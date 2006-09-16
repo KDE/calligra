@@ -1536,12 +1536,15 @@ void Doc::enableRedo( bool _b )
 }
 
 void Doc::paintContent( QPainter& painter, const QRect& rect,
-                               bool transparent, double zoomX, double /*zoomY*/ )
+                        bool transparent, double zoomX, double zoomY )
 {
-    kDebug(36001) << "paintContent() called on " << rect << endl;
+    Q_UNUSED( zoomY );
+//     kDebug(36001) << "paintContent() called on " << rect << endl;
 
-  //  ElapsedTime et( "Doc::paintContent1" );
-    //kDebug(36001) << "Doc::paintContent m_zoom=" << zoomInPercent() << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
+//     ElapsedTime et( "Doc::paintContent1" );
+//     kDebug(36001) << "Doc::paintContent m_zoom=" << zoomInPercent()
+//                   << " zoomX=" << zoomX << " zoomY=" << zoomY
+//                   << " transparent=" << transparent << endl;
 
     // choose sheet: the first or the active
     Sheet* sheet = 0;
@@ -1559,7 +1562,7 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
 
     // only one zoom is supported
     double d_zoom = 1.0;
-    setZoom( 1.0 );
+    setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
     if ( m_zoomedResolutionX != zoomX )
         d_zoom *= ( zoomX / m_zoomedResolutionX );
     setZoom( d_zoom );
@@ -1585,9 +1588,12 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
     setZoom( oldZoom );
 }
 
-void Doc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, Sheet* sheet, bool drawCursor )
+void Doc::paintContent( QPainter& painter, const QRect& rect, bool transparent,
+                        Sheet* sheet, bool drawCursor )
 {
-  Q_UNUSED( drawCursor );
+    Q_UNUSED( transparent );
+    Q_UNUSED( drawCursor );
+
     if ( isLoading() )
         return;
     //    ElapsedTime et( "Doc::paintContent2" );
@@ -1628,29 +1634,27 @@ void Doc::paintUpdates()
   }
 }
 
-void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
-         View* view,
-         const Region& region)
+void Doc::paintCellRegions( QPainter& painter, const QRect &viewRect,
+                            View* view, const Region& region )
 {
-  //
-  // Clip away children
-  //
+    //
+    // Clip away children
+    //
+    QRegion rgn = painter.clipRegion();
+    if ( rgn.isEmpty() )
+        rgn = QRegion( QRect( 0, 0, viewRect.width(), viewRect.height() ) );
 
-  QRegion rgn = painter.clipRegion();
-  if ( rgn.isEmpty() )
-    rgn = QRegion( QRect( 0, 0, viewRect.width(), viewRect.height() ) );
-
-  QMatrix matrix;
-  if ( view ) {
-    matrix.scale( zoomedResolutionX(),
-                  zoomedResolutionY() );
-    matrix.translate( - view->canvasWidget()->xOffset(),
-                      - view->canvasWidget()->yOffset() );
-  }
-  else {
-    matrix = painter.matrix();
-  }
-
+//   QMatrix matrix;
+//   if ( view ) {
+//     matrix.scale( zoomedResolutionX(),
+//                   zoomedResolutionY() );
+//     matrix.translate( - view->canvasWidget()->xOffset(),
+//                       - view->canvasWidget()->yOffset() );
+//   }
+//   else {
+//     matrix = painter.matrix();
+//   }
+//
 //   QPtrListIterator<KoDocumentChild> it( children() );
 //   for( ; it.current(); ++it ) {
 //     // if ( ((Child*)it.current())->sheet() == sheet &&
@@ -1658,183 +1662,170 @@ void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
 //     if ( ((Child*)it.current())->sheet() == sheet)
 //       rgn -= it.current()->region( matrix );
 //   }
-  painter.setClipRegion( rgn );
+    painter.setClipRegion( rgn );
 
-  QPen pen;
-  pen.setWidth( 1 );
-  painter.setPen( pen );
-
-  QRect cellRegion;
-  KoRect unzoomedViewRect = unzoomRectOld( viewRect );
-
-  Region::ConstIterator endOfList(region.constEnd());
-  for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
-  {
-    cellRegion = (*it)->rect();
-
-    paintRegion(painter, unzoomedViewRect, view, cellRegion, (*it)->sheet());
-  }
+    Region::ConstIterator endOfList(region.constEnd());
+    for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
+    {
+        paintRegion(painter, unzoomRectOld( viewRect ), view,(*it)->rect(), (*it)->sheet());
+    }
 }
 
-
-void Doc::paintRegion(QPainter &painter, const KoRect &viewRegion,
-          View* view, const QRect &paintRegion,
-          const Sheet* sheet)
+void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
+                       View* view, const QRect &cellRegion, const Sheet* sheet )
 {
-  // Paint Region.has cell coordinates (col,row) while viewRegion has
-  // world coordinates.  paintRegion is the cells to update and
-  // viewRegion is the area actually onscreen.
+    // cellRegion has cell coordinates (col,row) while viewRegion has
+    // world coordinates.  cellRegion is the cells to update and
+    // viewRegion is the area actually onscreen.
 
-  if ( paintRegion.left() <= 0 || paintRegion.top() <= 0 )
-    return;
+    if ( cellRegion.left() <= 0 || cellRegion.top() <= 0 )
+        return;
 
-  // Get the world coordinates of the upper left corner of the
-  // paintRegion The view is 0, when paintRegion is called from
-  // paintContent, which itself is only called, when we should paint
-  // the output for INACTIVE embedded view.  If inactive embedded,
-  // then there is no view and we alwas start at top/left, so the
-  // offset is 0.
-  //
-  KoPoint  dblCorner;
-  if ( view == 0 ) //Most propably we are embedded and inactive, so no offset
-    dblCorner = KoPoint( sheet->dblColumnPos( paintRegion.left() ),
-       sheet->dblRowPos( paintRegion.top() ) );
-  else
-    dblCorner = KoPoint( sheet->dblColumnPos( paintRegion.left() )
-       - view->canvasWidget()->xOffset(),
-       sheet->dblRowPos( paintRegion.top() )
-       - view->canvasWidget()->yOffset() );
-  KoPoint dblCurrentCellPos( dblCorner );
+    // Get the world coordinates of the upper left corner of the
+    // cellRegion The view is 0, when cellRegion is called from
+    // paintContent, which itself is only called, when we should paint
+    // the output for INACTIVE embedded view.  If inactive embedded,
+    // then there is no view and we alwas start at top/left, so the
+    // offset is 0.
+    //
+    KoPoint  dblCorner;
+    if ( view == 0 ) //Most propably we are embedded and inactive, so no offset
+        dblCorner = KoPoint( sheet->dblColumnPos( cellRegion.left() ),
+                             sheet->dblRowPos( cellRegion.top() ) );
+    else
+        dblCorner = KoPoint( sheet->dblColumnPos( cellRegion.left() ) - view->canvasWidget()->xOffset(),
+                             sheet->dblRowPos( cellRegion.top() ) - view->canvasWidget()->yOffset() );
+    KoPoint dblCurrentCellPos( dblCorner );
 
-  int regionBottom = paintRegion.bottom();
-  int regionRight  = paintRegion.right();
-  int regionLeft   = paintRegion.left();
-  int regionTop    = paintRegion.top();
+    int regionBottom = cellRegion.bottom();
+    int regionRight  = cellRegion.right();
+    int regionLeft   = cellRegion.left();
+    int regionTop    = cellRegion.top();
 
-  QLinkedList<QPoint>  mergedCellsPainted;
-  for ( int y = regionTop;
-        y <= regionBottom && dblCurrentCellPos.y() <= viewRegion.bottom();
-        ++y )
-  {
-    const RowFormat * row_lay = sheet->rowFormat( y );
-    dblCurrentCellPos.setX( dblCorner.x() );
-
-    for ( int x = regionLeft;
-          x <= regionRight && dblCurrentCellPos.x() <= viewRegion.right();
-          ++x )
+    QLinkedList<QPoint>  mergedCellsPainted;
+    for ( int y = regionTop;
+          y <= regionBottom && dblCurrentCellPos.y() <= viewRegion.bottom();
+          ++y )
     {
-      const ColumnFormat *col_lay = sheet->columnFormat( x );
-      Cell* cell = sheet->cellAt( x, y );
+        const RowFormat * row_lay = sheet->rowFormat( y );
+        dblCurrentCellPos.setX( dblCorner.x() );
 
-      QPoint cellRef( x, y );
+        for ( int x = regionLeft;
+              x <= regionRight && dblCurrentCellPos.x() <= viewRegion.right();
+              ++x )
+        {
+            const ColumnFormat *col_lay = sheet->columnFormat( x );
+            Cell* cell = sheet->cellAt( x, y );
 
-#if 0
-      bool paintBordersBottom = false;
-      bool paintBordersRight  = false;
-      bool paintBordersLeft   = false;
-      bool paintBordersTop    = false;
-#endif
-      CellView::Borders paintBorder = CellView::NoBorder;
-
-      QPen rightPen( cell->effRightBorderPen( x, y ) );
-      QPen leftPen( cell->effLeftBorderPen( x, y ) );
-      QPen topPen( cell->effTopBorderPen( x, y ) );
-      QPen bottomPen( cell->effBottomBorderPen( x, y ) );
-
-      // Paint border if outermost cell or if the pen is more "worth"
-      // than the border pen of the cell on the other side of the
-      // border or if the cell on the other side is not painted. In
-      // the latter case get the pen that is of more "worth"
-
-      // right border:
-      if ( x >= KS_colMax )
-        //paintBordersRight = true;
-        paintBorder |= CellView::RightBorder;
-      else if ( x == regionRight ) {
-  paintBorder |= CellView::RightBorder;
-  if ( cell->effRightBorderValue( x, y )
-       < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-    rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
-      }
-      else {
-  paintBorder |= CellView::RightBorder;
-  if ( cell->effRightBorderValue( x, y )
-       < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-    rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
-      }
-
-      // Similiar for other borders...
-      // bottom border:
-      if ( y >= KS_rowMax )
-        paintBorder |= CellView::BottomBorder;
-      else if ( y == regionBottom ) {
-  paintBorder |= CellView::BottomBorder;
-  if ( cell->effBottomBorderValue( x, y )
-       < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
-    bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
-      }
-      else {
-        paintBorder |= CellView::BottomBorder;
-        if ( cell->effBottomBorderValue( x, y )
-       < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
-          bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
-      }
-
-      // left border:
-      if ( x == 1 )
-        paintBorder |= CellView::LeftBorder;
-      else if ( x == regionLeft ) {
-  paintBorder |= CellView::LeftBorder;
-  if ( cell->effLeftBorderValue( x, y )
-       < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-    leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
-      }
-      else {
-        paintBorder |= CellView::LeftBorder;
-        if ( cell->effLeftBorderValue( x, y )
-       < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-          leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
-      }
-
-      // top border:
-      if ( y == 1 )
-        paintBorder |= CellView::TopBorder;
-      else if ( y == regionTop ) {
-  paintBorder |= CellView::TopBorder;
-  if ( cell->effTopBorderValue( x, y )
-       < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-    topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
-      }
-      else {
-        paintBorder |= CellView::TopBorder;
-        if ( cell->effTopBorderValue( x, y )
-       < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-          topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
-      }
+            QPoint cellRef( x, y );
 
 #if 0
-      cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
-           paintBordersRight, paintBordersBottom,
-           paintBordersLeft, paintBordersTop,
-           rightPen, bottomPen, leftPen, topPen,
-           mergedCellsPainted, false );
+            bool paintBordersBottom = false;
+            bool paintBordersRight  = false;
+            bool paintBordersLeft   = false;
+            bool paintBordersTop    = false;
+#endif
+            CellView::Borders paintBorder = CellView::NoBorder;
 
-      Cell::BorderSides highlightBorder=Cell::NoBorder;
-      QPen highlightPen;
+            QPen rightPen( cell->effRightBorderPen( x, y ) );
+            QPen leftPen( cell->effLeftBorderPen( x, y ) );
+            QPen topPen( cell->effTopBorderPen( x, y ) );
+            QPen bottomPen( cell->effBottomBorderPen( x, y ) );
+
+            // Paint border if outermost cell or if the pen is more "worth"
+            // than the border pen of the cell on the other side of the
+            // border or if the cell on the other side is not painted. In
+            // the latter case get the pen that is of more "worth"
+
+            // right border:
+            if ( x >= KS_colMax )
+                //paintBordersRight = true;
+                paintBorder |= CellView::RightBorder;
+            else if ( x == regionRight ) {
+                paintBorder |= CellView::RightBorder;
+                if ( cell->effRightBorderValue( x, y )
+                     < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+                    rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+            }
+            else {
+                paintBorder |= CellView::RightBorder;
+                if ( cell->effRightBorderValue( x, y )
+                     < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+                    rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+            }
+
+            // Similiar for other borders...
+            // bottom border:
+            if ( y >= KS_rowMax )
+                paintBorder |= CellView::BottomBorder;
+            else if ( y == regionBottom ) {
+                paintBorder |= CellView::BottomBorder;
+                if ( cell->effBottomBorderValue( x, y )
+                     < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+                    bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+            }
+            else {
+                paintBorder |= CellView::BottomBorder;
+                if ( cell->effBottomBorderValue( x, y )
+                     < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+                    bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+            }
+
+            // left border:
+            if ( x == 1 )
+                paintBorder |= CellView::LeftBorder;
+            else if ( x == regionLeft ) {
+                paintBorder |= CellView::LeftBorder;
+                if ( cell->effLeftBorderValue( x, y )
+                     < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+                    leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+            }
+            else {
+                paintBorder |= CellView::LeftBorder;
+                if ( cell->effLeftBorderValue( x, y )
+                     < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+                    leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+            }
+
+            // top border:
+            if ( y == 1 )
+                paintBorder |= CellView::TopBorder;
+            else if ( y == regionTop ) {
+                paintBorder |= CellView::TopBorder;
+                if ( cell->effTopBorderValue( x, y )
+                     < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+                    topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+            }
+            else {
+                paintBorder |= CellView::TopBorder;
+                if ( cell->effTopBorderValue( x, y )
+                     < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+                    topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+            }
+
+#if 0
+            cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
+            paintBordersRight, paintBordersBottom,
+            paintBordersLeft, paintBordersTop,
+            rightPen, bottomPen, leftPen, topPen,
+            mergedCellsPainted, false );
+
+            Cell::BorderSides highlightBorder=Cell::NoBorder;
+            QPen highlightPen;
 #endif
 
 
-      const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
-      cell->cellView()->paintCell( viewRegionF, painter, view, dblCurrentCellPos, cellRef,
-           paintBorder,
-           rightPen, bottomPen, leftPen, topPen,
-           mergedCellsPainted );
+            const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
+            cell->cellView()->paintCell( viewRegionF, painter, view, dblCurrentCellPos, cellRef,
+            paintBorder,
+            rightPen, bottomPen, leftPen, topPen,
+            mergedCellsPainted );
 
 
-      dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
+            dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
+        }
+        dblCurrentCellPos.setY( dblCurrentCellPos.y() + row_lay->dblHeight() );
     }
-    dblCurrentCellPos.setY( dblCurrentCellPos.y() + row_lay->dblHeight() );
-  }
 }
 
 
