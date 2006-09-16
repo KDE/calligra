@@ -2631,6 +2631,14 @@ void View::initialPosition()
     for( ; it.current(); ++it )
       addSheet( it.current() );
 
+    // Set the initial X and Y offsets for the view (OpenDocument loading)
+    if ( KSPLoadingInfo* loadingInfo = doc()->loadingInfo() )
+    {
+        d->savedAnchors = loadingInfo->cursorPositions();
+        d->savedMarkers = loadingInfo->cursorPositions();
+        d->savedOffsets = loadingInfo->scrollingOffsets();
+    }
+
     Sheet * tbl = 0L;
     if ( doc()->isEmbedded() )
     {
@@ -2660,44 +2668,25 @@ void View::initialPosition()
 
     refreshView();
 
-    int col = 1;
-    int row = 1;
-    double offsetX = 0;
-    double offsetY = 0;
-    // Set the initial X and Y offsets for the view.
-    if (KSPLoadingInfo* loadingInfo = doc()->loadingInfo())
+    // Set the initial X and Y offsets for the view (Native format loading)
+    if ( !doc()->loadingInfo() )
     {
-      kdDebug() << "View::initialPosition(): setting initial position" << endl;
-      d->savedAnchors = loadingInfo->cursorPositions();
-      d->savedMarkers = loadingInfo->cursorPositions();
-      d->savedOffsets = loadingInfo->scrollingOffsets();
-
-      QMapIterator<Sheet*, QPoint> it = d->savedMarkers.find(d->activeSheet);
-      QPoint cursor = (it == d->savedMarkers.end()) ? QPoint(1,1) : *it;
-      col = cursor.x();
-      row = cursor.y();
-
-      QMapIterator<Sheet*, KoPoint> it2 = d->savedOffsets.find(d->activeSheet);
-      KoPoint offset = (it2 == d->savedOffsets.end()) ? KoPoint() : *it2;
-      offsetX = offset.x();
-      offsetY = offset.y();
-    }
-    else
-    {
-      offsetX = doc()->map()->initialXOffset();
-      offsetY = doc()->map()->initialYOffset();
+      double offsetX = doc()->map()->initialXOffset();
+      double offsetY = doc()->map()->initialYOffset();
       // Set the initial position for the marker as stored in the XML file,
       // (1,1) otherwise
-      col = doc()->map()->initialMarkerColumn();
+      int col = doc()->map()->initialMarkerColumn();
       if ( col <= 0 )
         col = 1;
-      row = doc()->map()->initialMarkerRow();
+      int row = doc()->map()->initialMarkerRow();
       if ( row <= 0 )
         row = 1;
+      d->canvas->setXOffset( offsetX );
+      d->canvas->setYOffset( offsetY );
+      d->horzScrollBar->setValue( (int)offsetX );
+      d->vertScrollBar->setValue( (int)offsetY );
+      d->selection->initialize( QPoint(col, row) );
     }
-    d->canvas->setXOffset( offsetX );
-    d->canvas->setYOffset( offsetY );
-    d->selection->initialize( QPoint(col, row) );
 
     updateBorderButton();
     updateShowSheetMenu();
@@ -3873,8 +3862,8 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
   {
     d->canvas->setXOffset((*it3).x());
     d->canvas->setYOffset((*it3).y());
-    d->horzScrollBar->setValue((*it3).x());
-    d->vertScrollBar->setValue((*it3).y());
+    d->horzScrollBar->setValue((int)(*it3).x());
+    d->vertScrollBar->setValue((int)(*it3).y());
   }
   calcStatusBarOp();
 
