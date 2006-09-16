@@ -162,6 +162,14 @@ public:
   Q3ValueList<KoPictureKey> usedPictures;
   bool m_savingWholeDocument;
   SavedDocParts savedDocParts;
+
+  // calculation settings
+  bool caseSensitiveComparisons : 1;
+  bool precisionAsShown         : 1;
+  bool wholeCellSearchCriteria  : 1;
+  bool automaticFindLabels      : 1;
+  bool useRegularExpressions : 1;
+  int refYear; // the reference year two-digit years are relative to
   QDate refDate; // the reference date all dates are relative to
 };
 
@@ -244,6 +252,13 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->spellConfig = 0;
   d->dontCheckUpperWord = false;
   d->dontCheckTitleCase = false;
+  // calculation settings
+  d->caseSensitiveComparisons = true;
+  d->precisionAsShown         = false;
+  d->wholeCellSearchCriteria  = true;
+  d->automaticFindLabels      = true;
+  d->useRegularExpressions    = true;
+  d->refYear = 1930;
   d->refDate = QDate( 1899, 12, 30 );
 }
 
@@ -1937,35 +1952,54 @@ void Doc::loadOasisCalculationSettings( const KoXmlElement& body )
     kDebug() << "Calculation settings found? "<< !settings.isNull() << endl;
     if ( !settings.isNull() )
     {
-        KoXmlElement element;
+        KoXmlElement element = settings.toElement();
+        if ( element.hasAttributeNS( KoXmlNS::table,  "case-sensitive" ) )
+        {
+            d->caseSensitiveComparisons = true;
+            QString value = element.attributeNS( KoXmlNS::table, "case-sensitive", "true" );
+            if ( value == "false" )
+                d->caseSensitiveComparisons = false;
+        }
+        else if ( element.hasAttributeNS( KoXmlNS::table, "precision-as-shown" ) )
+        {
+            d->precisionAsShown = false;
+            QString value = element.attributeNS( KoXmlNS::table, "precision-as-shown", "false" );
+            if ( value == "true" )
+                d->precisionAsShown = true;
+        }
+        else if ( element.hasAttributeNS( KoXmlNS::table, "search-criteria-must-apply-to-whole-cell" ) )
+        {
+            d->wholeCellSearchCriteria = true;
+            QString value = element.attributeNS( KoXmlNS::table, "search-criteria-must-apply-to-whole-cell", "true" );
+            if ( value == "false" )
+                d->wholeCellSearchCriteria = false;
+        }
+        else if ( element.hasAttributeNS( KoXmlNS::table, "automatic-find-labels" ) )
+        {
+            d->automaticFindLabels = true;
+            QString value = element.attributeNS( KoXmlNS::table, "automatic-find-labels", "true" );
+            if ( value == "false" )
+                d->automaticFindLabels = false;
+        }
+        else if ( element.hasAttributeNS( KoXmlNS::table, "use-regular-expressions" ) )
+        {
+            d->useRegularExpressions = true;
+            QString value = element.attributeNS( KoXmlNS::table, "use-regular-expressions", "true" );
+            if ( value == "false" )
+                d->useRegularExpressions = false;
+        }
+        else if ( element.hasAttributeNS( KoXmlNS::table, "null-year" ) )
+        {
+            d->refYear = 1930;
+            QString value = element.attributeNS( KoXmlNS::table, "null-year", "1930" );
+            if ( value == "false" )
+                d->refYear = false;
+        }
+
         forEachElement( element, settings )
         {
             if ( element.namespaceURI() != KoXmlNS::table )
                 continue;
-            else if ( element.tagName() ==  "case-sensitive" )
-            {
-                // TODO Stefan: mandatory for OpenFormula small group compliance
-            }
-            else if ( element.tagName() ==  "precision-as-shown" )
-            {
-                // TODO Stefan: mandatory for OpenFormula small group compliance
-            }
-            else if ( element.tagName() ==  "search-criteria-must-apply-to-whole-cell" )
-            {
-                // TODO Stefan: mandatory for OpenFormula small group compliance
-            }
-            else if ( element.tagName() ==  "automatic-find-labels" )
-            {
-                // TODO Stefan: mandatory for OpenFormula small group compliance
-            }
-            else if ( element.tagName() ==  "use-regular-expressions " )
-            {
-                // TODO Stefan: mandatory for OpenFormula small group compliance
-            }
-            else if ( element.tagName() ==  "null-year" )
-            {
-                // TODO Stefan: mandatory for OpenFormula small group compliance
-            }
             else if ( element.tagName() ==  "null-date" )
             {
                 d->refDate = QDate( 1899, 12, 30 );
@@ -1976,13 +2010,13 @@ void Doc::loadOasisCalculationSettings( const KoXmlElement& body )
                     QDate date = QDate::fromString( value, Qt::ISODate );
                     if ( date.isValid() )
                         d->refDate = date;
-               }
+                }
                 else
                 {
                     kDebug() << "Doc: Error on loading null date. "
                              << "Value type """ << valueType << """ not handled"
                              << ", falling back to default." << endl;
-                    // TODO Stefan: I don't know why different types are possible here!
+                    // NOTE Stefan: I don't know why different types are possible here!
                 }
             }
             else if ( element.tagName() ==  "iteration" )
