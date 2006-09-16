@@ -2372,76 +2372,60 @@ void View::initialPosition()
     // Loading completed, pick initial worksheet
     foreach ( Sheet* sheet, doc()->map()->sheetList() )
     {
-      addSheet( sheet );
+        addSheet( sheet );
     }
 
-    Sheet * tbl = 0;
+    // Set the initial X and Y offsets for the view (OpenDocument loading)
+    if ( LoadingInfo* loadingInfo = doc()->loadingInfo() )
+    {
+        d->savedAnchors = loadingInfo->cursorPositions();
+        d->savedMarkers = loadingInfo->cursorPositions();
+        d->savedOffsets = loadingInfo->scrollingOffsets();
+    }
+
+    Sheet* sheet = 0;
     if ( doc()->isEmbedded() )
+        sheet = doc()->displaySheet();
+    if ( !sheet )
+        sheet = doc()->map()->initialActiveSheet();
+    if ( !sheet )
     {
-        tbl = doc()->displaySheet();
-    }
-
-    if ( !tbl )
-        tbl = doc()->map()->initialActiveSheet();
-    if ( tbl )
-      setActiveSheet( tbl );
-    else
-    {
-      //activate first table which is not hiding
-      tbl = doc()->map()->findSheet( doc()->map()->visibleSheets().first());
-      if ( !tbl )
-      {
-        tbl = doc()->map()->sheet( 0 );
-        if ( tbl )
+        //activate first table which is not hiding
+        sheet = doc()->map()->findSheet( doc()->map()->visibleSheets().first());
+        if ( !sheet )
         {
-          tbl->setHidden( false );
-          QString tabName = tbl->sheetName();
-          d->tabBar->addTab( tabName );
+            sheet = doc()->map()->sheet( 0 );
+            if ( sheet )
+            {
+                sheet->setHidden( false );
+                QString tabName = sheet->sheetName();
+                d->tabBar->addTab( tabName );
+            }
         }
-      }
-      setActiveSheet( tbl );
     }
+    setActiveSheet( sheet );
 
     refreshView();
 
-    int col = 1;
-    int row = 1;
-    double offsetX = 0;
-    double offsetY = 0;
-    // Set the initial X and Y offsets for the view.
-    if (LoadingInfo* loadingInfo = doc()->loadingInfo())
+    // Set the initial X and Y offsets for the view (Native format loading)
+    if ( !doc()->loadingInfo() )
     {
-      kDebug() << "View::initialPosition(): setting initial position" << endl;
-      d->savedAnchors = loadingInfo->cursorPositions();
-      d->savedMarkers = loadingInfo->cursorPositions();
-      d->savedOffsets = loadingInfo->scrollingOffsets();
-
-      QMap<Sheet*, QPoint>::Iterator it = d->savedMarkers.find(d->activeSheet);
-      QPoint cursor = (it == d->savedMarkers.end()) ? QPoint(1,1) : *it;
-      col = cursor.x();
-      row = cursor.y();
-
-      QMap<Sheet*, KoPoint>::Iterator it2 = d->savedOffsets.find(d->activeSheet);
-      KoPoint offset = (it2 == d->savedOffsets.end()) ? KoPoint() : *it2;
-      offsetX = offset.x();
-      offsetY = offset.y();
+        double offsetX = doc()->map()->initialXOffset();
+        double offsetY = doc()->map()->initialYOffset();
+        // Set the initial position for the marker as stored in the XML file,
+        // (1,1) otherwise
+        int col = doc()->map()->initialMarkerColumn();
+        if ( col <= 0 )
+            col = 1;
+        int row = doc()->map()->initialMarkerRow();
+        if ( row <= 0 )
+            row = 1;
+        d->canvas->setXOffset( offsetX );
+        d->canvas->setYOffset( offsetY );
+        d->horzScrollBar->setValue( (int)offsetX );
+        d->vertScrollBar->setValue( (int)offsetY );
+        d->selection->initialize( QPoint(col, row) );
     }
-    else
-    {
-      offsetX = doc()->map()->initialXOffset();
-      offsetY = doc()->map()->initialYOffset();
-      // Set the initial position for the marker as stored in the XML file,
-      // (1,1) otherwise
-      col = doc()->map()->initialMarkerColumn();
-      if ( col <= 0 )
-        col = 1;
-      row = doc()->map()->initialMarkerRow();
-      if ( row <= 0 )
-        row = 1;
-    }
-    d->canvas->setXOffset( offsetX );
-    d->canvas->setYOffset( offsetY );
-    d->selection->initialize( QPoint(col, row) );
 
     updateBorderButton();
     updateShowSheetMenu();
@@ -2468,7 +2452,7 @@ void View::initialPosition()
     doc()->emitEndOperation( vr );
 
     if ( koDocument()->isReadWrite() )
-      initConfig();
+        initConfig();
 
     d->adjustActions( !d->activeSheet->isProtected() );
     d->adjustWorkbookActions( !doc()->map()->isProtected() );
