@@ -36,6 +36,7 @@ MimeType=image/jpeg
 Name=Krita
 Name[eo]=Krito
 Name[hi]=के-रिता
+Name[km]= Krita
 Name[lo]=ກຣິຕາ
 Path=
 StartupNotify=true
