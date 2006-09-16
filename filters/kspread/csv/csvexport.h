@@ -29,6 +29,7 @@
 namespace KSpread
 {
 class Sheet;
+class Doc;
 }
 
 class CSVExport : public KoFilter
@@ -42,7 +43,7 @@ class CSVExport : public KoFilter
   virtual KoFilter::ConversionStatus convert( const QByteArray & from, const QByteArray & to );
 
   private:
-  QString exportCSVCell( KSpread::Sheet const * const sheet, int col, int row, QChar const & textQuote );
+  QString exportCSVCell( const KSpread::Doc* doc,KSpread::Sheet const * const sheet, int col, int row, QChar const & textQuote );
 
   private:
   QString m_eol; ///< End of line (LF, CR or CRLF)

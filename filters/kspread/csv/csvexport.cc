@@ -68,7 +68,7 @@ CSVExport::CSVExport( QObject* parent, const QStringList & )
 {
 }
 
-QString CSVExport::exportCSVCell( Sheet const * const sheet, int col, int row, QChar const & textQuote )
+QString CSVExport::exportCSVCell( const KSpread::Doc* doc, Sheet const * const sheet, int col, int row, QChar const & textQuote )
 {
   // This function, given a cell, returns a string corresponding to its export in CSV format
   // It proceeds by:
@@ -86,9 +86,9 @@ QString CSVExport::exportCSVCell( Sheet const * const sheet, int col, int row, Q
     else if ( !cell->link().isEmpty() )
         text = cell->text(); // untested
     else if( cell->isTime() )
-        text = cell->value().asTime().toString("hh:mm:ss");
+        text = cell->value().asTime(doc).toString("hh:mm:ss");
     else if( cell->isDate() )
-        text = cell->value().asDate().toString("yyyy-MM-dd");
+        text = cell->value().asDate(doc).toString("yyyy-MM-dd");
     else
         text = cell->strOutText();
   }
@@ -233,7 +233,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
       for ( int col = selection.left();
             col <= right && idxCol <= CSVMaxCol; ++col, ++idxCol )
       {
-        str += exportCSVCell( sheet, col, row, textQuote );
+        str += exportCSVCell( ksdoc, sheet, col, row, textQuote );
 
         if ( idxCol < CSVMaxCol )
           str += csvDelimiter;
@@ -327,7 +327,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
 
         for ( int col = 1 ; col <= CSVMaxCol ; col++ )
         {
-          str += exportCSVCell( sheet, col, row, textQuote );
+          str += exportCSVCell( ksdoc,sheet, col, row, textQuote );
 
           if ( col < CSVMaxCol )
             str += csvDelimiter;
