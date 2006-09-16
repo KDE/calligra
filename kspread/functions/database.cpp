@@ -222,7 +222,7 @@ Value func_dsum (valVector args, ValueCalc *calc, FuncExtra *)
   DBConditions conds (calc, database, conditions);
 
   int rows = database.rows() - 1;  // first row contains column names
-  Value res;
+  Value res( Value::Float );
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
       Value val = database.element (fieldIndex, r + 1);
