@@ -44,11 +44,11 @@ QSize KWViewModePreview::contentsSize() {
     return QSize();
 }
 
-QPointF KWViewModePreview::documentToView( const QPointF & point ) {
+QPointF KWViewModePreview::documentToView( const QPointF & point ) const {
     return QPointF();
 }
 
-QPointF KWViewModePreview::viewToDocument( const QPointF & point ) {
+QPointF KWViewModePreview::viewToDocument( const QPointF & point ) const {
     return QPointF();
 }
 

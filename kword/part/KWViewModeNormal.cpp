@@ -35,7 +35,7 @@ KWViewModeNormal::KWViewModeNormal( KWCanvas* canvas )
 QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &viewRect) const {
     const KWPageManager *pageManager = canvas()->document()->pageManager();
     QList<ViewMap> answer;
-    int pageOffset = pageManager->startPage();
+    const int pageOffset = pageManager->startPage();
     double offsetX = 0.0;
     foreach(KWPage *page, pageManager->pages()) {
         QRectF zoomedPage = canvas()->viewConverter()->documentToView(page->rect());
@@ -123,21 +123,22 @@ QSize KWViewModeNormal::contentsSize() {
     return QSize(qRound(size.x()), qRound(size.y()));
 }
 
-QPointF KWViewModeNormal::documentToView( const QPointF & point ) {
+QPointF KWViewModeNormal::documentToView( const QPointF & point ) const {
     KWPage *page = canvas()->document()->pageManager()->page(point);
     int pageIndex = page->pageNumber() - canvas()->document()->startPage();
     double x = 0;
-    if(page->pageSide() == KWPage::Right) {
+    if(m_pageSpreadMode && page->pageSide() == KWPage::Right) {
         KWPage *prevPage = canvas()->document()->pageManager()->page(page->pageNumber() - 1);
         if(prevPage)
             x = prevPage->width();
     }
 
+    QPointF offsetInPage(point.x(),  + point.y() - page->offsetInDocument());
     QPointF translated(x, m_pageTops[pageIndex]);
-    return canvas()->viewConverter()->documentToView(translated);
+    return canvas()->viewConverter()->documentToView(translated + offsetInPage);
 }
 
-QPointF KWViewModeNormal::viewToDocument( const QPointF & point ) {
+QPointF KWViewModeNormal::viewToDocument( const QPointF & point ) const {
     const KWPageManager *pageManager = canvas()->document()->pageManager();
     QPointF clippedPoint(qMax(0.0, point.x()), qMax(0.0, point.y()));
     QPointF translated = canvas()->viewConverter()->viewToDocument(clippedPoint);

@@ -42,8 +42,8 @@ class KWViewModeNormal : public KWViewMode {
 public:
     ~KWViewModeNormal() {}
 
-    QPointF documentToView( const QPointF & point );
-    QPointF viewToDocument( const QPointF & point );
+    QPointF documentToView( const QPointF & point ) const;
+    QPointF viewToDocument( const QPointF & point ) const;
     QSize contentsSize();
 
     /// return a string identification of this viewMode
@@ -61,7 +61,7 @@ protected:
     void updatePageCache();
 
 private:
-    // a list with the top of the page, in unzoomed-pt.
+    // a list with the top of the page location in view-coordinates, in unzoomed-pt.
     QList<double> m_pageTops;
     bool m_pageSpreadMode;
     QSizeF m_contents;

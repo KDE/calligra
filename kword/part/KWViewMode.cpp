@@ -29,7 +29,7 @@ KWViewMode::KWViewMode( KWCanvas *canvas ) : m_canvas(canvas)
 {
 }
 
-QRectF KWViewMode::documentToView( const QRectF & rect ) {
+QRectF KWViewMode::documentToView( const QRectF & rect ) const {
     QRectF r;
     QPointF topLeft(documentToView( rect.topLeft() ));
     QPointF bottomRight(documentToView( rect.bottomRight() ));
@@ -38,7 +38,7 @@ QRectF KWViewMode::documentToView( const QRectF & rect ) {
     return r;
 }
 
-QRectF KWViewMode::viewToDocument( const QRectF & rect ) {
+QRectF KWViewMode::viewToDocument( const QRectF & rect ) const {
     QRectF r;
     QPointF topLeft(viewToDocument( rect.topLeft() ));
     QPointF bottomRight(viewToDocument( rect.bottomRight() ));

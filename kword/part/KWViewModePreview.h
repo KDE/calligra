@@ -35,8 +35,8 @@ public:
     KWViewModePreview( KWCanvas* canvas );
     ~KWViewModePreview() {}
 
-    QPointF documentToView( const QPointF & point );
-    QPointF viewToDocument( const QPointF & point );
+    QPointF documentToView( const QPointF & point ) const;
+    QPointF viewToDocument( const QPointF & point ) const;
     QSize contentsSize();
 
     /**

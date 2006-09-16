@@ -146,7 +146,7 @@ double KWPageManager::bottomOfPage(int pageNum) const {
 double KWPageManager::pageOffset(int pageNum, bool bottom) const {
     if(pageNum < m_firstPage)
         return 0;
-    double offset = m_padding.top;
+    double offset = 0.0;
     foreach(KWPage *page, m_pageList) {
         if(page->pageNumber() == pageNum) {
             if(bottom)
