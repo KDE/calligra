@@ -1481,7 +1481,7 @@ View::View( QWidget *_parent, Doc *_doc )
   : KoView( _doc, _parent )
 {
     ElapsedTime et( "View constructor" );
-    kDebug(36001) << "sizeof(Cell)=" << sizeof(Cell) <<endl;
+//     kDebug() << "sizeof(Cell)=" << sizeof(Cell) <<endl;
 
     d = new Private;
     d->view = this;
@@ -3642,7 +3642,7 @@ void View::changeSheet( const QString& _name )
     Sheet *t = doc()->map()->findSheet( _name );
     if ( !t )
     {
-        kDebug(36001) << "Unknown sheet " << _name << endl;
+        kDebug() << "Unknown sheet " << _name << endl;
         return;
     }
     doc()->emitBeginOperation(false);
@@ -3911,14 +3911,14 @@ void View::paste()
     KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() )
     {
-      kDebug() << "Invalid OASIS OpenDocument file. No office:body tag found." << endl;
+      kDebug(36005) << "Invalid OASIS OpenDocument file. No office:body tag found." << endl;
       return;
     }
     KoXmlElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
 
     if ( body.isNull() )
     {
-      kError(32001) << "No office:spreadsheet found!" << endl;
+      kError(36005) << "No office:spreadsheet found!" << endl;
       KoXmlElement childElem;
       QString localName;
       forEachElement( childElem, realBody ) {
@@ -3957,7 +3957,7 @@ void View::paste()
   doc()->emitBeginOperation( false );
   if ( !d->canvas->editor() )
   {
-      //kDebug(36001) << "Pasting. Rect= " << d->selection->selection(false) << " bytes" << endl;
+      //kDebug(36005) << "Pasting. Rect= " << d->selection->selection(false) << " bytes" << endl;
     d->activeSheet->paste( d->selection->lastRange(), true,
                            Paste::Normal, Paste::OverWrite,
                            false, 0, true );
@@ -4980,7 +4980,7 @@ void View::viewZoom( KoZoomMode::Mode mode, int zoom )
 
 void View::setZoom( int zoom, bool /*updateViews*/ )
 {
-  kDebug() << "---------SetZoom: " << zoom << endl;
+  kDebug(36005) << "---------SetZoom: " << zoom << endl;
 
   // Set the zoom in KoView (for embedded views)
   doc()->emitBeginOperation( false );
@@ -5225,7 +5225,7 @@ int View::bottomBorder() const
 
 void View::refreshView()
 {
-  kDebug() << "refreshing view" << endl;
+  kDebug(36004) << "refreshing view" << endl;
 
   Sheet * sheet = activeSheet();
   if ( !sheet )
@@ -5261,7 +5261,7 @@ void View::refreshView()
   Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
   bool interfaceIsRTL = QApplication::isRightToLeft();
 
-  kDebug()<<" sheetDir == Sheet::LeftToRight :"<<( sheetDir == Sheet::LeftToRight )<<endl;
+//   kDebug(36004)<<" sheetDir == Sheet::LeftToRight :"<<( sheetDir == Sheet::LeftToRight )<<endl;
   if ((sheetDir == Sheet::LeftToRight && !interfaceIsRTL) ||
       (sheetDir == Sheet::RightToLeft && interfaceIsRTL))
   {
@@ -6696,7 +6696,7 @@ void View::slotChangeChoice(const KSpread::Region& changedRegion)
   d->activeSheet->setRegionPaintDirty( changedRegion );
   d->canvas->scrollToCell(choice()->marker());
   doc()->emitEndOperation(/* *choice() */);
-  kDebug() << "Choice: " << *choice() << endl;
+  kDebug(36002) << "Choice: " << *choice() << endl;
 }
 
 void View::calcStatusBarOp()
@@ -7080,8 +7080,8 @@ void View::saveCurrentSheetSelection()
     {
       d->savedAnchors.remove(d->activeSheet);
       d->savedAnchors.insert(d->activeSheet, d->selection->anchor());
-      kDebug() << " Current scrollbar vert value: " << d->canvas->vertScrollBar()->value() << endl;
-      kDebug() << "Saving marker pos: " << d->selection->marker() << endl;
+      kDebug(36005) << " Current scrollbar vert value: " << d->canvas->vertScrollBar()->value() << endl;
+      kDebug(36005) << "Saving marker pos: " << d->selection->marker() << endl;
       d->savedMarkers.remove(d->activeSheet);
       d->savedMarkers.insert(d->activeSheet, d->selection->marker());
       d->savedOffsets.remove(d->activeSheet);
@@ -7092,7 +7092,7 @@ void View::saveCurrentSheetSelection()
 
 void View::handleDamages( const QList<Damage*>& damages )
 {
-    kDebug() << "\tProcessing damages..." << endl;
+    kDebug(36005) << "Processing damages..." << endl;
     bool refreshView = false;
     Region formulaChangedRegion;
     Region layoutChangedRegion;
