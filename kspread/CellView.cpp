@@ -151,9 +151,9 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
 
 #if 0
   if (paintingObscured == 0)
-    kDebug(36001) << "painting cell " << d->cell->name() << endl;
+    kDebug(36004) << "painting cell " << d->cell->name() << endl;
   else
-    kDebug(36001) << "  painting obscured cell " << d->cell->name() << endl;
+    kDebug(36004) << "  painting obscured cell " << d->cell->name() << endl;
 #endif
 
   // Sanity check: If we're working on drawing an obscured cell, that
@@ -301,7 +301,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
 
   if (d->cell->d->hasExtra() && (d->cell->extraXCells() > 0
       || d->cell->extraYCells() > 0)) {
-    //kDebug(36001) << "painting obscured cells for " << name() << endl;
+    //kDebug(36004) << "painting obscured cells for " << name() << endl;
 
     paintObscuredCells( rect, painter, view, cellRect, cellRef, paintBorder,
                         rightPen, bottomPen, leftPen, topPen,
@@ -383,7 +383,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
        !( sheetDir == Sheet::RightToLeft && dynamic_cast<QPrinter*>(painter.device()) ) )
   {
 
-    //kDebug(36001) << "painting cells that obscure " << name() << endl;
+    //kDebug(36004) << "painting cells that obscure " << name() << endl;
 
     // Store the obscuringCells list in a list of QPoint(column, row)
     // This avoids crashes during the iteration through
@@ -440,7 +440,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
                   obscuringCellRef.y() ) );
 
 
-          //kDebug(36001) << "  painting obscuring cell "
+          //kDebug(36004) << "  painting obscuring cell "
           //     << obscuringCell->name() << endl;
           // QPen highlightPen;
 
@@ -622,7 +622,7 @@ void CellView::paintObscuredCells(const QRectF& rect, QPainter& painter,
   //        However, it looks as if we don't need to.  It works anyway.
         bottomPen         = _bottomPen;
 
-  //kDebug(36001) << "calling paintcell for obscured cell "
+  //kDebug(36004) << "calling paintcell for obscured cell "
   //       << cell->name() << endl;
         cell->cellView()->paintCell( rect, painter, view, corner,
                                      QPoint( cellRef.x() + x, cellRef.y() + y ),
@@ -1542,7 +1542,7 @@ void CellView::paintCellBorders( QPainter& painter, const QRectF& rect,
 
     painter.setPen( leftPen );
 
-    //kDebug(36001) << "    painting left border of cell " << name() << endl;
+    //kDebug(36004) << "    painting left border of cell " << name() << endl;
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
@@ -1591,7 +1591,7 @@ void CellView::paintCellBorders( QPainter& painter, const QRectF& rect,
 
     painter.setPen( rightPen );
 
-    //kDebug(36001) << "    painting right border of cell " << name() << endl;
+    //kDebug(36004) << "    painting right border of cell " << name() << endl;
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
@@ -1632,7 +1632,7 @@ void CellView::paintCellBorders( QPainter& painter, const QRectF& rect,
   {
     painter.setPen( topPen );
 
-    //kDebug(36001) << "    painting top border of cell " << name()
+    //kDebug(36004) << "    painting top border of cell " << name()
     //       << " [" << cellRect.left() << "," << cellRect.right()
     //       << ": " << cellRect.right() - cellRect.left() << "]" << endl;
 
@@ -1656,7 +1656,7 @@ void CellView::paintCellBorders( QPainter& painter, const QRectF& rect,
   {
     painter.setPen( bottomPen );
 
-    //kDebug(36001) << "    painting bottom border of cell " << name()
+    //kDebug(36004) << "    painting bottom border of cell " << name()
     //       << " [" << cellRect.left() << "," << cellRect.right()
     //       << ": " << cellRect.right() - cellRect.left() << "]" << endl;
 
@@ -2618,7 +2618,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
         breakpos = outText.indexOf( ' ', breakpos );
         int linefeed = outText.indexOf( '\n', pos1 );
 
-//         kDebug() << "start: " << start << "; breakpos: " << breakpos << "; pos1: " << pos1 << "; linefeed: " << linefeed << endl;
+//         kDebug(36004) << "start: " << start << "; breakpos: " << breakpos << "; pos1: " << pos1 << "; linefeed: " << linefeed << endl;
 
         //don't miss LF as a position to calculate current lineWidth
         int work_breakpos = breakpos;
@@ -2632,7 +2632,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
         //linefeed could be -1 when no linefeed is found!
         if (breakpos > linefeed && linefeed > 0)
         {
-//           kDebug() << "applying linefeed to start;" << endl;
+//           kDebug(36004) << "applying linefeed to start;" << endl;
           start = linefeed;
         }
 

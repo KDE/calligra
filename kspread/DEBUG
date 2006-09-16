@@ -9,3 +9,12 @@ The current debug keys are:
 Ctrl-Shift-T : activate kspread's self tests
 Ctrl-Shift-I : show object inspector
 
+
+Debug areas (16.09.2006)
+========================
+36001        kspread
+36002        kspread (Formula)
+36003        kspread (OpenDocument)
+36004        kspread (Painting)
+36005        kspread (UI)
+37000        kspread

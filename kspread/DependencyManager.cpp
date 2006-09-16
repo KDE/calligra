@@ -100,12 +100,12 @@ void DependencyManager::Private::dump() const
   for ( QMap<Region::Point, Region>::ConstIterator mit(dependencies.begin()); mit != mend; ++mit )
   {
     Region::Point p = mit.key();
-    kDebug() << "Cell " << p.name() << " depends on:" << endl;
+    kDebug(36002) << "Cell " << p.name() << " depends on:" << endl;
 
     Region::ConstIterator rend((*mit).constEnd());
     for ( Region::ConstIterator rit((*mit).constBegin()); rit != rend; ++rit )
     {
-      kDebug() << "  cell " << (*rit)->name() << endl;
+      kDebug(36002) << "  cell " << (*rit)->name() << endl;
     }
   }
 
@@ -123,7 +123,7 @@ void DependencyManager::Private::dump() const
     foreach (QString uniqueKey, table.uniqueKeys())
     {
       QStringList debugStr(table.values(uniqueKey));
-      kDebug() << "The cells depending on " << uniqueKey << " are: " << debugStr.join(", ") << endl;
+      kDebug(36002) << "The cells depending on " << uniqueKey << " are: " << debugStr.join(", ") << endl;
     }
   }
 }
@@ -148,7 +148,7 @@ void DependencyManager::regionChanged(const Region& region)
 {
   if (region.isEmpty())
     return;
-  kDebug() << "DependencyManager::regionChanged " << region.name() << endl;
+  kDebug(36002) << "DependencyManager::regionChanged " << region.name() << endl;
   Region::ConstIterator end(region.constEnd());
   for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
   {
@@ -254,7 +254,7 @@ void DependencyManager::updateFormula( Cell* cell, const Region::Element* oldLoc
   const Formula* formula = cell->formula();
   if ( !formula )
   {
-    kDebug() << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->text() << endl;
+    kDebug(36002) << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->text() << endl;
     return;
   }
 
@@ -278,7 +278,7 @@ void DependencyManager::updateFormula( Cell* cell, const Region::Element* oldLoc
       const Region region( sheet->workbook(), token.text(), sheet );
       const Region::Element* element = *region.constBegin();
 
-      kDebug() << region.name() << endl;
+      kDebug(36002) << region.name() << endl;
       // the offset contains a sheet, only if it was an intersheet move.
       if ( ( oldLocation->sheet() == element->sheet() ) &&
            ( oldLocation->rect().contains( element->rect() ) ) )
@@ -316,7 +316,7 @@ KSpread::Region DependencyManager::Private::getDependants(const Cell* cell)
 
   if (!dependants.contains(sheet))
   {
-    kDebug() << "No dependant tree found for the cell's sheet." << endl;
+    kDebug(36002) << "No dependant tree found for the cell's sheet." << endl;
     return Region();
   }
 
@@ -444,7 +444,7 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
   const Formula* f = cell->formula();
   if (f==0)
   {
-    kDebug() << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->text() << endl;
+    kDebug(36002) << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->text() << endl;
 //     Q_ASSERT(cell->formula());
     return Region();
   }

@@ -73,9 +73,10 @@ void RecalcManager::regionChanged(const Region& region)
   if (d->busy || region.isEmpty())
     return;
   d->busy = true;
-  kDebug() << "RecalcManager::regionChanged " << region.name() << endl;
+  kDebug(36002) << "RecalcManager::regionChanged " << region.name() << endl;
   ElapsedTime et( "Overall region recalculation", ElapsedTime::PrintOnlyTime );
   {
+    ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
     recalcRegion(region);
   }
   recalc();
@@ -295,6 +296,6 @@ void RecalcManager::dump() const
 {
   foreach (Cell* cell, d->depths)
   {
-    kDebug() << "Cell(" << cell->column() << ", " << cell->row() << "): " << d->cells[cell] << endl;
+    kDebug(36002) << "Cell(" << cell->column() << ", " << cell->row() << "): " << d->cells[cell] << endl;
   }
 }

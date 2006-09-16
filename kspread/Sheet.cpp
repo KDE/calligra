@@ -2112,7 +2112,7 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
                    Paste::Mode mode, Paste::Operation operation,
                    bool insert, int insertTo, bool pasteFC )
 {
-    kDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
+    kDebug(36005) << "Parsing " << b.size() << " bytes" << endl;
 
     QString errorMsg;
     int errorLine;
@@ -2121,7 +2121,7 @@ void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
     if ( !doc.setContent( b, false, &errorMsg, &errorLine, &errorColumn ) )
     {
       // an error occurred
-      kDebug() << "Sheet::paste(const QByteArray&): an error occurred" << endl
+      kDebug(36005) << "Sheet::paste(const QByteArray&): an error occurred" << endl
                << "line: " << errorLine << " col: " << errorColumn
                << ' ' << errorMsg << endl;
       return;
@@ -2171,12 +2171,12 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
                             && root.namedItem( "columns" ).toElement().isNull())
     ? pasteArea.height() : rowsInClpbrd;
 
-//   kDebug() << "loadSelection: paste area has size "
+//   kDebug(36005) << "loadSelection: paste area has size "
 //             << pasteHeight << " rows * "
 //             << pasteWidth << " columns " << endl;
-//   kDebug() << "loadSelection: " << rowsInClpbrd << " rows and "
+//   kDebug(36005) << "loadSelection: " << rowsInClpbrd << " rows and "
 //             << columnsInClpbrd << " columns in clipboard." << endl;
-//   kDebug() << "xshift: " << _xshift << " _yshift: " << _yshift << endl;
+//   kDebug(36005) << "xshift: " << _xshift << " _yshift: " << _yshift << endl;
 
   Region recalcRegion;
   KoXmlElement e = root.firstChild().toElement(); // "columns", "rows" or "cell"
@@ -2259,7 +2259,7 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
       {
         for (int coff = 0; col + coff - _xshift <= pasteWidth; coff += columnsInClpbrd)
         {
-//           kDebug() << "loadSelection: cell at " << (col+coff) << ',' << (row+roff)
+//           kDebug(36005) << "loadSelection: cell at " << (col+coff) << ',' << (row+roff)
 //                     << " with roff,coff= " << roff << ',' << coff
 //                     << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
 
@@ -3163,26 +3163,26 @@ bool Sheet::loadSheetStyleFormat( KoXmlElement *style )
 
     if ( !header.isNull() )
     {
-        kDebug() << "Header exists" << endl;
+        kDebug(36003) << "Header exists" << endl;
         KoXmlNode part = KoDom::namedItemNS( header, KoXmlNS::style, "region-left" );
         if ( !part.isNull() )
         {
             hleft = getPart( part );
-            kDebug() << "Header left: " << hleft << endl;
+            kDebug(36003) << "Header left: " << hleft << endl;
         }
         else
-            kDebug() << "Style:region:left doesn't exist!" << endl;
+            kDebug(36003) << "Style:region:left doesn't exist!" << endl;
         part = KoDom::namedItemNS( header, KoXmlNS::style, "region-center" );
         if ( !part.isNull() )
         {
             hmiddle = getPart( part );
-            kDebug() << "Header middle: " << hmiddle << endl;
+            kDebug(36003) << "Header middle: " << hmiddle << endl;
         }
         part = KoDom::namedItemNS( header, KoXmlNS::style, "region-right" );
         if ( !part.isNull() )
         {
             hright = getPart( part );
-            kDebug() << "Header right: " << hright << endl;
+            kDebug(36003) << "Header right: " << hright << endl;
         }
     }
     //TODO implement it under kspread
@@ -3191,9 +3191,9 @@ bool Sheet::loadSheetStyleFormat( KoXmlElement *style )
     {
         KoXmlElement e = headerleft.toElement();
         if ( e.hasAttributeNS( KoXmlNS::style, "display" ) )
-            kDebug()<<"header.hasAttribute( style:display ) :"<<e.hasAttributeNS( KoXmlNS::style, "display" )<<endl;
+            kDebug(36003)<<"header.hasAttribute( style:display ) :"<<e.hasAttributeNS( KoXmlNS::style, "display" )<<endl;
         else
-            kDebug()<<"header left doesn't has attribute  style:display  \n";
+            kDebug(36003)<<"header left doesn't has attribute  style:display  \n";
     }
     //TODO implement it under kspread
     KoXmlNode footerleft = KoDom::namedItemNS( *style, KoXmlNS::style, "footer-left" );
@@ -3201,9 +3201,9 @@ bool Sheet::loadSheetStyleFormat( KoXmlElement *style )
     {
         KoXmlElement e = footerleft.toElement();
         if ( e.hasAttributeNS( KoXmlNS::style, "display" ) )
-            kDebug()<<"footer.hasAttribute( style:display ) :"<<e.hasAttributeNS( KoXmlNS::style, "display" )<<endl;
+            kDebug(36003)<<"footer.hasAttribute( style:display ) :"<<e.hasAttributeNS( KoXmlNS::style, "display" )<<endl;
         else
-            kDebug()<<"footer left doesn't has attribute  style:display  \n";
+            kDebug(36003)<<"footer left doesn't has attribute  style:display  \n";
     }
 
     KoXmlNode footer = KoDom::namedItemNS( *style, KoXmlNS::style, "footer" );
@@ -3214,19 +3214,19 @@ bool Sheet::loadSheetStyleFormat( KoXmlElement *style )
         if ( !part.isNull() )
         {
             fleft = getPart( part );
-            kDebug() << "Footer left: " << fleft << endl;
+            kDebug(36003) << "Footer left: " << fleft << endl;
         }
         part = KoDom::namedItemNS( footer, KoXmlNS::style, "region-center" );
         if ( !part.isNull() )
         {
             fmiddle = getPart( part );
-            kDebug() << "Footer middle: " << fmiddle << endl;
+            kDebug(36003) << "Footer middle: " << fmiddle << endl;
         }
         part = KoDom::namedItemNS( footer, KoXmlNS::style, "region-right" );
         if ( !part.isNull() )
         {
             fright = getPart( part );
-            kDebug() << "Footer right: " << fright << endl;
+            kDebug(36003) << "Footer right: " << fright << endl;
         }
     }
 
@@ -3299,10 +3299,10 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         QString stylename = sheetElement.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        //kDebug()<<" style of table :"<<stylename<<endl;
+        //kDebug(36003)<<" style of table :"<<stylename<<endl;
         const KoXmlElement *style = oasisContext.oasisStyles().findStyle( stylename, "table" );
         Q_ASSERT( style );
-        //kDebug()<<" style :"<<style<<endl;
+        //kDebug(36003)<<" style :"<<style<<endl;
         if ( style )
         {
             KoXmlElement properties( KoDom::namedItemNS( *style, KoXmlNS::style, "table-properties" ) );
@@ -3354,11 +3354,11 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     // FIXME POSSIBLE DATA LOSS!
     while( !rowNode.isNull() && rowIndex <= KS_rowMax )
     {
-        kDebug()<<" rowIndex :"<<rowIndex<<" indexCol :"<<indexCol<<endl;
+        kDebug(36003)<<" rowIndex :"<<rowIndex<<" indexCol :"<<indexCol<<endl;
         KoXmlElement rowElement = rowNode.toElement();
         if( !rowElement.isNull() )
         {
-            kDebug()<<" Sheet::loadOasis rowElement.tagName() :"<<rowElement.localName()<<endl;
+            kDebug(36003)<<" Sheet::loadOasis rowElement.tagName() :"<<rowElement.localName()<<endl;
             if ( rowElement.namespaceURI() == KoXmlNS::table )
             {
                 if ( rowElement.localName()=="table-column" && indexCol <= KS_colMax )
@@ -3381,9 +3381,9 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                 }
                 else if( rowElement.localName() == "table-row" )
                 {
-                    kDebug()<<" table-row found :index row before "<<rowIndex<<endl;
+                    kDebug(36003)<<" table-row found :index row before "<<rowIndex<<endl;
                     loadRowFormat( rowElement, rowIndex, oasisContext, /*rowNode.isNull() ,*/ styleMap );
-                    kDebug()<<" table-row found :index row after "<<rowIndex<<endl;
+                    kDebug(36003)<<" table-row found :index row after "<<rowIndex<<endl;
                 }
                 else if ( rowElement.localName() == "shapes" )
                     loadOasisObjects( rowElement, oasisContext );
@@ -3450,7 +3450,7 @@ void Sheet::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext&
             if ( !image.isNull() )
               obj = new EmbeddedPictureObject( this, doc()->pictureCollection() );
             else
-              kDebug() << "Object type wasn't loaded!" << endl;
+              kDebug(36003) << "Object type wasn't loaded!" << endl;
           }
 
           if ( obj )
@@ -3505,7 +3505,7 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" ) )
     {
-        kDebug()<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" )<<endl;
+        kDebug(36003)<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttributeNS( KoXmlNS::style, "writing-mode" )<<endl;
         setLayoutDirection (( styleStack.attributeNS( KoXmlNS::style, "writing-mode" )=="lr-tb" ) ? LeftToRight : RightToLeft);
         //TODO
         //<value>lr-tb</value>
@@ -3528,13 +3528,13 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
         //These attributes specify the numbering style to use.
         //If a numbering style is not specified, the numbering style is inherited from
         //the page style. See section 6.7.8 for information on these attributes
-        kDebug()<<" num-format :"<<styleStack.attributeNS( KoXmlNS::style, "num-format" )<<endl;
+        kDebug(36003)<<" num-format :"<<styleStack.attributeNS( KoXmlNS::style, "num-format" )<<endl;
 
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
     {
         //TODO
-        kDebug()<<" fo:background-color :"<<styleStack.attributeNS( KoXmlNS::fo, "background-color" )<<endl;
+        kDebug(36003)<<" fo:background-color :"<<styleStack.attributeNS( KoXmlNS::fo, "background-color" )<<endl;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "print" ) )
     {
@@ -5416,7 +5416,7 @@ void Sheet::setRegionPaintDirty( const Region & region )
 
   d->paintDirtyList.add(region);
 
-  kDebug() << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
+  kDebug(36004) << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
 }
 
 void Sheet::clearPaintDirtyData()

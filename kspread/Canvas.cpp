@@ -435,7 +435,7 @@ void Canvas::validateSelection()
 
             if ( !d->validationInfo )
                 d->validationInfo = new QLabel(  this );
-            kDebug()<<" display info validation\n";
+            kDebug(36001)<<" display info validation\n";
             double u = cell->dblWidth( col );
             double v = cell->dblHeight( row );
             double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
@@ -550,7 +550,7 @@ void Canvas::scrollToCell(QPoint location) const
     double minX = unzoomedWidth - 100.0; // less than that, we scroll
     double maxX = 100.0; // more than that, we scroll
 
-    // kDebug() << "rtl2: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << ", Offset: " << xOffset() << endl;
+    // kDebug(36005) << "rtl2: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << ", Offset: " << xOffset() << endl;
 
     // Do we need to scroll left?
     if ( xpos > minX )
@@ -594,16 +594,16 @@ void Canvas::scrollToCell(QPoint location) const
   }
 
 #if 0
-  kDebug() << "------------------------------------------------" << endl;
-  kDebug() << "scrollToCell(): at location [" << location.x() << ","
+  kDebug(36005) << "------------------------------------------------" << endl;
+  kDebug(36005) << "scrollToCell(): at location [" << location.x() << ","
            << location.y() << "]" << endl;
-  kDebug() << "Unzoomed view size: [" << unzoomedWidth << ","
+  kDebug(36005) << "Unzoomed view size: [" << unzoomedWidth << ","
            << unzoomedHeight << "]" << endl;
-  kDebug() << "Position: [" << xpos << "," << ypos << "]" << endl;
-  kDebug() << "Canvas::scrollToCell : height=" << height() << endl;
-  kDebug() << "Canvas::scrollToCell : width=" << width() << endl;
-  kDebug() << "ltr: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << endl;
-  kDebug() << "ltr: YPos: " << ypos << ", min: " << minY << ", maxY: " << maxY << endl;
+  kDebug(36005) << "Position: [" << xpos << "," << ypos << "]" << endl;
+  kDebug(36005) << "Canvas::scrollToCell : height=" << height() << endl;
+  kDebug(36005) << "Canvas::scrollToCell : width=" << width() << endl;
+  kDebug(36005) << "ltr: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << endl;
+  kDebug(36005) << "ltr: YPos: " << ypos << ", min: " << minY << ", maxY: " << maxY << endl;
 #endif
 
   // do we need to scroll up
@@ -630,8 +630,8 @@ void Canvas::slotScrollHorz( int _value )
   if (!sheet)
     return;
 
-  kDebug(36001) << "slotScrollHorz: value = " << _value << endl;
-  //kDebug(36001) << kBacktrace() << endl;
+  kDebug(36005) << "slotScrollHorz: value = " << _value << endl;
+  //kDebug(36005) << kBacktrace() << endl;
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
     _value = horzScrollBar()->maximum() - _value;
@@ -655,9 +655,9 @@ void Canvas::slotScrollHorz( int _value )
   int dx = (int) ( d->xOffset - _value );
 
   // New absolute position
-  kDebug(36001) << "slotScrollHorz(): XOffset before setting: " << d->xOffset << endl;
+  kDebug(36005) << "slotScrollHorz(): XOffset before setting: " << d->xOffset << endl;
   d->xOffset = _value;
-  kDebug(36001) << "slotScrollHorz(): XOffset after setting: " << d->xOffset << endl;
+  kDebug(36005) << "slotScrollHorz(): XOffset after setting: " << d->xOffset << endl;
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
     dx = -dx;
@@ -910,7 +910,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   // you cannot move marker when col > KS_colMax or row > KS_rowMax
   if ( col > KS_colMax || row > KS_rowMax )
   {
-    kDebug(36001) << "Canvas::mouseMoveEvent: col or row is out of range: "
+    kDebug(36005) << "Canvas::mouseMoveEvent: col or row is out of range: "
                    << "col: " << col << " row: " << row << endl;
     return;
   }
@@ -1263,7 +1263,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   // you cannot move marker when col > KS_colMax or row > KS_rowMax
   if ( col > KS_colMax || row > KS_rowMax )
   {
-    kDebug(36001) << "Canvas::mousePressEvent: col or row is out of range: "
+    kDebug(36005) << "Canvas::mousePressEvent: col or row is out of range: "
                    << "col: " << col << " row: " << row << endl;
     return;
   }
@@ -1271,7 +1271,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   // you cannot move marker when col > KS_colMax or row > KS_rowMax
   if ( col > KS_colMax || row > KS_rowMax )
   {
-    kDebug(36001) << "Canvas::mousePressEvent: col or row is out of range: "
+    kDebug(36005) << "Canvas::mousePressEvent: col or row is out of range: "
                    << "col: " << col << " row: " << row << endl;
     return;
   }
@@ -1336,7 +1336,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
     }
   }
 
-  //  kDebug() << "Clicked in cell " << col << ", " << row << endl;
+  //  kDebug(36005) << "Clicked in cell " << col << ", " << row << endl;
 
   // Extending an existing selection with the shift button ?
   if ((_ev->modifiers() & Qt::ShiftModifier) &&
@@ -1562,7 +1562,7 @@ void Canvas::focusInEvent( QFocusEvent* )
   if ( !d->cellEditor )
     return;
 
-  //kDebug(36001) << "d->chooseCell : " << ( d->chooseCell ? "true" : "false" ) << endl;
+  //kDebug(36005) << "d->chooseCell : " << ( d->chooseCell ? "true" : "false" ) << endl;
   // If we are in editing mode, we redirect the
   // focus to the CellEditor or EditWidget
   // And we know which, using lastEditorWithFocus.
@@ -1570,11 +1570,11 @@ void Canvas::focusInEvent( QFocusEvent* )
   if ( lastEditorWithFocus() == EditWidget )
   {
     d->editWidget->setFocus();
-    //kDebug(36001) << "Focus to EditWidget" << endl;
+    //kDebug(36005) << "Focus to EditWidget" << endl;
     return;
   }
 
-  //kDebug(36001) << "Redirecting focus to editor" << endl;
+  //kDebug(36005) << "Redirecting focus to editor" << endl;
   d->cellEditor->setFocus();
 }
 
@@ -1622,12 +1622,12 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
   {
     if ( event->source() == this  )
     {
-      kDebug() << "source == this" << endl;
+      kDebug(36005) << "source == this" << endl;
       dragMarkingRect = selectionInfo()->boundingRect();
     }
     else
     {
-      kDebug() << "source != this" << endl;
+      kDebug(36005) << "source != this" << endl;
       QByteArray data = mimeData->data( "application/x-kspread-snippet" );
       QString errorMsg;
       int errorLine;
@@ -1636,7 +1636,7 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
       if ( !doc.setContent( data, false, &errorMsg, &errorLine, &errorColumn ) )
       {
         // an error occured
-        kDebug() << "Canvas::daragMoveEvent: an error occured" << endl
+        kDebug(36005) << "Canvas::daragMoveEvent: an error occured" << endl
                  << "line: " << errorLine << " col: " << errorColumn
                  << ' ' << errorMsg << endl;
         dragMarkingRect = QRect(1,1,1,1);
@@ -1652,7 +1652,7 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
   }
   else // if ( mimeData->hasText() )
   {
-    kDebug() << "has text" << endl;
+    kDebug(36005) << "has text" << endl;
     dragMarkingRect = QRect(1,1,1,1);
   }
 #endif
@@ -1689,7 +1689,7 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
   const int col = sheet->leftColumn( eventPosX, tmp );
   const int row = sheet->topRow( eventPosY, tmp );
   dragMarkingRect.moveTo( QPoint( col, row ) );
-  kDebug() << "MARKING RECT = " << dragMarkingRect << endl;
+  kDebug(36005) << "MARKING RECT = " << dragMarkingRect << endl;
 #endif
 }
 
@@ -1863,7 +1863,7 @@ QPoint Canvas::cursorPos()
 
 QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 {
-  kDebug(36001) << "Canvas::moveDirection" << endl;
+  kDebug(36005) << "Canvas::moveDirection" << endl;
 
   register Sheet * const sheet = activeSheet();
   if (!sheet)
@@ -3110,7 +3110,7 @@ void Canvas::slotAutoScroll(const QPoint &scrollDistance)
   //              initiated in the canvas.
   if (!d->mousePressed)
     return;
-//   kDebug() << "Canvas::slotAutoScroll(" << scrollDistance << " " << endl;
+//   kDebug(36005) << "Canvas::slotAutoScroll(" << scrollDistance << " " << endl;
   horzScrollBar()->setValue( horzScrollBar()->value() + scrollDistance.x() );
   vertScrollBar()->setValue( vertScrollBar()->value() + scrollDistance.y() );
 }
@@ -3298,7 +3298,7 @@ void Canvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
 //     diffDueToBorders.setX( pageRect.right() - (rect.right() + move.x()) );
 
 
-  //kDebug() << "rect.top() + move.y():" << rect.top() + move.y()<< endl;
+  //kDebug(36005) << "rect.top() + move.y():" << rect.top() + move.y()<< endl;
   if ( rect.top() + move.y() < 0 )
     diffDueToBorders.setY( -rect.top() - move.y() );
 //   else if ( rect.bottom() + move.y() > pageRect.bottom() )
@@ -3650,13 +3650,13 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
     {
       w = min_w;
       h = min_h;
-      //kDebug(36001) << "DEFAULT" << endl;
+      //kDebug(36005) << "DEFAULT" << endl;
     }
     else
     {
       w = cell->extraWidth();
       h = cell->extraHeight();
-      //kDebug(36001) << "HEIGHT=" << min_h << " EXTRA=" << h << endl;
+      //kDebug(36005) << "HEIGHT=" << min_h << " EXTRA=" << h << endl;
     }
 
     double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
@@ -3708,7 +3708,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
     d->cellEditor->setGeometry( zoomedRect );
     d->cellEditor->setMinimumSize( QSize( d->view->doc()->zoomItXOld( min_w ), d->view->doc()->zoomItYOld( min_h ) ) );
     d->cellEditor->show();
-    //kDebug(36001) << "FOCUS1" << endl;
+    //kDebug(36005) << "FOCUS1" << endl;
     //Laurent 2001-12-05
     //Don't add focus when we create a new editor and
     //we select text in edit widget otherwise we don't delete
@@ -3780,7 +3780,7 @@ void Canvas::copyOasisObjects()
     if ( !picture.isNull() )
         multiDrag->setMimeData( picture.dragObject( 0 ) );
 #endif
-    kDebug() << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
+    kDebug(36003) << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
     mimeData->setData( mimeType, buffer.buffer() );
 
     //save the objects as pictures too so that other programs can access them
@@ -3985,10 +3985,10 @@ void Canvas::paintUpdates()
   // unzoomedRect.translate( xOffset(), yOffset() );
 
 #if 0
-  kDebug(36001)
+  kDebug(36004)
     << "================================================================"
     << endl;
-  kDebug(36001) << "painting dirty cells " << endl;
+  kDebug(36004) << "painting dirty cells " << endl;
 #endif
 
   /* paint any visible cell that has the paintDirty flag */

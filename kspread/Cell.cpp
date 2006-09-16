@@ -592,7 +592,7 @@ bool Cell::needsPrinting() const
   }
 
   if ( format()->hasProperty( Style::SBackgroundColor ) ) {
-    kDebug() << "needsPrinting: Has background colour" << endl;
+    kDebug(36004) << "needsPrinting: Has background colour" << endl;
     QColor backgroundColor=bgColor(column(),row());
 
     //We don't need to print anything if the background is white
@@ -938,7 +938,7 @@ QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
             ++pos;
             if ( row < 1 || col < 1 || row > KS_rowMax || col > KS_colMax )
             {
-                kDebug(36001) << "Cell::decodeFormula: row or column out of range (col: " << col << " | row: " << row << ')' << endl;
+                kDebug(36003) << "Cell::decodeFormula: row or column out of range (col: " << col << " | row: " << row << ')' << endl;
                 erg = "=\"#### " + i18n("REFERENCE TO COLUMN OR ROW IS OUT OF RANGE") + '"';
                 return erg;
             }
@@ -1053,7 +1053,7 @@ void Cell::setOutputText()
 
 bool Cell::makeFormula()
 {
-//   kDebug() << k_funcinfo << endl;
+//   kDebug(36002) << k_funcinfo << endl;
 
   d->formula = new KSpread::Formula (sheet(), this);
   d->formula->setExpression (d->strText);
@@ -1087,7 +1087,7 @@ void Cell::clearFormula()
   // Update the dependencies, if this was a formula.
   if (d->formula)
   {
-    kDebug() << "This was a formula. Dependency update triggered." << endl;
+    kDebug(36002) << "This was a formula. Dependency update triggered." << endl;
     format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula ) );
     delete d->formula;
     d->formula = 0;
@@ -1524,7 +1524,7 @@ void Cell::incPrecision()
       else if ( (start=d->strOutText.indexOf('E')) != -1 )
         start = d->strOutText.length() - start;
 
-      //kDebug(36001) << "start=" << start << " pos=" << pos << " length=" << d->strOutText.length() << endl;
+      //kDebug() << "start=" << start << " pos=" << pos << " length=" << d->strOutText.length() << endl;
       format()->setPrecision( qMax( 0, (int)d->strOutText.length() - start - pos ) );
     }
   }
@@ -1542,7 +1542,7 @@ void Cell::decPrecision()
   if ( !value().isNumber() )
     return;
   int preciTmp = format()->precision( column(), row() );
-//  kDebug(36001) << "decPrecision: tmpPreci = " << tmpPreci << endl;
+//  kDebug() << "decPrecision: tmpPreci = " << tmpPreci << endl;
   if ( format()->precision(column(),row()) == -1 )
   {
     int pos = d->strOutText.indexOf( locale()->decimalSymbol() );
@@ -2362,8 +2362,8 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         // get the next cell and set the index to the adjacent cell
         nextCell = format()->sheet()->getNextCellRight( j++, row );
       }
-      kDebug() << "Cell::saveOasis: empty cell in column " << column << " "
-                << "repeated " << repeated << " time(s)" << endl;
+      kDebug(36003) << "Cell::saveOasis: empty cell in column " << column << " "
+                    << "repeated " << repeated << " time(s)" << endl;
 
       if ( repeated > 1 )
         xmlwriter.addAttribute( "table:number-columns-repeated", QString::number( repeated ) );
@@ -2377,13 +2377,13 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     }
     if ( isFormula() )
     {
-      //kDebug() << "Formula found" << endl;
+      //kDebug(36003) << "Formula found" << endl;
       QString formula = Oasis::encodeFormula( text(), locale() );
       xmlwriter.addAttribute( "table:formula", formula );
     }
     else if ( !link().isEmpty() )
     {
-        //kDebug()<<"Link found \n";
+        //kDebug(36003)<<"Link found \n";
         xmlwriter.startElement( "text:p" );
         xmlwriter.startElement( "text:a" );
         //Reference cell is started by '#'
@@ -2486,14 +2486,14 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
 
 void Cell::loadOasisConditional( KoXmlElement * style )
 {
-    //kDebug()<<" void Cell::loadOasisConditional( KoXmlElement * style  :"<<style<<endl;
+    //kDebug(36003)<<" void Cell::loadOasisConditional( KoXmlElement * style  :"<<style<<endl;
     if ( style )//safe
     {
         //TODO fixme it doesn't work :(((
         KoXmlElement e;
         forEachElement( e, style->toElement() )
         {
-//             kDebug()<<"e.localName() :"<<e.localName()<<endl;
+//             kDebug(36003)<<"e.localName() :"<<e.localName()<<endl;
             if ( e.localName() == "map" && e.namespaceURI() == KoXmlNS::style )
             {
                 if (d->hasExtra())
@@ -2510,11 +2510,11 @@ void Cell::loadOasisConditional( KoXmlElement * style )
 
 bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasisContext , Style* style )
 {
-    kDebug() << "*** Loading cell properties ***** at " << column() << ',' << row () << endl;
+    kDebug(36003) << "*** Loading cell properties ***** at " << column() << ',' << row () << endl;
 
     if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        kDebug()<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
+        kDebug(36003)<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
         oasisContext.fillStyleStack( element, KoXmlNS::table, "styleName", "table-cell" );
 
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
@@ -2538,7 +2538,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
     bool isFormula = false;
     if ( element.hasAttributeNS( KoXmlNS::table, "formula" ) )
     {
-        kDebug()<<" formula :"<<element.attributeNS( KoXmlNS::table, "formula", QString::null )<<endl;
+        kDebug(36003)<<" formula :"<<element.attributeNS( KoXmlNS::table, "formula", QString::null )<<endl;
         isFormula = true;
         QString oasisFormula( element.attributeNS( KoXmlNS::table, "formula", QString::null ) );
         //necessary to remove it to load formula from oocalc2.0 (use namespace)
@@ -2559,7 +2559,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
     //
     if ( element.hasAttributeNS( KoXmlNS::table, "validation-name" ) )
     {
-        kDebug()<<" validation-name: "<<element.attributeNS( KoXmlNS::table, "validation-name", QString::null )<<endl;
+        kDebug(36003)<<" validation-name: "<<element.attributeNS( KoXmlNS::table, "validation-name", QString::null )<<endl;
         loadOasisValidation( element.attributeNS( KoXmlNS::table, "validation-name", QString::null ) );
     }
 
@@ -2569,7 +2569,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
     if( element.hasAttributeNS( KoXmlNS::office, "value-type" ) )
     {
         QString valuetype = element.attributeNS( KoXmlNS::office, "value-type", QString::null );
-        kDebug()<<"  value-type: " << valuetype << endl;
+        kDebug(36003)<<"  value-type: " << valuetype << endl;
         if( valuetype == "boolean" )
         {
           QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString::null ).toLower();
@@ -2636,7 +2636,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
             QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
             if ( value.isEmpty() )
                 value = element.attributeNS( KoXmlNS::office, "date-value", QString::null );
-            kDebug() << "Type: date, value: " << value << endl;
+            kDebug(36003) << "Type: date, value: " << value << endl;
 
             // "1980-10-15"
             int year = 0, month = 0, day = 0;
@@ -2646,25 +2646,25 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
             if ( p1 > 0 )
                 year  = value.left( p1 ).toInt( &ok );
 
-            kDebug() << "year: " << value.left( p1 ) << endl;
+            kDebug(36003) << "year: " << value.left( p1 ) << endl;
 
             int p2 = value.indexOf( '-', ++p1 );
 
             if ( ok )
                 month = value.mid( p1, p2 - p1  ).toInt( &ok );
 
-            kDebug() << "month: " << value.mid( p1, p2 - p1 ) << endl;
+            kDebug(36003) << "month: " << value.mid( p1, p2 - p1 ) << endl;
 
             if ( ok )
                 day = value.right( value.length() - p2 - 1 ).toInt( &ok );
 
-            kDebug() << "day: " << value.right( value.length() - p2 ) << endl;
+            kDebug(36003) << "day: " << value.right( value.length() - p2 ) << endl;
 
             if ( ok )
             {
                 setCellValue( Value( QDate( year, month, day ), sheet()->doc() ) );
                 format()->setFormatType (ShortDate_format);
-                kDebug() << "Set QDate: " << year << " - " << month << " - " << day << endl;
+                kDebug(36003) << "Set QDate: " << year << " - " << month << " - " << day << endl;
             }
 
         }
@@ -2673,7 +2673,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
             QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
             if ( value.isEmpty() )
                 value = element.attributeNS( KoXmlNS::office, "time-value", QString::null );
-            kDebug() << "Type: time: " << value << endl;
+            kDebug(36003) << "Type: time: " << value << endl;
             // "PT15H10M12S"
             int hours = 0, minutes = 0, seconds = 0;
             int l = value.length();
@@ -2695,13 +2695,13 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
                 else
                     continue;
 
-                kDebug() << "Num: " << num << endl;
+                kDebug(36003) << "Num: " << num << endl;
 
                 num = "";
                 if ( !ok )
                     break;
             }
-            kDebug() << "Hours: " << hours << ", " << minutes << ", " << seconds << endl;
+            kDebug(36003) << "Hours: " << hours << ", " << minutes << ", " << seconds << endl;
 
             if ( ok )
             {
@@ -2723,7 +2723,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
             format()->setFormatType (Text_format);
         }
         else
-            kDebug()<<" type of value found : "<<valuetype<<endl;
+            kDebug(36003)<<" type of value found : "<<valuetype<<endl;
     }
 
     //
@@ -2855,7 +2855,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
             if ( !image.isNull() )
               obj = new EmbeddedPictureObject( sheet(), sheet()->doc()->pictureCollection() );
             else
-              kDebug() << "Object type wasn't loaded!" << endl;
+              kDebug(36003) << "Object type wasn't loaded!" << endl;
           }
 
           if ( obj )
@@ -2904,7 +2904,7 @@ void Cell::loadOasisValidation( const QString& validationName )
     if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
     {
         QString valExpression = element.attributeNS( KoXmlNS::table, "condition", QString::null );
-        kDebug()<<" element.attribute( table:condition ) "<<valExpression<<endl;
+        kDebug(36003)<<" element.attribute( table:condition ) "<<valExpression<<endl;
         //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
         //ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
@@ -2922,7 +2922,7 @@ void Cell::loadOasisValidation( const QString& validationName )
         {
             //"cell-content-text-length()>45"
             valExpression = valExpression.remove("oooc:cell-content-text-length()" );
-            kDebug()<<" valExpression = :"<<valExpression<<endl;
+            kDebug(36003)<<" valExpression = :"<<valExpression<<endl;
             validity->m_restriction = Restriction::TextLength;
 
             loadOasisValidationCondition( valExpression );
@@ -2937,7 +2937,7 @@ void Cell::loadOasisValidation( const QString& validationName )
             validity->m_restriction = Restriction::TextLength;
             validity->m_cond = Conditional::Between;
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-between(" );
-            kDebug()<<" valExpression :"<<valExpression<<endl;
+            kDebug(36003)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ')' );
             QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
             loadOasisValidationValue( listVal );
@@ -2947,9 +2947,9 @@ void Cell::loadOasisValidation( const QString& validationName )
             validity->m_restriction = Restriction::TextLength;
             validity->m_cond = Conditional::Different;
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-not-between(" );
-            kDebug()<<" valExpression :"<<valExpression<<endl;
+            kDebug(36003)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ')' );
-            kDebug()<<" valExpression :"<<valExpression<<endl;
+            kDebug(36003)<<" valExpression :"<<valExpression<<endl;
             QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
             loadOasisValidationValue( listVal );
         }
@@ -2957,7 +2957,7 @@ void Cell::loadOasisValidation( const QString& validationName )
         {
             validity->m_restriction = Restriction::List;
             valExpression = valExpression.remove( "oooc:cell-content-is-in-list(" );
-            kDebug()<<" valExpression :"<<valExpression<<endl;
+            kDebug(36003)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ')' );
             validity->listValidity = valExpression.split( ';',  QString::SkipEmptyParts );
 
@@ -2985,7 +2985,7 @@ void Cell::loadOasisValidation( const QString& validationName )
                 validity->m_restriction = Restriction::Time;
                 valExpression = valExpression.remove( "oooc:cell-content-is-time() and " );
             }
-            kDebug()<<"valExpression :"<<valExpression<<endl;
+            kDebug(36003)<<"valExpression :"<<valExpression<<endl;
 
             if ( valExpression.contains( "cell-content()" ) )
             {
@@ -3014,7 +3014,7 @@ void Cell::loadOasisValidation( const QString& validationName )
     }
     if ( element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" ) )
     {
-        kDebug()<<" element.hasAttribute( table:allow-empty-cell ) :"<<element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" )<<endl;
+        kDebug(36003)<<" element.hasAttribute( table:allow-empty-cell ) :"<<element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" )<<endl;
         validity->allowEmptyCell = ( ( element.attributeNS( KoXmlNS::table, "allow-empty-cell", QString::null )=="true" ) ? true : false );
     }
     if ( element.hasAttributeNS( KoXmlNS::table, "base-cell-address" ) )
@@ -3027,18 +3027,18 @@ void Cell::loadOasisValidation( const QString& validationName )
     {
         if ( help.hasAttributeNS( KoXmlNS::table, "title" ) )
         {
-            kDebug()<<"help.attribute( table:title ) :"<<help.attributeNS( KoXmlNS::table, "title", QString::null )<<endl;
+            kDebug(36003)<<"help.attribute( table:title ) :"<<help.attributeNS( KoXmlNS::table, "title", QString::null )<<endl;
             validity->titleInfo = help.attributeNS( KoXmlNS::table, "title", QString::null );
         }
         if ( help.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
-            kDebug()<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
+            kDebug(36003)<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
             validity->displayValidationInformation = ( ( help.attributeNS( KoXmlNS::table, "display", QString::null )=="true" ) ? true : false );
         }
         KoXmlElement attrText = KoDom::namedItemNS( help, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )
         {
-            kDebug()<<"help text :"<<attrText.text()<<endl;
+            kDebug(36003)<<"help text :"<<attrText.text()<<endl;
             validity->messageInfo = attrText.text();
         }
     }
@@ -3058,12 +3058,12 @@ void Cell::loadOasisValidation( const QString& validationName )
             else if ( str == "stop" )
               validity->m_action = Action::Stop;
             else
-                kDebug()<<"validation : message type unknown  :"<<str<<endl;
+                kDebug(36003)<<"validation : message type unknown  :"<<str<<endl;
         }
 
         if ( error.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
-            kDebug()<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
+            kDebug(36003)<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
             validity->displayMessage = (error.attributeNS( KoXmlNS::table, "display", QString::null )=="true");
         }
         KoXmlElement attrText = KoDom::namedItemNS( error, KoXmlNS::text, "p" );
@@ -3076,7 +3076,7 @@ void Cell::loadOasisValidation( const QString& validationName )
 void Cell::loadOasisValidationValue( const QStringList &listVal )
 {
     bool ok = false;
-    kDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+    kDebug(36003)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
     
     Validity *validity = this->validity(true);
     
@@ -3097,7 +3097,7 @@ void Cell::loadOasisValidationValue( const QStringList &listVal )
         {
             validity->valMin = listVal[0].toInt(&ok);
             if ( !ok )
-                kDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+                kDebug(36003)<<" Try to parse this value :"<<listVal[0]<<endl;
 
 #if 0
             if ( !ok )
@@ -3110,7 +3110,7 @@ void Cell::loadOasisValidationValue( const QStringList &listVal )
         {
             validity->valMax = listVal[1].toInt(&ok);
             if ( !ok )
-                kDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+                kDebug(36003)<<" Try to parse this value :"<<listVal[1]<<endl;
 
 #if 0
             if ( !ok )
@@ -3157,7 +3157,7 @@ void Cell::loadOasisValidationCondition( QString &valExpression )
         validity->m_cond = Conditional::Equal;
     }
     else
-        kDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
+        kDebug(36003)<<" I don't know how to parse it :"<<valExpression<<endl;
     if ( validity->m_restriction == Restriction::Date )
     {
         validity->dateMin = QDate::fromString( value );
@@ -3174,7 +3174,7 @@ void Cell::loadOasisValidationCondition( QString &valExpression )
         {
             validity->valMin = value.toInt(&ok);
             if ( !ok )
-                kDebug()<<" Try to parse this value :"<<value<<endl;
+                kDebug(36003)<<" Try to parse this value :"<<value<<endl;
 
 #if 0
             if ( !ok )
@@ -4098,7 +4098,7 @@ void Cell::checkForNamedAreas( QString & formula ) const
 
   LoadingInfo* loadinginfo = sheet()->doc()->loadingInfo();
   if(! loadinginfo) {
-    kDebug() << "Cell::checkForNamedAreas loadinginfo is NULL" << endl;
+    kDebug(36003) << "Cell::checkForNamedAreas loadinginfo is NULL" << endl;
     return;
   }
 
@@ -4121,7 +4121,7 @@ void Cell::checkForNamedAreas( QString & formula ) const
         formula = formula.replace( start, word.length(), '\'' + word + '\'' );
         l = formula.length();
         ++i;
-        kDebug() << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
+        kDebug(36003) << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
       }
     }
 
@@ -4136,7 +4136,7 @@ void Cell::checkForNamedAreas( QString & formula ) const
       formula = formula.replace( start, word.length(), '\'' + word + '\'' );
       l = formula.length();
       ++i;
-      kDebug() << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
+      kDebug(36003) << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
     }
   }
 }
