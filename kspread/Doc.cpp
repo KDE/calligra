@@ -2040,11 +2040,11 @@ void Doc::saveOasisAreaName( KoXmlWriter & xmlWriter )
 
 void Doc::loadOasisAreaName( const KoXmlElement& body )
 {
-    kDebug()<<"void Doc::loadOasisAreaName( const KoXmlElement& body ) \n";
+    kDebug(36003)<<"void Doc::loadOasisAreaName( const KoXmlElement& body ) \n";
     KoXmlNode namedAreas = KoDom::namedItemNS( body, KoXmlNS::table, "named-expressions" );
     if ( !namedAreas.isNull() )
     {
-        kDebug()<<" area name exist \n";
+        kDebug(36003)<<" area name exist \n";
         KoXmlNode area = namedAreas.firstChild();
         while ( !area.isNull() )
         {
@@ -2054,7 +2054,7 @@ void Doc::loadOasisAreaName( const KoXmlElement& body )
             {
                 if ( !e.hasAttributeNS( KoXmlNS::table, "name" ) || !e.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
                 {
-                    kDebug() << "Reading in named area failed" << endl;
+                    kDebug(36003) << "Reading in named area failed" << endl;
                     area = area.nextSibling();
                     continue;
                 }
@@ -2062,9 +2062,8 @@ void Doc::loadOasisAreaName( const KoXmlElement& body )
                 // TODO: what is: sheet:base-cell-address
                 QString name  = e.attributeNS( KoXmlNS::table, "name", QString::null );
                 QString range = e.attributeNS( KoXmlNS::table, "cell-range-address", QString::null );
-                kDebug()<<"area name : "<<name<<" range :"<<range<<endl;
                 d->loadingInfo->addWordInAreaList( name );
-                kDebug() << "Reading in named area, name: " << name << ", area: " << range << endl;
+                kDebug(36003) << "Reading in named area, name: " << name << ", area: " << range << endl;
 
                 range = Oasis::decodeFormula( range );
 
@@ -2076,7 +2075,7 @@ void Doc::loadOasisAreaName( const KoXmlElement& body )
                     if ( n > 0 )
                         range = range + ':' + range.right( range.length() - n - 1);
 
-                    kDebug() << "=> Area: " << range << endl;
+                    kDebug(36003) << "=> Area: " << range << endl;
                 }
 
                 if ( range.contains( '!' ) && range[0] == '$' )
@@ -2088,11 +2087,10 @@ void Doc::loadOasisAreaName( const KoXmlElement& body )
                 Range p( range );
 
                 addAreaName( p.range(), name, p.sheetName() );
-                kDebug() << "Area range: " << p.sheetName() << endl;
             }
             else if ( e.localName() == "named-expression" )
             {
-                kDebug() << "Named expression found." << endl;
+                kDebug(36003) << "Named expression found." << endl;
                 // TODO
             }
 

@@ -878,7 +878,7 @@ Region::Point::Point(const QString& sCell)
     }
     else  // If there isn't any, then this is not a point -> return
     {
-      kDebug(36001) << "Region::Point::init: no number in string (string: '" << string.mid( p, result ) << "'" << endl;
+      kDebug(36001) << "Region::Point::init: no number in string (string: '" << string.mid( p, result ) << "')" << endl;
         return;
     }
     p = result;
