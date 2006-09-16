@@ -321,15 +321,21 @@ Value func_dget (valVector args, ValueCalc *calc, FuncExtra *)
 
   DBConditions conds (calc, database, conditions);
 
+  bool match = false;
+  Value result = Value::errorVALUE();
   int rows = database.rows() - 1;  // first row contains column names
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      Value val = database.element (fieldIndex, r + 1);
-      return val;
+      if (match) {
+        // error on multiple matches
+        result = Value::errorVALUE();
+        break;
+      }
+      result = database.element (fieldIndex, r + 1);
+      match = true;
     }
 
-  // no match
-  return Value::errorVALUE();
+  return result;
 }
 
 // Function: DMAX
