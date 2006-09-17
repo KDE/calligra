@@ -20,7 +20,6 @@
 #include "KexiStartup_p.h"
 
 #include <kstandarddirs.h>
-#include <kprogressbar.h>
 #include <kprocess.h>
 #include <kdebug.h>
 #include <klocale.h>

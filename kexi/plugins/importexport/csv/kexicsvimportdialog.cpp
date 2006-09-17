@@ -62,7 +62,6 @@
 #include <kiconloader.h>
 #include <kcharsets.h>
 #include <knuminput.h>
-#include <kprogressbar.h>
 #include <kactivelabel.h>
 
 #include <kexiutils/identifier.h>

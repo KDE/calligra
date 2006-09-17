@@ -42,7 +42,7 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <QPushButton>
-
+#include <QProgressBar>
 
 #include <Q3GroupBox>
 //Added by qt3to4:
@@ -58,7 +58,6 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kprogressbar.h>
 #include <kstandarddirs.h>
 #include <kurlrequester.h>
 #include <kstdguiitem.h>
@@ -82,7 +81,7 @@ KPrMSPresentation::KPrMSPresentation( const KPrMSPresentation &msPres )
     view = msPres.view;
 }
 
-void KPrMSPresentation::initCreation( KProgressBar *progressBar )
+void KPrMSPresentation::initCreation( QProgressBar *progressBar )
 {
     int p;
 
@@ -160,7 +159,7 @@ void KPrMSPresentation::initCreation( KProgressBar *progressBar )
 
 }
 
-void KPrMSPresentation::createSlidesPictures( KProgressBar *progressBar )
+void KPrMSPresentation::createSlidesPictures( QProgressBar *progressBar )
 {
     if ( slideInfos.isEmpty() )
         return;

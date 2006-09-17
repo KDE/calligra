@@ -23,7 +23,6 @@
 #define KEXIMIGRATIONIMPORTWIZARD_H
 
 #include <k3wizard.h>
-#include <kprogressbar.h>
 #include <kapplication.h>
 
 #include <kexiutils/tristate.h> 
@@ -141,7 +140,7 @@ private:
 	bool m_fileBasedDstWasPresented, m_setupFileBasedSrcNeeded, 
 		m_importExecuted; //!< used in import()
 	KexiProjectSet* m_prjSet;
-	KProgress *m_progressBar;
+	QProgress *m_progressBar;
 	QPushButton* m_importOptionsButton;
 	QMap<QString,QString> *m_args;
 	QString m_predefinedDatabaseName, m_predefinedMimeType;

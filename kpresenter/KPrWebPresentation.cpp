@@ -50,6 +50,7 @@
 #include <QRegExp>
 #include <qimage.h>
 #include <QLayout>
+#include <QProgressBar>
 
 #include <QCheckBox>
 //Added by qt3to4:
@@ -67,7 +68,6 @@
 #include <kbuttonbox.h>
 #include <ksimpleconfig.h>
 #include <kapplication.h>
-#include <kprogressbar.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kcharsets.h>
@@ -267,7 +267,7 @@ void KPrWebPresentation::saveConfig()
     cfg.writeEntry( "Encoding", m_encoding );
 }
 
-void KPrWebPresentation::initCreation( KProgressBar *progressBar )
+void KPrWebPresentation::initCreation( QProgressBar *progressBar )
 {
     QString cmd;
     int p;
@@ -303,7 +303,7 @@ void KPrWebPresentation::initCreation( KProgressBar *progressBar )
     }
 }
 
-void KPrWebPresentation::createSlidesPictures( KProgressBar *progressBar )
+void KPrWebPresentation::createSlidesPictures( QProgressBar *progressBar )
 {
     if ( slideInfos.isEmpty() )
         return;
@@ -388,7 +388,7 @@ void KPrWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *
     // ### TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 }
 
-void KPrWebPresentation::createSlidesHTML( KProgressBar *progressBar )
+void KPrWebPresentation::createSlidesHTML( QProgressBar *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
 
@@ -531,7 +531,7 @@ void KPrWebPresentation::createSlidesHTML( KProgressBar *progressBar )
     }
 }
 
-void KPrWebPresentation::createMainPage( KProgressBar *progressBar )
+void KPrWebPresentation::createMainPage( QProgressBar *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
     KTempFile tmp;
@@ -1263,7 +1263,7 @@ void KPrWebPresentationCreateDialog::setupGUI()
     line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
     line->setMaximumHeight( 20 );
 
-    progressBar = new KProgressBar( back );
+    progressBar = new QProgressBar( back );
 
     line = new Q3Frame( back );
     line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );

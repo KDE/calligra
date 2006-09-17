@@ -50,7 +50,7 @@ class KHBox;
 
 class Q3ListViewItem;
 class QCloseEvent;
-class KProgressBar;
+class QProgressBar;
 class QLabel;
 class Q3GroupBox;
 class Q3VBoxLayout;
@@ -85,9 +85,9 @@ public:
     int slidesSteps() { return slideInfos.count(); }
     int indexFileSteps() const { return 4 + slideInfos.count(); }
 
-    void initCreation( KProgressBar *progressBar );
-    void createSlidesPictures( KProgressBar *progressBar );
-    void createIndexFile( KProgressBar *progressBar );
+    void initCreation( QProgressBar *progressBar );
+    void createSlidesPictures( QProgressBar *progressBar );
+    void createIndexFile( QProgressBar *progressBar );
 
 protected:
     void init();
@@ -155,7 +155,7 @@ protected:
     KPrDocument *doc;
     KPrMSPresentation msPres;
 
-    KProgressBar *progressBar;
+    QProgressBar *progressBar;
     QLabel *step1, *step2, *step3;
     QPushButton *bDone;
     KVBox *back;

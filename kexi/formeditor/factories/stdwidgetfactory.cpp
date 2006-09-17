@@ -25,6 +25,7 @@
 #include <Q3CString>
 #include <Q3Frame>
 #include <Q3ValueList>
+#include <QProgressBar>
 
 #include <klineedit.h>
 #include <kpushbutton.h>
@@ -33,7 +34,6 @@
 #include <klistbox.h>
 #include <ktextedit.h>
 #include <k3listview.h>
-#include <kprogressbar.h>
 #include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -264,9 +264,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 
 	KFormDesigner::WidgetInfo *wProgressBar = new KFormDesigner::WidgetInfo(this);
 	wProgressBar->setPixmap("progress");
-	wProgressBar->setClassName("KProgress");
-	wProgressBar->addAlternateClassName("QProgressBar");
-	wProgressBar->setIncludeFileName("kprogressbar.h");
+	wProgressBar->setClassName("QProgressBar");
 	wProgressBar->setName(i18n("Progress Bar"));
 	wProgressBar->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "progressBar"));
@@ -432,8 +430,8 @@ StdWidgetFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 	else if(c == "QSlider")
 		w = new QSlider(Qt::Horizontal, p, n);
 
-	else if(c == "KProgress")
-		w = new KProgress(p, n);
+	else if(c == "QProgressBar")
+		w = new QProgressBar(p, n);
 
 	else if(c == "KDateWidget")
 		w = new KDateWidget(QDate::currentDate(), p, n);

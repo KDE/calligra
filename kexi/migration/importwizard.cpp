@@ -347,7 +347,8 @@ void ImportWizard::setupImporting()
 	m_lblImportingErrTxt = new QLabel(m_importingPage);
 	m_lblImportingErrTxt->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::TextWordWrap );
 
-	m_progressBar = new KProgress(100, m_importingPage);
+	m_progressBar = new QProgress(m_importingPage);
+	m_progressBar->setRange(0, 100);
 	m_progressBar->hide();
 
 	vbox->addWidget( m_lblImportingTxt );

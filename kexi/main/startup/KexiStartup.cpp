@@ -45,7 +45,6 @@
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
 #include <kdeversion.h>
-#include <kprogressbar.h>
 #include <ktextedit.h>
 #include <kstaticdeleter.h>
 
