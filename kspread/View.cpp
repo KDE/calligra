@@ -7099,6 +7099,8 @@ void View::handleDamages( const QList<Damage*>& damages )
     Region textFormatChagedRegion;
     Region valueChangedRegion;
 
+    ElapsedTime et( "Damage processing", ElapsedTime::PrintOnlyTime );
+
     QList<Damage*>::ConstIterator end(damages.end());
     for( QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it )
     {

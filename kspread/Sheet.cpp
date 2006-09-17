@@ -3363,9 +3363,9 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
             {
                 if ( rowElement.localName()=="table-column" && indexCol <= KS_colMax )
                 {
-                    kDebug ()<<" table-column found : index column before "<< indexCol<<endl;
+                    kDebug(36003)<<" table-column found : index column before "<< indexCol<<endl;
                     loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol , styleMap);
-                    kDebug ()<<" table-column found : index column after "<< indexCol<<endl;
+                    kDebug(36003)<<" table-column found : index column after "<< indexCol<<endl;
                 }
                 else if ( rowElement.localName() == "table-header-rows" )
                 {
@@ -4172,7 +4172,7 @@ void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
         //we don't have var at the end =>store it
         addText( text+var, xmlWriter );
     }
-    kDebug()<<" text end :"<<text<<" var :"<<var<<endl;
+    kDebug(36003)<<" text end :"<<text<<" var :"<<var<<endl;
 }
 
 
