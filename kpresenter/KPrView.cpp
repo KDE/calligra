@@ -6367,7 +6367,6 @@ void KPrView::documentModified( bool b )
 
 void KPrView::loadingFinished()
 {
-  setZoom( 100, true );
   h_ruler->setPageLayout(m_pKPresenterDoc->pageLayout());
   v_ruler->setPageLayout(m_pKPresenterDoc->pageLayout());
   slotUpdateRuler();
