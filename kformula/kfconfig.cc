@@ -45,6 +45,7 @@ KFConfig::KFConfig( KFormulaPartView* parent )
     _page = new KFormula::ConfigurePage( parent->document()->getDocument(), this,
                                          KFormulaFactory::global()->config(),
                                          page1 );
+    addpage( p1 );
 //     QVBox* page2 = addVBoxPage( i18n( "Math Fonts" ), i18n( "Math Fonts Settings" ),
 //                                BarIcon( "kformula", K3Icon::SizeMedium ) );
 //     _mathFontPage = new KFormula::MathFontsConfigurePage( parent->document()->getDocument(), this,

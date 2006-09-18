@@ -44,7 +44,7 @@ KFormulaConfigDialog::KFormulaConfigDialog( KFormulaPartView* parent )
 /*    _page = new KFormula::ConfigurePage( parent->document()->getDocument(), this,
                                          KFormulaFactory::global()->config(),
                                          page1 );*/
-
+    addPage(page);
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
 }
 
