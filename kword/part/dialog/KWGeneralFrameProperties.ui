@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>434</width>
-    <height>243</height>
+    <width>491</width>
+    <height>248</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -114,6 +114,9 @@
         </item>
         <item>
          <widget class="QCheckBox" name="evenOdd" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
           <property name="text" >
            <string>Only on even/odd pages</string>
           </property>
@@ -163,18 +166,18 @@
  <resources/>
  <connections>
   <connection>
-   <sender>reconnect</sender>
+   <sender>noFollowup</sender>
    <signal>toggled(bool)</signal>
    <receiver>evenOdd</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel" >
-     <x>345</x>
-     <y>92</y>
+     <x>364</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel" >
-     <x>340</x>
-     <y>145</y>
+     <x>347</x>
+     <y>162</y>
     </hint>
    </hints>
   </connection>
