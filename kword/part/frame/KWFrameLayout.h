@@ -77,6 +77,16 @@ public:
      */
     void cleanupHeadersFooters();
 
+    /**
+     * For the one frameset create all the frames that would be auto-placed
+     * on the target pagenumber if the page was appended.  Will only place
+     * frames if the already present frames in the frameset plus the
+     * newFrameBehavior state it should.
+     * @param fs the frameset to attach a new textframe to
+     * @param pageNumber the (already existing) page where the new frame(s) will show
+     */
+    void createNewFrameForPage(KWTextFrameSet *fs, int pageNumber);
+
 signals:
     /**
      * Signal emitted when a frameset is created

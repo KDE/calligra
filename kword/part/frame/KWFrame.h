@@ -105,7 +105,7 @@ public:
      * The space between this frames edge and the text when that text runs around this frame.
      * @return the space around this frame to keep free from text
      */
-    double runAroundDistance() { return m_runAroundDistance; }
+    double runAroundDistance() const { return m_runAroundDistance; }
     /**
      * Set the space between this frames edge and the text when that text runs around this frame.
      * @param distance the space around this frame to keep free from text
@@ -137,7 +137,7 @@ public:
      * previous frame in this frameset.
      * @return true if this is a copy
      */
-    bool isCopy() { return m_isCopy; }
+    bool isCopy() const { return m_isCopy; }
     /**
      * Sets if this frame is a copy of the previous one.
      * If this frame is a copy, then this frame is drawn with the same content as the
@@ -145,6 +145,12 @@ public:
      * @param on if true, the frame is now a copy
      */
     void setCopy(bool on) { m_isCopy = on; }
+
+    /**
+     * Copy all the settings from the parameter frame and apply them to this frame.
+     * @param frame the frame to use as original
+     */
+    virtual void copySettings(const KWFrame *frame);
 
 private:
     KoShape *m_shape;

@@ -50,3 +50,14 @@ void KWFrame::setFrameSet(KWFrameSet *fs) {
     m_frameSet = fs;
     fs->addFrame(this);
 }
+
+void KWFrame::copySettings(const KWFrame *frame) {
+    setFrameBehavior(frame->frameBehavior());
+    setNewFrameBehavior(frame->newFrameBehavior());
+    setFrameOnBothSheets(frame->frameOnBothSheets());
+    setRunAroundDistance(frame->runAroundDistance());
+    setRunAroundSide(frame->runAroundSide());
+    setTextRunAround(frame->textRunAround());
+    setCopy(frame->isCopy());
+    shape()->copySettings(frame->shape());
+}

@@ -113,8 +113,21 @@ void KWTextFrameSet::relayout() {
 }
 
 void KWTextFrameSet::requestMoreFrames() {
-    // TODO emit only when the last frame wants me to
-    emit moreFramesNeeded(this);
+    if(frameCount() == 0)
+        return; // there is no way we can get more frames anyway.
+    KWFrame *lastFrame = frames()[frameCount()-1];
+    switch(lastFrame->frameBehavior()) {
+        case KWord::IgnoreContentFrameBehavior:
+            return;
+        case KWord::AutoCreateNewFrameBehavior:
+            if(lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
+                emit moreFramesNeeded(this);
+            break;
+        case KWord::AutoExtendFrameBehavior:
+                // TODO emit a request for more space, but not until we know how
+                //      much (vertical) space we actually need.
+            break;
+    }
 }
 
 void KWTextFrameSet::framesEmpty(int framesInUse) {

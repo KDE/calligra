@@ -402,17 +402,18 @@ void KWDocument::addCommand(KCommand *command, bool execute) {
 }
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {
+//kDebug() << "KWDocument::requestMoreSpace\n";
     Q_ASSERT(fs);
     Q_ASSERT(fs->frameCount() > 0);
     Q_ASSERT(QThread::currentThread() == thread());
-    kDebug() << "KWFrameLayout::requestMoreSpace" << endl;
 
     KWFrame *lastFrame = fs->frames()[ fs->frameCount()-1 ];
     KWPage *page = m_pageManager.page(lastFrame->shape());
-    int pageDiff = m_pageManager.lastPageNumber() - page->pageNumber() -page->pageNumber();
-    if(pageDiff > (lastFrame->frameOnBothSheets() ? 1 : 2)) {
+    int pageDiff =  m_pageManager.lastPageNumber() - page->pageNumber();
+    if(pageDiff >= (lastFrame->frameOnBothSheets() ? 1 : 2)) {
         // its enough to just create a new frame.
-        kDebug() << "TODO: Create a new frame on page: " << (lastFrame->frameOnBothSheets()?page->pageNumber()+1:page->pageNumber()+2) << endl;
+        m_frameLayout.createNewFrameForPage(fs, page->pageNumber() +
+                (lastFrame->frameOnBothSheets() ? 1 : 2));
     }
     else
         appendPage();

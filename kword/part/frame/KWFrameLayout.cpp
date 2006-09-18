@@ -264,6 +264,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
         const double columnWidth = textWidth / columns;
         bool first=true;
         for (int i=columns-1; i >= 0; i--) {
+            main[i]->setFrameBehavior(KWord::AutoCreateNewFrameBehavior);
+            main[i]->setNewFrameBehavior(KWord::ReconnectNewFrame);
             KoShape *shape = main[i]->shape();
             shape->setPosition(
                     QPointF(left + layout.ptLeft + columnWidth * i, resultingPositions[3]));
@@ -528,6 +530,54 @@ void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs) {
     foreach(KWFrame *frame, fs->frames()) {
         fs->removeFrame(frame);
         delete(frame);
+    }
+}
+
+void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber) {
+// kDebug() << "KWFrameLayout::createNewFrameForPage " << pageNumber << endl;
+    if(fs->frameCount() == 0)
+        return;
+    if(pageNumber == m_pageManager->startPage())
+        return;
+    double prevPage, prevPage2;
+    prevPage = m_pageManager->topOfPage(pageNumber-1);
+    if(pageNumber - 2 >= m_pageManager->startPage())
+        prevPage2 = m_pageManager->topOfPage(pageNumber-2);
+    else
+        prevPage2 = -1;
+
+
+    QList<KWTextFrame*> framesToDuplicate;
+    QList<KWFrame*> frames = fs->frames();
+    QList<KWFrame*>::Iterator iter = frames.end();
+    while(iter != frames.begin()) {
+        iter--;
+        KWTextFrame *frame = static_cast<KWTextFrame*> (*iter);
+        double y = frame->shape()->position().y();
+        if(y > prevPage) {
+            if(frame->frameOnBothSheets())
+                framesToDuplicate.prepend(frame);
+        }
+        else if(y > prevPage2) {
+            if(!frame->frameOnBothSheets())
+                framesToDuplicate.prepend(frame );
+        }
+        else // more then 2 pages back is not interresting
+            break;
+    }
+
+    KWPage *page = m_pageManager->page(pageNumber);
+    const double offsetInDocument = page->offsetInDocument();
+    // now add them in the proper order.
+    foreach(KWTextFrame *f, framesToDuplicate) {
+        KWTextFrame *frame = new KWTextFrame(createTextShape(page), fs);
+        const double y = f->shape()->position().y();
+        double offsetFromPage = y - prevPage2;
+        if(y > prevPage)
+            offsetFromPage = y - prevPage;
+        frame->copySettings(f);
+        frame->shape()->setPosition(QPointF(frame->shape()->position().x(),
+                offsetInDocument + offsetFromPage));
     }
 }
 
