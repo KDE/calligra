@@ -20,6 +20,8 @@
 #include "pdfimport.h"
 #include "pdfimport.moc"
 
+#include <QProgressBar>
+
 #include <qdom.h>
 #include <QDateTime> // debug
 //Added by qt3to4:
