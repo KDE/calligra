@@ -168,10 +168,8 @@ KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc, 
     }
     else if(viewModeType=="ModeText")
     {
-        KWTextFrameSet* fs = KWViewModeText::determineTextFrameSet( doc );
-        if ( fs )
-            return new KWViewModeText( doc, canvas, fs );
-        return new KWViewModeNormal( doc, canvas, doc->viewFrameBorders() );
+        KWTextFrameSet* fs = KWViewModeText::determineTextFrameSet( doc ); // could be 0
+        return new KWViewModeText( doc, canvas, fs );
     }
     else
     {
@@ -451,12 +449,13 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
 KWViewModeText::KWViewModeText( KWDocument * doc, KWCanvas* canvas, KWTextFrameSet* fs )
     : KWViewMode( doc, canvas, false )
 {
-    Q_ASSERT( fs );
     m_textFrameSet = fs;
 }
 
 KWTextFrameSet * KWViewModeText::textFrameSet() const
 {
+    if ( !m_textFrameSet ) // e.g. when we set this mode before we had any frames (doc not loaded yet)
+        m_textFrameSet = determineTextFrameSet( m_doc );
     return m_textFrameSet;
 }
 
@@ -502,9 +501,7 @@ QPoint KWViewModeText::viewToNormal( const QPoint & vPoint )
 
 QSize KWViewModeText::contentsSize()
 {
-    textFrameSet(); // init.
-
-    if (!m_textFrameSet)
+    if (!textFrameSet())
         return QSize();
 
     // The actual contents only depend on the amount of text.
@@ -595,7 +592,7 @@ void KWViewModeText::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPa
 }
 
 bool KWViewModeText::isTextModeFrameset(KWFrameSet *fs) const {
-    return fs==m_textFrameSet;
+    return fs == textFrameSet();
 }
 
 
