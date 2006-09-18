@@ -182,7 +182,7 @@ void KPrMSPresentation::createSlidesPictures( QProgressBar *progressBar )
     }
 }
 
-void KPrMSPresentation::createIndexFile( KProgressBar *progressBar )
+void KPrMSPresentation::createIndexFile( QProgressBar *progressBar )
 {
     int p;
     KTempFile sppFile;
@@ -600,7 +600,7 @@ void KPrMSPresentationCreateDialog::setupGUI()
     line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
     line->setMaximumHeight( 20 );
 
-    progressBar = new KProgressBar( back );
+    progressBar = new QProgressBar( back );
 
     line = new Q3Frame( back );
     line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
