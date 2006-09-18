@@ -1,11 +1,18 @@
 == Kexi CHANGES ==
 
 1.1 "Access Granted" - within KOffice 1.6
-   (alpha 1: 2006-07-01, beta 1: 2006-09-11, stable: 2006-??-??)
+   (alpha 1: 2006-07-01, beta 1: 2006-09-9, rc 1: 2006-09-26, stable: 2006-10-10)
  * Object data type and data-aware image form widget
+ * Support for macros (technology preview)
  * Improvements in Auto Field form widget
- * Table design altering without removing the existing data
- * Support for Data-aware combo boxes in the Table View
+ * Table design altering without removing the existing data; 
+   Undo and Redo commands are available. (experimental, switched off by default)
+ * Support for Data-aware combo boxes in the Table View, i.e. lookup columns 
+   (experimental, switched off by default, there is no user interface 
+   for designing the lookup columns; you can try the feature by downloading 
+   a specially prepared database)
+ * Improvements in Table View, including support for default values and tooltips 
+    for content that is too large for its cell size
 
 1.0 "Black Mamba" - within KOffice 1.5 
    (beta 1: 2006-01-31, beta 2: 2006-03-11, rc 1: 2006-03-29, stable: 2006-04-11)
