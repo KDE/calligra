@@ -20,7 +20,7 @@
 #include "pdfimport.h"
 #include "pdfimport.moc"
 
-#include <QProgressBar>
+#include <QtGui/QProgressBar>
 
 #include <qdom.h>
 #include <QDateTime> // debug
