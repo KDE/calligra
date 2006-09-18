@@ -114,9 +114,6 @@
         </item>
         <item>
          <widget class="QCheckBox" name="evenOdd" >
-          <property name="enabled" >
-           <bool>false</bool>
-          </property>
           <property name="text" >
            <string>Only on even/odd pages</string>
           </property>

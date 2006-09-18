@@ -107,6 +107,8 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames) {
     allFrames.updateCheckBox(widget.allFrames, true);
     protectContent.updateCheckBox(widget.protectContent, true);
     evenOdd.updateCheckBox(widget.evenOdd, false);
+    // unfortunately the datamodel is reversed :)
+    widget.evenOdd->setChecked( ! widget.evenOdd->isChecked());
 
     if(newFrame == GuiHelper::On)
         m_newPageGroup->button(nfb)->setChecked(true);
@@ -141,7 +143,7 @@ void KWGeneralFrameProperties::save() {
             frame->setNewFrameBehavior(nfb);
         }
         if(widget.evenOdd->checkState() != Qt::PartiallyChecked)
-            frame->setFrameOnBothSheets( widget.evenOdd->checkState() == Qt::Checked );
+            frame->setFrameOnBothSheets( widget.evenOdd->checkState() != Qt::Checked );
         if(frame->frameSet()) {
             if(widget.protectContent->checkState() != Qt::PartiallyChecked) {
                 KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *> (frame->frameSet());
