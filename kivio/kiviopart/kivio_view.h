@@ -69,7 +69,6 @@ class KoUnitDoubleSpinBox;
 class KStatusBarLabel;
 class KoLineWidthAction;
 class KoLineStyleAction;
-class KoPaletteManager;
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -102,7 +101,6 @@ class KIVIO_EXPORT KivioView : public KoView
     KivioStencilSpawnerSet *activeSpawnerSet();
 
     KoTabBar* tabBar()const { return  m_pTabBar;}
-    KoPaletteManager* paletteManager() { return m_pPaletteManager; };
     void updateMenuPage( );
 
     virtual void setupPrinter(KPrinter&);
@@ -330,7 +328,6 @@ class KIVIO_EXPORT KivioView : public KoView
     KivioStencilSpawnerSet* m_pActiveSpawnerSet;
 
     StencilBarDockManager* m_pStencilBarDockManager;
-    KoPaletteManager* m_pPaletteManager;
 
     KoRuler* vRuler;
     KoRuler* hRuler;

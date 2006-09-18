@@ -83,7 +83,6 @@
 #include "vconfiguredlg.h"
 
 // Dockers.
-#include "kopalettemanager.h"
 #include "vcolordocker.h"
 #include "vdocumentdocker.h"
 #include "vstrokedocker.h"
@@ -174,8 +173,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	// set selectTool by default
 	//m_toolbox->slotPressButton( 0 );
 
-	m_pPaletteManager = new KoPaletteManager(this, actionCollection(), "karbon palette manager");
-
 	unsigned int max = part()->maxRecentFiles();
 	setNumberOfRecentFiles( max );
 
@@ -224,7 +221,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		createResourceDock();
 
 		m_strokeFillPreview = new VStrokeFillPreview( part() );
-		paletteManager()->addWidget( m_strokeFillPreview, "StrokeFillTab", "ColorPanel" );
+        createDock(i18n("Stroke/Fills"), m_strokeFillPreview);
 	//	m_typeButtonBox = new VTypeButtonBox( part(), m_toolbox );
 
 		//connect( m_strokeFillPreview, SIGNAL( fillSelected() ), m_typeButtonBox, SLOT( setFill() ) );
@@ -242,8 +239,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 		KoShapeSelector *selector = new KoShapeSelector( this, m_canvasView, "" );
 		selector->setWindowTitle(i18n("Shapes"));
-		paletteManager()->addWidget( selector, "ToolTabDock", "ShapePanel" );
-
+        createDock(i18n("Shapes"), selector);
 		KoToolManager::instance()->addControllers( m_canvasView, p );
 
 		// for testing: manually set a shape id of the shape to be created
@@ -266,7 +262,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 			m_horizRuler->hide();
 			m_vertRuler->hide();
 		}
-	
+
 		m_horizRuler->installEventFilter(m_canvas);
 		m_vertRuler->installEventFilter(m_canvas);
 	}
@@ -292,34 +288,6 @@ KarbonView::~KarbonView()
 	delete m_canvas;
 
 	delete m_toolController;
-}
-
-static Qt::ToolBarArea stringToDock( const QString& attrPosition )
-{
-	debugView(QString("Qt::ToolBarArea stringToDock(%1)").arg(attrPosition));
-	/* Port to KDE/Qt 4
-
-	KToolBar::Dock dock = KToolBar::DockTop;
-	if ( !attrPosition.isEmpty() ) {
-		if ( attrPosition == "top" )
-			dock = Qt::DockTop;
-		else if ( attrPosition == "left" )
-			dock = Qt::DockLeft;
-		else if ( attrPosition == "right" )
-			dock = Qt::DockRight;
-		else if ( attrPosition == "bottom" )
-			dock = Qt::DockBottom;
-		else if ( attrPosition == "floating" )
-			dock = Qt::DockTornOff;
-		else if ( attrPosition == "flat" )
-			dock = Qt::DockMinimized;
-	}
-
-	return dock;
-	*/
-	
-	return Qt::TopToolBarArea;
-
 }
 
 QWidget*
@@ -393,9 +361,9 @@ KarbonView::print( KPrinter &printer )
 
 	// TODO : ultimately use plain QPainter here as that is better suited to print system
 	//kDebug(38000) << "KarbonView::print" << endl;
-	
+
 	printer.setFullPage( true );
-	
+
 	// we are using 72 dpi internally
 	double zoom = printer.logicalDpiX() / 72.0;
 
@@ -412,7 +380,7 @@ KarbonView::print( KPrinter &printer )
 
 	// first use the painter to draw into the pixmap
 	VQPainter kop( ( QPaintDevice * )&img, static_cast<int>( w ), static_cast<int>( h ) );
-	
+
 	kop.setZoomFactor( zoom );
 	kop.setMatrix( mat );
 
@@ -510,7 +478,7 @@ KarbonView::editPaste()
 
 	// Paste with a small offset.
 	double copyOffset = part()->instance()->config()->readEntry( "CopyOffset", 10 );
-	part()->addCommand( new VInsertCmd( &part()->document(), 
+	part()->addCommand( new VInsertCmd( &part()->document(),
 										objects.count() == 1
 											? i18n( "Paste Object" )
 											: i18n( "Paste Objects" ),
@@ -744,7 +712,7 @@ KarbonView::selectionDuplicate()
 
 	// Paste with a small offset.
 	double copyOffset = part()->instance()->config()->readEntry( "CopyOffset", 10 );
-	part()->addCommand( new VInsertCmd( &part()->document(), 
+	part()->addCommand( new VInsertCmd( &part()->document(),
 										objects.count() == 1
 											? i18n( "Duplicate Object" )
 											: i18n( "Duplicate Objects" ),
@@ -802,7 +770,7 @@ KarbonView::groupSelection()
 
 	KoShapeGroup *group = new KoShapeGroup();
 	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
-	
+
 	QList<KoShape*> groupedShapes;
 
 	// only group shapes with an unselected parent
@@ -812,11 +780,11 @@ KarbonView::groupSelection()
 			continue;
 		groupedShapes << shape;
 	}
-	
+
 	KMacroCommand *cmd = new KMacroCommand( i18n("Group shapes") );
 	cmd->addCommand( new KoShapeCreateCommand( m_part, group ) );
 	cmd->addCommand( new KoGroupShapesCommand( group, groupedShapes ) );
-		
+
 	part()->commandHistory()->addCommand( cmd, true );
 }
 
@@ -922,7 +890,7 @@ KarbonView::viewZoomOut()
 	setZoomAt( zoom() * 0.75 );
 }
 
-void 
+void
 KarbonView::zoomChanged( KoZoomMode::Mode mode, int zoom )
 {
 	debugView(QString("KarbonView::zoomChanged( mode = %1, zoom = %2) )").arg(mode).arg(zoom));
@@ -936,7 +904,7 @@ KarbonView::zoomChanged( KoZoomMode::Mode mode, int zoom )
 		KoView::setZoom( zoomF );
 		zoomHandler->setZoom( zoomF );
 	}
-	
+
 	zoomHandler->setZoomMode( mode );
 	m_canvas->adjustSize();
 	// TODO adjust the scrollbar positions of the canvas view
@@ -1118,7 +1086,7 @@ KarbonView::initActions()
 	m_viewAction = new KSelectAction(i18n("View &Mode"), actionCollection(), "view_mode");
 	connect(m_viewAction, SIGNAL(triggered()), this, SLOT(viewModeChanged()));
 
-	m_zoomAction = new KoZoomAction( KoZoomMode::ZOOM_CONSTANT|KoZoomMode::ZOOM_PAGE|KoZoomMode::ZOOM_WIDTH, 
+	m_zoomAction = new KoZoomAction( KoZoomMode::ZOOM_CONSTANT|KoZoomMode::ZOOM_PAGE|KoZoomMode::ZOOM_WIDTH,
 	i18n("Zoom"), KIcon("14_zoom"), 0, actionCollection(), "view_zoom");
 	connect(m_zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
           this, SLOT(zoomChanged(KoZoomMode::Mode, int)));
@@ -1548,7 +1516,7 @@ KarbonView::selectionChanged()
 
 	if( count > 0 )
 	{
-		/** TODO needs porting to flake 
+		/** TODO needs porting to flake
 		VObject *obj = part()->document().selection()->objects().getFirst();
 
 		if ( shell() ) {
@@ -1584,7 +1552,7 @@ KarbonView::selectionChanged()
 		else if( obj->stroke()->dashPattern().array().count() == 6 )
   			m_lineStyleAction->setCurrentSelection( Qt::DashDotDotLine );
 		*/
-		
+
 		// check all selected shapes if they are grouped
 		// and enable the ungroup action if at least one is found
 		foreach( KoShape* shape, selection->selectedShapes() )
@@ -1659,7 +1627,7 @@ void KarbonView::createDocumentTabDock()
 
 	m_DocumentTab = new VDocumentTab(this, this);
 	m_DocumentTab->setWindowTitle(i18n("Document"));
-	paletteManager()->addWidget(m_DocumentTab, "DocumentTabDock", "DocumentPanel");
+    createDock(i18n("Document"), m_DocumentTab);
 	connect( m_part, SIGNAL( unitChanged( KoUnit::Unit ) ), m_DocumentTab, SLOT( updateDocumentInfo() ) );
 }
 
@@ -1669,7 +1637,7 @@ void KarbonView::createLayersTabDock()
 
 	m_LayersTab = new VLayersTab(this, this);
 	m_LayersTab->setWindowTitle(i18n("Layers"));
-	paletteManager()->addWidget(m_LayersTab, "LayersTabDock", "DocumentPanel");
+    createDock(i18n("Layers"), m_LayersTab);
 }
 
 void KarbonView::createStrokeDock()
@@ -1678,8 +1646,7 @@ void KarbonView::createStrokeDock()
 
 	m_strokeDocker = new VStrokeDocker(part(), this);
 	m_strokeDocker->setWindowTitle(i18n("Stroke Properties"));
-	paletteManager()->addWidget(m_strokeDocker, "StrokeTabDock", "StrokePanel");
-
+    createDock(i18n("Stroke Properties"), m_strokeDocker);
 	connect( part(), SIGNAL( unitChanged( KoUnit::Unit ) ), m_strokeDocker, SLOT( setUnit( KoUnit::Unit ) ) );
 }
 
@@ -1688,9 +1655,7 @@ void KarbonView::createColorDock()
 	debugView("KarbonView::createColorDock()");
 
 	m_ColorManager = new VColorDocker(part(),this);
-	//m_ColorManager->setWindowTitle(i18n("Stroke Properties"));
-	paletteManager()->addWidget(m_ColorManager, "ColorTabDock", "ColorPanel");
-
+    createDock(i18n("Colors"), m_ColorManager);
 	connect( this, SIGNAL( selectionChange() ), m_ColorManager, SLOT( update() ) );
 }
 
@@ -1700,8 +1665,7 @@ void KarbonView::createTransformDock()
 
 	m_TransformDocker = new VTransformDocker(part(), this);
 	m_TransformDocker->setWindowTitle(i18n("Transform"));
-	paletteManager()->addWidget(m_TransformDocker, "TransformTabDock", "TransformPanel");
-
+    createDock(i18n("Transform"), m_TransformDocker);
 	connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
 	connect( part(), SIGNAL( unitChanged( KoUnit::Unit ) ), m_TransformDocker, SLOT( setUnit( KoUnit::Unit ) ) );
 }
@@ -1712,7 +1676,7 @@ void KarbonView::createResourceDock()
 
 	m_styleDocker = new VStyleDocker( part(), this );
 	m_styleDocker->setWindowTitle(i18n("Resources"));
-	paletteManager()->addWidget(m_styleDocker, "ResourceTabDock", "ResourcePanel");
+    createDock(i18n("Resources"), m_styleDocker);
 }
 
 QDockWidget *KarbonView::createToolBox() {

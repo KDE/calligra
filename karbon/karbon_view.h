@@ -54,7 +54,6 @@ class KoUnitDoubleSpinComboBox;
 class QRectF;
 class VRuler;
 
-class KoPaletteManager;
 class VDocumentTab;
 class VLayersTab;
 class VStrokeDocker;
@@ -98,7 +97,6 @@ public:
 
 	virtual VPainterFactory* painterFactory() const { return m_painterFactory; }
 
-	KoPaletteManager* paletteManager() { return m_pPaletteManager; };
 
 	// printing support, override from KoView
 	virtual void setupPrinter( KPrinter &/*printer*/ ) {}
@@ -262,7 +260,6 @@ private:
 	KoLineStyleAction	*m_lineStyleAction;
 
 	//dockers
-	KoPaletteManager	*m_pPaletteManager;
 	VDocumentTab		*m_DocumentTab;
 	VLayersTab			*m_LayersTab;
 	VColorDocker		*m_ColorManager;

@@ -75,7 +75,6 @@
 #include <KoTabBar.h>
 #include <Kolinewidthaction.h>
 #include <Kolinestyleaction.h>
-#include <kopalettemanager.h>
 #include <KoGuideLineDia.h>
 
 #include "kivio_view.h"
@@ -143,7 +142,6 @@ KivioView::KivioView( QWidget *_parent, KivioDoc* doc )
   m_addStencilSetDialog = 0;
   m_pluginManager = new PluginManager(this, "Kivio Plugin Manager");
   m_addStencilTool = new Kivio::AddStencilTool(this);
-  m_pPaletteManager = new KoPaletteManager(this, actionCollection(), "kivio palette manager");
   m_zoomHandler = new KoZoomHandler();
   zoomHandler()->setZoomAndResolution(100, KoGlobal::dpiX(), KoGlobal::dpiY());
   m_pDoc = doc;
@@ -273,8 +271,6 @@ KivioView::KivioView( QWidget *_parent, KivioDoc* doc )
   createObjectListPalette();
   createGeometryDock();
   createProtectionDock();
-  paletteManager()->showWidget("birdseyepanel");
-  paletteManager()->showWidget("stencilgeometrypanel");
 
   setupActions();
 
@@ -339,7 +335,7 @@ void KivioView::createGeometryDock()
   m_pStencilGeometryPanel = new KivioStencilGeometryPanel(this);
   m_pStencilGeometryPanel->setCaption(i18n("Geometry"));
   m_pStencilGeometryPanel->setUnit(m_pDoc->unit());
-  paletteManager()->addWidget(m_pStencilGeometryPanel, "stencilgeometrypanel", "geometrydocker");
+  createDock(i18n("Geometry"), m_pStencilGeometryPanel);
 
   connect( m_pStencilGeometryPanel, SIGNAL(positionChanged(double, double)), this, SLOT(slotChangeStencilPosition(double, double)) );
   connect( m_pStencilGeometryPanel, SIGNAL(sizeChanged(double, double)), this, SLOT(slotChangeStencilSize(double, double)) );
@@ -352,28 +348,28 @@ void KivioView::createBirdEyeDock()
 {
   m_pBirdEyePanel = new KivioBirdEyePanel(this, this);
   m_pBirdEyePanel->setCaption(i18n("Overview"));
-  paletteManager()->addWidget(m_pBirdEyePanel, "birdseyepanel", "birdeyedocker");
+  createDock(i18n("Overview"), m_pBirdEyePanel);
 }
 
 void KivioView::createLayerDock()
 {
   m_pLayersPanel = new KivioLayerPanel( this, this);
   m_pLayersPanel->setCaption(i18n("Layers"));
-  paletteManager()->addWidget(m_pLayersPanel, "layerspanel", "birdeyedocker");
+  createDock(i18n("Layers"), m_pLayersPanel);
 }
 
 void KivioView::createProtectionDock()
 {
   m_pProtectionPanel = new KivioProtectionPanel(this,this);
   m_pProtectionPanel->setCaption(i18n("Protection"));
-  paletteManager()->addWidget(m_pProtectionPanel, "protectionpanel", "geometrydocker");
+  createDock(i18n("Protection"), m_pProtectionPanel);
 }
 
 void KivioView::createObjectListPalette()
 {
   m_objectListPalette = new Kivio::ObjectListPalette(this);
-  m_objectListPalette->setCaption("Objects");
-  paletteManager()->addWidget(m_objectListPalette, "objectlistpalette", "birdeyedocker");
+  m_objectListPalette->setCaption(i18n("Objects"));
+  createDock(i18n("Objects"), m_objectListPalette);
 }
 
 void KivioView::setupActions()
