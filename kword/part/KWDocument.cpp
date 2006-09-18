@@ -48,6 +48,7 @@
 #include <kaction.h>
 #include <QIODevice>
 #include <QTimer>
+#include <QThread>
 #include <QDomDocument>
 #include <QCoreApplication>
 
@@ -163,8 +164,14 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
         addFrame(frame);
 
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-    if(tfs)
+    if(tfs) {
         m_styleManager->add( tfs->document() );
+        if(tfs->textFrameSetType() == KWord::MainTextFrameSet ||
+                tfs->textFrameSetType() == KWord::OtherTextFrameSet) {
+            connect(tfs, SIGNAL(moreFramesNeeded(KWTextFrameSet*)),
+                    this, SLOT(requestMoreSpace(KWTextFrameSet*)));
+        }
+    }
 
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
     connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
@@ -394,6 +401,23 @@ void KWDocument::addCommand(KCommand *command, bool execute) {
     m_commandHistory.addCommand2(command, execute);
 }
 
+void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {
+    Q_ASSERT(fs);
+    Q_ASSERT(fs->frameCount() > 0);
+    Q_ASSERT(QThread::currentThread() == thread());
+    kDebug() << "KWFrameLayout::requestMoreSpace" << endl;
+
+    KWFrame *lastFrame = fs->frames()[ fs->frameCount()-1 ];
+    KWPage *page = m_pageManager.page(lastFrame->shape());
+    int pageDiff = m_pageManager.lastPageNumber() - page->pageNumber() -page->pageNumber();
+    if(pageDiff > (lastFrame->frameOnBothSheets() ? 1 : 2)) {
+        // its enough to just create a new frame.
+        kDebug() << "TODO: Create a new frame on page: " << (lastFrame->frameOnBothSheets()?page->pageNumber()+1:page->pageNumber()+2) << endl;
+    }
+    else
+        appendPage();
+}
+
 #ifndef NDEBUG
 void KWDocument::printDebug() {
     class Helper {
@@ -475,8 +499,8 @@ void PageProcessingQueue::addPage(KWPage *page) {
 
 void PageProcessingQueue::process() {
     foreach(KWPage *page, m_pages) {
-        m_document->m_frameLayout.createNewFramesForPage(page->pageNumber());
         emit m_document->pageAdded(page);
+        m_document->m_frameLayout.createNewFramesForPage(page->pageNumber());
     }
     m_pages.clear();
     deleteLater();

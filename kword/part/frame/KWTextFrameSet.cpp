@@ -112,6 +112,15 @@ void KWTextFrameSet::relayout() {
         lay->layout();
 }
 
+void KWTextFrameSet::requestMoreFrames() {
+    // TODO emit only when the last frame wants me to
+    emit moreFramesNeeded(this);
+}
+
+void KWTextFrameSet::framesEmpty(int framesInUse) {
+    kDebug() << "KWTextFrameSet::framesEmpty " << framesInUse << endl;
+}
+
 #ifndef NDEBUG
 void KWTextFrameSet::printDebug(KWFrame *frame) {
     KWFrameSet::printDebug(frame);

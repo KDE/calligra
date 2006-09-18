@@ -223,6 +223,7 @@ private slots:
     /// Frame maintainance on already registed framesets
     void addFrame( KWFrame *frame );
     void removeFrame( KWFrame *frame );
+    void requestMoreSpace(KWTextFrameSet *fs);
 
 private:
     friend class PageProcessingQueue;

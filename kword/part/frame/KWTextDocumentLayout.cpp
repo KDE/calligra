@@ -364,7 +364,8 @@ KWTextDocumentLayout::KWTextDocumentLayout(KWTextFrameSet *frameSet)
     : QAbstractTextDocumentLayout(frameSet->document()),
     m_frameSet(frameSet),
     m_styleManager(0),
-    m_state(0)
+    m_state(0),
+    m_lastKnownFrameCount(0)
 {
     m_state = new LayoutState(m_frameSet, m_styleManager);
     setPaintDevice( new PostscriptPaintDevice() );
@@ -524,8 +525,16 @@ void KWTextDocumentLayout::layout() {
                 m_state->shape->repaint(QRectF(0, posY,
                             m_state->shape->size().width(), m_state->y() - posY));
 
-            if(! moreText)
+            if(! moreText) {
+                const int frameCount = m_frameSet->frameCount();
+                const int framesInUse = m_state->frameNumber+1;
+                if(framesInUse < frameCount && framesInUse != m_lastKnownFrameCount)
+                    m_frameSet->framesEmpty(framesInUse);
+                m_lastKnownFrameCount = frameCount;
+                m_moreFramesRequested = false;
+
                 return; // done!
+            }
             newParagraph = true;
             continue;
         }
@@ -541,6 +550,10 @@ void KWTextDocumentLayout::layout() {
         while(m_state->addLine(line)) {
             if(m_state->shape == 0) { // no more shapes to put the text in!
                 line.setPosition(QPointF(0, m_state->y()+20));
+                if(! m_moreFramesRequested) {
+                    m_frameSet->requestMoreFrames();
+                    m_moreFramesRequested = true;
+                }
                 return; // done!
             }
             line.setLineWidth(m_state->width());
@@ -553,6 +566,9 @@ void KWTextDocumentLayout::layout() {
         repaintRect.setY(m_state->shape->size().width()); // where lines were before layout.
         m_state->shape->repaint(repaintRect);
     }
+    // finished normally. Meaning that amount of frames is perfect for this text.
+    m_moreFramesRequested = false;
+    m_lastKnownFrameCount = m_frameSet->frameCount();
 }
 
 

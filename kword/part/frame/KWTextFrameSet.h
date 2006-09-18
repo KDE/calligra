@@ -56,12 +56,21 @@ public:
     void printDebug(KWFrame *frame);
 #endif
 
+signals:
+    /**
+     * Emitted when the frameset finished layout and found that there is more
+     * text then will fit in the frameset.
+     * Signal will be emitted only when the policy of the last frame allows it.
+     */
+    void moreFramesNeeded(KWTextFrameSet *fs);
 
 protected:
-    void setupFrame(KWFrame *frame);
-
-private slots:
     friend class KWTextDocumentLayout;
+    void setupFrame(KWFrame *frame);
+    void requestMoreFrames();
+    void framesEmpty(int framesInUse);
+
+protected slots:
     void relayout();
     void requestLayout();
 

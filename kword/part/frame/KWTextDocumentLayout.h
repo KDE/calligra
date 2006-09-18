@@ -77,13 +77,15 @@ protected:
 
 private:
     friend class KWTextFrameSet;
-    //void layout(QTextLayout &layout, bool recalc=false);
     bool layout(KWTextFrame *frame, double offset);
 
+private:
     KWTextFrameSet *m_frameSet;
     KoStyleManager *m_styleManager;
 
     LayoutState *m_state;
+    int m_lastKnownFrameCount;
+    bool m_moreFramesRequested;
 };
 
 class ListItemsPrivate;
