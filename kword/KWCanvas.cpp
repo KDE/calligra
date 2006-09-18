@@ -158,7 +158,7 @@ m_shapeManager->add(rs);
         fs = m_doc->frameSetByName( fsName );
     if ( !fs )
         fs = m_doc->frameSet( 0 );
-    Q_ASSERT( fs );
+    //Q_ASSERT( fs ); // empty page template -> no fs
     if ( fs && fs->isVisible( m_viewMode ) ) {
         checkCurrentEdit( fs );
         KWTextFrameSetEdit* textedit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);

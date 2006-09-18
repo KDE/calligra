@@ -292,7 +292,7 @@ public:
 
 
 private:
-    KWTextFrameSet *m_textFrameSet;
+    mutable KWTextFrameSet *m_textFrameSet;
 };
 
 #endif
