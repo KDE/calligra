@@ -164,18 +164,18 @@ Thesaurus::Thesaurus(QObject* parent, const QStringList &)
 
     connect(m_thes_syn, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_hyper, SLOT(clearSelection()));
     connect(m_thes_syn, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_hypo, SLOT(clearSelection()));
-    connect(m_thes_syn, SIGNAL(itemSelectionChanged(QListWidgetItem *)),
-        this, SLOT(slotSetReplaceTerm(QListWidgetItem *)));
+    connect(m_thes_syn, SIGNAL(itemSelectionChanged()),
+        this, SLOT(slotSetReplaceTermSyn()));
 
     connect(m_thes_hyper, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_syn, SLOT(clearSelection()));
     connect(m_thes_hyper, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_hypo, SLOT(clearSelection()));
-    connect(m_thes_hyper, SIGNAL(itemSelectionChanged(QListWidgetItem *)),
-        this, SLOT(slotSetReplaceTerm(QListWidgetItem *)));
+    connect(m_thes_hyper, SIGNAL(itemSelectionChanged()),
+        this, SLOT(slotSetReplaceTermHyper()));
 
     connect(m_thes_hypo, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_syn, SLOT(clearSelection()));
     connect(m_thes_hypo, SIGNAL(itemClicked(QListWidgetItem *)), m_thes_hyper, SLOT(clearSelection()));
-    connect(m_thes_hypo, SIGNAL(itemSelectionChanged(QListWidgetItem *)),
-        this, SLOT(slotSetReplaceTerm(QListWidgetItem *)));
+    connect(m_thes_hypo, SIGNAL(itemSelectionChanged()),
+        this, SLOT(slotSetReplaceTermHypo()));
 
     // double click:
     connect(m_thes_syn, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
@@ -378,12 +378,30 @@ void Thesaurus::slotForward()
 }
 
 // Triggered when a word is selected in the list box.
-void Thesaurus::slotSetReplaceTerm(QListWidgetItem *item)
+void Thesaurus::slotSetReplaceTermSyn()
 {
+    QListWidgetItem *item = m_thes_syn->currentItem ();
     if( ! item )
         return;
     m_replace->setText(item->text());
 }
+
+void Thesaurus::slotSetReplaceTermHyper()
+{
+    QListWidgetItem *item = m_thes_hyper->currentItem (); 
+    if( ! item )
+        return;
+    m_replace->setText(item->text());
+}
+
+void Thesaurus::slotSetReplaceTermHypo()
+{
+    QListWidgetItem *item = m_thes_hypo->currentItem ();
+    if( ! item )
+        return;
+    m_replace->setText(item->text());
+}
+
 
 void Thesaurus::slotSetReplaceTerm(const QString &term)
 {

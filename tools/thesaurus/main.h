@@ -82,7 +82,9 @@ protected slots:
     void slotUpdateNavButtons();
     void slotGotoHistory(int index);
 
-    void slotSetReplaceTerm(QListWidgetItem *item);
+    void slotSetReplaceTermSyn();
+    void slotSetReplaceTermHypo();
+    void slotSetReplaceTermHyper();
     void slotSetReplaceTerm(const QString &term);
 
     void slotBack();
