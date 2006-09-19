@@ -760,6 +760,8 @@ void CellEditor::slotCursorPositionChanged()
     {
       d->highlighter->resetRangeChanged();
 
+      disconnect( d->canvas->choice(), SIGNAL(changed(const Region&)),
+                  d->canvas->view(), SLOT(slotScrollChoice(const Region&)) );
       d->canvas->doc()->emitBeginOperation();
       setUpdateChoice(false);
 
@@ -798,6 +800,8 @@ void CellEditor::slotCursorPositionChanged()
       }
       setUpdateChoice(true);
       d->canvas->doc()->emitEndOperation(*d->canvas->choice());
+      connect( d->canvas->choice(), SIGNAL(changed(const Region&)),
+               d->canvas->view(), SLOT(slotScrollChoice(const Region&)) );
     }
   }
 }

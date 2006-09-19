@@ -1499,6 +1499,7 @@ View::View( QWidget *_parent, Doc *_doc )
     d->choice->setMultipleOccurences(true);
     connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotChangeSelection(const Region&)));
     connect(d->choice, SIGNAL(changed(const Region&)), this, SLOT(slotChangeChoice(const Region&)));
+    connect(d->choice, SIGNAL(changed(const Region&)), this, SLOT(slotScrollChoice(const Region&)));
 
     d->findOptions = 0;
     d->findLeftColumn = 0;
@@ -6694,9 +6695,15 @@ void View::slotChangeChoice(const KSpread::Region& changedRegion)
   doc()->emitBeginOperation( false );
   d->canvas->updateEditor();
   d->activeSheet->setRegionPaintDirty( changedRegion );
-  d->canvas->scrollToCell(choice()->marker());
   doc()->emitEndOperation(/* *choice() */);
   kDebug(36002) << "Choice: " << *choice() << endl;
+}
+
+void View::slotScrollChoice(const KSpread::Region& changedRegion)
+{
+    if ( !changedRegion.isValid() )
+        return;
+    d->canvas->scrollToCell( choice()->marker() );
 }
 
 void View::calcStatusBarOp()
