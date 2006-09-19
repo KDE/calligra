@@ -665,6 +665,7 @@ public slots:
     void slotUpdateVBorder( Sheet *_sheet );
     void slotChangeSelection(const Region&);
     void slotChangeChoice(const Region&);
+    void slotScrollChoice(const Region&);
     void slotAddSheet( Sheet *_sheet );
     void slotUpdateChildGeometry( EmbeddedKOfficeObject *_child );
     void slotSheetRenamed( Sheet* sheet, const QString& old_name );
