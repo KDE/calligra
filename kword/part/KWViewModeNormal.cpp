@@ -124,7 +124,11 @@ QSize KWViewModeNormal::contentsSize() {
 }
 
 QPointF KWViewModeNormal::documentToView( const QPointF & point ) const {
-    KWPage *page = canvas()->document()->pageManager()->page(point);
+    const KWPageManager *pageManager = canvas()->document()->pageManager();
+    KWPage *page = pageManager->page(point);
+    if(! page)
+        page = pageManager->page(pageManager->lastPageNumber());
+    Q_ASSERT(page);
     int pageIndex = page->pageNumber() - canvas()->document()->startPage();
     double x = 0;
     if(m_pageSpreadMode && page->pageSide() == KWPage::Right) {
