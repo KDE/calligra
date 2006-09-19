@@ -36,8 +36,6 @@
 #include "KPrCommand.h"
 #include <KoPoint.h>
 #include <KoRect.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 KPrPageAdaptor::KPrPageAdaptor( KPrPage *_page, int pgnum )
   : QDBusAbstractAdaptor( _page )

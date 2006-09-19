@@ -27,7 +27,7 @@
 #include <QLayout>
 #include <qslider.h>
 
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
@@ -55,7 +55,7 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
     layout->addWidget( typeLabel, 0, 0 );
     typeLabel->setBuddy( m_typeCombo );
 
-    m_stack = new Q3WidgetStack( this );
+    m_stack = new QStackedWidget( this );
     layout->addMultiCellWidget( m_stack, 1, 1, 0, 1 );
     connect( m_typeCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotTypeChanged( int ) ) );
@@ -87,7 +87,7 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
     connect( m_brushUI->colorChooser, SIGNAL( changed( const QColor& ) ),
              this, SLOT( slotBrushChanged() ) );
 
-    m_stack->addWidget( m_brushUI, 0 );
+    m_stack->insertWidget( 0,m_brushUI );
 
     m_gradientUI = new GradientPropertyUI( m_stack );
     m_gradientUI->styleCombo->addItem( i18n( "Horizontal" ) );
@@ -116,8 +116,8 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
     connect( m_gradientUI->ySlider, SIGNAL( valueChanged( int ) ),
              this, SLOT( slotYFactorChanged() ) );
 
-    m_stack->addWidget( m_gradientUI, 1 );
-    m_stack->addWidget( new Q3Frame(this), 2 ); // the transparent case
+    m_stack->insertWidget( 1,m_gradientUI );
+    m_stack->insertWidget( 2,new Q3Frame(this) ); // the transparent case
 
     slotReset();
 }
@@ -447,7 +447,7 @@ void KPrBrushProperty::slotReset()
 
 void KPrBrushProperty::slotTypeChanged( int pos )
 {
-    m_stack->raiseWidget( pos );
+    m_stack->setCurrentIndex( pos );
     slotBrushChanged();
 }
 
