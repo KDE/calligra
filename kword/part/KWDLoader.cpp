@@ -198,7 +198,11 @@ bool KWDLoader::load(QDomElement &root) {
     QDomElement attributes = root.firstChildElement("ATTRIBUTES");
     if ( !attributes.isNull() )
     {
-        //m_processingType = static_cast<ProcessingType>( KWDocument::getAttribute( attributes, "processing", 0 ) );
+        if(attributes.attribute("processing", "0") == "1") {
+            m_pageSettings->setMainTextFrame(false); // DTP type document.
+            m_foundMainFS = true; // we will not reuse the main FS now.
+        }
+
         //KWDocument::getAttribute( attributes, "standardpage", QString::null );
         if(attributes.attribute("hasHeader") != "1") {
             m_pageSettings->setFirstHeaderPolicy(KWord::HFTypeNone);
