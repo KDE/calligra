@@ -129,8 +129,43 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
         }
     }
 
-    // copy frames from last 2 pages
-    // TODO
+    bool odd=true; // an odd number of pages back, so frameOnBothSheets matters
+    for(int i=pageNumber-2; i < pageNumber; i++) {
+        if(i < m_pageManager->startPage()) {
+            odd = false;
+            continue;
+        }
+        KWPage *prevPage = m_pageManager->page(i);
+        QRectF pageRect = prevPage->rect(pageNumber);
+        foreach(KWFrame *frame, framesInPage( pageRect )) {
+            if(odd && !frame->frameOnBothSheets())
+                continue;
+            if(!(frame->newFrameBehavior() == KWord::ReconnectNewFrame ||
+                    frame->newFrameBehavior() == KWord::CopyNewFrame))
+                continue;
+
+            KWFrame *f;
+            KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (frame->frameSet());
+            if(tfs) {
+                if(tfs->textFrameSetType() != KWord::OtherTextFrameSet)
+                    continue; // these are copied above already.
+                f = new KWTextFrame(createTextShape(page), tfs);
+            }
+            else {
+                Q_ASSERT(frame->newFrameBehavior() == KWord::CopyNewFrame);
+                continue;
+                // TODO figure out a way to do copy-frames.
+                //f = new KWFrame(frame->shape(), frame->frameSet());
+                //f->setCopy(true);
+            }
+            const double y = frame->shape()->position().y();
+            double offsetFromPage = y - pageRect.top();
+            f->copySettings(frame);
+            f->shape()->setPosition(QPointF(frame->shape()->position().x(),
+                    page->offsetInDocument() + offsetFromPage));
+        }
+        odd = false;
+    }
 
     layoutFramesOnPage(pageNumber);
     if(page->pageSide() == KWPage::PageSpread)

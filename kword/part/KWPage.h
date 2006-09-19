@@ -91,8 +91,17 @@ public:
     /// return width of the margin that is the closest to the binding, i.e. right for even pages
     double marginClosestBinding() const;
 
-    /// return a rectangle outlining this page, using the offset in the document
-    QRectF rect() const;
+    /**
+     * return a rectangle outlining this page, using the offset in the document.
+     * For page-spreads the page size will effectively be 2 pages unless the
+     * pageNumber param is specified and the pagenumber of either the left or the
+     * right page is passed.
+     * @param pageNumber passing a pagenumber will return the rect of either the
+     *  left or the right halve of a pageSpread.
+     * Passing a pagenumber that is not represented by this object will have
+     *  unpredictabe results.
+     */
+    QRectF rect(int pageNumber=-1) const;
 
     // the y coordinate
     /**

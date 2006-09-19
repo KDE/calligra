@@ -129,6 +129,10 @@ double KWPage::offsetInDocument() const { // the y coordinate
     return m_parent->topOfPage(m_pageNum);
 }
 
-QRectF KWPage::rect() const {
+QRectF KWPage::rect(int pageNumber) const {
+    if(pageNumber == m_pageNum && m_pageSide == PageSpread) // left
+        return QRectF(0, offsetInDocument(), width()/2, height());
+    if(pageNumber == m_pageNum+1 && m_pageSide == PageSpread) // right
+        return QRectF(width()/2, offsetInDocument(), width()/2, height());
     return QRectF(0, offsetInDocument(), width(), height());
 }
