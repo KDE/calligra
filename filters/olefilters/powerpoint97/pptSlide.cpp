@@ -54,8 +54,9 @@ Q_UINT16 PptSlide::getPlaceholderType(void)
 Q_UINT16 PptSlide::gotoPlaceholder(Q_UINT16 pholderNumber)
 {
 	m_currentPholder = m_placeholderList.at(pholderNumber);
+        return 0;
 }
-	
+
 Q_INT32 PptSlide::getPsrReference(void)
 {
 	return m_psrReference;
@@ -70,7 +71,7 @@ Q_UINT16 PptSlide::getNumberOfPholders()
 {
 	return m_numberOfPholders;
 }
-	
+
 void PptSlide::addText(QString text, Q_UINT16 type)
 {
 	unsigned j;
@@ -79,7 +80,7 @@ void PptSlide::addText(QString text, Q_UINT16 type)
 	m_numberOfPholders++;
 	m_currentPholder->type = type;
 	kdError(s_area) << "adding to slide now!!!!!!!!!!!! m_numberOfPholders: " << m_numberOfPholders << endl;
-	
+
 	switch (type)
 	{
 	case TITLE_TEXT:
