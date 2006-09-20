@@ -48,10 +48,23 @@ class Account;
 class Account
 {
 public:
+
+    /**
+     * Constructor.
+     */
     Account();
+
+    /**
+     * 
+     */
     Account(QString name, QString description=QString::null);
-    ~Account();
+   
+    /**
+     * Destructor.
+     */
+     ~Account();
     
+
     QString name() const { return m_name; }
     void setName(QString name);
     

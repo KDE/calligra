@@ -116,13 +116,13 @@ public:
     // of the table-building node is the house-building node.
 
     int numDependChildNodes() const { return m_dependChildNodes.count(); }
-    /// Adds relation to both this node and @node
+    /// Adds relation to both this node and address node
     virtual void addDependChildNode( Node *node, Relation::Type p=Relation::FinishStart);
-    /// Adds relation to both this node and @node
+    /// Adds relation to both this node and address node
     virtual void addDependChildNode( Node *node, Relation::Type p, Duration lag);
     /// Adds relation only to this node
     virtual bool addDependChildNode( Relation *relation);
-    /// Inserts relation to this node at index @index and appends relation to @node
+    /// Inserts relation to this node at index address index and appends relation to address node
     virtual void insertDependChildNode( unsigned int index, Node *node, Relation::Type p=Relation::FinishStart);
     void delDependChildNode( Node *node, bool remove=false);
     void delDependChildNode( Relation *rel, bool remove=false);
@@ -352,7 +352,7 @@ public:
      * dependent on use.
      * @param time Where to start calculation.
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
-     * @param Backward If true, time specifies when the task should end.
+     * @param backward If true, time specifies when the task should end.
      */
     Duration duration(const DateTime &time, int use, bool backward);
     // Reimplement this
@@ -503,12 +503,12 @@ protected:
     ConstraintType m_constraint;
 
     /**
-      * @m_constraintTime is used if any of the constraints
+      * m_constraintTime is used if any of the constraints
       * FixedInterval, StartNotEarlier, MustStartOn or FixedInterval is selected
       */
     DateTime m_constraintStartTime;
     /**
-      * @m_constraintEndTime is used if any of the constraints
+      * m_constraintEndTime is used if any of the constraints
       * FixedInterval, FinishNotLater, MustFinishOn or FixedInterval is selected
       */
     DateTime m_constraintEndTime;
@@ -593,21 +593,21 @@ public:
 
     /**
      * Set the optimistic duration
-     * @percent should be a negativ value.
+     * @param percent should be a negativ value.
      */
     void setOptimisticRatio(int percent);
     /**
-     * Return the @optimistic duaration as deviation from @expected in percent.
+     * Return the "optimistic" duration as deviation from "expected" in percent.
      * This should be a negativ value.
      */
     int optimisticRatio() const;
     /**
      * Set the pessimistic duration
-     * @percent should be a positive value.
+     * @param percent should be a positive value.
      */
     void setPessimisticRatio(int percent);
     /**
-     * Return the @pessimistic duaration as the deviation from @expected in percent.
+     * Return the "pessimistic" duration as the deviation from "expected" in percent.
      * This should be a positive value.
      */
     int pessimisticRatio() const;

@@ -122,8 +122,9 @@ public:
     void addWeekday(CalendarDay *day) { m_weekdays.append(day); }
     const Q3PtrList<CalendarDay> &weekdays() const { return m_weekdays; }
     /**
-     * Returns the pointer to CalendarDay for @day or 0 if not defined. 
+     * Returns the pointer to CalendarDay for day or 0 if not defined. 
      * day is 0..6.
+     * @param day todo : add a comment
      */
     CalendarDay *weekday(int day) const;
     CalendarDay *weekday(const QDate &date) const { return weekday(date.dayOfWeek()-1); }

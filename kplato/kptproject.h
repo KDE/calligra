@@ -66,7 +66,7 @@ public:
     /**
      * Calculate the whole project.
      *
-     * @param schedule Calculate using expected-, optimistic- or pessimistic estimate.
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      */
     void calculate(Effort::Use use);
     /// Calculate current schedule

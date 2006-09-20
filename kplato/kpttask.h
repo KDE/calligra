@@ -136,35 +136,35 @@ public:
      */
     void initiateCalculationLists(Q3PtrList<Node> &startnodes, Q3PtrList<Node> &endnodes, Q3PtrList<Node> &summarytasks);
     /**
-     * Calculates @ref m_durationForward from @ref earliestStart and
+     * Calculates ref m_durationForward from ref earliestStart and
      * returns the resulting end time, 
-     * which will be used as the succesors @ref earliestStart.
+     * which will be used as the succesors ref earliestStart.
      *
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      */
     DateTime calculateForward(int use);
     /**
-     * Calculates @ref m_durationBackward from @ref latestFinish and
+     * Calculates ref m_durationBackward from ref latestFinish and
      * returns the resulting start time, 
-     * which will be used as the predecessors @ref latestFinish.
+     * which will be used as the predecessors ref latestFinish.
      *
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      */
     DateTime calculateBackward(int use);
     /**
      * Schedules the task within the limits of earliestStart and latestFinish.
-     * Calculates @ref m_startTime, @ref m_endTime and @ref m_duration,
-     * Assumes @ref calculateForward() and @ref calculateBackward() has been run.
+     * Calculates ref m_startTime, ref m_endTime and ref m_duration,
+     * Assumes ref calculateForward() and ref calculateBackward() has been run.
      *
-     * @param latest The task is not scheduled to start earlier than this
+     * @param earliest The task is not scheduled to start earlier than this
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      * @return The tasks endtime which can be used for scheduling the successor.
      */
     DateTime scheduleForward(const DateTime &earliest, int use);
     /**
      * Schedules the task within the limits of earliestStart and latestFinish.
-     * Calculates @ref m_startTime, @ref m_endTime and @ref m_duration,
-     * Assumes @ref calculateForward() and @ref calculateBackward() has been run.
+     * Calculates ref m_startTime, ref m_endTime and ref m_duration,
+     * Assumes ref calculateForward() and ref calculateBackward() has been run.
      *
      * @param latest The task is not scheduled to end later than this
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
