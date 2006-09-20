@@ -22,7 +22,7 @@
 #include "KWPageManager.h"
 #include "KWPage.h"
 
-//#include <kdebug.h>
+#include <kdebug.h>
 
 #define GAP 5
 
@@ -38,6 +38,12 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
     const int pageOffset = pageManager->startPage();
     double offsetX = 0.0;
     foreach(KWPage *page, pageManager->pages()) {
+        if(m_pageTops.count() <= page->pageNumber() - pageOffset) {
+           kWarning(32003) << "KWViewModeNormal ERROR; pagemanager has more pages than viewmode (" <<
+               pageManager->pageCount() << ">" << m_pageTops.count() <<
+               "). Make sure you add pages via the document!" << endl;
+            break;
+        }
         QRectF zoomedPage = canvas()->viewConverter()->documentToView(page->rect());
         ViewMap vm;
 //kDebug() << "page[" << page->pageNumber() << "] uses pagetops: " << m_pageTops[page->pageNumber() - pageOffset] << endl;
