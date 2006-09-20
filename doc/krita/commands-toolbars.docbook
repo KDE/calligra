@@ -121,75 +121,6 @@ linkend="commands-palettes-controlbox-tool">options</link>.
 <variablelist>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
-fileref="tool-bezier.png" format="PNG"></imagedata>
-</imageobject></inlinemediaobject> <guilabel>Bezier</guilabel></term>
-<listitem><para>
-You can draw Bezier curves by using this tool. Click the &LMB; to indicate the
-starting point of the curve, then click again for consecutive control points
-of the curve. 
-</para>
-<para>
-<screenshot>
-<screeninfo>Drawing a Bezier curve</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="tool-bezier-example.png" format="PNG" />
-</imageobject>
-<textobject>
-<phrase>Drawing a Bezier curve</phrase>
-</textobject>
-<caption><para>Drawing a Bezier curve</para></caption>
-</mediaobject>
-</screenshot>
-</para>
-<para>
-&krita; will show a blue line with two handles when you add a control point.
-You can drag these handles to change the direction of the curve in that point.
-</para>
-<para>
-<screenshot>
-<screeninfo>Modifying a Bezier curve</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="tool-bezier-example2.png" format="PNG" />
-</imageobject>
-<textobject>
-<phrase>Modifying a Bezier curve</phrase>
-</textobject>
-<caption><para>Modifying a Bezier curve</para></caption>
-</mediaobject>
-</screenshot>
-</para>
-<para>
-You can click on a previous control point to modify it. With an intermediate
-control point (&ie; a point that is not the starting point and not the ending
-point), you can move the direction handles seperately to have the curve enter
-and leave the point in different directions. After editing a point, you can
-just click on the canvas to continue adding points to the curve.
-</para>
-<para>
-Pressing <keycap>Delete</keycap> will remove the currently selected control
-point from the curve. Double-click the &LMB; on any point of the curve or
-press &Enter; to finish drawing, or press &Esc; to cancel the entire curve.
-You can use &Ctrl; while keeping the &LMB; pressed to move the entire curve to
-a different position.
-</para>
-<para>
-<screenshot>
-<screeninfo>A finished Bezier curve</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="tool-bezier-example3.png" format="PNG" />
-</imageobject>
-<textobject>
-<phrase>A finished Bezier curve</phrase>
-</textobject>
-<caption><para>A finished Bezier curve</para></caption>
-</mediaobject>
-</screenshot>
-</para></listitem></varlistentry>
-
-<varlistentry><term><inlinemediaobject><imageobject><imagedata
 fileref="tool-brush.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Brush</guilabel></term>
 <listitem><para>
@@ -289,6 +220,75 @@ different location.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-bezier.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> <guilabel>Bezier</guilabel></term>
+<listitem><para>
+You can draw Bezier curves by using this tool. Click the &LMB; to indicate the
+starting point of the curve, then click again for consecutive control points
+of the curve. 
+</para>
+<para>
+<screenshot>
+<screeninfo>Drawing a Bezier curve</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tool-bezier-example.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Drawing a Bezier curve</phrase>
+</textobject>
+<caption><para>Drawing a Bezier curve</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>
+&krita; will show a blue line with two handles when you add a control point.
+You can drag these handles to change the direction of the curve in that point.
+</para>
+<para>
+<screenshot>
+<screeninfo>Modifying a Bezier curve</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tool-bezier-example2.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>Modifying a Bezier curve</phrase>
+</textobject>
+<caption><para>Modifying a Bezier curve</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>
+You can click on a previous control point to modify it. With an intermediate
+control point (&ie; a point that is not the starting point and not the ending
+point), you can move the direction handles seperately to have the curve enter
+and leave the point in different directions. After editing a point, you can
+just click on the canvas to continue adding points to the curve.
+</para>
+<para>
+Pressing <keycap>Delete</keycap> will remove the currently selected control
+point from the curve. Double-click the &LMB; on any point of the curve or
+press &Enter; to finish drawing, or press &Esc; to cancel the entire curve.
+You can use &Ctrl; while keeping the &LMB; pressed to move the entire curve to
+a different position.
+</para>
+<para>
+<screenshot>
+<screeninfo>A finished Bezier curve</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tool-bezier-example3.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>A finished Bezier curve</phrase>
+</textobject>
+<caption><para>A finished Bezier curve</para></caption>
+</mediaobject>
+</screenshot>
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
 fileref="tool-duplicate.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Duplicate</guilabel></term>
 <listitem><para>
@@ -331,17 +331,6 @@ right, the Maximize Channel, Minimize Channel, Invert, and Desaturate filters.
 </screenshot>
 </para></listitem></varlistentry>
 
-<varlistentry>
-<term><inlinemediaobject><imageobject><imagedata fileref="tool-transform.png"
-format="PNG"></imagedata> </imageobject></inlinemediaobject> Transform</term>
-<listitem><para>
-With this tool you can quickly transform the current selection or layer.
-Handles will appear at the corners and sides, with which you can resize the
-selection or layer. You can perform rotations by moving the mouse above or to
-the left of the handles and dragging it. You can also click anywhere inside
-the selection or layer and move it by dragging the mouse.
-</para></listitem></varlistentry>
-
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
 fileref="tool-crop.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Crop</guilabel></term>
@@ -354,6 +343,25 @@ inside the area to move the outline in its entirety.
 </para><para>
 Double-click outside the area (i.e. on a part of the image that is to be removed)
 to confirm the cropping operation.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-move.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> <guilabel>Move</guilabel></term>
+<listitem><para>
+With this tool, you can move the current layer or selection by dragging the
+mouse.
+</para></listitem></varlistentry>
+
+<varlistentry>
+<term><inlinemediaobject><imageobject><imagedata fileref="tool-transform.png"
+format="PNG"></imagedata> </imageobject></inlinemediaobject> Transform</term>
+<listitem><para>
+With this tool you can quickly transform the current selection or layer.
+Handles will appear at the corners and sides, with which you can resize the
+selection or layer. You can perform rotations by moving the mouse above or to
+the left of the handles and dragging it. You can also click anywhere inside
+the selection or layer and move it by dragging the mouse.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
@@ -397,19 +405,20 @@ the top of the text will be at the same height as, the chosen location.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-colorpicker.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> <guilabel>Color Picker</guilabel></term>
+<listitem><para>
+With this tool you can find the color values of a point. Click the &LMB;
+somewhere in the image to see color information about that point in the
+<guilabel>Control box</guilabel>.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
 fileref="tool-pan.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Pan</guilabel></term>
 <listitem><para>
 This tool can be used to navigate through your image. Click and hold the &LMB;
 and move the mouse to scroll in a certain direction.
-</para></listitem></varlistentry>
-
-<varlistentry><term><inlinemediaobject><imageobject><imagedata
-fileref="tool-move.png" format="PNG"></imagedata>
-</imageobject></inlinemediaobject> <guilabel>Move</guilabel></term>
-<listitem><para>
-With this tool, you can move the current layer or selection by dragging the
-mouse.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
@@ -419,15 +428,6 @@ fileref="tool-zoom.png" format="PNG"></imagedata>
 Use this tool to zoom in and out. Click the &LMB; to increase the zoom by
 a factor 2 (e.g. 1:1 to 2:1), click the &RMB; to decrease the zoom by a factor
 2 (e.g. 1:1 to 1:2).
-</para></listitem></varlistentry>
-
-<varlistentry><term><inlinemediaobject><imageobject><imagedata
-fileref="tool-colorpicker.png" format="PNG"></imagedata>
-</imageobject></inlinemediaobject> <guilabel>Color Picker</guilabel></term>
-<listitem><para>
-With this tool you can find the color values of a point. Click the &LMB;
-somewhere in the image to see color information about that point in the
-<guilabel>Control box</guilabel>.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
@@ -535,14 +535,6 @@ adjacent.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
-fileref="tool-selectbezier.png" format="PNG"></imagedata>
-</imageobject></inlinemediaobject> <guilabel>Select Bezier</guilabel></term>
-<listitem><para>
-With this tool you can select an area by drawing a Bezier outline. See the
-description of the Bezier tool for details.
-</para></listitem></varlistentry>
-
-<varlistentry><term><inlinemediaobject><imageobject><imagedata
 fileref="tool-selectmagnetic.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> <guilabel>Magnetic Selection</guilabel></term>
 <listitem><para>
@@ -559,6 +551,14 @@ In manual mode, you can also move control points by clicking on them with the
 </para><para>
 When you want to return to automatic mode, simply press &Ctrl; again. You can
 switch between these two modes as often as you like.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-selectbezier.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> <guilabel>Select Bezier</guilabel></term>
+<listitem><para>
+With this tool you can select an area by drawing a Bezier outline. See the
+description of the Bezier tool for details.
 </para></listitem></varlistentry>
 
 </variablelist>
