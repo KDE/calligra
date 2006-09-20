@@ -321,7 +321,7 @@ public:
     /// Take, don't delete.
     void takeSchedule(const Schedule *schedule);
     void addSchedule(Schedule *schedule);
-    ResourceSchedule *createSchedule(QString name, int type, int id);
+    ResourceSchedule *createSchedule(QString name, int type, long id);
     ResourceSchedule *createSchedule(Schedule *parent);
     
 protected:

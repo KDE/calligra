@@ -361,6 +361,7 @@ Duration Node::duration(const DateTime &time, int use, bool backward) {
         return Duration::zeroDuration;
         kError()<<k_funcinfo<<"No current schedule"<<endl;
     }
+    kdDebug()<<k_funcinfo<<m_name<<": Use="<<use<<endl;
     return calcDuration(time, m_effort->effort(use), backward);
 }
 
@@ -774,11 +775,13 @@ Effort::Effort( Duration e, Duration p, Duration o) {
   m_pessimisticEffort = p;
   m_optimisticEffort = o;
   m_type = Type_Effort;
+  m_risktype = Risk_None;
 }
 
 Effort::Effort(const Effort &effort) {
     set(effort.expected(), effort.pessimistic(), effort.optimistic());
     setType(effort.type());
+    setRisktype(effort.risktype());
 }
 
 Effort::~Effort() {
@@ -817,11 +820,47 @@ void Effort::expectedEffort(unsigned *days, unsigned *hours, unsigned *minutes) 
     m_expectedEffort.get(days, hours, minutes);
 }
 
+Duration Effort::variance() const {
+    return (m_pessimisticEffort - m_optimisticEffort)/6;
+}
+Duration Effort::pertExpected() const {
+    if (m_risktype == Risk_Low) {
+        return (m_optimisticEffort + m_pessimisticEffort + (m_expectedEffort*4))/6;
+    } else if (m_risktype == Risk_High) {
+        return (m_optimisticEffort + (m_pessimisticEffort*2) + (m_expectedEffort*4))/7;
+    }
+    return m_expectedEffort; // risk==none
+}
+Duration Effort::pertOptimistic() const {
+    if (m_risktype != Risk_None) {
+        return pertExpected() - variance();
+    }
+    return m_optimisticEffort;
+}
+Duration Effort::pertPessimistic() const {
+    if (m_risktype != Risk_None) {
+        return pertExpected() + variance();
+    }
+    return m_pessimisticEffort;
+}
+
+Duration Effort::effort(int use) const {
+    if (use == Effort::Use_Expected) {
+        return pertExpected();
+    } else if (use == Effort::Use_Optimistic) {
+        return pertOptimistic();
+    } else if (use == Effort::Use_Pessimistic)
+        return pertPessimistic();
+    
+    return m_expectedEffort; // default
+}
+
 bool Effort::load(QDomElement &element) {
     m_expectedEffort = Duration::fromString(element.attribute("expected"));
     m_optimisticEffort = Duration::fromString(element.attribute("optimistic"));
     m_pessimisticEffort = Duration::fromString(element.attribute("pessimistic"));
     setType(element.attribute("type", "WorkBased"));
+    setRisktype(element.attribute("risk"));
     return true;
 }
 
@@ -832,6 +871,7 @@ void Effort::save(QDomElement &element) const {
     me.setAttribute("optimistic", m_optimisticEffort.toString());
     me.setAttribute("pessimistic", m_pessimisticEffort.toString());
     me.setAttribute("type", typeToString());
+    me.setAttribute("risk", risktypeToString());
 }
 
 QString Effort::typeToString() const {
@@ -850,6 +890,26 @@ void Effort::setType(QString type) {
         setType(Type_FixedDuration);
     else
         setType(Type_Effort); // default
+}
+
+QString Effort::risktypeToString() const {
+    if (m_risktype == Risk_None)
+        return QString("None");
+    if (m_risktype == Risk_Low)
+        return QString("Low");
+    if (m_risktype == Risk_High)
+        return QString("High");
+
+    return QString();
+}
+
+void Effort::setRisktype(QString type) {
+    if (type == "High")
+        setRisktype(Risk_High);
+    else if (type == "Low")
+        setRisktype(Risk_Low);
+    else
+        setRisktype(Risk_None); // default
 }
 
 void Effort::setOptimisticRatio(int percent)
@@ -931,9 +991,15 @@ void Node::printDebug(bool children, QByteArray indent) {
 void Effort::printDebug(QByteArray indent) {
     kDebug()<<indent<<"  Effort:"<<endl;
     indent += "  ";
-    kDebug()<<indent<<"  Expected: "<<m_expectedEffort.toString()<<endl;
-    kDebug()<<indent<<"  Optimistic: "<<m_optimisticEffort.toString()<<endl;
-    kDebug()<<indent<<"  Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
+    kdDebug()<<indent<<"  Expected:    "<<m_expectedEffort.toString()<<endl;
+    kdDebug()<<indent<<"  Optimistic:  "<<m_optimisticEffort.toString()<<endl;
+    kdDebug()<<indent<<"  Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
+    
+    kdDebug()<<indent<<"  Risk: "<<risktypeToString()<<endl;
+    kdDebug()<<indent<<"  Pert expected:    "<<pertExpected().toString()<<endl;
+    kdDebug()<<indent<<"  Pert optimistic:  "<<pertOptimistic().toString()<<endl;
+    kdDebug()<<indent<<"  Pert pessimistic: "<<pertPessimistic().toString()<<endl;
+    kdDebug()<<indent<<"  Pert variance:    "<<variance().toString()<<endl;
 }
 #endif
 

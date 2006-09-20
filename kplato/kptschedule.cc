@@ -41,7 +41,9 @@ Schedule::Schedule()
 }
 
 Schedule::Schedule(Schedule *parent)
-    : m_deleted(false),
+    : m_type(Expected),
+      m_id(0),
+      m_deleted(false),
       m_appointments(),
       m_parent(parent) {
 
@@ -349,11 +351,6 @@ NodeSchedule::NodeSchedule(Schedule *parent, Node *node)
       m_node(node) {
 
     //kDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
-    if (parent) {
-        m_name = parent->name();
-        m_type = parent->type();
-        m_id = parent->id();
-    }
     init();
 }
 
@@ -477,15 +474,10 @@ ResourceSchedule::ResourceSchedule(Resource *resource, QString name, Schedule::T
 }
 
 ResourceSchedule::ResourceSchedule(Schedule *parent, Resource *resource)
-    : Schedule(),
+    : Schedule(parent),
       m_resource(resource),
       m_parent(parent) {
     //kDebug()<<k_funcinfo<<"resource: "<<resource->name()<<endl;
-    if (parent) {
-        m_name = parent->name();
-        m_type = parent->type();
-        m_id = parent->id();
-    }
 }
 
 ResourceSchedule::~ResourceSchedule() {

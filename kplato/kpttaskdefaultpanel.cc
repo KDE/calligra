@@ -128,24 +128,24 @@ KMacroCommand *TaskDefaultPanel::buildCommand(Part *part) {
     }
     int et = estimationType();
     if (et != m_task.effort()->type()) {
-        cmd->addCommand(new ModifyEffortTypeCmd(part, m_task.effort(),  m_task.effort()->type(), et));
+        cmd->addCommand(new ModifyEffortTypeCmd(part, m_task,  m_task.effort()->type(), et));
         modified = true;
     }
     dt = estimationValue();
     kDebug()<<k_funcinfo<<"Estimate: "<<dt.toString()<<endl;
     bool expchanged = dt != m_task.effort()->expected();
     if ( expchanged ) {
-        cmd->addCommand(new ModifyEffortCmd(part, m_task.effort(), m_task.effort()->expected(), dt));
+        cmd->addCommand(new ModifyEffortCmd(part, m_task, m_task.effort()->expected(), dt));
         modified = true;
     }
     int x = optimistic();
     if ( x != m_task.effort()->optimisticRatio() || expchanged) {
-        cmd->addCommand(new EffortModifyOptimisticRatioCmd(part, m_task.effort(), m_task.effort()->optimisticRatio(), x));
+        cmd->addCommand(new EffortModifyOptimisticRatioCmd(part, m_task, m_task.effort()->optimisticRatio(), x));
         modified = true;
     }
     x = pessimistic();
     if ( x != m_task.effort()->pessimisticRatio() || expchanged) {
-        cmd->addCommand(new EffortModifyPessimisticRatioCmd(part, m_task.effort(), m_task.effort()->pessimisticRatio(), x));
+        cmd->addCommand(new EffortModifyPessimisticRatioCmd(part, m_task, m_task.effort()->pessimisticRatio(), x));
         modified = true;
     }
     if (!modified) {

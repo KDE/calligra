@@ -173,6 +173,7 @@ protected:
     friend class Task;
     friend class Project;
     friend class Resource;
+    friend class RecalculateProjectCmd;
     /** 
       * earliestStart is calculated by PERT/CPM.
       * A task may be scheduled to start later because of constraints
@@ -216,7 +217,6 @@ protected:
     DateTime workStartTime;
     DateTime workEndTime;
     bool inCriticalPath;
-
 
 #ifndef NDEBUG
 public:
