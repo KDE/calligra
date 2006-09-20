@@ -341,9 +341,9 @@ NodeDeleteCmd::NodeDeleteCmd(Part *part, Node *node, QString name)
     m_mine = false;
     m_appointments.setAutoDelete(true);
 
-    Node *p = node->projectNode();
-    if (p) {
-        Q3IntDictIterator<Schedule> it = p->schedules();
+    m_project = static_cast<Project*>(node->projectNode());
+    if (m_project) {
+        Q3IntDictIterator<Schedule> it = m_project->schedules();
         for (; it.current(); ++it) {
             Schedule *s = node->findSchedule(it.current()->id());
             if (s && s->isScheduled()) {
@@ -358,24 +358,23 @@ NodeDeleteCmd::~NodeDeleteCmd() {
         delete m_node;
 }
 void NodeDeleteCmd::execute() {
-    if (m_parent) {
+    if (m_parent && m_project) {
         //kDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
         Q3PtrListIterator<Appointment> it = m_node->appointments();
         for (; it.current(); ++it) {
             it.current()->detach();
             m_appointments.append(it.current());
         }
-        m_parent->delChildNode(m_node, false/*take*/);
-        m_node->setParent(0);
+        m_project->delTask(m_node);
         m_mine = true;
         setSchScheduled(false);
         setCommandType(1);
     }
 }
 void NodeDeleteCmd::unexecute() {
-    if (m_parent) {
-        //kDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
-        m_parent->insertChildNode(m_index, m_node);
+    if (m_parent && m_project) {
+        //kdDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
+        m_project->addSubTask(m_node, m_index, m_parent);
         Appointment *a;
         for (a = m_appointments.first(); a != 0; m_appointments.take()) {
             a->attach();
@@ -423,8 +422,7 @@ void TaskAddCmd::execute() {
     setCommandType(1);
 }
 void TaskAddCmd::unexecute() {
-    m_node->getParent()->delChildNode(m_node, false/*take*/);
-    m_node->setParent(0);
+    m_project->delTask(m_node);
     m_added = false;
     
     setCommandType(1);
@@ -456,8 +454,7 @@ void SubtaskAddCmd::execute() {
     setCommandType(1);
 }
 void SubtaskAddCmd::unexecute() {
-    m_parent->delChildNode(m_node, false/*take*/);
-    m_node->setParent(0);
+    m_project->delTask(m_node);
     m_added = false;
     
     setCommandType(1);
@@ -699,48 +696,43 @@ void NodeUnindentCmd::unexecute() {
 NodeMoveUpCmd::NodeMoveUpCmd(Part *part, Node &node, QString name)
     : NamedCommand(part, name),
       m_node(node), 
-      m_newindex(-1) {
+      m_moved(false) {
+
+    m_project = static_cast<Project *>(m_node.projectNode());
 }
 void NodeMoveUpCmd::execute() {
-    m_oldindex = m_node.getParent()->findChildNode(&m_node);
-    Project *p = dynamic_cast<Project *>(m_node.projectNode());
-    if (p && p->moveTaskUp(&m_node)) {
-        m_newindex = m_node.getParent()->findChildNode(&m_node);
+    if (m_project) {
+        m_moved = m_project->moveTaskUp(&m_node);
     }
     
     setCommandType(0);
 }
 void NodeMoveUpCmd::unexecute() {
-    if (m_newindex != -1) {
-        m_node.getParent()->delChildNode(m_newindex, false);
-        m_node.getParent()->insertChildNode(m_oldindex, &m_node);
-        m_newindex = -1;
+    if (m_project && m_moved) {
+        m_project->moveTaskDown(&m_node);
     }
-    
+    m_moved = false;
     setCommandType(0);
 }
 
 NodeMoveDownCmd::NodeMoveDownCmd(Part *part, Node &node, QString name)
     : NamedCommand(part, name),
       m_node(node), 
-      m_newindex(-1) {
+      m_moved(false) {
+    
+    m_project = static_cast<Project *>(m_node.projectNode());
 }
 void NodeMoveDownCmd::execute() {
-    m_oldindex = m_node.getParent()->findChildNode(&m_node);
-    Project *p = dynamic_cast<Project *>(m_node.projectNode());
-    if (p && p->moveTaskDown(&m_node)) {
-        m_newindex = m_node.getParent()->findChildNode(&m_node);
+    if (m_project) {
+        m_moved = m_project->moveTaskDown(&m_node);
     }
-    
     setCommandType(0);
 }
 void NodeMoveDownCmd::unexecute() {
-    if (m_newindex != -1) {
-        m_node.getParent()->delChildNode(m_newindex, false);
-        m_node.getParent()->insertChildNode(m_oldindex, &m_node);
-        m_newindex = -1;
+    if (m_project && m_moved) {
+        m_project->moveTaskUp(&m_node);
     }
-    
+    m_moved = false;
     setCommandType(0);
 }
 

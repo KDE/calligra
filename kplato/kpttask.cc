@@ -210,7 +210,9 @@ bool Task::load(QDomElement &element, Project &project) {
                 // Load the subproject
                 Project *child = new Project(this);
                 if (child->load(e)) {
-                    addChildNode(child);
+                    if (!project.addSubTask(child, this)) {
+                        delete child;  // TODO: Complain about this
+                    }
                 } else {
                     // TODO: Complain about this
                     delete child;
@@ -219,7 +221,9 @@ bool Task::load(QDomElement &element, Project &project) {
                 // Load the task
                 Task *child = new Task(this);
                 if (child->load(e, project)) {
-                    addChildNode(child);
+                    if (!project.addSubTask(child, this)) {
+                        delete child;  // TODO: Complain about this
+                    }
                 } else {
                     // TODO: Complain about this
                     delete child;
