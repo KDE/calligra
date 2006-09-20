@@ -78,6 +78,10 @@ bool Relation::load(QDomElement &element, Project &project) {
         kDebug()<<k_funcinfo<<"child == parent"<<endl;
         return false;
     }
+    if (m_child == m_parent) {
+        kdDebug()<<k_funcinfo<<"child == parent"<<endl;
+        return false;
+    }
     if (!m_parent->legalToLink(m_child))
         return false;
         
