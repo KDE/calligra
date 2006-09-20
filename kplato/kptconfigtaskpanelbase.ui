@@ -280,6 +280,9 @@ The estimation can be either effort based or duration based. If it is effort bas
                             <property name="suffix">
                                 <string>%</string>
                             </property>
+                            <property name="maxValue">
+                                <number>999</number>
+                            </property>
                         </widget>
                     </hbox>
                 </widget>
