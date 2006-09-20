@@ -244,7 +244,7 @@ VRoundCornersCmd::visitVSubpath( VSubpath& path )
 
 		param = length > 2 * m_radius
 			? path.current()->lengthParam( m_radius )
-			: param = 0.5;
+			: 0.5;
 
 
 		path.insert(
