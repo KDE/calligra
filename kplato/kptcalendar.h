@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -376,6 +376,8 @@ public:
     bool load(QDomElement &element);
     void save(QDomElement &element) const;
 
+    Calendar *calendar() const { return m_calendar; }
+    
 protected:
     void init();
     
@@ -384,6 +386,8 @@ private:
     Duration m_month;
     Duration m_week;
     Duration m_day;
+    
+    Calendar *m_calendar;
     
 #ifndef NDEBUG
 public:

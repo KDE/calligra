@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE DOC>
-<DOC mime="application/x-vnd.kde.kplato" syntaxVersion="0" >
-
+<!DOCTYPE kplato>
+<kplato mime="application/x-vnd.kde.kplato" version="0.4" editor="KPlato" >
  <project id="0" scheduling="MustStartOn" >
-  <calendar id="1" name="Base" >
-   <weekday day="0" state="2" >
-    <interval end="16:00:00" start="08:00:00" />
-   </weekday>
-   <weekday day="1" state="2" >
-    <interval end="16:00:00" start="08:00:00" />
-   </weekday>
-   <weekday day="2" state="2" >
-    <interval end="16:00:00" start="08:00:00" />
-   </weekday>
-   <weekday day="3" state="2" >
-    <interval end="16:00:00" start="08:00:00" />
-   </weekday>
-   <weekday day="4" state="2" >
-    <interval end="16:00:00" start="08:00:00" />
-   </weekday>
-   <weekday day="5" state="1" />
-   <weekday day="6" state="1" />
-  </calendar>
-  <standard-worktime  day="8h0m" week="40h0m" month="176h0m" year="1760h0m" />
+  <standard-worktime day="8h0m" week="40h0m" month="176h0m" year="1760h0m" >
+   <calendar id="-1" name="Base" >
+    <weekday day="0" state="2" >
+     <interval end="16:00:00" start="08:00:00" />
+    </weekday>
+    <weekday day="1" state="2" >
+     <interval end="16:00:00" start="08:00:00" />
+    </weekday>
+    <weekday day="2" state="2" >
+     <interval end="16:00:00" start="08:00:00" />
+    </weekday>
+    <weekday day="3" state="2" >
+     <interval end="16:00:00" start="08:00:00" />
+    </weekday>
+    <weekday day="4" state="2" >
+     <interval end="16:00:00" start="08:00:00" />
+    </weekday>
+    <weekday day="5" state="1" />
+    <weekday day="6" state="1" />
+   </calendar>
+  </standard-worktime>
  </project>
-</DOC>
+</kplato>

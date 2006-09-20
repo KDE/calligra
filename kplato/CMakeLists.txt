@@ -72,7 +72,9 @@ set(libkplatopart_SRCS
     kptwbsdefinition.cc
     KPtViewAdaptor.cc
 )
-
+kde4_add_ui_files(libkplatopart_SRCS
+    standardworktimedialogbase.ui
+)
 kde4_add_ui3_files(libkplatopart_SRCS
     kpttaskcostpanelbase.ui
     kptsummarytaskgeneralpanelbase.ui
@@ -93,7 +95,6 @@ kde4_add_ui3_files(libkplatopart_SRCS
     kpttaskprogresspanelbase.ui
     kptconfigtaskpanelbase.ui
     kptintervaleditbase.ui
-    standardworktimedialogbase.ui
     )
 
 ########### next target ###############

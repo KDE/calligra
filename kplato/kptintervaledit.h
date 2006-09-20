@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 #include <QString>
 #include <q3ptrlist.h>
 #include <qpair.h>
+#include <QWidget>
 
 namespace KPlato
 {
@@ -34,32 +35,24 @@ namespace KPlato
 class IntervalEditImpl : public IntervalEditBase {
     Q_OBJECT
 public:
-    IntervalEditImpl(const Q3PtrList<QPair<QTime, QTime> > &intervals, QWidget *parent);
-
+    IntervalEditImpl(QWidget *parent);
+    
     Q3PtrList<QPair<QTime, QTime> > intervals() const;
-
+    void setIntervals(const Q3PtrList<QPair<QTime, QTime> > &intervals) const;
+    
 private slots:
-    void slotCheckAllFieldsFilled();
-    void slotEnableButtonOk(bool on);
-
     void slotClearClicked();
     void slotAddIntervalClicked();
     void slotIntervalSelectionChanged(Q3ListViewItem *item);
 signals:
-    void obligatedFieldsFilled(bool yes);
-    void enableButtonOk(bool);
-
+    void changed();
 };
 
-class IntervalEdit : public KDialog {
+class IntervalEdit : public IntervalEditImpl {
     Q_OBJECT
 public:
-    IntervalEdit(const Q3PtrList<QPair<QTime, QTime> > &intervals, QWidget *parent=0, const char *name=0);
+    IntervalEdit(QWidget *parent=0, const char *name=0);
 
-    Q3PtrList<QPair<QTime, QTime> > intervals() const;
-
-private:
-    IntervalEditImpl *dia;
 };
 
 }  //KPlato namespace

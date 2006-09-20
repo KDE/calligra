@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,9 +22,11 @@
 
 #include <QPushButton>
 #include <QComboBox>
+#include <q3header.h>
 #include <QLabel>
 #include <QLineEdit>
 #include <q3datetimeedit.h>
+#include <qpair.h>
 #include <qdatetime.h>
 #include <q3listview.h>
 //Added by qt3to4:
@@ -36,36 +38,18 @@
 namespace KPlato
 {
 
-IntervalEdit::IntervalEdit(const Q3PtrList<QPair<QTime, QTime> > &intervals, QWidget *parent, const char *name)
-    : KDialog(parent)
+IntervalEdit::IntervalEdit(QWidget *parent, const char *name)
+    : IntervalEditImpl(parent)
 {
-    setCaption(i18n("Edit Interval"));
-    setButtons(Ok|Cancel);
-    showButtonSeparator(true);
-
     //kDebug()<<k_funcinfo<<endl;
-    dia = new IntervalEditImpl(intervals, this);
-
-    setMainWidget(dia);
-    enableButtonOk(false);
-
-    connect(dia, SIGNAL(obligatedFieldsFilled(bool) ), SLOT(enableButtonOk(bool)));
-    connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)));
-}
-
-Q3PtrList<QPair<QTime, QTime> > IntervalEdit::intervals() const {
-    return dia->intervals();
 }
 
 
-IntervalEditImpl::IntervalEditImpl(const Q3PtrList<QPair<QTime, QTime> > &intervals, QWidget *parent)
+//--------------------------------------------
+IntervalEditImpl::IntervalEditImpl(QWidget *parent)
     : IntervalEditBase(parent) {
-
+  
     intervalList->setSortColumn(0);
-    Q3PtrListIterator<QPair<QTime, QTime> > it = intervals;
-    for (; it.current(); ++it) {
-        new IntervalItem(intervalList, it.current()->first, it.current()->second);
-    }
 
     connect(bClear, SIGNAL(clicked()), SLOT(slotClearClicked()));
     connect(bAddInterval, SIGNAL(clicked()), SLOT(slotAddIntervalClicked()));
@@ -73,22 +57,16 @@ IntervalEditImpl::IntervalEditImpl(const Q3PtrList<QPair<QTime, QTime> > &interv
 
 }
 
-
-void IntervalEditImpl::slotEnableButtonOk(bool on) {
-    emit enableButtonOk(on);
-}
-
-void IntervalEditImpl::slotCheckAllFieldsFilled() {
-    emit obligatedFieldsFilled(true); //FIXME
-}
-
 void IntervalEditImpl::slotClearClicked() {
+    bool c = intervalList->firstChild() != 0;
     intervalList->clear();
+    if (c)
+        emit changed();
 }
 
 void IntervalEditImpl::slotAddIntervalClicked() {
     new IntervalItem(intervalList, startTime->time(), endTime->time());
-    slotEnableButtonOk(true);
+    emit changed();
 }
 
 void IntervalEditImpl::slotIntervalSelectionChanged(Q3ListViewItem *item) {
@@ -108,6 +86,14 @@ Q3PtrList<QPair<QTime, QTime> > IntervalEditImpl::intervals() const {
             l.append(new QPair<QTime, QTime>(item->interval().first, item->interval().second));
     }
     return l;
+}
+
+void IntervalEditImpl::setIntervals(const Q3PtrList<QPair<QTime, QTime> > &intervals) const {
+    intervalList->clear();
+    Q3PtrListIterator<QPair<QTime, QTime> > it =intervals;
+    for (; it.current(); ++it) {
+        new IntervalItem(intervalList, it.current()->first, it.current()->second);
+    }
 }
 
 }  //KPlato namespace

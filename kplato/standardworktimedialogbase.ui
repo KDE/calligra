@@ -1,163 +1,275 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPlato::StandardWorktimeDialogBase</class>
-<author>Dag Andersen </author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>StandardWorktimeDialogBase</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>228</width>
-            <height>112</height>
-        </rect>
-    </property>
-    <property name="caption">
-        <string>StandardWorktime</string>
-    </property>
-    <property name="whatsThis" stdset="0">
-        <string>These values are used when you estimate the effort needed to complete a task.</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
+<ui version="4.0" >
+ <author>Dag Andersen </author>
+ <class>KPlato::StandardWorktimeDialogBase</class>
+ <widget class="QWidget" name="KPlato::StandardWorktimeDialogBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>417</width>
+    <height>368</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>StandardWorktime</string>
+  </property>
+  <property name="whatsThis" >
+   <string>These values are used when you estimate the effort needed to complete a task.</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="3" column="0" >
+      <widget class="QLabel" name="textLabel4" >
+       <property name="text" >
+        <string>Hours per day:</string>
+       </property>
+       <property name="wordWrap" >
+        <bool>false</bool>
+       </property>
+       <property name="buddy" >
+        <cstring>day</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="textLabel2" >
+       <property name="text" >
+        <string>Hours per month:</string>
+       </property>
+       <property name="wordWrap" >
+        <bool>false</bool>
+       </property>
+       <property name="buddy" >
+        <cstring>month</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0" >
+      <widget class="QLabel" name="textLabe3" >
+       <property name="text" >
+        <string>Hours per week:</string>
+       </property>
+       <property name="wordWrap" >
+        <bool>false</bool>
+       </property>
+       <property name="buddy" >
+        <cstring>week</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="KDoubleSpinBox" native="1" name="month" >
+       <property name="focusPolicy" >
+        <enum>Qt::WheelFocus</enum>
+       </property>
+       <property name="toolTip" >
+        <string>Number of working hours in a normal month.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1" >
+      <widget class="KDoubleSpinBox" native="1" name="day" >
+       <property name="focusPolicy" >
+        <enum>Qt::WheelFocus</enum>
+       </property>
+       <property name="toolTip" >
+        <string>Number of working hours in a normal day.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="KDoubleSpinBox" native="1" name="year" >
+       <property name="focusPolicy" >
+        <enum>Qt::WheelFocus</enum>
+       </property>
+       <property name="toolTip" >
+        <string>Number of working hours in a normal year.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <widget class="KDoubleSpinBox" native="1" name="week" >
+       <property name="focusPolicy" >
+        <enum>Qt::WheelFocus</enum>
+       </property>
+       <property name="toolTip" >
+        <string>Number of working hours in a normal week.</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="textLabel1" >
+       <property name="text" >
+        <string>Hours per year:</string>
+       </property>
+       <property name="wordWrap" >
+        <bool>false</bool>
+       </property>
+       <property name="buddy" >
+        <cstring>year</cstring>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="Q3GroupBox" name="groupBox1" >
+     <property name="toolTip" >
+      <string>Define standard weekly working hours.</string>
+     </property>
+     <property name="whatsThis" >
+      <string>The working hours defined here will be used
+when there is no calendar defined for a resource.</string>
+     </property>
+     <property name="title" >
+      <string>Working Hours</string>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="K3ListView" name="weekdayList" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="margin">
-            <number>0</number>
+        <property name="minimumSize" >
+         <size>
+          <width>160</width>
+          <height>210</height>
+         </size>
         </property>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>textLabel1</cstring>
+        <property name="selectionMode" >
+         <enum>Q3ListView::Extended</enum>
+        </property>
+        <property name="itemMargin" >
+         <number>4</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Q3GroupBox" name="editBox" >
+        <property name="title" >
+         <string/>
+        </property>
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item row="0" column="0" >
+          <widget class="KComboBox" name="state" >
+           <item>
+            <property name="text" >
+             <string>Non-working</string>
             </property>
-            <property name="text">
-                <string>Hours per year:</string>
+           </item>
+           <item>
+            <property name="text" >
+             <string>Working</string>
             </property>
-            <property name="buddy" stdset="0">
-                <cstring>year</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="1" column="0">
-            <property name="name">
-                <cstring>textLabel2</cstring>
-            </property>
-            <property name="text">
-                <string>Hours per month:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>month</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="3" column="0">
-            <property name="name">
-                <cstring>textLabel4</cstring>
-            </property>
-            <property name="text">
-                <string>Hours per day:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>day</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="2" column="0">
-            <property name="name">
-                <cstring>textLabe3</cstring>
-            </property>
-            <property name="text">
-                <string>Hours per week:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>week</cstring>
-            </property>
-        </widget>
-        <widget class="KDoubleSpinBox" row="0" column="1">
-            <property name="name">
-                <cstring>year</cstring>
-            </property>
-            <property name="focusPolicy">
-                <enum>Qt::WheelFocus</enum>
-            </property>
-            <property name="maximum">
-                <number>8784</number>
-            </property>
-            <property name="minimum">
-                <number>1</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Number of working hours in a normal year</string>
-            </property>
-        </widget>
-        <widget class="KDoubleSpinBox" row="1" column="1">
-            <property name="name">
-                <cstring>month</cstring>
-            </property>
-            <property name="focusPolicy">
-                <enum>Qt::WheelFocus</enum>
-            </property>
-            <property name="maximum">
-                <number>744</number>
-            </property>
-            <property name="minimum">
-                <number>1</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Number of working hours in a normal month</string>
-            </property>
-        </widget>
-        <widget class="KDoubleSpinBox" row="2" column="1">
-            <property name="name">
-                <cstring>week</cstring>
-            </property>
-            <property name="focusPolicy">
-                <enum>Qt::WheelFocus</enum>
-            </property>
-            <property name="maximum">
-                <number>168</number>
-            </property>
-            <property name="minimum">
-                <number>1</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Number of working hours in a normal week</string>
-            </property>
-        </widget>
-        <widget class="KDoubleSpinBox" row="3" column="1">
-            <property name="name">
-                <cstring>day</cstring>
-            </property>
-            <property name="focusPolicy">
-                <enum>Qt::WheelFocus</enum>
-            </property>
-            <property name="maximum">
-                <number>24</number>
-            </property>
-            <property name="minimum">
-                <number>1</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Number of working hours in a normal day</string>
-            </property>
-        </widget>
-    </grid>
-</widget>
-<customwidgets>
-      <customwidget>
-          <class>KDoubleNumInput</class>
-          <header location="global">knuminput.h</header>
-          <container>0</container>
+           </item>
+          </widget>
+         </item>
+         <item row="0" column="1" >
+          <widget class="QPushButton" name="bApply" >
+           <property name="text" >
+            <string>Apply</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" colspan="2" >
+          <widget class="Q3GroupBox" name="intervalBox" >
+           <property name="title" >
+            <string/>
+           </property>
+           <property name="orientation" >
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KDoubleSpinBox</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+   <container>1</container>
   </customwidget>
-      <customwidget>
-          <class>KDoubleSpinBox</class>
-          <header location="global">knuminput.h</header>
-          <container>0</container>
+  <customwidget>
+   <class>Q3GroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>Qt3Support/Q3GroupBox</header>
+   <container>1</container>
   </customwidget>
-</customwidgets>
-
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-</includehints>
-</UI>
+  <customwidget>
+   <class>Q3ListView</class>
+   <extends>Q3Frame</extends>
+   <header>q3listview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>K3ListView</class>
+   <extends>Q3ListView</extends>
+   <header>k3listview.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>day</tabstop>
+  <tabstop>weekdayList</tabstop>
+  <tabstop>state</tabstop>
+  <tabstop>bApply</tabstop>
+  <tabstop>year</tabstop>
+  <tabstop>month</tabstop>
+  <tabstop>week</tabstop>
+ </tabstops>
+ <includes>
+  <include location="local" >knuminput.h</include>
+  <include location="local" >k3listview.h</include>
+  <include location="local" >kcombobox.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

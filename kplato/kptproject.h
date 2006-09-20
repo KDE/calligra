@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -149,14 +149,15 @@ public:
     /// Actual cost up to and including date
     virtual double actualCostTo(const QDate &date);
 
-    Calendar *defaultCalendar() { return m_defaultCalendar; }
+    Calendar *defaultCalendar() { return m_standardWorktime->calendar(); }
     Q3PtrList<Calendar> calendars();
     void addCalendar(Calendar *calendar);
     /// Returns the calendar with identity id.
     Calendar *calendar(const QString id) const;
 
     /**
-     * Defines the length of days, weeks, months and years.
+     * Defines the length of days, weeks, months and years
+     * and the standard working week.
      * Used for estimation and calculation of effort, 
      * and presentation in gantt chart.
      */    
@@ -233,7 +234,6 @@ protected:
     Accounts m_accounts;
     Q3PtrList<ResourceGroup> m_resourceGroups;
 
-    Calendar *m_defaultCalendar;
     Q3PtrList<Calendar> m_calendars;
 
     StandardWorktime *m_standardWorktime;
