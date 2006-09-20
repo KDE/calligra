@@ -164,6 +164,7 @@ public slots:
 	void ungroupSelection();
 
 	void closePath();
+	void combinePath();
 
 	//View:
 	void viewZoomIn();
@@ -244,6 +245,7 @@ private:
 	KAction			*m_ungroupObjects;
 
 	KAction			*m_closePath;
+	KAction			*m_combinePath;
 
 	// actions:
 	KoZoomAction		*m_zoomAction;

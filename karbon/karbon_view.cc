@@ -67,6 +67,8 @@
 #include <KoSelection.h>
 #include <KoZoomAction.h>
 #include <KoShapeSelector.h>
+#include <KoPathShape.h>
+#include <KoPathCommand.h>
 
 // Commands.
 #include "vcleanupcmd.h"
@@ -829,6 +831,31 @@ KarbonView::closePath()
 }
 
 void
+KarbonView::combinePath()
+{
+	debugView("KarbonView::combinePath()");
+
+	KoSelection* selection = m_canvas->shapeManager()->selection();
+	if( ! selection )
+		return;
+
+	KoSelectionSet selectedShapes = selection->selectedShapes();
+	QList<KoPathShape*> paths;
+
+	foreach( KoShape* shape, selectedShapes )
+	{
+		KoPathShape *path = dynamic_cast<KoPathShape*>( shape );
+		if( path )
+		{
+			paths << path;
+			selection->deselect( shape );
+		}
+	}
+
+	if( paths.size() )
+		m_canvas->addCommand( new KoPathCombineCommand( part(), paths ), true );
+}
+void
 KarbonView::slotActiveToolChanged( VTool *tool )
 {
 	debugView(QString("KarbonView::slotActiveToolChanged(%1)").arg(tool->uiname()));
@@ -1207,11 +1234,19 @@ KarbonView::initActions()
 	m_ungroupObjects = new KAction(KIcon("ungroup"), i18n("&Ungroup Objects"), actionCollection(), "selection_ungroup");
 	m_ungroupObjects->setShortcut(QKeySequence("Ctrl+Shift+G"));
 	connect(m_ungroupObjects, SIGNAL(triggered()), this, SLOT(ungroupSelection()));
+	// object <-----
 
+	// path ------->
 	m_closePath = new KAction(i18n("&Close Path"), actionCollection(), "close_path");
 	m_closePath->setShortcut(QKeySequence("Ctrl+U"));
+	m_closePath->setEnabled( false );
 	connect(m_closePath, SIGNAL(triggered()), this, SLOT(closePath()));
-	// object <-----
+
+	m_combinePath = new KAction( i18n("Com&bine Path"), actionCollection(), "combine_path" );
+	m_combinePath->setShortcut(QKeySequence("Ctrl+K"));
+	m_combinePath->setEnabled( false );
+	connect(m_combinePath, SIGNAL(triggered()), this, SLOT(combinePath()));
+	// path <-----
 
 	// line style (dashes)
 	// TODO: KoLineStyleAction isn't ported yet.
@@ -1424,6 +1459,8 @@ KarbonView::showSelectionPopupMenu( const QPoint &pos )
 		actionList.append( m_ungroupObjects );
 	if( m_closePath->isEnabled() )
 		actionList.append( m_closePath );
+	if( m_combinePath->isEnabled() )
+		actionList.append( m_combinePath );
 	plugActionList( "selection_type_action", actionList );
 	((Q3PopupMenu *)factory()->container( "selection_popup", this ) )->exec( pos );
 	unplugActionList( "selection_type_action" );
@@ -1510,6 +1547,7 @@ KarbonView::selectionChanged()
 	m_groupObjects->setEnabled( count > 1 );
 	m_ungroupObjects->setEnabled( false );
 	m_closePath->setEnabled( false );
+	m_combinePath->setEnabled( false );
 	m_deleteSelectionAction->setEnabled( count > 0 );
 
 	kDebug(38000) << count << " shapes selected" << endl;
@@ -1553,16 +1591,20 @@ KarbonView::selectionChanged()
   			m_lineStyleAction->setCurrentSelection( Qt::DashDotDotLine );
 		*/
 
-		// check all selected shapes if they are grouped
-		// and enable the ungroup action if at least one is found
+		uint selectedPaths = 0;
+		uint selectedGroups = 0;
+		// check for different shape types for enabling specific actions 
 		foreach( KoShape* shape, selection->selectedShapes() )
 		{
 			if( dynamic_cast<KoShapeGroup*>( shape->parent() ) )
-			{
-				m_ungroupObjects->setEnabled( true );
-				break;
-			}
+				selectedGroups++;
+			if( dynamic_cast<KoPathShape*>( shape ) )
+				selectedPaths++;
 		}
+		m_ungroupObjects->setEnabled( selectedGroups > 0 );
+		//TODO enable action when the ClosePath command is ported
+		//m_closePath->setEnabled( selectedPaths > 0 );
+		m_combinePath->setEnabled( selectedPaths > 1 );
 	}
 	else
 	{

@@ -78,7 +78,11 @@
 		</Menu>
 		<Action name="selection_group"/>
 		<Action name="selection_ungroup"/>
+	</Menu>
+	<Menu name="path">
+		<text>&amp;Path</text>
 		<Action name="close_path"/>
+		<Action name="combine_path"/>
 	</Menu>
 	<Menu name="effects">
 		<text>Effe&amp;cts</text>
