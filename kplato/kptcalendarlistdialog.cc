@@ -179,7 +179,7 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *
     Q3PtrListIterator<Calendar> it = list;
     for (; it.current(); ++it) {
         Calendar *c = new Calendar(it.current());
-        c->setProject(&p);
+        //c->setProject(&p);
         new CalendarListViewItem(*dia, dia->calendarList, c, it.current());
     }
     dia->setBaseCalendars();
