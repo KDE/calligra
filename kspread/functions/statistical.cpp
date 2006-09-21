@@ -501,14 +501,14 @@ Value func_large (valVector args, ValueCalc *calc, FuncExtra *)
   // does NOT support anything other than doubles !!!
   int k = calc->conv()->asInteger (args[1]).asInteger();
   if ( k < 1 )
-    return false;
+    return Value::errorVALUE();
 
   List array;
   int number = 1;
 
   func_array_helper (args[0], calc, array, number);
 
-  if ( k > number )
+  if ( k >= number || number - k - 1 >= array.count() )
     return Value::errorVALUE();
 
   qSort(array);
@@ -521,14 +521,14 @@ Value func_small (valVector args, ValueCalc *calc, FuncExtra *)
   // does NOT support anything other than doubles !!!
   int k = calc->conv()->asInteger (args[1]).asInteger();
   if ( k < 1 )
-    return false;
+    return Value::errorVALUE();
 
   List array;
   int number = 1;
 
   func_array_helper (args[0], calc, array, number);
 
-  if ( k > number )
+  if ( k > number || k - 1 >= array.count() )
     return Value::errorVALUE();
 
   qSort(array);
@@ -740,6 +740,9 @@ Value func_median (valVector args, ValueCalc *calc, FuncExtra *)
 
   for (int i = 0; i < args.count(); ++i)
     func_array_helper (args[i], calc, array, number);
+
+  if ( number / 2 + number % 2 >= array.count() )
+    return Value::errorVALUE();
 
   qSort(array);
   double d = array.at(number / 2 + number % 2);
