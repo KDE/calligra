@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
     Copyright (C) 1997 Tim D. Gilman (tdgilman@best.org)
               (C) 1998-2001 Mirko Boehm (mirko@kde.org)
-              (C) 2004 Dag Andersen <danders@get2net.dk>
+              (C) 2004-2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -508,7 +508,7 @@ bool DateTable::selectDate(const QDate& date_) {
     }
 
     temp.setYMD(date.year(), date.month(), 1);
-    firstday=temp.dayOfWeek();
+    firstday=column(KGlobal::locale()->calendar()->dayOfWeek(temp));
     if(firstday==1) firstday=8; // Reserve row 1 for previous month
     numdays=date.daysInMonth();
     if(date.month()==1) { // set to december of previous year
@@ -544,9 +544,9 @@ bool DateTable::setDate(const QDate& date_, bool repaint) {
     //m_selectedDates.clear();
 
     temp.setYMD(date.year(), date.month(), 1);
-    firstday=temp.dayOfWeek();
+    firstday=column(KGlobal::locale()->calendar()->dayOfWeek(temp));
     if(firstday==1) firstday=8;
-    //kDebug()<<k_funcinfo<<"date="<<temp.toString()<<"day="<<temp.dayOfWeek()<<" firstday="<<firstday<<endl;
+    //kdDebug()<<k_funcinfo<<"date="<<temp<<"day="<<(KGlobal::locale()->calendar()->dayOfWeek(temp))<<" firstday="<<firstday<<endl;
     numdays=date.daysInMonth();
     if(date.month()==1) { // set to december of previous year
         temp.setYMD(date.year()-1, 12, 1);
@@ -655,6 +655,24 @@ bool DateTable::weekdayMarked(int day) {
 
 bool DateTable::dateMarked(QDate date) {
     return m_markedDates[date.toString()];
+}
+
+QDate DateTable::getDate(int pos) const {
+    return QDate(date.year(), date.month(), 1).addDays(pos-firstday); 
+}
+
+int DateTable::weekday(int col) const {
+    int day = col - m_dateStartCol + KGlobal::locale()->weekStartDay();
+    if (day > 7) day %= 7;
+    //kdDebug()<<k_funcinfo<<"col="<<col<<" day="<<day<<" StartCol="<<m_dateStartCol<<" weekStartDay="<<KGlobal::locale()->weekStartDay()<<endl;
+    return day;
+}
+
+int DateTable::column(int weekday) const {
+    int col = weekday - KGlobal::locale()->weekStartDay();
+    if (col < 0) col += 7;
+    //kdDebug()<<k_funcinfo<<"col="<<col<<" day="<<col<<" StartCol="<<m_dateStartCol<<" weekStartDay="<<KGlobal::locale()->weekStartDay()<<endl;
+    return col + m_dateStartCol;
 }
 
 void DateTable::clear() {
