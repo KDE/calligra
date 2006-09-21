@@ -1200,7 +1200,7 @@ void CellView::paintText( QPainter& painter,
   if ( d->cell->sheet()->getHideZero()
        && d->cell->value().isNumber()
        && d->cell->value().asFloat() == 0 ) {
-    d->cell->d->strOutText.clear();
+    d->cell->strOutText().clear();
   }
 
   // Clear extra cell if column or row is hidden
@@ -2148,107 +2148,82 @@ QFont CellView::effectiveFont( int _col, int _row ) const
 //
 void CellView::makeLayout( int _col, int _row )
 {
-    // Are _col and _row really needed ?
-    //
-    // Yes they are: they are useful if this is the default layout, in
-    // which case d->cell->row() and d->cell->column() are 0 and 0, but _col and _row
-    // are the real coordinates of the cell.
+  // Are _col and _row really needed ?
+  //
+  // Yes they are: they are useful if this is the default layout, in
+  // which case d->cell->row() and d->cell->column() are 0 and 0, but _col and _row
+  // are the real coordinates of the cell.
 
-    // There is no need to remake the layout if it hasn't changed.
-    if ( !d->cell->testFlag( Cell::Flag_LayoutDirty ) )
-        return;
+  // There is no need to remake the layout if it hasn't changed.
+  if ( !d->cell->testFlag( Cell::Flag_LayoutDirty ) )
+    return;
 
-    // Some initializations.
-    d->cell->clearFlag( Cell::Flag_CellTooShortX );
-    d->cell->clearFlag( Cell::Flag_CellTooShortY );
+  // Some initializations.
+  d->cell->clearFlag( Cell::Flag_CellTooShortX );
+  d->cell->clearFlag( Cell::Flag_CellTooShortY );
 
-    // Initiate the cells that this one is obscuring to the ones that
-    // are actually merged.
-    d->cell->freeAllObscuredCells();
-    if ( d->cell->d->hasExtra() )
-    {
-        d->cell->mergeCells( d->cell->column(), d->cell->row(), d->cell->mergedXCells(), d->cell->mergedYCells() );
-    }
+  // Initiate the cells that this one is obscuring to the ones that
+  // are actually merged.
+  d->cell->freeAllObscuredCells();
+  if (d->cell->d->hasExtra())
+  {
+    d->cell->mergeCells( d->cell->column(), d->cell->row(), d->cell->mergedXCells(), d->cell->mergedYCells() );
+  }
 
-    // If the column for this cell is hidden or the row is too low,
-    // there is no use in remaking the layout.
-    ColumnFormat  *cl1 = d->cell->sheet()->columnFormat( _col );
-    RowFormat     *rl1 = d->cell->sheet()->rowFormat( _row );
-    if ( cl1->isHide() || ( rl1->dblHeight() <= d->cell->sheet()->doc()->unzoomItY( 2 ) ) )
-    {
-        d->cell->clearFlag( Cell::Flag_LayoutDirty );
-        return;
-    }
-
-    // Recalculate the output text, d->cell->strOutText().
-    d->cell->setOutputText();
-
-    // Empty text?  Reset the outstring and, if this is the default
-    // cell, return.
-    if ( d->cell->strOutText().isEmpty() ) {
-        d->cell->d->strOutText.clear();
-
-        if ( d->cell->isDefault() ) {
-            d->cell->clearFlag( Cell::Flag_LayoutDirty );
-            return;
-        }
-    }
-
-    // Up to here, we have just cared about the contents, not the
-    // painting of it.  Now it is time to see if the contents fits into
-    // the cell and, if not, maybe rearrange the outtext a bit.
-    //
-    // First, Determine the correct font with zoom taken into account.
-    // Then calculate text dimensions, i.e. d->textWidth and d->textHeight.
-    QFontMetrics fontMetrics( effectiveFont( _col, _row ) );
-    textSize( fontMetrics );
-
-    // Calculate the size of the cell.
-    calculateCellDimension();
-
-    // check wether the text fits into the cell
-    checkTextFitting();
-
-    if ( !d->cell->testFlag( Cell::Flag_CellTooShortX ) &&
-         !d->cell->testFlag( Cell::Flag_CellTooShortY ) )
-    {
-        // text fits. we're done.
-        d->cell->clearFlag( Cell::Flag_LayoutDirty );
-        return;
-    }
-
-    // grow in horizontal direction
-    if ( d->cell->testFlag( Cell::Flag_CellTooShortX ) )
-    {
-        obscureHorizontalCells();
-    }
-
-    // Still not enough?
-    if ( d->cell->testFlag( Cell::Flag_CellTooShortX ) )
-    {
-        // Check, if we are allowed to break the line into multiple lines and do so.
-        breakLines( fontMetrics );
-    }
-
-    // Also recalculate text dimensions, i.e. d->textWidth and d->textHeight,
-    // because of new line breaks.
-    textSize( fontMetrics );
-
-    // Calculate text offset, i.e. d->textX and d->textY.
-    textOffset( fontMetrics );
-
-    // check wether the text fits into the cell
-    checkTextFitting();
-
-    if ( d->cell->testFlag( Cell::Flag_CellTooShortY ) )
-    {
-//         obscureVerticalCells();
-    }
-
-    // Calculate text offset, i.e. d->textX and d->textY.
-    textOffset( fontMetrics );
-
+  // If the column for this cell is hidden or the row is too low,
+  // there is no use in remaking the layout.
+  ColumnFormat  *cl1 = d->cell->sheet()->columnFormat( _col );
+  RowFormat     *rl1 = d->cell->sheet()->rowFormat( _row );
+  if ( cl1->isHide() || ( rl1->dblHeight() <= d->cell->sheet()->doc()->unzoomItY( 2 ) ) )
+  {
     d->cell->clearFlag( Cell::Flag_LayoutDirty );
+    return;
+  }
+
+  // Recalculate the output text, d->cell->strOutText().
+  d->cell->setOutputText();
+
+  // Empty text?  Reset the outstring and, if this is the default
+  // cell, return.
+  if ( d->cell->strOutText().isEmpty() ) {
+    d->cell->strOutText().clear();
+
+    if ( d->cell->isDefault() ) {
+      d->cell->clearFlag( Cell::Flag_LayoutDirty );
+      return;
+    }
+  }
+
+  // Up to here, we have just cared about the contents, not the
+  // painting of it.  Now it is time to see if the contents fits into
+  // the cell and, if not, maybe rearrange the outtext a bit.
+  //
+  // First, Determine the correct font with zoom taken into account.
+  // Then calculate text dimensions, i.e. d->textWidth and d->textHeight.
+  QFontMetrics fontMetrics( effectiveFont( _col, _row ) );
+  textSize( fontMetrics );
+
+  // Calculate the size of the cell.
+  calculateCellDimension();
+
+  // Check, if we need to break the line into multiple lines and are
+  // allowed to do so.
+  breakLines( fontMetrics );
+
+  // Also recalculate text dimensions, i.e. d->textWidth and d->textHeight,
+  // because of new line breaks.
+  textSize( fontMetrics );
+
+  // Calculate text offset, i.e. d->textX and d->textY.
+  textOffset( fontMetrics );
+
+  // Obscure cells, if necessary.
+  obscureHorizontalCells();
+  obscureVerticalCells();
+
+  d->cell->clearFlag( Cell::Flag_LayoutDirty );
+
+  return;
 }
 
 
@@ -2279,44 +2254,6 @@ void CellView::calculateCellDimension() const
     d->cell->d->extra()->extraWidth  = width;
     d->cell->d->extra()->extraHeight = height;
   }
-}
-
-void CellView::checkTextFitting()
-{
-    d->cell->clearFlag( Cell::Flag_CellTooShortX );
-    d->cell->clearFlag( Cell::Flag_CellTooShortY );
-
-    // dimension (including merged cells)
-    double width  = d->cell->dblWidth();
-    double height = d->cell->dblHeight();
-
-    if ( d->cell->d->hasExtra() )
-    {
-        const int endCol = d->cell->column() + d->cell->d->extra()->extraXCells;
-        for ( int col = d->cell->column() + d->cell->d->extra()->mergedXCells + 1; col <= endCol; ++col )
-        {
-            width += d->cell->sheet()->columnFormat( col )->dblWidth();
-        }
-        const int endRow = d->cell->row() + d->cell->d->extra()->extraYCells;
-        for ( int row = d->cell->row() + d->cell->d->extra()->mergedYCells + 1; row <= endRow; ++row )
-        {
-            height += d->cell->sheet()->rowFormat( row )->dblHeight();
-        }
-    }
-
-    if ( d->textWidth > ( width - 2 * s_borderSpace
-         - 0.5 * d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
-         - 0.5 * d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) ) )
-    {
-        d->cell->setFlag( Cell::Flag_CellTooShortX );
-    }
-
-    if ( d->textHeight > ( height - 2 * s_borderSpace
-         - 0.5 * d->cell->format()->topBorderWidth( d->cell->column(), d->cell->row() )
-         - 0.5 * d->cell->format()->bottomBorderWidth( d->cell->column(), d->cell->row() ) ) )
-    {
-        d->cell->setFlag( Cell::Flag_CellTooShortY );
-    }
 }
 
 
@@ -2646,199 +2583,178 @@ void CellView::textSize( const QFontMetrics& fm )
 
 void CellView::breakLines( const QFontMetrics& fontMetrics )
 {
-    if ( d->cell->format()->multiRow( d->cell->column(), d->cell->row() ) &&
-         d->textWidth > ( d->cell->dblWidth() - 2 * s_borderSpace
-         - 0.5 * d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
-         - 0.5 * d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) ) )
+  if ( d->cell->format()->multiRow( d->cell->column(), d->cell->row() ) &&
+       d->textWidth > ( d->cell->dblWidth() - 2 * s_borderSpace
+           - d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
+           - d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) ) )
+  {
+    // don't remove the existing LF, these are intended line wraps (whishlist #9881)
+    QString  outText = d->cell->strOutText();
+
+    // Break the line at appropriate places, i.e. spaces, if
+    // necessary.  This means to change the spaces where breaks occur
+    // into newlines.
+    if ( !outText.contains(' ') )
     {
-        d->cell->clearFlag( Cell::Flag_CellTooShortX );
-
-        // don't remove the existing LF, these are intended line wraps (whishlist #9881)
-        QString  outText = d->cell->strOutText();
-
-        // Break the line at appropriate places, i.e. spaces, if
-        // necessary.  This means to change the spaces where breaks occur
-        // into newlines.
-        if ( !outText.contains(' ') )
-        {
-            // no spaces -> impossible to wrap
-            return;
-        }
-        else
-        {
-            d->cell->d->strOutText.clear();
-
-            // Make sure that we have a space at the end.
-            outText += ' ';
-
-            int start = 0;    // Start of the line we are handling now
-            int breakpos = 0;   // The next candidate pos to break the string
-            int pos1 = 0;
-            int availableWidth = (int) ( d->cell->dblWidth() - 2 * s_borderSpace
-                    - 0.5 * d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
-                    - 0.5 * d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) );
-
-            do {
-
-                breakpos = outText.indexOf( ' ', breakpos );
-                int linefeed = outText.indexOf( '\n', pos1 );
-
-//                 kDebug(36004) << "start: " << start
-//                               << "; breakpos: " << breakpos
-//                               << "; pos1: " << pos1
-//                               << "; linefeed: " << linefeed << endl;
-
-                //don't miss LF as a position to calculate current lineWidth
-                int work_breakpos = breakpos;
-                if (pos1 < linefeed && linefeed < breakpos)
-                    work_breakpos = linefeed;
-
-                double lineWidth = fontMetrics.width( d->cell->strOutText().mid( start, (pos1 - start) )
-                                                      + outText.mid( pos1, work_breakpos - pos1 ) );
-
-                //linefeed could be -1 when no linefeed is found!
-                if (breakpos > linefeed && linefeed > 0)
-                {
-//                     kDebug(36004) << "applying linefeed to start;" << endl;
-                    start = linefeed;
-                }
-
-                if ( lineWidth <= availableWidth ) {
-                    // We have room for the rest of the line.  End it here.
-                    d->cell->d->strOutText += outText.mid( pos1, breakpos - pos1 );
-                    pos1 = breakpos;
-                }
-                else {
-                    // Still not enough room.  Try to split further.
-                    if ( outText.at( pos1 ) == ' ' )
-                        pos1++;
-
-                    if ( pos1 != 0 && breakpos != -1 ) {
-                        d->cell->d->strOutText += '\n' + outText.mid( pos1, breakpos - pos1 );
-                    }
-                    else
-                        d->cell->d->strOutText += outText.mid( pos1, breakpos - pos1 );
-
-                    start = pos1;
-                    pos1 = breakpos;
-                }
-
-                breakpos++;
-            } while( outText.indexOf( ' ', breakpos ) != -1 );
-        }
+      // no spaces -> impossible to wrap
+      return;
     }
+    else
+    {
+      d->cell->d->strOutText = "";
+
+      // Make sure that we have a space at the end.
+      outText += ' ';
+
+      int start = 0;    // Start of the line we are handling now
+      int breakpos = 0;   // The next candidate pos to break the string
+      int pos1 = 0;
+      int availableWidth = (int) ( d->cell->dblWidth() - 2 * s_borderSpace
+          - d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
+          - d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) );
+
+      do {
+
+        breakpos = outText.indexOf( ' ', breakpos );
+        int linefeed = outText.indexOf( '\n', pos1 );
+
+//         kDebug(36004) << "start: " << start << "; breakpos: " << breakpos << "; pos1: " << pos1 << "; linefeed: " << linefeed << endl;
+
+        //don't miss LF as a position to calculate current lineWidth
+        int work_breakpos = breakpos;
+        if (pos1 < linefeed && linefeed < breakpos)
+          work_breakpos = linefeed;
+
+        double lineWidth = d->cell->sheet()->doc()
+              ->unzoomItX( fontMetrics.width( d->cell->strOutText().mid( start, (pos1 - start) )
+              + outText.mid( pos1, work_breakpos - pos1 ) ) );
+
+        //linefeed could be -1 when no linefeed is found!
+        if (breakpos > linefeed && linefeed > 0)
+        {
+//           kDebug(36004) << "applying linefeed to start;" << endl;
+          start = linefeed;
+        }
+
+        if ( lineWidth <= availableWidth ) {
+            // We have room for the rest of the line.  End it here.
+          d->cell->d->strOutText += outText.mid( pos1, breakpos - pos1 );
+          pos1 = breakpos;
+        }
+        else {
+          // Still not enough room.  Try to split further.
+          if ( outText.at( pos1 ) == ' ' )
+            pos1++;
+
+          if ( pos1 != 0 && breakpos != -1 ) {
+            d->cell->d->strOutText += '\n' + outText.mid( pos1, breakpos - pos1 );
+          }
+          else
+            d->cell->d->strOutText += outText.mid( pos1, breakpos - pos1 );
+
+          start = pos1;
+          pos1 = breakpos;
+        }
+
+        breakpos++;
+      } while( outText.indexOf( ' ', breakpos ) != -1 );
+    }
+  }
 }
 
 void CellView::obscureHorizontalCells()
 {
-    d->cell->clearFlag( Cell::Flag_CellTooShortX );
+  double height = d->cell->dblHeight( d->cell->row() );
+  double width  = d->cell->dblWidth( d->cell->column() );
 
-    double height = d->cell->dblHeight( d->cell->row() );
-    double width  = d->cell->dblWidth( d->cell->column() );
+  int align = d->cell->effAlignX();
 
-    int align = d->cell->effAlignX();
+  // Get indentation.  This is only used for left aligned text.
+  double indent = 0.0;
+  if ( align == Style::Left && !d->cell->isEmpty() )
+  {
+    indent = d->cell->format()->getIndent( d->cell->column(), d->cell->row() );
+  }
 
-    // Get indentation.  This is only used for left aligned text.
-    double indent = 0.0;
-    if ( align == Style::Left && !d->cell->isEmpty() )
+  // Set Cell::Flag_CellTooShortX if the text is vertical or angled, and too
+  // high for the cell.
+  if ( d->cell->format()->verticalText( d->cell->column(), d->cell->row() ) || d->cell->format()->getAngle( d->cell->column(), d->cell->row() ) != 0 )
+  {
+    if ( d->textHeight >= height )
+      d->cell->setFlag( Cell::Flag_CellTooShortX );
+  }
+
+
+  // Do we have to occupy additional cells to the right?  This is only
+  // done for cells that have no merged cells in the Y direction.
+  //
+  // FIXME: Check if all cells along the merged edge to the right are
+  //        empty and use the extra space?  No, probably not.
+  //
+  if ( d->textWidth + indent > ( width - 2 * s_borderSpace
+       - d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
+       - d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) ) &&
+       ( !d->cell->d->hasExtra() || d->cell->mergedYCells() == 0 ) )
+  {
+    int col = d->cell->column();
+
+    // Find free cells to the right of this one.
+    int end = 0;
+    while ( !end )
     {
-        indent = d->cell->format()->getIndent( d->cell->column(), d->cell->row() );
+      ColumnFormat  *cl2  = d->cell->sheet()->columnFormat( col + 1 );
+      Cell   *cell = d->cell->sheet()->visibleCellAt( col + 1, d->cell->row() );
+
+      if ( cell->isEmpty() )
+      {
+        width += cl2->dblWidth() - 1;
+        col++;
+
+        // Enough space?
+        if ( d->textWidth + indent <= ( width - 2 * s_borderSpace
+             - d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
+             - d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) ) )
+          end = 1;
+      }
+      else
+        // Not enough space, but the next cell is not empty
+        end = -1;
     }
 
-    // Set Cell::Flag_CellTooShortX if the text is vertical or angled, and too
-    // high for the cell.
-    if ( d->cell->format()->verticalText( d->cell->column(), d->cell->row() ) ||
-         d->cell->format()->getAngle( d->cell->column(), d->cell->row() ) != 0 )
+    // Try to use additional space from the neighboring cells that
+    // were calculated in the last step.  This is the place that we
+    // set d->cell->extraXCells() and d->cell->extraWidth().
+    //
+    // Currently this is only done for left aligned cells. We have to
+    // check to make sure we haven't already force-merged enough cells
+    //
+    // FIXME: Why not right/center aligned text?
+    //
+    // FIXME: Shouldn't we check to see if end == -1 here before
+    //        setting Cell::Flag_CellTooShortX?
+    //
+    if ( d->cell->format()->align( d->cell->column(), d->cell->row() ) == Style::Left
+         || ( d->cell->format()->align( d->cell->column(), d->cell->row() ) == Style::HAlignUndefined
+         && !d->cell->value().isNumber() ) )
     {
-        if ( d->textHeight >= height )
-            d->cell->setFlag( Cell::Flag_CellTooShortX );
-    }
-
-
-    // Do we have to occupy additional cells to the right?  This is only
-    // done for cells that have no merged cells in the Y direction.
-    if ( d->textWidth + indent > ( width - 2 * s_borderSpace
-         - 0.5 * d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
-         - 0.5 * d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) )/* &&
-         ( !d->cell->d->hasExtra() || d->cell->mergedYCells() == 0 )*/ )
-    {
-        int col = d->cell->column() + ( d->cell->d->hasExtra() ? d->cell->d->extra()->mergedXCells : 0 );
-
-        // Find free cells to the right of this one.
-        enum { NeedMoreSpace, EnoughSpace, NotEnoughSpace } status = NeedMoreSpace;
-        while ( status == NeedMoreSpace )
-        {
-            ColumnFormat* columnFormat = d->cell->sheet()->columnFormat( col + 1 );
-
-            // are the cells right to this cell empty?
-            bool cellsAreEmpty = true;
-            const int endRow = d->cell->row() + ( d->cell->d->hasExtra() ? d->cell->d->extra()->mergedYCells : 0 );
-            for ( int row = d->cell->row(); row <= endRow; ++row )
-            {
-                const Cell* cell = d->cell->sheet()->visibleCellAt( col + 1, row );
-                if ( !cell->isEmpty() )
-                {
-                    cellsAreEmpty = false;
-                    break;
-                }
-            }
-
-            if ( cellsAreEmpty )
-            {
-                width += columnFormat->dblWidth() - 1; // one point overlap
-                col++;
-
-                // Enough space?
-                if ( d->textWidth + indent <= ( width - 2 * s_borderSpace
-                     - 0.5 * d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
-                     - 0.5 * d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) ) )
-                {
-                    status = EnoughSpace;
-                }
-            }
-            else
-            {
-                // Not enough space, but the next cells are not empty
-                status = NotEnoughSpace;
-            }
+      if ( col - d->cell->column() > d->cell->mergedXCells() ) {
+        d->cell->d->extra()->extraXCells = col - d->cell->column();
+        d->cell->d->extra()->extraWidth  = width;
+        for ( int i = d->cell->column() + 1; i <= col; ++i ) {
+          Cell *cell = d->cell->sheet()->nonDefaultCell( i, d->cell->row() );
+          cell->obscure( d->cell );
         }
 
-        // Try to use additional space from the neighboring cells that
-        // were calculated in the last step.  This is the place that we
-        // set d->cell->extraXCells and d->cell->extraWidth.
-        //
-        // Currently this is only done for left aligned cells. We have to
-        // check to make sure we haven't already force-merged enough cells
-        //
-        // FIXME: Why not right/center aligned text?
-        //
-        // FIXME: Shouldn't we check to see if end == -1 here before
-        //        setting Cell::Flag_CellTooShortX?
-        //
-        if ( d->cell->format()->align( d->cell->column(), d->cell->row() ) == Style::Left
-             || ( d->cell->format()->align( d->cell->column(), d->cell->row() ) == Style::HAlignUndefined
-             && !d->cell->value().isNumber() ) )
-        {
-            if ( col - d->cell->column() > d->cell->mergedXCells() )
-            {
-                d->cell->d->extra()->extraXCells = col - d->cell->column();
-                d->cell->d->extra()->extraWidth  = width;
-                for ( int i = d->cell->column() + 1; i <= col; ++i )
-                {
-                    Cell *cell = d->cell->sheet()->nonDefaultCell( i, d->cell->row() );
-                    cell->obscure( d->cell );
-                }
-
-                // Not enough space
-                if ( status == NotEnoughSpace )
-                    d->cell->setFlag( Cell::Flag_CellTooShortX );
-            }
-            else
-                d->cell->setFlag( Cell::Flag_CellTooShortX );
-        }
-        else
-            d->cell->setFlag( Cell::Flag_CellTooShortX );
+        // Not enough space
+        if ( end == -1 )
+          d->cell->setFlag( Cell::Flag_CellTooShortX );
+      }
+      else
+        d->cell->setFlag( Cell::Flag_CellTooShortX );
     }
+    else
+      d->cell->setFlag( Cell::Flag_CellTooShortX );
+  }
 }
 
 void CellView::obscureVerticalCells()

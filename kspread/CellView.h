@@ -177,8 +177,6 @@ private:
    */
   void calculateCellDimension() const;
 
-  void checkTextFitting();
-
   /**
    * \ingroup Layout
    * Checks, wether horizontal neighbours could be obscured
