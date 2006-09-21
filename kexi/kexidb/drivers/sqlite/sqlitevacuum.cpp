@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <ktempfile.h>
 #include <kmessagebox.h>
+#include <kprogressbar.h>
 #include <kio/global.h>
 
 #include <qfileinfo.h>

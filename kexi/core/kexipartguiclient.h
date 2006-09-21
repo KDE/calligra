@@ -32,7 +32,7 @@ class KexiDialogBase;
 namespace KexiPart
 {
 
-/** GUI Client used by KexiPart::Part objects within KexiMainWindow
+/** @internal A GUI Client used by KexiPart::Part objects within KexiMainWindow
 */
 class GUIClient : public QObject, public KXMLGUIClient
 {
@@ -42,7 +42,10 @@ class GUIClient : public QObject, public KXMLGUIClient
 		inline Part *part() { return static_cast<Part*>(QObject::parent()); }
 
 	protected:
-		GUIClient(KexiMainWindow *win, Part* part, bool partInstanceClient);
+		/*! Creates a new GUI Client. If \a partInstanceClient is true, the part will be 
+		 used as "instance" client, otherwise it will be defined per-view. 
+		 \a nameSuffix is used in constructing client's name (only useful for debugging purposes). */
+		GUIClient(KexiMainWindow *win, Part* part, bool partInstanceClient, const char* nameSuffix);
 
 		friend class Part;
 };

@@ -43,6 +43,18 @@
 #include "formIO.h"
 
 namespace KFormDesigner {
+
+//! @internal
+class XMLGUIClient : public QObject, public KXMLGUIClient
+{
+	public:
+		XMLGUIClient(KXMLGUIClient* parent, const QString& xmlFileName)
+		 : QObject(parent->actionCollection()), KXMLGUIClient(parent)
+		{
+			setXMLFile( xmlFileName, true /*merge*/ );
+		}
+};
+
 //! @internal
 class WidgetLibraryPrivate
 {
@@ -236,7 +248,9 @@ WidgetLibrary::loadFactories()
 		}
 		f->m_library = this;
 		f->m_showAdvancedProperties = d->showAdvancedProperties; //inherit this flag from the library
+		f->m_xmlGUIFileName = (*it.current())->property("X-KFormDesigner-XMLGUIFileName").toString();
 		d->factories.insert( f->name(), f );
+
 		//collect information about classes to be hidden
 		if (f->m_hiddenClasses) {
 			for (Q3AsciiDictIterator<char> it2(*f->m_hiddenClasses); it2.current(); ++it2) {
@@ -262,6 +276,7 @@ WidgetLibrary::loadFactories()
 	}
 }
 
+/* old
 QString
 WidgetLibrary::createXML()
 {
@@ -306,16 +321,31 @@ WidgetLibrary::createXML()
 	}
 
 	return doc.toString();
-}
+}*/
 
 ActionList
-WidgetLibrary::addCreateWidgetActions(KActionCollection *parent,  QObject *receiver, const char *slot)
+WidgetLibrary::createWidgetActions(KXMLGUIClient* client, KActionCollection *parent, 
+	QObject *receiver, const char *slot)
 {
 	loadFactories();
+	
+	// init XML gui clients (custom factories have their own .rc files)
+	for (Q3AsciiDictIterator<WidgetFactory> it(d->factories); it.current(); ++it)
+	{
+		if (it.current()->m_xmlGUIFileName.isEmpty()) { // probably a built-in factory, with GUI file like kexiformpartinstui.rc
+			it.current()->m_guiClient = 0;
+		}
+		else { // a custom factory with its own .rc file
+			it.current()->m_guiClient = new XMLGUIClient(client, it.current()->m_xmlGUIFileName);
+		}
+	}
+
 	ActionList actions;
 	for (Q3AsciiDictIterator<WidgetInfo> it(d->widgets); it.current(); ++it)
 	{
-		LibActionWidget *a = new LibActionWidget(it.current(), parent);
+		LibActionWidget *a = new LibActionWidget(it.current(), 
+			it.current()->factory()->m_guiClient 
+			? it.current()->factory()->m_guiClient->actionCollection() : parent);
 		connect(a, SIGNAL(prepareInsert(const Q3CString &)), receiver, slot);
 		actions.append(a);
 	}
@@ -323,11 +353,13 @@ WidgetLibrary::addCreateWidgetActions(KActionCollection *parent,  QObject *recei
 }
 
 void
-WidgetLibrary::addCustomWidgetActions(KActionCollection *parent)
+WidgetLibrary::addCustomWidgetActions(KActionCollection *col)
 {
 	for (Q3AsciiDictIterator<WidgetFactory> it(d->factories); it.current(); ++it)
 	{
-		it.current()->createCustomActions( parent );
+		it.current()->createCustomActions(
+			it.current()->m_guiClient 
+			? it.current()->m_guiClient->actionCollection() : col);
 	}
 }
 

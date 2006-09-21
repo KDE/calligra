@@ -242,11 +242,11 @@ KFormDesignerKDevPart::setupActions()
 	sizeMenu->insert( new KAction(i18n("To Narrowest"), "aonarrowest", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustWidthToSmall()), actionCollection(), "adjust_width_small") );
 	sizeMenu->insert( new KAction(i18n("To Widest"), "aowidest", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustWidthToBig()), actionCollection(), "adjust_width_big") );
 
-	KFormDesigner::FormManager::self()->createActions(formsLibrary(), actionCollection());
 	if(m_inShell)
 		setXMLFile("kformdesigner_part_shell.rc");
 	else
 		setXMLFile("kformdesigner_part.rc");
+	KFormDesigner::FormManager::self()->createActions(formsLibrary(), actionCollection(), this);
 }
 
 void

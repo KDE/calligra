@@ -72,19 +72,20 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 Factory group names are case-insensitive. */
 		WidgetLibrary(QObject *parent=0, const QStringList& supportedFactoryGroups = QStringList());
 
-		~WidgetLibrary();
+		virtual ~WidgetLibrary();
 
 		/**
 		 * creates actions for widget creating
 		 */
-		ActionList addCreateWidgetActions(KActionCollection *parent, QObject *receiver, const char *slot);
+		ActionList createWidgetActions(KXMLGUIClient* client, KActionCollection *parent, 
+			QObject *receiver, const char *slot);
 
-		void addCustomWidgetActions(KActionCollection *parent);
+		void addCustomWidgetActions(KActionCollection *col);
 
-		/**
-		 * creates the XML for widget actions
-		 */
-		QString createXML();
+//old		/**
+//old		 * creates the XML for widget actions
+//old		 */
+//old		QString createXML();
 
 		/**
 		 * searches the right factory and creates a widget.
@@ -169,7 +170,8 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		/*! Used by WidgetPropertySet::setWidget() after creating properties. */
 		void setPropertyOptions( WidgetPropertySet &list, const WidgetInfo& winfo, QWidget* w );
 
-		/*! Sometimes property sets should be reloaded when a given property value changed. */
+		/*! \return true if property sets should be reloaded for \a property property, 
+		 \a classname class and widget \a w when a given property value changed. */
 		bool propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname, QWidget *w, 
 			const Q3CString& property);
 

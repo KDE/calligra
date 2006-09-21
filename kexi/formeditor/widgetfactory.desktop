@@ -11,3 +11,6 @@ Type=QString
 
 [PropertyDef::X-KFormDesigner-WidgetFactoryVersion]
 Type=int
+
+[PropertyDef::X-KFormDesigner-XMLGUIFileName]
+Type=QString
