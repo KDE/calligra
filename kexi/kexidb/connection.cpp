@@ -3186,7 +3186,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			return false;
 		}
 	}
-	if (getROWID) {
+	if (getROWID && /*sanity check*/data.size() > fieldsExpanded.size()) {
 //		KexiDBDbg << "Connection::insertRow(): new ROWID == " << (uint)ROWID << endl;
 		data[data.size()-1] = ROWID;
 	}
