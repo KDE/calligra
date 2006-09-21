@@ -167,6 +167,7 @@ KexiFormView::~KexiFormView()
 	if (m_cursor) {
 		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 		conn->deleteCursor(m_cursor);
+		m_cursor = 0;
 	}
 	deleteQuery();
 
@@ -180,6 +181,12 @@ KexiFormView::~KexiFormView()
 void
 KexiFormView::deleteQuery()
 {
+	if (m_cursor) {
+		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+		conn->deleteCursor(m_cursor);
+		m_cursor = 0;
+	}
+
 	if (m_queryIsOwned) {
 		delete m_query;
 	} else {

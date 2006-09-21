@@ -184,6 +184,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	hlyr->addWidget(m_availableFieldsLabel);
 
 	m_addField = new QToolButton(contents, "addFieldButton");
+	m_addField->setFocusPolicy(StrongFocus);
 	m_addField->setUsesTextLabel(true);
 	m_addField->setTextPosition(QToolButton::Right);
 	m_addField->setTextLabel(i18n("Insert selected field into form", "Insert"));
@@ -198,17 +199,18 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 
 	m_fieldListView = new KexiFieldListView(contents, "fieldListView",
 		KexiFieldListView::ShowDataTypes | KexiFieldListView::AllowMultiSelection );
-//	m_fieldListView->header()->show();
 	m_fieldListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
 	m_availableFieldsLabel->setBuddy(m_fieldListView);
 	contentsVlyr->addWidget(m_fieldListView, 1);
 	connect(m_fieldListView, SIGNAL(selectionChanged()), this, SLOT(slotFieldListViewSelectionChanged()));
+	connect(m_fieldListView, SIGNAL(fieldDoubleClicked(const QString&, const QString&, const QString&)),
+		this, SLOT(slotFieldDoubleClicked(const QString&, const QString&, const QString&)));
 #endif
 
 	vlyr->addStretch(1);
 
 	connect(m_dataSourceCombo, SIGNAL(textChanged(const QString &)), this, SLOT(slotDataSourceTextChanged(const QString &)));
-	connect(m_dataSourceCombo, SIGNAL(dataSourceSelected()), this, SLOT(slotDataSourceSelected()));
+	connect(m_dataSourceCombo, SIGNAL(dataSourceChanged()), this, SLOT(slotDataSourceChanged()));
 	connect(m_sourceFieldCombo, SIGNAL(selected()), this, SLOT(slotFieldSelected()));
 
 	clearDataSourceSelection();
@@ -259,38 +261,38 @@ void KexiDataSourcePage::slotGotoSelected()
 {
 	QCString mime = m_dataSourceCombo->selectedMimeType();
 	if (mime=="kexi/table" || mime=="kexi/query") {
-		QCString name = m_dataSourceCombo->selectedName();
-		if (name.isEmpty())
-			return;
-		emit jumpToObjectRequested(mime, name);
+		if (m_dataSourceCombo->isSelectionValid())
+			emit jumpToObjectRequested(mime, m_dataSourceCombo->selectedName());
 	}
 }
 
 void KexiDataSourcePage::slotInsertSelectedFields()
 {
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
-	if (!m_fieldListView->schema())
-		return;
-	QStringList selectedFields;
-	for (QListViewItemIterator it(m_fieldListView); it.current(); ++it) {
-		if (it.current()->isSelected()) {
-//! @todo what about query fields/aliases? it.current()->text(0) can be not enough
-			selectedFields.append(it.current()->text(0));
-		}
-	}
-	if (selectedFields.isEmpty())
+	QStringList selectedFieldNames(m_fieldListView->selectedFieldNames());
+	if (selectedFieldNames.isEmpty())
 		return;
 
 	emit insertAutoFields(m_fieldListView->schema()->table() ? "kexi/table" : "kexi/query",
-		m_fieldListView->schema()->name(), selectedFields);
+		m_fieldListView->schema()->name(), selectedFieldNames);
+#endif
+}
+
+void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
+	const QString& fieldName)
+{
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
+	QStringList selectedFields;
+	selectedFields.append(fieldName);
+	emit insertAutoFields(sourceMimeType, sourceName, selectedFields);
 #endif
 }
 
 void KexiDataSourcePage::slotDataSourceTextChanged(const QString & string)
 {
-	const bool enable = !string.isEmpty() && m_dataSourceCombo->selectedName() == string.latin1();
+	const bool enable = m_dataSourceCombo->isSelectionValid(); //!string.isEmpty() && m_dataSourceCombo->selectedName() == string.latin1();
 	if (!enable) {
-		clearDataSourceSelection( string.isEmpty()/*alsoClearComboBox*/ );
+		clearDataSourceSelection( m_dataSourceCombo->selectedName().isEmpty()/*alsoClearComboBox*/ );
 	}
 	updateSourceFieldWidgetsAvailability();
 /*#ifndef KEXI_NO_AUTOFIELD_WIDGET
@@ -300,14 +302,14 @@ void KexiDataSourcePage::slotDataSourceTextChanged(const QString & string)
 #endif*/
 }
 
-void KexiDataSourcePage::slotDataSourceSelected()
+void KexiDataSourcePage::slotDataSourceChanged()
 {
 	if (!m_dataSourceCombo->project())
 		return;
 	QCString mime = m_dataSourceCombo->selectedMimeType();
 	bool dataSourceFound = false;
 	QCString name = m_dataSourceCombo->selectedName();
-	if ((mime=="kexi/table" || mime=="kexi/query") && !name.isEmpty()) {
+	if ((mime=="kexi/table" || mime=="kexi/query") && m_dataSourceCombo->isSelectionValid()) {
 		KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
 			m_dataSourceCombo->project()->dbConnection(), name, mime=="kexi/table");
 		if (tableOrQuery->table() || tableOrQuery->query()) {
@@ -464,7 +466,7 @@ void KexiDataSourcePage::slotFieldListViewSelectionChanged()
 
 void KexiDataSourcePage::updateSourceFieldWidgetsAvailability()
 {
-	const bool hasDataSource = !m_dataSourceCombo->selectedName().isEmpty();
+	const bool hasDataSource = m_dataSourceCombo->isSelectionValid(); //!m_dataSourceCombo->selectedName().isEmpty();
 	m_sourceFieldCombo->setEnabled( hasDataSource );
 	m_widgetDSLabel->setEnabled( hasDataSource );
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
