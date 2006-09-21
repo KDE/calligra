@@ -392,6 +392,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - display progress bar (in the statusbar?) to indicate there're pending jobs
 - enlarge the default main window size, currently it's ~50% ofthe desktop size 
   - not convenient as user is forced to enlarge the window by hand (settings are stored though)
+- add "File->Save All" action
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
@@ -909,6 +910,7 @@ ALTER TABLE t1_new RENAME TO t1;
 - display default values in other widgets showing text
 - new action for button widgets: open table/query 
   +with query parameters taken from a line edit
+- provide "Edit->Clear Table Contents" action in forms too
 
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code

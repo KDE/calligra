@@ -15,6 +15,17 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-09-19
+Forms
+- double clicking items of "Available fields" list inserts a new auto field
+- fixed form's selecting data source via the data source pane
+2.0: merged
+KexiDB
+= fixed retrieving autonumber data
+2.0: merged
+
+~~~~~~~~~~~~ 1.1 RC1 release (with KOffice 1.6 RC1)  ~~~~~~~~~~~~
+
 2006-09-14
 KoProperty
 - property is not changed when new and old value are both null
