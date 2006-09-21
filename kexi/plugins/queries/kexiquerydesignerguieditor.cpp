@@ -148,7 +148,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 	c << COLUMN_ID_COLUMN << COLUMN_ID_TABLE << COLUMN_ID_CRITERIA;
 	if (d->dataTable->tableView()/*sanity*/) {
 		d->dataTable->tableView()->maximizeColumnsWidth( c );
-		d->dataTable->tableView()->adjustColumnWidthToContents(2);//'visible'
+		d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_VISIBLE);
 		d->dataTable->tableView()->setDropsAtRowEnabled(true);
 		connect(d->dataTable->tableView(), SIGNAL(dragOverRow(KexiTableItem*,int,QDragMoveEvent*)),
 			this, SLOT(slotDragOverTableRow(KexiTableItem*,int,QDragMoveEvent*)));
@@ -199,6 +199,8 @@ KexiQueryDesignerGuiEditor::initTableColumns()
 
 	KexiTableViewColumn *col3 = new KexiTableViewColumn("visible", KexiDB::Field::Boolean, i18n("Visible"),
 		i18n("Describes visibility for a given field or expression."));
+	col3->field()->setDefaultValue( QVariant(false, 0) );
+	col3->field()->setNotNull( true );
 	d->data->addColumn(col3);
 	d->dataTable->tableView()->adjustColumnWidthToContents( COLUMN_ID_VISIBLE );
 
@@ -239,7 +241,9 @@ void KexiQueryDesignerGuiEditor::initTableRows()
 	d->data->deleteAllRows();
 	//const int columns = d->data->columnsCount();
 	for (int i=0; i<(int)d->sets->size(); i++) {
-		d->data->append(d->data->createItem());
+		KexiTableItem* item;
+		d->data->append(item = d->data->createItem());
+		item->at(COLUMN_ID_VISIBLE) = QVariant(false, 0);
 	}
 	d->dataTable->dataAwareObject()->setData(d->data);
 
