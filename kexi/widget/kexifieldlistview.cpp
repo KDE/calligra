@@ -68,6 +68,9 @@ KexiFieldListView::KexiFieldListView(QWidget *parent, const char *name, int opti
 //	header()->hide();
 	setSorting(-1, true); // disable sorting
 	setDragEnabled(true);
+	
+	connect(this, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint &, int)), 
+		this, SLOT(slotDoubleClicked(Q3ListViewItem*)));
 }
 
 KexiFieldListView::~KexiFieldListView()
@@ -152,6 +155,29 @@ Q3DragObject* KexiFieldListView::dragObject()
 			selectedItem()->text(1), this, "KexiFieldDrag");
 			return drag;
 	}*/
+}
+
+QStringList KexiFieldListView::selectedFieldNames()
+{
+	if (!schema())
+		return QStringList();
+	QStringList selectedFields;
+	for (Q3ListViewItemIterator it(this); it.current(); ++it) {
+		if (it.current()->isSelected()) {
+//! @todo what about query fields/aliases? it.current()->text(0) can be not enough
+			selectedFields.append(it.current()->text(0));
+		}
+	}
+	return selectedFields;
+}
+
+void KexiFieldListView::slotDoubleClicked(Q3ListViewItem* item)
+{
+	if (schema() && item) {
+	//! @todo what about query fields/aliases? it.current()->text(0) can be not enough
+		emit fieldDoubleClicked(schema()->table() ? "kexi/table" : "kexi/query",
+			schema()->name(), item->text(0));
+	}
 }
 
 #include "kexifieldlistview.moc"

@@ -50,10 +50,22 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public K3ListView
 		 The schema object will be owned by the KexiFieldListView object. */
 		void setSchema(KexiDB::TableOrQuerySchema* schema);
 
+		/*! \return table or query schema schema set for this widget. */
 		KexiDB::TableOrQuerySchema* schema() const { return m_schema; }
+
+		/*! \return list of selected field names. */
+		QStringList selectedFieldNames();
 
 //		void setReadOnly(bool);
 //		virtual QSize sizeHint();
+
+	signals:
+		/*! Emitted when a field is double clicked */
+		void fieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
+			const QString& fieldName);
+
+	protected slots:
+		void slotDoubleClicked(Q3ListViewItem* item);
 
 	protected:
 		virtual Q3DragObject *dragObject();

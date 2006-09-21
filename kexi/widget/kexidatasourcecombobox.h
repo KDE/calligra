@@ -41,23 +41,36 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
 		KexiDataSourceComboBox(QWidget *parent, const char *name=0);
 		~KexiDataSourceComboBox();
 
+		//! \return global project that is used to retrieve schema informationm for this combo box.
 		KexiProject* project() const;
 
+		//! \return name of selected table or query. Can return null string.
+		//! You should use isSelectionValid() to check validity of the input.
 		Q3CString selectedMimeType() const;
+
+		//! \return name of selected table or query. Can return null string or nonexisting name,
+		//! so you should use isSelectionValid() to check validity of the input.
 		Q3CString selectedName() const;
+
+		//! \return true if current selection is valid
+		bool isSelectionValid() const;
+
 		/*! \return index of item of mime type \a mimeType and name \a name.
 		 Returs -1 of no such item exists. */
 		int findItem(const Q3CString& mimeType, const Q3CString& name);
 
 	public slots:
+		//! Sets global project that is used to retrieve schema informationm for this combo box.
 		void setProject(KexiProject *prj);
 
-		/*! Selects item for data source described by \a mimeType and \a name.
+		/*! Sets item for data source described by \a mimeType and \a name.
 		 If \a mimeType is empty, either "kexi/table" and "kexi/query" are tried. */
 		void setDataSource(const Q3CString& mimeType, const Q3CString& name);
 
 	signals:
-		void dataSourceSelected();
+		//! Emitted whenever data source changes. 
+		//! Even setting invalid data source or clearing it will emit this signal.
+		void dataSourceChanged();
 
 	protected slots:
 		void slotNewItemStored(KexiPart::Item& item);

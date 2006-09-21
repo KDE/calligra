@@ -81,11 +81,13 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 
 	protected slots:
 		void slotDataSourceTextChanged(const QString & string);
-		void slotDataSourceSelected();
+		void slotDataSourceChanged();
 		void slotFieldSelected();
 		void slotGotoSelected();
 		void slotInsertSelectedFields();
 		void slotFieldListViewSelectionChanged();
+		void slotFieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
+			const QString& fieldName);
 
 	protected:
 		void updateSourceFieldWidgetsAvailability();

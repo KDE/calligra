@@ -373,6 +373,7 @@ void KexiDBLineEdit::paintEvent ( QPaintEvent *pe )
 {
 	KLineEdit::paintEvent( pe );
 	QPainter p(this);
+	KexiDBTextWidgetInterface::paint( this, &p, text().isEmpty(), alignment(), hasFocus() );
 }
 
 bool KexiDBLineEdit::event( QEvent * e )
