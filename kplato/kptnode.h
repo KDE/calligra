@@ -272,7 +272,9 @@ public:
         { return m_currentSchedule ? m_currentSchedule->schedulingError : false; }
     /// The node has not been scheduled
     bool notScheduled() const
-        { return m_currentSchedule == 0 || m_currentSchedule->isDeleted() || m_currentSchedule->notScheduled; }
+    { return m_currentSchedule == 0 || m_currentSchedule->isDeleted() || m_currentSchedule->notScheduled; }
+    /// Return a list of overbooked resources
+    virtual QStringList overbookedResources() const;
     
     virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end) const=0;
         

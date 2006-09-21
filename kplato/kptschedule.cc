@@ -26,6 +26,7 @@
 
 #include <qdom.h>
 #include <QString>
+#include <QStringList>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -132,6 +133,17 @@ void Schedule::calcResourceOverbooked() {
             break;
         }
     }
+}
+
+QStringList Schedule::overbookedResources() const {
+    QStringList rl;
+    Q3PtrListIterator<Appointment> it = m_appointments;
+    for (; it.current(); ++it) {
+        if (it.current()->resource()->isOverbooked(it.current()->startTime(), it.current()->endTime())) {
+            rl += it.current()->resource()->resource()->name();
+        }
+    }
+    return rl;
 }
 
 bool Schedule::loadXML(const QDomElement &sch) {
@@ -620,6 +632,9 @@ void NodeSchedule::printDebug(QString indent) {
     kDebug()<<indent<<"resourceError="<<resourceError<<endl;
     kDebug()<<indent<<"schedulingError="<<schedulingError<<endl;
     kDebug()<<indent<<"resourceNotAvailable="<<resourceNotAvailable<<endl;
+    kdDebug()<<indent<<"Resource overbooked="<<resourceOverbooked<<endl;
+    kdDebug()<<indent<<"  "<<overbookedResources()<<endl;
+
     kDebug()<<indent<<"inCriticalPath="<<inCriticalPath<<endl;
     kDebug()<<indent<<endl;
     kDebug()<<indent<<"workStartTime="<<workStartTime.toString()<<endl;
