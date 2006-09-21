@@ -83,6 +83,7 @@
 		<text>&amp;Path</text>
 		<Action name="close_path"/>
 		<Action name="combine_path"/>
+		<Action name="separate_path"/>
 	</Menu>
 	<Menu name="effects">
 		<text>Effe&amp;cts</text>

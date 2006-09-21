@@ -855,6 +855,32 @@ KarbonView::combinePath()
 	if( paths.size() )
 		m_canvas->addCommand( new KoPathCombineCommand( part(), paths ), true );
 }
+
+void
+KarbonView::separatePath()
+{
+	debugView("KarbonView::separatePath()");
+	KoSelection* selection = m_canvas->shapeManager()->selection();
+	if( ! selection )
+		return;
+
+	KoSelectionSet selectedShapes = selection->selectedShapes();
+	QList<KoPathShape*> paths;
+
+	foreach( KoShape* shape, selectedShapes )
+	{
+		KoPathShape *path = dynamic_cast<KoPathShape*>( shape );
+		if( path )
+		{
+			paths << path;
+			selection->deselect( shape );
+		}
+	}
+
+	if( paths.size() )
+		m_canvas->addCommand( new KoPathSeparateCommand( part(), paths ), true );
+}
+
 void
 KarbonView::slotActiveToolChanged( VTool *tool )
 {
@@ -1246,6 +1272,11 @@ KarbonView::initActions()
 	m_combinePath->setShortcut(QKeySequence("Ctrl+K"));
 	m_combinePath->setEnabled( false );
 	connect(m_combinePath, SIGNAL(triggered()), this, SLOT(combinePath()));
+
+	m_separatePath = new KAction( i18n("Se&parate Path"), actionCollection(), "separate_path" );
+	m_separatePath->setShortcut(QKeySequence("Shift+Ctrl+K"));
+	m_separatePath->setEnabled( false );
+	connect(m_separatePath, SIGNAL(triggered()), this, SLOT(separatePath()));
 	// path <-----
 
 	// line style (dashes)
@@ -1605,6 +1636,7 @@ KarbonView::selectionChanged()
 		//TODO enable action when the ClosePath command is ported
 		//m_closePath->setEnabled( selectedPaths > 0 );
 		m_combinePath->setEnabled( selectedPaths > 1 );
+		m_separatePath->setEnabled( selectedPaths > 0 );
 	}
 	else
 	{

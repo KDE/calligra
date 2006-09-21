@@ -165,6 +165,7 @@ public slots:
 
 	void closePath();
 	void combinePath();
+	void separatePath();
 
 	//View:
 	void viewZoomIn();
@@ -246,6 +247,7 @@ private:
 
 	KAction			*m_closePath;
 	KAction			*m_combinePath;
+	KAction			*m_separatePath;
 
 	// actions:
 	KoZoomAction		*m_zoomAction;
