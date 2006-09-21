@@ -723,7 +723,8 @@ Duration Calendar::effort(const QDate &date, const QTime &start, const QTime &en
     if (m_parent && !m_parent->isDeleted()) {
         return m_parent->effort(date, start, end);
     }
-    return Duration::zeroDuration;
+    // Check default calendar
+    return project()->defaultCalendar()->effort(date, start, end);
 }
 
 Duration Calendar::effort(const DateTime &start, const DateTime &end) const {
@@ -768,7 +769,7 @@ QPair<QTime, QTime> Calendar::firstInterval(const QDate &date, const QTime &star
     if (m_parent && !m_parent->isDeleted()) {
         return m_parent->firstInterval(date, startTime, endTime);
     }
-    return QPair<QTime, QTime>(QTime(), QTime());
+    return project()->defaultCalendar()->firstInterval(date, startTime, endTime);
 }
 
 QPair<DateTime, DateTime> Calendar::firstInterval(const DateTime &start, const DateTime &end) const {
@@ -821,7 +822,7 @@ bool Calendar::hasInterval(const QDate &date, const QTime &startTime, const QTim
     if (m_parent && !m_parent->isDeleted()) {
         return m_parent->hasInterval(date, startTime, endTime);
     }
-    return false;
+    return project()->defaultCalendar()->hasInterval(date, startTime, endTime);
 }
 
 bool Calendar::hasInterval(const DateTime &start, const DateTime &end) const {
