@@ -247,6 +247,8 @@ public:
     /// Set current schedule to schedule with identity id, for me nd my children
     virtual void setCurrentSchedule(long id);
     
+    virtual bool effortMetError() const;
+    
     struct Progress {
         Progress() { started = finished = false; percentFinished = 0; }
         bool operator==(struct Progress &p) {

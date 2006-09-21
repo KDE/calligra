@@ -1463,8 +1463,11 @@ DateTime Task::workFinishBefore(const DateTime &dt) {
 }
 
 Duration Task::positiveFloat() {
-    if (m_currentSchedule == 0)
+    if (m_currentSchedule == 0 || 
+        m_currentSchedule->schedulingError ||
+        effortMetError()) {
         return Duration::zeroDuration;
+    }
     Duration f;
     if (type() == Node::Type_Milestone) {
         if (m_currentSchedule->startTime < m_currentSchedule->latestFinish) {
@@ -1548,6 +1551,12 @@ void Task::setCurrentSchedule(long id) {
     Node::setCurrentSchedule(id);
 }
 
+bool Task::effortMetError() const {
+    if (m_currentSchedule->notScheduled) {
+        return false;
+    }
+    return m_currentSchedule->plannedEffort() < effort()->effort(static_cast<Effort::Use>(m_currentSchedule->type()));
+}
 
 #ifndef NDEBUG
 void Task::printDebug(bool children, QByteArray indent) {
