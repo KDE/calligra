@@ -400,27 +400,29 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
         int day = weekday(col);
         if (e->state() & Qt::ShiftModifier) {
             // select all days between this and the furthest away selected day,
-            // check first down - then up, clear all others
+            // check first downside - then upside, clear all others
             bool select = false;
-            for(int i=0; i < col; ++i) {
-                if (m_selectedWeekdays.contains(i)) {
-                    select = true;
+            for(int i=m_dateStartCol; i < col; ++i) {
+                //kdDebug()<<"Down["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
+                if (m_selectedWeekdays.contains(weekday(i))) {
+                    select = true; // we have hit a selected day; select the rest
                 } else if (select) {
-                    m_selectedWeekdays.toggle(i); // select
+                    m_selectedWeekdays.toggle(weekday(i)); // select
                 }
             }
             bool selected = select;
             select = false;
             for(int i=7; i > col; --i) {
-                if (m_selectedWeekdays.contains(i)) {
-                    if (selected) m_selectedWeekdays.toggle(i); // deselect
+                //kdDebug()<<"Up["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
+                if (m_selectedWeekdays.contains(weekday(i))) {
+                    if (selected) m_selectedWeekdays.toggle(weekday(i)); // deselect
                     else select = true;
                 } else if (select) {
-                    m_selectedWeekdays.toggle(i); // select
+                    m_selectedWeekdays.toggle(weekday(i)); // select
                 }
             }
-            if (!m_selectedWeekdays.contains(col)) {
-                m_selectedWeekdays.toggle(col); // always select
+            if (!m_selectedWeekdays.contains(day)) {
+                m_selectedWeekdays.toggle(day); // always select
             }
         } else if (e->state() & Qt::ControlModifier) {
             // toggle select this date
