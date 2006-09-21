@@ -1473,6 +1473,12 @@ Duration Task::positiveFloat() {
         if (m_currentSchedule->startTime < m_currentSchedule->latestFinish) {
             f = m_currentSchedule->latestFinish - m_currentSchedule->startTime;
         }
+    } else if (m_effort->type() == Effort::Type_FixedDuration) {
+        if (m_currentSchedule->endTime.isValid()) {
+            if (m_currentSchedule->endTime < m_currentSchedule->latestFinish) {
+                f = m_currentSchedule->latestFinish - m_currentSchedule->endTime;
+            }
+        }
     } else {
         if (m_currentSchedule->workEndTime.isValid())
             if (m_currentSchedule->workEndTime < m_currentSchedule->latestFinish) {
