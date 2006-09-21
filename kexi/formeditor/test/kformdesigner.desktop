@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=KFormDesigner
 Name[x-test]=xxKFormDesignerxx
-Exec=kformdesigner %i %m -caption "%c"
+Exec=kformdesigner %i  -caption "%c"
 Icon=kformdesigner
 Type=Application
 DocPath=kformdesigner/kformdesigner.html
