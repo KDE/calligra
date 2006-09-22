@@ -46,32 +46,34 @@ bool KPrTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& conte
                                   KoTextParag* parag, uint pos,
                                   QString& textData, KoTextCustomItem* & customItem )
 {
-    const QString tagName( tag.tagName() );
-    const bool textFoo = tagName.startsWith( "text:" );
-    kdDebug() << "KWTextDocument::loadSpanTag: " << tagName << endl;
+    const QString localName( tag.localName() );
+    const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
+    kdDebug( 32500 ) << "KPrTextDocument::loadSpanTag: " << localName << endl;
 
-    if ( textFoo )
+    if ( isTextNS )
     {
-        if ( tagName == "text:a" )
+        if ( localName == "a" )
         {
-            QString href( tag.attributeNS( KoXmlNS::xlink, "href", QString::null) );
-            if ( href.startsWith("#") )
+            QString href( tag.attributeNS( KoXmlNS::xlink, "href", QString::null ) );
+            if ( href.startsWith( "#" ) )
             {
                 context.styleStack().save();
                 // We have a reference to a bookmark (### TODO)
-                // As we do not support it now, treat it as a <text:span> without formatting
+                // As we do not support it now, treat it as a <span> without formatting
                 parag->loadOasisSpan( tag, context, pos ); // recurse
                 context.styleStack().restore();
             }
             else
             {
-                // The text is contained in a text:span inside the text:a element. In theory
+                // The text is contained in a <span> inside the <a> element. In theory
                 // we could have multiple spans there, but OO ensures that there is always only one,
                 // splitting the hyperlink if necessary (at format changes).
                 // Note that we ignore the formatting of the span.
                 QDomElement spanElem = KoDom::namedItemNS( tag, KoXmlNS::text, "span" );
                 QString text;
-                if( spanElem.isNull() )
+                if ( spanElem.isNull() )
+                    text = tag.text();
+                if ( spanElem.isNull() )
                     text = tag.text();
                 else {
                     // The save/restore of the stack is done by the caller (KoTextParag::loadOasisSpan)
@@ -80,20 +82,20 @@ bool KPrTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& conte
                     context.fillStyleStack( spanElem, KoXmlNS::text, "style-name", "text" );
                     text = spanElem.text();
                 }
-                textData = '#'; // hyperlink placeholder
+                textData = KoTextObject::customItemChar(); // hyperlink placeholder
                 // unused tag.attributeNS( KoXmlNS::office, "name", QString::null )
                 KoVariableCollection& coll = context.variableCollection();
                 customItem = new KoLinkVariable( this, text, href,
-                                                 coll.formatCollection()->format( "STRING" ),
-                                                 &coll );
+                        coll.formatCollection()->format( "STRING" ),
+                        &coll );
             }
             return true;
         }
     }
     else // non "text:" tags
-        {
-            kdDebug()<<"Extension found tagName : "<<tagName<<endl;
-        }
+    {
+        kdDebug()<<"Extension found tagName : "<< localName <<endl;
+    }
     return false;
 }
 
