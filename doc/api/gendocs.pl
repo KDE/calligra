@@ -3,7 +3,6 @@
 # this script generates dox based on the availability of a Mainpage.dox file.
 # whereever there is one, doxygen is started.
 
-
 #set basedir relative to ours.
 $rootdir=`pwd`;
 chomp($rootdir);
@@ -13,24 +12,35 @@ if(! -d $basedir) {
     exit 1;
 }
 
+# used in the tag decleration
+$remoteDocs_kdelibs="$rootdir/../kdelibs/docs/api";
+$remoteDocs_qt="$rootdir/../qt-copy/docs/api";
+
 $doxygenconftmp=".doxygen.conf.tmp";
 
 #init
 if($#ARGV >= 0) {
+    my $ok=0;
     for($i=0; $i <= $#ARGV; $i++) {
         if( -f "$rootdir/$ARGV[$i]/Mainpage.dox") {
             push @sections, $ARGV[$i];
+            $ok=1;
         }
-        else {
+        elsif($ARGV[$i] eq "--remote") {
+            print "Using remote url for browing\n";
+            $remoteDocs_kdelibs="http://www.koffice.org/developer/kdelibs-api/";
+            $remoteDocs_qt="http://www.koffice.org/developer/qt-api/";
+            $ok=1;
+        } else {
             print "No Mainpage.dox found at '$rootdir/$ARGV[$i]' skipping..\n";
         }
     }
-    if($#sections == -1) {
+    if($ok == 0) {
         print "Nothing to do!\n";
         exit;
     }
 }
-else {
+if($#sections == -1) {
     print "Finding all sections...";
     @output=`find . -name Mainpage.dox -type f | grep -v _darcs`;
     foreach $section (@output) {
@@ -58,7 +68,7 @@ foreach $section (@sections) {
     print "\n". $i++ ."/$totalSteps) Creating tags ";
     &createConf($section, @dirs);
     system "mkdir -p \"$basedir$section\"";
-    system "doxygen $doxygenconftmp >/dev/null 2>/dev/null";
+    system "/home/zander/work/doxygen-1.4.7/bin/doxygen $doxygenconftmp >/dev/null 2>/dev/null";
     chdir $rootdir;
 }
 
@@ -68,7 +78,7 @@ foreach $section (@sections) {
     &alterConf();
     $sect=$section;
     $sect=~s/\//-/;
-    system "doxygen $doxygenconftmp.2 >/dev/null 2>$basedir$sect/err.log";
+    system "/home/zander/work/doxygen-1.4.7/bin/doxygen $doxygenconftmp.2 >/dev/null 2>$basedir$sect/err.log";
     unlink "$doxygenconftmp";
     unlink "$doxygenconftmp.2";
     chdir $rootdir;
@@ -283,7 +293,7 @@ sub createConf() {
     #print FILE "RECURSIVE=NO\n";
     #print FILE "EXCLUDE=\n";
     #print FILE "EXCLUDE_SYMLINKS=NO\n";
-    #print FILE "EXCLUDE_PATTERNS=\n";
+    print FILE "EXCLUDE_PATTERNS=*_p.*\n";
     #print FILE "EXAMPLE_PATH=$rootdir\n";
     #print FILE "EXAMPLE_PATTERNS=\n";
     #print FILE "EXAMPLE_RECURSIVE=YES\n";
@@ -343,6 +353,12 @@ sub createConf() {
         if($sect ne $name) {
             print FILE "\"$basedir$section/$tagfile=../$section\" ";
         }
+    }
+    if($rootdir=~/koffice/) {
+        print FILE "$rootdir/../kdelibs/doc/api/kio-kio/kio_kio_TAGS=$remoteDocs_kdelibs/kio-kio $rootdir/../kdelibs/doc/api/kio-kssl/kio_kssl_TAGS=$remoteDocs_kdelibs/kio-kssl $rootdir/../kdelibs/doc/api/kio/kio_TAGS=$remoteDocs_kdelibs/kio $rootdir/../kdelibs/doc/api/kio-kioexec/kio_kioexec_TAGS=$remoteDocs_kdelibs/kio-kioexec $rootdir/../kdelibs/doc/api/kio-kfile/kio_kfile_TAGS=$remoteDocs_kdelibs/kio-kfile $rootdir/../kdelibs/doc/api/kio-kpasswdserver/kio_kpasswdserver_TAGS=$remoteDocs_kdelibs/kio-kpasswdserver $rootdir/../kdelibs/doc/api/kio-httpfilter/kio_httpfilter_TAGS=$remoteDocs_kdelibs/kio-httpfilter $rootdir/../kdelibs/doc/api/kio-bookmarks/kio_bookmarks_TAGS=$remoteDocs_kdelibs/kio-bookmarks $rootdir/../kdelibs/doc/api/kjs/kjs_TAGS=$remoteDocs_kdelibs/kjs $rootdir/../kdelibs/doc/api/interfaces/interfaces_TAGS=$remoteDocs_kdelibs/interfaces $rootdir/../kdelibs/doc/api/interfaces-ktexteditor/interfaces_ktexteditor_TAGS=$remoteDocs_kdelibs/interfaces-ktexteditor $rootdir/../kdelibs/doc/api/interfaces-kspeech/interfaces_kspeech_TAGS=$remoteDocs_kdelibs/interfaces-kspeech $rootdir/../kdelibs/doc/api/interfaces-kdocument/interfaces_kdocument_TAGS=$remoteDocs_kdelibs/interfaces-kdocument $rootdir/../kdelibs/doc/api/kate/kate_TAGS=$remoteDocs_kdelibs/kate $rootdir/../kdelibs/doc/api/kded/kded_TAGS=$remoteDocs_kdelibs/kded $rootdir/../kdelibs/doc/api/kdecore/kdecore_TAGS=$remoteDocs_kdelibs/kdecore $rootdir/../kdelibs/doc/api/knewstuff/knewstuff_TAGS=$remoteDocs_kdelibs/knewstuff $rootdir/../kdelibs/doc/api/dnssd/dnssd_TAGS=$remoteDocs_kdelibs/dnssd $rootdir/../kdelibs/doc/api/kdefx/kdefx_TAGS=$remoteDocs_kdelibs/kdefx $rootdir/../kdelibs/doc/api/kdesu/kdesu_TAGS=$remoteDocs_kdelibs/kdesu $rootdir/../kdelibs/doc/api/kdeui/kdeui_TAGS=$remoteDocs_kdelibs/kdeui $rootdir/../kdelibs/doc/api/khtml/khtml_TAGS=$remoteDocs_kdelibs/khtml $rootdir/../kdelibs/doc/api/kinit/kinit_TAGS=$remoteDocs_kdelibs/kinit $rootdir/../kdelibs/doc/api/kconf_update/kconf_update_TAGS=$remoteDocs_kdelibs/kconf_update $rootdir/../kdelibs/doc/api/kstyles/kstyles_TAGS=$remoteDocs_kdelibs/kstyles $rootdir/../kdelibs/doc/api/kwallet/kwallet_TAGS=$remoteDocs_kdelibs/kwallet $rootdir/../kdelibs/doc/api/kdoctools/kdoctools_TAGS=$remoteDocs_kdelibs/kdoctools $rootdir/../kdelibs/doc/api/kioslave-http/kioslave_http_TAGS=$remoteDocs_kdelibs/kioslave-http $rootdir/../kdelibs/doc/api/kioslave/kioslave_TAGS=$remoteDocs_kdelibs/kioslave $rootdir/../kdelibs/doc/api/kcmshell/kcmshell_TAGS=$remoteDocs_kdelibs/kcmshell $rootdir/../kdelibs/doc/api/kdeprint/kdeprint_TAGS=$remoteDocs_kdelibs/kdeprint $rootdir/../kdelibs/doc/api/kimgio/kimgio_TAGS=$remoteDocs_kdelibs/kimgio $rootdir/../kdelibs/doc/api/kxmlcore/kxmlcore_TAGS=$remoteDocs_kdelibs/kxmlcore $rootdir/../kdelibs/doc/api/kparts/kparts_TAGS=$remoteDocs_kdelibs/kparts $rootdir/../kdelibs/doc/api/kutils/kutils_TAGS=$remoteDocs_kdelibs/kutils $rootdir/../kdelibs/doc/api/kjsembed/kjsembed_TAGS=$remoteDocs_kdelibs/kjsembed $rootdir/../kdelibs/doc/api/kde3support-kio/kde3support_kio_TAGS=$remoteDocs_kdelibs/kde3support-kio $rootdir/../kdelibs/doc/api/kde3support-kdecore/kde3support_kdecore_TAGS=$remoteDocs_kdelibs/kde3support-kdecore $rootdir/../kdelibs/doc/api/kde3support-kdeui/kde3support_kdeui_TAGS=$remoteDocs_kdelibs/kde3support-kdeui $rootdir/../kdelibs/doc/api/kde3support-kunittest/kde3support_kunittest_TAGS=$remoteDocs_kdelibs/kde3support-kunittest $rootdir/../kdelibs/doc/api/kde3support-kparts/kde3support_kparts_TAGS=$remoteDocs_kdelibs/kde3support-kparts $rootdir/../kdelibs/doc/api/phonon-ui/phonon_ui_TAGS=$remoteDocs_kdelibs/phonon-ui $rootdir/../kdelibs/doc/api/phonon/phonon_TAGS=$remoteDocs_kdelibs/phonon $rootdir/../kdelibs/doc/api/sonnet/sonnet_TAGS=$remoteDocs_kdelibs/sonnet $rootdir/../kdelibs/doc/api/threadweaver/threadweaver_TAGS=$remoteDocs_kdelibs/threadweaver";
+    }
+    if($rootdir=~/qt-copy/) { } else {
+        print FILE " $rootdir/../qt-copy/doc/api/gui/gui_TAGS=$remoteDocs_qt/gui/ $rootdir/../qt-copy/doc/api/corelib/corelib_TAGS=$remoteDocs_qt/corelib/ $rootdir/../qt-copy/doc/api/network/network_TAGS=$remoteDocs_qt/network/ $rootdir/../qt-copy/doc/api/opengl/opengl_TAGS=$remoteDocs_qt/opengl/ $rootdir/../qt-copy/doc/api/plugins/plugins_TAGS=$remoteDocs_qt/plugins/ $rootdir/../qt-copy/doc/api/sql/sql_TAGS=$remoteDocs_qt/sql/ $rootdir/../qt-copy/doc/api/svg/svg_TAGS=$remoteDocs_qt/svg/ $rootdir/../qt-copy/doc/api/xml/xml_TAGS=$remoteDocs_qt/xml/";
     }
     print FILE "\n";
     $tagfile="$name\_TAGS";
