@@ -13,6 +13,7 @@ ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 
 find_package(Freetype REQUIRED)
 find_package(Fontconfig REQUIRED)
+find_package(ImageMagick REQUIRED)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-karbon.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-karbon.h )
 
