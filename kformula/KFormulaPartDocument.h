@@ -45,7 +45,7 @@ class FormulaShape;
  * A KFormulaPartDocument will always be created by @ref KFormulaPartFactory.
  * Following the model-view-paradigm KFormulaPartDocument is the class holding
  * the data whereas KFormulaPartView does the GUI & rendering related tasks.
- * The actual data KFormulaPartDocument is maintaining is a list of @ref FormulaShape.
+ * The actual data KFormulaPartDocument is maintaining is a list of FormulaShape.
  * 
  */
 class KFormulaPartDocument : public KoDocument
@@ -58,15 +58,15 @@ public:
 		           bool singleViewMode = false);
     ~KFormulaPartDocument();
 
-    virtual void paintContent( QPainter &painter, const QRect &rect,
+    void paintContent( QPainter &painter, const QRect &rect,
 		    bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
-    virtual void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
-    virtual bool showEmbedInitDialog(QWidget* parent);
-    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
+    void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
+    bool showEmbedInitDialog(QWidget* parent);
+    bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 		            const QDomDocument& settings, KoStore* );
-    virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
-    virtual bool loadXML( QIODevice *, const QDomDocument & doc );
+    bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+    bool loadXML( QIODevice *, const QDomDocument & doc );
 
 protected slots:
     void commandExecuted();

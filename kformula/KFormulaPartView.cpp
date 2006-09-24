@@ -43,7 +43,7 @@ KFormulaPartView::KFormulaPartView( KFormulaPartDocument* doc, QWidget* parent )
     m_formulaCanvas = new KFormulaCanvas( this );
 
     m_dbus = new KFormulaPartViewAdaptor( this );
-    QDBusConnection::sessionBus().registerObject( "/" + objectName(), this );
+    QDBusConnection::sessionBus().registerObject( '/' + objectName(), this );
 
     setInstance( KFormulaPartFactory::global() );
 

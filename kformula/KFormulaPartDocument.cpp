@@ -152,7 +152,7 @@ void KFormulaPartDocument::paintContent( QPainter& painter, const QRect& rect,
 
 QString KFormulaPartDocument::configFile() const
 {
-    return QString::null;
+    return QString();
 }
 
 #include "KFormulaPartDocument.moc"
