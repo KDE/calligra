@@ -161,7 +161,7 @@ void KFormulaPartViewAdaptor::makeGreek()
 //    m_view->document()->getDocument()->wrapper()->makeGreek();
 }
 
-void KFormulaPartViewAdaptor::insertSymbol( QString name )
+void KFormulaPartViewAdaptor::insertSymbol( const QString& name )
 {
 //    m_view->document()->getDocument()->wrapper()->insertSymbol( name );
 }
@@ -243,12 +243,12 @@ void KFormulaPartViewAdaptor::eraseSelection( int direction )
 //    m_view->formulaView()->eraseSelection( static_cast<KFormula::Direction>( direction ) );
 }
 
-void KFormulaPartViewAdaptor::addText( QString str )
+void KFormulaPartViewAdaptor::addText( const QString& str )
 {
 //    m_view->formulaView()->addText( str );
 }
 
-QStringList KFormulaPartViewAdaptor::readFormulaString( QString text )
+QStringList KFormulaPartViewAdaptor::readFormulaString( const QString& text )
 {
 //    return m_view->readFormulaString( text );
     return QStringList();

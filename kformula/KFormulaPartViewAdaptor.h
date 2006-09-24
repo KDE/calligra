@@ -65,7 +65,7 @@ public Q_SLOTS: // METHODS
     void addGenericUpperIndex();
     void removeEnclosing();
     void makeGreek();
-    void insertSymbol( QString name );
+    void insertSymbol( const QString& name );
 
     void appendColumn();
     void insertColumn();
@@ -89,9 +89,9 @@ public Q_SLOTS: // METHODS
     bool isEnd() const;
 
     void eraseSelection( int direction );
-    void addText( QString str );
+    void addText( const QString& str );
 
-    QStringList readFormulaString( QString text );
+    QStringList readFormulaString( const QString& text );
 
 private:
     KFormulaPartView* m_partView;
