@@ -1,16 +1,16 @@
 #!/bin/bash
-if ! kde-config ; then
-  echo 'kde-config not found ! Aborting. You need a more recent KDE, or to fix your $PATH.'
+if ! kde4-config ; then
+  echo 'kde4-config not found ! Aborting. You need a more recent KDE, or to fix your $PATH.'
   exit 1
 fi
 IFS=:
 
 echo -n "KDE prefixes: "
-kde-config --prefix
+kde4-config --prefix
 
 # Check for the binary
 found=0
-exedirs=`kde-config --path exe`
+exedirs=`kde4-config --path exe`
 for dir in $exedirs; do
   if [ -f "$dir/kword" ]; then
     echo "kword found in $dir"
@@ -22,7 +22,7 @@ if [ $found -eq 0 ]; then
     echo "ERROR: kword not found - looked at $exedirs"
 fi
 
-mimelnks=`kde-config --path mime`
+mimelnks=`kde4-config --path mime`
 # Relevant existing mimetypes
 mimes=""
 
@@ -80,7 +80,7 @@ if [ $foundmagicfile -eq 0 ]; then
     echo "ERROR: Magic file not found $magic"
 fi
 
-for dir in `kde-config --path services`; do
+for dir in `kde4-config --path services`; do
   echo Services dir $dir
   for mime in $mimes; do
      grep "Import=.*$mime" $dir/*.desktop

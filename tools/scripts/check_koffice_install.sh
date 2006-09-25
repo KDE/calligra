@@ -1,12 +1,12 @@
 #!/bin/bash
-if ! kde-config ; then
-  echo 'kde-config not found ! Aborting. You need a more recent KDE, or to fix your $PATH.'
+if ! kde4-config ; then
+  echo 'kde4-config not found ! Aborting. You need a more recent KDE, or to fix your $PATH.'
   exit 1
 fi
 
 instance=kword
-applnks=`kde-config --path apps`:`kde-config --path xdgdata-apps`
-services=`kde-config --path services`
+applnks=`kde4-config --path apps`:`kde4-config --path xdgdata-apps`
+services=`kde4-config --path services`
 found=0
 
 function checkname()
@@ -76,7 +76,7 @@ fi
 echo
 
 stfound=0
-for dir in `kde-config --path servicetypes`; do
+for dir in `kde4-config --path servicetypes`; do
   echo Service Types dir $dir
   f=`echo $dir/kofficepart.desktop | sed -e 's,//,/,g'`
   if [ -f $f ]; then
@@ -88,7 +88,7 @@ done
 
 if [ $stfound = 0 ]; then
   echo '****** kofficepart.desktop not found!'
-  kde-config --path servicetypes
+  kde4-config --path servicetypes
 else
   echo
   if [ $found = 1 ]; then
