@@ -61,7 +61,7 @@ fixAppSpecific()
 # Paths
 mkdir -p /tmp/kexi-dist
 DESTINATION=/tmp/kexi-dist/$DIST_VER		# CHANGE TO A NON-EXISTING DIR, WHICH WILL BE CREATED LATER!!!
-CONFIGURE_PREFIX=`kde-config --prefix`	# CHANGE
+CONFIGURE_PREFIX=`kde4-config --prefix`	# CHANGE
 EXPECT_PROGRAM=`which expect`				# CHANGE
 ED_LOCATION=/bin						# CHANGE
 
