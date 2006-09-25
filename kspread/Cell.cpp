@@ -296,7 +296,7 @@ void Cell::setValue( const Value& value )
     clearAllErrors();
 
   //If the value has not changed then we don't need to do anything
-  //(ie. no need to relayout, update dependant cells etc.),
+  //(ie. no need to relayout, update dependent cells etc.),
   //unless this cell contains a formula, in which case its dependancies might have changed
   //even though the value has not.  For example, if this cell was previously empty (and its value is
   //therefore empty) and a new dependency upon an empty cell has been added.  The new value would still
@@ -592,7 +592,7 @@ bool Cell::needsPrinting() const
   }
 
   if ( format()->hasProperty( Style::SBackgroundColor ) ) {
-    kDebug(36004) << "needsPrinting: Has background colour" << endl;
+    kDebug(36004) << "needsPrinting: Has background color" << endl;
     QColor backgroundColor=bgColor(column(),row());
 
     //We don't need to print anything if the background is white

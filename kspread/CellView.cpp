@@ -446,7 +446,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
 
           //Note: Painting of highlight isn't quite right.  If several
           //      cells are merged, then the whole merged cell will be
-          //      painted with the colour of the last cell referenced
+          //      painted with the color of the last cell referenced
           //      which is inside the merged range.
           obscuringCell->cellView()->paintCell( rect, painter, view,
                                                 corner, obscuringCellRef,
@@ -711,7 +711,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
   painter.setRenderHint( QPainter::Antialiasing, false );
 
   /*
-    *** Notes about optimisation ***
+    *** Notes about optimization ***
 
     This function was painting the top, left, right & bottom lines in almost
     all cells previously, contrary to what the comment below says should happen.

@@ -183,7 +183,7 @@ void Inspector::Private::handleSheet()
 void Inspector::Private::handleDep()
 {
   DependencyManager* manager = sheet->workbook()->dependencyManager();
-  Region deps = manager->getDependants( cell );
+  Region deps = manager->getDependents( cell );
 
   depView->clear();
   Region::ConstIterator end(deps.constEnd());

@@ -209,7 +209,7 @@ public:
      *
      * @param name The new sheet name.
      * @param init If set to true then no formula will be changed and no signal
-     *             will be emitted and no undo action created. Usually you dont
+     *             will be emitted and no undo action created. Usually you do not
      *             want to do that.
      * @param makeUndo If set to @p true , the renaming is inserted in the
      *                 undo list.
@@ -908,7 +908,7 @@ public:
 
     /**
      * Handles the fact that a cell has been changed.
-     * Recalculates dependant cells.
+     * Recalculates dependent cells.
      */
     void valueChanged (Cell *cell);
 

@@ -1012,7 +1012,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     setCursor( Qt::ArrowCursor );
   }
 
-  // No marking, selecting etc. in progess? Then quit here.
+  // No marking, selecting etc. in progress? Then quit here.
   if ( d->mouseAction == NoAction )
     return;
 
@@ -1635,8 +1635,8 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
       QDomDocument doc;
       if ( !doc.setContent( data, false, &errorMsg, &errorLine, &errorColumn ) )
       {
-        // an error occured
-        kDebug(36005) << "Canvas::daragMoveEvent: an error occured" << endl
+        // an error occurred
+        kDebug(36005) << "Canvas::daragMoveEvent: an error occurred" << endl
                  << "line: " << errorLine << " col: " << errorColumn
                  << ' ' << errorMsg << endl;
         dragMarkingRect = QRect(1,1,1,1);
@@ -3502,7 +3502,7 @@ void Canvas::finishResizeObject( const QString &/*name*/, bool /*layout*/ )
     if ( ( d->m_resizeObject->geometry() ) != d->m_rectBeforeResize )
     {
         ChangeObjectGeometryCommand *resizeCmd = new ChangeObjectGeometryCommand( d->m_resizeObject, move, size );
-        // the command is not executed as the object is allready resized.
+        // the command is not executed as the object is already resized.
         doc()->addCommand( resizeCmd );
     }
 
@@ -4043,7 +4043,7 @@ void Canvas::paintUpdates()
             rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
         }
 
-        // similiar for other borders...
+        // similar for other borders...
         // bottom border:
         if ( y >= KS_rowMax )
         {

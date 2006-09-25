@@ -247,7 +247,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   m_tabWidget->insertTab( 1, m_page2, i18n( "Options" ) );
 
   m_copyLayout = new QCheckBox( m_page2 );
-  m_copyLayout->setText( i18n( "Copy cell &formatting (Borders, Colours, Text Style)" ) );
+  m_copyLayout->setText( i18n( "Copy cell &formatting (Borders, Colors, Text Style)" ) );
 
   page2Layout->addWidget( m_copyLayout, 1, 0 );
 

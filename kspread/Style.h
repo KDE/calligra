@@ -291,8 +291,8 @@ public:
   void setParentName (const QString &n) { m_parentName = n; };
 
   /**
-   * Returns the name of a colour.  This is the same as returned by QColor::name, but an internal cache
-   * is used to reduce the overhead when asking for the name of the same colour.
+   * Returns the name of a color.  This is the same as returned by QColor::name, but an internal cache
+   * is used to reduce the overhead when asking for the name of the same color.
    */
   static QString colorName( const QColor& color );
 

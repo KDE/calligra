@@ -57,14 +57,14 @@ class View;
 
 
 /**
- * Colours cell references in formulas.  Installed by CellEditor instances in
+ * Colors cell references in formulas.  Installed by CellEditor instances in
  * the constructor.
  */
 class FormulaEditorHighlighter : public QSyntaxHighlighter
 {
 public:
   /**
-   * Constructs a FormulaHighlighter to colour-code cell references in a QTextEdit.
+   * Constructs a FormulaHighlighter to color-code cell references in a QTextEdit.
    *
    * @param textEdit The QTextEdit widget which the highlighter should operate on
    * @param canvas The Canvas object

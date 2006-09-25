@@ -2300,7 +2300,7 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
     //refresh chart after that you paste all cells
 
     /* I don't think this is gonna work....doesn't this only update
-       one chart -- the one which had a dependant cell update first? - John
+       one chart -- the one which had a dependent cell update first? - John
 
        I don't have time to check on this now....
     */
@@ -2518,7 +2518,7 @@ void Sheet::deleteCells(const Region& region)
     }
     d->cells.setAutoDelete( true );
 
-    // recalculate dependant cells
+    // recalculate dependent cells
     d->workbook->recalcManager()->regionChanged(region);
     // relayout region
     setLayoutDirtyFlag();
@@ -4598,7 +4598,7 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
         QString baseName = sname;
         int nameSuffix = 0;
 
-        /* so we don't panic over finding ourself in the follwing test*/
+        /* so we don't panic over finding ourself in the following test*/
         sname.clear();
         while (workbook()->findSheet(testName) != 0)
         {

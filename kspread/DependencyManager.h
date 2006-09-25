@@ -61,7 +61,7 @@ public:
   /**
    * \return cells depending on \p cell
    */
-  Region getDependants(const Cell* cell);
+  Region getDependents(const Cell* cell);
 
   /**
    * Adjusts formulas after cut & paste operations or column/row insertions/deletions.

@@ -61,7 +61,7 @@ public:
   /**
    * @brief Insert data item into the tree
    *
-   * This will insert a data item into the tree. If neccessary the tree will
+   * This will insert a data item into the tree. If necessary the tree will
    * adjust itself.
    *
    * \note Reimplemented for KSpread, because of the QRectF behaviour differs from

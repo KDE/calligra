@@ -773,7 +773,7 @@ void CellEditor::slotCursorPositionChanged()
 
       //A list of regions which have already been highlighted on the spreadsheet.
       //This is so that we don't end up highlighting the same region twice in two different
-      //colours.
+      //colors.
       QLinkedList<Region> alreadyUsedRegions;
 
       for (int i = 0; i < tokens.count(); ++i)

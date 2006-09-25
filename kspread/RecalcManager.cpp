@@ -244,10 +244,10 @@ void RecalcManager::recalcRegion(const Region& region)
 
           // Recursion. We need the whole dependency tree of the changed region.
           // An infinite loop is prevented by the check above.
-          Region dependantRegion = d->depManager->getDependants(cell);
-          if (!dependantRegion.contains(QPoint(cell->column(), cell->row()), cell->sheet()))
+          Region dependentRegion = d->depManager->getDependents(cell);
+          if (!dependentRegion.contains(QPoint(cell->column(), cell->row()), cell->sheet()))
           {
-            recalcRegion(dependantRegion);
+            recalcRegion(dependentRegion);
           }
         }
       }

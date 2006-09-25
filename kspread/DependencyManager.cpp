@@ -55,7 +55,7 @@ public:
   /**
    * \return cells depending on \p cell
    */
-  Region getDependants(const Cell* cell);
+  Region getDependents(const Cell* cell);
 
   void areaModified (const QString &name);
 
@@ -87,7 +87,7 @@ public:
   /** list of cells, that depend on a cell */
   class PointTree :public KoRTree<Region::Point>
   { public: PointTree() : KoRTree<Region::Point>(8,4) {} };
-  QHash<Sheet*, PointTree*> dependants; // FIXME Stefan: Why is a QHash<Sheet*, PointTree> crashing?
+  QHash<Sheet*, PointTree*> dependents; // FIXME Stefan: Why is a QHash<Sheet*, PointTree> crashing?
   /** list of cells referencing a given named area */
   QMap<QString, QMap<Region::Point, bool> > areaDeps;
 };
@@ -109,10 +109,10 @@ void DependencyManager::Private::dump() const
     }
   }
 
-  foreach (Sheet* sheet, dependants.keys())
+  foreach (Sheet* sheet, dependents.keys())
   {
-    QList<QRectF> keys = dependants[sheet]->keys();
-    QList<Region::Point> values = dependants[sheet]->values();
+    QList<QRectF> keys = dependents[sheet]->keys();
+    QList<Region::Point> values = dependents[sheet]->values();
     QHash<QString, QString> table;
     for (int i = 0; i < keys.count(); ++i)
     {
@@ -135,7 +135,7 @@ DependencyManager::DependencyManager()
 
 DependencyManager::~DependencyManager ()
 {
-  qDeleteAll(d->dependants.values());
+  qDeleteAll(d->dependents.values());
   delete d;
 }
 
@@ -204,9 +204,9 @@ void DependencyManager::updateAllDependencies(const Map* map)
 //   return d->getDependencies (cell);
 // }
 
-KSpread::Region DependencyManager::getDependants(const Cell* cell)
+KSpread::Region DependencyManager::getDependents(const Cell* cell)
 {
-  return d->getDependants(cell);
+  return d->getDependents(cell);
 }
 
 QMap<KSpread::Region::Point, KSpread::Region> DependencyManager::dependencies() const
@@ -225,14 +225,14 @@ void DependencyManager::regionMoved( const Region& movedRegion, const Region::Po
     locationOffset.setSheet( ( sheet == destination.sheet() ) ? 0 : destination.sheet() );
     const QRect range = (*it)->rect();
 
-    if ( d->dependants.contains( sheet ) )
+    if ( d->dependents.contains( sheet ) )
     {
       const QRectF rangeF = QRectF( range ).adjusted( 0, 0, -0.1, -0.1 );
-      QList<Region::Point> dependantLocations = d->dependants[sheet]->intersects( rangeF );
+      QList<Region::Point> dependentLocations = d->dependents[sheet]->intersects( rangeF );
 
-      for ( int i = 0; i < dependantLocations.count(); ++i )
+      for ( int i = 0; i < dependentLocations.count(); ++i )
       {
-        const Region::Point location = dependantLocations[i];
+        const Region::Point location = dependentLocations[i];
         Cell* const cell = location.sheet()->cellAt( location.pos().x(), location.pos().y() );
         updateFormula( cell, (*it), locationOffset );
       }
@@ -302,7 +302,7 @@ void DependencyManager::updateFormula( Cell* cell, const Region::Element* oldLoc
 void DependencyManager::Private::reset ()
 {
   dependencies.clear();
-  dependants.clear();
+  dependents.clear();
 }
 
 KSpread::Region DependencyManager::Private::getDependencies (const Region::Point &cell)
@@ -310,17 +310,17 @@ KSpread::Region DependencyManager::Private::getDependencies (const Region::Point
   return dependencies.value(cell);
 }
 
-KSpread::Region DependencyManager::Private::getDependants(const Cell* cell)
+KSpread::Region DependencyManager::Private::getDependents(const Cell* cell)
 {
   Sheet* const sheet = cell->sheet();
 
-  if (!dependants.contains(sheet))
+  if (!dependents.contains(sheet))
   {
-    kDebug(36002) << "No dependant tree found for the cell's sheet." << endl;
+    kDebug(36002) << "No dependent tree found for the cell's sheet." << endl;
     return Region();
   }
 
-  KoRTree<Region::Point>* tree = dependants.value(sheet);
+  KoRTree<Region::Point>* tree = dependents.value(sheet);
 
   Region region;
   foreach (Region::Point point, tree->contains(QPoint(cell->column(), cell->row())))
@@ -366,8 +366,8 @@ void DependencyManager::Private::addDependency(const Cell* cell, const Region& r
     Sheet* sheet = (*it)->sheet();
     QRectF range = QRectF((*it)->rect()).adjusted(0, 0, -0.1, -0.1);
 
-    if (!dependants.contains(sheet)) dependants.insert(sheet, new PointTree);
-    dependants[sheet]->insert(range, point);
+    if (!dependents.contains(sheet)) dependents.insert(sheet, new PointTree);
+    dependents[sheet]->insert(range, point);
   }
 }
 
@@ -388,9 +388,9 @@ void DependencyManager::Private::removeDependencies(const Cell* cell)
     Sheet* const sheet = (*it)->sheet();
     const QRect range = (*it)->rect();
 
-    if (dependants.contains(sheet))
+    if (dependents.contains(sheet))
     {
-      dependants[sheet]->remove(point);
+      dependents[sheet]->remove(point);
     }
   }
 
