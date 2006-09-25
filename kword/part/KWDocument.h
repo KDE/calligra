@@ -220,7 +220,7 @@ signals:
     void frameSetRemoved(KWFrameSet*);
 
 private slots:
-    /// Frame maintainance on already registed framesets
+    /// Frame maintenance on already registered framesets
     void addFrame( KWFrame *frame );
     void removeFrame( KWFrame *frame );
     void requestMoreSpace(KWTextFrameSet *fs);

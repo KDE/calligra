@@ -65,7 +65,7 @@ private:
     FrameConfigSharedState *m_state;
 };
 
-/// A simple class usefull for finding out if a series of data object will cause a
+/// A simple class useful for finding out if a series of data object will cause a
 /// normal or a tri-state checkbox. For example.
 class GuiHelper {
 public:

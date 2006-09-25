@@ -213,7 +213,7 @@ void KWFrameViewManager::fireEvents() {
 void KWFrameViewManager::recalculateFrameCache() {
     // TODO :) design and implement a cache...
     // list of frames sorted on y-coord, with an additional list containing a jump-index
-    kDebug(31001) << "recalculateFrameCache " << m_frames.count() << " frames are currently registred" << endl;
+    kDebug(31001) << "recalculateFrameCache " << m_frames.count() << " frames are currently registered" << endl;
 }
 
 KWFrameView *KWFrameViewManager::view(const KoPoint &point, SelectionType selected, bool borderOnly) const {

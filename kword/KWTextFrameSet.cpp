@@ -190,9 +190,9 @@ void KWTextFrameSet::init()
              SLOT( slotParagraphModified(KoTextParag*, int, int, int) ));
 }
 
-void KWTextFrameSet::slotParagraphModified(KoTextParag* _parag, int /*KoTextParag::ParagModifyType*/ _type, int start, int lenght)
+void KWTextFrameSet::slotParagraphModified(KoTextParag* _parag, int /*KoTextParag::ParagModifyType*/ _type, int start, int length)
 {
-    kWordDocument()->paragraphModified(_parag, _type, start, lenght);
+    kWordDocument()->paragraphModified(_parag, _type, start, length);
 }
 
 void KWTextFrameSet::slotParagraphCreated(KoTextParag* /*_parag*/)

@@ -264,7 +264,7 @@ void KWPartFrameSet::KWPartFrameSet::createEmptyRegion( const QRect &crect, QReg
     Q_UNUSED(emptyRegion);
     Q_UNUSED(viewMode);
 
-    // empty implementation since embedded parts can be transparant.
+    // empty implementation since embedded parts can be transparent.
 }
 
 #if 0

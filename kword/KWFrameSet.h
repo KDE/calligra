@@ -148,7 +148,7 @@ public:
     /**
      * Returns the original frame that the param frame is a copy off, or the frame itself.
      * For changing a frame that is a copy of another (as found in KWFrame::isCopy()) you
-     * need a so called settings frame, or original frame.  This method can savely be called
+     * need a so called settings frame, or original frame.  This method can safely be called
      * on any frame to make sure you are dealing with the original frame.
      * @param frame the frame to find the settings frame for.
      * @return the frame itself if its not a copy, or the original frame if it is one.

@@ -303,7 +303,7 @@ private:
 
     /** List of frames we have below and on top of us.
      * Frames on top we should never overwrite.  Frames below us needd for selection code &
-     * transparancy */
+     * transparency */
     KWFrameList *m_frameStack;
     KWFrameSet *m_frameSet;
 

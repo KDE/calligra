@@ -49,7 +49,7 @@ public:
     /**
      * Create a new frameLayout instance
      * @param pageManager the manager of pages
-     * @param frameSets all the framesets registred in the document.
+     * @param frameSets all the framesets registered in the document.
      * @param pageSettings the settings used for auto-layout of frames.
      */
     KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet*> &frameSets, const KWPageSettings *pageSettings);

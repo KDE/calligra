@@ -6870,7 +6870,7 @@ void KWView::insertFile(const KUrl& url)
                                                     //kDebug()<<k_funcinfo<<" Inline frameset: "<<name<<" added"<<endl;
                                                 }
                                                 else if ( grpMgr == iName )
-                                                {   // Table so we need to create table framset if it is new
+                                                {   // Table so we need to create table frameset if it is new
                                                     if ( grpMgr != tableName )
                                                     {
                                                         tableName = grpMgr;

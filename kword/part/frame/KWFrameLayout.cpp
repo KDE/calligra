@@ -260,7 +260,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
         }
     }
 
-    // spread space accross items.
+    // spread space across items.
     double heightLeft = page->height();
     for(int i=0; i < 11; i++)
         heightLeft -= qMax(minimumHeight[i], requestedHeight[i]);

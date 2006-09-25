@@ -738,7 +738,7 @@ public:
     QStringList listOfBookmarkName(KWViewMode * viewMode) const;
 
     void paragraphDeleted( KoTextParag *parag, KWFrameSet *frm);
-    void paragraphModified(KoTextParag* parag, int /*KoTextParag::ParagModifyType*/ type, int start, int lenght);
+    void paragraphModified(KoTextParag* parag, int /*KoTextParag::ParagModifyType*/ type, int start, int length);
 
     void initBookmarkList();
     void loadImagesFromStore( KoStore *store );

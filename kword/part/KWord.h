@@ -100,7 +100,7 @@ public:
     /// Specifies the horizontal position of the line that separates main text and foot note
     enum FootNoteSeparatorLinePos {
         FootNoteSeparatorLeft, ///< Left of page
-        FootNoteSeparatorCenter, ///< Centred on page
+        FootNoteSeparatorCenter, ///< Centered on page
         FootNoteSeparatorRight  ///< Right of page
     };
 };
