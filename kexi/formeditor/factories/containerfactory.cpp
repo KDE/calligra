@@ -200,7 +200,8 @@ InsertPageCommand::execute()
 	QWidget *parent = m_form->objectTree()->lookup(m_parentname)->widget();
 	if(m_name.isEmpty()) {
 		m_name = container->form()->objectTree()->generateUniqueName(
-			container->form()->library()->displayName("QWidget").latin1());
+			container->form()->library()->displayName("QWidget").latin1(),
+			/*!numberSuffixRequired*/false);
 	}
 
 	QWidget *page = new QWidget(parent, m_name.latin1());

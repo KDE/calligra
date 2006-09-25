@@ -676,7 +676,8 @@ InsertWidgetCommand::InsertWidgetCommand(Container *container)
 	m_insertRect = container->m_insertRect;
 	m_point = container->m_insertBegin;
 	m_name = container->form()->objectTree()->generateUniqueName(
-		container->form()->library()->namePrefix(m_class).latin1());
+		container->form()->library()->namePrefix(m_class).latin1(),
+		/*!numberSuffixRequired*/false);
 }
 
 InsertWidgetCommand::InsertWidgetCommand(Container *container,
