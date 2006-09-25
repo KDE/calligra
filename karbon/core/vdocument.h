@@ -43,7 +43,7 @@ class KoShape;
 
 class KoLayerShape;
 
-typedef QList<KoShape*> VLayerList;
+typedef QList<KoLayerShape*> VLayerList;
 
 /**
  * All non-visual, static doc info is in here.
@@ -222,7 +222,7 @@ public:
 	/**
 	 * Returns the list of shapes.
 	 */
-	const QList<KoShape*> shapes() const { return m_shapes; }
+	const QList<KoShape*> shapes() const;
 
 	QDomDocument saveXML() const;
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
@@ -336,7 +336,6 @@ private:
 	KoUnit::Unit m_unit;
 
 	QMap<const KoShape *, QString>	m_objectNames;
-	QList<KoShape*> m_shapes;
 
 	// TODO this flag is used nowhere, can we remove it?
 	bool m_saveAsPath;

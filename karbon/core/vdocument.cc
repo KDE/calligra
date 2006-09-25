@@ -63,7 +63,7 @@ VDocument::VDocument( const VDocument& document )
 VDocument::~VDocument()
 {
 	delete( m_selection );
-	foreach( KoShape* shape, m_layers )
+	foreach( KoLayerShape* shape, m_layers )
 		delete shape;
 }
 
@@ -155,7 +155,7 @@ VDocument::removeLayer( KoLayerShape* layer )
 	m_layers.removeAt( m_layers.indexOf( layer ) );
 	if ( m_layers.count() == 0 )
 		m_layers.append( new KoLayerShape() );
-	m_activeLayer = (KoLayerShape*)m_layers.last();
+	m_activeLayer = m_layers.last();
 } // VDocument::removeLayer
 
 bool VDocument::canRaiseLayer( KoLayerShape* layer )
@@ -208,8 +208,8 @@ VDocument::add( KoShape* shape )
 void
 VDocument::remove( KoShape* shape )
 {
-	foreach( KoShape *layer, m_layers ) 
-		((KoLayerShape*)layer)->removeChild( shape );
+	foreach( KoLayerShape *layer, m_layers )
+		layer->removeChild( shape );
 }
 
 QDomDocument
@@ -232,8 +232,8 @@ VDocument::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainS
 
 	// save objects:
 	int index = 0;
-	foreach( KoShape* layer, m_layers )
-		((KoLayerShape*)layer)->saveOasis( store, docWriter, mainStyles, ++index );
+	foreach( KoLayerShape* layer, m_layers )
+		layer->saveOasis( store, docWriter, mainStyles, ++index );
 
 	docWriter->endElement(); // draw:page
 }
@@ -317,7 +317,7 @@ VDocument::loadDocumentContent( const QDomElement& doc )
 bool
 VDocument::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
-	return ((KoLayerShape*)m_layers.first())->loadOasis( element, context );
+	return m_layers.first()->loadOasis( element, context );
 }
 
 void
@@ -343,4 +343,17 @@ VDocument::boundingRect()
 	}
 
 	return bb;
+}
+
+const QList<KoShape*>
+VDocument::shapes() const
+{
+	QList<KoShape*> allShapes;
+
+	foreach( KoLayerShape* layer, m_layers )
+	{
+		foreach( KoShape* shape, layer->iterator() )
+			allShapes << shape;
+	}
+	return allShapes;
 }

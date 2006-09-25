@@ -496,10 +496,17 @@ KarbonView::editSelectAll()
 {
 	debugView("KarbonView::editSelectAll()");
 
-	part()->document().selection()->append();
+	KoSelection* selection = m_canvas->shapeManager()->selection();
+	if( ! selection )
+		return;
 
-	if( part()->document().selection()->objects().count() > 0 )
-		part()->repaintAllViews();
+	QList<KoShape*> shapes = part()->document().shapes();
+	kDebug(38000) << "shapes.size() = " << shapes.size() << endl;
+
+	foreach( KoShape* shape, shapes )
+		selection->select( shape );
+
+	m_canvas->updateCanvas( selection->boundingRect() );
 
 	selectionChanged();
 }
