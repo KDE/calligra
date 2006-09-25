@@ -20,11 +20,8 @@ KoPathShape:
 
 - make sure it supports all we had with the old karbon path
 - some things that are currently lacking (taken from inkscape):
-  - joining selected end nodes
-  - joining selected end nodes with new segment
+  - joining selected end nodes by merging them
   - remove a segment
-  - break path at selected nodes
-  - make selected segments curves/lines
 
 Layers:
 -------
