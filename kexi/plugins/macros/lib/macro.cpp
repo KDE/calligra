@@ -23,8 +23,6 @@
 #include "context.h"
 #include "variable.h"
 
-#include "metaproxy.h"
-
 #include <qdom.h>
 #include <kdebug.h>
 
@@ -105,19 +103,6 @@ void Macro::clearItems()
 {
 	d->itemlist.clear();
 }
-
-//no longer needed
-// void Macro::connectSignal(const QObject* sender, const char* signal)
-// {
-// 	MetaProxy* metaproxy = new MetaProxy();
-// 
-// 	metaproxy->connectSignal(sender, signal);
-// 
-// 	connect( metaproxy, SIGNAL(slotCalled(QValueList< KSharedPtr<Variable> >)),
-// 			 this,SLOT(activate(QValueList< KSharedPtr<Variable> >)) );
-// 
-// 	//TODO d->proxies.append( metaproxy );
-// }
 
 //run our macro
 KSharedPtr<Context> Macro::execute(QObject* sender)

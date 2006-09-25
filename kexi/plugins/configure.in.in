@@ -12,7 +12,7 @@
 AC_ARG_ENABLE(kexi-macros,
     AC_HELP_STRING([--enable-kexi-macros],
                    [build Kexi macro plugin (EXPERIMENTAL) [default=yes]]),
-    compile_kexi_macros_plugin=$enableval, compile_kexi_macros_plugin=yes)
+    compile_kexi_macros_plugin=$enableval, compile_kexi_macros_plugin=no)
 AM_CONDITIONAL(compile_kexi_macros_plugin, test "x$compile_kexi_macros_plugin" == "xyes")
 
 if test "$compile_kexi_macros_plugin" == "yes"; then

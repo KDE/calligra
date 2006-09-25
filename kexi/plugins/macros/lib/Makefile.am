@@ -5,10 +5,8 @@ libkomacro_la_SOURCES = \
     variable.cpp \
     metaparameter.cpp \
     metamethod.cpp \
-    metaproxy.cpp \
     metaobject.cpp \
     action.cpp \
-    function.cpp \
     macroitem.cpp \
     macro.cpp \
     context.cpp \
