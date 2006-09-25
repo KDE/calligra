@@ -24,9 +24,9 @@
 #include <qlayout.h>
 
 #include <ktabwidget.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kiconloader.h>
-#include <kdialogbase.h>
+#include <kpagedialog.h>
 #include <kpushbutton.h>
 #include <kguiitem.h>
 
