@@ -72,10 +72,14 @@ class MyKDGanttView : public KDGanttView {
 public:
     MyKDGanttView(QWidget *parent, const char *name)
     : KDGanttView(parent, name) {
+        setAllConnectorsEnabled(false);
+        setConnectorEnabled(KDGanttViewItem::TaskLinkStart, true);
+        setConnectorEnabled(KDGanttViewItem::TaskLinkEnd, true);
+        setAutoScrollEnabled(true);
     }
-    virtual QSize sizeHint() const {
+/*    virtual QSize sizeHint() const {
         return minimumSizeHint(); //HACK: koshell splitter minimumSize problem
-    }
+    }*/
 };
 
 GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
@@ -116,10 +120,10 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     m_gantt->setShowHeaderPopupMenu();
     m_taskView = new TaskAppointmentsView(this);
     // hide TaskAppointmentsView
-    Q3ValueList<int> list = sizes();
+/*    Q3ValueList<int> list = sizes();
     list[0] += list[1];
     list[1] = 0;
-    setSizes(list);
+    setSizes(list);*/
     m_taskView->hide();
 
     setReadWriteMode(readWrite);
@@ -147,10 +151,20 @@ void GanttView::setZoom(double zoom)
   m_taskView->zoom( zoom );
 }
 
+void GanttView::show()
+{
+    m_gantt->show();
+}
+
 void GanttView::clear()
 {
     m_gantt->clear();
     m_taskView->clear();
+}
+
+void GanttView::setShowTaskLinks(bool on) { 
+    m_showTaskLinks = on;
+    m_gantt->setShowTaskLinks(on);
 }
 
 void GanttView::draw(Project &project)
@@ -566,10 +580,6 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         }
     }
     item->setText(text);
-#ifdef __GNUC__
-#warning what happened to KDGanttViewItem::setProgress and setFloatStart/EndTime?
-#endif
-#if 0
     if (m_showProgress) {
         item->setProgress(task->progress().percentFinished);
     } else {
@@ -586,7 +596,6 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         item->setFloatStartTime(QDateTime());
         item->setFloatEndTime(QDateTime());
     }
-#endif
     QString w = i18n("Name: %1", task->name());
     if (!task->notScheduled()) {
         w += "\n"; w += i18n("Start: %1", locale->formatDateTime(task->startTime()));
@@ -675,10 +684,6 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
     } else {
         item->setText(QString());
     }
-#ifdef __GNUC__
-#warning what happened to KDGanttViewItem::setFloatStart/EndTime?
-#endif
-#if 0
     if (m_showPositiveFloat) {
         DateTime t = task->startTime() + task->positiveFloat();
         //kDebug()<<k_funcinfo<<task->name()<<" float: "<<t.toString()<<endl;
@@ -691,7 +696,6 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
         item->setFloatStartTime(QDateTime());
         item->setFloatEndTime(QDateTime());
     }
-#endif
     //TODO: Show progress
 
     QString w = i18n("Name: %1", task->name());
@@ -1115,39 +1119,49 @@ bool GanttView::exportGantt(QIODevice* device) {
     return m_gantt->saveProject(device);
 }
 
-void GanttView::slotLinkItems(KDGanttViewItem* from, KDGanttViewItem* to, int linkType) {
-    //kDebug()<<k_funcinfo<<(from?from->listViewText():"null")<<" to "<<(to?to->listViewText():"null")<<" linkType="<<linkType<<endl;
+void GanttView::slotCreateTaskLink(KDGanttViewItem* from, KDGanttViewItem::Connector fc, KDGanttViewItem* to, KDGanttViewItem::Connector tc) {
+    kDebug()<<k_funcinfo<<(from?from->listViewText():"null")<<" fc="<<fc<<" to "<<(to?to->listViewText():"null")<<" tc="<<tc<<endl;
     Node *par = getNode(from);
     Node *child = getNode(to);
     if (!par || !child || !(par->legalToLink(child))) {
         KMessageBox::sorry(this, i18n("Cannot link these nodes"));
         return;
     }
+    int rt = linkTypeToRelation(fc, tc);
+    if (rt == Relation::None) 
+    {
+        KMessageBox::sorry(this, i18n("Cannot link these nodes"));
+        return;
+    }
     Relation *rel = child->findRelation(par);
     if (rel)
-        emit modifyRelation(rel, linkTypeToRelation(linkType));
+        emit modifyRelation(rel, rt);
     else
-        emit addRelation(par, child, linkTypeToRelation(linkType));
+        emit addRelation(par, child, rt);
 
     return;
 }
 
-int GanttView::linkTypeToRelation(int linkType) {
-    switch (linkType) {
-        case KDGanttViewTaskLink::FinishStart:
-            return Relation::FinishStart;
-            break;
-        case KDGanttViewTaskLink::StartStart:
+int GanttView::linkTypeToRelation(KDGanttViewItem::Connector fc, KDGanttViewItem::Connector tc) {
+    if (fc == KDGanttViewItem::TaskLinkStart) {
+// TODO: support StartFinish
+//        if (tc == KDGanttViewItem::TaskLinkStart) {
             return Relation::StartStart;
-            break;
-        case KDGanttViewTaskLink::FinishFinish:
+//        }
+//
+//        if (tc == KDGanttViewItem::TaskLinkEnd) {
+//            return Relation::StartFinish;
+//        }
+
+    } else if (fc == KDGanttViewItem::TaskLinkEnd) {
+        if (tc == KDGanttViewItem::TaskLinkStart) {
+            return Relation::FinishStart;
+        }
+        if (tc == KDGanttViewItem::TaskLinkEnd) {
             return Relation::FinishFinish;
-            break;
-        case KDGanttViewTaskLink::StartFinish:
-        default:
-            return -1;
-            break;
+        }
     }
+    return Relation::None;
 }
 
 void GanttView::slotModifyLink(KDGanttViewTaskLink* link) {
@@ -1223,7 +1237,7 @@ void GanttView::getContextClosedNodes(Context::Ganttview &context, KDGanttViewIt
 
 void GanttView::setReadWriteMode(bool on) {
     m_readWrite = on;
-    disconnect(m_gantt, SIGNAL(linkItems(KDGanttViewItem*, KDGanttViewItem*, int)), this, SLOT(slotLinkItems(KDGanttViewItem*, KDGanttViewItem*, int)));
+    disconnect(m_gantt, SIGNAL(gvCreateTaskLink(KDGanttViewItem*, KDGanttViewItem::Connector, KDGanttViewItem*, KDGanttViewItem::Connector)), this, SLOT(slotCreateTaskLink(KDGanttViewItem*, KDGanttViewItem::Connector, KDGanttViewItem*, KDGanttViewItem::Connector)));
     disconnect(m_gantt, SIGNAL(taskLinkDoubleClicked(KDGanttViewTaskLink*)), this, SLOT(slotModifyLink(KDGanttViewTaskLink*)));
 #ifdef __GNUC__
 #warning setLinkItemsEnabled missing
@@ -1233,7 +1247,7 @@ void GanttView::setReadWriteMode(bool on) {
 #endif
 
     if (on) {
-        connect(m_gantt, SIGNAL(linkItems(KDGanttViewItem*, KDGanttViewItem*, int)), SLOT(slotLinkItems(KDGanttViewItem*, KDGanttViewItem*, int)));
+        connect(m_gantt, SIGNAL(gvCreateTaskLink(KDGanttViewItem*, KDGanttViewItem::Connector, KDGanttViewItem*, KDGanttViewItem::Connector)), this, SLOT(slotCreateTaskLink(KDGanttViewItem*, KDGanttViewItem::Connector, KDGanttViewItem*, KDGanttViewItem::Connector)));
 
         connect(m_gantt, SIGNAL(taskLinkDoubleClicked(KDGanttViewTaskLink*)), SLOT(slotModifyLink(KDGanttViewTaskLink*)));
     }

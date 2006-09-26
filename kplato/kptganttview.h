@@ -23,6 +23,8 @@
 
 #include "kptcontext.h"
 
+#include <KDGanttViewItem.h>
+
 #include <qsplitter.h>
 #include <qcursor.h>
 //Added by qt3to4:
@@ -38,7 +40,6 @@ class QSpinBox;
 class KDGanttViewSummaryItem;
 class KDGanttViewTaskItem;
 class KDGanttViewEventItem;
-class KDGanttViewItem;
 class KDGanttViewTaskLink;
 
 class KPrinter;
@@ -65,7 +66,7 @@ class GanttView : public QSplitter
     //~GanttView();
 
     void setZoom(double zoom);
-
+    void show();
     void draw(Project &project);
     void drawChanges(Project &project);
     
@@ -119,7 +120,7 @@ public slots:
     void setShowPessimistic(bool on) { m_showPessimistic = on; }
     void setShowResources(bool on) { m_showResources = on; }
     void setShowTaskName(bool on) { m_showTaskName = on; }
-    void setShowTaskLinks(bool on) { m_showTaskLinks = on; }
+    void setShowTaskLinks(bool on);
     void setShowProgress(bool on) { m_showProgress = on; }
     void setShowPositiveFloat(bool on) { m_showPositiveFloat = on; }
     void setShowCriticalTasks(bool on) { m_showCriticalTasks = on; }
@@ -132,14 +133,14 @@ private slots:
     void slotItemDoubleClicked(Q3ListViewItem*);
     void slotItemRenamed(KDGanttViewItem*, int, const QString&);
     
-    void slotLinkItems(KDGanttViewItem* from, KDGanttViewItem* to, int linkType);
+    void slotCreateTaskLink(KDGanttViewItem* from, KDGanttViewItem::Connector fc, KDGanttViewItem* to, KDGanttViewItem::Connector tc);
     
     void slotGvItemClicked(KDGanttViewItem*);
     
     void slotModifyLink(KDGanttViewTaskLink* link);
 
 protected:
-    int linkTypeToRelation(int linkType);
+    int linkTypeToRelation(KDGanttViewItem::Connector fc, KDGanttViewItem::Connector tc);
     void setRenameEnabled(Q3ListViewItem *item, bool on);
 private:
     KDGanttViewItem *findItem(Node *node);
