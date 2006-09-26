@@ -51,7 +51,7 @@ public:
 
     int minHeight();
     QRect bottomMiddleResizableRect();
-    void arrange( int base, bool destructive = TRUE );
+    void arrange( int base, bool destructive = true );
     virtual void updateGeomProps();
 
     Q3CanvasItemList items;

@@ -92,7 +92,7 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & /*doc*/ )
         else
         {
             ok = false;
-            KMessageBox::sorry( 0, i18n( "The zero sized data file %1 can't be rendered" , m_file ) );
+            KMessageBox::sorry( 0, i18n( "The zero sized data file %1 cannot be rendered" , m_file ) );
         }
 
     }
@@ -211,7 +211,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
             else
             {
                 f.close();
-                KMessageBox::sorry( 0, i18n( "Couldn't read the beginning of the template file: %1" , localtpl ) );
+                KMessageBox::sorry( 0, i18n( "Could not read the beginning of the template file: %1" , localtpl ) );
             }
 
         }

@@ -128,7 +128,7 @@ private:
 
 signals:  // Signals
     /** Emitted when user clicks on the canvas, so a button
-    or a menu item assosiated with the selected item should
+    or a menu item associated with the selected item should
     be unchecked. */
     void selectedActionProcessed();
     void selectedEditActionProcessed();

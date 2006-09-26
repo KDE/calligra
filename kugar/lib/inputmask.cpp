@@ -89,19 +89,19 @@ void InputMask::parseInputMask( const QString &maskFields )
     MaskInputData::Casemode m = MaskInputData::NoCaseMode;
     c = 0;
     bool s;
-    bool escape = FALSE;
+    bool escape = false;
     int index = 0;
     for ( i = 0; i < m_mask.length(); i++ )
     {
         c = m_mask.at( i );
         if ( escape )
         {
-            s = TRUE;
+            s = true;
             m_maskData[ index ].maskChar = c;
             m_maskData[ index ].separator = s;
             m_maskData[ index ].caseMode = m;
             index++;
-            escape = FALSE;
+            escape = false;
         }
 		else if( c == '<' )
 		{
@@ -118,11 +118,11 @@ void InputMask::parseInputMask( const QString &maskFields )
         else if ( c != '{' && c != '}' && c != '[' && c != ']' )
         {
 			if( c == 'A' || c == 'a' || c == 'N' || c =='n' || c == 'X' || c == 'x' || c == '9' || c == '0' || c =='D' || c == 'd' || c == '#')
-					s = FALSE;
+					s = false;
 			else if( c == '\\' )
-					escape = TRUE;
+					escape = true;
 			else
-					s = TRUE;
+					s = true;
             if ( !escape )
             {
                 m_maskData[ index ].maskChar = c;
@@ -139,59 +139,59 @@ bool InputMask::isValidInput( QChar key, QChar mask ) const
     if( mask ==  'A')
 	{
         if ( key.isLetter() && key != m_blank )
-            return TRUE;
+            return true;
 	}
 	else if(mask ==  'a')
 	{
         if ( key.isLetter() || key == m_blank )
-            return TRUE;
+            return true;
 	}
 	else if( mask == 'N')
 	{
         if ( key.isLetterOrNumber() && key != m_blank )
-            return TRUE;
+            return true;
 	}
 	else if( mask == 'n')
 	{
         if ( key.isLetterOrNumber() || key == m_blank )
-            return TRUE;
+            return true;
 	}
 	else if(mask == 'X')
 	{
         if ( key.isPrint() && key != m_blank )
-            return TRUE;
+            return true;
 	}
 	else if(mask == 'x')
 	{
         if ( key.isPrint() || key == m_blank )
-            return TRUE;
+            return true;
 	}
 	else if(mask ==  '9')
 	{
         if ( key.isNumber() && key != m_blank )
-            return TRUE;
+            return true;
 	}
 	else if(mask == '0')
 	{
         if ( key.isNumber() || key == m_blank )
-            return TRUE;
+            return true;
 	}
 	else if(mask == 'D')
 	{
         if ( key.isNumber() && key.digitValue() > 0 && key != m_blank )
-            return TRUE;
+            return true;
 	}
 	else if(mask ==  'd')
 	{			
         if ( ( key.isNumber() && key.digitValue() > 0 ) || key == m_blank )
-            return TRUE;
+            return true;
 	}
 	else if(mask ==  '#')
 	{
         if ( key.isNumber() || key == '+' || key == '-' || key == m_blank )
-            return TRUE;
+            return true;
 	}
-    return FALSE;
+    return false;
 }
 
 QString InputMask::maskString( uint pos, const QString &str, bool clear ) const
@@ -236,7 +236,7 @@ QString InputMask::maskString( uint pos, const QString &str, bool clear ) const
                 else
                 {
                     // search for separator first
-                    int n = findInMask( i, TRUE, TRUE, str[ ( int ) strIndex ] );
+                    int n = findInMask( i, true, true, str[ ( int ) strIndex ] );
                     if ( n != -1 )
                     {
                         if ( str.length() != 1 || i == 0 || ( i > 0 && ( !m_maskData[ i - 1 ].separator || m_maskData[ i - 1 ].maskChar != str[ ( int ) strIndex ] ) ) )
@@ -248,7 +248,7 @@ QString InputMask::maskString( uint pos, const QString &str, bool clear ) const
                     else
                     {
                         // search for valid m_blank if not
-                        n = findInMask( i, TRUE, FALSE, str[ ( int ) strIndex ] );
+                        n = findInMask( i, true, false, str[ ( int ) strIndex ] );
                         if ( n != -1 )
                         {
                             s += fill.mid( i, n - i );

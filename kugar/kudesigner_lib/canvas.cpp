@@ -189,7 +189,7 @@ bool Canvas::loadXML( const QDomNode &report )
                 setReportFooterAttributes( &child );
         }
     }
-    templ->arrangeSections( FALSE );
+    templ->arrangeSections( false );
     Q3CanvasItemList l = allItems();
     for ( Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it )
     {

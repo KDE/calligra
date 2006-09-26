@@ -36,7 +36,7 @@ public:
 private:
     void parseInputMask( const QString &maskFields );
     bool isValidInput( QChar key, QChar mask ) const;
-    QString maskString( uint pos, const QString &str, bool clear = FALSE ) const;
+    QString maskString( uint pos, const QString &str, bool clear = false ) const;
     QString clearString( uint pos, uint len ) const;
     QString stripString( const QString &str ) const;
     int findInMask( int pos, bool forward, bool findSeparator, QChar searchChar = QChar() ) const;

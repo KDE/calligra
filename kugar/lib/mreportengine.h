@@ -200,11 +200,11 @@ private:
       */
     void copy( const MReportEngine* mReportEngine );
 
-    /** Finds the detail header object, which is apropriate for the given level */
+    /** Finds the detail header object, which is appropriate for the given level */
     MReportSection *findDetailHeader( int level );
-    /** Finds the detail object, which is apropriate for the given level */
+    /** Finds the detail object, which is appropriate for the given level */
     MReportDetail *findDetail( int level );
-    /** Finds the detail footer object, which is apropriate for the given level */
+    /** Finds the detail footer object, which is appropriate for the given level */
     MReportSection *findDetailFooter( int level );
 };
 

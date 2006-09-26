@@ -98,7 +98,7 @@ void KudesignerDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
 
     // Need to draw only the document rectangle described in the parameter rect.
 
-    canvas() ->drawArea( rect, &painter, TRUE );
+    canvas() ->drawArea( rect, &painter, true );
 
 }
 
