@@ -318,10 +318,10 @@ void KivioPyStencil::rescaleShapes( PyObject *o )
         PyDict_SetItemString( o, "h", Py_BuildValue( "d", h ) );
     }
 
-    PyObject *childs = PyDict_Values( o );
-    int size = PyList_Size( childs );
+    PyObject *children = PyDict_Values( o );
+    int size = PyList_Size( children );
     for ( int i=0; i<size; i++ )
-        rescaleShapes(PyList_GetItem(childs,i) );
+        rescaleShapes(PyList_GetItem(children,i) );
 
   } else
   if ( PyList_Check(o) ) {

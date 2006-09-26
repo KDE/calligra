@@ -65,8 +65,8 @@ namespace Kivio {
       /** Move point with index @param index.
        *
        * @param index Which point to move.
-       * @param xOffset How far to move the point horizontaly.
-       * @param yOffset How far to move the point verticaly.
+       * @param xOffset How far to move the point horizontally.
+       * @param yOffset How far to move the point vertically.
        */
       void movePoint(unsigned int index, double xOffset, double yOffset);
       

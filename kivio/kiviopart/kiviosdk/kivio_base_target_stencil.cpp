@@ -422,7 +422,7 @@ KivioConnectorTarget *KivioBaseTargetStencil::connectToTarget( KivioConnectorPoi
 }
 
 // we probably don't need targetID in the function since it's stored in p... but I don't remember so
-// i'm leaving it here for now.
+// I am leaving it here for now.
 KivioConnectorTarget *KivioBaseTargetStencil::connectToTarget( KivioConnectorPoint *p, int /*targetID*/ )
 {
     int id = p->targetId();

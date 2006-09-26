@@ -60,7 +60,7 @@ static struct KivioShapeTypeInfo shapeInfo[] = {
  *
  * Down the road, this will be phased out because of the KivioTextStyle
  * class.  But it's here for now to keep backwards compatibility with
- * beta 2 -- even though noone should be using it for anything important!!!
+ * beta 2 -- even though no one should be using it for anything important!!!
  ****************/
 KivioTextShapeData::KivioTextShapeData()
 {
@@ -230,7 +230,7 @@ void KivioShapeData::copyInto( KivioShapeData *pTarget ) const
         }
         else
         {
-	   kWarning(43000) << "KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist." << endl;
+	   kWarning(43000) << "KivioShapeData::copyInto() - Shape is of type text-box, but our text data doesn't exist." << endl;
             pTarget->m_pTextData->setText("");
             pTarget->m_pTextData->setIsHtml(false);
             pTarget->m_pTextData->setHTextAlign(Qt::AlignHCenter);
