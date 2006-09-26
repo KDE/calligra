@@ -826,6 +826,7 @@ private:
      */
     bool m_autoPresStop;
     bool m_screenSaverWasEnabled;
+    bool m_dpmsWasEnabled;
 
     // right button popup menus
     QPopupMenu *rb_lbegin, *rb_lend;

@@ -201,6 +201,53 @@ static const char * const pagedown_xpm[] = {
     "##############"
 };
 
+#ifdef HAVE_DPMS
+#include <X11/Xutil.h>
+#include <X11/extensions/dpms.h>
+#include <fixx11h.h>
+#endif
+
+static void enableDPMS(bool enable)
+{
+#ifdef HAVE_DPMS
+    Display *display = qt_xdisplay();
+
+    int dummy;
+    bool hasDPMS = DPMSQueryExtension(display, &dummy, &dummy);
+    if (hasDPMS && DPMSCapable(display)) {
+        if (enable) {
+            kdDebug() << "Enabling DPMS" << endl;
+            DPMSEnable(display);
+        } else {
+            kdDebug() << "Disabling DPMS" << endl;
+            DPMSDisable(display);
+        }
+    } else
+        qWarning("Server has no DPMS extension");
+
+    XFlush(display);
+#else
+    Q_UNUSED(enable); /* keep gcc silent */
+#endif
+}
+
+static bool isDPMSEnabled()
+{
+    bool result = false;
+#ifdef HAVE_DPMS
+    int event_base;
+    int error_base;
+    CARD16 x_standby;
+    CARD16 x_suspend;
+    CARD16 x_off;
+    Display *display = qt_xdisplay();
+    if (DPMSQueryExtension(display, &event_base, &error_base))
+        if (DPMSCapable(display))
+            result = (DPMSGetTimeouts(display, &x_standby, &x_suspend, &x_off));
+#endif
+    return result;
+}
+
 KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     : KoView( _doc, _parent, _name )
 {
@@ -1446,6 +1493,7 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
         {
             QDataStream replyArg(replyData, IO_ReadOnly);
             replyArg >> m_screenSaverWasEnabled;
+            kdDebug() << "Screensaver was enabled:" << m_screenSaverWasEnabled << endl;
             if ( m_screenSaverWasEnabled )
             {
                 // disable screensaver
@@ -1456,6 +1504,14 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
                 else
                     kdDebug(33001) << "Screensaver successfully disabled" << endl;
             }
+        } else {
+            kdWarning(33001) << "Couldn't check screensaver (using dcop to kdesktop)!" << endl;
+        }
+        // is DPMS enabled?
+        m_dpmsWasEnabled = isDPMSEnabled();
+        kdDebug() << "DPMS was enabled:" << m_dpmsWasEnabled << endl;
+        if ( m_dpmsWasEnabled ) {
+            enableDPMS( false );
         }
 
         deSelectAllObjects();
@@ -1549,6 +1605,12 @@ void KPrView::screenStop()
             arg << true;
             if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
                 kdWarning(33001) << "Couldn't re-enabled screensaver (using dcop to kdesktop)" << endl;
+        }
+        if ( m_dpmsWasEnabled )
+        {
+            // re-enable DPMS
+            kdDebug(33001) << "Re-enabling DPMS" << endl;
+            enableDPMS( true );
         }
 
         actionScreenStart->setEnabled( true );
@@ -2533,7 +2595,7 @@ void KPrView::setupActions()
 
     actionExtraArrangePopup = new KActionMenu( i18n( "Arra&nge Objects" ), "arrange",
                                                actionCollection(), "extra_arrangepopup" );
-    actionExtraArrangePopup->setDelayed( false ); 
+    actionExtraArrangePopup->setDelayed( false );
 
     actionExtraRaise = new KAction( i18n( "Ra&ise Objects" ), "raise",
                                     CTRL+Qt::SHIFT+Qt::Key_R, this, SLOT( extraRaise() ),
@@ -2630,7 +2692,7 @@ void KPrView::setupActions()
                                               this, SLOT( extraDefaultTemplate() ),
                                               actionCollection(), "extra_defaulttemplate" );
 
-    actionExtraAlignObjsPopup = new KActionMenu( i18n("Align O&bjects"), "alignobjs", 
+    actionExtraAlignObjsPopup = new KActionMenu( i18n("Align O&bjects"), "alignobjs",
                                             actionCollection(), "extra_alignobjs" );
     actionExtraAlignObjsPopup->setDelayed( false );
 
@@ -2655,12 +2717,12 @@ void KPrView::setupActions()
     connect( kPresenterDoc(), SIGNAL( unitChanged( KoUnit::Unit ) ),
              actionExtraPenWidth, SLOT( setUnit( KoUnit::Unit ) ) );
 
-    actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group", 
+    actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group",
                                     QKeySequence( "Ctrl+G" ),
                                     this, SLOT( extraGroup() ),
                                     actionCollection(), "extra_group" );
 
-    actionExtraUnGroup = new KAction( i18n( "&Ungroup Objects" ), "ungroup", 
+    actionExtraUnGroup = new KAction( i18n( "&Ungroup Objects" ), "ungroup",
                                       QKeySequence( "Ctrl+Shift+G" ),
                                       this, SLOT( extraUnGroup() ),
                                       actionCollection(), "extra_ungroup" );
@@ -3104,7 +3166,7 @@ void KPrView::increaseFontSize()
 
 void KPrView::objectSelectedChanged()
 {
-    
+
     bool state=m_canvas->isOneObjectSelected();
     bool headerfooterselected=false;
 
@@ -3124,9 +3186,9 @@ void KPrView::objectSelectedChanged()
     KPrObjectProperties objectProperties( m_canvas->activePage()->getSelectedObjects() );
     int flags = objectProperties.getPropertyFlags();
     // only button when object support them or none object is selected
-    actionBrushColor->setEnabled( !state || ( flags & KPrObjectProperties::PtBrush ) ); 
-    actionExtraLineBegin->setEnabled( !state || ( flags & KPrObjectProperties::PtLineEnds ) ); 
-    actionExtraLineEnd->setEnabled( !state || ( flags & KPrObjectProperties::PtLineEnds ) ); 
+    actionBrushColor->setEnabled( !state || ( flags & KPrObjectProperties::PtBrush ) );
+    actionExtraLineBegin->setEnabled( !state || ( flags & KPrObjectProperties::PtLineEnds ) );
+    actionExtraLineEnd->setEnabled( !state || ( flags & KPrObjectProperties::PtLineEnds ) );
     actionExtraPenWidth->setEnabled( !state || ( flags & KPrObjectProperties::PtPenWidth ) );
 
     actionExtraProperties->setEnabled(state && !headerfooterselected);
