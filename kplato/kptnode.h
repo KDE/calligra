@@ -471,7 +471,7 @@ public:
     Schedule *findSchedule(long id) const { return m_schedules[id]; }
     /// Take, don't delete (as in destruct).
     void takeSchedule(const Schedule *schedule);
-    /// Add schedule to list, replace if schedule with same id allready exists.
+    /// Add schedule to list, replace if schedule with same id already exists.
     void addSchedule(Schedule *schedule);
     /// Create a new schedule.
     Schedule *createSchedule(QString name, Schedule::Type type, long id);
@@ -592,12 +592,12 @@ public:
 
     /**
      * Set the optimistic duration
-     * @param percent should be a negativ value.
+     * @param percent should be a negative value.
      */
     void setOptimisticRatio(int percent);
     /**
      * Return the "optimistic" duration as deviation from "expected" in percent.
-     * This should be a negativ value.
+     * This should be a negative value.
      */
     int optimisticRatio() const;
     /**

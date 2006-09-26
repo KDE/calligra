@@ -177,7 +177,7 @@ void Schedule::saveAppointments(QDomElement &element) const {
 
 bool Schedule::add(Appointment *appointment) {
     if (m_appointments.findRef(appointment) != -1) {
-        kError()<<k_funcinfo<<"Appointment allready exists"<<endl;
+        kError()<<k_funcinfo<<"Appointment already exists"<<endl;
         return false;
     }
     m_appointments.append(appointment);
@@ -588,7 +588,7 @@ bool MainSchedule::loadXML(const QDomElement &sch, Project &project) {
             QDomElement app = al.item(i).toElement();
             if (app.tagName() == "appointment") {
                 // Load the appointments.
-                // Resources and tasks must allready loaded
+                // Resources and tasks must already be loaded
                 Appointment *child = new Appointment();
                 if (!child->loadXML(app, project, *this)) {
                     // TODO: Complain about this

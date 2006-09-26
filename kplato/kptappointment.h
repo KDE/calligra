@@ -116,7 +116,7 @@ typedef Q3PtrListIterator<AppointmentInterval> AppointmentIntervalListIterator;
  * A resource (@ref Resource) can be scheduled to be used at any time, 
  * this is represented internally with Appointments
  * There is one Appointment per resource-task pair.
- * An appointment can be devided into several intervals, represented with
+ * An appointment can be divided into several intervals, represented with
  * a list of AppointmentInterval.
  * This list is sorted after 1) startdatetime, 2) enddatetime.
  * The intervals do not overlap, an interval does not start before the

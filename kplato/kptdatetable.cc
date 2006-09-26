@@ -785,7 +785,7 @@ DateInternalMonthPicker::DateInternalMonthPicker
   // setTableFlags(Tbl_clipCellPainting);
   viewport()->setEraseColor(KGlobalSettings::baseColor()); // for consistency with the datepicker
   // ----- find the preferred size
-  //       (this is slow, possibly, but unfortunatly it is needed here):
+  //       (this is slow, possibly, but unfortunately it is needed here):
   QFontMetrics metrics(font);
   for(int i=1; i <= 12; ++i)
     {

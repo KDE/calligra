@@ -807,7 +807,7 @@ bool Project::registerNodeId(Node *node) {
        return true;
     }
     if (rn != node) {
-       kdError()<<k_funcinfo<<"Id allready exists for different task: "<<node->id()<<endl;
+       kdError()<<k_funcinfo<<"Id already exists for different task: "<<node->id()<<endl;
        return false;
     }
     return true;

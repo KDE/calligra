@@ -92,14 +92,14 @@ public:
         m_days.insert(date, EffortCost(effort, cost));
     }
     /** 
-     * If data for this date allready exists add the new values to the old,
+     * If data for this date already exists add the new values to the old,
      * else the new values are inserted.
      */
     EffortCost &add(const QDate &date, const Duration &effort, const double cost) {
         return add(date, EffortCost(effort, cost));
     }
     /** 
-     * If data for this date allready exists add the new values to the old,
+     * If data for this date already exists add the new values to the old,
      * else the new value is inserted.
      */
     EffortCost &add(const QDate &date, const EffortCost &ec) {

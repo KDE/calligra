@@ -489,7 +489,7 @@ bool Accounts::insertId(const Account *account) {
         return true;
     }
     if (a == account) {
-        kDebug()<<k_funcinfo<<"'"<<a->name()<<"' allready exists"<<endl;
+        kDebug()<<k_funcinfo<<"'"<<a->name()<<"' already exists"<<endl;
         return true;
     }
     //TODO: Create unique id?

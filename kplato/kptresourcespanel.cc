@@ -70,7 +70,7 @@ public:
     }
     void setState(State s) {
         if (m_state == New)
-            return; // A new is allways new
+            return; // A new is always new
         m_state = s;
     }
     QString name() { return m_resource->name(); }

@@ -172,7 +172,7 @@ const Node* Node::getChildNode(int number) const {
 
 Duration *Node::getDelay() {
     /* TODO
-       Calculate the delay of this node. Use the calculated startTime and the setted startTime.
+       Calculate the delay of this node. Use the calculated startTime and the set startTime.
     */
     return 0L;
 }
@@ -961,7 +961,7 @@ void Node::printDebug(bool children, QByteArray indent) {
     kDebug()<<indent<<"  Level: "<<level()<<endl;
     kDebug()<<indent<<"  No of predecessors: "<<m_dependParentNodes.count()<<endl;
     Q3PtrListIterator<Relation> pit(m_dependParentNodes);
-    //kDebug()<<indent<<"  Dependant parents="<<pit.count()<<endl;
+    //kDebug()<<indent<<"  Dependent parents="<<pit.count()<<endl;
     if (pit.count() > 0) {
         for ( ; pit.current(); ++pit ) {
             pit.current()->printDebug(indent);
@@ -969,7 +969,7 @@ void Node::printDebug(bool children, QByteArray indent) {
     }
     kDebug()<<indent<<"  No of successors: "<<m_dependChildNodes.count()<<endl;
     Q3PtrListIterator<Relation> cit(m_dependChildNodes);
-    //kDebug()<<indent<<"  Dependant children="<<cit.count()<<endl;
+    //kDebug()<<indent<<"  Dependent children="<<cit.count()<<endl;
     if (cit.count() > 0) {
         for ( ; cit.current(); ++cit ) {
             cit.current()->printDebug(indent);

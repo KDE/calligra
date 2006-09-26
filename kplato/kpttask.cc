@@ -1467,7 +1467,7 @@ bool Task::calcCriticalPath(bool fromEnd) {
         return false;
     //kDebug()<<k_funcinfo<<m_name<<" fromEnd="<<fromEnd<<" cp="<<m_currentSchedule->inCriticalPath<<endl;
     if (m_currentSchedule->inCriticalPath) {
-        return true; // path allready calculated
+        return true; // path already calculated
     }
     if (!isCritical()) {
         return false;

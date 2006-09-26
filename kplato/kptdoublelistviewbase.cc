@@ -213,7 +213,7 @@ DoubleListViewBase::MasterListItem::~MasterListItem() {
 void DoubleListViewBase::MasterListItem::createSlaveItems(Q3ListView *lv, Q3ListViewItem *after) {
     //kDebug()<<k_funcinfo<<text(0)<<endl;
     if (m_slaveItem) {
-        kError()<<k_funcinfo<<"Slave item allready exists"<<endl;
+        kError()<<k_funcinfo<<"Slave item already exists"<<endl;
     } else {
         if (parent() == 0) {
             m_slaveItem = new DoubleListViewBase::SlaveListItem(this, lv, after);

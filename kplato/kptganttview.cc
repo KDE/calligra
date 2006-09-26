@@ -227,7 +227,7 @@ void GanttView::drawChanges(Project &project)
 
 void GanttView::drawOnPainter(QPainter* painter, const QRect rect)
 {
-    // Assume clipping is allready set
+    // Assume clipping is already set
 
     // Fill out the rect by adding ticks to right side of the timeline
     QSize s = m_gantt->drawContents(0, false, true);
