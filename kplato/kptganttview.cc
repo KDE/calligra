@@ -1233,12 +1233,6 @@ void GanttView::setReadWriteMode(bool on) {
     m_readWrite = on;
     disconnect(m_gantt, SIGNAL(gvCreateTaskLink(KDGanttViewItem*, KDGanttViewItem::Connector, KDGanttViewItem*, KDGanttViewItem::Connector)), this, SLOT(slotCreateTaskLink(KDGanttViewItem*, KDGanttViewItem::Connector, KDGanttViewItem*, KDGanttViewItem::Connector)));
     disconnect(m_gantt, SIGNAL(taskLinkDoubleClicked(KDGanttViewTaskLink*)), this, SLOT(slotModifyLink(KDGanttViewTaskLink*)));
-#ifdef __GNUC__
-#warning setLinkItemsEnabled missing
-#endif
-#if 0
-    m_gantt->setLinkItemsEnabled(on);
-#endif
 
     if (on) {
         connect(m_gantt, SIGNAL(gvCreateTaskLink(KDGanttViewItem*, KDGanttViewItem::Connector, KDGanttViewItem*, KDGanttViewItem::Connector)), this, SLOT(slotCreateTaskLink(KDGanttViewItem*, KDGanttViewItem::Connector, KDGanttViewItem*, KDGanttViewItem::Connector)));
