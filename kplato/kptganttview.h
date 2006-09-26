@@ -130,7 +130,7 @@ public slots:
     
 private slots:
     void currentItemChanged(KDGanttViewItem *);
-    void slotItemDoubleClicked(Q3ListViewItem*);
+    void slotItemDoubleClicked( KDGanttViewItem* );
     void slotItemRenamed(KDGanttViewItem*, int, const QString&);
     
     void slotCreateTaskLink(KDGanttViewItem* from, KDGanttViewItem::Connector fc, KDGanttViewItem* to, KDGanttViewItem::Connector tc);

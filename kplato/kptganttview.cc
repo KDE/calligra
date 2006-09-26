@@ -128,13 +128,11 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
 
     setReadWriteMode(readWrite);
 
-	connect(m_gantt, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
-	             this, SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
+	connect(m_gantt, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )), SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
 
-	connect(m_gantt, SIGNAL(lvCurrentChanged(KDGanttViewItem*)), this, SLOT (currentItemChanged(KDGanttViewItem*)));
+	connect(m_gantt, SIGNAL(lvCurrentChanged(KDGanttViewItem*)), SLOT (currentItemChanged(KDGanttViewItem*)));
 
-    // HACK: kdgantt emits 2 signals for each *double* click, so we go direct to listview
-	connect(lv, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)), this, SLOT (slotItemDoubleClicked(Q3ListViewItem*)));
+        connect(m_gantt, SIGNAL(lvItemDoubleClicked( KDGanttViewItem* )), SLOT (slotItemDoubleClicked( KDGanttViewItem* )));
 
     m_taskLinks.setAutoDelete(true);
 
@@ -1020,12 +1018,8 @@ void GanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, i
     //TODO: Other nodetypes
 }
 
-void GanttView::slotItemDoubleClicked(Q3ListViewItem* item) {
+void GanttView::slotItemDoubleClicked( KDGanttViewItem*  item) {
     //kDebug()<<k_funcinfo<<endl;
-    if (item == 0 || item->childCount() > 0) {
-        // FIXME: How else to avoid interference wirh expanding/collapsing summary items?
-        return;
-    }
     emit itemDoubleClicked();
 }
 
