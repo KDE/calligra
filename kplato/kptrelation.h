@@ -44,7 +44,7 @@ class PertCanvas;
   */
 class Relation {
 public:
-    enum Type { FinishStart, FinishFinish, StartStart };
+    enum Type { None, FinishStart, FinishFinish, StartStart };
 
     Relation(Node *parent, Node *child, Type type, Duration lag);
     Relation(Node *parent=0, Node *child=0, Type type=FinishStart);
