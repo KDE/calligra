@@ -446,7 +446,7 @@ void KivioView::setupActions()
                                       this, SLOT( textAlignCenter() ),
                                       actionCollection(), "textAlignCenter" );
   m_textAlignCenter->setExclusiveGroup( "align" );
-  m_textAlignCenter->setChecked( TRUE );
+  m_textAlignCenter->setChecked( true );
   m_textAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", CTRL + ALT + Qt::Key_R,
                                       this, SLOT( textAlignRight() ),
                                       actionCollection(), "textAlignRight" );
@@ -837,7 +837,7 @@ int KivioView::canvasYOffset() const
 
 void KivioView::print(KPrinter& ptr)
 {
-  ptr.setFullPage(TRUE);
+  ptr.setFullPage(true);
   m_pDoc->printContent( ptr );
 }
 

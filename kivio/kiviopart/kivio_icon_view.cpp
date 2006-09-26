@@ -160,12 +160,12 @@ QDragObject *KivioIconView::dragObject()
   id.setData( QCString(full.ascii()));
 
   drag->append( id,
-      QRect( item->pixmapRect(FALSE).x() - orig.x(),
-              item->pixmapRect(FALSE).y() - orig.y(),
+      QRect( item->pixmapRect(false).x() - orig.x(),
+              item->pixmapRect(false).y() - orig.y(),
               item->pixmapRect().width(),
               item->pixmapRect().height() ),
-      QRect( item->textRect(FALSE).x() - orig.x(),
-              item->textRect(FALSE).y() - orig.y(),
+      QRect( item->textRect(false).x() - orig.x(),
+              item->textRect(false).y() - orig.y(),
               item->textRect().width(),
               item->textRect().height() ),
       *(item->spawner()) );
