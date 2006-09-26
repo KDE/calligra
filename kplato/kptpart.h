@@ -87,7 +87,7 @@ protected:
 
 protected slots:
     void slotDocumentRestored();
-    void slotCommandExecuted();
+    void slotCommandExecuted(KCommand *);
     void slotCopyContextFromView();
     void slotViewDestroyed();
 

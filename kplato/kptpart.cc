@@ -66,7 +66,7 @@ Part::Part(QWidget *parentWidget,
     delete m_project;
     m_project = new Project(); // after config is loaded
 
-    connect(m_commandHistory, SIGNAL(commandExecuted()), SLOT(slotCommandExecuted()));
+    connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)), SLOT(slotCommandExecuted(KCommand *)));
     connect(m_commandHistory, SIGNAL(documentRestored()), SLOT(slotDocumentRestored()));
 
     //FIXME the following is really dirty, we should make KPlato::Context a real class
@@ -309,7 +309,7 @@ void Part::addCommand(KCommand * cmd, bool execute)
     m_commandHistory->addCommand(cmd, execute);
 }
 
-void Part::slotCommandExecuted() {
+void Part::slotCommandExecuted(KCommand *) {
     //kDebug()<<k_funcinfo<<endl;
     setModified(true);
     kDebug() << "------- KPlato, is embedded: " << isEmbedded() << endl;
