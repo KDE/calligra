@@ -215,6 +215,53 @@ static const char * const pagedown_xpm[] = {
     "##############"
 };
 
+#ifdef HAVE_DPMS
+#include <X11/Xutil.h>
+#include <X11/extensions/dpms.h>
+#include <fixx11h.h>
+#endif
+
+static void enableDPMS(bool enable)
+{
+#ifdef HAVE_DPMS
+    Display *display = qt_xdisplay();
+
+    int dummy;
+    bool hasDPMS = DPMSQueryExtension(display, &dummy, &dummy);
+    if (hasDPMS && DPMSCapable(display)) {
+        if (enable) {
+            kDebug() << "Enabling DPMS" << endl;
+            DPMSEnable(display);
+        } else {
+            kDebug() << "Disabling DPMS" << endl;
+            DPMSDisable(display);
+        }
+    } else
+        qWarning("Server has no DPMS extension");
+
+    XFlush(display);
+#else
+    Q_UNUSED(enable); /* keep gcc silent */
+#endif
+}
+
+static bool isDPMSEnabled()
+{
+    bool result = false;
+#ifdef HAVE_DPMS
+    int event_base;
+    int error_base;
+    CARD16 x_standby;
+    CARD16 x_suspend;
+    CARD16 x_off;
+    Display *display = qt_xdisplay();
+    if (DPMSQueryExtension(display, &event_base, &error_base))
+        if (DPMSCapable(display))
+            result = (DPMSGetTimeouts(display, &x_standby, &x_suspend, &x_off));
+#endif
+    return result;
+}
+
 KPrView::KPrView( KPrDocument* _doc, QWidget *_parent )
     : KoView( _doc, _parent )
 {
@@ -1477,6 +1524,14 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
                 else
                     kDebug(33001) << "Screensaver successfully disabled" << endl;
             }
+        } else {
+            kdWarning(33001) << "Couldn't check screensaver (using dcop to kdesktop)!" << endl;
+        }
+        // is DPMS enabled?
+        m_dpmsWasEnabled = isDPMSEnabled();
+        kDebug() << "DPMS was enabled:" << m_dpmsWasEnabled << endl;
+        if ( m_dpmsWasEnabled ) {
+            enableDPMS( false );
         }
 
         deSelectAllObjects();
@@ -1572,6 +1627,12 @@ void KPrView::screenStop()
             QDBusReply<bool> reply = screensaver.callWithArgumentList(QDBus::Block, "enable", args);
             if (!reply.isValid() || !reply.value())
                 kWarning(33001) << "Couldn't re-enabled screensaver (using dbus to kdesktop)" << endl;
+        }
+        if ( m_dpmsWasEnabled )
+        {
+            // re-enable DPMS
+            kDebug(33001) << "Re-enabling DPMS" << endl;
+            enableDPMS( true );
         }
 
         actionScreenStart->setEnabled( true );

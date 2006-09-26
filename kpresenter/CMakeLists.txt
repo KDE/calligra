@@ -6,6 +6,9 @@ include_directories(
 		${KOFFICEUI_INCLUDES}
 		${KOPAINTER_INCLUDES})
 
+# TODO HAVE_DPMS in a config.h file, see kdebase/workspace/kcontrol/energy/energy.cpp which needs the same
+include_directories( ${X11_dpms_INCLUDE_PATH} )
+
 add_subdirectory( autoforms )
 add_subdirectory( pics )
 add_subdirectory( templates )

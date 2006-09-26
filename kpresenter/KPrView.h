@@ -840,6 +840,7 @@ private:
      */
     bool m_autoPresStop;
     bool m_screenSaverWasEnabled;
+    bool m_dpmsWasEnabled;
 
     // right button popup menus
     Q3PopupMenu *rb_lbegin, *rb_lend;
