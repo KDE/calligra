@@ -15,6 +15,18 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-09-25
+Forms
+- The first widget of a given kind should be named "widget" by default,
+  the second - "widget2" and so on. (thanks to Natalie)
+2.0: ported
+
+2006-09-21
+KexiDB
+- parser: added support for ORDER BY clause
+Query Designer
+- added support for setting order of columns
+
 2006-09-19
 Forms
 - double clicking items of "Available fields" list inserts a new auto field
