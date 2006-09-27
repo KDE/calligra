@@ -44,6 +44,7 @@ public:
 
 private slots:
     void updateShape();
+    void protectSizeChanged(int protectSizeState);
 
 private:
     Ui::KWFrameGeometry widget;

@@ -65,6 +65,13 @@ void KWFrameGeometry::open(KoShape *shape) {
     widget.width->changeValue(mOriginalSize.width());
     widget.height->changeValue(mOriginalSize.height());
 
+    connect(widget.protectSize, SIGNAL(stateChanged(int)),
+            this, SLOT(protectSizeChanged(int)));
+
+    if (shape->isLocked()) {
+        widget.protectSize->setCheckState(Qt::Checked);
+    }
+
     connect(widget.left, SIGNAL(valueChanged(double)), 
             this, SLOT(updateShape()));
     connect(widget.top, SIGNAL(valueChanged(double)), 
@@ -90,7 +97,24 @@ void KWFrameGeometry::updateShape() {
     frame->shape()->repaint();
 }
 
+void KWFrameGeometry::protectSizeChanged(int protectSizeState)
+{
+    KWFrame *frame = m_frame;
+    if(frame == 0) {
+        frame = m_state->frame();
+        m_state->markFrameUsed();
+    }
+    Q_ASSERT(frame);   
+    bool lock = (protectSizeState == Qt::Checked);
+    frame->shape()->setLocked(lock);
+    widget.left->setDisabled(lock);
+    widget.top->setDisabled(lock);
+    widget.width->setDisabled(lock);
+    widget.height->setDisabled(lock);
+}
+
 void KWFrameGeometry::save() {
+    // no-op now
 }
 
 void KWFrameGeometry::cancel() {
