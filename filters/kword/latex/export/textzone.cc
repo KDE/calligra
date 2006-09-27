@@ -87,8 +87,8 @@ bool TextZone::useFormat() const
 /*******************************************/
 /* escapeLatin1                            */
 /*******************************************/
-/* Convert special caracters (unicode) in  */
-/* latex usable caracters.                 */
+/* Convert special characters (unicode) in */
+/* latex usable characters.                */
 /*******************************************/
 QString TextZone::escapeLatin1(QString text)
 {
@@ -259,7 +259,7 @@ QString TextZone::escapeLatin1(QString text)
 /* convert                                 */
 /*******************************************/
 /* Convert all the instance of one         */
-/* character in latex usable caracter.     */
+/* character in latex usable character.    */
 /*******************************************/
 void TextZone::convert(QString& text, int unicode, const char* escape)
 {
@@ -311,7 +311,7 @@ void TextZone::analyse()
 	/* Format the text */
 	setTexte(getTexte().mid(getPos(), getLength()));
 	
-	kDebug(30522) << "String of " << getTexte().length() << " caracters :" << endl;
+	kDebug(30522) << "String of " << getTexte().length() << " characters :" << endl;
 	kDebug(30522) << getTexte().latin1() << endl;
 	kDebug(30522) << "END ZONE" << endl;
 }
@@ -319,7 +319,7 @@ void TextZone::analyse()
 /*******************************************/
 /* generate                                */
 /*******************************************/
-/* Generate the text formated (if needed). */
+/* Generate the text formatted (if needed).*/
 /*******************************************/
 void TextZone::generate(QTextStream &out)
 {
@@ -342,7 +342,7 @@ void TextZone::generate(QTextStream &out)
 /*******************************************/
 /* display                                 */
 /*******************************************/
-/* Trunc the text in about 80 caracters of */
+/* Trunc the text in about 80 characters of*/
 /* width except if there are not spaces.   */
 /*******************************************/
 void TextZone::display(QString texte, QTextStream& out)
@@ -378,7 +378,7 @@ void TextZone::display(QString texte, QTextStream& out)
 /*******************************************/
 /* generate_format_begin                   */
 /*******************************************/
-/* Write the begining format markup.       */
+/* Write the beginning format markup.      */
 /*******************************************/
 void TextZone::generate_format_begin(QTextStream & out)
 {

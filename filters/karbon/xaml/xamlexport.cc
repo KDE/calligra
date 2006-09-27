@@ -143,7 +143,7 @@ XAMLExport::visitVDocument( VDocument& document )
 	// Microsoft Acrylic has a transform group just like this
 	*m_body << "<Transform=\"scale(1, -1) Translate(0, -" << rect.height() << ")\">" << endl;
 
-	// we dont need the selection anymore:
+	// we do not need the selection anymore:
 	document.selection()->clear();
 
 	// set up gc

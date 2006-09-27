@@ -5293,9 +5293,9 @@ Color ExcelReader::convertColor( unsigned colorIndex )
       return d->colorTable[ colorIndex-8 ];
 
   // FIXME the following colors depend on system color settings
-  // 0x0040  system window text colour for border lines
-  // 0x0041  system window background colour for pattern background
-  // 0x7fff  system window text colour for fonts
+  // 0x0040  system window text color for border lines
+  // 0x0041  system window background color for pattern background
+  // 0x7fff  system window text color for fonts
   if( colorIndex == 0x40 ) return Color( 0, 0, 0 );
   if( colorIndex == 0x41 ) return Color( 255, 255, 255 );
   if( colorIndex == 0x7fff ) return Color( 0, 0, 0 );

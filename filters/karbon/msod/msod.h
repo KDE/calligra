@@ -63,10 +63,10 @@ public:
     // Should be protected...
 
     void brushSet(
-        unsigned colour,
+        unsigned color,
         unsigned style);
     void penSet(
-        unsigned colour,
+        unsigned color,
         unsigned style,
         unsigned width);
 

@@ -68,7 +68,7 @@ class TextZone: public TextFormat
 
 		/* ==== Getters ==== */
 		/**
-		 * @return Specify if the text must be formated.
+		 * @return Specify if the text must be formatted.
 		 *
 		 */
 		bool    useFormat() const;
@@ -78,7 +78,7 @@ class TextZone: public TextFormat
 		
 		void setTexte(QString texte) { _texte = texte; }
 
-		/* ==== Helpfull functions ==== */
+		/* ==== Helpful functions ==== */
 
 		/**
 		 * convert a unicode text in latin1 enconding ala latex.

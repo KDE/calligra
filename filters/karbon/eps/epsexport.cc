@@ -179,7 +179,7 @@ EpsExport::visitVDocument( VDocument& document )
 		"%%Creator: Karbon14 EPS Exportfilter 0.5"
 	<< endl;
 
-	// We dont need the selection anymore.
+	// We do not need the selection anymore.
 	document.selection()->clear();
 
 

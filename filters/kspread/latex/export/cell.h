@@ -94,7 +94,7 @@ class Cell: public Format
 		void setResultDataType(QString dt) { _resultDataType = dt; }
 	
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 		void     analyse (const QDomNode);
 		void     analyseText (const QDomNode);

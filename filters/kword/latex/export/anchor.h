@@ -77,7 +77,7 @@ class Anchor: public Format
 		void setInstance(QString inst) { _instance = inst; }
 
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 
 		void analyse (const QDomNode);

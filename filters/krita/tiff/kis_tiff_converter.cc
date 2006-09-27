@@ -85,7 +85,7 @@ namespace {
             }
         } else if(color_type == PHOTOMETRIC_SEPARATED ) {
             if(nbchannels == 0) nbchannels = 4;
-            // SEPARATED is in general CMYK but not allways, so we check
+            // SEPARATED is in general CMYK but not always, so we check
             uint16 inkset;
             if((TIFFGetField(image, TIFFTAG_INKSET, &inkset) == 0)){
                 kDebug(41008) <<  "Image does not define the inkset." << endl;
@@ -129,7 +129,7 @@ namespace {
             destDepth = 16;
             if(nbchannels == 0) nbchannels = 2;
             extrasamplescount = nbchannels - 2; // FIX the extrasamples count in case of
-            // <-- we will convert the index image to RGBA16 as the palette is allways on 16bits colors
+            // <-- we will convert the index image to RGBA16 as the palette is always on 16bits colors
             return "RGBA16";
         }
         return "";
@@ -189,7 +189,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         kDebug(41008) <<  "Image does not define its depth" << endl;
         depth = 1;
     }
-    // Determine the number of channels (usefull to know if a file has an alpha or not
+    // Determine the number of channels (useful to know if a file has an alpha or not
     uint16 nbchannels;
     if(TIFFGetField(image, TIFFTAG_SAMPLESPERPIXEL, &nbchannels) == 0){
         kDebug(41008) << "Image has an undefined number of samples per pixel" << endl;
@@ -601,7 +601,7 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageSP i
     // Open file for writing
     TIFF *image;
     if((image = TIFFOpen(QFile::encodeName(uri.path()), "w")) == NULL){
-        kDebug(41008) << "Could not open the file for writting " << uri.path() << endl;
+        kDebug(41008) << "Could not open the file for writing " << uri.path() << endl;
         TIFFClose(image);
         return (KisImageBuilder_RESULT_FAILURE);
     }

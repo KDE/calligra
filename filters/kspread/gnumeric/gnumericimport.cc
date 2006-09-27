@@ -442,7 +442,7 @@ void setSelectionInfo( QDomNode * sheet, Sheet * /* table */ )
   QDomNode selections =  sheet->namedItem("gmr:Selections");
   QDomNode selection = selections.namedItem("gmr:Selection");
 
-  /* Kspread does not support mutiple selections.. */
+  /* Kspread does not support multiple selections.. */
   /* This code will set the selection to the last one GNUmeric's multiple
      selections. */
   while( !selection.isNull() )

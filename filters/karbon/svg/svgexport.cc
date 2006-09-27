@@ -144,7 +144,7 @@ SvgExport::visitVDocument( VDocument& document )
 	m_indent++;
 	m_indent2++;
 
-	// we dont need the selection anymore:
+	// we do not need the selection anymore:
 	document.selection()->clear();
 
 	// set up gc

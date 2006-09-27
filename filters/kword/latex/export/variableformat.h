@@ -150,7 +150,7 @@ class VariableFormat: public TextZone
 		void setValue     (const QString val)   { _value = val;   }
 		void setNote      (const QString note)  { _note  = note;  }
 
-		/* ==== Helpfull functions ==== */
+		/* ==== Helpful functions ==== */
 		void analyseFormat(const QDomNode);
 		void analyseDate      (const QDomNode);
 		void analyseTime      (const QDomNode);

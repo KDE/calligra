@@ -71,7 +71,7 @@ class Pen: public XmlParser
 		void setColor(QString color) { _color.setNamedColor(color); }
 
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 
 		/**

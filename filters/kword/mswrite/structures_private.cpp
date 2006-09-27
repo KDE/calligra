@@ -1454,8 +1454,8 @@ namespace MSWrite
 		Dump (sizeImage);
 		Dump (xPixelsPerMeter);
 		Dump (yPixelsPerMeter);
-		Dump (coloursUsed);
-		Dump (coloursImportant);
+		Dump (colorsUsed);
+		Dump (colorsImportant);
 	#endif
 
 		return true;
@@ -1476,20 +1476,20 @@ namespace MSWrite
 	}
 
 
-	BMP_BitmapColourIndex::BMP_BitmapColourIndex ()
+	BMP_BitmapColorIndex::BMP_BitmapColorIndex ()
 	{
 	}
 
-	BMP_BitmapColourIndex::~BMP_BitmapColourIndex ()
+	BMP_BitmapColorIndex::~BMP_BitmapColorIndex ()
 	{
 	}
 
-	BMP_BitmapColourIndex &BMP_BitmapColourIndex::operator= (const BMP_BitmapColourIndex &rhs)
+	BMP_BitmapColorIndex &BMP_BitmapColorIndex::operator= (const BMP_BitmapColorIndex &rhs)
 	{
 		if (this == &rhs)
 			return *this;
 
-		BMP_BitmapColourIndexGenerated::operator= (rhs);
+		BMP_BitmapColorIndexGenerated::operator= (rhs);
 
 		return *this;
 	}

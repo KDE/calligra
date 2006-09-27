@@ -148,7 +148,7 @@ class Format: public XmlParser
 		void setFontWeight(int w) { _weight = w; }
 
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 
 		/**
@@ -159,7 +159,7 @@ class Format: public XmlParser
 		virtual void analyseFont(const QDomNode);
 
 		/**
-		 * Generate the cell format inherited from the row or the colum format or
+		 * Generate the cell format inherited from the row or the column format or
 		 * use its own format.
 		 *
 		 * @param out The output stream.

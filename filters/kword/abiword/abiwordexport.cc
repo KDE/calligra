@@ -416,11 +416,11 @@ QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
     {
         if ( formatData.fgColor.isValid() )
         {
-            // Give colour
+            // Give color
             strElement+="color: ";
 
             // No leading # (unlike CSS2)
-            // We must have two hex digits for each colour channel!
+            // We must have two hex digits for each color channel!
             const int red=formatData.fgColor.red();
             strElement += QString::number((red&0xf0)>>4,16);
             strElement += QString::number(red&0x0f,16);
@@ -441,11 +441,11 @@ QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
     {
         if ( formatData.bgColor.isValid() )
         {
-            // Give background colour
+            // Give background color
             strElement+="bgcolor: ";
 
             // No leading # (unlike CSS2)
-            // We must have two hex digits for each colour channel!
+            // We must have two hex digits for each color channel!
             const int red=formatData.bgColor.red();
             strElement += QString::number((red&0xf0)>>4,16);
             strElement += QString::number(red&0x0f,16);

@@ -67,7 +67,7 @@ public:
     KWord13FormatOne(void);
     virtual ~KWord13FormatOne(void);
 public:
-    /// Get lenght of format
+    /// Get length of format
     virtual int length( void );
     /**
      * Get a pointer to the data correponding to \<FORMAT id="1"\>

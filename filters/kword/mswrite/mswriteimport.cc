@@ -851,7 +851,7 @@ public:
 					/*case MSWrite::Alignment::Left:
 						output += "left";
 						break;*/
-					case MSWrite::Alignment::Centre:
+					case MSWrite::Alignment::Center:
 						output += "center";
 						break;
 					case MSWrite::Alignment::Right:
@@ -878,7 +878,7 @@ public:
 				if (align == MSWrite::Align::Center)
 				{
 					// TODO: I don't know what m_objectHorizOffset is relative to!
-					kDebug (30509) <<  "ignoring image offset with centred image" << endl;
+					kDebug (30509) <<  "ignoring image offset with centered image" << endl;
 					m_objectHorizOffset = 0;
 				}
 				else

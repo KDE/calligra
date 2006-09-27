@@ -158,7 +158,7 @@ QString HtmlCssWorker::textFormatToCss(const TextFormatting& formatOrigin,
     {
         if ( formatData.fgColor.isValid() )
         {
-            // Give colour
+            // Give color
             strElement+="color: ";
             strElement+=formatData.fgColor.name();
             strElement+="; ";
@@ -169,7 +169,7 @@ QString HtmlCssWorker::textFormatToCss(const TextFormatting& formatOrigin,
     {
         if ( formatData.bgColor.isValid() )
         {
-            // Give background colour
+            // Give background color
             strElement+="background-color: ";
             strElement+=formatData.bgColor.name();
             strElement+="; ";
@@ -674,7 +674,7 @@ bool HtmlCssWorker::doOpenStyles(void)
               << strVersion.mid(10).remove('$')
               << "*/\n";
 
-    // TODO: does KWord gives a paper colour?
+    // TODO: does KWord give a paper color?
     *m_streamOut << "BODY\n{\n  background-color: #FFFFFF\n}\n";
 
     return true;

@@ -92,7 +92,7 @@ void VariableZone::analyse(const QDomNode balise)
 /*******************************************/
 /* generate                                */
 /*******************************************/
-/* Generate the text formated (if needed). */
+/* Generate the text formatted (if needed).*/
 /*******************************************/
 void VariableZone::generate(QTextStream &out)
 {

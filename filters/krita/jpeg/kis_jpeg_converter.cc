@@ -520,7 +520,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     }
     
 
-    // Writting is over
+    // Writing is over
     jpeg_finish_compress(&cinfo);
     fclose(fp);
     

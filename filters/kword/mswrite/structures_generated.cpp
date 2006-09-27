@@ -1565,8 +1565,8 @@ namespace MSWrite
 		m_sizeImage = (DWord) (0);
 		m_xPixelsPerMeter = (Long) (0);
 		m_yPixelsPerMeter = (Long) (0);
-		m_coloursUsed = (DWord) (0);
-		// no default for m_coloursImportant
+		m_colorsUsed = (DWord) (0);
+		// no default for m_colorsImportant
 	}
 	
 	BMP_BitmapInfoHeaderGenerated::~BMP_BitmapInfoHeaderGenerated ()
@@ -1590,8 +1590,8 @@ namespace MSWrite
 		m_sizeImage = rhs.m_sizeImage;
 		m_xPixelsPerMeter = rhs.m_xPixelsPerMeter;
 		m_yPixelsPerMeter = rhs.m_yPixelsPerMeter;
-		m_coloursUsed = rhs.m_coloursUsed;
-		m_coloursImportant = rhs.m_coloursImportant;
+		m_colorsUsed = rhs.m_colorsUsed;
+		m_colorsImportant = rhs.m_colorsImportant;
 		
 		return *this;
 	}
@@ -1609,8 +1609,8 @@ namespace MSWrite
 		// m_sizeImage will not be checked
 		// m_xPixelsPerMeter will not be checked
 		// m_yPixelsPerMeter will not be checked
-		// m_coloursUsed will not be checked
-		// m_coloursImportant will not be checked
+		// m_colorsUsed will not be checked
+		// m_colorsImportant will not be checked
 		return true;
 	}
 	
@@ -1631,8 +1631,8 @@ namespace MSWrite
 		ReadDWord (m_sizeImage, m_data + 20);
 		ReadLong (m_xPixelsPerMeter, m_data + 24);
 		ReadLong (m_yPixelsPerMeter, m_data + 28);
-		ReadDWord (m_coloursUsed, m_data + 32);
-		ReadDWord (m_coloursImportant, m_data + 36);
+		ReadDWord (m_colorsUsed, m_data + 32);
+		ReadDWord (m_colorsImportant, m_data + 36);
 		return verifyVariables ();
 	}
 	
@@ -1649,8 +1649,8 @@ namespace MSWrite
 		WriteDWord (m_sizeImage, m_data + 20);
 		WriteLong (m_xPixelsPerMeter, m_data + 24);
 		WriteLong (m_yPixelsPerMeter, m_data + 28);
-		WriteDWord (m_coloursUsed, m_data + 32);
-		WriteDWord (m_coloursImportant, m_data + 36);
+		WriteDWord (m_colorsUsed, m_data + 32);
+		WriteDWord (m_colorsImportant, m_data + 36);
 		return true;
 	}
 	
@@ -1672,9 +1672,9 @@ namespace MSWrite
 	}
 	
 	
-	// -------------------- BEGIN BMP_BitmapColourIndexGenerated --------------------
+	// -------------------- BEGIN BMP_BitmapColorIndexGenerated --------------------
 	
-	BMP_BitmapColourIndexGenerated::BMP_BitmapColourIndexGenerated ()
+	BMP_BitmapColorIndexGenerated::BMP_BitmapColorIndexGenerated ()
 	{
 		// --- set defaults for variables --
 		// no default for m_blue
@@ -1683,11 +1683,11 @@ namespace MSWrite
 		m_reserved = (Byte) (0);
 	}
 	
-	BMP_BitmapColourIndexGenerated::~BMP_BitmapColourIndexGenerated ()
+	BMP_BitmapColorIndexGenerated::~BMP_BitmapColorIndexGenerated ()
 	{
 	}
 	
-	BMP_BitmapColourIndexGenerated &BMP_BitmapColourIndexGenerated::operator= (const BMP_BitmapColourIndexGenerated &rhs)
+	BMP_BitmapColorIndexGenerated &BMP_BitmapColorIndexGenerated::operator= (const BMP_BitmapColorIndexGenerated &rhs)
 	{
 		if (this == &rhs)
 			return *this;
@@ -1703,7 +1703,7 @@ namespace MSWrite
 		return *this;
 	}
 	
-	bool BMP_BitmapColourIndexGenerated::verifyVariables (void)
+	bool BMP_BitmapColorIndexGenerated::verifyVariables (void)
 	{
 	CHECK_DEVICE;
 	
@@ -1714,13 +1714,13 @@ namespace MSWrite
 		return true;
 	}
 	
-	bool BMP_BitmapColourIndexGenerated::readFromDevice (void)
+	bool BMP_BitmapColorIndexGenerated::readFromDevice (void)
 	{
 	CHECK_DEVICE;
 	
 		// read the data straight from the file
 		if (!m_device->readInternal (m_data, s_size))
-			ErrorAndQuit (Error::FileError, "could not read BMP_BitmapColourIndexGenerated data");
+			ErrorAndQuit (Error::FileError, "could not read BMP_BitmapColorIndexGenerated data");
 		
 		ReadByte (m_blue, m_data + 0);
 		ReadByte (m_green, m_data + 1);
@@ -1729,7 +1729,7 @@ namespace MSWrite
 		return verifyVariables ();
 	}
 	
-	bool BMP_BitmapColourIndexGenerated::writeToArray (void)
+	bool BMP_BitmapColorIndexGenerated::writeToArray (void)
 	{
 	CHECK_DEVICE;
 	
@@ -1740,7 +1740,7 @@ namespace MSWrite
 		return true;
 	}
 	
-	bool BMP_BitmapColourIndexGenerated::writeToDevice (void)
+	bool BMP_BitmapColorIndexGenerated::writeToDevice (void)
 	{
 	CHECK_DEVICE;
 	
@@ -1752,7 +1752,7 @@ namespace MSWrite
 		
 		// write the data straight to the file
 		if (!m_device->writeInternal (m_data, s_size))
-			ErrorAndQuit (Error::FileError, "could not write BMP_BitmapColourIndexGenerated data");
+			ErrorAndQuit (Error::FileError, "could not write BMP_BitmapColorIndexGenerated data");
 		
 		return true;
 	}

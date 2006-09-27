@@ -76,7 +76,7 @@ class Column: public Format
 		void setWidth(double w) { _width = w; }
 	
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 		void     analyse (const QDomNode);
 		void     generate  (QTextStream&);

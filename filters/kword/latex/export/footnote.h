@@ -80,7 +80,7 @@ class Footnote: public Format
 		void setRef   (QString);
 
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 		void analyse (const QDomNode);
 		void analyseInternal(const QDomNode);

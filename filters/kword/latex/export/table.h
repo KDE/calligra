@@ -92,7 +92,7 @@ class Table: public Q3PtrList<Element>, public Element
 		void setMaxCol(int c) { _maxCol = c; }
 
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 		Element* searchCell(int, int);
 		void     append    (Element*);

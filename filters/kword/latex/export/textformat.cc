@@ -225,9 +225,9 @@ void TextFormat::analyseStrikeout(const QDomNode balise)
 }
 
 /*******************************************/
-/* analyseWeigth                           */
+/* analyseWeight                           */
 /*******************************************/
-/* Get the text weigth.                    */
+/* Get the text weight.                    */
 /*******************************************/
 void TextFormat::analyseWeight(const QDomNode balise)
 {

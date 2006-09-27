@@ -21,7 +21,7 @@ class QDateTime;
 class QTextCodec;
 
 /**
- * Escape the special XML characters and be careful to catch any unallowed control character
+ * Escape the special XML characters and be careful to catch any disallowed control character
  */
 QString CheckAndEscapeXmlText(const QString& strText);
 

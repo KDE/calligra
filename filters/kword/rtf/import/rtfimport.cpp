@@ -261,7 +261,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"ululdbwave",	setUnderlineProperty,	0L, RTFFormat::UnderlineWave ),
 	MEMBER(	0L,		"up",		setUpProperty,		state.format.baseline, 6 ),
 	MEMBER(	0L,		"v",		setToggleProperty,	state.format.hidden, 0 ),
-        // ### TODO: \wbitmap: a Windows Device-Dependant Bitmap is not a BMP
+        // ### TODO: \wbitmap: a Windows Device-Dependent Bitmap is not a BMP
 	PROP(	"@pict",	"wbitmap",	setPictureType,	        0L, RTFPicture::BMP ),
 	PROP(	"@pict",	"wmetafile",	setPictureType,	        0L, RTFPicture::EMF ),
 	PROP(	0L,		"zwj",		insertSymbol,		0L, 0x200d ),

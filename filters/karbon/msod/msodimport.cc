@@ -131,10 +131,10 @@ void MSODImport::gotEllipse(
                 "\" rx=\"" + QString::number(halfAxes.width()) +
                 "\" ry=\"" + QString::number(halfAxes.height()) +
                 "\">\n";
-    m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColour, 16) +
+    m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColor, 16) +
                 "\" fillstyle=\"" + QString::number(1 /*m_winding*/) +
                 "\" linewidth=\"" + QString::number(dc.m_penWidth) +
-                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
+                "\" strokecolor=\"#" + QString::number(dc.m_penColor, 16) +
                 "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
                 "\">\n";
     m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";
@@ -221,7 +221,7 @@ void MSODImport::gotPolygon(
     {
         m_text += "<STROKE lineWidth=\"1\">\n";// + QString::number(dc.m_penWidth, 16) + "\">\n";
         double r, g, b;
-        toRGB(dc.m_penColour, r, g, b);
+        toRGB(dc.m_penColor, r, g, b);
         m_text += "<COLOR v1=\"" + QString::number(r) + "\" v2=\"" + QString::number(g) + "\"  v3=\"" + QString::number(b) + "\" opacity=\"1\" colorSpace=\"0\"  />\n";
     m_text += "</STROKE>\n";
     }
@@ -229,7 +229,7 @@ void MSODImport::gotPolygon(
         m_text += "<STROKE lineWidth=\"1\" />\n";
     m_text += "<FILL fillRule=\"" + QString::number(dc.m_winding) + "\">\n";
     double r, g, b;
-    toRGB(dc.m_brushColour, r, g, b);
+    toRGB(dc.m_brushColor, r, g, b);
     m_text += "<COLOR v1=\"" + QString::number(r) + "\" v2=\"" + QString::number(g) + "\"  v3=\"" + QString::number(b) + "\" opacity=\"1\" colorSpace=\"0\"  />\n";
     m_text += "</FILL>\n";
 
@@ -270,10 +270,10 @@ void MSODImport::gotRectangle(
                 "\" rounding=\"0\">\n";
     m_text += "<polyline arrow1=\"0\" arrow2=\"0\">\n";
     pointArray(points);
-    m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColour, 16) +
+    m_text += " <gobject fillcolor=\"#" + QString::number(dc.m_brushColor, 16) +
                 "\" fillstyle=\"" + QString::number(1 /*m_winding*/) +
                 "\" linewidth=\"" + QString::number(dc.m_penWidth) +
-                "\" strokecolor=\"#" + QString::number(dc.m_penColour, 16) +
+                "\" strokecolor=\"#" + QString::number(dc.m_penColor, 16) +
                 "\" strokestyle=\"" + QString::number(dc.m_penStyle) +
                 "\">\n";
     m_text += "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n";

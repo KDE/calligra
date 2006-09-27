@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
  
- // A big thank to Glenn Randers-Pehrson for it's wonderfull documentation of libpng available at http://www.libpng.org/pub/png/libpng-1.2.5-manual.html
+ // A big thank to Glenn Randers-Pehrson for his wonderful documentation of libpng available at http://www.libpng.org/pub/png/libpng-1.2.5-manual.html
 #include "kis_png_converter.h"
 
 #include <stdio.h>
@@ -755,7 +755,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     
     png_write_image(png_ptr, row_pointers);
 
-    // Writting is over
+    // Writing is over
     png_write_end(png_ptr, info_ptr);
     
     // Free memory

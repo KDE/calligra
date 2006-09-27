@@ -105,7 +105,7 @@ void Layout::analyseName(const QDomNode balise)
 /*******************************************/
 /* analyseFollowing                        */
 /*******************************************/
-/* Get info about folowing. Ununsefull.    */
+/* Get info about following. Not useful.   */
 /*******************************************/
 void Layout::analyseFollowing(const QDomNode balise)
 {

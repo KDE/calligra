@@ -256,7 +256,7 @@ namespace MSWrite
 		//
 		int m_formatPointerUpto;	// [import] which formatPointer we are up to
 		DWord m_nextCharByte;	// [import] for consistency checking
-		int m_lastPropertyOffset;	// [import] lazy optimisation (don't reload Property if FormatPointer points to last Property)
+		int m_lastPropertyOffset;	// [import] lazy optimization (don't reload Property if FormatPointer points to last Property)
 		int m_formatPointerPos, m_formatPropertyPos;	// [export]
 		int m_numProperty;	// [export]
 
@@ -324,13 +324,13 @@ namespace MSWrite
 	};
 
 
-	class BMP_BitmapColourIndex : public BMP_BitmapColourIndexGenerated
+	class BMP_BitmapColorIndex : public BMP_BitmapColorIndexGenerated
 	{
 	public:
-		BMP_BitmapColourIndex ();
-		virtual ~BMP_BitmapColourIndex ();
+		BMP_BitmapColorIndex ();
+		virtual ~BMP_BitmapColorIndex ();
 
-		BMP_BitmapColourIndex &operator= (const BMP_BitmapColourIndex &rhs);
+		BMP_BitmapColorIndex &operator= (const BMP_BitmapColorIndex &rhs);
 	};
 
 

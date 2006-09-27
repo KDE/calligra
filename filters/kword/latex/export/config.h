@@ -123,7 +123,7 @@ class Config
 		
 		void setIndentation(int indent) { _tabulation = indent; }
 		
-		/* ==== Helpfull functions ==== */
+		/* ==== Helpful functions ==== */
 		void indent();
 		void desindent();
 

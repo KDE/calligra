@@ -65,7 +65,7 @@ class VariableZone: public VariableFormat
 
 		/* ==== Setters ==== */
 
-		/* ==== Helpfull functions ==== */
+		/* ==== Helpful functions ==== */
 
 		void analyse(const QDomNode);
 		void generate(QTextStream&);

@@ -111,7 +111,7 @@ namespace Libppt {
    * </pre>
    *
    * If that sounds confusing your best bet is to simply forget about the
-   * existance of this class and treat is as being identical to @ref UChar.
+   * existence of this class and treat it as being identical to @ref UChar.
    */
   class UCharReference {
     friend class UString;
@@ -331,12 +331,12 @@ namespace Libppt {
      */
     unsigned long toULong(bool *ok = 0L) const;
     /**
-     * @return Position of first occurence of f starting at position pos.
+     * @return Position of first occurrence of f starting at position pos.
      * -1 if the search was not successful.
      */
     int find(const UString &f, int pos = 0) const;
     /**
-     * @return Position of first occurence of f searching backwards from
+     * @return Position of first occurrence of f searching backwards from
      * position pos.
      * -1 if the search was not successful.
      */

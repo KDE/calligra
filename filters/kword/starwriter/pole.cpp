@@ -972,7 +972,7 @@ Stream* Storage::stream( const std::string& name )
   if( !name.length() ) return (Stream*) 0L;
   if( !io ) return (Stream*) 0L;
 
-  // make absolute if necesary
+  // make absolute if necessary
   std::string fullName = name;
   if( name[0] != '/' ) fullName.insert( 0, path() + "/" );
 

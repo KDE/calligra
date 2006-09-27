@@ -811,7 +811,7 @@ static bool StartElementPBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
     // We are sure to be the child of a <p> element
 
     // The following code is similar to the one in StartElementP
-    // We use mainFramesetElement here not to be dependant that <section> has happened before
+    // We use mainFramesetElement here not to be dependent that <section> has happened before
     QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
     stackCurrent->m_frameset.appendChild(paragraphElementOut);
     QDomElement textElementOut=mainDocument.createElement("TEXT");
@@ -1731,7 +1731,7 @@ bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
         {
         case ElementTypeContent:
             {
-                // Push the item on the auxilary stack
+                // Push the item on the auxiliary stack
                 auxilaryStack.push(item);
                 break;
             }

@@ -134,7 +134,7 @@ class Layout: public TextFormat
 		void keepLinesTogether()            { _keepLinesTogether = true; }
 
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 
 		void analyseLayout  (const QDomNode);

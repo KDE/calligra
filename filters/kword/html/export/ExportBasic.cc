@@ -59,7 +59,7 @@ QString HtmlBasicWorker::textFormatToCss(const TextFormatting& formatData) const
 
     if ( formatData.fgColor.isValid() )
     {
-        // Give colour
+        // Give color
         strElement+="color: ";
         strElement+=formatData.fgColor.name();
         strElement+="; ";
@@ -190,7 +190,7 @@ void HtmlBasicWorker::openFormatData(const FormatData& formatOrigin,
     if( ( force || formatOrigin.text.fgColor != format.text.fgColor ) &&
           format.text.fgColor.isValid() )
     {
-        // Give colour
+        // Give color
         attr += " color=\"";
         attr += format.text.fgColor.name();
         attr += "\"";
@@ -355,7 +355,7 @@ void HtmlBasicWorker::closeSpan(const FormatData& formatOrigin, const FormatData
 
 bool HtmlBasicWorker::doOpenBody(void)
 {
-    // Define the background colour as white!
+    // Define the background color as white!
     *m_streamOut << "<body bgcolor=\"#FFFFFF\">\n";
     return true;
 }

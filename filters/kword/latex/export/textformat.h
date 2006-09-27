@@ -147,7 +147,7 @@ class TextFormat: public Format
 		void setColor      (const int, const int, const int);
 		void setBkColor    (const int, const int, const int);
 
-		/* ==== Helpfull functions ==== */
+		/* ==== Helpful functions ==== */
 		void analyseFormat    (const QDomNode);
 		void analyseParam     (const QDomNode);
 		void analyseFont      (const QDomNode);

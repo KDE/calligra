@@ -88,7 +88,7 @@ class PixmapFrame : public Element
 		void setFilenamePS (QString f) { _filenamePS = f; }
 
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 
 		void analyse(const QDomNode);

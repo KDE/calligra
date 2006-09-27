@@ -40,7 +40,7 @@
 #include <kmessagebox.h>
 #include <kcharsets.h>
 
-CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*seperator*/)
+CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*separator*/)
     : KDialog(parent),
       m_adjustRows(false),
       m_adjustCols(false),

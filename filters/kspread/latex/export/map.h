@@ -69,7 +69,7 @@ class Map: public XmlParser, Config
 		 */
 
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 
 		/**

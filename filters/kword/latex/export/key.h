@@ -102,7 +102,7 @@ class Key: public XmlParser
 		void setYear(int year) { _year = year; }
 
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 
 		/**

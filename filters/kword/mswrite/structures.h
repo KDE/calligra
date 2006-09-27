@@ -324,7 +324,6 @@ namespace MSWrite
 	{
 	public:
 		static const int Left			=	0;
-		static const int Centre			=	1;
 		static const int Center			=	1;
 		static const int Right			=	2;
 		static const int Justify		=	3;

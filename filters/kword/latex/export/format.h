@@ -98,7 +98,7 @@ class Format: public XmlParser
 		void setLength     (const unsigned int t)  { _taille    = t; }
 
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 
 		/**

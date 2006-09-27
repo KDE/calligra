@@ -181,7 +181,7 @@ namespace MSWrite
 	 *
 	 */
 
-	// optimisation freak, I know :)
+	// optimization freak, I know :)
 	#define BitMask1 1
 	#define BitMask2 3
 	#define BitMask3 7

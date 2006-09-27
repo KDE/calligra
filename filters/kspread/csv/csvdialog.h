@@ -41,7 +41,7 @@ public:
         POINTNUMBER ///< Number, which decimal symbol is a point/dot
     };
 
-    CSVDialog(QWidget* parent, QByteArray& fileArray, const QString seperator);
+    CSVDialog(QWidget* parent, QByteArray& fileArray, const QString separator);
     ~CSVDialog();
 
     int getRows();

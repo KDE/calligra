@@ -157,7 +157,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
           int alllenght;
           QString mystrn;
 
-          // Remember lenght of the string
+          // Remember length of the string
           alllenght = mystr.length ();
           if (alllenght >= 80-1)
           {
@@ -1167,7 +1167,7 @@ APPLIXSPREADImport::filterSHFGBG (QString it, int *style, int *bgcolor,
   printf ("\n");
 
 
-  // corrent the bgcolor to the fgcolor if the background is plain
+  // correct the bgcolor to the fgcolor if the background is plain
   if ((*style == 8) && (m2 == 1) && (m3 == 0))
   {
     *bgcolor = *fgcolor;

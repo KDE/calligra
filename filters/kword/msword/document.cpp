@@ -406,7 +406,7 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
     {
         // If ipat = 0 (solid fill), icoBack is the background color.
         // But otherwise, icoFore is the one we need to set as bkColor
-        // (and icoBack is usually white; it's the other colour of the pattern,
+        // (and icoBack is usually white; it's the other color of the pattern,
         // something that we can't set in Qt apparently).
         int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
         kDebug(30513) << "generateFrameBorder: " << " icoFore=" << shd.icoFore << " icoBack=" << shd.icoBack << " ipat=" << shd.ipat << " -> bkColor=" << bkColor << endl;

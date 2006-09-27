@@ -189,7 +189,7 @@ void PixmapFrame::convert()
 /*******************************************/
 /* generate                                */
 /*******************************************/
-/* Generate the text formated (if needed). */
+/* Generate the text formatted (if needed).*/
 /*******************************************/
 void PixmapFrame::generate(QTextStream &out)
 {

@@ -90,7 +90,7 @@ class Formula: public Element
 		void setSheetSide (const int s)    { _sheetSide = (TSide) s;    }
 
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 
 		/**

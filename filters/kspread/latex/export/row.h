@@ -76,7 +76,7 @@ class Row: public Format
 		void setHeight(double h) { _height = h; }
 	
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 		void     analyse (const QDomNode);
 		void     generate  (QTextStream&);

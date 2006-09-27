@@ -683,34 +683,34 @@ namespace MSWrite
 			infoHeader.setCompression (0);	// BI_RGB (uncompressed)
 			infoHeader.setSizeImage (0);		// lazy
 			infoHeader.setXPixelsPerMeter (0), infoHeader.setYPixelsPerMeter (0);
-			infoHeader.setColoursUsed (1 << infoHeader.getBitsPerPixel ());
-			infoHeader.setColoursImportant (infoHeader.getColoursUsed ());
+			infoHeader.setColorsUsed (1 << infoHeader.getBitsPerPixel ());
+			infoHeader.setColorsImportant (infoHeader.getColorsUsed ());
 
-			if (infoHeader.getColoursUsed () != 2)
-				ErrorAndQuit (Error::InternalError, "colour bitmap???  Please email clarencedang@users.sourceforge.net this file\n");
+			if (infoHeader.getColorsUsed () != 2)
+				ErrorAndQuit (Error::InternalError, "color bitmap???  Please email clarencedang@users.sourceforge.net this file\n");
 
-			Word colourTableSize = infoHeader.getColoursUsed () * BMP_BitmapColourIndex::s_size;
+			Word colorTableSize = infoHeader.getColorsUsed () * BMP_BitmapColorIndex::s_size;
 
 			// fileHeader
 			BMP_BitmapFileHeader fileHeader;
 			DWord fileSize = BMP_BitmapFileHeader::s_size + BMP_BitmapInfoHeader::s_size
-										+ colourTableSize
+										+ colorTableSize
 										+ (m_bmh->getHeight ()
 											* getBytesPerScanLine (m_bmh->getWidth (), m_bmh->getBitsPerPixel (), 4));
 
 			fileHeader.setTotalBytes (fileSize);
 			fileHeader.setActualImageOffset (BMP_BitmapFileHeader::s_size + BMP_BitmapInfoHeader::s_size
-														+ colourTableSize);
+														+ colorTableSize);
 
-			// colourTable
-			BMP_BitmapColourIndex *colourIndex = new BMP_BitmapColourIndex [infoHeader.getColoursUsed ()];
-			if (!colourIndex)
-				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for colourIndex[]\n");
+			// colorTable
+			BMP_BitmapColorIndex *colorIndex = new BMP_BitmapColorIndex [infoHeader.getColorsUsed ()];
+			if (!colorIndex)
+				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for colorIndex[]\n");
 
 
 			// black and white...
-			colourIndex [0].setRed (0), colourIndex [0].setGreen (0), colourIndex [0].setBlue (0);
-			colourIndex [1].setRed (0xFF), colourIndex [1].setGreen (0xFF), colourIndex [1].setBlue (0xFF);
+			colorIndex [0].setRed (0), colorIndex [0].setGreen (0), colorIndex [0].setBlue (0);
+			colorIndex [1].setRed (0xFF), colorIndex [1].setGreen (0xFF), colorIndex [1].setBlue (0xFF);
 
 			m_externalImage = new Byte [m_externalImageSize = fileSize];
 			if (!m_externalImage)
@@ -724,8 +724,8 @@ namespace MSWrite
 			infoHeader.writeToDevice ();
 			for (int i = 0; i < 2; i++)
 			{
-				colourIndex [i].setDevice (&device);
-				colourIndex [i].writeToDevice ();
+				colorIndex [i].setDevice (&device);
+				colorIndex [i].writeToDevice ();
 			}
 
 			// write out each scanline
@@ -759,7 +759,7 @@ namespace MSWrite
 
 			device.setCache (NULL);
 
-			delete [] colourIndex;
+			delete [] colorIndex;
 			delete [] internalData;
 		}
 
@@ -847,17 +847,17 @@ namespace MSWrite
 			if (!fileHeader.readFromDevice ()) return false;
 
 
-			/*Word colourTableSize = (1 << m_bmh->getNumPlanes ()) * BMP_BitmapColourIndex::s_size;
+			/*Word colorTableSize = (1 << m_bmh->getNumPlanes ()) * BMP_BitmapColorIndex::s_size;
 
 			// fileHeader
 			DWord fileSize = BMP_BitmapFileHeader::s_size + BMP_BitmapInfoHeader::s_size
-												+ colourTableSize
+												+ colorTableSize
 												+ (m_bmh->getHeight ()
 													* getBytesPerScanLine (m_bmh->getWidth (), m_bmh->getBitsPerPixel (), 4));
 
 			fileHeader.setTotalBytes (fileSize);
 			fileHeader.setActualImageOffset (BMP_BitmapFileHeader::s_size + BMP_BitmapInfoHeader::s_size
-														+ colourTableSize);*/
+														+ colorTableSize);*/
 
 			// infoHeader
 			BMP_BitmapInfoHeader infoHeader;
@@ -885,23 +885,23 @@ namespace MSWrite
 				ErrorAndQuit (Error::Unsupported, "compressed bitmaps unsupported\n");
 			//infoHeader.setSizeImage (0);		// lazy
 			//infoHeader.setXPixelsPerMeter (0), infoHeader.setYPixelsPerMeter (0);
-			infoHeader.setColoursUsed (1 << infoHeader.getBitsPerPixel ());	// make life easier
-			//infoHeader.setColoursImportant (infoHeader.getColoursUsed ());
+			infoHeader.setColorsUsed (1 << infoHeader.getBitsPerPixel ());	// make life easier
+			//infoHeader.setColorsImportant (infoHeader.getColorsUsed ());
 
-			if (infoHeader.getColoursUsed () != 2)
-				ErrorAndQuit (Error::Unsupported, "can't save colour BMPs, use WMFs for that purpose\n");
+			if (infoHeader.getColorsUsed () != 2)
+				ErrorAndQuit (Error::Unsupported, "can't save color BMPs, use WMFs for that purpose\n");
 
-			// colourTable
-			BMP_BitmapColourIndex *colourIndex = new BMP_BitmapColourIndex [infoHeader.getColoursUsed ()];
-			if (!colourIndex)
-				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for colourIndex[]\n");
-			colourIndex [0].setDevice (m_device);
-			if (!colourIndex [0].readFromDevice ()) return false;
-			if (colourIndex [0].getRed () != 0 || colourIndex [0].getGreen () != 0 || colourIndex [0].getBlue () != 0)
+			// colorTable
+			BMP_BitmapColorIndex *colorIndex = new BMP_BitmapColorIndex [infoHeader.getColorsUsed ()];
+			if (!colorIndex)
+				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for colorIndex[]\n");
+			colorIndex [0].setDevice (m_device);
+			if (!colorIndex [0].readFromDevice ()) return false;
+			if (colorIndex [0].getRed () != 0 || colorIndex [0].getGreen () != 0 || colorIndex [0].getBlue () != 0)
 				m_device->error (Error::Warn, "black not black\n");
-			colourIndex [1].setDevice (m_device);
-			if (!colourIndex [1].readFromDevice ()) return false;
-			if (colourIndex [1].getRed () != 0xFF || colourIndex [1].getGreen () != 0xFF || colourIndex [1].getBlue () != 0xFF)
+			colorIndex [1].setDevice (m_device);
+			if (!colorIndex [1].readFromDevice ()) return false;
+			if (colorIndex [1].getRed () != 0xFF || colorIndex [1].getGreen () != 0xFF || colorIndex [1].getBlue () != 0xFF)
 				m_device->error (Error::Warn, "white not white\n");
 
 			// finish reading from m_externalImage
@@ -939,7 +939,7 @@ namespace MSWrite
 				bmpData -= scanLineBMPLength;
 			}
 
-			delete [] colourIndex;
+			delete [] colorIndex;
 		}
 
 		return true;

@@ -46,7 +46,7 @@ public:
   /**
    * Opens the specified file, using the mode m.
    *
-   * @return true if succesful, otherwise false.
+   * @return true if successful, otherwise false.
    */
   bool open( const char* filename, int m = ReadOnly );
 

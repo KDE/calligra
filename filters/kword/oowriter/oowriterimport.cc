@@ -741,7 +741,7 @@ void OoWriterImport::importDateTimeStyle( const QDomElement& parent )
             format += shortForm ? "s" : "ss";
         } else if ( localName == "am-pm" ) {
             format += "ap";
-        } else if ( localName == "text" ) { // litteral
+        } else if ( localName == "text" ) { // literal
             format += e.text();
         } // TODO number:decimal-places
     }
@@ -785,7 +785,7 @@ void OoWriterImport::importDateTimeStyle( const QDomElement& parent )
             kdeFormat += shortForm ? "%S" : "%S"; // KLocale doesn't have 1-digit seconds
         } else if ( localName == "am-pm" ) {
             kdeFormat += "%p";
-        } else if ( localName == "text" ) { // litteral
+        } else if ( localName == "text" ) { // literal
             kdeFormat += e.text();
         } // TODO number:decimal-places
     }

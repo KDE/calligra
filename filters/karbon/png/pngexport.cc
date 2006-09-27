@@ -92,7 +92,7 @@ PngExport::convert( const QByteArray& from, const QByteArray& to )
 	VObjectList objects = doc.selection()->objects();
 	VObjectListIterator itr = objects;
 
-	// we dont need the selection anymore:
+	// we do not need the selection anymore:
 	doc.selection()->clear();
 
 	// paint shapes over image

@@ -1913,13 +1913,13 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         styleKey += 'A';
     }
 
-    styleKey += '@'; // A more visible seperator
+    styleKey += '@'; // A more visible separator
 
     props += textFormatToStyle(layoutOrigin.formatData.text,layout.formatData.text,force,styleKey);
 
     props += ">";
 
-    styleKey += '@'; // A more visible seperator
+    styleKey += '@'; // A more visible separator
 
     // ### TODO/FIXME: what if all tabulators must be erased?
     if (!layout.tabulatorList.isEmpty()
@@ -2105,7 +2105,7 @@ bool OOWriterWorker::doFullPaperFormat(const int format,
         m_paperWidth=width;
         m_paperHeight=height;
     }
-    m_paperOrientation=orientation; // ### TODO: check if OOWriter needs the orignal size (without landscape) or the real size
+    m_paperOrientation=orientation; // ### TODO: check if OOWriter needs the original size (without landscape) or the real size
     return true;
 }
 

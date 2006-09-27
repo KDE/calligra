@@ -90,11 +90,11 @@ void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
         stackItem->textPosition=0;
     }
 
-    QString strColour=abiPropsMap["color"].getValue();
-    if (!strColour.isEmpty())
+    QString strColor=abiPropsMap["color"].getValue();
+    if (!strColor.isEmpty())
     {
-        // The colour information is *not* lead by a hash (#)
-        stackItem->fgColor.setNamedColor("#"+strColour);
+        // The color information is *not* lead by a hash (#)
+        stackItem->fgColor.setNamedColor("#"+strColor);
    }
 
     QString strBackgroundTextColor=abiPropsMap["bgcolor"].getValue();
@@ -105,7 +105,7 @@ void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
     }
     else if(!strBackgroundTextColor.isEmpty())
     {
-        // The colour information is *not* lead by a hash (#)
+        // The color information is *not* lead by a hash (#)
         stackItem->bgColor.setNamedColor("#"+strBackgroundTextColor);
     }
 

@@ -139,7 +139,7 @@ class Para: public Layout
 		//void setPrevious(Para *p)  { _previous  = p;    }
 
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 
 		/**

@@ -524,7 +524,7 @@ int ASCIIImport::Indent(const QString& line) const
 {
 
     QChar c;  // for reading string a character at a time
-    int count=0;  // amount of white space at the begining of the line
+    int count=0;  // amount of white space at the beginning of the line
 
     for( int i = 0; i < line.length(); i++ )
     {

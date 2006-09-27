@@ -888,8 +888,8 @@ namespace MSWrite
 		DWord m_sizeImage;
 		Long m_xPixelsPerMeter;
 		Long m_yPixelsPerMeter;
-		DWord m_coloursUsed;
-		DWord m_coloursImportant;
+		DWord m_colorsUsed;
+		DWord m_colorsImportant;
 		
 		BMP_BitmapInfoHeaderGenerated &operator= (const BMP_BitmapInfoHeaderGenerated &rhs);
 		
@@ -905,8 +905,8 @@ namespace MSWrite
 		static const DWord sizeImageDefault = DWord (0);
 		static const Long xPixelsPerMeterDefault = Long (0);
 		static const Long yPixelsPerMeterDefault = Long (0);
-		static const DWord coloursUsedDefault = DWord (0);
-		// no default for coloursImportant
+		static const DWord colorsUsedDefault = DWord (0);
+		// no default for colorsImportant
 	
 	public:
 		// [PRIVATE] do not call!
@@ -945,22 +945,22 @@ namespace MSWrite
 		Long getYPixelsPerMeter (void) const	{	return m_yPixelsPerMeter;	}
 		void setYPixelsPerMeter (const Long val)	{	m_yPixelsPerMeter = val;	}
 		
-		DWord getColoursUsed (void) const	{	return m_coloursUsed;	}
-		void setColoursUsed (const DWord val)	{	m_coloursUsed = val;	}
+		DWord getColorsUsed (void) const	{	return m_colorsUsed;	}
+		void setColorsUsed (const DWord val)	{	m_colorsUsed = val;	}
 		
-		DWord getColoursImportant (void) const	{	return m_coloursImportant;	}
-		void setColoursImportant (const DWord val)	{	m_coloursImportant = val;	}
+		DWord getColorsImportant (void) const	{	return m_colorsImportant;	}
+		void setColorsImportant (const DWord val)	{	m_colorsImportant = val;	}
 	};
 	
-	// element of colourTable, triad of RGB
+	// element of colorTable, triad of RGB
 	// [PRIVATE] this is a private libmswrite class, do not use it!
-	class BMP_BitmapColourIndexGenerated : public NeedsDevice
+	class BMP_BitmapColorIndexGenerated : public NeedsDevice
 	{
 	public:
 		static const int s_size = 4;
 	
 	private:
-		BMP_BitmapColourIndexGenerated (const BMP_BitmapColourIndexGenerated &rhs);	//TODO: copy constructor
+		BMP_BitmapColorIndexGenerated (const BMP_BitmapColorIndexGenerated &rhs);	//TODO: copy constructor
 	
 	protected:
 		Byte m_data [4];	// raw data from .wri file
@@ -970,7 +970,7 @@ namespace MSWrite
 		Byte m_red;
 		Byte m_reserved;
 		
-		BMP_BitmapColourIndexGenerated &operator= (const BMP_BitmapColourIndexGenerated &rhs);
+		BMP_BitmapColorIndexGenerated &operator= (const BMP_BitmapColorIndexGenerated &rhs);
 		
 		virtual bool verifyVariables (void);
 		virtual bool writeToArray (void);
@@ -985,8 +985,8 @@ namespace MSWrite
 		virtual bool readFromDevice (void);
 		virtual bool writeToDevice (void);
 		
-		BMP_BitmapColourIndexGenerated ();
-		virtual ~BMP_BitmapColourIndexGenerated ();
+		BMP_BitmapColorIndexGenerated ();
+		virtual ~BMP_BitmapColorIndexGenerated ();
 		
 		
 		//

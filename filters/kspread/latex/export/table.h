@@ -148,7 +148,7 @@ class Table: public XmlParser, Config
 		void setLCMode() { _lcMode = true; }
 	
 		/**
-		 * Helpfull functions
+		 * Helpful functions
 		 */
 
 		/**

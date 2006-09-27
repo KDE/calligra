@@ -104,7 +104,7 @@ void KHTMLReader::popState() {
 	HTMLReader_state *s=_state.pop();
 
 	/**
-	   the recursion trough html is somewhat clumsy still, i'm working on a better method.
+	   the recursion trough html is somewhat clumsy still, I am working on a better method.
 	   popState gets called when a tag is closed, but since a closed tag doesn't mean the end
 	   of a (kword) "tag" we have to copy some things over from the closed tag:
 	   	- the paragraph (after a </B>, we still are in the same paragraph, but
@@ -377,7 +377,7 @@ bool KHTMLReader::parse_hr(DOM::Element /*e*/) {
 
 bool KHTMLReader::parse_br(DOM::Element /*e*/) {
 	startNewParagraph(false,false); //keep the current format and layout
-	return false; // a BR tag has no childs.
+	return false; // a BR tag has no children.
 }
 
 static const QColor parsecolor(const QString& colorstring) {

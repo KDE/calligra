@@ -22,7 +22,7 @@
 #include "rtfimport_dom.h"
 
 /**
- * Escape the special XML characters and be careful to catch any unallowed control character
+ * Escape the special XML characters and be careful to catch any disallowed control character
  */
 QString CheckAndEscapeXmlText(const QString& strText)
 {
@@ -44,7 +44,7 @@ QString CheckAndEscapeXmlText(const QString& strText)
         else if ((test == 9) || (test == 10) || (test == 13) ) continue; // Allowed control characters: TAB, LF, CR
         else
         {
-            // An unallowed control character:
+            // A disallowed control character:
             // - could be a bug in the RTF file
             // - could be not supported encoding.
             // In any case, we must replace this character.

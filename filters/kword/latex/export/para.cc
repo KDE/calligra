@@ -228,7 +228,7 @@ void Para::analyseLayoutPara(const QDomNode balise)
 		if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
 			//analyseFormat(balise);
-			/* No more format : verify if all the text zone has been formated */
+			/* No more format : verify if all the text zone has been formatted */
 			if(_currentPos != _text.length())
 			{
 				zone = new TextZone(_text, this);
@@ -369,7 +369,7 @@ void Para::generate(QTextStream &out)
 	{
 		/* We generate center, itemize tag and new page only for
 		 * parag not for footnote
-		 * If a parag. have a special format (begining)
+		 * If a parag. have a special format (beginning)
 		 */
 		if(isHardBreak())
 			out << "\\newpage" << endl;
@@ -407,7 +407,7 @@ void Para::generate(QTextStream &out)
 /*******************************************/
 /* GenerateDebut                           */
 /*******************************************/
-/* Generate the begining paragraph markup. */
+/* Generate the beginning paragraph markup.*/
 /*******************************************/
 void Para::generateDebut(QTextStream &out)
 {

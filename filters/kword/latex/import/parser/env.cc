@@ -33,7 +33,7 @@ Env::Env(const char* command)
 	/* Parse the command name */
 	QString pattern = QString(command);
 	int pos = pattern.find("{");
-	/* Remove \begin{ at the begining and the } at the end. */
+	/* Remove \begin{ at the beginning and the } at the end. */
 	if(pos != -1)
 		_name = pattern.mid(pos + 1, pattern.length() - pos - 2);
 	_name = _name.trimmed();
