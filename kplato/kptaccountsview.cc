@@ -123,7 +123,7 @@ AccountsView::AccountsView(Project &project, View *view, QWidget *parent)
     int tot = list[0] + list[1];
     list[0] = qMin(35, tot);
     list[1] = tot-list[0];
-    m_dlv->setSizes(list);
+    //m_dlv->setSizes(list);
 }
 
 void AccountsView::zoom(double zoom) {
@@ -367,7 +367,7 @@ bool AccountsView::setContext(Context::Accountsview &context) {
     //kDebug()<<k_funcinfo<<"---->"<<endl;
     Q3ValueList<int> list;
     list << context.accountsviewsize << context.periodviewsize;
-    m_dlv->setSizes(list);
+    //m_dlv->setSizes(list); //NOTE: Doesn't always work!
     m_date = context.date;
     if (!m_date.isValid())
         m_date = QDate::currentDate();
