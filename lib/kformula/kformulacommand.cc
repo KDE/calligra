@@ -183,7 +183,6 @@ void KFCReplace::unexecute()
 KFCAddToken::KFCAddToken(const QString &name, Container *document)
         : Command(name, document)
 {
-    tokenList.setAutoDelete( true );
 }
 
 KFCAddToken::~KFCAddToken()
