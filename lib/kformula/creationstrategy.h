@@ -44,7 +44,7 @@ class RootElement;
 class SpaceElement;
 class SymbolElement;
 class TextElement;
-class TokenElement;
+class NumberElement;
 class UnderlineElement;
 
 /**
@@ -76,7 +76,7 @@ public:
     virtual IndexElement* createIndexElement() = 0;
     virtual IdentifierElement* createIdentifierElement() = 0;
     virtual OperatorElement* createOperatorElement() = 0;
-    virtual TokenElement* createNumberElement() = 0;
+    virtual NumberElement* createNumberElement() = 0;
 	virtual QString type() const = 0;
 };
 
@@ -103,7 +103,7 @@ public:
     virtual IndexElement* createIndexElement();
     virtual IdentifierElement* createIdentifierElement();
     virtual OperatorElement* createOperatorElement();
-    virtual TokenElement* createNumberElement();
+    virtual NumberElement* createNumberElement();
 	virtual QString type() const { return "Ordinary"; }
 };
 

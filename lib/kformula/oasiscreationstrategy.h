@@ -66,7 +66,7 @@ public:
     virtual IndexElement* createIndexElement();
     virtual IdentifierElement* createIdentifierElement();
     virtual OperatorElement* createOperatorElement();
-    virtual TokenElement* createNumberElement();
+    virtual NumberElement* createNumberElement();
 	virtual QString type() const { return "Oasis"; }
 
     BasicElement* createOperatorElement( const QDomElement& element );

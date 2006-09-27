@@ -32,7 +32,7 @@
 #include "spaceelement.h"
 #include "symbolelement.h"
 #include "textelement.h"
-#include "tokenelement.h"
+#include "numberelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -134,9 +134,9 @@ OperatorElement* OrdinaryCreationStrategy::createOperatorElement()
     return new OperatorElement();
 }
 
-TokenElement* OrdinaryCreationStrategy::createNumberElement()
+NumberElement* OrdinaryCreationStrategy::createNumberElement()
 {
-    return new TokenElement();
+    return new NumberElement();
 }
 
 

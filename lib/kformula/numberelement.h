@@ -17,20 +17,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef TOKENELEMENT_H
-#define TOKENELEMENT_H
+#ifndef NUMBERELEMENT_H
+#define NUMBERELEMENT_H
 
-#include "formulacursor.h"
-#include "tokenstyleelement.h"
-#include "sequenceelement.h"
-#include "contextstyle.h"
+#include "tokenelement.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
-class TokenElement : public TokenStyleElement {
-    typedef TokenStyleElement inherited;
+class NumberElement : public TokenElement {
+    typedef TokenElement inherited;
 public:
-    TokenElement( BasicElement* parent = 0 );
+    NumberElement( BasicElement* parent = 0 );
 
     /**
      * This is called by the container to get a command depending on
@@ -42,30 +39,9 @@ public:
      */
     virtual KCommand* buildCommand( Container*, Request* );
 
-	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
-
-    virtual QString getElementName() const { return "mtext"; }
-protected:
-    QString getCharFromEntity( const QString& entity );
-
-    /**
-     * @returns true if the sequence contains only text.
-     */
-    virtual bool isTextOnly() const { return m_textOnly; }
-
-    /**
-     * Space around sequence
-     */
-    virtual luPt getSpaceBefore( const ContextStyle& context, 
-                                 ContextStyle::TextStyle tstyle,
-                                 double factor );
-    virtual luPt getSpaceAfter( const ContextStyle& context, 
-                                 ContextStyle::TextStyle tstyle,
-                                 double factor );
-private:
-    bool m_textOnly;
+    virtual QString getElementName() const { return "mn"; }
 };
 
 KFORMULA_NAMESPACE_END
 
-#endif // TOKENELEMENT_H
+#endif // NUMBERELEMENT_H

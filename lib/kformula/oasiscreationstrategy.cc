@@ -31,7 +31,7 @@
 #include "textelement.h"
 #include "glyphelement.h"
 #include "styleelement.h"
-#include "tokenelement.h"
+#include "numberelement.h"
 #include "identifierelement.h"
 #include "operatorelement.h"
 #include "stringelement.h"
@@ -60,7 +60,7 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
     if      ( type == "mi" )               return new IdentifierElement();
     else if ( type == "mo" )               return createOperatorElement( element );
     else if ( type == "mn"
-              || type == "mtext" )         return new TokenElement();
+              || type == "mtext" )         return new NumberElement();
     else if ( type == "ms" )               return new StringElement();
     else if ( type == "mspace" )           return new SpaceElement();
     else if ( type == "mglyph" )           return new GlyphElement();
@@ -202,9 +202,9 @@ OperatorElement* OasisCreationStrategy::createOperatorElement()
     return new OperatorElement();
 }
 
-TokenElement* OasisCreationStrategy::createNumberElement()
+NumberElement* OasisCreationStrategy::createNumberElement()
 {
-    return new TokenElement();
+    return new NumberElement();
 }
 
 KFORMULA_NAMESPACE_END
