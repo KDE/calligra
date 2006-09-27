@@ -86,7 +86,20 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
         return command;
     }
 
-    case req_addText:
+    case req_addText: {
+        KFCSplitToken* command = new KFCSplitToken( i18n("Add Text"), container );
+        TextRequest* tr = static_cast<TextRequest*>( request );
+        IdentifierElement* id = creationStrategy->createIdentifierElement();
+        command->addCursor( cursor );
+        command->addToken( id );
+        for ( uint i = 0; i < tr->text().length(); i++ ) {
+            TextElement* text = creationStrategy->createTextElement( tr->text()[i] );
+            command->addContent( id, text );
+        }
+        cursor->setTo( getParent(), static_cast<SequenceElement*>(getParent())->childPos( this ) + 1 );
+        return command;
+    }
+
     case req_addOperator:
     case req_addEmptyBox:
     case req_addNameSequence:
