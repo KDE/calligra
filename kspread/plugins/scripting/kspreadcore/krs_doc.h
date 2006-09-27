@@ -95,10 +95,11 @@ class Doc : public Kross::Api::Class<Doc>
 #if 0
 		bool loadOpenDocXML(const QString& xml);
 		QString saveOpenDocXML();
-
-		bool loadOpenDocFile(const QString& file);
-		bool saveOpenDocFile(const QString& file) const;
 #endif
+
+		bool openUrl(const QString& url);
+		bool import(const QString& url);
+		bool exp0rt(const QString& url);
 
 	private:
 		KSpread::Doc* m_doc;

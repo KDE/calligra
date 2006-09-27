@@ -34,6 +34,11 @@ Doc::Doc(KSpread::Doc* doc)
 
 	this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("loadNativeXML", this, &Doc::loadNativeXML);
 	this->addFunction0< Kross::Api::Variant >("saveNativeXML", this, &Doc::saveNativeXML);
+
+	this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("openUrl", this, &Doc::openUrl);
+	this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("import", this, &Doc::import);
+	this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("exp0rt", this, &Doc::exp0rt);
+
 }
 
 Doc::~Doc() {
@@ -78,5 +83,20 @@ QString Doc::saveNativeXML() {
 	return m_doc->saveXML().toString(2);
 }
 
+bool Doc::openUrl(const QString& url)
+{
+	return m_doc->openURL(url);
 }
+
+bool Doc::import(const QString& url)
+{
+	return m_doc->import(url);
 }
+
+bool Doc::exp0rt(const QString& url)
+{
+	return m_doc->exp0rt(url);
+}
+
+}}
+
