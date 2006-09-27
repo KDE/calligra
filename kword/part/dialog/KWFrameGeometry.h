@@ -39,12 +39,18 @@ public:
     void open(KWFrame* frame);
     void open(KoShape *shape);
     void save();
+    void cancel();
     KAction *createAction();
+
+private slots:
+    void updateShape();
 
 private:
     Ui::KWFrameGeometry widget;
     KWFrame *m_frame;
     FrameConfigSharedState *m_state;
+    QPointF mOriginalPosition;
+    QSizeF mOriginalSize;
 };
 
 #endif

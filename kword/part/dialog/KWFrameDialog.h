@@ -56,6 +56,7 @@ public:
 
 private slots:
     void okClicked();
+    void cancelClicked();
 
 private:
     KWFrameConnectSelector *m_frameConnectSelector;

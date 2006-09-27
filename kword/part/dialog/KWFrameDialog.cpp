@@ -56,6 +56,7 @@ KWFrameDialog::KWFrameDialog (const QList<KWFrame*> &frames, KWDocument *documen
     m_frameRunaroundProperties->open(frames);
 
     connect(this, SIGNAL( okClicked() ), this, SLOT( okClicked() ));
+    connect(this, SIGNAL( cancelClicked() ), this, SLOT( cancelClicked() ));
 }
 
 KWFrameDialog::~KWFrameDialog() {
@@ -68,6 +69,11 @@ void KWFrameDialog::okClicked() {
     m_frameRunaroundProperties->save();
     if(m_frameGeometry)
         m_frameGeometry->save();
+}
+
+void KWFrameDialog::cancelClicked() {
+    if(m_frameGeometry)
+        m_frameGeometry->cancel();
 }
 
 // static

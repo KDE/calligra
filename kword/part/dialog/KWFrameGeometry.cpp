@@ -20,6 +20,8 @@
 #include "KWDocument.h"
 #include "frame/KWFrame.h"
 
+#include <kdebug.h>
+
 KWFrameGeometry::KWFrameGeometry(FrameConfigSharedState *state)
     : m_state(state),
     m_frame(0)
@@ -56,24 +58,50 @@ void KWFrameGeometry::open(KWFrame* frame) {
 }
 
 void KWFrameGeometry::open(KoShape *shape) {
-    QPointF absolutePosition = shape->absolutePosition();
-    widget.left->changeValue(absolutePosition.x());
-    widget.top->changeValue(absolutePosition.y());
-    widget.width->changeValue(shape->size().width());
-    widget.height->changeValue(shape->size().height());
+    mOriginalPosition = shape->absolutePosition();
+    mOriginalSize = shape->size();
+    widget.left->changeValue(mOriginalPosition.x());
+    widget.top->changeValue(mOriginalPosition.y());
+    widget.width->changeValue(mOriginalSize.width());
+    widget.height->changeValue(mOriginalSize.height());
+
+    connect(widget.left, SIGNAL(valueChanged(double)), 
+            this, SLOT(updateShape()));
+    connect(widget.top, SIGNAL(valueChanged(double)), 
+            this, SLOT(updateShape()));
+    connect(widget.width, SIGNAL(valueChanged(double)), 
+            this, SLOT(updateShape()));
+    connect(widget.height, SIGNAL(valueChanged(double)), 
+            this, SLOT(updateShape()));
 }
 
-void KWFrameGeometry::save() {
+void KWFrameGeometry::updateShape() {
     KWFrame *frame = m_frame;
     if(frame == 0) {
         frame = m_state->frame();
         m_state->markFrameUsed();
     }
     Q_ASSERT(frame);
+    frame->shape()->repaint();
     QPointF pos(widget.left->value(), widget.top->value());
     frame->shape()->setAbsolutePosition(pos);
     QSizeF size(widget.width->value(), widget.height->value());
     frame->shape()->resize(size);
+    frame->shape()->repaint();
+}
+
+void KWFrameGeometry::save() {
+}
+
+void KWFrameGeometry::cancel() {
+    KWFrame *frame = m_frame;
+    if(frame == 0) {
+        frame = m_state->frame();
+        m_state->markFrameUsed();
+    }
+    Q_ASSERT(frame);
+    frame->shape()->setAbsolutePosition(mOriginalPosition);
+    frame->shape()->resize(mOriginalSize);
 }
 
 KAction *KWFrameGeometry::createAction() {
