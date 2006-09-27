@@ -52,16 +52,13 @@ KSpreadCoreModule::KSpreadCoreModule(Kross::Api::Manager* manager)
         kdDebug() << it.key() << " " << it.data() << endl;
     }
 
-kdDebug() << "===========> KSpreadCoreModule::KSpreadCoreModule 1" << endl;
     // Wrap doc
     Kross::Api::Object::Ptr kspreaddocument = manager->getChild("KSpreadDocument");
     if(! kspreaddocument) {
-kdDebug() << "===========> KSpreadCoreModule::KSpreadCoreModule 2" << endl;
         KSpread::Doc* doc = new KSpread::Doc();
         addChild( new Kross::KSpreadCore::Doc(doc) );
     }
     else {
-kdDebug() << "===========> KSpreadCoreModule::KSpreadCoreModule 3" << endl;
         Kross::Api::QtObject* kspreaddocumentqt = dynamic_cast< Kross::Api::QtObject* >( kspreaddocument.data() );
         if(kspreaddocumentqt) {
             KSpread::Doc* document = dynamic_cast< ::KSpread::Doc* >( kspreaddocumentqt->getObject() );
