@@ -46,8 +46,7 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
         return 0;
     }
 
-    switch ( *request ) {
-    case req_addNumber: {
+    if ( *request == req_addNumber ) {
         KFCReplace* command = new KFCReplace( i18n("Add Number"), container );
         NumberRequest* nr = static_cast<NumberRequest*>( request );
         TextElement* element = creationStrategy->createTextElement( nr->ch(), false );
@@ -55,8 +54,39 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
         return command;
     }
 
+    if ( countChildren() == 0 || cursor->getPos() == countChildren() ) {
+        // We are in the last position, so it's easy, call the parent to 
+        // create a new child
+        uint pos = static_cast<SequenceElement*>(getParent())->childPos( this );
+        cursor->setTo( getParent(), pos + 1);
+        return getParent()->buildCommand( container, request );
+    }
+    if ( cursor->getPos() == 0 ) {
+        uint pos = static_cast<SequenceElement*>(getParent())->childPos( this );
+        cursor->setTo( getParent(), pos );
+        return getParent()->buildCommand( container, request );
+    }
+
+    // We are in the middle of a token, so:
+    // a) Cut from mark to the end
+    // b) Create a new token and add an element from key pressed
+    // c) Create a new token and add elements cut previously
+    // d) Move cursor to parent so that it command execution works fine
+
+    switch( *request ) {
+    case req_addTextChar: {
+        KFCSplitToken* command = new KFCSplitToken( i18n("Add Text"), container );
+        TextCharRequest* tr = static_cast<TextCharRequest*>( request );
+        IdentifierElement* id = creationStrategy->createIdentifierElement();
+        TextElement* text = creationStrategy->createTextElement( tr->ch() );
+        command->addCursor( cursor );
+        command->addToken( id );
+        command->addContent( id, text );
+        cursor->setTo( getParent(), static_cast<SequenceElement*>(getParent())->childPos( this ) + 1 );
+        return command;
+    }
+
     case req_addText:
-    case req_addTextChar:
     case req_addOperator:
     case req_addEmptyBox:
     case req_addNameSequence:
