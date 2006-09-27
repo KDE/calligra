@@ -1031,7 +1031,7 @@ void KPrEffectHandler::drawObject( KPrObject *object, int x, int y, QPixmap *scr
 
     p.translate( -x, -y );
 
-    // redraw objects which lie above the currenty drawn
+    // redraw objects which lie above the currently drawn one
     m_objects.findRef( object );
     KPrObject *obj;
     while ( ( obj = m_objects.next() ) != 0 )

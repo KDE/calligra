@@ -47,7 +47,7 @@ class KoPageLayout;
 class KCommand;
 class KoPointArray;
 /*
- * deactive KPrPageAdaptor
+ * deactivated KPrPageAdaptor
 class KPrPageAdaptor;
 */
 class KPrTextObject;
@@ -98,7 +98,7 @@ public:
     /**
      * @brief Set the manual title
      *
-     * @param title which sould be set
+     * @param title which should be set
      */
     void insertManualTitle(const QString & title);
 
@@ -232,9 +232,9 @@ public:
     void completeLoading( bool _clean, int lastObj );
 
     /**
-     * @brief Create a uniq name for an object.
+     * @brief Create a unique name for an object.
      *
-     * Create a uniq name for the object. If no name is set for the object
+     * Create a unique name for the object. If no name is set for the object
      * a name according to its type is created. If the name already exists
      * append ' (x)'. // FIXME: not allowed by I18N
      *
@@ -491,8 +491,8 @@ public:
     /**
      * @brief get the rect for the objects
      *
-     * @param all true if the rect for all objects shoud be returned
-     *        false if only the rect for selected objects sould be returned
+     * @param all true if the rect for all objects should be returned
+     *        false if only the rect for selected objects should be returned
      *
      * @return rect of the objects
      */

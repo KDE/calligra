@@ -1304,7 +1304,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             Q3PtrList<KPrObject> objects;
             objects.append( m_rotateObject );
 
-            /* As the object is allready rotated set the angle to
+            /* As the object is already rotated set the angle to
              * the m_angleBeforeRotate for the creation of the command, and
              * back afterwards. No need for executing the command */
             float newAngle = m_rotateObject->getAngle();
@@ -1971,7 +1971,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             m_view->screenStop();
             break;
         case Qt::Key_G:
-            // setSwitchingMode( false ) not needed as it is allready done in slotGotoPage;
+            // setSwitchingMode( false ) not needed as it is already done in slotGotoPage;
             if ( !spManualSwitch() )
                 m_view->stopAutoPresTimer();
             slotGotoPage();
@@ -4971,7 +4971,7 @@ void KPrCanvas::finishResizeObject( const QString &name, bool layout )
         {
             KPrResizeCmd *resizeCmd = new KPrResizeCmd( name, move, size, m_resizeObject,
                                                   m_view->kPresenterDoc() );
-            // the command is not executed as the object is allready resized.
+            // the command is not executed as the object is already resized.
             m_view->kPresenterDoc()->addCommand( resizeCmd );
         }
 

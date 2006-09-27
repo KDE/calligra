@@ -116,7 +116,7 @@ public:
     KPrCircleGroup(QWidget *parent);
     /**
      * Set the angle the group is currently representing. If there is a child button
-     * that registred itself (using add()) with an ID that matches the argument angle
+     * that registered itself (using add()) with an ID that matches the argument angle
      * that button will be checked.  All other buttons will be disabled.
      * @param angle the new angle to be represented by this circle
      */

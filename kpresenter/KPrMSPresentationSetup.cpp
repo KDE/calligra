@@ -74,8 +74,8 @@ KPrMSPresentation::KPrMSPresentation( KPrDocument *_doc, KPrView *_view )
 
 KPrMSPresentation::KPrMSPresentation( const KPrMSPresentation &msPres )
     : title( msPres.title ),
-      slideInfos( msPres.slideInfos ), backColour( msPres.backColour ),
-      textColour( msPres.textColour ), path( msPres.path )
+      slideInfos( msPres.slideInfos ), backColor( msPres.backColor ),
+      textColor( msPres.textColor ), path( msPres.path )
 {
     doc = msPres.doc;
     view = msPres.view;
@@ -129,7 +129,7 @@ void KPrMSPresentation::initCreation( QProgressBar *progressBar )
 
     // create the title slides
     QPixmap titleSlide( 1024, 768 );
-    titleSlide.fill( backColour );
+    titleSlide.fill( backColor );
     QPainter painter( &titleSlide );
 
     //the second title is just blank, so create that now
@@ -145,7 +145,7 @@ void KPrMSPresentation::initCreation( QProgressBar *progressBar )
     // and put the specified title string on the first slide
     QFont textFont( "SansSerif", 96 );
     painter.setFont( textFont );
-    painter.setPen( textColour );
+    painter.setPen( textColor );
     painter.drawText( titleSlide.rect(), Qt::AlignCenter | Qt::TextWordWrap, title );
     filename = path + slidePath + "/SPJT0001.JPG";
 
@@ -290,8 +290,8 @@ void KPrMSPresentation::init()
     }
     if ( slideInfos.isEmpty() )
         kWarning() << "No slides selected!" << endl;
-    backColour = Qt::black;
-    textColour = Qt::white;
+    backColor = Qt::black;
+    textColor = Qt::white;
 
     path = KGlobalSettings::documentPath();
 }
@@ -336,9 +336,9 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
     titleLayout->addWidget( title );
 
     KHBox *moreBox = new KHBox( this );
-    QPushButton *showColourButton = new QPushButton( i18n("&Set Colors"), moreBox );
-    showColourButton->setToggleButton( true );
-    connect( showColourButton, SIGNAL( toggled(bool) ), this, SLOT( showColourGroup(bool) ) );
+    QPushButton *showColorButton = new QPushButton( i18n("&Set Colors"), moreBox );
+    showColorButton->setToggleButton( true );
+    connect( showColorButton, SIGNAL( toggled(bool) ), this, SLOT( showColorGroup(bool) ) );
 
     Q3VBoxLayout *topLayout = new Q3VBoxLayout;
     topLayout->addWidget( helptext );
@@ -347,26 +347,26 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
     topLayout->addLayout( titleLayout );
     topLayout->addWidget( moreBox );
 
-    colourGroup = new Q3GroupBox( 2, Qt::Vertical,
+    colorGroup = new Q3GroupBox( 2, Qt::Vertical,
                                             i18n("Preliminary Slides"),
-                                            this , "colourBox" );
-    colourGroup->setWhatsThis(
+                                            this , "colorBox" );
+    colorGroup->setWhatsThis(
                      i18n( "This section allows you to set the colors for "
                            "the preliminary slides; it does not affect the "
                            "presentation in any way, and it is normal to "
                            "leave these set to the default.") );
-    KHBox *textColourLayout = new KHBox( colourGroup );
-    QLabel *lable3 = new QLabel( i18n("Text color:"), textColourLayout );
+    KHBox *textColorLayout = new KHBox( colorGroup );
+    QLabel *lable3 = new QLabel( i18n("Text color:"), textColorLayout );
     lable3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    textColour = new KColorButton( msPres.getTextColour(), textColourLayout );
-    lable3->setBuddy( textColour );
+    textColor = new KColorButton( msPres.getTextColor(), textColorLayout );
+    lable3->setBuddy( textColor );
 
-    KHBox *backgroundColourLayout = new KHBox( colourGroup );
-    QLabel *lable4 = new QLabel( i18n("Background color:"), backgroundColourLayout );
+    KHBox *backgroundColorLayout = new KHBox( colorGroup );
+    QLabel *lable4 = new QLabel( i18n("Background color:"), backgroundColorLayout );
     lable4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    backColour = new KColorButton( msPres.getBackColour(), backgroundColourLayout );
-    lable4->setBuddy( backColour );
-    colourGroup->setHidden( true );
+    backColor = new KColorButton( msPres.getBackColor(), backgroundColorLayout );
+    lable4->setBuddy( backColor );
+    colorGroup->setHidden( true );
 
     KHBox *buttonLayout = new KHBox( this );
     KPushButton *helpButton = new KPushButton( KStdGuiItem::help(), buttonLayout );
@@ -390,7 +390,7 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
     mainLayout->setSpacing(6);
     mainLayout->addLayout(topLayout);
     mainLayout->addSpacing( 10 );
-    mainLayout->addWidget(colourGroup);
+    mainLayout->addWidget(colorGroup);
     mainLayout->addWidget(buttonLayout);
     mainLayout->setResizeMode( QLayout::Fixed );
     mainLayout->setGeometry( QRect( 0, 0, 300, 220 ) );
@@ -414,13 +414,13 @@ void KPrMSPresentationSetup::createMSPresentation( KPrDocument *_doc, KPrView *_
     delete dlg;
 }
 
-void KPrMSPresentationSetup::showColourGroup(bool on)
+void KPrMSPresentationSetup::showColorGroup(bool on)
 {
     if (on) {
-        colourGroup->setHidden( false );
+        colorGroup->setHidden( false );
         mainLayout->setGeometry( QRect(0, 0, 300, 220 ) );
     } else {
-        colourGroup->setHidden( true );
+        colorGroup->setHidden( true );
         mainLayout->setGeometry( QRect(0, 0, 300, 320 ) );
     }
 }
@@ -434,8 +434,8 @@ void KPrMSPresentationSetup::finish()
 {
     msPres.setTitle( title->text() );
 
-    msPres.setBackColour( backColour->color() );
-    msPres.setTextColour( textColour->color() );
+    msPres.setBackColor( backColor->color() );
+    msPres.setTextColor( textColor->color() );
     msPres.setPath( path->lineEdit()->text() );
 
     // Things to sanity check:

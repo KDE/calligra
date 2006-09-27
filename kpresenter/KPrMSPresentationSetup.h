@@ -64,16 +64,16 @@ public:
 
     void setTitle( const QString &_title )
         { title = _title; }
-    void setBackColour( const QColor &_backColour )
-        { backColour = _backColour; }
-    void setTextColour( const QColor &_textColour )
-        { textColour = _textColour; }
+    void setBackColor( const QColor &_backColor )
+        { backColor = _backColor; }
+    void setTextColor( const QColor &_textColor )
+        { textColor = _textColor; }
     void setPath( const QString &_path )
         { path = _path; }
 
     QString getTitle() const { return title; }
-    QColor getBackColour() const { return backColour; }
-    QColor getTextColour() const { return textColour; }
+    QColor getBackColor() const { return backColor; }
+    QColor getTextColor() const { return textColor; }
     QString getPath() const { return path; }
 
     struct SlideInfo {
@@ -97,7 +97,7 @@ protected:
 
     QString title;
     Q3ValueList<SlideInfo> slideInfos;
-    QColor backColour, textColour;
+    QColor backColor, textColor;
     QString path;
     QString slidePath; // directory relative to path, containing slides 
 
@@ -119,8 +119,8 @@ protected:
     KPrMSPresentation msPres;
 
     KLineEdit *title;
-    KColorButton *textColour, *backColour;
-    Q3GroupBox *colourGroup;
+    KColorButton *textColor, *backColor;
+    Q3GroupBox *colorGroup;
     Q3VBoxLayout *mainLayout;
     KUrlRequester *path;
 
@@ -128,7 +128,7 @@ protected slots:
     void slotChoosePath(const KUrl &);
     virtual void finish();
     virtual void helpMe();
-    void showColourGroup(bool on);
+    void showColorGroup(bool on);
 };
 
 class KPrMSPresentationCreateDialog : public QDialog

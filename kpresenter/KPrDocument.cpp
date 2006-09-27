@@ -411,7 +411,7 @@ KPrDocument::~KPrDocument()
     if(isReadWrite())
         saveConfig();
     clearTestCustomSlideShow();
-    //Be carefull !!!!!! don't delete this pointer delete in stickypage
+    //Be careful !!!!!! don't delete this pointer delete in stickypage
 #if 0
     delete _header;
     delete _footer;
@@ -2182,7 +2182,7 @@ int KPrDocument::createPresentationAnimation(const QDomElement& element, int ord
 void KPrDocument::fillStyleStack( const QDomElement& object, KoOasisContext & context, const char* family )
 {
     // See OpenDoc 9.2.15 Common Drawing Shape Attributes
-    // presentation:style-name is allways family presentation
+    // presentation:style-name is always family presentation
     if ( object.hasAttributeNS( KoXmlNS::presentation, "style-name" ))
     {
         context.fillStyleStack( object, KoXmlNS::presentation, "style-name", "presentation" );
@@ -2191,7 +2191,7 @@ void KPrDocument::fillStyleStack( const QDomElement& object, KoOasisContext & co
     {
         context.fillStyleStack( object, KoXmlNS::draw, "style-name", family );
     }
-    // draw:tex-style-name is allways family paragraph
+    // draw:tex-style-name is always family paragraph
     if ( object.hasAttributeNS( KoXmlNS::draw, "text-style-name" ) )
     {
         context.fillStyleStack( object, KoXmlNS::draw, "text-style-name", "paragraph" );
@@ -2231,7 +2231,7 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
         QString cmd = KGlobal::dirs()->findExe("perl");
         if (cmd.isEmpty())
         {
-            setErrorMessage( i18n("You don't appear to have PERL installed.\nIt is needed to convert this document.\nPlease install PERL and try again."));
+            setErrorMessage( i18n("You do not appear to have PERL installed.\nIt is needed to convert this document.\nPlease install PERL and try again."));
             return false;
         }
         cmd += " ";
@@ -3188,7 +3188,7 @@ bool KPrDocument::completeLoading( KoStore* _store )
 
 
         if ( saveOnlyPage == -1 ) {
-            // ### following call independant of saveOnlyPage's value?
+            // ### following call independent of saveOnlyPage's value?
             m_masterPage->completeLoading( _clean, lastObj );
             Q3PtrListIterator<KPrPage> it( m_pageList );
             for ( ; it.current(); ++it )
@@ -3451,7 +3451,7 @@ void KPrDocument::deletePage( int _page )
 
 void KPrDocument::insertPage( KPrPage *page, int currentPageNum, int insertPageNum )
 {
-    // check if page was allready deleted
+    // check if page was already deleted
     int pos = m_deletedPageList.findRef( page );
     if ( pos != -1 )
         m_deletedPageList.take( pos );
@@ -3745,7 +3745,7 @@ void KPrDocument::makeUsedPixmapList()
             continue;
         m_pageList.at(i)->makeUsedPixmapList();
     }
-    // ### following call independant of saveOnlyPage's value?
+    // ### following call independent of saveOnlyPage's value?
     if ( saveOnlyPage == -1 )
         m_masterPage->makeUsedPixmapList();
 }

@@ -947,7 +947,7 @@ void KPrOutline::itemClicked( Q3ListViewItem *item )
  * The listview no longer moves the item by itself. It just calls m_doc->movePage
  * which then moves the item. At the moment the method only works as long as
  * only one object is moves.
- * When an item is about to move (using drag-and-drop), it makes shure that
+ * When an item is about to move (using drag-and-drop), it makes sure that
  * it's not moved right after an object.
  */
 void KPrOutline::slotDropped( QDropEvent * /* e */, Q3ListViewItem *parent, Q3ListViewItem *target )
@@ -972,7 +972,7 @@ void KPrOutline::slotDropped( QDropEvent * /* e */, Q3ListViewItem *parent, Q3Li
 
         i->setSelected( false );
 
-        // don't move the item as it is allready
+        // don't move the item as it is already
         moveItem(i, parent, target );
 
         // Only one item can be moved

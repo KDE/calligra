@@ -428,7 +428,7 @@ void KPrPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
     setMinMax( min_x, min_y, max_x, max_y, secondPoint );
 
     /* 4. check if maximal points lie on the arc.
-     * There are three posibilities how many sections have to
+     * There are three possibilities how many sections have to
      * been checked.
      * 1. the arc is only once on one side of the x axis
      * 2. the arc is on both sides of the x axis
@@ -572,7 +572,7 @@ void KPrPieObject::setEndPoints( KoPointArray &points ) const
         double x = 0;
         double y = 0;
 
-        // be carefull
+        // be careful
         if ( angles[i] == 90 * 16 ) {
             y = radius2;
         }

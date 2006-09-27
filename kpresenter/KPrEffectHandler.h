@@ -85,7 +85,7 @@ protected:
   /**
    * Effect None
    * The object just appears on its position
-   * Returns allways true as the object is in is final position.
+   * Returns always true as the object is in its final position.
    */
   bool appearNone( KPrObject *object );
 
@@ -278,7 +278,7 @@ protected:
 
   /**
    * Pixmap used as source for displaying on.
-   * m_src contains all objects which are allready on the
+   * m_src contains all objects which are already on the
    * final position.
    */
   QPixmap *m_src;

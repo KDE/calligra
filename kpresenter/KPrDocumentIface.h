@@ -70,7 +70,7 @@ k_dcop:
 
     virtual QString selectedForPrinting() const;
 
-    //Be carefull ! when pgNum > num of page we return false
+    //Be careful ! when pgNum > num of page we return false
     virtual bool isSlideSelected( int pgNum);
 
 

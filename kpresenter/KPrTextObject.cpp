@@ -384,7 +384,7 @@ void KPrTextObject::paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
 {
     // Never draw shadow (in text objects, it's a character property, not an object property)
     KPrPage *p = m_doc->pageList().at( pageNum );
-    // neccessary when on masterpage
+    // necessary when on masterpage
     if ( p )
         recalcPageNum( p );
     if ( drawingShadow ) return;

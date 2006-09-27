@@ -340,8 +340,8 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     /**
      * @brief get the rect for the objects
      *
-     * @param all true if the rect for all objects shoud be returned
-     *        false if only the rect for selected objects sould be returned
+     * @param all true if the rect for all objects should be returned
+     *        false if only the rect for selected objects should be returned
      *
      * @return rect of the objects
      */
@@ -665,7 +665,7 @@ private:
     /**
      * @brief Get the list of objects in the order they should be displayed.
      *
-     * This takes into acount the object set in raiseObject so that it is 
+     * This takes into account the object set in raiseObject so that it is 
      * the last one in the list returned (the one that is displayed above all
      * the others).
      *

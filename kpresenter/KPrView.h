@@ -521,7 +521,7 @@ public:
      * @brief Show the rect where object lies
      *
      * It will move the screen to the top right corner of object
-     * when it is not allready totaly visible on the screen.
+     * when it is not already totaly visible on the screen.
      *
      * @param object which should be shown
      */

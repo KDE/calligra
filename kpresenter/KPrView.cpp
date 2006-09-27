@@ -1499,7 +1499,7 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
     // no slide is selected ?
     if( !kPresenterDoc()->displaySelectedSlides().count() )
     {
-        KMessageBox::sorry( this, i18n("You didn't select any slide." ),
+        KMessageBox::sorry( this, i18n("You did not select any slide." ),
                             i18n("No Slide") );
         return;
     }
