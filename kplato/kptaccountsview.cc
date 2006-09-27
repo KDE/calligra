@@ -375,7 +375,7 @@ bool AccountsView::setContext(Context::Accountsview &context) {
     //kdDebug()<<k_funcinfo<<"---->"<<endl;
     QValueList<int> list;
     list << context.accountsviewsize << context.periodviewsize;
-    m_dlv->setSizes(list);
+    //m_dlv->setSizes(list); //NOTE: This doesn't always work!
     m_date = context.date;
     if (!m_date.isValid())
         m_date = QDate::currentDate();
