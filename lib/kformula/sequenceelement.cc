@@ -954,10 +954,10 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
     case req_addText: {
         KFCReplaceToken* command = new KFCReplaceToken( i18n("Add Text"), container );
         TextRequest* tr = static_cast<TextRequest*>( request );
+        IdentifierElement* id = creationStrategy->createIdentifierElement();
+        command->addToken( id );
         for ( uint i = 0; i < tr->text().length(); i++ ) {
-            IdentifierElement* id = creationStrategy->createIdentifierElement();
             TextElement* text = creationStrategy->createTextElement( tr->text()[i] );
-            command->addToken( id );
             command->addContent( id, text );
         }
         return command;
