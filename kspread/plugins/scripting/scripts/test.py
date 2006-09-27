@@ -1,16 +1,7 @@
 import krosskspreadcore
+
 doc = krosskspreadcore.get("KSpreadDocument")
-
 doc.openUrl("/home/ak016/ccc/invoicetemplate.ods")
-
-#for sheetname in doc.sheetNames():
-#	sheet = doc.sheetByName( sheetname )
-#	cell = sheet.firstCell()
-#	while cell:
-#		print "Cell col=%s row=%s value=%s" % (cell.column(),cell.row(),cell.value())
-#		row = cell.row()
-#		cell = cell.nextCell()
-
 
 sheet1 = doc.sheetByName( "Sheet1" )
 sheet1.cell(0,7).setText("Joe User")
@@ -31,7 +22,4 @@ for item in items:
 for i in xrange(row, 32):
 	sheet1.cell(6, i).setText("")
 
-#print doc.saveNativeXML()
-
-#doc.exp0rt("/home/ak016/ccc/test.html")
 doc.saveUrl("/home/ak016/ccc/invoice.ods")
