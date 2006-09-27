@@ -552,7 +552,7 @@ Value func_harmean (valVector args, ValueCalc *calc, FuncExtra *)
     return Value::errorDIV0();
   Value suminv;
   calc->arrayWalk (args, suminv, awSumInv, 0);
-  return calc->div (suminv, count);
+  return calc->div (count, suminv);
 }
 
 Value func_loginv (valVector args, ValueCalc *calc, FuncExtra *)
