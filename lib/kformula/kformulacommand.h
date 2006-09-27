@@ -107,6 +107,11 @@ protected:
     FormulaCursor* getUnexecuteCursor();
 
     /**
+     * Saves the cursor that is used to execute the command.
+     */
+    void setExecuteCursor(FormulaCursor* cursor);
+
+    /**
      * Sets the cursor that is to be used to @ref unexecute the
      * command. This has to be called by @ref execute after the
      * formula has been changed but before the cursor has been
@@ -134,11 +139,6 @@ protected:
 private:
 
     void destroyUndoCursor() { delete undocursor; undocursor = 0; }
-
-    /**
-     * Saves the cursor that is used to execute the command.
-     */
-    void setExecuteCursor(FormulaCursor* cursor);
 
     /**
      * Cursor position before the command execution.
@@ -286,6 +286,36 @@ public:
 
     virtual void execute();
     virtual void unexecute();
+
+private:
+
+    /**
+     * The command that needs to be executed first if there is a selection.
+     */
+    KFCRemoveSelection* removeSelection;
+
+};
+
+
+/**
+ * Add and remove arbitrary token elements and their contents. This command
+ * add needed flexibility in order to remove and insert new tokens in the
+ * middle of a token, that is, splitting the token and creating new ones.
+ */
+class KFCSplitToken : public KFCAddToken
+{
+public:
+
+    KFCSplitToken(const QString &name, Container* document);
+    ~KFCSplitToken();
+
+    virtual void execute();
+    virtual void unexecute();
+
+    /**
+     * Collect cursor data that will be needed to do the stuff properly
+     */
+    void addCursor( FormulaCursor* cursor ) { setExecuteCursor( cursor ); }
 
 private:
 

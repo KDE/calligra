@@ -51,7 +51,7 @@
 #include "symbolelement.h"
 #include "symboltable.h"
 #include "textelement.h"
-#include "tokenelement.h"
+#include "numberelement.h"
 #include "identifierelement.h"
 #include "operatorelement.h"
 
@@ -985,7 +985,7 @@ KCommand* SequenceElement::buildCommand( Container* container, Request* request 
     case req_addNumber: {
         KFCReplaceToken* command = new KFCReplaceToken( i18n("Add Number"), container );
         NumberRequest* nr = static_cast<NumberRequest*>( request );
-        TokenElement* num = creationStrategy->createNumberElement();
+        NumberElement* num = creationStrategy->createNumberElement();
         num->setParent( this );
         TextElement* text = creationStrategy->createTextElement( nr->ch() );
         text->setParent( num );

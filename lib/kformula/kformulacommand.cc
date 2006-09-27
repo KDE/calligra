@@ -29,6 +29,7 @@
 #include "matrixelement.h"
 #include "sequenceelement.h"
 #include "textelement.h"
+#include "tokenelement.h"
 
 
 KFORMULA_NAMESPACE_BEGIN
@@ -197,20 +198,20 @@ KFCAddToken::~KFCAddToken()
 
 void KFCAddToken::execute()
 {
+    kdDebug( DEBUGID ) << k_funcinfo << endl;
     FormulaCursor* cursor = getExecuteCursor();
     QPtrList<BasicElement> tokenListTmp = tokenList;
     cursor->insert( tokenList, beforeCursor );
-    QPtrListIterator< BasicElement > it( tokenListTmp );
+    tokenList = tokenListTmp;
+    QPtrListIterator< BasicElement > it( tokenList );
     BasicElement* element;
     BasicElement* current = cursor->getElement();
-    uint pos = cursor->getPos();
-    int mark = cursor->getMark();
     while ( (element = it.current()) != 0 ) {
         element->goInside( cursor );
         cursor->insert( *contentList.find( element ), beforeCursor );
         ++it;
     }
-    setUnexecuteCursor(cursor);
+    setUnexecuteCursor( cursor );
     cursor->setSelection(false);
     testDirty();
 }
@@ -218,19 +219,14 @@ void KFCAddToken::execute()
 
 void KFCAddToken::unexecute()
 {
+    kdDebug( DEBUGID ) << k_funcinfo << endl;
     FormulaCursor* cursor = getUnexecuteCursor();
-    QPtrListIterator< BasicElement > it( tokenList );
-    BasicElement* element;
     BasicElement* current = cursor->getElement();
-    uint pos = cursor->getPos();
-    int mark = cursor->getMark();
-    while ( (element = it.current()) != 0 ) {
-        element->goInside( cursor );
-        cursor->remove( *contentList.find( element ), beforeCursor );
+    for ( int i = 0; i < tokenList.count(); i++ ) {
+        QPtrList< BasicElement > list;
+        cursor->remove( list, beforeCursor );
+        cursor->normalize();
     }
-    cursor->setTo( current, pos, mark );
-    cursor->remove(tokenList, beforeCursor);
-    //cursor->setSelection(false);
     cursor->normalize();
     testDirty();
 }
@@ -246,7 +242,7 @@ void KFCAddToken::addToken( BasicElement* element )
 }
 
 KFCReplaceToken::KFCReplaceToken(const QString &name, Container* document)
-        : KFCAddToken(name, document), removeSelection(0)
+    : KFCAddToken(name, document), removeSelection(0)
 {
 }
 
@@ -257,6 +253,7 @@ KFCReplaceToken::~KFCReplaceToken()
 
 void KFCReplaceToken::execute()
 {
+    kdDebug( DEBUGID ) << k_funcinfo << endl;
     if (getActiveCursor()->isSelection() && (removeSelection == 0)) {
         removeSelection = new KFCRemoveSelection(getDocument());
     }
@@ -268,6 +265,54 @@ void KFCReplaceToken::execute()
 
 void KFCReplaceToken::unexecute()
 {
+    kdDebug( DEBUGID ) << k_funcinfo << endl;
+    KFCAddToken::unexecute();
+    if (removeSelection != 0) {
+        removeSelection->unexecute();
+    }
+}
+
+
+KFCSplitToken::KFCSplitToken(const QString &name, Container* document)
+    : KFCAddToken(name, document), removeSelection(0)
+{
+}
+
+KFCSplitToken::~KFCSplitToken()
+{
+    delete removeSelection;
+}
+
+void KFCSplitToken::execute()
+{
+    FormulaCursor* cursor = getExecuteCursor();
+    if (getActiveCursor()->isSelection() && (removeSelection == 0)) {
+        removeSelection = new KFCRemoveSelection(getDocument());
+    }
+    if (removeSelection != 0) {
+        removeSelection->execute();
+    }
+    setUnexecuteCursor( cursor );
+    cursor->setMark( static_cast<SequenceElement*>(cursor->getElement())->countChildren() );
+    cursor->setSelection( true );
+    QPtrList< BasicElement > splitList;
+    cursor->getElement()->remove( cursor, splitList, afterCursor );
+    TokenElement *token = new TokenElement();// TODO 
+    addToken( token );
+    QPtrListIterator< BasicElement > it ( splitList );
+    BasicElement* element;
+    while ( ( element = it.current() ) != 0 ) {
+        addContent( token, element );
+        ++it;
+    }
+    KFCAddToken::execute();
+    cursor = getExecuteCursor();
+    static_cast<SequenceElement*>(static_cast<SequenceElement*>(cursor->getElement())->getChild( cursor->getPos() ))->goInsideLast(cursor);
+}
+
+void KFCSplitToken::unexecute()
+{
+    kdDebug( DEBUGID ) << k_funcinfo << endl;
     KFCAddToken::unexecute();
     if (removeSelection != 0) {
         removeSelection->unexecute();
