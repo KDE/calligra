@@ -98,6 +98,7 @@ class Doc : public Kross::Api::Class<Doc>
 #endif
 
 		bool openUrl(const QString& url);
+		bool saveUrl(const QString& url);
 		bool import(const QString& url);
 		bool exp0rt(const QString& url);
 
