@@ -510,7 +510,7 @@ class KEXI_DB_EXPORT Field
 		inline bool isQueryAsterisk() const { return type() == Asterisk; }
 		
 		/*! \return string for debugging purposes. */
-		virtual QString debugString();
+		virtual QString debugString() const;
 
 		/*! Shows debug information about this field. */
 		void debug();

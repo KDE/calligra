@@ -249,6 +249,25 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	return WHERE;
 }
 
+"ORDER" {
+	ECOUNT;
+	return ORDER;
+}
+
+"BY" {
+	ECOUNT;
+	return BY;
+}
+
+"ASC" {
+	ECOUNT;
+	return ASC;
+}
+
+"DESC" {
+	ECOUNT;
+	return DESC;
+}
 
 ['][^']*['] {
 	ECOUNT;

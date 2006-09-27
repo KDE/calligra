@@ -21,9 +21,10 @@ Forms
   the second - "widget2" and so on. (thanks to Natalie)
 2.0: ported
 
-2006-09-21
+2006-09-21..27
 KexiDB
-- parser: added support for ORDER BY clause
+- added support for ORDER BY clause
+2.0: ported
 Query Designer
 - added support for setting order of columns
 

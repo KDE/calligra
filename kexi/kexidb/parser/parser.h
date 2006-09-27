@@ -23,6 +23,7 @@
 
 #include <qobject.h>
 #include <qptrlist.h>
+#include <qvariant.h>
 
 #include <kexidb/field.h>
 #include <kexidb/expression.h>

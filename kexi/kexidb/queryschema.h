@@ -40,7 +40,7 @@ class QuerySchemaPrivate;
 	- alias
 	- visibility
 	QueryColumnInfo::Vector is created and returned by QuerySchema::fieldsExpanded().
-	It's efficiently cached there.
+	It is efficiently cached there.
 */
 class KEXI_DB_EXPORT QueryColumnInfo
 {
@@ -52,12 +52,12 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		QueryColumnInfo(Field *f, QCString _alias, bool _visible);
 		~QueryColumnInfo();
 
-		//! \return alias if it's not empty, field's name otherwise.
+		//! \return alias if it is not empty, field's name otherwise.
 		inline QCString aliasOrName() const { 
 			return alias.isEmpty() ? field->name().latin1() : (const char*)alias; 
 		}
 
-		//! \return field's caption if it's not empty, field's alias otherwise.
+		//! \return field's caption if it is not empty, field's alias otherwise.
 		//! If alias is also empty - returns field's name.
 		inline QString captionOrAliasOrName() const {
 			return field->caption().isEmpty() ? QString(aliasOrName()) : field->caption(); }
@@ -77,10 +77,111 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		//! true if this column is visible to the user
 		bool visible : 1;
 
+		/*! \return string for debugging purposes. */
+		virtual QString debugString() const;
+
 	private:
 		/*! Index of column with visible lookup value within the 'fields expanded' vector.
 		 @see indexForVisibleLookupValue() */
 		int m_indexForVisibleLookupValue;
+};
+
+//! KexiDB::OrderByColumn provides information about a single column 
+//! (expression or table field) used for sorting.
+class KEXI_DB_EXPORT OrderByColumn
+{
+	public:
+		typedef QValueListConstIterator<OrderByColumn> ListConstIterator;
+		OrderByColumn();
+		OrderByColumn(const QueryColumnInfo& column, bool ascending = true, int pos = -1);
+		
+		//! Like above but used when the field \a field is not present on the list of columns. (e.g. SELECT a FROM t ORDER BY b; where T is a table with fields (a,b)). 
+		OrderByColumn(const Field& field, bool ascending = true);
+
+		//! A column to sort.
+		inline const QueryColumnInfo* column() const { return m_column; }
+
+		//!< A helper for column() that allows you to know that sorting column 
+	  //!< was defined by providing its position. -1 by default.
+		//!< Example query: SELECT a, b FROM T ORDER BY 2
+		inline int position() const { return m_pos; }
+
+		//! A field to sort, used only in case when the second constructor was used.
+		inline const Field *field() const { return m_field; }
+
+		//! \return true if ascending sorting should be performed (the default).
+		inline bool ascending() const { return m_ascending; }
+
+		//! \return true if this column is thesame as \a col
+		bool operator== ( const OrderByColumn& col ) const 
+			{ return m_column==col.m_column && m_field==col.m_field 
+				&& m_ascending==col.m_ascending; }
+
+		/*! \return string for debugging purposes. */
+		QString debugString() const;
+
+	protected:
+		//! Column to sort
+		const QueryColumnInfo* m_column; //!< 0 if m_field is non-0.
+		int m_pos; //!< A helper for m_column that allows to know that sorting column 
+		           //!< was defined by providing its position. -1 by default.
+		           //!< e.g. SELECT a, b FROM T ORDER BY 2
+		const Field* m_field; //!< Used only in case when the second contructor is used.
+
+		//! true if ascending sorting should be performed (the default).
+		bool m_ascending : 1;
+};
+
+//! A base for KexiDB::OrderByColumnList
+typedef QValueList<OrderByColumn> OrderByColumnListBase;
+
+//! KexiDB::OrderByColumnList provides list of sorted columns for a query schema
+class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
+{
+	public:
+		/*! Constructs empty list of ordered columns. */
+		OrderByColumnList();
+	
+		/*! Appends multiple fields for sorting. \a querySchema 
+		 is used to find appropriate field or alias name.
+		 \return false if there is at least one name for which a field or alias name does not exist
+		 (all the newly appended fields are removed in this case) */
+		bool appendFields(QuerySchema& querySchema,
+			const QString& field1, bool ascending1 = true, 
+			const QString& field2 = QString::null, bool ascending2 = true, 
+			const QString& field3 = QString::null, bool ascending3 = true, 
+			const QString& field4 = QString::null, bool ascending4 = true, 
+			const QString& field5 = QString::null, bool ascending5 = true);
+
+		/*! Appends column \a columnInfo. Ascending sorting is set is \a ascending is true. */
+		void appendColumn(const QueryColumnInfo& columnInfo, bool ascending = true);
+		
+		/*! Appends a field \a field. Ascending sorting is set is \a ascending is true. 
+		 Read documentation of \ref OrderByColumn(const Field& field, bool ascending = true)
+		 for more info. */
+		void appendField(const Field& field, bool ascending = true);
+
+		/*! Appends field with a name \a field. Ascending sorting is set is \a ascending is true. 
+		 \return true on successful appending, and false if there is no such field or alias 
+		 name in the \a querySchema. */
+		bool appendField(QuerySchema& querySchema, const QString& fieldName, 
+			bool ascending = true);
+
+		/*! Appends a column that is at position \a pos (counted from 0). 
+		 \return true on successful adding and false if there is no such position \a pos. */
+		bool appendColumn(QuerySchema& querySchema, bool ascending = true, int pos = -1);
+
+		/*! Appends \a column to the list. */
+		void appendColumn(const OrderByColumn& column);
+		
+		/*! \return true if the list is empty. */
+		bool isEmpty() const { return OrderByColumnListBase::isEmpty(); }
+		
+		/*! \return number of elements of the list. */
+		uint count() const { return OrderByColumnListBase::count(); }
+
+		/*! \return string for debugging purposes. */
+		QString debugString() const;
 };
 
 /*! KexiDB::QuerySchema provides information about database query
@@ -231,16 +332,20 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 The field does not need to be included on the list of query columns.
 		 Similarly, query aliases are not taken into account.
 
-		 \a tableDotFieldName string must contain table name and field name 
+		 \a tableOrTableAndFieldName string may contain table name and field name 
 		 with '.' character between them, e.g. "mytable.myfield". 
+		 This is recommended way to avoid ambiguity.
 		 0 is returned if the query has no such 
 		 table defined of the table has no such field defined.
+		 If you do not provide a table name, the first field found is returned.
 
 		 QuerySchema::table("mytable")->field("myfield") could be 
 		 alternative for findTableField("mytable.myfield") but it can crash
 		 if "mytable" is not defined in the query.
+		 
+		 @see KexiDB::splitToTableAndFieldParts()
 		*/
-		Field* findTableField(const QString &tableDotFieldName) const;
+		Field* findTableField(const QString &tableOrTableAndFieldName) const;
 
 		/*! \return alias of a column at \a position or null string 
 		 If there is no alias for this column
@@ -353,10 +458,10 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 to lookup expanded list of the query fields, so queries with asterisks 
 		 are processed well.
 		 If a field has alias defined, name is not taken into account, 
-		 but only it's alias. If a field has no alias:
+		 but only its alias. If a field has no alias:
 		 - field's name is checked
 		 - field's table and field's name are checked in a form of "tablename.fieldname",
-		   so you can provide \a name of this form to avoid ambiguity.
+		   so you can provide \a name in this form to avoid ambiguity.
 
 		 If there are more than one fields with the same name equal to \a name,
 		 first-found is returned (checking is performed from first to last query field).
@@ -364,10 +469,10 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 so only first usage costs o(n) - another usages cost o(1). 
 
 		 Example:
-		 Let query be defined by "SELECT T.B AS X, * FROM T" statement and T 
-		 is table containing fields A, B, C. 
+		 Let query be defined by "SELECT T.B AS X, T.* FROM T" statement and let T 
+		 be table containing fields A, B, C. 
 		 Expanded list of columns for the query is: T.B AS X, T.A, T.B, T.C.
-		 - Calling field("B") will return a pointer to third query column (not first, 
+		 - Calling field("B") will return a pointer to third query column (not the first, 
 		   because it is covered by "X" alias). Additionally, calling field("X") 
 		   will return the same pointer.
 		 - Calling field("T.A") will return the same pointer as field("A").
@@ -375,7 +480,8 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		virtual Field* field(const QString& name);
 
 		/*! Like QuerySchema::field(const QString& name) but returns not only Field
-		 object for \a name but entire QueryColumnInfo object. */
+		 object for \a name but entire QueryColumnInfo object. 
+		 */
 		QueryColumnInfo* columnInfo(const QString& name);
 
 		/*! Options used in fieldsExpanded(). */
@@ -538,19 +644,13 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/*! Sets a list of columns for ORDER BY section of the query. 
 		 Each name on the list must be a field or alias present within the query 
-		 and must not be covered by aliases. If one or more names cannot be found within 
-		 the query, the method will have no effect. Any previous ORDER BY settings will be removed. 
-		 */
-		void setOrderByColumnList(const QStringList& columnNames);
+		 and must not be covered by aliases. If one or more names cannot be found 
+		 within the query, the method will have no effect. 
+		 Any previous ORDER BY settings will be removed. */
+		void setOrderByColumnList(const OrderByColumnList& list);
 
-		/*! Convenience method, similar to setOrderByColumnList(const QStringList&). */
-		void setOrderByColumnList(const QString& column1, const QString& column2 = QString::null, 
-			const QString& column3 = QString::null, const QString& column4 = QString::null, 
-			const QString& column5 = QString::null);
-
-		/*! \return a list of columns contained in ORDER BY section of the query. 
-		 @see setOrderBy(const QStringList&) */
-		QueryColumnInfo::Vector orderByColumnList() const;
+		/*! \return a list of columns listed in ORDER BY section of the query. */
+		OrderByColumnList& orderByColumnList() const;
 
 	protected:
 		void init();

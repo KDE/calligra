@@ -205,10 +205,11 @@ Connection* Driver::removeConnection( Connection *conn )
 
 QString Driver::defaultSQLTypeName(int id_t)
 {
-	if (id_t==Field::Null)
+	if (id_t>=Field::Null)
 		return "Null";
 	if (dflt_typeNames.isEmpty()) {
 		dflt_typeNames.resize(Field::LastType + 1);
+		dflt_typeNames[Field::InvalidType]="InvalidType";
 		dflt_typeNames[Field::Byte]="Byte";
 		dflt_typeNames[Field::ShortInteger]="ShortInteger";
 		dflt_typeNames[Field::Integer]="Integer";
