@@ -102,6 +102,7 @@ tristate SQLiteConnection::drv_changeFieldProperty(TableSchema &table, Field& fi
 tristate SQLiteConnection::changeFieldType(TableSchema &table, Field& field, 
 	Field::Type type)
 {
+	Q_UNUSED(table);
 	const Field::Type oldType = field.type();
 	const SQLiteTypeAffinity oldAffinity = affinityForType(oldType);
 	const SQLiteTypeAffinity newAffinity = affinityForType(type);

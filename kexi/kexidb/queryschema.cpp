@@ -49,6 +49,13 @@ QueryColumnInfo::~QueryColumnInfo()
 {
 }
 
+QString QueryColumnInfo::debugString() const
+{
+	return field->name() + 
+		( alias.isEmpty() ? QString::null 
+			: (QString::fromLatin1(" AS ") + QString(alias)) );
+}
+
 //=======================================
 namespace KexiDB {
 //! @internal
@@ -66,7 +73,6 @@ class QuerySchemaPrivate
 		 , internalFields(0)
 		 , fieldsExpandedWithInternalAndRowID(0)
 		 , fieldsExpandedWithInternal(0)
-		 , orderByColumnList(0)
 		 , autoincFields(0)
 		 , fieldsOrder(0)
 		 , pkeyFieldsOrder(0)
@@ -91,7 +97,6 @@ class QuerySchemaPrivate
 			delete internalFields;
 			delete fieldsExpandedWithInternalAndRowID;
 			delete fieldsExpandedWithInternal;
-			delete orderByColumnList;
 			delete autoincFields;
 			delete fieldsOrder;
 			delete pkeyFieldsOrder;
@@ -240,7 +245,7 @@ class QuerySchemaPrivate
 		QueryColumnInfo::Vector *fieldsExpandedWithInternal;
 
 		/*! A list of fields for ORDER BY section. @see QuerySchema::orderByColumnList(). */
-		QueryColumnInfo::Vector *orderByColumnList;
+		OrderByColumnList orderByColumnList;
 
 		/*! A cache for autoIncrementFields(). */
 		QueryColumnInfo::List *autoincFields;
@@ -300,6 +305,136 @@ class QuerySchemaPrivate
 		 be generated on next columnAlias() call. */
 		bool regenerateExprAliases : 1;
 };
+}
+
+//=======================================
+
+OrderByColumn::OrderByColumn()
+ : m_column(0)
+ , m_pos(-1)
+ , m_field(0)
+ , m_ascending(true)
+{
+}
+
+OrderByColumn::OrderByColumn(const QueryColumnInfo& column, bool ascending, int pos)
+ : m_column(&column)
+ , m_pos(pos)
+ , m_field(0)
+ , m_ascending(ascending)
+{
+}
+
+OrderByColumn::OrderByColumn(const Field& field, bool ascending)
+ : m_column(0)
+ , m_pos(-1)
+ , m_field(&field)
+ , m_ascending(ascending)
+{
+}
+
+QString OrderByColumn::debugString() const
+{
+	if (m_column) {
+		if (m_pos>-1)
+			return QString("COLUMN_AT_POSITION_%1(%2)")
+				.arg(m_pos+1).arg(m_column->debugString());
+		else
+			return QString("COLUMN(%1)").arg(m_column->debugString());
+	}
+	return m_field ? QString("FIELD(%1)").arg(m_field->debugString()) : QString("NONE");
+}
+
+//=======================================
+
+OrderByColumnList::OrderByColumnList()
+ : OrderByColumnListBase()
+{
+}
+
+bool OrderByColumnList::appendFields(QuerySchema& querySchema,
+	const QString& field1, bool ascending1, 
+	const QString& field2, bool ascending2, 
+	const QString& field3, bool ascending3, 
+	const QString& field4, bool ascending4, 
+	const QString& field5, bool ascending5)
+{
+	uint numAdded = 0;
+#define ADD_COL(fieldName, ascending) \
+	if (ok && !fieldName.isEmpty()) { \
+		if (!appendField( querySchema, fieldName, ascending )) \
+			ok = false; \
+		else \
+			numAdded++; \
+	}
+	bool ok = true;
+	ADD_COL(field1, ascending1);
+	ADD_COL(field2, ascending2);
+	ADD_COL(field3, ascending3);
+	ADD_COL(field4, ascending4);
+	ADD_COL(field5, ascending5);
+#undef ADD_COL
+	if (ok)
+		return true;
+	for (uint i=0; i<numAdded; i++)
+		pop_back();
+	return false;
+}
+
+void OrderByColumnList::appendColumn(const QueryColumnInfo& columnInfo, bool ascending)
+{
+	appendColumn( OrderByColumn(columnInfo, ascending) );
+}
+
+bool OrderByColumnList::appendColumn(QuerySchema& querySchema, bool ascending, int pos)
+{
+	QueryColumnInfo::Vector fieldsExpanded( querySchema.fieldsExpanded() );
+	QueryColumnInfo* ci = (pos >= (int)fieldsExpanded.size()) ? 0 : fieldsExpanded[pos];
+	if (!ci)
+		return false;
+	appendColumn( OrderByColumn(*ci, ascending, pos) );
+	return true;
+}
+
+void OrderByColumnList::appendField(const Field& field, bool ascending)
+{
+	appendColumn( OrderByColumn(field, ascending) );
+}
+
+bool OrderByColumnList::appendField(QuerySchema& querySchema, 
+	const QString& fieldName, bool ascending)
+{
+	QueryColumnInfo *columnInfo = querySchema.columnInfo( fieldName );
+	if (columnInfo) {
+		appendColumn( OrderByColumn(*columnInfo, ascending) );
+		return true;
+	}
+	Field *field = querySchema.findTableField(fieldName);
+	if (field) {
+		appendColumn( OrderByColumn(*field, ascending) );
+		return true;
+	}
+	KexiDBWarn << "OrderByColumnList::addColumn(QuerySchema& querySchema, "
+		"const QString& column, bool ascending): no such field \"" << fieldName << "\"" << endl;
+	return false;
+}
+		
+void OrderByColumnList::appendColumn(const OrderByColumn& column)
+{
+	append( column );
+}
+
+QString OrderByColumnList::debugString() const
+{
+	QString dbg;
+	if (isEmpty())
+		return "NONE";
+	for (OrderByColumn::ListConstIterator it=constBegin(); it!=constEnd(); ++it) {
+		if (!dbg.isEmpty())
+			dbg += "\n";
+		dbg += (*it).debugString();
+	}
+	return dbg;
 }
 
 //=======================================
@@ -528,8 +663,7 @@ QString QuerySchema::debugString()
 			QueryColumnInfo *ci = fe[i];
 			if (!dbg1.isEmpty())
 				dbg1 += ",\n";
-			dbg1 += (ci->field->name() + 
-				(ci->alias.isEmpty() ? QString::null : (QString::fromLatin1(" AS ") + QString(ci->alias))));
+			dbg1 += ci->debugString();
 		}
 		dbg1 += "\n";
 	}
@@ -605,7 +739,10 @@ QString QuerySchema::debugString()
 	dbg += QString("-TABLE ALIASES:\n" + aliases);
 	QString where = d->whereExpr ? d->whereExpr->debugString() : QString::null;
 	if (!where.isEmpty())
-		dbg += QString("\n-WHERE EXPRESSION:\n" + where);
+		dbg += (QString("\n-WHERE EXPRESSION:\n") + where);
+	if (!orderByColumnList().isEmpty())
+		dbg += (QString("\n-ORDER BY (%1):\n").arg(orderByColumnList().count()) 
+			+ orderByColumnList().debugString());
 	return dbg;
 }
 
@@ -697,11 +834,20 @@ bool QuerySchema::contains(TableSchema *table) const
 	return d->tables.findRef(table)!=-1;
 }
 
-Field* QuerySchema::findTableField(const QString &tableDotFieldName) const
+Field* QuerySchema::findTableField(const QString &tableOrTableAndFieldName) const
 {
 	QString tableName, fieldName;
-	if (!KexiDB::splitToTableAndFieldParts(tableDotFieldName, tableName, fieldName))
+	if (!KexiDB::splitToTableAndFieldParts(tableOrTableAndFieldName, 
+		tableName, fieldName, KexiDB::SetFieldNameIfNoTableName)) {
 		return 0;
+	}
+	if (tableName.isEmpty()) {
+		for (TableSchema::ListIterator it(d->tables); it.current(); ++it) {
+			if (it.current()->field(fieldName))
+				return it.current()->field(fieldName);
+		}
+		return 0;
+	}
 	TableSchema *tableSchema = table(tableName);
 	if (!tableSchema)
 		return 0;
@@ -1266,33 +1412,15 @@ BaseExpr *QuerySchema::whereExpression() const
 	return d->whereExpr;
 }
 
-void QuerySchema::setOrderByColumnList(const QStringList& columnNames)
+void QuerySchema::setOrderByColumnList(const OrderByColumnList& list)
 {
-	Q_UNUSED(columnNames);
-//! @todo implement this:
-// all field names should be fooun, exit otherwise ..........
-
-	// OK
-//TODO	if (!d->orderByColumnList)
-//TODO
+	d->orderByColumnList = list;
+// all field names should be found, exit otherwise ..........?
 }
 
-/*! Convenience method, similar to setOrderBy(const QStringList&). */
-void QuerySchema::setOrderByColumnList(const QString& column1, const QString& column2, 
-	const QString& column3, const QString& column4, const QString& column5)
+OrderByColumnList& QuerySchema::orderByColumnList() const
 {
-	Q_UNUSED(column1);
-	Q_UNUSED(column2);
-	Q_UNUSED(column3);
-	Q_UNUSED(column4);
-	Q_UNUSED(column5);
-//! @todo implement this, like above
-//! @todo add ORDER BY info to debugString()
-}
-
-QueryColumnInfo::Vector QuerySchema::orderByColumnList() const
-{
-	return d->orderByColumnList ? *d->orderByColumnList: QueryColumnInfo::Vector();
+	return d->orderByColumnList;
 }
 
 
@@ -1379,8 +1507,7 @@ QString QueryAsterisk::debugString()
 		dbg += "ALL-TABLES ASTERISK (*) ON TABLES(";
 		TableSchema *table;
 		QString table_names;
-		TableSchema::List *tables = query()->tables();
-		for ( table = tables->first(); table; table = tables->next() ) {
+		for (TableSchema::ListIterator it( *query()->tables() ); it.current(); ++it) {
 			if (!table_names.isEmpty())
 				table_names += ", ";
 			table_names += table->name();

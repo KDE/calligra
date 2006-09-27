@@ -92,7 +92,7 @@ bool BaseExpr::validate(ParseInfo& /*parseInfo*/)
 }
 
 extern const char * const tname(int offset);
-#define safe_tname(token) ((token>=254 && token<=__LAST_TOKEN) ? tname(token-254) : "")
+#define safe_tname(token) ((token>=255 && token<=__LAST_TOKEN) ? tname(token-255) : "")
 
 QString BaseExpr::tokenToDebugString(int token)
 {

@@ -29,6 +29,7 @@
 #include <kexidb/tableschema.h>
 #include <kexidb/connection.h>
 #include <kexidb/expression.h>
+#include "sqltypes.h"
 #include "parser.h"
 
 namespace KexiDB {
@@ -74,9 +75,9 @@ void setError(const QString& errName, const QString& errDesc);
 void setError(const QString& errDesc);
 //bool parseData(KexiDB::Parser *p, const char *data);
 bool addColumn( KexiDB::ParseInfo& parseInfo, KexiDB::BaseExpr* columnExpr );
-KexiDB::QuerySchema* parseSelect( 
+KexiDB::QuerySchema* buildSelectQuery( 
 	KexiDB::QuerySchema* querySchema, KexiDB::NArgExpr* colViews, 
-	KexiDB::NArgExpr* tablesList = 0, KexiDB::BaseExpr* whereExpr = 0 );
+	KexiDB::NArgExpr* tablesList = 0, SelectOptionsInternal* options = 0 ); //KexiDB::BaseExpr* whereExpr = 0 );
 
 extern KexiDB::Parser *parser;
 extern KexiDB::Field *field;

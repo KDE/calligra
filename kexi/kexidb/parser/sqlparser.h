@@ -747,10 +747,11 @@ bool parseData(KexiDB::Parser *p, const char *data);
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 503 "sqlparser.y"
+#line 508 "sqlparser.y"
 {
 	char stringValue[255];
 	qint64 integerValue;
+	bool booleanValue;
 	struct realType realValue;
 	KexiDB::Field::Type colType;
 	KexiDB::Field *field;
@@ -758,9 +759,12 @@ typedef union YYSTYPE
 	KexiDB::NArgExpr *exprList;
 	KexiDB::ConstExpr *constExpr;
 	KexiDB::QuerySchema *querySchema;
+	SelectOptionsInternal *selectOptions;
+	OrderByColumnInternal::List *orderByColumns;
+	QVariant *variantValue;
 }
 /* Line 1528 of yacc.c.  */
-#line 757 "sqlparser.tab.h"
+#line 761 "sqlparser.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

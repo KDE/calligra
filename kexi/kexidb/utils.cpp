@@ -197,7 +197,7 @@ TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const QByteArray& name)
 	m_query = m_table ? 0 : conn->querySchema(QString(name));
 	if (!m_table && !m_query)
 		KexiDBWarn << "TableOrQuery(FieldList &tableOrQuery) : "
-			" tableOrQuery is nether table nor query!" << endl;
+			" tableOrQuery is neither table nor query!" << endl;
 }
 
 
@@ -578,13 +578,13 @@ bool KexiDB::splitToTableAndFieldParts(const QString& string,
 	if (option & SetFieldNameIfNoTableName && id==-1) {
 		tableName = QString::null;
 		fieldName = string;
-		return true;
+		return !fieldName.isEmpty();
 	}
 	if (id<=0 || id==int(string.length()-1))
 		return false;
 	tableName = string.left(id);
 	fieldName = string.mid(id+1);
-	return true;
+	return !tableName.isEmpty() && !fieldName.isEmpty();
 }
 
 bool KexiDB::supportsVisibleDecimalPlacesProperty(Field::Type type)

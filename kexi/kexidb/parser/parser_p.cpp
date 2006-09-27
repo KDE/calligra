@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -144,16 +144,14 @@ void yyerror(const char *str)
 			if (!lexerErr.isEmpty())
 				lexerErr.prepend(": ");
 
-			if ( parser->isReservedKeyword( ctoken.toLatin1() ) ) {
+			if ( parser->isReservedKeyword( ctoken.toLatin1() ) )
 				parser->setError( ParserError(i18n("Syntax Error"),
 					i18n("\"%1\" is a reserved keyword", ctoken ) + lexerErr,
 					ctoken, current) );
-			}
-			else {
+			else
 				parser->setError( ParserError(i18n("Syntax Error"),
 					i18n("Syntax Error near \"%1\"", ctoken ) + lexerErr,
 					ctoken, current) );
-			}
 		}
 	}
 }
@@ -406,10 +404,12 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 //clean up no longer needed objects
 #define CLEANUP \
 	delete colViews; \
-	delete tablesList
+	delete tablesList; \
+	delete options
 
-QuerySchema* parseSelect(
-	QuerySchema* querySchema, NArgExpr* colViews, NArgExpr* tablesList, BaseExpr* whereExpr )
+QuerySchema* buildSelectQuery(
+	QuerySchema* querySchema, NArgExpr* colViews, NArgExpr* tablesList,
+	SelectOptionsInternal* options ) //BaseExpr* whereExpr )
 {
 	ParseInfo parseInfo(querySchema);
 
@@ -586,14 +586,54 @@ QuerySchema* parseSelect(
 			}
 		}
 	}
-	//----- WHERE expr.
-	if (whereExpr) {
-		if (!whereExpr->validate(parseInfo)) {
-			setError(parseInfo.errMsg, parseInfo.errDescr);
-			CLEANUP;
-			return false;
+	//----- SELECT options
+	if (options) {
+		//----- WHERE expr.
+		if (options->whereExpr) {
+			if (!options->whereExpr->validate(parseInfo)) {
+				setError(parseInfo.errMsg, parseInfo.errDescr);
+				CLEANUP;
+				return false;
+			}
+			querySchema->setWhereExpression(options->whereExpr);
 		}
-		querySchema->setWhereExpression(whereExpr);
+		//----- ORDER BY
+		if (options->orderByColumns) {
+			OrderByColumnList &orderByColumnList = querySchema->orderByColumnList();
+			OrderByColumnInternal::ListConstIterator it = options->orderByColumns->constEnd();
+			uint count = options->orderByColumns->count();
+			--it;
+			for (;count>0; --it, --count) 
+				/*opposite direction due to parser specifics*/
+			{
+				//first, try to find a column name or alias
+				QueryColumnInfo *columnInfo = querySchema->columnInfo( (*it).aliasOrName );
+				if (columnInfo) {
+					orderByColumnList.appendColumn( *columnInfo, (*it).ascending );
+				}
+				else {
+					//failed, try to find a field name within all the tables
+					if ((*it).columnNumber != -1) {
+						if (!orderByColumnList.appendColumn( *querySchema,
+							(*it).ascending, (*it).columnNumber-1 ))
+						{
+							setError(futureI18n("Could not define ordering - no column at position %1").arg((*it).columnNumber));
+							CLEANUP;
+							return 0;
+						}
+					}
+					else {
+						Field * f = querySchema->findTableField((*it).aliasOrName);
+						if (!f) {
+							setError(futureI18n("Could not define ordering - column name or alias \"%1\" does not exist").arg((*it).aliasOrName));
+							CLEANUP;
+							return 0;
+						}
+						orderByColumnList.appendField( *f, (*it).ascending );
+					}
+				}
+			}
+		}
 	}
 
 //	KexiDBDbg << "Select ColViews=" << (colViews ? colViews->debugString() : QString::null)

@@ -16,7 +16,7 @@ fi
 
 temp=`mktemp /tmp/$0.XXXXXX`
 
-kexidbtest -test parser sqlite3 "$1" "$REPLY" 2> $temp || \
+./kexidbtest -test parser sqlite3 "$1" "$REPLY" 2> $temp || \
 	cat $temp && test "$3" = "-v" && cat $temp
 
 rm -f $temp

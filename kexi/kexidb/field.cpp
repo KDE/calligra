@@ -580,7 +580,7 @@ void Field::setIndexed(bool s)
 }
 
 
-QString Field::debugString()
+QString Field::debugString() const
 {
 	KexiDB::Connection *conn = table() ? table()->connection() : 0;
 	QString dbg = (m_name.isEmpty() ? "<NONAME> " : m_name + " ");

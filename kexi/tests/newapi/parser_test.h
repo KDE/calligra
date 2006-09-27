@@ -35,7 +35,7 @@ int parserTest(const char *st)
 	KexiDB::QuerySchema *q = parser.query();
 	if (ok && q) {
 		cout << q->debugString().toLatin1().constData() << '\n';
-		cout << "STATEMENT:\n" << conn->selectStatement( *q ).toLatin1().constData() << '\n';
+		cout << "-STATEMENT:\n" << conn->selectStatement( *q ).toLatin1().constData() << '\n';
 	}
 	else {
 		KexiDB::ParserError	err = parser.error();

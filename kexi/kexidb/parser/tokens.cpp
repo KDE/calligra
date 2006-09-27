@@ -1,7 +1,10 @@
 /* WARNING! All changes made in this file will be lost! Run 'generate_parser_code.sh' instead. */
 INS("AND");
 INS("AS");
+INS("ASC");
+INS("BY");
 INS("CREATE");
+INS("DESC");
 INS("FROM");
 INS("IN");
 INS("INTEGER");
@@ -13,6 +16,7 @@ INS("NOT");
 INS("NULL");
 INS("ON");
 INS("OR");
+INS("ORDER");
 INS("RIGHT");
 INS("SELECT");
 INS("SIMILAR");
