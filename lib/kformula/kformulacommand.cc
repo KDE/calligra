@@ -221,13 +221,22 @@ void KFCAddToken::unexecute()
 {
     kdDebug( DEBUGID ) << k_funcinfo << endl;
     FormulaCursor* cursor = getUnexecuteCursor();
-    BasicElement* current = cursor->getElement();
+    SequenceElement* parent = static_cast<SequenceElement*>(cursor->getElement()->getParent());
+
     for ( int i = 0; i < tokenList.count(); i++ ) {
+        SequenceElement* current = static_cast<SequenceElement*>(cursor->getElement());
         QPtrList< BasicElement > list;
+        for ( uint i = 0; i < current->countChildren(); ++i ) {
+            cursor->remove( list, beforeCursor );
+        }
+        int pos = parent->childPos( current );
+        kdWarning() << pos << endl;
+        cursor->setTo( parent, pos + 1);
         cursor->remove( list, beforeCursor );
-        cursor->normalize();
+        if ( pos > 0 ) {
+            parent->getChild( pos - 1 )->moveEnd( cursor );
+        }
     }
-    cursor->normalize();
     testDirty();
 }
 
