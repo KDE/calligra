@@ -247,7 +247,10 @@
 </string>
             </property>
             <property name="alignment">
-                <set>Qt::TextWordWrap|Qt::AlignTop</set>
+                <set>Qt::AlignTop</set>
+            </property>
+            <property name="wordWrap" >
+                <bool>true</bool>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>list</cstring>

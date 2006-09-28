@@ -152,7 +152,10 @@
                                 <string>Task 1</string>
                             </property>
                             <property name="alignment">
-                                <set>Qt::TextWordWrap|Qt::AlignTop</set>
+                                <set>Qt::AlignTop</set>
+                            </property>
+                            <property name="wordWrap" >
+                                <bool>true</bool>
                             </property>
                         </widget>
                         <widget class="QLabel" row="1" column="1">
@@ -163,7 +166,10 @@
                                 <string>Task 2</string>
                             </property>
                             <property name="alignment">
-                                <set>Qt::TextWordWrap|Qt::AlignTop</set>
+                                <set>Qt::AlignTop</set>
+                            </property>
+                            <property name="wordWrap" >
+                                <bool>true</bool>
                             </property>
                         </widget>
                     </grid>

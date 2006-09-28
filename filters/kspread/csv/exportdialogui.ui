@@ -255,7 +255,10 @@
                                     <string>&lt;SHEETNAME&gt; gets replaced by the name of the next sheet.</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>Qt::TextWordWrap|Qt::AlignVCenter</set>
+                                    <set>Qt::AlignVCenter</set>
+                                </property>
+                                <property name="wordWrap" >
+                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="0">

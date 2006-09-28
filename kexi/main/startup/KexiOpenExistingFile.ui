@@ -36,7 +36,10 @@
 </string>
             </property>
             <property name="alignment">
-                <set>Qt::TextWordWrap|Qt::AlignTop</set>
+                <set>Qt::AlignTop</set>
+            </property>
+            <property name="wordWrap" >
+                <bool>true</bool>
             </property>
         </widget>
         <widget class="QFrame">
@@ -113,7 +116,10 @@
                         <string>Click "Advanced" button if you want to find an existing project on a server rather than a file.</string>
                     </property>
                     <property name="alignment">
-                        <set>Qt::TextWordWrap|Qt::AlignTop</set>
+                        <set>Qt::AlignTop</set>
+                    </property>
+                    <property name="wordWrap" >
+                        <bool>true</bool>
                     </property>
                 </widget>
             </hbox>

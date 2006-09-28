@@ -380,7 +380,10 @@
                                     <enum>Qt::AutoText</enum>
                                 </property>
                                 <property name="alignment">
-                                    <set>Qt::TextWordWrap|Qt::AlignCenter</set>
+                                    <set>Qt::AlignCenter</set>
+                                </property>
+                                <property name="wordWrap" >
+                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="0" column="0">
@@ -429,7 +432,10 @@
                                     <enum>Qt::AutoText</enum>
                                 </property>
                                 <property name="alignment">
-                                    <set>Qt::TextWordWrap|Qt::AlignCenter</set>
+                                    <set>Qt::AlignCenter</set>
+                                </property>
+                                <property name="wordWrap" >
+                                    <bool>true</bool>
                                 </property>
                             </widget>
                             <widget class="QSpinBox" row="0" column="1">
