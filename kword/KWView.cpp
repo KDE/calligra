@@ -1456,7 +1456,7 @@ void KWView::addVariableActions( int type, const QStringList & texts,
             v.type = type;
             v.subtype = i;
             QByteArray actionName;
-            actionName = "var-action-" + QByteArray::number(type)+ "-" + QByteArray::number(i);
+            actionName = "var-action-" + QByteArray::number(type)+ '-' + QByteArray::number(i);
             KAction * act = new KAction( (*it), 0, this, SLOT( insertVariable() ),
                                          actionCollection(), actionName );
             // Mainly for KEditToolbar

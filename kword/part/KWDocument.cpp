@@ -240,10 +240,10 @@ QString KWDocument::renameFrameSet( const QString &prefix, const QString& base )
         after = base.mid(pos + findDigits.matchedLength());
     }
     else if(prefix.isEmpty())
-        before = base +" ";
+        before = base + ' ';
     else {
         before = prefix;
-        after = " "+ base;
+        after = ' ' + base;
     }
 
     if(! before.startsWith(prefix)) {
