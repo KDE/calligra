@@ -1,0 +1,92 @@
+Status overview of the KOffice manuals
+--------------------------------------
+
+General goal for KOffice 2.0: all applications should have up-to-date and
+feature-complete manuals.
+
+- The user interfaces should be fully described (toolbars, menus, etc.) and
+  the screenshots should match the actual looks and be consistent in style and
+  presentation. A consistent way of describing the menu entries would be very
+  nice as well.
+
+- Common tasks should be described in a clear way, where needed using a how-to
+  or tutorial like approach.
+
+- Technical information should be separated from actual user information.
+  Whether we should put developer stuff in a separate handbook or just remove
+  it from the manuals completely is an open question for me at this point.
+
+- Especially for the larger applications: we should take a look at other
+  manuals and their tables of contents to see what information is included and
+  how they present it. A good theft is better than a bad idea, after all...
+
+The list of maintainers should be kept up-to-date at the KOffice "get
+involved" documentation page: http://koffice.org/getinvolved/doc-writers.php
+
+--------------------------------------------------------------------------------
+
+KOffice - general
+
+Too technical - basically a complete rewrite is needed. More focus on the
+common interface and on the component system, less on the technicalities
+(don't mention KPart!). General configuration options may be included, but on
+the UI level only. This depends on the 2.0 user interface though. Perhaps even
+remove this part and combine the useful information with KOShell?
+
+KOShell (KOffice workspace)
+
+Update for 2.0 interface - this goes for all parts, let's just mention it
+here. The "Under the hood" section should be moved to developer documentation,
+the rest seems to be fine.
+
+KWord
+
+The introduction and the Fundamentals should be restyled.
+Most of the appendices, but also some other sections, are pretty much
+outdated. (1.3!)
+
+KSpread
+
+Not much additional remarks.
+
+KPresenter
+
+Some stuff is outdated (1.3!). Apart from the Menu/Toolbar items chapter,
+there are almost no screenshots and only very little actual text.
+It's also questionable if we should include tips on how you should do
+presentations. If so, it ought to be an appendix, not a running chapter.
+
+Kexi
+
+See http://kexi.pl/doc/pl/contents.html for the Polish version of the
+documentation. This seems pretty well written to me.
+
+Kivio
+
+Screenshots are missing, a toolbars and menus description should be added.
+
+Karbon14
+
+Easy: no documentation at all.
+
+Krita
+
+Running text (descriptive chapters) is still to be added.
+
+KPlato
+
+Text on how to use the program is missing: the only chapters available deal
+with terminology and the menus/dialogs.
+
+KChart
+
+Fairly complete.
+
+KFormula
+
+Fairly complete.
+
+Kugar
+
+Will apparently be removed from KOffice in the future.
+
