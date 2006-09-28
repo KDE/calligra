@@ -172,11 +172,11 @@
                         <bool>true</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Disable to get smaller files if your image has no transparancy</string>
+                        <string>Disable to get smaller files if your image has no transparency</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>&lt;p&gt;The Portable Network Graphics (PNG) file format allows transparancy in your image to be stored by saving an alpha channel.
-You can uncheck the box if you are not using transparancy and you want to make the resulting file smaller .&lt;br&gt;Always saving the alpha channel is recommended.&lt;/p&gt;</string>
+                        <string>&lt;p&gt;The Portable Network Graphics (PNG) file format allows transparency in your image to be stored by saving an alpha channel.
+You can uncheck the box if you are not using transparency and you want to make the resulting file smaller .&lt;br&gt;Always saving the alpha channel is recommended.&lt;/p&gt;</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox">

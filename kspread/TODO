@@ -253,7 +253,7 @@ Not yet sorted (will be entered into categories above)
 - Insert basic drawings, autoforms (necessary to create a share lib from kpresenter)
 - Insert widgets like buttons, drop down lists,... + having the possibily to
   define action if pressed, or selection changes,...
-- Transparancy for embedded objects
+- Transparency for embedded objects
 - z-order for embedded objects (and possibility to change the order)
 - better handling of embedded objects: e.g. delete them just by marking them + Del-Key
   not only in the context menu of the borders

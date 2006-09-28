@@ -66,7 +66,7 @@ void KWFrameSet::printDebug(KWFrame *frame) {
     kDebug() << "     FrameBehavior: "<< frameBh[ frame->frameBehavior() ] << endl;
     kDebug() << "     NewFrameBehavior: "<< newFrameBh[ frame->newFrameBehavior() ] << endl;
     if(frame->shape()->background().style() == Qt::NoBrush)
-        kDebug() << "     BackgroundColor: Transparant\n";
+        kDebug() << "     BackgroundColor: Transparent\n";
     else {
         QColor col = frame->shape()->background().color();
         kDebug() << "     BackgroundColor: "<< ( col.isValid() ? col.name() : QString("(default)") ) << endl;

@@ -150,11 +150,11 @@ Enabling interlacing will cause the image to be displayed by the browser even wh
    <item row="2" column="0" >
     <widget class="QCheckBox" name="alpha" >
      <property name="toolTip" >
-      <string>Disable to get smaller files if your image has no transparancy</string>
+      <string>Disable to get smaller files if your image has no transparency</string>
      </property>
      <property name="whatsThis" >
-      <string>&lt;p>The Portable Network Graphics (PNG) file format allows transparancy in your image to be stored by saving an alpha channel.
-You can uncheck the box if you are not using transparancy and you want to make the resulting file smaller .&lt;br>Always saving the alpha channel is recommended.&lt;/p></string>
+      <string>&lt;p>The Portable Network Graphics (PNG) file format allows transparency in your image to be stored by saving an alpha channel.
+You can uncheck the box if you are not using transparency and you want to make the resulting file smaller .&lt;br>Always saving the alpha channel is recommended.&lt;/p></string>
      </property>
      <property name="text" >
       <string>Store alpha channel (transparency)</string>
