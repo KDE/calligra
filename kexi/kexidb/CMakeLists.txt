@@ -1,12 +1,35 @@
 
 
-add_subdirectory( parser )
+#add_subdirectory( parser )
 add_subdirectory( drivers )
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb/parser ${KDE4_INCLUDES}  )
 
-ADD_DEFINITIONS( -D__KEXIDB__= -include ${CMAKE_SOURCE_DIR}/kexi/kexidb/global.h 
-  -DYYERROR_VERBOSE=1 )
+ADD_DEFINITIONS( 
+-D__KEXIDB__= 
+-include ${CMAKE_SOURCE_DIR}/kexi/kexidb/global.h
+-DMAKE_KEXI_DB_LIB
+-DYYERROR_VERBOSE=1
+)
+
+
+########### generate parser/lexer files ###############
+# as described at http://public.kitware.com/pipermail/cmake/2002-September/003028.html
+
+# Create target for the parser
+ADD_CUSTOM_TARGET(parser echo "Creating parser/lexer files")
+
+# Create custom command for flex/lex (note the outputs)
+ADD_CUSTOM_COMMAND(
+COMMAND ${CMAKE_SOURCE_DIR}/kexi/kexidb/parser/generate_parser_code.sh
+TARGET parser
+OUTPUTS ${CMAKE_SOURCE_DIR}/kexi/kexidb/parser/sqlparser.h  ${CMAKE_SOURCE_DIR}/kexi/kexidb/parser/sqlparser.cpp ${CMAKE_SOURCE_DIR}/kexi/kexidb/parser/sqlscanner.h ${CMAKE_SOURCE_DIR}/kexi/kexidb/parser/sqlscanner.cpp)
+
+# mark files as generated
+SET_SOURCE_FILES_PROPERTIES(${CMAKE_SOURCE_DIR}/kexi/kexidb/parser/sqlparser.h GENERATED)
+SET_SOURCE_FILES_PROPERTIES(${CMAKE_SOURCE_DIR}/kexi/kexidb/parser/sqlparser.cpp GENERATED)
+SET_SOURCE_FILES_PROPERTIES(${CMAKE_SOURCE_DIR}/kexi/kexidb/parser/sqlscanner.h GENERATED)
+SET_SOURCE_FILES_PROPERTIES(${CMAKE_SOURCE_DIR}/kexi/kexidb/parser/sqlscanner.cpp GENERATED)
 
 ########### next target ###############
 
@@ -50,8 +73,6 @@ set(kexidb_LIB_SRCS
 
 kde4_automoc(${kexidb_LIB_SRCS})
 
-
-add_definitions( -DMAKE_KEXI_DB_LIB )
 kde4_add_library(kexidb SHARED ${kexidb_LIB_SRCS})
 target_link_libraries(kexidb 
    ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} kexiutils )
