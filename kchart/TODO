@@ -20,6 +20,12 @@ Before release of KOffice 1.5.0
 Item								   Prio Status
 ------------------------------------------------------------------------------
 
+I Chose number 2.
+
+* Fix bug 128758
+  + Fix it so that m_row/colLabels always contains the headers.		----
+     - Fix doSetData to do this. Take into account canChangeValue	--
+  + Fix paintContent() to take canChangedata into account		----
 
 
 After the feature freeze
