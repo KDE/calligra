@@ -1252,9 +1252,10 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 	}
 	if (!s_where.isEmpty())
 		sql += QString::fromLatin1(" WHERE ") + s_where;
-//! \todo (js) add WHERE and other sql parts
+//! \todo (js) add other sql parts
 	//(use wasWhere here)
 
+	//KexiDBDbg << sql << endl;
 	return sql;
 }
 
@@ -2239,12 +2240,12 @@ tristate Connection::querySingleRecordInternal(RowData &data, const QString* sql
 		m_sql = addLimitTo1 ? (*sql + " LIMIT 1") : *sql; // is this safe?
 	KexiDB::Cursor *cursor;
 	if (!(cursor = sql ? executeQuery( m_sql ) : executeQuery( *query ))) {
-		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
+		KexiDBWarn << "Connection::querySingleRecord(): !executeQuery() " << m_sql << endl;
 		return false;
 	}
 	if (!cursor->moveFirst() || cursor->eof()) {
 		const tristate result = cursor->error() ? false : cancelled;
-		KexiDBDbg << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof()" << endl;
+		KexiDBWarn << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof()" << m_sql << endl;
 		setError(cursor);
 		deleteCursor(cursor);
 		return result;
@@ -2277,12 +2278,12 @@ tristate Connection::querySingleString(const QString& sql, QString &value, uint 
 	KexiDB::Cursor *cursor;
 	m_sql = addLimitTo1 ? (sql + " LIMIT 1") : sql; // is this safe?;
 	if (!(cursor = executeQuery( m_sql ))) {
-		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
+		KexiDBWarn << "Connection::querySingleRecord(): !executeQuery() " << m_sql << endl;
 		return false;
 	}
 	if (!cursor->moveFirst() || cursor->eof()) {
 		const tristate result = cursor->error() ? false : cancelled;
-		KexiDBDbg << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof()" << endl;
+		KexiDBWarn << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof() " << m_sql << endl;
 		deleteCursor(cursor);
 		return result;
 	}
@@ -2311,7 +2312,7 @@ bool Connection::queryStringList(const QString& sql, QStringList& list, uint col
 	clearError();
 	m_sql = sql;
 	if (!(cursor = executeQuery( m_sql ))) {
-		KexiDBDbg << "Connection::queryStringList(): !executeQuery()" << endl;
+		KexiDBWarn << "Connection::queryStringList(): !executeQuery() " << m_sql << endl;
 		return false;
 	}
 	if (!checkIfColumnExists(cursor, column)) {
@@ -2354,13 +2355,13 @@ bool Connection::resultExists(const QString& sql, bool &success, bool addLimitTo
 			m_sql = sql;
 	}
 	if (!(cursor = executeQuery( m_sql ))) {
-		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
+		KexiDBWarn << "Connection::querySingleRecord(): !executeQuery() " << m_sql << endl;
 		success = false;
 		return false;
 	}
 	if (!cursor->moveFirst() || cursor->eof()) {
 		success = !cursor->error();
-		KexiDBDbg << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof()" << endl;
+		KexiDBWarn << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof() " << m_sql << endl;
 		setError(cursor);
 		deleteCursor(cursor);
 		return false;
