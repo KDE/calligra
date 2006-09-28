@@ -86,11 +86,13 @@ Value func_sumx2py2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumx2my2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumxmy2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_ttest (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_variance (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_variancea (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_variancep (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_variancepa (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weibull (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_ztest (valVector args, ValueCalc *calc, FuncExtra *);
 
 typedef QList<double> List;
 
@@ -286,6 +288,11 @@ void RegisterStatisticalFunctions()
   f = new Function ("TDIST", func_tdist);
   f->setParamCount (3);
   repo->add (f);
+#if 0 // TODO Stefan: finish
+  f = new Function ("TTEST", func_ttest);
+  f->setParamCount (4);
+  repo->add (f);
+#endif
   f = new Function ("VARIANCE", func_variance);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
@@ -308,6 +315,10 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("WEIBULL", func_weibull);
   f->setParamCount (4);
+  repo->add (f);
+  f = new Function ("ZTEST", func_ztest);
+  f->setParamCount (2, 3);
+  f->setAcceptArray ();
   repo->add (f);
 }
 
@@ -1314,4 +1325,65 @@ Value func_steyx( valVector args, ValueCalc* calc, FuncExtra* )
     Value numerator = calc->sub( varY, calc->div( calc->sqr( cov ), varX ) );
     Value denominator = calc->sub( number, 2 );
     return calc->sqrt( calc->div( numerator, denominator ) );
+}
+
+// Function TTEST
+Value func_ttest( valVector args, ValueCalc* calc, FuncExtra* )
+{
+    Value x = args[0];
+    Value y = args[1];
+    int mode = calc->conv()->asInteger( args[2] ).asInteger();
+    int type = calc->conv()->asInteger( args[3] ).asInteger();
+
+    int numX = calc->count( x );
+    int numY = calc->count( y );
+
+    // check mode parameter
+    if ( mode < 1 || mode > 2 )
+        return Value::errorVALUE();
+    // check type parameter
+    if ( type < 1 || type > 3 )
+        return Value::errorVALUE();
+    // check amount of numbers in sequences
+    if ( numX < 2 || numY < 2 || ( type == 1 && numX != numY ) )
+        return Value::errorVALUE();
+
+    Value t;
+    if ( type == 1 )
+    {
+        // paired
+        // TODO
+    }
+    else if ( type == 2 )
+    {
+        // independent, equal variances
+        // TODO
+    }
+    else
+    {
+        // independent, unequal variances
+        // TODO
+    }
+
+    valVector tmp(3);
+    tmp.insert( 0, t );
+    tmp.insert( 1, numX );
+    tmp.insert( 2, mode );
+    return calc->sub( 1.0, func_tdist( tmp, calc, 0 ) );
+}
+
+// Function ZTEST
+Value func_ztest( valVector args, ValueCalc* calc, FuncExtra* )
+{
+    int number = calc->count( args[0] );
+
+    if ( number < 2 )
+        return Value::errorVALUE();
+
+    // standard deviation is optional
+    Value sigma = ( args.count() > 2 ) ? args[2] : calc->stddev( args[0], false );
+    // z = Ex - mu / sigma * sqrt(N)
+    Value z = calc->div( calc->mul( calc->sub( calc->avg( args[0] ), args[1] ), calc->sqrt( number ) ), sigma );
+    // result = 1 - ( NORMDIST(-abs(z),0,1,1) + ( 1 - NORMDIST(abs(z),0,1,1) ) )
+    return calc->mul( 2.0, calc->gauss( calc->abs( z ) ) );
 }

@@ -1451,8 +1451,61 @@
         <Type>Float</Type>
       </Parameter>
       <Help>
-        <Text>The STEYX() function calculates the standard error of the predicted y value for each x in the regression.</Text>
+        <Text>The STEYX() function calculates the standard error of the predicted y value for each x in the regression.</Text>
         <Syntax>SLOPE(y;x)</Syntax>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TTEST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>x (array)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>y (array)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>type</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>mode</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The TTEST() function calculates the probability of a t-test.</Text>
+        <Syntax>TTEST(x; y; type; mode)</Syntax>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ZTEST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>x (array)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>mean</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>standardDeviation</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The ZTEST() function calculates the two tailed probability of a z-test with normal distribution.</Text>
+        <Syntax>ZTEST(x; mean; standardDeviation)</Syntax>
+        <Text>Performs a test of the null hypothesis, that sample is a sample
+            of a normal distributed random variable with mean mean and standard
+            deviation sigma. A return value of 1 indicates, that the null
+            hypothesis is rejected, i.e. the sample is not a random sample of
+            the normal distribution.
+            If sigma is omitted, it is estimated from sample, using STDEV.
+        </Text>
       </Help>
     </Function>
 
