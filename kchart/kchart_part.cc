@@ -259,8 +259,8 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     // If params is 0, initDoc() has not been called.
     Q_ASSERT( m_params != 0 );
 
-    KDChartAxisParams  bottomparms;
-    bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+    KDChartAxisParams  xAxisParms;
+    xAxisParms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
     // Handle data in rows or columns.
     //
@@ -273,13 +273,14 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     // Create the displayData table.
     numDatasets = createDisplayData();
 
-
     // Create and set the axis labels and legend.
     QStringList  longLabels;
     QStringList  shortLabels;
     createLabelsAndLegend(longLabels, shortLabels);
-    bottomparms.setAxisLabelStringLists( &longLabels, &shortLabels );
-    m_params->setAxisParams(KDChartAxisParams::AxisPosBottom, bottomparms);
+
+    // Set the x axis labels.
+    xAxisParms.setAxisLabelStringLists( &longLabels, &shortLabels );
+    m_params->setAxisParams(KDChartAxisParams::AxisPosBottom, xAxisParms);
 
 
     // Handle some types or subtypes of charts specially, notably:
@@ -365,14 +366,16 @@ int  KChartPart::createDisplayData()
     int  colOffset   = 0;
     int  numDatasets = 0;
 
-    if ( m_params->firstRowAsLabel() )
-	rowOffset++;
-    if ( m_params->firstColAsLabel() )
-	colOffset++;
+    if ( !canChangeValue() ) {
+	if ( m_params->firstRowAsLabel() )
+	    rowOffset++;
+	if ( m_params->firstColAsLabel() )
+	    colOffset++;
+    }
 
     // After this sequence, m_DisplayData contains the data in the
-    // correct transposition, and the X axis (represented by
-    // bottomparms) and the legend contain the correct labels.
+    // correct transposition, and the X axis and the legend contain
+    // the correct labels.
     QVariant  value1;
     QVariant  value2;
     int       prop;
@@ -383,6 +386,7 @@ int  KChartPart::createDisplayData()
 	m_displayData.expand( numDatasets,
 			      m_currentData.usedCols() - colOffset );
 
+	// Remove the first row and/or col if they are used for headers.
 	for (uint row = rowOffset; row < m_currentData.usedRows(); row++) {
 	    for (uint col = colOffset; col < m_currentData.usedCols(); col++) {
 		if ( m_currentData.cellContent( row, col,
@@ -392,7 +396,6 @@ int  KChartPart::createDisplayData()
 		    m_displayData.setProp(row - rowOffset, col - colOffset,
 					  prop);
                 }
-
 	    }
 	}
     }
@@ -618,60 +621,53 @@ void KChartPart::analyzeHeaders( const KDChartTableData& data )
 
 
 void KChartPart::doSetData( const KDChartTableData&  data,
-			    bool  hasRowHeader,
-			    bool  hasColHeader )
+			    bool  firstRowHeader,
+			    bool  firstColHeader )
 {
     uint  rowStart = 0;
     uint  colStart = 0;
     uint  col;
     uint  row;
 
-    // Disable this function.  Maybe we should remove this function
-    // altogether, since I was doing some pretty fuzzy thinking when I
-    // implemented it.
-    return;
+    // From this point, we know that the labels and legend are going
+    // to be taken from the data if firstRowHeader or firstColheader
+    // is true.
 
-    if (hasRowHeader)
-      rowStart = 1;
-    if (hasColHeader)
-      colStart = 1;
+    if (firstRowHeader)
+        rowStart = 1;
+    if (firstColHeader)
+        colStart = 1;
 
-    // Generate legend from the column headers if applicable.
+    // Generate m_rowlabels from the column headers if applicable.
     m_rowLabels.clear();
-    if ( hasColHeader ) {
+    if ( firstColHeader ) {
         for( row = rowStart; row < data.rows(); row++ )
 	    m_rowLabels << data.cellVal( row, 0 ).toString();
     }
-    else
-        m_params->setLegendSource( KDChartParams::LegendAutomatic );
+    else {
+	for( row = rowStart; row < data.rows(); row++ )
+	    m_rowLabels << "";
+
+	// FIXME: Check what this does, and if we don't have to check
+	//        the data order (rows / cols).
+	m_params->setLegendSource( KDChartParams::LegendAutomatic );
+    }
 
     // Generate X labels from the row headers if applicable
     m_colLabels.clear();
-    if ( hasRowHeader ) {
+    if ( firstRowHeader ) {
         for( col = colStart; col < data.cols(); col++ )
 	    m_colLabels << data.cellVal( 0, col ).toString();
     }
-
-#if 0
-    // If there is a row header and/or a column header, then generate
-    // the data that will be used for the chart by translating the
-    // original data.
-    if ( hasColHeader || hasRowHeader ) {
-        KDChartTableData matrix( data.rows() - rowStart, data.cols() - colStart );
-
-        for ( col = colStart; col < data.cols(); col++ ) {
-            for ( row = rowStart; row < data.rows(); row++ ) {
-                matrix.setCell( row - rowStart, col - colStart,
-				data.cellVal( row, col ).toDouble() );
-            }
-        }
-        m_currentData = matrix;
+    else {
+	for( col = colStart; col < data.cols(); col++ )
+	    m_colLabels << "";
     }
-    else
-#endif
-        m_currentData = data;
 
-    setChartDefaults();
+    // Doesn't hurt if data == m_currentData, but necessary if not.
+    m_currentData = data;
+
+    //setChartDefaults();
 
     emit docChanged();
 }
