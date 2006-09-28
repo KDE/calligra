@@ -70,8 +70,8 @@ class Spreadsheet: public XmlParser, Config
 		 * Accessors
 		 */
 
-		void analyse(const QDomNode);
-		void analyse_attr(const QDomNode);
+		void analyze(const QDomNode);
+		void analyze_attr(const QDomNode);
 
 		void generate(QTextStream&, bool);
 

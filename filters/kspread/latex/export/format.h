@@ -154,9 +154,9 @@ class Format: public XmlParser
 		/**
 		 * Get information from a markup tree (only param of a format).
 		 */
-		virtual void analyse(const QDomNode);
-		virtual void analysePen(const QDomNode);
-		virtual void analyseFont(const QDomNode);
+		virtual void analyze(const QDomNode);
+		virtual void analyzePen(const QDomNode);
+		virtual void analyzeFont(const QDomNode);
 
 		/**
 		 * Generate the cell format inherited from the row or the column format or

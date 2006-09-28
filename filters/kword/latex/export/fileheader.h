@@ -134,8 +134,8 @@ class FileHeader: public XmlParser
 		void useGraphics   ()           { _hasGraphics  = true;           }
 		void useTable      ()           { _hasTable     = true;           }
 
-		void analysePaper     (const QDomNode);
-		void analyseAttributs (const QDomNode);
+		void analyzePaper     (const QDomNode);
+		void analyzeAttributes (const QDomNode);
 
 		void generate         (QTextStream &);
 
@@ -149,7 +149,7 @@ class FileHeader: public XmlParser
 
 	private:
 
-		void analysePaperParam(const QDomNode);
+		void analyzePaperParam(const QDomNode);
 
 		void generatePaper    (QTextStream&);
 		void generateLatinPreambule(QTextStream&);

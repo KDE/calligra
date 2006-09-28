@@ -48,18 +48,18 @@ class Body
 		~Body() { }
 
 		/**
-		 * Analyse the latex tree and keep data.
+		 * Analyze the latex tree and keep data.
 		 * 
-		 * @param elt The root tree which contaisn an entire latex document.
+		 * @param elt The root tree which contains an entire latex document.
 		 * 
-		 * @return <code>false</code> if the analyse failed.
+		 * @return <code>false</code> if the analysis failed.
 		 */
-		bool analyse(Element* elt);
+		bool analyze(Element* elt);
 
 		/**
 		 * Generate a kword document.
 		 *
-		 * @return <code>true</code> if the generation success.
+		 * @return <code>true</code> if the generation succeeded.
 		 */
 		bool generate(QDomElement& framesets, QDomDocument& doc);
 

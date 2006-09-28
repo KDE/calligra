@@ -50,21 +50,21 @@ Element::~Element()
 }
 
 /*******************************************/
-/* Analyse                                 */
+/* Analyze                                 */
 /*******************************************/
-void Element::analyse(const QDomNode balise_initiale)
+void Element::analyze(const QDomNode balise_initiale)
 {
-	/* ANALYSE A FRAMESET MARKUP */
+	/* ANALYZE A FRAMESET MARKUP */
 	
-	/* Parameters Analyse */
-	kDebug(30522) << "FRAMESET PARAMETERS ANALYSE (Element)" << endl;
-	analyseParam(balise_initiale);
+	/* Parameter analysis */
+	kDebug(30522) << "FRAMESET PARAMETER ANALYSIS (Element)" << endl;
+	analyzeParam(balise_initiale);
 }
 
 /*******************************************/
-/* AnalyseParam                            */
+/* AnalyzeParam                            */
 /*******************************************/
-void Element::analyseParam(const QDomNode balise)
+void Element::analyzeParam(const QDomNode balise)
 {
 	/* <FRAMESET frameType="1" frameInfo="0" removable="0"
 	 * visible="1" name="Supercadre 1">

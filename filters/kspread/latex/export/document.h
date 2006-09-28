@@ -55,7 +55,7 @@ class Document : public XmlParser, Config
 
 		/* Accesors */
 		
-		void analyse();
+		void analyze();
 		void generate();
 
 	private:

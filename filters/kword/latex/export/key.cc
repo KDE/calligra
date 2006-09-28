@@ -42,11 +42,11 @@ Key::~Key()
 }
 
 /*******************************************/
-/* Analyse                                 */
+/* Analyze                                 */
 /*******************************************/
-void Key::analyse(const QDomNode balise)
+void Key::analyze(const QDomNode balise)
 {
-	/* MARKUP TYPE :  PARAGRAPH */
+	/* Markup type: Paragraph */
 
 	kDebug(30522) << "**** KEY ****" << endl;
 	kDebug(30522) << getAttr(balise, "name") << endl;

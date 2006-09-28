@@ -137,14 +137,14 @@ class Layout: public TextFormat
 		 * Helpful functions
 		 */
 
-		void analyseLayout  (const QDomNode);
+		void analyzeLayout  (const QDomNode);
 
 	private:
-		void analyseCounter  (const QDomNode);
-		void analyseFollowing(const QDomNode);
-		void analyseName     (const QDomNode);
-		void analyseEnv      (const QDomNode);
-		void analyseBreakLine(const QDomNode);
+		void analyzeCounter  (const QDomNode);
+		void analyzeFollowing(const QDomNode);
+		void analyzeName     (const QDomNode);
+		void analyzeEnv      (const QDomNode);
+		void analyzeBreakLine(const QDomNode);
 };
 
 #endif /* __KWORD_LAYOUT_H__ */

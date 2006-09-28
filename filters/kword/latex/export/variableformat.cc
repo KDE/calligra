@@ -71,52 +71,52 @@
 }*/
 
 /*******************************************/
-/* analyseVariableFormat                       */
+/* analyzeVariableFormat                       */
 /*******************************************/
 /* Get the set of info. about a text format*/
 /*******************************************/
-void VariableFormat::analyseFormat(const QDomNode balise)
+void VariableFormat::analyzeFormat(const QDomNode balise)
 {
-	/* MARKUPS FORMAT id="1" pos="0" len="17">...</FORMAT> */
+	/* MARKUP FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
-	/* Parameters Analyse */
-	analyseParam(balise);
-	kDebug(30522) << "ANALYSE A FORMAT" << endl;
+	/* Parameter Analysis */
+	analyzeParam(balise);
+	kDebug(30522) << "ANALYZE A FORMAT" << endl;
 	
-	/* Children Markups Analyse */
+	/* Child markup analysis */
 	if(isChild(balise, "FONT"))
-		analyseFont(getChild(balise, "FONT"));
+		analyzeFont(getChild(balise, "FONT"));
 	if(isChild(balise, "ITALIC"))
-		analyseItalic(getChild(balise, "ITALIC"));
+		analyzeItalic(getChild(balise, "ITALIC"));
 	if(isChild(balise, "UNDERLINE"))
-		analyseUnderlined(getChild(balise, "UNDERLINE"));
+		analyzeUnderlined(getChild(balise, "UNDERLINE"));
 	if(isChild(balise, "WEIGHT"))
-		analyseWeight(getChild(balise, "WEIGHT"));
+		analyzeWeight(getChild(balise, "WEIGHT"));
 	if(isChild(balise, "VERTALIGN"))
-		analyseAlign(getChild(balise, "VERTALIGN"));
+		analyzeAlign(getChild(balise, "VERTALIGN"));
 	if(isChild(balise, "STRIKEOUT"))
-		analyseStrikeout(getChild(balise, "STRIKEOUT"));
+		analyzeStrikeout(getChild(balise, "STRIKEOUT"));
 	if(isChild(balise, "COLOR"))
-		analyseColor(getChild(balise, "COLOR"));
+		analyzeColor(getChild(balise, "COLOR"));
 	if(isChild(balise, "SIZE"))
-		analyseSize(getChild(balise, "SIZE"));
+		analyzeSize(getChild(balise, "SIZE"));
 	if(isChild(balise, "DATE"))
-		analyseDate(getChild(balise, "DATE"));
+		analyzeDate(getChild(balise, "DATE"));
 	if(isChild(balise, "FOOTNOTE"))
-		analyseFootnote(getChild(balise, "FOOTNOTE"));
+		analyzeFootnote(getChild(balise, "FOOTNOTE"));
 	if(isChild(balise, "NOTE"))
-		analyseNote(getChild(balise, "NOTE"));
+		analyzeNote(getChild(balise, "NOTE"));
 	if(isChild(balise, "TYPE"))
-		analyseType(getChild(balise, "TYPE"));
+		analyzeType(getChild(balise, "TYPE"));
 	kDebug(30522) << "END OF A FORMAT" << endl;
 }
 
 /*******************************************/
-/* analyseDate                             */
+/* analyzeDate                             */
 /*******************************************/
 /* Get the date.                           */
 /*******************************************/
-void VariableFormat::analyseDate(const QDomNode balise)
+void VariableFormat::analyzeDate(const QDomNode balise)
 {
 	setDay(getAttr(balise, "day").toInt());
 	setMonth(getAttr(balise, "month").toInt());
@@ -125,11 +125,11 @@ void VariableFormat::analyseDate(const QDomNode balise)
 }
 
 /*******************************************/
-/* analyseTime                             */
+/* analyzeTime                             */
 /*******************************************/
 /* Get the time.                           */
 /*******************************************/
-void VariableFormat::analyseTime(const QDomNode balise)
+void VariableFormat::analyzeTime(const QDomNode balise)
 {
 	setHour(getAttr(balise, "day").toInt());
 	setMinute(getAttr(balise, "month").toInt());
@@ -137,7 +137,7 @@ void VariableFormat::analyseTime(const QDomNode balise)
 	setFix(getAttr(balise, "fix").toInt());
 }
 
-void VariableFormat::analyseFootnote(const QDomNode balise)
+void VariableFormat::analyzeFootnote(const QDomNode balise)
 {
 	setNumberingtype(getAttr(balise, "numberingtype"));
 	setNotetype(getAttr(balise, "notetype"));
@@ -145,17 +145,17 @@ void VariableFormat::analyseFootnote(const QDomNode balise)
 	setValue(getAttr(balise, "value"));
 }
 
-void VariableFormat::analyseNote(const QDomNode balise)
+void VariableFormat::analyzeNote(const QDomNode balise)
 {
 	setNote(getAttr(balise, "note"));
 }
 
 /*******************************************/
-/* analyseType                             */
+/* analyzeType                             */
 /*******************************************/
 /* Get information about variable.         */
 /*******************************************/
-void VariableFormat::analyseType(const QDomNode balise)
+void VariableFormat::analyzeType(const QDomNode balise)
 {
 	setKey(getAttr(balise, "key"));
 	setType(getAttr(balise, "type").toInt());

@@ -165,11 +165,11 @@ class Element: public XmlParser, public Border
 		 * Get information about frameset markup only from a
 		 * markup tree.
 		 */
-		virtual void analyse(const QDomNode);
+		virtual void analyze(const QDomNode);
 		virtual void generate(QTextStream&) = 0;
 
 	private:
-		void analyseParam(const QDomNode);
+		void analyzeParam(const QDomNode);
 };
 
 #endif /* __KWORD_ELEMENT_H__ */

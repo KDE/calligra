@@ -96,9 +96,9 @@ class Cell: public Format
 		/**
 		 * Helpful functions
 		 */
-		void     analyse (const QDomNode);
-		void     analyseText (const QDomNode);
-		void     analyseResult (const QDomNode);
+		void     analyze (const QDomNode);
+		void     analyzeText (const QDomNode);
+		void     analyzeResult (const QDomNode);
 		void     generate  (QTextStream&, Table*);
 		
 	private:

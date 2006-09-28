@@ -151,12 +151,12 @@ class VariableFormat: public TextZone
 		void setNote      (const QString note)  { _note  = note;  }
 
 		/* ==== Helpful functions ==== */
-		void analyseFormat(const QDomNode);
-		void analyseDate      (const QDomNode);
-		void analyseTime      (const QDomNode);
-		void analyseFootnote  (const QDomNode);
-		void analyseNote      (const QDomNode);
-		void analyseType      (const QDomNode);
+		void analyzeFormat(const QDomNode);
+		void analyzeDate      (const QDomNode);
+		void analyzeTime      (const QDomNode);
+		void analyzeFootnote  (const QDomNode);
+		void analyzeNote      (const QDomNode);
+		void analyzeType      (const QDomNode);
 };
 
 #endif /* __KWORD_VARIABLEFORMAT_H__ */

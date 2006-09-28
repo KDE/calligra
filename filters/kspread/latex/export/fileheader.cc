@@ -56,9 +56,9 @@ FileHeader::~FileHeader()
 }
 
 /*******************************************/
-/* AnalysePaperParam                       */
+/* AnalyzePaperParam                       */
 /*******************************************/
-void FileHeader::analysePaperParam(const QDomNode balise)
+void FileHeader::analyzePaperParam(const QDomNode balise)
 {
 	setFormat(getAttr(balise, "format").toInt());
 	_width = getAttr(balise, "width").toInt();
@@ -74,15 +74,15 @@ void FileHeader::analysePaperParam(const QDomNode balise)
 }
 
 /*******************************************/
-/* AnalysePaper                            */
+/* AnalyzePaper                            */
 /*******************************************/
-void FileHeader::analysePaper(const QDomNode balise)
+void FileHeader::analyzePaper(const QDomNode balise)
 {
-	analysePaperParam(balise);
+	analyzePaperParam(balise);
 
 	//setTokenCurrent(balise_initiale->pContent);
-	// Analyse children markups --> PAPERBORDERS
-	QDomNode fils = getChild(balise, "PAPERSBORDERS");
+	// Analyze child markup --> PAPERBORDERS
+	QDomNode fils = getChild(balise, "PAPERBORDERS");
 	_leftBorder = getAttr(fils, "left").toInt();
 	_rightBorder = getAttr(fils, "right").toInt();
 	_bottomBorder = getAttr(fils, "bottom").toInt();
@@ -90,9 +90,9 @@ void FileHeader::analysePaper(const QDomNode balise)
 }
 
 /*******************************************/
-/* AnalyseAttributs                        */
+/* AnalyzeAttributes                        */
 /*******************************************/
-void FileHeader::analyseAttributs(const QDomNode balise)
+void FileHeader::analyzeAttributes(const QDomNode balise)
 {
 	setProcessing(getAttr(balise, "processing").toInt());
 	setStandardPge(getAttr(balise, "standardpage").toInt());

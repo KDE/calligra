@@ -216,8 +216,8 @@ void KWordLatexExportDia::accept()
 	config->setDefaultLanguage(langUsedList->currentText());
 
 	Xml2LatexParser LATEXParser(_in, _fileOut, config);
-	kDebug(30522) << "---------- analyse input file -------------" << endl;
-	LATEXParser.analyse();
+	kDebug(30522) << "---------- analyze input file -------------" << endl;
+	LATEXParser.analyze();
 	kDebug(30522) << "---------- generate output file -------------" << endl;
 	LATEXParser.generate();
 	kDebug(30522) << "KWORD LATEX EXPORT FILTER --> END" << endl;
@@ -225,7 +225,7 @@ void KWordLatexExportDia::accept()
 
 void KWordLatexExportDia::addLanguage()
 {
-	kDebug(30522) << "add a new language supported" << languagesList->currentText() << endl;
+	kDebug(30522) << "add a new supported language" << languagesList->currentText() << endl;
 	QString text = languagesList->currentText();
 	languagesList->removeItem(languagesList->currentItem());
 	langUsedList->insertItem(text);

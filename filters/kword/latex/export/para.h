@@ -145,7 +145,7 @@ class Para: public Layout
 		/**
 		 * Get information from a markup tree.
 		 */
-		void analyse         (const QDomNode);
+		void analyze         (const QDomNode);
 
 		/**
 		 * Write the paragraph in a file.
@@ -178,13 +178,13 @@ class Para: public Layout
 		void closeList        (QTextStream&, Para*);
 
 	private:
-		void analyseParam     (const QDomNode);
-		void analyseName      (const QDomNode);
-		void analyseInfo      (const QDomNode);
-		//void analyseBrk       (const QDomNode);
-		void analyseLayoutPara(const QDomNode);
-		void analyseFormat    (const QDomNode);
-		void analyseFormats   (const QDomNode);
+		void analyzeParam     (const QDomNode);
+		void analyzeName      (const QDomNode);
+		void analyzeInfo      (const QDomNode);
+		//void analyzeBrk       (const QDomNode);
+		void analyzeLayoutPara(const QDomNode);
+		void analyzeFormat    (const QDomNode);
+		void analyzeFormats   (const QDomNode);
 
 		/**
 		 * Write the paragraph style, format.

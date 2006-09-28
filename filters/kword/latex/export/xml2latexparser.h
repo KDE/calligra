@@ -52,7 +52,7 @@ class Xml2LatexParser : public XmlParser
 
 		virtual ~Xml2LatexParser() {}
 
-		void analyse();
+		void analyze();
 		void generate();
 
 };

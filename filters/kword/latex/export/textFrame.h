@@ -35,8 +35,8 @@
 /***********************************************************************/
 
 /**
- * This class hold 2 lists of paragraphs for the text and for the footnotes.
- * NOTE : The frame analyse can be (must be) in a Element class.
+ * This class holds 2 lists of paragraphs for the text and for the footnotes.
+ * NOTE: The frame analysis can be (must be) in an Element class.
  */
 class TextFrame: public Element
 {
@@ -117,7 +117,7 @@ class TextFrame: public Element
 		/**
 		 * Get information from a markup tree.
 		 */
-		void analyse(const QDomNode);
+		void analyze(const QDomNode);
 
 		/**
 		 * Write the text in a file.
@@ -127,9 +127,9 @@ class TextFrame: public Element
 	private:
 		/**
 		 * Get information from a markup tree (only parameters
-		 * in a frame.
+		 * in a frame).
 		 */
-		void analyseParamFrame(const QDomNode);
+		void analyzeParamFrame(const QDomNode);
 
 };
 

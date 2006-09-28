@@ -276,19 +276,19 @@ void TextZone::convert(QString& text, int unicode, const char* escape)
 }
 
 /*******************************************/
-/* analyse                                 */
+/* analyze                                 */
 /*******************************************/
-/* Analyse a text format, get the text used*/
+/* Analyze a text format, get the text used*/
 /* by this format.                         */
 /*******************************************/
-void TextZone::analyse(const QDomNode balise)
+void TextZone::analyze(const QDomNode balise)
 {
 	kDebug(30522) << "FORMAT" << endl;
 	/* Get header information (size, position)
 	 * Get infos. to format the text
 	 */
 	//if(balise != 0)
-		analyseFormat(balise);
+		analyzeFormat(balise);
 	
 	/* Format the text */
 	setTexte(getTexte().mid(getPos(), getLength()));
@@ -299,19 +299,19 @@ void TextZone::analyse(const QDomNode balise)
 }
 
 /*******************************************/
-/* analyse                                 */
+/* analyze                                 */
 /*******************************************/
-/* Analyse a text format, get the text used*/
+/* Analyze a text format, get the text used*/
 /* by this format.                         */
 /*******************************************/
-void TextZone::analyse()
+void TextZone::analyze()
 {
 	kDebug(30522) << "ZONE" << endl;
 	
 	/* Format the text */
 	setTexte(getTexte().mid(getPos(), getLength()));
 	
-	kDebug(30522) << "String of " << getTexte().length() << " characters :" << endl;
+	kDebug(30522) << "String of " << getTexte().length() << " characters:" << endl;
 	kDebug(30522) << getTexte().latin1() << endl;
 	kDebug(30522) << "END ZONE" << endl;
 }

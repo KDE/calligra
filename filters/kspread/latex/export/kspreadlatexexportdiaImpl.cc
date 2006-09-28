@@ -217,8 +217,8 @@ void KSpreadLatexExportDiaImpl::accept()
 	}
 
 	Document doc(_in, _fileOut);
-	kDebug(30522) << "---------- analyse file -------------" << endl;
-	doc.analyse();
+	kDebug(30522) << "---------- analyze file -------------" << endl;
+	doc.analyze();
 	kDebug(30522) << "---------- generate file -------------" << endl;
 	doc.generate();
 	kDebug(30522) << "KSPREAD LATEX EXPORT FILTER --> END" << endl;
@@ -226,7 +226,7 @@ void KSpreadLatexExportDiaImpl::accept()
 
 void KSpreadLatexExportDiaImpl::addLanguage()
 {
-	kDebug(30522) << "add a new language supported" << languagesList->currentText() << endl;
+	kDebug(30522) << "add a new supported language" << languagesList->currentText() << endl;
 	QString text = languagesList->currentText();
 	languagesList->removeItem(languagesList->currentItem());
 	langUsedList->insertItem(text);
@@ -234,7 +234,7 @@ void KSpreadLatexExportDiaImpl::addLanguage()
 
 void KSpreadLatexExportDiaImpl::removeLanguage()
 {
-	kDebug(30522) << "remove a lanugage" << langUsedList->currentText() << endl;
+	kDebug(30522) << "remove a language" << langUsedList->currentText() << endl;
 	QString text = langUsedList->currentText();
 	langUsedList->removeItem(langUsedList->currentItem());
 	languagesList->insertItem(text);

@@ -81,8 +81,8 @@ bool Format::hasRightBorder() const
 		return (_rightBorder->getStyle() > 0);
 }
 
-/* Get the set of info. about a text format */
-void Format::analyse(const QDomNode balise)
+/* Get the set of info about a text format */
+void Format::analyze(const QDomNode balise)
 {
 	/* <format brushstyle="5" brushcolor="#a70bc3" bgcolor="#ffffff" alignY="2" align="4" > */
 	if( !getAttr(balise, "brushstyle").isEmpty() )
@@ -96,38 +96,38 @@ void Format::analyse(const QDomNode balise)
 		setAlign(getAttr(balise, "align").toLong());
 	}
 	if(isChild(balise, "pen"))
-		analysePen(getChild(balise, "pen"));
+		analyzePen(getChild(balise, "pen"));
 	if(isChild(balise, "bottom-border"))
 	{
 		kDebug(30522) << "bottom-border" << endl;
 		_isValidFormat = true;
 		_bottomBorder = new Pen();
-		_bottomBorder->analyse(getChild(getChild(balise, "bottom-border"), "pen"));
+		_bottomBorder->analyze(getChild(getChild(balise, "bottom-border"), "pen"));
 	}
 	if(isChild(balise, "top-border"))
 	{
 		kDebug(30522) << "top-border" << endl;
 		_isValidFormat = true;
 		_topBorder = new Pen();
-		_topBorder->analyse(getChild(getChild(balise, "top-border"), "pen"));
+		_topBorder->analyze(getChild(getChild(balise, "top-border"), "pen"));
 	}
 	if(isChild(balise, "left-border"))
 	{
 		kDebug(30522) << "left-border" << endl;
 		_isValidFormat = true;
 		_leftBorder = new Pen();
-		_leftBorder->analyse(getChild(getChild(balise, "left-border"), "pen"));
+		_leftBorder->analyze(getChild(getChild(balise, "left-border"), "pen"));
 	}
 	if(isChild(balise, "right-border"))
 	{
 		kDebug(30522) << "right-border" << endl;
 		_isValidFormat = true;
 		_rightBorder = new Pen();
-		_rightBorder->analyse(getChild(getChild(balise, "right-border"), "pen"));
+		_rightBorder->analyze(getChild(getChild(balise, "right-border"), "pen"));
 	}
 }
 
-void Format::analysePen(const QDomNode balise)
+void Format::analyzePen(const QDomNode balise)
 {
 	/* <pen width="0" style="1" color="#000000" /> */
 	_isValidFormat = true;
@@ -136,7 +136,7 @@ void Format::analysePen(const QDomNode balise)
 	setPenColor(getAttr(balise, "color"));
 }
 
-void Format::analyseFont(const QDomNode balise)
+void Format::analyzeFont(const QDomNode balise)
 {
 	/* <font size="18" family="Helvetica" weight="50" /> */
 	setFontSize(getAttr(balise, "size").toInt());

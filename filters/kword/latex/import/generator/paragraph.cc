@@ -23,7 +23,7 @@
 //Added by qt3to4:
 #include <Q3PtrList>
 
-bool Paragraph::analyse(Q3PtrList<Element>* body)
+bool Paragraph::analyze(Q3PtrList<Element>* body)
 {
 }
 

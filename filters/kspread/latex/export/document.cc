@@ -34,7 +34,7 @@ Document::Document(const KoStore* in, QString fileOut):
 	//setFileHeader(_fileHeader);
 	//setRoot(&_document);
 	Config::instance()->setEmbeded(false);
-	//analyse_config(config);
+	//analyze_config(config);
 }
 
 Document::~Document()
@@ -42,13 +42,13 @@ Document::~Document()
 
 }
 
-void Document::analyse()
+void Document::analyze()
 {
 	QDomNode balise;
 	balise = init();
-	kDebug(30522) << "ANALYSE A DOC" << endl;
-	_document.analyse(balise);
-	kDebug(30522) << "END ANALYSE" << endl;
+	kDebug(30522) << "ANALYZE A DOC" << endl;
+	_document.analyze(balise);
+	kDebug(30522) << "END ANALYZE" << endl;
 }
 
 void Document::generate()

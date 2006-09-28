@@ -36,7 +36,7 @@
 
 /**
  * This class hold a footnote. This class will be a lot modified because
- * it doesn't correspond whith the dtd 1.0.
+ * it doesn't correspond with the dtd 1.0.
  */
 class Footnote: public Format
 {
@@ -82,11 +82,11 @@ class Footnote: public Format
 		/**
 		 * Helpful functions
 		 */
-		void analyse (const QDomNode);
-		void analyseInternal(const QDomNode);
-		void analyseRange(const QDomNode);
-		void analyseText(const QDomNode);
-		void analyseDescript(const QDomNode);
+		void analyze (const QDomNode);
+		void analyzeInternal(const QDomNode);
+		void analyzeRange(const QDomNode);
+		void analyzeText(const QDomNode);
+		void analyzeDescript(const QDomNode);
 
 		void generate(QTextStream&);
 

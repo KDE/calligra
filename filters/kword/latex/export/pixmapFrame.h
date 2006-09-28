@@ -91,14 +91,14 @@ class PixmapFrame : public Element
 		 * Helpful functions
 		 */
 
-		void analyse(const QDomNode);
+		void analyze(const QDomNode);
 		void convert();
 		void generate(QTextStream&);
 		/*void generate_format_begin(QTextStream &);
 		void generate_format_end(QTextStream &);*/
 
 	private:
-		void analyseParamFrame(const QDomNode);
+		void analyzeParamFrame(const QDomNode);
 };
 
 #endif /* __KWORD_LATEX_EXPORT_PIXMAPFRAME_H__ */

@@ -85,8 +85,8 @@ class TextZone: public TextFormat
 		 */
 		QString escapeLatin1(QString);
 		
-		void analyse(const QDomNode);
-		void analyse();
+		void analyze(const QDomNode);
+		void analyze();
 		virtual void generate(QTextStream&);
 
 		void generate_format_begin(QTextStream &);

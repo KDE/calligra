@@ -27,7 +27,7 @@
 #include "format.h"
 
 /* Get the set of info. about a text format */
-void Format::analyse(const QDomNode balise)
+void Format::analyze(const QDomNode balise)
 {
 	/* <FORMAT id="1" pos="0" len="17"> */
 	setId(getAttr(balise, "id").toInt());

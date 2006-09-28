@@ -51,9 +51,9 @@ Document::~Document()
 }
 
 /*******************************************/
-/* Analyse                                 */
+/* Analyze                                 */
 /*******************************************/
-void Document::analyse(const QDomNode balise)
+void Document::analyze(const QDomNode balise)
 {
 	//QDomNode balise = getChild(balise_initial, "FRAMESET");
 	kDebug(30522) << getChildName(balise, 0) << endl;
@@ -71,27 +71,27 @@ void Document::analyse(const QDomNode balise)
 			case ST_TEXT:
 				kDebug(30522) << "TEXT" << endl;
 				elt = new TextFrame;
-				elt->analyse(getChild(balise, index));
+				elt->analyze(getChild(balise, index));
 				break;
 			case ST_PICTURE:
 				kDebug(30522) << "PICTURE" << endl;
 				elt = new PixmapFrame();
-				elt->analyse(getChild(balise, index));
+				elt->analyze(getChild(balise, index));
 				break;
 			case ST_PART:
 				kDebug(30522) << "PART" << endl;
 				//elt = new Part;
-				//elt->analyse(getChild(balise, index));
+				//elt->analyze(getChild(balise, index));
 				break;
 			case ST_FORMULA:
 				/* Just save the frameset in a QString input
 				 * call the formula latex export filter
 				 * save in output
-				 * generate : write the output
+				 * generate: write the output
 				 */
 				kDebug(30522) << "FORMULA" << endl;
 				elt = new Formula;
-				elt->analyse(getChild(balise, index));
+				elt->analyze(getChild(balise, index));
 				break;
 			case ST_HLINE:
 				kDebug(30522) << "HLINE" << endl;
@@ -154,14 +154,14 @@ void Document::analyse(const QDomNode balise)
 					break;
 			}
 		}
-		kDebug(30522) << "END OF ANALYSE OF A FRAMESET" << endl;
+		kDebug(30522) << "END OF ANALYSIS OF A FRAMESET" << endl;
 	}
 }
 
 /*******************************************/
-/* AnalysePixmaps                          */
+/* AnalyzePixmaps                          */
 /*******************************************/
-void Document::analysePixmaps(const QDomNode balise)
+void Document::analyzePixmaps(const QDomNode balise)
 {
 	//QDomNode balise = getChild(balise_initial, "FRAMESET");
 	for(int index= 0; index < getNbChild(balise); index++)
@@ -170,7 +170,7 @@ void Document::analysePixmaps(const QDomNode balise)
 		kDebug(30522) << "NEW PIXMAP" << endl;
 
 		key = new Key(Key::PIXMAP);
-		key->analyse(getChild(balise, "KEY"));
+		key->analyze(getChild(balise, "KEY"));
 		_keys.append(key);
 	}
 }
@@ -368,7 +368,7 @@ Element* Document::searchAnchor(QString anchor)
 			return elt;
 		elt = _tables.next();
 	}
-	kDebug(30522) << "No in table, search in formulae list." << endl;
+	kDebug(30522) << "Not in table, search in formula list." << endl;
 	elt = _formulas.first();
 	while(elt != 0)
 	{
@@ -376,7 +376,7 @@ Element* Document::searchAnchor(QString anchor)
 			return elt;
 		elt = _formulas.next();
 	}
-	kDebug(30522) << "No in table and formulae, search in pictures." << endl;
+	kDebug(30522) << "Not in table and formula list, search in pictures." << endl;
 	elt = _pixmaps.first();
 	while(elt != 0)
 	{

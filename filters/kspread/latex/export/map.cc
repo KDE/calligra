@@ -41,19 +41,19 @@ Map::~Map()
 }
 
 /*******************************************/
-/* Analyse                                 */
+/* Analyze                                 */
 /*******************************************/
-void Map::analyse(const QDomNode balise)
+void Map::analyze(const QDomNode balise)
 {
-	/* Analyse of the parameters */
-	kDebug(30522) << "ANALYSE A MAP" << endl;
+	/* Analysis of the parameters */
+	kDebug(30522) << "ANALYZE A MAP" << endl;
 
-	/* Analyse of the children markups */
+	/* Analysis of the child markups */
 	for(int index = 0; index < getNbChild(balise); index++)
 	{
 		// Only tables
 		Table* table = new Table();
-		table->analyse(getChild(balise, index));
+		table->analyze(getChild(balise, index));
 		_tables.append(table);
 	}
 	kDebug(30522) << "END OF MAP" << endl;

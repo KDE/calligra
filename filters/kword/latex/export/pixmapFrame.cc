@@ -60,26 +60,26 @@ void PixmapFrame::setKeepAspectRatio(const QString ratio)
 }
 
 /*******************************************/
-/* analyse                                 */
+/* analyze                                 */
 /*******************************************/
 /* Get information about a pixmap stored   */
 /* in the tarred file.                     */
 /*******************************************/
-void PixmapFrame::analyse(const QDomNode balise)
+void PixmapFrame::analyze(const QDomNode balise)
 {
 	/* MARKUP TYPE : FRAMESET INFO = TEXTE, ENTETE CONNUE */
 
-	/* Parameters Analyse */
-	Element::analyse(balise);
+	/* Parameter analysis */
+	Element::analyze(balise);
 
-	kDebug(30522) << "FRAME ANALYSE (Pixmap)" << endl;
+	kDebug(30522) << "FRAME ANALYSIS (Pixmap)" << endl;
 
-	/* Chlidren markups Analyse */
+	/* Child markup analysis */
 	for(int index = 0; index < getNbChild(balise); index++)
 	{
 		if(getChildName(balise, index).compare("FRAME")== 0)
 		{
-			analyseParamFrame(balise);
+			analyzeParamFrame(balise);
 		}
 		else if(getChildName(balise, index).compare("PICTURE")== 0)
 		{
@@ -115,9 +115,9 @@ void PixmapFrame::getPixmap(const QDomNode balise_initiale)
 }
 
 /*******************************************/
-/* analyseParamFrame                       */
+/* analyzeParamFrame                       */
 /*******************************************/
-void PixmapFrame::analyseParamFrame(const QDomNode balise)
+void PixmapFrame::analyzeParamFrame(const QDomNode balise)
 {
 	/*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
 

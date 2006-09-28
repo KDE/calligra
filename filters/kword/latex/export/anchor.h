@@ -36,7 +36,7 @@
 
 /**
  * This class hold an anchor. This class will be a lot modified because
- * it doesn't correspond whith the dtd 1.0.
+ * it doesn't correspond with the dtd 1.0.
  */
 class Anchor: public Format
 {
@@ -80,7 +80,7 @@ class Anchor: public Format
 		 * Helpful functions
 		 */
 
-		void analyse (const QDomNode);
+		void analyze (const QDomNode);
 
 		void generate(QTextStream&);
 

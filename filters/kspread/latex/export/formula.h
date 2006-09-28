@@ -97,7 +97,7 @@ class Formula: public Element
 		 * Get information from a markup tree and put the formula
 		 * in a QString.
 		 */
-		void analyse(const QDomNode);
+		void analyze(const QDomNode);
 
 		/**
 		 * Write the formula in a file.
@@ -105,7 +105,7 @@ class Formula: public Element
 		void generate(QTextStream&);
 
 	private:
-		void analyseParamFrame(const QDomNode);
+		void analyzeParamFrame(const QDomNode);
 };
 
 #endif /* __KWORD_LATEXFORMULA_H__ */

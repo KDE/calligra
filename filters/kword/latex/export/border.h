@@ -31,7 +31,7 @@
 
 /**
  * This class hold 2 lists of paragraphs for the text and for the footnotes.
- * NOTE : The frame analyse can be (must be) in a Element class.
+ * NOTE: The frame analysis can be (must be) in an Element class.
  */
 class Border
 {

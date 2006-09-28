@@ -40,25 +40,25 @@ class Document
 		}
 
 		/**
-		 * Analyse the latex tree and keep data.
+		 * Analyze the latex tree and keep data.
 		 * 
 		 * @param elt The root tree which contaisn an entire latex document.
 		 * 
-		 * @return <code>false</code> if the analyse failed.
+		 * @return <code>false</code> if the analysis failed.
 		 */
-		bool analyse(Q3PtrList<Element>* elt);
+		bool analyze(Q3PtrList<Element>* elt);
 
 		/**
-		 * Analyse and get all information in a documentclass command.
+		 * Analyze and get all information in a documentclass command.
 		 */
-		bool analyseDocumentClass(Command* documentclass);
+		bool analyzeDocumentClass(Command* documentclass);
 
 		/**
 		 * Generate a kword document.
 		 *
 		 * @param store The kword document zip file.
 		 *
-		 * @return <code>true</code> if the generation success.
+		 * @return <code>true</code> if the generation succeeded.
 		 */
 		bool generate(KoStore* store);
 

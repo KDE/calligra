@@ -67,19 +67,19 @@ VariableZone::~VariableZone()
 }
 
 /*******************************************/
-/* analyse                                 */
+/* analyze                                 */
 /*******************************************/
-/* Analyse a text format, get the text used*/
+/* Analyze a text format, get the text used*/
 /* by this format.                         */
 /*******************************************/
-void VariableZone::analyse(const QDomNode balise)
+void VariableZone::analyze(const QDomNode balise)
 {
 	kDebug(30522) << "FORMAT" << endl;
 	/* Get header information (size, position)
 	 * Get infos. to format the text
 	 */
 	//if(balise != 0)
-		analyseFormat(balise);
+		analyzeFormat(balise);
 	
 	/* Format the text */
 	setTexte(getTexte().mid(getPos(), getLength()));

@@ -48,24 +48,24 @@ Formula::Formula()
 }
 
 /*******************************************/
-/* analyse                                 */
+/* analyze                                 */
 /*******************************************/
-void Formula::analyse(const QDomNode balise)
+void Formula::analyze(const QDomNode balise)
 {
 
 	/* MARKUP TYPE : FRAMESET INFO = TEXTE, ENTETE CONNUE */
 
-	/* Parameters Analyse */
-	Element::analyse(balise);
+	/* Parameter analysis */
+	Element::analyze(balise);
 
-	kDebug(30522) << "FRAME ANALYSE (Formula)" << endl;
+	kDebug(30522) << "FRAME ANALYSIS (Formula)" << endl;
 
-	/* Chlidren markups Analyse */
+	/* Child markup analysis */
 	for(int index= 0; index < getNbChild(balise); index++)
 	{
 		if(getChildName(balise, index).compare("FRAME")== 0)
 		{
-			analyseParamFrame(balise);
+			analyzeParamFrame(balise);
 		}
 		else if(getChildName(balise, index).compare("FORMULA")== 0)
 		{
@@ -129,9 +129,9 @@ void Formula::getFormula(QDomNode p, int indent)
 }
 
 /*******************************************/
-/* analyseParamFrame                       */
+/* analyzeParamFrame                       */
 /*******************************************/
-void Formula::analyseParamFrame(const QDomNode balise)
+void Formula::analyzeParamFrame(const QDomNode balise)
 {
 	/*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
 

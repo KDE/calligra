@@ -160,21 +160,21 @@ class Table: public XmlParser, Config
 		Cell* searchCell(int col,int row);
 		
 		/**
-		 * Return one specific column which describe the format of the column.
+		 * Return one specific column which describes the format of the column.
 		 * 
 		 * @param col the column.
 		 */
 		Column* searchColumn(int col);
 
 		/**
-		 * Return one specific row which describe the format of the row.
+		 * Return one specific row which describes the format of the row.
 		 *
 		 * @param row The row number.
 		 */
 		Row* searchRow(int row);
                 
-		void     analyse (const QDomNode);
-		void     analysePaper (const QDomNode);
+		void     analyze (const QDomNode);
+		void     analyzePaper (const QDomNode);
 		void     generate  (QTextStream&);
 
 	private:

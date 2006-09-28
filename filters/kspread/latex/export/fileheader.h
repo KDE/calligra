@@ -31,8 +31,8 @@
 /***********************************************************************/
 
 /**
- * This class hold all general information about the doc : does it use a color markup, ... ?
- * paper size, ... and generate the information about the doc (packages and extensions
+ * This class holds all general information about the doc: does it use a color markup, ... ?
+ * paper size, ... and generates the information about the doc (packages and extensions
  * to include, ...). It's the configuration latex file used to include the needed packages,
  * define the paper format, ...
  */
@@ -134,8 +134,8 @@ class FileHeader: public XmlParser
 		void useGraphics   ()           { _hasGraphics  = true;           }
 		void useTable      ()           { _hasTable     = true;           }
 
-		void analysePaper     (const QDomNode);
-		void analyseAttributs (const QDomNode);
+		void analyzePaper     (const QDomNode);
+		void analyzeAttributes (const QDomNode);
 
 		void generate         (QTextStream &);
 
@@ -149,7 +149,7 @@ class FileHeader: public XmlParser
 
 	private:
 
-		void analysePaperParam(const QDomNode);
+		void analyzePaperParam(const QDomNode);
 
 		void generatePaper    (QTextStream&);
 		void generateLatinPreambule(QTextStream&);

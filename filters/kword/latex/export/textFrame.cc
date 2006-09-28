@@ -62,19 +62,19 @@ TextFrame::TextFrame()
 }*/
 
 /*******************************************/
-/* analyse                                 */
+/* analyze                                 */
 /*******************************************/
-void TextFrame::analyse(const QDomNode balise)
+void TextFrame::analyze(const QDomNode balise)
 {
 	/* MARKUP TYPE : FRAMESET INFO = TEXTE, ENTETE CONNUE */
 
-	/* Parameters Analyse */
-	Element::analyse(balise);
+	/* Parameter analysis */
+	Element::analyze(balise);
 
-	kDebug(30522) << "FRAME ANALYSE (TextFrame)" << endl;
+	kDebug(30522) << "FRAME ANALYSIS (TextFrame)" << endl;
 
-	/* Chlidren markups Analyse */
-	analyseParamFrame(getChild(balise, "FRAME"));
+	/* Child markup analysis */
+	analyzeParamFrame(getChild(balise, "FRAME"));
 
 	for(int index = 0; index < getNbChild(balise); index++)
 	{
@@ -83,7 +83,7 @@ void TextFrame::analyse(const QDomNode balise)
 			// 1. Create a paragraph :
 			Para *prg = new Para(this);
 			// 2. Add the information :
-			prg->analyse(getChild(balise, index));
+			prg->analyze(getChild(balise, index));
 			if(prg->getInfo() == EP_FOOTNOTE)
 			{
 				// 3. add this parag. in the footnote list
@@ -100,13 +100,13 @@ void TextFrame::analyse(const QDomNode balise)
 		}
 
 	}
-	kDebug(30522) << "END OF A FRAME ANALYSE" << endl;
+	kDebug(30522) << "END OF A FRAME ANALYSIS" << endl;
 }
 
 /*******************************************/
-/* analyseParamFrame                       */
+/* analyzeParamFrame                       */
 /*******************************************/
-void TextFrame::analyseParamFrame(const QDomNode balise)
+void TextFrame::analyzeParamFrame(const QDomNode balise)
 {
 	/*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
 	setLeft(getAttr(balise, "left").toDouble());

@@ -46,16 +46,16 @@ Cell::~Cell()
 {
 }
 
-void Cell::analyse(const QDomNode balise)
+void Cell::analyze(const QDomNode balise)
 {
 	_row = getAttr(balise, "row").toLong();
 	_col = getAttr(balise, "column").toLong();
 	kDebug(30522) << getRow() << "-" << getCol() << endl;
-	Format::analyse(getChild(balise, "format"));
-	analyseText(balise);
+	Format::analyze(getChild(balise, "format"));
+	analyzeText(balise);
 }
 
-void Cell::analyseText(const QDomNode balise)
+void Cell::analyzeText(const QDomNode balise)
 {
 	setTextDataType( getAttr(getChild(balise, "text"), "dataType"));	
 	setText(getData(balise, "text"));

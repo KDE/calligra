@@ -30,17 +30,17 @@
 #include <param.h>
 #include <command.h>
 
-bool Document::analyse(Q3PtrList<Element>* root)
+bool Document::analyze(Q3PtrList<Element>* root)
 {
 	bool error = true;
-	error &= analyseDocumentClass((Command*) Latex::instance()->getCommand(root, "documentclass"));
+	error &= analyzeDocumentClass((Command*) Latex::instance()->getCommand(root, "documentclass"));
 	
-	/* Analyse body */
-	_body.analyse(Latex::instance()->getEnv(root, "document"));
+	/* Analyze body */
+	_body.analyze(Latex::instance()->getEnv(root, "document"));
 	return true;
 }
 
-bool Document::analyseDocumentClass(Command* documentclass)
+bool Document::analyzeDocumentClass(Command* documentclass)
 {
 	kWarning(documentclass != NULL) << "no documentclass found !" << endl;
 	Q3PtrList<Param> params = documentclass->getOptions();

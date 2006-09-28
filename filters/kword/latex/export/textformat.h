@@ -148,17 +148,17 @@ class TextFormat: public Format
 		void setBkColor    (const int, const int, const int);
 
 		/* ==== Helpful functions ==== */
-		void analyseFormat    (const QDomNode);
-		void analyseParam     (const QDomNode);
-		void analyseFont      (const QDomNode);
-		void analyseItalic    (const QDomNode);
-		void analyseUnderlined(const QDomNode);
-		void analyseStrikeout (const QDomNode);
-		void analyseWeight    (const QDomNode);
-		void analyseAlign     (const QDomNode);
-		void analyseColor     (const QDomNode);
-		void analyseSize      (const QDomNode);
-		void analyseBackgroundColor(const QDomNode);
+		void analyzeFormat    (const QDomNode);
+		void analyzeParam     (const QDomNode);
+		void analyzeFont      (const QDomNode);
+		void analyzeItalic    (const QDomNode);
+		void analyzeUnderlined(const QDomNode);
+		void analyzeStrikeout (const QDomNode);
+		void analyzeWeight    (const QDomNode);
+		void analyzeAlign     (const QDomNode);
+		void analyzeColor     (const QDomNode);
+		void analyzeSize      (const QDomNode);
+		void analyzeBackgroundColor(const QDomNode);
 };
 
 #endif /* __KWORD_TEXTFORMAT_H__ */

@@ -78,7 +78,7 @@ class Row: public Format
 		/**
 		 * Helpful functions
 		 */
-		void     analyse (const QDomNode);
+		void     analyze (const QDomNode);
 		void     generate  (QTextStream&);
 
 	private:

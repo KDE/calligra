@@ -45,24 +45,24 @@ Spreadsheet::~Spreadsheet()
 }
 
 /*******************************************/
-/* Analyse                                 */
+/* Analyze                                 */
 /*******************************************/
-void Spreadsheet::analyse(const QDomNode balise)
+void Spreadsheet::analyze(const QDomNode balise)
 {
 	kDebug(30522) << getChildName(balise, 0) << endl;
-	analyse_attr(balise);
-	//_paper.analyse(getChild(balise, "paper"));
-	_map.analyse(getChild(balise, "map"));
-	//_locale.analyse(getChild(balise, "locale"));
-	//_areaname.analyse(getChild(balise, "areaname"));
+	analyze_attr(balise);
+	//_paper.analyze(getChild(balise, "paper"));
+	_map.analyze(getChild(balise, "map"));
+	//_locale.analyze(getChild(balise, "locale"));
+	//_areaname.analyze(getChild(balise, "areaname"));
 
 	kDebug(30522) << "SPREADSHEET END" << endl;
 }
 
 /*******************************************/
-/* AnalysePixmaps                          */
+/* AnalyzePixmaps                          */
 /*******************************************/
-void Spreadsheet::analyse_attr(const QDomNode balise)
+void Spreadsheet::analyze_attr(const QDomNode balise)
 {
 
 }

@@ -49,53 +49,53 @@ Layout::Layout()
 }
 
 /*******************************************/
-/* analyseLAyout                           */
+/* analyzeLAyout                           */
 /*******************************************/
-void Layout::analyseLayout(const QDomNode balise)
+void Layout::analyzeLayout(const QDomNode balise)
 {
 	/* Markup type : FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
 	/* No parameters for this markup */
-	kDebug(30522) << "ANALYSE OF THE BEGINING OF A LAYOUT" << endl;
+	kDebug(30522) << "ANALYSIS OF THE BEGINNING OF A LAYOUT" << endl;
 	
-	/* Analyse children markups */
+	/* Analyze child markups */
 	for(int index= 0; index < getNbChild(balise); index++)
 	{
 		if(getChildName(balise, index).compare("NAME")== 0)
 		{
-			kDebug(30522) << "NAME : " << endl;
-			analyseName(getChild(balise, index));
+			kDebug(30522) << "NAME: " << endl;
+			analyzeName(getChild(balise, index));
 		}
 		else if(getChildName(balise, index).compare("FOLLOWING")== 0)
 		{
-			kDebug(30522) << "FOLLOWING : " << endl;
-			analyseFollowing(getChild(balise, index));
+			kDebug(30522) << "FOLLOWING: " << endl;
+			analyzeFollowing(getChild(balise, index));
 		}
 		else if(getChildName(balise, index).compare("FLOW")== 0)
 		{
-			kDebug(30522) << "FLOW : " << endl;
-			analyseEnv(getChild(balise, index));
+			kDebug(30522) << "FLOW: " << endl;
+			analyzeEnv(getChild(balise, index));
 		}
 		else if(getChildName(balise, index).compare("PAGEBREAKING")== 0)
 		{
-			kDebug(30522) << "PAGEBREAKING : " << endl;
-			analyseBreakLine(getChild(balise, index));
+			kDebug(30522) << "PAGEBREAKING: " << endl;
+			analyzeBreakLine(getChild(balise, index));
 		}
 		else if(getChildName(balise, index).compare("COUNTER")== 0)
 		{
-			kDebug(30522) << "COUNTER : " << endl;
-			analyseCounter(getChild(balise, index));
+			kDebug(30522) << "COUNTER: " << endl;
+			analyzeCounter(getChild(balise, index));
 		}
 		else if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
-			kDebug(30522) << "FORMAT : " << endl;
-			analyseFormat(getChild(balise, index));
+			kDebug(30522) << "FORMAT: " << endl;
+			analyzeFormat(getChild(balise, index));
 		}
 	}
-	kDebug(30522) << "END OF THE BEGINING OF A LAYOUT" << endl;
+	kDebug(30522) << "END OF THE BEGINNING OF A LAYOUT" << endl;
 }
 
-void Layout::analyseName(const QDomNode balise)
+void Layout::analyzeName(const QDomNode balise)
 {
 	/* <NAME value="times"> */
 	kDebug(30522) << "PARAM" << endl;
@@ -103,11 +103,11 @@ void Layout::analyseName(const QDomNode balise)
 }
 
 /*******************************************/
-/* analyseFollowing                        */
+/* analyzeFollowing                        */
 /*******************************************/
-/* Get info about following. Not useful.   */
+/* Get info about following.               */
 /*******************************************/
-void Layout::analyseFollowing(const QDomNode balise)
+void Layout::analyzeFollowing(const QDomNode balise)
 {
 	/* <FOLLOWING name="times"> */
 	kDebug(30522) << "PARAM" << endl;
@@ -115,11 +115,11 @@ void Layout::analyseFollowing(const QDomNode balise)
 }
 
 /*******************************************/
-/* analyseEnv                              */
+/* analyzeEnv                              */
 /*******************************************/
 /* Get information about environment.      */
 /*******************************************/
-void Layout::analyseEnv(const QDomNode balise)
+void Layout::analyzeEnv(const QDomNode balise)
 {
 	/* <FLOW align="0"> */
 	// ERROR: Enter first in flow ????
@@ -134,7 +134,7 @@ void Layout::analyseEnv(const QDomNode balise)
 		setEnv(ENV_CENTER);
 }
 
-void Layout::analyseBreakLine(const QDomNode balise)
+void Layout::analyzeBreakLine(const QDomNode balise)
 {
 	/* <NAME hardFrameBreakAfter="true"> */
 	kDebug(30522) << "PARAM" << endl;
@@ -147,13 +147,13 @@ void Layout::analyseBreakLine(const QDomNode balise)
 }
 
 /*******************************************/
-/* analyseCounter                          */
+/* analyzeCounter                          */
 /*******************************************/
 /* Get all information about counter.      */
 /* If I use a counter, I must include a tex*/
 /* package.                                */
 /*******************************************/
-void Layout::analyseCounter(const QDomNode balise)
+void Layout::analyzeCounter(const QDomNode balise)
 {
 	/* <COUNTER type="1"> */
 	kDebug(30522) << "PARAM" << endl;

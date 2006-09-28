@@ -32,8 +32,8 @@ Pen::Pen()
 {
 }
 
-/* Get the set of info. about a text format */
-void Pen::analyse(const QDomNode balise)
+/* Get the set of info about a text format */
+void Pen::analyze(const QDomNode balise)
 {
 	/* <pen width="0" style="1" color="#000000" /> */
 	setWidth(getAttr(balise, "width").toDouble());

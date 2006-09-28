@@ -34,7 +34,7 @@ void KwordGenerator::convert(KoStore* out)
 	/*if(out->open("root"))
 	{*/
 		Document document;
-		document.analyse(_root);
+		document.analyze(_root);
 		//QTextStream output(tempFile);
 		document.generate(out);
 		//tempFile->close();

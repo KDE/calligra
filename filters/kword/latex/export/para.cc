@@ -127,15 +127,15 @@ int Para::getNbCharPara() const
 }
 
 /*******************************************/
-/* Analyse                                 */
+/* Analyze                                 */
 /*******************************************/
-void Para::analyse(const QDomNode balise)
+void Para::analyze(const QDomNode balise)
 {
-	/* MARKUP TYPE :  PARAGRAPH */
+	/* markup type: paragraph */
 
 	kDebug(30522) << "**** PARAGRAPH ****" << endl;
 
-	/* Analyse of the children markups */
+	/* Analysis of the child markups */
 	for(int index = 0; index < getNbChild(balise); index++)
 	{
 		if(getChildName(balise, index).compare("TEXT")== 0)
@@ -145,39 +145,39 @@ void Para::analyse(const QDomNode balise)
 		}
 		else if(getChildName(balise, index).compare("NAME")== 0)
 		{
-			analyseName(getChild(balise, index));
+			analyzeName(getChild(balise, index));
 		}
 		else if(getChildName(balise, index).compare("INFO")== 0)
 		{
-			analyseInfo(getChild(balise, index));
+			analyzeInfo(getChild(balise, index));
 		}
 		/*else if(getChildName(balise, index).compare("HARDBRK")== 0)
 		{
-			analyseBrk(getChild(balise, index));
+			analyzeBrk(getChild(balise, index));
 		}*/
 		else if(getChildName(balise, index).compare("FORMATS")== 0)
 		{
 			// IMPORTANT ==> police + style
 			kDebug(30522) << "FORMATS" << endl;
-			analyseFormats(getChild(balise, index));
+			analyzeFormats(getChild(balise, index));
 
 		}
 		else if(getChildName(balise, index).compare("LAYOUT")== 0)
 		{
 			kDebug(30522) << "LAYOUT" << endl;
-			analyseLayoutPara(getChild(balise, index));
+			analyzeLayoutPara(getChild(balise, index));
 		}
 	}
 	kDebug(30522) << " **** END PARAGRAPH ****" << endl;
 }
 
 /*******************************************/
-/* AnalyseName                             */
+/* AnalyzeName                             */
 /*******************************************/
-/* If a footnote have a name : it's a      */
+/* If a footnote has a name it is a        */
 /* footnote/endnote.                       */
 /*******************************************/
-void Para::analyseName(const QDomNode balise)
+void Para::analyzeName(const QDomNode balise)
 {
 	/* <NAME name="Footnote/Endnote_1"> */
 
@@ -185,12 +185,12 @@ void Para::analyseName(const QDomNode balise)
 }
 
 /*******************************************/
-/* AnalyseInfo                             */
+/* AnalyzeInfo                             */
 /*******************************************/
-/* Type of the parag. : if info is 1, it's */
-/* a footnote/endnote (so it have a name). */
+/* Type of the parag.: If info is 1, it is */
+/* a footnote/endnote (so it has a name).  */
 /*******************************************/
-void Para::analyseInfo(const QDomNode balise)
+void Para::analyzeInfo(const QDomNode balise)
 {
 	/* <INFO info="1"> */
 
@@ -198,12 +198,12 @@ void Para::analyseInfo(const QDomNode balise)
 }
 
 /*******************************************/
-/* AnalyseBrk                              */
+/* AnalyzeBrk                              */
 /*******************************************/
 /* There is a new page before this         */
 /* paragraph.                              */
 /*******************************************/
-/*void Para::analyseBrk(const QDomNode balise)
+/*void Para::analyzeBrk(const QDomNode balise)
 {
 	//<NAME name="Footnote/Endnote_1">
 
@@ -211,30 +211,30 @@ void Para::analyseInfo(const QDomNode balise)
 }*/
 
 /*******************************************/
-/* AnalyseLayoutPara                       */
+/* AnalyzeLayoutPara                       */
 /*******************************************/
-/* Analyse the layout of a para.           */
+/* Analyze the layout of a para.           */
 /* For each format, keep the type (picture,*/
 /* text, variable, footnote) and put the   */
 /* zone in a list.                         */
 /*******************************************/
-void Para::analyseLayoutPara(const QDomNode balise)
+void Para::analyzeLayoutPara(const QDomNode balise)
 {
 	Format* zone = 0;
 
-	analyseLayout(balise);
+	analyzeLayout(balise);
 	for(int index= 0; index < getNbChild(balise); index++)
 	{
 		if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
-			//analyseFormat(balise);
-			/* No more format : verify if all the text zone has been formatted */
+			//analyzeFormat(balise);
+			/* No more format: verify if all the text zone has been formatted */
 			if(_currentPos != _text.length())
 			{
 				zone = new TextZone(_text, this);
 				((TextZone*) zone)->setPos(_currentPos);
 				((TextZone*) zone)->setLength(_currentPos - _text.length());
-				((TextZone*) zone)->analyse();
+				((TextZone*) zone)->analyze();
 				if(_lines == 0)
 					_lines = new Q3PtrList<Format>;
 				/* add the text */
@@ -249,20 +249,20 @@ void Para::analyseLayoutPara(const QDomNode balise)
 }
 
 /*******************************************/
-/* AnalyseFormats                          */
+/* AnalyzeFormats                          */
 /*******************************************/
-/* Analyse several formats.                */
-/*  keep the type (picture, text, variable,*/
+/* Analyze several formats.                */
+/* keep the type (picture, text, variable, */
 /* footnote) and put the zone in a list.   */
 /*******************************************/
-void Para::analyseFormats(const QDomNode balise)
+void Para::analyzeFormats(const QDomNode balise)
 {
 	for(int index= 0; index < getNbChild(balise, "FORMAT"); index++)
 	{
 		if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
 			kDebug(30522) << "A FORMAT !!!" << endl;
-			analyseFormat(getChild(balise, index));
+			analyzeFormat(getChild(balise, index));
 		}
 		else
 			kDebug(30522) << " FORMAT UNUSEFULL HERE" << endl;
@@ -270,18 +270,18 @@ void Para::analyseFormats(const QDomNode balise)
 }
 
 /*******************************************/
-/* AnalyseFormat                           */
+/* AnalyzeFormat                           */
 /*******************************************/
-/* Analyse one format.                     */
-/*  keep the type (picture, text, variable,*/
+/* Analyze one format.                     */
+/* keep the type (picture, text, variable, */
 /* footnote) and put the zone in a list.   */
 /*******************************************/
-void Para::analyseFormat(const QDomNode balise)
+void Para::analyzeFormat(const QDomNode balise)
 {
 	Format *zone      = 0;
 	Format *zoneFirst = 0;
 
-	kDebug(30522) << "ANALYSE FORMAT BODY" << endl;
+	kDebug(30522) << "ANALYZE FORMAT BODY" << endl;
 	switch(getTypeFormat(balise))
 	{
 		case EF_ERROR: kDebug(30522) << "Id format error" << endl;
@@ -290,7 +290,7 @@ void Para::analyseFormat(const QDomNode balise)
 				zone = new TextZone(_text, this);
 				if(_currentPos != _text.length())
 				{
-					zone->analyse(balise);
+					zone->analyze(balise);
 					if(zone->getPos() != _currentPos)
 					{
 						if(_lines == 0)
@@ -299,7 +299,7 @@ void Para::analyseFormat(const QDomNode balise)
 						zoneFirst = new TextZone(_text, this);
 						zoneFirst->setPos(_currentPos);
 						zoneFirst->setLength(zone->getPos() - _currentPos);
-						((TextZone*) zoneFirst)->analyse();
+						((TextZone*) zoneFirst)->analyze();
 
 						/* Add the text without format */
 						_lines->append(zoneFirst);
@@ -309,19 +309,19 @@ void Para::analyseFormat(const QDomNode balise)
 			break;
 		case EF_PICTURE: /* It's a picture (2) */
 				/*zone = new PictureZone(this);
-				zone->analyse(balise);*/
+				zone->analyze(balise);*/
 			break;
 		case EF_VARIABLE: /* It's a variable (4) */
 				zone = new VariableZone(this);
-				zone->analyse(balise);
+				zone->analyze(balise);
 			break;
 		case EF_FOOTNOTE: /* It's a footnote (5) */
 				zone = new Footnote(this);
-				zone->analyse(balise);
+				zone->analyze(balise);
 			break;
 		case EF_ANCHOR: /* It's an anchor (6) */
 				zone = new Anchor(this);
-				zone->analyse(balise);
+				zone->analyze(balise);
 			break;
 		default: /* Unknown */
 				kDebug(30522) << "Format not yet supported" << endl;
@@ -335,8 +335,8 @@ void Para::analyseFormat(const QDomNode balise)
 		zoneFirst = new TextZone(_text, this);
 		zoneFirst->setPos(_currentPos);
 		zoneFirst->setLength(zone->getPos() - _currentPos);
-		((TextZone*) zoneFirst)->analyse();
-		kDebug(30522) << "pos courante : " << _currentPos << endl;
+		((TextZone*) zoneFirst)->analyze();
+		kDebug(30522) << "current position: " << _currentPos << endl;
 		/* Add the text without format */
 		_lines->append(zoneFirst);
 		_currentPos = _currentPos + zoneFirst->getLength();

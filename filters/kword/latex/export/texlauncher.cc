@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 	
 	kDebug(30522) << "TEXGRAPH FILTER --> BEGIN" << endl;
 	Xml2LatexParser parser(fileIn, fileOut);
-	parser.analyse();
+	parser.analyze();
 	kDebug(30522) << "---------- generate file -------------" << endl;
 	parser.generate();
 	kDebug(30522) << "TEXGRAPH FILTER --> END" << endl;

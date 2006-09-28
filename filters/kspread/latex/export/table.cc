@@ -54,7 +54,7 @@ void Table::setMaxRow(int row)
 	if(_maxRow < row) _maxRow = row;
 }
 
-void Table::analyse(const QDomNode balise)
+void Table::analyze(const QDomNode balise)
 {
 	kDebug(30522) << "New table" << endl;
 	if(getAttr(balise, "columnnumber") == "1")
@@ -83,7 +83,7 @@ void Table::analyse(const QDomNode balise)
 		setLCMode();
 	setName(getAttr(balise, "name"));
 	
-	analysePaper(getChild(balise, "paper"));
+	analyzePaper(getChild(balise, "paper"));
 
 	int max = getNbChild(balise);
 	for(int index = 0; index < max; index++)
@@ -93,7 +93,7 @@ void Table::analyse(const QDomNode balise)
 		{
 			kDebug(30522) << "----- cell -----" << endl;
 			Cell* cell = new Cell();
-			cell->analyse(getChild(balise, index));
+			cell->analyze(getChild(balise, index));
 			_cells.append(cell);
 			setMaxColumn(cell->getCol());
 			setMaxRow(cell->getRow());
@@ -102,14 +102,14 @@ void Table::analyse(const QDomNode balise)
 		{
 			kDebug(30522) << "----- column -----" << endl;
 			Column* column = new Column();
-			column->analyse(getChild(balise, index));
+			column->analyze(getChild(balise, index));
 			_columns.append(column);
 		}
 		else if(name == "row")
 		{
 			kDebug(30522) << "----- row -----" << endl;
 			Row* row = new Row();
-			row->analyse(getChild(balise, index));
+			row->analyze(getChild(balise, index));
 			_rows.append(row);
 		}
 		else
@@ -117,7 +117,7 @@ void Table::analyse(const QDomNode balise)
 	}
 }
 
-void Table::analysePaper(const QDomNode balise)
+void Table::analyzePaper(const QDomNode balise)
 {
 	setFormat(getAttr(balise, "format"));
 	setOrientation(getAttr(balise, "orientation"));

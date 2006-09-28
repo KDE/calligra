@@ -21,7 +21,7 @@
 #include <element.h>
 #include <qdom.h>
 
-bool Body::analyse(Element* body)
+bool Body::analyze(Element* body)
 {
 }
 
