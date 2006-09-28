@@ -34,7 +34,7 @@ QString KWFootNoteFrameSetIface::footEndNoteText() const
     if ( var )
         return var->text();
     else
-        return QString::null;
+        return QString();
 }
 
 bool KWFootNoteFrameSetIface::isFootNote() const

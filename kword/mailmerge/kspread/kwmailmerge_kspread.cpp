@@ -176,7 +176,7 @@ int KWMailMergeKSpread::columns() const
 
 QString KWMailMergeKSpread::cellText( const KSpread::Cell *cell ) const
 {
-  QString text = QString::null;
+  QString text;
 
   if ( !cell->isDefault() && !cell->isEmpty() ) {
       if ( cell->isFormula() )

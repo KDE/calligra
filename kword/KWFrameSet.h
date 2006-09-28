@@ -332,7 +332,7 @@ public:
     virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true, bool /*useNames*/ = true )
     { load( framesetElem, loadFrames ); }
 
-    virtual QString toPlainText() const { return QString::null; }
+    virtual QString toPlainText() const { return QString(); }
 
     //virtual void preparePrinting( QPainter *, QProgressDialog *, int & ) { }
 

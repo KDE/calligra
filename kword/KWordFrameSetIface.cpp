@@ -200,7 +200,7 @@ QString KWordFrameSetIface::frameSetInfo() const
         return QString("FootNote");
         break;
     default:
-        return QString::null;
+        return QString();
         break;
     }
 }

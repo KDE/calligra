@@ -4829,7 +4829,7 @@ QString KWDocument::checkSectionTitleInParag( KoTextParag* parag, KWTextFrameSet
         const_cast<KWDocument*>(this)->m_sectionTitles[ pageNum ] = txt;
         return txt;
     }
-    return QString::null;
+    return QString();
 #endif
 }
 
@@ -4858,15 +4858,15 @@ QString KWDocument::sectionTitle( int pageNum ) const
     // If not in the cache, determine from the paragraphs in the page.
 
     if ( m_lstFrameSet.isEmpty() )
-        return QString::null;
+        return QString();
     // We use the "main" frameset to determine section titles.
     KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
     if ( !frameset )
-        return QString::null;
+        return QString();
 
     int topLUpix, bottomLUpix;
     if ( !frameset->minMaxInternalOnPage( pageNum, topLUpix, bottomLUpix ) )
-        return QString::null;
+        return QString();
 
     KoTextParag* parag = frameset->textDocument()->firstParag();
     //kDebug(32001) << "KWDocument::sectionTitle " << pageNum
@@ -4898,7 +4898,7 @@ QString KWDocument::sectionTitle( int pageNum ) const
     }
 
     // First page, no heading found
-    return QString::null;
+    return QString();
 #endif
 }
 
@@ -5106,7 +5106,7 @@ void KWDocument::changeBgSpellCheckingState( bool b )
 
 QString KWDocument::initialFrameSet() const
 {
-    return m_initialEditing ? m_initialEditing->m_initialFrameSet : QString::null;
+    return m_initialEditing ? m_initialEditing->m_initialFrameSet : QString();
 }
 
 int KWDocument::initialCursorParag() const

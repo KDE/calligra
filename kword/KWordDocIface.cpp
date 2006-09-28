@@ -221,7 +221,7 @@ QString KWordDocIface::customVariableValue(const QString & varname)const
 {
     if(doc->variableCollection()->customVariableExist(varname))
         return doc->variableCollection()->getVariableValue( varname );
-    return QString::null;
+    return QString();
 }
 
 void KWordDocIface::initConfig()
@@ -542,7 +542,6 @@ void KWordDocIface::setFootNoteSeparatorLinePosition( const QString &pos)
 
 QString KWordDocIface::footNoteSeparatorLinePosition()const
 {
-    QString tmp=QString::null;
     switch( doc->footNoteSeparatorLinePosition() )
     {
     case SLP_LEFT:
@@ -552,7 +551,7 @@ QString KWordDocIface::footNoteSeparatorLinePosition()const
     case SLP_CENTERED:
         return QString("centered");
     }
-    return tmp;
+    return QString();
 }
 
 double KWordDocIface::footNoteSeparatorLineWidth() const

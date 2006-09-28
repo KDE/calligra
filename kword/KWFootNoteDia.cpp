@@ -123,7 +123,7 @@ KWFootNoteVariable::Numbering KWFootNoteDia::numberingType()const
 
 QString KWFootNoteDia::manualString()const
 {
-    return  m_rbAuto->isChecked() ? QString::null : m_footLine->text();
+    return  m_rbAuto->isChecked() ? QString() : m_footLine->text();
 }
 
 void KWFootNoteDia::slotConfigurate()

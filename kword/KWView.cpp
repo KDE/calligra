@@ -3979,7 +3979,7 @@ void KWView::createFrameStyle()
 void KWView::extraStylist()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
-    QString activeStyleName  = QString::null;
+    QString activeStyleName;
     if ( edit )
     {
         edit->hideCursor();

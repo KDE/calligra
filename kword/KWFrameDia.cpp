@@ -1811,7 +1811,7 @@ bool KWFrameDia::applyChanges()
         frameCopy = m_frame->getCopy(); // keep a copy of the original (for undo/redo)
         isNewFrame = m_frame->frameSet() == 0L; // true if we are creating a newframe
     }
-    QString name=QString::null;
+    QString name;
 
     KMacroCommand * macroCmd=0L;
     if ( m_tab3 ) { // TAB Frameset
