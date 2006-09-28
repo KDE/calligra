@@ -23,6 +23,7 @@
 #include "kformuladefs.h"
 #include "textelement.h"
 #include "identifierelement.h"
+#include "operatorelement.h"
 #include "kformulacommand.h"
 #include "kformulacontainer.h"
 #include "formulaelement.h"
@@ -100,7 +101,17 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
         return command;
     }
 
-    case req_addOperator:
+    case req_addOperator: {
+        KFCSplitToken* command = new KFCSplitToken( i18n("Add Operator"), container );
+        OperatorRequest* opr = static_cast<OperatorRequest*>( request );
+        OperatorElement* op = creationStrategy->createOperatorElement();
+        TextElement* text = creationStrategy->createTextElement( opr->ch() );
+        command->addCursor( cursor );
+        command->addToken( op );
+        command->addContent( op, text );
+        cursor->setTo( getParent(), static_cast<SequenceElement*>(getParent())->childPos( this ) + 1 );
+        return command;
+    }
     case req_addEmptyBox:
     case req_addNameSequence:
     case req_addBracket:
