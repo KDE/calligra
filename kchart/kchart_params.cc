@@ -572,7 +572,11 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     // chart:stock-with-volume      - boolean
     // chart:japanese-candle-sticks - boolean
 
-    // chart:series-source     - "row" or "columns
+    // chart:series-source     - "rows" or "columns"
+    // "columns" is the default
+    if ( styleStack.attributeNS( KoXmlNS::chart, "series-source" ) == "rows" ) {
+      setDataDirection( DataRows );
+    }
 
     // chart:data-label-number - "value" / "percentage" / "none" (def: none)
 
@@ -957,6 +961,9 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
 	break;
     }
 
+    // chart:series-source
+    plotAreaStyle.addProperty( "chart:series-source",
+			       ( dataDirection() == DataRows ) ? "rows" : "columns" );
     // Register the style, and get back its auto-generated name
     const QString styleName = mainStyles.lookup( plotAreaStyle, "ch" );
 
@@ -965,7 +972,6 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
     saveOasisAxis( bodyWriter, mainStyles, KDChartAxisParams::AxisPosBottom, "x" );
     saveOasisAxis( bodyWriter, mainStyles, KDChartAxisParams::AxisPosLeft, "y" );
 
-    // TODO chart:series
     // TODO chart:wall
     // TODO chart:floor
 }
