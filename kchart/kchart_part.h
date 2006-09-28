@@ -50,8 +50,8 @@ public:
 
     void  analyzeHeaders( const KDChartTableData& data );
     void  doSetData( const KDChartTableData&  data,
-		     bool  hasRowHeader,
-		     bool  hasRowHeader );
+		     bool  firstRowHeader,
+		     bool  firstRowHeader );
 
     bool showWizard( QString &area );
     void initLabelAndLegend();
@@ -119,7 +119,9 @@ private:
     // The chart and its contents
     KChartParams            *m_params;      // Everything about the chart
     KDChartTableData         m_currentData; // The data in the chart.
-    QString                  m_regionName;
+    QStringList              m_rowLabels;
+    QStringList              m_colLabels;
+    //QString                  m_regionName;
 
     // Other auxiliary values
     bool                     m_bCanChangeValue;
@@ -129,8 +131,6 @@ private:
 
     // Used when displaying.
     KDChartTableData         m_displayData;
-    QStringList              m_rowLabels;
-    QStringList              m_colLabels;
 
     QPixmap                  m_bufferPixmap;
 };
