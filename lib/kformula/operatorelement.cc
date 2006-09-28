@@ -29,6 +29,8 @@
 #include "fontstyle.h"
 #include "operatordictionary.h"
 #include "operatorelement.h"
+#include "identifierelement.h"
+#include "numberelement.h"
 #include "kformulacommand.h"
 #include "kformulacontainer.h"
 #include "kformuladocument.h"
@@ -167,8 +169,7 @@ KCommand* OperatorElement::buildCommand( Container* container, Request* request 
         return 0;
     }
 
-    switch ( *request ) {
-    case req_addOperator: {
+    if ( *request == req_addOperator ) {
         KFCReplace* command = new KFCReplace( i18n("Add Operator"), container );
         OperatorRequest* opr = static_cast<OperatorRequest*>( request );
         TextElement* element = creationStrategy->createTextElement( opr->ch(), true );
@@ -177,9 +178,78 @@ KCommand* OperatorElement::buildCommand( Container* container, Request* request 
         return command;
     }
 
-    case req_addText:
-    case req_addTextChar:
-    case req_addNumber:
+    if ( countChildren() == 0 || cursor->getPos() == countChildren() ) {
+        // We are in the last position, so it's easy, call the parent to 
+        // create a new child
+        SequenceElement* parent = static_cast<SequenceElement*>( getParent() );
+        if ( parent ) {
+            uint pos = parent->childPos( this );
+            cursor->setTo( parent, pos + 1);
+            return parent->buildCommand( container, request );
+        }
+    }
+    if ( cursor->getPos() == 0 ) {
+        SequenceElement* parent = static_cast<SequenceElement*>( getParent() );
+        if ( parent ) {
+            uint pos = parent->childPos( this );
+            cursor->setTo( parent, pos );
+            return parent->buildCommand( container, request );
+        }
+    }
+
+    // We are in the middle of a token, so:
+    // a) Cut from mark to the end
+    // b) Create a new token and add an element from key pressed
+    // c) Create a new token and add elements cut previously
+    // d) Move cursor to parent so that it command execution works fine
+
+    switch( *request ) {
+    case req_addTextChar: {
+        KFCSplitToken* command = new KFCSplitToken( i18n("Add Text"), container );
+        TextCharRequest* tr = static_cast<TextCharRequest*>( request );
+        IdentifierElement* id = creationStrategy->createIdentifierElement();
+        TextElement* text = creationStrategy->createTextElement( tr->ch() );
+        command->addCursor( cursor );
+        command->addToken( id );
+        command->addContent( id, text );
+        SequenceElement* parent = static_cast< SequenceElement* >( getParent() );
+        if ( parent ) {
+            cursor->setTo( parent, parent->childPos( this ) + 1 );
+        }
+        return command;
+    }
+
+    case req_addText: {
+        KFCSplitToken* command = new KFCSplitToken( i18n("Add Text"), container );
+        TextRequest* tr = static_cast<TextRequest*>( request );
+        IdentifierElement* id = creationStrategy->createIdentifierElement();
+        command->addCursor( cursor );
+        command->addToken( id );
+        for ( uint i = 0; i < tr->text().length(); i++ ) {
+            TextElement* text = creationStrategy->createTextElement( tr->text()[i] );
+            command->addContent( id, text );
+        }
+        SequenceElement* parent = static_cast< SequenceElement* >( getParent() );
+        if ( parent ) {
+            cursor->setTo( parent, parent->childPos( this ) + 1 );
+        }
+        return command;
+    }
+
+    case req_addNumber: {
+        KFCSplitToken* command = new KFCSplitToken( i18n("Add Number"), container );
+        NumberRequest* nr = static_cast<NumberRequest*>( request );
+        NumberElement* num = creationStrategy->createNumberElement();
+        TextElement* text = creationStrategy->createTextElement( nr->ch() );
+        command->addCursor( cursor );
+        command->addToken( num );
+        command->addContent( num, text );
+        SequenceElement* parent = static_cast< SequenceElement* >( getParent() );
+        if ( parent ) {
+            cursor->setTo( parent, parent->childPos( this ) + 1 );
+        }
+        return command;
+    }
     case req_addEmptyBox:
     case req_addNameSequence:
     case req_addBracket:
