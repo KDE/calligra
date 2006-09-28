@@ -168,6 +168,7 @@ void FormulaParserTester::run()
   CHECK_PARSE( "2.5*B1", "foc" );
   CHECK_PARSE( "SUM(A1:Z10)", "xoro" );
   CHECK_PARSE( "MAX(Sheet1!Sales)", "xoro" );
+  CHECK_PARSE( "-ABS(A1)", "oxoco" );
 
   // should be correctly parsed though they are nonsense (can't be evaluated)
   CHECK_PARSE( "0E0.5", "ff" );
@@ -240,6 +241,7 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "5---1", Value(4) );
   CHECK_EVAL( "5----1", Value(6) );
   CHECK_EVAL( "5-----1", Value(4) );
+  CHECK_EVAL( "-SIN(0)", Value(0) );
 
   // no parentheses, checking operator precendences
   CHECK_EVAL( "14+3*77", Value(245) );
