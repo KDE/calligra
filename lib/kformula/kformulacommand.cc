@@ -233,7 +233,9 @@ void KFCAddToken::unexecute()
         cursor->setTo( parent, pos + 1);
         cursor->remove( list, beforeCursor );
         if ( pos > 0 ) {
-            parent->getChild( pos - 1 )->moveEnd( cursor );
+            BasicElement* element = parent->getChild( pos - 1 );
+            if (element)
+                element->moveEnd( cursor );
         }
     }
     testDirty();

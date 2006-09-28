@@ -587,7 +587,7 @@ MatrixElement* FormulaCursor::getActiveMatrixElement()
 void FormulaCursor::elementWillVanish(BasicElement* element)
 {
     BasicElement* child = getElement();
-    if (child == element->getParent()) {
+    if (element && child == element->getParent()) {
         child->childWillVanish(this, element);
         return;
     }
