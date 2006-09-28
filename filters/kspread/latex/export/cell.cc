@@ -46,19 +46,19 @@ Cell::~Cell()
 {
 }
 
-void Cell::analyze(const QDomNode balise)
+void Cell::analyze(const QDomNode node)
 {
-	_row = getAttr(balise, "row").toLong();
-	_col = getAttr(balise, "column").toLong();
+	_row = getAttr(node, "row").toLong();
+	_col = getAttr(node, "column").toLong();
 	kDebug(30522) << getRow() << "-" << getCol() << endl;
-	Format::analyze(getChild(balise, "format"));
-	analyzeText(balise);
+	Format::analyze(getChild(node, "format"));
+	analyzeText(node);
 }
 
-void Cell::analyzeText(const QDomNode balise)
+void Cell::analyzeText(const QDomNode node)
 {
-	setTextDataType( getAttr(getChild(balise, "text"), "dataType"));	
-	setText(getData(balise, "text"));
+	setTextDataType( getAttr(getChild(node, "text"), "dataType"));	
+	setText(getData(node, "text"));
 	kDebug(30522) << "text(" << getTextDataType() << "): " << getText() << endl;
 }
 

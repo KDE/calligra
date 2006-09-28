@@ -50,26 +50,26 @@ Formula::Formula()
 /*******************************************/
 /* analyze                                 */
 /*******************************************/
-void Formula::analyze(const QDomNode balise)
+void Formula::analyze(const QDomNode node)
 {
 
-	/* MARKUP TYPE : FRAMESET INFO = TEXTE, ENTETE CONNUE */
+	/* Markup type: Frameset info = text, heading known */
 
 	/* Parameter analysis */
-	Element::analyze(balise);
+	Element::analyze(node);
 
 	kDebug(30522) << "FRAME ANALYSIS (Formula)" << endl;
 
 	/* Child markup analysis */
-	for(int index= 0; index < getNbChild(balise); index++)
+	for(int index= 0; index < getNbChild(node); index++)
 	{
-		if(getChildName(balise, index).compare("FRAME")== 0)
+		if(getChildName(node, index).compare("FRAME")== 0)
 		{
-			analyzeParamFrame(balise);
+			analyzeParamFrame(node);
 		}
-		else if(getChildName(balise, index).compare("FORMULA")== 0)
+		else if(getChildName(node, index).compare("FORMULA")== 0)
 		{
-			getFormula(getChild(getChild(balise, "FORMULA"), "FORMULA"), 0);
+			getFormula(getChild(getChild(node, "FORMULA"), "FORMULA"), 0);
 			kDebug(30522) << _formula << endl;
 		}
 
@@ -131,19 +131,19 @@ void Formula::getFormula(QDomNode p, int indent)
 /*******************************************/
 /* analyzeParamFrame                       */
 /*******************************************/
-void Formula::analyzeParamFrame(const QDomNode balise)
+void Formula::analyzeParamFrame(const QDomNode node)
 {
 	/*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
 
-	_left = getAttr(balise, "left").toInt();
-	_top = getAttr(balise, "top").toInt();
-	_right = getAttr(balise, "right").toInt();
-	_bottom = getAttr(balise, "bottom").toInt();
-	setRunAround(getAttr(balise, "runaround").toInt());
-	setAroundGap(getAttr(balise, "runaroundGap").toInt());
-	setAutoCreate(getAttr(balise, "autoCreateNewFrame").toInt());
-	setNewFrame(getAttr(balise, "newFrameBehaviour").toInt());
-	setSheetSide(getAttr(balise, "sheetside").toInt());
+	_left = getAttr(node, "left").toInt();
+	_top = getAttr(node, "top").toInt();
+	_right = getAttr(node, "right").toInt();
+	_bottom = getAttr(node, "bottom").toInt();
+	setRunAround(getAttr(node, "runaround").toInt());
+	setAroundGap(getAttr(node, "runaroundGap").toInt());
+	setAutoCreate(getAttr(node, "autoCreateNewFrame").toInt());
+	setNewFrame(getAttr(node, "newFrameBehaviour").toInt());
+	setSheetSide(getAttr(node, "sheetside").toInt());
 }
 
 /*******************************************/

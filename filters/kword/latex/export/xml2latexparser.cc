@@ -37,20 +37,20 @@ Xml2LatexParser::Xml2LatexParser(const KoStore* in, QString fileOut, Config* con
 
 void Xml2LatexParser::analyze()
 {
-	QDomNode balise;
-	balise = init();
-	//balise = getChild(balise, "DOC");
+	QDomNode node;
+	node = init();
+	//node = getChild(node, "DOC");
 	kDebug(30522) <<"HEADER -> PAPER" << endl;
-	FileHeader::instance()->analyzePaper(getChild(balise, "PAPER"));
+	FileHeader::instance()->analyzePaper(getChild(node, "PAPER"));
 	kDebug(30522) <<"HEADER -> ATTRIBUTES" << endl;
-	FileHeader::instance()->analyzeAttributes(getChild(balise, "ATTRIBUTES"));
+	FileHeader::instance()->analyzeAttributes(getChild(node, "ATTRIBUTES"));
 	kDebug(30522) <<"HEADER -> FRAMESETS" << endl;
-	_document.analyze(getChild(balise, "FRAMESETS"));
+	_document.analyze(getChild(node, "FRAMESETS"));
 	kDebug(30522) <<"HEADER -> END FRAMESETS" << endl;
 	//kDebug(30522) <<"HEADER -> STYLES" << endl;
 	//
 	kDebug(30522) <<"HEADER -> PICTURES" << endl;
-	_document.analyzePixmaps(getChild(balise, "PICTURES"));
+	_document.analyzePixmaps(getChild(node, "PICTURES"));
 	//kDebug(30522) <<"HEADER -> SERIALL" << endl;
 	kDebug(30522) << "END ANALYZE" << endl;
 }

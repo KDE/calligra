@@ -152,8 +152,8 @@ class FileHeader: public XmlParser
 		void analyzePaperParam(const QDomNode);
 
 		void generatePaper    (QTextStream&);
-		void generateLatinPreambule(QTextStream&);
-		void generateUnicodePreambule(QTextStream&);
+		void generateLatinPreamble(QTextStream&);
+		void generateUnicodePreamble(QTextStream&);
 		void generatePackage  (QTextStream&);
 
 };

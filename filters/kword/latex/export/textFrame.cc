@@ -64,26 +64,26 @@ TextFrame::TextFrame()
 /*******************************************/
 /* analyze                                 */
 /*******************************************/
-void TextFrame::analyze(const QDomNode balise)
+void TextFrame::analyze(const QDomNode node)
 {
-	/* MARKUP TYPE : FRAMESET INFO = TEXTE, ENTETE CONNUE */
+	/* Markup type: Frameset info = text, heading known */
 
 	/* Parameter analysis */
-	Element::analyze(balise);
+	Element::analyze(node);
 
 	kDebug(30522) << "FRAME ANALYSIS (TextFrame)" << endl;
 
 	/* Child markup analysis */
-	analyzeParamFrame(getChild(balise, "FRAME"));
+	analyzeParamFrame(getChild(node, "FRAME"));
 
-	for(int index = 0; index < getNbChild(balise); index++)
+	for(int index = 0; index < getNbChild(node); index++)
 	{
-		if(getChildName(balise, index).compare("PARAGRAPH")== 0)
+		if(getChildName(node, index).compare("PARAGRAPH")== 0)
 		{
 			// 1. Create a paragraph :
 			Para *prg = new Para(this);
 			// 2. Add the information :
-			prg->analyze(getChild(balise, index));
+			prg->analyze(getChild(node, index));
 			if(prg->getInfo() == EP_FOOTNOTE)
 			{
 				// 3. add this parag. in the footnote list
@@ -106,66 +106,66 @@ void TextFrame::analyze(const QDomNode balise)
 /*******************************************/
 /* analyzeParamFrame                       */
 /*******************************************/
-void TextFrame::analyzeParamFrame(const QDomNode balise)
+void TextFrame::analyzeParamFrame(const QDomNode node)
 {
 	/*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
-	setLeft(getAttr(balise, "left").toDouble());
-	setTop(getAttr(balise, "top").toDouble());
-	setRight(getAttr(balise, "right").toDouble());
-	setBottom(getAttr(balise, "bottom").toDouble());
-	setRunAround(getAttr(balise, "runaround").toInt());
-	setAroundGap(getAttr(balise, "runaroundGap").toInt());
-	setAutoCreate(getAttr(balise, "autoCreateNewFrame").toInt());
-	setNewFrame(getAttr(balise, "newFrameBehaviour").toInt());
-	setSheetSide(getAttr(balise, "sheetSide").toInt());
-	if(getAttr(balise, "lWidth").toInt() > 0)
+	setLeft(getAttr(node, "left").toDouble());
+	setTop(getAttr(node, "top").toDouble());
+	setRight(getAttr(node, "right").toDouble());
+	setBottom(getAttr(node, "bottom").toDouble());
+	setRunAround(getAttr(node, "runaround").toInt());
+	setAroundGap(getAttr(node, "runaroundGap").toInt());
+	setAutoCreate(getAttr(node, "autoCreateNewFrame").toInt());
+	setNewFrame(getAttr(node, "newFrameBehaviour").toInt());
+	setSheetSide(getAttr(node, "sheetSide").toInt());
+	if(getAttr(node, "lWidth").toInt() > 0)
 	{
-		setLeftWidth(getAttr(balise, "lWidth").toInt());
+		setLeftWidth(getAttr(node, "lWidth").toInt());
 		useLeftBorder();
 	}
-	if(getAttr(balise, "rWidth").toInt() > 0)
+	if(getAttr(node, "rWidth").toInt() > 0)
 	{
-		setRightWidth(getAttr(balise, "rWidth").toInt());
+		setRightWidth(getAttr(node, "rWidth").toInt());
 		useRightBorder();
 	}
-	if(getAttr(balise, "tWidth").toInt() > 0)
+	if(getAttr(node, "tWidth").toInt() > 0)
 	{
-		setTopWidth(getAttr(balise, "tWidth").toInt());
+		setTopWidth(getAttr(node, "tWidth").toInt());
 		useTopBorder();
 	}
-	if(getAttr(balise, "bWidth").toInt() > 0)
+	if(getAttr(node, "bWidth").toInt() > 0)
 	{
-		setBottomWidth(getAttr(balise, "bWidth").toInt());
+		setBottomWidth(getAttr(node, "bWidth").toInt());
 		useBottomBorder();
 	}
-	setLeftRed(getAttr(balise, "lRed").toInt());
-	setLeftGreen(getAttr(balise, "lGreen").toInt());
-	setLeftBlue(getAttr(balise, "lBlue").toInt());
+	setLeftRed(getAttr(node, "lRed").toInt());
+	setLeftGreen(getAttr(node, "lGreen").toInt());
+	setLeftBlue(getAttr(node, "lBlue").toInt());
 
-	setRightRed(getAttr(balise, "rRed").toInt());
-	setRightGreen(getAttr(balise, "rGreen").toInt());
-	setRightBlue(getAttr(balise, "rBlue").toInt());
+	setRightRed(getAttr(node, "rRed").toInt());
+	setRightGreen(getAttr(node, "rGreen").toInt());
+	setRightBlue(getAttr(node, "rBlue").toInt());
 
-	setTopRed(getAttr(balise, "tRed").toInt());
-	setTopGreen(getAttr(balise, "tGreen").toInt());
-	setTopBlue(getAttr(balise, "tBlue").toInt());
+	setTopRed(getAttr(node, "tRed").toInt());
+	setTopGreen(getAttr(node, "tGreen").toInt());
+	setTopBlue(getAttr(node, "tBlue").toInt());
 
-	setBottomRed(getAttr(balise, "bRed").toInt());
-	setBottomGreen(getAttr(balise, "bGreen").toInt());
-	setBottomBlue(getAttr(balise, "bBlue").toInt());
+	setBottomRed(getAttr(node, "bRed").toInt());
+	setBottomGreen(getAttr(node, "bGreen").toInt());
+	setBottomBlue(getAttr(node, "bBlue").toInt());
 
-	setLeftStyle(getAttr(balise, "lStyle").toInt());
-	setRightStyle(getAttr(balise, "rStyle").toInt());
-	setTopStyle(getAttr(balise, "tStyle").toInt());
-	setBottomStyle(getAttr(balise, "bStyle").toInt());
-	setBkRed(getAttr(balise, "bkred").toInt());
-	setBkGreen(getAttr(balise, "bkgreen").toInt());
-	setBkBlue(getAttr(balise, "bkblue").toInt());
+	setLeftStyle(getAttr(node, "lStyle").toInt());
+	setRightStyle(getAttr(node, "rStyle").toInt());
+	setTopStyle(getAttr(node, "tStyle").toInt());
+	setBottomStyle(getAttr(node, "bStyle").toInt());
+	setBkRed(getAttr(node, "bkred").toInt());
+	setBkGreen(getAttr(node, "bkgreen").toInt());
+	setBkBlue(getAttr(node, "bkblue").toInt());
 /*
-	setLeftWidth(getAttr(balise, "bleftpt").toDouble());
-	setLeftWidth(getAttr(balise, "brightpt").toDouble());
-	setLeftWidth(getAttr(balise, "bktoppt").toDouble());
-	setLeftWidth(getAttr(balise, "bkbottompt").toDouble());
+	setLeftWidth(getAttr(node, "bleftpt").toDouble());
+	setLeftWidth(getAttr(node, "brightpt").toDouble());
+	setLeftWidth(getAttr(node, "bktoppt").toDouble());
+	setLeftWidth(getAttr(node, "bkbottompt").toDouble());
 */
 }
 

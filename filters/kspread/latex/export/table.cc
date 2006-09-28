@@ -54,46 +54,46 @@ void Table::setMaxRow(int row)
 	if(_maxRow < row) _maxRow = row;
 }
 
-void Table::analyze(const QDomNode balise)
+void Table::analyze(const QDomNode node)
 {
 	kDebug(30522) << "New table" << endl;
-	if(getAttr(balise, "columnnumber") == "1")
+	if(getAttr(node, "columnnumber") == "1")
 		setColumnNumber();
-	if(getAttr(balise, "borders") == "1")
+	if(getAttr(node, "borders") == "1")
 		setBorders();
-	if(getAttr(balise, "hide") == "1")
+	if(getAttr(node, "hide") == "1")
 		setHide();
-	if(getAttr(balise, "hidezero") == "1")
+	if(getAttr(node, "hidezero") == "1")
 		setHideZero();
-	if(getAttr(balise, "firstletterupper") == "1")
+	if(getAttr(node, "firstletterupper") == "1")
 		setFirstletterupper();
-	if(getAttr(balise, "grid") == "1")
+	if(getAttr(node, "grid") == "1")
 		setGrid();
-	if(getAttr(balise, "printgrid") == "1")
+	if(getAttr(node, "printgrid") == "1")
 		setPrintGrid();
-	if(getAttr(balise, "printCommentIndicator") == "1")
+	if(getAttr(node, "printCommentIndicator") == "1")
 		setPrintCommentIndicator();
-	if(getAttr(balise, "printFormulaIndicator") == "1")
+	if(getAttr(node, "printFormulaIndicator") == "1")
 		setPrintFormulaIndicator();
-	if(getAttr(balise, "showFormula") == "1")
+	if(getAttr(node, "showFormula") == "1")
 		setShowFormula();
-	if(getAttr(balise, "showFormulaIndicator") == "1")
+	if(getAttr(node, "showFormulaIndicator") == "1")
 		setShowFormulaIndicator();
-	if(getAttr(balise, "lcmode") == "1")
+	if(getAttr(node, "lcmode") == "1")
 		setLCMode();
-	setName(getAttr(balise, "name"));
+	setName(getAttr(node, "name"));
 	
-	analyzePaper(getChild(balise, "paper"));
+	analyzePaper(getChild(node, "paper"));
 
-	int max = getNbChild(balise);
+	int max = getNbChild(node);
 	for(int index = 0; index < max; index++)
 	{
-		QString name = getChildName(balise, index);		
+		QString name = getChildName(node, index);		
 		if(name == "cell")
 		{
 			kDebug(30522) << "----- cell -----" << endl;
 			Cell* cell = new Cell();
-			cell->analyze(getChild(balise, index));
+			cell->analyze(getChild(node, index));
 			_cells.append(cell);
 			setMaxColumn(cell->getCol());
 			setMaxRow(cell->getRow());
@@ -102,14 +102,14 @@ void Table::analyze(const QDomNode balise)
 		{
 			kDebug(30522) << "----- column -----" << endl;
 			Column* column = new Column();
-			column->analyze(getChild(balise, index));
+			column->analyze(getChild(node, index));
 			_columns.append(column);
 		}
 		else if(name == "row")
 		{
 			kDebug(30522) << "----- row -----" << endl;
 			Row* row = new Row();
-			row->analyze(getChild(balise, index));
+			row->analyze(getChild(node, index));
 			_rows.append(row);
 		}
 		else
@@ -117,17 +117,17 @@ void Table::analyze(const QDomNode balise)
 	}
 }
 
-void Table::analyzePaper(const QDomNode balise)
+void Table::analyzePaper(const QDomNode node)
 {
-	setFormat(getAttr(balise, "format"));
-	setOrientation(getAttr(balise, "orientation"));
+	setFormat(getAttr(node, "format"));
+	setOrientation(getAttr(node, "orientation"));
 
 	/* borders */
-	QDomNode border = getChild(balise, "borders");
-	setBorderRight(getAttr(balise, "right").toLong());
-	setBorderLeft(getAttr(balise, "left").toLong());
-	setBorderBottom(getAttr(balise, "bottom").toLong());
-	setBorderTop(getAttr(balise, "top").toLong());
+	QDomNode border = getChild(node, "borders");
+	setBorderRight(getAttr(node, "right").toLong());
+	setBorderLeft(getAttr(node, "left").toLong());
+	setBorderBottom(getAttr(node, "bottom").toLong());
+	setBorderTop(getAttr(node, "top").toLong());
 }
 
 Cell* Table::searchCell(int col, int row)

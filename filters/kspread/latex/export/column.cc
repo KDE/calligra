@@ -40,11 +40,11 @@ Column::~Column()
 {
 }
 
-void Column::analyze(const QDomNode balise)
+void Column::analyze(const QDomNode node)
 {
-	_col = getAttr(balise, "column").toLong();
-	_width = getAttr(balise, "width").toDouble();
-	Format::analyze(getChild(balise, "format"));
+	_col = getAttr(node, "column").toLong();
+	_width = getAttr(node, "width").toDouble();
+	Format::analyze(getChild(node, "format"));
 }
 
 /*******************************************/

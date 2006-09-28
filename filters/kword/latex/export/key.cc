@@ -44,21 +44,21 @@ Key::~Key()
 /*******************************************/
 /* Analyze                                 */
 /*******************************************/
-void Key::analyze(const QDomNode balise)
+void Key::analyze(const QDomNode node)
 {
 	/* Markup type: Paragraph */
 
 	kDebug(30522) << "**** KEY ****" << endl;
-	kDebug(30522) << getAttr(balise, "name") << endl;
-	setName(getAttr(balise, "name"));
-	setFilename(getAttr(balise, "filename"));
-	setHour(getAttr(balise, "hour").toInt());
-	setMSec(getAttr(balise, "msec").toInt());
-	setDay(getAttr(balise, "day").toInt());
-	setMinute(getAttr(balise, "minute").toInt());
-	setSecond(getAttr(balise, "second").toInt());
-	setMonth(getAttr(balise, "month").toInt());
-	setYear(getAttr(balise, "year").toInt());
+	kDebug(30522) << getAttr(node, "name") << endl;
+	setName(getAttr(node, "name"));
+	setFilename(getAttr(node, "filename"));
+	setHour(getAttr(node, "hour").toInt());
+	setMSec(getAttr(node, "msec").toInt());
+	setDay(getAttr(node, "day").toInt());
+	setMinute(getAttr(node, "minute").toInt());
+	setSecond(getAttr(node, "second").toInt());
+	setMonth(getAttr(node, "month").toInt());
+	setYear(getAttr(node, "year").toInt());
 	kDebug(30522) << "**** END KEY ****" << endl;
 }
 

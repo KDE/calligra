@@ -72,68 +72,68 @@ XmlParser::~XmlParser()
 		_in->close();
 }
 
-QDomNode XmlParser::getChild(QDomNode balise, QString name)
+QDomNode XmlParser::getChild(QDomNode node, QString name)
 {
-	QDomNode node = getChild(balise, name, 0);
-	kDebug(30522) << node.nodeName() << endl;
+	QDomNode childNode = getChild(node, name, 0);
+	kDebug(30522) << childNode.nodeName() << endl;
 	return node;
 }
 
-bool XmlParser::isChild(QDomNode balise, QString name)
+bool XmlParser::isChild(QDomNode node, QString name)
 {
-	if(balise.isElement())
-		return balise.toElement().elementsByTagName(name).count();
+	if(node.isElement())
+		return node.toElement().elementsByTagName(name).count();
 	return false;
 }
 
-QDomNode XmlParser::getChild(QDomNode balise, QString name, int index)
+QDomNode XmlParser::getChild(QDomNode node, QString name, int index)
 {
-	if(balise.isElement()) {
-		QDomNodeList children = balise.toElement().elementsByTagName(name);
+	if(node.isElement()) {
+		QDomNodeList children = node.toElement().elementsByTagName(name);
 		if ( children.count() )
 			return children.item(index);
 	}
 	return QDomNode();
 }
 
-QDomNode XmlParser::getChild(QDomNode balise, int index)
+QDomNode XmlParser::getChild(QDomNode node, int index)
 {
-	QDomNodeList children = balise.childNodes();
+	QDomNodeList children = node.childNodes();
 	if ( children.count() )
 		return children.item(index);
 	return QDomNode();
 }
 
-QString XmlParser::getData(QDomNode balise, int index)
+QString XmlParser::getData(QDomNode node, int index)
 {
-	return getChild(getChild(balise, index), 0).nodeValue();
+	return getChild(getChild(node, index), 0).nodeValue();
 }
 
-QString XmlParser::getData(QDomNode balise, QString name)
+QString XmlParser::getData(QDomNode node, QString name)
 {
-	return getChild(getChild(balise, name), 0).nodeValue();
+	return getChild(getChild(node, name), 0).nodeValue();
 }
 
-int XmlParser::getNbChild(QDomNode balise)
+int XmlParser::getNbChild(QDomNode node)
 {
-	return balise.childNodes().count();
+	return node.childNodes().count();
 }
 
-int XmlParser::getNbChild(QDomNode balise, QString name)
+int XmlParser::getNbChild(QDomNode node, QString name)
 {
-	if(balise.isElement())
-		return balise.toElement().elementsByTagName(name).count();
+	if(node.isElement())
+		return node.toElement().elementsByTagName(name).count();
 	return -1;
 }
 
-QString  XmlParser::getChildName(QDomNode balise, int index)
+QString  XmlParser::getChildName(QDomNode node, int index)
 {
-	return balise.childNodes().item(index).nodeName();
+	return node.childNodes().item(index).nodeName();
 }
 
-QString  XmlParser::getAttr(QDomNode balise, QString name) const
+QString  XmlParser::getAttr(QDomNode node, QString name) const
 {
-	if(balise.isElement())
-		return balise.toElement().attributeNode(name).value();
+	if(node.isElement())
+		return node.toElement().attributeNode(name).value();
 	return QString();
 }

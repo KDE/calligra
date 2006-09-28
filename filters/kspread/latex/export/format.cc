@@ -82,66 +82,66 @@ bool Format::hasRightBorder() const
 }
 
 /* Get the set of info about a text format */
-void Format::analyze(const QDomNode balise)
+void Format::analyze(const QDomNode node)
 {
 	/* <format brushstyle="5" brushcolor="#a70bc3" bgcolor="#ffffff" alignY="2" align="4" > */
-	if( !getAttr(balise, "brushstyle").isEmpty() )
+	if( !getAttr(node, "brushstyle").isEmpty() )
 	{
 		_isValidFormat = true;
-		setBrushStyle(getAttr(balise, "brushstyle").toInt());
+		setBrushStyle(getAttr(node, "brushstyle").toInt());
 		FileHeader::instance()->useColor();
-		setBrushColor(getAttr(balise, "brushcolor"));
-		setBgColor(getAttr(balise, "bgcolor"));
-		setAlignY(getAttr(balise, "alignY").toLong());
-		setAlign(getAttr(balise, "align").toLong());
+		setBrushColor(getAttr(node, "brushcolor"));
+		setBgColor(getAttr(node, "bgcolor"));
+		setAlignY(getAttr(node, "alignY").toLong());
+		setAlign(getAttr(node, "align").toLong());
 	}
-	if(isChild(balise, "pen"))
-		analyzePen(getChild(balise, "pen"));
-	if(isChild(balise, "bottom-border"))
+	if(isChild(node, "pen"))
+		analyzePen(getChild(node, "pen"));
+	if(isChild(node, "bottom-border"))
 	{
 		kDebug(30522) << "bottom-border" << endl;
 		_isValidFormat = true;
 		_bottomBorder = new Pen();
-		_bottomBorder->analyze(getChild(getChild(balise, "bottom-border"), "pen"));
+		_bottomBorder->analyze(getChild(getChild(node, "bottom-border"), "pen"));
 	}
-	if(isChild(balise, "top-border"))
+	if(isChild(node, "top-border"))
 	{
 		kDebug(30522) << "top-border" << endl;
 		_isValidFormat = true;
 		_topBorder = new Pen();
-		_topBorder->analyze(getChild(getChild(balise, "top-border"), "pen"));
+		_topBorder->analyze(getChild(getChild(node, "top-border"), "pen"));
 	}
-	if(isChild(balise, "left-border"))
+	if(isChild(node, "left-border"))
 	{
 		kDebug(30522) << "left-border" << endl;
 		_isValidFormat = true;
 		_leftBorder = new Pen();
-		_leftBorder->analyze(getChild(getChild(balise, "left-border"), "pen"));
+		_leftBorder->analyze(getChild(getChild(node, "left-border"), "pen"));
 	}
-	if(isChild(balise, "right-border"))
+	if(isChild(node, "right-border"))
 	{
 		kDebug(30522) << "right-border" << endl;
 		_isValidFormat = true;
 		_rightBorder = new Pen();
-		_rightBorder->analyze(getChild(getChild(balise, "right-border"), "pen"));
+		_rightBorder->analyze(getChild(getChild(node, "right-border"), "pen"));
 	}
 }
 
-void Format::analyzePen(const QDomNode balise)
+void Format::analyzePen(const QDomNode node)
 {
 	/* <pen width="0" style="1" color="#000000" /> */
 	_isValidFormat = true;
-	setPenWidth(getAttr(balise, "width").toDouble());
-	setPenStyle(getAttr(balise, "style").toInt());
-	setPenColor(getAttr(balise, "color"));
+	setPenWidth(getAttr(node, "width").toDouble());
+	setPenStyle(getAttr(node, "style").toInt());
+	setPenColor(getAttr(node, "color"));
 }
 
-void Format::analyzeFont(const QDomNode balise)
+void Format::analyzeFont(const QDomNode node)
 {
 	/* <font size="18" family="Helvetica" weight="50" /> */
-	setFontSize(getAttr(balise, "size").toInt());
-	setFontFamily(getAttr(balise, "family"));
-	setFontWeight(getAttr(balise, "weight").toInt());
+	setFontSize(getAttr(node, "size").toInt());
+	setFontFamily(getAttr(node, "family"));
+	setFontWeight(getAttr(node, "weight").toInt());
 }
 
 void Format::generate(QTextStream& out, Column* col, Row* row)

@@ -43,17 +43,17 @@ Map::~Map()
 /*******************************************/
 /* Analyze                                 */
 /*******************************************/
-void Map::analyze(const QDomNode balise)
+void Map::analyze(const QDomNode node)
 {
 	/* Analysis of the parameters */
 	kDebug(30522) << "ANALYZE A MAP" << endl;
 
 	/* Analysis of the child markups */
-	for(int index = 0; index < getNbChild(balise); index++)
+	for(int index = 0; index < getNbChild(node); index++)
 	{
 		// Only tables
 		Table* table = new Table();
-		table->analyze(getChild(balise, index));
+		table->analyze(getChild(node, index));
 		_tables.append(table);
 	}
 	kDebug(30522) << "END OF MAP" << endl;

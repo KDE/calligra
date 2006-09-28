@@ -33,12 +33,12 @@ Pen::Pen()
 }
 
 /* Get the set of info about a text format */
-void Pen::analyze(const QDomNode balise)
+void Pen::analyze(const QDomNode node)
 {
 	/* <pen width="0" style="1" color="#000000" /> */
-	setWidth(getAttr(balise, "width").toDouble());
-	setStyle(getAttr(balise, "style").toInt());
-	setColor(getAttr(balise, "color"));
+	setWidth(getAttr(node, "width").toDouble());
+	setStyle(getAttr(node, "style").toInt());
+	setColor(getAttr(node, "color"));
 }
 
 void Pen::generate(QTextStream&)

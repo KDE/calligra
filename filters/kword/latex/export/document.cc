@@ -53,17 +53,16 @@ Document::~Document()
 /*******************************************/
 /* Analyze                                 */
 /*******************************************/
-void Document::analyze(const QDomNode balise)
+void Document::analyze(const QDomNode node)
 {
-	//QDomNode balise = getChild(balise_initial, "FRAMESET");
-	kDebug(30522) << getChildName(balise, 0) << endl;
-	for(int index= 0; index < getNbChild(balise); index++)
+	kDebug(30522) << getChildName(node, 0) << endl;
+	for(int index= 0; index < getNbChild(node); index++)
 	{
 		Element *elt = 0;
 		kDebug(30522) << "--------------------------------------------------" << endl;
 
-		kDebug(30522) << getChildName(balise, index) << endl;
-		switch(getTypeFrameset(getChild(balise, index)))
+		kDebug(30522) << getChildName(node, index) << endl;
+		switch(getTypeFrameset(getChild(node, index)))
 		{
 			case ST_NONE:
 				kDebug(30522) << "NONE" << endl;
@@ -71,17 +70,17 @@ void Document::analyze(const QDomNode balise)
 			case ST_TEXT:
 				kDebug(30522) << "TEXT" << endl;
 				elt = new TextFrame;
-				elt->analyze(getChild(balise, index));
+				elt->analyze(getChild(node, index));
 				break;
 			case ST_PICTURE:
 				kDebug(30522) << "PICTURE" << endl;
 				elt = new PixmapFrame();
-				elt->analyze(getChild(balise, index));
+				elt->analyze(getChild(node, index));
 				break;
 			case ST_PART:
 				kDebug(30522) << "PART" << endl;
 				//elt = new Part;
-				//elt->analyze(getChild(balise, index));
+				//elt->analyze(getChild(node, index));
 				break;
 			case ST_FORMULA:
 				/* Just save the frameset in a QString input
@@ -91,7 +90,7 @@ void Document::analyze(const QDomNode balise)
 				 */
 				kDebug(30522) << "FORMULA" << endl;
 				elt = new Formula;
-				elt->analyze(getChild(balise, index));
+				elt->analyze(getChild(node, index));
 				break;
 			case ST_HLINE:
 				kDebug(30522) << "HLINE" << endl;
@@ -161,16 +160,15 @@ void Document::analyze(const QDomNode balise)
 /*******************************************/
 /* AnalyzePixmaps                          */
 /*******************************************/
-void Document::analyzePixmaps(const QDomNode balise)
+void Document::analyzePixmaps(const QDomNode node)
 {
-	//QDomNode balise = getChild(balise_initial, "FRAMESET");
-	for(int index= 0; index < getNbChild(balise); index++)
+	for(int index= 0; index < getNbChild(node); index++)
 	{
 		Key *key = 0;
 		kDebug(30522) << "NEW PIXMAP" << endl;
 
 		key = new Key(Key::PIXMAP);
-		key->analyze(getChild(balise, "KEY"));
+		key->analyze(getChild(node, "KEY"));
 		_keys.append(key);
 	}
 }
@@ -178,28 +176,28 @@ void Document::analyzePixmaps(const QDomNode balise)
 /*******************************************/
 /* getTypeFrameset                         */
 /*******************************************/
-SType Document::getTypeFrameset(const QDomNode balise)
+SType Document::getTypeFrameset(const QDomNode node)
 {
 	SType type = ST_NONE;
-	type = (SType) getAttr(balise, "frameType").toInt();
+	type = (SType) getAttr(node, "frameType").toInt();
 	return type;
 }
 
 /*******************************************/
 /* Generate                                */
 /*******************************************/
-void Document::generate(QTextStream &out, bool hasPreambule)
+void Document::generate(QTextStream &out, bool hasPreamble)
 {
 	kDebug(30522) << "DOC. GENERATION." << endl;
 
-	if(hasPreambule)
-		generatePreambule(out);
-	kDebug(30522) << "preambule : " << hasPreambule << endl;
+	if(hasPreamble)
+		generatePreamble(out);
+	kDebug(30522) << "preamble : " << hasPreamble << endl;
 
 	/* Body */
 	kDebug(30522) << endl << "body : " << _corps.count() << endl;
 
-	if(hasPreambule)
+	if(hasPreamble)
 	{
 		out << "\\begin{document}" << endl;
 		Config::instance()->indent();
@@ -220,7 +218,7 @@ void Document::generate(QTextStream &out, bool hasPreambule)
 		_tables.getFirst()->generate(out);
 	if(_formulas.getFirst() != 0)
 		_formulas.getFirst()->generate(out);*/
-	if(hasPreambule)
+	if(hasPreamble)
 		out << "\\end{document}" << endl;
 	Config::instance()->desindent();
 	if(Config::instance()->getIndentation() != 0)
@@ -228,9 +226,9 @@ void Document::generate(QTextStream &out, bool hasPreambule)
 }
 
 /*******************************************/
-/* GeneratePreambule                       */
+/* GeneratePreamble                        */
 /*******************************************/
-void Document::generatePreambule(QTextStream &out)
+void Document::generatePreamble(QTextStream &out)
 {
 	Element* header;
 	Element* footer;

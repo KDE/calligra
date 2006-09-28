@@ -44,10 +44,10 @@ Document::~Document()
 
 void Document::analyze()
 {
-	QDomNode balise;
-	balise = init();
+	QDomNode node;
+	node = init();
 	kDebug(30522) << "ANALYZE A DOC" << endl;
-	_document.analyze(balise);
+	_document.analyze(node);
 	kDebug(30522) << "END ANALYZE" << endl;
 }
 

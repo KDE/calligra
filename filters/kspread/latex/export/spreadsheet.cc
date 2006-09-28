@@ -47,14 +47,14 @@ Spreadsheet::~Spreadsheet()
 /*******************************************/
 /* Analyze                                 */
 /*******************************************/
-void Spreadsheet::analyze(const QDomNode balise)
+void Spreadsheet::analyze(const QDomNode node)
 {
-	kDebug(30522) << getChildName(balise, 0) << endl;
-	analyze_attr(balise);
-	//_paper.analyze(getChild(balise, "paper"));
-	_map.analyze(getChild(balise, "map"));
-	//_locale.analyze(getChild(balise, "locale"));
-	//_areaname.analyze(getChild(balise, "areaname"));
+	kDebug(30522) << getChildName(node, 0) << endl;
+	analyze_attr(node);
+	//_paper.analyze(getChild(node, "paper"));
+	_map.analyze(getChild(node, "map"));
+	//_locale.analyze(getChild(node, "locale"));
+	//_areaname.analyze(getChild(node, "areaname"));
 
 	kDebug(30522) << "SPREADSHEET END" << endl;
 }
@@ -62,7 +62,7 @@ void Spreadsheet::analyze(const QDomNode balise)
 /*******************************************/
 /* AnalyzePixmaps                          */
 /*******************************************/
-void Spreadsheet::analyze_attr(const QDomNode balise)
+void Spreadsheet::analyze_attr(const QDomNode node)
 {
 
 }
@@ -70,16 +70,16 @@ void Spreadsheet::analyze_attr(const QDomNode balise)
 /*******************************************/
 /* Generate                                */
 /*******************************************/
-void Spreadsheet::generate(QTextStream &out, bool hasPreambule)
+void Spreadsheet::generate(QTextStream &out, bool hasPreamble)
 {
 	kDebug(30522) << "DOC. GENERATION." << endl;
 
 	if(!Config::instance()->isEmbeded())
-		generatePreambule(out);
-	kDebug(30522) << "preambule : " << hasPreambule << endl;
+		generatePreamble(out);
+	kDebug(30522) << "preamble : " << hasPreamble << endl;
 
 	/* Body */
-	if(hasPreambule)
+	if(hasPreamble)
 	{
 		out << "\\begin{document}" << endl;
 		indent();
@@ -87,7 +87,7 @@ void Spreadsheet::generate(QTextStream &out, bool hasPreambule)
 
 	_map.generate(out);
 
-	if(hasPreambule)
+	if(hasPreamble)
 		out << "\\end{document}" << endl;
 	desindent();
 	if(getIndentation() != 0)
@@ -95,9 +95,9 @@ void Spreadsheet::generate(QTextStream &out, bool hasPreambule)
 }
 
 /*******************************************/
-/* GeneratePreambule                       */
+/* GeneratePreamble                        */
 /*******************************************/
-void Spreadsheet::generatePreambule(QTextStream &out)
+void Spreadsheet::generatePreamble(QTextStream &out)
 {
 	FileHeader::instance()->generate(out);
 	/* For each header */

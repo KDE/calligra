@@ -58,83 +58,83 @@ void Footnote::setRef(QString new_ref)
 	_ref = new_ref;
 }
 
-void Footnote::analyze(const QDomNode balise)
+void Footnote::analyze(const QDomNode node)
 {
-	/* MARKUP FORMAT id="1" pos="0" len="17">...</FORMAT> */
+	/* Markup <FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
 	/* Parameter analysis */
 	kDebug(30522) << "ANALYZE A FOOTNOTE" << endl;
 	
 	/* Child markup analysis */
-	for(int index= 0; index < getNbChild(balise); index++)
+	for(int index= 0; index < getNbChild(node); index++)
 	{
-		if(getChildName(balise, index).compare("INTERNAL")== 0)
+		if(getChildName(node, index).compare("INTERNAL")== 0)
 		{
 			kDebug(30522) << "INTERNAL: " << endl;
-			analyzeInternal(balise);
+			analyzeInternal(node);
 		}
-		else if(getChildName(balise, index).compare("RANGE")== 0)
+		else if(getChildName(node, index).compare("RANGE")== 0)
 		{
 			kDebug(30522) << "RANGE: " << endl;
-			analyzeRange(balise);
+			analyzeRange(node);
 		}
-		else if(getChildName(balise, index).compare("TEXT")== 0)
+		else if(getChildName(node, index).compare("TEXT")== 0)
 		{
 			kDebug(30522) << "TEXT: " << endl;
-			analyzeText(balise);
+			analyzeText(node);
 		}
-		else if(getChildName(balise, index).compare("DESCRIPT")== 0)
+		else if(getChildName(node, index).compare("DESCRIPT")== 0)
 		{
 			kDebug(30522) << "DESCRIPT: " << endl;
-			analyzeDescript(balise);
+			analyzeDescript(node);
 		}
-		else if(getChildName(balise, index).compare("FORMAT")== 0)
+		else if(getChildName(node, index).compare("FORMAT")== 0)
 		{
 			kDebug(30522) << "SUBFORMAT: " << endl;
-			Format::analyze(balise);
+			Format::analyze(node);
 		}
 	}
 	kDebug(30522) << "END OF FOOTNOTE" << endl;
 }
 
-void Footnote::analyzeInternal(const QDomNode balise)
+void Footnote::analyzeInternal(const QDomNode node)
 {
-	QDomNode fils;
-	/* MARKUPS <INTERNAL> <PART from="1" to="-1" space="-"/> */
+	QDomNode childNode;
+	/* Markup <INTERNAL> <PART from="1" to="-1" space="-"/> */
 
 	/* Child markup analysis */
-	fils = getChild(balise, "PART");
-	for(int index= 0; index < getNbChild(balise); index++)
+	childNode = getChild(node, "PART");
+	for(int index= 0; index < getNbChild(node); index++)
 	{
-		if(getChildName(balise, index).compare("PART")== 0)
+		if(getChildName(node, index).compare("PART")== 0)
 		{
 			kDebug(30522) << "PART : " << endl;
-			setFrom(getAttr(balise, "FROM").toInt());
-			setTo(getAttr(balise, "TO").toInt());
-			setSpace(getAttr(balise, "SPACE"));
+			setFrom(getAttr(node, "FROM").toInt());
+			setTo(getAttr(node, "TO").toInt());
+			setSpace(getAttr(node, "SPACE"));
 
 		}
 	}
 }
 
-void Footnote::analyzeRange(const QDomNode balise)
+void Footnote::analyzeRange(const QDomNode node)
 {
 	kDebug(30522) << "PARAM" << endl;
-	setStart(getAttr(balise, "START").toInt());
-	setEnd(getAttr(balise, "END").toInt());
+	setStart(getAttr(node, "START").toInt());
+	setEnd(getAttr(node, "END").toInt());
 }
 
-void Footnote::analyzeText(const QDomNode balise)
+void Footnote::analyzeText(const QDomNode node)
 {
 	kDebug(30522) << "PARAM" << endl;
-	setBefore(getAttr(balise, "BEFORE"));
-	setAfter(getAttr(balise, "AFTER"));
+	setBefore(getAttr(node, "BEFORE"));
+	setAfter(getAttr(node, "AFTER"));
 }
 
-void Footnote::analyzeDescript(const QDomNode balise)
+void Footnote::analyzeDescript(const QDomNode node)
 {
 	kDebug(30522) << "PARAM" << endl;
-	setRef(getAttr(balise, "REF"));
+	setRef(getAttr(node, "REF"));
 }
 
 void Footnote::generate(QTextStream &out)

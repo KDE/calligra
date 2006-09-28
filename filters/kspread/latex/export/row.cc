@@ -40,11 +40,11 @@ Row::~Row()
 {
 }
 
-void Row::analyze(const QDomNode balise)
+void Row::analyze(const QDomNode node)
 {
-	_row = getAttr(balise, "row").toLong();
-	_height = getAttr(balise, "height").toDouble();
-	Format::analyze(getChild(balise, "format"));
+	_row = getAttr(node, "row").toLong();
+	_height = getAttr(node, "height").toDouble();
+	Format::analyze(getChild(node, "format"));
 }
 
 /*******************************************/

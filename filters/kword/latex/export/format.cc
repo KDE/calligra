@@ -27,12 +27,12 @@
 #include "format.h"
 
 /* Get the set of info. about a text format */
-void Format::analyze(const QDomNode balise)
+void Format::analyze(const QDomNode node)
 {
 	/* <FORMAT id="1" pos="0" len="17"> */
-	setId(getAttr(balise, "id").toInt());
-	setPos(getAttr(balise, "pos").toInt());
-	setLength(getAttr(balise, "len").toInt());
+	setId(getAttr(node, "id").toInt());
+	setPos(getAttr(node, "pos").toInt());
+	setLength(getAttr(node, "len").toInt());
 }
 
 /*void Format::generate(QTextStream&, int)

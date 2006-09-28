@@ -37,17 +37,17 @@ Anchor::~Anchor()
 	kDebug(30522) << "Destruction of an anchor." << endl;
 }
 
-void Anchor::analyze(const QDomNode balise)
+void Anchor::analyze(const QDomNode node)
 {
-	/* MARKUPS FORMAT id="1" pos="0" len="17">...</FORMAT> */
-	Format::analyze(balise);
+	/* Markup <FORMAT id="1" pos="0" len="17">...</FORMAT> */
+	Format::analyze(node);
 
-	/* Parameter Analysis */
+	/* Parameter analysis */
 	kDebug(30522) << "ANALYZE AN ANCHOR" << endl;
 	
 	/* Child markup analysis */
-	_type = getAttr(getChild(balise, "ANCHOR"), "type");
-	_instance = getAttr(getChild(balise, "ANCHOR"), "instance");
+	_type = getAttr(getChild(node, "ANCHOR"), "type");
+	_instance = getAttr(getChild(node, "ANCHOR"), "instance");
 	kDebug(30522) << "type = " << _type << " instance = " << _instance << endl;
 	
 	kDebug(30522) << "END OF AN ANCHOR" << endl;

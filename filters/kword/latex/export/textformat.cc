@@ -107,47 +107,47 @@ void TextFormat::setBkColor (const int r, const int g, const int b)
 /*******************************************/
 /* Get the set of info. about a text format*/
 /*******************************************/
-void TextFormat::analyzeFormat(const QDomNode balise)
+void TextFormat::analyzeFormat(const QDomNode node)
 {
-	/* MARKUPS FORMAT id="1" pos="0" len="17">...</FORMAT> */
+	/* Markup <FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
 	/* Parameters analysis */
-	analyzeParam(balise);
+	analyzeParam(node);
 	kDebug(30522) << "ANALYZE A FORMAT" << endl;
 	
 	/* Child markup analysis */
-	if(isChild(balise, "FONT"))
-		analyzeFont(getChild(balise, "FONT"));
-	if(isChild(balise, "ITALIC"))
-		analyzeItalic(getChild(balise, "ITALIC"));
-	if(isChild(balise, "UNDERLINE"))
-		analyzeUnderlined(getChild(balise, "UNDERLINE"));
-	if(isChild(balise, "WEIGHT"))
-		analyzeWeight(getChild(balise, "WEIGHT"));
-	if(isChild(balise, "VERTALIGN"))
-		analyzeAlign(getChild(balise, "VERTALIGN"));
-	if(isChild(balise, "STRIKEOUT"))
-		analyzeStrikeout(getChild(balise, "STRIKEOUT"));
-	if(isChild(balise, "COLOR"))
-		analyzeColor(getChild(balise, "COLOR"));
-	if(isChild(balise, "SIZE"))
-		analyzeSize(getChild(balise, "SIZE"));
-	if(isChild(balise, "TEXTBACKGROUNDCOLOR"))
-		analyzeBackgroundColor(getChild(balise, "TEXTBACKGROUNDCOLOR"));
+	if(isChild(node, "FONT"))
+		analyzeFont(getChild(node, "FONT"));
+	if(isChild(node, "ITALIC"))
+		analyzeItalic(getChild(node, "ITALIC"));
+	if(isChild(node, "UNDERLINE"))
+		analyzeUnderlined(getChild(node, "UNDERLINE"));
+	if(isChild(node, "WEIGHT"))
+		analyzeWeight(getChild(node, "WEIGHT"));
+	if(isChild(node, "VERTALIGN"))
+		analyzeAlign(getChild(node, "VERTALIGN"));
+	if(isChild(node, "STRIKEOUT"))
+		analyzeStrikeout(getChild(node, "STRIKEOUT"));
+	if(isChild(node, "COLOR"))
+		analyzeColor(getChild(node, "COLOR"));
+	if(isChild(node, "SIZE"))
+		analyzeSize(getChild(node, "SIZE"));
+	if(isChild(node, "TEXTBACKGROUNDCOLOR"))
+		analyzeBackgroundColor(getChild(node, "TEXTBACKGROUNDCOLOR"));
 
 	kDebug(30522) << "END OF A FORMAT" << endl;
 }
 
-void TextFormat::analyzeBackgroundColor(const QDomNode balise)
+void TextFormat::analyzeBackgroundColor(const QDomNode node)
 {
 	/* <TEXTBACKGROUNDCOLOR red="0" green="0" blue="0"/> */
 	int  red   = 0, 
 	     blue  = 0,
 	     green = 0;
 
-	red = getAttr(balise, "red").toInt();
-	green = getAttr(balise, "green").toInt();
-	blue = getAttr(balise, "blue").toInt();
+	red = getAttr(node, "red").toInt();
+	green = getAttr(node, "green").toInt();
+	blue = getAttr(node, "blue").toInt();
 
 	if(!(red == 255 && green == 255 && blue == 255))
 	{
@@ -163,14 +163,14 @@ void TextFormat::analyzeBackgroundColor(const QDomNode balise)
 /*******************************************/
 /* Get the zone where the format is applied*/
 /*******************************************/
-void TextFormat::analyzeParam(const QDomNode balise)
+void TextFormat::analyzeParam(const QDomNode node)
 {
 	/* <FORMAT id="1" pos="0" len="17"> */
 
-	//setId(getAttr(balise, "id").toInt());
-	//setPos(getAttr(balise, "pos").toInt());
-	//setLength(getAttr(balise, "len").toInt());
-	Format::analyze(balise);
+	//setId(getAttr(node, "id").toInt());
+	//setPos(getAttr(node, "pos").toInt());
+	//setLength(getAttr(node, "len").toInt());
+	Format::analyze(node);
 }
 
 /*******************************************/
@@ -178,10 +178,10 @@ void TextFormat::analyzeParam(const QDomNode balise)
 /*******************************************/
 /* Get the text font!                      */
 /*******************************************/
-void TextFormat::analyzeFont(const QDomNode balise)
+void TextFormat::analyzeFont(const QDomNode node)
 {
 	/* <FONT name="times"> */
-	setPolice(getAttr(balise, "name"));
+	setPolice(getAttr(node, "name"));
 }
 
 /*******************************************/
@@ -189,10 +189,10 @@ void TextFormat::analyzeFont(const QDomNode balise)
 /*******************************************/
 /* Verify if it is an italic text.         */
 /*******************************************/
-void TextFormat::analyzeItalic(const QDomNode balise)
+void TextFormat::analyzeItalic(const QDomNode node)
 {
 	/* <ITALIC value="1"> */
-	setItalic(getAttr(balise, "value").toInt());
+	setItalic(getAttr(node, "value").toInt());
 }
 
 /*******************************************/
@@ -200,11 +200,11 @@ void TextFormat::analyzeItalic(const QDomNode balise)
 /*******************************************/
 /* Verify if it is an underlined text.     */
 /*******************************************/
-void TextFormat::analyzeUnderlined(const QDomNode balise)
+void TextFormat::analyzeUnderlined(const QDomNode node)
 {
 	/* <UNDERLINE value="1"> */
 
-	setUnderlined(getAttr(balise, "value"));
+	setUnderlined(getAttr(node, "value"));
 	if(isUnderlined())
 		FileHeader::instance()->useUnderline();
 	kDebug(30522) << "Underlined? " << isUnderlined() << endl;
@@ -215,10 +215,10 @@ void TextFormat::analyzeUnderlined(const QDomNode balise)
 /*******************************************/
 /* Verify if it is a strikeout text.       */
 /*******************************************/
-void TextFormat::analyzeStrikeout(const QDomNode balise)
+void TextFormat::analyzeStrikeout(const QDomNode node)
 {
 	/* <STRIKEOUT value="1" /> */
-	setStrikeout(getAttr(balise, "value").toInt());
+	setStrikeout(getAttr(node, "value").toInt());
 	if(isStrikeout())
 		FileHeader::instance()->useUnderline();
 	kDebug(30522) << "Strikeout? " << isUnderlined() << endl;
@@ -229,10 +229,10 @@ void TextFormat::analyzeStrikeout(const QDomNode balise)
 /*******************************************/
 /* Get the text weight.                    */
 /*******************************************/
-void TextFormat::analyzeWeight(const QDomNode balise)
+void TextFormat::analyzeWeight(const QDomNode node)
 {
 	/* <WEIGHT value="75" /> */
-	setWeight(getAttr(balise, "value").toInt());
+	setWeight(getAttr(node, "value").toInt());
 	kDebug(30522) << "Weight = " << getWeight() << endl;
 }
 
@@ -241,11 +241,11 @@ void TextFormat::analyzeWeight(const QDomNode balise)
 /*******************************************/
 /* Get the text alignment.                 */
 /*******************************************/
-void TextFormat::analyzeAlign(const QDomNode balise)
+void TextFormat::analyzeAlign(const QDomNode node)
 {
 	/* <VERTALIGN value="0"> */
 
-	setAlign(getAttr(balise, "value").toInt());
+	setAlign(getAttr(node, "value").toInt());
 }
 
 /*******************************************/
@@ -253,16 +253,16 @@ void TextFormat::analyzeAlign(const QDomNode balise)
 /*******************************************/
 /* Get the text color.                     */
 /*******************************************/
-void TextFormat::analyzeColor(const QDomNode balise)
+void TextFormat::analyzeColor(const QDomNode node)
 {
 	/* <COLOR red="0" green="0" blue="0"/> */
 	int  red   = 0, 
 	     blue  = 0,
 	     green = 0;
 
-	red = getAttr(balise, "red").toInt();
-	green = getAttr(balise, "green").toInt();
-	blue = getAttr(balise, "blue").toInt();
+	red = getAttr(node, "red").toInt();
+	green = getAttr(node, "green").toInt();
+	blue = getAttr(node, "blue").toInt();
 
 	if(!(red == 0 && green == 0 && blue == 0))
 	{
@@ -278,9 +278,9 @@ void TextFormat::analyzeColor(const QDomNode balise)
 /*******************************************/
 /* Get the text size.                      */
 /*******************************************/
-void TextFormat::analyzeSize(const QDomNode balise)
+void TextFormat::analyzeSize(const QDomNode node)
 {
 	/* <SIZE value="11"> */
-	setSize(getAttr(balise, "value").toInt());
+	setSize(getAttr(node, "value").toInt());
 	kDebug(30522) << "font size : " << getSize() << endl;
 }

@@ -52,26 +52,26 @@ Element::~Element()
 /*******************************************/
 /* Analyze                                 */
 /*******************************************/
-void Element::analyze(const QDomNode balise_initiale)
+void Element::analyze(const QDomNode node)
 {
-	/* ANALYZE A FRAMESET MARKUP */
+	/* Analyze a frameset markup */
 	
 	/* Parameter analysis */
 	kDebug(30522) << "FRAMESET PARAMETER ANALYSIS (Element)" << endl;
-	analyzeParam(balise_initiale);
+	analyzeParam(node);
 }
 
 /*******************************************/
 /* AnalyzeParam                            */
 /*******************************************/
-void Element::analyzeParam(const QDomNode balise)
+void Element::analyzeParam(const QDomNode node)
 {
 	/* <FRAMESET frameType="1" frameInfo="0" removable="0"
 	 * visible="1" name="Supercadre 1">
 	 */
-	_name = getAttr(balise, "name");
-	_type = (SType) getAttr(balise, "frameType").toInt();
-	switch(getAttr(balise, "frameInfo").toInt())
+	_name = getAttr(node, "name");
+	_type = (SType) getAttr(node, "frameType").toInt();
+	switch(getAttr(node, "frameInfo").toInt())
 	{
 		case 0: _section = SS_BODY;
 			break;
@@ -97,19 +97,19 @@ void Element::analyzeParam(const QDomNode balise)
 			break;
 		default:
 			_section = SS_NONE;
-			kDebug(30522) << "error : frameinfo unknown!" << endl;
+			kDebug(30522) << "Error: Frame info unknown!" << endl;
 	}
-	setRemovable(getAttr(balise, "removable").toInt());
-	setVisible(getAttr(balise, "visible").toInt());
-	if(getAttr(balise, "grpMgr")!= 0)
+	setRemovable(getAttr(node, "removable").toInt());
+	setVisible(getAttr(node, "visible").toInt());
+	if(getAttr(node, "grpMgr")!= 0)
 	{
 		_section = SS_TABLE;
-		setGrpMgr(getAttr(balise, "grpMgr"));
+		setGrpMgr(getAttr(node, "grpMgr"));
 	}
-	setRow(getAttr(balise, "row").toInt());
-	setCol(getAttr(balise, "col").toInt());
-	setRows(getAttr(balise, "rows").toInt());
-	setCols(getAttr(balise, "cols").toInt());
+	setRow(getAttr(node, "row").toInt());
+	setCol(getAttr(node, "col").toInt());
+	setRows(getAttr(node, "rows").toInt());
+	setCols(getAttr(node, "cols").toInt());
 
-	kDebug(30522) << "FIN PARAM" << endl;
+	kDebug(30522) << "END PARAM" << endl;
 }

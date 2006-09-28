@@ -75,39 +75,39 @@
 /*******************************************/
 /* Get the set of info. about a text format*/
 /*******************************************/
-void VariableFormat::analyzeFormat(const QDomNode balise)
+void VariableFormat::analyzeFormat(const QDomNode node)
 {
-	/* MARKUP FORMAT id="1" pos="0" len="17">...</FORMAT> */
+	/* Markup <FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
-	/* Parameter Analysis */
-	analyzeParam(balise);
+	/* Parameter analysis */
+	analyzeParam(node);
 	kDebug(30522) << "ANALYZE A FORMAT" << endl;
 	
 	/* Child markup analysis */
-	if(isChild(balise, "FONT"))
-		analyzeFont(getChild(balise, "FONT"));
-	if(isChild(balise, "ITALIC"))
-		analyzeItalic(getChild(balise, "ITALIC"));
-	if(isChild(balise, "UNDERLINE"))
-		analyzeUnderlined(getChild(balise, "UNDERLINE"));
-	if(isChild(balise, "WEIGHT"))
-		analyzeWeight(getChild(balise, "WEIGHT"));
-	if(isChild(balise, "VERTALIGN"))
-		analyzeAlign(getChild(balise, "VERTALIGN"));
-	if(isChild(balise, "STRIKEOUT"))
-		analyzeStrikeout(getChild(balise, "STRIKEOUT"));
-	if(isChild(balise, "COLOR"))
-		analyzeColor(getChild(balise, "COLOR"));
-	if(isChild(balise, "SIZE"))
-		analyzeSize(getChild(balise, "SIZE"));
-	if(isChild(balise, "DATE"))
-		analyzeDate(getChild(balise, "DATE"));
-	if(isChild(balise, "FOOTNOTE"))
-		analyzeFootnote(getChild(balise, "FOOTNOTE"));
-	if(isChild(balise, "NOTE"))
-		analyzeNote(getChild(balise, "NOTE"));
-	if(isChild(balise, "TYPE"))
-		analyzeType(getChild(balise, "TYPE"));
+	if(isChild(node, "FONT"))
+		analyzeFont(getChild(node, "FONT"));
+	if(isChild(node, "ITALIC"))
+		analyzeItalic(getChild(node, "ITALIC"));
+	if(isChild(node, "UNDERLINE"))
+		analyzeUnderlined(getChild(node, "UNDERLINE"));
+	if(isChild(node, "WEIGHT"))
+		analyzeWeight(getChild(node, "WEIGHT"));
+	if(isChild(node, "VERTALIGN"))
+		analyzeAlign(getChild(node, "VERTALIGN"));
+	if(isChild(node, "STRIKEOUT"))
+		analyzeStrikeout(getChild(node, "STRIKEOUT"));
+	if(isChild(node, "COLOR"))
+		analyzeColor(getChild(node, "COLOR"));
+	if(isChild(node, "SIZE"))
+		analyzeSize(getChild(node, "SIZE"));
+	if(isChild(node, "DATE"))
+		analyzeDate(getChild(node, "DATE"));
+	if(isChild(node, "FOOTNOTE"))
+		analyzeFootnote(getChild(node, "FOOTNOTE"));
+	if(isChild(node, "NOTE"))
+		analyzeNote(getChild(node, "NOTE"));
+	if(isChild(node, "TYPE"))
+		analyzeType(getChild(node, "TYPE"));
 	kDebug(30522) << "END OF A FORMAT" << endl;
 }
 
@@ -116,12 +116,12 @@ void VariableFormat::analyzeFormat(const QDomNode balise)
 /*******************************************/
 /* Get the date.                           */
 /*******************************************/
-void VariableFormat::analyzeDate(const QDomNode balise)
+void VariableFormat::analyzeDate(const QDomNode node)
 {
-	setDay(getAttr(balise, "day").toInt());
-	setMonth(getAttr(balise, "month").toInt());
-	setYear(getAttr(balise, "year").toInt());
-	setFix(getAttr(balise, "fix").toInt());
+	setDay(getAttr(node, "day").toInt());
+	setMonth(getAttr(node, "month").toInt());
+	setYear(getAttr(node, "year").toInt());
+	setFix(getAttr(node, "fix").toInt());
 }
 
 /*******************************************/
@@ -129,25 +129,25 @@ void VariableFormat::analyzeDate(const QDomNode balise)
 /*******************************************/
 /* Get the time.                           */
 /*******************************************/
-void VariableFormat::analyzeTime(const QDomNode balise)
+void VariableFormat::analyzeTime(const QDomNode node)
 {
-	setHour(getAttr(balise, "day").toInt());
-	setMinute(getAttr(balise, "month").toInt());
-	setSeconde(getAttr(balise, "year").toInt());
-	setFix(getAttr(balise, "fix").toInt());
+	setHour(getAttr(node, "day").toInt());
+	setMinute(getAttr(node, "month").toInt());
+	setSeconde(getAttr(node, "year").toInt());
+	setFix(getAttr(node, "fix").toInt());
 }
 
-void VariableFormat::analyzeFootnote(const QDomNode balise)
+void VariableFormat::analyzeFootnote(const QDomNode node)
 {
-	setNumberingtype(getAttr(balise, "numberingtype"));
-	setNotetype(getAttr(balise, "notetype"));
-	setFrameset(getAttr(balise, "frameset"));
-	setValue(getAttr(balise, "value"));
+	setNumberingtype(getAttr(node, "numberingtype"));
+	setNotetype(getAttr(node, "notetype"));
+	setFrameset(getAttr(node, "frameset"));
+	setValue(getAttr(node, "value"));
 }
 
-void VariableFormat::analyzeNote(const QDomNode balise)
+void VariableFormat::analyzeNote(const QDomNode node)
 {
-	setNote(getAttr(balise, "note"));
+	setNote(getAttr(node, "note"));
 }
 
 /*******************************************/
@@ -155,10 +155,10 @@ void VariableFormat::analyzeNote(const QDomNode balise)
 /*******************************************/
 /* Get information about variable.         */
 /*******************************************/
-void VariableFormat::analyzeType(const QDomNode balise)
+void VariableFormat::analyzeType(const QDomNode node)
 {
-	setKey(getAttr(balise, "key"));
-	setType(getAttr(balise, "type").toInt());
-	setText(getAttr(balise, "text"));
+	setKey(getAttr(node, "key"));
+	setType(getAttr(node, "type").toInt());
+	setText(getAttr(node, "text"));
 }
 

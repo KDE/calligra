@@ -77,9 +77,9 @@ class Spreadsheet: public XmlParser, Config
 
 	private:
 		/**
-		 * Generate the second part of the preambule
+		 * Generate the second part of the preamble
 		 */
-		void generatePreambule(QTextStream&);
+		void generatePreamble(QTextStream&);
 
 		/**
 		 * Generate the header
