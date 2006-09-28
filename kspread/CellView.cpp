@@ -1189,18 +1189,19 @@ void CellView::paintText( QPainter& painter,
   // FIXME: Make this dependent on the height as well.
   //
   if ( d->cell->testFlag( Cell::Flag_CellTooShortX ) ) {
-    d->cell->d->strOutText = textDisplaying( painter.fontMetrics() );
+    QFontMetrics fontMetrics( effectiveFont( cellRef.x(), cellRef.y() ) );
+    d->cell->d->strOutText = textDisplaying( fontMetrics );
 
     // Recalculate the text dimensions and the offset.
-    textSize( painter.fontMetrics() );
-    textOffset( painter.fontMetrics() );
+    textSize( fontMetrics );
+    textOffset( fontMetrics );
   }
 
   // Hide zero.
   if ( d->cell->sheet()->getHideZero()
        && d->cell->value().isNumber()
        && d->cell->value().asFloat() == 0 ) {
-    d->cell->strOutText().clear();
+    d->cell->d->strOutText.clear();
   }
 
   // Clear extra cell if column or row is hidden
@@ -2144,7 +2145,7 @@ QFont CellView::effectiveFont( int _col, int _row ) const
 //
 // and, of course,
 //
-//   d->cell->strOutText()
+//   d->cell->strOutText
 //
 void CellView::makeLayout( int _col, int _row )
 {
@@ -2180,13 +2181,13 @@ void CellView::makeLayout( int _col, int _row )
     return;
   }
 
-  // Recalculate the output text, d->cell->strOutText().
+  // Recalculate the output text, d->cell->strOutText.
   d->cell->setOutputText();
 
   // Empty text?  Reset the outstring and, if this is the default
   // cell, return.
-  if ( d->cell->strOutText().isEmpty() ) {
-    d->cell->strOutText().clear();
+  if ( d->cell->d->strOutText.isEmpty() ) {
+    d->cell->d->strOutText.clear();
 
     if ( d->cell->isDefault() ) {
       d->cell->clearFlag( Cell::Flag_LayoutDirty );
@@ -2219,11 +2220,10 @@ void CellView::makeLayout( int _col, int _row )
 
   // Obscure cells, if necessary.
   obscureHorizontalCells();
-  obscureVerticalCells();
+  // FIXME Stefan
+  //obscureVerticalCells();
 
   d->cell->clearFlag( Cell::Flag_LayoutDirty );
-
-  return;
 }
 
 
@@ -2601,7 +2601,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
     }
     else
     {
-      d->cell->d->strOutText = "";
+      d->cell->d->strOutText.clear();
 
       // Make sure that we have a space at the end.
       outText += ' ';
@@ -2625,9 +2625,8 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
         if (pos1 < linefeed && linefeed < breakpos)
           work_breakpos = linefeed;
 
-        double lineWidth = d->cell->sheet()->doc()
-              ->unzoomItX( fontMetrics.width( d->cell->strOutText().mid( start, (pos1 - start) )
-              + outText.mid( pos1, work_breakpos - pos1 ) ) );
+        double lineWidth = fontMetrics.width( d->cell->strOutText().mid( start, (pos1 - start) )
+                         + outText.mid( pos1, work_breakpos - pos1 ) );
 
         //linefeed could be -1 when no linefeed is found!
         if (breakpos > linefeed && linefeed > 0)
