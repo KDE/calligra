@@ -40,7 +40,7 @@
 class TextZone: public TextFormat
 {
 	/* TEXT MARKUP */
-	QString _texte;
+	QString _text;
 
 	public:
 		/* === Constructors ==== */
@@ -72,11 +72,11 @@ class TextZone: public TextFormat
 		 *
 		 */
 		bool    useFormat() const;
-		QString getTexte()  const { return _texte; }
+		QString getText()  const { return _text; }
 
 		/* ==== Setters ==== */
 		
-		void setTexte(QString texte) { _texte = texte; }
+		void setText(QString text) { _text = text; }
 
 		/* ==== Helpful functions ==== */
 

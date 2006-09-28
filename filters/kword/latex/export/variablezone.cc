@@ -49,7 +49,7 @@ VariableZone::VariableZone(Para* para): VariableFormat(para)
 /*******************************************/
 VariableZone::VariableZone(QString text, Para* para): VariableFormat(para)
 {
-	setTexte(text);
+	setText(text);
 	/*setPara(para);
 	setSize(para->getSize());
 	setWeight(para->getWeight());
@@ -82,10 +82,10 @@ void VariableZone::analyze(const QDomNode node)
 		analyzeFormat(node);
 	
 	/* Format the text */
-	setTexte(getTexte().mid(getPos(), getLength()));
+	setText(getText().mid(getPos(), getLength()));
 	
-	kDebug(30522) << getTexte().length() << endl;
-	kDebug(30522) << getTexte().latin1() << endl;
+	kDebug(30522) << getText().length() << endl;
+	kDebug(30522) << getText().latin1() << endl;
 	kDebug(30522) << "END FORMAT" << endl;
 }
 

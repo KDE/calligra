@@ -52,7 +52,7 @@ TextZone::TextZone(Para *para)
 /*******************************************/
 /* TextZone                                */
 /*******************************************/
-TextZone::TextZone(QString texte, Para *para): _texte(texte)
+TextZone::TextZone(QString text, Para *para): _text(text)
 {
 	setPara(para);
 	if(para != NULL)
@@ -291,10 +291,10 @@ void TextZone::analyze(const QDomNode node)
 		analyzeFormat(node);
 	
 	/* Format the text */
-	setTexte(getTexte().mid(getPos(), getLength()));
+	setText(getText().mid(getPos(), getLength()));
 	
-	kDebug(30522) << getTexte().length() << endl;
-	kDebug(30522) << getTexte().latin1() << endl;
+	kDebug(30522) << getText().length() << endl;
+	kDebug(30522) << getText().latin1() << endl;
 	kDebug(30522) << "END FORMAT" << endl;
 }
 
@@ -309,10 +309,10 @@ void TextZone::analyze()
 	kDebug(30522) << "ZONE" << endl;
 	
 	/* Format the text */
-	setTexte(getTexte().mid(getPos(), getLength()));
+	setText(getText().mid(getPos(), getLength()));
 	
-	kDebug(30522) << "String of " << getTexte().length() << " characters:" << endl;
-	kDebug(30522) << getTexte().latin1() << endl;
+	kDebug(30522) << "String of " << getText().length() << " characters:" << endl;
+	kDebug(30522) << getText().latin1() << endl;
 	kDebug(30522) << "END ZONE" << endl;
 }
 
@@ -329,11 +329,11 @@ void TextZone::generate(QTextStream &out)
 
 	/* Display the text */
 	if(Config::instance()->getEncoding() == "latin1")
-		display(_texte, out);
+		display(_text, out);
 	else if(Config::instance()->mustUseUnicode())
-		display(_texte, out);
+		display(_text, out);
 	else
-		display(escapeLatin1(_texte), out);	
+		display(escapeLatin1(_text), out);	
 
 	if(useFormat())
 		generate_format_end(out);
@@ -345,16 +345,16 @@ void TextZone::generate(QTextStream &out)
 /* Trunc the text in about 80 characters of*/
 /* width except if there are not spaces.   */
 /*******************************************/
-void TextZone::display(QString texte, QTextStream& out)
+void TextZone::display(QString text, QTextStream& out)
 {
 	QString line;
 	int index = 0, end = 0;
-	end = texte.find(' ', 60, false);
+	end = text.find(' ', 60, false);
 	if(end != -1)
-		line = texte.mid(index, end - index);
+		line = text.mid(index, end - index);
 	else
-		line = texte;
-	while(end < (signed int) texte.length() && end != -1)
+		line = text;
+	while(end < (signed int) text.length() && end != -1)
 	{
 		/* There are something to display */
 		if(Config::instance()->mustUseUnicode())
@@ -363,8 +363,8 @@ void TextZone::display(QString texte, QTextStream& out)
 			out << line << endl;
 		Config::instance()->writeIndent(out);
 		index = end;
-		end = texte.find(' ', index + 60, false);
-		line = texte.mid(index, end - index);
+		end = text.find(' ', index + 60, false);
+		line = text.mid(index, end - index);
 	}
 	kDebug(30522) << line << endl;
 	if(Config::instance()->mustUseUnicode())

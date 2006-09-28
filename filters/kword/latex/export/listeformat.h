@@ -96,8 +96,6 @@ class FormatElt
 
 class ListeFormat
 {
-	//QString _texte;
-
 	private:
 		FormatElt* _first;
 		FormatElt* _end;
