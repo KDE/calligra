@@ -27,7 +27,7 @@
 #include <QCheckBox>
 
 class KWFrameConnectSelector;
-class KWFrameGeometry;
+class KoShapeGeometry;
 class KWFrameRunaroundProperties;
 class KWGeneralFrameProperties;
 class KWFrame;
@@ -60,7 +60,7 @@ private slots:
 
 private:
     KWFrameConnectSelector *m_frameConnectSelector;
-    KWFrameGeometry *m_frameGeometry;
+    KoShapeGeometry *m_frameGeometry;
     KWFrameRunaroundProperties *m_frameRunaroundProperties;
     KWGeneralFrameProperties *m_generalFrameProperties;
     FrameConfigSharedState *m_state;

@@ -21,10 +21,11 @@
 
 #include "KWShapeConfigFactory.h"
 #include "KWFrameConnectSelector.h"
-#include "KWFrameGeometry.h"
 #include "KWFrameRunaroundProperties.h"
 #include "KWGeneralFrameProperties.h"
 #include "frame/KWFrame.h"
+
+#include "KoShapeGeometry.h"
 
 KWFrameDialog::KWFrameDialog (const QList<KWFrame*> &frames, KWDocument *document, QWidget *parent)
     : KPageDialog(parent),
@@ -47,8 +48,8 @@ KWFrameDialog::KWFrameDialog (const QList<KWFrame*> &frames, KWDocument *documen
             delete m_frameConnectSelector;
             m_frameConnectSelector = 0;
         }
-        m_frameGeometry = new KWFrameGeometry(m_state);
-        m_frameGeometry->open(frame);
+        m_frameGeometry = new KoShapeGeometry();
+        m_frameGeometry->open(frame->shape());
         addPage(m_frameGeometry, i18n("Geometry"));
     }
 
