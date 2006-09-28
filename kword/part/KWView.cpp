@@ -231,9 +231,9 @@ const bool clipToPage=false; // should become a setting in the GUI
     zoomer.setZoomAndResolution(100, resolution, resolution);
     const int lastPage = m_document->lastPage();
     KoInsets bleed = m_document->pageManager()->padding();
-    const int bleedOffset = (int) clipToPage?0:POINT_TO_INCH(-bleed.left * resolution);
-    const int bleedWidth = (int)clipToPage?0:POINT_TO_INCH((bleed.left + bleed.right) * resolution);
-    const int bleedHeigt = (int)clipToPage?0:POINT_TO_INCH((bleed.top + bleed.bottom) * resolution);
+    const int bleedOffset = (int) (clipToPage?0:POINT_TO_INCH(-bleed.left * resolution));
+    const int bleedWidth = (int) (clipToPage?0:POINT_TO_INCH((bleed.left + bleed.right) * resolution));
+    const int bleedHeigt = (int) (clipToPage?0:POINT_TO_INCH((bleed.top + bleed.bottom) * resolution));
     for(int pageNum=m_document->startPage(); pageNum <= lastPage; pageNum++) {
         KWPage *page = m_document->pageManager()->page(pageNum);
         // Note that Qt does not at this time allow us to alter the page size to an arbitairy size
