@@ -22,6 +22,8 @@
 #include "kformuladefs.h"
 #include "textelement.h"
 #include "identifierelement.h"
+#include "operatorelement.h"
+#include "numberelement.h"
 #include "kformulacommand.h"
 #include "kformulacontainer.h"
 #include "kformuladocument.h"
@@ -46,8 +48,7 @@ KCommand* IdentifierElement::buildCommand( Container* container, Request* reques
         return 0;
     }
 
-    switch ( *request ) {
-    case req_addText: {
+    if ( *request == req_addText ) {
         KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
         TextRequest* tr = static_cast<TextRequest*>( request );
         for ( uint i = 0; i < tr->text().length(); i++ ) {
@@ -56,7 +57,8 @@ KCommand* IdentifierElement::buildCommand( Container* container, Request* reques
         }
         return command;
     }
-    case req_addTextChar: {
+
+    else if ( *request ==  req_addTextChar ) {
         KFCReplace* command = new KFCReplace( i18n("Add Text"), container );
         TextCharRequest* tr = static_cast<TextCharRequest*>( request );
         TextElement* element = creationStrategy->createTextElement( tr->ch(), tr->isSymbol() );
@@ -64,8 +66,60 @@ KCommand* IdentifierElement::buildCommand( Container* container, Request* reques
         return command;
     }
 
-    case req_addOperator:
-    case req_addNumber:
+    if ( countChildren() == 0 || cursor->getPos() == countChildren() ) {
+        // We are in the last position, so it's easy, call the parent to 
+        // create a new child
+        SequenceElement* parent = static_cast<SequenceElement*>( getParent() );
+        if ( parent ) {
+            uint pos = parent->childPos( this );
+            cursor->setTo( parent, pos + 1);
+            return parent->buildCommand( container, request );
+        }
+    }
+    if ( cursor->getPos() == 0 ) {
+        SequenceElement* parent = static_cast<SequenceElement*>( getParent() );
+        if ( parent ) {
+            uint pos = parent->childPos( this );
+            cursor->setTo( parent, pos );
+            return parent->buildCommand( container, request );
+        }
+    }
+
+    // We are in the middle of a token, so:
+    // a) Cut from mark to the end
+    // b) Create a new token and add an element from key pressed
+    // c) Create a new token and add elements cut previously
+    // d) Move cursor to parent so that it command execution works fine
+
+    switch( *request ) {
+    case req_addOperator: {
+        KFCSplitToken* command = new KFCSplitToken( i18n("Add Operator"), container );
+        OperatorRequest* opr = static_cast<OperatorRequest*>( request );
+        OperatorElement* op = creationStrategy->createOperatorElement();
+        TextElement* text = creationStrategy->createTextElement( opr->ch() );
+        command->addCursor( cursor );
+        command->addToken( op );
+        command->addContent( op, text );
+        SequenceElement* parent = static_cast< SequenceElement* >( getParent() );
+        if ( parent ) {
+            cursor->setTo( parent, parent->childPos( this ) + 1 );
+        }
+        return command;
+    }
+    case req_addNumber: {
+        KFCSplitToken* command = new KFCSplitToken( i18n("Add Number"), container );
+        NumberRequest* nr = static_cast<NumberRequest*>( request );
+        NumberElement* num = creationStrategy->createNumberElement();
+        TextElement* text = creationStrategy->createTextElement( nr->ch() );
+        command->addCursor( cursor );
+        command->addToken( num );
+        command->addContent( num, text );
+        SequenceElement* parent = static_cast< SequenceElement* >( getParent() );
+        if ( parent ) {
+            cursor->setTo( parent, parent->childPos( this ) + 1 );
+        }
+        return command;
+    }
     case req_addEmptyBox:
     case req_addNameSequence:
     case req_addBracket:
