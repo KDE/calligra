@@ -173,7 +173,6 @@ KCommand* OperatorElement::buildCommand( Container* container, Request* request 
         KFCReplace* command = new KFCReplace( i18n("Add Operator"), container );
         OperatorRequest* opr = static_cast<OperatorRequest*>( request );
         TextElement* element = creationStrategy->createTextElement( opr->ch(), true );
-        element->setParent( this );
         command->addElement( element );
         return command;
     }
