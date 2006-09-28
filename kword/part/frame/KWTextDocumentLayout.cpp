@@ -340,6 +340,9 @@ public:
             lastPos = data->endPosition();
             frameNumber++;
         }
+        Q_ASSERT(frameNumber >= 0);
+        if(m_frameSet->frameCount() == 0)
+            return;
         shape = m_frameSet->frames()[frameNumber]->shape();
         m_data = dynamic_cast<KoTextShapeData*> (shape->userData());
 
