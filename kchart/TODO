@@ -49,6 +49,12 @@ Think about doing it in one of these ways:
   headers.  This means that it will perhaps have to skip the first row
   or column when displayData is generated.
 
+I Chose number 2.
+
+* Fix bug 128758
+  + Fix it so that m_row/colLabels always contains the headers.		----
+     - Fix doSetData to do this. Take into account canChangeValue	--
+  + Fix paintContent() to take canChangedata into account		----
 
 
 After the feature freeze
