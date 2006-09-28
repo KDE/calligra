@@ -228,14 +228,15 @@ void KFCAddToken::unexecute()
         for ( uint i = 0; i < current->countChildren(); ++i ) {
             cursor->remove( list, beforeCursor );
         }
-        int pos = parent->childPos( current );
-        kdWarning() << pos << endl;
-        cursor->setTo( parent, pos + 1);
-        cursor->remove( list, beforeCursor );
-        if ( pos > 0 ) {
-            BasicElement* element = parent->getChild( pos - 1 );
-            if (element)
-                element->moveEnd( cursor );
+        if ( parent ) {
+            int pos = parent->childPos( current );
+            cursor->setTo( parent, pos + 1);
+            cursor->remove( list, beforeCursor );
+            if ( pos > 0 ) {
+                BasicElement* element = parent->getChild( pos - 1 );
+                if (element)
+                    element->moveEnd( cursor );
+            }
         }
     }
     testDirty();
@@ -305,8 +306,11 @@ void KFCSplitToken::execute()
         removeSelection->execute();
     }
     splitCursor = cursor->getCursorData();
-    cursor->setMark( static_cast<SequenceElement*>(cursor->getElement())->countChildren() );
-    cursor->setSelection( true );
+    SequenceElement* parent = static_cast<SequenceElement*>( cursor->getElement() );
+    if ( parent ) {
+        cursor->setMark( parent->countChildren() );
+        cursor->setSelection( true );
+    }
     cursor->remove( splitList, afterCursor );
     TokenElement *token = new TokenElement();// TODO 
     addToken( token );
@@ -318,7 +322,12 @@ void KFCSplitToken::execute()
     }
     KFCAddToken::execute();
     cursor = getExecuteCursor();
-    static_cast<SequenceElement*>(static_cast<SequenceElement*>(cursor->getElement())->getChild( cursor->getPos() ))->goInsideLast(cursor);
+    if ( parent ) {
+        BasicElement* child = parent->getChild( cursor->getPos() );
+        if ( child ) {
+            child->moveEnd( cursor );
+        }
+    }
 }
 
 void KFCSplitToken::unexecute()
