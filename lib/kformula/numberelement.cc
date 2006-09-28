@@ -58,14 +58,19 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
     if ( countChildren() == 0 || cursor->getPos() == countChildren() ) {
         // We are in the last position, so it's easy, call the parent to 
         // create a new child
-        uint pos = static_cast<SequenceElement*>(getParent())->childPos( this );
-        cursor->setTo( getParent(), pos + 1);
-        return getParent()->buildCommand( container, request );
+        SequenceElement* parent = static_cast<SequenceElement*>( getParent() );
+        if ( parent ) {
+            uint pos = parent->childPos( this );
+            cursor->setTo( parent, pos + 1);
+            return parent->buildCommand( container, request );
+        }
     }
     if ( cursor->getPos() == 0 ) {
-        uint pos = static_cast<SequenceElement*>(getParent())->childPos( this );
-        cursor->setTo( getParent(), pos );
-        return getParent()->buildCommand( container, request );
+        if ( parent ) {
+            uint pos = parent->childPos( this );
+            cursor->setTo( parent, pos );
+            return parent->buildCommand( container, request );
+        }
     }
 
     // We are in the middle of a token, so:
@@ -100,6 +105,7 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
             TextElement* text = creationStrategy->createTextElement( tr->text()[i] );
             command->addContent( id, text );
         }
+        SequenceElement* parent = static_cast< SequenceElement* >( getParent() );
         if ( parent ) {
             cursor->setTo( parent(), parent->childPos( this ) + 1 );
         }
@@ -114,6 +120,7 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
         command->addCursor( cursor );
         command->addToken( op );
         command->addContent( op, text );
+        SequenceElement* parent = static_cast< SequenceElement* >( getParent() );
         if ( parent ) {
             cursor->setTo( parent(), parent->childPos( this ) + 1 );
         }
@@ -128,9 +135,12 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
     case req_addSymbol:
     case req_addOneByTwoMatrix:
     case req_addMatrix: {
-        uint pos = static_cast<SequenceElement*>(getParent())->childPos( this );
-        cursor->setTo( getParent(), pos + 1);
-        return getParent()->buildCommand( container, request );
+        SequenceElement* parent = static_cast<SequenceElement*>( getParent() );
+        if ( parent ) {
+            uint pos = parent->childPos( this );
+            cursor->setTo( parent, pos + 1);
+            return parent->buildCommand( container, request );
+        }
     }
     default:
         return SequenceElement::buildCommand( container, request );
