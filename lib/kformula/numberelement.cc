@@ -66,6 +66,7 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
         }
     }
     if ( cursor->getPos() == 0 ) {
+        SequenceElement* parent = static_cast<SequenceElement*>( getParent() );
         if ( parent ) {
             uint pos = parent->childPos( this );
             cursor->setTo( parent, pos );
@@ -90,7 +91,7 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
         command->addContent( id, text );
         SequenceElement* parent = static_cast< SequenceElement* >( getParent() );
         if ( parent ) {
-            cursor->setTo( parent(), parent->childPos( this ) + 1 );
+            cursor->setTo( parent, parent->childPos( this ) + 1 );
         }
         return command;
     }
@@ -107,7 +108,7 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
         }
         SequenceElement* parent = static_cast< SequenceElement* >( getParent() );
         if ( parent ) {
-            cursor->setTo( parent(), parent->childPos( this ) + 1 );
+            cursor->setTo( parent, parent->childPos( this ) + 1 );
         }
         return command;
     }
@@ -122,7 +123,7 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
         command->addContent( op, text );
         SequenceElement* parent = static_cast< SequenceElement* >( getParent() );
         if ( parent ) {
-            cursor->setTo( parent(), parent->childPos( this ) + 1 );
+            cursor->setTo( parent, parent->childPos( this ) + 1 );
         }
         return command;
     }
