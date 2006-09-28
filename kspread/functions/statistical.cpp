@@ -24,6 +24,8 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
+#include <kdebug.h>
+
 // needed for MODE
 #include <QList>
 #include <QMap>
@@ -54,6 +56,7 @@ Value func_gauss (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_geomean (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_harmean (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_hypgeomdist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_intercept (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_kurtosis_est (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_kurtosis_pop (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_large (valVector args, ValueCalc *calc, FuncExtra *);
@@ -69,6 +72,7 @@ Value func_phi (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_poisson (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_skew_est (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_skew_pop (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_slope (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_small (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_standardize (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_stddev (valVector args, ValueCalc *calc, FuncExtra *);
@@ -76,6 +80,7 @@ Value func_stddeva (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_stddevp (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_stddevpa (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_stdnormdist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_steyx (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumproduct (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumx2py2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumx2my2 (valVector args, ValueCalc *calc, FuncExtra *);
@@ -166,6 +171,10 @@ void RegisterStatisticalFunctions()
   f = new Function ("HYPGEOMDIST", func_hypgeomdist);
   f->setParamCount (4);
   repo->add (f);
+  f = new Function ("INTERCEPT", func_intercept);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
   f = new Function ("INVBINO", func_bino);  // same as BINO, for 1.4 compat
   repo->add (f);
   f = new Function ("KURT", func_kurtosis_est);
@@ -227,6 +236,10 @@ void RegisterStatisticalFunctions()
   f->setParamCount (1, -1);
   f->setAcceptArray ();
   repo->add (f);
+  f = new Function ("SLOPE", func_slope);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
   f = new Function ("SMALL", func_small);
   f->setParamCount (2);
   f->setAcceptArray ();
@@ -248,6 +261,10 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("STDEVPA", func_stddevpa);
   f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("STEYX", func_steyx);
+  f->setParamCount (2);
   f->setAcceptArray ();
   repo->add (f);
   f = new Function ("SUM2XMY", func_sumxmy2);
@@ -1210,8 +1227,8 @@ void tawSumxmy2 (ValueCalc *c, Value &res, Value v1,
     Value v2) {
   // res += sqr(v1-v2)
   res = c->add (res, c->sqr (c->sub (v1, v2)));
-
 }
+
 
 // Function: sumproduct
 Value func_sumproduct (valVector args, ValueCalc *calc, FuncExtra *)
@@ -1243,4 +1260,58 @@ Value func_sumxmy2 (valVector args, ValueCalc *calc, FuncExtra *)
   Value result;
   calc->twoArrayWalk (args[0], args[1], result, tawSumxmy2);
   return result;
+}
+
+// Function: INTERCEPT
+Value func_intercept( valVector args, ValueCalc* calc, FuncExtra* )
+{
+    int numberY = calc->count( args[0] );
+    int numberX = calc->count( args[1] );
+
+    if ( numberY < 1 || numberX < 1 || numberY != numberX )
+        return Value::errorVALUE();
+
+    Value denominator;
+    Value avgY = calc->avg( args[0] );
+    Value avgX = calc->avg( args[1] );
+    Value nominator = func_covar_helper( args[0], args[1], calc, avgY, avgX );
+    calc->arrayWalk( args[1], denominator, calc->awFunc("devsq"), avgX );
+    // result = Ey - SLOPE * Ex
+    return calc->sub( avgY, calc->mul( calc->div( nominator, denominator ), avgX ) );
+}
+
+// Function: SLOPE
+Value func_slope( valVector args, ValueCalc* calc, FuncExtra* )
+{
+    int numberY = calc->count( args[0] );
+    int numberX = calc->count( args[1] );
+
+    if ( numberY < 1 || numberX < 1 || numberY != numberX )
+        return Value::errorVALUE();
+
+    Value denominator;
+    Value avgY = calc->avg( args[0] );
+    Value avgX = calc->avg( args[1] );
+    Value nominator = func_covar_helper( args[0], args[1], calc, avgY, avgX );
+    calc->arrayWalk( args[1], denominator, calc->awFunc("devsq"), avgX );
+    return calc->div( nominator, denominator );
+}
+
+// Function: STEYX
+Value func_steyx( valVector args, ValueCalc* calc, FuncExtra* )
+{
+    int number = calc->count( args[0] );
+
+    if ( number < 1 || number != calc->count( args[1] ) )
+        return Value::errorVALUE();
+
+    Value varX, varY;
+    Value avgY = calc->avg( args[0] );
+    Value avgX = calc->avg( args[1] );
+    Value cov = func_covar_helper( args[0], args[1], calc, avgY, avgX );
+    calc->arrayWalk( args[0], varY, calc->awFunc("devsq"), avgY );
+    calc->arrayWalk( args[1], varX, calc->awFunc("devsq"), avgX );
+    Value numerator = calc->sub( varY, calc->div( calc->sqr( cov ), varX ) );
+    Value denominator = calc->sub( number, 2 );
+    return calc->sqrt( calc->div( numerator, denominator ) );
 }

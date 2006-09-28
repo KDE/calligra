@@ -1405,6 +1405,57 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>INTERCEPT</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>y values (array)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>x values (array)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The INTERCEPT() function calculates the interception of the linear regression line with the y axis.</Text>
+        <Syntax>INTERCEPT(y;x)</Syntax>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SLOPE</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>y values (array)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>x values (array)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The SLOPE() function calculates the slope of the linear regression line.</Text>
+        <Syntax>SLOPE(y;x)</Syntax>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>STEYX</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>y values (array)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>x values (array)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The STEYX() function calculates the standard error of the predicted y value for each x in the regression.</Text>
+        <Syntax>SLOPE(y;x)</Syntax>
+      </Help>
+    </Function>
+
   </Group>
 
 </KSpreadFunctions>
