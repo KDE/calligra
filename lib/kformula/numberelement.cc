@@ -83,7 +83,10 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
         command->addCursor( cursor );
         command->addToken( id );
         command->addContent( id, text );
-        cursor->setTo( getParent(), static_cast<SequenceElement*>(getParent())->childPos( this ) + 1 );
+        SequenceElement* parent = static_cast< SequenceElement* >( getParent() );
+        if ( parent ) {
+            cursor->setTo( parent(), parent->childPos( this ) + 1 );
+        }
         return command;
     }
 
@@ -97,7 +100,9 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
             TextElement* text = creationStrategy->createTextElement( tr->text()[i] );
             command->addContent( id, text );
         }
-        cursor->setTo( getParent(), static_cast<SequenceElement*>(getParent())->childPos( this ) + 1 );
+        if ( parent ) {
+            cursor->setTo( parent(), parent->childPos( this ) + 1 );
+        }
         return command;
     }
 
@@ -109,7 +114,9 @@ KCommand* NumberElement::buildCommand( Container* container, Request* request )
         command->addCursor( cursor );
         command->addToken( op );
         command->addContent( op, text );
-        cursor->setTo( getParent(), static_cast<SequenceElement*>(getParent())->childPos( this ) + 1 );
+        if ( parent ) {
+            cursor->setTo( parent(), parent->childPos( this ) + 1 );
+        }
         return command;
     }
     case req_addEmptyBox:
