@@ -497,7 +497,7 @@ int KexiDB::rowCount(const KexiDB::TableSchema& tableSchema)
 	}
 	int count = -1; //will be changed only on success of querySingleNumber()
 	tableSchema.connection()->querySingleNumber(
-		QString::fromLatin1("SELECT COUNT() FROM ") 
+		QString::fromLatin1("SELECT COUNT(*) FROM ") 
 		+ tableSchema.connection()->driver()->escapeIdentifier(tableSchema.name()), 
 		count
 	);
