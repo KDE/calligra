@@ -12,7 +12,7 @@ set(TestBasicLayout_test_SRCS TestBasicLayout.cpp)
 kde4_automoc(${TestBasicLayout_test_SRCS})
 kde4_add_executable(TestBasicLayout RUN_UNINSTALLED ${TestBasicLayout_test_SRCS})
 target_link_libraries(TestBasicLayout kwordprivate ${QT_QTTEST_LIBRARY})
-add_test(kword-TestBasicLayout ${EXECUTABLE_OUTPUT_PATH}/TestBasicLayout)
+add_test(kword/frame/TestBasicLayout ${EXECUTABLE_OUTPUT_PATH}/TestBasicLayout)
 
 ########### next target ###############
 
@@ -20,7 +20,7 @@ set(TestDocumentLayout_test_SRCS TestDocumentLayout.cpp)
 kde4_automoc(${TestDocumentLayout_test_SRCS})
 kde4_add_executable(TestDocumentLayout RUN_UNINSTALLED ${TestDocumentLayout_test_SRCS})
 target_link_libraries(TestDocumentLayout kwordprivate ${QT_QTTEST_LIBRARY})
-add_test(kword-TestDocumentLayout ${EXECUTABLE_OUTPUT_PATH}/TestDocumentLayout)
+add_test(kword/frame/TestDocumentLayout ${EXECUTABLE_OUTPUT_PATH}/TestDocumentLayout)
 
 ########### next target ###############
 
