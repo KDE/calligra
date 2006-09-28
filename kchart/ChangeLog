@@ -1,3 +1,8 @@
+2006-09-28  Inge Wallin  <inge@lysator.liu.se>
+
+	* kchart_params.cc (loadOasisPlotarea): Add support for
+	chart:series-source (row or column):
+
 2006-07-18  Inge Wallin  <inge@lysator.liu.se>
 
 	Clean up the data editor and fix bug 129553: kchart: crash / heavy
