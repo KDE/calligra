@@ -272,6 +272,14 @@ void KWDocument::clear() {
         removeFrameSet(fs);
         delete fs;
     }
+
+    // industry standard for bleed
+    KoInsets padding;
+    padding.top = MM_TO_POINT(3);
+    padding.bottom = MM_TO_POINT(3);
+    padding.left = MM_TO_POINT(3);
+    padding.right = MM_TO_POINT(3);
+    m_pageManager.setPadding(padding);
 }
 
 bool KWDocument::loadOasis(const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore*) {

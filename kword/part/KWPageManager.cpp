@@ -27,12 +27,6 @@ KWPageManager::KWPageManager() {
     m_firstPage = 1;
     m_onlyAllowAppend = false;
     m_defaultPageLayout = KoPageLayout::standardLayout();
-
-    // industry standard for bleed
-    m_padding.top = MM_TO_POINT(3);
-    m_padding.bottom = MM_TO_POINT(3);
-    m_padding.left = MM_TO_POINT(3);
-    m_padding.right = MM_TO_POINT(3);
 }
 
 KWPageManager::~KWPageManager() {
