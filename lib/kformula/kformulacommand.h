@@ -323,6 +323,17 @@ private:
      * The command that needs to be executed first if there is a selection.
      */
     KFCRemoveSelection* removeSelection;
+
+    /**
+     * The list of elements that are splited into another token
+     */
+    QPtrList< BasicElement > splitList;
+
+    /**
+     * Information about cursor position where the split is made.
+     * Needed to restore splited elements.
+     */
+    FormulaCursor::CursorData* splitCursor;
 };
 
 

@@ -286,10 +286,12 @@ void KFCReplaceToken::unexecute()
 KFCSplitToken::KFCSplitToken(const QString &name, Container* document)
     : KFCAddToken(name, document), removeSelection(0)
 {
+    splitList.setAutoDelete( true );
 }
 
 KFCSplitToken::~KFCSplitToken()
 {
+    delete splitCursor;
     delete removeSelection;
 }
 
@@ -302,11 +304,10 @@ void KFCSplitToken::execute()
     if (removeSelection != 0) {
         removeSelection->execute();
     }
-    setUnexecuteCursor( cursor );
+    splitCursor = cursor->getCursorData();
     cursor->setMark( static_cast<SequenceElement*>(cursor->getElement())->countChildren() );
     cursor->setSelection( true );
-    QPtrList< BasicElement > splitList;
-    cursor->getElement()->remove( cursor, splitList, afterCursor );
+    cursor->remove( splitList, afterCursor );
     TokenElement *token = new TokenElement();// TODO 
     addToken( token );
     QPtrListIterator< BasicElement > it ( splitList );
@@ -324,9 +325,13 @@ void KFCSplitToken::unexecute()
 {
     kdDebug( DEBUGID ) << k_funcinfo << endl;
     KFCAddToken::unexecute();
+    FormulaCursor *cursor;
+    cursor->setCursorData( splitCursor );
+    cursor->insert( splitList, afterCursor );
     if (removeSelection != 0) {
         removeSelection->unexecute();
     }
+    testDirty();
 }
 
 
