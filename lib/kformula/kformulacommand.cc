@@ -413,7 +413,9 @@ void KFCRemoveEnclosing::execute()
 void KFCRemoveEnclosing::unexecute()
 {
     FormulaCursor* cursor = getUnexecuteCursor();
-    cursor->replaceSelectionWith(element);
+    if ( element ) {
+        cursor->replaceSelectionWith(element);
+    }
     cursor->normalize();
     cursor->setSelection(false);
     element = 0;
