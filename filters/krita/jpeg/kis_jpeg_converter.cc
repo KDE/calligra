@@ -313,7 +313,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
     fclose(fp);
-    delete row_pointer;
+    delete [] row_pointer;
     return KisImageBuilder_RESULT_OK;
 }
 
