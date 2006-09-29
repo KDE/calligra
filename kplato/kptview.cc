@@ -252,7 +252,7 @@ View::View(Part* part, QWidget* parent)
     actionEditResources = new KAction(KIcon("edit"), i18n("Edit Resources..."), actionCollection(), "project_resources");
     connect(actionEditResources, SIGNAL(triggered(bool) ), SLOT(slotProjectResources()));
 
-    actionCalculate = new KActionMenu(KIcon("project_calculate"), i18n("Calculate"), actionCollection(),"action_calculate");
+    actionCalculate = new KActionMenu(KIcon("project_calculate"), i18n("Calculate"), actionCollection(),"project_calculate");
     connect(actionCalculate, SIGNAL(activated()), SLOT(slotProjectCalculate()));
 
     actionCalculateExpected = new KAction(i18n("Expected"), actionCollection(), "project_calculate_expected");

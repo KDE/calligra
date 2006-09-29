@@ -1,9 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KPlato" version="4">
+<kpartgui name="KPlato" version="5">
     <MenuBar>
         <Menu name="edit"><text>&amp;Edit</text>
-            <Action name="koffice_undo"/>
-            <Action name="koffice_redo"/>
+            <Action name="edit_undo"/>
+            <Action name="edit_redo"/>
             <Separator/>
 <!--            <Action name="edit_cut"/>
             <Action name="edit_copy"/>
@@ -76,8 +76,8 @@
         <Action name="view_reports"/>
     </ToolBar>
     <ToolBar name="project" position="top"><Text>Project</Text>
-        <Action name="koffice_undo"/>
-        <Action name="koffice_redo"/>
+        <Action name="edit_undo"/>
+        <Action name="edit_redo"/>
         <Separator/>
         <Action name="project_edit"/>
         <Action name="project_calculate">
