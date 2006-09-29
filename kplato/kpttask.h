@@ -240,7 +240,7 @@ public:
     Duration finishFloat() { return Duration(); }
     
     /// A task is critical if there is no positive float
-    virtual bool isCritical();
+    virtual bool isCritical() const;
     /// Calculate critical path
     virtual bool calcCriticalPath(bool fromEnd);
     
