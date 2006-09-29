@@ -71,7 +71,6 @@ bool KFormulaPartDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWrite
     KTempFile contentTmpFile;
     contentTmpFile.setAutoDelete( true );
     QFile* tmpFile = contentTmpFile.file();
-    KoXmlWriter contentTmpWriter( tmpFile, 1 );
 
     QTextStream stream( tmpFile );
     formula->saveMathML( stream, true );
