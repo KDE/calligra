@@ -20,6 +20,11 @@ QpFormulaStack::QpFormulaStack()
 
 QpFormulaStack::~QpFormulaStack()
 {
+   while( cIdx >= 0 )
+   {
+      delete [] cStack[cIdx--];
+   }
+   delete cStack;
 }
 
 void
