@@ -288,11 +288,10 @@ void RegisterStatisticalFunctions()
   f = new Function ("TDIST", func_tdist);
   f->setParamCount (3);
   repo->add (f);
-#if 0 // TODO Stefan: finish
   f = new Function ("TTEST", func_ttest);
   f->setParamCount (4);
+  f->setAcceptArray ();
   repo->add (f);
-#endif
   f = new Function ("VARIANCE", func_variance);
   f->setParamCount (1, -1);
   f->setAcceptArray ();
@@ -1160,7 +1159,7 @@ Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *) {
   Value fDF = args[1];
   int flag = calc->conv()->asInteger (args[2]).asInteger();
 
-  if (calc->lower (fDF, 1) || calc->lower (T, 0.0) || (flag != 1 && flag != 2))
+  if (calc->lower (fDF, 1) || (flag != 1 && flag != 2))
     return Value::errorVALUE();
 
   // arg = fDF / (fDF + T * T)
@@ -1238,6 +1237,12 @@ void tawSumxmy2 (ValueCalc *c, Value &res, Value v1,
     Value v2) {
   // res += sqr(v1-v2)
   res = c->add (res, c->sqr (c->sub (v1, v2)));
+}
+
+void tawSumxmy (ValueCalc *c, Value &res, Value v1,
+    Value v2) {
+  // res += (v1-v2)
+  res = c->add (res, c->sub (v1, v2));
 }
 
 
@@ -1349,27 +1354,75 @@ Value func_ttest( valVector args, ValueCalc* calc, FuncExtra* )
         return Value::errorVALUE();
 
     Value t;
+    Value dof;
     if ( type == 1 )
     {
         // paired
-        // TODO
+        dof = calc->sub( numX, 1 );
+
+        Value mean;
+        calc->twoArrayWalk( x, y, mean, tawSumxmy );
+        mean = calc->div( mean, numX );
+
+        Value sigma;
+        calc->twoArrayWalk( x, y, sigma, tawSumxmy2 );
+        sigma = calc->sqrt( calc->sub( calc->div( sigma, numX ), calc->sqr( mean ) ) );
+
+        t = calc->div( calc->mul( mean, calc->sqrt( dof ) ), sigma );
     }
     else if ( type == 2 )
     {
         // independent, equal variances
-        // TODO
+        dof = calc->sub( calc->add( numX, numY ), 2 );
+
+        Value avgX = calc->avg( x );
+        Value avgY = calc->avg( y );
+        Value varX, varY;
+        calc->arrayWalk( x, varX, calc->awFunc ("devsq"), avgX );
+        calc->arrayWalk( y, varY, calc->awFunc ("devsq"), avgY );
+        varX = calc->div( varX, calc->sub( numX, 1 ) );
+        varY = calc->div( varY, calc->sub( numX, 1 ) );
+
+        Value numerator = calc->sub( calc->avg( x ), calc->avg( y ) );
+
+        Value denominator = calc->div( varX, numX );
+        denominator = calc->add( denominator, calc->div( varY, numY ) );
+        denominator = calc->sqrt( denominator );
+
+        t = calc->div( numerator, denominator );
     }
     else
     {
         // independent, unequal variances
-        // TODO
+
+        Value avgX = calc->avg( x );
+        Value avgY = calc->avg( y );
+        Value varX, varY;
+        calc->arrayWalk( x, varX, calc->awFunc ("devsq"), avgX );
+        calc->arrayWalk( y, varY, calc->awFunc ("devsq"), avgY );
+        varX = calc->div( varX, calc->sub( numX, 1 ) );
+        varY = calc->div( varY, calc->sub( numX, 1 ) );
+
+        Value numerator = calc->add( numX, numY );
+        numerator = calc->div( calc->mul( numX, calc->mul( numY, calc->sub( numerator, 2 ) ) ), numerator );
+        numerator = calc->mul( calc->sub( calc->avg( x ), calc->avg( y ) ), calc->sqrt( numerator ) );
+
+        Value denominator = calc->mul( calc->sub( numX, 1 ), varX );
+        denominator = calc->add( denominator, calc->mul( calc->sub( numY, 1 ), varY ) );
+        denominator = calc->sqrt( denominator );
+
+        t = calc->div( numerator, denominator );
+
+        // inspired from Gnumeric
+        dof = calc->div( 1.0, calc->add( 1.0, calc->div( calc->mul( varY, numX ), calc->mul( varX, numY ) ) ) );
+        dof = calc->div( 1.0, calc->add( calc->div( calc->sqr( dof ), calc->sub( numX, 1 ) ), calc->div( calc->sqr( calc->sub( 1, dof ) ), calc->sub( numY, 1 ) ) ) );
     }
 
     valVector tmp(3);
     tmp.insert( 0, t );
-    tmp.insert( 1, numX );
+    tmp.insert( 1, dof );
     tmp.insert( 2, mode );
-    return calc->sub( 1.0, func_tdist( tmp, calc, 0 ) );
+    return func_tdist( tmp, calc, 0 );
 }
 
 // Function ZTEST
