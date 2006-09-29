@@ -459,7 +459,6 @@ KPrView::~KPrView()
     m_searchEntry = 0L;
     delete m_replaceEntry;
     m_replaceEntry = 0L;
-    delete m_specialCharDlg;
     delete m_propertyEditor;
     delete pgConfDia;
     delete rotateDia;
@@ -468,8 +467,10 @@ KPrView::~KPrView()
     delete m_fontDlg;
     delete m_paragDlg;
     delete m_arrangeObjectsPopup;
+
     if ( m_specialCharDlg )
         m_specialCharDlg->closeDialog(); // will call slotSpecialCharDlgClosed
+    delete m_specialCharDlg;
 }
 
 void KPrView::setupPrinter( KPrinter &prt )
