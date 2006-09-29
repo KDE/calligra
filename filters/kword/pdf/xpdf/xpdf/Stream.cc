@@ -1012,9 +1012,7 @@ LZWStream::LZWStream(Stream *strA, int predictor, int columns, int colors,
 }
 
 LZWStream::~LZWStream() {
-  if (pred) {
-    delete pred;
-  }
+  delete pred;
   delete str;
 }
 
