@@ -1452,7 +1452,7 @@ Record* Record::create( unsigned type )
   else if( type == PaletteRecord::id )
     record = new PaletteRecord();
 
-  if( type == RightMarginRecord::id )
+  else if( type == RightMarginRecord::id )
     record = new RightMarginRecord();
 
   else if( type == RKRecord::id )
