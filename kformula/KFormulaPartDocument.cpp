@@ -104,7 +104,13 @@ bool KFormulaPartDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&,
 
 bool KFormulaPartDocument::loadXML(QIODevice *, const QDomDocument& doc)
 {
-/*    if ( document->loadXML( doc ) )
+/*    if ( doc.doctype().name().lower() == "math" ) // FIXME: This is ugly
+        if ( document->loadOasis( doc ) ) {
+            history->clear();
+            history->documentSaved();
+            return true;
+        }
+    if ( document->loadXML( doc ) )
       {
            history->clear();
            history->documentSaved();
