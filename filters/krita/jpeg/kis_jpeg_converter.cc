@@ -524,7 +524,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     jpeg_finish_compress(&cinfo);
     fclose(fp);
     
-    delete row_pointer;
+    delete [] row_pointer;
     // Free memory
     jpeg_destroy_compress(&cinfo);
     
