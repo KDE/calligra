@@ -156,7 +156,7 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
     TIFF *image = 0;
     if((image = TIFFOpen(QFile::encodeName(uri.path()), "r")) == NULL){
         kdDebug(41008) << "Could not open the file, either it doesn't exist, either it is not a TIFF : " << uri.path() << endl;
-        if (image) TIFFClose(image);
+
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
     do {
