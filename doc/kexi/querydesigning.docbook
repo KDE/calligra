@@ -6,12 +6,12 @@
   <sect1 id="designing-queries">
     <title>Designing Database Queries</title>
     <para>
-      A database's primary purpose is to store and help extracting information
+      A database's primary purpose is to store and help extract information
       you are looking for. Unlike databases written on a paper sheets, &kexi;
       database allows you to specify more search criteria. Results
       are returend faster even for large data sets. All this is a power of
       databases, however to be able to perform efffective <emphasis>queries</emphasis>
-      in your database, you need to learn how to tell the database what are you
+      in your database, you need to learn how to tell the database what you are
       looking for.
     </para>
     <para>
@@ -20,8 +20,8 @@
       data coming from multiple tables.
     </para>
     <para>
-      To see how queries work in practice you will create <literal>contacts</literal>
-      query joining data from two tables <literal>persons</literal> and
+      To see how queries work in practice you will create a <literal>contacts</literal>
+      query joining data from two tables: <literal>persons</literal> and
       <literal>phone_numbers</literal> (designed in <!--<a href="05_01_00_table_designing.html">-->chapter 3.1<!--</a>-->
       and filled with data in <!--<a href="05_02_00_entering_data_into_tables.html">-->chapter 3.2<!--</a>-->).
     </para>
@@ -30,17 +30,17 @@
         <para>
           Create a new empty query by selecting <!--<img src="icons/query_newobj.png" class="icon">-->
           <menuchoice><guimenu>Insert</guimenu><guimenuitem>Query</guimenuitem></menuchoice> from
-          the menubar. Design window will appear. <!--similar to the one presented in the
-          figure below. -->The window is splitted into two areas: query
-          relationships on the top and query columns below.
+          the menubar. The design window will appear. <!--similar to the one presented in the
+          figure below. -->The window is split into two areas: query
+          relationships at the top and query columns below.
           <!-- TODO update screenshot with names of window's areas -->
         </para>
       </step>
       <step>
         <para>
-          Select table <literal>persons</literal> in the drop down list <guilabel>Table:</guilabel>
-          located at the top of the window and click <guibutton>Add</guibutton> button. A graphical
-          representation of the table will appear in the the relations area. Do the same for
+          Select the table <literal>persons</literal> in the drop down list <guilabel>Table:</guilabel>
+          located at the top of the window and click the <guibutton>Add</guibutton> button. A graphical
+          representation of the table will appear in the relations area. Do the same for the
           <literal>phone_numbers</literal> table to insert it too, as in the figure below.
         </para>
         <!--<screenshot>
@@ -59,7 +59,7 @@
         <para>
           Add query relationship using mouse drag &amp; drop technique: click the field
           <literal>id</literal> in the table <literal>persons</literal> table, drag it
-          and drop onto the <literal>person</literal> field of the <literal>phone_numbers</literal>
+          and drop into the <literal>person</literal> field of the <literal>phone_numbers</literal>
           table. This will <emphasis>join both fields by creating a new relationship</emphasis>.
         </para>
       </step>
@@ -74,7 +74,7 @@
       </step>
       <step>
         <para>
-          Query design is now ready for tests. Click <!--<img src="icons/state_data.png" class="icon">-->
+          Query design is now ready for testing. Click the <!--<img src="icons/state_data.png" class="icon">-->
           <guibutton>Switch to data view</guibutton> button on the toolbar, to switch from
           design to viewing the data provided as query results.
         </para>
@@ -92,13 +92,13 @@
       </step>
       <step>
         <para>
-          Save the query design for later use by clicking <!--<img src="icons/filesave.png" class="icon">-->
+          Save the query design for later use by clicking the <!--<img src="icons/filesave.png" class="icon">-->
           <guibutton>Save</guibutton> button on the toolbar. You can also use
           <menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice>
-          from the menubar or press <keycombo action="simul"><keycap>Ctrl</keycap><keycap>S</keycap></keycombo>
+          from the menubar or press the <keycombo action="simul"><keycap>Ctrl</keycap><keycap>S</keycap></keycombo>
           keys. Because the query design has not been saved yet, you will be asked to
           specify a name for it. Enter <literal>Contacts</literal> text in the
-          <guilabel>caption</guilabel> field and click <guibutton>OK</guibutton> button.
+          <guilabel>caption</guilabel> field and click the <guibutton>OK</guibutton> button.
         </para>
       </step>
     </procedure>

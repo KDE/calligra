@@ -8,31 +8,32 @@
     <para>
       You have designed the two tables <literal>Persons</literal> and
       <literal>phone_numbers</literal>. None of them contain any data yet. You can
-      enter some, and this chapter you will learn how to do this fast and effectively.
+      enter some, and in this chapter you will learn how to do this fast and effectively.
     </para>
     <procedure>
       <step>
         <para>
-          Start with <literal>persons</literal> table. Open it in <interface>Data View</interface> using
-          <!--<a href="04_06_01_project_navigator.html">-->
-          <interface>Project Navigtor</interface>. Current cell is marked with
-          (usually black) rectangle, a <firstterm>cursor</firstterm>. Contents
-          of the cell, if exists, is highlighted with a different color. Current
+          Start with the <literal>persons</literal> table. Open it in <interface>Data View</interface> using the <!--<a href="04_06_01_project_navigator.html">--><interface>Project Navigtor</interface>'s context menu.
+          The current cell is marked with
+          (usually black) thicker border, a <firstterm>cell cursor</firstterm>. The contents
+          of the cell, if present, are highlighted with a different color. The current
           row, i.e. the one you have placed your rectangular cursor in, is marked
-          on the left hand using with an arrow symbol.
+          on the left hand with an arrow symbol.
           <!--<img src="icons/button_tableview_currentrow.png" class="icon">-->
         </para>
         <para>
-          You can navigate through table cells using mouse or arrow keys, <keycap>Page Down</keycap>,
-          <keycap>Page Down</keycap>, <keycap>Home</keycap>, <keycap>End</keycap> keys. To learn more
-          about available of the key bindings for the data table view, see the section
-          <!-- TODO chapter moved --><!--<a href="ab_00_00_shortcuts.html#data_table">-->
-          B.4. Data Table<!--</a>--> in the Appendix B. Key Bindings.
+          You can navigate through table cells using the arrow keys, <keycap>Page Down</keycap>,
+          <keycap>Page Down</keycap>, <keycap>Home</keycap>, <keycap>End</keycap> keys; you can also 
+   click with the mouse in a cell to select it. <!-- TODO chapter moved 
+          To learn more
+          about available key bindings for the data table view, see the section
+          <a href="ab_00_00_shortcuts.html#data_table">
+          B.4. Data Table in the Appendix B. Key Bindings. -->
         </para>
         <para>
-          Initially, after opening table <literal>Persons</literal>, the cursor is placed in
+          Initially, after opening the table <literal>Persons</literal>, the cursor is placed in
           the <literal>id</literal> column. The column has autonumber property defined,
-          marked with blue <literal>(autonumber)</literal> text in the last row. That
+          marked with blue <literal>(autonumber)</literal> text in the last row. It
           means you do not have to enter values there by hand when entering data for a new
           row because the cell will be filled automatically with successive numbers.
         </para>
@@ -53,44 +54,41 @@
           Inserting new rows and entering data for them in &kexi; is different from
           the way of doing this in spreadsheets. To enter data for a new row, you need
           to use the arrow keys or mouse, to move your cursor to the special empty last
-          row marked with plus <!--<img src="icons/button_tableview_newrow.png" class="icon">-->
-          sign. Place your cursor in (second) <literal>name</literal> column and enter a
+          row marked with a plus <!--<img src="icons/button_tableview_newrow.png" class="icon">-->
+          sign. Place your cursor in the (second) <literal>name</literal> column and enter a
           person's name. Also enter surname, street, house number and city. When
-          done, move down arrow or mouse button to the last empty row to accept new row
-          inserting. You can insert rows you can see in the figure and add more your own.
+          done, move the cell cursor to the last empty row either by using the 
+   <keycap>Arrow Down</keycap> key or by clicking in the last 
+   row with the mouse to append a new row. 
         </para>
         <note>
           <title>Details About Actions Available While Entering Data Into Tables</title>
           <itemizedlist>
             <listitem>
               <para>
-                When you started entering data by entering the first character, editing
-                of the current row is started. On the left hand of the data table,
-                pencil <!--<img src="icons/button_tableview_editrow.png" class="icon">-->
-                symbol appears.
+                As soon as you enter the first character, the current row is being edited. A pencil <!--<img src="icons/button_tableview_editrow.png" class="icon">--> symbol appears on the left side of the data table.
               </para>
             </listitem>
             <listitem>
               <para>
-                Double clicking a cell with <mousebutton>right</mousebutton> mouse button
-                or pressing <keycap>Enter</keycap> or <keycap>F2</keycap> key also starts
+                Double clicking a cell with the &LMB; or pressing <keycap>Enter</keycap> or the <keycap>F2</keycap> key also starts
                 editing of the current row.
               </para>
             </listitem>
             <listitem>
               <para>
-                Pressing <keycap>Esc</keycap> key when contents of a cell is edited 
+                Pressing the <keycap>Esc</keycap> key when the contents of a cell is edited 
                 <emphasis>cancels changes made to this cell</emphasis>. However, the pencil
                 <!--<img src="icons/button_tableview_editrow.png" class="icon">-->
-                symbol will not disappear because you can still move to different cell
+                symbol will not disappear because you can still move to a different cell
                 of the edited row to change its contents. To
-                <emphasis>cancel changes made to entire edited row</emphasis>, press
+                <emphasis>cancel changes made to the entire edited row</emphasis>, press the
                 <keycap>Esc</keycap> key again.
               </para>
             </listitem>
             <listitem>
               <para>
-                Instead of pressing <keycap>Esc</keycap> key, you can click
+                Instead of pressing the <keycap>Esc</keycap> key, you can click the
                 <!--<img src="icons/button_cancel.png" class="icon">--><guibutton>Cancel</guibutton>
                 toolbar button or select
                 <menuchoice><guimenu>Data</guimenu><guimenuitem>Cancel Row Changes</guimenuitem></menuchoice>
@@ -99,7 +97,7 @@
             </listitem>
             <listitem>
               <para>
-                Click <keycombo action="simul"><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>
+                Click the <keycombo action="simul"><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>
                 keys to accept changes made to all cells in the currently edited row. You can also click
                 <!--<img src="icons/button_ok.png" class="icon">--><guibutton>OK</guibutton> toolbar
                 button or select <menuchoice><guimenu>Data</guimenu><guimenuitem>Save Row</guimenuitem></menuchoice>

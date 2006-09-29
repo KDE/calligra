@@ -10,7 +10,7 @@
 
   <sect1 id="doc-vs-project">
     <title>
-      Kexi Databases
+      &kexi; Databases
     </title>
     <para>
       Many applications such as OpenOffice.org or Microsoft Excel create
@@ -110,7 +110,7 @@ Main application elements
 -->
 <itemizedlist>
 <title>
-Main elements of Kexi application's window are:
+Main elements of &kexi; application's window are:
 </title>
 <listitem>
 <para><emphasis>Menubar</emphasis></para>
@@ -126,11 +126,10 @@ You will find detailed description of any of the commands in the appendix.
 contains most frequently used commands.
 </para>
 </listitem>
+
 <listitem>
-
 <!-- @todo: link to the various chapters from the listitems -->
-
-<para><emphasis>Project Navigator's pane</emphasis></para>
+<para><emphasis><guilabel>Project Navigator</guilabel>'s pane</emphasis></para>
 <para>
 contains a list of any object (tables, queries, forms, ...) created
 within the currently opened database project. The navigator also contains
@@ -139,7 +138,7 @@ small toolbar with most usable commands related to the database objects.
 </listitem>
 
 <listitem>
-<para><emphasis>Opened database objects area</emphasis></para>
+<para><emphasis><guilabel>Opened database objects</guilabel> area</emphasis></para>
 <para>
 a central area of the application taking most of the screen space.
 For IDEAl user interface mode it contains switchable tabs with
@@ -149,7 +148,7 @@ mode it contains floating windows.
 </listitem>
 
 <listitem>
-<para><emphasis>Properties pane</emphasis></para>
+<para><emphasis><guilabel>Properties</guilabel> pane</emphasis></para>
 <para>
 contains a list of properties of currently activated database object.
 For certain objects (&eg; form's widgets) it can have several tabs.
@@ -169,19 +168,19 @@ buttons, behaving just like your operating system's taskbar.
 </itemizedlist>
 
 <sect3 id="project-navigator-pane">
-<title>Project Navigator pane</title>
+<title><guilabel>Project Navigator</guilabel> pane</title>
 <para>
-The Project Navigator pane is one of the most frequently used elements
+The <guilabel>Project Navigator</guilabel> pane is one of the most frequently used elements
 of the &kexi; main window. The pane contains a list of all objects
 created within the currently opened &kexi; database project. The objects
 are split into groups: tables, queries, forms.
 </para>
 <para id="project-navigator-pane-toolbar">
-The Project Navigator pane also contains a <emphasis>small toolbar for most
-frequently used commands</emphasis> (from left to right): <emphasis>Open
-selected object</emphasis>, <emphasis>Design selected object</emphasis>,
-<emphasis>Create a new object</emphasis>, and <emphasis>Delete selected
-object</emphasis>.
+The <guilabel>Project Navigator</guilabel> pane also contains a <emphasis>small toolbar for most
+frequently used commands</emphasis> (from left to right): <guilabel>Open
+selected object</guilabel>, <guilabel>Design selected object</guilabel>,
+<guilabel>Create a new object</guilabel>, and <guilabel>Delete selected
+object</guilabel>.
 <!--
 <img src="img/04_06_01_nav_mini_toolbar.png">
 <br>A toolbar in the Project Navigator pane<br><br>
@@ -232,7 +231,7 @@ pane</link>.
 <listitem>
 <para>
 <!-- <img src="icons/edit.png" class="icon"> -->
-Click the <guilabel>Open</guilabel> button on the <link
+Click the <guibutton>Open</guibutton> button on the <link
 linkend="project-navigator-pane-toolbar">Project Navigator pane's toolbar</link>.
 </para>
 </listitem>
@@ -244,7 +243,7 @@ linkend="project-navigator-pane-toolbar">Project Navigator pane's toolbar</link>
 <para>
 When the IDEAl user interface mode (the default) is used, each window has
 its own tab. Place the mouse pointer on the icon on the tab. A
-<!-- <img src="fileclose.png" class="icon"> --> close button will become
+<!-- <img src="fileclose.png" class="icon"> --> <guibutton>Close</guibutton> button will become
 visible. Click it to close the tab.
 </para>
 <para>
@@ -283,9 +282,9 @@ to show a context menu with commands related to the window.
 </sect3>
 
 <sect3 id="property-editor-pane">
-<title>Property Editor pane</title>
+<title><guilabel>Property Editor</guilabel> pane</title>
 <para>
-In the Property Editor pane you can change properties of the object
+In the <guilabel>Property Editor</guilabel> pane you can change properties of the object
 displayed in the active window. Depending on the context, the pane is
 consisted of one or more tabs. The first, always visible tab, Properties,
 contains the list of available properties.
@@ -318,8 +317,8 @@ or increase or decrease its value by clicking with the &LMB; on the arrows.
 <listitem><para>drop down list of values</para></listitem>
 <listitem><para><emphasis>Yes/No;</emphasis>
 you can toggle the value by clicking on the button;
-<emphasis>Yes</emphasis> (<emphasis>true</emphasis>) means that the button is
-toggled on, <emphasis>No</emphasis> (<emphasis>false</emphasis>) means that
+<guibutton>Yes</guibutton> (<emphasis>true</emphasis>) means that the button is
+toggled on, <guibutton>>No</guibutton> (<emphasis>false</emphasis>) means that
 the button is toggled off.
 <!-- see the above figure -->
 </para>
@@ -339,7 +338,7 @@ database are marked with bold text.
 </listitem>
 <listitem>
 <para>
-After changing the value of a property, a special <guilabel>Undo changes</guilabel>
+After changing the value of a property, a special <guibutton>Undo changes</guibutton>
 button appears on the right side of the Property Editor's list.
 <!-- <img src="img/04_06_03_prop_undo.png" class="icon"> -->
 By clicking it you can revert the value of the property to the original value
@@ -375,14 +374,14 @@ pane in appendix Property Editor pane.
 
   <sect1 id="project-opening">
     <title>
-      Opening an existing Kexi database file
+      Opening an existing &kexi; database file
     </title>
     <itemizedlist>
       <title>
-        To open an existing Kexi database file:
+        To open an existing &kexi; database file:
       </title>
       <listitem><para>
-        select it in the <guimenuitem>Open Existing Project</guimenuitem>
+        select it in the <guilabel>Open Existing Project</guilabel>
 		dialog; or
       </para></listitem>
       <listitem><para>
@@ -392,8 +391,8 @@ pane in appendix Property Editor pane.
 
     <sect2 id="window-open-existing">
       <title>
-        Opening a database file in the <guimenuitem>Open Existing
-		Project</guimenuitem> dialog
+        Opening a database file in the <guilabel>Open Existing
+		Project</guilabel> dialog
       </title>
       <itemizedlist>
         <listitem><para>
@@ -446,11 +445,11 @@ pane in appendix Property Editor pane.
 
     <sect2 id="open-icon">
       <title>
-        Opening an existing Kexi database file by clicking on .kexi file's icon
+        Opening an existing &kexi; database file by clicking on .kexi file's icon
       </title>
       <para>
         Click file's icon using your file manager or desktop.
-        Kexi will open this database project automatically.
+        &kexi; will open this database project automatically.
       </para>
 <!-- <img src="icons/mime-kexiproject_sqlite.png" class="icon"/> -->
       <sect3 id="open-icon-notes">
@@ -481,7 +480,7 @@ pane in appendix Property Editor pane.
     </title>
     <itemizedlist>
       <title>
-        The following ways to get built-in help in Kexi are available:
+        The following ways to get built-in help in &kexi; are available:
       </title>
       <listitem>
         <para><emphasis>The Handbook in form of electronic document.</emphasis></para>

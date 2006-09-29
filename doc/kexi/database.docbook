@@ -29,16 +29,16 @@ Look at this diagram for one of the above examples: a simple phone book.
 <para>
 The above picture shows a set of two contacts each of which is
 presented on a separate card. It appears that such a card can
-constitute a single line in a table:
+constitute a single row in a table:
 </para>
 
-<para><emphasis>Contacts table</emphasis></para>
+<para><emphasis><guilabel>Contacts</guilabel> table</emphasis></para>
 <informaltable>
 <tgroup cols="2">
 <tbody>
 <row>
-<entry><emphasis>Name</emphasis></entry>
-<entry><emphasis>Tel No.</emphasis></entry>
+<entry><guilabel>Name</guilabel></entry>
+<entry><guilabel>Tel No.</guilabel></entry>
 </row>
 <row>
 <entry>Joan</entry>
@@ -55,12 +55,12 @@ constitute a single line in a table:
 <para>
 <emphasis>Terms and definitions</emphasis>:
 A single data which constitutes a part of a greater collection can be called a
-<firstterm>line</firstterm> or more professionally a
+<firstterm>row</firstterm> or more professionally a
 <firstterm>record</firstterm>.
 The collection is normally called a <firstterm>table</firstterm>.
 Moreover, the most natural name for the table is one describing the data it
 offers/stores which is <guilabel>Contacts</guilabel>.
-Furthermore, each line in the table consists of <firstterm>columns</firstterm>
+Furthermore, each row in the table consists of <firstterm>columns</firstterm>
 often also called <firstterm>fields</firstterm>. In the table
 <guilabel>Contacts</guilabel> there are two columns (fields):
 <guilabel>Name</guilabel> and <guilabel>Tel No.</guilabel>.
@@ -171,14 +171,14 @@ encounter at this stage?
 <para>
 Suppose you are using a spreadsheet and you need to change the address of at
 least one person. You have a small problem: you often have to change the
-address in many lines. For example, Joan takes three lines. A real problem
-will arise if you forget to change one of the lines - the address asigned
+address in many rows. For example, Joan takes three rows. A real problem
+will arise if you forget to change one of the rows - the address asigned
 to this person will be <emphasis>ambiguous</emphasis>, hence
 <emphasis>your data loses integrity</emphasis>.
 </para>
 <para>
 Moreover there is no simple way of deleting a chosen person from the table
-since you have to remember about deleting all the lines releted to him or her.
+since you have to remember about deleting all rows releted to him or her.
 </para>
 </sect3>
 
@@ -199,7 +199,7 @@ with only two columns: <guilabel>Name and surname</guilabel>
 and <guilabel>Address</guilabel>:
 </para>
 
-<para><emphasis>Persons table</emphasis></para>
+<para><emphasis><guilabel>Persons</guilabel> table</emphasis></para>
 <informaltable>
 <tgroup cols="2">
 <tbody>
@@ -220,7 +220,7 @@ and <guilabel>Address</guilabel>:
 </informaltable>
 
 <para>
-Each line in the table <guilabel>Persons</guilabel> corresponds to a
+Each row in the table <guilabel>Persons</guilabel> corresponds to a
 <emphasis>single person</emphasis>. Table <guilabel>Contacts</guilabel>
 is from now on a relation to the table <guilabel>Persons</guilabel>
 <!--(see next paragraph)-->.
@@ -241,7 +241,7 @@ other ways.
 <para>
 The above problem shows that &eg; when searching the telephone number of a
 person whose address is "Western Gate 1, Warsaw" you will not get a full
-result. You will get only one line instead of three. Moreover You will also
+result. You will get only one row instead of three. Moreover You will also
 not find all the telephone numbers searching for the value "Joan Smith" in
 the field <guilabel>Name and surname</guilabel>, because "Smith Joan" will
 not fit to "Joan Smith".
@@ -325,8 +325,8 @@ of course allow omitting certain fields while entering data.
 <sect3 id="data-limiting">
 <title>Limiting data view</title>
 <para>
-A spreadsheet displays all lines and columns of the table which is bothersome
-in case of very large data sheets. You may of course filter and sort lines
+A spreadsheet displays all rows and columns of the table which is bothersome
+in case of very large data sheets. You may of course filter and sort rows
 in spreadsheets, however you must be extra careful while doing so. Spreadsheet
 users are in risk of forgetting that their data view has been filtered what
 can lead to mistakes. For example, while calculating sums you may think you
@@ -410,7 +410,7 @@ This means that unlike spreadsheets, databases do not care about:
 </para>
 <itemizedlist>
 <listitem><para>
-The sequence of lines since you can order the lines according to your needs.
+The sequence of rows since you can order the rows according to your needs.
 Moreover, you can view the same data in many views with different orders.
 </para></listitem>
 <listitem><para>
@@ -432,7 +432,7 @@ advantage of databases.
 The latest editions of applications for creating spreadsheets enable you
 to design data-entry forms. Such forms are most useful if your data cannot
 be conveniently displayed in tabular view, &eg; if the text occupies
-too many lines or if all the columns do not fit on the screen.
+too many rows or if all the columns do not fit on the screen.
 </para>
 <para>
 In this case the very way the spreadsheet works is problematic.

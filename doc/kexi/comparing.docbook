@@ -11,7 +11,7 @@
     functionality, they often use different terminology.  For your
     convenience, this appendix shows how the terminology used in
     &kexi; corresponds to that used by other database applications.
-    Thus, this chapter may be useful when migrating databases to from
+    Thus, this chapter may be useful when migrating databases from
     one application to another.
   </para>
   <sect1 id="comparing-data-types">
@@ -25,8 +25,8 @@
       <para>
 	Some of the data types listed here are
 	<firstterm>sub-types</firstterm> of other types.  For example,
-	the <firstterm>Long text</firstterm> type is a sub-type of the
-	<firstterm>Text</firstterm> type.  To use a sub-type in
+	the <emphasis>Long text</emphasis> type is a sub-type of the
+	<emphasis>Text</emphasis> type.  To use a sub-type in
 	&kexi;, you should select the corresponding basic type (in
 	this case, Text) in the table designer, and then select the
 	sub-type using the <guilabel>Subtype</guilabel> setting in the
