@@ -112,7 +112,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
                 <string>Show c&amp;omment indicator</string>
               </property>
               <property name="whatsThis" stdset="0" >
-                <string>If this box is checked cells containing comments will be marked by a small Qt::red triangle at the top right corner.</string>
+                <string>If this box is checked cells containing comments will be marked by a small red triangle at the top right corner.</string>
               </property>
             </widget>
           </item>
