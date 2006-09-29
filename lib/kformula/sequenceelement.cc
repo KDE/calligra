@@ -486,9 +486,6 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
         else {
             cursor->setTo(this, fromPos);
         }
-        if (cursor->isSelectionMode()) {
-            cursor->setMark(fromPos+1);
-        }
 
         // invisible elements are not visible so we move on.
         if (from->isInvisible()) {
@@ -514,9 +511,7 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
     // We already owned the cursor. Ask next child then.
     else if (from == this) {
         uint pos = cursor->getPos();
-		kdWarning() << "Cursor position: " << pos << endl;
         if (pos < children.count()) {
-            kdWarning() << "Cursor pos++\n";
             cursor->setTo(this, pos+1);
             
             // invisible elements are not visible so we move on.
