@@ -561,7 +561,7 @@ VClipartIconItem::~VClipartIconItem()
 	delete m_clipart;
 }
 
-VClipartIconItem* VClipartIconItem::clone()
+VClipartIconItem* VClipartIconItem::clone() const
 {
 	return new VClipartIconItem( *this );
 }

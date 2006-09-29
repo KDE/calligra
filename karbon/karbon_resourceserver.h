@@ -148,7 +148,7 @@ public:
 		return m_height;
 	}
 
-	VClipartIconItem* clone();
+	VClipartIconItem* clone() const;
 
 private:
 	QPixmap m_pixmap;
