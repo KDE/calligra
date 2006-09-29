@@ -1454,7 +1454,7 @@ Duration Task::positiveFloat() {
     return f;
 }
 
-bool Task::isCritical() {
+bool Task::isCritical() const {
     Schedule *cs = m_currentSchedule;
     if (cs == 0) {
         return false;
