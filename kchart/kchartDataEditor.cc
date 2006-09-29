@@ -635,9 +635,6 @@ void kchartDataEditor::removeCurrentRow()
     m_table->removeRow(row);
     m_rowsSB->setValue(m_table->numRows());
     
-    if (row == 0)
-        updateColHeaders();   
-    
     m_modified = true;
 }
 
@@ -655,9 +652,6 @@ void kchartDataEditor::removeCurrentColumn()
 
     m_table->removeColumn(col);
     m_colsSB->setValue(m_table->numCols());
-    
-    if (col == 0)
-        updateRowHeaders();
     
     m_modified = true;
 }
