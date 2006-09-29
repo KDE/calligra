@@ -612,6 +612,8 @@ void EmbeddedChart::loadOasis(const KoXmlElement &element, KoOasisLoadingContext
       if ( range.isValid() )
         setDataArea( range.range() );
     }
+
+    chart()->setCanChangeValue( false  );
 }
 
 
