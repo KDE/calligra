@@ -1504,7 +1504,7 @@ static double ccmath_kbes(double v,double x)
 }
 
 static double ccmath_jbes(double v,double x)
-{ double y,s,t,tp; int p,m;
+{ double y,s,t = 0.,tp; int p,m;
   y=x-8.5; if(y>0.) y*=y; tp=v*v/4.+13.69;
   if(y<tp){ x/=2.; m=(int)x;
     if(x>0.) s=t=exp(v*log(x)-ccmath_gaml(v+1.));
