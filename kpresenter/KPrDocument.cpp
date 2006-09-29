@@ -3229,6 +3229,8 @@ void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list
             kDebug( 33001 ) << "Not found file on disk. Use this( " << soundFile << " ) file." << endl;
             KoStoreDevice dev( _store );
             int size = _store->size();
+            if (size < 0)
+                return;
             // TODO: why not use QByteArray here?
             char *data = new char[size];
             dev.read( data, size );
