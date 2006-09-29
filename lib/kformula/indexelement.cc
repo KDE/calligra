@@ -1586,7 +1586,7 @@ QString IndexElement::getElementName() const
     if ( hasLowerRight() || hasUpperRight() ) {
         if ( ! hasUpperRight() )
             return "msub";
-        if ( ! hasUpperRight() )
+        if ( ! hasLowerRight() )
             return "msup";
     }
     return "msubsup";
