@@ -101,8 +101,8 @@ class Sheet : public Kross::Api::Class<Sheet>
 	 * Example (in Python) :
 	 * @code
 	 * import krosskspreadcore
-     * doc = krosskspreadcore.get("KSpreadDocument")
-     * sheet = doc.currentSheet()
+	 * doc = krosskspreadcore.get("KSpreadDocument")
+	 * sheet = doc.currentSheet()
 	 * for colnr in range( sheet.maxColumn() ):
 	 *     for rownr in range( sheet.maxRow() ):
 	 *         cell = sheet.cell(colnr, rownr)

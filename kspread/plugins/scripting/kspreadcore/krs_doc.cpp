@@ -32,6 +32,9 @@ Doc::Doc(KSpread::Doc* doc)
 	this->addFunction1< Sheet, Kross::Api::Variant >("sheetByName", this, &Doc::sheetByName);
 	this->addFunction0< Kross::Api::Variant >("sheetNames", this, &Doc::sheetNames);
 
+	this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("addSheet", this, &Doc::addSheet);
+	this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("removeSheet", this, &Doc::removeSheet);
+
 	this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("loadNativeXML", this, &Doc::loadNativeXML);
 	this->addFunction0< Kross::Api::Variant >("saveNativeXML", this, &Doc::saveNativeXML);
 
@@ -71,6 +74,30 @@ QStringList Doc::sheetNames()
 	for( ; it.current(); ++it )
 		names.append( it.current()->sheetName() );
 	return names;
+}
+
+bool Doc::addSheet(const QString& sheetname)
+{
+	KSpread::Sheet* sheet = m_doc->map()->createSheet();
+	if(sheet) {
+		if(! sheet->setSheetName(sheetname)) {
+			delete sheet;
+			return false;
+		}
+		m_doc->map()->addSheet(sheet);
+		return true;
+	}
+	return false;
+}
+
+bool Doc::removeSheet(const QString& sheetname)
+{
+	KSpread::Sheet* sheet = m_doc->map()->findSheet(sheetname);
+	if(sheet) {
+		m_doc->map()->takeSheet(sheet);
+		return true;
+	}
+	return false;
 }
 
 bool Doc::loadNativeXML(const QString& xml) {

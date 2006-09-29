@@ -84,6 +84,16 @@ class Doc : public Kross::Api::Class<Doc>
 		QStringList sheetNames();
 
 		/**
+		* Add a new sheet named @p sheetname to the document.
+		*/
+		bool addSheet(const QString& sheetname);
+
+		/**
+		* Remove the sheet named @p sheetname from the document.
+		*/
+		bool removeSheet(const QString& sheetname);
+
+		/**
 		* Loads the native XML document.
 		*/
 		bool loadNativeXML(const QString& xml);
