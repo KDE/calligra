@@ -2186,7 +2186,7 @@ void KPrView::createGUI()
     setRanges();
     setupRulers();
 
-    if ( m_pKPresenterDoc && m_canvas )
+    if ( m_canvas )
     {
         QObject::connect( m_canvas, SIGNAL( stopAutomaticPresentation() ), this, SLOT( stopAutomaticPresentation() ) );
         QObject::connect( m_canvas, SIGNAL( restartPresentation() ), this, SLOT( restartPresentation() ) );
