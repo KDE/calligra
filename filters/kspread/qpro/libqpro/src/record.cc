@@ -626,7 +626,7 @@ QpRecPageName::QpRecPageName(QP_INT16, QpIStream& pIn)
 
 QpRecPageName::~QpRecPageName()
 {
-   delete [] pIn;
+   delete [] cPageName;
 }
 
 const char*
