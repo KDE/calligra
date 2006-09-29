@@ -1,0 +1,187 @@
+KOffice 2.0 TOC proposal
+------------------------
+
+
+Preface
+
+This document gives some suggestions about what the KOffice documentation
+should contain, in the form of annotated tables of contents. The TOCs have
+been compiled from
+- thoughts
+- the current manual contents
+- the guides for OpenOffice.org as published by the OOoAuthors initiative
+
+The current status of the documentation should be available in the file
+status.txt in the same directory as this file.
+
+Contributors to this document:
+	Sander Koning (KOffice documentation coordinator) <sanderkoning@kde.nl>
+	Thomas Zander <zander@kde.org>
+
+Comments and suggestions are more than welcome, either as SVN commits, or as
+e-mails to <sanderkoning@kde.nl>.
+
+--------------------------------------------------------------------------------
+
+In general
+
+An application manual should be divided into three (four) parts:
+
+- the first chapters describe base technologies (working with text, working
+  with frames, working with layers, etc.). Start off with a global
+  introduction (say, 2 pages) that newbees can read and then skip the rest of
+  the respective chapter.
+
+- the next couple of chapters are based on use cases, having one chapter per
+  use case. A use case can be "Create a booklet for my kid with lots of
+  graphics" (google for "pig in the box" for example).
+
+- the following chapters form the reference guide. Describe the menus,
+  toolbars, etcetera - in a professional, but legible way.
+
+- if any technical, application-specific information needs to be included, do
+  so in appendices.
+
+--------------------------------------------------------------------------------
+
+KOffice
+
+Introduction to what KOffice is, how to use the user interface that is common
+to all applications, how to set general configuration options, where to get
+more information.
+
+Since this handbook describes the overall framework, it may as an exception
+derive from the general layout noted above.
+
+What is it / Key features
+	Goal-driven (not implementation-driven) description of what users can do
+	with KOffice.
+The KOffice Workspace
+	A short description of how to use the workspace:
+	- what each application does
+	- tabbed editing
+Working with documents
+	How to manage KOffice documents
+	- open, save, print, ...
+Menus and toolbars
+	Description of common menus and toolbars.
+Configuration
+	(If any configuration options are available for KOShell, describe them
+	here.)
+More information
+	Where to get more information about KOffice
+	(web sites, mailing lists, ...)
+
+--------------------------------------------------------------------------------
+
+KWord
+
+Introduction
+	Basically a copy of the goals described in the general KOffice handbook.
+Working with text
+Working with frames
+Working with tables
+<more technologies?>
+<usecases>
+<reference guide>
+
+--------------------------------------------------------------------------------
+
+KSpread
+
+Introduction
+	Basically a copy of the goals described in the general KOffice handbook.
+Working with cells
+Working with formulas
+<more technologies?>
+<usecases>
+<reference guide>
+
+--------------------------------------------------------------------------------
+
+KPresenter
+
+Introduction
+	Basically a copy of the goals described in the general KOffice handbook.
+Working with slides
+Working with animations
+<more technologies?>
+<usecases>
+<reference guide>
+
+--------------------------------------------------------------------------------
+
+Kexi
+
+Introduction
+	Basically a copy of the goals described in the general KOffice handbook.
+<technologies>
+<usecases>
+<reference guide>
+
+--------------------------------------------------------------------------------
+
+Kivio
+
+Introduction
+	Basically a copy of the goals described in the general KOffice handbook.
+<technologies>
+<usecases>
+<reference guide>
+
+--------------------------------------------------------------------------------
+
+Karbon14
+
+Introduction
+	Basically a copy of the goals described in the general KOffice handbook.
+<technologies>
+<usecases>
+<reference guide>
+
+--------------------------------------------------------------------------------
+
+Krita
+
+Introduction
+	Basically a copy of the goals described in the general KOffice handbook.
+Working with painting tools
+Working with filters
+Working with selections
+Working with layers
+<more technologies?>
+<usecases>
+<reference guide>
+
+--------------------------------------------------------------------------------
+
+KPlato
+
+Introduction
+	Basically a copy of the goals described in the general KOffice handbook.
+<technologies>
+<usecases>
+<reference guide>
+
+--------------------------------------------------------------------------------
+
+KChart
+
+Introduction
+	Basically a copy of the goals described in the general KOffice handbook.
+<technologies>
+<usecases>
+<reference guide>
+
+--------------------------------------------------------------------------------
+
+KFormula
+
+Introduction
+	Basically a copy of the goals described in the general KOffice handbook.
+<technologies>
+<usecases>
+<reference guide>
+
+--------------------------------------------------------------------------------
+
