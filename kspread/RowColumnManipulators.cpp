@@ -431,7 +431,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 ColumnFormat* format = m_sheet->columnFormat(col);
                 m_oldWidths[col] = format->dblWidth();
               }
-              if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
+              if (!cell->isDefault() && !cell->isEmpty() && !cell->isObscured())
               {
                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
@@ -445,7 +445,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->dblHeight();
               }
-              if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
+              if (!cell->isDefault() && !cell->isEmpty() && !cell->isObscured())
               {
                 m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);
@@ -471,7 +471,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 ColumnFormat* format = m_sheet->columnFormat(col);
                 m_oldWidths[col] = format->dblWidth();
               }
-              if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
+              if (!cell->isDefault() && !cell->isEmpty() && !cell->isObscured())
               {
                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
@@ -485,7 +485,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->dblHeight();
               }
-              if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
+              if (!cell->isDefault() && !cell->isEmpty() && !cell->isObscured())
               {
                 m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);

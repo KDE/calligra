@@ -116,7 +116,7 @@ bool AbstractDataManipulator::preProcessing ()
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
         Cell* cell = m_sheet->cellAt(col, row);
-        if (cell != m_sheet->defaultCell())  // non-default cell - remember it
+        if (!cell->isDefault())  // non-default cell - remember it
         {
           ADMStorage st;
 
@@ -197,7 +197,7 @@ bool AbstractDFManipulator::preProcessing ()
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
         Cell* cell = m_sheet->cellAt(col, row);
-        if (cell != m_sheet->defaultCell())  // non-default cell - remember it
+        if (!cell->isDefault())  // non-default cell - remember it
         {
           int colidx = col - range.left();
           int rowidx = row - range.top();
