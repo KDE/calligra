@@ -471,9 +471,7 @@ Gfx::~Gfx() {
   while (res) {
     popResources();
   }
-  if (state) {
-    delete state;
-  }
+  delete state;
 }
 
 void Gfx::display(Object *obj, GBool topLevel) {
