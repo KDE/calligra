@@ -573,5 +573,7 @@ void KWDWriter::addRect(QDomElement e,QRect rect) {
 
 
 KWDWriter::~KWDWriter(){
-	delete(_zoomhandler);
+	delete _zoomhandler;
+	delete _docinfo;
+        delete _doc;
 }
