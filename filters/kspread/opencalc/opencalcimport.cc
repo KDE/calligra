@@ -2250,7 +2250,7 @@ void OpenCalcImport::readInStyle( Format * layout, QDomElement const & style )
     if ( style.hasAttributeNS( ooNS::style, "data-style-name" ) )
     {
       QString * format = m_formats[ style.attributeNS( ooNS::style, "data-style-name", QString::null ) ];
-      FormatType formatType = GenericFormat;
+      FormatType formatType = Generic_format;
 
       if ( !format )
       {
