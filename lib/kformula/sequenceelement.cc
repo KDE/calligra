@@ -452,6 +452,9 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
     // Our parent asks us for a cursor position. Found.
     if (from == getParent()) {
         cursor->setTo(this, children.count());
+        if ( cursor->isSelectionMode() ) {
+            cursor->setMark( children.count() );
+        }
         from->entered( this );
     }
 
