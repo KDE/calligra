@@ -278,7 +278,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propDesc["dataSource"] = i18n("Data Source");
 	m_propDesc["formName"] = i18n("Form Name");
 	m_propDesc["onClickAction"] = i18n("On Click");
-	m_propDesc["autoTabStops"] = i18n("Auto Tab Stops");
+	m_propDesc["autoTabStops"] = i18n("Auto Tab Order");
 	m_propDesc["shadowEnabled"] = i18n("Shadow Enabled");
 
 	m_propDesc["widgetType"] = i18n("Editor Type");
