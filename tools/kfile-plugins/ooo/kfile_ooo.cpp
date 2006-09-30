@@ -347,7 +347,7 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
 QString KOfficePlugin::stringFromNode(const QDomNode &node, const QString &name)
 {
     QString value = node.namedItem(name).toElement().text();
-    return value.isEmpty() ? QString::null : value;
+    return value.isEmpty() ? QString() : value;
 }
 
 void KOfficePlugin::addAttributeInfo(const QDomElement & elem, KFileMetaInfoGroup & group, const QString &attributeName)
@@ -412,9 +412,9 @@ bool KOfficePlugin::writeInfo( const KFileMetaInfo& info) const
     base.appendChild(doc.createElement(metakeywords));
   QDomNode metaKeyNode = base.namedItem(metakeywords);
 
-  QDomNodeList childs = doc.elementsByTagName(metakeyword);
-  for (int i = childs.length(); i >= 0; --i){
-	  metaKeyNode.removeChild( childs.item(i) );
+  QDomNodeList children = doc.elementsByTagName(metakeyword);
+  for (int i = children.length(); i >= 0; --i){
+	  metaKeyNode.removeChild( children.item(i) );
   }
   QStringList keywordList = info[DocumentInfo][metakeyword].value().toString().trimmed().split( ",", QString::SkipEmptyParts );
   for ( QStringList::Iterator it = keywordList.begin(); it != keywordList.end(); ++it ) {
@@ -484,7 +484,7 @@ bool copyZipToZip( const KZip * src, KZip * dest)
 	if (curDirName.isEmpty() || src_dir->name()=="/"){
 		filename = *it;
 	} else {
-		filename = curDirName.join("/") + "/" + *it;
+		filename = curDirName.join("/") + '/' + *it;
 	}
 	dest->writeFile(filename , QString::null, QString::null,b.data(), b.count() );
       } else

@@ -270,11 +270,11 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
     // Check whether we can accept the data
     if ( datatype != "QString" ) {
         kDebug(31000) << "Thesaurus only accepts datatype QString" << endl;
-        return FALSE;
+        return false;
     }
     if ( mimetype != "text/plain" ) {
         kDebug(31000) << "Thesaurus only accepts mimetype text/plain" << endl;
-        return FALSE;
+        return false;
     }
 
     if ( command == "thesaurus" ) {
@@ -292,7 +292,7 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
     } else {
         kDebug(31000) << "Thesaurus does only accept the command 'thesaurus' or 'thesaurus_standalone'" << endl;
         kDebug(31000) << "The command " << command << " is not accepted" << endl;
-        return FALSE;
+        return false;
     }
 
     // Get data and clean it up:
@@ -316,7 +316,7 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
         *((QString*)data) = m_replace->text();
     }
 
-    return TRUE;
+    return true;
 }
 
 
@@ -472,7 +472,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
 
     // Find only whole words. Looks clumsy, but this way we don't have to rely on
     // features that might only be in certain versions of grep:
-    QString term_tmp = ";" + term.trimmed() + ";";
+    QString term_tmp = ';' + term.trimmed() + ';';
     m_thesproc->clearArguments();
     *m_thesproc << "grep" << "-i" << term_tmp;
     *m_thesproc << m_data_file;
@@ -833,7 +833,7 @@ QString Thesaurus::formatLine(QString l)
         int dash_pos = l.indexOf("--");
         QString line_end = l.mid(dash_pos+2, l.length()-dash_pos);
         l = re.cap(1);
-        l += re.cap(2) + " ";
+        l += re.cap(2) + ' ';
         QStringList links = re.cap(3).split(QChar(','), QString::SkipEmptyParts);
         for ( QStringList::Iterator it = links.begin(); it != links.end(); ++it ) {
             QString link = (*it);
