@@ -207,6 +207,7 @@ protected slots:
 	/// Called by the zoom action to set the zoom
 	void zoomChanged( KoZoomMode::Mode mode, int zoom );
 
+	void centerCanvas();
 signals:
 	void zoomChanged( double );
 	void selectionChange();

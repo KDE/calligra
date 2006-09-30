@@ -202,9 +202,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	m_canvasView = new KoCanvasController(this);
 	m_canvasView->setCanvas(m_canvas);
 	m_canvasView->centerCanvas( false );
-
 	layout->addWidget(m_canvasView, 0, 0);
-
 	m_canvasView->show();
 
 	// set up factory
@@ -967,7 +965,14 @@ KarbonView::zoomChanged( KoZoomMode::Mode mode, int zoom )
 
 	zoomHandler->setZoomMode( mode );
 	m_canvas->adjustSize();
-	// TODO adjust the scrollbar positions of the canvas view
+	if( mode == KoZoomMode::ZOOM_PAGE || mode == KoZoomMode::ZOOM_WIDTH )
+		QTimer::singleShot(500, this, SLOT(centerCanvas()));
+}
+
+void
+KarbonView::centerCanvas()
+{
+	m_canvasView->ensureVisible( QRectF(0,0,part()->document().width(),part()->document().height() ) );
 }
 
 void
