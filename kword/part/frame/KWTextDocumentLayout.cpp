@@ -498,6 +498,7 @@ void KWTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     // if still here; then the change was not in any frame, lets relayout the last for now.
     KWFrame *last = m_frameSet->frames().last();
     KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (last->shape()->userData());
+    Q_ASSERT(data);
     data->faul();
 
     m_state->reset();
