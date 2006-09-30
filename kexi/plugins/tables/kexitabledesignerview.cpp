@@ -939,7 +939,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 		setPrimaryKey = false;
 		// this will be toplevel command 
 		CommandGroup *unsetIndexedOrUniquOrNotNullCommand = new CommandGroup(
-			i18n("Set \"%1\" property for field \"%1\"").arg(property.caption()).arg(set["name"].value().toString()) );
+			i18n("Set \"%1\" property for field \"%2\"").arg(property.caption()).arg(set["name"].value().toString()) );
 		toplevelCommand = unsetIndexedOrUniquOrNotNullCommand;
 		d->setPropertyValueIfNeeded( set, pname, QVariant(false,1), unsetIndexedOrUniquOrNotNullCommand );
 		if (pname=="notNull") {
