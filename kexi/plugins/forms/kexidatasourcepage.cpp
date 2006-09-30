@@ -81,7 +81,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 //! @todo unhide this when expression work
 //	m_widgetDSLabel = new QLabel(i18n("Table Field, Query Field or Expression", "Source field or expression:"), this);
 #else
-	m_widgetDSLabel = new QLabel(i18n("Table Field or Query Field", "Source field:"), contents);
+	m_widgetDSLabel = new QLabel(i18n("Table Field or Query Field", "Widget's data source:"), contents);
 #endif
 	m_widgetDSLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_widgetDSLabel->setMargin(2);
@@ -125,7 +125,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_gotoButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	m_gotoButton->setAutoRaise(true);
 	m_gotoButton->setPaletteBackgroundColor(palette().active().background());
-	m_gotoButton->setToolTip( i18n("Go to selected data source"));
+	m_gotoButton->setToolTip( i18n("Go to selected form's data source"));
 	hlyr->addWidget(m_gotoButton);
 	connect(m_gotoButton, SIGNAL(clicked()), this, SLOT(slotGotoSelected()));
 
@@ -135,7 +135,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_clearDSButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	m_clearDSButton->setAutoRaise(true);
 	m_clearDSButton->setPaletteBackgroundColor(palette().active().background());
-	m_clearDSButton->setToolTip( i18n("Clear data source"));
+	m_clearDSButton->setToolTip( i18n("Clear form's data source"));
 	hlyr->addWidget(m_clearDSButton);
 	connect(m_clearDSButton, SIGNAL(clicked()), this, SLOT(clearDataSourceSelection()));
 
