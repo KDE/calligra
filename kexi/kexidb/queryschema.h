@@ -127,6 +127,9 @@ class KEXI_DB_EXPORT OrderByColumn
 		/*! \return string for debugging purposes. */
 		QString debugString() const;
 
+		/*! \return a string like "name ASC" usable for building a SQL statement. */
+		QString toSQLString() const;
+
 	protected:
 		//! Column to sort
 		const QueryColumnInfo* m_column; //!< 0 if m_field is non-0.
@@ -189,6 +192,9 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 
 		/*! \return string for debugging purposes. */
 		QString debugString() const;
+		
+		/*! \return a string like "name ASC, 2 DESC" usable for building a SQL statement. */
+		QString toSQLString() const;
 };
 
 /*! KexiDB::QuerySchema provides information about database query
