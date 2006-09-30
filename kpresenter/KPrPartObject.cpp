@@ -190,6 +190,8 @@ void KPrPartObject::paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
 void KPrPartObject::activate( QWidget *_widget )
 {
     KPrView *view = dynamic_cast<KPrView*>( _widget );
+    if (!view)
+        return;
     KoDocument* part = child->document();
     if ( !part )
         return;
