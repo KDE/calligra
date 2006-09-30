@@ -1254,7 +1254,12 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 		sql += QString::fromLatin1(" WHERE ") + s_where;
 //! \todo (js) add other sql parts
 	//(use wasWhere here)
-
+	
+	// ORDER BY
+	QString orderByString( querySchema.orderByColumnList().toSQLString() );
+	if (!orderByString.isEmpty())
+		sql += (" " + orderByString);
+	
 	//KexiDBDbg << sql << endl;
 	return sql;
 }

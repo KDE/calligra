@@ -15,6 +15,25 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-09-30
+KexiDB
+= support for ORDER BY while generating SQL statements
+2.0: ported
+
+2006-09-29
+Form
+- fixed bug #134504 "Several glitches in Kexi GUI"
+2.0: ported
+Docs
+- fixed bug #134503 "Typos in several Kexi docs"
+
+2006-09-28
+KexiDB
+= use COUNT(*), not COUNT() -- fixes MySQL support
+= missing ORDER BY usage while generating SQL statements
+2.0: ported
+2.0: 'parser' target added
+
 2006-09-25
 Forms
 - The first widget of a given kind should be named "widget" by default,
@@ -26,7 +45,9 @@ KexiDB
 - added support for ORDER BY clause
 2.0: ported
 Query Designer
-- added support for setting order of columns
+TODO- added support for setting order of columns
+
+~ ~ ~ ~ aKademy 2006, Dublin ~ ~ ~ ~
 
 2006-09-19
 Forms

@@ -333,14 +333,30 @@ OrderByColumn::OrderByColumn(const Field& field, bool ascending)
 
 QString OrderByColumn::debugString() const
 {
+	QString orderString( m_ascending ? "ascending" : "descending" );
 	if (m_column) {
 		if (m_pos>-1)
-			return QString("COLUMN_AT_POSITION_%1(%2)")
-				.arg(m_pos+1).arg(m_column->debugString());
+			return QString("COLUMN_AT_POSITION_%1(%2, %3)")
+				.arg(m_pos+1).arg(m_column->debugString()).arg(orderString);
 		else
-			return QString("COLUMN(%1)").arg(m_column->debugString());
+			return QString("COLUMN(%1, %2)").arg(m_column->debugString()).arg(orderString);
 	}
-	return m_field ? QString("FIELD(%1)").arg(m_field->debugString()) : QString("NONE");
+	return m_field ? QString("FIELD(%1, %2)").arg(m_field->debugString()).arg(orderString)
+	 : QString("NONE");
+}
+
+QString OrderByColumn::toSQLString() const
+{
+	QString orderString( m_ascending ? "" : " DESC" );
+	if (m_column) {
+		if (m_pos>-1)
+			return QString::number(m_pos+1) + orderString;
+		else
+			return QString(m_column->aliasOrName()) + orderString;
+	}
+	else {
+		return m_field ? m_field->name() : QString::null;
+	}
 }
 
 //=======================================
@@ -433,6 +449,17 @@ QString OrderByColumnList::debugString() const
 		dbg += (*it).debugString();
 	}
 	return dbg;
+}
+
+QString OrderByColumnList::toSQLString() const
+{
+	QString string;
+	for (OrderByColumn::ListConstIterator it=constBegin(); it!=constEnd(); ++it) {
+		if (!string.isEmpty())
+			string += ", ";
+		string += (*it).toSQLString();
+	}
+	return string;
 }
 
 //=======================================

@@ -841,8 +841,8 @@ TODO Data Types
   with one to four decimal places. Accurate to 15 digits on the left side of the decimal separator 
   and to 4 digits on the right side. 
 -Decimal Number (NUMERIC?)
-  MS Access: Decimal Stores numbers from –10^38–1 through 10^38–1 (.adp), 
-  from –10^28–1 through 10^28–1 (.mdb); decimal precision: 28 B, storage size: 12 B
+  MS Access: Decimal Stores numbers from 10^381 through 10^381 (.adp), 
+  from 10^281 through 10^281 (.mdb); decimal precision: 28 B, storage size: 12 B
 
 
 TODO Migration from Native SQLite3
@@ -913,6 +913,14 @@ ALTER TABLE t1_new RENAME TO t1;
 - provide "Edit->Clear Table Contents" action in forms too
 - autofield: after setting form's data source to a valid value, 
    "unbound" mark should disappear in design time
+- rename "Source field" to "Widget's data source" in the data source pane
+- Designer bug: "Click a container widget (or a form surface itself), 
+   where widgets are inserted and select one of the layout 
+   types from the context menu item Layout Widgets. "
+   "I tried this with the Frame, the Group box and the Tab 
+   widget, the menu item Layout Widgets is not available. You 
+   have to select the widgets inserted in the contrainer widget 
+   to make the menu item available. "
 
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
