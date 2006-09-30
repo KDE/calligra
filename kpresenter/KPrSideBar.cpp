@@ -490,7 +490,8 @@ void KPrThumbBar::moveItem( int oldPos, int newPos )
     // because it was insert after the first one
     if ( newPos == 0 ) {
         //todo do not recreate the pics
-        after->setPixmap(getSlideThumb( 0 ));
+        if (after)
+            after->setPixmap(getSlideThumb( 0 ));
         //take->setPixmap(getSlideThumb( 1 ));
         item->setPixmap(getSlideThumb( 1 ));
     }
