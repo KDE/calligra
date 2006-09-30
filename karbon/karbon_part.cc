@@ -226,7 +226,8 @@ KarbonPart::saveXML()
 }
 
 bool
-KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDomDocument &settings, KoStore *store )
+KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
+                       const KoXmlDocument & settings, KoStore* store )
 {
 	kDebug(38000) << "Start loading OASIS document..." << doc.toString() << endl;
 
@@ -261,11 +262,11 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 	}
 
 	QString masterPageName = "Standard"; // use default layout as fallback
-	QDomElement *master = styles.masterPages()[ masterPageName ];
+	QDomElement *master = oasisStyles.masterPages()[ masterPageName ];
 	if ( !master ) //last test...
-		master = styles.masterPages()[ "Default" ];
+		master = oasisStyles.masterPages()[ "Default" ];
 	Q_ASSERT( master );
-	const QDomElement *style = master ? styles.findStyle( master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
+	const QDomElement *style = master ? oasisStyles.findStyle( master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
 	if( style )
 	{
 		m_pageLayout.loadOasis( *style );
@@ -275,7 +276,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 	else
 		return false;
 
-	KoOasisLoadingContext context( this, styles, store );
+	KoOasisLoadingContext context( this, oasisStyles, store );
 	m_doc.loadOasis( page, context );
 	// do y-mirroring here
 	QMatrix mat;
