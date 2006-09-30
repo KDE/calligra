@@ -323,6 +323,7 @@ bool KugarTemplate::removeReportItem( Q3CanvasItem *item )
             }*/
 
         Band * section = dynamic_cast<Band *>( item );
+        Q_ASSERT( section );
 
         DetailHeader *header = 0;
         DetailFooter *footer = 0;
