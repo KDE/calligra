@@ -262,7 +262,7 @@ void Table::generate(QTextStream& out)
 	generateBottomLineBorder(out, row - 1);
 	out << "\\end{tabular}" << endl << endl;
 	desindent();*/
-	kDebug(30522) << "END OF GENERATINO OF A TABLE" << endl;
+	kDebug(30522) << "END OF GENERATION OF A TABLE" << endl;
 }
 
 /*******************************************/
@@ -284,7 +284,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 			cell = new Cell(row, index);
 
 		/* If the element has a border display it here */
-		border[ index ] = cell->hasTopBorder();
+		border[ index - 1 ] = cell->hasTopBorder();
 		if( ! cell->hasTopBorder() )
 			fullLine = false;
 	}
@@ -340,7 +340,7 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
 			cell = new Cell(row, index);
 
 		/* If the element has a border display it here */
-		border[ index ] = cell->hasBottomBorder();
+		border[ index - 1 ] = cell->hasBottomBorder();
 		if( ! cell->hasBottomBorder() )
 			fullLine = false;
 	}
