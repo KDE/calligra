@@ -491,7 +491,7 @@ public:
   uint fontLength;
   uint length_namecell;
   uint length_text;
-  uint currentToken;
+  int currentToken;
   uint rangeCount;
 };
 
@@ -1002,64 +1002,62 @@ void CellEditor::setUpdateChoice(bool state)
 
 void CellEditor::updateChoice()
 {
-//   kDebug() << k_funcinfo << endl;
+    if (!d->updateChoice)
+        return;
 
-  if (!d->updateChoice)
-    return;
+    // prevent recursion
+    d->updatingChoice = true;
 
-//   // prevent recursion
-//   d->updateChoice = false; // TODO nescessary?
-  d->updatingChoice = true;
+    Selection* choice = d->canvas->choice();
 
-  Selection* choice = d->canvas->choice();
+    if (choice->isEmpty())
+        return;
 
-  if (choice->isEmpty())
-    return;
+    if (!choice->activeElement())
+        return;
 
-  if (!choice->activeElement())
-    return;
+    QString name_cell = choice->activeSubRegionName();
 
-  // only one element TODO
-  if (++choice->constBegin() == choice->constEnd())
-  {
-  }
-
-  QString name_cell = choice->activeSubRegionName();
-
-  Tokens tokens = d->highlighter->formulaTokens();
-  uint start = 1;
-  uint length = 0;
-  if (!tokens.empty())
-  {
-    Token token = tokens[d->currentToken];
-    Token::Type type = token.type();
-    if (type == Token::Cell || type == Token::Range)
+    Tokens tokens = d->highlighter->formulaTokens();
+    uint start = 1;
+    uint length = 0;
+    if (!tokens.empty())
     {
-      start = token.pos() + 1; // don't forget the '='!
-      length = token.text().length();
+        if ( d->currentToken < tokens.count() )
+        {
+            Token token = tokens[d->currentToken];
+            Token::Type type = token.type();
+            if (type == Token::Cell || type == Token::Range)
+            {
+                start = token.pos() + 1; // don't forget the '='!
+                length = token.text().length();
+            }
+            else
+            {
+                start = token.pos() + token.text().length() + 1;
+            }
+        }
+        else
+        {
+            // sanitize
+            d->currentToken = 0;
+        }
     }
-    else
-    {
-      start = token.pos() + token.text().length() + 1;
-    }
-  }
 
-  d->length_namecell = name_cell.length();
-  d->length_text = text().length();
-    //kDebug(36001) << "updateChooseMarker2 len=" << d->length_namecell << endl;
+    d->length_namecell = name_cell.length();
+    d->length_text = text().length();
 
-  QString oldText = text();
-  QString newText = oldText.left(start) + name_cell + oldText.right(d->length_text - start - length);
+    QString oldText = text();
+    QString newText = oldText.left(start) + name_cell + oldText.right(d->length_text - start - length);
 
-  setCheckChoice( false );
-  setText( newText );
-  setCheckChoice( true );
-  setCursorPosition( start + d->length_namecell );
+    setCheckChoice( false );
+    setText( newText );
+    setCheckChoice( true );
+    setCursorPosition( start + d->length_namecell );
 
-  d->canvas->view()->editWidget()->setText( newText );
+    d->canvas->view()->editWidget()->setText( newText );
 
-//   d->updateChoice = false;
-  d->updatingChoice = false;
+    d->updatingChoice = false;
 }
 
 void CellEditor::resizeEvent( QResizeEvent* )
