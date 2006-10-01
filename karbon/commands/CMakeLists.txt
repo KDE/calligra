@@ -8,8 +8,7 @@ set(karboncommands_SRCS
     vcommand.cc 
     vfillcmd.cc 
     vflattencmd.cc 
-    vdeletenodescmd.cc 
-    vlayercmd.cc 
+    vlayercmd.cc
     vreplacingcmd.cc 
     vshapecmd.cc 
     vstrokecmd.cc 

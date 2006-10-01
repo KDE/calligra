@@ -113,7 +113,6 @@
 #include "vcanvas.h"
 #include "KoCanvasController.h"
 #include "karbon_drag.h"
-// #include "vselectnodestool.h"
 
 #include <unistd.h>
 

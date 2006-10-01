@@ -1148,8 +1148,6 @@ VLayersTab::slotCommandExecuted( VCommand* command )
 /* TODO Port to flake
 	if( dynamic_cast<VLayerCmd*>( command ) 
 	|| dynamic_cast<VDeleteCmd*>( command ) 
-	|| dynamic_cast<VGroupCmd*>( command ) 
-	|| dynamic_cast<VUnGroupCmd*>( command ) 
 	|| dynamic_cast<VZOrderCmd*>( command ) )
 		updateLayers();*/
 }

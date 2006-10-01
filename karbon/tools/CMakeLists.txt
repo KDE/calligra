@@ -7,8 +7,7 @@ include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOPAINTER_INCLUDES} ${
 set(karbon_defaulttools_PART_SRCS 
    vcurvefit.cc 
    vrotatetool.cc 
-   vselectnodestool.cc 
-   vselecttool.cc 
+   vselecttool.cc
    vsheartool.cc 
    vellipsetool.cc 
    vgradienttool.cc 

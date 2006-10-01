@@ -35,7 +35,6 @@
 #include "vrectangletool.h"
 #include "vrotatetool.h"
 #include "vroundrecttool.h"
-#include "vselectnodestool.h"
 #include "vselecttool.h"
 #include "vshapetool.h"
 #include "vsheartool.h"
@@ -62,7 +61,6 @@ VDefaultTools::VDefaultTools(QObject *parent, const QStringList &)
 	{
 		KarbonToolRegistry* r = KarbonToolRegistry::instance();
 		r->add(new KarbonToolFactory<VSelectTool>());
-		r->add(new KarbonToolFactory<VSelectNodesTool>());
 		r->add(new KarbonToolFactory<VRotateTool>());
 		r->add(new KarbonToolFactory<VShearTool>());
 		r->add(new KarbonToolFactory<VEllipseTool>());
