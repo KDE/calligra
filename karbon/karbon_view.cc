@@ -195,6 +195,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 	m_canvas = new KarbonCanvas( p->document() );
 	m_canvas->setCommandHistory( p->commandHistory() );
+	m_canvas->setParent( this );
 
 	connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 	//connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
@@ -284,8 +285,6 @@ KarbonView::~KarbonView()
 	delete m_cursorCoords;
 
 	delete m_painterFactory;
-
-	delete m_canvas;
 
 	delete m_toolController;
 }
