@@ -249,6 +249,7 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
         KMessageBox::sorry( 0L, i18n("Unable to open password protected files.\n"
                                      "The password algorithm has not been published")
                           );
+        delete lRec;
         return KoFilter::NotImplemented;
       }
 
