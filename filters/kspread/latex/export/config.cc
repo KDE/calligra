@@ -64,16 +64,16 @@ void Config::indent()
 	_tabulation = _tabulation + getTabSize();
 }
 
-void Config::desindent()
+void Config::unindent()
 {
 	if ((_tabulation - getTabSize()) > 0)
 	{
-		kDebug(30522) << "Desindent tab = " << (_tabulation - getTabSize()) << endl;
+		kDebug(30522) << "Unindent tab = " << (_tabulation - getTabSize()) << endl;
 		_tabulation = _tabulation - getTabSize();
 	}
 	else
 	{
-		kDebug(30522) << "Desindent tab = 0" << endl;
+		kDebug(30522) << "Unindent tab = 0" << endl;
 		_tabulation = 0;
 	}
 }

@@ -213,15 +213,15 @@ void Table::generate(QTextStream& out)
 		rowNumber++;
 	}
 	generateBottomLineBorder(out, rowNumber - 1);
-	desindent();
+	unindent();
 	writeIndent(out);
 	out << "\\end{tabular}" << endl << endl;
-	desindent();
+	unindent();
 	
 	if(getOrientation() == "Portrait")
 	{
 		out << "\\end{sidewaystable}" << endl;
-		desindent();
+		unindent();
 	}
 	/*Element* elt = 0;
 	kDebug(30522) << "GENERATION OF A TABLE " << count() << endl;
@@ -261,7 +261,7 @@ void Table::generate(QTextStream& out)
 	}
 	generateBottomLineBorder(out, row - 1);
 	out << "\\end{tabular}" << endl << endl;
-	desindent();*/
+	unindent();*/
 	kDebug(30522) << "END OF GENERATION OF A TABLE" << endl;
 }
 

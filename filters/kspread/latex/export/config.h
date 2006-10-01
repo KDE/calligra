@@ -30,8 +30,8 @@
 /***********************************************************************/
 
 /**
- * This class hold all parameters and configuration from a file or from
- * the filter configuration dialog box. it's a singleton, so you may use
+ * This class holds all parameters and configuration from a file or from
+ * the filter configuration dialog box. It's a singleton, so you may use
  * the instance() method to get this instance.
  */
 class Config
@@ -96,8 +96,8 @@ class Config
 		/* ==== Setters ==== */
 
 		/**
-		 * Initialise the tab size.
-		 * @param size New size. Must be superior or eguals to 0.
+		 * Initialize the tab size.
+		 * @param size New size. Must be greater or equal to 0.
 		 */
 		void setTabSize(int size)
 		{
@@ -125,7 +125,7 @@ class Config
 		
 		/* ==== Helpful functions ==== */
 		void indent();
-		void desindent();
+		void unindent();
 
 		void writeIndent(QTextStream& out);
 
@@ -134,7 +134,7 @@ class Config
 		 * Constructors
 		 *
 		 * Creates a new instance of Config.
-		 * Initialise param. at default value.
+		 * Initialize params to default values.
 		 */
 		Config(); /* Ensure singleton */
 

@@ -128,7 +128,7 @@ void Cell::generate(QTextStream& out, Table* table)
 	}
 	generateBottomLineBorder(out, row - 1);
 	out << "\\end{tabular}" << endl << endl;
-	desindent();*/
-	kDebug(30522) << "END OF GENERATINO OF A CELL" << endl;
+	unindent();*/
+	kDebug(30522) << "END OF GENERATION OF A CELL" << endl;
 }
 

@@ -89,7 +89,7 @@ void Spreadsheet::generate(QTextStream &out, bool hasPreamble)
 
 	if(hasPreamble)
 		out << "\\end{document}" << endl;
-	desindent();
+	unindent();
 	if(getIndentation() != 0)
 			kError(30522) << "Error : indent != 0 at the end ! " << endl;
 }
