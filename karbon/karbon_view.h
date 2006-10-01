@@ -180,8 +180,6 @@ public slots:
 	void setLineWidth();
 	void selectionChanged();
 
-	void slotActiveToolChanged( VTool * );
-
 	void togglePageMargins(bool);
 	void showRuler();
 	void showGrid();

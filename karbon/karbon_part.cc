@@ -440,16 +440,6 @@ KarbonPart::saveOasisSettings( KoXmlWriter &/*settingsWriter*/ )
 }
 
 void
-KarbonPart::insertObject( VObject* object )
-{
-	// don't repaint here explicitly. some commands might want to insert many
-	// objects.
-	// TODO: porting to flake
-	//m_doc.append( object );
-	setModified( true );
-}
-
-void
 KarbonPart::addCommand( VCommand* cmd, bool repaint )
 {
 	kDebug(38000) << "KarbonPart::addCommand: please port to new command handling" << endl;
@@ -649,6 +639,7 @@ KarbonPart::addShape( KoShape* shape )
 		canvas->adjustSize();
 		canvas->update();
 	}
+	setModified( true );
 }
 
 void
@@ -661,6 +652,7 @@ KarbonPart::removeShape( KoShape* shape )
 		canvas->adjustSize();
 		canvas->update();
 	}
+	setModified( true );
 }
 
 #include "karbon_part.moc"

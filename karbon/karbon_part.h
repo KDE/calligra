@@ -64,9 +64,6 @@ public:
 
 	virtual void addShell( KoMainWindow *shell );
 
-	/// insert a new vobject
-	void insertObject( VObject* object );
-
 	/// insert a command into the undo/redo-history:
 	void addCommand( VCommand* cmd, bool repaint = false );
 

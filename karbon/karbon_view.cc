@@ -886,16 +886,6 @@ KarbonView::separatePath()
 }
 
 void
-KarbonView::slotActiveToolChanged( VTool *tool )
-{
-	debugView(QString("KarbonView::slotActiveToolChanged(%1)").arg(tool->uiname()));
-
-	toolController()->setCurrentTool( tool );
-
-	m_canvas->updateCanvas(m_canvas->canvasWidget()->rect());
-}
-
-void
 KarbonView::viewModeChanged()
 {
 	debugView("KarbonView::viewModeChanged()");
