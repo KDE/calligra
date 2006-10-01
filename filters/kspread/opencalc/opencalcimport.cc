@@ -1683,6 +1683,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
   QDomElement e = element->firstChild( ).toElement();
   int precision = 0;
   int leadingZ  = 1;
+#warning (coverity) what's the purpose of this constant?
   bool thousandsSep = false;
   bool negRed = false;
 
