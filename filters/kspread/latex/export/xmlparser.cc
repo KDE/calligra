@@ -76,7 +76,7 @@ QDomNode XmlParser::getChild(QDomNode node, QString name)
 {
 	QDomNode childNode = getChild(node, name, 0);
 	kDebug(30522) << childNode.nodeName() << endl;
-	return node;
+	return childNode;
 }
 
 bool XmlParser::isChild(QDomNode node, QString name)
