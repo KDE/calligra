@@ -86,6 +86,8 @@ public:
     /** Sets the margins in pixel used when fitting to page or to width. */
     void setFitMargin( int fitMarginX, int fitMarginY );
 
+    virtual QPoint documentOrigin();
+
 public slots:
 
     /**

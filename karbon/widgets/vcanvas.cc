@@ -214,5 +214,10 @@ KoUnit::Unit KarbonCanvas::unit() {
     return m_doc->unit();
 }
 
+QPoint KarbonCanvas::documentOrigin()
+{
+    return m_origin;
+}
+
 #include "vcanvas.moc"
 
