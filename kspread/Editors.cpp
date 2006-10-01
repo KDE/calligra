@@ -657,13 +657,14 @@ void CellEditor::functionAutoComplete( const QString& item )
   textCursor.setPosition( lastToken.pos() + 1 );
   textCursor.setPosition( lastToken.pos() + lastToken.text().length() + 1,
                             QTextCursor::KeepAnchor );
+  d->textEdit->setTextCursor( textCursor );
   d->textEdit->insertPlainText( item );
   d->textEdit->blockSignals( false );
 }
 
 void CellEditor::slotCursorPositionChanged()
 {
-//   kDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo << endl << "position: " << cursorPosition() << endl;
 
   // TODO Stefan: optimize this function!
 
@@ -918,7 +919,7 @@ void CellEditor::slotTextChanged()
     {
       QString tmp = t + " %";
       d->textEdit->setPlainText(tmp);
-      d->textEdit->textCursor().setPosition( 1 );
+      setCursorPosition( 1 );
       return;
     }
   }
@@ -1056,7 +1057,6 @@ void CellEditor::updateChoice()
   setCursorPosition( start + d->length_namecell );
 
   d->canvas->view()->editWidget()->setText( newText );
-    //kDebug(36001) << "old=" << old << " len=" << d->length_namecell << " pos=" << pos << endl;
 
 //   d->updateChoice = false;
   d->updatingChoice = false;
@@ -1113,7 +1113,7 @@ void CellEditor::handleKeyPressEvent( QKeyEvent * _ev )
     newString += tmp2;
 
     d->textEdit->setPlainText(newString);
-    d->textEdit->textCursor().setPosition( cur );
+    setCursorPosition( cur );
 
     _ev->accept();
 
@@ -1137,17 +1137,17 @@ QString CellEditor::text() const
 
 void CellEditor::setText(QString text)
 {
-  d->textEdit->setPlainText(text);
-  //Usability : It is usually more convenient if the cursor is positioned at the end of the text so it can
-  //be quickly deleted using the backspace key
+    d->textEdit->setPlainText(text);
+    //Usability : It is usually more convenient if the cursor is positioned at the end of the text so it can
+    //be quickly deleted using the backspace key
 
-  //This also ensures that the caret is sized correctly for the text
-  d->textEdit->textCursor().setPosition( text.length() );
+    // This also ensures that the caret is sized correctly for the text
+    setCursorPosition( text.length() );
 
     if (d->fontLength == 0)
     {
-      QFontMetrics fm( d->textEdit->font() );
-      d->fontLength = fm.width('x');
+        QFontMetrics fm( d->textEdit->font() );
+        d->fontLength = fm.width('x');
     }
 }
 
@@ -1158,8 +1158,10 @@ int CellEditor::cursorPosition() const
 
 void CellEditor::setCursorPosition( int pos )
 {
-  d->textEdit->textCursor().setPosition( pos );
-  canvas()->view()->editWidget()->setCursorPosition( pos );
+    QTextCursor textCursor( d->textEdit->textCursor() );
+    textCursor.setPosition( pos );
+    d->textEdit->setTextCursor( textCursor );
+    canvas()->view()->editWidget()->setCursorPosition( pos );
 }
 
 bool CellEditor::eventFilter( QObject* o, QEvent* e )
@@ -1220,8 +1222,6 @@ bool CellEditor::eventFilter( QObject* o, QEvent* e )
 
 void CellEditor::setCursorToRange(uint pos)
 {
-//   kDebug() << k_funcinfo << endl;
-
   d->updatingChoice = true;
   uint counter = 0;
   Tokens tokens = d->highlighter->formulaTokens();
