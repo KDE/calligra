@@ -1,3 +1,6 @@
+NOTE:	This TODO file is outdated, and need to be fixed.
+
+
 Legend
 ======
 
@@ -14,7 +17,7 @@ inge	Inge has taken this subtask
 RAPH	Raphael has taken this task
 
 
-Before release of KOffice 1.5.0
+Before release of KOffice 1.6.0
 ===============================
 
 Item								   Prio Status
@@ -53,35 +56,28 @@ After the feature freeze
     - insert rows / columns before current cell				  ----
   + Adjust labels when inserting / deleting rows / columns	      1 ----
 
-* OpenDocument Support
-  Item							Load	Save
-  ----------------------------------------------------------------------------
-  + Handle all chart types				----	----
-  + Plot area						----	----
-  + Legend						DONE	DONE
-  + Axes						----	----
-
-* Scripting
-  + DCOP for data manipulation					      2 ----
-    - class KChartData
-  + DCOP for chart manipulation					      2 ----
-    - class KChartParam							  done
 
 
-* Structure
-  + put dialogs in their own directory				      3 ----
-
-
-After 1.5
-=========
+After 1.6 (1.6.x)
+=================
 
 
 Item								   Prio Status
 ------------------------------------------------------------------------------
 
+* OpenDocument Support -- read and write all tags and attributes
+
+  Item							Load	Save
+  ----------------------------------------------------------------------------
+  + Handle all chart types				----	----
+  + Plot area						----	----
+    - Data in rows / columns				done	done
+  + Legend						DONE	DONE
+  + Axes						----	----
+
 * Bugs
 
-* Wishes
+* Integration with rest of KOffice.
   + Give KChart the same page layout dialog as KSpread.		      1 ----
        (Kivio has a simpler variation with only one page.)
 
@@ -103,17 +99,55 @@ Item								   Prio Status
   + According to Fredrik, background page works badly all over	      2 ----
 
 * Wizard
+  + -- Nothing so far --
 
 * Manual
+  + -- Nothing so far --
 
 * Filters
+  + -- Nothing so far --
 
 * KDChart (See also above)
+  + -- Nothing so far --
 
 
 ================================================================
-                  After release of KOffice 1.5
+			     Towards 2.0
 ================================================================
+
+
+Large items
+-----------
+
+* Separate Model / View
+  We should create a new model that contains all of the document
+  and let the embedded KDChart component become a viewer instead
+  of a combined viewer and data storage.
+
+  Some parts of the KDChart data structures could be reused, e.g. 
+  the Data Storage (KDChartData).  This model must be able to 
+  redraw itself, just like the present KoDocument can.
+
+  + Make all the data be contained in the Model, so far being
+    the part.
+
+* Create a Flake shape of KChart
+
+* Integrate KDChart 2.0
+
+* Scripting
+  + Kross support for 
+  + DCOP for data manipulation					      2 ----
+    - class KChartData
+  + DCOP for chart manipulation					      2 ----
+    - class KChartParam							  done
+
+* Structure
+  + put dialogs in their own directory				      3 ----
+
+
+Smaller items
+-------------
 
 * Config dialog
   + Check *all* subpages for uglyness and bugs			     S1 INGE
