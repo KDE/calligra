@@ -109,6 +109,8 @@ void ShowDialog::slotOk()
     for ( QStringList::Iterator it = listSheet.begin(); it != listSheet.end(); ++it )
     {
         sheet=m_pView->doc()->map()->findSheet( *it );
+        if (!sheet)
+            continue;
         KCommand* command = new ShowSheetCommand( sheet );
         macroUndo->addCommand( command );
     }
