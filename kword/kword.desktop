@@ -7,7 +7,6 @@ Name[eo]=Verkilo
 Name[fo]=KOrð
 Name[hi]=के-वर्ड
 Name[lo]=ເອກະສານຂໍ້ຄວາມ K
-Name[lv]=KWords
 Name[sv]=Kword
 Name[th]=เอกสารข้อความ K
 Exec=kword %u
