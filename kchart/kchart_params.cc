@@ -612,12 +612,12 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 	    continue;
     }
 
-    // Load the axes.
-    if ( !loadOasisAxis( xAxisElem, loadingContext, errorMessage,
+    // Load the axes.  Pie charts use only the y axis.
+    if ( m_chartType != Pie
+	 && !loadOasisAxis( xAxisElem, loadingContext, errorMessage,
 			 KDChartAxisParams::AxisPosBottom) )
 	return false;
-    if ( m_chartType != Pie
-	 && !loadOasisAxis( yAxisElem, loadingContext, errorMessage,
+    if ( !loadOasisAxis( yAxisElem, loadingContext, errorMessage,
 			    KDChartAxisParams::AxisPosLeft) )
 	return false;
 
@@ -964,6 +964,7 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
     // chart:series-source
     plotAreaStyle.addProperty( "chart:series-source",
 			       ( dataDirection() == DataRows ) ? "rows" : "columns" );
+
     // Register the style, and get back its auto-generated name
     const QString styleName = mainStyles.lookup( plotAreaStyle, "ch" );
 
@@ -972,6 +973,7 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
     saveOasisAxis( bodyWriter, mainStyles, KDChartAxisParams::AxisPosBottom, "x" );
     saveOasisAxis( bodyWriter, mainStyles, KDChartAxisParams::AxisPosLeft, "y" );
 
+    // TODO chart:series
     // TODO chart:wall
     // TODO chart:floor
 }
