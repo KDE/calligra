@@ -25,7 +25,7 @@ see a smaller part of the image. You can zoom in by choosing the
 <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom
 in</guimenuitem></menuchoice> menu item, by clicking the
 <inlinemediaobject><imageobject><imagedata
-fileref="toolbars-button-zoomin.png" format="PNG"></imagedata>
+fileref="toolbars-button-zoomin.png" format="PNG"/>
 </imageobject></inlinemediaobject> <guilabel>Zoom in</guilabel> button on the
 toolbar, or by pressing the <keycombo
 action="simul">&Ctrl;<keycap>+</keycap></keycombo> keys.
@@ -39,7 +39,7 @@ losing some detail. Zooming out can be done by choosing the
 <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom
 out</guimenuitem></menuchoice> menu item, by clicking the
 <inlinemediaobject><imageobject><imagedata
-fileref="toolbars-button-zoomout.png" format="PNG"></imagedata>
+fileref="toolbars-button-zoomout.png" format="PNG"/>
 </imageobject></inlinemediaobject> <guilabel>Zoom out</guilabel> button on the
 toolbar, or by pressing the <keycombo
 action="simul">&Ctrl;<keycap>-</keycap></keycombo> keys.
