@@ -135,6 +135,8 @@ KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QB
     for( int i = 0; i < sheets.count() ; ++i )
     {
       sheet = ksdoc->map()->findSheet( sheets[i] );
+      if (!sheet)
+          continue;
 
       QString file = fileName( filenameBase, sheet->sheetName(), sheets.count() > 1 );
 
