@@ -5467,7 +5467,8 @@ void PPTReader::loadRecord( Record* parent )
   unsigned long type = readU16( buffer + 2 );
   unsigned long size = readU32( buffer + 4 );
   unsigned long nextpos = d->docStream->tell() + size;
-  unsigned lastSize;
+#warning what use does this constant have?
+  unsigned lastSize = 0;
   // create the record using the factory
   Record* record = Record::create( type );
   if( record )
