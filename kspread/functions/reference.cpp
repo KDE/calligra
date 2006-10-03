@@ -252,7 +252,7 @@ Value func_lookup (valVector args, ValueCalc *calc, FuncExtra *)
   unsigned rows = lookup.rows();
   if ((cols != rr.columns()) || (rows != rr.rows()))
     return Value::errorVALUE();
-  Value res;
+  Value res = Value::errorNA();
 
   // now traverse the array and perform comparison
   for (unsigned r = 0; r < rows; ++r)
@@ -260,7 +260,7 @@ Value func_lookup (valVector args, ValueCalc *calc, FuncExtra *)
     {
       // update the result, return if we cross the line
       Value le = lookup.element (c, r);
-      if (calc->lower (lookup, le) || calc->equal (lookup, le))
+      if (calc->lower (le, num) || calc->equal (num, le))
         res = rr.element (c, r);
       else
         return res;
