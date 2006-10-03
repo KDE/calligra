@@ -2187,27 +2187,24 @@ void KPrView::createGUI()
     setRanges();
     setupRulers();
 
-    if ( m_canvas )
-    {
-        QObject::connect( m_canvas, SIGNAL( stopAutomaticPresentation() ), this, SLOT( stopAutomaticPresentation() ) );
-        QObject::connect( m_canvas, SIGNAL( restartPresentation() ), this, SLOT( restartPresentation() ) );
+    QObject::connect( m_canvas, SIGNAL( stopAutomaticPresentation() ), this, SLOT( stopAutomaticPresentation() ) );
+    QObject::connect( m_canvas, SIGNAL( restartPresentation() ), this, SLOT( restartPresentation() ) );
 
-        connect( getVRuler(), SIGNAL( addGuide( const QPoint &, bool, int ) ),
-                 &( m_canvas->guideLines() ), SLOT( addGuide( const QPoint &, bool, int ) ) );
-        connect( getVRuler(), SIGNAL( moveGuide( const QPoint &, bool, int ) ),
-                 &( m_canvas->guideLines() ), SLOT( moveGuide( const QPoint &, bool, int ) ) );
-        connect( getHRuler(), SIGNAL( addGuide( const QPoint &, bool, int ) ),
-                 &( m_canvas->guideLines() ), SLOT( addGuide( const QPoint &, bool, int ) ) );
-        connect( getHRuler(), SIGNAL( moveGuide( const QPoint &, bool, int ) ),
-                 &( m_canvas->guideLines() ), SLOT( moveGuide( const QPoint &, bool, int ) ) );
-        connect( &( m_canvas->guideLines() ), SIGNAL( moveGuides( bool ) ),
-                 m_canvas, SLOT( setPaintGuides( bool ) ) );
-        connect( &( m_canvas->guideLines() ), SIGNAL( paintGuides( bool ) ),
-                 m_canvas, SLOT( setPaintGuides( bool ) ) );
-        connect( &( m_canvas->guideLines() ), SIGNAL( guideLinesChanged( KoView * ) ),
-                 m_pKPresenterDoc, SLOT( slotGuideLinesChanged( KoView * ) ) );
-        m_canvas->guideLines().setGuideLines( m_pKPresenterDoc->horizontalGuideLines(), m_pKPresenterDoc->verticalGuideLines() );
-    }
+    connect( getVRuler(), SIGNAL( addGuide( const QPoint &, bool, int ) ),
+             &( m_canvas->guideLines() ), SLOT( addGuide( const QPoint &, bool, int ) ) );
+    connect( getVRuler(), SIGNAL( moveGuide( const QPoint &, bool, int ) ),
+             &( m_canvas->guideLines() ), SLOT( moveGuide( const QPoint &, bool, int ) ) );
+    connect( getHRuler(), SIGNAL( addGuide( const QPoint &, bool, int ) ),
+             &( m_canvas->guideLines() ), SLOT( addGuide( const QPoint &, bool, int ) ) );
+    connect( getHRuler(), SIGNAL( moveGuide( const QPoint &, bool, int ) ),
+             &( m_canvas->guideLines() ), SLOT( moveGuide( const QPoint &, bool, int ) ) );
+    connect( &( m_canvas->guideLines() ), SIGNAL( moveGuides( bool ) ),
+             m_canvas, SLOT( setPaintGuides( bool ) ) );
+    connect( &( m_canvas->guideLines() ), SIGNAL( paintGuides( bool ) ),
+             m_canvas, SLOT( setPaintGuides( bool ) ) );
+    connect( &( m_canvas->guideLines() ), SIGNAL( guideLinesChanged( KoView * ) ),
+             m_pKPresenterDoc, SLOT( slotGuideLinesChanged( KoView * ) ) );
+    m_canvas->guideLines().setGuideLines( m_pKPresenterDoc->horizontalGuideLines(), m_pKPresenterDoc->verticalGuideLines() );
 
     if ( sidebar )
     {
