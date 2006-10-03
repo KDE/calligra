@@ -80,7 +80,7 @@ class Opcode
 public:
 
   enum { Nop = 0, Load, Ref, Cell, Range, Function, Add, Sub, Neg, Mul, Div,
-    Pow, Concat, Not, Equal, Less, Greater };
+    Pow, Concat, Not, Equal, Less, Greater, Array };
 
   unsigned type;
   unsigned index;
@@ -150,6 +150,11 @@ Token::Op KSpread::matchOperator( const QString& text )
         case '<': result = Token::Less; break;
         case '>': result = Token::Greater; break;
         case '%': result = Token::Percent; break;
+#ifdef KSPREAD_INLINE_ARRAYS
+        case '{': result = Token::CurlyBra; break;
+        case '}': result = Token::CurlyKet; break;
+        case '|': result = Token::Pipe; break;
+#endif
         default : result = Token::InvalidOp; break;
     }
   }
@@ -185,6 +190,12 @@ static int opPrecedence( Token::Op op )
     case Token::Greater      : prec = 1; break;
     case Token::LessEqual    : prec = 1; break;
     case Token::GreaterEqual : prec = 1; break;
+#ifdef KSPREAD_INLINE_ARRAYS
+    // FIXME Stefan: I don't know wether zero is right for this case. :-(
+    case Token::CurlyBra     : prec = 0; break;
+    case Token::CurlyKet     : prec = 0; break;
+    case Token::Pipe         : prec = 0; break;
+#endif
     case Token::Semicolon    : prec = 0; break;
     case Token::RightPar     : prec = 0; break;
     case Token::LeftPar      : prec = -1; break;
@@ -895,6 +906,24 @@ void Formula::compile( const Tokens& tokens ) const
         }
      }
 
+#ifdef KSPREAD_INLINE_ARRAYS
+    // are we entering an inline array ?
+    // if token is operator, and stack already has: { arg
+    if( tokenType == Token::Operator )
+    if( syntaxStack.itemCount() >= 2 )
+    {
+        Token arg = syntaxStack.top();
+        Token bra = syntaxStack.top( 1 );
+        if( !arg.isOperator() )
+        if( bra.asOperator() == Token::CurlyBra )
+        {
+          argStack.push( argCount );
+          argStack.push( 1 ); // row count
+          argCount = 1;
+        }
+     }
+#endif
+
      // special case for percentage
     if( tokenType == Token::Operator )
     if( token.asOperator() == Token::Percent )
@@ -920,7 +949,7 @@ void Formula::compile( const Tokens& tokens ) const
         if( !ruleFound )
         if( syntaxStack.itemCount() >= 5 )
         if( ( token.asOperator() == Token::RightPar ) ||
-        ( token.asOperator() == Token::Semicolon ) )
+            ( token.asOperator() == Token::Semicolon ) )
         {
           Token arg2 = syntaxStack.top();
           Token sep = syntaxStack.top( 1 );
@@ -986,6 +1015,82 @@ void Formula::compile( const Tokens& tokens ) const
           }
         }
 
+#ifdef KSPREAD_INLINE_ARRAYS
+        // rule for inline array elements, if token is ; or | or }
+        // { arg1 ; arg2 -> { arg
+        if( !ruleFound )
+        if( syntaxStack.itemCount() >= 4 )
+        if( ( token.asOperator() == Token::Semicolon ) ||
+            ( token.asOperator() == Token::CurlyKet ) ||
+            ( token.asOperator() == Token::Pipe ) )
+        {
+          Token arg2 = syntaxStack.top();
+          Token sep = syntaxStack.top( 1 );
+          Token arg1 = syntaxStack.top( 2 );
+          Token bra = syntaxStack.top( 3 );
+          if( !arg2.isOperator() )
+          if( sep.asOperator() == Token::Semicolon )
+          if( !arg1.isOperator() )
+          if( bra.asOperator() == Token::CurlyBra )
+          {
+            ruleFound = true;
+            syntaxStack.pop();
+            syntaxStack.pop();
+            argCount++;
+          }
+        }
+
+        // rule for last array row element, if token is ; or | or }
+        //  { arg1 | arg2 -> { arg
+        if( !ruleFound )
+        if( syntaxStack.itemCount() >= 4 )
+        if( ( token.asOperator() == Token::Semicolon ) ||
+            ( token.asOperator() == Token::CurlyKet ) ||
+            ( token.asOperator() == Token::Pipe ) )
+        {
+          Token arg2 = syntaxStack.top();
+          Token sep = syntaxStack.top( 1 );
+          Token arg1 = syntaxStack.top( 2 );
+          Token bra = syntaxStack.top( 3 );
+          if( !arg2.isOperator() )
+          if( sep.asOperator() == Token::Pipe )
+          if( !arg1.isOperator() )
+          if( bra.asOperator() == Token::CurlyBra )
+          {
+            ruleFound = true;
+            syntaxStack.pop();
+            syntaxStack.pop();
+            int rowCount = argStack.pop();
+            argStack.push( ++rowCount );
+            argCount = 1;
+          }
+        }
+
+        // rule for last array element:
+        //  { arg } -> arg
+        if( !ruleFound )
+        if( syntaxStack.itemCount() >= 3 )
+        {
+          Token ket = syntaxStack.top();
+          Token arg = syntaxStack.top( 1 );
+          Token bra = syntaxStack.top( 2 );
+          if( ket.asOperator() == Token::CurlyKet )
+          if( !arg.isOperator() )
+          if( bra.asOperator() == Token::CurlyBra )
+          {
+            ruleFound = true;
+            syntaxStack.pop();
+            syntaxStack.pop();
+            syntaxStack.pop();
+            syntaxStack.push( arg );
+            const int rowCount = argStack.pop();
+            d->constants.append( (int)argCount ); // cols
+            d->constants.append( rowCount );
+            d->codes.append( Opcode( Opcode::Array, d->constants.count()-2 ) );
+            argCount = argStack.empty() ? 0 : argStack.pop();
+          }
+        }
+#endif
         // rule for parenthesis:  ( Y ) -> Y
         if( !ruleFound )
         if( syntaxStack.itemCount() >= 3 )
@@ -1444,6 +1549,29 @@ Value Formula::eval() const
 
         break;
 
+#ifdef KSPREAD_INLINE_ARRAYS
+      // creating an array
+      case Opcode::Array:
+      {
+        const int cols = d->constants[index].asInteger();
+        const int rows = d->constants[index+1].asInteger();
+        // check if enough array elements are available
+        if( stack.count() < cols * rows )
+            return Value::errorVALUE();
+        Value array( cols, rows );
+        for ( int row = rows - 1; row >= 0; --row )
+        {
+            for ( int col = cols - 1; col >= 0; --col )
+            {
+                array.setElement( col, row, stack.pop().val );
+            }
+        }
+        entry.reset();
+        entry.val = array;
+        stack.push( entry );
+        break;
+      }
+#endif
       default:
         break;
     }
@@ -1461,7 +1589,6 @@ Value Formula::eval() const
     return Value::errorVALUE();
 
   return stack.pop().val;
-
 }
 
 // Debugging aid
@@ -1517,6 +1644,7 @@ QString Formula::dump() const
       case Opcode::Not:      ctext = "Not"; break;
       case Opcode::Less:     ctext = "Less"; break;
       case Opcode::Greater:  ctext = "Greater"; break;
+      case Opcode::Array:    ctext = QString("Array (%1x%2)").arg( d->constants[d->codes[i].index].asInteger() ).arg( d->constants[d->codes[i].index+1].asInteger() ); break;
       default: ctext = "Unknown"; break;
     }
     result.append( "   " ).append( ctext ).append("\n");

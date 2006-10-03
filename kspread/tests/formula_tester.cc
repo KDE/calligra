@@ -178,6 +178,11 @@ void FormulaParserTester::run()
 
   // invalid formulas, can't be parsed correctly
   CHECK_PARSE( "+1.23E", QString::null );
+
+#ifdef KSPREAD_INLINE_ARRAYS
+  // inline arrays
+  CHECK_PARSE( "{1;2|3;4}", "oioioioio" );
+#endif
 }
 
 FormulaEvalTester::FormulaEvalTester(): Tester()
@@ -201,7 +206,22 @@ void FormulaEvalTester::checkEval( const char *file, int line, const char* msg,
   f.setExpression( expr );
   Value result = f.eval();
 
-  if( !result.equal( expected ) )
+  bool equality = false;
+  if ( expected.type() == Value::Array )
+  {
+    const uint cols = expected.columns();
+    const uint rows = expected.rows();
+    if ( cols == result.columns() )
+    if ( rows == result.rows() )
+    for ( uint row = 0; row < rows; ++row )
+      for ( uint col = 0; col < cols; ++col )
+        if ( !result.element(col,row).equal( expected.element(col,row) ) ) break;
+    equality = true;
+  }
+  else
+    equality = result.equal( expected );
+
+  if( !equality )
   {
     QString message;
     QTextStream ts( &message, QIODevice::WriteOnly );
@@ -355,6 +375,19 @@ void FormulaEvalTester::run()
   CHECK_EVAL("=ROUNDUP(0.01;1)", Value(0.1));
   CHECK_EVAL("=ROUNDDOWN(0.9)", Value(0));
   CHECK_EVAL("=ROUNDDOWN(0.19;1)", Value(0.1));
+
+#ifdef KSPREAD_INLINE_ARRAYS
+  // inline arrays
+  Value array(2,2);
+  array.setElement(0,0,1);
+  array.setElement(1,0,2);
+  array.setElement(0,1,3);
+  array.setElement(1,1,4);
+  CHECK_EVAL( "={1;2|3;4}", array );
+  array.setElement(1,0,0);
+  CHECK_EVAL( "={1;SIN(0)|3;4}", array ); // "dynamic"
+  CHECK_EVAL( "=SUM({1;2|3;4})", Value(10) );
+#endif
 }
 
 

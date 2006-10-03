@@ -25,6 +25,8 @@
 #include <QVector>
 #include <koffice_export.h>
 
+#define KSPREAD_INLINE_ARRAYS
+
 class KLocale;
 
 namespace KSpread
@@ -77,7 +79,10 @@ class KSPREAD_EXPORT Token
       Greater,        ///<  >
       LessEqual,      ///<  <=
       GreaterEqual,   ///<  >=
-      Percent         ///<  %
+      Percent,        ///<  %
+      CurlyBra,       ///<  { (array start)
+      CurlyKet,       ///<  } (array end)
+      Pipe            ///<  | (array row separator)
     };
 
     /**
