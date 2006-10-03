@@ -111,8 +111,8 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		KoProperty::Property::ListData* createValueList(WidgetInfo *winfo, const QStringList &list);
 
 		/*! Changes \a property old value and changed state, using the value
-		stored in \a tree. */
-		void  updatePropertyValue(ObjectTreeItem *tree, const char *property);
+		stored in \a tree. Optional \a meta can be specified if you need to handle enum values. */
+		void  updatePropertyValue(ObjectTreeItem *tree, const char *property, const QMetaProperty *meta = 0);
 
 		/*! \return the property list hold by this object. Do not modify the list,
 		 just use this method to change Editor's list. */

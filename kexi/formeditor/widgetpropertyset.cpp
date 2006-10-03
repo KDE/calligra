@@ -303,7 +303,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 
 	// iterate over the property list, and create Property objects
 	for(; it.current() != 0; ++it) {
-		kdDebug() << ">> " << it.current() << endl;
+		//kDebug() << ">> " << it.current() << endl;
 		const QMetaProperty *subMeta = // special case - subproperty
 			subpropIface ? subpropIface->findMetaSubproperty(it.current()) : 0;
 		const QMetaProperty *meta = subMeta ? subMeta 
@@ -313,8 +313,9 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 		const char* propertyName = meta->name();
 		QWidget *subwidget = subMeta/*subpropIface*/ ? subpropIface->subwidget() : w;
 		WidgetInfo *subwinfo = form->library()->widgetInfoForClassName(subwidget->className());
+//		kDebug() << "$$$ " << subwidget->className() << endl;
 
-		if(meta->designable(subwidget) && !d->set.contains(propertyName)) {
+		if(subwinfo && meta->designable(subwidget) && !d->set.contains(propertyName)) {
 			//! \todo add another list for property description
 			QString desc( d->propCaption[meta->name()] );
 			//! \todo change i18n
@@ -371,7 +372,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 		}*/
 
 		// update the Property.oldValue() and isModified() using the value stored in the ObjectTreeItem
-		updatePropertyValue(tree, propertyName);
+		updatePropertyValue(tree, propertyName, meta);
 	}
 
 	(*this)["name"].setAutoSync(false); // name should be updated only when pressing Enter
@@ -405,17 +406,23 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 }
 
 void
-WidgetPropertySet::updatePropertyValue(ObjectTreeItem *tree, const char *property)
+WidgetPropertySet::updatePropertyValue(ObjectTreeItem *tree, const char *property, const QMetaProperty *meta)
 {
-	if (!d->set.contains(property))
+	const char *propertyName = meta ? meta->name() : property;
+	if (!d->set.contains(propertyName))
 		return;
-	KoProperty::Property p = d->set[property];
+	KoProperty::Property p( d->set[propertyName] );
 
 //! \todo what about set properties, and lists properties
-	QMap<QString, QVariant>::ConstIterator it( tree->modifiedProperties()->find(property) );
+	QMap<QString, QVariant>::ConstIterator it( tree->modifiedProperties()->find(propertyName) );
 	if (it != tree->modifiedProperties()->constEnd()) {
 		blockSignals(true);
-		p.setValue(it.data(), false );
+		if(meta && meta->isEnumType()) {
+			p.setValue( meta->valueToKey( it.data().toInt() ), false );
+		}
+		else {
+			p.setValue(it.data(), false );
+		}
 		p.setValue(p.value(), true);
 		blockSignals(false);
 	}
