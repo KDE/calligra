@@ -516,6 +516,7 @@ KoFilter::ConversionStatus ASCIIExport::convert(const QByteArray& from, const QB
     {
         kError(30502) << "No codec!" << endl;
         delete dialog;
+        delete worker;
         return KoFilter::StupidError;
     }
 
