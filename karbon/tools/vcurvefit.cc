@@ -505,6 +505,7 @@ QPointF *FitCubic(Q3PtrList<QPointF> &points,int first,int last,FitVector tHat1,
 					curve, uPrime, &splitPoint);
 			if (maxError < error) {
 				delete[] u;
+				delete[] uPrime;
 				width=4;	
 				return curve;
 			}
