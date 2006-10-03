@@ -463,12 +463,8 @@ void NodeSchedule::addAppointment(Schedule *resource, DateTime &start, DateTime 
         return;
     }
     a = new Appointment(resource, this, start, end, load);
-    if (!add(a)) {
+    if (!add(a) && !resource->add(a))
         delete a;
-    }
-    if (!resource->add(a)) {
-        delete a;
-    }
 }
 
 //-----------------------------------------------
@@ -505,12 +501,8 @@ void ResourceSchedule::addAppointment(Schedule *node, DateTime &start, DateTime 
         return;
     }
     a = new Appointment(this, node, start, end, load);
-    if (!add(a)) {
+    if (!add(a) && !node->add(a))
         delete a;
-    }
-    if (!node->add(a)) {
-        delete a;
-    }
 }
 
 bool ResourceSchedule::isOverbooked() const {
