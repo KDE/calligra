@@ -961,6 +961,26 @@ QTextStream& operator<<( QTextStream& ts, Value value )
     case Value::String:
       ts << ": " << value.asString(); break;
 
+    case Value::Array:
+    {
+      ts << ": {" << value.asString();
+      const int cols = value.columns();
+      const int rows = value.rows();
+      for ( int row = 0; row < rows; ++row )
+      {
+        for ( int col = 0; col < cols; ++col )
+        {
+          ts << value.element(col,row);
+          if ( col < cols-1 )
+            ts << ';';
+        }
+        if ( row < rows-1 )
+          ts << '|';
+      }
+      ts << '}';
+      break;
+    }
+
     case Value::Error:
       ts << '(' << value.errorMessage() << ')'; break;
 

@@ -24,6 +24,8 @@
 #include <QString>
 #include <QTextStream>
 
+#include <kdebug.h>
+
 #include <koffice_export.h>
 
 namespace KSpread
@@ -435,5 +437,18 @@ class KSPREAD_EXPORT Value
 
 KSPREAD_EXPORT QTextStream& operator<<( QTextStream& ts, KSpread::Value::Type type );
 KSPREAD_EXPORT QTextStream& operator<<( QTextStream& ts, KSpread::Value value );
+
+/***************************************************************************
+  kDebug support
+****************************************************************************/
+
+inline kdbgstream operator<<( kdbgstream str, const KSpread::Value& v )
+{
+    QString string;
+    QTextStream stream(&string);
+    stream << v;
+    str << string;
+    return str;
+}
 
 #endif // KSPREAD_VALUE_H
