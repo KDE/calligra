@@ -613,7 +613,9 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 	else if(classname == "KexiDBAutoField") {
 		if (!isTopLevel && property=="caption")
 			return true; //force
-		if (property=="fieldTypeInternal" || property=="fieldCaptionInternal")
+		if (property=="fieldTypeInternal" || property=="fieldCaptionInternal"
+//! @todo unhide in 2.0
+			|| property=="widgetType")
 			return false;
 		ok = property!="text"; /* "text" is not needed as "caption" is used instead */
 	}
