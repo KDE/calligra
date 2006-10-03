@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="143">
+<kpartgui name="kexi" version="146">
 <MenuBar>
   <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
@@ -94,9 +94,9 @@
 
   <Menu name="data" noMerge="1">
     <text>&amp;Data</text>
-    <ActionList name="data_save_row"/>
-    <ActionList name="data_cancel_row_changes"/>
-    <ActionList name="data_filter"/>
+    <Action name="data_save_row"/>
+    <Action name="data_cancel_row_changes"/>
+    <!-- Action name="data_filter"/ -->
     <Menu name="data_sort">
       <text>Sort</text>
       <Action name="data_sort_az"/>
@@ -181,11 +181,11 @@
 
 <ToolBar name="dataToolBar" fullWidth="false" noMerge="0">
   <text>Data</text>
-  <ActionList name="data_cancel_row_changes"/>
-  <ActionList name="data_save_row"/>
-  <ActionList name="data_sort_az"/>
-  <ActionList name="data_sort_za"/>
-  <ActionList name="data_filter"/>
+  <Action name="data_cancel_row_changes"/>
+  <Action name="data_save_row"/>
+  <Action name="data_sort_az"/>
+  <Action name="data_sort_za"/>
+  <!-- Action name="data_filter"/ -->
 </ToolBar>
 
 </kpartgui>
