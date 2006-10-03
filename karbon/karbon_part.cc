@@ -443,6 +443,7 @@ void
 KarbonPart::addCommand( VCommand* cmd, bool repaint )
 {
 	kDebug(38000) << "KarbonPart::addCommand: please port to new command handling" << endl;
+        delete cmd;
 	/* 
 	m_commandHistory->addCommand( cmd );
 	setModified( true );
