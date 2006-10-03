@@ -813,6 +813,23 @@ private: // variables
 };
 
 /******************************************************************/
+/* Class: KWViewWidget                                            */
+/******************************************************************/
+class KWViewWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    KWViewWidget( QWidget *parent, KWView *view );
+
+protected:
+    void resizeEvent( QResizeEvent *e );
+
+    // A pointer to the view.
+    KWView          *m_view;
+};
+
+/******************************************************************/
 /* Class: KWGUI                                                   */
 /******************************************************************/
 

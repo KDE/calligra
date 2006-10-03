@@ -7564,6 +7564,28 @@ void KWView::deleteSelectedFrames() {
 
 
 /******************************************************************/
+/* Class: KWViewWidget                                            */
+/******************************************************************/
+KWViewWidget::KWViewWidget( QWidget *parent, KWView *view )
+  : QWidget( parent ),
+    m_view ( view )
+{
+}
+
+void KWViewWidget::resizeEvent( QResizeEvent *e )
+{
+    // Update zoom if width changes and fit width is used
+    if ( ( e->size().width() != e->oldSize().width() )
+        && ( m_view->kWordDocument()->zoomMode() == KoZoomMode::ZOOM_WIDTH ) )
+    {
+        QTimer::singleShot( 0, m_view, SLOT( updateZoom() ) );
+    }
+
+    QWidget::resizeEvent( e );
+}
+
+
+/******************************************************************/
 /* Class: KWGUI                                                */
 /******************************************************************/
 KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
@@ -7584,7 +7606,7 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     m_docStruct->setMinimumWidth( 0 );
 
     // The right side
-    m_right = new QWidget( m_panner );
+    m_right = new KWViewWidget( m_panner, m_view );
     QGridLayout *gridLayout = new QGridLayout( m_right, 2, 2 );
     m_canvas = new KWCanvas( viewMode, m_right, doc, this );
     gridLayout->addWidget( m_canvas, 1, 1 );
