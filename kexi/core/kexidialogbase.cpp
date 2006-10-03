@@ -35,6 +35,7 @@
 
 #include <q3widgetstack.h>
 #include <qobject.h>
+#include <qtimer.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <QEvent>
@@ -374,7 +375,7 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString
 	m_stack->raiseWidget( newView );
 	newView->propertySetSwitched();
 	m_parentWindow->invalidateSharedActions( newView );
-	newView->setFocus(); //js ok?
+	QTimer::singleShot(10, newView, SLOT(activate())); //newView->setFocus(); //js ok?
 //	setFocus();
 	return true;
 }
