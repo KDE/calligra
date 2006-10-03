@@ -286,39 +286,39 @@ VPolylineTool::mouseButtonRelease()
 		drawBezierVector( m_lastVectorStart, m_lastVectorEnd );
 		draw();
 		m_bezierPoints.removeLast();
-		QPointF* p = new QPointF( *m_bezierPoints.last() );
+		QPointF p ( *m_bezierPoints.last() );
 		m_bezierPoints.removeLast();
-		QPointF* b = new QPointF( *m_bezierPoints.last() );
+		QPointF b ( *m_bezierPoints.last() );
 		m_bezierPoints.removeLast();
 
 		if( shiftPressed() )
 		{
 			m_bezierPoints.removeLast();
 			m_bezierPoints.append( new QPointF( *m_bezierPoints.last() ) );
-			m_bezierPoints.append( new QPointF( *p ) );
-			m_bezierPoints.append( new QPointF( *p ) );
-			m_bezierPoints.append( new QPointF( *p ) );
-			m_lastVectorStart = m_lastVectorEnd = *p;
+			m_bezierPoints.append( new QPointF( p ) );
+			m_bezierPoints.append( new QPointF( p ) );
+			m_bezierPoints.append( new QPointF( p ) );
+			m_lastVectorStart = m_lastVectorEnd = p;
 		}
 		else if( ctrlPressed() )
 		{
 			m_bezierPoints.removeLast();
 			m_lastVectorStart = *m_bezierPoints.last();
 			m_bezierPoints.append( new QPointF( _last ) );
-			m_bezierPoints.append( new QPointF( *b ) );
-			m_bezierPoints.append( new QPointF( *p ) );
-			m_bezierPoints.append( new QPointF( *p - ( *b - *p ) ) );
+			m_bezierPoints.append( new QPointF( b ) );
+			m_bezierPoints.append( new QPointF( p ) );
+			m_bezierPoints.append( new QPointF( p - ( b - p ) ) );
 			m_lastVectorEnd = _last;
 		}
 		else
 		{
 			m_bezierPoints.append( new QPointF( _last ) );
-			m_bezierPoints.append( new QPointF( *p ) );
-			m_bezierPoints.append( new QPointF( *p - ( _last - *p ) ) );
-			m_lastVectorStart = *p;
+			m_bezierPoints.append( new QPointF( p ) );
+			m_bezierPoints.append( new QPointF( p - ( _last - p ) ) );
+			m_lastVectorStart = p;
 			m_lastVectorEnd = _last;
 		}
-		if( m_bezierPoints.count() > 2 && VGlobal::pointsAreNear(*p, *m_bezierPoints.first(), 3 ) )
+		if( m_bezierPoints.count() > 2 && VGlobal::pointsAreNear(p, *m_bezierPoints.first(), 3 ) )
 		{
 			m_bezierPoints.append( new QPointF( _last ) );
 			m_close = true;
