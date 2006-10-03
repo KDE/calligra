@@ -22,6 +22,7 @@ Name[sk]=Kexi filter pre import do KSpread
 Name[sl]=Uvozni filter Kexi za KSpread
 Name[sv]=Kexi-importfilter för Kspread
 Name[uk]=Фільтр імпорту Kexi для KSpread
+Name[uz]=KSpread учун Kexi импорт филтери
 Name[zh_TW]=Kexi 的 KSpread 匯入過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service

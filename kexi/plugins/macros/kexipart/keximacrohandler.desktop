@@ -22,6 +22,7 @@ GenericName[sk]=Makrá
 GenericName[sl]=Makri
 GenericName[sv]=Makron
 GenericName[uk]=Макроси
+GenericName[uz]=Макрос
 GenericName[zh_TW]=巨集
 
 Name=Macros
@@ -43,6 +44,7 @@ Name[sk]=Makrá
 Name[sl]=Makri
 Name[sv]=Makron
 Name[uk]=Макроси
+Name[uz]=Макрос
 Name[zh_TW]=巨集
 
 X-KDE-Library=kexihandler_macro
