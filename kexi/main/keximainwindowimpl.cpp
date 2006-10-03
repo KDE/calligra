@@ -735,12 +735,12 @@ void KexiMainWindowImpl::initActions()
 	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", Qt::SHIFT | Qt::Key_Return, "data_save_row");
 	d->action_data_save_row->setToolTip(i18n("Save currently selected table row's data"));
 	d->action_data_save_row->setWhatsThis(i18n("Saves currently selected table row's data."));
-	setActionVolatile( d->action_data_save_row, true );
+//temp. disable because of problems with volatile actions	setActionVolatile( d->action_data_save_row, true );
 
 	d->action_data_cancel_row_changes = createSharedAction(i18n("&Cancel Row Changes"), "button_cancel", 0 , "data_cancel_row_changes");
 	d->action_data_cancel_row_changes->setToolTip(i18n("Cancel changes made to currently selected table row"));
 	d->action_data_cancel_row_changes->setWhatsThis(i18n("Cancels changes made to currently selected table row."));
-	setActionVolatile( d->action_data_cancel_row_changes, true );
+//temp. disable because of problems with volatile actions	setActionVolatile( d->action_data_cancel_row_changes, true );
 
 	d->action_data_execute = createSharedAction(i18n("&Execute"), "player_play", 0 , "data_execute");
 	//d->action_data_execute->setToolTip(i18n("")); //TODO
@@ -753,12 +753,12 @@ void KexiMainWindowImpl::initActions()
 
 //	setSharedMenu("data_sort");
 	action = createSharedAction(i18n("&Ascending"), "sort_az", 0, "data_sort_az");
-	setActionVolatile( action, true );
+//temp. disable because of problems with volatile actions	setActionVolatile( action, true );
 	action->setToolTip(i18n("Sort data in ascending order"));
 	action->setWhatsThis(i18n("Sorts data in ascending order (from A to Z and from 0 to 9). Data from selected column is used for sorting."));
 
 	action = createSharedAction(i18n("&Descending"), "sort_za", 0, "data_sort_za");
-	setActionVolatile( action, true );
+//temp. disable because of problems with volatile actions	setActionVolatile( action, true );
 	action->setToolTip(i18n("Sort data in descending order"));
 	action->setWhatsThis(i18n("Sorts data in descending (from Z to A and from 9 to 0). Data from selected column is used for sorting."));
 
