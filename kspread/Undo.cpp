@@ -63,7 +63,7 @@ Undo::~Undo()
 
 void Undo::appendUndo( UndoAction *_action )
 {
-    if ( isLocked() )
+    if ( m_pDoc && isLocked() )
 	return;
 
     qDeleteAll(m_stckRedo);
