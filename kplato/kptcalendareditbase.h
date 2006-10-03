@@ -50,7 +50,7 @@ class CalendarEditBase : public QWidget
     Q_OBJECT
 
 public:
-    CalendarEditBase( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
+    CalendarEditBase( QWidget* parent = 0, Qt::WFlags fl = 0 );
     ~CalendarEditBase();
 
     Q3GroupBox* groupBox2;

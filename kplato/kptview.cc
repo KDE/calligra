@@ -128,7 +128,7 @@ View::View(Part* part, QWidget* parent)
 
     m_tab = new Q3WidgetStack(this);
     Q3VBoxLayout *layout = new Q3VBoxLayout(this);
-    layout->add(m_tab);
+    layout->addWidget(m_tab);
 
     m_ganttview = new GanttView(m_tab, part->isReadWrite());
     m_tab->addWidget(m_ganttview);

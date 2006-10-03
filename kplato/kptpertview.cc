@@ -43,7 +43,7 @@ namespace KPlato
 {
 
 PertView::PertView( View *view, QWidget *parent, QLayout *layout )
-    : QWidget( parent, "Pert view" ),
+    : QWidget( parent ),
     m_mainview( view ),
     m_node( 0 )
 {

@@ -86,7 +86,7 @@ void AccountsView::AccountItem::add(int col, const QDate &date, const EffortCost
 }
 
 AccountsView::AccountsView(Project &project, View *view, QWidget *parent)
-    : QWidget(parent, "Accounts view"),
+    : QWidget(parent),
       m_mainview(view),
       m_project(project),
       m_accounts(project.accounts()) {

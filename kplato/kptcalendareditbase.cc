@@ -46,11 +46,10 @@ namespace KPlato
  *  Constructs a CalendarEditBase as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  */
-CalendarEditBase::CalendarEditBase( QWidget* parent, const char* name, Qt::WFlags fl )
-    : QWidget( parent, name, fl )
+CalendarEditBase::CalendarEditBase( QWidget* parent, Qt::WFlags fl )
+    : QWidget( parent, fl )
 {
-    if ( !name )
-	setName( "CalendarEditBase" );
+    setObjectName( "CalendarEditBase" );
     CalendarEditBaseLayout = new Q3HBoxLayout( this, 0, 0, "CalendarEditBaseLayout");
 
     groupBox2 = new Q3GroupBox( this, "groupBox2" );
