@@ -51,8 +51,8 @@ Part::Part(QWidget *parentWidget,
 		 QObject *parent, bool singleViewMode)
     : KoDocument(parentWidget, parent, singleViewMode),
       m_project(0), m_projectDialog(0), m_parentWidget(parentWidget), m_view(0),
-      m_embeddedGanttView(new GanttView(parentWidget)),
-      m_embeddedContext(new Context()), m_embeddedContextInitialized(false),
+      m_embeddedGanttView(0),//new GanttView(parentWidget)),
+      m_embeddedContext(0),//new Context()), m_embeddedContextInitialized(false),
       m_context(0), m_xmlLoader()
 {
     m_update = m_calculate = false;
@@ -329,7 +329,7 @@ void Part::slotCommandExecuted(KCommand *) {
 
 void Part::slotCopyContextFromView()
 {
-    if (m_view)
+    if (m_view && m_embeddedContext)
     {
 //         kDebug() << "Updating embedded context from view context." << endl;
         this->m_view->getContext( *m_embeddedContext );
