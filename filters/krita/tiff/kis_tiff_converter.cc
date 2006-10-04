@@ -624,7 +624,6 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageSP i
         TIFFSetField(image, TIFFTAG_ARTIST, author.toAscii().data());
     }
     
-    KisTIFFWriterVisitor* visitor = new KisTIFFWriterVisitor(image, &options);
     KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(img->rootLayer().data());
     if(root == 0)
     {
@@ -632,6 +631,7 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageSP i
         TIFFClose(image);
         return KisImageBuilder_RESULT_FAILURE;
     }
+    KisTIFFWriterVisitor* visitor = new KisTIFFWriterVisitor(image, &options);
     if(!visitor->visit( root ))
     {
         KIO::del(uri);
