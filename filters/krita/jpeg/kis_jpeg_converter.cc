@@ -514,6 +514,8 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
                 break;
             default:
                 KIO::del(uri);
+                delete [] row_pointer;
+                jpeg_destroy_compress(&cinfo);
                 return KisImageBuilder_RESULT_UNSUPPORTED;
         }
         jpeg_write_scanlines(&cinfo, &row_pointer, 1);
