@@ -725,6 +725,21 @@ public:
   void setUndoRedoLimit(int _val);
 
     /**
+     * Sets the reference year.
+     * All two-digit-year dates are stored as numbers relative to a reference year.
+     *
+     * \param year the new reference year
+     */
+    void setReferenceYear( int year );
+
+    /**
+     * Returns the reference year all two-digit-year dates are stored relative to.
+     *
+     * \return the reference year (default: 1930)
+     */
+    int referenceYear() const;
+
+    /**
      * Sets the reference date.
      * All dates are stored as numbers relative to a reference date.
      *

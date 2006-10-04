@@ -110,7 +110,15 @@ public:
       AutoFill,       /**< Autofilling */
       ResizeSelection /**< Resizing the selection */
     };
-    enum EditorType { CellEditor, EditWidget };
+
+    /**
+     * The editor type.
+     */
+    enum EditorType
+    {
+        CellEditor,  ///< the 'in-place' editor appearing in a cell
+        EditWidget   ///< the line edit located above the canvas
+    };
 
     Canvas (View *_view);
     ~Canvas( );

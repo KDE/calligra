@@ -2390,6 +2390,18 @@ void Doc::setUndoRedoLimit(int val)
   d->commandHistory->setRedoLimit(val);
 }
 
+void Doc::setReferenceYear( int year )
+{
+    if ( !( year >= 1900 && year <= 1999 ) || !( year >= 0 && year <= 99 ) )
+        return;
+    d->refYear = ( year <= 99 ) ? 1900 + year : year;
+}
+
+int Doc::referenceYear() const
+{
+    return d->refYear;
+}
+
 void Doc::setReferenceDate( QDate date )
 {
     if ( !date.isValid() ) return;

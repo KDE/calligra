@@ -388,37 +388,42 @@ void FunctionCompletion::itemSelected( const QString& item )
 
 bool FunctionCompletion::eventFilter( QObject *obj, QEvent *ev )
 {
-    if ( obj == d->completionPopup || obj == d->completionListBox )
+    if ( obj != d->completionPopup && obj != d->completionListBox )
+        return false;
+
+    if ( ev->type() == QEvent::KeyPress )
     {
-      if ( ev->type() == QEvent::KeyPress )
-      {
-              QKeyEvent *ke = (QKeyEvent*)ev;
-              if ( ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return  )
-              {
-                  doneCompletion();
-                  return true;
-              }
-              else if ( ke->key() == Qt::Key_Left || ke->key() == Qt::Key_Right ||
-              ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down ||
-              ke->key() == Qt::Key_Home || ke->key() == Qt::Key_End ||
-              ke->key() == Qt::Key_PageUp || ke->key() == Qt::Key_PageDown )
-                  return false;
+        QKeyEvent *ke = static_cast<QKeyEvent*>( ev );
+        switch ( ke->key() )
+        {
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+                doneCompletion();
+                return true;
+            case Qt::Key_Left:
+            case Qt::Key_Right:
+            case Qt::Key_Up:
+            case Qt::Key_Down:
+            case Qt::Key_Home:
+            case Qt::Key_End:
+            case Qt::Key_PageUp:
+            case Qt::Key_PageDown:
+                return false;
+            default:
+                d->hintLabel->hide();
+                d->completionPopup->close();
+                d->editor->setFocus();
+                QApplication::sendEvent( d->editor, ev );
+                return true;
+        }
+    }
 
-              d->hintLabel->hide();
-              d->completionPopup->close();
-              d->editor->setFocus();
-              QApplication::sendEvent( d->editor, ev );
-              return true;
-      }
-
-      if ( ev->type() == QEvent::MouseButtonDblClick )
-      {
-          doneCompletion();
-          return true;
-      }
-  }
-
-  return false;
+    if ( ev->type() == QEvent::MouseButtonDblClick )
+    {
+        doneCompletion();
+        return true;
+    }
+    return false;
 }
 
 void FunctionCompletion::doneCompletion()
@@ -1141,6 +1146,7 @@ void CellEditor::setText(QString text)
 
     // This also ensures that the caret is sized correctly for the text
     setCursorPosition( text.length() );
+    kDebug() << "text cursor positioned at the end" << endl;
 
     if (d->fontLength == 0)
     {
@@ -1162,59 +1168,61 @@ void CellEditor::setCursorPosition( int pos )
     canvas()->view()->editWidget()->setCursorPosition( pos );
 }
 
-bool CellEditor::eventFilter( QObject* o, QEvent* e )
+bool CellEditor::eventFilter( QObject* obj, QEvent* ev )
 {
     // Only interested in KTextEdit
-    if ( o != d->textEdit )
+    if ( obj != d->textEdit )
         return false;
-    if ( e->type() == QEvent::FocusOut )
+
+    if ( ev->type() == QEvent::FocusOut )
     {
         canvas()->setLastEditorWithFocus( Canvas::CellEditor );
         return false;
     }
 
-    if ( e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease )
+    if ( ev->type() == QEvent::KeyPress || ev->type() == QEvent::KeyRelease )
     {
-        QKeyEvent* k = (QKeyEvent*)e;
-        if ( !( k->modifiers() & Qt::ShiftModifier ) || canvas()->chooseMode())
+        QKeyEvent* ke = static_cast<QKeyEvent*>( ev );
+        if ( !( ke->modifiers() & Qt::ShiftModifier ) || canvas()->chooseMode() )
         {
-          //If the user presses the return key to finish editing this cell, choose mode must be turned off first
-          //otherwise it will merely select a different cell
-          if (k->key() == Qt::Key_Return || k->key() == Qt::Key_Enter)
-          {
-            kDebug() << "CellEditor::eventFilter: canvas()->endChoose();" << endl;
-            canvas()->endChoose();
-          }
-
-          //NB - Added check for Qt::Key_Return when migrating text edit from KLineEdit to KTextEdit, since
-          //normal behaviour for KTextEdit is to swallow return key presses
-          if ( k->key() == Qt::Key_Up || k->key() == Qt::Key_Down ||
-                k->key() == Qt::Key_PageDown || k->key() == Qt::Key_PageUp ||
-                k->key() == Qt::Key_Escape || k->key() == Qt::Key_Tab ||
-                k->key() == Qt::Key_Return || k->key() == Qt::Key_Enter)
-          {
-              // Send directly to canvas
-              QApplication::sendEvent( parent(), e );
-              return true;
-          }
+            switch ( ke->key() )
+            {
+                // If the user presses the return key to finish editing this cell,
+                // choose mode must be turned off first. Otherwise it will merely
+                // select a different cell.
+                case Qt::Key_Return:
+                case Qt::Key_Enter:
+                    kDebug() << "CellEditor::eventFilter: quitting choose mode" << endl;
+                    canvas()->endChoose();
+                    // fall through
+                case Qt::Key_Up:
+                case Qt::Key_Down:
+                case Qt::Key_PageDown:
+                case Qt::Key_PageUp:
+                case Qt::Key_Escape:
+                case Qt::Key_Tab:
+                    // Send directly to canvas
+                    QApplication::sendEvent( parent(), ev );
+                    return true;
+            }
         }
-        // End choosing. May be restarted by CellEditor::slotTextChanged
-        if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
+        // End choosing. May be restarted by CellEditor::slotTextChanged.
+        // QKeyEvent::text() is empty, if a modifier was pressed/released.
+        if ( ev->type() == QEvent::KeyPress && !ke->text().isEmpty() )
         {
-          canvas()->setChooseMode(false);
+            canvas()->setChooseMode(false);
         }
-        // forward Left/Right keys - so that pressing left/right in this
-        // editor leaves editing mode ... otherwise editing is annoying
-        // left/right arrows still work with the F2-editor.
-
-        // Forward left & right arrows to parent, unless this editor has been set to capture arrow key events
-        // Changed to this behaviour for consistancy with OO Calc & MS Office.
-        if ( ((k->key() == Qt::Key_Left) || (k->key() == Qt::Key_Right)) && (!d->captureAllKeyEvents)) {
-          QApplication::sendEvent (parent(), e);
-          return true;
+        // Forward left/right arrows to parent, so that pressing left/right
+        // in this editor leaves editing mode, unless this editor has been set
+        // to capture arrow key events. Changed to this behaviour for
+        // consistancy with OO Calc & MS Office.
+        if ( ( !d->captureAllKeyEvents ) &&
+             ( ( ke->key() == Qt::Key_Left ) || ( ke->key() == Qt::Key_Right ) ) )
+        {
+            QApplication::sendEvent( parent(), ev );
+            return true;
         }
     }
-
     return false;
 }
 
@@ -1513,7 +1521,7 @@ void EditWidget::keyPressEvent ( QKeyEvent* _ev )
   if ( !m_pCanvas->editor() )
   {
     // Start editing the current cell
-    m_pCanvas->createEditor( Canvas::CellEditor,false );
+    m_pCanvas->createEditor( Canvas::CellEditor, /*focus*/ false, /*arrows*/ true );
   }
   CellEditor * cellEditor = (CellEditor*) m_pCanvas->editor();
 

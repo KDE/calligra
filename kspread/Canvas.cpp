@@ -2373,7 +2373,7 @@ void Canvas::processOtherKey(QKeyEvent *event)
     if ( !d->cellEditor && !d->chooseCell )
     {
       // Switch to editing mode
-      createEditor( CellEditor );
+      createEditor( CellEditor, true, true );
       d->cellEditor->handleKeyPressEvent( event );
     }
     else if ( d->cellEditor )
@@ -2826,7 +2826,7 @@ void Canvas::processIMEvent( QIMEvent * event )
   if ( !d->cellEditor && !d->chooseCell )
   {
     // Switch to editing mode
-    createEditor( CellEditor );
+    createEditor( CellEditor, true, true );
     d->cellEditor->handleIMEvent( event );
   }
 
@@ -3613,7 +3613,7 @@ void Canvas::createEditor(bool captureArrowKeys)
   if (!sheet)
     return;
 
-  Cell * cell = sheet->nonDefaultCell( markerColumn(), markerRow() );
+  Cell* cell = sheet->nonDefaultCell( markerColumn(), markerRow() );
 
   if ( !createEditor( CellEditor , true , captureArrowKeys ) )
       return;
