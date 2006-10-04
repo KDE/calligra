@@ -2865,7 +2865,7 @@ void KPrView::setupActions()
     connect(actionChangeCase, SIGNAL(triggered(bool)), SLOT( changeCaseOfText() ));
 
     actionViewZoom = new KSelectAction( KIcon("viewmag"), i18n( "Zoom" ), actionCollection(), "view_zoom" );
-    connect( actionViewZoom, SIGNAL( activated( const QString & ) ),
+    connect( actionViewZoom, SIGNAL( triggered( const QString & ) ),
              this, SLOT( viewZoom( const QString & ) ) );
     actionViewZoom->setEditable(true);
     changeZoomMenu( );
