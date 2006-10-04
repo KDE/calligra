@@ -201,7 +201,59 @@
        <Example>LOOKUP(1.232; A1:A6; B1:B6) for A1 = 1, A2 = 2 returns the value of B1.</Example>
      </Help>
    </Function>
-                                                                                                                            
+
+   <Function>
+     <Name>HLOOKUP</Name>
+     <Type>String/Numeric</Type>
+     <Parameter>
+       <Comment>Lookup value</Comment>
+       <Type>String/Numeric</Type>
+     </Parameter>
+     <Parameter>
+       <Comment>Data source</Comment>
+       <Type>Array</Type>
+     </Parameter>
+     <Parameter>
+       <Comment>Row</Comment>
+       <Type>Int</Type>
+     </Parameter>
+     <Parameter>
+        <Comment>Sorted (optional)</Comment>
+        <Type>Boolean</Type>
+     </Parameter>
+     <Help>
+       <Text>Look for a matching value in the first row of the given table, and return the value of the indicated row.</Text>
+       <Text>Looks up the 'lookup value' in the first row of the 'data source'. If a value matches, the value in the 'row' and the column, the value was found in, is returned. If 'sorted' is true (default), the first row is assumed to be sorted. The search will end, if the 'lookup value' is lower than the value, currently compared to.</Text>
+       <Syntax>HLOOKUP(Lookup value; data source; Row; Sorted)</Syntax>
+     </Help>
+   </Function>
+
+   <Function>
+     <Name>VLOOKUP</Name>
+     <Type>String/Numeric</Type>
+     <Parameter>
+       <Comment>Lookup value</Comment>
+       <Type>String/Numeric</Type>
+     </Parameter>
+     <Parameter>
+       <Comment>Data source</Comment>
+       <Type>Array</Type>
+     </Parameter>
+     <Parameter>
+       <Comment>Column</Comment>
+       <Type>Int</Type>
+     </Parameter>
+     <Parameter>
+        <Comment>Sorted (optional)</Comment>
+        <Type>Boolean</Type>
+     </Parameter>
+     <Help>
+       <Text>Look for a matching value in the first column of the given table, and return the value of the indicated column.</Text>
+       <Text>Looks up the 'lookup value' in the first column of the 'data source'. If a value matches, the value in the 'column' and the row, the value was found in, is returned. If 'sorted' is true (default), the first column is assumed to be sorted. The search will end, if the 'lookup value' is lower than the value, currently compared to.</Text>
+       <Syntax>VLOOKUP(Lookup value; data source; Column; Sorted)</Syntax>
+     </Help>
+   </Function>
+
   </Group>
 
 </KSpreadFunctions>

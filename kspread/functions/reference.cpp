@@ -37,11 +37,13 @@ Value func_areas (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_choose (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_column (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_columns (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_hlookup (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_index (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_indirect (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_lookup (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_row (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rows (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_vlookup (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all reference functions
 void RegisterReferenceFunctions()
@@ -68,6 +70,10 @@ void RegisterReferenceFunctions()
   f->setAcceptArray ();
   f->setNeedsExtra (true);
   repo->add (f);
+  f = new Function ("HLOOKUP",  func_hlookup);
+  f->setParamCount (3, 4);
+  f->setAcceptArray ();
+  repo->add (f);
   f = new Function ("INDEX",   func_index);
   f->setParamCount (3);
   f->setAcceptArray ();
@@ -87,6 +93,10 @@ void RegisterReferenceFunctions()
   f->setParamCount (1);
   f->setAcceptArray ();
   f->setNeedsExtra (true);
+  repo->add (f);
+  f = new Function ("VLOOKUP",  func_vlookup);
+  f->setParamCount (3, 4);
+  f->setAcceptArray ();
   repo->add (f);
 }
 
@@ -224,6 +234,31 @@ Value func_choose (valVector args, ValueCalc *calc, FuncExtra *)
   return args[num];
 }
 
+// Function: HLOOKUP
+Value func_hlookup (valVector args, ValueCalc *calc, FuncExtra *)
+{
+    const Value key = args[0];
+    const Value data = args[1];
+    const int row = calc->conv()->asInteger( args[2] ).asInteger();
+    const int cols = data.columns();
+    const int rows = data.rows();
+    if ( row < 1 || row > rows )
+        return Value::errorVALUE();
+    const bool sorted = ( args.count() > 3 ) ? calc->conv()->asBoolean( args[3] ).asBoolean() : true;
+
+    // now traverse the array and perform comparison
+    for ( int col = 0; col < cols; ++col )
+    {
+        // search in the first row
+        const Value le = data.element( col, 0 );
+        if ( sorted && calc->naturalLower( key, le ) )
+            return Value::errorNA();
+        if ( calc->naturalEqual( key, le ) )
+            return data.element( col, row-1 );
+    }
+    return Value::errorNA();
+}
+
 // Function: INDEX
 Value func_index (valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -339,3 +374,28 @@ Value func_indirect (valVector args, ValueCalc *calc, FuncExtra *e)
   return Value::errorVALUE();
 }
 
+// Function: VLOOKUP
+Value func_vlookup (valVector args, ValueCalc *calc, FuncExtra *)
+{
+    const Value key = args[0];
+    const Value data = args[1];
+    const int col = calc->conv()->asInteger( args[2] ).asInteger();
+    const int cols = data.columns();
+    const int rows = data.rows();
+    if ( col < 1 || col > cols )
+        return Value::errorVALUE();
+    const bool sorted = ( args.count() > 3 ) ? calc->conv()->asBoolean( args[3] ).asBoolean() : true;
+kDebug() << "col: " << col << " sorted: " << sorted << endl;
+
+    // now traverse the array and perform comparison
+    for ( int row = 0; row < rows; ++row )
+    {
+        // search in the first column
+        const Value le = data.element( 0, row );
+        if ( sorted && calc->naturalLower( key, le ) )
+            return Value::errorNA();
+        if ( calc->naturalEqual( key, le ) )
+            return data.element( col-1, row );
+    }
+    return Value::errorNA();
+}
