@@ -3854,7 +3854,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                     style = styleMap[ cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null ) ];
                 }
 
-                Cell* const cell = nonDefaultCell( columnIndex, backupRow ); // FIXME Stefan: if empty, delete afterwards
+                Cell* const cell = nonDefaultCell( columnIndex, backupRow );
                 cell->loadOasis( cellElement, oasisContext, style );
 
                 int cols = 1;
@@ -3893,6 +3893,12 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                             }
                         }
                     }
+                }
+
+                // delete non-default cell, if it is empty
+                if ( !cellHasStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
+                {
+                    d->cells.remove( cell->column(), cell->row() );
                 }
             }
         }
