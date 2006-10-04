@@ -59,8 +59,8 @@ BasicElement* OasisCreationStrategy::createElement( QString type, const QDomElem
     // Token Elements ( Section 3.1.6.1 )
     if      ( type == "mi" )               return new IdentifierElement();
     else if ( type == "mo" )               return createOperatorElement( element );
-    else if ( type == "mn"
-              || type == "mtext" )         return new NumberElement();
+    else if ( type == "mn" )               return new NumberElement();
+    else if ( type == "mtext" )            return new TokenElement();
     else if ( type == "ms" )               return new StringElement();
     else if ( type == "mspace" )           return new SpaceElement();
     else if ( type == "mglyph" )           return new GlyphElement();
