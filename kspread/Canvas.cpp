@@ -1488,7 +1488,7 @@ void Canvas::mouseDoubleClickEvent( QMouseEvent*  _ev)
   }
 
   if ( d->view->koDocument()->isReadWrite() && sheet )
-    createEditor();
+    createEditor( false /* keep content */);
 }
 
 void Canvas::wheelEvent( QWheelEvent* _ev )
@@ -3607,7 +3607,7 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
 }
 
 
-bool Canvas::createEditor( bool focus )
+bool Canvas::createEditor( bool clear,  bool focus )
 {
     register Sheet * const sheet = activeSheet();
     if (!sheet)
@@ -3701,7 +3701,7 @@ bool Canvas::createEditor( bool focus )
         repaint();
     }
 
-    if ( cell )
+    if ( !clear && cell )
         d->cellEditor->setText( cell->text() );
 
     return true;

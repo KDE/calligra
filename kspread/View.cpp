@@ -5064,7 +5064,7 @@ void View::editCell()
   if ( d->canvas->editor() )
     return;
 
-  d->canvas->createEditor();
+  d->canvas->createEditor( false /* keep content */ );
 }
 
 bool View::showSheet(const QString& sheetName) {

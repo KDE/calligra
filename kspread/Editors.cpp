@@ -1521,7 +1521,7 @@ void EditWidget::keyPressEvent ( QKeyEvent* _ev )
   if ( !m_pCanvas->editor() )
   {
     // Start editing the current cell
-    m_pCanvas->createEditor( false /* no focus */ );
+    m_pCanvas->createEditor( true /* clear content */, false /* no focus */ );
   }
   CellEditor * cellEditor = (CellEditor*) m_pCanvas->editor();
 
