@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--  kspread XSD v1.0 -->
+<xsd:schema
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.koffice.org/standards/kspread/functions/1.0"
+           xmlns:kspread="http://www.koffice.org/standards/kspread/functions/1.0"
+           targetNamespace="http://www.koffice.org/standards/kspread/functions/1.0"
+           version="1.0"
+           elementFormDefault="qualified" >
+
+    <xsd:annotation>
+        <xsd:documentation>
+
+            Copyright (c) 2006 Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net&gt;
+
+            Permission to use, copy, modify and distribute this XML schema
+            and its accompanying documentation for any purpose and without fee
+            is hereby granted in perpetuity, provided that the above copyright
+            notice and this paragraph appear in all copies.  The copyright
+            holders make no representation about the suitability of the DTD for
+            any purpose. It is provided "as is" without expressed or implied
+            warranty.
+
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:annotation>
+        <xsd:documentation>
+
+            A schema for KSpread's function description XML format.
+
+            A document instance of this Schema should have a declaration
+            looking like this:
+
+            <![CDATA[
+
+                <?xml version="1.0" encoding="UTF-8" ?>
+                <functions xmlns="http://www.koffice.org/standards/kspread/1.0"
+                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xsi:schemaLocation="http://www.koffice.org/standards/kspread/functions/1.0
+                           http://www.koffice.org/standards/kspread/functions/1.0/functions.xsd" >
+                    <!-- the content -->
+                </functions>
+
+            ]]>
+
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="functions">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="group" maxOccurs="unbounded" type="group"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="group">
+        <xsd:sequence>
+            <xsd:group ref="functions"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" use="required" type="xsd:string"/>
+    </xsd:complexType>
+
+    <xsd:group name="functions">
+        <xsd:sequence>
+            <xsd:element name="function" maxOccurs="unbounded" type="function"/>
+        </xsd:sequence>
+    </xsd:group>
+
+    <xsd:complexType name="function">
+        <xsd:sequence>
+            <xsd:element name="summary" maxOccurs="1" type="xsd:string"/>
+            <xsd:element name="parameters" minOccurs="0" maxOccurs="1" type="parameters"/>
+            <xsd:element name="description" maxOccurs="1" type="xsd:string"/>
+            <xsd:element name="examples" minOccurs="0" maxOccurs="1"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" use="required" type="xsd:string"/>
+        <xsd:attribute name="type" use="required" type="type"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="parameters">
+        <xsd:sequence>
+            <xsd:element name="parameter" maxOccurs="unbounded" type="parameter"/>
+            <xsd:element name="optional" maxOccurs="1" type="optionalParameters"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="optionalParameters">
+        <xsd:sequence>
+            <xsd:element name="parameter" maxOccurs="unbounded" type="optionalParameter"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="parameter">
+        <xsd:attribute name="name" use="required" type="xsd:string"/>
+        <xsd:attribute name="type" use="required" type="type" />
+        <xsd:attribute name="comment" use="required" type="xsd:string"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="optionalParameter">
+        <xsd:complexContent>
+            <xsd:extension base="parameter">
+                <xsd:attribute name="default" use="optional" type="xsd:string"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="examples">
+        <xsd:sequence>
+            <xsd:element name="example" maxOccurs="unbounded" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="type">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="String"/>
+            <xsd:enumeration value="Number"/>
+            <xsd:enumeration value="Integer"/>
+            <xsd:enumeration value="Date"/>
+            <xsd:enumeration value="Time"/>
+            <xsd:enumeration value="Boolean"/>
+            <xsd:enumeration value="Percentage"/>
+            <xsd:enumeration value="Currency"/>
+            <xsd:enumeration value="Complex"/>
+            <xsd:enumeration value="Array"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>
