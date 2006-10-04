@@ -714,6 +714,9 @@ public:
   void loadConfigFromFile();
   bool configLoadFromFile() const;
 
+  void setCaptureAllArrowKeys( bool capture );
+  bool captureAllArrowKeys() const;
+
   // repaint (update) all views
   void repaint( const QRect& );
   void repaint( EmbeddedObject* );

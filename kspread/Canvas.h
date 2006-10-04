@@ -228,11 +228,10 @@ public:
     void scrollToCell(QPoint location) const;
 
     /**
-     * Chooses the correct EditorType by looking at
-     * the current cells value. By default CellEditor is chosen.
+     * Creates a 'in-place' editor over the currently selected cell.
+     * \param focus gives the focus to the editor
      */
-    void createEditor( bool captureArrowKeys=false );
-    bool createEditor( EditorType type, bool addFocus = true, bool captureArrowKeys=false );
+    bool createEditor( bool focus = true );
 
     /**
      * Deletes the current cell editor.

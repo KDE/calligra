@@ -77,7 +77,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     // Make sure that there is a cell editor running.
     if ( !m_pView->canvasWidget()->editor() )
     {
-        m_pView->canvasWidget()->createEditor( Canvas::CellEditor );
+        m_pView->canvasWidget()->createEditor();
         if(cell->text().isEmpty())
           m_pView->canvasWidget()->editor()->setText( "=" );
         else

@@ -137,26 +137,27 @@ public:
 
   // document properties
   int syntaxVersion;
-  bool verticalScrollBar:1;
-  bool horizontalScrollBar:1;
-  bool columnHeader:1;
-  bool rowHeader:1;
+  bool verticalScrollBar        : 1;
+  bool horizontalScrollBar      : 1;
+  bool columnHeader             : 1;
+  bool rowHeader                : 1;
   QColor gridColor;
   double indentValue;
-  bool showStatusBar:1;
-  bool showTabBar:1;
-  bool showFormulaBar:1;
-  bool showError:1;
+  bool showStatusBar            : 1;
+  bool showTabBar               : 1;
+  bool showFormulaBar           : 1;
+  bool showError                : 1;
   KGlobalSettings::Completion completionMode;
   KSpread::MoveTo moveTo;
   MethodOfCalc calcMethod;
-  bool delayCalculation:1;
+  bool delayCalculation         : 1;
   K3SpellConfig *spellConfig;
-  bool dontCheckUpperWord:1;
-  bool dontCheckTitleCase:1;
-    bool configLoadFromFile:1;
+  bool dontCheckUpperWord       : 1;
+  bool dontCheckTitleCase       : 1;
+  bool configLoadFromFile       : 1;
+  bool captureAllArrowKeys      : 1;
   QStringList spellListIgnoreAll;
-  /// list of all objects
+  // list of all objects
   QList<EmbeddedObject*> embeddedObjects;
   KoPictureCollection m_pictureCollection;
   Q3ValueList<KoPictureKey> usedPictures;
@@ -168,7 +169,7 @@ public:
   bool precisionAsShown         : 1;
   bool wholeCellSearchCriteria  : 1;
   bool automaticFindLabels      : 1;
-  bool useRegularExpressions : 1;
+  bool useRegularExpressions    : 1;
   int refYear; // the reference year two-digit years are relative to
   QDate refDate; // the reference date all dates are relative to
 };
@@ -202,6 +203,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
 
   d->pageBorderColor = Qt::red;
   d->configLoadFromFile = false;
+  d->captureAllArrowKeys = true;
 
   QFont font( KoGlobal::defaultFont() );
   Format::setGlobalRowHeight( font.pointSizeF() + 3 );
@@ -2308,6 +2310,16 @@ void Doc::loadConfigFromFile()
 bool Doc::configLoadFromFile() const
 {
     return d->configLoadFromFile;
+}
+
+void Doc::setCaptureAllArrowKeys( bool capture )
+{
+    d->captureAllArrowKeys = capture;
+}
+
+bool Doc::captureAllArrowKeys() const
+{
+    return d->captureAllArrowKeys;
 }
 
 

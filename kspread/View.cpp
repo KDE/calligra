@@ -1850,24 +1850,26 @@ void View::initConfig()
     KConfig *config = Factory::global()->config();
     if ( config->hasGroup("Parameters" ))
     {
+        const bool configFromDoc = doc()->configLoadFromFile();
         config->setGroup( "Parameters" );
-        if ( !doc()->configLoadFromFile() )
+        if ( !configFromDoc )
+        {
             doc()->setShowHorizontalScrollBar(config->readEntry("Horiz ScrollBar",true));
-        if ( !doc()->configLoadFromFile() )
             doc()->setShowVerticalScrollBar(config->readEntry("Vert ScrollBar",true));
+        }
         doc()->setShowColumnHeader(config->readEntry("Column Header",true));
         doc()->setShowRowHeader(config->readEntry("Row Header",true));
-        if ( !doc()->configLoadFromFile() )
+        if ( !configFromDoc )
             doc()->setCompletionMode((KGlobalSettings::Completion)config->readEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
         doc()->setMoveToValue((KSpread::MoveTo)config->readEntry("Move",(int)(Bottom)));
         doc()->setIndentValue( config->readEntry( "Indent", 10.0 ) );
         doc()->setTypeOfCalc((MethodOfCalc)config->readEntry("Method of Calc",(int)(SumOfNumber)));
-        if ( !doc()->configLoadFromFile() )
+        if ( !configFromDoc )
             doc()->setShowTabBar(config->readEntry("Tabbar",true));
 
-  doc()->setShowMessageError(config->readEntry( "Msg error" ,false) );
+        doc()->setShowMessageError(config->readEntry( "Msg error" ,false) );
 
-  doc()->setShowFormulaBar(config->readEntry("Formula bar",true));
+        doc()->setShowFormulaBar(config->readEntry("Formula bar",true));
         doc()->setShowStatusBar(config->readEntry("Status bar",true));
 
         changeNbOfRecentFiles(config->readEntry("NbRecentFile",10));
@@ -1877,35 +1879,40 @@ void View::initConfig()
         doc()->setBackupFile( config->readEntry("BackupFile",true));
     }
 
-   if (  config->hasGroup("KSpread Color" ) )
-   {
-     config->setGroup( "KSpread Color" );
-     QColor _col(Qt::lightGray);
-     _col = config->readEntry("GridColor", _col);
-     doc()->setGridColor(_col);
+    if (  config->hasGroup("KSpread Color" ) )
+    {
+        config->setGroup( "KSpread Color" );
+        QColor _col(Qt::lightGray);
+        _col = config->readEntry("GridColor", _col);
+        doc()->setGridColor(_col);
 
-     QColor _pbCol(Qt::red);
-     _pbCol = config->readEntry("PageBorderColor", _pbCol);
-     doc()->changePageBorderColor(_pbCol);
-   }
+        QColor _pbCol(Qt::red);
+        _pbCol = config->readEntry("PageBorderColor", _pbCol);
+        doc()->changePageBorderColor(_pbCol);
+    }
 
 // Do we need a Page Layout in the congiguration file? Isn't this already in the template? Philipp
 /*
-if ( config->hasGroup("KSpread Page Layout" ) )
- {
-   config->setGroup( "KSpread Page Layout" );
-   if ( d->activeSheet->isEmpty())
-     {
-  d->activeSheet->setPaperFormat((KoFormat)config->readEntry("Default size page",1));
+    if ( config->hasGroup("KSpread Page Layout" ) )
+    {
+    config->setGroup( "KSpread Page Layout" );
+    if ( d->activeSheet->isEmpty())
+    {
+    d->activeSheet->setPaperFormat((KoFormat)config->readEntry("Default size page",1));
 
-  d->activeSheet->setPaperOrientation((KoOrientation)config->readEntry("Default orientation page",0));
-  d->activeSheet->setPaperUnit((KoUnit::Unit)config->readEntry("Default unit page",0));
-     }
- }
+    d->activeSheet->setPaperOrientation((KoOrientation)config->readEntry("Default orientation page",0));
+    d->activeSheet->setPaperUnit((KoUnit::Unit)config->readEntry("Default unit page",0));
+}
+}
 */
+    if ( config->hasGroup("Editor" ) )
+    {
+        config->setGroup( "Editor" );
+        doc()->setCaptureAllArrowKeys( config->readEntry("CaptureAllArrowKeys", true ) );
+    }
 
- initCalcMenu();
- calcStatusBarOp();
+    initCalcMenu();
+    calcStatusBarOp();
 }
 
 void View::changeNbOfRecentFiles(int _nb)
@@ -2673,7 +2680,7 @@ void View::autoSum()
 
         QString str = Range(startPoint, endPoint).toString();
 
-        d->canvas->createEditor( Canvas::CellEditor , true , true );
+        d->canvas->createEditor();
         d->canvas->editor()->setText("=SUM(" + str + ')');
         d->canvas->editor()->setCursorPosition(5 + str.length());
         return;
@@ -2692,7 +2699,7 @@ void View::autoSum()
 
         QString str = Range(startPoint, endPoint).toString();
 
-        d->canvas->createEditor( Canvas::CellEditor , true , true );
+        d->canvas->createEditor();
         d->canvas->editor()->setText("=SUM(" + str + ')');
         d->canvas->editor()->setCursorPosition(5 + str.length());
         return;
@@ -2705,7 +2712,7 @@ void View::autoSum()
 
   rg.setRange(sel);
 
-  d->canvas->createEditor( Canvas::CellEditor , true , true );
+  d->canvas->createEditor();
 
 
   if ( (rg.range().isValid() ) && (!rg.range().isEmpty()) )
@@ -5057,7 +5064,7 @@ void View::editCell()
   if ( d->canvas->editor() )
     return;
 
-  d->canvas->createEditor(true);
+  d->canvas->createEditor();
 }
 
 bool View::showSheet(const QString& sheetName) {

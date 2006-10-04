@@ -1488,7 +1488,7 @@ void Canvas::mouseDoubleClickEvent( QMouseEvent*  _ev)
   }
 
   if ( d->view->koDocument()->isReadWrite() && sheet )
-    createEditor(true);
+    createEditor();
 }
 
 void Canvas::wheelEvent( QWheelEvent* _ev )
@@ -2373,7 +2373,7 @@ void Canvas::processOtherKey(QKeyEvent *event)
     if ( !d->cellEditor && !d->chooseCell )
     {
       // Switch to editing mode
-      createEditor( CellEditor, true, true );
+      createEditor();
       d->cellEditor->handleKeyPressEvent( event );
     }
     else if ( d->cellEditor )
@@ -2826,7 +2826,7 @@ void Canvas::processIMEvent( QIMEvent * event )
   if ( !d->cellEditor && !d->chooseCell )
   {
     // Switch to editing mode
-    createEditor( CellEditor, true, true );
+    createEditor();
     d->cellEditor->handleIMEvent( event );
   }
 
@@ -3607,122 +3607,104 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
 }
 
 
-void Canvas::createEditor(bool captureArrowKeys)
+bool Canvas::createEditor( bool focus )
 {
-  register Sheet * const sheet = activeSheet();
-  if (!sheet)
-    return;
+    register Sheet * const sheet = activeSheet();
+    if (!sheet)
+        return false;
 
-  Cell* cell = sheet->nonDefaultCell( markerColumn(), markerRow() );
-
-  if ( !createEditor( CellEditor , true , captureArrowKeys ) )
-      return;
-  if ( cell )
-      d->cellEditor->setText( cell->text() );
-}
-
-bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
-{
-  register Sheet * const sheet = activeSheet();
-  if (!sheet)
-    return false;
-
-  // Set the starting sheet of the choice.
-  choice()->setSheet( sheet );
-
-  if ( !d->cellEditor )
-  {
-    Cell * cell = sheet->nonDefaultCell( marker().x(), marker().y() );
+    Cell* const cell = sheet->nonDefaultCell( marker().x(), marker().y() );
 
     if ( sheet->isProtected() && !cell->format()->notProtected( marker().x(), marker().y() ) )
-      return false;
+        return false;
 
-    if ( ed == CellEditor )
+    // Set the starting sheet of the choice.
+    choice()->setSheet( sheet );
+
+    if ( !d->cellEditor )
     {
-      d->editWidget->setEditMode( true );
-      d->cellEditor = new KSpread::CellEditor( cell, this, captureArrowKeys );
+        d->editWidget->setEditMode( true );
+        d->cellEditor = new KSpread::CellEditor( cell, this, doc()->captureAllArrowKeys() );
+
+        double w, h;
+        double min_w = cell->dblWidth( markerColumn() );
+        double min_h = cell->dblHeight( markerRow() );
+        if ( cell->isDefault() )
+        {
+            w = min_w;
+            h = min_h;
+        }
+        else
+        {
+            w = cell->extraWidth();
+            h = cell->extraHeight();
+        }
+
+        double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
+
+        Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
+        bool rtlText = cell->strOutText().isRightToLeft();
+
+        // if sheet and cell direction don't match, then the editor's location
+        // needs to be shifted backwards so that it's right above the cell's text
+        if ( w > 0 && ( ( sheetDir == Sheet::RightToLeft && !rtlText ) ||
+             ( sheetDir == Sheet::LeftToRight && rtlText  ) ) )
+            xpos -= w - min_w;
+
+        // paint editor above correct cell if sheet direction is RTL
+        if ( sheetDir == Sheet::RightToLeft )
+        {
+            double dwidth = d->view->doc()->unzoomItXOld( width() );
+            double w2 = qMax( w, min_w );
+            xpos = dwidth - w2 - xpos;
+        }
+
+        double ypos = sheet->dblRowPos( markerRow() ) - yOffset();
+        QPalette editorPalette( d->cellEditor->palette() );
+
+        QColor color = cell->format()->textColor( markerColumn(), markerRow() );
+        if ( !color.isValid() )
+            color = palette().text().color();
+        editorPalette.setColor( QPalette::Text, color );
+
+        color = cell->bgColor( markerColumn(), markerRow() );
+        if ( !color.isValid() )
+            color = editorPalette.base().color();
+        editorPalette.setColor( QPalette::Background, color );
+
+        d->cellEditor->setPalette( editorPalette );
+        QFont tmpFont = cell->format()->textFont( markerColumn(), markerRow() );
+        tmpFont.setPointSizeF( 0.01 * d->view->doc()->zoomInPercent() * tmpFont.pointSizeF() );
+        d->cellEditor->setFont( tmpFont );
+
+        KoRect rect( xpos, ypos, w, h ); //needed to circumvent rounding issue with height/width
+
+
+        QRect zoomedRect=d->view->doc()->zoomRectOld( rect );
+        /*zoomedRect.setLeft(zoomedRect.left()-2);
+        zoomedRect.setRight(zoomedRect.right()+4);
+        zoomedRect.setTop(zoomedRect.top()-1);
+        zoomedRect.setBottom(zoomedRect.bottom()+2);*/
+
+        d->cellEditor->setGeometry( zoomedRect );
+        d->cellEditor->setMinimumSize( QSize( d->view->doc()->zoomItXOld( min_w ), d->view->doc()->zoomItYOld( min_h ) ) );
+        d->cellEditor->show();
+
+        // Laurent 2001-12-05
+        // Don't add focus when we create a new editor and
+        // we select text in edit widget otherwise we don't delete
+        // selected text.
+        if ( focus )
+            d->cellEditor->setFocus();
+
+        sheet->setRegionPaintDirty( *selectionInfo() );
+        repaint();
     }
 
-    double w, h;
-    double min_w = cell->dblWidth( markerColumn() );
-    double min_h = cell->dblHeight( markerRow() );
-    if ( cell->isDefault() )
-    {
-      w = min_w;
-      h = min_h;
-      //kDebug(36005) << "DEFAULT" << endl;
-    }
-    else
-    {
-      w = cell->extraWidth();
-      h = cell->extraHeight();
-      //kDebug(36005) << "HEIGHT=" << min_h << " EXTRA=" << h << endl;
-    }
+    if ( cell )
+        d->cellEditor->setText( cell->text() );
 
-    double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
-
-    Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
-    bool rtlText = cell->strOutText().isRightToLeft();
-
-    // if sheet and cell direction don't match, then the editor's location
-    // needs to be shifted backwards so that it's right above the cell's text
-    if ( w > 0 && ( ( sheetDir == Sheet::RightToLeft && !rtlText ) ||
-                    ( sheetDir == Sheet::LeftToRight && rtlText  ) ) )
-      xpos -= w - min_w;
-
-    // paint editor above correct cell if sheet direction is RTL
-    if ( sheetDir == Sheet::RightToLeft )
-    {
-      double dwidth = d->view->doc()->unzoomItXOld( width() );
-      double w2 = qMax( w, min_w );
-      xpos = dwidth - w2 - xpos;
-    }
-
-    double ypos = sheet->dblRowPos( markerRow() ) - yOffset();
-    QPalette editorPalette( d->cellEditor->palette() );
-
-    QColor color = cell->format()->textColor( markerColumn(), markerRow() );
-    if ( !color.isValid() )
-      color = palette().text().color();
-    editorPalette.setColor( QPalette::Text, color );
-
-    color = cell->bgColor( markerColumn(), markerRow() );
-    if ( !color.isValid() )
-      color = editorPalette.base().color();
-    editorPalette.setColor( QPalette::Background, color );
-
-    d->cellEditor->setPalette( editorPalette );
-    QFont tmpFont = cell->format()->textFont( markerColumn(), markerRow() );
-    tmpFont.setPointSizeF( 0.01 * d->view->doc()->zoomInPercent() * tmpFont.pointSizeF() );
-    d->cellEditor->setFont( tmpFont );
-
-    KoRect rect( xpos, ypos, w, h ); //needed to circumvent rounding issue with height/width
-
-
-    QRect zoomedRect=d->view->doc()->zoomRectOld( rect );
-	/*zoomedRect.setLeft(zoomedRect.left()-2);
-	zoomedRect.setRight(zoomedRect.right()+4);
-	zoomedRect.setTop(zoomedRect.top()-1);
-	zoomedRect.setBottom(zoomedRect.bottom()+2);*/
-
-    d->cellEditor->setGeometry( zoomedRect );
-    d->cellEditor->setMinimumSize( QSize( d->view->doc()->zoomItXOld( min_w ), d->view->doc()->zoomItYOld( min_h ) ) );
-    d->cellEditor->show();
-    //kDebug(36005) << "FOCUS1" << endl;
-    //Laurent 2001-12-05
-    //Don't add focus when we create a new editor and
-    //we select text in edit widget otherwise we don't delete
-    //selected text.
-  //  startChoose();
-
-    if ( addFocus )
-        d->cellEditor->setFocus();
-
-    sheet->setRegionPaintDirty( *selectionInfo() );
-    repaint();
-  }
-
-  return true;
+    return true;
 }
 
 void Canvas::repaintObject( EmbeddedObject *obj )
