@@ -2319,8 +2319,10 @@ void KPrDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCom
             {
                 delete kppartobject;
                 kppartobject = 0L;
-                return;
             }
+            if (!kppartobject)
+                return;
+
             int index = m_pageList.findRef(page);
             int pageIndex = (int)(offset/__pgLayout.ptHeight)+index;
             int newPos=(int)((offset+index*__pgLayout.ptHeight)-pageIndex*__pgLayout.ptHeight);
