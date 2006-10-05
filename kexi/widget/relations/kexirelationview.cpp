@@ -113,23 +113,21 @@ KexiRelationView::containerForTable(KexiDB::TableSchema* tableSchema)
 	return 0;
 }*/
 
+KexiRelationViewTableContainer *
+KexiRelationView::tableContainer(KexiDB::TableSchema *t) const
+{
+	return t ? m_tables.find(t->name()) : 0;
+}
+
 KexiRelationViewTableContainer*
-KexiRelationView::addTable(KexiDB::TableSchema *t, const QRect &rect)
+KexiRelationView::addTableContainer(KexiDB::TableSchema *t, const QRect &rect)
 {
 	if(!t)
 		return 0;
 
 	kdDebug() << "KexiRelationView::addTable(): " << t->name() << ", " << viewport() << endl;
 
-	/*
-	if(m_tables.contains(t->name()))
-	{
-		kdDebug() << "KexiRelationView::addTable(): table already exists" << endl;
-//		return;
-	}
-	*/
-
-	KexiRelationViewTableContainer* c = m_tables.find(t->name());
+	KexiRelationViewTableContainer* c = tableContainer(t);
 	if (c) {
 		kdWarning() << "KexiRelationView::addTable(): table already added" << endl;
 		return c;

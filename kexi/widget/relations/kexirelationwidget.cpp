@@ -166,12 +166,14 @@ KexiRelationWidget::addTable(KexiDB::TableSchema *t, const QRect &rect)
 {
 	if (!t)
 		return;
-	KexiRelationViewTableContainer *c = m_relationView->addTable(t, rect);
-	if (!c)
-		return;
-	connect(c->tableView(), SIGNAL(doubleClicked(QListViewItem*,const QPoint&,int)),
-		this, SLOT(slotTableFieldDoubleClicked(QListViewItem*,const QPoint&,int)));
-	kdDebug() << "KexiRelationWidget::slotAddTable(): adding table " << t->name() << endl;
+	if (!m_relationView->tableContainer(t)) {
+		KexiRelationViewTableContainer *c = m_relationView->addTableContainer(t, rect);
+		kdDebug() << "KexiRelationWidget::slotAddTable(): adding table " << t->name() << endl;
+		if (!c)
+			return;
+		connect(c->tableView(), SIGNAL(doubleClicked(QListViewItem*,const QPoint&,int)),
+			this, SLOT(slotTableFieldDoubleClicked(QListViewItem*,const QPoint&,int)));
+	}
 
 	const QString tname = t->name().lower();
 	const int count = m_tableCombo->count();

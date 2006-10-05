@@ -166,15 +166,17 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
 		//! Implement this to return a hint for popup width.
 		virtual int popupWidthHint() const = 0;
 
+		//! Implement this to update button state. Table view just updates on/off state 
+		//! for the button depending on visibility of the popup
+		virtual void updateButton() {}
+
 		QString m_userEnteredText; //!< text entered by hand (by user)
 	
 		bool m_internalEditorValueChanged : 1; //!< true if user has text or other value inside editor
 		bool m_slotLineEditTextChanged_enabled : 1;
 		bool m_mouseBtnPressedWhenPopupVisible : 1; //!< Used only by KexiComboBoxTableEdit
+		bool m_insideCreatePopup : 1; //!< true if we're inside createPopup(); used in slotItemSelected()
 		KexiComboBoxPopup *m_popup;
-
-//		class Private;
-//		Private *d;
 };
 
 #endif

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004, 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -77,9 +77,14 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 		TablesDict* tables() { return &m_tables; }
 
 		/*! Adds a table \a t to the area. This changes only visual representation.
-		 If \a rect is valid, table widget rgeometry will be initialized.
+		 If \a rect is valid, table widget geometry will be initialized.
+		 \return added table container or 0 on failure.
 		 */
-		KexiRelationViewTableContainer* addTable(KexiDB::TableSchema *t, const QRect &rect = QRect());
+		KexiRelationViewTableContainer* addTableContainer(KexiDB::TableSchema *t, 
+			const QRect &rect = QRect());
+
+		/*! \return table container for table \a t. */
+		KexiRelationViewTableContainer * tableContainer(KexiDB::TableSchema *t) const;
 
 		//! Adds a connection \a con to the area. This changes only visual representation.
 		void addConnection(const SourceConnection& _conn /*, bool interactive=true*/);
