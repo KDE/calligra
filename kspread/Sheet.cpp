@@ -687,8 +687,8 @@ int Sheet::rightColumn( double _xpos ) const
             kDebug(36001) << "Sheet:rightColumn: invalid column (col: " << col << ')' << endl;
                   return KS_colMax + 1; //Return out of range value, so other code can react on this
         }
-        x += columnFormat( col )->dblWidth();
         col++;
+        x += columnFormat( col )->dblWidth();
     }
 
     return col;
@@ -728,8 +728,8 @@ int Sheet::bottomRow( double _ypos ) const
             kDebug(36001) << "Sheet:bottomRow: invalid row (row: " << row << ')' << endl;
                   return KS_rowMax + 1; //Return out of range value, so other code can react on this
         }
-        y += rowFormat( row )->dblHeight();
         row++;
+        y += rowFormat( row )->dblHeight();
     }
 
     return row;
