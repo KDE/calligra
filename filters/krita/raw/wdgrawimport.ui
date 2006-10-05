@@ -165,7 +165,7 @@
                   <item>
                     <widget class="QRadioButton" name="radioAutomatic" >
                       <property name="text" >
-                        <string>Automatic Qt::white balance</string>
+                        <string>Automatic white balance</string>
                       </property>
                       <property name="shortcut" >
                         <string/>
@@ -174,14 +174,14 @@
                         <bool>false</bool>
                       </property>
                       <property name="toolTip" stdset="0" >
-                        <string>Automatic color balance. The default is to use a fixed color balance based on a Qt::white card photographed in sunlight</string>
+                        <string>Automatic color balance. The default is to use a fixed color balance based on a white card photographed in sunlight</string>
                       </property>
                     </widget>
                   </item>
                   <item>
                     <widget class="QRadioButton" name="radioCamera" >
                       <property name="text" >
-                        <string>Camera Qt::white balance</string>
+                        <string>Camera white balance</string>
                       </property>
                       <property name="shortcut" >
                         <string/>
