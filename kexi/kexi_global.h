@@ -56,6 +56,7 @@
 
 #ifndef futureI18n
 # define futureI18n QString
+# define futureI18n2(a,b) QString(b)
 #endif
 
 #ifndef FUTURE_I18N_NOOP
