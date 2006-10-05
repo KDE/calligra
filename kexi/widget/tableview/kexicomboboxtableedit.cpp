@@ -577,6 +577,11 @@ void KexiComboBoxTableEdit::slotPopupHidden()
 	d->button->setOn(false);
 }
 
+void KexiComboBoxTableEdit::updateButton()
+{
+	d->button->setOn(m_popup->isVisible());
+}
+
 void KexiComboBoxTableEdit::hide()
 {
 	KexiInputTableEdit::hide();
@@ -587,8 +592,9 @@ void KexiComboBoxTableEdit::hide()
 void KexiComboBoxTableEdit::show()
 {
 	KexiInputTableEdit::show();
-	if (!column()->isReadOnly())
+	if (!column()->isReadOnly()) {
 		d->button->show();
+	}
 }
 
 /* in KexiComboBoxBase

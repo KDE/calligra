@@ -659,6 +659,12 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 else the m_scrollBarTipTimerCnt is just set to 0.*/
 		virtual void scrollBarTipTimeout();
 
+		/*! Shows error message box suitable for \a resultInfo. This can be "sorry" or "detailedSorry"
+		 message box or "queryYesNo" if resultInfo->allowToDiscardChanges is true. 
+		 \return code of button clicked: KMessageBox::Ok in case of "sorry" or "detailedSorry" messages
+		 and KMessageBox::Yes or KMessageBox::No in case of "queryYesNo" message. */
+		int showErrorMessageForResult(KexiDB::ResultInfo* resultInfo);
+
 		//! data structure displayed for this object
 		KexiTableViewData *m_data;
 

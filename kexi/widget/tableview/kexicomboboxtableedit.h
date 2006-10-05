@@ -55,6 +55,9 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 		//! Implemented for KexiComboBoxBase
 		virtual QVariant origValue() const { return m_origValue; }
 
+		virtual void setValueInternal(const QVariant& add, bool removeOld)
+			{ KexiComboBoxBase::setValueInternal(add, removeOld); }
+
 		virtual QVariant value() { return KexiComboBoxBase::value(); }
 
 		virtual void clear();
@@ -128,6 +131,9 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 
 		//! Implemented for KexiComboBoxBase
 		virtual int popupWidthHint() const;
+
+		//! Implemented this to update button state. 
+		virtual void updateButton();
 
 		class Private;
 		Private *d;

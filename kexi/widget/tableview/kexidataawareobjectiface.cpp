@@ -785,14 +785,17 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 		if (faultyColumn >= 0) {
 			setCursorPosition(m_curRow, faultyColumn);
 		}
-		if (m_data->result()->desc.isEmpty())
-			KMessageBox::sorry(dynamic_cast<QWidget*>(this), m_data->result()->msg);
-		else
-			KMessageBox::detailedSorry(dynamic_cast<QWidget*>(this), m_data->result()->msg, m_data->result()->desc);
 
-		if (faultyColumn >= 0) {
-			//edit this cell
-			startEditCurrentCell();
+		const int button = showErrorMessageForResult( m_data->result() );
+		if (KMessageBox::No == button) {
+			//discard changes
+			cancelRowEdit();
+		}
+		else {
+			if (faultyColumn >= 0) {
+				//edit this cell
+				startEditCurrentCell();
+			}
 		}
 	}
 
@@ -999,6 +1002,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 	const int realFieldNumber = fieldNumberForColumn(m_curCol);
 	if (realFieldNumber < 0) {
 		kWarning() << "KexiDataAwareObjectInterface::acceptEditor(): fieldNumberForColumn(m_curCol) < 0" << endl;
+		m_inside_acceptEditor = false;
 		return false;
 	}
 
@@ -1010,9 +1014,9 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 			|| (m_editor->field()->type()!=KexiDB::Field::Boolean && setNull && m_currentItem->at( realFieldNumber ).isNull())) {
 			kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): VALUE NOT CHANGED." << endl;
 			removeEditor();
-			m_inside_acceptEditor = false;
 			if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting)
 				acceptRowEdit();
+			m_inside_acceptEditor = false;
 			return true;
 		}
 		if (!setNull) {//get the new value 
@@ -1087,10 +1091,15 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 				setCursorPosition(m_curRow, m_data->result()->column);
 			}
 			if (!m_data->result()->msg.isEmpty()) {
-				if (m_data->result()->desc.isEmpty())
-					KMessageBox::sorry(dynamic_cast<QWidget*>(this), m_data->result()->msg);
-				else
-					KMessageBox::detailedSorry(dynamic_cast<QWidget*>(this), m_data->result()->msg, m_data->result()->desc);
+				const int button = showErrorMessageForResult( m_data->result() );
+				if (KMessageBox::No == button) {
+					//discard changes
+					cancelEditor();
+					if (m_acceptsRowEditAfterCellAccepting)
+						cancelRowEdit();
+					m_inside_acceptEditor = false;
+					return false;
+				}
 			}
 		}
 	}
@@ -1509,11 +1518,10 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiTableItem *item)/*, bool moveC
 	                                                                         //can return to the last row 
 	                                                                         //after reinserting it
 	if (!m_data->deleteRow(*item, true /*repaint*/)) {
-		//error
-		if (m_data->result()->desc.isEmpty())
-			KMessageBox::sorry(dynamic_cast<QWidget*>(this), m_data->result()->msg);
-		else
-			KMessageBox::detailedSorry(dynamic_cast<QWidget*>(this), m_data->result()->msg, m_data->result()->desc);
+		const int button = showErrorMessageForResult( m_data->result() );
+//		if (KMessageBox::No == button) {
+			//discard changes
+	//	}
 		return false;
 	}
 	else {
@@ -1795,4 +1803,23 @@ void KexiDataAwareObjectInterface::focusOutEvent(QFocusEvent* e)
 	m_scrollBarTip->hide();
 	
 	updateCell(m_curRow, m_curCol);
+}
+
+int KexiDataAwareObjectInterface::showErrorMessageForResult(KexiDB::ResultInfo* resultInfo)
+{
+	QWidget *thisWidget = dynamic_cast<QWidget*>(this);
+	if (resultInfo->allowToDiscardChanges) {
+		return KMessageBox::questionYesNo(thisWidget, resultInfo->msg 
+			+ (resultInfo->desc.isEmpty() ? QString::null : ("\n"+resultInfo->desc)),
+			QString::null, 
+			KGuiItem(futureI18n2("Correct Changes", "Correct"), QString::null, futureI18n("Correct changes")),
+			KGuiItem(futureI18n("Discard Changes")) );
+	}
+
+	if (resultInfo->desc.isEmpty())
+		KMessageBox::sorry(thisWidget, resultInfo->msg);
+	else
+		KMessageBox::detailedSorry(thisWidget, resultInfo->msg, resultInfo->desc);
+	
+	return KMessageBox::Ok;
 }

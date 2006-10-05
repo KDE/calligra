@@ -65,6 +65,7 @@ KexiComboBoxBase::KexiComboBoxBase()
 	m_internalEditorValueChanged = false; //user has text or other value inside editor
 	m_slotLineEditTextChanged_enabled = true;
 	m_mouseBtnPressedWhenPopupVisible = false;
+	m_insideCreatePopup = false;
 
 //moved	d->parentRightMargin = m_rightMargin;
 }
@@ -486,6 +487,7 @@ void KexiComboBoxBase::showPopup()
 
 void KexiComboBoxBase::createPopup(bool show)
 {
+	m_insideCreatePopup = true;
 	QWidget* thisWidget = dynamic_cast<QWidget*>(this);
 	QWidget *widgetToFocus = internalEditor() ? internalEditor() : thisWidget;
 	if (!m_popup) {
@@ -550,6 +552,7 @@ void KexiComboBoxBase::createPopup(bool show)
 	}
 
 	widgetToFocus->setFocus();
+	m_insideCreatePopup = false;
 }
 
 /* moved
@@ -579,6 +582,7 @@ void KexiComboBoxBase::slotRowAccepted(KexiTableItem * item, int row)
 	Q_UNUSED(row);
 	//update our value
 	//..nothing to do?
+	updateButton();
 	slotItemSelected(item);
 	/*emit*/acceptRequested();
 }
@@ -680,6 +684,12 @@ void KexiComboBoxBase::slotItemSelected(KexiTableItem*)
 	else {
 		//use 'enum hints' model
 		valueToSet = field()->enumHint( m_popup->tableView()->currentRow() );
+		if (valueToSet.toString().isEmpty() && !m_insideCreatePopup) {
+			clear();
+			QWidget* thisWidget = dynamic_cast<QWidget*>(this);
+			thisWidget->parentWidget()->setFocus();
+			return;
+		}
 	}
 	setValueOrTextInInternalEditor( valueToSet );
 	moveCursorToEndInInternalEditor();
