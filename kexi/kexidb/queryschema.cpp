@@ -72,7 +72,8 @@ class QuerySchemaPrivate
 		 , fieldsExpandedWithInternalAndRowID(0)
 		 , fieldsExpandedWithInternal(0)
 		 , autoincFields(0)
-		 , fieldsOrder(0)
+		 , columnsOrder(0)
+		 , columnsOrderExpanded(0)
 		 , pkeyFieldsOrder(0)
 		 , pkeyFieldsCount(0)
 		 , tablesBoundToColumns(64, -1)
@@ -96,7 +97,8 @@ class QuerySchemaPrivate
 			delete fieldsExpandedWithInternalAndRowID;
 			delete fieldsExpandedWithInternal;
 			delete autoincFields;
-			delete fieldsOrder;
+			delete columnsOrder;
+			delete columnsOrderExpanded;
 			delete pkeyFieldsOrder;
 			delete whereExpr;
 			delete fakeRowIDCol;
@@ -122,13 +124,16 @@ class QuerySchemaPrivate
 
 		void clearCachedData()
 		{
+			orderByColumnList.clear();
 			if (fieldsExpanded) {
 				delete fieldsExpanded;
 				fieldsExpanded = 0;
 				delete internalFields;
 				internalFields = 0;
-				delete fieldsOrder;
-				fieldsOrder = 0;
+				delete columnsOrderExpanded;
+				columnsOrderExpanded = 0;
+				delete columnsOrder;
+				columnsOrder = 0;
 				delete autoincFields;
 				autoincFields = 0;
 				autoIncrementSQLFieldsList = QString::null;
@@ -252,10 +257,13 @@ class QuerySchemaPrivate
 		QString autoIncrementSQLFieldsList;
 		QGuardedPtr<Driver> lastUsedDriverForAutoIncrementSQLFieldsList;
 
-		/*! A map for fast lookup of query fields' order.
+		/*! A map for fast lookup of query columns' order.
 		 This is exactly opposite information compared to vector returned 
 		 by fieldsExpanded() */
-		QMap<QueryColumnInfo*,int> *fieldsOrder;
+		QMap<QueryColumnInfo*,int> *columnsOrderExpanded;
+
+		/*! A map for fast lookup of query columns' order. */
+		QMap<QueryColumnInfo*,int> *columnsOrder;
 
 //		QValueList<bool> detailedVisibility;
 
@@ -315,7 +323,7 @@ OrderByColumn::OrderByColumn()
 {
 }
 
-OrderByColumn::OrderByColumn(const QueryColumnInfo& column, bool ascending, int pos)
+OrderByColumn::OrderByColumn(QueryColumnInfo& column, bool ascending, int pos)
  : m_column(&column)
  , m_pos(pos)
  , m_field(0)
@@ -323,11 +331,15 @@ OrderByColumn::OrderByColumn(const QueryColumnInfo& column, bool ascending, int 
 {
 }
 
-OrderByColumn::OrderByColumn(const Field& field, bool ascending)
+OrderByColumn::OrderByColumn(Field& field, bool ascending)
  : m_column(0)
  , m_pos(-1)
  , m_field(&field)
  , m_ascending(ascending)
+{
+}
+
+OrderByColumn::~OrderByColumn()
 {
 }
 
@@ -355,7 +367,7 @@ QString OrderByColumn::toSQLString() const
 			return QString(m_column->aliasOrName()) + orderString;
 	}
 	else {
-		return m_field ? m_field->name() : QString::null;
+		return (m_field ? m_field->name() : QString::null)  + orderString;
 	}
 }
 
@@ -395,7 +407,11 @@ bool OrderByColumnList::appendFields(QuerySchema& querySchema,
 	return false;
 }
 
-void OrderByColumnList::appendColumn(const QueryColumnInfo& columnInfo, bool ascending)
+OrderByColumnList::~OrderByColumnList()
+{
+}
+
+void OrderByColumnList::appendColumn(QueryColumnInfo& columnInfo, bool ascending)
 {
 	appendColumn( OrderByColumn(columnInfo, ascending) );
 }
@@ -410,7 +426,7 @@ bool OrderByColumnList::appendColumn(QuerySchema& querySchema, bool ascending, i
 	return true;
 }
 
-void OrderByColumnList::appendField(const Field& field, bool ascending)
+void OrderByColumnList::appendField(Field& field, bool ascending)
 {
 	appendColumn( OrderByColumn(field, ascending) );
 }
@@ -433,16 +449,16 @@ bool OrderByColumnList::appendField(QuerySchema& querySchema,
 	return false;
 }
 		
-void OrderByColumnList::appendColumn(const OrderByColumn& column)
+void OrderByColumnList::appendColumn(OrderByColumn& column)
 {
 	append( column );
 }
 
 QString OrderByColumnList::debugString() const
 {
-	QString dbg;
 	if (isEmpty())
 		return "NONE";
+	QString dbg;
 	for (OrderByColumn::ListConstIterator it=constBegin(); it!=constEnd(); ++it) {
 		if (!dbg.isEmpty())
 			dbg += "\n";
@@ -1084,11 +1100,13 @@ QueryColumnInfo* QuerySchema::expandedOrInternalField(uint index)
 
 void QuerySchema::computeFieldsExpanded()
 {
-	if (d->fieldsExpanded) {
-//		if (detailedVisibility)
-//			*detailedVisibility = d->detailedVisibility;
+	if (d->fieldsExpanded)
 		return;
-	}
+
+	if (!d->columnsOrder)
+		d->columnsOrder = new QMap<QueryColumnInfo*,int>();
+	else
+		d->columnsOrder->clear();
 
 	//collect all fields in a list (not a vector yet, because we do not know its size)
 	QueryColumnInfo::List list; //temporary
@@ -1102,9 +1120,10 @@ void QuerySchema::computeFieldsExpanded()
 				Field::List *ast_fields = static_cast<QueryAsterisk*>(f)->table()->fields();
 				for (Field *ast_f = ast_fields->first(); ast_f; ast_f=ast_fields->next()) {
 //					d->detailedVisibility += isFieldVisible(fieldPosition);
-					list.append( new QueryColumnInfo(ast_f, QCString()/*no field for asterisk!*/,
-						isColumnVisible(fieldPosition)) 
-					);
+					QueryColumnInfo *ci = new QueryColumnInfo(ast_f, QCString()/*no field for asterisk!*/,
+						isColumnVisible(fieldPosition));
+					list.append( ci );
+					d->columnsOrder->insert(ci, fieldPosition);
 //					list.append(ast_f);
 				}
 			}
@@ -1116,9 +1135,10 @@ void QuerySchema::computeFieldsExpanded()
 //! \todo (js): perhaps not all fields should be appended here
 //						d->detailedVisibility += isFieldVisible(fieldPosition);
 //						list.append(tab_f);
-						list.append( new QueryColumnInfo(tab_f, QCString()/*no field for asterisk!*/,
-							isColumnVisible(fieldPosition)) 
-						);
+						QueryColumnInfo *ci = new QueryColumnInfo(tab_f, QCString()/*no field for asterisk!*/,
+							isColumnVisible(fieldPosition));
+						list.append( ci );
+						d->columnsOrder->insert(ci, fieldPosition);
 					}
 				}
 			}
@@ -1128,6 +1148,7 @@ void QuerySchema::computeFieldsExpanded()
 //			d->detailedVisibility += isFieldVisible(fieldPosition);
 			QueryColumnInfo *ci = new QueryColumnInfo(f, columnAlias(fieldPosition), isColumnVisible(fieldPosition));
 			list.append( ci );
+			d->columnsOrder->insert(ci, fieldPosition);
 
 			//handle lookup field schema
 			LookupFieldSchema *lookupFieldSchema = f->table() ? f->table()->lookupFieldSchema( *f ) : 0;
@@ -1165,12 +1186,12 @@ void QuerySchema::computeFieldsExpanded()
 	if (!d->fieldsExpanded) {
 		d->fieldsExpanded = new QueryColumnInfo::Vector( list.count() );// Field::Vector( list.count() );
 		d->fieldsExpanded->setAutoDelete(true);
-		d->fieldsOrder = new QMap<QueryColumnInfo*,int>();
+		d->columnsOrderExpanded = new QMap<QueryColumnInfo*,int>();
 	}
 	else {//for future:
 		d->fieldsExpanded->clear();
 		d->fieldsExpanded->resize( list.count() );
-		d->fieldsOrder->clear();
+		d->columnsOrderExpanded->clear();
 	}
 
 	/*fill (based on prepared 'list' and 'lookup_list'):
@@ -1183,7 +1204,7 @@ void QuerySchema::computeFieldsExpanded()
 	for (QueryColumnInfo::ListIterator it(list); it.current(); ++it, i++) 
 	{
 		d->fieldsExpanded->insert(i, it.current());
-		d->fieldsOrder->insert(it.current(), i);
+		d->columnsOrderExpanded->insert(it.current(), i);
 		//remember field by name/alias/table.name if there's no such string yet in d->columnInfosByName
 		if (!it.current()->alias.isEmpty()) {
 			//alias
@@ -1219,6 +1240,7 @@ void QuerySchema::computeFieldsExpanded()
 			i++;
 		}
 	}
+
 	//create internal expanded list with lookup fields
 	if (d->internalFields) {
 		d->internalFields->clear();
@@ -1229,18 +1251,18 @@ void QuerySchema::computeFieldsExpanded()
 	d->fieldsExpandedWithInternal = 0;
 	d->fieldsExpandedWithInternalAndRowID = 0;
 	i=0;
+	if (!lookup_list.isEmpty() && !d->internalFields) {//create on demand
+		d->internalFields = new QueryColumnInfo::Vector( lookup_list.count() );
+		d->internalFields->setAutoDelete(true);
+	}
 	for (QueryColumnInfo::ListIterator it(lookup_list); it.current();i++, ++it)
 	{
 		//add it to the internal list
-		if (!d->internalFields) {//create on demand
-			d->internalFields = new QueryColumnInfo::Vector( lookup_list.count() );
-			d->internalFields->setAutoDelete(true);
-		}
 		d->internalFields->insert(i, it.current());
-		d->fieldsOrder->insert(it.current(), list.count()+i);
+		d->columnsOrderExpanded->insert(it.current(), list.count()+i);
 	}
+
 	//update QueryColumnInfo::indexForVisibleLookupValue() cache for columns
-	d->fieldsExpanded->count();
 	for (i=0; i < d->fieldsExpanded->size(); i++) {
 		QueryColumnInfo* ci = d->fieldsExpanded->at(i);
 //! @todo QuerySchema itself will also support lookup fields...
@@ -1259,16 +1281,13 @@ void QuerySchema::computeFieldsExpanded()
 			}
 		}
 	}
-
-//	if (detailedVisibility)
-//		*detailedVisibility = d->detailedVisibility;
 }
 
-QMap<QueryColumnInfo*,int> QuerySchema::fieldsOrder()
+QMap<QueryColumnInfo*,int> QuerySchema::columnsOrder(bool expanded)
 {
-	if (!d->fieldsOrder)
+	if (!d->columnsOrder)
 		computeFieldsExpanded();
-	return *d->fieldsOrder;
+	return expanded ? *d->columnsOrderExpanded : *d->columnsOrder;
 }
 
 QValueVector<int> QuerySchema::pkeyFieldsOrder()
@@ -1532,7 +1551,7 @@ QString QueryAsterisk::debugString()
 		dbg += "ALL-TABLES ASTERISK (*) ON TABLES(";
 		TableSchema *table;
 		QString table_names;
-		for (TableSchema::ListIterator it( *query()->tables() ); it.current(); ++it) {
+		for (TableSchema::ListIterator it( *query()->tables() ); (table = it.current()); ++it) {
 			if (!table_names.isEmpty())
 				table_names += ", ";
 			table_names += table->name();

@@ -49,6 +49,8 @@
 
 #define KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION 1
 
+//#define KEXIDB_LOOKUP_FIELD_TEST
+
 namespace KexiDB {
 
 ConnectionInternal::ConnectionInternal(Connection *conn)
@@ -1258,7 +1260,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 	// ORDER BY
 	QString orderByString( querySchema.orderByColumnList().toSQLString() );
 	if (!orderByString.isEmpty())
-		sql += (" " + orderByString);
+		sql += (" ORDER BY " + orderByString);
 	
 	//KexiDBDbg << sql << endl;
 	return sql;
@@ -2501,6 +2503,7 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 		loadExtendedTableSchemaData_ERR;
 	// extendedTableSchemaString will be just empty if there is no such data block
 
+#ifdef KEXIDB_LOOKUP_FIELD_TEST
 //<temp. for LookupFieldSchema tests>
 	if (tableSchema.name()=="cars") {
 		LookupFieldSchema *lookupFieldSchema = new LookupFieldSchema();
@@ -2511,6 +2514,7 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 		tableSchema.setLookupFieldSchema( "owner", lookupFieldSchema );
 	}
 //</temp. for LookupFieldSchema tests>
+#endif
 
 	if (extendedTableSchemaString.isEmpty())
 		return true;
@@ -2947,6 +2951,23 @@ void Connection::setAvailableDatabaseName(const QString& dbName)
 	d->availableDatabaseName = dbName;
 }
 
+//! @internal used in updateRow(), insertRow(), 
+inline void updateRowDataWithNewValues(QuerySchema &query, RowData& data, KexiDB::RowEditBuffer::DBMap& b,
+	QMap<QueryColumnInfo*,int>& columnsOrderExpanded)
+{
+	columnsOrderExpanded = query.columnsOrder(true/*expanded*/);
+	QMap<QueryColumnInfo*,int>::ConstIterator columnsOrderExpandedIt;
+	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
+		columnsOrderExpandedIt = columnsOrderExpanded.find( it.key() );
+		if (columnsOrderExpandedIt == columnsOrderExpanded.constEnd()) {
+			KexiDBWarn << "(Connection) updateRowDataWithNewValues(): \"now also assign new value in memory\" step "
+				"- could not find item '" << it.key()->aliasOrName() << "'" << endl;
+			continue;
+		}
+		data[ columnsOrderExpandedIt.data() ] = it.data();
+	}
+}
+
 bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf, bool useROWID)
 {
 // Each SQL identifier needs to be escaped in the generated query.
@@ -3025,18 +3046,9 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		setError(ERR_UPDATE_SERVER_ERROR, i18n("Row updating on the server failed."));
 		return false;
 	}
-	//success: now also assign new value in memory:
-	QMap<QueryColumnInfo*,int> fieldsOrder = query.fieldsOrder();
-	QMap<QueryColumnInfo*,int>::ConstIterator fieldsOrderIt;
-	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
-		fieldsOrderIt = fieldsOrder.find( it.key() );
-		if (fieldsOrderIt == fieldsOrder.constEnd()) {
-			KexiDBWarn << "Connection::updateRow(): \"now also assign new value in memory\" step "
-				"- could not find item '" << it.key()->aliasOrName() << "'" << endl;
-			continue;
-		}
-		data[ fieldsOrderIt.data() ] = it.data();
-	}
+	//success: now also assign new values in memory:
+	QMap<QueryColumnInfo*,int> columnsOrderExpanded;
+	updateRowDataWithNewValues(query, data, b, columnsOrderExpanded);
 	return true;
 }
 
@@ -3138,17 +3150,8 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		return false;
 	}
 	//success: now also assign new value in memory:
-	QMap<QueryColumnInfo*,int> fieldsOrder = query.fieldsOrder();
-	QMap<QueryColumnInfo*,int>::ConstIterator fieldsOrderIt;
-	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
-		fieldsOrderIt = fieldsOrder.find( it.key() );
-		if (fieldsOrderIt == fieldsOrder.constEnd()) {
-			KexiDBWarn << "Connection::insertRow(): \"now also assign new value in memory\" step "
-				"- could not find item '" << it.key()->aliasOrName() << "'" << endl;
-			continue;
-		}
-		data[ fieldsOrderIt.data() ] = it.data();
-	}
+	QMap<QueryColumnInfo*,int> columnsOrderExpanded;
+	updateRowDataWithNewValues(query, data, b, columnsOrderExpanded);
 
 	//fetch autoincremented values
 	QueryColumnInfo::List *aif_list = query.autoIncrementFields();
@@ -3176,12 +3179,12 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			//! @todo show error
 			return false;
 		}
-		QueryColumnInfo::ListIterator fi_it(*aif_list);
-		QueryColumnInfo *fi;
-		for (uint i=0; (fi = fi_it.current()); ++fi_it, i++) {
+		QueryColumnInfo::ListIterator ci_it(*aif_list);
+		QueryColumnInfo *ci;
+		for (uint i=0; (ci = ci_it.current()); ++ci_it, i++) {
 //			KexiDBDbg << "Connection::insertRow(): AUTOINCREMENTED FIELD " << fi->field->name() << " == "
 //				<< aif_data[i].toInt() << endl;
-			data[ fieldsOrder[ fi ] ] = aif_data[i];
+			data[ columnsOrderExpanded[ ci ] ] = aif_data[i];
 		}
 	}
 	else {
