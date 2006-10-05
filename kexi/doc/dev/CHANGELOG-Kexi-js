@@ -15,6 +15,44 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+~~~~~~~~~~~~~~~~ 1.1 stable (with KOffice 1.6)  ~~~~~~~~~~~~~~~~
+
+2006-10-04, 05
+Table View
+= fixed displaying values for combobox fields
+= it is now possible to have empty combobox item: selecting it clears 
+  the value of combobox
+2.0: merged
+Query Designer
+- invalid input (e.g. criteria or sorting) now displays a message box with 
+  "Correct" and "Discard Changes" buttons
+- added support for setting order of columns in Design and SQL views (ORDER BY)
+- fields were sometimes added twice
+2.0: merged
+KexiDB
+= fixed handling information about columns ordering
+2.0: ported
+KoProperty
+= Property: added a method for clearing "modified" flag
+2.0: ported
+
+2006-10-03
+Forms
+- solution for bug #134773: hide "Editor type" property for auto fields
+  Kexi 2.0 will have it unhidden.
+2.0: ported
+- fixed updating property values of enum type
+2.0: merged
+Core
+- fixed bug #134977: enabling/disabling of actions in query editor
+2.0: merged
+Main Window
+- fixed bug #134975: "Data actions do not appear on first open"
+  workaround used before Kexi 2.0: the Data toolbar is always visible
+2.0: merged
+
+~ ~ ~ ~ End of aKademy 2006, Dublin ~ ~ ~ ~
+
 2006-09-30
 KexiDB
 = support for ORDER BY while generating SQL statements
@@ -44,8 +82,6 @@ Forms
 KexiDB
 - added support for ORDER BY clause
 2.0: ported
-Query Designer
-TODO- added support for setting order of columns
 
 ~ ~ ~ ~ aKademy 2006, Dublin ~ ~ ~ ~
 

@@ -355,7 +355,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - add "description" label on the bottom of the property editor; 
   it should reuse Property::description() text
 
-==== Query GUI Designer TODO: ======
+==== Query Designer TODO: ======
 - add tables dropping from the browser
 - add a dialog for inserting multiple tables at a time
 - fix connections drawing
@@ -378,7 +378,8 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
   so 'wait' cursor can be visible on 1st loading.
 - allow saving invalid queries (KexiQueryDesignerSQLView::storeNewData())
   (for invelid queries, after opening SQL view should be shown automatically)
-
+- allow to copy error message (e.g. using a copy button) 
+  + allow to select message text (use active label?)
 
 ==== Main window TODO ====
 - propeditor dock window is hidden when a window in data view mode is active 
@@ -921,6 +922,7 @@ ALTER TABLE t1_new RENAME TO t1;
    widget, the menu item Layout Widgets is not available. You 
    have to select the widgets inserted in the contrainer widget 
    to make the menu item available. "
+- unhide "Editor type" property for auto fields (it's hidden in 1.1 due to a crash)
 
 TODO:
 - inform Raphael about koffice.org/1.5/ url, give him the php code
