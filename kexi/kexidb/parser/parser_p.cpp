@@ -401,15 +401,15 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 	return true;
 }
 
-//clean up no longer needed objects
+//! clean up no longer needed temporary objects
 #define CLEANUP \
 	delete colViews; \
 	delete tablesList; \
 	delete options
 
-QuerySchema* buildSelectQuery(
-	QuerySchema* querySchema, NArgExpr* colViews, NArgExpr* tablesList,
-	SelectOptionsInternal* options ) //BaseExpr* whereExpr )
+QuerySchema* buildSelectQuery( 
+	QuerySchema* querySchema, NArgExpr* colViews, NArgExpr* tablesList, 
+	SelectOptionsInternal* options )
 {
 	ParseInfo parseInfo(querySchema);
 
@@ -617,7 +617,8 @@ QuerySchema* buildSelectQuery(
 						if (!orderByColumnList.appendColumn( *querySchema,
 							(*it).ascending, (*it).columnNumber-1 ))
 						{
-							setError(futureI18n("Could not define ordering - no column at position %1").arg((*it).columnNumber));
+							setError(futureI18n("Could not define ordering - no column at position %1")
+								.arg((*it).columnNumber));
 							CLEANUP;
 							return 0;
 						}
@@ -625,7 +626,8 @@ QuerySchema* buildSelectQuery(
 					else {
 						Field * f = querySchema->findTableField((*it).aliasOrName);
 						if (!f) {
-							setError(futureI18n("Could not define ordering - column name or alias \"%1\" does not exist").arg((*it).aliasOrName));
+							setError(futureI18n("Could not define ordering - "
+								"column name or alias \"%1\" does not exist").arg((*it).aliasOrName));
 							CLEANUP;
 							return 0;
 						}

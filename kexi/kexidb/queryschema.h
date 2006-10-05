@@ -39,11 +39,12 @@ class Connection;
 class QueryAsterisk;
 class QuerySchemaPrivate;
 
-/*! Helper class that assigns additional information for the column in a query:
-	- alias
-	- visibility
+//! @short Helper class that assigns additional information for the column in a query
+/*! The following information is assigned:
+	 - alias
+	 - visibility
 	QueryColumnInfo::Vector is created and returned by QuerySchema::fieldsExpanded().
-	It is efficiently cached there.
+	It is efficiently cached within the QuerySchema object.
 */
 class KEXI_DB_EXPORT QueryColumnInfo
 {
@@ -81,11 +82,11 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		/*! Sets index of column with visible lookup value within the 'fields expanded' vector. */
 		inline void setIndexForVisibleLookupValue(int index) { m_indexForVisibleLookupValue = index; }
 
-		//! true if this column is visible to the user
-		bool visible : 1;
-
 		/*! \return string for debugging purposes. */
-		QString debugString() const;
+		virtual QString debugString() const;
+
+		//! true if this column is visible to the user (and its data is fetched by the engine)
+		bool visible : 1;
 
 	private:
 		/*! Index of column with visible lookup value within the 'fields expanded' vector.
@@ -93,28 +94,31 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		int m_indexForVisibleLookupValue;
 };
 
-//! KexiDB::OrderByColumn provides information about a single column 
-//! (expression or table field) used for sorting.
+//! @short KexiDB::OrderByColumn provides information about a single query column used for sorting
+/*! The column can be expression or table field. */
 class KEXI_DB_EXPORT OrderByColumn
 {
 	public:
-		typedef QList<OrderByColumn>::ConstIterator ListConstIterator;
+		typedef QValueListConstIterator<OrderByColumn> ListConstIterator;
 		OrderByColumn();
-		OrderByColumn(const QueryColumnInfo& column, bool ascending = true, int pos = -1);
+		OrderByColumn(QueryColumnInfo& column, bool ascending = true, int pos = -1);
 		
-		//! Like above but used when the field \a field is not present on the list of columns. (e.g. SELECT a FROM t ORDER BY b; where T is a table with fields (a,b)). 
-		OrderByColumn(const Field& field, bool ascending = true);
+		//! Like above but used when the field \a field is not present on the list of columns.
+		//! (e.g. SELECT a FROM t ORDER BY b; where T is a table with fields (a,b)). 
+		OrderByColumn(Field& field, bool ascending = true);
+
+		~OrderByColumn();
 
 		//! A column to sort.
-		inline const QueryColumnInfo* column() const { return m_column; }
+		inline QueryColumnInfo* column() const { return m_column; }
 
-		//!< A helper for column() that allows you to know that sorting column 
-	  //!< was defined by providing its position. -1 by default.
-		//!< Example query: SELECT a, b FROM T ORDER BY 2
+		/*! A helper for column() that allows you to know that sorting column 
+		 was defined by providing its position. -1 by default.
+		 Example query: SELECT a, b FROM T ORDER BY 2 */
 		inline int position() const { return m_pos; }
 
 		//! A field to sort, used only in case when the second constructor was used.
-		inline const Field *field() const { return m_field; }
+		inline Field *field() const { return m_field; }
 
 		//! \return true if ascending sorting should be performed (the default).
 		inline bool ascending() const { return m_ascending; }
@@ -132,26 +136,28 @@ class KEXI_DB_EXPORT OrderByColumn
 
 	protected:
 		//! Column to sort
-		const QueryColumnInfo* m_column; //!< 0 if m_field is non-0.
+		QueryColumnInfo* m_column; //!< 0 if m_field is non-0.
 		int m_pos; //!< A helper for m_column that allows to know that sorting column 
 		           //!< was defined by providing its position. -1 by default.
 		           //!< e.g. SELECT a, b FROM T ORDER BY 2
-		const Field* m_field; //!< Used only in case when the second contructor is used.
+		Field* m_field; //!< Used only in case when the second contructor is used.
 
 		//! true if ascending sorting should be performed (the default).
 		bool m_ascending : 1;
 };
 
 //! A base for KexiDB::OrderByColumnList
-typedef QList<OrderByColumn> OrderByColumnListBase;
+typedef QValueList<OrderByColumn> OrderByColumnListBase;
 
-//! KexiDB::OrderByColumnList provides list of sorted columns for a query schema
+//! @short KexiDB::OrderByColumnList provides list of sorted columns for a query schema
 class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 {
 	public:
 		/*! Constructs empty list of ordered columns. */
 		OrderByColumnList();
-	
+
+		~OrderByColumnList();
+
 		/*! Appends multiple fields for sorting. \a querySchema 
 		 is used to find appropriate field or alias name.
 		 \return false if there is at least one name for which a field or alias name does not exist
@@ -164,12 +170,12 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 			const QString& field5 = QString::null, bool ascending5 = true);
 
 		/*! Appends column \a columnInfo. Ascending sorting is set is \a ascending is true. */
-		void appendColumn(const QueryColumnInfo& columnInfo, bool ascending = true);
+		void appendColumn(QueryColumnInfo& columnInfo, bool ascending = true);
 		
 		/*! Appends a field \a field. Ascending sorting is set is \a ascending is true. 
 		 Read documentation of \ref OrderByColumn(const Field& field, bool ascending = true)
 		 for more info. */
-		void appendField(const Field& field, bool ascending = true);
+		void appendField(Field& field, bool ascending = true);
 
 		/*! Appends field with a name \a field. Ascending sorting is set is \a ascending is true. 
 		 \return true on successful appending, and false if there is no such field or alias 
@@ -182,7 +188,7 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 		bool appendColumn(QuerySchema& querySchema, bool ascending = true, int pos = -1);
 
 		/*! Appends \a column to the list. */
-		void appendColumn(const OrderByColumn& column);
+		void appendColumn(OrderByColumn& column);
 		
 		/*! \return true if the list is empty. */
 		bool isEmpty() const { return OrderByColumnListBase::isEmpty(); }
@@ -197,9 +203,10 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 		QString toSQLString() const;
 };
 
-/*! KexiDB::QuerySchema provides information about database query
-	that can be executed using SQL database engine. 
-*/
+//! @short KexiDB::QuerySchema provides information about database query
+/*! The query that can be executed using KexiDB-compatible SQL database engine 
+ or used as an introspection tool. KexiDB parser builds QuerySchema objects
+ by parsing SQL statements. */
 class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 {
 	public:
@@ -492,6 +499,9 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 */
 		virtual Field* field(const QString& name);
 
+		/*! \return field id or NULL if there is no such a field. */
+		inline Field* field(uint id) { return FieldList::field(id); }
+
 		/*! Like QuerySchema::field(const QString& name) but returns not only Field
 		 object for \a name but entire QueryColumnInfo object. 
 		 */
@@ -559,16 +569,28 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		QueryColumnInfo* expandedOrInternalField(uint index);
 
 		/*! \return a map for fast lookup of query columns' order.
-		 This is exactly opposite information compared to vector returned 
-		 by fieldsExpanded(). This method's result is cached by QuerySchema object.
+		 If \a expanded is true (the default) this method provides is exactly opposite 
+		 information compared to vector returned by fieldsExpanded(). 
+		 This method's result is cached by the QuerySchema object.
 		 Note: indices of internal fields (see internalFields()) are also returned 
 		 here - in this case the index is counted as a sum of size(e) + i (where "e" is 
 		 the list of expanded fields and i is the column index within internal fields list).
 		 This feature is used eg. at the end of Connection::updateRow() where need indices of
 		 fields (including internal) to update all the values in memory.
-@todo js: UPDATE CACHE!
+		 If \a expanded is false, each QueryColumnInfo pointer is mapped to the index
+		 within (unexpanded) list of fields, i.e. "*" or "table.*" asterisks are considered 
+		 to be single items.
+
+		 Example use: let t be table (int id, name text, surname text) and q be query
+		 defined by a statement "select * from t". 
+		 columnsOrder(true) will return the following map: QueryColumnInfo(id)->0,
+		 QueryColumnInfo(name)->1, QueryColumnInfo(surname)->2.
+		 columnsOrder(false) will return the following map: QueryColumnInfo(id)->0,
+		 QueryColumnInfo(name)->0, QueryColumnInfo(surname)->0 because the column 
+		 list is not expanded. This way you can use the returned index to get Field*
+		 pointer using field(uint) method of FieldList superclass.
 		*/
-		QMap<QueryColumnInfo*,int> fieldsOrder();
+		QMap<QueryColumnInfo*,int> columnsOrder(bool expanded = true);
 
 		/*! \return table describing order of primary key (PKEY) fields within the query.
 		 Indexing is performed against vector returned by fieldsExpanded().
@@ -659,10 +681,18 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 Each name on the list must be a field or alias present within the query 
 		 and must not be covered by aliases. If one or more names cannot be found 
 		 within the query, the method will have no effect. 
-		 Any previous ORDER BY settings will be removed. */
+		 Any previous ORDER BY settings will be removed. 
+
+		 Note that this information is cleared whenever you call methods that 
+		 modify list of columns (QueryColumnInfo), i.e. insertFiled(), 
+		 addField(), removeField(), addExpression(), etc. 
+		 (because OrderByColumn items can point to a QueryColumnInfo that's removed by these 
+		 methods), so you should use setOrderByColumnList() method after the query 
+		 is completely built. */
 		void setOrderByColumnList(const OrderByColumnList& list);
 
-		/*! \return a list of columns listed in ORDER BY section of the query. */
+		/*! \return a list of columns listed in ORDER BY section of the query. 
+		 Read notes for \ref setOrderByColumnList(). */
 		OrderByColumnList& orderByColumnList() const;
 
 	protected:
@@ -670,17 +700,14 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		void computeFieldsExpanded();
 
-	//		/*! Automatically retrieves query schema via connection. */
-//		QuerySchema(Connection *conn);
-
 		QuerySchemaPrivate *d;
 		
 	friend class Connection;
 	friend class QuerySchemaPrivate;
 };
 
-/*! This class encapsulates information about single asterisk in query definition.
- There are two types of query asterisks:
+//! @short KexiDB::QueryAsterisk class encapsulates information about single asterisk in query definition
+/*! There are two types of query asterisks:
  
  1. "Single-table" asterisk, that references all fields of given table used
  in the query.
@@ -702,7 +729,6 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
  There can be many asterisks of 1st type defined for given single query.
  There can be one asterisk of 2nd type defined for given single query.
 */
-
 class KEXI_DB_EXPORT QueryAsterisk : protected Field
 {
 	public:
