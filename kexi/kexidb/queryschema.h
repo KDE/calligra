@@ -196,6 +196,12 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 		/*! \return number of elements of the list. */
 		uint count() const { return OrderByColumnListBase::count(); }
 
+		/*! Removes all elements from the list. */
+		void clear() { OrderByColumnListBase::clear(); }
+
+		const_iterator constBegin () const { return OrderByColumnListBase::constBegin(); }
+		const_iterator constEnd () const { return OrderByColumnListBase::constEnd(); }
+
 		/*! \return string for debugging purposes. */
 		QString debugString() const;
 		
