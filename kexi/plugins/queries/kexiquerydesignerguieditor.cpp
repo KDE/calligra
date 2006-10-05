@@ -41,6 +41,7 @@
 #include <kexidb/parser/parser.h>
 #include <kexidb/parser/sqlparser.h>
 #include <kexidb/utils.h>
+#include <kexidb/roweditbuffer.h>
 #include <kexiutils/identifier.h>
 #include <kexiproject.h>
 #include <keximainwindow.h>
@@ -70,10 +71,12 @@
 #define COLUMN_ID_TABLE 1
 #define COLUMN_ID_VISIBLE 2
 #ifdef KEXI_NO_QUERY_TOTALS
-# define COLUMN_ID_CRITERIA 3
+# define COLUMN_ID_SORTING 3
+# define COLUMN_ID_CRITERIA 4
 #else
 # define COLUMN_ID_TOTALS 3
-# define COLUMN_ID_CRITERIA 4
+# define COLUMN_ID_SORTING 4
+# define COLUMN_ID_CRITERIA 5
 #endif
 
 /*! @internal */
@@ -116,6 +119,16 @@ public:
 	bool slotTableAdded_enabled : 1;
 };
 
+static bool isAsterisk(const QString& tableName, const QString& fieldName)
+{
+	return tableName=="*" || fieldName.endsWith("*");
+}
+
+//! @internal \return true if sorting is allowed for \a fieldName and \a tableName
+static bool sortingAllowed(const QString& fieldName, const QString& tableName) {
+	return ! (fieldName=="*" || (fieldName.isEmpty() && tableName=="*"));
+}
+
 //=========================================================
 
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
@@ -147,8 +160,9 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 	Q3ValueList<int> c;
 	c << COLUMN_ID_COLUMN << COLUMN_ID_TABLE << COLUMN_ID_CRITERIA;
 	if (d->dataTable->tableView()/*sanity*/) {
-		d->dataTable->tableView()->maximizeColumnsWidth( c );
 		d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_VISIBLE);
+		d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_SORTING);
+		d->dataTable->tableView()->maximizeColumnsWidth( c );
 		d->dataTable->tableView()->setDropsAtRowEnabled(true);
 		connect(d->dataTable->tableView(), SIGNAL(dragOverRow(KexiTableItem*,int,QDragMoveEvent*)),
 			this, SLOT(slotDragOverTableRow(KexiTableItem*,int,QDragMoveEvent*)));
@@ -218,15 +232,14 @@ KexiQueryDesignerGuiEditor::initTableColumns()
 	d->data->addColumn(col4);
 #endif
 
-/*TODO
-f= new KexiDB::Field(i18n("Sort"), KexiDB::Field::Enum);
+	KexiTableViewColumn *col5 = new KexiTableViewColumn("sort", KexiDB::Field::Enum, i18n("Sorting"),
+		i18n("Describes a way of sorting for a given field."));
 	QValueVector<QString> sortTypes;
+	sortTypes.append( "" );
 	sortTypes.append( i18n("Ascending") );
 	sortTypes.append( i18n("Descending") );
-	sortTypes.append( i18n("No sorting") );
-	f->setEnumHints(sortTypes);
-	KexiTableViewColumn *col5 = new KexiTableViewColumn(*f);
-	d->data->addColumn(col5);*/
+	col5->field()->setEnumHints(sortTypes);
+	d->data->addColumn(col5);
 
 	KexiTableViewColumn *col6 = new KexiTableViewColumn("criteria", KexiDB::Field::Text, i18n("Criteria"),
 		i18n("Describes the criteria for a given field or expression."));
@@ -353,11 +366,13 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 		temp->query()->addTable( it.current()->schema()->table() );
 	}
 
-	//add fields
+	//add fields, also build:
+	// -WHERE expression
+	// -ORDER BY list
 	KexiDB::BaseExpr *whereExpr = 0;
-	KexiTableViewData::Iterator it(d->data->iterator());
 	const uint count = qMin(d->data->count(), d->sets->size());
 	bool fieldsFound = false;
+	KexiTableViewData::Iterator it(d->data->iterator());
 	for (uint i=0; i<count && it.current(); ++it, i++) {
 		if (!it.current()->at(COLUMN_ID_TABLE).isNull() && it.current()->at(COLUMN_ID_COLUMN).isNull()) {
 			//show message about missing field name, and set focus to that cell
@@ -374,6 +389,8 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 			QString tableName = (*set)["table"].value().toString().trimmed();
 			QString fieldName = (*set)["field"].value().toString();
 			QString fieldAndTableName = fieldName;
+			KexiDB::Field *currentField = 0; // will be set if this column is a single field
+			KexiDB::QueryColumnInfo* currentColumn = 0;
 			if (!tableName.isEmpty())
 				fieldAndTableName.prepend(tableName+".");
 			bool fieldVisible = (*set)["visible"].value().toBool();
@@ -395,7 +412,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 				if (whereExpr)
 					whereExpr = new KexiDB::BinaryExpr(KexiDBExpr_Logical, whereExpr, AND, criteriaExpr);
 				else //first expr.
-					whereExpr =	criteriaExpr;
+					whereExpr = criteriaExpr;
 			}
 			if (tableName.isEmpty()) {
 				if ((*set)["isExpression"].value().toBool()==true) {
@@ -424,7 +441,6 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 			}
 			else {
 				KexiDB::TableSchema *t = d->conn->tableSchema(tableName);
-//				if (fieldName.find(".*")!=-1) {
 				if (fieldName=="*") {
 					//single-table asterisk: <tablename> + ".*" + number
 					temp->query()->addAsterisk( new KexiDB::QueryAsterisk( temp->query(), t ), fieldVisible );
@@ -435,12 +451,13 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 						kexipluginswarn << "query designer: NO TABLE '" << (*set)["table"].value().toString() << "'" << endl;
 						continue;
 					}
-					KexiDB::Field *f = t->field( fieldName );
-					if (!f) {
+					currentField = t->field( fieldName );
+					if (!currentField) {
 						kexipluginswarn << "query designer: NO FIELD '" << fieldName << "'" << endl;
 						continue;
 					}
-					temp->query()->addField(f, fieldVisible);
+					temp->query()->addField(currentField, fieldVisible);
+					currentColumn = temp->query()->expandedOrInternalField( temp->query()->fieldsExpanded().count() - 1 );
 					if (fieldVisible)
 						fieldsFound = true;
 					if (!alias.isEmpty())
@@ -474,6 +491,32 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 			masterTable->schema()->table()->field(it.current()->masterField()),
 			detailsTable->schema()->table()->field(it.current()->detailsField()) );
 	}
+
+	// Add sorting information (ORDER BY) - we can do that only now once 
+	//  all QueryColumnInfo items are instantiated
+	KexiDB::OrderByColumnList orderByColumns;
+	it = d->data->iterator();
+	for (uint i=0; i<count && it.current(); ++it, i++) {
+		KoProperty::Set *set = d->sets->at(i);
+		if (!set)
+			continue;
+		KexiDB::Field *currentField = temp->query()->field( i );
+		if (!currentField || currentField->isExpression() || currentField->isQueryAsterisk())
+//! @todo support expressions here
+			continue;
+//! @todo ok, but not for expresions
+		QString aliasString( (*set)["alias"].value().toString() );
+		KexiDB::QueryColumnInfo *currentColumn = temp->query()->columnInfo( 
+			aliasString.isEmpty() ? currentField->name() : aliasString );
+		QString sortingString( (*set)["sorting"].value().toString() );
+		if (currentField && currentColumn && (sortingString=="ascending" || sortingString=="descending")) {
+			if (currentColumn->visible)
+				orderByColumns.appendColumn(*currentColumn, sortingString=="ascending");
+			else if (currentColumn->field)
+				orderByColumns.appendField(*currentColumn->field, sortingString=="ascending");
+		}
+	}
+	temp->query()->setOrderByColumnList( orderByColumns );
 
 	temp->query()->debug();
 	temp->registerTableSchemaChanges(temp->query());
@@ -769,7 +812,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 	if (!showFields)
 		return;
 
-	//3. show fields
+	//3. show fields (including * and table.*)
 	uint row_num = 0;
 	KexiDB::Field *field;
 	Q3PtrDict<char> usedCriterias(101); // <-- used criterias will be saved here
@@ -843,7 +886,49 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 		}
 	}
 
-	//4. Show fields for unused criterias (with "Visible" column set to false)
+	//4. show ORDER BY information
+	KexiDB::OrderByColumnList &orderByColumns = query->orderByColumnList();
+//	Q3PtrDict<KexiDB::OrderByColumn> orderByDictForFields;
+//	Q3PtrDict<KexiDB::OrderByColumn> orderByDictForColumns;
+	QMap<KexiDB::QueryColumnInfo*,int> columnsOrder( query->columnsOrder(false/*!expanded*/) );
+	for (KexiDB::OrderByColumn::ListConstIterator orderByColumnsIt( orderByColumns.constBegin() );
+		orderByColumnsIt!=orderByColumns.constEnd(); ++orderByColumnsIt)
+	{
+		KexiDB::QueryColumnInfo *column = (*orderByColumnsIt).column();
+		if (column) {
+			//sorting for visible column
+			if (column->visible) {
+				if (columnsOrder.contains(column)) {
+					const int columnPosition = columnsOrder[ column ];
+					KexiTableItem *rowItem = d->data->at( columnPosition );
+					KoProperty::Set *rowPropertySet = d->sets->at( columnPosition );
+					if (rowItem && rowPropertySet) {
+						kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
+							"Setting \"" << (*orderByColumnsIt).debugString() << "\" sorting for row #" 
+							<< columnPosition<< endl;
+						//(*rowPropertySet)["sorting"].setValue(
+							//QString((*orderByColumnsIt).ascending() ? "ascending" : "descending") );
+						d->data->clearRowEditBuffer();
+						d->data->updateRowEditBuffer(rowItem, COLUMN_ID_SORTING,
+							(*orderByColumnsIt).ascending() ? 1 : 2); // this will automatically update "sorting" property
+						                                             // in slotBeforeCellChanged()
+						d->data->saveRowChanges(*rowItem, true);
+						(*rowPropertySet)["sorting"].clearModifiedFlag(); // this property should look "fresh"
+//						d->data->rowEditBuffer()->debug();
+					}
+//					query->field(columnPosition);
+				}
+			}
+//				orderByDictForColumns.replace( (void*)(*orderByColumnsIt).column(), &(*orderByColumnsIt) );
+	//		else
+		//		orderByDictForFields.replace( (void*)(*orderByColumnsIt).column()->field, &(*orderByColumnsIt) );
+		}
+		else if ((*orderByColumnsIt).field()) {//this will be presented as invisible field
+//			orderByDictForFields.replace( (void*)(*orderByColumnsIt).field(), &(*orderByColumnsIt) );
+		}
+	}
+
+	//5. Show fields for unused criterias (with "Visible" column set to false)
 	KexiDB::BaseExpr *criteriaArgument; // <-- contains field or table.field
 	for (Q3DictIterator<KexiDB::BaseExpr> it(criterias); (criteriaArgument = it.current()); ++it) {
 		if (usedCriterias[it.current()])
@@ -1277,7 +1362,8 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 					alias = fieldId.left(id).trimmed().latin1();
 					if (!KexiUtils::isIdentifier(alias)) {
 						result->success = false;
-						result->column = 0;
+						result->allowToDiscardChanges = true;
+						result->column = colnum;
 						result->msg = i18n("Entered column alias \"%1\" is not a valid identifier.")
 							.arg(alias);
 						result->desc = i18n("Identifiers should start with a letter or '_' character");
@@ -1296,7 +1382,8 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 				}
 				else {
 					result->success = false;
-					result->column = 0;
+					result->allowToDiscardChanges = true;
+					result->column = colnum;
 					result->msg = i18n("Invalid expression \"%1\"").arg(fieldName);
 					return;
 				}
@@ -1328,10 +1415,15 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 				propertySetSwitched();
 			}
 			d->data->updateRowEditBuffer(item, COLUMN_ID_TABLE, QVariant(tableName), false/*!allowSignals*/);
-			d->data->updateRowEditBuffer(item, COLUMN_ID_VISIBLE, QVariant(true,1));//visible
+			d->data->updateRowEditBuffer(item, COLUMN_ID_VISIBLE, QVariant(true,1));
 #ifndef KEXI_NO_QUERY_TOTALS
-			d->data->updateRowEditBuffer(item, COLUMN_ID_TOTALS, QVariant(0));//totals
+			d->data->updateRowEditBuffer(item, COLUMN_ID_TOTALS, QVariant(0));
 #endif
+			if (!sortingAllowed(fieldName, tableName)) {
+				// sorting is not available for "*" or "table.*" rows
+//! @todo what about expressions?
+				d->data->updateRowEditBuffer(item, COLUMN_ID_SORTING, QVariant());
+			}
 			//update properties
 			(*set)["field"].setValue(fieldName, saveOldValue);
 			if (isExpression) {
@@ -1399,15 +1491,32 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		setDirty(true);
 	}
 #endif
-	else if (colnum==COLUMN_ID_CRITERIA) {//'criteria'
-//TODO: this is primitive, temporary: reuse SQL parser
+	else if (colnum==COLUMN_ID_SORTING) {
+		KoProperty::Set *set = d->sets->findPropertySetForItem(*item);
+		QString table( set->property("table").value().toString() );
+		QString field( set->property("field").value().toString() );
+		if (newValue.toInt()==0 || sortingAllowed(field, table)) {
+			KoProperty::Property &property = set->property("sorting");
+			QString key( property.listData()->keysAsStringList()[ newValue.toInt() ] );
+			kexipluginsdbg << "new key=" << key << endl;
+			property.setValue(key, true);
+		}
+		else { //show msg: sorting is not available
+			result->success = false;
+			result->allowToDiscardChanges = true;
+			result->column = colnum;
+			result->msg = futureI18n("Could not set sorting for multiple columns (%1)")
+				.arg(table=="*" ? table : (table+".*"));
+		}
+	}
+	else if (colnum==COLUMN_ID_CRITERIA) {
+//! @todo this is primitive, temporary: reuse SQL parser
 		QString operatorStr, argStr;
 		KexiDB::BaseExpr* e = 0;
 		const QString str = newValue.toString().trimmed();
-//		KoProperty::Set &set = *propertySet();
 		int token;
 		QString field, table;
-		KoProperty::Set *set = d->sets->findPropertySetForItem(*item); //*propertySet();
+		KoProperty::Set *set = d->sets->findPropertySetForItem(*item);
 		if (set) {
 			field = (*set)["field"].value().toString();
 			table = (*set)["table"].value().toString();
@@ -1415,13 +1524,14 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		if (!str.isEmpty() && (!set || table=="*" || field.find("*")!=-1)) {
 			//asterisk found! criteria not allowed
 			result->success = false;
-			result->column = 4;
+			result->allowToDiscardChanges = true;
+			result->column = colnum;
 			if (propertySet())
 				result->msg = i18n("Could not set criteria for \"%1\"")
 					.arg(table=="*" ? table : field);
 			else
 				result->msg = i18n("Could not set criteria for empty row");
-			d->dataTable->dataAwareObject()->cancelEditor(); //prevents further editing of this cell
+			//moved to result->allowToDiscardChanges handler //d->dataTable->dataAwareObject()->cancelEditor(); //prevents further editing of this cell
 		}
 		else if (str.isEmpty() || (e = parseExpressionString(str, token, true/*allowRelationalOperator*/)))
 		{
@@ -1442,7 +1552,8 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		}
 		else {
 			result->success = false;
-			result->column = 4;
+			result->allowToDiscardChanges = true;
+			result->column = colnum;
 			result->msg = i18n("Invalid criteria \"%1\"").arg(newValue.toString());
 		}
 	}
@@ -1483,11 +1594,6 @@ KoProperty::Set *KexiQueryDesignerGuiEditor::propertySet()
 	return d->sets->currentPropertySet();
 }
 
-static bool isAsterisk(const QString& tableName, const QString& fieldName)
-{
-	return tableName=="*" || fieldName.endsWith("*");
-}
-
 void KexiQueryDesignerGuiEditor::updatePropertiesVisibility(KoProperty::Set& set)
 {
 	const bool asterisk = isAsterisk(
@@ -1497,9 +1603,9 @@ void KexiQueryDesignerGuiEditor::updatePropertiesVisibility(KoProperty::Set& set
 	set["caption"].setVisible( !asterisk );
 #endif
 	set["alias"].setVisible( !asterisk );
-#ifndef KEXI_NO_UNFINISHED
+/*always invisible #ifndef KEXI_NO_UNFINISHED
 	set["sorting"].setVisible( !asterisk );
-#endif
+#endif*/
 	propertySetReloaded(true);
 }
 
@@ -1544,9 +1650,7 @@ KexiQueryDesignerGuiEditor::createPropertySet( int row,
 	nlist << i18n("None") << i18n("Ascending") << i18n("Descending");
 	set->addProperty(prop = new KoProperty::Property("sorting",
 		slist, nlist, *slist.at(0), i18n("Sorting")));
-#ifdef KEXI_NO_UNFINISHED
-	prop->setVisible(false);
-#endif
+	//prop->setVisible(false);
 
 	set->addProperty(prop = new KoProperty::Property("criteria", QVariant(QString::null)) );
 	prop->setVisible(false);
