@@ -177,15 +177,15 @@ void KexiFormDataProvider::invalidateDataSources( const Q3ValueList<uint>& inval
 	if (query) {
 		fieldsExpanded = query->fieldsExpanded();
 		dataFieldsCount = fieldsExpanded.count();
-		QMap<KexiDB::QueryColumnInfo*,int> fieldsOrder( query->fieldsOrder() );
-		for (QMapConstIterator<KexiDB::QueryColumnInfo*,int> it = fieldsOrder.constBegin(); it!=fieldsOrder.constEnd(); ++it) {
-			kexipluginsdbg << "query->fieldsOrder()[ " << it.key()->field->name() << " ] = " << it.data() << endl;
+		QMap<KexiDB::QueryColumnInfo*,int> columnsOrder( query->columnsOrder() );
+		for (QMapConstIterator<KexiDB::QueryColumnInfo*,int> it = columnsOrder.constBegin(); it!=columnsOrder.constEnd(); ++it) {
+			kexipluginsdbg << "query->columnsOrder()[ " << it.key()->field->name() << " ] = " << it.data() << endl;
 		}
 		for (Q3PtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
 			KexiFormDataItemInterface *item = it.current();
 			KexiDB::QueryColumnInfo* ci = query->columnInfo( it.current()->dataSource() );
-			int index = ci ? query->fieldsOrder()[ ci ] : -1;
-			kexipluginsdbg << "query->fieldsOrder()[ " << (ci ? ci->field->name() : "") << " ] = " << index 
+			int index = ci ? columnsOrder[ ci ] : -1;
+			kexipluginsdbg << "query->columnsOrder()[ " << (ci ? ci->field->name() : "") << " ] = " << index 
 				<< " (dataSource: " << item->dataSource() << ", name=" << dynamic_cast<QObject*>(item)->name() << ")" << endl;
 			if (index!=-1)
 				m_fieldNumbersForDataItems.insert( item, index );
