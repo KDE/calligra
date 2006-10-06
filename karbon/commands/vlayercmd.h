@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001-2005, The Karbon Developers
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,39 +21,41 @@
 #ifndef __VLAYERCMD_H__
 #define __VLAYERCMD_H__
 
-#include "vcommand.h"
-#include "vobject.h"
-
+#include <kcommand.h>
 
 class VDocument;
 class KoLayerShape;
 
-
-class VLayerCmd : public VCommand
+/// Command for adding, deleting, raising, lowering layers
+class VLayerCmd : public KCommand
 {
 public:
-	/**
-	 * The different types of layer commands.
-	 */
-	enum VLayerCmdType
-	{
-		addLayer,
-		raiseLayer,
-		lowerLayer,
-		deleteLayer
-	};
+    /**
+     * The different types of layer commands.
+     */
+    enum VLayerCmdType
+    {
+        addLayer,
+        raiseLayer,
+        lowerLayer,
+        deleteLayer
+    };
 
-	VLayerCmd( VDocument* doc, const QString& name, KoLayerShape* layer, VLayerCmdType order );
-	virtual ~VLayerCmd() {}
-	
-	virtual void execute();
-	virtual void unexecute();
+    VLayerCmd( VDocument* doc, KoLayerShape* layer, VLayerCmdType order );
+    virtual ~VLayerCmd();
+
+    /// execute the command
+    virtual void execute ();
+    /// revert the actions done in execute
+    virtual void unexecute ();
+    /// return the name of this command
+    virtual QString name () const;
 
 protected:
-	KoLayerShape* m_layer;
-	VLayerCmdType m_cmdType;
-	bool m_wasVisible;
-	bool m_wasLocked;
+    VDocument *m_document;
+    KoLayerShape* m_layer;
+    VLayerCmdType m_cmdType;
+    bool m_deleteLayer;
 };
 
 #endif

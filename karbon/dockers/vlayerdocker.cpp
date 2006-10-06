@@ -31,8 +31,11 @@
 
 #include <KoDocumentSectionView.h>
 
+#include "karbon_view.h"
+#include "karbon_part.h"
 #include "vdocument.h"
 #include "vlayer.h"
+#include "vlayercmd.h"
 
 enum ButtonIds
 {
@@ -42,8 +45,9 @@ enum ButtonIds
     Button_Delete
 };
 
-VLayerDocker::VLayerDocker( QWidget *parent, VDocument *doc )
-: QWidget( parent )
+VLayerDocker::VLayerDocker( KarbonView *view, VDocument *doc )
+: QWidget( view )
+, m_view( view )
 , m_document( doc )
 , m_model( 0 )
 {
@@ -58,24 +62,28 @@ VLayerDocker::VLayerDocker( QWidget *parent, VDocument *doc )
     QToolButton *button = new QToolButton( this );
     button->setIcon( SmallIcon( "14_layer_newlayer" ) );
     button->setText( i18n( "New" ) );
+    button->setToolTip( i18n("Add a new layer") );
     buttonGroup->addButton( button, Button_New );
     layout->addWidget( button, 1, 0 );
 
     button = new QToolButton( this );
     button->setIcon( SmallIcon( "14_layer_raiselayer" ) );
     button->setText( i18n( "Raise" ) );
+    button->setToolTip( i18n("Raise selected objects") );
     buttonGroup->addButton( button, Button_Raise );
     layout->addWidget( button, 1, 1 );
 
     button = new QToolButton( this );
     button->setIcon( SmallIcon( "14_layer_lowerlayer" ) );
     button->setText( i18n( "Lower" ) );
+    button->setToolTip( i18n("Lower selected objects") );
     buttonGroup->addButton( button, Button_Lower );
     layout->addWidget( button, 1, 2 );
 
     button = new QToolButton( this );
     button->setIcon( SmallIcon( "14_layer_deletelayer" ) );
     button->setText( i18n( "Delete" ) );
+    button->setToolTip( i18n("Delete selected objects") );
     buttonGroup->addButton( button, Button_Delete );
     layout->addWidget( button, 1, 3 );
 
@@ -127,14 +135,7 @@ void VLayerDocker::addLayer()
     if( ok )
     {
         KoLayerShape* layer = new KoLayerShape();
-        /*TODO: porting to flake
-        layer->setName( name );
-        VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Add Layer" ),
-                layer, VLayerCmd::addLayer );
-        m_view->part()->addCommand( cmd, true );
-        updateLayers();
-        */
-        m_document->insertLayer( layer );
+        m_view->part()->commandHistory()->addCommand( new VLayerCmd( m_document, layer, VLayerCmd::addLayer ), true );
         m_document->setObjectName( layer, name );
         m_model->update();
     }

@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <KoDocumentSectionModel.h>
 
+class KarbonView;
 class VDocument;
 class KoDocumentSectionView;
 class KoShape;
@@ -34,7 +35,7 @@ class VLayerDocker : public QWidget
 Q_OBJECT
 
 public:
-    VLayerDocker( QWidget *parent, VDocument *doc );
+    VLayerDocker( KarbonView *view, VDocument *doc );
     virtual ~VLayerDocker();
 public slots:
     void updateView();
@@ -42,6 +43,7 @@ private slots:
     void slotButtonClicked( int buttonId );
     void addLayer();
 private:
+    KarbonView *m_view;
     VDocument *m_document;
     KoDocumentSectionView *m_layerView;
     VDocumentModel *m_model;

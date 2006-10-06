@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001-2005, The Karbon Developers
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,70 +21,81 @@
 #include "vlayer.h"
 #include "vlayercmd.h"
 #include "vdocument.h"
+#include <klocale.h>
 
-VLayerCmd::VLayerCmd( VDocument* doc, const QString& name, KoLayerShape* layer, VLayerCmdType order )
-	: VCommand( doc, name, "14_layers" ), m_layer( layer ), m_cmdType( order )
+VLayerCmd::VLayerCmd( VDocument* doc, KoLayerShape* layer, VLayerCmdType order )
+: m_document( doc ), m_layer( layer ), m_cmdType( order ), m_deleteLayer( false )
 {
-	if( order == addLayer )
-	{
-		document()->insertLayer( layer );
-	}
-
-	m_wasVisible = layer->isVisible();
-	m_wasLocked = layer->isLocked();
+    if( m_cmdType == addLayer )
+        m_deleteLayer = true;
 }
 
-void
-VLayerCmd::execute()
+VLayerCmd::~VLayerCmd()
 {
-	/* TODO: porting to flake 
-	switch( m_cmdType )
-	{
-		case addLayer:
-			m_layer->setState( VObject::normal );
-		break;
-
-		case deleteLayer:
-			m_layer->setState( VObject::deleted );
-		break;
-
-		case raiseLayer:
-			document()->raiseLayer( m_layer );
-		break;
-
-		case lowerLayer:
-			document()->lowerLayer( m_layer );
-		break;
-	}
-
-	setSuccess( true );
-	*/
+    if( m_deleteLayer )
+        delete m_layer;
 }
 
-void
-VLayerCmd::unexecute()
+void VLayerCmd::execute()
 {
-	/* TODO: porting to flake 
-	switch ( m_cmdType )
-	{
-		case addLayer:
-			m_layer->setState( VObject::deleted );
-		break;
+    switch( m_cmdType )
+    {
+        case addLayer:
+            m_document->insertLayer( m_layer );
+            m_deleteLayer = false;
+        break;
 
-		case deleteLayer:
-			m_layer->setState( m_oldState );
-		break;
+        case deleteLayer:
+            m_document->removeLayer( m_layer );
+            m_deleteLayer = true;
+        break;
+        case raiseLayer:
+            m_document->raiseLayer( m_layer );
+        break;
 
-		case raiseLayer:
-			document()->lowerLayer( m_layer );
-		break;
-
-		case lowerLayer:
-			document()->raiseLayer( m_layer );
-		break;
-	}
-
-	setSuccess( false );
-	*/
+        case lowerLayer:
+            m_document->lowerLayer( m_layer );
+        break;
+    }
 }
 
+void VLayerCmd::unexecute()
+{
+    switch ( m_cmdType )
+    {
+        case addLayer:
+            m_document->removeLayer( m_layer );
+            m_deleteLayer = true;
+        break;
+
+        case deleteLayer:
+            m_document->insertLayer( m_layer );
+            m_deleteLayer = false;
+        break;
+
+        case raiseLayer:
+            m_document->lowerLayer( m_layer );
+        break;
+
+        case lowerLayer:
+            m_document->raiseLayer( m_layer );
+        break;
+    }
+}
+
+QString VLayerCmd::name() const
+{
+    switch( m_cmdType )
+    {
+        case addLayer:
+            return i18n( "Add Layer");
+        case deleteLayer:
+            return i18n( "Delete Layer");
+        case raiseLayer:
+            return i18n( "Raise Layer" );
+        case lowerLayer:
+            return i18n( "Lower Layer");
+        default:
+            return i18n( "Edit Layer");
+    }
+}
