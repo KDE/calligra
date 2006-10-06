@@ -613,11 +613,11 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 	return true;
 }
 
-//get a new value (of present in the buffer), or the old one, otherwise
+//get a new value (if present in the buffer), or the old one, otherwise
 //(taken here for optimization)
 #define GET_VALUE if (!val) { \
 	val = m_cursor \
-				? m_pRowEditBuffer->at( *it_f.current()->columnInfo, false /* !useDefaultValueIfPossible */ ) \
+				? m_pRowEditBuffer->at( *it_f.current()->columnInfo, true /* useDefaultValueIfPossible */ ) \
 				: m_pRowEditBuffer->at( *f ); \
 	if (!val) \
 		val = &(*it_r); /* get old value */ \
