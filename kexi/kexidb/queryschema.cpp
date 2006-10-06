@@ -1239,7 +1239,9 @@ void QuerySchema::computeFieldsExpanded()
 			//store alias and table.alias
 			if (!d->columnInfosByNameExpanded[ it.current()->alias ])
 				d->columnInfosByNameExpanded.insert( it.current()->alias, it.current() );
-			QString tableAndAlias( it.current()->field->table()->name() + "." + QString(it.current()->alias) );
+			QString tableAndAlias( it.current()->alias );
+			if (it.current()->field->table())
+				tableAndAlias.prepend(it.current()->field->table()->name() + ".");
 			if (!d->columnInfosByNameExpanded[ tableAndAlias ])
 				d->columnInfosByNameExpanded.insert( tableAndAlias, it.current() );
 			//the same for "unexpanded" list
@@ -1254,7 +1256,9 @@ void QuerySchema::computeFieldsExpanded()
 			//no alias: store name and table.name
 			if (!d->columnInfosByNameExpanded[ it.current()->field->name() ])
 				d->columnInfosByNameExpanded.insert( it.current()->field->name(), it.current() );
-			QString tableAndName( it.current()->field->table()->name() + "." + it.current()->field->name() );
+			QString tableAndName( it.current()->field->name() );
+			if (it.current()->field->table())
+				tableAndName.prepend(it.current()->field->table()->name() + ".");
 			if (!d->columnInfosByNameExpanded[ tableAndName ])
 				d->columnInfosByNameExpanded.insert( tableAndName, it.current() );
 			//the same for "unexpanded" list
