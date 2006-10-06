@@ -150,7 +150,7 @@ QString KexiInputTableEdit::valueToText(const QVariant& value, const QString& ad
 			qMax(field()->visibleDecimalPlaces(), 10)); //<-- 10 is quite good maximum for fractional digits 
 													  //! @todo add command line settings?
 		if (value.toDouble() == 0.0) {
-			text = add; //eat 0
+			text = add.isEmpty() ? "0" : add; //eat 0
 		}
 		else {
 //! @todo (js): get decimal places settings here...
