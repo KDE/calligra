@@ -776,6 +776,7 @@ void View::slotOpenNode() {
             break;
         case Node::Type_Task: {
             Task *task = dynamic_cast<Task *>(node);
+            Q_ASSERT(task);
             TaskDialog *dia = new TaskDialog(*task, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
             if (dia->exec()) {
                 KCommand *m = dia->buildCommand(getPart());
@@ -792,6 +793,7 @@ void View::slotOpenNode() {
             // enter a duration in case we accidentally set a tasks duration to zero
             // and hence, create a milestone
             Task *task = dynamic_cast<Task *>(node);
+            Q_ASSERT(task);
             TaskDialog *dia = new TaskDialog(*task, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
             if (dia->exec()) {
                 KCommand *m = dia->buildCommand(getPart());
@@ -804,6 +806,7 @@ void View::slotOpenNode() {
         }
         case Node::Type_Summarytask: {
             Task *task = dynamic_cast<Task *>(node);
+            Q_ASSERT(task);
             SummaryTaskDialog *dia = new SummaryTaskDialog(*task);
             if (dia->exec()) {
                 KCommand *m = dia->buildCommand(getPart());
@@ -834,6 +837,7 @@ void View::slotTaskProgress() {
             break;
         case Node::Type_Task: {
             Task *task = dynamic_cast<Task *>(node);
+            Q_ASSERT(task);
             TaskProgressDialog *dia = new TaskProgressDialog(*task, getProject().standardWorktime());
             if (dia->exec()) {
                 KCommand *m = dia->buildCommand(getPart());
