@@ -181,7 +181,7 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 		bool appendColumn(QuerySchema& querySchema, bool ascending = true, int pos = -1);
 
 		/*! Appends \a column to the list. */
-		void appendColumn(OrderByColumn& column);
+		void appendColumn(const OrderByColumn& column);
 		
 		/*! \return true if the list is empty. */
 		bool isEmpty() const { return OrderByColumnListBase::isEmpty(); }

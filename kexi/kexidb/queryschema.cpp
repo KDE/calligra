@@ -72,8 +72,8 @@ class QuerySchemaPrivate
 		 , fieldsExpandedWithInternalAndRowID(0)
 		 , fieldsExpandedWithInternal(0)
 		 , autoincFields(0)
-		 , columnsOrder(0)
 		 , columnsOrderExpanded(0)
+		 , columnsOrder(0)
 		 , pkeyFieldsOrder(0)
 		 , pkeyFieldsCount(0)
 		 , tablesBoundToColumns(64, -1)
@@ -449,7 +449,7 @@ bool OrderByColumnList::appendField(QuerySchema& querySchema,
 	return false;
 }
 		
-void OrderByColumnList::appendColumn(OrderByColumn& column)
+void OrderByColumnList::appendColumn(const OrderByColumn& column)
 {
 	append( column );
 }
