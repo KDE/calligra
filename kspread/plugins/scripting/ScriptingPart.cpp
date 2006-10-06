@@ -1,5 +1,5 @@
 /*
- * This file is part of the KSpread project
+ * This file is part of KSpread
  *
  * Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  * Copyright (c) 2006 Isaac Clerencia <isaac@warp.es>
