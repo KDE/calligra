@@ -847,12 +847,15 @@ void GanttView::drawChildren(KDGanttViewItem *parentItem, Node &parentNode)
 		    drawSubProject(parentItem, n);
 		else if (n->type() == Node::Type_Summarytask) {
             Task *t = dynamic_cast<Task *>(n);
+            Q_ASSERT(t);
 		    drawSummaryTask(parentItem, t);
 		} else if (n->type() == Node::Type_Task) {
             Task *t = dynamic_cast<Task *>(n);
+            Q_ASSERT(t);
 		    drawTask(parentItem, t);
         } else if (n->type() == Node::Type_Milestone) {
             Task *t = dynamic_cast<Task *>(n);
+            Q_ASSERT(t);
 			drawMilestone(parentItem, t);
         }
 		else
