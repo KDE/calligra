@@ -26,9 +26,10 @@
 #include <kdialog.h>
 #include <kgenericfactory.h>
 
+#include <KoColorSpace.h>
 #include <KoFilterChain.h>
 
-#include <kis_doc.h>
+#include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_progress_display_interface.h>
@@ -50,31 +51,32 @@ KisPNGExport::~KisPNGExport()
 KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug(41008) << "Png export! From: " << from << ", To: " << to << "\n";
-    
-    KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
+
+    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
-    
+
     if (!output)
         return KoFilter::CreationError;
-    
-    
+
+
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    
+
     KDialog* kdb = new KDialog(0);
     kdb->setCaption( i18n("PNG Export Options") );
     kdb->setModal(false);
-    
+
     KisImageSP img = output->currentImage();
     KisPaintDeviceSP pd;
     pd = new KisPaintDevice(*img->projection());
-    KisPaintLayerSP l = new KisPaintLayer(img, QLatin1String("projection"), OPACITY_OPAQUE, pd);
- 
+    KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd));
+
     KisRectIteratorPixel it = l->paintDevice()->createRectIterator(0,0, img->width(), img->height(), false);
-    KisColorSpace* cs = l->paintDevice()->colorSpace();
+    KoColorSpace* cs = l->paintDevice()->colorSpace();
+
     bool isThereAlpha = false;
     while( !it.isDone() )
     {
@@ -85,7 +87,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
         }
         ++it;
     }
-    
+
     KisWdgOptionsPNG* wdg = new KisWdgOptionsPNG(kdb);
     wdg->alpha->setChecked(isThereAlpha);
     wdg->alpha->setEnabled(isThereAlpha);
@@ -102,13 +104,8 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
 
     delete kdb;
 
-    KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
-    QString filename = m_chain->outputFile();
-
     KUrl url;
     url.setPath(filename);
-
-    KisImageSP img = output->currentImage();
 
     KisPNGConverter kpc(output, output->undoAdapter());
 
@@ -116,7 +113,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
 
-    
+
     if ( (res = kpc.buildFile(url, l, beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
         kDebug(41008) << "success !" << endl;
         return KoFilter::OK;

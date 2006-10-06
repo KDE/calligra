@@ -42,7 +42,7 @@ class KisWdgOptionsPNG : public QWidget, public Ui::KisWdgOptionsPNG
         KisWdgOptionsPNG(QWidget *parent) : QWidget(parent) { setupUi(this); }
 };
 
-class KisDoc;
+class KisDoc2;
 class KisUndoAdapter;
 
 /**
@@ -68,7 +68,7 @@ enum KisImageBuilder_Result {
 class KisPNGConverter : public KisProgressSubject {
         Q_OBJECT
     public:
-        KisPNGConverter(KisDoc *doc, KisUndoAdapter *adapter);
+        KisPNGConverter(KisDoc2 *doc, KisUndoAdapter *adapter);
         virtual ~KisPNGConverter();
     public:
         KisImageBuilder_Result buildImage(const KUrl& uri);
@@ -84,7 +84,7 @@ class KisPNGConverter : public KisProgressSubject {
     private:
         png_uint_32 m_max_row;
         KisImageSP m_img;
-        KisDoc *m_doc;
+        KisDoc2 *m_doc;
         KisUndoAdapter *m_adapter;
         bool m_stop;
 };
