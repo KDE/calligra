@@ -1765,6 +1765,7 @@ void View::initView()
     connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
     connect( d->horzScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollHorz(int) ) );
 
+    d->canvas->setFocus();
 }
 
 Canvas* View::canvasWidget() const
