@@ -487,7 +487,7 @@ void KWTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         if(frame->isCopy())
             continue;
         KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
-        if(data->position() <= position && data->endPosition() >= position) {
+        if(data && data->position() <= position && data->endPosition() >= position) {
             // found our (first) frame to re-layout
             data->faul();
             m_state->reset();
