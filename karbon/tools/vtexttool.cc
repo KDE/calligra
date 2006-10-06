@@ -1104,6 +1104,7 @@ VTextTool::VTextToCompositeCmd::execute()
 
 	if( !m_group )
 	{
+                return;
 		/* TODO: porting to flake
 		m_group = m_text->toVGroup();
 		document()->append( m_group );
