@@ -572,7 +572,7 @@ void KexiDB::fromMap( const QMap<QString,QString>& map, ConnectionData& data )
 
 bool KexiDB::splitToTableAndFieldParts(const QString& string, 
 	QString& tableName, QString& fieldName,
-	SetFieldNameIfNoTableNameOptions option)
+	SplitToTableAndFieldPartsOptions option)
 {
 	const int id = string.indexOf('.');
 	if (option & SetFieldNameIfNoTableName && id==-1) {

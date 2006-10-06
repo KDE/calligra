@@ -10,7 +10,7 @@
 #define YY_FLEX_MINOR_VERSION 5
 
 #include <stdio.h>
-
+#include <errno.h>
 
 /* cfront 1.2 defines "c_plusplus" instead of "__cplusplus" */
 #ifdef c_plusplus
@@ -23,7 +23,9 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
@@ -62,6 +64,7 @@
 #else
 #define YY_PROTO(proto) ()
 #endif
+
 
 /* Returned upon end-of-file. */
 #define YY_NULL 0
@@ -263,18 +266,13 @@ static void yy_flex_free YY_PROTO(( void * ));
 #define YY_AT_BOL() (yy_current_buffer->yy_at_bol)
 
 
-#define YY_USES_REJECT
-
 #define yywrap() 1
 #define YY_SKIP_YYWRAP
 typedef unsigned char YY_CHAR;
 FILE *yyin = (FILE *) 0, *yyout = (FILE *) 0;
 typedef int yy_state_type;
-#define YY_FLEX_LEX_COMPAT
-extern int yylineno;
-int yylineno = 1;
-extern char yytext[];
-
+extern char *yytext;
+#define yytext_ptr yytext
 
 static yy_state_type yy_get_previous_state YY_PROTO(( void ));
 static yy_state_type yy_try_NUL_trans YY_PROTO(( yy_state_type current_state ));
@@ -289,56 +287,28 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 	yyleng = (int) (yy_cp - yy_bp); \
 	yy_hold_char = *yy_cp; \
 	*yy_cp = '\0'; \
-	if ( yyleng + yy_more_offset >= YYLMAX ) \
-		YY_FATAL_ERROR( "token too large, exceeds YYLMAX" ); \
-	yy_flex_strncpy( &yytext[yy_more_offset], yytext_ptr, yyleng + 1 ); \
-	yyleng += yy_more_offset; \
-	yy_prev_more_offset = yy_more_offset; \
-	yy_more_offset = 0; \
 	yy_c_buf_p = yy_cp;
 
 #define YY_NUM_RULES 43
 #define YY_END_OF_BUFFER 44
-static yyconst short int yy_acclist[170] =
+static yyconst short int yy_accept[146] =
     {   0,
-       44,   43,   41,   43,   42,   43,   43,   42,   43,   42,
-       43,   43,   42,   43,    7,   39,   43,   42,   43,   42,
-       43,   42,   43,   39,   43,   39,   43,   39,   43,   39,
-       43,   39,   43,   39,   43,   39,   43,   39,   43,   39,
-       43,   39,   43,   39,   43,   39,   43,   39,   43,   39,
-       43,   39,   43,   39,   43,   42,   43,   41,    2,    9,
-       38,    8,    8,    7,   39,   39,   27,    4,    1,    3,
-        5,   28,   39,   10,   39,   35,   39,   39,   39,   39,
-        6,   39,   22,   39,   39,   39,   39,   39,   39,   24,
-       39,   25,   39,   39,   39,   39,   39,   39,   39,   26,
+        0,    0,   44,   43,   41,   42,   43,   42,   42,   43,
+       42,    7,   42,   42,   42,   39,   39,   39,   39,   39,
+       39,   39,   39,   39,   39,   39,   39,   39,   39,   39,
+       39,   42,   41,    2,    0,    9,    0,   38,    8,    8,
+        7,   39,   27,    4,    1,    3,    5,   28,   39,   10,
+       35,   39,   39,   39,    6,   22,   39,   39,   39,   39,
+       39,   24,   25,   39,   39,   39,   39,   39,   39,   26,
+       40,    8,    9,   36,   39,   39,   39,   39,    0,   39,
+       39,   39,   21,   39,   39,   39,   39,   39,   39,   39,
+       29,   39,   37,   12,   39,    0,   14,   15,   16,    0,
 
-       40,    8,    9,   39,   36,   39,   39,   39,   39,   39,
-       39,   39,   39,   21,   39,   39,   39,   39,   39,   39,
-       39,   39,   29,   39,   39,   37,   39,   12,   39,   39,
-       14,   39,   15,   39,   16,   39,   23,   39,   39,   39,
-       39,   39,   39,   39,   39,   39,   34,   39,   30,   39,
-       39,   39,   32,   39,   33,   39,   11,   39,   39,   31,
-       39,   39,   13,   39,   20,   39,   18,   19,   17
-    } ;
-
-static yyconst short int yy_accept[147] =
-    {   0,
-        1,    1,    1,    2,    3,    5,    7,    8,   10,   12,
-       13,   15,   18,   20,   22,   24,   26,   28,   30,   32,
-       34,   36,   38,   40,   42,   44,   46,   48,   50,   52,
-       54,   56,   58,   59,   60,   60,   61,   61,   62,   63,
-       64,   66,   67,   68,   69,   70,   71,   72,   73,   74,
-       76,   78,   79,   80,   81,   83,   85,   86,   87,   88,
-       89,   90,   92,   94,   95,   96,   97,   98,   99,  100,
-      101,  102,  103,  105,  107,  108,  109,  110,  111,  111,
-      112,  113,  114,  116,  117,  118,  119,  120,  121,  122,
-      123,  125,  126,  128,  130,  131,  131,  133,  135,  137,
-
-      137,  139,  140,  141,  142,  143,  144,  145,  146,  147,
-      147,  147,  147,  149,  151,  152,  153,  155,  157,  159,
-      160,  160,  160,  160,  162,  163,  165,  165,  166,  166,
-      167,  167,  167,  167,  167,  167,  167,  167,  167,  168,
-      169,  169,  169,  169,  170,  170
+       23,   39,   39,   39,   39,   39,   39,   39,   39,    0,
+        0,    0,   34,   30,   39,   39,   32,   33,   11,   39,
+        0,    0,    0,   31,   39,   13,    0,   20,    0,   39,
+        0,    0,    0,    0,    0,    0,    0,    0,   18,   19,
+        0,    0,    0,   17,    0
     } ;
 
 static yyconst int yy_ec[256] =
@@ -491,32 +461,17 @@ static yyconst short int yy_chk[285] =
       145,  145,  145,  145
     } ;
 
-static yy_state_type yy_state_buf[YY_BUF_SIZE + 2], *yy_state_ptr;
-static char *yy_full_match;
-static int yy_lp;
-#define REJECT \
-{ \
-*yy_cp = yy_hold_char; /* undo effects of setting up yytext */ \
-yy_cp = yy_full_match; /* restore poss. backed-over text */ \
-++yy_lp; \
-goto find_rule; \
-}
-static int yy_more_offset = 0;
-static int yy_prev_more_offset = 0;
-#define yymore() (yy_more_offset = yy_flex_strlen( yytext ))
-#define YY_NEED_STRLEN
-#define YY_MORE_ADJ 0
-#define YY_RESTORE_YY_MORE_OFFSET \
-	{ \
-	yy_more_offset = yy_prev_more_offset; \
-	yyleng -= yy_more_offset; \
-	}
-#ifndef YYLMAX
-#define YYLMAX 8192
-#endif
+static yy_state_type yy_last_accepting_state;
+static char *yy_last_accepting_cpos;
 
-char yytext[YYLMAX];
-char *yytext_ptr;
+/* The intent behind this definition is that it'll catch
+ * any uses of REJECT which flex missed.
+ */
+#define REJECT reject_used_but_not_detected
+#define yymore() yymore_used_but_not_detected
+#define YY_MORE_ADJ 0
+#define YY_RESTORE_YY_MORE_OFFSET
+char *yytext;
 #line 1 "sqlscanner.l"
 #define INITIAL 0
 /* This file is part of the KDE project
@@ -558,7 +513,7 @@ extern void setError(const QString& errName, const QString& errDesc);
 #define YY_NEVER_INTERACTIVE 1
 /*identifier	[a-zA-Z_][a-zA-Z_0-9]* */
 /* todo: support for real numbers */
-#line 562 "sqlscanner.cpp"
+#line 517 "sqlscanner.cpp"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -658,9 +613,20 @@ YY_MALLOC_DECL
 			YY_FATAL_ERROR( "input in flex scanner failed" ); \
 		result = n; \
 		} \
-	else if ( ((result = fread( buf, 1, max_size, yyin )) == 0) \
-		  && ferror( yyin ) ) \
-		YY_FATAL_ERROR( "input in flex scanner failed" );
+	else \
+		{ \
+		errno=0; \
+		while ( (result = fread(buf, 1, max_size, yyin))==0 && ferror(yyin)) \
+			{ \
+			if( errno != EINTR) \
+				{ \
+				YY_FATAL_ERROR( "input in flex scanner failed" ); \
+				break; \
+				} \
+			errno=0; \
+			clearerr(yyin); \
+			} \
+		}
 #endif
 
 /* No semi-colon after return; correct usage is to write "yyterminate();" -
@@ -713,7 +679,7 @@ YY_DECL
 
 
 
-#line 717 "sqlscanner.cpp"
+#line 683 "sqlscanner.cpp"
 
 	if ( yy_init )
 		{
@@ -752,12 +718,15 @@ YY_DECL
 		yy_bp = yy_cp;
 
 		yy_current_state = yy_start;
-		yy_state_ptr = yy_state_buf;
-		*yy_state_ptr++ = yy_current_state;
 yy_match:
 		do
 			{
 			register YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)];
+			if ( yy_accept[yy_current_state] )
+				{
+				yy_last_accepting_state = yy_current_state;
+				yy_last_accepting_cpos = yy_cp;
+				}
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
@@ -765,45 +734,34 @@ yy_match:
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-			*yy_state_ptr++ = yy_current_state;
 			++yy_cp;
 			}
 		while ( yy_base[yy_current_state] != 248 );
 
 yy_find_action:
-		yy_current_state = *--yy_state_ptr;
-		yy_lp = yy_accept[yy_current_state];
-find_rule: /* we branch to this label when backing up */
-		for ( ; ; ) /* until we find what rule we matched */
-			{
-			if ( yy_lp && yy_lp < yy_accept[yy_current_state + 1] )
-				{
-				yy_act = yy_acclist[yy_lp];
-					{
-					yy_full_match = yy_cp;
-					break;
-					}
-				}
-			--yy_cp;
-			yy_current_state = *--yy_state_ptr;
-			yy_lp = yy_accept[yy_current_state];
+		yy_act = yy_accept[yy_current_state];
+		if ( yy_act == 0 )
+			{ /* have to back up */
+			yy_cp = yy_last_accepting_cpos;
+			yy_current_state = yy_last_accepting_state;
+			yy_act = yy_accept[yy_current_state];
 			}
 
 		YY_DO_BEFORE_ACTION;
 
-		if ( yy_act != YY_END_OF_BUFFER )
-			{
-			int yyl;
-			for ( yyl = 0; yyl < yyleng; ++yyl )
-				if ( yytext[yyl] == '\n' )
-					++yylineno;
-			}
 
 do_action:	/* This label is used only to access EOF actions. */
 
 
 		switch ( yy_act )
 	{ /* beginning of action switch */
+			case 0: /* must back up */
+			/* undo the effects of YY_DO_BEFORE_ACTION */
+			*yy_cp = yy_hold_char;
+			yy_cp = yy_last_accepting_cpos;
+			yy_current_state = yy_last_accepting_state;
+			goto yy_find_action;
+
 case 1:
 YY_RULE_SETUP
 #line 60 "sqlscanner.l"
@@ -1192,9 +1150,9 @@ YY_RULE_SETUP
 #line 317 "sqlscanner.l"
 ECHO;
 	YY_BREAK
-#line 1196 "sqlscanner.cpp"
-			case YY_STATE_EOF(INITIAL):
-				yyterminate();
+#line 1154 "sqlscanner.cpp"
+case YY_STATE_EOF(INITIAL):
+	yyterminate();
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1472,12 +1430,15 @@ static yy_state_type yy_get_previous_state()
 	register char *yy_cp;
 
 	yy_current_state = yy_start;
-	yy_state_ptr = yy_state_buf;
-	*yy_state_ptr++ = yy_current_state;
 
 	for ( yy_cp = yytext_ptr + YY_MORE_ADJ; yy_cp < yy_c_buf_p; ++yy_cp )
 		{
 		register YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
+		if ( yy_accept[yy_current_state] )
+			{
+			yy_last_accepting_state = yy_current_state;
+			yy_last_accepting_cpos = yy_cp;
+			}
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
@@ -1485,7 +1446,6 @@ static yy_state_type yy_get_previous_state()
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-		*yy_state_ptr++ = yy_current_state;
 		}
 
 	return yy_current_state;
@@ -1506,8 +1466,14 @@ yy_state_type yy_current_state;
 #endif
 	{
 	register int yy_is_jam;
+	register char *yy_cp = yy_c_buf_p;
 
 	register YY_CHAR yy_c = 1;
+	if ( yy_accept[yy_current_state] )
+		{
+		yy_last_accepting_state = yy_current_state;
+		yy_last_accepting_cpos = yy_cp;
+		}
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
@@ -1516,8 +1482,6 @@ yy_state_type yy_current_state;
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 	yy_is_jam = (yy_current_state == 145);
-	if ( ! yy_is_jam )
-		*yy_state_ptr++ = yy_current_state;
 
 	return yy_is_jam ? 0 : yy_current_state;
 	}
@@ -1560,8 +1524,6 @@ register char *yy_bp;
 
 	*--yy_cp = (char) c;
 
-	if ( c == '\n' )
-		--yylineno;
 
 	yytext_ptr = yy_bp;
 	yy_hold_char = *yy_cp;
@@ -1638,8 +1600,6 @@ static int input()
 	*yy_c_buf_p = '\0';	/* preserve yytext */
 	yy_hold_char = *++yy_c_buf_p;
 
-	if ( c == '\n' )
-		++yylineno;
 
 	return c;
 	}
@@ -1754,9 +1714,13 @@ YY_BUFFER_STATE b;
 	}
 
 
+#ifndef _WIN32
+#include <unistd.h>
+#else
 #ifndef YY_ALWAYS_INTERACTIVE
 #ifndef YY_NEVER_INTERACTIVE
 extern int isatty YY_PROTO(( int ));
+#endif
 #endif
 #endif
 

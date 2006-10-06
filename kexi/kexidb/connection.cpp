@@ -1260,7 +1260,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 	//(use wasWhere here)
 	
 	// ORDER BY
-	QString orderByString( querySchema.orderByColumnList().toSQLString() );
+	QString orderByString( querySchema.orderByColumnList().toSQLString(!singleTable/*includeTableName*/) );
 	if (!orderByString.isEmpty())
 		sql += (" ORDER BY " + orderByString);
 	
@@ -2958,7 +2958,7 @@ void Connection::setAvailableDatabaseName(const QString& dbName)
 inline void updateRowDataWithNewValues(QuerySchema &query, RowData& data, KexiDB::RowEditBuffer::DBMap& b,
 	QMap<QueryColumnInfo*,int>& columnsOrderExpanded)
 {
-	columnsOrderExpanded = query.columnsOrder(true/*expanded*/);
+	columnsOrderExpanded = query.columnsOrder(QuerySchema::ExpandedList);
 	QMap<QueryColumnInfo*,int>::ConstIterator columnsOrderExpandedIt;
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
 		columnsOrderExpandedIt = columnsOrderExpanded.find( it.key() );

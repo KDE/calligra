@@ -131,8 +131,10 @@ class KEXI_DB_EXPORT OrderByColumn
 		/*! \return string for debugging purposes. */
 		QString debugString() const;
 
-		/*! \return a string like "name ASC" usable for building a SQL statement. */
-		QString toSQLString() const;
+		/*! \return a string like "name ASC" usable for building a SQL statement. 
+		 If \a includeTableNames is true (the default) field is output in a form 
+		 of "tablename.fieldname". */
+		QString toSQLString(bool includeTableName = true) const;
 
 	protected:
 		//! Column to sort
@@ -205,8 +207,10 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 		/*! \return string for debugging purposes. */
 		QString debugString() const;
 		
-		/*! \return a string like "name ASC, 2 DESC" usable for building a SQL statement. */
-		QString toSQLString() const;
+		/*! \return a string like "name ASC, 2 DESC" usable for building a SQL statement.
+		 If \a includeTableNames is true (the default) fields are output in a form 
+		 of "tablename.fieldname". */
+		QString toSQLString(bool includeTableNames = true) const;
 };
 
 //! @short KexiDB::QuerySchema provides information about database query
@@ -479,7 +483,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! \return list of QueryAsterisk objects defined for this query */
 		Field::List* asterisks() const;
 
-		/*! \return field for \a name or 0 if no field for this name 
+		/*! \return field for \a identifier or 0 if no field for this name 
 		 was found within the query. fieldsExpanded() method is used 
 		 to lookup expanded list of the query fields, so queries with asterisks 
 		 are processed well.
@@ -487,9 +491,9 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 but only its alias. If a field has no alias:
 		 - field's name is checked
 		 - field's table and field's name are checked in a form of "tablename.fieldname",
-		   so you can provide \a name in this form to avoid ambiguity.
+		   so you can provide \a identifier in this form to avoid ambiguity.
 
-		 If there are more than one fields with the same name equal to \a name,
+		 If there are more than one fields with the same name equal to \a identifier,
 		 first-found is returned (checking is performed from first to last query field).
 		 Structures needed to compute result of this method are cached, 
 		 so only first usage costs o(n) - another usages cost o(1). 
@@ -503,20 +507,29 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		   will return the same pointer.
 		 - Calling field("T.A") will return the same pointer as field("A").
 		 */
-		virtual Field* field(const QString& name);
+		virtual Field* field(const QString& name, bool expanded = true);
 
 		/*! \return field id or NULL if there is no such a field. */
 		inline Field* field(uint id) { return FieldList::field(id); }
 
 		/*! Like QuerySchema::field(const QString& name) but returns not only Field
-		 object for \a name but entire QueryColumnInfo object. 
-		 */
-		QueryColumnInfo* columnInfo(const QString& name);
+		 object for \a identifier but entire QueryColumnInfo object. 
+		 \a identifier can be:
+		 - a fieldname
+		 - an aliasname
+		 - a tablename.fieldname
+		 - a tablename.aliasname 
+		 Note that if there are two occurences of the same name,
+		 only the first is accessible using this method. For instance,
+		 calling columnInfo("name") for "SELECT t1.name, t2.name FROM t1, t2" statement
+		 will only return the column related to t1.name and not t2.name, so you'll need to
+		 explicity specify "t2.name" as the identifier to get the second column. */
+		QueryColumnInfo* columnInfo(const QString& identifier, bool expanded = true);
 
 		/*! Options used in fieldsExpanded(). */
 		enum FieldsExpandedOptions {
-			Default, //!< All fields are returned even if duplicated
-			Unique, //!< Unique list of fields is returned
+			Default,                   //!< All fields are returned even if duplicated
+			Unique,                    //!< Unique list of fields is returned
 			WithInternalFields,        //!< Like Default but internal fields (for lookup) are appended
 			WithInternalFieldsAndRowID //!< Like WithInternalFields but RowID (big int type) field 
 			                           //!< is appended after internal fields
@@ -574,29 +587,43 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 Equivalent of QuerySchema::fieldsExpanded(WithInternalFields).at(index). */
 		QueryColumnInfo* expandedOrInternalField(uint index);
 
+		/*! Options used in columnsOrder(). */
+		enum ColumnsOrderOptions {
+			UnexpandedList,                 //!< A map for unexpanded list is created
+			UnexpandedListWithoutAsterisks, //!< A map for unexpanded list is created, with asterisks skipped
+			ExpandedList                    //!< A map for expanded list is created
+		};
+
 		/*! \return a map for fast lookup of query columns' order.
-		 If \a expanded is true (the default) this method provides is exactly opposite 
-		 information compared to vector returned by fieldsExpanded(). 
+		 - If \a options is UnexpandedList, each QueryColumnInfo pointer is mapped to the index
+		   within (unexpanded) list of fields, i.e. "*" or "table.*" asterisks are considered 
+		   to be single items.
+		 - If \a options is UnexpandedListWithoutAsterisks, each QueryColumnInfo pointer 
+		   is mapped to the index within (unexpanded) list of columns that come from asterisks 
+		   like "*" or "table.*" are not included in the map at all.
+		 - If \a options is ExpandedList (the default) this method provides is exactly opposite 
+		   information compared to vector returned by fieldsExpanded(). 
+
 		 This method's result is cached by the QuerySchema object.
 		 Note: indices of internal fields (see internalFields()) are also returned 
 		 here - in this case the index is counted as a sum of size(e) + i (where "e" is 
 		 the list of expanded fields and i is the column index within internal fields list).
 		 This feature is used eg. at the end of Connection::updateRow() where need indices of
 		 fields (including internal) to update all the values in memory.
-		 If \a expanded is false, each QueryColumnInfo pointer is mapped to the index
-		 within (unexpanded) list of fields, i.e. "*" or "table.*" asterisks are considered 
-		 to be single items.
 
 		 Example use: let t be table (int id, name text, surname text) and q be query
 		 defined by a statement "select * from t". 
-		 columnsOrder(true) will return the following map: QueryColumnInfo(id)->0,
-		 QueryColumnInfo(name)->1, QueryColumnInfo(surname)->2.
-		 columnsOrder(false) will return the following map: QueryColumnInfo(id)->0,
-		 QueryColumnInfo(name)->0, QueryColumnInfo(surname)->0 because the column 
-		 list is not expanded. This way you can use the returned index to get Field*
-		 pointer using field(uint) method of FieldList superclass.
+
+		 - columnsOrder(ExpandedList) will return the following map: QueryColumnInfo(id)->0,
+		   QueryColumnInfo(name)->1, QueryColumnInfo(surname)->2.
+		 - columnsOrder(UnexpandedList) will return the following map: QueryColumnInfo(id)->0,
+		   QueryColumnInfo(name)->0, QueryColumnInfo(surname)->0 because the column 
+		   list is not expanded. This way you can use the returned index to get Field*
+		   pointer using field(uint) method of FieldList superclass.
+		 - columnsOrder(UnexpandedListWithoutAsterisks) will return the following map: 
+		   QueryColumnInfo(id)->0,
 		*/
-		QMap<QueryColumnInfo*,int> columnsOrder(bool expanded = true);
+		QMap<QueryColumnInfo*,int> columnsOrder(ColumnsOrderOptions options = ExpandedList);
 
 		/*! \return table describing order of primary key (PKEY) fields within the query.
 		 Indexing is performed against vector returned by fieldsExpanded().

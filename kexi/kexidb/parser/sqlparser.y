@@ -825,6 +825,11 @@ IDENTIFIER
 	$$ = new QVariant( QString::fromUtf8($1) );
 	KexiDBDbg << "OrderByColumnId: " << *$$ << endl;
 }
+| IDENTIFIER '.' IDENTIFIER
+{
+	$$ = new QVariant( QString::fromUtf8($1)+"."+QString::fromUtf8($3) );
+	KexiDBDbg << "OrderByColumnId: " << *$$ << endl;
+}
 | INTEGER_CONST
 {
 	$$ = new QVariant($1);

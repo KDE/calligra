@@ -606,8 +606,8 @@ QuerySchema* buildSelectQuery(
 			for (;count>0; --it, --count) 
 				/*opposite direction due to parser specifics*/
 			{
-				//first, try to find a column name or alias
-				QueryColumnInfo *columnInfo = querySchema->columnInfo( (*it).aliasOrName );
+				//first, try to find a column name or alias (outside of asterisks)
+				QueryColumnInfo *columnInfo = querySchema->columnInfo( (*it).aliasOrName, false/*outside of asterisks*/ );
 				if (columnInfo) {
 					orderByColumnList.appendColumn( *columnInfo, (*it).ascending );
 				}
