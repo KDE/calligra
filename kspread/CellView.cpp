@@ -2211,8 +2211,7 @@ void CellView::makeLayout( int _col, int _row )
 
   // Check, if we need to break the line into multiple lines and are
   // allowed to do so.
-  // FIXME Stefan
-//   breakLines( fontMetrics );
+  breakLines( fontMetrics );
 
   // Also recalculate text dimensions, i.e. d->textWidth and d->textHeight,
   // because of new line breaks.
@@ -2588,7 +2587,9 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
   if ( d->cell->format()->multiRow( d->cell->column(), d->cell->row() ) &&
        d->textWidth > ( d->cell->dblWidth() - 2 * s_borderSpace
            - 0.5 * d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
-           - 0.5 * d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) ) )
+           - 0.5 * d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) )  &&
+       // FIXME Stefan: consider this later in the wrap algo.
+       d->textHeight + fontMetrics.ascent() + fontMetrics.descent() < d->cell->dblHeight() )
   {
     // don't remove the existing LF, these are intended line wraps (whishlist #9881)
     QString outText = d->cell->strOutText();
