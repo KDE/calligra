@@ -1652,7 +1652,7 @@ KexiQueryDesignerGuiEditor::createPropertySet( int row,
 	nlist << i18n("None") << i18n("Ascending") << i18n("Descending");
 	set->addProperty(prop = new KoProperty::Property("sorting",
 		slist, nlist, *slist.at(0), i18n("Sorting")));
-	//prop->setVisible(false);
+	prop->setVisible(false);
 
 	set->addProperty(prop = new KoProperty::Property("criteria", QVariant(QString::null)) );
 	prop->setVisible(false);
