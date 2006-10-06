@@ -60,6 +60,7 @@ class VStrokeDocker;
 class VColorDocker;
 class VStyleDocker;
 class VTransformDocker;
+class VLayerDocker;
 
 class VFill;
 class VPainterFactory;
@@ -264,11 +265,11 @@ private:
 
 	//dockers
 	VDocumentTab		*m_DocumentTab;
-	VLayersTab			*m_LayersTab;
 	VColorDocker		*m_ColorManager;
 	VStrokeDocker		*m_strokeDocker;
 	VStyleDocker		*m_styleDocker;
 	VTransformDocker	*m_TransformDocker;
+	VLayerDocker		*m_layerDocker;
 
 	VSelectToolBar		*m_selectToolBar;
 

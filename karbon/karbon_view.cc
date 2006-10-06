@@ -80,6 +80,7 @@
 #include "vinsertcmd.h"
 #include "vzordercmd.h"
 #include "vlayer.h"
+#include "vlayerdocker.h"
 
 // Dialogs.
 #include "vconfiguredlg.h"
@@ -164,12 +165,12 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	initActions();
 
 	m_DocumentTab = 0L;
-	m_LayersTab = 0L;
 	m_strokeFillPreview = 0L;
 	m_ColorManager = 0L;
 	m_strokeDocker = 0L;
 	m_styleDocker = 0L;
 	m_TransformDocker = 0L;
+	m_layerDocker = 0L;
 
 	// set selectTool by default
 	//m_toolbox->slotPressButton( 0 );
@@ -1709,9 +1710,10 @@ void KarbonView::createLayersTabDock()
 {
 	debugView("KarbonView::createLayersTabDock()");
 
-	m_LayersTab = new VLayersTab(this, this);
-	m_LayersTab->setWindowTitle(i18n("Layers"));
-    createDock(i18n("Layers"), m_LayersTab);
+    m_layerDocker = new VLayerDocker( this, &part()->document() );
+    m_layerDocker->setWindowTitle(i18n("Layers"));
+    createDock(i18n("Layers"), m_layerDocker);
+    connect( this, SIGNAL( selectionChange() ), m_layerDocker, SLOT( updateView() ) );
 }
 
 void KarbonView::createStrokeDock()

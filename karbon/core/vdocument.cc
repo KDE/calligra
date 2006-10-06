@@ -333,6 +333,12 @@ VDocument::objectName( const KoShape *obj ) const
 	return it == m_objectNames.end() ? 0L : it.value();
 }
 
+void
+VDocument::setObjectName( const KoShape *obj, const QString name )
+{
+	m_objectNames.insert( obj, name );
+}
+
 QRectF 
 VDocument::boundingRect()
 {

@@ -293,8 +293,7 @@ public:
 	 * @param obj the object to set custom name for
 	 * @param name the the custom name to set
 	 */
-	void setObjectName( const KoShape *obj, const QString name ) 
-		{ m_objectNames.insert( obj, name ); }
+	void setObjectName( const KoShape *obj, const QString name );
 
 	bool saveAsPath() const { return m_saveAsPath; }
 	void saveAsPath( bool b ) { m_saveAsPath = b; }
