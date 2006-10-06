@@ -351,8 +351,8 @@ void DependencyManager::Private::areaModified (const QString &name)
 
 void DependencyManager::Private::addDependency(const Cell* cell, const Region& region)
 {
-  if (region.isEmpty())
-    return;
+    // NOTE Stefan: Also store cells without dependencies to avoid an
+    //              iteration over all cells in a map/sheet on recalculation.
 
   Region::Point point(QPoint(cell->column(), cell->row()));
   point.setSheet(cell->sheet());

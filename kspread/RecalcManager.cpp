@@ -294,8 +294,10 @@ void RecalcManager::recalcCell(Cell* cell) const
 
 void RecalcManager::dump() const
 {
-  foreach (Cell* cell, d->depths)
-  {
-    kDebug(36002) << "Cell(" << cell->column() << ", " << cell->row() << "): " << d->cells[cell] << endl;
-  }
+    foreach (Cell* cell, d->depths)
+    {
+        QString cellName = cell->name();
+        while ( cellName.count() < 4 ) cellName.prepend( ' ' );
+        kDebug(36002) << "depth( " << cellName << " ) = " << d->cells[cell] << endl;
+    }
 }
