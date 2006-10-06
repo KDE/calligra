@@ -1943,7 +1943,9 @@ void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect
 //
 QString CellView::textDisplaying( const QFontMetrics& fm )
 {
-  int           a  = d->cell->format()->align( d->cell->column(), d->cell->row() );
+  Style::HAlign hAlign = d->cell->format()->align( d->cell->column(), d->cell->row() );
+  if ( d->cell->testFlag( Cell::Flag_CellTooShortX ) )
+      hAlign = Style::Left; // force left alignment, if text does not fit
 
   bool isNumeric = d->cell->value().isNumber();
 
@@ -1970,12 +1972,12 @@ QString CellView::textDisplaying( const QFontMetrics& fm )
     {
       //Note that numbers are always treated as left-aligned since if we have to cut digits off, they should
       //always be the least significant ones at the end of the string
-      if ( a == Style::Left || a == Style::HAlignUndefined || isNumeric)
+      if ( hAlign == Style::Left || hAlign == Style::HAlignUndefined || isNumeric )
         tmp = d->cell->strOutText().left(i);
-      else if ( a == Style::Right)
+      else if ( hAlign == Style::Right )
         tmp = d->cell->strOutText().right(i);
       else
-        tmp = d->cell->strOutText().mid( ( d->cell->strOutText().length() - i ) / 2, i);
+        tmp = d->cell->strOutText().mid( ( d->cell->strOutText().length() - i ) / 2, i );
 
       if (isNumeric)
       {
@@ -1986,7 +1988,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm )
         //TODO Perhaps try to display integer part in standard form if there is not enough room for it?
 
         if (!tmp.contains('.'))
-          d->cell->d->strOutText = QString().fill('#',20);
+          d->cell->d->strOutText = QString().fill( '#', 20 );
       }
 
       // 4 equal length of red triangle +1 point.
@@ -2209,7 +2211,8 @@ void CellView::makeLayout( int _col, int _row )
 
   // Check, if we need to break the line into multiple lines and are
   // allowed to do so.
-  breakLines( fontMetrics );
+  // FIXME Stefan
+//   breakLines( fontMetrics );
 
   // Also recalculate text dimensions, i.e. d->textWidth and d->textHeight,
   // because of new line breaks.
@@ -2220,8 +2223,7 @@ void CellView::makeLayout( int _col, int _row )
 
   // Obscure cells, if necessary.
   obscureHorizontalCells();
-  // FIXME Stefan
-  //obscureVerticalCells();
+  obscureVerticalCells();
 
   d->cell->clearFlag( Cell::Flag_LayoutDirty );
 }
@@ -2585,11 +2587,11 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
 {
   if ( d->cell->format()->multiRow( d->cell->column(), d->cell->row() ) &&
        d->textWidth > ( d->cell->dblWidth() - 2 * s_borderSpace
-           - d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
-           - d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) ) )
+           - 0.5 * d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
+           - 0.5 * d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) ) )
   {
     // don't remove the existing LF, these are intended line wraps (whishlist #9881)
-    QString  outText = d->cell->strOutText();
+    QString outText = d->cell->strOutText();
 
     // Break the line at appropriate places, i.e. spaces, if
     // necessary.  This means to change the spaces where breaks occur
@@ -2610,8 +2612,8 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
       int breakpos = 0;   // The next candidate pos to break the string
       int pos1 = 0;
       int availableWidth = (int) ( d->cell->dblWidth() - 2 * s_borderSpace
-          - d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
-          - d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) );
+          - 0.5 * d->cell->format()->leftBorderWidth( d->cell->column(), d->cell->row() )
+          - 0.5 * d->cell->format()->rightBorderWidth( d->cell->column(), d->cell->row() ) );
 
       do {
 
@@ -2626,7 +2628,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
           work_breakpos = linefeed;
 
         double lineWidth = fontMetrics.width( d->cell->strOutText().mid( start, (pos1 - start) )
-                         + outText.mid( pos1, work_breakpos - pos1 ) );
+                                              + outText.mid( pos1, work_breakpos - pos1 ) );
 
         //linefeed could be -1 when no linefeed is found!
         if (breakpos > linefeed && linefeed > 0)

@@ -181,7 +181,7 @@ Canvas::Canvas(View *view)
              this, SLOT( slotAutoScroll( const QPoint &)));
   }
   setFocus();
-//   installEventFilter( this );
+  installEventFilter( this ); // for TAB key processing, otherwise focus change
   setAcceptDrops( true );
   setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
 
