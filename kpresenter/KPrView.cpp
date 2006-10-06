@@ -1507,7 +1507,7 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
 
     m_canvas->setToolEditMode( TEM_MOUSE );
 
-    if ( m_canvas && !presStarted ) {
+    if ( !presStarted ) {
         m_screenSaverWasEnabled = false;
         // is screensaver enabled?
         QDBusInterface screensaver("org.kde.kdesktop", "/", "org.kde.kdesktop.KScreensaver");
