@@ -402,6 +402,8 @@ void ResourcesPanel::slotResourceRename( const QString &newName) {
     if(!item || m_blockResourceRename) return;
 
     ResourceLBItem *i = dynamic_cast<ResourceLBItem *>(item);
+    if (!i) return;
+
     if (i->name() == newName) return;
 
     i->setName(newName);
