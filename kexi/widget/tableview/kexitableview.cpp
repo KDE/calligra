@@ -1409,7 +1409,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		}
 		break;*/
 
-	bool _return;
+//	bool _return;
 	if (k == Qt::Key_Shift || k == Qt::Key_Alt || k == Qt::Key_Control || k == Qt::Key_Meta) {
 		e->ignore();
 	}
