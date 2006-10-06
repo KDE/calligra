@@ -17,6 +17,18 @@ Legend:
 
 ~~~~~~~~~~~~~~~~ 1.1 stable (with KOffice 1.6)  ~~~~~~~~~~~~~~~~
 
+2006-10-06
+KexiDB
+= fixed constructing ORDER BY part of SQL statements (ambiguous fields)
+= when creating "columns by name" cache, also remeber "table.alias" identifiers
+= QuerySchema: retrieving infromation about columns much improved
+  (needed by the parser and designer)
+2.0: merged
+QuerySchema
+= fixes for handling ordering information in design mode when there're asterisks
+  in the query
+2.0: merged
+
 2006-10-04, 05
 Table View
 = fixed displaying values for combobox fields

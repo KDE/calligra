@@ -247,7 +247,7 @@ namespace KexiDB
 	KEXI_DB_EXPORT void fromMap( const QMap<QString,QString>& map, ConnectionData& data );
 
 	//! Used in splitToTableAndFieldParts().
-	enum SetFieldNameIfNoTableNameOptions {
+	enum SplitToTableAndFieldPartsOptions {
 		FailIfNoTableOrFieldName = 0, //!< default value for splitToTableAndFieldParts()
 		SetFieldNameIfNoTableName = 1 //!< @see splitToTableAndFieldParts()
 	};
@@ -269,7 +269,7 @@ namespace KexiDB
 	 \return true on success. */
 	KEXI_DB_EXPORT bool splitToTableAndFieldParts(const QString& string, 
 		QString& tableName, QString& fieldName, 
-		SetFieldNameIfNoTableNameOptions option = FailIfNoTableOrFieldName);
+		SplitToTableAndFieldPartsOptions option = FailIfNoTableOrFieldName);
 
 	/*! \return true if \a type supports "visibleDecimalPlaces" property. */
 	KEXI_DB_EXPORT bool supportsVisibleDecimalPlacesProperty(Field::Type type);

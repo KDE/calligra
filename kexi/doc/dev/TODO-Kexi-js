@@ -524,6 +524,7 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
   assume you're entering a long record and db connection is dead before saving...
   the record could be buffered locally before closing Kexi application... and on next startup, re-sent.
   This can work in simple cases (when complex transactions are not involved).
+- report "ambiguous field name 'id'" error for ambiguous queries like "SELECT a.id, b.id FROM a, b ORDER BY id"
 
 === KEXIDB TESTS=== 
 - add tests for DatabaseProperties

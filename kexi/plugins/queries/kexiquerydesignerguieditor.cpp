@@ -500,7 +500,8 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 //! @todo ok, but not for expresions
 		QString aliasString( (*set)["alias"].value().toString() );
 		KexiDB::QueryColumnInfo *currentColumn = temp->query()->columnInfo( 
-			aliasString.isEmpty() ? currentField->name() : aliasString );
+			(*set)["table"].value().toString() + "."
+			+ (aliasString.isEmpty() ? currentField->name() : aliasString) );
 		QString sortingString( (*set)["sorting"].value().toString() );
 		if (currentField && currentColumn && (sortingString=="ascending" || sortingString=="descending")) {
 			if (currentColumn->visible)
@@ -883,7 +884,8 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 	KexiDB::OrderByColumnList &orderByColumns = query->orderByColumnList();
 //	QPtrDict<KexiDB::OrderByColumn> orderByDictForFields;
 //	QPtrDict<KexiDB::OrderByColumn> orderByDictForColumns;
-	QMap<KexiDB::QueryColumnInfo*,int> columnsOrder( query->columnsOrder(false/*!expanded*/) );
+	QMap<KexiDB::QueryColumnInfo*,int> columnsOrder( 
+		query->columnsOrder(KexiDB::QuerySchema::UnexpandedListWithoutAsterisks) );
 	for (KexiDB::OrderByColumn::ListConstIterator orderByColumnsIt( orderByColumns.constBegin() );
 		orderByColumnsIt!=orderByColumns.constEnd(); ++orderByColumnsIt)
 	{
