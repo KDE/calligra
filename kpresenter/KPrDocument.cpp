@@ -60,7 +60,7 @@
 #include <KoGlobal.h>
 #include <kapplication.h>
 #include <k3urldrag.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -206,7 +206,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, QObject* parent,
     _spShowEndOfPresentationSlide = true;
     _spManualSwitch = true;
     _showPresentationDuration = false;
-    tmpSoundFileList = Q3PtrList<KTempFile>();
+    tmpSoundFileList = Q3PtrList<KTemporaryFile>();
     _xRnd = 20;
     _yRnd = 20;
     _txtBackCol = Qt::lightGray;
@@ -1020,17 +1020,15 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     // Save user styles as KoGenStyle objects
     m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
 
-    KTempFile contentTmpFile;
-    contentTmpFile.setAutoDelete( true );
-    QFile* tmpFile = contentTmpFile.file();
-    KoXmlWriter contentTmpWriter( tmpFile, 1 );
+    KTemporaryFile contentTmpFile;
+    contentTmpFile.open();
+    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
 
 
     //For sticky objects
-    KTempFile stickyTmpFile;
-    stickyTmpFile.setAutoDelete( true );
-    QFile* masterStyles = stickyTmpFile.file();
-    KoXmlWriter stickyTmpWriter( masterStyles, 1 );
+    KTemporaryFile masterStyles;
+    masterStyles.open();
+    KoXmlWriter stickyTmpWriter( &masterStyles, 1 );
 
 
     contentTmpWriter.startElement( "office:body" );
@@ -1086,8 +1084,8 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     writeAutomaticStyles( *contentWriter, mainStyles, savingContext, false );
 
     // And now we can copy over the contents from the tempfile to the real one
-    tmpFile->close();
-    contentWriter->addCompleteElement( tmpFile );
+    contentTmpFile.close();
+    contentWriter->addCompleteElement( &contentTmpFile );
     contentTmpFile.close();
 
     contentWriter->endElement(); // root element
@@ -1106,9 +1104,8 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
 
     //todo fixme????
-    masterStyles->close();
-    saveOasisDocumentStyles( store, mainStyles, masterStyles, savingContext );
-    stickyTmpFile.close();
+    masterStyles.close();
+    saveOasisDocumentStyles( store, mainStyles, &masterStyles, savingContext );
 
     if ( !store->close() ) // done with styles.xml
         return false;
@@ -2219,15 +2216,15 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
         kWarning(33001) << "KPresenter document version 1. Launching perl script to convert it." << endl;
 
         // Read the full XML and write it to a temp file
-        KTempFile tmpFileIn;
-        tmpFileIn.setAutoDelete( true );
+        KTemporaryFile tmpFileIn;
+        tmpFileIn.open();
         dev->reset();
-        tmpFileIn.file()->write( dev->readAll() ); // copy stresm to temp file
+        tmpFileIn.write( dev->readAll() ); // copy stresm to temp file
         tmpFileIn.close();
 
         // Launch the perl script on it
-        KTempFile tmpFileOut;
-        tmpFileOut.setAutoDelete( true );
+        KTemporaryFile tmpFileOut;
+        tmpFileOut.open();
         QString cmd = KGlobal::dirs()->findExe("perl");
         if (cmd.isEmpty())
         {
@@ -2237,9 +2234,9 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
         cmd += " ";
         cmd += KStandardDirs::locate( "exe", "kprconverter.pl" );
         cmd += " ";
-        cmd += KProcess::quote( tmpFileIn.name() );
+        cmd += KProcess::quote( tmpFileIn.fileName() );
         cmd += " ";
-        cmd += KProcess::quote( tmpFileOut.name() );
+        cmd += KProcess::quote( tmpFileOut.fileName() );
         system( QFile::encodeName(cmd) );
 
         // Build a new QDomDocument from the result
@@ -2247,7 +2244,7 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
         int errorLine;
         int errorColumn;
         QDomDocument newdoc;
-        if ( ! newdoc.setContent( tmpFileOut.file(), &errorMsg, &errorLine, &errorColumn ) )
+        if ( ! newdoc.setContent( &tmpFileOut, &errorMsg, &errorLine, &errorColumn ) )
         {
             kError (33001) << "Parsing Error! Aborting! (in KPrDocument::loadXML)" << endl
                             << "  Line: " << errorLine << " Column: " << errorColumn << endl
@@ -3239,12 +3236,13 @@ void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list
 
             int position = soundFile.findRev( '.' );
             QString format = soundFile.right( soundFile.length() - position );
-            KTempFile *tmpFile = new KTempFile( QString::null, format );
-            tmpFile->setAutoDelete( true );
-            tmpFile->file()->write( data, size );
+            KTemporaryFile *tmpFile = new KTemporaryFile();
+            tmpFile->setSuffix(format);
+            tmpFile->open();
+            tmpFile->write( data, size );
             tmpFile->close();
 
-            QString tmpFileName = tmpFile->name();
+            QString tmpFileName = tmpFile->fileName();
             tmpSoundFileList.append( tmpFile );
 
             QString _fileName = haveNotOwnDiskSoundFile.at( i );
@@ -3867,16 +3865,17 @@ void KPrDocument::copyPage( int from )
     kDebug(33001) << "KPrDocument::copyPage from=" << from << " to=" << from + 1 << endl;
     kDebug(33001) << "mimeType = " << mimeType() << ", outputMimeType = " << outputMimeType() << endl;
     bool wasSelected = isSlideSelected( from );
-    KTempFile tempFile( QString::null, mimeType() == nativeOasisMimeType() ? ".oop": ".kpr" );
-    tempFile.setAutoDelete( true );
-    savePage( tempFile.name(), from, true );
+    KTemporaryFile tempFile;
+    tempFile.setSuffix(mimeType() == nativeOasisMimeType() ? ".oop": ".kpr");
+    tempFile.open();
+    savePage( tempFile.fileName(), from, true );
 
     //insert page.
     KPrPage *newpage = new KPrPage( this, m_masterPage );
 
     m_pageWhereLoadObject = newpage;
 
-    bool ok = loadNativeFormat( tempFile.name() );
+    bool ok = loadNativeFormat( tempFile.fileName() );
     if ( !ok )
         showLoadingErrorDialog();
 
@@ -3901,13 +3900,15 @@ void KPrDocument::copyPageToClipboard( int pgnum )
     // In fact it even allows copying a [1-page] kpr in konq and pasting it in kpresenter :))
     kDebug(33001) << "KPrDocument::copyPageToClipboard pgnum=" << pgnum << endl;
     kDebug(33001) << "mimeType = " << mimeType() << ", outputMimeType = " << outputMimeType() << endl;
-    KTempFile tempFile( QString::null, mimeType() == nativeOasisMimeType() ? ".oop": ".kpr" );
-    savePage( tempFile.name(), pgnum, true );
-    KUrl url; url.setPath( tempFile.name() );
+    KTemporaryFile tempFile;
+    tempFile.setSuffix(mimeType() == nativeOasisMimeType() ? ".oop": ".kpr");
+    tempFile.open();
+    savePage( tempFile.fileName(), pgnum, true );
+    KUrl url; url.setPath( tempFile.fileName() );
     KUrl::List lst;
     lst.append( url );
     QApplication::clipboard()->setData( new K3URLDrag( lst ) );
-    m_tempFileInClipboard = tempFile.name(); // do this last, the above calls clipboardDataChanged
+    m_tempFileInClipboard = tempFile.fileName(); // do this last, the above calls clipboardDataChanged
 }
 
 void KPrDocument::pastePage( const QMimeSource * data, int pgnum )

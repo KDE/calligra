@@ -35,7 +35,7 @@
 #include "koshellsettings.h"
 
 #include <kapplication.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -171,20 +171,18 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
   KMimeType::Ptr mimeType = KMimeType::findByUrl( url );
   m_documentEntry = KoDocumentEntry::queryByMimeType( mimeType->name().toLatin1() );
 
-  KTempFile* tmpFile = 0;
+  KTemporaryFile tmpFile;
   KUrl tmpUrl( url );  // we might have to load a converted temp. file
 
   if ( m_documentEntry.isEmpty() ) { // non-native
-    tmpFile = new KTempFile;
+    tmpFile.open();
 
     KoFilterManager *manager = new KoFilterManager( url.path() );
     QByteArray mimetype;                                               // an empty mimetype means, that the "nearest"
-    KoFilter::ConversionStatus status = manager->exp0rt( tmpFile->name(), mimetype ); // KOffice part will be chosen
+    KoFilter::ConversionStatus status = manager->exp0rt( tmpFile.fileName(), mimetype ); // KOffice part will be chosen
     delete manager;
 
     if ( status != KoFilter::OK || mimetype.isEmpty() ) {
-      tmpFile->unlink();
-      delete tmpFile;
       return false;
     }
 
@@ -192,23 +190,17 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
     // chosen KOffice part back.
     m_documentEntry = KoDocumentEntry::queryByMimeType( mimetype );
     if ( m_documentEntry.isEmpty() ) {
-      tmpFile->unlink();
-      delete tmpFile;
       return false;
     }
 
     // Open the temporary file
-    tmpUrl.setPath( tmpFile->name() );
+    tmpUrl.setPath( tmpFile.fileName() );
   }
 
   recentAction()->addUrl( url );
 
   KoDocument* newdoc = m_documentEntry.createDoc();
   if ( !newdoc ) {
-      if ( tmpFile ) {
-        tmpFile->unlink();
-        delete tmpFile;
-      }
       return false;
   }
 
@@ -221,14 +213,10 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
   {
       newdoc->removeShell(this);
       delete newdoc;
-      if ( tmpFile ) {
-        tmpFile->unlink();
-        delete tmpFile;
-      }
       return false;
   }
 
-  if ( tmpFile ) {
+  if ( !tmpFile.fileName().isNull() ) {
     //if the loaded file has been a temporary file
     //we need to correct a few document settings
     //see description of bug #77574 for additional information
@@ -252,9 +240,6 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
 
     //update caption to represent the correct URL in the window titlebar
     updateCaption();
-
-    tmpFile->unlink();
-    delete tmpFile;
   }
   return true;
 }

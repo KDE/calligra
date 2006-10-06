@@ -20,7 +20,7 @@
 #include <kdebug.h>
 #include <kprinter.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kinstance.h>
 #include <kxmlguifactory.h>
 #include <kfiledialog.h>
@@ -708,13 +708,14 @@ void KChartView::extraCreateTemplate()
     int height = 60;
     QPixmap pix = koDocument()->generatePreview(QSize(width, height));
 
-    KTempFile tempFile( QString::null, ".chrt" );
-    tempFile.setAutoDelete(true);
+    KTemporaryFile tempFile;
+    tempFile.setSuffix(".chrt");
+    tempFile.open();
 
-    koDocument()->saveNativeFormat( tempFile.name() );
+    koDocument()->saveNativeFormat( tempFile.fileName() );
 
     KoTemplateCreateDia::createTemplate( "kchart_template", KChartFactory::global(),
-                                         tempFile.name(), pix, this );
+                                         tempFile.fileName(), pix, this );
 
     KChartFactory::global()->dirs()->addResourceType("kchart_template",
                                                     KStandardDirs::kde_default( "data" ) +

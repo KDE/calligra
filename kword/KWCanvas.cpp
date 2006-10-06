@@ -57,7 +57,7 @@
 #include <KoShapeManager.h>
 #include <KoCreateShapesTool.h>
 
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <klocale.h>
 #include <kcursor.h>
 #include <kdebug.h>
@@ -1635,20 +1635,20 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
 void KWCanvas::pasteImage( const QMimeData *mimeData, const KoPoint &docPoint )
 {
     QImage i = mimeData->imageData().value<QImage>();
-    KTempFile tmpFile( QString::null, ".png");
-    tmpFile.setAutoDelete( true );
-    if ( !i.save(tmpFile.name(), "PNG") ) {
-        kWarning() << "Couldn't save image to " << tmpFile.name() << endl;
+    KTemporaryFile tmpFile;
+    tmpFile.setSuffix(".png");
+    if ( !tmpFile.open() || !i.save(tmpFile.fileName(), "PNG") ) {
+        kWarning() << "Couldn't save image to " << tmpFile.fileName() << endl;
         return;
     }
 
     m_pixmapSize = i.size();
     // Prepare things for mrCreatePixmap
     KoPictureKey key;
-    key.setKeyFromFile( tmpFile.name() );
+    key.setKeyFromFile( tmpFile.fileName() );
     KoPicture newKoPicture;
     newKoPicture.setKey( key );
-    newKoPicture.loadFromFile( tmpFile.name() );
+    newKoPicture.loadFromFile( tmpFile.fileName() );
     m_kopicture = newKoPicture;
     m_insRect = KoRect( docPoint.x(), docPoint.y(), m_doc->unzoomItXOld( i.width() ), m_doc->unzoomItYOld( i.height() ) );
     m_keepRatio = true;

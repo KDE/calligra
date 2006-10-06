@@ -30,7 +30,7 @@
 #include <kstandarddirs.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include <QFile>
 #include <qtextstream.h>
@@ -315,10 +315,12 @@ void KPrWebPresentation::createSlidesPictures( QProgressBar *progressBar )
         view->getCanvas()->drawPageInPix( pix, pgNum, zoom, true /*force real variable value*/ );
         filename = QString( "%1/pics/slide_%2.png" ).arg( path ).arg( i + 1 );
 
-        KTempFile tmp;
-        pix.save( tmp.name(), "PNG" );
+        KTemporaryFile tmp;
+        tmp.setAutoRemove(false);
+        tmp.open();
+        pix.save( tmp.fileName(), "PNG" );
 
-        KIO::NetAccess::file_move( tmp.name(), filename, -1, true /*overwrite*/);
+        KIO::NetAccess::file_move( tmp.fileName(), filename, -1, true /*overwrite*/);
 
         p = progressBar->value();
         progressBar->setValue( ++p );
@@ -397,13 +399,13 @@ void KPrWebPresentation::createSlidesHTML( QProgressBar *progressBar )
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
 
         unsigned int pgNum = i + 1; // pgquiles # elpauer . org - I think this is a bug, seems to be an overflow if we have max_unsigned_int slides
-        KTempFile tmp;
+        KTemporaryFile tmp;
+        tmp.setAutoRemove(false);
+        tmp.open();
         QString dest= QString( "%1/html/slide_%2.html" ).arg( path ).arg( pgNum );
         QString next= QString( "slide_%2.html" ).arg( pgNum<slideInfos.count() ? pgNum+1 : (m_bLoopSlides ? 1 : pgNum ) ); // Ugly, but it works
 
-        QFile file( tmp.name() );
-        file.open( QIODevice::WriteOnly );
-        QTextStream streamOut( &file );
+        QTextStream streamOut( &tmp );
         streamOut.setCodec( codec );
 
         writeStartOfHeader( streamOut, codec, slideInfos[ i ].slideTitle, next );
@@ -521,9 +523,9 @@ void KPrWebPresentation::createSlidesHTML( QProgressBar *progressBar )
 
         streamOut << "</body>\n</html>\n";
 
-        file.close();
+        streamOut.flush();
 
-        KIO::NetAccess::file_move( tmp.name(), dest, -1, true /*overwrite*/);
+        KIO::NetAccess::file_move( tmp.fileName(), dest, -1, true /*overwrite*/);
 
         int p = progressBar->value();
         progressBar->setValue( ++p );
@@ -534,11 +536,11 @@ void KPrWebPresentation::createSlidesHTML( QProgressBar *progressBar )
 void KPrWebPresentation::createMainPage( QProgressBar *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
-    KTempFile tmp;
+    KTemporaryFile tmp;
+    tmp.setAutoRemove(false);
+    tmp.open();
     QString dest = QString( "%1/index.html" ).arg( path );
-    QFile file( tmp.name() );
-    file.open( QIODevice::WriteOnly );
-    QTextStream streamOut( &file );
+    QTextStream streamOut( &tmp );
     streamOut.setCodec( codec );
 
     writeStartOfHeader( streamOut, codec, i18n("Table of Contents"), QString() );
@@ -568,10 +570,9 @@ void KPrWebPresentation::createMainPage( QProgressBar *progressBar )
                                       , KGlobal::locale()->formatDate ( QDate::currentDate() ), htmlAuthor ) );
 
     streamOut << "</body>\n</html>\n";
-    file.close();
+    streamOut.flush();
 
-    KIO::NetAccess::file_move( tmp.name(), dest, -1, true /*overwrite*/);
-
+    KIO::NetAccess::file_move( tmp.fileName(), dest, -1, true /*overwrite*/);
 
     progressBar->setValue( progressBar->maximum() );
     kapp->processEvents();

@@ -21,7 +21,7 @@ DESCRIPTION
 */
 
 #include <kdebug.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kmimetype.h>
 #include <kgenericfactory.h>
 #include <KoFilterChain.h>
@@ -194,11 +194,13 @@ void MSODImport::gotPicture(
     else
     {
         // We could not import it as a part. Try as an image.
-        KTempFile tempFile( QString::null, '.' + extension );
-        tempFile.file()->write( data, length );
-        tempFile.close();
+        KTemporaryFile tempFile;
+        tempFile.setSuffix('.' + extension);
+        tempFile.setAutoRemove(false);
+        tempFile.open();
+        tempFile.write( data, length );
 
-        m_text += "<pixmap src=\"" + tempFile.name() + "\">\n"
+        m_text += "<pixmap src=\"" + tempFile.fileName() + "\">\n"
                     " <gobject fillstyle=\"0\" linewidth=\"1\" strokecolor=\"#000000\" strokestyle=\"1\">\n"
                     "  <matrix dx=\"0\" dy=\"0\" m21=\"0\" m22=\"1\" m11=\"1\" m12=\"0\"/>\n"
                     " </gobject>\n"

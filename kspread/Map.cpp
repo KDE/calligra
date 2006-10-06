@@ -23,7 +23,7 @@
 #include <QFile>
 
 #include <kcodecs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include <KoDom.h>
 #include <KoGenStyles.h>
@@ -258,17 +258,15 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
 
     GenValidationStyles valStyle;
 
-    KTempFile bodyTmpFile;
+    KTemporaryFile bodyTmpFile;
     //Check that creation of temp file was successful
-    if (bodyTmpFile.status() != 0)
+    if (!bodyTmpFile.open())
     {
 	    qWarning("Creation of temporary file to store document body failed.");
 	    return false;
     }
 
-    bodyTmpFile.setAutoDelete( true );
-    QFile* tmpFile = bodyTmpFile.file();
-    KoXmlWriter bodyTmpWriter( tmpFile );
+    KoXmlWriter bodyTmpWriter( &bodyTmpFile );
 
 
     foreach ( Sheet* sheet, d->lstSheets )
@@ -280,9 +278,8 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
     valStyle.writeStyle( xmlWriter );
 
 
-    tmpFile->close();
-    xmlWriter.addCompleteElement( tmpFile );
     bodyTmpFile.close();
+    xmlWriter.addCompleteElement( &bodyTmpFile );
 
     return true;
 }

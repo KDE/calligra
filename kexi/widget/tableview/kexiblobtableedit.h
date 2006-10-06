@@ -31,7 +31,7 @@
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
 
-class KTempFile;
+class KTemporaryFile;
 class KProcess;
 class Q3TextEdit;
 
@@ -115,7 +115,7 @@ class KexiBlobTableEdit : public KexiTableEdit
 
 		class Private;
 		Private *d;
-//todo		KTempFile* m_tempFile;
+//todo		KTemporaryFile* m_tempFile;
 //todo		KProcess* m_proc;
 //todo		Q3TextEdit *m_content;
 };

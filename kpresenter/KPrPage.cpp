@@ -63,7 +63,7 @@
 #include <KoVariable.h>
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <qbuffer.h>
 #include <QRegExp>
 #include <QFile>
@@ -136,10 +136,9 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
     Q_UNUSED( manifestWriter );
     KPrObject::KPOasisSaveContext sc( xmlWriter, context, indexObj, partIndexObj, isMasterPage() );
 
-    KTempFile animationTmpFile;
-    animationTmpFile.setAutoDelete( true );
-    QFile* tmpFile = animationTmpFile.file();
-    KoXmlWriter animationTmpWriter( tmpFile );
+    KTemporaryFile animationTmpFile;
+    animationTmpFile.open();
+    KoXmlWriter animationTmpWriter( &animationTmpFile );
     lstMap listObjectAnimation;
     Q3PtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -238,13 +237,10 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
 
         }
         animationTmpWriter.endElement();//close "presentation:animations"
-        tmpFile->close();
-        xmlWriter.addCompleteElement( tmpFile );
+        animationTmpFile.close();
+        xmlWriter.addCompleteElement( &animationTmpFile );
 
     }
-    else
-        tmpFile->close();
-    animationTmpFile.close();
 }
 
 void KPrPage::load( const QDomElement &element )

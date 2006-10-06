@@ -60,7 +60,7 @@
 #include <kprinter.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kmessagebox.h>
@@ -2387,18 +2387,16 @@ bool KPrCanvas::exportPage( int nPage,
         if( fileURL.protocol().isEmpty() )
             fileURL.setProtocol( "file" );
         const bool bLocalFile = fileURL.isLocalFile();
-        KTempFile* tmpFile = bLocalFile ? NULL : new KTempFile();
-        if( !bLocalFile )
-            tmpFile->setAutoDelete( true );
-        if( bLocalFile || 0 == tmpFile->status() ){
-            QFile file( bLocalFile ? fileURL.path(KUrl::LeaveTrailingSlash) : tmpFile->name() );
+        KTemporaryFile* tmpFile = bLocalFile ? NULL : new KTemporaryFile();
+        if( bLocalFile || tmpFile->open() ){
+            QFile file( bLocalFile ? fileURL.path(KUrl::LeaveTrailingSlash) : tmpFile->fileName() );
             if ( file.open( QIODevice::ReadWrite ) ) {
                 res = pix.save( &file, format, quality );
                 file.close();
             }
             if( !bLocalFile ){
                 if( res ){
-                    res = KIO::NetAccess::upload( tmpFile->name(), fileURL, this );
+                    res = KIO::NetAccess::upload( tmpFile->fileName(), fileURL, this );
                 }
             }
         }
@@ -3989,20 +3987,18 @@ void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, i
     QImage pix;
     Q3ImageDrag::decode( data, pix );
 
-    KTempFile tmpFile;
-    tmpFile.setAutoDelete(true);
-
-    if( tmpFile.status() != 0 )
+    KTemporaryFile tmpFile;
+    if( !tmpFile.open() )
         return;
 
-    pix.save( tmpFile.name(), "PNG" );
+    pix.save( tmpFile.fileName(), "PNG" );
     QCursor c = cursor();
     setCursor( Qt::waitCursor );
 
     QPoint pos( posX + diffx(), posY + diffy() );
     KoPoint docPoint( m_view->zoomHandler()->unzoomPointOld( pos ) );
 
-    m_activePage->insertPicture( tmpFile.name(), docPoint  );
+    m_activePage->insertPicture( tmpFile.fileName(), docPoint  );
 
     tmpFile.close();
 

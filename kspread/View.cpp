@@ -78,7 +78,7 @@
 #include <kstatusbar.h>
 #include <kstdaction.h>
 #include <kstandarddirs.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <ktoolbarpopupaction.h>
 #include <kparts/partmanager.h>
 #include <k3listview.h>
@@ -2598,20 +2598,19 @@ void View::createTemplate()
   int height = 60;
   QPixmap pix = doc()->generatePreview(QSize(width, height));
 
-  KTempFile tempFile( QString::null, ".kst" );
+  KTemporaryFile tempFile;
+  tempFile.setSuffix(".kst");
   //Check that creation of temp file was successful
-  if (tempFile.status() != 0)
+  if (!tempFile.open())
   {
     qWarning("Creation of temprary file to store template failed.");
     return;
   }
 
-  tempFile.setAutoDelete(true);
-
-  doc()->saveNativeFormat( tempFile.name() );
+  doc()->saveNativeFormat( tempFile.fileName() );
 
   KoTemplateCreateDia::createTemplate( "kspread_template", Factory::global(),
-                                           tempFile.name(), pix, this );
+                                           tempFile.fileName(), pix, this );
 
   Factory::global()->dirs()->addResourceType("kspread_template",
                                                        KStandardDirs::kde_default( "data" ) +

@@ -35,7 +35,7 @@
 #include <kglobal.h>
 #include <krecentdocument.h>
 #include <KoFilterManager.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kdebug.h>
 
 #include <xsltproc.h>
@@ -236,25 +236,22 @@ void XSLTImportDia::okSlot()
 	}
 	
 	/* Create a temp file */
-	KTempFile temp("xsltimport-", "kwd");
-	temp.setAutoDelete(true);
-
-	QFile* tempFile = temp.file();
-	tempFile->open(QIODevice::WriteOnly);
+	KTemporaryFile tempFile;
+	tempFile.setPrefix("xsltimport-");
+	tempFile.setSuffix("kwd");
+	tempFile.open();
 
 	/* Generate the data in the temp file */
-	XSLTProc* xsltproc = new XSLTProc(_fileIn, temp.name(), stylesheet);
+	XSLTProc* xsltproc = new XSLTProc(_fileIn, tempFile.fileName(), stylesheet);
 	xsltproc->parse();
 
 	/* Save the temp file in the store */
-	tempFile->open(QIODevice::ReadOnly);
-	_out->write(tempFile->readAll());
+	tempFile.seek(0);
+	_out->write(tempFile.readAll());
 	
-	delete tempFile;
 	delete xsltproc;
 
 	_out->close();
-	temp.close();
 
 	kDebug() << "XSLT FILTER --> END" << endl;
 	reject();

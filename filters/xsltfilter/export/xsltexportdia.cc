@@ -33,7 +33,7 @@
 #include <kdeversion.h>
 #include <kstandarddirs.h>
 #include <krecentdocument.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <KoFilterManager.h>
@@ -237,9 +237,10 @@ void XSLTExportDia::okSlot()
 	}
 
 	/* Temp file */
-	KTempFile temp("xsltexport-", "kwd");
-	temp.setAutoDelete(true);
-	QFile* tempFile = temp.file();
+	KTemporaryFile tempFile;
+	tempFile.setPrefix("xsltexport-");
+	tempFile.setSuffix("kwd");
+	tempFile.open();
 
 	const Q_LONG buflen = 4096;
 	char buffer[ buflen ];
@@ -247,13 +248,13 @@ void XSLTExportDia::okSlot()
 
 	while ( readBytes > 0 )
 	{
-		tempFile->write( buffer, readBytes );
+		tempFile.write( buffer, readBytes );
 		readBytes = _in->read( buffer, buflen );
 	}
-	temp.close();
+	tempFile.flush();
 
 	kDebug() << stylesheet << endl;
-	XSLTProc* xsltproc = new XSLTProc(temp.name(), _fileOut, stylesheet);
+	XSLTProc* xsltproc = new XSLTProc(tempFile.fileName(), _fileOut, stylesheet);
 	xsltproc->parse();
 
 	delete xsltproc;

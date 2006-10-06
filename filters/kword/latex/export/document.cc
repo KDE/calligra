@@ -22,7 +22,7 @@
 #include <stdlib.h>		/* for atoi function    */
 
 #include <kdebug.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <KoStore.h>
 
 #include <QDir>
@@ -427,9 +427,9 @@ QString Document::extractData(QString key)
 	}
 
 	/* Temp file with the default name in the default temp dir */
-	KTempFile temp;
-	//temp.setAutoDelete(true);
-	QFile* tempFile = temp.file();
+	KTemporaryFile tempFile;
+	tempFile.setAutoRemove(false);
+	tempFile.open();
 
 	const Q_LONG buflen = 4096;
 	char buffer[ buflen ];
@@ -437,7 +437,7 @@ QString Document::extractData(QString key)
 
 	while ( readBytes > 0 )
 	{
-		tempFile->write( buffer, readBytes );
+		tempFile.write( buffer, readBytes );
 		readBytes = getStorage()->read( buffer, buflen );
 	}
 	temp.close();
@@ -446,6 +446,6 @@ QString Document::extractData(QString key)
 		kError(30522) << "Unable to close " << data << endl;
 		return QString("");
 	}
-	kDebug(30522) << "temp filename : " << temp.name() << endl;
-	return temp.name();
+	kDebug(30522) << "temp filename : " << temp.fileName() << endl;
+	return temp.fileName();
 }

@@ -21,7 +21,7 @@
 #ifndef KWORD_1_3_PICTURE
 #define KWORD_1_3_PICTURE
 
-class KTempFile;
+class KTemporaryFile;
 class KoStore;
 
 #include <QString>
@@ -36,7 +36,7 @@ public:
     QString getOasisPictureName( void ) const;
 public:
     QString m_storeName; ///< Name of the file in store
-    KTempFile* m_tempFile; ///< Temporary file
+    KTemporaryFile* m_tempFile; ///< Temporary file
     bool m_valid; ///< Is the picture valid?
 };
 

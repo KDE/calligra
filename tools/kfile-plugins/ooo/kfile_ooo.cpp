@@ -44,7 +44,7 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <kzip.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <q3ptrstack.h>
 
 #include <qdom.h>
@@ -504,9 +504,9 @@ bool copyZipToZip( const KZip * src, KZip * dest)
 bool KOfficePlugin::writeMetaData(const QString & path,
 				  const QDomDocument &doc) const
 {
-    KTempFile tmp_file;
-    tmp_file.setAutoDelete(true);
-    KZip * m_zip = new KZip(tmp_file.name());
+    KTemporaryFile tmp_file;
+    tmp_file.open();
+    KZip * m_zip = new KZip(tmp_file.fileName());
     KZip * current= new KZip(path);
     /* To correct problem with OOo 1.1, we have to recreate the file from scratch */
     if (!m_zip->open(QIODevice::WriteOnly) || !current->open(QIODevice::ReadOnly) ) {
@@ -526,8 +526,8 @@ bool KOfficePlugin::writeMetaData(const QString & path,
     delete m_zip;
     // NULL as third parameter is not good, but I don't know the Window ID
     // That is only to avoid the deprecated warning at compile time
-    if (!KIO::NetAccess::upload( tmp_file.name(), KUrl(path), NULL)){
-	    kDebug(7034) << "Error while saving " << tmp_file.name() << " as " << path << endl;
+    if (!KIO::NetAccess::upload( tmp_file.fileName(), KUrl(path), NULL)){
+	    kDebug(7034) << "Error while saving " << tmp_file.fileName() << " as " << path << endl;
 	    return false;
     }
     return true;

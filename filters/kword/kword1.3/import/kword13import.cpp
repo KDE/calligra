@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kimageio.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include <KoFilterChain.h>
 #include <KoStoreDevice.h>
@@ -175,14 +175,12 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
             }
             else
             {
-                kwordDocument.m_previewFile = new KTempFile( QString::null, ".png" );
-                // ### TODO check KTempFile
-                kwordDocument.m_previewFile->setAutoDelete( true );
-                QFile file( kwordDocument.m_previewFile->name() );
+                kwordDocument.m_previewFile = new KTemporaryFile();
+                kwordDocument.m_previewFile->setSuffix(".png");
+                kwordDocument.m_previewFile->open(); // ### TODO check KTemporaryFile
                 // ### TODO: check if file is correctly written
-                file.open( QIODevice::WriteOnly );
-                file.write( image );
-                file.close();
+                kwordDocument.m_previewFile->write( image );
+                kwordDocument.m_previewFile->close();
             }
             ioPreview.close();
             store->close();

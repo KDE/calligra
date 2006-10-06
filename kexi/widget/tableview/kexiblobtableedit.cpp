@@ -38,7 +38,7 @@
 #include <qbuffer.h>
 
 #include <kdebug.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kmimetype.h>
 #include <kmimemagic.h>
 #include <kuserprofile.h>
@@ -150,15 +150,15 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 #if 0 //todo?
 	QByteArray val = m_origValue.toByteArray();
 	kDebug() << "KexiBlobTableEdit: Size of BLOB: " << val.size() << endl;
-	m_tempFile = new KTempFile();
-	m_tempFile->setAutoDelete(true);
-	kDebug() << "KexiBlobTableEdit: Creating temporary file: " << m_tempFile->name() << endl;
-	m_tempFile->dataStream()->writeRawBytes(val.data(), val.size());
-	m_tempFile->close();
+	m_tempFile = new KTemporaryFile();
+	m_tempFile->open();
+	kDebug() << "KexiBlobTableEdit: Creating temporary file: " << m_tempFile->fileName() << endl;
+	QDataStream stream ( m_tempFile );
+	stream->writeRawBytes(val.data(), val.size());
 	delete m_tempFile;
 	m_tempFile = 0;
 
-	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->name());
+	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->fileName());
 	kDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
 
 	setViewWidget( new QWidget(this) );
@@ -182,7 +182,7 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 		if(mmr->mimeType().contains("image/"))
 		{
 			//sale the image to the maximal allowed size by optaining the aspect ratio
-			QImage pix(m_tempFile->name());
+			QImage pix(m_tempFile->fileName());
 			pix = pix.smoothScale(m_view->width(), l->height(), QImage::ScaleMin);
 
 			l->setScaledContents(true);
@@ -190,7 +190,7 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 		}
 		else
 		{
-			l->setPixmap(KMimeType::pixmapForURL(KUrl(m_tempFile->name())));
+			l->setPixmap(KMimeType::pixmapForURL(KUrl(m_tempFile->fileName())));
 		}
 
 //		QLabel *l = new QLabel(this);
@@ -232,7 +232,7 @@ KexiBlobTableEdit::value()
 		return QVariant(m_content->text());
 	}
 	QByteArray value;
-	QFile f( m_tempFile->name() );
+	QFile f( m_tempFile->fileName() );
 	f.open(QIODevice::ReadOnly);
 	QDataStream stream(&f);
 	char* data = (char*) malloc(f.size());
@@ -324,14 +324,14 @@ KexiBlobTableEdit::execute(const QString& app, const QString& file)
 void
 KexiBlobTableEdit::open()
 {
-	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->name());
+	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->fileName());
 	kDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
 	KService::Ptr ptr = KServiceTypeProfile::preferredService(mmr->mimeType(), "Application");
 	QString exec;
 
 	if(!ptr.data())
 	{
-		exec = openWithDlg(m_tempFile->name());
+		exec = openWithDlg(m_tempFile->fileName());
 	}
 	else
 	{
@@ -340,18 +340,18 @@ KexiBlobTableEdit::open()
 
 	if(!exec.isEmpty())
 	{
-		execute(exec, m_tempFile->name());
+		execute(exec, m_tempFile->fileName());
 	}
 }
 
 void
 KexiBlobTableEdit::openWith()
 {
-	QString exec = openWithDlg(m_tempFile->name());
+	QString exec = openWithDlg(m_tempFile->fileName());
 
 	if(!exec.isEmpty())
 	{
-		execute(exec, m_tempFile->name());
+		execute(exec, m_tempFile->fileName());
 	}
 }
 
@@ -382,7 +382,7 @@ KexiBlobTableEdit::loadFile()
 
 	if(!file.isEmpty())
 	{
-		(void) KIO::file_copy(KUrl(file), KUrl(m_tempFile->name()), -1, true);
+		(void) KIO::file_copy(KUrl(file), KUrl(m_tempFile->fileName()), -1, true);
 	}
 }
 
@@ -393,7 +393,7 @@ KexiBlobTableEdit::saveFile()
 
 	if(!file.isEmpty())
 	{
-		(void)KIO::file_copy(KUrl(m_tempFile->name()), KUrl(file), -1, true);
+		(void)KIO::file_copy(KUrl(m_tempFile->fileName()), KUrl(file), -1, true);
 	}
 }*/
 

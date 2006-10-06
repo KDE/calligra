@@ -26,7 +26,6 @@
 #include <kexiutils/tristate.h>
 
 class Q3Process;
-class KTempFile;
 class KProgressDialog;
 
 //! @short Helper class performing interactive compacting (VACUUM) of the SQLite database

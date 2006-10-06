@@ -28,7 +28,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kservice.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kservicetypetrader.h>
 #include "generic_filter.h"
 
@@ -81,10 +81,9 @@ KoFilter::ConversionStatus GenericFilter::convert( const QByteArray &from, const
 
 KoFilter::ConversionStatus GenericFilter::doImport()
 {
-    KTempFile temp(QString("genericfilter-"));
-    temp.setAutoDelete(true);
-
-    QFile tempFile(temp.name());
+    KTemporaryFile tempFile;
+    tempFile.setPrefix(QString("genericfilter-"));
+    tempFile.open();
 
     m_out = KoStore::createStore(&tempFile, KoStore::Write);
 

@@ -24,7 +24,7 @@
 #define KWORD_1_3_DOCUMENT_H
 
 class QIODevice;
-class KTempFile;
+class KTemporaryFile;
 class KWord13Picture;
 
 #include <QString>
@@ -75,7 +75,7 @@ public:
     Q3PtrList<KWord13PictureFrameset> m_pictureFramesetList; ///< List of \<FRAMESET\> having pictures
     Q3PtrList<KWord13Frameset> m_otherFramesetList; ///< List of \<FRAMESET\> of other types
     Q3Dict<KWord13Picture> m_pictureDict; ///< "Dictionnary" of all pictures' data
-    KTempFile* m_previewFile;
+    KTemporaryFile* m_previewFile;
     QStringList m_anchoredFramesetNames; ///< List of framesets that are anchored
 };
 

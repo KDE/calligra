@@ -21,7 +21,7 @@
 #include <QFile>
 
 #include <kdebug.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -42,10 +42,10 @@ bool KWord13Picture::loadPicture( KoStore* store )
 {
     kDebug(30520) << "Loading picture: " << m_storeName << endl;
  
-    m_tempFile = new KTempFile( QString::null, ".bin" );
-    m_tempFile->setAutoDelete( true );
+    m_tempFile = new KTemporaryFile();
+    m_tempFile->setSuffix(".bin");
  
-    if ( ! store->extractFile( m_storeName, m_tempFile->name() ) )   
+    if ( !m_tempFile->open() || !store->extractFile( m_storeName, m_tempFile->fileName() ) )
     {
         kWarning(30520) << "Could not write temporary file!" << endl;
         delete m_tempFile;

@@ -28,7 +28,7 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kcommand.h>
 #include <KoStoreDevice.h>
 #include <KoOasisStyles.h>
@@ -321,10 +321,9 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     masterPage.addAttribute( "style:page-layout-name", layoutName );
     mainStyles.lookup( masterPage, "Default", KoGenStyles::DontForceNumbering );
 
-    KTempFile contentTmpFile;
-    contentTmpFile.setAutoDelete( true );
-    QFile* tmpFile = contentTmpFile.file();
-    KoXmlWriter contentTmpWriter( tmpFile, 1 );
+    KTemporaryFile contentTmpFile;
+    contentTmpFile.open();
+    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
 
     contentTmpWriter.startElement( "office:body" );
     contentTmpWriter.startElement( "office:drawing" );
@@ -344,9 +343,8 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     docWriter->endElement(); // office:automatic-styles
 
     // And now we can copy over the contents from the tempfile to the real one
-    tmpFile->close();
-    docWriter->addCompleteElement( tmpFile );
-    contentTmpFile.close();
+    contentTmpFile.seek(0);
+    docWriter->addCompleteElement( &contentTmpFile );
 
     docWriter->endElement(); // Root element
     docWriter->endDocument();

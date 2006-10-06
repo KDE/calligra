@@ -47,7 +47,7 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <k3sconfig.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include <KoApplication.h>
 #include <KoDocumentInfo.h>
@@ -548,17 +548,15 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     KoXmlWriter* contentWriter = createOasisXmlWriter( &dev, "office:document-content" );
     KoGenStyles mainStyles;//for compile
 
-    KTempFile contentTmpFile;
+    KTemporaryFile contentTmpFile;
     //Check that temp file was successfully created
-    if (contentTmpFile.status() != 0)
+    if (!contentTmpFile.open())
     {
       qWarning("Creation of temporary file to store document content failed.");
       return false;
     }
 
-    contentTmpFile.setAutoDelete( true );
-    QFile* tmpFile = contentTmpFile.file();
-    KoXmlWriter contentTmpWriter( tmpFile, 1 );
+    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
 
 
 
@@ -671,9 +669,8 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
 
 
    // And now we can copy over the contents from the tempfile to the real one
-    tmpFile->close();
-    contentWriter->addCompleteElement( tmpFile );
     contentTmpFile.close();
+    contentWriter->addCompleteElement( &contentTmpFile );
 
 
     contentWriter->endElement(); // root element

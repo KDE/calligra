@@ -40,7 +40,7 @@ class KoAutoFormat;
 class KoVariable;
 class KoVariableFormatCollection;
 class KPrVariableCollection;
-class KTempFile;
+class KTemporaryFile;
 class KoParagStyle;
 class KPrBgSpellCheck;
 class KoTextParag;
@@ -648,7 +648,7 @@ protected:
 
     Q3ValueList<KoPictureKey> usedPictures;
     QStringList usedSoundFile, haveNotOwnDiskSoundFile;
-    Q3PtrList<KTempFile> tmpSoundFileList;
+    Q3PtrList<KTemporaryFile> tmpSoundFileList;
     KPrDocumentAdaptor *dbus;
 
     int saveOnlyPage;

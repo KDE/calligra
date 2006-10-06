@@ -100,7 +100,7 @@
 #include <kimageio.h>
 #include <kparts/event.h>
 #include <kdebug.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kcolorbutton.h>
 
 #include <KoMainWindow.h>
@@ -829,30 +829,20 @@ void KPrView::savePicture( const QString& oldName, KoPicture& picture)
                 }
                 else
                 {
-                    KTempFile tempFile;
-                    tempFile.setAutoDelete( true );
-                    if ( tempFile.status() == 0 )
+                    KTemporaryFile tempFile;
+                    if ( tempFile.open() )
                     {
-                        QFile file( tempFile.name() );
-                        if ( file.open( QIODevice::ReadWrite ) )
+                        picture.save( &tempFile );
+                        if ( !KIO::NetAccess::upload( tempFile.fileName(), url, this ) )
                         {
-                            picture.save( &file );
-                            file.close();
-                            if ( !KIO::NetAccess::upload( tempFile.name(), url, this ) )
-                            {
-                                KMessageBox::sorry( this, i18n(
-                                   "Unable to save the file to '%1'. %2.", url.prettyUrl() , KIO::NetAccess::lastErrorString() ),
-                                   i18n("Save Failed") );
-                            }
+                            KMessageBox::sorry( this, i18n(
+                               "Unable to save the file to '%1'. %2.", url.prettyUrl() , KIO::NetAccess::lastErrorString() ),
+                               i18n("Save Failed") );
                         }
-                        else
-                            KMessageBox::error(this,
-                                   i18n("Error during saving: could not open '%1' temporary file for writing.", file.name() ),
-                                   i18n("Save Picture"));
                     }
                     else
                         KMessageBox::sorry( this, i18n(
-                            "Error during saving: could not create temporary file: %1.", strerror( tempFile.status() ) ),
+                            "Error during saving: could not create temporary file."),
                             i18n("Save Picture") );
                 }
             }
@@ -1345,17 +1335,19 @@ void KPrView::extraCreateTemplate()
     int height = 60;
     QPixmap pix = m_pKPresenterDoc->generatePreview(QSize(width, height));
 #if COPYOASISFORMAT
-    KTempFile tempFile( QString::null, ".otp" );
-    tempFile.setAutoDelete( true );
-    m_pKPresenterDoc->savePage( tempFile.name(), getCurrPgNum() - 1);
+    KTemporaryFile tempFile;
+    tempFile.setSuffix(".otp");
+    tempFile.open();
+    m_pKPresenterDoc->savePage( tempFile.fileName(), getCurrPgNum() - 1);
 #else
-    KTempFile tempFile( QString::null, ".kpt" );
-    tempFile.setAutoDelete( true );
-    m_pKPresenterDoc->savePage( tempFile.name(), getCurrPgNum() - 1);
+    KTemporaryFile tempFile;
+    tempFile.setSuffix(".kpt");
+    tempFile.open();
+    m_pKPresenterDoc->savePage( tempFile.fileName(), getCurrPgNum() - 1);
 #endif
 
     KoTemplateCreateDia::createTemplate( "kpresenter_template", KPrFactory::global(),
-                                         tempFile.name(), pix, this);
+                                         tempFile.fileName(), pix, this);
     KPrFactory::global()->dirs()->addResourceType("kpresenter_template",
                                                          KStandardDirs::kde_default( "data" ) +
                                                          "kpresenter/templates/");

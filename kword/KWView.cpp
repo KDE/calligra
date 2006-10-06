@@ -104,7 +104,7 @@
 #include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kiconloader.h>
 #include <kxmlguifactory.h>
 #include <kfontsizeaction.h>
@@ -3999,13 +3999,14 @@ void KWView::extraCreateTemplate()
     int height = 60;
     QPixmap pix = m_doc->generatePreview(QSize(width, height));
 
-    KTempFile tempFile( QString::null, ".odt" );
-    tempFile.setAutoDelete(true);
+    KTemporaryFile tempFile;
+    tempFile.setSuffix(".odt");
+    tempFile.open();
 
-    m_doc->saveNativeFormat( tempFile.name() );
+    m_doc->saveNativeFormat( tempFile.fileName() );
 
     KoTemplateCreateDia::createTemplate( "kword_template", KWFactory::instance(),
-                                         tempFile.name(), pix, this );
+                                         tempFile.fileName(), pix, this );
 
     KWFactory::instance()->dirs()->addResourceType("kword_template",
                                                     KStandardDirs::kde_default( "data" ) +
@@ -6138,30 +6139,20 @@ void KWView::savePicture()
                 }
                 else
                 {
-                    KTempFile tempFile;
-                    tempFile.setAutoDelete( true );
-                    if ( tempFile.status() == 0 )
+                    KTemporaryFile tempFile;
+                    if ( tempFile.open() )
                     {
-                        QFile file( tempFile.name() );
-                        if ( file.open( QIODevice::ReadWrite ) )
+                        picture.save( &tempFile );
+                        if ( !KIO::NetAccess::upload( tempFile.fileName(), url, this ) )
                         {
-                            picture.save( &file );
-                            file.close();
-                            if ( !KIO::NetAccess::upload( tempFile.name(), url, this ) )
-                            {
-                              KMessageBox::sorry( this, i18n(
-                                  "Unable to save the file to '%1'. %2.", url.prettyUrl() ,KIO::NetAccess::lastErrorString() ),
-                                  i18n("Save Failed") );
-                            }
+                          KMessageBox::sorry( this, i18n(
+                              "Unable to save the file to '%1'. %2.", url.prettyUrl() ,KIO::NetAccess::lastErrorString() ),
+                              i18n("Save Failed") );
                         }
-                        else
-                            KMessageBox::error(this,
-                                i18n("Error during saving. Could not open '%1' temporary file for writing", file.name() ),
-                                i18n("Save Picture"));
                     }
                     else
                         KMessageBox::sorry( this, i18n(
-                            "Error during saving. Could not create temporary file: %1.", strerror( tempFile.status() ) ),
+                            "Error during saving. Could not create temporary file."),
                             i18n("Save Picture") );
                 }
             }

@@ -27,7 +27,7 @@
 #include <Q3ValueList>
 
 #include <kdebug.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kmimetype.h>
 
 #include <kofficeversion.h>

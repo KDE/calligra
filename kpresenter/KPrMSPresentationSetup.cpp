@@ -31,7 +31,7 @@
 #include "KPrPage.h"
 
 #include <kio/netaccess.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include <QDir>
 #include <q3frame.h>
@@ -133,10 +133,12 @@ void KPrMSPresentation::initCreation( QProgressBar *progressBar )
     QPainter painter( &titleSlide );
 
     //the second title is just blank, so create that now
-    KTempFile tmp;
+    KTemporaryFile tmp;
+    tmp.setAutoRemove(false);
+    tmp.open();
     QString filename = path + slidePath + "/SPJT0002.JPG";
-    titleSlide.save( tmp.name(), "JPEG" );
-    KIO::NetAccess::file_move( tmp.name(), filename, -1, true /*overwrite*/);
+    titleSlide.save( tmp.fileName(), "JPEG" );
+    KIO::NetAccess::file_move( tmp.fileName(), filename, -1, true /*overwrite*/);
 
     p = progressBar->value();
     progressBar->setValue( ++p );
@@ -149,9 +151,11 @@ void KPrMSPresentation::initCreation( QProgressBar *progressBar )
     painter.drawText( titleSlide.rect(), Qt::AlignCenter | Qt::TextWordWrap, title );
     filename = path + slidePath + "/SPJT0001.JPG";
 
-    KTempFile tmp2;
-    titleSlide.save( tmp2.name(), "JPEG" );
-    KIO::NetAccess::file_move( tmp2.name(), filename, -1, true /*overwrite*/);
+    KTemporaryFile tmp2;
+    tmp2.setAutoRemove(false);
+    tmp2.open();
+    titleSlide.save( tmp2.fileName(), "JPEG" );
+    KIO::NetAccess::file_move( tmp2.fileName(), filename, -1, true /*overwrite*/);
 
     p = progressBar->value();
     progressBar->setValue( ++p );
@@ -169,12 +173,14 @@ void KPrMSPresentation::createSlidesPictures( QProgressBar *progressBar )
         int pgNum = slideInfos[i].pageNumber;
         filename.sprintf("/SPJP%04i.JPG", i+3);
 
-        KTempFile tmp;
+        KTemporaryFile tmp;
+        tmp.setAutoRemove(false);
+        tmp.open();
 
         view->getCanvas()->exportPage( pgNum, 1023, 767,
-                                       tmp.name(), "JPEG" );
+                                       tmp.fileName(), "JPEG" );
 
-        KIO::NetAccess::file_move( tmp.name(), ( path + slidePath + filename ), -1, true /*overwrite*/);
+        KIO::NetAccess::file_move( tmp.fileName(), ( path + slidePath + filename ), -1, true /*overwrite*/);
 
         p = progressBar->value();
         progressBar->setValue( ++p );
@@ -185,11 +191,13 @@ void KPrMSPresentation::createSlidesPictures( QProgressBar *progressBar )
 void KPrMSPresentation::createIndexFile( QProgressBar *progressBar )
 {
     int p;
-    KTempFile sppFile;
+    KTemporaryFile sppFile;
+    sppFile.setAutoRemove(false);
+    sppFile.open();
 
     QString filenameStore = (path + "/MSSONY/PJ/" + title + ".SPP");
 
-    QDataStream sppStream( sppFile.file() );
+    QDataStream sppStream( &sppFile );
     sppStream.setByteOrder(QDataStream::LittleEndian);
     p = progressBar->value();
     progressBar->setValue( ++p );
@@ -271,8 +279,8 @@ void KPrMSPresentation::createIndexFile( QProgressBar *progressBar )
     progressBar->setValue( ++p );
     kapp->processEvents();
 
-    sppFile.close();
-    KIO::NetAccess::file_move( sppFile.name(), filenameStore, -1, true /*overwrite*/);
+    sppFile.flush();
+    KIO::NetAccess::file_move( sppFile.fileName(), filenameStore, -1, true /*overwrite*/);
 }
 
 void KPrMSPresentation::init()
