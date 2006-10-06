@@ -4667,7 +4667,7 @@ void Canvas::showToolTip( const QPoint& p )
     }
 
     // Now we shows the tip
-    QToolTip::showText( marker.toRect().bottomRight(), tipText, this );
+    QToolTip::showText( mapToGlobal( marker.toRect().bottomRight() ), tipText, this );
 
     // Here we try to find the tip label again
     // Reason: the previous tip_findLabel might fail if no tip has ever shown yet
