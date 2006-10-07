@@ -117,6 +117,7 @@ Region::Region(const QRect& rect, Sheet* sheet)
 {
   d = new Private();
 
+  Q_ASSERT( !rect.isNull() );
   if (rect.isNull())
   {
     kError(36001) << "Region::Region(const QRect&): QRect is empty!" << endl;
@@ -129,6 +130,7 @@ Region::Region(const QPoint& point, Sheet* sheet)
 {
   d = new Private();
 
+  Q_ASSERT( !point.isNull() );
   if (point.isNull())
   {
     kError(36001) << "Region::Region(const QPoint&): QPoint is empty!" << endl;
@@ -163,6 +165,7 @@ Region::Region(int x, int y, Sheet* sheet)
 {
   d = new Private();
 
+  Q_ASSERT( isValid(QPoint(x,y)) );
   if (!isValid(QPoint(x,y)))
   {
     kError(36001) << "Region::Region(" << x << ", " << y << "): Coordinates are invalid!" << endl;
@@ -175,6 +178,7 @@ Region::Region(int x, int y, int width, int height, Sheet* sheet)
 {
   d = new Private();
 
+  Q_ASSERT( isValid(QRect(x,y,width,height)) );
   if (!isValid(QRect(x,y,width,height)))
   {
     kError(36001) << "Region::Region(" << x << ", " << y << ", " << width << ", " << height << "): Dimensions are invalid!" << endl;

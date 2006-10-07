@@ -7016,7 +7016,7 @@ void View::insertSheet( Sheet* sheet )
   bool state = ( doc()->map()->visibleSheets().count() > 1 );
   d->actions->removeSheet->setEnabled( state );
   d->actions->hideSheet->setEnabled( state );
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 QColor View::borderColor() const

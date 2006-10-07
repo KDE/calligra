@@ -151,7 +151,7 @@ int Cell::row() const
   // Make sure this isn't called for the default cell.  This assert
   // can save you (could have saved me!) the hassle of some very
   // obscure bugs.
-
+  Q_ASSERT( !isDefault() );
   if ( isDefault() )
   {
     kWarning(36001) << "Error: Calling Cell::row() for default cell" << endl;
@@ -169,6 +169,7 @@ int Cell::column() const
   // Make sure this isn't called for the default cell.  This assert
   // can save you (could have saved me!) the hassle of some very
   // obscure bugs.
+  Q_ASSERT( !isDefault() );
   if ( isDefault() )
   {
     kWarning(36001) << "Error: Calling Cell::column() for default cell" << endl;
@@ -3646,17 +3647,17 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         else
           setValue ( Value( t.toLong(&ok) ) );
         if ( !ok )
-  {
+        {
           kWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
-  }
-  /* We will need to localize the text version of the number */
-  KLocale* locale = format()->sheet()->doc()->locale();
+        }
+        /* We will need to localize the text version of the number */
+        KLocale* locale = format()->sheet()->doc()->locale();
 
         /* KLocale::formatNumber requires the precision we want to return.
         */
         int precision = t.length() - t.indexOf('.') - 1;
 
-  if ( formatType() == Percentage_format )
+        if ( formatType() == Percentage_format )
         {
           if (value().isInteger())
             t = locale->formatNumber( value().asInteger() * 100 );

@@ -152,7 +152,7 @@ int RecalcManager::computeDepth(Cell* cell) const
   if (cell->testFlag(Cell::Flag_UpdatingDeps) ||
       cell->testFlag (Cell::Flag_CircularCalculation))
   {
-    kError(36001) << "Circular dependency at " << cell->fullName() << endl;
+    kDebug(36002) << "Circular dependency at " << cell->fullName() << endl;
     // don't set anything if the cell already has all these things set
     // this prevents endless loop for inter-sheet curcular dependencies,
     // where the usual mechanisms fail doe to having multiple dependency
@@ -262,7 +262,7 @@ void RecalcManager::recalcCell(Cell* cell) const
       cell->testFlag (Cell::Flag_CircularCalculation))
   {
 #if 0
-    kError(36001) << "ERROR: Circle, cell " << cell->fullName() << endl;
+    kDebug(36002) << "Circle, cell " << cell->fullName() << endl;
     // don't set anything if the cell already has all these things set
     // this prevents endless loop for inter-sheet curcular dependencies,
     // where the usual mechanisms fail doe to having multiple dependency
