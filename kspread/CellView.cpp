@@ -298,7 +298,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
   // FIXME: This needs to be taken out eventually - it is done in
   //        canvas::paintUpdates().
 #ifdef KSPREAD_CELL_WINDOW
-    if ( d->dirty || ( !cell()->isDefault() && cell()->testFlag( Cell::Flag_LayoutDirty ) ) )
+    if ( !cell()->isDefault() && ( d->dirty || cell()->testFlag( Cell::Flag_LayoutDirty ) ) )
     {
         Q_ASSERT( d->col == cellRef.x() );
         Q_ASSERT( d->row == cellRef.y() );
