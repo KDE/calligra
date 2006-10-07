@@ -2401,9 +2401,10 @@ void Doc::setUndoRedoLimit(int val)
 
 void Doc::setReferenceYear( int year )
 {
-    if ( !( year >= 1900 && year <= 1999 ) || !( year >= 0 && year <= 99 ) )
-        return;
-    d->refYear = ( year <= 99 ) ? 1900 + year : year;
+    if ( year < 100)
+       d->refYear = 1900 + year;
+    else
+       d->refYear = year;
 }
 
 int Doc::referenceYear() const
