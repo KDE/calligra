@@ -428,6 +428,7 @@ bool KWord13Parser::startElementKey( const QString& name, const QXmlAttributes& 
         if ( pic->m_storeName.isEmpty() )
         {
             kError(30520) << "Picture defined without store name! Aborting!" << endl;
+            delete pic;
             return false; // Assume parse error
         }
         // ### TODO: catch duplicate keys (should not happen but who knows?)
