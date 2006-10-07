@@ -320,7 +320,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
              if (pos > -1) str += my_rc.rc[pos];
           }
 
-          kDebug()<<" Data : Text :"<<mystr<<" tab :"<<tabnostr<<" "<< cellnostr <<" " <<ccol<<" " << irow<<" "<< typeFormStr<<" " <<typeCharStr<<" " <<typeCellStr<<endl;
+          //kDebug()<<" Data : Text :"<<mystr<<" tab :"<<tabnostr<<" "<< cellnostr <<" " <<ccol<<" " << irow<<" "<< typeFormStr<<" " <<typeCharStr<<" " <<typeCellStr<<endl;
 
 
           /********************************************************************
