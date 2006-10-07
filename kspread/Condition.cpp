@@ -438,22 +438,22 @@ QDomElement Conditions::saveConditions( QDomDocument & doc ) const
 
 void Conditions::loadOasisConditions( const KoXmlElement & element )
 {
-    kDebug()<<"void Conditions::loadOasisConditions( const KoXmlElement & element )\n";
+    kDebug(36003)<<"void Conditions::loadOasisConditions( const KoXmlElement & element )\n";
     KoXmlElement elementItem( element );
     StyleManager * manager = m_cell->sheet()->doc()->styleManager();
 
     while ( !elementItem.isNull() )
     {
-        kDebug()<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
+        kDebug(36003)<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
         if ( elementItem.tagName()== "map" && elementItem.namespaceURI() == KoXmlNS::style  )
         {
             bool ok = true;
-            kDebug()<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( KoXmlNS::style, "condition", QString::null )<<endl;
+            kDebug(36003)<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( KoXmlNS::style, "condition", QString::null )<<endl;
             Conditional newCondition;
             loadOasisConditionValue( elementItem.attributeNS( KoXmlNS::style, "condition", QString::null ), newCondition );
             if ( elementItem.hasAttributeNS( KoXmlNS::style, "apply-style-name" ) )
             {
-                kDebug()<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null )<<endl;
+                kDebug(36003)<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null )<<endl;
                 newCondition.styleName = new QString( elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null ) );
                 newCondition.style = manager->style( *newCondition.styleName );
                 if ( !newCondition.style )
@@ -465,7 +465,7 @@ void Conditions::loadOasisConditions( const KoXmlElement & element )
             if ( ok )
                 m_condList.append( newCondition );
             else
-                kDebug(36001) << "Error loading condition " << elementItem.nodeName()<< endl;
+                kDebug(36003) << "Error loading condition " << elementItem.nodeName()<< endl;
         }
         elementItem = elementItem.nextSibling().toElement();
     }
@@ -536,8 +536,8 @@ void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCon
         newCondition.cond = Conditional::Equal;
     }
     else
-        kDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
-    kDebug()<<" value :"<<value<<endl;
+        kDebug(36003)<<" I don't know how to parse it :"<<valExpression<<endl;
+    kDebug(36003)<<" value :"<<value<<endl;
     bool ok = false;
     newCondition.val1 = value.toDouble(&ok);
     if ( !ok )
@@ -546,7 +546,7 @@ void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCon
         if ( !ok )
         {
             newCondition.strVal1 = new QString( value );
-            kDebug()<<" Try to parse this value :"<<value<<endl;
+            kDebug(36003)<<" Try to parse this value :"<<value<<endl;
         }
 
     }
@@ -556,7 +556,7 @@ void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCon
 void Conditions::loadOasisValidationValue( const QStringList &listVal, Conditional &newCondition )
 {
     bool ok = false;
-    kDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+    kDebug(36003)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
 
     newCondition.val1 = listVal[0].toDouble(&ok);
     if ( !ok )
@@ -565,7 +565,7 @@ void Conditions::loadOasisValidationValue( const QStringList &listVal, Condition
         if ( !ok )
         {
             newCondition.strVal1 = new QString( listVal[0] );
-            kDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+            kDebug(36003)<<" Try to parse this value :"<<listVal[0]<<endl;
         }
     }
     ok=false;
@@ -576,7 +576,7 @@ void Conditions::loadOasisValidationValue( const QStringList &listVal, Condition
         if ( !ok )
         {
             newCondition.strVal2 = new QString( listVal[1] );
-            kDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+            kDebug(36003)<<" Try to parse this value :"<<listVal[1]<<endl;
         }
     }
 }
