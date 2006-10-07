@@ -1070,10 +1070,11 @@ void Formula::compile( const Tokens& tokens ) const
          }
 
          // rule for unary operator:  (op1) (op2) X -> (op1) X
-         // conditions: op2 is unary
+         // conditions: op2 is unary, token is not '('
          // action: push (op2) to result
          // e.g.  "* - 2" becomes "*"
          if( !ruleFound )
+         if( token.asOperator() != Token::LeftPar )
          if( syntaxStack.itemCount() >= 3 )
          {
             Token x = syntaxStack.top();
@@ -1095,9 +1096,10 @@ void Formula::compile( const Tokens& tokens ) const
           }
 
          // auxilary rule for unary operator:  (op) X -> X
-         // conditions: op is unary, op is first in syntax stack
+         // conditions: op is unary, op is first in syntax stack, token is not '('
          // action: push (op) to result
          if( !ruleFound )
+         if( token.asOperator() != Token::LeftPar )
          if( syntaxStack.itemCount() == 2 )
          {
             Token x = syntaxStack.top();
