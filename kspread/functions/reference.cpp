@@ -385,7 +385,6 @@ Value func_vlookup (valVector args, ValueCalc *calc, FuncExtra *)
     if ( col < 1 || col > cols )
         return Value::errorVALUE();
     const bool sorted = ( args.count() > 3 ) ? calc->conv()->asBoolean( args[3] ).asBoolean() : true;
-kDebug() << "col: " << col << " sorted: " << sorted << endl;
 
     // now traverse the array and perform comparison
     for ( int row = 0; row < rows; ++row )
