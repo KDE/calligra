@@ -63,6 +63,11 @@ public:
   };
   Q_DECLARE_FLAGS(Borders, Border)
 
+    /**
+     * \return the cell associated with this view
+     */
+    Cell* cell() const;
+
   /**
    * \ingroup Painting
    * Paints the cell.
