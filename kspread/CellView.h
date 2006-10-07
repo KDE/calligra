@@ -40,18 +40,24 @@
 // KOffice
 #include <KoPoint.h>
 
+#define KSPREAD_CELL_WINDOW
+
 class QRectF;
 
 namespace KSpread
 {
 class Cell;
+class Sheet;
 class View;
 
 class CellView
 {
 public:
-  CellView( Cell* cell );
-  ~CellView();
+    CellView( Cell* cell );
+#ifdef KSPREAD_CELL_WINDOW
+    CellView( Sheet* sheet, int col, int row );
+#endif
+    ~CellView();
 
   enum Border
   {

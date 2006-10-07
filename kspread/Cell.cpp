@@ -98,7 +98,9 @@ Cell::Cell( Sheet * _sheet, int _column, int _row )
 {
   d->row = _row;
   d->column = _column;
+#ifndef KSPREAD_CELL_WINDOW
   d->cellView = new CellView( this );
+#endif
   d->format = new Format(_sheet, _sheet->doc()->styleManager()->defaultStyle());
   d->format->setCell(this);
   clearAllErrors();
@@ -110,17 +112,21 @@ Cell::Cell( Sheet * _sheet, Style * _style,  int _column, int _row )
 {
   d->row = _row;
   d->column = _column;
+#ifndef KSPREAD_CELL_WINDOW
   d->cellView = new CellView( this );
+#endif
   d->format = new Format( _sheet, _style );
   d->format->setCell(this);
 
   clearAllErrors();
 }
 
+#ifndef KSPREAD_CELL_WINDOW
 CellView* Cell::cellView() const
 {
   return d->cellView;
 }
+#endif
 
 Format* Cell::format() const
 {
@@ -3916,7 +3922,9 @@ Cell::~Cell()
       valueChanged ();  //our value has been changed (is now null), but only if we aren't default
 
     delete d->format;
+#ifndef KSPREAD_CELL_WINDOW
     delete d->cellView;
+#endif
     delete d;
 }
 

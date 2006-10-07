@@ -69,6 +69,15 @@ class CellView::Private
 public:
   Cell* cell;
 
+#ifdef KSPREAD_CELL_WINDOW
+  Sheet* sheet;
+  int col;
+  int row;
+
+  // flag indicating, that we need to recalculate the attributes
+  bool dirty;
+#endif
+
   // Position and dimension of displayed text.
   // Doc coordinate system; points; no zoom
   double  textX;
@@ -82,12 +91,39 @@ CellView::CellView( Cell* cell )
 {
   d->cell = cell;
 
+#ifdef KSPREAD_CELL_WINDOW
+  d->sheet = cell ? ( cell->format() ? cell->format()->sheet() : 0 ) : 0;
+  d->col = cell->isDefault() ? 0 : cell->column();
+  d->row = cell->isDefault() ? 0 : cell->row();
+
+  d->dirty = true;
+#endif
+
   // Formatting
   d->textX      = 0.0;
   d->textY      = 0.0;
   d->textWidth  = 0.0;
   d->textHeight = 0.0;
 }
+
+#ifdef KSPREAD_CELL_WINDOW
+CellView::CellView( Sheet* sheet, int col, int row )
+    : d( new Private )
+{
+    d->cell  = sheet ? sheet->cellAt( col, row ) : 0;
+    d->sheet = sheet;
+    d->col   = col;
+    d->row   = row;
+
+    d->dirty = true;
+
+    // Formatting
+    d->textX      = 0.0;
+    d->textY      = 0.0;
+    d->textWidth  = 0.0;
+    d->textHeight = 0.0;
+}
+#endif
 
 CellView::~CellView()
 {
@@ -96,6 +132,10 @@ CellView::~CellView()
 
 Cell* CellView::cell() const
 {
+#ifdef KSPREAD_CELL_WINDOW
+    if ( d->sheet )
+        d->cell = d->sheet->cellAt( d->col, d->row );
+#endif
     return d->cell;
 }
 
@@ -257,8 +297,18 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
   //
   // FIXME: This needs to be taken out eventually - it is done in
   //        canvas::paintUpdates().
+#ifdef KSPREAD_CELL_WINDOW
+    if ( d->dirty || ( !cell()->isDefault() && cell()->testFlag( Cell::Flag_LayoutDirty ) ) )
+    {
+        Q_ASSERT( d->col == cellRef.x() );
+        Q_ASSERT( d->row == cellRef.y() );
+        makeLayout( cellRef.x(), cellRef.y() );
+        d->dirty = false;
+    }
+#else
   if ( cell()->testFlag( Cell::Flag_LayoutDirty ) )
     makeLayout( cellRef.x(), cellRef.y() );
+#endif
 
   // ----------------  Start the actual painting.  ----------------
 
@@ -453,11 +503,17 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
           //      cells are merged, then the whole merged cell will be
           //      painted with the color of the last cell referenced
           //      which is inside the merged range.
-          obscuringCell->cellView()->paintCell( rect, painter, view,
-                                                corner, obscuringCellRef,
-                                                LeftBorder|TopBorder|RightBorder|BottomBorder,
-                                                rp, bp, lp, tp,
-                                                mergedCellsPainted); // new pens
+#ifdef KSPREAD_CELL_WINDOW
+          CellView tmpCellView( obscuringCell );
+          CellView* cellView = &tmpCellView;
+#else
+          CellView* cellView = obscuringCell->cellView();
+#endif
+          cellView->paintCell( rect, painter, view,
+                               corner, obscuringCellRef,
+                               LeftBorder|TopBorder|RightBorder|BottomBorder,
+                               rp, bp, lp, tp,
+                               mergedCellsPainted); // new pens
           painter.restore();
         }
       }
@@ -629,10 +685,16 @@ void CellView::paintObscuredCells(const QRectF& rect, QPainter& painter,
 
   //kDebug(36004) << "calling paintcell for obscured cell "
   //       << cell->name() << endl;
-        cell->cellView()->paintCell( rect, painter, view, corner,
-                                     QPoint( cellRef.x() + x, cellRef.y() + y ),
-                                     paintBorder, rightPen, bottomPen, leftPen, topPen,
-                                     mergedCellsPainted);
+#ifdef KSPREAD_CELL_WINDOW
+        CellView tmpCellView( cell );
+        CellView* cellView = &tmpCellView;
+#else
+        CellView* cellView = cell->cellView();
+#endif
+        cellView->paintCell( rect, painter, view, corner,
+                             QPoint( cellRef.x() + x, cellRef.y() + y ),
+                             paintBorder, rightPen, bottomPen, leftPen, topPen,
+                             mergedCellsPainted );
       }
       xpos += cl->dblWidth();
     }
@@ -2163,7 +2225,11 @@ void CellView::makeLayout( int _col, int _row )
   // are the real coordinates of the cell.
 
   // There is no need to remake the layout if it hasn't changed.
+#ifdef KSPREAD_CELL_WINDOW
+    if ( !d->dirty && !cell()->testFlag( Cell::Flag_LayoutDirty ) )
+#else
   if ( !cell()->testFlag( Cell::Flag_LayoutDirty ) )
+#endif
     return;
 
   // Some initializations.

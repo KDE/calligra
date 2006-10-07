@@ -502,8 +502,14 @@ bool AdjustColumnRowManipulator::preProcessing()
 double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
 {
   double long_max = 0.0;
-  cell->cellView()->calculateTextParameters();
-  if ( cell->cellView()->textWidth() > long_max )
+#ifdef KSPREAD_CELL_WINDOW
+  CellView tmpCellView( cell );
+  CellView* cellView = &tmpCellView;
+#else
+  CellView* cellView = cell->cellView();
+#endif
+  cellView->calculateTextParameters();
+  if ( cellView->textWidth() > long_max )
   {
     double indent = 0.0;
     Style::HAlign alignment = cell->format()->align(cell->column(), cell->row());
@@ -523,7 +529,7 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
     {
       indent = cell->format()->getIndent( cell->column(), cell->row() );
     }
-    long_max = indent + cell->cellView()->textWidth()
+    long_max = indent + cellView->textWidth()
         + cell->format()->leftBorderWidth( cell->column(), cell->row() )
         + cell->format()->rightBorderWidth( cell->column(), cell->row() );
   }
@@ -543,10 +549,16 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
 double AdjustColumnRowManipulator::adjustRowHelper(Cell* cell)
 {
   double long_max = 0.0;
-  cell->cellView()->calculateTextParameters();
-  if ( cell->cellView()->textHeight() > long_max )
+#ifdef KSPREAD_CELL_WINDOW
+  CellView tmpCellView( cell );
+  CellView* cellView = &tmpCellView;
+#else
+  CellView* cellView = cell->cellView();
+#endif
+  cellView->calculateTextParameters();
+  if ( cellView->textHeight() > long_max )
   {
-    long_max = cell->cellView()->textHeight()
+    long_max = cellView->textHeight()
         + cell->format()->topBorderWidth(cell->column(), cell->row())
         + cell->format()->bottomBorderWidth(cell->column(), cell->row());
   }

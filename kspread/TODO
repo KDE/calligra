@@ -132,6 +132,16 @@ Things to do after the release of KOffice 1.4
   see OASIS.txt							      1 ----
 
 * Internals (See also DESIGN.html)
+  + Painting    						      1 ----
+    Use a 'CellWindow' to store CellViews for the the currently
+    visible cells. This 'CellWindow' will create and delete CellViews
+    if necessary, but reuses existing ones. This approach will enable
+    us to decouple the CellViews from the Cells. This in turn will
+    enable us to cache each and every attribute related to the cell
+    painting, which is currently not possible because of memory
+    consumption. Caching the attributes should make the painting
+    way faster.
+
   + Format Storage						      1 ----
     This would dramatically reduce memory consumption and allows
     styles for empty cells.

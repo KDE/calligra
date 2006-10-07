@@ -561,19 +561,19 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 
 	      QPen highlightPen;
 
-            if ( m_pSheet->layoutDirection()==Sheet::RightToLeft )
-              cell->cellView()->paintCell( rect, painter, 0,
-                                           KoPoint( view.width() - xpos -
-                                           col_lay->dblWidth(), ypos ), QPoint( x, y ),
-                                           paintBorder,
-                                           rightPen, bottomPen, leftPen, topPen,
-                                           mergedCellsPainted);
-            else
-              cell->cellView()->paintCell( rect, painter, 0,
-                                           KoPoint( xpos, ypos ), QPoint( x, y ),
-                                           paintBorder,
-                                           rightPen, bottomPen, leftPen, topPen,
-                                           mergedCellsPainted);
+              double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft ) ? view.width() - xpos -
+                                           col_lay->dblWidth() : xpos;
+#ifdef KSPREAD_CELL_WINDOW
+              CellView tmpCellView( m_pSheet, x, y );
+              CellView* cellView = &tmpCellView;
+#else
+              CellView* cellView = cell->cellView();
+#endif
+              cellView->paintCell( rect, painter, 0,
+                                   KoPoint( effXPos, ypos ), QPoint( x, y ),
+                                   paintBorder,
+                                   rightPen, bottomPen, leftPen, topPen,
+                                   mergedCellsPainted );
 
             xpos += col_lay->dblWidth();
         }

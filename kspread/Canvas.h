@@ -43,6 +43,8 @@
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
+#define KSPREAD_CELL_WINDOW
+
 class QDragLeaveEvent;
 class QDragMoveEvent;
 class QDropEvent;
@@ -195,6 +197,14 @@ public:
      * @return a rect indicating which cell range is currently visible onscreen
      */
     QRect visibleCells() const;
+
+#ifdef KSPREAD_CELL_WINDOW
+    /**
+     * Updates the CellView s for the visible cells.
+     * \see visibleCells()
+     */
+    void updateCellWindow();
+#endif
 
     /**
      * @return a pointer to the active sheet

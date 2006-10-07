@@ -142,6 +142,10 @@ Canvas::Canvas(View *view)
 
   d->xOffset = 0.0;
   d->yOffset = 0.0;
+#ifdef KSPREAD_CELL_WINDOW
+    d->cellWindowSheet = 0;
+#endif
+
   d->view = view;
   // m_eAction = DefaultAction;
   d->mouseAction = NoAction;
@@ -960,11 +964,23 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     QString anchor;
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
-      anchor = cell->cellView()->testAnchor( cell->dblWidth() - ev_PosX + xpos, ev_PosY - ypos );
+#ifdef KSPREAD_CELL_WINDOW
+        CellView tmpCellView( cell );
+        CellView* cellView = &tmpCellView;
+#else
+        CellView* cellView = cell->cellView();
+#endif
+      anchor = cellView->testAnchor( cell->dblWidth() - ev_PosX + xpos, ev_PosY - ypos );
     }
     else
     {
-      anchor = cell->cellView()->testAnchor( ev_PosX - xpos, ev_PosY - ypos );
+#ifdef KSPREAD_CELL_WINDOW
+        CellView tmpCellView( cell );
+        CellView* cellView = &tmpCellView;
+#else
+        CellView* cellView = cell->cellView();
+#endif
+      anchor = cellView->testAnchor( ev_PosX - xpos, ev_PosY - ypos );
     }
     if ( !anchor.isEmpty() && anchor != d->anchor )
     {
@@ -1512,6 +1528,10 @@ void Canvas::paintEvent( QPaintEvent* event )
   register Sheet * const sheet = activeSheet();
   if (!sheet)
     return;
+
+#ifdef KSPREAD_CELL_WINDOW
+    updateCellWindow();
+#endif
 
   // repaint whole visible region, if no cells are marked as dirty
   if (sheet->paintDirtyData().isEmpty())
@@ -3929,6 +3949,59 @@ QRect Canvas::visibleCells() const
   return viewToCellCoordinates( QRectF( 0, 0, width(), height() ) );
 }
 
+#ifdef KSPREAD_CELL_WINDOW
+void Canvas::updateCellWindow()
+{
+    if ( d->cellWindowSheet == activeSheet() && d->cellWindowRect == visibleCells() )
+        return;
+
+    Sheet* const sheet = activeSheet();
+    const QRect cellRect = visibleCells();
+
+    // create the new matrix, copy existing views and create missing ones
+    QList< QList<CellView*> > newMatrix;
+    const int newLeft   = cellRect.left();
+    const int newTop    = cellRect.top();
+    const int newRight  = cellRect.right();
+    const int newBottom = cellRect.bottom();
+    const int oldLeft   = d->cellWindowRect.left();
+    const int oldTop    = d->cellWindowRect.top();
+    const int oldRight  = d->cellWindowRect.right();
+    const int oldBottom = d->cellWindowRect.bottom();
+    for ( int col = newLeft; col <= newRight; ++col )
+    {
+        if ( sheet == d->cellWindowSheet && col >= oldLeft && col <= oldRight )
+        {
+            QList<CellView*> matrixRow;
+            for ( int row = newTop; row <= newBottom; ++row )
+            {
+                if ( row >= oldTop && row <= oldBottom )
+                    matrixRow.append( d->cellWindowMatrix[col-oldLeft][row-oldTop] );
+                else
+                    matrixRow.append( new CellView( sheet, col, row ) );
+            }
+            newMatrix.append( matrixRow );
+        }
+        else // no intersection
+        {
+            QList<CellView*> matrixRow;
+            for ( int row = newTop; row <= newBottom; ++row )
+                matrixRow.append( new CellView( sheet, col, row ) );
+            newMatrix.append( matrixRow );
+        }
+    }
+    // delete the unused CellViews
+    for ( int col = oldLeft; col <= oldRight; ++col )
+        if ( col < newLeft || col > newRight || sheet != d->cellWindowSheet )
+            for ( int row = oldTop; row <= oldBottom; ++row )
+                if ( row < newTop || row > newBottom || sheet != d->cellWindowSheet )
+                    delete d->cellWindowMatrix[col-oldLeft][row-oldTop];
+
+    d->cellWindowMatrix = newMatrix;
+    d->cellWindowRect = cellRect;
+    d->cellWindowSheet = sheet;
+}
+#endif
 
 //---------------------------------------------
 //
@@ -3995,12 +4068,16 @@ void Canvas::paintUpdates()
       {
         cell = sheet->cellAt( x, y );
 
+#ifdef KSPREAD_CELL_WINDOW
+        // relayout in CellView
+#else
         // relayout only for non default cells
         if (!cell->isDefault())
         {
           if (cell->testFlag(Cell::Flag_LayoutDirty))
             cell->cellView()->makeLayout( x, y );
         }
+#endif
 
         CellView::Borders paintBorder = CellView::NoBorder;
 
@@ -4065,11 +4142,20 @@ void Canvas::paintUpdates()
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
 
+#ifdef KSPREAD_CELL_WINDOW
+        Q_ASSERT( visibleRect == d->cellWindowRect );
+        CellView* cellView = d->cellWindowMatrix[x-visibleRect.left()][y-visibleRect.top()];
+        Q_ASSERT( cellView->cell() == cell );
+        cellView->paintCell( unzoomedRect, painter, d->view, dblCorner,
+                             QPoint( x, y ), paintBorder,
+                             rightPen, bottomPen, leftPen, topPen,
+                             mergedCellsPainted );
+#else
         cell->cellView()->paintCell( unzoomedRect, painter, d->view, dblCorner,
                                      QPoint( x, y), paintBorder,
                                      rightPen,bottomPen,leftPen,topPen,
                                      mergedCellsPainted);
-
+#endif
 
         dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight() );
       }

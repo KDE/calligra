@@ -47,6 +47,8 @@
 // KSpread
 #include "Formula.h"
 
+#define KSPREAD_CELL_WINDOW
+
 namespace KSpread
 {
 class Cell;
@@ -206,7 +208,9 @@ public:
     return cellExtra;
   }
 
+#ifndef KSPREAD_CELL_WINDOW
   CellView*   cellView;
+#endif
   Format*     format;
   StatusFlags flags;
 

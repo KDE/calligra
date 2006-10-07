@@ -1815,11 +1815,16 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
 
 
             const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
-            cell->cellView()->paintCell( viewRegionF, painter, view, dblCurrentCellPos, cellRef,
-            paintBorder,
-            rightPen, bottomPen, leftPen, topPen,
-            mergedCellsPainted );
-
+#ifdef KSPREAD_CELL_WINDOW
+            CellView tmpCellView( cell );
+            CellView* cellView = &tmpCellView;
+#else
+            CellView* cellView = cell->cellView();
+#endif
+            cellView->paintCell( viewRegionF, painter, view, dblCurrentCellPos,
+                                 cellRef, paintBorder,
+                                 rightPen, bottomPen, leftPen, topPen,
+                                 mergedCellsPainted );
 
             dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
         }
