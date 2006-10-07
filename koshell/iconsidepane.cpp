@@ -413,12 +413,12 @@ IconSidePane::IconSidePane(QWidget *parent, const char *name )
 
   mShowIcons = mPopupMenu->addAction(i18n( "Show Icons" ));
   mShowIcons->setEnabled(m_bShowText);
-  mShowIcons->setChecked(mShowIcons);
+  mShowIcons->setChecked(m_bShowIcons);
   mShowText = mPopupMenu->addAction(i18n( "Show Text" ));
   mShowText->setEnabled(m_bShowIcons);
-  mShowText->setChecked(mShowText);
+  mShowText->setChecked(m_bShowText);
 
-  if ( !mShowText )
+  if ( !m_bShowText )
     m_buttongroup->hide();
 }
 
