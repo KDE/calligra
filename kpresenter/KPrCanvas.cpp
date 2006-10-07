@@ -2227,9 +2227,10 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
     {
         QWidget::resizeEvent( e );
     }
-    else
-        QWidget::resizeEvent( new QResizeEvent( KGlobalSettings::desktopGeometry(this).size(),
-                                                e->oldSize() ) );
+    else {
+        QResizeEvent ne( KGlobalSettings::desktopGeometry(this).size(), e->oldSize() );
+        QWidget::resizeEvent( &ne);
+    }
     buffer.resize( size() );
 }
 
