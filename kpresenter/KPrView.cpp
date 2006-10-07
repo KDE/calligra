@@ -4652,10 +4652,7 @@ void KPrView::slotApplyParag()
         }
     }
 
-    if(flags)
-        m_pKPresenterDoc->addCommand(macroCommand);
-    else
-        delete macroCommand;
+    m_pKPresenterDoc->addCommand(macroCommand);
 
     // Set "oldLayout" in KoParagDia from the current paragraph's settings
     // Otherwise "isBlahChanged" will return wrong things when doing A -> B -> A
