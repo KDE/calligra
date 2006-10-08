@@ -99,10 +99,18 @@ public:
    */
   void paintCell( const QRectF & rect, QPainter & painter,
                   View * view, const KoPoint & coordinate,
-                  const QPoint & cellRef, Borders paintBorder,
-                  QPen& rightPen, QPen& bottomPen,
-                  QPen& leftPen,  QPen& topPen,
+                  const QPoint & cellRef,
                   QLinkedList<QPoint> &mergedCellsPainted );
+
+  /**
+   * \ingroup Painting
+   */
+  void paintCellBorders( const QRectF& rect, QPainter& painter,
+                         View* view, const KoPoint& coordinate,
+                         const QPoint& cellRef, Borders paintBorder,
+                         const QPen& rightPen, const QPen& bottomPen,
+                         const QPen& leftPen, const QPen& topPen,
+                         QLinkedList<QPoint> &mergedCellsPainted );
 
   /**
    * \ingroup Layout
@@ -245,11 +253,11 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintCellBorders( QPainter& painter, const QRectF &rect,
-                         const QRectF &cellRect, const QPoint &cellRef,
-                         Borders paintBorder,
-                         QPen & rightPen, QPen & bottomPen,
-                         QPen & leftPen, QPen & topPen );
+  void paintCustomBorders( QPainter& painter, const QRectF &rect,
+                           const QRectF &cellRect, const QPoint &cellRef,
+                           Borders paintBorder,
+                           const QPen & rightPen, const QPen & bottomPen,
+                           const QPen & leftPen, const QPen & topPen );
 
   /**
    * \ingroup Painting
@@ -326,9 +334,7 @@ private:
    */
   void paintObscuredCells( const QRectF& rect, QPainter& painter,
                            View* view, const QRectF &cellRect,
-                           const QPoint &cellRef, Borders paintBorder,
-                           QPen & rightPen, QPen & bottomPen,
-                           QPen & leftPen, QPen & topPen,
+                           const QPoint &cellRef,
                            QLinkedList<QPoint> &mergedCellsPainted );
 
   /**

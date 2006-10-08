@@ -4015,6 +4015,7 @@ void Canvas::paintUpdates()
     if (!sheet)
         return;
 
+    ElapsedTime et( "Painting cells", ElapsedTime::PrintOnlyTime );
     QPainter painter(this);
 
     //Save clip region
@@ -4070,14 +4071,37 @@ void Canvas::paintUpdates()
 
 #ifdef KSPREAD_CELL_WINDOW
                 // relayout in CellView
+                Q_ASSERT( visibleRect == d->cellWindowRect );
+                CellView* cellView = d->cellWindowMatrix[x-visibleRect.left()][y-visibleRect.top()];
+                Q_ASSERT( cellView->cell() == cell );
+                cellView->paintCell( unzoomedRect, painter, d->view, dblCorner,
+                                     QPoint( x, y ),
+                                     mergedCellsPainted );
 #else
                 // relayout only for non default cells
-                if (!cell->isDefault())
-                {
-                    if (cell->testFlag(Cell::Flag_LayoutDirty))
-                        cell->cellView()->makeLayout( x, y );
-                }
+                if ( !cell->isDefault() && cell->testFlag(Cell::Flag_LayoutDirty) )
+                    cell->cellView()->makeLayout( x, y );
+
+                cell->cellView()->paintCell( unzoomedRect, painter, d->view, dblCorner,
+                QPoint( x, y), paintBorder,
+                rightPen,bottomPen,leftPen,topPen,
+                mergedCellsPainted);
 #endif
+
+                dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight() );
+            }
+            dblCorner.setY( topPos - yOffset() );
+            dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth() );
+        }
+
+        dblCorner = KoPoint( leftPos - xOffset(), topPos - yOffset() );
+        right  = range.right();
+        for ( int x = range.left(); x <= right; ++x )
+        {
+            int bottom = range.bottom();
+            for ( int y = range.top(); y <= bottom; ++y )
+            {
+                cell = sheet->cellAt( x, y );
 
                 CellView::Borders paintBorder = CellView::NoBorder;
 
@@ -4146,16 +4170,13 @@ void Canvas::paintUpdates()
                 Q_ASSERT( visibleRect == d->cellWindowRect );
                 CellView* cellView = d->cellWindowMatrix[x-visibleRect.left()][y-visibleRect.top()];
                 Q_ASSERT( cellView->cell() == cell );
-                cellView->paintCell( unzoomedRect, painter, d->view, dblCorner,
-                                     QPoint( x, y ), paintBorder,
-                                     rightPen, bottomPen, leftPen, topPen,
-                                     mergedCellsPainted );
 #else
-                cell->cellView()->paintCell( unzoomedRect, painter, d->view, dblCorner,
-                QPoint( x, y), paintBorder,
-                rightPen,bottomPen,leftPen,topPen,
-                mergedCellsPainted);
+                CellView* cellView = cell->cellView();
 #endif
+                cellView->paintCellBorders( unzoomedRect, painter, d->view, dblCorner,
+                                            QPoint( x, y ), paintBorder,
+                                            rightPen, bottomPen, leftPen, topPen,
+                                            mergedCellsPainted );
 
                 dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight() );
             }

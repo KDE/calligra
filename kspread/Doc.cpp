@@ -1702,6 +1702,36 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
     int regionTop    = cellRegion.top();
 
     QLinkedList<QPoint>  mergedCellsPainted;
+    for ( int y = regionTop; y <= regionBottom && dblCurrentCellPos.y() <= viewRegion.bottom(); ++y )
+    {
+        const RowFormat * row_lay = sheet->rowFormat( y );
+        dblCurrentCellPos.setX( dblCorner.x() );
+
+        for ( int x = regionLeft; x <= regionRight && dblCurrentCellPos.x() <= viewRegion.right(); ++x )
+        {
+            const ColumnFormat *col_lay = sheet->columnFormat( x );
+            Cell* cell = sheet->cellAt( x, y );
+
+            QPoint cellRef( x, y );
+
+            const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
+#ifdef KSPREAD_CELL_WINDOW
+            CellView tmpCellView( cell );
+            CellView* cellView = &tmpCellView;
+#else
+            CellView* cellView = cell->cellView();
+#endif
+            cellView->paintCell( viewRegionF, painter, view, dblCurrentCellPos,
+                                 cellRef,
+                                 mergedCellsPainted );
+
+            dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
+        }
+        dblCurrentCellPos.setY( dblCurrentCellPos.y() + row_lay->dblHeight() );
+    }
+
+    dblCurrentCellPos.setY( dblCorner.y() );
+    mergedCellsPainted.clear();
     for ( int y = regionTop;
           y <= regionBottom && dblCurrentCellPos.y() <= viewRegion.bottom();
           ++y )
@@ -1821,10 +1851,10 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
 #else
             CellView* cellView = cell->cellView();
 #endif
-            cellView->paintCell( viewRegionF, painter, view, dblCurrentCellPos,
-                                 cellRef, paintBorder,
-                                 rightPen, bottomPen, leftPen, topPen,
-                                 mergedCellsPainted );
+            cellView->paintCellBorders( viewRegionF, painter, view, dblCurrentCellPos,
+                                        cellRef, paintBorder,
+                                        rightPen, bottomPen, leftPen, topPen,
+                                        mergedCellsPainted );
 
             dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
         }

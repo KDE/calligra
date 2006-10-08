@@ -452,15 +452,45 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     QPointF bottomRight( topLeft );
     for ( int x = regionLeft; x <= regionRight; ++x )
         bottomRight.setX( bottomRight.x()
-                + m_pSheet->columnFormat( x )->dblWidth() );
+                          + m_pSheet->columnFormat( x )->dblWidth() );
     for ( int y = regionTop; y <= regionBottom; ++y )
         bottomRight.setY( bottomRight.y()
-                + m_pSheet->rowFormat( y )->dblHeight() );
+                          + m_pSheet->rowFormat( y )->dblHeight() );
     QRectF rect;
     rect.setTopLeft( topLeft );
     rect.setBottomRight( bottomRight );
 
     QLinkedList<QPoint> mergedCellsPainted;
+    for ( int y = regionTop; y <= regionBottom; ++y )
+    {
+        row_lay = m_pSheet->rowFormat( y );
+        xpos = topLeft.x();
+
+        for ( int x = regionLeft; x <= regionRight; ++x )
+        {
+            col_lay = m_pSheet->columnFormat( x );
+
+            cell = m_pSheet->cellAt( x, y );
+            double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft ) ?
+                             view.width() - xpos - col_lay->dblWidth() : xpos;
+#ifdef KSPREAD_CELL_WINDOW
+              CellView tmpCellView( m_pSheet, x, y );
+              CellView* cellView = &tmpCellView;
+#else
+              CellView* cellView = cell->cellView();
+#endif
+              cellView->paintCell( rect, painter, 0,
+                                   KoPoint( effXPos, ypos ), QPoint( x, y ),
+                                   mergedCellsPainted );
+
+            xpos += col_lay->dblWidth();
+        }
+
+        ypos += row_lay->dblHeight();
+    }
+
+    ypos = topLeft.y();
+    mergedCellsPainted.clear();
     for ( int y = regionTop; y <= regionBottom; ++y )
     {
         row_lay = m_pSheet->rowFormat( y );
@@ -486,94 +516,94 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
             // of the cell on the left or if the cell on the right is not painted. In the latter case get
             // the pen that is of more "worth"
             if ( x >= KS_colMax )
-                paintBordersRight = true;
+              paintBordersRight = true;
             else
-                if ( x == regionRight )
-            {
+              if ( x == regionRight )
+              {
                 paintBordersRight = true;
                 if ( cell->effRightBorderValue( x, y ) < m_pSheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-                    rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
-            }
-            else
-            {
+                  rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+              }
+              else
+              {
                 paintBordersRight = true;
                 if ( cell->effRightBorderValue( x, y ) < m_pSheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-                    rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
-            }
+                  rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+              }
 
             // similar for other borders...
             // bottom border:
             if ( y >= KS_rowMax )
-                paintBordersBottom = true;
+              paintBordersBottom = true;
             else
-                if ( y == regionBottom )
-            {
+              if ( y == regionBottom )
+              {
                 paintBordersBottom = true;
                 if ( cell->effBottomBorderValue( x, y ) < m_pSheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
-                    bottomPen = m_pSheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
-            }
-            else
-            {
+                  bottomPen = m_pSheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+              }
+              else
+              {
                 paintBordersBottom = true;
                 if ( cell->effBottomBorderValue( x, y ) < m_pSheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
-                    bottomPen = m_pSheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
-            }
+                  bottomPen = m_pSheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+              }
 
             // left border:
             if ( x == 1 )
-                paintBordersLeft = true;
+              paintBordersLeft = true;
             else
-                if ( x == regionLeft )
-            {
+              if ( x == regionLeft )
+              {
                 paintBordersLeft = true;
                 if ( cell->effLeftBorderValue( x, y ) < m_pSheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-                    leftPen = m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
-            }
-            else
-            {
+                  leftPen = m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+              }
+              else
+              {
                 paintBordersLeft = true;
                 if ( cell->effLeftBorderValue( x, y ) < m_pSheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-                    leftPen = m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
-            }
+                  leftPen = m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+              }
 
             // top border:
             if ( y == 1 )
-                paintBordersTop = true;
+              paintBordersTop = true;
             else
-                if ( y == regionTop )
-            {
+              if ( y == regionTop )
+              {
                 paintBordersTop = true;
                 if ( cell->effTopBorderValue( x, y ) < m_pSheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-                    topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
-            }
-            else
-            {
+                  topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+              }
+              else
+              {
                 paintBordersTop = true;
                 if ( cell->effTopBorderValue( x, y ) < m_pSheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-                    topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
-            }
+                  topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+              }
 
-            CellView::Borders paintBorder = CellView::NoBorder;
-            if (paintBordersLeft) paintBorder   |= CellView::LeftBorder;
-            if (paintBordersRight) paintBorder  |= CellView::RightBorder;
-            if (paintBordersTop) paintBorder    |= CellView::TopBorder;
-            if (paintBordersBottom) paintBorder |= CellView::BottomBorder;
+              CellView::Borders paintBorder = CellView::NoBorder;
+              if (paintBordersLeft) paintBorder   |= CellView::LeftBorder;
+	      if (paintBordersRight) paintBorder  |= CellView::RightBorder;
+              if (paintBordersTop) paintBorder    |= CellView::TopBorder;
+              if (paintBordersBottom) paintBorder |= CellView::BottomBorder;
 
-            QPen highlightPen;
+	      QPen highlightPen;
 
-            double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft ) ? view.width() - xpos -
-                        col_lay->dblWidth() : xpos;
+              double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft ) ? view.width() - xpos -
+                                           col_lay->dblWidth() : xpos;
 #ifdef KSPREAD_CELL_WINDOW
-            CellView tmpCellView( m_pSheet, x, y );
-            CellView* cellView = &tmpCellView;
+              CellView tmpCellView( m_pSheet, x, y );
+              CellView* cellView = &tmpCellView;
 #else
-            CellView* cellView = cell->cellView();
+              CellView* cellView = cell->cellView();
 #endif
-            cellView->paintCell( rect, painter, 0,
-                                 KoPoint( effXPos, ypos ), QPoint( x, y ),
-                                 paintBorder,
-                                 rightPen, bottomPen, leftPen, topPen,
-                                 mergedCellsPainted );
+              cellView->paintCellBorders( rect, painter, 0,
+                                          KoPoint( effXPos, ypos ), QPoint( x, y ),
+                                          paintBorder,
+                                          rightPen, bottomPen, leftPen, topPen,
+                                          mergedCellsPainted );
 
             xpos += col_lay->dblWidth();
         }
@@ -590,7 +620,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 
     QList<PrintObject *>::iterator itObject;
     for ( itObject = m_printObjects.begin(); itObject != m_printObjects.end(); ++itObject ) {
-        EmbeddedObject *obj = (*itObject)->obj;
+          EmbeddedObject *obj = (*itObject)->obj;
 //        QString tmp=QString("Testing child %1/%2 %3/%4 against view %5/%6 %7/%8")
 //        .arg(it.current()->contentRect().left())
 //        .arg(it.current()->contentRect().top())
@@ -599,10 +629,10 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 //        .arg(view.left()).arg(view.top()).arg(zoomedView.right()).arg(zoomedView.bottom());
 //        kDebug(36001)<<tmp<<" offset "<<_childOffset.x()<<"/"<<_childOffset.y()<<endl;
 
-        KoRect const bound = obj->geometry();
-        QRect zoomedBound = m_pDoc->zoomRectOld( KoRect(bound.left(), bound.top(),
-                bound.width(),
-                bound.height() ) );
+          KoRect const bound = obj->geometry();
+          QRect zoomedBound = m_pDoc->zoomRectOld( KoRect(bound.left(), bound.top(),
+              bound.width(),
+              bound.height() ) );
 #if 1
 //         kDebug(36001)  << "printRect(): Bounding rect of view: " << view
 //             << endl;
@@ -613,8 +643,8 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 //         kDebug(36001)  << "printRect(): Bounding rect of zoomed child: "
 //             << zoomedBound << endl;
 #endif
-        if ( obj->sheet() == m_pSheet  && zoomedBound.intersects( zoomedView ) )
-        {
+    if ( obj->sheet() == m_pSheet  && zoomedBound.intersects( zoomedView ) )
+    {
             painter.save();
 
             painter.translate( -zoomedView.left() + m_pDoc->zoomItXOld( topLeft.x() ),
