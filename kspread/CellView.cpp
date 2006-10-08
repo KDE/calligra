@@ -180,123 +180,122 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
                           QPen& leftPen,  QPen& topPen,
                           QLinkedList<QPoint> &mergedCellsPainted )
 {
-  // If we are already painting this cell, then return immediately.
-  // This avoids infinite recursion.
-  if ( cell()->testFlag( Cell::Flag_PaintingCell ) )
-    return;
+    // If we are already painting this cell, then return immediately.
+    // This avoids infinite recursion.
+    if ( cell()->testFlag( Cell::Flag_PaintingCell ) )
+        return;
 
-  // Indicate that we are painting this cell now.
-  cell()->setFlag( Cell::Flag_PaintingCell );
+    // Indicate that we are painting this cell now.
+    cell()->setFlag( Cell::Flag_PaintingCell );
 
-  // This flag indicates that we are working on drawing the cells that
-  // another cell is obscuring.  The value is the number of levels down we
-  // are currently working -- i.e. a cell obscured by a cell which is
-  // obscured by a cell.
-  static int  paintingObscured = 0;
+    // This flag indicates that we are working on drawing the cells that
+    // another cell is obscuring.  The value is the number of levels down we
+    // are currently working -- i.e. a cell obscured by a cell which is
+    // obscured by a cell.
+    static int  paintingObscured = 0;
 
 #if 0
-  if (paintingObscured == 0)
-    kDebug(36004) << "painting cell " << cell()->name() << endl;
-  else
-    kDebug(36004) << "  painting obscured cell " << cell()->name() << endl;
+    if (paintingObscured == 0)
+        kDebug(36004) << "painting cell " << cell()->name() << endl;
+    else
+        kDebug(36004) << "  painting obscured cell " << cell()->name() << endl;
 #endif
 
-  // Sanity check: If we're working on drawing an obscured cell, that
-  // means this cell should have a cell that obscures it.
-  Q_ASSERT(!(paintingObscured > 0 && cell()->d->extra()->obscuringCells.isEmpty()));
+    // Sanity check: If we're working on drawing an obscured cell, that
+    // means this cell should have a cell that obscures it.
+    Q_ASSERT(!(paintingObscured > 0 && cell()->d->extra()->obscuringCells.isEmpty()));
 
-  // The parameter cellref should be *this, unless this is the default cell.
-  Q_ASSERT(cell()->isDefault()
-      || (((cellRef.x() == cell()->column()) && (cellRef.y() == cell()->row()))));
+    // The parameter cellref should be *this, unless this is the default cell.
+    Q_ASSERT(cell()->isDefault() || (((cellRef.x() == cell()->column()) && (cellRef.y() == cell()->row()))));
 
-  Sheet::LayoutDirection sheetDir =  cell()->sheet()->layoutDirection();
+    Sheet::LayoutDirection sheetDir =  cell()->sheet()->layoutDirection();
 
-  double left = coordinate.x();
+    double left = coordinate.x();
 
-  ColumnFormat * columnFormat = cell()->sheet()->columnFormat( cellRef.x() );
-  RowFormat    * rowFormat = cell()->sheet()->rowFormat( cellRef.y() );
+    ColumnFormat * columnFormat = cell()->sheet()->columnFormat( cellRef.x() );
+    RowFormat    * rowFormat = cell()->sheet()->rowFormat( cellRef.y() );
 
-  // Set width, height to the total width and height that this cell
-  // covers, including obscured cells, and width0, height0 to the
-  // width and height of this cell, maybe merged but never implicitly
-  // extended.
-  double  width0  = columnFormat->dblWidth();
-  double  height0 = rowFormat->dblHeight();
-  double  width   = width0;
-  double  height  = height0;
+    // Set width, height to the total width and height that this cell
+    // covers, including obscured cells, and width0, height0 to the
+    // width and height of this cell, maybe merged but never implicitly
+    // extended.
+    double  width0  = columnFormat->dblWidth();
+    double  height0 = rowFormat->dblHeight();
+    double  width   = width0;
+    double  height  = height0;
 
-  // Handle right-to-left layout.
-  // In an RTL sheet the cells have to be painted at their opposite horizontal
-  // location on the canvas, meaning that column A will be the rightmost column
-  // on screen, column B will be to the left of it and so on. Here we change
-  // the horizontal coordinate at which we start painting the cell in case the
-  // sheet's direction is RTL. We do this only if paintingObscured is 0,
-  // otherwise the cell's painting location will flip back and forth in
-  // consecutive calls to paintCell when painting obscured cells.
-  if ( sheetDir == Sheet::RightToLeft && paintingObscured == 0
-       && view && view->canvasWidget() )
-  {
-    double  dwidth = view->doc()->unzoomItXOld(view->canvasWidget()->width());
-    left = dwidth - coordinate.x() - width;
-  }
-
-  // See if this cell is merged or has overflown into neighbor cells.
-  // In that case, the width/height is greater than just the cell
-  // itself.
-  if (cell()->d->hasExtra()) {
-    if (cell()->mergedXCells() > 0 || cell()->mergedYCells() > 0) {
-      // merged cell extends to the left if sheet is RTL
-      if ( sheetDir == Sheet::RightToLeft ) {
-        left -= cell()->extraWidth() - width;
-      }
-      width0  = cell()->extraWidth();
-      height0 = cell()->extraHeight();
-      width   = cell()->extraWidth();
-      height  = cell()->extraHeight();
+    // Handle right-to-left layout.
+    // In an RTL sheet the cells have to be painted at their opposite horizontal
+    // location on the canvas, meaning that column A will be the rightmost column
+    // on screen, column B will be to the left of it and so on. Here we change
+    // the horizontal coordinate at which we start painting the cell in case the
+    // sheet's direction is RTL. We do this only if paintingObscured is 0,
+    // otherwise the cell's painting location will flip back and forth in
+    // consecutive calls to paintCell when painting obscured cells.
+    if ( sheetDir == Sheet::RightToLeft && paintingObscured == 0
+         && view && view->canvasWidget() )
+    {
+        double  dwidth = view->doc()->unzoomItXOld(view->canvasWidget()->width());
+        left = dwidth - coordinate.x() - width;
     }
-    else {
+
+    // See if this cell is merged or has overflown into neighbor cells.
+    // In that case, the width/height is greater than just the cell
+    // itself.
+    if (cell()->d->hasExtra()) {
+        if (cell()->mergedXCells() > 0 || cell()->mergedYCells() > 0) {
+            // merged cell extends to the left if sheet is RTL
+            if ( sheetDir == Sheet::RightToLeft ) {
+                left -= cell()->extraWidth() - width;
+            }
+            width0  = cell()->extraWidth();
+            height0 = cell()->extraHeight();
+            width   = cell()->extraWidth();
+            height  = cell()->extraHeight();
+        }
+        else {
 #if 0
-      width  += cell()->extraXCells() ? cell()->extraWidth()  : 0;
-      height += cell()->extraYCells() ? cell()->extraHeight() : 0;
+            width  += cell()->extraXCells() ? cell()->extraWidth()  : 0;
+            height += cell()->extraYCells() ? cell()->extraHeight() : 0;
 #else
-      // FIXME: Make extraWidth/Height really contain the *extra* width/height.
-      if ( cell()->extraXCells() )
-        width  = cell()->extraWidth();
-      if ( cell()->extraYCells() )
-        height = cell()->extraHeight();
+            // FIXME: Make extraWidth/Height really contain the *extra* width/height.
+            if ( cell()->extraXCells() )
+                width  = cell()->extraWidth();
+            if ( cell()->extraYCells() )
+                height = cell()->extraHeight();
 #endif
+        }
     }
-  }
 
-  // Check if the cell is "selected", i.e. it should be drawn with the
-  // color that indicates selection (dark blue).  If more than one
-  // square is selected, the last one uses the ordinary colors.  In
-  // that case, "selected" will be set to false even though the cell
-  // itself really is selected.
-  bool  selected = false;
-  if ( view != 0 ) {
-    selected = view->selectionInfo()->contains( cellRef );
+    // Check if the cell is "selected", i.e. it should be drawn with the
+    // color that indicates selection (dark blue).  If more than one
+    // square is selected, the last one uses the ordinary colors.  In
+    // that case, "selected" will be set to false even though the cell
+    // itself really is selected.
+    bool  selected = false;
+    if ( view != 0 ) {
+        selected = view->selectionInfo()->contains( cellRef );
 
-    // But the cell doesn't look selected if this is the marker cell.
-    Cell* cell = this->cell()->sheet()->cellAt( view->selectionInfo()->marker() );
-    QPoint bottomRight( view->selectionInfo()->marker().x() + cell->extraXCells(),
-                        view->selectionInfo()->marker().y() + cell->extraYCells() );
-    QRect markerArea( view->selectionInfo()->marker(), bottomRight );
-    selected = selected && !( markerArea.contains( cellRef ) );
+        // But the cell doesn't look selected if this is the marker cell.
+        Cell* cell = this->cell()->sheet()->cellAt( view->selectionInfo()->marker() );
+        QPoint bottomRight( view->selectionInfo()->marker().x() + cell->extraXCells(),
+                            view->selectionInfo()->marker().y() + cell->extraYCells() );
+        QRect markerArea( view->selectionInfo()->marker(), bottomRight );
+        selected = selected && !( markerArea.contains( cellRef ) );
 
-    // Don't draw any selection at all when printing.
-    if ( dynamic_cast<QPrinter*>(painter.device()) )
-      selected = false;
-  }
+        // Don't draw any selection at all when printing.
+        if ( dynamic_cast<QPrinter*>(painter.device()) )
+            selected = false;
+    }
 
-  // Need to make a new layout ?
-  //
-  // FIXME: We have already used (at least) extraWidth/Height above,
-  //        and now we are recalculating the layout.  This has to be
-  //        moved up above all uses.
-  //
-  // FIXME: This needs to be taken out eventually - it is done in
-  //        canvas::paintUpdates().
+    // Need to make a new layout ?
+    //
+    // FIXME: We have already used (at least) extraWidth/Height above,
+    //        and now we are recalculating the layout.  This has to be
+    //        moved up above all uses.
+    //
+    // FIXME: This needs to be taken out eventually - it is done in
+    //        canvas::paintUpdates().
 #ifdef KSPREAD_CELL_WINDOW
     if ( !cell()->isDefault() && ( d->dirty || cell()->testFlag( Cell::Flag_LayoutDirty ) ) )
     {
@@ -306,222 +305,222 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
         d->dirty = false;
     }
 #else
-  if ( cell()->testFlag( Cell::Flag_LayoutDirty ) )
-    makeLayout( cellRef.x(), cellRef.y() );
+    if ( cell()->testFlag( Cell::Flag_LayoutDirty ) )
+        makeLayout( cellRef.x(), cellRef.y() );
 #endif
 
-  // ----------------  Start the actual painting.  ----------------
+    // ----------------  Start the actual painting.  ----------------
 
-  // If the rect of this cell doesn't intersect the rect that should
-  // be painted, we can skip the rest and return. (Note that we need
-  // to calculate `left' first before we can do this.)
-  const QRectF  cellRect( left, coordinate.y(), width, height );
-  const QRectF  cellRect0( left, coordinate.y(), width0, height0 );
-  if ( !cellRect.intersects( rect ) ) {
-    cell()->clearFlag( Cell::Flag_PaintingCell );
-    return;
-  }
+    // If the rect of this cell doesn't intersect the rect that should
+    // be painted, we can skip the rest and return. (Note that we need
+    // to calculate `left' first before we can do this.)
+    const QRectF  cellRect( left, coordinate.y(), width, height );
+    const QRectF  cellRect0( left, coordinate.y(), width0, height0 );
+    if ( !cellRect.intersects( rect ) ) {
+        cell()->clearFlag( Cell::Flag_PaintingCell );
+        return;
+    }
 
-  // Get the background color.
-  //
-  // If there is a condition giving the background color for this cell
-  // (and it matches), use that one, otherwise get the standard
-  // background.
-  QColor backgroundColor;
-  if ( cell()->d->hasExtra() && cell()->d->extra()->conditions
-       && cell()->d->extra()->conditions->matchedStyle()
-       && cell()->d->extra()->conditions->matchedStyle()->hasFeature( Style::SBackgroundColor, true ) )
-    backgroundColor = cell()->d->extra()->conditions->matchedStyle()->bgColor();
-  else
-    backgroundColor = cell()->bgColor( cellRef.x(), cellRef.y() );
+    // Get the background color.
+    //
+    // If there is a condition giving the background color for this cell
+    // (and it matches), use that one, otherwise get the standard
+    // background.
+    QColor backgroundColor;
+    if ( cell()->d->hasExtra() && cell()->d->extra()->conditions
+         && cell()->d->extra()->conditions->matchedStyle()
+         && cell()->d->extra()->conditions->matchedStyle()->hasFeature( Style::SBackgroundColor, true ) )
+        backgroundColor = cell()->d->extra()->conditions->matchedStyle()->bgColor();
+    else
+        backgroundColor = cell()->bgColor( cellRef.x(), cellRef.y() );
 
-  // 1. Paint the background.
-  if ( !cell()->isPartOfMerged() )
-    paintBackground( painter, cellRect0, cellRef, selected, backgroundColor );
+    // 1. Paint the background.
+    if ( !cell()->isPartOfMerged() )
+        paintBackground( painter, cellRect0, cellRef, selected, backgroundColor );
 
-  // 2. Paint the default borders if we are on screen or if we are printing
-  //    and the checkbox to do this is checked.
-  if ( painter.device()->devType() != QInternal::Printer
-       || cell()->sheet()->print()->printGrid())
-    paintDefaultBorders( painter, rect, cellRect, cellRef, paintBorder,
-                         rightPen, bottomPen, leftPen, topPen );
+    // 2. Paint the default borders if we are on screen or if we are printing
+    //    and the checkbox to do this is checked.
+    if ( painter.device()->devType() != QInternal::Printer
+         || cell()->sheet()->print()->printGrid())
+        paintDefaultBorders( painter, rect, cellRect, cellRef, paintBorder,
+                             rightPen, bottomPen, leftPen, topPen );
 
-  // 3. Paint all the cells that this one obscures.  They may only be
-  //    partially obscured.
-  //
-  // The `paintingObscured' variable is used to avoid infinite
-  // recursion since cells sometimes paint their obscuring cell as
-  // well.
-  paintingObscured++;
+    // 3. Paint all the cells that this one obscures.  They may only be
+    //    partially obscured.
+    //
+    // The `paintingObscured' variable is used to avoid infinite
+    // recursion since cells sometimes paint their obscuring cell as
+    // well.
+    paintingObscured++;
 
-  if (cell()->d->hasExtra() && (cell()->extraXCells() > 0
-      || cell()->extraYCells() > 0)) {
-    //kDebug(36004) << "painting obscured cells for " << name() << endl;
-
-    paintObscuredCells( rect, painter, view, cellRect, cellRef, paintBorder,
-                        rightPen, bottomPen, leftPen, topPen,
-                        mergedCellsPainted);
-
-    // FIXME: Is this the right place for this?
-    if ( cell()->mergedXCells() > 0 || cell()->mergedYCells() > 0 )
-      mergedCellsPainted.prepend( cellRef );
-  }
-  paintingObscured--;
-
-  // 4. Paint the borders of the cell if no other cell is forcing this
-  // one, i.e. this cell is not part of a merged cell.
-  //
-
-  // If we print pages, then we disable clipping, otherwise borders are
-  // cut in the middle at the page borders.
-  if ( dynamic_cast<QPrinter*>(painter.device()) )
-    painter.setClipping( false );
-
-  // Paint the borders if this cell is not part of another merged cell.
-  if ( !cell()->isPartOfMerged() )
-  {
-    paintCellBorders( painter, rect, cellRect0, cellRef, paintBorder,
-                      rightPen, bottomPen, leftPen, topPen );
-  }
-
-  // Turn clipping back on.
-  if ( dynamic_cast<QPrinter*>(painter.device()) )
-    painter.setClipping( true );
-
-
-  // 5. Paint diagonal lines and page borders.
-  paintCellDiagonalLines( painter, cellRect0, cellRef );
-  paintPageBorders( painter, cellRect0, cellRef, paintBorder );
-
-  // 6. Now paint the content, if this cell isn't obscured.
-  if ( !cell()->isObscured() ) {
-
-    // 6a. Paint possible comment indicator.
-    if ( !dynamic_cast<QPrinter*>(painter.device())
-          || cell()->sheet()->print()->printCommentIndicator() )
-      paintCommentIndicator( painter, cellRect, cellRef, backgroundColor );
-
-    // 6b. Paint possible formula indicator.
-    if ( !dynamic_cast<QPrinter*>(painter.device())
-          || cell()->sheet()->print()->printFormulaIndicator() )
-      paintFormulaIndicator( painter, cellRect, backgroundColor );
-
-    // 6c. Paint possible indicator for clipped text.
-    paintMoreTextIndicator( painter, cellRect, backgroundColor );
-
-     //6c. Paint cell highlight
-#if 0
-    if (highlightBorder != None)
-      paintCellHighlight ( painter, cellRect, cellRef, highlightBorder,
-         rightHighlightPen, bottomHighlightPen,
-         leftHighlightPen,  topHighlightPen );
-#endif
-
-    // 6d. Paint the text in the cell unless:
-    //  a) it is empty
-    //  b) something indicates that the text should not be painted
-    //  c) the sheet is protected and the cell is hidden.
-    if ( !cell()->strOutText().isEmpty()
-        && ( !dynamic_cast<QPrinter*>(painter.device())
-        || !cell()->format()->getDontprintText( cellRef.x(), cellRef.y() ) )
-        && !( cell()->sheet()->isProtected()
-        && cell()->format()->isHideAll( cellRef.x(), cellRef.y() ) ) )
+    if (cell()->d->hasExtra() && (cell()->extraXCells() > 0 || cell()->extraYCells() > 0))
     {
-      paintText( painter, cellRect, cellRef );
+        //kDebug(36004) << "painting obscured cells for " << name() << endl;
+
+        paintObscuredCells( rect, painter, view, cellRect, cellRef, paintBorder,
+                            rightPen, bottomPen, leftPen, topPen,
+                            mergedCellsPainted);
+
+        // FIXME: Is this the right place for this?
+        if ( cell()->mergedXCells() > 0 || cell()->mergedYCells() > 0 )
+            mergedCellsPainted.prepend( cellRef );
     }
-  }
+    paintingObscured--;
 
-  // 7. If this cell is obscured and we are not already painting obscured
-  //    cells, then paint the obscuring cell(s).  Otherwise don't do
-  //    anything so that we don't cause an infinite loop.
-  if ( cell()->isObscured() && paintingObscured == 0 &&
-       !( sheetDir == Sheet::RightToLeft && dynamic_cast<QPrinter*>(painter.device()) ) )
-  {
+    // 4. Paint the borders of the cell if no other cell is forcing this
+    // one, i.e. this cell is not part of a merged cell.
+    //
 
-    //kDebug(36004) << "painting cells that obscure " << name() << endl;
+    // If we print pages, then we disable clipping, otherwise borders are
+    // cut in the middle at the page borders.
+    if ( dynamic_cast<QPrinter*>(painter.device()) )
+        painter.setClipping( false );
 
-    // Store the obscuringCells list in a list of QPoint(column, row)
-    // This avoids crashes during the iteration through
-    // obscuringCells, when the cells may get non valid or the list
-    // itself gets changed during a call of obscuringCell->paintCell
-    // (this happens e.g. when there is an updateDepend)
-    if (cell()->d->hasExtra()) {
-      QLinkedList<QPoint>           listPoints;
-      QList<Cell*>::iterator  it = cell()->d->extra()->obscuringCells.begin();
-      QList<Cell*>::iterator  end = cell()->d->extra()->obscuringCells.end();
-      for ( ; it != end; ++it ) {
-        Cell *obscuringCell = *it;
+    // Paint the borders if this cell is not part of another merged cell.
+    if ( !cell()->isPartOfMerged() )
+    {
+        paintCellBorders( painter, rect, cellRect0, cellRef, paintBorder,
+                          rightPen, bottomPen, leftPen, topPen );
+    }
 
-        listPoints.append( QPoint( obscuringCell->column(), obscuringCell->row() ) );
-      }
-
-      QLinkedList<QPoint>::iterator  it1  = listPoints.begin();
-      QLinkedList<QPoint>::iterator  end1 = listPoints.end();
-      for ( ; it1 != end1; ++it1 ) {
-        QPoint obscuringCellRef = *it1;
-
-        // Only paint those obscuring cells that haven't been already
-        // painted yet.
-        //
-        // This optimization removes an O(n^4) behaviour where n is
-        // the number of cells on one edge in a merged cell.
-        if ( mergedCellsPainted.contains( obscuringCellRef ) )
-          continue;
-
-        Cell *obscuringCell = cell()->sheet()->cellAt( obscuringCellRef.x(),
-        obscuringCellRef.y() );
-
-        if ( obscuringCell != 0 ) {
-          double x = cell()->sheet()->dblColumnPos( obscuringCellRef.x() );
-          double y = cell()->sheet()->dblRowPos( obscuringCellRef.y() );
-          if ( view != 0 ) {
-            x -= view->canvasWidget()->xOffset();
-            y -= view->canvasWidget()->yOffset();
-          }
-
-          KoPoint corner( x, y );
-          painter.save();
-
-          // Get the effective pens for the borders.  These are
-          // determined by possible conditions on the cell with
-          // associated styles.
-          QPen rp( obscuringCell->effRightBorderPen( obscuringCellRef.x(),
-                  obscuringCellRef.y() ) );
-          QPen bp( obscuringCell->effBottomBorderPen( obscuringCellRef.x(),
-                  obscuringCellRef.y() ) );
-          QPen lp( obscuringCell->effLeftBorderPen( obscuringCellRef.x(),
-                  obscuringCellRef.y() ) );
-          QPen tp( obscuringCell->effTopBorderPen( obscuringCellRef.x(),
-                  obscuringCellRef.y() ) );
+    // Turn clipping back on.
+    if ( dynamic_cast<QPrinter*>(painter.device()) )
+        painter.setClipping( true );
 
 
-          //kDebug(36004) << "  painting obscuring cell "
-          //     << obscuringCell->name() << endl;
-          // QPen highlightPen;
+    // 5. Paint diagonal lines and page borders.
+    paintCellDiagonalLines( painter, cellRect0, cellRef );
+    paintPageBorders( painter, cellRect0, cellRef, paintBorder );
 
-          //Note: Painting of highlight isn't quite right.  If several
-          //      cells are merged, then the whole merged cell will be
-          //      painted with the color of the last cell referenced
-          //      which is inside the merged range.
-#ifdef KSPREAD_CELL_WINDOW
-          CellView tmpCellView( obscuringCell );
-          CellView* cellView = &tmpCellView;
-#else
-          CellView* cellView = obscuringCell->cellView();
+    // 6. Now paint the content, if this cell isn't obscured.
+    if ( !cell()->isObscured() ) {
+
+        // 6a. Paint possible comment indicator.
+        if ( !dynamic_cast<QPrinter*>(painter.device())
+              || cell()->sheet()->print()->printCommentIndicator() )
+            paintCommentIndicator( painter, cellRect, cellRef, backgroundColor );
+
+        // 6b. Paint possible formula indicator.
+        if ( !dynamic_cast<QPrinter*>(painter.device())
+              || cell()->sheet()->print()->printFormulaIndicator() )
+            paintFormulaIndicator( painter, cellRect, backgroundColor );
+
+        // 6c. Paint possible indicator for clipped text.
+        paintMoreTextIndicator( painter, cellRect, backgroundColor );
+
+        //6c. Paint cell highlight
+#if 0
+        if (highlightBorder != None)
+        paintCellHighlight ( painter, cellRect, cellRef, highlightBorder,
+        rightHighlightPen, bottomHighlightPen,
+        leftHighlightPen,  topHighlightPen );
 #endif
-          cellView->paintCell( rect, painter, view,
-                               corner, obscuringCellRef,
-                               LeftBorder|TopBorder|RightBorder|BottomBorder,
-                               rp, bp, lp, tp,
-                               mergedCellsPainted); // new pens
-          painter.restore();
-        }
-      }
-    }
-  }
 
-  // We are done with the painting, so remove the flag on the cell.
-  cell()->clearFlag( Cell::Flag_PaintingCell );
+        // 6d. Paint the text in the cell unless:
+        //  a) it is empty
+        //  b) something indicates that the text should not be painted
+        //  c) the sheet is protected and the cell is hidden.
+        if ( !cell()->strOutText().isEmpty()
+              && ( !dynamic_cast<QPrinter*>(painter.device())
+              || !cell()->format()->getDontprintText( cellRef.x(), cellRef.y() ) )
+              && !( cell()->sheet()->isProtected()
+              && cell()->format()->isHideAll( cellRef.x(), cellRef.y() ) ) )
+        {
+            paintText( painter, cellRect, cellRef );
+        }
+    }
+
+    // 7. If this cell is obscured and we are not already painting obscured
+    //    cells, then paint the obscuring cell(s).  Otherwise don't do
+    //    anything so that we don't cause an infinite loop.
+    if ( cell()->isObscured() && paintingObscured == 0 &&
+         !( sheetDir == Sheet::RightToLeft && dynamic_cast<QPrinter*>(painter.device()) ) )
+    {
+
+        //kDebug(36004) << "painting cells that obscure " << name() << endl;
+
+        // Store the obscuringCells list in a list of QPoint(column, row)
+        // This avoids crashes during the iteration through
+        // obscuringCells, when the cells may get non valid or the list
+        // itself gets changed during a call of obscuringCell->paintCell
+        // (this happens e.g. when there is an updateDepend)
+        if (cell()->d->hasExtra()) {
+            QLinkedList<QPoint>           listPoints;
+            QList<Cell*>::iterator  it = cell()->d->extra()->obscuringCells.begin();
+            QList<Cell*>::iterator  end = cell()->d->extra()->obscuringCells.end();
+            for ( ; it != end; ++it ) {
+                Cell *obscuringCell = *it;
+
+                listPoints.append( QPoint( obscuringCell->column(), obscuringCell->row() ) );
+            }
+
+            QLinkedList<QPoint>::iterator  it1  = listPoints.begin();
+            QLinkedList<QPoint>::iterator  end1 = listPoints.end();
+            for ( ; it1 != end1; ++it1 ) {
+                QPoint obscuringCellRef = *it1;
+
+                // Only paint those obscuring cells that haven't been already
+                // painted yet.
+                //
+                // This optimization removes an O(n^4) behaviour where n is
+                // the number of cells on one edge in a merged cell.
+                if ( mergedCellsPainted.contains( obscuringCellRef ) )
+                    continue;
+
+                Cell *obscuringCell = cell()->sheet()->cellAt( obscuringCellRef.x(),
+                obscuringCellRef.y() );
+
+                if ( obscuringCell != 0 ) {
+                    double x = cell()->sheet()->dblColumnPos( obscuringCellRef.x() );
+                    double y = cell()->sheet()->dblRowPos( obscuringCellRef.y() );
+                    if ( view != 0 ) {
+                        x -= view->canvasWidget()->xOffset();
+                        y -= view->canvasWidget()->yOffset();
+                    }
+
+                    KoPoint corner( x, y );
+                    painter.save();
+
+                    // Get the effective pens for the borders.  These are
+                    // determined by possible conditions on the cell with
+                    // associated styles.
+                    QPen rp( obscuringCell->effRightBorderPen( obscuringCellRef.x(),
+                             obscuringCellRef.y() ) );
+                    QPen bp( obscuringCell->effBottomBorderPen( obscuringCellRef.x(),
+                             obscuringCellRef.y() ) );
+                    QPen lp( obscuringCell->effLeftBorderPen( obscuringCellRef.x(),
+                             obscuringCellRef.y() ) );
+                    QPen tp( obscuringCell->effTopBorderPen( obscuringCellRef.x(),
+                             obscuringCellRef.y() ) );
+
+
+                    //kDebug(36004) << "  painting obscuring cell "
+                    //     << obscuringCell->name() << endl;
+                    // QPen highlightPen;
+
+                    //Note: Painting of highlight isn't quite right.  If several
+                    //      cells are merged, then the whole merged cell will be
+                    //      painted with the color of the last cell referenced
+                    //      which is inside the merged range.
+#ifdef KSPREAD_CELL_WINDOW
+                    CellView tmpCellView( obscuringCell );
+                    CellView* cellView = &tmpCellView;
+#else
+                    CellView* cellView = obscuringCell->cellView();
+#endif
+                    cellView->paintCell( rect, painter, view,
+                                         corner, obscuringCellRef,
+                                         LeftBorder|TopBorder|RightBorder|BottomBorder,
+                                         rp, bp, lp, tp,
+                                         mergedCellsPainted); // new pens
+                    painter.restore();
+                }
+            }
+        }
+    }
+
+    // We are done with the painting, so remove the flag on the cell.
+    cell()->clearFlag( Cell::Flag_PaintingCell );
 }
 
 
@@ -771,13 +770,13 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
                                     QPen const & rightPen, QPen const & /*bottomPen*/,
                                     QPen const & leftPen, QPen const & topPen )
 {
-  Q_UNUSED(cellRef)
+    Q_UNUSED(cellRef)
 
-  // disable antialiasing
-  painter.save();
-  painter.setRenderHint( QPainter::Antialiasing, false );
+    // disable antialiasing
+    painter.save();
+    painter.setRenderHint( QPainter::Antialiasing, false );
 
-  /*
+    /*
     *** Notes about optimization ***
 
     This function was painting the top, left, right & bottom lines in almost
@@ -794,247 +793,248 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
     grabbing the whole QPen object and asking it.
 
     --Robert Knight (robertknight@gmail.com)
-  */
-  Sheet::LayoutDirection sheetDir = cell()->sheet()->layoutDirection();
-  bool paintingToExternalDevice = dynamic_cast<QPrinter*>(painter.device());
+    */
+    Sheet::LayoutDirection sheetDir = cell()->sheet()->layoutDirection();
+    bool paintingToExternalDevice = dynamic_cast<QPrinter*>(painter.device());
 
-  // Each cell is responsible for drawing it's top and left portions
-  // of the "default" grid. --Or not drawing it if it shouldn't be
-  // there.  It's also responsible to paint the right and bottom, if
-  // it is the last cell on a print out.
+    // Each cell is responsible for drawing it's top and left portions
+    // of the "default" grid. --Or not drawing it if it shouldn't be
+    // there.  It's also responsible to paint the right and bottom, if
+    // it is the last cell on a print out.
 
-  const bool isMergedOrObscured = cell()->isPartOfMerged() || cell()->isObscured();
-  bool paintTop;
-  bool paintLeft;
+    const bool isMergedOrObscured = cell()->isPartOfMerged() || cell()->isObscured();
+    bool paintTop;
+    bool paintLeft;
 //   bool paintBottom=false;
-  bool paintRight=false;
+    bool paintRight=false;
 
-  paintLeft   = ( (paintBorder & LeftBorder) &&
-                  leftPen.style() == Qt::NoPen &&
-                  cell()->sheet()->getShowGrid() &&
-                  sheetDir == Sheet::LeftToRight &&
-                  !isMergedOrObscured );
-  paintRight  = ( (paintBorder & RightBorder) &&
-                  rightPen.style() == Qt::NoPen &&
-                  cell()->sheet()->getShowGrid() &&
-                  sheetDir == Sheet::RightToLeft &&
-                  !isMergedOrObscured );
-  paintTop    = ( (paintBorder & TopBorder) &&
-                  topPen.style() == Qt::NoPen &&
-                  cell()->sheet()->getShowGrid() &&
-                  !isMergedOrObscured );
+    paintLeft   = ( (paintBorder & LeftBorder) &&
+            leftPen.style() == Qt::NoPen &&
+            cell()->sheet()->getShowGrid() &&
+            sheetDir == Sheet::LeftToRight &&
+            !isMergedOrObscured );
+    paintRight  = ( (paintBorder & RightBorder) &&
+            rightPen.style() == Qt::NoPen &&
+            cell()->sheet()->getShowGrid() &&
+            sheetDir == Sheet::RightToLeft &&
+            !isMergedOrObscured );
+    paintTop    = ( (paintBorder & TopBorder) &&
+            topPen.style() == Qt::NoPen &&
+            cell()->sheet()->getShowGrid() &&
+            !isMergedOrObscured );
 //  paintBottom = ( (paintBorder & BottomBorder) &&
 //                  cell()->sheet()->getShowGrid() &&
 //                  bottomPen.style() == Qt::NoPen );
 
-  // Set the single-pixel width pen for drawing the borders with.
-  // NOTE Stefan: Use a cosmetic pen (width = 0), because we want the grid always one pixel wide
-  painter.setPen( QPen( cell()->sheet()->doc()->gridColor(), 0, Qt::SolidLine ) );
+    // Set the single-pixel width pen for drawing the borders with.
+    // NOTE Stefan: Use a cosmetic pen (width = 0), because we want the grid always one pixel wide
+    painter.setPen( QPen( cell()->sheet()->doc()->gridColor(), 0, Qt::SolidLine ) );
 
-  QLineF line;
+    QLineF line;
 
 #if 0 // FIXME Stefan: I think this part is superfluous with the merge check above
-  // If there are extra cells, there might be more conditions.
-  if (cell()->d->hasExtra()) {
-    QList<Cell*>::const_iterator it  = cell()->d->extra()->obscuringCells.begin();
-    QList<Cell*>::const_iterator end = cell()->d->extra()->obscuringCells.end();
-    for ( ; it != end; ++it ) {
-      Cell *cell = *it;
+    // If there are extra cells, there might be more conditions.
+    if (cell()->d->hasExtra()) {
+        QList<Cell*>::const_iterator it  = cell()->d->extra()->obscuringCells.begin();
+        QList<Cell*>::const_iterator end = cell()->d->extra()->obscuringCells.end();
+        for ( ; it != end; ++it ) {
+            Cell *cell = *it;
 
-      paintTop  = paintTop && ( cell->row() == cellRef.y() );
-      paintBottom = false;
+            paintTop  = paintTop && ( cell->row() == cellRef.y() );
+            paintBottom = false;
 
-      if ( sheetDir == Sheet::RightToLeft ) {
-        paintRight = paintRight && ( cell->column() == cellRef.x() );
-        paintLeft = false;
-}
-      else {
+            if ( sheetDir == Sheet::RightToLeft ) {
+                paintRight = paintRight && ( cell->column() == cellRef.x() );
+                paintLeft = false;
+            }
+            else {
 
-        paintLeft = paintLeft && ( cell->column() == cellRef.x() );
-        paintRight = false;
-}
-}
-}
+                paintLeft = paintLeft && ( cell->column() == cellRef.x() );
+                paintRight = false;
+            }
+        }
+    }
 #endif
 
-  // The left border.
-  if ( paintLeft )
-  {
-    int dt = 0;
-    int db = 0;
-
-#if 0
-    if ( cellRef.x() > 1 ) {
-      Cell  *cell_west = cell()->sheet()->cellAt( cellRef.x() - 1,
-                cellRef.y() );
-      QPen t = cell_west->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
-      QPen b = cell_west->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
-
-      if ( t.style() != Qt::NoPen )
-        dt = ( t.width() + 1 )/2;
-      if ( b.style() != Qt::NoPen )
-        db = ( t.width() / 2);
-}
-#endif
-
-    // If we are on paper printout, we limit the length of the lines.
-    // On paper, we always have full cells, on screen not.
-    if ( paintingToExternalDevice ) {
-      if ( sheetDir == Sheet::RightToLeft )
-        line = QLineF( qMax( rect.left(),   cellRect.right() ),
-                       qMax( rect.top(),    cellRect.y() + dt ),
-                       qMin( rect.right(),  cellRect.right() ),
-                       qMin( rect.bottom(), cellRect.bottom() - db ) );
-      else
-        line = QLineF( qMax( rect.left(),   cellRect.x() ),
-                       qMax( rect.top(),    cellRect.y() + dt ),
-                       qMin( rect.right(),  cellRect.x() ),
-                       qMin( rect.bottom(), cellRect.bottom() - db ) );
-    }
-    else {
-      if ( sheetDir == Sheet::RightToLeft )
-        line = QLineF( cellRect.right(),
-                       cellRect.y() + dt,
-                       cellRect.right(),
-                       cellRect.bottom() - db );
-      else
-        line = QLineF( cellRect.x(),
-                       cellRect.y() + dt,
-                       cellRect.x(),
-                       cellRect.bottom() - db );
-    }
-    painter.drawLine( line );
-  }
-
-
-  // The top border.
-  if ( paintTop ) {
-    int dl = 0;
-    int dr = 0;
-
-#if 0
-    if ( cellRef.y() > 1 ) {
-      Cell  *cell_north = cell()->sheet()->cellAt( cellRef.x(),
-                 cellRef.y() - 1 );
-
-      QPen l = cell_north->effLeftBorderPen(  cellRef.x(), cellRef.y() - 1 );
-      QPen r = cell_north->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
-
-      if ( l.style() != Qt::NoPen )
-        dl = ( l.width() - 1 ) / 2 + 1;
-      if ( r.style() != Qt::NoPen )
-        dr = r.width() / 2;
-  }
-#endif
-
-    // If we are on paper printout, we limit the length of the lines.
-    // On paper, we always have full cells, on screen not.
-    if ( paintingToExternalDevice ) {
-      line = QLineF( qMax( rect.left(),   cellRect.x() + dl ),
-                     qMax( rect.top(),    cellRect.y() ),
-                     qMin( rect.right(),  cellRect.right() - dr ),
-                     qMin( rect.bottom(), cellRect.y() ) );
-    }
-    else {
-      line = QLineF( cellRect.x() + dl,
-                     cellRect.y(),
-                     cellRect.right() - dr,
-                     cellRect.y() );
-    }
-    painter.drawLine( line );
-  }
-
-
-  // The right border.
-  if ( paintRight ) {
-    int dt = 0;
-    int db = 0;
-
-#if 0
-    if ( cellRef.x() < KS_colMax ) {
-      Cell  *cell_east = cell()->sheet()->cellAt( cellRef.x() + 1,
-                cellRef.y() );
-
-      QPen t = cell_east->effTopBorderPen(    cellRef.x() + 1, cellRef.y() );
-      QPen b = cell_east->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
-
-      if ( t.style() != Qt::NoPen )
-        dt = ( t.width() + 1 ) / 2;
-      if ( b.style() != Qt::NoPen )
-        db = ( t.width() / 2);
-  }
-#endif
-
-    //painter.setPen( QPen( cell()->sheet()->doc()->gridColor(), 1, Qt::SolidLine ) );
-
-    // If we are on paper printout, we limit the length of the lines.
-    // On paper, we always have full cells, on screen not.
-    if ( dynamic_cast<QPrinter*>(painter.device()) )
+    // The left border.
+    if ( paintLeft )
     {
-      if ( sheetDir == Sheet::RightToLeft )
-        line = QLineF( qMax( rect.left(),   cellRect.x() ),
-                       qMax( rect.top(),    cellRect.y() + dt ),
-                       qMin( rect.right(),  cellRect.x() ),
-                       qMin( rect.bottom(), cellRect.bottom() - db ) );
-      else
-        line = QLineF( qMax( rect.left(),   cellRect.right() ),
-                       qMax( rect.top(),    cellRect.y() + dt ),
-                       qMin( rect.right(),  cellRect.right() ),
-                       qMin( rect.bottom(), cellRect.bottom() - db ) );
+        int dt = 0;
+        int db = 0;
+
+#if 0
+        if ( cellRef.x() > 1 ) {
+            Cell  *cell_west = cell()->sheet()->cellAt( cellRef.x() - 1,
+            cellRef.y() );
+            QPen t = cell_west->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
+            QPen b = cell_west->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
+
+            if ( t.style() != Qt::NoPen )
+            dt = ( t.width() + 1 )/2;
+            if ( b.style() != Qt::NoPen )
+            db = ( t.width() / 2);
+        }
+#endif
+
+        // If we are on paper printout, we limit the length of the lines.
+        // On paper, we always have full cells, on screen not.
+        if ( paintingToExternalDevice ) {
+            if ( sheetDir == Sheet::RightToLeft )
+                line = QLineF( qMax( rect.left(),   cellRect.right() ),
+                               qMax( rect.top(),    cellRect.y() + dt ),
+                               qMin( rect.right(),  cellRect.right() ),
+                               qMin( rect.bottom(), cellRect.bottom() - db ) );
+            else
+                line = QLineF( qMax( rect.left(),   cellRect.x() ),
+                               qMax( rect.top(),    cellRect.y() + dt ),
+                               qMin( rect.right(),  cellRect.x() ),
+                               qMin( rect.bottom(), cellRect.bottom() - db ) );
+        }
+        else {
+            if ( sheetDir == Sheet::RightToLeft )
+                line = QLineF( cellRect.right(),
+                               cellRect.y() + dt,
+                               cellRect.right(),
+                               cellRect.bottom() - db );
+            else
+                line = QLineF( cellRect.x(),
+                               cellRect.y() + dt,
+                               cellRect.x(),
+                               cellRect.bottom() - db );
+        }
+        painter.drawLine( line );
     }
-    else
-    {
-      if ( sheetDir == Sheet::RightToLeft )
-        line = QLineF( cellRect.x(),
-                       cellRect.y() + dt,
-                       cellRect.x(),
-                       cellRect.bottom() - db );
-      else
-        line = QLineF( cellRect.right(),
-                       cellRect.y() + dt,
-                       cellRect.right(),
-                       cellRect.bottom() - db );
+
+
+    // The top border.
+    if ( paintTop ) {
+        int dl = 0;
+        int dr = 0;
+
+#if 0
+        if ( cellRef.y() > 1 ) {
+            Cell  *cell_north = cell()->sheet()->cellAt( cellRef.x(),
+            cellRef.y() - 1 );
+
+            QPen l = cell_north->effLeftBorderPen(  cellRef.x(), cellRef.y() - 1 );
+            QPen r = cell_north->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
+
+            if ( l.style() != Qt::NoPen )
+            dl = ( l.width() - 1 ) / 2 + 1;
+            if ( r.style() != Qt::NoPen )
+            dr = r.width() / 2;
+        }
+#endif
+
+        // If we are on paper printout, we limit the length of the lines.
+        // On paper, we always have full cells, on screen not.
+        if ( paintingToExternalDevice ) {
+            line = QLineF( qMax( rect.left(),   cellRect.x() + dl ),
+                           qMax( rect.top(),    cellRect.y() ),
+                           qMin( rect.right(),  cellRect.right() - dr ),
+                           qMin( rect.bottom(), cellRect.y() ) );
+        }
+        else {
+            line = QLineF( cellRect.x() + dl,
+                           cellRect.y(),
+                           cellRect.right() - dr,
+                           cellRect.y() );
+        }
+        painter.drawLine( line );
     }
-    painter.drawLine( line );
-  }
 
-  // The bottom border.
-  /*if ( paintBottom ) {
-  int dl = 0;
-  int dr = 0;
-  if ( cellRef.y() < KS_rowMax ) {
-  Cell  *cell_south = cell()->sheet()->cellAt( cellRef.x(),
-  cellRef.y() + 1 );
 
-  QPen l = cell_south->effLeftBorderPen(  cellRef.x(), cellRef.y() + 1 );
-  QPen r = cell_south->effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
+    // The right border.
+    if ( paintRight ) {
+        int dt = 0;
+        int db = 0;
 
-  if ( l.style() != Qt::NoPen )
-  dl = ( l.width() - 1 ) / 2 + 1;
-  if ( r.style() != Qt::NoPen )
-  dr = r.width() / 2;
-}
+#if 0
+        if ( cellRef.x() < KS_colMax ) {
+            Cell  *cell_east = cell()->sheet()->cellAt( cellRef.x() + 1,
+            cellRef.y() );
 
-  painter.setPen( QPen( cell()->sheet()->doc()->gridColor(), 1, Qt::SolidLine ) );
+            QPen t = cell_east->effTopBorderPen(    cellRef.x() + 1, cellRef.y() );
+            QPen b = cell_east->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
+
+            if ( t.style() != Qt::NoPen )
+            dt = ( t.width() + 1 ) / 2;
+            if ( b.style() != Qt::NoPen )
+            db = ( t.width() / 2);
+        }
+#endif
+
+        //painter.setPen( QPen( cell()->sheet()->doc()->gridColor(), 1, Qt::SolidLine ) );
+
+        // If we are on paper printout, we limit the length of the lines.
+        // On paper, we always have full cells, on screen not.
+        if ( dynamic_cast<QPrinter*>(painter.device()) )
+        {
+            if ( sheetDir == Sheet::RightToLeft )
+                line = QLineF( qMax( rect.left(),   cellRect.x() ),
+                               qMax( rect.top(),    cellRect.y() + dt ),
+                               qMin( rect.right(),  cellRect.x() ),
+                               qMin( rect.bottom(), cellRect.bottom() - db ) );
+            else
+                line = QLineF( qMax( rect.left(),   cellRect.right() ),
+                               qMax( rect.top(),    cellRect.y() + dt ),
+                               qMin( rect.right(),  cellRect.right() ),
+                               qMin( rect.bottom(), cellRect.bottom() - db ) );
+        }
+        else
+        {
+            if ( sheetDir == Sheet::RightToLeft )
+                line = QLineF( cellRect.x(),
+                               cellRect.y() + dt,
+                               cellRect.x(),
+                               cellRect.bottom() - db );
+            else
+                line = QLineF( cellRect.right(),
+                               cellRect.y() + dt,
+                               cellRect.right(),
+                               cellRect.bottom() - db );
+        }
+        painter.drawLine( line );
+    }
+
+#if 0
+    // The bottom border.
+    if ( paintBottom ) {
+        int dl = 0;
+        int dr = 0;
+        if ( cellRef.y() < KS_rowMax ) {
+            Cell  *cell_south = cell()->sheet()->cellAt( cellRef.x(),
+            cellRef.y() + 1 );
+
+            QPen l = cell_south->effLeftBorderPen(  cellRef.x(), cellRef.y() + 1 );
+            QPen r = cell_south->effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
+
+            if ( l.style() != Qt::NoPen )
+                dl = ( l.width() - 1 ) / 2 + 1;
+            if ( r.style() != Qt::NoPen )
+                dr = r.width() / 2;
+        }
+
+        painter.setPen( QPen( cell()->sheet()->doc()->gridColor(), 1, Qt::SolidLine ) );
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
-  if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-  painter.drawLine( doc->zoomItXOld( qMax( rect.left(),   cellRect.x() + dl ) ),
-  doc->zoomItYOld( qMax( rect.top(),    cellRect.bottom() ) ),
-  doc->zoomItXOld( qMin( rect.right(),  cellRect.right() - dr ) ),
-  doc->zoomItYOld( qMin( rect.bottom(), cellRect.bottom() ) ) );
-}
-  else {
-  painter.drawLine( doc->zoomItXOld( cellRect.x() + dl ),
-  doc->zoomItYOld( cellRect.bottom() ),
-  doc->zoomItXOld( cellRect.right() - dr ),
-  doc->zoomItYOld( cellRect.bottom() ) );
-}
-}*/
-
-  // restore antialiasing
-  painter.restore();
+        if ( dynamic_cast<QPrinter*>(painter.device()) ) {
+            painter.drawLine( doc->zoomItXOld( qMax( rect.left(),   cellRect.x() + dl ) ),
+                              doc->zoomItYOld( qMax( rect.top(),    cellRect.bottom() ) ),
+                              doc->zoomItXOld( qMin( rect.right(),  cellRect.right() - dr ) ),
+                              doc->zoomItYOld( qMin( rect.bottom(), cellRect.bottom() ) ) );
+        }
+        else {
+            painter.drawLine( doc->zoomItXOld( cellRect.x() + dl ),
+                              doc->zoomItYOld( cellRect.bottom() ),
+                              doc->zoomItXOld( cellRect.right() - dr ),
+                              doc->zoomItYOld( cellRect.bottom() ) );
+        }
+    }
+#endif
+    // restore antialiasing
+    painter.restore();
 }
 
 
@@ -1543,214 +1543,214 @@ void CellView::paintCellBorders( QPainter& painter, const QRectF& rect,
                                  QPen& _rightPen, QPen& _bottomPen,
                                  QPen& _leftPen,  QPen& _topPen )
 {
-  //Sanity check: If we are not painting any of the borders then the function
-  //really shouldn't be called at all.
-  if ( paintBorder == NoBorder )
+    //Sanity check: If we are not painting any of the borders then the function
+    //really shouldn't be called at all.
+    if ( paintBorder == NoBorder )
+        return;
+
+    Sheet::LayoutDirection sheetDir =  cell()->sheet()->layoutDirection();
+
+    if (cell()->d->hasExtra()) {
+        QList<Cell*>::const_iterator it  = cell()->d->extra()->obscuringCells.begin();
+        QList<Cell*>::const_iterator end = cell()->d->extra()->obscuringCells.end();
+        for ( ; it != end; ++it ) {
+            Cell* cell = *it;
+
+            int xDiff = cellRef.x() - cell->column();
+            int yDiff = cellRef.y() - cell->row();
+            if (xDiff == 0)
+                paintBorder |= LeftBorder;
+            else
+                paintBorder &= ~LeftBorder;
+            if (yDiff == 0)
+                paintBorder |= TopBorder;
+            else
+                paintBorder &= ~TopBorder;
+
+            // Paint the border(s) if either this one should or if we have a
+            // merged cell with this cell as its border.
+            if (cell->mergedXCells() == xDiff)
+                paintBorder |= RightBorder;
+            else
+                paintBorder &= ~RightBorder;
+            if (cell->mergedYCells() == yDiff)
+                paintBorder |= BottomBorder;
+            else
+                paintBorder &= ~BottomBorder;
+        }
+    }
+
+    // Must create copies of these since otherwise the zoomIt()
+    // operation will be performed on them repeatedly.
+    QPen  leftPen( _leftPen );
+    QPen  rightPen( _rightPen );
+    QPen  topPen( _topPen );
+    QPen  bottomPen( _bottomPen );
+
+    // Determine the pens that should be used for drawing
+    // the borders.
+    //
+    int left_penWidth   = qMax( 1, ( leftPen.width() ) );
+    int right_penWidth  = qMax( 1, ( rightPen.width() ) );
+    int top_penWidth    = qMax( 1, ( topPen.width() ) );
+    int bottom_penWidth = qMax( 1, ( bottomPen.width() ) );
+
+    leftPen.setWidth( left_penWidth );
+    rightPen.setWidth( right_penWidth );
+    topPen.setWidth( top_penWidth );
+    bottomPen.setWidth( bottom_penWidth );
+
+    QLineF line;
+
+    if ( (paintBorder & LeftBorder) && leftPen.style() != Qt::NoPen )
+    {
+        int top = ( qMax( 0, -1 + top_penWidth ) ) / 2 +
+                ( ( qMax( 0, -1 + top_penWidth ) ) % 2 );
+        int bottom = ( qMax( 0, -1 + bottom_penWidth ) ) / 2 + 1;
+
+        painter.setPen( leftPen );
+
+        //kDebug(36004) << "    painting left border of cell " << name() << endl;
+
+        // If we are on paper printout, we limit the length of the lines.
+        // On paper, we always have full cells, on screen not.
+        if ( dynamic_cast<QPrinter*>(painter.device()) ) {
+            // FIXME: There is probably Cut&Paste bugs here as well as below.
+            //        The qMin/qMax and left/right pairs don't really make sense.
+            //
+            //    UPDATE: In fact, most of these qMin/qMax combinations
+            //            are TOTALLY BOGUS.  For one thing, the idea
+            //            that we always have full cells on paper is wrong
+            //            since we can have embedded sheets in e.g. kword,
+            //            and those can be arbitrarily clipped.  WE HAVE TO
+            //            REVISE THIS WHOLE BORDER PAINTING SECTION!
+            //
+            if ( sheetDir == Sheet::RightToLeft )
+                line = QLineF( qMin( rect.right(),  cellRect.right() ),
+                               qMax( rect.top(),    cellRect.top() - top ),
+                               qMin( rect.right(),  cellRect.right() ),
+                               qMin( rect.bottom(), cellRect.bottom() + bottom ) );
+            else
+                line = QLineF( qMax( rect.left(),   cellRect.left() ),
+                               qMax( rect.top(),    cellRect.top() - top ),
+                               qMax( rect.left(),   cellRect.left() ),
+                               qMin( rect.bottom(), cellRect.bottom() + bottom ) );
+        }
+        else {
+            if ( sheetDir == Sheet::RightToLeft )
+                line = QLineF( cellRect.right(),
+                               cellRect.top() - top,
+                               cellRect.right(),
+                               cellRect.bottom() + bottom );
+            else
+                line = QLineF( cellRect.left(),
+                               cellRect.top() - top,
+                               cellRect.left(),
+                               cellRect.bottom() + bottom );
+        }
+        painter.drawLine( line );
+    }
+
+    if ( (paintBorder & RightBorder) && rightPen.style() != Qt::NoPen )
+    {
+        int top = ( qMax( 0, -1 + top_penWidth ) ) / 2 +
+                ( ( qMax( 0, -1 + top_penWidth ) ) % 2 );
+        int bottom = ( qMax( 0, -1 + bottom_penWidth ) ) / 2 + 1;
+
+        painter.setPen( rightPen );
+
+        //kDebug(36004) << "    painting right border of cell " << name() << endl;
+
+        // If we are on paper printout, we limit the length of the lines.
+        // On paper, we always have full cells, on screen not.
+        if ( dynamic_cast<QPrinter*>(painter.device()) ) {
+            if ( sheetDir == Sheet::RightToLeft )
+                line = QLineF( qMax( rect.left(), cellRect.left() ),
+                               qMax( rect.top(), cellRect.top() - top ),
+                               qMax( rect.left(), cellRect.left() ),
+                               qMin( rect.bottom(), cellRect.bottom() + bottom ) );
+            else {
+                // FIXME: This is the way all these things should look.
+                //        Make it so.
+                //
+                // Only print the right border if it is visible.
+                if ( cellRect.right() <= rect.right() + right_penWidth / 2)
+                    line = QLineF( cellRect.right(),
+                                   qMax( rect.top(), cellRect.top() - top ),
+                                   cellRect.right(),
+                                   qMin( rect.bottom(), cellRect.bottom() + bottom ) );
+            }
+        }
+        else {
+            if ( sheetDir == Sheet::RightToLeft )
+                line = QLineF( cellRect.left(),
+                               cellRect.top() - top,
+                               cellRect.left(),
+                               cellRect.bottom() + bottom );
+            else
+                line = QLineF( cellRect.right(),
+                               cellRect.top() - top,
+                               cellRect.right(),
+                               cellRect.bottom() + bottom );
+        }
+        painter.drawLine( line );
+    }
+
+    if ( (paintBorder & TopBorder) && topPen.style() != Qt::NoPen )
+    {
+        painter.setPen( topPen );
+
+        //kDebug(36004) << "    painting top border of cell " << name()
+        //       << " [" << cellRect.left() << "," << cellRect.right()
+        //       << ": " << cellRect.right() - cellRect.left() << "]" << endl;
+
+        // If we are on paper printout, we limit the length of the lines.
+        // On paper, we always have full cells, on screen not.
+        if ( dynamic_cast<QPrinter*>(painter.device()) ) {
+            if ( cellRect.top() >= rect.top() + top_penWidth / 2)
+                line = QLineF( qMax( rect.left(),   cellRect.left() ),
+                               cellRect.top(),
+                               qMin( rect.right(),  cellRect.right() ),
+                               cellRect.top() );
+        }
+        else {
+            line = QLineF( cellRect.left(), cellRect.top(),
+                           cellRect.right(), cellRect.top() );
+        }
+        painter.drawLine( line );
+    }
+
+    if ( (paintBorder & BottomBorder) && bottomPen.style() != Qt::NoPen )
+    {
+        painter.setPen( bottomPen );
+
+        //kDebug(36004) << "    painting bottom border of cell " << name()
+        //       << " [" << cellRect.left() << "," << cellRect.right()
+        //       << ": " << cellRect.right() - cellRect.left() << "]" << endl;
+
+        // If we are on paper printout, we limit the length of the lines.
+        // On paper, we always have full cells, on screen not.
+        if ( dynamic_cast<QPrinter*>(painter.device()) ) {
+            if ( cellRect.bottom() <= rect.bottom() + bottom_penWidth / 2)
+                line = QLineF( qMax( rect.left(),   cellRect.left() ),
+                               cellRect.bottom(),
+                               qMin( rect.right(),  cellRect.right() ),
+                               cellRect.bottom() );
+        }
+        else {
+            line = QLineF( cellRect.left(), cellRect.bottom(),
+                           cellRect.right(), cellRect.bottom() );
+        }
+        painter.drawLine( line );
+    }
+
+    // FIXME: Look very closely at when the following code is really needed.
+    //        I can't really see any case, but I might be wrong.
+    //        Since the code below is buggy, and incredibly complex,
+    //        I am currently disabling it.  If somebody wants to enable
+    //        it again, then please also solve bug 68977: "Embedded KSpread
+    //        document printing problem" at the same time.
     return;
-
-  Sheet::LayoutDirection sheetDir =  cell()->sheet()->layoutDirection();
-
-  if (cell()->d->hasExtra()) {
-    QList<Cell*>::const_iterator it  = cell()->d->extra()->obscuringCells.begin();
-    QList<Cell*>::const_iterator end = cell()->d->extra()->obscuringCells.end();
-    for ( ; it != end; ++it ) {
-      Cell* cell = *it;
-
-      int xDiff = cellRef.x() - cell->column();
-      int yDiff = cellRef.y() - cell->row();
-      if (xDiff == 0)
-        paintBorder |= LeftBorder;
-      else
-        paintBorder &= ~LeftBorder;
-      if (yDiff == 0)
-        paintBorder |= TopBorder;
-      else
-        paintBorder &= ~TopBorder;
-
-      // Paint the border(s) if either this one should or if we have a
-      // merged cell with this cell as its border.
-      if (cell->mergedXCells() == xDiff)
-        paintBorder |= RightBorder;
-      else
-        paintBorder &= ~RightBorder;
-      if (cell->mergedYCells() == yDiff)
-        paintBorder |= BottomBorder;
-      else
-        paintBorder &= ~BottomBorder;
-    }
-  }
-
-  // Must create copies of these since otherwise the zoomIt()
-  // operation will be performed on them repeatedly.
-  QPen  leftPen( _leftPen );
-  QPen  rightPen( _rightPen );
-  QPen  topPen( _topPen );
-  QPen  bottomPen( _bottomPen );
-
-  // Determine the pens that should be used for drawing
-  // the borders.
-  //
-  int left_penWidth   = qMax( 1, ( leftPen.width() ) );
-  int right_penWidth  = qMax( 1, ( rightPen.width() ) );
-  int top_penWidth    = qMax( 1, ( topPen.width() ) );
-  int bottom_penWidth = qMax( 1, ( bottomPen.width() ) );
-
-  leftPen.setWidth( left_penWidth );
-  rightPen.setWidth( right_penWidth );
-  topPen.setWidth( top_penWidth );
-  bottomPen.setWidth( bottom_penWidth );
-
-  QLineF line;
-
-  if ( (paintBorder & LeftBorder) && leftPen.style() != Qt::NoPen )
-  {
-    int top = ( qMax( 0, -1 + top_penWidth ) ) / 2 +
-        ( ( qMax( 0, -1 + top_penWidth ) ) % 2 );
-    int bottom = ( qMax( 0, -1 + bottom_penWidth ) ) / 2 + 1;
-
-    painter.setPen( leftPen );
-
-    //kDebug(36004) << "    painting left border of cell " << name() << endl;
-
-    // If we are on paper printout, we limit the length of the lines.
-    // On paper, we always have full cells, on screen not.
-    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-      // FIXME: There is probably Cut&Paste bugs here as well as below.
-      //        The qMin/qMax and left/right pairs don't really make sense.
-      //
-      //    UPDATE: In fact, most of these qMin/qMax combinations
-      //            are TOTALLY BOGUS.  For one thing, the idea
-      //            that we always have full cells on paper is wrong
-      //            since we can have embedded sheets in e.g. kword,
-      //            and those can be arbitrarily clipped.  WE HAVE TO
-      //            REVISE THIS WHOLE BORDER PAINTING SECTION!
-      //
-      if ( sheetDir == Sheet::RightToLeft )
-        line = QLineF( qMin( rect.right(),  cellRect.right() ),
-                          qMax( rect.top(),    cellRect.top() - top ),
-                          qMin( rect.right(),  cellRect.right() ),
-                          qMin( rect.bottom(), cellRect.bottom() + bottom ) );
-      else
-        line = QLineF( qMax( rect.left(),   cellRect.left() ),
-                          qMax( rect.top(),    cellRect.top() - top ),
-                          qMax( rect.left(),   cellRect.left() ),
-                          qMin( rect.bottom(), cellRect.bottom() + bottom ) );
-    }
-    else {
-      if ( sheetDir == Sheet::RightToLeft )
-        line = QLineF( cellRect.right(),
-                          cellRect.top() - top,
-                          cellRect.right(),
-                          cellRect.bottom() + bottom );
-      else
-        line = QLineF( cellRect.left(),
-                          cellRect.top() - top,
-                          cellRect.left(),
-                          cellRect.bottom() + bottom );
-    }
-    painter.drawLine( line );
-  }
-
-  if ( (paintBorder & RightBorder) && rightPen.style() != Qt::NoPen )
-  {
-    int top = ( qMax( 0, -1 + top_penWidth ) ) / 2 +
-        ( ( qMax( 0, -1 + top_penWidth ) ) % 2 );
-    int bottom = ( qMax( 0, -1 + bottom_penWidth ) ) / 2 + 1;
-
-    painter.setPen( rightPen );
-
-    //kDebug(36004) << "    painting right border of cell " << name() << endl;
-
-    // If we are on paper printout, we limit the length of the lines.
-    // On paper, we always have full cells, on screen not.
-    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-      if ( sheetDir == Sheet::RightToLeft )
-        line = QLineF( qMax( rect.left(), cellRect.left() ),
-                          qMax( rect.top(), cellRect.top() - top ),
-                          qMax( rect.left(), cellRect.left() ),
-                          qMin( rect.bottom(), cellRect.bottom() + bottom ) );
-      else {
-  // FIXME: This is the way all these things should look.
-  //        Make it so.
-        //
-  // Only print the right border if it is visible.
-        if ( cellRect.right() <= rect.right() + right_penWidth / 2)
-          line = QLineF( cellRect.right(),
-                            qMax( rect.top(), cellRect.top() - top ),
-                            cellRect.right(),
-                            qMin( rect.bottom(), cellRect.bottom() + bottom ) );
-      }
-    }
-    else {
-      if ( sheetDir == Sheet::RightToLeft )
-        line = QLineF( cellRect.left(),
-                          cellRect.top() - top,
-                          cellRect.left(),
-                          cellRect.bottom() + bottom );
-      else
-        line = QLineF( cellRect.right(),
-                          cellRect.top() - top,
-                          cellRect.right(),
-                          cellRect.bottom() + bottom );
-    }
-    painter.drawLine( line );
-  }
-
-  if ( (paintBorder & TopBorder) && topPen.style() != Qt::NoPen )
-  {
-    painter.setPen( topPen );
-
-    //kDebug(36004) << "    painting top border of cell " << name()
-    //       << " [" << cellRect.left() << "," << cellRect.right()
-    //       << ": " << cellRect.right() - cellRect.left() << "]" << endl;
-
-    // If we are on paper printout, we limit the length of the lines.
-    // On paper, we always have full cells, on screen not.
-    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-      if ( cellRect.top() >= rect.top() + top_penWidth / 2)
-        line = QLineF( qMax( rect.left(),   cellRect.left() ),
-                          cellRect.top(),
-                          qMin( rect.right(),  cellRect.right() ),
-                          cellRect.top() );
-    }
-    else {
-      line = QLineF( cellRect.left(), cellRect.top(),
-                        cellRect.right(), cellRect.top() );
-    }
-    painter.drawLine( line );
-  }
-
-  if ( (paintBorder & BottomBorder) && bottomPen.style() != Qt::NoPen )
-  {
-    painter.setPen( bottomPen );
-
-    //kDebug(36004) << "    painting bottom border of cell " << name()
-    //       << " [" << cellRect.left() << "," << cellRect.right()
-    //       << ": " << cellRect.right() - cellRect.left() << "]" << endl;
-
-    // If we are on paper printout, we limit the length of the lines.
-    // On paper, we always have full cells, on screen not.
-    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-      if ( cellRect.bottom() <= rect.bottom() + bottom_penWidth / 2)
-        line = QLineF( qMax( rect.left(),   cellRect.left() ),
-                          cellRect.bottom(),
-                          qMin( rect.right(),  cellRect.right() ),
-                          cellRect.bottom() );
-    }
-    else {
-      line = QLineF( cellRect.left(), cellRect.bottom(),
-                        cellRect.right(), cellRect.bottom() );
-    }
-    painter.drawLine( line );
-  }
-
-  // FIXME: Look very closely at when the following code is really needed.
-  //        I can't really see any case, but I might be wrong.
-  //        Since the code below is buggy, and incredibly complex,
-  //        I am currently disabling it.  If somebody wants to enable
-  //        it again, then please also solve bug 68977: "Embedded KSpread
-  //        document printing problem" at the same time.
-  return;
 
 #if 0
   // Look at the cells on our corners. It may happen that we

@@ -4011,168 +4011,168 @@ void Canvas::updateCellWindow()
 
 void Canvas::paintUpdates()
 {
-  register Sheet * const sheet = activeSheet();
-  if (!sheet)
-    return;
+    register Sheet * const sheet = activeSheet();
+    if (!sheet)
+        return;
 
-  QPainter painter(this);
+    QPainter painter(this);
 
-  //Save clip region
-  QMatrix matrix;
-  if ( d->view )
-  {
-    matrix = d->view->matrix();
-  }
-  else
-  {
-    matrix = painter.matrix();
-  }
+    //Save clip region
+    QMatrix matrix;
+    if ( d->view )
+    {
+        matrix = d->view->matrix();
+    }
+    else
+    {
+        matrix = painter.matrix();
+    }
 
-  paintChildren( painter, matrix );
+    paintChildren( painter, matrix );
 
-  painter.save();
-  clipoutChildren( painter );
+    painter.save();
+    clipoutChildren( painter );
 
-  painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
-  painter.scale( d->view->doc()->zoomedResolutionX(), d->view->doc()->zoomedResolutionY() );
+    painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
+    painter.scale( d->view->doc()->zoomedResolutionX(), d->view->doc()->zoomedResolutionY() );
 
-  QRectF unzoomedRect = d->view->doc()->viewToDocument( QRectF( 0, 0, width(), height() ) );
-  // unzoomedRect.translate( xOffset(), yOffset() );
+    QRectF unzoomedRect = d->view->doc()->viewToDocument( QRectF( 0, 0, width(), height() ) );
+    // unzoomedRect.translate( xOffset(), yOffset() );
 
 #if 0
-  kDebug(36004)
-    << "================================================================"
-    << endl;
-  kDebug(36004) << "painting dirty cells " << endl;
+    kDebug(36004)
+            << "================================================================"
+            << endl;
+    kDebug(36004) << "painting dirty cells " << endl;
 #endif
 
-  /* paint any visible cell that has the paintDirty flag */
-  Cell* cell = 0;
-  const QRect visibleRect = visibleCells();
-  QLinkedList<QPoint> mergedCellsPainted;
-  Region paintDirtyList = sheet->paintDirtyData();
+    /* paint any visible cell that has the paintDirty flag */
+    Cell* cell = 0;
+    const QRect visibleRect = visibleCells();
+    QLinkedList<QPoint> mergedCellsPainted;
+    Region paintDirtyList = sheet->paintDirtyData();
 
-  Region::ConstIterator end(paintDirtyList.constEnd());
-  for (Region::ConstIterator it(paintDirtyList.constBegin()); it != end; ++it)
-  {
-    QRect range = (*it)->rect() & visibleRect;
-    const double topPos = sheet->dblRowPos(range.top());
-    const double leftPos = sheet->dblColumnPos(range.left());
-    KoPoint dblCorner( leftPos - xOffset(), topPos - yOffset() );
-
-    int right  = range.right();
-    for ( int x = range.left(); x <= right; ++x )
+    Region::ConstIterator end(paintDirtyList.constEnd());
+    for (Region::ConstIterator it(paintDirtyList.constBegin()); it != end; ++it)
     {
-      int bottom = range.bottom();
-      for ( int y = range.top(); y <= bottom; ++y )
-      {
-        cell = sheet->cellAt( x, y );
+        QRect range = (*it)->rect() & visibleRect;
+        const double topPos = sheet->dblRowPos(range.top());
+        const double leftPos = sheet->dblColumnPos(range.left());
+        KoPoint dblCorner( leftPos - xOffset(), topPos - yOffset() );
+
+        int right  = range.right();
+        for ( int x = range.left(); x <= right; ++x )
+        {
+            int bottom = range.bottom();
+            for ( int y = range.top(); y <= bottom; ++y )
+            {
+                cell = sheet->cellAt( x, y );
 
 #ifdef KSPREAD_CELL_WINDOW
-        // relayout in CellView
+                // relayout in CellView
 #else
-        // relayout only for non default cells
-        if (!cell->isDefault())
-        {
-          if (cell->testFlag(Cell::Flag_LayoutDirty))
-            cell->cellView()->makeLayout( x, y );
-        }
+                // relayout only for non default cells
+                if (!cell->isDefault())
+                {
+                    if (cell->testFlag(Cell::Flag_LayoutDirty))
+                        cell->cellView()->makeLayout( x, y );
+                }
 #endif
 
-        CellView::Borders paintBorder = CellView::NoBorder;
+                CellView::Borders paintBorder = CellView::NoBorder;
 
-        QPen bottomPen( cell->effBottomBorderPen( x, y ) );
-        QPen rightPen( cell->effRightBorderPen( x, y ) );
-        QPen leftPen( cell->effLeftBorderPen( x, y ) );
-        QPen topPen( cell->effTopBorderPen( x, y ) );
+                QPen bottomPen( cell->effBottomBorderPen( x, y ) );
+                QPen rightPen( cell->effRightBorderPen( x, y ) );
+                QPen leftPen( cell->effLeftBorderPen( x, y ) );
+                QPen topPen( cell->effTopBorderPen( x, y ) );
 
-        // paint right border
-        // - if rightmost cell
-        // - if the pen is more "worth" than the left border pen of the cell
-        //   on the left
-        if ( x >= KS_colMax )
-        {
-          paintBorder = paintBorder | CellView::RightBorder;
-        }
-        else
-        {
-          paintBorder = paintBorder | CellView::RightBorder;
-          if ( cell->effRightBorderValue( x, y ) <
-               sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-            rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
-        }
+                // paint right border
+                // - if rightmost cell
+                // - if the pen is more "worth" than the left border pen of the cell
+                //   on the left
+                if ( x >= KS_colMax )
+                {
+                    paintBorder = paintBorder | CellView::RightBorder;
+                }
+                else
+                {
+                    paintBorder = paintBorder | CellView::RightBorder;
+                    if ( cell->effRightBorderValue( x, y ) <
+                         sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+                        rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+                }
 
-        // similar for other borders...
-        // bottom border:
-        if ( y >= KS_rowMax )
-        {
-          paintBorder = paintBorder | CellView::BottomBorder;
-        }
-        else
-        {
-          paintBorder = paintBorder | CellView::BottomBorder;
-          if ( cell->effBottomBorderValue( x, y ) <
-               sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
-            bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
-        }
+                // similar for other borders...
+                // bottom border:
+                if ( y >= KS_rowMax )
+                {
+                    paintBorder = paintBorder | CellView::BottomBorder;
+                }
+                else
+                {
+                    paintBorder = paintBorder | CellView::BottomBorder;
+                    if ( cell->effBottomBorderValue( x, y ) <
+                         sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
+                        bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+                }
 
-        // left border:
-        if ( x == 1 )
-        {
-          paintBorder = paintBorder | CellView::LeftBorder;
-        }
-        else
-        {
-          paintBorder = paintBorder | CellView::LeftBorder;
-          if ( cell->effLeftBorderValue( x, y ) <
-               sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-            leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
-        }
+                // left border:
+                if ( x == 1 )
+                {
+                    paintBorder = paintBorder | CellView::LeftBorder;
+                }
+                else
+                {
+                    paintBorder = paintBorder | CellView::LeftBorder;
+                    if ( cell->effLeftBorderValue( x, y ) <
+                         sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+                        leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+                }
 
-        // top border:
-        if ( y == 1 )
-        {
-          paintBorder = paintBorder | CellView::TopBorder;
-        }
-        else
-        {
-          paintBorder = paintBorder | CellView::TopBorder;
-          if ( cell->effTopBorderValue( x, y ) <
-               sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-            topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
-        }
+                // top border:
+                if ( y == 1 )
+                {
+                    paintBorder = paintBorder | CellView::TopBorder;
+                }
+                else
+                {
+                    paintBorder = paintBorder | CellView::TopBorder;
+                    if ( cell->effTopBorderValue( x, y ) <
+                         sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+                        topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+                }
 
 #ifdef KSPREAD_CELL_WINDOW
-        Q_ASSERT( visibleRect == d->cellWindowRect );
-        CellView* cellView = d->cellWindowMatrix[x-visibleRect.left()][y-visibleRect.top()];
-        Q_ASSERT( cellView->cell() == cell );
-        cellView->paintCell( unzoomedRect, painter, d->view, dblCorner,
-                             QPoint( x, y ), paintBorder,
-                             rightPen, bottomPen, leftPen, topPen,
-                             mergedCellsPainted );
+                Q_ASSERT( visibleRect == d->cellWindowRect );
+                CellView* cellView = d->cellWindowMatrix[x-visibleRect.left()][y-visibleRect.top()];
+                Q_ASSERT( cellView->cell() == cell );
+                cellView->paintCell( unzoomedRect, painter, d->view, dblCorner,
+                                     QPoint( x, y ), paintBorder,
+                                     rightPen, bottomPen, leftPen, topPen,
+                                     mergedCellsPainted );
 #else
-        cell->cellView()->paintCell( unzoomedRect, painter, d->view, dblCorner,
-                                     QPoint( x, y), paintBorder,
-                                     rightPen,bottomPen,leftPen,topPen,
-                                     mergedCellsPainted);
+                cell->cellView()->paintCell( unzoomedRect, painter, d->view, dblCorner,
+                QPoint( x, y), paintBorder,
+                rightPen,bottomPen,leftPen,topPen,
+                mergedCellsPainted);
 #endif
 
-        dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight() );
-      }
-      dblCorner.setY( topPos - yOffset() );
-      dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth() );
+                dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight() );
+            }
+            dblCorner.setY( topPos - yOffset() );
+            dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth() );
+        }
     }
-  }
 
-  /* now paint the selection */
-  //Nb.  No longer necessary to paint choose Selection.here as the cell reference highlight
-  //stuff takes care of this anyway
+    /* now paint the selection */
+    //Nb.  No longer necessary to paint choose Selection.here as the cell reference highlight
+    //stuff takes care of this anyway
 
-  paintHighlightedRanges(painter, unzoomedRect);
-  paintNormalMarker(painter, unzoomedRect);
+    paintHighlightedRanges(painter, unzoomedRect);
+    paintNormalMarker(painter, unzoomedRect);
 
-  //restore clip region with children area
-  painter.restore();
+    //restore clip region with children area
+    painter.restore();
 }
 
 
