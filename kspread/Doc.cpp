@@ -1748,12 +1748,6 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
 
             QPoint cellRef( x, y );
 
-#if 0
-            bool paintBordersBottom = false;
-            bool paintBordersRight  = false;
-            bool paintBordersLeft   = false;
-            bool paintBordersTop    = false;
-#endif
             CellView::Borders paintBorder = CellView::NoBorder;
 
             QPen rightPen( cell->effRightBorderPen( x, y ) );
@@ -1768,7 +1762,6 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
 
             // right border:
             if ( x >= KS_colMax )
-                //paintBordersRight = true;
                 paintBorder |= CellView::RightBorder;
             else if ( x == regionRight ) {
                 paintBorder |= CellView::RightBorder;
@@ -1831,18 +1824,6 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
                      < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
                     topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
             }
-
-#if 0
-            cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
-            paintBordersRight, paintBordersBottom,
-            paintBordersLeft, paintBordersTop,
-            rightPen, bottomPen, leftPen, topPen,
-            mergedCellsPainted, false );
-
-            Cell::BorderSides highlightBorder=Cell::NoBorder;
-            QPen highlightPen;
-#endif
-
 
             const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
 #ifdef KSPREAD_CELL_WINDOW
