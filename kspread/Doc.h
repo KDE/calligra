@@ -622,16 +622,43 @@ public:
 
 //   virtual DCOPObject* dcopObject();
 
-  void addAreaName(const QRect &_rect,const QString & name,const QString & sheetName);
-  const QList<Reference>  & listArea();
-  void removeArea( const QString &name);
-  KCompletion & completion();
+  /**
+   * Registers a named area.
+   * \note The name is valid for the whole document.
+   * \param rect the cell range to be named
+   * \param name the name of the new area
+   * \param sheetName the name of the sheet the area belongs to
+   */
+  void addAreaName( const QRect& rect, const QString& name, const QString& sheetName );
+
+  /**
+   * Returns the list of all registered named areas.
+   * \return the list of named areas
+   */
+  const QList<Reference>& listArea();
+
+  /**
+   * Removes a named area.
+   * \param name the name of the area to be removed
+   */
+  void removeArea( const QString& name );
+
+  /**
+   * Returns the cell range associated with the area named \p name .
+   * \param name the name of the area
+   * \return the cell range
+   */
+  QRect namedArea( const QString& name );
+
+  /**
+   * Changes the sheet name of all named areas.
+   * \param oldName the old sheet name
+   * \param newName the new sheet name
+   */
+  void changeAreaSheetName( const QString& oldName, const QString& newName );
+
+  KCompletion& completion();
   void addStringCompletion(const QString & stringCompletion);
-
-  void changeAreaSheetName(const QString & oldName,const QString &sheetName);
-
-
-  QRect getRectArea(const QString &  _sheetName);
 
   /**
    * Inserts an object to the object list.

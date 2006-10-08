@@ -1852,52 +1852,50 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
 //     return d->dcop;
 // }
 
-void Doc::addAreaName(const QRect &_rect,const QString & name,const QString & sheetName)
+void Doc::addAreaName( const QRect& rect, const QString& name, const QString& sheetName )
 {
-  setModified( true );
-  Reference tmp;
-  tmp.rect = _rect;
-  tmp.sheet_name = sheetName;
-  tmp.ref_name = name;
-  d->refs.append( tmp);
-  emit sig_addAreaName( name );
+    setModified( true );
+    Reference ref;
+    ref.rect = rect;
+    ref.sheet_name = sheetName;
+    ref.ref_name = name;
+    d->refs.append( ref );
+    emit sig_addAreaName( name );
 }
 
-void Doc::removeArea( const QString & name)
+void Doc::removeArea( const QString& name )
 {
-    QList<Reference>::Iterator it2;
-    for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
+    QList<Reference>::Iterator it;
+    for ( it = d->refs.begin(); it != d->refs.end(); ++it )
     {
-        if((*it2).ref_name==name)
+        if ( (*it).ref_name == name )
         {
-            d->refs.erase(it2);
+            d->refs.erase( it );
             emit sig_removeAreaName( name );
             return;
         }
     }
 }
 
-void Doc::changeAreaSheetName(const QString & oldName,const QString & sheetName)
+void Doc::changeAreaSheetName( const QString& oldName, const QString& newName )
 {
-  QList<Reference>::Iterator it2;
-  for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
-        {
-        if((*it2).sheet_name==oldName)
-                   (*it2).sheet_name=sheetName;
-        }
+    QList<Reference>::Iterator it;
+    for ( it = d->refs.begin(); it != d->refs.end(); ++it )
+    {
+        if ( (*it).sheet_name == oldName )
+            (*it).sheet_name = newName;
+    }
 }
 
-QRect Doc::getRectArea(const QString  &_sheetName)
+QRect Doc::namedArea( const QString& name )
 {
-  QList<Reference>::Iterator it2;
-  for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
-        {
-        if((*it2).ref_name==_sheetName)
-                {
-                return (*it2).rect;
-                }
-        }
-  return QRect(-1,-1,-1,-1);
+    QList<Reference>::Iterator it;
+    for ( it = d->refs.begin(); it != d->refs.end(); ++it )
+    {
+        if ( (*it).ref_name == name )
+            return (*it).rect;
+    }
+    return QRect();
 }
 
 QDomElement Doc::saveAreaName( QDomDocument& doc )
