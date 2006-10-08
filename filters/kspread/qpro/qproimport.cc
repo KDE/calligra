@@ -184,7 +184,8 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
          lRecInt = (QpRecIntegerCell*)lRec;
          field.setNum( lRecInt->integer() );
 //cout << "Setting R " << lRecInt->row()+1 << ", C " << ((unsigned)lRecInt->column()) << endl;
-         table->setText( lRecInt->row()+1, ((unsigned)lRecInt->column())+1, field, false );
+         if( table )
+            table->setText( lRecInt->row()+1, ((unsigned)lRecInt->column())+1, field, false );
          break;
 
       case QpFormulaCell:
@@ -217,20 +218,23 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
             }
          }
 
-         table->setText( lRecFormula->row()+1, lRecFormula->column()+1, field, false );
+         if( table )
+            table->setText( lRecFormula->row()+1, lRecFormula->column()+1, field, false );
          break;
 
       case QpFloatingPointCell:
          lRecFloat = (QpRecFloatingPointCell*)lRec;
          field.setNum( lRecFloat->value() );
-         table->setText( lRecFloat->row()+1, lRecFloat->column()+1, field, false );
+         if( table )
+            table->setText( lRecFloat->row()+1, lRecFloat->column()+1, field, false );
          break;
 
       case QpLabelCell:
          lRecLabel = (QpRecLabelCell*)lRec;
          field = "'";
          field += lRecLabel->label();
-         table->setText( lRecLabel->row()+1, lRecLabel->column()+1, field, false );
+         if( table )
+            table->setText( lRecLabel->row()+1, lRecLabel->column()+1, field, false );
          break;
 
       case QpPageName:
