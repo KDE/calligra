@@ -2033,9 +2033,12 @@ QString CellView::textDisplaying( const QFontMetrics& fm )
     if ( !cell()->isEmpty() )
       tmpIndent = cell()->format()->getIndent( cell()->column(), cell()->row() );
 
+    // Estimate worst case length to reduce the number of iterations.
+    int start = ( len - 4.0 - 1.0 - tmpIndent ) / fm.width( '.' );
+    start = qMin( cell()->strOutText().length(), start );
     // Start out with the whole text, cut one character at a time, and
     // when the text finally fits, return it.
-    for ( int i = cell()->strOutText().length(); i != 0; i-- )
+    for ( int i = start; i != 0; i-- )
     {
       //Note that numbers are always treated as left-aligned since if we have to cut digits off, they should
       //always be the least significant ones at the end of the string
