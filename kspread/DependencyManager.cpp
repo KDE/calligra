@@ -275,7 +275,6 @@ void DependencyManager::updateFormula( Cell* cell, const Region::Element* oldLoc
         //parse each cell/range and put it to our RangeList
         if (tokenType == Token::Cell || tokenType == Token::Range)
         {
-            // FIXME Stefan: Region does not yet support named areas
             const Region region( sheet->workbook(), token.text(), sheet );
             const Region::Element* element = *region.constBegin();
 
@@ -466,7 +465,6 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
     //parse each cell/range and put it to our RangeList
         if (tokenType == Token::Cell || tokenType == Token::Range)
         {
-            // FIXME Stefan: Region does not yet support named areas
             Region subRegion(sheet->workbook(), token.text(), sheet);
             if (subRegion.isValid())
                 region.add(subRegion);

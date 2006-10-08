@@ -71,6 +71,26 @@ Region::Region(Map* map, const QString& string, Sheet* fallbackSheet)
   {
     QString sRegion = *it;
 
+    // check for a named area first
+    if ( !map->doc()->namedArea( sRegion ).isNull() )
+    {
+        QList<Reference> namedAreas = map->doc()->listArea();
+        QList<Reference>::Iterator it;
+        for ( it = namedAreas.begin(); it != namedAreas.end(); ++it )
+            if ( (*it).ref_name == sRegion )
+                break;
+        Range* range = createRange( (*it).rect );
+        Sheet* sheet = map->findSheet( (*it).sheet_name );
+        if ( sheet )
+        {
+            range->setSheet( sheet );
+            d->cells.append( range );
+            return;
+        }
+        else
+            delete range;
+    }
+
     Sheet* sheet = filterSheetName(sRegion);
     if (!sheet)
     {
