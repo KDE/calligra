@@ -73,7 +73,7 @@ KexiStartupFileDialog::KexiStartupFileDialog(
 		QObject *obj;
 		while ( (obj = it.current()) != 0 ) {
 			++it;
-			static_cast<QPushButton*>(obj)->installEventFilter(this);
+			static_cast<QWidget*>(obj)->installEventFilter(this);
 		}
 		delete l;
 	}	
