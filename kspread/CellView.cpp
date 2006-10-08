@@ -946,21 +946,21 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
 //   bool paintBottom=false;
     bool paintRight=false;
 
-    paintLeft   = ( (paintBorder & LeftBorder) &&
+    paintLeft   = ( 
             leftPen.style() == Qt::NoPen &&
             cell()->sheet()->getShowGrid() &&
             sheetDir == Sheet::LeftToRight &&
             !isMergedOrObscured );
-    paintRight  = ( (paintBorder & RightBorder) &&
+    paintRight  = ( 
             rightPen.style() == Qt::NoPen &&
             cell()->sheet()->getShowGrid() &&
             sheetDir == Sheet::RightToLeft &&
             !isMergedOrObscured );
-    paintTop    = ( (paintBorder & TopBorder) &&
+    paintTop    = ( 
             topPen.style() == Qt::NoPen &&
             cell()->sheet()->getShowGrid() &&
             !isMergedOrObscured );
-//  paintBottom = ( (paintBorder & BottomBorder) &&
+//  paintBottom = ( 
 //                  cell()->sheet()->getShowGrid() &&
 //                  bottomPen.style() == Qt::NoPen );
 
@@ -1687,9 +1687,6 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
     if ( paintBorder == NoBorder )
         return;
 
-    painter.save();
-    painter.setRenderHint( QPainter::Antialiasing, false );
-
     Sheet::LayoutDirection sheetDir =  cell()->sheet()->layoutDirection();
 
     if (cell()->d->hasExtra()) {
@@ -1866,9 +1863,6 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
         }
         painter.drawLine( line );
     }
-
-    // restore antialiasing
-    painter.restore();
 
     // FIXME: Look very closely at when the following code is really needed.
     //        I can't really see any case, but I might be wrong.

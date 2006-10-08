@@ -1769,11 +1769,11 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
                      < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
                     rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
             }
-            else {
+            else if ( cell->effRightBorderValue( x, y )
+                      < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+            {
                 paintBorder |= CellView::RightBorder;
-                if ( cell->effRightBorderValue( x, y )
-                     < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-                    rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+                rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
             }
 
             // Similiar for other borders...
@@ -1786,11 +1786,11 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
                      < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
                     bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
             }
-            else {
+            else if ( cell->effBottomBorderValue( x, y )
+                      < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+            {
                 paintBorder |= CellView::BottomBorder;
-                if ( cell->effBottomBorderValue( x, y )
-                     < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
-                    bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+                bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
             }
 
             // left border:
@@ -1802,11 +1802,11 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
                      < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
                     leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
             }
-            else {
-                paintBorder |= CellView::LeftBorder;
-                if ( cell->effLeftBorderValue( x, y )
+            else if ( cell->effLeftBorderValue( x, y )
                      < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-                    leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+            {
+                paintBorder |= CellView::LeftBorder;
+                leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
             }
 
             // top border:
@@ -1818,11 +1818,11 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
                      < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
                     topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
             }
-            else {
+            else if ( cell->effTopBorderValue( x, y )
+                      < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+            {
                 paintBorder |= CellView::TopBorder;
-                if ( cell->effTopBorderValue( x, y )
-                     < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-                    topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+                topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
             }
 
             const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );

@@ -4118,12 +4118,11 @@ void Canvas::paintUpdates()
                 {
                     paintBorder = paintBorder | CellView::RightBorder;
                 }
-                else
+                else if ( cell->effRightBorderValue( x, y ) <
+                          sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
                 {
                     paintBorder = paintBorder | CellView::RightBorder;
-                    if ( cell->effRightBorderValue( x, y ) <
-                         sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-                        rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+                    rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
                 }
 
                 // similar for other borders...
@@ -4132,12 +4131,11 @@ void Canvas::paintUpdates()
                 {
                     paintBorder = paintBorder | CellView::BottomBorder;
                 }
-                else
+                else if ( cell->effBottomBorderValue( x, y ) <
+                          sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
                 {
                     paintBorder = paintBorder | CellView::BottomBorder;
-                    if ( cell->effBottomBorderValue( x, y ) <
-                         sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
-                        bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+                    bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
                 }
 
                 // left border:
@@ -4145,12 +4143,11 @@ void Canvas::paintUpdates()
                 {
                     paintBorder = paintBorder | CellView::LeftBorder;
                 }
-                else
+                else if ( cell->effLeftBorderValue( x, y ) <
+                          sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
                 {
                     paintBorder = paintBorder | CellView::LeftBorder;
-                    if ( cell->effLeftBorderValue( x, y ) <
-                         sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-                        leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+                    leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
                 }
 
                 // top border:
@@ -4158,12 +4155,11 @@ void Canvas::paintUpdates()
                 {
                     paintBorder = paintBorder | CellView::TopBorder;
                 }
-                else
+                else if ( cell->effTopBorderValue( x, y ) <
+                          sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
                 {
                     paintBorder = paintBorder | CellView::TopBorder;
-                    if ( cell->effTopBorderValue( x, y ) <
-                         sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-                        topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+                    topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
                 }
 
 #ifdef KSPREAD_CELL_WINDOW

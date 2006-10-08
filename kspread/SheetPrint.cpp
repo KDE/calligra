@@ -520,11 +520,10 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
                 if ( cell->effRightBorderValue( x, y ) < m_pSheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
                     rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
             }
-            else
+            else if ( cell->effRightBorderValue( x, y ) < m_pSheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
             {
                 paintBorder |= CellView::RightBorder;
-                if ( cell->effRightBorderValue( x, y ) < m_pSheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-                    rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+                rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
             }
 
             // similar for other borders...
@@ -537,11 +536,11 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
                 if ( cell->effBottomBorderValue( x, y ) < m_pSheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
                     bottomPen = m_pSheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
             }
-            else
+            else if ( cell->effBottomBorderValue( x, y )
+                      < m_pSheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
             {
                 paintBorder |= CellView::BottomBorder;
-                if ( cell->effBottomBorderValue( x, y ) < m_pSheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
-                    bottomPen = m_pSheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+                bottomPen = m_pSheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
             }
 
             // left border:
@@ -553,11 +552,11 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
                 if ( cell->effLeftBorderValue( x, y ) < m_pSheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
                     leftPen = m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
             }
-            else
+            else if ( cell->effLeftBorderValue( x, y )
+                      < m_pSheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
             {
                 paintBorder |= CellView::LeftBorder;
-                if ( cell->effLeftBorderValue( x, y ) < m_pSheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-                    leftPen = m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+                leftPen = m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
             }
 
             // top border:
@@ -569,11 +568,11 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
                 if ( cell->effTopBorderValue( x, y ) < m_pSheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
                     topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
             }
-            else
+            else if ( cell->effTopBorderValue( x, y )
+                      < m_pSheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
             {
                 paintBorder |= CellView::TopBorder;
-                if ( cell->effTopBorderValue( x, y ) < m_pSheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-                    topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+                topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
             }
 
             double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft )
