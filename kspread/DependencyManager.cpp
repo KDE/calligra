@@ -242,61 +242,62 @@ void DependencyManager::regionMoved( const Region& movedRegion, const Region::Po
 
 void DependencyManager::updateFormula( Cell* cell, const Region::Element* oldLocation, const Region::Point& offset )
 {
-  // Not a formula -> no dependencies
-  if (!cell->isFormula())
-    return;
+    // Not a formula -> no dependencies
+    if (!cell->isFormula())
+        return;
 
-  // Broken formula -> meaningless dependencies
-  // (tries to avoid cell->formula() being null)
-  if (cell->testFlag(Cell::Flag_ParseError))
-    return;
+    // Broken formula -> meaningless dependencies
+    // (tries to avoid cell->formula() being null)
+    if (cell->testFlag(Cell::Flag_ParseError))
+        return;
 
-  const Formula* formula = cell->formula();
-  if ( !formula )
-  {
-    kDebug(36002) << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->text() << endl;
-    return;
-  }
-
-  Tokens tokens = formula->tokens();
-
-  //return empty list if the tokens aren't valid
-  if (!tokens.valid())
-    return;
-
-  QString expression = "=";
-  Sheet* sheet = cell->sheet();
-  Region region;
-  for( int i = 0; i < tokens.count(); i++ )
-  {
-    Token token = tokens[i];
-    Token::Type tokenType = token.type();
-
-    //parse each cell/range and put it to our RangeList
-    if (tokenType == Token::Cell || tokenType == Token::Range)
+    const Formula* formula = cell->formula();
+    if ( !formula )
     {
-      const Region region( sheet->workbook(), token.text(), sheet );
-      const Region::Element* element = *region.constBegin();
+        kDebug(36002) << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->text() << endl;
+        return;
+    }
 
-      kDebug(36002) << region.name() << endl;
-      // the offset contains a sheet, only if it was an intersheet move.
-      if ( ( oldLocation->sheet() == element->sheet() ) &&
-           ( oldLocation->rect().contains( element->rect() ) ) )
-      {
-        const Region yetAnotherRegion( element->rect().translated( offset.pos() ), offset.sheet() ? offset.sheet() : sheet );
-        expression.append( yetAnotherRegion.name( sheet ) );
-      }
-      else
-      {
-        expression.append( token.text() );
-      }
-    }
-    else
+    Tokens tokens = formula->tokens();
+
+    //return empty list if the tokens aren't valid
+    if (!tokens.valid())
+        return;
+
+    QString expression = "=";
+    Sheet* sheet = cell->sheet();
+    Region region;
+    for( int i = 0; i < tokens.count(); i++ )
     {
-      expression.append( token.text() );
+        Token token = tokens[i];
+        Token::Type tokenType = token.type();
+
+        //parse each cell/range and put it to our RangeList
+        if (tokenType == Token::Cell || tokenType == Token::Range)
+        {
+            // FIXME Stefan: Region does not yet support named areas
+            const Region region( sheet->workbook(), token.text(), sheet );
+            const Region::Element* element = *region.constBegin();
+
+            kDebug(36002) << region.name() << endl;
+            // the offset contains a sheet, only if it was an intersheet move.
+            if ( ( oldLocation->sheet() == element->sheet() ) &&
+                   ( oldLocation->rect().contains( element->rect() ) ) )
+            {
+                const Region yetAnotherRegion( element->rect().translated( offset.pos() ), offset.sheet() ? offset.sheet() : sheet );
+                expression.append( yetAnotherRegion.name( sheet ) );
+            }
+            else
+            {
+                expression.append( token.text() );
+            }
+        }
+        else
+        {
+            expression.append( token.text() );
+        }
     }
-  }
-  cell->setCellText( expression );
+    cell->setCellText( expression );
 }
 
 void DependencyManager::Private::reset ()
@@ -433,44 +434,45 @@ void DependencyManager::Private::generateDependencies(const Cell* cell)
 KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell) const
 {
   // Not a formula -> no dependencies
-  if (!cell->isFormula())
-    return Region();
+    if (!cell->isFormula())
+        return Region();
 
   // Broken formula -> meaningless dependencies
   // (tries to avoid cell->formula() being null)
-  if (cell->testFlag(Cell::Flag_ParseError))
-    return Region();
+    if (cell->testFlag(Cell::Flag_ParseError))
+        return Region();
 
-  const Formula* f = cell->formula();
-  if (f==0)
-  {
-    kDebug(36002) << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->text() << endl;
+    const Formula* f = cell->formula();
+    if (f==0)
+    {
+        kDebug(36002) << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->text() << endl;
 //     Q_ASSERT(cell->formula());
-    return Region();
-  }
+        return Region();
+    }
 
-  Tokens tokens = f->tokens();
+    Tokens tokens = f->tokens();
 
   //return empty list if the tokens aren't valid
-  if (!tokens.valid())
-    return Region();
+    if (!tokens.valid())
+        return Region();
 
-  Sheet* sheet = cell->sheet();
-  Region region;
-  for( int i = 0; i < tokens.count(); i++ )
-  {
-    Token token = tokens[i];
-    Token::Type tokenType = token.type();
+    Sheet* sheet = cell->sheet();
+    Region region;
+    for( int i = 0; i < tokens.count(); i++ )
+    {
+        Token token = tokens[i];
+        Token::Type tokenType = token.type();
 
     //parse each cell/range and put it to our RangeList
-    if (tokenType == Token::Cell || tokenType == Token::Range)
-    {
-      Region subRegion(sheet->workbook(), token.text(), sheet);
-      if (subRegion.isValid())
-        region.add(subRegion);
+        if (tokenType == Token::Cell || tokenType == Token::Range)
+        {
+            // FIXME Stefan: Region does not yet support named areas
+            Region subRegion(sheet->workbook(), token.text(), sheet);
+            if (subRegion.isValid())
+                region.add(subRegion);
+        }
     }
-  }
-  return region;
+    return region;
 }
 
 void DependencyManager::Private::removeCircularDependencyFlags(const Region& region)
