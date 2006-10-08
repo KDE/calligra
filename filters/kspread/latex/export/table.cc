@@ -281,7 +281,10 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 		cell = searchCell(index, row);
 
 		if(cell == NULL)
+		{
 			cell = new Cell(row, index);
+			_cells.append(cell);
+		}
 
 		/* If the element has a border display it here */
 		border[ index - 1 ] = cell->hasTopBorder();
