@@ -643,7 +643,8 @@ RemoveObjectCommand::~RemoveObjectCommand()
   if ( obj->getType() == OBJECT_CHART )
   {
     EmbeddedKOfficeObject *chart = dynamic_cast<EmbeddedKOfficeObject *>(obj);
-    chart->embeddedObject()->setDeleted(true);
+    if ( chart )
+      chart->embeddedObject()->setDeleted(true);
   }
 
   delete obj;
@@ -663,7 +664,8 @@ void RemoveObjectCommand::execute()
   if ( obj->getType() == OBJECT_CHART ||  obj->getType()== OBJECT_KOFFICE_PART)
   {
     EmbeddedKOfficeObject *eko = dynamic_cast<EmbeddedKOfficeObject *>(obj);
-    eko->embeddedObject()->setDeleted(true);
+    if ( eko )
+      eko->embeddedObject()->setDeleted(true);
   }
 
   obj->setSelected( false );
@@ -677,7 +679,8 @@ void RemoveObjectCommand::unexecute()
   if ( obj->getType() == OBJECT_CHART ||  obj->getType()== OBJECT_KOFFICE_PART)
   {
     EmbeddedKOfficeObject *eko = dynamic_cast<EmbeddedKOfficeObject *>(obj);
-    eko->embeddedObject()->setDeleted(false);
+    if ( eko )
+      eko->embeddedObject()->setDeleted(false);
   }
   doc->repaint( obj );
   executed = false;
@@ -728,7 +731,8 @@ InsertObjectCommand::~InsertObjectCommand()
   if ( obj->getType() == OBJECT_CHART )
   {
     EmbeddedKOfficeObject *chart = dynamic_cast<EmbeddedKOfficeObject *>(obj);
-    chart->embeddedObject()->setDeleted(true);
+    if ( chart )
+      chart->embeddedObject()->setDeleted(true);
   }
 
   delete obj;
