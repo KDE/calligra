@@ -261,7 +261,16 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "5---1", Value(4) );
   CHECK_EVAL( "5----1", Value(6) );
   CHECK_EVAL( "5-----1", Value(4) );
+  CHECK_EVAL( "5-----1*2.5", Value(2.5) );
+  CHECK_EVAL( "5------1*2.5", Value(7.5) );
   CHECK_EVAL( "-SIN(0)", Value(0) );
+  CHECK_EVAL( "1.1-SIN(0)", Value(1.1) );
+  CHECK_EVAL( "1.2--SIN(0)", Value(1.2) );
+  CHECK_EVAL( "1.3---SIN(0)", Value(1.3) );
+  CHECK_EVAL( "-COS(0)", Value(-1) );
+  CHECK_EVAL( "1.1-COS(0)", Value(0.1) );
+  CHECK_EVAL( "1.2--COS(0)", Value(2.2) );
+  CHECK_EVAL( "1.3---COS(0)", Value(0.3) );
 
   // no parentheses, checking operator precendences
   CHECK_EVAL( "14+3*77", Value(245) );
