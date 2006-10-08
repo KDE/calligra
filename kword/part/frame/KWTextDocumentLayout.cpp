@@ -260,7 +260,7 @@ public:
             m_data->wipe();
         }
         shape = m_frameSet->frames()[frameNumber]->shape();
-        m_data = dynamic_cast<KoTextShapeData*> (shape->userData());
+        m_data = static_cast<KoTextShapeData*> (shape->userData());
         m_data->setDocumentOffset(m_y);
         m_data->faul(); // make dirty since this one needs relayout at this point.
     }
