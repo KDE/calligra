@@ -2300,6 +2300,9 @@ void Doc::addView( KoView *_view )
 
 void Doc::addDamage( Damage* damage )
 {
+    if ( isLoading() )
+        return;
+
     d->damages.append( damage );
 
     if( d->damages.count() == 1 )

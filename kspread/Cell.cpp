@@ -1091,14 +1091,17 @@ bool Cell::makeFormula()
 
 void Cell::clearFormula()
 {
-  // Update the dependencies, if this was a formula.
-  if (d->formula)
-  {
-    kDebug(36002) << "This was a formula. Dependency update triggered." << endl;
-    format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula ) );
-    delete d->formula;
-    d->formula = 0;
-  }
+    // Update the dependencies, if this was a formula.
+    if (d->formula)
+    {
+        if ( !format()->sheet()->isLoading() )
+        {
+            kDebug(36002) << "This was a formula. Dependency update triggered." << endl;
+            format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula ) );
+        }
+        delete d->formula;
+        d->formula = 0;
+    }
 }
 
 bool Cell::calc(bool delay)
