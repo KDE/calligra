@@ -43,7 +43,7 @@
 #include "KPrTextObjectAdaptor.h"
 #include <KoOasisContext.h>
 #include <KoStyleStack.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdeversion.h>

@@ -24,7 +24,7 @@
 #include <QTextStream>
 
 #include <kdebug.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 
 #include "kword13utils.h"
 #include "kword13layout.h"

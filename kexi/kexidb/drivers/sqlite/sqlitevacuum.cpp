@@ -24,7 +24,7 @@
 #include <kprogressdialog.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kmessagebox.h>
 #include <qprogressbar.h>
 #include <kio/global.h>

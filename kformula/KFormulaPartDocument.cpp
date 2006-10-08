@@ -33,7 +33,7 @@
 #include <KoXmlWriter.h>
 #include <KoMainWindow.h>
 #include <KoStoreDevice.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <klocale.h>
 
 
