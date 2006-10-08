@@ -1688,7 +1688,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         kDebug()<<" end load oasis master style \n";
 
         Q_ASSERT( master );
-        const QDomElement *style = master ? oasisStyles.findStyle(master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )) : 0;
+        const QDomElement *style = oasisStyles.findStyle(master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ));
         const QDomElement *backgroundStyle = oasisStyles.findStyle( "Standard-background", "presentation" );
         kDebug()<<"Standard background "<<backgroundStyle<<endl;
         // parse all pages
