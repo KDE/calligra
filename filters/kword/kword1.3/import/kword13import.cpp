@@ -208,7 +208,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
         file.close();
     }
 
-    if ( ! postParse( store, kwordDocument ) )
+    if ( store && ! postParse( store, kwordDocument ) )
     {
         kError(30520) << "Error during post-parsing! Aborting!" << endl;
         return  KoFilter::StupidError;
