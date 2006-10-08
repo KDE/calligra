@@ -55,9 +55,9 @@ SpecialField::SpecialField( int x, int y, int width, int height, Canvas *canvas 
 
 void SpecialField::draw( QPainter &painter )
 {
-    props[ "Text" ].setValue( "[" +
+    props[ "Text" ].setValue( '[' +
                               QString( props[ "Type" ].value().toInt() ? i18n( "PageNo" ) : i18n( "Date" ) )
-                              + "]" );
+                              + ']' );
     Label::draw( painter );
 }
 

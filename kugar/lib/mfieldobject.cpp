@@ -237,7 +237,7 @@ void MFieldObject::formatCommas()
 
     // If neg value, add back the sign
     if ( offset )
-        tmp = "-" + tmp;
+        tmp = '-' + tmp;
 
     // Set the new string to the field
     text = tmp;

@@ -79,7 +79,7 @@ Field::Field( int x, int y, int width, int height, Canvas *canvas, bool reg )
 
 void Field::draw( QPainter &painter )
 {
-    props[ "Text" ].setValue( "[" + props[ "Field" ].value().toString() + "]" );
+    props[ "Text" ].setValue( '[' + props[ "Field" ].value().toString() + ']' );
     Label::draw( painter );
     props[ "Text" ].setValue( "" );
 }

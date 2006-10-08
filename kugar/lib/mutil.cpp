@@ -30,9 +30,9 @@ QString MUtil::formatDate( const QDate& value, int format )
 
     // Add leading zeros to month and day
     if ( value.month() < 10 )
-        month = "0" + month;
+        month = '0' + month;
     if ( value.day() < 10 )
-        day = "0" + day;
+        day = '0' + day;
 
     // Create a two digit year
     year.setNum( value.year() );
