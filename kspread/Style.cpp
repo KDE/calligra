@@ -236,7 +236,7 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
           m_featuresSet |= SFormatType;
           break;
         case KoOasisStyles::NumericStyleFormat::Currency:
-          kDebug() << " currency-symbol: " << dataStyle.currencySymbol << endl;
+          kDebug(36003) << " currency-symbol: " << dataStyle.currencySymbol << endl;
           if (!dataStyle.currencySymbol.isEmpty())
           {
             KSpread::Currency currency(dataStyle.currencySymbol);
@@ -302,7 +302,7 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
 void Style::loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack )
 {
   Q_UNUSED( oasisStyles );
-  kDebug() << "\t paragraph-properties" << endl;
+  kDebug(36003) << "\t paragraph-properties" << endl;
   if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
   {
     QString str = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
@@ -315,7 +315,7 @@ void Style::loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoSt
     else
       m_alignX = Style::HAlignUndefined;
     m_featuresSet |= SHAlign;
-    kDebug() << "\t\t text-align: " << str << endl;
+    kDebug(36003) << "\t\t text-align: " << str << endl;
   }
 }
 
@@ -393,7 +393,7 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
   {
     bool ok;
     int a = styleStack.attributeNS( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
-    kDebug()<<" rotation-angle :"<<a<<endl;
+    kDebug(36003)<<" rotation-angle :"<<a<<endl;
     if ( a != 0 )
     {
       m_rotateAngle= ( -a  );
@@ -458,10 +458,10 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
 
   if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
   {
-    kDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
+    kDebug(36003)<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
 
     const KoXmlElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
-    kDebug()<<" style :"<<style<<endl;
+    kDebug(36003)<<" style :"<<style<<endl;
     if ( style )
     {
       KoStyleStack drawStyleStack;
@@ -470,16 +470,16 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
       if ( drawStyleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
       {
         const QString fill = drawStyleStack.attributeNS( KoXmlNS::draw, "fill" );
-        kDebug()<<" load object gradient fill type :"<<fill<<endl;
+        kDebug(36003)<<" load object gradient fill type :"<<fill<<endl;
 
         if ( fill == "solid" || fill == "hatch" )
         {
-          kDebug()<<" Style ******************************************************\n";
+          kDebug(36003)<<" Style ******************************************************\n";
           m_backGroundBrush=KoOasisStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles );
           m_featuresSet |= SBackgroundBrush;
         }
         else
-          kDebug()<<" fill style not supported into kspread : "<<fill<<endl;
+          kDebug(36003)<<" fill style not supported into kspread : "<<fill<<endl;
       }
     }
   }
@@ -493,20 +493,20 @@ void Style::loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleSt
   // style:text-underline="double"
   // style:text-underline-color="font-color"
   // fo:font-weight="bold"
-  kDebug() << "\t text-properties" << endl;
+  kDebug(36003) << "\t text-properties" << endl;
   if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
   {
     m_fontFamily = styleStack.attributeNS( KoXmlNS::fo, "font-family" ); // FIXME Stefan: sanity check
     m_featuresSet |= SFontFamily;
     m_featuresSet |= SFont;
-    kDebug() << "\t\t fo:font-family: " << m_fontFamily << endl;
+    kDebug(36003) << "\t\t fo:font-family: " << m_fontFamily << endl;
   }
   if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
   {
     m_fontSize = (int) KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "font-size" ), 10.0 ); // FIXME Stefan: fallback to default
     m_featuresSet |= SFontSize;
     m_featuresSet |= SFont;
-    kDebug() << "\t\t fo:font-size: " << m_fontSize << endl;
+    kDebug(36003) << "\t\t fo:font-size: " << m_fontSize << endl;
   }
   if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) )
   {
@@ -515,7 +515,7 @@ void Style::loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleSt
       m_fontFlags |= FItalic;
       m_featuresSet |= SFontFlag;
       m_featuresSet |= SFont;
-      kDebug() << "\t\t fo:font-style: " << "italic" << endl;
+      kDebug(36003) << "\t\t fo:font-style: " << "italic" << endl;
     }
   }
   if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
@@ -525,7 +525,7 @@ void Style::loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleSt
       m_fontFlags |= FBold;
       m_featuresSet |= SFontFlag;
       m_featuresSet |= SFont;
-      kDebug() << "\t\t fo:font-weight: " << "bold" << endl;
+      kDebug(36003) << "\t\t fo:font-weight: " << "bold" << endl;
     }
   }
   if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) )
@@ -535,7 +535,7 @@ void Style::loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleSt
       m_fontFlags |= FUnderline;
       m_featuresSet |= SFontFlag;
       m_featuresSet |= SFont;
-      kDebug() << "\t\t style:text-underline-style: " << "solid (actually: !none)" << endl;
+      kDebug(36003) << "\t\t style:text-underline-style: " << "solid (actually: !none)" << endl;
     }
   }
   if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-width" ) )
@@ -553,7 +553,7 @@ void Style::loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleSt
     {
       m_featuresSet |= STextPen;
       m_textPen = QPen( color );
-      kDebug() << "\t\t fo:color: " << color.name() << endl;
+      kDebug(36003) << "\t\t fo:color: " << color.name() << endl;
     }
   }
   if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-line-through-style" ) )
@@ -564,7 +564,7 @@ void Style::loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleSt
       m_fontFlags |= FStrike;
       m_featuresSet |= SFontFlag;
       m_featuresSet |= SFont;
-      kDebug() << "\t\t text-line-through-style: " << "solid (actually: !none)" << endl;
+      kDebug(36003) << "\t\t text-line-through-style: " << "solid (actually: !none)" << endl;
     }
   }
 }
@@ -985,7 +985,7 @@ QString Style::saveOasisStyleNumericDate( KoGenStyles&mainStyles, FormatType _st
         format = "yyyy/MMM/dd";
         break;
     default:
-        kDebug()<<"this date format is not defined ! :"<<_style<<endl;
+        kDebug(36003)<<"this date format is not defined ! :"<<_style<<endl;
         break;
     }
     return KoOasisStyles::saveOasisDateStyle( mainStyles, format, locale, _prefix, _postfix );
@@ -1058,7 +1058,7 @@ QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, FormatType _s
         format = "h:mm";
         break;
     default:
-        kDebug()<<"time format not defined :"<<_style<<endl;
+        kDebug(36003)<<"time format not defined :"<<_style<<endl;
         break;
     }
     return KoOasisStyles::saveOasisTimeStyle( mainStyles, format, locale, _prefix, _postfix );
@@ -1102,7 +1102,7 @@ QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatTyp
         format = "# \?\?\?/\?\?\?";
         break;
     default:
-        kDebug()<<" fraction format not defined :"<<_style<<endl;
+        kDebug(36003)<<" fraction format not defined :"<<_style<<endl;
         break;
     }
 
@@ -1547,7 +1547,7 @@ bool Style::loadXML( KoXmlElement & format )
     int i = format.attribute( "precision" ).toInt( &ok );
     if ( i < -1 )
     {
-      kDebug(36001) << "Value out of range Cell::precision=" << i << endl;
+      kDebug(36003) << "Value out of range Cell::precision=" << i << endl;
       return false;
     }
     m_precision = i;
