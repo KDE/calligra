@@ -128,7 +128,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 		for (Q3PtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
 			if (!it.current()->columnInfo() || !it.current()->columnInfo()->field)
 				continue;
-			kdDebug() << " ** " << it.current()->columnInfo()->field->name() << endl;
+			kDebug() << " ** " << it.current()->columnInfo()->field->name() << endl;
 			it_dup = tmpDuplicatedItems.find( it.current()->columnInfo()->field );
 			uint count;
 			if (it_dup==tmpDuplicatedItems.end())

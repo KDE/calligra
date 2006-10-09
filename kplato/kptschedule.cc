@@ -624,8 +624,8 @@ void NodeSchedule::printDebug(QString indent) {
     kDebug()<<indent<<"resourceError="<<resourceError<<endl;
     kDebug()<<indent<<"schedulingError="<<schedulingError<<endl;
     kDebug()<<indent<<"resourceNotAvailable="<<resourceNotAvailable<<endl;
-    kdDebug()<<indent<<"Resource overbooked="<<resourceOverbooked<<endl;
-    kdDebug()<<indent<<"  "<<overbookedResources()<<endl;
+    kDebug()<<indent<<"Resource overbooked="<<resourceOverbooked<<endl;
+    kDebug()<<indent<<"  "<<overbookedResources()<<endl;
 
     kDebug()<<indent<<"inCriticalPath="<<inCriticalPath<<endl;
     kDebug()<<indent<<endl;

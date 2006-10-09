@@ -50,7 +50,7 @@ void WidgetWithSubpropertiesInterface::setSubwidget(QWidget *widget)
 				{
 					m_subproperies.append( propertyName );
 					addedSubproperies.insert( propertyName, (char*)1 );
-					kdDebug() << propertyName << endl;
+					kDebug() << propertyName << endl;
 				}
 			}
 		}

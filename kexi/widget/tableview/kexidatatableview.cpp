@@ -84,7 +84,7 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	m_cursor = cursor;
 
 	if (!m_cursor->query()) {
-		kdDebug() << "KexiDataTableView::setData(): WARNING: cursor should have query schema defined!\n--aborting setData()." << endl;
+		kDebug() << "KexiDataTableView::setData(): WARNING: cursor should have query schema defined!\n--aborting setData()." << endl;
 		m_cursor->debug();
 		clearColumns();
 		return false;
@@ -96,7 +96,7 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	}
 
 	if (!m_cursor->isOpened() && !m_cursor->open()) {
-		kdDebug() << "KexiDataTableView::setData(): WARNING: cannot open cursor\n--aborting setData()." << endl;
+		kDebug() << "KexiDataTableView::setData(): WARNING: cannot open cursor\n--aborting setData()." << endl;
 		m_cursor->debug();
 		clearColumns();
 		return false;

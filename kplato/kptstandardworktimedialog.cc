@@ -164,7 +164,7 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     m_week = m_std->week();
     m_day = m_std->day();
 
-    kdDebug()<<k_funcinfo<<"y="<<m_year<<" m="<<m_month<<" w="<<m_week<<" d="<<m_day<<endl;
+    kDebug()<<k_funcinfo<<"y="<<m_year<<" m="<<m_month<<" w="<<m_week<<" d="<<m_day<<endl;
     year->setRange(1.0, 8784.0, 0.1, 1);
     year->setValue(m_year);
     month->setRange(1.0, 744.0, 0.1, 1);
@@ -185,7 +185,7 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
             if (day == 0) {
                 continue;
             }
-            kdDebug()<<k_funcinfo<<"Add day: "<<cs->weekDayName(i+1)<<endl;
+            kDebug()<<k_funcinfo<<"Add day: "<<cs->weekDayName(i+1)<<endl;
             item = new WeekdayListItem(cal, i, weekdayList, cs->weekDayName(i+1), item);
             weekdayList->insertItem(item);
         }

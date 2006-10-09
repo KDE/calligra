@@ -173,7 +173,7 @@ bool KexiInternalPart::executeCommand(const char* partName,
 {
 	KexiInternalPart *part = internalPartManager.findPart(0, partName);
 	if (!part) {
-		kdDebug() << "KexiInternalPart::createDialogInstance() !part" << endl;
+		kDebug() << "KexiInternalPart::createDialogInstance() !part" << endl;
 		return 0; //fatal!
 	}
 	return part->executeCommand(mainWin, commandName, args);

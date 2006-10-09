@@ -322,7 +322,7 @@ void KPrBackDialog::updateConfiguration()
 
     if ( m_useMasterBackground && m_useMasterBackground->isChecked() )
     {
-        kdDebug(33001) << "set backgound to master" << endl;
+        kDebug(33001) << "set backgound to master" << endl;
         preview->backGround()->setBackGround( m_page->masterPage()->background()->getBackGround() );
         preview->repaint( true );
     }

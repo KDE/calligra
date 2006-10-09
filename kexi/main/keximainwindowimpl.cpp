@@ -187,7 +187,7 @@ int KexiMainWindowImpl::create(int argc, char *argv[], KAboutData* aboutdata)
 		return (~res) ? 0 : 1;
 	}
 	
-	kdDebug() << "startupActions OK" <<endl;
+	kDebug() << "startupActions OK" <<endl;
 
 	/* Exit requested, e.g. after database removing. */
 	if (Kexi::startupHandler().action() == KexiStartupData::Exit) {

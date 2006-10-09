@@ -618,7 +618,7 @@ void Project::delTask(Node *node)
 {
     Node *parent = node->getParent();
     if (parent == 0) {
-        kdDebug()<<k_funcinfo<<"Node must have a parent!"<<endl;
+        kDebug()<<k_funcinfo<<"Node must have a parent!"<<endl;
         return;
     }
     removeId(node->id());
@@ -787,12 +787,12 @@ QString Project::uniqueNodeId(int seed) {
 }
 
 bool Project::removeId(const QString &id) {
-    kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+    kDebug()<<k_funcinfo<<"id="<<id<<endl;
     return (m_parent ? m_parent->removeId(id) : nodeIdDict.remove(id)); 
 }
 
 void Project::insertId(const QString &id, const Node *node) {
-    kdDebug()<<k_funcinfo<<"id="<<id<<" "<<node->name()<<endl;
+    kDebug()<<k_funcinfo<<"id="<<id<<" "<<node->name()<<endl;
     m_parent ? m_parent->insertId(id, node) : nodeIdDict.insert(id, node); 
 }
 
@@ -1070,12 +1070,12 @@ MainSchedule *Project::createSchedule(QString name, Schedule::Type type) {
 }
 
 bool Project::removeCalendarId(const QString &id) {
-    kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+    kDebug()<<k_funcinfo<<"id="<<id<<endl;
     return calendarIdDict.remove(id); 
 }
 
 void Project::insertCalendarId(const QString &id, const Calendar *calendar) { 
-    kdDebug()<<k_funcinfo<<"id="<<id<<": "<<calendar->name()<<endl;
+    kDebug()<<k_funcinfo<<"id="<<id<<": "<<calendar->name()<<endl;
     calendarIdDict.insert(id, calendar);
 }
         

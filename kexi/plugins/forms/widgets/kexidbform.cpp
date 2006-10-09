@@ -533,7 +533,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 	else if (e->type()==QEvent::FocusIn) {
 		bool focusDataWidget = preview();
 		if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Popup) {
-			kdDebug() << "->>> focus IN, popup" <<endl;
+			kDebug() << "->>> focus IN, popup" <<endl;
 			focusDataWidget = !d->popupFocused;
 			d->popupFocused = false;
 //			if (d->widgetFocusedBeforePopup) {
@@ -578,7 +578,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 		else
 			d->popupFocused = false;
 //			d->widgetFocusedBeforePopup = 0;
-//		kdDebug() << "e->type()==QEvent::FocusOut " << watched->className() << " " <<watched->name() << endl;
+//		kDebug() << "e->type()==QEvent::FocusOut " << watched->className() << " " <<watched->name() << endl;
 //		UNSET_FOCUS_USING_REASON(watched, static_cast<QFocusEvent*>(e)->reason());
 	}
 	return KexiDBFormBase::eventFilter(watched, e);

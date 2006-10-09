@@ -49,7 +49,7 @@ void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add,
 	m_disable_signalValueChanged = true; //to prevent emmiting valueChanged()
 //needed?	clear();
 	if (dynamic_cast<QObject*>(this)) {
-		kdDebug() << "KexiDataItemInterface::setValue(): " <<
+		kDebug() << "KexiDataItemInterface::setValue(): " <<
 			dynamic_cast<QObject*>(this)->className() << " " 
 			<< dynamic_cast<QWidget*>(this)->name()
 			<< " value=" << value << " add=" << add << endl;

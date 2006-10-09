@@ -373,7 +373,7 @@ void NodeDeleteCmd::execute() {
 }
 void NodeDeleteCmd::unexecute() {
     if (m_parent && m_project) {
-        //kdDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
+        //kDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
         m_project->addSubTask(m_node, m_index, m_parent);
         Appointment *a;
         for (a = m_appointments.first(); a != 0; m_appointments.take()) {

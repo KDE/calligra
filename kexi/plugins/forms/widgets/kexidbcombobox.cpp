@@ -147,7 +147,7 @@ QRect KexiDBComboBox::editorGeometry() const
 	
 	//if ((height()-r.bottom())<6)
 //		r.setBottom(height()-6);
-//	kdDebug() << r << geometry() <<endl;
+//	kDebug() << r << geometry() <<endl;
 	return r;
 }
 

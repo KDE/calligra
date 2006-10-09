@@ -53,7 +53,7 @@ ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidg
 
 ObjectTreeItem::~ObjectTreeItem()
 {
-//	kdDebug() << "ObjectTreeItem deleted: " << name() << endl;
+//	kDebug() << "ObjectTreeItem deleted: " << name() << endl;
 	delete m_subprops;
 }
 

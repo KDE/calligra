@@ -403,7 +403,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
             // check first downside - then upside, clear all others
             bool select = false;
             for(int i=m_dateStartCol; i < col; ++i) {
-                //kdDebug()<<"Down["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
+                //kDebug()<<"Down["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
                 if (m_selectedWeekdays.contains(weekday(i))) {
                     select = true; // we have hit a selected day; select the rest
                 } else if (select) {
@@ -413,7 +413,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
             bool selected = select;
             select = false;
             for(int i=7; i > col; --i) {
-                //kdDebug()<<"Up["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
+                //kDebug()<<"Up["<<i<<"]: col="<<col<<" day="<<day<<" column(i)="<<column(i)<<endl;
                 if (m_selectedWeekdays.contains(weekday(i))) {
                     if (selected) m_selectedWeekdays.toggle(weekday(i)); // deselect
                     else select = true;
@@ -548,7 +548,7 @@ bool DateTable::setDate(const QDate& date_, bool repaint) {
     temp.setYMD(date.year(), date.month(), 1);
     firstday=column(KGlobal::locale()->calendar()->dayOfWeek(temp));
     if(firstday==1) firstday=8;
-    //kdDebug()<<k_funcinfo<<"date="<<temp<<"day="<<(KGlobal::locale()->calendar()->dayOfWeek(temp))<<" firstday="<<firstday<<endl;
+    //kDebug()<<k_funcinfo<<"date="<<temp<<"day="<<(KGlobal::locale()->calendar()->dayOfWeek(temp))<<" firstday="<<firstday<<endl;
     numdays=date.daysInMonth();
     if(date.month()==1) { // set to december of previous year
         temp.setYMD(date.year()-1, 12, 1);
@@ -666,14 +666,14 @@ QDate DateTable::getDate(int pos) const {
 int DateTable::weekday(int col) const {
     int day = col - m_dateStartCol + KGlobal::locale()->weekStartDay();
     if (day > 7) day %= 7;
-    //kdDebug()<<k_funcinfo<<"col="<<col<<" day="<<day<<" StartCol="<<m_dateStartCol<<" weekStartDay="<<KGlobal::locale()->weekStartDay()<<endl;
+    //kDebug()<<k_funcinfo<<"col="<<col<<" day="<<day<<" StartCol="<<m_dateStartCol<<" weekStartDay="<<KGlobal::locale()->weekStartDay()<<endl;
     return day;
 }
 
 int DateTable::column(int weekday) const {
     int col = weekday - KGlobal::locale()->weekStartDay();
     if (col < 0) col += 7;
-    //kdDebug()<<k_funcinfo<<"col="<<col<<" day="<<col<<" StartCol="<<m_dateStartCol<<" weekStartDay="<<KGlobal::locale()->weekStartDay()<<endl;
+    //kDebug()<<k_funcinfo<<"col="<<col<<" day="<<col<<" StartCol="<<m_dateStartCol<<" weekStartDay="<<KGlobal::locale()->weekStartDay()<<endl;
     return col + m_dateStartCol;
 }
 

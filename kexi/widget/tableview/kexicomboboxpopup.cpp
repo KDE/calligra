@@ -212,7 +212,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 	for(uint i=0; i < hints.size(); i++) {
 		KexiTableItem *item = data->createItem();//new KexiTableItem(1);
 		(*item)[0]=QVariant(hints[i]);
-		kdDebug() << "added: '" << hints[i] <<"'"<<endl;
+		kDebug() << "added: '" << hints[i] <<"'"<<endl;
 		data->append( item );
 	}
 	setDataInternal( data, true );

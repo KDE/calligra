@@ -525,7 +525,7 @@ void KexiTableDesignerView::switchPrimaryKey(KoProperty::Set &propertySet,
 
 /*void KexiTableDesignerView::slotCellSelected(int, int row)
 {
-	kdDebug() << "KexiTableDesignerView::slotCellSelected()" << endl;
+	kDebug() << "KexiTableDesignerView::slotCellSelected()" << endl;
 	if(row == m_row)
 		return;
 	m_row = row;
@@ -613,7 +613,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 {
 	if (!d->slotBeforeCellChanged_enabled)
 		return;
-//	kdDebug() << d->view->selectedItem() << " " << item 
+//	kDebug() << d->view->selectedItem() << " " << item 
 		//<< " " << d->sets->at( d->view->currentRow() ) << " " << propertySet() << endl;
 	if (colnum==COLUMN_ID_CAPTION) {//'caption'
 //		if (!item->at(1).toString().isEmpty() && item->at(1).isNull()) {
@@ -980,8 +980,8 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 		else {*/
 		typeName = KexiDB::Field::typeName( KexiDB::Field::typeForString(property.value().toString()) );
 //		}
-//		kdDebug() << property.value().toString() << endl;
-//		kdDebug() << set["type"].value() << endl;
+//		kDebug() << property.value().toString() << endl;
+//		kDebug() << set["type"].value() << endl;
 //		if (KexiDB::Field::typeGroup( set["type"].value().toInt() ) == (int)KexiDB::Field::TextGroup) {
 		CommandGroup* changeFieldTypeCommand = new CommandGroup(
 			i18n("Change type for field \"%1\" to \"%2\"").arg(set["name"].value().toString())
@@ -1487,7 +1487,7 @@ KexiTablePart::TempData* KexiTableDesignerView::tempData() const
 
 	//check if there is a type specified
 //	if ((old_type.isNull() && !buf_type) || (buf_type && buf_type->isNull())) {
-		//kdDebug() << "err" << endl;
+		//kDebug() << "err" << endl;
 	//}
 //	allow = true;
 //	m_dirty = m_dirty | result->success;

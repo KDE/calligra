@@ -243,7 +243,7 @@ WidgetPropertySet::addWidget(QWidget *w)
 //	QWidget *subwidget = isSubproperty ? subpropIface->subwidget() : w;
 
 	for(KoProperty::Set::Iterator it(d->set); it.current(); ++it) {
-		kdDebug() << it.currentKey() << endl;
+		kDebug() << it.currentKey() << endl;
 		if(!isPropertyVisible(it.currentKey(), isTopLevel, classname))
 			d->set[it.currentKey()].setVisible(false);
 	}
@@ -297,7 +297,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 		foreach(QValueListConstIterator<Q3CString>, it, subproperies ) {
 			tmpList.append( *it );
 			pList.append( tmpList.last() );
-			kdDebug() << "Added subproperty: " << *it << endl;
+			kDebug() << "Added subproperty: " << *it << endl;
 		}
 	}
 

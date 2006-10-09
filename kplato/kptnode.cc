@@ -130,7 +130,7 @@ void Node::delChildNode( Node *node, bool remove) {
 
 void Node::delChildNode( int number, bool remove) {
     Node *n = m_nodes.at(number);
-    //kdDebug()<<k_funcinfo<<(n?n->id():"null")<<" : "<<(n?n->name():"")<<endl;
+    //kDebug()<<k_funcinfo<<(n?n->id():"null")<<" : "<<(n?n->name():"")<<endl;
     if(remove)
         m_nodes.remove(number);
     else
@@ -359,7 +359,7 @@ Duration Node::duration(const DateTime &time, int use, bool backward) {
         return Duration::zeroDuration;
         kError()<<k_funcinfo<<"No current schedule"<<endl;
     }
-    kdDebug()<<k_funcinfo<<m_name<<": Use="<<use<<endl;
+    kDebug()<<k_funcinfo<<m_name<<": Use="<<use<<endl;
     return calcDuration(time, m_effort->effort(use), backward);
 }
 
@@ -993,15 +993,15 @@ void Node::printDebug(bool children, QByteArray indent) {
 void Effort::printDebug(QByteArray indent) {
     kDebug()<<indent<<"  Effort:"<<endl;
     indent += "  ";
-    kdDebug()<<indent<<"  Expected:    "<<m_expectedEffort.toString()<<endl;
-    kdDebug()<<indent<<"  Optimistic:  "<<m_optimisticEffort.toString()<<endl;
-    kdDebug()<<indent<<"  Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
+    kDebug()<<indent<<"  Expected:    "<<m_expectedEffort.toString()<<endl;
+    kDebug()<<indent<<"  Optimistic:  "<<m_optimisticEffort.toString()<<endl;
+    kDebug()<<indent<<"  Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
     
-    kdDebug()<<indent<<"  Risk: "<<risktypeToString()<<endl;
-    kdDebug()<<indent<<"  Pert expected:    "<<pertExpected().toString()<<endl;
-    kdDebug()<<indent<<"  Pert optimistic:  "<<pertOptimistic().toString()<<endl;
-    kdDebug()<<indent<<"  Pert pessimistic: "<<pertPessimistic().toString()<<endl;
-    kdDebug()<<indent<<"  Pert variance:    "<<variance().toString()<<endl;
+    kDebug()<<indent<<"  Risk: "<<risktypeToString()<<endl;
+    kDebug()<<indent<<"  Pert expected:    "<<pertExpected().toString()<<endl;
+    kDebug()<<indent<<"  Pert optimistic:  "<<pertOptimistic().toString()<<endl;
+    kDebug()<<indent<<"  Pert pessimistic: "<<pertPessimistic().toString()<<endl;
+    kDebug()<<indent<<"  Pert variance:    "<<variance().toString()<<endl;
 }
 #endif
 

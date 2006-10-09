@@ -57,7 +57,7 @@ void showError(const QString& msg)
 {
 	QString msg_(msg);
 	msg_.prepend(QString("Error at line %1: ").arg(testLineNumber));
-	kdDebug() << msg_ << endl;
+	kDebug() << msg_ << endl;
 }
 
 /* Reads a single line from testFileStream, fills testFileLine, updates testLineNumber
@@ -298,7 +298,7 @@ bool AlterTableTester::showSchema(KexiDialogBase* dlg, bool copyToClipboard)
 	if (copyToClipboard)
 		QApplication::clipboard()->setText( schemaDebugString );
 	else
-		kdDebug() << QString("Schema for '%1' table:\n").arg(dlg->partItem()->name())
+		kDebug() << QString("Schema for '%1' table:\n").arg(dlg->partItem()->name())
 			+ schemaDebugString + "\nendSchema" << endl;
 	return true;
 }
@@ -354,7 +354,7 @@ bool AlterTableTester::checkSchema(KexiDialogBase* dlg)
 	if (!getSchemaDump(dlg, schemaDebugString))
 		return false;
 	bool result = checkInternal(dlg, schemaDebugString, "endSchema", true /*skipColonsAndStripWhiteSpace*/);
-	kdDebug() << QString("Schema check for table '%1': %2").arg(dlg->partItem()->name())
+	kDebug() << QString("Schema check for table '%1': %2").arg(dlg->partItem()->name())
 		.arg(result ? "OK" : "Failed") << endl;
 	return result;
 }
@@ -381,7 +381,7 @@ bool AlterTableTester::showActions(KexiDialogBase* dlg, bool copyToClipboard)
 	if (copyToClipboard)
 		QApplication::clipboard()->setText( actionsDebugString );
 	else
-		kdDebug() << QString("Simplified actions for altering table '%1':\n").arg(dlg->partItem()->name())
+		kDebug() << QString("Simplified actions for altering table '%1':\n").arg(dlg->partItem()->name())
 			+ actionsDebugString+"\n" << endl;
 	return true;
 }
@@ -392,7 +392,7 @@ bool AlterTableTester::checkActions(KexiDialogBase* dlg)
 	if (!getActionsDump(dlg, actionsDebugString))
 		return false;
 	bool result = checkInternal(dlg, actionsDebugString, "endActions", true /*skipColonsAndStripWhiteSpace*/);
-		kdDebug() << QString("Actions check for table '%1': %2").arg(dlg->partItem()->name())
+		kDebug() << QString("Actions check for table '%1': %2").arg(dlg->partItem()->name())
 		.arg(result ? "OK" : "Failed") << endl;
 	return result;
 }
@@ -441,7 +441,7 @@ bool AlterTableTester::showTableData(KexiDialogBase* dlg, bool copyToClipboard)
 	if (copyToClipboard)
 		QApplication::clipboard()->setText( dataString );
 	else
-		kdDebug() << QString("Contents of table '%1':\n").arg(dlg->partItem()->name())+dataString+"\n" << endl;
+		kDebug() << QString("Contents of table '%1':\n").arg(dlg->partItem()->name())+dataString+"\n" << endl;
 	return true;
 }
 
@@ -451,7 +451,7 @@ bool AlterTableTester::checkTableData(KexiDialogBase* dlg)
 	if (!getTableDataDump(dlg, dataString))
 		return false;
 	bool result = checkInternal(dlg, dataString, "endTableData", false /*!skipColonsAndStripWhiteSpace*/);
-		kdDebug() << QString("Table '%1' contents: %2").arg(dlg->partItem()->name())
+		kDebug() << QString("Table '%1' contents: %2").arg(dlg->partItem()->name())
 			.arg(result ? "OK" : "Failed") << endl;
 	return result;
 }
@@ -462,7 +462,7 @@ bool AlterTableTester::closeWindow(KexiDialogBase* dlg)
 		return true;
 	QString name = dlg->partItem()->name();
 	tristate result = true == win->closeDialog(dlg, true/*layoutTaskBar*/, true/*doNotSaveChanges*/);
-	kdDebug() << QString("Closing window for table '%1': %2").arg(name)
+	kDebug() << QString("Closing window for table '%1': %2").arg(name)
 		.arg(result==true ? "OK" : (result==false ? "Failed" : "Cancelled")) << endl;
 	return result == true;
 }
@@ -474,7 +474,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
 	while (!m_finishedCopying)
 		qApp->processEvents(300);
 
-	kdDebug() << "Database copied to temporary: " << dbFilename << endl;
+	kDebug() << "Database copied to temporary: " << dbFilename << endl;
 
 	if (!checkItemsNumber(2))
 		return false;
@@ -622,7 +622,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
 		if (command=="stop") {
 			if (!checkItemsNumber(1))
 				return false;
-			kdDebug() << QString("Test STOPPED at line %1.").arg(testLineNumber) << endl;
+			kDebug() << QString("Test STOPPED at line %1.").arg(testLineNumber) << endl;
 			break;
 		}
 		else if (command=="closeWindow") {
@@ -636,7 +636,7 @@ tristate AlterTableTester::run(bool &closeAppRequested)
 			if (!checkItemsNumber(1) || !closeWindow(dlg))
 				return false;
 			closeAppRequested = true;
-			kdDebug() << QString("Quitting the application...") << endl;
+			kDebug() << QString("Quitting the application...") << endl;
 			break;
 		}
 		else {
@@ -707,7 +707,7 @@ int main(int argc, char *argv[])
 			kdWarning() << QString("Running test for file '%1' failed.").arg(testFilename) << endl;
 		return quit(res==false ? 1 : 0);
 	}
-	kdDebug() << QString("Tests from file '%1': OK").arg(testFilename) << endl;
+	kDebug() << QString("Tests from file '%1': OK").arg(testFilename) << endl;
 	result = (closeOnFinish || closeAppRequested) ? 0 : qApp->exec();
 	quit(result);
 	return result;
