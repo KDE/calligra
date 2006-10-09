@@ -108,7 +108,7 @@ MySqlDriver::drv_createConnection( ConnectionData &conn_data )
 
 bool MySqlDriver::isSystemDatabaseName(const QString &n) const
 {
-	return n.lower()=="mysql" || Driver::isSystemObjectName(n);
+	return n.toLower()=="mysql" || Driver::isSystemObjectName(n);
 }
 
 bool MySqlDriver::drv_isSystemFieldName(const QString&) const {

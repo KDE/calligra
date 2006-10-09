@@ -43,7 +43,7 @@ using namespace KexiDB;
 //! safer interpretations of boolean values for SQLite
 static bool sqliteStringToBool(const QString& s)
 {
-	return s.lower()=="yes" || (s.lower()!="no" && s!="0");
+	return s.toLower()=="yes" || (s.toLower()!="no" && s!="0");
 }
 
 //----------------------------------------------------
@@ -153,7 +153,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 					return QDateTime::fromString( tmp, Qt::ISODate );
 				}
 				case Field::Boolean:
-					return QVariant(sqliteStringToBool(GET_sqlite3_column_text), 1);
+					return sqliteStringToBool(GET_sqlite3_column_text);
 				default:
 					return QVariant(); //TODO
 				}
@@ -168,7 +168,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 			case Field::BigInteger:
 				return QVariant( (qint64)sqlite3_column_int64(prepared_st_handle, i) );
 			case Field::Boolean:
-				return QVariant( sqlite3_column_int(prepared_st_handle, i)!=0, 1 );
+				return sqlite3_column_int(prepared_st_handle, i)!=0;
 			default:;
 			}
 			if (f->isFPNumericType()) //WEIRD, YEAH?
@@ -186,11 +186,9 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 		}
 		else if (type==SQLITE_BLOB) {
 			if (f && f->type()==Field::BLOB) {
-				QByteArray ba;
 //! @todo efficient enough?
-				ba.duplicate((const char*)sqlite3_column_blob(prepared_st_handle, i),
+				return QByteArray( (const char*)sqlite3_column_blob(prepared_st_handle, i),
 					sqlite3_column_bytes(prepared_st_handle, i));
-				return ba;
 			} else
 				return QVariant(); //TODO
 		}
@@ -237,7 +235,7 @@ bool SQLiteCursor::drv_open()
 	}
 
 #ifdef SQLITE2
-	d->st = m_sql.local8Bit();
+	d->st = m_sql.toLocal8Bit();
 	d->res = sqlite_compile(
 		d->data,
 		d->st.data(),
@@ -245,7 +243,7 @@ bool SQLiteCursor::drv_open()
 		&d->prepared_st_handle,
 		&d->errmsg_p );
 #else //SQLITE3
-	d->st = m_sql.utf8();
+	d->st = m_sql.toUtf8();
 	d->res = sqlite3_prepare(
 		d->data,            /* Database handle */
 		d->st.data(),       /* SQL statement, UTF-8 encoded */
@@ -482,7 +480,7 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 			case Field::BigInteger:
 				data[i] = QVariant( QString::fromLatin1(*col).toLongLong() );
 			case Field::Boolean:
-				data[i] = QVariant( sqliteStringToBool(QString::fromLatin1(*col)), 1 );
+				data[i] = sqliteStringToBool(QString::fromLatin1(*col));
 				break;
 			case Field::Date:
 				data[i] = QDate::fromString( QString::fromLatin1(*col), Qt::ISODate );

@@ -911,7 +911,7 @@ QVariant KexiDB::emptyValueForType( KexiDB::Field::Type type )
 		ADD(Field::ShortInteger, 0);
 		ADD(Field::Integer, 0);
 		ADD(Field::BigInteger, 0);
-		ADD(Field::Boolean, QVariant(false, 0));
+		ADD(Field::Boolean, false);
 		ADD(Field::Float, 0.0);
 		ADD(Field::Double, 0.0);
 //! @ok? we have no better defaults
@@ -998,7 +998,7 @@ QString KexiDB::escapeBLOB(const QByteArray& array, BLOBEscapingType type)
 		escaped_length += 3; //X' + '
 	QString str;
 	str.reserve(escaped_length);
-	if (str.capacity() < (uint)escaped_length) {
+	if (str.capacity() < escaped_length) {
 		KexiDBWarn << "KexiDB::Driver::escapeBLOB(): no enough memory (cannot allocate "<< 
 			escaped_length<<" chars)" << endl;
 		return QString::null;
@@ -1060,7 +1060,8 @@ QVariant KexiDB::stringToVariant( const QString& s, QVariant::Type type, bool &o
 	}
 	if (type==QVariant::ByteArray) {//special case: hex string
 		const uint len = s.length();
-		QByteArray ba(len/2 + len%2);
+		QByteArray ba;
+		ba.resize(len/2 + len%2);
 		for (uint i=0; i<(len-1); i+=2) {
 			int c = s.mid(i,2).toInt(&ok, 16);
 			if (!ok) {
@@ -1073,7 +1074,7 @@ QVariant KexiDB::stringToVariant( const QString& s, QVariant::Type type, bool &o
 		return ba;
 	}
 	QVariant result(s);
-	if (!result.cast( type )) {
+	if (!result.convert(type)) {
 		ok = false;
 		return QVariant();
 	}

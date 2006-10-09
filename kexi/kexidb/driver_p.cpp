@@ -55,7 +55,7 @@ DriverPrivate::DriverPrivate()
 
 void DriverPrivate::initInternalProperties()
 {
-	properties["is_file_database"] = QVariant(isFileDriver, 1);
+	properties["is_file_database"] = QVariant(isFileDriver);
 	propertyCaptions["is_file_database"] = i18n("File-based database driver");
 	if (isFileDriver) {
 		properties["file_database_mimetype"] = fileDBDriverMimeType;
@@ -77,11 +77,11 @@ void DriverPrivate::initInternalProperties()
 #endif
 //	properties["transaction_support"] = features & Driver::TransactionsMask;
 //	propertyCaptions["transaction_support"] = i18n("Transaction support");
-	properties["transaction_single"] = QVariant(features & Driver::SingleTransactions, 1);
+	properties["transaction_single"] = QVariant(features & Driver::SingleTransactions);
 	propertyCaptions["transaction_single"] = i18n("Single transactions support");
-	properties["transaction_multiple"] = QVariant(features & Driver::MultipleTransactions, 1);
+	properties["transaction_multiple"] = QVariant(features & Driver::MultipleTransactions);
 	propertyCaptions["transaction_multiple"] = i18n("Multiple transactions support");
-	properties["transaction_nested"] = QVariant(features & Driver::NestedTransactions, 1);
+	properties["transaction_nested"] = QVariant(features & Driver::NestedTransactions);
 	propertyCaptions["transaction_nested"] = i18n("Nested transactions support");
 
 	properties["kexidb_driver_version"] =

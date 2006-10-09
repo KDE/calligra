@@ -83,7 +83,7 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		inline void setIndexForVisibleLookupValue(int index) { m_indexForVisibleLookupValue = index; }
 
 		/*! \return string for debugging purposes. */
-		virtual QString debugString() const;
+		QString debugString() const;
 
 		//! true if this column is visible to the user (and its data is fetched by the engine)
 		bool visible : 1;
@@ -99,7 +99,7 @@ class KEXI_DB_EXPORT QueryColumnInfo
 class KEXI_DB_EXPORT OrderByColumn
 {
 	public:
-		typedef QValueListConstIterator<OrderByColumn> ListConstIterator;
+		typedef Q3ValueListConstIterator<OrderByColumn> ListConstIterator;
 		OrderByColumn();
 		OrderByColumn(QueryColumnInfo& column, bool ascending = true, int pos = -1);
 		
@@ -149,7 +149,7 @@ class KEXI_DB_EXPORT OrderByColumn
 };
 
 //! A base for KexiDB::OrderByColumnList
-typedef QValueList<OrderByColumn> OrderByColumnListBase;
+typedef Q3ValueList<OrderByColumn> OrderByColumnListBase;
 
 //! @short KexiDB::OrderByColumnList provides list of sorted columns for a query schema
 class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
@@ -190,7 +190,7 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 		bool appendColumn(QuerySchema& querySchema, bool ascending = true, int pos = -1);
 
 		/*! Appends \a column to the list. */
-		void appendColumn(OrderByColumn& column);
+		void appendColumn(const OrderByColumn& column);
 		
 		/*! \return true if the list is empty. */
 		bool isEmpty() const { return OrderByColumnListBase::isEmpty(); }

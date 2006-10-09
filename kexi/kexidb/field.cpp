@@ -197,19 +197,19 @@ QString Field::typeGroupString(uint typeGroup)
 Field::Type Field::typeForString(const QString& typeString)
 {
 	m_typeNames.init();
-	QMap<QString,Type>::ConstIterator it = m_typeNames.str2num.find(typeString.lower());
+	QMap<QString,Type>::ConstIterator it = m_typeNames.str2num.find(typeString.toLower());
 	if (it==m_typeNames.str2num.end())
 		return InvalidType;
-	return it.data();
+	return it.value();
 }
 
 Field::TypeGroup Field::typeGroupForString(const QString& typeGroupString)
 {
 	m_typeGroupNames.init();
-	QMap<QString,TypeGroup>::ConstIterator it = m_typeGroupNames.str2num.find(typeGroupString.lower());
+	QMap<QString,TypeGroup>::ConstIterator it = m_typeGroupNames.str2num.find(typeGroupString.toLower());
 	if (it==m_typeGroupNames.str2num.end())
 		return InvalidGroup;
-	return it.data();
+	return it.value();
 }
 
 bool Field::isIntegerType( uint type )
@@ -619,8 +619,8 @@ QString Field::debugString() const
 				first = false;
 			else
 				dbg += ", ";
-			dbg += QString("%1 = %2 (%3)").arg(QString(it.key())).arg(it.data().toString())
-				.arg(it.data().typeName());
+			dbg += QString("%1 = %2 (%3)").arg(QString(it.key())).arg(it.value().toString())
+				.arg(it.value().typeName());
 		}
 	}
 	return dbg;
@@ -650,7 +650,7 @@ QVariant Field::customProperty(const QByteArray& propertyName,
 	CustomPropertiesMap::ConstIterator it(m_customProperties->find(propertyName));
 	if (it==m_customProperties->constEnd())
 		return defaultValue;
-	return it.data();
+	return it.value();
 }
 
 void Field::setCustomProperty(const QByteArray& propertyName, const QVariant& value)
@@ -665,10 +665,10 @@ void Field::setCustomProperty(const QByteArray& propertyName, const QVariant& va
 //-------------------------------------------------------
 #define ADDTYPE(type, i18, str) this->at(Field::type) = i18; \
 	this->at(Field::type+Field::LastType+1) = str; \
-	str2num.insert(QString::fromLatin1(str).lower(), type)
+	str2num.insert(QString::fromLatin1(str).toLower(), type)
 #define ADDGROUP(type, i18, str) this->at(Field::type) = i18; \
 	this->at(Field::type+Field::LastTypeGroup+1) = str; \
-	str2num.insert(QString::fromLatin1(str).lower(), type)
+	str2num.insert(QString::fromLatin1(str).toLower(), type)
 
 Field::FieldTypeNames::FieldTypeNames()
  : Q3ValueVector<QString>()

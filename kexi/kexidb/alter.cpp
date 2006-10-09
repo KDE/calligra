@@ -125,12 +125,12 @@ static int alteringTypeForProperty(const QCString& propertyName)
 		KexiDB_alteringTypeForProperty_deleter.setObject( KexiDB_alteringTypeForProperty, 
 			new QMap<QCString,int>() );
 #define I(name, type) \
-	KexiDB_alteringTypeForProperty->insert(QCString(name).lower(), (int)AlterTableHandler::type)
+	KexiDB_alteringTypeForProperty->insert(QCString(name).toLower(), (int)AlterTableHandler::type)
 #define I2(name, type1, type2) \
 	flag = (int)AlterTableHandler::type1|(int)AlterTableHandler::type2; \
 	if (flag & AlterTableHandler::PhysicalAlteringRequired) \
 		flag |= AlterTableHandler::MainSchemaAlteringRequired; \
-	KexiDB_alteringTypeForProperty->insert(QCString(name).lower(), flag)
+	KexiDB_alteringTypeForProperty->insert(QCString(name).toLower(), flag)
 
 	/* useful links: 
 		http://dev.mysql.com/doc/refman/5.0/en/create-table.html
@@ -163,7 +163,7 @@ static int alteringTypeForProperty(const QCString& propertyName)
 #undef I
 #undef I2
 	}
-	return (*KexiDB_alteringTypeForProperty)[propertyName.lower()]; 
+	return (*KexiDB_alteringTypeForProperty)[propertyName.toLower()]; 
 }
 
 //---

@@ -202,7 +202,7 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 
 	try
 	{
-		d->pqxxsql = new pqxx::connection( conninfo.latin1() );
+		d->pqxxsql = new pqxx::connection( conninfo.toLatin1() );
 		drv_executeSQL( "SET DEFAULT_WITH_OIDS TO ON" ); //Postgres 8.1 changed the default to no oids but we need them
 
 		if (d->version) {
@@ -277,7 +277,7 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 		//		m_trans = new pqxx::nontransaction(*m_pqxxsql);
 //		KexiDBDrvDbg << "About to execute" << endl;
 		//Create a result object through the transaction
-		d->res = new pqxx::result(m_trans->data->exec(statement.utf8()));
+		d->res = new pqxx::result(m_trans->data->exec(statement.toUtf8()));
 //		KexiDBDrvDbg << "Executed" << endl;
 		//Commit the transaction
 		if (implicityStarted) {

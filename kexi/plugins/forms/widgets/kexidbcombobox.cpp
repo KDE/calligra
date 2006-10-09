@@ -117,7 +117,7 @@ void KexiDBComboBox::paintEvent( QPaintEvent * )
 		return;
 	}
 
-	bool reverse = QApplication::reverseLayout();
+//todo	bool reverse = QApplication::reverseLayout();
 	style().drawComplexControl( QStyle::CC_ComboBox, &p, d->paintedCombo /*this*/, rect(), cg,
 		flags, (uint)QStyle::SC_All, 
 		(d->buttonPressed ? QStyle::SC_ComboBoxArrow : QStyle::SC_None )
@@ -432,6 +432,7 @@ void KexiDBComboBox::selectAllInInternalEditor()
 
 void KexiDBComboBox::setValueInInternalEditor(const QVariant& value)
 {
+	Q_UNUSED(value);
 	//! @todo
 }
 

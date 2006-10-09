@@ -92,7 +92,7 @@ SimpleCommandLineApp::SimpleCommandLineApp(
  , d( new Private() )
 {
 	QFileInfo fi(argv[0]);
-	Q3CString appName( fi.baseName().latin1() );
+	Q3CString appName( fi.baseName().toLatin1() );
 	KCmdLineArgs::init(argc, argv, 
 		new KAboutData( appName, programName,
 			version, shortDescription, licenseType, copyrightStatement, text, 
@@ -114,7 +114,7 @@ SimpleCommandLineApp::SimpleCommandLineApp(
 		allOptionsPtr->name = qstrdup(optionsPtr->name);
 		allOptionsPtr->description = qstrdup(optionsPtr->description);
 		if (optionsPtr == predefinedOptions) //first row == drv
-			allOptionsPtr->def = qstrdup(KexiDB::Driver::defaultFileBasedDriverName().latin1());
+			allOptionsPtr->def = qstrdup(KexiDB::Driver::defaultFileBasedDriverName().toLatin1());
 		else
 			allOptionsPtr->def = qstrdup(optionsPtr->def);
 	}

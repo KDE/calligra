@@ -71,7 +71,7 @@ tristate SQLiteVacuum::run()
 	QStringList args;
 	args << ksqlite_app << "-verbose-vacuum" << m_filePath << "vacuum";
 	m_process = new Q3Process(args, this, "process");
-	m_process->setWorkingDirectory( QFileInfo(m_filePath).dir(true) );
+	m_process->setWorkingDirectory( QFileInfo(m_filePath).absoluteDir() );
 	connect( m_process, SIGNAL(readyReadStdout()), this, SLOT(readFromStdout()) );
 	connect( m_process, SIGNAL(processExited()), this, SLOT(processExited()) );
 	if (!m_process->start()) {

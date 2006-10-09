@@ -465,7 +465,7 @@ bool OrderByColumnList::appendField(QuerySchema& querySchema,
 	return false;
 }
 		
-void OrderByColumnList::appendColumn(OrderByColumn& column)
+void OrderByColumnList::appendColumn(const OrderByColumn& column)
 {
 	append( column );
 }
@@ -579,7 +579,7 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
 			<<"' must contain table information!" <<endl;
 		return *this;
 	}
-	if (fieldCount()>=d->visibility.size()) {
+	if ((int)fieldCount()>=d->visibility.size()) {
 		d->visibility.resize(d->visibility.size()*2);
 		d->tablesBoundToColumns.resize(d->tablesBoundToColumns.size()*2);
 	}
@@ -636,7 +636,7 @@ FieldList& QuerySchema::insertField(uint position, Field *field,
 
 int QuerySchema::tableBoundToColumn(uint columnPosition) const
 {
-	if (columnPosition > d->tablesBoundToColumns.count()) {
+	if ((int)columnPosition > d->tablesBoundToColumns.count()) {
 		KexiDBWarn << "QuerySchema::tableBoundToColumn(): columnPosition (" << columnPosition
 			<< ") out of range" << endl;
 		return -1;

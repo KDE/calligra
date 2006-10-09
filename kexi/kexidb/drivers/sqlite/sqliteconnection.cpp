@@ -288,9 +288,9 @@ bool SQLiteConnection::drv_executeSQL( const QString& statement )
 //	QCString st(statement.length()*2);
 //	st = escapeString( statement.local8Bit() ); //?
 #ifdef SQLITE_UTF8
-	d->temp_st = statement.utf8();
+	d->temp_st = statement.toUtf8();
 #else
-	d->temp_st = statement.local8Bit(); //latin1 only
+	d->temp_st = statement.toLocal8Bit(); //latin1 only
 #endif
 
 #ifdef KEXI_DEBUG_GUI

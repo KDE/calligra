@@ -1518,7 +1518,8 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiTableItem *item)/*, bool moveC
 	                                                                         //can return to the last row 
 	                                                                         //after reinserting it
 	if (!m_data->deleteRow(*item, true /*repaint*/)) {
-		const int button = showErrorMessageForResult( m_data->result() );
+		/*const int button =*/ 
+		showErrorMessageForResult( m_data->result() );
 //		if (KMessageBox::No == button) {
 			//discard changes
 	//	}

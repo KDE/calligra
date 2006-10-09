@@ -58,7 +58,7 @@ bool MySqlCursor::drv_open() {
 //	KexiDBDrvDbg << "MySqlCursor::drv_open:" << m_sql << endl;
 	// This can't be right?  mysql_real_query takes a length in order that
 	// queries can have binary data - but strlen does not allow binary data.
-	if(mysql_real_query(d->mysql, m_sql.utf8(), strlen(m_sql.utf8())) == 0) {
+	if(mysql_real_query(d->mysql, m_sql.toUtf8(), strlen(m_sql.toUtf8())) == 0) {
 		if(mysql_errno(d->mysql) == 0) {
 			d->mysqlres= mysql_store_result(d->mysql);
 			m_fieldCount=mysql_num_fields(d->mysqlres);
@@ -148,9 +148,7 @@ void MySqlCursor::storeCurrentRow(RowData &data) const {
 		if (m_fieldsExpanded && !f)
 			continue;
 		if (f && f->type()==Field::BLOB) {
-			QByteArray ba;
-			ba.duplicate(d->mysqlrow[i], d->mysqlres->lengths[i]);
-			data[i] = ba;
+			data[i] = QByteArray(d->mysqlrow[i], d->mysqlres->lengths[i]);
 			KexiDBDbg << data[i].toByteArray().size() << endl;
 		}
 //! @todo more types!

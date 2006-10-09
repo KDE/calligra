@@ -296,6 +296,7 @@ void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourceMimeType, c
 
 void KexiDataSourcePage::slotDataSourceTextChanged(const QString & string)
 {
+	Q_UNUSED(string);
 	const bool enable = m_dataSourceCombo->isSelectionValid(); //!string.isEmpty() && m_dataSourceCombo->selectedName() == string.latin1();
 	if (!enable) {
 		clearDataSourceSelection( m_dataSourceCombo->selectedName().isEmpty()/*alsoClearComboBox*/ );

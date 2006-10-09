@@ -108,7 +108,7 @@ bool SQLitePreparedStatement::execute()
 		}
 		if (field->isTextType()) {
 			//! @todo optimize: make a static copy so SQLITE_STATIC can be used
-			Q3CString utf8String((*it).toString().utf8());
+			Q3CString utf8String((*it).toString().toUtf8());
 			res = sqlite3_bind_text(prepared_st_handle, arg, 
 				(const char*)utf8String, utf8String.length(), SQLITE_TRANSIENT /*??*/);
 			if (SQLITE_OK != res) {
@@ -171,7 +171,7 @@ bool SQLitePreparedStatement::execute()
 		}
 		case KexiDB::Field::Boolean:
 			res = sqlite3_bind_text(prepared_st_handle, arg, 
-				QString::number((*it).toBool() ? 1 : 0).latin1(), 
+				QString::number((*it).toBool() ? 1 : 0).toLatin1(), 
 				1, SQLITE_TRANSIENT /*??*/);
 			if (SQLITE_OK != res) {
 				//! @todo msg?
@@ -180,7 +180,7 @@ bool SQLitePreparedStatement::execute()
 			break;
 		case KexiDB::Field::Time:
 			res = sqlite3_bind_text(prepared_st_handle, arg, 
-				(*it).toTime().toString(Qt::ISODate).latin1(), 
+				(*it).toTime().toString(Qt::ISODate).toLatin1(), 
 				sizeof("HH:MM:SS"), SQLITE_TRANSIENT /*??*/);
 			if (SQLITE_OK != res) {
 				//! @todo msg?
@@ -189,7 +189,7 @@ bool SQLitePreparedStatement::execute()
 			break;
 		case KexiDB::Field::Date:
 			res = sqlite3_bind_text(prepared_st_handle, arg, 
-				(*it).toDate().toString(Qt::ISODate).latin1(), 
+				(*it).toDate().toString(Qt::ISODate).toLatin1(), 
 				sizeof("YYYY-MM-DD"), SQLITE_TRANSIENT /*??*/);
 			if (SQLITE_OK != res) {
 				//! @todo msg?
@@ -198,7 +198,7 @@ bool SQLitePreparedStatement::execute()
 			break;
 		case KexiDB::Field::DateTime:
 			res = sqlite3_bind_text(prepared_st_handle, arg, 
-				(*it).toDateTime().toString(Qt::ISODate).latin1(), 
+				(*it).toDateTime().toString(Qt::ISODate).toLatin1(), 
 				sizeof("YYYY-MM-DDTHH:MM:SS"), SQLITE_TRANSIENT /*??*/);
 			if (SQLITE_OK != res) {
 				//! @todo msg?

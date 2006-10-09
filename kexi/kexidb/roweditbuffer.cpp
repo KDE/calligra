@@ -53,7 +53,7 @@ const QVariant* RowEditBuffer::at( QueryColumnInfo& ci, bool useDefaultValueIfPo
 	*m_dbBufferIt = m_dbBuffer->find( &ci );
 	QVariant* result = 0;
 	if (*m_dbBufferIt!=m_dbBuffer->end())
-		result = &(*m_dbBufferIt).data();
+		result = &(*m_dbBufferIt).value();
 	if ( useDefaultValueIfPossible 
 		&& (!result || result->isNull()) 
 		&& ci.field && !ci.field->defaultValue().isNull() && KexiDB::isDefaultValueAllowed(ci.field)
@@ -77,7 +77,7 @@ const QVariant* RowEditBuffer::at( Field& f ) const
 	*m_simpleBufferIt = m_simpleBuffer->find( f.name() );
 	if (*m_simpleBufferIt==m_simpleBuffer->constEnd())
 		return 0;
-	return &(*m_simpleBufferIt).data();
+	return &(*m_simpleBufferIt).value();
 }
 
 const QVariant* RowEditBuffer::at( const QString& fname ) const
@@ -89,7 +89,7 @@ const QVariant* RowEditBuffer::at( const QString& fname ) const
 	*m_simpleBufferIt = m_simpleBuffer->find( fname );
 	if (*m_simpleBufferIt==m_simpleBuffer->constEnd())
 		return 0;
-	return &(*m_simpleBufferIt).data();
+	return &(*m_simpleBufferIt).value();
 }
 
 void RowEditBuffer::clear() {
@@ -116,7 +116,7 @@ void RowEditBuffer::debug()
 		KexiDBDbg << "RowEditBuffer type=DB-AWARE, " << m_dbBuffer->count() <<" items"<< endl;
 		for (DBMap::ConstIterator it = m_dbBuffer->constBegin(); it!=m_dbBuffer->constEnd(); ++it) {
 			KexiDBDbg << "* field name=" <<it.key()->field->name()<<" val="
-				<< (it.data().isNull() ? QString("<NULL>") : it.data().toString()) 
+				<< (it.value().isNull() ? QString("<NULL>") : it.value().toString()) 
 				<< (hasDefaultValueAt(*it.key()) ? " DEFAULT" : "") <<endl;
 		}
 		return;
@@ -124,6 +124,6 @@ void RowEditBuffer::debug()
 	KexiDBDbg << "RowEditBuffer type=SIMPLE, " << m_simpleBuffer->count() <<" items"<< endl;
 	for (SimpleMap::ConstIterator it = m_simpleBuffer->constBegin(); it!=m_simpleBuffer->constEnd(); ++it) {
 		KexiDBDbg << "* field name=" <<it.key()<<" val="
-			<< (it.data().isNull() ? QString("<NULL>") : it.data().toString()) <<endl;
+			<< (it.value().isNull() ? QString("<NULL>") : it.value().toString()) <<endl;
 	}
 }

@@ -58,15 +58,17 @@ TransactionData::~TransactionData()
 const Transaction Transaction::null;
 
 Transaction::Transaction()
-	: QObject(0,"kexidb_transaction")
+	: QObject(0)
 	, m_data(0)
 {
+	setObjectName("kexidb_transaction");
 }
 
 Transaction::Transaction( const Transaction& trans )
-	: QObject(0,"kexidb_transaction")
+	: QObject(0)
 	, m_data(trans.m_data)
 {
+	setObjectName("kexidb_transaction");
 	if (m_data) {
 		m_data->refcount++;
 		Transaction::globalcount++;

@@ -1673,8 +1673,8 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 		return false;
 	}
 	const QString oldTableName = tableSchema.name();
-	const QString newTableName = newName.lower().trimmed();
-	if (oldTableName.lower().trimmed() == newTableName) {
+	const QString newTableName = newName.toLower().trimmed();
+	if (oldTableName.toLower().trimmed() == newTableName) {
 		setError(ERR_OBJECT_THE_SAME, i18n("Could rename table \"%1\" using the same name.",
 			newTableName));
 		return false;
@@ -2464,7 +2464,7 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 			itCustom!=customProperties.constEnd(); ++itCustom ) 
 		{
 			addFieldPropertyToExtendedTableSchemaData( 
-				f, itCustom.key(), itCustom.data(), doc, 
+				f, itCustom.key(), itCustom.value(), doc, 
 				extendedTableSchemaMainEl, extendedTableSchemaStringIsEmpty, /*custom*/true );
 		}
 	}
@@ -2553,7 +2553,7 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 					bool ok;
 					int intValue;
 					if (propEl.tagName()=="property") {
-						QByteArray propertyName = propEl.attribute("name").latin1();
+						QByteArray propertyName = propEl.attribute("name").toLatin1();
 						if (propEl.attribute("custom")=="true") {
 							//custom property
 							f->setCustomProperty(propertyName, 
@@ -2646,7 +2646,7 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 		}
 
 		Field *f = new Field(
-			cursor->value(2).asString(), f_type, f_constr, f_opts, f_len, f_prec );
+			cursor->value(2).toString(), f_type, f_constr, f_opts, f_len, f_prec );
 
 		f->setDefaultValue( KexiDB::stringToVariant(cursor->value(7).toString(), Field::variantType( f_type ), ok) );
 		if (!ok) {
@@ -2967,7 +2967,7 @@ inline void updateRowDataWithNewValues(QuerySchema &query, RowData& data, KexiDB
 				"- could not find item '" << it.key()->aliasOrName() << "'" << endl;
 			continue;
 		}
-		data[ columnsOrderExpandedIt.data() ] = it.data();
+		data[ columnsOrderExpandedIt.value() ] = it.value();
 	}
 }
 
@@ -3010,7 +3010,7 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		if (!sqlset.isEmpty())
 			sqlset+=",";
 		sqlset += (escapeIdentifier(it.key()->field->name()) + "=" +
-			m_driver->valueToSQL(it.key()->field,it.data()));
+			m_driver->valueToSQL(it.key()->field, it.value()));
 	}
 	if (pkey) {
 		Q3ValueVector<int> pkeyFieldsOrder = query.pkeyFieldsOrder();
@@ -3139,7 +3139,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 				sqlvals+=",";
 			}
 			sqlcols += escapeIdentifier(it.key()->field->name());
-			sqlvals += m_driver->valueToSQL(it.key()->field,it.data());
+			sqlvals += m_driver->valueToSQL(it.key()->field, it.value());
 		}
 	}
 	m_sql += (sqlcols + ") VALUES (" + sqlvals + ")");
@@ -3197,7 +3197,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			return false;
 		}
 	}
-	if (getROWID && /*sanity check*/data.size() > fieldsExpanded.size()) {
+	if (getROWID && /*sanity check*/data.size() > (int)fieldsExpanded.size()) {
 //		KexiDBDbg << "Connection::insertRow(): new ROWID == " << (uint)ROWID << endl;
 		data[data.size()-1] = ROWID;
 	}

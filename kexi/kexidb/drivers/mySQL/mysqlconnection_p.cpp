@@ -77,7 +77,7 @@ bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 	KexiDBDrvDbg << "MySqlConnectionInternal::connect()" << endl;
 	Q3CString localSocket;
 	QString hostName = data.hostName;
-	if (hostName.isEmpty() || hostName.lower()=="localhost") {
+	if (hostName.isEmpty() || hostName.toLower()=="localhost") {
 		if (data.useLocalSocketFile) {
 			if (data.localSocketFileName.isEmpty()) {
 	//! @todo move the list of default sockets to a generic method
@@ -90,7 +90,7 @@ bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 				for(QStringList::ConstIterator it = sockets.constBegin(); it != sockets.constEnd(); it++)
 				{
 					if(QFile(*it).exists()) {
-						localSocket = ((QString)(*it)).local8Bit();
+						localSocket = ((QString)(*it)).toLocal8Bit();
 						break;
 					}
 				}
@@ -106,9 +106,9 @@ bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 	}
 
 /*! @todo is latin1() encoding here valid? what about using UTF for passwords? */
-	const char *pwd = data.password.isNull() ? 0 : data.password.latin1();
-	mysql_real_connect(mysql, hostName.latin1(), data.userName.latin1(), 
-		pwd, 0, data.port, localSocket, 0);
+	QByteArray pwd( data.password.isNull() ? QByteArray() : data.password.toLatin1() );
+	mysql_real_connect(mysql, hostName.toLatin1(), data.userName.toLatin1(), 
+		pwd.constData(), 0, data.port, localSocket, 0);
 	if(mysql_errno(mysql) == 0)
 		return true;
 
@@ -141,7 +141,7 @@ bool MySqlConnectionInternal::useDatabase(const QString &dbName) {
 bool MySqlConnectionInternal::executeSQL(const QString& statement) {
 //	KexiDBDrvDbg << "MySqlConnectionInternal::executeSQL: "
 //	             << statement << endl;
-	Q3CString queryStr=statement.utf8();
+	Q3CString queryStr=statement.toUtf8();
 	const char *query=queryStr;
 	if(mysql_real_query(mysql, query, strlen(query)) == 0)
 	{

@@ -128,21 +128,21 @@ bool pqxxSqlDriver::drv_isSystemFieldName( const QString& ) const
 //
 bool pqxxSqlDriver::isSystemDatabaseName( const QString& n ) const
 {
-	return n.lower()=="template1" || n.lower()=="template0";
+	return n.toLower()=="template1" || n.toLower()=="template0";
 }
 
 //==================================================================================
 //
 QString pqxxSqlDriver::escapeString( const QString& str) const
 {
-    return QString(pqxx::Quote(str.ascii()).c_str());
+    return QString(pqxx::Quote(str.toAscii().constData()).c_str());
 }
 
 //==================================================================================
 //
 Q3CString pqxxSqlDriver::escapeString( const Q3CString& str) const
 {
-    return Q3CString(pqxx::Quote(QString(str).ascii()).c_str());
+    return Q3CString(pqxx::Quote(str.constData()).c_str());
 }
 
 //==================================================================================

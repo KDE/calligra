@@ -304,7 +304,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 		/*! Creates custom actions. Reimplement this if you need to add some 
 		 actions coming from the factory. */
-		virtual void createCustomActions(KActionCollection *col) {};
+		virtual void createCustomActions(KActionCollection *col) { Q_UNUSED(col); };
 
 		/*! This function can be used to add custom items in widget \a w context
 		menu \a menu. */

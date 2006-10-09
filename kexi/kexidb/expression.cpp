@@ -417,7 +417,7 @@ Field::Type ConstExpr::type()
 	}
 	else if (m_token==CHARACTER_STRING_LITERAL) {
 //TODO: Field::defaultTextLength() is hardcoded now!
-		if (value.toString().length() > Field::defaultTextLength())
+		if (value.toString().length() > (int)Field::defaultTextLength())
 			return Field::LongText;
 		else
 			return Field::Text;
@@ -706,7 +706,7 @@ bool FunctionExpr::validate(ParseInfo& parseInfo)
 
 bool FunctionExpr::isBuiltInAggregate(const Q3CString& fname)
 {
-	return builtInAggregates().find(fname.upper())!=FunctionExpr_builtIns.end();
+	return builtInAggregates().contains(fname.upper());
 }
 
 #if 0
