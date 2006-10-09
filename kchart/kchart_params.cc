@@ -595,7 +595,7 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     QDomElement  axisElem;
     forEachElement( axisElem, plotareaElem ) {
 
-	//cerr << "plotarea element: " << axisElem.tagName().latin1() << "\n";
+	// If this element is not an axis, then continue
 	if ( axisElem.tagName() != "axis" )
 	    continue;
 
@@ -650,7 +650,7 @@ bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
     // Get the axis to manipulate.
     // TODO
 
-    // Get the axis title if any.
+    // Get the axis title (== axis label) if any.
     QDomElement  titleElem = KoDom::namedItemNS( axisElem,
 						 KoXmlNS::chart, "title" );
     if ( !titleElem.isNull() ) {
@@ -981,7 +981,7 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
 
 void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter, 
 				  KoGenStyles& mainStyles,
-                                  KDChartAxisParams::AxisPos /*axisPos*/, 
+                                  KDChartAxisParams::AxisPos axisPos, 
 				  const char* axisName ) const
 {
     bodyWriter->startElement( "chart:axis" );
@@ -991,12 +991,28 @@ void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter,
 
     KoGenStyle axisStyle( KoGenStyle::STYLE_AUTO, "chart" );
 
-    // TODO save axis style properties, like
+    // TODO: Save axis style properties, like
     axisStyle.addProperty( "chart:display-label", "true" ); // ###
 
 
     const QString styleName = mainStyles.lookup( axisStyle, "ch" );
     bodyWriter->addAttribute( "chart:style-name", styleName );
+
+    // Write axis titles if any.
+    QString tmpStr = axisTitle( axisPos );
+    if ( tmpStr != "" ) {
+	bodyWriter->startElement( "chart:title" );
+	// TODO: Save style, svg:x, svg:y
+
+	// Write the text in the axis title.
+	bodyWriter->startElement( "text:p" );
+	bodyWriter->addTextNode( tmpStr
+				 .remove( QRegExp( "^<qt><center>" ) )
+				 .remove( QRegExp( "</center></qt>$" ) ) );
+	bodyWriter->endElement(); // text:p
+
+	bodyWriter->endElement(); // chart:title
+    }
 
     // TODO x axis has chart:categories, y axis has chart:grid ?
     // Maybe that part should be done by the caller of saveOasisAxis then
