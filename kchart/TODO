@@ -87,8 +87,8 @@ After the feature freeze
 
 
 
-After 1.6 (1.6.x)
-=================
+Fixes for 1.6.x
+===============
 
 
 Item								   Prio Status
@@ -103,12 +103,9 @@ Item								   Prio Status
     - Data in rows / columns				done	done
   + Legend						DONE	DONE
   + Axes						----	----
+    - Axis labels					--      --
 
 * Bugs
-
-* Integration with rest of KOffice.
-  + Give KChart the same page layout dialog as KSpread.		      1 ----
-       (Kivio has a simpler variation with only one page.)
 
 * Issues with KSpread
 
@@ -140,9 +137,6 @@ Item								   Prio Status
   + -- Nothing so far --
 
 
-================================================================
-			     Towards 2.0
-================================================================
 
 
 Large items
@@ -160,12 +154,8 @@ Large items
   + Make all the data be contained in the Model, so far being
     the part.
 
-* Create a Flake shape of KChart
-
-* Integrate KDChart 2.0
-
 * Scripting
-  + Kross support for 
+  + Kross support						      2 ----
   + DCOP for data manipulation					      2 ----
     - class KChartData
   + DCOP for chart manipulation					      2 ----
@@ -210,6 +200,3 @@ Smaller items
     - Pie							      2 --
     - Ring							      2 --
     - Polar							      2 --
-
-* Miscellaneous fixes
-  + Tooltips & What's this help all over the program?		     S1 ----
