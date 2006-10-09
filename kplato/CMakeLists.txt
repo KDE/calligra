@@ -79,24 +79,20 @@ kde4_add_ui3_files(libkplatopart_SRCS
     kpttaskcostpanelbase.ui
     kptsummarytaskgeneralpanelbase.ui
     kptcalendarlistpanel.ui
-    kptaccountsviewconfigurepanelbase.ui
     kptmilestoneprogresspanelbase.ui
     kptdurationwidget.ui
     kptmainprojectpanelbase.ui
     relationpanel.ui
     resourcedialogbase.ui
-    kpttaskresourcespanelbase.ui
-    resourcespanelbase.ui
     kptprojectdialogbase.ui
     kpttasknotespanelbase.ui
     kpttaskgeneralpanelbase.ui
     kptwbsdefinitionpanelbase.ui
     kpttaskprogresspanelbase.ui
     kptconfigtaskpanelbase.ui
-    kptintervaleditbase.ui
     )
 
-kde4_add_ui_files(libkplatopart_SRCS kptaccountspanelbase.ui)
+kde4_add_ui_files(libkplatopart_SRCS kptaccountspanelbase.ui resourcespanelbase.ui kptaccountsviewconfigurepanelbase.ui kptintervaleditbase.ui kpttaskresourcespanelbase.ui)
 
 ########### next target ###############
 

@@ -21,7 +21,7 @@
 #define KPTPRESOURCESPANEL_H
 
 #include "kptresource.h"
-#include "resourcespanelbase.h"
+#include "ui_resourcespanelbase.h"
 
 #include <q3listbox.h>
 #include <QString>
@@ -39,6 +39,15 @@ class GroupItem;
 class ResourcesPanelResourceItem;
 class ResourcesPanelGroupLVItem;
 class Part;
+
+class ResourcesPanelBase : public QWidget, public Ui::ResourcesPanelBase
+{
+public:
+  ResourcesPanelBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class ResourcesPanel : public ResourcesPanelBase {
     Q_OBJECT

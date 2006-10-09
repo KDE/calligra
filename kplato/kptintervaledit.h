@@ -20,7 +20,7 @@
 #ifndef KPTINTERVALEDIT_H
 #define KPTINTERVALEDIT_H
 
-#include "kptintervaleditbase.h"
+#include "ui_kptintervaleditbase.h"
 
 #include <kdialog.h>
 
@@ -31,6 +31,15 @@
 
 namespace KPlato
 {
+
+class IntervalEditBase : public QWidget, public Ui::IntervalEditBase
+{
+public:
+  IntervalEditBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class IntervalEditImpl : public IntervalEditBase {
     Q_OBJECT

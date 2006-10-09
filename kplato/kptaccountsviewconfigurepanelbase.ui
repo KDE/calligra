@@ -1,68 +1,62 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPlato::AccountsviewConfigurePanelBase</class>
-<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>AccountsviewConfigurePanelBase</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author>Dag Andersen &lt;danders@get2net.dk></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>KPlato::AccountsviewConfigurePanelBase</class>
+  <widget class="QWidget" name="KPlato::AccountsviewConfigurePanelBase" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>337</width>
+        <height>81</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>337</width>
-            <height>81</height>
-        </rect>
+    <property name="windowTitle" >
+      <string>AccountsviewConfigurePanelBase</string>
     </property>
-    <property name="caption">
-        <string>AccountsviewConfigurePanelBase</string>
-    </property>
-    <grid>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>0</number>
-        </property>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="text">
-                <string>Cut-off date:</string>
-            </property>
+    <layout class="QGridLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <item row="0" column="0" >
+        <widget class="QLabel" name="textLabel1" >
+          <property name="text" >
+            <string>Cut-off date:</string>
+          </property>
+          <property name="wordWrap" >
+            <bool>false</bool>
+          </property>
         </widget>
-        <widget class="QComboBox" row="1" column="1">
-            <property name="name">
-                <cstring>periodBox</cstring>
-            </property>
+      </item>
+      <item row="1" column="1" >
+        <widget class="QComboBox" name="periodBox" />
+      </item>
+      <item row="0" column="1" >
+        <widget class="KDateWidget" name="dateEdit" />
+      </item>
+      <item row="1" column="0" >
+        <widget class="QLabel" name="textLabel1_2" >
+          <property name="text" >
+            <string>Periodicity:</string>
+          </property>
+          <property name="wordWrap" >
+            <bool>false</bool>
+          </property>
         </widget>
-        <widget class="KDateWidget" row="0" column="1">
-            <property name="name">
-                <cstring>dateEdit</cstring>
-            </property>
+      </item>
+      <item rowspan="1" row="2" column="0" colspan="2" >
+        <widget class="QCheckBox" name="cumulative" >
+          <property name="text" >
+            <string>Cumulative</string>
+          </property>
         </widget>
-        <widget class="QLabel" row="1" column="0">
-            <property name="name">
-                <cstring>textLabel1_2</cstring>
-            </property>
-            <property name="text">
-                <string>Periodicity:</string>
-            </property>
-        </widget>
-        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>cumulative</cstring>
-            </property>
-            <property name="text">
-                <string>Cumulative</string>
-            </property>
-        </widget>
-    </grid>
-</widget>
-<customwidgets>
-</customwidgets>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kdatewidget.h</includehint>
-</includehints>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <includes>
+    <include location="local" >kdatewidget.h</include>
+  </includes>
+</ui>

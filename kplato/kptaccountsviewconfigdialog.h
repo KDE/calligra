@@ -22,7 +22,7 @@
 
 
 #include <kdialog.h>
-#include "kptaccountsviewconfigurepanelbase.h"
+#include "ui_kptaccountsviewconfigurepanelbase.h"
 
 class QDate;
 class QString;
@@ -32,6 +32,15 @@ namespace KPlato
 {
 
 class AccountsviewConfigPanel;
+
+class AccountsviewConfigurePanelBase : public QWidget, public Ui::AccountsviewConfigurePanelBase
+{
+public:
+  AccountsviewConfigurePanelBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class AccountsviewConfigDialog : public KDialog {
     Q_OBJECT

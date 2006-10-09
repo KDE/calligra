@@ -20,7 +20,7 @@
 #ifndef KPTREQUESTRESOURCESPANEL_H
 #define KPTREQUESTRESOURCESPANEL_H
 
-#include "kpttaskresourcespanelbase.h"
+#include "ui_kpttaskresourcespanelbase.h"
 #include "kptduration.h"
 
 #include <q3listview.h>
@@ -91,6 +91,13 @@ public:
     ResourceGroupRequest *m_request;
 };
 
+class TaskResourcesPanelBase : public QWidget, public Ui::TaskResourcesPanelBase
+{
+public:
+  TaskResourcesPanelBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 class RequestResourcesPanel : public TaskResourcesPanelBase {
     Q_OBJECT

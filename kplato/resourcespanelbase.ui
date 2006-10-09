@@ -1,195 +1,174 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPlato::ResourcesPanelBase</class>
-<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>ResourcesPanelBase</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author>Dag Andersen &lt;danders@get2net.dk></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>KPlato::ResourcesPanelBase</class>
+  <widget class="QWidget" name="KPlato::ResourcesPanelBase" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>510</width>
+        <height>227</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>510</width>
-            <height>227</height>
-        </rect>
+    <property name="minimumSize" >
+      <size>
+        <width>500</width>
+        <height>200</height>
+      </size>
     </property>
-    <property name="minimumSize">
-        <size>
-            <width>500</width>
-            <height>200</height>
-        </size>
+    <property name="windowTitle" >
+      <string>ResourcesPanelBase</string>
     </property>
-    <property name="caption">
-        <string>ResourcesPanelBase</string>
-    </property>
-    <hbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout5</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+    <layout class="QHBoxLayout" >
+      <item>
+        <layout class="QVBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item>
+            <widget class="K3ListView" name="listOfGroups" >
+              <column>
+                <property name="text" >
+                  <string>Resource Group</string>
                 </property>
-                <widget class="K3ListView">
-                    <column>
-                        <property name="text">
-                            <string>Resource Group</string>
-                        </property>
-                        <property name="clickable">
-                            <bool>true</bool>
-                        </property>
-                        <property name="resizable">
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                    <property name="name">
-                        <cstring>listOfGroups</cstring>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout1</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>bAdd</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;New</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>bRemove</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Remove</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </vbox>
-        </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>resourceGroupBox</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>1</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="title">
-                <string>Resource</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
+                <property name="clickable" >
+                  <bool>true</bool>
                 </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout51</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>resourceName</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QListBox">
-                            <property name="name">
-                                <cstring>listOfResources</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>7</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                        </widget>
-                    </vbox>
+                <property name="resizable" >
+                  <bool>true</bool>
+                </property>
+              </column>
+            </widget>
+          </item>
+          <item>
+            <layout class="QHBoxLayout" >
+              <property name="margin" >
+                <number>0</number>
+              </property>
+              <item>
+                <widget class="QPushButton" name="bAdd" >
+                  <property name="text" >
+                    <string>&amp;New</string>
+                  </property>
                 </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout5</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>bAddResource</cstring>
-                            </property>
-                            <property name="text">
-                                <string>New...</string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>bEditResource</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Edit...</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>bRemoveResource</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Remove</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                        </widget>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer9</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Qt::Vertical</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>20</width>
-                                    <height>220</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </vbox>
+              </item>
+              <item>
+                <widget class="QPushButton" name="bRemove" >
+                  <property name="text" >
+                    <string>&amp;Remove</string>
+                  </property>
                 </widget>
-            </hbox>
+              </item>
+            </layout>
+          </item>
+        </layout>
+      </item>
+      <item>
+        <widget class="Q3GroupBox" name="resourceGroupBox" >
+          <property name="sizePolicy" >
+            <sizepolicy>
+              <hsizetype>5</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+            </sizepolicy>
+          </property>
+          <property name="title" >
+            <string>Resource</string>
+          </property>
+          <layout class="QHBoxLayout" >
+            <property name="margin" >
+              <number>0</number>
+            </property>
+            <item>
+              <layout class="QVBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <widget class="QLineEdit" name="resourceName" />
+                </item>
+                <item>
+                  <widget class="Q3ListBox" name="listOfResources" >
+                    <property name="sizePolicy" >
+                      <sizepolicy>
+                        <hsizetype>7</hsizetype>
+                        <vsizetype>7</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                      </sizepolicy>
+                    </property>
+                  </widget>
+                </item>
+              </layout>
+            </item>
+            <item>
+              <layout class="QVBoxLayout" >
+                <property name="margin" >
+                  <number>0</number>
+                </property>
+                <item>
+                  <widget class="QPushButton" name="bAddResource" >
+                    <property name="text" >
+                      <string>New...</string>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QPushButton" name="bEditResource" >
+                    <property name="text" >
+                      <string>Edit...</string>
+                    </property>
+                    <property name="shortcut" >
+                      <string/>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QPushButton" name="bRemoveResource" >
+                    <property name="text" >
+                      <string>Remove</string>
+                    </property>
+                    <property name="shortcut" >
+                      <string/>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <spacer name="spacer9" >
+                    <property name="sizeHint" >
+                      <size>
+                        <width>20</width>
+                        <height>220</height>
+                      </size>
+                    </property>
+                    <property name="sizeType" >
+                      <enum>Expanding</enum>
+                    </property>
+                    <property name="orientation" >
+                      <enum>Qt::Vertical</enum>
+                    </property>
+                  </spacer>
+                </item>
+              </layout>
+            </item>
+          </layout>
         </widget>
-    </hbox>
-</widget>
-<customwidgets>
-</customwidgets>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>k3listview.h</includehint>
-</includehints>
-</UI>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <customwidgets>
+    <customwidget>
+      <class>K3ListView</class>
+      <extends>Q3ListView</extends>
+      <header>k3listview.h</header>
+    </customwidget>
+  </customwidgets>
+  <includes>
+    <include location="local" >k3listview.h</include>
+  </includes>
+</ui>
