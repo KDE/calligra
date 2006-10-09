@@ -395,8 +395,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, co
 
             if (colpos != -1)
 	    {
-              t_mycolor *mc = new t_mycolor; // delete is in place
-              mc = mcol.at(colpos);
+              t_mycolor *mc = mcol.at(colpos);
               str += "       <COLOR red=\"";
 
               str += QString::number (mc->r);
@@ -405,7 +404,6 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, co
               str += "\" blue=\"";
               str += QString::number (mc->b);
               str += "\" />\n";
-              delete mc;
 	    }
 
             str += "      </FORMAT>\n";
