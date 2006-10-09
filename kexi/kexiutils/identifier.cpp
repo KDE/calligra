@@ -29,12 +29,13 @@ using namespace KexiUtils;
 bool KexiUtils::isIdentifier(const QString& s)
 {
 	uint i;
-	for (i=0; i<s.length(); i++) {
+	const uint sLength = s.length();
+	for (i=0; i<sLength; i++) {
 		QChar c = s.at(i).toLower();
 		if (!(c=='_' || c>='a' && c<='z' || i>0 && c>='0' && c<='9'))
 			break;
 	}
-	return i>0 && i==s.length();
+	return i>0 && i==sLength;
 }
 
 QString KexiUtils::string2FileName(const QString &s)
@@ -213,7 +214,8 @@ inline QString char2Identifier(const QChar& c)
 
 QString KexiUtils::string2Identifier(const QString &s)
 {
-	QString r, id = s.simplified();
+	QString r;
+	QString id( s.simplified() );
 	if (id.isEmpty())
 		return id;
 	r.reserve(id.length());
@@ -227,7 +229,8 @@ QString KexiUtils::string2Identifier(const QString &s)
 	} else
 		r+=char2Identifier(c);
 
-	for (uint i=1; i<id.length(); i++)
+	const uint idLength = id.length();
+	for (uint i=1; i<idLength; i++)
 		r+=char2Identifier(id.at(i));
 	return r;
 }
@@ -254,16 +257,16 @@ IdentifierValidator::~IdentifierValidator()
 QValidator::State IdentifierValidator::validate( QString& input, int& pos ) const
 {
 	uint i;
-	for (i=0; i<input.length() && input.at(i)==' '; i++)
+	for (i=0; (int)i<input.length() && input.at(i)==' '; i++)
 		;
 	pos -= i; //i chars will be removed from beginning
-	if (i<input.length() && input.at(i)>='0' && input.at(i)<='9')
+	if ((int)i<input.length() && input.at(i)>='0' && input.at(i)<='9')
 		pos++; //_ will be added at the beginning
 	bool addspace = (input.right(1)==" ");
 	input = string2Identifier(input);
 	if (addspace)
 		input += "_";
-	if((uint)pos>input.length())
+	if(pos > input.length())
 		pos=input.length();
 	return input.isEmpty() ? QValidator::Intermediate : Acceptable;
 }

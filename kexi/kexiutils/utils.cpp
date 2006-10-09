@@ -33,10 +33,11 @@
 using namespace KexiUtils;
 
 DelayedCursorHandler::DelayedCursorHandler() {
+	timer.setSingleShot( true );
 	connect(&timer, SIGNAL(timeout()), this, SLOT(show()));
 }
 void DelayedCursorHandler::start(bool noDelay) {
-	timer.start(noDelay ? 0 : 1000, true);
+	timer.start(noDelay ? 0 : 1000);
 }
 void DelayedCursorHandler::stop() {
 	timer.stop();
@@ -181,9 +182,9 @@ QMap<QString,QString> KexiUtils::deserializeMap(QByteArray& array)
 
 QMap<QString,QString> KexiUtils::deserializeMap(const QString& string)
 {
+	QByteArray array;
 	const uint size = string.length();
-	Q3CString cstr(string.latin1());
-	QByteArray array( size );
+	array.resize( size );
 	for (uint i=0; i<size; i++) {
 		array[i] = char(string[i].unicode()-1);
 	}
@@ -323,9 +324,10 @@ QString KexiUtils::ptrToStringInternal(void* ptr, uint size)
 
 void* KexiUtils::stringToPtrInternal(const QString& str, uint size)
 {
-	QByteArray array(size);
-	if ((str.length()/2)<size)
+	if ((str.length()/2)<(int)size)
 		return 0;
+	QByteArray array;
+	array.resize(size);
 	bool ok;
 	for (uint i=0; i<size; i++) {
 		array[i]=(unsigned char)(str.mid(i*2, 2).toUInt(&ok, 16));

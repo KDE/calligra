@@ -43,7 +43,7 @@ class DebugWindowDialog : public QDialog
 {
 	public:
 		explicit DebugWindowDialog( QWidget * parent )
-		 : QDialog(parent, 0, false, Qt::WType_Dialog|Qt::WStyle_MinMax|Qt::WStyle_StaysOnTop)
+		 : QDialog(parent, Qt::WType_Dialog|Qt::WStyle_MinMax|Qt::WStyle_StaysOnTop)
 		{
 			setWindowState( Qt::WindowMinimized );
 		}
