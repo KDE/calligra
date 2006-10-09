@@ -132,6 +132,7 @@ public slots:
  private:
     KChartPart    *m_part;
 
+    // ----------------------------------------------------------------
     // Info about the chart itself.
     ChartType      m_chartType;
 

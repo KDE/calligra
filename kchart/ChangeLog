@@ -1,3 +1,7 @@
+2006-10-10  Inge Wallin  <ingwa@dhcp-254-139.lkpg.cendio.se>
+
+	* kchart_params.cc (saveOasisAxis): Add saving of axis titles.
+
 2006-10-06  ----  Version 1.6.0 tagged  ----
 
 2006-10-03  Inge Wallin  <inge@lysator.liu.se>
