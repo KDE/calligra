@@ -214,7 +214,7 @@ Navigator::Navigator(bool _selectable, KMenu * menu, IconSidePane *_iconsidepane
 {
   setSelectionMode( KListBox::Single );
   viewport()->setAutoFillBackground( true );
-  setFrameStyle( Q3Frame::NoFrame );
+  setFrameStyle( QFrame::NoFrame );
   setHScrollBarMode( Q3ScrollView::AlwaysOff );
   //setAcceptDrops( true );
   mMinWidth = 0;

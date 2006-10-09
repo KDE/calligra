@@ -170,7 +170,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 //                            "the upper left part of it." ) );
     Q3ButtonGroup* alignmentBG;
     alignmentBG = new Q3ButtonGroup( right, "GroupBox_Alignment" );
-    //alignmentBG->setFrameStyle( Q3Frame::NoFrame );
+    //alignmentBG->setFrameStyle( QFrame::NoFrame );
     alignmentBG->insert( stretchedRB );
     alignmentBG->insert( scaledRB );
     alignmentBG->insert( centeredRB );
