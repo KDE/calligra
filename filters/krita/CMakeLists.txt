@@ -3,6 +3,7 @@ macro_optional_find_package(OpenEXR)
 macro_optional_find_package(TIFF)
 macro_optional_find_package(JPEG)
 macro_optional_find_package(GraphicsMagick)
+macro_optional_find_package(PopplerQt4)
 
 include_directories(${KRITA_INCLUDES})
 
@@ -28,3 +29,7 @@ endif(OPENEXR_FOUND)
 if(GRAPHICSMAGICK_FOUND)
 	add_subdirectory(gmagick)
 endif(GRAPHICSMAGICK_FOUND)
+
+if(POPPLER_QT4_FOUND)
+   add_subdirectory(pdf)
+endif(POPPLER_QT4_FOUND)
