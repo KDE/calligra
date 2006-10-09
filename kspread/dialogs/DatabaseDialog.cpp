@@ -608,7 +608,7 @@ void DatabaseDialog::accept()
 
   int i;
   QString queryStr;
-  QString tmp = m_sqlQuery->text();
+  QString tmp = m_sqlQuery->toPlainText();
   for ( i = 0; i < (int) tmp.length(); ++i )
   {
     if ( tmp[i] != '\n' )

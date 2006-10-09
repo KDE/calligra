@@ -660,7 +660,7 @@ void DlgValidity::OkPressed()
     result.m_restriction=Restriction::None;
     result.m_action=Action::Stop;
     result.m_cond=Conditional::Equal;
-    result.message=message->text();
+    result.message=message->toPlainText();
     result.title=title->text();
     result.valMin=0;
     result.valMax=0;
@@ -744,7 +744,7 @@ void DlgValidity::OkPressed()
      default :
       break;
     }
-    result.message=message->text();
+    result.message=message->toPlainText();
     result.title=title->text();
     result.valMin=0;
     result.valMax=0;
@@ -819,13 +819,13 @@ void DlgValidity::OkPressed()
     }
     else if ( chooseType->currentIndex()==7 )
     {
-      result.listValidity = validityList->text().split( '\n', QString::SkipEmptyParts );
+      result.listValidity = validityList->toPlainText().split( '\n', QString::SkipEmptyParts );
     }
   }
   result.displayMessage = displayMessage->isChecked();
   result.allowEmptyCell = allowEmptyCell->isChecked();
   result.displayValidationInformation = displayHelp->isChecked();
-  result.messageInfo= messageHelp->text();
+  result.messageInfo= messageHelp->toPlainText();
   result.titleInfo = titleHelp->text();
 
   ValidityManipulator* manipulator = new ValidityManipulator();

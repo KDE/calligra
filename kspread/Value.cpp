@@ -571,6 +571,7 @@ void Value::setValue( const QDateTime& dt, const Doc* doc  )
 
 void Value::setValue( const QTime& time, const Doc* doc )
 {
+  Q_UNUSED(doc);
   // reference time is midnight
   QTime refTime( 0, 0 );
   int i = refTime.msecsTo( time ) /* / 86400000 */;
@@ -608,6 +609,7 @@ QDate Value::asDate( const Doc* doc ) const
 // get the value as time
 QTime Value::asTime( const Doc* doc ) const
 {
+  Q_UNUSED(doc);
   QTime dt;
 
   int i = asInteger();
