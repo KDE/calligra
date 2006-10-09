@@ -8,14 +8,14 @@ macro_optional_find_package(ImageMagick)
 
 include_directories(${KRITA_INCLUDES})
 
-add_subdirectory( raw )
+#add_subdirectory( raw )
 
 if(JPEG_FOUND AND LIBEXIF_FOUND)
-	add_subdirectory(jpeg)
+#	add_subdirectory(jpeg)
 endif(JPEG_FOUND AND LIBEXIF_FOUND)
 
 if(TIFF_FOUND AND LIBEXIF_FOUND)
-	add_subdirectory(tiff)
+#	add_subdirectory(tiff)
 endif(TIFF_FOUND AND LIBEXIF_FOUND)
 
 message(STATUS "someone needs to port the krita plugins!")
