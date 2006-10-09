@@ -18,7 +18,6 @@
 */
 #include "KPrBrushProperty.h"
 
-#include "brushpropertyui.h"
 #include "gradientpropertyui.h"
 #include "KPrPBPreview.h"
 

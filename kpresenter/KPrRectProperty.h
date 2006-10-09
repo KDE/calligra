@@ -20,12 +20,18 @@
 
 #ifndef RECTPROPERTY_H
 #define RECTPROPERTY_H
-
+#include "ui_rectpropertyui.h"
 #include <QWidget>
 
 #include "KPrCommand.h"
 
-class RectPropertyUI;
+class RectPropertyUI : public QWidget, public Ui::RectPropertyUI
+{
+public:
+  RectPropertyUI( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
 
 class KPrRectProperty : public QWidget
 {

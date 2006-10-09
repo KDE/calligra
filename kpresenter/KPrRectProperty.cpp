@@ -18,11 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrRectProperty.h"
 
-#include "rectpropertyui.h"
 #include "KPrRectPreview.h"
-
+#include "KPrRectProperty.h"
 #include <KoImageResource.h>
 
 #include <QSpinBox>
