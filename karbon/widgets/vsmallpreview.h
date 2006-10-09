@@ -27,10 +27,10 @@
 #include <QWidget>
 //Added by qt3to4:
 #include <QPaintEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <QLabel>
 
-class Q3Frame;
+class QFrame;
 class QLabel;
 class VFill;
 class VStroke;
@@ -50,8 +50,8 @@ protected:
 private:
 	void drawFill( const VFill & );
 	void drawStroke( const VStroke & );
-	Q3Frame *m_fillFrame;
-	Q3Frame *m_strokeFrame;
+	QFrame *m_fillFrame;
+	QFrame *m_strokeFrame;
 	QLabel *m_fillLabel;
 	QLabel *m_strokeLabel;
 	VFill m_fill;

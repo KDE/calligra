@@ -20,7 +20,7 @@
 
 /* vsmallpreview.cc */
 #include <QColor>
-#include <q3frame.h>
+#include <qframe.h>
 #include <QLabel>
 #include <QLayout>
 #include <qpixmap.h>
@@ -51,15 +51,15 @@ VSmallPreview::VSmallPreview( QWidget* parent, const char* name )
 	QHBoxLayout *layout = new QHBoxLayout;
 	m_strokeLabel = new QLabel( i18n( "Stroke: None" ), this );
 	layout->addWidget( m_strokeLabel );
-	m_strokeFrame = new Q3Frame( this );
+	m_strokeFrame = new QFrame( this );
 	m_strokeFrame->setFixedWidth ( FRAMEWIDTH );
-	m_strokeFrame->setFrameStyle( QFrame::StyledPanel | Q3Frame::Plain );
+	m_strokeFrame->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
 	layout->addWidget( m_strokeFrame );
 	m_fillLabel = new QLabel( i18n( "Fill: None" ), this );
 	layout->addWidget( m_fillLabel );
-	m_fillFrame = new Q3Frame( this );
+	m_fillFrame = new QFrame( this );
 	m_fillFrame->setFixedWidth ( FRAMEWIDTH );
-	m_fillFrame->setFrameStyle( QFrame::StyledPanel | Q3Frame::Plain );
+	m_fillFrame->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
 	layout->addWidget( m_fillFrame );
 	layout->activate();
 
