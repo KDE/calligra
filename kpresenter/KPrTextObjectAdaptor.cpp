@@ -204,15 +204,15 @@ void KPrTextObjectAdaptor::setTextFamilyFont(const QString &font)
 void KPrTextObjectAdaptor::changeCaseOfText( const QString & caseType)
 {
     KCommand *cmd = 0L;
-    if( caseType.lower() == "uppercase" )
+    if( caseType.toLower() == "uppercase" )
         cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::UpperCase );
-    else if( caseType.lower() =="lowercase" )
+    else if( caseType.toLower() =="lowercase" )
         cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::LowerCase );
-    else if( caseType.lower() =="titlecase" )
+    else if( caseType.toLower() =="titlecase" )
         cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::TitleCase );
-    else if( caseType.lower() =="togglecase" )
+    else if( caseType.toLower() =="togglecase" )
         cmd=m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::ToggleCase );
-    else if( caseType.lower() =="sentencecase" )
+    else if( caseType.toLower() =="sentencecase" )
         cmd = m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::SentenceCase );
     else
         kDebug(33001)<<"Error in void KWordTextFrameSetAdaptor::changeCaseOfText( const QString & caseType) parameter\n";
@@ -287,11 +287,11 @@ double KPrTextObjectAdaptor::ptMarginBottom()const
 
 void KPrTextObjectAdaptor::setVerticalAligment( const QString & type)
 {
-    if ( type.lower() =="center" )
+    if ( type.toLower() =="center" )
         m_textobject->setVerticalAligment( KP_CENTER );
-    else if ( type.lower() =="top" )
+    else if ( type.toLower() =="top" )
         m_textobject->setVerticalAligment( KP_TOP );
-    else if ( type.lower() =="bottom" )
+    else if ( type.toLower() =="bottom" )
         m_textobject->setVerticalAligment( KP_BOTTOM );
 }
 

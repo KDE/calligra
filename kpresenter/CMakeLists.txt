@@ -130,10 +130,9 @@ kde4_add_ui3_files(kpresenterprivate_LIB_SRCS
    polygonpropertyui.ui
    piepropertyui.ui
    picturepropertyui.ui
-   marginui.ui
    slidetransitionwidget.ui )
 
-kde4_add_ui_files(kpresenterprivate_LIB_SRCS brushpropertyui.ui rectpropertyui.ui )
+kde4_add_ui_files(kpresenterprivate_LIB_SRCS brushpropertyui.ui rectpropertyui.ui marginui.ui )
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 

@@ -25,8 +25,17 @@
 #include <QWidget>
 
 #include <KoUnit.h>
+#include "ui_marginui.h"
 
-class MarginUI;
+
+class MarginUI : public QWidget, public Ui::MarginUI
+{
+public:
+  MarginUI( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class KPrMarginWidget : public QWidget
 {

@@ -31,7 +31,6 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include "marginui.h"
 #include <KoUnitWidgets.h>//for KoUnitDoubleSpinBox
 
 KPrMarginWidget::KPrMarginWidget( QWidget *parent, const char *name, const KoUnit::Unit unit )

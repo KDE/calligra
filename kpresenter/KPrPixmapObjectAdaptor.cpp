@@ -87,13 +87,13 @@ void KPrPixmapObjectAdaptor::loadImage( const QString & fileName )
 
 void KPrPixmapObjectAdaptor::setPictureMirrorType(const QString & _mirror)
 {
-    if ( _mirror.lower()=="normal")
+    if ( _mirror.toLower()=="normal")
         obj->setPictureMirrorType( PM_NORMAL);
-    else if ( _mirror.lower()=="horizontal")
+    else if ( _mirror.toLower()=="horizontal")
         obj->setPictureMirrorType( PM_HORIZONTAL );
-    else if ( _mirror.lower()=="vertical")
+    else if ( _mirror.toLower()=="vertical")
         obj->setPictureMirrorType( PM_VERTICAL );
-    else if ( _mirror.lower()=="horizontalandvertical")
+    else if ( _mirror.toLower()=="horizontalandvertical")
         obj->setPictureMirrorType( PM_HORIZONTALANDVERTICAL );
     else
         kDebug(33001)<<" Error in setPictureMirrorType :"<<_mirror<<endl;
