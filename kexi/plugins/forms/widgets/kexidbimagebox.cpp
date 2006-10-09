@@ -356,7 +356,7 @@ void KexiDBImageBox::handleInsertFromFileAction(const KURL& url)
 void KexiDBImageBox::handleAboutToSaveAsAction(QString& origFilename, QString& fileExtension, bool& dataIsEmpty)
 {
 	if (data().isEmpty()) {
-		kdWarning() << "KexiDBImageBox::handleAboutToSaveAs(): no pixmap!" << endl;
+		kWarning() << "KexiDBImageBox::handleAboutToSaveAs(): no pixmap!" << endl;
 		dataIsEmpty = false;
 		return;
 	}

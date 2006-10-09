@@ -84,8 +84,8 @@ private:
     }
 };
 
-AccountsPanel::AccountsPanel(Accounts &acc, QWidget *p, const char *n)
-    : AccountsPanelBase(p, n),
+AccountsPanel::AccountsPanel(Accounts &acc, QWidget *p)
+    : AccountsPanelBase(p),
       m_accounts(acc),
       m_currentIndex(0),
       m_renameItem(0)

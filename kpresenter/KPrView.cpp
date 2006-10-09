@@ -1518,7 +1518,7 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
                     kDebug(33001) << "Screensaver successfully disabled" << endl;
             }
         } else {
-            kdWarning(33001) << "Couldn't check screensaver (using dcop to kdesktop)!" << endl;
+            kWarning(33001) << "Couldn't check screensaver (using dcop to kdesktop)!" << endl;
         }
         // is DPMS enabled?
         m_dpmsWasEnabled = isDPMSEnabled();

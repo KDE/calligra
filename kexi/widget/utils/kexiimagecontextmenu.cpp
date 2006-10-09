@@ -145,7 +145,7 @@ void KexiImageContextMenu::saveAs()
 	emit aboutToSaveAsRequested(origFilename, fileExtension, dataIsEmpty);
 
 	if (dataIsEmpty) {
-		kdWarning() << "KexiImageContextMenu::saveAs(): no data!" << endl;
+		kWarning() << "KexiImageContextMenu::saveAs(): no data!" << endl;
 		return;
 	}
 	if (!origFilename.isEmpty())

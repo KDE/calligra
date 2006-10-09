@@ -20,7 +20,7 @@
 #ifndef KPTACCOUNTSPANEL_H
 #define KPTACCOUNTSPANEL_H
 
-#include "kptaccountspanelbase.h"
+#include "ui_kptaccountspanelbase.h"
 
 #include <q3ptrlist.h>
 #include <q3dict.h>
@@ -41,10 +41,19 @@ class Accounts;
 class Part;
 class Project;
 
+class AccountsPanelBase : public QWidget, public Ui::AccountsPanelBase
+{
+public:
+  AccountsPanelBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
+
 class AccountsPanel : public AccountsPanelBase {
     Q_OBJECT
 public:
-    AccountsPanel(Accounts &acc, QWidget *parent=0, const char *name=0);
+    AccountsPanel(Accounts &acc, QWidget *parent=0);
     
     KCommand *buildCommand(Part *part);
     

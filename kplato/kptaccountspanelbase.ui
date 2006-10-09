@@ -1,130 +1,122 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPlato::AccountsPanelBase</class>
-<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>AccountsPanelBase</cstring>
+<ui version="4.0" stdsetdef="1" >
+  <author>Dag Andersen &lt;danders@get2net.dk></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>KPlato::AccountsPanelBase</class>
+  <widget class="QWidget" name="KPlato::AccountsPanelBase" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>350</width>
+        <height>234</height>
+      </rect>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>350</width>
-            <height>234</height>
-        </rect>
+    <property name="minimumSize" >
+      <size>
+        <width>350</width>
+        <height>220</height>
+      </size>
     </property>
-    <property name="minimumSize">
-        <size>
-            <width>350</width>
-            <height>220</height>
-        </size>
+    <property name="baseSize" >
+      <size>
+        <width>300</width>
+        <height>0</height>
+      </size>
     </property>
-    <property name="baseSize">
-        <size>
-            <width>300</width>
-            <height>0</height>
-        </size>
+    <property name="windowTitle" >
+      <string>AccountsPanelBase</string>
     </property>
-    <property name="caption">
-        <string>AccountsPanelBase</string>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
+    <layout class="QVBoxLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
             <number>0</number>
-        </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout1</cstring>
+          </property>
+          <item>
+            <widget class="QLabel" name="textLabel1" >
+              <property name="text" >
+                <string>Default account:</string>
+              </property>
+              <property name="wordWrap" >
+                <bool>false</bool>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QComboBox" name="accountsComboBox" />
+          </item>
+        </layout>
+      </item>
+      <item>
+        <widget class="K3ListView" name="accountList" >
+          <column>
+            <property name="text" >
+              <string>Account</string>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Default account:</string>
-                    </property>
-                </widget>
-                <widget class="QComboBox">
-                    <property name="name">
-                        <cstring>accountsComboBox</cstring>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="K3ListView">
-            <column>
-                <property name="text">
-                    <string>Account</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>Description</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <property name="name">
-                <cstring>accountList</cstring>
+            <property name="clickable" >
+              <bool>true</bool>
             </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout7</cstring>
+            <property name="resizable" >
+              <bool>true</bool>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>newBtn</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;New</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>subBtn</cstring>
-                    </property>
-                    <property name="text">
-                        <string>New &amp;Sub-Account</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>removeBtn</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Remove</string>
-                    </property>
-                </widget>
-            </hbox>
+          </column>
+          <column>
+            <property name="text" >
+              <string>Description</string>
+            </property>
+            <property name="clickable" >
+              <bool>true</bool>
+            </property>
+            <property name="resizable" >
+              <bool>true</bool>
+            </property>
+          </column>
         </widget>
-    </vbox>
-</widget>
-<customwidgets>
-</customwidgets>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>k3listview.h</includehint>
-</includehints>
-</UI>
+      </item>
+      <item>
+        <layout class="QHBoxLayout" >
+          <property name="margin" >
+            <number>0</number>
+          </property>
+          <item>
+            <widget class="QPushButton" name="newBtn" >
+              <property name="text" >
+                <string>&amp;New</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="subBtn" >
+              <property name="text" >
+                <string>New &amp;Sub-Account</string>
+              </property>
+            </widget>
+          </item>
+          <item>
+            <widget class="QPushButton" name="removeBtn" >
+              <property name="text" >
+                <string>&amp;Remove</string>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <customwidgets>
+    <customwidget>
+      <class>K3ListView</class>
+      <extends>Q3ListView</extends>
+      <header>k3listview.h</header>
+    </customwidget>
+  </customwidgets>
+  <includes>
+    <include location="local" >k3listview.h</include>
+  </includes>
+</ui>

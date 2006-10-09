@@ -662,7 +662,7 @@ int main(int argc, char *argv[])
 {
 	// args: <.altertable test filename>
 	if (argc < 2) {
-		kdWarning() << "Please specify test filename.\nOptions: \n"
+		kWarning() << "Please specify test filename.\nOptions: \n"
 		"\t-close - closes the main window when test finishes" << endl;
 		return quit(1);
 	}
@@ -674,7 +674,7 @@ int main(int argc, char *argv[])
 	testFilename = argv[argc-1];
 	testFile.setName(testFilename);
 	if (!testFile.open(IO_ReadOnly)) {
-		kdWarning() << QString("Opening test file %1 failed.").arg(testFilename) << endl;
+		kWarning() << QString("Opening test file %1 failed.").arg(testFilename) << endl;
 		return quit(1);
 	}
 	//load db name
@@ -704,7 +704,7 @@ int main(int argc, char *argv[])
 	res = tester.run(closeAppRequested);
 	if (true != res) {
 		if (false == res)
-			kdWarning() << QString("Running test for file '%1' failed.").arg(testFilename) << endl;
+			kWarning() << QString("Running test for file '%1' failed.").arg(testFilename) << endl;
 		return quit(res==false ? 1 : 0);
 	}
 	kDebug() << QString("Tests from file '%1': OK").arg(testFilename) << endl;

@@ -588,11 +588,11 @@ bool Project::addSubTask( Node* task, Node* position )
     // we want to add a subtask to the node "position". It will become
     // position's last child.
     if ( 0 == position ) {
-        kdError()<<k_funcinfo<<"No parent, can not add subtask: "<<task->name()<<endl;
+        kError()<<k_funcinfo<<"No parent, can not add subtask: "<<task->name()<<endl;
         return false;
     }
     if (!registerNodeId(task)) {
-        kdError()<<k_funcinfo<<"Failed to register node id, can not add subtask: "<<task->name()<<endl;
+        kError()<<k_funcinfo<<"Failed to register node id, can not add subtask: "<<task->name()<<endl;
         return false;
     }
     position->addChildNode(task);
@@ -603,11 +603,11 @@ bool Project::addSubTask( Node* task, int index, Node* parent )
 {
     // we want to add a subtask to the node "parent" at the given index.
     if ( 0 == parent ) {
-        kdError()<<k_funcinfo<<"No parent, can not add subtask: "<<task->name()<<endl;
+        kError()<<k_funcinfo<<"No parent, can not add subtask: "<<task->name()<<endl;
         return false;
     }
     if (!registerNodeId(task)) {
-        kdError()<<k_funcinfo<<"Failed to register node id, can not add subtask: "<<task->name()<<endl;
+        kError()<<k_funcinfo<<"Failed to register node id, can not add subtask: "<<task->name()<<endl;
         return false;
     }
     parent->insertChildNode(index, task);
@@ -798,7 +798,7 @@ void Project::insertId(const QString &id, const Node *node) {
 
 bool Project::registerNodeId(Node *node) {
     if (node->id().isEmpty()) {
-       kdError()<<k_funcinfo<<"Id is empty."<<endl;
+       kError()<<k_funcinfo<<"Id is empty."<<endl;
        return false;
     }
     Node *rn = findNode(node->id());
@@ -807,7 +807,7 @@ bool Project::registerNodeId(Node *node) {
        return true;
     }
     if (rn != node) {
-       kdError()<<k_funcinfo<<"Id already exists for different task: "<<node->id()<<endl;
+       kError()<<k_funcinfo<<"Id already exists for different task: "<<node->id()<<endl;
        return false;
     }
     return true;
