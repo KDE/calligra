@@ -19,18 +19,18 @@
 #ifndef KIS_IMAGE_MAGICK_CONVERTER_H_
 #define KIS_IMAGE_MAGICK_CONVERTER_H_
 
-#include <QObject>
-#include <q3valuevector.h>
+#include <qobject.h>
+#include <QVector>
 
 #include <kio/job.h>
 
-#include "kis_types.h"
-#include "kis_global.h"
-#include "kis_progress_subject.h"
+#include <kis_global.h>
+#include <kis_progress_subject.h>
+#include <kis_types.h>
 
 class QString;
 class KUrl;
-class KisDoc2;
+class KisDoc;
 class KisNameServer;
 class KisUndoAdapter;
 /**
@@ -63,7 +63,7 @@ class KisImageMagickConverter : public KisProgressSubject {
     Q_OBJECT
 
 public:
-    KisImageMagickConverter(KisDoc2 *doc, KisUndoAdapter *adapter);
+    KisImageMagickConverter(KisDoc *doc, KisUndoAdapter *adapter);
     virtual ~KisImageMagickConverter();
 
 public slots:
@@ -86,14 +86,14 @@ private slots:
 private:
     KisImageMagickConverter(const KisImageMagickConverter&);
     KisImageMagickConverter& operator=(const KisImageMagickConverter&);
-    void init(KisDoc2 *doc, KisUndoAdapter *adapter);
+    void init(KisDoc *doc, KisUndoAdapter *adapter);
     KisImageBuilder_Result decode(const KUrl& uri, bool isBlob);
 
 private:
     KisImageSP m_img;
-    KisDoc2 *m_doc;
+    KisDoc *m_doc;
     KisUndoAdapter *m_adapter;
-    Q3ValueVector<quint8> m_data;
+    QVector<Q_UINT8> m_data;
     KIO::TransferJob *m_job;
     KIO::filesize_t m_size;
     bool m_stop;

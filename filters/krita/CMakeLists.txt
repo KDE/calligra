@@ -2,7 +2,7 @@ macro_optional_find_package(PNG)
 macro_optional_find_package(OpenEXR)
 macro_optional_find_package(TIFF)
 macro_optional_find_package(JPEG)
-macro_optional_find_package(ImageMagick)
+macro_optional_find_package(GraphicsMagick)
 
 include_directories(${KRITA_INCLUDES})
 
@@ -25,7 +25,6 @@ if(OPENEXR_FOUND)
 #	add_subdirectory(openexr)
 endif(OPENEXR_FOUND)
 
-if(IMAGEMAGICK_FOUND)
-    #	add_subdirectory(magick)
-endif(IMAGEMAGICK_FOUND)
-
+if(GRAPHICSMAGICK_FOUND)
+	add_subdirectory(gmagick)
+endif(GRAPHICSMAGICK_FOUND)

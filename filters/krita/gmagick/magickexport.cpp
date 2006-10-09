@@ -21,17 +21,17 @@
 #include <KoDocument.h>
 #include <KoFilterChain.h>
 
-#include <kis_doc2.h>
+#include <kis_doc.h>
 #include <kis_paint_layer.h>
 #include <kis_image.h>
 #include <kis_annotation.h>
 #include <kis_types.h>
 #include <kis_image_magick_converter.h>
 
-typedef KGenericFactory<MagickExport> MagickExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritamagickexport, MagickExportFactory("kofficefilters"))
+typedef KGenericFactory<MagickExport, KoFilter> MagickExportFactory;
+K_EXPORT_COMPONENT_FACTORY(libkritagmagickexport, MagickExportFactory("kofficefilters"))
 
-MagickExport::MagickExport(QObject *parent, const QStringList&) : KoFilter(parent)
+MagickExport::MagickExport(QObject* parent, const QStringList&) : KoFilter(parent)
 {
 }
 
@@ -42,18 +42,18 @@ MagickExport::~MagickExport()
 KoFilter::ConversionStatus MagickExport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug(41008) << "magick export! From: " << from << ", To: " << to << "\n";
-
+    
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
     // XXX: Add dialog about flattening layers here
 
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
-
+    
     if (!output)
         return KoFilter::CreationError;
-
+    
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KUrl url;
@@ -63,9 +63,9 @@ KoFilter::ConversionStatus MagickExport::convert(const QByteArray& from, const Q
 
     KisImageMagickConverter ib(output, output->undoAdapter());
 
-    KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*img->projection()));
-    KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd));
-
+    KisPaintDeviceSP pd = new KisPaintDevice(*img->projection());
+    KisPaintLayerSP l = new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd);
+    
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
     if (ib.buildFile(url, l, beginIt, endIt) == KisImageBuilder_RESULT_OK) {

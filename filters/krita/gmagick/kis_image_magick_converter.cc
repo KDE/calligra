@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
+ *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "kis_image_magick_converter.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,9 +26,11 @@
 
 #include <magick/api.h>
 
-#include <QFile>
-#include <QFileInfo>
-#include <QString>
+#include <qcolor.h>
+
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qstring.h>
 
 #include <kdeversion.h>
 #include <kdebug.h>
@@ -34,27 +39,24 @@
 #include <kurl.h>
 #include <kio/netaccess.h>
 
-#include <QColor>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorProfile.h>
 
 #include "kis_types.h"
 #include "kis_global.h"
-#include "kis_doc2.h"
+#include "kis_doc.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
-#include "kis_image_magick_converter.h"
 #include "kis_meta_registry.h"
-#include "KoColorSpaceRegistry.h"
 #include "kis_iterators_pixel.h"
-#include "kis_colorspace.h"
-#include "KoColorProfile.h"
 #include "kis_annotation.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include "kis_paint_device.h"
 
 #include "../../../config.h"
-#include <config-filters.h>
 
 namespace {
 
@@ -76,7 +78,7 @@ namespace {
      * Make this more flexible -- although... ImageMagick
      * isn't that flexible either.
      */
-    QString getColorSpaceName(ColorspaceType type, unsigned long imageDepth = 8)
+    QString colorSpaceName(ColorspaceType type, unsigned long imageDepth = 8)
     {
 
         if (type == GRAYColorspace) {
@@ -113,16 +115,27 @@ namespace {
         if ( cs->id() == KoID("CMYK") || cs->id() == KoID("CMYK16") ) return CMYKColorspace;
         if ( cs->id() == KoID("LABA") ) return LABColorspace;
 
-        kDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
+//         kDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
         return RGBColorspace;
 
     }
 
     KoColorProfile * getProfileForProfileInfo(const Image * image)
     {
-#ifndef HAVE_MAGICK6
+        size_t length;
+        
+        const unsigned char * profiledata = GetImageProfile(image, "ICM", &length);
+        if( profiledata == NULL )
+            return 0;
+        QByteArray rawdata;
+        rawdata.resize(length);
+        memcpy(rawdata.data(), profiledata, length);
+        
+        KoColorProfile* p = new KoColorProfile(rawdata);
+        return p;
+
+#if 0
         return 0;
-#else
 
         if (image->profiles == NULL)
             return  0;
@@ -157,9 +170,49 @@ namespace {
 
     void setAnnotationsForImage(const Image * src, KisImageSP image)
     {
-#ifndef HAVE_MAGICK6
+        size_t length;
+        
+        const unsigned char * profiledata = GetImageProfile(src, "IPTC", &length);
+        if( profiledata != NULL )
+        {
+            QByteArray rawdata;
+            rawdata.resize(length);
+            memcpy(rawdata.data(), profiledata, length);
+            
+            KisAnnotation* annotation = new KisAnnotation(QString("IPTC"), "", rawdata);
+            Q_CHECK_PTR(annotation);
+
+            image -> addAnnotation(annotation);
+        }
+        for(int i = 0; i < src->generic_profiles; i++)
+        {
+            QByteArray rawdata;
+            rawdata.resize(length);
+            memcpy(rawdata.data(), src->generic_profile[i].info, src->generic_profile[i].length);
+            
+            KisAnnotation* annotation = new KisAnnotation(QString(src->generic_profile[i].name), "", rawdata);
+            Q_CHECK_PTR(annotation);
+
+            image -> addAnnotation(annotation);
+        }
+        
+        const ImageAttribute* imgAttr = GetImageAttribute(src, NULL);
+        while(imgAttr)
+        {
+            QByteArray rawdata;
+            int len = strlen(imgAttr -> value) + 1;
+            rawdata.resize(len);
+            memcpy(rawdata.data(), imgAttr -> value, len);
+            
+            KisAnnotation* annotation = new KisAnnotation( QString("krita_attribute:%1").arg(QString(imgAttr -> key)), "", rawdata );
+            Q_CHECK_PTR(annotation);
+
+            image -> addAnnotation(annotation);
+
+            imgAttr = imgAttr->next;
+        }
+#if 0
         return;
-#else
         if (src->profiles == NULL)
             return;
 
@@ -174,7 +227,7 @@ namespace {
             if (profile == (StringInfo *) NULL)
                 continue;
 
-            // XXX: icc will be written separately?
+            // XXX: icc will be written seperately?
             if (QString::compare(name, "icc") == 0)
                 continue;
 
@@ -185,7 +238,7 @@ namespace {
             annotation = new KisAnnotation(QString(name), "", rawdata);
             Q_CHECK_PTR(annotation);
 
-            image -> addAnnotation(KisAnnotationSP(annotation));
+            image -> addAnnotation(annotation);
         }
 
         // Attributes, since we have no hint on if this is an attribute or a profile
@@ -210,7 +263,7 @@ namespace {
                     QString("krita_attribute:%1").arg(QString(attr -> key)), "", rawdata);
                 Q_CHECK_PTR(annotation);
 
-                image -> addAnnotation(KisAnnotationSP(annotation));
+                image -> addAnnotation(annotation);
 #if MagickLibVersion < 0x620
                 attr = attr -> next;
 #endif
@@ -222,9 +275,6 @@ namespace {
 
     void exportAnnotationsForImage(Image * dst, vKisAnnotationSP_it& it, vKisAnnotationSP_it& annotationsEnd)
     {
-#ifndef HAVE_MAGICK6
-        return;
-#else
         while(it != annotationsEnd) {
             if (!(*it) || (*it) -> type() == QString()) {
                     kDebug(41008) << "Warning: empty annotation" << endl;
@@ -249,7 +299,6 @@ namespace {
             }
             ++it;
         }
-#endif
     }
 
 
@@ -276,7 +325,7 @@ namespace {
      * locks when calling user defined callbacks, this means that the same thread going back into IM
      * would deadlock since it would try to acquire locks it already holds.
      */
-#ifdef HAVE_MAGICK6
+#if 0
     MagickBooleanType monitor(const char *text, const ExtendedSignedIntegralType, const ExtendedUnsignedIntegralType, ExceptionInfo *)
     {
         KApplication *app = KApplication::kApplication();
@@ -306,7 +355,7 @@ namespace {
 
 
 
-KisImageMagickConverter::KisImageMagickConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
+KisImageMagickConverter::KisImageMagickConverter(KisDoc *doc, KisUndoAdapter *adapter)
 {
     InitGlobalMagick();
     init(doc, adapter);
@@ -386,7 +435,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         }
         else {
             colorspaceType = image->colorspace;
-            csName = getColorSpaceName(image -> colorspace, imageDepth);
+            csName = colorSpaceName(image -> colorspace, imageDepth);
         }
 
         kDebug(41008) << "image has " << csName << " colorspace\n";
@@ -401,7 +450,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(csName,""),"");
 
         if (!cs) {
-            kDebug(41008) << "Krita does not support colorspace " << image -> colorspace << "\n";
+            kDebug(41008) << "Krita does not support colorspace " << image -> colorspace<< "\n";
             CloseCacheView(vi);
             DestroyImage(image);
             DestroyExceptionInfo(&ei);
@@ -416,7 +465,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             Q_CHECK_PTR(m_img);
             m_img->blockSignals(true); // Don't send out signals while we're building the image
             
-            // XXX I'm assuming separate layers won't have other profile things like EXIF
+            // XXX I'm assuming seperate layers won't have other profile things like EXIF
             setAnnotationsForImage(image, m_img);
         }
 
@@ -429,7 +478,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 opacity = quint8_MAX - Downscale(QString(attr->value).toInt());
             }
 
-            KisPaintLayerSP layer = KisPaintLayerSP(0);
+            KisPaintLayerSP layer = 0;
 
             attr = GetImageAttribute(image, "[layer-name]");
             if (attr != 0) {
@@ -442,8 +491,8 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             Q_ASSERT(layer);
 
             // Layerlocation  (set by the photoshop import filter)
-            qint32 x_offset = 0;
-            qint32 y_offset = 0;
+            Q_INT32 x_offset = 0;
+            Q_INT32 y_offset = 0;
 
             attr = GetImageAttribute(image, "[layer-xpos]");
             if (attr != 0) {
@@ -456,7 +505,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             }
 
 
-            for (quint32 y = 0; y < image->rows; y ++)
+            for (Q_UINT32 y = 0; y < image->rows; y ++)
             {
                 const PixelPacket *pp = AcquireCacheView(vi, 0, y, image->columns, 1, &ei);
 
@@ -472,7 +521,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
 
                 IndexPacket * indexes = GetCacheViewIndexes(vi);
 
-                KisHLineIteratorPixel hiter = layer->paintDevice()->createHLineIterator(0, y, image->columns, true);
+                KisHLineIteratorPixel hiter = layer->paintDevice()->createHLineIterator(0, y, image->columns);
 
                 if (colorspaceType== CMYKColorspace) {
                     if (imageDepth == 8) {
@@ -587,7 +636,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                         return KisImageBuilder_RESULT_INTR;
                     }
                 }
-                m_img->addLayer(KisLayerSP(layer.data()), m_img->rootLayer());
+                m_img->addLayer(layer.data(), m_img->rootLayer());
                 layer->paintDevice()->move(x_offset, y_offset);
             }
 
@@ -631,7 +680,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         return m_img;
     }
 
-    void KisImageMagickConverter::init(KisDoc2 *doc, KisUndoAdapter *adapter)
+    void KisImageMagickConverter::init(KisDoc *doc, KisUndoAdapter *adapter)
     {
         m_doc = doc;
         m_adapter = adapter;
@@ -647,7 +696,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         if (!layer)
             return KisImageBuilder_RESULT_INVALID_ARG;
 
-        KisImageSP img = KisImageSP(layer->image());
+        KisImageSP img = layer->image();
         if (!img)
             return KisImageBuilder_RESULT_EMPTY;
 
@@ -658,7 +707,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             return KisImageBuilder_RESULT_NOT_LOCAL;
 
 
-        quint32 layerBytesPerChannel = layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
+        Q_UINT32 layerBytesPerChannel = layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
 
         GetExceptionInfo(&ei);
 
@@ -684,11 +733,11 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         ii->colorspace = getColorTypeforColorSpace(layer->paintDevice()->colorSpace());
 
         image = AllocateImage(ii);
-        SetImageColorspace(image, ii->colorspace);
+//         SetImageColorspace(image, ii->colorspace);
         image -> columns = img -> width();
         image -> rows = img -> height();
 
-        kDebug(41008) << "Saving with colorspace " << image->colorspace << ", (" << layer->paintDevice()->colorSpace()->id().name() << ")\n";
+        kDebug(41008) << "Saving with colorspace " << image->colorspace << ", (" << layer->paintDevice()->colorSpace()->id() << ")\n";
         kDebug(41008) << "IM Image thinks it has depth: " << image->depth << "\n";
 
 #ifdef HAVE_MAGICK6
@@ -701,7 +750,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         image -> matte = true;
 #endif
 
-        qint32 y, height, width;
+        Q_INT32 y, height, width;
 
         height = img -> height();
         width = img -> width();
@@ -729,7 +778,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
 
             }
 
-            KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width, false);
+            KisHLineConstIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
             if (alpha)
                 SetImageType(image, TrueColorMatteType);
             else
@@ -757,7 +806,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 else {
                     while (!it.isDone()) {
 
-                        quint8 * d = it.rawData();
+                        const quint8 * d = it.rawData();
                         pp -> red = Upscale(d[PIXEL_CYAN]);
                         pp -> green = Upscale(d[PIXEL_MAGENTA]);
                         pp -> blue = Upscale(d[PIXEL_YELLOW]);
@@ -793,7 +842,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 else {
                     while (!it.isDone()) {
 
-                        quint8 * d = it.rawData();
+                        const quint8 * d = it.rawData();
                         pp -> red = Upscale(d[PIXEL_RED]);
                         pp -> green = Upscale(d[PIXEL_GREEN]);
                         pp -> blue = Upscale(d[PIXEL_BLUE]);
@@ -824,7 +873,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 }
                 else {
                     while (!it.isDone()) {
-                        quint8 * d = it.rawData();
+                        const quint8 * d = it.rawData();
                         pp -> red = Upscale(d[PIXEL_GRAY]);
                         pp -> green = Upscale(d[PIXEL_GRAY]);
                         pp -> blue = Upscale(d[PIXEL_GRAY]);
@@ -938,7 +987,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         QString description;
         unsigned long matches;
 
-#ifdef HAVE_MAGICK6
+/*#ifdef HAVE_MAGICK6
 #ifdef HAVE_OLD_GETMAGICKINFOLIST
         const MagickInfo **mi;
         mi = GetMagickInfoList("*", &matches);
@@ -949,18 +998,18 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         mi = GetMagickInfoList("*", &matches, &ei);
         DestroyExceptionInfo(&ei);
 #endif // HAVE_OLD_GETMAGICKINFOLIST
-#else // HAVE_MAGICK6
+#else // HAVE_MAGICK6*/
         const MagickInfo *mi;
         ExceptionInfo ei;
         GetExceptionInfo(&ei);
         mi = GetMagickInfo("*", &ei);
         DestroyExceptionInfo(&ei);
-#endif // HAVE_MAGICK6
+// #endif // HAVE_MAGICK6
 
         if (!mi)
             return s;
 
-#ifdef HAVE_MAGICK6
+/*#ifdef HAVE_MAGICK6
         for (unsigned long i = 0; i < matches; i++) {
             const MagickInfo *info = mi[i];
             if (info -> stealth)
@@ -979,7 +1028,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 }
             }
         }
-#else
+#else*/
         for (; mi; mi = reinterpret_cast<const MagickInfo*>(mi -> next)) {
             if (mi -> stealth)
                 continue;
@@ -996,7 +1045,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 }
             }
         }
-#endif
+// #endif
 
         all += "|" + i18n("All Images");
         all += "\n";
@@ -1012,7 +1061,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         QString description;
         unsigned long matches;
 
-#ifdef HAVE_MAGICK6
+/*#ifdef HAVE_MAGICK6
 #ifdef HAVE_OLD_GETMAGICKINFOLIST
         const MagickInfo **mi;
         mi = GetMagickInfoList("*", &matches);
@@ -1023,20 +1072,20 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         mi = GetMagickInfoList("*", &matches, &ei);
         DestroyExceptionInfo(&ei);
 #endif // HAVE_OLD_GETMAGICKINFOLIST
-#else // HAVE_MAGICK6
+#else // HAVE_MAGICK6*/
         const MagickInfo *mi;
         ExceptionInfo ei;
         GetExceptionInfo(&ei);
         mi = GetMagickInfo("*", &ei);
         DestroyExceptionInfo(&ei);
-#endif // HAVE_MAGICK6
+// #endif // HAVE_MAGICK6
 
         if (!mi) {
             kDebug(41008) << "Eek, no magick info!\n";
             return s;
         }
 
-#ifdef HAVE_MAGICK6
+/*#ifdef HAVE_MAGICK6
         for (unsigned long i = 0; i < matches; i++) {
             const MagickInfo *info = mi[i];
             kDebug(41008) << "Found export filter for: " << info -> name << "\n";
@@ -1056,7 +1105,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 }
             }
         }
-#else
+#else*/
         for (; mi; mi = reinterpret_cast<const MagickInfo*>(mi -> next)) {
             kDebug(41008) << "Found export filter for: " << mi -> name << "\n";
             if (mi -> stealth)
@@ -1075,7 +1124,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 }
             }
         }
-#endif
+// #endif
 
 
         all += "|" + i18n("All Images");

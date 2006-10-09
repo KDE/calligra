@@ -16,24 +16,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <QString>
-
+#include <qstring.h>
+ 
 #include <magickimport.h>
 #include <kgenericfactory.h>
 #include <KoDocument.h>
 #include <KoFilterChain.h>
 
-#include <kis_doc2.h>
-#include <kis_view2.h>
+#include <kis_doc.h>
+#include <kis_view.h>
 #include <kis_image_magick_converter.h>
 #include <kis_progress_display_interface.h>
 #include <kis_image.h>
 #include <kis_layer.h>
 
-typedef KGenericFactory<MagickImport> MagickImportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkritamagickimport, MagickImportFactory("kofficefilters"))
+typedef KGenericFactory<MagickImport, KoFilter> MagickImportFactory;
+K_EXPORT_COMPONENT_FACTORY(libkritagmagickimport, MagickImportFactory("kofficefilters"))
 
-MagickImport::MagickImport(QObject *parent, const QStringList&) : KoFilter(parent)
+MagickImport::MagickImport(QObject* parent, const QStringList&) : KoFilter(parent)
 {
 }
 
@@ -48,33 +48,38 @@ KoFilter::ConversionStatus MagickImport::convert(const QByteArray&, const QByteA
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;
 
-    KisDoc2 *doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
+
+    KisDoc *doc = dynamic_cast<KisDoc*>(m_chain->outputDocument());
 
     if (!doc)
         return KoFilter::CreationError;
-
-    KisView2 * view = 0;
+    
+    KisView * view = 0;
 
     if (!doc->views().isEmpty()) {
-        view = static_cast<KisView2*>(doc->views().first());
+        view = static_cast<KisView*>(doc->views().first());
     }
-
+    
     QString filename = m_chain -> inputFile();
+    
+    if (!doc)
+        return KoFilter::CreationError;
 
     doc -> prepareForImport();
+        
 
     if (!filename.isEmpty()) {
-
+    
         KUrl url;
         url.setPath(filename);
 
         if (url.isEmpty())
             return KoFilter::FileNotFound;
-
+            
         KisImageMagickConverter ib(doc, doc -> undoAdapter());
 
-//        if (view != 0)
-//            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
+        if (view != 0)
+            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
 
         switch (ib.buildImage(url)) {
             case KisImageBuilder_RESULT_UNSUPPORTED:
@@ -89,7 +94,7 @@ KoFilter::ConversionStatus MagickImport::convert(const QByteArray&, const QByteA
                 break;
             case KisImageBuilder_RESULT_BAD_FETCH:
             case KisImageBuilder_RESULT_EMPTY:
-                return KoFilter::ParsingError;
+                return KoFilter::ParsingError;                
                 break;
             case KisImageBuilder_RESULT_FAILURE:
                 return KoFilter::InternalError;
