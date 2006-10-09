@@ -28,7 +28,7 @@
 
     uint KisTIFFReaderTarget8bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream)
     {
-        KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth, true);
+        KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
         double coeff = quint8_MAX / (double)( pow(2, sourceDepth() ) - 1 );
 //         kDebug(41008) << " depth expension coefficient : " << coeff << endl;
         while (!it.isDone()) {
@@ -54,7 +54,7 @@
     }
     uint KisTIFFReaderTarget16bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream)
     {
-        KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth, true);
+        KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
         double coeff = quint16_MAX / (double)( pow(2, sourceDepth() ) - 1 );
 //         kDebug(41008) << " depth expension coefficient : " << coeff << endl;
         while (!it.isDone()) {
@@ -81,7 +81,7 @@
     
     uint KisTIFFReaderFromPalette::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth,  TIFFStreamBase* tiffstream)
     {
-        KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth, true);
+        KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
         while (!it.isDone()) {
             quint16* d = reinterpret_cast<quint16 *>(it.rawData());
             uint32 index = tiffstream->nextValue();

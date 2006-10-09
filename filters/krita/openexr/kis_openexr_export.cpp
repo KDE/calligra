@@ -29,7 +29,7 @@
 #include <KoDocument.h>
 #include <KoFilterChain.h>
 
-#include "kis_doc.h"
+#include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_paint_layer.h"
@@ -67,7 +67,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
 
     // XXX: Add dialog about flattening layers here
 
-    KisDoc *doc = dynamic_cast<KisDoc*>(m_chain -> inputDocument());
+    KisDoc2 *doc = dynamic_cast<KisDoc2*>(m_chain -> inputDocument());
     QString filename = m_chain -> outputFile();
 
     if (!doc) {

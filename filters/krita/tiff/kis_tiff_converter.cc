@@ -32,7 +32,7 @@
 #include <kio/netaccess.h>
 
 #include <KoColorSpaceRegistry.h>
-#include <kis_doc.h>
+#include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_layer.h>
@@ -136,7 +136,7 @@ namespace {
     }
 }
 
-KisTIFFConverter::KisTIFFConverter(KisDoc *doc, KisUndoAdapter *adapter)
+KisTIFFConverter::KisTIFFConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
     m_doc = doc;
     m_adapter = adapter;

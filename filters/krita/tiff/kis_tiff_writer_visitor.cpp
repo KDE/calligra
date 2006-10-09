@@ -72,7 +72,7 @@ KisTIFFWriterVisitor::~KisTIFFWriterVisitor()
 
 bool KisTIFFWriterVisitor::saveAlpha() { return m_options->alpha; }
 
-bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses)
+bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineConstIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses)
 {
     if(depth == 16)
     {
@@ -161,7 +161,7 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     qint32 width = layer->image()->width();
     bool r = true;
     for (int y = 0; y < height; y++) {
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width, false);
+        KisHLineConstIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
         switch(color_type)
         {
             case PHOTOMETRIC_MINISBLACK:

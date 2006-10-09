@@ -38,7 +38,7 @@
 
 #include "kis_types.h"
 #include "kis_global.h"
-#include "kis_doc.h"
+#include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
@@ -306,7 +306,7 @@ namespace {
 
 
 
-KisImageMagickConverter::KisImageMagickConverter(KisDoc *doc, KisUndoAdapter *adapter)
+KisImageMagickConverter::KisImageMagickConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
     InitGlobalMagick();
     init(doc, adapter);
@@ -631,7 +631,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         return m_img;
     }
 
-    void KisImageMagickConverter::init(KisDoc *doc, KisUndoAdapter *adapter)
+    void KisImageMagickConverter::init(KisDoc2 *doc, KisUndoAdapter *adapter)
     {
         m_doc = doc;
         m_adapter = adapter;

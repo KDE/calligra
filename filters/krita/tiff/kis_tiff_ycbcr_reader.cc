@@ -53,7 +53,7 @@ uint KisTIFFYCbCrReaderTarget8Bit::copyDataToChannels( quint32 x, quint32 y, qui
     uint buffPos = y / m_vsub * m_bufferWidth + x / m_hsub ;
     for(int index = 0; index < numcols; index++)
     {
-        KisHLineIterator it = paintDevice() -> createHLineIterator(x + m_hsub * index, y, m_hsub, true);
+        KisHLineIterator it = paintDevice() -> createHLineIterator(x + m_hsub * index, y, m_hsub);
         for( int vindex = 0; vindex < m_vsub; vindex++)
         {
             while( !it.isDone() )
@@ -81,7 +81,7 @@ uint KisTIFFYCbCrReaderTarget8Bit::copyDataToChannels( quint32 x, quint32 y, qui
 
 void KisTIFFYCbCrReaderTarget8Bit::finalize()
 {
-    KisHLineIterator it = paintDevice() -> createHLineIterator(0, 0, paintDevice()->image()->width(), true);
+    KisHLineIterator it = paintDevice() -> createHLineIterator(0, 0, paintDevice()->image()->width());
     for(int y = 0; y < paintDevice()->image()->height(); y++)
     {
         int x = 0;
@@ -125,7 +125,7 @@ uint KisTIFFYCbCrReaderTarget16Bit::copyDataToChannels( quint32 x, quint32 y, qu
     uint buffPos = y / m_vsub * m_bufferWidth + x / m_hsub ;
     for(int index = 0; index < numcols; index++)
     {
-        KisHLineIterator it = paintDevice() -> createHLineIterator(x + m_hsub * index, y, m_hsub, true);
+        KisHLineIterator it = paintDevice() -> createHLineIterator(x + m_hsub * index, y, m_hsub);
         for( int vindex = 0; vindex < m_vsub; vindex++)
         {
             while( !it.isDone() )
@@ -153,7 +153,7 @@ uint KisTIFFYCbCrReaderTarget16Bit::copyDataToChannels( quint32 x, quint32 y, qu
 
 void KisTIFFYCbCrReaderTarget16Bit::finalize()
 {
-    KisHLineIterator it = paintDevice() -> createHLineIterator(0, 0, paintDevice()->image()->width(), true);
+    KisHLineIterator it = paintDevice() -> createHLineIterator(0, 0, paintDevice()->image()->width());
     for(int y = 0; y < paintDevice()->image()->height(); y++)
     {
         int x = 0;

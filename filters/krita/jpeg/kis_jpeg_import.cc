@@ -23,10 +23,10 @@
 
 #include <KoFilterChain.h>
 
-#include <kis_doc.h>
+#include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_progress_display_interface.h>
-#include <kis_view.h>
+#include <kis_view2.h>
 
 #include "kis_jpeg_converter.h"
 
@@ -48,15 +48,15 @@ KoFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByte
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;
 
-    KisDoc * doc = dynamic_cast<KisDoc*>(m_chain->outputDocument());
+    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
 
     if (!doc)
         return KoFilter::CreationError;
 
-    KisView * view = 0;
+    KisView2 * view = 0;
 
     if (!doc->views().isEmpty()) {
-        view = static_cast<KisView*>(doc->views().first());
+        view = static_cast<KisView2*>(doc->views().first());
     }
 
     QString filename = m_chain -> inputFile();
@@ -73,8 +73,8 @@ KoFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByte
 
         KisJPEGConverter ib(doc, doc -> undoAdapter());
 
-        if (view != 0)
-            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
+//        if (view != 0)
+//            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
 
         switch (ib.buildImage(url)) {
             case KisImageBuilder_RESULT_UNSUPPORTED:

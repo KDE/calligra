@@ -38,7 +38,7 @@
 
 #include "kis_types.h"
 #include "kis_openexr_import.h"
-#include "kis_doc.h"
+#include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_meta_registry.h"
 #include "kis_layer.h"
@@ -72,7 +72,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
 
     kDebug(41008) << "\n\n\nKrita importing from OpenEXR\n";
 
-    KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
+    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
     if (!doc) {
         return KoFilter::CreationError;
     }

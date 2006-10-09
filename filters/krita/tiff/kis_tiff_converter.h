@@ -32,7 +32,7 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_annotation.h"
-class KisDoc;
+class KisDoc2;
 class KisUndoAdapter;
 
 /**
@@ -69,7 +69,7 @@ struct KisTIFFOptions {
 class KisTIFFConverter : public KisProgressSubject {
         Q_OBJECT
     public:
-        KisTIFFConverter(KisDoc *doc, KisUndoAdapter *adapter);
+        KisTIFFConverter(KisDoc2 *doc, KisUndoAdapter *adapter);
         virtual ~KisTIFFConverter();
     public:
         KisImageBuilder_Result buildImage(const KUrl& uri);
@@ -84,7 +84,7 @@ class KisTIFFConverter : public KisProgressSubject {
         KisImageBuilder_Result readTIFFDirectory( TIFF* image);
     private:
         KisImageSP m_img;
-        KisDoc *m_doc;
+        KisDoc2 *m_doc;
         KisUndoAdapter *m_adapter;
         bool m_stop;
         KIO::TransferJob *m_job;

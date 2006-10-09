@@ -36,7 +36,7 @@ extern "C" {
 #include <kio/netaccess.h>
 
 #include <KoColorSpaceRegistry.h>
-#include <kis_doc.h>
+#include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_paint_layer.h>
@@ -91,7 +91,7 @@ namespace {
 
 }
 
-KisJPEGConverter::KisJPEGConverter(KisDoc *doc, KisUndoAdapter *adapter)
+KisJPEGConverter::KisJPEGConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
     m_doc = doc;
     m_adapter = adapter;
@@ -207,7 +207,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
     
     for (; cinfo.output_scanline < cinfo.image_height;) {
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.output_scanline, cinfo.image_width, true);
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.output_scanline, cinfo.image_width);
         jpeg_read_scanlines(&cinfo, &row_pointer, 1);
         quint8 *src = row_pointer;
         switch(cinfo.out_color_space)
@@ -450,7 +450,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
     
     for (; cinfo.next_scanline < height;) {
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.next_scanline, width, false);
+        KisHLineConstIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.next_scanline, width);
         quint8 *dst = row_pointer;
         switch(color_type)
         {

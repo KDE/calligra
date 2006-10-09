@@ -24,7 +24,7 @@
 #include <KoDocument.h>
 #include <KoFilterChain.h>
 
-#include <kis_doc.h>
+#include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_annotation.h>
 #include <kis_types.h>
@@ -50,7 +50,7 @@ KoFilter::ConversionStatus XCFExport::convert(const QByteArray& from, const QByt
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-    KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
+    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
     
     if (!output)

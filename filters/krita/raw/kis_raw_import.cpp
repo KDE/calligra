@@ -57,7 +57,7 @@
 #include "kis_cmb_idlist.h"
 #include "kis_types.h"
 #include "kis_raw_import.h"
-#include "kis_doc.h"
+#include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_meta_registry.h"
 #include "kis_layer.h"
@@ -107,7 +107,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
     kDebug(41008) << "Krita importing from Raw\n";
 
-    KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
+    KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
     if (!doc) {
         return KoFilter::CreationError;
     }
@@ -259,7 +259,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             int pos = 0;
 
             for (int line = 0; line < sz.height(); ++line) {
-                KisHLineIterator it = device->createHLineIterator(0, line, sz.width(), true);
+                KisHLineIterator it = device->createHLineIterator(0, line, sz.width());
 
                 while (!it.isDone()) {
                     if (m_page->radioGray->isChecked()) {
@@ -357,7 +357,7 @@ void KisRawImport::slotUpdatePreview()
         int pos = 0;
 
         for (int line = 0; line < sz.height(); ++line) {
-            KisHLineIterator it = dev->createHLineIterator(0, line, sz.width(), true);
+            KisHLineIterator it = dev->createHLineIterator(0, line, sz.width());
 
             while (!it.isDone()) {
                 if (m_page->radioGray->isChecked()) {

@@ -44,7 +44,7 @@ class KisTIFFWriterVisitor : public KisLayerVisitor
     private:
         inline TIFF* image() { return m_image; }
         inline bool saveAlpha();
-        bool copyDataToStrips( KisHLineIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses);
+        bool copyDataToStrips( KisHLineConstIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses);
     private:
         TIFF* m_image;
         KisTIFFOptions* m_options;

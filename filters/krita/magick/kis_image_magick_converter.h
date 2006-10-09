@@ -30,7 +30,7 @@
 
 class QString;
 class KUrl;
-class KisDoc;
+class KisDoc2;
 class KisNameServer;
 class KisUndoAdapter;
 /**
@@ -63,7 +63,7 @@ class KisImageMagickConverter : public KisProgressSubject {
     Q_OBJECT
 
 public:
-    KisImageMagickConverter(KisDoc *doc, KisUndoAdapter *adapter);
+    KisImageMagickConverter(KisDoc2 *doc, KisUndoAdapter *adapter);
     virtual ~KisImageMagickConverter();
 
 public slots:
@@ -86,12 +86,12 @@ private slots:
 private:
     KisImageMagickConverter(const KisImageMagickConverter&);
     KisImageMagickConverter& operator=(const KisImageMagickConverter&);
-    void init(KisDoc *doc, KisUndoAdapter *adapter);
+    void init(KisDoc2 *doc, KisUndoAdapter *adapter);
     KisImageBuilder_Result decode(const KUrl& uri, bool isBlob);
 
 private:
     KisImageSP m_img;
-    KisDoc *m_doc;
+    KisDoc2 *m_doc;
     KisUndoAdapter *m_adapter;
     Q3ValueVector<quint8> m_data;
     KIO::TransferJob *m_job;
