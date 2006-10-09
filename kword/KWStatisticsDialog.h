@@ -27,7 +27,7 @@ class QLabel;
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <QLabel>
-#include <Q3Frame>
+#include <QFrame>
 
 #include <defs.h>
 #include <kdialog.h>
@@ -51,8 +51,8 @@ private:
     QLabel *m_resultLabelSelected[7];
     QLabel *m_resultGeneralLabel[6];
 
-    void addBox( Q3Frame *page, QLabel **resultLabel, bool calcWithFootNoteCheckbox );
-    void addBoxGeneral( Q3Frame *page, QLabel **resultLabel );
+    void addBox( QFrame *page, QLabel **resultLabel, bool calcWithFootNoteCheckbox );
+    void addBoxGeneral( QFrame *page, QLabel **resultLabel );
 
     bool calcStats( QLabel **resultLabel, bool selection, bool useFootEndNote );
     void calcGeneral( QLabel **resultLabel );

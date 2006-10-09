@@ -43,7 +43,7 @@
 #include <QLabel>
 #include <QPushButton>
 //Added by qt3to4:
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3VBoxLayout>
 #include <kvbox.h>
 
@@ -354,8 +354,8 @@ KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KService::List off
   descriptionLabel = new QLabel( back );
   descriptionLabel->hide();
   descriptionLabel->setWordWrap( true );
-  descriptionLabel->setFrameShape( Q3Frame::Box );
-  descriptionLabel->setFrameShadow( Q3Frame::Sunken );
+  descriptionLabel->setFrameShape( QFrame::Box );
+  descriptionLabel->setFrameShadow( QFrame::Sunken );
 
   QSize old_sizeHint;
   for ( KService::List::Iterator it = pluginOffers.begin(); *it; ++it )

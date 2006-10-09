@@ -41,7 +41,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3GridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3GroupBox>
 
 #include "KWConfig.h"
@@ -757,7 +757,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char
     QString labelName = font->family() + ' ' + QString::number(font->pointSize());
     fontName = new QLabel(labelName, fontContainer);
     fontName->setFont(*font);
-    fontName->setFrameStyle(Q3Frame::StyledPanel | Q3Frame::Sunken);
+    fontName->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 
     QPushButton *chooseButton = new QPushButton(i18n("Choose..."), fontContainer);
     connect(chooseButton, SIGNAL(clicked()), this, SLOT(selectNewDefaultFont()));

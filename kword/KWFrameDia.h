@@ -31,7 +31,7 @@
 #include <QCloseEvent>
 #include <Q3GridLayout>
 #include <Q3PtrList>
-#include <Q3Frame>
+#include <QFrame>
 #include <QLabel>
 #include <QMouseEvent>
 
@@ -55,7 +55,7 @@ class KDoubleNumInput;
 /******************************************************************/
 /* Class: KWBrushStylePreview                                     */
 /******************************************************************/
-class KWBrushStylePreview : public Q3Frame
+class KWBrushStylePreview : public QFrame
 {
     Q_OBJECT
 public:

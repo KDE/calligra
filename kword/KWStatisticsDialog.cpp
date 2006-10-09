@@ -29,7 +29,7 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3GridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3GroupBox>
 
 KWStatisticsDialog::KWStatisticsDialog( QWidget *parent, KWDocument *document )
@@ -43,9 +43,9 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *parent, KWDocument *document )
     Q3VBoxLayout *topLayout = new Q3VBoxLayout( page, 0, KDialog::spacingHint() );
 
     QTabWidget *tab = new QTabWidget( page );
-    Q3Frame *pageAll = 0;
-    Q3Frame *pageGeneral = 0;
-    Q3Frame *pageSelected = 0;
+    QFrame *pageAll = 0;
+    QFrame *pageGeneral = 0;
+    QFrame *pageSelected = 0;
     for (int i=0; i < 7; ++i) {
         m_resultLabelAll[i] = 0;
         m_resultLabelSelected[i] = 0;
@@ -58,20 +58,20 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *parent, KWDocument *document )
 
 
     // add Tab "General"
-    pageGeneral = new Q3Frame( this );
+    pageGeneral = new QFrame( this );
     tab->addTab( pageGeneral,  i18n( "General" ) );
 
     addBoxGeneral( pageGeneral, m_resultGeneralLabel );
     calcGeneral( m_resultGeneralLabel );
 
     // add Tab "All"
-    pageAll = new Q3Frame( this );
+    pageAll = new QFrame( this );
     tab->addTab( pageAll,  i18n( "Text" ) );
 
     addBox( pageAll, m_resultLabelAll, true );
 
     m_canceled = true;
-    pageSelected = new Q3Frame( this );
+    pageSelected = new QFrame( this );
     tab->addTab( pageSelected,  i18n( "Selected Text" ) );
     // let's see if there's selected text
     bool b = docHasSelection();
@@ -230,7 +230,7 @@ double KWStatisticsDialog::calcFlesch( ulong sentences, ulong words, ulong sylla
     return flesch_score;
 }
 
-void KWStatisticsDialog::addBoxGeneral( Q3Frame *page, QLabel **resultLabel )
+void KWStatisticsDialog::addBoxGeneral( QFrame *page, QLabel **resultLabel )
 {
     // Layout Managers
     Q3VBoxLayout *topLayout = new Q3VBoxLayout( page, 0, 7 );
@@ -278,7 +278,7 @@ void KWStatisticsDialog::addBoxGeneral( Q3Frame *page, QLabel **resultLabel )
     topLayout->addWidget( box );
 }
 
-void KWStatisticsDialog::addBox( Q3Frame *page, QLabel **resultLabel, bool calcWithFootNoteCheckbox )
+void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel, bool calcWithFootNoteCheckbox )
 {
     // Layout Managers
     Q3VBoxLayout *topLayout = new Q3VBoxLayout( page, 0, 7 );

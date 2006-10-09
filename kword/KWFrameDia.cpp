@@ -55,7 +55,7 @@
 #include <QPixmap>
 #include <Q3GridLayout>
 #include <Q3PtrList>
-#include <Q3Frame>
+#include <QFrame>
 #include <QList>
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
@@ -68,7 +68,7 @@
 /* Class KWBrushStylePreview - only used by kwframestylemanager   */
 /******************************************************************/
 KWBrushStylePreview::KWBrushStylePreview( QWidget* parent )
-    : Q3Frame(parent)
+    : QFrame(parent)
 {
 }
 
@@ -852,10 +852,10 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     tabLayout->addWidget( m_rNewFrameset );
     myGroup->insert(m_rNewFrameset,2);
 
-    Q3Frame *line1 = new Q3Frame( m_tab3 );
-    line1->setProperty( "frameShape", (int)Q3Frame::HLine );
-    line1->setFrameShadow( Q3Frame::Plain );
-    line1->setFrameShape( Q3Frame::HLine );
+    QFrame *line1 = new QFrame( m_tab3 );
+    line1->setProperty( "frameShape", (int)QFrame::HLine );
+    line1->setFrameShadow( QFrame::Plain );
+    line1->setFrameShape( QFrame::HLine );
     tabLayout->addWidget( line1 );
 
     Q3HBoxLayout *layout1 = new Q3HBoxLayout( 0, 0, 6 );
@@ -1302,7 +1302,7 @@ void KWFrameDia::setupTab6() // Border style
     grid->addWidget( m_bColor, 5, 0 );
 
     Q3ButtonGroup * bb = new Q3HButtonGroup( m_tab6 );
-    //bb->setFrameStyle(Q3Frame::NoFrame);
+    //bb->setFrameStyle(QFrame::NoFrame);
     m_bLeft = new QPushButton(bb);
     m_bLeft->setPixmap( BarIcon( "borderleft" ) );
     m_bLeft->setToggleButton( true );

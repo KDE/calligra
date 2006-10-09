@@ -41,7 +41,7 @@
 #include <QPaintEvent>
 #include <Q3GridLayout>
 #include <Q3PtrList>
-#include <Q3Frame>
+#include <QFrame>
 #include <QList>
 #include <QResizeEvent>
 

@@ -28,7 +28,7 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3Frame>
+#include <QFrame>
 
 
 class Q3GridLayout;
@@ -36,7 +36,6 @@ class QLineEdit;
 class Q3ListBox;
 class QPushButton;
 class QWidget;
-class Q3Frame;
 class QComboBox;
 
 class KWDocument;
