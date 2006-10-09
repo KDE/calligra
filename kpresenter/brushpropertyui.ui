@@ -63,7 +63,7 @@
         </widget>
       </item>
       <item rowspan="1" row="2" column="0" colspan="2" >
-        <widget class="Q3Frame" name="previewPanel" >
+        <widget class="QFrame" name="previewPanel" >
           <property name="frameShape" >
             <enum>NoFrame</enum>
           </property>

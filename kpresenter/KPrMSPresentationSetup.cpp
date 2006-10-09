@@ -598,20 +598,20 @@ void KPrMSPresentationCreateDialog::setupGUI()
     back = new KVBox( this );
     back->setMargin( KDialog::marginHint() );
 
-    Q3Frame *line;
+    QFrame *line;
 
     step1 = new QLabel( i18n( "Create directory structure" ), back );
     step2 = new QLabel( i18n( "Create pictures of the slides" ), back );
     step3 = new QLabel( i18n( "Create index file" ), back );
 
-    line = new Q3Frame( back );
-    line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
+    line = new QFrame( back );
+    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     line->setMaximumHeight( 20 );
 
     progressBar = new QProgressBar( back );
 
-    line = new Q3Frame( back );
-    line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
+    line = new QFrame( back );
+    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     line->setMaximumHeight( 20 );
 
     KButtonBox *bb = new KButtonBox( back );

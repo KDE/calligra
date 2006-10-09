@@ -28,7 +28,7 @@
 #include <Q3HBoxLayout>
 #include <QLabel>
 #include <QMouseEvent>
-#include <Q3Frame>
+#include <QFrame>
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -155,7 +155,7 @@ void KPrCircleToggle::setChecked(bool on) {
 }
 
 KPrCircleGroup::KPrCircleGroup(QWidget *parent)
-    : Q3Frame(parent), m_buttons()
+    : QFrame(parent), m_buttons()
 {
     noSignals=false;
 }

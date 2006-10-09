@@ -273,8 +273,8 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
     previewButton->setText( i18n("Preview") );
     connect( previewButton, SIGNAL(clicked()), this, SLOT(preview()) );
 
-    Q3Frame* line = new Q3Frame( leftpart );
-    line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
+    QFrame* line = new QFrame( leftpart );
+    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
     soundFileName = pg->getPageSoundFileName();
     soundEffect = pg->getPageSoundEffect();

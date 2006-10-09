@@ -22,7 +22,7 @@
 #include <QLabel>
 //Added by qt3to4:
 #include <QMouseEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <QEvent>
 #include <Q3PtrList>
 #include <QPixmap>
@@ -105,7 +105,7 @@ private:
 /**
  * A button-group equivalent for a set of KPrCircleToggle classes.
  */
-class KPrCircleGroup : public Q3Frame
+class KPrCircleGroup : public QFrame
 {
     Q_OBJECT
 public:

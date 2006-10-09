@@ -662,8 +662,8 @@ void KPrWebPresentationWizard::setupPage1()
     QLabel* sidebar = new QLabel( page1 );
     sidebar->setMinimumSize( 106, 318 );
     sidebar->setMaximumSize( 106, 318 );
-    sidebar->setFrameShape( Q3Frame::Panel );
-    sidebar->setFrameShadow( Q3Frame::Sunken );
+    sidebar->setFrameShape( QFrame::Panel );
+    sidebar->setFrameShadow( QFrame::Sunken );
     sidebar->setPixmap(KStandardDirs::locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page1 );
@@ -760,8 +760,8 @@ void KPrWebPresentationWizard::setupPage2()
     QLabel* sidebar = new QLabel( page2 );
     sidebar->setMinimumSize( 106, 318 );
     sidebar->setMaximumSize( 106, 318 );
-    sidebar->setFrameShape( Q3Frame::Panel );
-    sidebar->setFrameShadow( Q3Frame::Sunken );
+    sidebar->setFrameShape( QFrame::Panel );
+    sidebar->setFrameShadow( QFrame::Sunken );
     sidebar->setPixmap(KStandardDirs::locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page2 );
@@ -850,8 +850,8 @@ void KPrWebPresentationWizard::setupPage3()
     QLabel* sidebar = new QLabel( page3 );
     sidebar->setMinimumSize( 106, 318 );
     sidebar->setMaximumSize( 106, 318 );
-    sidebar->setFrameShape( Q3Frame::Panel );
-    sidebar->setFrameShadow( Q3Frame::Sunken );
+    sidebar->setFrameShape( QFrame::Panel );
+    sidebar->setFrameShadow( QFrame::Sunken );
     sidebar->setPixmap(KStandardDirs::locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page3 );
@@ -907,8 +907,8 @@ void KPrWebPresentationWizard::setupPage4()
     QLabel* sidebar = new QLabel( page4 );
     sidebar->setMinimumSize( 106, 318 );
     sidebar->setMaximumSize( 106, 318 );
-    sidebar->setFrameShape( Q3Frame::Panel );
-    sidebar->setFrameShadow( Q3Frame::Sunken );
+    sidebar->setFrameShape( QFrame::Panel );
+    sidebar->setFrameShadow( QFrame::Sunken );
     sidebar->setPixmap(KStandardDirs::locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page4 );
@@ -975,8 +975,8 @@ void KPrWebPresentationWizard::setupPage5()
     QLabel* sidebar = new QLabel( page5 );
     sidebar->setMinimumSize( 106, 318 );
     sidebar->setMaximumSize( 106, 318 );
-    sidebar->setFrameShape( Q3Frame::Panel );
-    sidebar->setFrameShadow( Q3Frame::Sunken );
+    sidebar->setFrameShape( QFrame::Panel );
+    sidebar->setFrameShadow( QFrame::Sunken );
     sidebar->setPixmap(KStandardDirs::locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page5 );
@@ -1248,10 +1248,10 @@ void KPrWebPresentationCreateDialog::setupGUI()
     back = new KVBox( this );
     back->setMargin( KDialog::marginHint() );
 
-    Q3Frame *line;
+    QFrame *line;
 
-    line = new Q3Frame( back );
-    line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
+    line = new QFrame( back );
+    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     line->setMaximumHeight( 20 );
 
     step1 = new QLabel( i18n( "Initialize (create file structure, etc.)" ), back );
@@ -1260,14 +1260,14 @@ void KPrWebPresentationCreateDialog::setupGUI()
     step4 = new QLabel( i18n( "Create Main Page (Table of Contents)" ), back );
     step5 = new QLabel( i18n( "Options for Unattended Presentations" ), back);
 
-    line = new Q3Frame( back );
-    line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
+    line = new QFrame( back );
+    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     line->setMaximumHeight( 20 );
 
     progressBar = new QProgressBar( back );
 
-    line = new Q3Frame( back );
-    line->setFrameStyle( Q3Frame::HLine | Q3Frame::Sunken );
+    line = new QFrame( back );
+    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     line->setMaximumHeight( 20 );
 
     KButtonBox *bb = new KButtonBox( back );
