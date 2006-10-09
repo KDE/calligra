@@ -76,7 +76,7 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		inline void setIndexForVisibleLookupValue(int index) { m_indexForVisibleLookupValue = index; }
 
 		/*! \return string for debugging purposes. */
-		virtual QString debugString() const;
+		QString debugString() const;
 
 		//! true if this column is visible to the user (and its data is fetched by the engine)
 		bool visible : 1;
