@@ -626,8 +626,6 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 //		ensureVisible(columnPos(d->curCol), rowPos(d->curRow) - contentsY(), columnWidth(d->curCol), rh);
 		if (m_verticalHeader && oldRow != m_curRow)
 			m_verticalHeader->setCurrentRow(m_curRow);
-		if (m_horizontalHeader && oldCol != m_curCol)
-			m_horizontalHeader->setSelectedSection(m_curCol);
 
 		if (m_updateEntireRowWhenMovingToOtherRow)
 			updateRow( m_curRow );
@@ -670,6 +668,9 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 
 		//quite clever: ensure the cell is visible:
 		ensureCellVisible(m_curRow, m_curCol);
+
+		if (m_horizontalHeader && oldCol != m_curCol)
+			m_horizontalHeader->setSelectedSection(m_curCol);
 
 		/*emit*/ itemSelected(m_currentItem);
 		/*emit*/ cellSelected(m_curCol, m_curRow);
