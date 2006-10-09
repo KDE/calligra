@@ -20,7 +20,7 @@
 #ifndef __VSTROKEFILLPREVIEW_H__
 #define __VSTROKEFILLPREVIEW_H__
 
-#include <q3frame.h>
+#include <qframe.h>
 #include <qpixmap.h>
 #include <QPaintEvent>
 #include <QEvent>
@@ -30,7 +30,7 @@ class VFill;
 class VStroke;
 class KarbonPart;
 
-class VStrokeFillPreview : public Q3Frame
+class VStrokeFillPreview : public QFrame
 {
 	Q_OBJECT
 

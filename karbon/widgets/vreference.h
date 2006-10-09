@@ -24,7 +24,7 @@
 #ifndef VREFERENCE_H
 #define VREFERENCE_H
 
-#include <q3frame.h>
+#include <qframe.h>
 
 class Q3ButtonGroup;
 
@@ -41,7 +41,7 @@ enum Choice
 	BottomRight
 };
 
-class VReference : public Q3Frame
+class VReference : public QFrame
 {
 	Q_OBJECT
 public:

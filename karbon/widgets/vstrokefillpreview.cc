@@ -19,7 +19,7 @@
 
 #include <QColor>
 #include <QPaintEvent>
-#include <Q3Frame>
+#include <QFrame>
 #include <QMouseEvent>
 #include <QEvent>
 #include <QPoint>
@@ -59,16 +59,12 @@
 
 VStrokeFillPreview::VStrokeFillPreview(
 	KarbonPart *part, QWidget* parent, const char* name )
-		: Q3Frame( parent, name ), m_part( part )
+		: QFrame( parent), m_part( part )
 {
 	m_strokeWidget = false;
 	setFocusPolicy( Qt::NoFocus );
 
-#if QT_VERSION < 0x030100
-	setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
-#else
-	setFrameStyle( Q3Frame::GroupBoxPanel | Q3Frame::Sunken );
-#endif
+	setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
 
 	installEventFilter( this );
 	m_pixmap = QPixmap( int( PANEL_SIZEX ), int( PANEL_SIZEY ) );
@@ -86,7 +82,7 @@ VStrokeFillPreview::paintEvent( QPaintEvent* event )
 	QPainter p(this);
 	p.drawPixmap(QPoint((int)( width() - PANEL_SIZEX ) / 2, (int)( height() - PANEL_SIZEY ) / 2), m_pixmap, QRect(0, 0, (int)PANEL_SIZEX, (int)PANEL_SIZEY ));
 
-	Q3Frame::paintEvent( event );
+	QFrame::paintEvent( event );
 }
 
 bool

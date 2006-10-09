@@ -24,11 +24,11 @@
 #include <QLayout>
 #include <qradiobutton.h>
 #include <QVBoxLayout>
-#include <Q3Frame>
+#include <QFrame>
 
 #include "vreference.h"
 
-VReference::VReference( QWidget *parent, const char *name ) : Q3Frame ( parent, name )
+VReference::VReference( QWidget *parent, const char *name ) : QFrame ( parent)
 {
 	QVBoxLayout* layout = new QVBoxLayout;
 	mButtonGroup = new Q3ButtonGroup (3, Qt::Vertical, this );

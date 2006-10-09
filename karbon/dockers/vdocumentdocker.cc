@@ -31,7 +31,7 @@
 #include <QGridLayout>
 #include <Q3PtrList>
 #include <QPixmap>
-#include <Q3Frame>
+#include <QFrame>
 #include <QMouseEvent>
 #include <QEvent>
 #include <QVBoxLayout>
@@ -244,19 +244,19 @@ VDocumentTab::VDocumentTab( KarbonView* view, QWidget* parent )
 {
 	setObjectName("DocumentTab");
 
-	Q3Frame* frame;
+	QFrame* frame;
 	QGridLayout* layout = new QGridLayout;
 	layout->setMargin( 3 );
 	layout->setSpacing( 2 );
 	layout->addWidget( m_documentPreview = new VDocumentPreview( m_view, this ), 0, 7, 2, 2 );
 	layout->addWidget( new QLabel( i18n( "Width:" ), this ), 0, 0 );
 	layout->addWidget( new QLabel( i18n( "Height:" ), this ), 1, 0 );
-	layout->addWidget( frame = new Q3Frame( this ), 2, 2, 0, 1 );
-	frame->setFrameShape( Q3Frame::HLine );
+	layout->addWidget( frame = new QFrame( this ), 2, 2, 0, 1 );
+	frame->setFrameShape( QFrame::HLine );
 	layout->addWidget( new QLabel( i18n( "Layers:" ), this ), 3, 0 );
 	layout->addWidget( new QLabel( i18n( "Format:" ), this ), 4, 0 );
-	layout->addWidget( frame = new Q3Frame( this ), 5, 5, 0, 1 );
-	frame->setFrameShape( Q3Frame::HLine );
+	layout->addWidget( frame = new QFrame( this ), 5, 5, 0, 1 );
+	frame->setFrameShape( QFrame::HLine );
 	//layout->addMultiCellWidget( new QLabel( i18n( "Zoom factor:" ), this ), 6, 6, 0, 1 );
 	layout->addWidget( m_width = new QLabel( this ), 0, 1 );
 	layout->addWidget( m_height = new QLabel( this ), 1, 1 );

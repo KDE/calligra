@@ -25,7 +25,7 @@
 #include <QWidget>
 #include <QToolTip>
 #include <QGridLayout>
-#include <Q3Frame>
+#include <QFrame>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -63,7 +63,7 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	mainLayout->addWidget( capLabel, 1, 0 );
 	m_capGroup = new Q3HButtonGroup( this );
 	//port:
-        // m_capGroup->setFrameShape( Q3Frame::NoFrame );
+        // m_capGroup->setFrameShape( QFrame::NoFrame );
 	m_capGroup->setInsideMargin( 1 );
 	m_capGroup->setExclusive( true );
 	button = new QPushButton( "", m_capGroup );
@@ -89,7 +89,7 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	
 	m_joinGroup = new Q3HButtonGroup( this );
 	//port:
-        // m_joinGroup->setFrameShape( Q3Frame::NoFrame );
+        // m_joinGroup->setFrameShape( QFrame::NoFrame );
 	m_joinGroup->setInsideMargin( 1 );
 	m_joinGroup->setExclusive( true );
 	button = new QPushButton( "", m_joinGroup );
