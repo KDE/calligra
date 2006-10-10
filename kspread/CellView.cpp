@@ -87,30 +87,32 @@ public:
 };
 
 CellView::CellView( Cell* cell )
-  : d( new Private )
+    : d( new Private )
 {
-  d->cell = cell;
+    Q_ASSERT( cell );
+    d->cell = cell;
 
 #ifdef KSPREAD_CELL_WINDOW
-  d->sheet = cell ? ( cell->format() ? cell->format()->sheet() : 0 ) : 0;
-  d->col = cell->isDefault() ? 0 : cell->column();
-  d->row = cell->isDefault() ? 0 : cell->row();
+    d->sheet = cell->format() ? cell->format()->sheet() : 0;
+    d->col = cell->isDefault() ? 0 : cell->column();
+    d->row = cell->isDefault() ? 0 : cell->row();
 
-  d->dirty = true;
+    d->dirty = true;
 #endif
 
-  // Formatting
-  d->textX      = 0.0;
-  d->textY      = 0.0;
-  d->textWidth  = 0.0;
-  d->textHeight = 0.0;
+    // Formatting
+    d->textX      = 0.0;
+    d->textY      = 0.0;
+    d->textWidth  = 0.0;
+    d->textHeight = 0.0;
 }
 
 #ifdef KSPREAD_CELL_WINDOW
 CellView::CellView( Sheet* sheet, int col, int row )
     : d( new Private )
 {
-    d->cell  = sheet ? sheet->cellAt( col, row ) : 0;
+    Q_ASSERT( sheet );
+    d->cell  = sheet->cellAt( col, row );
     d->sheet = sheet;
     d->col   = col;
     d->row   = row;
