@@ -114,13 +114,13 @@ bool Page::isLastParagraphLine(TextLine *line, const Paragraph &par)
     if ( line->next==0 ) return true;
     double dy = line->next->yMin - line->yMax;
     double ndy = line->next->yMax - line->next->yMin;
-    String *str = static_cast<String *>(line->blocks->strings);
-    String *nStr = static_cast<String *>(line->next->blocks->strings);
     // next line far below
     if ( dy>0.5*ndy ) return true;
+    if ( line->blocks==0 ) return false; // should not happen
+    String *str = static_cast<String *>(line->blocks->strings);
+    String *nStr = static_cast<String *>(line->next->blocks->strings);
     // image displayed before next line (?)
     if ( str->frameIndex()!=nStr->frameIndex() ) return true;
-    if ( line->blocks==0 ) return false; // should not happen
     // if contains one or more inside tabs
     if (line->blocks->next) return true;
     if ( line->next && line->next->blocks==0 ) return false;//should not happen
