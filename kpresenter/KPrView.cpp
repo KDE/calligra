@@ -149,7 +149,6 @@
 #include "KPrFindReplace.h"
 #include "KPrVariableCollection.h"
 #include "KPrCanvas.h"
-#include <q3paintdevicemetrics.h>
 #include <KoStyleCollection.h>
 #include "KPrStyleManager.h"
 #include "KPrPixmapObject.h"
@@ -546,7 +545,6 @@ void KPrView::print( KPrinter &prt )
         m_pKPresenterDoc->recalcVariables( VT_ALL );
     }
 
-    Q3PaintDeviceMetrics metrics( &prt );
     unZoomDocument(dpiX,dpiY);
     if ( m_pKPresenterDoc->pageLayout().format == PG_SCREEN )
     {
@@ -557,8 +555,8 @@ void KPrView::print( KPrinter &prt )
     QPainter painter;
     painter.begin( &prt );
     QRect rect = m_pKPresenterDoc->pageList().at( 0 )->getZoomPageRect();
-    double zoom = qMin( double( metrics.width() ) / double( rect.width() ),
-                        double( metrics.height() ) / double( rect.height() ) );
+    double zoom = qMin( double( prt.width() ) / double( rect.width() ),
+                        double( prt.height() ) / double( rect.height() ) );
     double newZoom = zoom * m_pKPresenterDoc->zoomHandler()->zoomInPercent();
     kDebug(33001) << "KPrView::print newZoom = " << newZoom << endl;
     setZoom( int( newZoom ), false );

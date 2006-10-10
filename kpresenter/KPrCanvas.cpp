@@ -26,7 +26,6 @@
 #include <QFile>
 #include <qtextstream.h>
 #include <qpainter.h>
-#include <q3paintdevicemetrics.h>
 #include <qmatrix.h>
 #include <qapplication.h>
 #include <QScrollBar>
@@ -3360,9 +3359,8 @@ void KPrCanvas::printPage( QPainter* painter, PresStep step, KPrinter *printer, 
     int height = rect.height();
     int width = rect.width();
     
-    Q3PaintDeviceMetrics metrics( printer );
-    int begin_left = ( metrics.width() - rect.width() );
-    int begin_top = ( metrics.height() - rect.height() );
+    int begin_left = ( printer->width() - rect.width() );
+    int begin_top = ( printer->height() - rect.height() );
 
     rows = cols = qMax( rows, cols ); // all slides have the same size
 

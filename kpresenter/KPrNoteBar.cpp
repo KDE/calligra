@@ -21,7 +21,6 @@
 
 #include <QLayout>
 #include <qpainter.h>
-#include <q3paintdevicemetrics.h>
 #include <q3simplerichtext.h>
 #include <QLabel>
 #include <Q3StyleSheet>
@@ -130,14 +129,13 @@ void KPrNoteBar::printNotes( QPainter *_painter, KPrinter *_printer, Q3ValueList
     // base code from $QTDIR/example/textedit/textedit.cpp
     _painter->save();
 
-    Q3PaintDeviceMetrics metrics( _painter->device() );
-    int dpix = metrics.logicalDpiX();
-    int dpiy = metrics.logicalDpiY();
+    int dpix = _painter->device()->logicalDpiX();
+    int dpiy = _painter->device()->logicalDpiY();
 
     const int margin = 72; // pt
     QRect body( margin * dpix / 72, margin * dpiy / 72,
-                metrics.width() - margin * dpix / 72 * 2,
-                metrics.height() - margin * dpiy / 72 * 2 );
+                _painter->device()->width() - margin * dpix / 72 * 2,
+                _painter->device()->height() - margin * dpiy / 72 * 2 );
 
     QFont font = KoGlobal::defaultFont();
     QString allText = getNotesTextForPrinting(_list);
