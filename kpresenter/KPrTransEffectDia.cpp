@@ -123,7 +123,8 @@ void KPrEffectPreview::run( PageEffect effect, EffectSpeed speed )
     else
     {
         connect( &m_pageEffectTimer, SIGNAL( timeout() ), SLOT( slotDoPageEffect() ) );
-        m_pageEffectTimer.start( 50, true );
+        m_pageEffectTimer.start( 50 );
+	m_pageEffectTimer.setSingleShot(true);
     }
 
     //QLabel::update();
@@ -142,7 +143,8 @@ void KPrEffectPreview::slotDoPageEffect()
     }
     else
     {
-        m_pageEffectTimer.start( 50, true );
+        m_pageEffectTimer.start( 50 );
+	m_pageEffectTimer.setSingleShot(true);
     }
 }
 

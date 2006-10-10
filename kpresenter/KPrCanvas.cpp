@@ -3131,7 +3131,8 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         else
         {
             connect( &m_pageEffectTimer, SIGNAL( timeout() ), SLOT( slotDoPageEffect() ) );
-            m_pageEffectTimer.start( 50, true );
+            m_pageEffectTimer.start( 50 );
+	    m_pageEffectTimer.setSingleShot(true);
         }
 
         return true;
@@ -3460,7 +3461,8 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
     else
     {
         connect( &m_effectTimer, SIGNAL( timeout() ), SLOT( slotDoEffect() ) );
-        m_effectTimer.start( 50, true );
+        m_effectTimer.start( 50 );
+	m_effectTimer.setSingleShot(true);
     }
 
 }
@@ -3476,7 +3478,8 @@ void KPrCanvas::slotDoEffect()
     }
     else
     {
-        m_effectTimer.start( 50, true );
+        m_effectTimer.start( 50 );
+	m_effectTimer.setSingleShot(true);
     }
 }
 
@@ -3494,7 +3497,8 @@ void KPrCanvas::slotDoPageEffect()
     }
     else
     {
-        m_pageEffectTimer.start( 50, true );
+        m_pageEffectTimer.start( 50 );
+	m_pageEffectTimer.setSingleShot(true);
     }
 }
 
