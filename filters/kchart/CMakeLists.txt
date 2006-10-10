@@ -12,17 +12,3 @@ add_subdirectory( png )
 add_subdirectory( svg )
 add_subdirectory( xbm )
 add_subdirectory( xpm )
-
-
-
-
-########### install files ###############
-
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = libimageexport bmp jpeg mng png svg xbm xpm

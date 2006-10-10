@@ -29,6 +29,6 @@ if(LIBXML2_FOUND AND LIBXSLT_FOUND)
 endif(LIBXML2_FOUND AND LIBXSLT_FOUND)	
 
 message (STATUS "Re-add kivio filters, karbon filter")
-
+MESSAGE( STATUS "Readd or not Kformula filter: Status ?")
 
 ########### install files ###############
