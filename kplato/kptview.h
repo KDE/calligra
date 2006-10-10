@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-   Copyright (C) 2002 - 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2002 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,27 +22,19 @@
 #define KPLATO_VIEW
 
 #include <KoView.h>
+
 #include "kptcontext.h"
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3PopupMenu>
-#include <Q3PtrList>
 
-class Q3ListViewItem;
-class Q3PopupMenu;
-class Q3HBoxLayout;
-class QTabWidget;
-class Q3WidgetStack;
+#include <QMenu>
 
-class K3ListView;
+class QStackedWidget;
+
 class KPrinter;
 class KAction;
 class KActionMenu;
 class KSelectAction;
 class KToggleAction;
 class KStatusBarLabel;
-
-class DCOPObject;
 
 namespace KPlato
 {
@@ -77,7 +69,7 @@ public:
     virtual void setupPrinter(KPrinter &printer);
     virtual void print(KPrinter &printer);
 
-    Q3PopupMenu *popupMenu(const QString& name);
+    QMenu *popupMenu(const QString& name);
 
     void projectCalculate();
 
@@ -179,14 +171,12 @@ protected:
 
 private:
     GanttView *m_ganttview;
-    Q3HBoxLayout *m_ganttlayout;
     PertView *m_pertview;
-    Q3HBoxLayout *m_pertlayout;
-    Q3WidgetStack *m_tab;
+    QStackedWidget *m_tab;
     ResourceView *m_resourceview;
     AccountsView *m_accountsview;
 //    ReportView *m_reportview;
-    Q3PtrList<QString> m_reportTemplateFiles;
+//    Q3PtrList<QString> m_reportTemplateFiles;
 
     bool m_baselineMode;
 

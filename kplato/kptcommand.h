@@ -194,7 +194,7 @@ private:
     int m_index;
     bool m_mine;
     Q3PtrList<Appointment> m_appointments;
-
+    KMacroCommand *m_cmd;
 };
 
 class TaskAddCmd : public NamedCommand

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-   Copyright (C) 2002 - 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2002 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,43 +23,29 @@
 
 #include <KoMainWindow.h>
 
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qicon.h>
+#include <QApplication>
+#include <QIcon>
 #include <QLayout>
-#include <qsplitter.h>
-#include <q3canvas.h>
-#include <q3scrollview.h>
 #include <QColor>
 #include <QLabel>
 #include <QString>
-#include <qstringlist.h>
-#include <q3vbox.h>
-#include <q3grid.h>
+#include <QStringList>
 #include <qsize.h>
-#include <q3header.h>
-#include <qtabwidget.h>
-#include <q3widgetstack.h>
-#include <qtimer.h>
-#include <q3popupmenu.h>
-#include <qpair.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QStackedWidget>
+#include <QVBoxLayout>
+
 #include <kicon.h>
-#include <kiconloader.h>
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <kstdaction.h>
 #include <klocale.h>
-#include <ktoolbar.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
-#include <k3listview.h>
 #include <kstdaccel.h>
 #include <kaccelgen.h>
 #include <kdeversion.h>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
-
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <kcommand.h>
@@ -99,7 +85,6 @@
 #include "KDGanttView.h"
 #include "KDGanttViewTaskItem.h"
 #include "KPtViewAdaptor.h"
-#include <kactionmenu.h>
 
 namespace KPlato
 {
@@ -107,9 +92,7 @@ namespace KPlato
 View::View(Part* part, QWidget* parent)
     : KoView(part, parent),
     m_ganttview(0),
-    m_ganttlayout(0),
     m_pertview(0),
-    m_pertlayout(0),
 //    m_reportview(0),
     m_baselineMode(false),
     m_currentEstimateType(Effort::Use_Expected)
@@ -126,8 +109,8 @@ View::View(Part* part, QWidget* parent)
     m_dbus = new ViewAdaptor(this);
     QDBusConnection::sessionBus().registerObject( "/" + objectName(), this);
 
-    m_tab = new Q3WidgetStack(this);
-    Q3VBoxLayout *layout = new Q3VBoxLayout(this);
+    m_tab = new QStackedWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(m_tab);
 
     m_ganttview = new GanttView(m_tab, part->isReadWrite());
@@ -135,7 +118,7 @@ View::View(Part* part, QWidget* parent)
     m_updateGanttview = false;
     m_ganttview->draw(getPart()->getProject());
 
-    m_pertview = new PertView( this, m_tab, layout );
+    m_pertview = new PertView( this, m_tab );
     m_tab->addWidget(m_pertview);
 
     m_resourceview = new ResourceView( this, m_tab );
@@ -380,23 +363,23 @@ void View::print(KPrinter &printer) {
             return;
         }
     }
-	if (m_tab->visibleWidget() == m_ganttview)
+	if (m_tab->currentWidget() == m_ganttview)
 	{
         m_ganttview->print(printer);
     }
-	else if (m_tab->visibleWidget() == m_pertview)
+	else if (m_tab->currentWidget() == m_pertview)
 	{
         m_pertview->print(printer);
 	}
-	else if (m_tab->visibleWidget() == m_resourceview)
+	else if (m_tab->currentWidget() == m_resourceview)
 	{
         m_resourceview->print(printer);
 	}
-	else if (m_tab->visibleWidget() == m_accountsview)
+	else if (m_tab->currentWidget() == m_accountsview)
     {
         m_accountsview->print(printer);
     }
-// 	else if (m_tab->visibleWidget() == m_reportview)
+// 	else if (m_tab->currentWidget() == m_reportview)
 // 	{
 //         m_reportview->print(printer);
 // 	}
@@ -439,56 +422,56 @@ void View::slotViewPessimistic() {
 void View::slotViewGanttResources() {
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowResources(actionViewGanttResources->isChecked());
-    if (m_tab->visibleWidget() == m_ganttview)
+    if (m_tab->currentWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttTaskName() {
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowTaskName(actionViewGanttTaskName->isChecked());
-    if (m_tab->visibleWidget() == m_ganttview)
+    if (m_tab->currentWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttTaskLinks() {
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowTaskLinks(actionViewGanttTaskLinks->isChecked());
-    if (m_tab->visibleWidget() == m_ganttview)
+    if (m_tab->currentWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttProgress() {
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowProgress(actionViewGanttProgress->isChecked());
-    if (m_tab->visibleWidget() == m_ganttview)
+    if (m_tab->currentWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttFloat() {
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowPositiveFloat(actionViewGanttFloat->isChecked());
-    if (m_tab->visibleWidget() == m_ganttview)
+    if (m_tab->currentWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttCriticalTasks() {
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowCriticalTasks(actionViewGanttCriticalTasks->isChecked());
-    if (m_tab->visibleWidget() == m_ganttview)
+    if (m_tab->currentWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttCriticalPath() {
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowCriticalPath(actionViewGanttCriticalPath->isChecked());
-    if (m_tab->visibleWidget() == m_ganttview)
+    if (m_tab->currentWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttNoInformation() {
     kDebug()<<k_funcinfo<<m_ganttview->showNoInformation()<<endl;
     m_ganttview->setShowNoInformation(!m_ganttview->showNoInformation()); //Toggle
-    if (m_tab->visibleWidget() == m_ganttview)
+    if (m_tab->currentWidget() == m_ganttview)
         slotUpdate(false);
 }
 
@@ -496,36 +479,36 @@ void View::slotViewTaskAppointments() {
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowAppointments(actionViewTaskAppointments->isChecked());
     m_updateGanttview = true;
-    if (m_tab->visibleWidget() == m_ganttview)
+    if (m_tab->currentWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGantt() {
     //kDebug()<<k_funcinfo<<endl;
-    m_tab->raiseWidget(m_ganttview);
+    m_tab->setCurrentWidget(m_ganttview);
 }
 
 void View::slotViewPert() {
     //kDebug()<<k_funcinfo<<endl;
-    m_tab->raiseWidget(m_pertview);
+    m_tab->setCurrentWidget(m_pertview);
 }
 
 void View::slotViewResources() {
     //kDebug()<<k_funcinfo<<endl;
-    m_tab->raiseWidget(m_resourceview);
+    m_tab->setCurrentWidget(m_resourceview);
 }
 
 void View::slotViewResourceAppointments() {
     //kDebug()<<k_funcinfo<<endl;
     m_resourceview->setShowAppointments(actionViewResourceAppointments->isChecked());
     m_updateResourceview = true;
-    if (m_tab->visibleWidget() == m_resourceview)
+    if (m_tab->currentWidget() == m_resourceview)
         slotUpdate(false);
 }
 
 void View::slotViewAccounts() {
     //kDebug()<<k_funcinfo<<endl;
-    m_tab->raiseWidget(m_accountsview);
+    m_tab->setCurrentWidget(m_accountsview);
 }
 
 void View::slotProjectEdit() {
@@ -641,7 +624,7 @@ void View::slotViewReportDesign() {
 
 void View::slotViewReports() {
     //kDebug()<<k_funcinfo<<endl;
-    //m_tab->raiseWidget(m_reportview);
+    //m_tab->setCurrentWidget(m_reportview);
 }
 
 void View::slotAddSubTask() {
@@ -737,13 +720,13 @@ void View::slotConfigure() {
 Node *View::currentTask()
 {
 	Node* task = 0;
-	if (m_tab->visibleWidget() == m_ganttview) {
+	if (m_tab->currentWidget() == m_ganttview) {
 	    task = m_ganttview->currentNode();
 	}
-	else if (m_tab->visibleWidget() == m_pertview) {
+	else if (m_tab->currentWidget() == m_pertview) {
 		task = m_pertview->currentNode();
 	}
-	else if (m_tab->visibleWidget() == m_resourceview) {
+	else if (m_tab->currentWidget() == m_resourceview) {
 		task = m_resourceview->currentNode();
 	}
 	if ( 0 != task ) {
@@ -877,16 +860,7 @@ void View::slotDeleteTask()
         kDebug()<<k_funcinfo<<(node ? "Task is main project" : "No current task")<<endl;
         return;
     }
-    KMacroCommand *cmd = new KMacroCommand(i18n("Delete Task"));
-    cmd->addCommand(new NodeDeleteCmd(getPart(), node));
-    Q3PtrListIterator<Relation> it = node->dependChildNodes();
-    for (; it.current(); ++it) {
-        cmd->addCommand(new DeleteRelationCmd(getPart(), it.current()));
-    }
-    it = node->dependParentNodes();
-    for (; it.current(); ++it) {
-        cmd->addCommand(new DeleteRelationCmd(getPart(),it.current()));
-    }
+    NodeDeleteCmd *cmd = new NodeDeleteCmd(getPart(), node, i18n("Delete Task"));
     getPart()->addCommand(cmd);
 }
 
@@ -1059,12 +1033,12 @@ void View::slotConnectNode() {
     }*/
 }
 
-Q3PopupMenu * View::popupMenu( const QString& name )
+QMenu * View::popupMenu( const QString& name )
 {
     //kDebug()<<k_funcinfo<<endl;
     Q_ASSERT(factory());
     if ( factory() )
-        return ((Q3PopupMenu*)factory()->container( name, this ));
+        return ((QMenu*)factory()->container( name, this ));
     return 0L;
 }
 
@@ -1090,7 +1064,7 @@ void View::slotUpdate(bool calculate)
     m_updateResourceview = true;
     m_updateAccountsview = true;
 
-    updateView(m_tab->visibleWidget());
+    updateView(m_tab->currentWidget());
 }
 
 void View::slotAboutToShow(QWidget *widget) {
@@ -1151,7 +1125,7 @@ void View::slotRenameNode(Node *node, const QString& name) {
 
 void View::slotPopupMenu(const QString& menuname, const QPoint & pos)
 {
-    Q3PopupMenu* menu = this->popupMenu(menuname);
+    QMenu* menu = this->popupMenu(menuname);
     if (menu)
       menu->exec(pos);
 }
@@ -1208,15 +1182,15 @@ void View::getContext(Context &context) const {
     context.actionViewOptimistic = actionViewOptimistic->isChecked();
     context.actionViewPessimistic = actionViewPessimistic->isChecked();
 
-    if (m_tab->visibleWidget() == m_ganttview) {
+    if (m_tab->currentWidget() == m_ganttview) {
         context.currentView = "ganttview";
-    } else if (m_tab->visibleWidget() == m_pertview) {
+    } else if (m_tab->currentWidget() == m_pertview) {
         context.currentView = "pertview";
-    } else if (m_tab->visibleWidget() == m_resourceview) {
+    } else if (m_tab->currentWidget() == m_resourceview) {
         context.currentView = "resourceview";
-    } else if (m_tab->visibleWidget() == m_accountsview) {
+    } else if (m_tab->currentWidget() == m_accountsview) {
         context.currentView = "accountsview";
-/*    } else if (m_tab->visibleWidget() == m_reportview) {
+/*    } else if (m_tab->currentWidget() == m_reportview) {
         context.currentView = "reportview";*/
     }
     m_ganttview->getContext(context.ganttview);

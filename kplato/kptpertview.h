@@ -43,7 +43,7 @@ class PertView : public QWidget
     
 public:
  
-    PertView( View *view, QWidget *parent, QLayout *layout );
+    PertView( View *view, QWidget *parent );
 
     ~PertView();
     
@@ -69,7 +69,7 @@ signals:
     void modifyRelation(Relation *rel);
 
 private:
-    void init(QLayout *layout);
+    void init();
     View *m_mainview;
     PertCanvas *m_canvasview;
     Node *m_node;

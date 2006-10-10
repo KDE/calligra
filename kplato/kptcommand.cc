@@ -352,10 +352,21 @@ NodeDeleteCmd::NodeDeleteCmd(Part *part, Node *node, QString name)
             }
         }
     }
+    m_cmd = new KMacroCommand("");
+    Q3PtrListIterator<Relation> it = node->dependChildNodes();
+    for (; it.current(); ++it) {
+        m_cmd->addCommand(new DeleteRelationCmd(part, it.current()));
+    }
+    it = node->dependParentNodes();
+    for (; it.current(); ++it) {
+        m_cmd->addCommand(new DeleteRelationCmd(part, it.current()));
+    }
+
 }
 NodeDeleteCmd::~NodeDeleteCmd() {
     if (m_mine)
         delete m_node;
+    delete m_cmd;
 }
 void NodeDeleteCmd::execute() {
     if (m_parent && m_project) {
@@ -365,6 +376,7 @@ void NodeDeleteCmd::execute() {
             it.current()->detach();
             m_appointments.append(it.current());
         }
+        m_cmd->execute();
         m_project->delTask(m_node);
         m_mine = true;
         setSchScheduled(false);
@@ -375,6 +387,7 @@ void NodeDeleteCmd::unexecute() {
     if (m_parent && m_project) {
         //kDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
         m_project->addSubTask(m_node, m_index, m_parent);
+        m_cmd->unexecute();
         Appointment *a;
         for (a = m_appointments.first(); a != 0; m_appointments.take()) {
             a->attach();

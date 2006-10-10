@@ -33,7 +33,7 @@
 #include <QLayout>
 #include <q3listview.h>
 #include <q3header.h>
-#include <q3popupmenu.h>
+#include <QMenu>
 //Added by qt3to4:
 #include <Q3GridLayout>
 
@@ -42,19 +42,19 @@
 namespace KPlato
 {
 
-PertView::PertView( View *view, QWidget *parent, QLayout *layout )
+PertView::PertView( View *view, QWidget *parent )
     : QWidget( parent ),
     m_mainview( view ),
     m_node( 0 )
 {
-    init(layout);
+    init();
 }
 
 PertView::~PertView()
 {
 }
 
-void PertView::init(QLayout */*layout*/)
+void PertView::init()
 {
     //kDebug()<<k_funcinfo<<endl;
     Q3GridLayout *gl = new Q3GridLayout(this, 1, 1, -1, -1, "Pert QGridLayout");
@@ -80,7 +80,7 @@ void PertView::slotRMBPressed(Node *node, const QPoint & point)
     //kDebug()<<k_funcinfo<<" node: "<<node->name()<<endl;
     m_node = node;
     if (node && (node->type() == Node::Type_Task || node->type() == Node::Type_Milestone)) {
-        Q3PopupMenu *menu = m_mainview->popupMenu("task_popup");
+        QMenu *menu = m_mainview->popupMenu("task_popup");
         if (menu)
         {
             /*int id =*/ menu->exec(point);
@@ -89,7 +89,7 @@ void PertView::slotRMBPressed(Node *node, const QPoint & point)
         return;
     }
     if (node && node->type() == Node::Type_Summarytask) {
-        Q3PopupMenu *menu = m_mainview->popupMenu("node_popup");
+        QMenu *menu = m_mainview->popupMenu("node_popup");
         if (menu)
         {
             /*int id =*/ menu->exec(point);

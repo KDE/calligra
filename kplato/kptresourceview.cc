@@ -31,7 +31,7 @@
 #include "kptcontext.h"
 
 #include <q3header.h>
-#include <q3popupmenu.h>
+#include <QMenu>
 #include <qpainter.h>
 #include <q3paintdevicemetrics.h>
 #include <qstyle.h>
@@ -539,7 +539,7 @@ void ResourceView::popupMenuRequested(Q3ListViewItem* item, const QPoint & pos, 
     if (ritem) {
         if (ritem != m_selectedItem)
             resSelectionChanged(ritem);
-        Q3PopupMenu *menu = m_mainview->popupMenu("resource_popup");
+        QMenu *menu = m_mainview->popupMenu("resource_popup");
         if (menu)
         {
             menu->exec(pos);
