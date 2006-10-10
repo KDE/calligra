@@ -22,6 +22,7 @@
 #include <qlayout.h>
 #include <qhbox.h>
 #include <qvbox.h>
+#include <qtimer.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -67,6 +68,7 @@ class KexiQueryDesignerSQLView::Private
 		 , heightForHistoryMode(-1)
 		 , eventFilterForSplitterEnabled(true)
 		 , justSwitchedFromNoViewMode(false)
+		 , slotTextChangedEnabled(true)
 		{
 		}
 		KexiQueryDesignerSQLEditor *editor;
@@ -91,6 +93,8 @@ class KexiQueryDesignerSQLView::Private
 		bool eventFilterForSplitterEnabled : 1;
 		//! helper for beforeSwitchTo()
 		bool justSwitchedFromNoViewMode : 1;
+		//! helper for slotTextChanged()
+		bool slotTextChangedEnabled : 1;
 };
 
 //===================
@@ -310,8 +314,11 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 		int flags = KexiDB::Driver::EscapeKexi;
 		d->origStatement = conn->selectStatement(*query, flags).trimmed();
 	}
-	
-	d->editor->setText( d->origStatement );
+
+	d->slotTextChangedEnabled = false;
+	 d->editor->setText( d->origStatement );
+	d->slotTextChangedEnabled = true;
+	QTimer::singleShot(100, d->editor, SLOT(setFocus()));
 	return true;
 }
 
@@ -392,6 +399,8 @@ void KexiQueryDesignerSQLView::slotUpdateMode()
 
 void KexiQueryDesignerSQLView::slotTextChanged()
 {
+	if (!d->slotTextChangedEnabled)
+		return;
 	setDirty(true);
 	setStatusEmpty();
 }

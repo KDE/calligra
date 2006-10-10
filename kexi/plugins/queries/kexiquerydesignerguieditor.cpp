@@ -393,12 +393,13 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 			KexiDB::QueryColumnInfo* currentColumn = 0;
 			if (!tableName.isEmpty())
 				fieldAndTableName.prepend(tableName+".");
-			bool fieldVisible = (*set)["visible"].value().toBool();
+			const bool fieldVisible = (*set)["visible"].value().toBool();
 			QString criteriaStr = (*set)["criteria"].value().toString();
 			Q3CString alias = (*set)["alias"].value().toCString();
 			if (!criteriaStr.isEmpty()) {
 				int token;
-				KexiDB::BaseExpr *criteriaExpr = parseExpressionString(criteriaStr, token, true/*allowRelationalOperator*/);
+				KexiDB::BaseExpr *criteriaExpr = parseExpressionString(criteriaStr, token, 
+					true/*allowRelationalOperator*/);
 				if (!criteriaExpr) {//for sanity
 					if (errMsg)
 						*errMsg = i18n("Invalid criteria \"%1\"").arg(criteriaStr);
@@ -418,7 +419,8 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 				if ((*set)["isExpression"].value().toBool()==true) {
 					//add expression column
 					int dummyToken;
-					KexiDB::BaseExpr *columnExpr = parseExpressionString(fieldName, dummyToken, false/*!allowRelationalOperator*/);
+					KexiDB::BaseExpr *columnExpr = parseExpressionString(fieldName, dummyToken, 
+						false/*!allowRelationalOperator*/);
 					if (!columnExpr) {
 						if (errMsg)
 							*errMsg = i18n("Invalid expression \"%1\"").arg(fieldName);
@@ -448,7 +450,8 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 						fieldsFound = true;
 				} else {
 					if (!t) {
-						kexipluginswarn << "query designer: NO TABLE '" << (*set)["table"].value().toString() << "'" << endl;
+						kexipluginswarn << "query designer: NO TABLE '" 
+							<< (*set)["table"].value().toString() << "'" << endl;
 						continue;
 					}
 					currentField = t->field( fieldName );
@@ -456,8 +459,15 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 						kexipluginswarn << "query designer: NO FIELD '" << fieldName << "'" << endl;
 						continue;
 					}
+					if (!fieldVisible && criteriaStr.isEmpty() && (*set)["isExpression"]
+						&& (*set)["sorting"].value().toString()!="nosorting")
+					{
+						kexipluginsdbg << "invisible field with sorting: do not add it to the fields list" << endl;
+						continue;
+					}
 					temp->query()->addField(currentField, fieldVisible);
-					currentColumn = temp->query()->expandedOrInternalField( temp->query()->fieldsExpanded().count() - 1 );
+					currentColumn = temp->query()->expandedOrInternalField( 
+						temp->query()->fieldsExpanded().count() - 1 );
 					if (fieldVisible)
 						fieldsFound = true;
 					if (!alias.isEmpty())
@@ -475,7 +485,8 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 		return false;
 	}
 	if (whereExpr)
-		kexipluginsdbg << "KexiQueryDesignerGuiEditor::buildSchema(): setting CRITERIA: " << whereExpr->debugString() << endl;
+		kexipluginsdbg << "KexiQueryDesignerGuiEditor::buildSchema(): setting CRITERIA: " 
+			<< whereExpr->debugString() << endl;
 
 	//set always, because if whereExpr==NULL,
 	//this will clear prev. expr
@@ -492,25 +503,46 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 			detailsTable->schema()->table()->field(it.current()->detailsField()) );
 	}
 
-	// Add sorting information (ORDER BY) - we can do that only now once 
-	//  all QueryColumnInfo items are instantiated
+	// Add sorting information (ORDER BY) - we can do that only now
+	//  after all QueryColumnInfo items are instantiated
 	KexiDB::OrderByColumnList orderByColumns;
 	it = d->data->iterator();
-	for (uint i=0; i<count && it.current(); ++it, i++) {
+	uint fieldNumber = 0;
+	for (uint i=0/*row number*/; i<count && it.current(); ++it, i++) {
 		KoProperty::Set *set = d->sets->at(i);
 		if (!set)
 			continue;
-		KexiDB::Field *currentField = temp->query()->field( i );
+		KexiDB::Field *currentField = 0;
+		KexiDB::QueryColumnInfo *currentColumn = 0;
+		QString sortingString( (*set)["sorting"].value().toString() );
+		if (sortingString!="ascending" && sortingString!="descending")
+			continue;
+		if (!(*set)["visible"].value().toBool()) {
+			// this row defines invisible field but contains sorting information,
+			// what means KexiDB::Field should be used as a reference for this sorting
+			// Note1: alias is not supported here.
+
+			// Try to find a field (not mentioned after SELECT):
+			currentField = temp->query()->findTableField( (*set)["field"].value().toString() );
+			if (!currentField) {
+				kexipluginswarn << "KexiQueryDesignerGuiEditor::buildSchema(): NO FIELD '" 
+					<< (*set)["field"].value().toString()
+					<< " available for sorting" << endl;
+				continue;
+			}
+			orderByColumns.appendField(*currentField, sortingString=="ascending");
+			continue;
+		}
+		currentField = temp->query()->field( fieldNumber );
 		if (!currentField || currentField->isExpression() || currentField->isQueryAsterisk())
 //! @todo support expressions here
 			continue;
 //! @todo ok, but not for expresions
 		QString aliasString( (*set)["alias"].value().toString() );
-		KexiDB::QueryColumnInfo *currentColumn = temp->query()->columnInfo( 
+		currentColumn = temp->query()->columnInfo( 
 			(*set)["table"].value().toString() + "."
 			+ (aliasString.isEmpty() ? currentField->name() : aliasString) );
-		QString sortingString( (*set)["sorting"].value().toString() );
-		if (currentField && currentColumn && (sortingString=="ascending" || sortingString=="descending")) {
+		if (currentField && currentColumn) {
 			if (currentColumn->visible)
 				orderByColumns.appendColumn(*currentColumn, sortingString=="ascending");
 			else if (currentColumn->field)
@@ -576,6 +608,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
 tristate
 KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 {
+	const bool was_dirty = dirty();
 	if (mode==Kexi::NoViewMode || (mode==Kexi::DataViewMode && !tempData()->query())) {
 		//this is not a SWITCH but a fresh opening in this view mode
 		if (!m_dialog->neverSaved()) {
@@ -627,6 +660,8 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 	}
 	tempData()->queryChangedInPreviousView = false;
 	setFocus(); //to allow shared actions proper update
+	if (!was_dirty)
+		setDirty(false);
 	return true;
 }
 
@@ -862,7 +897,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 			}
 		}
 		//create new row data
-		KexiTableItem *newItem = createNewRow(tableName, fieldName);
+		KexiTableItem *newItem = createNewRow(tableName, fieldName, true /* visible*/);
 		if (criteriaExpr) {
 //! @todo fix for !INFIX operators
 			if (criteriaExpr->token()=='=')
@@ -888,45 +923,51 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 	}
 
 	//4. show ORDER BY information
+	d->data->clearRowEditBuffer();
 	KexiDB::OrderByColumnList &orderByColumns = query->orderByColumnList();
-//	Q3PtrDict<KexiDB::OrderByColumn> orderByDictForFields;
-//	Q3PtrDict<KexiDB::OrderByColumn> orderByDictForColumns;
 	QMap<KexiDB::QueryColumnInfo*,int> columnsOrder( 
 		query->columnsOrder(KexiDB::QuerySchema::UnexpandedListWithoutAsterisks) );
 	for (KexiDB::OrderByColumn::ListConstIterator orderByColumnsIt( orderByColumns.constBegin() );
 		orderByColumnsIt!=orderByColumns.constEnd(); ++orderByColumnsIt)
 	{
 		KexiDB::QueryColumnInfo *column = (*orderByColumnsIt).column();
+		KexiTableItem *rowItem = 0;
+		KoProperty::Set *rowPropertySet = 0;
 		if (column) {
 			//sorting for visible column
 			if (column->visible) {
 				if (columnsOrder.contains(column)) {
 					const int columnPosition = columnsOrder[ column ];
-					KexiTableItem *rowItem = d->data->at( columnPosition );
-					KoProperty::Set *rowPropertySet = d->sets->at( columnPosition );
-					if (rowItem && rowPropertySet) {
-						kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
-							"Setting \"" << (*orderByColumnsIt).debugString() << "\" sorting for row #" 
-							<< columnPosition<< endl;
-						//(*rowPropertySet)["sorting"].setValue(
-							//QString((*orderByColumnsIt).ascending() ? "ascending" : "descending") );
-						d->data->clearRowEditBuffer();
-						d->data->updateRowEditBuffer(rowItem, COLUMN_ID_SORTING,
-							(*orderByColumnsIt).ascending() ? 1 : 2); // this will automatically update "sorting" property
-						                                             // in slotBeforeCellChanged()
-						d->data->saveRowChanges(*rowItem, true);
-						(*rowPropertySet)["sorting"].clearModifiedFlag(); // this property should look "fresh"
-//						d->data->rowEditBuffer()->debug();
-					}
-//					query->field(columnPosition);
+					rowItem = d->data->at( columnPosition );
+					rowPropertySet = d->sets->at( columnPosition );
+					kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
+						"Setting \"" << (*orderByColumnsIt).debugString() << "\" sorting for row #" 
+						<< columnPosition << endl;
 				}
 			}
-//				orderByDictForColumns.replace( (void*)(*orderByColumnsIt).column(), &(*orderByColumnsIt) );
-	//		else
-		//		orderByDictForFields.replace( (void*)(*orderByColumnsIt).column()->field, &(*orderByColumnsIt) );
 		}
-		else if ((*orderByColumnsIt).field()) {//this will be presented as invisible field
-//			orderByDictForFields.replace( (void*)(*orderByColumnsIt).field(), &(*orderByColumnsIt) );
+		else if ((*orderByColumnsIt).field()) {
+			//this will be presented as invisible field: create new row
+			field = (*orderByColumnsIt).field();
+			QString tableName( field->table() ? field->table()->name() : QString::null );
+			rowItem = createNewRow( tableName, field->name(), false /* !visible*/);
+			d->dataTable->dataAwareObject()->insertItem(rowItem, row_num);
+			rowPropertySet = createPropertySet( row_num, tableName, field->name(), true /*newOne*/ );
+			propertySetSwitched();
+			kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
+				"Setting \"" << (*orderByColumnsIt).debugString() << "\" sorting for invisible field " 
+				<< field->name() << ", table " << tableName << " -row #" << row_num << endl;
+			row_num++;
+		}
+		//alter sorting for either existing or new row
+		if (rowItem && rowPropertySet) {
+			d->data->updateRowEditBuffer(rowItem, COLUMN_ID_SORTING,
+				(*orderByColumnsIt).ascending() ? 1 : 2); // this will automatically update "sorting" property
+						                                        // in slotBeforeCellChanged()
+			d->data->saveRowChanges(*rowItem, true);
+			(*rowPropertySet)["sorting"].clearModifiedFlag(); // this property should look "fresh"
+			if (!rowItem->at(COLUMN_ID_VISIBLE).toBool()) //update
+				(*rowPropertySet)["visible"].setValue(QVariant(false,0), false/*rememberOldValue*/); 
 		}
 	}
 
@@ -1115,10 +1156,8 @@ KexiTableItem*
 KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString& fieldName,
 	bool visible) const
 {
-	KexiTableItem *newItem = d->data->createItem(); //new KexiTableItem(d->data->columnsCount());
+	KexiTableItem *newItem = d->data->createItem();
 	QString key;
-//	if (!alias.isEmpty())
-//		key=alias+": ";
 	if (tableName=="*")
 		key="*";
 	else {
@@ -1130,7 +1169,7 @@ KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString
 	(*newItem)[COLUMN_ID_TABLE]=tableName;
 	(*newItem)[COLUMN_ID_VISIBLE]=QVariant(visible, 1);
 #ifndef KEXI_NO_QUERY_TOTALS
-	(*newItem)[COLUMN_ID_TOTALS]=QVariant(0);//totals
+	(*newItem)[COLUMN_ID_TOTALS]=QVariant(0);
 #endif
 	return newItem;
 }
@@ -1154,7 +1193,7 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem * /*item*/, int /*row
 	if (!KexiFieldDrag::decodeSingle(ev,sourceMimeType,srcTable,srcField))
 		return;
 	//insert new row at specific place
-	newItem = createNewRow(srcTable, srcField);
+	newItem = createNewRow(srcTable, srcField, true /* visible*/);
 	d->droppedNewItem = newItem;
 	d->droppedNewTable = srcTable;
 	d->droppedNewField = srcField;
@@ -1582,7 +1621,7 @@ void KexiQueryDesignerGuiEditor::slotTableFieldDoubleClicked(
 		;
 	row_num++; //after
 	//add row
-	KexiTableItem *newItem = createNewRow(table->name(), fieldName);
+	KexiTableItem *newItem = createNewRow(table->name(), fieldName, true /* visible*/);
 	d->dataTable->dataAwareObject()->insertItem(newItem, row_num);
 	d->dataTable->dataAwareObject()->setCursorPosition(row_num, 0);
 	//create buffer
