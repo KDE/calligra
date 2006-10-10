@@ -735,7 +735,5 @@ You can uncheck the box if you are not using transparency and you want to make t
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>kcombobox.h</includehint>
 </includehints>
 </UI>
