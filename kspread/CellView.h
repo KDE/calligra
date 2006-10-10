@@ -105,11 +105,9 @@ public:
   /**
    * \ingroup Painting
    */
-  void paintCellBorders( const QRectF& rect, QPainter& painter,
-                         View* view, const KoPoint& coordinate,
-                         const QPoint& cellRef, Borders paintBorder,
-                         const QPen& rightPen, const QPen& bottomPen,
-                         const QPen& leftPen, const QPen& topPen,
+  void paintCellBorders( const QRectF& paintRegion, QPainter& painter,
+                         View* view, const KoPoint& paintCoordinate,
+                         const QPoint& cellCoordinate, const QRect& cellRegion,
                          QLinkedList<QPoint> &mergedCellsPainted );
 
   /**

@@ -502,79 +502,6 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 
             cell = m_pSheet->cellAt( x, y );
 
-            CellView::Borders paintBorder = CellView::NoBorder;
-
-            QPen rightPen  = cell->effRightBorderPen( x, y );
-            QPen leftPen   = cell->effLeftBorderPen( x, y );
-            QPen bottomPen = cell->effBottomBorderPen( x, y );
-            QPen topPen    = cell->effTopBorderPen( x, y );
-
-            // paint right border if rightmost cell or if the pen is more "worth" than the left border pen
-            // of the cell on the left or if the cell on the right is not painted. In the latter case get
-            // the pen that is of more "worth"
-            if ( x >= KS_colMax )
-                paintBorder |= CellView::RightBorder;
-            else if ( x == regionRight )
-            {
-                paintBorder |= CellView::RightBorder;
-                if ( cell->effRightBorderValue( x, y ) < m_pSheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-                    rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
-            }
-            else if ( cell->effRightBorderValue( x, y ) < m_pSheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-            {
-                paintBorder |= CellView::RightBorder;
-                rightPen = m_pSheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
-            }
-
-            // similar for other borders...
-            // bottom border:
-            if ( y >= KS_rowMax )
-                paintBorder |= CellView::BottomBorder;
-            else if ( y == regionBottom )
-            {
-                paintBorder |= CellView::BottomBorder;
-                if ( cell->effBottomBorderValue( x, y ) < m_pSheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
-                    bottomPen = m_pSheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
-            }
-            else if ( cell->effBottomBorderValue( x, y )
-                      < m_pSheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
-            {
-                paintBorder |= CellView::BottomBorder;
-                bottomPen = m_pSheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
-            }
-
-            // left border:
-            if ( x == 1 )
-                paintBorder |= CellView::LeftBorder;
-            else if ( x == regionLeft )
-            {
-                paintBorder |= CellView::LeftBorder;
-                if ( cell->effLeftBorderValue( x, y ) < m_pSheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-                    leftPen = m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
-            }
-            else if ( cell->effLeftBorderValue( x, y )
-                      < m_pSheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-            {
-                paintBorder |= CellView::LeftBorder;
-                leftPen = m_pSheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
-            }
-
-            // top border:
-            if ( y == 1 )
-                paintBorder |= CellView::TopBorder;
-            else if ( y == regionTop )
-            {
-                paintBorder |= CellView::TopBorder;
-                if ( cell->effTopBorderValue( x, y ) < m_pSheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-                    topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
-            }
-            else if ( cell->effTopBorderValue( x, y )
-                      < m_pSheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-            {
-                paintBorder |= CellView::TopBorder;
-                topPen = m_pSheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
-            }
-
             double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft )
                              ? view.width() - xpos - col_lay->dblWidth() : xpos;
 #ifdef KSPREAD_CELL_WINDOW
@@ -583,10 +510,8 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 #else
             CellView* cellView = cell->cellView();
 #endif
-            cellView->paintCellBorders( rect, painter, 0,
-                                        KoPoint( effXPos, ypos ), QPoint( x, y ),
-                                        paintBorder,
-                                        rightPen, bottomPen, leftPen, topPen,
+            cellView->paintCellBorders( rect, painter, 0, KoPoint( effXPos, ypos ),
+                                        QPoint( x, y ), printRect,
                                         mergedCellsPainted );
 
             xpos += col_lay->dblWidth();

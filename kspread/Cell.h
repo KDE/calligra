@@ -790,7 +790,6 @@ public:
        * Tells whether we've already calculated the reverse dependancies for this
        * cell.  Similar to the Progress flag but it's for when we are calculating
        * in the reverse direction.
-       * \todo TODO Stefan: never set so far
        */
       Flag_UpdatingDeps          = 0x0008,
       /**
@@ -839,9 +838,17 @@ public:
       Flag_PaintingCell          = 0x0400,
       /**
        * TextFormatDirty
-       * \todo TODO Stefan: difference to Flag_LayoutDirty?
+       * Indicates, that the format of the cell content has changed and needs
+       * an update, e.g. a cell content is set to the percentage format.
        */
-      Flag_TextFormatDirty       = 0x0800
+      Flag_TextFormatDirty       = 0x0800,
+      /**
+       * PaintingDirty
+       * Marks cells, that need repainting.
+       * If the Flag_LayoutDirty is not set, the cached layout information is
+       * used to paint the cell.
+       */
+      Flag_PaintingDirty         = 0x1000
     };
     Q_DECLARE_FLAGS(StatusFlags, StatusFlag)
 

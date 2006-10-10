@@ -488,20 +488,21 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
     cell()->clearFlag( Cell::Flag_PaintingCell );
 }
 
-void CellView::paintCellBorders( const QRectF& rect, QPainter& painter,
-                                 View* view, const KoPoint& coordinate,
-                                 const QPoint& cellRef, Borders paintBorder,
-                                 const QPen& rightPen, const QPen& bottomPen,
-                                 const QPen& leftPen, const QPen& topPen,
+void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
+                                 View* view, const KoPoint& paintCoordinate,
+                                 const QPoint& cellCoordinate, const QRect& cellRegion,
                                  QLinkedList<QPoint> &mergedCellsPainted )
 {
+    Cell*  const cell  = this->cell();
+    Sheet* const sheet = cell->sheet();
+
     // If we are already painting this cell, then return immediately.
     // This avoids infinite recursion.
-    if ( cell()->testFlag( Cell::Flag_PaintingCell ) )
+    if ( cell->testFlag( Cell::Flag_PaintingCell ) )
         return;
 
     // Indicate that we are painting this cell now.
-    cell()->setFlag( Cell::Flag_PaintingCell );
+    cell->setFlag( Cell::Flag_PaintingCell );
 
     // This flag indicates that we are working on drawing the cells that
     // another cell is obscuring.  The value is the number of levels down we
@@ -511,24 +512,32 @@ void CellView::paintCellBorders( const QRectF& rect, QPainter& painter,
 
 #if 0
     if (paintingObscured == 0)
-        kDebug(36004) << "painting cell " << cell()->name() << endl;
+        kDebug(36004) << "painting cell " << cell->name() << endl;
     else
-        kDebug(36004) << "  painting obscured cell " << cell()->name() << endl;
+        kDebug(36004) << "  painting obscured cell " << cell->name() << endl;
 #endif
 
     // Sanity check: If we're working on drawing an obscured cell, that
     // means this cell should have a cell that obscures it.
-    Q_ASSERT(!(paintingObscured > 0 && cell()->d->extra()->obscuringCells.isEmpty()));
+    Q_ASSERT(!(paintingObscured > 0 && cell->d->extra()->obscuringCells.isEmpty()));
 
-    // The parameter cellref should be *this, unless this is the default cell.
-    Q_ASSERT(cell()->isDefault() || (((cellRef.x() == cell()->column()) && (cellRef.y() == cell()->row()))));
+    // The parameter cellCoordinate should be *this, unless this is the default cell.
+    Q_ASSERT(cell->isDefault() || (((cellCoordinate.x() == cell->column()) && (cellCoordinate.y() == cell->row()))));
 
-    Sheet::LayoutDirection sheetDir =  cell()->sheet()->layoutDirection();
+    const int col = cellCoordinate.x();
+    const int row = cellCoordinate.y();
+    const int regionBottom = cellRegion.bottom();
+    const int regionRight  = cellRegion.right();
+    const int regionLeft   = cellRegion.left();
+    const int regionTop    = cellRegion.top();
 
-    double left = coordinate.x();
 
-    ColumnFormat * columnFormat = cell()->sheet()->columnFormat( cellRef.x() );
-    RowFormat    * rowFormat = cell()->sheet()->rowFormat( cellRef.y() );
+    Sheet::LayoutDirection sheetDir =  sheet->layoutDirection();
+
+    double left = paintCoordinate.x();
+
+    ColumnFormat * columnFormat = sheet->columnFormat( col );
+    RowFormat    * rowFormat = sheet->rowFormat( row );
 
     // Set width, height to the total width and height that this cell
     // covers, including obscured cells, and width0, height0 to the
@@ -551,33 +560,33 @@ void CellView::paintCellBorders( const QRectF& rect, QPainter& painter,
          && view && view->canvasWidget() )
     {
         double  dwidth = view->doc()->unzoomItXOld(view->canvasWidget()->width());
-        left = dwidth - coordinate.x() - width;
+        left = dwidth - paintCoordinate.x() - width;
     }
 
     // See if this cell is merged or has overflown into neighbor cells.
     // In that case, the width/height is greater than just the cell
     // itself.
-    if (cell()->d->hasExtra()) {
-        if (cell()->mergedXCells() > 0 || cell()->mergedYCells() > 0) {
+    if (cell->d->hasExtra()) {
+        if (cell->mergedXCells() > 0 || cell->mergedYCells() > 0) {
             // merged cell extends to the left if sheet is RTL
             if ( sheetDir == Sheet::RightToLeft ) {
-                left -= cell()->extraWidth() - width;
+                left -= cell->extraWidth() - width;
             }
-            width0  = cell()->extraWidth();
-            height0 = cell()->extraHeight();
-            width   = cell()->extraWidth();
-            height  = cell()->extraHeight();
+            width0  = cell->extraWidth();
+            height0 = cell->extraHeight();
+            width   = cell->extraWidth();
+            height  = cell->extraHeight();
         }
         else {
 #if 0
-            width  += cell()->extraXCells() ? cell()->extraWidth()  : 0;
-            height += cell()->extraYCells() ? cell()->extraHeight() : 0;
+            width  += cell->extraXCells() ? cell->extraWidth()  : 0;
+            height += cell->extraYCells() ? cell->extraHeight() : 0;
 #else
             // FIXME: Make extraWidth/Height really contain the *extra* width/height.
-            if ( cell()->extraXCells() )
-                width  = cell()->extraWidth();
-            if ( cell()->extraYCells() )
-                height = cell()->extraHeight();
+            if ( cell->extraXCells() )
+                width  = cell->extraWidth();
+            if ( cell->extraYCells() )
+                height = cell->extraHeight();
 #endif
         }
     }
@@ -589,14 +598,14 @@ void CellView::paintCellBorders( const QRectF& rect, QPainter& painter,
     // itself really is selected.
     bool  selected = false;
     if ( view != 0 ) {
-        selected = view->selectionInfo()->contains( cellRef );
+        selected = view->selectionInfo()->contains( cellCoordinate );
 
         // But the cell doesn't look selected if this is the marker cell.
-        Cell* cell = this->cell()->sheet()->cellAt( view->selectionInfo()->marker() );
-        QPoint bottomRight( view->selectionInfo()->marker().x() + cell->extraXCells(),
-                            view->selectionInfo()->marker().y() + cell->extraYCells() );
+        Cell* markerCell = sheet->cellAt( view->selectionInfo()->marker() );
+        QPoint bottomRight( view->selectionInfo()->marker().x() + markerCell->extraXCells(),
+                            view->selectionInfo()->marker().y() + markerCell->extraYCells() );
         QRect markerArea( view->selectionInfo()->marker(), bottomRight );
-        selected = selected && !( markerArea.contains( cellRef ) );
+        selected = selected && !( markerArea.contains( cellCoordinate ) );
 
         // Don't draw any selection at all when printing.
         if ( dynamic_cast<QPrinter*>(painter.device()) )
@@ -612,35 +621,124 @@ void CellView::paintCellBorders( const QRectF& rect, QPainter& painter,
     // FIXME: This needs to be taken out eventually - it is done in
     //        canvas::paintUpdates().
 #ifdef KSPREAD_CELL_WINDOW
-    if ( !cell()->isDefault() && ( d->dirty || cell()->testFlag( Cell::Flag_LayoutDirty ) ) )
+    if ( !cell->isDefault() && ( d->dirty || cell->testFlag( Cell::Flag_LayoutDirty ) ) )
     {
-        Q_ASSERT( d->col == cellRef.x() );
-        Q_ASSERT( d->row == cellRef.y() );
-        makeLayout( cellRef.x(), cellRef.y() );
+        Q_ASSERT( d->col == col );
+        Q_ASSERT( d->row == row );
+        makeLayout( col, row );
         d->dirty = false;
     }
 #else
-    if ( cell()->testFlag( Cell::Flag_LayoutDirty ) )
-        makeLayout( cellRef.x(), cellRef.y() );
+    if ( cell->testFlag( Cell::Flag_LayoutDirty ) )
+        makeLayout( col, row );
 #endif
+
+    CellView::Borders paintBorder = CellView::NoBorder;
+
+    QPen rightPen( cell->effRightBorderPen( col, row ) );
+    QPen leftPen( cell->effLeftBorderPen( col, row ) );
+    QPen topPen( cell->effTopBorderPen( col, row ) );
+    QPen bottomPen( cell->effBottomBorderPen( col, row ) );
+
+    // Paint border if outermost cell or if the pen is more "worth"
+    // than the border pen of the cell on the other side of the
+    // border or if the cell on the other side is not painted. In
+    // the latter case get the pen that is of more "worth"
+
+    // right border:
+    // FIXME Stefan: Do not always paint the right border.
+    paintBorder |= CellView::RightBorder;
+    if ( col >= KS_colMax )
+        paintBorder |= CellView::RightBorder;
+    else if ( col == regionRight )
+    {
+        paintBorder |= CellView::RightBorder;
+        if ( cell->effRightBorderValue( col, row )
+                < sheet->cellAt( col + 1, row )->effLeftBorderValue( col + 1, row ) )
+            rightPen = sheet->cellAt( col + 1, row )->effLeftBorderPen( col + 1, row );
+    }
+    else if ( cell->effRightBorderValue( col, row )
+                < sheet->cellAt( col + 1, row )->effLeftBorderValue( col + 1, row ) )
+    {
+        paintBorder |= CellView::RightBorder;
+        rightPen = sheet->cellAt( col + 1, row )->effLeftBorderPen( col + 1, row );
+    }
+
+    // Similiar for other borders...
+    // bottom border:
+    // FIXME Stefan: Do not always paint the bottom border.
+    paintBorder |= CellView::BottomBorder;
+    if ( row >= KS_rowMax )
+        paintBorder |= CellView::BottomBorder;
+    else if ( row == regionBottom )
+    {
+        paintBorder |= CellView::BottomBorder;
+        if ( cell->effBottomBorderValue( col, row )
+                < sheet->cellAt( col, row + 1 )->effTopBorderValue( col, row + 1) )
+            bottomPen = sheet->cellAt( col, row + 1 )->effTopBorderPen( col, row + 1 );
+    }
+    else if ( cell->effBottomBorderValue( col, row )
+                < sheet->cellAt( col, row + 1 )->effTopBorderValue( col, row + 1) )
+    {
+        paintBorder |= CellView::BottomBorder;
+        bottomPen = sheet->cellAt( col, row + 1 )->effTopBorderPen( col, row + 1 );
+    }
+
+    // left border:
+    // FIXME Stefan: Do not always paint the left border.
+    paintBorder |= CellView::LeftBorder;
+    if ( col == 1 )
+        paintBorder |= CellView::LeftBorder;
+    else if ( col == regionLeft )
+    {
+        paintBorder |= CellView::LeftBorder;
+        if ( cell->effLeftBorderValue( col, row )
+                < sheet->cellAt( col - 1, row )->effRightBorderValue( col - 1, row ) )
+            leftPen = sheet->cellAt( col - 1, row )->effRightBorderPen( col - 1, row );
+    }
+    else if ( cell->effLeftBorderValue( col, row )
+                < sheet->cellAt( col - 1, row )->effRightBorderValue( col - 1, row ) )
+    {
+        paintBorder |= CellView::LeftBorder;
+        leftPen = sheet->cellAt( col - 1, row )->effRightBorderPen( col - 1, row );
+    }
+
+    // top border:
+    // FIXME Stefan: Do not always paint the top border.
+    paintBorder |= CellView::TopBorder;
+    if ( row == 1 )
+        paintBorder |= CellView::TopBorder;
+    else if ( row == regionTop )
+    {
+        paintBorder |= CellView::TopBorder;
+        if ( cell->effTopBorderValue( col, row )
+                < sheet->cellAt( col, row - 1 )->effBottomBorderValue( col, row - 1 ) )
+            topPen = sheet->cellAt( col, row - 1 )->effBottomBorderPen( col, row - 1 );
+    }
+    else if ( cell->effTopBorderValue( col, row )
+                < sheet->cellAt( col, row - 1 )->effBottomBorderValue( col, row - 1 ) )
+    {
+        paintBorder |= CellView::TopBorder;
+        topPen = sheet->cellAt( col, row - 1 )->effBottomBorderPen( col, row - 1 );
+    }
 
     // ----------------  Start the actual painting.  ----------------
 
     // If the rect of this cell doesn't intersect the rect that should
     // be painted, we can skip the rest and return. (Note that we need
     // to calculate `left' first before we can do this.)
-    const QRectF  cellRect( left, coordinate.y(), width, height );
-    const QRectF  cellRect0( left, coordinate.y(), width0, height0 );
-    if ( !cellRect.intersects( rect ) ) {
-        cell()->clearFlag( Cell::Flag_PaintingCell );
+    const QRectF  cellRect( left, paintCoordinate.y(), width, height );
+    const QRectF  cellRect0( left, paintCoordinate.y(), width0, height0 );
+    if ( !cellRect.intersects( paintRegion ) ) {
+        cell->clearFlag( Cell::Flag_PaintingCell );
         return;
     }
 
     // 2. Paint the default borders if we are on screen or if we are printing
     //    and the checkbox to do this is checked.
     if ( painter.device()->devType() != QInternal::Printer ||
-         cell()->sheet()->print()->printGrid())
-        paintDefaultBorders( painter, rect, cellRect, cellRef, paintBorder,
+         sheet->print()->printGrid())
+        paintDefaultBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder,
                              rightPen, bottomPen, leftPen, topPen );
 
     // 4. Paint the borders of the cell if no other cell is forcing this
@@ -653,9 +751,9 @@ void CellView::paintCellBorders( const QRectF& rect, QPainter& painter,
         painter.setClipping( false );
 
     // Paint the borders if this cell is not part of another merged cell.
-    if ( !cell()->isPartOfMerged() )
+    if ( !cell->isPartOfMerged() )
     {
-        paintCustomBorders( painter, rect, cellRect, cellRef, paintBorder,
+        paintCustomBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder,
                             rightPen, bottomPen, leftPen, topPen );
     }
 
@@ -664,11 +762,11 @@ void CellView::paintCellBorders( const QRectF& rect, QPainter& painter,
         painter.setClipping( true );
 
     // 5. Paint diagonal lines and page borders.
-    paintCellDiagonalLines( painter, cellRect, cellRef );
-    paintPageBorders( painter, cellRect, cellRef, paintBorder );
+    paintCellDiagonalLines( painter, cellRect, cellCoordinate );
+    paintPageBorders( painter, cellRect, cellCoordinate, paintBorder );
 
     // We are done with the painting, so remove the flag on the cell.
-    cell()->clearFlag( Cell::Flag_PaintingCell );
+    cell->clearFlag( Cell::Flag_PaintingCell );
 }
 
 

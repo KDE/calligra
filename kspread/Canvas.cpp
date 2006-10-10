@@ -4103,65 +4103,6 @@ void Canvas::paintUpdates()
             {
                 cell = sheet->cellAt( x, y );
 
-                CellView::Borders paintBorder = CellView::NoBorder;
-
-                QPen bottomPen( cell->effBottomBorderPen( x, y ) );
-                QPen rightPen( cell->effRightBorderPen( x, y ) );
-                QPen leftPen( cell->effLeftBorderPen( x, y ) );
-                QPen topPen( cell->effTopBorderPen( x, y ) );
-
-                // paint right border
-                // - if rightmost cell
-                // - if the pen is more "worth" than the left border pen of the cell
-                //   on the left
-                if ( x >= KS_colMax )
-                {
-                    paintBorder = paintBorder | CellView::RightBorder;
-                }
-                else if ( cell->effRightBorderValue( x, y ) <
-                          sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-                {
-                    paintBorder = paintBorder | CellView::RightBorder;
-                    rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
-                }
-
-                // similar for other borders...
-                // bottom border:
-                if ( y >= KS_rowMax )
-                {
-                    paintBorder = paintBorder | CellView::BottomBorder;
-                }
-                else if ( cell->effBottomBorderValue( x, y ) <
-                          sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1 ) )
-                {
-                    paintBorder = paintBorder | CellView::BottomBorder;
-                    bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
-                }
-
-                // left border:
-                if ( x == 1 )
-                {
-                    paintBorder = paintBorder | CellView::LeftBorder;
-                }
-                else if ( cell->effLeftBorderValue( x, y ) <
-                          sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-                {
-                    paintBorder = paintBorder | CellView::LeftBorder;
-                    leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
-                }
-
-                // top border:
-                if ( y == 1 )
-                {
-                    paintBorder = paintBorder | CellView::TopBorder;
-                }
-                else if ( cell->effTopBorderValue( x, y ) <
-                          sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-                {
-                    paintBorder = paintBorder | CellView::TopBorder;
-                    topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
-                }
-
 #ifdef KSPREAD_CELL_WINDOW
                 Q_ASSERT( visibleRect == d->cellWindowRect );
                 CellView* cellView = d->cellWindowMatrix[x-visibleRect.left()][y-visibleRect.top()];
@@ -4170,8 +4111,7 @@ void Canvas::paintUpdates()
                 CellView* cellView = cell->cellView();
 #endif
                 cellView->paintCellBorders( unzoomedRect, painter, d->view, dblCorner,
-                                            QPoint( x, y ), paintBorder,
-                                            rightPen, bottomPen, leftPen, topPen,
+                                            QPoint( x, y ), QRect( 1, 1, KS_colMax, KS_rowMax ),
                                             mergedCellsPainted );
 
                 dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight() );
