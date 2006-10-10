@@ -26,7 +26,7 @@
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QFrame>
-#include <Q3PointArray>
+#include <QPolygon>
 
 #include <math.h>
 
@@ -51,7 +51,7 @@ void KPrPolygonPreview::drawContents( QPainter *painter )
     painter->setPen( pen );
     painter->setBrush( brush );
 
-    Q3PointArray points( isConcave ? nCorners * 2 : nCorners );
+    QPolygon points( isConcave ? nCorners * 2 : nCorners );
     points.setPoint( 0, 0, qRound( -radius ) );
 
     if ( isConcave ) {

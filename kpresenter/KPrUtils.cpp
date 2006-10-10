@@ -79,7 +79,7 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         KoPoint p1( -10 - _w, -3 - _w / 2 );
         KoPoint p2( 0 , 0 );
         KoPoint p3( -10 - _w, 3 + _w / 2 );
-        Q3PointArray pArray( 3 );
+        QPolygon pArray( 3 );
         pArray.setPoint( 0, _zoomHandler->zoomPointOld(p1) );
         pArray.setPoint( 1, _zoomHandler->zoomPointOld(p2) );
         pArray.setPoint( 2, _zoomHandler->zoomPointOld(p3) );
@@ -127,7 +127,7 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         KoPoint p5( -10, 0 );
         KoPoint p6( -20 - _w, 3 + _w / 2 );
 
-        Q3PointArray pArray( 3 );
+        QPolygon pArray( 3 );
         pArray.setPoint( 0, _zoomHandler->zoomPointOld(p1) );
         pArray.setPoint( 1, _zoomHandler->zoomPointOld(p2) );
         pArray.setPoint( 2, _zoomHandler->zoomPointOld(p3) );
