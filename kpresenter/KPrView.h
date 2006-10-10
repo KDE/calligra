@@ -39,7 +39,7 @@
 #include <QKeyEvent>
 #include <QDropEvent>
 #include <QDragMoveEvent>
-#include <Q3PopupMenu>
+#include <QMenu>
 #include <Q3PtrList>
 
 #include <KoView.h>
@@ -50,7 +50,6 @@
 #include <koffice_export.h>
 #include <KoTabulator.h>
 
-class Q3PopupMenu;
 class QSplitter;
 class QLabel;
 class KPrViewAdaptor;
@@ -635,7 +634,7 @@ public:
 
     void showCounter( KoParagCounter &c );
 
-    Q3PopupMenu * popupMenu( const QString& name );
+    QMenu * popupMenu( const QString& name );
 
     void showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin, bool rtl );
 
@@ -843,8 +842,8 @@ private:
     bool m_dpmsWasEnabled;
 
     // right button popup menus
-    Q3PopupMenu *rb_lbegin, *rb_lend;
-    Q3PopupMenu *m_arrangeObjectsPopup;
+    QMenu *rb_lbegin, *rb_lend;
+    QMenu *m_arrangeObjectsPopup;
     QList<KAction*> m_actionList; // for the kodatatools
     QList<KAction*> m_variableActionList;
 

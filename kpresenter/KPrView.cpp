@@ -3517,7 +3517,7 @@ void KPrView::updateReadWrite( bool readwrite )
 void KPrView::setupPopupMenus()
 {
     // create right button line begin
-    rb_lbegin = new Q3PopupMenu();
+    rb_lbegin = new QMenu();
     Q_CHECK_PTR( rb_lbegin );
     rb_lbegin->insertItem( KPBarIcon("line_normal_begin" ), this, SLOT( extraLineBeginNormal() ) );
     rb_lbegin->insertSeparator();
@@ -3538,7 +3538,7 @@ void KPrView::setupPopupMenus()
     rb_lbegin->setCheckable( false );
 
     // create right button line end
-    rb_lend = new Q3PopupMenu();
+    rb_lend = new QMenu();
     Q_CHECK_PTR( rb_lend );
     rb_lend->insertItem( KPBarIcon("line_normal_end" ), this, SLOT( extraLineEndNormal() ) );
     rb_lend->insertSeparator();
@@ -3559,7 +3559,7 @@ void KPrView::setupPopupMenus()
     rb_lend->setCheckable( false );
 
     // create arrange-objects popup
-    m_arrangeObjectsPopup = new Q3PopupMenu();
+    m_arrangeObjectsPopup = new QMenu();
     Q_CHECK_PTR(m_arrangeObjectsPopup);
     m_arrangeObjectsPopup->insertItem(KPBarIcon("lower"), this, SLOT(extraLower()));
     m_arrangeObjectsPopup->insertSeparator();
@@ -4109,7 +4109,7 @@ void KPrView::openPopupMenuMenuPage( const QPoint & _point )
     if ( actionList.count()>0)
         plugActionList( "picture_action", actionList );
     m_mousePos = m_canvas->mapFromGlobal( _point );
-    Q3PopupMenu* menu = dynamic_cast<Q3PopupMenu*>(factory()->container("menupage_popup",this));
+    QMenu* menu = dynamic_cast<QMenu*>(factory()->container("menupage_popup",this));
     if ( menu )
         menu->exec(_point);
     m_mousePos = QPoint( 0, 0 );
@@ -4121,14 +4121,14 @@ void KPrView::openPopupMenuObject( const QString & name, const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;
-    dynamic_cast<Q3PopupMenu*>(factory()->container(name, this))->popup(_point);
+    dynamic_cast<QMenu*>(factory()->container(name, this))->popup(_point);
 }
 
 void KPrView::openPopupMenuSideBar(const QPoint & _point)
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;
-    dynamic_cast<Q3PopupMenu*>(factory()->container("sidebarmenu_popup", this))->popup(_point);
+    dynamic_cast<QMenu*>(factory()->container("sidebarmenu_popup", this))->popup(_point);
 }
 
 void KPrView::renamePageTitle()
@@ -4670,11 +4670,11 @@ void KPrView::changeNbOfRecentFiles(int _nb)
         shell()->setMaxRecentItems( _nb );
 }
 
-Q3PopupMenu * KPrView::popupMenu( const QString& name )
+QMenu * KPrView::popupMenu( const QString& name )
 {
     Q_ASSERT(factory());
     if ( factory() )
-        return ((Q3PopupMenu*)factory()->container( name, this ));
+        return ((QMenu*)factory()->container( name, this ));
     return 0L;
 }
 
@@ -5631,7 +5631,7 @@ void KPrView::openPopupMenuZoom( const QPoint & _point )
     actionZoomSelectedObject->setEnabled( m_canvas->isOneObjectSelected());
     int nbObj = m_canvas->activePage()->objectList().count();
     actionZoomAllObject->setEnabled( nbObj > 0);
-    static_cast<Q3PopupMenu*>(factory()->container("zoom_popup",this))->popup(_point);
+    static_cast<QMenu*>(factory()->container("zoom_popup",this))->popup(_point);
 }
 
 void KPrView::zoomMinus()

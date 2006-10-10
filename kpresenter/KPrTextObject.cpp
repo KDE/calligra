@@ -2240,7 +2240,7 @@ void KPrTextView::showPopup( KPrView *view, const QPoint &point, QList<KAction*>
     if( variableList.count()>0)
     {
         view->plugActionList( "variable_action", variableList );
-        Q3PopupMenu * popup = view->popupMenu("variable_popup");
+        QMenu * popup = view->popupMenu("variable_popup");
         Q_ASSERT(popup);
         if (popup)
             popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
@@ -2253,7 +2253,7 @@ void KPrTextView::showPopup( KPrView *view, const QPoint &point, QList<KAction*>
 		//actionList = dataToolActionList(view->kPresenterDoc()->instance(), word, singleWord);
         //kDebug(33001) << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
         KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( var );
-        Q3PopupMenu * popup;
+        QMenu * popup;
         if ( !linkVar )
         {
             view->plugActionList( "datatools", actionList );

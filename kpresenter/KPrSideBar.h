@@ -28,7 +28,6 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
-#include <Q3PopupMenu>
 
 #include <k3iconview.h>
 #include <k3listview.h>
@@ -37,7 +36,6 @@ class Q3ListViewItem;
 class KPrDocument;
 class KPrView;
 class QDropEvent;
-class Q3PopupMenu;
 class KPrOutline;
 class OutlineSlideItem;
 class KPrThumbBar;
