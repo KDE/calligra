@@ -27,11 +27,11 @@
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3Frame>
+#include <QFrame>
 
 
 KPrPicturePreview::KPrPicturePreview( QWidget* parent)
-: Q3Frame( parent )
+: QFrame( parent )
 , mirrorType( PM_NORMAL )
 , depth( 0 )
 , swapRGB( false )

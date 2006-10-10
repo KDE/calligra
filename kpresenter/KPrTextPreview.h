@@ -1,15 +1,15 @@
 #ifndef __textpreview_h__
 #define __textpreview_h__
 
-#include <q3frame.h>
+#include <qframe.h>
 #include "global.h"
 
-class KPrTextPreview : public Q3Frame
+class KPrTextPreview : public QFrame
 {
     Q_OBJECT
 
 public:
-    KPrTextPreview( QWidget* parent, const char* name = 0 );
+    KPrTextPreview( QWidget* parent);
     ~KPrTextPreview() {}
 
     void setShadowDirection( ShadowDirection sd ) { shadowDirection = sd; repaint( true ); }

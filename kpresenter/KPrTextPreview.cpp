@@ -5,10 +5,10 @@
 #include <qpainter.h>
 #include <QFont>
 //Added by qt3to4:
-#include <Q3Frame>
+#include <QFrame>
 
-KPrTextPreview::KPrTextPreview( QWidget* parent, const char* name )
-    : Q3Frame( parent, name ),
+KPrTextPreview::KPrTextPreview( QWidget* parent )
+    : QFrame( parent ),
       shadowDirection( SD_LEFT_BOTTOM ),
       shadowDistance( 0 ),
       angle( 0 )

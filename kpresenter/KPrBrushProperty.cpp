@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
-#include <Q3Frame>
+#include <QFrame>
 
 #include <klocale.h>
 #include <kcolorbutton.h>
@@ -116,7 +116,7 @@ KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPr
              this, SLOT( slotYFactorChanged() ) );
 
     m_stack->insertWidget( 1,m_gradientUI );
-    m_stack->insertWidget( 2,new Q3Frame(this) ); // the transparent case
+    m_stack->insertWidget( 2,new QFrame(this) ); // the transparent case
 
     slotReset();
 }

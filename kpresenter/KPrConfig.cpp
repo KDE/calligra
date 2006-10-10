@@ -46,7 +46,7 @@
 
 //Added by qt3to4:
 #include <Q3GridLayout>
-#include <Q3Frame>
+#include <QFrame>
 #include <Q3VBoxLayout>
 
 #include "KPrPenStyleWidget.h"
@@ -627,7 +627,7 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     QString labelName = font->family() + ' ' + QString::number(font->pointSize());
     fontName = new QLabel(labelName, fontContainer);
     fontName->setFont(*font);
-    fontName->setFrameStyle(Q3Frame::StyledPanel | Q3Frame::Sunken);
+    fontName->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 
     QPushButton *chooseButton = new QPushButton(i18n("Choose..."), fontContainer);
     chooseButton->setWhatsThis( i18n( "Click here if you want to set a new font. The KDE default Select Font dialog will then be displayed." ) );
