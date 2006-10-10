@@ -54,8 +54,13 @@
 #define foreach_dict(_class, _variable, _list) foreach_list(_class, _variable, _list)
 
 #ifndef futureI18n
-# define futureI18n QString
-# define futureI18n2(a,b) QString(b)
+# ifdef USE_FUTURE_I18N
+#  define futureI18n(a) QObject::tr(a)
+#  define futureI18n2(a,b) QObject::tr(b)
+# else
+#  define futureI18n(a) QString(a)
+#  define futureI18n2(a,b) QString(b)
+# endif
 #endif
 
 #ifndef FUTURE_I18N_NOOP
