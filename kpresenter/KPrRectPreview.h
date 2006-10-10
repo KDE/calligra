@@ -23,11 +23,11 @@
 #ifndef RECTPREVIEW_H
 #define RECTPREVIEW_H
 
-#include <q3frame.h>
+#include <qframe.h>
 #include <qpen.h>
 #include <qbrush.h>
 
-class KPrRectPreview : public Q3Frame
+class KPrRectPreview : public QFrame
 {
     Q_OBJECT
 
