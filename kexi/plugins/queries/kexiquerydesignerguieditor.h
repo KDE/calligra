@@ -107,7 +107,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		 \a tableName and \a fieldName shoudl be provided. 
 		 \a visible flag sets value for "Visible" column. */
 		KexiTableItem* createNewRow(const QString& tableName, const QString& fieldName,
-			bool visible = true) const;
+			bool visible) const;
 
 		KexiDB::BaseExpr* parseExpressionString(const QString& fullString, int& token,
 			bool allowRelationalOperator);

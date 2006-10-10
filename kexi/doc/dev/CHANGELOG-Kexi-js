@@ -15,6 +15,16 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-10-09
+Table View
+- fixed drawing selection highlighting for the horizontal header immediately after
+  scrolling the table
+2.0: merged
+Query Designer
+- column sorting is also supported for columns with cleared "visible" flag
+- SQL view's section header now provides an accelerator
+2.0: merged
+
 ~~~~~~~~~~~~~~~~ 1.1 stable (with KOffice 1.6)  ~~~~~~~~~~~~~~~~
 
 2006-10-06
@@ -24,9 +34,18 @@ KexiDB
 = QuerySchema: retrieving infromation about columns much improved
   (needed by the parser and designer)
 2.0: merged
-QuerySchema
+Query Designer
 = fixes for handling ordering information in design mode when there're asterisks
   in the query
+2.0: merged
+Forms
+- fixed bug #134976: Yes/No field default value does not work properly
+  (for required field: if you add a checkbox that points to a Yes/No 
+  field that has a default value the default value is not accepted)
+2.0: merged
+Table View
+- fixed problem with editing floating-point values when there's default 
+   value set to 0.0
 2.0: merged
 
 2006-10-04, 05

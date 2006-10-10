@@ -29,7 +29,7 @@
 #include <kiconloader.h>
 #include <kpushbutton.h>
 
-class BoxLayout : public QBoxLayout
+class KexiSectionHeader::BoxLayout : public QBoxLayout
 {
 	public:
 		BoxLayout( KexiSectionHeader* parent, Direction d, int margin = 0, 
@@ -50,14 +50,14 @@ class KexiSectionHeaderPrivate
 	
 		Qt::Orientation orientation;
 		QLabel *lbl;
-		BoxLayout *lyr;
+		KexiSectionHeader::BoxLayout *lyr;
 		QHBox *lbl_b;
 };
 
 //==========================
 
-KexiSectionHeader::KexiSectionHeader(const QString &caption, Orientation o, QWidget* parent, const char * name )
-	: QWidget(parent, name)
+KexiSectionHeader::KexiSectionHeader(const QString &caption, Orientation o, QWidget* parent )
+	: QWidget(parent, "KexiSectionHeader")
 	, d( new KexiSectionHeaderPrivate() )
 {
 	d->orientation = o;
@@ -66,6 +66,7 @@ KexiSectionHeader::KexiSectionHeader(const QString &caption, Orientation o, QWid
 	d->lbl_b = new QHBox(this);
 	d->lbl = new QLabel(QString(" ")+caption, d->lbl_b);
 	d->lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+	d->lbl->setFocusPolicy(StrongFocus);
 	d->lbl->installEventFilter(this);
 	installEventFilter(this);
 	setCaption(caption);
@@ -110,8 +111,8 @@ bool KexiSectionHeader::eventFilter( QObject *o, QEvent *e )
 	return QWidget::eventFilter(o,e);
 }
 
-
-void KexiSectionHeader::slotFocus(bool in) {
+void KexiSectionHeader::slotFocus(bool in)
+{
 	in = in || focusWidget()==this;
 	d->lbl->setPaletteBackgroundColor( 
 		in ? palette().active().color(QColorGroup::Highlight) : palette().active().color(QColorGroup::Background) );
@@ -137,12 +138,12 @@ QSize KexiSectionHeader::sizeHint() const
 
 //======================
 
-BoxLayout::BoxLayout( KexiSectionHeader* parent, Direction d, int margin, int spacing, const char * name )
+KexiSectionHeader::BoxLayout::BoxLayout( KexiSectionHeader* parent, Direction d, int margin, int spacing, const char * name )
  : QBoxLayout(parent, d, margin, spacing, name )
 {
 }
 
-void BoxLayout::addItem( QLayoutItem * item )
+void KexiSectionHeader::BoxLayout::addItem( QLayoutItem * item )
 {
 	QBoxLayout::addItem( item );
 	if (item->widget()) {
@@ -151,6 +152,7 @@ void BoxLayout::addItem( QLayoutItem * item )
 			view = static_cast<KexiViewBase*>(item->widget());
 			KexiSectionHeader *sh = static_cast<KexiSectionHeader*>(mainWidget());
 			connect(view,SIGNAL(focus(bool)),sh,SLOT(slotFocus(bool)));
+			sh->d->lbl->setBuddy(item->widget());
 		}
 	}
 }

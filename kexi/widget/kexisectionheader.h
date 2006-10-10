@@ -28,8 +28,10 @@ class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 {
 	Q_OBJECT
 	public:
+		class BoxLayout;
+
 		KexiSectionHeader(const QString &caption, Orientation o, 
-			QWidget* parent = 0, const char * name = 0 );
+			QWidget* parent = 0 );
 
 		virtual ~KexiSectionHeader();
 
@@ -40,12 +42,12 @@ class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 
 		virtual QSize sizeHint() const;
 
-//		virtual void setFocus();
 	public slots:
 		void slotFocus(bool in);
 
 	protected:
 		KexiSectionHeaderPrivate *d;
+		friend class BoxLayout;
 };
 
 #endif
