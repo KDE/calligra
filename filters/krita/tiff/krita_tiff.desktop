@@ -1,5 +1,5 @@
 [Desktop Entry]
-Categories=Qt;KDE;Office;Graphics;
+Categories=
 Encoding=UTF-8
 Exec=krita %u
 GenericName=Painting and Image Editing Application
@@ -45,7 +45,6 @@ Name[eo]=Krito
 Name[hi]=के-रिता
 Name[km]= Krita
 Name[lo]=ກຣິຕາ
-NoDisplay=true
 Path=
 StartupNotify=true
 Terminal=false

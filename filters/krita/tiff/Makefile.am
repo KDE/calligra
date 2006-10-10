@@ -27,7 +27,7 @@ INCLUDES= \
 servicedir = $(kde_servicesdir)
 
 
-kdelnkdir = $(kde_appsdir)/Office
+kdelnkdir = $(kde_appsdir)/.hidden
 
 
 

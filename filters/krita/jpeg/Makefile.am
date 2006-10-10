@@ -33,7 +33,7 @@ service_DATA = krita_jpeg_import.desktop krita_jpeg_export.desktop
 servicedir = $(kde_servicesdir)
 
 kdelnk_DATA = krita_jpeg.desktop
-kdelnkdir = $(kde_appsdir)/Office
+kdelnkdir = $(kde_appsdir)/.hidden
 
 libkritajpegimport_la_SOURCES = kis_jpeg_import.cc
 libkritajpegexport_la_SOURCES = kis_wdg_options_jpeg.ui kis_jpeg_export.cc

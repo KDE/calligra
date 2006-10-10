@@ -37,7 +37,7 @@ service_DATA = krita_openexr_import.desktop krita_openexr_export.desktop
 servicedir = $(kde_servicesdir)
 
 kdelnk_DATA = krita_openexr.desktop
-kdelnkdir = $(kde_appsdir)/Office
+kdelnkdir = $(kde_appsdir)/.hidden
 
 libkrita_openexr_import_la_SOURCES = kis_openexr_import.cpp
 libkrita_openexr_export_la_SOURCES = kis_openexr_export.cpp

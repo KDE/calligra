@@ -22,7 +22,7 @@ service_DATA = krita_raw_import.desktop
 servicedir = $(kde_servicesdir)
 
 kdelnk_DATA = krita_raw.desktop
-kdelnkdir = $(kde_appsdir)/Office
+kdelnkdir = $(kde_appsdir)/.hidden
 
 libkrita_raw_import_la_SOURCES = kis_raw_import.cpp wdgrawimport.ui
 
