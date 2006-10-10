@@ -28,6 +28,7 @@
 #include <kicon.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
+#include <kmessagebox.h>
 
 #include <KoDocumentSectionView.h>
 
@@ -119,10 +120,13 @@ void VLayerDocker::slotButtonClicked( int buttonId )
             addLayer();
             break;
         case Button_Raise:
+            raiseItem();
             break;
         case Button_Lower:
+            lowerItem();
             break;
         case Button_Delete:
+            deleteItem();
             break;
     }
 }
@@ -135,12 +139,125 @@ void VLayerDocker::addLayer()
     if( ok )
     {
         KoLayerShape* layer = new KoLayerShape();
-        m_view->part()->commandHistory()->addCommand( new VLayerCmd( m_document, layer, VLayerCmd::addLayer ), true );
+        m_view->part()->commandHistory()->addCommand( new VLayerCreateCmd( m_document, layer ), true );
         m_document->setObjectName( layer, name );
         m_model->update();
     }
 }
 
+void VLayerDocker::deleteItem()
+{
+    QList<KoLayerShape*> selectedLayers;
+    QList<KoShape*> selectedShapes;
+
+    // separate selected layers and selected shapes
+    extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
+
+    KCommand *cmd = 0;
+
+    if( selectedLayers.count() )
+    {
+        if( m_document->layers().count() > selectedLayers.count() )
+            cmd = new VLayerDeleteCmd( m_document, m_view->part(), selectedLayers );
+        else
+        {
+            KMessageBox::error( 0L, i18n( "Could not delete all layers. At least one layer is requiered."), i18n( "Error deleting layers") );
+        }
+    }
+    else if( selectedShapes.count() )
+    {
+        cmd = new KoShapeDeleteCommand( m_view->part(), selectedShapes.toSet() );
+    }
+
+    if( cmd )
+    {
+        m_view->part()->commandHistory()->addCommand( cmd, true );
+        m_model->update();
+    }
+}
+
+void VLayerDocker::raiseItem()
+{
+    QList<KoLayerShape*> selectedLayers;
+    QList<KoShape*> selectedShapes;
+
+    // separate selected layers and selected shapes
+    extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
+
+    KCommand *cmd = 0;
+
+    if( selectedLayers.count() )
+    {
+        // check if all layers could be raised
+        foreach( KoLayerShape* layer, selectedLayers )
+            if( ! m_document->canRaiseLayer( layer ) )
+                return;
+
+        cmd = new VLayerZOrderCmd( m_document, selectedLayers, VLayerZOrderCmd::raiseLayer );
+    }
+    else if( selectedShapes.count() )
+    {
+        // TODO implement shape z-order command
+    }
+
+    if( cmd )
+    {
+        m_view->part()->commandHistory()->addCommand( cmd, true );
+        m_model->update();
+    }
+}
+
+void VLayerDocker::lowerItem()
+{
+    QList<KoLayerShape*> selectedLayers;
+    QList<KoShape*> selectedShapes;
+
+    // separate selected layers and selected shapes
+    extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
+
+    KCommand *cmd = 0;
+
+    if( selectedLayers.count() )
+    {
+        // check if all layers could be raised
+        foreach( KoLayerShape* layer, selectedLayers )
+            if( ! m_document->canLowerLayer( layer ) )
+                return;
+
+        cmd = new VLayerZOrderCmd( m_document, selectedLayers, VLayerZOrderCmd::lowerLayer );
+    }
+    else if( selectedShapes.count() )
+    {
+        // TODO implement shape z-order command
+    }
+
+    if( cmd )
+    {
+        m_view->part()->commandHistory()->addCommand( cmd, true );
+        m_model->update();
+    }
+}
+
+void VLayerDocker::extractSelectedLayersAndShapes( QList<KoLayerShape*> &layers, QList<KoShape*> &shapes )
+{
+    layers.clear();
+    shapes.clear();
+
+    QModelIndexList selectedItems = m_layerView->selectionModel()->selectedIndexes();
+    if( selectedItems.count() == 0 )
+        return;
+
+    // separate selected layers and selected shapes
+    foreach( QModelIndex index, selectedItems )
+    {
+        KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
+        KoLayerShape *layer = dynamic_cast<KoLayerShape*>( shape );
+        if( layer )
+            layers.append( layer );
+        else if( ! selectedItems.contains( index.parent() ) )
+            shapes.append( shape );
+    }
+}
 
 VDocumentModel::VDocumentModel( VDocument *doc )
 : m_document( doc )
@@ -179,7 +296,7 @@ QModelIndex VDocumentModel::index( int row, int column, const QModelIndex &paren
     if( ! parent.isValid() )
     {
         if( row < m_document->layers().count() )
-            return createIndex( row, column, m_document->layers().at(row) );
+            return createIndex( row, column, m_document->layers().at(m_document->layers().count()-1-row) );
         else
             return QModelIndex();
     }
@@ -217,7 +334,7 @@ QModelIndex VDocumentModel::parent( const QModelIndex &child ) const
     // check if the parent is a layer
     KoLayerShape *parentLayer = dynamic_cast<KoLayerShape*>( parentShape );
     if( parentLayer )
-        return createIndex( m_document->layers().indexOf( parentLayer ), 0, parentShape );
+        return createIndex( m_document->layers().count()-1-m_document->layers().indexOf( parentLayer ), 0, parentShape );
 
     KoShapeContainer *grandParentShape = parentShape->parent();
     if( ! parentShape->parent() )
@@ -270,6 +387,7 @@ QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
             return double(bbox.width()) / bbox.height();
         }
         default:
+            // TODO draw layers and shape into an image for the thumbnail and tooltip
 /*            if (role >= int(BeginThumbnailRole))
                 return QImage( role - int(BeginThumbnailRole), role - int(BeginThumbnailRole), QImage::Format_ARGB32 );
             else*/
@@ -315,6 +433,7 @@ bool VDocumentModel::setData(const QModelIndex &index, const QVariant &value, in
                 KoLayerShape *layer = dynamic_cast<KoLayerShape*>( shape );
                 if( layer )
                     m_document->setActiveLayer( layer );
+                // TODO select shapes here
             }
             break;
         default:

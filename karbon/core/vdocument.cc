@@ -359,7 +359,7 @@ VDocument::shapes() const
 	foreach( KoLayerShape* layer, m_layers )
 	{
 		foreach( KoShape* shape, layer->iterator() )
-			allShapes << shape;
+			allShapes.prepend( shape );
 	}
 	return allShapes;
 }

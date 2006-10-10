@@ -42,7 +42,11 @@ public slots:
 private slots:
     void slotButtonClicked( int buttonId );
     void addLayer();
+    void deleteItem();
+    void raiseItem();
+    void lowerItem();
 private:
+    void extractSelectedLayersAndShapes( QList<KoLayerShape*> &layers, QList<KoShape*> &shapes );
     KarbonView *m_view;
     VDocument *m_document;
     KoDocumentSectionView *m_layerView;

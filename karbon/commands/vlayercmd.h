@@ -25,24 +25,56 @@
 
 class VDocument;
 class KoLayerShape;
+class KoShapeControllerBase;
+class KoShapeDeleteCommand;
 
-/// Command for adding, deleting, raising, lowering layers
-class VLayerCmd : public KCommand
+/// Command for deleting layers
+class VLayerDeleteCmd : public KCommand
 {
 public:
     /**
-     * The different types of layer commands.
+     * Layer command which works on a single layer.
+     * @param document the document containing the layer
+     * @param controller the controller to remove the layers shape from
+     * @param layer the layer which is subject to the command
      */
-    enum VLayerCmdType
-    {
-        addLayer,
-        raiseLayer,
-        lowerLayer,
-        deleteLayer
-    };
+    VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, KoLayerShape* layer );
 
-    VLayerCmd( VDocument* doc, KoLayerShape* layer, VLayerCmdType order );
-    virtual ~VLayerCmd();
+    /**
+     * Layer command which works on a list of layers.
+     * @param document the document containing the layers
+     * @param controller the controller to remove the layers shape from
+     * @param layers the layers which are subject to the command
+     */
+    VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, const QList<KoLayerShape*> &layers );
+    virtual ~VLayerDeleteCmd();
+
+    /// execute the command
+    virtual void execute ();
+    /// revert the actions done in execute
+    virtual void unexecute ();
+    /// return the name of this command
+    virtual QString name () const;
+private:
+    VDocument *m_document;               ///< the document to work on
+    KoShapeControllerBase *m_controller; ///< the shape controller to remove the layers shapes from
+    QList<KoLayerShape*> m_layers;       ///< the list of layers subject to the command
+    KoShapeDeleteCommand *m_deleteCmd;   ///< the command for deleting the layers shapes
+    bool m_deleteLayers;                 ///< controls if layers should be deleted when destroying the command
+};
+
+/// Command for creating layers
+class VLayerCreateCmd : public KCommand
+{
+public:
+    /**
+     * Layer command which works on a single layer.
+     * @param document the document containing the layer
+     * @param layer the layer which is subject to the command
+     */
+    VLayerCreateCmd( VDocument* document, KoLayerShape* layer );
+
+    virtual ~VLayerCreateCmd();
 
     /// execute the command
     virtual void execute ();
@@ -51,11 +83,52 @@ public:
     /// return the name of this command
     virtual QString name () const;
 
-protected:
-    VDocument *m_document;
-    KoLayerShape* m_layer;
-    VLayerCmdType m_cmdType;
-    bool m_deleteLayer;
+private:
+    VDocument *m_document;    ///< the document to work on
+    KoLayerShape* m_layer;    ///< the layer subject to the command
+    bool m_deleteLayer;       ///< controls if layers should be deleted when destroying the command
+};
+
+/// Command for raising or lowering layers
+class VLayerZOrderCmd : public KCommand
+{
+public:
+    /// The different types of layer commands.
+    enum VLayerCmdType
+    {
+        raiseLayer, ///< raises layer in z-order
+        lowerLayer, ///< lowers layer in z-order
+    };
+
+    /**
+     * Layer command which works on a single layer.
+     * @param document the document containing the layer
+     * @param layer the layer which is subject to the command
+     * @param commandType the type of the command to execute
+     */
+    VLayerZOrderCmd( VDocument* document, KoLayerShape* layer, VLayerCmdType commandType );
+
+    /**
+     * Layer command which works on a single layer.
+     * @param document the document containing the layer
+     * @param layers the list of layers which are subject to the command
+     * @param commandType the type of the command to execute
+     */
+    VLayerZOrderCmd( VDocument* document, QList<KoLayerShape*> layers, VLayerCmdType commandType );
+
+    virtual ~VLayerZOrderCmd();
+
+    /// execute the command
+    virtual void execute ();
+    /// revert the actions done in execute
+    virtual void unexecute ();
+    /// return the name of this command
+    virtual QString name () const;
+
+private:
+    VDocument *m_document;         ///< the document to work on
+    QList<KoLayerShape*> m_layers; ///< the list of layers subject to the command
+    VLayerCmdType m_cmdType;       ///< the type of the command to execute
 };
 
 #endif
