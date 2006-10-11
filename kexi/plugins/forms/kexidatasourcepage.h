@@ -38,7 +38,7 @@ class QToolButton;
 class QLabel;
 class Q3Frame;
 
-//! A page within form's property tabbed pane, providing data source information
+//! A page within form designer's property tabbed pane, providing data source editor
 class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 {
 	Q_OBJECT

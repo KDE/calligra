@@ -56,7 +56,6 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 		//! \return a pointer to Forms Widget Library.
 		static KFormDesigner::WidgetLibrary* library();
 
-//		KFormDesigner::FormManager *manager() const;
 		KexiDataSourcePage* dataSourcePage() const;
 
 		void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);

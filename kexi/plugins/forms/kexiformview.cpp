@@ -387,8 +387,9 @@ KexiFormView::loadForm()
 void
 KexiFormView::slotPropertySetSwitched(KoProperty::Set *set, bool forceReload, const QCString& propertyToSelect)
 {
-	//if (m_buffer == b)
-	//	return;
+//	if (set && parentDialog()!=parentDialog()->mainWin()->currentDialog())
+	if (form() != KFormDesigner::FormManager::self()->activeForm())
+		return; //this is not the current form view
 	m_propertySet = set;
 	if (forceReload)
 		propertySetReloaded(true/*preservePrevSelection*/, propertyToSelect);

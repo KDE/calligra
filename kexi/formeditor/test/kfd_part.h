@@ -94,6 +94,10 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 		void setUndoEnabled(bool enabled, const QString &text);
 		void setRedoEnabled(bool enabled, const QString &text);
 
+		/*! Shows a property set \a set in a Property Editor. */
+		void slotPropertySetSwitched(KoProperty::Set *set, bool forceReload = false, 
+			const Q3CString& propertyToSelect = Q3CString());
+
 	protected:
 		virtual bool openFile();
 		virtual bool saveFile();
@@ -105,6 +109,7 @@ class KFORMEDITOR_EXPORT KFormDesignerPart: public KParts::ReadWritePart
 		static KFormDesigner::WidgetLibrary* static_formsLibrary;
 //		KFormDesigner::FormManager  *m_manager;
 		QWorkspace  *m_workspace;
+		QPointer<KoProperty::Editor> m_editor;
 		int  m_count;
 		bool m_uniqueFormMode;
 		bool m_openingFile;

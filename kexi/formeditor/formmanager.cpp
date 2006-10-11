@@ -139,6 +139,7 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
 	m_connection = 0;
 	m_popup = 0;
 	m_treeview = 0;
+	m_emitSelectionSignalsUpdatesPropertySet = false;
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
 	m_deleteWidgetLater_list.setAutoDelete(true);
@@ -531,8 +532,8 @@ FormManager::windowChanged(QWidget *w)
 			m_active->emitActionSignals();
 			//update the buffer too
 			form->emitSelectionSignals();
-
-			showPropertySet( propertySet(), true );
+			if (!m_emitSelectionSignalsUpdatesPropertySet)
+				showPropertySet( propertySet(), true );
 			return;
 		}
 	}

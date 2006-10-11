@@ -45,8 +45,7 @@ KexiFormManager::KexiFormManager(KexiPart::Part *parent, const char* name)
 	, name)
  , m_part(parent)
 {
-//moved to KexiFormPart	lib()->setAdvancedPropertiesVisible(false);
-
+	m_emitSelectionSignalsUpdatesPropertySet = true;
 	KexiCustomPropertyFactory::init();
 }
 
