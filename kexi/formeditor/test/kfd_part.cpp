@@ -44,7 +44,8 @@
 #include "container.h"
 #include "formmanager.h"
 #include "objecttreeview.h"
-#include "koproperty/editor.h"
+#include <koproperty/set.h>
+#include <koproperty/editor.h>
 
 #include "kfd_part.h"
 
@@ -159,12 +160,12 @@ KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool rea
 		dockTree->setFixedExtentWidth(256);
 
 		QDockWindow *dockEditor = new QDockWindow(dockArea);
-		KoProperty::Editor *editor = new KoProperty::Editor(dockEditor);
-		dockEditor->setWidget(editor);
+		m_editor = new KoProperty::Editor(dockEditor);
+		dockEditor->setWidget(m_editor);
 		dockEditor->setCaption(i18n("Properties"));
 		dockEditor->setResizeEnabled(true);
 
-		KFormDesigner::FormManager::self()->setEditor(editor);
+		KFormDesigner::FormManager::self()->setEditor(m_editor);
 		KFormDesigner::FormManager::self()->setObjectTreeView(view);
 
 		setupActions();
@@ -182,6 +183,9 @@ KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool rea
 	container->show();
 	setWidget(container);
 	connect(m_workspace, SIGNAL(windowActivated(QWidget*)), KFormDesigner::FormManager::self(), SLOT(windowChanged(QWidget*)));
+	connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool, const QCString&)),
+		this, SLOT(slotPropertySetSwitched(KoProperty::Set*, bool, const QCString&)));
+
 //	slotNoFormSelected();
 	KFormDesigner::FormManager::self()->emitNoFormSelected();
 }
@@ -366,9 +370,12 @@ KFormDesignerPart::closeURL()
 	if(!KFormDesigner::FormManager::self()->activeForm())
 		return true;
 
-	if(m_uniqueFormMode || !m_openingFile)
-		return closeForms();
+	if(m_uniqueFormMode || !m_openingFile) {
+		if (!closeForms())
+			return false;
+	}
 
+	delete (KoProperty::Editor*)m_editor;
 	return true;
 }
 
@@ -702,6 +709,17 @@ FormWidgetBase::closeEvent(QCloseEvent *ev)
 			ev->accept();
 		else
 			ev->ignore();
+	}
+}
+
+void KFormDesignerPart::slotPropertySetSwitched(KoProperty::Set *set, bool forceReload, 
+	const QCString& propertyToSelect)
+{
+	if (m_editor) {
+		if (propertyToSelect.isEmpty() && forceReload)
+			m_editor->changeSet(set, propertyToSelect);
+		else
+			m_editor->changeSet(set);
 	}
 }
 
