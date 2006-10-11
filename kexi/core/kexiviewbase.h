@@ -112,7 +112,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		/*! Call this in your view's implementation whenever current property set
 		 (returned by propertySet()) is switched to other,
 		 so property editor contents need to be completely replaced. */
-		void propertySetSwitched();
+		virtual void propertySetSwitched();
 
 		/*! Sets dirty flag on or off. It the flag changes,
 		 dirty(bool) signal is emitted by parent dialog (KexiDialog),

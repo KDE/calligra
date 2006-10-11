@@ -3605,9 +3605,12 @@ void KexiMainWindowImpl::acceptPropertySetEditing()
 void KexiMainWindowImpl::propertySetSwitched(KexiDialogBase *dlg, bool force, bool preservePrevSelection,
 	const QCString& propertyToSelect)
 {
-	kDebug() << "KexiMainWindowImpl::propertySetSwitched()" << endl;
-	if ((KexiDialogBase*)d->curDialog!=dlg)
+	kDebug() << "KexiMainWindowImpl::propertySetSwitched() d->curDialog: "
+		<< (d->curDialog ? d->curDialog->caption() : QString("NULL")) << " dlg: " << (dlg ? dlg->caption() : QString("NULL"))<< endl;
+	if ((KexiDialogBase*)d->curDialog!=dlg) {
+		d->propBuffer = 0; //we'll need to move to another prop. set
 		return;
+	}
 	if (d->propEditor) {
 		KoProperty::Set *newBuf = d->curDialog ? d->curDialog->propertySet() : 0;
 		if (!newBuf || (force || static_cast<KoProperty::Set*>(d->propBuffer) != newBuf)) {

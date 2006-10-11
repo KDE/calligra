@@ -432,6 +432,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void emitUndoEnabled(bool enabled, const QString &text);
 		void emitRedoEnabled(bool enabled, const QString &text);
 
+		/*! True if emitSelectionSignals() updates property set so showPropertySet() will 
+		 not be needed in windowChanged(). False by default. Set to true in KexiFormManager. */
+		bool m_emitSelectionSignalsUpdatesPropertySet : 1;
+
 	private:
 		static FormManager* _self;
 
@@ -482,9 +486,6 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		void *m_objectBlockingPropertyEditorUpdating;
 		bool m_isRedoing : 1;
-		/*! True if emitSelectionSignals() updates property set so showPropertySet() will 
-		 not be needed in windowChanged(). False by default. Set to true in KexiFormManager. */
-		bool m_emitSelectionSignalsUpdatesPropertySet : 1;
 
 		friend class PropertyCommand;
 		friend class GeometryPropertyCommand;
