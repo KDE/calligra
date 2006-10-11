@@ -35,8 +35,7 @@
 #include <qpainter.h>
 #include <q3paintdevicemetrics.h>
 #include <qstyle.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 #include <Q3ValueList>
 
 #include <k3listview.h>
@@ -98,8 +97,7 @@ public:
         p->restore();
     }
     int calculateY(int ymin, int ymax) const {
-        Q3PtrList<ResListView::DrawableItem> drawables;
-        drawables.setAutoDelete(true);
+        QList<ResListView::DrawableItem*> drawables;
         Q3ListViewItem *child = firstChild();
         int level = 0;
         int ypos = 0;
@@ -107,11 +105,16 @@ public:
             ypos = buildDrawables(drawables, level, ypos, child, ymin, ymax);
         }
         int y = 0;
-        DrawableItem *item = drawables.getLast();
-        if (item) {
-            y = item->y + item->i->height();
+        if (!drawables.isEmpty()) {
+            DrawableItem *item = drawables.last();
+            if (item) {
+                y = item->y + item->i->height();
+            }
         }
         //kDebug()<<k_funcinfo<<y<<" ("<<ymin<<", "<<ymax<<")"<<endl;
+        while (!drawables.isEmpty()) {
+            delete drawables.takeFirst();
+        }
         return y;
     }
     class DrawableItem {
@@ -122,7 +125,7 @@ public:
         Q3ListViewItem * i;
     };
 protected:
-    int buildDrawables(Q3PtrList<ResListView::DrawableItem> &lst, int level, int ypos, Q3ListViewItem *item, int ymin, int ymax) const {
+    int buildDrawables(QList<ResListView::DrawableItem*> &lst, int level, int ypos, Q3ListViewItem *item, int ymin, int ymax) const {
         int y = ypos;
         int ih = item->height();
         if (y < ymin && y+ih > ymin) {
@@ -152,8 +155,7 @@ protected:
             return;
         }
         //kDebug()<<k_funcinfo<<QRect(cx, cy, cw, ch)<<endl;
-        Q3PtrList<ResListView::DrawableItem> drawables;
-        drawables.setAutoDelete(true);
+        QList<ResListView::DrawableItem*> drawables;
         Q3ListViewItem *child = firstChild();
         int level = 0;
         int ypos = 0;
@@ -163,15 +165,10 @@ protected:
 
         p->setFont( font() );
 
-        Q3PtrListIterator<ResListView::DrawableItem> it(drawables);
-
         QRect r;
         int fx = -1, x, fc = 0, lc = 0;
         int tx = -1;
-        ResListView::DrawableItem * current;
-
-        while ( (current = it.current()) != 0 ) {
-            ++it;
+        foreach (ResListView::DrawableItem * current, drawables) {
             int ih = current->i->height();
             int ith = current->i->totalHeight();
             int c;
@@ -244,7 +241,7 @@ protected:
                 tx = header()->cellPos( cell );
 
             // do any children of current need to be painted?
-/* FIXME: painting branches doesn't work for some reason...
+            /* FIXME: painting branches doesn't work for some reason...
               if ( ih != ith &&
                  rootIsDecorated() &&
                  current->y + ith > cy &&
@@ -276,6 +273,9 @@ protected:
                     p->restore();
                 }
             }*/
+            while (!drawables.isEmpty()) {
+                delete drawables.takeFirst();
+            }
         }
     }
 
@@ -432,26 +432,23 @@ void ResourceView::draw(Project &project)
     m_appview->clear();
     m_selectedItem = 0;
 
-/*    Q3PtrListIterator<ResourceGroup> it(project.resourceGroups());
-    for (; it.current(); ++it) {
-        K3ListViewItem *item = new K3ListViewItem(resList, it.current()->name());
+    foreach (ResourceGroup *gr, project.resourceGroups()) {
+        K3ListViewItem *item = new K3ListViewItem(resList, gr->name());
         item->setOpen(true);
-        drawResources(project, item, it.current());
+        drawResources(project, item, gr);
     }
     if (m_selectedItem) {
         resList->setSelected(m_selectedItem, true);
     } else {
         resSelectionChanged(m_selectedItem);
-    }*/
+    }
 }
 
 
 void ResourceView::drawResources(const Project &proj, Q3ListViewItem *parent, ResourceGroup *group)
 {
     //kDebug()<<k_funcinfo<<"group: "<<group->name()<<" ("<<group<<")"<<endl;
-/*    Q3PtrListIterator<Resource> it(group->resources());
-    for (; it.current(); ++it) {
-        Resource *r = it.current();
+    foreach (Resource *r, group->resources()) {
         ResourceItemPrivate *item = new ResourceItemPrivate(r, parent);
         // set column colors
         item->setColumnState(0, 0);
@@ -502,7 +499,7 @@ void ResourceView::drawResources(const Project &proj, Q3ListViewItem *parent, Re
         if (!m_selectedItem) {
             m_selectedItem = item;
         }
-    }*/
+    }
 }
 
 

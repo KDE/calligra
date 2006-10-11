@@ -92,8 +92,8 @@ public:
     QList<ResourceGroup*> &resourceGroups();
     virtual void addResourceGroup(ResourceGroup *resource);
     virtual void insertResourceGroup(unsigned int index, ResourceGroup *resource);
-    void removeResourceGroup(ResourceGroup *resource);
-    void removeResourceGroup(int number);
+    void deleteResourceGroup(ResourceGroup *resource);
+    void deleteResourceGroup(int number);
     ResourceGroup *takeResourceGroup(ResourceGroup *resource) {
         int i = m_resourceGroups.indexOf(resource);
         return i != -1 ? m_resourceGroups.takeAt(i) : 0; 

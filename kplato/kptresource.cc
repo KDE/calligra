@@ -105,10 +105,11 @@ Risk* ResourceGroup::getRisk(int) {
     return 0L;
 }
 
-void ResourceGroup::removeResource(Resource *resource) {
+void ResourceGroup::deleteResource(Resource *resource) {
     int i = m_resources.indexOf(resource);
     if (i != -1)
         m_resources.removeAt(i);
+    delete resource;
 }
 
 Resource *ResourceGroup::takeResource(Resource *resource) {
@@ -118,7 +119,7 @@ Resource *ResourceGroup::takeResource(Resource *resource) {
     return 0;
 }
 
-void ResourceGroup::removeResource(int) {
+void ResourceGroup::deleteResource(int) {
 }
 
 void ResourceGroup::addRequiredResource(ResourceGroup*) {
@@ -128,7 +129,7 @@ ResourceGroup* ResourceGroup::getRequiredResource(int) {
     return 0L;
 }
 
-void ResourceGroup::removeRequiredResource(int) {
+void ResourceGroup::deleteRequiredResource(int) {
 }
 
 bool ResourceGroup::load(QDomElement &element) {
@@ -444,7 +445,7 @@ void Resource::initiateCalculation(Schedule &sch) {
     m_currentSchedule = createSchedule(&sch);
 }
 
-void Resource::removeSchedule(Schedule *schedule) {
+void Resource::deleteSchedule(Schedule *schedule) {
     takeSchedule(schedule);
     delete schedule;
 }

@@ -535,12 +535,15 @@ void Project::addResourceGroup(ResourceGroup * group) {
 }
 
 
-void Project::removeResourceGroup(ResourceGroup * group){
-    m_resourceGroups.remove(group);
+void Project::deleteResourceGroup(ResourceGroup *group) {
+    int i = m_resourceGroups.indexOf(group);
+    if (i != -1)
+        m_resourceGroups.removeAt(i);
+    delete group;
 }
 
 
-void Project::removeResourceGroup(int /* number */){
+void Project::deleteResourceGroup(int /* number */){
    // always auto remove
 }
 

@@ -65,8 +65,8 @@ class Schedule;
  */
 class ResourceGroup {
     public:
-	      ResourceGroup(Project *project);
-	      ~ResourceGroup();
+        ResourceGroup(Project *project);
+        ~ResourceGroup();
 
           enum Type { Type_Work, Type_Material };
           
@@ -76,53 +76,53 @@ class ResourceGroup {
           
           Project *project() { return m_project; }
           
-	      void setName(QString n) {m_name=n;}
-	      const QString &name() const {return m_name;}
+          void setName(QString n) {m_name=n;}
+          const QString &name() const {return m_name;}
           void setType(Type type) { m_type = type; }
           //void setType(const QString &type);
           Type type() const { return m_type; }
 
-	      /** Manage the resources in this list
-	        * <p>At some point we will have to look at not mixing types of resources
-	        * (e.g. you can't add a person to a list of computers
-	        *
-	        * <p>Risks must always be associated with a resource, so there is no option
-	        * to manipulate risks (@ref Risk) separately
-	        */
-	      void addResource(Resource*, Risk*);
+          /** Manage the resources in this list
+           * <p>At some point we will have to look at not mixing types of resources
+           * (e.g. you can't add a person to a list of computers
+           *
+           * <p>Risks must always be associated with a resource, so there is no option
+           * to manipulate risks (@ref Risk) separately
+               */
+          void addResource(Resource*, Risk*);
           void insertResource( unsigned int index, Resource *resource );
-          void removeResource( Resource *resource );
+          void deleteResource( Resource *resource );
           Resource *takeResource( Resource *resource );
-	      void removeResource(int);
+          void deleteResource(int);
 
-	      Resource* getResource(int);
-	      Risk* getRisk(int);
+          Resource* getResource(int);
+          Risk* getRisk(int);
 
-	  /** Get the "num" resources which is available in the time frame
-            * defined by "start" and "duration".
-            * @param start todo 
-            * @param duration todo
-            * @param num todo
-            */
+          /** Get the "num" resources which is available in the time frame
+           * defined by "start" and "duration".
+           * @param start todo 
+           * @param duration todo
+           * @param num todo
+           */
           QList<Resource> availableResources(const DateTime start, const Duration duration, int num);
-	      /** Manage the dependent resources.  This is a list of the resource
-	        * groups that must have available resources for this resource to
-	        * perform the work
-            * <p>see also @ref getRequiredResource, @ref getRequiredResource
-	        */
-	      void addRequiredResource(ResourceGroup*);
-	      /** Manage the dependent resources.  This is a list of the resource
-	        * groups that must have available resources for this resource to
-	        * perform the work
-            * <p>see also @ref addRequiredResource, @ref getRequiredResource
-	        */
-	      ResourceGroup* getRequiredResource(int);
-	      /** Manage the dependent resources.  This is a list of the resource
-	        * groups that must have available resources for this resource to
-	        * perform the work
-            * <p>see also @ref getRequiredResource, @ref addRequiredResource
-	        */
-	      void removeRequiredResource(int);
+          /** Manage the dependent resources.  This is a list of the resource
+           * groups that must have available resources for this resource to
+           * perform the work
+           * <p>see also @ref getRequiredResource, @ref getRequiredResource
+               */
+          void addRequiredResource(ResourceGroup*);
+          /** Manage the dependent resources.  This is a list of the resource
+           * groups that must have available resources for this resource to
+           * perform the work
+           * <p>see also @ref addRequiredResource, @ref getRequiredResource
+               */
+          ResourceGroup* getRequiredResource(int);
+          /** Manage the dependent resources.  This is a list of the resource
+           * groups that must have available resources for this resource to
+           * perform the work
+           * <p>see also @ref getRequiredResource, @ref addRequiredResource
+               */
+          void deleteRequiredResource(int);
           int numResources() const { return m_resources.count(); }
           QList<Resource*> &resources() { return m_resources; }
 
@@ -323,7 +323,7 @@ public:
     Q3IntDict<Schedule> &schedules() { return m_schedules; }
     Schedule *findSchedule(long id) { return m_schedules[id]; }
     /// Take, and delete.
-    void removeSchedule(Schedule *schedule);
+    void deleteSchedule(Schedule *schedule);
     /// Take, don't delete.
     void takeSchedule(const Schedule *schedule);
     void addSchedule(Schedule *schedule);
@@ -526,10 +526,11 @@ public:
         m_requests.append(request);
         request->setParent(this);
     }
-    void removeRequest(ResourceGroupRequest *request) {
+    void deleteRequest(ResourceGroupRequest *request) {
         int i = m_requests.indexOf(request);
         if (i != -1)
             m_requests.removeAt(i);
+        delete request;
     }
 
     void takeRequest(ResourceGroupRequest *request) {
