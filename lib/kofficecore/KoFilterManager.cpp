@@ -144,11 +144,6 @@ QString KoFilterManager::import( const QString& url, KoFilter::ConversionStatus&
     KURL u;
     u.setPath( url );
     KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
-    if ( t->name() == KMimeType::defaultMimeType() ) {
-        kdError(s_area) << "No mimetype found for " << url << endl;
-        status = KoFilter::BadMimeType;
-        return QString::null;
-    }
 
     m_graph.setSourceMimeType( t->name().latin1() );  // .latin1() is okay here (Werner)
     if ( !m_graph.isValid() ) {

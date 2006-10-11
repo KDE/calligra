@@ -1442,15 +1442,6 @@ bool KoDocument::openFile()
 
     QString importedFile = m_file;
 
-    if ( typeName == KMimeType::defaultMimeType() ) {
-        kdError(30003) << "No mimetype found for " << m_file << endl;
-        QApplication::restoreOverrideCursor();
-        if ( d->m_autoErrorHandlingEnabled )
-            KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
-        d->m_bLoading = false;
-        return false;
-    }
-
     if ( !isNativeFormat( typeName.latin1() ) ) {
         if ( !d->filterManager )
             d->filterManager = new KoFilterManager( this );
@@ -1689,7 +1680,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
             in.reset();
             // Remove spaces
             do {
-                if ( in.readBlock( buf , 1 ) < 1 ) 
+                if ( in.readBlock( buf , 1 ) < 1 )
                 {
                     QApplication::restoreOverrideCursor();
                     in.close();
@@ -1698,7 +1689,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
                 }
             } while ( QChar( buf[0] ).isSpace() );
             if ( buf[0] == '<' ) { // First not-space character
-                if ( in.readBlock( buf , 4 ) < 4 ) 
+                if ( in.readBlock( buf , 4 ) < 4 )
                 {
                     QApplication::restoreOverrideCursor();
                     in.close();
