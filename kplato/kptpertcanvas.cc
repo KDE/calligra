@@ -120,6 +120,7 @@ PertNodeItem *PertCanvas::createNodeItem(Node *node)
             m_nodes.insert(node, item);
     }
     return item;*/
+    return 0;
 }
 
 void PertCanvas::createChildItems(PertNodeItem *parentItem)
