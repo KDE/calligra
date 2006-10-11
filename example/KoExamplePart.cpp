@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "example_part.h"
-#include "example_factory.h"
-#include "example_view.h"
+#include "KoExamplePart.h"
+#include "KoExampleFactory.h"
+#include "KoExampleView.h"
 
 #include <qpainter.h>
 
@@ -76,4 +76,4 @@ void ExamplePart::paintContent( QPainter& painter, const QRect& rect, bool /*tra
         painter.drawLine( left * 20, y * 20, right * 20, y * 20 );
 }
 
-#include "example_part.moc"
+#include "KoExamplePart.moc"

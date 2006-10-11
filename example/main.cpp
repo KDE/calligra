@@ -18,21 +18,17 @@
 */
 
 #include <KoApplication.h>
-#include <KoDocument.h>
-#include <KoMainWindow.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-#include <dcopclient.h>
-#include "example_aboutdata.h"
-#include <koffice_export.h>
+#include "KoExampleAboutData.h"
 
 static const KCmdLineOptions options[]=
 {
-	{"+[file]", I18N_NOOP("File to open"),0},
-	KCmdLineLastOption
+    {"+[file]", I18N_NOOP("File to open"),0},
+    KCmdLineLastOption
 };
 
-extern "C" EXAMPLE_EXPORT int kdemain( int argc, char **argv )
+extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
     KCmdLineArgs::init( argc, argv, newExampleAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );

@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "example_view.h"
-#include "example_factory.h"
-#include "example_part.h"
+#include "KoExampleView.h"
+#include "KoExampleFactory.h"
+#include "KoExamplePart.h"
 
 #include <qpainter.h>
 #include <qicon.h>
@@ -75,4 +75,4 @@ void ExampleView::cut()
     kDebug(31000) << "ExampleView::cut(): CUT called" << endl;
 }
 
-#include "example_view.moc"
+#include "KoExampleView.moc"

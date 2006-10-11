@@ -17,15 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <example_factory.h>
-#include <example_part.h>
-#include <example_aboutdata.h>
+#include <KoExampleFactory.h>
+#include <KoExamplePart.h>
+#include <KoExampleAboutData.h>
 #include <kinstance.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
 
-K_EXPORT_COMPONENT_FACTORY( libexamplepart, ExampleFactory )
+//K_EXPORT_COMPONENT_FACTORY( libkoexamplepart, ExampleFactory )
+K_EXPORT_PLUGIN( ExampleFactory )
 
 KInstance* ExampleFactory::s_global = 0L;
 KAboutData* ExampleFactory::s_aboutData = 0L;
@@ -79,4 +80,4 @@ KInstance* ExampleFactory::global()
     return s_global;
 }
 
-#include <example_factory.moc>
+#include "KoExampleFactory.moc"

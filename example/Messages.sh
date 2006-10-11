@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT rc.cpp *.cc example_aboutdata.h -o $podir/example.pot
+$XGETTEXT rc.cpp *.cpp KoExampleAboutData.h -o $podir/example.pot
