@@ -13,7 +13,6 @@ ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 
 find_package(Freetype REQUIRED)
 find_package(Fontconfig REQUIRED)
-find_package(ImageMagick REQUIRED)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-karbon.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-karbon.h )
 
@@ -78,7 +77,7 @@ kde4_automoc(${karboncommon_LIB_SRCS})
 
 kde4_add_library(karboncommon SHARED ${karboncommon_LIB_SRCS})
 
-target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} kofficecore kofficeui kopainter kotext karbondockers karbonwidgets vpainter karboncore karbonshapes karboncommands karbonvisitors karbondialogs ${IMAGEMAGICK_LIBRARIES})
+target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} kofficecore kofficeui kopainter kotext karbondockers karbonwidgets vpainter karboncore karbonshapes karboncommands karbonvisitors karbondialogs )
 
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS karboncommon  DESTINATION ${LIB_INSTALL_DIR})

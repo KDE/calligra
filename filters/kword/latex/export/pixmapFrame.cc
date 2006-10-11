@@ -25,7 +25,7 @@
 #include <kdebug.h>		/* for kDebug() stream */
 #include <config.h>
 #include <config-filters.h>
-/* Needed to convert picture in eps file. Use ImageMagick. */
+/* Needed to convert picture in eps file. Use GraphicsMagick. */
 #ifdef HAVE_MAGICK
 #        include <stdio.h>
 #        include <time.h>
