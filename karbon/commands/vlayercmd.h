@@ -97,7 +97,7 @@ public:
     enum VLayerCmdType
     {
         raiseLayer, ///< raises layer in z-order
-        lowerLayer, ///< lowers layer in z-order
+        lowerLayer  ///< lowers layer in z-order
     };
 
     /**
