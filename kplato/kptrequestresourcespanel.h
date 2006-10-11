@@ -27,7 +27,7 @@
 #include <QString>
 #include <q3table.h>
 //Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 //class QCheckTableItem;
 
 class KCommand;
@@ -79,7 +79,7 @@ public:
 
     void update();
     void insert(Q3Table *table);
-    const Q3PtrList<ResourceTableItem> &resources() const { return m_resources; }
+    const QList<ResourceTableItem*> &resources() const { return m_resources; }
     void ok(Task &task);
 
     int numRequests();
@@ -87,7 +87,7 @@ public:
     
     ResourceGroup *m_group;
     int m_units;
-    Q3PtrList<ResourceTableItem> m_resources;
+    QList<ResourceTableItem*> m_resources;
     ResourceGroupRequest *m_request;
 };
 

@@ -31,7 +31,7 @@
 #include <qdom.h>
 #include <qbrush.h>
 //Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 #include <kdebug.h>
 
 namespace KPlato
@@ -39,7 +39,6 @@ namespace KPlato
 
 Task::Task(Node *parent) : Node(parent), m_resource() {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
-    m_resource.setAutoDelete(true);
     Duration d(1, 0, 0);
     m_effort = new Effort(d);
     m_effort->setOptimisticRatio(-10);
@@ -48,20 +47,12 @@ Task::Task(Node *parent) : Node(parent), m_resource() {
 
     if (m_parent)
         m_leader = m_parent->leader();
-    
-    m_schedules.setAutoDelete(true);
-    m_parentProxyRelations.setAutoDelete(true);
-    m_childProxyRelations.setAutoDelete(true);
 }
 
 Task::Task(Task &task, Node *parent) 
     : Node(task, parent), 
       m_resource() {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
-    m_resource.setAutoDelete(true);
-    
-    m_parentProxyRelations.setAutoDelete(true);
-    m_childProxyRelations.setAutoDelete(true);
     m_requests = 0;
     
     m_effort = task.effort() ? new Effort(*(task.effort())) 
@@ -71,6 +62,20 @@ Task::Task(Task &task, Node *parent)
 
 Task::~Task() {
     delete m_effort;
+    while (!m_resource.isEmpty()) {
+        delete m_resource.takeFirst();
+    }
+    while (!m_parentProxyRelations.isEmpty()) {
+        delete m_parentProxyRelations.takeFirst();
+    }
+    while (!m_childProxyRelations.isEmpty()) {
+        delete m_childProxyRelations.takeFirst();
+    }
+    while (!m_schedules.isEmpty()) {
+        foreach (long k, m_schedules.uniqueKeys()) {
+            delete m_schedules.take(k);
+        }
+    }
 }
 
 int Task::type() const {
@@ -150,9 +155,8 @@ void Task::makeAppointments() {
             //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->startTime<<", "<<m_currentSchedule->endTime<<"; "<<m_currentSchedule->duration.toString()<<endl;
         }
     } else if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> nit(m_nodes);
-        for ( ; nit.current(); ++nit ) {
-            nit.current()->makeAppointments();
+        foreach (Node *n, m_nodes) {
+            n->makeAppointments();
         }
     } else if (type() == Node::Type_Milestone) {
         //kDebug()<<k_funcinfo<<"Milestone not implemented"<<endl;
@@ -314,10 +318,9 @@ void Task::save(QDomElement &element)  const {
     if (!m_schedules.isEmpty()) {
         QDomElement schs = me.ownerDocument().createElement("schedules");
         me.appendChild(schs);
-        Q3IntDictIterator<Schedule> it = m_schedules;
-        for (; it.current(); ++it) {
-            if (!it.current()->isDeleted()) {
-                it.current()->saveXML(schs);
+        foreach (Schedule *s, m_schedules) {
+            if (!s->isDeleted()) {
+                s->saveXML(schs);
             }
         }
     }
@@ -329,15 +332,14 @@ void Task::save(QDomElement &element)  const {
     }
 }
 
-void Task::saveAppointments(QDomElement &element, long id) const {
+void Task::saveAppointments(QDomElement &element, long id) {
     //kDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
     Schedule *sch = findSchedule(id);
     if (sch) {
         sch->saveAppointments(element);
     }
-    Q3PtrListIterator<Node> it(m_nodes);
-    for (; it.current(); ++it ) {
-        it.current()->saveAppointments(element, id);
+    foreach (Node *n, m_nodes) {
+        n->saveAppointments(element, id);
     }
 }
 
@@ -354,9 +356,8 @@ Duration Task::plannedEffort() {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> it(childNodeIterator());
-        for (; it.current(); ++it) {
-            eff += it.current()->plannedEffort();
+        foreach (Node *n, childNodeIterator()) {
+            eff += n->plannedEffort();
         }
     } else if (m_currentSchedule) {
         eff = m_currentSchedule->plannedEffort();
@@ -369,9 +370,8 @@ Duration Task::plannedEffort(const QDate &date) {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> it(childNodeIterator());
-        for (; it.current(); ++it) {
-            eff += it.current()->plannedEffort(date);
+        foreach (Node *n, childNodeIterator()) {
+            eff += n->plannedEffort(date);
         }
     } else if (m_currentSchedule) {
         eff = m_currentSchedule->plannedEffort(date);
@@ -384,9 +384,8 @@ Duration Task::plannedEffortTo(const QDate &date) {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> it(childNodeIterator());
-        for (; it.current(); ++it) {
-            eff += it.current()->plannedEffortTo(date);
+        foreach (Node *n, childNodeIterator()) {
+            eff += n->plannedEffortTo(date);
         }
     } else if (m_currentSchedule) {
         eff = m_currentSchedule->plannedEffortTo(date);
@@ -399,9 +398,8 @@ Duration Task::actualEffort() {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> it(childNodeIterator());
-        for (; it.current(); ++it) {
-            eff += it.current()->actualEffort();
+        foreach (Node *n, childNodeIterator()) {
+            eff += n->actualEffort();
         }
     } else {
         eff = m_progress.totalPerformed;
@@ -418,9 +416,8 @@ Duration Task::actualEffort(const QDate &date) {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> it(childNodeIterator());
-        for (; it.current(); ++it) {
-            eff += it.current()->actualEffort(date);
+        foreach (Node *n, childNodeIterator()) {
+            eff += n->actualEffort(date);
         }
     } else if (m_currentSchedule) {
         eff = m_currentSchedule->actualEffort(date);
@@ -433,9 +430,8 @@ Duration Task::actualEffortTo(const QDate &date) {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> it(childNodeIterator());
-        for (; it.current(); ++it) {
-            eff += it.current()->actualEffortTo(date);
+        foreach (Node *n, childNodeIterator()) {
+            eff += n->actualEffortTo(date);
         }
     } else if (m_currentSchedule) {
         eff = m_currentSchedule->actualEffortTo(date);
@@ -447,9 +443,8 @@ double Task::plannedCost() {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> it(childNodeIterator());
-        for (; it.current(); ++it) {
-            c += it.current()->plannedCost();
+        foreach (Node *n, childNodeIterator()) {
+            c += n->plannedCost();
         }
     } else if (m_currentSchedule) {
         c = m_currentSchedule->plannedCost();
@@ -461,9 +456,8 @@ double Task::plannedCost(const QDate &date) {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> it(childNodeIterator());
-        for (; it.current(); ++it) {
-            c += it.current()->plannedCost(date);
+        foreach (Node *n, childNodeIterator()) {
+            c += n->plannedCost(date);
         }
     } else if (m_currentSchedule) {
         c = m_currentSchedule->plannedCost(date);
@@ -475,9 +469,8 @@ double Task::plannedCostTo(const QDate &date) {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> it(childNodeIterator());
-        for (; it.current(); ++it) {
-            c += it.current()->plannedCostTo(date);
+        foreach (Node *n, childNodeIterator()) {
+            c += n->plannedCostTo(date);
         }
     } else if (m_currentSchedule) {
         c = m_currentSchedule->plannedCostTo(date);
@@ -489,9 +482,8 @@ double Task::actualCost() {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> it(childNodeIterator());
-        for (; it.current(); ++it) {
-            c += it.current()->actualCost();
+        foreach (Node *n, childNodeIterator()) {
+            c += n->actualCost();
         }
     } else if (m_currentSchedule) {
         c = m_currentSchedule->actualCost();
@@ -503,9 +495,8 @@ double Task::actualCost(const QDate &date) {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> it(childNodeIterator());
-        for (; it.current(); ++it) {
-            c += it.current()->actualCost(date);
+        foreach (Node *n, childNodeIterator()) {
+            c += n->actualCost(date);
         }
     } else if (m_currentSchedule) {
         c = m_currentSchedule->actualCost(date);
@@ -517,9 +508,8 @@ double Task::actualCostTo(const QDate &date) {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
-        Q3PtrListIterator<Node> it(childNodeIterator());
-        for (; it.current(); ++it) {
-            c += it.current()->actualCostTo(date);
+        foreach (Node *n, childNodeIterator()) {
+            c += n->actualCostTo(date);
         }
     } else if (m_currentSchedule) {
         c = m_currentSchedule->actualCostTo(date);
@@ -568,20 +558,18 @@ void Task::initiateCalculation(Schedule &sch) {
 }
 
 
-void Task::initiateCalculationLists(Q3PtrList<Node> &startnodes, Q3PtrList<Node> &endnodes, Q3PtrList<Node> &summarytasks/*, QPtrList<Node> &milestones*/) {
+void Task::initiateCalculationLists(QList<Node*> &startnodes, QList<Node*> &endnodes, QList<Node*> &summarytasks/*, QList<Node*> &milestones*/) {
     //kDebug()<<k_funcinfo<<m_name<<endl;
     if (type() == Node::Type_Summarytask) {
         summarytasks.append(this);
         // propagate my relations to my children and dependent nodes
-        
-        Q3PtrListIterator<Node> nodes = m_nodes;
-        for (; nodes.current(); ++nodes) {
+        foreach (Node *n, m_nodes) {
             if (!dependParentNodes().isEmpty()) 
-                nodes.current()->addParentProxyRelations(dependParentNodes());
+                n->addParentProxyRelations(dependParentNodes());
             if (!dependChildNodes().isEmpty()) 
-                nodes.current()->addChildProxyRelations(dependChildNodes());
-            nodes.current()->initiateCalculationLists(startnodes, endnodes, summarytasks);
-        }        
+                n->addChildProxyRelations(dependChildNodes());
+            n->initiateCalculationLists(startnodes, endnodes, summarytasks);
+        }
     } else {
         if (isEndNode()) {
             endnodes.append(this);
@@ -594,28 +582,27 @@ void Task::initiateCalculationLists(Q3PtrList<Node> &startnodes, Q3PtrList<Node>
     }
 }
 
-DateTime Task::calculatePredeccessors(const Q3PtrList<Relation> &list, int use) {
+DateTime Task::calculatePredeccessors(const QList<Relation*> &list, int use) {
     DateTime time;
-    Q3PtrListIterator<Relation> it = list;
-    for (; it.current(); ++it) {
-        if (it.current()->parent()->type() == Type_Summarytask) {
+    foreach (Relation *r, list) {
+        if (r->parent()->type() == Type_Summarytask) {
             //kDebug()<<k_funcinfo<<"Skip summarytask: "<<it.current()->parent()->name()<<endl;
             continue; // skip summarytasks
         }
-        DateTime t = it.current()->parent()->calculateForward(use); // early finish
-        switch (it.current()->type()) {
+        DateTime t = r->parent()->calculateForward(use); // early finish
+        switch (r->type()) {
             case Relation::StartStart:
                 // I can't start earlier than my predesseccor
-                t = it.current()->parent()->getEarliestStart() + it.current()->lag();
+                t = r->parent()->getEarliestStart() + r->lag();
                 break;
             case Relation::FinishFinish:
                 // I can't finish earlier than my predeccessor, so
                 // I can't start earlier than it's (earlyfinish+lag)- my duration
-                t += it.current()->lag();
+                t += r->lag();
                 t -= duration(t, use, true);
                 break;
             default:
-                t += it.current()->lag();
+                t += r->lag();
                 break;
         }
         if (!time.isValid() || t > time)
@@ -720,29 +707,28 @@ DateTime Task::calculateForward(int use) {
     return cs->earliestStart + m_durationForward;
 }
 
-DateTime Task::calculateSuccessors(const Q3PtrList<Relation> &list, int use) {
+DateTime Task::calculateSuccessors(const QList<Relation*> &list, int use) {
     DateTime time;
-    Q3PtrListIterator<Relation> it = list;
-    for (; it.current(); ++it) {
-        if (it.current()->child()->type() == Type_Summarytask) {
-            //kDebug()<<k_funcinfo<<"Skip summarytask: "<<it.current()->parent()->name()<<endl;
+    foreach (Relation *r, list) {
+        if (r->child()->type() == Type_Summarytask) {
+            //kDebug()<<k_funcinfo<<"Skip summarytask: "<<r->parent()->name()<<endl;
             continue; // skip summarytasks
         }
-        DateTime t = it.current()->child()->calculateBackward(use);
-        switch (it.current()->type()) {
+        DateTime t = r->child()->calculateBackward(use);
+        switch (r->type()) {
             case Relation::StartStart:
                 // I must start before my successor, so
                 // I can't finish later than it's (starttime-lag) + my duration
-                t -= it.current()->lag();
+                t -= r->lag();
                 t += duration(t, use, false);
                 break;
             case Relation::FinishFinish:
                 // My successor cannot finish before me, so
                 // I can't finish later than it's latest finish - lag
-                t = it.current()->child()->getLatestFinish() -  it.current()->lag();
+                t = r->child()->getLatestFinish() -  r->lag();
                 break;
             default:
-                t -= it.current()->lag();
+                t -= r->lag();
                 break;
         }
         if (!time.isValid() || t < time)
@@ -845,29 +831,28 @@ DateTime Task::calculateBackward(int use) {
     return cs->latestFinish - m_durationBackward;
 }
 
-DateTime Task::schedulePredeccessors(const Q3PtrList<Relation> &list, int use) {
+DateTime Task::schedulePredeccessors(const QList<Relation*> &list, int use) {
     DateTime time;
-    Q3PtrListIterator<Relation> it = list;
-    for (; it.current(); ++it) {
-        if (it.current()->parent()->type() == Type_Summarytask) {
-            //kDebug()<<k_funcinfo<<"Skip summarytask: "<<it.current()->parent()->name()<<endl;
+    foreach (Relation *r, list) {
+        if (r->parent()->type() == Type_Summarytask) {
+            //kDebug()<<k_funcinfo<<"Skip summarytask: "<<r->parent()->name()<<endl;
             continue; // skip summarytasks
         }
         // schedule the predecessors
-        DateTime earliest = it.current()->parent()->getEarliestStart();
-        DateTime t = it.current()->parent()->scheduleForward(earliest, use);
-        switch (it.current()->type()) {
+        DateTime earliest = r->parent()->getEarliestStart();
+        DateTime t = r->parent()->scheduleForward(earliest, use);
+        switch (r->type()) {
             case Relation::StartStart:
                 // I can't start before my predesseccor
-                t = it.current()->parent()->startTime() + it.current()->lag();
+                t = r->parent()->startTime() + r->lag();
                 break;
             case Relation::FinishFinish:
                 // I can't end before my predecessor, so
                 // I can't start before it's endtime - my duration
-                t -= duration(t + it.current()->lag(), use, true);
+                t -= duration(t + r->lag(), use, true);
                 break;
             default:
-                t += it.current()->lag();
+                t += r->lag();
                 break;
         }
         if (!time.isValid() || t > time)
@@ -1043,28 +1028,27 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
     return cs->endTime;
 }
 
-DateTime Task::scheduleSuccessors(const Q3PtrList<Relation> &list, int use) {
+DateTime Task::scheduleSuccessors(const QList<Relation*> &list, int use) {
     DateTime time;
-    Q3PtrListIterator<Relation> it = list;
-    for (; it.current(); ++it) {
-        if (it.current()->child()->type() == Type_Summarytask) {
-            //kDebug()<<k_funcinfo<<"Skip summarytask: "<<it.current()->child()->name()<<endl;
+    foreach (Relation *r, list) {
+        if (r->child()->type() == Type_Summarytask) {
+            //kDebug()<<k_funcinfo<<"Skip summarytask: "<<r->child()->name()<<endl;
             continue;
         }
         // get the successors starttime
-        DateTime latest = it.current()->child()->getLatestFinish();
-        DateTime t = it.current()->child()->scheduleBackward(latest, use);
-        switch (it.current()->type()) {
+        DateTime latest = r->child()->getLatestFinish();
+        DateTime t = r->child()->scheduleBackward(latest, use);
+        switch (r->type()) {
             case Relation::StartStart:
                 // I can't start before my successor, so
                 // I can't finish later than it's starttime + my duration
-                t += duration(t - it.current()->lag(), use, false);
+                t += duration(t - r->lag(), use, false);
                 break;
             case Relation::FinishFinish:
-                t = it.current()->child()->endTime() - it.current()->lag();
+                t = r->child()->endTime() - r->lag();
                 break;
             default:
-                t -= it.current()->lag();
+                t -= r->lag();
                 break;
         }
         if (!time.isValid() || t < time)
@@ -1244,13 +1228,12 @@ void Task::adjustSummarytask() {
     if (type() == Type_Summarytask) {
         DateTime start = m_currentSchedule->latestFinish;
         DateTime end = m_currentSchedule->earliestStart;
-        Q3PtrListIterator<Node> it(m_nodes);
-        for (; it.current(); ++it) {
-            it.current()->adjustSummarytask();
-            if (it.current()->startTime() < start)
-                start = it.current()->startTime();
-            if (it.current()->endTime() > end)
-                end = it.current()->endTime();
+        foreach (Node *n, m_nodes) {
+            n->adjustSummarytask();
+            if (n->startTime() < start)
+                start = n->startTime();
+            if (n->endTime() > end)
+                end = n->endTime();
         }
         m_currentSchedule->startTime = start;
         m_currentSchedule->endTime = end;
@@ -1291,46 +1274,42 @@ void Task::clearProxyRelations() {
     m_childProxyRelations.clear();
 }
 
-void Task::addParentProxyRelations(Q3PtrList<Relation> &list) {
+void Task::addParentProxyRelations(QList<Relation*> &list) {
     //kDebug()<<k_funcinfo<<m_name<<endl;
     if (type() == Type_Summarytask) {
         // propagate to my children
         //kDebug()<<k_funcinfo<<m_name<<" is summary task"<<endl;
-        Q3PtrListIterator<Node> nodes = m_nodes;
-        for (; nodes.current(); ++nodes) {
-            nodes.current()->addParentProxyRelations(list);
-            nodes.current()->addParentProxyRelations(dependParentNodes());
+        foreach (Node *n, m_nodes) {
+            n->addParentProxyRelations(list);
+            n->addParentProxyRelations(dependParentNodes());
         }        
     } else {
         // add 'this' as child relation to the relations parent
         //kDebug()<<k_funcinfo<<m_name<<" is not summary task"<<endl;
-        Q3PtrListIterator<Relation> it = list;
-        for (; it.current(); ++it) {
-            it.current()->parent()->addChildProxyRelation(this, it.current());
+        foreach (Relation *r, list) {
+            r->parent()->addChildProxyRelation(this, r);
             // add a parent relation to myself
-            addParentProxyRelation(it.current()->parent(), it.current());
+            addParentProxyRelation(r->parent(), r);
         }
     }
 }
 
-void Task::addChildProxyRelations(Q3PtrList<Relation> &list) {
+void Task::addChildProxyRelations(QList<Relation*> &list) {
     //kDebug()<<k_funcinfo<<m_name<<endl;
     if (type() == Type_Summarytask) {
         // propagate to my children
         //kDebug()<<k_funcinfo<<m_name<<" is summary task"<<endl;
-        Q3PtrListIterator<Node> nodes = m_nodes;
-        for (; nodes.current(); ++nodes) {
-            nodes.current()->addChildProxyRelations(list);
-            nodes.current()->addChildProxyRelations(dependChildNodes());
+        foreach (Node *n, m_nodes) {
+            n->addChildProxyRelations(list);
+            n->addChildProxyRelations(dependChildNodes());
         }        
     } else {
         // add 'this' as parent relation to the relations child
         //kDebug()<<k_funcinfo<<m_name<<" is not summary task"<<endl;
-        Q3PtrListIterator<Relation> it = list;
-        for (; it.current(); ++it) {
-            it.current()->child()->addParentProxyRelation(this, it.current());
+        foreach (Relation *r, list) {
+            r->child()->addParentProxyRelation(this, r);
             // add a child relation to myself
-            addChildProxyRelation(it.current()->child(), it.current());
+            addChildProxyRelation(r->child(), r);
         }
     }
 }
@@ -1339,9 +1318,8 @@ void Task::addParentProxyRelation(Node *node, const Relation *rel) {
     if (node->type() != Type_Summarytask) {
         if (type() == Type_Summarytask) {
             //kDebug()<<"Add parent proxy from my children "<<m_name<<" to "<<node->name()<<endl;
-            Q3PtrListIterator<Node> nodes = m_nodes;
-            for (; nodes.current(); ++nodes) {
-                nodes.current()->addParentProxyRelation(node, rel);
+            foreach (Node *n, m_nodes) {
+                n->addParentProxyRelation(node, rel);
             }
         } else {
             //kDebug()<<"Add parent proxy from "<<node->name()<<" to (me) "<<m_name<<endl;
@@ -1354,9 +1332,8 @@ void Task::addChildProxyRelation(Node *node, const Relation *rel) {
     if (node->type() != Type_Summarytask) {
         if (type() == Type_Summarytask) {
             //kDebug()<<"Add child proxy from my children "<<m_name<<" to "<<node->name()<<endl;
-            Q3PtrListIterator<Node> nodes = m_nodes;
-            for (; nodes.current(); ++nodes) {
-                nodes.current()->addChildProxyRelation(node, rel);
+            foreach (Node *n, m_nodes) {
+                n->addChildProxyRelation(node, rel);
             }
         } else {
             //kDebug()<<"Add child proxy from (me) "<<m_name<<" to "<<node->name()<<endl;
@@ -1366,29 +1343,25 @@ void Task::addChildProxyRelation(Node *node, const Relation *rel) {
 }
 
 bool Task::isEndNode() const {
-    Q3PtrListIterator<Relation> it = m_dependChildNodes;
-    for (; it.current(); ++it) {
-        if (it.current()->type() == Relation::FinishStart)
+    foreach (Relation *r, m_dependChildNodes) {
+        if (r->type() == Relation::FinishStart)
             return false;
     }
-    Q3PtrListIterator<Relation> pit = m_childProxyRelations;
-    for (; pit.current(); ++pit) {
-        if (pit.current()->type() == Relation::FinishStart)
+    foreach (Relation *r, m_childProxyRelations) {
+        if (r->type() == Relation::FinishStart)
             return false;
     }
     return true;
 }
 bool Task::isStartNode() const {
-    Q3PtrListIterator<Relation> it = m_dependParentNodes;
-    for (; it.current(); ++it) {
-        if (it.current()->type() == Relation::FinishStart ||
-            it.current()->type() == Relation::StartStart)
+    foreach (Relation *r, m_dependParentNodes) {
+        if (r->type() == Relation::FinishStart ||
+            r->type() == Relation::StartStart)
             return false;
     }
-    Q3PtrListIterator<Relation> pit = m_parentProxyRelations;
-    for (; pit.current(); ++pit) {
-        if (pit.current()->type() == Relation::FinishStart ||
-            pit.current()->type() == Relation::StartStart)
+    foreach (Relation *r, m_parentProxyRelations) {
+        if (r->type() == Relation::FinishStart ||
+            r->type() == Relation::StartStart)
             return false;
     }
     return true;
@@ -1478,15 +1451,13 @@ bool Task::calcCriticalPath(bool fromEnd) {
             //kDebug()<<k_funcinfo<<m_name<<" end node"<<endl;
             return true;
         }
-        Q3PtrListIterator<Relation> it(m_childProxyRelations);
-        for (; it.current(); ++it) {
-            if (it.current()->child()->calcCriticalPath(fromEnd)) {
+        foreach (Relation *r, m_childProxyRelations) {
+            if (r->child()->calcCriticalPath(fromEnd)) {
                 m_currentSchedule->inCriticalPath = true;
             }
         }
-        Q3PtrListIterator<Relation> pit(m_dependChildNodes);
-        for (; pit.current(); ++pit) {
-            if (pit.current()->child()->calcCriticalPath(fromEnd)) {
+        foreach (Relation *r, m_dependChildNodes) {
+            if (r->child()->calcCriticalPath(fromEnd)) {
                 m_currentSchedule->inCriticalPath = true;
             }
         }
@@ -1496,15 +1467,13 @@ bool Task::calcCriticalPath(bool fromEnd) {
             //kDebug()<<k_funcinfo<<m_name<<" start node"<<endl;
             return true;
         }
-        Q3PtrListIterator<Relation> it(m_parentProxyRelations);
-        for (; it.current(); ++it) {
-            if (it.current()->parent()->calcCriticalPath(fromEnd)) {
+        foreach (Relation *r, m_parentProxyRelations) {
+            if (r->parent()->calcCriticalPath(fromEnd)) {
                 m_currentSchedule->inCriticalPath = true;
             }
         }
-        Q3PtrListIterator<Relation> pit(m_dependParentNodes);
-        for (; pit.current(); ++pit) {
-            if (pit.current()->parent()->calcCriticalPath(fromEnd)) {
+        foreach (Relation *r, m_dependParentNodes) {
+            if (r->parent()->calcCriticalPath(fromEnd)) {
                 m_currentSchedule->inCriticalPath = true;
             }
         }

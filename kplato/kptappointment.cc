@@ -27,8 +27,6 @@
 #include "kptschedule.h"
 
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 namespace KPlato
 {
@@ -173,20 +171,26 @@ bool Appointment::UsedEffortItem::isOvertime() {
 }
 
 Appointment::UsedEffort::UsedEffort() {
-    setAutoDelete(true);
+}
+
+Appointment::UsedEffort::~UsedEffort() {
+    while (!isEmpty())
+        delete takeFirst();
 }
 
 void Appointment::UsedEffort::inSort(QDate date, Duration effort, bool overtime) {
     UsedEffortItem *item = new UsedEffortItem(date, effort, overtime);
-    Q3PtrList<UsedEffortItem>::inSort(item);
+    this->append(item);
+//TODO    qSort(*this);
 }
 
 Duration Appointment::UsedEffort::usedEffort(bool includeOvertime) const {
     Duration eff;
-    Q3PtrListIterator<UsedEffortItem> it(*this);
-    for (; it.current(); ++it) {
-        if (includeOvertime || !it.current()->isOvertime()) {
-            eff += it.current()->effort();
+    QListIterator<UsedEffortItem*> it(*this);
+    while (it.hasNext()) {
+        UsedEffortItem *i = it.next();
+        if (includeOvertime || !i->isOvertime()) {
+            eff += i->effort();
         }
     }
     return eff;
@@ -194,11 +198,12 @@ Duration Appointment::UsedEffort::usedEffort(bool includeOvertime) const {
 
 Duration Appointment::UsedEffort::usedEffort(const QDate &date, bool includeOvertime) const {
     Duration eff;
-    Q3PtrListIterator<UsedEffortItem> it(*this);
-    for (; it.current(); ++it) {
-        if ((includeOvertime || !it.current()->isOvertime()) &&
-            it.current()->date() == date) {
-            eff += it.current()->effort();
+    QListIterator<UsedEffortItem*> it(*this);
+    while (it.hasNext()) {
+        UsedEffortItem *i = it.next();
+        if ((includeOvertime || !i->isOvertime()) &&
+            i->date() == date) {
+            eff += i->effort();
         }
     }
     return eff;
@@ -206,27 +211,31 @@ Duration Appointment::UsedEffort::usedEffort(const QDate &date, bool includeOver
 
 Duration Appointment::UsedEffort::usedEffortTo(const QDate &date, bool includeOvertime) const {
     Duration eff;
-    Q3PtrListIterator<UsedEffortItem> it(*this);
-    for (; it.current(); ++it) {
-        if ((includeOvertime || !it.current()->isOvertime()) &&
-            it.current()->date() <= date) {
-            eff += it.current()->effort();
+    QListIterator<UsedEffortItem*> it(*this);
+    while (it.hasNext()) {
+        UsedEffortItem *i = it.next();
+        if ((includeOvertime || !i->isOvertime()) &&
+            i->date() <= date) {
+            eff += i->effort();
         }
     }
     return eff;
 }
 
 Duration Appointment::UsedEffort::usedOvertime() const {
-    UsedEffortItem *item = getFirst();
-    return item==0 ? Duration::zeroDuration : usedOvertime(item->date());
+    if (isEmpty()) {
+        return 0;
+    }
+    return usedOvertime(first()->date());
 }
 
 Duration Appointment::UsedEffort::usedOvertime(const QDate &date) const {
     Duration eff;
-    Q3PtrListIterator<UsedEffortItem> it(*this);
-    for (; it.current(); ++it) {
-        if (it.current()->isOvertime() && it.current()->date() == date) {
-            eff += it.current()->effort();
+    QListIterator<UsedEffortItem*> it(*this);
+    while (it.hasNext()) {
+        UsedEffortItem *i = it.next();
+        if (i->isOvertime() && i->date() == date) {
+            eff += i->effort();
         }
     }
     return eff;
@@ -234,10 +243,11 @@ Duration Appointment::UsedEffort::usedOvertime(const QDate &date) const {
 
 Duration Appointment::UsedEffort::usedOvertimeTo(const QDate &date) const {
     Duration eff;
-    Q3PtrListIterator<UsedEffortItem> it(*this);
-    for (; it.current(); ++it) {
-        if (it.current()->isOvertime() && it.current()->date() <= date) {
-            eff += it.current()->effort();
+    QListIterator<UsedEffortItem*> it(*this);
+    while (it.hasNext()) {
+        UsedEffortItem *i = it.next();
+        if (i->isOvertime() && i->date() <= date) {
+            eff += i->effort();
         }
     }
     return eff;
@@ -269,22 +279,15 @@ bool Appointment::UsedEffort::load(QDomElement &element) {
 
 void Appointment::UsedEffort::save(QDomElement &element) const {
     if (isEmpty()) return;
-    Q3PtrListIterator<UsedEffortItem> it = *this;
-    for (; it.current(); ++it) {
+    QListIterator<UsedEffortItem*> it = *this;
+    while (it.hasNext()) {
+        UsedEffortItem *i = it.next();
         QDomElement me = element.ownerDocument().createElement("actual-effort");
         element.appendChild(me);
-        me.setAttribute("date",it.current()->date().toString(Qt::ISODate));
-        me.setAttribute("effort",it.current()->effort().toString());
-        me.setAttribute("overtime",it.current()->isOvertime());
+        me.setAttribute("date",i->date().toString(Qt::ISODate));
+        me.setAttribute("effort",i->effort().toString());
+        me.setAttribute("overtime",i->isOvertime());
     }
-}
-
-int Appointment::UsedEffort::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2) {
-    QDate d1 = static_cast<UsedEffortItem*>(item1)->date();
-    QDate d2 = static_cast<UsedEffortItem*>(item2)->date();
-    if (d1 > d2) return 1;
-    if (d1 < d2) return -1;
-    return 0;
 }
 
 ////
@@ -295,8 +298,6 @@ Appointment::Appointment()
     m_node=0;
     m_repeatInterval=Duration();
     m_repeatCount=0;
-
-    m_intervals.setAutoDelete(true);
 }
 
 Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, DateTime end, double load)
@@ -309,8 +310,6 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dat
     m_repeatCount = 0;
 
     addInterval(start, end, load);
-
-    m_intervals.setAutoDelete(true);
 }
 
 Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Duration duration, double load)
@@ -324,12 +323,13 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dur
 
     addInterval(start, duration, load);
 
-    m_intervals.setAutoDelete(true);
 }
 
 Appointment::~Appointment() {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     detach();
+    while (m_intervals.isEmpty())
+        delete m_intervals.takeFirst();
 }
 
 void Appointment::addInterval(AppointmentInterval *a) {
@@ -346,30 +346,33 @@ void Appointment::addInterval(const DateTime &start, const Duration &duration, d
 
 double Appointment::maxLoad() const {
     double v = 0.0;
-    Q3PtrListIterator<AppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        if (v < it.current()->load())
-            v = it.current()->load();
+    QListIterator<AppointmentInterval*> it = m_intervals;
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        if (v < i->load())
+            v = i->load();
     }
     return v;
 }
 
 DateTime Appointment::startTime() const {
     DateTime t;
-    Q3PtrListIterator<AppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        if (!t.isValid() || t > it.current()->startTime())
-            t = it.current()->startTime();
+    QListIterator<AppointmentInterval*> it = m_intervals;
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        if (!t.isValid() || t > i->startTime())
+            t = i->startTime();
     }
     return t;
 }
 
 DateTime Appointment::endTime() const {
     DateTime t;
-    Q3PtrListIterator<AppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        if (!t.isValid() || t < it.current()->endTime())
-            t = it.current()->endTime();
+    QListIterator<AppointmentInterval*> it = m_intervals;
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        if (!t.isValid() || t < i->endTime())
+            t = i->endTime();
     }
     return t;
 }
@@ -386,10 +389,6 @@ bool Appointment::isBusy(const DateTime &/*start*/, const DateTime &/*end*/) {
 
 bool Appointment::loadXML(QDomElement &element, Project &project, Schedule &sch) {
     //kDebug()<<k_funcinfo<<endl;
-    Q3DictIterator<Node> it = project.nodeDict();
-/*    for (; it.current(); ++it) {
-        kDebug()<<" Node="<<it.current()->name()<<" id="<<it.currentKey()<<endl;
-    }*/
     Node *node = project.findNode(element.attribute("task-id"));
     if (node == 0) {
         kError()<<k_funcinfo<<"The referenced task does not exists: "<<element.attribute("task-id")<<endl;
@@ -450,9 +449,10 @@ void Appointment::saveXML(QDomElement &element) const {
 
     me.setAttribute("resource-id", m_resource->resource()->id());
     me.setAttribute("task-id", m_node->node()->id());
-    Q3PtrListIterator<AppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        it.current()->saveXML(me);
+    QListIterator<AppointmentInterval*> it = m_intervals;
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        i->saveXML(me);
     }
     m_actualEffort.save(me);
 }
@@ -460,9 +460,10 @@ void Appointment::saveXML(QDomElement &element) const {
 // Returns the total actual effort for this appointment
 Duration Appointment::plannedEffort() const {
     Duration d;
-    Q3PtrListIterator<AppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        d += it.current()->effort();
+    QListIterator<AppointmentInterval*> it = m_intervals;
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        d += i->effort();
     }
     return d;
 }
@@ -472,9 +473,10 @@ Duration Appointment::plannedEffort(const QDate &date) const {
     Duration d;
     DateTime s(date);
     DateTime e(date.addDays(1));
-    Q3PtrListIterator<AppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        d += it.current()->effort(s, e);
+    QListIterator<AppointmentInterval*> it = m_intervals;
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        d += i->effort(s, e);
     }
     return d;
 }
@@ -483,9 +485,10 @@ Duration Appointment::plannedEffort(const QDate &date) const {
 Duration Appointment::plannedEffortTo(const QDate& date) const {
     Duration d;
     DateTime e(date.addDays(1));
-    Q3PtrListIterator<AppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        d += it.current()->effort(e, true);
+    QListIterator<AppointmentInterval*> it = m_intervals;
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        d += i->effort(e, true);
     }
     return d;
 }
@@ -500,9 +503,10 @@ EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) co
     DateTime ndt(dt.addDays(1));
     double rate = m_resource->normalRatePrHour();
     AppointmentIntervalListIterator it = m_intervals;
-    for (; it.current(); ++it) {
-        DateTime st = it.current()->startTime();
-        DateTime e = it.current()->endTime();
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        DateTime st = i->startTime();
+        DateTime e = i->endTime();
         if (end < st.date())
             break;
         if (dt.date() < st.date()) {
@@ -511,7 +515,7 @@ EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) co
         ndt = dt.addDays(1);
         // loop trough the interval (it may span dates)
         while (dt.date() <= e.date()) {
-            eff = it.current()->effort(dt, ndt);
+            eff = i->effort(dt, ndt);
             ec.add(dt.date(), eff, eff.toDouble(Duration::Unit_h) * rate);
             dt = ndt;
             ndt = ndt.addDays(1);
@@ -613,27 +617,30 @@ void Appointment::detach() {
 // Returns the effort from start to end
 Duration Appointment::effort(const DateTime &start, const DateTime &end) const {
     Duration d;
-    Q3PtrListIterator<AppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        d += it.current()->effort(start, end);
+    QListIterator<AppointmentInterval*> it = m_intervals;
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        d += i->effort(start, end);
     }
     return d;
 }
 // Returns the effort from start for the duration
 Duration Appointment::effort(const DateTime &start, const Duration &duration) const {
     Duration d;
-    Q3PtrListIterator<AppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        d += it.current()->effort(start, start+duration);
+    QListIterator<AppointmentInterval*> it = m_intervals;
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        d += i->effort(start, start+duration);
     }
     return d;
 }
 // Returns the effort upto time / from time
 Duration Appointment::effortFrom(const DateTime &time) const {
     Duration d;
-    Q3PtrListIterator<AppointmentInterval> it = m_intervals;
-    for (; it.current(); ++it) {
-        d += it.current()->effort(time, false);
+    QListIterator<AppointmentInterval*> it = m_intervals;
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        d += i->effort(time, false);
     }
     return d;
 }
@@ -645,9 +652,10 @@ Appointment &Appointment::operator=(const Appointment &app) {
     m_repeatCount = app.repeatCount();
 
     m_intervals.clear();
-    Q3PtrListIterator<AppointmentInterval> it = app.intervals();
-    for (; it.current(); ++it) {
-        addInterval(new AppointmentInterval(*(it.current())));
+    QListIterator<AppointmentInterval*> it = m_intervals;
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        addInterval(new AppointmentInterval(*i));
     }
     return *this;
 }
@@ -659,42 +667,47 @@ Appointment &Appointment::operator+=(const Appointment &app) {
 
 Appointment Appointment::operator+(const Appointment &app) {
     Appointment a;
-    AppointmentIntervalList ai = app.intervals();
-    AppointmentInterval i;
-    AppointmentInterval *i1 = m_intervals.first();
-    AppointmentInterval *i2 = ai.first();
+    AppointmentIntervalList lst1 = m_intervals;
+    AppointmentInterval *i1;
+    AppointmentIntervalList lst2 = app.intervals();
+    AppointmentInterval *i2;
+    int index1 = 0, index2 = 0;
     DateTime from;
-    while (i1 || i2) {
-        if (!i1) {
+    while (index1 < lst1.size() || index2 < lst2.size()) {
+        if (index1 >= lst1.size()) {
+            i2 = lst2[index2];
             if (!from.isValid() || from < i2->startTime())
                 from = i2->startTime();
             a.addInterval(from, i2->endTime(), i2->load());
             //kDebug()<<"Interval+ (i2): "<<from.toString()<<" - "<<i2->endTime().toString()<<endl;
             from = i2->endTime();
-            i2 = ai.next();
+            ++index2;
             continue;
         }
-        if (!i2) {
+        if (index2 >= lst2.size()) {
+            i1 = lst1[index1];
             if (!from.isValid() || from < i1->startTime())
                 from = i1->startTime();
             a.addInterval(from, i1->endTime(), i1->load());
             //kDebug()<<"Interval+ (i1): "<<from.toString()<<" - "<<i1->endTime().toString()<<endl;
             from = i1->endTime();
-            i1 = m_intervals.next();
+            ++index1;
             continue;
         }
-        i =  i1->firstInterval(*i2, from);
+        i1 = lst1[index1];
+        i2 = lst2[index2];
+        AppointmentInterval i =  i1->firstInterval(*i2, from);
         if (!i.isValid()) {
             break;
         }
         a.addInterval(i);
         from = i.endTime();
         //kDebug()<<"Interval+ (i): "<<i.startTime().toString()<<" - "<<i.endTime().toString()<<" load="<<i.load()<<endl;
-        if (i1 && a.endTime() >= i1->endTime()) {
-            i1 = m_intervals.next();
+        if (a.endTime() >= i1->endTime()) {
+            ++index1;
         }
-        if (i2 && a.endTime() >= i2->endTime()) {
-            i2 = ai.next();
+        if (a.endTime() >= i2->endTime()) {
+            ++index2;
         }
     }
     return a;
@@ -722,9 +735,10 @@ void Appointment::printDebug(QString indent)
         return;
     kDebug()<<indent<<"  + Appointment to schedule: "<<m_node->name()<<" ("<<m_node->type()<<")"<<" resource: "<<m_resource->resource()->name()<<endl;
     indent += "  ! ";
-    Q3PtrListIterator<AppointmentInterval> it = intervals();
-    for (; it.current(); ++it) {
-        kDebug()<<indent<<it.current()->startTime().toString()<<" - "<<it.current()->endTime().toString()<<" load="<<it.current()->load()<<endl;
+    QListIterator<AppointmentInterval*> it = m_intervals;
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        kDebug()<<indent<<i->startTime()<<" - "<<i->endTime()<<" load="<<i->load()<<endl;
     }
 }
 #endif

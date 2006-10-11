@@ -81,27 +81,26 @@ GroupLVItem::GroupLVItem(Q3ListView *parent, ResourceGroup *group, Task &task)
     if (m_request) {
         m_units = m_request->units();
     }
-    Q3PtrListIterator<Resource> it(group->resources());
-    for (; it.current(); ++it) {
-        //kDebug()<<k_funcinfo<<"resource="<<it.current()->name()<<endl;
+    foreach (Resource *r, group->resources()) {
+        //kDebug()<<k_funcinfo<<"resource="<<r->name()<<endl;
         ResourceRequest *req=0;
         if (m_request) {
-            req = m_request->find(it.current());
+            req = m_request->find(r);
         }
-        m_resources.append(new ResourceTableItem(it.current(), req, (bool)req));
+        m_resources.append(new ResourceTableItem(r, req, (bool)req));
     }
-
-    m_resources.setAutoDelete(true);
 }
 
 GroupLVItem::~GroupLVItem() {
     //kDebug()<<k_funcinfo<<m_group->name()<<endl;
+
+    while (!m_resources.isEmpty())
+        delete m_resources.takeFirst();
 }
 
 void GroupLVItem::update() {
-    Q3PtrListIterator<ResourceTableItem> it(m_resources);
-    for (; it.current(); ++it) {
-        it.current()->update();
+    foreach (ResourceTableItem *i, m_resources) {
+        i->update();
     }
 }
 
@@ -117,9 +116,9 @@ void GroupLVItem::insert(Q3Table *table) {
         table->setItem(0, 1, new Q3ComboTableItem(table,QStringList(i18n("None"))));
     } else {
         table->setNumRows(m_group->numResources());
-        Q3PtrListIterator<ResourceTableItem> it(m_resources);
-        for (int i = 0; it.current(); ++it, ++i) {
-            it.current()->insert(table, i);
+        int i = 0;
+        foreach (ResourceTableItem *r, m_resources) {
+            r->insert(table, i++);
         }
     }
     table->adjustColumn(0);
@@ -128,18 +127,16 @@ void GroupLVItem::insert(Q3Table *table) {
 int GroupLVItem::numRequests() {
     //kDebug()<<k_funcinfo<<endl;
     int value = m_units;
-    Q3PtrListIterator<ResourceTableItem> it(m_resources);
-    for (; it.current(); ++it) {
-        value += it.current()->numRequests();
+    foreach (ResourceTableItem *r, m_resources) {
+        value += r->numRequests();
     }
     return value;
 }
 
 bool GroupLVItem::isNull() const {
     //kDebug()<<k_funcinfo<<endl;
-    Q3PtrListIterator<ResourceTableItem> it(m_resources);
-    for (; it.current(); ++it) {
-        if (it.current()->isChecked())
+    foreach (ResourceTableItem *r, m_resources) {
+        if (r->isChecked())
             return false;
     }
     if (m_units > 0)
@@ -157,10 +154,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool b
     Project *p = dynamic_cast<Project*>(task.projectNode());
     if (p) {
         m_worktime = p->standardWorktime();
-
-        Q3PtrListIterator<ResourceGroup> git(p->resourceGroups());
-        for(int i=0; git.current(); ++git, ++i) {
-            ResourceGroup *grp = git.current();
+        foreach (ResourceGroup *grp, p->resourceGroups()) {
             GroupLVItem *grpitem = new GroupLVItem(groupList, grp, task);
             groupList->insertItem(grpitem);
             //kDebug()<<k_funcinfo<<" Added group: "<<grp->name()<<endl;
@@ -220,21 +214,20 @@ KCommand *RequestResourcesPanel::buildCommand(Part *part) {
     Q3ListViewItem *item = groupList->firstChild();
     for (; item; item = item->nextSibling()) {
         GroupLVItem *grp = static_cast<GroupLVItem*>(item);
-        Q3PtrListIterator<ResourceTableItem> it = grp->resources();
-        for (; it.current(); ++it) {
-            if (it.current()->isChecked() != it.current()->isOrigChecked()) {
+        foreach (ResourceTableItem *r, grp->resources()) {
+            if (r->isChecked() != r->isOrigChecked()) {
                 if (!cmd) cmd = new KMacroCommand("");
-                if (it.current()->isChecked()) {
+                if (r->isChecked()) {
                     if (!grp->m_request) {
                         grp->m_request = new ResourceGroupRequest(grp->m_group, grp->m_units);
                         cmd->addCommand(new AddResourceGroupRequestCmd(part, m_task, grp->m_request));
                     }
-                    cmd->addCommand(new AddResourceRequestCmd(part, grp->m_request, new ResourceRequest(it.current()->resource(), it.current()->units())));
+                    cmd->addCommand(new AddResourceRequestCmd(part, grp->m_request, new ResourceRequest(r->resource(), r->units())));
 
                     continue;
                 }
-                if (grp->m_request && it.current()->request()) {
-                    cmd->addCommand(new RemoveResourceRequestCmd(part, grp->m_request, it.current()->request()));
+                if (grp->m_request && r->request()) {
+                    cmd->addCommand(new RemoveResourceRequestCmd(part, grp->m_request, r->request()));
                     if (grp->isNull()) {
                         cmd->addCommand(new RemoveResourceGroupRequestCmd(part, m_task, grp->m_request));
                     }
@@ -243,7 +236,7 @@ KCommand *RequestResourcesPanel::buildCommand(Part *part) {
                 }
                 continue;
             }
-            if (!it.current()->isChecked()) {
+            if (!r->isChecked()) {
                 continue;
             }
         }

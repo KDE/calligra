@@ -25,7 +25,7 @@
 #include "kptduration.h"
 #include "kptresource.h"
 
-#include <q3ptrlist.h>
+#include <QList>
 
 namespace KPlato
 {
@@ -84,7 +84,7 @@ public:
     /// Save to document
     virtual void save(QDomElement &element) const;
     /// Save appointments for schedule with id
-    virtual void saveAppointments(QDomElement &element, long id) const;
+    virtual void saveAppointments(QDomElement &element, long id);
     /**
      * Returns a list of planned effort and cost for this task
      * for the interval start, end inclusive
@@ -134,7 +134,7 @@ public:
      * This includes adding summarytasks relations to subtasks
      * and lists for start- and endnodes.
      */
-    void initiateCalculationLists(Q3PtrList<Node> &startnodes, Q3PtrList<Node> &endnodes, Q3PtrList<Node> &summarytasks);
+    void initiateCalculationLists(QList<Node*> &startnodes, QList<Node*> &endnodes, QList<Node*> &summarytasks);
     /**
      * Calculates ref m_durationForward from ref earliestStart and
      * returns the resulting end time, 
@@ -186,8 +186,8 @@ public:
     // Proxy relations are relations to/from summarytasks. 
     // These relations are distrubuted to the relevant tasks before calculation.
     void clearProxyRelations();
-    void addParentProxyRelations(Q3PtrList<Relation> &list);
-    void addChildProxyRelations(Q3PtrList<Relation> &list);
+    void addParentProxyRelations(QList<Relation*> &list);
+    void addChildProxyRelations(QList<Relation*> &list);
     void addParentProxyRelation(Node *node, const Relation *rel);
     void addChildProxyRelation(Node *node, const Relation *rel);
     
@@ -276,21 +276,21 @@ public:
     struct Progress &progress() { return m_progress; }
     
 private:
-    DateTime calculateSuccessors(const Q3PtrList<Relation> &list, int use);
-    DateTime calculatePredeccessors(const Q3PtrList<Relation> &list, int use);
-    DateTime scheduleSuccessors(const Q3PtrList<Relation> &list, int use);
-    DateTime schedulePredeccessors(const Q3PtrList<Relation> &list, int use);
+    DateTime calculateSuccessors(const QList<Relation*> &list, int use);
+    DateTime calculatePredeccessors(const QList<Relation*> &list, int use);
+    DateTime scheduleSuccessors(const QList<Relation*> &list, int use);
+    DateTime schedulePredeccessors(const QList<Relation*> &list, int use);
     
     DateTime workStartAfter(const DateTime &dt);
     DateTime workFinishBefore(const DateTime &dt);
 
 private:
-    Q3PtrList<ResourceGroup> m_resource;
+    QList<ResourceGroup*> m_resource;
 
     ResourceRequestCollection *m_requests;
  
-    Q3PtrList<Relation> m_parentProxyRelations;
-    Q3PtrList<Relation> m_childProxyRelations;
+    QList<Relation*> m_parentProxyRelations;
+    QList<Relation*> m_childProxyRelations;
       
     struct Progress m_progress;
     

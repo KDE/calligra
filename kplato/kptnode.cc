@@ -25,7 +25,8 @@
 #include "kptresource.h"
 #include "kptschedule.h"
 
-#include <q3ptrlist.h>
+#include <QList>
+#include <QListIterator>
 #include <qdom.h>
 
 #include <klocale.h>
@@ -65,7 +66,6 @@ Node::Node(Node &node, Node *parent)
     m_startupCost = node.startupCost();
     m_shutdownCost = node.shutdownCost();
     
-    m_schedules.setAutoDelete(node.m_schedules.autoDelete());
 }
 
 Node::~Node() {
@@ -73,11 +73,11 @@ Node::~Node() {
         removeId(); // only remove myself (I may be just a working copy)
     }
     Relation *rel = 0;
-    while ((rel = m_dependParentNodes.getFirst())) {
-        delete rel;
+    while (!m_dependParentNodes.isEmpty()) {
+        delete m_dependParentNodes.takeFirst();
     }
-    while ((rel = m_dependChildNodes.getFirst())) {
-        delete rel;
+    while (!m_dependChildNodes.isEmpty()) {
+        delete m_dependChildNodes.takeFirst();
     }
     if (m_runningAccount)
         m_runningAccount->removeRunning(*this);
@@ -85,11 +85,20 @@ Node::~Node() {
         m_startupAccount->removeStartup(*this);
     if (m_shutdownAccount)
         m_shutdownAccount->removeShutdown(*this);
+
+    while (!m_nodes.isEmpty())
+        delete m_nodes.takeFirst();
+    
+    while (!m_schedules.isEmpty()) {
+        QList<long> k = m_schedules.uniqueKeys();
+        while (!k.isEmpty()) {
+            delete m_schedules[k.takeFirst()];
+        }
+    }
 }
 
 void Node::init() {
     m_currentSchedule = 0;
-    m_nodes.setAutoDelete(true);
     m_name="";
     m_constraint = Node::ASAP;
     m_effort = 0;
@@ -117,29 +126,23 @@ Node *Node::projectNode() {
     return 0;
 }
 
-void Node::delChildNode( Node *node, bool remove) {
-    //kDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
-    if ( m_nodes.findRef(node) != -1 ) {
-        if(remove)
-            m_nodes.remove();
-        else
-            m_nodes.take();
+void Node::takeChildNode( Node *node) {
+    //kDebug()<<k_funcinfo<<"find="<<m_nodes.indexOf(node)<<endl;
+    int i = m_nodes.indexOf(node);
+    if ( i != -1 ) {
+        m_nodes.removeAt(i);
     }
     node->setParent(0);
 }
 
-void Node::delChildNode( int number, bool remove) {
-    Node *n = m_nodes.at(number);
-    //kDebug()<<k_funcinfo<<(n?n->id():"null")<<" : "<<(n?n->name():"")<<endl;
-    if(remove)
-        m_nodes.remove(number);
-    else
-        m_nodes.take(number);
-    
-    if (n) {
-        n->setParent(0);
+void Node::takeChildNode( int number ) {
+    if (number >= 0 && number < m_nodes.size()) {
+        Node *n = m_nodes.takeAt(number);
+        //kDebug()<<k_funcinfo<<(n?n->id():"null")<<" : "<<(n?n->name():"")<<endl;
+        if (n) {
+            n->setParent(0);
+        }
     }
-
 }
 
 void Node::insertChildNode( unsigned int index, Node *node) {
@@ -148,7 +151,7 @@ void Node::insertChildNode( unsigned int index, Node *node) {
 }
 
 void Node::addChildNode( Node *node, Node *after) {
-    int index = m_nodes.findRef(after);
+    int index = m_nodes.indexOf(after);
     if (index == -1) {
         m_nodes.append(node);
         node->setParent(this);
@@ -160,14 +163,12 @@ void Node::addChildNode( Node *node, Node *after) {
 
 int Node::findChildNode( Node* node )
 {
-	return m_nodes.findRef( node );
+	return m_nodes.indexOf( node );
 }
 
 
 const Node* Node::getChildNode(int number) const {
-    // Work around missing const at() method in QPtrList
-    const Q3PtrList<Node> &nodes = m_nodes;
-    return (const_cast<Q3PtrList<Node> &>(nodes)).at(number);
+    return m_nodes.at(number);
 }
 
 Duration *Node::getDelay() {
@@ -198,42 +199,29 @@ void Node::insertDependChildNode( unsigned int index, Node *node, Relation::Type
 }
 
 bool Node::addDependChildNode( Relation *relation) {
-    if(m_dependChildNodes.findRef(relation) != -1)
+    if(m_dependChildNodes.indexOf(relation) != -1)
         return false;
     m_dependChildNodes.append(relation);
     return true;
 }
 
 // These delDepend... methods look suspicious to me, can someone review?
-void Node::delDependChildNode( Node *node, bool remove) {
-    if ( m_nodes.findRef(node) != -1 ) {
-        if(remove)
-            m_dependChildNodes.remove();
-        else
-            m_dependChildNodes.take();
+void Node::takeDependChildNode( Node *node ) {
+    int i = m_nodes.indexOf(node);
+    if ( i != -1 ) {
+        m_dependChildNodes.removeAt(i);
     }
 }
 
-void Node::delDependChildNode( Relation *rel, bool remove) {
-    if ( m_dependChildNodes.findRef(rel) != -1 ) {
-        if(remove)
-            m_dependChildNodes.remove();
-        else
-            m_dependChildNodes.take();
+void Node::takeDependChildNode( Relation *rel ) {
+    int i = m_dependChildNodes.indexOf(rel);
+    if ( i != -1 ) {
+        m_dependChildNodes.removeAt(i);
     }
 }
 
-void Node::delDependChildNode( int number, bool remove) {
-    if(remove)
-        m_dependChildNodes.remove(number);
-    else
-        m_dependChildNodes.take(number);
-}
-
-void Node::takeDependChildNode(Relation *rel) {
-    if (m_dependChildNodes.findRef(rel) != -1) {
-        m_dependChildNodes.take();
-    }
+void Node::takeDependChildNode( int number) {
+    m_dependChildNodes.removeAt(number);
 }
 
 void Node::addDependParentNode( Node *node, Relation::Type p) {
@@ -257,54 +245,41 @@ void Node::insertDependParentNode( unsigned int index, Node *node, Relation::Typ
 }
 
 bool Node::addDependParentNode( Relation *relation) {
-    if(m_dependParentNodes.findRef(relation) != -1)
+    if(m_dependParentNodes.indexOf(relation) != -1)
         return false;
     m_dependParentNodes.append(relation);
     return true;
 }
 
-// These delDepend... methods look suspicious to me, can someone review?
-void Node::delDependParentNode( Node *node, bool remove) {
-    if ( m_nodes.findRef(node) != -1 ) {
-        if(remove)
-            m_dependParentNodes.remove();
-        else
-            m_dependParentNodes.take();
+void Node::takeDependParentNode( Node *node ) {
+    int i = m_nodes.indexOf(node);
+    if ( i != -1 ) {
+        m_dependParentNodes.removeAt(i);
     }
 }
 
-void Node::delDependParentNode( Relation *rel, bool remove) {
-    if ( m_dependParentNodes.findRef(rel) != -1 ) {
-        if(remove)
-            m_dependParentNodes.remove();
-        else
-            m_dependParentNodes.take();
+void Node::takeDependParentNode( Relation *rel ) {
+    int i = m_dependParentNodes.indexOf(rel);
+    if ( i != -1 ) {
+        m_dependParentNodes.removeAt(i);
     }
 }
 
-void Node::delDependParentNode( int number, bool remove) {
-    if(remove)
-        m_dependParentNodes.remove(number);
-    else
-        m_dependParentNodes.take(number);
-}
-
-void Node::takeDependParentNode(Relation *rel) {
-    if (m_dependParentNodes.findRef(rel) != -1) {
-        rel = m_dependParentNodes.take();
-    }      
+void Node::takeDependParentNode( int number ) {
+    if (number < m_dependParentNodes.size())
+        m_dependParentNodes.removeAt(number);
 }
 
 bool Node::isParentOf(Node *node) {
-    if (m_nodes.findRef(node) != -1)
-	    return true;
+    if (m_nodes.indexOf(node) != -1)
+        return true;
 
-	Q3PtrListIterator<Node> nit(childNodeIterator());
-	for ( ; nit.current(); ++nit ) {
-		if (nit.current()->isParentOf(node))
-		    return true;
-	}
-	return false;
+    QListIterator<Node*> nit(childNodeIterator());
+    while (nit.hasNext()) {
+        if (nit.next()->isParentOf(node))
+            return true;
+    }
+    return false;
 }
 
 Relation *Node::findParentRelation(Node *node) {
@@ -364,16 +339,16 @@ Duration Node::duration(const DateTime &time, int use, bool backward) {
 }
 
 void Node::makeAppointments() {
-    Q3PtrListIterator<Node> nit(m_nodes);
-    for ( ; nit.current(); ++nit ) {
-        nit.current()->makeAppointments();
+    QListIterator<Node*> nit(m_nodes);
+    while (nit.hasNext()) {
+        nit.next()->makeAppointments();
     }
 }
 
 void Node::calcResourceOverbooked() {
-    Q3PtrListIterator<Node> nit(m_nodes);
-    for ( ; nit.current(); ++nit ) {
-        nit.current()->calcResourceOverbooked();
+    QListIterator<Node*> nit(m_nodes);
+    while (nit.hasNext()) {
+        nit.next()->calcResourceOverbooked();
     }
 }
 
@@ -382,13 +357,13 @@ QStringList Node::overbookedResources() const {
 }
 
 void Node::saveRelations(QDomElement &element) const {
-    Q3PtrListIterator<Relation> it(m_dependChildNodes);
-    for (; it.current(); ++it) {
-        it.current()->save(element);
+    QListIterator<Relation*> it(m_dependChildNodes);
+    while (it.hasNext()) {
+        it.next()->save(element);
     }
-    Q3PtrListIterator<Node> nodes(m_nodes);
-    for ( ; nodes.current(); ++nodes ) {
-        nodes.current()->saveRelations(element);
+    QListIterator<Node*> nodes(m_nodes);
+    while (nodes.hasNext()) {
+        nodes.next()->saveRelations(element);
     }
 }
 
@@ -437,9 +412,9 @@ void Node::propagateEarliestStart(DateTime &time) {
         return;
     m_currentSchedule->earliestStart = time;
     //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->earliestStart.toString()<<endl;
-    Q3PtrListIterator<Node> it = m_nodes;
-    for (; it.current(); ++it) {
-        it.current()->propagateEarliestStart(time);
+    QListIterator<Node*> it = m_nodes;
+    while (it.hasNext()) {
+        it.next()->propagateEarliestStart(time);
     }
 }
 
@@ -448,9 +423,9 @@ void Node::propagateLatestFinish(DateTime &time) {
         return;
     m_currentSchedule->latestFinish = time;
     //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->latestFinish<<endl;
-    Q3PtrListIterator<Node> it = m_nodes;
-    for (; it.current(); ++it) {
-        it.current()->propagateLatestFinish(time);
+    QListIterator<Node*> it = m_nodes;
+    while (it.hasNext()) {
+        it.next()->propagateLatestFinish(time);
     }
 }
 
@@ -459,9 +434,9 @@ void Node::moveEarliestStart(DateTime &time) {
         return;
     if (m_currentSchedule->earliestStart < time)
         m_currentSchedule->earliestStart = time;
-    Q3PtrListIterator<Node> it = m_nodes;
-    for (; it.current(); ++it) {
-        it.current()->moveEarliestStart(time);
+    QListIterator<Node*> it = m_nodes;
+    while (it.hasNext()) {
+        it.next()->moveEarliestStart(time);
     }
 }
 
@@ -470,25 +445,25 @@ void Node::moveLatestFinish(DateTime &time) {
         return;
     if (m_currentSchedule->latestFinish > time)
         m_currentSchedule->latestFinish = time;
-    Q3PtrListIterator<Node> it = m_nodes;
-    for (; it.current(); ++it) {
-        it.current()->moveLatestFinish(time);
+    QListIterator<Node*> it = m_nodes;
+    while (it.hasNext()) {
+        it.next()->moveLatestFinish(time);
     }
 }
 
 void Node::initiateCalculation(Schedule &sch) {
-    Q3PtrListIterator<Node> it = m_nodes;
-    for (; it.current(); ++it) {
-        it.current()->initiateCalculation(sch);
+    QListIterator<Node*> it = m_nodes;
+    while (it.hasNext()) {
+        it.next()->initiateCalculation(sch);
     }
 }
 
 void Node::resetVisited() {
     m_visitedForward = false;
     m_visitedBackward = false;
-    Q3PtrListIterator<Node> it = m_nodes;
-    for (; it.current(); ++it) {
-        it.current()->resetVisited();
+    QListIterator<Node*> it = m_nodes;
+    while (it.hasNext()) {
+        it.next()->resetVisited();
     }
 }
 
@@ -501,7 +476,7 @@ Node *Node::siblingBefore() {
 
 Node *Node::childBefore(Node *node) {
     //kDebug()<<k_funcinfo<<endl;
-    int index = m_nodes.findRef(node);
+    int index = m_nodes.indexOf(node);
     if (index > 0){
         return m_nodes.at(index-1);
     }
@@ -518,7 +493,7 @@ Node *Node::siblingAfter() {
 Node *Node::childAfter(Node *node)
 {
     //kDebug()<<k_funcinfo<<endl;
-    uint index = m_nodes.findRef(node);
+    uint index = m_nodes.indexOf(node);
     if (index < m_nodes.count()-1) {
         return m_nodes.at(index+1);    }
     return 0;
@@ -532,7 +507,7 @@ bool Node::moveChildUp(Node* node)
     if (!sib)
         return false;
     sib = sib->siblingBefore();
-    delChildNode(node, false);
+    takeChildNode(node);
     if (sib) {
         addChildNode(node, sib);
     } else {
@@ -548,7 +523,7 @@ bool Node::moveChildDown(Node* node)
     Node *sib = node->siblingAfter();
     if (!sib)
         return false;
-    delChildNode(node, false);
+    takeChildNode(node);
     addChildNode(node, sib);
     return true;
 }
@@ -612,14 +587,14 @@ void Node::setEndTime(DateTime endTime) {
 
 void Node::saveAppointments(QDomElement &element, long id) const {
     //kDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
-    Q3PtrListIterator<Node> it(m_nodes);
-    for (; it.current(); ++it ) {
-        it.current()->saveAppointments(element, id);
+    QListIterator<Node*> it(m_nodes);
+    while (it.hasNext()) {
+        it.next()->saveAppointments(element, id);
     }
 }
 
-Q3PtrList<Appointment> Node::appointments() {
-    Q3PtrList<Appointment> lst;
+QList<Appointment*> Node::appointments() {
+    QList<Appointment*> lst;
     if (m_currentSchedule)
         lst = m_currentSchedule->appointments();
     return lst;
@@ -665,7 +640,7 @@ void Node::takeSchedule(const Schedule *schedule) {
 void Node::addSchedule(Schedule *schedule) {
     if (schedule == 0)
         return;
-    m_schedules.replace(schedule->id(), schedule);
+    m_schedules.insert(schedule->id(), schedule);
 }
 
 Schedule *Node::createSchedule(QString name, Schedule::Type type, long id) {
@@ -682,22 +657,22 @@ Schedule *Node::createSchedule(Schedule *parent) {
     return sch;
 }
 
-Schedule *Node::findSchedule(const QString name, const Schedule::Type type) const {
-    Q3IntDictIterator<Schedule> it = m_schedules;
-    for (; it.current(); ++it) {
-        if (!it.current()->isDeleted() && 
-            it.current()->name() == name && it.current()->type() == type)
-            return it.current();
+Schedule *Node::findSchedule(const QString name, const Schedule::Type type) {
+    QHash<long, Schedule*> it;
+    foreach (Schedule *sch, it) {
+        if (!sch->isDeleted() && 
+            sch->name() == name && sch->type() == type)
+            return sch;
     }
     return 0;
 }
 
-Schedule *Node::findSchedule(const Schedule::Type type) const {
+Schedule *Node::findSchedule(const Schedule::Type type) {
     //kDebug()<<k_funcinfo<<m_name<<" find type="<<type<<" nr="<<m_schedules.count()<<endl;
-    Q3IntDictIterator<Schedule> it = m_schedules;
-    for (; it.current(); ++it) {
-        if (!it.current()->isDeleted() && it.current()->type() == type) {
-            return it.current();
+    QHash<long, Schedule*> hash;
+    foreach (Schedule *sch, hash) {
+        if (!sch->isDeleted() && sch->type() == type) {
+            return sch;
         }
     }
     return 0;
@@ -717,9 +692,9 @@ void Node::setParentSchedule(Schedule *sch) {
     if (s) {
         s->setParent(sch);
     }
-    Q3PtrListIterator<Node> it = m_nodes;
-    for (; it.current(); ++it) {
-        it.current()->setParentSchedule(sch);
+    QListIterator<Node*> it = m_nodes;
+    while (it.hasNext()) {
+        it.next()->setParentSchedule(sch);
     }
 }
 
@@ -738,9 +713,9 @@ bool Node::calcCriticalPath(bool fromEnd) {
         m_currentSchedule->inCriticalPath = true;
         return true;
     }
-    Q3PtrListIterator<Relation> pit(m_dependParentNodes);
-    for (; pit.current(); ++pit) {
-        if (pit.current()->parent()->calcCriticalPath(fromEnd)) {
+    QListIterator<Relation*> pit(m_dependParentNodes);
+    while (pit.hasNext()) {
+        if (pit.next()->parent()->calcCriticalPath(fromEnd)) {
             m_currentSchedule->inCriticalPath = true;
         }
     }
@@ -756,17 +731,18 @@ void Node::generateWBS(int count, WBSDefinition &def, QString wbs) {
     m_wbs = wbs + def.code(count, level());
     //kDebug()<<k_funcinfo<<m_name<<" wbs: "<<m_wbs<<endl;
     QString w = wbs + def.wbs(count, level());
-    Q3PtrListIterator<Node> it = m_nodes;
-    for (int i=0; it.current(); ++it) {
-        it.current()->generateWBS(++i, def, w);
+    QListIterator<Node*> it = m_nodes;
+    int i=0;
+    while (it.hasNext()) {
+        it.next()->generateWBS(++i, def, w);
     }
 
 }
 
 void Node::setCurrentSchedule(long id) {
-    Q3PtrListIterator<Node> it = m_nodes;
-    for (; it.current(); ++it) {
-        it.current()->setCurrentSchedule(id);
+    QListIterator<Node*> it = m_nodes;
+    while (it.hasNext()) {
+        it.next()->setCurrentSchedule(id);
     }
     //kDebug()<<k_funcinfo<<m_name<<" id: "<<id<<"="<<m_currentSchedule<<endl;
 }
@@ -953,35 +929,31 @@ void Node::printDebug(bool children, QByteArray indent) {
     } else {
         kDebug()<<indent<<"  Current schedule: None"<<endl;
     }
-    Q3IntDictIterator<Schedule> it = m_schedules;
-    for (; it.current(); ++it) {
-        it.current()->printDebug(indent+"  ");
+    QHash<long, Schedule*> hash;
+    foreach (Schedule *sch, hash) {
+        sch->printDebug(indent+"  ");
     }
     kDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;
     kDebug()<<indent<<"  Level: "<<level()<<endl;
     kDebug()<<indent<<"  No of predecessors: "<<m_dependParentNodes.count()<<endl;
-    Q3PtrListIterator<Relation> pit(m_dependParentNodes);
+    QListIterator<Relation*> pit(m_dependParentNodes);
     //kDebug()<<indent<<"  Dependent parents="<<pit.count()<<endl;
-    if (pit.count() > 0) {
-        for ( ; pit.current(); ++pit ) {
-            pit.current()->printDebug(indent);
-        }
+    while (pit.hasNext()) {
+        pit.next()->printDebug(indent);
     }
     kDebug()<<indent<<"  No of successors: "<<m_dependChildNodes.count()<<endl;
-    Q3PtrListIterator<Relation> cit(m_dependChildNodes);
+    QListIterator<Relation*> cit(m_dependChildNodes);
     //kDebug()<<indent<<"  Dependent children="<<cit.count()<<endl;
-    if (cit.count() > 0) {
-        for ( ; cit.current(); ++cit ) {
-            cit.current()->printDebug(indent);
-        }
+    while (cit.hasNext()) {
+        cit.next()->printDebug(indent);
     }
 
     //kDebug()<<indent<<endl;
     indent += "  ";
     if (children) {
-        Q3PtrListIterator<Node> it(m_nodes);
-        for ( ; it.current(); ++it ) {
-            it.current()->printDebug(true,indent);
+        QListIterator<Node*> it(m_nodes);
+        while (it.hasNext()) {
+            it.next()->printDebug(true,indent);
         }
     }
 

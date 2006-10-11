@@ -26,7 +26,7 @@
 #include <qdom.h>
 #include <q3intdict.h>
 #include <QString>
-#include <q3ptrlist.h>
+#include <QList>
 
 #include <kdebug.h>
 
@@ -78,6 +78,8 @@ public:
     bool isValid() const;
     AppointmentInterval firstInterval(const AppointmentInterval &interval, const DateTime &from) const;
 
+    void inSort(AppointmentInterval *a);
+
 private:
     DateTime m_start;
     DateTime m_end;
@@ -90,27 +92,30 @@ private:
  * The intervals do not overlap, an interval does not start before the
  * previous interval ends.
  */
-class AppointmentIntervalList : public Q3PtrList<AppointmentInterval> {
-protected:
-    int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2) {
-        AppointmentInterval *i1 = static_cast<AppointmentInterval*>(item1);
-        AppointmentInterval *i2 = static_cast<AppointmentInterval*>(item2);
-        if (i1->startTime() < i2->startTime()) {
-            return -1;
+class AppointmentIntervalList : public QList<AppointmentInterval*> {
+public:
+    static bool compareItems(AppointmentInterval &i1, AppointmentInterval &i2) {
+        if (i1.startTime() < i2.startTime()) {
+            return true;
         }
-        if (i1->startTime() > i2->startTime()) {
-            return 1;
+        if (i1.startTime() > i2.startTime()) {
+            return false;
         }
-        if (i1->endTime() < i2->endTime()) {
-            return -1;
+        if (i1.endTime() < i2.endTime()) {
+            return true;
         }
-        if (i1->endTime() > i2->endTime()) {
-            return 1;
+        if (i1.endTime() > i2.endTime()) {
+            return false;
         }
-        return 0;
+        return true;
+    }
+    
+    void inSort(AppointmentInterval *a) {
+        append(a);
+        qSort(*this);
     }
 };
-typedef Q3PtrListIterator<AppointmentInterval> AppointmentIntervalListIterator;
+typedef QListIterator<AppointmentInterval*> AppointmentIntervalListIterator;
 
 /**
  * A resource (@ref Resource) can be scheduled to be used at any time, 
@@ -221,8 +226,8 @@ private:
     
     Duration m_repeatInterval;
     int m_repeatCount;
-    Q3PtrList<Duration> m_extraRepeats;
-    Q3PtrList<Duration> m_skipRepeats;
+    QList<Duration*> m_extraRepeats;
+    QList<Duration*> m_skipRepeats;
 
     AppointmentIntervalList m_intervals;
     
@@ -237,10 +242,10 @@ private:
         Duration m_effort;
         bool m_overtime;
     };
-    class UsedEffort : Q3PtrList<UsedEffortItem> {
+    class UsedEffort : QList<UsedEffortItem*> {
     public:
         UsedEffort();
-        ~UsedEffort() {}
+        ~UsedEffort();
         void inSort(QDate date, Duration effort, bool overtime=false);
         Duration usedEffort(bool includeOvertime=true) const;
         Duration usedEffort(const QDate &date, bool includeOvertime=true) const;
@@ -250,9 +255,6 @@ private:
         Duration usedOvertimeTo(const QDate &date) const;
         bool load(QDomElement &element);
         void save(QDomElement &element) const;
-    
-    protected:
-        int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
     };
     
     UsedEffort m_actualEffort;

@@ -33,7 +33,7 @@
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <QSpinBox>
-#include <q3ptrlist.h>
+#include <QList>
 #include <qstringlist.h>
 
 #include <kabc/addressee.h>
@@ -145,13 +145,14 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     int cal = 0;
     dia->calendarList->addItem(i18n("None"));
     m_calendars.insert(0, 0);
-    Q3PtrList<Calendar> list = project.calendars();
-    Q3PtrListIterator<Calendar> cit = list;
-    for(int i=1; cit.current(); ++cit, ++i) {
-        dia->calendarList->insertItem(i, cit.current()->name());
-        m_calendars.insert(i, cit.current());
-        if (cit.current() == resource->calendar())
+    QList<Calendar*> list = project.calendars();
+    int i=1;
+    foreach (Calendar *c, list) {
+        dia->calendarList->insertItem(i, c->name());
+        m_calendars.insert(i, c);
+        if (c == resource->calendar())
             cal = i;
+        ++i;
     }
     dia->calendarList->setCurrentIndex(cal);
 

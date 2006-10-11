@@ -53,7 +53,6 @@ Schedule::Schedule(Schedule *parent)
         m_type = parent->type();
         m_id = parent->id();
     }
-    m_appointments.setAutoDelete(true);
     //kDebug()<<k_funcinfo<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id<<endl;
 }
 
@@ -66,10 +65,11 @@ Schedule::Schedule(QString name, Type type, long id)
       m_parent(0) {
 
     //kDebug()<<k_funcinfo<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id<<endl;
-    m_appointments.setAutoDelete(true);
 }
 
 Schedule::~Schedule() {
+    while (!m_appointments.isEmpty())
+        delete m_appointments.takeFirst();
 }
 
 void Schedule::setParent(Schedule *parent) {
@@ -126,9 +126,9 @@ void Schedule::initiateCalculation() {
 
 void Schedule::calcResourceOverbooked() {
     resourceOverbooked = false;
-    Q3PtrListIterator<Appointment> it = m_appointments;
-    for (; it.current(); ++it) {
-        if (it.current()->resource()->isOverbooked(startTime, endTime)) {
+    QListIterator<Appointment*> it = m_appointments;
+    while (it.hasNext()) {
+        if (it.next()->resource()->isOverbooked(startTime, endTime)) {
             resourceOverbooked = true;
             break;
         }
@@ -137,10 +137,11 @@ void Schedule::calcResourceOverbooked() {
 
 QStringList Schedule::overbookedResources() const {
     QStringList rl;
-    Q3PtrListIterator<Appointment> it = m_appointments;
-    for (; it.current(); ++it) {
-        if (it.current()->resource()->isOverbooked(it.current()->startTime(), it.current()->endTime())) {
-            rl += it.current()->resource()->resource()->name();
+    QListIterator<Appointment*> it = m_appointments;
+    while (it.hasNext()) {
+        Appointment *a = it.next();
+        if (a->resource()->isOverbooked(a->startTime(), a->endTime())) {
+            rl += a->resource()->resource()->name();
         }
     }
     return rl;
@@ -169,14 +170,14 @@ void Schedule::saveCommonXML(QDomElement &element) const {
 
 void Schedule::saveAppointments(QDomElement &element) const {
     //kDebug()<<k_funcinfo<<endl;
-    Q3PtrListIterator<Appointment> it = m_appointments;
-    for (; it.current(); ++it) {
-        it.current()->saveXML(element);
+    QListIterator<Appointment*> it = m_appointments;
+    while (it.hasNext()) {
+        it.next()->saveXML(element);
     }
 }
 
 bool Schedule::add(Appointment *appointment) {
-    if (m_appointments.findRef(appointment) != -1) {
+    if (m_appointments.indexOf(appointment) != -1) {
         kError()<<k_funcinfo<<"Appointment already exists"<<endl;
         return false;
     }
@@ -192,9 +193,9 @@ void Schedule::removeAppointment(Appointment *appointment) {
 }
 
 void Schedule::takeAppointment(Appointment *appointment) {
-    int i = m_appointments.findRef(appointment);
+    int i = m_appointments.indexOf(appointment);
     if (i != -1) {
-        m_appointments.take(i);
+        m_appointments.removeAt(i);
         //kDebug()<<k_funcinfo<<"Taken: "<<appointment<<endl;
         if (appointment->node())
             appointment->node()->takeAppointment(appointment);
@@ -204,10 +205,11 @@ void Schedule::takeAppointment(Appointment *appointment) {
 }
 
 Appointment *Schedule::findAppointment(Schedule *resource, Schedule *node) {
-    Q3PtrListIterator<Appointment> it = m_appointments;
-    for (; it.current(); ++it) {
-        if (it.current()->node() == node && it.current()->resource() == resource)
-            return it.current();
+    QListIterator<Appointment*> it = m_appointments;
+    while (it.hasNext()) {
+        Appointment *a = it.next();
+        if (a->node() == node && a->resource() == resource)
+            return a;
     }
     return 0;
 }
@@ -215,10 +217,10 @@ Appointment *Schedule::findAppointment(Schedule *resource, Schedule *node) {
 EffortCostMap Schedule::plannedEffortCostPrDay(const QDate &start, const QDate &end) const {
     //kDebug()<<k_funcinfo<<m_name<<endl;
     EffortCostMap ec;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
         //kDebug()<<k_funcinfo<<m_name<<endl;
-        ec += it.current()->plannedPrDay(start, end);
+        ec += it.next()->plannedPrDay(start, end);
     }
     return ec;
 }
@@ -226,9 +228,9 @@ EffortCostMap Schedule::plannedEffortCostPrDay(const QDate &start, const QDate &
 Duration Schedule::plannedEffort() const {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        eff += it.current()->plannedEffort();
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
+        eff += it.next()->plannedEffort();
     }
     return eff;
 }
@@ -236,9 +238,9 @@ Duration Schedule::plannedEffort() const {
 Duration Schedule::plannedEffort(const QDate &date) const {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        eff += it.current()->plannedEffort(date);
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
+        eff += it.next()->plannedEffort(date);
     }
     return eff;
 }
@@ -246,9 +248,9 @@ Duration Schedule::plannedEffort(const QDate &date) const {
 Duration Schedule::plannedEffortTo(const QDate &date) const {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        eff += it.current()->plannedEffortTo(date);
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
+        eff += it.next()->plannedEffortTo(date);
     }
     return eff;
 }
@@ -256,9 +258,9 @@ Duration Schedule::plannedEffortTo(const QDate &date) const {
 Duration Schedule::actualEffort() const {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        eff += it.current()->actualEffort();
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
+        eff += it.next()->actualEffort();
     }
     return eff;
 }
@@ -266,9 +268,9 @@ Duration Schedule::actualEffort() const {
 Duration Schedule::actualEffort(const QDate &date) const {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        eff += it.current()->actualEffort(date);
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
+        eff += it.next()->actualEffort(date);
     }
     return eff;
 }
@@ -276,9 +278,9 @@ Duration Schedule::actualEffort(const QDate &date) const {
 Duration Schedule::actualEffortTo(const QDate &date) const {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        eff += it.current()->actualEffortTo(date);
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
+        eff += it.next()->actualEffortTo(date);
     }
     return eff;
 }
@@ -286,9 +288,9 @@ Duration Schedule::actualEffortTo(const QDate &date) const {
 double Schedule::plannedCost() const {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        c += it.current()->plannedCost();
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
+        c += it.next()->plannedCost();
     }
     return c;
 }
@@ -296,9 +298,9 @@ double Schedule::plannedCost() const {
 double Schedule::plannedCost(const QDate &date) const {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        c += it.current()->plannedCost(date);
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
+        c += it.next()->plannedCost(date);
     }
     return c;
 }
@@ -306,9 +308,9 @@ double Schedule::plannedCost(const QDate &date) const {
 double Schedule::plannedCostTo(const QDate &date) const {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        c += it.current()->plannedCostTo(date);
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
+        c += it.next()->plannedCostTo(date);
     }
     return c;
 }
@@ -316,9 +318,9 @@ double Schedule::plannedCostTo(const QDate &date) const {
 double Schedule::actualCost() const {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        c += it.current()->actualCost();
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
+        c += it.next()->actualCost();
     }
     return c;
 }
@@ -326,9 +328,9 @@ double Schedule::actualCost() const {
 double Schedule::actualCost(const QDate &date) const {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        c += it.current()->actualCost(date);
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
+        c += it.next()->actualCost(date);
     }
     return c;
 }
@@ -336,9 +338,9 @@ double Schedule::actualCost(const QDate &date) const {
 double Schedule::actualCostTo(const QDate &date) const {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
-    Q3PtrListIterator<Appointment> it(m_appointments);
-    for (; it.current(); ++it) {
-        c += it.current()->actualCostTo(date);
+    QListIterator<Appointment*> it(m_appointments);
+    while (it.hasNext()) {
+        c += it.next()->actualCostTo(date);
     }
     return c;
 }
@@ -383,10 +385,11 @@ void NodeSchedule::setDeleted(bool on) {
     //kDebug()<<k_funcinfo<<"deleted="<<on<<endl;
     m_deleted = on;
     // set deleted also for possible resource schedules
-    Q3PtrListIterator<Appointment> it = m_appointments;
-    for (; it.current(); ++it) {
-        if (it.current()->resource()) {
-            it.current()->resource()->setDeleted(on);
+    QListIterator<Appointment*> it = m_appointments;
+    while (it.hasNext()) {
+        Appointment *a = it.next();
+        if (a->resource()) {
+            a->resource()->setDeleted(on);
         }
     }
 }
@@ -514,17 +517,18 @@ bool ResourceSchedule::isOverbooked(const DateTime &start, const DateTime &end) 
         return false;
     //kDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
     Appointment a = appointmentIntervals();
-    Q3PtrListIterator<AppointmentInterval> it = a.intervals();
-    for (; it.current(); ++it) {
-        if ((!end.isValid() || it.current()->startTime() < end) &&
-            (!start.isValid() || it.current()->endTime() > start))
+    QListIterator<AppointmentInterval*> it = a.intervals();
+    while (it.hasNext()) {
+        AppointmentInterval *i = it.next();
+        if ((!end.isValid() || i->startTime() < end) &&
+            (!start.isValid() || i->endTime() > start))
         {
-            if (it.current()->load() > m_resource->units()) {
+            if (i->load() > m_resource->units()) {
                 //kDebug()<<k_funcinfo<<m_name<<" overbooked"<<endl;
                 return true;
             }
         }
-        if (it.current()->startTime() >= end)
+        if (i->startTime() >= end)
             break;
     }
     //kDebug()<<k_funcinfo<<m_name<<" not overbooked"<<endl;
@@ -533,9 +537,9 @@ bool ResourceSchedule::isOverbooked(const DateTime &start, const DateTime &end) 
 
 Appointment ResourceSchedule::appointmentIntervals() const {
     Appointment a;
-    Q3PtrListIterator<Appointment> it = m_appointments;
-    for (; it.current(); ++it) {
-        a += *(it.current());
+    QListIterator<Appointment*> it = m_appointments;
+    while (it.hasNext()) {
+        a += *(it.next());
     }
     return a;
 }
@@ -633,9 +637,9 @@ void NodeSchedule::printDebug(QString indent) {
     kDebug()<<indent<<"workEndTime="<<workEndTime.toString()<<endl;
     kDebug()<<indent<<endl;
     kDebug()<<indent<<"Appointments: "<<m_appointments.count()<<endl;
-    Q3PtrListIterator<Appointment> it = m_appointments;
-    for (; it.current(); ++it) {
-        it.current()->printDebug(indent + "  ");
+    QListIterator<Appointment*> it = m_appointments;
+    while (it.hasNext()) {
+        it.next()->printDebug(indent + "  ");
     }
 }
 void ResourceSchedule::printDebug(QString indent) {
@@ -664,9 +668,9 @@ void MainSchedule::printDebug(QString indent) {
 
     kDebug()<<indent<<endl;
     kDebug()<<indent<<"Appointments: "<<m_appointments.count()<<endl;
-    Q3PtrListIterator<Appointment> it = m_appointments;
-    for (; it.current(); ++it) {
-        it.current()->printDebug(indent + "  ");
+    QListIterator<Appointment*> it = m_appointments;
+    while (it.hasNext()) {
+        it.next()->printDebug(indent + "  ");
     }
 }
 #endif

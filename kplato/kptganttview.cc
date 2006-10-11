@@ -416,10 +416,9 @@ KDGanttViewItem *GanttView::correctParent(KDGanttViewItem *item, Node *node)
 void GanttView::updateChildren(Node *parentNode)
 {
     //kDebug()<<k_funcinfo<<endl;
-    Q3PtrListIterator<Node> nit(parentNode->childNodeIterator());
-    for (; nit.current(); ++nit )
+    foreach (Node *n, parentNode->childNodeIterator())
     {
-        updateNode(nit.current());
+        updateNode(n);
     }
 }
 
@@ -446,10 +445,9 @@ void GanttView::updateNode(Node *node)
 void GanttView::modifyChildren(Node *node)
 {
     //kDebug()<<k_funcinfo<<endl;
-    Q3PtrListIterator<Node> nit(node->childNodeIterator());
-    for ( nit.toLast(); nit.current(); --nit ) {
-        modifyNode(nit.current());
-        modifyChildren(nit.current());
+    foreach (Node *n,  node->childNodeIterator()) {
+        modifyNode(n);
+        modifyChildren(n);
     }
 }
 
@@ -562,16 +560,16 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         text = task->name();
     }
     if (m_showResources && !task->notScheduled()) {
-        Q3PtrList<Appointment> lst = task->appointments();
+        QList<Appointment*> lst = task->appointments();
         if (lst.count() > 0) {
             if (!text.isEmpty())
                 text += ' ';
             text += '(';
-            Q3PtrListIterator<Appointment> it = lst;
-            for (bool first=true; it.current(); ++it) {
+            bool first=true;
+            foreach (Appointment *a, lst) {
                 if (!first)
                     text += ", ";
-                text += it.current()->resource()->resource()->name();
+                text += a->resource()->resource()->name();
                 first = false;
             }
             text += ')';
@@ -837,31 +835,29 @@ KDGanttViewItem *GanttView::addMilestone(KDGanttViewItem *parentItem, Task *task
 void GanttView::drawChildren(KDGanttViewItem *parentItem, Node &parentNode)
 {
     //kDebug()<<k_funcinfo<<endl;
-	Q3PtrListIterator<Node> nit(parentNode.childNodeIterator());
-	for ( nit.toLast(); nit.current(); --nit )
-	{
-		Node *n = nit.current();
-		if (n->type() == Node::Type_Project)
-	        drawProject(parentItem, n);
-		else if (n->type() == Node::Type_Subproject)
-		    drawSubProject(parentItem, n);
-		else if (n->type() == Node::Type_Summarytask) {
+    foreach (Node *n, parentNode.childNodeIterator())
+    {
+        if (n->type() == Node::Type_Project)
+            drawProject(parentItem, n);
+        else if (n->type() == Node::Type_Subproject)
+            drawSubProject(parentItem, n);
+        else if (n->type() == Node::Type_Summarytask) {
             Task *t = dynamic_cast<Task *>(n);
             Q_ASSERT(t);
-		    drawSummaryTask(parentItem, t);
-		} else if (n->type() == Node::Type_Task) {
+            drawSummaryTask(parentItem, t);
+        } else if (n->type() == Node::Type_Task) {
             Task *t = dynamic_cast<Task *>(n);
             Q_ASSERT(t);
-		    drawTask(parentItem, t);
+            drawTask(parentItem, t);
         } else if (n->type() == Node::Type_Milestone) {
             Task *t = dynamic_cast<Task *>(n);
             Q_ASSERT(t);
-			drawMilestone(parentItem, t);
+            drawMilestone(parentItem, t);
         }
-		else
-		    kDebug()<<k_funcinfo<<"Node type "<<n->type()<<" not implemented yet"<<endl;
+        else
+            kDebug()<<k_funcinfo<<"Node type "<<n->type()<<" not implemented yet"<<endl;
 
-	}
+    }
 }
 
 

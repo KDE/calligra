@@ -102,7 +102,7 @@ bool Relation::load(QDomElement &element, Project &project) {
         return false;
     }
     if (!m_child->addDependParentNode(this)) {
-        m_parent->delDependChildNode(this, false/*do not delete*/);
+        m_parent->takeDependChildNode(this);
         kError()<<k_funcinfo<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
         return false;
     }

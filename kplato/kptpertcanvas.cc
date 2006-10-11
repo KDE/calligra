@@ -33,8 +33,7 @@
 #include <qcursor.h>
 #include <qrect.h>
 #include <qsize.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QMouseEvent>
 #include <Q3MemArray>
 
@@ -69,29 +68,25 @@ PertCanvas::~PertCanvas()
 void PertCanvas::draw(Project& project)
 {
     //kDebug()<<k_funcinfo<<endl;
-    clear();
+/*    clear();
     updateContents();
 
     // First make node items
-    Q3PtrListIterator<Node> nit(project.childNodeIterator());
-    for ( ; nit.current(); ++nit ) {
-        createChildItems(createNodeItem(nit.current()));
+    foreach (Node *n, project.childNodeIterator()) {
+        createChildItems(createNodeItem(n));
     }
 
     // First all items with relations
-    Q3PtrDictIterator<PertNodeItem> it(m_nodes);
-    for(; it.current(); ++it)
-    {
-        if (!(it.current()->hasParent()) && it.current()->hasChild())
+    foreach (PertNodeItem *n, m_nodes) {
+        if (!(n->hasParent()) && n->hasChild())
         {
             m_rows.append(new Q3MemArray<bool>(1)); // New node always goes into new row, first column
-            it.current()->move(this, m_rows.count()-1, 0); // item also moves it's children
+            n->move(this, m_rows.count()-1, 0); // item also moves it's children
         }
     }
     // now items without relations
-    for(it.toFirst(); it.current(); ++it)
-    {
-        if (!(it.current()->hasParent() || it.current()->hasChild()))
+    foreach (PertNodeItem *n, m_nodes) {
+        if (!(n->hasParent() || n->hasChild()))
         {
             m_rows.append(new Q3MemArray<bool>(1)); // New node always goes into new row, first column
             it.current()->move(this, m_rows.count()-1, 0);
@@ -100,12 +95,12 @@ void PertCanvas::draw(Project& project)
     drawRelations(); // done _after_ all nodes are drawn
     QSize s = canvasSize();
     m_canvas->resize(s.width(), s.height());
-    update();
+    update();*/
 }
 
 PertNodeItem *PertCanvas::createNodeItem(Node *node)
 {
-    PertNodeItem *item = m_nodes.find(node);
+/*    PertNodeItem *item = m_nodes.find(node);
     if (!item)
     {
         if ( node->type() == Node::Type_Project)
@@ -124,50 +119,45 @@ PertNodeItem *PertCanvas::createNodeItem(Node *node)
         if (item)
             m_nodes.insert(node, item);
     }
-    return item;
+    return item;*/
 }
 
 void PertCanvas::createChildItems(PertNodeItem *parentItem)
 {
     //kDebug()<<k_funcinfo<<"parentItem="<<(parentItem ? parentItem->node().name() : "nil")<<endl;
-    if (!parentItem)
+    if (!parentItem) {
         return;
-
-    Q3PtrListIterator<Relation> it(parentItem->node().dependChildNodes());
-    for (; it.current(); ++it)
-    {
-        PertNodeItem *childItem = createNodeItem(it.current()->child());
+    }
+    foreach (Relation *r, parentItem->node().dependChildNodes()) {
+        PertNodeItem *childItem = createNodeItem(r->child());
         if (childItem)
-            parentItem->addChildRelation(it.current(), childItem);
-            m_relations.append(it.current());
+            parentItem->addChildRelation(r, childItem);
+            m_relations.append(r);
     }
 
     // Now my children
-	Q3PtrListIterator<Node> nit(parentItem->node().childNodeIterator());
-    for ( ; nit.current(); ++nit ) {
-        createChildItems(createNodeItem(nit.current()));
-	}
+    foreach (Node *n, parentItem->node().childNodeIterator()) {
+        createChildItems(createNodeItem(n));
+    }
 }
 
 void PertCanvas::drawRelations()
 {
-	//kDebug()<<k_funcinfo<<endl;
-    Q3PtrListIterator<Relation> it(m_relations);
-    for (; it.current(); ++it)
-    {
-        PertNodeItem *parentItem = m_nodes.find(it.current()->parent());
-        PertNodeItem *childItem = m_nodes.find(it.current()->child());
+    //kDebug()<<k_funcinfo<<endl;
+/*    foreach (Relation *r, m_relations) {
+        PertNodeItem *parentItem = m_nodes.find(r->parent());
+        PertNodeItem *childItem = m_nodes.find(r->child());
         if (parentItem && childItem)
         {
-            PertRelationItem *item = new PertRelationItem(this, parentItem, childItem, it.current());
+            PertRelationItem *item = new PertRelationItem(this, parentItem, childItem, r);
             item->show();
         }
-    }
+    }*/
 }
 
 void PertCanvas::mapNode(PertNodeItem *item)
 {
-	//kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (! m_rows.at(item->row()) || (item->column() >= 0 && m_rows.at(item->row())->count() <= uint(item->column())))
     {
         kError()<<k_funcinfo<<item->node().name()<<": non existing map for: ("<<item->row()<<","<<item->column()<<")"<<endl;

@@ -30,10 +30,9 @@
 #include "kptresource.h"
 
 #include <QMap>
-#include <q3ptrlist.h>
-#include <q3dict.h>
+#include <QList>
+#include <QHash>
 
-#include <k3listview.h>
 #include <klocale.h>
 
 namespace KPlato
@@ -90,13 +89,15 @@ public:
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element) const;
 
-    Q3PtrList<ResourceGroup> &resourceGroups();
+    QList<ResourceGroup*> &resourceGroups();
     virtual void addResourceGroup(ResourceGroup *resource);
     virtual void insertResourceGroup(unsigned int index, ResourceGroup *resource);
     void removeResourceGroup(ResourceGroup *resource);
     void removeResourceGroup(int number);
-    ResourceGroup *takeResourceGroup(ResourceGroup *resource)
-        { return m_resourceGroups.take(m_resourceGroups.findRef(resource)); }
+    ResourceGroup *takeResourceGroup(ResourceGroup *resource) {
+        int i = m_resourceGroups.indexOf(resource);
+        return i != -1 ? m_resourceGroups.takeAt(i) : 0; 
+    }
 
     bool addTask( Node* task, Node* position );
     bool addSubTask( Node* task, Node* position );
@@ -152,7 +153,7 @@ public:
     virtual double actualCostTo(const QDate &date);
 
     Calendar *defaultCalendar() { return m_standardWorktime->calendar(); }
-    Q3PtrList<Calendar> calendars();
+    QList<Calendar*> calendars();
     void addCalendar(Calendar *calendar);
     /// Returns the calendar with identity id.
     Calendar *calendar(const QString id) const;
@@ -170,45 +171,64 @@ public:
     /// Check if node par can be linked to node child.
     bool legalToLink(Node *par, Node *child);
     
-    virtual const Q3Dict<Node> &nodeDict() { return nodeIdDict; }
+    virtual const QHash<QString, Node*> &nodeDict() { return nodeIdDict; }
     
     /// Find the node with identity id
-    virtual Node *findNode(const QString &id) const 
-        { return (m_parent ? m_parent->findNode(id) : nodeIdDict.find(id)); }
+    virtual Node *findNode(const QString &id) {
+        if (m_parent == 0) { 
+            if (nodeIdDict.contains(id)) 
+                return nodeIdDict[id];
+            return 0;
+        }
+        return m_parent->findNode(id); 
+    }
     /// Remove the node with identity id from the register
     virtual bool removeId(const QString &id);
     /// Insert the node with identity id
-    virtual void insertId(const QString &id, const Node *node);
+    virtual void insertId(const QString &id, Node *node);
     /// Register node. The nodes id must be unique and non-empty.
     bool registerNodeId(Node *node);
     /// Create a unique id.
     QString uniqueNodeId(int seed=1);
     
-    ResourceGroup *findResourceGroup(const QString &id) const 
-        { return resourceGroupIdDict.find(id); }
+    ResourceGroup *findResourceGroup(const QString &id) const {
+        if (resourceGroupIdDict.contains(id))
+            return resourceGroupIdDict[id];
+        return 0;
+    }
     /// Remove the resourcegroup with identity id from the register
-    bool removeResourceGroupId(const QString &id) 
-        { return resourceGroupIdDict.remove(id); }
+    bool removeResourceGroupId(const QString &id) {
+        if (resourceGroupIdDict.contains(id))
+            return resourceGroupIdDict.remove(id);
+        return false;
+    }
     /// Insert the resourcegroup with identity id
-    void insertResourceGroupId(const QString &id, const ResourceGroup* group) 
-        { resourceGroupIdDict.insert(id, group); }
+    void insertResourceGroupId(const QString &id, ResourceGroup* group) { 
+            resourceGroupIdDict.insert(id, group);
+    }
     
-    Resource *findResource(const QString &id) const 
-        { return resourceIdDict.find(id); }
+    Resource *findResource(const QString &id) const {
+        if (resourceIdDict.contains(id))
+            return resourceIdDict[id];
+        return 0;
+    }
     /// Remove the resource with identity id from the register
     bool removeResourceId(const QString &id) 
         { return resourceIdDict.remove(id); }
     /// Insert the resource with identity id
-    void insertResourceId(const QString &id, const Resource *resource) 
+    void insertResourceId(const QString &id, Resource *resource) 
         { resourceIdDict.insert(id, resource); }
 
     /// Find the calendar with identity id
-    virtual Calendar *findCalendar(const QString &id) const 
-        { return id.isEmpty() ? 0 : calendarIdDict.find(id); }
+    virtual Calendar *findCalendar(const QString &id) const {
+        if (id.isEmpty() || !calendarIdDict.contains(id))
+            return 0;
+        return calendarIdDict[id];
+    }
     /// Remove the calendar with identity id from the register
     virtual bool removeCalendarId(const QString &id);
     /// Insert the calendar with identity id
-    virtual void insertCalendarId(const QString &id, const Calendar *calendar);
+    virtual void insertCalendarId(const QString &id, Calendar *calendar);
     
     /**
      * Setting a project to be baselined means the project data can not be edited anymore.
@@ -233,9 +253,9 @@ public:
     
 protected:
     Accounts m_accounts;
-    Q3PtrList<ResourceGroup> m_resourceGroups;
+    QList<ResourceGroup*> m_resourceGroups;
 
-    Q3PtrList<Calendar> m_calendars;
+    QList<Calendar*> m_calendars;
 
     StandardWorktime *m_standardWorktime;
         
@@ -246,7 +266,7 @@ protected:
     void adjustSummarytask();
 
     void initiateCalculation(Schedule &sch);
-    void initiateCalculationLists(Q3PtrList<Node> &startnodes, Q3PtrList<Node> &endnodes, Q3PtrList<Node> &summarytasks);
+    void initiateCalculationLists(QList<Node*> &startnodes, QList<Node*> &endnodes, QList<Node*> &summarytasks);
 
     bool legalParents(Node *par, Node *child);
     bool legalChildren(Node *par, Node *child);
@@ -254,16 +274,16 @@ protected:
 private:
     void init();
     
-    Q3PtrList<Node> m_startNodes;
-    Q3PtrList<Node> m_endNodes;
-    Q3PtrList<Node> m_summarytasks;
+    QList<Node*> m_startNodes;
+    QList<Node*> m_endNodes;
+    QList<Node*> m_summarytasks;
     
     bool m_baselined;
     
-    Q3Dict<ResourceGroup> resourceGroupIdDict;
-    Q3Dict<Resource> resourceIdDict;
-    Q3Dict<Node> nodeIdDict;        
-    Q3Dict<Calendar> calendarIdDict;
+    QHash<QString, ResourceGroup*> resourceGroupIdDict;
+    QHash<QString, Resource*> resourceIdDict;
+    QHash<QString, Node*> nodeIdDict;
+    QHash<QString, Calendar*> calendarIdDict;
     
 #ifndef NDEBUG
 public:

@@ -432,7 +432,7 @@ void ResourceView::draw(Project &project)
     m_appview->clear();
     m_selectedItem = 0;
 
-    Q3PtrListIterator<ResourceGroup> it(project.resourceGroups());
+/*    Q3PtrListIterator<ResourceGroup> it(project.resourceGroups());
     for (; it.current(); ++it) {
         K3ListViewItem *item = new K3ListViewItem(resList, it.current()->name());
         item->setOpen(true);
@@ -442,14 +442,14 @@ void ResourceView::draw(Project &project)
         resList->setSelected(m_selectedItem, true);
     } else {
         resSelectionChanged(m_selectedItem);
-    }
+    }*/
 }
 
 
 void ResourceView::drawResources(const Project &proj, Q3ListViewItem *parent, ResourceGroup *group)
 {
     //kDebug()<<k_funcinfo<<"group: "<<group->name()<<" ("<<group<<")"<<endl;
-    Q3PtrListIterator<Resource> it(group->resources());
+/*    Q3PtrListIterator<Resource> it(group->resources());
     for (; it.current(); ++it) {
         Resource *r = it.current();
         ResourceItemPrivate *item = new ResourceItemPrivate(r, parent);
@@ -502,7 +502,7 @@ void ResourceView::drawResources(const Project &proj, Q3ListViewItem *parent, Re
         if (!m_selectedItem) {
             m_selectedItem = item;
         }
-    }
+    }*/
 }
 
 

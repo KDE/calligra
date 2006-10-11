@@ -33,8 +33,7 @@
 #include <qdatetime.h>
 #include <qtabwidget.h>
 #include <q3textbrowser.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 #include <klocale.h>
 
@@ -96,29 +95,27 @@ public:
             }
 
             //kDebug()<<k_funcinfo<<"Check for days deleted: "<<calendar->name()<<endl;
-            Q3PtrListIterator<CalendarDay> oit = original->days();
-            for (; oit.current(); ++oit) {
-                if (calendar->findDay(oit.current()->date()) == 0) {
+            foreach (CalendarDay *day, original->days()) {
+                if (calendar->findDay(day->date()) == 0) {
                     if (macro == 0) macro = new KMacroCommand("");
-                    macro->addCommand(new CalendarRemoveDayCmd(part, original, oit.current()->date()));
+                    macro->addCommand(new CalendarRemoveDayCmd(part, original, day->date()));
                     //kDebug()<<k_funcinfo<<"Removed day"<<endl;
                 }
             }
 
             //kDebug()<<k_funcinfo<<"Check for days added or modified: "<<calendar->name()<<endl;
-            Q3PtrListIterator<CalendarDay> cit = calendar->days();
-            for (; cit.current(); ++cit) {
-                CalendarDay *day = original->findDay(cit.current()->date());
+            foreach (CalendarDay *org, original->days()) {
+                CalendarDay *day = original->findDay(org->date());
                 if (day == 0) {
                     if (macro == 0) macro = new KMacroCommand("");
                     // added
                     //kDebug()<<k_funcinfo<<"Added day"<<endl;
-                    macro->addCommand(new CalendarAddDayCmd(part, original, new CalendarDay(cit.current())));
-                } else if (*day != cit.current()) {
+                    macro->addCommand(new CalendarAddDayCmd(part, original, new CalendarDay(org)));
+                } else if (*day != org) {
                     if (macro == 0) macro = new KMacroCommand("");
                     // modified
                     //kDebug()<<k_funcinfo<<"Modified day"<<endl;
-                    macro->addCommand(new CalendarModifyDayCmd(part, original, new CalendarDay(cit.current())));
+                    macro->addCommand(new CalendarModifyDayCmd(part, original, new CalendarDay(org)));
                 }
             }
             //kDebug()<<k_funcinfo<<"Check for weekdays modified: "<<calendar->name()<<endl;
@@ -175,12 +172,11 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *
     showButtonSeparator( true );
     //kDebug()<<k_funcinfo<<&p<<endl;
     dia = new CalendarListDialogImpl(p, this);
-    Q3PtrList<Calendar> list = p.calendars();
-    Q3PtrListIterator<Calendar> it = list;
-    for (; it.current(); ++it) {
-        Calendar *c = new Calendar(it.current());
+    QList<Calendar*> list = p.calendars();
+    foreach (Calendar *org, list) {
+        Calendar *c = new Calendar(org);
         //c->setProject(&p);
-        new CalendarListViewItem(*dia, dia->calendarList, c, it.current());
+        new CalendarListViewItem(*dia, dia->calendarList, c, org);
     }
     dia->setBaseCalendars();
 
@@ -211,12 +207,11 @@ KCommand *CalendarListDialog::buildCommand(Part *part) {
             }
         }
     }
-    Q3PtrListIterator<CalendarListViewItem> it = dia->deletedItems();
-    for (; it.current(); ++it) {
-        //kDebug()<<k_funcinfo<<"deleted: "<<it.current()->calendar->name()<<endl;
-        if (it.current()->original) {
+    foreach (CalendarListViewItem *item, dia->deletedItems()) {
+        //kDebug()<<k_funcinfo<<"deleted: "<<item->calendar->name()<<endl;
+        if (item->original) {
             if (cmd == 0) cmd = new KMacroCommand("");
-            cmd->addCommand(new CalendarDeleteCmd(part, it.current()->original));
+            cmd->addCommand(new CalendarDeleteCmd(part, item->original));
         }
     }
     if (cmd) {
@@ -240,7 +235,6 @@ CalendarListDialogImpl::CalendarListDialogImpl (Project &p, QWidget *parent)
     calendarList->setSorting(0);
     calendarList->setDefaultRenameAction(Q3ListView::Accept);
 
-    m_deletedItems.setAutoDelete(true);
     calendar->setEnabled(false);
 
     slotSelectionChanged();
@@ -264,6 +258,10 @@ CalendarListDialogImpl::CalendarListDialogImpl (Project &p, QWidget *parent)
     connect(this, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
 }
 
+CalendarListDialogImpl::~CalendarListDialogImpl() {
+    if (!m_deletedItems.isEmpty())
+        delete m_deletedItems.takeFirst();
+}
 void CalendarListDialogImpl::setBaseCalendars() {
     Q3ListViewItemIterator it(calendarList);
     for (;it.current(); ++it) {
@@ -362,7 +360,7 @@ void CalendarListDialogImpl::slotAddClicked() {
 
 }
 
-Q3PtrList<CalendarListViewItem> &CalendarListDialogImpl::deletedItems() {
+QList<CalendarListViewItem*> &CalendarListDialogImpl::deletedItems() {
     return m_deletedItems;
 }
 

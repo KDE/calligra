@@ -26,7 +26,7 @@
 #include "kptdatetime.h"
 #include "kptschedule.h"
 
-#include <q3intdict.h>
+#include <QHash>
 #include <qrect.h>
 #include <q3ptrlist.h>
 #include <QString>
@@ -99,15 +99,15 @@ public:
     // 2) cutting 3) building 4) painting.
     Node *getParent() const { return m_parent; }
 	void setParent( Node* newParent ) { m_parent = newParent;}
-    const Q3PtrList<Node> &childNodeIterator() const { return m_nodes; }
+    const QList<Node*> &childNodeIterator() const { return m_nodes; }
     int numChildren() const { return m_nodes.count(); }
     virtual void addChildNode(Node *node, Node *after=0);
     virtual void insertChildNode(unsigned int index, Node *node);
-    void delChildNode(Node *node, bool remove=true);
-    void delChildNode(int number, bool remove=true);
+    void takeChildNode(Node *node );
+    void takeChildNode(int number );
     Node* getChildNode(int number) { return m_nodes.at(number); }
     const Node* getChildNode(int number) const;
-	int findChildNode( Node* node );
+        int findChildNode( Node* node );
 
     // Time-dependent child-node-management.
     // list all nodes that are dependent upon this one.
@@ -124,20 +124,18 @@ public:
     virtual bool addDependChildNode( Relation *relation);
     /// Inserts relation to this node at index address index and appends relation to address node
     virtual void insertDependChildNode( unsigned int index, Node *node, Relation::Type p=Relation::FinishStart);
-    void delDependChildNode( Node *node, bool remove=false);
-    void delDependChildNode( Relation *rel, bool remove=false);
-    void delDependChildNode( int number, bool remove=false);
-    Relation *getDependChildNode( int number) {
-	return m_dependChildNodes.at(number);
-    }
-    Q3PtrList<Relation> &dependChildNodes() { return m_dependChildNodes; }
-
+    void takeDependChildNode( Node *node );
     /**
      * Takes the relation rel from this node only.
      * Never deletes even when autoDelete = true.
      */
-    void takeDependChildNode(Relation *rel);
-    
+    void takeDependChildNode( Relation *rel );
+    void takeDependChildNode( int number );
+    Relation *getDependChildNode( int number ) {
+        return m_dependChildNodes.at(number);
+    }
+    QList<Relation*> &dependChildNodes() { return m_dependChildNodes; }
+
     int numDependParentNodes() const { return m_dependParentNodes.count(); }
     /// Adds relation to both this node and node
     virtual void addDependParentNode(Node *node, Relation::Type p=Relation::FinishStart);
@@ -147,21 +145,19 @@ public:
     virtual bool addDependParentNode( Relation *relation);
     /// Inserts relation to this node at index and appends relation to node
     virtual void insertDependParentNode( unsigned int index, Node *node, Relation::Type p=Relation::FinishStart);
-    void delDependParentNode( Node *node, bool remove=false);
-    void delDependParentNode( Relation *rel, bool remove=false);
-    void delDependParentNode( int number, bool remove=false);
-    Relation *getDependParentNode( int number) {
-	return m_dependParentNodes.at(number);
-    }
-    Q3PtrList<Relation> &dependParentNodes() { return m_dependParentNodes; }
-    
+    void takeDependParentNode( Node *node );
     /**
      * Takes the relation rel from this node only.
      * Never deletes even when autoDelete = true.
      */
-    void takeDependParentNode(Relation *rel);
+    void takeDependParentNode( Relation *rel );
+    void takeDependParentNode( int number );
+    Relation *getDependParentNode( int number ) {
+        return m_dependParentNodes.at(number);
+    }
+    QList<Relation*> &dependParentNodes() { return m_dependParentNodes; }
 
-	bool isParentOf(Node *node);
+    bool isParentOf(Node *node);
     bool isDependChildOf(Node *node);
 
     Relation *findParentRelation(Node *node);
@@ -320,7 +316,7 @@ public:
     /// Cost performance index
     double costPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) { return 0.0; }
     
-    virtual void initiateCalculationLists(Q3PtrList<Node> &startnodes, Q3PtrList<Node> &endnodes, Q3PtrList<Node> &summarytasks) = 0;
+    virtual void initiateCalculationLists(QList<Node*> &startnodes, QList<Node*> &endnodes, QList<Node*> &summarytasks) = 0;
     virtual DateTime calculateForward(int /*use*/) = 0;
     virtual DateTime calculateBackward(int /*use*/) = 0;
     virtual DateTime scheduleForward(const DateTime &, int /*use*/) = 0;
@@ -376,15 +372,15 @@ public:
     /// Check if this node has any dependent parent nodes
     virtual bool isStartNode() const;
     virtual void clearProxyRelations() {}
-    virtual void addParentProxyRelations(Q3PtrList<Relation> &) {}
-    virtual void addChildProxyRelations(Q3PtrList<Relation> &) {}
+    virtual void addParentProxyRelations(QList<Relation*> &) {}
+    virtual void addChildProxyRelations(QList<Relation*> &) {}
     virtual void addParentProxyRelation(Node *, const Relation *) {}
     virtual void addChildProxyRelation(Node *, const Relation *) {}
 
     /// Save appointments for schedule with id
     virtual void saveAppointments(QDomElement &element, long id) const;
     ///Return the list of appointments for current schedule.
-    Q3PtrList<Appointment> appointments();
+    QList<Appointment*> appointments();
     /// Return appointment this node have with resource
 //    Appointment *findAppointment(Resource *resource);
     /// Adds appointment to this node only (not to resource)
@@ -407,7 +403,7 @@ public:
     /// Insert myself into the id register
     virtual void insertId(const QString &id) { insertId(id, this); }
     /// Insert node with identity id into the register
-    virtual void insertId(const QString &id, const Node *node)
+    virtual void insertId(const QString &id, Node *node)
         { if (m_parent) m_parent->insertId(id, node); }
     
     /**
@@ -462,13 +458,15 @@ public:
     // NOTE: Cannot use setCurrentSchedule() due to overload/casting problems
     void setCurrentSchedulePtr(Schedule *schedule) { m_currentSchedule = schedule; }
     
-    Q3IntDict<Schedule> &schedules() { return m_schedules; }
+    QHash<long, Schedule*> &schedules() { return m_schedules; }
     /// Find schedule matching name and type. Does not return deleted schedule.
-    Schedule *findSchedule(const QString name, const Schedule::Type type) const;
+    Schedule *findSchedule(const QString name, const Schedule::Type type);
     /// Find schedule matching type.  Does not return deleted schedule.
-    Schedule *findSchedule(const Schedule::Type type) const;
+    Schedule *findSchedule(const Schedule::Type type);
     /// Find schedule matching id.  Also returns deleted schedule.
-    Schedule *findSchedule(long id) const { return m_schedules[id]; }
+    Schedule *findSchedule(long id) { 
+        return m_schedules.contains(id) ? m_schedules[id] : 0; 
+    }
     /// Take, don't delete (as in destruct).
     void takeSchedule(const Schedule *schedule);
     /// Add schedule to list, replace if schedule with same id already exists.
@@ -489,9 +487,9 @@ public:
         { return m_currentSchedule ? m_currentSchedule->endTime : DateTime(); }
 
 protected:
-    Q3PtrList<Node> m_nodes;
-    Q3PtrList<Relation> m_dependChildNodes;
-    Q3PtrList<Relation> m_dependParentNodes;
+    QList<Node*> m_nodes;
+    QList<Relation*> m_dependChildNodes;
+    QList<Relation*> m_dependParentNodes;
     Node *m_parent;
 
     QString m_id; // unique id
@@ -524,7 +522,7 @@ protected:
     QDate m_dateOnlyEndDate;
     Duration m_dateOnlyDuration;
  
-    Q3IntDict<Schedule> m_schedules;
+    QHash<long, Schedule*> m_schedules;
     Schedule *m_currentSchedule;
 
     QString m_wbs;

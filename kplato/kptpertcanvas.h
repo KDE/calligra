@@ -26,9 +26,9 @@
 #include <q3canvas.h>
 #include <q3memarray.h>
 #include <q3ptrdict.h>
-//Added by qt3to4:
+#include <QHash>
 #include <QMouseEvent>
-#include <Q3PtrList>
+#include <QList>
 
 class QTimer;
 class QPainter;
@@ -92,8 +92,8 @@ private:
 	int m_horizontalGap;
 	QSize m_itemSize;
 
-    Q3PtrDict<PertNodeItem> m_nodes;
-    Q3PtrList<Relation> m_relations;
+    QHash<PertNodeItem*, Node*> m_nodes;
+    QList<Relation*> m_relations;
 
     Q3PtrList<Q3MemArray<bool> > m_rows;
 

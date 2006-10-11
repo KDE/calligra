@@ -110,15 +110,14 @@ void ResourceAppointmentsView::draw() {
     m_totalItem->setExpandable(true);
     m_totalItem->setOpen(true);
     m_availItem = new ResourceAppointmentsView::NodeItem(i18n("Available"), masterListView());
-    Q3PtrList<Appointment> lst = m_resource->appointments();
+    QList<Appointment*> lst = m_resource->appointments();
     //kDebug()<<k_funcinfo<<lst.count()<<endl;
-    Q3PtrListIterator<Appointment> it(lst);
-    for (; it.current(); ++it) {
+    foreach (Appointment* a, lst) {
         //kDebug()<<k_funcinfo<<endl;
-        Node *n = it.current()->node()->node();
+        Node *n = a->node()->node();
         ResourceAppointmentsView::NodeItem *item = new ResourceAppointmentsView::NodeItem(n, m_totalItem);
         
-        item->effortMap = it.current()->plannedPrDay(m_start, m_end);
+        item->effortMap = a->plannedPrDay(m_start, m_end);
     }
     slotUpdate();
 }

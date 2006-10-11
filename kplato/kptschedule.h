@@ -87,7 +87,7 @@ public:
     void saveAppointments(QDomElement &element) const;
     
     /// Return the list of appointments
-    Q3PtrList<Appointment> &appointments() { return m_appointments; }
+    QList<Appointment*> &appointments() { return m_appointments; }
     /// Adds appointment to this schedule only
     virtual bool add(Appointment *appointment);
     /// Adds appointment to both this resource schedule and node schedule
@@ -168,7 +168,7 @@ protected:
     long m_id;
     bool m_deleted;
 
-    Q3PtrList<Appointment> m_appointments;
+    QList<Appointment*> m_appointments;
     Schedule *m_parent;
     
     friend class Node;

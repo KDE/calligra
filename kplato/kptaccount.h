@@ -82,7 +82,7 @@ public:
     void take(Account *account);
     void insertChildren();
     
-    bool load(QDomElement &element, const Project &project);
+    bool load(QDomElement &element, Project &project);
     void save(QDomElement &element) const;
     
     const Q3PtrList<Account> &accountList() const { return m_accountList; }
@@ -130,7 +130,7 @@ public:
         bool shutdown() const  { return m_shutdown; }
         void setShutdown(bool on);
     
-        bool load(QDomElement &element, const Project &project);
+        bool load(QDomElement &element, Project &project);
         void save(QDomElement &element) const;
     
     private:
@@ -191,7 +191,7 @@ public:
     void append(Account *account);
     void take(Account *account);
     
-    bool load(QDomElement &element, const Project &project);
+    bool load(QDomElement &element, Project &project);
     void save(QDomElement &element) const;
 
     QStringList costElements() const;

@@ -700,7 +700,7 @@ void GanttViewSummaryItem::insertRelations(GanttView *view)
 {
     //kDebug()<<k_funcinfo<<endl;
 
-    Q3PtrListIterator<Relation> it(m_node->dependChildNodes());
+/*    Q3PtrListIterator<Relation> it(m_node->dependChildNodes());
     for (; it.current(); ++it)
     {
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
@@ -716,7 +716,7 @@ void GanttViewSummaryItem::insertRelations(GanttView *view)
             link->setTooltipText(t);
             view->addTaskLink(link);
         }
-    }
+    }*/
 }
 
 KDGanttViewItem *GanttViewSummaryItem::find(Node *node)
@@ -781,7 +781,7 @@ void GanttViewTaskItem::insertRelations(GanttView *view)
 {
     //kDebug()<<k_funcinfo<<endl;
 
-    Q3PtrListIterator<Relation> it(m_task->dependChildNodes());
+/*    Q3PtrListIterator<Relation> it(m_task->dependChildNodes());
     for (; it.current(); ++it)
     {
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
@@ -797,7 +797,7 @@ void GanttViewTaskItem::insertRelations(GanttView *view)
             link->setTooltipText(t);
             view->addTaskLink(link);
         }
-    }
+    }*/
 }
 
 KDGanttViewItem *GanttViewTaskItem::find(Node *node)
@@ -863,7 +863,7 @@ void GanttViewEventItem::insertRelations(GanttView *view)
 {
     //kDebug()<<k_funcinfo<<endl;
 
-    Q3PtrListIterator<Relation> it(m_task->dependChildNodes());
+/*    Q3PtrListIterator<Relation> it(m_task->dependChildNodes());
     for (; it.current(); ++it)
     {
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
@@ -879,7 +879,7 @@ void GanttViewEventItem::insertRelations(GanttView *view)
             link->setTooltipText(t);
             view->addTaskLink(link);
         }
-    }
+    }*/
 }
 
 KDGanttViewItem *GanttViewEventItem::find(Node *node)

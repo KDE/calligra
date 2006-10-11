@@ -246,14 +246,10 @@ ResourcesPanel::ResourcesPanel(QWidget *parent, Project *p) : ResourcesPanelBase
     m_groupItems.setAutoDelete(true);
     m_deletedGroupItems.setAutoDelete(true);
     
-    Q3PtrListIterator<ResourceGroup> git(project->resourceGroups());
-    for(; git.current(); ++git) {
-        ResourceGroup *grp = git.current();
+    foreach (ResourceGroup *grp, project->resourceGroups()) {
         GroupItem *groupItem = new GroupItem(grp);
         //kDebug()<<k_funcinfo<<" Added group: "<<groupItem->m_name<<" ("<<groupItem<<")"<<endl;
-        Q3PtrListIterator<Resource> rit(grp->resources());
-        for(; rit.current(); ++rit) {
-            Resource *res = rit.current();
+        foreach (Resource *res, grp->resources()) {
             ResourcesPanelResourceItem *ritem = new ResourcesPanelResourceItem(res);
             groupItem->addResource(ritem);
             //kDebug()<<k_funcinfo<<"      Added resource: "<<ritem->m_name<<" ("<<ritem<<")"<<endl;

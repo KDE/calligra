@@ -27,8 +27,7 @@
 #include <kdialog.h>
 
 #include <QString>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 class KCommand;
 
@@ -43,13 +42,13 @@ class CalendarListDialogImpl : public CalendarListDialogBase {
     Q_OBJECT
 public:
     CalendarListDialogImpl(Project &project, QWidget *parent);
-
+    ~CalendarListDialogImpl();
     void setBaseCalendars();
     
     Calendar *getCalendar() { return calendar->getCalendar(); }
     void setCalendar(Calendar *cal);
 
-    Q3PtrList<CalendarListViewItem> &deletedItems();
+    QList<CalendarListViewItem*> &deletedItems();
 
     void renameStopped(Q3ListViewItem *item);
 
@@ -84,8 +83,8 @@ protected:
     
 private:
     Project &project;
-    Q3PtrList<CalendarListViewItem> m_deletedItems;
-    Q3PtrList<CalendarListViewItem> baseCalendarList;
+    QList<CalendarListViewItem*> m_deletedItems;
+    QList<CalendarListViewItem*> baseCalendarList;
     Q3ListViewItem *m_renameItem;
 };
 

@@ -89,13 +89,14 @@ void TaskAppointmentsView::draw() {
     if (!m_task)
         return;
 
-    Q3PtrList<Appointment> lst = m_task->appointments();
-    Q3PtrListIterator<Appointment> it(lst);
-    for (; it.current(); ++it) {
-        Resource *r = it.current()->resource()->resource();
+    QList<Appointment*> lst = m_task->appointments();
+    QListIterator<Appointment*> it(lst);
+    while (it.hasNext()) {
+        Appointment *a = it.next();
+        Resource *r = a->resource()->resource();
         TaskAppointmentsView::ResourceItem *item = new TaskAppointmentsView::ResourceItem(r, masterListView());
 
-        item->effortMap = it.current()->plannedPrDay(m_task->startTime().date(), m_task->endTime().date());
+        item->effortMap = a->plannedPrDay(m_task->startTime().date(), m_task->endTime().date());
     }
     slotUpdate();
 }

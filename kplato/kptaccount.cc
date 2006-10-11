@@ -105,7 +105,7 @@ void Account::take(Account *account) {
     //kDebug()<<k_funcinfo<<account->name()<<endl;
 }
     
-bool Account::load(QDomElement &element, const Project &project) {
+bool Account::load(QDomElement &element, Project &project) {
     m_name = element.attribute("name");
     m_description = element.attribute("description");
     QDomNodeList list = element.childNodes();
@@ -280,7 +280,7 @@ void Account::CostPlace::setShutdown(bool on ) {
         m_node->setShutdownAccount(on ? m_account : 0);
 }
 
-bool Account::CostPlace::load(QDomElement &element, const Project &project) {
+bool Account::CostPlace::load(QDomElement &element, Project &project) {
     //kDebug()<<k_funcinfo<<endl;
     m_nodeId = element.attribute("node-id");
     if (m_nodeId.isEmpty()) {
@@ -347,9 +347,8 @@ EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, 
         }
     }
     if (&account == m_defaultAccount) {
-        Q3DictIterator<Node> nit = m_project.nodeDict();
-        for (; nit.current(); ++nit) {
-            Node *n = nit.current();
+        QHash<QString, Node*> hash = m_project.nodeDict();
+        foreach (Node *n, hash) {
             if (n->runningAccount() == 0) {
                 ec += n->plannedEffortCostPrDay(start, end);
             }
@@ -391,7 +390,7 @@ void Accounts::take(Account *account){
     //kDebug()<<k_funcinfo<<account->name()<<endl;
 }
     
-bool Accounts::load(QDomElement &element, const Project &project) {
+bool Accounts::load(QDomElement &element, Project &project) {
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
