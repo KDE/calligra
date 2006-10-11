@@ -21,6 +21,7 @@
 #define KPTINTERVALEDIT_H
 
 #include "ui_kptintervaleditbase.h"
+#include "kptcalendar.h"
 
 #include <kdialog.h>
 
@@ -46,8 +47,8 @@ class IntervalEditImpl : public IntervalEditBase {
 public:
     IntervalEditImpl(QWidget *parent);
     
-    Q3PtrList<QPair<QTime, QTime> > intervals() const;
-    void setIntervals(const Q3PtrList<QPair<QTime, QTime> > &intervals) const;
+    QList<TimeInterval*> intervals() const;
+    void setIntervals(const QList<TimeInterval*> &intervals) const;
     
 private slots:
     void slotClearClicked();

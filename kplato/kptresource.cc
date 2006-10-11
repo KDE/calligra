@@ -498,7 +498,7 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
             //node->resourceNotAvailable = true;
             return; // nothing more to do
         }
-        QPair<DateTime, DateTime> i = cal->firstInterval(time, end);
+        DateTimeInterval i = cal->firstInterval(time, end);
         if (!i.second.isValid()) {
             kWarning()<<k_funcinfo<<"Invalid interval: "<<time<<", "<<end<<endl;
             return;

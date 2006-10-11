@@ -560,12 +560,11 @@ void CalendarPanel::setCalendar(Calendar *cal) {
     table->clear();
     if (cal) {
         table->setMarkedWeekdays(cal->weekdaysMap());
-        Q3PtrListIterator<CalendarDay> it = cal->days();
         //kDebug()<<k_funcinfo<<"Days="<<it.count()<<endl;
-        for (; it.current(); ++it) {
-            if (it.current()->state() != Map::None) {
-                table->addMarkedDate(it.current()->date(), it.current()->state());
-            //kDebug()<<k_funcinfo<<"Added day: "<<it.current()->date().toString()<<"="<<it.current()->state()<<endl;
+        foreach (CalendarDay *d, cal->days()) {
+            if (d->state() != Map::None) {
+                table->addMarkedDate(d->date(), d->state());
+            //kDebug()<<k_funcinfo<<"Added day: "<<d->date().toString()<<"="<<d->state()<<endl;
             }
         }
         setEnabled(true);

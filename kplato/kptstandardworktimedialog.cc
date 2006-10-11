@@ -69,7 +69,7 @@ public:
         setText(1, "-");
         day->clearIntervals();
     }
-    void setIntervals(Q3PtrList<QPair<QTime, QTime> > intervals) {
+    void setIntervals(QList<TimeInterval*> intervals) {
         day->setIntervals(intervals);
         setText(1, KGlobal::locale()->formatNumber(day->duration().toDouble(Duration::Unit_h)));
     }

@@ -35,7 +35,8 @@ public:
       m_start(start),
       m_end(end)
     {}
-    QPair<QTime, QTime> interval() { return QPair<QTime, QTime>(m_start, m_end); }
+      
+    TimeInterval interval() { return TimeInterval(m_start, m_end); }
 
 private:
     QTime m_start;

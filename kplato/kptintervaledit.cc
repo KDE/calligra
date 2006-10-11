@@ -77,22 +77,21 @@ void IntervalEditImpl::slotIntervalSelectionChanged(Q3ListViewItem *item) {
     endTime->setTime(ii->interval().second);
 }
 
-Q3PtrList<QPair<QTime, QTime> > IntervalEditImpl::intervals() const {
-    Q3PtrList<QPair<QTime, QTime> > l;
+QList<TimeInterval*> IntervalEditImpl::intervals() const {
+    QList<TimeInterval*> l;
     Q3ListViewItem *i = intervalList->firstChild();
     for (; i; i = i->nextSibling()) {
         IntervalItem *item = dynamic_cast<IntervalItem*>(i);
         if (i)
-            l.append(new QPair<QTime, QTime>(item->interval().first, item->interval().second));
+            l.append(new TimeInterval(item->interval().first, item->interval().second));
     }
     return l;
 }
 
-void IntervalEditImpl::setIntervals(const Q3PtrList<QPair<QTime, QTime> > &intervals) const {
+void IntervalEditImpl::setIntervals(const QList<TimeInterval*> &intervals) const {
     intervalList->clear();
-    Q3PtrListIterator<QPair<QTime, QTime> > it =intervals;
-    for (; it.current(); ++it) {
-        new IntervalItem(intervalList, it.current()->first, it.current()->second);
+    foreach (TimeInterval *i, intervals) {
+        new IntervalItem(intervalList, i->first, i->second);
     }
 }
 

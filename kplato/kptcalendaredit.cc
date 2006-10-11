@@ -205,9 +205,8 @@ void CalendarEdit::slotDateSelected(QDate date) {
     CalendarDay *calDay = m_calendar->findDay(date);
     state->setEnabled(true);
     if (calDay) {
-        Q3PtrListIterator<QPair<QTime, QTime> > it = calDay->workingIntervals();
-        for (; it.current(); ++it) {
-            IntervalItem *item = new IntervalItem(intervalList, it.current()->first, it.current()->second);
+        foreach (TimeInterval *i, calDay->workingIntervals()) {
+            IntervalItem *item = new IntervalItem(intervalList, i->first, i->second);
             intervalList->insertItem(item);
         }
         if (calDay->state() == Map::Working) {
@@ -250,9 +249,8 @@ void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
     state->addItem(i18n("Undefined"));
     state->addItem(i18n("Non-working"));
     state->addItem(i18n("Working"));
-    Q3PtrListIterator<QPair<QTime, QTime> > it = calDay->workingIntervals();
-    for (; it.current(); ++it) {
-        IntervalItem *item = new IntervalItem(intervalList, it.current()->first, it.current()->second);
+    foreach (TimeInterval *i, calDay->workingIntervals()) {
+        IntervalItem *item = new IntervalItem(intervalList, i->first, i->second);
         intervalList->insertItem(item);
     }
     state->setEnabled(true);

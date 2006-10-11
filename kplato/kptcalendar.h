@@ -24,8 +24,8 @@
 #include "kptduration.h"
 
 #include <qdatetime.h>
-#include <qpair.h>
-#include <q3ptrlist.h>
+#include <QPair>
+#include <QList>
 
 class QDomElement;
 class QDateTime;
@@ -39,6 +39,9 @@ namespace KPlato
 class DateTime;
 class Project;
 
+typedef QPair<QTime, QTime> TimeInterval;
+typedef QPair<DateTime, DateTime> DateTimeInterval;
+        
 class CalendarDay {
 
 public:
@@ -51,11 +54,11 @@ public:
     bool load(QDomElement &element);
     void save(QDomElement &element) const;
 
-    const Q3PtrList<QPair<QTime, QTime> > &workingIntervals() const { return m_workingIntervals; }
-    void addInterval(QPair<QTime, QTime> *interval);
-    void addInterval(QPair<QTime, QTime> interval) { addInterval(new QPair<QTime, QTime>(interval)); }
+    const QList<TimeInterval*> &workingIntervals() const { return m_workingIntervals; }
+    void addInterval(TimeInterval *interval);
+    void addInterval(TimeInterval interval) { addInterval(new TimeInterval(interval)); }
     void clearIntervals() { m_workingIntervals.clear(); }
-    void setIntervals(Q3PtrList<QPair<QTime, QTime> > intervals) { 
+    void setIntervals(QList<TimeInterval*> intervals) { 
         m_workingIntervals.clear();
         m_workingIntervals = intervals;
     }
@@ -84,7 +87,7 @@ public:
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    QPair<QTime, QTime> interval(const QTime &start, const QTime &end) const;
+    TimeInterval interval(const QTime &start, const QTime &end) const;
     
     bool hasInterval() const;
 
@@ -101,11 +104,11 @@ public:
 private:
     QDate m_date; //NOTE: inValid if used for weekdays
     int m_state;
-    Q3PtrList<QPair<QTime, QTime> > m_workingIntervals;
+    QList<TimeInterval*> m_workingIntervals;
 
 #ifndef NDEBUG
 public:
-    void printDebug(QByteArray indent="");
+    void printDebug(QString indent="");
 #endif
 };
 
@@ -120,7 +123,7 @@ public:
     void save(QDomElement &element) const;
 
     void addWeekday(CalendarDay *day) { m_weekdays.append(day); }
-    const Q3PtrList<CalendarDay> &weekdays() const { return m_weekdays; }
+    const QList<CalendarDay*> &weekdays() const { return m_weekdays; }
     /**
      * Returns the pointer to CalendarDay for day or 0 if not defined. 
      * day is 0..6.
@@ -141,8 +144,8 @@ public:
     int state(int weekday) const;
     void setState(int weekday, int state);
     
-    const Q3PtrList<QPair<QTime, QTime> > &intervals(int weekday) const;
-    void setIntervals(int weekday, Q3PtrList<QPair<QTime, QTime> >intervals);
+    const QList<TimeInterval*> &intervals(int weekday) const;
+    void setIntervals(int weekday, QList<TimeInterval*>intervals);
     void clearIntervals(int weekday);
     
     bool operator==(const CalendarWeekdays *weekdays) const;
@@ -156,7 +159,7 @@ public:
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    QPair<QTime, QTime> interval(const QDate date, const QTime &start, const QTime &end) const;
+    TimeInterval interval(const QDate date, const QTime &start, const QTime &end) const;
     /**
      * Returns true if at least a part of a 'work interval' exists 
      * on the weekday defined by date for the interval start to end.
@@ -175,12 +178,12 @@ public:
     const CalendarWeekdays &copy(const CalendarWeekdays &weekdays);
 
 private:
-    Q3PtrList<CalendarDay> m_weekdays;
+    QList<CalendarDay*> m_weekdays;
     double m_workHours;
 
 #ifndef NDEBUG
 public:
-    void printDebug(QByteArray indent="");
+    void printDebug(QString indent="");
 #endif
 };
 
@@ -233,10 +236,22 @@ public:
      * If skipUndefined=true the day is NOT returned if it has state None (Undefined).
      */
     CalendarDay *findDay(const QDate &date, bool skipUndefined=false) const;
-    bool addDay(CalendarDay *day) { return m_days.insert(0, day); }
-    bool removeDay(CalendarDay *day) { return m_days.removeRef(day); }
-    CalendarDay *takeDay(CalendarDay *day) { return m_days.take(m_days.find(day)); }
-    const Q3PtrList<CalendarDay> &days() const { return m_days; }
+    void addDay(CalendarDay *day) { m_days.insert(0, day); }
+    void deleteDay(CalendarDay *day) {
+        int i = m_days.indexOf(day);
+        if (i != -1) {
+            m_days.removeAt(i);
+        }
+        delete day;
+    }
+        
+    CalendarDay *takeDay(CalendarDay *day) {
+        int i = m_days.indexOf(day);
+        if (i != -1)
+            m_days.removeAt(i);
+        return day;
+    }
+    const QList<CalendarDay*> &days() const { return m_days; }
     
     /**
      * Returns the state of definition for parents day date in it.
@@ -271,7 +286,7 @@ public:
      * If no 'work interval' exists, returns an interval with invalid DateTime.
      * You can also use @ref hasInterval() to check if a 'work interval' exists.
      */
-    QPair<DateTime, DateTime> firstInterval(const DateTime &start, const DateTime &end) const;
+    DateTimeInterval firstInterval(const DateTime &start, const DateTime &end) const;
     
     /**
      * Returns the first 'work interval' on date for the interval 
@@ -279,7 +294,7 @@ public:
      * If no 'work interval' exists, returns an interval with first==second.
      * You can also use @ref hasInterval() to check if a 'work interval' exists.
      */
-    QPair<QTime, QTime> firstInterval(const QDate &date, const QTime &start, const QTime &end) const;
+    TimeInterval firstInterval(const QDate &date, const QTime &start, const QTime &end) const;
     
     /**
      * Returns true if at least a part of a 'work interval' exists 
@@ -322,12 +337,12 @@ private:
     QString m_id;
     QString m_parentId;
 
-    Q3PtrList<CalendarDay> m_days;
+    QList<CalendarDay*> m_days;
     CalendarWeekdays *m_weekdays;
 
 #ifndef NDEBUG
 public:
-    void printDebug(QByteArray indent="");
+    void printDebug(QString indent="");
 #endif
 };
 
@@ -392,7 +407,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(QByteArray indent="");
+    void printDebug(QString indent="");
 #endif
 };
 

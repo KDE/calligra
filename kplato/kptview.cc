@@ -1339,7 +1339,7 @@ void View::slotPrintTestDebug() {
 //     DateTime wdt1(wdate, t1);
 //     DateTime wdt2(wdate, t2);
 //     CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
-//     day->addInterval(QPair<QTime, QTime>(t1, t2));
+//     day->addInterval(TimeInterval(t1, t2));
 //     if (!t->addDay(day)) {
 //         kDebug()<<"Failed to add day"<<endl;
 //         delete day;
@@ -1400,7 +1400,7 @@ void View::slotPrintTestDebug() {
 //     DateTime wdt1(wdate, t1);
 //     DateTime wdt2(wdate, t2);
 //     CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
-//     day->addInterval(QPair<QTime, QTime>(t1, t2));
+//     day->addInterval(TimeInterval(t1, t2));
 //     if (!p->addDay(day)) {
 //         kDebug()<<"Failed to add day"<<endl;
 //         delete day;
@@ -1462,7 +1462,7 @@ void View::slotPrintTestDebug() {
 //     if (wd2 == 0) {
 //         kDebug()<<"Failed to get weekday"<<endl;
 //     }
-//     wd2->addInterval(QPair<QTime, QTime>(t1, t2));
+//     wd2->addInterval(TimeInterval(t1, t2));
 //     wd2->setState(Map::Working);
 //
 //     Calendar *t = new Calendar("Test 4");
@@ -1473,7 +1473,7 @@ void View::slotPrintTestDebug() {
 //     DateTime wdt1(wdate, t1);
 //     DateTime wdt2(QDate(2006, 1, 4), t2); // Wednesday
 //     CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
-//     day->addInterval(QPair<QTime, QTime>(t1, t2));
+//     day->addInterval(TimeInterval(t1, t2));
 //     if (!p->addDay(day)) {
 //         kDebug()<<"Failed to add day"<<endl;
 //         delete day;
@@ -1516,7 +1516,7 @@ void View::slotPrintTestDebug() {
 //     b = e1==e2;
 //     kDebug()<<"9: Success="<<b<<"      effort "<<e1.toString()<<"="<<e2.toString()<<endl;
 //
-//     QPair<DateTime, DateTime> r = t->firstInterval(before, after);
+//     DateTimeInterval r = t->firstInterval(before, after);
 //     b = r.first == wdt1; // We find the monday jan 2
 //     kDebug()<<"10: Success="<<b<<"      firstInterval("<<before<<"): ="<<r.first<<", "<<r.second<<endl;
 //     r = t->firstInterval(r.second, after);
