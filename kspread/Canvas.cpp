@@ -653,20 +653,34 @@ void Canvas::slotScrollHorz( int _value )
 
   sheet->enableScrollBarUpdates( false );
 
+  // FIXME Stefan: Disabled, because we repaint all cells.
+  //               Unfortunately, it's not possible to shift the current
+  //               content and just repaint the changed area, because the
+  //               painting relies on the document coordinate system. The shift
+  //               is done in view coordinates. The rounding errors on
+  //               conversion introduce visible offsets of the default grid on
+  //               scrolling.
+  //               With the new CellView-only-for-visible-cells approach we
+  //               already know which cells became visible after the scrolling,
+  //               but we still repaint all visible cells. It would improve the
+  //               performance, if we could make use of QPaintEvent::rect()
+  //               after scrolling or window resizing. But we should stay
+  //               in document coordinate system, otherwise zoom operations
+  //               become overpopulated.
+#if 0
   // Relative movement
   int dx = (int) ( d->xOffset - _value );
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
+    dx = -dx;
+  scroll( dx, 0 );
+  hBorderWidget()->scroll( dx, 0 );
+#endif
 
   // New absolute position
   kDebug(36005) << "slotScrollHorz(): XOffset before setting: " << d->xOffset << endl;
   d->xOffset = _value;
   kDebug(36005) << "slotScrollHorz(): XOffset after setting: " << d->xOffset << endl;
 
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
-    dx = -dx;
-
-  scroll( dx, 0 );
-
-  hBorderWidget()->scroll( dx, 0 );
 
   sheet->enableScrollBarUpdates( true );
 
@@ -698,13 +712,29 @@ void Canvas::slotScrollVert( int _value )
 
   sheet->enableScrollBarUpdates( false );
 
+  // FIXME Stefan: Disabled, because we repaint all cells.
+  //               Unfortunately, it's not possible to shift the current
+  //               content and just repaint the changed area, because the
+  //               painting relies on the document coordinate system. The shift
+  //               is done in view coordinates. The rounding errors on
+  //               conversion introduce visible offsets of the default grid on
+  //               scrolling.
+  //               With the new CellView-only-for-visible-cells approach we
+  //               already know which cells became visible after the scrolling,
+  //               but we still repaint all visible cells. It would improve the
+  //               performance, if we could make use of QPaintEvent::rect()
+  //               after scrolling or window resizing. But we should stay
+  //               in document coordinate system, otherwise zoom operations
+  //               become overpopulated.
+#if 0
   // Relative movement
-  int dy = (int) ( d->yOffset - _value );
+  int dy = (int) d->view->doc()->zoomItY( d->yOffset - _value );
+  scroll( 0, dy );
+  vBorderWidget()->scroll( 0, dy );
+#endif
 
   // New absolute position
   d->yOffset = _value;
-  scroll( 0, dy );
-  vBorderWidget()->scroll( 0, dy );
 
   sheet->enableScrollBarUpdates( true );
 
