@@ -163,7 +163,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                 if ( tmp!= listObjectAnimation.end() )
                 {
                     //kDebug()<<" group already exist \n";
-                    tmp.data().append( lstappear );
+                    tmp.value().append( lstappear );
                 }
                 else
                 {
@@ -186,7 +186,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                 if ( tmp!= listObjectAnimation.end() )
                 {
                     //kDebug()<<" group already exist \n";
-                    tmp.data().append( lstappear );
+                    tmp.value().append( lstappear );
                 }
                 else
                 {
@@ -209,17 +209,17 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
         lstMap::Iterator end = listObjectAnimation.end();
         for (; it != end; ++it )
         {
-            if ( it.data().count() == 1 )
+            if ( it.value().count() == 1 )
             {
                 kDebug()<<" add unique element \n";
-                if ( it.data().at( 0 )->appear )
-                    it.data().at( 0 )->obj->saveOasisObjectStyleShowAnimation( animationTmpWriter, it.data().at( 0 )->objIndex );
+                if ( it.value().at( 0 )->appear )
+                    it.value().at( 0 )->obj->saveOasisObjectStyleShowAnimation( animationTmpWriter, it.value().at( 0 )->objIndex );
                 else
-                    it.data().at( 0 )->obj->saveOasisObjectStyleHideAnimation( animationTmpWriter, it.data().at( 0 )->objIndex );
+                    it.value().at( 0 )->obj->saveOasisObjectStyleHideAnimation( animationTmpWriter, it.value().at( 0 )->objIndex );
             }
-            else if ( it.data().count() > 1 )
+            else if ( it.value().count() > 1 )
             {
-                Q3PtrList<listAnimation> list = it.data();
+                Q3PtrList<listAnimation> list = it.value();
                 animationTmpWriter.startElement( "presentation:animation-group" );
                 for ( uint i = 0; i < list.count(); ++i )
                 {

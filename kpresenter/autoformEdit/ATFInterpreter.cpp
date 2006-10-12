@@ -269,7 +269,7 @@ void ATFInterpreter::interpret()
             }
             else if (level.top() == LEVEL_X || level.top() == LEVEL_Y || level.top() == LEVEL_ATTR)
             {
-                switch (((*it).at(0)).latin1())
+                switch (((*it).at(0)).toLatin1())
                 {
                 case VAR_1:
                 {
@@ -308,13 +308,13 @@ void ATFInterpreter::interpret()
                 } break;
                 case VAR_VARIA:
                 {
-                    if ((*it).find('0') != -1) v = false;
+                    if ((*it).indexOf('0') != -1) v = false;
                     else v = true;
                     attrib.isVariable = (*it);
                 } break;
                 case VAR_PW:
                 {
-                    pw = 1; pw = ((*it).at(4)).latin1() - 48;
+                    pw = 1; pw = ((*it).at(4)).toLatin1() - 48;
                     attrib.pwDiv = (*it);
                 } break;
                 case '}':
@@ -370,7 +370,7 @@ Q3PtrList<ATFInterpreter::Sign> ATFInterpreter::getVar(const QString &s)
         if(s.at(i)==' ')
             continue;
         signPtr = new Sign;
-        switch (s.at(i).latin1())
+        switch (s.at(i).toLatin1())
         {
         case VAR_W: signPtr->type = ST_WIDTH; break;
         case VAR_H: signPtr->type = ST_HEIGHT; break;
@@ -435,20 +435,20 @@ Q3PtrList<ATFInterpreter::Sign> ATFInterpreter::getVar(const QString &s)
             signPtr->type = ST_NUMBER;
             if (s.length() - 1 > i)
             {
-                switch (s.at(i+1).latin1())
+                switch (s.at(i+1).toLatin1())
                 {
                 case NUM_0: case NUM_1: case NUM_2: case NUM_3: case NUM_4:
                 case NUM_5: case NUM_6: case NUM_7: case NUM_8: case NUM_9:
                 {
-                    signPtr->num = (s.at(i).latin1() - 48) * 10 + s.at(i+1).latin1() - 48;
+                    signPtr->num = (s.at(i).toLatin1() - 48) * 10 + s.at(i+1).toLatin1() - 48;
                     i++;
                 } break;
                 default:
-                    signPtr->num = s.at(i).latin1() - 48; break;
+                    signPtr->num = s.at(i).toLatin1() - 48; break;
                 }
             }
             else
-                signPtr->num = s.at(i).latin1() - 48;
+                signPtr->num = s.at(i).toLatin1() - 48;
         } break;
         }
         list.append(signPtr);
