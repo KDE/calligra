@@ -15,7 +15,7 @@ supposed to work. At present, it is not a complete description.</p>
 
 <h2>General</h2>
 
-<p>Painting is started by KSpreadCanvas::paintUpdates().  This method
+<p>Painting is started by Canvas::paintEvent().  This method
 calls paintCell() on all visible cells, i.e. it always repaints the
 entire sheet.  This is inefficient, but is OK for most circumstances.
 There is a bug in bugzilla (#xxxx) which points this out.</p>
@@ -78,20 +78,12 @@ variables in a cell:</p>
   <td>The size of the text</td>
 </tr>
 <tr>
-  <td><pre>d->fmAscent</pre></td>
-  <td>Ascent value of the font metrics</td>
-</tr>
-<tr>
   <td><pre>d->extra()->extraXCells<br>d->extra()->extraYCells</pre></td>
   <td>Number of extra cells in X and Y direction</td>
 </tr>
 <tr>
   <td><pre>d->extra()->extraWidth<br>d->extra()->extraHeight</pre></td>
   <td>Extra width/height brought in by the extra cells</td>
-</tr>
-<tr>
-  <td><pre>d->extra()->nbLines</pre></td>
-  <td>Number of lines if multirow</td>
 </tr>
 <tr>
   <td><pre>d->strOutText</pre></td>
@@ -135,8 +127,8 @@ that is demanded can be handled in several different ways:</p>
 <h3>Borders and overflow</h3>
 
 <p>A border that is defined for a cell should never be moved just
-because the content of the cell overflows.  The current version
-(1.4beta1) does that, but it has to be changed.</p>
+because it would be possible, that the content of the cell overflows.
+The current version (2.0 alpha) does that, but it has to be changed.</p>
 
 
 <h3>Other spreadsheets</h3>
@@ -150,7 +142,7 @@ handle overflow into other cells.</p>
   <th>Excel</th>
   <th>Gnumeric</th>
   <th>Oocalc</th>
-  <th>KSpread 1.4<br><i>(Check these!)</i></th>
+  <th>KSpread 2.0 alpha<br><i>(Check these!)</i></th>
   <th>Suggested behaviour</th>
 </tr>
 
@@ -208,16 +200,16 @@ handle overflow into other cells.</p>
   <td>Precision is reduced</td>
   <td>Precision is reduced</td>
   <td>"###" is shown</td>
-  <td>#############<br>(cell is filled)</td>
-  <td>#############<br>(For now)<br>Preciesion is reduced<br>(Long term)</td>
+  <td>if no thousands separator (BUG!):<br>Precision is reduced</td>
+  <td>Precision is reduced</td>
 </tr>
 <tr>
   <td><i>Number format</i></td>
   <td>#############<br>(cell is filled)</td>
   <td>#############<br>(cell is filled)</td>
   <td>"###" is shown</td>
-  <td>#############<br>(cell is filled)</td>
-  <td>#############<br>(cell is filled)</td>
+  <td>if no thousands separator (BUG!):<br>variable precision:<br>precision is reduced<p>otherwise:<br>#############<br>(cell is filled)</td>
+  <td>variable precision:<br>precision is reduced<p>otherwise:<br>#############<br>(cell is filled)</td>
 </tr>
 
 
@@ -228,8 +220,8 @@ handle overflow into other cells.</p>
   <td>??</td> 
   <td>Right border is not drawn<br>Text overflows TtR</td>
   <td>Border stays on cell<br>Text overflows TtR<br>Text covers right border</td>
-  <td>??</td>
-  <td>Border stays on cell<br>Text overflows TtR<br>Text covers right border</td>
+  <td>Border moves TtR<br>Text overflows TtR</td>
+  <td>Border stays on cell<br>Text is cut</td>
 </tr>
 
 <tr>
@@ -238,8 +230,8 @@ handle overflow into other cells.</p>
   <td>??</td>
   <td>Gnumeric 1.2.8 can't merge<br>Test with Gnumeric 1.4</td>
   <td>Border stays on cell<br>Text is cut</td>
-  <td>??</td>
-  <td>Border stays on cell<br>Text is cut(?)</td>
+  <td>Border stays on cell<br>Text is cut</td>
+  <td>Border stays on cell<br>Text is cut<br><b>OK</b></td>
  </tr>
 </table>
 
