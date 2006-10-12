@@ -821,7 +821,10 @@ KarbonView::ungroupSelection()
 	{
 		KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
 		if( container )
+        {
 			cmd->addCommand( new KoUngroupShapesCommand( container, container->iterator() ) );
+            cmd->addCommand( new KoShapeDeleteCommand( m_part, container ) );
+        }
 	}
 	part()->commandHistory()->addCommand( cmd, true );
 }

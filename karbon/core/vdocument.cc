@@ -202,14 +202,29 @@ VDocument::setActiveLayer( KoLayerShape* layer )
 void
 VDocument::add( KoShape* shape )
 {
-	m_activeLayer->addChild( shape );
+    if( ! m_objects.contains( shape ) )
+        m_objects.append( shape );
+
+    if( ! shape->parent() )
+        m_activeLayer->addChild( shape );
+    else
+    {
+        if( shape->parent() && ( m_layers.contains( dynamic_cast<KoLayerShape*>( shape->parent() ) ) || m_objects.contains( shape->parent() ) ) )
+        {
+            shape->parent()->addChild( shape );
+        }
+        else
+            m_activeLayer->addChild( shape );
+    }
 }
 
 void
 VDocument::remove( KoShape* shape )
 {
-	foreach( KoLayerShape *layer, m_layers )
-		layer->removeChild( shape );
+    m_objects.removeAt( m_objects.indexOf( shape ) );
+    // remove the shape from its current parent too
+    if( shape->parent() )
+        shape->parent()->removeChild( shape );
 }
 
 QDomDocument
@@ -354,12 +369,5 @@ VDocument::boundingRect()
 const QList<KoShape*>
 VDocument::shapes() const
 {
-	QList<KoShape*> allShapes;
-
-	foreach( KoLayerShape* layer, m_layers )
-	{
-		foreach( KoShape* shape, layer->iterator() )
-			allShapes.prepend( shape );
-	}
-	return allShapes;
+    return m_objects;
 }

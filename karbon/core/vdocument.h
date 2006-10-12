@@ -216,11 +216,18 @@ public:
 
 	/**
 	 * Returns the list of layers.
+     * The layer list provides a hierarchical view/access of the document data.
+     * All the documents shapes are childs of a shape container, where a layer
+     * resembles a root container which can contain other containers in an
+     * arbitrary nesting depth.
 	 */
 	const VLayerList& layers() const { return m_layers; }
 
 	/**
-	 * Returns the list of shapes.
+	 * Returns the list of all shapes of the document.
+     * This list provides a flat view/access to all the documents shapes.
+     * For an hierarchical view/access one should retrieve the documents
+     * layers with layers().
 	 */
 	const QList<KoShape*> shapes() const;
 
@@ -318,11 +325,9 @@ private:
 	 */
 	double m_height;
 
-
-	/// The layers in this document.
-	VLayerList m_layers;
-	/// The active layer.
-	KoLayerShape* m_activeLayer;
+    QList<KoShape*> m_objects;   ///< The list of all object of the document.
+	VLayerList m_layers;         ///< The layers in this document.
+	KoLayerShape* m_activeLayer; ///< The active layer.
 
 	/// The selection. A list of selected objects.
 	VSelection* m_selection;

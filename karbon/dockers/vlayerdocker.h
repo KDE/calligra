@@ -25,6 +25,8 @@
 class KarbonView;
 class VDocument;
 class KoDocumentSectionView;
+class KarbonCanvas;
+class KoShapeManager;
 class KoShape;
 class KoLayerShape;
 class QAbstractItemModel;
@@ -45,10 +47,12 @@ private slots:
     void deleteItem();
     void raiseItem();
     void lowerItem();
+    void itemClicked( const QModelIndex &index );
 private:
     void extractSelectedLayersAndShapes( QList<KoLayerShape*> &layers, QList<KoShape*> &shapes );
     KarbonView *m_view;
     VDocument *m_document;
+    KarbonCanvas *m_canvas;
     KoDocumentSectionView *m_layerView;
     VDocumentModel *m_model;
 };
@@ -56,7 +60,7 @@ private:
 class VDocumentModel : public KoDocumentSectionModel
 {
 public:
-    VDocumentModel( VDocument *doc );
+    VDocumentModel( VDocument *document, KoShapeManager *shapeManager );
     void update();
     // from QAbstractItemModel
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -66,11 +70,11 @@ public:
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-    virtual bool hasChildren ( const QModelIndex & parent = QModelIndex() ) const;
 private:
     PropertyList properties( KoShape* shape ) const;
     void setProperties( KoShape* shape, const PropertyList &properties );
     VDocument *m_document;
+    KoShapeManager *m_shapeManager;
     KoShape *m_shape;
 };
 

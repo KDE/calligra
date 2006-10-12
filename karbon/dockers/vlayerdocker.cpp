@@ -31,10 +31,12 @@
 #include <kmessagebox.h>
 
 #include <KoDocumentSectionView.h>
+#include <KoShapeManager.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
 #include "vdocument.h"
+#include "vcanvas.h"
 #include "vlayer.h"
 #include "vlayercmd.h"
 
@@ -96,11 +98,15 @@ VLayerDocker::VLayerDocker( KarbonView *view, VDocument *doc )
     layout->activate();
     setLayout(layout);
 
-    m_model = new VDocumentModel( m_document );
-    //m_layerView->setRootIsDecorated( false );
+    m_canvas = qobject_cast<KarbonCanvas*>( m_view->canvas() );
+    m_model = new VDocumentModel( m_document, m_canvas->shapeManager() );
     m_layerView->setItemsExpandable( true );
     m_layerView->setModel( m_model );
     m_layerView->setDisplayMode( KoDocumentSectionView::MinimalMode );
+    m_layerView->setSelectionMode( QAbstractItemView::ExtendedSelection );
+    m_layerView->setSelectionBehavior( QAbstractItemView::SelectRows );
+
+    connect( m_layerView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
 }
 
 VLayerDocker::~VLayerDocker()
@@ -129,6 +135,42 @@ void VLayerDocker::slotButtonClicked( int buttonId )
             deleteItem();
             break;
     }
+}
+
+void VLayerDocker::itemClicked( const QModelIndex &index )
+{
+    kDebug() << "entering VLayerDocker::itemClicked" << endl;
+    Q_ASSERT(index.internalPointer());
+
+    if( ! index.isValid() )
+        return;
+
+    KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
+    if( ! shape )
+        return;
+    if( dynamic_cast<KoLayerShape*>( shape ) )
+        return;
+
+    QList<KoLayerShape*> selectedLayers;
+    QList<KoShape*> selectedShapes;
+
+    // separate selected layers and selected shapes
+    extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
+
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+
+    QRectF oldSelectionRect = selection->boundingRect();
+
+    selection->deselectAll();
+
+    foreach( KoShape* shape, selectedShapes )
+    {
+        if( shape )
+            selection->select( shape );
+    }
+
+    m_canvas->updateCanvas( oldSelectionRect.unite( selection->boundingRect() ) );
+    kDebug() << "leaving VLayerDocker::itemClicked" << endl;
 }
 
 void VLayerDocker::addLayer()
@@ -259,8 +301,9 @@ void VLayerDocker::extractSelectedLayersAndShapes( QList<KoLayerShape*> &layers,
     }
 }
 
-VDocumentModel::VDocumentModel( VDocument *doc )
-: m_document( doc )
+VDocumentModel::VDocumentModel( VDocument *document, KoShapeManager *shapeManager )
+: m_document( document )
+, m_shapeManager( shapeManager )
 {
 }
 
@@ -279,10 +322,10 @@ int VDocumentModel::rowCount( const QModelIndex &parent ) const
     Q_ASSERT(parent.internalPointer());
 
     KoShapeContainer *parentShape = dynamic_cast<KoShapeContainer*>( (KoShape*)parent.internalPointer() );
-    if( parentShape )
-        return parentShape->childCount();
-    else
+    if( ! parentShape )
         return 0;
+
+    return parentShape->childCount();
 }
 
 int VDocumentModel::columnCount( const QModelIndex & ) const
@@ -305,7 +348,10 @@ QModelIndex VDocumentModel::index( int row, int column, const QModelIndex &paren
     Q_ASSERT(parent.internalPointer());
 
     KoShapeContainer *parentShape = dynamic_cast<KoShapeContainer*>( (KoShape*)parent.internalPointer() );
-    if( parentShape && row < parentShape->childCount() )
+    if( ! parentShape )
+        return QModelIndex();
+
+    if( row < parentShape->childCount() )
         return createIndex( row, column, parentShape->iterator().at(row) );
     else
         return QModelIndex();
@@ -336,8 +382,9 @@ QModelIndex VDocumentModel::parent( const QModelIndex &child ) const
     if( parentLayer )
         return createIndex( m_document->layers().count()-1-m_document->layers().indexOf( parentLayer ), 0, parentShape );
 
+    // get the grandparent to determine the row of the parent shape
     KoShapeContainer *grandParentShape = parentShape->parent();
-    if( ! parentShape->parent() )
+    if( ! grandParentShape )
         return QModelIndex();
 
     return createIndex( grandParentShape->iterator().indexOf( parentShape ), 0, parentShape );
@@ -377,6 +424,8 @@ QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
             KoLayerShape *layer = dynamic_cast<KoLayerShape*>( shape );
             if( layer )
                 return (layer == m_document->activeLayer() );
+            else if( m_shapeManager )
+                return m_shapeManager->selection()->isSelected( shape );
             else
                 return false;
         }
@@ -433,7 +482,6 @@ bool VDocumentModel::setData(const QModelIndex &index, const QVariant &value, in
                 KoLayerShape *layer = dynamic_cast<KoLayerShape*>( shape );
                 if( layer )
                     m_document->setActiveLayer( layer );
-                // TODO select shapes here
             }
             break;
         default:
@@ -442,18 +490,6 @@ bool VDocumentModel::setData(const QModelIndex &index, const QVariant &value, in
 
     emit dataChanged( index, index );
     return true;
-}
-
-bool VDocumentModel::hasChildren( const QModelIndex & parent ) const
-{
-    if( ! parent.isValid() )
-        return true;
-
-    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( (KoShape*)parent.internalPointer());
-    if( container && container->childCount() )
-        return true;
-
-    return false;
 }
 
 KoDocumentSectionModel::PropertyList VDocumentModel::properties( KoShape* shape ) const
