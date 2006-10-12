@@ -21,8 +21,8 @@
 #define KPTACCOUNT_H
 
 #include <qdatetime.h>
-#include <q3dict.h>
-#include <q3ptrlist.h>
+#include <QHash>
+#include <QList>
 #include <qstringlist.h>
 
 #include "kpteffortcostmap.h"
@@ -85,14 +85,14 @@ public:
     bool load(QDomElement &element, Project &project);
     void save(QDomElement &element) const;
     
-    const Q3PtrList<Account> &accountList() const { return m_accountList; }
+    const QList<Account*> &accountList() const { return m_accountList; }
     
     Account *findAccount() const { return findAccount(m_name); }
     Account *findAccount(const QString &id) const;
     bool removeId() { return removeId(m_name); }
     bool removeId(const QString &id);
     bool insertId();
-    bool insertId(const Account *account);
+    bool insertId(Account *account);
     
     class CostPlace {
     public:
@@ -142,8 +142,8 @@ public:
         bool m_shutdown;
     };
     
-    void append(const CostPlace *cp) { m_costPlaces.append(cp); }
-    const Q3PtrList<CostPlace> &costPlaces() const {return m_costPlaces; }
+    void append(CostPlace *cp) { m_costPlaces.append(cp); }
+    const QList<CostPlace*> &costPlaces() const {return m_costPlaces; }
     Account::CostPlace *findCostPlace(const Node &node) const;
     CostPlace *findRunning(const Node &node) const;
     void removeRunning(const Node &node);
@@ -154,14 +154,14 @@ public:
     CostPlace *findShutdown(const Node &node) const;
     void removeShutdown(const Node &node);
     void addShutdown(Node &node);
-
+    void deleteCostPlace(CostPlace *cp);
 private:
     QString m_name;
     QString m_description;
     Accounts *m_list;
     Account *m_parent;
-    Q3PtrList<Account> m_accountList;
-    Q3PtrList<CostPlace> m_costPlaces;
+    QList<Account*> m_accountList;
+    QList<CostPlace*> m_costPlaces;
     
 #ifndef NDEBUG
 public:
@@ -169,8 +169,8 @@ public:
 #endif
 };
 
-typedef Q3PtrList<Account> AccountList;
-typedef Q3PtrListIterator<Account> AccountListIterator;
+typedef QList<Account*> AccountList;
+typedef QListIterator<Account*> AccountListIterator;
 
 /**
  *  Accounts administrates all accounts.
@@ -203,7 +203,7 @@ public:
     Account *findStartupAccount(const Node &node) const;
     Account *findShutdownAccount(const Node &node) const;
     Account *findAccount(const QString &id) const;
-    bool insertId(const Account *account);
+    bool insertId(Account *account);
     bool removeId(const QString &id);
     
     void accountDeleted(Account *account) 
@@ -211,7 +211,7 @@ public:
 private:
     Project &m_project;
     AccountList m_accountList;
-    Q3Dict<Account> m_idDict;
+    QHash<QString, Account*> m_idDict;
 
     Account *m_defaultAccount;
 

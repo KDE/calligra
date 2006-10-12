@@ -39,8 +39,6 @@ Account::Account()
       m_accountList(),
       m_costPlaces() {
     
-    m_accountList.setAutoDelete(true);
-    m_costPlaces.setAutoDelete(true);
 }
 
 Account::Account(QString name, QString description)
@@ -51,17 +49,21 @@ Account::Account(QString name, QString description)
       m_accountList(),
       m_costPlaces() {
     
-    m_accountList.setAutoDelete(true);
-    m_costPlaces.setAutoDelete(true);
 }
 
 Account::~Account() {
-    m_accountList.clear();
+    //kDebug()<<k_funcinfo<<m_name<<endl;
     if (findAccount() == this) {
         removeId(); // only remove myself (I may be just a working copy)
     }
     if (m_list)
         m_list->accountDeleted(this);
+
+    while (!m_accountList.isEmpty())
+        delete m_accountList.takeFirst();
+    
+    while (!m_costPlaces.isEmpty())
+        delete m_costPlaces.takeFirst();
 }
     
 
@@ -82,12 +84,11 @@ void Account::append(Account *account){
 }
 
 void Account::insertChildren() {
-    AccountListIterator it = m_accountList;
-    for (; it.current(); ++it) {
-        it.current()->setList(m_list);
-        it.current()->setParent(this);
-        insertId(it.current());
-        it.current()->insertChildren();
+    foreach (Account *a, m_accountList) {
+        a->setList(m_list);
+        a->setParent(this);
+        insertId(a);
+        a->insertChildren();
     }
 }
 
@@ -96,7 +97,9 @@ void Account::take(Account *account) {
         return;
     }
     if (account->parent() == this) {
-        m_accountList.take(m_accountList.findRef(account));
+        int i = m_accountList.indexOf(account);
+        if (i != -1)
+            m_accountList.removeAt(i);
     } else if (account->parent()) {
         account->parent()->take(account);
     } else {
@@ -139,21 +142,18 @@ void Account::save(QDomElement &element) const {
     element.appendChild(me);
     me.setAttribute("name", m_name);
     me.setAttribute("description", m_description);
-    Q3PtrListIterator<Account::CostPlace> cit = m_costPlaces;
-    for (; cit.current(); ++cit) {
-        cit.current()->save(me);
+    foreach (Account::CostPlace *cp, m_costPlaces) {
+        cp->save(me);
     }
-    AccountListIterator it = m_accountList;
-    for (; it.current(); ++it) {
-        it.current()->save(me);
+    foreach (Account *a, m_accountList) {
+        a->save(me);
     }
 }
 
 Account::CostPlace *Account::findCostPlace(const Node &node) const {
-    Q3PtrListIterator<CostPlace> it = m_costPlaces;
-    for (; it.current(); ++it) {
-        if (&node == it.current()->node()) {
-            return it.current();
+    foreach (Account::CostPlace *cp, m_costPlaces) {
+        if (&node == cp->node()) {
+            return cp;
         }
     }
     return 0;    
@@ -169,7 +169,7 @@ void Account::removeRunning(const Node &node) {
     if (cp) {
         cp->setRunning(false);
         if (cp->isEmpty()) {
-            m_costPlaces.removeRef(cp);
+            deleteCostPlace(cp);
         }
     }
 }
@@ -193,7 +193,7 @@ void Account::removeStartup(const Node &node) {
     if (cp) {
         cp->setStartup(false);
         if (cp->isEmpty()) {
-            m_costPlaces.removeRef(cp);
+            deleteCostPlace(cp);
         }
     }
 }
@@ -218,7 +218,7 @@ void Account::removeShutdown(const Node &node) {
     if (cp) {
         cp->setShutdown(false);
         if (cp->isEmpty()) {
-            m_costPlaces.removeRef(cp);
+            deleteCostPlace(cp);
         }
     }
 }
@@ -246,9 +246,18 @@ bool Account::insertId() {
     return insertId(this);
 }
 
-bool Account::insertId(const Account *account) {
+bool Account::insertId(Account *account) {
     return (m_list ? m_list->insertId(account) : false);
 }
+
+void Account::deleteCostPlace(CostPlace *cp) {
+    kDebug()<<k_funcinfo<<endl;
+    int i = m_costPlaces.indexOf(cp);
+    if (i != -1)
+        m_costPlaces.removeAt(i);
+    delete cp;
+}
+
 
 //------------------------------------
 Account::CostPlace::~CostPlace() {
@@ -316,31 +325,33 @@ Accounts::Accounts(Project &project)
       m_idDict(),
       m_defaultAccount(0) {
       
-    m_accountList.setAutoDelete(true);
 }
 
 Accounts::~Accounts() {
-    m_accountList.clear();
+    kDebug()<<k_funcinfo<<endl;
+    while (!m_accountList.isEmpty()) {
+        delete m_accountList.takeFirst();
+    }
+    kDebug()<<k_funcinfo<<"end"<<endl;
 }
 
 EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, const QDate &end) {
     EffortCostMap ec;
-    Q3PtrListIterator<Account::CostPlace> it = account.costPlaces();
-    for (; it.current(); ++it) {
-        Node *n = it.current()->node();
+    foreach (Account::CostPlace *cp, account.costPlaces()) {
+        Node *n = cp->node();
         if (n == 0) {
             continue;
         }
         //kDebug()<<k_funcinfo<<"n="<<n->name()<<endl;
-        if (it.current()->running()) {
+        if (cp->running()) {
             ec += n->plannedEffortCostPrDay(start, end);
         }
-        if (it.current()->startup()) {
+        if (cp->startup()) {
             if (n->startTime().date() >= start &&
                 n->startTime().date() <= end)
                 ec.add(n->startTime().date(), EffortCost(Duration::zeroDuration, n->startupCost()));
         }
-        if (it.current()->shutdown()) {
+        if (cp->shutdown()) {
             if (n->endTime().date() >= start &&
                 n->endTime().date() <= end)
                 ec.add(n->endTime().date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
@@ -386,7 +397,9 @@ void Accounts::take(Account *account){
         account->parent()->take(account);
         return;
     }
-    m_accountList.take(m_accountList.findRef(account));
+    int i = m_accountList.indexOf(account);
+    if (i != -1)
+        m_accountList.removeAt(i);
     //kDebug()<<k_funcinfo<<account->name()<<endl;
 }
     
@@ -422,66 +435,61 @@ void Accounts::save(QDomElement &element) const {
     if (m_defaultAccount) {
         me.setAttribute("default-account", m_defaultAccount->name());
     }
-    AccountListIterator it = m_accountList;
-    for (; it.current(); ++it) {
-        it.current()->save(me);
+    foreach (Account *a, m_accountList) {
+        a->save(me);
     }
 }
 
 QStringList Accounts::costElements() const {
-    Q3DictIterator<Account> it(m_idDict);
+    QList<QString> keylist = m_idDict.uniqueKeys();
     QStringList l;
-    for(; it.current(); ++it) {
-        if (it.current()->isElement())
-            l << it.currentKey();
+    foreach (QString key, keylist) {
+        if (m_idDict[key]->isElement())
+            l << key;
     }
     return l;
 }
     
 
 QStringList Accounts::nameList() const {
-    Q3DictIterator<Account> it(m_idDict);
-    QStringList l;
-    for(; it.current(); ++it) {
-        l << it.currentKey();
-    }
-    return l;
+    return m_idDict.uniqueKeys();
 }
     
 Account *Accounts::findRunningAccount(const Node &node) const {
-    Q3DictIterator<Account> it = m_idDict;
-    for (; it.current(); ++it) {
-        if (it.current()->findRunning(node))
-            return it.current();
+    foreach (Account *a, m_idDict) {
+        if (a->findRunning(node))
+            return a;
     }
     return 0;
 }
 
 Account *Accounts::findStartupAccount(const Node &node) const {
-    Q3DictIterator<Account> it = m_idDict;
-    for (; it.current(); ++it) {
-        if (it.current()->findStartup(node))
-            return it.current();
+    foreach (Account *a, m_idDict) {
+        if (a->findStartup(node))
+            return a;
     }
     return 0;
 }
 
 Account *Accounts::findShutdownAccount(const Node &node) const {
-    Q3DictIterator<Account> it = m_idDict;
-    for (; it.current(); ++it) {
-        if (it.current()->findShutdown(node))
-            return it.current();
+    foreach (Account *a, m_idDict) {
+        if (a->findShutdown(node))
+            return a;
     }
     return 0;
 }
 
 Account *Accounts::findAccount(const QString &id) const {
-    return m_idDict.find(id);
+    QHash<QString, Account*>::ConstIterator ai = m_idDict.find(id);
+    if (ai == m_idDict.constEnd()) {
+        return 0;
+    }
+    return ai.value();
 }
 
-bool Accounts::insertId(const Account *account) {
+bool Accounts::insertId(Account *account) {
     Q_ASSERT(account);
-    Account *a = m_idDict.find(account->name());
+    Account *a = findAccount(account->name());
     if (a == 0) {
         //kDebug()<<k_funcinfo<<"'"<<account->name()<<"' inserted"<<endl;
         m_idDict.insert(account->name(), account);

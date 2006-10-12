@@ -148,11 +148,11 @@ void AccountsView::draw() {
 void AccountsView::initAccList(const AccountList &list) {
     m_dlv->clearLists();
     AccountListIterator it = list;
-    for (it.toLast(); it.current(); --it) {
-        AccountsView::AccountItem *a = new AccountsView::AccountItem(it.current(), m_dlv->masterListView());
+    for (it.toBack(); it.hasPrevious(); it.previous()) {
+        AccountsView::AccountItem *a = new AccountsView::AccountItem(it.peekPrevious(), m_dlv->masterListView());
         a->setOpen(true);
-        a->setExpandable(!it.current()->isElement());
-        initAccSubItems(it.current(), a);
+        a->setExpandable(!it.peekPrevious()->isElement());
+        initAccSubItems(it.peekPrevious(), a);
     }
     createPeriods();
 }
@@ -181,11 +181,11 @@ void AccountsView::initAccSubItems(Account *acc, AccountsView::AccountItem *pare
 
 void AccountsView::initAccList(const AccountList &list, AccountsView::AccountItem *parent) {
     AccountListIterator it = list;
-    for (it.toLast(); it.current(); --it) {
-        AccountsView::AccountItem *a = new AccountsView::AccountItem(it.current(), parent);
+    for (it.toBack(); it.hasPrevious(); it.previous()) {
+        AccountsView::AccountItem *a = new AccountsView::AccountItem(it.peekPrevious(), parent);
         a->setOpen(true);
-        a->setExpandable(!it.current()->isElement());
-        initAccSubItems(it.current(), a);
+        a->setExpandable(!it.peekPrevious()->isElement());
+        initAccSubItems(it.peekPrevious(), a);
     }
 }
 

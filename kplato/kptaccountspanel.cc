@@ -119,31 +119,30 @@ AccountsPanel::AccountsPanel(Accounts &acc, QWidget *p)
 void AccountsPanel::addItems(Q3ListView *lv, Accounts &acc) {
     //kDebug()<<k_funcinfo<<"No of accs: "<<acc.accountList().count()<<endl;
     AccountListIterator it = acc.accountList();
-    for (; it.current(); ++it) {
-        QString n = it.current()->name();
-        QString d = it.current()->description();
+    foreach (Account *a, acc.accountList()) {
+        QString n = a->name();
+        QString d = a->description();
         AccountItem *item = new AccountItem(*this, lv, n, d);
-        item->account = it.current();
-        item->isDefault = (it.current() == acc.defaultAccount());
-        if (it.current()->isElement()) {
+        item->account = a;
+        item->isDefault = (a == acc.defaultAccount());
+        if (a->isElement()) {
             addElement(item);
         }
-        addItems(item, it.current());
+        addItems(item, a);
     }
 }
 
 void AccountsPanel::addItems(Q3ListViewItem *item, Account *acc) {
-    AccountListIterator it = acc->accountList();
-    for (; it.current(); ++it) {
-        QString n = it.current()->name();
-        QString d = it.current()->description();
+    foreach (Account *a, acc->accountList()) {
+        QString n = a->name();
+        QString d = a->description();
         AccountItem *ai = new AccountItem(*this, item, n, d);
-        ai->account = it.current();
-        ai->isDefault = (it.current() == acc->list()->defaultAccount());
-        if (it.current()->isElement()) {
+        ai->account = a;
+        ai->isDefault = (a == acc->list()->defaultAccount());
+        if (a->isElement()) {
             addElement(ai);
         }
-        addItems(ai, it.current());
+        addItems(ai, a);
     }
 }
 
