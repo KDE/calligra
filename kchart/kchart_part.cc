@@ -56,8 +56,8 @@ KChartPart::KChartPart( QWidget *parentWidget,
 			bool singleViewMode )
   : KoChart::Part( parentWidget, parent, singleViewMode ),
     m_params( 0 ),
-    m_parentWidget( parentWidget ),
-    m_rowLabels(), m_colLabels()
+    m_rowLabels(), m_colLabels(),
+    m_parentWidget( parentWidget )
 {
     kDebug(35001) << "Constructor started!" << endl;
 
@@ -1559,7 +1559,7 @@ bool KChartPart::loadData( const QDomDocument& doc,
                 // add the cell to the corresponding place...
                 QVariant t;
                 if ( e.hasAttribute("value") && e.hasAttribute("valType") ) {
-                    QString valueType = e.attribute("valType").lower();
+                    QString valueType = e.attribute("valType").toLower();
                     if ( "string" == valueType ) {
                         t = e.attribute("value");
                     }

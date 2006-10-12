@@ -207,13 +207,13 @@ void KChartBackgroundPixmapConfigPage::loadWallpaperFilesList()
 
       // avoid name collisions
       QString rs = imageCaption;
-      QString lrs = rs.lower();
+      QString lrs = rs.toLower();
       for (int n = 1; papers.find(lrs) != papers.end(); ++n)
       {
          rs = imageCaption + " (" + QString::number(n) + ')';
-         lrs = rs.lower();
+         lrs = rs.toLower();
       }
-      int slash = (*it).findRev('/') + 1;
+      int slash = (*it).lastIndexOf('/') + 1;
       QString directory = (*it).left(slash);
       bool canLoadScaleable = false;
 #ifdef HAVE_LIBART
@@ -240,8 +240,8 @@ void KChartBackgroundPixmapConfigPage::loadWallpaperFilesList()
 
          if (imageCaption.isEmpty())
          {
-            int slash = (*it).findRev('/') + 1;
-            int endDot = (*it).findRev('.');
+            int slash = (*it).lastIndexOf('/') + 1;
+            int endDot = (*it).lastIndexOf('.');
 
             // strip the extension if it exists
             if (endDot != -1 && endDot > slash)
@@ -255,11 +255,11 @@ void KChartBackgroundPixmapConfigPage::loadWallpaperFilesList()
 
          // avoid name collisions
          QString rs = imageCaption;
-         QString lrs = rs.lower();
+         QString lrs = rs.toLower();
          for (int n = 1; papers.find(lrs) != papers.end(); ++n)
          {
             rs = imageCaption + " (" + QString::number(n) + ')';
-            lrs = rs.lower();
+            lrs = rs.toLower();
          }
          papers[lrs] = qMakePair(rs, *it);
       }
@@ -271,8 +271,8 @@ void KChartBackgroundPixmapConfigPage::loadWallpaperFilesList()
         it != papers.end();
         ++it)
    {
-      wallCB->addItem(it.data().first);
-      m_wallpaper[it.data().second] = i;
+      wallCB->addItem(it.value().first);
+      m_wallpaper[it.value().second] = i;
       i++;
    }
 }
@@ -429,8 +429,8 @@ void KChartBackgroundPixmapConfigPage::showSettings( const QString& fileName )
    {
       int i = wallCB->count();
       QString imageCaption;
-      int slash = fileName.findRev('/') + 1;
-      int endDot = fileName.findRev('.');
+      int slash = fileName.lastIndexOf('/') + 1;
+      int endDot = fileName.lastIndexOf('.');
 
       // strip the extension if it exists
       if (endDot != -1 && endDot > slash)
@@ -491,7 +491,7 @@ bool KChartBackgroundPixmapConfigPage::loadWallPaper()
             it != m_wallpaper.end();
             ++it)
         {
-            if (it.data() == i)
+            if (it.value() == i)
             {
                 wallFile = it.key();
                 break;
