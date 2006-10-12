@@ -23,8 +23,6 @@
 #include "kptcontext.h"
 #include "kptdoublelistviewbase.h"
 #include "kpteffortcostmap.h"
-//Added by qt3to4:
-#include <QLabel>
 
 class QComboBox;
 class Q3DateEdit;

@@ -146,13 +146,20 @@ void AccountsPanel::addItems(Q3ListViewItem *item, Account *acc) {
     }
 }
 
-void AccountsPanel::addElement(const Q3ListViewItem *item) {
+void AccountsPanel::addElement(Q3ListViewItem *item) {
     if (item->parent()) {
         removeElement(item->parent());
     }
-    m_elements.replace(item->text(0), item);
+    m_elements.insert(item->text(0), item);
     //kDebug()<<k_funcinfo<<item->text(0)<<endl;
     refreshDefaultAccount();
+}
+
+void AccountsPanel::removeElement(QString key) {
+    QHash<QString, Q3ListViewItem*>::Iterator it = m_elements.find(key);
+    for (it = m_elements.begin(); it != m_elements.end(); ++it) {
+        removeElement(*it);
+    }
 }
 
 void AccountsPanel::removeElement(Q3ListViewItem *item) {
@@ -165,14 +172,16 @@ void AccountsPanel::refreshDefaultAccount() {
     accountsComboBox->clear();
     m_currentIndex = 0;
     accountsComboBox->addItem(i18n("None"));
-    Q3DictIterator<Q3ListViewItem> it(m_elements);
-    for(int i=1; it.current(); ++it, ++i) {
-        accountsComboBox->addItem(it.currentKey());
-        if (static_cast<AccountItem*>(it.current())->isDefault) {
+    QStringList keylist = m_elements.uniqueKeys();
+    int i=1;
+    foreach (QString key, keylist) {
+        accountsComboBox->addItem(key);
+        if (static_cast<AccountItem*>(m_elements[key])->isDefault) {
             m_currentIndex = i;
             accountsComboBox->setCurrentIndex(i);
-            //kDebug()<<k_funcinfo<<"Default="<<it.current()->text(0)<<endl;
+            kDebug()<<k_funcinfo<<"Default="<<key<<endl;
         }
+        ++i;
     }
     //kDebug()<<k_funcinfo<<"size="<<accountsComboBox->count()<<endl;
 }
@@ -305,14 +314,13 @@ void AccountsPanel::slotSubBtn() {
 KCommand *AccountsPanel::buildCommand(Part *part) {
     KMacroCommand *cmd = 0;
     // First remove
-    Q3PtrListIterator<Q3ListViewItem> rit = m_removedItems;
-    for (;rit.current(); ++rit) {
-        AccountItem *item = static_cast<AccountItem*>(rit.current());
+    while (!m_removedItems.isEmpty()) {
+        AccountItem *item = static_cast<AccountItem*>(m_removedItems.takeFirst());
         //kDebug()<<k_funcinfo<<"Removed item"<<endl;
         if (!cmd) cmd = new KMacroCommand(i18n("Modify Accounts"));
         cmd->addCommand(new RemoveAccountCmd(part, part->getProject(), item->account));
+        delete item;
     }
-    m_removedItems.setAutoDelete(true);
     // Then add/modify
     KCommand *c = save(part, part->getProject());
     if (c) {

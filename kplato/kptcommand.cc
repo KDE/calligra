@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <q3intdict.h>
+#include <QHash>
 #include <QMap>
 
 namespace KPlato
@@ -1092,9 +1092,8 @@ RemoveResourceCmd::RemoveResourceCmd(Part *part, ResourceGroup *group, Resource 
     m_mine = false;
     m_requests = m_resource->requests();
     
-    Q3IntDictIterator<Schedule> it = resource->schedules();
-    for (; it.current(); ++it) {
-        addSchScheduled(it.current());
+    foreach (Schedule *s, resource->schedules()) {
+        addSchScheduled(s);
     }
 }
 RemoveResourceCmd::~RemoveResourceCmd() {
@@ -1183,9 +1182,8 @@ ModifyResourceTypeCmd::ModifyResourceTypeCmd(Part *part, Resource *resource, int
       m_newvalue(value) {
     m_oldvalue = resource->type();
     
-    Q3IntDictIterator<Schedule> it = resource->schedules();
-    for (; it.current(); ++it) {
-        addSchScheduled(it.current());
+    foreach (Schedule *s, resource->schedules()) {
+        addSchScheduled(s);
     }
 }
 void ModifyResourceTypeCmd::execute() {
@@ -1204,9 +1202,8 @@ ModifyResourceUnitsCmd::ModifyResourceUnitsCmd(Part *part, Resource *resource, i
       m_newvalue(value) {
     m_oldvalue = resource->units();
     
-    Q3IntDictIterator<Schedule> it = resource->schedules();
-    for (; it.current(); ++it) {
-        addSchScheduled(it.current());
+    foreach (Schedule *s, resource->schedules()) {
+        addSchScheduled(s);
     }
 }
 void ModifyResourceUnitsCmd::execute() {
@@ -1226,19 +1223,18 @@ ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd(Part *part, Resou
       m_newvalue(value) {
     m_oldvalue = resource->availableFrom();
 
-    Q3IntDictIterator<Schedule> it = resource->schedules();
-    if (!it.isEmpty() && resource->project()) {
+    if (resource->project()) {
         QDateTime s;
         QDateTime e;
-        for (; it.current(); ++it) {
-            Schedule *sch = resource->project()->findSchedule(it.current()->id());
+        foreach (Schedule *rs, resource->schedules()) {
+            Schedule *sch = resource->project()->findSchedule(rs->id());
             if (sch) {
                 s = sch->start();
                 e = sch->end();
                 kDebug()<<k_funcinfo<<"old="<<m_oldvalue<<" new="<<value<<" s="<<s<<" e="<<e<<endl;
             }
             if (!s.isValid() || !e.isValid() || ((m_oldvalue > s || value > s) && (m_oldvalue < e || value < e))) {
-                addSchScheduled(it.current());
+                addSchScheduled(rs);
             }
         }
     }
@@ -1260,19 +1256,18 @@ ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd(Part *part, Res
       m_newvalue(value) {
     m_oldvalue = resource->availableUntil();
     
-    Q3IntDictIterator<Schedule> it = resource->schedules();
-    if (!it.isEmpty()) {
+    if (resource->project()) {
         QDateTime s;
         QDateTime e;
-        for (; it.current(); ++it) {
-            Schedule *sch = resource->project()->findSchedule(it.current()->id());
+        foreach (Schedule *rs, resource->schedules()) {
+            Schedule *sch = resource->project()->findSchedule(rs->id());
             if (sch) {
                 s = sch->start();
                 e = sch->end();
                 kDebug()<<k_funcinfo<<"old="<<m_oldvalue<<" new="<<value<<" s="<<s<<" e="<<e<<endl;
             }
             if (!s.isValid() || !e.isValid() || ((m_oldvalue > s || value > s) && (m_oldvalue < e || value < e))) {
-                addSchScheduled(it.current());
+                addSchScheduled(rs);
             }
         }
     }
@@ -1327,9 +1322,8 @@ ModifyResourceCalendarCmd::ModifyResourceCalendarCmd(Part *part, Resource *resou
       m_newvalue(value) {
     m_oldvalue = resource->calendar(true);
     
-    Q3IntDictIterator<Schedule> it = resource->schedules();
-    for (; it.current(); ++it) {
-        addSchScheduled(it.current());
+    foreach (Schedule *s, resource->schedules()) {
+        addSchScheduled(s);
     }
 }
 void ModifyResourceCalendarCmd::execute() {

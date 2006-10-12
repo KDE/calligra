@@ -461,7 +461,8 @@ void Resource::takeSchedule(const Schedule *schedule) {
 void Resource::addSchedule(Schedule *schedule) {
     if (schedule == 0)
         return;
-    m_schedules.replace(schedule->id(), schedule);
+    m_schedules.remove(schedule->id());
+    m_schedules.insert(schedule->id(), schedule);
 }
 
 ResourceSchedule *Resource::createSchedule(QString name, int type, long id) {
@@ -1212,10 +1213,9 @@ void ResourceGroup::printDebug(QString indent)
 void Resource::printDebug(QString indent)
 {
     kDebug()<<indent<<"  + Resource: "<<m_name<<" id="<<m_id/*<<" Overbooked="<<isOverbooked()*/<<endl;
-    Q3IntDictIterator<Schedule> it(m_schedules);
     indent += "      ";
-    for (; it.current(); ++it) {
-        it.current()->printDebug(indent);
+    foreach (Schedule *s, m_schedules) {
+        s->printDebug(indent);
     }
     indent += "  !";
 }

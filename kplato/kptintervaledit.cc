@@ -29,8 +29,7 @@
 #include <qpair.h>
 #include <qdatetime.h>
 #include <q3listview.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 #include <klocale.h>
 #include <kdebug.h>

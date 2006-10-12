@@ -22,8 +22,8 @@
 
 #include "ui_kptaccountspanelbase.h"
 
-#include <q3ptrlist.h>
-#include <q3dict.h>
+#include <QList>
+#include <QHash>
 
 class Q3ListView;
 class Q3ListViewItem;
@@ -86,7 +86,8 @@ protected slots:
 protected:
     void addItems(Q3ListView *lv, Accounts &acc);
     void addItems(Q3ListViewItem *item, Account *acc);
-    void addElement(const Q3ListViewItem *item);
+    void addElement(Q3ListViewItem *item);
+    void removeElement(QString key);
     void removeElement(Q3ListViewItem *item);
     void refreshDefaultAccount();
     KCommand *save(Part *part, Project &project);
@@ -95,9 +96,9 @@ protected:
 private:
     Accounts &m_accounts;
     
-    Q3PtrList<Q3ListViewItem> m_removedItems;
+    QList<Q3ListViewItem*> m_removedItems;
     Account *m_oldDefaultAccount;
-    Q3Dict<Q3ListViewItem> m_elements;
+    QHash<QString, Q3ListViewItem*> m_elements;
     int m_currentIndex;
     QString m_renameText;
     Q3ListViewItem *m_renameItem;

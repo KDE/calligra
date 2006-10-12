@@ -36,8 +36,7 @@
 #include <QLineEdit>
 #include <q3listview.h>
 #include <QPushButton>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
 
 ////////////////////////////   Private classes   //////////////////////////////////
 
@@ -130,8 +129,6 @@ public:
         m_group = group;
         m_name = group->name();
         m_state = state;
-        m_resourceItems.setAutoDelete(true);
-        m_deletedItems.setAutoDelete(true);
         //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     }
     ~GroupItem() {
@@ -139,6 +136,11 @@ public:
         if (m_state & New) {
             delete m_group;
         }
+        while (!m_resourceItems.isEmpty())
+            delete m_resourceItems.takeFirst();
+        
+        while (!m_deletedItems.isEmpty())
+            delete m_deletedItems.takeFirst();
     }
     void setState(State s) { m_state |= s; }
     void setName(const QString &newName) {
@@ -154,7 +156,11 @@ public:
     }
     void deleteResource(ResourcesPanelResourceItem *item) {
         //kDebug()<<k_funcinfo<<" Deleted: "<<item->m_name<<" ("<<item<<")"<<endl;
-        m_resourceItems.take(m_resourceItems.findRef(item));
+        if (item == 0)
+            return;
+        int i = m_resourceItems.indexOf(item);
+        if (i != -1)
+            m_resourceItems.removeAt(i);
         if (item->m_state == ResourcesPanelResourceItem::New)
             delete item;
         else
@@ -168,8 +174,8 @@ public:
         return g;
     }
     void saveResources() {
-        ResourcesPanelResourceItem *item = m_resourceItems.first();
-        while ((item = m_resourceItems.take())) {
+        while (!m_resourceItems.isEmpty()) {
+            ResourcesPanelResourceItem *item = m_resourceItems.takeFirst();
             //kDebug()<<k_funcinfo<<item->m_resource->name()<<endl;
             m_group->addResource(item->takeResource(), 0);
             delete item;
@@ -177,8 +183,8 @@ public:
     }
     ResourceGroup *m_group;
     QString m_name;
-    Q3PtrList<ResourcesPanelResourceItem> m_resourceItems;
-    Q3PtrList<ResourcesPanelResourceItem> m_deletedItems;
+    QList<ResourcesPanelResourceItem*> m_resourceItems;
+    QList<ResourcesPanelResourceItem*> m_deletedItems;
     int m_state;
 };
 
@@ -417,22 +423,17 @@ KCommand *ResourcesPanel::buildCommand(Part *part) {
     GroupItem *gitem;
 
     QString cmdName = "Modify resourcegroups";
-    Q3PtrListIterator<GroupItem> dgit(m_deletedGroupItems);
-    for (; (gitem = dgit.current()) != 0; ++dgit) {
+    foreach (GroupItem *gitem, m_deletedGroupItems) {
         if (!(gitem->m_state & GroupItem::New)) {
             if (!m) m = new KMacroCommand(cmdName);
             //kDebug()<<k_funcinfo<<"Remove group: '"<<gitem->m_name<<"'"<<endl;
             m->addCommand(new RemoveResourceGroupCmd(part, gitem->takeGroup()));
         }
     }
-
-    Q3PtrListIterator<GroupItem> git(m_groupItems);
-    for (; (gitem = git.current()) != 0; ++git) {
+    foreach (GroupItem *gitem, m_groupItems) {
         //kDebug()<<k_funcinfo<<"Group: "<<gitem->m_name<<" has "<<gitem->m_resourceItems.count()<<" resources"<<" and "<<gitem->m_deletedItems.count()<<" deleted resources"<<endl;
         //First remove deleted resources from group
-        Q3PtrListIterator<ResourcesPanelResourceItem> dit(gitem->m_deletedItems);
-        ResourcesPanelResourceItem *ditem;
-        for (; (ditem = dit.current()) != 0; ++dit) {
+        foreach (ResourcesPanelResourceItem *ditem, gitem->m_deletedItems) {
             if (!m) m = new KMacroCommand(cmdName);
             //kDebug()<<k_funcinfo<<" Deleting resource: '"<<ditem->m_originalResource->name()<<"'"<<endl;
             m->addCommand(new RemoveResourceCmd(part, gitem->m_group, ditem->m_originalResource));
@@ -453,9 +454,8 @@ KCommand *ResourcesPanel::buildCommand(Part *part) {
                 m->addCommand(new ModifyResourceGroupNameCmd(part, rg, gitem->m_name));
             }
         }
-        Q3PtrListIterator<ResourcesPanelResourceItem> it(gitem->m_resourceItems);
-        for (; it.current() != 0; ++it) {
-            KCommand *cmd = it.current()->saveResource(part, rg);
+        foreach (ResourcesPanelResourceItem *item, gitem->m_resourceItems) {
+            KCommand *cmd = item->saveResource(part, rg);
             if (cmd) {
                 if (!m) m = new KMacroCommand(cmdName);
                 m->addCommand(cmd);
@@ -487,10 +487,9 @@ void ResourcesPanel::slotGroupChanged(Q3ListViewItem *itm) {
     m_groupItem = item;
     listOfResources->clear();
 
-    Q3PtrListIterator<ResourcesPanelResourceItem> it(m_groupItem->m_group->m_resourceItems);
-    for ( ; it.current(); ++it ) {
-        listOfResources->insertItem(new ResourceLBItem(it.current()));
-        //kDebug()<<k_funcinfo<<"Insert resource item: "<<it.current()->name()<<endl;
+    foreach (ResourcesPanelResourceItem *i, m_groupItem->m_group->m_resourceItems) {
+        listOfResources->insertItem(new ResourceLBItem(i));
+        //kDebug()<<k_funcinfo<<"Insert resource item: "<<i->name()<<endl;
     }
     bAdd->setEnabled(true);
     bRemove->setEnabled(true);

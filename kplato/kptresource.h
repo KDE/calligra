@@ -25,7 +25,7 @@
 #include "kptdatetime.h"
 
 #include <qdom.h>
-#include <q3intdict.h>
+#include <QHash>
 #include <QString>
 #include <QList>
 
@@ -320,8 +320,12 @@ public:
     void setCurrentSchedule(long id) { m_currentSchedule = findSchedule(id); }
     Schedule *currentSchedule() const { return m_currentSchedule; }
     
-    Q3IntDict<Schedule> &schedules() { return m_schedules; }
-    Schedule *findSchedule(long id) { return m_schedules[id]; }
+    QHash<long, Schedule*> &schedules() { return m_schedules; }
+    Schedule *findSchedule(long id) { 
+        if (m_schedules.contains(id))
+            return m_schedules[id]; 
+        return 0;
+    }
     /// Take, and delete.
     void deleteSchedule(Schedule *schedule);
     /// Take, don't delete.
@@ -335,7 +339,7 @@ protected:
     
 private:
     Project *m_project;
-    Q3IntDict<Schedule> m_schedules;
+    QHash<long, Schedule*> m_schedules;
     QString m_id; // unique id
     QString m_name;
     QString m_initials;
