@@ -667,14 +667,14 @@ void Canvas::slotScrollHorz( int _value )
   //               after scrolling or window resizing. But we should stay
   //               in document coordinate system, otherwise zoom operations
   //               become overpopulated.
-#if 0
   // Relative movement
   int dx = (int) ( d->xOffset - _value );
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
     dx = -dx;
+#if 0
   scroll( dx, 0 );
-  hBorderWidget()->scroll( dx, 0 );
 #endif
+  hBorderWidget()->scroll( dx, 0 );
 
   // New absolute position
   kDebug(36005) << "slotScrollHorz(): XOffset before setting: " << d->xOffset << endl;
@@ -726,12 +726,12 @@ void Canvas::slotScrollVert( int _value )
   //               after scrolling or window resizing. But we should stay
   //               in document coordinate system, otherwise zoom operations
   //               become overpopulated.
-#if 0
   // Relative movement
   int dy = (int) d->view->doc()->zoomItY( d->yOffset - _value );
+#if 0
   scroll( 0, dy );
-  vBorderWidget()->scroll( 0, dy );
 #endif
+  vBorderWidget()->scroll( 0, dy );
 
   // New absolute position
   d->yOffset = _value;
