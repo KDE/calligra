@@ -50,21 +50,21 @@ public:
 
     KPrPBPreview( QWidget* parent, PaintType _paintType = Pen );
     ~KPrPBPreview();
-    void setPen( const KoPen &_pen ) { pen = _pen; repaint( true ); }
-    void setBrush( const QBrush &_brush ) { brush = _brush; repaint( true ); }
-    void setLineBegin( LineEnd lb ) { lineBegin = lb; repaint( true ); }
-    void setLineEnd( LineEnd le ) { lineEnd = le; repaint( true ); }
-    void setGradient( KPrGradient *g ) { if ( g ) { gradient = g; } repaint( true ); }
-    void setPaintType( PaintType pt ) { paintType = pt; repaint(true); }
+    void setPen( const KoPen &_pen ) { pen = _pen; repaint(); }
+    void setBrush( const QBrush &_brush ) { brush = _brush; repaint(); }
+    void setLineBegin( LineEnd lb ) { lineBegin = lb; repaint(); }
+    void setLineEnd( LineEnd le ) { lineEnd = le; repaint(); }
+    void setGradient( KPrGradient *g ) { if ( g ) { gradient = g; } repaint(); }
+    void setPaintType( PaintType pt ) { paintType = pt; repaint(); }
 
     void setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
                       bool _unbalanced, int _xfactor, int _yfactor );
-    void setColor1( const QColor &_color ) { gradient->setColor1( _color ); repaint( false ); }
-    void setColor2( const QColor &_color ) { gradient->setColor2( _color ); repaint( false ); }
-    void setBackColorType( BCType _type ) { gradient->setBackColorType( _type ); repaint( false ); }
-    void setUnbalanced( bool b ) { gradient->setUnbalanced( b ); repaint( false ); }
-    void setXFactor( int i ) { gradient->setXFactor( i ); repaint( false ); }
-    void setYFactor( int i ) { gradient->setYFactor( i ); repaint( false ); }
+    void setColor1( const QColor &_color ) { gradient->setColor1( _color ); repaint(); }
+    void setColor2( const QColor &_color ) { gradient->setColor2( _color ); repaint(); }
+    void setBackColorType( BCType _type ) { gradient->setBackColorType( _type ); repaint(); }
+    void setUnbalanced( bool b ) { gradient->setUnbalanced( b ); repaint(); }
+    void setXFactor( int i ) { gradient->setXFactor( i ); repaint(); }
+    void setYFactor( int i ) { gradient->setYFactor( i ); repaint(); }
 
 protected:
     void drawContents( QPainter *p );

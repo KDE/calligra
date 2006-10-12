@@ -121,7 +121,7 @@ void KPrPBPreview::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
     gradient->setUnbalanced( _unbalanced );
     gradient->setXFactor( _xfactor );
     gradient->setYFactor( _yfactor );
-    repaint( false );
+    repaint();
 }
 
 
