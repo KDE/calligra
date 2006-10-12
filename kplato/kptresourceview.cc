@@ -30,15 +30,16 @@
 #include "kptdatetime.h"
 #include "kptcontext.h"
 
-#include <q3header.h>
 #include <QMenu>
 #include <qpainter.h>
 #include <q3paintdevicemetrics.h>
 #include <qstyle.h>
 #include <QList>
 #include <Q3ValueList>
+#include <QHeaderView>
+#include <QTreeWidget>
+#include <QStringList>
 
-#include <k3listview.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kprinter.h>
@@ -48,22 +49,23 @@
 namespace KPlato
 {
 
-class ResListView : public K3ListView {
+class ResListView : public QTreeWidget {
 public:
     ResListView(QWidget * parent = 0)
-    : K3ListView(parent)
+    : QTreeWidget(parent)
     {}
 
     int headerHeight() const {
-        return header()->count() > 0 ? header()->sectionRect(0).height() : 0;
+        return header()->height();
     }
     virtual void paintToPrinter(QPainter *p, int x, int y, int w, int h) {
+#if 0
         p->save();
         QColor bgc(193, 223, 255);
         QBrush bg(bgc);
         p->setBackgroundMode(Qt::OpaqueMode);
         p->setBackgroundColor(bgc);
-        Q3Header *head = header();
+        QHeaderView *head = header();
         int offset = 0;
         QRect sr;
         // Header shall always be at top/left on page
@@ -95,10 +97,12 @@ public:
         p->translate(0, headerHeight());
         drawAllContents(p, x, y, w, h);
         p->restore();
+#endif
     }
     int calculateY(int ymin, int ymax) const {
+#if 0
         QList<ResListView::DrawableItem*> drawables;
-        Q3ListViewItem *child = firstChild();
+        QTreeWidgetItem *child = firstChild();
         int level = 0;
         int ypos = 0;
         for (; child; child = child->nextSibling()) {
@@ -116,16 +120,19 @@ public:
             delete drawables.takeFirst();
         }
         return y;
+#endif
+        return 0;
     }
     class DrawableItem {
     public:
-        DrawableItem(int level, int ypos, Q3ListViewItem *item ) { y = ypos; l = level; i = item; };
+        DrawableItem(int level, int ypos, QTreeWidgetItem *item ) { y = ypos; l = level; i = item; };
         int y;
         int l;
-        Q3ListViewItem * i;
+        QTreeWidgetItem * i;
     };
 protected:
-    int buildDrawables(QList<ResListView::DrawableItem*> &lst, int level, int ypos, Q3ListViewItem *item, int ymin, int ymax) const {
+    int buildDrawables(QList<ResListView::DrawableItem*> &lst, int level, int ypos, QTreeWidgetItem *item, int ymin, int ymax) const {
+#if 0
         int y = ypos;
         int ih = item->height();
         if (y < ymin && y+ih > ymin) {
@@ -138,25 +145,28 @@ protected:
         }
         y += ih;
         if (item->isOpen()) {
-            Q3ListViewItem *child = item->firstChild();
+            QTreeWidgetItem *child = item->firstChild();
             for (; child; child = child->nextSibling()) {
                 y = buildDrawables(lst, level+1, y, child, ymin, ymax);
             }
         }
         return y;
+#endif
+        return 0;
     }
     // This is a copy of QListView::drawContentsOffset(), with a few changes
     // because drawContentsOffset() only draws *visible* items,
     // we want to draw *all* items.
     // FIXME: Haven't got paintBraches() to work, atm live without it.
     virtual void drawAllContents(QPainter * p, int cx, int cy, int cw, int ch) {
+#if 0
         if ( columns() == 0 ) {
             paintEmptyArea( p, QRect( cx, cy, cw, ch ) );
             return;
         }
         //kDebug()<<k_funcinfo<<QRect(cx, cy, cw, ch)<<endl;
         QList<ResListView::DrawableItem*> drawables;
-        Q3ListViewItem *child = firstChild();
+        QTreeWidgetItem *child = firstChild();
         int level = 0;
         int ypos = 0;
         for (; child; child = child->nextSibling()) {
@@ -277,15 +287,18 @@ protected:
                 delete drawables.takeFirst();
             }
         }
+#endif
     }
 
 };
 
-class ResourceItemPrivate : public K3ListViewItem {
+class ResourceItemPrivate : public QTreeWidgetItem {
 public:
-    ResourceItemPrivate(Resource *r, Q3ListViewItem *parent)
-        : K3ListViewItem(parent, r->name()),
-        resource(r) {}
+    ResourceItemPrivate(Resource *r, QTreeWidgetItem *parent)
+        : QTreeWidgetItem(parent),
+        resource(r) {
+            setText(0, r->name());
+    }
 
     Resource *resource;
 
@@ -296,7 +309,7 @@ public:
             g.setColor(QColorGroup::HighlightedText, QColor(Qt::red));
         }
 
-        K3ListViewItem::paintCell(p, g, column, width, align);
+        //QTreeWidgetItem::paintCell(p, g, column, width, align);
     }
     void setColumnState(int c, int state=1) {
         m_columns[c] = state;
@@ -305,17 +318,19 @@ private:
     QMap<int, int> m_columns;
 };
 
-class NodeItemPrivate : public K3ListViewItem {
+class NodeItemPrivate : public QTreeWidgetItem {
 public:
-    NodeItemPrivate(Task *n, Q3ListView *parent)
-    : K3ListViewItem(parent, n->name()),
+    NodeItemPrivate(Task *n, QTreeWidget *parent)
+    : QTreeWidgetItem(parent),
       node(n) {
+          setText(0, n->name());
         init();
     }
 
-    NodeItemPrivate(QString name, Q3ListView *parent)
-    : K3ListViewItem(parent, name),
+    NodeItemPrivate(QString name, QTreeWidget *parent)
+    : QTreeWidgetItem(parent),
       node(0) {
+          setText(0, name);
         init();
     }
 
@@ -339,7 +354,7 @@ public:
         if (columnPrio.contains(column)) {
             g.setColor(QColorGroup::Base, prioColors[columnPrio[column]]);
         }
-        K3ListViewItem::paintCell(p, g, column, width, align);
+        //QTreeWidgetItem::paintCell(p, g, column, width, align);
     }
 
     Task *node;
@@ -354,10 +369,10 @@ private:
     QMap<int, int> columnPrio;
 };
 
-class AppointmentItem : public K3ListViewItem {
+class AppointmentItem : public QTreeWidgetItem {
 public:
-    AppointmentItem(Appointment *a, QDate &d, Q3ListViewItem *parent)
-        : K3ListViewItem(parent),
+    AppointmentItem(Appointment *a, QDate &d, QTreeWidgetItem *parent)
+        : QTreeWidgetItem(parent),
         appointment(a),
         date(d) {}
 
@@ -369,6 +384,8 @@ QSize ResourceView::sizeHint() const {
     return minimumSizeHint(); // HACK: koshell splitter minimumSize problem
 }
 
+//-------------------------------------------------
+
 ResourceView::ResourceView(View *view, QWidget *parent)
     : QSplitter(parent, "Resource view"),
     m_mainview(view),
@@ -377,41 +394,52 @@ ResourceView::ResourceView(View *view, QWidget *parent)
 {
     setOrientation(Qt::Vertical);
 
-    resList = new ResListView(this);
-	setObjectName("Resource list");
-    resList->setItemMargin(2);
-    resList->setShadeSortColumn(false);
-    resList->setRootIsDecorated(true);
-    resList->addColumn(i18n("Name"));
-    resList->setColumnAlignment(1, Qt::AlignHCenter);
-    resList->addColumn(i18n("Type"));
-    resList->setColumnAlignment(2, Qt::AlignHCenter);
-    resList->addColumn(i18n("Initials"));
-    resList->setColumnAlignment(3, Qt::AlignLeft);
-    resList->addColumn(i18n("Email"));
-    resList->setColumnAlignment(4, Qt::AlignHCenter);
-    resList->addColumn(i18n("Calendar Name"));
-    resList->setColumnAlignment(5, Qt::AlignRight);
-    resList->addColumn(i18n("Available From"));
-    resList->setColumnAlignment(6, Qt::AlignRight);
-    resList->addColumn(i18n("Available Until"));
-    resList->setColumnAlignment(7, Qt::AlignRight);
-    resList->addColumn(i18n("%"));
-    resList->setColumnAlignment(8, Qt::AlignRight);
-    resList->addColumn(i18n("Normal Rate"));
-    resList->setColumnAlignment(9, Qt::AlignRight);
-    resList->addColumn(i18n("Overtime Rate"));
+    m_resListView = new ResListView(this);
+    QStringList sl;
+    sl << i18n("Name")
+            << i18n("Type")
+            << i18n("Initials")
+            << i18n("Email")
+            << i18n("Calendar Name")
+            << i18n("Available From")
+            << i18n("Available Until")
+            << i18n("%")
+            << i18n("Normal Rate")
+            << i18n("Overtime Rate");
+    m_resListView->setHeaderLabels(sl);
+    
+//     m_resListView->setItemMargin(2);
+//     m_resListView->setShadeSortColumn(false);
+//     m_resListView->setRootIsDecorated(true);
+//     m_resListView->addColumn(i18n("Name"));
+//     m_resListView->setColumnAlignment(1, Qt::AlignHCenter);
+//     m_resListView->addColumn(i18n("Type"));
+//     m_resListView->setColumnAlignment(2, Qt::AlignHCenter);
+//     m_resListView->addColumn(i18n("Initials"));
+//     m_resListView->setColumnAlignment(3, Qt::AlignLeft);
+//     m_resListView->addColumn(i18n("Email"));
+//     m_resListView->setColumnAlignment(4, Qt::AlignHCenter);
+//     m_resListView->addColumn(i18n("Calendar Name"));
+//     m_resListView->setColumnAlignment(5, Qt::AlignRight);
+//     m_resListView->addColumn(i18n("Available From"));
+//     m_resListView->setColumnAlignment(6, Qt::AlignRight);
+//     m_resListView->addColumn(i18n("Available Until"));
+//     m_resListView->setColumnAlignment(7, Qt::AlignRight);
+//     m_resListView->addColumn(i18n("%"));
+//     m_resListView->setColumnAlignment(8, Qt::AlignRight);
+//     m_resListView->addColumn(i18n("Normal Rate"));
+//     m_resListView->setColumnAlignment(9, Qt::AlignRight);
+//     m_resListView->addColumn(i18n("Overtime Rate"));
 
     m_showAppointments = false;
     m_appview = new ResourceAppointmentsView(view, this);
     m_appview->hide();
     draw(view->getProject());
 
-    //connect(resList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(resSelectionChanged(QListViewItem*)));
-    connect(resList, SIGNAL(selectionChanged()), SLOT(resSelectionChanged()));
-    connect(resList, SIGNAL( contextMenuRequested(Q3ListViewItem*, const QPoint&, int)), SLOT(popupMenuRequested(Q3ListViewItem*, const QPoint&, int)));
-    //NOTE: using doubleClicked, not executed() to be consistent with ganttview
-    connect(resList, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)), SLOT(slotItemDoubleClicked(Q3ListViewItem*)));
+    connect(m_resListView, SIGNAL(itemSelectionChanged()), SLOT(resSelectionChanged()));
+    connect(m_resListView, SIGNAL(itemActivated(QTreeWidgetItem*, int)), SLOT(slotItemActivated(QTreeWidgetItem*)));
+    //TODO
+    connect(m_resListView, SIGNAL( contextMenuRequested(QTreeWidgetItem*, const QPoint&, int)), SLOT(popupMenuRequested(QTreeWidgetItem*, const QPoint&, int)));
 
 }
 
@@ -428,24 +456,25 @@ Resource *ResourceView::currentResource() {
 void ResourceView::draw(Project &project)
 {
     //kDebug()<<k_funcinfo<<endl;
-    resList->clear();
+    m_resListView->clear();
     m_appview->clear();
     m_selectedItem = 0;
 
     foreach (ResourceGroup *gr, project.resourceGroups()) {
-        K3ListViewItem *item = new K3ListViewItem(resList, gr->name());
-        item->setOpen(true);
+        QTreeWidgetItem *item = new QTreeWidgetItem(m_resListView);
+        item->setText(0, gr->name());
+        //item->setOpen(true);
         drawResources(project, item, gr);
     }
     if (m_selectedItem) {
-        resList->setSelected(m_selectedItem, true);
+        m_selectedItem->setSelected(true);
     } else {
         resSelectionChanged(m_selectedItem);
     }
 }
 
 
-void ResourceView::drawResources(const Project &proj, Q3ListViewItem *parent, ResourceGroup *group)
+void ResourceView::drawResources(const Project &proj, QTreeWidgetItem *parent, ResourceGroup *group)
 {
     //kDebug()<<k_funcinfo<<"group: "<<group->name()<<" ("<<group<<")"<<endl;
     foreach (Resource *r, group->resources()) {
@@ -505,10 +534,14 @@ void ResourceView::drawResources(const Project &proj, Q3ListViewItem *parent, Re
 
 void ResourceView::resSelectionChanged() {
     //kDebug()<<k_funcinfo<<endl;
-    resSelectionChanged(resList->selectedItem());
+    QTreeWidgetItem *i = 0;
+    QList<QTreeWidgetItem*> sl = m_resListView->selectedItems();
+    if (!sl.isEmpty())
+        i = sl.first();
+    resSelectionChanged(i);
 }
 
-void ResourceView::resSelectionChanged(Q3ListViewItem *item) {
+void ResourceView::resSelectionChanged(QTreeWidgetItem *item) {
     //kDebug()<<k_funcinfo<<item<<endl;
     ResourceItemPrivate *ritem = dynamic_cast<ResourceItemPrivate *>(item);
     if (ritem) {
@@ -526,11 +559,11 @@ void ResourceView::resSelectionChanged(Q3ListViewItem *item) {
 }
 
 
-void ResourceView::slotItemDoubleClicked(Q3ListViewItem*) {
+void ResourceView::slotItemActivated(QTreeWidgetItem*) {
     emit itemDoubleClicked();
 }
 
-void ResourceView::popupMenuRequested(Q3ListViewItem* item, const QPoint & pos, int)
+void ResourceView::popupMenuRequested(QTreeWidgetItem* item, const QPoint & pos, int)
 {
     ResourceItemPrivate *ritem = dynamic_cast<ResourceItemPrivate *>(item);
     if (ritem) {
@@ -549,20 +582,23 @@ void ResourceView::popupMenuRequested(Q3ListViewItem* item, const QPoint & pos, 
 
 Q3ValueList<int> ResourceView::listOffsets(int pageHeight) const {
     Q3ValueList<int> lst;
-    int hh = resList->headerHeight();
+#if 0
+    int hh = m_resListView->headerHeight();
     int ph = pageHeight-hh;
-    int lh = resList->contentsHeight() - hh; // list height ex header.
+    int lh = m_resListView->contentsHeight() - hh; // list height ex header.
     int ly = 0;
     kDebug()<<k_funcinfo<<ly<<", "<<lh<<endl;
     while (ly < lh) {
         lst << ly;
-        ly = resList->calculateY(ly+1, ly+ph); // offset into the list, ex header
+        ly = m_resListView->calculateY(ly+1, ly+ph); // offset into the list, ex header
         //kDebug()<<k_funcinfo<<ly<<", "<<lh<<endl;
     }
+#endif
     return lst;
 }
 
 void ResourceView::print(KPrinter &printer) {
+#if 0
     //kDebug()<<k_funcinfo<<endl;
     uint top, left, bottom, right;
     printer.margins(&top, &left, &bottom, &right);
@@ -574,24 +610,25 @@ void ResourceView::print(KPrinter &printer) {
     QRect preg = p.clipRegion().boundingRect();
     //kDebug()<<"p="<<preg<<endl;
     //p.drawRect(preg.x(), preg.y(), preg.width()-1, preg.height()-1);
-    int ch = resList->contentsHeight();
-    int cw = resList->contentsWidth();
+    int ch = m_resListView->contentsHeight();
+    int cw = m_resListView->contentsWidth();
     double scale = (double)preg.width()/(double)(cw);
     //kDebug()<<"scale="<<scale<<endl;
     if (scale < 1.0) {
         p.scale(scale, scale);
     }
-    int ph = preg.height()-resList->headerHeight();
+    int ph = preg.height()-m_resListView->headerHeight();
     Q3ValueList<int> lst = listOffsets(preg.height());
     for (int i=0; i < lst.count(); ++i) {
         //kDebug()<<"Page "<<i+1<<": "<<"scale="<<scale<<" "<<lst[i]<<" : "<<cw<<"x"<<ch<<endl;
         if (i > 0) {
             printer.newPage();
         }
-        resList->paintToPrinter(&p, 0, lst[i], cw, ph);
+        m_resListView->paintToPrinter(&p, 0, lst[i], cw, ph);
     }
 
     p.end();
+#endif
 }
 
 bool ResourceView::setContext(Context::Resourceview &/*context*/) {

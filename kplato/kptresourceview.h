@@ -27,7 +27,7 @@
 #include "kptcontext.h"
 
 class QPoint;
-class Q3ListViewItem;
+class QTreeWidgetItem;
 
 class KPrinter;
 
@@ -80,19 +80,21 @@ signals:
     
 protected slots:
     void resSelectionChanged();
-    void resSelectionChanged(Q3ListViewItem *item);
-    void slotItemDoubleClicked(Q3ListViewItem*);
-    void popupMenuRequested(Q3ListViewItem * item, const QPoint & pos, int);
+    void resSelectionChanged(QTreeWidgetItem *item);
+    void slotItemActivated(QTreeWidgetItem*);
+    void popupMenuRequested(QTreeWidgetItem * item, const QPoint & pos, int);
 
 private:
-    void drawResources(const Project &proj, Q3ListViewItem *parent, ResourceGroup *group);
-
+    void drawResources(const Project &proj, QTreeWidgetItem *parent, ResourceGroup *group);
+    void clearResList();
+    
 private:
-	View *m_mainview;
+    View *m_mainview;
     int m_defaultFontSize;
 
     ResourceItemPrivate *m_selectedItem;
-    ResListView *resList;
+    ResListView *m_resListView;
+    QTreeWidgetItem *m_header;
     ResourceAppointmentsView *m_appview;
     Node *m_currentNode;
     QDate m_start;
