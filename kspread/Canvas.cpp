@@ -188,8 +188,6 @@ Canvas::Canvas(View *view)
   installEventFilter( this ); // for TAB key processing, otherwise focus change
   setAcceptDrops( true );
   setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
-
-  setWindowFlags(Qt::WNoAutoErase);
 }
 
 Canvas::~Canvas()
@@ -672,7 +670,11 @@ void Canvas::slotScrollHorz( int _value )
 
   sheet->enableScrollBarUpdates( true );
 
+#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
+  d->view->doc()->emitEndOperation();
+#else
   d->view->doc()->emitEndOperation( visibleCells() );
+#endif
 }
 
 void Canvas::slotScrollVert( int _value )
@@ -706,7 +708,11 @@ void Canvas::slotScrollVert( int _value )
 
   sheet->enableScrollBarUpdates( true );
 
+#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
+  d->view->doc()->emitEndOperation();
+#else
   d->view->doc()->emitEndOperation( visibleCells() );
+#endif
 }
 
 void Canvas::slotMaxColumn( int _max_column )
@@ -1532,7 +1538,7 @@ void Canvas::paintEvent( QPaintEvent* event )
 #ifdef KSPREAD_CELL_WINDOW
     updateCellWindow();
 #endif
-
+#ifndef KSPREAD_CACHED_PAINTING_ATTRIBUTES
   // repaint whole visible region, if no cells are marked as dirty
   if (sheet->paintDirtyData().isEmpty())
   {
@@ -1573,6 +1579,7 @@ void Canvas::paintEvent( QPaintEvent* event )
     QRect vr( QPoint(left_col, top_row), QPoint(right_col, bottom_row) );
     sheet->setRegionPaintDirty( vr );
   }
+#endif
   paintUpdates();
   event->accept();
 }
@@ -4057,6 +4064,22 @@ void Canvas::paintUpdates()
     for (Region::ConstIterator it(paintDirtyList.constBegin()); it != end; ++it)
     {
         QRect range = (*it)->rect() & visibleRect;
+
+#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
+        int right  = range.right();
+        for ( int x = range.left(); x <= right; ++x )
+        {
+            int bottom = range.bottom();
+            for ( int y = range.top(); y <= bottom; ++y )
+            {
+                cell = sheet->cellAt( x, y );
+                cell->setFlag( Cell::Flag_PaintingDirty );
+            }
+        }
+    }
+
+        QRect range = visibleRect;
+#endif
         const double topPos = sheet->dblRowPos(range.top());
         const double leftPos = sheet->dblColumnPos(range.left());
         KoPoint dblCorner( leftPos - xOffset(), topPos - yOffset() );
@@ -4119,7 +4142,9 @@ void Canvas::paintUpdates()
             dblCorner.setY( topPos - yOffset() );
             dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth() );
         }
+#ifndef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     }
+#endif
 
     /* now paint the selection */
     //Nb.  No longer necessary to paint choose Selection.here as the cell reference highlight

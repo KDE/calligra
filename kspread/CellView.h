@@ -40,6 +40,7 @@
 // KOffice
 #include <KoPoint.h>
 
+#define KSPREAD_CACHED_PAINTING_ATTRIBUTES
 #define KSPREAD_CELL_WINDOW
 
 class QRectF;
@@ -50,6 +51,11 @@ class Cell;
 class Sheet;
 class View;
 
+/**
+ * \class CellView
+ * The CellView class is responsible for the painting of the cell.
+ * For each visible Cell exists a CellView.
+ */
 class CellView
 {
 public:
@@ -73,6 +79,13 @@ public:
      * \return the cell associated with this view
      */
     Cell* cell() const;
+
+#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
+    /**
+     * Updates the cached painting attributes.
+     */
+    void update();
+#endif
 
   /**
    * \ingroup Painting
