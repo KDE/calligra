@@ -1973,233 +1973,221 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
     return;
 
 #if 0
-  // Look at the cells on our corners. It may happen that we
-  // just erased parts of their borders corner, so we might need
-  // to repaint these corners.
-  //
-  QPen  vert_pen, horz_pen;
-  int   vert_penWidth, horz_penWidth;
+    // Look at the cells on our corners. It may happen that we
+    // just erased parts of their borders corner, so we might need
+    // to repaint these corners.
+    //
+    QPen  vert_pen, horz_pen;
+    int   vert_penWidth, horz_penWidth;
 
-  // Some useful referenses.
-  Cell  *cell_north     = cell()->sheet()->cellAt( cellRef.x(),
-                 cellRef.y() - 1 );
-  Cell  *cell_northwest = cell()->sheet()->cellAt( cellRef.x() - 1,
-                 cellRef.y() - 1 );
-  Cell  *cell_west      = cell()->sheet()->cellAt( cellRef.x() - 1,
-                 cellRef.y() );
-  Cell  *cell_northeast = cell()->sheet()->cellAt( cellRef.x() + 1,
-                 cellRef.y() - 1 );
-  Cell  *cell_east      = cell()->sheet()->cellAt( cellRef.x() + 1,
-                 cellRef.y() );
-  Cell  *cell_south     = cell()->sheet()->cellAt( cellRef.x(),
-                 cellRef.y() + 1 );
-  Cell  *cell_southwest = cell()->sheet()->cellAt( cellRef.x() - 1,
-                 cellRef.y() + 1 );
-  Cell  *cell_southeast = cell()->sheet()->cellAt( cellRef.x() + 1,
-                 cellRef.y() + 1 );
+    // Some useful referenses.
+    Cell  *cell_north     = cell()->sheet()->cellAt( cellRef.x(),     cellRef.y() - 1 );
+    Cell  *cell_northwest = cell()->sheet()->cellAt( cellRef.x() - 1, cellRef.y() - 1 );
+    Cell  *cell_west      = cell()->sheet()->cellAt( cellRef.x() - 1, cellRef.y() );
+    Cell  *cell_northeast = cell()->sheet()->cellAt( cellRef.x() + 1, cellRef.y() - 1 );
+    Cell  *cell_east      = cell()->sheet()->cellAt( cellRef.x() + 1, cellRef.y() );
+    Cell  *cell_south     = cell()->sheet()->cellAt( cellRef.x(),     cellRef.y() + 1 );
+    Cell  *cell_southwest = cell()->sheet()->cellAt( cellRef.x() - 1, cellRef.y() + 1 );
+    Cell  *cell_southeast = cell()->sheet()->cellAt( cellRef.x() + 1, cellRef.y() + 1 );
 
-  // Fix the borders which meet at the top left corner
-  if ( cell_north->effLeftBorderValue( cellRef.x(), cellRef.y() - 1 )
-       >= cell_northwest->effRightBorderValue( cellRef.x() - 1, cellRef.y() - 1 ) )
-    vert_pen = cell_north->effLeftBorderPen( cellRef.x(), cellRef.y() - 1 );
-  else
-    vert_pen = cell_northwest->effRightBorderPen( cellRef.x() - 1,
-              cellRef.y() - 1 );
-
-  vert_penWidth = qMax( 1, doc->zoomItXOld( vert_pen.width() ) );
-  vert_pen.setWidth( vert_penWidth );
-
-  if ( vert_pen.style() != Qt::NoPen ) {
-    if ( cell_west->effTopBorderValue( cellRef.x() - 1, cellRef.y() )
-         >= cell_northwest->effBottomBorderValue( cellRef.x() - 1, cellRef.y() - 1 ) )
-      horz_pen = cell_west->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
+    // Fix the borders which meet at the top left corner
+    if ( cell_north->effLeftBorderValue( cellRef.x(), cellRef.y() - 1 )
+         >= cell_northwest->effRightBorderValue( cellRef.x() - 1, cellRef.y() - 1 ) )
+        vert_pen = cell_north->effLeftBorderPen( cellRef.x(), cellRef.y() - 1 );
     else
-      horz_pen = cell_northwest->effBottomBorderPen( cellRef.x() - 1,
-                 cellRef.y() - 1 );
+        vert_pen = cell_northwest->effRightBorderPen( cellRef.x() - 1, cellRef.y() - 1 );
 
-    horz_penWidth = qMax( 1, doc->zoomItYOld( horz_pen.width() ) );
-    int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2 + 1;
-
-    painter.setPen( vert_pen );
-    // If we are on paper printout, we limit the length of the lines.
-    // On paper, we always have full cells, on screen not.
-    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-      if ( sheetDir == Sheet::RightToLeft )
-        painter.drawLine( qMax( rect.left(), cellRect.right() ),
-                          qMax( rect.top(), cellRect.top() ),
-                          qMin( rect.right(), cellRect.right() ),
-                          qMin( rect.bottom(), cellRect.top() + bottom ) );
-      else
-        painter.drawLine( qMax( rect.left(), cellRect.left() ),
-                          qMax( rect.top(), cellRect.top() ),
-                          qMin( rect.right(), cellRect.left() ),
-                          qMin( rect.bottom(), cellRect.top() + bottom ) );
-}
-    else {
-      if ( sheetDir == Sheet::RightToLeft )
-        painter.drawLine( cellRect.right(), cellRect.top(),
-                          cellRect.right(), cellRect.top() + bottom );
-      else
-        painter.drawLine( cellRect.left(), cellRect.top(),
-                          cellRect.left(), cellRect.top() + bottom );
-}
-}
-
-  // Fix the borders which meet at the top right corner
-  if ( cell_north->effRightBorderValue( cellRef.x(), cellRef.y() - 1 )
-       >= cell_northeast->effLeftBorderValue( cellRef.x() + 1,
-                cellRef.y() - 1 ) )
-    vert_pen = cell_north->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
-  else
-    vert_pen = cell_northeast->effLeftBorderPen( cellRef.x() + 1,
-             cellRef.y() - 1 );
-
-  // vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
-  vert_penWidth = qMax( 1, doc->zoomItXOld( vert_pen.width() ) );
-  vert_pen.setWidth( vert_penWidth );
-  if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) ) {
-    if ( cell_east->effTopBorderValue( cellRef.x() + 1, cellRef.y() )
-         >= cell_northeast->effBottomBorderValue( cellRef.x() + 1,
-              cellRef.y() - 1 ) )
-      horz_pen = cell_east->effTopBorderPen( cellRef.x() + 1, cellRef.y() );
-    else
-      horz_pen = cell_northeast->effBottomBorderPen( cellRef.x() + 1,
-                 cellRef.y() - 1 );
-
-    // horz_pen = cell()->effTopBorderPen( cellRef.x() + 1, cellRef.y() );
-    horz_penWidth = qMax( 1, doc->zoomItYOld( horz_pen.width() ) );
-    int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2 + 1;
-
-    painter.setPen( vert_pen );
-    //If we are on paper printout, we limit the length of the lines
-    //On paper, we always have full cells, on screen not
-    if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-      if ( sheetDir == Sheet::RightToLeft )
-        painter.drawLine( qMax( rect.left(), cellRect.left() ),
-                          qMax( rect.top(), cellRect.top() ),
-                          qMin( rect.right(), cellRect.left() ),
-                          qMin( rect.bottom(), cellRect.top() + bottom ) );
-      else
-        painter.drawLine( qMax( rect.left(), cellRect.right() ),
-                          qMax( rect.top(), cellRect.top() ),
-                          qMin( rect.right(), cellRect.right() ),
-                          qMin( rect.bottom(), cellRect.top() + bottom ) );
-}
-    else {
-      if ( sheetDir == Sheet::RightToLeft )
-        painter.drawLine( cellRect.left(), cellRect.top(),
-                          cellRect.left(), cellRect.top() + bottom );
-      else
-        painter.drawLine( cellRect.right(), cellRect.top(),
-                          cellRect.right(), cellRect.top() + bottom );
-}
-}
-
-  // Bottom
-  if ( cellRef.y() < KS_rowMax ) {
-    // Fix the borders which meet at the bottom left corner
-    if ( cell_south->effLeftBorderValue( cellRef.x(), cellRef.y() + 1 )
-         >= cell_southwest->effRightBorderValue( cellRef.x() - 1,
-             cellRef.y() + 1 ) )
-      vert_pen = cell_south->effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
-    else
-      vert_pen = cell_southwest->effRightBorderPen( cellRef.x() - 1,
-                cellRef.y() + 1 );
-
-    // vert_pen = effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
-    vert_penWidth = qMax( 1, doc->zoomItYOld( vert_pen.width() ) );
+    vert_penWidth = qMax( 1, doc->zoomItXOld( vert_pen.width() ) );
     vert_pen.setWidth( vert_penWidth );
+
     if ( vert_pen.style() != Qt::NoPen ) {
-      if ( cell_west->effBottomBorderValue( cellRef.x() - 1, cellRef.y() )
-           >= cell_southwest->effTopBorderValue( cellRef.x() - 1,
-             cellRef.y() + 1 ) )
-        horz_pen = cell_west->effBottomBorderPen( cellRef.x() - 1,
-              cellRef.y() );
-      else
-        horz_pen = cell_southwest->effTopBorderPen( cellRef.x() - 1,
-                cellRef.y() + 1 );
-
-      // horz_pen = cell()->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
-      horz_penWidth = qMax( 1, doc->zoomItXOld( horz_pen.width() ) );
-      int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2;
-
-      painter.setPen( vert_pen );
-      // If we are on paper printout, we limit the length of the lines.
-      // On paper, we always have full cells, on screen not.
-      if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-        if ( sheetDir == Sheet::RightToLeft )
-          painter.drawLine( qMax( rect.left(), cellRect.right() ),
-                            qMax( rect.top(), cellRect.bottom() - bottom ),
-                            qMin( rect.right(), cellRect.right() ),
-                            qMin( rect.bottom(), cellRect.bottom() ) );
+        if ( cell_west->effTopBorderValue( cellRef.x() - 1, cellRef.y() )
+             >= cell_northwest->effBottomBorderValue( cellRef.x() - 1, cellRef.y() - 1 ) )
+            horz_pen = cell_west->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
         else
-          painter.drawLine( qMax( rect.left(), cellRect.left() ),
-                            qMax( rect.top(), cellRect.bottom() - bottom ),
-                            qMin( rect.right(), cellRect.left() ),
-                            qMin( rect.bottom(), cellRect.bottom() ) );
-}
-      else {
-        if ( sheetDir == Sheet::RightToLeft )
-          painter.drawLine( cellRect.right(), cellRect.bottom() - bottom,
-                            cellRect.right(), cellRect.bottom() );
-        else
-          painter.drawLine( cellRect.left(), cellRect.bottom() - bottom,
-                            cellRect.left(), cellRect.bottom() );
-}
-}
+            horz_pen = cell_northwest->effBottomBorderPen( cellRef.x() - 1, cellRef.y() - 1 );
 
-    // Fix the borders which meet at the bottom right corner
-    if ( cell_south->effRightBorderValue( cellRef.x(), cellRef.y() + 1 )
-         >= cell_southeast->effLeftBorderValue( cellRef.x() + 1,
-            cellRef.y() + 1 ) )
-      vert_pen = cell_south->effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
+        horz_penWidth = qMax( 1, doc->zoomItYOld( horz_pen.width() ) );
+        int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2 + 1;
+
+        painter.setPen( vert_pen );
+        // If we are on paper printout, we limit the length of the lines.
+        // On paper, we always have full cells, on screen not.
+        if ( dynamic_cast<QPrinter*>(painter.device()) ) {
+            if ( sheetDir == Sheet::RightToLeft )
+                painter.drawLine( qMax( rect.left(), cellRect.right() ),
+                                  qMax( rect.top(), cellRect.top() ),
+                                  qMin( rect.right(), cellRect.right() ),
+                                  qMin( rect.bottom(), cellRect.top() + bottom ) );
+            else
+                painter.drawLine( qMax( rect.left(), cellRect.left() ),
+                                  qMax( rect.top(), cellRect.top() ),
+                                  qMin( rect.right(), cellRect.left() ),
+                                  qMin( rect.bottom(), cellRect.top() + bottom ) );
+        }
+        else {
+            if ( sheetDir == Sheet::RightToLeft )
+                painter.drawLine( cellRect.right(), cellRect.top(),
+                                  cellRect.right(), cellRect.top() + bottom );
+            else
+                painter.drawLine( cellRect.left(), cellRect.top(),
+                                  cellRect.left(), cellRect.top() + bottom );
+        }
+    }
+
+    // Fix the borders which meet at the top right corner
+    if ( cell_north->effRightBorderValue( cellRef.x(), cellRef.y() - 1 )
+         >= cell_northeast->effLeftBorderValue( cellRef.x() + 1,
+                 cellRef.y() - 1 ) )
+        vert_pen = cell_north->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
     else
-      vert_pen = cell_southeast->effLeftBorderPen( cellRef.x() + 1,
-               cellRef.y() + 1 );
+        vert_pen = cell_northeast->effLeftBorderPen( cellRef.x() + 1,
+            cellRef.y() - 1 );
 
-    // vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
-    vert_penWidth = qMax( 1, doc->zoomItYOld( vert_pen.width() ) );
+    // vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
+    vert_penWidth = qMax( 1, doc->zoomItXOld( vert_pen.width() ) );
     vert_pen.setWidth( vert_penWidth );
     if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) ) {
-      if ( cell_east ->effBottomBorderValue( cellRef.x() + 1, cellRef.y() )
-           >= cell_southeast->effTopBorderValue( cellRef.x() + 1,
-             cellRef.y() + 1 ) )
-
-        horz_pen = cell()->sheet()->cellAt( cellRef.x() + 1, cellRef.y() )
-    ->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
-      else
-        horz_pen = cell()->sheet()->cellAt( cellRef.x() + 1, cellRef.y() + 1 )
-    ->effTopBorderPen( cellRef.x() + 1, cellRef.y() + 1 );
-
-      // horz_pen = cell()->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
-      horz_penWidth = qMax( 1, doc->zoomItXOld( horz_pen.width() ) );
-      int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2;
-
-      painter.setPen( vert_pen );
-      // If we are on paper printout, we limit the length of the lines.
-      // On paper, we always have full cells, on screen not.
-      if ( dynamic_cast<QPrinter*>(painter.device()) )      {
-        if ( sheetDir == Sheet::RightToLeft )
-          painter.drawLine( qMax( rect.left(), cellRect.left() ),
-                            qMax( rect.top(), cellRect.bottom() - bottom ),
-                            qMin( rect.right(), cellRect.left() ),
-                            qMin( rect.bottom(), cellRect.bottom() ) );
+        if ( cell_east->effTopBorderValue( cellRef.x() + 1, cellRef.y() )
+             >= cell_northeast->effBottomBorderValue( cellRef.x() + 1,
+                     cellRef.y() - 1 ) )
+            horz_pen = cell_east->effTopBorderPen( cellRef.x() + 1, cellRef.y() );
         else
-          painter.drawLine( qMax( rect.left(), cellRect.right() ),
-                            qMax( rect.top(), cellRect.bottom() - bottom ),
-                            qMin( rect.right(), cellRect.right() ),
-                            qMin( rect.bottom(), cellRect.bottom() ) );
-}
-      else {
-        if ( sheetDir == Sheet::RightToLeft )
-          painter.drawLine( cellRect.left(), cellRect.bottom() - bottom,
-                            cellRect.left(), cellRect.bottom() );
+            horz_pen = cell_northeast->effBottomBorderPen( cellRef.x() + 1,
+                cellRef.y() - 1 );
+
+        // horz_pen = cell()->effTopBorderPen( cellRef.x() + 1, cellRef.y() );
+        horz_penWidth = qMax( 1, doc->zoomItYOld( horz_pen.width() ) );
+        int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2 + 1;
+
+        painter.setPen( vert_pen );
+        //If we are on paper printout, we limit the length of the lines
+        //On paper, we always have full cells, on screen not
+        if ( dynamic_cast<QPrinter*>(painter.device()) ) {
+            if ( sheetDir == Sheet::RightToLeft )
+                painter.drawLine( qMax( rect.left(), cellRect.left() ),
+                                  qMax( rect.top(), cellRect.top() ),
+                                  qMin( rect.right(), cellRect.left() ),
+                                  qMin( rect.bottom(), cellRect.top() + bottom ) );
+            else
+                painter.drawLine( qMax( rect.left(), cellRect.right() ),
+                                  qMax( rect.top(), cellRect.top() ),
+                                  qMin( rect.right(), cellRect.right() ),
+                                  qMin( rect.bottom(), cellRect.top() + bottom ) );
+        }
+        else {
+            if ( sheetDir == Sheet::RightToLeft )
+                painter.drawLine( cellRect.left(), cellRect.top(),
+                                  cellRect.left(), cellRect.top() + bottom );
+            else
+                painter.drawLine( cellRect.right(), cellRect.top(),
+                                  cellRect.right(), cellRect.top() + bottom );
+        }
+    }
+
+    // Bottom
+    if ( cellRef.y() < KS_rowMax ) {
+        // Fix the borders which meet at the bottom left corner
+        if ( cell_south->effLeftBorderValue( cellRef.x(), cellRef.y() + 1 )
+             >= cell_southwest->effRightBorderValue( cellRef.x() - 1,
+                     cellRef.y() + 1 ) )
+            vert_pen = cell_south->effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
         else
-          painter.drawLine( cellRect.right(), cellRect.bottom() - bottom,
-                            cellRect.right(), cellRect.bottom() );
-}
-}
-}
+            vert_pen = cell_southwest->effRightBorderPen( cellRef.x() - 1,
+                cellRef.y() + 1 );
+
+        // vert_pen = effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
+        vert_penWidth = qMax( 1, doc->zoomItYOld( vert_pen.width() ) );
+        vert_pen.setWidth( vert_penWidth );
+        if ( vert_pen.style() != Qt::NoPen ) {
+            if ( cell_west->effBottomBorderValue( cellRef.x() - 1, cellRef.y() )
+                 >= cell_southwest->effTopBorderValue( cellRef.x() - 1,
+                         cellRef.y() + 1 ) )
+                horz_pen = cell_west->effBottomBorderPen( cellRef.x() - 1,
+                    cellRef.y() );
+            else
+                horz_pen = cell_southwest->effTopBorderPen( cellRef.x() - 1,
+                    cellRef.y() + 1 );
+
+            // horz_pen = cell()->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
+            horz_penWidth = qMax( 1, doc->zoomItXOld( horz_pen.width() ) );
+            int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2;
+
+            painter.setPen( vert_pen );
+            // If we are on paper printout, we limit the length of the lines.
+            // On paper, we always have full cells, on screen not.
+            if ( dynamic_cast<QPrinter*>(painter.device()) ) {
+                if ( sheetDir == Sheet::RightToLeft )
+                    painter.drawLine( qMax( rect.left(), cellRect.right() ),
+                                      qMax( rect.top(), cellRect.bottom() - bottom ),
+                                      qMin( rect.right(), cellRect.right() ),
+                                      qMin( rect.bottom(), cellRect.bottom() ) );
+                else
+                    painter.drawLine( qMax( rect.left(), cellRect.left() ),
+                                      qMax( rect.top(), cellRect.bottom() - bottom ),
+                                      qMin( rect.right(), cellRect.left() ),
+                                      qMin( rect.bottom(), cellRect.bottom() ) );
+            }
+            else {
+                if ( sheetDir == Sheet::RightToLeft )
+                    painter.drawLine( cellRect.right(), cellRect.bottom() - bottom,
+                                      cellRect.right(), cellRect.bottom() );
+                else
+                    painter.drawLine( cellRect.left(), cellRect.bottom() - bottom,
+                                      cellRect.left(), cellRect.bottom() );
+            }
+        }
+
+        // Fix the borders which meet at the bottom right corner
+        if ( cell_south->effRightBorderValue( cellRef.x(), cellRef.y() + 1 )
+             >= cell_southeast->effLeftBorderValue( cellRef.x() + 1, cellRef.y() + 1 ) )
+            vert_pen = cell_south->effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
+        else
+            vert_pen = cell_southeast->effLeftBorderPen( cellRef.x() + 1, cellRef.y() + 1 );
+
+            // vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
+        vert_penWidth = qMax( 1, doc->zoomItYOld( vert_pen.width() ) );
+        vert_pen.setWidth( vert_penWidth );
+        if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) ) {
+            if ( cell_east ->effBottomBorderValue( cellRef.x() + 1, cellRef.y() )
+                 >= cell_southeast->effTopBorderValue( cellRef.x() + 1,
+                         cellRef.y() + 1 ) )
+
+                horz_pen = cell()->sheet()->cellAt( cellRef.x() + 1, cellRef.y() )
+                        ->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
+            else
+                horz_pen = cell()->sheet()->cellAt( cellRef.x() + 1, cellRef.y() + 1 )
+                        ->effTopBorderPen( cellRef.x() + 1, cellRef.y() + 1 );
+
+            // horz_pen = cell()->effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
+            horz_penWidth = qMax( 1, doc->zoomItXOld( horz_pen.width() ) );
+            int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2;
+
+            painter.setPen( vert_pen );
+            // If we are on paper printout, we limit the length of the lines.
+            // On paper, we always have full cells, on screen not.
+            if ( dynamic_cast<QPrinter*>(painter.device()) )      {
+                if ( sheetDir == Sheet::RightToLeft )
+                    painter.drawLine( qMax( rect.left(), cellRect.left() ),
+                                      qMax( rect.top(), cellRect.bottom() - bottom ),
+                                      qMin( rect.right(), cellRect.left() ),
+                                      qMin( rect.bottom(), cellRect.bottom() ) );
+                else
+                    painter.drawLine( qMax( rect.left(), cellRect.right() ),
+                                      qMax( rect.top(), cellRect.bottom() - bottom ),
+                                      qMin( rect.right(), cellRect.right() ),
+                                      qMin( rect.bottom(), cellRect.bottom() ) );
+            }
+            else {
+                if ( sheetDir == Sheet::RightToLeft )
+                    painter.drawLine( cellRect.left(), cellRect.bottom() - bottom,
+                                      cellRect.left(), cellRect.bottom() );
+                else
+                    painter.drawLine( cellRect.right(), cellRect.bottom() - bottom,
+                                      cellRect.right(), cellRect.bottom() );
+            }
+        }
+    }
 #endif
 }
 
