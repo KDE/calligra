@@ -150,7 +150,7 @@ protected slots:
     void slotChanged(QWidget *);
     void slotChanged();
 
-    void slotAboutToShow(QWidget *widget);
+    void slotCurrentChanged(int);
 
 #ifndef NDEBUG
     void slotPrintDebug();

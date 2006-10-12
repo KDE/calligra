@@ -132,12 +132,12 @@ View::View(Part* part, QWidget* parent)
     //m_reportview = new ReportView(this, m_tab);
     //m_tab->addWidget(m_reportview);
 
-    connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotAboutToShow(QWidget *)));
+    connect(m_tab, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentChanged(int)));
 
     connect(m_pertview, SIGNAL(addRelation(Node*, Node*)), SLOT(slotAddRelation(Node*, Node*)));
     connect(m_pertview, SIGNAL(modifyRelation(Relation*)), SLOT(slotModifyRelation(Relation*)));
 
-	connect(m_ganttview, SIGNAL(enableActions(bool)), SLOT(setTaskActionsEnabled(bool)));
+    connect(m_ganttview, SIGNAL(enableActions(bool)), SLOT(setTaskActionsEnabled(bool)));
     connect(m_ganttview, SIGNAL(addRelation(Node*, Node*, int)), SLOT(slotAddRelation(Node*, Node*, int)));
     connect(m_ganttview, SIGNAL(modifyRelation(Relation*, int)), SLOT(slotModifyRelation(Relation*, int)));
     connect(m_ganttview, SIGNAL(modifyRelation(Relation*)), SLOT(slotModifyRelation(Relation*)));
@@ -1067,8 +1067,8 @@ void View::slotUpdate(bool calculate)
     updateView(m_tab->currentWidget());
 }
 
-void View::slotAboutToShow(QWidget *widget) {
-    updateView(widget);
+void View::slotCurrentChanged(int index) {
+    updateView(m_tab->currentWidget());
 }
 
 void View::updateView(QWidget *widget)
