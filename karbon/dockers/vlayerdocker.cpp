@@ -371,7 +371,7 @@ QModelIndex VDocumentModel::parent( const QModelIndex &child ) const
     if( childlayer )
         return QModelIndex();
 
-    // get the childs parent shape
+    // get the children's parent shape
     KoShapeContainer *parentShape = childShape->parent();
     if( ! parentShape )
         return QModelIndex();

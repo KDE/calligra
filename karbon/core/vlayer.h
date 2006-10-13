@@ -35,7 +35,7 @@ class VVisitor;
 /**
  * VLayer manages a set of vobjects. It keeps the objects from bottom to top
  * in a list, ie. objects higher in the list are drawn above lower objects.
- * Objects in a layer can be manipulated and worked on independant of objects
+ * Objects in a layer can be manipulated and worked on independent of objects
  * in other layers.
  */
 
