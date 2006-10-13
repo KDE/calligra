@@ -545,6 +545,9 @@ void VBorder::paintEvent( QPaintEvent* event )
   if (!sheet)
     return;
 
+  // FIXME Stefan: Make use of clipping. Find the repaint call after the scrolling.
+  // kDebug(36004) << event->rect() << endl;
+
   // painting rectangle
   const QRectF paintRect = m_pCanvas->d->view->doc()->viewToDocument( event->rect() );
 
@@ -1252,6 +1255,9 @@ void HBorder::paintEvent( QPaintEvent* event )
   register Sheet * const sheet = m_pView->activeSheet();
   if (!sheet)
     return;
+
+  // FIXME Stefan: Make use of clipping. Find the repaint call after the scrolling.
+  // kDebug(36004) << event->rect() << endl;
 
   // painting rectangle
   const QRectF paintRect = m_pView->doc()->viewToDocument( event->rect() );

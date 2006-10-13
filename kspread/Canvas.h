@@ -44,6 +44,7 @@
 #define XBORDER_HEIGHT 20
 
 #define KSPREAD_CELL_WINDOW
+#define KSPREAD_CLIPPED_PAINTING
 
 class QDragLeaveEvent;
 class QDragMoveEvent;
@@ -228,7 +229,7 @@ public:
      * Paints all visible cells that have a paint dirty flag set.
      * @see paintEvent()
      */
-    void paintUpdates();
+    void paintUpdates( QPainter& painter, const QRectF& paintRect );
 
 
     /**
