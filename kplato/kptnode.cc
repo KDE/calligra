@@ -69,6 +69,10 @@ Node::Node(Node &node, Node *parent)
 }
 
 Node::~Node() {
+    //kDebug()<<k_funcinfo<<"("<<this<<") "<<m_name<<endl;
+    while (!m_nodes.isEmpty())
+        delete m_nodes.takeFirst();
+    
     if (findNode() == this) {
         removeId(); // only remove myself (I may be just a working copy)
     }
@@ -86,15 +90,10 @@ Node::~Node() {
     if (m_shutdownAccount)
         m_shutdownAccount->removeShutdown(*this);
 
-    while (!m_nodes.isEmpty())
-        delete m_nodes.takeFirst();
-    
-    while (!m_schedules.isEmpty()) {
-        QList<long> k = m_schedules.uniqueKeys();
-        while (!k.isEmpty()) {
-            delete m_schedules[k.takeFirst()];
-        }
+    foreach (long key, m_schedules.keys()) {
+        delete m_schedules.take(key);
     }
+    m_parent = 0; //safety
 }
 
 void Node::init() {
@@ -205,23 +204,12 @@ bool Node::addDependChildNode( Relation *relation) {
     return true;
 }
 
-// These delDepend... methods look suspicious to me, can someone review?
-void Node::takeDependChildNode( Node *node ) {
-    int i = m_nodes.indexOf(node);
-    if ( i != -1 ) {
-        m_dependChildNodes.removeAt(i);
-    }
-}
-
 void Node::takeDependChildNode( Relation *rel ) {
     int i = m_dependChildNodes.indexOf(rel);
     if ( i != -1 ) {
+        //kDebug()<<k_funcinfo<<m_name<<": ("<<rel<<")"<<endl;
         m_dependChildNodes.removeAt(i);
     }
-}
-
-void Node::takeDependChildNode( int number) {
-    m_dependChildNodes.removeAt(number);
 }
 
 void Node::addDependParentNode( Node *node, Relation::Type p) {
@@ -251,23 +239,12 @@ bool Node::addDependParentNode( Relation *relation) {
     return true;
 }
 
-void Node::takeDependParentNode( Node *node ) {
-    int i = m_nodes.indexOf(node);
-    if ( i != -1 ) {
-        m_dependParentNodes.removeAt(i);
-    }
-}
-
 void Node::takeDependParentNode( Relation *rel ) {
     int i = m_dependParentNodes.indexOf(rel);
     if ( i != -1 ) {
+        //kDebug()<<k_funcinfo<<m_name<<": ("<<rel<<")"<<endl;
         m_dependParentNodes.removeAt(i);
     }
-}
-
-void Node::takeDependParentNode( int number ) {
-    if (number < m_dependParentNodes.size())
-        m_dependParentNodes.removeAt(number);
 }
 
 bool Node::isParentOf(Node *node) {

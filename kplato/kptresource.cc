@@ -44,6 +44,7 @@ ResourceGroup::ResourceGroup(Project *project) {
 }
 
 ResourceGroup::~ResourceGroup() {
+    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     if (findId() == this) {
         removeId(); // only remove myself (I may be just a working copy)
     }
@@ -236,6 +237,9 @@ Resource::~Resource() {
     }
     foreach (ResourceRequest *r, m_requests) {
         r->parent()->deleteResourceRequest(r);
+    }
+    foreach (long key, m_schedules.keys()) {
+        delete m_schedules.take(key);
     }
 }
 

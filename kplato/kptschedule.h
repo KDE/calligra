@@ -92,10 +92,10 @@ public:
     virtual bool add(Appointment *appointment);
     /// Adds appointment to both this resource schedule and node schedule
     virtual void addAppointment(Schedule */*other*/, DateTime &/*start*/, DateTime &/*end*/, double /*load*/=100) {}
-    /// removes appointment and deletes it (independent of setAutoDelete)
+    /// removes appointment and deletes it.
     void removeAppointment(Appointment *appointment);
-    /// removes appointment without deleting it (independent of setAutoDelete)
-    void takeAppointment(Appointment *appointment);
+    /// removes appointment without deleting it.
+    virtual void takeAppointment(Appointment *appointment);
     Appointment *findAppointment(Schedule *resource, Schedule *node);
     
     Appointment appointmentIntervals() const;
@@ -247,6 +247,7 @@ public:
 
 // tasks------------>
     virtual void addAppointment(Schedule *resource, DateTime &start, DateTime &end, double load=100);
+    virtual void takeAppointment(Appointment *appointment);
     
     virtual Node *node() const { return m_node; }
     virtual void setNode(Node *n) { m_node = n; }
@@ -278,6 +279,7 @@ public:
     virtual bool isDeleted() const 
         { return m_parent == 0 ? true : m_parent->isDeleted(); }
     virtual void addAppointment(Schedule *node, DateTime &start, DateTime &end, double load=100);
+    virtual void takeAppointment(Appointment *appointment);
     
     virtual bool isOverbooked() const;
     virtual bool isOverbooked(const DateTime &start, const DateTime &end) const;

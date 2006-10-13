@@ -68,6 +68,7 @@ Schedule::Schedule(QString name, Type type, long id)
 }
 
 Schedule::~Schedule() {
+    //kDebug()<<k_funcinfo<<this<<endl;
     while (!m_appointments.isEmpty())
         delete m_appointments.takeFirst();
 }
@@ -193,15 +194,6 @@ void Schedule::removeAppointment(Appointment *appointment) {
 }
 
 void Schedule::takeAppointment(Appointment *appointment) {
-    int i = m_appointments.indexOf(appointment);
-    if (i != -1) {
-        m_appointments.removeAt(i);
-        //kDebug()<<k_funcinfo<<"Taken: "<<appointment<<endl;
-        if (appointment->node())
-            appointment->node()->takeAppointment(appointment);
-    } else {
-        //kDebug()<<k_funcinfo<<"Couldn't find appointment: "<<appointment<<endl;
-    }
 }
 
 Appointment *Schedule::findAppointment(Schedule *resource, Schedule *node) {
@@ -470,6 +462,18 @@ void NodeSchedule::addAppointment(Schedule *resource, DateTime &start, DateTime 
         delete a;
 }
 
+void NodeSchedule::takeAppointment(Appointment *appointment) {
+    int i = m_appointments.indexOf(appointment);
+    if (i != -1) {
+        m_appointments.removeAt(i);
+        //kDebug()<<k_funcinfo<<"Taken: "<<appointment<<endl;
+        if (appointment->resource())
+            appointment->resource()->takeAppointment(appointment);
+    } else {
+        //kDebug()<<k_funcinfo<<"Couldn't find appointment: "<<appointment<<endl;
+    }
+}
+
 //-----------------------------------------------
 ResourceSchedule::ResourceSchedule()
     : Schedule(),
@@ -506,6 +510,18 @@ void ResourceSchedule::addAppointment(Schedule *node, DateTime &start, DateTime 
     a = new Appointment(this, node, start, end, load);
     if (!add(a) && !node->add(a))
         delete a;
+}
+
+void ResourceSchedule::takeAppointment(Appointment *appointment) {
+    int i = m_appointments.indexOf(appointment);
+    if (i != -1) {
+        m_appointments.removeAt(i);
+        //kDebug()<<k_funcinfo<<"Taken: "<<appointment<<endl;
+        if (appointment->node())
+            appointment->node()->takeAppointment(appointment);
+    } else {
+        //kDebug()<<k_funcinfo<<"Couldn't find appointment: "<<appointment<<endl;
+    }
 }
 
 bool ResourceSchedule::isOverbooked() const {
@@ -566,7 +582,7 @@ MainSchedule::~MainSchedule() {
 }
 
 bool MainSchedule::loadXML(const QDomElement &sch, Project &project) {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QString s;
     Schedule::loadXML(sch);
 
@@ -578,7 +594,7 @@ bool MainSchedule::loadXML(const QDomElement &sch, Project &project) {
         endTime = DateTime::fromString(s);
 
     QDomNodeList al = sch.childNodes();
-    kDebug()<<k_funcinfo<<"No of appointments: "<<al.count()<<endl;
+    //kDebug()<<k_funcinfo<<"No of appointments: "<<al.count()<<endl;
     for (unsigned int i=0; i<al.count(); ++i) {
         if (al.item(i).isElement()) {
             QDomElement app = al.item(i).toElement();

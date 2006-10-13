@@ -326,7 +326,7 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dur
 }
 
 Appointment::~Appointment() {
-    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     detach();
     while (m_intervals.isEmpty())
         delete m_intervals.takeFirst();
@@ -605,7 +605,7 @@ bool Appointment::attach() {
 }
 
 void Appointment::detach() {
-    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     if (m_resource) {
         m_resource->takeAppointment(this); // takes from node also
     }

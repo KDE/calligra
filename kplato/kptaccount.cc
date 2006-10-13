@@ -251,7 +251,7 @@ bool Account::insertId(Account *account) {
 }
 
 void Account::deleteCostPlace(CostPlace *cp) {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     int i = m_costPlaces.indexOf(cp);
     if (i != -1)
         m_costPlaces.removeAt(i);
@@ -328,11 +328,10 @@ Accounts::Accounts(Project &project)
 }
 
 Accounts::~Accounts() {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     while (!m_accountList.isEmpty()) {
         delete m_accountList.takeFirst();
     }
-    kDebug()<<k_funcinfo<<"end"<<endl;
 }
 
 EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, const QDate &end) {
@@ -441,9 +440,8 @@ void Accounts::save(QDomElement &element) const {
 }
 
 QStringList Accounts::costElements() const {
-    QList<QString> keylist = m_idDict.uniqueKeys();
     QStringList l;
-    foreach (QString key, keylist) {
+    foreach (QString key, m_idDict.uniqueKeys()) {
         if (m_idDict[key]->isElement())
             l << key;
     }

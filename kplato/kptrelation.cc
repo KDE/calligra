@@ -36,6 +36,7 @@ Relation::Relation(Node *parent, Node *child, Type type, Duration lag) {
     m_child=child;
     m_type=type;
     m_lag=lag;
+    //kDebug()<<k_funcinfo<<this<<endl;
 }
 
 Relation::Relation(Node *parent, Node *child, Type type) {
@@ -43,6 +44,7 @@ Relation::Relation(Node *parent, Node *child, Type type) {
     m_child=child;
     m_type=type;
     m_lag=Duration();
+    //kDebug()<<k_funcinfo<<this<<endl;
 }
 
 Relation::Relation(Relation *rel) {
@@ -50,10 +52,11 @@ Relation::Relation(Relation *rel) {
     m_child=rel->child();
     m_type=rel->type();
     m_lag=rel->lag();
+    //kDebug()<<k_funcinfo<<this<<endl;
 }
 
 Relation::~Relation() {
-    //kDebug()<<k_funcinfo<<"parent: "<<(m_parent ? m_parent->name():"none")<<" child: "<<(m_child ? m_child->name():"None")<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<") parent: "<<(m_parent ? m_parent->name():"none")<<" child: "<<(m_child ? m_child->name():"None")<<endl;
     if (m_parent)
         m_parent->takeDependChildNode(this);
     if (m_child)

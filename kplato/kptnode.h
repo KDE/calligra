@@ -124,13 +124,10 @@ public:
     virtual bool addDependChildNode( Relation *relation);
     /// Inserts relation to this node at index address index and appends relation to address node
     virtual void insertDependChildNode( unsigned int index, Node *node, Relation::Type p=Relation::FinishStart);
-    void takeDependChildNode( Node *node );
     /**
      * Takes the relation rel from this node only.
-     * Never deletes even when autoDelete = true.
      */
     void takeDependChildNode( Relation *rel );
-    void takeDependChildNode( int number );
     Relation *getDependChildNode( int number ) {
         return m_dependChildNodes.at(number);
     }
@@ -145,13 +142,10 @@ public:
     virtual bool addDependParentNode( Relation *relation);
     /// Inserts relation to this node at index and appends relation to node
     virtual void insertDependParentNode( unsigned int index, Node *node, Relation::Type p=Relation::FinishStart);
-    void takeDependParentNode( Node *node );
     /**
      * Takes the relation rel from this node only.
-     * Never deletes even when autoDelete = true.
      */
     void takeDependParentNode( Relation *rel );
-    void takeDependParentNode( int number );
     Relation *getDependParentNode( int number ) {
         return m_dependParentNodes.at(number);
     }
