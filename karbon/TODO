@@ -22,16 +22,12 @@ KoPathShape:
 - some things that are currently lacking (taken from inkscape):
   - joining selected end nodes by merging them
   - remove a segment
+  - nearest point on curve
 
 Layers:
 -------
-- figure out how we best implement the layers (its just a somewhat working hack right now)
-- the layer view needs porting to qt4 (use the model/view framework from qt see
-  http://www.phptr.com/content/images/0131872494/samplechapter/blanchette_ch10.pdf )
-  -> seems like there is another soc project working on a layer view (KoDocumentSection* in libs/kofficui)
 - we should make that really pretty with preview of shapes in a tooltip etc.
 - drag and drop of items to reparent or raising/lowering them
-- toggling locking and visbility should be easy to use
 
 Shapes/Tools:
 ---------------
