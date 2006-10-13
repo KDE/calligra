@@ -491,21 +491,22 @@ KarbonView::editPaste()
 void
 KarbonView::editSelectAll()
 {
-	debugView("KarbonView::editSelectAll()");
+    debugView("KarbonView::editSelectAll()");
 
-	KoSelection* selection = m_canvas->shapeManager()->selection();
-	if( ! selection )
-		return;
+    KoSelection* selection = m_canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
 
-	QList<KoShape*> shapes = part()->document().shapes();
-	kDebug(38000) << "shapes.size() = " << shapes.size() << endl;
+    QList<KoShape*> shapes = part()->document().shapes();
+    kDebug(38000) << "shapes.size() = " << shapes.size() << endl;
 
-	foreach( KoShape* shape, shapes )
-		selection->select( shape );
+    foreach( KoShape* shape, shapes )
+    {
+        selection->select( shape );
+        shape->repaint();
+    }
 
-	m_canvas->updateCanvas( selection->boundingRect() );
-
-	selectionChanged();
+    selectionChanged();
 }
 
 void

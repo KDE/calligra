@@ -132,7 +132,7 @@ void KarbonCanvas::addCommand(KCommand *command, bool execute) {
 
 void KarbonCanvas::updateCanvas(const QRectF& rc) {
     QRect clipRect( viewToWidget( m_zoomHandler.documentToView(rc).toRect() ) );
-    clipRect.adjust(-12, -12, 12, 12); // grow for anti-aliasing and to include selection handles
+    clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
     update(clipRect);
 }
 

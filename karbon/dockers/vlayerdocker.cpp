@@ -139,7 +139,6 @@ void VLayerDocker::slotButtonClicked( int buttonId )
 
 void VLayerDocker::itemClicked( const QModelIndex &index )
 {
-    kDebug() << "entering VLayerDocker::itemClicked" << endl;
     Q_ASSERT(index.internalPointer());
 
     if( ! index.isValid() )
@@ -158,19 +157,19 @@ void VLayerDocker::itemClicked( const QModelIndex &index )
     extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
 
     KoSelection *selection = m_canvas->shapeManager()->selection();
-
-    QRectF oldSelectionRect = selection->boundingRect();
+    foreach( KoShape* shape, selection->selectedShapes() )
+        shape->repaint();
 
     selection->deselectAll();
 
     foreach( KoShape* shape, selectedShapes )
     {
         if( shape )
+        {
             selection->select( shape );
+            shape->repaint();
+        }
     }
-
-    m_canvas->updateCanvas( oldSelectionRect.unite( selection->boundingRect() ) );
-    kDebug() << "leaving VLayerDocker::itemClicked" << endl;
 }
 
 void VLayerDocker::addLayer()
