@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbonxamlexport_PART_SRCS xamlexport.cc )
 
-kde4_automoc(${karbonxamlexport_PART_SRCS})
+kde4_automoc(karbonxamlexport ${karbonxamlexport_PART_SRCS})
 
 kde4_add_plugin(karbonxamlexport WITH_PREFIX ${karbonxamlexport_PART_SRCS})
 
@@ -22,7 +22,7 @@ install(TARGETS karbonxamlexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(karbonxamlimport_PART_SRCS xamlimport.cc )
 
-kde4_automoc(${karbonxamlimport_PART_SRCS})
+kde4_automoc(karbonxamlimport ${karbonxamlimport_PART_SRCS})
 
 kde4_add_plugin(karbonxamlimport WITH_PREFIX ${karbonxamlimport_PART_SRCS})
 

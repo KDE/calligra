@@ -3,7 +3,7 @@
 
 set(clipartthumbnail_PART_SRCS clipartcreator.cpp )
 
-kde4_automoc(${clipartthumbnail_PART_SRCS})
+kde4_automoc(clipartthumbnail ${clipartthumbnail_PART_SRCS})
 
 kde4_add_plugin(clipartthumbnail ${clipartthumbnail_PART_SRCS})
 
@@ -18,7 +18,7 @@ install(TARGETS clipartthumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kofficethumbnail_PART_SRCS kofficecreator.cpp )
 
-kde4_automoc(${kofficethumbnail_PART_SRCS})
+kde4_automoc(kofficethumbnail ${kofficethumbnail_PART_SRCS})
 
 kde4_add_plugin(kofficethumbnail ${kofficethumbnail_PART_SRCS})
 

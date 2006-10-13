@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kchart ${CMAKE_SOURCE_DIR}/kchart/kdcha
 
 set(kchartjpegexport_PART_SRCS jpegexport.cpp ${libdialogfilter_SRCS})
 
-kde4_automoc(${kchartjpegexport_PART_SRCS})
+kde4_automoc(kchartjpegexport ${kchartjpegexport_PART_SRCS})
 
 kde4_add_plugin(kchartjpegexport WITH_PREFIX ${kchartjpegexport_PART_SRCS})
 

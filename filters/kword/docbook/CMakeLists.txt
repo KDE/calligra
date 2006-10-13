@@ -7,7 +7,7 @@
 
 set(docbookexport_PART_SRCS docbookexport.cc )
 
-kde4_automoc(${docbookexport_PART_SRCS})
+kde4_automoc(docbookexport ${docbookexport_PART_SRCS})
 
 kde4_add_plugin(docbookexport WITH_PREFIX ${docbookexport_PART_SRCS})
 

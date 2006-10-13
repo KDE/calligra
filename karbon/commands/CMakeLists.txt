@@ -17,7 +17,7 @@ set(karboncommands_SRCS
     vzordercmd.cc
     )
 
-kde4_automoc(${karboncommands_SRCS})
+kde4_automoc(karboncommands ${karboncommands_SRCS})
 
 kde4_add_library(karboncommands ${karboncommands_SRCS})
 

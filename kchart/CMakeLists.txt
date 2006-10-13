@@ -49,7 +49,7 @@ set(kchartcommon_LIB_SRCS
    kchartPrinterDlg.cc
 )
 
-kde4_automoc(${kchartcommon_LIB_SRCS})
+kde4_automoc(kchartcommon ${kchartcommon_LIB_SRCS})
 
 # kde4_add_dcop_skels(kchartcommon_LIB_SRCS KChartViewIface.h KChartParamsIface.h )
 
@@ -65,7 +65,7 @@ install(TARGETS kchartcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 set(kchartpart_PART_SRCS kchart_factory_init.cc )
 
-kde4_automoc(${kchartpart_PART_SRCS})
+kde4_automoc(kchartpart ${kchartpart_PART_SRCS})
 
 kde4_add_plugin(kchartpart WITH_PREFIX ${kchartpart_PART_SRCS})
 
@@ -80,7 +80,7 @@ install(TARGETS kchartpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kchart_KDEINIT_SRCS main.cc )
 
-kde4_automoc(${kchart_KDEINIT_SRCS})
+kde4_automoc(kchart ${kchart_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kchart ${kchart_KDEINIT_SRCS})
 

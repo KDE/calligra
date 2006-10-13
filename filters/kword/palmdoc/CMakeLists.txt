@@ -7,7 +7,7 @@
 
 set(palmdocimport_PART_SRCS palmdocimport.cc palmdb.cpp palmdoc.cpp )
 
-kde4_automoc(${palmdocimport_PART_SRCS})
+kde4_automoc(palmdocimport ${palmdocimport_PART_SRCS})
 
 kde4_add_plugin(palmdocimport WITH_PREFIX ${palmdocimport_PART_SRCS})
 
@@ -22,7 +22,7 @@ install(TARGETS palmdocimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(palmdocexport_PART_SRCS palmdocexport.cc palmdb.cpp palmdoc.cpp )
 
-kde4_automoc(${palmdocexport_PART_SRCS})
+kde4_automoc(palmdocexport ${palmdocexport_PART_SRCS})
 
 kde4_add_plugin(palmdocexport WITH_PREFIX ${palmdocexport_PART_SRCS})
 

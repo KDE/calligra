@@ -11,7 +11,7 @@ include_directories(
 
 set(kwmailmerge_kspread_PART_SRCS kwmailmerge_kspread.cpp kwmailmerge_kspread_config.cpp )
 
-kde4_automoc(${kwmailmerge_kspread_PART_SRCS})
+kde4_automoc(kwmailmerge_kspread ${kwmailmerge_kspread_PART_SRCS})
 
 kde4_add_plugin(kwmailmerge_kspread ${kwmailmerge_kspread_PART_SRCS})
 

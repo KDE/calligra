@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbon_zoomtoolplugin_PART_SRCS vzoomtool.cc zoomtoolplugin.cc )
 
-kde4_automoc(${karbon_zoomtoolplugin_PART_SRCS})
+kde4_automoc(karbon_zoomtoolplugin ${karbon_zoomtoolplugin_PART_SRCS})
 
 kde4_add_plugin(karbon_zoomtoolplugin ${karbon_zoomtoolplugin_PART_SRCS})
 

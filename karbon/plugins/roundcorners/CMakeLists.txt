@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbon_roundcornersplugin_PART_SRCS roundcornersplugin.cc )
 
-kde4_automoc(${karbon_roundcornersplugin_PART_SRCS})
+kde4_automoc(karbon_roundcornersplugin ${karbon_roundcornersplugin_PART_SRCS})
 
 kde4_add_plugin(karbon_roundcornersplugin ${karbon_roundcornersplugin_PART_SRCS})
 

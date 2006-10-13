@@ -7,7 +7,7 @@ include_directories( ${KOFFICECORE_INCLUDES} )
 
 set(kounavailpart_PART_SRCS kounavail.cc )
 
-kde4_automoc(${kounavailpart_PART_SRCS})
+kde4_automoc(kounavailpart ${kounavailpart_PART_SRCS})
 
 kde4_add_plugin(kounavailpart WITH_PREFIX ${kounavailpart_PART_SRCS})
 

@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/lib/kote
 
 set(kpresenterxbmexport_PART_SRCS xbmexport.cpp ${libdialogfilter_SRCS})
 
-kde4_automoc(${kpresenterxbmexport_PART_SRCS})
+kde4_automoc(kpresenterxbmexport ${kpresenterxbmexport_PART_SRCS})
 
 kde4_add_plugin(kpresenterxbmexport WITH_PREFIX ${kpresenterxbmexport_PART_SRCS})
 

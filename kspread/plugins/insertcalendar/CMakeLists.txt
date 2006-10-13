@@ -7,7 +7,7 @@ include_directories( ${KOFFICEUI_INCLUDES} ${KDE4_INCLUDES}  )
 
 set(kspreadinsertcalendar_PART_SRCS kspread_plugininsertcalendar.cc kspread_insertcalendardialog.cc )
 
-kde4_automoc(${kspreadinsertcalendar_PART_SRCS})
+kde4_automoc(kspreadinsertcalendar ${kspreadinsertcalendar_PART_SRCS})
 
 kde4_add_ui_files(kspreadinsertcalendar_PART_SRCS kspread_insertcalendardialogbase.ui )
 

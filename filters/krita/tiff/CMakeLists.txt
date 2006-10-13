@@ -17,7 +17,7 @@ set(kritatiffimport_PART_SRCS
     kis_tiff_import.cc
     )
 
-kde4_automoc(${kritatiffimport_PART_SRCS})
+kde4_automoc(kritatiffimport ${kritatiffimport_PART_SRCS})
 
 kde4_add_plugin(kritatiffimport WITH_PREFIX ${kritatiffimport_PART_SRCS})
 
@@ -36,7 +36,7 @@ set(kritatiffexport_PART_SRCS
     kis_dlg_options_tiff.cpp
     )
 
-kde4_automoc(${kritatiffexport_PART_SRCS})
+kde4_automoc(kritatiffexport ${kritatiffexport_PART_SRCS})
 
 kde4_add_ui3_files(kritatiffexport_PART_SRCS kis_wdg_options_tiff.ui )
 

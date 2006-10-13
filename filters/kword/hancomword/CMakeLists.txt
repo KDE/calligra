@@ -7,7 +7,7 @@
 
 set(hancomwordimport_PART_SRCS pole.cpp hancomwordimport.cpp )
 
-kde4_automoc(${hancomwordimport_PART_SRCS})
+kde4_automoc(hancomwordimport ${hancomwordimport_PART_SRCS})
 
 kde4_add_plugin(hancomwordimport WITH_PREFIX ${hancomwordimport_PART_SRCS})
 

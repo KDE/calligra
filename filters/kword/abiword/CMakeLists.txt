@@ -11,7 +11,7 @@ set(abiwordimport_PART_SRCS
    ImportStyle.cc 
    ImportField.cc )
 
-kde4_automoc(${abiwordimport_PART_SRCS})
+kde4_automoc(abiwordimport ${abiwordimport_PART_SRCS})
 
 kde4_add_plugin(abiwordimport WITH_PREFIX ${abiwordimport_PART_SRCS})
 
@@ -26,7 +26,7 @@ install(TARGETS abiwordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(abiwordexport_PART_SRCS abiwordexport.cc )
 
-kde4_automoc(${abiwordexport_PART_SRCS})
+kde4_automoc(abiwordexport ${abiwordexport_PART_SRCS})
 
 kde4_add_plugin(abiwordexport WITH_PREFIX ${abiwordexport_PART_SRCS})
 

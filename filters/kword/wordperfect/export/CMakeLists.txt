@@ -7,7 +7,7 @@
 
 set(wpexport_PART_SRCS wpexport.cc wp5.cc wp6.cc )
 
-kde4_automoc(${wpexport_PART_SRCS})
+kde4_automoc(wpexport ${wpexport_PART_SRCS})
 
 kde4_add_plugin(wpexport WITH_PREFIX ${wpexport_PART_SRCS})
 

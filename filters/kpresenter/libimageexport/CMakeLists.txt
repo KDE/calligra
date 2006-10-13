@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/lib/kote
 
 set(kpresenterimageexport_LIB_SRCS imageexport.cpp )
 
-kde4_automoc(${kpresenterimageexport_LIB_SRCS})
+kde4_automoc(kpresenterimageexport ${kpresenterimageexport_LIB_SRCS})
 
 kde4_add_library(kpresenterimageexport SHARED ${kpresenterimageexport_LIB_SRCS})
 

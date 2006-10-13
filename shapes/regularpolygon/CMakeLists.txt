@@ -6,7 +6,7 @@ set(koregularpolygon_PART_SRCS
 	KoRegularPolygonShapeFactory.cpp
 )
 
-kde4_automoc(${koregularpolygon_PART_SRCS})
+kde4_automoc(koregularpolygon ${koregularpolygon_PART_SRCS})
 
 kde4_add_plugin(koregularpolygon ${koregularpolygon_PART_SRCS})
 

@@ -71,7 +71,7 @@ set(karboncommon_LIB_SRCS
    vtoolcontroller.cc 
    vtool.cc )
 
-kde4_automoc(${karboncommon_LIB_SRCS})
+kde4_automoc(karboncommon ${karboncommon_LIB_SRCS})
 
 #kde4_add_dcop_skels(karboncommon_LIB_SRCS karbon_part_iface.h karbon_view_iface.h )
 
@@ -87,7 +87,7 @@ install(TARGETS karboncommon  DESTINATION ${LIB_INSTALL_DIR})
 
 set(karbonpart_PART_SRCS karbon_factory_init.cc )
 
-kde4_automoc(${karbonpart_PART_SRCS})
+kde4_automoc(karbonpart ${karbonpart_PART_SRCS})
 
 kde4_add_plugin(karbonpart WITH_PREFIX ${karbonpart_PART_SRCS})
 
@@ -102,7 +102,7 @@ install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(karbon_KDEINIT_SRCS main.cc )
 
-kde4_automoc(${karbon_KDEINIT_SRCS})
+kde4_automoc(karbon ${karbon_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 

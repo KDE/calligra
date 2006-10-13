@@ -13,7 +13,7 @@ set(mswordimport_PART_SRCS
    tablehandler.cpp 
    graphicshandler.cpp )
 
-kde4_automoc(${mswordimport_PART_SRCS})
+kde4_automoc(mswordimport ${mswordimport_PART_SRCS})
 
 kde4_add_plugin(mswordimport WITH_PREFIX ${mswordimport_PART_SRCS})
 

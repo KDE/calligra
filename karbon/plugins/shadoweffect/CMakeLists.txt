@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbon_shadoweffectplugin_PART_SRCS shadoweffectplugin.cc vshadowdecorator.cc )
 
-kde4_automoc(${karbon_shadoweffectplugin_PART_SRCS})
+kde4_automoc(karbon_shadoweffectplugin ${karbon_shadoweffectplugin_PART_SRCS})
 
 kde4_add_plugin(karbon_shadoweffectplugin ${karbon_shadoweffectplugin_PART_SRCS})
 

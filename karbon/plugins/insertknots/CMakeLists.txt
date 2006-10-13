@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbon_insertknotsplugin_PART_SRCS insertknotsplugin.cc )
 
-kde4_automoc(${karbon_insertknotsplugin_PART_SRCS})
+kde4_automoc(karbon_insertknotsplugin ${karbon_insertknotsplugin_PART_SRCS})
 
 kde4_add_plugin(karbon_insertknotsplugin ${karbon_insertknotsplugin_PART_SRCS})
 

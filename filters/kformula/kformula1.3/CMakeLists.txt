@@ -8,7 +8,7 @@
 set( kformula13import_PART_SRCS KFormula13Import.cpp
                                 KFormula13ContentHandler.cpp )
 
-kde4_automoc(${kformula13import_PART_SRCS})
+kde4_automoc(kformula13import ${kformula13import_PART_SRCS})
 
 kde4_add_plugin(kformula13import WITH_PREFIX ${kformula13import_PART_SRCS})
 

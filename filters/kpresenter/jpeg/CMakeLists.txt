@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/lib/kote
 
 set(kpresenterjpegexport_PART_SRCS jpegexport.cpp ${libdialogfilter_SRCS})
 
-kde4_automoc(${kpresenterjpegexport_PART_SRCS})
+kde4_automoc(kpresenterjpegexport ${kpresenterjpegexport_PART_SRCS})
 
 kde4_add_plugin(kpresenterjpegexport WITH_PREFIX ${kpresenterjpegexport_PART_SRCS})
 

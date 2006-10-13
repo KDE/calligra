@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart/config ${CMAKE_SOURCE_D
 
 set(kiviotexttool_PART_SRCS plugin.cpp tool_text.cpp stenciltexteditor.cpp )
 
-kde4_automoc(${kiviotexttool_PART_SRCS})
+kde4_automoc(kiviotexttool ${kiviotexttool_PART_SRCS})
 
 kde4_add_ui3_files(kiviotexttool_PART_SRCS kivio_stenciltexteditorui.ui )
 

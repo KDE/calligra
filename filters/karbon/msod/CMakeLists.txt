@@ -7,7 +7,7 @@ include_directories( ${KWMF_INCLUDES} )
 
 set(karbonmsodimport_PART_SRCS msodimport.cc msod.cc )
 
-kde4_automoc(${karbonmsodimport_PART_SRCS})
+kde4_automoc(karbonmsodimport ${karbonmsodimport_PART_SRCS})
 
 kde4_add_plugin(karbonmsodimport WITH_PREFIX ${karbonmsodimport_PART_SRCS})
 

@@ -9,7 +9,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart/config ${CMAKE_SOURCE_D
 
 set(kivioselecttool_PART_SRCS plugin.cpp tool_select.cpp )
 
-kde4_automoc(${kivioselecttool_PART_SRCS})
+kde4_automoc(kivioselecttool ${kivioselecttool_PART_SRCS})
 
 kde4_add_plugin(kivioselecttool WITH_PREFIX ${kivioselecttool_PART_SRCS})
 

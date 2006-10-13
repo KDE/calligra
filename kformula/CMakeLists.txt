@@ -15,7 +15,7 @@ set(kformulapart_PART_SRCS
    KFormulaCanvas.cpp 
    KFormulaConfigDialog.cpp )
 
-kde4_automoc(${kformulapart_PART_SRCS})
+kde4_automoc(kformulapart ${kformulapart_PART_SRCS})
 
 kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
 
@@ -30,7 +30,7 @@ install(TARGETS kformulapart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kformula_KDEINIT_SRCS main.cpp )
 
-kde4_automoc(${kformula_KDEINIT_SRCS})
+kde4_automoc(kformula ${kformula_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kformula ${kformula_KDEINIT_SRCS})
 

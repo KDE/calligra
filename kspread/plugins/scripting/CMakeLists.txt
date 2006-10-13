@@ -12,7 +12,7 @@ add_subdirectory( scripts )
 
 set(kspreadscripting_PART_SRCS ScriptingModule.cpp ScriptingPart.cpp )
 
-kde4_automoc(${kspreadscripting_PART_SRCS})
+kde4_automoc(kspreadscripting ${kspreadscripting_PART_SRCS})
 kde4_add_plugin(kspreadscripting ${kspreadscripting_PART_SRCS})
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadscripting )
 

@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/lib/kote
 
 set(kpresenterbmpexport_PART_SRCS bmpexport.cpp ${libdialogfilter_SRCS})
 
-kde4_automoc(${kpresenterbmpexport_PART_SRCS})
+kde4_automoc(kpresenterbmpexport ${kpresenterbmpexport_PART_SRCS})
 
 kde4_add_plugin(kpresenterbmpexport WITH_PREFIX ${kpresenterbmpexport_PART_SRCS})
 

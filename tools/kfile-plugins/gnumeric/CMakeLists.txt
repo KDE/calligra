@@ -1,7 +1,7 @@
 
 set(kfile_gnumeric_PART_SRCS kfile_gnumeric.cpp )
 
-kde4_automoc(${kfile_gnumeric_PART_SRCS})
+kde4_automoc(kfile_gnumeric ${kfile_gnumeric_PART_SRCS})
 
 kde4_add_plugin(kfile_gnumeric ${kfile_gnumeric_PART_SRCS})
 

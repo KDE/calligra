@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
 
 set(gnumericexport_PART_SRCS gnumericexport.cc )
 
-kde4_automoc(${gnumericexport_PART_SRCS})
+kde4_automoc(gnumericexport ${gnumericexport_PART_SRCS})
 
 kde4_add_plugin(gnumericexport WITH_PREFIX ${gnumericexport_PART_SRCS})
 
@@ -22,7 +22,7 @@ install(TARGETS gnumericexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(gnumericimport_PART_SRCS gnumericimport.cc )
 
-kde4_automoc(${gnumericimport_PART_SRCS})
+kde4_automoc(gnumericimport ${gnumericimport_PART_SRCS})
 
 kde4_add_plugin(gnumericimport WITH_PREFIX ${gnumericimport_PART_SRCS})
 

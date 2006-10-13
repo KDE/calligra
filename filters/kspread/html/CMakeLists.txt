@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
 
 set(kspreadhtmlexport_PART_SRCS htmlexport.cc exportdialog.cc )
 
-kde4_automoc(${kspreadhtmlexport_PART_SRCS})
+kde4_automoc(kspreadhtmlexport ${kspreadhtmlexport_PART_SRCS})
 
 kde4_add_ui3_files(kspreadhtmlexport_PART_SRCS exportwidget.ui )
 

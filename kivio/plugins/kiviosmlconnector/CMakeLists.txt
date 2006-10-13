@@ -9,7 +9,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart/config ${CMAKE_SOURCE_D
 
 set(kiviosmlconnector_PART_SRCS plugin.cpp tool_connector.cpp )
 
-kde4_automoc(${kiviosmlconnector_PART_SRCS})
+kde4_automoc(kiviosmlconnector ${kiviosmlconnector_PART_SRCS})
 
 kde4_add_plugin(kiviosmlconnector WITH_PREFIX ${kiviosmlconnector_PART_SRCS})
 

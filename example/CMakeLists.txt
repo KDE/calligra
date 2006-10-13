@@ -7,7 +7,7 @@ include_directories( ${KOFFICEUI_INCLUDES} )
 
 set(koexamplepart_PART_SRCS KoExamplePart.cpp KoExampleView.cpp KoExampleFactory.cpp )
 
-kde4_automoc(${koexamplepart_PART_SRCS})
+kde4_automoc(koexamplepart ${koexamplepart_PART_SRCS})
 
 kde4_add_plugin(koexamplepart WITH_PREFIX ${koexamplepart_PART_SRCS})
 
@@ -22,7 +22,7 @@ install(TARGETS koexamplepart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(koexample_KDEINIT_SRCS main.cpp )
 
-kde4_automoc(${koexample_KDEINIT_SRCS})
+kde4_automoc(koexample ${koexample_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( koexample ${koexample_KDEINIT_SRCS})
 

@@ -7,7 +7,7 @@
 
 set(powerpointimport_PART_SRCS powerpointimport.cc ${libppt_SRCS} )
 
-kde4_automoc(${powerpointimport_PART_SRCS})
+kde4_automoc(powerpointimport ${powerpointimport_PART_SRCS})
 
 kde4_add_plugin(powerpointimport WITH_PREFIX ${powerpointimport_PART_SRCS})
 

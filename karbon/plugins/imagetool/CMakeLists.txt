@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbon_imagetoolplugin_PART_SRCS imagetoolplugin.cc vimagetool.cc )
 
-kde4_automoc(${karbon_imagetoolplugin_PART_SRCS})
+kde4_automoc(karbon_imagetoolplugin ${karbon_imagetoolplugin_PART_SRCS})
 
 kde4_add_plugin(karbon_imagetoolplugin ${karbon_imagetoolplugin_PART_SRCS})
 

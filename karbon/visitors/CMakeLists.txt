@@ -8,7 +8,7 @@ set(karbonvisitors_SRCS
     vtransformnodes.cc 
     )
 
-kde4_automoc(${karbonvisitors_SRCS})
+kde4_automoc(karbonvisitors ${karbonvisitors_SRCS})
 
 kde4_add_library(karbonvisitors ${karbonvisitors_SRCS})
 

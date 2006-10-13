@@ -20,7 +20,7 @@ set(kwordkword1dot3import_PART_SRCS
    kword13picture.cpp 
    kword13postparsing.cpp )
 
-kde4_automoc(${kwordkword1dot3import_PART_SRCS})
+kde4_automoc(kwordkword1dot3import ${kwordkword1dot3import_PART_SRCS})
 
 kde4_add_plugin(kwordkword1dot3import WITH_PREFIX ${kwordkword1dot3import_PART_SRCS})
 

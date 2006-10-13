@@ -10,7 +10,7 @@ add_subdirectory( generator )
 
 set(kwordlateximport_PART_SRCS config.cc lateximport.cc lateximportdia.cc )
 
-kde4_automoc(${kwordlateximport_PART_SRCS})
+kde4_automoc(kwordlateximport ${kwordlateximport_PART_SRCS})
 
 kde4_add_dcop_skels(kwordlateximport_PART_SRCS lateximportdia.h )
 

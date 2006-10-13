@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kpresenter ${CMAKE_SOURCE_DIR}/lib/kote
 
 set(kpresentersvgexport_PART_SRCS svgexport.cc )
 
-kde4_automoc(${kpresentersvgexport_PART_SRCS})
+kde4_automoc(kpresentersvgexport ${kpresentersvgexport_PART_SRCS})
 
 kde4_add_plugin(kpresentersvgexport WITH_PREFIX ${kpresentersvgexport_PART_SRCS})
 

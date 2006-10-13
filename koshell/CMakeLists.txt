@@ -7,7 +7,7 @@ include_directories(${KOFFICEUI_INCLUDES})
 
 set(koshell_KDEINIT_SRCS koshell_main.cc koshell_shell.cc iconsidepane.cpp )
 
-kde4_automoc(${koshell_KDEINIT_SRCS})
+kde4_automoc(koshell ${koshell_KDEINIT_SRCS})
 
 kde4_add_kcfg_files(koshell_KDEINIT_SRCS koshellsettings.kcfgc )
 

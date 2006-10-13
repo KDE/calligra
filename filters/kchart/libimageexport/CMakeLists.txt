@@ -13,7 +13,7 @@ include_directories(
 
 set(kchartimageexport_LIB_SRCS imageexport.cpp ${libdialogfilter_SRCS})
 
-kde4_automoc(${kchartimageexport_LIB_SRCS})
+kde4_automoc(kchartimageexport ${kchartimageexport_LIB_SRCS})
 
 kde4_add_library(kchartimageexport SHARED ${kchartimageexport_LIB_SRCS})
 

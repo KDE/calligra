@@ -9,7 +9,7 @@ set(karbondockers_SRCS
     vlayerdocker.cpp
     )
 
-kde4_automoc(${karbondockers_SRCS})
+kde4_automoc(karbondockers ${karbondockers_SRCS})
 
 kde4_add_library(karbondockers ${karbondockers_SRCS})
 
