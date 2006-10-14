@@ -665,7 +665,7 @@ QString FormulaStringParser::nextToken()
     }
     if ( eol() ) {
         currentType = EOL;
-        return QString::null;
+        return QString();
     }
     if ( m_formula[pos].isDigit() || m_formula[pos] == '.' ) {
         uint begin = pos;
@@ -673,10 +673,10 @@ QString FormulaStringParser::nextToken()
         currentType = NUMBER;
         current = m_formula.mid( begin, pos-begin );
         if ( current[0] == '.' ) {
-            current = "0" + current;
+            current = '0' + current;
         }
         if ( current[current.length()-1] == '.' ) {
-            current = current + "0";
+            current = current + '0';
         }
         return current;
     }
