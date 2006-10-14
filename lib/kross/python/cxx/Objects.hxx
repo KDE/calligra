@@ -1938,7 +1938,7 @@ namespace Py
 			if(map.hasKey(key)) the_item = map.getItem(key);
 			};
 
-		~mapref<T>()
+		~mapref()
 			{}
 
 		// MapBase<T> stuff
