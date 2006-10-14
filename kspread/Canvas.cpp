@@ -4317,7 +4317,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const QRectF& /*viewRect*
       continue;
     }
 
-    const QRect range = (*it)->rect();
+    const QRect range = choice()->extendToMergedAreas( (*it)->rect() );
 
     QRectF unzoomedRect = cellCoordinatesToDocument( range ).translated( -xOffset(), -yOffset() );
 
@@ -4369,7 +4369,8 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
 
   const Selection* selection = selectionInfo();
   const QRect currentRange = QRect(selection->anchor(), selection->marker()).normalized();
-  const QRectF markerRegion = cellCoordinatesToDocument( QRect( selection->marker(), selection->marker() ) ).translated( -xOffset(), -yOffset() );
+  const QRect effMarker = selectionInfo()->extendToMergedAreas( QRect( selection->marker(), selection->marker() ) );
+  const QRectF markerRegion = cellCoordinatesToDocument( effMarker ).translated( -xOffset(), -yOffset() );
   Region::ConstIterator end(selection->constEnd());
   for (Region::ConstIterator it(selection->constBegin()); it != end; ++it)
   {
@@ -4380,7 +4381,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
 
     bool current = (currentRange == range);
 
-    retrieveMarkerInfo( range, viewRect, positions, paintSides );
+    retrieveMarkerInfo( selectionInfo()->extendToMergedAreas( range ), viewRect, positions, paintSides );
 
     double left =   positions[0];
     double top =    positions[1];
@@ -4400,7 +4401,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
         // clip out the marker region
         painter.setClipRegion( clipRegion.subtracted( markerRegion.toRect() ) );
         // draw the transparent selection background
-        painter.fillRect( left, top, right - left, bottom - top, selectionColor );
+        painter.fillRect( QRectF( left, top, right - left, bottom - top ), selectionColor );
         // restore clip region
         painter.setClipRegion( clipRegion );
 
