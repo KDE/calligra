@@ -1764,8 +1764,6 @@ void View::initView()
     // signal slot
     connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
     connect( d->horzScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollHorz(int) ) );
-
-    d->canvas->setFocus();
 }
 
 Canvas* View::canvasWidget() const
@@ -2465,6 +2463,8 @@ void View::initialPosition()
 
     d->adjustActions( !d->activeSheet->isProtected() );
     d->adjustWorkbookActions( !doc()->map()->isProtected() );
+
+    d->canvas->setFocus();
 
     // finish the "View Loading" process
     d->loading = false;

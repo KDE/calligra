@@ -170,7 +170,7 @@ Cell* CellView::cell() const
 void CellView::update()
 {
     Cell* const cell = this->cell();
-    kDebug(36004) << "updating painting attributes for " << cell->name() << endl;
+//     kDebug(36004) << "updating painting attributes for " << cell->name() << endl;
     d->leftBorderPen     = cell->effLeftBorderPen     ( cell->column(), cell->row() );
     d->rightBorderPen    = cell->effRightBorderPen    ( cell->column(), cell->row() );
     d->topBorderPen      = cell->effTopBorderPen      ( cell->column(), cell->row() );
@@ -318,6 +318,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
     // that case, "selected" will be set to false even though the cell
     // itself really is selected.
     bool  selected = false;
+#if 0 // moved to Canvas::paintNormalMarker()
     if ( view != 0 ) {
         selected = view->selectionInfo()->contains( cellRef );
 
@@ -332,6 +333,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
         if ( dynamic_cast<QPrinter*>(painter.device()) )
             selected = false;
     }
+#endif
 
 #ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     // Need to update the painting attributes cache?
@@ -640,27 +642,6 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                 height = cell->extraHeight();
 #endif
         }
-    }
-
-    // Check if the cell is "selected", i.e. it should be drawn with the
-    // color that indicates selection (dark blue).  If more than one
-    // square is selected, the last one uses the ordinary colors.  In
-    // that case, "selected" will be set to false even though the cell
-    // itself really is selected.
-    bool  selected = false;
-    if ( view != 0 ) {
-        selected = view->selectionInfo()->contains( cellCoordinate );
-
-        // But the cell doesn't look selected if this is the marker cell.
-        Cell* markerCell = sheet->cellAt( view->selectionInfo()->marker() );
-        QPoint bottomRight( view->selectionInfo()->marker().x() + markerCell->extraXCells(),
-                            view->selectionInfo()->marker().y() + markerCell->extraYCells() );
-        QRect markerArea( view->selectionInfo()->marker(), bottomRight );
-        selected = selected && !( markerArea.contains( cellCoordinate ) );
-
-        // Don't draw any selection at all when printing.
-        if ( dynamic_cast<QPrinter*>(painter.device()) )
-            selected = false;
     }
 
     // Need to make a new layout ?
@@ -1038,8 +1019,10 @@ void CellView::paintBackground( QPainter& painter, const QRectF& cellRect,
                                 const QPoint& cellRef, bool selected,
                                 QColor& backgroundColor )
 {
-  // disable antialiasing
-  painter.setRenderHint( QPainter::Antialiasing, false );
+    Q_UNUSED( selected );
+
+    // disable antialiasing
+    painter.setRenderHint( QPainter::Antialiasing, false );
 
   // Handle printers separately.
   if ( dynamic_cast<QPrinter*>(painter.device()) )
@@ -1076,6 +1059,7 @@ void CellView::paintBackground( QPainter& painter, const QRectF& cellRect,
   if ( brush.style() != Qt::NoBrush )
     painter.fillRect( cellRect, brush );
 
+#if 0 // moved to Canvas::paintNormalMarker()
   // Draw alpha-blended selection
   if ( selected )
   {
@@ -1083,9 +1067,10 @@ void CellView::paintBackground( QPainter& painter, const QRectF& cellRect,
     selectionColor.setAlpha( 127 );
     painter.fillRect( cellRect, selectionColor );
   }
+#endif
 
-  // restore antialiasing
-  painter.setRenderHint( QPainter::Antialiasing, true );
+    // restore antialiasing
+    painter.setRenderHint( QPainter::Antialiasing, true );
 }
 
 

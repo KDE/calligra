@@ -496,6 +496,14 @@ private:
     QRect viewToCellCoordinates( const QRectF& area ) const;
 
     /**
+     * Calculates the region in document coordinates occupied by a range of cells on
+     * the currently active sheet.
+     *
+     * @param cellRange The range of cells on the current sheet.
+     */
+    QRectF cellCoordinatesToDocument( const QRect& cellRange ) const;
+
+    /**
      * Paints the children
      */
     void paintChildren( QPainter& painter, QMatrix& matrix );
@@ -520,30 +528,6 @@ private:
   * @param viewRect The area currently visible on the canvas
   */
   void paintHighlightedRanges(QPainter& painter, const QRectF& viewRect);
-
-  /**
-  * Calculates the visible region on the canvas occupied by a range of cells on the currently active sheet.
-  * This is used for drawing the thick border around the current selection or highlights around cell range
-  * references.
-  * The results do not take into account the current zoom factor of the sheet,
-  * use Doc::zoomRect on @p visibleRect after calling this function to get a new rectangle taking
-  * the zoom level into account.
-  * @param sheetArea The range of cells on the current sheet
-  * @param visibleRect This is set to the visible region occupied by the given range of cells
-  *
-  */
-  void sheetAreaToVisibleRect( const QRect& sheetArea, QRectF& visibleRect );
-
-  /**
-  * Calculates the physical region on the canvas widget occupied by a range of cells on
-  * the currently active sheet.
-  * Unlike @see sheetAreaToVisibleRect , scrolling the view does not affect sheetAreaToRect.
-  *
-  * @param sheetArea The range of cells on the current sheet
-  * @param visibleRect This is set to the physical region occupied by the given range of cells
-  */
-  void sheetAreaToRect( const QRect& sheetArea, KoRect& rect );
-
 
   /**
    * helper function in drawing the marker and choose marker.

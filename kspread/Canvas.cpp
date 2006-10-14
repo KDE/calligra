@@ -1229,8 +1229,7 @@ bool Canvas::highlightRangeSizeGripAt(double x, double y)
   for (Region::ConstIterator it = choice()->constBegin(); it != end; ++it)
   {
     // TODO Stefan: adapt to Selection::selectionHandleArea
-    KoRect visibleRect;
-    sheetAreaToRect((*it)->rect(), visibleRect);
+    QRectF visibleRect = cellCoordinatesToDocument( (*it)->rect() );
 
     QPoint bottomRight((int) visibleRect.right(), (int) visibleRect.bottom());
     QRect handle( ( (int) bottomRight.x() - 6 ),
@@ -4320,9 +4319,8 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const QRectF& /*viewRect*
 
     const QRect range = (*it)->rect();
 
-    QRectF unzoomedRect;
+    QRectF unzoomedRect = cellCoordinatesToDocument( range ).translated( -xOffset(), -yOffset() );
 
-    sheetAreaToVisibleRect( range, unzoomedRect );
     //Convert region from sheet coordinates to canvas coordinates for use with the painter
     //retrieveMarkerInfo(region,viewRect,positions,paintSides);
 
@@ -4362,7 +4360,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
   if (d->cellEditor)
 	return;
 
-  painter.save();
+  // disable antialiasing
   painter.setRenderHint( QPainter::Antialiasing, false );
 
   QLineF line;
@@ -4371,6 +4369,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
 
   const Selection* selection = selectionInfo();
   const QRect currentRange = QRect(selection->anchor(), selection->marker()).normalized();
+  const QRectF markerRegion = cellCoordinatesToDocument( QRect( selection->marker(), selection->marker() ) ).translated( -xOffset(), -yOffset() );
   Region::ConstIterator end(selection->constEnd());
   for (Region::ConstIterator it(selection->constBegin()); it != end; ++it)
   {
@@ -4393,6 +4392,18 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
     bool paintRight =  paintSides[2];
     bool paintBottom = paintSides[3];
 
+        // get the transparent selection color
+        QColor selectionColor( QApplication::palette().highlight().color() );
+        selectionColor.setAlpha( 127 );
+        // save old clip region
+        QRegion clipRegion = painter.clipRegion();
+        // clip out the marker region
+        painter.setClipRegion( clipRegion.subtracted( markerRegion.toRect() ) );
+        // draw the transparent selection background
+        painter.fillRect( left, top, right - left, bottom - top, selectionColor );
+        // restore clip region
+        painter.setClipRegion( clipRegion );
+
     /* the extra '-1's thrown in here account for the thickness of the pen.
       want to look like this:                     not this:
                               * * * * * *                     * * * *
@@ -4400,7 +4411,6 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
                               *         *                   *         *
     */
     int l = 0;
-
     if ( paintTop )
     {
       line = QLineF( left - l, top, right + l, top );
@@ -4474,162 +4484,112 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
       }
     }
   }
-  painter.restore();
+  // restore antialiasing
+  painter.setRenderHint( QPainter::Antialiasing, true );
 }
 
-void Canvas::sheetAreaToRect(const QRect& sheetArea, KoRect& rect)
+QRectF Canvas::cellCoordinatesToDocument( const QRect& cellRange ) const
 {
-  register Sheet * const sheet = activeSheet();
-  if (!sheet)
-    return;
+    register Sheet * const sheet = activeSheet();
+    if (!sheet)
+        return QRectF();
 
-	if ( sheet->layoutDirection()==Sheet::RightToLeft )
-	{
-		rect.setLeft(sheet->dblColumnPos( sheetArea.right()+1 ) );
-		rect.setRight(sheet->dblColumnPos( sheetArea.left() ));
-	}
-	else
-	{
-		rect.setLeft(sheet->dblColumnPos( sheetArea.left() ));
-		rect.setRight(sheet->dblColumnPos( sheetArea.right()+1 ));
-	}
-
-	rect.setTop(sheet->dblRowPos(sheetArea.top()));
-	rect.setBottom(sheet->dblRowPos(sheetArea.bottom()+1));
-
-}
-
-void Canvas::sheetAreaToVisibleRect( const QRect& sheetArea, QRectF& visibleRect )
-{
-	Sheet* sheet=activeSheet();
-
-	if (!sheet)
-		return;
-
-	double dwidth=d->view->doc()->unzoomItXOld(width());
-	double xpos;
-	double x;
-
-	if ( sheet->layoutDirection()==Sheet::RightToLeft )
-	{
-		xpos = dwidth - sheet->dblColumnPos( sheetArea.right() ) + xOffset();
-		x    = dwidth - sheet->dblColumnPos( sheetArea.left() ) + xOffset();
-	}
-	else
-	{
-		xpos = sheet->dblColumnPos( sheetArea.left() ) - xOffset();
-		x    = sheet->dblColumnPos( sheetArea.right() ) - xOffset();
-	}
-
-	double ypos = sheet->dblRowPos(sheetArea.top())-yOffset();
-
-	const ColumnFormat *columnFormat = sheet->columnFormat( sheetArea.right() );
-	double tw = columnFormat->dblWidth( );
-	double w = x - xpos + tw;
-
-	double y = sheet->dblRowPos( sheetArea.bottom() ) - yOffset();
-	const RowFormat* rowFormat = sheet->rowFormat( sheetArea.bottom() );
-	double th = rowFormat->dblHeight( );
-	double h = ( y - ypos ) + th;
-
-	/* left, top, right, bottom */
-	if ( sheet->layoutDirection()==Sheet::RightToLeft )
-	{
-		visibleRect.setLeft(xpos - tw );
-		visibleRect.setRight(xpos - tw + w );
-	}
-	else
-	{
-		visibleRect.setLeft(xpos );
-		visibleRect.setRight(xpos + w );
-	}
-	visibleRect.setTop(ypos);
-	visibleRect.setBottom(ypos + h);
+    QRectF rect;
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
+    {
+        rect.setLeft ( sheet->dblColumnPos( cellRange.right() + 1 ) );
+        rect.setRight( sheet->dblColumnPos( cellRange.left() ) );
+    }
+    else
+    {
+        rect.setLeft ( sheet->dblColumnPos( cellRange.left() ) );
+        rect.setRight( sheet->dblColumnPos( cellRange.right() + 1 ) );
+    }
+    rect.setTop   ( sheet->dblRowPos( cellRange.top() ) );
+    rect.setBottom( sheet->dblRowPos( cellRange.bottom() + 1 ) );
+    return rect;
 }
 
 void Canvas::retrieveMarkerInfo( const QRect &marker,
-                                        const QRectF &viewRect,
-                                        double positions[],
-                                        bool paintSides[] )
+                                 const QRectF &viewRect,
+                                 double positions[],
+                                 bool paintSides[] )
 {
+    Sheet* sheet=activeSheet();
 
-	Sheet* sheet=activeSheet();
+    if (!sheet) return;
 
-	if (!sheet) return;
-
-	QRectF visibleRect;
-	sheetAreaToVisibleRect( marker,visibleRect );
-
+    QRectF visibleRect = cellCoordinatesToDocument( marker ).translated( -xOffset(), -yOffset() );
 
  /* register Sheet * const sheet = activeSheet();
-  if (!sheet)
+    if (!sheet)
     return;
 
-  double dWidth = d->view->doc()->unzoomItXOld( width() );
+    double dWidth = d->view->doc()->unzoomItXOld( width() );
 
-  double xpos;
-  double x;
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
-  {
+    double xpos;
+    double x;
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
+    {
     xpos = dWidth - sheet->dblColumnPos( marker.right() ) + xOffset();
     x    = dWidth - sheet->dblColumnPos( marker.left() ) + xOffset();
-  }
-  else
-  {
+}
+    else
+    {
     xpos = sheet->dblColumnPos( marker.left() ) - xOffset();
     x    = sheet->dblColumnPos( marker.right() ) - xOffset();
-  }
-  double ypos = sheet->dblRowPos( marker.top() ) - yOffset();
+}
+    double ypos = sheet->dblRowPos( marker.top() ) - yOffset();
 
-  const ColumnFormat *columnFormat = sheet->columnFormat( marker.right() );
-  double tw = columnFormat->dblWidth( );
-  double w = x - xpos + tw;
+    const ColumnFormat *columnFormat = sheet->columnFormat( marker.right() );
+    double tw = columnFormat->dblWidth( );
+    double w = x - xpos + tw;
 
-  double y = sheet->dblRowPos( marker.bottom() ) - yOffset();
-  const RowFormat* rowFormat = sheet->rowFormat( marker.bottom() );
-  double th = rowFormat->dblHeight( );
-  double h = ( y - ypos ) + th;
+    double y = sheet->dblRowPos( marker.bottom() ) - yOffset();
+    const RowFormat* rowFormat = sheet->rowFormat( marker.bottom() );
+    double th = rowFormat->dblHeight( );
+    double h = ( y - ypos ) + th;
 
 	//left, top, right, bottom
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
-  {
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
+    {
     positions[0] = xpos - tw;
     positions[2] = xpos - tw + w;
-  }
-  else
-  {
+}
+    else
+    {
     positions[0] = xpos;
     positions[2] = xpos + w;
-  }
-  positions[1] = ypos;
-	positions[3] = ypos + h;*/
+}
+    positions[1] = ypos;
+    positions[3] = ypos + h;*/
 
-  /* these vars are used for clarity, the array for simpler function arguments  */
-	double left = visibleRect.left();
-	double top = visibleRect.top();
-	double right = visibleRect.right();
-	double bottom = visibleRect.bottom();
+    /* these vars are used for clarity, the array for simpler function arguments  */
+    double left = visibleRect.left();
+    double top = visibleRect.top();
+    double right = visibleRect.right();
+    double bottom = visibleRect.bottom();
 
-  /* left, top, right, bottom */
-  paintSides[0] = (viewRect.left() <= left) && (left <= viewRect.right()) &&
+    /* left, top, right, bottom */
+    paintSides[0] = (viewRect.left() <= left) && (left <= viewRect.right()) &&
+            (bottom >= viewRect.top()) && (top <= viewRect.bottom());
+    paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom())
+            && (right >= viewRect.left()) && (left <= viewRect.right());
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
+        paintSides[2] = (viewRect.left() <= right ) &&
+                (right - 1 <= viewRect.right()) &&
                 (bottom >= viewRect.top()) && (top <= viewRect.bottom());
-  paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom())
-               && (right >= viewRect.left()) && (left <= viewRect.right());
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
-    paintSides[2] = (viewRect.left() <= right ) &&
-                    (right - 1 <= viewRect.right()) &&
-                    (bottom >= viewRect.top()) && (top <= viewRect.bottom());
-  else
-    paintSides[2] = (viewRect.left() <= right ) &&
-                    (right <= viewRect.right()) &&
-                    (bottom >= viewRect.top()) && (top <= viewRect.bottom());
-  paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom())
-               && (right >= viewRect.left()) && (left <= viewRect.right());
+    else
+        paintSides[2] = (viewRect.left() <= right ) &&
+                (right <= viewRect.right()) &&
+                (bottom >= viewRect.top()) && (top <= viewRect.bottom());
+    paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom())
+            && (right >= viewRect.left()) && (left <= viewRect.right());
 
-  positions[0] = qMax( left,   viewRect.left() );
-  positions[1] = qMax( top,    viewRect.top() );
-  positions[2] = qMin( right,  viewRect.right() );
-  positions[3] = qMin( bottom, viewRect.bottom() );
+    positions[0] = qMax( left,   viewRect.left() );
+    positions[1] = qMax( top,    viewRect.top() );
+    positions[2] = qMin( right,  viewRect.right() );
+    positions[3] = qMin( bottom, viewRect.bottom() );
 }
 
 // find the label for the tip
