@@ -79,10 +79,22 @@ KWord
 Introduction
 	Basically a copy of the goals described in the general KOffice handbook.
 Working with text
+    Styles
+    linespacing
+    text features (see character/paragraph style header files for a list)
+    foot notes
+    end notes
 Working with frames
+    Styles
+Working with pages
+    when are they auto created
+    copying of frames concept
+    page spreads
 Working with tables
 <more technologies?>
 <usecases>
+    * Simple text with great layout (default styles)
+    * Create a 3 column, 2 page 'newspaper' with 2 pictures and using just 1 flow of text make sure the user never has to create any frames except for the picture frames.
 <reference guide>
 
 --------------------------------------------------------------------------------
