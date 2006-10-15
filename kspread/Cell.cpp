@@ -2494,27 +2494,26 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
   };
 }
 
-void Cell::loadOasisConditional( KoXmlElement * style )
+void Cell::loadOasisConditional( const KoXmlElement* style )
 {
-    //kDebug(36003)<<" void Cell::loadOasisConditional( KoXmlElement * style  :"<<style<<endl;
     if ( style )//safe
     {
-        //TODO fixme it doesn't work :(((
+        // search for at least one condition
         KoXmlElement e;
         forEachElement( e, style->toElement() )
         {
-//             kDebug(36003)<<"e.localName() :"<<e.localName()<<endl;
             if ( e.localName() == "map" && e.namespaceURI() == KoXmlNS::style )
             {
-                if (d->hasExtra())
+                if ( d->hasExtra() )
                     delete d->extra()->conditions;
                 d->extra()->conditions = new Conditions( this );
                 d->extra()->conditions->loadOasisConditions( e );
                 d->extra()->conditions->checkMatches();
+                // break here
+                // Conditions::loadOasisConditions finishes the iteration
                 break;
             }
         }
-
     }
 }
 
@@ -2528,10 +2527,10 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
         oasisContext.fillStyleStack( element, KoXmlNS::table, "styleName", "table-cell" );
 
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        KoXmlElement* cellStyle = const_cast<KoXmlElement*>( oasisContext.oasisStyles().findStyle( str, "table-cell" ) );
+        const KoXmlElement* cellStyle = oasisContext.oasisStyles().findStyle( str, "table-cell" );
 
         if ( cellStyle )
-            loadOasisConditional( const_cast<KoXmlElement *>( cellStyle ) );
+            loadOasisConditional( cellStyle );
     }
 
     if (style)

@@ -917,7 +917,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisConditional( KoXmlElement * style );
+    void loadOasisConditional( const KoXmlElement* style );
 
 private:
     class Extra;
