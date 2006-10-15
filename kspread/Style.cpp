@@ -2797,8 +2797,6 @@ void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& sty
     setName (name);
     if ( style.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
       setParentName (style.attributeNS( KoXmlNS::style, "parent-style-name", QString::null ));
-    else if ( this->name() != "Default" )
-        setParentName ("Default");
 
     setType (CUSTOM);
 

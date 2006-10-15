@@ -49,15 +49,12 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
     KoGenStyle defStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
     defaultStyle()->saveOasis( defStyle, mainStyles );
 
-    QStringList names = styleNames ();
-    QStringList::iterator it;
-    for (it = names.begin(); it != names.end(); ++it) {
-      if (*it != "Default") {
-        kDebug(36003) << "StyleManager: Saving common cell style " << *it <<endl;
-        CustomStyle * styleData = style (*it);
+    CustomStyles::ConstIterator end = m_styles.end();
+    for ( CustomStyles::ConstIterator it( m_styles.begin() ); it != end; ++it )
+    {
+        kDebug(36003) << "StyleManager: Saving common cell style " << it.key() <<endl;
         KoGenStyle customStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
-        styleData->saveOasis( customStyle, mainStyles );
-      }
+        (*it)->saveOasis( customStyle, mainStyles );
     }
 }
 
@@ -76,8 +73,6 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
     }
     else
       resetDefaultStyle();
-    // insert it into the the map sorted the OpenDocument name
-    m_oasisStyles["Default"] = defaultStyle();
 
     uint nStyles = oasisStyles.userStyles().count();
     for (unsigned int item = 0; item < nStyles; item++) {
@@ -111,9 +106,13 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
 
     // reparent all styles
     foreach ( CustomStyle* style, m_styles )
-      if ( style->name() != "Default" )
         if ( !style->parent() && !style->parentName().isNull() )
-          style->setParent( m_oasisStyles[ style->parentName() ] );
+        {
+            style->setParent( m_oasisStyles[ style->parentName() ] );
+            kDebug(36003) << style->name() << " (" << style << ") gets " << m_oasisStyles[ style->parentName() ]->name() << " (" << m_oasisStyles[ style->parentName() ] << ") as parent." << endl;
+        }
+        else
+            kDebug(36003) << style->name() << " (" << style << ") already has " << style->parentName() << " (" << style->parent() << ") as parent." << endl;
 }
 
 QDomElement StyleManager::save( QDomDocument & doc )
