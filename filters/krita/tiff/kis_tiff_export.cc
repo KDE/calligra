@@ -23,6 +23,7 @@
 #include <qslider.h>
 
 #include <kapplication.h>
+#include <kcombobox.h>
 #include <kdialogbase.h>
 #include <kgenericfactory.h>
 
@@ -59,6 +60,17 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QCString& from, const QC
     
     KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0, "options dialog for tiff");
  
+    KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
+    
+    KisColorSpace* cs = output->currentImage()->colorSpace();
+    KisChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
+    if( type == KisChannelInfo::FLOAT16 || type == KisChannelInfo::FLOAT32)
+    {
+      kdb->optionswdg->kComboBoxPredictor->removeItem(1);
+    } else {
+      kdb->optionswdg->kComboBoxPredictor->removeItem(2);
+    }
+    
     if(kdb->exec() == QDialog::Rejected)
     {
         return KoFilter::OK; // FIXME Cancel doesn't exist :(
@@ -66,9 +78,12 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QCString& from, const QC
     
     KisTIFFOptions options = kdb->options();
 
+    if( ( type == KisChannelInfo::FLOAT16 || type == KisChannelInfo::FLOAT32) && options.predictor == 2  )
+    { // FIXME THIS IS AN HACK FIX THAT IN 2.0 !!
+      options.predictor = 3;
+    }
     delete kdb;
-
-    KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
+    
     QString filename = m_chain->outputFile();
     
     if (!output)

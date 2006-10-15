@@ -79,6 +79,32 @@
         return 1;
     }
     
+    uint KisTIFFReaderTarget32bit::copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, TIFFStreamBase* tiffstream)
+    {
+        KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth, true);
+        double coeff = Q_UINT32_MAX / (double)( pow(2, sourceDepth() ) - 1 );
+//         kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
+        while (!it.isDone()) {
+            Q_UINT32 *d = reinterpret_cast<Q_UINT32 *>(it.rawData());
+            Q_UINT8 i;
+            for(i = 0; i < nbColorsSamples(); i++)
+            {
+                d[poses()[i]] = (Q_UINT32)( tiffstream->nextValue() * coeff );
+            }
+            postProcessor()->postProcess32bit( d);
+            if(transform()) cmsDoTransform(transform(), d, d, 1);
+            d[poses()[i]] = Q_UINT32_MAX;
+            for(int k = 0; k < nbExtraSamples(); k++)
+            {
+                if(k == alphaPos())
+                    d[poses()[i]] = (Q_UINT32) ( tiffstream->nextValue() * coeff );
+                else
+                    tiffstream->nextValue();
+            }
+            ++it;
+        }
+        return 1;
+    }
     uint KisTIFFReaderFromPalette::copyDataToChannels(Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth,  TIFFStreamBase* tiffstream)
     {
         KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth, true);

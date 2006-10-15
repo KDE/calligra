@@ -32,8 +32,9 @@
 #include "kis_tiff_converter.h"
 
 namespace {
-    bool writeColorSpaceInformation( TIFF* image, KisColorSpace * cs, uint16& color_type )
+    bool writeColorSpaceInformation( TIFF* image, KisColorSpace * cs, uint16& color_type, uint16& sample_format )
     {
+        sample_format = SAMPLEFORMAT_UINT;
         if ( cs->id() == KisID("GRAYA") || cs->id() == KisID("GRAYA16") )
         {
             color_type = PHOTOMETRIC_MINISBLACK;
@@ -42,6 +43,12 @@ namespace {
         if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") )
         {
             color_type = PHOTOMETRIC_RGB;
+            return true;
+        }
+        if ( cs->id() == KisID("RGBAF16HALF") || cs->id() == KisID("RGBAF32") )
+        {
+            color_type = PHOTOMETRIC_RGB;
+            sample_format = SAMPLEFORMAT_IEEEFP;
             return true;
         }
         if ( cs->id() == KisID("CMYK") || cs->id() == KisID("CMYKA16") )
@@ -74,7 +81,21 @@ bool KisTIFFWriterVisitor::saveAlpha() { return m_options->alpha; }
 
 bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, Q_UINT8* poses)
 {
-    if(depth == 16)
+    if(depth == 32)
+    {
+        Q_UINT32 *dst = reinterpret_cast<Q_UINT32 *>(buff);
+        while (!it.isDone()) {
+            const Q_UINT32 *d = reinterpret_cast<const Q_UINT32 *>(it.rawData());
+            int i;
+            for(i = 0; i < nbcolorssamples; i++)
+            {
+                *(dst++) = d[poses[i]];
+            }
+            if(saveAlpha()) *(dst++) = d[poses[i]];
+            ++it;
+        }
+        return true;
+    } else if(depth == 16)
     {
         Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(buff);
         while (!it.isDone()) {
@@ -125,11 +146,13 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     }
     // Save colorspace information
     uint16 color_type;
-    if(!writeColorSpaceInformation(image(), pd->colorSpace(), color_type))
+    uint16 sample_format;
+    if(!writeColorSpaceInformation(image(), pd->colorSpace(), color_type, sample_format))
     { // unsupported colorspace
         return false;
     }
     TIFFSetField(image(), TIFFTAG_PHOTOMETRIC, color_type);
+    TIFFSetField(image(), TIFFTAG_SAMPLEFORMAT, sample_format);
     TIFFSetField(image(), TIFFTAG_IMAGEWIDTH, layer->image()->width());
     TIFFSetField(image(), TIFFTAG_IMAGELENGTH, layer->image()->height());
 
