@@ -177,7 +177,17 @@ class KisTIFFReaderTarget8bit : public KisTIFFReaderBase {
 
 class KisTIFFReaderTarget16bit : public KisTIFFReaderBase {
     public:
-        KisTIFFReaderTarget16bit( KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
+        KisTIFFReaderTarget16bit( KisPaintDeviceSP device, Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
+        {
+            
+        }
+    public:
+        virtual uint copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, TIFFStreamBase* tiffstream) ;
+};
+
+class KisTIFFReaderTarget32bit : public KisTIFFReaderBase {
+    public:
+        KisTIFFReaderTarget32bit( KisPaintDeviceSP device, Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
         {
             
         }
@@ -196,15 +206,5 @@ class KisTIFFReaderFromPalette : public  KisTIFFReaderBase {
     private:
         uint16 *m_red,  *m_green, *m_blue;
 };
-
-// class KisTIFFReaderBaseTarget32bit {
-//     public:
-//         KisTIFFReaderBaseTarget32bit( int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, quint8* poses, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor postprocessor) : KisTiffReader(alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, poses, transformProfile, postprocessor )
-//         {
-//             
-//         }
-//     public:
-//         virtual void copyDataToChannels( KisHLineIterator it, TIFFStream* tiffstream) =0;
-// };
 
 #endif

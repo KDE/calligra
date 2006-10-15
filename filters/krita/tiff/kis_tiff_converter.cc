@@ -64,13 +64,26 @@ namespace {
         } else if(color_type == PHOTOMETRIC_RGB  /*|| color_type == */ ) {
             if(nbchannels == 0) nbchannels = 3;
             extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
-            if(color_nb_bits <= 8)
+            if(sampletype == SAMPLEFORMAT_IEEEFP)
             {
-                destDepth = 8;
-                return "RGBA";
-            } else {
+              if(color_nb_bits == 16)
+              {
                 destDepth = 16;
-                return "RGBA16";
+                return "RGBAF16HALF";
+              } else if( color_nb_bits == 32) {
+                destDepth = 32;
+                return "RGBAF32";
+              }
+              return "";
+            } else {
+              if(color_nb_bits <= 8)
+              {
+                  destDepth = 8;
+                  return "RGBA";
+              } else {
+                  destDepth = 16;
+                  return "RGBA16";
+              }
             }
         } else if(color_type == PHOTOMETRIC_YCBCR ) {
             if(nbchannels == 0) nbchannels = 3;
@@ -189,7 +202,12 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         kDebug(41008) <<  "Image does not define its depth" << endl;
         depth = 1;
     }
-    // Determine the number of channels (useful to know if a file has an alpha or not
+    uint16 sampletype;
+    if((TIFFGetField(image, TIFFTAG_SAMPLEFORMAT, &sampletype) == 0)){
+        kdDebug(41008) <<  "Image does not define its sample type" << endl;
+        sampletype =  SAMPLEFORMAT_UINT;
+    }
+    // Determine the number of channels (usefull to know if a file has an alpha or not
     uint16 nbchannels;
     if(TIFFGetField(image, TIFFTAG_SAMPLESPERPIXEL, &nbchannels) == 0){
         kDebug(41008) << "Image has an undefined number of samples per pixel" << endl;
@@ -422,6 +440,8 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         tiffReader = new KisTIFFReaderTarget8bit( layer->paintDevice(), poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
     } else if(dstDepth == 16) {
         tiffReader = new KisTIFFReaderTarget16bit( layer->paintDevice(), poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
+    } else if(dstDepth == 32) {
+        tiffReader = new KisTIFFReaderTarget32bit( layer->paintDevice(), poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
     }
     
     if(TIFFIsTiled(image))

@@ -55,10 +55,20 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
-
-    KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0);
-    kdb->setObjectName( "options dialog for tiff" );
-
+    
+    KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0, "options dialog for tiff");
+ 
+    KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
+    
+    KisColorSpace* cs = output->currentImage()->colorSpace();
+    KisChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
+    if( type == KisChannelInfo::FLOAT16 || type == KisChannelInfo::FLOAT32)
+    {
+      kdb->optionswdg->kComboBoxPredictor->removeItem(1);
+    } else {
+      kdb->optionswdg->kComboBoxPredictor->removeItem(2);
+    }
+    
     if(kdb->exec() == QDialog::Rejected)
     {
         return KoFilter::UserCancelled;
@@ -66,9 +76,12 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     KisTIFFOptions options = kdb->options();
 
+    if( ( type == KisChannelInfo::FLOAT16 || type == KisChannelInfo::FLOAT32) && options.predictor == 2  )
+    { // FIXME THIS IS AN HACK FIX THAT IN 2.0 !!
+      options.predictor = 3;
+    }
     delete kdb;
-
-    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
+    
     QString filename = m_chain->outputFile();
 
     if (!output)
