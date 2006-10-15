@@ -5660,14 +5660,11 @@ QString Cell::convertFormulaToOasisFormat( const QString & formula ) const
 
 void Cell::loadOasisConditional( QDomElement * style )
 {
-    //kdDebug()<<" void Cell::loadOasisConditional( QDomElement * style  :"<<style<<endl;
     if ( style )//safe
     {
-        //TODO fixme it doesn't work :(((
         QDomElement e;
         forEachElement( e, style->toElement() )
         {
-//             kdDebug()<<"e.localName() :"<<e.localName()<<endl;
             if ( e.localName() == "map" && e.namespaceURI() == KoXmlNS::style )
             {
                 if (d->hasExtra())
@@ -5675,10 +5672,11 @@ void Cell::loadOasisConditional( QDomElement * style )
                 d->extra()->conditions = new Conditions( this );
                 d->extra()->conditions->loadOasisConditions( e );
                 d->extra()->conditions->checkMatches();
+                // break here
+                // Conditions::loadOasisConditions finishes the iteration
                 break;
             }
         }
-
     }
 }
 
@@ -5692,7 +5690,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
         oasisContext.fillStyleStack( element, KoXmlNS::table, "styleName", "table-cell" );
 
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        QDomElement* cellStyle = const_cast<QDomElement*>( oasisContext.oasisStyles().findStyle( str, "table-cell" ) );
+        const QDomElement* cellStyle = oasisContext.oasisStyles().findStyle( str, "table-cell" );
 
         if ( cellStyle )
             loadOasisConditional( const_cast<QDomElement *>( cellStyle ) );

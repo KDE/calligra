@@ -439,22 +439,22 @@ QDomElement Conditions::saveConditions( QDomDocument & doc ) const
 
 void Conditions::loadOasisConditions( const QDomElement & element )
 {
-    kdDebug()<<"void Conditions::loadOasisConditions( const QDomElement & element )\n";
-    QDomElement elementItem( element );
+    kdDebug(36003) << "Loading conditional styles" << endl;
+    QDomNode node( element );
     StyleManager * manager = m_cell->sheet()->doc()->styleManager();
 
-    while ( !elementItem.isNull() )
+    while ( !node.isNull() )
     {
-        kdDebug()<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
+        QDomElement elementItem = node.toElement();
         if ( elementItem.tagName()== "map" && elementItem.namespaceURI() == KoXmlNS::style  )
         {
             bool ok = true;
-            kdDebug()<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( KoXmlNS::style, "condition", QString::null )<<endl;
+            kdDebug(36003) << "\tcondition: "<< elementItem.attributeNS( KoXmlNS::style, "condition", QString::null )<<endl;
             Conditional newCondition;
             loadOasisConditionValue( elementItem.attributeNS( KoXmlNS::style, "condition", QString::null ), newCondition );
             if ( elementItem.hasAttributeNS( KoXmlNS::style, "apply-style-name" ) )
             {
-                kdDebug()<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null )<<endl;
+                kdDebug(36003)<<"\tstyle: "<<elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null )<<endl;
                 newCondition.styleName = new QString( elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null ) );
                 newCondition.style = manager->style( *newCondition.styleName );
                 if ( !newCondition.style )
@@ -466,9 +466,9 @@ void Conditions::loadOasisConditions( const QDomElement & element )
             if ( ok )
                 m_condList.append( newCondition );
             else
-                kdDebug(36001) << "Error loading condition " << elementItem.nodeName()<< endl;
+                kdDebug(36003) << "Error loading condition " << elementItem.nodeName()<< endl;
         }
-        elementItem = elementItem.nextSibling().toElement();
+        node = node.nextSibling();
     }
 }
 
@@ -538,7 +538,7 @@ void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCon
     }
     else
         kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
-    kdDebug()<<" value :"<<value<<endl;
+    kdDebug(36003) << "\tvalue: " << value << endl;
     bool ok = false;
     newCondition.val1 = value.toDouble(&ok);
     if ( !ok )
@@ -549,7 +549,6 @@ void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCon
             newCondition.strVal1 = new QString( value );
             kdDebug()<<" Try to parse this value :"<<value<<endl;
         }
-
     }
 }
 
