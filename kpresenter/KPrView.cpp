@@ -86,6 +86,7 @@
 #include <kdebug.h>
 #include <ktempfile.h>
 #include <kcolorbutton.h>
+#include <kprocess.h>
 
 #include <KoMainWindow.h>
 #include <KoPartSelectDia.h>
@@ -1484,35 +1485,45 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
     m_canvas->setToolEditMode( TEM_MOUSE );
 
     if ( m_canvas && !presStarted ) {
-        QByteArray data;
-        QByteArray replyData;
-        QCString replyType;
-        m_screenSaverWasEnabled = false;
-        // is screensaver enabled?
-        if (kapp->dcopClient()->call("kdesktop", "KScreensaverIface", "isEnabled()", data, replyType, replyData)
-            && replyType=="bool")
-        {
-            QDataStream replyArg(replyData, IO_ReadOnly);
-            replyArg >> m_screenSaverWasEnabled;
-            kdDebug() << "Screensaver was enabled:" << m_screenSaverWasEnabled << endl;
-            if ( m_screenSaverWasEnabled )
-            {
-                // disable screensaver
-                QDataStream arg(data, IO_WriteOnly);
-                arg << false;
-                if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
-                    kdWarning(33001) << "Couldn't disable screensaver (using dcop to kdesktop)!" << endl;
-                else
-                    kdDebug(33001) << "Screensaver successfully disabled" << endl;
-            }
+        const QString xdgScreenSaver = KStandardDirs::findExe("xdg-screensaver");
+        if (!xdgScreenSaver.isEmpty()) {
+            KProcess proc;
+            proc << xdgScreenSaver;
+            proc << "suspend";
+            proc << QString::number( topLevelWidget()->winId() );
+            kdDebug() << k_funcinfo << proc.args() << endl;
+            proc.start( KProcess::DontCare );
         } else {
-            kdWarning(33001) << "Couldn't check screensaver (using dcop to kdesktop)!" << endl;
-        }
-        // is DPMS enabled?
-        m_dpmsWasEnabled = isDPMSEnabled();
-        kdDebug() << "DPMS was enabled:" << m_dpmsWasEnabled << endl;
-        if ( m_dpmsWasEnabled ) {
-            enableDPMS( false );
+            QByteArray data;
+            QByteArray replyData;
+            QCString replyType;
+            m_screenSaverWasEnabled = false;
+            // is screensaver enabled?
+            if (kapp->dcopClient()->call("kdesktop", "KScreensaverIface", "isEnabled()", data, replyType, replyData)
+                && replyType=="bool")
+            {
+                QDataStream replyArg(replyData, IO_ReadOnly);
+                replyArg >> m_screenSaverWasEnabled;
+                kdDebug() << "Screensaver was enabled:" << m_screenSaverWasEnabled << endl;
+                if ( m_screenSaverWasEnabled )
+                {
+                    // disable screensaver
+                    QDataStream arg(data, IO_WriteOnly);
+                    arg << false;
+                    if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
+                        kdWarning(33001) << "Couldn't disable screensaver (using dcop to kdesktop)!" << endl;
+                    else
+                        kdDebug(33001) << "Screensaver successfully disabled" << endl;
+                }
+            } else {
+                kdWarning(33001) << "Couldn't check screensaver (using dcop to kdesktop)!" << endl;
+            }
+            // is DPMS enabled?
+            m_dpmsWasEnabled = isDPMSEnabled();
+            kdDebug() << "DPMS was enabled:" << m_dpmsWasEnabled << endl;
+            if ( m_dpmsWasEnabled ) {
+                enableDPMS( false );
+            }
         }
 
         deSelectAllObjects();
@@ -1598,20 +1609,30 @@ void KPrView::screenStop()
         m_canvas->setMouseTracking( true );
         m_canvas->setBackgroundMode( Qt::NoBackground );
 
-        if ( m_screenSaverWasEnabled )
-        {
-            // start screensaver again
-            QByteArray data;
-            QDataStream arg(data, IO_WriteOnly);
-            arg << true;
-            if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
-                kdWarning(33001) << "Couldn't re-enabled screensaver (using dcop to kdesktop)" << endl;
-        }
-        if ( m_dpmsWasEnabled )
-        {
-            // re-enable DPMS
-            kdDebug(33001) << "Re-enabling DPMS" << endl;
-            enableDPMS( true );
+        const QString xdgScreenSaver = KStandardDirs::findExe("xdg-screensaver");
+        if (!xdgScreenSaver.isEmpty()) {
+            KProcess proc;
+            proc << xdgScreenSaver;
+            proc << "resume";
+            proc << QString::number( topLevelWidget()->winId() );
+            kdDebug() << k_funcinfo << proc.args() << endl;
+            proc.start( KProcess::DontCare );
+        } else {
+            if ( m_screenSaverWasEnabled )
+            {
+                // start screensaver again
+                QByteArray data;
+                QDataStream arg(data, IO_WriteOnly);
+                arg << true;
+                if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
+                    kdWarning(33001) << "Couldn't re-enabled screensaver (using dcop to kdesktop)" << endl;
+            }
+            if ( m_dpmsWasEnabled )
+            {
+                // re-enable DPMS
+                kdDebug(33001) << "Re-enabling DPMS" << endl;
+                enableDPMS( true );
+            }
         }
 
         actionScreenStart->setEnabled( true );
