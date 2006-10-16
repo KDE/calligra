@@ -4058,7 +4058,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                     if ( f.open( QIODevice::ReadOnly ) ) {
                         while ( !t.atEnd() ) {
                             tmp = t.readLine();
-                            tmp += "\n";
+                            tmp += '\n';
                             text.append( tmp );
                         }
                         f.close();

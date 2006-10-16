@@ -3144,7 +3144,7 @@ void KPrView::afChooseOk( const QString & c )
 {
     QFileInfo fileInfo( c );
     QString fileName = KStandardDirs::locate( "autoforms",
-                               fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf",
+                               fileInfo.dirPath( false ) + '/' + fileInfo.baseName() + ".atf",
                                KPrFactory::global() );
 
     deSelectAllObjects();

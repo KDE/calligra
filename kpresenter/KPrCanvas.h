@@ -715,7 +715,7 @@ private:
     /**
      * @brief Find the next grid in distance
      *
-     * Allways the top left corner is snapped to the grid.
+     * Always the top left corner is snapped to the grid.
      *
      * @param rect The rect which should be snapped to the grid.
      * @param diffx The range in x distance in which the grid has to be.
@@ -840,7 +840,7 @@ private:
     PresStep m_step;
     float _presFakt;
     int m_showOnlyPage; // 1-based (-1 = all)
-    /// list of all effect steps occuring on the active page
+    /// list of all effect steps occurring on the active page
     Q3ValueList<int> m_pageEffectSteps;
     /// List of the slides used in the presentation
     Q3ValueList<int> m_presentationSlides;

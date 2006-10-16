@@ -394,7 +394,7 @@ void KPrWebPresentation::createSlidesHTML( QProgressBar *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
 
-    const QString brtag ( "<br" + QString(isXML()?" /":"") + ">" );
+    const QString brtag ( "<br" + QString(isXML()?" /":"") + '>' );
 
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
 

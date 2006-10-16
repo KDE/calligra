@@ -67,7 +67,7 @@ void AFChoose::getGroups()
             s = t.readLine();
             if ( !s.isEmpty() ) {
                 grpPtr = new Group;
-                QString directory=QFileInfo( afDir ).dirPath() + "/" + s.simplified();
+                QString directory=QFileInfo( afDir ).dirPath() + '/' + s.simplified();
                 grpPtr->dir.setFile(directory);
                 QDir d(directory);
                 if(d.exists(".directory")) {

@@ -101,7 +101,7 @@ KPrObjectAdaptor* KPrPixmapObject::dbusObject()
 
 QString KPrPixmapObject::convertValueToPercent( int val ) const
 {
-   return QString::number( val )+"%";
+   return QString::number( val )+'%';
 }
 
 void KPrPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto ) const

@@ -108,7 +108,7 @@ bool KPrAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) cons
     }
 
     if ( closed )
-        d += "Z";
+        d += 'Z';
 
     sc.xmlWriter.addAttribute( "svg:d", d );
 

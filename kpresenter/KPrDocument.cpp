@@ -624,7 +624,7 @@ QDomDocument KPrDocument::saveXML()
                     if ( posPage != -1 )
                     {
                         if ( itPage != ( *it ).begin() )
-                            tmp += ",";
+                            tmp += ',';
                         tmp += page2name[*itPage];
                     }
                 }
@@ -1275,13 +1275,13 @@ void KPrDocument::saveOasisSettings( KoXmlWriter &settingsWriter )
     for( Q3ValueList<double>::Iterator it = m_vGuideLines.begin(); it != m_vGuideLines.end(); ++it )
     {
         int tmpX = ( int ) ( KoUnit::toMM( *it  )*100 );
-        guideLinesOasis += "V" + QString::number( tmpX );
+        guideLinesOasis += 'V' + QString::number( tmpX );
     }
 
     for( Q3ValueList<double>::Iterator it = m_hGuideLines.begin(); it != m_hGuideLines.end(); ++it )
     {
         int tmpY = ( int ) ( KoUnit::toMM( *it  )*100 );
-        guideLinesOasis += "H" + QString::number( tmpY );
+        guideLinesOasis += 'H' + QString::number( tmpY );
     }
     if ( !guideLinesOasis.isEmpty() )
     {
@@ -1460,8 +1460,8 @@ void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpW
             if ( posPage != -1 )
             {
                 if ( itPage != ( *it ).begin() )
-                    tmp += ",";
-                //tmp+=( *itPage )->oasisNamePage(posPage+1)+",";
+                    tmp += ',';
+                //tmp+=( *itPage )->oasisNamePage(posPage+1)+',';
                 tmp += page2name[posPage + 1];
             }
         }
@@ -2231,11 +2231,11 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
             setErrorMessage( i18n("You do not appear to have PERL installed.\nIt is needed to convert this document.\nPlease install PERL and try again."));
             return false;
         }
-        cmd += " ";
+        cmd += ' ';
         cmd += KStandardDirs::locate( "exe", "kprconverter.pl" );
-        cmd += " ";
+        cmd += ' ';
         cmd += KProcess::quote( tmpFileIn.fileName() );
-        cmd += " ";
+        cmd += ' ';
         cmd += KProcess::quote( tmpFileOut.fileName() );
         system( QFile::encodeName(cmd) );
 
@@ -3559,7 +3559,7 @@ QString KPrDocument::templateFileName( bool chooseTemplate, const QString &theFi
                                           "kpresenter_template", parentWidget ) == KoTemplateChooseDia::Cancel )
             return QString::null;
         QFileInfo fileInfo( _template );
-        fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
+        fileName = fileInfo.dirPath( true ) + '/' + fileInfo.baseName() + ".kpt";
 
         KUrl src, dest;
         src.setPath( fileName );
@@ -4066,9 +4066,9 @@ QString KPrDocument::selectedForPrinting() {
         else {
             if(continuous) {
                 if(start==end)
-                    ret+=QString::number(start+1)+",";
+                    ret+=QString::number(start+1)+',';
                 else
-                    ret+=QString::number(start+1)+"-"+QString::number(end+1)+",";
+                    ret+=QString::number(start+1)+'-'+QString::number(end+1)+',';
                 continuous=false;
             }
         }
@@ -4077,7 +4077,7 @@ QString KPrDocument::selectedForPrinting() {
         if(start==end)
             ret+=QString::number(start+1);
         else
-            ret+=QString::number(start+1)+"-"+QString::number(end+1);
+            ret+=QString::number(start+1)+'-'+QString::number(end+1);
     }
     if(','==ret[ret.length()-1])
         ret.truncate(ret.length()-1);
