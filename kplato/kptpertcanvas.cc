@@ -38,7 +38,6 @@
 #include <Q3MemArray>
 
 #include <KoStore.h>
-#include <ktempfile.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>
