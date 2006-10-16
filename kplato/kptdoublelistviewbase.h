@@ -20,16 +20,15 @@
 #ifndef KPTDOUBLELISTVIEWBASE_H
 #define KPTDOUBLELISTVIEWBASE_H
 
-#include <QColor>
 #include <QMap>
-#include <q3ptrvector.h>
-#include <qsplitter.h>
+#include <QSplitter>
+#include <QTreeWidget>
 
-#include <k3listview.h>
+class QColor;
+class QStringList;
+class QTreeWidgetItem;
+class QTreeWidgetItem;
 
-class Q3ListViewItem;
-
-class K3ListViewItem;
 class KPrinter;
 
 namespace KPlato
@@ -38,11 +37,11 @@ namespace KPlato
 class View;
 class Project;
 
-class ListView : public K3ListView
+class ListView : public QTreeWidget
 {
 public:
     ListView(QWidget *parent)
-    : K3ListView(parent)
+    : QTreeWidget(parent)
     {}
     
     virtual void paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch);
@@ -67,12 +66,12 @@ public:
 
     ListView *masterListView() const { return m_masterList; }
     ListView *slaveListView() const { return m_slaveList; }
-    void setOpen(Q3ListViewItem *item, bool open);
+    void setOpen(QTreeWidgetItem *item, bool open);
     
     void setNameHeader(QString text);
     void setTotalHeader(QString text);
     void setDescriptionHeader(QString text);
-    void addSlaveColumn(QString text);
+    void setSlaveLabels(const QStringList &text);
     virtual void print(KPrinter &printer);
 
     virtual void calculate();
@@ -85,10 +84,10 @@ public:
     virtual QSize sizeHint() const;
     
     class MasterListItem;
-    class SlaveListItem : public K3ListViewItem {
+    class SlaveListItem : public QTreeWidgetItem {
     public:
-        SlaveListItem(MasterListItem *master, Q3ListView *parent, Q3ListViewItem *after, bool highlight=false);
-        SlaveListItem(MasterListItem *master, Q3ListViewItem *parent, Q3ListViewItem *after, bool highlight=false);
+        SlaveListItem(MasterListItem *master, QTreeWidget *parent, QTreeWidgetItem *after, bool highlight=false);
+        SlaveListItem(MasterListItem *master, QTreeWidgetItem *parent, QTreeWidgetItem *after, bool highlight=false);
         ~SlaveListItem();
         void masterItemDeleted() { m_masterItem = 0; }
         
@@ -102,7 +101,7 @@ public:
         virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);
         
         void setFormat(int fieldwidth=0, char fmt='f', int prec=0);
-
+        
     protected:
         MasterListItem *m_masterItem;
         double m_value;
@@ -116,16 +115,16 @@ public:
         int m_prec;
     };
 
-    class MasterListItem : public K3ListViewItem {
+    class MasterListItem : public QTreeWidgetItem {
     public:
-        MasterListItem(Q3ListView *parent, bool highlight=false);
-        MasterListItem(Q3ListView *parent, QString text, bool highlight=false);
-        MasterListItem(Q3ListViewItem *parent, bool highlight=false);
-        MasterListItem(Q3ListViewItem *parent, QString text, bool highlight=false);
+        MasterListItem(QTreeWidget *parent, bool highlight=false);
+        MasterListItem(QTreeWidget *parent, QString text, bool highlight=false);
+        MasterListItem(QTreeWidgetItem *parent, bool highlight=false);
+        MasterListItem(QTreeWidgetItem *parent, QString text, bool highlight=false);
         ~MasterListItem();
         
         /// Creates slaveitems for myself and my children
-        void createSlaveItems(Q3ListView *lv, Q3ListViewItem *after=0);
+        void createSlaveItems(QTreeWidget *lv, QTreeWidgetItem *after=0);
         void slaveItemDeleted();
         void setSlaveOpen(bool on);
         SlaveListItem *slaveItem() const { return m_slaveItem; }
@@ -146,7 +145,7 @@ public:
         virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);    
 
         void setFormat(int fieldwidth=0, char fmt='f', int prec=0);
-
+        
     protected:
         SlaveListItem *m_slaveItem;
         double m_value;
@@ -161,11 +160,17 @@ public:
     };
 
 public:
+    QList<QTreeWidgetItem*> masterItems() { 
+        return m_masterList->findItems("*", Qt::MatchWildcard|Qt::MatchRecursive); 
+    }
+    QList<QTreeWidgetItem*> slaveItems() { 
+        return m_slaveList->findItems("*", Qt::MatchWildcard|Qt::MatchRecursive); 
+    }
     virtual void paintContents(QPainter *p);
-    
+
 protected slots:
-    void slotExpanded(Q3ListViewItem* item);
-    void slotCollapsed(Q3ListViewItem* item);
+    void slotExpanded(QTreeWidgetItem* item);
+    void slotCollapsed(QTreeWidgetItem* item);
 
 private:
 

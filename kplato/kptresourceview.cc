@@ -35,7 +35,6 @@
 #include <q3paintdevicemetrics.h>
 #include <qstyle.h>
 #include <QList>
-#include <Q3ValueList>
 #include <QHeaderView>
 #include <QTreeWidget>
 #include <QStringList>
@@ -49,248 +48,241 @@
 namespace KPlato
 {
 
-class ResListView : public QTreeWidget {
-public:
-    ResListView(QWidget * parent = 0)
-    : QTreeWidget(parent)
-    {}
+ResListView::ResListView(QWidget * parent)
+: QTreeWidget(parent)
+{
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL( customContextMenuRequested(const QPoint&)), SLOT(slotContextMenuRequested(const QPoint&)));
+}
 
-    int headerHeight() const {
-        return header()->height();
-    }
-    virtual void paintToPrinter(QPainter *p, int x, int y, int w, int h) {
+int ResListView::headerHeight() const {
+    return header()->height();
+}
+void ResListView::paintToPrinter(QPainter *p, int x, int y, int w, int h) {
 #if 0
-        p->save();
-        QColor bgc(193, 223, 255);
-        QBrush bg(bgc);
-        p->setBackgroundMode(Qt::OpaqueMode);
-        p->setBackgroundColor(bgc);
-        QHeaderView *head = header();
-        int offset = 0;
-        QRect sr;
-        // Header shall always be at top/left on page
-        for (int s = 0; s < head->count(); ++s) {
-            sr = head->sectionRect(s);
-            if (offset > sr.x())
-                offset = sr.x();
+    p->save();
+    QColor bgc(193, 223, 255);
+    QBrush bg(bgc);
+    p->setBackgroundMode(Qt::OpaqueMode);
+    p->setBackgroundColor(bgc);
+    QHeaderView *head = header();
+    int offset = 0;
+    QRect sr;
+    // Header shall always be at top/left on page
+    for (int s = 0; s < head->count(); ++s) {
+        sr = head->sectionRect(s);
+        if (offset > sr.x())
+            offset = sr.x();
+    }
+    for (int s = 0; s < head->count(); ++s) {
+        sr = head->sectionRect(s);
+        if (offset != 0) {
+            sr = QRect(sr.x()-offset, sr.y(), sr.width(), sr.height());
         }
-        for (int s = 0; s < head->count(); ++s) {
-            sr = head->sectionRect(s);
-            if (offset != 0) {
-                sr = QRect(sr.x()-offset, sr.y(), sr.width(), sr.height());
-            }
-            //kDebug()<<s<<": "<<head->label(s)<<" "<<sr<<endl;
-            if (sr.x()+sr.width() <= x || sr.x() >= x+w) {
-                //kDebug()<<s<<": "<<h->label(s)<<" "<<sr<<": continue"<<endl;
-                continue;
-            }
-            QRect tr = sr;
-            if (sr.x() < x) {
-                tr.setX(x);
-                //kDebug()<<s<<": "<<head->label(s)<<" "<<tr<<endl;
-            }
-            p->eraseRect(tr);
-            p->drawText(tr, columnAlignment(s)|Qt::AlignVCenter, head->label(s), -1);
+        //kDebug()<<s<<": "<<head->label(s)<<" "<<sr<<endl;
+        if (sr.x()+sr.width() <= x || sr.x() >= x+w) {
+            //kDebug()<<s<<": "<<h->label(s)<<" "<<sr<<": continue"<<endl;
+            continue;
         }
-        p->restore();
-        p->save();
-        p->translate(0, headerHeight());
-        drawAllContents(p, x, y, w, h);
-        p->restore();
+        QRect tr = sr;
+        if (sr.x() < x) {
+            tr.setX(x);
+            //kDebug()<<s<<": "<<head->label(s)<<" "<<tr<<endl;
+        }
+        p->eraseRect(tr);
+        p->drawText(tr, columnAlignment(s)|Qt::AlignVCenter, head->label(s), -1);
+    }
+    p->restore();
+    p->save();
+    p->translate(0, headerHeight());
+    drawAllContents(p, x, y, w, h);
+    p->restore();
 #endif
-    }
-    int calculateY(int ymin, int ymax) const {
+}
+int ResListView::calculateY(int ymin, int ymax) const {
 #if 0
-        QList<ResListView::DrawableItem*> drawables;
-        QTreeWidgetItem *child = firstChild();
-        int level = 0;
-        int ypos = 0;
+    QList<ResListView::DrawableItem*> drawables;
+    QTreeWidgetItem *child = firstChild();
+    int level = 0;
+    int ypos = 0;
+    for (; child; child = child->nextSibling()) {
+        ypos = buildDrawables(drawables, level, ypos, child, ymin, ymax);
+    }
+    int y = 0;
+    if (!drawables.isEmpty()) {
+        DrawableItem *item = drawables.last();
+        if (item) {
+            y = item->y + item->i->height();
+        }
+    }
+    //kDebug()<<k_funcinfo<<y<<" ("<<ymin<<", "<<ymax<<")"<<endl;
+    while (!drawables.isEmpty()) {
+        delete drawables.takeFirst();
+    }
+    return y;
+#endif
+    return 0;
+}
+int ResListView::buildDrawables(QList<ResListView::DrawableItem*> &lst, int level, int ypos, QTreeWidgetItem *item, int ymin, int ymax) const {
+#if 0
+    int y = ypos;
+    int ih = item->height();
+    if (y < ymin && y+ih > ymin) {
+        y = ymin; // include partial item at top
+    }
+    if (y >= ymin && y+ih < ymax) { // exclude partial item at bottom
+        ResListView::DrawableItem *dr = new ResListView::DrawableItem(level, y, item);
+        lst.append(dr);
+        //kDebug()<<k_funcinfo<<level<<", "<<y<<" : "<<item->text(0)<<endl;
+    }
+    y += ih;
+    if (item->isOpen()) {
+        QTreeWidgetItem *child = item->firstChild();
         for (; child; child = child->nextSibling()) {
-            ypos = buildDrawables(drawables, level, ypos, child, ymin, ymax);
+            y = buildDrawables(lst, level+1, y, child, ymin, ymax);
         }
-        int y = 0;
-        if (!drawables.isEmpty()) {
-            DrawableItem *item = drawables.last();
-            if (item) {
-                y = item->y + item->i->height();
+    }
+    return y;
+#endif
+    return 0;
+}
+
+void ResListView::drawAllContents(QPainter * p, int cx, int cy, int cw, int ch) {
+#if 0
+    if ( columns() == 0 ) {
+        paintEmptyArea( p, QRect( cx, cy, cw, ch ) );
+        return;
+    }
+    //kDebug()<<k_funcinfo<<QRect(cx, cy, cw, ch)<<endl;
+    QList<ResListView::DrawableItem*> drawables;
+    QTreeWidgetItem *child = firstChild();
+    int level = 0;
+    int ypos = 0;
+    for (; child; child = child->nextSibling()) {
+        ypos = buildDrawables(drawables, level, ypos, child, cy, cy+ch);
+    }
+
+    p->setFont( font() );
+
+    QRect r;
+    int fx = -1, x, fc = 0, lc = 0;
+    int tx = -1;
+    foreach (ResListView::DrawableItem * current, drawables) {
+        int ih = current->i->height();
+        int ith = current->i->totalHeight();
+        int c;
+        int cs;
+
+        // need to paint current?
+        if ( ih > 0 && current->y < cy+ch && current->y+ih > cy ) {
+            //kDebug()<<k_funcinfo<<"Paint: "<<current->i->text(0)<<" y="<<current->y<<endl;
+            if ( fx < 0 ) {
+                // find first interesting column, once
+                x = 0;
+                c = 0;
+                cs = header()->cellSize( 0 );
+                while ( x + cs <= cx && c < header()->count() ) {
+                    x += cs;
+                    c++;
+                    if ( c < header()->count() )
+                        cs = header()->cellSize( c );
+                }
+                fx = x;
+                fc = c;
+                while( x < cx + cw && c < header()->count() ) {
+                    x += cs;
+                    c++;
+                    if ( c < header()->count() )
+                        cs = header()->cellSize( c );
+                }
+                lc = c;
             }
+
+            x = fx;
+            c = fc;
+            // draw to last interesting column
+
+            const QColorGroup &cg = ( palette().inactive() );
+
+            while ( c < lc && !drawables.isEmpty() ) {
+                int i = header()->mapToLogical( c );
+                cs = header()->cellSize( c );
+                r.setRect( x, current->y-cy, cs, ih );
+                if ( i == 0 )
+                    r.setLeft( r.left() + current->l * treeStepSize() );
+
+                p->save();
+                // No need to paint if the cell isn't technically visible
+                if ( !( r.width() == 0 || r.height() == 0 ) ) {
+                    p->translate( r.left(), r.top() );
+                    int ac = header()->mapToLogical( c );
+                    // map to Left currently. This should change once we
+                    // can really reverse the listview.
+                    int align = columnAlignment( ac );
+                    if ( align == Qt::AlignAuto ) align = Qt::AlignLeft;
+                    bool sel = current->i->isSelected();
+                    if (sel)
+                        current->i->setSelected(false);
+                    current->i->paintCell( p, cg, ac, r.width(), align );
+                    if (sel)
+                        current->i->setSelected(sel);
+                }
+                p->restore();
+                x += cs;
+                c++;
+            }
+
         }
-        //kDebug()<<k_funcinfo<<y<<" ("<<ymin<<", "<<ymax<<")"<<endl;
+
+        const int cell = header()->mapToActual( 0 );
+
+        if ( tx < 0 )
+            tx = header()->cellPos( cell );
+
+        // do any children of current need to be painted?
+        /* FIXME: painting branches doesn't work for some reason...
+            if ( ih != ith &&
+                rootIsDecorated() &&
+                current->y + ith > cy &&
+                current->y + ih < cy + ch &&
+                tx + current->l * treeStepSize() < cx + cw &&
+                tx + (current->l+1) * treeStepSize() > cx ) {
+            // compute the clip rectangle the safe way
+
+            int rtop = current->y + ih;
+            int rbottom = current->y + ith;
+            int rleft = tx + current->l*treeStepSize();
+            int rright = rleft + treeStepSize();
+
+            int crtop = qMax( rtop, cy );
+            int crbottom = qMin( rbottom, cy+ch );
+            int crleft = qMax( rleft, cx );
+            int crright = qMin( rright, cx+cw );
+
+            r.setRect( crleft, crtop,
+                    crright-crleft, crbottom-crtop );
+
+            if ( r.isValid() ) {
+                p->save();
+                p->translate( rleft, crtop );
+                //kDebug()<<k_funcinfo<<"paintBranches: "<<current->i->text(0)<<endl;
+
+                    current->i->paintBranches( p, colorGroup(), treeStepSize(),
+                                            rtop - crtop, r.height() );
+                p->restore();
+            }
+        }*/
         while (!drawables.isEmpty()) {
             delete drawables.takeFirst();
         }
-        return y;
-#endif
-        return 0;
     }
-    class DrawableItem {
-    public:
-        DrawableItem(int level, int ypos, QTreeWidgetItem *item ) { y = ypos; l = level; i = item; };
-        int y;
-        int l;
-        QTreeWidgetItem * i;
-    };
-protected:
-    int buildDrawables(QList<ResListView::DrawableItem*> &lst, int level, int ypos, QTreeWidgetItem *item, int ymin, int ymax) const {
-#if 0
-        int y = ypos;
-        int ih = item->height();
-        if (y < ymin && y+ih > ymin) {
-            y = ymin; // include partial item at top
-        }
-        if (y >= ymin && y+ih < ymax) { // exclude partial item at bottom
-            ResListView::DrawableItem *dr = new ResListView::DrawableItem(level, y, item);
-            lst.append(dr);
-            //kDebug()<<k_funcinfo<<level<<", "<<y<<" : "<<item->text(0)<<endl;
-        }
-        y += ih;
-        if (item->isOpen()) {
-            QTreeWidgetItem *child = item->firstChild();
-            for (; child; child = child->nextSibling()) {
-                y = buildDrawables(lst, level+1, y, child, ymin, ymax);
-            }
-        }
-        return y;
 #endif
-        return 0;
+}
+
+void ResListView::slotContextMenuRequested(const QPoint &p) {
+    kDebug()<<k_funcinfo<<p<<endl;
+    emit contextMenuRequested(itemAt(p), mapToGlobal(p), 0);
     }
-    // This is a copy of QListView::drawContentsOffset(), with a few changes
-    // because drawContentsOffset() only draws *visible* items,
-    // we want to draw *all* items.
-    // FIXME: Haven't got paintBraches() to work, atm live without it.
-    virtual void drawAllContents(QPainter * p, int cx, int cy, int cw, int ch) {
-#if 0
-        if ( columns() == 0 ) {
-            paintEmptyArea( p, QRect( cx, cy, cw, ch ) );
-            return;
-        }
-        //kDebug()<<k_funcinfo<<QRect(cx, cy, cw, ch)<<endl;
-        QList<ResListView::DrawableItem*> drawables;
-        QTreeWidgetItem *child = firstChild();
-        int level = 0;
-        int ypos = 0;
-        for (; child; child = child->nextSibling()) {
-            ypos = buildDrawables(drawables, level, ypos, child, cy, cy+ch);
-        }
-
-        p->setFont( font() );
-
-        QRect r;
-        int fx = -1, x, fc = 0, lc = 0;
-        int tx = -1;
-        foreach (ResListView::DrawableItem * current, drawables) {
-            int ih = current->i->height();
-            int ith = current->i->totalHeight();
-            int c;
-            int cs;
-
-            // need to paint current?
-            if ( ih > 0 && current->y < cy+ch && current->y+ih > cy ) {
-                //kDebug()<<k_funcinfo<<"Paint: "<<current->i->text(0)<<" y="<<current->y<<endl;
-                if ( fx < 0 ) {
-                    // find first interesting column, once
-                    x = 0;
-                    c = 0;
-                    cs = header()->cellSize( 0 );
-                    while ( x + cs <= cx && c < header()->count() ) {
-                        x += cs;
-                        c++;
-                        if ( c < header()->count() )
-                            cs = header()->cellSize( c );
-                    }
-                    fx = x;
-                    fc = c;
-                    while( x < cx + cw && c < header()->count() ) {
-                        x += cs;
-                        c++;
-                        if ( c < header()->count() )
-                            cs = header()->cellSize( c );
-                    }
-                    lc = c;
-                }
-
-                x = fx;
-                c = fc;
-                // draw to last interesting column
-
-                const QColorGroup &cg = ( palette().inactive() );
-
-                while ( c < lc && !drawables.isEmpty() ) {
-                    int i = header()->mapToLogical( c );
-                    cs = header()->cellSize( c );
-                    r.setRect( x, current->y-cy, cs, ih );
-                    if ( i == 0 )
-                        r.setLeft( r.left() + current->l * treeStepSize() );
-
-                    p->save();
-                    // No need to paint if the cell isn't technically visible
-                    if ( !( r.width() == 0 || r.height() == 0 ) ) {
-                        p->translate( r.left(), r.top() );
-                        int ac = header()->mapToLogical( c );
-                        // map to Left currently. This should change once we
-                        // can really reverse the listview.
-                        int align = columnAlignment( ac );
-                        if ( align == Qt::AlignAuto ) align = Qt::AlignLeft;
-                        bool sel = current->i->isSelected();
-                        if (sel)
-                            current->i->setSelected(false);
-                        current->i->paintCell( p, cg, ac, r.width(), align );
-                        if (sel)
-                            current->i->setSelected(sel);
-                    }
-                    p->restore();
-                    x += cs;
-                    c++;
-                }
-
-            }
-
-            const int cell = header()->mapToActual( 0 );
-
-            if ( tx < 0 )
-                tx = header()->cellPos( cell );
-
-            // do any children of current need to be painted?
-            /* FIXME: painting branches doesn't work for some reason...
-              if ( ih != ith &&
-                 rootIsDecorated() &&
-                 current->y + ith > cy &&
-                 current->y + ih < cy + ch &&
-                 tx + current->l * treeStepSize() < cx + cw &&
-                 tx + (current->l+1) * treeStepSize() > cx ) {
-                // compute the clip rectangle the safe way
-
-                int rtop = current->y + ih;
-                int rbottom = current->y + ith;
-                int rleft = tx + current->l*treeStepSize();
-                int rright = rleft + treeStepSize();
-
-                int crtop = qMax( rtop, cy );
-                int crbottom = qMin( rbottom, cy+ch );
-                int crleft = qMax( rleft, cx );
-                int crright = qMin( rright, cx+cw );
-
-                r.setRect( crleft, crtop,
-                        crright-crleft, crbottom-crtop );
-
-                if ( r.isValid() ) {
-                    p->save();
-                    p->translate( rleft, crtop );
-                    //kDebug()<<k_funcinfo<<"paintBranches: "<<current->i->text(0)<<endl;
-
-                     current->i->paintBranches( p, colorGroup(), treeStepSize(),
-                                             rtop - crtop, r.height() );
-                    p->restore();
-                }
-            }*/
-            while (!drawables.isEmpty()) {
-                delete drawables.takeFirst();
-            }
-        }
-#endif
-    }
-
-};
 
 class ResourceItemPrivate : public QTreeWidgetItem {
 public:
@@ -563,7 +555,7 @@ void ResourceView::slotItemActivated(QTreeWidgetItem*) {
     emit itemDoubleClicked();
 }
 
-void ResourceView::popupMenuRequested(QTreeWidgetItem* item, const QPoint & pos, int)
+void ResourceView::popupMenuRequested(QTreeWidgetItem *item, const QPoint & pos, int)
 {
     ResourceItemPrivate *ritem = dynamic_cast<ResourceItemPrivate *>(item);
     if (ritem) {
@@ -580,8 +572,8 @@ void ResourceView::popupMenuRequested(QTreeWidgetItem* item, const QPoint & pos,
     }
 }
 
-Q3ValueList<int> ResourceView::listOffsets(int pageHeight) const {
-    Q3ValueList<int> lst;
+QList<int> ResourceView::listOffsets(int pageHeight) const {
+    QList<int> lst;
 #if 0
     int hh = m_resListView->headerHeight();
     int ph = pageHeight-hh;

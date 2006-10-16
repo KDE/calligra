@@ -24,7 +24,7 @@
 #include "kptduration.h"
 #include "kptnode.h"
 
-#include <qdom.h>
+#include <QDomElement>
 #include <QString>
 #include <QStringList>
 

@@ -23,11 +23,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <QList>
 #include <QString>
-#include <qstringlist.h>
-#include <qpair.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QStringList>
+#include <QPair>
 
 namespace KPlato
 {
@@ -156,7 +155,7 @@ QString WBSDefinition::toRoman( int n, bool upper )
 
 QStringList WBSDefinition::codeList() {
     QStringList cl;
-    Q3ValueList<QPair<QString, QString> >::Iterator it;
+    QList<QPair<QString, QString> >::Iterator it;
     for (it = m_codeLists.begin(); it != m_codeLists.end(); ++it) {
         cl.append((*it).second);
     }
@@ -164,22 +163,21 @@ QStringList WBSDefinition::codeList() {
 }
 
 int WBSDefinition::defaultCodeIndex() const {
-    Q3ValueList<QPair<QString, QString> >::const_iterator it;
-    int i = -1;
-    for(it = m_codeLists.begin(); it != m_codeLists.end(); ++it) {
-        ++i;
-        if (m_defaultDef.code == (*it).first)
+    int index = -1;
+    for(int i = 0; i < m_codeLists.count(); ++i) {
+        if (m_defaultDef.code == m_codeLists.at(i).first) {
+            index = i;
             break;
+        }
     }
-    return i;
+    return index;
 }
 
 bool WBSDefinition::setDefaultCode(uint index) {
-    Q3ValueList<QPair<QString, QString> >::const_iterator it = m_codeLists.at(index);
-    if (it == m_codeLists.end()) {
+    if (index >= m_codeLists.size()) {
         return false;
     }
-    m_defaultDef.code = (*it).first;
+    m_defaultDef.code = m_codeLists[index].first;
     return true;
 }
 

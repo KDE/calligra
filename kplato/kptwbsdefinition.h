@@ -22,8 +22,8 @@
 
 #include <QString>
 #include <QMap>
-#include <qpair.h>
-#include <q3valuelist.h>
+#include <QPair>
+#include <QList>
 
 class QStringList;
 
@@ -87,7 +87,7 @@ private:
     bool m_levelsEnabled;
     QMap<int, CodeDef> m_levelsDef;
 
-    Q3ValueList<QPair<QString, QString> > m_codeLists;
+    QList<QPair<QString, QString> > m_codeLists;
 };
 
 } //namespace KPlato

@@ -23,12 +23,12 @@
 #include "ui_kpttaskresourcespanelbase.h"
 #include "kptduration.h"
 
-#include <q3listview.h>
+#include <QTreeWidgetItem>
 #include <QString>
-#include <q3table.h>
-//Added by qt3to4:
+#include <QTableWidget>
 #include <QList>
-//class QCheckTableItem;
+
+class QTableWidgetItem;
 
 class KCommand;
 class KMacroCommand;
@@ -53,7 +53,7 @@ public:
     ~ResourceTableItem() ;
 
     void update();
-    void insert(Q3Table *table, int row);
+    void insert(QTableWidget *table, int row);
     void ok(ResourceGroupRequest *group);
 
     bool isChecked() const { return m_checked; }
@@ -66,19 +66,19 @@ public:
     Resource *m_resource;
     int m_units, m_origUnits;
     bool m_checked, m_origChecked;
-    Q3CheckTableItem *m_checkitem;
+    QTableWidgetItem *m_checkitem;
     ResourceRequest *m_request;
     int m_curAccountItem;
     QString m_curAccountText;
 };
 
-class GroupLVItem : public Q3ListViewItem {
+class GroupLVItem : public QTreeWidgetItem {
 public:
-    GroupLVItem(Q3ListView *parent, ResourceGroup *group, Task &task);
+    GroupLVItem(QTreeWidget *parent, ResourceGroup *group, Task &task);
     ~GroupLVItem();
 
     void update();
-    void insert(Q3Table *table);
+    void insert(QTableWidget *table);
     const QList<ResourceTableItem*> &resources() const { return m_resources; }
     void ok(Task &task);
 
@@ -111,7 +111,8 @@ public:
 private slots:
     void sendChanged();
 
-    void groupChanged(Q3ListViewItem *item);
+    void groupChanged(QTreeWidgetItem *item);
+    void groupChanged();
     void resourceChanged(int, int);
     void unitsChanged(int);
     

@@ -27,11 +27,8 @@
 #include "kptschedule.h"
 
 #include <QHash>
-#include <qrect.h>
-#include <q3ptrlist.h>
+#include <QRect>
 #include <QString>
-#include <q3canvas.h>
-#include <vector>
 
 class QDomElement;
 

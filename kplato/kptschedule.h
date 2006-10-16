@@ -23,8 +23,6 @@
 #include "kpteffortcostmap.h"
 #include "kptresource.h"
 
-#include <q3intdict.h>
-#include <q3ptrlist.h>
 #include <QString>
 
 class QDomElement;

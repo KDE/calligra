@@ -26,12 +26,11 @@
 #include <knotification.h>
 #include <kcalendarsystem.h>
 
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QString>
-#include <qpen.h>
-#include <qpainter.h>
-#include <qdialog.h>
-//Added by qt3to4:
+#include <QPen>
+#include <QPainter>
+
 #include <QWheelEvent>
 #include <QFocusEvent>
 #include <QKeyEvent>
@@ -41,9 +40,9 @@
 #include <QMouseEvent>
 #include <assert.h>
 #include <QLayout>
-#include <q3valuelist.h>
-#include <kglobalsettings.h>
 #include <QDesktopWidget>
+
+#include <kglobalsettings.h>
 #include <kdebug.h>
 
 namespace KPlato

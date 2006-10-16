@@ -20,9 +20,8 @@
 #ifndef INTERVALITEM_H
 #define INTERVALITEM_H
 
-#include <q3listview.h>
-#include <qdatetime.h>
-#include <qpair.h>
+#include <Q3ListViewItem>
+#include <QDateTime>
 
 namespace KPlato
 {

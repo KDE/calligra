@@ -22,27 +22,24 @@
 #include "kptappointment.h"
 #include "kpttask.h"
 
-#include <qapplication.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <QApplication>
 #include <QList>
+
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
 
-#include <q3header.h>
-
 namespace KPlato
 {
 
-TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, Q3ListView *parent, bool highlight)
+TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, QTreeWidget *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, r->name(), highlight),
       resource(r) {
 
       setFormat(0, 'f', 1);
     //kDebug()<<k_funcinfo<<endl;
 }
-TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, Q3ListViewItem *p, bool highlight)
+TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, QTreeWidgetItem *p, bool highlight)
     : DoubleListViewBase::MasterListItem(p, r->name(), highlight),
       resource(r) {
 
@@ -50,7 +47,7 @@ TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, Q3ListViewItem *p,
     //kDebug()<<k_funcinfo<<endl;
 }
 
-TaskAppointmentsView::ResourceItem::ResourceItem(QString text, Q3ListViewItem *parent, bool highlight)
+TaskAppointmentsView::ResourceItem::ResourceItem(QString text, QTreeWidgetItem *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       resource(0) {
 
@@ -66,7 +63,7 @@ TaskAppointmentsView::TaskAppointmentsView(QWidget *parent)
     setNameHeader(i18n("Resource"));
 
 
-    Q3ValueList<int> list = sizes();
+    QList<int> list = sizes();
     int tot = list[0] + list[1];
     list[0] = qMin(35, tot);
     list[1] = tot-list[0];
@@ -114,14 +111,13 @@ void TaskAppointmentsView::slotUpdate() {
     QDate start = m_task->startTime().date();
     QDate end = m_task->endTime().date();
     //kDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
-    int c=0;
-    for (QDate dt = start; dt <= end; dt = cal->addDays(dt, 1), ++c) {
-        QString df = locale->formatDate(dt, true);
-        addSlaveColumn(df);
+    QStringList df;
+    for (QDate dt = start; dt <= end; dt = cal->addDays(dt, 1)) {
+        df << locale->formatDate(dt, true);
     }
-    Q3ListViewItemIterator it(masterListView());
-    for (;it.current(); ++it) {
-        TaskAppointmentsView::ResourceItem *item = static_cast<TaskAppointmentsView::ResourceItem*>(it.current());
+    setSlaveLabels(df);
+    foreach (QTreeWidgetItem *i, masterItems()) {
+        TaskAppointmentsView::ResourceItem *item = static_cast<TaskAppointmentsView::ResourceItem*>(i);
         if (!item) {
             continue;
         }

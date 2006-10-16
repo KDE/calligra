@@ -20,9 +20,8 @@
 #ifndef KPTRESOURCEVIEW_H
 #define KPTRESOURCEVIEW_H
 
-#include <qsplitter.h>
-#include <qdatetime.h>
-#include <q3valuelist.h>
+#include <QSplitter>
+#include <QTreeWidget>
 
 #include "kptcontext.h"
 
@@ -45,6 +44,34 @@ class ResourceGroup;
 class Resource;
 class ResourceItemPrivate;
 
+class ResListView : public QTreeWidget {
+    Q_OBJECT
+public:
+    ResListView(QWidget * parent = 0);
+
+    int headerHeight() const;
+    virtual void paintToPrinter(QPainter *p, int x, int y, int w, int h);
+    int calculateY(int ymin, int ymax) const;
+    class DrawableItem {
+        public:
+            DrawableItem(int level, int ypos, QTreeWidgetItem *item ) { y = ypos; l = level; i = item; };
+            int y;
+            int l;
+            QTreeWidgetItem * i;
+    };
+signals:
+    void contextMenuRequested(QTreeWidgetItem*, const QPoint&, int);
+protected:
+    int buildDrawables(QList<ResListView::DrawableItem*> &lst, int level, int ypos, QTreeWidgetItem *item, int ymin, int ymax) const;
+// This is a copy of QListView::drawContentsOffset(), with a few changes
+// because drawContentsOffset() only draws *visible* items,
+// we want to draw *all* items.
+// FIXME: Haven't got paintBranches() to work, atm live without it.
+    virtual void drawAllContents(QPainter * p, int cx, int cy, int cw, int ch);
+private slots:
+    void slotContextMenuRequested(const QPoint &p);
+};
+
 
  class ResourceView : public QSplitter
 {
@@ -62,7 +89,7 @@ class ResourceItemPrivate;
 
     Resource *currentResource();
 
-    Q3ValueList<int> listOffsets(int pageHeight) const;
+    QList<int> listOffsets(int pageHeight) const;
     void print(KPrinter &printer);
     
     Node *currentNode() const { return m_currentNode; }

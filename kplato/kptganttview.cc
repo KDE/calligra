@@ -43,22 +43,18 @@
 
 #include <kdebug.h>
 
-#include <qsplitter.h>
-#include <q3vbox.h>
-#include <QLayout>
 #include <q3listview.h>
-#include <q3header.h>
 #include <q3popupmenu.h>
-#include <qtabwidget.h>
-#include <q3ptrlist.h>
+
 #include <QLineEdit>
 #include <QWidget>
 #include <QLabel>
+#include <QLayout>
 #include <QSpinBox>
+#include <QSplitter>
 #include <QStringList>
-#include <q3valuelist.h>
-#include <qpainter.h>
-#include <q3paintdevicemetrics.h>
+#include <QTabWidget>
+#include <QPainter>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -128,11 +124,11 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
 
     setReadWriteMode(readWrite);
 
-	connect(m_gantt, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )), SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
+    connect(m_gantt, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )), SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
 
-	connect(m_gantt, SIGNAL(lvCurrentChanged(KDGanttViewItem*)), SLOT (currentItemChanged(KDGanttViewItem*)));
+    connect(m_gantt, SIGNAL(lvCurrentChanged(KDGanttViewItem*)), SLOT (currentItemChanged(KDGanttViewItem*)));
 
-        connect(m_gantt, SIGNAL(lvItemDoubleClicked( KDGanttViewItem* )), SLOT (slotItemDoubleClicked( KDGanttViewItem* )));
+    connect(m_gantt, SIGNAL(lvItemDoubleClicked( KDGanttViewItem* )), SLOT (slotItemDoubleClicked( KDGanttViewItem* )));
 
     m_taskLinks.setAutoDelete(true);
 

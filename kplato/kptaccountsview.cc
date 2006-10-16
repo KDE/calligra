@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Dag Andersen kplato@kde.org>
+   Copyright (C) 2005 - 2006 Dag Andersen kplato@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,28 +26,23 @@
 #include "kptview.h"
 #include "kpteffortcostmap.h"
 
-#include <qapplication.h>
+#include <QApplication>
 #include <QComboBox>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <q3datetimeedit.h>
-#include <q3header.h>
 #include <QLabel>
 #include <QLayout>
-#include <qpainter.h>
+#include <QPainter>
 #include <qpalette.h>
 #include <QPushButton>
-#include <q3valuelist.h>
 #include <q3popupmenu.h>
-#include <qsizepolicy.h>
-#include <q3hbox.h>
+#include <QSizePolicy>
 #include <q3paintdevicemetrics.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>
-#include <k3listview.h>
 #include <klocale.h>
 #include <kprinter.h>
 
@@ -56,24 +51,24 @@
 namespace KPlato
 {
 
-AccountsView::AccountItem::AccountItem(Account *a, Q3ListView *parent, bool highlight)
+AccountsView::AccountItem::AccountItem(Account *a, QTreeWidget *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, a->name(), highlight),
       account(a) {
-    if (parent->columns() >= 3) {
+    if (parent->columnCount() >= 3) {
         setText(2, a->description());
     }
     //kDebug()<<k_funcinfo<<endl;
 }
-AccountsView::AccountItem::AccountItem(Account *a, Q3ListViewItem *p, bool highlight)
+AccountsView::AccountItem::AccountItem(Account *a, QTreeWidgetItem *p, bool highlight)
     : DoubleListViewBase::MasterListItem(p, a->name(), highlight),
       account(a) {
-    if (listView() && listView()->columns() >= 3) {
+    if (treeWidget() && columnCount() >= 3) {
         setText(2, a->description());
     }
     //kDebug()<<k_funcinfo<<endl;
 }
 
-AccountsView::AccountItem::AccountItem(QString text, Account *a, Q3ListViewItem *parent, bool highlight)
+AccountsView::AccountItem::AccountItem(QString text, Account *a, QTreeWidgetItem *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       account(a) {
     //kDebug()<<k_funcinfo<<endl;
@@ -96,9 +91,9 @@ AccountsView::AccountsView(Project &project, View *view, QWidget *parent)
     m_periodTexts<<i18n("Day")<<i18n("Week")<<i18n("Month");
     m_cumulative = false;
 
-    Q3VBoxLayout *lay1 = new Q3VBoxLayout(this, 0, KDialog::spacingHint());
+    QVBoxLayout *lay1 = new QVBoxLayout(this, 0, KDialog::spacingHint());
 
-    Q3HBoxLayout *lay2 = new Q3HBoxLayout(0, 0, KDialog::spacingHint());
+    QHBoxLayout *lay2 = new QHBoxLayout(0, 0, KDialog::spacingHint());
     m_label = new QLabel(this);
     m_label->setFrameShape(QLabel::StyledPanel);
     m_label->setFrameShadow(QLabel::Sunken);
@@ -119,7 +114,7 @@ AccountsView::AccountsView(Project &project, View *view, QWidget *parent)
     connect(this, SIGNAL(update()), SLOT(slotUpdate()));
     connect(m_changeBtn, SIGNAL(clicked()), SLOT(slotConfigure()));
 
-    Q3ValueList<int> list = m_dlv->sizes();
+    QList<int> list = m_dlv->sizes();
     int tot = list[0] + list[1];
     list[0] = qMin(35, tot);
     list[1] = tot-list[0];
@@ -139,7 +134,7 @@ void AccountsView::init() {
 void AccountsView::draw() {
     //kDebug()<<k_funcinfo<<endl;
     Context::Accountsview context;
-    getContextClosedItems(context, m_dlv->masterListView()->firstChild());
+    getContextClosedItems(context, m_dlv->masterListView()->topLevelItem(0));
     initAccList(m_accounts.accountList());
     setContextClosedItems(context);
     slotUpdate();
@@ -150,8 +145,8 @@ void AccountsView::initAccList(const AccountList &list) {
     AccountListIterator it = list;
     for (it.toBack(); it.hasPrevious(); it.previous()) {
         AccountsView::AccountItem *a = new AccountsView::AccountItem(it.peekPrevious(), m_dlv->masterListView());
-        a->setOpen(true);
-        a->setExpandable(!it.peekPrevious()->isElement());
+/*        a->setOpen(true);
+        a->setExpandable(!it.peekPrevious()->isElement());*/
         initAccSubItems(it.peekPrevious(), a);
     }
     createPeriods();
@@ -183,8 +178,8 @@ void AccountsView::initAccList(const AccountList &list, AccountsView::AccountIte
     AccountListIterator it = list;
     for (it.toBack(); it.hasPrevious(); it.previous()) {
         AccountsView::AccountItem *a = new AccountsView::AccountItem(it.peekPrevious(), parent);
-        a->setOpen(true);
-        a->setExpandable(!it.peekPrevious()->isElement());
+/*        a->setOpen(true);
+        a->setExpandable(!it.peekPrevious()->isElement());*/
         initAccSubItems(it.peekPrevious(), a);
     }
 }
@@ -215,16 +210,15 @@ void AccountsView::slotUpdate() {
     // Add columns for selected period/periods
     QDate start = m_project.startTime().date();
     QDate end = m_date;
-    //kDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
-    int c=0;
+    //kDebug()<<k_funcinfo<<start<<" - "<<end<<endl;
+    QStringList df;
     if (m_period == 0) { //Daily
-        for (QDate dt = start; dt <= end; dt = cal->addDays(dt, 1), ++c) {
-            QString df = locale->formatDate(dt, true);
-            m_dlv->addSlaveColumn(df);
+        for (QDate dt = start; dt <= end; dt = cal->addDays(dt, 1)) {
+            df << locale->formatDate(dt, true);
         }
-        Q3ListViewItemIterator it(m_dlv->masterListView());
-        for (;it.current(); ++it) {
-            AccountsView::AccountItem *item = dynamic_cast<AccountsView::AccountItem*>(it.current());
+        m_dlv->setSlaveLabels(df);
+        foreach (QTreeWidgetItem *i, m_dlv->masterItems()) {
+            AccountsView::AccountItem *item = dynamic_cast<AccountsView::AccountItem*>(i);
             if (!item || !item->account || !item->account->isElement()) {
                 continue;
             }
@@ -245,28 +239,28 @@ void AccountsView::slotUpdate() {
     if (m_period == 1) { //Weekly
         //TODO make this user controlled
         int weekStartDay = locale->weekStartDay();
-
+        QStringList t;
         QDate dt = start;
         QDate pend = cal->addDays(dt, 7 + weekStartDay - 1 - cal->dayOfWeek(dt));
+        int c=0;
         for (; pend <= end; ++c) {
             //kDebug()<<k_funcinfo<<c<<": "<<dt<<"-"<<pend<<" : "<<end<<endl;
             int y;
             int w = cal->weekNumber(dt, &y);
-            QString t = i18nc("<week>-<year>", "%1-%2", w, y);
-            m_dlv->addSlaveColumn(t);
+            t << i18nc("<week>-<year>", "%1-%2", w, y);
             dt = pend.addDays(1);
             pend = cal->addDays(pend, 7);
             if ((pend.year() == end.year()) && (pend.weekNumber() == end.weekNumber())) {
                 pend = end;
             }
         }
+        m_dlv->setSlaveLabels(t);
         if (c == 0) {
             QApplication::restoreOverrideCursor();
             return;
         }
-        Q3ListViewItemIterator it(m_dlv->masterListView());
-        for (;it.current(); ++it) {
-            AccountsView::AccountItem *item = dynamic_cast<AccountsView::AccountItem*>(it.current());
+        foreach (QTreeWidgetItem *i, m_dlv->masterItems()) {
+            AccountsView::AccountItem *item = dynamic_cast<AccountsView::AccountItem*>(i);
             if (!item || !item->account || !item->account->isElement()) {
                 continue;
             }
@@ -292,27 +286,27 @@ void AccountsView::slotUpdate() {
     }
     if (m_period == 2) { //Monthly
         //TODO make this user controlled
+        QStringList m;
         QDate dt = start;
         QDate pend;
         cal->setYMD(pend, dt.year(), dt.month(), dt.daysInMonth());
+        int c=0;
         for (; pend <= end; ++c) {
             //kDebug()<<k_funcinfo<<c<<": "<<dt<<"-"<<pend<<" : "<<end<<endl;
-            QString m = cal->monthName(dt, true) + QString(" %1").arg( dt.year());
-            m_dlv->addSlaveColumn(m);
-
+            m << cal->monthName(dt, true) + QString(" %1").arg( dt.year());
             dt = pend.addDays(1); // 1. next month
             pend = cal->addDays(pend, dt.daysInMonth());
             if ((pend.year() == end.year()) && (pend.month() == end.month())) {
                 pend = end;
             }
         }
+        m_dlv->setSlaveLabels(m);
         if (c == 0) {
             QApplication::restoreOverrideCursor();
             return;
         }
-        Q3ListViewItemIterator it(m_dlv->masterListView());
-        for (;it.current(); ++it) {
-            AccountsView::AccountItem *item = dynamic_cast<AccountsView::AccountItem*>(it.current());
+        foreach (QTreeWidgetItem *i, m_dlv->masterItems()) {
+            AccountsView::AccountItem *item = dynamic_cast<AccountsView::AccountItem*>(i);
             if (!item || !item->account || !item->account->isElement()) {
                 continue;
             }
@@ -365,7 +359,7 @@ void AccountsView::print(KPrinter &printer) {
 
 bool AccountsView::setContext(Context::Accountsview &context) {
     //kDebug()<<k_funcinfo<<"---->"<<endl;
-    Q3ValueList<int> list;
+    QList<int> list;
     list << context.accountsviewsize << context.periodviewsize;
     //m_dlv->setSizes(list); //NOTE: Doesn't always work!
     m_date = context.date;
@@ -380,15 +374,15 @@ bool AccountsView::setContext(Context::Accountsview &context) {
 
 void AccountsView::setContextClosedItems(Context::Accountsview &context) {
     for (QStringList::ConstIterator it = context.closedItems.begin(); it != context.closedItems.end(); ++it) {
-        if (m_accounts.findAccount(*it)) {
-            Q3ListViewItemIterator lit(m_dlv->masterListView());
+/*        if (m_accounts.findAccount(*it)) {
+            QTreeWidgetItemIterator lit(m_dlv->masterListView());
             for (; lit.current(); ++lit) {
                 if (lit.current()->text(0) == (*it)) {
                     m_dlv->setOpen(lit.current(), false);
                     break;
                 }
             }
-        }
+        }*/
     }
 }
 
@@ -401,20 +395,20 @@ void AccountsView::getContext(Context::Accountsview &context) const {
     context.cumulative = m_cumulative;
     //kDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
 
-    getContextClosedItems(context, m_dlv->masterListView()->firstChild());
+    getContextClosedItems(context, m_dlv->masterListView()->topLevelItem(0));
 }
 
 
-void AccountsView::getContextClosedItems(Context::Accountsview &context, Q3ListViewItem *item) const {
+void AccountsView::getContextClosedItems(Context::Accountsview &context, QTreeWidgetItem *item) const {
     if (item == 0)
         return;
-    for (Q3ListViewItem *i = item; i; i = i->nextSibling()) {
+/*    for (QTreeWidgetItem *i = item; i; i = i->nextSibling()) {
         if (!i->isOpen()) {
             context.closedItems.append(i->text(0));
             //kDebug()<<k_funcinfo<<"add closed "<<i->text(0)<<endl;
         }
         getContextClosedItems(context, i->firstChild());
-    }
+    }*/
 }
 
 void AccountsView::slotConfigure() {

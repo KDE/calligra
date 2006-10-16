@@ -28,7 +28,7 @@ class QComboBox;
 class Q3DateEdit;
 class QPushButton;
 class QSplitter;
-class Q3ListViewItem;
+class QTreeWidgetItem;
 class QLabel;
 class QPushButton;
 
@@ -74,9 +74,9 @@ protected slots:
 private:
     class ResourceItem : public DoubleListViewBase::MasterListItem {
     public:
-        ResourceItem(Resource *r, Q3ListView *parent, bool highlight=false);
-        ResourceItem(Resource *r, Q3ListViewItem *parent, bool highlight=false);
-        ResourceItem(QString text, Q3ListViewItem *parent, bool highlight=false);
+        ResourceItem(Resource *r, QTreeWidget *parent, bool highlight=false);
+        ResourceItem(Resource *r, QTreeWidgetItem *parent, bool highlight=false);
+        ResourceItem(QString text, QTreeWidgetItem *parent, bool highlight=false);
 
         Resource *resource;
         EffortCostMap effortMap;

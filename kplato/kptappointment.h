@@ -23,13 +23,12 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 
-#include <qdom.h>
-#include <q3intdict.h>
 #include <QString>
 #include <QList>
 
 #include <kdebug.h>
 
+class QDomElement;
 class QTime;
 
 namespace KPlato

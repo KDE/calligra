@@ -25,26 +25,25 @@
 #include "kptresource.h"
 #include "kptview.h"
 
-#include <qapplication.h>
+#include <QApplication>
+#include <QDateTime>
 #include <QList>
+
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
 
-#include <qdatetime.h>
-#include <q3header.h>
-
 namespace KPlato
 {
 
-ResourceAppointmentsView::NodeItem::NodeItem(Node *t, Q3ListView *parent, bool highlight)
+ResourceAppointmentsView::NodeItem::NodeItem(Node *t, QTreeWidget *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, t->name(), highlight),
       node(t) {
       
       setFormat(0, 'f', 1);
     //kDebug()<<k_funcinfo<<endl;
 }
-ResourceAppointmentsView::NodeItem::NodeItem(Node *t, Q3ListViewItem *p, bool highlight)
+ResourceAppointmentsView::NodeItem::NodeItem(Node *t, QTreeWidgetItem *p, bool highlight)
     : DoubleListViewBase::MasterListItem(p, t->name(), highlight),
       node(t) {
       
@@ -52,7 +51,7 @@ ResourceAppointmentsView::NodeItem::NodeItem(Node *t, Q3ListViewItem *p, bool hi
     //kDebug()<<k_funcinfo<<endl;
 }
 
-ResourceAppointmentsView::NodeItem::NodeItem(QString text, Q3ListViewItem *parent, bool highlight)
+ResourceAppointmentsView::NodeItem::NodeItem(QString text, QTreeWidgetItem *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       node(0) {
       
@@ -60,7 +59,7 @@ ResourceAppointmentsView::NodeItem::NodeItem(QString text, Q3ListViewItem *paren
     //kDebug()<<k_funcinfo<<endl;
 }
 
-ResourceAppointmentsView::NodeItem::NodeItem(QString text, Q3ListView *parent, bool highlight)
+ResourceAppointmentsView::NodeItem::NodeItem(QString text, QTreeWidget *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       node(0) {
       
@@ -79,7 +78,7 @@ ResourceAppointmentsView::ResourceAppointmentsView(View *view, QWidget *parent)
     setNameHeader(i18n("Task"));
     
     
-    Q3ValueList<int> list = sizes();
+    QList<int> list = sizes();
     int tot = list[0] + list[1];
     list[0] = qMin(35, tot);
     list[1] = tot-list[0];
@@ -99,14 +98,14 @@ void ResourceAppointmentsView::draw(Resource *resource, const QDate &start, cons
 }
 
 void ResourceAppointmentsView::draw() {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<m_resource->name()<<": "<<m_start<< " - "<<m_end<<endl;
     clear();
     if (!m_resource)
         return;
     
     m_totalItem = new ResourceAppointmentsView::NodeItem(i18n("Total"), masterListView());
-    m_totalItem->setExpandable(true);
-    m_totalItem->setOpen(true);
+//    m_totalItem->setExpandable(true);
+//    m_totalItem->setOpen(true);
     m_availItem = new ResourceAppointmentsView::NodeItem(i18n("Available"), masterListView());
     QList<Appointment*> lst = m_resource->appointments();
     //kDebug()<<k_funcinfo<<lst.count()<<endl;
@@ -132,20 +131,19 @@ void ResourceAppointmentsView::slotUpdate() {
     const QDateTime availFrom = m_resource->availableFrom();
     const QDateTime availUntil = m_resource->availableUntil();
     // Add columns for selected period/periods
-    //kDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
-    int c=0;
-    for (QDate dt = m_start; dt <= m_end; dt = cal->addDays(dt, 1), ++c) {
-        QString df = locale->formatDate(dt, true);
-        addSlaveColumn(df);
+    //kDebug()<<k_funcinfo<<start<<" - "<<end<<endl;
+    QStringList df;
+    for (QDate dt = m_start; dt <= m_end; dt = cal->addDays(dt, 1)) {
+        df << locale->formatDate(dt, true);
     }
+    setSlaveLabels(df);
     if (m_totalItem) {
         m_totalItem->setHighlight(true);
         m_totalItem->setSlaveHighlight(true);
     }
-    Q3ListViewItemIterator it(masterListView());
-    for (;it.current(); ++it) {
-        ResourceAppointmentsView::NodeItem *item = static_cast<ResourceAppointmentsView::NodeItem*>(it.current());
-        if (!item || item->firstChild()) {
+    foreach (QTreeWidgetItem *i, masterItems()) {
+        ResourceAppointmentsView::NodeItem *item = static_cast<ResourceAppointmentsView::NodeItem*>(i);
+        if (!item || item->child(0)) {
             continue;
         }
         double eff;
