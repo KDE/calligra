@@ -32,7 +32,6 @@
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <krecentdocument.h>
-#include <ktempfile.h>
 #include <kurlrequester.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
