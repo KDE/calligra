@@ -1814,8 +1814,8 @@ int KexiDataAwareObjectInterface::showErrorMessageForResult(KexiDB::ResultInfo* 
 		return KMessageBox::questionYesNo(thisWidget, resultInfo->msg 
 			+ (resultInfo->desc.isEmpty() ? QString::null : ("\n"+resultInfo->desc)),
 			QString::null, 
-			KGuiItem(futureI18n2("Correct Changes", "Correct"), QString::null, futureI18n("Correct changes")),
-			KGuiItem(futureI18n("Discard Changes")) );
+			KGuiItem(i18n("Correct Changes", "Correct"), QString::null, i18n("Correct changes")),
+			KGuiItem(i18n("Discard Changes")) );
 	}
 
 	if (resultInfo->desc.isEmpty())

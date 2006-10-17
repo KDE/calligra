@@ -8,7 +8,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CM
 
 set(kexihandler_table_PART_SRCS kexitablepart.cpp kexitabledesignerview.cpp
 	kexitabledesigner_dataview.cpp kexitabledesignercommands.cpp
-	kexitabledesignerview_p.cpp )
+	kexitabledesignerview_p.cpp kexilookupcolumnpage.cpp )
 
 kde4_automoc(kexihandler_table ${kexihandler_table_PART_SRCS})
 
