@@ -332,7 +332,7 @@ void Task::save(QDomElement &element)  const {
     }
 }
 
-void Task::saveAppointments(QDomElement &element, long id) {
+void Task::saveAppointments(QDomElement &element, long id) const {
     //kDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
     Schedule *sch = findSchedule(id);
     if (sch) {

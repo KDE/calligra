@@ -84,7 +84,7 @@ public:
     /// Save to document
     virtual void save(QDomElement &element) const;
     /// Save appointments for schedule with id
-    virtual void saveAppointments(QDomElement &element, long id);
+    virtual void saveAppointments(QDomElement &element, long id) const;
     /**
      * Returns a list of planned effort and cost for this task
      * for the interval start, end inclusive
