@@ -249,7 +249,7 @@ void KexiDataSourcePage::clearWidgetDataSourceSelection()
 
 void KexiDataSourcePage::slotGotoSelected()
 {
-	Q3CString mime = m_dataSourceCombo->selectedMimeType();
+	Q3CString mime = m_dataSourceCombo->selectedMimeType().latin1();
 	if (mime=="kexi/table" || mime=="kexi/query") {
 		if (m_dataSourceCombo->isSelectionValid())
 			emit jumpToObjectRequested(mime, m_dataSourceCombo->selectedName().latin1());
@@ -297,9 +297,9 @@ void KexiDataSourcePage::slotDataSourceChanged()
 {
 	if (!m_dataSourceCombo->project())
 		return;
-	Q3CString mime = m_dataSourceCombo->selectedMimeType();
+	Q3CString mime = m_dataSourceCombo->selectedMimeType().latin1();
 	bool dataSourceFound = false;
-	Q3CString name = m_dataSourceCombo->selectedName();
+	Q3CString name = m_dataSourceCombo->selectedName().latin1();
 	if ((mime=="kexi/table" || mime=="kexi/query") && m_dataSourceCombo->isSelectionValid()) {
 		KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
 			m_dataSourceCombo->project()->dbConnection(), name, mime=="kexi/table");

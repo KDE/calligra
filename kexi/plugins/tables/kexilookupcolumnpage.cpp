@@ -68,8 +68,8 @@ class KexiLookupColumnPage::Private
 {
 	public:
 		Private()
-		 : insideClearRowSourceSelection(false)
-		 , currentFieldUid(-1)
+		 : currentFieldUid(-1)
+		 , insideClearRowSourceSelection(false)
 		 , propertySetEnabled(true)
 		{
 		}
@@ -423,7 +423,7 @@ void KexiLookupColumnPage::clearBoundColumnSelection()
 
 void KexiLookupColumnPage::slotBoundColumnSelected()
 {
-	KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
+//	KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
 //! @todo this should also work for expressions
 /*disabled	KexiDB::Field *field = d->fieldListView->schema()->field( d->boundColumnCombo->fieldOrExpression() );
 	if (field)
@@ -456,7 +456,7 @@ void KexiLookupColumnPage::clearVisibleColumnSelection()
 
 void KexiLookupColumnPage::slotVisibleColumnSelected()
 {
-	KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
+//	KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
 //! @todo this should also work for expressions
 	d->clearVisibleColumnButton->setEnabled( !d->visibleColumnCombo->fieldOrExpression().isEmpty() );
 

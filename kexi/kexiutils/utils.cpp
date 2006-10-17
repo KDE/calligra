@@ -24,7 +24,6 @@
 #include <qpainter.h>
 #include <qimage.h>
 #include <qwmatrix.h>
-#include <Q3CString>
 
 #include <kdebug.h>
 #include <kcursor.h>

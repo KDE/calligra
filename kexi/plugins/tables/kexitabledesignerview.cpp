@@ -1152,7 +1152,7 @@ KexiDB::Field * KexiTableDesignerView::buildField( const KoProperty::Set &set ) 
 
 	while (it!=values.end()) {
 		const QString propName( it.key() );
-		if (d->internalPropertyNames.find(propName) || propName.startsWith("this:")
+		if (d->internalPropertyNames.find(propName.toLatin1()) || propName.startsWith("this:")
 			|| (/*sanity*/propName=="objectType" && KexiDB::Field::BLOB != KexiDB::intToFieldType( set["type"].value().toInt() )))
 		{
 			QMap<QCString, QVariant>::Iterator it_tmp = it;
