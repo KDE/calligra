@@ -1,0 +1,145 @@
+<chapter id="configure">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Pamela</firstname>
+<surname>Robert</surname>
+<affiliation>
+<address><email>pamroberts@blueyonder.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
+<title>Configuring &kspread; Shortcuts and Toolbars</title>
+
+<sect1 id="configshort">
+<title>Shortcuts</title>
+<para>To change the shortcut key arrangements used by &kspread; select
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...
+</guimenuitem></menuchoice>. This will launch a dialog box as shown below.
+</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Shortcut config screenshot 1</phrase>
+</textobject>
+</mediaobject>
+<para>Search through the list box to find the action you want to add or
+change the shortcut keys for and select it by <mousebutton>left</mousebutton>
+clicking on the name. By entering the name of the action in the search bar at the
+top you can quickly find the desired action. You will then be able to change the shortcut
+by selecting the <guilabel>None</guilabel>, <guilabel>Default</guilabel> or
+<guilabel>Custom</guilabel> radio button or by clicking on the large button in 
+the <guilabel>Shortcut for Selected Action</guilabel> area.</para>
+<para>The <guilabel>Configure Shortcut</guilabel> dialog box will then open.
+</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Simple shortcut configuration</phrase>
+</textobject>
+</mediaobject>
+<para>You can now simply press the key combination you want to act as the
+shortcut, for example <keycombo action="simul">
+&Ctrl;&Shift;<keycap>S</keycap></keycombo>. The <guilabel>Configure
+Shortcut</guilabel> dialog box will then close by itself as soon as the shortcut
+is configured.
+</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Advanced shortcut configuration</phrase>
+</textobject>
+</mediaobject>
+<para>
+You can also click on the <guibutton>Advanced &gt;&gt;</guibutton> button in the
+<guilabel>Configure Shortcut</guilabel> dialog to get more options.
+There you can configure a <guilabel>Primary shortcut:</guilabel> and a secondary 
+<guilabel>Alternate shortcut:</guilabel>.
+You can even choose <guilabel>Multi-key mode</guilabel>, which lets you add additional
+keys to the shortcut.
+</para>
+<para>
+Configuring the shortcut with the simple dialog sets the primary
+shortcut.
+</para>
+
+<sect2 id="userdefmenus">
+<title>User Defined Menus</title>
+<para>You can add your own pop up menu to &kspread; so that pressing one key 
+combination will make the menu appear then pressing a second key, or using the 
+<keysym>Up arrow</keysym> and <keysym>Down arrow</keysym> keys and pressing 
+<keysym>Enter</keysym>, will select an item from it.</para>
+<para>To do this add a <guilabel>Custom</guilabel> shortcut for each of the 
+actions you want to appear in the menu and in the <guilabel>Configure Shortcut
+</guilabel> dialog check the <guilabel>Multi-key mode</guilabel> box, press the 
+key combination that you want to bring up your new menu then, separately, 
+press the key that will choose that item from the menu.</para>
+</sect2>
+</sect1>
+
+<sect1 id="configtoolbars">
+<title>Toolbars</title>
+<para>&kspread; has five toolbars: <guilabel>File</guilabel>, 
+<guilabel>Edit</guilabel>, <guilabel>Navigation</guilabel>, 
+<guilabel>Format</guilabel> and <guilabel>Color/Border</guilabel>.
+each of which may or may not be shown depending on the choices made in the 
+<guimenu>Settings</guimenu> menu.</para>
+<para>You can choose whether a toolbar appears at the <guimenuitem>Top</guimenuitem>, 
+<guimenuitem>Left</guimenuitem>, <guimenuitem>Right</guimenuitem> or 
+<guimenuitem>Bottom</guimenuitem> of &kspread;'s window by <mousebutton>right</mousebutton> clicking on 
+the toolbar, which brings up the <guilabel>Toolbar Menu</guilabel>, and making 
+a selection from the <guisubmenu>Orientation</guisubmenu> sub menu. This 
+<guilabel>Toolbar Menu</guilabel> also has sub menus for choosing whether the 
+toolbar displays icons, text or both, and the size of the icons.</para>
+
+<para>Another way of moving a toolbar is by positioning the mouse pointer over
+the two vertical bars at the left end of each toolbar and holding the 
+<mousebutton>left</mousebutton> mouse button down while you drag the toolbar 
+to the wanted position. When you drag the toolbar in this way you can release 
+the mouse button when it is some distance from any of &kspread;'s window 
+sides, and then you will get a floating toolbar, which is not locked to any 
+particular part of &kspread;'s window and can in fact be moved outside of 
+the window. To put a floating toolbar back into one of the traditional 
+positions <mousebutton>right</mousebutton> click on its titlebar to bring 
+up the <guilabel>Toolbar Menu</guilabel> then choose one of the options in 
+the <guisubmenu>Orientation</guisubmenu> sub menu.</para>
+<para>You can also <quote>flatten</quote> a toolbar by <mousebutton>left
+</mousebutton> clicking on the two vertical bars at the left end of the 
+toolbar or by selecting <menuchoice><guisubmenu>Orientation</guisubmenu>
+<guimenuitem>Flat</guimenuitem></menuchoice> from the <guilabel>Toolbar 
+Menu</guilabel>. A <quote>flattened</quote> toolbar appears as a small 
+rectangle containing two horizontal bars just under &kspread;'s Menubar. It 
+can be restored to normal by <mousebutton>left</mousebutton> clicking on it.
+</para>
+<para>Selecting <guimenuitem>Configure Toolbars...</guimenuitem> from the 
+<guimenu>Settings</guimenu> menu will bring up a dialog box which lets you add 
+buttons to or remove them from &kspread;'s toolbars.</para>
+<para>To use this <guilabel>Configure Toolbars</guilabel> dialog box first 
+select a toolbar from the <guilabel>Toolbar:</guilabel> combo box. The 
+right hand <guilabel>Current actions:</guilabel> window will then show the 
+buttons currently present on the toolbar. You can remove a button by selecting 
+it in this window then pressing the left arrow button, or move it around by 
+pressing the up and down arrow buttons. To add a new button to the toolbar 
+select it in the <guilabel>Available actions:</guilabel> list then press the 
+right arrow button.</para>
+</sect1>
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
