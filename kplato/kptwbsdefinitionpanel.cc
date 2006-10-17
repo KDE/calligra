@@ -28,53 +28,102 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QCheckBox>
-#include <q3groupbox.h>
-#include <q3memarray.h>
+#include <QGroupBox>
 #include <QPushButton>
-#include <qstringlist.h>
+#include <QComboBox>
 #include <QSpinBox>
-#include <q3table.h>
+#include <QTableWidget>
+#include <QHeaderView>
+#include <QStringList>
 
 namespace KPlato
 {
 
+ComboBoxDelegate::ComboBoxDelegate(QStringList &list, QObject *parent)
+    : QItemDelegate(parent)
+{
+    kDebug()<<k_funcinfo<<endl;
+    setObjectName("ComboBoxDelegate");
+    m_list = list;
+}
+
+QWidget *ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
+{
+    kDebug()<<k_funcinfo<<endl;
+    QComboBox *editor = new QComboBox(parent);
+    editor->installEventFilter(const_cast<ComboBoxDelegate*>(this));
+    return editor;
+}
+
+void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    QString value = index.model()->data(index, Qt::DisplayRole).toString();
+    kDebug()<<k_funcinfo<<value<<": "<<m_list<<endl;
+    QComboBox *comboBox = static_cast<QComboBox*>(editor);
+
+    comboBox->insertItems(0, m_list);
+    comboBox->setCurrentIndex(comboBox->findText(value));
+}
+
+void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+{
+    QComboBox *comboBox = static_cast<QComboBox*>(editor);
+    kDebug()<<k_funcinfo<<comboBox->currentText()<<endl;
+    model->setData(index, comboBox->currentText());
+}
+
+void ComboBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    editor->setGeometry(option.rect);
+}
+
+//----------------------
+
 WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const char *n)
-    : WBSDefinitionPanelBase(p, n),
+    : Ui_WBSDefinitionPanelBase(),
+      selectedRow(-1),
       m_def(def)
 {
-    removeBtn->setEnabled(false);
+    setupUi(this);
     
     QStringList codeList = def.codeList();
+    kDebug()<<k_funcinfo<<codeList<<endl;
     defaultSeparator->setText(def.defaultSeparator());
     defaultCode->addItems(codeList);
     defaultCode->setCurrentIndex(def.defaultCodeIndex());
     defaultCode->setFocus();
-    
+    levelsTable->setItemDelegateForColumn(0, new ComboBoxDelegate(codeList, this));
     levelsGroup->setChecked(def.isLevelsDefEnabled());
     int i = 0;
     const QMap<int, WBSDefinition::CodeDef> &lev = def.levelsDef();
-    levelsTable->setNumRows(lev.count());
+    levelsTable->setRowCount(lev.count());
+    QStringList sl;
     kDebug()<<"Map size="<<lev.count()<<endl;
     QMap<int, WBSDefinition::CodeDef>::const_iterator it;
     for (it = lev.begin(); it != lev.end(); ++it) {
-        levelsTable->verticalHeader()->setLabel(i, QString("%1").arg(it.key()));
-        Q3ComboTableItem *item = new Q3ComboTableItem(levelsTable, codeList, true);
-        item->setCurrentItem(it.value().code);
+        sl << QString("%1").arg(it.key());
+        QTableWidgetItem *item = new QTableWidgetItem();
+        item->setData(Qt::DisplayRole, it.value().code);
         levelsTable->setItem(i, 0, item);
-        levelsTable->setText(i, 1, it.value().separator);
+        item = new QTableWidgetItem();
+        item->setText(it.value().separator);
+        levelsTable->setItem(i, 1, item);
         i++;
     }
-    levelsTable->setColumnStretchable(0, true);
+    levelsTable->setVerticalHeaderLabels(sl);
+    //levelsTable->setColumnStretchable(0, true);
     slotLevelChanged(level->value());
     
     connect(defaultCode, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(defaultSeparator, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
     connect(levelsGroup, SIGNAL(toggled(bool)), SLOT(slotLevelsGroupToggled(bool)));
-    connect(levelsTable, SIGNAL(valueChanged(int, int)), SLOT(slotChanged()));
-    connect(levelsTable, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
+    connect(levelsTable, SIGNAL(cellChanged(int, int)), SLOT(slotChanged()));
+    connect(levelsTable, SIGNAL(itemSelectionChanged()), SLOT(slotSelectionChanged()));
     connect(level, SIGNAL(valueChanged(int)), SLOT(slotLevelChanged(int)));
-    connect(removeBtn, SIGNAL(clicked()), SLOT(slotRemoveBtnClicked()));
-    connect(addBtn, SIGNAL(clicked()), SLOT(slotAddBtnClicked()));
+    connect(removeBtn, SIGNAL(clicked(bool)), SLOT(slotRemoveBtnClicked()));
+    connect(addBtn, SIGNAL(clicked(bool)), SLOT(slotAddBtnClicked()));
+
+    removeBtn->setEnabled(false);
 }
 
 void WBSDefinitionPanel::setStartValues(Part */*part*/) {
@@ -87,14 +136,15 @@ KMacroCommand *WBSDefinitionPanel::buildCommand(Part */*part*/) {
 }
 
 bool WBSDefinitionPanel::ok() {
+    kDebug()<<k_funcinfo<<endl;
     m_def.setDefaultCode(defaultCode->currentIndex());
     m_def.setDefaultSeparator(defaultSeparator->text());
     
     m_def.setLevelsDefEnabled(levelsGroup->isChecked());
 
     m_def.clearLevelsDef();
-    for (int i = 0; i < levelsTable->numRows(); ++i) {
-        m_def.setLevelsDef(levelsTable->verticalHeader()->label(i).toInt(), levelsTable->text(i, 0), levelsTable->text(i, 1));
+    for (int i = 0; i < levelsTable->rowCount(); ++i) {
+        m_def.setLevelsDef(levelsTable->verticalHeaderItem(i)->text().toInt(), levelsTable->item(i, 0)->text(), levelsTable->item(i, 1)->text());
     }
     return true;
 }
@@ -105,48 +155,47 @@ void WBSDefinitionPanel::slotChanged() {
 
 void WBSDefinitionPanel::slotSelectionChanged() {
     QString s;
-    bool rowSelected = false;
-    for (int i=0; i < levelsTable->numRows(); ++i) {
-        if (levelsTable->isRowSelected(i, true)) {
-            s += QString("Row[%1]=selected ").arg(i);
-            rowSelected = true;
-        }
+    selectedRow = -1;
+    QList<QTableWidgetItem *> items = levelsTable->selectedItems();
+    if (items.count() == 2 && items[0]->row() == items[1]->row()) {
+        selectedRow = items[0]->row();
+        s = QString("Row[%1]=selected ").arg(selectedRow);
+    } else {
+        s = "None selected";
     }
-    removeBtn->setEnabled(rowSelected);
-    if (s.isEmpty()) s = "None selected";
+    removeBtn->setEnabled(selectedRow != -1);
     kDebug()<<k_funcinfo<<s<<endl;
 }
 
 void WBSDefinitionPanel::slotRemoveBtnClicked() {
-    Q3MemArray<int> rows;
-    for (int i=0; i < levelsTable->numRows(); ++i) {
-        if (levelsTable->isRowSelected(i)) {
-            rows.resize(rows.size()+1);
-            rows[rows.size()-1] = i;
-        }
+    kDebug()<<k_funcinfo<<selectedRow<<endl;
+    if (selectedRow == -1) {
+        return;
     }
-    levelsTable->removeRows(rows);
+    levelsTable->removeRow(selectedRow);
     removeBtn->setEnabled(false);
     slotLevelChanged(level->value());
 }
 
 void WBSDefinitionPanel::slotAddBtnClicked() {
     kDebug()<<k_funcinfo<<endl;
-    int i=levelsTable->numRows()-1;
+    int i=levelsTable->rowCount()-1;
     for (; i >= 0; --i) {
-        kDebug()<<k_funcinfo<<"Checking row["<<i<<"]="<<levelsTable->verticalHeader()->label(i)<<" with "<<level->value()<<endl;
-        if (level->value() > levelsTable->verticalHeader()->label(i).toInt()) {
+        kDebug()<<k_funcinfo<<"Checking row["<<i<<"]="<<levelsTable->verticalHeaderItem(i)->text()<<" with "<<level->value()<<endl;
+        if (level->value() > levelsTable->verticalHeaderItem(i)->text().toInt()) {
             break;
         }
     }
     i++;
-    levelsTable->insertRows(i);
-    levelsTable->verticalHeader()->setLabel(i, QString("%1").arg(level->value()));
-    Q3ComboTableItem *item = new Q3ComboTableItem(levelsTable, m_def.codeList(), true);
+    levelsTable->insertRow(i);
+    levelsTable->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1").arg(level->value())));
+    QTableWidgetItem *item = new QTableWidgetItem();
+    item->setData(Qt::DisplayRole, (m_def.codeList())[m_def.defaultCodeIndex()]);
     levelsTable->setItem(i, 0, item);
-    levelsTable->clearSelection();
-    levelsTable->selectCells(i, 0, i, 0);
-    levelsTable->setCurrentCell(i, 0);
+    item = new QTableWidgetItem();
+    item->setText(m_def.defaultSeparator());
+    levelsTable->setItem(i, 1, item);
+    
     addBtn->setEnabled(false);
     slotChanged();
     
@@ -154,8 +203,8 @@ void WBSDefinitionPanel::slotAddBtnClicked() {
 }
 
 void WBSDefinitionPanel::slotLevelChanged(int value) {
-    for (int i=0; i < levelsTable->numRows(); ++i) {
-        if (value == levelsTable->verticalHeader()->label(i).toInt()) {
+    for (int i=0; i < levelsTable->rowCount(); ++i) {
+        if (value == levelsTable->verticalHeaderItem(i)->text().toInt()) {
             addBtn->setEnabled(false);
             return;
         }
@@ -164,6 +213,7 @@ void WBSDefinitionPanel::slotLevelChanged(int value) {
     slotChanged();
 }
 void WBSDefinitionPanel::slotLevelsGroupToggled(bool /*on*/) {
+    kDebug()<<k_funcinfo<<endl;
     slotLevelChanged(level->value());
 }
 

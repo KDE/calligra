@@ -20,7 +20,10 @@
 #ifndef KPTWBSDEFINITIONPANEL_H
 #define KPTWBSDEFINITIONPANEL_H
 
-#include "kptwbsdefinitionpanelbase.h"
+#include "ui_kptwbsdefinitionpanelbase.h"
+
+#include <QItemDelegate>
+#include <QWidget>
 
 class KMacroCommand;
 
@@ -30,7 +33,26 @@ namespace KPlato
 class Part;
 class WBSDefinition;
 
-class WBSDefinitionPanel : public WBSDefinitionPanelBase {
+class ComboBoxDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    ComboBoxDelegate(QStringList &list, QObject *parent = 0);
+
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                            const QModelIndex &index) const;
+
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model,
+                        const QModelIndex &index) const;
+
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+private:
+    QStringList m_list;
+};
+
+//---------------
+class WBSDefinitionPanel : public QWidget, public Ui_WBSDefinitionPanelBase {
     Q_OBJECT
 public:
     WBSDefinitionPanel(WBSDefinition &def, QWidget *parent=0, const char *name=0);
@@ -52,7 +74,7 @@ protected slots:
     void slotLevelChanged(int);
     void slotLevelsGroupToggled(bool on);
 private:
-    
+    int selectedRow;
     WBSDefinition &m_def;
 };
 

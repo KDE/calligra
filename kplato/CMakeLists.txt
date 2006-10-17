@@ -74,7 +74,14 @@ set(libkplatopart_SRCS
 )
 kde4_add_ui_files(libkplatopart_SRCS
     standardworktimedialogbase.ui
+    kptwbsdefinitionpanelbase.ui
+    kptaccountspanelbase.ui
+    resourcespanelbase.ui
+    kptaccountsviewconfigurepanelbase.ui
+    kptintervaleditbase.ui
+    kpttaskresourcespanelbase.ui
 )
+
 kde4_add_ui3_files(libkplatopart_SRCS
     kpttaskcostpanelbase.ui
     kptsummarytaskgeneralpanelbase.ui
@@ -87,12 +94,9 @@ kde4_add_ui3_files(libkplatopart_SRCS
     kptprojectdialogbase.ui
     kpttasknotespanelbase.ui
     kpttaskgeneralpanelbase.ui
-    kptwbsdefinitionpanelbase.ui
     kpttaskprogresspanelbase.ui
     kptconfigtaskpanelbase.ui
-    )
-
-kde4_add_ui_files(libkplatopart_SRCS kptaccountspanelbase.ui resourcespanelbase.ui kptaccountsviewconfigurepanelbase.ui kptintervaleditbase.ui kpttaskresourcespanelbase.ui)
+)
 
 ########### next target ###############
 
