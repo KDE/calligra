@@ -1,0 +1,253 @@
+<sect1 id="page-format">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Formatting the Page</title>
+
+<para>Before delving into the specifics of formatting a page in &kword;, remember that
+&kword; has two separate types of documents:  Text Oriented and Page Layout.  
+Please review <link
+linkend="wp-vs-dtp">The difference between Text Oriented and Page Layout Documents</link>, 
+if the differences are still unclear.</para>
+
+<para>This section of the manual is divided into two sub-parts, one for
+<link linkend="wp-page-format">Text Oriented</link>, the other for <link linkend="dtp-page-format">Page Layout</link>.</para>
+
+<sect2 id="wp-page-format">
+<title> Formatting the Page (Text Oriented Document)</title>
+<indexterm><primary>text oriented document</primary><secondary>formatting the page size</secondary></indexterm>
+<indexterm><primary>formatting the page size (text oriented document)</primary></indexterm>
+<indexterm><primary>text oriented document</primary><secondary>formatting the margins</secondary></indexterm>
+<indexterm><primary>formatting the margins (text oriented document)</primary></indexterm>
+<indexterm><primary>headers</primary><secondary>formatting</secondary></indexterm>
+<indexterm><primary>footers</primary><secondary>formatting the page</secondary></indexterm>
+
+<para>When you are working with a Text Oriented Document, you control
+the size and shape of the main frame by setting the paper size and the margins. </para>
+
+<para>Formatting the page is usually done by selecting: <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
+from the menubar.</para>
+
+<tip>
+<para>You can also go straight to the <guimenuitem>
+Page Layout</guimenuitem> options by selecting the main frame of the document and then double clicking on either of the
+rulers.</para>
+</tip>
+
+<para>A dialog box will appear with three tabs, labeled <guilabel>Page Size &amp; Margins</guilabel>, <guilabel>Columns</guilabel> and <guilabel>Header &amp; and Footer</guilabel>.</para>
+
+<para>The <guilabel>Page Size &amp; Margins</guilabel> tab is for altering
+the paper size, and changing the margins.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="wpfmtpg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>First you will notice, that a preview box appears on the right
+half of this dialog.  This will <emphasis>approximate</emphasis> the
+final look of your document.  It is updated with each change, and should
+be used as a guide for your changes. </para>
+
+<para>On the left, the dialog displays the current unit of measurement.
+This unit of measurement is the same unit of measurement
+you use for your document rulers. (In this example, we are using
+inches.)  To change the units, follow the instructions in the section entitled
+<link linkend="rulers">Using Rulers</link>.</para>
+
+<para>The dialog section labled <guilabel>Page Size</guilabel> is used to specify
+the paper size for the document.  </para>
+<para>&kword; includes many predefined paper sizes.  Select the appropriate paper size with the drop down
+box labeled <guilabel>Size</guilabel>.</para>
+
+<para>In addition to standard paper sizes, there are two selections that
+deserve special mention.</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Screen</guilabel></term>
+<listitem><para>This format is used to generate a document where
+each page has an <glossterm linkend="defaspectratio">aspect
+ratio</glossterm> (shape) which matches the aspect ratios of computer
+monitors. This might be useful for documents which will never be printed, but will appear only on a computer screen.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Custom</guilabel></term>
+<listitem><para>You can select this option to specify a unique  paper size.</para>
+<para>Once selected,  two text
+entry boxes (labeled <guilabel>Width:</guilabel> and
+<guilabel>Height:</guilabel>) become active.  Enter the height and width of your desired paper size in these text boxes.</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>Below the page size, are two radio boxes in the section labeled
+<guilabel>Orientation</guilabel> you can select either <link
+linkend="defportrait">Portrait</link> or <link
+linkend="deflandscape">Landscape</link> layout for
+your document. </para>
+
+<para>Below the page orientation, is the <guilabel>Margins</guilabel> subsection, which
+consists of 4 spin boxes.</para>
+
+<para>The <guilabel>Margins</guilabel> define the
+white-space surrounding the text in your main frame.  You can enter any
+number from 0 to the maximum size of the page in these boxes.  The units
+are the same for all four boxes, and is the same as the measurement
+listed at the top of the dialog.</para>
+
+<para>Clicking on the <guilabel>Columns</guilabel> tab allows you to
+change the number of columns on each page.  Details on multi-column documents
+can be found <link linkend="columns">here</link>.</para>
+
+<para>Clicking on the <guilabel>Header &amp; Footer</guilabel> tab allows the user to
+specify header and footer information. </para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="wpfmtpg3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This dialog can be broken into two major sections.</para>
+
+<para>If you are not familiar with Headers and Footers yet, you should
+first read the section entitled <link
+linkend="headers-and-footers">Headers/Footers</link></para>
+
+<para><emphasis>Headers</emphasis></para>
+
+<para>This section lets you determine the placement of headers, and
+which pages have which headers on them.</para>
+
+<para>If you place a mark in front of <guilabel>Different header for the first page</guilabel>, you
+will be able to specify a different format for the header on the first page.</para>
+
+<para>If you place a mark in front of <guilabel>Different header for even and odd pages</guilabel>,
+the even pages will use one header, the odd
+pages use another header. </para>
+<tip><para>You can use this to ensure the page numbers
+are always on the outside of the page, or to list the title of the
+document on odd pages and the chapter number on the even pages.</para></tip>
+
+<para>In the spin box labeled <guilabel>Spacing between header and
+body:</guilabel>, you can specify how much empty space should be placed
+between the bottom of the header, and the top of the main frame.</para>
+
+<para><emphasis>Footers</emphasis></para>
+
+<para>This section lets you determine the placement of footers, and
+which pages have which footers on them.</para>
+
+<para>If you place a mark in front of <guilabel>Different footer for the first page</guilabel>, you
+will be able to specify a different format for the footer on the first page.</para>
+
+<para>If you place a mark in front of <guilabel>Different footer for even and odd pages</guilabel>,
+the even pages will use one footer, the odd
+pages use another footer.  </para>
+
+<para>In the spin box labeled <guilabel>Spacing between footer and
+body:</guilabel>, you can specify how much empty space should be placed
+between the top of the footer, and the bottom of the main frame.</para>
+
+<para><emphasis>Footnote/Endnote</emphasis></para>
+
+<para>The bottom spin box is labeled <guilabel>Spacing between footnote and body:</guilabel>.  As the label
+suggests, you can use this text
+box to specify the distance between the bottom edge of the main frame, and the top edge of the footnotes.  For more information on
+footnotes, see the section entitled <link linkend="endnotes-and-footnotes">footnotes</link>. </para>
+
+<para>When you are satisfied with the changes you are ready to make,
+click <guibutton>OK</guibutton>.</para>
+
+<para>If you click <guibutton>Cancel</guibutton>, all your changes will
+be ignored.</para>
+
+</sect2>
+
+<sect2 id="dtp-page-format">
+<title> Formatting the Page (Page Layout Document)</title>
+<indexterm><primary>page layout document</primary><secondary>formatting the page size</secondary></indexterm>
+<indexterm><primary>formatting the page size (page layout document)</primary></indexterm>
+
+<para>When you are working with a Page Layout Document, you control the
+size and shape of all the frames individually. </para>
+
+<para>Formatting the page is usually done by selecting: <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
+from the menubar.</para>
+
+<tip>
+<para>You can also go straight to the <guimenuitem>Page 
+Layout</guimenuitem> options by double clicking on either of the
+rulers.</para>
+</tip>
+
+<para>A dialog box will appear.</para>
+
+<para>The <guilabel>Page Size &amp; Margins</guilabel> tab is for altering
+the paper size, and changing the margins.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dtpfmtpg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>First you will notice, that a preview box appears on the right
+half of this dialog.  This will <emphasis>approximate</emphasis> the
+final look of your document.  It is updated with each change, and should
+be used as a guide for your changes. </para>
+
+<para>On the left, the dialog displays the current unit of measurement.
+This unit of measurement is the same unit of measurement
+you use for your document rulers. (In this example, we are using
+inches.)  To change the units, follow the instructions in the section entitled
+<link linkend="rulers">Using Rulers</link>.</para>
+
+<para>The dialog section labled <guilabel>Page Size</guilabel> is used to specify
+the paper size for the document.  </para>
+<para>&kword; includes many predefined paper sizes.  Select the appropriate paper size with the drop down
+box labled <guilabel>Size</guilabel>.</para>
+
+<para>In addition to standard paper sizes, there are two selections that
+deserve special mention.</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Screen</guilabel></term>
+<listitem><para>This format is used to generate a document where
+each page has an <glossterm linkend="defaspectratio">aspect
+ratio</glossterm> (shape) which matches the aspect ratios of computer
+monitors. This might be useful for documents which will never be printed, but will appear only on a computer screen.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Custom</guilabel></term>
+<listitem><para>You can select this option to specify a unique  paper size.</para>
+<para>Once selected,  two text
+entry boxes (labeled <guilabel>Width:</guilabel> and
+<guilabel>Height:</guilabel>) become active.  Enter the height and width of your desired paper size in these text boxes.</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>Next to the paper format, in the section labeled
+<guilabel>Orientation</guilabel> you can select either <link
+linkend="defportrait">Portrait</link> or <link
+linkend="deflandscape">Landscape</link> layout for
+your document. </para>
+
+<para>Below the page format options, is the <guilabel>Margins</guilabel> subsection, which
+consists of 4 entry boxes. All options in this subsection are disabled in Page Oriented documents.</para>
+
+</sect2>
+</sect1>

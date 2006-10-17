@@ -1,0 +1,22 @@
+<sect1 id="insert-file">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Inserting files</title>
+<indexterm><primary>inserting files</primary></indexterm>
+
+<para>&kword; has the ability to insert a previously saved &kword; file into the current document.  This is especially useful for 
+large documents that have multiple authors.</para>
+<para>To insert a &kword; file into the current document, place the cursor at the desired insertion point of the document.</para>
+<para>Selecting <menuchoice><guimenu>Insert</guimenu><guimenuitem>File...</guimenuitem></menuchoice> from
+the menubar. You will be given a <link linkend="file-dialog">file selection dialog</link> to select the &kword; file you want to insert.</para>
+<para>When you have located the &kword; file, click <guibutton>OK</guibutton>, and the new &kword; file will be inserted into the 
+current document at the current cursor position.</para>
+<para>&kword; will integrate the newly inserted document into the structure of the current document.</para>
+</sect1>

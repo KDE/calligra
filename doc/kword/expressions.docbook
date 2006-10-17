@@ -1,0 +1,93 @@
+<sect1 id="expressions">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Expressions </title>
+<indexterm><primary>expressions</primary></indexterm>
+
+<para>Expressions are a way to quickly insert common phrases into a document.  Once an expression has been selected, the
+text is inserted into &kword;.</para>
+<note><para>  Expressions are different from variables.  Expressions are inserted as regular text, can only be
+changed later by manually editing the text. Variables, insert a placeholder in the document which can be automatically updated at
+a later date.</para></note>
+<sect2 id="expressions-insert"><title>Using expressions</title>
+<para>To use an expression could not be easier.</para>
+<para>Simply place the cursor at the location you want the expression inserted and select
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Expression</guimenuitem>
+</menuchoice> from the menubar.  This will give you a submenu with groups of expressions.  Select the group that is appropriate
+for your expression.  This will bring up a list of expressions available to you.  Select the appropriate expression.</para>
+<para>Once selected, that expression will be inserted at the cursor position.</para>
+</sect2>
+<sect2 id="expressions-add"><title>Add, change and delete expression groups and expressions</title>
+<para>Adding an expression is accomplished by selecting <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Edit Personal Expressions...</guimenuitem>
+</menuchoice> from the menubar. This will bring up a dialog box. </para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="expression.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The list at the left shows you all available groups (<emphasis>Employees</emphasis> and <emphasis>Notices</emphasis>
+in the example above).
+<emphasis>Notices</emphasis> is the currently selected group.</para>
+<sect3 id="expression-add-group"><title>Add a new group</title>
+<para>You will need to create a new group the first time you want to add a new expression.  &kword;
+ will not allow the user to edit or remove any predefined expressions.  You create a new group by clicking on the
+ <guibutton>New</guibutton> located <emphasis>below the group list</emphasis>.  A new group will be created
+ with the name <emphasis>new group</emphasis>.  You can change the name of the new group by clicking on the
+ newly created group in the group list on the left, then editing the text box on the right labeled <guilabel>Group name:</guilabel>.</para>
+ </sect3>
+<sect3 id="expression-add-rename-group"><title>Change the name of a group</title>
+<para>To change the name of a group, simply click on the group in the list on the left side of the dialog.  Type the new name in the text
+box labeled <guilabel>Group name:</guilabel>.</para>
+</sect3>
+<sect3 id="expression-add-delete-group"><title>Delete a group</title>
+<para>To delete a group, click on the group in the list on the left side of the dialog.</para>
+<warning><para>Be sure you have selected the correct group prior to clicking on the <guibutton>Delete</guibutton>
+button.  &kword; will not give you the opportunity to restore the group if it is accidentally deleted.</para></warning>
+<para>  Click on the
+<guibutton>Delete</guibutton> button <emphasis>below the group list</emphasis>. The group and all of the expressions it
+contained are immediately deleted.</para>
+<note><para>Deleting an expression with this dialog does not delete the expression from any document.  It only removes the
+expression from the menus.</para></note>
+</sect3>
+<sect3 id="expression-add-expression"><title>Add a new expression to a group</title>
+<para>The left side of the dialog box lists all the available groups.  Select the group you want to add your expression to by
+clicking with the &LMB; on the name of the group.  The list on the right of the dialog labeled
+<guilabel>Expressions</guilabel> lists all the current expressions in the current group.</para>
+<para>To add an expression, click on the <guibutton>New</guibutton> located <emphasis>below the expression list</emphasis>.</para>
+<para>A new expression is created called <emphasis>empty</emphasis>.  Type your new expression in the textbox below the list of expressions.</para>
+</sect3>
+<sect3 id="expression-change-expression"><title>Edit an expression in a group</title>
+<para>The left side of the dialog box lists all the available groups.  Select the group that contains your expression to by
+clicking with the &LMB; on the name of the group.  The list on the right of the dialog labeled
+<guilabel>Expressions</guilabel> lists all the current expressions in the current group.</para>
+<para>Click on the expression you want to edit in the expression list on the right.</para>
+<para>Click in the text box below the expression list.  You can now edit your expression in the textbox below the list of expressions.</para>
+<para>When you are finished adding new expressions, simply click <guibutton>OK</guibutton>.</para>
+</sect3>
+<sect3 id="expression-delete-expression"><title>Delete an expression</title>
+<para>To delete an expression, click on the group in the list on the left side of the dialog.  This will show a list of the expressions 
+belonging to that group in the listbox on the right labeled <guilabel>Expressions</guilabel>.</para>
+<para>Select the expression you want to delete by clicking once with the &LMB;.</para>
+<warning><para>Be sure you have selected the correct expression prior to clicking on the <guibutton>Delete</guibutton>
+button.  &kword; will not give you the opportunity to restore the expression if it is accidentally deleted.</para></warning>
+<para>  Click on the
+<guibutton>Delete</guibutton> button <emphasis>below the expression list</emphasis>. The 
+expression is immediately deleted.</para>
+<note><para>Deleting an expression with this dialog does not delete the expression from any document.  It only removes the
+expression from the menus.</para></note>
+<para>When you are finished making changes, simply click <guibutton>OK</guibutton>.</para>
+
+</sect3>
+
+</sect2>
+</sect1>

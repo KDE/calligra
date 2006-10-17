@@ -1,0 +1,475 @@
+<sect1 id="mail-merge">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Mail Merge</title>
+<indexterm><primary>mail merge</primary><secondary>introduction</secondary></indexterm>
+
+<para>&kword; has the ability to use data from an outside database (or internal database) to <emphasis>personalize</emphasis> your 
+documents for individual members/clients/friends.</para>
+<para>This section of the manual will cover all aspects of creating, merging and printing documents that are specific to &kword;.  This 
+manual will not cover:</para>
+<itemizedlist>
+<listitem><para>Creating an external database.</para></listitem>
+<listitem><para>Security issues regarding databases.</para></listitem>
+<listitem><para>Detailed instructions on SQL.  It is assumed you have some knowledge regarding SQL if you are using a 
+SQL database for your data source.</para></listitem>
+<listitem><para>Accessing the network or Internet.</para></listitem>
+</itemizedlist>
+
+<para>For answers to these questions, other documentation is available on the Internet that is specific to the software you have chosen.</para>
+<para>You can retreive your mail-merge data from a number of sources:  </para>
+<itemizedlist>
+<listitem><para>If you want to use an outside SQL database, click <link linkend="mail-merge-sql">here</link> for instructions.</para></listitem>
+<listitem><para>If you want to use a &kspread; file for your data, click <link linkend="mail-merge-kspread">here</link>.</para></listitem>
+<listitem><para>If you want use information from your &kde; Address Book, click <link linkend="mail-merge-ab">here</link>.</para></listitem>
+<listitem><para>If you want to use the internal database of &kword;, click <link linkend="mail-merge-internal">here</link>.</para></listitem>
+</itemizedlist>
+
+<sect2 id="mail-merge-sql">
+<title>Using an external SQL database as a data source</title>
+<indexterm><primary>mail merge</primary><secondary>SQL databases</secondary></indexterm>
+
+<para>&kword; has the ability to use several of the most popular open source databases as a source of data for personalized documents.</para>
+<note><para>In order to access an outside database using SQL, your machine needs to have the appropriate database module compiled 
+into your copy of QT.</para>
+<para>For more information see the <link linkend="installation">installation section of this documentation</link>.</para></note>
+<para>The database can be located on the same machine as &kword;, or on any computer which is accessable through your computer 
+network or the Internet.</para>
+<para>In order to use the database, you must know the following information:</para>
+<itemizedlist>
+<listitem><para>Name of the database</para></listitem>
+<listitem><para>Host name/IP address of the computer the database is located on</para></listitem>
+<listitem><para>The port address on the specified computer granting SQL access</para></listitem>
+<listitem><para>A valid user name for the database</para></listitem>
+<listitem><para>A valid password for the user name</para></listitem>
+</itemizedlist>
+
+<para>If you have all this information at your finger tips, you are ready to proceed.</para>
+<para>Using an outside database to create personalized documents is a three step process:</para>
+<orderedlist>
+<listitem><para><link linkend="mail-merge-sql-data">Connect to the database and select your query.</link></para></listitem>
+<listitem><para><link linkend="mail-merge-fields">Insert the merge fields</link> to tell &kword;
+where to insert the database information.</para></listitem>
+<listitem><para><link linkend="mail-merge-print">Print</link> the personalized documents.</para></listitem>
+</orderedlist>
+
+<sect3 id="mail-merge-sql-data">
+<title>Locate the database and query the records.</title>
+<para>To begin, select <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
+the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click on <guibutton>Open Existing...</guibutton>.  Another small dialog will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1a.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Select <guilabel>QT-SQL Source</guilabel> and click on
+<guibutton>OK</guibutton>.  A new dialog box will appear.<anchor id="mail-merge-login"/></para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmergesql1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Enter the &URL; or IP address of the computer that holds the database in the text box labeled <guilabel>Hostname:</guilabel>.</para>
+<para>Select the driver named <guilabel>QMYSQL3</guilabel> from the combo box labeled <guilabel>Driver:</guilabel>.  </para>
+<para>Enter the database name you were provided in the text box labeled <guilabel>Database name:</guilabel> and a
+user name in the text box labeled <guilabel>Username:</guilabel>.</para>
+<para>If the database access is through a port other than the default port enter that port number in the text box labeled 
+<guilabel>Port:</guilabel>.</para>
+<tip><para>If you are going to be using this database at other times, you can click on the button labeled
+<guibutton>Keep settings...</guibutton>. &kword; will ask for a descriptive name.</para>
+<para>When you want to restore these settings on future sessions, simply select the descriptive name from the combo box in the 
+upper left of the dialog box.</para>
+</tip>
+<para>When all information is correct, click <guibutton>OK</guibutton>.  &kword; will ask you for a password to that database.  Enter 
+the password in the text box, and click <guibutton>OK</guibutton>.</para>
+<para>&kword; will now ask if you want to replace your current data source with the source you have selected.  Click <guibutton>Yes</guibutton>. </para>
+<para>You are now connected to the database.  Now you need to select the data from the database. This dialog box has re-appeared.  </para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click on <guibutton>Edit Current...</guibutton>.  Another dialog will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmergesql2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This dialog is designed to help you enter and test your database query.  The dialog is divided into three
+sections:  Database information, Query information and Query line.</para>
+<para>The database information section is labeled <guilabel>Information</guilabel> and consists of two combo boxes.  The
+left combo box (<guilabel>Available tables:</guilabel>) gives you a list of all available tables within the current database.
+Select the desired table from the list by clicking on the table name with the &LMB;.  
+A list of all available fields from that table will appear in the right combo box.</para>
+<para>The query line is a text box located near the bottom of the dialog labeled <guilabel>Query:</guilabel>.  Simply type your 
+SQL query into this text box and click <guibutton>Execute</guibutton>.  &kword; will query the database and return the specified query
+in tabular format in the <guilabel>Query Result</guilabel> box.  You can alter, or edit your query on the query line and each time you 
+click <guibutton>Execute</guibutton>, the new query results will appear.</para>
+<note><para>&kword; does not limit your query strings.  They can be simple and straight forward:</para>
+<para><userinput>select * from Clients</userinput></para>
+<para>Or complex multitable queries:</para>
+<para><userinput>select Clients.FirstName, Clients.LastName, Clients.address, data.Birthday, 
+data.EyeColour from eMail, data where data.FirstName=Clients.FirstName and 
+data.LastName=Clients.LastName
+</userinput></para>
+</note>
+<para>Clicking <guibutton>Setup</guibutton>, will allow you to <link linkend="mail-merge-login">log into a different database</link>.</para>
+<para>When you have the correct query in the <guilabel>Query:</guilabel> text box, click <guibutton>OK</guibutton> to select that query.
+</para>
+<para>This will return you to the mail merge main dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click <guibutton>Close</guibutton>.</para>
+
+<para>Now that you have selected your data query, it is time to insert the merge fields in the document.  Click 
+<link linkend="mail-merge-fields">here to continue</link>.</para>
+</sect3>
+</sect2>
+
+<sect2 id="mail-merge-kspread">
+<title>Using a &kspread; file as a data source</title>
+<indexterm><primary>mail merge</primary><secondary>using &kspread; file</secondary></indexterm>
+
+<para>&kword; can use data in a &kspread; document for personalizing documents.</para>
+<note><para>In order to use this data, you only need to know the location of the &kspread; document and the worksheet (page) number the data is located on.</para></note>
+
+<para>Using a &kspread; document to create personalized documents is a three step process:</para>
+<orderedlist>
+<listitem><para><link linkend="mail-merge-kspread-data">Select the file the data is located within.</link></para></listitem>
+<listitem><para><link linkend="mail-merge-fields">Insert the merge fields</link> to tell &kword;
+where to insert the database information</para></listitem>
+<listitem><para><link linkend="mail-merge-print">Print</link> the personalized documents.</para></listitem>
+</orderedlist>
+
+<sect3 id="mail-merge-kspread-data">
+<title>Selecting the file that contains the data.</title>
+<para>To begin, select <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
+the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click on <guibutton>Open Existing...</guibutton>.  Another small dialog will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1a.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Select <guilabel>&kspread; Table Source</guilabel> from the drop down box labeled <guilabel>Available sources:</guilabel> and click on
+<guibutton>OK</guibutton>.  A new dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmergekspread1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Enter the &URL; or file name of the &kspread; document in the text box labeled <guilabel>URL:</guilabel>.  You can type the file name 
+directly into the text box, or click on the button with the blue folder and use the file dialog to select the &kspread; file.</para>
+<para>Once you have selected the &kspread; document, the drop down box labeled <guilabel>Page number:</guilabel> will show you all the available pages or worksheets 
+within the &kspread; document.  Select the page (or worksheet) that contains the mail merge data.</para>
+<para>When all information is correct, click <guibutton>OK</guibutton>.  &kword; will ask you if you want to replace the current data source.  Click <guibutton>Yes</guibutton> to continue.</para>
+
+
+<para>You will again see the mail merge main dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click <guibutton>Close</guibutton>.</para>
+
+<para>Now that you have selected your data query, it is time to insert the merge fields in the document.  Click 
+<link linkend="mail-merge-fields">here to continue</link>.</para>
+</sect3>
+</sect2>
+
+<sect2 id="mail-merge-ab">
+<title>Using your &kde; Address book as a data source</title>
+<indexterm><primary>mail merge</primary><secondary>using &kde; Address Book</secondary></indexterm>
+
+<para>&kword; can use data in your address book for personalizing documents.</para>
+
+<para>Using address book entries to create personalized documents is a three step process:</para>
+<orderedlist>
+<listitem><para><link linkend="mail-merge-ab-data">Select the people you want included in the mail merge.</link></para></listitem>
+<listitem><para><link linkend="mail-merge-fields">Insert the merge fields</link> to tell &kword;
+where to insert the database information</para></listitem>
+<listitem><para><link linkend="mail-merge-print">Print</link> the personalized documents.</para></listitem>
+</orderedlist>
+
+<sect3 id="mail-merge-ab-data">
+<title>Select the people you want included</title>
+<para>To begin, select <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
+the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click on <guibutton>Open Existing...</guibutton>.  Another small dialog will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1a.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Select <guilabel>&kde; Addressbook Plugin</guilabel> from the drop down box labeled <guilabel>Available sources:</guilabel> and click on
+<guibutton>OK</guibutton>.  A new dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmergeab1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The dialog consists of two listboxes labeled <guilabel>Address Book</guilabel> and <guilabel>Selected Addresses</guilabel>.  By moving entries from your Address book to the <guilabel>Selected Addresses</guilabel> listbox, you will be including those entries in your merge document.  </para>
+<para>To add an entry, select the entry in the left listbox by clicking with the &LMB;.  Then click <guibutton>Add</guibutton>.</para>
+<para>To remove an entry, select the entry in the right listbox by clicking with the &LMB;.  Then click <guibutton>Remove</guibutton>.</para>
+<tip><para>You can locate entries quickly by entering the first 2-3 letters of an entries name in the textbox labeled <guilabel>Filter on:</guilabel></para></tip>
+<note><para>You can load the full address book application by clicking the <guibutton>Address Book...</guibutton> button.</para>
+<para>You can also save a distribution list using the <guibutton>Save as Distribution List...</guibutton> button.  For more information on distribution lists, see the documentation on the &kde; Addressbook.</para></note>
+
+<para>When you have selected all the entries and distribution lists you want, click <guibutton>OK</guibutton>.  &kword; will ask you if you want to replace the current data source.  Click <guibutton>Yes</guibutton> to continue.</para>
+
+
+<para>You will again see the mail merge main dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click <guibutton>Close</guibutton>.</para>
+
+<para>Now that you have selected your data query, it is time to insert the merge fields in the document.  Click 
+<link linkend="mail-merge-fields">here to continue</link>.</para>
+</sect3>
+</sect2>
+
+
+<sect2 id="mail-merge-internal">
+<title>Using an internal representation of tabular data to create documents</title>
+<indexterm><primary>mail merge</primary><secondary>using &kword; data tables</secondary></indexterm>
+
+<para>For small sets of data, or when you do not currently have a database containing the merge data, &kword; 
+offers you the ability to enter the data <emphasis>directly into &kword;</emphasis> in tabular form.  This internal data 
+structure can then be used to create documents with this data inserted at predefined locations.</para>
+<para>Using an internal representation of the data to create personalized documents is a three step process:</para>
+<orderedlist>
+<listitem><para><link linkend="mail-merge-internal-data">Enter the data</link> into &kword;</para></listitem>
+<listitem><para><link linkend="mail-merge-fields">Insert the merge fields</link> to tell &kword;
+where to insert the database information</para></listitem>
+<listitem><para><link linkend="mail-merge-print">Print</link> the personalized documents.</para></listitem>
+</orderedlist>
+<para>After the data has been created once, you can go back and change the data as needed, and produce another set of
+personalized documents from that data.</para>
+
+<sect3 id="mail-merge-internal-data">
+<title>Enter the data</title>
+<para>To begin, select <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
+the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click on <guibutton>Create New...</guibutton>.  Another small dialog will appear.</para>
+<para>There is currently only one option in this dialog box <guilabel>Internal Storage</guilabel>. Click on
+<guibutton>OK</guibutton>.  A new dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This is a record card for creating your tabular data file.  Along the top is a toolbar and the main part of the dialog is space to hold
+your entry/data pairs.</para>
+<sect4 id="mail-merge-internal-data-entry"><title>Defining the structure of your data table</title>
+<para>First, we need to add one or more entries (merge fields).  This is accomplished by clicking the
+<inlinemediaobject><imageobject>
+<imagedata fileref="addentry.png" format="PNG" align="center"/></imageobject></inlinemediaobject> 
+(<guilabel>Add entry</guilabel>)
+button (third button from the right along the toolbar). A small dialog box will appear.  Type a descriptive name of your entry
+in the dialog box (Name, Address, Balance Due, etc....). </para>
+<note><para>This is for the name of the entry, not the data that is contained within the entry.</para></note>
+<para>Click <guibutton>OK</guibutton>, and the entry is added to the card.</para>
+<para>Repeat this process until all needed entries are visible on this first card.</para>
+<para>If you want to delete an entry, simply click once on the entry name with the &LMB; and select <inlinemediaobject><imageobject>
+<imagedata fileref="delentry.png" format="PNG" align="center"/></imageobject></inlinemediaobject>
+(<guilabel>Remove entry</guilabel>). </para>
+<warning><para>Be <emphasis>very</emphasis> sure you have selected the correct entry name.  Once you tell &kword; to delete 
+the entry, the entry <emphasis>and all of the data within those entries will be deleted immediately</emphasis>.  You will not be
+given the option to stop or reverse the process once it is begun.</para></warning>
+
+</sect4>
+<sect4 id="mail-merge-internal-data-value"><title>Entering the data into the table</title>
+<para>Now that the structure of your data is defined, you can enter the data into your entries.</para>
+<para>At the top of the dialog box, are 4 buttons surrounding a spin box.  The spin box gives the current record number.  All
+records are numbered in the order they are added starting with number 1.  You can use the spin box to go directly to 
+the desired record or you can use the arrows to graphically move
+through the list of records.</para>
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Action</entry></row>
+</thead><tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="beginning.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Move directly to record one</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="back.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Move back one record</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="forward.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Move forward one record</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="end.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Move to the last record in the dataset</entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+
+<para>To enter the data, simply place the cursor in the text box to the right of the entry name, and type in the data. (&kword; uses 
+<quote>No Value</quote> as the default value for all entries in newly created records.)</para>
+<para>To add a record, click the 
+<inlinemediaobject><imageobject>
+<imagedata fileref="addrecord.png" format="PNG" align="center"/></imageobject></inlinemediaobject> button.</para>
+<para>To delete a record, click the 
+<inlinemediaobject><imageobject>
+<imagedata fileref="delrecord.png" format="PNG" align="center"/></imageobject></inlinemediaobject> button.</para>
+<warning><para>Be careful when you are deleting records.  Once deleted, the record cannot be retrieved.</para></warning>
+<para>Continue to enter all data until your dataset is complete.</para>  
+<para>After your dataset is complete, click <guibutton>OK</guibutton> to 
+save the changes to your dataset.  This will bring up the mail merge main dialog:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click <guibutton>Close</guibutton>.  Now it is time to insert the merge fields in the document.</para>
+
+</sect4>
+
+</sect3>
+
+<sect3 id="mail-merge-fields">
+<title>Insert merge fields in document</title>
+<para>Now that &kword; knows the entries available in your data source, you can insert the merge fields into your document.</para>
+<para>A merge field is a placeholder within the document.  This placeholder will be replaced in each personalized document with the
+value of the entry for that individual record.</para>
+
+<sect4 id="mail-merge-field-insert">
+<title>Insert a merge field</title>
+<indexterm><primary>mail merge</primary><secondary>inserting merge fields</secondary></indexterm>
+
+<para>To insert a merge field, place the cursor at the desired place in the document.  Select <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenuitem>Mail Merge...</guimenuitem></menuchoice> from
+the menubar.  A list of available entries will appear.  Select the desired entry, and click <guibutton>OK</guibutton>.</para>
+<para>The merge field is inserted at the current cursor location.  The merge field is surrounded by brackets.</para>
+<para>You can place the cursor in a new location in the document and insert another placeholder.  When you are done inserting placeholders, 
+you can proceed to printing your document.</para>
+</sect4>
+
+<sect4 id="mail-merge-field-delete">
+<title>Delete a merge field</title>
+<indexterm><primary>mail merge</primary><secondary>deleting a merge field</secondary></indexterm>
+
+<para>You can delete a merge field two ways.</para>
+
+<itemizedlist>
+<listitem><para>Place the cursor at the end of the merge field, and press the &Backspace; key. </para></listitem>
+<listitem><para>Place the cursor at the beginning of the merge field, and press the <keycap>Delete</keycap> key. </para></listitem>
+</itemizedlist>
+
+</sect4>
+</sect3>
+
+<sect3 id="mail-merge-print">
+<title>Previewing and printing the merged document</title>
+<indexterm><primary>mail merge</primary><secondary>merging data and text</secondary></indexterm>
+
+<para>Once you have inserted all the merge fields you want, you are ready to preview and print the personalized documents.</para>
+<sect4 id="mail-merge-print-preview">
+<title>Preview your documents before printing</title>
+<para>To preview your document select <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
+the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="mmerge1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click <guilabel>Print Preview...</guilabel>.  You will be able to see the final output of your personalized documents prior to 
+printing.</para>
+</sect4>
+<sect4 id="mail-merge-print-printing">
+<title>Print your personalized documents.</title>
+<para>You print personalized documents using the same methods that you do to print traditional documents.  For more information on printing 
+see the section on <link linkend="printing">Printing a Document</link>.</para>
+</sect4>
+</sect3>
+</sect2>
+</sect1>

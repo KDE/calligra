@@ -1,0 +1,246 @@
+<sect1 id="kword-file-format">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>&kword; file format</title>
+<indexterm><primary>&kword;</primary><secondary>file format</secondary></indexterm>
+
+<para>&kword; uses two open source, independently developed standards for
+its file format.  The combination was chosen for its balance between
+convenience and open development models.</para>
+
+<para>First, it should be noted that all &kword; files are multiple &XML;
+files that are compressed to reduce their space requirements. </para>
+
+<para>Select the &kword; version you are interested in:</para>
+<itemizedlist>
+<listitem><para><link linkend="kword-file-format-11">&kword; 1.1 and earlier</link>.</para></listitem>
+<listitem><para><link linkend="kword-file-format-12">&kword; 1.2</link>.</para></listitem>
+<listitem><para><link linkend="kword-file-format-13">&kword; 1.3</link>.</para></listitem>
+
+</itemizedlist>
+
+<sect2 id="kword-file-format-11">
+<title>&kword; 1.1 and earlier</title>
+
+<para>The &XML; files are compressed into a single file using the same
+algorithm as used by <ulink
+url="http://www.gnu.org/software/tar/tar.html"><application>tar</application></ulink>.</para>
+
+<para>You can uncompress the files with the following command:</para>
+
+<screen width="40">
+<prompt>%</prompt> <userinput><command>tar -xzvf </command><replaceable>filename</replaceable></userinput>
+</screen>
+
+<para>This will expand the &kword; document file into its component
+files.</para>
+
+<para>The text portion of all &kword; files are &XML; (eXtensible Markup
+Language) files.</para>
+
+<note><para>For more information on &XML; documents, processors and
+technology, please visit <simplelist> <member><ulink
+url="http://www.w3.org/XML/">World Wide Web Consortium &XML;
+pages</ulink></member> <member><ulink
+url="http://www.xml.org/xml/resources_cover.shtml">XML.org Resource
+Guide</ulink></member> <member><ulink url="http://www.ucc.ie/xml/">The &XML;
+FAQ</ulink></member> </simplelist></para></note>
+
+<para>All &kword; documents consist of at least two &XML; files:</para>
+
+<variablelist>
+<varlistentry>
+<term><filename>maindoc.xml</filename></term>
+<listitem>
+<para>This file contains the bulk of the &kword; text, tables and formula
+information. It is marked with &XML; tags according to the official DTD.  A
+copy of the &kword; 1.1 DTD is located at: <ulink
+url="http://www.koffice.org/DTD/kword-1.1.dtd">http://www.koffice.org/DTD/kword-1.1.dtd</ulink>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>documentinfo.xml</filename></term>
+<listitem>
+<para>This file contains the document information.  This is information
+entered into the dialog boxes when selecting
+<menuchoice><guimenu>File</guimenu><guimenuitem>Document
+Information</guimenuitem> </menuchoice> from the menubar. This information
+is useful for tracking authors, contact information &etc;</para>
+<para>The DTD for &koffice; 1.1 is located at: <ulink
+url="http://www.koffice.org/DTD/document-info-1.1.dtd">http://www.koffice.org/DTD/document-info-1.1.dtd</ulink>.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>In addition, there may be other files included in the &kword; document
+file.  Pictures, embedded documents and other binary information are stored
+within the &kword; document as separate files.</para>
+
+<para>For more specific information on &kword; file storage or other
+internal information, please see <ulink
+url="http://www.koffice.org/developer">The KOffice API</ulink> and the
+<ulink url="http://developer.kde.org">General &kde; developer information
+pages</ulink>.</para>
+</sect2>
+
+<sect2 id="kword-file-format-12">
+<title>&kword; 1.2</title>
+
+<para>The text files are compressed into a single file using the same
+algorithm as used by <ulink
+url="http://www.info-zip.org/pub/infozip/Zip.html"><application>zip</application></ulink>.
+This change was made because of its broad use in other open source office
+suites and its improved performance with lower memory requirements.</para>
+<para>You can uncompress the files with the following command:</para>
+
+<screen width="40">
+<prompt>%</prompt> <userinput><command>unzip </command><replaceable>filename</replaceable></userinput>
+</screen>
+
+<para>This will expand the &kword; document file into its component
+files.</para> 
+
+<para>The text portion of all &kword; files are &XML;
+(eXtensible Markup Language) files.</para> 
+
+<note><para>For more information on &XML; documents, processing and
+technology, please visit <simplelist> <member><ulink
+url="http://www.w3.org/XML/">World Wide Web Consortium &XML;
+pages</ulink></member> <member><ulink
+url="http://www.xml.org/xml/resources_cover.shtml">XML.org Resource
+Guide</ulink></member> <member><ulink url="http://www.ucc.ie/xml/">The &XML;
+FAQ</ulink></member> </simplelist></para></note>
+
+<para>All &kword; documents consist of at least three files:</para>
+
+<variablelist>
+<varlistentry>
+<term><filename>maindoc.xml</filename></term>
+<listitem>
+<para>This file contains the bulk of the &kword; text, tables and formula
+information. It is marked with &XML; tags according to the official
+DTD.</para> <para>A copy of the &kword; 1.2 DTD is located at: <ulink
+url="http://www.koffice.org/DTD/kword-1.2.dtd">http://www.koffice.org/DTD/kword-1.2.dtd</ulink>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>documentinfo.xml</filename></term>
+<listitem>
+<para>This file contains the document information.  This is information
+entered into the dialog boxes when selecting
+<menuchoice><guimenu>File</guimenu><guimenuitem>Document
+Information</guimenuitem> </menuchoice> from the menubar. This information
+is useful for tracking authors, contact information etc.</para>
+<para>The DTD for &koffice; 1.2 is located at: <ulink
+url="http://www.koffice.org/DTD/document-info-1.2.dtd">http://koffice.kde.org/DTD/document-info-1.2.dtd</ulink>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><filename>mimetype</filename></term>
+<listitem>
+<para>This file contains the mimetype for &kword; files.  This information
+is used by &kde; to determine that this is a &kword; file.</para>
+<para>This file always contains:
+<emphasis>application/x-kword</emphasis></para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+<para>In addition, there may be other files included in the &kword; document
+file.  Pictures, embedded documents and other binary information are stored
+within the &kword; document as separate files.</para>
+
+<para>For more specific information on &kword; file storage or other
+internal information, please see <ulink
+url="http://www.koffice.org/developer">The KOffice API</ulink> and the
+<ulink url="http://developer.kde.org">General &kde; developer information
+pages</ulink>.</para>
+
+</sect2>
+<sect2 id="kword-file-format-13">
+<title>&kword; 1.3 (current version)</title>
+
+<para>The text files are compressed into a single file using the same
+algorithm as used by <ulink
+url="http://www.info-zip.org/pub/infozip/Zip.html"><application>zip</application></ulink>.
+This change was made because of its broad use in other open source office
+suites and its improved performance with lower memory requirements.</para>
+<para>You can uncompress the files with the following command:</para>
+
+<screen width="40">
+<prompt>%</prompt> <userinput><command>unzip </command><replaceable>filename</replaceable></userinput>
+</screen>
+
+<para>This will expand the &kword; document file into its component
+files.</para> 
+
+<para>The text portion of all &kword; files are &XML;
+(eXtensible Markup Language) files.</para> 
+
+<note><para>For more information on &XML; documents, processing and
+technology, please visit <simplelist> <member><ulink
+url="http://www.w3.org/XML/">World Wide Web Consortium &XML;
+pages</ulink></member> <member><ulink
+url="http://www.xml.org/xml/resources_cover.shtml">XML.org Resource
+Guide</ulink></member> <member><ulink url="http://www.ucc.ie/xml/">The &XML;
+FAQ</ulink></member> </simplelist></para></note>
+
+<para>All &kword; documents consist of at least three files:</para>
+
+<variablelist>
+<varlistentry>
+<term><filename>maindoc.xml</filename></term>
+<listitem>
+<para>This file contains the bulk of the &kword; text, tables and formula
+information. It is marked with &XML; tags according to the official
+DTD.</para> <para>A copy of the &kword; 1.3 DTD is located at: <ulink
+url="http://www.koffice.org/DTD/kword-1.3.dtd">http://www.koffice.org/DTD/kword-1.3.dtd</ulink>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>documentinfo.xml</filename></term>
+<listitem>
+<para>This file contains the document information.  This is information
+entered into the dialog boxes when selecting
+<menuchoice><guimenu>File</guimenu><guimenuitem>Document
+Information</guimenuitem> </menuchoice> from the menubar. This information
+is useful for tracking authors, contact information etc.</para>
+<para>The DTD for &koffice; 1.3 is located at: <ulink
+url="http://www.koffice.org/DTD/document-info-1.3.dtd">http://koffice.kde.org/DTD/document-info-1.3.dtd</ulink>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><filename>mimetype</filename></term>
+<listitem>
+<para>This file contains the mimetype for &kword; files.  This information
+is used by &kde; to determine that this is a &kword; file.</para>
+<para>This file always contains:
+<emphasis>application/x-kword</emphasis></para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+<para>In addition, there may be other files included in the &kword; document
+file.  Pictures, embedded documents and other binary information are stored
+within the &kword; document as separate files.</para>
+
+<para>For more specific information on &kword; file storage or other
+internal information, please see <ulink
+url="http://www.koffice.org/developer">The KOffice API</ulink> and the
+<ulink url="http://developer.kde.org">General &kde; developer information
+pages</ulink>.</para>
+
+</sect2>
+</sect1>
+

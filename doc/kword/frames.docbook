@@ -1,0 +1,435 @@
+<sect1 id="frames">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Working with Frames</title>
+<indexterm><primary>frames</primary><secondary>introduction</secondary></indexterm>
+<para>Since &kword; is a frames based word processor, an understanding of
+frames and framesets is necessary for all but the most simple of documents.</para>
+
+<para>This section is designed to give you a firm understanding of how
+to create, destroy and manipulate frames so &kword; can provide you with
+the exact document you want.</para>
+
+<sect2 id="framesets">
+<title>Framesets</title>
+<indexterm><primary>framesets</primary><secondary>introduction</secondary></indexterm>
+
+<para>Before we continue our discussion of Frames, its important that we
+define a couple terms now:</para>
+
+<variablelist>
+<varlistentry>
+<term>Frame</term>
+<listitem>
+<para>A frame is a rectangular space on the page.  This space defines an
+area where text (or other data), can be placed.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Frameset</term>
+<listitem>
+<para>A frameset is a group of frames.  Each frame in the frameset has a
+position within the frameset</para>
+
+<para>The position is determined by their placement on the page.  If frames extend across the entire width of the page, the frame which begins closest 
+to the top of the page is Frame #1.  The next frame that is closest to the top of the page is Frame #2, etc. 
+If the frames do not extend across the width of the page, the frame whose 
+left edge is closest to the left margin will be frame #1.  In this case, 
+the vertical position of the frame is ignored.</para>
+
+<para>All text flows from one frame to another <emphasis>within a
+frameset, and only within a frameset.</emphasis> Text flows from frame
+to frame within the frameset <emphasis>according to the position of each
+frame</emphasis> on the page (and therefore the order of the frames within the frameset).</para>
+
+<para>As an example:  If we have a frameset that consists of three
+frames (#1, #2, and #3).</para>
+
+<para>As we type text into Frame #1, the text is shaped to the outline
+of Frame #1.</para>
+
+<para>When the text will no longer fit within Frame #1, it is
+automatically continued into Frame #2.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Text moves freely between frames
+within a frameset.  If you insert text in the middle of a frame, all text after the inserted text is
+rearranged as you type.</para>
+
+</sect2>
+
+<sect2 id="select-frame">
+<title>Selecting a frame</title>
+<indexterm><primary>frames</primary><secondary>selecting</secondary></indexterm>
+
+<para>You can select a frame within a frameset two ways:</para>
+<itemizedlist>
+<listitem><para>By clicking on the text frame border of the frame you want
+to select. </para></listitem>
+<listitem><para>By holding down the &Ctrl; key and clicking anywhere within the frame.</para></listitem>
+</itemizedlist>
+<para>There should now be 8 squares around the edges of the frame.</para>
+
+</sect2>
+<sect2 id="add-text-frame">
+<title>Adding a Text Frame to a Document</title>
+<indexterm><primary>frames</primary><secondary>adding a text frame</secondary></indexterm>
+
+<para>Adding a text frame can be done one of three ways:</para>
+
+<itemizedlist>
+<listitem>
+<para>By selecting <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Text
+Frame</guimenuitem></menuchoice> from the menubar</para>
+</listitem>
+
+<listitem>
+<para>You can use the keyboard shortcut:
+<keycombo><keycap>F10</keycap></keycombo></para>
+</listitem>
+
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="tfcreatebut.png"
+format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
+</listitem>
+</itemizedlist>
+
+<para>Whatever method you choose, &kword; responds by changing the cursor
+to a set of cross hairs.</para>
+
+<para>Using the mouse, place the crosshairs at the desired position of the upper left corner of the
+new text frame.</para>
+
+<para>Click once with the &LMB;.</para>
+
+<para>Alternative, first position the text caret at the place where you want to insert
+the frame.  When the mouse cursor changes to crosshairs, press &Enter;.
+</para>
+
+<para>A dialog box appears.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="formframe3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This dialog box is used to determine which frameset this new frame will belong to.</para>
+
+<para>Using the screenshot as an example, a new text frame has been created in a
+document which currently has two framesets (called <guilabel>Text Frameset
+1</guilabel>, and <guilabel>Text Frameset 2</guilabel>).</para>
+
+<para>You now have the option of either:</para>
+
+<variablelist>
+<varlistentry>
+<term>Add the new frame to one of the previously created
+framesets.</term>
+
+<listitem><para>To do this, simply select the frameset you want the new frame to belong to.
+ (Either <guilabel>Text Frameset 1</guilabel>, or
+<guilabel>Text Frameset 2</guilabel> in the example.)</para>
+
+<para>When this text frame is created, the new text frame will become
+a member of the selected frameset.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term>Create a new frameset.  </term>
+
+<listitem><para>If you want this to be a new frameset, you should enter a descriptive
+name for your new frameset.  (A name which will tell you what you might
+find in that frameset).  This name should be entered in the text box
+labeled <guilabel>Name of frameset:</guilabel>.</para>
+<para>This newly added frame will be the
+only frame in the frameset.</para>
+</listitem></varlistentry>
+</variablelist>
+
+<para>The other tabs in this dialog box, can be used to set some options
+for this frame.  For more information on these options, see the section
+entitled <link linkend="format-frame">Setting the properties for a frame</link>.</para>
+
+<para>If you click <guibutton>OK</guibutton>, the new frame will be
+created.</para>
+
+<para>If you click <guibutton>Cancel</guibutton>, the new frame will not
+be created, and you will be returned to editing your document.</para>
+
+<tip>
+<para>By default, &kword; creates a small frame with the upper left corner of the 
+frame located on the page where you clicked with the mouse cursor.  After the frame is 
+created, you are expected to reshape the frame to fit your needs.</para>
+
+<para>If you would prefer to establish the shape of your frame <emphasis>while you are
+creating</emphasis> the frame, simply click the &LMB; where you want the upper left corner to 
+be placed and hold the button down.  Drag the mouse towards the opposite corner of the frame to establish the 
+boundaries of the new frame.  As
+you drag the mouse, you will see a box drawn.  This box represents the
+boundaries of your new text frame.  When you are satisfied with the size and shape of the new text
+frame, release the mouse button.  </para></tip>
+
+</sect2>
+
+<sect2 id="delete-frame">
+<title>Deleting a Frame From a Document</title>
+<indexterm><primary>frames</primary><secondary>deleting</secondary></indexterm>
+
+<para>You may decide you no longer need a frame in your document.  You
+could leave it blank (so it would not be visible in the final output),
+but you should delete it to keep your document as simple as
+possible.</para>
+
+<para>Begin by clicking on the text frame border of the frame you want
+to delete. (Or holding down the &Ctrl; key and clicking inside the frame with the
+&LMB;.)</para>
+
+<para>There are now 8 squares on the edges of the frame.</para>
+
+<para>If this is the frame you want to delete, you can do so by:</para>
+
+<itemizedlist>
+<listitem>
+<para>Press the <keycap>Delete</keycap> key.</para>
+</listitem>
+
+<listitem>
+<para>Selecting <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Delete
+Frame</guimenuitem></menuchoice> from the menubar</para>
+</listitem>
+
+<listitem>
+<para>While the cursor is on the border of the frame you want to delete,
+click once with the &RMB;. A small menu will appear.  Select <guimenuitem>Delete
+Frame</guimenuitem>.</para>
+</listitem>
+</itemizedlist>
+
+
+</sect2>
+
+<sect2 id="move-frame">
+<title>Moving a Frame</title>
+<indexterm><primary>frames</primary><secondary>moving</secondary></indexterm>
+
+<para>Moving a frame around on the page is easy.</para>
+
+<para>Begin by clicking on the text frame border of the frame you want
+to move. (Or holding down the &Ctrl; key and clicking inside the frame with the
+&LMB;.)</para>
+
+<para>There are now 8 squares on the edges of the frame.</para>
+
+<para>Click and hold the &LMB; on the border again and drag the cursor in the direction you want to move the
+frame.</para>
+
+<para>You will see an outline of the frame as you move it.  When the
+outline is where you want it, release the mouse button.</para>
+
+<tip><para>A faster way to move the frame, can be done by holding down the
+&Ctrl; and &Shift; keys on the keyboard and click and hold with the &LMB;.  Drag
+the mouse cursor on the page and when the frame is in the correct location, release
+the &LMB;.</para></tip>
+
+
+</sect2>
+
+<sect2 id="resize-frame">
+<title>Resizing a Frame</title>
+<indexterm><primary>frames</primary><secondary>resizing</secondary></indexterm>
+
+<para>It is also easy to change the size or shape of a frame.</para>
+
+<para>Begin by clicking on the text frame border of the frame you want
+to change. (Or holding down the &Ctrl; key and clicking inside the frame with the
+&LMB;.)  This selects
+this frame as the current frame.</para>
+
+<para>There are now 8 squares on the edges of the frame. By moving
+these squares, you will be able to drag the frame border(s) to a new
+location.</para>
+
+<para>Each square will move a different combination of borders.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="framers.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>As an example:  To move the bottom border of a frame, place the
+mouse over the box at the six o'clock position in the frame.  When the
+mouse is over the box, it will change to a double headed arrow.</para>
+
+<para>Now click with the &LMB;
+and hold the button down.  As you move the mouse up and down on the
+page, you will see that the frame changes shape to match the movements of
+the  mouse. When the bottom edge of the frame is at the new location,
+simply release the mouse button, and the changes will become
+permanent.</para>
+
+<note>
+<para>If you are using a Text Oriented Template, you cannot change
+the size of the primary frame by dragging the edges of the frame.  If you
+want to resize this frame, you must do so by <link
+linkend="page-format">Changing the margins</link> </para>
+</note>
+
+</sect2>
+
+<sect2 id="connect-frame">
+<title>Reconnecting Frames in a Frameset/Changing text flow.</title>
+<indexterm><primary>frames</primary><secondary>create/edit framesets</secondary></indexterm>
+
+<para>Normally, each new text frame is created with a specific
+purpose.  Sometimes, however, as the document is changed, changes to the text flow
+will need to be made.  To accomplish this, you will need
+to know how to move a frame from one frameset to another.</para>
+
+<para>First click on the frame border of the frame you want to
+move to another frameset.</para>
+
+<para>You can change the frameset of the currently selected frame by
+selecting <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset Properties...</guimenuitem></menuchoice>
+from the menubar</para>
+
+<tip><para>You can also accomplish this by clicking on the frame border once with the &RMB;, and selecting
+<guilabel>Frame/Frameset Properties...</guilabel> from the popup menu.</para></tip>
+
+<para>This will bring up a dialog box with five tabs.  Select the tab
+labeled <guilabel>Connect Text Frames</guilabel>.</para>
+
+<para>You will be presented with a list of framesets.  Simply select the new
+frameset.</para>
+
+<para>When you click <guibutton>OK</guibutton>, the currently selected frame will be added
+to that frameset.</para>
+
+</sect2>
+
+<sect2 id="raise-frame"><title>Raise and Lower Frames</title>
+<indexterm><primary>frames</primary><secondary>raise</secondary></indexterm>
+<indexterm><primary>frames</primary><secondary>lower</secondary></indexterm>
+
+<para>When two frames occupy the same place on a page, they must overlap.  
+When they overlap, one frame sits <emphasis>above</emphasis> the other frame.</para>
+<para>You can raise and lower the frames to change which frame sits above the other frames by using four commands.</para>
+
+<variablelist>
+<varlistentry>
+<term>Bring to Front</term>
+<listitem><para>To raise a frame, select the frame by clicking once on the frame border with the &LMB;.</para>
+<para>Select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Bring to Front</guimenuitem>
+</menuchoice> from the menubar.</para>
+<para>This will place the frame on top of <emphasis>all other frames</emphasis> that it overlaps.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Raise Frame</term>
+<listitem><para>To raise a frame, select the frame by clicking once on the frame border with the &LMB;.</para>
+<para>Select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Raise Frame</guimenuitem>
+</menuchoice> from the menubar.</para>
+<para>This will move the frame up <emphasis>one level</emphasis> of any frame that it overlaps.</para>
+<tip><para>Pressing <keycombo action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo> is the
+same as selecting <guilabel>Raise Frame</guilabel> from the menubar.</para></tip>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Send to Back</term>
+<listitem><para>To lower a frame, select the frame by clicking once on the frame border with the &LMB;.</para>
+<para>Select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Send to Back</guimenuitem>
+</menuchoice> from the menubar.</para>
+<para>This will place the frame below <emphasis>all other frames</emphasis> that it overlaps.</para>
+</listitem></varlistentry>
+
+<varlistentry>
+<term>Lower Frame</term>
+<listitem><para>To lower a frame, select the frame by clicking once on the frame border with the &LMB;.</para>
+<para>Select <menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Lower Frame</guimenuitem>
+</menuchoice> from the menubar.</para>
+<para>This will move the frame down <emphasis>one level</emphasis> of any frame that it overlaps.</para>
+<tip><para>Pressing <keycombo action="simul">&Ctrl;&Shift;<keycap>L</keycap></keycombo> is the
+same as selecting <guilabel>Lower Frame</guilabel> from the menubar.</para></tip>
+</listitem></varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="hard-break">
+<title>Hard Frame Breaks</title>
+<indexterm><primary>frames</primary><secondary>frame breaks</secondary></indexterm>
+<indexterm><primary>page breaks</primary></indexterm>
+
+<para>A hard frame break is a special formatting character.  It is
+invisible on the final printed output.</para>
+
+<para>The purpose of a hard frame break, is to force all the
+text that follows it into the next frame in the frameset.</para>
+
+<para>If we have the following sentence:  <quote>We have nothing to
+fear but fear itself</quote></para>
+
+<para>and we insert a Hard Frame Break, just before the word
+<quote>but</quote>, we will end up with one frame containing <quote>We have nothing
+to fear</quote>, and the next frame in the frameset beginning with
+<quote>but fear itself</quote>.</para>
+
+<para>To add a Hard Frame Break, you should first place the keyboard
+cursor where you want the break to be located in the document.</para>
+
+<para>A Hard Frame Break can be inserted one of two ways:</para>
+
+<itemizedlist>
+<listitem>
+<para>Select <menuchoice> <guimenu>Insert</guimenu><guimenuitem>Hard Frame Break</guimenuitem></menuchoice> from the menubar</para>
+</listitem>
+
+<listitem>
+<para>You can use the keyboard shortcut:
+<keycombo><keycap>Ctrl</keycap><keycap>Return</keycap></keycombo></para>
+</listitem>
+</itemizedlist>
+
+<para>If you want to remove a Hard Frame Break, you simply delete it
+like you would any other character.</para>
+<tip><para>Since this is not a character that
+you can normally see in &kword;, it will be easier to delete a Hard Frame Break with the following procedure.</para>
+
+<orderedlist>
+
+<listitem><para>Select <menuchoice>
+<guimenu>View</guimenu><guimenuitem>Formatting
+Characters</guimenuitem></menuchoice> from the menubar.  This will make the breaks visible.</para></listitem>
+
+<listitem><para>Find the newly revealed Page Break, labeled <guilabel>--- Frame Break ---</guilabel>.
+  Place the mouse pointer in
+front of this and click once with the &LMB;. This will place the cursor directly in front of the page break.</para></listitem>
+
+<listitem><para>Now press the <keycap>Delete</keycap> key.</para></listitem>
+</orderedlist></tip>
+
+</sect2>
+
+</sect1>

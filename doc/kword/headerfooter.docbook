@@ -1,0 +1,57 @@
+<sect1 id="headers-and-footers">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Headers/Footers</title>
+<indexterm><primary>headers</primary><secondary>using</secondary></indexterm>
+<indexterm><primary>footers</primary><secondary>using</secondary></indexterm>
+
+<sect2 id="headers-and-footers-intro"><title>Introduction</title>
+<para>With multi-page documents, you might want to provide certain
+information at the top or bottom of each page throughout the document.
+Headers or footers can provide the reader with important information and they tie your
+documents together visually. </para>
+
+<para>Headers and footers are special frames.
+You can edit the text and data within the headers and
+footers just as you would any other text frame. What makes headers and footers
+different from most other frames in &kword; is that they are automatically created at the top and bottom
+of each page.</para>
+
+<note><para>Headers and footers are only available when using text oriented templates.</para></note>
+</sect2>
+<sect2 id="headers-and-footers-use"><title>Using headers and footers</title>
+<para>You can toggle headers and footers on and off independently at any
+time.</para>
+
+<para>You can toggle the headers by selecting <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Enable/Disable Document Headers</guimenuitem></menuchoice>
+from the menubar.</para>
+
+<para>You can toggle the footers by selecting <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Enable/Disable Document Footers</guimenuitem></menuchoice>
+from the menubar.</para>
+
+<para>The footers will be
+added below the margins you set under page setup.  The text within the
+main frames will be moved so the headers and/or footers do not overlap
+any text.</para>
+
+<para>Since headers and footers are simply text frames that are placed on each page, you can use all of the
+tools and techniques you are familiar with to create your header and footer information.</para>
+
+<para>For more information on options for headers and footers, see the section on
+<link linkend="page-format">Formatting the page</link>. </para>
+<para>For information on page numbers see the section on <link linkend="page-number">Page Numbering</link>.</para>
+<para>For information on formatting the frame, see the section on
+<link linkend="format-frame">Setting the Properties for a Frame</link>.</para>
+<para>For an example of how to place the page numbers on the outside of even and odd pages, see the
+<link linkend="qd-page-numbers">How do I?</link> section.</para>
+</sect2>
+</sect1>

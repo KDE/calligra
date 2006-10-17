@@ -1,0 +1,178 @@
+<chapter id="fundamentals">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+
+<title>Fundamentals</title>
+<para>This section of the documentation discusses starting &kword;, introduces the user to templates and
+discusses an important difference between two major types of templates.</para>
+
+
+<sect1 id="starting-kword">
+<title>Starting &kword;</title>
+<indexterm><primary>starting &kword;</primary></indexterm>
+
+<para>&kword; can be started one of four ways:</para>
+
+<orderedlist>
+<listitem>
+<para>You can select &kword; through the system menus, under:
+<menuchoice><guimenu>K-Button</guimenu><guimenuitem>Office</guimenuitem>
+<guimenuitem>KWord</guimenuitem></menuchoice>.</para> 
+</listitem>
+
+<listitem>
+<para>If you are in a terminal program (&konsole;, <application>Xterm</application>, &etc;), you can type:
+<screen><prompt>$</prompt> <userinput><command>kword &amp;</command></userinput></screen></para>
+
+<para>Or</para>
+
+<para><screen><prompt>$</prompt> <userinput><command>kword</command> <replaceable>filename</replaceable> &amp;</userinput></screen></para>
+</listitem>
+
+<listitem>
+<para>Using &konqueror;, you can click on your data file (&kword;
+documents end in <literal role="extension">.kwd</literal>).  This will
+automatically start &kword; and begin editing the file.</para>
+</listitem>
+
+<listitem>
+<para>Using the &koffice; Workspace.</para>
+</listitem>
+</orderedlist>
+
+</sect1>
+
+<sect1 id="template-intro">
+
+<title>An Introduction to Templates</title>
+<indexterm><primary>templates</primary><secondary>introduction</secondary></indexterm>
+
+<para>OK, so the first question a new user may have is:</para>
+
+<para><emphasis>Why do I need to use a frames based word processor, when
+I am perfectly happy writing my letters on my current (page layout) word
+processor? </emphasis></para>
+
+<para>Well the good news is, adjusting to a frames based word processor
+is easy and once a template is selected, &kword; can act just like a
+page layout word processor.  There are templates
+available for simple correspondence and day to day use.</para>
+
+<para>When a more complex document (newsletters,
+posters, &etc;) needs to be created, you will not need to switch to a different
+application to generate these special documents. There are templates in
+&kword; which will help generate newsletters or other more
+complicated documents.</para>
+
+<para><emphasis>What are templates and what can they do for
+the user?</emphasis></para>
+
+<para>A template can be thought of as an initial mold for a document.</para>
+
+<para>When a user sits down to write a document, they already have an idea of
+what the final product will look like. If they are writing a letter to a
+business, a document with only one column, which goes all the
+way across the page, and from top to bottom of the page is appropriate.  When a user sits
+down to author a newsletter for a local organization, however, they may
+want a large title across the top, and several columns for quick news
+articles.</para>
+
+<para>With &kword;, this predetermined notion of how the
+document should look is used to select a template.  By using a template, 
+a set of frames is created to approximate this final layout. For
+a business letter, a document with one large frame that covers the
+page from top to bottom and side to side would be selected. 
+For a newsletter, however, a two or
+three column document is more appropriate. Once this
+template is selected, &kword; will create the frames automatically.</para>
+
+<para><emphasis>What if the user decides to change the
+layout after a template is selected?</emphasis></para>
+
+<para>This is not a problem. If a document begins as a single
+column document and it is decided later that two columns is better, another column can be added. 
+The purpose of templates is not to
+limit the ability to change the layout of a document, but rather to take some of the
+work load off the user whenever possible.  Choosing the correct template when
+beginning a document will simplify the formatting (as opposed to
+always selecting the default template and making changes later).
+Choosing the wrong template
+will not limit the flexibility of the document later on.</para>
+
+<para>The next section, consists of one more important topic which
+you should understand before we begin using &kword;.</para>
+
+</sect1>
+
+<sect1 id="wp-vs-dtp">
+
+<title>The difference between Text Oriented and Page Layout
+templates</title>
+<indexterm><primary>templates</primary><secondary>Text oriented/Page Layout</secondary></indexterm>
+
+<para>It is vital that the
+difference between Text Oriented and Page Layout templates is clear in
+your mind.</para>
+
+<variablelist>
+<varlistentry>
+<term>Text Oriented</term>
+<listitem>
+<para>The Text Oriented templates are designed to act like page-oriented
+word processors. When you select a Text Oriented template, you will
+create a template with one or more frames. The first frame is distinctly
+tied to the paper size of your document.  When you increase or decrease
+the paper size or change the margins, the frame size is automatically
+adjusted.  You are <emphasis>not</emphasis> able to move this frame
+around on the page and you cannot delete this frame. If you need to
+adjust the size or position of this frame, you must <link
+linkend="page-format">adjust the margins</link>. On top of the first
+frame, you can, of course, add additional frames. These frames can
+contain pictures, text or whatever you want. These new frames can be
+moved, re-sized and deleted to suit your needs. If you want it, &kword;
+will even wrap the text from the first frame around any information in
+any subsequent frames.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Page Layout</term>
+<listitem>
+<para>These templates are designed for desktop publishing.  When you
+select a template from this class, all of the frames are created
+equal. This is where the difference between Page Layout and Text
+Oriented template lies. None of the frames in a Page Layout template are
+tied to the page as tightly as the main frame in a Text Oriented
+template is. Each of the frames is independent of the page size, and can
+be moved or re-sized without changing margins, &etc; Of course this also
+means that altering the margins or paper size of your document requires
+that you individually move/resize each frame.  </para>
+
+<note><para>In addition to not having a main text frame, Page Layout
+documents cannot use the automatic headers or footers (though these can be
+added in as frames).  Additionally, footnotes must be managed by hand while
+in Page Layout Mode.</para></note>
+
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>As you can see, the choice between Page Layout and Text Oriented
+templates is a choice between flexibility (Page Layout) and convenience
+(Text Oriented).  You can create any document you like with either type
+of template.</para>
+
+<para>If the concept of templates is still unclear, please follow along
+with the following tutorial. The first document you create will use a
+Page Layout template. This should help clarify exactly how templates
+function.</para> 
+
+</sect1> 
+</chapter>

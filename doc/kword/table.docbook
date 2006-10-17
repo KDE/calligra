@@ -1,0 +1,653 @@
+<sect1 id="tables">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Tables</title>
+<indexterm><primary>tables</primary><secondary>using</secondary></indexterm>
+
+<para>&kword; has the built in ability to generate tables for the display of data.</para>
+
+<para>These tables can consist of up to 128 rows and 128 columns,
+with text centered or justified differently in different cells.  Text flows easily around in the 
+table and cells are resized (if specified by the user) automatically to fit comfortably around the data.</para>
+
+<para>Tables in &kword; are for the display of data only.  No calculations can be performed.</para>
+
+<tip><para>Remember, if you need the functions of a spreadsheet, you can <link
+linkend="kparts">embed a &kspread; Table</link> in your
+document.</para></tip>
+
+<para>This section of the document will cover the formatting of tables
+<emphasis>created in &kword;</emphasis> only.</para>
+
+<sect2 id="table-new"><title>Adding a new Table</title>
+<indexterm><primary>tables</primary><secondary>adding</secondary></indexterm>
+
+<para>You can create a table in &kword; in one of three ways:</para>
+
+<itemizedlist>
+
+<listitem>
+<para>Select <menuchoice> <guimenu>Insert</guimenu>
+<guimenuitem>Table...</guimenuitem></menuchoice> from the menubar.</para>
+</listitem>
+<listitem> 
+<para>You can use the keyboard shortcut: <keycombo
+action="simul"><keycap>F5</keycap></keycombo>.</para>
+</listitem>
+
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject>
+on the toolbar.</para>
+</listitem>
+
+</itemizedlist>
+
+<para>This will open a dialog box.  The dialog box has two tabs:  <guilabel>Geometry</guilabel> and <guilabel>Templates</guilabel>.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="instab1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This dialog box is divided into two halves.</para>
+
+<para>The right half of the dialog box provides you a quick visual guide
+to how many rows and columns will be created in the table.  This is
+useful for laying out your table.  You cannot edit
+your table layout here.</para>
+
+<para>The left half of the dialog box consists of two combo boxes.</para>
+
+<para>The spin box labeled <guilabel>Number of
+rows:</guilabel>, allows you to specify from 1 to 128 rows in the
+table.</para>
+
+<para>The spin box labeled <guilabel>Number of
+columns:</guilabel>, allows you to specify from 1 to 128 columns in the
+table.</para>
+
+<para>While adjusting either of these two options, the preview box
+adjusts to your new settings.</para>
+
+
+<para>If you click on the tab labeled <guilabel>Templates</guilabel>, you can use predefined table looks to format the look of your table.  
+For more information see the section on <link linkend="table-templates">Using formatting templates</link>.</para>
+
+<para>Click <guibutton>OK</guibutton> to insert the table.</para>
+<para>Click <guibutton>Cancel</guibutton> to cancel this action and return to editing your document.</para>
+</sect2>
+
+<sect2 id="table-navigation">
+<title>Moving between cells in a table</title>
+<indexterm><primary>tables</primary><secondary>navigating</secondary></indexterm>
+
+<para>You can navigate between cells of the table by using the mouse (simply click in the cell you want to edit),
+or by using the keyboard (use the arrow keys to move up, down, left or right one cell at a time).</para>
+
+</sect2>
+<sect2 id="table-delete">
+<title>Deleting a Table</title>
+<indexterm><primary>tables</primary><secondary>deleting</secondary></indexterm>
+
+<para>To delete a table in &kword;:</para>
+
+<para>Place the mouse pointer over the frame of any cell of the table you want to
+delete and click once with the &LMB;. </para>
+<warning>
+<para>Be sure you have selected the correct table before continuing.
+&kword; will not ask for confirmation.</para>
+</warning>
+
+<para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Delete
+Table</guimenuitem></menuchoice> from the menubar</para>
+
+
+<para>The table will be immediately deleted.</para>
+</sect2>
+
+<sect2 id="table-insert-row">
+<title>Insert Row in Table</title>
+<indexterm><primary>tables</primary><secondary>inserting a row</secondary></indexterm>
+
+<para>You can insert a row into any place in a table.</para>
+
+<para>To insert a row into a table, place the mouse pointer over the border of any cell of the table you want to add
+a row to.  Using your mouse, select either <menuchoice> <guimenu>Table</guimenu>
+<guimenuitem>Row</guimenuitem>
+<guimenuitem>Insert Row...</guimenuitem>
+</menuchoice> from the menubar or 
+click <inlinemediaobject><imageobject><imagedata
+fileref="rowin.png" format="PNG"/></imageobject></inlinemediaobject> on the
+toolbar.</para>
+
+
+<para>This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="insrowdlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The spin box labeled <guilabel>Row:</guilabel>, allows
+you to select any row within the table.  This number selection box
+limits you to the rows currently in the table.</para>
+<para>Select the row you want to use as a reference.</para>
+
+<para>Now select either <guilabel>Before</guilabel> or
+<guilabel>After</guilabel> as is appropriate.</para>
+
+<para>Click <guibutton>OK</guibutton> to add the row or click
+<guibutton>Cancel</guibutton> to not add any rows.</para>
+
+</sect2>
+
+<sect2 id="table-insert-column">
+<title>Insert Column in Table</title>
+<indexterm><primary>tables</primary><secondary>inserting a column</secondary></indexterm>
+
+<para>To insert a column into a table, place the mouse pointer over the border of any cell of the table you want to add
+a column to.  Select either <menuchoice> <guimenu>Table</guimenu><guimenuitem>Column</guimenuitem>
+<guimenuitem>Insert Column...</guimenuitem></menuchoice> from the menubar or click 
+<inlinemediaobject><imageobject><imagedata fileref="colin.png" format="PNG"/></imageobject></inlinemediaobject> on the
+toolbar.</para>
+
+<para>This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="inscoldlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The number selection box labeled <guilabel>Column:</guilabel>,
+allows you to select any column within the table.  This number selection
+box limits you to the columns currently in the table.</para>
+
+<para>Select the column you want to use as a reference.</para>
+
+<para>Now select either <guilabel>Before</guilabel> or
+<guilabel>After</guilabel> as is appropriate.</para>
+
+<para>Click <guibutton>OK</guibutton> to add the column or click
+<guibutton>Cancel</guibutton> to not add any columns.</para>
+
+</sect2>
+
+<sect2 id="table-delete-row">
+<title>Delete Row in Table</title>
+<indexterm><primary>tables</primary><secondary>deleting a row</secondary></indexterm>
+
+<para>To delete a row from a table:</para>
+
+<para>Click once with the &LMB; in any cell in the row you want to delete  Then:</para>
+
+<itemizedlist>
+<listitem>
+<para>select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Row</guimenuitem>
+<guimenuitem>Delete Selected
+Rows...</guimenuitem></menuchoice> from the menubar</para>
+</listitem>
+<listitem>
+<para>or click <inlinemediaobject><imageobject><imagedata
+fileref="rowout.png" format="PNG"/></imageobject></inlinemediaobject> on the
+toolbar.</para>
+</listitem>
+</itemizedlist>
+<para>This will bring up a dialog box confirming that your have selected the correct row(s).</para>
+
+<warning>
+<para>Make sure you have selected the correct row(s) before
+continuing.</para>
+<para>&kword; will delete any data contained within the selected rows.</para>
+</warning>
+<para>Click <guibutton>Delete</guibutton> to delete the row, or click <guibutton>Cancel</guibutton> to not
+delete any rows.</para>
+
+</sect2>
+
+<sect2 id="table-delete-column">
+<title>Delete Column in Table</title>
+<indexterm><primary>tables</primary><secondary>deleting a column</secondary></indexterm>
+
+<para>To delete a column from a table:</para>
+
+<para>Click once with the &LMB; in any cell in the column you want to delete  Then:</para>
+
+<itemizedlist>
+<listitem>
+<para>select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Column</guimenuitem>
+<guimenuitem>Delete Selected
+Columns...</guimenuitem></menuchoice> from the menubar</para>
+</listitem>
+<listitem>
+<para>or click <inlinemediaobject><imageobject><imagedata
+fileref="colout.png" format="PNG"/></imageobject></inlinemediaobject> on the
+toolbar.</para>
+</listitem>
+</itemizedlist>
+
+<para>This will bring up a dialog box confirming that your have selected the correct column(s).</para>
+
+
+<warning>
+<para>Make sure you have selected the correct column(s) before
+continuing.</para>
+<para>&kword; will delete any data contained within these columns.</para>
+</warning>
+
+<para>Click <guibutton>Delete</guibutton> to delete the column(s), or click
+<guibutton>Cancel</guibutton> to not delete any columns.</para>
+
+</sect2>
+
+<sect2 id="table-resize-column">
+<title>Change column width</title>
+<indexterm><primary>tables</primary><secondary>change column width</secondary></indexterm>
+
+<para>When a table is created, all columns are equal in width.  You can change the width of individual columns by using
+<link linkend="table-resize-column-mouse">the mouse</link> or <link linkend="table-resize-column-dialog">the keyboard</link>.</para>
+<sect3 id="table-resize-column-mouse"><title>Using the mouse</title>
+<para>First select any cell in the column you want to change, by holding down the &Ctrl; key and clicking once with the &LMB;.</para>
+<para>The cell is now surrounded by 8 colored boxes.  Place the mouse over the box in the middle of the
+right vertical border of the cell.  The mouse pointer changes to a double-headed arrow.  Click on the box and drag the right edge of the
+cell to the desired width.  When you release the &LMB;, the entire column will assume the width of this cell.</para>
+</sect3>
+
+<sect3 id="table-resize-column-dialog"><title>Using the dialog box</title>
+<para>First, select any cell in the column you want to change, by holding down the &Ctrl; key and clicking once with the &LMB;.</para>
+<tip><para>You can select any cell in the table to change column widths.  By selecting a cell in the column you want to change 
+the dialog box will default to the correct column automatically.</para></tip>
+<para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Column</guimenuitem>
+<guimenuitem>Resize
+Column...</guimenuitem></menuchoice> from the menubar.</para>
+<para>A dialog box will appear.  In the spin box labeled <guilabel>Column:</guilabel>, you can chose a different column to set.  
+In the spin box labeled <guilabel>Width:</guilabel>, enter the desired width of the column.</para>
+<para>Click <guibutton>OK</guibutton> to change the width, or click <guibutton>Cancel</guibutton> to leave the column 
+width unchanged.</para>
+</sect3>
+</sect2>
+
+<sect2 id="table-join-cells">
+<title>Join Cells in Table</title>
+<indexterm><primary>tables</primary><secondary>join cells</secondary></indexterm>
+
+<para>A table is traditionally made of a grid of rows and columns, with
+equal sized cells throughout the table.</para>
+
+<para>Sometimes you would like to spread text out over several cells in
+a table.  This is especially common with titles.</para>
+
+<para>&kword; allows you to do this by <emphasis>Joining</emphasis> two (or
+more) adjacent cells of a table together.</para> 
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="joincell.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>This is an example of three cells joined together in the middle of
+a table.</para>
+
+<tip>
+<para>You can join cells vertically, as well as horizontally.</para>
+</tip>
+
+<para>To join several cells you must first select the cells.  To select the cells, hold down the &Ctrl; key 
+and click once with the &LMB;
+in a cell. Click on the next cell with the &LMB;.  Continue
+this until you have selected all the cells you want to join together.</para>
+
+<tip>
+<para>If you have a number of cells in a row that you want to select,
+you can select them in two quick steps:</para>
+<para>First hold down the &Ctrl; key and click on one of the end cells.</para>
+<para>Now hold down the &Shift; key and click on the cell at the other
+end of the row or column you want to join.</para>
+<para>All cells between these two cells will be selected.</para>
+</tip>
+
+
+<para>Once you have selected all the cells you want to join,
+select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem>
+<guimenuitem>Join Cells</guimenuitem></menuchoice> from the menubar</para>
+
+<para>The cells will now be joined.</para>
+
+<para>Any text in the left most frame will now be located in the joined
+frame.  Any text from any other frames will be deleted.</para>
+</sect2>
+
+<sect2 id="table-split-cells">
+<title>Split Cells in Table</title>
+<indexterm><primary>tables</primary><secondary>split cells</secondary></indexterm>
+
+<para>In addition to combining two or more cells into a single cell, it is easy to split one cell into many cells.</para>
+
+<para>If you decide that you do not want the previously joined cells to
+be joined any longer, you can <quote>split</quote> them back into individual cells
+again. You can also split cells within a column or row. They do not need 
+to have been previously joined.</para>
+
+<para>To split a cell, select the cell you want to split by holding the &Ctrl; button down and
+clicking on it with the
+&LMB;.  Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem>
+<guimenuitem>Split Cell...</guimenuitem></menuchoice> from the menubar.</para>
+
+<para>This will bring up a small dialog box which allows you to set the number of rows and 
+the number of columns you want to split this cell into.</para>
+
+<para>Once you have set the correct number of rows and columns in the spin boxes, click 
+<guibutton>OK</guibutton> to split the cells.  Click <guibutton>Cancel</guibutton> to abort.</para>
+
+</sect2>
+
+<sect2 id="table-ungroup">
+<title>Ungroup a Table</title>
+<indexterm><primary>tables</primary><secondary>ungrouping</secondary></indexterm>
+
+<para>If you select a cell in a table and then choose <menuchoice> <guimenu>Table</guimenu>
+<guimenuitem>Ungroup Table</guimenuitem></menuchoice> from the menubar, &kword; will convert each cell in your table
+into an individual frame.  You can then move these frames around independently on the page.</para>
+
+</sect2>
+
+<sect2 id="table-protect">
+<title>Protecting a cell in a table.</title>
+<indexterm><primary>tables</primary><secondary>protecting cells</secondary></indexterm>
+
+<para>You can protect any or all cells in a table from accidental modification or deletion.</para>
+<para>Simply select the cell(s) you want to protect, then:</para>
+<para>Select <menuchoice> <guimenu>Table</guimenu>
+<guimenuitem>Cell</guimenuitem><guimenuitem>Protect Cells</guimenuitem></menuchoice>
+from the menubar or hold down the &Ctrl; button, click in the cell once with the &RMB; and select
+<menuchoice> <guimenuitem>Cell</guimenuitem><guimenuitem>Protect Cells</guimenuitem></menuchoice> 
+from the popup menu.</para>
+<para>You will not be able to change the contents or formatting of that cell.</para>
+
+<note><para>To disable the protection, simply repeat the steps above, and the cells will no longer be protected.</para></note>
+
+</sect2>
+
+<sect2 id="table-format">
+<title>Formating a Table</title>
+<indexterm><primary>tables</primary><secondary>formating</secondary></indexterm>
+
+<para>There are many aspects of a table that can be formatted.</para>
+
+<para>For information of formatting text with a table see <link linkend="change-font">Format characters</link>.</para>
+<para>For information on formatting borders between frames in individual cells, see <link linkend="para-borders">Borders</link></para>
+<para>For information on formatting background color of individual cells, see <link linkend="format-frame-background">Frame background</link></para>
+<para>For information on changing the width of columns, see <link linkend="table-resize-column">Resizing Columns</link></para>
+
+<para>&kword; also provides the user with a set of tools to help speed up the formatting of tables.</para>
+
+<sect3 id="table-geometry">
+<title>Altering the number of rows and columns in a table.</title>
+<indexterm><primary>tables</primary><secondary>changing geometry</secondary></indexterm>
+
+<para>Previously in the manual, we have discussed how to individually add or delete rows and/or columns.  &kword; also provides the 
+user the ability to make major changes to the number of rows and columns in a table.</para>
+<para>Select <menuchoice> <guimenu>Table</guimenu>
+<guimenuitem>Properties...</guimenuitem></menuchoice>
+from the menubar. A dialog will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tableprop1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You can use this dialog to change the number of rows in your table by using the spin box labeled
+<guilabel>Number of rows:</guilabel>.</para>
+<warning><para>If you reduce the number of rows using this dialog box, &kword; will delete the bottom row(s)
+<emphasis>including the data within the rows</emphasis>.</para><para>Be sure you do not have any data in these rows 
+that you need to preserve.</para></warning>
+<para>You can use this dialog to change the number of columns in your table by using the spin box labeled
+<guilabel>Number of columns:</guilabel>.</para>
+<warning><para>If you reduce the number of columns using this dialog box, &kword; will delete the right most column(s)
+<emphasis>including the data within the columns</emphasis>.</para><para>Be sure you do not have any data in these columns
+that you need to preserve.</para></warning>
+<para>Placing a mark in the check box labeled <guilabel>Reapply template to table</guilabel>, will cause &kword; to re-apply the
+template to the table <emphasis>after adding or deleting the specified number of rows and/or columns</emphasis>.</para>
+<para>Click <guibutton>OK</guibutton> to make changes permenant, or click <guibutton>Cancel</guibutton> to abort all
+changes.</para>
+
+</sect3>
+
+<sect3 id="table-format-selcol">
+<title>Selecting an entire column for formatting</title>
+<para>To select an entire column for formatting, move the mouse pointer to the white space directly <emphasis>above</emphasis>
+the desired column. The mouse pointer will turn from an arrow to a hand.  If you click with the &LMB;, the entire column will be selected. </para>
+</sect3>
+
+<sect3 id="table-format-selrow">
+<title>Selecting an entire row for formatting</title>
+<para>To select an entire row for formatting, move the mouse pointer to the white space directly <emphasis>to the left</emphasis> of
+the desired row. The mouse pointer will turn from an arrow to a hand.  If you click with the &LMB;, the entire row will be selected. </para>
+</sect3>
+
+<sect3 id="table-templates">
+<title>Using table templates to format an entire table</title>
+<indexterm><primary>tables</primary><secondary>templates</secondary></indexterm>
+
+<para>&kword; has templates for many commonly used table formatting options.  Table templates provide 
+the same formatting functionality for tables that
+document templates provide you for formating your documents.</para>
+<para>Select <menuchoice> <guimenu>Table</guimenu>
+<guimenuitem>Properties...</guimenuitem></menuchoice>
+from the menubar. A dialog will appear.  Click on the tab labeled <guilabel>Templates</guilabel>.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tableprop2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Along the left of the dialog box, is a list of table templates.</para>
+
+<para>On the right is a preview box that
+gives an example of what a table template will look like when applied to your table.</para>
+
+<para>Below the preview box, are 5 check boxes.</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>First row</guilabel></term>
+<listitem><para>This check box will toggle formatting of all cells in the top row.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Last row</guilabel></term>
+<listitem><para>This check box will toggle formatting of all cells in the bottom row.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Body</guilabel></term>
+<listitem><para>This check box will toggle formatting of all cells in the body.  The body of the table is any cells which are not formatted 
+by any of the other four options.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>First column</guilabel></term>
+<listitem><para>This check box will toggle formatting of all cells in the left column.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Last column</guilabel></term>
+<listitem><para>This check box will toggle formatting of all cells in the right column.</para></listitem>
+</varlistentry>
+</variablelist>
+
+<!--<para>The <guibutton>Customize</guibutton> is currently disabled, but will be available in future versions of &kword;.</para>-->
+
+<para>Placing a mark in the check box labeled <guilabel>Reapply template to table</guilabel>, will cause &kword; to re-apply the
+template to the table <emphasis>after adding or deleting the specified number of rows and/or columns</emphasis>.</para>
+
+<para>Click <guibutton>OK</guibutton> to make changes permenant, or click <guibutton>Cancel</guibutton> to abort all
+changes.</para>
+
+</sect3>
+
+</sect2>
+<sect2 id="tablestyle">
+<title>Using table styles</title>
+<indexterm><primary>tables</primary><secondary>styles</secondary></indexterm>
+<indexterm><primary>table styles</primary></indexterm>
+
+<para>Table styles are a rapid way for you to format individual cells of your table to common formats.  You can add or remove
+table styles, and change predefined table styles to suit your needs. A table style consists of a frame style and a text style
+which are grouped together and named.</para>
+<sect3 id="tablestyle-use">
+<title>Formatting a cell with a table styles</title>
+<indexterm><primary>table styles</primary><secondary>formatting a cell with</secondary></indexterm>
+
+<para>To format a cell using a predefined table style simply:</para>
+<para>Select the cell(s) by holding down &Ctrl; and clicking within the cell with the &LMB;.  You can also 
+<link linkend="table-format-selcol">select columns</link> and <link linkend="table-format-selrow">rows</link>.</para>
+<para>Select <menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Tablestyle</guimenuitem></menuchoice>
+from the menubar.  A submenu will appear, listing all the currently defined table styles.  Select the name of the table style
+you want and all selected cells will automatically be formatting using the options of that table style.</para>
+</sect3>
+
+<sect3 id="tablestyle-edit">
+<title>Editing a table style</title>
+<indexterm><primary>table styles</primary><secondary>editing</secondary></indexterm>
+
+<para>To change the options of a table style, you will use the Table Style Manager.</para>
+<para>Select <menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
+from the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tablestylist.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>All of the currently defined table styles are listed in the listbox on the left.  The currently selected table style is highlighted, and
+the name of the currently selected table style is listed in the text box labeled <guilabel>Name</guilabel>. (In this example,
+the currently selected table style is <emphasis>Header 1</emphasis>.)</para>
+<para>Select the name of the table style you want to change by clicking on the name of the table style in the listbox on the left.</para>
+
+<para>In the section labeled <guilabel>Adjust</guilabel> is a combo box labeled <guilabel>Framestyle</guilabel> which is used to select the desired frame style.
+If you want to add or alter a frame style, click the <guilabel>Change...</guilabel> button, and you will be taken to the
+<link linkend="framestyle-edit">Framestylist</link> to make those changes.</para>
+<para>Below that, is a combo box labeled <guilabel>Textstyle:</guilabel> which is used to select the desired text style for this table style.
+If you want to add or alter a text style, click on the <guilabel>Change...</guilabel> button, and you will be taken directly to the 
+<link linkend="style-add-dialog">Stylelist</link> to make those changes.</para>
+
+<para>Once all changes have been made, click <guibutton>OK</guibutton> to save your changes. All of the affected table styles will
+be changed to reflect the new options.</para>
+</sect3>
+
+<sect3 id="tablestyle-add">
+<title>Creating a new table style</title>
+<indexterm><primary>table styles</primary><secondary>creating</secondary></indexterm>
+
+<para>To create a new table style, select <menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
+from the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tablestylist.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>Select a table style from the list at the left which most closely matches your new desired table style.
+The selected table style will be used as a template for the new table style.  Select the table style by clicking
+once with the &LMB; in the list on the left.</para>
+<para>Click on the <guibutton>New</guibutton> button.  &kword; will generate a new table style, which is a copy
+of the previously selected table style.</para>
+<para>Choose a name for your new table style, and type it in the text box labeled <guilabel>Name</guilabel>.</para>
+<para>You can now change your table style options to customize your newly created table style.  For details, see
+<link linkend="tablestyle-edit">Editing a table style</link>.</para>
+</sect3>
+
+<sect3 id="tablestyle-delete">
+<title>Deleting a table style</title>
+<indexterm><primary>table styles</primary><secondary>deleting</secondary></indexterm>
+
+<para>To delete table style, select <menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
+from the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tablestylist.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>Select the table style you want to delete 
+by clicking once with the &LMB; on the name of the table style you want to delete.</para>
+<para>Click on the <guibutton>Delete</guibutton> button.</para>
+<note><para>&kword; will not allow you to delete the <emphasis>Plain</emphasis> table style. </para></note>
+</sect3>
+
+<sect3 id="tablestyle-reorder">
+<title>Changing the order of the table style in the list</title>
+<indexterm><primary>table styles</primary><secondary>reordering</secondary></indexterm>
+
+<para>To change the order that the table style are listed, select <menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
+from the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tablestylist.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The order the table styles are listed in the menu is determined by the order of the table styles in the list on the left.</para>
+<para>Select the table style you want to move from the list at the left by clicking once with the &LMB;.</para>
+<para>Now click on the <guiicon>Up Arrow</guiicon> and <guiicon>Down Arrow</guiicon> located at the bottom of the list of table styles.  
+This will move theselected table style up or down in the list of table styles.</para>
+<para>When you are satisfied with the order of the list, select <guibutton>OK</guibutton>.</para>
+</sect3>
+
+<sect3 id="tablestyle-import">
+<title>Importing a table style from another &kword; file</title>
+<indexterm><primary>table styles</primary><secondary>importing</secondary></indexterm>
+
+<para>To import a table style from another &kword; file, select <menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Table Style Manager...</guimenuitem></menuchoice>
+from the menubar. A dialog box will appear.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tablestylist.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>Click the button labeled <guibutton>Import From File</guibutton>.  You can 
+select the &kword; file using the <link linkend="file-dialog">file selection dialog</link>.  Choose your file, and click 
+<guibutton>OK</guibutton>.</para>
+<para>A new dialog box will appear listing all available table styles for importing.</para>
+<tip><para>If &kword; encounters a duplicate table style name in the selected file, it will append a number to the end of the
+table style name to identify the imported style.</para>
+<para>As an example, if you import the <emphasis>Plain</emphasis> table style from another &kword; file, &kword; will change
+the name to <emphasis>Plain-1</emphasis>.</para></tip>
+<para>Select <emphasis>all</emphasis> the table styles you want to import.  Then click
+<guibutton>OK</guibutton>.</para>
+<para>The table styles will now appear at the bottom of your list of table styles.  Click <guibutton>OK</guibutton>
+to save the table styles in the new document.</para>
+</sect3>
+</sect2>
+
+</sect1>

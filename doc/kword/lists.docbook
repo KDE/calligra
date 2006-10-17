@@ -1,0 +1,165 @@
+<sect1 id="lists">
+<sect1info>
+<authorgroup>
+<author>
+<firstname>Mike</firstname>
+<surname>McBride</surname>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</sect1info>
+<title>Lists</title>
+<indexterm><primary>lists</primary></indexterm>
+
+<para>&kword; has a simple and flexible list creation system.
+Using the same interface, &kword; can create bulleted or enumerated lists of nearly any depth.  
+For easy, simple lists, &kword; offers
+a toolbar button for both enumerated and bulleted lists.</para>
+
+<para>An enumerating style is a series of letters or
+numbers which proposes an order or hierarchy within the list. Bullets 
+simply mark the item as part of the list and usually consist of a symbol or shape.</para>
+
+<sect2 id="list-simpl"><title>Simple lists</title>
+
+<para>To quickly create a single level list, &kword; provides two toolbar buttons.</para>
+<para>To create a simple enumerated list, simply select <inlinemediaobject><imageobject><imagedata
+fileref="enumlist.png" format="PNG"/></imageobject></inlinemediaobject> from the 
+<link linkend="paragraph-toolbar">paragraph toolbar</link>.
+A small menu will list different enumerated list styles.  Select the appropriate style and the selected
+paragraphs are converted into a list of that style.</para>
+<para>To create a simple bulleted list, select <inlinemediaobject><imageobject><imagedata
+fileref="bullist.png" format="PNG"/></imageobject></inlinemediaobject> from the 
+<link linkend="paragraph-toolbar">paragraph toolbar</link>.
+A small menu will list different bulleted list styles.  Select the appropriate style and the selected
+paragraphs are converted into a bulleted list of that style.</para>
+<tip><para>You are still able to make changes to the list styles by <link linkend="list-complex">using the dialog</link>.</para></tip>
+</sect2>
+
+<sect2 id="list-complex"><title>Complex lists</title>
+<para>All complex list formatting is done through the <guilabel>Paragraph Settings</guilabel> dialog.  To get to the <guilabel>Paragraph Settings</guilabel> dialog you can:</para>
+
+<itemizedlist>
+<listitem>
+<para>Select <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
+from the menubar</para>
+</listitem>
+
+<listitem><para>Type <keycombo action="simul">&Alt;&Ctrl;<keycap>P</keycap></keycombo></para></listitem>
+
+<listitem>
+<para>Place the mouse pointer in the paragraphs that will become the list and click once
+with the &RMB;.  A small menu
+will appear.  Select <guimenuitem>Paragraph...</guimenuitem>.</para>
+</listitem>
+
+</itemizedlist>
+<para>A dialog will appear.  To find the tab specific to lists, click once on the tab labeled <guilabel>Bullets/Numbers</guilabel>.</para>
+
+<sect3 id="list-dialog">
+<title>List type</title>
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="fpara4.png" format="PNG"/>
+</imageobject>
+</mediaobject>
+</screenshot>
+
+<para>To format the selected text as a list, select the radio button labeled <guilabel>List</guilabel> from the top section of the dialog box.</para>
+
+<para>There is a list of five bullets types and five enumerating styles along the left
+side of the dialog box.  Select the desired list style from the list on the left.</para>
+</sect3>
+<sect3 id="list-look"><title>Changing the look of the list</title>
+
+<para>The text box labeled <guilabel>Prefix text:</guilabel> allows the user to add text before
+the enumeration or bullet.</para>
+
+<para>The text box labeled <guilabel>Suffix text:</guilabel> allows the user to add text after
+the enumeration or bullet.</para>
+
+<para>For example:  If <quote>Step</quote> is typed into the <guilabel>Prefix text:</guilabel>
+box, and <quote>-</quote> is typed into the <guilabel>Suffix text:</guilabel> text box, the list will look like this:</para>
+
+<informalexample><simplelist>
+<member>Step 1 - Place 1 cup of flour in a large mixing bowl.</member>
+<member>Step 2 - Add 1/4 tablespoon of yeast.</member>
+<member>Step 3 - ....</member>
+</simplelist></informalexample>
+
+<para>If an enumerated list style is selected, the starting number/letter for the list can be set in the spin box
+labeled <guilabel>Start at:</guilabel>.  If you have selected a bulleted list style, this box will be inactive.</para>
+</sect3>
+<sect3 id="list-depth"><title>Multi-level lists</title>
+
+<para>The spin box labled <guilabel>Depth:</guilabel> is used to add subsections to your list.  By selecting a depth greater than one,
+you are adding a subsection to the list.  </para>
+
+<para>Example of a multilevel enumerated list:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="listdepth1.png" format="PNG"/>
+</imageobject>
+</mediaobject>
+</screenshot>
+
+<para>An example of a multilevel bulleted list:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="listdepth2.png" format="PNG"/>
+</imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Adjust the depth setting to determine where in the list this text occurs.</para>
+<para>By adjusting the spin box labeled <guilabel>Display levels:</guilabel> you can determine if previous levels are displayed.  For example, with a list where <guilabel>Depth:</guilabel> is set to three and 
+<guilabel>Display levels:</guilabel> is set to one might be: </para>
+ 
+<informalexample><simplelist>
+<member>i. This is a step</member>
+<member>ii. This is another step</member>
+</simplelist></informalexample>
+
+<para>If you change the <guilabel>Display levels:</guilabel> to two, it would change to: </para>
+
+<informalexample><simplelist>
+<member>A.i. This is a step</member>
+<member>A.ii. This is another step</member>
+</simplelist></informalexample>
+
+<para> You can always refer to the preview section of the dialog for an example of how
+your list will look.</para>
+
+
+
+</sect3>
+
+<sect3 id="lists-custom-bullets"><title>Custom Bullets</title>
+<para>If you select <guilabel>Custom Bullet</guilabel> from the list of styles, you can click on the button labeled 
+<guilabel>Custom character:</guilabel> to choose the letter or symbol you want for your bulleted list.</para>
+</sect3>
+<sect3 id="lists-restart"><title>Restart new list</title>
+<para>If you select the checkbox labeled <guilabel>Restart numbering at this paragraph</guilabel> &kword; will start 
+numbering your list at the beginning.</para>
+</sect3>
+<sect3 id="lists-multiline"><title> Multiple paragraphs in one list element</title>
+<para>Each new paragraph represents a new list element.  Sometimes, however, it will be desireable to have multiple 
+paragraphs on a single list element.  This is accomplished by inserting a New Line character instead of a Paragraph Break.</para>
+
+<para>To insert a New Line, type <keycombo action="simul">&Shift;<keycap>Return</keycap></keycombo>.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="listdepth3.png" format="PNG"/>
+</imageobject>
+</mediaobject>
+</screenshot>
+
+</sect3>
+
+</sect2>
+
+</sect1>
