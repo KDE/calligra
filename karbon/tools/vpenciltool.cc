@@ -25,8 +25,8 @@
 #include <q3groupbox.h>
 #include <QComboBox>
 #include <QCheckBox>
-#include <q3vbox.h>
-#include <q3widgetstack.h>
+#include <kvbox.h>
+#include <QStackedWidget>
 #include <QPointF>
 #include <Q3PtrList>
 #include <kicon.h>
@@ -64,7 +64,7 @@ VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, co
 	setCaption( i18n( "Pencil Settings" ) );
 	setButtons( Ok | Cancel );
 
-	Q3VBox *vbox = new Q3VBox( this );
+	KVBox *vbox = new KVBox( this );
 
 	m_combo = new QComboBox( vbox );
 
@@ -72,19 +72,19 @@ VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, co
 	m_combo->insertItem( 1, i18n( "Curve" ) );
 	m_combo->insertItem( 2, i18n( "Straight" ) );
 
-	m_widgetStack  = new Q3WidgetStack( vbox );
+	m_widgetStack  = new QStackedWidget( vbox );
 
 	Q3GroupBox *group1 = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
-	m_widgetStack->addWidget( group1, 1 );
+	m_widgetStack->insertWidget( 1,group1 );
 	m_optimizeRaw = new QCheckBox( i18n( "Optimize" ), group1 );
 
 	group1->setInsideMargin( 4 );
 	group1->setInsideSpacing( 2 );
 
 	Q3GroupBox *group2 = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
-	m_widgetStack->addWidget( group2, 2 );
+	m_widgetStack->insertWidget( 2,group2 );
 
-	Q3VBox *vbox2 = new Q3VBox( group2 );
+	KVBox *vbox2 = new KVBox( group2 );
 
 	m_optimizeCurve = new QCheckBox( i18n( "Optimize" ), vbox2 );
 	m_fittingError = new KDoubleNumInput( 0.0, 400.0, 4.00, vbox2, 0.50, 3 );
@@ -94,7 +94,7 @@ VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, co
 	group2->setInsideSpacing( 2 );
 
 	Q3GroupBox *group3 = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), m_widgetStack );
-	m_widgetStack->addWidget( group3, 3 );
+	m_widgetStack->insertWidget( 3,group3 );
 
 	m_combineAngle = new KDoubleNumInput( 0.0, 360.0, 0.10, group3, 0.50, 3 );
 	m_combineAngle->setSuffix( " deg" );
@@ -132,7 +132,7 @@ float VPencilOptionsWidget::fittingError()
 
 void VPencilOptionsWidget::selectMode()
 {
-	m_widgetStack->raiseWidget( m_combo->currentIndex() + 1 );
+	m_widgetStack->setCurrentIndex ( m_combo->currentIndex() + 1 );
 
 	switch( m_combo->currentIndex() )
 	{

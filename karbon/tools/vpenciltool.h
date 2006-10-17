@@ -38,7 +38,7 @@ class QWidget;
 class VPath;
 class KarbonView;
 class QCheckBox;
-class Q3WidgetStack;
+class QStackedWidget;
 class QComboBox;
 class KDoubleNumInput;
 class QCursor;
@@ -64,7 +64,7 @@ class VPencilOptionsWidget : public KDialog
 		QCheckBox			*m_optimizeCurve;
 		KDoubleNumInput			*m_combineAngle;
 		KDoubleNumInput			*m_fittingError;
-		Q3WidgetStack			*m_widgetStack;
+		QStackedWidget			*m_widgetStack;
 		QComboBox			*m_combo;
 		int				m_mode;
 };
