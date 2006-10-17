@@ -24,6 +24,7 @@
 #include <kdialog.h>
 
 class Q3ButtonGroup;
+class QAbstractButton;
 class KCommand;
 
 namespace KPlato
@@ -49,6 +50,9 @@ protected slots:
     void slotOk();
     void lagChanged();
     void typeClicked(int);
+    void slotFinishStartToggled(bool);
+    void slotFinishFinishToggled(bool);
+    void slotStartStartToggled(bool);
 
 protected:
     RelationPanel *m_panel;

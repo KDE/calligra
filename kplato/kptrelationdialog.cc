@@ -55,7 +55,13 @@ AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, QString caption,
 
     m_panel->fromName->setText(rel->parent()->name());
     m_panel->toName->setText(rel->child()->name());
-    m_panel->relationType->setButton(rel->type());
+    if (rel->type() == Relation::FinishStart) {
+        m_panel->bFinishStart->setChecked(true);
+    } else if (rel->type() == Relation::FinishFinish) {
+        m_panel->bFinishFinish->setChecked(true);
+    } else if (rel->type() == Relation::StartStart) {
+        m_panel->bStartStart->setChecked(true);
+    }
 
     m_panel->lag->setVisibleFields(DurationWidget::Days|DurationWidget::Hours|DurationWidget::Minutes);
     m_panel->lag->setFieldUnit(0, i18nc("days", "d"));
@@ -65,7 +71,10 @@ AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, QString caption,
 
     m_panel->relationType->setFocus();
     enableButtonOk(true);
-    connect(m_panel->relationType, SIGNAL(clicked(int)), SLOT(typeClicked(int)));
+    //connect(m_panel->relationType, SIGNAL(clicked(int)), SLOT(typeClicked(int)));
+    connect(m_panel->bFinishStart, SIGNAL(toggled(bool)), SLOT(slotFinishStartToggled(bool)));
+    connect(m_panel->bFinishFinish, SIGNAL(toggled(bool)), SLOT(slotFinishFinishToggled(bool)));
+    connect(m_panel->bStartStart, SIGNAL(toggled(bool)), SLOT(slotStartStartToggled(bool)));
     connect(m_panel->lag, SIGNAL(valueChanged()), SLOT(lagChanged()));
 }
 
@@ -79,6 +88,21 @@ void AddRelationDialog::slotOk() {
         return;
     }
     accept();
+}
+void AddRelationDialog::slotFinishStartToggled(bool ch) {
+    //kDebug()<<k_funcinfo<<ch<<endl;
+    if (ch && m_relation->type() != Relation::FinishStart)
+        enableButtonOk(true);
+}
+void AddRelationDialog::slotFinishFinishToggled(bool ch) {
+    //kDebug()<<k_funcinfo<<ch<<endl;
+    if (ch && m_relation->type() != Relation::FinishFinish)
+        enableButtonOk(true);
+}
+void AddRelationDialog::slotStartStartToggled(bool ch) {
+    //kDebug()<<k_funcinfo<<ch<<endl;
+    if (ch && m_relation->type() != Relation::StartStart)
+        enableButtonOk(true);
 }
 
 void AddRelationDialog::lagChanged() {
@@ -111,7 +135,9 @@ KCommand *ModifyRelationDialog::buildCommand(Part *part) {
     if (m_panel->relationType->selectedId() != m_relation->type()) {
         if (cmd == 0)
             cmd = new KMacroCommand(i18n("Modify Relation"));
-        cmd->addCommand(new ModifyRelationTypeCmd(part, m_relation, (Relation::Type)m_panel->relationType->selectedId()));
+        cmd->addCommand(new ModifyRelationTypeCmd(part, m_relation, (Relation::Type)(m_panel->relationType->selectedId())));
+        
+        //kDebug()<<k_funcinfo<<m_panel->relationType->selectedId()<<endl;
     }
     if (m_relation->lag() != m_panel->lag->value()) {
         if (cmd == 0)
