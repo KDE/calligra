@@ -174,7 +174,7 @@ public:
     virtual const QHash<QString, Node*> &nodeDict() { return nodeIdDict; }
     
     /// Find the node with identity id
-    virtual Node *findNode(const QString &id) {
+    virtual Node *findNode(const QString &id) const {
         if (m_parent == 0) { 
             if (nodeIdDict.contains(id)) 
                 return nodeIdDict[id];
