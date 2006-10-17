@@ -233,7 +233,7 @@ Form::setDesignMode(bool design)
 ///////////////////////////// Selection stuff ///////////////////////
 
 void
-Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
+Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise, bool moreWillBeSelected)
 {
 	if((d->selected.isEmpty()) || (w == widget()) || (d->selected.first() == widget()))
 		add = false;
@@ -263,7 +263,7 @@ Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
 		d->resizeHandles.clear();
 	}
 	d->selected.append(w);
-	emit selectionChanged(w, add);
+	emit selectionChanged(w, add, moreWillBeSelected);
 	emitActionSignals(false);
 
 	// WidgetStack and TabWidget pages widgets shouldn't have resize handles, but their parent

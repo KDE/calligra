@@ -148,7 +148,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		  the widget \a selected (and its parent) won't be raised (eg when you
 		   select widget in ObjectTreeView).
 		  \sa Form::setSelectedWidget() */
-		void setSelectedWidget(QWidget *selected, bool add, bool dontRaise=false);
+		void setSelectedWidget(QWidget *selected, bool add, bool dontRaise=false,
+			bool moreWillBeSelected = false);
 
 		/*! Unselects the widget \a w. The widget is removed from the Form's list
 		 and its resizeHandles are removed. */

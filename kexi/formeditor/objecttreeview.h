@@ -60,7 +60,8 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 };
 
 /*! @short A graphical view of Form's ObjectTree.
- This is a KListView which represents an item for each widget in the form. The actually selected widget is written bold
+ This is a KListView which represents an item for each widget in the form. 
+ The actually selected widget is written bold
  and selected. Clicking on a list item selects the corresponding widget in the Form.
  */
 class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
@@ -73,8 +74,9 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 
 		virtual QSize sizeHint() const;
 
-		/*! Sets \a form as the current Form in the list. The list will automatically be filled with an item for each widget
-		    in the Form, and selection will be synced. Nothing happens if \a form is already the current Form.
+		/*! Sets \a form as the current Form in the list. The list will automatically 
+		 be filled with an item for each widget in the Form, and selection will be synced. 
+		 Nothing happens if \a form is already the current Form.
 		 */
 		void setForm(Form *form);
 
@@ -82,7 +84,8 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		QString iconNameForClass(const QCString &classname);
 
 	public slots:
-		/*! Sets the widget \a w as selected item, so it will be written bold. It is added to current selection if \a add is true. */
+		/*! Sets the widget \a w as selected item, so it will be written bold. 
+		 It is added to current selection if \a add is true. */
 		void setSelectedWidget(QWidget *w, bool add=false);
 
 		/*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
@@ -95,7 +98,8 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		void renameItem(const QCString &oldname, const QCString &newname);
 
 	protected slots:
-		/*! This slot is called when the user right-click a list item. The widget context menu is shown, as inisde the Form. */
+		/*! This slot is called when the user right-click a list item. 
+		 The widget context menu is shown, as inisde the Form. */
 		void displayContextMenu(KListView *list, QListViewItem *item, const QPoint &p);
 
 		void slotColumnSizeChanged(int);

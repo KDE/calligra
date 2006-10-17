@@ -66,8 +66,15 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		 (only common properties are shown). Should be directly
 		 connected to Form::widgetSelected() signal. 
 		 If \a forceReload is true, the the properties will be redisplayed in the property editor 
-		 even if these were already displayed. */
-		void setSelectedWidget(QWidget *w, bool add = false, bool forceReload = false);
+		 even if these were already displayed. 
+		 If \a showPropertySet is true (the default), property editor will be updated for the current selection.
+		 This flag is set to false when we're selecting multiple widgets. */
+		void setSelectedWidget(QWidget *w, bool add = false, bool forceReload = false,
+			bool moreWillBeSelected = false);
+
+		void setSelectedWidgetWithoutReload(QWidget *w, bool add = false, bool moreWillBeSelected = false) {
+			setSelectedWidget(w, add, false, moreWillBeSelected);
+		}
 
 		/*!  This function is called every time a property is modifed.  It also takes
 		 care of saving set and enum properties. */
