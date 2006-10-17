@@ -1588,6 +1588,8 @@ void Canvas::paintEvent( QPaintEvent* event )
   if (!sheet)
     return;
 
+    ElapsedTime et( "Painting cells", ElapsedTime::PrintOnlyTime );
+
 #ifdef KSPREAD_CELL_WINDOW
     updateCellWindow();
 #endif
@@ -4076,8 +4078,6 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
     if (!sheet)
         return;
 
-    ElapsedTime et( "Painting cells", ElapsedTime::PrintOnlyTime );
-
     //Save clip region
     QMatrix matrix;
     if ( d->view )
@@ -4368,7 +4368,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
   painter.setPen( pen );
 
   const Selection* selection = selectionInfo();
-  const QRect currentRange = QRect(selection->anchor(), selection->marker()).normalized();
+  const QRect currentRange = Region::normalized( QRect( selection->anchor(), selection->marker() ) );
   const QRect effMarker = selectionInfo()->extendToMergedAreas( QRect( selection->marker(), selection->marker() ) );
   const QRectF markerRegion = cellCoordinatesToDocument( effMarker ).translated( -xOffset(), -yOffset() );
   Region::ConstIterator end(selection->constEnd());

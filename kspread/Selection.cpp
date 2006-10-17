@@ -859,7 +859,7 @@ QRect Selection::extendToMergedAreas(QRect area) const
   if (!d->view->activeSheet())
 	  return area;
 
-  area = area.normalized();
+  area = normalized( area );
   const Cell *cell = d->view->activeSheet()->cellAt(area.left(), area.top());
 
   if( Region::Range(area).isColumn() || Region::Range(area).isRow() )

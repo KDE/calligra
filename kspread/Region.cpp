@@ -279,7 +279,7 @@ Region::Element* Region::add(const QPoint& point, Sheet* sheet)
 
 Region::Element* Region::add(const QRect& range, Sheet* sheet)
 {
-  const QRect normalizedRange = range.normalized();
+  const QRect normalizedRange = normalized( range );
   if (normalizedRange.width() == 0 || normalizedRange.height() == 0)
   {
     return 0;
@@ -323,7 +323,7 @@ void Region::sub(const QPoint& point, Sheet* sheet)
 
 void Region::sub(const QRect& range, Sheet* sheet)
 {
-  const QRect normalizedRange = range.normalized();
+  const QRect normalizedRange = normalized( range );
   // TODO Stefan: Improve!
   Iterator endOfList(d->cells.end());
   for (Iterator it = d->cells.begin(); it != endOfList; ++it)
@@ -485,7 +485,7 @@ Region::Element* Region::insert(int pos, const QPoint& point, Sheet* sheet, bool
 
 Region::Element* Region::insert(int pos, const QRect& range, Sheet* sheet, bool multi)
 {
-  const QRect normalizedRange = range.normalized();
+  const QRect normalizedRange = normalized( range );
   if (normalizedRange.size() == QSize(1,1))
   {
     return insert(pos, normalizedRange.topLeft(), sheet);
@@ -713,6 +713,22 @@ QRect Region::boundingRect() const
     }
   }
   return QRect(left, top, right-left+1, bottom-top+1);
+}
+
+QRect Region::normalized( const QRect& rect )
+{
+    QRect normalizedRect( rect );
+    if ( rect.left() > rect.right() )
+    {
+        normalizedRect.setLeft( rect.right() );
+        normalizedRect.setRight( rect.left() );
+    }
+    if ( rect.top() > rect.bottom() )
+    {
+        normalizedRect.setTop( rect.bottom() );
+        normalizedRect.setBottom( rect.top() );
+    }
+    return normalizedRect;
 }
 
 Region::ConstIterator Region::constBegin() const
@@ -1046,7 +1062,7 @@ bool Region::Range::contains(const QPoint& point) const
 
 bool Region::Range::contains(const QRect& range) const
 {
-  return m_range.contains(range.normalized());
+  return m_range.contains( normalized( range ) );
 }
 
 } // namespace KSpread

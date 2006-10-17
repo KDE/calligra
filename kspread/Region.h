@@ -267,6 +267,8 @@ public:
   QRect boundingRect() const;
 
 
+  static QRect normalized( const QRect& rect );
+
 
   /**
    * @param region the region to compare

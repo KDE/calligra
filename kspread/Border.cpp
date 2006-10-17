@@ -545,6 +545,8 @@ void VBorder::paintEvent( QPaintEvent* event )
   if (!sheet)
     return;
 
+//     ElapsedTime et( "Painting vertical header", ElapsedTime::PrintOnlyTime );
+
   // FIXME Stefan: Make use of clipping. Find the repaint call after the scrolling.
   // kDebug(36004) << event->rect() << endl;
 
@@ -1255,6 +1257,8 @@ void HBorder::paintEvent( QPaintEvent* event )
   register Sheet * const sheet = m_pView->activeSheet();
   if (!sheet)
     return;
+
+//     ElapsedTime et( "Painting horizontal header", ElapsedTime::PrintOnlyTime );
 
   // FIXME Stefan: Make use of clipping. Find the repaint call after the scrolling.
   // kDebug(36004) << event->rect() << endl;
