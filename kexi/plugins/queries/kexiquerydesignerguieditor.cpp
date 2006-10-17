@@ -630,7 +630,9 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 			//todo: load global query properties
 		}
 	}
-	else if (mode==Kexi::TextViewMode) {
+	else if (mode==Kexi::TextViewMode || mode==Kexi::DataViewMode) {
+		// Switch from text or data view. In the second case, the design could be changed as well
+		// because there could be changes made in the text view before switching to the data view.
 		if (tempData()->queryChangedInPreviousView) {
 			//previous view changed query data
 			//-clear and regenerate GUI items
@@ -646,9 +648,10 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 				d->relations->clear();
 			}
 		}
-		//todo: load global query properties
+//! @todo load global query properties
 	}
-	else if (mode==Kexi::DataViewMode) {
+	
+	if (mode==Kexi::DataViewMode) {
 		//this is just a SWITCH from data view
 		//set cursor if needed:
 		if (d->dataTable->dataAwareObject()->currentRow()<0
@@ -1546,7 +1549,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			result->success = false;
 			result->allowToDiscardChanges = true;
 			result->column = colnum;
-			result->msg = futureI18n("Could not set sorting for multiple columns (%1)")
+			result->msg = i18n("Could not set sorting for multiple columns (%1)")
 				.arg(table=="*" ? table : (table+".*"));
 		}
 	}
