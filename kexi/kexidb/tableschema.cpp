@@ -35,13 +35,26 @@ class TableSchema::Private
 public:
 	Private()
 	 : anyNonPKField(0)
-	 , lookupFields(101)
 	{
-		lookupFields.setAutoDelete(true);
+	}
+
+	~Private()
+	{
+		clearLookupFields();
+	}
+
+	void clearLookupFields()
+	{
+		for (QMap<const Field*, LookupFieldSchema*>::ConstIterator it = lookupFields.constBegin(); 
+			it!=lookupFields.constEnd(); ++it)
+		{
+			delete it.data();
+		}
+		lookupFields.clear();
 	}
 
 	Field *anyNonPKField;
-	Q3PtrDict<LookupFieldSchema> lookupFields;
+	QMap<const Field*, LookupFieldSchema*> lookupFields;
 };
 }
 //-------------------------------------
@@ -201,6 +214,7 @@ void TableSchema::removeField(KexiDB::Field *field)
 {
 	if (d->anyNonPKField && field == d->anyNonPKField) //d->anyNonPKField will be removed!
 		d->anyNonPKField = 0;
+	delete d->lookupFields[field];
 	d->lookupFields.remove(field);
 	FieldList::removeField(field);
 }
@@ -245,7 +259,7 @@ KexiDB::FieldList& TableSchema::addField(KexiDB::Field* field)
 void TableSchema::clear()
 {
 	m_indices.clear();
-	d->lookupFields.clear();
+	d->clearLookupFields();
 	FieldList::clear();
 	SchemaData::clear();
 	m_conn = 0;
@@ -363,23 +377,26 @@ Field* TableSchema::anyNonPKField()
 	return d->anyNonPKField;
 }
 
-void TableSchema::setLookupFieldSchema( const QString& fieldName, LookupFieldSchema *lookupFieldSchema )
+bool TableSchema::setLookupFieldSchema( const QString& fieldName, LookupFieldSchema *lookupFieldSchema )
 {
 	Field *f = field(fieldName);
 	if (!f) {
 		KexiDBWarn << "TableSchema::setLookupFieldSchema(): no such field '" << fieldName 
 			<< "' in table " << name() << endl;
-		return;
+		return false;
 	}
 	if (lookupFieldSchema)
 		d->lookupFields.replace( f, lookupFieldSchema );
-	else
+	else {
+		delete d->lookupFields[f];
 		d->lookupFields.remove( f );
+	}
+	return true;
 }
 
-LookupFieldSchema *TableSchema::lookupFieldSchema( Field& field ) const
+LookupFieldSchema *TableSchema::lookupFieldSchema( const Field& field ) const
 {
-	return d->lookupFields.find( &field );
+	return d->lookupFields[ &field ];
 }
 
 LookupFieldSchema *TableSchema::lookupFieldSchema( const QString& fieldName )

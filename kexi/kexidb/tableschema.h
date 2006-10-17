@@ -142,12 +142,14 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		Field* anyNonPKField();
 
 		/*! Sets lookup field schema \a lookupFieldSchema for \a fieldName. 
-		 Passing null \a lookupFieldSchema will remove the previously set lookup field.  */
-		void setLookupFieldSchema( const QString& fieldName, LookupFieldSchema *lookupFieldSchema );
+		 Passing null \a lookupFieldSchema will remove the previously set lookup field.  
+		 \return true if \a lookupFieldSchema has been added, 
+		 or false if there is no such field \a fieldName. */
+		bool setLookupFieldSchema( const QString& fieldName, LookupFieldSchema *lookupFieldSchema );
 
 		/*! \return lookup field schema for \a field. 
 		 0 is returned if there is no such field in the table or this field has no lookup schema. */
-		LookupFieldSchema *lookupFieldSchema( Field& field ) const;
+		LookupFieldSchema *lookupFieldSchema( const Field& field ) const;
 
 		/*! \overload LookupFieldSchema *TableSchema::lookupFieldSchema( Field& field ) const */
 		LookupFieldSchema *lookupFieldSchema( const QString& fieldName );

@@ -1185,8 +1185,9 @@ void QuerySchema::computeFieldsExpanded()
 				// Now we also need to fetch "visible" value from the lookup table, not only the value of binding.
 				// -> build LEFT OUTER JOIN clause for this purpose (LEFT, not INNER because the binding can be broken)
 				// "LEFT OUTER JOIN lookupTable ON thisTable.thisField=lookupTable.boundField"
-				if (lookupFieldSchema->rowSourceType()==LookupFieldSchema::Table) {
-					TableSchema *lookupTable = connection()->tableSchema( lookupFieldSchema->rowSource() );
+				LookupFieldSchema::RowSource& rowSource = lookupFieldSchema->rowSource();
+				if (rowSource.type()==LookupFieldSchema::RowSource::Table) {
+					TableSchema *lookupTable = connection()->tableSchema( rowSource.name() );
 					Field *visibleField = 0;
 					Field *boundField = 0;
 					if (lookupTable && lookupFieldSchema->boundColumn()>=0 
@@ -1316,9 +1317,11 @@ void QuerySchema::computeFieldsExpanded()
 	for (i=0; i < d->fieldsExpanded->size(); i++) {
 		QueryColumnInfo* ci = d->fieldsExpanded->at(i);
 //! @todo QuerySchema itself will also support lookup fields...
-		LookupFieldSchema *lookupFieldSchema = ci->field->table() ? ci->field->table()->lookupFieldSchema( *ci->field ) : 0;
+		LookupFieldSchema *lookupFieldSchema 
+			= ci->field->table() ? ci->field->table()->lookupFieldSchema( *ci->field ) : 0;
 		if (lookupFieldSchema) {
-			TableSchema *lookupTable = connection()->tableSchema( lookupFieldSchema->rowSource() );
+			LookupFieldSchema::RowSource& rowSource = lookupFieldSchema->rowSource();
+			TableSchema *lookupTable = connection()->tableSchema( rowSource.name() );
 			Field *visibleField = 0;
 			if (lookupTable && lookupFieldSchema->boundColumn()>=0 
 				&& (uint)lookupFieldSchema->boundColumn() < lookupTable->fieldCount()

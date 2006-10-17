@@ -34,17 +34,16 @@ using namespace KexiDB;
 static KCmdLineOptions predefinedOptions[] =
 {
 	{ "drv", 0, 0 },
-	{ "driver <name>", FUTURE_I18N_NOOP("Database driver name"), 0 },
+	{ "driver <name>", I18N_NOOP("Database driver name"), 0 },
 	{ "u", 0, 0 },
-	{ "user <name>", FUTURE_I18N_NOOP("Database user name"), 0 },
+	{ "user <name>", I18N_NOOP("Database user name"), 0 },
 	{ "p", 0, 0 },
-	{ "password", FUTURE_I18N_NOOP("Prompt for password"), 0 },
+	{ "password", I18N_NOOP("Prompt for password"), 0 },
 	{ "h", 0, 0 },
-	{ "user <name>", FUTURE_I18N_NOOP("Database user name"), 0 },
-	{ "host <name>", FUTURE_I18N_NOOP("Server (host) name"), 0 },
-	{ "port <number>", FUTURE_I18N_NOOP("Server's port number"), 0 },
+	{ "host <name>", I18N_NOOP("Host (server) name"), 0 },
+	{ "port <number>", I18N_NOOP("Server's port number"), 0 },
 	{ "s", 0, 0 },
-	{ "local-socket <filename>", FUTURE_I18N_NOOP("Server's local socket filename, if needed"), 0 },
+	{ "local-socket <filename>", I18N_NOOP("Server's local socket filename"), 0 },
 	KCmdLineLastOption
 };
 
@@ -143,7 +142,7 @@ SimpleCommandLineApp::SimpleCommandLineApp(
 			userAtHost += "@";
 		userAtHost += (d->connData.hostName.isEmpty() ? "localhost" : d->connData.hostName);
 		QTextStream cout(stdout,IO_WriteOnly);
-		cout << futureI18n("Enter password for %1: ").arg(userAtHost);
+		cout << i18n("Enter password for %1: ").arg(userAtHost);
 //! @todo make use of pty/tty here! (and care about portability)
 		QTextStream cin(stdin,QIODevice::ReadOnly);
 		cin >> d->connData.password;

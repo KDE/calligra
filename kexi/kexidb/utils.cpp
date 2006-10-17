@@ -837,7 +837,7 @@ bool KexiDB::setFieldProperty( Field& field, const QByteArray& propertyName, con
 #undef GET_INT
 }
 
-int KexiDB::loadIntPropertyValueFromXML( const QDomNode& node, bool* ok )
+int KexiDB::loadIntPropertyValueFromDom( const QDomNode& node, bool* ok )
 {
 	QByteArray valueType = node.nodeName().toLatin1();
 	if (valueType.isEmpty() || valueType!="number") {
@@ -845,12 +845,12 @@ int KexiDB::loadIntPropertyValueFromXML( const QDomNode& node, bool* ok )
 			*ok = false;
 		return 0;
 	}
-	const QString text( node.firstChild().toElement().text() );
+	const QString text( QDomNode(node).toElement().text() );
 	int val = text.toInt(ok);
 	return val;
 }
 
-QString KexiDB::loadStringPropertyValueFromXML( const QDomNode& node, bool* ok )
+QString KexiDB::loadStringPropertyValueFromDom( const QDomNode& node, bool* ok )
 {
 	QByteArray valueType = node.nodeName().toLatin1();
 	if (valueType!="string") {
@@ -858,15 +858,15 @@ QString KexiDB::loadStringPropertyValueFromXML( const QDomNode& node, bool* ok )
 			*ok = false;
 		return 0;
 	}
-	return node.firstChild().toElement().text();
+	return QDomNode(node).toElement().text();
 }
 
-QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
+QVariant KexiDB::loadPropertyValueFromDom( const QDomNode& node )
 {
 	QByteArray valueType = node.nodeName().toLatin1();
 	if (valueType.isEmpty())
 		return QVariant();
-	const QString text( node.firstChild().toElement().text() );
+	const QString text( QDomNode(node).toElement().text() );
 	bool ok;
 	if (valueType == "string") {
 		return text;
@@ -881,10 +881,10 @@ QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
 				return val;
 		}
 		else {
-			int val = text.toInt(&ok);
+			const int val = text.toInt(&ok);
 			if (ok)
 				return val;
-			int valLong = text.toLongLong(&ok);
+			const qint64 valLong = text.toLongLong(&ok);
 			if (ok)
 				return valLong;
 		}
@@ -893,8 +893,30 @@ QVariant KexiDB::loadPropertyValueFromXML( const QDomNode& node )
 		return QVariant(text.toLower()=="true" || text=="1");
 	}
 //! @todo add more QVariant types
-	KexiDBWarn << "loadPropertyValueFromXML(): unknown type '" << valueType << "'" << endl;
+	KexiDBWarn << "loadPropertyValueFromDom(): unknown type '" << valueType << "'" << endl;
 	return QVariant();
+}
+
+QDomElement KexiDB::saveNumberElementToDom(QDomDocument& doc, QDomElement& parentEl, 
+	const QString& elementName, int value)
+{
+	QDomElement el( doc.createElement(elementName) );
+	parentEl.appendChild( el );
+	QDomElement numberEl( doc.createElement("number") );
+	el.appendChild( numberEl );
+	numberEl.appendChild( doc.createTextNode( QString::number(value) ) );
+	return el;
+}
+
+QDomElement KexiDB::saveBooleanElementToDom(QDomDocument& doc, QDomElement& parentEl, 
+	const QString& elementName, bool value)
+{
+	QDomElement el( doc.createElement(elementName) );
+	parentEl.appendChild( el );
+	QDomElement boolEl( doc.createElement("bool") );
+	el.appendChild( boolEl );
+	boolEl.appendChild( doc.createTextNode( value ? "true" : "false" ) );
+	return el;
 }
 
 //! Used in KexiDB::emptyValueForType()
