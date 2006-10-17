@@ -22,8 +22,12 @@
     <para>
       To see how queries work in practice you will create a <literal>contacts</literal>
       query joining data from two tables: <literal>persons</literal> and
-      <literal>phone_numbers</literal> (designed in <!--<a href="05_01_00_table_designing.html">-->chapter 3.1<!--</a>-->
-      and filled with data in <!--<a href="05_02_00_entering_data_into_tables.html">-->chapter 3.2<!--</a>-->).
+      <literal>phone_numbers</literal> (designed in 
+      <!--<a href="05_01_00_table_designing.html">-->chapter 3.1i
+      <!--</a>-->
+      and filled with data in 
+      <!--<a href="05_02_00_entering_data_into_tables.html">-->chapter 3.2
+      <!--</a>-->).
     </para>
     <procedure>
       <step>
