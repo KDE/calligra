@@ -132,9 +132,9 @@ the usage of modifier keys.</para>
 <imagedata fileref="palettes-controlbox-rectangle.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Rectangle</phrase>
+<phrase>The Tool tab for <guilabel>Rectangle</guilabel></phrase>
 </textobject>
-<caption><para>The Tool tab for Rectangle</para></caption>
+<caption><para>The Tool tab for <guilabel>Rectangle</guilabel></para></caption>
 </mediaobject>
 </screenshot>
 </para>

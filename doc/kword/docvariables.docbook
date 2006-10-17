@@ -46,7 +46,7 @@ a notice of the last date of modification (which would change with each passing 
 <para>To insert the date in the document, simply place the cursor in the text box where the date
 should be inserted and select
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Date</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu><guimenuitem>Date</guimenuitem>
 </menuchoice> from the menubar.  This will bring up several selections. To insert the current date, select one of two 
 options:
 <guimenuitem>Current date (fixed)</guimenuitem> and <guimenuitem>Current date (variable)</guimenuitem>.</para>
@@ -200,7 +200,7 @@ variable or new layout from the menu and the variable is immediately updated. </
 <para>To insert the time in the document, simply place the cursor in the text box where the time should
 be inserted and select
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Time</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu><guisubmenu>Time</guisubmenu>
 </menuchoice> from the menubar.  This will bring up two selections:
 <guimenuitem>Current time (fixed)</guimenuitem> and <guimenuitem>Current time (variable)</guimenuitem>.</para>
 
@@ -343,25 +343,25 @@ variable or new layout from the menu and the variable is immediately updated. </
 and <guilabel>Previous Page</guilabel>.</para>
 <para>To insert the current page number, place the cursor where you want the page number and select
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu><guisubmenu>Page</guisubmenu>
 <guimenuitem>Page Number</guimenuitem>
 </menuchoice> from the menubar.  The page number will be inserted at the current cursor location.</para>
 <para>To insert the total number of pages, place the cursor where you want the variable and select
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu><guisubmenu>Page</guisubmenu>
 <guimenuitem>Number of Pages</guimenuitem>
 </menuchoice> from the menubar.  The total number of pages will be inserted.</para>
 <para>To insert the title of the section, place the cursor where you want the variable and select
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu><guisubmenu>Page</guisubmenu>
 <guimenuitem>Section Title</guimenuitem>
 </menuchoice> from the menubar.  The section title will be inserted.</para>
 <para>By selecting <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu><guisubmenu>Page</guisubmenu>
 <guimenuitem>Next Page</guimenuitem>
 </menuchoice> from the menubar, a reference to the page number after the current page will be inserted at the current cursor location.</para>
 <para>Likewise, by selecting <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu><guisubmenu>Page</guisubmenu>
 <guimenuitem>Previous Page</guimenuitem>
 </menuchoice> from the menubar, a reference to the page number before the current page will be inserted at the current cursor location.</para>
 
@@ -374,7 +374,7 @@ every page will have a page number at the appropriate place.</para></tip>
 <sect2 id="misc-section-title"><title>Section Title</title>
 <para>You can insert the section title anywhere in your document by selecting
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu><guisubmenu>Page</guisubmenu>
 <guimenuitem>Section Title</guimenuitem>
 </menuchoice> from the menubar. </para>
 <para>&kword; determines the Section title by beginning a search from the top of the current page.  The first paragraph with a style of
@@ -388,7 +388,7 @@ on previous pages until it finds a section title.</para>
 <para>&kword; provides other commonly used variables that you might find useful. This set of variables
 are specific to the document.  You can insert these variables by selecting
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Document Information</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu><guimenuitem>Document Information</guimenuitem>
 </menuchoice> from the menubar.  This will bring up a list of variables.  The variables are detailed below.
 <informaltable>
 <tgroup cols="3">
@@ -433,7 +433,7 @@ to define your own variables for a document.  </para>
 
 <para>To create a new custom variable, place the cursor at the location in the document to insert the new variable.</para>
 <para>Select <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Custom</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu><guisubmenu>Custom</guisubmenu>
 <guimenuitem>New</guimenuitem></menuchoice> from the menubar.  This will bring up a dialog box.</para>
 <para>Enter the variable name and its current value in the text boxes provided.</para>
 <para>Click <guibutton>OK</guibutton> to create the new variable name and insert it at the current
@@ -462,7 +462,7 @@ variables will be updated.</para>
 <indexterm><primary>variables</primary><secondary>insert custom variable</secondary></indexterm>
 
 <para>To insert a new custom variable select <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Custom</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu><guisubmenu>Custom</guisubmenu>
 </menuchoice> from the menubar. The custom variable is listed in the submenu.  Click on the name of
 the variable and &kword; will insert the variable, with its current value, at the cursor location.</para>
 </sect3>
@@ -473,7 +473,7 @@ the variable and &kword; will insert the variable, with its current value, at th
 <para>You can tell &kword; to update all variable values (to make sure all variables are set to their
 current values).  This is <emphasis>especially</emphasis> important with dates and times.</para>
 <para>Simply select <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Refresh All Variables</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu><guimenuitem>Refresh All Variables</guimenuitem>
 </menuchoice> from the menubar.</para>
 </sect2>
 <sect2 id="update-variables-one"><title>Updating One Date or Time Variable Value </title>

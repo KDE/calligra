@@ -158,7 +158,7 @@ Each page of the document has its own set of layers.</para>
 
 <sect2>
 <title>Adding Layers</title>
-<para>Using the <guilabel>Layers</guilabel> docker you can add new layers by clicking the <guibutton>New Layer</guibutton> button, the first from the left. Layers can be deleted by clicking the second button, <guibutton>Remove Layer</guibutton>. &kivio; numbers the layers consecutively, to rename a layer select it in the list and click <guibutton>Rename Layer</guibutton>.</para>
+<para>Using the <guilabel>Layers</guilabel> palette you can add new layers by clicking the <guibutton>New Layer</guibutton> button, the first from the left. Layers can be deleted by clicking the second button, <guibutton>Remove Layer</guibutton>. &kivio; numbers the layers consecutively, to rename a layer select it in the list and click <guibutton>Rename Layer</guibutton>.</para>
 </sect2>
 
 <sect2>

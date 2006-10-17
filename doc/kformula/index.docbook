@@ -221,9 +221,9 @@ document.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Open Recent</guimenuitem>
+<guisubmenu>Open Recent</guisubmenu>
 </menuchoice></term>
-<listitem><para><action>Displays a selection of recently saved documents you can open.</action></para></listitem>
+<listitem><para><action>Displays a selection of recently opened documents.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -971,9 +971,9 @@ empty list right away. But this one is special. It uses a different
 font and is meant to insert things like function names. There is,
 however, a second idea here. Your keyboard only has a limited number of keys. 
 The wealth of mathematical symbols on the other side is overwhelming. To get one 
-of those you can type its name and press the space key afterwards. The name you 
+of those you can type its name and press the space bar afterwards. The name you 
 typed will be replaced by the symbol then. In this context, the
-<keycap>Space</keycap> key means <quote>get out of here</quote>, that
+<keycap>Space</keycap> bar means <quote>get out of here</quote>, that
 is move the cursor to the containing list. The cursor will be
 positioned at the end of what you just entered but will also enclose part of the original
 formula, after pressing the space bar.

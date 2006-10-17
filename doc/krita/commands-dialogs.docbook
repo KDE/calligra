@@ -626,7 +626,7 @@ preview yourself.
 This dialog allows you to customize the way your image is blurred. The
 <guilabel>Half-width</guilabel> and <guilabel>Half-height</guilabel> spinboxes
 determine the size of the areas of your image that are consecutively blurred.
-With the <guilabel>Strength</guilabel> spinbox you can set how hard the
+With the <guilabel>Strength</guilabel> spinbox you can set the strength with which the
 blurring should be applied, and with the <guilabel>Angle</guilabel> spinbox
 you can add a rotation to the area. The <guilabel>Shape</guilabel> setting,
 finally, allows you to choose between circular and rectangular areas
@@ -816,7 +816,7 @@ transparent, higher thresholds will make other colors match as well.
 
 <para>
 This dialog lets you copy the colors from one image (the <guilabel>Reference
-Image</guilabel>) to the current one. The colors in both image are compared
+Image</guilabel>) to the current one. The colors in both images are compared
 and each color in the one you are working with, will be replaced by the
 nearest one in the reference image.
 </para>
@@ -1139,7 +1139,7 @@ raindrop effects).
 <para>
 This filter adds random noise (speckles, or something similar) to your image.
 There are two customizable settings: the amount of noise
-(<guilabel>Level</guilabel> (as a percentage) and the
+(<guilabel>Level</guilabel>, as a percentage) and the
 <guilabel>Opacity</guilabel> of the noise (should the original color still be
 a bit visible or not).
 </para>
@@ -1306,7 +1306,7 @@ you can determine four settings here. The <guilabel>Wavelength</guilabel> (a
 shorter wavelength means a more erratical wave), the
 <guilabel>Shift</guilabel> (which point of the wave should be started at), the
 <guilabel>Amplitude</guilabel> (the amount of distortion), and the
-<guilabel>Shape</guilabel> (<guilabel>Sinusoidale</guilabel> or rounded,
+<guilabel>Shape</guilabel> (<guilabel>Sinusoidal</guilabel> or rounded,
 versus <guilabel>Triangle</guilabel> or pointy).
 </para>
 

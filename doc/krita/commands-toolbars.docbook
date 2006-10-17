@@ -260,7 +260,7 @@ You can drag these handles to change the direction of the curve in that point.
 </screenshot>
 </para>
 <para>
-You can click on a previous control point to modify it. With an intermediate
+You can click on a previously inserted control point to modify it. With an intermediate
 control point (&ie; a point that is not the starting point and not the ending
 point), you can move the direction handles seperately to have the curve enter
 and leave the point in different directions. After editing a point, you can
@@ -679,7 +679,7 @@ Predefined Brushes</guibutton> button, you can save it for later use.</para>
 </para>
 
 <para>In the <guilabel>Gradients</guilabel> palette, you can choose a gradient
-to paint with using the <guilabel>Gradient fill</guilabel> tool. Clicking once on a gradient in the
+to paint with using the <guilabel>Gradient</guilabel> tool. Clicking once on a gradient in the
 palette will show a larger preview. Click it again to make it the current
 gradient.</para>
 <para>You can create your own gradients with the <guibutton>Custom

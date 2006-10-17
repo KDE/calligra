@@ -436,8 +436,7 @@ cell background.</para>
 <guilabel>Cell Protection</guilabel> page.</para>
 <para>All cells are protected by default (that means cell content cannot be
 changed) and for the cell protection to be active you also need to protect the
-sheet using the <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
-Document </guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
+sheet using the <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
 menu and to provide a password.
 You can also hide the cell formula in order to protect the way you calculate the
 formula. This also needs to enable sheet protection to work.

@@ -367,29 +367,29 @@ linkend="commands-dialogs-filters-emboss">the
 for more information on the settings of the Emboss with Variable Depth filter.
 </para>
 <screenshot>
-<screeninfo>The image with the Emboss All filter applied to it</screeninfo>
+<screeninfo>The image with the Emboss in All Directions filter applied to it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-embossall.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Emboss All filter applied to it</phrase>
+<phrase>The image with the Emboss in All Directions filter applied to it</phrase>
 </textobject>
-<caption><para>The image with the Emboss All filter applied to
+<caption><para>The image with the Emboss in All Directions filter applied to
 it</para></caption>
 </mediaobject>
 </screenshot>
 <screenshot>
-<screeninfo>The image with the Emboss Variable filter applied to
+<screeninfo>The image with the Emboss with Variable depth filter applied to
 it</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="crocusses-embossvariable.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The image with the Emboss Variable filter applied to it</phrase>
+<phrase>The image with the Emboss with Variable depth filter applied to it</phrase>
 </textobject>
-<caption><para>The image with the Emboss Variable filter applied to
+<caption><para>The image with the Emboss with Variable depth filter applied to
 it</para></caption>
 </mediaobject>
 </screenshot>
@@ -513,7 +513,7 @@ gray pixels, which are kept gray).
 </para>
 <para>
 You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
-<guisubmenu>Color</guisubmenu></menuchoice> menu. 
+<guisubmenu>Colors</guisubmenu></menuchoice> menu. 
 This filter is not customizable.
 </para>
 <screenshot>
@@ -565,7 +565,7 @@ gray pixels, which are kept gray).
 </para>
 <para>
 You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
-<guisubmenu>Color</guisubmenu></menuchoice> menu. 
+<guisubmenu>Colors</guisubmenu></menuchoice> menu. 
 This filter is not customizable.
 </para>
 <screenshot>
@@ -593,7 +593,7 @@ You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
 <guisubmenu>Artistic</guisubmenu></menuchoice> menu. 
 See the section on <link
 linkend="commands-dialogs-filters-oilpaint">the
-<guilabel></guilabel> dialog</link>
+<guilabel>Oilpaint</guilabel> dialog</link>
 for more information on its settings.
 </para>
 <screenshot>
@@ -622,7 +622,7 @@ You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
 <guisubmenu>Artistic</guisubmenu></menuchoice> menu. 
 See the section on <link
 linkend="commands-dialogs-filters-pixelize">the
-<guilabel></guilabel> dialog</link>
+<guilabel>Pixelize</guilabel> dialog</link>
 for more information on its settings.
 </para>
 <screenshot>
@@ -653,7 +653,7 @@ You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
 <guisubmenu>Artistic</guisubmenu></menuchoice> menu. 
 See the section on <link
 linkend="commands-dialogs-filters-raindrops">the
-<guilabel></guilabel> dialog</link>
+<guilabel>Raindrops</guilabel> dialog</link>
 for more information on its settings.
 </para>
 <screenshot>
@@ -681,7 +681,7 @@ You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
 <guisubmenu>Other</guisubmenu></menuchoice> menu. 
 See the section on <link
 linkend="commands-dialogs-filters-randomnoise">the
-<guilabel></guilabel> dialog</link>
+<guilabel>Random Noise</guilabel> dialog</link>
 for more information on its settings.
 </para>
 <screenshot>
@@ -708,7 +708,7 @@ You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
 <guisubmenu>Other</guisubmenu></menuchoice> menu. 
 See the section on <link
 linkend="commands-dialogs-filters-randompick">the
-<guilabel></guilabel> dialog</link>
+<guilabel>Random Pick</guilabel> dialog</link>
 for more information on its settings.
 </para>
 <screenshot>
@@ -736,7 +736,7 @@ You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
 <guisubmenu>Map</guisubmenu></menuchoice> menu. 
 See the section on <link
 linkend="commands-dialogs-filters-roundcorners">the
-<guilabel></guilabel> dialog</link>
+<guilabel>Round Corners</guilabel> dialog</link>
 for more information on its settings.
 </para>
 <screenshot>
@@ -816,7 +816,7 @@ You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
 <guisubmenu>Edge Detection</guisubmenu></menuchoice> menu. 
 See the section on <link
 linkend="commands-dialogs-filters-sobel">the
-<guilabel></guilabel> dialog</link>
+<guilabel>Sobel</guilabel> dialog</link>
 for more information on its settings.
 </para>
 <screenshot>
@@ -844,7 +844,7 @@ You can find the filter in the <menuchoice><guimenu>Filter</guimenu>
 <guisubmenu>Enhance</guisubmenu></menuchoice> menu. 
 See the section on <link
 linkend="commands-dialogs-filters-unsharpmask">the
-<guilabel></guilabel> dialog</link>
+<guilabel>Unsharp Mask</guilabel> dialog</link>
 for more information on its settings.
 </para>
 <screenshot>

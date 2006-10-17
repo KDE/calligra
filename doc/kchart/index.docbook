@@ -479,8 +479,8 @@ on and off.
   </mediaobject>
 </screenshot>
 <para>
-On the <guilabel>Colors</guilabel> page you can choose the <guilabel>Colors</guilabel> for the individual
-data sets. You can also set <guilabel>Colors</guilabel> for some general chart parts
+On the <guilabel>Colors</guilabel> page you can choose the colors for the individual
+data sets. You can also set colors for some general chart parts
 like axes <guilabel>Line color</guilabel> and <guilabel>Grid color</guilabel>.
 </para>
 </sect2>
@@ -922,7 +922,7 @@ graph. It also determines the size of the slices in a pie chart.
 <guimenu>File</guimenu>
 <guimenuitem>Open Recent</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens a recently saved document</action></para></listitem>
+<listitem><para><action>Shows a list of recently opened documents</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1234,11 +1234,11 @@ the chart wizard.</para>
 
 <itemizedlist>
 <listitem><para>
-Click on <guilabel>Custom</guilabel>.
+Click on <guibutton>Custom</guibutton>.
 </para></listitem>
 
 <listitem><para>
-Next click on <guilabel>Primary shortcut:</guilabel>.
+Next click on <guibutton>Primary shortcut:</guibutton>.
 </para></listitem>
 
 <listitem><para>
