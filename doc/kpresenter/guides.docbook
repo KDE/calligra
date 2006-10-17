@@ -1,0 +1,558 @@
+<chapter id="guides">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Brad</firstname>
+<surname>Hards</surname>
+<affiliation>
+<address><email>bradh@frogmouth.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Danny</firstname>
+<surname>Allen</surname>
+<affiliation>
+<address><email>danny@dannyallen.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
+
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Detailed Guides</title>
+
+<para>This chapter describes how to perform some common tasks in
+&kpresenter;.</para>
+
+<sect1 id="html-wizard">
+<title>Create a <acronym>HTML</acronym> Slideshow</title>
+
+<para>Turn an existing presentation into standard <acronym>HTML</acronym>
+pages with accompanying navigation aids.</para>
+
+<procedure>
+<step>
+<para>First, either make a new presentation, or open an existing one. Then,
+click on <guimenu>File</guimenu><guimenuitem>Create HTML
+Slideshow...</guimenuitem></para>
+
+<screenshot>
+<screeninfo>File menu option to <guimenuitem>Create HTML
+Slideshow...</guimenuitem></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow1.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>File menu option to <guimenuitem>Create HTML
+Slideshow...</guimenuitem></phrase></textobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para>A dialog box asks if you want to use a previously saved
+configuration:</para>
+
+<screenshot>
+<screeninfo>Previous configuration dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow2.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Previous configuration dialog</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Click <guibutton>No</guibutton> if this is the first time that you have
+used this feature, or if you want to alter specific options. The
+<guibutton>Yes</guibutton> option allows you to use details that you have
+previously entered for your <acronym>HTML</acronym> slideshow, so that you can
+quickly create the slideshow without needing to adjust the options.</para>
+</step>
+
+<step>
+<para>You will then get a dialog box asking for a few details:</para>
+
+<screenshot>
+<screeninfo>Fill in the details for your <acronym>HTML</acronym>
+slideshow</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow3.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Fill in the details for your <acronym>HTML</acronym>
+slideshow</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Fill in each field (the dialog takes the informations from &kcontrol; if they exist) and ensure that the path details are correct, as this
+is where &kpresenter; will save your new <acronym>HTML</acronym> files
+and pictures. Click on the <guibutton>Next</guibutton> when you are
+done.</para>
+
+<para>If the path you select at this stage does not exist, &kpresenter; will
+ask if you would like to create it.</para></step>
+
+<step>
+<para>Now you can configure the specific <acronym>HTML</acronym> options:</para>
+
+<screenshot>
+<screeninfo>Fill in additional details for your <acronym>HTML</acronym>
+slideshow</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow4.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Fill in additional details for your <acronym>HTML</acronym>
+slideshow</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Here, the encoding and format details can be changed, along with
+the zoom level of the slides. For example, if you originally designed your
+slides to display full screen on a 1280 x 1024 resolution screen, you could
+scale the slides to 50% to enable them to be easily viewed in a much smaller web
+browser window.</para>
+
+<para>In most cases, the defaults will be fine, and you can safely press the
+<guibutton>Next</guibutton> to continue to the next page.</para>
+</step>
+
+<step>
+<para>Now you can customize the colors of the web pages:</para>
+
+<screenshot>
+<screeninfo>Setting up the display style for your <acronym>HTML</acronym>
+slideshow</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow5.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Setting up the display style for your
+<acronym>HTML</acronym>
+slideshow</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>When &kpresenter; creates the web pages for you, the text colors
+for the navigation aids will follow whatever you set here. To change any of
+these colors, click the colored bar next to the corresponding text label. The
+colors used in your actual slides will be unchanged.</para>
+
+<tip><para>Choose colors that are complimentary to the contents of your
+presentation.</para></tip>
+</step>
+
+<step><para>The <guibutton>Next</guibutton> button presents a dialog box
+that allows you to change the name used on the <acronym>HTML</acronym> page for
+each slide:</para>
+
+<screenshot>
+<screeninfo>Setting the slide names</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow6.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Setting the slide names</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para>If your presentation was intended to be displayed in an unattended manner
+(&ie; automatic advance to next slide, &etc;), you can also make your
+<acronym>HTML</acronym>
+presentation counterpart exhibit the same behavior:</para>
+
+<screenshot>
+<screeninfo>Unattended presentations</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow7.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Unattended presentations</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Here, you can force the slide to advance to the next after a specified
+amount of time, and also make the presentation return to the start once it
+reaches the end.</para>
+</step>
+
+<step>
+<para>Now it is time to actually produce your <acronym>HTML</acronym>
+presentation, the progress of
+which is shown in this dialog box:</para>
+
+<screenshot>
+<screeninfo>Saving your configuration</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow8.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Saving your configuration</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>Finally, you can save the configuration you have just used before you
+close the dialog box by pressing the <guibutton>Save
+Configuration...</guibutton> button.
+</para>
+</step>
+
+<step><para>What we now have are the newly-produced <filename>html/</filename>
+and <filename>pics/</filename> folders,
+created where we earlier set the path:</para>
+
+<screenshot>
+<screeninfo>The newly created <acronym>HTML</acronym> slideshow
+folders</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="htmlshow9.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>The newly created <acronym>HTML</acronym> slideshow
+folders</phrase></textobject>
+</mediaobject>
+</screenshot>
+</step>
+</procedure>
+
+<para>There is also an <filename>index.html</filename> file to launch
+your web slideshow.</para>
+
+<para>You can see how it works by using your file manager or web
+browser to open the <filename>index.html</filename> file. Click where prompted,
+and the first slide of your presentation is displayed. It will now behave as a
+&kpresenter; slideshow.</para>
+
+<para>Each click on the slide image takes you to the next slide.</para>
+
+<tip><para>To share your presentation with the world, transfer the
+newly-produced files to a network-accessible location (&ie; webspace),
+remembering to keep the directory structure intact.</para></tip>
+</sect1>
+
+<sect1 id="ms-export">
+<title>Exporting &kpresenter; presentations to a <trademark>Memory
+Stick</trademark></title>
+<para>
+Some Sony projectors have the ability to run a presentation directly
+from a <trademark>Memory Stick</trademark>, without needing to connect a
+computer up to the projector. &kpresenter; can export presentations to the
+format required by these projectors, and this tutorial will show you how to
+export your presentation.
+</para>
+
+<para>
+Each exported slideshow consists of a series of image files (one for
+each slide in the original presentation, plus two title slides) and an
+index file. They are created in a fairly complex directory structure
+that allows more than one presentation to be stored on a single memory
+stick. A simple example is shown below, consisting of two
+presentations.
+</para>
+
+<mediaobject id="ms-export-directory-structure">
+<imageobject>
+<imagedata format="PNG" fileref="msexport4.png"/>
+</imageobject>
+<textobject><phrase><trademark>Memory Stick</trademark> directory
+structure</phrase></textobject>
+</mediaobject>
+
+<procedure>
+
+
+<step>
+<para>
+If the presentation that you want to export is not already open, go to
+<guimenu>File</guimenu><guimenuitem>Open...</guimenuitem> and select the
+presentation that you want to export.
+</para>
+</step>
+
+<step>
+<para>
+Now, select the <guimenu>File</guimenu> menu and choose <guimenuitem>Create
+Memory Stick Slideshow...</guimenuitem>.
+</para>
+
+<screenshot>
+<screeninfo>The &kpresenter; <guimenuitem>Create Memory Stick
+Slideshow...</guimenuitem> menu selection.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="msexport1.png"/>
+</imageobject>
+<textobject><phrase>The &kpresenter; <guimenuitem>Create Memory Stick
+Slideshow...</guimenuitem> menu selection.</phrase></textobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para>
+This will bring up the <guilabel>Create Memory Stick
+Slideshow</guilabel> dialog.</para>
+
+<screenshot>
+<screeninfo>The &kpresenter; <guilabel>Create Memory Stick
+Slideshow</guilabel> dialog.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="msexport2.png"/>
+</imageobject>
+<textobject><phrase>The &kpresenter; <guilabel>Create Memory Stick
+Slideshow</guilabel> dialog.</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The <guilabel>Path</guilabel> is the directory in which your presentation will
+be exported to as directories (<filename>DCIM</filename> and
+<filename>MSSONY</filename>, see the <link
+linkend="ms-export-directory-structure">directory structure
+diagram</link> above) will be created. If you are able to, you may wish to export
+directly
+to the <trademark>Memory Stick</trademark>, in which case you would enter the
+location of the medium here.
+</para>
+
+<para>
+The <guilabel>Title</guilabel> is used for both the name of the index
+file, and as a text label on the title slide. Note that this title
+does not affect the titles on any of the normal presentation slides -
+the title slide is visible using the Sony projector setup prior to
+starting the actual presentation display.
+</para>
+
+<para>Select the <guibutton>Set Colors</guibutton> option to expand the
+dialog:</para>
+
+<screenshot>
+<screeninfo>The &kpresenter; <guilabel>Create Memory Stick
+Slideshow</guilabel> dialog (extended).</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="msexport2b.png"/>
+</imageobject>
+<textobject><phrase>The &kpresenter; <guilabel>Create Memory Stick
+Slideshow</guilabel> dialog (extended).</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+These two color selectors are only used for the title slide. It
+can be useful to change the title slides to make the presentations
+easier to identify when working on the projector, though it is perfectly safe to
+leave them as default.
+</para>
+
+<para>
+You can then press the <guibutton>OK</guibutton> button to proceed with the
+actual export process.
+</para>
+</step>
+
+<step>
+
+<para>
+Your presentation will now be exported into the correct format, with the
+following dialog informing you of the progress of this process:
+</para>
+
+<screenshot>
+<screeninfo>The &kpresenter; <guilabel>Create Memory Stick
+Slideshow</guilabel> progress dialog.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="msexport3.png"/>
+</imageobject>
+<textobject><phrase>The &kpresenter; <guilabel>Create Memory Stick
+Slideshow</guilabel> progress dialog.</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+When the export is complete, you can select the
+<guibutton>Done</guibutton> button, and the dialog will close.
+</para>
+</step>
+
+<step>
+<para>
+If you did not export the slideshow directly onto a <trademark>Memory
+Stick</trademark>, you will need to copy the correct files onto the
+<trademark>Memory
+Stick</trademark> before you can utilise the projector. As noted above,
+you need to copy over the correct directories and files starting at
+<filename>DCIM</filename> and <filename>MSSONY</filename> into the
+"root", or <filename>/</filename> of the <trademark>Memory Stick</trademark>. It
+is
+critical that the directory structure is maintained, and you may
+find it easier to copy the whole of <filename>DCIM</filename> and
+<filename>MSSONY</filename> directories.
+</para>
+
+<para>
+If necessary, you can safely rename the index file (which is
+<filename>Slideshow.SPP</filename> by default), however you cannot
+rename the slide images, nor can you change the name of these directories,
+as these are encoded into the index file.
+</para>
+</step>
+
+</procedure>
+
+</sect1>
+
+<sect1 id="creating-templates">
+<title>Creating &kpresenter; Templates</title>
+
+<para>It is very easy to add new templates to &kpresenter;'s library.</para>
+
+<para>If you have made a presentation in a style that you would like to use
+again, you can save it as a template.</para>
+
+<para>This tutorial will show how we can make a new template and save
+it.</para>
+
+<procedure>
+<step>
+<para>Open &kpresenter; and create a new document.</para>
+</step>
+
+<step>
+<para>To add a little sparkle to the blank slide, we can change the slide
+background - do this by either going to <guimenu>Format</guimenu> >
+<guimenuitem>Slide Background...</guimenuitem>, or by selecting the same item
+from the &RMB; menu:</para>
+
+<screenshot>
+<screeninfo>The &kpresenter; <guilabel>Slide Background</guilabel>
+dialog.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="template02.png"/>
+</imageobject>
+<textobject><phrase>The &kpresenter; <guilabel>Slide Background</guilabel>
+dialog.</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>We want the background to look attractive, so let's add a background
+gradient by using the drop-down menu, and then selecting the gradient colors by
+clicking the colored boxes. Of course, you may choose to use an image as a
+background by clicking the <guilabel>Picture</guilabel> tab: feel free to
+experiment, but keep it beautiful!</para>
+
+<screenshot>
+<screeninfo>Choosing a slide background</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="template03.png"/>
+</imageobject>
+<textobject><phrase>Choosing a slide background</phrase></textobject>
+</mediaobject>
+</screenshot>
+</step>
+
+<step>
+<para>The page should now have the background you desire. Create a text box, and
+type a heading for your slide:</para>
+
+<screenshot>
+<screeninfo>Adding a Heading to the new template</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template04.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Adding a Heading to the new template</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>When you are happy with your template, go to <guimenu>File</guimenu> >
+<guimenuitem>Template Manager</guimenuitem>:</para>
+
+<screenshot>
+<screeninfo><guimenu>File</guimenu><guimenuitem>Template
+Manager</guimenuitem></screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template05.png" format="PNG"/>
+</imageobject>
+<textobject><phrase><guimenu>File</guimenu><guimenuitem>Template
+Manager</guimenuitem></phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>This dialog box allows you to select where you would like your template to
+be saved:</para>
+
+<screenshot>
+<screeninfo>Saving the new template</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template06.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Saving the new template</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>I highly recommend that you save the template in the <guilabel>Screen
+Presentations</guilabel> group. You may call it whatever you wish, in this case,
+my template is named <userinput>Tutorial_Template</userinput>. Once you are
+happy with the settings, press <guibutton>OK</guibutton> to add your custom
+template to the template collection.</para>
+</step>
+
+<step>
+<para>You can now close the document you have been working on (there is no need
+to save it). The next time you are presented with the <guilabel>Create
+Document</guilabel> dialog, your very own template will be available to
+select!</para>
+
+<screenshot>
+<screeninfo>Your new template in the &kpresenter; <guilabel>Create
+Document</guilabel>
+dialog.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="template07.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Your new template in the &kpresenter;
+<guilabel>Create Document</guilabel>
+dialog.</phrase></textobject>
+</mediaobject>
+</screenshot>
+</step>
+</procedure>
+
+</sect1>
+
+</chapter>

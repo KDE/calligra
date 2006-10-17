@@ -1,0 +1,2060 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN"
+"dtd/kdex.dtd">
+
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="menu-items">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>The Menu and Toolbar Items</title>
+
+<para>&kpresenter; presents different types of interfaces for you to interact
+with the program. Perhaps the most familiar type of interface is the
+menu which appears on the top of the &kpresenter; window.</para>
+
+<para>Clicking on the menu items gives you a list of commands from which you
+can choose the one you want. Many of the commands can also be accessed
+directly by holding down &Ctrl; or &Alt; and pressing another key on
+your keyboard. In the next section, each of the menu commands is
+described in brief.</para>
+
+<sect1 id="toolbars">
+<title>The Toolbars</title>
+
+<sect2 id="manipulating-toolbars">
+<title>Manipulating the Toolbars</title>
+
+<para>In addition to the menus, &kpresenter; also has a set of toolbars. Each
+toolbar consists of a collection of icons. A toolbar icon often presents
+a convenient shortcut to a command that is found in one of the menus.</para>
+
+<screenshot>
+<screeninfo>The toolbars</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>The toolbars</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para>You can move the toolbar around by dragging the handle, shown here in red. Toolbars can
+be <quote>docked</quote> or attached to any side of the &kpresenter;
+window. If you like, you can also have the toolbar <quote>float</quote> in
+its own window, separated from the main &kpresenter; window as shown in the
+screenshot below:</para>
+
+<screenshot>
+<screeninfo>Floating toolbar</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Floating toolbar</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para> If you don't like dragging toolbars around,
+<mousebutton>right</mousebutton> click on the handle and a menu pops up as shown
+in the screenshot below: </para>
+
+<screenshot>
+<screeninfo>Toolbar context menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Toolbar context menu</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The first few items in the popup menu have to do with the placement of
+the toolbar. You can choose any of the four sides of the &kpresenter;
+window, or have the toolbar <quote>float</quote> in a separate
+window. Choosing <guimenuitem>Flat</guimenuitem> hides the toolbar.
+To unflat a hidden toolbar, &LMB; click on its handle.
+
+
+</para>
+
+<para>
+Choosing the next item in the menu, <guisubmenu>Text Position</guisubmenu>, leads
+to an additional menu which lets you control the appearance of the items
+in toolbar. This additional cascading menu is shown in the screenshot
+below:
+</para>
+
+<screenshot>
+<screeninfo>The toolbar modes menu</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle5.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>The toolbar modes menu</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The default view of the toolbar is icons only. In this view, if you
+don't know what a particular icon means, you can hold the mouse over the
+icon, and after a second or so, a little hint pops up in a highlighted
+text box as shown in the screenshot below:
+</para>
+
+<screenshot>
+<screeninfo>Tooltips</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle6.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Tooltips</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+You can choose to display the toolbar items as text instead of icons, or
+even to combine both icons and text. If you want both text and icons,
+the cascading menu allows you to select whether the text appears beside
+the icons or below them. All four styles of displaying toolbar items are
+shown in the screenshot below:
+</para>
+
+<screenshot>
+<screeninfo>The toolbar styles</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="barstyle7.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>The toolbar styles</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The &kpresenter; menus are discussed in the following sections.
+</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="file-menu">
+<title><guimenu>File</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Begins a new presentation.</action> The
+<guilabel>Create Document</guilabel> dialog will open, allowing you to choose a
+template for your presentation.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open...</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Opens an existing presentation.</action> A standard &kde; file
+open dialog will appear, allowing you to choose a file to open.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guisubmenu>Open Recent</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Displays a list of recently opened files for you to choose
+from.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo action="simul">
+&Ctrl;<keycap>S</keycap>
+</keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Saves the currently open presentation.</action> If you have not
+previously saved it, you will be asked to name the file. If you have
+previously saved the presentation, it will be resaved with the same name.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save As...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Saves the currently open presentation with a new name.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Reload</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Reload the currently active file.
+<!-- FIXME: What's a situation when you might want to do this? -->
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Import...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Import a presentation that was previously created in
+one of several common formats.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Export...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Export the currently open presentation to one of several common
+formats for use in another application, or for exchange with someone
+who does not have access to &kpresenter;.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Mail...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Open</action> a new email message in your selected email client with the current &kpresenter; document attached.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Create HTML Slideshow...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Starts the HTML wizard</action>, which is described in the
+section <xref linkend="html-wizard"/>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Create Memory Stick Slideshow...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Starts the Memory Stick dialog</action>, which is described in the
+section <xref linkend="ms-export"/>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Template Manager</guimenu>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to save the current slide as a
+template.</action> In future the template will be available for you to
+use to build slides with. Creating a template is further discussed in
+section <xref linkend="creating-templates"/>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Use Current Slide as Default Template</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Sets the current slide as your default template</action>.
+Especially useful if you have created a template of your own to fit into
+corporate style guidelines, or if you just use a particular layout very
+often.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>P</keycap></keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Print...</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para><action>Prints the presentation</action>. More precisely, it opens the
+print settings dialog, where you can adjust the settings before printing
+your presentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Print Preview...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Displays the presentation</action> with a &PostScript; viewer,
+exactly as it would look if printed.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Document Information</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to enter information about the document.</action>
+This includes information about the author, and an abstract on the
+documents contents.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>W</keycap></keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Close</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Close the current presentation.</action> You will be given an
+opportunity to save any changes first.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Close</action> &kpresenter;. You will be given an opportunity
+to save all changes in all open presentations first.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="edit-menu">
+<title><guimenu>Edit</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Z</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Undo: <replaceable>Last task</replaceable></guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Undo the last action you performed.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Redo: <replaceable>Last undone
+task</replaceable></guimenuitem>
+</menuchoice></term>
+<listitem>
+<para><action>Redo the last action you undid.</action> If you have not undone
+any actions, or the last undo action is not reversible, this menu item
+is disabled.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;<keycap>X</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Cut</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Copy the selected item to the clipboard, and remove it from the
+document.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Copy</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Copy the selected item to the clipboard, while leaving it intact
+in your presentation.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Paste</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Insert the contents of the clipboard into your
+presentation.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Delete</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Delete</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Remove the currently selected item from your
+presentation.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>A</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Select All</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para>
+<action>Select all the objects and text on the current slide.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>A</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Deselect</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Deselect any currently selected objects.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>F</keycap></keycombo></shortcut>
+<guimenu>Edit</guimenu>
+<guimenuitem>Find...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Search for text within the presentation.</action>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycap>F3</keycap>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Find Next</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Find the next occurrence of a piece of text within a presentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keycap>F3</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Find Previous</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Find the previous occurrence of a piece of text within a
+presentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Replace...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Replace one or more occurrences of a piece of text in
+your presentation with a different piece of text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Copy Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Copy the current slide to the clipboard.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Duplicate Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Insert an exact copy of the current slide.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Delete Slide</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para><action>Delete the current page from the presentation.</action> You
+will be asked to confirm this action.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Duplicate Object...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Create a duplicate of the currently selected object. A dialog will
+display allowing you to set some options for the duplicate, &eg; if it
+should be rotated, or scaled, or offset to a new position on the
+slide.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+
+<sect1 id="view-menu">
+<title><guimenu>View</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>New View</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para><action>Opens another window with the same presentation loaded</action>
+so you can work on more than one slide at a time.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>W</keycap></keycombo></shortcut>
+<guimenu>View</guimenu>
+<guimenuitem>Close All Views</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Close all views on the presentation.</action> You will be given
+a chance to save any changes, or to cancel closing.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Split View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Splits the window into two (or more) views on the same
+presentation.</action> The default split is horizontal.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Remove View</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Close only the currently active view</action>. The
+presentation, and any other views you have open, remain open, and any
+changes you have made remain unsaved.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Splitter Orientation</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggle the split view</action> between
+<guimenuitem>Horizontal</guimenuitem> (the default) and
+<guimenuitem>Vertical</guimenuitem>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Show Sidebar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggle the display of the sidebar</action> where you can
+see an overview of all the slides in your presentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Show Notebar</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggle the display of the notebar</action> where you can
+see an overview of all the notes in your presentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Slide  Master</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggle the display of the slide master</action> where you can put objects that you want to appear on each slide in your presentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Show Header</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggle the display of the header field</action> on the current slide. Header content can only be added in the master slide but you can choose to display the header only on some slides with this action.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Show Footer</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggle the display of the footer field</action> on the current slide. Footer content can only be added in the master slide but you can choose to display the footer only on some slides with this action.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Formatting Characters</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Show a visual representation of <quote>non-printing
+characters</quote>, such as tabs and paragraph markers. This can be
+a useful aid to precisely positioning text.</para>
+
+<para>This item can be toggled. If enabled, formatting characters are
+visible; if disabled, they are not.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Guide Lines</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>When working in &kpresenter; you can drag a <quote>guide
+line</quote> from either the horizontal or vertical ruler onto your
+document. This guide-line will not print or display in the finished
+presentation, it is simply to help you align objects on screen. If
+this item is enabled, these guide lines will be visible. If this is
+disabled, they will not be visible.</para>
+
+<para>Guide lines work across slides, allowing you to align objects the
+same way across multiple slides.</para>
+
+<para>Disabling (hiding) guide lines does not delete them. If you have
+created guide lines, and then disabled this item, enabling it again
+will retain the guide lines you created.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Add Guide Line...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+Opens a dialog to select the <guilabel>Orientation</guilabel>
+(<guilabel>Horizontal</guilabel> or <guilabel>Vertical</guilabel>)
+and choose a <guilabel>Position:</guilabel>
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Show/Hide Grid</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>If enabled, &kpresenter; will display a grid of dots
+representing the intersections of imaginary horizontal and vertical
+lines. You can use these dots to precisely position objects on the
+slide.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice><guimenu>View</guimenu><guimenuitem>
+Snap to Grid</guimenuitem></menuchoice>
+</term>
+<listitem><para>If this is enabled, when dropping or moving objects on the
+slide the top left corner of the object will <quote>snap</quote> or
+move, to the nearest grid point.</para>
+<para>This does reduce your freedom to freely position objects on the
+slide, however it also helps to line up objects precisely. It is
+easily disabled or enabled with this menu entry, allowing you the best
+of both worlds.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Zoom</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>This submenu allows you to zoom in or out of the
+slide. Several predefined zoom levels are available, including
+<guimenuitem>Whole Slide</guimenuitem> to scale the entire slide so as
+to be visible in the size window you have open, and
+<guimenuitem>Width</guimenuitem> to scale the slide so it fills the
+entire width of the window, although you may now have to scroll
+vertically. There are also several other scaling choices, from
+<guimenuitem>33%</guimenuitem> up to
+<guimenuitem>500%</guimenuitem>.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+
+<sect1 id="insert-menu">
+<title><guimenu>Insert</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;&Shift;<keycap>C</keycap></keycombo>
+</shortcut>
+<guimenu>Insert</guimenu>
+<guimenuitem>Special Character...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Insert a special character. This might be a character
+you don't have a key for on your keyboard layout, for instance &uuml;
+on a US Keyboard.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu>
+<guisubmenu>Variable</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>Here you can insert a variable that is filled in with a
+value that may be updated as you update the document.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Link...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Insert a hyperlink to a file, a website, or an email
+address. This enables these locations to be linked to directly from within active presentations, with resources being handled as appropriately by other applications installed on your system.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Comment...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Enter a small note that does not display during the
+real presentation. You might use this to comment on a colleague's
+text, or to leave a note for yourself about something to do
+later.</para>
+<!-- FIXME: How do you display these again? -->
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F2</keycap></shortcut>
+<guimenu>Insert</guimenu>
+<guimenuitem>Slide...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>
+<action>Add a new page to your presentation.</action> A dialog will open
+allowing you to choose a template, and whether to insert the new page
+before or after the currently selected page.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>File...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Insert an already existing presentation.</action> A standard &kde; file
+open dialog will appear, allowing you to choose a .kpr file which will be inserted after the last slide in your current presentation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F10</keycap></shortcut>
+<guimenu>Insert</guimenu><guimenuitem>Text</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Add a new text object. Click and drag to create a frame where
+you wish the text to appear.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Chart</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Insert a chart. Click and drag to define the size of the
+chart. Some default data will be displayed. Double click to edit the
+data and choose the type of chart to display, using the embedded
+&kchart; editor.</para>
+
+<!--<para>FIXME: KChart has it's own help file, but a brief overview of
+charting in this doc wouldn't go astray either.</para>-->
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F5</keycap></shortcut>
+<guimenu>Insert</guimenu><guimenuitem>Table</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Insert a table. Click and drag to define the size of
+the table.</para>
+
+<para>A &kspread; open dialog will display. You may import a
+spreadsheet that you have saved in one of many formats, including
+plain text files. You may also choose to create a new and empty
+table.</para>
+
+<para>Double clicking on the table will allow you to edit the
+contents.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu>
+<guisubmenu>Object</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<!--<para>FIXME: This needs a section of it's own</para>-->
+
+<para>An object is an embeddable file, in one of many formats.</para>
+
+<para>A common use of this action is to insert scaleable clipart in
+vector format.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Shift;<keycap>F5</keycap></keycombo>
+</shortcut>
+<guimenu>Insert</guimenu>
+<guimenuitem>Picture...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Insert a raster image.</action> These are not as easily
+scaleable as vector images or <quote>clipart</quote>. &kpresenter;
+currently understands many formats, including <literal
+role="extension">.tiff</literal>, <literal
+role="extension">.jpg</literal>, <literal
+role="extension">.png</literal> and many more.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu>
+<guisubmenu>Line</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>You can insert several types of lines. Line drawing is described
+further in the <!-- FIXME: Make a drawing tools section --> section.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu>
+<guisubmenu>Shape</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>You can insert several prepared shapes, in vector format. These are
+editable just like lines you have drawn yourself. Using the drawing
+tools is described in detail in the drawing tools
+section.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Scan Image...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Scan an image with a scanner.</action> This requires you have a
+scanner installed. It opens the Acquire Image dialog to allow the use of the scanner.<!--FIXME: Document how to set up a scanner that &kpresenter; can
+use.--></para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="format-menu">
+<title><guimenu>Format</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Select</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>If you have been using a tool such as the line drawing tool which does
+not allow you to select other objects, you can use this menu item to
+return to the normal selection cursor.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Rotate</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Changes the cursor to a double headed curved arrow. Drag with
+the cursor to rotate the object on the slide. When you are
+happy with the position of the object, click to stop
+rotating.</para>
+
+<para>If you change your mind and wish to cancel the rotation, you can
+press the &Esc; key to cancel, or use
+<menuchoice><guimenu>Edit</guimenu><guimenuitem>Undo</guimenuitem>
+</menuchoice> to later undo it.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Zoom</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Allow you to zoom in or out in the current slide. You can see the zoom factor in the <guilabel>Edit</guilabel> toolbar, in the zoom indicator.</para>
+<screenshot>
+<screeninfo>The <guilabel>zoom factor</guilabel> indicator</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="zoomfactor.png"/>
+</imageobject>
+<textobject>
+<phrase>The <guilabel>zoom factor</guilabel> indicator</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+<para>Left clicking on the slide will <guimenuitem>Zoom In</guimenuitem>. Right clicking on the current slide will present you a menu to allow you to <guimenuitem>Zoom In</guimenuitem>, to <guimenuitem>Zoom Out</guimenuitem>, to <guimenuitem>Zoom Entire Slide</guimenuitem>, to <guimenuitem>Zoom Slide Width</guimenuitem> or <guimenuitem>Zoom Slide Height</guimenuitem>, to <guimenuitem>Zoom Selected Objects</guimenuitem> or <guimenuitem>Zoom All Objects</guimenuitem> which put back all objects in your view.
+</para>
+<para>This action has the same effect as <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom</guimenuitem>
+</menuchoice> on another form.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Properties</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Open</action> the <guilabel>Properties</guilabel> dialog for the currently selected object on your slide.</para>
+<screenshot>
+<screeninfo>The <guilabel>Properties</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="properties.png"/>
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Properties</guilabel>dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+<para>The <guilabel>Properties</guilabel> dialog for an object allows you to manipulate it in a
+very detailed manner. You can change several properties for the selected object, like the text color if the object is text or the depth if the object is a picture.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guisubmenu>Arrange Objects</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>This is where you can manipulate the stacking order of
+objects on the slide.</para>
+
+<para>An object that is on top will cover, either partially or fully
+depending on its size, all other objects beneath it. Meanwhile an
+object on the bottom of the stack may not be visible at all, as it is
+covered up by other objects. An object in the middle may be partially
+covered by other objects, while partially covering yet more objects
+itself.</para>
+
+<para>You can send the selected object down or up a layer, or directly
+to the top or bottom of the stack.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guisubmenu>Align Objects</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+
+<para>In the submenu you can quickly align all the currently
+selected objects with a side of the slide, or center them either
+vertically or horizontally.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Group Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>If you are drawing, you might want to make something out of
+several rectangles or circles. Arrange the individual parts where you
+want them, select one, then hold down the <keycap>Shift</keycap> key
+as you click in the others you want to group together. Click
+<guimenuitem>Group Objects</guimenuitem> and from then on they act as
+if they are just one thing. It glues things together.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Ungroup Objects</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>If you decide that you want to alter an object that is made out
+of several pieces, you can unglue it with this tool. Click somewhere
+away from the object to deselect it, then click to select one of its
+parts.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Shadow Objects...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>This puts a colored copy of either text or a drawn object behind
+it. You can make nice <quote>dropped shadows</quote> for logos with
+this tool. To work with text, ensure that you have the text
+box selected (you will see the six small black boxes around the
+outline.) You choose the color, select which way the shadow is going to
+fall and select a distance. For text it looks nice if you set the
+distance to two or three. Click <guibutton>Apply</guibutton> to see
+the result.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Page Layout...</guimenuitem>
+</menuchoice></term>
+<listitem>
+
+<para>Allows you to set the page details. You can specify the margins,
+the orientation, either portrait (higher than wide) or Landscape
+(wider than high) formats. There are many templates, such as screen,
+A4, US legal.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Slide Background...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para>Allows you to alter the background to your presentation
+slides. Your options are <guilabel>Color/Gradient</guilabel>, (which lets you
+set either a plain color or one of many gradients)
+or <guilabel>Picture</guilabel>, which gives a dialog box to find the picture 
+you want. Set the <guilabel>View mode:</guilabel> for this picture
+to <guimenuitem>Scaled</guimenuitem>, <guimenuitem>Centered</guimenuitem>, 
+or <guimenuitem>Tiled</guimenuitem>.</para>
+
+<para> If you want a plain color, click in the box to select
+it. Gradients only work when you have chosen two colors. The picture
+option allows you to center the picture, zoom it to cover the entire
+slide (if it is smaller than the screen, this is very useful) or tile
+it. This is used when you want a small pattern to repeat across the
+page. It's probably best used with patterns rather than pictures of
+logos.</para>
+
+<para>You can get rid of a picture by selecting another one or
+choosing a color/gradient.</para>
+
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+
+<sect1 id="text-menu">
+<title><guimenu>Text</guimenu> Menu</title>
+
+<para>This menu modifies selected text and provides a few tools familiar from
+word processing applications for your convienience for when you are making
+presentations with large amounts
+of text in them. The <guimenu>Text</guimenu> menu will only effect selected or
+highlighted text.</para>
+
+<variablelist>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Default Format</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Restores selected text to the system default font size, style and
+formatting.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Font...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para>The <guilabel>Select Font</guilabel> dialog contains options for selected
+segments of text:</para>
+
+<screenshot>
+<screeninfo>The <guilabel>Select Font</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="textmenu1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Select Font</guilabel> dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para>With this dialog, you can <action>change the font, style and size of
+selected text</action>. The <interface>preview box</interface> at the bottom
+allows you to <action>approximate changes before you make them</action>. </para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">
+&Ctrl;&Alt;<keycap>P</keycap>
+</keycombo>
+</shortcut>
+<guimenu>Text</guimenu>
+<guimenuitem>Paragraph...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para>The <guilabel>Paragraph Settings</guilabel> dialog contains settings for
+larger blocks of text, such as paragraphs. Using this dialog, you can set
+indenting, line spacing, bullet/numbered list and border settings.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Color...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para>Use the <guilabel>Select Color</guilabel> dialog to have precise control
+over the color of selected text:</para>
+
+<screenshot>
+<screeninfo>The <guilabel>Select Color</guilabel> dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata format="PNG" fileref="textmenu2.png"/>
+</imageobject>
+<textobject>
+<phrase>The <guilabel>Select Color</guilabel> dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para>Using the <interface>color spectrum box</interface> on the left,
+<action>colors can be precisely defined</action> for use in your document. The
+color tone can then be adjusted using the <interface>scale</interface> to the
+right of the spectrum box. The <interface>input boxes</interface> below the
+color spectrum allow <action>color values to be entered</action>, so that exact
+colors can be specified.</para>
+
+<tip>
+<para>Use the color picker to select colors from elsewhere in your document
+(&eg; images).</para>
+</tip>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Alt;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>Text</guimenu>
+<guimenuitem>Style Manager</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>The <guilabel>Style Manager</guilabel> allows you to create an entire set of
+attributes that will be applied to selected text all at once. See Working With Styles</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Import Styles...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Here you can import styles that you have defined in another &kpresenter;
+document.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guisubmenu>Style</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>Using this submenu, you can apply a style that you have previously defined
+to the currently selected text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Create Style From Selection</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Copy the properties of the currently selected text and
+save them as a style that you may apply to other text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guisubmenu>Align</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para><guisubmenu>Align</guisubmenu> has a submenu with several options:
+<guimenuitem>Align Left</guimenuitem> (<keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>), 
+<guimenuitem>Align Center</guimenuitem> (<keycombo action="simul">&Alt;<keycap>C</keycap></keycombo>), 
+<guimenuitem>Align Right</guimenuitem> (<keycombo action="simul">&Alt;<keycap>R</keycap></keycombo>), and
+<guimenuitem>Align Block</guimenuitem> (<keycombo action="simul">&Alt;<keycap>J</keycap></keycombo>) 
+which is also commonly known as <quote>Justify</quote>.</para>
+
+<para>Text is by default left-aligned.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guisubmenu>Type</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>Using this submenu, you can format the currently selected text as a list,
+either of the numbered or bulleted type. If you choose numbered, you can then
+select a numbering style, and likewise if you choose bulleted, you can
+choose the style of bullets to use.</para>
+
+<para>To change a list back to plain text, select
+<guimenuitem>None</guimenuitem> as the style.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>+</keycap></keycombo>
+</shortcut>
+<guimenu>Text</guimenu>
+<guimenuitem>Increase Depth</guimenuitem>
+</menuchoice>
+</term>
+
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>-</keycap></keycombo>
+</shortcut>
+<guimenu>Text</guimenu>
+<guimenuitem>Decrease Depth</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><guimenuitem>Increase Depth</guimenuitem> and <guimenuitem>Decrease
+Depth</guimenuitem> move paragraphs in a list either to the right
+(<guimenuitem>Increase Depth</guimenuitem>) or back to the left
+(<guimenuitem>Decrease Depth</guimenuitem>).</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Extend Contents to Object Height</guimenuitem>
+</menuchoice></term>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Extend Object to Fit Contents</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><guimenuitem>Extend Contents to Object Height</guimenuitem> and
+<guimenuitem>Extend Object to Fit Contents</guimenuitem> help to
+resize text within the text box or make the text box fit the text you have typed
+or pasted into it.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Insert Slide Number</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Insert a dynamically-updated slide number. This page number will
+automatically update when slides are added or removed from your presentation to
+reflect the correct slide value.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guimenuitem>Change Case...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Presents a dialog that provides a variety of different case/capitalization
+options for the currently selected text.</para>
+
+<para>You may choose between several styles of capitalization,
+including all lower or uppercase, book style capitalization where each
+word except conjunctions has an initial capital letter, and sentence
+style capitalization where the first word in a sentence is capitalized. You can
+also toggle the case, so that uppercase becomes lowercase, and vice
+versa.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guisubmenu>Spellcheck</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>Use this submenu to utilize the spellcheck options. If you enable
+<guimenuitem>Autospellcheck</guimenuitem>, &kpresenter; will automatically check
+text that you enter for spelling errors.</para>
+
+<para>If you prefer to check spelling explicitly, rather than automatically, you
+can also force a <guimenuitem>Spelling...</guimenuitem> check here.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Text</guimenu>
+<guisubmenu>Autocorrection</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>Use this submenu to utilize autocorrection options. If you enable
+<guimenuitem>Autocorrection</guimenuitem>, common spelling errors will be
+corrected as you type. For example, if you entered <userinput>Teh</userinput>,
+it would be autocorrected to <userinput>The</userinput>.</para>
+
+<para>If the autocorrection feature is not active, you can also
+<guimenuitem>Apply Autocorrection</guimenuitem> check here.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+
+<sect1 id="slide-show-menu">
+<title><guimenu>Slide Show</guimenu> Menu</title>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Configure Slide Show...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<!--<para>
+FIXME: Write a working with slideshows section
+</para>-->
+<para>You can set up the properties for the entire slide show here,
+including whether to show the duration on screen, which of the slides
+in a presentation to include, and several other global settings.</para>
+
+<!--<para>This is discussed in detail in the FIXME: link to presentation
+section.</para>-->
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Edit Object Effect...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Choose what effect you want to apply for the highlighted object. This is where
+you can set the order of appearance, how the object will appear, if you want a sound while the object appears and if you want some disappearance effects too.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Edit Slide Transition...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Apply transition effects to the currently open slide. This is where
+you can choose how the transition from one slide to the next
+will be handled.</para>
+
+<para>The transition effects you select here are applied on the
+transition <emphasis>from</emphasis> this slide
+<emphasis>to</emphasis> the next.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>F12</keycap></shortcut>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Start</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Begin the slideshow from the current slide.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Start From First Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Begin the slideshow from the first slide.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Custom Slide Show...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Opens a dialog to <guibutton>Add...</guibutton>, <guibutton>Modify...</guibutton>, 
+<guibutton>Remove</guibutton> and <guibutton>Copy</guibutton> slides and
+<guibutton>Test</guibutton> the slide show in full screen mode.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Go to Start</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Go directly to the first slide in the slide show.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>PageUp</keycap></shortcut>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Previous Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Go back to the previous slide in the slide show.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>PageDown</keycap></shortcut>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Next Slide</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Go to the next slide in the slide show.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut><keycap>End</keycap></shortcut>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Go to End</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Go immediately to the final slide in the slide show.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect1>
+
+<sect1 id="settingsmenu">
+<title>The <guimenu>Settings</guimenu> Menu</title>
+
+<para>The <guimenu>Settings</guimenu> menu allows you to customize
+&kpresenter;.</para>
+
+<variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+</menuchoice>
+</term>
+<listitem>
+<para>The items in this submenu can be toggled, that is, you can both enable and
+disable the display of specific toolbars here.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Autocorrection...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Autocorrection is &kpresenter;'s ability to correct
+common typing errors or expand abbreviations independently of the spell
+checking function. There are several common typing errors entered for
+you by default such as replacing <userinput>teh</userinput> with
+<userinput>the</userinput> and you can add as many more as you
+like.</para>
+
+<para>The ability to expand abbreviations can save you a lot of typing
+time, if you often repeat text whether in the same presentation or in
+multiple presentations.</para>
+
+<para>For instance, if you work for <quote>Company with a really really
+long name Inc.</quote> then you might define an autocorrection entry so
+that whenever you type <userinput>myJob</userinput> or some other piece
+of unique text, it will be replaced with <quote>Company with a really
+really long name Inc.</quote>.</para>
+
+<para>Autocorrection can be applied automatically as you type, or only
+on demand when you choose it from the <guimenu>Text</guimenu>
+menu.</para>
+
+<para>Please see the <link
+linkend="configure-autocorrection">Configure Autocorrection</link> section for a complete explanation.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Completion...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Autocompletion allows you to type the first few letters of a commonly used word (often technical or job specific), and tells &kpresenter; to finish typing the word for you.</para>
+
+<para>Please see the <link
+linkend="configure-completion">Configure Completion</link> section for a complete explanation.</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Shortcuts...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+
+<para><guimenuitem>Configure Shortcuts</guimenuitem> allows you to
+assign a keyboard shortcut to actions that &kpresenter; menus or icons
+contain.</para>
+
+<screenshot>
+<screeninfo>Customize Shortcuts</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="settings03.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Customizing the shortcuts</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<para>If you try to assign a shortcut that is already used, it will
+give you a warning message. Highlight what you want to do (in the
+picture, I have chosen to make a keyboard shortcut to <guilabel>About
+KDE</guilabel>).</para>
+
+<para>Click the radio button to the <guilabel>Custom</guilabel> key setting and type the
+key you want to use. I assigned <keycap>Control</keycap> key and
+<keycap>Y</keycap> to bring up the <quote>About KDE</quote> dialog
+box.</para>
+
+<para>The button shows what has been assigned. Click
+<guibutton>OK</guibutton> to make the changes, click
+<guibutton>Default</guibutton> to restore whatever was assigned as
+default, click <guibutton>Cancel</guibutton> to do nothing and leave
+the dialog.</para>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Toolbars...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Configure Toolbars allows you to add or delete icons on each of
+the toolbars.</para>
+
+<screenshot>
+<screeninfo>Configuring &kpresenter; toolbars</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="settings04.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Configuring &kpresenter; toolbars</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+
+
+<para>At the top is a drop down box to enable you to choose which
+toolbar you want to modify. In the picture the <guilabel>Format</guilabel> toolbar is
+selected. If I want to add the <guiicon>Spelling</guiicon> icon to
+that toolbar, I click the entry in the left window. The arrow pointing
+right becomes available, if I click the arrow the <guiicon>Spelling</guiicon> 
+entry is added to the selected toolbar. The left arrow
+is available when you click in the right side window. It allows you to
+remove an icon from a toolbar. The up and down arrows become active
+when an item on the wright side is selected. You can also move the highlight in
+the right side window up and down with the keyboard arrow keys. By
+clicking on the arrows with the mouse you can change the order of the entries 
+in the menu. 
+<!--The <guimenuitem>Configure 
+&kpresenter;...</guimenuitem> menu entry gives two menu boxes. -->
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure &kpresenter;...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>See the <link
+linkend="configure-dialog">configure &kpresenter;</link> section for a complete explanation of all &kpresenter; settings.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="helpmenu">
+<title><guimenu>Help</guimenu> Menu</title>
+
+&help.menu.documentation;
+
+</sect1>
+
+</chapter>

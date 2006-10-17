@@ -1,0 +1,145 @@
+<!--    
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+       
+To edit or validate this document separately, uncomment this prolog
+Be sure to comment it out again when you are done -->
+
+<chapter id="hints-and-tips">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Neil</firstname>
+<surname>Lucock</surname>
+<affiliation>
+<address><email>neil@nlucock.freeserve.co.uk</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Krishna</firstname>
+<surname>Tateneni</surname>
+<affiliation>
+<address><email>tateneni@pluto.njcc.com</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>General Hints and Tips for Great Presentations</title>
+
+<para>Okay, you've decided to use &kpresenter; for your
+presentation. Before you start making transparencies or animated slide
+shows, go and find a piece of paper and sit down at a desk away from
+the computer. It doesn't matter whether you are doing a teaching
+session or trying to convince the boss that your plan, policy or idea
+should be adopted, you need to figure out what you are trying to
+say. Write down all the subjects you need to cover, try to get them in
+the order you think will make sense. Don't put any details in yet,
+just decide on headings and the structure of your talk.</para>
+
+<para>Under each heading make a note of what facts you need to
+cover. You are trying to build a convincing argument. Consider
+grouping your facts into things must be included,  things that should
+be included and things that it would be nice to cover if you had
+plenty of time.</para>
+
+<para>Once you have written down all the things you need to say,
+consider the time available to do it in. Ten minutes seems ages when
+you start, but it is very difficult to actually get much across in so
+short a time. Get your sheet of paper and a clock with a second
+hand. Practise your presentation over and over again. This has many
+benefits. Firstly, you get the timing right. If someone says you have
+ten minutes, never go over the allowed time. Secondly, when you
+actually do it in front of a live audience, it will not be the first
+time you have done that presentation. Third, you get the words right
+in your own head. You will find ways of saying things about the
+subject. If you've heard yourself do this presentation several times,
+you will know what you are going to say next and how you are going to
+say it. </para>
+
+<para>&kpresenter; does not produce Speaker's Notes at the time of
+writing, but I am happy to just use ordinary slides. Produce some
+slides for yourself, printed on plain paper, and some for use with the
+Overhead Projector. Make the text on your slides nice and big, you
+need to be able to read it at a distance. I use 14 or 16 point text,
+experiment to find a size that you can read easily. I never write out
+a script.</para>
+
+<para>If you are using an Overhead projector, learn how to use it
+beforehand. Make sure that the bulb works, that the spare bulb is
+still okay. Clean the lens and display plates. If you are not used to
+working with projectors, practice. Ensure that the projection screen
+itself is clean. It's probably best, when timing yourself, to allow
+for five seconds (count <quote>one thousand and one, one thousand and
+two....</quote>) to change each slide. That way you know you don't
+have to rush. If you need to point at something on a slide, you can
+use a pointer and point at the display screen, find a laser pointer or
+put a pencil on the transparency itself. Be warned, these tend to roll
+out of place when you nudge the table.</para>
+
+<para>Consider where you are going to stand. You cannot stand in
+front of your display, so off to one side is probably your best option
+if you want your audience to be able to see. I often project a picture
+onto a wipeboard and draw over the top of it. If you are using a PC
+with a digital projector you can draw over the top of your slides with
+&kpresenter;'s pen tool. Remember, drawing freehand with a mouse is a
+skill that needs practice. If you are using an Overhead projector, you
+can use transparent overlay slides and a pen over the top of your
+computer generated ones.</para>
+
+<para>When you are doing the presentation do not accidently look into
+the light, it's easy to do. If you are not going to use the machine
+for a few minutes, turn it off.  Practise to get where you are going
+to stand sorted out. Check the room you intend to use for electrical
+sockets and learn how the blinds work and where the light switches
+are. Good preparation not only makes you less likely to make mistakes
+(inanimate things can be a nightmare in front of an audience) but also
+gives you confidence. Always have a <quote>Plan B</quote> ready if
+something refuses to work. Have a paper copy of your slides with
+you. You can photocopy and distribute these to your audience if the
+equipment fails.</para>
+
+<para>I have not said much about the content yet. At present all you
+have is a piece of paper with everything you want to say on it. Before
+you make anything, ask youself if their understanding of what you are
+saying is going to improved by showing them a picture. Bad
+presentations consist of a series of slides full of text. The
+presenter then reads the slide to the audience (who have already read
+it as they can read faster than someone can say it aloud). Try to
+avoid writing anything on the slide, except a title and a number. Draw
+a picture of what you need to say, then explain the picture to
+them. That way they do not get ahead of you (they can read faster than
+you can speak, remember?) and you look like you know it. You do not
+know it, you are using the picture as a series of prompts. A slide
+should support what you are saying, not duplicate it. A slide should
+be the focus of the audience's attention, not a distraction.</para>
+
+<para>An example. I teach Railway staff how to respond to accidents. I
+wanted to use a slide to discuss how you can move dangerous loads from
+a derailed or damaged rail vehicle to a road vehicle after an
+accident.  The slide I made had a simple drawing of tank wagon, the
+kind used for carrying gases or oils. On the side I wrote
+<quote>Lethal Chemical Company</quote> so that I do not have to
+explain it. I wanted to make several important points. First, you must
+get any overhead electric wires turned off before you do anything if
+they are within a certain distance. I drew one of the supporting
+structures and drew an arrow with the safety distance on it. Then I
+wanted to say that you must not transfer the wagon's contents in
+darkness or thunderstorms. I drew a moon and a lightning bolt above
+the vehicle. You must get specialist advice, so I drew a sheet of
+paper and wrote the word <quote>Plan</quote> near the vehicle. You
+also have to ensure that the vehicle does not move when the weight
+inside is removed. I drew little red wedges by the wheels. Everything
+I need to talk about is on this drawing. All I have to do is look at
+the drawing and it tells me what I need to cover. When I have covered
+all the things in the drawing, I have finished on that
+subject. </para>
+
+<para>In general, only use a slide or picture if it shows something
+that adds to what you are saying. Finally, relax and try not to rush
+through it all. Talk to them, not at them and remember that a
+presentation is about whatever message you are trying to get
+across. &kpresenter; is a useful tool. It can help you to get that
+message over, but it cannot do the job for you.</para>
+
+</chapter>
