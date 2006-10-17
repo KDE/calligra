@@ -1,0 +1,156 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY kudesigner "Kugar Report Designer">
+  <!ENTITY kugar "Kugar">
+  <!ENTITY kappname "&kugar;">
+  <!ENTITY package "koffice">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+  <!ENTITY template SYSTEM "template.docbook">
+  <!ENTITY templatedtd SYSTEM "templatedtd.docbook">
+  <!ENTITY templateelements SYSTEM "template-elements.docbook">
+  <!ENTITY datadtd SYSTEM "datadtd.docbook">
+  <!ENTITY dataelements SYSTEM "dataref.docbook">
+  <!ENTITY progguide SYSTEM "progguide.docbook">
+  <!ENTITY starting SYSTEM "starting.docbook">
+  <!ENTITY designermanual SYSTEM "designer.docbook">
+  <!ENTITY tutorial SYSTEM "tutorial.docbook">
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>The &kugar; Handbook</title>
+
+<authorgroup>
+<author>
+<firstname>Alexander</firstname>
+<surname>Dymo</surname>
+<affiliation>
+<address><email>cloudtemple@mksat.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Phil</firstname>
+<surname>Thompson</surname>
+<affiliation>
+<address><email>phil@river-bank.demon.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+<copyright>
+<year>2000</year>
+<year>2001</year>
+<holder>Phil Thompson</holder>
+</copyright>
+<copyright>
+<year>2002</year>
+<holder>Alexander Dymo</holder>
+</copyright>
+<!--&underFDL;-->
+<legalnotice>&FDLNotice;</legalnotice>
+
+<date>2002-06-11</date>
+<releaseinfo>1.02.00</releaseinfo>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&kugar; is a template based &XML; report engine.
+&kudesigner; is a flexible &GUI; report template designer for &kugar; report engine.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>kdeutils</keyword>
+<keyword>kugar</keyword>
+<keyword>kudesigner</keyword>
+<keyword>report</keyword>
+<keyword>generator</keyword>
+<keyword>engine</keyword>
+<keyword>designer</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<para> &kugar; is a report creation tool for &Qt; and &kde;. It includes
+a &GUI; report template designer, a report engine, a &konqueror; part
+for easy report preview and a set of examples.</para>
+
+<para> The &kudesigner; is a report template creation tool
+for the &kugar; report engine. The &kugar; report engine uses an &XML;
+based report template file (which can be created by hand or with
+&kudesigner;) and a data file (also in &XML; format) to create
+reports. To get more information on &kudesigner; refer to the <link
+linkend="designer-manual">Report Template Designer Manual</link>.
+</para>
+
+<para> See <link linkend="template-dtd"> The KugarTemplate Document
+Type Definition</link> for an overview of the template's
+<acronym>DTD</acronym> (file format), <link
+linkend="kugardata-dtd">KugarData Document Type Definition</link> and
+<link linkend="tutorial">Tutorial</link> for a step-by-step explanation
+on how reports can be created.  </para>
+
+<para> Programmers should also refer to the <link
+linkend="prog-guide">Programmer's guide</link> to find information
+about using &kugar; in their own applications.</para>
+</chapter>
+
+&tutorial;
+
+&starting;
+
+&designermanual;
+
+&progguide; 
+
+<chapter>
+<title>Credits and License</title>
+
+<para>
+&kugar;
+</para>
+
+<para>
+Copyright 2000 Mutiny Bay Software
+</para>
+<para>
+Copyright 2000, 2001, Phil Thompson
+</para>
+<para>
+Copyright 2002 Alexander Dymo
+</para>
+
+<para>Portions of the documentation Copyright 2000, 2001 Phil Thompson
+and Copyright 2002 Alexander Dymo</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+&underFDL;
+&underGPL;
+
+</chapter>
+
+<appendix id="document-structure">
+<title>Document Structure</title>
+&templatedtd;
+&template;
+&templateelements;
+&datadtd;
+&dataelements;
+</appendix>
+
+<appendix id="installation">
+<title>Installation</title>
+
+&install.intro.documentation;
+&install.compile.documentation;
+</appendix>
+
+</book>

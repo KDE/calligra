@@ -1,0 +1,60 @@
+<!-- If you want to validate or edit this document separately, uncomment
+this prolog
+
+<?xml version="1.0" ?>
+<!DOCTYPE appendix PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+
+-->
+<chapter id="starting">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Alexander</firstname>
+<surname>Dymo</surname>
+<affiliation>
+<address><email>cloudtemple@mksat.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Phil</firstname>
+<surname>Thompson</surname>
+<affiliation>
+<address><email>phil@river-bank.demon.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Starting &kugar; and &kudesigner;</title>
+<para>
+The &kugar; program takes two commandline arguments:
+</para>
+
+<cmdsynopsis>
+<command>kugar</command>
+<group>
+<option>-d <replaceable>Kugar data file</replaceable></option>
+</group>
+<group>
+<option>-r <replaceable>Kugar template file</replaceable></option>
+</group>
+</cmdsynopsis>
+
+<para>
+For example, <userinput><command>kugar</command> <option>-d</option>
+<parameter>sample1.kdf</parameter> <option>-r</option>
+<parameter>sample1.ktf</parameter></userinput>
+</para>
+
+<para>
+The &kudesigner; program can be started with no arguments
+or with a report template file name as an argument:
+</para>
+<cmdsynopsis>
+<command>kudesigner</command>
+<group>
+<replaceable>template.ktf</replaceable>
+</group>
+</cmdsynopsis>
+
+</chapter>

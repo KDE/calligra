@@ -1,0 +1,364 @@
+<!-- If you want to validate or edit this document separately, uncomment
+this prolog
+
+<?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+
+-->
+<chapter id="designer-manual">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Alexander</firstname>
+<surname>Dymo</surname>
+<affiliation>
+<address><email>cloudtemple@mksat.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Phil</firstname>
+<surname>Thompson</surname>
+<affiliation>
+<address><email>phil@river-bank.demon.co.uk</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Report Template Designer Manual</title>
+
+<para>&kudesigner; allows interactive creation and modification of
+report templates, and placement of report sections and section items onto a
+report.</para>
+
+<para> &kudesigner; is a <acronym>WYSIWYG</acronym>
+application. <guilabel>Report page size</guilabel> defines the report
+dimensions on the screen. At the present moment, the scale is set
+to 100&percnt; automatically and cannot be changed.</para>
+
+<itemizedlist>
+<title>Every report template may contain the following report sections:</title>
+<listitem><para>Report Header</para></listitem>
+<listitem><para>Page Header</para></listitem>
+<listitem><para>Detail Header</para></listitem>
+<listitem><para>Detail</para></listitem>
+<listitem><para>Detail Footer</para></listitem>
+<listitem><para>Page Footer</para></listitem>
+<listitem><para>Report Footer</para></listitem>
+</itemizedlist>
+
+<itemizedlist>
+<title>Report sections may contain the following report items:</title>
+<listitem><para>Label</para></listitem>
+<listitem><para>Field</para></listitem>
+<listitem><para>Calculated Field</para></listitem>
+<listitem><para>Special Field</para></listitem>
+<listitem><para>Line</para></listitem>
+</itemizedlist>
+
+<para>Report sections and items can be placed onto the report template by
+using menus or toolbars.</para>
+
+<para>Every element, such as a report template, a report section or an
+item has its own properties. These properties define geometrical,
+textual and any other parameters. Every time an element is placed, a set
+of default properties is applied. For example, when
+<guilabel>Label</guilabel> is placed, its Text property value is
+set to <quote>Text</quote>.</para>
+
+<para>To change properties, use the <guilabel>Report Item
+Options</guilabel> dialog.  This dialog can be called by &RMB; clicking
+on an item or with an <guilabel>Edit Properties</guilabel> button in the
+<guilabel>Edit Toolbar</guilabel>.
+  See screenshot below (properties for a Field item):
+</para>
+
+<para>
+To delete an item, &MMB; click on it or use the <guilabel>Delete</guilabel> button in the
+<guilabel>Edit Toolbar</guilabel>.
+</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="props.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase><guilabel>New Report</guilabel> dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<title>The &kudesigner; menu reference</title>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;
+<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem>
+<para><action>Bring up</action> the <guilabel>New Report</guilabel> dialog
+to create a new report template.</para>
+<para>
+As seen on the screenshot, the report page size, orientation and margins
+must be set before the report can be created.
+</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="file_new.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase><interface>New Report</interface> dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo action="simul">&Ctrl;
+<keycap>O</keycap>
+</keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open</action> the previously saved report template.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Open Recent</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Display</action> a list of recently opened templates.
+Select a file to open it.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo action="simul">&Ctrl;
+<keycap>S</keycap>
+</keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Save</action> the current report template into a text file in &XML; format.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Save As...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Save</action> the current report template into a file and give it another name.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo action="simul">&Ctrl;
+<keycap>W</keycap>
+</keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Close</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Close</action> the current report template.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo action="simul">&Ctrl;
+<keycap>P</keycap>
+</keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Print</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Print...</action> the current report template as text in &XML; format.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut><keycombo action="simul">&Ctrl;
+<keycap>Q</keycap>
+</keycombo></shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quit</action> the program.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Clear Selection</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Cancel</action> any edit action, so no properties
+will be edited or items deleted.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Edit Properties</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Edit</action> properties of the selected item.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Delete</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Delete</action> the selected item.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Sections</guimenu>
+<guimenuitem>Report Header</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Place the Report Header</action> section onto the report template.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Sections</guimenu>
+<guimenuitem>Page Header</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Place the Page Header</action> section onto the report template.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Sections</guimenu>
+<guimenuitem>Detail Header</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Place the Detail Header</action> section onto the report template.</para>
+<para>Before placing the section, the <guilabel>Add Detail Header</guilabel> dialog will be shown to
+specify the detail level. The Detail header will be added to the detail section of the given level.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="add_detail_header.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase><guilabel>Add Detail Header</guilabel> dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Sections</guimenu>
+<guimenuitem>Detail</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Place the Detail</action> section onto the report template.</para>
+<para>Before placing the section, the <guilabel>Add Detail</guilabel> dialog will be shown to
+specify the detail level.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="add_detail.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase><interface>Add Detail</interface> dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Sections</guimenu>
+<guimenuitem>Detail Footer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Place the Detail Footer</action> section onto the report template.</para>
+<para>Before placing the section, the <guilabel>Add Detail Footer</guilabel> dialog will be shown to
+specify the detail level. The Detail footer will be added to the detail section of the given level.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="add_detail_footer.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase><guilabel>Add Detail Footer</guilabel> dialog</phrase>
+</textobject>
+</mediaobject>
+</screenshot>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Sections</guimenu>
+<guimenuitem>Page Footer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Place the Page Footer</action> section onto the report template.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Sections</guimenu>
+<guimenuitem>Report Footer</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Place the Report Footer</action> section onto the report template.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Items</guimenu>
+<guimenuitem>Clear Selection</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Clear</action> item selection, so no report item will be added to the section.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Items</guimenu>
+<guimenuitem>Label</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Place the Label</action> element onto the section.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Items</guimenu>
+<guimenuitem>Field</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Place the Field</action> element onto the section.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Items</guimenu>
+<guimenuitem>Calculated Field</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Place the Calculated Field</action> element onto the section.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Items</guimenu>
+<guimenuitem>Special Field</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Place the Special Field</action> element onto the section.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Items</guimenu>
+<guimenuitem>Line</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Place the Line</action> element onto the section.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</chapter>
