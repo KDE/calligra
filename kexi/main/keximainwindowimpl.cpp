@@ -3718,21 +3718,6 @@ void KexiMainWindowImpl::slotOptionsEnableForms(bool show, bool noMessage)
 {
 	Q_UNUSED(noMessage);
 	Kexi::tempShowForms() = show;
-#if 0
-	d->config->setGroup("Unfinished");
-	d->config->writeEntry("EnableForms", Kexi::tempShowForms());
-	if (noMessage)
-		return;
-	QString note = futureI18n("Please note that forms are currently unstable functionality, provided <u>only for your preview</u>.");
-	if (show) {
-		KMessageBox::information(this,
-			"<p>"+futureI18n("Forms will be available after restarting Kexi application.")+"</p>"+note+"<p>");
-	}
-	else {
-		KMessageBox::information(this,
-			"<p>"+futureI18n("Forms will be hidden after restarting Kexi application.")+"</p><p>"+note+"<p>");
-	}
-#endif
 }
 
 bool KexiMainWindowImpl::inFinalMode() const
