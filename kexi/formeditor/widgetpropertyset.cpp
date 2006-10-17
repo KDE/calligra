@@ -187,7 +187,7 @@ WidgetPropertySet::isUndoing()
 /////////////// Functions related to adding widgets /////////////////////////////////////
 
 void
-WidgetPropertySet::setSelectedWidget(QWidget *w, bool add, bool forceReload)
+WidgetPropertySet::setSelectedWidget(QWidget *w, bool add, bool forceReload, bool moreWillBeSelected)
 {
 	if(!w) {
 		clearSet();
@@ -219,7 +219,8 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add, bool forceReload)
 		connect(w, SIGNAL(destroyed()), this, SLOT(slotWidgetDestroyed()));
 	}
 
-	KFormDesigner::FormManager::self()->showPropertySet(this, true/*force*/, prevProperty);
+	if (!moreWillBeSelected)
+		KFormDesigner::FormManager::self()->showPropertySet(this, true/*force*/, prevProperty);
 }
 
 void
@@ -250,6 +251,7 @@ WidgetPropertySet::addWidget(QWidget *w)
 
 	if (d->widgets.count()>=2) {
 		//second widget, update metainfo
+		d->set["this:className"].setValue("special:multiple");
 		d->set["this:classString"].setValue(
 			i18n("Multiple Widgets") + QString(" (%1)").arg(d->widgets.count()) );
 		d->set["this:iconName"].setValue("multiple_obj");

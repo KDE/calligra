@@ -327,8 +327,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 If \a add is true, the formerly selected widget is still selected, 
 		 and the new one is just added. If false, \a selected replace the actually selected widget.
 		 The form widget is always selected alone.
-		 */
-		void setSelectedWidget(QWidget *selected, bool add=false, bool dontRaise=false);
+		 \a moreWillBeSelected indicates whether more widgets will be selected soon
+		 (so for multiselection we should not update the property pane before the last widget is selected) */
+		void setSelectedWidget(QWidget *selected, bool add=false, bool dontRaise=false,
+			bool moreWillBeSelected = false);
 
 		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list
 		and its resizeHandle is removed. */
@@ -358,11 +360,11 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		void slotFormRestored();
 
 	signals:
-		/*! This signal is emitted when user selects a new widget, to update both
-		   Property Editor and ObjectTreeView.
-		   \a w is the newly selected widget.
+		/*! This signal is emitted by setSelectedWidget() when user selects a new widget, 
+		 to update both Property Editor and ObjectTreeView.
+		 \a w is the newly selected widget.
 		  */
-		void selectionChanged(QWidget *w, bool add);
+		void selectionChanged(QWidget *w, bool add, bool moreWillBeSelected = false);
 
 		/*! This signal is emitted when a new widget is created, to update ObjectTreeView.
 		 \a it is the ObjectTreeItem representing this new widget.

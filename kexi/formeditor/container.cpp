@@ -544,7 +544,7 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
 }
 
 void
-Container::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
+Container::setSelectedWidget(QWidget *w, bool add, bool dontRaise, bool moreWillBeSelected)
 {
 	if (w)
 		kDebug() << "slotSelectionChanged " << w->name()<< endl;
@@ -555,7 +555,7 @@ Container::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
 		return;
 	}
 
-	m_form->setSelectedWidget(w, add, dontRaise);
+	m_form->setSelectedWidget(w, add, dontRaise, moreWillBeSelected);
 }
 
 void
@@ -1002,16 +1002,22 @@ Container::drawSelectionRect(QMouseEvent *mev)
 	int boty = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
 	QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));
 
-	QWidget *w=0;
 	setSelectedWidget(m_container, false);
+	QWidget *widgetToSelect = 0;
 	// We check which widgets are in the rect and select them
 	for(ObjectTreeItem *item = m_tree->children()->first(); item; item = m_tree->children()->next())
 	{
-		w = item->widget();
-		if(!w) continue;
-		if(w->geometry().intersects(r) && w != m_container)
-			setSelectedWidget(w, true);
+		QWidget *w = item->widget();
+		if(!w)
+			continue;
+		if(w->geometry().intersects(r) && w != m_container) {
+			if (widgetToSelect)
+				setSelectedWidget(widgetToSelect, true/*add*/, false/*raise*/, true/*moreWillBeSelected*/);
+			widgetToSelect = w; //select later
+		}
 	}
+	if (widgetToSelect) //the last one left
+		setSelectedWidget(widgetToSelect, true/*add*/, false/*raise*/, false/*!moreWillBeSelected*/);
 
 	m_insertRect = QRect();
 	m_state = DoingNothing;

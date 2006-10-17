@@ -632,10 +632,12 @@ FormManager::initForm(Form *form)
 
 	m_active = form;
 
-	connect(form, SIGNAL(selectionChanged(QWidget*, bool)), m_propSet, SLOT(setSelectedWidget(QWidget*, bool)));
+	connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)), 
+		m_propSet, SLOT(setSelectedWidgetWithoutReload(QWidget*, bool, bool)));
 	if(m_treeview)
 	{
-		connect(form, SIGNAL(selectionChanged(QWidget*, bool)), m_treeview, SLOT(setSelectedWidget(QWidget*, bool)));
+		connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)), 
+			m_treeview, SLOT(setSelectedWidget(QWidget*, bool)));
 		connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
 		connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
 	}
@@ -1382,8 +1384,12 @@ FormManager::selectAll()
 		return;
 
 	activeForm()->selectFormWidget();
-	for(ObjectTreeItem *it = activeForm()->objectTree()->children()->first(); it; it = activeForm()->objectTree()->children()->next())
-		activeForm()->setSelectedWidget(it->widget(), true);
+	uint count = activeForm()->objectTree()->children()->count();
+	for(ObjectTreeItem *it = activeForm()->objectTree()->children()->first(); it; 
+		it = activeForm()->objectTree()->children()->next(), count--)
+	{
+		activeForm()->setSelectedWidget(it->widget(), /*add*/true, /*raise*/false, /*moreWillBeSelected*/count>1);
+	}
 }
 
 void

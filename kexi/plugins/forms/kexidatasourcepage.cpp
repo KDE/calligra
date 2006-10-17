@@ -39,6 +39,7 @@
 #include <widget/kexidatasourcecombobox.h>
 #include <widget/kexifieldlistview.h>
 #include <widget/kexifieldcombobox.h>
+#include <widget/kexismalltoolbutton.h>
 #include <kexidb/connection.h>
 #include <kexiproject.h>
 
@@ -89,12 +90,8 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_widgetDSLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(m_widgetDSLabel);
 
-	m_clearWidgetDSButton = new QToolButton(contents, "clearWidgetDSButton");
-	m_clearWidgetDSButton->setIconSet(SmallIconSet("clear_left"));
+	m_clearWidgetDSButton = new KexiSmallToolButton(contents, QString::null, "clear_left", "clearWidgetDSButton");
 	m_clearWidgetDSButton->setMinimumHeight(m_widgetDSLabel->minimumHeight());
-	m_clearWidgetDSButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-	m_clearWidgetDSButton->setAutoRaise(true);
-	m_clearWidgetDSButton->setPaletteBackgroundColor(palette().active().background());
 	m_clearWidgetDSButton->setToolTip( i18n("Clear widget's data source"));
 	hlyr->addWidget(m_clearWidgetDSButton);
 	connect(m_clearWidgetDSButton, SIGNAL(clicked()), this, SLOT(clearWidgetDataSourceSelection()));
@@ -103,10 +100,10 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_widgetDSLabel->setBuddy(m_sourceFieldCombo);
 	contentsVlyr->addWidget(m_sourceFieldCombo);
 
-	m_dataSourceSeparator = new Q3Frame(contents);
+/*	m_dataSourceSeparator = new Q3Frame(contents);
 	m_dataSourceSeparator->setFrameShape(Q3Frame::HLine);
 	m_dataSourceSeparator->setFrameShadow(Q3Frame::Sunken);
-	contentsVlyr->addWidget(m_dataSourceSeparator);
+	contentsVlyr->addWidget(m_dataSourceSeparator);*/
 
 	contentsVlyr->addSpacing(8);
 
@@ -119,22 +116,14 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_dataSourceLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(m_dataSourceLabel);
 
-	m_gotoButton = new QToolButton(contents, "gotoButton");
-	m_gotoButton->setIconSet(SmallIconSet("goto"));
+	m_gotoButton = new KexiSmallToolButton(contents, QString::null, "goto", "gotoButton");
 	m_gotoButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
-	m_gotoButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-	m_gotoButton->setAutoRaise(true);
-	m_gotoButton->setPaletteBackgroundColor(palette().active().background());
 	m_gotoButton->setToolTip( i18n("Go to selected form's data source"));
 	hlyr->addWidget(m_gotoButton);
 	connect(m_gotoButton, SIGNAL(clicked()), this, SLOT(slotGotoSelected()));
 
-	m_clearDSButton = new QToolButton(contents, "clearDSButton");
-	m_clearDSButton->setIconSet(SmallIconSet("clear_left"));
+	m_clearDSButton = new KexiSmallToolButton(contents, QString::null, "clear_left", "clearDSButton");
 	m_clearDSButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
-	m_clearDSButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-	m_clearDSButton->setAutoRaise(true);
-	m_clearDSButton->setPaletteBackgroundColor(palette().active().background());
 	m_clearDSButton->setToolTip( i18n("Clear form's data source"));
 	hlyr->addWidget(m_clearDSButton);
 	connect(m_clearDSButton, SIGNAL(clicked()), this, SLOT(clearDataSourceSelection()));
@@ -189,16 +178,11 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_availableFieldsLabel->setMinimumHeight(IconSize(K3Icon::Small));
 	hlyr->addWidget(m_availableFieldsLabel);
 
-	m_addField = new QToolButton(contents, "addFieldButton");
-	m_addField->setFocusPolicy(StrongFocus);
-	m_addField->setUsesTextLabel(true);
-	m_addField->setTextPosition(QToolButton::BesideIcon);
-	m_addField->setTextLabel(i18n("Insert selected field into form", "Insert"));
-	m_addField->setIconSet(SmallIconSet("add_field"));
+	m_addField = new KexiSmallToolButton(contents, i18n("Insert selected field into form", "Insert"), 
+		"add_field", "addFieldButton");
 	m_addField->setMinimumHeight(m_availableFieldsLabel->minimumHeight());
-	m_addField->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-	m_addField->setAutoRaise(true);
-	m_addField->setPaletteBackgroundColor(palette().active().background());
+//	m_addField->setTextPosition(QToolButton::Right);
+	m_addField->setFocusPolicy(StrongFocus);
 	m_addField->setToolTip( i18n("Insert selected fields into form"));
 	hlyr->addWidget(m_addField);
 	connect(m_addField, SIGNAL(clicked()), this, SLOT(slotInsertSelectedFields()));
@@ -268,7 +252,7 @@ void KexiDataSourcePage::slotGotoSelected()
 	Q3CString mime = m_dataSourceCombo->selectedMimeType();
 	if (mime=="kexi/table" || mime=="kexi/query") {
 		if (m_dataSourceCombo->isSelectionValid())
-			emit jumpToObjectRequested(mime, m_dataSourceCombo->selectedName());
+			emit jumpToObjectRequested(mime, m_dataSourceCombo->selectedName().latin1());
 	}
 }
 
@@ -384,8 +368,11 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 	if (!objectName.isEmpty() && objectName == m_currentObjectName)
 		return; //the same object
 	m_currentObjectName = objectName;
+
 	Q3CString objectClassName;
-	if (propertySet) {
+	if (propertySet && propertySet->contains("this:className"))
+		objectClassName = (*propertySet)["this:className"].value().toCString();
+/*moved	if (propertySet) {
 		Q3CString iconName;
 		QString objectClassString;
 		if (propertySet->contains("this:iconName"))
@@ -397,7 +384,9 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 		m_objectInfoLabel->setObjectClassName(objectClassString);
 		if (propertySet->contains("this:className"))
 			objectClassName = (*propertySet)["this:className"].value().toCString();
-	}
+	}*/
+	KexiPropertyEditorView::updateInfoLabelForPropertySet(
+		m_objectInfoLabel, propertySet);
 
 	const bool isForm = objectClassName=="KexiDBForm";
 //	kDebug() << "objectClassName=" << objectClassName << endl;
@@ -412,7 +401,8 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 //	}
 //	else {
 
-	const bool hasDataSourceProperty = propertySet && propertySet->contains("dataSource");
+	const bool multipleSelection = objectClassName=="special:multiple";
+	const bool hasDataSourceProperty = propertySet && propertySet->contains("dataSource") && !multipleSelection;
 
 	if (!isForm) {
 		//this is a widget
@@ -427,25 +417,25 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 			m_widgetDSLabel->show();
 			m_clearWidgetDSButton->show();
 			m_sourceFieldCombo->show();
-			m_dataSourceSeparator->hide();
+//			m_dataSourceSeparator->hide();
 			updateSourceFieldWidgetsAvailability();
 		}
 	}
 
 	if (isForm) {
 		m_noDataSourceAvailableLabel->hide();
-		m_dataSourceSeparator->hide();
+//		m_dataSourceSeparator->hide();
 	}
 	else if (!hasDataSourceProperty) {
-		if (objectClassName=="special:multiple")
+		if (multipleSelection)
 			m_noDataSourceAvailableLabel->setText(m_noDataSourceAvailableMultiText);
 		else
 			m_noDataSourceAvailableLabel->setText(m_noDataSourceAvailableSingleText);
 		m_noDataSourceAvailableLabel->show();
-		m_dataSourceSeparator->show();
+//		m_dataSourceSeparator->show();
 		//make 'No data source could be assigned' label's height the same as the 'source field' combo+label
 		m_noDataSourceAvailableLabel->setMinimumHeight(m_widgetDSLabel->height()
-			+ m_sourceFieldCombo->height()-m_dataSourceSeparator->height());
+			+ m_sourceFieldCombo->height()/*-m_dataSourceSeparator->height()*/);
 		m_sourceFieldCombo->setCurrentText("");
 	}
 

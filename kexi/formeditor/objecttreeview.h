@@ -62,7 +62,8 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public K3ListViewItem
 };
 
 /*! @short A graphical view of Form's ObjectTree.
- This is a K3ListView which represents an item for each widget in the form. The actually selected widget is written bold
+ This is a K3ListView which represents an item for each widget in the form. 
+ The actually selected widget is written bold
  and selected. Clicking on a list item selects the corresponding widget in the Form.
  */
 class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
@@ -75,8 +76,9 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
 
 		virtual QSize sizeHint() const;
 
-		/*! Sets \a form as the current Form in the list. The list will automatically be filled with an item for each widget
-		    in the Form, and selection will be synced. Nothing happens if \a form is already the current Form.
+		/*! Sets \a form as the current Form in the list. The list will automatically 
+		 be filled with an item for each widget in the Form, and selection will be synced. 
+		 Nothing happens if \a form is already the current Form.
 		 */
 		void setForm(Form *form);
 
@@ -84,7 +86,8 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
 		QString iconNameForClass(const Q3CString &classname);
 
 	public slots:
-		/*! Sets the widget \a w as selected item, so it will be written bold. It is added to current selection if \a add is true. */
+		/*! Sets the widget \a w as selected item, so it will be written bold. 
+		 It is added to current selection if \a add is true. */
 		void setSelectedWidget(QWidget *w, bool add=false);
 
 		/*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
@@ -97,7 +100,8 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
 		void renameItem(const Q3CString &oldname, const Q3CString &newname);
 
 	protected slots:
-		/*! This slot is called when the user right-click a list item. The widget context menu is shown, as inisde the Form. */
+		/*! This slot is called when the user right-click a list item. 
+		 The widget context menu is shown, as inisde the Form. */
 		void displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint &p);
 
 		void slotColumnSizeChanged(int);
