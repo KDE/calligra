@@ -80,7 +80,7 @@ class KEXI_DB_EXPORT LookupFieldSchema
 				void setType(Type type) { m_type = type; }
 
 				/*! @return row source type name. @see setTypeByName() */
-				QString LookupFieldSchema::RowSource::typeName() const;
+				QString RowSource::typeName() const;
 
 				/*! Sets row source type by name using \a typeName. Accepted (cast sensitive) 
 				 names are "table", "query", "sql", "valuelist", "fieldlist".
