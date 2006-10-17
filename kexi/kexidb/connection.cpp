@@ -1125,8 +1125,9 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 				// Now we also need to fetch "visible" value from the lookup table, not only the value of binding.
 				// -> build LEFT OUTER JOIN clause for this purpose (LEFT, not INNER because the binding can be broken)
 				// "LEFT OUTER JOIN lookupTable ON thisTable.thisField=lookupTable.boundField"
-				if (lookupFieldSchema->rowSourceType()==LookupFieldSchema::Table) {
-					TableSchema *lookupTable = querySchema.connection()->tableSchema( lookupFieldSchema->rowSource() );
+				LookupFieldSchema::RowSource& rowSource = lookupFieldSchema->rowSource();
+				if (rowSource.type()==LookupFieldSchema::RowSource::Table) {
+					TableSchema *lookupTable = querySchema.connection()->tableSchema( rowSource.name() );
 					Field *visibleField = 0;
 					Field *boundField = 0;
 					if (lookupTable && lookupFieldSchema->boundColumn()>=0 
@@ -2390,26 +2391,54 @@ int Connection::resultCount(const QString& sql)
 	return count;
 }
 
-//! @internal used by storeExtendedTableSchemaData()
+//! Used by addFieldPropertyToExtendedTableSchemaData()
+static void createExtendedTableSchemaMainElementIfNeeded(
+	QDomDocument& doc, QDomElement& extendedTableSchemaMainEl,
+	bool& extendedTableSchemaStringIsEmpty)
+{
+	if (!extendedTableSchemaStringIsEmpty)
+		return;
+	//init document
+	extendedTableSchemaMainEl = doc.createElement("EXTENDED_TABLE_SCHEMA");
+	doc.appendChild( extendedTableSchemaMainEl );
+	extendedTableSchemaMainEl.setAttribute("version", QString::number(KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION));
+	extendedTableSchemaStringIsEmpty = false;
+}
+
+//! Used by addFieldPropertyToExtendedTableSchemaData()
+static void createExtendedTableSchemaFieldElementIfNeeded(QDomDocument& doc, 
+	QDomElement& extendedTableSchemaMainEl, const QString& fieldName, QDomElement& extendedTableSchemaFieldEl)
+{
+	if (!extendedTableSchemaFieldEl.isNull())
+		return;
+	extendedTableSchemaFieldEl = doc.createElement("field");
+	extendedTableSchemaMainEl.appendChild( extendedTableSchemaFieldEl );
+	extendedTableSchemaFieldEl.setAttribute("name", fieldName);
+}
+
+/*! @internal used by storeExtendedTableSchemaData()
+ Creates DOM node for \a propertyName and \a propertyValue.
+ Creates enclosing EXTENDED_TABLE_SCHEMA element if EXTENDED_TABLE_SCHEMA is true.
+ Updates extendedTableSchemaStringIsEmpty and extendedTableSchemaMainEl afterwards. 
+ If extendedTableSchemaFieldEl is null, creates <field> element (with optional 
+ "custom" attribute is \a custom is false). */
 static void addFieldPropertyToExtendedTableSchemaData( 
 	Field *f, const char* propertyName, const QVariant& propertyValue, 
 	QDomDocument& doc, QDomElement& extendedTableSchemaMainEl, 
+	QDomElement& extendedTableSchemaFieldEl,
 	bool& extendedTableSchemaStringIsEmpty,
 	bool custom = false )
 {
-	if (extendedTableSchemaStringIsEmpty) {//init document
-		extendedTableSchemaMainEl = doc.createElement("EXTENDED_TABLE_SCHEMA");
-		doc.appendChild( extendedTableSchemaMainEl );
-		extendedTableSchemaMainEl.setAttribute("version", QString::number(KEXIDB_EXTENDED_TABLE_SCHEMA_VERSION));
-		extendedTableSchemaStringIsEmpty = false;
-	}
-	QDomElement extendedTableSchemaFieldEl = doc.createElement("field");
-	extendedTableSchemaMainEl.appendChild( extendedTableSchemaFieldEl );
-	extendedTableSchemaFieldEl.setAttribute("name", f->name());
+	createExtendedTableSchemaMainElementIfNeeded(doc,
+		extendedTableSchemaMainEl, extendedTableSchemaStringIsEmpty);
+	createExtendedTableSchemaFieldElementIfNeeded(
+		doc, extendedTableSchemaMainEl, f->name(), extendedTableSchemaFieldEl);
+
+	//create <property>
 	QDomElement extendedTableSchemaFieldPropertyEl = doc.createElement("property");
+	extendedTableSchemaFieldEl.appendChild( extendedTableSchemaFieldPropertyEl );
 	if (custom)
 		extendedTableSchemaFieldPropertyEl.setAttribute("custom", "true");
-	extendedTableSchemaFieldEl.appendChild( extendedTableSchemaFieldPropertyEl );
 	extendedTableSchemaFieldPropertyEl.setAttribute("name", propertyName);
 	QDomElement extendedTableSchemaFieldPropertyValueEl;
 	switch (propertyValue.type()) {
@@ -2440,7 +2469,7 @@ static void addFieldPropertyToExtendedTableSchemaData(
 
 bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 {
-	//todo: future: save in older versions if neeed
+//! @todo future: save in older versions if neeed
 	QDomDocument doc("EXTENDED_TABLE_SCHEMA");
 	QDomElement extendedTableSchemaMainEl;
 	bool extendedTableSchemaStringIsEmpty = true;
@@ -2448,10 +2477,12 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 	//for each field:
 	Field *f;
 	for (Field::ListIterator it( *tableSchema.fields() ); (f = it.current()); ++it) {
-		if (f->visibleDecimalPlaces()>=0 && KexiDB::supportsVisibleDecimalPlacesProperty(f->type())) {
+		QDomElement extendedTableSchemaFieldEl;
+		if (f->visibleDecimalPlaces()>=0/*nondefault*/ && KexiDB::supportsVisibleDecimalPlacesProperty(f->type())) {
 			addFieldPropertyToExtendedTableSchemaData( 
 				f, "visibleDecimalPlaces", f->visibleDecimalPlaces(), doc, 
-				extendedTableSchemaMainEl, extendedTableSchemaStringIsEmpty );
+				extendedTableSchemaMainEl, extendedTableSchemaFieldEl, 
+				extendedTableSchemaStringIsEmpty );
 		}
 		// boolean field with "not null"
 
@@ -2460,7 +2491,17 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 		foreach( Field::CustomPropertiesMap::ConstIterator, itCustom, customProperties ) {
 			addFieldPropertyToExtendedTableSchemaData( 
 				f, itCustom.key(), itCustom.data(), doc, 
-				extendedTableSchemaMainEl, extendedTableSchemaStringIsEmpty, /*custom*/true );
+				extendedTableSchemaMainEl, extendedTableSchemaFieldEl, extendedTableSchemaStringIsEmpty,
+				/*custom*/true );
+		}
+		// save lookup table specification, if present
+		LookupFieldSchema *lookupFieldSchema = tableSchema.lookupFieldSchema( *f );
+		if (lookupFieldSchema) {
+			createExtendedTableSchemaMainElementIfNeeded(doc, extendedTableSchemaMainEl, 
+				extendedTableSchemaStringIsEmpty);
+			createExtendedTableSchemaFieldElementIfNeeded(
+				doc, extendedTableSchemaMainEl, f->name(), extendedTableSchemaFieldEl);
+			LookupFieldSchema::saveToDom(*lookupFieldSchema, doc, extendedTableSchemaFieldEl);
 		}
 	}
 
@@ -2473,11 +2514,10 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 			return false;
 	}
 	else {
-		QString docString( doc.toString(1) );
 #ifdef KEXI_DEBUG_GUI
-		KexiUtils::addAlterTableActionDebug(QString("** Extended table schema set to:\n")+docString);
+		KexiUtils::addAlterTableActionDebug(QString("** Extended table schema set to:\n")+doc.toString(4));
 #endif
-		if (!storeDataBlock( tableSchema.id(), docString, "extended_schema" ))
+		if (!storeDataBlock( tableSchema.id(), doc.toString(1), "extended_schema" ))
 			return false;
 	}
 	return true;
@@ -2507,8 +2547,8 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 //<temp. for LookupFieldSchema tests>
 	if (tableSchema.name()=="cars") {
 		LookupFieldSchema *lookupFieldSchema = new LookupFieldSchema();
-		lookupFieldSchema->setRowSourceType(LookupFieldSchema::Table);
-		lookupFieldSchema->setRowSource("persons");
+		lookupFieldSchema->rowSource().setType(LookupFieldSchema::RowSource::Table);
+		lookupFieldSchema->rowSource().setName("persons");
 		lookupFieldSchema->setBoundColumn(0); //id
 		lookupFieldSchema->setVisibleColumn(3); //surname
 		tableSchema.setLookupFieldSchema( "owner", lookupFieldSchema );
@@ -2553,19 +2593,19 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 						if (propEl.attribute("custom")=="true") {
 							//custom property
 							f->setCustomProperty(propertyName, 
-								KexiDB::loadPropertyValueFromXML( propEl.firstChild() ));
+								KexiDB::loadPropertyValueFromDom( propEl.firstChild() ));
 						}
 						else if (propertyName == "visibleDecimalPlaces"
 							&& KexiDB::supportsVisibleDecimalPlacesProperty(f->type()))
 						{
-							intValue = KexiDB::loadIntPropertyValueFromXML( propEl.firstChild(), &ok );
+							intValue = KexiDB::loadIntPropertyValueFromDom( propEl.firstChild(), &ok );
 							if (ok)
 								f->setVisibleDecimalPlaces(intValue);
 						}
 //! @todo more properties...
 					}
 					else if (propEl.tagName()=="lookup-column") {
-						LookupFieldSchema *lookupFieldSchema = LookupFieldSchema::loadFromXML(propEl);
+						LookupFieldSchema *lookupFieldSchema = LookupFieldSchema::loadFromDom(propEl);
 						tableSchema.setLookupFieldSchema( f->name(), lookupFieldSchema );
 					}
 				}

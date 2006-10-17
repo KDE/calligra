@@ -28,6 +28,8 @@
 #include <kexidb/driver.h>
 
 class QDomNode;
+class QDomElement;
+class QDomDocument;
 
 namespace KexiDB
 {
@@ -319,13 +321,30 @@ namespace KexiDB
 	 notation: <number>int</number> or <bool>bool</bool>, etc. Supported types are
 	 "string", "cstring", "bool", "number". For invalid values null QVariant is returned.
 	 You can check the validity of the returned value using QVariant::type(). */
-	KEXI_DB_EXPORT QVariant loadPropertyValueFromXML( const QDomNode& node );
+	KEXI_DB_EXPORT QVariant loadPropertyValueFromDom( const QDomNode& node );
 
-	/*! Convenience version of loadPropertyValueFromXML(). \return int value. */
-	KEXI_DB_EXPORT int loadIntPropertyValueFromXML( const QDomNode& node, bool* ok );
+	/*! Convenience version of loadPropertyValueFromDom(). \return int value. */
+	KEXI_DB_EXPORT int loadIntPropertyValueFromDom( const QDomNode& node, bool* ok );
 
-	/*! Convenience version of loadPropertyValueFromXML(). \return QString value. */
-	KEXI_DB_EXPORT QString loadStringPropertyValueFromXML( const QDomNode& node, bool* ok );
+	/*! Convenience version of loadPropertyValueFromDom(). \return QString value. */
+	KEXI_DB_EXPORT QString loadStringPropertyValueFromDom( const QDomNode& node, bool* ok );
+
+	/*! Saves integer element for value \a value to \a doc document within parent element
+	 \a parentEl. The value will be enclosed in "number" element and "elementName" element.
+	 Example: saveNumberElementToDom(doc, parentEl, "height", 15) will create 
+	 \code
+	  <height><number>15</number></height>
+	 \endcode
+	 \return the reference to element created with tag elementName. */
+	QDomElement saveNumberElementToDom(QDomDocument& doc, QDomElement& parentEl, 
+		const QString& elementName, int value);
+
+	/*! Saves boolean element for value \a value to \a doc document within parent element
+	 \a parentEl. Like saveNumberElementToDom() but creates "bool" tags. True/false values will be
+	 saved as "true"/"false" strings. 
+	 \return the reference to element created with tag elementName. */
+	QDomElement saveBooleanElementToDom(QDomDocument& doc, QDomElement& parentEl, 
+		const QString& elementName, bool value);
 
 	/*! \return an empty value that can be set for a database field of type \a type having 
 	 "null" property set. Empty string is returned for text type, 0 for integer 
