@@ -4055,10 +4055,9 @@ void Canvas::updateCellWindow()
     }
     // delete the unused CellViews
     for ( int col = oldLeft; col <= oldRight; ++col )
-        if ( col < newLeft || col > newRight || sheet != d->cellWindowSheet )
-            for ( int row = oldTop; row <= oldBottom; ++row )
-                if ( row < newTop || row > newBottom || sheet != d->cellWindowSheet )
-                    delete d->cellWindowMatrix[col-oldLeft][row-oldTop];
+        for ( int row = oldTop; row <= oldBottom; ++row )
+            if ( col < newLeft || col > newRight || row < newTop || row > newBottom || sheet != d->cellWindowSheet )
+                delete d->cellWindowMatrix[col-oldLeft][row-oldTop];
 
     d->cellWindowMatrix = newMatrix;
     d->cellWindowRect = cellRect;
