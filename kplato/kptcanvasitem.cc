@@ -700,23 +700,22 @@ void GanttViewSummaryItem::insertRelations(GanttView *view)
 {
     //kDebug()<<k_funcinfo<<endl;
 
-/*    Q3PtrListIterator<Relation> it(m_node->dependChildNodes());
-    for (; it.current(); ++it)
+    foreach (Relation *r, m_node->dependChildNodes())
     {
-        KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
+        KDGanttViewItem *child = find(m_view->firstChild(), r->child());
         if (child)
         {
-            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->type()));
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(r->type()));
             //TODO i18n
             QString t = i18n("From: %1", this->listViewText(0));
             t += "\n" + i18n("To: %1", child->listViewText(0));
-            if (it.current()->lag() > Duration::zeroDuration) {
-                t += "\n" + i18n("Lag:  %1", it.current()->lag().toString(Duration::Format_i18nDayTime));
+            if (r->lag() > Duration::zeroDuration) {
+                t += "\n" + i18n("Lag:  %1", r->lag().toString(Duration::Format_i18nDayTime));
             }
             link->setTooltipText(t);
             view->addTaskLink(link);
         }
-    }*/
+    }
 }
 
 KDGanttViewItem *GanttViewSummaryItem::find(Node *node)
@@ -781,23 +780,21 @@ void GanttViewTaskItem::insertRelations(GanttView *view)
 {
     //kDebug()<<k_funcinfo<<endl;
 
-/*    Q3PtrListIterator<Relation> it(m_task->dependChildNodes());
-    for (; it.current(); ++it)
+    foreach (Relation *r, m_task->dependChildNodes())
     {
-        KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
+        KDGanttViewItem *child = find(m_view->firstChild(), r->child());
         if (child)
         {
-            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child,  kdLinkType(it.current()->type()));
-            //TODO i18n
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child,  kdLinkType(r->type()));
             QString t = i18n("From: %1", this->listViewText(0));
             t += "\n" + i18n("To: %1", child->listViewText(0));
-            if (it.current()->lag() > Duration::zeroDuration) {
-                t += "\n" + i18n("Lag:  %1", it.current()->lag().toString(Duration::Format_i18nDayTime));
+            if (r->lag() > Duration::zeroDuration) {
+                t += "\n" + i18n("Lag:  %1", r->lag().toString(Duration::Format_i18nDayTime));
             }
             link->setTooltipText(t);
             view->addTaskLink(link);
         }
-    }*/
+    }
 }
 
 KDGanttViewItem *GanttViewTaskItem::find(Node *node)
@@ -863,23 +860,22 @@ void GanttViewEventItem::insertRelations(GanttView *view)
 {
     //kDebug()<<k_funcinfo<<endl;
 
-/*    Q3PtrListIterator<Relation> it(m_task->dependChildNodes());
-    for (; it.current(); ++it)
+    foreach (Relation *r, m_task->dependChildNodes())
     {
-        KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
+        KDGanttViewItem *child = find(m_view->firstChild(), r->child());
         if (child)
         {
-            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->type()));
+            KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(r->type()));
 
             QString t = i18n("From: %1",this->listViewText(0));
             t += "\n" + i18n("To: %1",child->listViewText(0));
-            if (it.current()->lag() > Duration::zeroDuration) {
-                t += "\n" + i18n("Lag:  %1",it.current()->lag().toString(Duration::Format_i18nDayTime));
+            if (r->lag() > Duration::zeroDuration) {
+                t += "\n" + i18n("Lag:  %1",r->lag().toString(Duration::Format_i18nDayTime));
             }
             link->setTooltipText(t);
             view->addTaskLink(link);
         }
-    }*/
+    }
 }
 
 KDGanttViewItem *GanttViewEventItem::find(Node *node)
