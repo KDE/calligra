@@ -24,6 +24,8 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
+#include <ktabwidget.h>
+#include <kiconloader.h>
 
 #include "keximainwindow.h"
 #include "kexiproject.h"
@@ -32,14 +34,29 @@
 #include "widget/tableview/kexidatatableview.h"
 #include "kexitabledesignerview.h"
 #include "kexitabledesigner_dataview.h"
+#include "kexilookupcolumnpage.h"
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 #include <kexidialogbase.h>
 
+//! @internal
+class KexiTablePart::Private
+{
+	public:
+		Private()
+		{
+		}
+		~Private()
+		{
+			delete static_cast<KexiLookupColumnPage*>(lookupColumnPage);
+		}
+		QGuardedPtr<KexiLookupColumnPage> lookupColumnPage;
+};
 
 KexiTablePart::KexiTablePart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
+ , d(new Private())
 {
 	// REGISTERED ID:
 	m_registeredPartID = (int)KexiPart::TableObjectType;
@@ -57,6 +74,7 @@ KexiTablePart::KexiTablePart(QObject *parent, const char *name, const QStringLis
 
 KexiTablePart::~KexiTablePart()
 {
+	delete d;
 }
 
 void KexiTablePart::initPartActions()
@@ -198,6 +216,37 @@ KexiTablePart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) 
 		return i18n("Warning! Any data in this table will be removed upon design's saving!");
 
 	return englishMessage;
+}
+
+void KexiTablePart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow* mainWin)
+{
+	if (!d->lookupColumnPage) {
+		d->lookupColumnPage = new KexiLookupColumnPage(0);
+		connect(d->lookupColumnPage, SIGNAL(jumpToObjectRequested(const QCString&, const QCString&)),
+			mainWin, SLOT(highlightObject(const QCString&, const QCString&)));
+
+//! @todo add "Table" tab
+
+	/*
+		connect(d->dataSourcePage, SIGNAL(formDataSourceChanged(const QCString&, const QCString&)),
+			KFormDesigner::FormManager::self(), SLOT(setFormDataSource(const QCString&, const QCString&)));
+		connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&, KexiDB::Field::Type)),
+			KFormDesigner::FormManager::self(), SLOT(setDataSourceFieldOrExpression(const QString&, const QString&, KexiDB::Field::Type)));
+		connect(d->dataSourcePage, SIGNAL(insertAutoFields(const QString&, const QString&, const QStringList&)),
+			KFormDesigner::FormManager::self(), SLOT(insertAutoFields(const QString&, const QString&, const QStringList&)));*/
+	}
+
+	KexiProject *prj = mainWin->project();
+	d->lookupColumnPage->setProject(prj);
+
+//! @todo add lookup field icon
+	tab->addTab( d->lookupColumnPage, SmallIconSet("search"), "");
+	tab->setTabToolTip( d->lookupColumnPage, i18n("Lookup column"));
+}
+
+KexiLookupColumnPage* KexiTablePart::lookupColumnPage() const
+{
+	return d->lookupColumnPage;
 }
 
 //----------------

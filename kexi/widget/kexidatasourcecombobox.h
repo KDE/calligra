@@ -44,18 +44,18 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
 
 		//! \return name of selected table or query. Can return null string.
 		//! You should use isSelectionValid() to check validity of the input.
-		QCString selectedMimeType() const;
+		QString selectedMimeType() const;
 
 		//! \return name of selected table or query. Can return null string or nonexisting name,
 		//! so you should use isSelectionValid() to check validity of the input.
-		QCString selectedName() const;
+		QString selectedName() const;
 
 		//! \return true if current selection is valid
 		bool isSelectionValid() const;
 
 		/*! \return index of item of mime type \a mimeType and name \a name.
 		 Returs -1 of no such item exists. */
-		int findItem(const QCString& mimeType, const QCString& name);
+		int findItem(const QString& mimeType, const QString& name);
 
 	public slots:
 		//! Sets global project that is used to retrieve schema informationm for this combo box.
@@ -63,7 +63,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
 
 		/*! Sets item for data source described by \a mimeType and \a name.
 		 If \a mimeType is empty, either "kexi/table" and "kexi/query" are tried. */
-		void setDataSource(const QCString& mimeType, const QCString& name);
+		void setDataSource(const QString& mimeType, const QString& name);
 
 	signals:
 		//! Emitted whenever data source changes. 

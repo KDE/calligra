@@ -177,7 +177,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 	if (lookupFieldSchema) {
 //! @todo support more RowSourceType's, not only table
 		KexiDB::TableSchema *lookupTable 
-			= field->table()->connection()->tableSchema( lookupFieldSchema->rowSource() );
+			= field->table()->connection()->tableSchema( lookupFieldSchema->rowSource().name() );
 		if (!lookupTable)
 //! @todo errmsg
 			return;

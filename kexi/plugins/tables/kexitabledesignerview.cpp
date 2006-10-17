@@ -19,6 +19,8 @@
 
 #include "kexitabledesignerview.h"
 #include "kexitabledesignerview_p.h"
+#include "kexilookupcolumnpage.h"
+#include "kexitabledesignercommands.h"
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -40,6 +42,7 @@
 #include <kexidb/utils.h>
 #include <kexidb/roweditbuffer.h>
 #include <kexidb/error.h>
+#include <kexidb/lookupfieldschema.h>
 #include <kexiutils/identifier.h>
 #include <kexiproject.h>
 #include <keximainwindow.h>
@@ -48,7 +51,6 @@
 #include <kexiutils/utils.h>
 #include <kexidialogbase.h>
 #include <kexitableview.h>
-#include "kexitabledesignercommands.h"
 
 //#define MAX_FIELDS 101 //nice prime number
 
@@ -270,6 +272,7 @@ void KexiTableDesignerView::initData()
 
 	setDirty(false);
 	d->view->setCursorPosition(0, COLUMN_ID_CAPTION); //set @ name column
+	propertySetSwitched();
 }
 
 //! Gets subtype strings and names for type \a fieldType
@@ -310,8 +313,14 @@ KexiTableDesignerView::createPropertySet( int row, const KexiDB::Field& field, b
 	//meta-info for property editor
 	set->addProperty(prop = new KoProperty::Property("this:classString", i18n("Table field")) );
 	prop->setVisible(false);
-//! \todo add table_field icon (add	buff->addProperty(prop = new KexiProperty("this:iconName", "table_field") );
-//	prop->setVisible(false);
+	set->addProperty(prop = new KoProperty::Property("this:iconName", 
+//! \todo add table_field icon 
+		"lineedit" //"table_field"
+	));
+	prop->setVisible(false);
+	set->addProperty(prop = new KoProperty::Property("this:useCaptionAsObjectName", 
+		QVariant(true, 1), QString::null)); //we want "caption" to be displayed in the header, not name
+	prop->setVisible(false);
 
 	//name
 	set->addProperty(prop 
@@ -389,26 +398,49 @@ KexiTableDesignerView::createPropertySet( int row, const KexiDB::Field& field, b
 	prop->setOption("3rdState", i18n("None"));
 //	prop->setVisible(false);
 
-	set->addProperty(prop 
+	set->addProperty( prop 
 		= new KoProperty::Property("primaryKey", QVariant(field.isPrimaryKey(), 4), i18n("Primary Key")));
 	prop->setIcon("key");
 
-	set->addProperty(
-		new KoProperty::Property("unique", QVariant(field.isUniqueKey(), 4), i18n("Unique")));
+	set->addProperty( prop
+		= new KoProperty::Property("unique", QVariant(field.isUniqueKey(), 4), i18n("Unique")));
 
-	set->addProperty(
-		new KoProperty::Property("notNull", QVariant(field.isNotNull(), 4), i18n("Required")));
+	set->addProperty( prop
+		= new KoProperty::Property("notNull", QVariant(field.isNotNull(), 4), i18n("Required")));
 	
-	set->addProperty(
-		new KoProperty::Property("allowEmpty", QVariant(!field.isNotEmpty(), 4), i18n("Allow Zero\nSize")));
+	set->addProperty( prop
+		= new KoProperty::Property("allowEmpty", QVariant(!field.isNotEmpty(), 4), i18n("Allow Zero\nSize")));
 
-	set->addProperty(prop 
+	set->addProperty( prop
 		= new KoProperty::Property("autoIncrement", QVariant(field.isAutoIncrement(), 4), i18n("Autonumber")));
 	prop->setIcon("autonumber");
 
-	set->addProperty(
-		new KoProperty::Property("indexed", QVariant(field.isIndexed(), 4), i18n("Indexed")));
+	set->addProperty( prop
+		= new KoProperty::Property("indexed", QVariant(field.isIndexed(), 4), i18n("Indexed")));
 
+	//- properties related to lookup columns (used and set by the "lookup column" tab in the property pane)
+	KexiDB::LookupFieldSchema *lookupFieldSchema = field.table() ? field.table()->lookupFieldSchema(field) : 0;
+	set->addProperty( prop = new KoProperty::Property("rowSource", 
+		lookupFieldSchema ? lookupFieldSchema->rowSource().name() : QString::null, i18n("Row Source")));
+	prop->setVisible(false);
+
+	set->addProperty( prop = new KoProperty::Property("rowSourceType", 
+		lookupFieldSchema ? lookupFieldSchema->rowSource().typeName() : QString::null, i18n("Row Source\nType")));
+	prop->setVisible(false);
+
+	set->addProperty( prop
+		= new KoProperty::Property("boundColumn", 
+		lookupFieldSchema ? lookupFieldSchema->boundColumn() : -1, i18n("Bound Column")));
+	prop->setVisible(false);
+	
+	set->addProperty( prop
+		= new KoProperty::Property("visibleColumn", 
+		lookupFieldSchema ? lookupFieldSchema->visibleColumn() : -1, i18n("Visible Column")));
+	prop->setVisible(false);
+
+//! @todo support columnWidths(), columnHeadersVisible(), maximumListRows(), limitToList(), displayWidget()
+
+	//----
 	d->updatePropertiesVisibility(field.type(), *set);
 
 	connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
@@ -1117,9 +1149,10 @@ KexiDB::Field * KexiTableDesignerView::buildField( const KoProperty::Set &set ) 
 	//remove internal values, to avoid creating custom field's properties
 	QMap<QCString, QVariant>::Iterator it = values.begin();
 	KexiDB::Field *field = new KexiDB::Field();
+
 	while (it!=values.end()) {
 		const QString propName( it.key() );
-		if (propName=="subType" || propName=="uid" || propName=="newrow" || propName.startsWith("this:")
+		if (d->internalPropertyNames.find(propName) || propName.startsWith("this:")
 			|| (/*sanity*/propName=="objectType" && KexiDB::Field::BLOB != KexiDB::intToFieldType( set["type"].value().toInt() )))
 		{
 			QMap<QCString, QVariant>::Iterator it_tmp = it;
@@ -1270,6 +1303,21 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
 			if (!f)
 				continue; //hmm?
 			schema.addField(f);
+			if (!(*s)["rowSource"].value().toString().isEmpty() && !(*s)["rowSourceType"].value().toString().isEmpty()) {
+				//add lookup column
+				KexiDB::LookupFieldSchema *lookupFieldSchema = new KexiDB::LookupFieldSchema();
+				lookupFieldSchema->rowSource().setTypeByName( (*s)["rowSourceType"].value().toString() );
+				lookupFieldSchema->rowSource().setName( (*s)["rowSource"].value().toString() );
+				lookupFieldSchema->setBoundColumn( (*s)["boundColumn"].value().toInt() );
+				lookupFieldSchema->setVisibleColumn( (*s)["visibleColumn"].value().toInt() );
+//! @todo support columnWidths(), columnHeadersVisible(), maximumListRows(), limitToList(), displayWidget()
+				if (!schema.setLookupFieldSchema(f->name(), lookupFieldSchema)) {
+					kexipluginswarn << 
+						"KexiTableDesignerView::buildSchema(): !schema.setLookupFieldSchema()" << endl;
+					delete lookupFieldSchema;
+					return false;
+				}
+			}
 		}
 	}
 	return res;
@@ -1811,6 +1859,17 @@ void KexiTableDesignerView::changePropertyVisibility(
 		property.setVisible(visible);
 		propertySetReloaded(true);
 	}
+}
+
+void KexiTableDesignerView::propertySetSwitched()
+{
+	KexiDataTable::propertySetSwitched();
+
+	//if (parentDialog()!=parentDialog()->mainWin()->currentDialog())
+	//	return; //this is not the current dialog's view
+	
+	static_cast<KexiTablePart*>(parentDialog()->part())->lookupColumnPage()
+		->assignPropertySet(propertySet());
 }
 
 #include "kexitabledesignerview.moc"

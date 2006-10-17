@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,28 +32,51 @@ namespace KoProperty {
 	class Set;
 }
 
-//! Helper class displaying small icon with class name and object name
+//! @short Helper class displaying small icon with class name and object name
+/*! The info label is displayed in a form:
+ <i>[ObjectClassIcon] ClassName "ObjectName"</i>
+
+ The <i>ObjectClassIcon</i> is optional. If "ClassName" is empty, the information 
+ is displayed as:
+ <i>[ObjectClassIcon] ObjectName</i>
+
+ Example uses:
+ - [button_icon] Button "quit"
+ - [label_icon] Label "welcome"
+*/
 class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 {
 	public:
 		KexiObjectInfoLabel(QWidget* parent, const char* name = 0);
 		~KexiObjectInfoLabel();
 
-		void setObjectClassIcon(const QCString& name);
-		QCString objectClassIcon() const { return m_classIcon; }
+		void setObjectClassIcon(const QString& name);
+		QString objectClassIcon() const { return m_classIcon; }
 		void setObjectClassName(const QString& name);
 		QString objectClassName() const { return m_className; }
-		void setObjectName(const QCString& name);
-		QCString objectName() const { return m_objectName; }
+		void setObjectName(const QString& name);
+		QString objectName() const { return m_objectName; }
 	protected:
 		void updateName();
 
 		QString m_className;
-		QCString m_classIcon, m_objectName;
+		QString m_classIcon, m_objectName;
 		QLabel *m_objectIconLabel, *m_objectNameLabel;
 };
 
-/*! The container (acts as a dock window) for KexiPropertyEditor
+//! @short The container (acts as a dock window) for KexiPropertyEditor.
+/*! The widget displays KexiObjectInfoLabel on its top, to show user what
+ object the properties belong to. Read KexiObjectInfoLabel documentation for 
+ the description what information is displayed.
+
+ There are properties obtained from KexiMainWindow's current property set 
+ that help to customize displaying this information:
+ - "this:classString property" of type string describes object's class name
+ - "this:iconName" property of type string describes class name
+ - "name" or "caption" property of type string describes object's name
+ - "this:useCaptionAsObjectName" propety of type boolean forces displaying "caption"
+   property instead of "name" - this can be usable when we know that "caption" properties
+   are available for a given type of objects (this is the case for Table Designer fields)
 */
 class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget //KexiViewBase
 {
@@ -62,6 +85,17 @@ class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget //KexiViewBa
 	public:
 		KexiPropertyEditorView(KexiMainWindow *mainWin, QWidget* parent);
 		virtual ~KexiPropertyEditorView();
+
+		/*! Helper function. Updates \a infoLabel widget by reusing properties provided 
+		 by property set \a set.
+		 Read documentation of KexiPropertyEditorView class for information about accepted properties.
+		 If \a set is 0 and \a textToDisplayForNullSet string is not empty, this string is displayed 
+		 (without icon or any other additional part). 
+		 If \a set is 0 and \a textToDisplayForNullSet string is empty, the \a infoLabel widget becomes 
+		 hidden. */
+		static void KexiPropertyEditorView::updateInfoLabelForPropertySet(
+			KexiObjectInfoLabel *infoLabel, KoProperty::Set* set, 
+			const QString& textToDisplayForNullSet = QString::null);
 
 		virtual QSize sizeHint() const;
 		virtual QSize minimumSizeHint() const;

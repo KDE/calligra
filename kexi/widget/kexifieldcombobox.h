@@ -46,12 +46,24 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldComboBox : public KComboBox
 //		KexiDB::TableOrQuerySchema* schema() const { return m_schema; }
 
 	public slots:
+		//! \return global project that is used to retrieve schema informationm for this combo box.
+		KexiProject* project() const;
+
+		//! Sets global project that is used to retrieve schema informationm for this combo box.
 		void setProject(KexiProject *prj);
-		void setTableOrQuery(const QCString& name, bool table);
-		QCString setTableOrQueryName() const;
+
+		void setTableOrQuery(const QString& name, bool table);
+		QString tableOrQueryName() const;
+		bool isTableAssigned() const;
 		void setFieldOrExpression(const QString& string);
+		void setFieldOrExpression(int index);
 		QString fieldOrExpression() const;
 		QString fieldOrExpressionCaption() const;
+
+		/*! \return index of selected table or query field.
+		 -1 is returned if there is nothing selected or expression is selected
+		 of project is not assigned or table or query is not assigned. */
+		int indexOfField() const;
 
 	signals:
 		void selected();

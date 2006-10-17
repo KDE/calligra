@@ -60,9 +60,9 @@ class KexiFieldComboBox::Private
 		QGuardedPtr<KexiProject> prj;
 //		KexiDB::TableOrQuerySchema* schema;
 		QPixmap keyIcon, noIcon;
-		QCString tableOrQueryName;
+		QString tableOrQueryName;
 		QString fieldOrExpression;
-		QMap<QCString, QString> captions;
+		QMap<QString, QString> captions;
 		bool table;
 };
 
@@ -101,7 +101,12 @@ void KexiFieldComboBox::setProject(KexiProject *prj)
 	setTableOrQuery("", true);
 }
 
-void KexiFieldComboBox::setTableOrQuery(const QCString& name, bool table)
+KexiProject* KexiFieldComboBox::project() const
+{
+	return d->prj;
+}
+
+void KexiFieldComboBox::setTableOrQuery(const QString& name, bool table)
 {
 	d->tableOrQueryName = name;
 	d->table = table;
@@ -112,7 +117,7 @@ void KexiFieldComboBox::setTableOrQuery(const QCString& name, bool table)
 	if (d->tableOrQueryName.isEmpty() || !d->prj)
 		return;
 
-	KexiDB::TableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName, table);
+	KexiDB::TableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.latin1(), d->table);
 	if (!tableOrQuery.table() && !tableOrQuery.query())
 		return;
 
@@ -136,17 +141,25 @@ void KexiFieldComboBox::setTableOrQuery(const QCString& name, bool table)
 	setFieldOrExpression(d->fieldOrExpression);
 }
 
-QCString KexiFieldComboBox::setTableOrQueryName() const
+QString KexiFieldComboBox::tableOrQueryName() const
 {
 	return d->tableOrQueryName;
+}
+
+bool KexiFieldComboBox::isTableAssigned() const
+{
+	return d->table;
 }
 
 void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 {
 	const QString name(string); //string.stripWhiteSpace().lower());
 	const int pos = name.find('.');
-	if (pos!=-1) {
-		QCString objectName = name.left(pos).latin1();
+	if (pos==-1) {
+		d->fieldOrExpression = name;
+	}
+	else {
+		QString objectName = name.left(pos);
 		if (d->tableOrQueryName!=objectName) {
 			d->fieldOrExpression = name;
 			setCurrentItem(0);
@@ -157,8 +170,6 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 		}
 		d->fieldOrExpression = name.mid(pos+1);
 	}
-	else
-		d->fieldOrExpression = name;
 
 	QListBoxItem *item = listBox()->findItem(d->fieldOrExpression);
 	if (!item) {
@@ -170,14 +181,41 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 	setCurrentItem( listBox()->index(item) );
 }
 
+void KexiFieldComboBox::setFieldOrExpression(int index)
+{
+	index++; //skip 1st empty item
+	if (index>=count()) {
+		kexiwarn << QString("KexiFieldComboBox::setFieldOrExpression(int index): index %1 "
+			"out of range (0..%2)").arg(index).arg(count()-1) << endl;
+		index = -1;
+	}
+	if (index<=0) {
+		setCurrentItem(0);
+		d->fieldOrExpression = QString::null;
+	}
+	else {
+		setCurrentItem(index);
+		d->fieldOrExpression = currentText();
+	}
+}
+
 QString KexiFieldComboBox::fieldOrExpression() const
 {
 	return d->fieldOrExpression;
 }
 
+int KexiFieldComboBox::indexOfField() const
+{
+	KexiDB::TableOrQuerySchema tableOrQuery(d->prj->dbConnection(), d->tableOrQueryName.latin1(), d->table);
+	if (!tableOrQuery.table() && !tableOrQuery.query())
+		return -1;
+
+	return currentItem()>0 ? (currentItem()-1) : -1;
+}
+
 QString KexiFieldComboBox::fieldOrExpressionCaption() const
 {
-	return d->captions[ d->fieldOrExpression.latin1() ];
+	return d->captions[ d->fieldOrExpression ];
 }
 
 void KexiFieldComboBox::slotActivated(int i)

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,7 +48,7 @@ KexiObjectInfoLabel::~KexiObjectInfoLabel()
 {
 }
 
-void KexiObjectInfoLabel::setObjectClassIcon(const QCString& name)
+void KexiObjectInfoLabel::setObjectClassIcon(const QString& name)
 {
 	m_classIcon = name;
 	if (m_classIcon.isEmpty())
@@ -64,7 +64,7 @@ void KexiObjectInfoLabel::setObjectClassName(const QString& name)
 	updateName();
 }
 
-void KexiObjectInfoLabel::setObjectName(const QCString& name)
+void KexiObjectInfoLabel::setObjectName(const QString& name)
 {
 	m_objectName = name;
 	updateName();
@@ -72,8 +72,10 @@ void KexiObjectInfoLabel::setObjectName(const QCString& name)
 
 void KexiObjectInfoLabel::updateName()
 {
-	QString txt = m_className;
-	if (!m_objectName.isEmpty())
+	QString txt( m_className );
+	if (txt.isEmpty())
+		txt = m_objectName;
+	else if (!m_objectName.isEmpty())
 		txt += QString(" \"%1\"").arg(m_objectName);
 	m_objectNameLabel->setText(txt);
 }
@@ -162,56 +164,53 @@ KoProperty::Editor *KexiPropertyEditorView::editor() const
 	return d->editor;
 }
 
-void KexiPropertyEditorView::slotPropertySetChanged(KoProperty::Set* set)
+/*! Updates \a infoLabel widget by reusing properties provided by property set \a set.
+ Read documentation of KexiPropertyEditorView class for information about accepted properties.
+ If \a set is 0 and \a textToDisplayForNullSet string is not empty, this string is displayed 
+ (without icon or any other additional part). 
+ If \a set is 0 and \a textToDisplayForNullSet string is empty, the \a infoLabel widget becomes 
+ hidden.
+*/
+void KexiPropertyEditorView::updateInfoLabelForPropertySet(KexiObjectInfoLabel *infoLabel, 
+	KoProperty::Set* set, const QString& textToDisplayForNullSet)
 {
-	//update information about selected object
-	QString className;
-	QCString iconName, objectName;
+	QString className, iconName, objectName;
 	if (set) {
 		if (set->contains("this:classString"))
 			className = (*set)["this:classString"].value().toString();
 		if (set->contains("this:iconName"))
-			iconName = (*set)["this:iconName"].value().toCString();
-		if (set->contains("name"))
-			objectName = (*set)["name"].value().toCString();
+			iconName = (*set)["this:iconName"].value().toString();
+		const bool useCaptionAsObjectName = set->contains("this:useCaptionAsObjectName")
+			&& (*set)["this:useCaptionAsObjectName"].value().toBool();
+		if (set->contains(useCaptionAsObjectName ? "caption" : "name"))
+			objectName = (*set)[useCaptionAsObjectName ? "caption" : "name"].value().toString();
+	}
+	if (!set || objectName.isEmpty()) {
+		objectName = textToDisplayForNullSet;
+		className = QString::null;
+		iconName = QString::null;
 	}
 
-	if (className.isEmpty()) {
-		d->objectInfoLabel->hide();
-	}
-	else {
-		d->objectInfoLabel->show();
-	}
+	if (className.isEmpty() && objectName.isEmpty())
+		infoLabel->hide();
+	else
+		infoLabel->show();
 
-	if (d->objectInfoLabel->objectClassName() == className 
-		&& d->objectInfoLabel->objectClassIcon() == iconName
-		&& d->objectInfoLabel->objectName() == objectName)
+	if (infoLabel->objectClassName() == className 
+		&& infoLabel->objectClassIcon() == iconName
+		&& infoLabel->objectName() == objectName)
 		return;
 
-	d->objectInfoLabel->setObjectClassIcon(iconName);
-	d->objectInfoLabel->setObjectClassName(className);
-	d->objectInfoLabel->setObjectName(objectName);
+	infoLabel->setObjectClassIcon(iconName);
+	infoLabel->setObjectClassName(className);
+	infoLabel->setObjectName(objectName);
+}
 
-/*
-	if (className.isEmpty()) {
-		d->objectClassName->hide();
-		d->objectIcon->hide();
-		d->objectIcon->setFixedWidth( 0 );
-	}
-	else {
-		if (iconName.isEmpty()) {
-			d->objectIcon->setFixedWidth( 0 );
-			d->objectIcon->hide();
-			d->objectIcon->setPixmap(QPixmap());
-		}
-		else {
-			d->objectIcon->setFixedWidth( IconSize(KIcon::Small) + 2 + 2 );
-			d->objectIcon->setPixmap(SmallIcon(iconName));
-		}
-		d->objectClassName->setText(className);
-		d->objectClassName->show();
-		d->objectIcon->show();
-	}*/
+void KexiPropertyEditorView::slotPropertySetChanged(KoProperty::Set* set)
+{
+	//update information about selected object
+	updateInfoLabelForPropertySet(d->objectInfoLabel, set);
+	d->editor->setEnabled(set);
 }
 
 #include "kexipropertyeditorview.moc"

@@ -43,6 +43,7 @@ class KexiDataSourceComboBox::Private
 	public:
 		Private()
 		 : tablesCount(0)
+		 , prevIndex(-1)
 		{
 		}
 		int firstTableIndex() const {
@@ -59,6 +60,7 @@ class KexiDataSourceComboBox::Private
 		QGuardedPtr<KexiProject> prj;
 		QPixmap tableIcon, queryIcon;
 		int tablesCount;
+		int prevIndex; //!< Used in slotActivated()
 };
 
 //------------------------
@@ -149,16 +151,17 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj)
 	setCurrentItem(0);
 }
 
-void KexiDataSourceComboBox::setDataSource(const QCString& mimeType, const QCString& name)
+void KexiDataSourceComboBox::setDataSource(const QString& mimeType, const QString& name)
 {
 	if (name.isEmpty()) {
 		clearEdit();
 		setCurrentItem(0);
+		d->prevIndex = -1;
 		emit dataSourceChanged();
 		return;
 	}
 
-	QCString mt(mimeType);
+	QString mt(mimeType);
 	if (mimeType.isEmpty())
 		mt="kexi/table";
 	int i = findItem(mt, name);
@@ -196,7 +199,7 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
 	}
 }
 
-int KexiDataSourceComboBox::findItem(const QCString& mimeType, const QCString& name)
+int KexiDataSourceComboBox::findItem(const QString& mimeType, const QString& name)
 {
 	int i, end;
 	if (mimeType=="kexi/table") {
@@ -224,7 +227,7 @@ int KexiDataSourceComboBox::findItem(const QCString& mimeType, const QCString& n
 
 void KexiDataSourceComboBox::slotItemRemoved(const KexiPart::Item& item)
 {
-	const int i = findItem(item.mimeType(), item.name().latin1());
+	const int i = findItem(item.mimeType(), item.name());
 	if (i==-1)
 		return;
 	removeItem(i);
@@ -243,7 +246,7 @@ void KexiDataSourceComboBox::slotItemRemoved(const KexiPart::Item& item)
 
 void KexiDataSourceComboBox::slotItemRenamed(const KexiPart::Item& item, const QCString& oldName)
 {
-	const int i = findItem(item.mimeType(), oldName);
+	const int i = findItem(item.mimeType(), QString(oldName));
 	if (i==-1)
 		return;
 	changeItem(item.name(), i);
@@ -254,11 +257,13 @@ void KexiDataSourceComboBox::slotItemRenamed(const KexiPart::Item& item, const Q
 
 void KexiDataSourceComboBox::slotActivated( int index )
 {
-	if (index >= d->firstTableIndex() && index < count())
+	if (index >= d->firstTableIndex() && index < count() && d->prevIndex!=currentItem()) {
+		d->prevIndex = currentItem();
 		emit dataSourceChanged();
+	}
 }
 
-QCString KexiDataSourceComboBox::selectedMimeType() const
+QString KexiDataSourceComboBox::selectedMimeType() const
 {
 	if (selectedName().isEmpty())
 		return "";
@@ -270,11 +275,11 @@ QCString KexiDataSourceComboBox::selectedMimeType() const
 	return "";
 }
 
-QCString KexiDataSourceComboBox::selectedName() const
+QString KexiDataSourceComboBox::selectedName() const
 {
 	if (isSelectionValid())
-		return text(currentItem()).latin1();
-	return currentText().latin1();
+		return text(currentItem());
+	return currentText();
 }
 
 bool KexiDataSourceComboBox::isSelectionValid() const
@@ -286,18 +291,24 @@ bool KexiDataSourceComboBox::isSelectionValid() const
 void KexiDataSourceComboBox::slotReturnPressed(const QString & text)
 {
 	//text is available: select item for this text:
-	if (text.isEmpty())
+	bool changed = false;
+	if (text.isEmpty() && 0!=currentItem()) {
 		setCurrentItem(0);
+		changed = true;
+	}
 	else {
 		QListBoxItem *item = listBox()->findItem( text, Qt::ExactMatch );
 		if (item) {
 			int index = listBox()->index( item );
 			//if (index < d->firstTableIndex())
-			if (index>=0)
+			if (index>=0 && index!=currentItem()) {
 				setCurrentItem( index );
+				changed = true;
+			}
 		}
 	}
-	emit dataSourceChanged();
+	if (changed)
+		emit dataSourceChanged();
 }
 
 void KexiDataSourceComboBox::focusOutEvent( QFocusEvent *e )

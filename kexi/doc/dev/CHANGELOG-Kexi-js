@@ -15,7 +15,34 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
-2006-10-09
+2006-10-16
+Query Designer
+- refresh design view after a sequence of switches: 
+   text view -> data view -> design view
+2.0: merged
+KexiDB
+= saving "lookup column" metadata supported
+2.0: merged
+
+2006-10-12
+Forms
+- fixed displaying contents "Data Source" property for multiple selections;
+  unnecessary updates removed (GUI is updated only after adding 
+  the last widget to the selection)
+2.0: merged
+Table Designer
+- "Lookup column" property tab added to the property pane
+2.0: merged
+
+2006-10-11
+KFormDesigner
+- removed crash on close and problems with displaying properties
+2.0: merged
+Forms
+- do not update the property editor for every form (only one is active anyway)
+2.0: merged
+
+2006-10-09..10
 Table View
 - fixed drawing selection highlighting for the horizontal header immediately after
   scrolling the table
@@ -5366,3 +5393,6 @@ dock windows visiblity fixed, simplified code
 2003-03-28
 - first touch on Kexi sources for porting
 
+2002-06-23, Sunday, 00:20:36 (Lucijan)
+- First Kexi commit, SVN revision #162554
+  details: http://websvn.kde.org/trunk/koffice/kexi/?rev=162554

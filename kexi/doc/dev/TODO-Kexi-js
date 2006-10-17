@@ -868,10 +868,6 @@ Forms TODO
   Partially fixed by setting StrongFocus policy as default; 
  FIX THIS for other focus policies too...
 
-TODO:
-table designer: 
- fix setting PK
-
 
 KDElibs4 TODO:
 - wizard
@@ -932,6 +928,11 @@ Table Designer TODO
 - i18n("Lookup") == Odnosnik (Ks. eksperta, s. 53)
 - add setting for default length of the text type
 - allow to set default values for BLOB types (requires a change in KoProperty as well)
+- 2.0: Add drag-and-drop-to-create-lookup-column to the "lookup column" tab of the property pane.
+  This should be implemented by displaying a list of fields and allowing to drop one into the
+  table view. Then, lookup column properties should be autoconfigured.
+- lookup column: support these properties of LookupFieldSchema:
+  columnWidths(), columnHeadersVisible(), maximumListRows(), limitToList(), displayWidget()
 
 Combobox table edit TODO:
 - copy should handle "displayed" value, not the real one 
@@ -993,7 +994,8 @@ Form/TV Shortcuts:
 
 == Must-have TODOs for 1.1 ==
 - use transliteration script: http://bugs.kde.org/show_bug.cgi?id=133170
-todo: notify and update data source after schema changes
+(done?): notify and update data source after schema changes
 todo: fix things like SELECT *, cars.owner AS ab, 1.3 AS wyr1, persons.surname FROM cars LEFT OUTER JOIN persons ON cars.owner=persons.id  WHERE cars.owner > 3
       (crash - see Simple_Database.kexi - persons_and_cars query has lookup fields and OUTER JOIN is NOT PARSED
        -- we should generate the SQL in a different way for the Query Designer)
+

@@ -190,7 +190,7 @@ class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInte
 		 or 0 if current row is empty. */
 		virtual KoProperty::Set *propertySet();
 
-		void removeCurrentPropertySet();
+//		void removeCurrentPropertySet();
 
 		/*! Reimplemented from KexiViewBase, because tables creation is more complex. 
 		 No table schema altering is required, so just buildSchema() is used to create a new schema.
@@ -242,6 +242,8 @@ class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInte
 		 it will be copied into the new set. Used by insertField(). */
 		void insertFieldInternal(int row, KoProperty::Set* set,	const QString& caption, bool addCommand);
 
+		//! Reimplemented to pass the information also to the "Lookup" tab
+		virtual void propertySetSwitched();
 
 	private:
 		KexiTableDesignerViewPrivate *d;
