@@ -1,0 +1,131 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY kplato "KPlato">
+  <!ENTITY kappname "&kplato;">
+  <!ENTITY package "koffice">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+  <!ENTITY definitions SYSTEM "definitions.docbook">
+  <!ENTITY mainwindow SYSTEM "mainwindow.docbook">
+  <!ENTITY wbs SYSTEM "wbs.docbook">
+  <!ENTITY options SYSTEM "options.docbook">
+  <!ENTITY commands SYSTEM "commands.docbook">
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>The &kplato; Handbook</title>
+
+<authorgroup>
+<author>
+<firstname>Raphael</firstname>
+<!-- <othername></othername> -->
+<surname>Langerhorst</surname>
+<affiliation>
+<address><email>raphael.langerhorst@kdemail.net</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annma@kde.org</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<!-- Date and version information of the documentation
+Don't forget to include this last date and this last revision number, we
+need them for translation coordination !
+Please respect the format of the date (DD/MM/YYYY) and of the version
+(Major.minor.lesser), it could be used by automation scripts -->
+
+<date>2006-02-11</date>
+<releaseinfo>0.5.0</releaseinfo>
+
+<!-- Abstract about this handbook -->
+
+<abstract>
+<para>
+&kplato; is a project planning and management application for &kde;.
+</para>
+</abstract>
+
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>KPlato</keyword>
+<keyword>Project</keyword>
+<keyword>Management</keyword>
+<keyword>gantt</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction"> <title>Introduction</title>
+<para><emphasis>
+&kplato; as included in &koffice; 1.5 is a technology preview
+release and it is not advised to use &kplato; in critical
+production scenarios. Do so at your own risk. In this first public release we
+focus on planning and scheduling of projects.
+</emphasis></para>
+<para>
+&kplato; is a project management application and a planning tool.
+As an integrated component of &koffice;, &kplato; can
+be used within larger documents of other &koffice; components.
+</para>
+</chapter>
+<chapter id="features"> <title>Features</title>
+<itemizedlist>
+<title>Features include:</title>
+<listitem><para>Resource management,</para></listitem>
+<listitem><para>Hierarchical calendars,</para></listitem>
+<listitem><para>Tasks with dependencies and subtasks.</para></listitem>
+<listitem>
+<itemizedlist>
+<title>Chart for visualization:</title>
+<listitem><para>Gantt</para></listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<itemizedlist><title>Project scheduling</title>
+<listitem><para>Pessimistic,</para></listitem>
+<listitem><para>Expected,</para></listitem>
+<listitem><para>Optimistic.</para></listitem>
+</itemizedlist>
+</listitem>
+<listitem><para>Work breakdown structure (WBS).</para></listitem>
+<listitem><para>Critical path and resources.</para></listitem>
+<listitem><para>Embedding into other KOffice applications.</para></listitem>
+</itemizedlist>
+</chapter>
+
+&definitions;
+&mainwindow;
+&wbs;
+&options;
+&commands;
+
+<chapter id="license"><title>License</title>
+
+&underFDL;
+
+</chapter>
+
+&documentation.index; 
+</book>
+
+
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
