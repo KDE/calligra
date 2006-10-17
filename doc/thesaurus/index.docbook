@@ -1,0 +1,150 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+ <!ENTITY kappname "&kthesaurus;">
+ <!ENTITY wordnet "WordNet">
+ <!ENTITY % addindex "IGNORE">
+ <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+]>
+
+<book lang="&language;">
+<bookinfo>
+<title>&kthesaurus;</title>
+
+<authorgroup>
+<author>
+<firstname>Daniel</firstname>
+<surname>Naber</surname>
+<affiliation><address><email>daniel.naber@t-online.de</email></address></affiliation> 
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<date>2003-04-12</date>
+<releaseinfo>0.95.00</releaseinfo>
+
+<copyright>
+<year>2002</year>
+<year>2003</year>
+<holder>Daniel Naber</holder>
+</copyright>
+
+<abstract>
+<para>
+&kthesaurus; lists words related to a given term and offers a user interface
+to &wordnet;, a powerful lexical reference system. By default, only the
+English language is supported.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>thesaurus</keyword>
+<keyword>WordNet</keyword>
+<keyword>synonyms</keyword>
+<keyword>dictionary</keyword>
+<keyword>lexicon</keyword>
+<keyword>English</keyword>
+<keyword>words</keyword>
+</keywordset>
+
+</bookinfo>
+
+
+<chapter id="thesaurus">
+<title>The Thesaurus Tab</title>
+
+<para>The <guilabel>Thesaurus</guilabel> tab offers a small thesaurus,
+built from a subset of <link linkend="frontend">&wordnet;</link>. 
+The results are listed in three
+categories: <guilabel>Synonyms</guilabel>, <guilabel>More General
+Words</guilabel> (hypernyms), <guilabel>More Specific
+Words</guilabel> (hyponyms). Synonyms are words with a very similar meaning.
+They do not necessarily apply to all senses of each word, so you cannot 
+always replace a word with any synonym.</para>
+
+<para>You can double click on a word to search for its synonyms &etc;.
+You can also type a word directly into the <guilabel>Search for:</guilabel>
+box at the top and press
+<keycap>Return</keycap>. The word which is currently visible in the
+<guilabel>Replace with:</guilabel> box at the bottom is the one that will 
+be used if you click on <guibutton>Replace</guibutton>.</para>
+
+<note><para>&kthesaurus; can be used as a standalone application, but it can also be 
+used from other applications (like &kword;, typically by right clicking
+on a word and selecting <guilabel>Show related words</guilabel>). 
+The <guibutton>Replace</guibutton> button will only be visible
+on a word and selecting <guilabel>Show Related Words</guilabel>). 
+The <guibutton>Replace with:</guibutton> button will only be visible
+if &kthesaurus; is called from another application.</para></note>
+
+<para>We have to keep the data file small so that it can be
+included in &koffice; &mdash; this introduces several limitations 
+(compared to &wordnet;):</para>
+
+<itemizedlist>
+<listitem><para>Only exact matches are found, &eg; if you search for a plural
+form nothing will be found.</para></listitem>
+<listitem><para>Many not so common words have been removed.</para></listitem>
+<listitem><para>It doesn't distinguish between parts of speech, e.g. verbs and
+nouns are mixed up in the lists of words.</para></listitem>
+<listitem><para>It won't separate the different meanings words can have.</para></listitem>
+<listitem><para>Adjectives don't really have a <quote>more general</quote> / <quote>more specific</quote>
+meaning, so one word may appear in more than one list at the same time.</para></listitem>
+</itemizedlist>
+
+<para>On the other hand, a few words have been added (function words like <quote>if</quote>
+and very few words specific to &kde;).</para>
+
+<para>Please do <emphasis>not</emphasis> report bugs in the thesaurus
+to the &wordnet; project, but to &kde;.</para>
+
+</chapter>
+
+
+<chapter id="languages">
+<title>Using languages besides English</title>
+
+<para>By default, only the English language is supported 
+in &kthesaurus;. You can check out
+<ulink url="http://www.koffice.org/addons/#thesauri">the
+KOffice download page</ulink> to see which other languages 
+are available.</para>
+
+</chapter>
+
+
+<chapter id="frontend">
+<title>The &wordnet; tab</title>
+
+<para>The <guilabel>&wordnet;</guilabel> tab provides a user interface
+to a local installation of <ulink url="http://www.cogsci.princeton.edu/~wn/">&wordnet; 1.7</ulink>.
+&wordnet; is <quote>an online lexical reference
+system whose design is inspired by current psycholinguistic theories
+of human lexical memory.</quote> The &kthesaurus; user interface offers nearly all options
+which are available on the command line. It calls the <command>wn</command> binary,
+which has to be in your <envar>PATH</envar>.</para>
+
+<para>To learn more about &wordnet;, please see the &wordnet; <command>man</command> pages
+or have a look at the <ulink url="http://www.cogsci.princeton.edu/~wn/">&wordnet; homepage</ulink>.
+</para>
+
+</chapter>
+
+
+<chapter id="legal">
+<title>Copyright and Licensing</title>
+
+<para>
+&kthesaurus; and this documentation is copyrighted by Daniel Naber.
+</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+&underFDL;
+&underGPL;
+
+</chapter>
+
+
+&documentation.index; 
+
+</book>
