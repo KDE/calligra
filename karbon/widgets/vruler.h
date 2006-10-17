@@ -20,7 +20,7 @@
 #ifndef VRULER_H_
 #define VRULER_H_
 
-#include <q3frame.h>
+#include <QFrame>
 #include <qpixmap.h>
 //Added by qt3to4:
 #include <QPaintEvent>
@@ -33,9 +33,9 @@
 
 class QPainter;
 
-class VRuler : public Q3Frame {
+class VRuler : public QFrame {
     Q_OBJECT
-    typedef Q3Frame super;
+    typedef QFrame super;
 
 public:
     VRuler(Qt::Orientation, QWidget *parent = 0, const char *name = 0);

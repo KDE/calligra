@@ -23,10 +23,9 @@
 #include <q3intdict.h>
 #include <qtoolbutton.h>
 //Added by qt3to4:
-#include <Q3Frame>
+#include <QFrame>
 #include <kdialogbase.h>
 
-class Q3Frame;
 class Q3ListView;
 class Q3ListViewItem;
 class K3ListViewItem;
@@ -84,7 +83,7 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 		enum { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
 		KoProperty::Editor  *m_editor;
 		KoProperty::Set  *m_propSet;
-		Q3Frame   *m_contents, *m_column;
+		QFrame   *m_contents, *m_column;
 		KListBox  *m_listbox;
 		K3ListView  *m_listview;
 		Q3IntDict<QToolButton>  m_buttons;
