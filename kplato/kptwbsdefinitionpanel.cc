@@ -80,10 +80,11 @@ void ComboBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionV
 //----------------------
 
 WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const char *n)
-    : Ui_WBSDefinitionPanelBase(),
+    : QWidget(p),
       selectedRow(-1),
       m_def(def)
 {
+    setObjectName(n);
     setupUi(this);
     
     QStringList codeList = def.codeList();
