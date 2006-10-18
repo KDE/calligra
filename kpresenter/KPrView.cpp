@@ -216,9 +216,28 @@ static const char * const pagedown_xpm[] = {
 };
 
 #ifdef HAVE_DPMS
+#include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/Xmd.h>
 #include <X11/extensions/dpms.h>
 #include <fixx11h.h>
+
+extern "C" {
+#ifndef HAVE_DPMSCAPABLE_PROTO
+Bool DPMSCapable( Display * );
+#endif
+}
+
+#if defined(XIMStringConversionRetrival) || defined (__sun) || defined(__hpux)
+extern "C" {
+#endif
+    Bool DPMSQueryExtension(Display *, int *, int *);
+    Status DPMSEnable(Display *);
+    Status DPMSDisable(Display *);
+    Bool DPMSGetTimeouts(Display *, CARD16 *, CARD16 *, CARD16 *);
+#if defined(XIMStringConversionRetrival) || defined (__sun) || defined(__hpux)
+}
+#endif
 #endif
 
 static void enableDPMS(bool enable)
