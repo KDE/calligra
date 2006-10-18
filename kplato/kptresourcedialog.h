@@ -20,7 +20,7 @@
 #ifndef KPTRESOURCEDIALOG_H
 #define KPTRESOURCEDIALOG_H
 
-#include "resourcedialogbase.h"
+#include "ui_resourcedialogbase.h"
 #include "kptresource.h"
 
 #include <kdialog.h>
@@ -41,7 +41,7 @@ class Project;
 class Resource;
 class Calendar;
 
-class ResourceDialogImpl : public ResourceDialogBase {
+class ResourceDialogImpl : public QWidget, public Ui_ResourceDialogBase {
     Q_OBJECT
 public:
     ResourceDialogImpl (QWidget *parent);

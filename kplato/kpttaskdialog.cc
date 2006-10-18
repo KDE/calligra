@@ -26,9 +26,8 @@
 #include <klocale.h>
 #include <kcommand.h>
 
-
-#include <kdebug.h>
 #include <kvbox.h>
+#include <kdebug.h>
 
 namespace KPlato
 {
@@ -59,6 +58,7 @@ TaskDialog::TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTim
     // Set the state of all the child widgets.
     enableButtonOk(false);
 
+    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
     connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOk(bool) ));
     connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
     connect(m_costTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));

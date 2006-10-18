@@ -21,32 +21,19 @@
 #ifndef KPTCALENDARLISTDIALOGBASE_H
 #define KPTCALENDARLISTDIALOGBASE_H
 
-#include "kptcalendarlistpanel.h"
+#include "ui_kptcalendarlistpanel.h"
 
 #include <QVariant>
 #include <QWidget>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
 #include <QLabel>
-#include <Q3GridLayout>
 
-class Q3VBoxLayout;
-class Q3HBoxLayout;
-class Q3GridLayout;
-class Q3ListView;
-class Q3ListViewItem;
-class QLineEdit;
-class QPushButton;
-class QComboBox;
-class QLabel;
 
 namespace KPlato
 {
 
 class CalendarEdit;
 
-class CalendarListDialogBase : public CalendarListPanel
+class CalendarListDialogBase : public QWidget, public Ui_CalendarListPanel
 {
     Q_OBJECT
 public:

@@ -68,8 +68,11 @@ KCommand *MilestoneProgressPanel::buildCommand(Part *part) {
 
 //-------------------------------------
 
-MilestoneProgressPanelImpl::MilestoneProgressPanelImpl(QWidget *parent, const char *name, Qt::WFlags f)
-    : MilestoneProgressPanelBase(parent, name, f) {
+MilestoneProgressPanelImpl::MilestoneProgressPanelImpl(QWidget *parent, const char *name)
+    : QWidget(parent) {
+    
+    setObjectName(name);
+    setupUi(this);
     
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotFinishedChanged(bool)));
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotChanged()));

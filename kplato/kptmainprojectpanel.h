@@ -20,11 +20,10 @@
 #ifndef KPTMAINPROJECTPANEL_H
 #define KPTMAINPROJECTPANEL_H
 
-#include "kptmainprojectpanelbase.h"
+#include "ui_kptmainprojectpanelbase.h"
 
-#include <qdatetime.h>
-
-class QWidget;
+#include <QDateTime>
+#include <QWidget>
 
 class KCommand;
 
@@ -34,7 +33,7 @@ namespace KPlato
 class Project;
 class Part;
 
-class MainProjectPanelImpl : public MainProjectPanelBase {
+class MainProjectPanelImpl : public QWidget, public Ui_MainProjectPanelBase {
     Q_OBJECT
 public:
     MainProjectPanelImpl(QWidget *parent=0, const char *name=0);

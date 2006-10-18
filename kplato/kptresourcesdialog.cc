@@ -17,8 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3vbox.h>
-
 #include <klocale.h>
 #include <kcommand.h>
 
@@ -45,6 +43,7 @@ ResourcesDialog::ResourcesDialog(Project &p, QWidget *parent, const char *name)
     setMainWidget(panel);
     enableButtonOk(false);
 
+    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
     connect(panel, SIGNAL(changed()), SLOT(slotChanged()));
 }
 

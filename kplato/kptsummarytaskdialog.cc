@@ -24,7 +24,6 @@
 #include <klocale.h>
 #include <kcommand.h>
 
-#include <q3vbox.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -42,6 +41,7 @@ SummaryTaskDialog::SummaryTaskDialog(Task &task, QWidget *p)
     enableButtonOk(false);
 
     connect(m_generalTab, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOk(bool)));
+    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
 }
 
 

@@ -1,62 +1,76 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPlato::MilestoneProgressPanelBase</class>
-<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>MilestoneProgressPanelBase</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>343</width>
-            <height>120</height>
-        </rect>
-    </property>
-    <property name="caption">
-        <string>MilestoneProgressPanelBase</string>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>finished</cstring>
-            </property>
-            <property name="text">
-                <string>Finished</string>
-            </property>
-        </widget>
-        <widget class="KDateTimeWidget">
-            <property name="name">
-                <cstring>finishTime</cstring>
-            </property>
-        </widget>
-        <spacer>
-            <property name="name">
-                <cstring>spacer8</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>40</height>
-                </size>
-            </property>
-        </spacer>
-    </vbox>
-</widget>
-<customwidgets>
-</customwidgets>
-<layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kdatetimewidget.h</includehint>
-    <includehint>kdatewidget.h</includehint>
-</includehints>
-</UI>
+<ui version="4.0" >
+ <author>Dag Andersen &lt;danders@get2net.dk></author>
+ <class>KPlato::MilestoneProgressPanelBase</class>
+ <widget class="QWidget" name="KPlato::MilestoneProgressPanelBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>343</width>
+    <height>120</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>MilestoneProgressPanelBase</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QCheckBox" name="finished" >
+     <property name="text" >
+      <string>Finished</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="KDateTimeWidget" native="1" name="finishTime" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>7</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>321</width>
+       <height>31</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KDateTimeWidget</class>
+   <extends>QWidget</extends>
+   <header>kdatetimewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local" >kdatetimewidget.h</include>
+  <include location="local" >kdatewidget.h</include>
+ </includes>
+ <resources/>
+ <connections/>
+</ui>

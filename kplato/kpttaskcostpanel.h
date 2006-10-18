@@ -20,7 +20,7 @@
 #ifndef KPTTASKCOSTPANEL_H
 #define KPTTASKCOSTPANEL_H
 
-#include "kpttaskcostpanelbase.h"
+#include "ui_kpttaskcostpanelbase.h"
 
 class KCommand;
 
@@ -33,7 +33,7 @@ class Accounts;
 class Part;
 class Task;
 
-class TaskCostPanelImpl : public TaskCostPanelBase {
+class TaskCostPanelImpl : public QWidget, public Ui_TaskCostPanelBase {
     Q_OBJECT
 public:
     TaskCostPanelImpl(QWidget *parent=0, const char *name=0);

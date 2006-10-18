@@ -20,7 +20,7 @@
 #ifndef KPTMILESTONEPROGRESSPANEL_H
 #define KPTMILESTONEPROGRESSPANEL_H
 
-#include "kptmilestoneprogresspanelbase.h"
+#include "ui_kptmilestoneprogresspanelbase.h"
 #include "kpttask.h"
 
 class KCommand;
@@ -31,10 +31,10 @@ namespace KPlato
 class Part;
 class StandardWorktime;
 
-class MilestoneProgressPanelImpl : public MilestoneProgressPanelBase {
+class MilestoneProgressPanelImpl : public QWidget, public Ui_MilestoneProgressPanelBase {
     Q_OBJECT
 public:
-    MilestoneProgressPanelImpl(QWidget *parent=0, const char *name=0, Qt::WFlags f=0);
+    MilestoneProgressPanelImpl(QWidget *parent=0, const char *name=0);
     
     void enableWidgets();
 

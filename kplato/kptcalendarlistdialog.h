@@ -50,11 +50,11 @@ public:
 
     QList<CalendarListViewItem*> &deletedItems();
 
-    void renameStopped(Q3ListViewItem *item);
+    void renameStopped(QTreeWidgetItem *item);
 
 public slots:
     void slotSelectionChanged();
-    void slotSelectionChanged(Q3ListViewItem *listItem);
+    void slotSelectionChanged(QTreeWidgetItem *listItem);
 
 private slots:
     void slotBaseCalendarActivated(int id);
@@ -62,10 +62,9 @@ private slots:
     void slotDeleteClicked();
     void slotAddClicked();
     void slotEnableButtonOk(bool on);
-    void slotItemRenamed(Q3ListViewItem *item, int col);
-    void slotListDoubleClicked(Q3ListViewItem *item, const QPoint&, int col);
-    void slotStartRename(Q3ListViewItem *item, int col);
-    void slotRenameStarted(Q3ListViewItem *item, int col);
+    void slotListDoubleClicked(const QModelIndex &index);
+    void slotListDoubleClicked(QTreeWidgetItem *item, int col);
+    void slotItemChanged(QTreeWidgetItem*, int);
 
 signals:
     void obligatedFieldsFilled(bool yes);
@@ -73,9 +72,6 @@ signals:
     void calendarChanged();
     void enableButtonOk(bool on);
 
-    //internal
-    void renameStarted(Q3ListViewItem *, int);
-    void startRename(Q3ListViewItem *item, int col);
     void selectionChanged();
 
 protected:
@@ -85,7 +81,7 @@ private:
     Project &project;
     QList<CalendarListViewItem*> m_deletedItems;
     QList<CalendarListViewItem*> baseCalendarList;
-    Q3ListViewItem *m_renameItem;
+    QTreeWidgetItem *m_renameItem;
 };
 
 class CalendarListDialog : public KDialog {

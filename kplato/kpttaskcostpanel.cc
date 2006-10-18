@@ -133,8 +133,11 @@ bool TaskCostPanel::ok() {
 
 
 TaskCostPanelImpl::TaskCostPanelImpl(QWidget *p, const char *n)
-    : TaskCostPanelBase(p, n)
+    : QWidget(p)
 {
+    setObjectName(n);
+    setupUi(this);
+    
     connect(runningAccount, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(startupAccount, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(shutdownAccount, SIGNAL(activated(int)), SLOT(slotChanged()));

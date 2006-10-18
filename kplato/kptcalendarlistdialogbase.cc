@@ -20,21 +20,7 @@
 #include "kptcalendarlistdialogbase.h"
 #include "kptcalendaredit.h"
 
-#include <QVariant>
-#include <q3frame.h>
-#include <q3groupbox.h>
-#include <q3header.h>
-#include <q3listview.h>
-#include <QLineEdit>
-#include <QPushButton>
-#include <q3table.h>
-#include <QLayout>
-#include <QToolTip>
-#include <q3whatsthis.h>
-#include <QLabel>
-#include <QComboBox>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -43,12 +29,11 @@ namespace KPlato
 {
 
 CalendarListDialogBase::CalendarListDialogBase( QWidget* parent, const char* name, Qt::WFlags fl )
-    : CalendarListPanel( parent, name, fl )
+    : QWidget(parent)
 {
-    if ( !name )
-        setName( "CalendarListDialogBase" );
-        
-    Q3VBoxLayout *l = new Q3VBoxLayout(calendarBox);
+    setObjectName(name);
+    setupUi(this);
+    QVBoxLayout *l = new QVBoxLayout(calendarBox);
     calendar = new CalendarEdit(calendarBox);
     l->addWidget(calendar);
 }

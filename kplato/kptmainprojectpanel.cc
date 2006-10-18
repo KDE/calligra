@@ -20,13 +20,9 @@
 #include "kptmainprojectpanel.h"
 
 #include <QCheckBox>
-#include <q3buttongroup.h>
-#include <qdatetime.h>
-#include <q3datetimeedit.h>
-#include <qradiobutton.h>
 #include <QPushButton>
-
 #include <QLabel>
+
 #include <klineedit.h>
 #include <ktextedit.h>
 #include <kdatewidget.h>
@@ -66,16 +62,16 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
     }
     schedulingGroup->setTitle(s);
     if (project.constraint() == Node::MustStartOn) {
-        schedulingGroup->setButton(0);
+        bStartDate->setChecked(true);
         if (sch)
             et = project.endTime();
     } else if (project.constraint() == Node::MustFinishOn) {
-        schedulingGroup->setButton(1);
+        bEndDate->setChecked(true);
         if (sch)
             st = project.startTime();
     } else {
         kWarning()<<k_funcinfo<<"Illegal constraint: "<<project.constraint()<<endl;
-        schedulingGroup->setButton(0);
+        bStartDate->setDown(true);;
         if (sch)
             et = project.endTime();
     }
@@ -143,18 +139,20 @@ KCommand *MainProjectPanel::buildCommand(Part *part) {
 
 //-------------------------------------------------------------------
 MainProjectPanelImpl::MainProjectPanelImpl(QWidget *parent, const char *name)
-    :  MainProjectPanelBase(parent, name) {
+    :  QWidget(parent) {
 
+    setObjectName(name);
+    setupUi(this);
     // signals and slots connections
-    connect( bStartDate, SIGNAL( clicked() ), this, SLOT( slotStartDateClicked() ) );
-    connect( bEndDate, SIGNAL( clicked() ), this, SLOT( slotEndDateClicked() ) );
-    connect( bStartDate, SIGNAL( clicked() ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( bEndDate, SIGNAL( clicked() ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( bStartDate, SIGNAL( toggled(bool) ), this, SLOT( slotStartDateClicked() ) );
+    connect( bEndDate, SIGNAL( toggled(bool) ), this, SLOT( slotEndDateClicked() ) );
+    connect( bStartDate, SIGNAL( toggled(bool) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( bEndDate, SIGNAL( toggled(bool) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( descriptionfield, SIGNAL( textChanged() ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( endDate, SIGNAL( changed(QDate) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( endTime, SIGNAL( valueChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( startDate, SIGNAL( changed(QDate) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( startTime, SIGNAL( valueChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( endDate, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( endTime, SIGNAL( timeChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( startDate, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
+    connect( startTime, SIGNAL( timeChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     //connect( baseline, SIGNAL( toggled(bool) ), this, SLOT( slotCheckAllFieldsFilled() ) ); FIXME: Removed for this release
     connect( namefield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( idfield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
@@ -195,15 +193,17 @@ void MainProjectPanelImpl::slotEndDateClicked()
 
 void MainProjectPanelImpl::enableDateTime()
 {
-    if (schedulingGroup->selected() == bStartDate)
+    if (bStartDate->isChecked())
     {
+        kDebug()<<k_funcinfo<<endl;
         startTime->setEnabled(true);
         startDate->setEnabled(true);
         endTime->setEnabled(false);
         endDate->setEnabled(false);
     }
-    if (schedulingGroup->selected() == bEndDate)
+    if (bEndDate->isChecked())
     {
+        kDebug()<<k_funcinfo<<endl;
         startTime->setEnabled(false);
         startDate->setEnabled(false);
         endTime->setEnabled(true);

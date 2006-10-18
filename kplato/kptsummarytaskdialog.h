@@ -23,20 +23,7 @@
 
 #include <kdialog.h>
 
-class Duration;
-
-class KLineEdit;
 class KCommand;
-class KTextEdit;
-class KComboBox;
-class KDoubleNumInput;
-
-class Q3DateTimeEdit;
-class QSpinBox;
-class Q3ButtonGroup;
-class Q3ListBox;
-class Q3Table;
-class QDateTime;
 
 namespace KPlato
 {

@@ -28,10 +28,6 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QComboBox>
-#include <q3datetimeedit.h>
-#include <qdatetime.h>
-#include <q3buttongroup.h>
-#include <qradiobutton.h>
 #include <QSpinBox>
 #include <QList>
 #include <qstringlist.h>
@@ -50,8 +46,9 @@ namespace KPlato
 {
 
 ResourceDialogImpl::ResourceDialogImpl (QWidget *parent)
-    : ResourceDialogBase(parent)
+    : QWidget(parent)
 {
+    setupUi(this);
 
     connect(type, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(units, SIGNAL(valueChanged(int)), SLOT(slotChanged()));
@@ -124,13 +121,15 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
       m_resource(resource),
       m_calculationNeeded(false)
 {
+    setObjectName(name);
+    
     setCaption( i18n("Resource Settings") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
     dia = new ResourceDialogImpl(this);
     setMainWidget(dia);
-	KDialog::enableButtonOk(false);
+    KDialog::enableButtonOk(false);
 
     dia->nameEdit->setText(resource->name());
     dia->initialsEdit->setText(resource->initials());
@@ -156,6 +155,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     }
     dia->calendarList->setCurrentIndex(cal);
 
+    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
     connect(dia, SIGNAL(changed()), SLOT(enableButtonOk()));
     connect(dia, SIGNAL(calculate()), SLOT(slotCalculationNeeded()));
     connect(dia->calendarList, SIGNAL(activated(int)), SLOT(slotCalendarChanged(int)));

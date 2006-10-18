@@ -41,6 +41,7 @@ MilestoneProgressDialog::MilestoneProgressDialog(Task &task, QWidget *p)
 
     enableButtonOk(false);
 
+    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
     connect(m_panel, SIGNAL(changed()), SLOT(slotChanged()));
 }
 

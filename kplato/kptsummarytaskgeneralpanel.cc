@@ -37,18 +37,19 @@
 #include <QPushButton>
 #include <QLayout>
 #include <QLabel>
-#include <qdatetime.h> 
-#include <q3datetimeedit.h> 
-#include <q3groupbox.h> 
+#include <QGroupBox>
 #include <kdebug.h>
 
 namespace KPlato
 {
 
 SummaryTaskGeneralPanel::SummaryTaskGeneralPanel(Task &task, QWidget *p, const char *n)
-    : SummaryTaskGeneralPanelBase(p, n),
+    : QWidget(p),
       m_task(task)
 {
+    setObjectName(n);
+    setupUi(this);
+    
     setStartValues(task);
     
     connect(namefield, SIGNAL(textChanged(const QString&)), SLOT(slotObligatedFieldsFilled()));
