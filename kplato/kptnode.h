@@ -455,7 +455,7 @@ public:
     /// Find schedule matching type.  Does not return deleted schedule.
     Schedule *findSchedule(const Schedule::Type type);
     /// Find schedule matching id.  Also returns deleted schedule.
-    Schedule *findSchedule(long id) { 
+    Schedule *findSchedule(long id) const { 
         return m_schedules.contains(id) ? m_schedules[id] : 0; 
     }
     /// Take, don't delete (as in destruct).
