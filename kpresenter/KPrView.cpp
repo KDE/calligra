@@ -1820,9 +1820,11 @@ void KPrView::textInsertPageNum()
 void KPrView::mtextFont()
 {
     KoTextFormatInterface* textAdaptor = m_canvas->applicableTextInterfaces().first();
-    QColor col;
-    if (textAdaptor)
-        col = textAdaptor->textBackgroundColor();
+    if (!textAdaptor)
+        return;
+
+#warning pointless variable
+    QColor col = textAdaptor->textBackgroundColor();
     col = col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
 
     delete m_fontDlg;
