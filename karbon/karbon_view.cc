@@ -391,7 +391,11 @@ KarbonView::print( KPrinter &printer )
 	
 	QPaintDeviceMetrics metrics( ( QPaintDevice * ) & printer );
 	printer.setFullPage( true );
-	
+
+	KoPageLayout pageLayout = part()->pageLayout();
+	printer.setOrientation( pageLayout.orientation == PG_PORTRAIT ? KPrinter::Portrait : KPrinter::Landscape );
+	printer.setPageSize( (KPrinter::PageSize)KoPageFormat::printerPageSize( pageLayout.format ) );
+
 	// we are using 72 dpi internally
 	double zoom = metrics.logicalDpiX() / 72.0;
 
