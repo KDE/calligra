@@ -20,6 +20,7 @@
 VImage::VImage( VObject *parent, const QString &fname ) : VObject( parent ), m_image( 0L ), m_fname( fname )
 {
 	m_stroke = new VStroke( this );
+	m_stroke->setType( VStroke::none );
 	m_fill = new VFill();
 	m_image = new QImage( m_fname );
 	if( m_image->depth() != 32 )
@@ -35,6 +36,12 @@ VImage::VImage( const VImage &other ) : VObject( other )
 		m_image = new QImage( *other.m_image );
 	else
 		m_image			= 0L;
+
+	if ( other.stroke() )
+		setStroke( *other.stroke() );
+	if ( other.fill() )
+		setFill( *other.fill() );
+
 	m_fname			= other.m_fname;
 	m_boundingBox	= other.m_boundingBox;
 	m_matrix		= other.m_matrix;

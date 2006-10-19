@@ -29,6 +29,10 @@
 #include "vstroke.h"
 #include <kdebug.h>
 
+VStroke::VStroke()
+: m_parent(0L), m_lineWidth(1.0), m_lineCap(capButt), m_lineJoin(joinMiter), m_miterLimit(10.0), m_type(none)
+{}
+
 VStroke::VStroke( VObject* parent, float width, const VLineCap cap, const VLineJoin join,
 			float miterLimit )
 {

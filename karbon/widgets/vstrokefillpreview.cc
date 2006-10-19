@@ -129,7 +129,7 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 				emit strokeSelected();
 			}
 		}
-		update( *m_stroke, *m_fill );
+		update( m_stroke, m_fill );
 	}
 
 	if( event && event->type() == QEvent::MouseButtonDblClick )
@@ -138,7 +138,7 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 			ex >= FILL_TOPX && ex <= FILL_BOTTOMX &&
 			ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
 		{
-			VColorDlg* dialog = new VColorDlg( m_fill->color(), this );
+			VColorDlg* dialog = new VColorDlg( m_fill.color(), this );
 			if( dialog->exec() == QDialog::Accepted )
 			{
 				if( m_part && m_part->document().selection() ) m_part->addCommand( new VFillCmd( &m_part->document(), VFill( dialog->Color() ) ), true );
@@ -149,7 +149,7 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 			ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX
 			&& ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
 		{
-			VColorDlg* dialog = new VColorDlg( m_stroke->color(), this );
+			VColorDlg* dialog = new VColorDlg( m_stroke.color(), this );
 			if( dialog->exec() == QDialog::Accepted )
 			{
 				if( m_part && m_part->document().selection() ) m_part->addCommand( new VStrokeCmd( &m_part->document(), dialog->Color() ), true );
@@ -164,8 +164,15 @@ void
 VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 {
 	m_painter->begin();
-	m_fill = &f;
-	m_stroke = &s;
+
+	if( &f )
+		m_fill = f;
+	else
+		m_fill = VFill();
+	if( &s )
+		m_stroke = s;
+	else
+		m_stroke = VStroke();
 
 	// draw checkerboard
 	VFill fill;
@@ -181,13 +188,13 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 
 	if ( m_strokeWidget )
 	{
-		drawFill( f );
-		drawStroke( s );
+		drawFill( m_fill );
+		drawStroke( m_stroke );
 	}
 	else
 	{
- 		drawStroke( s );
-		drawFill( f );
+ 		drawStroke( m_stroke );
+		drawFill( m_fill );
 	}
 
 	m_painter->end();

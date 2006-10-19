@@ -1352,50 +1352,53 @@ KarbonView::canvasContentsMoving( int x, int y )
 void
 KarbonView::selectionChanged()
 {
-	int count = part()->document().selection()->objects().count();
+	VSelection *selection = part()->document().selection();
+	int count = selection->objects().count();
 	m_groupObjects->setEnabled( false );
 	m_closePath->setEnabled( false );
 	m_ungroupObjects->setEnabled( false );
 
 	if( count > 0 )
 	{
-		VObject *obj = part()->document().selection()->objects().getFirst();
+		VObject *obj = selection->objects().getFirst();
+		VFill fill = obj->fill() ? *obj->fill() : VFill();
+		VStroke stroke = obj->stroke() ? *obj->stroke() : VStroke();
 
 		if ( shell() ) {
 			//if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
-				m_strokeFillPreview->update( *obj->stroke(), *obj->fill() );
-				m_smallPreview->update( *obj->stroke(), *obj->fill() );
+				m_strokeFillPreview->update( stroke, fill );
+				m_smallPreview->update( stroke, fill );
 			//}
 		}
-		m_strokeDocker->setStroke( *( obj->stroke() ) );
+		m_strokeDocker->setStroke( stroke );
 
 		if( count == 1 )
 		{
-			VGroup *group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
+			VGroup *group = dynamic_cast<VGroup *>( selection->objects().getFirst() );
 			m_ungroupObjects->setEnabled( group );
-			VPath *path = dynamic_cast<VPath *>( part()->document().selection()->objects().getFirst() );
+			VPath *path = dynamic_cast<VPath *>( selection->objects().getFirst() );
 			m_closePath->setEnabled( path && !path->isClosed() );
 		}
 		else
 			m_groupObjects->setEnabled( true );
 
-		part()->document().selection()->setStroke( *obj->stroke() );
-		part()->document().selection()->setFill( *obj->fill() );
+		selection->setStroke( stroke );
+		selection->setFill( fill );
 		m_setLineWidth->setEnabled( true );
-		m_setLineWidth->updateValue( obj->stroke()->lineWidth() );
+		m_setLineWidth->updateValue( stroke.lineWidth() );
 		// dashes
   		m_lineStyleAction->setEnabled( true );
-		if( obj->stroke()->dashPattern().array().isEmpty() )
+		if( stroke.dashPattern().array().isEmpty() )
   			m_lineStyleAction->setCurrentSelection( Qt::SolidLine );
-		else if( obj->stroke()->dashPattern().array()[ 0 ] == 0. )
+		else if( stroke.dashPattern().array()[ 0 ] == 0. )
   			m_lineStyleAction->setCurrentSelection( Qt::NoPen );
-		else if( obj->stroke()->dashPattern().array()[ 0 ]  == 2. )
+		else if( stroke.dashPattern().array()[ 0 ]  == 2. )
   			m_lineStyleAction->setCurrentSelection( Qt::DotLine );
-		else if( obj->stroke()->dashPattern().array().count() == 2 )
+		else if( stroke.dashPattern().array().count() == 2 )
   			m_lineStyleAction->setCurrentSelection( Qt::DashLine );
-		else if( obj->stroke()->dashPattern().array().count() == 4 )
+		else if( stroke.dashPattern().array().count() == 4 )
   			m_lineStyleAction->setCurrentSelection( Qt::DashDotLine );
-		else if( obj->stroke()->dashPattern().array().count() == 6 )
+		else if( stroke.dashPattern().array().count() == 6 )
   			m_lineStyleAction->setCurrentSelection( Qt::DashDotDotLine );
 
 		m_deleteSelectionAction->setEnabled( true );
@@ -1403,9 +1406,12 @@ KarbonView::selectionChanged()
 	else
 	{
 		if ( shell() )
+		{
+			VFill fill = selection->fill() ? *selection->fill() : VFill();
+			VStroke stroke = selection->stroke() ? *selection->stroke() : VStroke();
 			//if ( this == shell()->rootView() || koDocument()->isEmbedded() && m_strokeFillPreview )
-			m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
-									 *( part()->document().selection()->fill() ) );
+			m_strokeFillPreview->update( stroke, fill );
+		}
   		m_lineStyleAction->setEnabled( false );
 		m_deleteSelectionAction->setEnabled( false );
 	}

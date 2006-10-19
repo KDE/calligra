@@ -65,8 +65,8 @@ private:
 	QPixmap m_pixmap;
 	KarbonPart *m_part;
 	bool m_strokeWidget;
-	const VFill *m_fill;
-	const VStroke *m_stroke;
+	VFill m_fill;
+	VStroke m_stroke;
 };
 
 #endif

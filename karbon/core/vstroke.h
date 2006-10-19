@@ -71,8 +71,8 @@ public:
 		joinBevel = 2
 	};
 
-
-	VStroke( VObject* parent = 0L, float width = 1.0, const VLineCap cap = capButt,
+	VStroke();
+	VStroke( VObject* parent, float width = 1.0, const VLineCap cap = capButt,
 			 const VLineJoin join = joinMiter, float miterLimit = 10.0 );
 	VStroke( const VColor &c, VObject* parent = 0L, float width = 1.0, const VLineCap cap = capButt,
 			 const VLineJoin join = joinMiter, float miterLimit = 10.0 );

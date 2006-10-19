@@ -243,8 +243,8 @@ void VColorDocker::update()
 	{
 		VObject *obj = m_part->document().selection()->objects().getFirst();
 
-		QColor fgColor = QColor(obj->stroke()->color());
-		QColor bgColor = QColor(obj->fill()->color());
+		QColor fgColor = QColor(obj->stroke() ? obj->stroke()->color() : VColor() );
+		QColor bgColor = QColor(obj->fill() ? obj->fill()->color() : VColor() );
 
 		mHSVWidget->setFgColor(fgColor);
 		mRGBWidget->setFgColor(fgColor);

@@ -188,7 +188,10 @@ void VStrokeDocker::widthChanged()
 
 void VStrokeDocker::setStroke( const VStroke &stroke )
 {
-	m_stroke = stroke;
+	if( &stroke )
+		m_stroke = stroke;
+	else
+		m_stroke = VStroke();
 	updateDocker();
 }
 

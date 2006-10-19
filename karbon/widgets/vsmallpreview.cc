@@ -69,11 +69,17 @@ VSmallPreview::~VSmallPreview()
 void
 VSmallPreview::update( const VStroke &s, const VFill &f )
 {
-	m_fill = f;
-	m_stroke = s;
+	if( &f )
+		m_fill = f;
+	else
+		m_fill = VFill();
+	if( &s )
+		m_stroke = s;
+	else
+		m_stroke = VStroke();
 
-	drawStroke( s );
-	drawFill( f );
+	drawStroke( m_stroke );
+	drawFill( m_fill );
 }
 
 void
@@ -98,7 +104,7 @@ VSmallPreview::drawFill( const VFill &f )
 	fill.setColor( Qt::white );
 	m_painter->setBrush( fill );
 	m_painter->drawRect( KoRect( 0, 0, m_fillFrame->width(), m_fillFrame->height() ) );
-	
+
 	switch ( f.type() )
 	{
 		case VFill::solid:
@@ -193,7 +199,6 @@ VSmallPreview::drawStroke( const VStroke &s )
 	fill.setColor( Qt::white );
 	m_painter->setBrush( fill );
 	m_painter->drawRect( KoRect( 0, 0, m_strokeFrame->width(), m_strokeFrame->height() ) );
-	
 	
 	switch ( s.type() )
 	{
