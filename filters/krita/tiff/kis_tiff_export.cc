@@ -26,6 +26,7 @@
 #include <kgenericfactory.h>
 
 #include <KoFilterChain.h>
+#include <KoColorSpace.h>
 
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
@@ -56,13 +57,13 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
         return KoFilter::NotImplemented;
 
     
-    KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0, "options dialog for tiff");
+    KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0);
  
-    KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
+    KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     
-    KisColorSpace* cs = output->currentImage()->colorSpace();
-    KisChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
-    if( type == KisChannelInfo::FLOAT16 || type == KisChannelInfo::FLOAT32)
+    KoColorSpace* cs = output->currentImage()->colorSpace();
+    KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
+    if( type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32)
     {
       kdb->optionswdg->kComboBoxPredictor->removeItem(1);
     } else {
@@ -76,7 +77,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     KisTIFFOptions options = kdb->options();
 
-    if( ( type == KisChannelInfo::FLOAT16 || type == KisChannelInfo::FLOAT32) && options.predictor == 2  )
+    if( ( type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) && options.predictor == 2  )
     { // FIXME THIS IS AN HACK FIX THAT IN 2.0 !!
       options.predictor = 3;
     }

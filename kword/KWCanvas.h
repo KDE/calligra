@@ -45,8 +45,7 @@ class KWFrameViewManager;
 class KWGUI;
 class KWTableTemplate;
 class KoTextParag;
-
-class KoTool;
+class KoToolProxy;
 class KoShapeManager;
 
 class KPrinter;
@@ -225,10 +224,11 @@ public:
     void addCommand(KCommand *command, bool execute = true);
     KoShapeManager *shapeManager() const { return m_shapeManager; }
     void updateCanvas(const QRectF& rc);
-    KoTool* tool() { return m_tool; }
-    void setTool(KoTool *tool) { m_tool = tool; }
     KoViewConverter *viewConverter();
     QWidget* canvasWidget() { return this; }
+    KoToolProxy * toolProxy() {
+        return 0;
+    }
 
 protected:
     void drawGrid( QPainter &p, const QRect& rect );
@@ -360,7 +360,6 @@ private:
     KWTableFrameSet *m_currentTable;
 
     KoShapeManager *m_shapeManager;
-    KoTool *m_tool;
 
     struct
     {

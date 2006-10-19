@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
- 
+
 #include "kis_jpeg_converter.h"
 
 #include <stdio.h>
@@ -57,7 +57,7 @@ extern "C" {
 #define MAX_DATA_BYTES_IN_MARKER  (MAX_BYTES_IN_MARKER - ICC_OVERHEAD_LEN)
 
 namespace {
-    
+
     J_COLOR_SPACE getColorTypeforColorSpace( KoColorSpace * cs)
     {
         if ( cs->id() == KoID("GRAYA") || cs->id() == KoID("GRAYA16") )
@@ -107,10 +107,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
-    
+
     cinfo.err = jpeg_std_error(&jerr);
     jpeg_create_decompress(&cinfo);
-    
+
     // open the file
     FILE *fp = fopen(QFile::encodeName(uri.path()), "rb");
     if (!fp)
@@ -118,20 +118,20 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         return (KisImageBuilder_RESULT_NOT_EXIST);
     }
     jpeg_stdio_src(&cinfo, fp);
-    
+
     jpeg_save_markers (&cinfo, JPEG_COM, 0xFFFF);
     /* Save APP0..APP15 markers */
     for (int m = 0; m < 16; m++)
         jpeg_save_markers (&cinfo, JPEG_APP0 + m, 0xFFFF);
 
-    
+
 //     setup_read_icc_profile(&cinfo);
     // read header
     jpeg_read_header(&cinfo, true);
-    
+
     // start reading
     jpeg_start_decompress(&cinfo);
-    
+
     // Get the colorspace
     QString csName = getColorSpaceForColorType(cinfo.out_color_space);
     if(csName.isEmpty()) {
@@ -160,7 +160,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
             }
         }
     }
-    
+
     // Retrieve a pointer to the colorspace
     KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput())
@@ -178,9 +178,9 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
-    
-    // Create the cmsTransform if needed 
-    
+
+    // Create the cmsTransform if needed
+
     cmsHTRANSFORM transform = 0;
     if(profile && !profile->isSuitableForOutput())
     {
@@ -188,7 +188,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
                                        cs->getProfile()->profile() , cs->colorSpaceType(),
                                        INTENT_PERCEPTUAL, 0);
     }
-    
+
     // Creating the KisImageSP
     if( ! m_img) {
         m_img = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
@@ -200,12 +200,12 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
 
     KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX));
-    
+
     // Read exif information if any
-    
+
     // Read data
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
-    
+
     for (; cinfo.output_scanline < cinfo.image_height;) {
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.output_scanline, cinfo.image_width);
         jpeg_read_scanlines(&cinfo, &row_pointer, 1);
@@ -248,13 +248,13 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
                 return KisImageBuilder_RESULT_UNSUPPORTED;
         }
     }
-    
+
     m_img->addLayer(KisLayerSP(layer.data()), m_img->rootLayer(), KisLayerSP(0));
-    
+
     // Read exif information
 
     kDebug(41008) << "Looking for exif information" << endl;
-    
+
     for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
         kDebug(41008) << "Marker is " << marker->marker << endl;
         if (marker->marker != (JOCTET) (JPEG_APP0 + 1) ||
@@ -379,7 +379,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     cinfo.err = jpeg_std_error(&jerr);
     // Initialize output stream
     jpeg_stdio_dest(&cinfo, fp);
-    
+
     cinfo.image_width = width;  // image width and height, in pixels
     cinfo.image_height = height;
     cinfo.input_components = img->colorSpace()->nColorChannels(); // number of color channels per pixel */
@@ -391,17 +391,17 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     }
     cinfo.in_color_space = color_type;   // colorspace of input image
 
-    
+
     // Set default compression parameters
     jpeg_set_defaults(&cinfo);
     // Customize them
     jpeg_set_quality(&cinfo, options.quality, true);
-    
+
     if(options.progressive)
     {
         jpeg_simple_progression (&cinfo);
     }
-    
+
     // Start compression
     jpeg_start_compress(&cinfo, true);
     // Save exif information if any available
@@ -420,7 +420,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             kDebug(41008) << "exif information couldn't be saved." << endl;
         }
     }
-    
+
 
     // Save annotation
     vKisAnnotationSP_it it = annotationsStart;
@@ -443,14 +443,14 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
         ++it;
     }
 
-    
+
     // Write data information
-    
+
     JSAMPROW row_pointer = new JSAMPLE[width*cinfo.input_components];
     int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
-    
+
     for (; cinfo.next_scanline < height;) {
-        KisHLineConstIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.next_scanline, width);
+        KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(0, cinfo.next_scanline, width);
         quint8 *dst = row_pointer;
         switch(color_type)
         {
@@ -520,16 +520,16 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
         }
         jpeg_write_scanlines(&cinfo, &row_pointer, 1);
     }
-    
+
 
     // Writing is over
     jpeg_finish_compress(&cinfo);
     fclose(fp);
-    
+
     delete [] row_pointer;
     // Free memory
     jpeg_destroy_compress(&cinfo);
-    
+
     return KisImageBuilder_RESULT_OK;
 }
 

@@ -26,6 +26,8 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QPaintEvent>
+#include <QTabletEvent>
+#include <QWheelEvent>
 #include <QFocusEvent>
 #include <QWidget>
 #include <QList>
@@ -43,7 +45,7 @@ class QPointF;
 class QRectF;
 class KoViewConverter;
 class KoShapeManager;
-class KoTool;
+class KoToolProxy;
 class KCommand;
 class KCommandHistory;
 class VDocument;
@@ -71,9 +73,6 @@ public:
      */
     void updateCanvas(const QRectF& rc);
 
-    KoTool *tool() { return m_tool; }
-    void setTool(KoTool *tool) { m_tool = tool; }
-
     KoViewConverter *viewConverter() { return &m_zoomHandler; }
 
     QWidget *canvasWidget() { return this; }
@@ -88,11 +87,14 @@ public:
 
     virtual QPoint documentOrigin();
 
+    KoToolProxy * toolProxy() { return m_toolProxy; }
+
+
 public slots:
 
     /**
      * Tell the canvas that it has to adjust its size.
-     * The new size depends on the current document size and the actual zoom factor. 
+     * The new size depends on the current document size and the actual zoom factor.
      * If the new calculated size is smaller than the visible size set
      * by setVisibleSize, the visible size is used as the new size.
      */
@@ -106,6 +108,8 @@ protected:
     void keyPressEvent (QKeyEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
+    void tabletEvent( QTabletEvent *e );
+    void wheelEvent( QWheelEvent *e );
 
     QPoint widgetToView( const QPoint& p ) const;
     QRect widgetToView( const QRect& r ) const;
@@ -118,7 +122,7 @@ private:
 
     KCommandHistory *m_commandHistory;
 
-    KoTool *m_tool;
+    KoToolProxy *m_toolProxy;
 
     VDocument *m_doc;
     QRectF m_contentRect;  ///< the content rect around all content of the document (>=m_documentRect)

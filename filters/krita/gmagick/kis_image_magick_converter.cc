@@ -45,7 +45,7 @@
 
 #include "kis_types.h"
 #include "kis_global.h"
-#include "kis_doc.h"
+#include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
@@ -123,14 +123,14 @@ namespace {
     KoColorProfile * getProfileForProfileInfo(const Image * image)
     {
         size_t length;
-        
+
         const unsigned char * profiledata = GetImageProfile(image, "ICM", &length);
         if( profiledata == NULL )
             return 0;
         QByteArray rawdata;
         rawdata.resize(length);
         memcpy(rawdata.data(), profiledata, length);
-        
+
         KoColorProfile* p = new KoColorProfile(rawdata);
         return p;
 
@@ -171,14 +171,14 @@ namespace {
     void setAnnotationsForImage(const Image * src, KisImageSP image)
     {
         size_t length;
-        
+
         const unsigned char * profiledata = GetImageProfile(src, "IPTC", &length);
         if( profiledata != NULL )
         {
             QByteArray rawdata;
             rawdata.resize(length);
             memcpy(rawdata.data(), profiledata, length);
-            
+
             KisAnnotation* annotation = new KisAnnotation(QString("IPTC"), "", rawdata);
             Q_CHECK_PTR(annotation);
 
@@ -189,13 +189,13 @@ namespace {
             QByteArray rawdata;
             rawdata.resize(length);
             memcpy(rawdata.data(), src->generic_profile[i].info, src->generic_profile[i].length);
-            
+
             KisAnnotation* annotation = new KisAnnotation(QString(src->generic_profile[i].name), "", rawdata);
             Q_CHECK_PTR(annotation);
 
             image -> addAnnotation(annotation);
         }
-        
+
         const ImageAttribute* imgAttr = GetImageAttribute(src, NULL);
         while(imgAttr)
         {
@@ -203,7 +203,7 @@ namespace {
             int len = strlen(imgAttr -> value) + 1;
             rawdata.resize(len);
             memcpy(rawdata.data(), imgAttr -> value, len);
-            
+
             KisAnnotation* annotation = new KisAnnotation( QString("krita_attribute:%1").arg(QString(imgAttr -> key)), "", rawdata );
             Q_CHECK_PTR(annotation);
 
@@ -355,7 +355,7 @@ namespace {
 
 
 
-KisImageMagickConverter::KisImageMagickConverter(KisDoc *doc, KisUndoAdapter *adapter)
+KisImageMagickConverter::KisImageMagickConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 {
     InitGlobalMagick();
     init(doc, adapter);
@@ -439,7 +439,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         }
 
         kDebug(41008) << "image has " << csName << " colorspace\n";
-        
+
         KoColorProfile * profile = getProfileForProfileInfo(image);
         if (profile)
         {
@@ -464,7 +464,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             m_img = new KisImage(m_doc->undoAdapter(), image -> columns, image -> rows, cs, "built image");
             Q_CHECK_PTR(m_img);
             m_img->blockSignals(true); // Don't send out signals while we're building the image
-            
+
             // XXX I'm assuming separate layers won't have other profile things like EXIF
             setAnnotationsForImage(image, m_img);
         }
@@ -554,7 +554,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                     while(! hiter.isDone())
                     {
                         quint16 *ptr = reinterpret_cast<quint16 *>(hiter.rawData());
-                        
+
                         *(ptr++) = ScaleQuantumToShort(pp->red);
                         *(ptr++) = ScaleQuantumToShort(pp->green);
                         *(ptr++) = ScaleQuantumToShort(pp->blue);
@@ -680,7 +680,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         return m_img;
     }
 
-    void KisImageMagickConverter::init(KisDoc *doc, KisUndoAdapter *adapter)
+    void KisImageMagickConverter::init(KisDoc2 *doc, KisUndoAdapter *adapter)
     {
         m_doc = doc;
         m_adapter = adapter;
@@ -778,7 +778,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
 
             }
 
-            KisHLineConstIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
+            KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(0, y, width);
             if (alpha)
                 SetImageType(image, TrueColorMatteType);
             else

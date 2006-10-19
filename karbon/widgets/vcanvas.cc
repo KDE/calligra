@@ -32,6 +32,8 @@
 
 #include "KoZoomHandler.h"
 #include "KoShapeManager.h"
+#include "KoToolManager.h"
+#include "KoToolProxy.h"
 #include "KoTool.h"
 #include "KoPointerEvent.h"
 
@@ -47,7 +49,6 @@ const int defaultMargin = 50;
 KarbonCanvas::KarbonCanvas( VDocument &document )
     : QWidget()
     , m_zoomHandler()
-    , m_tool(0)
     , m_doc( &document )
     , m_marginX( defaultMargin )
     , m_marginY( defaultMargin )
@@ -61,6 +62,8 @@ KarbonCanvas::KarbonCanvas( VDocument &document )
 
     m_shapeManager = new KoShapeManager(this, m_doc->shapes() );
     setMouseTracking(true);
+
+    m_toolProxy = KoToolManager::instance()->toolProxy();
 
     connect( m_shapeManager, SIGNAL(selectionChanged()), this, SLOT(adjustSize()) );
     setFocusPolicy(Qt::ClickFocus); // allow to receive keyboard input
@@ -85,35 +88,42 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
         m_doc->grid().paint( gc, m_zoomHandler, m_zoomHandler.viewToDocument( widgetToView( ev->rect() ) ) );
 
     m_shapeManager->paint( gc, m_zoomHandler, false );
-    m_tool->paint( gc, m_zoomHandler );
+    m_toolProxy->paint( gc, m_zoomHandler );
 
     gc.end();
 }
 
 void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
 {
-    KoPointerEvent ev(e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
-    m_tool->mouseMoveEvent( &ev );
+    m_toolProxy->mouseMoveEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
 }
 
 void KarbonCanvas::mousePressEvent(QMouseEvent *e)
 {
-    KoPointerEvent ev(e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
-    m_tool->mousePressEvent( &ev );
+    m_toolProxy->mousePressEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
 }
 
 void KarbonCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    KoPointerEvent ev(e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
-    m_tool->mouseReleaseEvent( &ev );
+    m_toolProxy->mouseReleaseEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
 }
 
 void KarbonCanvas::keyReleaseEvent (QKeyEvent *e) {
-    m_tool->keyReleaseEvent(e);
+    m_toolProxy->keyReleaseEvent(e);
 }
 
 void KarbonCanvas::keyPressEvent (QKeyEvent *e) {
-    m_tool->keyPressEvent(e);
+    m_toolProxy->keyPressEvent(e);
+}
+
+void KarbonCanvas::tabletEvent( QTabletEvent *e )
+{
+    m_toolProxy->tabletEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
+}
+
+void KarbonCanvas::wheelEvent( QWheelEvent *e )
+{
+    m_toolProxy->wheelEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
 }
 
 void KarbonCanvas::gridSize(double *horizontal, double *vertical) const {
@@ -151,7 +161,7 @@ void KarbonCanvas::adjustSize() {
     m_contentRect = m_doc->boundingRect();
     m_documentRect.setRect( 0.0, 0.0, m_doc->width(), m_doc->height() );
 
-    if( m_zoomHandler.zoomMode() == KoZoomMode::ZOOM_PAGE ) 
+    if( m_zoomHandler.zoomMode() == KoZoomMode::ZOOM_PAGE )
     {
         double zoomX = double( m_visibleWidth-2*m_fitMarginX ) / double( m_zoomHandler.resolutionX() * m_documentRect.width() );
         double zoomY = double( m_visibleHeight-2*m_fitMarginY ) / double( m_zoomHandler.resolutionY() * m_documentRect.height() );
@@ -167,7 +177,7 @@ void KarbonCanvas::adjustSize() {
             zoom = qMin( zoomX, zoomY );
         m_zoomHandler.setZoom( zoom );
     }
-    else if( m_zoomHandler.zoomMode() == KoZoomMode::ZOOM_WIDTH ) 
+    else if( m_zoomHandler.zoomMode() == KoZoomMode::ZOOM_WIDTH )
     {
         double zoom = double( m_visibleWidth-2*m_fitMarginX ) / double( m_zoomHandler.resolutionX() * m_documentRect.width() );
         m_zoomHandler.setZoom( zoom );

@@ -29,8 +29,9 @@
 #include <KoZoomHandler.h>
 #include <KoPageLayout.h>
 #include <KoShapeManager.h>
-#include <KoTool.h>
+#include <KoToolManager.h>
 #include <KoPointerEvent.h>
+#include <KoToolProxy.h>
 
 #include "KivioView.h"
 #include "KivioDocument.h"
@@ -40,6 +41,7 @@ KivioCanvas::KivioCanvas(KivioView* parent)
   : QWidget(parent), m_view(parent)
 {
   m_shapeManager = new KoShapeManager(this);
+  m_toolProxy = KoToolManager::instance()->toolProxy();
 
   setMouseTracking(true);
 
@@ -116,38 +118,35 @@ void KivioCanvas::paintEvent(QPaintEvent* event)
   painter.setClipRect(event->rect());
 
   shapeManager()->paint(painter, *(viewConverter()), false);
-  m_tool->paint(painter, *(viewConverter()));
+  m_toolProxy->paint(painter, *(viewConverter()));
 
   painter.end();
 }
 
 void KivioCanvas::mouseMoveEvent(QMouseEvent* event)
 {
-  KoPointerEvent pointerEvent(event, viewConverter()->viewToDocument(event->pos()));
-  m_tool->mouseMoveEvent(&pointerEvent);
+  m_toolProxy->mouseMoveEvent(event, viewConverter()->viewToDocument(event->pos()));
   m_view->updateMousePosition(event->pos());
 }
 
 void KivioCanvas::mousePressEvent(QMouseEvent* event)
 {
-  KoPointerEvent pointerEvent(event, viewConverter()->viewToDocument(event->pos()));
-  m_tool->mousePressEvent(&pointerEvent);
+  m_toolProxy->mousePressEvent(event, viewConverter()->viewToDocument(event->pos()));
 }
 
 void KivioCanvas::mouseReleaseEvent(QMouseEvent* event)
 {
-  KoPointerEvent pointerEvent(event, viewConverter()->viewToDocument(event->pos()));
-  m_tool->mouseReleaseEvent(&pointerEvent);
+  m_toolProxy->mouseReleaseEvent(event, viewConverter()->viewToDocument(event->pos()));
 }
 
 void KivioCanvas::keyPressEvent(QKeyEvent* event)
 {
-  m_tool->keyPressEvent(event);
+  m_toolProxy->keyPressEvent(event);
 }
 
 void KivioCanvas::keyReleaseEvent(QKeyEvent* event)
 {
-  m_tool->keyReleaseEvent(event);
+  m_toolProxy->keyReleaseEvent(event);
 }
 
 #include "KivioCanvas.moc"

@@ -2128,7 +2128,7 @@ void KWCanvas::addCommand(KCommand *command, bool execute) {
 
 void KWCanvas::updateCanvas(const QRectF& rc) {
     QRect clipRect(viewConverter()->normalToView(rc).toRect());
-    clipRect.adjust(-2, -2, 2, 2); // grow for to anti-aliasing
+    clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
     update(clipRect);
 }
 

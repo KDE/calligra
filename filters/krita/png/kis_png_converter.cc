@@ -547,7 +547,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     if(!alpha && layer->paintDevice()->colorSpace()->id() == KoID("RGBA") )
     { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
         palette = new png_color[255];
-        KisRectConstIteratorPixel it = layer->paintDevice()->createRectIterator(0,0, img->width(), img->height());
+        KisRectConstIteratorPixel it = layer->paintDevice()->createRectConstIterator(0,0, img->width(), img->height());
         bool toomuchcolor = false;
         while( !it.isDone() )
         {
@@ -677,7 +677,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     png_byte** row_pointers= new png_byte*[height];
 
     for (int y = 0; y < height; y++) {
-        KisHLineConstIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
+        KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(0, y, width);
         row_pointers[y] = new png_byte[width*layer->paintDevice()->pixelSize()];
         switch(color_type)
         {

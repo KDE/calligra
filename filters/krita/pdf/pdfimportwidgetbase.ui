@@ -1,259 +1,273 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>PDFImportWidgetBase</class>
  <widget class="QWidget" name="PDFImportWidgetBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>462</width>
-    <height>210</height>
+    <width>535</width>
+    <height>295</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>PDFImportWidget</string>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
-    <number>11</number>
+  <widget class="Q3ButtonGroup" name="buttonGroup1" >
+   <property name="geometry" >
+    <rect>
+     <x>11</x>
+     <y>11</y>
+     <width>199</width>
+     <height>273</height>
+    </rect>
    </property>
-   <property name="spacing" >
-    <number>6</number>
+   <property name="title" >
+    <string>Pages</string>
    </property>
-   <item row="0" column="1" >
-    <widget class="Q3GroupBox" name="groupBox1" >
-     <property name="title" >
-      <string>Dimensions</string>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <layout class="QVBoxLayout" >
+   <property name="orientation" >
+    <enum>Qt::Vertical</enum>
+   </property>
+   <layout class="QVBoxLayout" >
+    <property name="margin" >
+     <number>11</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <item>
+     <widget class="QRadioButton" name="boolAllPages" >
+      <property name="text" >
+       <string>&amp;All pages</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="boolFirstPage" >
+      <property name="text" >
+       <string>&amp;First page</string>
+      </property>
+      <property name="checked" >
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="boolSelectionPage" >
+      <property name="text" >
+       <string>&amp;Selection of page</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="KListBox" name="listPages" >
+      <property name="selectionMode" >
+       <enum>Q3ListBox::Multi</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="Q3GroupBox" name="groupBox1" >
+   <property name="geometry" >
+    <rect>
+     <x>216</x>
+     <y>11</y>
+     <width>301</width>
+     <height>273</height>
+    </rect>
+   </property>
+   <property name="title" >
+    <string>Dimensions</string>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Vertical</enum>
+   </property>
+   <layout class="QGridLayout" >
+    <property name="margin" >
+     <number>0</number>
+    </property>
+    <property name="spacing" >
+     <number>0</number>
+    </property>
+    <item row="0" column="0" >
+     <widget class="QLabel" name="textLabel1" >
+      <property name="text" >
+       <string>Resolution:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" >
+     <layout class="QHBoxLayout" >
       <property name="margin" >
-       <number>11</number>
+       <number>0</number>
       </property>
       <property name="spacing" >
        <number>6</number>
       </property>
       <item>
-       <widget class="QLabel" name="textLabel1" >
-        <property name="text" >
-         <string>Resolution:</string>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
         </property>
-       </widget>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item>
-       <layout class="QHBoxLayout" >
+       <layout class="QGridLayout" >
         <property name="margin" >
          <number>0</number>
         </property>
         <property name="spacing" >
          <number>6</number>
         </property>
-        <item>
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
+        <item row="1" column="0" >
+         <widget class="QLabel" name="intVerticalqsdf" >
+          <property name="text" >
+           <string>Vertical:</string>
           </property>
-          <property name="sizeType" >
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
+         </widget>
         </item>
-        <item>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>0</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item row="1" column="0" >
-           <widget class="QLabel" name="intVerticalqsdf" >
-            <property name="text" >
-             <string>Vertical:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2" >
-           <widget class="KComboBox" name="kComboBox1" />
-          </item>
-          <item row="0" column="1" >
-           <widget class="QSpinBox" name="intHorizontal" />
-          </item>
-          <item row="1" column="1" >
-           <widget class="QSpinBox" name="intVertical" />
-          </item>
-          <item row="0" column="0" >
-           <widget class="QLabel" name="textLabel5" >
-            <property name="text" >
-             <string>Horizontal:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2" >
-           <widget class="KComboBox" name="kComboBox2" />
-          </item>
-         </layout>
+        <item row="0" column="2" >
+         <widget class="KComboBox" name="kComboBox1" />
         </item>
-        <item>
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
+        <item row="0" column="1" >
+         <widget class="QSpinBox" name="intHorizontal" />
+        </item>
+        <item row="1" column="1" >
+         <widget class="QSpinBox" name="intVertical" />
+        </item>
+        <item row="0" column="0" >
+         <widget class="QLabel" name="textLabel5" >
+          <property name="text" >
+           <string>Horizontal:</string>
           </property>
-          <property name="sizeType" >
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>31</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
+         </widget>
+        </item>
+        <item row="1" column="2" >
+         <widget class="KComboBox" name="kComboBox2" />
         </item>
        </layout>
       </item>
       <item>
-       <widget class="QLabel" name="textLabel2" >
-        <property name="text" >
-         <string>Size:</string>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
         </property>
-       </widget>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>31</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0" >
+     <widget class="QLabel" name="textLabel2" >
+      <property name="text" >
+       <string>Size:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" >
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item>
-       <layout class="QHBoxLayout" >
+       <layout class="QGridLayout" >
         <property name="margin" >
          <number>0</number>
         </property>
         <property name="spacing" >
          <number>6</number>
         </property>
-        <item>
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType" >
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
+        <item row="1" column="1" >
+         <widget class="QSpinBox" name="intHeight" />
         </item>
-        <item>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>0</number>
+        <item row="0" column="0" >
+         <widget class="QLabel" name="intWidthzqffs" >
+          <property name="text" >
+           <string>Width:</string>
           </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item row="1" column="1" >
-           <widget class="QSpinBox" name="intHeight" />
-          </item>
-          <item row="0" column="0" >
-           <widget class="QLabel" name="intWidthzqffs" >
-            <property name="text" >
-             <string>Width:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
-           <widget class="QSpinBox" name="intWidth" />
-          </item>
-          <item row="1" column="0" >
-           <widget class="QLabel" name="intHeightqsdfq" >
-            <property name="text" >
-             <string>Height:</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         </widget>
         </item>
-        <item>
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
+        <item row="0" column="1" >
+         <widget class="QSpinBox" name="intWidth" />
+        </item>
+        <item row="1" column="0" >
+         <widget class="QLabel" name="intHeightqsdfq" >
+          <property name="text" >
+           <string>Height:</string>
           </property>
-          <property name="sizeType" >
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>51</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
+         </widget>
         </item>
        </layout>
       </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="0" >
-    <widget class="Q3ButtonGroup" name="buttonGroup1" >
-     <property name="title" >
-      <string>Pages</string>
-     </property>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>11</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
       <item>
-       <widget class="QRadioButton" name="boolAllPages" >
-        <property name="text" >
-         <string>&amp;All pages</string>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="boolFirstPage" >
-        <property name="text" >
-         <string>&amp;First page</string>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Expanding</enum>
         </property>
-        <property name="checked" >
-         <bool>true</bool>
+        <property name="sizeHint" >
+         <size>
+          <width>51</width>
+          <height>20</height>
+         </size>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="boolSelectionPage" >
-        <property name="text" >
-         <string>&amp;Selection of page</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="KListBox" name="listPages" >
-        <property name="selectionMode" >
-         <enum>Q3ListBox::Multi</enum>
-        </property>
-       </widget>
+       </spacer>
       </item>
      </layout>
-    </widget>
-   </item>
-  </layout>
+    </item>
+    <item row="4" column="0" >
+     <spacer>
+      <property name="orientation" >
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" >
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
@@ -263,35 +277,27 @@
    <extends>QGroupBox</extends>
    <header>Qt3Support/Q3GroupBox</header>
    <container>1</container>
-   <pixmap></pixmap>
-  </customwidget>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>Q3ButtonGroup</class>
    <extends>Q3GroupBox</extends>
    <header>Qt3Support/Q3ButtonGroup</header>
    <container>1</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
-   <class>KListBox</class>
-   <extends>Q3ListBox</extends>
-   <header>klistbox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>Q3ListBox</class>
    <extends>Q3Frame</extends>
    <header>q3listbox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KListBox</class>
+   <extends>Q3ListBox</extends>
+   <header>klistbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

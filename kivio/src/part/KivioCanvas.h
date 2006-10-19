@@ -31,8 +31,8 @@
 class QPaintEvent;
 
 class KoZoomHandler;
-class KoTool;
 class KoShapeManager;
+class KoToolProxy;
 
 class KivioView;
 
@@ -85,18 +85,6 @@ class KivioCanvas : public QWidget, public KoCanvasBase
     virtual void updateCanvas(const QRectF& rc);
 
     /**
-     * Return the curently active tool, or 0 if non active.
-     * @return the curently active tool, or 0 if non active.
-     */
-    KoTool* tool() { return m_tool; }
-
-    /**
-     * Set the new ative tool.
-     * @param tool the new tool to be used on the canvas.
-     */
-    void setTool(KoTool* tool) { m_tool = tool; }
-
-    /**
      * Return the viewConverter for this view.
      * @return the viewConverter for this view.
      */
@@ -106,6 +94,10 @@ class KivioCanvas : public QWidget, public KoCanvasBase
      * Return the widget that will be added to the scrollArea.
      */
     virtual QWidget* canvasWidget();
+
+    KoToolProxy * toolProxy() {
+        return m_toolProxy;
+    }
 
     KoUnit::Unit unit() { return m_view->document()->unit(); }
 
@@ -125,9 +117,7 @@ class KivioCanvas : public QWidget, public KoCanvasBase
 
   private:
     KivioView* m_view;
-
-    KoTool *m_tool;
-
+    KoToolProxy * m_toolProxy;
     KoShapeManager* m_shapeManager;
 };
 

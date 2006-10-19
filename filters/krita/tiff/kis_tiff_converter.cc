@@ -48,7 +48,7 @@
 
 namespace {
 
-    QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 &extrasamplescount, uint8 &destDepth) {
+    QString getColorSpaceForColorType(uint16 sampletype, uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 &extrasamplescount, uint8 &destDepth) {
         if(color_type == PHOTOMETRIC_MINISWHITE || color_type == PHOTOMETRIC_MINISBLACK)
         {
             if(nbchannels == 0) nbchannels = 1;
@@ -204,7 +204,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     }
     uint16 sampletype;
     if((TIFFGetField(image, TIFFTAG_SAMPLEFORMAT, &sampletype) == 0)){
-        kdDebug(41008) <<  "Image does not define its sample type" << endl;
+        kDebug(41008) <<  "Image does not define its sample type" << endl;
         sampletype =  SAMPLEFORMAT_UINT;
     }
     // Determine the number of channels (usefull to know if a file has an alpha or not
@@ -226,7 +226,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         color_type = PHOTOMETRIC_MINISWHITE;
     }
     uint8 dstDepth;
-    QString csName = getColorSpaceForColorType(color_type, depth, image, nbchannels, extrasamplescount, dstDepth);
+    QString csName = getColorSpaceForColorType(sampletype, color_type, depth, image, nbchannels, extrasamplescount, dstDepth);
     if(csName.isEmpty()) {
         kDebug(41008) << "Image has an unsupported colorspace : " << color_type << " for this depth : "<< depth << endl;
         TIFFClose(image);

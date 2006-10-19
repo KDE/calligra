@@ -31,6 +31,7 @@
 class KWGui;
 class KWView;
 class KWViewMode;
+class KoToolProxy;
 
 /**
  * Class: KWCanvas
@@ -68,16 +69,13 @@ public:
     /// reimplemented method from superclass
     void updateCanvas(const QRectF& rc);
     /// reimplemented method from superclass
-    KoTool* tool() { return m_tool; }
-    /// reimplemented method from superclass
-    void setTool(KoTool *tool) { m_tool = tool; }
-    /// reimplemented method from superclass
     KoViewConverter *viewConverter();
     /// reimplemented method from superclass
     QWidget* canvasWidget() { return this; }
     /// reimplemented method from superclass
     KoUnit::Unit unit() { return document()->unit(); }
-
+    /// reimplemented method from superclass
+    KoToolProxy * toolProxy() { return m_toolProxy; }
     // getters
     /// return the document that this canvas works on
     KWDocument *document() const { return m_document; }
@@ -98,6 +96,11 @@ protected:
     void keyReleaseEvent (QKeyEvent *e);
     /// reimplemented method from superclass
     void paintEvent(QPaintEvent * ev);
+    /// reimplemented method from superclass
+    void tabletEvent( QTabletEvent *e );
+    /// reimplemented method from superclass
+    void wheelEvent( QWheelEvent *e );
+
 
 private slots:
     /// Called whenever there was a page added/removed or simply resized.
@@ -106,7 +109,7 @@ private slots:
 private:
     KWDocument *m_document;
     KoShapeManager *m_shapeManager;
-    KoTool *m_tool;
+    KoToolProxy * m_toolProxy;
     KWView *m_view;
     KWViewMode *m_viewMode;
 };

@@ -27,7 +27,8 @@
 // koffice libs includes
 #include "KoShapeManager.h"
 #include "KoPointerEvent.h"
-#include "KoTool.h"
+#include "KoToolManager.h"
+#include "KoToolProxy.h"
 
 // KDE + Qt includes
 #include "kdebug.h"
@@ -43,7 +44,6 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, 
     m_document( document ),
     m_viewMode(0)
 {
-    m_tool = 0;
     m_view = view;
     m_shapeManager = new KoShapeManager(this);
     m_viewMode = KWViewMode::create(viewMode, this);
@@ -52,6 +52,8 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, 
 
     connect(document, SIGNAL(pageAdded(KWPage*)), this, SLOT(pageSetupChanged()));
     connect(document, SIGNAL(pageRemoved(KWPage*)), this, SLOT(pageSetupChanged()));
+
+    m_toolProxy = KoToolManager::instance()->toolProxy();
 }
 
 void KWCanvas::pageSetupChanged() {
@@ -100,25 +102,19 @@ KoViewConverter *KWCanvas::viewConverter() {
 }
 
 void KWCanvas::mouseMoveEvent(QMouseEvent *e) {
-    KoPointerEvent ev(e, QPointF( m_viewMode->viewToDocument(e->pos()) ));
-
-    m_tool->mouseMoveEvent( &ev );
+    m_toolProxy->mouseMoveEvent( e, m_viewMode->viewToDocument(e->pos()) );
 }
 
 void KWCanvas::mousePressEvent(QMouseEvent *e) {
-    KoPointerEvent ev(e, QPointF( m_viewMode->viewToDocument(e->pos()) ));
-
-    m_tool->mousePressEvent( &ev );
+    m_toolProxy->mousePressEvent( e, m_viewMode->viewToDocument(e->pos()) );
 }
 
 void KWCanvas::mouseReleaseEvent(QMouseEvent *e) {
-    KoPointerEvent ev(e, QPointF( m_viewMode->viewToDocument(e->pos()) ));
-
-    m_tool->mouseReleaseEvent( &ev );
+    m_toolProxy->mouseReleaseEvent( e, m_viewMode->viewToDocument(e->pos()) );
 }
 
 void KWCanvas::keyPressEvent( QKeyEvent *e ) {
-    m_tool->keyPressEvent(e);
+    m_toolProxy->keyPressEvent(e);
 }
 
 void KWCanvas::keyReleaseEvent (QKeyEvent *e) {
@@ -154,8 +150,19 @@ void KWCanvas::keyReleaseEvent (QKeyEvent *e) {
         // For some reason 'T' doesn't work (maybe kxkb)
     }
 #endif
-    m_tool->keyReleaseEvent(e);
+    m_toolProxy->keyReleaseEvent(e);
 }
+
+void KWCanvas::tabletEvent( QTabletEvent *e )
+{
+    m_toolProxy->tabletEvent( e, m_viewMode->viewToDocument(e->pos()) );
+}
+
+void KWCanvas::wheelEvent( QWheelEvent *e )
+{
+    m_toolProxy->wheelEvent( e, m_viewMode->viewToDocument(e->pos()) );
+}
+
 
 #ifdef DEBUG_REPAINT
 # include <stdlib.h>
@@ -176,7 +183,7 @@ void KWCanvas::paintEvent(QPaintEvent * ev) {
             painter.fillRect(vm.clipRect, QBrush(color));
             painter.setRenderHint(QPainter::Antialiasing);
             m_shapeManager->paint( painter, *(viewConverter()), false );
-            m_tool->paint( painter, *(viewConverter()) );
+            m_toolProxy->paint( painter, *(viewConverter()) );
             painter.restore();
         }
     }

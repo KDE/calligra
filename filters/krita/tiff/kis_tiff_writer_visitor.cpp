@@ -22,8 +22,10 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-#include <kis_annotation.h>
 #include <KoColorSpace.h>
+#include <KoID.h>
+
+#include <kis_annotation.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
@@ -32,22 +34,22 @@
 #include "kis_tiff_converter.h"
 
 namespace {
-    bool writeColorSpaceInformation( TIFF* image, KoColorSpace * cs, uint16& color_type )
+    bool writeColorSpaceInformation( TIFF* image, KoColorSpace * cs, uint16& color_type, uint16& sample_type )
     {
         if ( cs->id() == "GRAYA" || cs->id() == "GRAYA16" )
         {
             color_type = PHOTOMETRIC_MINISBLACK;
             return true;
         }
-        if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") )
+        if ( cs->id() == KoID("RGBA") || cs->id() == KoID("RGBA16") )
         {
             color_type = PHOTOMETRIC_RGB;
             return true;
         }
-        if ( cs->id() == KisID("RGBAF16HALF") || cs->id() == KisID("RGBAF32") )
+        if ( cs->id() == KoID("RGBAF16HALF") || cs->id() == KoID("RGBAF32") )
         {
             color_type = PHOTOMETRIC_RGB;
-            sample_format = SAMPLEFORMAT_IEEEFP;
+            sample_type = SAMPLEFORMAT_IEEEFP;
             return true;
         }
         if ( cs->id() == "CMYK" || cs->id() == "CMYKA16" )
@@ -161,7 +163,7 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     TIFFSetField(image(), TIFFTAG_JPEGQUALITY, m_options->jpegQuality);
     TIFFSetField(image(), TIFFTAG_ZIPQUALITY, m_options->deflateCompress);
     TIFFSetField(image(), TIFFTAG_PIXARLOGQUALITY, m_options->pixarLogCompress);
-    
+
     // Set the predictor
     TIFFSetField(image(), TIFFTAG_PREDICTOR, m_options->predictor);
 
@@ -183,7 +185,7 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     qint32 width = layer->image()->width();
     bool r = true;
     for (int y = 0; y < height; y++) {
-        KisHLineConstIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
+        KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(0, y, width);
         switch(color_type)
         {
             case PHOTOMETRIC_MINISBLACK:

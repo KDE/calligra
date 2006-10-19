@@ -7,18 +7,18 @@ macro_optional_find_package(PopplerQt4)
 
 include_directories(${KRITA_INCLUDES})
 
-#add_subdirectory( raw )
+add_subdirectory( raw )
 
 if(JPEG_FOUND AND LIBEXIF_FOUND)
-#	add_subdirectory(jpeg)
+	add_subdirectory(jpeg)
 endif(JPEG_FOUND AND LIBEXIF_FOUND)
 
 if(TIFF_FOUND AND LIBEXIF_FOUND)
-#	add_subdirectory(tiff)
+	add_subdirectory(tiff)
 endif(TIFF_FOUND AND LIBEXIF_FOUND)
 
 if(PNG_FOUND)
-#    add_subdirectory(png)
+    add_subdirectory(png)
 endif(PNG_FOUND)
 
 message(STATUS "reactivate openexr when colorspaces f32 and f16 are reactivated")

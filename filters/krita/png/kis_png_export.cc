@@ -74,7 +74,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     pd = new KisPaintDevice(*img->projection());
     KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd));
 
-    KisRectConstIteratorPixel it = l->paintDevice()->createRectIterator(0,0, img->width(), img->height());
+    KisRectConstIteratorPixel it = l->paintDevice()->createRectConstIterator(0,0, img->width(), img->height());
     KoColorSpace* cs = l->paintDevice()->colorSpace();
 
     bool isThereAlpha = false;

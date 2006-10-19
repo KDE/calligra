@@ -1629,7 +1629,7 @@ KarbonView::selectionChanged()
 
 		uint selectedPaths = 0;
 		uint selectedGroups = 0;
-		// check for different shape types for enabling specific actions 
+		// check for different shape types for enabling specific actions
 		foreach( KoShape* shape, selection->selectedShapes() )
 		{
 			if( dynamic_cast<KoShapeGroup*>( shape->parent() ) )

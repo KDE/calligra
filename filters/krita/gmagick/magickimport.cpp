@@ -23,7 +23,7 @@
 #include <KoDocument.h>
 #include <KoFilterChain.h>
 
-#include <kis_doc.h>
+#include <kis_doc2.h>
 #include <kis_view.h>
 #include <kis_image_magick_converter.h>
 #include <kis_progress_display_interface.h>
@@ -49,7 +49,7 @@ KoFilter::ConversionStatus MagickImport::convert(const QByteArray&, const QByteA
         return KoFilter::BadMimeType;
 
 
-    KisDoc *doc = dynamic_cast<KisDoc*>(m_chain->outputDocument());
+    KisDoc2 *doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
 
     if (!doc)
         return KoFilter::CreationError;
