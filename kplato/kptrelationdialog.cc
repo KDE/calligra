@@ -23,7 +23,6 @@
 #include "kptpart.h"
 #include "kptcommand.h"
 #include "kptdurationwidget.h"
-#include "relationpanel.h"
 
 #include <QLayout>
 #include <QLabel>
