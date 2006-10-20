@@ -134,6 +134,8 @@ ModifyRelationDialog::ModifyRelationDialog(Relation *rel, QWidget *p, const char
     setButtonText( KDialog::User1, i18n("Delete") );
     m_deleted = false;
     enableButtonOk(false);
+    
+    connect(this, SIGNAL(user1Clicked()), SLOT(slotUser1()));
 }
 
 // Delete
