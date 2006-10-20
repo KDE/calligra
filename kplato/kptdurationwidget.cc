@@ -1,12 +1,3 @@
-//
-// ui.h extension file, included from the uic-generated form implementation.
-//
-// If you wish to add, delete or rename functions or slots use
-// Qt Designer which will update this file, preserving your code. Create an
-// init() function in place of a constructor, and a destroy() function in
-// place of a destructor.
-//
-
 /* This file is part of the KDE project
    Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
 
@@ -26,44 +17,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kptdurationwidget.h"
+
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 
 #include <cmath>
-//Added by qt3to4:
 #include <QLabel>
+#include <QRegExp>
+#include <QRegExpValidator>
+#include <QString>
 
 namespace KPlato
 {
-
-/**
- * This structure describes one of the fields shown.
- */
-struct FieldDescriptor
-{
-    // Which field is to my left, and what conversion factor separates us?
-    QLineEdit *left;
-    double leftScale;
-    
-    // Which field am I, and how am I formatted?
-    QLineEdit *current;
-    const char *format;
-    
-    // Which field is to my right, and what conversion factor separates us?
-    QLineEdit *right;
-    double rightScale;
-    
-    // If I am hidden, who else hides with me?
-    QLabel *separator;
-    
-    // Used for calculating a correct duration
-    double fullScale;
-    double scale;
-    
-    // Used for displaying a unit behind each field
-    QLabel *unit;
-};
 
 #define setField(f, l, ls, c, fmt, r, rs, s, fs, sc, u) \
 do \
@@ -79,9 +46,12 @@ do \
     m_fields[f].scale = sc; \
     m_fields[f].unit = u; \
 } while (0)
-    
-void DurationWidget::init()
+
+
+DurationWidget::DurationWidget(QWidget *parent)
+    : QFrame(parent)
 {
+    setupUi(this);
     // Use the user's decimal point!
     m_decimalPoint = KGlobal::locale()->decimalSymbol();
     
@@ -118,15 +88,23 @@ void DurationWidget::init()
     m_ssUnit->hide();
     m_msUnit->hide();
     
-    m_fields = new FieldDescriptor[5];    
+    m_fields = new FieldDescriptor[5];
     setField(0, NULL, 0, m_ddd, "%u", m_hh, 24, m_hhSpace, 24, 24, m_ddUnit);
     setField(1, m_ddd, 24, m_hh, "%02u", m_mm, 60, m_mmColon, 60, 60, m_hhUnit);
     setField(2, m_hh, 60, m_mm, "%02u", m_ss, 60, NULL, 60, 60, m_mmUnit);
     setField(3, m_mm, 60, m_ss, "%02u", m_ms, 1000, m_ssColon, 60, 60, m_ssUnit);
     setField(4, m_ss, 1000, m_ms, "%03u", NULL, 0, m_dot, 1000, 1000, m_msUnit);
+
+
+    connect( m_ddd, SIGNAL( lostFocus() ), this, SLOT( dddLostFocus() ) );
+    connect( m_hh, SIGNAL( lostFocus() ), this, SLOT( hhLostFocus() ) );
+    connect( m_mm, SIGNAL( lostFocus() ), this, SLOT( mmLostFocus() ) );
+    connect( m_ss, SIGNAL( lostFocus() ), this, SLOT( ssLostFocus() ) );
+    connect( m_ms, SIGNAL( lostFocus() ), this, SLOT( msLostFocus() ) );
+
 }
 
-void DurationWidget::destroy()
+DurationWidget::~DurationWidget()
 {
     delete m_fields;
     //delete m_validator;  //QWidget takes care of this
@@ -455,3 +433,6 @@ double DurationWidget::fraction(QString number, int *exp) {
 }
 
 }  //KPlato namespace
+
+#include "kptdurationwidget.moc"
+
