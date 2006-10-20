@@ -22,13 +22,10 @@
 
 #include <QPushButton>
 #include <QComboBox>
-#include <q3header.h>
+#include <QHeaderView>
 #include <QLabel>
 #include <QLineEdit>
-#include <q3datetimeedit.h>
-#include <qpair.h>
-#include <qdatetime.h>
-#include <q3listview.h>
+#include <QTreeWidget>
 #include <QList>
 
 #include <klocale.h>
@@ -48,16 +45,16 @@ IntervalEdit::IntervalEdit(QWidget *parent, const char *name)
 IntervalEditImpl::IntervalEditImpl(QWidget *parent)
     : IntervalEditBase(parent) {
   
-    intervalList->setSortColumn(0);
+    intervalList->setSortingEnabled(true);
 
     connect(bClear, SIGNAL(clicked()), SLOT(slotClearClicked()));
     connect(bAddInterval, SIGNAL(clicked()), SLOT(slotAddIntervalClicked()));
-    connect(intervalList, SIGNAL(selectionChanged(Q3ListViewItem*)), SLOT(slotIntervalSelectionChanged(Q3ListViewItem*)));
+    connect(intervalList, SIGNAL(itemSelectionChanged()), SLOT(slotIntervalSelectionChanged()));
 
 }
 
 void IntervalEditImpl::slotClearClicked() {
-    bool c = intervalList->firstChild() != 0;
+    bool c = intervalList->topLevelItemCount() > 0;
     intervalList->clear();
     if (c)
         emit changed();
@@ -68,21 +65,22 @@ void IntervalEditImpl::slotAddIntervalClicked() {
     emit changed();
 }
 
-void IntervalEditImpl::slotIntervalSelectionChanged(Q3ListViewItem *item) {
-    IntervalItem *ii = dynamic_cast<IntervalItem *>(item);
-    if (!ii)
+void IntervalEditImpl::slotIntervalSelectionChanged() {
+    QList<QTreeWidgetItem*> lst = intervalList->selectedItems();
+    if (lst.count() == 0)
         return;
+    
+    IntervalItem *ii = static_cast<IntervalItem *>(lst[0]);
     startTime->setTime(ii->interval().first);
     endTime->setTime(ii->interval().second);
 }
 
 QList<TimeInterval*> IntervalEditImpl::intervals() const {
     QList<TimeInterval*> l;
-    Q3ListViewItem *i = intervalList->firstChild();
-    for (; i; i = i->nextSibling()) {
-        IntervalItem *item = dynamic_cast<IntervalItem*>(i);
-        if (i)
-            l.append(new TimeInterval(item->interval().first, item->interval().second));
+    int cnt = intervalList->topLevelItemCount();
+    for (int i=0; i < cnt; ++i) {
+        IntervalItem *item = static_cast<IntervalItem*>(intervalList->topLevelItem(i));
+        l.append(new TimeInterval(item->interval().first, item->interval().second));
     }
     return l;
 }

@@ -20,24 +20,31 @@
 #ifndef KPTTASKPROGRESSPANEL_H
 #define KPTTASKPROGRESSPANEL_H
 
-#include "kpttaskprogresspanelbase.h"
+#include "ui_kpttaskprogresspanelbase.h"
 #include "kpttask.h"
+
+#include <QWidget>
 
 class KCommand;
 
 namespace KPlato
 {
 
+class DurationWidget;
 class Part;
 class StandardWorktime;
 
-class TaskProgressPanelImpl : public TaskProgressPanelBase {
+class TaskProgressPanelImpl : public QWidget, public Ui_TaskProgressPanelBase {
     Q_OBJECT
 public:
-    TaskProgressPanelImpl(QWidget *parent=0, const char *name=0, Qt::WFlags f=0);
+    TaskProgressPanelImpl(QWidget *parent=0, const char *name=0);
     
     void enableWidgets();
 
+    DurationWidget *actualEffort;
+    DurationWidget *remainingEffort;
+    DurationWidget *scheduledEffort;
+    
 signals:
     void changed();
     

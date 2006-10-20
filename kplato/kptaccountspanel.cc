@@ -23,13 +23,12 @@
 #include "kptproject.h"
 
 #include <QComboBox>
-#include <q3header.h>
-#include <q3listview.h>
+#include <QHeaderView>
+#include <QTreeWidget>
 #include <QPushButton>
 #include <QString>
-#include <qstringlist.h>
+#include <QStringList>
 
-#include <k3listview.h>
 #include <klocale.h>
 
 #include <kdebug.h>
@@ -37,50 +36,41 @@
 namespace KPlato
 {
 
-class AccountItem : public K3ListViewItem {
+class AccountItem : public QTreeWidgetItem {
 public:
-    AccountItem(AccountsPanel &pan, Q3ListView *parent)
-    : K3ListViewItem(parent), account(0), panel(pan)
+    AccountItem(AccountsPanel &pan, QTreeWidget *parent)
+    : QTreeWidgetItem(parent), account(0), panel(pan)
     { init(); }
-    AccountItem(AccountsPanel &pan, Q3ListViewItem *parent)
-    : K3ListViewItem(parent), account(0), panel(pan)
+    AccountItem(AccountsPanel &pan, QTreeWidgetItem *parent)
+    : QTreeWidgetItem(parent), account(0), panel(pan)
     { init(); }
-    AccountItem(AccountsPanel &pan, Q3ListView *parent, QString label1, QString label2 = QString::null)
-    : K3ListViewItem(parent, label1, label2), account(0), panel(pan)
+    AccountItem(AccountsPanel &pan, QTreeWidget *parent, QString label1, QString label2 = QString::null)
+    : QTreeWidgetItem(parent), account(0), panel(pan) { 
+        setText(0, label1);
+        setText(1, label2);
+        init(); 
+    }
+    AccountItem(AccountsPanel &pan, QTreeWidgetItem *parent, QString label1, QString label2 = QString::null)
+    : QTreeWidgetItem(parent), account(0), panel(pan) { 
+        setText(0, label1);
+        setText(1, label2);
+        init(); 
+    }
+    AccountItem(AccountsPanel &pan, QTreeWidget *parent, QTreeWidgetItem *after)
+    : QTreeWidgetItem(parent, after), account(0), panel(pan)
     { init(); }
-    AccountItem(AccountsPanel &pan, Q3ListViewItem *parent, QString label1, QString label2 = QString::null)
-    : K3ListViewItem(parent, label1, label2), account(0), panel(pan)
-    { init(); }
-    AccountItem(AccountsPanel &pan, Q3ListView *parent, Q3ListViewItem *after)
-    : K3ListViewItem(parent, after), account(0), panel(pan)
-    { init(); }
-    AccountItem(AccountsPanel &pan, Q3ListViewItem *parent, Q3ListViewItem *after)
-    : K3ListViewItem(parent, after), account(0), panel(pan)
+    AccountItem(AccountsPanel &pan, QTreeWidgetItem *parent, QTreeWidgetItem *after)
+    : QTreeWidgetItem(parent, after), account(0), panel(pan)
     { init(); }
 
     Account *account;
     bool isDefault;
-
-    QString oldText;
     AccountsPanel &panel;
-protected:
-    virtual void cancelRename(int col) {
-        //kDebug()<<k_funcinfo<<endl;
-        if ((col == 0 && oldText.isEmpty()) ||
-            (!panel.isUnique(this))) {
-            return;
-        }
-        panel.renameStopped(this);
-        Q3ListViewItem::cancelRename(col);
-        setRenameEnabled(col, false);
-    }
+
 private:
     void init() {
-        setRenameEnabled(0, false);  
-        setRenameEnabled(1, false);
-        setOpen(true);
         isDefault = false;
-    
+        setFlags(flags() | Qt::ItemIsEditable);
     }
 };
 
@@ -91,17 +81,12 @@ AccountsPanel::AccountsPanel(Accounts &acc, QWidget *p)
       m_renameItem(0)
 {
 
-    accountList->setRootIsDecorated(true);
-    accountList->header()->setStretchEnabled(true, 1);
-    accountList->setItemMargin(2);
-    accountList->setDefaultRenameAction(Q3ListView::Accept);
+    accountList->header()->setStretchLastSection(true);
     addItems(accountList, acc);
 
     slotSelectionChanged();
     
-    connect(accountList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
-    connect(accountList, SIGNAL(itemRenamed(Q3ListViewItem*, int)), SLOT(slotItemRenamed(Q3ListViewItem*, int)));
-    connect(accountList, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint &, int)), SLOT(slotListDoubleClicked(Q3ListViewItem*, const QPoint &, int)));
+    connect(accountList, SIGNAL(itemSelectionChanged()), SLOT(slotSelectionChanged()));
     
     connect(removeBtn, SIGNAL(clicked()), SLOT(slotRemoveBtn()));
     connect(newBtn, SIGNAL(clicked()), SLOT(slotNewBtn()));
@@ -109,14 +94,9 @@ AccountsPanel::AccountsPanel(Accounts &acc, QWidget *p)
 
     connect(accountsComboBox, SIGNAL(activated(int)), SLOT(slotActivated(int)));
     
-    // Internal hacks, to get renaming to behave along with unique names
-    // Uses signals to not get in the way of QListView
-    connect(this, SIGNAL(renameStarted(Q3ListViewItem*, int)), SLOT(slotRenameStarted(Q3ListViewItem*, int)));
-    connect(this, SIGNAL(startRename(Q3ListViewItem*, int)), SLOT(slotStartRename(Q3ListViewItem*, int)));
-    connect(this, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
 }
     
-void AccountsPanel::addItems(Q3ListView *lv, Accounts &acc) {
+void AccountsPanel::addItems(QTreeWidget *lv, Accounts &acc) {
     //kDebug()<<k_funcinfo<<"No of accs: "<<acc.accountList().count()<<endl;
     AccountListIterator it = acc.accountList();
     foreach (Account *a, acc.accountList()) {
@@ -132,7 +112,7 @@ void AccountsPanel::addItems(Q3ListView *lv, Accounts &acc) {
     }
 }
 
-void AccountsPanel::addItems(Q3ListViewItem *item, Account *acc) {
+void AccountsPanel::addItems(QTreeWidgetItem *item, Account *acc) {
     foreach (Account *a, acc->accountList()) {
         QString n = a->name();
         QString d = a->description();
@@ -146,7 +126,7 @@ void AccountsPanel::addItems(Q3ListViewItem *item, Account *acc) {
     }
 }
 
-void AccountsPanel::addElement(Q3ListViewItem *item) {
+void AccountsPanel::addElement(QTreeWidgetItem *item) {
     if (item->parent()) {
         removeElement(item->parent());
     }
@@ -156,13 +136,13 @@ void AccountsPanel::addElement(Q3ListViewItem *item) {
 }
 
 void AccountsPanel::removeElement(QString key) {
-    QHash<QString, Q3ListViewItem*>::Iterator it = m_elements.find(key);
+    QHash<QString, QTreeWidgetItem*>::Iterator it = m_elements.find(key);
     for (it = m_elements.begin(); it != m_elements.end(); ++it) {
         removeElement(*it);
     }
 }
 
-void AccountsPanel::removeElement(Q3ListViewItem *item) {
+void AccountsPanel::removeElement(QTreeWidgetItem *item) {
     static_cast<AccountItem*>(item)->isDefault = false;
     m_elements.remove(item->text(0));
     refreshDefaultAccount();
@@ -212,78 +192,44 @@ void AccountsPanel::slotChanged() {
 
 void AccountsPanel::slotSelectionChanged() {
     //kDebug()<<k_funcinfo<<endl;
-    if (m_renameItem) {
-        removeBtn->setEnabled(false);
-        newBtn->setEnabled(false);
-        subBtn->setEnabled(false);
-        accountList->setSelected(m_renameItem, true);
-        return;
-    }
-    if (accountList->childCount() == 0) {
+    if (accountList->topLevelItemCount() == 0) {
         removeBtn->setEnabled(false);
         newBtn->setEnabled(true);
         subBtn->setEnabled(false);
         return;
     }
-    Q3ListViewItem *i = accountList->selectedItem();
+    bool i = accountList->selectedItems().count() > 0;
     removeBtn->setEnabled((bool)i);
     newBtn->setEnabled(true);
     subBtn->setEnabled((bool)i);
 }
 
-void AccountsPanel::slotItemRenamed(Q3ListViewItem *item, int col) {
-    //kDebug()<<k_funcinfo<<item->text(0)<<endl;
-    item->setRenameEnabled(col, false);
-    m_renameItem = 0;
-    if (col != 0) {
-        renameStopped(item);
-        slotChanged();
-        return;
-    }
-    if (item->text(0).isEmpty()) {
-        item->setText(0, static_cast<AccountItem*>(item)->oldText); // keep the old name
-    }
-    if (item->text(0).isEmpty()) {
-        // Not allowed
-        //kDebug()<<k_funcinfo<<"name empty"<<endl;
-        emit startRename(item, 0);
-        return;
-    }
-    if (!isUnique(item)) {
-        // name must be unique
-        emit startRename(item, 0);
-        return;
-    }
-    addElement(item);
-    removeBtn->setEnabled(accountList->selectedItem());
-    newBtn->setEnabled(accountList->selectedItem());
-    subBtn->setEnabled(accountList->selectedItem());
-    renameStopped(item);
-    slotChanged();
-}
-
-bool AccountsPanel::isUnique(Q3ListViewItem *item) {
-    Q3ListViewItemIterator it(accountList);
+bool AccountsPanel::isUnique(QTreeWidgetItem *item) {
+/*    QTreeWidgetItemIterator it(accountList);
     for (; it.current(); ++it) {
         if (it.current() != item && it.current()->text(0) == item->text(0)) {
             return false;
         }
     }
-    return true;
+    return true;*/
 }
 
 void AccountsPanel::slotRemoveBtn() {
-    slotRemoveItem(accountList->selectedItem());
+    QList<QTreeWidgetItem*> lst = accountList->selectedItems();
+    foreach (QTreeWidgetItem* i, lst) {
+        slotRemoveItem(i);
+    }
     slotChanged();
 }
 
 void AccountsPanel::slotNewBtn() {
     //kDebug()<<k_funcinfo<<endl;
-    Q3ListViewItem *item = accountList->selectedItem();
-    if (item && item->text(0).isEmpty()) {
-        return;
+    QList<QTreeWidgetItem*> lst = accountList->selectedItems();
+    QTreeWidgetItem *item = 0;
+    if (lst.count() > 0) {
+        item = lst[0];
     }
-    Q3ListViewItem *n;
+    QTreeWidgetItem *n;
     if (item) {
         if (item->parent()) {
             n = new AccountItem(*this, item->parent(), item);
@@ -293,22 +239,23 @@ void AccountsPanel::slotNewBtn() {
     } else {
         n = new AccountItem(*this, accountList);
     }
-    slotListDoubleClicked(n, QPoint(), 0);
+    accountList->clearSelection();
+    accountList->editItem(n);
 }
 
 void AccountsPanel::slotSubBtn() {
     //kDebug()<<k_funcinfo<<endl;
-    Q3ListViewItem *item = accountList->selectedItem();
-    if (item && item->text(0).isEmpty()) {
-        return;
+    QList<QTreeWidgetItem*> lst = accountList->selectedItems();
+    QTreeWidgetItem* item = 0;
+    if (lst.count() > 0) {
+        item = lst[0];
     }
-    Q3ListViewItem *n;
+    QTreeWidgetItem *n;
     if (item) {
         n = new AccountItem(*this, item);
     } else {
         n = new AccountItem(*this, accountList);
     }
-    slotListDoubleClicked(n, QPoint(), 0);
 }
 
 KCommand *AccountsPanel::buildCommand(Part *part) {
@@ -332,9 +279,9 @@ KCommand *AccountsPanel::buildCommand(Part *part) {
 
 KCommand *AccountsPanel::save(Part *part, Project &project) {
     KMacroCommand *cmd=0;
-    Q3ListViewItem *myChild = accountList->firstChild();
-    for (; myChild; myChild = myChild->nextSibling()) {
-        KCommand *c = save(part, project, myChild);
+    int cnt = accountList->topLevelItemCount();
+    for (int i=0; i < cnt; ++i) {
+        KCommand *c = save(part, project, accountList->topLevelItem(i));
         if (c) {
             if (!cmd) cmd = new KMacroCommand("");
             cmd->addCommand(c);
@@ -343,7 +290,7 @@ KCommand *AccountsPanel::save(Part *part, Project &project) {
     return cmd;
 }
 
-KCommand *AccountsPanel::save(Part *part, Project &project, Q3ListViewItem *i) {
+KCommand *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i) {
     KMacroCommand *cmd=0;
     AccountItem *item = static_cast<AccountItem*>(i);
     if (item->account == 0) {
@@ -370,8 +317,9 @@ KCommand *AccountsPanel::save(Part *part, Project &project, Q3ListViewItem *i) {
             cmd->addCommand(new ModifyAccountDescriptionCmd(part, item->account, item->text(1)));
         }
     }
-    Q3ListViewItem *myChild = item->firstChild();
-    for (; myChild; myChild = myChild->nextSibling()) {
+    int cnt = item->childCount();
+    for (int i=0; i < cnt; ++i) {
+        QTreeWidgetItem *myChild = item->child(i);
         KCommand *c = save(part, project, myChild);
         if (c) {
             if (!cmd) cmd = new KMacroCommand("");
@@ -390,41 +338,15 @@ KCommand *AccountsPanel::save(Part *part, Project &project, Q3ListViewItem *i) {
     return cmd;
 }
 
-void AccountsPanel::slotListDoubleClicked(Q3ListViewItem* item, const QPoint&, int col) {
-    //kDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
-    if (m_renameItem)
-        return;
-    slotStartRename(item, col);
-}
-
-void AccountsPanel::slotRenameStarted(Q3ListViewItem */*item*/, int /*col*/) {
-    //kDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
-    if (accountList->isRenaming()) {
-        removeBtn->setEnabled(false);
-        newBtn->setEnabled(false);
-        subBtn->setEnabled(false);
-    }
-}
-
-void AccountsPanel::slotStartRename(Q3ListViewItem *item, int col) {
-    //kDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
-    static_cast<AccountItem*>(item)->oldText = item->text(col);
-    item->setRenameEnabled(col, true);
-    item->startRename(col);
-    m_renameItem = item;
-    
-    emit renameStarted(item, col);
-}
-
-void AccountsPanel::slotRemoveItem(Q3ListViewItem *i) {
+void AccountsPanel::slotRemoveItem(QTreeWidgetItem *i) {
     AccountItem *item = static_cast<AccountItem*>(i);
     if (item == 0)
         return;
     //kDebug()<<k_funcinfo<<item->text(0)<<endl;
     removeElement(item);
-    Q3ListViewItem *p = item->parent();
+    QTreeWidgetItem *p = item->parent();
     if (p) {
-        p->takeItem(item);
+        p->takeChild(p->indexOfChild(item));
         if (item->account) {
             m_removedItems.append(item);
         } else {
@@ -434,20 +356,13 @@ void AccountsPanel::slotRemoveItem(Q3ListViewItem *i) {
             addElement(p);
         }
     } else {
-        accountList->takeItem(item);
+        accountList->takeTopLevelItem(accountList->indexOfTopLevelItem(item));
         if (item->account) {
             m_removedItems.append(item);
         } else {
             delete item;
         }
     }
-}
-
-// We don't get notified when rename is cancelled, this is called from the item
-void AccountsPanel::renameStopped(Q3ListViewItem */*item*/) {
-    //kDebug()<<k_funcinfo<<endl;
-    m_renameItem = 0;
-    emit selectionChanged();
 }
 
 void AccountsPanel::slotOk() {

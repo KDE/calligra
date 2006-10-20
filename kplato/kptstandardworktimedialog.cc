@@ -25,18 +25,15 @@
 #include "kptintervaledit.h"
 #include "kptpart.h"
 
-#include <qgroupbox.h>
-#include <q3header.h>
+#include <QGroupBox>
+#include <QHeaderView>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QComboBox>
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
-#include <q3datetimeedit.h>
-#include <qdatetime.h>
 
-#include <k3listview.h>
 #include <kcalendarsystem.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -45,11 +42,11 @@
 namespace KPlato
 {
 
-class WeekdayListItem : public K3ListViewItem
+class WeekdayListItem : public QTreeWidgetItem
 {
 public:
-    WeekdayListItem(Calendar *cal, int wd, K3ListView *parent, QString name, K3ListViewItem *after)
-    : K3ListViewItem(parent, after),
+    WeekdayListItem(Calendar *cal, int wd, QTreeWidget *parent, QString name, QTreeWidgetItem *after)
+    : QTreeWidgetItem(parent, after),
       original(cal->weekday(wd)),
       calendar(cal),
       weekday(wd)
@@ -130,9 +127,9 @@ KMacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {
         if (cmd == 0) cmd = new KMacroCommand(n);
         cmd->addCommand(new ModifyStandardWorktimeDayCmd(part, m_original, m_original->day(), dia->inDay()));
     }
-    Q3ListViewItem *item = dia->weekdayList->firstChild();
-    for (; item; item = item->nextSibling()) {
-        KCommand *c = static_cast<WeekdayListItem*>(item)->save(part);
+    int cnt = dia->weekdayList->topLevelItemCount();
+    for (int i=0; i < cnt; ++i) {
+        KCommand *c = static_cast<WeekdayListItem*>(dia->weekdayList->topLevelItem(i))->save(part);
         if (c) {
             if (cmd == 0) cmd = new KMacroCommand(n);
             cmd->addCommand(c);
@@ -173,9 +170,9 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     week->setValue(m_week);
     day->setRange(1.0, 24.0, 0.1, 1);
     day->setValue(m_day);
-    weekdayList->addColumn(i18n("Weekday"));
-    weekdayList->setSorting(-1);
-    weekdayList->header()->setStretchEnabled(true);
+    weekdayList->setHeaderLabel(i18n("Weekday"));
+    weekdayList->setSortingEnabled(false);
+    weekdayList->header()->setStretchLastSection(true);
     const KCalendarSystem * cs = KGlobal::locale()->calendar();
     Calendar *cal = m_std->calendar();
     if (cal) {
@@ -187,7 +184,7 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
             }
             kDebug()<<k_funcinfo<<"Add day: "<<cs->weekDayName(i+1)<<endl;
             item = new WeekdayListItem(cal, i, weekdayList, cs->weekDayName(i+1), item);
-            weekdayList->insertItem(item);
+            weekdayList->addTopLevelItem(item);
         }
     }
 
@@ -201,9 +198,9 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     connect(weekdayList, SIGNAL(selectionChanged()), SLOT(slotWeekdaySelected()));
     connect(state, SIGNAL(activated(int)), SLOT(slotStateChanged(int)));
     
-    if (weekdayList->firstChild()) {
-        weekdayList->setSelected(weekdayList->firstChild(), true);
-        weekdayList->setCurrentItem(weekdayList->firstChild());
+    if (weekdayList->topLevelItemCount() > 0) {
+        weekdayList->topLevelItem(0)->setSelected(true);
+        weekdayList->setCurrentItem(weekdayList->topLevelItem(0));
     }
 }
 
@@ -260,8 +257,9 @@ void StandardWorktimeDialogImpl::slotIntervalChanged() {
 
 void StandardWorktimeDialogImpl::slotApplyClicked() {
     //kDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
-    Q3ListViewItem *item = weekdayList->firstChild();
-    for (; item; item = item->nextSibling()) {
+    int c = weekdayList->topLevelItemCount();
+    for (int i=0; i < c; ++i) {
+        QTreeWidgetItem *item = weekdayList->topLevelItem(i);
         if (item->isSelected()) {
             //kDebug()<<k_funcinfo<<item->text(0)<<" selected"<<endl;
             WeekdayListItem *wd = static_cast<WeekdayListItem*>(item);
@@ -279,18 +277,17 @@ void StandardWorktimeDialogImpl::slotApplyClicked() {
 void StandardWorktimeDialogImpl::slotWeekdaySelected() {
     //kDebug()<<k_funcinfo<<"state="<<state->currentItem()<<endl;
     
-    Q3ListViewItem *item = weekdayList->firstChild();
-    for (; item; item = item->nextSibling()) {
-        if (item->isSelected()) {
-            //kDebug()<<k_funcinfo<<item->text(0)<<" selected"<<endl;
-            WeekdayListItem *wd = static_cast<WeekdayListItem*>(item);
-            state->setCurrentIndex(wd->day->state()-1);
-            m_intervalEdit->setIntervals(wd->day->workingIntervals());
-            slotStateChanged(state->currentItem());
-            break;
-        }
+    QList<QTreeWidgetItem *> lst = weekdayList->selectedItems();
+    if (lst.count() == 0) {
+        editBox->setEnabled(false);
+        return;
     }
-    editBox->setEnabled(item != 0);
+    //kDebug()<<k_funcinfo<<item->text(0)<<" selected"<<endl;
+    WeekdayListItem *wd = static_cast<WeekdayListItem*>(lst[0]);
+    state->setCurrentIndex(wd->day->state()-1);
+    m_intervalEdit->setIntervals(wd->day->workingIntervals());
+    slotStateChanged(state->currentItem());
+    editBox->setEnabled(true);
 }
 
 void StandardWorktimeDialogImpl::slotStateChanged(int st) {

@@ -23,10 +23,8 @@
 #include "kptresource.h"
 #include "ui_resourcespanelbase.h"
 
-#include <q3listbox.h>
 #include <QString>
 
-class Q3ListViewItem;
 class KCommand;
 
 namespace KPlato
@@ -51,13 +49,12 @@ class ResourcesPanel : public ResourcesPanelBase {
     Q_OBJECT
 public:
     ResourcesPanel (QWidget *parent, Project *project);
+    ~ResourcesPanel();
     
     bool ok();
     KCommand *buildCommand(Part *part);
 
     void sendChanged();
-
-    void renameStopped(Q3ListViewItem* item);
     
 protected slots:
     void slotAddGroup();
@@ -67,31 +64,24 @@ protected slots:
     void slotEditResource();
     void slotDeleteResource();
 
-    void slotGroupChanged(Q3ListViewItem *item);
+    void slotGroupChanged(QTreeWidgetItem *item);
     void slotGroupChanged();
     void slotResourceRename(const QString &newName);
-    void slotResourceChanged( Q3ListBoxItem*);
-    void slotCurrentChanged( Q3ListBoxItem*);
+    void slotResourceChanged();
+    void slotCurrentChanged(QListWidgetItem*);
 
-    void slotListDoubleClicked(Q3ListViewItem*, const QPoint&, int);
-    void slotItemRenamed(Q3ListViewItem *item, int col);
-    void slotRenameStarted(Q3ListViewItem *item, int col);
-    void slotStartRename(Q3ListViewItem *item, int col);
 signals:
     void changed();
     void selectionChanged();
-    void startRename(Q3ListViewItem *item, int col);
-    void renameStarted(Q3ListViewItem *item, int col);
     
 private:
     Project *project;
     ResourcesPanelGroupLVItem *m_groupItem;
 
-    Q3PtrList<GroupItem> m_groupItems;
-    Q3PtrList<GroupItem> m_deletedGroupItems;
+    QList<GroupItem*> m_groupItems;
+    QList<GroupItem*> m_deletedGroupItems;
 
     bool m_blockResourceRename;
-    Q3ListViewItem *m_renameItem;
 };
 
 } //KPlato namespace

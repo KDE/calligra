@@ -23,7 +23,7 @@
 #include "kptview.h"
 #include "kptfactory.h"
 #include "kptproject.h"
-#include "kptprojectdialog.h"
+#include "kptmainprojectdialog.h"
 #include "kptresource.h"
 #include "kptcontext.h"
 #include "kptganttview.h"
@@ -122,8 +122,8 @@ void Part::editProject() {
       parent = m_view;
 
     if (m_projectDialog == 0)
-	// Make the dialog
-	m_projectDialog = new ProjectDialog(*m_project, parent);
+        // Make the dialog
+        m_projectDialog = new MainProjectDialog(*m_project, parent);
 
     m_projectDialog->exec();
 }

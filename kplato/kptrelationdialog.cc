@@ -26,10 +26,7 @@
 #include "relationpanel.h"
 
 #include <QLayout>
-#include <q3vbox.h>
 #include <QLabel>
-#include <q3buttongroup.h>
-#include <qradiobutton.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -39,6 +36,16 @@
 namespace KPlato
 {
 
+RelationPanel::RelationPanel(QWidget *parent)
+    : QWidget(parent)
+{
+    setupUi(this);
+    lag = new DurationWidget(durationHolder);
+    QLayout *l = durationHolder->layout();
+    if (l)
+        l->addWidget(lag);
+}
+    
 AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, QString caption, ButtonCodes buttons, const char *n)
     : KDialog(p)
 {
@@ -83,10 +90,6 @@ KCommand *AddRelationDialog::buildCommand(Part *part) {
 }
 
 void AddRelationDialog::slotOk() {
-    if ( m_panel->relationType->selected() == 0 ) {
-        KMessageBox::sorry(this, i18n("You must select a relationship type"));
-        return;
-    }
     accept();
 }
 void AddRelationDialog::slotFinishStartToggled(bool ch) {
@@ -114,6 +117,15 @@ void AddRelationDialog::typeClicked(int id) {
         enableButtonOk(true);
 }
 
+int AddRelationDialog::selectedRelationType() const {
+    if (m_panel->bStartStart->isChecked())
+        return Relation::StartStart;
+    else if (m_panel->bFinishFinish->isChecked())
+        return Relation::FinishFinish;
+    
+    return Relation::FinishStart;
+}
+
 //////////////////
 
 ModifyRelationDialog::ModifyRelationDialog(Relation *rel, QWidget *p, const char *n)
@@ -132,10 +144,10 @@ void ModifyRelationDialog::slotUser1() {
 
 KCommand *ModifyRelationDialog::buildCommand(Part *part) {
     KMacroCommand *cmd=0;
-    if (m_panel->relationType->selectedId() != m_relation->type()) {
+    if (selectedRelationType() != m_relation->type()) {
         if (cmd == 0)
             cmd = new KMacroCommand(i18n("Modify Relation"));
-        cmd->addCommand(new ModifyRelationTypeCmd(part, m_relation, (Relation::Type)(m_panel->relationType->selectedId())));
+        cmd->addCommand(new ModifyRelationTypeCmd(part, m_relation, (Relation::Type)(selectedRelationType())));
         
         //kDebug()<<k_funcinfo<<m_panel->relationType->selectedId()<<endl;
     }

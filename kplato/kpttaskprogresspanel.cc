@@ -124,9 +124,21 @@ void TaskProgressPanel::setEstimateScales( int day )
 
 //-------------------------------------
 
-TaskProgressPanelImpl::TaskProgressPanelImpl(QWidget *parent, const char *name, Qt::WFlags f)
-    : TaskProgressPanelBase(parent, name, f) {
+TaskProgressPanelImpl::TaskProgressPanelImpl(QWidget *parent, const char *name)
+    : QWidget(parent) {
     
+    setObjectName(name);
+    setupUi(this);
+    actualEffort = new DurationWidget(actualEffortHolder);
+    if (actualEffortHolder->layout()) 
+        actualEffortHolder->layout()->addWidget(actualEffort);
+    remainingEffort = new DurationWidget(remainingEffortHolder);
+    if (remainingEffortHolder->layout()) 
+        remainingEffortHolder->layout()->addWidget(remainingEffort);
+    scheduledEffort = new DurationWidget(scheduledEffortHolder);
+    if (scheduledEffortHolder->layout()) 
+        scheduledEffortHolder->layout()->addWidget(scheduledEffort);
+
     connect(started, SIGNAL(toggled(bool)), SLOT(slotStartedChanged(bool)));
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotFinishedChanged(bool)));
 

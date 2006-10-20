@@ -24,7 +24,7 @@
 #include <QVariant>
 #include <QPushButton>
 #include <q3groupbox.h>
-//Added by qt3to4:
+
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
@@ -32,7 +32,8 @@
 #include <QLabel>
 #include <QComboBox>
 #include <q3buttongroup.h>
-#include <q3header.h>
+#include <QHeaderView>
+#include <QTreeWidget>
 #include <q3listview.h>
 #include <q3datetimeedit.h>
 #include <QLayout>
@@ -88,8 +89,8 @@ CalendarEditBase::CalendarEditBase( QWidget* parent, Qt::WFlags fl )
     groupBox4Layout = new Q3VBoxLayout( groupBox4->layout() );
     groupBox4Layout->setAlignment( Qt::AlignTop );
 
-    intervalList = new Q3ListView( groupBox4, "intervalList" );
-    intervalList->addColumn( tr2i18n( "Work Interval" ) );
+    intervalList = new QTreeWidget( groupBox4 );
+    intervalList->setHeaderLabel( tr2i18n( "Work Interval" ) );
     groupBox4Layout->addWidget( intervalList );
 
     layout6 = new Q3HBoxLayout( 0, 0, 6, "layout6");
@@ -138,7 +139,7 @@ void CalendarEditBase::languageChange()
     day->setTitle( QString::null );
     bApply->setText( tr2i18n( "Apply" ) );
     groupBox4->setTitle( QString::null );
-    intervalList->header()->setLabel( 0, tr2i18n( "Work Interval" ) );
+    intervalList->headerItem()->setText( 0, tr2i18n( "Work Interval" ) );
     bClear->setText( tr2i18n( "Clear" ) );
     bAddInterval->setText( tr2i18n( "Add Interval" ) );
 }

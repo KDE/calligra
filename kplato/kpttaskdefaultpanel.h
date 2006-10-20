@@ -20,7 +20,7 @@
 #ifndef KPTTASKDEFAULTPANEL_H
 #define KPTTASKDEFAULTPANEL_H
 
-#include "kptconfigtaskpanelbase.h"
+#include "ui_kptconfigtaskpanelbase.h"
 #include "kptduration.h"
 
 class KMacroCommand;
@@ -32,7 +32,7 @@ class Part;
 class Task;
 class StandardWorktime;
 
-class ConfigTaskPanelImpl : public ConfigTaskPanelBase
+class ConfigTaskPanelImpl : public QWidget, public Ui_ConfigTaskPanelBase
 {
     Q_OBJECT
 public:
@@ -50,6 +50,8 @@ public:
     virtual QDate startDate();
     virtual QDate endDate();
 
+    DurationWidget *estimate;
+    
 public slots:
     virtual void setSchedulingType( int type );
     virtual void changeLeader();

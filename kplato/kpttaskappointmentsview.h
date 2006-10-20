@@ -25,15 +25,12 @@
 #include "kpteffortcostmap.h"
 
 class QComboBox;
-class Q3DateEdit;
 class QPushButton;
 class QSplitter;
 class QTreeWidgetItem;
 class QLabel;
 class QPushButton;
 
-class K3ListView;
-class K3ListViewItem;
 class KPrinter;
 
 namespace KPlato

@@ -20,20 +20,22 @@
 #ifndef INTERVALITEM_H
 #define INTERVALITEM_H
 
-#include <Q3ListViewItem>
+#include <QTreeWidgetItem>
 #include <QDateTime>
 
 namespace KPlato
 {
 
-class IntervalItem : public Q3ListViewItem
+class IntervalItem : public QTreeWidgetItem
 {
 public:
-    IntervalItem(Q3ListView * parent, QTime start, QTime end)
-    : Q3ListViewItem(parent, QString("%1  -  %2").arg(start.toString(), end.toString())),
+    IntervalItem(QTreeWidget * parent, QTime start, QTime end)
+    : QTreeWidgetItem(parent),
       m_start(start),
       m_end(end)
-    {}
+    {
+        setText(0, QString("%1  -  %2").arg(start.toString(), end.toString()));
+    }
       
     TimeInterval interval() { return TimeInterval(m_start, m_end); }
 

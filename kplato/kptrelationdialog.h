@@ -21,6 +21,8 @@
 #ifndef KPTRELATIONDIALOG_H
 #define KPTRELATIONDIALOG_H
 
+#include "ui_relationpanel.h"
+#include <QWidget>
 #include <kdialog.h>
 
 class Q3ButtonGroup;
@@ -38,6 +40,15 @@ class Relation;
 class Part;
 class ModifyRelationTypeCmd;
 
+class RelationPanel : public QWidget, public Ui_RelationPanel
+{
+    Q_OBJECT
+public:
+    RelationPanel(QWidget *parent=0);
+    
+    DurationWidget *lag;
+};
+
 class AddRelationDialog : public KDialog
 {
     Q_OBJECT
@@ -45,7 +56,8 @@ public:
     AddRelationDialog(Relation *rel, QWidget *p, QString caption=QString::null, ButtonCodes buttons=Ok|Cancel, const char *n=0);
 
     virtual KCommand *buildCommand(Part *part);
-
+    int selectedRelationType() const;
+    
 protected slots:
     void slotOk();
     void lagChanged();

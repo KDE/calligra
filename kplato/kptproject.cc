@@ -21,7 +21,6 @@
 #include "kptproject.h"
 #include "kptappointment.h"
 #include "kpttask.h"
-#include "kptprojectdialog.h"
 #include "kptdatetime.h"
 #include "kptpart.h"
 #include "kptconfig.h"

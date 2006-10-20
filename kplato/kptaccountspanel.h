@@ -25,8 +25,8 @@
 #include <QList>
 #include <QHash>
 
-class Q3ListView;
-class Q3ListViewItem;
+class QTreeWidget;
+class QTreeWidgetItem;
 class QWidget;
 
 class KCommand;
@@ -57,16 +57,11 @@ public:
     
     KCommand *buildCommand(Part *part);
     
-    bool isUnique(Q3ListViewItem *item);
-    void renameStopped(Q3ListViewItem *item);
+    bool isUnique(QTreeWidgetItem *item);
+    void renameStopped(QTreeWidgetItem *item);
     
 signals:
     void changed(bool);
-    
-    // Internal
-    void renameStarted(Q3ListViewItem *, int);
-    void startRename(Q3ListViewItem *item, int col);
-    void selectionChanged();
     
 public slots:
     void slotOk();
@@ -74,34 +69,30 @@ public slots:
 protected slots:
     void slotChanged();
     void slotSelectionChanged();
-    void slotItemRenamed(Q3ListViewItem *item, int col);
     void slotRemoveBtn();
     void slotNewBtn();
     void slotSubBtn();
     void slotActivated(int);
-    void slotListDoubleClicked(Q3ListViewItem* item, const QPoint&, int col);
-    void slotRenameStarted(Q3ListViewItem *item, int col);
-    void slotStartRename(Q3ListViewItem *item, int col);
-    void slotRemoveItem(Q3ListViewItem *i);
+    void slotRemoveItem(QTreeWidgetItem *i);
 protected:
-    void addItems(Q3ListView *lv, Accounts &acc);
-    void addItems(Q3ListViewItem *item, Account *acc);
-    void addElement(Q3ListViewItem *item);
+    void addItems(QTreeWidget *lv, Accounts &acc);
+    void addItems(QTreeWidgetItem *item, Account *acc);
+    void addElement(QTreeWidgetItem *item);
     void removeElement(QString key);
-    void removeElement(Q3ListViewItem *item);
+    void removeElement(QTreeWidgetItem *item);
     void refreshDefaultAccount();
     KCommand *save(Part *part, Project &project);
-    KCommand *save(Part *part, Project &project, Q3ListViewItem *item);
+    KCommand *save(Part *part, Project &project, QTreeWidgetItem *item);
     
 private:
     Accounts &m_accounts;
     
-    QList<Q3ListViewItem*> m_removedItems;
+    QList<QTreeWidgetItem*> m_removedItems;
     Account *m_oldDefaultAccount;
-    QHash<QString, Q3ListViewItem*> m_elements;
+    QHash<QString, QTreeWidgetItem*> m_elements;
     int m_currentIndex;
     QString m_renameText;
-    Q3ListViewItem *m_renameItem;
+    QTreeWidgetItem *m_renameItem;
 };
 
 } //namespace KPlato

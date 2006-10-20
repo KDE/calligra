@@ -59,7 +59,6 @@
 #include "kptpart.h"
 #include "kptproject.h"
 #include "kptmainprojectdialog.h"
-#include "kptprojectdialog.h"
 #include "kpttask.h"
 #include "kptsummarytaskdialog.h"
 #include "kpttaskdialog.h"

@@ -11,6 +11,7 @@ include_directories(${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}
 
 
 set(libkplatopart_SRCS
+    kptdurationwidget.cc
     kptsummarytaskdialog.cc
     kptsummarytaskgeneralpanel.cc
     kptschedule.cc
@@ -35,7 +36,6 @@ set(libkplatopart_SRCS
     kptfactory.cc
     kptpart.cc
     kptview.cc
-    kptprojectdialog.cc
     kpttaskdialog.cc
     kptmainprojectdialog.cc
     kptmainprojectpanel.cc
@@ -73,6 +73,7 @@ set(libkplatopart_SRCS
     KPtViewAdaptor.cc
 )
 kde4_add_ui_files(libkplatopart_SRCS
+    kptdurationwidget.ui
     standardworktimedialogbase.ui
     kptwbsdefinitionpanelbase.ui
     kptaccountspanelbase.ui
@@ -87,15 +88,13 @@ kde4_add_ui_files(libkplatopart_SRCS
     resourcedialogbase.ui
     kptmainprojectpanelbase.ui
     kptcalendarlistpanel.ui
-)
-
-kde4_add_ui3_files(libkplatopart_SRCS
-    kptdurationwidget.ui
     relationpanel.ui
-    kptprojectdialogbase.ui
     kpttaskgeneralpanelbase.ui
     kpttaskprogresspanelbase.ui
     kptconfigtaskpanelbase.ui
+)
+
+kde4_add_ui3_files(libkplatopart_SRCS
 )
 
 ########### next target ###############

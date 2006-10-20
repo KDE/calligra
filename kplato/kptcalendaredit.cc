@@ -25,7 +25,7 @@
 #include "intervalitem.h"
 
 #include <q3buttongroup.h>
-#include <q3header.h>
+#include <QHeaderView>
 #include <QPushButton>
 #include <qradiobutton.h>
 #include <QComboBox>
@@ -55,9 +55,9 @@ CalendarEdit::CalendarEdit (QWidget *parent, const char */*name*/)
  {
 
     clear();
-    intervalList->header()->setStretchEnabled(true, 0);
-    intervalList->setShowSortIndicator(true);
-    intervalList->setSorting(0);
+    intervalList->header()->setStretchLastSection(true);
+//     intervalList->setShowSortIndicator(true);
+//     intervalList->setSorting(0);
 
     connect (calendarPanel, SIGNAL(dateChanged(QDate)), SLOT(slotDateSelected(QDate)));
     connect (calendarPanel, SIGNAL(weekdaySelected(int)), SLOT(slotWeekdaySelected(int)));
@@ -92,7 +92,7 @@ void CalendarEdit::slotStateActivated(int id) {
         bClear->setEnabled(true);
         bAddInterval->setEnabled(true);
         intervalList->setEnabled(true);
-        bApply->setEnabled(intervalList->firstChild());
+        bApply->setEnabled(intervalList->topLevelItemCount() > 0);
     }
 }
 
@@ -103,7 +103,7 @@ void CalendarEdit::slotClearClicked() {
 }
 void CalendarEdit::slotAddIntervalClicked() {
     //kDebug()<<k_funcinfo<<endl;
-    intervalList->insertItem(new IntervalItem(intervalList, startTime->time(), endTime->time()));
+    intervalList->addTopLevelItem(new IntervalItem(intervalList, startTime->time(), endTime->time()));
     bApply->setEnabled(true);
 }
 
@@ -122,9 +122,10 @@ void CalendarEdit::slotApplyClicked() {
         calDay->setState(state->currentIndex()); //NOTE!!
         calDay->clearIntervals();
         if (calDay->state() == Map::Working) {
-            for (Q3ListViewItem *item = intervalList->firstChild(); item; item = item->nextSibling()) {
+            int cnt = intervalList->topLevelItemCount();
+            for (int i = 0; i < cnt; ++i) {
                 //kDebug()<<k_funcinfo<<"Adding interval: "<<static_cast<IntervalItem *>(item)->interval().first.toString()<<"-"<<static_cast<IntervalItem *>(item)->interval().second.toString()<<endl;
-                calDay->addInterval(static_cast<IntervalItem *>(item)->interval());
+                calDay->addInterval(static_cast<IntervalItem *>(intervalList->topLevelItem(i))->interval());
             }
         }
     }
@@ -136,9 +137,10 @@ void CalendarEdit::slotApplyClicked() {
         weekday->setState(state->currentIndex());//NOTE!!
         weekday->clearIntervals();
         if (weekday->state() == Map::Working) {
-            for (Q3ListViewItem *item = intervalList->firstChild(); item; item = item->nextSibling()) {
+            int cnt = intervalList->topLevelItemCount();
+            for (int i = 0; i < cnt; ++i) {
                 //kDebug()<<k_funcinfo<<"Adding interval: "<<static_cast<IntervalItem *>(item)->interval().first.toString()<<"-"<<static_cast<IntervalItem *>(item)->interval().second.toString()<<endl;
-                weekday->addInterval(static_cast<IntervalItem *>(item)->interval());
+                weekday->addInterval(static_cast<IntervalItem *>(intervalList->topLevelItem(i))->interval());
             }
         }
     }
@@ -152,11 +154,11 @@ void CalendarEdit::slotCheckAllFieldsFilled() {
     //kDebug()<<k_funcinfo<<endl;
     if (state->currentItem() == 0 /*undefined*/ ||
         state->currentIndex() == 1 /*Non-working*/||
-        (state->currentItem() == 2 /*Working*/ && intervalList->firstChild()))
+        (state->currentItem() == 2 /*Working*/ && intervalList->topLevelItemCount() > 0))
     {
         emit obligatedFieldsFilled(true);
     }
-    else if (state->currentIndex() == 2 && !intervalList->firstChild())
+    else if (state->currentIndex() == 2 && !intervalList->topLevelItemCount() > 0)
     {
         emit obligatedFieldsFilled(false);
     }
@@ -207,7 +209,7 @@ void CalendarEdit::slotDateSelected(QDate date) {
     if (calDay) {
         foreach (TimeInterval *i, calDay->workingIntervals()) {
             IntervalItem *item = new IntervalItem(intervalList, i->first, i->second);
-            intervalList->insertItem(item);
+            intervalList->addTopLevelItem(item);
         }
         if (calDay->state() == Map::Working) {
             //kDebug()<<k_funcinfo<<"("<<date.toString()<<") is workday"<<endl;
@@ -251,7 +253,7 @@ void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
     state->addItem(i18n("Working"));
     foreach (TimeInterval *i, calDay->workingIntervals()) {
         IntervalItem *item = new IntervalItem(intervalList, i->first, i->second);
-        intervalList->insertItem(item);
+        intervalList->addTopLevelItem(item);
     }
     state->setEnabled(true);
     if (calDay->state() == Map::Working) {

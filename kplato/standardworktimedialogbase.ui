@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>417</width>
-    <height>368</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -126,58 +126,24 @@
     </layout>
    </item>
    <item>
-    <widget class="Q3GroupBox" name="groupBox1" >
-     <property name="toolTip" >
-      <string>Define standard weekly working hours.</string>
-     </property>
-     <property name="whatsThis" >
-      <string>The working hours defined here will be used
-when there is no calendar defined for a resource.</string>
-     </property>
+    <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Working Hours</string>
      </property>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
      <layout class="QHBoxLayout" >
       <property name="margin" >
-       <number>0</number>
+       <number>9</number>
       </property>
       <property name="spacing" >
        <number>6</number>
       </property>
       <item>
-       <widget class="K3ListView" name="weekdayList" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>5</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize" >
-         <size>
-          <width>160</width>
-          <height>210</height>
-         </size>
-        </property>
-        <property name="selectionMode" >
-         <enum>Q3ListView::Extended</enum>
-        </property>
-        <property name="itemMargin" >
-         <number>4</number>
-        </property>
-       </widget>
+       <widget class="QTreeWidget" name="weekdayList" />
       </item>
       <item>
-       <widget class="Q3GroupBox" name="editBox" >
+       <widget class="QGroupBox" name="editBox" >
         <property name="title" >
          <string/>
-        </property>
-        <property name="orientation" >
-         <enum>Qt::Vertical</enum>
         </property>
         <layout class="QGridLayout" >
          <property name="margin" >
@@ -208,12 +174,9 @@ when there is no calendar defined for a resource.</string>
           </widget>
          </item>
          <item row="1" column="0" colspan="2" >
-          <widget class="Q3GroupBox" name="intervalBox" >
+          <widget class="QGroupBox" name="intervalBox" >
            <property name="title" >
             <string/>
-           </property>
-           <property name="orientation" >
-            <enum>Qt::Vertical</enum>
            </property>
           </widget>
          </item>
@@ -235,30 +198,13 @@ when there is no calendar defined for a resource.</string>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ListView</class>
-   <extends>QFrame</extends>
-   <header>q3listview.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
   </customwidget>
-  <customwidget>
-   <class>K3ListView</class>
-   <extends>Q3ListView</extends>
-   <header>k3listview.h</header>
-  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>day</tabstop>
-  <tabstop>weekdayList</tabstop>
   <tabstop>state</tabstop>
   <tabstop>bApply</tabstop>
   <tabstop>year</tabstop>

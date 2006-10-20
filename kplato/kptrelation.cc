@@ -23,7 +23,6 @@
 #include "kptproject.h"
 #include "kptcanvasitem.h"
 
-#include <q3canvas.h>
 #include <qdom.h>
 
 #include <kdebug.h>

@@ -27,6 +27,7 @@
 #include <Q3HBoxLayout>
 #include <QLabel>
 #include <Q3GridLayout>
+#include <QTreeWidget>
 
 class Q3VBoxLayout;
 class Q3HBoxLayout;
@@ -59,7 +60,7 @@ public:
     QComboBox* state;
     QPushButton* bApply;
     Q3GroupBox* groupBox4;
-    Q3ListView* intervalList;
+    QTreeWidget* intervalList;
     Q3TimeEdit* startTime;
     Q3TimeEdit* endTime;
     QPushButton* bClear;

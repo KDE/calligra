@@ -20,8 +20,10 @@
 #ifndef KPTTASKGENERALPANEL_H
 #define KPTTASKGENERALPANEL_H
 
-#include "kpttaskgeneralpanelbase.h"
+#include "ui_kpttaskgeneralpanelbase.h"
 #include "kptduration.h"
+
+#include <QWidget>
 
 class KMacroCommand;
 
@@ -33,8 +35,9 @@ class RequestResourcesPanel;
 class Part;
 class Task;
 class StandardWorktime;
+class DurationWidget;
 
-class TaskGeneralPanelImpl : public TaskGeneralPanelBase
+class TaskGeneralPanelImpl : public QWidget, public Ui_TaskGeneralPanelBase
 {
     Q_OBJECT
 public:
@@ -52,6 +55,9 @@ public:
     virtual QDate startDate();
     virtual QDate endDate();
     virtual int risktype() const;
+
+    DurationWidget *estimate;
+    
 public slots:
     virtual void setSchedulingType( int type );
     virtual void changeLeader();

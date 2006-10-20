@@ -1,174 +1,149 @@
-<ui version="4.0" stdsetdef="1" >
-  <author>Dag Andersen &lt;danders@get2net.dk></author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>KPlato::ResourcesPanelBase</class>
-  <widget class="QWidget" name="KPlato::ResourcesPanelBase" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>510</width>
-        <height>227</height>
-      </rect>
-    </property>
-    <property name="minimumSize" >
-      <size>
-        <width>500</width>
-        <height>200</height>
-      </size>
-    </property>
-    <property name="windowTitle" >
-      <string>ResourcesPanelBase</string>
-    </property>
-    <layout class="QHBoxLayout" >
-      <item>
-        <layout class="QVBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
-          <item>
-            <widget class="K3ListView" name="listOfGroups" >
-              <column>
-                <property name="text" >
-                  <string>Resource Group</string>
-                </property>
-                <property name="clickable" >
-                  <bool>true</bool>
-                </property>
-                <property name="resizable" >
-                  <bool>true</bool>
-                </property>
-              </column>
-            </widget>
-          </item>
-          <item>
-            <layout class="QHBoxLayout" >
-              <property name="margin" >
-                <number>0</number>
-              </property>
-              <item>
-                <widget class="QPushButton" name="bAdd" >
-                  <property name="text" >
-                    <string>&amp;New</string>
-                  </property>
-                </widget>
-              </item>
-              <item>
-                <widget class="QPushButton" name="bRemove" >
-                  <property name="text" >
-                    <string>&amp;Remove</string>
-                  </property>
-                </widget>
-              </item>
-            </layout>
-          </item>
-        </layout>
-      </item>
-      <item>
-        <widget class="Q3GroupBox" name="resourceGroupBox" >
-          <property name="sizePolicy" >
-            <sizepolicy>
-              <hsizetype>5</hsizetype>
-              <vsizetype>5</vsizetype>
-              <horstretch>1</horstretch>
-              <verstretch>0</verstretch>
-            </sizepolicy>
-          </property>
-          <property name="title" >
-            <string>Resource</string>
-          </property>
-          <layout class="QHBoxLayout" >
-            <property name="margin" >
-              <number>0</number>
-            </property>
-            <item>
-              <layout class="QVBoxLayout" >
-                <property name="margin" >
-                  <number>0</number>
-                </property>
-                <item>
-                  <widget class="QLineEdit" name="resourceName" />
-                </item>
-                <item>
-                  <widget class="Q3ListBox" name="listOfResources" >
-                    <property name="sizePolicy" >
-                      <sizepolicy>
-                        <hsizetype>7</hsizetype>
-                        <vsizetype>7</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                      </sizepolicy>
-                    </property>
-                  </widget>
-                </item>
-              </layout>
-            </item>
-            <item>
-              <layout class="QVBoxLayout" >
-                <property name="margin" >
-                  <number>0</number>
-                </property>
-                <item>
-                  <widget class="QPushButton" name="bAddResource" >
-                    <property name="text" >
-                      <string>New...</string>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QPushButton" name="bEditResource" >
-                    <property name="text" >
-                      <string>Edit...</string>
-                    </property>
-                    <property name="shortcut" >
-                      <string/>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <widget class="QPushButton" name="bRemoveResource" >
-                    <property name="text" >
-                      <string>Remove</string>
-                    </property>
-                    <property name="shortcut" >
-                      <string/>
-                    </property>
-                  </widget>
-                </item>
-                <item>
-                  <spacer name="spacer9" >
-                    <property name="sizeHint" >
-                      <size>
-                        <width>20</width>
-                        <height>220</height>
-                      </size>
-                    </property>
-                    <property name="sizeType" >
-                      <enum>Expanding</enum>
-                    </property>
-                    <property name="orientation" >
-                      <enum>Qt::Vertical</enum>
-                    </property>
-                  </spacer>
-                </item>
-              </layout>
-            </item>
-          </layout>
+<ui version="4.0" >
+ <author>Dag Andersen &lt;danders@get2net.dk></author>
+ <class>KPlato::ResourcesPanelBase</class>
+ <widget class="QWidget" name="KPlato::ResourcesPanelBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>500</width>
+    <height>200</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>ResourcesPanelBase</string>
+  </property>
+  <layout class="QHBoxLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QTreeWidget" name="listOfGroups" />
+     </item>
+     <item>
+      <layout class="QHBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QPushButton" name="bAdd" >
+         <property name="text" >
+          <string>&amp;New</string>
+         </property>
         </widget>
-      </item>
+       </item>
+       <item>
+        <widget class="QPushButton" name="bRemove" >
+         <property name="text" >
+          <string>&amp;Remove</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
     </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <customwidgets>
-    <customwidget>
-      <class>K3ListView</class>
-      <extends>Q3ListView</extends>
-      <header>k3listview.h</header>
-    </customwidget>
-  </customwidgets>
-  <includes>
-    <include location="local" >k3listview.h</include>
-  </includes>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="resourceGroupBox" >
+     <property name="title" >
+      <string>Resource</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QLineEdit" name="resourceName" />
+      </item>
+      <item rowspan="2" row="0" column="1" >
+       <layout class="QVBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="bAddResource" >
+          <property name="text" >
+           <string>New...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="bEditResource" >
+          <property name="text" >
+           <string>Edit...</string>
+          </property>
+          <property name="shortcut" >
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="bRemoveResource" >
+          <property name="text" >
+           <string>Remove</string>
+          </property>
+          <property name="shortcut" >
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>20</width>
+            <height>220</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QListWidget" name="listOfResources" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <includes>
+  <include location="local" >k3listview.h</include>
+ </includes>
+ <resources/>
+ <connections/>
 </ui>

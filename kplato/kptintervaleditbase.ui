@@ -1,138 +1,131 @@
-<ui version="4.0" stdsetdef="1" >
-  <author>Dag Andersen</author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>KPlato::IntervalEditBase</class>
-  <widget class="QWidget" name="KPlato::IntervalEditBase" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>278</width>
-        <height>248</height>
-      </rect>
-    </property>
-    <property name="windowTitle" >
-      <string>CalendarEditBase</string>
-    </property>
-    <layout class="QVBoxLayout" >
-      <property name="margin" >
-        <number>0</number>
+<ui version="4.0" >
+ <author>Dag Andersen</author>
+ <class>KPlato::IntervalEditBase</class>
+ <widget class="QWidget" name="KPlato::IntervalEditBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>CalendarEditBase</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QTreeWidget" name="intervalList" >
+     <column>
+      <property name="text" >
+       <string>Work Interval</string>
       </property>
-      <item>
-        <widget class="Q3ListView" name="intervalList" >
-          <property name="focusPolicy" >
-            <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="resizeMode" >
-            <enum>Q3ListView::AllColumns</enum>
-          </property>
-          <column>
-            <property name="text" >
-              <string>Work Interval</string>
-            </property>
-            <property name="clickable" >
-              <bool>true</bool>
-            </property>
-            <property name="resizable" >
-              <bool>true</bool>
-            </property>
-          </column>
-        </widget>
-      </item>
-      <item>
-        <layout class="QHBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
-          <item>
-            <layout class="QHBoxLayout" >
-              <property name="margin" >
-                <number>0</number>
-              </property>
-              <item>
-                <widget class="QLabel" name="textLabel1" >
-                  <property name="text" >
-                    <string>From:</string>
-                  </property>
-                  <property name="wordWrap" >
-                    <bool>false</bool>
-                  </property>
-                </widget>
-              </item>
-              <item>
-                <widget class="Q3TimeEdit" name="startTime" />
-              </item>
-            </layout>
-          </item>
-          <item>
-            <layout class="QHBoxLayout" >
-              <property name="margin" >
-                <number>0</number>
-              </property>
-              <item>
-                <widget class="QLabel" name="textLabel2" >
-                  <property name="text" >
-                    <string>To:</string>
-                  </property>
-                  <property name="wordWrap" >
-                    <bool>false</bool>
-                  </property>
-                </widget>
-              </item>
-              <item>
-                <widget class="Q3TimeEdit" name="endTime" />
-              </item>
-            </layout>
-          </item>
-        </layout>
-      </item>
-      <item>
-        <layout class="QHBoxLayout" >
-          <property name="margin" >
-            <number>0</number>
-          </property>
-          <item>
-            <spacer name="spacer1" >
-              <property name="sizeHint" >
-                <size>
-                  <width>51</width>
-                  <height>21</height>
-                </size>
-              </property>
-              <property name="sizeType" >
-                <enum>Expanding</enum>
-              </property>
-              <property name="orientation" >
-                <enum>Qt::Horizontal</enum>
-              </property>
-            </spacer>
-          </item>
-          <item>
-            <widget class="QPushButton" name="bClear" >
-              <property name="text" >
-                <string>Clear</string>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QPushButton" name="bAddInterval" >
-              <property name="text" >
-                <string>Add Interval</string>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </item>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="textLabel1" >
+       <property name="text" >
+        <string>From:</string>
+       </property>
+       <property name="wordWrap" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTimeEdit" name="startTime" />
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="textLabel2" >
+       <property name="text" >
+        <string>To:</string>
+       </property>
+       <property name="wordWrap" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTimeEdit" name="endTime" />
+     </item>
     </layout>
-  </widget>
-  <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <tabstops>
-    <tabstop>startTime</tabstop>
-    <tabstop>endTime</tabstop>
-    <tabstop>bClear</tabstop>
-    <tabstop>bAddInterval</tabstop>
-    <tabstop>intervalList</tabstop>
-  </tabstops>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>51</width>
+         <height>21</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bClear" >
+       <property name="text" >
+        <string>Clear</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bAddInterval" >
+       <property name="text" >
+        <string>Add Interval</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <tabstops>
+  <tabstop>bClear</tabstop>
+  <tabstop>bAddInterval</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
 </ui>

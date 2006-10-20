@@ -39,7 +39,7 @@ namespace KPlato
 
 class View;
 class Project;
-class ProjectDialog;
+class MainProjectDialog;
 class ResourceGroup;
 class Context;
 class GanttView;
@@ -93,7 +93,7 @@ protected slots:
 
 private:
     Project *m_project;
-    ProjectDialog *m_projectDialog;
+    MainProjectDialog *m_projectDialog;
     QWidget* m_parentWidget;
     View *m_view;
 

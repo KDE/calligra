@@ -228,7 +228,13 @@ void TaskGeneralPanel::scheduleTypeChanged(int value)
 
 //-----------------------------
 TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
-    : TaskGeneralPanelBase(p, n) {
+    : QWidget(p) {
+
+    setObjectName(n);
+    setupUi(this);
+    estimate = new DurationWidget(durationHolder);
+    if (durationHolder->layout()) 
+        durationHolder->layout()->addWidget(estimate);
 
     connect(idfield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
     connect(namefield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));

@@ -25,7 +25,6 @@
 
 #include <QString>
 
-class Q3Canvas;
 class QDomElement;
 
 namespace KPlato

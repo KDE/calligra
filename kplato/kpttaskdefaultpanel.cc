@@ -190,7 +190,13 @@ void TaskDefaultPanel::scheduleTypeChanged(int value)
 
 //-----------------------------
 ConfigTaskPanelImpl::ConfigTaskPanelImpl(QWidget *p, const char *n)
-    : ConfigTaskPanelBase(p, n) {
+    : QWidget(p) {
+
+    setObjectName(n);
+    setupUi(this);
+    estimate = new DurationWidget(durationHolder);
+    if (durationHolder->layout()) 
+        durationHolder->layout()->addWidget(estimate);
 
     connect(leaderfield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
     connect(chooseLeader, SIGNAL(clicked()), SLOT(changeLeader()));

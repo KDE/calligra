@@ -26,8 +26,7 @@
 #include <kdialog.h>
 
 #include <QString>
-#include <q3ptrlist.h>
-#include <qpair.h>
+#include <QPair>
 #include <QWidget>
 
 namespace KPlato
@@ -53,7 +52,7 @@ public:
 private slots:
     void slotClearClicked();
     void slotAddIntervalClicked();
-    void slotIntervalSelectionChanged(Q3ListViewItem *item);
+    void slotIntervalSelectionChanged();
 signals:
     void changed();
 };
