@@ -156,6 +156,8 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     m_intervalEdit = new IntervalEdit(intervalBox);
     l->addWidget(m_intervalEdit);
     
+    weekdayList->setRootIsDecorated(false);
+    
     m_year = m_std->year();
     m_month = m_std->month();
     m_week = m_std->week();

@@ -55,6 +55,7 @@ public:
 public slots:
     void slotSelectionChanged();
     void slotSelectionChanged(QTreeWidgetItem *listItem);
+    void slotItemChanged(QTreeWidgetItem*, int);
 
 private slots:
     void slotBaseCalendarActivated(int id);
@@ -64,7 +65,6 @@ private slots:
     void slotEnableButtonOk(bool on);
     void slotListDoubleClicked(const QModelIndex &index);
     void slotListDoubleClicked(QTreeWidgetItem *item, int col);
-    void slotItemChanged(QTreeWidgetItem*, int);
 
 signals:
     void obligatedFieldsFilled(bool yes);

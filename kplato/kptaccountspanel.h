@@ -73,7 +73,9 @@ protected slots:
     void slotNewBtn();
     void slotSubBtn();
     void slotActivated(int);
+    void slotItemChanged(QTreeWidgetItem* item, int col);
     void slotRemoveItem(QTreeWidgetItem *i);
+    
 protected:
     void addItems(QTreeWidget *lv, Accounts &acc);
     void addItems(QTreeWidgetItem *item, Account *acc);

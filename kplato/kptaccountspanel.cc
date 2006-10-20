@@ -80,7 +80,7 @@ AccountsPanel::AccountsPanel(Accounts &acc, QWidget *p)
       m_currentIndex(0),
       m_renameItem(0)
 {
-
+    accountList->setHeaderLabels(QStringList()<<"Account"<<"Description");
     accountList->header()->setStretchLastSection(true);
     addItems(accountList, acc);
 
@@ -94,6 +94,7 @@ AccountsPanel::AccountsPanel(Accounts &acc, QWidget *p)
 
     connect(accountsComboBox, SIGNAL(activated(int)), SLOT(slotActivated(int)));
     
+    connect(accountList, SIGNAL(itemChanged(QTreeWidgetItem*, int)), SLOT(slotItemChanged(QTreeWidgetItem*, int)));
 }
     
 void AccountsPanel::addItems(QTreeWidget *lv, Accounts &acc) {
@@ -159,12 +160,18 @@ void AccountsPanel::refreshDefaultAccount() {
         if (static_cast<AccountItem*>(m_elements[key])->isDefault) {
             m_currentIndex = i;
             accountsComboBox->setCurrentIndex(i);
-            kDebug()<<k_funcinfo<<"Default="<<key<<endl;
+            //kDebug()<<k_funcinfo<<"Default="<<key<<endl;
         }
         ++i;
     }
     //kDebug()<<k_funcinfo<<"size="<<accountsComboBox->count()<<endl;
 }
+
+void AccountsPanel::slotItemChanged(QTreeWidgetItem* item, int col) {
+    //kDebug()<<k_funcinfo<<item->text(0)<<", "<<col<<endl;
+    emit changed(true);
+}
+
 void AccountsPanel::slotActivated(int index) {
     //kDebug()<<k_funcinfo<<index<<endl;
     if (m_currentIndex >= (int)m_elements.count()) {
@@ -240,6 +247,7 @@ void AccountsPanel::slotNewBtn() {
         n = new AccountItem(*this, accountList);
     }
     accountList->clearSelection();
+    n->setSelected(true);
     accountList->editItem(n);
 }
 
@@ -253,9 +261,13 @@ void AccountsPanel::slotSubBtn() {
     QTreeWidgetItem *n;
     if (item) {
         n = new AccountItem(*this, item);
+        item->setExpanded(true);
     } else {
         n = new AccountItem(*this, accountList);
     }
+    accountList->clearSelection();
+    n->setSelected(true);
+    accountList->editItem(n);
 }
 
 KCommand *AccountsPanel::buildCommand(Part *part) {

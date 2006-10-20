@@ -228,7 +228,6 @@ ResourcesPanel::ResourcesPanel(QWidget *parent, Project *p) : ResourcesPanelBase
 
     bEditResource->setEnabled(false);
     bRemoveResource->setEnabled(false);
-    resourceName->setEnabled(false);
     
     listOfGroups->setHeaderLabel(i18n("Group"));
     listOfGroups->header()->setStretchLastSection(true);
@@ -252,18 +251,19 @@ ResourcesPanel::ResourcesPanel(QWidget *parent, Project *p) : ResourcesPanelBase
     if (listOfGroups->topLevelItemCount() > 0)
         listOfGroups->topLevelItem(0)->setSelected(true);
     
-    slotGroupChanged();
+    slotGroupSelectionChanged();
 
     connect(bAdd, SIGNAL(clicked()), SLOT(slotAddGroup()));
     connect(bRemove, SIGNAL(clicked()), SLOT(slotDeleteGroup()));
-    connect(listOfGroups, SIGNAL(itemSelectionChanged()), SLOT(slotGroupChanged()));
+    connect(listOfGroups, SIGNAL(itemSelectionChanged()), SLOT(slotGroupSelectionChanged()));
 
     connect(bAddResource, SIGNAL( clicked() ), this, SLOT ( slotAddResource() ));
     connect(bEditResource, SIGNAL( clicked() ), this, SLOT ( slotEditResource() ));
     connect(bRemoveResource, SIGNAL( clicked() ), this, SLOT ( slotDeleteResource() ));
     connect(listOfResources, SIGNAL(itemSelectionChanged()), SLOT(slotResourceChanged()));
-    connect(listOfResources, SIGNAL(currentChanged(QListWidgetItem*)), SLOT(slotCurrentChanged(QListWidgetItem*)));
-    connect(resourceName, SIGNAL(textChanged(const QString&)), SLOT(slotResourceRename(const QString&)));
+    connect(listOfResources, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), SLOT(slotCurrentChanged(QListWidgetItem*, QListWidgetItem*)));
+    
+    connect(listOfGroups, SIGNAL(itemChanged(QTreeWidgetItem*, int)), SLOT(slotGroupChanged(QTreeWidgetItem*, int)));
 
 }
 
@@ -321,7 +321,6 @@ void ResourcesPanel::slotAddResource() {
         m_groupItem->m_group->addResource(resourceItem);
         ResourceLBItem *item = new ResourceLBItem(resourceItem);
         listOfResources->addItem(item);
-        resourceName->clear();
         item->setSelected(true);
         emit changed();
         //kDebug()<<k_funcinfo<<" Added: "<<resourceItem->name()<<" to "<<m_groupItem->m_group->m_name<<endl;
@@ -346,7 +345,6 @@ void ResourcesPanel::slotEditResource() {
             cmd->execute(); // modifications -> r
             delete cmd;
         }
-        resourceName->setText(r->name());
         item->m_resourceItem->setState(ResourcesPanelResourceItem::Modified);
         item->setName(r->name()); // refresh list
         emit changed();
@@ -373,26 +371,19 @@ void ResourcesPanel::slotDeleteResource() {
 /* Select another resource */
 void ResourcesPanel::slotResourceChanged() {
     QList<QListWidgetItem*> lst = listOfResources->selectedItems();
-    if (lst.isEmpty()) {
-        return;
-    }
-    QListWidgetItem *item = lst[0];
-    if (!item) {
-        resourceName->setEnabled(false);
+    if (listOfResources->selectedItems().count() == 0) {
         bEditResource->setEnabled(false);
         bRemoveResource->setEnabled(false);
         return;
     }
-    resourceName->setText( ((ResourceLBItem *)item)->name());
-    resourceName->setEnabled(true);
     bEditResource->setEnabled(true);
     bRemoveResource->setEnabled(true);
 }
 
 /* Select another resource */
-void ResourcesPanel::slotCurrentChanged( QListWidgetItem *item) {
-    if (item && !item->isSelected()) {
-        item->setSelected(true);
+void ResourcesPanel::slotCurrentChanged(QListWidgetItem *curr, QListWidgetItem* prev) {
+    if (curr && !curr->isSelected()) {
+        curr->setSelected(true);
     }
 }
 
@@ -447,21 +438,29 @@ KCommand *ResourcesPanel::buildCommand(Part *part) {
     return m;
 }
 
-void ResourcesPanel::slotGroupChanged() {
+void ResourcesPanel::slotGroupChanged(QTreeWidgetItem *ci, int col) {
+    if (ci == 0)
+        return;
+    //kDebug()<<k_funcinfo<<ci->text(0)<<", "<<col<<endl;
+    ResourcesPanelGroupLVItem *item = static_cast<ResourcesPanelGroupLVItem*>(ci);
+    item->setName(item->text(0));
+    emit changed();
+}
+
+void ResourcesPanel::slotGroupSelectionChanged() {
     QList<QTreeWidgetItem*> lst = listOfGroups->selectedItems();
     QTreeWidgetItem *i = 0;
     if (lst.count() > 0)
         i = lst[0]; // handle only single selection, really
-    slotGroupChanged(i);
+    slotGroupSelectionChanged(i);
 }
 
-void ResourcesPanel::slotGroupChanged(QTreeWidgetItem *itm) {
+void ResourcesPanel::slotGroupSelectionChanged(QTreeWidgetItem *itm) {
     ResourcesPanelGroupLVItem *item = static_cast<ResourcesPanelGroupLVItem*>(itm);
     if (!item) {
         bAdd->setEnabled(true);
         bRemove->setEnabled(false);
         listOfResources->clear();
-        resourceName->clear();
         resourceGroupBox->setEnabled(false);
         return;
     }
@@ -476,11 +475,6 @@ void ResourcesPanel::slotGroupChanged(QTreeWidgetItem *itm) {
     bRemove->setEnabled(true);
     slotResourceChanged();
     resourceGroupBox->setEnabled(true);
-}
-
-void ResourcesPanel::slotResourceRename(const QString &newName)
-{
-    kDebug()<<k_funcinfo<<newName<<endl;
 }
 
 }  //KPlato namespace

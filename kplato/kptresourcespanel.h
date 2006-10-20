@@ -54,8 +54,6 @@ public:
     bool ok();
     KCommand *buildCommand(Part *part);
 
-    void sendChanged();
-    
 protected slots:
     void slotAddGroup();
     void slotDeleteGroup();
@@ -64,11 +62,11 @@ protected slots:
     void slotEditResource();
     void slotDeleteResource();
 
-    void slotGroupChanged(QTreeWidgetItem *item);
-    void slotGroupChanged();
-    void slotResourceRename(const QString &newName);
+    void slotGroupSelectionChanged(QTreeWidgetItem *item);
+    void slotGroupSelectionChanged();
+    void slotGroupChanged(QTreeWidgetItem *ci, int col);
     void slotResourceChanged();
-    void slotCurrentChanged(QListWidgetItem*);
+    void slotCurrentChanged(QListWidgetItem *curr, QListWidgetItem* prev);
 
 signals:
     void changed();

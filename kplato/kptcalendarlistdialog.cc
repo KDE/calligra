@@ -190,6 +190,8 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *
 
     connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
     connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOk(bool)));
+    // Don't connect this until the list is filled
+    connect(dia->calendarList, SIGNAL(itemChanged(QTreeWidgetItem*, int)), dia, SLOT(slotItemChanged(QTreeWidgetItem*, int)));
 }
 
 KCommand *CalendarListDialog::buildCommand(Part *part) {
@@ -198,6 +200,7 @@ KCommand *CalendarListDialog::buildCommand(Part *part) {
     int c = dia->calendarList->topLevelItemCount();
     for (int i=0; i < c; ++i) {
         CalendarListViewItem *item = static_cast<CalendarListViewItem *>(dia->calendarList->topLevelItem(i));
+        //kDebug()<<k_funcinfo<<item->text(0)<<endl;
         KMacroCommand *c = item->buildCommand(part, project);
         if (c != 0) {
             if (cmd == 0) cmd = new KMacroCommand("");
@@ -249,7 +252,6 @@ CalendarListDialogImpl::CalendarListDialogImpl (Project &p, QWidget *parent)
 
     connect(this, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
     
-    connect(calendarList, SIGNAL(itemChanged(QTreeWidgetItem*, int)), SLOT(slotItemChanged(QTreeWidgetItem*, int)));
 }
 
 CalendarListDialogImpl::~CalendarListDialogImpl() {
@@ -264,8 +266,13 @@ void CalendarListDialogImpl::setBaseCalendars() {
     }
 }
 
-void CalendarListDialogImpl::slotItemChanged(QTreeWidgetItem*, int) {
-    kDebug()<<k_funcinfo<<endl;
+void CalendarListDialogImpl::slotItemChanged(QTreeWidgetItem *ci, int col) {
+    if (ci == 0)
+        return;
+    //kDebug()<<k_funcinfo<<ci->text(0)<<", "<<col<<endl;
+    CalendarListViewItem *item = static_cast<CalendarListViewItem*>(ci);
+    item->calendar->setName(item->text(0));
+    item->setState(CalendarListViewItem::Modified);
     slotEnableButtonOk(true);
 }
 
@@ -274,6 +281,7 @@ void CalendarListDialogImpl::slotEnableButtonOk(bool on) {
 }
 
 void CalendarListDialogImpl::slotBaseCalendarActivated(int id) {
+    //kDebug()<<k_funcinfo<<endl;
     QList<QTreeWidgetItem*> lst = calendarList->selectedItems();
     if (lst.count() == 1) {
         CalendarListViewItem *item = static_cast<CalendarListViewItem*>(lst[0]);
@@ -288,7 +296,6 @@ void CalendarListDialogImpl::slotBaseCalendarActivated(int id) {
 void CalendarListDialogImpl::slotSelectionChanged() {
     //kDebug()<<k_funcinfo<<endl;
     QList<QTreeWidgetItem *> lst = calendarList->selectedItems();
-
     bDelete->setEnabled(lst.count() > 0);
     bAdd->setEnabled(true);
     if (lst.count() > 0)
@@ -333,11 +340,14 @@ void CalendarListDialogImpl::setCalendar(Calendar *cal) {
 }
 
 void CalendarListDialogImpl::slotCalendarModified() {
-    CalendarListViewItem *item = dynamic_cast<CalendarListViewItem*>(calendarList->currentItem());
-    if (item) {
-        item->setState(CalendarListViewItem::Modified);
-        //kDebug()<<k_funcinfo<<"("<<item->calendar<<")"<<endl;
+    QList<QTreeWidgetItem*> lst = calendarList->selectedItems();
+    if (lst.count() == 0) {
+        return;
     }
+    CalendarListViewItem *item = static_cast<CalendarListViewItem*>(lst[0]);
+    item->setState(CalendarListViewItem::Modified);
+    //kDebug()<<k_funcinfo<<"("<<item->calendar<<")"<<endl;
+    
     emit calendarModified();
 }
 
@@ -354,6 +364,8 @@ void CalendarListDialogImpl::slotDeleteClicked() {
 }
 
 void CalendarListDialogImpl::slotAddClicked() {
+    disconnect(calendarList, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(slotItemChanged(QTreeWidgetItem*, int)));
+    
     Calendar *cal = new Calendar();
     cal->setProject(&project);
     CalendarListViewItem *item = new CalendarListViewItem(*this, calendarList, cal);
@@ -361,7 +373,8 @@ void CalendarListDialogImpl::slotAddClicked() {
     calendarList->clearSelection();
     item->setSelected(true);
     calendarList->editItem(item, 0);
-
+    
+    connect(calendarList, SIGNAL(itemChanged(QTreeWidgetItem*, int)), this, SLOT(slotItemChanged(QTreeWidgetItem*, int)));
 }
 
 QList<CalendarListViewItem*> &CalendarListDialogImpl::deletedItems() {
