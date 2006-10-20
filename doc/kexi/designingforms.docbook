@@ -165,9 +165,11 @@
       <procedure>
         <step>
           <para>To create a new empty form, select
-            <menuchoice><guimenu>Insert</guimenu><guimenuitem><!--<img src="img/form_newobj.png" class="icon">-->Form</guimenuitem></menuchoice>
+            <menuchoice><guimenu>Insert</guimenu><guimenuitem>
+            <!--<img src="img/form_newobj.png" class="icon">-->Form</guimenuitem></menuchoice>
             from the Menubar. Optionally, you can use
-            <menuchoice><guimenuitem><!--<img src="img/form_newobj.png" class="icon">-->New Form</guimenuitem></menuchoice>
+            <menuchoice><guimenuitem>
+            <!--<img src="img/form_newobj.png" class="icon">-->New Form</guimenuitem></menuchoice>
             command from drop-down button on the <interface>Project Navigator's</interface>
             toolbar or <menuchoice><guimenuitem>Create Object: Form</guimenuitem></menuchoice> command from the context menu.
           </para>
@@ -390,9 +392,10 @@
           </listitem>
           <listitem>
             <para>
-              The commands <guimenuitem><!--<img src="img/editcut.png" class="icon">-->Cut</guimenuitem>,
-              <guimenuitem><!--<img src="img/editcopy.png" class="icon">-->Copy</guimenuitem> and
-              <guimenuitem><!--<img src="img/editpaste.png" class="icon">-->Paste</guimenuitem>
+              The commands <guimenuitem>
+              <!--<img src="img/editcut.png" class="icon">-->Cut</guimenuitem>,<guimenuitem>
+              <!--<img src="img/editcopy.png" class="icon">-->Copy</guimenuitem> and <guimenuitem>
+              <!--<img src="img/editpaste.png" class="icon">-->Paste</guimenuitem>
               makes it possible to move or copy widgets between forms, even between separate
               database projects.
             </para>
@@ -405,8 +408,10 @@
           </listitem>
           <listitem>
             <para>
-              Instead of using <guimenuitem><!--<img src="img/editcopy.png" class="icon">-->Copy</guimenuitem>
-              and <guimenuitem><!--<img src="img/editpaste.png" class="icon">-->Paste</guimenuitem>
+              Instead of using <guimenuitem>
+              <!--<img src="img/editcopy.png" class="icon">-->Copy</guimenuitem>
+              and <guimenuitem>
+              <!--<img src="img/editpaste.png" class="icon">-->Paste</guimenuitem>
               commands, to duplicate a widget within the same form you can hold down the
               <keycap>Ctrl</keycap> key while moving the widget. After the <keycap>Ctrl</keycap>
               key is released, the dragged widget will not be moved but copied in the new location.
@@ -496,10 +501,12 @@
       </procedure>
       <para>
         You can now save the form's design (this is not mandatory to test the
-        form in action). To save, click the <!--<img src="img/filesave.png" class="icon">-->
+        form in action). To save, click the 
+        <!--<img src="img/filesave.png" class="icon">-->
         <guilabel>Save object changes</guilabel> toolbar button or use the
         <menuchoice><shortcut><keycombo action="simul"><keycap>Ctrl</keycap><keycap>S</keycap></keycombo></shortcut>
-        <guimenu>File</guimenu><guimenuitem><!--<img src="img/filesave.png" class="icon">-->Save</guimenuitem></menuchoice>
+        <guimenu>File</guimenu><guimenuitem>
+        <!--<img src="img/filesave.png" class="icon">-->Save</guimenuitem></menuchoice>
         menu command. Upon saving you will be asked for entering the form's name. Enter
         <literal>Persons</literal> as caption and click the <guibutton>OK</guibutton>
         button. The form's name will be filled automatically.
@@ -744,14 +751,17 @@
           <para>
             Select two or more widgets that should be placed in a common layout,
             and select one of the layout types from the context menu item
-            <!--<a href="aa_00_00_menu.html#menu_format_layout">--><guilabel>Layout Widgets</guilabel><!--</a>-->.
+            <!--<a href="aa_00_00_menu.html#menu_format_layout">-->
+            <guilabel>Layout Widgets</guilabel>
+            <!--</a>-->.
           </para>
         </listitem>
         <listitem>
           <para>
             Click a container widget (or a form surface itself), where widgets are
             inserted and select one of the layout types from the context menu item
-            <!--<a href="aa_00_00_menu.html#menu_format_layout">-->Layout Widgets<!--</a>-->.
+            <!--<a href="aa_00_00_menu.html#menu_format_layout">-->Layout Widgets
+            <!--</a>-->.
             All widgets existing within the container or within the
             form, being on the same level will be put into a single common layout.
           </para>
@@ -999,7 +1009,8 @@
             command will not remove widgets contained in the layout. If you want to
             remove the widgets as well, just select the layout by clicking on its
             border and press <keycap>Delete</keycap> key or use
-            <menuchoice><guimenu>Edit</guimenu><guimenuitem><!--<img src="img/editdelete.png" class="icon">-->Delete</guimenuitem></menuchoice>
+            <menuchoice><guimenu>Edit</guimenu><guimenuitem>
+            <!--<img src="img/editdelete.png" class="icon">-->Delete</guimenuitem></menuchoice>
             menu command or context menu command.
           </para>
         </note>

@@ -14,17 +14,20 @@
       of data will be displayed and a text cursor will be set inside the first
       data field. You can move between fields using the &LMB; or the <keycap>Tab</keycap> and
       <keycombo action="simul"><keycap>Shift</keycap><keycap>Tab</keycap></keycombo>
-      keys. While editing, there will be a <!--<img src="icons/button_tableview_editrow.png" class="icon">-->
+      keys. While editing, there will be a 
+      <!--<img src="icons/button_tableview_editrow.png" class="icon">-->
       pencil icon visible near the record navigator. After entering the row's (record)
       data you can press the 
       <keycombo action="simul"><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>
-      keys or click the <!--<img src="icons/button_ok.png" class="icon">--><guibutton>OK</guibutton>
+      keys or click the 
+      <!--<img src="icons/button_ok.png" class="icon">--><guibutton>OK</guibutton>
       toolbar button to accept changes made to the current row. Clicking the
       <!--<img src="icons/button_cancel.png" class="icon">--><guibutton>Cancel</guibutton>
       toolbar button discards changes made to the current row and restores the contents of
       the data fields. You can use the <!--<img src="icons/navigator_next.png" class="icon">-->
       record navigator's button to move to a new row. All the navigator's functions are
-      also available in a similar way as in the data table view<!-- TODO link -->.
+      also available in a similar way as in the data table view
+      <!-- TODO link -->.
       <!-- TODO shortcuts! -->
     </para>
   </sect1>
