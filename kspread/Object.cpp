@@ -47,7 +47,6 @@
 
 using namespace KSpread;
 
-class Sheet;
 class View;
 
 /**********************************************************
