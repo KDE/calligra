@@ -8,6 +8,14 @@ ready for the KFormulaShape in KOffice 2. This will be the usual way to work wit
 formulas. KWord will hold formulas as KFormulaShape and also every other KOffice app
 is able to do so.
 
+ToDo for flake usage:
+- make KFormulaCanvas be derived from KoCanvasBase
+- make use of FormulaTool
+- make KFormula display FormulaShapes
+
+ToDo for filters:
+- finish the KFormula1.3 filter and remove the old code from the lib
+
 Further possible features:
 - new GUI ( will come )
 - updated and improved LaTex filters ( is important )
