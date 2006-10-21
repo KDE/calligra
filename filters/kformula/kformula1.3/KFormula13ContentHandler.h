@@ -22,6 +22,8 @@
 
 #include <QXmlDefaultHandler>
 #include <QDomDocument>
+#include <QStack>
+#include <QPair>
 
 class KFormula13ContentHandler : public QXmlDefaultHandler {
 public:
@@ -31,17 +33,20 @@ public:
     bool startDocument();
     bool startElement( const QString& namespaceURI, const QString& localName,
                        const QString& qName, const QXmlAttributes& atts );
-    bool endElement( const QString& namespaceURI, const QString & localName,
+    bool endElement( const QString& namespaceURI, const QString& localName,
                      const QString& qName );
-    bool characters( const QString& ch ); 
     QByteArray mathMlData() const;
     
 private:
     void writeBracketAttributes( const QXmlAttributes& atts );
+    void writeSpaceAttributes( const QXmlAttributes& atts );
+    void parseMatrix();
     
     QDomDocument m_mathMlDocument;
     
     QDomElement m_currentElement;
+
+    QStack< QPair<int,int> > m_matrixStack;
 };
     
 #endif // KFORMULA13CONTENTHANDLER_H
