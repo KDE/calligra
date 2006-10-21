@@ -26,8 +26,8 @@
 #include "KFormulaPartFactory.h"
 #include "KFormulaConfigDialog.h"
 #include "KFormulaCanvas.h"
-
-#include <QScrollArea>
+#include <KoCanvasController.h>
+#include <KoZoomHandler.h>
 #include <kstdaction.h>
 #include <kaction.h>
 #include <ktip.h>
@@ -40,15 +40,16 @@ KFormulaPartView::KFormulaPartView( KFormulaPartDocument* doc, QWidget* parent )
         : KoView( doc, parent )
 {
     m_partDocument = doc;
-    m_formulaCanvas = new KFormulaCanvas( this );
 
     m_dbus = new KFormulaPartViewAdaptor( this );
     QDBusConnection::sessionBus().registerObject( '/' + objectName(), this );
 
     setInstance( KFormulaPartFactory::global() );
 
-    m_scrollArea = new QScrollArea( this );
-    m_scrollArea->setWidget( m_formulaCanvas );
+    m_formulaCanvas = new KFormulaCanvas( this, this );
+    m_zoomHandler = new KoZoomHandler();
+    m_canvasController = new KoCanvasController( this );
+    m_canvasController->setCanvas( m_formulaCanvas );
 
     if ( !doc->isReadWrite() )
         setXMLFile("kformula_readonly.rc");
@@ -63,6 +64,8 @@ KFormulaPartView::KFormulaPartView( KFormulaPartDocument* doc, QWidget* parent )
 KFormulaPartView::~KFormulaPartView()
 {
     delete m_formulaCanvas;
+    delete m_zoomHandler;
+    delete m_canvasController;
     delete m_dbus;
 }
 
@@ -73,12 +76,12 @@ KFormulaPartViewAdaptor* KFormulaPartView::dbusObject()
 
 void KFormulaPartView::setupActions()
 {
-    KGlobal::dirs()->addResourceType( "toolbar", KStandardDirs::kde_default("data") +
+/*    KGlobal::dirs()->addResourceType( "toolbar", KStandardDirs::kde_default("data") +
                                       "kformula/pics/" );
 	
-/*    m_cutAction;
+    m_cutAction;
     m_copyAction;
-    m_pasteAction;*/
+    m_pasteAction;
 
     m_addBracketAction = new KAction( KIcon("paren"), i18n("Add Bracket"),
 		                      actionCollection(), "addbracket" );
@@ -96,20 +99,20 @@ void KFormulaPartView::setupActions()
 		                       actionCollection(), "addintegral" );
     m_addMatrixAction = new KAction( KIcon("matrix"), i18n("Add Matrix"),
 		                     actionCollection(), "addmatrix" );
-/*    m_addUpperLeftAction;
+    m_addUpperLeftAction;
     m_addLowerLeftAction;
     m_addUpperRightAction;
     m_addLowerRightAction;
     m_addGenericUpperAction;
     m_addGenericLowerAction;
-    m_removeEnclosingAction;*/
+    m_removeEnclosingAction;
 
-    KStdAction::preferences( this, SLOT(configure()), actionCollection(), "configure" );
+    KStdAction::preferences( this, SLOT(configure()), actionCollection(), "configure" );*/
 }
 
 void KFormulaPartView::focusInEvent( QFocusEvent* )
 {
-    m_formulaCanvas->setFocus();
+//    m_formulaCanvas->setFocus();
 }
 
 void KFormulaPartView::slotShowTipOnStart()
@@ -124,13 +127,13 @@ void KFormulaPartView::slotShowTip()
 
 void KFormulaPartView::setEnabled( bool enabled )
 {
-    m_addBracketAction->setEnabled( enabled );
+/*    m_addBracketAction->setEnabled( enabled );
     m_addFractionAction->setEnabled( enabled );
     m_addRootAction->setEnabled( enabled );
     m_addSumAction->setEnabled( enabled );
     m_addIntegralAction->setEnabled( enabled);
     m_addMatrixAction->setEnabled( enabled);
-/*    m_addUpperLeftAction->setEnabled( enabled );
+    m_addUpperLeftAction->setEnabled( enabled );
     m_addLowerLeftAction->setEnabled( enabled );
     m_addUpperRightAction->setEnabled( enabled );
     m_addLowerRightAction->setEnabled( enabled );
@@ -141,7 +144,7 @@ void KFormulaPartView::setEnabled( bool enabled )
 
 void KFormulaPartView::resizeEvent( QResizeEvent * )
 {
-    m_scrollArea->setGeometry( 0, 0, width(), height() );
+    m_canvasController->setGeometry( 0, 0, width(), height() );
 }
 
 void KFormulaPartView::setupPrinter( KPrinter& )
@@ -163,7 +166,7 @@ void KFormulaPartView::cursorChanged( bool visible, bool selecting )
 void KFormulaPartView::sizeSelected( int size )
 {
 //    document()->getFormula()->setFontSize( size );
-    m_formulaCanvas->setFocus();
+//    m_formulaCanvas->setFocus();
 }
 
 void KFormulaPartView::configure()
@@ -174,6 +177,11 @@ void KFormulaPartView::configure()
 
 void KFormulaPartView::updateReadWrite( bool )
 {
+}
+
+KoViewConverter* KFormulaPartView::viewConverter()
+{
+    return m_zoomHandler;
 }
 
 #include "KFormulaPartView.moc"

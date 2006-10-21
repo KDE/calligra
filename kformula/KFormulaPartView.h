@@ -31,8 +31,9 @@ class KAction;
 class QPaintEvent;
 class QFocusEvent;
 class QResizeEvent;
-class QScrollArea;
-
+class KoCanvasController;
+class KoZoomHandler;
+class KoViewConverter;
 
 /**
  * @short The view class of the KFormulaPart
@@ -76,6 +77,8 @@ public:
      */
     KFormulaPartDocument* document() const;
 
+    KoViewConverter* viewConverter();
+
 protected:
     virtual void resizeEvent( QResizeEvent* _ev );
     virtual void focusInEvent( QFocusEvent* );
@@ -96,15 +99,25 @@ private:
     /// Enable or disable the actions that modify the formula.
     void setEnabled( bool enabled );
 
-    KFormulaPartViewAdaptor* m_dbus;
-    KFormulaPartDocument *m_partDocument;
-    KFormulaCanvas* m_formulaCanvas;
-    QScrollArea* m_scrollArea;
+    /// The document this view is showing
+    KFormulaPartDocument* m_partDocument;
 
+    /// The canvas showing the formula shapes
+    KFormulaCanvas* m_formulaCanvas;
+
+    /// The scrollarea wrapper managing the canvas
+    KoCanvasController* m_canvasController;
+
+    /// The zoom handler taking care of zooming for this view
+    KoZoomHandler* m_zoomHandler;
+
+    /// The interface for DBus
+    KFormulaPartViewAdaptor* m_dbus;
+
+    // the actions
     KAction* m_cutAction;
     KAction* m_copyAction;
     KAction* m_pasteAction;
-
     KAction* m_addBracketAction;
     KAction* m_addFractionAction;
     KAction* m_addRootAction;
@@ -119,7 +132,6 @@ private:
     KAction* m_addGenericUpperAction;
     KAction* m_addGenericLowerAction;
     KAction* m_removeEnclosingAction;
-
     KAction* m_formulaStringAction;
 };
 

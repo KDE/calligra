@@ -24,20 +24,13 @@
 
 #include <KoDocument.h>
 #include "KFormulaPartView.h"
-
 #include <QPainter>
+#include <kcommand.h>
 
 class QIODevice;
 class QDomDocument;
-
-#include <kcommand.h>
-
-class KoXmlWriter;
-/* that will come...
-namespace KFormula {
 class FormulaShape;
-}
-*/
+class KoXmlWriter;
 
 /**
  * @short The document class for the KFormulaPart
@@ -48,14 +41,12 @@ class FormulaShape;
  * The actual data KFormulaPartDocument is maintaining is a list of FormulaShape.
  * 
  */
-class KFormulaPartDocument : public KoDocument
-{
-    Q_OBJECT
-
+class KFormulaPartDocument : public KoDocument {
+Q_OBJECT
 public:
     /// The basic constructor
     KFormulaPartDocument( QWidget *parentWidget = 0, QObject* parent = 0,
-		           bool singleViewMode = false);
+		           bool singleViewMode = false );
     ~KFormulaPartDocument();
 
     void paintContent( QPainter &painter, const QRect &rect,
@@ -79,9 +70,6 @@ protected:
 private:
     /// The undo stack
     KCommandHistory* m_commandHistory;
-
-    /// The formula in form of a FormulaShape
-//    FormulaShape* m_formulaShape;
 };
 
 #endif

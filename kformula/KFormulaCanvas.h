@@ -16,60 +16,84 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef KFORMULACANVAS_H
 #define KFORMULACANVAS_H
 
-#include <QWidget>
 #include <QPixmap>
+#include <QWidget>
+#include <KoCanvasBase.h>
 
-class QMouseEvent;
-class QFocusEvent;
-class QKeyEvent;
-class QPaintEvent;
-/* not yet written but will come
-namespace KFormula {
-class FormulaShape;
-}*/
+class KFormulaPartView;
+class KoShapeManager;
+class KoToolProxy;
 
 /**
- * @short The canvas widget displaying the @ref FormulaShape
+ * @short The canvas widget displaying the FormulaShape
  * 
  * The KFormulaCanvas is a class derived from QWidget to display a @ref FormulaShape
  * and to direct all user inputs to the shape. KFormulaCanvas renders the formula
  * in its paintEvent method.
  */
-class KFormulaCanvas : public QWidget
-{
+class KFormulaCanvas : public KoCanvasBase, public QWidget {
 public:
-    KFormulaCanvas( QWidget* parent = 0, Qt::WFlags f=0 );
+    /// The constructor taking arguments for QWidget
+    KFormulaCanvas( KFormulaPartView* view, QWidget* parent = 0 );
+
+    /// The destructor
     ~KFormulaCanvas();
 
-//    void setFormulaShape( FormulaShape* shape );
-//    FormulaShape* formulaShape() const;
+    /// reimplemented method from superclass
+    void gridSize( double* horizontal, double* vertical ) const;
+    
+    /// reimplemented method from superclass
+    bool snapToGrid() const;
+    
+    /// reimplemented method from superclass
+    void addCommand( KCommand* command, bool execute = true );
+     
+    /// reimplemented method from superclass
+    KoShapeManager* shapeManager() const;
+
+    /// reimplemented method from superclass
+    KoToolProxy* toolProxy();
+    
+    /// reimplemented method from superclass
+    void updateCanvas( const QRectF& rc );
+    
+    /// reimplemented method from superclass
+    KoViewConverter* viewConverter();
+    
+    /// reimplemented method from superclass
+    QWidget* canvasWidget();
+
+    /// reimplemented method from superclass
+    KoUnit::Unit unit();
     
 protected:
-    virtual void mousePressEvent( QMouseEvent* event );
-    virtual void mouseReleaseEvent( QMouseEvent* event );
-    virtual void mouseDoubleClickEvent( QMouseEvent* event );
-    virtual void mouseMoveEvent( QMouseEvent* event );
-
-    virtual void paintEvent( QPaintEvent* event );
-    virtual void keyPressEvent( QKeyEvent* event );
-    virtual void focusInEvent( QFocusEvent* event );
-    virtual void focusOutEvent( QFocusEvent* event );
+    void mousePressEvent( QMouseEvent* event );
+    void mouseReleaseEvent( QMouseEvent* event );
+    void mouseDoubleClickEvent( QMouseEvent* event );
+    void mouseMoveEvent( QMouseEvent* event );
+    void paintEvent( QPaintEvent* event );
+    void keyPressEvent( QKeyEvent* event );
 
 private:
-    /// The @ref FormulaShape shown at the moment
-//    FormulaShape* m_formulaShape;
-   
     /// The buffer for painting - always updated when the formula changes 
     QPixmap m_paintBuffer;
 
     /// True when a formula repaint is needed
     bool m_dirtyBuffer;
+
+    /// The KFormulaPartView we belong to
+    KFormulaPartView* m_view;
+   
+    /// The proxy used to forward events 
+    KoToolProxy* m_toolProxy;
+
+    KoShapeManager* m_shapeManager;
 };
 
 #endif // KFORMULACANVAS_H

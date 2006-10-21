@@ -20,13 +20,20 @@
 */
 
 #include "KFormulaCanvas.h"
-
-//#include <FormulaShape.h>
+#include "KFormulaPartView.h"
+#include <KoShapeManager.h>
+#include <KoToolManager.h>
+#include <KoToolProxy.h>
 #include <QPaintEvent>
 #include <QPainter>
 
-KFormulaCanvas::KFormulaCanvas( QWidget* parent, Qt::WFlags f) : QWidget( parent, f )
+KFormulaCanvas::KFormulaCanvas( KFormulaPartView* view, QWidget* parent )
+              : QWidget( parent ),
+	        m_view( view )
 {
+    m_toolProxy = KoToolManager::instance()->toolProxy();
+    m_shapeManager = new KoShapeManager( this );
+	
     setFocusPolicy( Qt::StrongFocus );
     setBackgroundRole( QPalette::NoRole );
     m_dirtyBuffer = true;
@@ -34,58 +41,98 @@ KFormulaCanvas::KFormulaCanvas( QWidget* parent, Qt::WFlags f) : QWidget( parent
 
 KFormulaCanvas::~KFormulaCanvas()
 {
+    delete m_shapeManager;
 }
 
-void KFormulaCanvas::paintEvent( QPaintEvent* event )
+void KFormulaCanvas::paintEvent( QPaintEvent* e )
 {
-    QPainter p;
+/*    QPainter p;
 
-/*    if( m_dirtyBuffer )
+    if( m_dirtyBuffer )
     {
-	 m_paintBuffer = QPixmap( m_formulaShape->size() );
-         p.begin( &m_painBuffer );
-         m_formulaShape->paint( &p );
+	 m_paintBuffer = QPixmap(  );
+         p.begin( &m_paintBuffer );
 	 p.end();
     }
-	 
+
     p.begin( this );
-    width()
-    p.drawPixmap(  );
+    QRect tmp = e->rect();
+    // if the shown area is smaller than the canvas centralise it    
+    if( width() > m_paintBuffer.width() || height() > m_paintBuffer.height() )
+        tmp.translate( width()/2 - m_paintBuffer.width()/2,
+		       height()/2 - m_paintBuffer.height()/2 )
+
+    p.drawPixmap( tmp, m_paintBuffer, viewConverter()->viewToDocument( e->rect() ) );
     p.end();*/
 }
 
-void KFormulaCanvas::keyPressEvent( QKeyEvent* event )
+void KFormulaCanvas::keyPressEvent( QKeyEvent* e )
 {
-//    m_formulaShape->keyPressEvent( event );
+    m_toolProxy->keyPressEvent( e );
 }
 
-void KFormulaCanvas::focusInEvent( QFocusEvent* event )
+void KFormulaCanvas::mousePressEvent( QMouseEvent* e )
 {
-//    m_formulaShape->focusInEvent( event );
+    m_toolProxy->mousePressEvent( e, viewConverter()->viewToDocument( e->pos() ) );
 }
 
-void KFormulaCanvas::focusOutEvent( QFocusEvent* event )
+void KFormulaCanvas::mouseReleaseEvent( QMouseEvent* e )
 {
-//    m_formulaShape->focusOutEvent( event );
+    m_toolProxy->mouseReleaseEvent( e, viewConverter()->viewToDocument( e->pos() ) );
 }
 
-void KFormulaCanvas::mousePressEvent( QMouseEvent* event )
+void KFormulaCanvas::mouseDoubleClickEvent( QMouseEvent* e )
 {
-//    m_formulaShape->mousePressEvent( event );
+    m_toolProxy->mouseDoubleClickEvent( e, viewConverter()->viewToDocument( e->pos() ) );
 }
 
-void KFormulaCanvas::mouseReleaseEvent( QMouseEvent* event )
+void KFormulaCanvas::mouseMoveEvent( QMouseEvent* e )
 {
-  //  m_formulaShape->mouseReleaseEvent( event );
+    m_toolProxy->mouseMoveEvent( e, viewConverter()->viewToDocument( e->pos() ) );
 }
 
-void KFormulaCanvas::mouseDoubleClickEvent( QMouseEvent* event )
+void KFormulaCanvas::gridSize( double* horizontal, double* vertical ) const
 {
-  //  m_formulaShape->mouseDoubleClickEvent( event );
+    *horizontal = 10.0;        // set values to a default as KFormula doesn't
+    *vertical = 10.0;          // use any grid
+}
+    
+bool KFormulaCanvas::snapToGrid() const
+{
+    return false;             // KFormula doesn't use a grid
+}
+    
+void KFormulaCanvas::addCommand( KCommand *command, bool execute )
+{
+}
+    
+KoShapeManager* KFormulaCanvas::shapeManager() const
+{
+    return m_shapeManager;
 }
 
-void KFormulaCanvas::mouseMoveEvent( QMouseEvent* event )
+void KFormulaCanvas::updateCanvas( const QRectF& rc )
 {
-//    m_formulaShape->mouseMoveEvent( event );
+    update( viewConverter()->documentToView( rc ).toRect() );
+}
+    
+KoViewConverter* KFormulaCanvas::viewConverter()
+{
+    return m_view->viewConverter();
+}
+    
+QWidget* KFormulaCanvas::canvasWidget()
+{
+    return this;
+}
+
+KoUnit::Unit KFormulaCanvas::unit()
+{
+    return KoUnit::U_CM;  // return this as default
+}
+
+KoToolProxy* KFormulaCanvas::toolProxy()
+{
+    return m_toolProxy;
 }
 

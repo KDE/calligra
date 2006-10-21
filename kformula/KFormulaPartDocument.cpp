@@ -43,8 +43,6 @@ KFormulaPartDocument::KFormulaPartDocument( QWidget *parentWidget, QObject* pare
 {
     setInstance( KFormulaPartFactory::global(), false );
 
-//    m_formulaShape = new FormulaShape();
-
     m_commandHistory = new KCommandHistory( actionCollection() );
 /*    connect( m_commandHistory, SIGNAL( commandExecuted() ),
 		         this, SLOT( slotExecuted() ) );
@@ -56,36 +54,20 @@ KFormulaPartDocument::KFormulaPartDocument( QWidget *parentWidget, QObject* pare
 KFormulaPartDocument::~KFormulaPartDocument()
 {
     delete m_commandHistory;
-//    delete m_formulaShape;
 }
 
 
 bool KFormulaPartDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
-/*    if ( !store->open( "content.xml" ) )
-        return false;
-
-    KoStoreDevice dev( store );
+/*  KoStoreDevice dev( store );
+ 
     KoXmlWriter* contentWriter = createOasisXmlWriter( &dev, "math:math" );
-
-    KTempFile contentTmpFile;
-    contentTmpFile.setAutoDelete( true );
-    QFile* tmpFile = contentTmpFile.file();
-
-    QTextStream stream( tmpFile );
-    formula->saveMathML( stream, true );
-
-    tmpFile->close();
-    contentWriter->addCompleteElement( tmpFile );
-    contentTmpFile.close();
-    contentWriter->endElement();
+    formulaShape->saveOasis( contentWriter )
     delete contentWriter;
 
     if( !store->close() )
         return false;
-
-    manifestWriter->addManifestEntry("content.xml", "text/xml");
-    setModified( false );*/
+*/
     return true;
 }
 
@@ -102,21 +84,10 @@ bool KFormulaPartDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&,
     return false;
 }
 
-bool KFormulaPartDocument::loadXML(QIODevice *, const QDomDocument& doc)
+bool KFormulaPartDocument::loadXML(QIODevice *, const QDomDocument& )
 {
-/*    if ( doc.doctype().name().lower() == "math" ) // FIXME: This is ugly
-        if ( document->loadOasis( doc ) ) {
-            history->clear();
-            history->documentSaved();
-            return true;
-        }
-    if ( document->loadXML( doc ) )
-      {
-           history->clear();
-           history->documentSaved();
-           return true;
-      }*/
-      return false;
+    // this is done with a filter
+    return false;
 }
 
 KoView* KFormulaPartDocument::createViewInstance( QWidget* parent )
