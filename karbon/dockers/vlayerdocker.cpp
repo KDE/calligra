@@ -23,6 +23,7 @@
 #include <QToolButton>
 #include <QButtonGroup>
 #include <QAbstractItemModel>
+#include <QPainterPath>
 
 #include <klocale.h>
 #include <kicon.h>
@@ -32,6 +33,7 @@
 
 #include <KoDocumentSectionView.h>
 #include <KoShapeManager.h>
+#include <KoShapeBorderModel.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
@@ -431,14 +433,15 @@ QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
         case PropertiesRole: return QVariant::fromValue( properties( shape ) );
         case AspectRatioRole:
         {
-            QRectF bbox = shape->boundingRect();
+            QMatrix matrix = shape->transformationMatrix( 0 );
+            QRectF bbox = matrix.mapRect( shape->outline().boundingRect() );
             return double(bbox.width()) / bbox.height();
         }
         default:
             // TODO draw layers and shape into an image for the thumbnail and tooltip
-/*            if (role >= int(BeginThumbnailRole))
-                return QImage( role - int(BeginThumbnailRole), role - int(BeginThumbnailRole), QImage::Format_ARGB32 );
-            else*/
+            if (role >= int(BeginThumbnailRole))
+                return createThumbnail( shape, QSize( role - int(BeginThumbnailRole), role - int(BeginThumbnailRole) ) );
+            else
                 return QVariant();
     }
 }
@@ -509,6 +512,74 @@ void VDocumentModel::setProperties( KoShape* shape, const PropertyList &properti
 
     if( ( oldVisibleState != shape->isVisible() ) || ( oldLockedState != shape->isLocked() ) )
         shape->repaint();
+}
+
+QImage VDocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSize ) const
+{
+    KoZoomHandler zoomHandler;
+    QMatrix shapeMatrix = shape->transformationMatrix( 0 );
+    // compute the transformed shape bounding box
+    QRectF shapeBox = shape->outline().toFillPolygon( shapeMatrix ).boundingRect();
+    if( shape->border() )
+    {
+        KoInsets inset;
+        shape->border()->borderInsets( shape, inset );
+        shapeBox.adjust( -inset.left, -inset.top, inset.right, inset.bottom );
+    }
+    // convert the thumbnail size into document coordinates
+    QRectF imageBox = zoomHandler.viewToDocument( QRectF( 0, 0, thumbSize.width(), thumbSize.height() ) );
+
+    // compute the zoom factor based on the bounding rects in document coordinates
+    double zoomW = imageBox.width() / shapeBox.width();
+    double zoomH = imageBox.height() / shapeBox.height();
+    double zoom = qMin( zoomW, zoomH );
+
+    // now set the zoom into the zoom handler used for painting the shape
+    zoomHandler.setZoom( zoom );
+
+    // create the thumbnail image and a painter for painting into the image
+    QImage thumb( thumbSize, QImage::Format_RGB32 );
+    QPainter painter( &thumb );
+
+    // set some painting hints
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen( QPen(Qt::NoPen) );
+    // draw the background of the thumbnail
+    painter.setBrush( QBrush( Qt::white ) );
+    painter.drawRect( 0, 0, thumbSize.width(), thumbSize.height() );
+    painter.setBrush( Qt::NoBrush );
+
+    // move the origin into the image center
+    painter.translate( QPointF(0.5*thumbSize.width(), 0.5*thumbSize.height() ) );
+    // move origin so that the shapes local origin is in the image center
+    painter.translate( -shapeMatrix.dx(), -shapeMatrix.dy() );
+    // move origin so that the transformed shapes center point in in the image center
+    double zoomX, zoomY;
+    zoomHandler.zoom( &zoomX, &zoomY );
+    QPointF translate = QPointF( shapeMatrix.dx(), shapeMatrix.dy() ) - shapeBox.center();
+    painter.translate( zoomX * translate.x(), zoomY * translate.y() );
+
+    // set the shapes transformation matrix
+    painter.setMatrix( shapeMatrix, true );
+
+    painter.save();
+
+    // paint the shape
+    painter.save();
+    shape->paint( painter, zoomHandler );
+    painter.restore();
+
+    // paint the shapes border
+    if(shape->border())
+    {
+        painter.save();
+        shape->border()->paintBorder(shape, painter, zoomHandler);
+        painter.restore();
+    }
+
+    painter.restore();
+
+    return thumb;
 }
 
 #include "vlayerdocker.moc"

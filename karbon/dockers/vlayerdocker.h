@@ -73,6 +73,7 @@ public:
 private:
     PropertyList properties( KoShape* shape ) const;
     void setProperties( KoShape* shape, const PropertyList &properties );
+    QImage createThumbnail( KoShape* shape, const QSize &thumbSize ) const;
     VDocument *m_document;
     KoShapeManager *m_shapeManager;
     KoShape *m_shape;
