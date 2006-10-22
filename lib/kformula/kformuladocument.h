@@ -192,6 +192,14 @@ public:
      */
     QDomDocument createMathMLDomDocument();
 
+    /**
+     * Set formula creation strategy: old KFormula or MathML/ODF.
+     * This tells which tags are valid during formula constructions
+     *
+     * @param strategy -- "Ordinary" for old Kformula, "Oasis" for MathML/ODF
+     */
+    void setCreationStrategy( QString strategy );
+
 public:
 
     /**

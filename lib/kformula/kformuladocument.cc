@@ -63,11 +63,10 @@ int FormulaList::compareItems( QPtrCollection::Item a, QPtrCollection::Item b )
 
 Document::Document( QObject *parent, const char *name,
                     const QStringList &/*args*/ )
-    : QObject( parent, name ), m_wrapper( 0 ), m_formula( 0 )
+    : QObject( parent, name ), m_wrapper( 0 ), m_formula( 0 ), creationStrategy( 0 )
 {
     m_contextStyle = new ContextStyle;
-	creationStrategy = new OasisCreationStrategy;
-	SequenceElement::setCreationStrategy( creationStrategy );
+    setCreationStrategy( "Oasis" );
     formulae.setAutoDelete( false );
 }
 
@@ -125,10 +124,7 @@ int Document::formulaCount()
 
 bool Document::loadXML( const QDomDocument& doc )
 {
-    if ( creationStrategy->type() != "Ordinary" ) {
-        delete creationStrategy;
-        creationStrategy = new OrdinaryCreationStrategy;
-    }
+    setCreationStrategy( "Ordinary" );
         
     //clear();
     QDomElement root = doc.documentElement();
@@ -167,10 +163,7 @@ bool Document::loadXML( const QDomDocument& doc )
 bool Document::loadOasis( const QDomDocument& doc )
 {
     // ### TODO: not finished!
-    if ( creationStrategy->type() != "Oasis" ) {
-        delete creationStrategy;
-        creationStrategy = new OasisCreationStrategy;
-    }
+    setCreationStrategy( "Oasis" );
     KFormula::Container* formula = newFormula( 0 );
     return formula->loadMathML( doc, true );
 }
@@ -221,6 +214,24 @@ QDomDocument Document::createMathMLDomDocument()
                                                        "version=\"1.0\" encoding=\"UTF-8\"" ),
                       doc.documentElement() );
     return doc;
+}
+
+/**
+ * Set formula creation strategy: old KFormula or MathML/ODF.
+ * This tells which tags are valid during formula constructions
+ *
+ * @param strategy -- "Ordinary" for old Kformula, "Oasis" for MathML/ODF
+ */
+void Document::setCreationStrategy( QString strategy )
+{
+    if ( !creationStrategy || creationStrategy->type() != strategy ) {
+        delete creationStrategy;
+        if ( strategy == "Ordinary" )
+            creationStrategy = new OrdinaryCreationStrategy;
+        else
+            creationStrategy = new OasisCreationStrategy;
+        SequenceElement::setCreationStrategy( creationStrategy );
+    }
 }
 
 void Document::registerFormula( Container* f, int pos )

@@ -298,6 +298,7 @@ void KWFormulaFrameSet::paste( QDomNode& formulaElem )
             connect( formula, SIGNAL( errorMsg( const QString& ) ),
                      this, SLOT( slotErrorMessage( const QString& ) ) );
         }
+        m_doc->formulaDocument()->setCreationStrategy( "Ordinary" );
         if ( !formula->load( formulaElem.firstChild().toElement() ) ) {
             kdError(32001) << "Error loading formula" << endl;
         }
