@@ -123,7 +123,7 @@ KisPNGConverter::~KisPNGConverter()
 
 class KisPNGStream {
     public:
-        KisPNGStream(Q_UINT8* buf,  Q_UINT32 depth ) : m_posinc(8),m_depth(depth), m_buf(buf) {};
+        KisPNGStream(Q_UINT8* buf,  Q_UINT32 depth ) : m_posinc(8),m_depth(depth), m_buf(buf) { *m_buf = 0;};
         int nextValue()
         {
             if( m_posinc == 0)
