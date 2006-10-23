@@ -272,4 +272,15 @@ QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool &emptyTable)
 		designerView->parentDialog())) );
 }
 
+void KexiTableDesignerViewPrivate::updateIconForItem(KexiTableItem &item, KoProperty::Set& set)
+{
+	QVariant icon;
+	if (!set["rowSource"].value().toString().isEmpty() && !set["rowSourceType"].value().toString().isEmpty())
+		icon = "combo";
+	//show/hide icon in the table
+	view->data()->clearRowEditBuffer();
+	view->data()->updateRowEditBuffer(&item, COLUMN_ID_ICON, icon);
+	view->data()->saveRowChanges(item, true);
+}
+
 #include "kexitabledesignerview_p.moc"

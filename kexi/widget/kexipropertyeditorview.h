@@ -56,6 +56,7 @@ class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 		QString objectClassName() const { return m_className; }
 		void setObjectName(const QString& name);
 		QString objectName() const { return m_objectName; }
+		void setBuddy( QWidget * buddy );
 	protected:
 		void updateName();
 

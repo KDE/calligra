@@ -102,6 +102,20 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 			m_visible=v; 
 		}
 
+		/*! Sets icon for displaying in the caption area (header). */
+		void setIcon(const QIconSet& icon) { m_icon = icon; }
+
+		/*! \return bame of icon displayed in the caption area (header). */
+		QIconSet icon() const { return m_icon; }
+
+		/*! If \a visible is true, caption has to be displayed in the column's header,
+		 (or field's name if caption is empty. True by default. */
+		void setHeaderTextVisible(bool visible) { m_headerTextVisible = visible; }
+
+		/*! \return true if caption has to be displayed in the column's header,
+		 (or field's name if caption is empty. */
+		bool isHeaderTextVisible() const { return m_headerTextVisible; }
+
 		/*! \return whatever is available: 
 		 - field's caption
 		 - or field's alias (from query)
@@ -174,6 +188,8 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 
 		QString m_captionAliasOrName;
 
+		QIconSet m_icon;
+
 		KexiUtils::Validator* m_validator;
 
 		//! Data that this column is assigned to.
@@ -188,6 +204,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		bool m_fieldOwned : 1;
 		bool m_visible : 1;
 		bool m_relatedDataEditable : 1;
+		bool m_headerTextVisible : 1;
 		
 	friend class KexiTableViewData;
 };

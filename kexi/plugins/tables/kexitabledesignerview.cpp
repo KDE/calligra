@@ -32,6 +32,7 @@
 #include <kaction.h>
 #include <kpopupmenu.h>
 #include <kmessagebox.h>
+#include <kiconeffect.h>
 
 #include <koproperty/set.h>
 #include <koproperty/utils.h>
@@ -53,12 +54,6 @@
 #include <kexitableview.h>
 
 //#define MAX_FIELDS 101 //nice prime number
-
-//! indices for table columns
-#define COLUMN_ID_PK 0
-#define COLUMN_ID_CAPTION 1
-#define COLUMN_ID_TYPE 2
-#define COLUMN_ID_DESC 3
 
 //! used only for BLOBs
 #define DEFAULT_OBJECT_TYPE_VALUE "image"
@@ -118,28 +113,31 @@ KexiTableDesignerView::KexiTableDesignerView(KexiMainWindow *win, QWidget *paren
 	KexiCustomPropertyFactory::init();
 
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
+	d->view = dynamic_cast<KexiTableView*>(mainWidget());
 
 	d->data = new KexiTableViewData();
 	if (conn->isReadOnly())
 		d->data->setReadOnly(true);
 	d->data->setInsertingEnabled( false );
 
-	KexiTableViewColumn *col = new KexiTableViewColumn("pk", KexiDB::Field::Text, i18n("Primary Key", "PK"),
-		i18n("Describes primary key for the field."));
+	KexiTableViewColumn *col = new KexiTableViewColumn("pk", KexiDB::Field::Text, QString::null,
+		i18n("Additional information about the field"));
+	col->setIcon( KexiUtils::colorizeIconToTextColor( SmallIcon("info"), d->view->palette() ) );
+	col->setHeaderTextVisible(false);
 	col->field()->setSubType("KIcon");
 	col->setReadOnly(true);
 	d->data->addColumn( col );
 
 //	col = new KexiTableViewColumn("name", KexiDB::Field::Text, i18n("Field Name"),
 	col = new KexiTableViewColumn("caption", KexiDB::Field::Text, i18n("Field Caption"),
-		i18n("Describes name for the field."));
+		i18n("Describes caption for the field"));
 //	KexiUtils::Validator *vd = new KexiUtils::IdentifierValidator();
 //	vd->setAcceptsEmptyValue(true);
 //	col->setValidator( vd );
 	d->data->addColumn( col );
 
 	col = new KexiTableViewColumn("type", KexiDB::Field::Enum, i18n("Data Type"),
-		i18n("Describes data type for the field."));
+		i18n("Describes data type for the field"));
 	d->data->addColumn( col );
 
 #ifdef KEXI_NO_BLOB_FIELDS
@@ -157,12 +155,9 @@ KexiTableDesignerView::KexiTableDesignerView(KexiMainWindow *win, QWidget *paren
 	col->field()->setEnumHints(types);
 
 	d->data->addColumn( col = new KexiTableViewColumn("comments", KexiDB::Field::Text, i18n("Comments"),
-		i18n("Describes additional comments for the field.")) );
-
-	d->view = dynamic_cast<KexiTableView*>(mainWidget());
+		i18n("Describes additional comments for the field")) );
 
 	d->view->setSpreadSheetMode();
-//	setFocusProxy(d->view);
 
 	connect(d->data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)),
 		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)));
@@ -228,12 +223,22 @@ void KexiTableDesignerView::initData()
 		for(int i=0; i < tableFieldCount; i++) {
 			KexiDB::Field *field = tempData()->table->field(i);
 			KexiTableItem *item = d->data->createItem(); //new KexiTableItem(0);
-			(*item)[0] = field->isPrimaryKey() ? "key" : "";
-			if (field->isPrimaryKey())
+			if (field->isPrimaryKey()) {
+				(*item)[COLUMN_ID_ICON] = "key";
 				d->primaryKeyExists = true;
-			(*item)[1] = field->captionOrName();
-			(*item)[2] = field->typeGroup()-1; //-1 because type groups are counted from 1
-			(*item)[3] = field->description();
+			}
+			else {
+				KexiDB::LookupFieldSchema *lookupFieldSchema
+					= field->table() ? field->table()->lookupFieldSchema(*field) : 0;
+				if (lookupFieldSchema && lookupFieldSchema->rowSource().type()!=KexiDB::LookupFieldSchema::RowSource::NoType
+					&& !lookupFieldSchema->rowSource().name().isEmpty())
+				{
+					(*item)[COLUMN_ID_ICON] = "combo";
+				}
+			}
+			(*item)[COLUMN_ID_CAPTION] = field->captionOrName();
+			(*item)[COLUMN_ID_TYPE] = field->typeGroup()-1; //-1 because type groups are counted from 1
+			(*item)[COLUMN_ID_DESC] = field->description();
 			d->data->append(item);
 
 //later!			createPropertySet( i, field );
@@ -262,7 +267,7 @@ void KexiTableDesignerView::initData()
 	}
 
 	//column widths
-	d->view->setColumnWidth(COLUMN_ID_PK, IconSize( KIcon::Small ) + 10);
+	d->view->setColumnWidth(COLUMN_ID_ICON, IconSize( KIcon::Small ) + 10);
 	d->view->adjustColumnWidthToContents(COLUMN_ID_CAPTION); //adjust column width
 	d->view->setColumnWidth(COLUMN_ID_TYPE, d->maxTypeNameTextWidth + 2 * d->view->rowHeight());
 	d->view->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
@@ -505,7 +510,7 @@ void KexiTableDesignerView::switchPrimaryKey(KoProperty::Set &propertySet,
 		if (d->view->selectedItem()) {
 			//show key in the table
 			d->view->data()->clearRowEditBuffer();
-			d->view->data()->updateRowEditBuffer(d->view->selectedItem(), COLUMN_ID_PK, 
+			d->view->data()->updateRowEditBuffer(d->view->selectedItem(), COLUMN_ID_ICON, 
 				QVariant(set ? "key" : ""));
 			d->view->data()->saveRowChanges(*d->view->selectedItem(), true);
 		}
@@ -532,7 +537,7 @@ void KexiTableDesignerView::switchPrimaryKey(KoProperty::Set &propertySet,
 			d->view->data()->clearRowEditBuffer();
 			KexiTableItem *item = d->view->itemAt(i);
 			if (item) {
-				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_PK, QVariant());
+				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_ICON, QVariant());
 				d->view->data()->saveRowChanges(*item, true);
 			}
 		}
@@ -692,7 +697,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 		if (newValue.isNull()) {
 			//'type' col will be cleared: clear all other columns as well
 			d->slotBeforeCellChanged_enabled = false;
-				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_PK, QVariant());
+				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_ICON, QVariant());
 				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_CAPTION, QVariant(QString::null));
 				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_DESC, QVariant());
 			d->slotBeforeCellChanged_enabled = true;
@@ -783,7 +788,7 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 			//primary keys require big int, so if selected type is not integer- remove PK
 			if (fieldTypeGroup != KexiDB::Field::IntegerGroup) {
 				/*not needed, line below will do the work
-				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_PK, QVariant());
+				d->view->data()->updateRowEditBuffer(item, COLUMN_ID_ICON, QVariant());
 				d->view->data()->saveRowChanges(*item); */
 				//set["primaryKey"] = QVariant(false, 1);
 				d->setPropertyValueIfNeeded( set, "primaryKey", QVariant(false, 1), changeDataTypeCommand );
@@ -920,6 +925,16 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 	if (pname=="primaryKey" && d->slotPropertyChanged_primaryKey_enabled) {
 		changePrimaryKey = true;
 		setPrimaryKey = property.value().toBool();
+	}
+
+	// update "lookup column" icon
+	if (pname=="rowSource" || pname=="rowSourceType") {
+//! @todo indicate invalid definitions of lookup columns as well using a special icon 
+//!       (e.g. due to missing data source)
+		const int row = d->sets->findRowForPropertyValue("uid", set["uid"].value().toInt());
+		KexiTableItem *item = d->view->itemAt(row);
+		if (item)
+			d->updateIconForItem(*item, set);
 	}
 
 	//setting autonumber requires setting PK as well
@@ -1127,7 +1142,7 @@ void KexiTableDesignerView::slotAboutToDeleteRow(
 {
 	Q_UNUSED(result)
 	Q_UNUSED(repaint)
-	if (item[COLUMN_ID_PK].toString()=="key")
+	if (item[COLUMN_ID_ICON].toString()=="key")
 		d->primaryKeyExists = false;
 
 	if (d->addHistoryCommand_in_slotAboutToDeleteRow_enabled) {

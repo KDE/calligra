@@ -401,10 +401,15 @@ void KexiTableView::initDataContents()
 	m_navPanel->showEditingIndicator(false);
 }
 
-void KexiTableView::addHeaderColumn(const QString& caption, const QString& description, int width)
+void KexiTableView::addHeaderColumn(const QString& caption, const QString& description, 
+	const QIconSet& icon, int width)
 {
 	const int nr = m_horizontalHeader->count();
-	m_horizontalHeader->addLabel(caption, width);
+	if (icon.isNull())
+		m_horizontalHeader->addLabel(caption, width);
+	else
+		m_horizontalHeader->addLabel(icon, caption, width);
+
 	if (!description.isEmpty())
 		m_horizontalHeader->setToolTip(nr, description);
 }

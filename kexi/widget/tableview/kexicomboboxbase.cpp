@@ -487,6 +487,8 @@ void KexiComboBoxBase::showPopup()
 
 void KexiComboBoxBase::createPopup(bool show)
 {
+	if (!field())
+		return;
 	m_insideCreatePopup = true;
 	QWidget* thisWidget = dynamic_cast<QWidget*>(this);
 	QWidget *widgetToFocus = internalEditor() ? internalEditor() : thisWidget;

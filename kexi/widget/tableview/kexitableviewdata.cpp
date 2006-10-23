@@ -157,6 +157,7 @@ void KexiTableViewColumn::init()
 	m_data = 0;
 	m_validator = 0;
 	m_relatedDataEditable = false;
+	m_headerTextVisible = true;
 }
 
 void KexiTableViewColumn::setValidator( KexiUtils::Validator* v )

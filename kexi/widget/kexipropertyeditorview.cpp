@@ -80,6 +80,11 @@ void KexiObjectInfoLabel::updateName()
 	m_objectNameLabel->setText(txt);
 }
 
+void KexiObjectInfoLabel::setBuddy( QWidget * buddy )
+{
+	m_objectNameLabel->setBuddy(buddy);
+}
+
 //------------------------------
 
 //! @internal
@@ -126,6 +131,8 @@ KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindow *mainWin, QWidget*
 	d->editor = new KoProperty::Editor(this, true /*AutoSync*/, "propeditor");
 	lyr->addWidget(d->editor);
 	setFocusProxy(d->editor);
+	d->objectInfoLabel->setBuddy(d->editor);
+	setFocusPolicy(WheelFocus);
 
 	connect(d->editor, SIGNAL(propertySetChanged(KoProperty::Set*)), 
 		this, SLOT(slotPropertySetChanged(KoProperty::Set*)));

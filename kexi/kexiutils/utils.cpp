@@ -24,10 +24,14 @@
 #include <qpainter.h>
 #include <qimage.h>
 #include <qwmatrix.h>
+#include <qiconset.h>
 
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kpixmap.h>
+#include <kiconeffect.h>
+#include <kpixmapeffect.h>
 
 using namespace KexiUtils;
 
@@ -145,6 +149,15 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
 		v += factor-50;
 	c2.setHsv(h, s, QMIN(255,v + factor-100));
 	return c2;
+}
+
+QIconSet KexiUtils::colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette)
+{
+	QPixmap pm(
+		KIconEffect().apply( icon, KIconEffect::Colorize, 1.0f, palette.active().buttonText(), false ) );
+
+	return QIconSet(
+		KPixmapEffect::fade( KPixmap(pm), 0.33, palette.active().button() ) );
 }
 
 void KexiUtils::serializeMap(const QMap<QString,QString>& map, const QByteArray& array)
