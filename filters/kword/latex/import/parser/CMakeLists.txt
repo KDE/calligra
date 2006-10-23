@@ -17,7 +17,7 @@ set(latexparser_PART_SRCS
    texparser.cc 
    texscaner.cc )
 
-kde4_automoc(latexparser ${latexparser_PART_SRCS})
+kde4_automoc(${latexparser_PART_SRCS})
 
 kde4_add_plugin(latexparser WITH_PREFIX ${latexparser_PART_SRCS})
 
@@ -32,7 +32,7 @@ install(TARGETS latexparser  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(texlauncher_SRCS texlauncher.cc )
 
-kde4_automoc(texlauncher ${texlauncher_SRCS})
+kde4_automoc(${texlauncher_SRCS})
 
 if(KDE4_BUILD_TESTS)
 

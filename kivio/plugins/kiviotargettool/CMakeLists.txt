@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart/config ${CMAKE_SOURCE_D
 
 set(kiviotargettool_PART_SRCS kiviotargettool.cpp kiviotargettoolfactory.cpp )
 
-kde4_automoc(kiviotargettool ${kiviotargettool_PART_SRCS})
+kde4_automoc(${kiviotargettool_PART_SRCS})
 
 kde4_add_plugin(kiviotargettool WITH_PREFIX ${kiviotargettool_PART_SRCS})
 

@@ -44,7 +44,7 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
     dialog/KWGeneralFrameProperties.ui
 )
 
-kde4_automoc(kwordprivate ${kwordprivate_LIB_SRCS})
+kde4_automoc(${kwordprivate_LIB_SRCS})
 
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 
@@ -62,7 +62,7 @@ install(TARGETS kwordprivate  DESTINATION ${LIB_INSTALL_DIR})
 
 set(kwordpart_PART_SRCS KWFactoryInit.cpp )
 
-kde4_automoc(kwordpart ${kwordpart_PART_SRCS})
+kde4_automoc(${kwordpart_PART_SRCS})
 
 kde4_add_plugin(kwordpart WITH_PREFIX ${kwordpart_PART_SRCS})
 
@@ -77,7 +77,7 @@ install(TARGETS kwordpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kword_KDEINIT_SRCS main.cpp )
 
-kde4_automoc(kword ${kword_KDEINIT_SRCS})
+kde4_automoc(${kword_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
 

@@ -7,7 +7,7 @@ include_directories( ${MYSQL_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUD
 
 set(keximigrate_mysql_PART_SRCS mysqlmigrate.cpp )
 
-kde4_automoc(keximigrate_mysql ${keximigrate_mysql_PART_SRCS})
+kde4_automoc(${keximigrate_mysql_PART_SRCS})
 
 kde4_add_plugin(keximigrate_mysql ${keximigrate_mysql_PART_SRCS})
 

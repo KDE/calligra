@@ -9,7 +9,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart/config ${CMAKE_SOURCE_D
 
 set(kiviozoomtool_PART_SRCS plugin.cpp tool_zoom.cpp )
 
-kde4_automoc(kiviozoomtool ${kiviozoomtool_PART_SRCS})
+kde4_automoc(${kiviozoomtool_PART_SRCS})
 
 kde4_add_plugin(kiviozoomtool WITH_PREFIX ${kiviozoomtool_PART_SRCS})
 

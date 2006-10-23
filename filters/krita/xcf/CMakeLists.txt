@@ -9,7 +9,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/krita ${CMAKE_SOURCE_DIR}/krita/core ${
 
 set(kritaxcfimport_PART_SRCS xcfimport.cpp )
 
-kde4_automoc(kritaxcfimport ${kritaxcfimport_PART_SRCS})
+kde4_automoc(${kritaxcfimport_PART_SRCS})
 
 kde4_add_plugin(kritaxcfimport WITH_PREFIX ${kritaxcfimport_PART_SRCS})
 
@@ -24,7 +24,7 @@ install(TARGETS kritaxcfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kritaxcfexport_PART_SRCS xcfexport.cpp )
 
-kde4_automoc(kritaxcfexport ${kritaxcfexport_PART_SRCS})
+kde4_automoc(${kritaxcfexport_PART_SRCS})
 
 kde4_add_plugin(kritaxcfexport WITH_PREFIX ${kritaxcfexport_PART_SRCS})
 

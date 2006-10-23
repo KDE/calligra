@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbonpngexport_PART_SRCS pngexport.cc )
 
-kde4_automoc(karbonpngexport ${karbonpngexport_PART_SRCS})
+kde4_automoc(${karbonpngexport_PART_SRCS})
 
 kde4_add_plugin(karbonpngexport WITH_PREFIX ${karbonpngexport_PART_SRCS})
 

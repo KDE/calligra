@@ -7,7 +7,7 @@
 
 set(dbaseimport_PART_SRCS dbaseimport.cc dbase.cpp )
 
-kde4_automoc(dbaseimport ${dbaseimport_PART_SRCS})
+kde4_automoc(${dbaseimport_PART_SRCS})
 
 kde4_add_plugin(dbaseimport WITH_PREFIX ${dbaseimport_PART_SRCS})
 

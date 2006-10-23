@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KDE4_INCLUDES}  )
 
 set(kspreadexport_LIB_SRCS KSpreadLeader.cc KSpreadBaseWorker.cc )
 
-kde4_automoc(kspreadexport ${kspreadexport_LIB_SRCS})
+kde4_automoc(${kspreadexport_LIB_SRCS})
 
 kde4_add_library(kspreadexport SHARED ${kspreadexport_LIB_SRCS})
 

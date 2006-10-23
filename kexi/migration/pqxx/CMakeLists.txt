@@ -7,7 +7,7 @@ include_directories( ${POSTGRESQL_INCLUDE_DIR} ${PQXX_INCLUDE_DIR} ${CMAKE_SOURC
 
 set(keximigrate_pqxx_PART_SRCS pqxxmigrate.cpp )
 
-kde4_automoc(keximigrate_pqxx ${keximigrate_pqxx_PART_SRCS})
+kde4_automoc(${keximigrate_pqxx_PART_SRCS})
 
 kde4_add_plugin(keximigrate_pqxx ${keximigrate_pqxx_PART_SRCS})
 

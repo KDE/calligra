@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 set(kexiutils_LIB_SRCS identifier.cpp validator.cpp utils.cpp debuggui.cpp styleproxy.cpp)
 
-kde4_automoc(kexiutils ${kexiutils_LIB_SRCS})
+kde4_automoc(${kexiutils_LIB_SRCS})
 
 add_definitions( -DMAKE_KEXIUTILS_LIB )
 kde4_add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})

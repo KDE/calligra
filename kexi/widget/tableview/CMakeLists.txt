@@ -27,7 +27,7 @@ set(kexidatatable_LIB_SRCS
    kexidataawarepropertyset.cpp
 )
 
-kde4_automoc(kexidatatable ${kexidatatable_LIB_SRCS})
+kde4_automoc(${kexidatatable_LIB_SRCS})
 
 kde4_add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
 

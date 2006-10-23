@@ -7,7 +7,7 @@ include_directories( ${KDE4_INCLUDES} )
 
 set(thesaurustool_PART_SRCS main.cc )
 
-kde4_automoc(thesaurustool ${thesaurustool_PART_SRCS})
+kde4_automoc(${thesaurustool_PART_SRCS})
 
 kde4_add_plugin(thesaurustool WITH_PREFIX ${thesaurustool_PART_SRCS})
 

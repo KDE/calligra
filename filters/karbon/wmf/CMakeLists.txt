@@ -7,7 +7,7 @@ include_directories( ${KWMF_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon/commands/ )
 
 set(wmfimport_PART_SRCS wmfimport.cc wmfimportparser.cc )
 
-kde4_automoc(wmfimport ${wmfimport_PART_SRCS})
+kde4_automoc(${wmfimport_PART_SRCS})
 
 kde4_add_plugin(wmfimport WITH_PREFIX ${wmfimport_PART_SRCS})
 
@@ -22,7 +22,7 @@ install(TARGETS wmfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(wmfexport_PART_SRCS wmfexport.cc )
 
-kde4_automoc(wmfexport ${wmfexport_PART_SRCS})
+kde4_automoc(${wmfexport_PART_SRCS})
 
 kde4_add_plugin(wmfexport WITH_PREFIX ${wmfexport_PART_SRCS})
 

@@ -62,7 +62,7 @@ set(pdfimport_PART_SRCS ${libgoo_SRCS} ${libxpdf_SRCS}
    dialog.cpp 
    pdfimport.cpp )
 
-kde4_automoc(pdfimport ${pdfimport_PART_SRCS})
+kde4_automoc(${pdfimport_PART_SRCS})
 
 kde4_add_plugin(pdfimport WITH_PREFIX ${pdfimport_PART_SRCS})
 

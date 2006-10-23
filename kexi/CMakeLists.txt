@@ -24,7 +24,7 @@ add_subdirectory( tests )
 
 set(kexi_KDEINIT_SRCS main.cpp )
 
-kde4_automoc(kexi ${kexi_KDEINIT_SRCS})
+kde4_automoc(${kexi_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kexi ${kexi_KDEINIT_SRCS})
 

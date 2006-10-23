@@ -17,7 +17,7 @@ set(keximain_LIB_SRCS
    kexinamedialog.cpp 
    kexinewstuff.cpp )
 
-kde4_automoc(keximain ${keximain_LIB_SRCS})
+kde4_automoc(${keximain_LIB_SRCS})
 
 kde4_add_library(keximain SHARED ${keximain_LIB_SRCS})
 

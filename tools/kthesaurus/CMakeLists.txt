@@ -7,7 +7,7 @@ include_directories( ${KDE4_INCLUDES} )
 
 set(kthesaurus_KDEINIT_SRCS main.cc )
 
-kde4_automoc(kthesaurus ${kthesaurus_KDEINIT_SRCS})
+kde4_automoc(${kthesaurus_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kthesaurus ${kthesaurus_KDEINIT_SRCS})
 

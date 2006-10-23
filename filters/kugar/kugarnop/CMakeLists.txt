@@ -7,7 +7,7 @@
 
 set(kugarnopimport_PART_SRCS kugarnopimport.cpp )
 
-kde4_automoc(kugarnopimport ${kugarnopimport_PART_SRCS})
+kde4_automoc(${kugarnopimport_PART_SRCS})
 
 kde4_add_plugin(kugarnopimport WITH_PREFIX ${kugarnopimport_PART_SRCS})
 

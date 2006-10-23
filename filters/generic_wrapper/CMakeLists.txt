@@ -11,7 +11,7 @@ include_directories(
 
 set(generickofilter_PART_SRCS generic_filter.cc )
 
-kde4_automoc(generickofilter ${generickofilter_PART_SRCS})
+kde4_automoc(${generickofilter_PART_SRCS})
 
 kde4_add_plugin(generickofilter WITH_PREFIX ${generickofilter_PART_SRCS})
 

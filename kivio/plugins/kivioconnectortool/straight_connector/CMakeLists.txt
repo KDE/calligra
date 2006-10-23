@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart ${CMAKE_SOURCE_DIR}/kiv
 
 set(straight_connector_PART_SRCS straight_connector.cpp )
 
-kde4_automoc(straight_connector ${straight_connector_PART_SRCS})
+kde4_automoc(${straight_connector_PART_SRCS})
 
 kde4_add_plugin(straight_connector ${straight_connector_PART_SRCS})
 

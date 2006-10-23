@@ -11,7 +11,7 @@ include_directories(
 
 set(csvimport_PART_SRCS csvimport.cc xmltree.cc csvdialog.cpp )
 
-kde4_automoc(csvimport ${csvimport_PART_SRCS})
+kde4_automoc(${csvimport_PART_SRCS})
 
 kde4_add_ui3_files(csvimport_PART_SRCS dialogui.ui )
 
@@ -28,7 +28,7 @@ install(TARGETS csvimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(csvexport_PART_SRCS csvexport.cc csvexportdialog.cpp )
 
-kde4_automoc(csvexport ${csvexport_PART_SRCS})
+kde4_automoc(${csvexport_PART_SRCS})
 
 kde4_add_ui3_files(csvexport_PART_SRCS exportdialogui.ui )
 

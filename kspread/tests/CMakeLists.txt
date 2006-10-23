@@ -8,7 +8,7 @@ set(libtests_SRCS tester.cc testrunner.cc value_tester.cc formula_tester.cc insp
 
 set(formulatest_SRCS test_formula.cc ${libtests_SRCS})
 
-kde4_automoc(formulatest ${formulatest_SRCS})
+kde4_automoc(${formulatest_SRCS})
 
 kde4_add_executable(formulatest RUN_UNINSTALLED ${formulatest_SRCS})
 
@@ -20,7 +20,7 @@ add_test(formula formulatest)
 
 set(valuetest_SRCS test_value.cpp ${libtests_SRCS})
 
-kde4_automoc(valuetest ${valuetest_SRCS})
+kde4_automoc(${valuetest_SRCS})
 
 kde4_add_executable(valuetest RUN_UNINSTALLED ${valuetest_SRCS})
 
@@ -32,7 +32,7 @@ add_test(value valuetest)
 
 set(rtree_SRCS rtreeperformancetest.cpp)
 
-kde4_automoc(rtree ${rtree_SRCS})
+kde4_automoc(${rtree_SRCS})
 
 kde4_add_executable(rtreeperformancetest RUN_UNINSTALLED ${rtree_SRCS})
 

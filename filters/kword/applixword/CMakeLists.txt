@@ -7,7 +7,7 @@
 
 set(applixwordimport_PART_SRCS applixwordimport.cc )
 
-kde4_automoc(applixwordimport ${applixwordimport_PART_SRCS})
+kde4_automoc(${applixwordimport_PART_SRCS})
 
 kde4_add_plugin(applixwordimport WITH_PREFIX ${applixwordimport_PART_SRCS})
 

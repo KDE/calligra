@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbonkontourimport_PART_SRCS kontourimport.cpp )
 
-kde4_automoc(karbonkontourimport ${karbonkontourimport_PART_SRCS})
+kde4_automoc(${karbonkontourimport_PART_SRCS})
 
 kde4_add_plugin(karbonkontourimport WITH_PREFIX ${karbonkontourimport_PART_SRCS})
 

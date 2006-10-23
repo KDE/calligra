@@ -7,7 +7,7 @@
 
 set(krita_raw_import_PART_SRCS kis_raw_import.cpp )
 
-kde4_automoc(krita_raw_import ${krita_raw_import_PART_SRCS})
+kde4_automoc(${krita_raw_import_PART_SRCS})
 
 kde4_add_ui_files(krita_raw_import_PART_SRCS wdgrawimport.ui )
 

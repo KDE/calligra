@@ -1,7 +1,7 @@
 
 set(koconverter_SRCS koconverter.cpp )
 
-kde4_automoc(koconverter ${koconverter_SRCS})
+kde4_automoc(${koconverter_SRCS})
 
 kde4_add_executable(koconverter ${koconverter_SRCS})
 

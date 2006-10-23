@@ -43,7 +43,7 @@ set(kexisql3_LIB_SRCS
    vdbemem.c 
    where.c )
 
-kde4_automoc(kexisql3 ${kexisql3_LIB_SRCS})
+kde4_automoc(${kexisql3_LIB_SRCS})
 
 kde4_add_library(kexisql3 SHARED ${kexisql3_LIB_SRCS})
 
@@ -57,7 +57,7 @@ install(TARGETS kexisql3  DESTINATION ${LIB_INSTALL_DIR})
 
 set(ksqlite_SRCS shell.c )
 
-kde4_automoc(ksqlite ${ksqlite_SRCS})
+kde4_automoc(${ksqlite_SRCS})
 
 kde4_add_executable(ksqlite ${ksqlite_SRCS})
 

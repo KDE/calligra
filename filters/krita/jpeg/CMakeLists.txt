@@ -17,7 +17,7 @@ set(kritajpegimport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_automoc(kritajpegimport ${kritajpegimport_PART_SRCS})
+kde4_automoc(${kritajpegimport_PART_SRCS})
 
 kde4_add_plugin(kritajpegimport WITH_PREFIX ${kritajpegimport_PART_SRCS})
 
@@ -34,7 +34,7 @@ set(kritajpegexport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_automoc(kritajpegexport ${kritajpegexport_PART_SRCS})
+kde4_automoc(${kritajpegexport_PART_SRCS})
 
 kde4_add_ui3_files(kritajpegexport_PART_SRCS kis_wdg_options_jpeg.ui )
 

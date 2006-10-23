@@ -10,7 +10,7 @@ ADD_DEFINITIONS( -DNO_GUI=1 )
 
 set(kexidbtest_SRCS main.cpp )
 
-kde4_automoc(kexidbtest ${kexidbtest_SRCS})
+kde4_automoc(${kexidbtest_SRCS})
 
 kde4_add_executable(kexidbtest ${kexidbtest_SRCS})
 

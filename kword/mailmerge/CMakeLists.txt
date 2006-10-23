@@ -11,7 +11,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${CMAKE_SOURCE_DIR}/kword 
 
 set(kwmailmerge_classic_PART_SRCS KWClassicSerialDataSource.cpp )
 
-kde4_automoc(kwmailmerge_classic ${kwmailmerge_classic_PART_SRCS})
+kde4_automoc(${kwmailmerge_classic_PART_SRCS})
 
 kde4_add_plugin(kwmailmerge_classic ${kwmailmerge_classic_PART_SRCS})
 

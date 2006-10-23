@@ -34,7 +34,7 @@ set(kexicore_LIB_SRCS
    kexiblobbuffer.cpp 
    kexistaticpart.cpp )
 
-kde4_automoc(kexicore ${kexicore_LIB_SRCS})
+kde4_automoc(${kexicore_LIB_SRCS})
 
 kde4_add_library(kexicore SHARED ${kexicore_LIB_SRCS})
 

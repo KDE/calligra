@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formedito
 
 set(kformdesigner_SRCS main.cpp kfd_mainwindow.cpp )
 
-kde4_automoc(kformdesigner ${kformdesigner_SRCS})
+kde4_automoc(${kformdesigner_SRCS})
 
 kde4_add_executable(kformdesigner ${kformdesigner_SRCS})
 
@@ -20,7 +20,7 @@ install(TARGETS kformdesigner  DESTINATION ${BIN_INSTALL_DIR})
 
 set(kformdesigner_part_PART_SRCS kfd_part.cpp )
 
-kde4_automoc(kformdesigner_part ${kformdesigner_part_PART_SRCS})
+kde4_automoc(${kformdesigner_part_PART_SRCS})
 
 kde4_add_plugin(kformdesigner_part WITH_PREFIX ${kformdesigner_part_PART_SRCS})
 

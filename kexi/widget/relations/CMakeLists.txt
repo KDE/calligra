@@ -11,7 +11,7 @@ set(kexirelationsview_LIB_SRCS
    kexirelationviewtable.cpp 
    kexirelationwidget.cpp )
 
-kde4_automoc(kexirelationsview ${kexirelationsview_LIB_SRCS})
+kde4_automoc(${kexirelationsview_LIB_SRCS})
 
 kde4_add_library(kexirelationsview SHARED ${kexirelationsview_LIB_SRCS})
 

@@ -7,7 +7,7 @@
 
 set(applixgraphicimport_PART_SRCS applixgraphicimport.cc )
 
-kde4_automoc(applixgraphicimport ${applixgraphicimport_PART_SRCS})
+kde4_automoc(${applixgraphicimport_PART_SRCS})
 
 kde4_add_plugin(applixgraphicimport WITH_PREFIX ${applixgraphicimport_PART_SRCS})
 

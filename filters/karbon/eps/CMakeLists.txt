@@ -4,7 +4,7 @@
 
 set(karbonepsexport_PART_SRCS epsexport.cc epsexportdlg.cc )
 
-kde4_automoc(karbonepsexport ${karbonepsexport_PART_SRCS})
+kde4_automoc(${karbonepsexport_PART_SRCS})
 
 kde4_add_plugin(karbonepsexport WITH_PREFIX ${karbonepsexport_PART_SRCS})
 
@@ -19,7 +19,7 @@ install(TARGETS karbonepsexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(karbonepsimport_PART_SRCS epsimport.cc pscommentlexer.cc )
 
-kde4_automoc(karbonepsimport ${karbonepsimport_PART_SRCS})
+kde4_automoc(${karbonepsimport_PART_SRCS})
 
 kde4_add_plugin(karbonepsimport WITH_PREFIX ${karbonepsimport_PART_SRCS})
 

@@ -7,7 +7,7 @@
 
 set(wmlimport_PART_SRCS wmlimport.cc wmlparser.cpp )
 
-kde4_automoc(wmlimport ${wmlimport_PART_SRCS})
+kde4_automoc(${wmlimport_PART_SRCS})
 
 kde4_add_plugin(wmlimport WITH_PREFIX ${wmlimport_PART_SRCS})
 
@@ -22,7 +22,7 @@ install(TARGETS wmlimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(wmlexport_PART_SRCS wmlexport.cc )
 
-kde4_automoc(wmlexport ${wmlexport_PART_SRCS})
+kde4_automoc(${wmlexport_PART_SRCS})
 
 kde4_add_plugin(wmlexport WITH_PREFIX ${wmlexport_PART_SRCS})
 

@@ -101,7 +101,7 @@ kde4_add_ui3_files(libkplatopart_SRCS
 
 set(kplatopart_PART_SRCS kptfactoryinit.cc ${libkdgantt_SRCS} ${libkplatopart_SRCS} )
 
-kde4_automoc(kplatopart ${kplatopart_PART_SRCS})
+kde4_automoc(${kplatopart_PART_SRCS})
 
 kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
 
@@ -116,7 +116,7 @@ install(TARGETS kplatopart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kplato_KDEINIT_SRCS main.cc )
 
-kde4_automoc(kplato ${kplato_KDEINIT_SRCS})
+kde4_automoc(${kplato_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kplato ${kplato_KDEINIT_SRCS})
 

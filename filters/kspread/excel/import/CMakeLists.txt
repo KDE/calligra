@@ -18,7 +18,7 @@ set(sidewinder_SRCS
 
 set(excelimport_PART_SRCS excelimport.cc ${sidewinder_SRCS})
 
-kde4_automoc(excelimport ${excelimport_PART_SRCS})
+kde4_automoc(${excelimport_PART_SRCS})
 
 kde4_add_plugin(excelimport WITH_PREFIX ${excelimport_PART_SRCS})
 

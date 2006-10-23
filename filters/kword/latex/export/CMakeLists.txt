@@ -30,7 +30,7 @@ set(kwordlatexexport_PART_SRCS
    xml2latexparser.cc 
    xmlparser.cc )
 
-kde4_automoc(kwordlatexexport ${kwordlatexexport_PART_SRCS})
+kde4_automoc(${kwordlatexexport_PART_SRCS})
 
 kde4_add_ui3_files(kwordlatexexport_PART_SRCS latexexportdia.ui )
 

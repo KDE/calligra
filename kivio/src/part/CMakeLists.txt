@@ -13,7 +13,7 @@ set(kivioprivate_LIB_SRCS
   KivioPage.cpp
 )
 
-kde4_automoc(kivioprivate ${kivioprivate_LIB_SRCS})
+kde4_automoc(${kivioprivate_LIB_SRCS})
 
 kde4_add_library(kivioprivate SHARED ${kivioprivate_LIB_SRCS})
 
@@ -25,7 +25,7 @@ install(TARGETS kivioprivate  DESTINATION ${LIB_INSTALL_DIR})
 ### kiviopart ###
 set(kiviopart_PART_SRCS KivioFactoryInit.cpp )
 
-kde4_automoc(kiviopart ${kiviopart_PART_SRCS})
+kde4_automoc(${kiviopart_PART_SRCS})
 
 kde4_add_plugin(kiviopart WITH_PREFIX ${kiviopart_PART_SRCS})
 
@@ -38,7 +38,7 @@ install(TARGETS kiviopart DESTINATION ${PLUGIN_INSTALL_DIR})
 ### kdeinit kivio ###
 set(kivio_KDEINIT_SRCS main.cpp )
 
-kde4_automoc(kivio ${kivio_KDEINIT_SRCS})
+kde4_automoc(${kivio_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kivio ${kivio_KDEINIT_SRCS})
 

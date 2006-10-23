@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib/kformula ${CMAKE_SOURCE_DIR}/kword 
 
 set(kwmailmerge_kabc_PART_SRCS KWMailMergeKABC.cpp KWMailMergeKABCConfig.cpp )
 
-kde4_automoc(kwmailmerge_kabc ${kwmailmerge_kabc_PART_SRCS})
+kde4_automoc(${kwmailmerge_kabc_PART_SRCS})
 
 kde4_add_ui3_files(kwmailmerge_kabc_PART_SRCS addresspicker.ui )
 

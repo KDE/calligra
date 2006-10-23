@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 set(kexidbdrivercombotest_SRCS kexidbdrivercombotest.cpp )
 
-kde4_automoc(kexidbdrivercombotest ${kexidbdrivercombotest_SRCS})
+kde4_automoc(${kexidbdrivercombotest_SRCS})
 
 kde4_add_executable(kexidbdrivercombotest ${kexidbdrivercombotest_SRCS})
 

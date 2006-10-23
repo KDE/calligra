@@ -31,7 +31,7 @@ set(kexiextendedwidgets_LIB_SRCS
    kexiprjtypeselectorbase.ui
 )
 
-kde4_automoc(kexiextendedwidgets ${kexiextendedwidgets_LIB_SRCS})
+kde4_automoc(${kexiextendedwidgets_LIB_SRCS})
 
 kde4_add_ui3_files(kexiextendedwidgets_LIB_SRCS kexidbconnectionwidgetbase.ui kexidbconnectionwidgetdetailsbase.ui )
 

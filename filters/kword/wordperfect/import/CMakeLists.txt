@@ -7,7 +7,7 @@ include_directories(${WPD_INCLUDE_DIR})
 
 set(wpimport_PART_SRCS wpimport.cc )
 
-kde4_automoc(wpimport ${wpimport_PART_SRCS})
+kde4_automoc(${wpimport_PART_SRCS})
 
 kde4_add_plugin(wpimport WITH_PREFIX ${wpimport_PART_SRCS})
 

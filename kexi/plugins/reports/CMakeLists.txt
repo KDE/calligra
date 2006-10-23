@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CM
 
 set(kexihandler_report_PART_SRCS kexireports.cpp )
 
-kde4_automoc(kexihandler_report ${kexihandler_report_PART_SRCS})
+kde4_automoc(${kexihandler_report_PART_SRCS})
 
 kde4_add_plugin(kexihandler_report ${kexihandler_report_PART_SRCS})
 
@@ -22,7 +22,7 @@ install(TARGETS kexihandler_report  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kexireportwidgets_PART_SRCS reportwidgets.cpp kexireportfactory.cpp )
 
-kde4_automoc(kexireportwidgets ${kexireportwidgets_PART_SRCS})
+kde4_automoc(${kexireportwidgets_PART_SRCS})
 
 kde4_add_plugin(kexireportwidgets ${kexireportwidgets_PART_SRCS})
 
@@ -38,7 +38,7 @@ install(TARGETS kexireportwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kexireportutils_LIB_SRCS kexireportpart.cpp kexireportview.cpp kexireportform.cpp )
 
-kde4_automoc(kexireportutils ${kexireportutils_LIB_SRCS})
+kde4_automoc(${kexireportutils_LIB_SRCS})
 
 kde4_add_library(kexireportutils SHARED ${kexireportutils_LIB_SRCS})
 

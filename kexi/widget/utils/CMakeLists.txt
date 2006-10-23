@@ -19,7 +19,7 @@ set(kexiguiutils_LIB_SRCS
    kexicomboboxdropdownbutton.cpp
 )
 
-kde4_automoc(kexiguiutils ${kexiguiutils_LIB_SRCS})
+kde4_automoc(${kexiguiutils_LIB_SRCS})
 
 kde4_add_library(kexiguiutils SHARED ${kexiguiutils_LIB_SRCS})
 

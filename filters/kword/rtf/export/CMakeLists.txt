@@ -7,7 +7,7 @@
 
 set(rtfexport_PART_SRCS rtfexport.cc ExportFilter.cc )
 
-kde4_automoc(rtfexport ${rtfexport_PART_SRCS})
+kde4_automoc(${rtfexport_PART_SRCS})
 
 kde4_add_plugin(rtfexport WITH_PREFIX ${rtfexport_PART_SRCS})
 

@@ -18,7 +18,7 @@ set(krosskexidb_PART_SRCS
    kexidbdrivermanager.cpp 
    kexidbmodule.cpp )
 
-kde4_automoc(krosskexidb ${krosskexidb_PART_SRCS})
+kde4_automoc(${krosskexidb_PART_SRCS})
 
 kde4_add_plugin(krosskexidb ${krosskexidb_PART_SRCS})
 

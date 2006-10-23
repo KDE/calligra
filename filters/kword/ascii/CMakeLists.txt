@@ -7,7 +7,7 @@
 
 set(asciiimport_PART_SRCS asciiimport.cc ImportDialog.cc )
 
-kde4_automoc(asciiimport ${asciiimport_PART_SRCS})
+kde4_automoc(${asciiimport_PART_SRCS})
 
 kde4_add_ui3_files(asciiimport_PART_SRCS ImportDialogUI.ui )
 
@@ -24,7 +24,7 @@ install(TARGETS asciiimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(asciiexport_PART_SRCS asciiexport.cc ExportDialog.cc )
 
-kde4_automoc(asciiexport ${asciiexport_PART_SRCS})
+kde4_automoc(${asciiexport_PART_SRCS})
 
 kde4_add_ui3_files(asciiexport_PART_SRCS ExportDialogUI.ui )
 

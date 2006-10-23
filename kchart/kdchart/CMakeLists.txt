@@ -39,7 +39,7 @@ set(kdchart_LIB_SRCS
    KDXMLTools.cpp 
    KDChartEnums.cpp )
 
-kde4_automoc(kdchart ${kdchart_LIB_SRCS})
+kde4_automoc(${kdchart_LIB_SRCS})
 
 kde4_add_library(kdchart SHARED ${kdchart_LIB_SRCS})
 

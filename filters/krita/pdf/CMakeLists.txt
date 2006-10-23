@@ -6,7 +6,7 @@ include_directories( ${CMAKE_BINARY_DIR}/filters/ ${POPPLER_QT4_INCLUDE_DIR} )
 
 set(kritapdfimport_PART_SRCS kis_pdf_import.cpp kis_pdf_import_widget.cpp )
 
-kde4_automoc(kritapdfimport ${kritapdfimport_PART_SRCS})
+kde4_automoc(${kritapdfimport_PART_SRCS})
 
 kde4_add_ui_files(kritapdfimport_PART_SRCS pdfimportwidgetbase.ui )
 

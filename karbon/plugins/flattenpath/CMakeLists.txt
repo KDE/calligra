@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbon_flattenpathplugin_PART_SRCS flattenpathplugin.cc )
 
-kde4_automoc(karbon_flattenpathplugin ${karbon_flattenpathplugin_PART_SRCS})
+kde4_automoc(${karbon_flattenpathplugin_PART_SRCS})
 
 kde4_add_plugin(karbon_flattenpathplugin ${karbon_flattenpathplugin_PART_SRCS})
 

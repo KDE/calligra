@@ -7,7 +7,7 @@ include_directories(${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
 
 set(htmlimport_PART_SRCS htmlimport.cpp khtmlreader.cpp kwdwriter.cpp )
 
-kde4_automoc(htmlimport ${htmlimport_PART_SRCS})
+kde4_automoc(${htmlimport_PART_SRCS})
 
 kde4_add_plugin(htmlimport WITH_PREFIX ${htmlimport_PART_SRCS})
 

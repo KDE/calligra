@@ -10,7 +10,7 @@ set(karbonshapes_SRCS
     vstar.cc
     )
 
-kde4_automoc(karbonshapes ${karbonshapes_SRCS})
+kde4_automoc(${karbonshapes_SRCS})
 
 kde4_add_library(karbonshapes ${karbonshapes_SRCS})
 

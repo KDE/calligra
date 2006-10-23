@@ -19,7 +19,7 @@ add_subdirectory( part )
 
 # set(kwordpart_PART_SRCS KWFactoryInit.cpp )
 #
-# kde4_automoc(kwordpart ${kwordpart_PART_SRCS})
+# kde4_automoc(${kwordpart_PART_SRCS})
 #
 # kde4_add_plugin(kwordpart WITH_PREFIX ${kwordpart_PART_SRCS})
 #
@@ -34,7 +34,7 @@ add_subdirectory( part )
 #
 # set(kwmailmerge_interface_LIB_SRCS KWMailMergeDataSource.cpp )
 #
-# kde4_automoc(kwmailmerge_interface ${kwmailmerge_interface_LIB_SRCS})
+# kde4_automoc(${kwmailmerge_interface_LIB_SRCS})
 #
 #
 # kde4_add_library(kwmailmerge_interface SHARED ${kwmailmerge_interface_LIB_SRCS})
@@ -120,7 +120,7 @@ add_subdirectory( part )
 #    KWLoadingInfo.cpp
 #     KWGUI.cpp )
 #
-# kde4_automoc(kwordprivate ${kwordprivate_LIB_SRCS})
+# kde4_automoc(${kwordprivate_LIB_SRCS})
 #
 # kde4_add_ui3_files(kwordprivate_LIB_SRCS KWCreateBookmarkDiaBase.ui KWSelectBookmarkDiaBase.ui KWStartupWidgetBase.ui )
 #
@@ -137,7 +137,7 @@ add_subdirectory( part )
 #
 # set(kword_KDEINIT_SRCS main.cpp )
 #
-# kde4_automoc(kword ${kword_KDEINIT_SRCS})
+# kde4_automoc(${kword_KDEINIT_SRCS})
 #
 # kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
 #

@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kivio/kiviopart ${CMAKE_SOURCE_DIR}/kiv
 
 set(sml_connector_PART_SRCS sml_connector.cpp )
 
-kde4_automoc(sml_connector ${sml_connector_PART_SRCS})
+kde4_automoc(${sml_connector_PART_SRCS})
 
 kde4_add_plugin(sml_connector ${sml_connector_PART_SRCS})
 

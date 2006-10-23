@@ -12,7 +12,7 @@ set(karbonaiimport_PART_SRCS
    ai3handler.cc 
    karbonaiparserbase.cc )
 
-kde4_automoc(karbonaiimport ${karbonaiimport_PART_SRCS})
+kde4_automoc(${karbonaiimport_PART_SRCS})
 
 kde4_add_plugin(karbonaiimport WITH_PREFIX ${karbonaiimport_PART_SRCS})
 

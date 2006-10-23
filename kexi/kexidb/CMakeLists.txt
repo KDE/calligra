@@ -71,7 +71,7 @@ set(kexidb_LIB_SRCS
 #temp. disabled   alter.cpp
 )
 
-kde4_automoc(kexidb ${kexidb_LIB_SRCS})
+kde4_automoc(${kexidb_LIB_SRCS})
 
 kde4_add_library(kexidb SHARED ${kexidb_LIB_SRCS})
 target_link_libraries(kexidb 

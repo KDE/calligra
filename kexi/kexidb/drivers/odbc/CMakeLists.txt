@@ -7,7 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 set(kexidb_odbcdriver_PART_SRCS odbcdriver.cpp odbcconnection.cpp )
 
-kde4_automoc(kexidb_odbcdriver ${kexidb_odbcdriver_PART_SRCS})
+kde4_automoc(${kexidb_odbcdriver_PART_SRCS})
 
 kde4_add_plugin(kexidb_odbcdriver ${kexidb_odbcdriver_PART_SRCS})
 

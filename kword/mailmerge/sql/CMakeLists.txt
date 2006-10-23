@@ -7,7 +7,7 @@
 
 set(kwmailmerge_qtsqldb_PART_SRCS KWQtSqlSerialDataSource.cpp KWQtSqlEasyFilter.cpp )
 
-kde4_automoc(kwmailmerge_qtsqldb ${kwmailmerge_qtsqldb_PART_SRCS})
+kde4_automoc(${kwmailmerge_qtsqldb_PART_SRCS})
 
 kde4_add_ui3_files(kwmailmerge_qtsqldb_PART_SRCS qtsqldatasourceeditor.ui )
 
@@ -24,7 +24,7 @@ install(TARGETS kwmailmerge_qtsqldb  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kwmailmerge_qtsqldb_power_PART_SRCS KWQtSqlPowerSerialDataSource.cpp )
 
-kde4_automoc(kwmailmerge_qtsqldb_power ${kwmailmerge_qtsqldb_power_PART_SRCS})
+kde4_automoc(${kwmailmerge_qtsqldb_power_PART_SRCS})
 
 kde4_add_ui3_files(kwmailmerge_qtsqldb_power_PART_SRCS kwqtsqlpower.ui )
 
