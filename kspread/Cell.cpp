@@ -329,7 +329,11 @@ void Cell::setValue( const Value& value )
 void Cell::setCellValue (const Value &value, FormatType fmtType, const QString &txt)
 {
     if ( !txt.isNull() )
+    {
         d->strText = txt;
+        if ( isFormula() )
+            makeFormula();
+    }
     else if ( !isFormula() )
         d->strText = sheet()->doc()->converter()->asString( value ).asString();
     if ( fmtType != No_format )
