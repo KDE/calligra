@@ -724,8 +724,13 @@ void KexiMainWindowImpl::initActions()
 	d->action_view_nav->setToolTip(i18n("Go to project navigator panel"));
 	d->action_view_nav->setWhatsThis(i18n("Goes to project navigator panel."));
 
+	d->action_view_mainarea = new KAction(i18n("Main Area"), "", Qt::ALT + Qt::Key_2,
+		this, SLOT(slotViewMainArea()), actionCollection(), "view_mainarea");
+	d->action_view_mainarea->setToolTip(i18n("Go to main area"));
+	d->action_view_mainarea->setWhatsThis(i18n("Goes to main area."));
+
 #ifdef KEXI_PROP_EDITOR
-	d->action_view_propeditor = new KAction(i18n("Property Editor"), "", Qt::ALT + Qt::Key_2,
+	d->action_view_propeditor = new KAction(i18n("Property Editor"), "", Qt::ALT + Qt::Key_3,
 		this, SLOT(slotViewPropertyEditor()), actionCollection(), "view_propeditor");
 	d->action_view_propeditor->setToolTip(i18n("Go to property editor panel"));
 	d->action_view_propeditor->setWhatsThis(i18n("Goes to property editor panel."));
@@ -941,6 +946,7 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 
 	//VIEW MENU
 	d->action_view_nav->setEnabled(d->prj);
+	d->action_view_mainarea->setEnabled(d->prj);
 	d->action_view_propeditor->setEnabled(d->prj);
 	d->action_view_data_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::DataViewMode) );
 	if (!d->action_view_data_mode->isEnabled())
@@ -2657,6 +2663,12 @@ void KexiMainWindowImpl::slotViewNavigator()
 	d->block_KMdiMainFrm_eventFilter=true;
 		d->nav->setFocus();
 	d->block_KMdiMainFrm_eventFilter=false;
+}
+
+void KexiMainWindowImpl::slotViewMainArea()
+{
+	if (d->curDialog)
+		d->curDialog->setFocus();
 }
 
 void KexiMainWindowImpl::slotViewPropertyEditor()

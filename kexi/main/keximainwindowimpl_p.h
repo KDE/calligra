@@ -56,6 +56,7 @@ public:
 		privateIDCounter=0;
 		action_view_nav=0;
 		action_view_propeditor=0;
+		action_view_mainarea=0;
 		action_open_recent_projects_title_id = -1;
 		action_open_recent_connections_title_id = -1;
 		forceDialogClosing=false;
@@ -376,7 +377,7 @@ void updatePropEditorDockWidthInfo() {
 			*action_edit_copy_special_data_table;
 
 		//! view menu
-		KAction *action_view_nav, *action_view_propeditor;
+		KAction *action_view_nav, *action_view_propeditor, *action_view_mainarea;
 		KRadioAction *action_view_data_mode, *action_view_design_mode, *action_view_text_mode;
 		Q3IntDict<KRadioAction> actions_for_view_modes;
 //		KRadioAction *last_checked_mode;

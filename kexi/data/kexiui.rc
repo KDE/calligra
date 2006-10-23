@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="146">
+<kpartgui name="kexi" version="147">
 <MenuBar>
   <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
@@ -76,6 +76,7 @@
     <Action name="view_text_mode" type="toggle" />
     <Separator/>
     <Action name="view_navigator"/>
+    <Action name="view_mainarea"/>
     <Action name="view_propeditor"/>
     <Separator/>
     <MergeLocal/>
