@@ -156,8 +156,9 @@ QIconSet KexiUtils::colorizeIconToTextColor(const QPixmap& icon, const QPalette&
 	QPixmap pm(
 		KIconEffect().apply( icon, KIconEffect::Colorize, 1.0f, palette.active().buttonText(), false ) );
 
+	KPixmap kpm(pm);
 	return QIconSet(
-		KPixmapEffect::fade( KPixmap(pm), 0.33, palette.active().button() ) );
+		KPixmapEffect::fade( kpm, 0.33, palette.active().button() ) );
 }
 
 void KexiUtils::serializeMap(const QMap<QString,QString>& map, const QByteArray& array)
