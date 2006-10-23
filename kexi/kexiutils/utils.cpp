@@ -24,10 +24,14 @@
 #include <qpainter.h>
 #include <qimage.h>
 #include <qwmatrix.h>
+#include <qiconset.h>
 
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
+#include <kpixmap.h>
+#include <kiconeffect.h>
+#include <kpixmapeffect.h>
 
 using namespace KexiUtils;
 

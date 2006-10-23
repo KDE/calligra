@@ -503,8 +503,9 @@ protected:
 //	virtual void emitRowEditTerminated(int row) { emit rowEditTerminated(row); }
 
 	/*! Implementation for KexiDataAwareObjectInterface.
-	 Adds another sections within horizontal header. */
-	virtual void addHeaderColumn(const QString& caption, const QString& description, int size);
+	 Adds another section within the horizontal header. */
+	virtual void addHeaderColumn(const QString& caption, const QString& description, 
+		const QIconSet& icon, int size);
 
 	/*! @internal \return true if the row defined by \a item has default 
 	 value at column \a col. If this is the case and \a value is not NULL,

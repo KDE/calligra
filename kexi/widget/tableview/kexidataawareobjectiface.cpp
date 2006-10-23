@@ -142,8 +142,10 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 				int wid = f->width();
 				if (wid==0)
 					wid=KEXI_DEFAULT_DATA_COLUMN_WIDTH;//default col width in pixels
-//js: TODO - add col width configuration and storage
-				addHeaderColumn(it.current()->captionAliasOrName(), f->description(), wid);
+//! @todo add col width configuration and storage
+				addHeaderColumn(it.current()->isHeaderTextVisible()
+					? it.current()->captionAliasOrName() : QString::null,
+					f->description(), it.current()->icon(), wid);
 			}
 		}
 	}

@@ -25,6 +25,12 @@
 
 class KexiDataAwarePropertySet;
 
+//! @internal indices for table columns
+#define COLUMN_ID_ICON 0
+#define COLUMN_ID_CAPTION 1
+#define COLUMN_ID_TYPE 2
+#define COLUMN_ID_DESC 3
+
 /*! @internal
  Command group, reimplemented to get access to commands().
  We need it to iterate through commands so we can perform a set of ALTER TABLE atomic actions. */
@@ -112,6 +118,11 @@ class KexiTableDesignerViewPrivate
 			CommandGroup *commandGroup = 0);
 
 		QString messageForSavingChanges(bool &emptyTable);
+
+		/*! Updates icon in the first column, depending on property set \a set.
+		 For example, when "rowSource" and "rowSourceType" propertiesa are not empty, 
+		 "combo" icon appears. */
+		void updateIconForItem(KexiTableItem &item, KoProperty::Set& set);
 
 		KexiTableDesignerView* designerView;
 

@@ -510,7 +510,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		/*! @internal for implementation
 		 This should append another section within horizontal header or any sort of caption
 		 for a field using provided names. \a width is a hint for new field's width. */
-		virtual void addHeaderColumn(const QString& caption, const QString& description, int width) = 0;
+		virtual void addHeaderColumn(const QString& caption, const QString& description, 
+			const QIconSet& icon, int size) = 0;
 
 		/*! @internal for implementation
 		 \return sorting order (within GUI): -1: descending, 1: ascending, 0: no sorting.

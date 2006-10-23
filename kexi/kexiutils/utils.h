@@ -152,6 +152,12 @@ namespace KexiUtils
 	 For black color the result is dark gray rather than black. */
 	KEXIUTILS_EXPORT QColor bleachedColor(const QColor& c, int factor);
 
+	/*! \return icon set computed as a result of colorizing \a icon pixmap with "buttonText" 
+	 color of \a palette palette. This function is useful for displaying monochromed icons 
+	 on the list view or table view header, to avoid bloat, but still have the color compatible 
+	 with accessibility settings. */
+	KEXIUTILS_EXPORT QIconSet colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette);
+
 	/*! Serializes \a map to \a array.
 	 KexiUtils::deserializeMap() can be used to deserialize this array back to map. */
 	KEXIUTILS_EXPORT void serializeMap(const QMap<QString,QString>& map, QByteArray& array);
