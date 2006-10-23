@@ -15,8 +15,8 @@ The current status of the documentation should be available in the file
 status.txt in the same directory as this file.
 
 Contributors to this document:
-	Sander Koning (KOffice documentation coordinator) <sanderkoning@kde.nl>
-	Thomas Zander <zander@kde.org>
+- Sander Koning (KOffice documentation coordinator) <sanderkoning@kde.nl>
+- Thomas Zander <zander@kde.org>
 
 Comments and suggestions are more than welcome, either as SVN commits, or as
 e-mails to <sanderkoning@kde.nl>.
@@ -44,6 +44,16 @@ An application manual should be divided into three (four) parts:
 
 --------------------------------------------------------------------------------
 
+To-do
+
+We still need:
+- proper, clear, and serious names for the three main parts
+  (Working with $APP, Examples, Reference Guide?)
+- a standardised way of sectioning the reference guide
+- technologies and usecases for all applications
+
+--------------------------------------------------------------------------------
+
 KOffice
 
 Introduction to what KOffice is, how to use the user interface that is common
@@ -54,146 +64,171 @@ Since this handbook describes the overall framework, it may as an exception
 derive from the general layout noted above.
 
 What is it / Key features
-	Goal-driven (not implementation-driven) description of what users can do
-	with KOffice.
+    Goal-driven (not implementation-driven) description of what users can do
+    with KOffice.
 The KOffice Workspace
-	A short description of how to use the workspace:
-	- what each application does
-	- tabbed editing
+    A short description of how to use the workspace:
+    - what each application does
+    - tabbed editing
 Working with documents
-	How to manage KOffice documents
-	- open, save, print, ...
+    How to manage KOffice documents
+    - open, save, print, ...
 Menus and toolbars
-	Description of common menus and toolbars.
+    Description of common menus and toolbars.
 Configuration
-	(If any configuration options are available for KOShell, describe them
-	here.)
+    (If any configuration options are available for KOShell, describe them
+    here.)
 More information
-	Where to get more information about KOffice
-	(web sites, mailing lists, ...)
+    Where to get more information about KOffice
+    (web sites, mailing lists, ...)
 
 --------------------------------------------------------------------------------
 
 KWord
 
 Introduction
-	Basically a copy of the goals described in the general KOffice handbook.
-Working with text
-    Styles
-    linespacing
-    text features (see character/paragraph style header files for a list)
-    foot notes
-    end notes
-Working with frames
-    Styles
-Working with pages
-    when are they auto created
-    copying of frames concept
-    page spreads
-Working with tables
-<more technologies?>
+    Basically a copy of the goals described in the general KOffice handbook.
+Working with KWord
+    Working with text
+        Styles
+        linespacing
+        text features (see character/paragraph style header files for a list)
+        foot notes
+        end notes
+    Working with frames
+        Styles
+    Working with pages
+        when are they auto created
+        copying of frames concept
+        page spreads
+    Working with tables
 <usecases>
     * Simple text with great layout (default styles)
-    * Create a 3 column, 2 page 'newspaper' with 2 pictures and using just 1 flow of text make sure the user never has to create any frames except for the picture frames.
-<reference guide>
+    * Create a 3 column, 2 page 'newspaper' with 2 pictures and using just 1
+      flow of text - make sure the user never has to create any frames except
+      for the picture frames.
+Reference Guide
 
 --------------------------------------------------------------------------------
 
 KSpread
 
 Introduction
-	Basically a copy of the goals described in the general KOffice handbook.
-Working with cells
-Working with formulas
-<more technologies?>
+    Basically a copy of the goals described in the general KOffice handbook.
+Working with KSpread
+    Working with cells
+    Working with formulas
+    Working with sheets
+    <more technologies?>
 <usecases>
-<reference guide>
+Reference Guide
 
 --------------------------------------------------------------------------------
 
 KPresenter
 
 Introduction
-	Basically a copy of the goals described in the general KOffice handbook.
-Working with slides
-Working with animations
-<more technologies?>
+    Basically a copy of the goals described in the general KOffice handbook.
+Working with KPresenter
+    Working with slides
+    Working with master slides
+    Working with animations
+    <more technologies?>
 <usecases>
-<reference guide>
+Reference Guide
 
 --------------------------------------------------------------------------------
 
 Kexi
 
 Introduction
-	Basically a copy of the goals described in the general KOffice handbook.
-<technologies>
+    Basically a copy of the goals described in the general KOffice handbook.
+Working with Kexi
+    Working with databases
+    Working with forms
+   <more technologies?>
 <usecases>
-<reference guide>
+Reference Guide
 
 --------------------------------------------------------------------------------
 
 Kivio
 
 Introduction
-	Basically a copy of the goals described in the general KOffice handbook.
-<technologies>
+    Basically a copy of the goals described in the general KOffice handbook.
+Working with Kivio
+    Working with stencils
+    Working with stencil sets
+    <more technologies?>
 <usecases>
-<reference guide>
+Reference Guide
 
 --------------------------------------------------------------------------------
 
 Karbon14
 
 Introduction
-	Basically a copy of the goals described in the general KOffice handbook.
-<technologies>
+    Basically a copy of the goals described in the general KOffice handbook.
+Working with Karbon
+    Working with shapes ("objects"?)
+    Working with effects
+    <more technologies?>
 <usecases>
-<reference guide>
+Reference Guide
 
 --------------------------------------------------------------------------------
 
 Krita
 
 Introduction
-	Basically a copy of the goals described in the general KOffice handbook.
-Working with painting tools
-Working with filters
-Working with selections
-Working with layers
-<more technologies?>
+    Basically a copy of the goals described in the general KOffice handbook.
+Working with Krita
+    Working with painting tools
+    Working with filters
+    Working with selections
+    Working with layers
+    <more technologies?>
 <usecases>
-<reference guide>
+Reference Guide
 
 --------------------------------------------------------------------------------
 
 KPlato
 
 Introduction
-	Basically a copy of the goals described in the general KOffice handbook.
-<technologies>
+    Basically a copy of the goals described in the general KOffice handbook.
+Working with KPlato
+    Working with tasks
+    Working with dependencies
+    <more technologies?>
 <usecases>
-<reference guide>
+Reference Guide
 
 --------------------------------------------------------------------------------
 
 KChart
 
 Introduction
-	Basically a copy of the goals described in the general KOffice handbook.
-<technologies>
+    Basically a copy of the goals described in the general KOffice handbook.
+Working with KChart
+    Working with charts
+        Chart types
+        Axes
+    <more technologies?>
 <usecases>
-<reference guide>
+Reference Guide
 
 --------------------------------------------------------------------------------
 
 KFormula
 
 Introduction
-	Basically a copy of the goals described in the general KOffice handbook.
-<technologies>
+    Basically a copy of the goals described in the general KOffice handbook.
+Working with KFormula
+    Working with formulas
+    <more technologies?>
 <usecases>
-<reference guide>
+Reference Guide
 
 --------------------------------------------------------------------------------
 
