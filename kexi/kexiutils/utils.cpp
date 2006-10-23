@@ -152,6 +152,16 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
 	return c2;
 }
 
+QIconSet KexiUtils::colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette)
+{
+	QPixmap pm(
+		KIconEffect().apply( icon, KIconEffect::Colorize, 1.0f, palette.active().buttonText(), false ) );
+
+	KPixmap kpm(pm);
+	return QIconSet(
+		KPixmapEffect::fade( kpm, 0.33, palette.active().button() ) );
+}
+
 void KexiUtils::serializeMap(const QMap<QString,QString>& map, QByteArray& array)
 {
 	QDataStream ds( &array,QIODevice::WriteOnly);
