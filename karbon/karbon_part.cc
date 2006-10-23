@@ -521,12 +521,6 @@ void
 KarbonPart::slotCommandExecuted( VCommand *command )
 {
 	setModified( true );
-	if( command && command->changesSelection() )
-	{
-		QPtrListIterator<KoView> itr( views() );
-			for( ; itr.current() ; ++itr )
-				static_cast<KarbonView*>( itr.current() )->selectionChanged();
-	}
 }
 
 void

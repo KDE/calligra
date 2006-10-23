@@ -68,6 +68,8 @@ class VTool;
 class VToolBox;
 class VToolController;
 
+class VCommand;
+
 class KARBONCOMMON_EXPORT KarbonView : public KoView, public KXMLGUIBuilder
 {
 	Q_OBJECT
@@ -196,6 +198,7 @@ protected slots:
 	void slotFillChanged( const VFill & );
 
 	void canvasContentsMoving( int x, int y );
+	void commandExecuted( VCommand *command );
 
 signals:
 	void zoomChanged( double );

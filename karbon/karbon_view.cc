@@ -277,6 +277,9 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 
 			connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
 			connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
+
+			connect( m_part->commandHistory(), SIGNAL( commandExecuted( VCommand* ) ), this, SLOT( commandExecuted( VCommand* ) ) );
+
 			selectionChanged();
 
 			//create toolbars
@@ -297,6 +300,7 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 
 	if( shell() && container == m_toolbox )
 	{
+		disconnect( m_part->commandHistory(), SIGNAL( commandExecuted( VCommand* ) ), this, SLOT( commandExecuted( VCommand* ) ) );
 		delete m_toolbox;
 		m_toolbox = 0L;
 		m_toolController->youAintGotNoToolBox();
@@ -1516,6 +1520,12 @@ VToolController *
 KarbonView::toolController()
 {
 	return m_toolController;
+}
+
+void KarbonView::commandExecuted( VCommand *command )
+{
+	if( command && command->changesSelection() )
+		selectionChanged();
 }
 
 #include "karbon_view.moc"
