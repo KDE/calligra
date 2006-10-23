@@ -916,14 +916,14 @@ void KPrWebPresentationWizard::setupPage4()
                                            KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
-    helptext->setAlignment( Qt::TextWordWrap | Qt::AlignVCenter| Qt::AlignLeft );
+    helptext->setAlignment( Qt::AlignVCenter| Qt::AlignLeft );
     helptext->setText( i18n( "Here you can specify titles for "
                              "each slide. Click on a slide in "
                              "the list and then enter the title "
                              "in the textbox below. If you "
                              "click on a title, KPresenter "
                              "mainview will display the slide.") );
-
+    helptext->setWordWrap(true);
     layout->addMultiCellWidget( helptext, 0, 0, 0, 1 );
 
     QLabel *label = new QLabel( i18n( "Slide title:" ), canvas );
@@ -1083,8 +1083,8 @@ void KPrWebPresentationWizard::pageChanged()
         if ( !KIO::NetAccess::exists( pathname, true/*write*/,this ) )
         {
             QString msg = i18n( "<qt>The directory <b>%1</b> does not exist.<br>"
-                                "Do you want create it?</qt>" );
-            if( KMessageBox::questionYesNo( this, msg.arg( pathname ),
+                                "Do you want create it?</qt>",pathname );
+            if( KMessageBox::questionYesNo( this, msg,
                                             i18n( "Directory Not Found" ) )
                 == KMessageBox::Yes)
             {
