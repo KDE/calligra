@@ -316,7 +316,7 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
     helptext->setText( i18n( "Please enter the directory where the memory stick "
                              "presentation should be saved. Please also enter a "
                              "title for the slideshow presentation. " ) );
-
+    helptext->setWordWrap(true);
     QLabel *lable2 = new QLabel( i18n("Path:"), this );
     lable2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     path=new KUrlRequester( this );
@@ -497,6 +497,11 @@ void KPrMSPresentationSetup::finish()
 
     KPrMSPresentationCreateDialog::createMSPresentation( doc, view, msPres );
 
+}
+
+void KPrMSPresentationSetup::slotChoosePath(const QString&text)
+{
+   msPres.setPath(text);	
 }
 
 void KPrMSPresentationSetup::slotChoosePath(const KUrl &text)

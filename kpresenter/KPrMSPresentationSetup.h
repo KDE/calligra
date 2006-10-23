@@ -126,6 +126,7 @@ protected:
 
 protected slots:
     void slotChoosePath(const KUrl &);
+    void slotChoosePath(const QString &);
     virtual void finish();
     virtual void helpMe();
     void showColorGroup(bool on);
