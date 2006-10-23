@@ -343,6 +343,17 @@ and means switching to the SQL View of the Query Designer.</para></listitem>
 <keycombo action="simul">&Alt;<keycap>2</keycap></keycombo>
 </shortcut>
 <guimenu>View</guimenu>
+<guimenuitem>Main Area</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Go to the main area.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Alt;<keycap>3</keycap></keycombo>
+</shortcut>
+<guimenu>View</guimenu>
 <guimenuitem>Property Editor</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Go to the Property Editor pane.</action></para></listitem>
