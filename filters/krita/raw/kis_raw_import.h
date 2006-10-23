@@ -37,7 +37,7 @@ class KProcess;
 class KDialog;
 class WdgRawImport;
 class KoColorProfile;
-class Q3ProgressDialog;
+class QProgressDialog;
 
 class KisRawImport : public KoFilter {
     Q_OBJECT
@@ -73,7 +73,7 @@ private:
     WdgRawImport * m_page;
     KoColorProfile * m_monitorProfile;
     KProcess * m_process;
-    Q3ProgressDialog* m_progress;
+    QProgressDialog* m_progress;
 };
 
 #endif // KIS_RAW_IMPORT_H_

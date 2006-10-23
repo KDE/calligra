@@ -37,7 +37,7 @@
 #include <QApplication>
 #include <QCursor>
 #include <QEventLoop>
-#include <q3progressdialog.h>
+#include <QProgressDialog>
 #include <QTimer>
 
 #include <kglobal.h>
@@ -173,8 +173,8 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
         QApplication::setOverrideCursor(Qt::WaitCursor);
         // Create a busy indicator to show that we didn't die or so
-        m_progress = new Q3ProgressDialog();
-        m_progress -> setTotalSteps(0);
+        m_progress = new QProgressDialog();
+        m_progress -> setMaximum(0);
         m_progress -> setCancelButton(0);
         QTimer timer;
         connect(&timer, SIGNAL(timeout()), this, SLOT(incrementProgress()));
@@ -310,7 +310,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
 void KisRawImport::incrementProgress()
 {
-    m_progress -> setProgress(m_progress -> progress() + 10);
+    m_progress -> setValue(m_progress -> value() + 10);
 }
 
 
