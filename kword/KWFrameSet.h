@@ -48,7 +48,7 @@ class KoXmlWriter;
 
 class KCommand;
 class QPoint;
-class Q3ProgressDialog;
+class QProgressDialog;
 
 
 /**
@@ -342,7 +342,7 @@ public:
 
     virtual int paragraphs() { return 0; }
     virtual int paragraphsSelected() { return 0; }
-    virtual bool statistics( Q3ProgressDialog * /*progress*/,  ulong & /*charsWithSpace*/, ulong & /*charsWithoutSpace*/, ulong & /*words*/,
+    virtual bool statistics( QProgressDialog * /*progress*/,  ulong & /*charsWithSpace*/, ulong & /*charsWithoutSpace*/, ulong & /*words*/,
                              ulong & /*sentences*/, ulong & /*syllables*/, ulong & /*lines*/,  bool /*process only selected */ ) { return true; }
 
     KWDocument* kWordDocument() const { return m_doc; }
