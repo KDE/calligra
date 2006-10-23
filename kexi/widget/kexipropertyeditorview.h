@@ -97,7 +97,7 @@ class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget //KexiViewBa
 		 (without icon or any other additional part). 
 		 If \a set is 0 and \a textToDisplayForNullSet string is empty, the \a infoLabel widget becomes 
 		 hidden. */
-		static void KexiPropertyEditorView::updateInfoLabelForPropertySet(
+		static void updateInfoLabelForPropertySet(
 			KexiObjectInfoLabel *infoLabel, KoProperty::Set* set, 
 			const QString& textToDisplayForNullSet = QString::null);
 
