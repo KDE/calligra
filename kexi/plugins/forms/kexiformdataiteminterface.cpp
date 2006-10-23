@@ -46,7 +46,7 @@ void KexiFormDataItemInterface::undoChanges()
 
 KexiDB::Field* KexiFormDataItemInterface::field() const
 {
-	return m_columnInfo->field;
+	return m_columnInfo ? m_columnInfo->field : 0;
 }
 
 void KexiFormDataItemInterface::setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue)

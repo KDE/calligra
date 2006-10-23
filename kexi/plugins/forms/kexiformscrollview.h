@@ -195,7 +195,8 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		virtual void clearColumnsInternal(bool repaint);
 
 		//! Implementation for KexiDataAwareObjectInterface
-		virtual void addHeaderColumn(const QString& caption, const QString& description, int width);
+		virtual void addHeaderColumn(const QString& caption, const QString& description, 
+			const QIconSet& icon, int width);
 
 		//! Implementation for KexiDataAwareObjectInterface
 		virtual int currentLocalSortingOrder() const;

@@ -46,7 +46,8 @@ class KexiDBComboBox::Private
 		}
 
 	KComboBox *paintedCombo; //!< fake combo used only to pass it as 'this' for QStyle (because styles use <static_cast>)
-
+	QSize sizeHint; //!< A cache for KexiDBComboBox::sizeHint(), 
+	                //!< rebuilt by KexiDBComboBox::fontChange() and KexiDBComboBox::styleChange()
 	bool isEditable : 1;
 	bool buttonPressed : 1;
 	bool mouseOver : 1;
@@ -149,13 +150,6 @@ QRect KexiDBComboBox::editorGeometry() const
 //		r.setBottom(height()-6);
 //	kDebug() << r << geometry() <<endl;
 	return r;
-}
-
-void KexiDBComboBox::styleChange( QStyle& s )
-{
-	KexiDBAutoField::styleChange( s );
-	if (m_subwidget)
-		m_subwidget->setGeometry( editorGeometry() );
 }
 
 void KexiDBComboBox::createEditor()
@@ -453,6 +447,33 @@ QPoint KexiDBComboBox::mapFromParentToGlobal(const QPoint& pos) const
 int KexiDBComboBox::popupWidthHint() const
 {
 	return m_popup->width();
+}
+
+void KexiDBComboBox::fontChange( const QFont & oldFont )
+{
+	d->sizeHint = QSize(); //force rebuild the cache
+	KexiDBAutoField::fontChange(oldFont);
+}
+
+void KexiDBComboBox::styleChange( QStyle& oldStyle )
+{
+	KexiDBAutoField::styleChange( oldStyle );
+	d->sizeHint = QSize(); //force rebuild the cache
+	if (m_subwidget)
+		m_subwidget->setGeometry( editorGeometry() );
+}
+
+QSize KexiDBComboBox::sizeHint() const
+{
+	if ( isVisible() && d->sizeHint.isValid() )
+		return d->sizeHint;
+
+	const int maxWidth = 7 * fontMetrics().width(QChar('x')) + 18;
+	const int maxHeight = qMax( fontMetrics().lineSpacing(), 14 ) + 2;
+	d->sizeHint = (style().sizeFromContents(QStyle::CT_ComboBox, d->paintedCombo,
+		QSize(maxWidth, maxHeight)).expandedTo(QApplication::globalStrut()));
+
+	return d->sizeHint;
 }
 
 #include "kexidbcombobox.moc"

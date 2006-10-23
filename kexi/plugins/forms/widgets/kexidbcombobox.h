@@ -66,6 +66,8 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
 
 		virtual QVariant value() { return KexiComboBoxBase::value(); }
 
+		virtual QSize sizeHint() const;
+
 /*
 		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
 		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
@@ -139,7 +141,10 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
 		virtual void createEditor();
 
 		/*! Reimplemented */
-		virtual void styleChange( QStyle& s );
+		virtual void styleChange( QStyle& oldStyle );
+
+		/*! Reimplemented */
+		virtual void fontChange( const QFont & oldFont );
 
 		virtual bool subwidgetStretchRequired(KexiDBAutoField* autoField) const;
 
