@@ -392,6 +392,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotEditPasteSpecialDataTable();
 		void slotEditCopySpecialDataTable();
 		void slotViewNavigator();
+		void slotViewMainArea();
 		void slotViewPropertyEditor();
 		void slotViewDataMode();
 		void slotViewDesignMode();
