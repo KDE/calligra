@@ -80,9 +80,5 @@ void KChartPrinterDlg::setOptions( const QMap<QString, QString>& opts )
     txtSizey->setValue((opts["kde-kchart-printsizey"]).toInt());
 }
 
-bool KChartPrinterDlg::isValid( const QString& )
-{
-  return true;
-}
 }  //namespace KChart
 #include "kchartPrinterDlg.moc"

@@ -40,8 +40,6 @@ class KChartPrinterDlg : public KPrintDialogPage
     void getOptions( QMap<QString, QString>& opts, bool include_def = false );
 	/// Reimplemented
     void setOptions( const QMap<QString, QString>& opts );
-	/// Reimplemented.
-    bool isValid( const QString& msg );
 	/// The check box for the option.
   
   private:
