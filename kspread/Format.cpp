@@ -2293,7 +2293,7 @@ QString Format::comment( int col, int row ) const
   }
 
   if ( !m_strComment )
-    return QString::null;
+    return QString();
 
   // not part of the style
   return *m_strComment;
@@ -3509,7 +3509,7 @@ QString Currency::getChooseString( int type, bool & ok )
   if ( !gMoneyList[type].country )
   {
     ok = false;
-    return QString::null;
+    return QString();
   }
   if ( type < 24 )
   {

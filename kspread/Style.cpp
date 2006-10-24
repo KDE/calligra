@@ -1117,7 +1117,7 @@ QString Style::saveOasis( KoGenStyle& style, KoGenStyles& mainStyles )
       style = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
   // doing the real work
   saveOasisStyle( style, mainStyles );
-  return QString::null;
+  return QString();
 }
 
 void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
@@ -2768,7 +2768,7 @@ QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles )
       style = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
 
     if ( name().isEmpty() )
-      return QString::null; // TODO fallback to Style::saveOasis() ???
+      return QString(); // TODO fallback to Style::saveOasis() ???
 
     // default style does not need display name
     if( type() != BUILTIN || name() != "Default" )
@@ -2779,7 +2779,7 @@ QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles )
 
     // The lookup is done in the calling object (Format).
     if ( style.type() == Doc::STYLE_CELL_AUTO )
-        return QString::null;
+        return QString();
 
     if( ( type() == BUILTIN ) && ( name() == "Default" ) )
     {
@@ -2796,7 +2796,7 @@ void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& sty
 {
     setName (name);
     if ( style.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
-      setParentName (style.attributeNS( KoXmlNS::style, "parent-style-name", QString::null ));
+      setParentName (style.attributeNS( KoXmlNS::style, "parent-style-name", QString() ));
 
     setType (CUSTOM);
 

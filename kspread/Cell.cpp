@@ -1665,7 +1665,7 @@ void Cell::setLink( const QString& link )
 
 QString Cell::link() const
 {
-  return d->hasExtra() ? d->extra()->link : QString::null;
+  return d->hasExtra() ? d->extra()->link : QString();
 }
 
 bool Cell::testValidity() const

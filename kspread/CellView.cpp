@@ -198,13 +198,13 @@ double CellView::textHeight() const
 QString CellView::testAnchor( double x, double y ) const
 {
   if( cell()->link().isEmpty() )
-    return QString::null;
+    return QString();
 
   if( x > d->textX ) if( x < d->textX + d->textWidth )
       if( y > d->textY - d->textHeight ) if( y < d->textY )
           return cell()->link();
 
-  return QString::null;
+  return QString();
 }
 
 // ================================================================
@@ -2424,7 +2424,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm )
       return tmp;
   }
 
-  return  QString::null;
+  return  QString();
 }
 
 

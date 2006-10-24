@@ -357,7 +357,7 @@ static QString toString (ParameterType type, bool range = false)
     }
   }
 
-  return QString::null;
+  return QString();
 }
 
 FunctionParameter::FunctionParameter()

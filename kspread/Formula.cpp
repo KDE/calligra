@@ -266,7 +266,7 @@ double Token::asFloat() const
 QString Token::asString() const
 {
   if( isString() ) return m_text.mid( 1, m_text.length()-2 );
-  else return QString::null;
+  else return QString();
 }
 
 Token::Op Token::asOperator() const
@@ -277,7 +277,7 @@ Token::Op Token::asOperator() const
 
 QString Token::sheetName() const
 {
-  if( !isCell() && !isRange() ) return QString::null;
+  if( !isCell() && !isRange() ) return QString();
   int i = m_text.indexOf( '!' );
   if( i < 0 ) return QString();
   QString sheet = m_text.left( i );
