@@ -30,7 +30,7 @@ class QDataStream;
 class WPFiveWorker : public KWEFBaseWorker
 {
   public:
-    WPFiveWorker(void)  { }
+    explicit WPFiveWorker(void)  { }
     virtual ~WPFiveWorker(void) { }
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
     virtual bool doCloseFile(void);

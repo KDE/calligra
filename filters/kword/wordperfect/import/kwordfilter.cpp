@@ -52,9 +52,9 @@ class KWordFormat
 
 KWordFormat::KWordFormat()
 {
-  bold = italic = underline = doubleunderline = FALSE;
-  striked = superscript = subscript = redline = FALSE;
-  color = highlight = FALSE;
+  bold = italic = underline = doubleunderline = false;
+  striked = superscript = subscript = redline = false;
+  color = highlight = false;
   red = green = blue = 0;
   bgred = bggreen = bgblue = 255;
   fontsize = 0.0;
@@ -122,7 +122,7 @@ KWordFilter::parse (const QString & filename)
   int frameLeftMargin = 36, frameRightMargin = 36; // quick hack
 
   if (!Parser::parse (filename))
-    return FALSE;
+    return false;
 
   // this will force very last text and formatting to be flushed as well
   tokens.append( new Token( Token::HardReturn ) );
@@ -418,5 +418,5 @@ KWordFilter::parse (const QString & filename)
 
   documentInfo += "</document-info>";
 
-  return TRUE;
+  return true;
 }
