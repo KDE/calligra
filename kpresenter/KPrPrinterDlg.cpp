@@ -95,11 +95,6 @@ void KPrPrinterDlg::setOptions( const QMap<QString, QString>& opts )
     drawBorder->setChecked((opts["kde-kpresenter-printslideborders"]).toInt());
 }
 
-bool KPrPrinterDlg::isValid( const QString& )
-{
-  return true;
-}
-
 void KPrPrinterDlg::txtRows_valueChanged( int new_value)
 {
   if ( new_value == 1 && txtColumns->value() == 1 )
