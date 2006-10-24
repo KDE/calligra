@@ -45,11 +45,6 @@ KivioCanvas::KivioCanvas(KivioView* parent)
 
   setMouseTracking(true);
 
-  QPalette newPalette = palette();
-  newPalette.setBrush(QPalette::Base, Qt::white); // TODO Make background a page property
-  setPalette(newPalette);
-  setBackgroundRole(QPalette::Base);
-
   updateSize();
 }
 
@@ -114,8 +109,10 @@ void KivioCanvas::updateSize()
 void KivioCanvas::paintEvent(QPaintEvent* event)
 {
   QPainter painter(this);
-  painter.setRenderHint(QPainter::Antialiasing);
   painter.setClipRect(event->rect());
+  QColor pageColor = QColor(Qt::white);
+  painter.fillRect(event->rect(), QBrush(pageColor));
+  painter.setRenderHint(QPainter::Antialiasing);
 
   shapeManager()->paint(painter, *(viewConverter()), false);
   m_toolProxy->paint(painter, *(viewConverter()));

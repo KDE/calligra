@@ -105,25 +105,25 @@ bool KivioDocument::loadOasis(const QDomDocument& doc, KoOasisStyles& oasisStyle
     return false;
   }
 
-  QDomElement body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
-
-  if(body.isNull()) {
-    kError(43000) << "No office:drawing found!" << endl;
-    QDomElement childElem;
-    QString localName;
-
-    forEachElement(childElem, realBody) {
-      localName = childElem.localName();
-    }
-
-    if(localName.isEmpty()) {
-      setErrorMessage(i18n("Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
-    } else {
-      setErrorMessage(i18n("This is not a graphical document, but %1. Please try opening it with the appropriate application.", KoDocument::tagNameToDocumentType(localName)));
-    }
-
-    return false;
-  }
+//   QDomElement body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
+// 
+//   if(body.isNull()) {
+//     kError(43000) << "No office:drawing found!" << endl;
+//     QDomElement childElem;
+//     QString localName;
+// 
+//     forEachElement(childElem, realBody) {
+//       localName = childElem.localName();
+//     }
+// 
+//     if(localName.isEmpty()) {
+//       setErrorMessage(i18n("Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
+//     } else {
+//       setErrorMessage(i18n("This is not a graphical document, but %1. Please try opening it with the appropriate application.", KoDocument::tagNameToDocumentType(localName)));
+//     }
+// 
+//     return false;
+//   }
 
   return true;
 }

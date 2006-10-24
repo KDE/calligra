@@ -67,6 +67,9 @@ class KivioView : public KoView, public KoShapeControllerBase
     /// Removes @p shape from the document and updates all views
     virtual void removeShape(KoShape* shape);
 
+    /// Create the toolbox for the flake tools
+    virtual QDockWidget* createToolBox();
+
   public Q_SLOTS:
     /// Change the page that will be shown on the canvas
     void setActivePage(KivioAbstractPage* page);
