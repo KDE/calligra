@@ -254,7 +254,7 @@ bool AmiProParser::parseParagraph( const QStringList& lines )
   QString partext = "";
   for( unsigned i=0; i<lines.count(); i++ )
     if( lines[i][0] == '>' ) break;
-      else partext.append( lines[i] + "\n" );
+      else partext.append( lines[i] + '\n' );
 
   QChar ch = partext[partext.length()-1];
   while( ( ch == '\n' ) || ( ch == '\r' ) )
@@ -579,7 +579,7 @@ AmiProFormat::AmiProFormat()
   pos = len = 0;
   bold = italic = underline = 
   word_underline = double_underline = 
-  subscript = superscript = strikethrough = FALSE;
+  subscript = superscript = strikethrough = false;
   fontFamily = "";
   fontSize = 12;
   fontColor = Qt::black;
@@ -637,7 +637,7 @@ AmiProLayout::AmiProLayout()
   fontColor = Qt::black;
   bold = italic = underline = 
   word_underline = double_underline = 
-  subscript = superscript = strikethrough = FALSE;
+  subscript = superscript = strikethrough = false;
   align = Qt::AlignLeft;
   linespace = AmiPro::LS_Single;
   spaceBefore = spaceAfter = 0;
@@ -702,7 +702,7 @@ AmiProStyle::AmiProStyle()
   fontColor = Qt::black;
   bold = italic = underline = 
   word_underline = double_underline = 
-  subscript = superscript = strikethrough = FALSE;
+  subscript = superscript = strikethrough = false;
   linespace = AmiPro::LS_Single;
   spaceBefore = spaceAfter = 0;
 }

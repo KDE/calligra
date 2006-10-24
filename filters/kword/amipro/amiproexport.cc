@@ -65,18 +65,18 @@ bool AmiProWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 {
   filename = filenameOut;
 
-  return TRUE;
+  return true;
 }
 
 bool AmiProWorker::doCloseFile(void)
 {
   QFile out( filename );
   if( !out.open( QIODevice::WriteOnly ) )
-    return FALSE;
+    return false;
   QTextStream stream;
   stream.setDevice( &out );
   stream << result;
-  return TRUE;
+  return true;
 }
 
 bool AmiProWorker::doOpenDocument(void)
@@ -94,21 +94,21 @@ bool AmiProWorker::doOpenDocument(void)
    1, 2160, 1, 2880, 1, 3600, 1, 4320, 1, 5040, 1, 5760,
    1, 6480, 1, 7200, 1, 7920, 1, 8640 };
   for( uint i=0; i<sizeof(magic)/sizeof(magic[0]); i++ )
-    result += "\t\t" + QString::number(magic[i]) + "\n";
+    result += "\t\t" + QString::number(magic[i]) + '\n';
 
   result += "[elay]\n";
   result += "[edoc]\n";
 
   m_bold = m_italic = m_underline = m_underlineDouble =
-  m_strike = m_subscript = m_superscript = FALSE;
+  m_strike = m_subscript = m_superscript = false;
 
-  return TRUE;
+  return true;
 }
 
 bool AmiProWorker::doCloseDocument(void)
 {
   result += ">\n\n";
-  return TRUE;
+  return true;
 }
 
 static QString AmiProEscape( const QString& text )
@@ -174,7 +174,7 @@ bool AmiProWorker::doFullParagraph(const QString& paraText,
 
   result += amiproText + "\n\n";
 
-  return TRUE;
+  return true;
 }
 
 AmiProExport::AmiProExport( QObject* parent, const QStringList& ):
