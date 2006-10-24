@@ -96,7 +96,7 @@ KoFilter::ConversionStatus PalmDocImport::convert( const QByteArray& from, const
   return KoFilter::OK;
 }
 
-QString PalmDocImport::processPlainParagraph( QString text )
+QString PalmDocImport::processPlainParagraph( const QString& text )
 {
   QString formats, layout, result;
 
@@ -135,15 +135,16 @@ QString PalmDocImport::processPlainParagraph( QString text )
   layout.append( "</LAYOUT>\n" );
 
   // encode text for XML-ness
-  text.replace( '&', "&amp;" );
-  text.replace( '<', "&lt;" );
-  text.replace( '>', "&gt;" );
-  text.replace( '"', "&quot;" );
-  text.replace( '\'', "&apos;" );
+  QString encodedText = text;
+  encodedText.replace( '&', "&amp;" );
+  encodedText.replace( '<', "&lt;" );
+  encodedText.replace( '>', "&gt;" );
+  encodedText.replace( '"', "&quot;" );
+  encodedText.replace( '\'', "&apos;" );
 
   // construct the <PARAGRAPH>
   result.append( "<PARAGRAPH>\n" );
-  result.append( "<TEXT>" + text + "</TEXT>\n" );
+  result.append( "<TEXT>" + encodedText + "</TEXT>\n" );
   result.append( "<FORMATS>\n");
   result.append( formats );
   result.append( "</FORMATS>\n");
@@ -153,12 +154,12 @@ QString PalmDocImport::processPlainParagraph( QString text )
   return result;
 }
 
-QString PalmDocImport::processPlainDocument( QString plaindoc )
+QString PalmDocImport::processPlainDocument( const QString& plaindoc )
 {
   QString prolog, content, epilog;
   QStringList paragraphs;
 
-  paragraphs = QStringList::split( "\n\n", plaindoc, TRUE );
+  paragraphs = QStringList::split( "\n\n", plaindoc, true );
   for( unsigned int i = 0; i < paragraphs.count(); i++ )
   {
       QString text = paragraphs[i];

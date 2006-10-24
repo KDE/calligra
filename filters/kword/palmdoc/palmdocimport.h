@@ -42,8 +42,8 @@ class PalmDocImport : public KoFilter
 
   private:
     
-    QString processPlainParagraph( QString text );
-    QString processPlainDocument( QString plaindoc );
+    QString processPlainParagraph( const QString& text );
+    QString processPlainDocument( const QString& plaindoc );
     QString processDocumentInfo( const QString &title );
 };
 

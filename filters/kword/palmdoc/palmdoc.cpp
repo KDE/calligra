@@ -42,14 +42,14 @@ bool PalmDoc::load( const char* filename )
   if( !ok )
   {
     m_result = PalmDoc::ReadError;
-    return FALSE;
+    return false;
   }
 
   if( type() != "TEXt" )
   {
     qDebug( "Type is \"%s\", not \"TEXt\", so this is not Palm DOC!", type().latin1() );
     m_result = PalmDoc::InvalidFormat;
-    return FALSE;
+    return false;
   }
 
   if( creator() != "REAd" )
@@ -57,7 +57,7 @@ bool PalmDoc::load( const char* filename )
     qDebug( "Creator is \"%s\", not \"REAd\", so this is not Palm DOC!",
       creator().latin1() );
     m_result = PalmDoc::InvalidFormat;
-    return FALSE;
+    return false;
   }
 
   // must have at least two records
@@ -65,7 +65,7 @@ bool PalmDoc::load( const char* filename )
   {
     qDebug( "Palm DOC has at least 2 records!" );
     m_result = PalmDoc::InvalidFormat;
-    return FALSE;
+    return false;
   }
 
   // the very first record is DOC header
@@ -82,7 +82,7 @@ bool PalmDoc::load( const char* filename )
   {
     qDebug( "Unknown format of document!" );
     m_result = PalmDoc::InvalidFormat;
-    return FALSE;
+    return false;
   }
 
   // initialize
@@ -110,7 +110,7 @@ bool PalmDoc::load( const char* filename )
 
   // done
   m_result = OK;
-  return TRUE;
+  return true;
 }
 
 bool PalmDoc::save( const char* filename )
@@ -165,12 +165,12 @@ bool PalmDoc::save( const char* filename )
   if( !ok )
   {
     m_result = WriteError;
-    return FALSE;
+    return false;
   }
 
   // done
   m_result = OK;
-  return TRUE;
+  return true;
 }
 
 // TODO describe in brief about compression algorithm
@@ -247,7 +247,7 @@ QByteArray PalmDoc::compress( const QString& text )
 #define INRANGE(v,p,q) ((v)>=(p))&&((v)<=(q))
 
 // TODO describe in brief about decompression algorithm
-QString PalmDoc::uncompress( QByteArray rec )
+QString PalmDoc::uncompress( const QByteArray& rec )
 {
   QString result;
 

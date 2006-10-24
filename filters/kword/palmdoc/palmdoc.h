@@ -46,7 +46,7 @@ class PalmDoc: public PalmDB
     QString m_text;
 
     QByteArray compress( const QString& text );
-    QString uncompress( QByteArray rec );
+    QString uncompress( const QByteArray& rec );
 };
 
 #endif

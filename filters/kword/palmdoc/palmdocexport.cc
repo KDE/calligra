@@ -66,7 +66,7 @@ private:
 bool PalmDocWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 {
   outfile = filenameOut;
-  return TRUE;
+  return true;
 }
 
 bool PalmDocWorker::doCloseFile(void)
@@ -82,24 +82,24 @@ bool PalmDocWorker::doCloseFile(void)
   doc.setText( text );
   doc.save( outfile.latin1() );
 
-  return TRUE;
+  return true;
 }
 
 bool PalmDocWorker::doOpenDocument(void)
 {
-  text = QString::null;
-  return TRUE;
+  text.clear();
+  return true;
 }
 
 bool PalmDocWorker::doCloseDocument(void)
 {
-  return TRUE;
+  return true;
 }
 
 bool PalmDocWorker::doFullDocumentInfo( const KWEFDocumentInfo& docInfo )
 {
   title = docInfo.title;
-  return TRUE;
+  return true;
 }
 
 bool PalmDocWorker::doFullParagraph(const QString& paraText,
@@ -109,7 +109,7 @@ bool PalmDocWorker::doFullParagraph(const QString& paraText,
   text.append( paraText );
   text.append( "\n\n" );
 
-  return TRUE;
+  return true;
 }
 
 PalmDocExport::PalmDocExport( QObject* parent, const QStringList& ):

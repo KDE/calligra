@@ -45,7 +45,7 @@ PalmDB::PalmDB()
   setCreator( QString::null );
 
   // crash if autodelete ?
-  records.setAutoDelete( TRUE );
+  records.setAutoDelete( true );
 }
 
 PalmDB::~PalmDB()
@@ -58,13 +58,13 @@ bool PalmDB::load( const char* filename )
   // open input file
   QFile in (filename);
   if (!in.open (QIODevice::ReadOnly))
-    return FALSE;
+    return false;
 
   QDataStream stream;
   stream.setDevice (&in);
 
   unsigned filesize = stream.device()->size();
-  if( filesize < 72 ) return FALSE;
+  if( filesize < 72 ) return false;
 
   // always big-endian
   stream.setByteOrder (QDataStream::BigEndian);
@@ -195,7 +195,7 @@ bool PalmDB::load( const char* filename )
   // close input file
   in.close();
 
-  return TRUE;
+  return true;
 }
 
 bool PalmDB::save( const char* filename )
@@ -203,7 +203,7 @@ bool PalmDB::save( const char* filename )
   // open output file
   QFile out( filename );
   if( !out.open( QIODevice::WriteOnly ) )
-    return FALSE;
+    return false;
 
   QDataStream stream;
   stream.setDevice( &out );
@@ -322,7 +322,7 @@ bool PalmDB::save( const char* filename )
   // close output file
   out.close();
 
-  return TRUE;
+  return true;
 }
 
 void PalmDB::setType( const QString& t )
