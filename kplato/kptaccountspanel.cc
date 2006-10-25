@@ -219,6 +219,7 @@ bool AccountsPanel::isUnique(QTreeWidgetItem *item) {
         }
     }
     return true;*/
+    return false;
 }
 
 void AccountsPanel::slotRemoveBtn() {
