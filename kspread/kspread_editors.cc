@@ -1199,6 +1199,11 @@ bool CellEditor::eventFilter( QObject* o, QEvent* e )
               return true;
           }
         }
+        else if ( k->state() & Qt::ShiftButton && ( k->key() == Key_Return || k->key() == Key_Enter ) )
+        {
+            // enable content wrapping
+            d->cell->format()->setMultiRow( true );
+        }
         // End choosing. May be restarted by CellEditor::slotTextChanged
         if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
         {
