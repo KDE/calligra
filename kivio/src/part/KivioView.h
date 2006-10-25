@@ -70,6 +70,9 @@ class KivioView : public KoView, public KoShapeControllerBase
     /// Create the toolbox for the flake tools
     virtual QDockWidget* createToolBox();
 
+    /// Create a shape selector for flake shapes
+    virtual QDockWidget* createShapeSelector();
+
   public Q_SLOTS:
     /// Change the page that will be shown on the canvas
     void setActivePage(KivioAbstractPage* page);

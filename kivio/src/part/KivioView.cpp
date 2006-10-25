@@ -106,10 +106,6 @@ void KivioView::initGUI()
 
   KoToolManager::instance()->addControllers(m_canvasController, this);
 
-  KoShapeSelector *selector = new KoShapeSelector(0, m_canvasController, ".*");
-  selector->resize(QSize(100, 200));
-  selector->show();
-
   connect(m_canvasController, SIGNAL(canvasOffsetXChanged(int)),
           m_horizontalRuler, SLOT(setOffset(int)));
   connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
@@ -275,6 +271,11 @@ void KivioView::updateMousePosition(QPoint position)
 QDockWidget* KivioView::createToolBox()
 {
   return KoToolManager::instance()->toolBox("Kivio");
+}
+
+QDockWidget* KivioView::createShapeSelector()
+{
+  return new KoShapeSelector(0, ".*");
 }
 
 #include "KivioView.moc"

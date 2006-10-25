@@ -77,6 +77,9 @@ public:
     /// overwritten method from superclass
     QDockWidget *createToolBox();
 
+    /// overwritten method from superclass
+    QDockWidget *createShapeSelector();
+
 signals:
     /// emitted when this view wants to go back in the document command-history.
     void undo();

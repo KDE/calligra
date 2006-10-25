@@ -238,9 +238,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 // 			m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
 // 			mainWindow()->addToolBar( m_selectToolBar );
 
-		KoShapeSelector *selector = new KoShapeSelector( this, m_canvasView, "" );
-		selector->setWindowTitle(i18n("Shapes"));
-        createDock(i18n("Shapes"), selector);
 		KoToolManager::instance()->addControllers( m_canvasView, p );
 
 		// for testing: manually set a shape id of the shape to be created
@@ -1763,6 +1760,10 @@ QDockWidget *KarbonView::createToolBox() {
 	return KoToolManager::instance()->toolBox("Karbon");
 }
 
+QDockWidget *KarbonView::createShapeSelector()
+{
+	return new KoShapeSelector( this, "" );
+}
 
 VToolController *
 KarbonView::toolController()

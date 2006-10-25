@@ -36,6 +36,7 @@
 #include <KoMainWindow.h>
 #include <KoToolBox.h>
 #include <KoTextShapeData.h>
+#include <KoShapeSelector.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -298,6 +299,10 @@ void KWView::editRedo() {
         }
     }
     emit redo();
+}
+
+QDockWidget *KWView::createShapeSelector() {
+    return new KoShapeSelector(0, ".*");
 }
 
 #include "KWView.moc"

@@ -40,10 +40,6 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     m_canvasController->setCanvas(m_canvas);
     KoToolManager::instance()->addControllers(m_canvasController, static_cast<KWDocument*>(parent->koDocument()));
 
-KoShapeSelector *selector = new KoShapeSelector(0, m_canvasController, ".*");
-selector->resize(QSize(100, 200));
-selector->show();
-
     gridLayout->addWidget( m_canvasController, 0, 0 );
 }
 KWGui::~KWGui() {
