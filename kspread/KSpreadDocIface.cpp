@@ -157,7 +157,7 @@ QString DocIface::moveToValue()const
         return QString("bottomFirst");
         break;
     }
-    return QString::null;
+    return QString();
 }
 
 void DocIface::setMoveToValue(const QString & move)
