@@ -50,12 +50,18 @@ bool ExamplePart::loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyle
 		const QDomDocument & settings, KoStore* store )
 {
     // TODO load the document from the QDomDocument
+    Q_UNUSED( doc );
+    Q_UNUSED( oasisStyles );
+    Q_UNUSED( settings );
+    Q_UNUSED( store );
     return true;
 }
 
 bool ExamplePart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
     // TODO save the document to the KoStore;
+    Q_UNUSED( store );
+    Q_UNUSED( manifestWriter );
     return true;
 }
 
