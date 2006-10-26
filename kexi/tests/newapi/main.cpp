@@ -232,9 +232,9 @@ int main(int argc, char** argv)
 		r=tableViewTest();
 #endif
 	else if (test_name == "parser") {
-		QStringList params;
+		QList<QByteArray> params;
 		if (args->isSet("query-params"))
-			params = QStringList::split("|", args->getOption("query-params"));
+			params = args->getOption("query-params").split('|');
 		r=parserTest(args->arg(2), params);
 	}
 	else if (test_name == "dr_prop")

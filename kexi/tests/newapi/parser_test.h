@@ -20,7 +20,7 @@
 #ifndef PARSER_TEST_H
 #define PARSER_TEST_H
 
-int parserTest(const char *st, const QStringList& params)
+int parserTest(const char *st, const QList<QByteArray>& params)
 {
 	int r = 0;
 
@@ -34,11 +34,11 @@ int parserTest(const char *st, const QStringList& params)
 	const bool ok = parser.parse(QString::fromLocal8Bit( st ));
 	KexiDB::QuerySchema *q = parser.query();
 	Q3ValueList<QVariant> variantParams;
-	foreach( QStringList::ConstIterator, it, params )
-		variantParams.append(*it);
+	foreach( const QByteArray param, params )
+		variantParams.append(param);
 	if (ok && q) {
 		cout << q->debugString().toLatin1().constData() << '\n';
-		cout << "-STATEMENT:\n" << conn->selectStatement( *q, variantParams ).latin1().constData() << '\n';
+		cout << "-STATEMENT:\n" << conn->selectStatement( *q, variantParams ).toLatin1().data() << '\n';
 	}
 	else {
 		KexiDB::ParserError	err = parser.error();
