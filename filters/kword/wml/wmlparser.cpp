@@ -125,7 +125,7 @@ bool WMLHandler::startElement( const QString&, const QString&,
   if( tag == "p" )
   {
     m_state.currentLayout = WMLLayout();
-    m_inBlock = TRUE;
+    m_inBlock = true;
     if( m_state.currentFormat.bold || 
         m_state.currentFormat.italic ||
         m_state.currentFormat.underline ||
@@ -138,31 +138,31 @@ bool WMLHandler::startElement( const QString&, const QString&,
     if( align == "center" )
       m_state.currentLayout.align =  WMLLayout::Center;
 
-    return TRUE;
+    return true;
   }
 
   if(( tag == "b" ) || (tag == "strong") )
   {
-    m_state.currentFormat.bold = TRUE;
+    m_state.currentFormat.bold = true;
     m_state.currentFormat.pos = m_text.length();
     m_state.formatList.append( m_state.currentFormat );
-    return TRUE;
+    return true;
   }
  
   if(( tag == "i" ) || (tag == "em") )
   {  
-    m_state.currentFormat.italic = TRUE;
+    m_state.currentFormat.italic = true;
     m_state.currentFormat.pos = m_text.length();  
     m_state.formatList.append( m_state.currentFormat );  
-    return TRUE;  
+    return true;  
   }  
 
   if( tag == "u" )
   {
-    m_state.currentFormat.underline = TRUE;
+    m_state.currentFormat.underline = true;
     m_state.currentFormat.pos = m_text.length();
     m_state.formatList.append( m_state.currentFormat );
-    return TRUE;
+    return true;
   }
 
   if( tag == "big" )
@@ -170,7 +170,7 @@ bool WMLHandler::startElement( const QString&, const QString&,
     m_state.currentFormat.fontsize = WMLFormat::Big;
     m_state.currentFormat.pos = m_text.length();
     m_state.formatList.append( m_state.currentFormat );
-    return TRUE;
+    return true;
   }
 
   if( tag == "small" ) 
@@ -178,7 +178,7 @@ bool WMLHandler::startElement( const QString&, const QString&,
     m_state.currentFormat.fontsize = WMLFormat::Small;
     m_state.currentFormat.pos = m_text.length();
     m_state.formatList.append( m_state.currentFormat );
-    return TRUE;
+    return true;
   }
 
   if( tag == "a" )
@@ -208,7 +208,7 @@ bool WMLHandler::startElement( const QString&, const QString&,
   if( tag == "tr" )
   {
     m_state.tableRow++;
-    return TRUE;
+    return true;
   }
 
   // open table cell, keep in sync with <p> above
@@ -216,13 +216,13 @@ bool WMLHandler::startElement( const QString&, const QString&,
   {
     m_state.tableCol++;
     m_state.currentLayout = WMLLayout();
-    m_inBlock = TRUE;
+    m_inBlock = true;
     m_state.formatList.append( m_state.currentFormat );
     return m_parser->doTableCell( m_state.tableRow, m_state.tableCol );
   }
 
   // unhandled element
-  return TRUE;
+  return true;
 }
 
 bool WMLHandler::endElement( const QString&, const QString&, 
@@ -236,7 +236,7 @@ bool WMLHandler::endElement( const QString&, const QString&,
   if( tag == "card" )
   {
     // forget </p> before </card> ?
-    m_inBlock = FALSE;
+    m_inBlock = false;
     if( !m_text.isEmpty() )
       flushParagraph();
     return m_parser->doCloseCard();
@@ -244,32 +244,32 @@ bool WMLHandler::endElement( const QString&, const QString&,
 
   if( tag == "p" )
   {
-    m_inBlock = FALSE;
+    m_inBlock = false;
     return flushParagraph();
   }
 
   if(( tag == "b" ) || (tag == "strong") )
   {
-    m_state.currentFormat.bold = FALSE; 
+    m_state.currentFormat.bold = false; 
     m_state.currentFormat.pos = m_text.length();
     m_state.formatList.append( m_state.currentFormat );
-    return TRUE;
+    return true;
   }
 
   if(( tag == "i" ) || (tag == "em") )
   {
-    m_state.currentFormat.italic = FALSE;
+    m_state.currentFormat.italic = false;
     m_state.currentFormat.pos = m_text.length();
     m_state.formatList.append( m_state.currentFormat );
-    return TRUE;
+    return true;
   }
 
   if( tag == "u" )
   {
-    m_state.currentFormat.underline = FALSE;  
+    m_state.currentFormat.underline = false;  
     m_state.currentFormat.pos = m_text.length();
     m_state.formatList.append( m_state.currentFormat );
-    return TRUE;
+    return true;
   }
 
   if( tag == "big" )
@@ -277,7 +277,7 @@ bool WMLHandler::endElement( const QString&, const QString&,
     m_state.currentFormat.fontsize = WMLFormat::Normal;
     m_state.currentFormat.pos = m_text.length();
     m_state.formatList.append( m_state.currentFormat );
-    return TRUE;
+    return true;
   }
 
   if( tag == "small" )
@@ -285,7 +285,7 @@ bool WMLHandler::endElement( const QString&, const QString&,
     m_state.currentFormat.fontsize = WMLFormat::Normal;
     m_state.currentFormat.pos = m_text.length();
     m_state.formatList.append( m_state.currentFormat );
-    return TRUE;
+    return true;
   }
 
   if( tag == "a" )
@@ -305,17 +305,17 @@ bool WMLHandler::endElement( const QString&, const QString&,
 
   // close table row
   if( tag == "tr" )
-    return TRUE; //skip
+    return true; //skip
 
   // close table cell, like </p>
   if( tag == "td" )
   {
-    m_inBlock = FALSE;
+    m_inBlock = false;
     return flushParagraph();
   }
 
   // unhandled
-  return TRUE;
+  return true;
 }
 
 bool WMLHandler::characters( const QString& ch )
@@ -326,7 +326,7 @@ bool WMLHandler::characters( const QString& ch )
   if( m_inLink )
     m_state.currentFormat.link.append( ch );
 
-  return TRUE;
+  return true;
 }
 
 bool WMLHandler::flushParagraph()
@@ -375,7 +375,7 @@ WMLFormat::WMLFormat()
 {
   pos = len = 0;
   fontsize = Normal;
-  bold = italic = underline = FALSE;
+  bold = italic = underline = false;
   link = "";
   href = "";
 }
@@ -438,40 +438,40 @@ void WMLParser::parse( const char* filename )
 
 bool WMLParser::doOpenDocument()
 {
-  return TRUE;
+  return true;
 }
 
 bool WMLParser::doCloseDocument()
 {
-  return TRUE;
+  return true;
 }
 
 bool WMLParser::doOpenCard( QString, QString )
 {
-  return TRUE;
+  return true;
 }
 
 bool WMLParser::doCloseCard()
 {
-  return TRUE;
+  return true;
 }
 
 bool WMLParser::doParagraph( QString, WMLFormatList, WMLLayout )
 {
-  return TRUE;
+  return true;
 }
 
 bool WMLParser::doBeginTable()
 {
-  return TRUE;
+  return true;
 }
 
 bool WMLParser::doEndTable()
 {
-  return TRUE;
+  return true;
 }
 
 bool WMLParser::doTableCell( unsigned, unsigned )
 {
-  return TRUE;
+  return true;
 }

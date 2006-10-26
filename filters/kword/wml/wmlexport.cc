@@ -64,18 +64,18 @@ class WMLWorker : public KWEFBaseWorker
 bool WMLWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 {
   filename = filenameOut;
-  return TRUE;
+  return true;
 }
 
 bool WMLWorker::doCloseFile(void)
 {
   QFile out( filename );
   if( !out.open( QIODevice::WriteOnly ) )
-    return FALSE;
+    return false;
   QTextStream stream;
   stream.setDevice( &out );
   stream << result;
-  return TRUE;
+  return true;
 }
 
 bool WMLWorker::doOpenDocument(void)
@@ -86,16 +86,16 @@ bool WMLWorker::doOpenDocument(void)
   result += "<wml>\n";
   result += "<card>\n";
 
-  m_bold = m_italic = m_underline = FALSE;
+  m_bold = m_italic = m_underline = false;
 
-  return TRUE;
+  return true;
 }
 
 bool WMLWorker::doCloseDocument(void)
 {
   result += "</card>\n";
   result += "</wml>";
-  return TRUE;
+  return true;
 }
 
 bool WMLWorker::doFullParagraph(const QString& paraText,
@@ -116,7 +116,7 @@ bool WMLWorker::doFullParagraph(const QString& paraText,
       partialText = text.mid( formatData.pos, formatData.len );
 
       // escape the text
-      partialText = KWEFUtil::EscapeSgmlText( NULL, partialText, TRUE, TRUE );
+      partialText = KWEFUtil::EscapeSgmlText( NULL, partialText, true, true );
 
       // apply formatting
       m_bold = formatData.text.weight >= 75;
@@ -139,7 +139,7 @@ bool WMLWorker::doFullParagraph(const QString& paraText,
 
   result += "<p align=\"" + align + "\">" + wmlText + "</p>\n";
 
-  return TRUE;
+  return true;
 }
 
 WMLExport::WMLExport( QObject* parent, const QStringList& ):

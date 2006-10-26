@@ -152,7 +152,7 @@ bool WMLConverter::doOpenCard( QString id, QString title )
   if( m_title.isEmpty() )
     m_title = ( !title.isEmpty() ) ? title : id;
 
-  return TRUE;
+  return true;
 }
 
 // FIXME is this right ?
@@ -188,7 +188,7 @@ bool WMLConverter::doParagraph( QString atext, WMLFormatList formatList,
   root.append( WMLLayoutAsXML( layout) );
   root.append( "</PARAGRAPH>\n" );
 
-  return TRUE;
+  return true;
 }
 
 void WMLConverter::parse( const char* filename )
