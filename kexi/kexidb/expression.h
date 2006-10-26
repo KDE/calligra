@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
-   Based on nexp.h : Parser module of Python-like language
+   Design based on nexp.h : Parser module of Python-like language
    (C) 2001 Jaroslaw Staniek, MIMUW (www.mimuw.edu.pl)
 
    This library is free software; you can redistribute it and/or
@@ -23,7 +23,8 @@
 #ifndef KEXIDB_EXPRESSION_H
 #define KEXIDB_EXPRESSION_H
 
-#include <kexidb/field.h>
+#include "field.h"
+#include "queryschema.h"
 
 #include <kdebug.h>
 #include "global.h"
@@ -42,6 +43,7 @@ namespace KexiDB {
 #define KexiDBExpr_Function 8
 #define KexiDBExpr_Aggregation 9
 #define KexiDBExpr_TableList 10
+#define KexiDBExpr_QueryParameter 11
 
 KEXI_DB_EXPORT QString exprClassName(int c);
 
@@ -52,6 +54,9 @@ class BinaryExpr;
 class ConstExpr;
 class VariableExpr;
 class FunctionExpr;
+class QueryParameterExpr;
+class QuerySchemaParameterValueListIterator;
+//class QuerySchemaParameterList;
 
 //! A base class for all expressions
 class KEXI_DB_EXPORT BaseExpr
@@ -62,18 +67,34 @@ public:
 
 	BaseExpr(int token);
 	virtual ~BaseExpr();
+	
 	int token() const { return m_token; }
+	
 	virtual Field::Type type();
+	
 	BaseExpr* parent() const { return m_par; }
+	
 	virtual void setParent(BaseExpr *p) { m_par = p; }
+	
 	virtual bool validate(ParseInfo& parseInfo);
-	virtual QString toString() = 0;
+
+	/*! \return string as a representation of this expression element by running recursive calls. 
+	 \a param, if not 0, points to a list item containing value of a query parameter
+	 (used in QueryParameterExpr). */
+	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0) = 0;
+
+	/*! Collects query parameters (messages and types) reculsively and saves them to params.
+	 The leaf nodes are objects of QueryParameterExpr class. */
+	virtual void getQueryParameters(QuerySchemaParameterList& params) = 0;
 	
 	inline void debug() { KexiDBDbg << debugString() << endl; }
+	
 	virtual QString debugString();
+	
 	/*! \return single character if the token is < 256 
 	 or token name, e.g. LESS_OR_EQUAL (for debugging). */
 	inline QString tokenToDebugString() { return tokenToDebugString(m_token); }
+
 	static QString tokenToDebugString(int token);
 
 	/*! \return string for token, like "<=" or ">" */
@@ -88,6 +109,7 @@ public:
 	ConstExpr* toConst();
 	VariableExpr* toVariable();
 	FunctionExpr* toFunction();
+	QueryParameterExpr* toQueryParameter();
 
 protected:
 	int m_cl; //!< class
@@ -106,7 +128,8 @@ public:
 	BaseExpr *arg(int n);
 	int args();
 	virtual QString debugString();
-	virtual QString toString();
+	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+	virtual void getQueryParameters(QuerySchemaParameterList& params);
 	virtual bool validate(ParseInfo& parseInfo);
 	BaseExpr::List list;
 };
@@ -119,7 +142,8 @@ public:
 	virtual ~UnaryExpr();
 	virtual Field::Type type();
 	virtual QString debugString();
-	virtual QString toString();
+	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+	virtual void getQueryParameters(QuerySchemaParameterList& params);
 	BaseExpr *arg() const { return m_arg; }
 	virtual bool validate(ParseInfo& parseInfo);
 
@@ -141,11 +165,11 @@ public:
 	virtual ~BinaryExpr();
 	virtual Field::Type type();
 	virtual QString debugString();
-	virtual QString toString();
+	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+	virtual void getQueryParameters(QuerySchemaParameterList& params);
 	BaseExpr *left() const { return m_larg; }
 	BaseExpr *right() const { return m_rarg; }
 	virtual bool validate(ParseInfo& parseInfo);
-
 	virtual QString tokenToString();
 
 	BaseExpr *m_larg;
@@ -154,9 +178,7 @@ public:
 
 /*! String, integer, float constants also includes NULL value.
  token can be: IDENTIFIER, SQL_NULL, CHARACTER_STRING_LITERAL,
- INTEGER_CONST, REAL_CONST
-*/
-//! @todo date, time
+ INTEGER_CONST, REAL_CONST */
 class KEXI_DB_EXPORT ConstExpr : public BaseExpr
 {
 public:
@@ -164,12 +186,38 @@ public:
 	virtual ~ConstExpr();
 	virtual Field::Type type();
 	virtual QString debugString();
-	virtual QString toString();
+	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+	virtual void getQueryParameters(QuerySchemaParameterList& params);
 	virtual bool validate(ParseInfo& parseInfo);
 	QVariant value;
 };
 
-//! variables like <i>fieldname</i> or <i>tablename</i>.<i>fieldname</i>
+//! Query parameter used to getting user input of constant values.
+//! It contains a message that is displayed to the user.
+class KEXI_DB_EXPORT QueryParameterExpr : public ConstExpr
+{
+public:
+	QueryParameterExpr(const QString& message);
+	virtual ~QueryParameterExpr();
+	virtual Field::Type type();
+	/*! Sets expected type of the parameter. The default is String.
+	 This method is called from parent's expression validate().
+	 This depends on the type of the related expression.
+	 For instance: query "SELECT * FROM cars WHERE name=[enter name]",
+	 "[enter name]" has parameter of the same type as "name" field.
+	 "=" binary expression's validate() will be called for the left side
+	 of the expression and then the right side will have type set to String.
+	*/
+	void setType(Field::Type type);
+	virtual QString debugString();
+	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+	virtual void getQueryParameters(QuerySchemaParameterList& params);
+	virtual bool validate(ParseInfo& parseInfo);
+protected:
+	Field::Type m_type;
+};
+
+//! Variables like <i>fieldname</i> or <i>tablename</i>.<i>fieldname</i>
 class KEXI_DB_EXPORT VariableExpr : public BaseExpr
 {
 public:
@@ -177,7 +225,9 @@ public:
 	virtual ~VariableExpr();
 	virtual Field::Type type();
 	virtual QString debugString();
-	virtual QString toString();
+	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+	virtual void getQueryParameters(QuerySchemaParameterList& params);
+
 	/*! Validation. Sets field, tablePositionForField 
 	 and tableForQueryAsterisk members. 
 	 See addColumn() in parse.y to see how it's used on column adding. */
@@ -206,17 +256,18 @@ public:
 	TableSchema *tableForQueryAsterisk;
 };
 
-//! aggregation functions like SUM, COUNT, MAX, ...
-//! builtin functions like CURRENT_TIME()
-//! user defined functions
+//! - aggregation functions like SUM, COUNT, MAX, ...
+//! - builtin functions like CURRENT_TIME()
+//! - user defined functions
 class KEXI_DB_EXPORT FunctionExpr : public BaseExpr
 {
 public:
-	FunctionExpr(const QString& _name, NArgExpr* args_);
+	FunctionExpr(const QString& _name, NArgExpr* args_ = 0);
 	virtual ~FunctionExpr();
 	virtual Field::Type type();
 	virtual QString debugString();
-	virtual QString toString();
+	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+	virtual void getQueryParameters(QuerySchemaParameterList& params);
 	virtual bool validate(ParseInfo& parseInfo);
 
 	static QValueList<QCString> builtInAggregates();
@@ -226,74 +277,6 @@ public:
 	NArgExpr* args;
 };
 
-/*
-//! Integer constant
-class NConstInt : public BaseExpr
-{
-public:
-	NConstInt(int val);
-	virtual const QString dump();
-	int value();
-	virtual void check();
-protected:
-	int val;
-};
-
-//! boolean
-class NConstBool : public BaseExpr
-{
-public:
-	NConstBool(const char v);
-	virtual const QString dump();
-	const char value();
-	virtual void check();
-	virtual void genCode();
-protected:
-	char val;
-};
-
-//! char const
-class NConstStr : public BaseExpr
-{
-public:
-	NConstStr(const char *v);
-	virtual const QString dump();
-	const QString value();
-	virtual void check();
-	virtual void genCode();
-protected:
-	QString val;
-};
-*/
-
-//-----------------------------------------
-#if 0
-/*! This class cantains information about any expression that can be used
- in sql queries.
-*/
-class KEXI_DB_EXPORT Expression
-{
-	public:
-		Expression();
-		virtual ~Expression();
-
-		/*! \return type of this expression (selected from Field::Type).
-		 Type information is just reused from field's type.
-		 If it is not valid expression (no field is assigned), Field::InvalidType is returned. */
-		int type();
-
-		//! owner of this expression: the field that uses expression
-		KexiDB::Field* field();
-	protected:
-		ExpressionPrivate *d; //unused
-
-		Field *m_field; //owner
-
-		friend class Field;
-};
-#endif
-
 } //namespace KexiDB
 
 #endif
-

@@ -34,6 +34,7 @@
 #include <kexidb/connectiondata.h>
 #include <kexidb/tableschema.h>
 #include <kexidb/queryschema.h>
+#include <kexidb/queryschemaparameter.h>
 #include <kexidb/transaction.h>
 #include <kexidb/driver.h>
 #include <kexidb/preparedstatement.h>
@@ -336,19 +337,22 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		virtual Cursor* prepareQuery( const QString& statement, uint cursor_options = 0) = 0;
 
 		/*! \overload prepareQuery( const QString& statement = QString::null, uint cursor_options = 0)
-		 Prepares query described by \a query schema. 
+		 Prepares query described by \a query schema. \a params are values of parameters that
+		 will be inserted into places marked with [] before execution of the query.
 
 		 Note for driver developers: you should initialize cursor engine-specific 
 		 resources and return Cursor subclass' object 
 		 (passing \a query and \a cursor_options to it's constructor).
 		 Kexi SQL and driver-specific escaping is performed on table names.
 		*/
-		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 ) = 0;
+		Cursor* prepareQuery( QuerySchema& query, const QValueList<QVariant>& params, 
+			uint cursor_options = 0 );
 
-		/*! \overload prepareQuery( const QString& statement = QString::null, uint cursor_options = 0)
-		 Statement is build from data provided by \a query schema.
+		/*! \overload prepareQuery( QuerySchema& query, const QValueList<QVariant>& params, 
+			uint cursor_options = 0 )
+		 Prepares query described by \a query schema without parameters.
 		*/
-//		Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0);
+		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 ) = 0;
 
 		/*! \overload prepareQuery( const QString& statement = QString::null, uint cursor_options = 0)
 		 Statement is build from data provided by \a table schema, 
@@ -366,11 +370,20 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		Cursor* executeQuery( const QString& statement, uint cursor_options = 0 );
 
 		/*! \overload executeQuery( const QString& statement, uint cursor_options = 0 )
+		 \a params are values of parameters that
+		 will be inserted into places marked with [] before execution of the query.
+
 		 Statement is build from data provided by \a query schema. 
 		 Kexi SQL and driver-specific escaping is performed on table names. */
+		Cursor* executeQuery( QuerySchema& query, const QValueList<QVariant>& params, 
+			uint cursor_options = 0 );
+
+		/*! \overload executeQuery( QuerySchema& query, const QValueList<QVariant>& params, 
+			uint cursor_options = 0 ) */
 		Cursor* executeQuery( QuerySchema& query, uint cursor_options = 0 );
 
 		/*! \overload executeQuery( const QString& statement, uint cursor_options = 0 )
+		 Executes query described by \a query schema without parameters.
 		 Statement is build from data provided by \a table schema, 
 		 it is like "select * from table_name".*/
 		Cursor* executeQuery( TableSchema& table, uint cursor_options = 0 );
@@ -653,16 +666,35 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Only use this method if you really need. */
 		bool executeSQL( const QString& statement );
 
-		/*! \return "SELECT ..." statement's string needed for executing query 
-		 defined by \a querySchema.
-
-		 Note: The statement string can be specific for this connection's driver database, 
-		 and thus not reusable in general.
-		*/
-		inline QString selectStatement( QuerySchema& querySchema, 
-			int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const
+		//! @short options used in selectStatement()
+		class KEXI_DB_EXPORT SelectStatementOptions
 		{
-			return selectStatement(querySchema, false, idEscaping);
+			public:
+				SelectStatementOptions();
+				~SelectStatementOptions();
+
+				//! A mode for escaping identifier, Driver::EscapeDriver|Driver::EscapeAsNecessary by default
+				int identifierEscaping;
+
+				//! True if ROWID should be also retrieved. False by default.
+				bool alsoRetrieveROWID : 1;
+		};
+
+		/*! \return "SELECT ..." statement's string needed for executing query 
+		 defined by \a querySchema and \a params. */
+		QString selectStatement( QuerySchema& querySchema, 
+			const QValueList<QVariant>& params, 
+			const SelectStatementOptions& options = SelectStatementOptions() ) const;
+
+		/*! \overload QString selectStatement( QuerySchema& querySchema, 
+			QValueList<QVariant> params = QValueList<QVariant>(), 
+			const SelectStatementOptions& options = SelectStatementOptions() ) const;
+		 \return "SELECT ..." statement's string needed for executing query 
+		 defined by \a querySchema. */
+		inline QString selectStatement( QuerySchema& querySchema, 
+			const SelectStatementOptions& options = SelectStatementOptions() ) const
+		{
+			return selectStatement(querySchema, QValueList<QVariant>(), options);
 		}
 
 		/*! Stores object's schema data (id, name, caption, help text)
@@ -877,12 +909,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note: The statement string can be specific for this connection's driver database, 
 		 and thus not reusable in general.
 		*/
-		QString selectStatement( TableSchema& tableSchema ) const;
-
-		/*! Like Connection::selectStatement( QuerySchema& querySchema, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const
-		 but also retrieves ROWID information (as the very last column), if \a alsoRetrieveROWID is true.
-		 Used by cursors. */
-		QString selectStatement( QuerySchema& querySchema, bool alsoRetrieveROWID, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const;
+		QString selectStatement( TableSchema& tableSchema,
+			const SelectStatementOptions& options = SelectStatementOptions() ) const;
 
 		/*! 
 		 Creates table named by \a tableSchemaName. Schema object must be on

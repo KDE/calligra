@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,6 +47,7 @@ digit				[0-9]
 /*identifier	[a-zA-Z_][a-zA-Z_0-9]* */
 identifier	[a-zA-Z_0-9]+
 quoted_identifier (\"[a-zA-Z_0-9]+\")
+query_parameter	\[[^\[\]]+\]
 
 integer			{digit}+
 decimal			(({digit}*\.{digit}+)|({digit}+\.{digit}*))
@@ -271,35 +272,39 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 
 ['][^']*['] {
 	ECOUNT;
-	strncpy(yylval.stringValue, yytext, yyleng + 1);
+	yylval.stringValue = new Substring(yytext+1, yyleng-2);
 	return CHARACTER_STRING_LITERAL;
 
 /* "ZZZ" sentinel for script */
 }
 
 {identifier} {
-	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
+	KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
 	ECOUNT;
-	strncpy(yylval.stringValue, yytext, yyleng + 1);
+	yylval.stringValue = new Substring(yytext, yyleng);
 	if (yytext[0]>='0' && yytext[0]<='9') {
 		setError(i18n("Invalid identifier"),
 		  i18n("Identifiers should start with a letter or '_' character"));
 		return SCAN_ERROR;
-//		return ERROR_DIGIT_BEFORE_IDENTIFIER;
 	}
 	return IDENTIFIER;
 }
 
-{quoted_identifier} {
-	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
+{query_parameter} {
+	KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
 	ECOUNT;
-	strncpy(yylval.stringValue, yytext + 1, yyleng - 1);
-	yylval.stringValue[yyleng - 2] = 0x00;
+	yylval.stringValue = new Substring(yytext+1, yyleng-2);
+	return QUERY_PARAMETER;
+}
+
+{quoted_identifier} {
+	KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
+	ECOUNT;
+	yylval.stringValue = new Substring(yytext+1, yyleng-2);
 	if (yytext[1]>='0' && yytext[1]<='9') {
 		setError(i18n("Invalid identifier"),
 		  i18n("Identifiers should start with a letter or '_' character"));
 		return SCAN_ERROR;
-//		return ERROR_DIGIT_BEFORE_IDENTIFIER;
 	}
 	return IDENTIFIER;
 }
@@ -309,7 +314,7 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 }
 
 [\~\!\@\#\^\&\|\`\?,()\[\]\.;\:\+\-\*\/\%\^\<\>\=] {
-	kdDebug() << "char: '" << yytext[0] << "'" << endl;
+	KexiDBDbg << "char: '" << yytext[0] << "'" << endl;
 	ECOUNT;
 	return yytext[0];
 }

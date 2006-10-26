@@ -74,7 +74,7 @@ static void initList()
 	KexiDB_typeCache->def_tlist[ Field::InvalidGroup ] = Field::InvalidType;
 	KexiDB_typeCache->def_tlist[ Field::TextGroup ] = Field::Text;
 	KexiDB_typeCache->def_tlist[ Field::IntegerGroup ] = Field::Integer;
-	KexiDB_typeCache->def_tlist[ Field::FloatGroup ] = Field::Float;
+	KexiDB_typeCache->def_tlist[ Field::FloatGroup ] = Field::Double;
 	KexiDB_typeCache->def_tlist[ Field::BooleanGroup ] = Field::Boolean;
 	KexiDB_typeCache->def_tlist[ Field::DateTimeGroup ] = Field::Date;
 	KexiDB_typeCache->def_tlist[ Field::BLOBGroup ] = Field::BLOB;
@@ -1106,6 +1106,26 @@ QVariant KexiDB::stringToVariant( const QString& s, QVariant::Type type, bool &o
 bool KexiDB::isDefaultValueAllowed( KexiDB::Field* field )
 {
 	return field && !field->isUniqueKey();
+}
+
+void KexiDB::getLimitsForType(Field::Type type, int &minValue, int &maxValue)
+{
+	switch (type) {
+	case Field::Byte:
+//! @todo always ok?
+		minValue = 0;
+		maxValue = 255;
+		break;
+	case Field::ShortInteger:
+		minValue = -32768;
+		maxValue = 32767;
+		break;
+	case Field::Integer:
+	case Field::BigInteger: //cannot return anything larger
+	default:
+		minValue = (int)-0x07FFFFFFF;
+		maxValue = (int)(0x080000000-1);
+	}
 }
 
 #include "utils_p.moc"

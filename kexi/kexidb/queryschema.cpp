@@ -1522,6 +1522,14 @@ OrderByColumnList& QuerySchema::orderByColumnList() const
 	return d->orderByColumnList;
 }
 
+QuerySchemaParameterList QuerySchema::parameters()
+{
+	if (!whereExpression())
+		return QuerySchemaParameterList();
+	QuerySchemaParameterList params;
+	whereExpression()->getQueryParameters(params);
+	return params;
+}
 
 /*
 	new field1, Field *field2

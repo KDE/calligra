@@ -141,7 +141,6 @@ QVariant::Type Field::variantType(uint type)
 		case ShortInteger:
 		case Integer:
 		case BigInteger:
-//		case AutoIncrement:
 			return QVariant::Int;
 		case Boolean:
 			return QVariant::Bool;
@@ -414,7 +413,7 @@ Field::setDefaultValue(const QCString& def)
 			break;
 		}case ShortInteger: {
 			int v = def.toInt(&ok);
-			if (!ok || (!(m_options & Unsigned) && (v < -32768 || v > 32768)) || ((m_options & Unsigned) && (v < 0 || v > 65535)))
+			if (!ok || (!(m_options & Unsigned) && (v < -32768 || v > 32767)) || ((m_options & Unsigned) && (v < 0 || v > 65535)))
 				m_defaultValue = QVariant();
 			else
 				m_defaultValue = QVariant(v);

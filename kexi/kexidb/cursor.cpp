@@ -101,6 +101,7 @@ void Cursor::init()
 		m_fieldCount = 0;
 	}
 	m_orderByColumnList = 0;
+	m_queryParameters = 0;
 }
 
 Cursor::~Cursor()
@@ -124,6 +125,7 @@ Cursor::~Cursor()
 		exit(1);
 	}
 	delete m_fieldsExpanded;
+	delete m_queryParameters;
 }
 
 bool Cursor::open()
@@ -140,7 +142,11 @@ bool Cursor::open()
 			setError(ERR_SQL_EXECUTION_ERROR, i18n("No query statement or schema defined."));
 			return false;
 		}
-		m_conn->m_sql = m_conn->selectStatement( *m_query, m_containsROWIDInfo /*get ROWID if needed*/ );
+		Connection::SelectStatementOptions options;
+		options.alsoRetrieveROWID = m_containsROWIDInfo; /*get ROWID if needed*/
+		m_conn->m_sql = m_queryParameters 
+			? m_conn->selectStatement( *m_query, *m_queryParameters, options )
+			: m_conn->selectStatement( *m_query, options );
 		if (m_conn->m_sql.isEmpty()) {
 			KexiDBDbg << "Cursor::open(): empty statement!" << endl;
 			setError(ERR_SQL_EXECUTION_ERROR, i18n("Query statement is empty."));
@@ -547,6 +553,19 @@ void Cursor::setOrderByColumnList(const QString& column1, const QString& column2
 QueryColumnInfo::Vector Cursor::orderByColumnList() const
 {
 	return m_orderByColumnList ? *m_orderByColumnList: QueryColumnInfo::Vector();
+}
+
+QValueList<QVariant> Cursor::queryParameters() const
+{
+	return m_queryParameters ? *m_queryParameters : QValueList<QVariant>();
+}
+
+void Cursor::setQueryParameters(const QValueList<QVariant>& params)
+{
+	if (!m_queryParameters)
+		m_queryParameters = new QValueList<QVariant>(params);
+	else
+		*m_queryParameters = params;
 }
 
 #include "cursor.moc"

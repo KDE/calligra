@@ -102,6 +102,12 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		 or NULL if query schema is undefined but raw statement instead. */
 		inline QuerySchema *query() const { return m_query; }
 
+		//! \return query parameters assigned to this cursor
+		QValueList<QVariant> queryParameters() const;
+
+		//! Sets query parameters \a params for this cursor.
+		void setQueryParameters(const QValueList<QVariant>& params);
+
 		/*! \return raw query statement used to define this cursor
 		 or null string if raw statement instead (but QuerySchema is defined instead). */
 		inline QString rawStatement() const { return m_rawStatement; }
@@ -339,6 +345,8 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 
 		//! Used by setOrderByColumnList()
 		QueryColumnInfo::Vector* m_orderByColumnList;
+
+		QValueList<QVariant>* m_queryParameters;
 
 	private:
 		bool m_readAhead : 1;

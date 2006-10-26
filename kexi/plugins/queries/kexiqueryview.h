@@ -44,7 +44,11 @@ class KexiQueryView : public KexiDataTable
 
 		virtual tristate storeData(bool dontAsk = false);
 
-		bool executeQuery(KexiDB::QuerySchema *query);
+		/*! Executes query \a query, filling the table view with query results.
+		 \return true on success, false on failure and cancelled when user has 
+		 cancelled execution (for example when she pressed the Cancel button 
+		 of the "Enter Query Parameter" input dialog. */
+		tristate executeQuery(KexiDB::QuerySchema *query);
 
 		class Private;
 		Private *d;

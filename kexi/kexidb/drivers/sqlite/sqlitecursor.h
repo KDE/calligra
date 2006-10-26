@@ -56,7 +56,8 @@ class SQLiteCursor : public Cursor
 		SQLiteCursor(Connection* conn, const QString& statement, uint options = NoOptions );
 
 		/*! Cursor will operate on \a conn, \a query schema will be used to execute query. */
-		SQLiteCursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
+		SQLiteCursor(Connection* conn, QuerySchema& query, 
+			uint options = NoOptions );
 
 		virtual bool drv_open();
 

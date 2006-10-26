@@ -25,16 +25,18 @@
 #include <qmap.h>
 #include <qptrlist.h>
 
-#include <kexidb/fieldlist.h>
-#include <kexidb/schemadata.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/relationship.h>
+#include "fieldlist.h"
+#include "schemadata.h"
+#include "tableschema.h"
+#include "relationship.h"
 
 namespace KexiDB {
 
 class Connection;
 class QueryAsterisk;
 class QuerySchemaPrivate;
+class QuerySchemaParameter;
+typedef QValueList<QuerySchemaParameter> QuerySchemaParameterList;
 
 //! @short Helper class that assigns additional information for the column in a query
 /*! The following information is assigned:
@@ -720,6 +722,10 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! \return a list of columns listed in ORDER BY section of the query. 
 		 Read notes for \ref setOrderByColumnList(). */
 		OrderByColumnList& orderByColumnList() const;
+
+		/*! \return query schema parameters. These are taked from the WHERE section 
+		 (a tree of expression items). */
+		QuerySchemaParameterList parameters();
 
 	protected:
 		void init();

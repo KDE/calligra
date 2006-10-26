@@ -86,23 +86,23 @@ namespace KexiDB
 	typedef QValueList<uint> TypeGroupList;
 
 	/*! \return list of types for type group \a typeGroup. */
-	KEXI_DB_EXPORT const TypeGroupList typesForGroup(KexiDB::Field::TypeGroup typeGroup);
+	KEXI_DB_EXPORT const TypeGroupList typesForGroup(Field::TypeGroup typeGroup);
 
 	/*! \return list of i18n'd type names for type group \a typeGroup. */
-	KEXI_DB_EXPORT QStringList typeNamesForGroup(KexiDB::Field::TypeGroup typeGroup);
+	KEXI_DB_EXPORT QStringList typeNamesForGroup(Field::TypeGroup typeGroup);
 
 	/*! \return list of (not-i18n'd) type names for type group \a typeGroup. */
-	KEXI_DB_EXPORT QStringList typeStringsForGroup(KexiDB::Field::TypeGroup typeGroup);
+	KEXI_DB_EXPORT QStringList typeStringsForGroup(Field::TypeGroup typeGroup);
 
 	/*! \return default field type for type group \a typeGroup,
 	 for example, Field::Integer for Field::IntegerGroup.
 	 It is used e.g. in KexiAlterTableDialog, to properly fill 
 	 'type' property when user selects type group for a field. */
-	KEXI_DB_EXPORT KexiDB::Field::Type defaultTypeForGroup(KexiDB::Field::TypeGroup typeGroup);
+	KEXI_DB_EXPORT Field::Type defaultTypeForGroup(Field::TypeGroup typeGroup);
 
 	/*! \return true if \a v represents an empty (but not null) value.
 	 Values of some types (as for strings) can be both empty and not null. */
-	inline bool isEmptyValue(KexiDB::Field *f, const QVariant &v) {
+	inline bool isEmptyValue(Field *f, const QVariant &v) {
 		if (f->hasEmptyProperty() && v.toString().isEmpty() && !v.toString().isNull())
 			return true;
 		return v.isNull();
@@ -127,7 +127,7 @@ namespace KexiDB
 	Constructs an sql string like "fielname = value" for specific \a drv driver,
 	 field type \a t, \a fieldName and \a value. If \a value is null, "fieldname is NULL" 
 	 string is returned. */
-	inline KEXI_DB_EXPORT QString sqlWhere(KexiDB::Driver *drv, KexiDB::Field::Type t, 
+	inline KEXI_DB_EXPORT QString sqlWhere(Driver *drv, Field::Type t, 
 		const QString fieldName, const QVariant value)
 	{
 		if (value.isNull())
@@ -239,8 +239,8 @@ namespace KexiDB
 	 (within a second thread).
 	 \a data is used to perform a (temporary) test connection. \a msgHandler is used to display errors.
 	 On successful connecting, a message is displayed. After testing, temporary connection is closed. */
-	KEXI_DB_EXPORT void connectionTestDialog(QWidget* parent, const KexiDB::ConnectionData& data, 
-		KexiDB::MessageHandler& msgHandler);
+	KEXI_DB_EXPORT void connectionTestDialog(QWidget* parent, const ConnectionData& data, 
+		MessageHandler& msgHandler);
 
 	/*! Saves connection data \a data into \a map. */
 	KEXI_DB_EXPORT QMap<QString,QString> toMap( const ConnectionData& data );
@@ -298,7 +298,7 @@ namespace KexiDB
 	/*! \return type of field for integer value \a type. 
 	 If \a type cannot be casted to KexiDB::Field::Type, KexiDB::Field::InvalidType is returned.
 	 This can be used when type information is deserialized from a string or QVariant. */
-	KEXI_DB_EXPORT KexiDB::Field::Type intToFieldType( int type );
+	KEXI_DB_EXPORT Field::Type intToFieldType( int type );
 
 	/*! Sets property values for \a field. \return true if all the values are valid and allowed.
 	 On failure contents of \a field is undefined.
@@ -353,7 +353,7 @@ namespace KexiDB
 	 Returns null QVariant for unsupported values like KexiDB::Field::InvalidType.
 	 This function is efficient (uses a cache) and is heavily used by the AlterTableHandler
 	 for filling new columns. */
-	KEXI_DB_EXPORT QVariant emptyValueForType( KexiDB::Field::Type type );
+	KEXI_DB_EXPORT QVariant emptyValueForType( Field::Type type );
 
 	/*! \return a value that can be set for a database field of type \a type having 
 	 "notEmpty" property set. It works in a similar way as 
@@ -363,7 +363,7 @@ namespace KexiDB
 	 Returns null QVariant for unsupported values like KexiDB::Field::InvalidType. 
 	 This function is efficient (uses a cache) and is heavily used by the AlterTableHandler
 	 for filling new columns. */
-	KEXI_DB_EXPORT QVariant notEmptyValueForType( KexiDB::Field::Type type );
+	KEXI_DB_EXPORT QVariant notEmptyValueForType( Field::Type type );
 
 	//! Escaping types used in escapeBLOB().
 	enum BLOBEscapingType {
@@ -399,7 +399,15 @@ namespace KexiDB
 	/*! \return true if setting default value for \a field field is allowed. Fields with unique 
 	 (and thus primary key) flags set do not accept  default values. 
 	 False is returned aslo if \a field is 0. */
-	KEXI_DB_EXPORT bool isDefaultValueAllowed( KexiDB::Field* field );
+	KEXI_DB_EXPORT bool isDefaultValueAllowed( Field* field );
+
+	/*! Gets limits for values of type \a type. The result is put into \a minValue and \a maxValue.
+	 Supported types are Byte, ShortInteger, Integer and BigInteger
+	 Results for BigInteger or non-integer types are the same as for Integer due 
+	 to limitation of int type.
+	 Signed integers are assumed. */
+//! @todo add support for unsigned flag
+	KEXI_DB_EXPORT void getLimitsForType(Field::Type type, int &minValue, int &maxValue);
 }
 
 #endif

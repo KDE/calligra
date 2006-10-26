@@ -29,7 +29,8 @@
 #include "kexiquerydesignersql.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerypart.h"
-#include "kexitableview.h"
+#include <widget/tableview/kexitableview.h>
+#include <widget/kexiqueryparameters.h>
 
 //! @internal
 class KexiQueryView::Private
@@ -63,13 +64,24 @@ KexiQueryView::~KexiQueryView()
 	delete d;
 }
 
-bool KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
+tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 {
 	if (!query)
 		return false;
 	KexiUtils::WaitCursor wait;
 	KexiDB::Cursor *oldCursor = d->cursor;
-	d->cursor = mainWin()->project()->dbConnection()->executeQuery(*query);
+	KexiDB::debug( query->parameters() );
+	bool ok;
+	QValueList<QVariant> params;
+	{
+		KexiUtils::WaitCursorRemover remover;
+		params = KexiQueryParameters::getParameters(this, 
+			*mainWin()->project()->dbConnection()->driver(), *query, ok);
+	}
+	if (!ok) {//input cancelled
+		return cancelled;
+	}
+	d->cursor = mainWin()->project()->dbConnection()->executeQuery(*query, params);
 	if (!d->cursor) {
 		parentDialog()->setStatus(parentDialog()->mainWin()->project()->dbConnection(), 
 			i18n("Query executing failed."));
@@ -94,9 +106,9 @@ tristate KexiQueryView::afterSwitchFrom(int mode)
 {
 	if (mode==Kexi::NoViewMode) {
 		KexiDB::QuerySchema *querySchema = static_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
-		if (!executeQuery(querySchema)) {
-			return false;
-		}
+		const tristate result = executeQuery(querySchema);
+		if (true != result)
+			return result;
 	}
 	else if (mode==Kexi::DesignViewMode || Kexi::TextViewMode) {
 		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
@@ -107,9 +119,9 @@ tristate KexiQueryView::afterSwitchFrom(int mode)
 //		else
 //			d->queryHasBeenChangedInViewMode = Kexi::NoViewMode;
 
-		if (!executeQuery(temp->query())) {
-			return false;
-		}
+		const tristate result = executeQuery(temp->query());
+		if (true != result)
+			return result;
 	}
 	return true;
 }

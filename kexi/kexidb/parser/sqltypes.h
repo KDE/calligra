@@ -38,6 +38,29 @@ struct realType
 	int fractional;
 };
 
+#define SHORT_STRING_MAX_LENGTH 4096
+
+//! @internal
+//! A string structure that effectively to avoid unnecesary copying 
+//! of string or substrings (delays copying)
+class Substring
+{
+	public:
+		Substring(const char* utf8String, int len)
+		 : m_utf8String(utf8String), m_len(len)
+		{
+		}
+		inline QString toQString() const {
+			return QString::fromUtf8(m_utf8String, m_len);
+		}
+		inline QCString toLatin1() const {
+			return QCString(m_utf8String, m_len);
+		}
+	private:
+		const char * const m_utf8String;
+		const int m_len;
+};
+
 //! @internal
 struct OrderByColumnInternal
 {
