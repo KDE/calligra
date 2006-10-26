@@ -57,6 +57,7 @@ set(kexidb_LIB_SRCS
    transaction.cpp 
    indexschema.cpp 
    queryschema.cpp 
+   queryschemaparameter.cpp
    schemadata.cpp 
    global.cpp 
    relationship.cpp 
@@ -68,6 +69,7 @@ set(kexidb_LIB_SRCS
    admin.cpp 
    lookupfieldschema.cpp 
    simplecommandlineapp.cpp
+   fieldvalidator.cpp
 #temp. disabled   alter.cpp
 )
 

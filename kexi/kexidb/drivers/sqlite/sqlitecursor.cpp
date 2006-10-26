@@ -197,8 +197,6 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 #endif //SQLITE3
 };
 
-
-
 SQLiteCursor::SQLiteCursor(Connection* conn, const QString& statement, uint options)
 	: Cursor( conn, statement, options )
 	, d( new SQLiteCursorData(conn) )

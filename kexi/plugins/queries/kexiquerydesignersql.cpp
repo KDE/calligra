@@ -311,8 +311,9 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 		temp->setQuery( query );
 //		temp->query = query;
 		KexiDB::Connection* conn = mainWin()->project()->dbConnection();
-		int flags = KexiDB::Driver::EscapeKexi;
-		d->origStatement = conn->selectStatement(*query, flags).trimmed();
+		KexiDB::Connection::SelectStatementOptions options;
+		options.identifierEscaping = KexiDB::Driver::EscapeKexi;
+		d->origStatement = conn->selectStatement(*query, options).trimmed();
 	}
 
 	d->slotTextChangedEnabled = false;

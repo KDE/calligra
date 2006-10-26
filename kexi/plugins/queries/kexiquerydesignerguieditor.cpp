@@ -1110,8 +1110,9 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
 	if (m_dialog->schemaData()) //set this instance as obsolete (only if it's stored)
 		dbConn->setQuerySchemaObsolete( m_dialog->schemaData()->name() );
 
-	QString sqlText = dbConn->selectStatement(
-		*temp->query(), KexiDB::Driver::EscapeKexi|KexiDB::Driver::EscapeAsNecessary );
+	KexiDB::Connection::SelectStatementOptions options;
+	options.identifierEscaping = KexiDB::Driver::EscapeKexi|KexiDB::Driver::EscapeAsNecessary;
+	QString sqlText = dbConn->selectStatement( *temp->query(), options );
 	if (!storeDataBlock( sqlText, "sql" )) {
 		return false;
 	}
@@ -1298,13 +1299,16 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 
 	KexiDB::BaseExpr *valueExpr = 0;
 	QRegExp re;
-	if (str.length()>=2
-		&& (
-		(str.startsWith("\"") && str.endsWith("\""))
+	if (str.length()>=2 &&
+		(
+		   (str.startsWith("\"") && str.endsWith("\""))
 		|| (str.startsWith("'") && str.endsWith("'")))
 		)
 	{
 		valueExpr = new KexiDB::ConstExpr(CHARACTER_STRING_LITERAL, str.mid(1,str.length()-2));
+	}
+	if (str.startsWith("[") && str.endsWith("]")) {
+		valueExpr = new KexiDB::QueryParameterExpr(str.mid(1,str.length()-2));
 	}
 	else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})")).exactMatch( str ))
 	{

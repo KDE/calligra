@@ -56,6 +56,18 @@
 
 namespace KexiDB {
 
+Connection::SelectStatementOptions::SelectStatementOptions()
+ : identifierEscaping(Driver::EscapeDriver|Driver::EscapeAsNecessary)
+ , alsoRetrieveROWID(false)
+{
+}
+
+Connection::SelectStatementOptions::~SelectStatementOptions()
+{
+}
+
+//================================================
+
 ConnectionInternal::ConnectionInternal(Connection *conn)
  : connection(conn)
 {
@@ -1052,7 +1064,8 @@ bool Connection::executeSQL( const QString& statement )
 }
 
 QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
-	bool alsoRetrieveROWID, int drvEscaping) const
+	const Q3ValueList<QVariant>& params, 
+	const SelectStatementOptions& options) const
 {
 //"SELECT FROM ..." is theoretically allowed "
 //if (querySchema.fieldCount()<1)
@@ -1091,7 +1104,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 
 			if (f->isQueryAsterisk()) {
 				if (!singleTable && static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) //single-table *
-					sql += escapeIdentifier(f->table()->name(), drvEscaping) +
+					sql += escapeIdentifier(f->table()->name(), options.identifierEscaping) +
 					       QString::fromLatin1(".*");
 				else //all-tables * (or simplified table.* when there's only one table)
 					sql += QString::fromLatin1("*");
@@ -1112,9 +1125,9 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 						tableName = f->table()->name();
 
 					if (!singleTable) {
-						sql += (escapeIdentifier(tableName, drvEscaping) + ".");
+						sql += (escapeIdentifier(tableName, options.identifierEscaping) + ".");
 					}
-					sql += escapeIdentifier(f->name(), drvEscaping);
+					sql += escapeIdentifier(f->name(), options.identifierEscaping);
 				}
 				QString aliasString = QString(querySchema.columnAlias(number));
 				if (!aliasString.isEmpty())
@@ -1141,11 +1154,11 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 						if (!s_additional_joins.isEmpty())
 							s_additional_joins += QString::fromLatin1(" ");
 						s_additional_joins += QString("LEFT OUTER JOIN %1 ON %2.%3=%4.%5")
-							.arg(escapeIdentifier(lookupTable->name(), drvEscaping))
-							.arg(escapeIdentifier(f->table()->name(), drvEscaping))
-							.arg(escapeIdentifier(f->name(), drvEscaping))
-							.arg(escapeIdentifier(lookupTable->name(), drvEscaping))
-							.arg(escapeIdentifier(boundField->name(), drvEscaping));
+							.arg(escapeIdentifier(lookupTable->name(), options.identifierEscaping))
+							.arg(escapeIdentifier(f->table()->name(), options.identifierEscaping))
+							.arg(escapeIdentifier(f->name(), options.identifierEscaping))
+							.arg(escapeIdentifier(lookupTable->name(), options.identifierEscaping))
+							.arg(escapeIdentifier(boundField->name(), options.identifierEscaping));
 
 						//add visibleField to the list of SELECTed fields if it is not yes present there
 						if (!querySchema.findTableField( visibleField->table()->name()+"."+visibleField->name() )) {
@@ -1154,13 +1167,13 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 								//table should be added after FROM
 								if (!s_from_additional.isEmpty())
 									s_from_additional += QString::fromLatin1(", ");
-								s_from_additional += escapeIdentifier(visibleField->table()->name(), drvEscaping);
+								s_from_additional += escapeIdentifier(visibleField->table()->name(), options.identifierEscaping);
 								*/
 							}
 							if (!s_additional_fields.isEmpty())
 								s_additional_fields += QString::fromLatin1(", ");
-							s_additional_fields += (escapeIdentifier(visibleField->table()->name(), drvEscaping) + "."
-								+ escapeIdentifier(visibleField->name(), drvEscaping));
+							s_additional_fields += (escapeIdentifier(visibleField->table()->name(), options.identifierEscaping) + "."
+								+ escapeIdentifier(visibleField->name(), options.identifierEscaping));
 						}
 					}
 				}
@@ -1172,7 +1185,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 	if (!s_additional_fields.isEmpty())
 		sql += (QString::fromLatin1(", ") + s_additional_fields);
 
-	if (alsoRetrieveROWID) { //append rowid column
+	if (options.alsoRetrieveROWID) { //append rowid column
 		QString s;
 		if (!sql.isEmpty())
 			s = QString::fromLatin1(", ");
@@ -1194,7 +1207,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 		{
 			if (!s_from.isEmpty())
 				s_from += QString::fromLatin1(", ");
-			s_from += escapeIdentifier(table->name(), drvEscaping);
+			s_from += escapeIdentifier(table->name(), options.identifierEscaping);
 			QString aliasString = QString(querySchema.tableAlias(number));
 			if (!aliasString.isEmpty())
 				s_from += (QString::fromLatin1(" AS ") + aliasString);
@@ -1231,13 +1244,13 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 			if (!s_where_sub.isEmpty())
 				s_where_sub += QString::fromLatin1(" AND ");
 			s_where_sub += (
-				escapeIdentifier(pair->first->table()->name(), drvEscaping) +
+				escapeIdentifier(pair->first->table()->name(), options.identifierEscaping) +
 				QString::fromLatin1(".") +
-				escapeIdentifier(pair->first->name(), drvEscaping) +
+				escapeIdentifier(pair->first->name(), options.identifierEscaping) +
 				QString::fromLatin1(" = ")  +
-				escapeIdentifier(pair->second->table()->name(), drvEscaping) +
+				escapeIdentifier(pair->second->table()->name(), options.identifierEscaping) +
 				QString::fromLatin1(".") +
-				escapeIdentifier(pair->second->name(), drvEscaping));
+				escapeIdentifier(pair->second->name(), options.identifierEscaping));
 		}
 		if (rel->fieldPairs()->count()>1) {
 			s_where_sub.prepend("(");
@@ -1245,14 +1258,16 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 		}
 		s_where += s_where_sub;
 	}
-	//EXPLICITY SPECIFIED WHERE EXPRESSION
+	//EXPLICITLY SPECIFIED WHERE EXPRESSION
 	if (querySchema.whereExpression()) {
+		QuerySchemaParameterValueListIterator paramValuesIt(*m_driver, params);
+		QuerySchemaParameterValueListIterator *paramValuesItPtr = params.isEmpty() ? 0 : &paramValuesIt;
 		if (wasWhere) {
 //TODO: () are not always needed
-			s_where = "(" + s_where + ") AND (" + querySchema.whereExpression()->toString() + ")";
+			s_where = "(" + s_where + ") AND (" + querySchema.whereExpression()->toString(paramValuesItPtr) + ")";
 		}
 		else {
-			s_where = querySchema.whereExpression()->toString();
+			s_where = querySchema.whereExpression()->toString(paramValuesItPtr);
 		}
 	}
 	if (!s_where.isEmpty())
@@ -1269,9 +1284,10 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 	return sql;
 }
 
-QString Connection::selectStatement( KexiDB::TableSchema& tableSchema ) const
+QString Connection::selectStatement( KexiDB::TableSchema& tableSchema,
+	const SelectStatementOptions& options) const
 {
-	return selectStatement( *tableSchema.query() );
+	return selectStatement( *tableSchema.query(), options );
 }
 
 Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
@@ -2088,9 +2104,10 @@ Cursor* Connection::executeQuery( const QString& statement, uint cursor_options 
 	return c;
 }
 
-Cursor* Connection::executeQuery( QuerySchema& query, uint cursor_options )
+Cursor* Connection::executeQuery( QuerySchema& query, const Q3ValueList<QVariant>& params, 
+	uint cursor_options )
 {
-	Cursor *c = prepareQuery( query, cursor_options );
+	Cursor *c = prepareQuery( query, params, cursor_options );
 	if (!c)
 		return 0;
 	if (!c->open()) {//err - kill that
@@ -2099,6 +2116,11 @@ Cursor* Connection::executeQuery( QuerySchema& query, uint cursor_options )
 		return 0;
 	}
 	return c;
+}
+
+Cursor* Connection::executeQuery( QuerySchema& query, uint cursor_options )
+{
+	return executeQuery(query, Q3ValueList<QVariant>(), cursor_options);
 }
 
 Cursor* Connection::executeQuery( TableSchema& table, uint cursor_options )
@@ -2106,22 +2128,18 @@ Cursor* Connection::executeQuery( TableSchema& table, uint cursor_options )
 	return executeQuery( *table.query(), cursor_options );
 }
 
-/*Cursor* Connection::prepareQuery( QuerySchema& query, uint cursor_options )
-{
-	Cursor *c = prepareQuery( query, cursor_options );
-	if (!c)
-		return 0;
-	if (!c->open()) {//err - kill that
-		setError(c);
-		delete c;
-		return 0;
-	}
-	return c;
-}*/
-
 Cursor* Connection::prepareQuery( TableSchema& table, uint cursor_options )
 {
 	return prepareQuery( *table.query(), cursor_options );
+}
+
+Cursor* Connection::prepareQuery( QuerySchema& query, const Q3ValueList<QVariant>& params, 
+	uint cursor_options )
+{
+	Cursor* cursor = prepareQuery(query, cursor_options);
+	if (cursor)
+		cursor->setQueryParameters(params);
+	return cursor;
 }
 
 bool Connection::deleteCursor(Cursor *cursor)

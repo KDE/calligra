@@ -1,16 +1,12 @@
-#ifndef _SQLPARSER_H_
-#define _SQLPARSER_H_
 #include "field.h"
 #include "parser.h"
 #include "sqltypes.h"
 
 bool parseData(KexiDB::Parser *p, const char *data);
-/* A Bison parser, made by GNU Bison 2.2.  */
+/* A Bison parser, made by GNU Bison 1.875b.  */
 
-/* Skeleton interface for Bison's Yacc-like parsers in C
-
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
+/* Skeleton parser for Yacc-like parsing with Bison,
+   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,21 +20,13 @@ bool parseData(KexiDB::Parser *p, const char *data);
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.  */
+   Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.  */
 
-/* As a special exception, you may create a larger work that contains
-   part or all of the Bison parser skeleton and distribute that work
-   under terms of your choice, so long as that work isn't itself a
-   parser generator using the skeleton or a modified version thereof
-   as a parser skeleton.  Alternatively, if you modify or redistribute
-   the parser skeleton itself, you may (at your option) remove this
-   special exception, which will cause the skeleton and the resulting
-   Bison output files to be licensed under the GNU General Public
-   License without this special exception.
-
-   This special exception was added by the Free Software Foundation in
-   version 2.2 of Bison.  */
+/* As a special exception, when this file is copied by Bison into a
+   Bison output file, you may use that output file without restriction.
+   This special exception was added by the Free Software Foundation
+   in version 1.24 of Bison.  */
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -369,32 +357,32 @@ bool parseData(KexiDB::Parser *p, const char *data);
      USER = 578,
      IDENTIFIER = 579,
      IDENTIFIER_DOT_ASTERISK = 580,
-     USING = 581,
-     VALUE = 582,
-     VALUES = 583,
-     VARBINARY = 584,
-     VARCHAR = 585,
-     VARYING = 586,
-     VENDOR = 587,
-     VIEW = 588,
-     WEEK = 589,
-     WHEN = 590,
-     WHENEVER = 591,
-     WHERE = 592,
-     WHERE_CURRENT_OF = 593,
-     WITH = 594,
-     WORD_WRAPPED = 595,
-     WORK = 596,
-     WRAPPED = 597,
-     XOR = 598,
-     YEAR = 599,
-     YEARS_BETWEEN = 600,
-     SCAN_ERROR = 601,
-     __LAST_TOKEN = 602,
-     ILIKE = 603
+     QUERY_PARAMETER = 581,
+     USING = 582,
+     VALUE = 583,
+     VALUES = 584,
+     VARBINARY = 585,
+     VARCHAR = 586,
+     VARYING = 587,
+     VENDOR = 588,
+     VIEW = 589,
+     WEEK = 590,
+     WHEN = 591,
+     WHENEVER = 592,
+     WHERE = 593,
+     WHERE_CURRENT_OF = 594,
+     WITH = 595,
+     WORD_WRAPPED = 596,
+     WORK = 597,
+     WRAPPED = 598,
+     XOR = 599,
+     YEAR = 600,
+     YEARS_BETWEEN = 601,
+     SCAN_ERROR = 602,
+     __LAST_TOKEN = 603,
+     ILIKE = 604
    };
 #endif
-/* Tokens.  */
 #define UMINUS 258
 #define SQL_TYPE 259
 #define SQL_ABS 260
@@ -718,38 +706,38 @@ bool parseData(KexiDB::Parser *p, const char *data);
 #define USER 578
 #define IDENTIFIER 579
 #define IDENTIFIER_DOT_ASTERISK 580
-#define USING 581
-#define VALUE 582
-#define VALUES 583
-#define VARBINARY 584
-#define VARCHAR 585
-#define VARYING 586
-#define VENDOR 587
-#define VIEW 588
-#define WEEK 589
-#define WHEN 590
-#define WHENEVER 591
-#define WHERE 592
-#define WHERE_CURRENT_OF 593
-#define WITH 594
-#define WORD_WRAPPED 595
-#define WORK 596
-#define WRAPPED 597
-#define XOR 598
-#define YEAR 599
-#define YEARS_BETWEEN 600
-#define SCAN_ERROR 601
-#define __LAST_TOKEN 602
-#define ILIKE 603
+#define QUERY_PARAMETER 581
+#define USING 582
+#define VALUE 583
+#define VALUES 584
+#define VARBINARY 585
+#define VARCHAR 586
+#define VARYING 587
+#define VENDOR 588
+#define VIEW 589
+#define WEEK 590
+#define WHEN 591
+#define WHENEVER 592
+#define WHERE 593
+#define WHERE_CURRENT_OF 594
+#define WITH 595
+#define WORD_WRAPPED 596
+#define WORK 597
+#define WRAPPED 598
+#define XOR 599
+#define YEAR 600
+#define YEARS_BETWEEN 601
+#define SCAN_ERROR 602
+#define __LAST_TOKEN 603
+#define ILIKE 604
 
 
 
 
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE
-#line 508 "sqlparser.y"
-{
-	char stringValue[255];
+#if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
+#line 511 "sqlparser.y"
+typedef union YYSTYPE {
+	Substring* stringValue;
 	qint64 integerValue;
 	bool booleanValue;
 	struct realType realValue;
@@ -762,10 +750,9 @@ typedef union YYSTYPE
 	SelectOptionsInternal *selectOptions;
 	OrderByColumnInternal::List *orderByColumns;
 	QVariant *variantValue;
-}
-/* Line 1528 of yacc.c.  */
-#line 761 "sqlparser.tab.h"
-	YYSTYPE;
+} YYSTYPE;
+/* Line 1252 of yacc.c.  */
+#line 751 "sqlparser.tab.h"
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
@@ -773,4 +760,5 @@ typedef union YYSTYPE
 
 extern YYSTYPE yylval;
 
-#endif
+
+

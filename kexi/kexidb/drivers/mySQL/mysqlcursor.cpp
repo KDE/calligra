@@ -120,6 +120,7 @@ QVariant MySqlCursor::value(uint pos) {
 	if (!f || f->isTextType())
 		return QVariant( QString::fromUtf8((const char*)d->mysqlrow[pos]) );
 	else if (f->isIntegerType())
+//! @todo support BigInteger
 		return QVariant( Q3CString((const char*)d->mysqlrow[pos]).toInt() );
 	else if (f->isFPNumericType())
 		return QVariant( Q3CString((const char*)d->mysqlrow[pos]).toDouble() );

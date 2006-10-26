@@ -13,6 +13,7 @@ set(kexiextendedwidgets_LIB_SRCS
    kexidataawareview.cpp 
    kexidatatable.cpp 
    kexiquerydesignersqleditor.cpp 
+   kexiqueryparameters.cpp
    kexisectionheader.cpp 
    pixmapcollection.cpp 
    kexiscrollview.cpp 
