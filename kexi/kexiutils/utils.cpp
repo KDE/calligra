@@ -35,14 +35,18 @@
 
 using namespace KexiUtils;
 
-DelayedCursorHandler::DelayedCursorHandler() {
+DelayedCursorHandler::DelayedCursorHandler() 
+ : startedOrActive(false)
+{
 	timer.setSingleShot( true );
 	connect(&timer, SIGNAL(timeout()), this, SLOT(show()));
 }
 void DelayedCursorHandler::start(bool noDelay) {
+	startedOrActive = true;
 	timer.start(noDelay ? 0 : 1000);
 }
 void DelayedCursorHandler::stop() {
+	startedOrActive = false;
 	timer.stop();
 	QApplication::restoreOverrideCursor();
 }
@@ -69,6 +73,17 @@ WaitCursor::WaitCursor(bool noDelay)
 WaitCursor::~WaitCursor()
 {
 	removeWaitCursor();
+}
+
+WaitCursorRemover::WaitCursorRemover()
+{
+	m_reactivateCursor = _delayedCursorHandler.startedOrActive;
+	_delayedCursorHandler.stop();
+}
+
+WaitCursorRemover::~WaitCursorRemover()
+{
+	_delayedCursorHandler.start(true);
 }
 
 //--------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -65,7 +65,7 @@ MultiValidator::MultiValidator(QObject* parent, const char * name)
 	m_ownedSubValidators.setAutoDelete(true);
 }
 
-MultiValidator::MultiValidator(Validator *validator, 
+MultiValidator::MultiValidator(QValidator *validator, 
 	QObject * parent, const char * name)
  : Validator(parent, name)
 {
@@ -73,7 +73,7 @@ MultiValidator::MultiValidator(Validator *validator,
 }
 
 
-void MultiValidator::addSubvalidator( Validator* validator, bool owned )
+void MultiValidator::addSubvalidator( QValidator* validator, bool owned )
 {
 	if (!validator)
 		return;
@@ -87,8 +87,7 @@ QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 	if (m_subValidators.isEmpty())
 		return Invalid;
 	State s;
-	Q3ValueList<Validator*>::const_iterator it;
-	for ( it=m_subValidators.constBegin(); it!=m_subValidators.constEnd(); ++it) {
+	foreach( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators ) {
 		s = (*it)->validate(input, pos);
 		if (s==Intermediate || s==Invalid)
 			return s;
@@ -98,10 +97,8 @@ QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 
 void MultiValidator::fixup ( QString & input ) const
 {
-	Q3ValueList<Validator*>::const_iterator it;
-	for ( it=m_subValidators.constBegin(); it!=m_subValidators.constEnd(); ++it) {
+	foreach( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators )
 		(*it)->fixup(input);
-	}
 }
 
 Validator::Result MultiValidator::internalCheck(
@@ -112,12 +109,14 @@ Validator::Result MultiValidator::internalCheck(
 		return Error;
 	Result r;
 	bool warning = false;
-	Q3ValueList<Validator*>::const_iterator it;
-	for ( it=m_subValidators.begin(); it!=m_subValidators.end(); ++it) {
-		r = (*it)->internalCheck(valueName, v, message, details);
+	foreach( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators ) {
+		if (dynamic_cast<Validator*>(*it))
+			r = dynamic_cast<Validator*>(*it)->internalCheck(valueName, v, message, details);
+		else
+			r = Ok; //ignore
 		if (r==Error)
 			return Error;
-		if (r==Warning)
+		else if (r==Warning)
 			warning = true;
 	}
 	return warning ? Warning : Ok;

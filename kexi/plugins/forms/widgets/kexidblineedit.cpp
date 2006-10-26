@@ -30,6 +30,7 @@
 
 #include <kexiutils/utils.h>
 #include <kexidb/queryschema.h>
+#include <kexidb/fieldvalidator.h>
 #include <kexiutils/utils.h>
 //Added by qt3to4:
 #include <QEvent>
@@ -292,57 +293,13 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 	KexiFormDataItemInterface::setColumnInfo(cinfo);
 	if (!cinfo)
 		return;
-//! @todo merge this code with KexiTableEdit code!
-//! @todo set maximum length validator
-//! @todo handle input mask (via QLineEdit::setInputMask()
+//! @todo handle input mask (via QLineEdit::setInputMask()) using a special KexiDB::FieldInputMask class
 	const KexiDB::Field::Type t = cinfo->field->type();
-	if (cinfo->field->isIntegerType()) {
-		QValidator *validator = 0;
-		const bool u = cinfo->field->isUnsigned();
-		int bottom, top;
-		if (t==KexiDB::Field::Byte) {
-			bottom = u ? 0 : -0x80;
-			top = u ? 0xff : 0x7f;
-		}
-		else if (t==KexiDB::Field::ShortInteger) {
-			bottom = u ? 0 : -0x8000;
-			top = u ? 0xffff : 0x7fff;
-		}
-		else if (t==KexiDB::Field::Integer) {
-			bottom = u ? 0 : -0x7fffffff-1;
-			top = u ? 0xffffffff : 0x7fffffff;
-		}
-		else if (t==KexiDB::Field::BigInteger) {
-/*! @todo couldn't work with KIntValidator: implement lonlong validator!
-			bottom = u ? 0 : -0x7fffffffffffffff;
-			top = u ? 0xffffffffffffffff : 127;*/
-			validator = new KIntValidator(this);
-		}
 
-		if (!validator)
-			validator = new KIntValidator(bottom, top, this);
-		setValidator( validator );
-	}
-	else if (cinfo->field->isFPNumericType()) {
-		QValidator *validator;
-		if (t==KexiDB::Field::Float) {
-			if (cinfo->field->isUnsigned()) //ok?
-				validator = new KDoubleValidator(0, 3.4e+38, cinfo->field->scale(), this);
-			else
-				validator = new KDoubleValidator(this);
-		}
-		else {//double
-			if (cinfo->field->isUnsigned()) //ok?
-				validator = new KDoubleValidator(0, 1.7e+308, cinfo->field->scale(), this);
-			else
-				validator = new KDoubleValidator(this);
-		}
-		setValidator( validator );
-	}
-	else if (t==KexiDB::Field::Date) {
+	setValidator( new KexiDB::FieldValidator(*cinfo->field, this) );
+
+	if (t==KexiDB::Field::Date) {
 //! @todo use KDateWidget?
-//		QValidator *validator = new KDateValidator(this);
-//		setValidator( validator );
 		setInputMask( dateFormatter()->inputMask() );
 	}
 	else if (t==KexiDB::Field::Time) {
@@ -353,11 +310,6 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 	else if (t==KexiDB::Field::DateTime) {
 		setInputMask( 
 			dateTimeInputMask( *dateFormatter(), *timeFormatter() ) );
-	}
-	else if (t==KexiDB::Field::Boolean) {
-//! @todo temporary solution for booleans!
-		QValidator *validator = new KIntValidator(0, 1, this);
-		setValidator( validator );
 	}
 
 	KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);

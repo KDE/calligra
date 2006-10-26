@@ -32,6 +32,7 @@ class DelayedCursorHandler : public QObject
 		DelayedCursorHandler();
 		void start(bool noDelay);
 		void stop();
+		bool startedOrActive : 1; //! true if ounting started or the cursor is active
 	protected slots:
 		void show();
 	protected:

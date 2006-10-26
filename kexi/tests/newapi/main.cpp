@@ -77,6 +77,9 @@ static KCmdLineOptions options[] =
 	{ "buffered-cursors",
 		"Optional switch :turns cursors used in any tests\n"
 		" to be buffered", 0},
+	{ "query-params <params>", "Query parameters separated\n"
+		"by '|' character that will be passed to query\n"
+		"statement to replace [...] placeholders.", 0 },
 	{ "", " Notes:\n"
 		"1. 'dr_prop' requires <db_name> argument.\n"
 		"2. 'parser' test requires <db_name>,\n"
@@ -228,8 +231,12 @@ int main(int argc, char** argv)
 	else if (test_name == "tableview")
 		r=tableViewTest();
 #endif
-	else if (test_name == "parser")
-		r=parserTest(args->arg(2));
+	else if (test_name == "parser") {
+		QStringList params;
+		if (args->isSet("query-params"))
+			params = QStringList::split("|", args->getOption("query-params"));
+		r=parserTest(args->arg(2), params);
+	}
 	else if (test_name == "dr_prop")
 		r=drPropTest();
 	else {
