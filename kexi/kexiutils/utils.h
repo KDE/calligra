@@ -91,26 +91,43 @@ namespace KexiUtils
 	}
 
 	/*! Sets "wait" cursor with 1 second delay (or 0 seconds if noDelay is true).
-	 Does nothing if GUI is not GUI-aware. (see KApplication::guiEnabled()) */
+	 Does nothing if the application has no GUI enabled. (see KApplication::guiEnabled()) */
 	KEXIUTILS_EXPORT void setWaitCursor(bool noDelay = false);
 
 	/*! Remove "wait" cursor previously set with \a setWaitCursor(), 
 	 even if it's not yet visible.
-	 Does nothing if GUI is not GUI-aware. (see KApplication::guiEnabled()) */
+	 Does nothing if the application has no GUI enabled. (see KApplication::guiEnabled()) */
 	KEXIUTILS_EXPORT void removeWaitCursor();
 
-	/*! Helper class. Allocate it in yor code block as follows:
+	/*! Helper class. Allocate it in your code block as follows:
 	 <code>
 	 KexiUtils::WaitCursor wait;
 	 </code>
-	 .. and wait cursor will be visible (with a delay) until you're in this block. without 
+	 .. and wait cursor will be visible (with one second delay) until you're in this block, without 
 	 a need to call removeWaitCursor() before exiting the block.
-	 Does nothing if GUI is not GUI-aware. (see KApplication::guiEnabled()) */
+	 Does nothing if the application has no GUI enabled. (see KApplication::guiEnabled()) */
 	class KEXIUTILS_EXPORT WaitCursor
 	{
 		public:
 			WaitCursor(bool noDelay = false);
 			~WaitCursor();
+	};
+
+	/*! Helper class. Allocate it in your code block as follows:
+	 <code>
+	 KexiUtils::WaitCursorRemover remover;
+	 </code>
+	 .. and the wait cursor will be hidden unless you leave this block, without 
+	 a need to call setWaitCursor() before exiting the block. After leaving the codee block,
+	 the cursor will be visible again, if it was visible before creating the WaitCursorRemover object.
+	 Does nothing if the application has no GUI enabled. (see KApplication::guiEnabled()) */
+	class KEXIUTILS_EXPORT WaitCursorRemover
+	{
+		public:
+			WaitCursorRemover();
+			~WaitCursorRemover();
+		private:
+			bool m_reactivateCursor : 1;
 	};
 
 	/*! \return filter string in QFileDialog format for a mime type pointed by \a mime

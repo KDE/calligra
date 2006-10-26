@@ -11,8 +11,10 @@ Usage: run 'kexidbtest --help' for usage details.
 ----------
 
 Script for easier executing 'parser' subtest within kexidbtest.
-
 Usage: run './sqltest' without arguments for usage details.
+
+There is also sqltest_int script accepting interactive mode.
+Usage: run './sqltest_int' without arguments for usage details.
 
 
 3. Important documents

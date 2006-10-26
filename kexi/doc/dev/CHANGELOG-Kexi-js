@@ -15,6 +15,36 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-10-24
+Query Designer
+- New: Added support for parameter queries in design and SQL view. 
+  User is asked for entering value of a parameter in a dialog window. 
+  Paramers can be of any type except Object.
+  (see also: MSA 2002 Bible, p. 767)
+2.0: merged
+Table Designer
+- Byte datatype is always set to unsigned now
+- "Double precision" datatype is now the default for the floating point 
+  type group instead of Float (so we get better precision by default)
+2.0: merged
+Table View
+- fixed validating Big Integer numbers
+Forms
+- fixed validating Big Integer numbers
+
+2006-10-20
+Forms
+= fixed default size of combo box widgets
+= removed crash when a combobox without a data source was clicked
+2.0: merged
+Main Window
+- accessibility: property editor can be focused using an accelerator key;
+  moreover, Alt+2 now focuses main area and Alt+3 focuses Property Editor
+2.0: merged
+Table Designer
+- "combo" icon is displayed near the field name that have lookup column defined
+2.0: merged
+
 2006-10-16
 Query Designer
 - refresh design view after a sequence of switches: 

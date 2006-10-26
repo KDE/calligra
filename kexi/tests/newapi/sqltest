@@ -1,23 +1,27 @@
 #!/bin/sh
 
-# fast parser testing using sqlite database
-# Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+# sqltest - fast parser testing using sqlite database.
+# Type sqltest --help for usage info.
+# Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
 
-[ $# -lt 1 ] && echo "Usage: $0 <sqlite-database-name> [<sql-statement>] [-v]" && \
- echo " Omit <sql-statement> for interactive mode." && \
+[ $# -lt 1 ] && echo "Usage: $0 <sqlite-database-name> <sql-statement> [-v] [other_options]" && \
  echo " -v    Verbose mode" && exit 1
 
-if [ -z "$2" ] ; then
-	echo "Enter SQL Statement:"
-	read
-else
-	REPLY=$2
+dbname=$1
+shift
+
+sql=$1
+shift
+
+verbose=0
+if [ "$1" = "-v" ] ; then
+	verbose=1
+	shift
 fi
 
 temp=`mktemp /tmp/$0.XXXXXX`
 
-./kexidbtest -test parser sqlite3 "$1" "$REPLY" 2> $temp || \
-	cat $temp && test "$3" = "-v" && cat $temp
+./kexidbtest -test parser sqlite3 "$dbname" "$sql" $* 2> $temp || \
+	cat $temp && test "$verbose" -eq 1 && cat $temp
 
 rm -f $temp
-

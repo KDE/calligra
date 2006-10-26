@@ -267,6 +267,29 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - Add icons for conditional formatting: http://blogs.msdn.com/excel/archive/2006/05/09/594200.aspx
   (displaying icons is already possible using custom properties, BTW)
 - display [null]  values in boolean fields, e.g. as [?]
+- allow to select entire rows, columns and grids as in a spreadsheet; 
+  offer copy/cut/paste/copy-to-file/clear for such selections
+- tooltips: 
+-- implement tooltip manager (this will allow to create custom tooltips)
+-- use  if ( QApplication::isEffectEnabled( UI_AnimateTooltip ) == FALSE ||....
+   as in qtooltip.cpp:564
+-- implement custom tooltip for large texts and BLOB, add "zoom" option at the bottom of the tooltip
+   (zooming should not show a modal dialog but rather a widget inside the TV)
+-- add the same zoom option to the context menu
+-- also show tooltips when the content is only partially visible
+- fix horizontal scrollbar's width updating: large tables like 'tabkodypocztowe1' hide the 'last' and 'new' buttons
+- display default values for BLOB types
+
+- add "None" option for editors supporting 3rdState, e.g. int, string (needed for "default"
+  property of the Table Designer)
+- fix repainting cells when moving down/up arrow at the window boundaries 
+  (weird, win32 is not affected)
+
+- (e.g. in table designer): in an empty row 1. drop down a type combo. 2. do not select enything an click outside
+ of it. 3. 
+- do not autoscroll vertically the contents if the current column is wider than the view 
+  (my example: 'microsoft_terminology' table's 1st column) because the text us unreadable 
+  valid even when we use arow keys only
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -360,11 +383,16 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - add a dialog for inserting multiple tables at a time
 - fix connections drawing
 - make "1" and "inf" signs a bit larger (scalable)
-- 'criteria' and 'totals' are unused yet
+- 'totals' are unused yet
 - update query after change in Connection cache
 - for queries like 'select * from a, b, c' allow to enter * in 'table' column
 --this should also work when we're recreating field rows on switching from SQL view to design view
 - query part: react on KexiProject::aboutItemDelete() and KexiProject::aboutItemRename() signals
+- query parameters:
+-- use a special dialog with validators compatible with the field type for getting query parameters
+   (currently KInputDialog is used)
+-- use dialog like KInputDialog::getItemList() for supporting multiple values as query parameters
+
 
 ==== SQL Editor TODO: =====
 - intergrate editor's (KPart) actions with KexiMainWindow's Actions
@@ -510,6 +538,10 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
 - Add support for compressed kexi files (better keep the same .kexi extension instead of .kexiz)
 - Implement tree structures using idea #5 described here http://www.depesz.com/various-sqltrees.php
   (does pgsql require this hack?)
+- double values are still rounded: consider storing them in memory as a decimal type 
+  (e.g. using a special Q_LLONG+decimalplace class); needed e.g. in KexiQueryParameters::getParameters()
+- handle input mask using a special KexiDB::FieldInputMask class
+  --needed in forms (KexiDBLineEdit::setColumnInfo()) and table views
 
 === KexiDB Parser TODO ===
 - add a method for replacing a single given table name in the statement (useful on table renames)
@@ -955,32 +987,6 @@ Combobox table edit TODO:
 - add setValue() to cursors: this will REQUIRE a buffered cursor, since we cannot run sql 
   before fetching is done... See http://kexi-project.org/cgi-bin/irclogger_log/kexi?date=2006-08-03,Thu&sel=229#l225
 - use ThreadWeaver library for threaded KexiDB version
-
-=== Kexi Table View TODO ===
-- allow to select entire rows, columns and grids as in a spreadsheet; 
-  offer copy/cut/paste/copy-to-file/clear for such selections
-- tooltips: 
--- implement tooltip manager (this will allow to create custom tooltips)
--- use  if ( QApplication::isEffectEnabled( UI_AnimateTooltip ) == FALSE ||....
-   as in qtooltip.cpp:564
--- implement custom tooltip for large texts and BLOB, add "zoom" option at the bottom of the tooltip
-   (zooming should not show a modal dialog but rather a widget inside the TV)
--- add the same zoom option to the context menu
--- also show tooltips when the content is only partially visible
-- fix horizontal scrollbar's width updating: large tables like 'tabkodypocztowe1' hide the 'last' and 'new' buttons
-- display default values for BLOB types
-
-- add "None" option for editors supporting 3rdState, e.g. int, string (needed for "default"
-  property of the Table Designer)
-- fix repainting cells when moving down/up arrow at the window boundaries 
-  (weird, win32 is not affected)
-
-- (e.g. in table designer): in an empty row 1. drop down a type combo. 2. do not select enything an click outside
- of it. 3. 
-- do not autoscroll vertically the contents if the current column is wider than the view 
-  (my example: 'microsoft_terminology' table's 1st column) because the text us unreadable 
-  valid even when we use arow keys only
-
 
 Form/TV Shortcuts:
  

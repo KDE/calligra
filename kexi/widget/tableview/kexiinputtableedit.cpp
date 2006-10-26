@@ -37,6 +37,7 @@
 #include <kglobalsettings.h>
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
+#include <kexiutils/longlongvalidator.h>
 
 //! @internal
 class MyLineEdit : public KLineEdit
@@ -187,7 +188,14 @@ QString KexiInputTableEdit::valueToText(const QVariant& value, const QString& ad
 			}
 //! @todo implement ranges here!
 			if (setValidator) {
-				QValidator *validator = new KIntValidator(m_lineedit);
+				QValidator *validator;
+				if (KexiDB::Field::BigInteger == field()->type()) {
+//! @todo use field->isUnsigned() for KexiUtils::ULongLongValidator
+					validator = new KexiUtils::LongLongValidator(m_lineedit); 
+				}
+				else {
+					validator = new KIntValidator(m_lineedit);
+				}
 				m_lineedit->setValidator( validator );
 			}
 		}
@@ -266,13 +274,29 @@ QVariant KexiInputTableEdit::value()
 		return ok ? QVariant(result) : QVariant();
 	}
 	else if (field()->isIntegerType()) {
-		//! @todo check constraints
+//! @todo check constraints
 		bool ok;
+		if (KexiDB::Field::BigInteger == field()->type()) {
+			if (field()->isUnsigned()) {
+				const Q_ULLONG result = m_lineedit->text().toULongLong(&ok);
+				return ok ? QVariant(result) : QVariant();
+			}
+			else {
+				const Q_LLONG result = m_lineedit->text().toLongLong(&ok);
+				return ok ? QVariant(result) : QVariant();
+			}
+		}
+		if (KexiDB::Field::Integer == field()->type()) {
+			if (field()->isUnsigned()) {
+				const uint result = m_lineedit->text().toUInt(&ok);
+				return ok ? QVariant(result) : QVariant();
+			}
+		}
+		//default: signed int
 		const int result = m_lineedit->text().toInt(&ok);
 		return ok ? QVariant(result) : QVariant();
 	}
 	//default: text
-//	ok = true;
 	return QVariant( m_lineedit->text() );
 }
 #if 0

@@ -855,7 +855,7 @@ void KexiTableViewData::preloadAllRows()
 	//const uint fcount = m_cursor->fieldCount() + (m_containsROWIDInfo ? 1 : 0);
 	m_cursor->moveFirst();
 	for (int i=0;!m_cursor->eof();i++) {
-		KexiTableItem *item = new KexiTableItem(0);//fcount);
+		KexiTableItem *item = new KexiTableItem(0);
 		m_cursor->storeCurrentRow(*item);
 //		item->debug();
 		append( item );
