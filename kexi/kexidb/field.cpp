@@ -613,7 +613,7 @@ QString Field::debugString() const
 	if (m_customProperties && !m_customProperties->isEmpty()) {
 		dbg += QString(" CUSTOM PROPERTIES (%1): ").arg(m_customProperties->count());
 		bool first = true;
-		foreach (CustomPropertiesMap::ConstIterator, it, *m_customProperties) {
+		foreach3 (CustomPropertiesMap::ConstIterator, it, *m_customProperties) {
 			if (first)
 				first = false;
 			else

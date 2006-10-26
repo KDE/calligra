@@ -36,7 +36,7 @@ namespace KexiDB {
 			/*! \a drv is a KexiDB driver on which isSystemObjectName() will be 
 			 called inside check(). If \a drv is 0, KexiDB::Driver::isKexiDBSystemObjectName()
 			 static function is called instead. */
-			ObjectNameValidator(KexiDB::Driver *drv, QObject * parent = 0, const char * name = 0);
+			ObjectNameValidator(KexiDB::Driver *drv, QObject * parent = 0);
 			virtual ~ObjectNameValidator();
 
 		protected:

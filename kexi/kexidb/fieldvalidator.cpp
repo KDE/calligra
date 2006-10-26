@@ -26,8 +26,8 @@
 
 using namespace KexiDB;
 
-FieldValidator::FieldValidator( const Field &field, QWidget * parent, const char * name )
- : KexiUtils::MultiValidator(parent, name)
+FieldValidator::FieldValidator( const Field &field, QWidget * parent )
+ : KexiUtils::MultiValidator(parent)
 {
 //! @todo merge this code with KexiTableEdit code!
 //! @todo set maximum length validator

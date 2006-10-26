@@ -51,7 +51,8 @@ KEXI_DB_EXPORT void debug(const QuerySchemaParameterList& list);
 class KEXI_DB_EXPORT QuerySchemaParameterValueListIterator
 {
 	public:
-		QuerySchemaParameterValueListIterator(const Driver& driver, const Q3ValueList<QVariant>& params);
+		QuerySchemaParameterValueListIterator(
+			Driver& driver, const Q3ValueList<QVariant>& params);
 		~QuerySchemaParameterValueListIterator();
 
 		//! \return previous value

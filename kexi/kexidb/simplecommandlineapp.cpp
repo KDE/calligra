@@ -25,6 +25,7 @@
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <kexidb/connectiondata.h>
 #include <kexidb/drivermanager.h>

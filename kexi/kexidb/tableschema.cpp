@@ -48,7 +48,7 @@ public:
 		for (QMap<const Field*, LookupFieldSchema*>::ConstIterator it = lookupFields.constBegin(); 
 			it!=lookupFields.constEnd(); ++it)
 		{
-			delete it.data();
+			delete it.value();
 		}
 		lookupFields.clear();
 	}
@@ -386,7 +386,7 @@ bool TableSchema::setLookupFieldSchema( const QString& fieldName, LookupFieldSch
 		return false;
 	}
 	if (lookupFieldSchema)
-		d->lookupFields.replace( f, lookupFieldSchema );
+		d->lookupFields.insert( f, lookupFieldSchema );
 	else {
 		delete d->lookupFields[f];
 		d->lookupFields.remove( f );

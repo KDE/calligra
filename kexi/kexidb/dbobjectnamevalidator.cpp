@@ -25,10 +25,10 @@ using namespace KexiDB;
 using namespace KexiUtils;
 
 ObjectNameValidator::ObjectNameValidator(
-	KexiDB::Driver *drv, QObject * parent, const char * name)
-: Validator(parent,name)
+	KexiDB::Driver *drv, QObject * parent)
+: Validator(parent)
+,	m_drv(drv)
 {
-	m_drv = drv;
 }
 
 ObjectNameValidator::~ObjectNameValidator()

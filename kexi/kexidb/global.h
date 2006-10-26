@@ -162,6 +162,12 @@ enum ObjectTypes {
  * TODO:  Remove these once we start using Qt4 containers:
  * Shortcuts for iterating over Q3PtrList and Q3PtrDict 
  */
+
+/*! a shortcut for iterating over lists or maps, eg. QMap, QValueList */
+#undef foreach3
+#define foreach3(_class, _variable, _list) \
+	for (_class _variable = (_list).constBegin(); _variable!=(_list).constEnd(); ++_variable)
+
 #define foreach_list(_class, _variable, _list) \
 	        for (_class _variable(_list); _variable.current(); ++_variable)
 
