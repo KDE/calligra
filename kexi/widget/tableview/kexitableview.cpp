@@ -578,7 +578,7 @@ QSize KexiTableView::sizeHint() const
 	w = qMin( w, qApp->desktop()->width()*3/4 ); //stretch
 	h = qMin( h, qApp->desktop()->height()*3/4 ); //stretch
 
-//	kDebug() << "KexiTableView::sizeHint()= " <<w <<", " <<h << endl;
+//	kexidbg << "KexiTableView::sizeHint()= " <<w <<", " <<h << endl;
 
 	return QSize(w, h);
 		/*QSize(
@@ -912,7 +912,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 
 //<temp>
 		//show visible lookup value instead
-		if (edit->columnInfo() && edit->columnInfo()->indexForVisibleLookupValue()!=-1) {
+		if (edit->columnInfo() && edit->columnInfo()->indexForVisibleLookupValue()!=-1
+			&& edit->columnInfo()->indexForVisibleLookupValue() < (int)item->count())
+		{
 			const QVariant *visibleFieldValue = 0;
 			if (m_currentItem == item && m_data->rowEditBuffer())
 				visibleFieldValue = m_data->rowEditBuffer()->at( *tvcol->visibleLookupColumnInfo );
@@ -946,7 +948,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	if(m_currentItem == item && col == m_curCol //js: && !d->recordIndicator)
 		&& !d->appearance.fullRowSelection) 
 	{
-//		kDebug() << ">>> CURRENT CELL ("<<m_curCol<<"," << m_curRow<<") focus="<<has_focus<<endl;
+//		kexidbg << ">>> CURRENT CELL ("<<m_curCol<<"," << m_curRow<<") focus="<<has_focus<<endl;
 //		if (has_focus) {
 		if (isEnabled()) {
 			p->setPen(d->appearance.textColor);
@@ -1025,7 +1027,7 @@ void KexiTableView::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch 
 	contentsToViewport2( cx, cy, cx, cy );
 	QRegion reg( QRect( cx, cy, cw, ch ) );
 
-//kDebug() << "---cy-- " << contentsY() << endl;
+//kexidbg << "---cy-- " << contentsY() << endl;
 
 	// Subtract the table from it
 //	reg = reg.subtract( QRect( QPoint( 0, 0 ), ts-QSize(0,m_navPanel->isVisible() ? m_navPanel->height() : 0) ) );
@@ -1121,9 +1123,9 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 			s = qMin( d->rowHeight-3, s );
 			s = qMin( columnWidth(m_curCol)-3, s ); //avoid too large box
 			const QRect r( columnPos(m_curCol) + qMax( columnWidth(m_curCol)/2 - s/2, 0 ), rowPos(m_curRow) +d->rowHeight/2 - s/2 /*- 1*/, s, s);
-			kDebug() << r << endl;
+			//kexidbg << r << endl;
 			if (r.contains(e->pos())) {
-//				kDebug() << "e->x:" << e->x() << " e->y:" << e->y() << " " << rowPos(m_curRow) << 
+//				kexidbg << "e->x:" << e->x() << " e->y:" << e->y() << " " << rowPos(m_curRow) << 
 //					" " << columnPos(m_curCol) << endl;
 				boolToggled();
 			}
@@ -1342,7 +1344,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 {
 	if (!hasData())
 		return;
-//	kDebug() << "KexiTableView::keyPressEvent: key=" <<e->key() << " txt=" <<e->text()<<endl;
+//	kexidbg << "KexiTableView::keyPressEvent: key=" <<e->key() << " txt=" <<e->text()<<endl;
 
 	const int k = e->key();
 	const bool ro = isReadOnly();
@@ -1388,7 +1390,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	}
 	else if (m_rowEditing) {// if a row is in edit mode, do some special stuff
 		if (shortCutPressed( e, "data_save_row")) {
-			kDebug() << "shortCutPressed!!!" <<endl;
+			kexidbg << "shortCutPressed!!!" <<endl;
 			acceptRowEdit();
 			return;
 		}
@@ -1508,7 +1510,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 				startEditOrToggleValue();
 			}
 			else {
-				kDebug() << "KexiTableView::KeyPressEvent(): default" << endl;
+				kexidbg << "KexiTableView::KeyPressEvent(): default" << endl;
 				if (e->text().isEmpty() || !e->text().isEmpty() && !e->text()[0].isPrint() ) {
 					kDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(k,0,16) <<endl;
 	//				e->ignore();
@@ -1595,11 +1597,11 @@ void KexiTableView::editorShowFocus( int /*row*/, int col )
 	KexiDataItemInterface *edit = editor( col );
 	/*nt p = rowPos(row);
 	 (!edit || (p < contentsY()) || (p > (contentsY()+clipper()->height()))) {
-		kDebug()<< "KexiTableView::editorShowFocus() : OUT" << endl;
+		kexidbg<< "KexiTableView::editorShowFocus() : OUT" << endl;
 		return;
 	}*/
 	if (edit) {
-		kDebug()<< "KexiTableView::editorShowFocus() : IN" << endl;
+		kexidbg<< "KexiTableView::editorShowFocus() : IN" << endl;
 		QRect rect = cellGeometry( m_curRow, m_curCol );
 //		rect.moveBy( -contentsX(), -contentsY() );
 		edit->showFocus( rect, isReadOnly() || m_data->column(col)->isReadOnly() );
@@ -1880,8 +1882,8 @@ void KexiTableView::updateRow(int row)
 		return;
 	//int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
 
-	//kDebug() << contentsX() << " " << contentsY() << endl;
-	//kDebug() << QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) << endl;
+	//kexidbg << contentsX() << " " << contentsY() << endl;
+	//kexidbg << QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) << endl;
 	//	updateContents( QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) ); //columnPos(rightcol)+columnWidth(rightcol), rowHeight() ) );
 	updateContents( QRect( contentsX(), rowPos(row), clipper()->width(), rowHeight() ) ); //columnPos(rightcol)+columnWidth(rightcol), rowHeight() ) );
 }
@@ -1978,7 +1980,7 @@ int KexiTableView::columnAt(int pos) const
 	return m_data->globalColumnID( r );
 
 //	if (r==-1)
-//		kDebug() << "columnAt("<<pos<<")==-1 !!!" << endl;
+//		kexidbg << "columnAt("<<pos<<")==-1 !!!" << endl;
 //	return r;
 }
 
@@ -2003,13 +2005,13 @@ QRect KexiTableView::cellGeometry(int row, int col) const
 QSize KexiTableView::tableSize() const
 {
 	if ((rows()+ (isInsertingEnabled()?1:0) ) > 0 && columns() > 0) {
-/*		kDebug() << "tableSize()= " << columnPos( columns() - 1 ) + columnWidth( columns() - 1 ) 
+/*		kexidbg << "tableSize()= " << columnPos( columns() - 1 ) + columnWidth( columns() - 1 ) 
 			<< ", " << rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
 //			+ qMax(m_navPanel ? m_navPanel->height() : 0, horizontalScrollBar()->sizeHint().height())
 			+ (m_navPanel->isVisible() ? qMax( m_navPanel->height(), horizontalScrollBar()->sizeHint().height() ) :0 )
 			+ margin() << endl;
 */
-//		kDebug()<< m_navPanel->isVisible() <<" "<<m_navPanel->height()<<" "
+//		kexidbg<< m_navPanel->isVisible() <<" "<<m_navPanel->height()<<" "
 //		<<horizontalScrollBar()->sizeHint().height()<<" "<<rowPos( rows()-1+(isInsertingEnabled()?1:0))<<endl;
 
 		//int xx = horizontalScrollBar()->sizeHint().height()/2;
@@ -2038,7 +2040,7 @@ QSize KexiTableView::tableSize() const
 //-2*d->rowHeight
 		);
 
-//		kDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (m_rowEditing?1:0) << " " <<  s << endl;
+//		kexidbg << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (m_rowEditing?1:0) << " " <<  s << endl;
 		return s;
 //			+horizontalScrollBar()->sizeHint().height() + margin() );
 	}
@@ -2212,41 +2214,49 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 {
 	if (!hasData())
 		return;
-	if (columns()<=colNum || colNum < -1)
-		return;
-
 	if (colNum==-1) {
-//		const int cols = columns();
-		for (int i=0; i<columns(); i++)
+		const int cols = columns();
+		for (int i=0; i<cols; i++)
 			adjustColumnWidthToContents(i);
 		return;
 	}
 
-	KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item( columnType(colNum) );
+	int indexOfVisibleColumn = m_data->column(colNum)->columnInfo 
+		? m_data->column(colNum)->columnInfo->indexForVisibleLookupValue() : -1;
+	if (-1==indexOfVisibleColumn)
+		indexOfVisibleColumn = colNum;
+
+	if (indexOfVisibleColumn < 0)
+		return;
+
+	Q3PtrListIterator<KexiTableItem> it = m_data->iterator();
+	if (it.current() && it.current()->count()<=(uint)indexOfVisibleColumn)
+		return;
+
+	KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item( columnType(indexOfVisibleColumn) );
 	if (!item)
 		return;
-	QFontMetrics fm(font());
+	QFontMetrics fm(fontMetrics());
 	int maxw = horizontalHeaderVisible()
-		? fm.width( m_horizontalHeader->label( colNum ) ) : 0;
+		? fm.width( m_horizontalHeader->label( colNum/* not indexOfVisibleColumn*/ ) ) : 0;
 	if (maxw == 0 && m_data->isEmpty())
 		return; //nothing to adjust
 
 //! \todo js: this is NOT EFFECTIVE for big data sets!!!!
 
-	KexiTableEdit *ed = tableEditorWidget( colNum );
-//	KexiDB::Field *f = m_data->column( colNum )->field;
+	KexiTableEdit *ed = tableEditorWidget( colNum/* not indexOfVisibleColumn*/ );
 	if (ed) {
-//		KexiDB::Field *f = m_data->column(colNum)->field;
-		for (Q3PtrListIterator<KexiTableItem> it = m_data->iterator(); it.current(); ++it) {
-			maxw = qMax( maxw, ed->widthForValue( it.current()->at( colNum ), fm ) );
-//			maxw = qMax( maxw, item->widthForValue( *f, it.current()->at( colNum ), fm ) );
+		for (it = m_data->iterator(); it.current(); ++it) {
+			const int wfw = ed->widthForValue( it.current()->at( indexOfVisibleColumn ), fm );
+			maxw = qMax( maxw, wfw );
 		}
 		maxw += (fm.width("  ") + ed->leftMargin() + ed->rightMargin());
 	}
 	if (maxw < KEXITV_MINIMUM_COLUMN_WIDTH )
 		maxw = KEXITV_MINIMUM_COLUMN_WIDTH; //not too small
-	kexidbg << "KexiTableView: setColumnWidth(colNum=" << colNum << ", width=" << maxw <<" )" << endl;
-	setColumnWidth( colNum, maxw );
+	kexidbg << "KexiTableView: setColumnWidth(colNum=" << colNum 
+		<< ", indexOfVisibleColumn=" << indexOfVisibleColumn << ", width=" << maxw <<" )" << endl;
+	setColumnWidth( colNum/* not indexOfVisibleColumn*/, maxw );
 }
 
 void KexiTableView::setColumnWidth(int colNum, int width)
@@ -2467,7 +2477,7 @@ void KexiTableView::paste()
 bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 {
 	//don't allow to stole key my events by others:
-//	kDebug() << "spontaneous " << e->spontaneous() << " type=" << e->type() << endl;
+//	kexidbg << "spontaneous " << e->spontaneous() << " type=" << e->type() << endl;
 
 	if (e->type()==QEvent::KeyPress) {
 		if (e->spontaneous() /*|| e->type()==QEvent::AccelOverride*/) {

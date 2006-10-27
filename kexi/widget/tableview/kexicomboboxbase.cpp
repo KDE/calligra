@@ -32,42 +32,13 @@
 
 #include <klineedit.h>
 
-//! @internal
-/*
-class KexiComboBoxBase::Private
-{
-public:
-	Private()
-	 : popup(0)
-	{
-//moved		mouseBtnPressedWhenPopupVisible = false;
-		currentEditorWidth = 0;
-		slotLineEditTextChanged_enabled = true;
-	}
-//moved	KPushButton *button;
-//	KexiComboBoxPopup *popup;
-	int parentRightMargin;
-	int currentEditorWidth;
-	QSize totalSize;
-	QString userEnteredText; //!< text entered by hand (by user)
-//moved	bool mouseBtnPressedWhenPopupVisible : 1;
-	bool slotLineEditTextChanged_enabled : 1;
-//	bool userEnteredTextChanged : 1;
-};*/
-
-//======================================================
-
 KexiComboBoxBase::KexiComboBoxBase()
 {
-//moved	connect(m_lineedit, SIGNAL(textChanged(const QString&)), this, SLOT(slotLineEditTextChanged(const QString&)));
-
 	m_popup = 0;
 	m_internalEditorValueChanged = false; //user has text or other value inside editor
 	m_slotLineEditTextChanged_enabled = true;
 	m_mouseBtnPressedWhenPopupVisible = false;
 	m_insideCreatePopup = false;
-
-//moved	d->parentRightMargin = m_rightMargin;
 }
 
 KexiComboBoxBase::~KexiComboBoxBase()
@@ -272,53 +243,6 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
 	return str; //for sanity but it's weird to show id to the user
 }
 
-/* moved
-void KexiComboBoxBase::showFocus( const QRect& r, bool readOnly )
-{
-//	d->button->move( pos().x()+ width(), pos().y() );
-	updateFocus( r );
-	d->button->setEnabled(!readOnly);
-	if (readOnly)
-		d->button->hide();
-	else
-		d->button->show();
-}*/
-
-/* moved
-void KexiComboBoxBase::resize(int w, int h)
-{
-	d->totalSize = QSize(w,h);
-	if (!column()->isReadOnly()) {
-		d->button->resize( h, h );
-		QWidget::resize(w - d->button->width(), h);
-	}
-	m_rightMargin = d->parentRightMargin + (column()->isReadOnly() ? 0 : d->button->width());
-	QRect r( pos().x(), pos().y(), w+1, h+1 );
-	r.moveBy(m_scrollView->contentsX(),m_scrollView->contentsY());
-	updateFocus( r );
-	if (m_popup) {
-		m_popup->updateSize();
-	}
-}*/
-
-/* moved
-// internal
-void KexiComboBoxBase::updateFocus( const QRect& r )
-{
-	if (!column()->isReadOnly()) {
-		if (d->button->width() > r.width())
-			moveChild(d->button, r.right() + 1, r.top());
-		else
-			moveChild(d->button, r.right() - d->button->width(), r.top() );
-	}
-}*/
-
-/* moved
-void KexiComboBoxBase::hideFocus()
-{
-	d->button->hide();
-}*/
-
 QVariant KexiComboBoxBase::value()
 {
 //	ok = true;
@@ -420,66 +344,6 @@ bool KexiComboBoxBase::valueIsEmpty()
 	return valueIsNull();
 }
 
-/* moved
-void KexiComboBoxBase::paintFocusBorders( QPainter *p, QVariant &, int x, int y, int w, int h )
-{
-	d->currentEditorWidth = w;
-	if (!column()->isReadOnly()) {
-		if (w > d->button->width())
-			w -= d->button->width();
-	}
-	p->drawRect(x, y, w, h);
-}*/
-
-/* moved
-void KexiComboBoxBase::setupContents( QPainter *p, bool focused, const QVariant& val, 
-	QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
-{
-	KexiInputTableEdit::setupContents( p, focused, val, txt, align, x, y_offset, w, h );
-	if (!column()->isReadOnly() && focused && (w > d->button->width()))
-		w -= (d->button->width() - x);
-	if (!val.isNull()) {
-		KexiTableViewData *relData = column()->relatedData();
-		KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
-		if (relData) {
-			int rowToHighlight;
-			txt = valueForString(val.toString(), &rowToHighlight, 0, 1);
-		}
-		else if (lookupFieldSchema) {
-			if (m_popup) {
-				KexiTableItem *it = m_popup->tableView()->selectedItem();
-				if (it && lookupFieldSchema->visibleColumn()!=-1 && (int)it->size() >= lookupFieldSchema->visibleColumn())
-					txt = it->at( lookupFieldSchema->visibleColumn() ).toString();
-			}
-		}
-		else {
-			//use 'enum hints' model
-			txt = field()->enumHint( val.toInt() );
-		}
-	}
-}*/
-
-/* moved
-void KexiComboBoxBase::slotButtonClicked()
-{
-	// this method is sometimes called by hand: 
-	// do not allow to simulate clicks when the button is disabled
-	if (column()->isReadOnly() || !d->button->isEnabled())
-		return;
-
-	if (d->mouseBtnPressedWhenPopupVisible) {
-		d->mouseBtnPressedWhenPopupVisible = false;
-		d->button->setOn(false);
-		return;
-	}
-	kDebug() << "KexiComboBoxBase::slotButtonClicked()" << endl;
-	if (!m_popup || !m_popup->isVisible()) {
-		kDebug() << "SHOW POPUP" << endl;
-		showPopup();
-		d->button->setOn(true);
-	}
-}*/
-
 void KexiComboBoxBase::showPopup()
 {
 	createPopup(true);
@@ -497,8 +361,6 @@ void KexiComboBoxBase::createPopup(bool show)
 			: new KexiComboBoxPopup(thisWidget, *field());
 		QObject::connect(m_popup, SIGNAL(rowAccepted(KexiTableItem*,int)), 
 			thisWidget, SLOT(slotRowAccepted(KexiTableItem*,int)));
-//moved		connect(m_popup, SIGNAL(cancelled()), this, SIGNAL(cancelRequested()));
-//moved		connect(m_popup, SIGNAL(hidden()), this, SLOT(slotPopupHidden()));
 		QObject::connect(m_popup->tableView(), SIGNAL(itemSelected(KexiTableItem*)),
 			thisWidget, SLOT(slotItemSelected(KexiTableItem*)));
 
@@ -506,12 +368,10 @@ void KexiComboBoxBase::createPopup(bool show)
 		m_popup->tableView()->setFocusProxy( widgetToFocus );
 		m_popup->installEventFilter(thisWidget);
 
-//		m_popup->tableView()->selectRow(origValue().toInt());//update selection
 		if (origValue().isNull())
 			m_popup->tableView()->clearSelection();
 		else
 			m_popup->tableView()->setHighlightedRow( 0 );
-//			m_popup->tableView()->selectRow(origValue().toInt());
 	}
 	if (show && internalEditor() && !internalEditor()->isVisible())
 		/*emit*/editRequested();
@@ -543,7 +403,6 @@ void KexiComboBoxBase::createPopup(bool show)
 		if (rowToHighlight!=-1) {
 			m_popup->tableView()->selectRow( rowToHighlight );
 //js ok?			rowToHighlight = -1; //don't highlight: we've a selection
-//moved up			rowToHighlight = origValue().toInt();
 		}
 		else {
 			rowToHighlight = qMax( m_popup->tableView()->highlightedRow(), 0);
@@ -557,27 +416,11 @@ void KexiComboBoxBase::createPopup(bool show)
 	m_insideCreatePopup = false;
 }
 
-/* moved
-void KexiComboBoxBase::slotPopupHidden()
-{
-	d->button->setOn(false);
-}*/
-
 void KexiComboBoxBase::hide()
 {
-//moved	KexiInputTableEdit::hide();
 	if (m_popup)
 		m_popup->hide();
-//moved	d->button->setOn(false);
 }
-
-/* moved
-void KexiComboBoxBase::show()
-{
-	KexiInputTableEdit::show();
-	if (!column()->isReadOnly())
-		d->button->show();
-}*/
 
 void KexiComboBoxBase::slotRowAccepted(KexiTableItem * item, int row)
 {
@@ -588,82 +431,6 @@ void KexiComboBoxBase::slotRowAccepted(KexiTableItem * item, int row)
 	slotItemSelected(item);
 	/*emit*/acceptRequested();
 }
-
-/* moved
-bool KexiComboBoxBase::handleKeyPress( QKeyEvent *ke, bool editorActive )
-{
-	const int k = ke->key();
-	if ((ke->state()==NoButton && k==Qt::Key_F4)
-		|| (ke->state()==AltButton && k==Qt::Key_Down))
-	{
-		//show popup
-		slotButtonClicked();
-		return true;
-	}
-	else if (editorActive){
-		const bool enterPressed = k==Qt::Key_Enter || k==Qt::Key_Return;
-		if (enterPressed && d->userEnteredTextChanged) {
-			createPopup(false);
-			selectItemForStringInLookupTable( d->userEnteredText );
-			return false;
-		}
-
-		// The editor may be active but the pull down menu not existant/visible,
-		// e.g. when the user has pressed a normal button to activate the editor
-		// Don't handle the event here in that case.
-		if (!m_popup || (!enterPressed && !m_popup->isVisible())) {
-			return false;
-		}
-
-		int highlightedOrSelectedRow = m_popup ? m_popup->tableView()->highlightedRow() : -1;
-		if (m_popup && highlightedOrSelectedRow < 0)
-			highlightedOrSelectedRow = m_popup->tableView()->currentRow();
-
-		switch (k) {
-		case Qt::Key_Up:
-	//			m_popup->tableView()->selectPrevRow();
-				m_popup->tableView()->setHighlightedRow( 
-					qMax(highlightedOrSelectedRow-1, 0) );
-				updateTextForHighlightedRow();
-				return true;
-		case Qt::Key_Down:
-	//			m_popup->tableView()->selectNextRow();
-				m_popup->tableView()->setHighlightedRow( 
-					qMin(highlightedOrSelectedRow+1, m_popup->tableView()->rows()-1) );
-				updateTextForHighlightedRow();
-				return true;
-		case Qt::Key_PageUp:
-	//			m_popup->tableView()->selectPrevPage();
-				m_popup->tableView()->setHighlightedRow( 
-					qMax(highlightedOrSelectedRow-m_popup->tableView()->rowsPerPage(), 0) );
-				updateTextForHighlightedRow();
-				return true;
-		case Qt::Key_PageDown:
-	//			m_popup->tableView()->selectNextPage();
-				m_popup->tableView()->setHighlightedRow( 
-					qMin(highlightedOrSelectedRow+m_popup->tableView()->rowsPerPage(), 
-					 m_popup->tableView()->rows()-1) );
-				updateTextForHighlightedRow();
-				return true;
-		case Qt::Key_Home:
-				m_popup->tableView()->setHighlightedRow( 0 );
-				updateTextForHighlightedRow();
-				return true;
-		case Qt::Key_End:
-				m_popup->tableView()->setHighlightedRow( m_popup->tableView()->rows()-1 );
-				updateTextForHighlightedRow();
-				return true;
-		case Qt::Key_Enter:
-		case Qt::Key_Return: //accept
-				//select row that is highlighted
-				if (m_popup->tableView()->highlightedRow()>=0)
-					m_popup->tableView()->selectRow( m_popup->tableView()->highlightedRow() );
-				//do not return true: allow to process event
-		default: ;
-		}
-	}
-	return false;
-}*/
 
 void KexiComboBoxBase::slotItemSelected(KexiTableItem*)
 {
@@ -712,58 +479,6 @@ void KexiComboBoxBase::slotLineEditTextChanged(const QString &newtext)
 	}
 	//todo: select matching row for given prefix
 }
-
-/* moved
-void KexiComboBoxBase::updateTextForHighlightedRow()
-{
-	KexiTableViewData *relData = column()->relatedData();
-	if (relData) {
-		//use 'related table data' model
-		const KexiTableItem *item = m_popup ? m_popup->tableView()->highlightedItem() : 0;
-		if (item) {
-			m_slotLineEditTextChanged_enabled = false; //temp. disable slot
-			setValueInInternalEditor( item->at(1) );
-			m_slotLineEditTextChanged_enabled = true;
-			moveCursorToEndInInternalEditor(); //m_lineedit->setCursorPosition(m_lineedit->text().length());
-			selectAllInInternalEditor(); //m_lineedit->selectAll();
-		}
-	}
-}*/
-
-/* moved
-int KexiComboBoxBase::widthForValue( QVariant &val, const QFontMetrics &fm )
-{
-	QValueVector<QString> hints = field()->enumHints();
-	bool ok;
-	int idx = val.toInt(&ok);
-	if (!ok || idx < 0 || idx > int(hints.size()-1))
-		return KEXITV_MINIMUM_COLUMN_WIDTH;
-	QString txt = hints.at( idx, &ok );
-	if (!ok)
-		return KEXITV_MINIMUM_COLUMN_WIDTH;
-	return fm.width( txt );
-}*/
-
-/* moved
-bool KexiComboBoxBase::eventFilter( QObject *o, QEvent *e )
-{
-	if (!column()->isReadOnly() && e->type()==QEvent::MouseButtonPress) {
-		QPoint gp = static_cast<QMouseEvent*>(e)->globalPos() 
-			+ QPoint(m_scrollView->childX(d->button), m_scrollView->childY(d->button));
-		QRect r(d->button->mapToGlobal(d->button->geometry().topLeft()), 
-			d->button->mapToGlobal(d->button->geometry().bottomRight()));
-		if (o==m_popup && m_popup->isVisible() && r.contains( gp )) {
-			d->mouseBtnPressedWhenPopupVisible = true;
-		}
-	}
-	return false;
-}*/
-
-/* moved
-QSize KexiComboBoxBase::totalSize() const
-{
-	return d->totalSize;
-}*/
 
 void KexiComboBoxBase::setValueOrTextInInternalEditor(const QVariant& value)
 {

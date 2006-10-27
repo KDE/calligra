@@ -663,6 +663,10 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 					m_itemIterator->toFirst();
 					(*m_itemIterator)+=m_curRow;
 				}
+				if (!**m_itemIterator) { //sanity
+					m_itemIterator->toFirst();
+					(*m_itemIterator)+=m_curRow;
+				}
 				m_currentItem = **m_itemIterator;
 					//itemAt(m_curRow);
 			}
