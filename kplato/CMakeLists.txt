@@ -41,8 +41,6 @@ set(libkplatopart_SRCS
     kptmainprojectpanel.cc
     kptganttview.cc
     kptresourcespanel.cc
-    kptpertview.cc
-    kptpertcanvas.cc
     kptrelationdialog.cc
     kptcanvasitem.cc
     kptresourceview.cc

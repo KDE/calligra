@@ -775,19 +775,6 @@ private:
     struct Task::Progress m_oldvalue;
 };
 
-class ProjectModifyBaselineCmd : public NamedCommand
-{
-public:
-    ProjectModifyBaselineCmd(Part *part, Project &project, bool value, QString name=0);
-    void execute();
-    void unexecute();
-
-private:
-    Project &m_project;
-    bool m_newvalue;
-    bool m_oldvalue;
-};
-
 class AddAccountCmd : public NamedCommand
 {
 public:

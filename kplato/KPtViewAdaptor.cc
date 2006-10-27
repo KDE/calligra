@@ -68,11 +68,6 @@ void ViewAdaptor::slotViewGantt()
   m_view->slotViewGantt();
 }
 
-void ViewAdaptor::slotViewPert()
-{
-  m_view->slotViewPert();
-}
-
 void ViewAdaptor::slotViewResources()
 {
   m_view->slotViewResources();

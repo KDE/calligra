@@ -97,7 +97,7 @@ protected:
 class TaskGeneralPanel : public TaskGeneralPanelImpl {
     Q_OBJECT
 public:
-    TaskGeneralPanel(Task &task, StandardWorktime *workTime=0, bool baseline=false, QWidget *parent=0, const char *name=0);
+    TaskGeneralPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
     KMacroCommand *buildCommand(Part *part);
 

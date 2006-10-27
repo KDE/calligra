@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-   Copyright (C) 2002 - 2006 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
+  Copyright (C) 2002 - 2006 Dag Andersen <danders@get2net.dk>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Library General Public
+  License as published by the Free Software Foundation; either
+  version 2 of the License, or (at your option) any later version.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Library General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+  You should have received a copy of the GNU Library General Public License
+  along with this library; see the file COPYING.LIB.  If not, write to
+  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+* Boston, MA 02110-1301, USA.
 */
 
 #ifndef KPLATO_VIEW
@@ -44,7 +44,6 @@ namespace KPlato
 class ViewListDockWidget;
 class AccountsView;
 class GanttView;
-class PertView;
 class ResourceView;
 //class ReportView;
 class Part;
@@ -57,76 +56,77 @@ class ViewAdaptor;
 class ViewListTreeWidget : public QTreeWidget
 {
     Q_OBJECT
-    public:
-        ViewListTreeWidget(QWidget *parent);
-        QTreeWidgetItem *findCategory(const QString cat);
+public:
+    ViewListTreeWidget( QWidget *parent );
+    QTreeWidgetItem *findCategory( const QString cat );
 
-    protected:
-        void drawRow(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+protected:
+    void drawRow( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 
-    signals:
-        void activated(QTreeWidgetItem*);
+signals:
+    void activated( QTreeWidgetItem* );
 
-    private slots:
-        void handleMousePress(QTreeWidgetItem *item);
+private slots:
+    void handleMousePress( QTreeWidgetItem *item );
 };
 
 class ViewListDockWidget : public QDockWidget
 {
     Q_OBJECT
 public:
-    ViewListDockWidget(QString name, KMainWindow *parent);
-    QTreeWidgetItem *addCategory(QString name);
-    void addView(QTreeWidgetItem *category, QString name, QWidget *widget, QString icon=QString::null);
+    ViewListDockWidget( QString name, KMainWindow *parent );
+    QTreeWidgetItem *addCategory( QString name );
+    void addView( QTreeWidgetItem *category, QString name, QWidget *widget, QString icon = QString::null );
 
 signals:
-    void activated(QWidget*);
+    void activated( QWidget* );
 
 protected slots:
-    void slotActivated(QTreeWidgetItem *item);
-    
+    void slotActivated( QTreeWidgetItem *item );
+
 private:
     ViewListTreeWidget *m_viewList;
 };
 
 //-------------
-class View : public KoView {
+class View : public KoView
+{
     Q_OBJECT
 
 public:
-    View(Part* part, QWidget* parent=0);
+    View( Part* part, QWidget* parent = 0 );
     ~View();
     /**
      * Support zooming.
      */
-    virtual void setZoom(double zoom);
+    virtual void setZoom( double zoom );
 
-    Part *getPart()const;
+    Part *getPart() const;
 
     Project& getProject() const;
 
-    virtual void setupPrinter(KPrinter &printer);
-    virtual void print(KPrinter &printer);
+    virtual void setupPrinter( KPrinter &printer );
+    virtual void print( KPrinter &printer );
 
-    QMenu *popupMenu(const QString& name);
+    QMenu *popupMenu( const QString& name );
 
     void projectCalculate();
 
     virtual ViewAdaptor* dbusObject();
 
-    virtual bool setContext(Context &context);
-    virtual void getContext(Context &context) const;
+    virtual bool setContext( Context &context );
+    virtual void getContext( Context &context ) const;
 
-    void setTaskActionsEnabled(QWidget *w, bool on);
+    void setTaskActionsEnabled( QWidget *w, bool on );
     void setScheduleActionsEnabled();
 
 public slots:
-    void slotUpdate(bool calculate);
+    void slotUpdate( bool calculate );
     void slotEditResource();
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
-    void slotViewSelector(bool show);
+    void slotViewSelector( bool show );
     void slotViewGantt();
     void slotViewExpected();
     void slotViewOptimistic();
@@ -141,7 +141,6 @@ public slots:
     void slotViewGanttCriticalPath();
     void slotViewGanttNoInformation();
     void slotViewTaskAppointments();
-    void slotViewPert();
     void slotViewResources();
     void slotViewResourceAppointments();
     void slotViewAccounts();
@@ -152,23 +151,21 @@ public slots:
     void slotDefineWBS();
     void slotGenerateWBS();
     void slotConfigure();
-    void slotAddRelation(Node *par, Node *child);
-    void slotModifyRelation(Relation *rel);
-    void slotAddRelation(Node *par, Node *child, int linkType);
-    void slotModifyRelation(Relation *rel, int linkType);
-
-    void setBaselineMode(bool on);
+    void slotAddRelation( Node *par, Node *child );
+    void slotModifyRelation( Relation *rel );
+    void slotAddRelation( Node *par, Node *child, int linkType );
+    void slotModifyRelation( Relation *rel, int linkType );
 
     void slotExportGantt(); // testing
-    void setTaskActionsEnabled(bool on);
+    void setTaskActionsEnabled( bool on );
 
-    void slotRenameNode(Node *node, const QString& name);
+    void slotRenameNode( Node *node, const QString& name );
 
-    void slotPopupMenu(const QString& menuname, const QPoint & pos);
+    void slotPopupMenu( const QString& menuname, const QPoint & pos );
 
 protected slots:
-    void slotViewActivated(QWidget*);
-    
+    void slotViewActivated( QWidget* );
+
     void slotProjectCalendar();
     void slotProjectWorktime();
     void slotProjectCalculate();
@@ -189,10 +186,10 @@ protected slots:
     void slotMoveTaskDown();
 
     void slotConnectNode();
-    void slotChanged(QWidget *);
+    void slotChanged( QWidget * );
     void slotChanged();
 
-    void slotCurrentChanged(int);
+    void slotCurrentChanged( int );
 
 #ifndef NDEBUG
     void slotPrintDebug();
@@ -208,22 +205,19 @@ protected slots:
 
 protected:
     void createViewSelector();
-    virtual void updateReadWrite(bool readwrite);
+    virtual void updateReadWrite( bool readwrite );
     Node *currentTask();
-    void updateView(QWidget *widget);
+    void updateView( QWidget *widget );
 
 private:
-    GanttView *m_ganttview;
-    PertView *m_pertview;
     QStackedWidget *m_tab;
+    GanttView *m_ganttview;
     ResourceView *m_resourceview;
     AccountsView *m_accountsview;
-//    ReportView *m_reportview;
-//    Q3PtrList<QString> m_reportTemplateFiles;
+    //    ReportView *m_reportview;
+    //    Q3PtrList<QString> m_reportTemplateFiles;
 
     ViewListDockWidget *m_viewlist;
-    
-    bool m_baselineMode;
 
     int m_viewGrp;
     int m_defaultFontSize;
@@ -249,9 +243,9 @@ private:
 
     // ------ View
     KAction *actionViewGantt;
-    
+
     KToggleAction *actionViewSelector;
-    
+
     KToggleAction *actionViewExpected;
     KToggleAction *actionViewOptimistic;
     KToggleAction *actionViewPessimistic;
@@ -265,8 +259,7 @@ private:
     KToggleAction *actionViewGanttCriticalPath;
     KToggleAction *actionViewGanttNotScheduled;
     KToggleAction *actionViewTaskAppointments;
-    
-    KAction *actionViewPert;
+
     KAction *actionViewResources;
     KToggleAction *actionViewResourceAppointments;
     KAction *actionViewAccounts;

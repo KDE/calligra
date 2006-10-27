@@ -1425,23 +1425,6 @@ void TaskModifyProgressCmd::unexecute() {
     setCommandType(0);
 }
 
-ProjectModifyBaselineCmd::ProjectModifyBaselineCmd(Part *part, Project &project, bool value, QString name)
-    : NamedCommand(part, name),
-      m_project(project),
-      m_newvalue(value) {
-    m_oldvalue = project.isBaselined();
-}
-void ProjectModifyBaselineCmd::execute() {
-    m_project.setBaselined(m_newvalue);
-    
-    setCommandType(2);
-}
-void ProjectModifyBaselineCmd::unexecute() {
-    m_project.setBaselined(m_oldvalue);
-    
-    setCommandType(2);
-}
-
 AddAccountCmd::AddAccountCmd(Part *part, Project &project, Account *account, QString parent, QString name)
     : NamedCommand(part, name),
       m_project(project),

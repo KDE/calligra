@@ -62,10 +62,9 @@ public:
      * @param task the task to show
      * @param accounts all defined accounts
      * @param workTime defines the number of hours pr day and week
-     * @param baseline if true, project is baselined
      * @param parent parent widget
      */
-    TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTime=0, bool baseline=false,  QWidget *parent=0);
+    TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTime=0, QWidget *parent=0);
 
     KCommand *buildCommand(Part *part);
 

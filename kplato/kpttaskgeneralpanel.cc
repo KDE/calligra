@@ -52,20 +52,13 @@
 namespace KPlato
 {
 
-TaskGeneralPanel::TaskGeneralPanel(Task &task, StandardWorktime *workTime, bool /*baseline*/, QWidget *p, const char *n)
+TaskGeneralPanel::TaskGeneralPanel(Task &task, StandardWorktime *workTime, QWidget *p, const char *n)
     : TaskGeneralPanelImpl(p, n),
       m_task(task),
       m_dayLength(24)
 {
     useTime = true;
     setStartValues(task, workTime);
-/*  Why is this done?  Its useless (its not actually read only, but that may be a Qt thing) and I have to
-    edit these to actually be able to OK the dialog.   TZ-8-2005
-    namefield->setReadOnly(baseline);
-    leaderfield->setReadOnly(baseline);
-    idfield->setReadOnly(baseline);
-    schedulingGroup->setEnabled(!baseline);
-*/
 }
 
 void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {

@@ -47,7 +47,6 @@ public slots:
     virtual void slotStartDateClicked();
     virtual void slotEndDateClicked();
     virtual void enableDateTime();
-    virtual void slotBaseline();
 
 signals:
     void obligatedFieldsFilled(bool);

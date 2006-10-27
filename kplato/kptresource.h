@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2001 Thomas Zander zander@kde.org
+ Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Library General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Library General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ You should have received a copy of the GNU Library General Public License
+ along with this library; see the file COPYING.LIB.  If not, write to
+ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+* Boston, MA 02110-1301, USA.
 */
 
 #ifndef KPTRESOURCE_H
@@ -63,118 +63,121 @@ class Schedule;
  *  and friends based on the schedules we got from the PIM projects.
  *  (Thomas Zander mrt-2003 by suggestion of Shaheed)
  */
-class ResourceGroup {
-    public:
-        ResourceGroup(Project *project);
-        ~ResourceGroup();
+class ResourceGroup
+{
+public:
+    ResourceGroup( Project *project );
+    ~ResourceGroup();
 
-          enum Type { Type_Work, Type_Material };
-          
-          QString id() const { return m_id; }
-          bool setId(QString id);
-          void generateId();
-          
-          Project *project() { return m_project; }
-          
-          void setName(QString n) {m_name=n;}
-          const QString &name() const {return m_name;}
-          void setType(Type type) { m_type = type; }
-          //void setType(const QString &type);
-          Type type() const { return m_type; }
+    enum Type { Type_Work, Type_Material };
 
-          /** Manage the resources in this list
-           * <p>At some point we will have to look at not mixing types of resources
-           * (e.g. you can't add a person to a list of computers
-           *
-           * <p>Risks must always be associated with a resource, so there is no option
-           * to manipulate risks (@ref Risk) separately
-               */
-          void addResource(Resource*, Risk*);
-          void insertResource( unsigned int index, Resource *resource );
-          void deleteResource( Resource *resource );
-          Resource *takeResource( Resource *resource );
-          void deleteResource(int);
+    QString id() const { return m_id; }
+    bool setId( QString id );
+    void generateId();
 
-          Resource* getResource(int);
-          Risk* getRisk(int);
+    Project *project() { return m_project; }
 
-          /** Get the "num" resources which is available in the time frame
-           * defined by "start" and "duration".
-           * @param start todo 
-           * @param duration todo
-           * @param num todo
-           */
-          QList<Resource> availableResources(const DateTime start, const Duration duration, int num);
-          /** Manage the dependent resources.  This is a list of the resource
-           * groups that must have available resources for this resource to
-           * perform the work
-           * <p>see also @ref getRequiredResource, @ref getRequiredResource
-               */
-          void addRequiredResource(ResourceGroup*);
-          /** Manage the dependent resources.  This is a list of the resource
-           * groups that must have available resources for this resource to
-           * perform the work
-           * <p>see also @ref addRequiredResource, @ref getRequiredResource
-               */
-          ResourceGroup* getRequiredResource(int);
-          /** Manage the dependent resources.  This is a list of the resource
-           * groups that must have available resources for this resource to
-           * perform the work
-           * <p>see also @ref getRequiredResource, @ref addRequiredResource
-               */
-          void deleteRequiredResource(int);
-          int numResources() const { return m_resources.count(); }
-          QList<Resource*> &resources() { return m_resources; }
+    void setName( QString n ) {m_name = n;}
+    const QString &name() const { return m_name;}
+    void setType( Type type ) { m_type = type; }
+    //void setType(const QString &type);
+    Type type() const { return m_type; }
 
-          bool load(QDomElement &element);
-          void save(QDomElement &element) const;
+    /** Manage the resources in this list
+     * <p>At some point we will have to look at not mixing types of resources
+     * (e.g. you can't add a person to a list of computers
+     *
+     * <p>Risks must always be associated with a resource, so there is no option
+     * to manipulate risks (@ref Risk) separately
+         */
+    void addResource( Resource*, Risk* );
+    void insertResource( unsigned int index, Resource *resource );
+    void deleteResource( Resource *resource );
+    Resource *takeResource( Resource *resource );
+    void deleteResource( int );
 
-          void initiateCalculation(Schedule &sch);
+    Resource* getResource( int );
+    Risk* getRisk( int );
 
-          void addNode(Node *node) { m_nodes.append(node); }
-          void clearNodes() { m_nodes.clear(); }
+    /** Get the "num" resources which is available in the time frame
+     * defined by "start" and "duration".
+     * @param start todo 
+     * @param duration todo
+     * @param num todo
+     */
+    QList<Resource> availableResources( const DateTime start, const Duration duration, int num );
+    /** Manage the dependent resources.  This is a list of the resource
+     * groups that must have available resources for this resource to
+     * perform the work
+     * <p>see also @ref getRequiredResource, @ref getRequiredResource
+         */
+    void addRequiredResource( ResourceGroup* );
+    /** Manage the dependent resources.  This is a list of the resource
+     * groups that must have available resources for this resource to
+     * perform the work
+     * <p>see also @ref addRequiredResource, @ref getRequiredResource
+         */
+    ResourceGroup* getRequiredResource( int );
+    /** Manage the dependent resources.  This is a list of the resource
+     * groups that must have available resources for this resource to
+     * perform the work
+     * <p>see also @ref getRequiredResource, @ref addRequiredResource
+         */
+    void deleteRequiredResource( int );
+    int numResources() const { return m_resources.count(); }
+    QList<Resource*> &resources() { return m_resources; }
 
-          Calendar *defaultCalendar() { return m_defaultCalendar; }
+    bool load( QDomElement &element );
+    void save( QDomElement &element ) const;
 
-          int units();
-        
-          void registerRequest(ResourceGroupRequest *request)
-            { m_requests.append(request); }
-          void unregisterRequest(ResourceGroupRequest *request) {
-              int i = m_requests.indexOf(request);
-              if (i != -1)
-                  m_requests.removeAt(i);
-          }
-          const QList<ResourceGroupRequest*> &requests() const
-            { return m_requests; }
+    void initiateCalculation( Schedule &sch );
 
-          ResourceGroup *findId() const { return findId(m_id); }
-          ResourceGroup *findId(const QString &id) const;
-          bool removeId() { return removeId(m_id); }
-          bool removeId(const QString &id);
-          void insertId(const QString &id);
+    void addNode( Node *node ) { m_nodes.append( node ); }
+    void clearNodes() { m_nodes.clear(); }
 
-          Appointment appointmentIntervals() const;
+    Calendar *defaultCalendar() { return m_defaultCalendar; }
+
+    int units();
+
+    void registerRequest( ResourceGroupRequest *request )
+    { m_requests.append( request ); }
+    void unregisterRequest( ResourceGroupRequest *request )
+    {
+        int i = m_requests.indexOf( request );
+        if ( i != -1 )
+            m_requests.removeAt( i );
+    }
+    const QList<ResourceGroupRequest*> &requests() const
+    { return m_requests; }
+
+    ResourceGroup *findId() const { return findId( m_id ); }
+    ResourceGroup *findId( const QString &id ) const;
+    bool removeId() { return removeId( m_id ); }
+    bool removeId( const QString &id );
+    void insertId( const QString &id );
+
+    Appointment appointmentIntervals() const;
 
 #ifndef NDEBUG
-        void printDebug(QString ident);
+
+    void printDebug( QString ident );
 #endif
 
-    private:
-        Project  *m_project;
-        QString m_id;   // unique id
-        QString m_name;
-        QList<Resource*> m_resources;
-        QList<Risk*> m_risks;
-        QList<ResourceGroup*> m_requires;
+private:
+    Project *m_project;
+    QString m_id;   // unique id
+    QString m_name;
+    QList<Resource*> m_resources;
+    QList<Risk*> m_risks;
+    QList<ResourceGroup*> m_requires;
 
-        QList<Node*> m_nodes; //The nodes that want resources from us
+    QList<Node*> m_nodes; //The nodes that want resources from us
 
-        Calendar *m_defaultCalendar;
-        Type m_type;
-        
-        QList<ResourceGroupRequest*> m_requests;
-        
+    Calendar *m_defaultCalendar;
+    Type m_type;
+
+    QList<ResourceGroupRequest*> m_requests;
+
 };
 
 /**
@@ -187,78 +190,79 @@ class ResourceGroup {
   * See also @ref ResourceGroup
   */
 
-class Resource {
+class Resource
+{
 public:
 
-    Resource(Project *project);
-    Resource(Resource *resource);
+    Resource( Project *project );
+    Resource( Resource *resource );
     virtual ~Resource();
 
     QString id() const { return m_id; }
-    bool setId(QString id);
+    bool setId( QString id );
     void generateId();
 
     enum Type { Type_Work, Type_Material };
-    void setType(Type type) { m_type = type; }
-    void setType(const QString &type);
+    void setType( Type type ) { m_type = type; }
+    void setType( const QString &type );
     Type type() const { return m_type; }
     QString typeToString() const;
 
-    void setName(QString n) {m_name=n;}
-    const QString &name() const {return m_name;}
+    void setName( QString n ) {m_name = n;}
+    const QString &name() const { return m_name;}
 
-    void setInitials(QString initials) {m_initials=initials;}
-    const QString &initials() const {return m_initials;}
+    void setInitials( QString initials ) {m_initials = initials;}
+    const QString &initials() const { return m_initials;}
 
-    void setEmail(QString email) {m_email=email;}
-    const QString &email() const {return m_email;}
+    void setEmail( QString email ) {m_email = email;}
+    const QString &email() const { return m_email;}
 
-    void copy(Resource *resource);
+    void copy( Resource *resource );
 
     /// Set the time from when the resource is available to this project
-    void setAvailableFrom(const QDateTime &af) {m_availableFrom=af;}
+    void setAvailableFrom( const QDateTime &af ) {m_availableFrom = af;}
     /// Return the time when the resource is available to this project
-    const DateTime &availableFrom() const {return m_availableFrom;}
+    const DateTime &availableFrom() const { return m_availableFrom;}
     /// Set the time when the resource is no longer available to this project
-    void setAvailableUntil(const QDateTime au) {m_availableUntil=au;}
+    void setAvailableUntil( const QDateTime au ) {m_availableUntil = au;}
     /// Return the time when the resource is no longer available to this project.
-    const DateTime &availableUntil() const {return m_availableUntil;}
+    const DateTime &availableUntil() const { return m_availableUntil;}
 
-    void addWorkingHour(QTime from, QTime until);
+    void addWorkingHour( QTime from, QTime until );
     QList<QTime*> workingHours() { return m_workingHours; }
 
-    DateTime getFirstAvailableTime(DateTime after = DateTime());
-    DateTime getBestAvailableTime(Duration duration);
-    DateTime getBestAvailableTime(const DateTime after, const Duration duration);
+    DateTime getFirstAvailableTime( DateTime after = DateTime() );
+    DateTime getBestAvailableTime( Duration duration );
+    DateTime getBestAvailableTime( const DateTime after, const Duration duration );
 
-    bool load(QDomElement &element);
-    void save(QDomElement &element) const;
+    bool load( QDomElement &element );
+    void save( QDomElement &element ) const;
 
     ///Return the list of appointments for current schedule.
     QList<Appointment*> appointments();
-    
-    Appointment *findAppointment(Node *node);
+
+    Appointment *findAppointment( Node *node );
     /// Adds appointment to current schedule
-    virtual bool addAppointment(Appointment *appointment);
+    virtual bool addAppointment( Appointment *appointment );
     /// Adds appointment to schedule sch
-    virtual bool addAppointment(Appointment *appointment, Schedule &main);
+    virtual bool addAppointment( Appointment *appointment, Schedule &main );
     /// Adds appointment to both this resource and node
-    virtual void addAppointment(Schedule *node, DateTime &start, DateTime &end, double load=100);
-    
-    void initiateCalculation(Schedule &sch);
-    bool isAvailable(Task *task);
-    void makeAppointment(Schedule *schedule);
+    virtual void addAppointment( Schedule *node, DateTime &start, DateTime &end, double load = 100 );
+
+    void initiateCalculation( Schedule &sch );
+    bool isAvailable( Task *task );
+    void makeAppointment( Schedule *schedule );
 
     bool isOverbooked() const;
-    bool isOverbooked(const QDate &date) const;
-    bool isOverbooked(const DateTime &start, const DateTime &end) const;
+    bool isOverbooked( const QDate &date ) const;
+    bool isOverbooked( const DateTime &start, const DateTime &end ) const;
 
     double normalRate() const { return cost.normalRate; }
-    void setNormalRate(double rate) { cost.normalRate = rate; }
+    void setNormalRate( double rate ) { cost.normalRate = rate; }
     double overtimeRate() const { return cost.overtimeRate; }
-    void setOvertimeRate(double rate) { cost.overtimeRate = rate; }
+    void setOvertimeRate( double rate ) { cost.overtimeRate = rate; }
     double fixedCost() const { return cost.fixed; }
-    void setFixedCost(double value) { cost.fixed = value; }
+    void setFixedCost( double value ) { cost.fixed = value; }
 
     /**
      * Return available units in percent
@@ -267,7 +271,7 @@ public:
     /**
      * Set available units in percent
      */
-    void setUnits(int units) { m_units = units; }
+    void setUnits( int units ) { m_units = units; }
 
     Project *project() const { return m_project; }
 
@@ -275,68 +279,70 @@ public:
      * Get the calendar for this resource. 
      * If local=false, check if there is a default calendar.
      */
-    Calendar *calendar(bool local=false) const;
-    Calendar *calendar(const QString id) const;
-    void setCalendar(Calendar *calendar) { m_calendar = calendar; }
+    Calendar *calendar( bool local = false ) const;
+    Calendar *calendar( const QString id ) const;
+    void setCalendar( Calendar *calendar ) { m_calendar = calendar; }
 
     /**
      * Used to clean up requests when the resource is deleted.
      */
-    void registerRequest(ResourceRequest *request)
-        { m_requests.append(request); }
-    void unregisterRequest(ResourceRequest *request) {
-        int i = m_requests.indexOf(request);
-        if (i != -1)
-            m_requests.removeAt(i);
+    void registerRequest( ResourceRequest *request )
+    { m_requests.append( request ); }
+    void unregisterRequest( ResourceRequest *request )
+    {
+        int i = m_requests.indexOf( request );
+        if ( i != -1 )
+            m_requests.removeAt( i );
     }
     const QList<ResourceRequest*> &requests() const
-        { return m_requests; }
-        
-    Duration effort(const DateTime &start, const Duration &duration, bool backward, bool *ok=0) const;
+    { return m_requests; }
+
+    Duration effort( const DateTime &start, const Duration &duration, bool backward, bool *ok = 0 ) const;
 
     /**
      * Find the first available time after time, within limit.
      * Returns invalid DateTime if not available.
      */
-    DateTime availableAfter(const DateTime &time, const DateTime limit=DateTime(), bool checkAppointments=false) const;
+    DateTime availableAfter( const DateTime &time, const DateTime limit = DateTime(), bool checkAppointments = false ) const;
     /**
      * Find the first available time before time, within limit.
      * Returns invalid DateTime if not available.
      */
-    DateTime availableBefore(const DateTime &time, const DateTime limit=DateTime(), bool checkAppointments=false) const;
+    DateTime availableBefore( const DateTime &time, const DateTime limit = DateTime(), bool checkAppointments = false ) const;
 
-    Resource *findId() const { return findId(m_id); }
-    Resource *findId(const QString &id) const;
-    bool removeId() { return removeId(m_id); }
-    bool removeId(const QString &id);
-    void insertId(const QString &id);
+    Resource *findId() const { return findId( m_id ); }
+    Resource *findId( const QString &id ) const;
+    bool removeId() { return removeId( m_id ); }
+    bool removeId( const QString &id );
+    void insertId( const QString &id );
 
-    Calendar *findCalendar(const QString &id) const;
+    Calendar *findCalendar( const QString &id ) const;
 
     Appointment appointmentIntervals() const;
-    Duration plannedEffort(const QDate &date) const;
+    Duration plannedEffort( const QDate &date ) const;
 
-    void setCurrentSchedule(Schedule *schedule) { m_currentSchedule = schedule; }
-    void setCurrentSchedule(long id) { m_currentSchedule = findSchedule(id); }
+    void setCurrentSchedule( Schedule *schedule ) { m_currentSchedule = schedule; }
+    void setCurrentSchedule( long id ) { m_currentSchedule = findSchedule( id ); }
     Schedule *currentSchedule() const { return m_currentSchedule; }
-    
+
     QHash<long, Schedule*> &schedules() { return m_schedules; }
-    Schedule *findSchedule(long id) { 
-        if (m_schedules.contains(id))
-            return m_schedules[id]; 
+    Schedule *findSchedule( long id )
+    {
+        if ( m_schedules.contains( id ) )
+            return m_schedules[ id ];
         return 0;
     }
     /// Take, and delete.
-    void deleteSchedule(Schedule *schedule);
+    void deleteSchedule( Schedule *schedule );
     /// Take, don't delete.
-    void takeSchedule(const Schedule *schedule);
-    void addSchedule(Schedule *schedule);
-    ResourceSchedule *createSchedule(QString name, int type, long id);
-    ResourceSchedule *createSchedule(Schedule *parent);
-    
+    void takeSchedule( const Schedule *schedule );
+    void addSchedule( Schedule *schedule );
+    ResourceSchedule *createSchedule( QString name, int type, long id );
+    ResourceSchedule *createSchedule( Schedule *parent );
+
 protected:
-    void makeAppointment(Schedule *node, const DateTime &from, const DateTime &end);
-    
+    void makeAppointment( Schedule *node, const DateTime &from, const DateTime &end );
+
 private:
     Project *m_project;
     QHash<long, Schedule*> m_schedules;
@@ -352,20 +358,23 @@ private:
 
     Type m_type;
 
-    struct Cost {
+    struct Cost
+    {
         double normalRate;
         double overtimeRate;
-        double fixed;
-    } cost;
-
+        double fixed ;
+    }
+    cost;
+    
     Calendar *m_calendar;
-    QList<ResourceRequest*> m_requests;
+    QList<ResourceRequest*>
+    m_requests;
     
     Schedule *m_currentSchedule;
-    
-public:
+
 #ifndef NDEBUG
-        void printDebug(QString ident);
+public:
+    void printDebug( QString ident );
 #endif
 };
 
@@ -375,221 +384,239 @@ public:
  * estimated effort. Risk can be one of none, low, or high. Some factors that may be taken into
  * account for risk are the experience of the person and the reliability of equipment.
  */
-class Risk {
-    public:
+class Risk
+{
+public:
 
-        enum RiskType {
-            NONE=0,
-            LOW=1,
-            HIGH=2
-        };
+    enum RiskType {
+        NONE = 0,
+        LOW = 1,
+        HIGH = 2
+    };
 
-        Risk(Node *n, Resource *r, RiskType rt=NONE);
-        ~Risk();
+    Risk( Node *n, Resource *r, RiskType rt = NONE );
+    ~Risk();
 
-        RiskType riskType() { return m_riskType; }
+    RiskType riskType() { return m_riskType; }
 
-        Node *node() { return m_node; }
-        Resource *resource() { return m_resource; }
+    Node *node() { return m_node; }
+    Resource *resource() { return m_resource; }
 
-    private:
-        Node *m_node;
-        Resource *m_resource;
-        RiskType m_riskType;
+private:
+    Node *m_node;
+    Resource *m_resource;
+    RiskType m_riskType;
 };
 
-class ResourceRequest {
-    public:
-        ResourceRequest(Resource *resource=0, int units = 1);
-
-        ~ResourceRequest();
-
-        ResourceGroupRequest *parent() const { return m_parent; }
-        void setParent(ResourceGroupRequest *parent) { m_parent = parent; }
-        
-        Resource *resource() const { return m_resource; }
-        void setResource(Resource* resource) { m_resource = resource; }
-        
-        bool load(QDomElement &element, Project &project);
-        void save(QDomElement &element) const;
-
-        /**
-        * Get amount of requested resource units in percent
-        */
-        int units() const;
-        
-        /**
-        * Get amount of requested work units in percent
-        */
-        int workUnits() const;
-                
-        void registerRequest() { if (m_resource) m_resource->registerRequest(this); }
-        void unregisterRequest() { if (m_resource) m_resource->unregisterRequest(this); }
- 
-        void makeAppointment(Schedule *schedule) { 
-            if (m_resource) 
-                m_resource->makeAppointment(schedule);
-        }
-        Task *task() const;
-    
-    private:
-        Resource *m_resource;
-        int m_units;
-        ResourceGroupRequest *m_parent;
-
-#ifndef NDEBUG
+class ResourceRequest
+{
 public:
-        void printDebug(QString ident);
-#endif
-};
+    ResourceRequest( Resource *resource = 0, int units = 1 );
 
-class ResourceGroupRequest {
-    public:
-        ResourceGroupRequest(ResourceGroup *group=0, int units=0);
-        ~ResourceGroupRequest();
+    ~ResourceRequest();
 
-        void setParent(ResourceRequestCollection *parent) { m_parent = parent;}
-        ResourceRequestCollection *parent() const { return m_parent; }
-        
-        ResourceGroup *group() const { return m_group; }
-        QList<ResourceRequest*> &resourceRequests() { return m_resourceRequests; }
-        void addResourceRequest(ResourceRequest *request);
-        void deleteResourceRequest(ResourceRequest *request) {
-            int i = m_resourceRequests.indexOf(request);
-            if (i != -1)
-                m_resourceRequests.removeAt(i);
-            delete request;
-        }
+    ResourceGroupRequest *parent() const { return m_parent; }
+    void setParent( ResourceGroupRequest *parent ) { m_parent = parent; }
 
-        ResourceRequest *takeResourceRequest(ResourceRequest *request);
-        ResourceRequest *find(Resource *resource);
+    Resource *resource() const { return m_resource; }
+    void setResource( Resource* resource ) { m_resource = resource; }
 
-        bool load(QDomElement &element, Project &project);
-        void save(QDomElement &element) const;
+    bool load( QDomElement &element, Project &project );
+    void save( QDomElement &element ) const;
 
-        /**
-        * Get total amount of resource units in percent
-        */
-        int units() const;
-    
-        /**
-        * Get amount of work units in percent
-        */
-        int workUnits() const;
-    
-        Duration effort(const DateTime &time, const Duration &duration, bool backward, bool *ok=0) const;
-        
-        int numDays(const DateTime &time, bool backward) const;
-        
-        /**
-         * Returns the duration needed to do the effort  effort
-         * starting at start.
-         */
-        Duration duration(const DateTime &start, const Duration &effort, bool backward=false);
-        
-        DateTime availableAfter(const DateTime &time);
-        DateTime availableBefore(const DateTime &time);
-        
-        /**
-         * Makes appointments for task @param task to the 
-         * requested resources for the duration found in @ref duration().
-         */
-        void makeAppointments(Schedule *schedule);
-            
-        /**
-         * Reserves the requested resources for the specified interval
-         */
-        void reserve(const DateTime &start, const Duration &duration);
+    /**
+    * Get amount of requested resource units in percent
+    */
+    int units() const;
 
-        bool isEmpty() const;
-        
-        Task *task() const;
-        
-    private:
-        ResourceGroup *m_group;
-        int m_units;
-        ResourceRequestCollection *m_parent;
-        
-        QList<ResourceRequest*> m_resourceRequests;
-        DateTime m_start;
-        Duration m_duration;
+    /**
+    * Get amount of requested work units in percent
+    */
+    int workUnits() const;
 
-#ifndef NDEBUG
-public:
-        void printDebug(QString ident);
-#endif
-};
-
-class ResourceRequestCollection {
-public:
-    ResourceRequestCollection(Task &task);
-    ~ResourceRequestCollection();
-
-    const QList<ResourceGroupRequest*> &requests() const { return m_requests; }
-    void addRequest(ResourceGroupRequest *request) {
-        m_requests.append(request);
-        request->setParent(this);
+    void registerRequest()
+    {
+        if ( m_resource )
+            m_resource->registerRequest( this );
     }
-    void deleteRequest(ResourceGroupRequest *request) {
-        int i = m_requests.indexOf(request);
-        if (i != -1)
-            m_requests.removeAt(i);
+    void unregisterRequest()
+    {
+        if ( m_resource )
+            m_resource->unregisterRequest( this );
+    }
+
+    void makeAppointment( Schedule *schedule )
+    {
+        if ( m_resource )
+            m_resource->makeAppointment( schedule );
+    }
+    Task *task() const;
+
+private:
+    Resource *m_resource;
+    int m_units;
+    ResourceGroupRequest *m_parent;
+
+#ifndef NDEBUG
+public:
+    void printDebug( QString ident );
+#endif
+};
+
+class ResourceGroupRequest
+{
+public:
+    ResourceGroupRequest( ResourceGroup *group = 0, int units = 0 );
+    ~ResourceGroupRequest();
+
+    void setParent( ResourceRequestCollection *parent ) { m_parent = parent;}
+    ResourceRequestCollection *parent() const { return m_parent; }
+
+    ResourceGroup *group() const { return m_group; }
+    QList<ResourceRequest*> &resourceRequests() { return m_resourceRequests; }
+    void addResourceRequest( ResourceRequest *request );
+    void deleteResourceRequest( ResourceRequest *request )
+    {
+        int i = m_resourceRequests.indexOf( request );
+        if ( i != -1 )
+            m_resourceRequests.removeAt( i );
         delete request;
     }
 
-    void takeRequest(ResourceGroupRequest *request) {
-        int i = m_requests.indexOf(request);
-        if (i != -1)
-            m_requests.removeAt(i);
+    ResourceRequest *takeResourceRequest( ResourceRequest *request );
+    ResourceRequest *find( Resource *resource );
+
+    bool load( QDomElement &element, Project &project );
+    void save( QDomElement &element ) const;
+
+    /**
+    * Get total amount of resource units in percent
+    */
+    int units() const;
+
+    /**
+    * Get amount of work units in percent
+    */
+    int workUnits() const;
+
+    Duration effort( const DateTime &time, const Duration &duration, bool backward, bool *ok = 0 ) const;
+
+    int numDays( const DateTime &time, bool backward ) const;
+
+    /**
+     * Returns the duration needed to do the effort  effort
+     * starting at start.
+     */
+    Duration duration( const DateTime &start, const Duration &effort, bool backward = false );
+
+    DateTime availableAfter( const DateTime &time );
+    DateTime availableBefore( const DateTime &time );
+
+    /**
+     * Makes appointments for task @param task to the 
+     * requested resources for the duration found in @ref duration().
+     */
+    void makeAppointments( Schedule *schedule );
+
+    /**
+     * Reserves the requested resources for the specified interval
+     */
+    void reserve( const DateTime &start, const Duration &duration );
+
+    bool isEmpty() const;
+
+    Task *task() const;
+
+private:
+    ResourceGroup *m_group;
+    int m_units;
+    ResourceRequestCollection *m_parent;
+
+    QList<ResourceRequest*> m_resourceRequests;
+    DateTime m_start;
+    Duration m_duration;
+
+#ifndef NDEBUG
+public:
+    void printDebug( QString ident );
+#endif
+};
+
+class ResourceRequestCollection
+{
+public:
+    ResourceRequestCollection( Task &task );
+    ~ResourceRequestCollection();
+
+    const QList<ResourceGroupRequest*> &requests() const { return m_requests; }
+    void addRequest( ResourceGroupRequest *request )
+    {
+        m_requests.append( request );
+        request->setParent( this );
+    }
+    void deleteRequest( ResourceGroupRequest *request )
+    {
+        int i = m_requests.indexOf( request );
+        if ( i != -1 )
+            m_requests.removeAt( i );
+        delete request;
     }
 
-    ResourceGroupRequest *find(ResourceGroup *resource) const;
-    ResourceRequest *find(Resource *resource) const;
-    bool isEmpty() const;
-    
-    //bool load(QDomElement &element, Project &project);
-    void save(QDomElement &element) const;
+    void takeRequest( ResourceGroupRequest *request )
+    {
+        int i = m_requests.indexOf( request );
+        if ( i != -1 )
+            m_requests.removeAt( i );
+    }
 
-    void clear() { m_requests.clear(); }
-    
+    ResourceGroupRequest *find( ResourceGroup *resource ) const;
+    ResourceRequest *find( Resource *resource ) const;
+    bool isEmpty() const;
+
+    //bool load(QDomElement &element, Project &project);
+    void save( QDomElement &element ) const;
+
+void clear() { m_requests.clear(); }
+
     /**
     * Returns the total amount of resource units in percent
     */
     int units() const;
-    
+
     /**
     * Returns the amount of work units in percent
     */
     int workUnits() const;
-    
+
     /**
     * Returns the duration needed to do the effort @param effort
     * starting at @param time.
     */
-    Duration duration(const DateTime &time, const Duration &effort, bool backward=false);
-    
-    DateTime availableAfter(const DateTime &time);
-    DateTime availableBefore(const DateTime &time);
-    
+    Duration duration( const DateTime &time, const Duration &effort, bool backward = false );
+
+    DateTime availableAfter( const DateTime &time );
+    DateTime availableBefore( const DateTime &time );
+
     /**
     * Makes appointments for the task @param task to the requested resources.
     * Assumes that @ref duration() has been run.
     */
-    void makeAppointments(Schedule *schedule);
+    void makeAppointments( Schedule *schedule );
     /**
      * Reserves the requested resources for the specified interval
      */
-    void reserve(const DateTime &start, const Duration &duration);
+    void reserve( const DateTime &start, const Duration &duration );
 
     Task &task() const { return m_task; }
-    
+
 protected:
-    struct Interval {
+    struct Interval
+    {
         DateTime start;
         DateTime end;
         Duration effort;
     };
-    
+
 
 private:
     Task &m_task;
@@ -597,7 +624,7 @@ private:
 
 #ifndef NDEBUG
 public:
-        void printDebug(QString ident);
+    void printDebug( QString ident );
 #endif
 };
 
