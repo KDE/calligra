@@ -91,6 +91,9 @@
        <property name="alignment" >
         <set>Qt::AlignRight</set>
        </property>
+       <property name="suffix" >
+        <string>°</string>
+       </property>
        <property name="decimals" >
         <number>1</number>
        </property>
