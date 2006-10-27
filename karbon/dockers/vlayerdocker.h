@@ -31,6 +31,7 @@ class KoShape;
 class KoLayerShape;
 class QAbstractItemModel;
 class VDocumentModel;
+class KoViewConverter;
 
 class VLayerDocker : public QWidget
 {
@@ -74,6 +75,8 @@ private:
     PropertyList properties( KoShape* shape ) const;
     void setProperties( KoShape* shape, const PropertyList &properties );
     QImage createThumbnail( KoShape* shape, const QSize &thumbSize ) const;
+    QRectF transformedShapeBox( KoShape *shape, const QMatrix &shapeMatrix ) const;
+    void paintShape( KoShape *shape, QPainter &painter, const KoViewConverter &converter ) const;
     VDocument *m_document;
     KoShapeManager *m_shapeManager;
     KoShape *m_shape;
