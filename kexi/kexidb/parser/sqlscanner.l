@@ -272,7 +272,7 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 
 ['][^']*['] {
 	ECOUNT;
-	yylval.stringValue = new Substring(yytext+1, yyleng-2);
+	yylval.stringValue = new QString(QString::fromUtf8(yytext+1, yyleng-2));
 	return CHARACTER_STRING_LITERAL;
 
 /* "ZZZ" sentinel for script */
@@ -281,7 +281,7 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 {identifier} {
 	KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
 	ECOUNT;
-	yylval.stringValue = new Substring(yytext, yyleng);
+	yylval.stringValue = new QString(QString::fromUtf8(yytext, yyleng));
 	if (yytext[0]>='0' && yytext[0]<='9') {
 		setError(i18n("Invalid identifier"),
 		  i18n("Identifiers should start with a letter or '_' character"));
@@ -293,14 +293,14 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 {query_parameter} {
 	KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
 	ECOUNT;
-	yylval.stringValue = new Substring(yytext+1, yyleng-2);
+	yylval.stringValue = new QString(QString::fromUtf8(yytext+1, yyleng-2));
 	return QUERY_PARAMETER;
 }
 
 {quoted_identifier} {
 	KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
 	ECOUNT;
-	yylval.stringValue = new Substring(yytext+1, yyleng-2);
+	yylval.stringValue = new QString(QString::fromUtf8(yytext+1, yyleng-2));
 	if (yytext[1]>='0' && yytext[1]<='9') {
 		setError(i18n("Invalid identifier"),
 		  i18n("Identifiers should start with a letter or '_' character"));

@@ -864,7 +864,7 @@ using namespace KexiDB;
 typedef union YYSTYPE
 #line 511 "sqlparser.y"
 {
-	Substring* stringValue;
+	QString* stringValue;
 	Q_LLONG integerValue;
 	bool booleanValue;
 	struct realType realValue;
@@ -2448,7 +2448,7 @@ YYACCEPT;
 #line 617 "sqlparser.y"
     {
 	parser->setOperation(Parser::OP_CreateTable);
-	parser->createTable((yyvsp[(3) - (3)].stringValue)->toLatin1());
+	parser->createTable((yyvsp[(3) - (3)].stringValue)->latin1());
 	delete (yyvsp[(3) - (3)].stringValue);
 ;}
     break;
@@ -2462,8 +2462,8 @@ YYACCEPT;
   case 12:
 #line 633 "sqlparser.y"
     {
-	KexiDBDbg << "adding field " << (yyvsp[(1) - (2)].stringValue)->toQString() << endl;
-	field->setName((yyvsp[(1) - (2)].stringValue)->toQString());
+	KexiDBDbg << "adding field " << *(yyvsp[(1) - (2)].stringValue) << endl;
+	field->setName((yyvsp[(1) - (2)].stringValue)->latin1());
 	parser->table()->addField(field);
 	field = 0;
 	delete (yyvsp[(1) - (2)].stringValue);
@@ -2473,8 +2473,8 @@ YYACCEPT;
   case 13:
 #line 641 "sqlparser.y"
     {
-	KexiDBDbg << "adding field " << (yyvsp[(1) - (3)].stringValue)->toLatin1() << endl;
-	field->setName((yyvsp[(1) - (3)].stringValue)->toLatin1());
+	KexiDBDbg << "adding field " << *(yyvsp[(1) - (3)].stringValue) << endl;
+	field->setName(*(yyvsp[(1) - (3)].stringValue));
 	delete (yyvsp[(1) - (3)].stringValue);
 	parser->table()->addField(field);
 
@@ -2703,7 +2703,7 @@ YYACCEPT;
   case 38:
 #line 828 "sqlparser.y"
     {
-	(yyval.variantValue) = new QVariant( (yyvsp[(1) - (1)].stringValue)->toQString() );
+	(yyval.variantValue) = new QVariant( *(yyvsp[(1) - (1)].stringValue) );
 	KexiDBDbg << "OrderByColumnId: " << *(yyval.variantValue) << endl;
 	delete (yyvsp[(1) - (1)].stringValue);
 ;}
@@ -2712,7 +2712,7 @@ YYACCEPT;
   case 39:
 #line 834 "sqlparser.y"
     {
-	(yyval.variantValue) = new QVariant( (yyvsp[(1) - (3)].stringValue)->toQString() + "." + (yyvsp[(3) - (3)].stringValue)->toQString() );
+	(yyval.variantValue) = new QVariant( *(yyvsp[(1) - (3)].stringValue) + "." + *(yyvsp[(3) - (3)].stringValue) );
 	KexiDBDbg << "OrderByColumnId: " << *(yyval.variantValue) << endl;
 	delete (yyvsp[(1) - (3)].stringValue);
 	delete (yyvsp[(3) - (3)].stringValue);
@@ -2949,10 +2949,10 @@ YYACCEPT;
   case 80:
 #line 1026 "sqlparser.y"
     {
-	(yyval.expr) = new VariableExpr( (yyvsp[(1) - (1)].stringValue)->toQString() );
+	(yyval.expr) = new VariableExpr( *(yyvsp[(1) - (1)].stringValue) );
 	
 //TODO: simplify this later if that's 'only one field name' expression
-	KexiDBDbg << "  + identifier: " << (yyvsp[(1) - (1)].stringValue)->toQString() << endl;
+	KexiDBDbg << "  + identifier: " << *(yyvsp[(1) - (1)].stringValue) << endl;
 	delete (yyvsp[(1) - (1)].stringValue);
 ;}
     break;
@@ -2960,7 +2960,7 @@ YYACCEPT;
   case 81:
 #line 1034 "sqlparser.y"
     {
-	(yyval.expr) = new QueryParameterExpr( (yyvsp[(1) - (1)].stringValue)->toQString() );
+	(yyval.expr) = new QueryParameterExpr( *(yyvsp[(1) - (1)].stringValue) );
 	KexiDBDbg << "  + query parameter: " << (yyval.expr)->debugString() << endl;
 	delete (yyvsp[(1) - (1)].stringValue);
 ;}
@@ -2969,8 +2969,8 @@ YYACCEPT;
   case 82:
 #line 1040 "sqlparser.y"
     {
-	KexiDBDbg << "  + function: " << (yyvsp[(1) - (2)].stringValue)->toQString() << "(" << (yyvsp[(2) - (2)].exprList)->debugString() << ")" << endl;
-	(yyval.expr) = new FunctionExpr((yyvsp[(1) - (2)].stringValue)->toQString(), (yyvsp[(2) - (2)].exprList));
+	KexiDBDbg << "  + function: " << *(yyvsp[(1) - (2)].stringValue) << "(" << (yyvsp[(2) - (2)].exprList)->debugString() << ")" << endl;
+	(yyval.expr) = new FunctionExpr(*(yyvsp[(1) - (2)].stringValue), (yyvsp[(2) - (2)].exprList));
 	delete (yyvsp[(1) - (2)].stringValue);
 ;}
     break;
@@ -2978,8 +2978,8 @@ YYACCEPT;
   case 83:
 #line 1047 "sqlparser.y"
     {
-	(yyval.expr) = new VariableExpr( (yyvsp[(1) - (3)].stringValue)->toQString() + "." + (yyvsp[(3) - (3)].stringValue)->toQString() );
-	KexiDBDbg << "  + identifier.identifier: " << (yyvsp[(1) - (3)].stringValue)->toQString() << "." << (yyvsp[(3) - (3)].stringValue)->toQString() << endl;
+	(yyval.expr) = new VariableExpr( *(yyvsp[(1) - (3)].stringValue) + "." + *(yyvsp[(3) - (3)].stringValue) );
+	KexiDBDbg << "  + identifier.identifier: " << *(yyvsp[(1) - (3)].stringValue) << "." << *(yyvsp[(3) - (3)].stringValue) << endl;
 	delete (yyvsp[(1) - (3)].stringValue);
 	delete (yyvsp[(3) - (3)].stringValue);
 ;}
@@ -2998,7 +2998,7 @@ YYACCEPT;
   case 85:
 #line 1061 "sqlparser.y"
     {
-	(yyval.expr) = new ConstExpr( CHARACTER_STRING_LITERAL, (yyvsp[(1) - (1)].stringValue)->toQString() );
+	(yyval.expr) = new ConstExpr( CHARACTER_STRING_LITERAL, *(yyvsp[(1) - (1)].stringValue) );
 	KexiDBDbg << "  + constant " << (yyvsp[(1) - (1)].stringValue) << endl;
 	delete (yyvsp[(1) - (1)].stringValue);
 ;}
@@ -3093,8 +3093,8 @@ YYACCEPT;
   case 96:
 #line 1185 "sqlparser.y"
     {
-	KexiDBDbg << "FROM: '" << (yyvsp[(1) - (1)].stringValue)->toQString() << "'" << endl;
-	(yyval.expr) = new VariableExpr((yyvsp[(1) - (1)].stringValue)->toQString());
+	KexiDBDbg << "FROM: '" << *(yyvsp[(1) - (1)].stringValue) << "'" << endl;
+	(yyval.expr) = new VariableExpr(*(yyvsp[(1) - (1)].stringValue));
 
 	/*
 //TODO: this isn't ok for more tables:
@@ -3127,8 +3127,8 @@ YYACCEPT;
 	//table + alias
 	(yyval.expr) = new BinaryExpr(
 		KexiDBExpr_SpecialBinary, 
-		new VariableExpr((yyvsp[(1) - (2)].stringValue)->toQString()), 0,
-		new VariableExpr((yyvsp[(2) - (2)].stringValue)->toQString())
+		new VariableExpr(*(yyvsp[(1) - (2)].stringValue)), 0,
+		new VariableExpr(*(yyvsp[(2) - (2)].stringValue))
 	);
 	delete (yyvsp[(1) - (2)].stringValue);
 	delete (yyvsp[(2) - (2)].stringValue);
@@ -3141,8 +3141,8 @@ YYACCEPT;
 	//table + alias
 	(yyval.expr) = new BinaryExpr(
 		KexiDBExpr_SpecialBinary,
-		new VariableExpr((yyvsp[(1) - (3)].stringValue)->toQString()), AS,
-		new VariableExpr((yyvsp[(3) - (3)].stringValue)->toQString())
+		new VariableExpr(*(yyvsp[(1) - (3)].stringValue)), AS,
+		new VariableExpr(*(yyvsp[(3) - (3)].stringValue))
 	);
 	delete (yyvsp[(1) - (3)].stringValue);
 	delete (yyvsp[(3) - (3)].stringValue);
@@ -3192,7 +3192,7 @@ YYACCEPT;
     {
 	(yyval.expr) = new BinaryExpr(
 		KexiDBExpr_SpecialBinary, (yyvsp[(1) - (3)].expr), AS,
-		new VariableExpr((yyvsp[(3) - (3)].stringValue)->toQString())
+		new VariableExpr(*(yyvsp[(3) - (3)].stringValue))
 	);
 	KexiDBDbg << " added column expr: " << (yyval.expr)->debugString() << endl;
 	delete (yyvsp[(3) - (3)].stringValue);
@@ -3204,7 +3204,7 @@ YYACCEPT;
     {
 	(yyval.expr) = new BinaryExpr(
 		KexiDBExpr_SpecialBinary, (yyvsp[(1) - (2)].expr), 0, 
-		new VariableExpr((yyvsp[(2) - (2)].stringValue)->toQString())
+		new VariableExpr(*(yyvsp[(2) - (2)].stringValue))
 	);
 	KexiDBDbg << " added column expr: " << (yyval.expr)->debugString() << endl;
 	delete (yyvsp[(2) - (2)].stringValue);
@@ -3242,7 +3242,7 @@ YYACCEPT;
   case 108:
 #line 1352 "sqlparser.y"
     {
-	QString s( (yyvsp[(1) - (3)].stringValue)->toQString() );
+	QString s( *(yyvsp[(1) - (3)].stringValue) );
 	s += ".*";
 	(yyval.expr) = new VariableExpr(s);
 	KexiDBDbg << "  + all columns from " << s << endl;

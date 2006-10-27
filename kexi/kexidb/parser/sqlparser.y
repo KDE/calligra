@@ -509,7 +509,7 @@ using namespace KexiDB;
 %}
 
 %union {
-	Substring* stringValue;
+	QString* stringValue;
 	Q_LLONG integerValue;
 	bool booleanValue;
 	struct realType realValue;
@@ -616,7 +616,7 @@ CreateTableStatement :
 CREATE TABLE IDENTIFIER
 {
 	parser->setOperation(Parser::OP_CreateTable);
-	parser->createTable($3->toLatin1());
+	parser->createTable($3->latin1());
 	delete $3;
 }
 '(' ColDefs ')'
@@ -631,16 +631,16 @@ ColDefs ',' ColDef|ColDef
 ColDef:
 IDENTIFIER ColType
 {
-	KexiDBDbg << "adding field " << $1->toQString() << endl;
-	field->setName($1->toQString());
+	KexiDBDbg << "adding field " << *$1 << endl;
+	field->setName($1->latin1());
 	parser->table()->addField(field);
 	field = 0;
 	delete $1;
 }
 | IDENTIFIER ColType ColKeys
 {
-	KexiDBDbg << "adding field " << $1->toLatin1() << endl;
-	field->setName($1->toLatin1());
+	KexiDBDbg << "adding field " << *$1 << endl;
+	field->setName(*$1);
 	delete $1;
 	parser->table()->addField(field);
 
@@ -826,13 +826,13 @@ OrderByColumnId
 OrderByColumnId:
 IDENTIFIER
 {
-	$$ = new QVariant( $1->toQString() );
+	$$ = new QVariant( *$1 );
 	KexiDBDbg << "OrderByColumnId: " << *$$ << endl;
 	delete $1;
 }
 | IDENTIFIER '.' IDENTIFIER
 {
-	$$ = new QVariant( $1->toQString() + "." + $3->toQString() );
+	$$ = new QVariant( *$1 + "." + *$3 );
 	KexiDBDbg << "OrderByColumnId: " << *$$ << endl;
 	delete $1;
 	delete $3;
@@ -1024,29 +1024,29 @@ aExpr9:
 }
 | IDENTIFIER
 {
-	$$ = new VariableExpr( $1->toQString() );
+	$$ = new VariableExpr( *$1 );
 	
 //TODO: simplify this later if that's 'only one field name' expression
-	KexiDBDbg << "  + identifier: " << $1->toQString() << endl;
+	KexiDBDbg << "  + identifier: " << *$1 << endl;
 	delete $1;
 }
 | QUERY_PARAMETER
 {
-	$$ = new QueryParameterExpr( $1->toQString() );
+	$$ = new QueryParameterExpr( *$1 );
 	KexiDBDbg << "  + query parameter: " << $$->debugString() << endl;
 	delete $1;
 }
 | IDENTIFIER aExprList
 {
-	KexiDBDbg << "  + function: " << $1->toQString() << "(" << $2->debugString() << ")" << endl;
-	$$ = new FunctionExpr($1->toQString(), $2);
+	KexiDBDbg << "  + function: " << *$1 << "(" << $2->debugString() << ")" << endl;
+	$$ = new FunctionExpr(*$1, $2);
 	delete $1;
 }
 /*TODO: shall we also support db name? */
 | IDENTIFIER '.' IDENTIFIER
 {
-	$$ = new VariableExpr( $1->toQString() + "." + $3->toQString() );
-	KexiDBDbg << "  + identifier.identifier: " << $1->toQString() << "." << $3->toQString() << endl;
+	$$ = new VariableExpr( *$1 + "." + *$3 );
+	KexiDBDbg << "  + identifier.identifier: " << *$1 << "." << *$3 << endl;
 	delete $1;
 	delete $3;
 }
@@ -1059,7 +1059,7 @@ aExpr9:
 }
 | CHARACTER_STRING_LITERAL
 {
-	$$ = new ConstExpr( CHARACTER_STRING_LITERAL, $1->toQString() );
+	$$ = new ConstExpr( CHARACTER_STRING_LITERAL, *$1 );
 	KexiDBDbg << "  + constant " << $1 << endl;
 	delete $1;
 }
@@ -1130,7 +1130,7 @@ FROM FlatTableList
 /*
 | Tables LEFT JOIN IDENTIFIER SQL_ON ColExpression
 {
-	KexiDBDbg << "LEFT JOIN: '" << $4->toQString() << "' ON " << $6 << endl;
+	KexiDBDbg << "LEFT JOIN: '" << *$4 << "' ON " << $6 << endl;
 	addTable($4->toQString());
 	delete $4;
 }
@@ -1141,19 +1141,19 @@ FROM FlatTableList
 }
 | Tables INNER JOIN IDENTIFIER SQL_ON ColExpression
 {
-	KexiDBDbg << "INNER JOIN: '" << $4->toQString() << "' ON " << $6 << endl;
+	KexiDBDbg << "INNER JOIN: '" << *$4 << "' ON " << $6 << endl;
 	addTable($4->toQString());
 	delete $4;
 }
 | Tables RIGHT JOIN IDENTIFIER SQL_ON ColExpression
 {
-	KexiDBDbg << "RIGHT JOIN: '" << $4->toQString() << "' ON " << $6 << endl;
-	addTable($4->toQString());
+	KexiDBDbg << "RIGHT JOIN: '" << *$4 << "' ON " << $6 << endl;
+	addTable(*$4);
 	delete $4;
 }
 | Tables RIGHT OUTER JOIN IDENTIFIER SQL_ON ColExpression
 {
-	KexiDBDbg << "RIGHT OUTER JOIN: '" << $5->toQString() << "' ON " << $7 << endl;
+	KexiDBDbg << "RIGHT OUTER JOIN: '" << *$5 << "' ON " << $7 << endl;
 	addTable($5->toQString());
 	delete $5;
 }*/
@@ -1183,8 +1183,8 @@ FlatTableList ',' FlatTable
 FlatTable:
 IDENTIFIER
 {
-	KexiDBDbg << "FROM: '" << $1->toQString() << "'" << endl;
-	$$ = new VariableExpr($1->toQString());
+	KexiDBDbg << "FROM: '" << *$1 << "'" << endl;
+	$$ = new VariableExpr(*$1);
 
 	/*
 //TODO: this isn't ok for more tables:
@@ -1214,8 +1214,8 @@ IDENTIFIER
 	//table + alias
 	$$ = new BinaryExpr(
 		KexiDBExpr_SpecialBinary, 
-		new VariableExpr($1->toQString()), 0,
-		new VariableExpr($2->toQString())
+		new VariableExpr(*$1), 0,
+		new VariableExpr(*$2)
 	);
 	delete $1;
 	delete $2;
@@ -1225,8 +1225,8 @@ IDENTIFIER
 	//table + alias
 	$$ = new BinaryExpr(
 		KexiDBExpr_SpecialBinary,
-		new VariableExpr($1->toQString()), AS,
-		new VariableExpr($3->toQString())
+		new VariableExpr(*$1), AS,
+		new VariableExpr(*$3)
 	);
 	delete $1;
 	delete $3;
@@ -1269,7 +1269,7 @@ ColExpression
 {
 	$$ = new BinaryExpr(
 		KexiDBExpr_SpecialBinary, $1, AS,
-		new VariableExpr($3->toQString())
+		new VariableExpr(*$3)
 	);
 	KexiDBDbg << " added column expr: " << $$->debugString() << endl;
 	delete $3;
@@ -1278,7 +1278,7 @@ ColExpression
 {
 	$$ = new BinaryExpr(
 		KexiDBExpr_SpecialBinary, $1, 0, 
-		new VariableExpr($2->toQString())
+		new VariableExpr(*$2)
 	);
 	KexiDBDbg << " added column expr: " << $$->debugString() << endl;
 	delete $2;
@@ -1350,7 +1350,7 @@ ColWildCard:
 }
 | IDENTIFIER '.' '*'
 {
-	QString s( $1->toQString() );
+	QString s( *$1 );
 	s += ".*";
 	$$ = new VariableExpr(s);
 	KexiDBDbg << "  + all columns from " << s << endl;

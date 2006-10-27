@@ -751,7 +751,7 @@ bool parseData(KexiDB::Parser *p, const char *data);
 typedef union YYSTYPE
 #line 511 "sqlparser.y"
 {
-	Substring* stringValue;
+	QString* stringValue;
 	Q_LLONG integerValue;
 	bool booleanValue;
 	struct realType realValue;
