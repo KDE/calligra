@@ -114,6 +114,8 @@ class KEXIUTILS_EXPORT Validator : public QValidator
    - Intermediate is returned if at least one subvalidator returned Intermediate
    - Acceptable is returned if exactly all subvalidators returned Acceptable.
    - If there is no subvalidators defined, Invalid is always returned.
+
+ If there are no subvalidators, the multi validator always accepts the input.
 */
 class KEXIUTILS_EXPORT MultiValidator : public Validator
 {
