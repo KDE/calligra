@@ -425,7 +425,7 @@ public:
 	inline bool containsROWIDInfo() const { return m_containsROWIDInfo; }
 
 	inline KexiTableItem* createItem() const
-	{ return new KexiTableItem(columns.count()+(m_containsROWIDInfo?1:0)); }
+	{ return new KexiTableItem(m_itemSize); }
 
 signals:
 	void destroying();
@@ -497,6 +497,7 @@ protected:
 	int m_key;
 	short m_order;
 	short m_type;
+	int m_itemSize;
 	static unsigned short charTable[];
 	KexiDB::RowEditBuffer *m_pRowEditBuffer;
 	QGuardedPtr<KexiDB::Cursor> m_cursor;

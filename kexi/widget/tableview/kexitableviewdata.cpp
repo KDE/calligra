@@ -241,7 +241,14 @@ KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 	init();
 	m_cursor = c;
 	m_containsROWIDInfo = m_cursor->containsROWIDInfo();
-
+	if (m_cursor && m_cursor->query()) {
+		const KexiDB::QuerySchema::FieldsExpandedOptions fieldsExpandedOptions
+			= m_containsROWIDInfo ? KexiDB::QuerySchema::WithInternalFieldsAndRowID 
+			: KexiDB::QuerySchema::WithInternalFields;
+		m_itemSize = m_cursor->query()->fieldsExpanded( fieldsExpandedOptions ).count();
+	}
+	else
+		m_itemSize = columns.count()+(m_containsROWIDInfo?1:0);
 
 	// 1. Allocate KexiTableViewColumn objects for each visible query column
 	const KexiDB::QueryColumnInfo::Vector fields = m_cursor->query()->fieldsExpanded();
@@ -253,10 +260,10 @@ KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 			if (ci->indexForVisibleLookupValue() != -1) {
 				//Lookup field is defined
 				visibleLookupColumnInfo = m_cursor->query()->expandedOrInternalField( ci->indexForVisibleLookupValue() );
+				/* not needed 
 				if (visibleLookupColumnInfo) {
 					// 2. Create a KexiTableViewData object for each found lookup field
-					
-				}
+				}*/
 			}
 			KexiTableViewColumn* col = new KexiTableViewColumn(*m_cursor->query(), *ci, visibleLookupColumnInfo);
 			addColumn( col );
@@ -346,6 +353,7 @@ void KexiTableViewData::init()
 
 	m_autoIncrementedColumn = -2;
 	m_containsROWIDInfo = false;
+	m_itemSize = 0;
 }
 
 void KexiTableViewData::addColumn( KexiTableViewColumn* col )
@@ -372,12 +380,9 @@ void KexiTableViewData::addColumn( KexiTableViewColumn* col )
 		m_visibleColumnsIDs[ columns.count()-1 ] = -1;
 	}
 	m_autoIncrementedColumn = -2; //clear cache;
+	if (!m_cursor || !m_cursor->query())
+		m_itemSize = columns.count()+(m_containsROWIDInfo?1:0);
 }
-
-/*void KexiTableViewData::addColumns( KexiDB::QuerySchema *query, KexiDB::Field *field )
-{
-	field->isQueryAsterisk
-}*/
 
 QString KexiTableViewData::dbTableName() const
 {
@@ -624,7 +629,7 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 		val = &(*it_r); /* get old value */ \
 	}
 
-//js TODO: if there can be multiple views for this data, we need multiple buffers!
+//! @todo if there're multiple views for this data, we need multiple buffers!
 bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 {
 	if (!m_pRowEditBuffer)
