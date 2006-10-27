@@ -5,13 +5,15 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 ########### next target ###############
 
-set(kexiutils_LIB_SRCS identifier.cpp validator.cpp utils.cpp debuggui.cpp styleproxy.cpp)
+set(kexiutils_LIB_SRCS identifier.cpp validator.cpp utils.cpp debuggui.cpp 
+	styleproxy.cpp longlongvalidator.cpp)
 
 kde4_automoc(${kexiutils_LIB_SRCS})
 
 add_definitions( -DMAKE_KEXIUTILS_LIB )
 kde4_add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
-target_link_libraries(kexiutils  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} )
+target_link_libraries(kexiutils  
+	${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} )
 
 set_target_properties(kexiutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kexiutils  DESTINATION ${LIB_INSTALL_DIR})
@@ -19,7 +21,8 @@ install(TARGETS kexiutils  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  tristate.h identifier.h validator.h utils.h kexiutils_export.h  DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils)
+install( FILES  tristate.h identifier.h validator.h utils.h kexiutils_export.h
+	longlongvalidator.h DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils)
 
 
 

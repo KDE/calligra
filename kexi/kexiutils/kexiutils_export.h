@@ -30,4 +30,9 @@
 # define KEXIUTILS_EXPORT
 #endif
 
+// temporary, remove after porting to Qt4
+#undef foreach3
+#define foreach3(_class, _variable, _list) \
+	for (_class _variable = (_list).constBegin(); _variable!=(_list).constEnd(); ++_variable)
+
 #endif

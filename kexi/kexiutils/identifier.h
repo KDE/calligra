@@ -48,7 +48,7 @@ namespace KexiUtils {
 	class KEXIUTILS_EXPORT IdentifierValidator : public Validator
 	{
 		public:
-			IdentifierValidator(QObject * parent = 0, const char * name = 0);
+			IdentifierValidator(QObject * parent = 0);
 			virtual ~IdentifierValidator();
 			virtual State validate( QString & input, int & pos) const;
 

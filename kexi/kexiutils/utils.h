@@ -173,7 +173,7 @@ namespace KexiUtils
 	 color of \a palette palette. This function is useful for displaying monochromed icons 
 	 on the list view or table view header, to avoid bloat, but still have the color compatible 
 	 with accessibility settings. */
-	KEXIUTILS_EXPORT QIconSet colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette);
+	KEXIUTILS_EXPORT QIcon colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette);
 
 	/*! Serializes \a map to \a array.
 	 KexiUtils::deserializeMap() can be used to deserialize this array back to map. */

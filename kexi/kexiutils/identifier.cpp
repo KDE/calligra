@@ -245,8 +245,8 @@ QString KexiUtils::identifierExpectedMessage(const QString &valueName, const QVa
 
 //--------------------------------------------------------------------------------
 
-IdentifierValidator::IdentifierValidator(QObject * parent, const char * name)
-: Validator(parent,name)
+IdentifierValidator::IdentifierValidator(QObject * parent)
+: Validator(parent)
 {
 }
 

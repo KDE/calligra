@@ -25,15 +25,16 @@
 
 using namespace KexiUtils;
 
-LongLongValidator::LongLongValidator( QWidget * parent, int base, const char * name )
- : QValidator(parent, name)
+LongLongValidator::LongLongValidator( QWidget * parent, int base )
+ : QValidator(parent)
  , m_min(0), m_max(0)
 {
 	setBase(base);
 }
 
-LongLongValidator::LongLongValidator( qint64 bottom, qint64 top, QWidget * parent, int base, const char * name )
-  : QValidator(parent, name)
+LongLongValidator::LongLongValidator( qint64 bottom, qint64 top, 
+	QWidget * parent, int base )
+  : QValidator(parent)
 {
 	setBase(base);
 	setRange( bottom, top );
@@ -51,7 +52,7 @@ QValidator::State LongLongValidator::validate( QString &str, int & ) const
 
 	newStr = str.trimmed();
 	if (m_base > 10)
-		newStr = newStr.upper();
+		newStr = newStr.toUpper();
 
 	if (newStr == QString::fromLatin1("-")) {// a special case
 		if ((m_min || m_max) && m_min >= 0)

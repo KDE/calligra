@@ -23,8 +23,8 @@
 
 using namespace KexiUtils;
 
-Validator::Validator(QObject * parent, const char * name)
-: QValidator(parent,name)
+Validator::Validator(QObject * parent)
+: QValidator(parent)
 , m_acceptsEmptyValue(false)
 {
 }
@@ -59,15 +59,14 @@ QValidator::State Validator::validate ( QString & , int & ) const
 
 //-----------------------------------------------------------
 
-MultiValidator::MultiValidator(QObject* parent, const char * name)
- : Validator(parent, name)
+MultiValidator::MultiValidator(QObject* parent)
+ : Validator(parent)
 {
 	m_ownedSubValidators.setAutoDelete(true);
 }
 
-MultiValidator::MultiValidator(QValidator *validator, 
-	QObject * parent, const char * name)
- : Validator(parent, name)
+MultiValidator::MultiValidator(QValidator *validator, QObject * parent)
+ : Validator(parent)
 {
 	addSubvalidator(validator);
 }
@@ -87,7 +86,7 @@ QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 	if (m_subValidators.isEmpty())
 		return Invalid;
 	State s;
-	foreach( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators ) {
+	foreach3( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators ) {
 		s = (*it)->validate(input, pos);
 		if (s==Intermediate || s==Invalid)
 			return s;
@@ -97,7 +96,7 @@ QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 
 void MultiValidator::fixup ( QString & input ) const
 {
-	foreach( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators )
+	foreach3( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators )
 		(*it)->fixup(input);
 }
 
@@ -109,7 +108,7 @@ Validator::Result MultiValidator::internalCheck(
 		return Error;
 	Result r;
 	bool warning = false;
-	foreach( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators ) {
+	foreach3( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators ) {
 		if (dynamic_cast<Validator*>(*it))
 			r = dynamic_cast<Validator*>(*it)->internalCheck(valueName, v, message, details);
 		else

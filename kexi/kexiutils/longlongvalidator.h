@@ -38,8 +38,8 @@ namespace KexiUtils {
 class KEXIUTILS_EXPORT LongLongValidator : public QValidator
 {
 	public:
-		LongLongValidator( QWidget * parent, int base = 10, const char * name = 0 );
-		LongLongValidator( qint64 bottom, qint64 top, QWidget * parent, int base = 10, const char * name = 0 );
+		LongLongValidator( QWidget * parent, int base = 10 );
+		LongLongValidator( qint64 bottom, qint64 top, QWidget * parent, int base = 10 );
 		virtual ~LongLongValidator();
 
 		//! Validates the text, and returns the result.  Does not modify the parameters.
