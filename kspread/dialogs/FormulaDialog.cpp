@@ -402,7 +402,7 @@ QString FormulaDialog::createFormula()
     QString tmp( "" );
 
     if ( !m_desc )
-	return QString::null;
+	return QString();
 
     bool first = true;
 
