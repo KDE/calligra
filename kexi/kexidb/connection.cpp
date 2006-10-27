@@ -3190,6 +3190,8 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	else {
 		// non-empty row inserting requested:
 		for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
+			if (it.key()->field->table()!=mt)
+				continue; // skip values for fields outside of the master table (e.g. a "visible value" of the lookup field)
 			if (!sqlcols.isEmpty()) {
 				sqlcols+=",";
 				sqlvals+=",";
@@ -3207,7 +3209,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		setError(ERR_INSERT_SERVER_ERROR, i18n("Row inserting on the server failed."));
 		return false;
 	}
-	//success: now also assign new value in memory:
+	//success: now also assign a new value in memory:
 	QMap<QueryColumnInfo*,int> columnsOrderExpanded;
 	updateRowDataWithNewValues(query, data, b, columnsOrderExpanded);
 
@@ -3242,7 +3244,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		for (uint i=0; (ci = ci_it.current()); ++ci_it, i++) {
 //			KexiDBDbg << "Connection::insertRow(): AUTOINCREMENTED FIELD " << fi->field->name() << " == "
 //				<< aif_data[i].toInt() << endl;
-			data[ columnsOrderExpanded[ ci ] ] = aif_data[i];
+			( data[ columnsOrderExpanded[ ci ] ] = aif_data[i] ).cast( ci->field->variantType() ); //cast to get proper type
 		}
 	}
 	else {

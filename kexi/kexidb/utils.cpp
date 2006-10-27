@@ -1128,4 +1128,11 @@ void KexiDB::getLimitsForType(Field::Type type, int &minValue, int &maxValue)
 	}
 }
 
+void KexiDB::debugRowData(const RowData& rowData)
+{
+	KexiDBDbg << QString("ROW DATA (%1 columns):").arg(rowData.count()) << endl;
+	foreach(RowData::ConstIterator, it, rowData)
+		KexiDBDbg << "- " << (*it) << endl;
+}
+
 #include "utils_p.moc"
