@@ -26,6 +26,8 @@
 #include "kptcontext.h"
 
 #include <QMenu>
+#include <QDockWidget>
+#include <QTreeWidget>
 
 class QStackedWidget;
 
@@ -39,6 +41,7 @@ class KStatusBarLabel;
 namespace KPlato
 {
 
+class ViewListDockWidget;
 class AccountsView;
 class GanttView;
 class PertView;
@@ -51,6 +54,42 @@ class Relation;
 class Context;
 class ViewAdaptor;
 
+class ViewListTreeWidget : public QTreeWidget
+{
+    Q_OBJECT
+    public:
+        ViewListTreeWidget(QWidget *parent);
+        QTreeWidgetItem *findCategory(const QString cat);
+
+    protected:
+        void drawRow(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+    signals:
+        void activated(QTreeWidgetItem*);
+
+    private slots:
+        void handleMousePress(QTreeWidgetItem *item);
+};
+
+class ViewListDockWidget : public QDockWidget
+{
+    Q_OBJECT
+public:
+    ViewListDockWidget(QString name, KMainWindow *parent);
+    QTreeWidgetItem *addCategory(QString name);
+    void addView(QTreeWidgetItem *category, QString name, QWidget *widget, QString icon=QString::null);
+
+signals:
+    void activated(QWidget*);
+
+protected slots:
+    void slotActivated(QTreeWidgetItem *item);
+    
+private:
+    ViewListTreeWidget *m_viewList;
+};
+
+//-------------
 class View : public KoView {
     Q_OBJECT
 
@@ -87,6 +126,7 @@ public slots:
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
+    void slotViewSelector(bool show);
     void slotViewGantt();
     void slotViewExpected();
     void slotViewOptimistic();
@@ -127,6 +167,8 @@ public slots:
     void slotPopupMenu(const QString& menuname, const QPoint & pos);
 
 protected slots:
+    void slotViewActivated(QWidget*);
+    
     void slotProjectCalendar();
     void slotProjectWorktime();
     void slotProjectCalculate();
@@ -165,6 +207,7 @@ protected slots:
 #endif
 
 protected:
+    void createViewSelector();
     virtual void updateReadWrite(bool readwrite);
     Node *currentTask();
     void updateView(QWidget *widget);
@@ -178,6 +221,8 @@ private:
 //    ReportView *m_reportview;
 //    Q3PtrList<QString> m_reportTemplateFiles;
 
+    ViewListDockWidget *m_viewlist;
+    
     bool m_baselineMode;
 
     int m_viewGrp;
@@ -204,6 +249,9 @@ private:
 
     // ------ View
     KAction *actionViewGantt;
+    
+    KToggleAction *actionViewSelector;
+    
     KToggleAction *actionViewExpected;
     KToggleAction *actionViewOptimistic;
     KToggleAction *actionViewPessimistic;
@@ -217,11 +265,11 @@ private:
     KToggleAction *actionViewGanttCriticalPath;
     KToggleAction *actionViewGanttNotScheduled;
     KToggleAction *actionViewTaskAppointments;
+    
     KAction *actionViewPert;
     KAction *actionViewResources;
     KToggleAction *actionViewResourceAppointments;
     KAction *actionViewAccounts;
-    KAction *actionViewReports;
 
     // ------ Insert
     KAction *actionAddTask;

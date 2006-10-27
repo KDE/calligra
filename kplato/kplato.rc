@@ -22,24 +22,26 @@
             <Action name="view_optimistic"/>
             <Action name="view_pessimistic"/>
             <Separator/>
-            <Action name="view_gantt"/>
-            <Action name="view_gantt_showResources"/>
-            <Action name="view_gantt_showTaskName"/>
-            <Action name="view_gantt_showTaskLinks"/>
-            <Action name="view_gantt_showProgress"/>
-            <Action name="view_gantt_showFloat"/>
-            <Action name="view_gantt_showCriticalPath"/>
-            <Action name="view_gantt_showCriticalTasks"/>
-            <Action name="view_task_appointments"/>
+            <Menu name="view_gantt_options"><text>Ganttview Options</text>
+                <Action name="view_gantt_showResources"/>
+                <Action name="view_gantt_showTaskName"/>
+                <Action name="view_gantt_showTaskLinks"/>
+                <Action name="view_gantt_showProgress"/>
+                <Action name="view_gantt_showFloat"/>
+                <Action name="view_gantt_showCriticalPath"/>
+                <Action name="view_gantt_showCriticalTasks"/>
+                <Action name="view_task_appointments"/>
+            </Menu>
             <Separator/>
             <!--<Action name="view_pert"/> -->
             <Separator/>
-            <Action name="view_resources"/>
-            <Action name="view_resource_appointments"/>
+            <Menu name="view_resource_options"><text>Resourceview Options</text>
+                <Action name="view_resource_appointments"/>
+            </Menu>
             <Separator/>
-            <Action name="view_accounts"/>
+            <!-- <Menu name="view_accounts_options"><text>Accountsview Options</text>
+            </Menu> -->
             <Separator/>
-            <Action name="view_reports"/>
         </Menu>
         <Menu name="insert"><text>&amp;Insert</text>
             <Action name="add_task"/>
@@ -67,14 +69,14 @@
             <Action name="configure" group="settings_configure"/>
         </Menu>
     </MenuBar>
-    <ToolBar name="view" position="left"><Text>View</Text>
+<!--    <ToolBar name="view" position="left"><Text>View</Text>
         <Action name="view_gantt"/>
-        <!--<Action name="view_pert"/> -->
+        <Action name="view_pert"/> 
         <Action name="view_resources"/>
         <Action name="view_resourceuse"/>
         <Action name="view_accounts"/>
         <Action name="view_reports"/>
-    </ToolBar>
+    </ToolBar> -->
     <ToolBar name="project" position="top"><Text>Project</Text>
         <Action name="edit_undo"/>
         <Action name="edit_redo"/>

@@ -22,8 +22,10 @@
 #include <kmessagebox.h>
 
 #include <KoMainWindow.h>
+#include <KoToolManager.h>
 
 #include <QApplication>
+#include <QDockWidget>
 #include <QIcon>
 #include <QLayout>
 #include <QColor>
@@ -32,7 +34,13 @@
 #include <QStringList>
 #include <qsize.h>
 #include <QStackedWidget>
+#include <QHeaderView>
 #include <QVBoxLayout>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QItemDelegate>
+#include <QStyle>
+#include <QVariant>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -88,6 +96,152 @@
 namespace KPlato
 {
 
+// <Code mostly nicked from qt designer ;)>
+class ViewCategoryDelegate : public QItemDelegate
+{
+public:
+    ViewCategoryDelegate(QObject *parent, QTreeView *view)
+    : QItemDelegate(parent),
+    m_view(view)
+    {}
+
+    virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
+
+private:
+    QTreeView *m_view;
+};
+
+void ViewCategoryDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+{
+    const QAbstractItemModel *model = index.model();
+    Q_ASSERT(model);
+
+    if (!model->parent(index).isValid()) {
+        // this is a top-level item.
+        QStyleOptionButton buttonOption;
+        buttonOption.state = option.state;
+        buttonOption.state &= ~QStyle::State_HasFocus;
+
+        buttonOption.rect = option.rect;
+        buttonOption.palette = option.palette;
+        buttonOption.features = QStyleOptionButton::None;
+        m_view->style()->drawControl(QStyle::CE_PushButton, &buttonOption, painter, m_view);
+
+        QStyleOption branchOption;
+        static const int i = 9; // ### hardcoded in qcommonstyle.cpp
+        QRect r = option.rect;
+        branchOption.rect = QRect(r.left() + i/2, r.top() + (r.height() - i)/2, i, i);
+        branchOption.palette = option.palette;
+        branchOption.state = QStyle::State_Children;
+
+        if (m_view->isExpanded(index))
+            branchOption.state |= QStyle::State_Open;
+
+        m_view->style()->drawPrimitive(QStyle::PE_IndicatorBranch, &branchOption, painter, m_view);
+
+        // draw text
+        QRect textrect = QRect(r.left() + i*2, r.top(), r.width() - ((5*i)/2), r.height());
+        QString text = elidedText(option.fontMetrics, textrect.width(), Qt::ElideMiddle, 
+                                model->data(index, Qt::DisplayRole).toString());
+        m_view->style()->drawItemText(painter, textrect, Qt::AlignCenter,
+        option.palette, m_view->isEnabled(), text);
+
+        } else {
+            QItemDelegate::paint(painter, option, index);
+        }
+
+}
+
+    
+ViewListTreeWidget::ViewListTreeWidget(QWidget *parent)
+    : QTreeWidget(parent)
+{
+    header()->hide();
+    setRootIsDecorated(false);
+    setItemDelegate(new ViewCategoryDelegate(this, this));
+    setItemsExpandable(true);
+
+    connect(this, SIGNAL(itemPressed(QTreeWidgetItem*,int)), SLOT(handleMousePress(QTreeWidgetItem*)));
+}
+
+void ViewListTreeWidget::drawRow(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QTreeWidget::drawRow(painter, option, index);
+}
+
+void ViewListTreeWidget::handleMousePress(QTreeWidgetItem *item)
+{
+    if (item == 0)
+        return;
+
+    if (item->parent() == 0) {
+        setItemExpanded(item, !isItemExpanded(item));
+        return;
+    } else {
+        emit activated(item);
+    }
+}
+
+QTreeWidgetItem *ViewListTreeWidget::findCategory(const QString cat)
+{
+    QTreeWidgetItem *item;
+    int cnt = topLevelItemCount();
+    for (int i=0; i < cnt; ++i) {
+        item = topLevelItem(i);
+        if (item->text(0) == cat)
+            return item;
+    }
+    return 0;
+}
+
+ViewListDockWidget::ViewListDockWidget(QString name, KMainWindow *parent)
+    : QDockWidget(name, parent)
+{
+    setFeatures(features() & ~QDockWidget::DockWidgetClosable);
+    m_viewList = new ViewListTreeWidget(this);
+    setWidget(m_viewList);
+    parent->addDockWidget(Qt::LeftDockWidgetArea, this);
+    connect(m_viewList, SIGNAL(activated(QTreeWidgetItem*)), SLOT(slotActivated(QTreeWidgetItem*)));
+}
+
+void ViewListDockWidget::slotActivated(QTreeWidgetItem *item)
+{
+    if (item == 0) {
+        kDebug()<<k_funcinfo<<"item=0"<<endl;
+        return;
+    }
+    QWidget *wgt = qvariant_cast<QWidget*>(item->data(0, Qt::UserRole));
+    if (wgt) {
+        kDebug()<<k_funcinfo<<"widget: "<<wgt<<endl;
+        emit activated(wgt);
+    } else {
+        kDebug()<<k_funcinfo<<"something else"<<endl;
+        //emit activated(item);
+    }
+}
+
+QTreeWidgetItem *ViewListDockWidget::addCategory(QString name)
+{
+    kDebug()<<k_funcinfo<<endl;
+    QTreeWidgetItem *item = m_viewList->findCategory(name);
+    if ( item == 0) {
+        item = new QTreeWidgetItem(m_viewList, QStringList(name));
+        item->setExpanded(true);
+    }
+    return item;
+}
+
+void ViewListDockWidget::addView(QTreeWidgetItem *category, QString name, QWidget *view, QString icon)
+{
+    QTreeWidgetItem *item = new QTreeWidgetItem(category, QStringList(name));
+    item->setData(0, Qt::UserRole, qVariantFromValue(view));
+    if (!icon.isEmpty())
+        item->setData(0, Qt::DecorationRole, KIcon(icon)); 
+    kDebug()<<k_funcinfo<<"added: "<<item<<endl;
+}
+// </Code mostly nicked from qt designer ;)>
+
+//-------------------------------
 View::View(Part* part, QWidget* parent)
     : KoView(part, parent),
     m_ganttview(0),
@@ -131,6 +285,8 @@ View::View(Part* part, QWidget* parent)
     //m_reportview = new ReportView(this, m_tab);
     //m_tab->addWidget(m_reportview);
 
+    createViewSelector();
+    
     connect(m_tab, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentChanged(int)));
 
     connect(m_pertview, SIGNAL(addRelation(Node*, Node*)), SLOT(slotAddRelation(Node*, Node*)));
@@ -164,6 +320,9 @@ View::View(Part* part, QWidget* parent)
     actionViewGantt = new KAction(KIcon("gantt_chart"), i18n("Gantt"), actionCollection(), "view_gantt");
     connect(actionViewGantt, SIGNAL(triggered(bool) ), SLOT(slotViewGantt()));
 
+    actionViewSelector = new KToggleAction(i18n("Show Selector"), actionCollection(), "view_show_selector");
+    connect(actionViewSelector, SIGNAL(triggered(bool)), SLOT(slotViewSelector(bool)));
+    
     actionViewExpected = new KToggleAction(i18n("Expected"), actionCollection(), "view_expected");
     connect(actionViewExpected, SIGNAL(triggered(bool)), SLOT(slotViewExpected()));
     actionViewOptimistic = new KToggleAction(i18n("Optimistic"), actionCollection(), "view_optimistic");
@@ -171,14 +330,11 @@ View::View(Part* part, QWidget* parent)
     actionViewPessimistic = new KToggleAction(i18n("Pessimistic"), actionCollection(), "view_pessimistic");
     connect(actionViewPessimistic, SIGNAL(triggered(bool)), SLOT(slotViewPessimistic()));
 
-	QActionGroup *estimationType = new QActionGroup( this );
+    QActionGroup *estimationType = new QActionGroup( this );
     estimationType->setExclusive( true );
-	estimationType->addAction(actionViewExpected);
-	estimationType->addAction(actionViewOptimistic);
-	estimationType->addAction(actionViewPessimistic);
-
-
-
+    estimationType->addAction(actionViewExpected);
+    estimationType->addAction(actionViewOptimistic);
+    estimationType->addAction(actionViewPessimistic);
 
     actionViewGanttResources = new KToggleAction(i18n("Resources"), actionCollection(), "view_gantt_showResources");
     connect(actionViewGanttResources, SIGNAL(triggered(bool)), SLOT(slotViewGanttResources()));
@@ -339,6 +495,31 @@ ViewAdaptor* View::dbusObject()
   return m_dbus;
 }
 
+void View::createViewSelector()
+{
+    kDebug()<<k_funcinfo<<endl;
+    m_viewlist = new ViewListDockWidget(i18n("Select"), mainWindow());
+    QTreeWidgetItem *cat;
+//     cat = m_viewlist->addCategory(i18n("Editors"));
+    
+    cat = m_viewlist->addCategory(i18n("Views"));
+    m_viewlist->addView(cat, i18n("Gantt"), m_ganttview, "gantt_chart");
+    m_viewlist->addView(cat, i18n("Resources"), m_resourceview, "resources");
+    m_viewlist->addView(cat, i18n("Accounts"), m_accountsview, "accounts");
+
+//    cat = m_viewlist->addCategory(i18n("Reports"));
+    
+    connect(m_viewlist, SIGNAL(activated(QWidget*)), SLOT(slotViewActivated(QWidget*)));
+}
+
+
+void View::slotViewActivated(QWidget *view)
+{
+    kDebug()<<k_funcinfo<<"view="<<view<<endl;
+    if (view) {
+        m_tab->setCurrentWidget(view);
+    }
+}
 
 Project& View::getProject() const
 {
@@ -480,6 +661,11 @@ void View::slotViewTaskAppointments() {
     m_updateGanttview = true;
     if (m_tab->currentWidget() == m_ganttview)
         slotUpdate(false);
+}
+
+void View::slotViewSelector(bool show) {
+    //kDebug()<<k_funcinfo<<endl;
+    m_viewlist->setVisible(show);
 }
 
 void View::slotViewGantt() {
