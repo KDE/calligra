@@ -83,8 +83,6 @@ void MultiValidator::addSubvalidator( QValidator* validator, bool owned )
 
 QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 {
-	if (m_subValidators.isEmpty())
-		return Invalid;
 	State s;
 	foreach3( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators ) {
 		s = (*it)->validate(input, pos);
@@ -104,8 +102,6 @@ Validator::Result MultiValidator::internalCheck(
 	const QString &valueName, const QVariant& v, 
 	QString &message, QString &details)
 {
-	if (m_subValidators.isEmpty())
-		return Error;
 	Result r;
 	bool warning = false;
 	foreach3( Q3ValueList<QValidator*>::ConstIterator, it,  m_subValidators ) {
