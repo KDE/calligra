@@ -35,6 +35,7 @@ class KoRuler;
 class KivioCanvas;
 class KivioDocument;
 class KivioAbstractPage;
+class KivioShapeGeometry;
 
 class KivioView : public KoView, public KoShapeControllerBase
 {
@@ -93,6 +94,12 @@ class KivioView : public KoView, public KoShapeControllerBase
     /// Called when the zoom mode needs a recalculation of the zoom
     void recalculateZoom();
 
+    /// Called when the selection changed
+    void selectionChanged();
+
+    /// Called when the doc emits updateGui
+    void updateGui();
+
   protected:
     /// Creates and initializes the GUI.
     void initGUI();
@@ -115,6 +122,8 @@ class KivioView : public KoView, public KoShapeControllerBase
     KoZoomAction* m_viewZoomAction;
 
     KivioAbstractPage* m_activePage;
+
+    KivioShapeGeometry* m_geometryWidget;
 };
 
 #endif

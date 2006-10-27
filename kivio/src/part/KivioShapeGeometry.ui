@@ -1,0 +1,144 @@
+<ui version="4.0" >
+ <class>KivioShapeGeometry</class>
+ <widget class="QWidget" name="KivioShapeGeometry" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string/>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="label" >
+       <property name="text" >
+        <string>X:</string>
+       </property>
+       <property name="buddy" >
+        <cstring>m_frameLeft</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QLabel" name="label_4" >
+       <property name="text" >
+        <string>Y:</string>
+       </property>
+       <property name="buddy" >
+        <cstring>m_frameTop</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="KoUnitDoubleSpinBox" name="m_xInput" />
+     </item>
+     <item row="1" column="1" >
+      <widget class="KoUnitDoubleSpinBox" name="m_yInput" />
+     </item>
+     <item row="2" column="0" >
+      <widget class="QLabel" name="label_3" >
+       <property name="text" >
+        <string>Width:</string>
+       </property>
+       <property name="buddy" >
+        <cstring>m_frameWidth</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1" >
+      <widget class="QLabel" name="label_5" >
+       <property name="text" >
+        <string>Height:</string>
+       </property>
+       <property name="buddy" >
+        <cstring>m_frameHeight</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" >
+      <widget class="KoUnitDoubleSpinBox" name="m_widthInput" />
+     </item>
+     <item row="3" column="1" >
+      <widget class="KoUnitDoubleSpinBox" name="m_heightInput" />
+     </item>
+     <item row="4" column="0" >
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string>Rotation:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" >
+      <widget class="QDoubleSpinBox" name="m_rotationInput" >
+       <property name="alignment" >
+        <set>Qt::AlignRight</set>
+       </property>
+       <property name="decimals" >
+        <number>1</number>
+       </property>
+       <property name="maximum" >
+        <double>360.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0" colspan="2" >
+      <widget class="QCheckBox" name="m_protectSizeCheck" >
+       <property name="text" >
+        <string>Protect size and position</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0" colspan="2" >
+      <widget class="QCheckBox" name="m_aspectRatioCheck" >
+       <property name="text" >
+        <string>Keep aspect ratio</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>51</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
+ <customwidgets>
+  <customwidget>
+   <class>KoUnitDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>KoUnitWidgets.h</header>
+  </customwidget>
+ </customwidgets>
+ <includes/>
+ <resources/>
+ <connections/>
+</ui>

@@ -161,7 +161,8 @@ void KivioDocument::slotDocumentRestored()
 
 void KivioDocument::slotCommandExecuted()
 {
-  setModified(true);
+    setModified(true);
+    emit updateGui();
 }
 
 void KivioDocument::addShell(KoMainWindow* shell)

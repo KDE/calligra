@@ -11,9 +11,11 @@ set(kivioprivate_LIB_SRCS
   KivioAbstractPage.cpp
   KivioMasterPage.cpp
   KivioPage.cpp
+  KivioShapeGeometry.cpp
 )
 
 kde4_automoc(${kivioprivate_LIB_SRCS})
+kde4_add_ui_files(kivioprivate_LIB_SRCS KivioShapeGeometry.ui)
 
 kde4_add_library(kivioprivate SHARED ${kivioprivate_LIB_SRCS})
 

@@ -38,244 +38,273 @@
 #include <KoPageLayout.h>
 #include <KoMainWindow.h>
 #include <KoRuler.h>
+#include <KoSelection.h>
 
 #include "KivioCanvas.h"
 #include "KivioDocument.h"
 #include "KivioAbstractPage.h"
 #include "KivioPage.h"
+#include "KivioShapeGeometry.h"
 
 KivioView::KivioView(KivioDocument* document, QWidget* parent)
   : KoView(document, parent), m_document(document)
 {
-  m_activePage = 0;
-  m_zoomHandler = new KoZoomHandler;
+    Q_ASSERT(m_document);
 
-  initGUI();
-  initActions();
+    m_activePage = 0;
+    m_zoomHandler = new KoZoomHandler;
 
-  if(m_document->pageCount() > 0)
-    setActivePage(m_document->pageByIndex(0));
+    initGUI();
+    initActions();
+
+    if(m_document->pageCount() > 0)
+        setActivePage(m_document->pageByIndex(0));
+
+    connect(m_document, SIGNAL(updateGui()), this, SLOT(updateGui()));
 }
 
 KivioView::~KivioView()
 {
-  delete m_zoomHandler;
-  m_zoomHandler = 0;
+    delete m_zoomHandler;
+    m_zoomHandler = 0;
 }
 
 KivioCanvas* KivioView::canvasWidget() const
 {
-  return m_canvas;
+    return m_canvas;
 }
 
 QWidget* KivioView::canvas() const
 {
-  return static_cast<QWidget*>(m_canvas);
+    return static_cast<QWidget*>(m_canvas);
 }
 
 KivioDocument* KivioView::document() const
 {
-  return m_document;
+    return m_document;
 }
 
 void KivioView::updateReadWrite(bool readwrite)
 {
-  Q_UNUSED(readwrite);
+    Q_UNUSED(readwrite);
 }
 
 void KivioView::initGUI()
 {
-  QGridLayout* layout = new QGridLayout(this);
-  layout->setSpacing(0);
-  layout->setMargin(0);
-  setLayout(layout);
+    QGridLayout* layout = new QGridLayout(this);
+    layout->setSpacing(0);
+    layout->setMargin(0);
+    setLayout(layout);
 
-  m_canvas = new KivioCanvas(this);
+    m_canvas = new KivioCanvas(this);
 
-  m_canvasController = new KoCanvasController(this);
-  m_canvasController->setCanvas(m_canvas);
+    m_canvasController = new KoCanvasController(this);
+    m_canvasController->setCanvas(m_canvas);
 
-  m_horizontalRuler = new KoRuler(this, Qt::Horizontal, m_zoomHandler);
-  m_horizontalRuler->setShowMousePosition(true);
-  m_verticalRuler = new KoRuler(this, Qt::Vertical, m_zoomHandler);
-  m_verticalRuler->setShowMousePosition(true);
+    m_horizontalRuler = new KoRuler(this, Qt::Horizontal, m_zoomHandler);
+    m_horizontalRuler->setShowMousePosition(true);
+    m_verticalRuler = new KoRuler(this, Qt::Vertical, m_zoomHandler);
+    m_verticalRuler->setShowMousePosition(true);
 
-  layout->addWidget(m_horizontalRuler, 0, 1);
-  layout->addWidget(m_verticalRuler, 1, 0);
-  layout->addWidget(m_canvasController, 1, 1);
+    layout->addWidget(m_horizontalRuler, 0, 1);
+    layout->addWidget(m_verticalRuler, 1, 0);
+    layout->addWidget(m_canvasController, 1, 1);
 
-  KoToolManager::instance()->addControllers(m_canvasController, this);
+    KoToolManager::instance()->addControllers(m_canvasController, this);
 
-  connect(m_canvasController, SIGNAL(canvasOffsetXChanged(int)),
-          m_horizontalRuler, SLOT(setOffset(int)));
-  connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
-          m_verticalRuler, SLOT(setOffset(int)));
+    connect(m_canvasController, SIGNAL(canvasOffsetXChanged(int)),
+            m_horizontalRuler, SLOT(setOffset(int)));
+    connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
+            m_verticalRuler, SLOT(setOffset(int)));
+
+    m_geometryWidget = new KivioShapeGeometry(this, document());
+    m_geometryWidget->setEnabled(false);
+    createDock(i18n("Geometry"), m_geometryWidget);
+
+    connect(m_canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
 
 void KivioView::initActions()
 {
-  setXMLFile("kivio.rc");
+    setXMLFile("kivio.rc");
 
-  m_viewZoomIn = KStdAction::zoomIn(this, SLOT(viewZoomIn()), actionCollection(), "view_zoom_in");
-  m_viewZoomOut = KStdAction::zoomOut(this, SLOT(viewZoomOut()), actionCollection(), "view_zoom_out");
-  m_viewZoomAction = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
-                                       i18n("Zoom"), KIcon("viewmag"), 0,
-                                       actionCollection(), "view_zoom");
-  connect(m_viewZoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
-          this, SLOT(viewZoom(KoZoomMode::Mode, int)));
+    m_viewZoomIn = KStdAction::zoomIn(this, SLOT(viewZoomIn()), actionCollection(), "view_zoom_in");
+    m_viewZoomOut = KStdAction::zoomOut(this, SLOT(viewZoomOut()), actionCollection(), "view_zoom_out");
+    m_viewZoomAction = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
+                                        i18n("Zoom"), KIcon("viewmag"), 0,
+                                        actionCollection(), "view_zoom");
+    connect(m_viewZoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
+            this, SLOT(viewZoom(KoZoomMode::Mode, int)));
 }
 
 KivioAbstractPage* KivioView::activePage() const
 {
-  return m_activePage;
+    return m_activePage;
 }
 
 KoShapeManager* KivioView::shapeManager() const
 {
-  return m_canvas->shapeManager();
+    return m_canvas->shapeManager();
 }
 
 void KivioView::setActivePage(KivioAbstractPage* page)
 {
-  if(!page) {
-    return;
-  }
+    if(!page) {
+        return;
+    }
 
-  m_activePage = page;
-  shapeManager()->setShapes(page->shapeList());
-  m_canvas->updateSize();
-  KoPageLayout layout = page->pageLayout();
-  m_horizontalRuler->setRulerLength(layout.ptWidth);
-  m_verticalRuler->setRulerLength(layout.ptHeight);
-  m_horizontalRuler->setActiveRange(layout.ptLeft, layout.ptWidth - layout.ptRight);
-  m_verticalRuler->setActiveRange(layout.ptTop, layout.ptHeight - layout.ptBottom);
+    m_activePage = page;
+    shapeManager()->setShapes(page->shapeList());
+    m_canvas->updateSize();
+    KoPageLayout layout = page->pageLayout();
+    m_horizontalRuler->setRulerLength(layout.ptWidth);
+    m_verticalRuler->setRulerLength(layout.ptHeight);
+    m_horizontalRuler->setActiveRange(layout.ptLeft, layout.ptWidth - layout.ptRight);
+    m_verticalRuler->setActiveRange(layout.ptTop, layout.ptHeight - layout.ptBottom);
 }
 
 void KivioView::addShape(KoShape* shape)
 {
-  m_document->addShape(m_activePage, shape);
+    m_document->addShape(m_activePage, shape);
 }
 
 void KivioView::removeShape(KoShape* shape)
 {
-  m_document->removeShape(m_activePage, shape);
+    m_document->removeShape(m_activePage, shape);
 }
 
 KoZoomHandler* KivioView::zoomHandler() const
 {
-  return m_zoomHandler;
+    return m_zoomHandler;
 }
 
 void KivioView::setZoom(int zoom)
 {
-  m_zoomHandler->setZoom(zoom);
-  m_canvas->updateSize();
+    m_zoomHandler->setZoom(zoom);
+    m_canvas->updateSize();
 }
 
 void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
 {
-  // No point trying to zoom something that isn't there...
-  if(m_activePage == 0) {
-    return;
-  }
-
-  int newZoom = zoom;
-  QString zoomString;
-
-  if(mode == KoZoomMode::ZOOM_WIDTH) {
-    zoomString = KoZoomMode::toString(mode);
-    KoPageLayout layout = m_activePage->pageLayout();
-    newZoom = qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) /
-        (m_zoomHandler->resolutionX() * layout.ptWidth)) - 1;
-
-    if((newZoom != m_zoomHandler->zoomInPercent()) &&
-        m_canvasController->verticalScrollBar()->isHidden())
-    {
-      QTimer::singleShot(0, this, SLOT(recalculateZoom()));
+    // No point trying to zoom something that isn't there...
+    if(m_activePage == 0) {
+        return;
     }
-  } else if(mode == KoZoomMode::ZOOM_PAGE) {
-    zoomString = KoZoomMode::toString(mode);
-    KoPageLayout layout = m_activePage->pageLayout();
-    double height = m_zoomHandler->resolutionY() * layout.ptHeight;
-    double width = m_zoomHandler->resolutionX() * layout.ptWidth;
-    newZoom = qMin(qRound(static_cast<double>(m_canvasController->visibleHeight() * 100) / height),
-                qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) / width)) - 1;
-  } else {
-    zoomString = i18n("%1%", newZoom);
-  }
 
-  // Don't allow smaller zoom then 10% or bigger then 2000%
-  if((newZoom < 10) || (newZoom > 2000) || (newZoom == m_zoomHandler->zoomInPercent())) {
-    return;
-  }
+    int newZoom = zoom;
+    QString zoomString;
 
-  m_zoomHandler->setZoomMode(mode);
-  m_viewZoomAction->setZoom(zoomString);
-  setZoom(newZoom);
-  m_canvas->setFocus();
+    if(mode == KoZoomMode::ZOOM_WIDTH) {
+        zoomString = KoZoomMode::toString(mode);
+        KoPageLayout layout = m_activePage->pageLayout();
+        newZoom = qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) /
+            (m_zoomHandler->resolutionX() * layout.ptWidth)) - 1;
+
+        if((newZoom != m_zoomHandler->zoomInPercent()) &&
+            m_canvasController->verticalScrollBar()->isHidden())
+        {
+        QTimer::singleShot(0, this, SLOT(recalculateZoom()));
+        }
+    } else if(mode == KoZoomMode::ZOOM_PAGE) {
+        zoomString = KoZoomMode::toString(mode);
+        KoPageLayout layout = m_activePage->pageLayout();
+        double height = m_zoomHandler->resolutionY() * layout.ptHeight;
+        double width = m_zoomHandler->resolutionX() * layout.ptWidth;
+        newZoom = qMin(qRound(static_cast<double>(m_canvasController->visibleHeight() * 100) / height),
+                    qRound(static_cast<double>(m_canvasController->visibleWidth() * 100) / width)) - 1;
+    } else {
+        zoomString = i18n("%1%", newZoom);
+    }
+
+    // Don't allow smaller zoom then 10% or bigger then 2000%
+    if((newZoom < 10) || (newZoom > 2000) || (newZoom == m_zoomHandler->zoomInPercent())) {
+        return;
+    }
+
+    m_zoomHandler->setZoomMode(mode);
+    m_viewZoomAction->setZoom(zoomString);
+    setZoom(newZoom);
+    m_canvas->setFocus();
 }
 
 void KivioView::resizeEvent(QResizeEvent* event)
 {
-  KoView::resizeEvent(event);
+    KoView::resizeEvent(event);
 
-  if(m_zoomHandler->zoomMode() != KoZoomMode::ZOOM_CONSTANT) {
-    recalculateZoom();
-  }
+    if(m_zoomHandler->zoomMode() != KoZoomMode::ZOOM_CONSTANT) {
+        recalculateZoom();
+    }
 
-  m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX());
-  m_verticalRuler->setOffset(m_canvasController->canvasOffsetY());
+    m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX());
+    m_verticalRuler->setOffset(m_canvasController->canvasOffsetY());
 }
 
 void KivioView::viewZoomIn()
 {
-  int zoom = m_zoomHandler->zoomInPercent();
+    int zoom = m_zoomHandler->zoomInPercent();
 
-  if((zoom + 25) > 2000) {
-    zoom = 2000 - zoom;
-  } else {
-    zoom = 25;
-  }
+    if((zoom + 25) > 2000) {
+        zoom = 2000 - zoom;
+    } else {
+        zoom = 25;
+    }
 
-  zoom = m_zoomHandler->zoomInPercent() + zoom;
-  m_viewZoomAction->setZoom(i18n("%1%", zoom));
-  setZoom(zoom);
+    zoom = m_zoomHandler->zoomInPercent() + zoom;
+    m_viewZoomAction->setZoom(i18n("%1%", zoom));
+    setZoom(zoom);
 }
 
 void KivioView::viewZoomOut()
 {
-  int zoom = m_zoomHandler->zoomInPercent();
+    int zoom = m_zoomHandler->zoomInPercent();
 
-  if(zoom < 35) {
-    zoom = zoom - 10;
-  } else {
-    zoom = 25;
-  }
+    if(zoom < 35) {
+        zoom = zoom - 10;
+    } else {
+        zoom = 25;
+    }
 
-  zoom = m_zoomHandler->zoomInPercent() - zoom;
-  m_viewZoomAction->setZoom(i18n("%1%", zoom));
-  setZoom(zoom);
+    zoom = m_zoomHandler->zoomInPercent() - zoom;
+    m_viewZoomAction->setZoom(i18n("%1%", zoom));
+    setZoom(zoom);
 }
 
 void KivioView::recalculateZoom()
 {
-  viewZoom(m_zoomHandler->zoomMode(), m_zoomHandler->zoomInPercent());
+    viewZoom(m_zoomHandler->zoomMode(), m_zoomHandler->zoomInPercent());
 }
 
 void KivioView::updateMousePosition(QPoint position)
 {
-  m_horizontalRuler->updateMouseCoordinate(position.x());
-  m_verticalRuler->updateMouseCoordinate(position.y());
+    m_horizontalRuler->updateMouseCoordinate(position.x());
+    m_verticalRuler->updateMouseCoordinate(position.y());
 }
 
 QDockWidget* KivioView::createToolBox()
 {
-  return KoToolManager::instance()->toolBox("Kivio");
+    return KoToolManager::instance()->toolBox("Kivio");
 }
 
 QDockWidget* KivioView::createShapeSelector()
 {
-  return new KoShapeSelector(0, ".*");
+    return new KoShapeSelector(this, ".*");
+}
+
+void KivioView::selectionChanged()
+{
+    bool selected = m_canvas->shapeManager()->selection()->count() > 0;
+
+    if(selected) {
+        m_geometryWidget->setEnabled(true);
+        m_geometryWidget->setSelection(m_canvas->shapeManager()->selection());
+    } else {
+        m_geometryWidget->setEnabled(false);
+    }
+}
+
+void KivioView::updateGui()
+{
+    selectionChanged();
 }
 
 #include "KivioView.moc"
