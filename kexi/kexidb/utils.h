@@ -409,6 +409,9 @@ namespace KexiDB
 	 Signed integers are assumed. */
 //! @todo add support for unsigned flag
 	KEXI_DB_EXPORT void getLimitsForType(Field::Type type, int &minValue, int &maxValue);
+
+	/*! Shows debug information about \a rowData row data. */
+	KEXI_DB_EXPORT void debugRowData(const RowData& rowData);
 }
 
 #endif

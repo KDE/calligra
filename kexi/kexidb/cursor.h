@@ -99,7 +99,7 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		virtual bool close();
 
 		/*! \return query schema used to define this cursor
-		 or NULL if query schema is undefined but raw statement instead. */
+		 or NULL if the cursor is not defined by a query schema but by a raw statement. */
 		inline QuerySchema *query() const { return m_query; }
 
 		//! \return query parameters assigned to this cursor
