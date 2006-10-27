@@ -583,6 +583,8 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 			<< colnum << " not found! col==0" << endl;
 		return false;
 	}
+	if (!m_pRowEditBuffer)
+		m_pRowEditBuffer = new KexiDB::RowEditBuffer(isDBAware());
 	if (m_pRowEditBuffer->isDBAware()) {
 		if (!(col->columnInfo)) {
 			kdWarning() << "KexiTableViewData::updateRowEditBufferRef(): column #" 

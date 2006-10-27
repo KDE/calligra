@@ -750,6 +750,9 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 		//editing is finished:
 		m_rowEditing = false;
 		m_newRowEditing = false;
+		//update current-item-iterator
+		m_itemIterator->toLast();
+		m_currentItem = **m_itemIterator;
 		//indicate on the vheader that we are not editing
 		if (m_verticalHeader)
 			m_verticalHeader->setEditRow(-1);
