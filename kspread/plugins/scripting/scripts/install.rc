@@ -2,7 +2,7 @@
 	<ScriptAction
 		name="pyexporthtml"
 		text="Export to HTML"
-		description="Export a OpenDocument Spreadsheet File to a HTML File"
+		description="Export an OpenDocument Spreadsheet File to a HTML File"
 		interpreter="python"
 		file="exporthtml.py" />
 	<!--

@@ -1,5 +1,30 @@
 #!/usr/bin/env krossrunner
 
+"""
+Python script to export an OpenDocument Spreadsheet File to
+a HTML File.
+
+The script could be run used in two ways;
+
+    1. Embedded in KSpread by execution via the "Tools=>Scripts"
+       menu or from the "Tools=>Script Manager". In that case
+       the document currently loaded and displayed by KSpread
+       will be exported to a HTML file.
+
+    2. As standalone script by running;
+           cd /usr/share/apps/kspread/scripts/default
+           chmod 755 exporthtml.py
+           ./exporthtml.py
+       In that case the exporthtml.py-script will use the with
+       Kross distributed krossrunner commandline-application
+       to execute the python script.
+
+(C)2006 Sebastian Sauer <mail@dipe.org>
+http://kross.dipe.org
+http://www.koffice.org/kspread
+Dual-licensed under LGPL v2+higher and the BSD license.
+"""
+
 class Styles:
 
     Simple = (
@@ -319,12 +344,6 @@ class Dialog:
         print dir(layoutwidget)
         self.layoutlist = layoutwidget["List"]
 
-        #w = widget #widget["KFileDialog::mainWidget"]
-        #print dir(w)
-        #for idx in range( len(w) ):
-        #    obj = w[ idx:idx ][0]
-        #    print "...... idx=%s obj=%s name=%s class=%s" % ( idx , obj , obj.__name__ , obj.__class__ )
-
     def __del__(self):
         self.dialog.delayedDestruct()
 
@@ -386,14 +405,6 @@ class Exporter:
         global Styles, Reader, Writer
         self.reader = Reader()
         self.writer = Writer( Styles() )
-
-        #import Kross, os
-        #window = Kross.activeWindow()
-        #if window == None:
-        #    print "Creating new dialog"
-        #    window = Kross.createDialog("TestGuiFormDialog")
-        #else:
-        #    print "Using active window"
 
         global Dialog
         self.dialog = Dialog(self)
