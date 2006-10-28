@@ -62,7 +62,7 @@ class Reader:
             return True
         def setFile(self, filename):
             self.filename = filename
-        def openFile(self):
+        def openFile(self, progress = None):
             self.records = [
                 ['A1','A2','A3','A4'],
                 ['B1','B2','B3','B4'],
@@ -98,9 +98,9 @@ class Reader:
             import datetime
 
             # default filename is empty
-            self.filename = ''
+            #self.filename = ''
             # use following for testing to access direct the OpenDocument Spreadsheet File without saveas-dialog.
-            #self.filename = '/home/kde4/kspreaddocument.ods'
+            self.filename = '/home/kde4/kspreaddocument.ods'
 
             if self.embeddedInKSpread:
                 pass
@@ -144,7 +144,7 @@ class Reader:
                 raise "No such file \"%s\" to read from." % filename
             self.filename = path
 
-        def openFile(self):
+        def openFile(self, progress = None):
             if not self.embeddedInKSpread:
                 file = self.extractFileFromUrl( self.filename )
                 docfile = self.extractFileFromUrl( self.document.url() )
@@ -160,6 +160,10 @@ class Reader:
             self.sheet = self.kspread.sheetByName( sheetnames[0] )
             self.rowidx = 0
             print "Reader.openFile file=%s rowidx=%i maxRow=%i maxColumn=%i" % (self.filename, self.rowidx, self.sheet.maxRow(), self.sheet.maxColumn())
+            self.progress = progress
+            if self.progress:
+                self.progress.labelText = "Processing sheet \"%s\"" % sheetnames[0]
+                self.progress.maximum = self.sheet.maxRow()
 
         def closeFile(self):
             pass
@@ -175,6 +179,8 @@ class Reader:
                     if value or len(record) > 0:
                         record.insert(0,value)
                 self.rowidx += 1
+                if self.progress:
+                    self.progress.value = self.rowidx
                 return record
             print "EXPORT DONE rowidx=%i maxRow=%i maxColumn=%i" % (self.rowidx, self.sheet.maxRow(), self.sheet.maxColumn())
             return None
@@ -358,6 +364,12 @@ class Dialog:
     def showError(self, message):
         self.forms.showMessageBox("Error", "Error", message)
 
+    def showProgress(self):
+        progress = self.forms.showProgressDialog("Exporting...", "Initialize...")
+        progress.value = 0
+        #progress.labelText = "blaaaaaaaaaaa"
+        return progress
+
 class Exporter:
 
     def __init__(self, scriptaction):
@@ -384,17 +396,19 @@ class Exporter:
         #    print "Using active window"
 
         global Dialog
-        dialog = Dialog(self)
+        self.dialog = Dialog(self)
         while True:
             try:
-                if dialog.show():
+                if self.dialog.show():
                     self.doExport()
                 break
             except:
-                dialog.showError(sys.exc_info()[0])
+                self.dialog.showError(sys.exc_info()[0])
 
     def doExport(self):
-        self.reader.openFile()
+        progress = self.dialog.showProgress()
+
+        self.reader.openFile(progress)
         self.writer.openFile()
 
         while True:
