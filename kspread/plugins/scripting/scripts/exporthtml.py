@@ -321,13 +321,11 @@ class Dialog:
                 self.exporter.writer.setFile(savefilename)
 
             # set informations
-            self.exporter.writer.infos = {
-                'Title' : self.infoswidget["Title"].text,
-                'Author' : self.infoswidget["Author"].text,
-                'Keywords' : self.infoswidget["Keywords"].text,
-                'Filename' : self.infoswidget["Filename"].text,
-                'Date' : self.infoswidget["Date"].text
-            }
+            for s in ['Title','Subject','Author','EMail','Keywords','Filename','Date']:
+                try:
+                    self.exporter.writer.infos[s] = self.infoswidget[s].text
+                except:
+                    pass
 
             # set style
             self.exporter.writer.styles._currentRow = self.layoutlist.currentRow
