@@ -2,7 +2,7 @@
 
 class Styles:
 
-    Classic = (
+    Simple = (
         "html { background-color:#ffffff; color:#000; }"
         "body { margin:1em; }"
     )
@@ -10,6 +10,19 @@ class Styles:
     Paper = (
         "html { background-color:#efefef; }"
         "body { background-color:#fafafa; color:#303030; margin:1em; padding:1em; border:#606060 1px solid; }"
+        "h1 { text-align:center; }"
+        "tr.row1 { background-color:#ffefef; }"
+        "tr.row0 { background-color:#fff0ff; }"
+    )
+
+    Desert = (
+        "html { background-color:#fffff0; font-family: \"courier new\", courier, monospace; }"
+        "body { background-color:#fffff0; color:#660000; margin:1em; padding:1em; }"
+        "h1 { color:#660000; text-align:center; }"
+        "th { padding:0.3em; background-color:#efefef; }"
+        "td { padding:0.3em; }"
+        "tr.row1 { background-color:#efffef; }"
+        "tr.row0 { background-color:#ffefef; }"
     )
 
     SeaWater = (
@@ -17,10 +30,16 @@ class Styles:
         "body { background-color:#000066; color:#efefff; margin:1em; padding:1em; border:#00f 1px solid; }"
         "h1 { color:#0000ff; }"
         "th { color:#6666ff; }"
+        "h1 { color:#0000ff; text-align:center; }"
+        "th { border:#00f 1px solid; color:#6666ff; padding:0.2em; }"
+        "table { border:#00f 1px solid; padding:1em; }"
+        "tr.row1 { background-color:#000060; }"
+        "tr.row0 { background-color:#00003f; }"
+        "td { border:#00f 1px solid; padding:0.2em; }"
     )
 
     def __init__(self):
-        self._currentRow = 0
+        self._currentRow = 3 #Simple is default
         self._items = [ s for s in dir(Styles) if not s.startswith('_') ]
         self._uiItems = ''.join( [ '<item><property name="text" ><string>%s</string></property></item>' % s for s in self._items ] )
 
@@ -194,6 +213,7 @@ class Writer:
             self.filename = filename
         def openFile(self):
             self.file = None
+            self.rowidx = 0
             try:
                 self.file = open(self.filename, "w")
             except IOError, (errno, strerror):
@@ -217,19 +237,22 @@ class Writer:
 
             self.file.write( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" )
 
-            self.file.write( "</head><h1>%s</h1><p>" % title )
+            self.file.write( "</head><h1>%s</h1><ul>" % title )
             for s in ['Title','Subject','Author','EMail','Keywords','Filename','Date']:
-                if self.infos.has_key(s):
-                    v = self.infos[s]
-                    if v: self.file.write( "%s: %s<br />" % (s,v) )
-            self.file.write( "</p><table border=\"1\">" )
+                try:
+                    self.file.write( "<li>%s: %s</li>" % (s,self.infos[s]) )
+                except:
+                    pass
+            self.file.write( "</ul><table border=\"1\">" )
         def closeFile(self):
             if self.file != None:
                 self.file.write("</table></body></html>")
                 self.file.close()
         def writeRecord(self, record):
             if record != None and len(record) > 0:
-                self.file.write("<tr>")
+                self.file.write("<tr class=\"row%i\">" % (self.rowidx % 2 != 0))
+                self.rowidx += 1
+                self.file.write("<th>%s</th>" % self.rowidx)
                 for value in record:
                     self.file.write("<td>%s</td>" % value)
                 self.file.write("</tr>")
