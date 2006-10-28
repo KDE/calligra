@@ -32,6 +32,7 @@
 #include "SheetPrint.h"
 #include "Util.h"
 #include "Doc.h"
+#include "DataManipulators.h"
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -179,6 +180,93 @@ QString SheetAdaptor::cell( const QString& name )
 //     str += name.toLatin1();
 
     return "str";
+}
+
+QString SheetAdaptor::text( int x, int y )
+{
+    Cell* cell = m_sheet ? m_sheet->cellAt(x, y) : 0;
+    return cell ? cell->text() : QString();
+}
+
+bool SheetAdaptor::setText( int x, int y, const QString& text, bool parse )
+{
+    //FIXME: there is some problem with asString parameter, when it's set
+	//to true KSpread says: ASSERT: "f" in Dependencies.cpp (621)
+	//kspread: Cell at row 6, col 1 marked as formula, but formula is NULL
+
+	KSpread::ProtectedCheck prot;
+	prot.setSheet(m_sheet);
+	prot.add(QPoint(x, y));
+	if(prot.check()) return false;
+
+	KSpread::DataManipulator *dm = new KSpread::DataManipulator();
+	dm->setSheet(m_sheet);
+	dm->setValue(text);
+	dm->setParsing(parse);
+	dm->add(QPoint(x, y));
+	dm->execute();
+	return true;
+}
+
+QVariant valueToVariant(const KSpread::Value& value)
+{
+	//Should we use following value-format enums here?
+	//fmt_None, fmt_Boolean, fmt_Number, fmt_Percent, fmt_Money, fmt_DateTime, fmt_Date, fmt_Time, fmt_String
+	switch(value.type()) {
+		case KSpread::Value::Empty:
+			return QVariant();
+		case KSpread::Value::Boolean:
+			return QVariant( value.asBoolean() );
+		case KSpread::Value::Integer:
+			return static_cast<Q_LLONG>(value.asInteger());
+		case KSpread::Value::Float:
+			return (float)value.asFloat();
+		case KSpread::Value::String:
+			return value.asString();
+		case KSpread::Value::Array: {
+			QVariantList colarray;
+			for(uint j = 0; j < value.rows(); j++) {
+				QVariantList rowarray;
+				for( uint i = 0; i < value.columns(); i++) {
+					KSpread::Value v = value.element(i,j);
+					rowarray.append( valueToVariant(v) );
+				}
+				colarray.append(rowarray);
+			}
+			return colarray;
+		} break;
+		case KSpread::Value::CellRange:
+			//FIXME: not yet used
+			return QVariant();
+		case KSpread::Value::Error:
+			return QVariant();
+	}
+	return QVariant();
+}
+
+QVariant SheetAdaptor::value( int x, int y )
+{
+    Cell* cell = m_sheet ? m_sheet->cellAt(x, y) : 0;
+    return cell ? valueToVariant( cell->value() ) : QVariant();
+}
+
+bool SheetAdaptor::setValue( int x, int y, const QVariant& value )
+{
+	Cell* cell = m_sheet ? m_sheet->cellAt(x, y) : 0;
+	if(! cell) return false;
+	KSpread::Value v = cell->value();
+	switch( value.type() ) {
+		case QVariant::Bool: v.setValue( value.toBool() ); break;
+		case QVariant::ULongLong: v.setValue( (long)value.toLongLong() ); break;
+		case QVariant::Int: v.setValue( value.toInt() ); break;
+		case QVariant::Double: v.setValue( value.toDouble() ); break;
+		case QVariant::String: v.setValue( value.toString() ); break;
+		//case QVariant::Date: v.setValue( value.toDate() ); break;
+		//case QVariant::Time: v.setValue( value.toTime() ); break;
+		//case QVariant::DateTime: v.setValue( value.toDateTime() ); break;
+		default: return false;
+	}
+	return true;
 }
 
 QString SheetAdaptor::column( int _col )

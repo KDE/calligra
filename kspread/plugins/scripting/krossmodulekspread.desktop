@@ -7,5 +7,5 @@ Comment=Allow execution of scripts
 Comment[fr]=Permet d'exécuter des scripts
 Comment[x-test]=xxAllow execution of scriptsxx
 Type=Service
-X-KDE-Library=kspreadscripting
+X-KDE-Library=krossmodulekspread
 X-KDE-Version=1

@@ -43,7 +43,7 @@ class ScriptingModule : public QObject
 {
 		Q_OBJECT
 	public:
-		ScriptingModule(KSpread::View* view);
+		ScriptingModule(KSpread::View* view = 0);
 		virtual ~ScriptingModule();
 
 	public slots:
@@ -94,6 +94,11 @@ class ScriptingModule : public QObject
 		* Return the document-content as XML string.
 		*/
 		QString toXML();
+
+        bool openUrl(const QString& url);
+		bool saveUrl(const QString& url);
+		bool importUrl(const QString& url);
+		bool exportUrl(const QString& url);
 
 	private:
 		class Private;

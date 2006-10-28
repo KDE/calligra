@@ -35,18 +35,28 @@
 #include <kapplication.h>
 #include <kdebug.h>
 
+extern "C"
+{
+    QObject* krossmodule()
+    {
+        return new ScriptingModule();
+    }
+}
+
 class ScriptingModule::Private
 {
 	public:
 		KSpread::View* view;
+		KSpread::Doc* doc;
 };
 
 ScriptingModule::ScriptingModule(KSpread::View* view)
 	: QObject()
-	, d(new Private())
+	, d( new Private() )
 {
 	setObjectName("KSpreadScriptingModule");
 	d->view = view;
+	d->doc = view ? view->doc() : new KSpread::Doc(0, this);
 }
 
 ScriptingModule::~ScriptingModule()
@@ -61,24 +71,25 @@ QObject* ScriptingModule::application()
 
 QObject* ScriptingModule::document()
 {
-	return d->view->doc()->findChild< KoDocumentAdaptor* >();
+	return d->doc->findChild< KoDocumentAdaptor* >();
 }
 
 QObject* ScriptingModule::view()
 {
-	return d->view->findChild< KSpread::ViewAdaptor* >();
+	//return d->view->findChild< KSpread::ViewAdaptor* >();
+	return 0;
 }
 
 QObject* ScriptingModule::currentSheet()
 {
-	KSpread::Sheet* sheet = d->view->doc() ? d->view->doc()->displaySheet() : 0;
+	KSpread::Sheet* sheet = d->doc ? d->doc->displaySheet() : 0;
 	return sheet ? sheet->findChild< KSpread::SheetAdaptor* >() : 0;
 }
 
 QObject* ScriptingModule::sheetByName(const QString& name)
 {
-	if(d->view->doc() && d->view->doc()->map())
-		foreach(KSpread::Sheet* sheet, d->view->doc()->map()->sheetList())
+	if(d->doc && d->doc->map())
+		foreach(KSpread::Sheet* sheet, d->doc->map()->sheetList())
 			if(sheet->sheetName() == name)
 				return sheet->findChild< KSpread::SheetAdaptor* >();
 	return 0;
@@ -87,27 +98,47 @@ QObject* ScriptingModule::sheetByName(const QString& name)
 QStringList ScriptingModule::sheetNames()
 {
 	QStringList names;
-	foreach(KSpread::Sheet* sheet, d->view->doc()->map()->sheetList())
+	foreach(KSpread::Sheet* sheet, d->doc->map()->sheetList())
 		names.append(sheet->sheetName());
 	return names;
 }
 
 bool ScriptingModule::fromXML(const QString& xml)
 {
-	KoXmlDocument doc;
+	KoXmlDocument xmldoc;
 #ifdef KOXML_USE_QDOM
-	if(! doc.setContent(xml, true))
+	if(! xmldoc.setContent(xml, true))
 		return false;
 #else
 #warning Problem with KoXmlReader conversion!
 	kWarning() << "Problem with KoXmlReader conversion!" << endl;
 #endif
-	return d->view->doc() ? d->view->doc()->loadXML(0, doc) : false;
+	return d->doc ? d->doc->loadXML(0, xmldoc) : false;
 }
 
 QString ScriptingModule::toXML()
 {
-	return d->view->doc() ? d->view->doc()->saveXML().toString(2) : "";
+	return d->doc ? d->doc->saveXML().toString(2) : QString();
+}
+
+bool ScriptingModule::openUrl(const QString& url)
+{
+    return d->doc ? d->doc->openURL(url) : false;
+}
+
+bool ScriptingModule::saveUrl(const QString& url)
+{
+	return d->doc ? d->doc->saveAs(url) : false;
+}
+
+bool ScriptingModule::importUrl(const QString& url)
+{
+	return d->doc ? d->doc->import(url) : false;
+}
+
+bool ScriptingModule::exportUrl(const QString& url)
+{
+	return d->doc ? d->doc->exp0rt(url) : false;
 }
 
 #include "ScriptingModule.moc"

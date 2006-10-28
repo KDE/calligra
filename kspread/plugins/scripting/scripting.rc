@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KSpreadPluginScripting" library="kspreadscripting" version="5">
+<kpartgui name="KSpreadPluginScripting" library="krossmodulekspread" version="6">
 <MenuBar>
 	<Menu name="tools"><text>&amp;Tools</text>
 		<Separator/>

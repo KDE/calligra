@@ -53,6 +53,16 @@ public Q_SLOTS: // METHODS
     virtual QString cell( int x, int y );
     virtual QString cell( const QString& name );
 
+    virtual QString text( int x, int y );
+    //virtual QString text( const QString& name );
+    virtual bool setText( int x, int y, const QString& text, bool parse = true );
+    //virtual bool setText( const QString& name, const QString& text );
+
+    virtual QVariant value( int x, int y );
+    //virtual QVariant value( const QString& name );
+    virtual bool setValue( int x, int y, const QVariant& value );
+    //virtual bool setValue( const QString& name, const QVariant& value );
+
     virtual QString column( int _col );
     virtual QString row( int _row );
 

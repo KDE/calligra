@@ -38,7 +38,7 @@
 //#include <main/wdgscriptsmanager.h>
 
 typedef KGenericFactory< ScriptingPart > KSpreadScriptingFactory;
-K_EXPORT_COMPONENT_FACTORY( kspreadscripting, KSpreadScriptingFactory( "kspreadscripting" ) )
+K_EXPORT_COMPONENT_FACTORY( krossmodulekspread, KSpreadScriptingFactory( "krossmodulekspread" ) )
 
 class ScriptingPart::Private
 {
