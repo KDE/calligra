@@ -240,16 +240,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 		KoToolManager::instance()->addControllers( m_canvasView, p );
 
-		// for testing: manually set a shape id of the shape to be created
-		KoCreateShapesTool *createTool = KoToolManager::instance()->shapeCreatorTool( m_canvas );
-		if( createTool )
-		{
-			QList<KoID> shapeIdList = KoShapeRegistry::instance()->listKeys();
-			if( shapeIdList.count() > 0 )
-				createTool->setShapeId( shapeIdList.first().id() );
-			createTool->setShapeController( p );
-		}
-
 		if( m_showRulerAction->isChecked() )
 		{
 			m_horizRuler->show();
