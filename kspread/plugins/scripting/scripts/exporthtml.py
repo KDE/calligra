@@ -29,6 +29,31 @@ http://www.koffice.org/kspread
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
+class Config:
+    """ Some configurations for the exporthtml.py script. """
+
+    ReaderFiles = ['/home/kde4/kspreaddocument.ods',]
+    """ If one of the files exist, use it per default if the exporthtml.py script
+    got run from the commandline with the krossrunner application. This option is
+    ignored if the exporthtml.py script got executed embedded within KSpreadsince
+    in that case always the current document will be used. """
+
+    Infos = {
+        'Title' : 'Spreadsheet',
+        'Subject' : '',
+        'Author' : '',
+        'EMail' : '',
+        'Keywords' : '',
+        'Filename' : '',
+    }
+    """ The default values for the "HTML Document Informations" page. They are used
+    if the corresponding value is not defined (for KSpread see in the mainmenu the
+    item "File=>Document Information". """
+
+    DefaultStyle = 'Paper'
+    """ Name of the default style. The name needs to be an existing class within
+    the Styles class. So for example 'Paper' or 'Simple'."""
+
 class Styles:
     """ The Styles class handles the different HTML cascading stylesheets. """
 
@@ -69,8 +94,16 @@ class Styles:
     )
 
     def __init__(self):
-        self._currentRow = 3 #Simple is default
-        self._items = [ s for s in dir(Styles) if not s.startswith('_') ]
+        global Config
+        self._currentRow = 0
+        self._items = []
+        idx = 0
+        for s in dir(Styles):
+            if not s.startswith('_'):
+                if s == Config.DefaultStyle:
+                    self._currentRow = idx
+                self._items.append(s)
+                idx += 1
         self._uiItems = ''.join( [ '<item><property name="text" ><string>%s</string></property></item>' % s for s in self._items ] )
 
 class Reader:
@@ -133,15 +166,18 @@ class Reader:
             application = self.kspread.application()
             self.document = self.kspread.document()
 
-            import datetime
+            import os, datetime
 
-            # default filename is empty
+            global Config
             self.filename = ''
-            # use following for testing to access direct the OpenDocument Spreadsheet File without saveas-dialog.
-            #self.filename = '/home/kde4/kspreaddocument.ods'
+            for f in Config.ReaderFiles:
+                if os.path.isfile(f):
+                    self.filename = f
+                    break
 
             if self.embeddedInKSpread:
-                pass
+                if self.document.url():
+                    self.setFile(self.document.url())
             elif self.filename and self.filename != '':
                 self.setFile(self.filename)
                 self.openFile()
@@ -149,12 +185,12 @@ class Reader:
                 self.setFile(self.document.url())
 
             self.infos = {
-                'Title' : self.document.documentInfoTitle(),
-                'Subject' : self.document.documentInfoSubject(),
-                'Author' : self.document.documentInfoAuthorName(),
-                'EMail' : self.document.documentInfoEmail(),
-                'Keywords' : self.document.documentInfoKeywords(),
-                'Filename' : self.document.url(),
+                'Title' : self.document.documentInfoTitle() or Config.Infos['Title'],
+                'Subject' : self.document.documentInfoSubject() or Config.Infos['Subject'],
+                'Author' : self.document.documentInfoAuthorName() or Config.Infos['Author'],
+                'EMail' : self.document.documentInfoEmail() or Config.Infos['EMail'],
+                'Keywords' : self.document.documentInfoKeywords() or Config.Infos['Keywords'],
+                'Filename' : self.document.url() or Config.Infos['Filename'],
                 'Date' : datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
             }
 
@@ -190,17 +226,18 @@ class Reader:
                     if not self.kspread.openUrl( self.filename ):
                         raise "Failed to open the file \"%s\"." % self.filename
 
-            sheetnames = self.kspread.sheetNames()
-            if len(sheetnames) < 1:
-                raise "No sheets which could be exported to HTML."
+            self.sheet = self.kspread.currentSheet()
+            if self.sheet == None:
+                sheetnames = self.kspread.sheetNames()
+                if len(sheetnames) < 1:
+                    raise "No sheets which could be exported to HTML."
+                self.sheet = self.kspread.sheetByName( sheetnames[0] )
 
-            self.sheetidx = 0
-            self.sheet = self.kspread.sheetByName( sheetnames[0] )
             self.rowidx = 0
             print "Reader.openFile file=%s rowidx=%i maxRow=%i maxColumn=%i" % (self.filename, self.rowidx, self.sheet.maxRow(), self.sheet.maxColumn())
             self.progress = progress
             if self.progress:
-                self.progress.labelText = "Processing sheet \"%s\"" % sheetnames[0]
+                self.progress.labelText = "Processing sheet \"%s\"" % self.sheet.name()
                 self.progress.maximum = self.sheet.maxRow()
 
         def closeFile(self):
@@ -444,18 +481,20 @@ class Exporter:
 
     def doExport(self):
         progress = self.dialog.showProgress()
+        try:
+            self.reader.openFile(progress)
+            self.writer.openFile()
 
-        self.reader.openFile(progress)
-        self.writer.openFile()
+            while True:
+                record = self.reader.readRecord()
+                if record == None:
+                    break
+                if len(record) > 0:
+                    self.writer.writeRecord(record)
 
-        while True:
-            record = self.reader.readRecord()
-            if record == None:
-                break
-            if len(record) > 0:
-                self.writer.writeRecord(record)
-
-        self.reader.closeFile()
-        self.writer.closeFile()
+            self.reader.closeFile()
+            self.writer.closeFile()
+        finally:
+            progress.reset()
 
 Exporter( self )
