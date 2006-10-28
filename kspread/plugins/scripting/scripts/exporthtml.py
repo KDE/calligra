@@ -1,14 +1,28 @@
 #!/usr/bin/env krossrunner
 
 class Styles:
-    Classic = ''
-    Desert = ''
-    Elegant = ''
-    Water = ''
+
+    Classic = (
+        "html { background-color:#ffffff; color:#000; }"
+        "body { margin:1em; }"
+    )
+
+    Paper = (
+        "html { background-color:#efefef; }"
+        "body { background-color:#fafafa; color:#303030; margin:1em; padding:1em; border:#606060 1px solid; }"
+    )
+
+    SeaWater = (
+        "html { background-color:#0000aa; }"
+        "body { background-color:#000066; color:#efefff; margin:1em; padding:1em; border:#00f 1px solid; }"
+        "h1 { color:#0000ff; }"
+        "th { color:#6666ff; }"
+    )
 
     def __init__(self):
         self._currentRow = 0
-        self._uiItems = ''.join( [ '<item><property name="text" ><string>%s</string></property></item>' % s for s in dir(Styles) if not s.startswith('_') ] )
+        self._items = [ s for s in dir(Styles) if not s.startswith('_') ]
+        self._uiItems = ''.join( [ '<item><property name="text" ><string>%s</string></property></item>' % s for s in self._items ] )
 
 class Reader:
 
@@ -188,7 +202,22 @@ class Writer:
                 title = self.infos['Title']
             else:
                 title = "Spreadsheet"
-            self.file.write( "<html><body><head><title>%s</title></head><h1>%s</h1><p>" % (title,title) )
+
+            self.file.write( "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" )
+            self.file.write( "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n" )
+            self.file.write( "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">\n" )
+            self.file.write( "<body><head><title>%s</title>" % title )
+
+            if hasattr(self,'styles'):
+                global Styles
+                self.file.write("<style type=\"text/css\">\n<!--\n")
+                stylename = self.styles._items[ self.styles._currentRow ]
+                self.file.write( getattr(Styles,stylename) )
+                self.file.write("\n//-->\n</style>\n")
+
+            self.file.write( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" )
+
+            self.file.write( "</head><h1>%s</h1><p>" % title )
             for s in ['Title','Subject','Author','EMail','Keywords','Filename','Date']:
                 if self.infos.has_key(s):
                     v = self.infos[s]
@@ -205,9 +234,10 @@ class Writer:
                     self.file.write("<td>%s</td>" % value)
                 self.file.write("</tr>")
 
-    def __init__(self):
+    def __init__(self, styles):
         #self.impl = Writer.StdOut()
         self.impl = Writer.File()
+        self.impl.styles = styles
 
     def __getattr__(self, name):
         return getattr(self.impl, name)
@@ -240,8 +270,6 @@ class Dialog:
             w = self.infoswidget[i]
             w.setText( self.exporter.reader.infos[i] )
 
-        global Styles
-        self.styles = Styles()
         layoutpage = self.dialog.addPage("Styles","Style of the HTML Document","colorize")
         layoutwidget = self.forms.createWidgetFromUI(layoutpage,
             '<ui version="4.0" >'
@@ -257,7 +285,7 @@ class Dialog:
             '  </layout>'
             ' </widget>'
             '</ui>'
-            % ( self.styles._currentRow , self.styles._uiItems )
+            % ( self.exporter.writer.styles._currentRow , self.exporter.writer.styles._uiItems )
         )
         print dir(layoutwidget)
         self.layoutlist = layoutwidget["List"]
@@ -302,7 +330,7 @@ class Dialog:
             }
 
             # set style
-            self.styles._currentRow = self.layoutlist.currentRow
+            self.exporter.writer.styles._currentRow = self.layoutlist.currentRow
 
         return result
 
@@ -322,9 +350,9 @@ class Exporter:
         self.scriptaction = scriptaction
         self.currentpath = self.scriptaction.currentPath()
 
-        global Reader, Writer
+        global Styles, Reader, Writer
         self.reader = Reader()
-        self.writer = Writer()
+        self.writer = Writer( Styles() )
 
         #import Kross, os
         #window = Kross.activeWindow()
