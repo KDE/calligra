@@ -98,9 +98,9 @@ class Reader:
             import datetime
 
             # default filename is empty
-            #self.filename = ''
+            self.filename = ''
             # use following for testing to access direct the OpenDocument Spreadsheet File without saveas-dialog.
-            self.filename = '/home/kde4/kspreaddocument.ods'
+            #self.filename = '/home/kde4/kspreaddocument.ods'
 
             if self.embeddedInKSpread:
                 pass
