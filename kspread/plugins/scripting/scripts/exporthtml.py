@@ -64,7 +64,9 @@ class Reader:
 
             import datetime
 
+            # default filename is empty
             self.filename = ''
+            # use following for testing to access direct the OpenDocument Spreadsheet File without saveas-dialog.
             #self.filename = '/home/kde4/kspreaddocument.ods'
 
             if self.embeddedInKSpread:
@@ -72,7 +74,7 @@ class Reader:
             elif self.filename and self.filename != '':
                 self.setFile(self.filename)
                 self.openFile()
-            else:
+            elif self.document.url():
                 self.setFile(self.document.url())
 
             self.infos = {
@@ -124,6 +126,7 @@ class Reader:
             self.sheetidx = 0
             self.sheet = self.kspread.sheetByName( sheetnames[0] )
             self.rowidx = 0
+            print "Reader.openFile file=%s rowidx=%i maxRow=%i maxColumn=%i" % (self.filename, self.rowidx, self.sheet.maxRow(), self.sheet.maxColumn())
 
         def closeFile(self):
             pass
@@ -131,7 +134,6 @@ class Reader:
         def readRecord(self):
             #FIXME this is not optimal since we need wo walk at least through 256*256 cells. It
             #would be better, if we reuse KSpread::Cell::firstCell()-iterator here.
-
             if self.rowidx < self.sheet.maxRow():
                 record = []
                 for i in range(self.sheet.maxColumn(), 0, -1):
@@ -141,7 +143,6 @@ class Reader:
                         record.insert(0,value)
                 self.rowidx += 1
                 return record
-
             print "EXPORT DONE rowidx=%i maxRow=%i maxColumn=%i" % (self.rowidx, self.sheet.maxRow(), self.sheet.maxColumn())
             return None
 
@@ -178,14 +179,35 @@ class Writer:
         def setFile(self, filename):
             self.filename = filename
         def openFile(self):
-            pass
+            self.file = None
+            try:
+                self.file = open(self.filename, "w")
+            except IOError, (errno, strerror):
+                raise "Failed to create HTML file \"%s\":\n%s" % (self.filename,strerror)
+            if self.infos.has_key('Title'):
+                title = self.infos['Title']
+            else:
+                title = "Spreadsheet"
+            self.file.write( "<html><body><head><title>%s</title></head><h1>%s</h1><p>" % (title,title) )
+            for s in ['Title','Subject','Author','EMail','Keywords','Filename','Date']:
+                if self.infos.has_key(s):
+                    v = self.infos[s]
+                    if v: self.file.write( "%s: %s<br />" % (s,v) )
+            self.file.write( "</p><table border=\"1\">" )
         def closeFile(self):
-            pass
+            if self.file != None:
+                self.file.write("</table></body></html>")
+                self.file.close()
         def writeRecord(self, record):
-            pass
+            if record != None and len(record) > 0:
+                self.file.write("<tr>")
+                for value in record:
+                    self.file.write("<td>%s</td>" % value)
+                self.file.write("</tr>")
 
     def __init__(self):
-        self.impl = Writer.StdOut()
+        #self.impl = Writer.StdOut()
+        self.impl = Writer.File()
 
     def __getattr__(self, name):
         return getattr(self.impl, name)
@@ -268,8 +290,7 @@ class Dialog:
                     r = self.forms.showMessageBox("WarningContinueCancel", "Overwrite file?", "The file \"%s\" does already exist. Overwrite the file?" % savefilename)
                     if r != "Continue":
                         raise "Export aborted."
-                if not self.exporter.writer.setFile(savefilename):
-                    raise "Failed to export to file \"%s\"" % savefilename
+                self.exporter.writer.setFile(savefilename)
 
             # set informations
             self.exporter.writer.infos = {
