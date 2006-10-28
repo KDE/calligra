@@ -68,7 +68,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
     addButton( i18n( "Bars and Lines" ), "chart_barlines", KChartParams::BarLines );
 #endif
 
-    addButton( i18n("Hi-Lo-Close"),      "chart_hilo",   KChartParams::HiLo );
+    addButton( i18n("HiLo"),             "chart_hilo",   KChartParams::HiLo );
     addButton( i18n("Box & Whisker "),   "chart_boxwhisker", KChartParams::BoxWhisker );
     incPos();
     incPos();
