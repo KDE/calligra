@@ -16,7 +16,7 @@ The script could be used in two ways;
             # make the script executable
             chmod 755 `kde4-config --install data`/kspread/scripts/default/exporthtml.py
             # run the script
-            chmod 755 `kde4-config --install data`/kspread/scripts/default/exporthtml.py
+            `kde4-config --install data`/kspread/scripts/default/exporthtml.py
 
        In that case the exporthtml.py-script will use the with
        Kross distributed krossrunner commandline-application
