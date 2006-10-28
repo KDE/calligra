@@ -4,7 +4,7 @@
 Python script to export an OpenDocument Spreadsheet File to
 a HTML File.
 
-The script could be run used in two ways;
+The script could be used in two ways;
 
     1. Embedded in KSpread by execution via the "Tools=>Scripts"
        menu or from the "Tools=>Script Manager". In that case
@@ -12,12 +12,16 @@ The script could be run used in two ways;
        will be exported to a HTML file.
 
     2. As standalone script by running;
-           cd /usr/share/apps/kspread/scripts/default
-           chmod 755 exporthtml.py
-           ./exporthtml.py
+
+            # make the script executable
+            chmod 755 `kde4-config --install data`/kspread/scripts/default/exporthtml.py
+            # run the script
+            chmod 755 `kde4-config --install data`/kspread/scripts/default/exporthtml.py
+
        In that case the exporthtml.py-script will use the with
        Kross distributed krossrunner commandline-application
-       to execute the python script.
+       to execute the python script. A empty document will be
+       used in that case.
 
 (C)2006 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
@@ -26,6 +30,7 @@ Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 class Styles:
+    """ The Styles class handles the different HTML cascading stylesheets. """
 
     Simple = (
         "html { background-color:#ffffff; color:#000; }"
@@ -69,8 +74,13 @@ class Styles:
         self._uiItems = ''.join( [ '<item><property name="text" ><string>%s</string></property></item>' % s for s in self._items ] )
 
 class Reader:
+    """ The Reader class provides the functionality to read content from different
+    backends like for example a OpenDocument Spreadsheet file by using KSpread. """
 
     class Static:
+        """ The Static class implements a Reader to read static content. This class
+        is used mainly for testing purposes. """
+
         def __init__(self):
             import datetime
             self.filename = ''
@@ -104,6 +114,9 @@ class Reader:
             return None
 
     class File:
+        """ The File class implements a Reader that uses KSpread to read
+        content from an OpenDocument Spreadsheet file. """
+
         def __init__(self):
             self.embeddedInKSpread = False
             try:
@@ -218,8 +231,13 @@ class Reader:
         return getattr(self.impl, name)
 
 class Writer:
+    """ The Writer class provides the functionality to write content into different
+    backends like for example a HTML file or stdout. """
 
     class StdOut:
+        """ The StdOut class implements a Writer to write content to stdout. This
+        class is mainly used for testing purposes. """
+
         def __init__(self):
             self.filename = ''
             self.infos = {}
@@ -235,6 +253,8 @@ class Writer:
             print "%s" % record
 
     class File:
+        """ The File class implements a Writer to write content into a HTML file. """
+
         def __init__(self):
             self.filename = ''
             self.infos = {}
@@ -297,6 +317,10 @@ class Writer:
         return getattr(self.impl, name)
 
 class Dialog:
+    """ The Dialog class uses the Kross forms-module to display a dialog
+    to let the user change settings like for example the HTML file that
+    should be written, document-informations or the style. """
+
     def __init__(self, exporter):
         import Kross, os
         self.exporter = exporter
@@ -390,6 +414,8 @@ class Dialog:
         return progress
 
 class Exporter:
+    """ The Exporter class connects Reader, Writer, Dialog and the
+    export-process together into one task. """
 
     def __init__(self, scriptaction):
         import os, sys
