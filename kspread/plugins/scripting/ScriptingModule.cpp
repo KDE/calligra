@@ -106,13 +106,9 @@ QStringList ScriptingModule::sheetNames()
 bool ScriptingModule::fromXML(const QString& xml)
 {
 	KoXmlDocument xmldoc;
-#ifdef KOXML_USE_QDOM
 	if(! xmldoc.setContent(xml, true))
 		return false;
-#else
-#warning Problem with KoXmlReader conversion!
-	kWarning() << "Problem with KoXmlReader conversion!" << endl;
-#endif
+
 	return d->doc ? d->doc->loadXML(0, xmldoc) : false;
 }
 
