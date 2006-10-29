@@ -2,6 +2,11 @@
 #define KDCHART_EXPORT_H
 
 #include <qglobal.h>
+
+#if 1
+#include <../../lib/kofficecore/koffice_export.h>
+#else
+
 #if defined(Q_OS_WIN32) && defined(KDCHART_DLL)
 #define DLL_EXPORT __declspec(dllexport)
 #define DLL_IMPORT __declspec(dllimport)
@@ -17,6 +22,8 @@
 #endif
 
 #endif
+
+#endif   // #if 1
 
 /*
    How to make a KD Chart DLL rather than linking statically:
