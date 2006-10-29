@@ -63,7 +63,7 @@ class Value
     /** 
      * Creates a value of certain type.
      */
-    Value( Type _type );
+    explicit Value( Type _type );
 
     /** 
      * Destroys the value.
@@ -91,22 +91,22 @@ class Value
     /**
      * Creates a boolean value.
      */
-    Value( bool b );
+    explicit Value( bool b );
 
     /**
      * Creates an integer value.
      */
-    Value( int i );
+    explicit Value( int i );
 
     /**
      * Create a floating-point value.
      */
-    Value( double f );
+    explicit Value( double f );
 
     /** 
      * Create a string value.
      */
-    Value( const UString& s );
+    explicit Value( const UString& s );
 
     /**
      * Returns the type of the value.

@@ -35,7 +35,7 @@ class Sheet
 {
 public:
 
-  Sheet( Workbook* workbook );
+  explicit Sheet( Workbook* workbook );
 
   virtual ~Sheet();
 

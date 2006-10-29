@@ -60,7 +60,7 @@ public:
   /**
    * Creates a color based on given red, green and blue values, encoded as \#RRGGBB in a string.
    */
-  Color( const char* c )
+  explicit Color( const char* c )
     { std::sscanf(c, "#%2x%2x%2x", &red, &green, &blue); }
 
   friend inline bool operator==(const Color&, const Color&);
