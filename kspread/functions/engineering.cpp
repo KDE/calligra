@@ -747,7 +747,7 @@ Value func_complex (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 
-static double imag_complexe(QString str, bool &ok)
+static double imag_complexe(const QString& str, bool &ok)
 {
 QString tmp=str;
 if(tmp.indexOf('i')==-1)
@@ -852,7 +852,7 @@ Value func_complex_imag (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 
-static double real_complexe(QString str, bool &ok)
+static double real_complexe(const QString& str, bool &ok)
 {
 double val;
 int pos1,pos2;
