@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2001-2003 Klarävdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KDChart library.
  **
@@ -206,6 +206,7 @@ KDChartAxisParams::KDChartAxisParams()
 
     _axisLabelsDivPow10 = 0;
     _axisDigitsBehindComma = KDCHART_AXIS_LABELS_AUTO_DIGITS;
+    _axisLabelsNotation = KDChartEnums::NumberNotationDecimal;
     _axisLabelsDecimalPoint = ".";
     _axisLabelsThousandsPoint = ",";
     _axisLabelsPrefix = "";
@@ -1456,7 +1457,9 @@ void KDChartAxisParams::setAxisLabelsColor( QColor axisLabelsColor )
   \param digitsBehindComma The number of digits to show behind the comma,
     to have this calculated automatically just use the default value
     KDCHART_DATA_VALUE_AUTO_DIGITS.
-  \sa setAxisLabelsFormat, axisLabelsDivPow10, axisLabelsDigitsBehindComma
+  \sa setAxisLabelsFormat
+  \sa setAxisLabelsNotation
+  \sa axisLabelsDivPow10, axisLabelsDigitsBehindComma
   */
 void KDChartAxisParams::setAxisLabelsCalc( int divPow10,
                                            int digitsBehindComma )
@@ -1476,6 +1479,7 @@ void KDChartAxisParams::setAxisLabelsCalc( int divPow10,
     100.000 and the 1.000.000 digit (default is ',').
 
   \sa setAxisLabelsFormat, setAxisLabelsCalc
+  \sa setAxisLabelsNotation
   \sa axisLabelsDecimalPoint, axisLabelsThousandsPoint
   */
 void KDChartAxisParams::setAxisLabelsRadix( const QString& decimalPoint,
@@ -1483,6 +1487,25 @@ void KDChartAxisParams::setAxisLabelsRadix( const QString& decimalPoint,
 {
   _axisLabelsDecimalPoint = decimalPoint;
   _axisLabelsThousandsPoint = thousandsPoint;
+}
+
+
+/**
+  Specifies the way how the number part of the axis label strings will be formatted.
+  Will be ignored for non-numerical axis labels.
+
+  \param notation The way of notation to be used for the number part.
+
+  \note  If you need exponential notation with a common magnitude, just use
+  setAxisLabelsCalc to declare the divisor, and then add a KDChartCustomBox
+  to the end of your axis's area, informing the user about the magnitude to
+  be added to each of the values, e.g. by saying "x 1e3".
+
+  \sa KDChartEnums::NumberNotation, setAxisLabelsCalc, setAxisLabelsRadix, setAxisLabelsFormat
+  */
+void KDChartAxisParams::setAxisLabelsNotation( KDChartEnums::NumberNotation notation )
+{
+  _axisLabelsNotation = notation;
 }
 
 /**
@@ -1505,6 +1528,7 @@ void KDChartAxisParams::setAxisLabelsRadix( const QString& decimalPoint,
     prepended before the prefix.
 
   \sa setAxisLabelsRadix, setAxisLabelsCalc
+  \sa setAxisLabelsNotation
   \sa axisLabelsPrefix, axisLabelsPostfix, axisLabelsTotalLen
   \sa axisLabelsPadFill, axisLabelsBlockAlign
   */
@@ -2822,6 +2846,7 @@ void KDChartAxisParams::deepCopy( KDChartAxisParams& D, const KDChartAxisParams&
 
     D._axisLabelsDivPow10      = R._axisLabelsDivPow10;
     D._axisLabelsDecimalPoint  = R._axisLabelsDecimalPoint;
+    D._axisLabelsNotation      = R._axisLabelsNotation;
     D._axisLabelsThousandsPoint= R._axisLabelsThousandsPoint;
     D._axisLabelsPrefix        = R._axisLabelsPrefix;
     D._axisLabelsPostfix       = R._axisLabelsPostfix;

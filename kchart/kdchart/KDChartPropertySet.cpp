@@ -26,8 +26,10 @@
  ** licensing are not clear to you.
  **
  **********************************************************************/
-#include "KDChartRingPainter.h"
+
+#include "KDChartPropertySet.h"
 #include "KDChartParams.h"
+#include <KDXMLTools.h>
 
 #include <qpainter.h>
 #include <qvaluestack.h>
@@ -378,5 +380,3 @@ bool KDChartPropertySet::loadXML( const QDomElement& element, KDChartPropertySet
     }
     return bOwnIDFound;
 }
-
-#include "KDChartPropertySet.moc"

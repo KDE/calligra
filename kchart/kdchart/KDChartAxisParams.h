@@ -39,6 +39,7 @@
 #include <qvariant.h>
 
 #include "KDChartGlobal.h"
+#include "KDChartEnums.h"
 
 class KDChartParams;
 
@@ -292,6 +293,10 @@ public slots:
                              const QString& thousandsPoint );
     QString axisLabelsDecimalPoint()   const { return _axisLabelsDecimalPoint; }
     QString axisLabelsThousandsPoint() const { return _axisLabelsThousandsPoint; }
+
+    void setAxisLabelsNotation( KDChartEnums::NumberNotation notation );
+    KDChartEnums::NumberNotation axisLabelsNotation() const { return _axisLabelsNotation; }
+
     void setAxisLabelsFormat( const QString& prefix = "",
                               const QString& postfix = "",
                               const int&     totalLen = 0,
@@ -499,6 +504,7 @@ private:
     int _axisLabelsDivPow10;
     QString _axisLabelsDecimalPoint;
     QString _axisLabelsThousandsPoint;
+    KDChartEnums::NumberNotation _axisLabelsNotation;
     QString _axisLabelsPrefix;
     QString _axisLabelsPostfix;
     int     _axisLabelsTotalLen;

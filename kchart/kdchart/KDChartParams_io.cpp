@@ -27,6 +27,7 @@
  **
  **********************************************************************/
 #include "KDChartParams.h"
+#include <KDXMLTools.h>
 
 #include <qintdict.h>
 
@@ -304,6 +305,10 @@ void KDChartParams::saveAxesToXML(QDomDocument& doc, QDomElement& docRoot) const
             // the LabelsThousandsPoint element
             KDXML::createStringNode( doc, axisSettingsElement, "LabelsThousandsPoint",
                     _axisSettings[axis].params._axisLabelsThousandsPoint );
+
+            // the LabelsNotation element
+            KDXML::createStringNode( doc, axisSettingsElement, "LabelsNotation",
+                    KDChartEnums::numberNotationToString( _axisSettings[axis].params._axisLabelsNotation ) );
 
             // the LabelsPrefix element
             KDXML::createStringNode( doc, axisSettingsElement, "LabelsPrefix",
@@ -1001,10 +1006,6 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
     {
         QDictIterator<KDChartFrameSettings> it( _areaDict );
         for( ; it.current(); ++it ){
-            /*
-            qDebug("storing frame: %s",
-            it.currentKey().left(5).stripWhiteSpace().latin1());
-            */
             KDChartFrameSettings::createFrameSettingsNode( doc, areaMapElement,
                     "FrameSettings",
                     it.current(),
@@ -1309,6 +1310,10 @@ void KDChartParams::loadAxesFormXML(int& curAxisSettings, QDomElement& element)
                 QString value;
                 if( KDXML::readStringNode( element, value ) )
                     axisSettings->_axisLabelsThousandsPoint = value;
+            } else if( tagName == "LabelsNotation" ) {
+                QString string;
+                if( KDXML::readStringNode( element, string ) )
+                    axisSettings->_axisLabelsNotation = KDChartEnums::stringToNumberNotation( string );
             } else if( tagName == "LabelsPrefix" ) {
                 QString value;
                 if( KDXML::readStringNode( element, value ) )
@@ -2195,12 +2200,6 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                                               .arg( 0, 5 );//frameSettings->data3rd(), 5 );
                                 else
                                     str = QString( "%1/-----/-----/-----" ).arg( areaId, 5 );
-                                /*
-                                const QPixmap* backPixmap;
-                                KDFrame::BackPixmapMode backPixmapMode;
-                                qDebug("inserting frame: %s   %s",str.latin1(),frameSettings->frame()
-                                .background(backPixmap, backPixmapMode).color().name().latin1());
-                                */
                                 _areaDict.replace( str, frameSettings );
                             }
                         }
@@ -2232,7 +2231,7 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                     node = node.nextSibling();
                 }
             } else {
-                //qDebug( "Unknown second-level element found: %s", tagName.latin1() );
+                qDebug( "Unknown second-level element found: %s", tagName.latin1() );
                 // NOTE: We do *not* 'return false' here but continue normal operation
                 //       since additional elements might have been added in future versions
             }

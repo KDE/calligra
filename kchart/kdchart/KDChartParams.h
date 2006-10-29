@@ -138,6 +138,7 @@ private:
 
 class KDCHART_EXPORT KDChartParams : public QObject
 {
+
     Q_OBJECT
     Q_ENUMS(ChartType)
     Q_ENUMS(SourceMode)
@@ -159,6 +160,7 @@ class KDCHART_EXPORT KDChartParams : public QObject
     Q_ENUMS( BrushStyle )
     Q_ENUMS( PenStyle )
     Q_ENUMS( Orientation )
+
 
 public slots: // PENDING(blackie) merge public slots into one section.
     void setOptimizeOutputForScreen( bool screenOutput )
@@ -388,12 +390,6 @@ public slots:
                    bool           addFrameWidthToLayout = true,
                    bool           addFrameHeightToLayout = true )
         {
-            /*
-            const QPixmap* backPixmap;
-            KDFrame::BackPixmapMode backPixmapMode;
-            qDebug("setFrame   area: %i", area);
-            qDebug("setFrame   backcolor: %s", frame.background(backPixmap, backPixmapMode).color().name().latin1());
-            */
             _areaDict.setAutoDelete( TRUE );
             _areaDict.replace( QString( "%1/-----/-----/-----" ).arg( area, 5 ),
                               new KDChartFrameSettings(0,0,0,
@@ -815,7 +811,7 @@ public slots:
 
 
     bool dataValuesUseFontRelSize( uint chart ) const
-        {	  
+        {
             return chart ? _printDataValuesSettings2._dataValuesUseFontRelSize
                 : _printDataValuesSettings._dataValuesUseFontRelSize;
         }
@@ -1013,17 +1009,17 @@ public slots:
 
 
     void setBarWidth( int width = KDCHART_AUTO_SIZE )
-        { 
+        {
           if ( width == KDCHART_AUTO_SIZE ) {
 	    _barWidth = width;
             _userWidth = 0;
 	  }
-          else 
+          else
 	  _userWidth = width;
 
           emit changed();
         }
- 
+
 
     int barWidth() const
         {
@@ -2188,7 +2184,7 @@ public slots:
     // that is anchored to the axis n.
     bool findFirstAxisCustomBoxID(   uint n, uint& boxID ) const;
     void setAxisTitle(               uint n, const QString& axisTitle );
-    
+
     QString axisTitle(               uint n ) const;
     void setAxisTitleColor(          uint n, QColor axisTitleColor );
     QColor axisTitleColor(           uint n ) const;

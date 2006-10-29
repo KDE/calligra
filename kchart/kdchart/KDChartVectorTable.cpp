@@ -24,9 +24,10 @@
 
 #include "KDChartVectorTable.moc"
 
+#if 0   // Already defined in the .h file
 KDChartVectorTableData::~KDChartVectorTableData()
 {
   if ( sh->deref() )
     delete sh;
 }
-
+#endif

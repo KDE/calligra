@@ -567,7 +567,7 @@ bool KDFrame::readFrameProfileNode( const QDomElement& element,
                         section );
                 profile.append( section );
             } else {
-                qDebug( "Unknown tag in frame profile" );
+                qDebug( "Unknown tag in double map" );
                 return false;
             }
         }
@@ -600,7 +600,7 @@ bool KDFrame::KDFrameCorner::readFrameCornerNode( const QDomElement& element,
                 KDFrameProfile profile;
                 ok = ok & readFrameProfileNode( element, profile );
             } else {
-                qDebug( "Unknown tag in frame corner" );
+                qDebug( "Unknown tag in frame" );
             }
         }
         node = node.nextSibling();
@@ -614,5 +614,3 @@ bool KDFrame::KDFrameCorner::readFrameCornerNode( const QDomElement& element,
 
     return ok;
 }
-
-#include "KDFrame.moc"

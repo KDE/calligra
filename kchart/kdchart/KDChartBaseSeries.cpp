@@ -29,3 +29,11 @@
 
 
 #include "KDChartBaseSeries.h"
+
+/**
+  Destructor. Does nothing, only defined to have it virtual.
+  */
+KDChartBaseSeries::~KDChartBaseSeries()
+{
+    // this bloc left empty intentionally
+}

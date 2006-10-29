@@ -78,7 +78,7 @@ bool KDFrameProfileSection::readFrameProfileSectionNode( const QDomElement& elem
             } else if( tagName == "Style" || tagName == "Pen" ) {
                 ok = ok & KDXML::readPenNode( element, tempPen );
             } else {
-                qDebug( "Unknown tag in frame profile section" );
+                qDebug( "Unknown tag in frame" );
             }
         }
         node = node.nextSibling();

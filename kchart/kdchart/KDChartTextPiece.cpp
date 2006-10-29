@@ -72,7 +72,7 @@ KDChartTextPiece::KDChartTextPiece( const QString& text, const QFont& font )
 KDChartTextPiece::KDChartTextPiece( QPainter *p, const QString& text, const QFont& font )
     :QObject(0)
 {
-    
+
     if( QStyleSheet::mightBeRichText( text ) ) {
         _isRichText = true;
         _richText = new QSimpleRichText( text, font );
@@ -81,7 +81,7 @@ KDChartTextPiece::KDChartTextPiece( QPainter *p, const QString& text, const QFon
         _richText->adjustSize();
         //qDebug( "richtext width %s", QString::number(_richText->width()).latin1());
 	//qDebug( "richtext height %s", QString::number(_richText->height()).latin1());
-        
+
     } else {
         _isRichText = false;
         _richText = 0;
@@ -158,14 +158,14 @@ int KDChartTextPiece::width() const
 
 int KDChartTextPiece::height() const
 {
-  
+
   if( _isRichText ) {
-    //qDebug ("_richText height %s", QString::number(_richText->height()).latin1()); 
+    //qDebug ("_richText height %s", QString::number(_richText->height()).latin1());
         return _richText->height();
   }
   else {
-  
-    //qDebug ("_metrics height %s", QString::number(_metrics->height()).latin1()); 
+
+    //qDebug ("_metrics height %s", QString::number(_metrics->height()).latin1());
         return _metrics->height();
 	 }
 }
@@ -180,20 +180,20 @@ QRect KDChartTextPiece::rect( QPainter *p, const QRect& clipRect) const
 {
     QRect rect( clipRect );
     QFont font( _font );
-     
-    if( _isRichText ) {  
-     
+
+    if( _isRichText ) {
+
     // Pending Michel make sure the fonts are not too large
-      if ( _richText->height() > clipRect.height() || _richText->width() > clipRect.width() ) 
+      if ( _richText->height() > clipRect.height() || _richText->width() > clipRect.width() )
 	font.setPixelSize( QMIN( (int)clipRect.width(),(int)clipRect.height() ) );
 
       _richText->setDefaultFont( font );
-      _richText->setWidth( p, clipRect.width() ); 
+      _richText->setWidth( p, clipRect.width() );
       rect.setWidth( _richText->width() );
       rect.setHeight( _richText->height() );
-    } else 
+    } else
       rect = clipRect;
-        
+
     return rect;
 }
 
@@ -202,23 +202,21 @@ void KDChartTextPiece::draw( QPainter *p, int x, int y,
         const QColor& color,
         const QBrush* paper ) const
 {
-  
+
   if( _isRichText ) {
+
     QColorGroup cg;
     //calculate the text area before drawing
-    QRect txtArea = rect( p,clipRect); 
-    QRect rect;
+    QRect txtArea = rect( p,clipRect);
     cg.setColor( QColorGroup::Text, color );
-    // adjust the vertical position of the text within the area - we send a null rectangle to avoid clipping
-    //PENDING: Michel - TODO - Let the user set or unset the adjustment factor by himself
-   _richText->draw( p, txtArea.x(), txtArea.y() + (int)txtArea.height()/10 , rect, cg, paper );
+    _richText->draw( p, txtArea.x(), txtArea.y(),txtArea , cg, paper );
   } else {
     p->save();
     p->setFont( _font );
     if( paper )
       p->setBrush( *paper );
     p->setPen( color );
-    //dont clip to avoid truncated text 
+    //dont clip to avoid truncated text
     //p->setClipRect( txtArea );
     if( _dirtyMetrics ){
       if( _metrics )
@@ -228,7 +226,7 @@ void KDChartTextPiece::draw( QPainter *p, int x, int y,
       meNotConst->_metrics = new QFontMetrics( p->fontMetrics() );
       meNotConst->_dirtyMetrics = false;
     }
-   
+
     p->drawText( x, y + _metrics->ascent(), _text );
     p->restore();
     }
@@ -290,5 +288,3 @@ bool KDChartTextPiece::isRichText() const
 }
 
 
-
-#include "KDChartTextPiece.moc"

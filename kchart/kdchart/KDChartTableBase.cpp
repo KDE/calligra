@@ -775,5 +775,3 @@ bool KDChartTableDataBase::sorted() const
 {
     return _sorted;
 }
-
-#include "KDChartTableBase.moc"

@@ -430,8 +430,11 @@ class KDChartListTableData : public KDChartTableDataBase
         void expand( uint _rows, uint _cols ) {
             detach();
             sh->expand( _rows, _cols );
-            _usedRows = _rows;
-            _usedCols = _cols;
+            // adjust the usedRows / usedCols, if they had been set before
+            if( _useUsedCols )
+                setUsedCols( QMIN( _usedCols, _cols ) );
+            if( _useUsedRows )
+                setUsedRows( QMIN( _usedRows, _rows ) );
         }
 
         void setUsedRows( uint _rows ) {

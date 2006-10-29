@@ -35,7 +35,7 @@
 #include "KDChartGlobal.h"
 
 /**
-   \file KDChartDataIntern.h
+   \file KDChartData.h
 
    \brief Provides a class to encapsulate one data value in a chart.
 */

@@ -161,7 +161,10 @@ public:
         setSorted( _t.sorted() );
     }
 
-    virtual ~KDChartVectorTableData();
+    virtual ~KDChartVectorTableData() {
+        if ( sh->deref() )
+            delete sh;
+    }
 
     KDChartVectorTableData& operator=( const KDChartVectorTableData& t ) {
         if ( &t == this )
@@ -206,6 +209,10 @@ public slots:
     uint rows() const {
         return sh->row_count;
     }
+    // WARNING: The KDChartData class is an internal class now,
+    //          and nobody supposed to use it any longer.
+    // Instead, please use cellCoord(), cellProp(), setCell(), setProp(), ...
+    // (khz, 2006-05-23)
 /*
     KDChartData& cell( uint _row, uint _col ) {
         detach();
@@ -258,8 +265,11 @@ public slots:
     void expand( uint _rows, uint _cols ) {
         detach();
         sh->expand( _rows, _cols );
-        _usedRows = _rows;
-        _usedCols = _cols;
+        // adjust the usedRows / usedCols, if they had been set before
+        if( _useUsedCols )
+            setUsedCols( QMIN( _usedCols, _cols ) );
+        if( _useUsedRows )
+            setUsedRows( QMIN( _usedRows, _rows ) );
     }
 
     void setUsedRows( uint _rows ) {

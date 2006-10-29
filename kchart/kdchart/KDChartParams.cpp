@@ -2447,7 +2447,7 @@ void KDChartParams::setGlobalLeading( int left, int top, int right, int bottom )
   \note An easier way to specify a frame setting is selecting a pre-defined
   setting using the setSimpleFrame methode.
 
-  \sa setSimpleFrame, frameSettings
+  \sa setSimpleFrame, frameSettings, removeFrame
   \endif
   */
 
@@ -2497,6 +2497,8 @@ void KDChartParams::setGlobalLeading( int left, int top, int right, int bottom )
   \param sunPos For internal use - do not set this parameter or set
   it to \c KDFrame::CornerTopLeft.
   \endif
+
+  \sa removeFrame
   */
 
 
@@ -2599,7 +2601,7 @@ bool KDChartParams::moveDataRegionFrame( uint oldDataRow,
 /**
   Return the frame settings of one of the chart areas.
 
-  \sa nextFrameSettings, setSimpleFrame, setFrame
+  \sa nextFrameSettings, setSimpleFrame, setFrame, removeFrame
   */
 const KDChartParams::KDChartFrameSettings* KDChartParams::frameSettings( uint area,
                                                                          bool& bFound,
@@ -2716,11 +2718,20 @@ uint KDChartParams::insertCustomBox( const KDChartCustomBox & box )
   Please fill in the index parameter with the value
   that was returned by insertCustomBox.
 
+  \note This method also removes the last frame, that was attached to this
+  box (if any), so the only reason for calling removeFrame() manually would
+  be, that you have specified more than one frame for this box.
+
+
   \sa removeAllCustomBoxes, insertCustomBox, customBox, maxCustomBoxIdx
   */
 bool KDChartParams::removeCustomBox( const uint & idx )
 {
     const bool bFound = _customBoxDict.remove( idx );
+    if( bFound ){
+        // also remove any frame, that was attached to this box
+        removeFrame( KDChartEnums::AreaCustomBoxesBASE + idx );
+    }
     _customBoxDictMayContainHoles = true;
     emit changed();
     return bFound;
@@ -9225,17 +9236,32 @@ void KDChartParams::insertDefaultAxisTitleBox( uint n,
                                 ? ( axisTitleFontUseRelSize ? relFontSize : fixedFontSize )
                                 : relFontSize,
                                 true,
-                                0,     bVert ?  -40 : (bHorz ?   0 : 0),
-                                -2000, bVert ? -200 : (bHorz ? -45 : 0),
+                                0, 0,
+                                0, 0,
                                 setColor ? axisTitleColor : Qt::darkBlue,
                                 Qt::NoBrush,
                                 KDChartEnums::AreaAxisBASE + n,
-                                bVert ? KDChartEnums::PosCenterLeft        : KDChartEnums::PosBottomCenter,
-                                bVert ? (Qt::AlignTop + Qt::AlignHCenter)  : (Qt::AlignBottom + Qt::AlignHCenter),
+                                bVert ? KDChartEnums::PosCenterLeft        : KDChartEnums::PosBottomCenter,                                                         bVert ? (Qt::AlignTop + Qt::AlignHCenter)  : (Qt::AlignBottom + Qt::AlignHCenter),
                                 0,0,0,
                                 bVert ? (Qt::AlignBottom + Qt::AlignRight) : (Qt::AlignTop + Qt::AlignHCenter),
-                                false );
-    insertCustomBox( customBox );
+                                false, n );
+
+   customBox.setParentAxisArea( n );
+   const uint id = insertCustomBox( customBox );
+   /*debugging Title box*/
+    /*
+   setSimpleFrame(
+                KDChartEnums::AreaCustomBoxesBASE
+                + id,
+                0,0,  0,0,
+                true,
+                true,
+                KDFrame::FrameFlat,
+                1,
+                0,
+                Qt::red,
+                QBrush( QColor ( 255,248,222 ) ) );
+   */
 }
 
 /**
@@ -9260,11 +9286,11 @@ void KDChartParams::setAxisTitle( uint n, const QString& axisTitle )
 	    title.prepend("<qt><center>");
 	  if( !stripTitleString.endsWith("</QT>" ) )
 	    title.append("</center></qt>");
-	  
+
 	  KDChartTextPiece textPiece( 0, title,
 				      box->content().font() );
-	  
-	  box->setContent( textPiece );            
+
+	  box->setContent( textPiece );
           //qDebug ("old Axis Title updated");
 	  bDone = true;
         }
@@ -9376,8 +9402,8 @@ void  KDChartParams::setAxisTitleFont( uint n,
 
 /**
   Specifies the font and the size of the default axis title text.
- \param axisTitleFont the font of the axis title text - by default the font will be relative 
- \param useFixedFontSize flag indicating whether the font's size is to be used as fixed or calculated  as per mil value. 
+ \param axisTitleFont the font of the axis title text - by default the font will be relative
+ \param useFixedFontSize flag indicating whether the font's size is to be used as fixed or calculated  as per mil value.
   \param axisTitleFontRelSize the size to be used if \c useFixedFontSize is false, this is interpreted as per mil value of the printable area size
   \sa setAxisTitle, setAxisTitleColor, setAxisTitleFont, setAxisTitleFontUseRelSize, setAxisTitleFontRelSize
   \sa axisTitle, axisTitleColor, axisTitleFont, axisTitleFontUseRelSize, axisTitleFontRelSize
@@ -9410,10 +9436,10 @@ void KDChartParams::setAxisTitleFont( uint n,
 			       false, 0 );
 
   emit changed();
-    
-  if ( useFixedFontSize ) 
+
+  if ( useFixedFontSize )
     setAxisTitleFontUseRelSize( n, false);
-    
+
 }
 
 

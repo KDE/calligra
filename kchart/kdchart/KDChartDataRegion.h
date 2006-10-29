@@ -39,6 +39,8 @@
   */
 struct KDCHART_EXPORT KDChartDataRegion
 {
+    typedef QValueList<QPointArray> PointArrayList;
+
     KDChartDataRegion()
     {
         init();
@@ -70,10 +72,23 @@ struct KDCHART_EXPORT KDChartDataRegion
         col   = c;
         chart = ch;
     }
+    KDChartDataRegion( uint r, uint c, uint ch, PointArrayList * list, bool takeOwnership )
+    {
+        init();
+        if( takeOwnership )
+            pPointArrayList = list;
+        else
+            pPointArrayList = new PointArrayList( * list );
+        row   = r;
+        col   = c;
+        chart = ch;
+    }
 
     ~KDChartDataRegion()
     {
         //qDebug ("~KDChartDataRegion");
+        if( pPointArrayList )
+            delete pPointArrayList;
         if( pRegion )
             delete pRegion;
         if( pArray )
@@ -86,6 +101,14 @@ struct KDCHART_EXPORT KDChartDataRegion
 
     QRegion region() const
     {
+        if( pPointArrayList && ! pPointArrayList->empty() ){
+            QRegion region;
+            PointArrayList::iterator it;
+            for ( it = pPointArrayList->begin(); it != pPointArrayList->end(); ++it ){
+                region += QRegion( *it );
+            }
+            return region;
+        }
         if( pRegion )
             return *pRegion;
         if( pArray )
@@ -97,6 +120,14 @@ struct KDCHART_EXPORT KDChartDataRegion
 
     QRect rect() const
     {
+        if( pPointArrayList && ! pPointArrayList->empty() ){
+            QRect rect;
+            PointArrayList::iterator it;
+            for ( it = pPointArrayList->begin(); it != pPointArrayList->end(); ++it ){
+                rect = rect.unite( (*it).boundingRect() );
+            }
+            return rect;
+        }
         if( pRegion )
             return pRegion->boundingRect();
         if( pArray )
@@ -106,12 +137,33 @@ struct KDCHART_EXPORT KDChartDataRegion
         return QRect();
     }
 
+    bool contains(const QPoint & p) const
+    {
+        if( pPointArrayList && ! pPointArrayList->empty() ){
+            PointArrayList::iterator it;
+            for ( it = pPointArrayList->begin(); it != pPointArrayList->end(); ++it ){
+                QRegion region( *it );
+                if( region.contains( p ) )
+                    return true;
+            }
+            return false;
+        }
+        if( pRegion )
+            return pRegion->contains( p );
+        if( pArray )
+            return QRegion( *pArray ).contains( p );
+        if( pRect )
+            return pRect->contains( p );
+        return false;
+    }
+
     void init()
     {
         pRegion     = 0;
         pArray      = 0;
         pRect       = 0;
         pTextRegion = 0;
+        pPointArrayList = 0;
         row    = 0;
         col    = 0;
         chart  = 0;
@@ -125,6 +177,10 @@ struct KDCHART_EXPORT KDChartDataRegion
     QPointArray* pArray;
     QRect*       pRect;
     QRegion*     pTextRegion;  // for the data values text
+
+    // for three-dimensional bars, and for comparable structures, needing
+    // more than one QPointArray, we use this list:
+    PointArrayList* pPointArrayList;
 
     // For rectangular data representation  (bar, line, area, point, ...)
     // we use the above declared 'pRect'.

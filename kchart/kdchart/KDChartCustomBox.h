@@ -55,6 +55,7 @@ class KDCHART_EXPORT KDChartCustomBox :public QObject
 {
     Q_OBJECT
     friend class KDChartPainter;
+    friend class KDChartParams;
 
 public:
 
@@ -80,7 +81,8 @@ public:
         _data3rd( 0 ),
         _deltaAlign( KDCHART_AlignAuto ),
         _deltaScaleGlobal( true ),
-        _anchorBeingCalculated( false )
+        _anchorBeingCalculated( false ),
+        _parentAxisArea( -1 )
     {
         const KDChartTextPiece piece( 0, "", QFont( "helvetica", 8, QFont::Normal, false ) );
         _content.deepCopy( &piece );
@@ -123,7 +125,8 @@ public:
         _data3rd( 0 ),
         _deltaAlign( KDCHART_AlignAuto ),
         _deltaScaleGlobal( true ),
-        _anchorBeingCalculated( false )
+        _anchorBeingCalculated( false ),
+         _parentAxisArea( -1 )
     {
         _content.deepCopy( &content );
     }
@@ -211,7 +214,8 @@ public:
                       uint dataCol = 0,
                       uint data3rd = 0,
                       uint deltaAlign = KDCHART_AlignAuto,
-                      bool deltaScaleGlobal = true )
+                      bool deltaScaleGlobal = true,
+                      int parentAxis = -1 )
         : _rotation( 0 ),
           _fontSize( fontSize ),
           _fontScaleGlobal( fontScaleGlobal ),
@@ -229,7 +233,8 @@ public:
           _data3rd( data3rd ),
           _deltaAlign( deltaAlign ),
           _deltaScaleGlobal( deltaScaleGlobal ),
-          _anchorBeingCalculated( false )
+          _anchorBeingCalculated( false ),
+          _parentAxisArea(  parentAxis )
     {
         _content.deepCopy( &content );
     }
@@ -331,7 +336,8 @@ public:
                       uint dataCol = 0,
                       uint data3rd = 0,
                       uint deltaAlign = KDCHART_AlignAuto,
-                      bool deltaScaleGlobal = true )
+                      bool deltaScaleGlobal = true,
+                      int parentAxis = -1 )
         : _rotation( rotation ),
           _fontSize( fontSize ),
           _fontScaleGlobal( fontScaleGlobal ),
@@ -349,7 +355,8 @@ public:
           _data3rd( data3rd ),
           _deltaAlign( deltaAlign ),
           _deltaScaleGlobal( deltaScaleGlobal ),
-          _anchorBeingCalculated( false )
+          _anchorBeingCalculated( false ),
+          _parentAxisArea(  parentAxis )
     {
         _content.deepCopy( &content );
     }
@@ -399,6 +406,10 @@ public slots: // PENDING(blackie) merge slots sections.
     /**
       Return the actual rectangle which to draw box into.
 
+      \note When ever possible, use this method, instead of the other trueRect(), that
+      has no \c QPainter parameter. Passing a QPainter will give you more exact results.
+
+      \param painter The QPainter to be used.
       \param anchor The anchor point which the box is to be aligned to.
       This can be any point within the painter drawing area but you
       will probably compute a point using anchorArea(), anchorPosition(), anchorAlign()
@@ -408,7 +419,21 @@ public slots: // PENDING(blackie) merge slots sections.
       \param areaHeightP1000 The thousands part of the logical height
       of the area to be used for drawing.
       */
+    QRect trueRect( QPainter * painter,
+       QPoint anchor, double areaWidthP1000, double areaHeightP1000 ) const ;
 
+    /**
+      Return the actual rectangle which to draw box into.
+
+      \param anchor The anchor point which the box is to be aligned to.
+      This can be any point within the painter drawing area but you
+      will probably compute a point using anchorArea(), anchorPosition(), anchorAlign()
+      (and dataRow(), dataCol(), data3rd() when dealing with KDChart data regions, resp.)
+      \param areaWidthP1000 The thousands part of the logical width
+      of the area to be used for drawing.
+      \param areaHeightP1000 The thousands part of the logical height
+      of the area to be used for drawing.
+      */
     virtual QRect trueRect( QPoint anchor,
                             double areaWidthP1000,
                             double areaHeightP1000 ) const ;
@@ -948,6 +973,17 @@ protected:
         return _anchorBeingCalculated;
     }
 
+    void setParentAxisArea( int parentAxis ) const
+    {
+        KDChartCustomBox* that = const_cast<KDChartCustomBox*>(this);
+        that->_parentAxisArea = parentAxis;
+    }
+
+    int parentAxisArea() const
+    {
+        return _parentAxisArea;
+    }
+
 private:
     int              _rotation;
     KDChartTextPiece _content;
@@ -979,6 +1015,7 @@ private:
     // it must be set to   f a l s e
     // after loading a KDChartCustomBox from a file.
     bool _anchorBeingCalculated;
+    int                        _parentAxisArea;
 };
 
 

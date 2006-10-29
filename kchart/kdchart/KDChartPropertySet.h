@@ -30,9 +30,11 @@
 #define __KDCHARTPROPERTYSET__
 
 
-#include <KDXMLTools.h>
 #include <KDChartEnums.h>
 #include <kdchart_export.h>
+#include <qdom.h>
+#include <qcolor.h>
+#include <qbrush.h>
 
 /**
   \file KDChartPropertySet.h
@@ -716,7 +718,7 @@ public slots:
         }
         return false;
     }
-    
+
     /**
       Specify the ID of the property set specifying the alignment of the
       Marker to be displayed for this data value
@@ -799,11 +801,11 @@ public slots:
         return false;
     }
 
-    
-    
 
 
-    
+
+
+
     void setExtraLinesAlign( int idExtraLinesAlign, uint extraLinesAlign )
     {
         mIdExtraLinesAlign = idExtraLinesAlign;

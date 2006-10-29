@@ -193,6 +193,7 @@ class KDChartAxesPainter : public KDChartPainter
                         int   behindComma,
                         double nDelta,
                         int& trueBehindComma,
+                        KDChartEnums::NumberNotation notation,
                         const QString& decimalPoint,
                         const QString& thousandsPoint,
                         const QString& prefix,

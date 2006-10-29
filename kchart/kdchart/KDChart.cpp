@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2001-2003 Klar�vdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KDChart library.
  **
@@ -26,6 +26,9 @@
  ** licensing are not clear to you.
  **
  **********************************************************************/
+#if defined KDAB_EVAL
+#include "../evaldialog/evaldialog.h"
+#endif
 
 /**
   \dontinclude KDChartPainter.h
@@ -40,6 +43,14 @@
 #include <qpainter.h>
 #include <qpaintdevice.h>
 #include <qpaintdevicemetrics.h>
+
+#ifdef QSA
+#if 0   // Disabled by ingwa to make it compile
+#include <qsinterpreter.h>
+#include "KDChartWrapperFactory.h"
+#include "KDChartObjectFactory.h"
+#endif
+#endif
 
 /**
   \class KDChart KDChart.h
@@ -221,6 +232,13 @@ bool KDChart::setupGeometry( QPainter* painter,
   Paints a chart with the specified parameters on the specified
   painter.
 
+  \note If you are passing \c regions pointer, KD Chart will call
+  the \c clear() method on it, to delete any regions that might
+  still be registered from previous painting.
+  Make sure to copy any regions information into your own, private
+  data structure, in case you need to keep track of region information,
+  that was valid for such previous times.
+
   \param painter the QPainter onto which the chart should be painted
   \param params the parameters defining the chart
   \param data the data that should be displayed as a chart
@@ -246,6 +264,10 @@ void KDChart::paint( QPainter*              painter,
 #if defined KDAB_EVAL
     EvalDialog::checkEvalLicense( "KD Chart" );
 #endif
+
+    // delete old contents, to avoid the region from constantly growing
+    if( regions )
+        regions->clear();
 
     KDChartParams*        params = paraParams;
     KDChartTableDataBase* data   = paraData;
@@ -356,3 +378,114 @@ void cleanupPainter()
     delete KDChart::cpainter2;
     KDChart::oldParams = 0;
 }
+
+#ifdef QSA
+void KDChart::initInterpreter( QSInterpreter* interpreter )
+{
+    privateInitInterpreter( interpreter );
+    interpreter->evaluate( globals() );
+}
+
+void KDChart::initProject( QSProject* project )
+{
+    project->createScript( QString::fromLatin1( "KDCHART_Globals" ), globals() );
+    privateInitInterpreter( project->interpreter() );
+}
+
+QString KDChart::globals()
+{
+    QString globals;
+    QMap<char*, double> intMap;
+
+    intMap.insert( "KDCHART_POS_INFINITE", KDCHART_POS_INFINITE );
+    intMap.insert( "KDCHART_NEG_INFINITE", KDCHART_NEG_INFINITE );
+    intMap.insert( "KDCHART_AlignAuto", KDCHART_AlignAuto );
+    intMap.insert( "KDCHART_ALL_AXES", KDCHART_ALL_AXES );
+    intMap.insert( "KDCHART_NO_AXIS", KDCHART_NO_AXIS );
+    intMap.insert( "KDCHART_ALL_DATASETS", KDCHART_ALL_DATASETS );
+    intMap.insert( "KDCHART_NO_DATASET", KDCHART_NO_DATASET );
+    intMap.insert( "KDCHART_UNKNOWN_CHART", KDCHART_UNKNOWN_CHART );
+    intMap.insert( "KDCHART_ALL_CHARTS", KDCHART_ALL_CHARTS );
+    intMap.insert( "KDCHART_NO_CHART", KDCHART_NO_CHART );
+    intMap.insert( "KDCHART_GLOBAL_LINE_STYLE", KDCHART_GLOBAL_LINE_STYLE );
+    intMap.insert( "KDCHART_AUTO_SIZE", KDCHART_AUTO_SIZE );
+    intMap.insert( "KDCHART_DATA_VALUE_AUTO_DIGITS", KDCHART_DATA_VALUE_AUTO_DIGITS );
+    intMap.insert( "KDCHART_SAGITTAL_ROTATION", KDCHART_SAGITTAL_ROTATION );
+    intMap.insert( "KDCHART_TANGENTIAL_ROTATION", KDCHART_TANGENTIAL_ROTATION );
+    intMap.insert( "KDCHART_PROPSET_NORMAL_DATA", KDCHART_PROPSET_NORMAL_DATA );
+    intMap.insert( "KDCHART_PROPSET_TRANSPARENT_DATA", KDCHART_PROPSET_TRANSPARENT_DATA );
+    intMap.insert( "KDCHART_PROPSET_HORI_LINE", KDCHART_PROPSET_HORI_LINE );
+    intMap.insert( "KDCHART_PROPSET_VERT_LINE", KDCHART_PROPSET_VERT_LINE );
+    intMap.insert( "KDCHART_SAGGITAL_ROTATION", KDCHART_SAGGITAL_ROTATION );
+    intMap.insert( "KDCHART_CNT_ORDINATES", KDCHART_CNT_ORDINATES );
+    intMap.insert( "KDCHART_MAX_POLAR_DELIMS_AND_LABELS_POS", KDCHART_MAX_POLAR_DELIMS_AND_LABELS_POS );
+    intMap.insert( "KDCHART_MAX_AXES", KDCHART_MAX_AXES );
+    intMap.insert( "KDCHART_AXIS_LABELS_AUTO_DELTA", KDCHART_AXIS_LABELS_AUTO_DELTA );
+    intMap.insert( "KDCHART_AXIS_LABELS_AUTO_LEAVEOUT", KDCHART_AXIS_LABELS_AUTO_LEAVEOUT );
+    intMap.insert( "KDCHART_AXIS_LABELS_AUTO_DIGITS", KDCHART_AXIS_LABELS_AUTO_DIGITS );
+    intMap.insert( "KDCHART_AXIS_GRID_AUTO_LINEWIDTH", KDCHART_AXIS_GRID_AUTO_LINEWIDTH );
+    intMap.insert( "KDCHART_AXIS_IGNORE_EMPTY_INNER_SPAN", KDCHART_AXIS_IGNORE_EMPTY_INNER_SPAN );
+    intMap.insert( "KDCHART_DONT_CHANGE_EMPTY_INNER_SPAN_NOW", KDCHART_DONT_CHANGE_EMPTY_INNER_SPAN_NOW );
+    intMap.insert( "DBL_MIN", DBL_MIN );
+    intMap.insert( "DBL_MAX", DBL_MAX );
+
+    for( QMapIterator<char*,double> it= intMap.begin(); it != intMap.end(); ++it ) {
+        // This is written this way to be efficient
+        globals += QString::fromLatin1( "const " );
+        globals += it.key();
+        globals += " = ";
+        globals += QString::number( it.data() );
+        globals += ";\n";
+    }
+
+    globals += QString::fromLatin1( "const KDCHART_AXIS_LABELS_AUTO_DATETIME_FORMAT=\"%1\";\n" )
+               .arg( QString::fromLatin1( KDCHART_AXIS_LABELS_AUTO_DATETIME_FORMAT ) );
+    globals += QString::fromLatin1( "const KDCHART_AXIS_LABELS_AUTO_LIMIT = 140319.64;\n" );
+    globals += QString::fromLatin1( "const KDCHART_DEFAULT_AXIS_GRID_COLOR = new Color(\"%1\");\n" )
+               .arg(KDCHART_DEFAULT_AXIS_GRID_COLOR.name());
+    globals += QString::fromLatin1( "const KDCHART_DATA_VALUE_AUTO_COLOR = new Color(\"%1\");\n" )
+               .arg( (KDCHART_DATA_VALUE_AUTO_COLOR)->name());
+
+
+    QMap<char*,QColor> colorMap;
+    colorMap.insert( "Qt.color0", Qt::color0 );
+    colorMap.insert( "Qt.color1", Qt::color1 );
+    colorMap.insert( "Qt.black", Qt::black );
+    colorMap.insert( "Qt.white", Qt::white );
+    colorMap.insert( "Qt.darkGray", Qt::darkGray );
+    colorMap.insert( "Qt.gray", Qt::gray );
+    colorMap.insert( "Qt.lightGray", Qt::lightGray );
+    colorMap.insert( "Qt.red", Qt::red );
+    colorMap.insert( "Qt.green", Qt::green );
+    colorMap.insert( "Qt.blue", Qt::blue );
+    colorMap.insert( "Qt.cyan", Qt::cyan );
+    colorMap.insert( "Qt.magenta", Qt::magenta );
+    colorMap.insert( "Qt.yellow", Qt::yellow );
+    colorMap.insert( "Qt.darkRed", Qt::darkRed );
+    colorMap.insert( "Qt.darkGreen", Qt::darkGreen );
+    colorMap.insert( "Qt.darkBlue", Qt::darkBlue );
+    colorMap.insert( "Qt.darkCyan", Qt::darkCyan );
+    colorMap.insert( "Qt.darkMagenta", Qt::darkMagenta );
+    colorMap.insert( "Qt.darkYellow", Qt::darkYellow );
+    for( QMapIterator<char*,QColor> it2= colorMap.begin(); it2 != colorMap.end(); ++it2 ) {
+        // This is written this way to be efficient
+        globals += QString::fromLatin1( it2.key() );
+        globals += QString::fromLatin1( " = new Color( " );
+        globals += QString::number( it2.data().red() );
+        globals += ',';
+        globals += QString::number( it2.data().green() );
+        globals += ',';
+        globals += QString::number( it2.data().blue() );
+        globals += QString::fromLatin1( " );\n" );
+    }
+    //qDebug( "%s",globals.latin1() );
+    return globals;
+}
+
+void KDChart::privateInitInterpreter( QSInterpreter* interpreter )
+{
+    interpreter->addWrapperFactory( new KDChartWrapperFactory );
+    interpreter->addObjectFactory ( new KDChartObjectFactory );
+}
+
+#endif

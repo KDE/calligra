@@ -93,4 +93,6 @@ QPoint KDChartEnums::positionFlagToPoint( const QRect& rect,
     return pt;
 }
 
+#ifndef KDCHART_MASTER_CVS
 #include "KDChartEnums.moc"
+#endif

@@ -30,7 +30,13 @@ libkdchart_la_SOURCES = KDChart.cpp 		\
 			KDFrame.cpp 		\
 			KDFrameProfileSection.cpp \
 			KDXMLTools.cpp          \
-                        KDChartEnums.cpp
+                        KDChartEnums.cpp \
+                        KDChartAxisParamsWrapper.cpp \
+                        KDChartCustomBoxWrapper.cpp \
+                        KDChartParamsWrapper.cpp \
+                        KDChartTableDataWrapper.cpp
+                        #KDChartObjectFactory.cpp 
+                        #KDChartWrapperFactory.cpp
 
 libkdchart_la_LDFLAGS = $(all_libraries) -no-undefined
 libkdchart_la_LIBADD = $(LIB_QT) $(LIB_KDECORE)
@@ -78,5 +84,11 @@ include_HEADERS =	KDChartTableBase.h	\
 			KDChartEnums.h		\
 			KDChartTextPiece.h	\
 			KDChartAxisParams.h \
-			kdchart_export.h
+			kdchart_export.h \
+                        KDChartCustomBoxWrapper.h \
+                        KDChartWrapperFactory.h \
+                        KDChartAxisParamsWrapper.h \
+                        KDChartParamsWrapper.h \
+                        KDChartTableDataWrapper.h \
+                        KDChartObjectFactory.h
 

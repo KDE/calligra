@@ -168,7 +168,7 @@ void KDChartWidget::mousePressEvent( QMouseEvent* event )
     //QPtrListIterator < KDChartDataRegion > it( _dataRegions );
     for( current = _dataRegions.last(); current; current = _dataRegions.prev() ){
     //while ( ( current = it.current() ) ) {
-        if ( current->region().contains( event->pos() ) ) {
+        if ( current->contains( event->pos() ) ) {
             _mousePressedOnRegion = current;
             if ( event->button() == LeftButton ){
                 emit dataLeftPressed( current->row, current->col );
@@ -198,7 +198,7 @@ void KDChartWidget::mouseReleaseEvent( QMouseEvent* event )
     QPtrListIterator < KDChartDataRegion > it( _dataRegions );
     while ( ( current = it.current() ) ) {
         ++it;
-        if ( current->region().contains( event->pos() ) ) {
+        if ( current->contains( event->pos() ) ) {
             if ( event->button() == LeftButton ) {
                 emit dataLeftReleased( current->row, current->col );
                 emit dataLeftReleased( event->pos() );
