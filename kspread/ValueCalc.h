@@ -65,7 +65,7 @@ doubles and GnuMP-based numbers, that is not of much concern ;)
 
 class ValueCalc {
  public:
-  ValueCalc (ValueConverter* c);
+  explicit ValueCalc (ValueConverter* c);
 
   ValueConverter *conv () { return converter; };
 

@@ -37,7 +37,7 @@ formats.
 class ValueConverter {
  public:
   /** constructor */
-  ValueConverter (ValueParser *parser);
+  explicit ValueConverter (ValueParser *parser);
 
   Value asBoolean (const Value &value) const;
   Value asInteger (const Value &value) const;

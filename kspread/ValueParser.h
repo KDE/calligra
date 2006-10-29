@@ -41,7 +41,7 @@ Value in the desired format.
 class ValueParser {
  public:
   /** constructor */
-  ValueParser (Doc* doc);
+  explicit ValueParser (Doc* doc);
 
   const Doc* doc() const;
   const KLocale* locale() const;

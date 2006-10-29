@@ -38,7 +38,7 @@ data stored in a Value, with a given formatting.
 class ValueFormatter {
  public:
   /** copnstructor */
-  ValueFormatter (ValueConverter *converter);
+  explicit ValueFormatter (ValueConverter *converter);
 
   /** create a text representation of data in this cell */
   QString formatText (Cell *cell, FormatType fmtType);
