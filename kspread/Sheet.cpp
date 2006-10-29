@@ -3390,12 +3390,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
             }
         }
         rowNode = rowNode.nextSibling();
-#ifdef KOXML_USE_QDOM
         doc()->emitProgress( 100 * rowIndex / overallRowCount );
-#else
-#warning Problem with KoXmlReader conversion!
-        kWarning() << "Problem with KoXmlReader conversion!" << endl;
-#endif
     }
 
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
