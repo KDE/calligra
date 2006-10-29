@@ -487,6 +487,7 @@ void KWTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         if(frame->isCopy())
             continue;
         KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
+        Q_ASSERT(data); // that implies that either the KWTextFrameSet is buggy or not used.
         if(data && data->position() <= position && data->endPosition() >= position) {
             // found our (first) frame to re-layout
             data->faul();
