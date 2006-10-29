@@ -353,12 +353,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
                 {
                     Sheet* sheet = addNewSheet();
                     sheet->setSheetName( sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ), true, false );
-#ifdef KOXML_USE_QDOM
-                    d->overallRowCount += sheetElement.childNodes().count();
-#else
-#warning Problem with KoXmlReader conversion!
-                    kWarning() << "Problem with KoXmlReader conversion!" << endl;
-#endif
+                    d->overallRowCount += KoXml::childNodesCount(sheetElement);
                 }
             }
         }
