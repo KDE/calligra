@@ -431,5 +431,21 @@ VStrokeFillPreview::drawStroke( const VStroke &s )
 	}
 }
 
+void
+VStrokeFillPreview::setFillSelected()
+{
+	m_strokeWidget = false;
+	update( m_stroke, m_fill );
+	emit fillSelected();
+}
+
+void
+VStrokeFillPreview::setStrokeSelected()
+{
+	m_strokeWidget = true;
+	update( m_stroke, m_fill );
+	emit strokeSelected();
+}
+
 #include "vstrokefillpreview.moc"
 

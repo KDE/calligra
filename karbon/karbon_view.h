@@ -28,6 +28,7 @@
 #include <KoPoint.h>
 #include <ksharedptr.h>
 #include <kxmlguibuilder.h>
+#include <kdualcolorbutton.h>
 #include <KoUnit.h>
 #include <koffice_export.h>
 class DCOPObject;
@@ -199,7 +200,8 @@ protected slots:
 
 	void canvasContentsMoving( int x, int y );
 	void commandExecuted( VCommand *command );
-
+	void strokeFillSelectionChanged( KDualColorButton::DualColor s );
+	void colorChanged( const QColor &c );
 signals:
 	void zoomChanged( double );
 	void selectionChange();

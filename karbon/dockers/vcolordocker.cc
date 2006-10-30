@@ -70,6 +70,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	connect( mHSVWidget, SIGNAL( sigBgColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
 	connect(this, SIGNAL(fgColorChanged(const QColor &)), mHSVWidget, SLOT(setFgColor(const QColor &)));
 	connect(this, SIGNAL(bgColorChanged(const QColor &)), mHSVWidget, SLOT(setBgColor(const QColor &)));
+	connect( mHSVWidget, SIGNAL( sigModeChanged(KDualColorButton::DualColor) ), this, SLOT( updateMode( KDualColorButton::DualColor ) ) );
 	mTabWidget->addTab( mHSVWidget, i18n( "HSV" ) );
 
 	/* ##### RGB WIDGET ##### */
@@ -78,6 +79,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	connect( mRGBWidget, SIGNAL( sigBgColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
 	connect(this, SIGNAL(fgColorChanged(const QColor &)), mRGBWidget, SLOT(setFgColor(const QColor &)));
 	connect(this, SIGNAL(bgColorChanged(const QColor &)), mRGBWidget, SLOT(setBgColor(const QColor &)));
+	connect( mRGBWidget, SIGNAL( sigModeChanged(KDualColorButton::DualColor) ), this, SLOT( updateMode( KDualColorButton::DualColor ) ) );
 	mTabWidget->addTab( mRGBWidget, i18n( "RGB" ) );
 
 	/* ##### CMYK WIDGET ##### */
@@ -110,8 +112,6 @@ void VColorDocker::updateFgColor(const QColor &c)
 	mHSVWidget->blockSignals(true);
 	mRGBWidget->blockSignals(true);
 	//mCMYKWidget->blockSignals(true);
-
-	m_oldColor = m_color;
 
 	m_color = c;
 
@@ -158,8 +158,6 @@ void VColorDocker::updateBgColor(const QColor &c)
 	mRGBWidget->blockSignals(true);
 	//mCMYKWidget->blockSignals(true);
 
-	m_oldColor = m_color;
-
 	m_color = c;
 
 	VColor v = VColor(c);
@@ -203,8 +201,6 @@ void VColorDocker::updateOpacity()
 {
 	m_opacity = mOpacity->value() / 100.0;
 
-	m_oldColor = m_color;
-
 	VColor c = VColor(m_color);
 	c.setOpacity( m_opacity );
 
@@ -223,16 +219,21 @@ VColorDocker::mouseReleaseEvent( QMouseEvent * )
 void VColorDocker::setFillDocker()
 {
 	m_isStrokeDocker = false;
+	mHSVWidget->setMode( KDualColorButton::Background );
+	mRGBWidget->setMode( KDualColorButton::Background );
+	update();
 }
 
 void VColorDocker::setStrokeDocker()
 {
 	m_isStrokeDocker = true;
+	mHSVWidget->setMode( KDualColorButton::Foreground );
+	mRGBWidget->setMode( KDualColorButton::Foreground );
+	update();
 }
 
 void VColorDocker::update()
 {
-
 	mHSVWidget->blockSignals(true);
 	mRGBWidget->blockSignals(true);
 	//mCMYKWidget->blockSignals(true);
@@ -253,11 +254,23 @@ void VColorDocker::update()
 		mHSVWidget->setBgColor(bgColor);
 		mRGBWidget->setBgColor(bgColor);
 		//mCMYKWidget->setBgColor(bgColor);
+
+		if( m_isStrokeDocker )
+			m_color = fgColor;
+		else
+			m_color = bgColor;
 	}
 
 	mHSVWidget->blockSignals(false);
 	mRGBWidget->blockSignals(false);
 	//mCMYKWidget->blockSignals(false);
+}
+
+void VColorDocker::updateMode( KDualColorButton::DualColor s )
+{
+	m_isStrokeDocker = (s == KDualColorButton::Foreground);
+	update();
+	emit modeChanged( s );
 }
 
 #include "vcolordocker.moc"

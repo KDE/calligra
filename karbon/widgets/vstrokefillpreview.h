@@ -48,7 +48,8 @@ public:
 	virtual bool eventFilter( QObject* object, QEvent* event );
 
 	bool strokeIsSelected() const { return m_strokeWidget; }
-
+	void setFillSelected();
+	void setStrokeSelected();
 signals:
 	void strokeChanged( const VStroke & );
 	void fillChanged( const VFill& );

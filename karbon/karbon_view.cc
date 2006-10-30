@@ -280,6 +280,9 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 
 			connect( m_part->commandHistory(), SIGNAL( commandExecuted( VCommand* ) ), this, SLOT( commandExecuted( VCommand* ) ) );
 
+			connect( m_ColorManager, SIGNAL(modeChanged( KDualColorButton::DualColor)), this, SLOT( strokeFillSelectionChanged(KDualColorButton::DualColor) ) );
+			connect( m_ColorManager, SIGNAL(bgColorChanged( const QColor & )), this, SLOT(colorChanged( const QColor & )) );
+			connect( m_ColorManager, SIGNAL(fgColorChanged( const QColor & )), this, SLOT(colorChanged( const QColor & )) );
 			selectionChanged();
 
 			//create toolbars
@@ -301,6 +304,9 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 	if( shell() && container == m_toolbox )
 	{
 		disconnect( m_part->commandHistory(), SIGNAL( commandExecuted( VCommand* ) ), this, SLOT( commandExecuted( VCommand* ) ) );
+		disconnect( m_ColorManager, SIGNAL(modeChanged( KDualColorButton::DualColor)), this, SLOT( strokeFillSelectionChanged(KDualColorButton::DualColor) ) );
+		disconnect( m_ColorManager, SIGNAL(bgColorChanged( const QColor & )), this, SLOT(colorChanged( const QColor & )) );
+		disconnect( m_ColorManager, SIGNAL(fgColorChanged( const QColor & )), this, SLOT(colorChanged( const QColor & )) );
 		delete m_toolbox;
 		m_toolbox = 0L;
 		m_toolController->youAintGotNoToolBox();
@@ -1526,6 +1532,20 @@ void KarbonView::commandExecuted( VCommand *command )
 {
 	if( command && command->changesSelection() )
 		selectionChanged();
+}
+
+void KarbonView::strokeFillSelectionChanged( KDualColorButton::DualColor s )
+{
+	if( s == KDualColorButton::Foreground )
+		m_strokeFillPreview->setStrokeSelected();
+	else
+		m_strokeFillPreview->setFillSelected();
+	selectionChanged();
+}
+
+void KarbonView::colorChanged( const QColor &c )
+{
+	selectionChanged();
 }
 
 #include "karbon_view.moc"

@@ -59,16 +59,15 @@ private:
 signals:
 	void fgColorChanged( const QColor &c );
 	void bgColorChanged( const QColor &c );
-
+	void modeChanged( KDualColorButton::DualColor s);
 private slots:
 	void updateFgColor(const QColor &c);
 	void updateBgColor(const QColor &c);
 	void updateOpacity();
-
+	void updateMode( KDualColorButton::DualColor s );
 protected:
 	bool m_isStrokeDocker; //Are we setting stroke color ( true ) or fill color ( false )
 	QColor m_color;
-	QColor m_oldColor;
 	float m_opacity;
 private:
 	KarbonPart *m_part;
