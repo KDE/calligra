@@ -176,6 +176,10 @@ class KexiTableDesignerViewPrivate
 
 		KActionCollection* historyActionCollection;
 		CommandHistory* history;
+
+		//! A cache used in KexiTableDesignerView::buildField() to quickly identify 
+		//! properties internal to the designer
+		Q3AsciiDict<char> internalPropertyNames;
 };
 
 #endif

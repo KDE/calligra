@@ -24,6 +24,8 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
+#include <ktabwidget.h>
+#include <kiconloader.h>
 
 #include "keximainwindow.h"
 #include "kexiproject.h"
@@ -32,22 +34,34 @@
 #include "widget/tableview/kexidatatableview.h"
 #include "kexitabledesignerview.h"
 #include "kexitabledesigner_dataview.h"
+#include "kexilookupcolumnpage.h"
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 #include <kexidialogbase.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3PtrList>
 
+//! @internal
+class KexiTablePart::Private
+{
+	public:
+		Private()
+		{
+		}
+		~Private()
+		{
+			delete static_cast<KexiLookupColumnPage*>(lookupColumnPage);
+		}
+		QGuardedPtr<KexiLookupColumnPage> lookupColumnPage;
+};
 
 KexiTablePart::KexiTablePart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
+ , d(new Private())
 {
 	// REGISTERED ID:
 	m_registeredPartID = (int)KexiPart::TableObjectType;
 
-	kDebug() << "KexiTablePart::KexiTablePart()" << endl;
+	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
 	m_names["instanceName"] 
 		= i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
@@ -60,6 +74,7 @@ KexiTablePart::KexiTablePart(QObject *parent, const char *name, const QStringLis
 
 KexiTablePart::~KexiTablePart()
 {
+	delete d;
 }
 
 void KexiTablePart::initPartActions()
@@ -92,7 +107,7 @@ KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog,
 	KexiTablePart::TempData *temp = static_cast<KexiTablePart::TempData*>(dialog->tempData());
 	if (!temp->table) {
 		temp->table = win->project()->dbConnection()->tableSchema(item.name());
-		kDebug() << "KexiTablePart::execute(): schema is " << temp->table << endl;
+		kdDebug() << "KexiTablePart::execute(): schema is " << temp->table << endl;
 	}
 
 	if (viewMode == Kexi::DesignViewMode) {
@@ -188,7 +203,7 @@ tristate KexiTablePart::askForClosingObjectsUsingTableSchema(QWidget *parent, Ke
 }
 
 QString
-KexiTablePart::i18nMessage(const Q3CString& englishMessage, KexiDialogBase* dlg) const
+KexiTablePart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
 {
 	if (englishMessage=="Design of object \"%1\" has been modified.")
 		return i18n("Design of table \"%1\" has been modified.");
@@ -201,6 +216,37 @@ KexiTablePart::i18nMessage(const Q3CString& englishMessage, KexiDialogBase* dlg)
 		return i18n("Warning! Any data in this table will be removed upon design's saving!");
 
 	return englishMessage;
+}
+
+void KexiTablePart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow* mainWin)
+{
+	if (!d->lookupColumnPage) {
+		d->lookupColumnPage = new KexiLookupColumnPage(0);
+		connect(d->lookupColumnPage, SIGNAL(jumpToObjectRequested(const QCString&, const QCString&)),
+			mainWin, SLOT(highlightObject(const QCString&, const QCString&)));
+
+//! @todo add "Table" tab
+
+	/*
+		connect(d->dataSourcePage, SIGNAL(formDataSourceChanged(const QCString&, const QCString&)),
+			KFormDesigner::FormManager::self(), SLOT(setFormDataSource(const QCString&, const QCString&)));
+		connect(d->dataSourcePage, SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&, KexiDB::Field::Type)),
+			KFormDesigner::FormManager::self(), SLOT(setDataSourceFieldOrExpression(const QString&, const QString&, KexiDB::Field::Type)));
+		connect(d->dataSourcePage, SIGNAL(insertAutoFields(const QString&, const QString&, const QStringList&)),
+			KFormDesigner::FormManager::self(), SLOT(insertAutoFields(const QString&, const QString&, const QStringList&)));*/
+	}
+
+	KexiProject *prj = mainWin->project();
+	d->lookupColumnPage->setProject(prj);
+
+//! @todo add lookup field icon
+	tab->addTab( d->lookupColumnPage, SmallIconSet("combo"), "");
+	tab->setTabToolTip( d->lookupColumnPage, i18n("Lookup column"));
+}
+
+KexiLookupColumnPage* KexiTablePart::lookupColumnPage() const
+{
+	return d->lookupColumnPage;
 }
 
 //----------------
@@ -218,7 +264,7 @@ KexiTableDataSource::~KexiTableDataSource()
 KexiDB::FieldList *
 KexiTableDataSource::fields(KexiProject *project, const KexiPart::Item &it)
 {
-	kDebug() << "KexiTableDataSource::fields(): " << it.name() << endl;
+	kdDebug() << "KexiTableDataSource::fields(): " << it.name() << endl;
 	return project->dbConnection()->tableSchema(it.name());
 }
 

@@ -28,11 +28,9 @@
 //#include <kexipartdatasource.h>
 #include <kexipartitem.h>
 #include <kexidb/fieldlist.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 class KexiMainWin;
-//class KexiTableDataSource;
+class KexiLookupColumnPage;
 
 class KexiTablePart : public KexiPart::Part
 {
@@ -63,8 +61,10 @@ class KexiTablePart : public KexiPart::Part
 			QWidget *parent, KexiDB::Connection& conn, 
 			KexiDB::TableSchema& table, const QString& msg);
 
-		virtual QString i18nMessage(const Q3CString& englishMessage, 
+		virtual QString i18nMessage(const QCString& englishMessage, 
 			KexiDialogBase* dlg) const;
+
+		KexiLookupColumnPage* lookupColumnPage() const;
 
 	protected:
 		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
@@ -75,7 +75,13 @@ class KexiTablePart : public KexiPart::Part
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 
-	virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode);
+		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow* mainWin);
+
+		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata, int viewMode);
+
+	private:
+		class Private;
+		Private* d;
 };
 
 #if 0

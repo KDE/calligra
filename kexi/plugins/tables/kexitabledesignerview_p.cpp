@@ -107,6 +107,14 @@ KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(KexiTableDesignerView
 {
 	historyActionCollection = new KActionCollection((QWidget*)0,"");
 	history = new CommandHistory(historyActionCollection, true);
+
+	internalPropertyNames.insert("subType",(char*)1);
+	internalPropertyNames.insert("uid",(char*)1);
+	internalPropertyNames.insert("newrow",(char*)1);
+	internalPropertyNames.insert("rowSource",(char*)1);
+	internalPropertyNames.insert("rowSourceType",(char*)1);
+	internalPropertyNames.insert("boundColumn",(char*)1);
+	internalPropertyNames.insert("visibleColumn",(char*)1);
 }
 
 KexiTableDesignerViewPrivate::~KexiTableDesignerViewPrivate() {
