@@ -240,7 +240,7 @@ void KexiTablePart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow
 	d->lookupColumnPage->setProject(prj);
 
 //! @todo add lookup field icon
-	tab->addTab( d->lookupColumnPage, SmallIconSet("search"), "");
+	tab->addTab( d->lookupColumnPage, SmallIconSet("combo"), "");
 	tab->setTabToolTip( d->lookupColumnPage, i18n("Lookup column"));
 }
 
