@@ -138,6 +138,7 @@ public:
   static FunctionRepository *self();
 
   void add (Function *function);
+  void add (FunctionDescription *desc);
 
   Function *function (const QString& name);
 
@@ -146,7 +147,8 @@ public:
   /** return functions within a group, or all if no group given */
   QStringList functionNames (const QString& group = QString::null);
 
-  const QStringList &groups () const { return m_groups; }
+  const QStringList &groups () const;
+  void addGroup(const QString& groupname);
 
 private:
 
@@ -157,8 +159,6 @@ private:
 
   /** loads function descriptions from a XML file */
   void loadFile (const QString& filename);
-
-  QStringList m_groups;
 
   // no copy or assign
   FunctionRepository( const FunctionRepository& );

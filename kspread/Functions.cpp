@@ -53,6 +53,7 @@ class FunctionRepository::Private
 public:
   QHash<QString, Function*> functions;
   QHash<QString, FunctionDescription*> funcs;
+  QStringList groups;
 };
 
 } // namespace KSpread
@@ -240,6 +241,13 @@ void FunctionRepository::add( Function* function )
   d->functions.insert( function->name().toUpper(), function );
 }
 
+void FunctionRepository::add( FunctionDescription *desc )
+{
+  if( !desc ) return;
+  if( !d->functions.contains( desc->name() ) ) return;
+  d->funcs.insert (desc->name(), desc);
+}
+
 Function *FunctionRepository::function (const QString& name)
 {
   return d->functions.value( name.toUpper() );
@@ -265,6 +273,17 @@ QStringList FunctionRepository::functionNames( const QString& group )
   return lst;
 }
 
+const QStringList& FunctionRepository::groups () const
+{
+  return d->groups;
+}
+
+void FunctionRepository::addGroup(const QString& groupname)
+{
+  d->groups.append( groupname );
+  d->groups.sort();
+}
+
 void FunctionRepository::loadFile (const QString& filename)
 {
   QFile file (filename);
@@ -286,8 +305,7 @@ void FunctionRepository::loadFile (const QString& filename)
     if (e.tagName() == "Group")
     {
       group = i18n (e.namedItem ("GroupName").toElement().text().toUtf8());
-      m_groups.append( group );
-      m_groups.sort();
+      addGroup(group);
 
       QDomNode n2 = e.firstChild();
       for (; !n2.isNull(); n2 = n2.nextSibling())

@@ -105,6 +105,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     typeFunction = new QComboBox(page);
     QStringList cats = FunctionRepository::self()->groups();
     cats.prepend( i18n("All") );
+    typeFunction->setMaxVisibleItems(15);
     typeFunction->insertItems( 0, cats  );
     grid1->addWidget( typeFunction, 1, 0 );
 
