@@ -263,6 +263,12 @@ void KoHSVWidget::currentChanged(KDualColorButton::DualColor s)
         slotFGColorSelected(m_ColorButton->currentColor());
     else
         slotBGColorSelected(m_ColorButton->currentColor());
+    emit sigModeChanged( s );
+}
+
+void KoHSVWidget::setMode(KDualColorButton::DualColor s)
+{
+    m_ColorButton->setCurrent( s );
 }
 
 #include "ko_hsv_widget.moc"

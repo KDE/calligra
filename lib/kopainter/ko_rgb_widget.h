@@ -50,6 +50,8 @@ public slots:
      */
     virtual void setFgColor(const QColor & c);
     virtual void setBgColor(const QColor & c);
+    /// Sets the current mode (foreground/background) without emitting the signal
+    virtual void setMode(KDualColorButton::DualColor);
 
 signals:
 
@@ -58,6 +60,8 @@ signals:
      */
     virtual void sigFgColorChanged(const QColor & c);
     virtual void sigBgColorChanged(const QColor & c);
+    /// Emitted when the mode (foreground/background) was changed
+    virtual void sigModeChanged(KDualColorButton::DualColor);
 
 
 protected slots:
