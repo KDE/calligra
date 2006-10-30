@@ -20,14 +20,16 @@
 #ifndef KPTRESOURCEVIEW_H
 #define KPTRESOURCEVIEW_H
 
-#include <QSplitter>
+#include <kptview.h>
 #include <QTreeWidget>
 
 #include "kptcontext.h"
 
 class QPoint;
 class QTreeWidgetItem;
+class QSplitter;
 
+class KToggleAction;
 class KPrinter;
 
 namespace KPlato
@@ -75,7 +77,7 @@ private slots:
 };
 
 
-class ResourceView : public QSplitter
+class ResourceView : public ViewBase
 {
     Q_OBJECT
 
@@ -87,7 +89,6 @@ public:
     void zoom( double zoom );
 
     void draw( Project &project );
-    View *mainView();
 
     Resource *currentResource();
 
@@ -118,9 +119,10 @@ private:
     void clearResList();
 
 private:
-    View *m_mainview;
     int m_defaultFontSize;
+    QSplitter *m_splitter;
 
+    Project *m_project;
     ResourceItemPrivate *m_selectedItem;
     ResListView *m_resListView;
     QTreeWidgetItem *m_header;

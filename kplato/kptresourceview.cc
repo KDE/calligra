@@ -37,6 +37,7 @@
 #include <QHeaderView>
 #include <QTreeWidget>
 #include <QStringList>
+#include <QVBoxLayout>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -400,14 +401,17 @@ QSize ResourceView::sizeHint() const
 //-------------------------------------------------
 
 ResourceView::ResourceView( View *view, QWidget *parent )
-        : QSplitter( parent, "Resource view" ),
-        m_mainview( view ),
+        : ViewBase(view, parent),
         m_selectedItem( 0 ),
         m_currentNode( 0 )
 {
-    setOrientation( Qt::Vertical );
+    QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin(0);
+    m_splitter = new QSplitter( this );
+    l->addWidget( m_splitter );
+    m_splitter->setOrientation(Qt::Vertical);
 
-    m_resListView = new ResListView( this );
+    m_resListView = new ResListView( m_splitter );
     QStringList sl;
     sl << i18n( "Name" )
     << i18n( "Type" )
@@ -445,7 +449,7 @@ ResourceView::ResourceView( View *view, QWidget *parent )
     //     m_resListView->addColumn(i18n("Overtime Rate"));
 
     m_showAppointments = false;
-    m_appview = new ResourceAppointmentsView( view, this );
+    m_appview = new ResourceAppointmentsView( view, m_splitter );
     m_appview->hide();
     draw( view->getProject() );
 

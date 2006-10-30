@@ -29,6 +29,8 @@
 #include <QDockWidget>
 #include <QTreeWidget>
 
+#include <kxmlguiclient.h>
+
 class QStackedWidget;
 
 class KPrinter;
@@ -41,6 +43,7 @@ class KStatusBarLabel;
 namespace KPlato
 {
 
+class View;
 class ViewListDockWidget;
 class AccountsView;
 class GanttView;
@@ -87,6 +90,28 @@ protected slots:
 private:
     ViewListTreeWidget *m_viewList;
 };
+
+//-----------
+class ViewBase : public QWidget, public KXMLGUIClient
+{
+    Q_OBJECT
+public:
+    ViewBase(View *mainview, QWidget *parent);
+    ViewBase(QWidget *parent);
+
+    View *mainView() const;
+    virtual ~ViewBase() {}
+
+    virtual void setZoom(double /*zoom*/) {}
+    virtual void draw() {}
+    virtual void draw(Project &/*project*/) {}
+    virtual void drawChanges(Project &project) { draw(project); }
+
+protected:
+    View *m_mainview;
+
+};
+
 
 //-------------
 class View : public KoView
@@ -186,8 +211,6 @@ protected slots:
     void slotMoveTaskDown();
 
     void slotConnectNode();
-    void slotChanged( QWidget * );
-    void slotChanged();
 
     void slotCurrentChanged( int );
 

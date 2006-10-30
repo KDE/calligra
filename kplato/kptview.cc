@@ -151,7 +151,6 @@ void ViewCategoryDelegate::paint( QPainter * painter, const QStyleOptionViewItem
 
 }
 
-
 ViewListTreeWidget::ViewListTreeWidget( QWidget *parent )
         : QTreeWidget( parent )
 {
@@ -240,6 +239,24 @@ void ViewListDockWidget::addView( QTreeWidgetItem *category, QString name, QWidg
 }
 // </Code mostly nicked from qt designer ;)>
 
+//--------------
+ViewBase::ViewBase(View *mainview, QWidget *parent)
+    : QWidget(parent),
+    m_mainview(mainview)
+{
+}
+    
+ViewBase::ViewBase(QWidget *parent)
+    : QWidget(parent),
+    m_mainview(0)
+{
+}
+    
+View *ViewBase::mainView() const
+{
+    return m_mainview;
+}
+
 //-------------------------------
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
@@ -261,6 +278,7 @@ View::View( Part* part, QWidget* parent )
 
     m_tab = new QStackedWidget( this );
     QVBoxLayout *layout = new QVBoxLayout( this );
+    layout->setMargin(0);
     layout->addWidget( m_tab );
 
     m_ganttview = new GanttView( m_tab, part->isReadWrite() );
@@ -1238,18 +1256,6 @@ QMenu * View::popupMenu( const QString& name )
     if ( factory() )
         return ( ( QMenu* ) factory() ->container( name, this ) );
     return 0L;
-}
-
-void View::slotChanged( QWidget * )
-{
-    //kDebug()<<k_funcinfo<<endl;
-    slotUpdate( false );
-}
-
-void View::slotChanged()
-{
-    //kDebug()<<k_funcinfo<<endl;
-    slotUpdate( false );
 }
 
 void View::slotUpdate( bool calculate )
