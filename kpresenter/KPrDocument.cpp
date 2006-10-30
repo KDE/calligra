@@ -1139,6 +1139,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter.startElement("config:config-item-set");
     settingsWriter.addAttribute("config:name", "configuration-settings");
     settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellCheckIgnoreList.join( "," ) );
+    settingsWriter.addConfigItem("ShowPresentationDuration", _showPresentationDuration );
     settingsWriter.endElement(); // config:config-item-set
 
     m_varColl->variableSetting()->saveOasis( settingsWriter );
@@ -1187,12 +1188,12 @@ void KPrDocument::saveOasisCustomFied( KoXmlWriter &writer )const
         writer.endElement();
 }
 
-
 void KPrDocument::loadOasisIgnoreList( const KoOasisSettings& settings )
 {
     KoOasisSettings::Items configurationSettings = settings.itemSet( "configuration-settings" );
     if ( !configurationSettings.isNull() )
     {
+        _showPresentationDuration = configurationSettings.parseConfigItemBool( "ShowPresentationDuration", false );
         const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
         m_spellCheckIgnoreList = QStringList::split( ',', ignorelist );
     }
