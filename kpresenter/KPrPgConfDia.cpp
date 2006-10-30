@@ -29,7 +29,7 @@
 #include <qcombobox.h>
 #include <qhbox.h>
 #include <qvbox.h>
-#include <qgroupbox.h>
+#include <qvgroupbox.h>
 #include <qheader.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -69,9 +69,9 @@ void KPrPgConfDia::setupPageGeneral()
 				       "be used during the display of the presentation to add "
 				       "additional information or to emphasise particular points.</p>") );
     QVBoxLayout *generalLayout = new QVBoxLayout( generalPage, 0, KDialog::spacingHint() );
-    generalLayout->setAutoAdd( true );
 
     QVButtonGroup *switchGroup = new QVButtonGroup( i18n("&Transition Type"), generalPage );
+    generalLayout->addWidget( switchGroup );
     QWhatsThis::add( switchGroup, i18n("<li><p>If you select <b>Manual transition to next step or slide</b> "
 					  "then each transition and effect on a slide, or transition from "
 					  "one slide to the next, will require an action. Typically this "
@@ -89,18 +89,20 @@ void KPrPgConfDia::setupPageGeneral()
     m_autoButton->setChecked( !m_doc->spManualSwitch() );
 
     infiniteLoop = new QCheckBox( i18n( "&Infinite loop" ), generalPage );
+    generalLayout->addWidget( infiniteLoop );
     QWhatsThis::add( infiniteLoop, i18n("<p>If this checkbox is selected, then the slideshow "
 					"will restart at the first slide after the last slide "
 					"has been displayed. It is only available if the "
 					"<b>Automatic transition to next step or slide</b> "
 					"button is selected above.</p> <p>This option may be "
 					"useful if you are running a promotional display.</p>") );
-    
+
     infiniteLoop->setEnabled( !m_doc->spManualSwitch() );
     connect( m_autoButton, SIGNAL( toggled(bool) ), infiniteLoop, SLOT( setEnabled(bool) ) );
     connect( m_autoButton, SIGNAL( toggled(bool) ), infiniteLoop, SLOT( setChecked(bool) ) );
 
     endOfPresentationSlide = new QCheckBox( i18n( "&Show 'End of presentation' slide" ), generalPage );
+    generalLayout->addWidget( endOfPresentationSlide );
     QWhatsThis::add( endOfPresentationSlide, i18n("<p>If this checkbox is selected, when the slideshow "
 					"has finished a black slideshow containing the "
 					"message 'End of presentation. Click to exit' will "
@@ -110,6 +112,7 @@ void KPrPgConfDia::setupPageGeneral()
     connect( infiniteLoop, SIGNAL( toggled(bool) ), endOfPresentationSlide, SLOT( setDisabled(bool) ) );
 
     presentationDuration = new QCheckBox( i18n( "Measure presentation &duration" ), generalPage );
+    generalLayout->addWidget( presentationDuration );
     QWhatsThis::add( presentationDuration, i18n("<p>If this checkbox is selected, the time that "
 						"each slide was displayed for, and the total time "
 						"for the presentation will be measured.</p> "
@@ -123,7 +126,8 @@ void KPrPgConfDia::setupPageGeneral()
 
     // presentation pen (color and width)
 
-    QGroupBox* penGroup = new QGroupBox( i18n("Presentation Pen") , generalPage );
+    QGroupBox* penGroup = new QGroupBox( 2, Qt::Horizontal, i18n("Presentation Pen") , generalPage );
+    generalLayout->addWidget( penGroup );
     QWhatsThis::add( penGroup, i18n("<p>This part of the dialog allows you to configure the "
 				    "<em>drawing mode</em>, which allows you to add additional "
 				    "information, emphasise particular content, or to correct "
@@ -131,20 +135,23 @@ void KPrPgConfDia::setupPageGeneral()
 				    "using the mouse.</p>"
 				    "<p>You can configure the color of the drawing pen and the "
 				    "width of the pen.</p>" ) );
-    QGridLayout *grid = new QGridLayout(penGroup, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
+    penGroup->layout()->setSpacing(KDialog::marginHint());
+    penGroup->layout()->setMargin(KDialog::spacingHint());
+    //QGridLayout *grid = new QGridLayout(penGroup->layout(), 3, 2 );
 
-    grid->addWidget( new QLabel( i18n( "Color:" ), penGroup ), 0, 0 );
+    QLabel* label = new QLabel( i18n( "Color:" ), penGroup );
+    //grid->addWidget( label, 0, 0 );
     penColor = new KColorButton( m_doc->presPen().color(), m_doc->presPen().color(), penGroup );
-    grid->addWidget( penColor, 0, 1 );
+    //grid->addWidget( penColor, 0, 1 );
 
-    grid->addWidget( new QLabel( i18n( "Width:" ), penGroup ), 1, 0 );
+    label = new QLabel( i18n( "Width:" ), penGroup );
+    // grid->addWidget( label, 1, 0 );
     penWidth = new QSpinBox( 1, 10, 1, penGroup );
     penWidth->setSuffix( i18n(" pt") );
     penWidth->setValue( m_doc->presPen().width() );
-    grid->addWidget( penWidth, 1, 1 );
+    //grid->addWidget( penWidth, 1, 1 );
 
-    QWidget* spacer = new QWidget( generalPage );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+    generalLayout->addStretch();
 }
 
 void KPrPgConfDia::setupPageSlides()
@@ -176,7 +183,8 @@ void KPrPgConfDia::setupPageSlides()
     connect( m_selectedSlide, SIGNAL( clicked () ), this, SLOT( radioButtonClicked() ) );
 
     slides = new QListView( slidesPage );
-    slidesLayout->addMultiCellWidget( slides, 3, 6, 0, 1 );
+    slidesLayout->addMultiCellWidget( slides, 3, 3, 0, 1 );
+    slidesLayout->setRowStretch( 3, 10 );
     slides->addColumn( i18n("Slide") );
     slides->setSorting( -1 );
     slides->header()->hide();
@@ -202,7 +210,7 @@ void KPrPgConfDia::setupPageSlides()
     QWidget* spacer = new QWidget( buttonGroup );
 
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
-    slidesLayout->addMultiCellWidget( buttonGroup, 6, 6, 0, 1 );
+    slidesLayout->addMultiCellWidget( buttonGroup, 4, 4, 0, 1 );
 
     if ( !m_doc->presentationName().isEmpty() )
     {
