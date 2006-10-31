@@ -109,15 +109,20 @@ VColorDocker::~VColorDocker()
 
 void VColorDocker::updateFgColor(const QColor &c)
 {
-	mHSVWidget->blockSignals(true);
-	mRGBWidget->blockSignals(true);
-	//mCMYKWidget->blockSignals(true);
-
 	m_color = c;
 
 	VColor v = VColor(c);
 	v.setOpacity( m_opacity );
 
+	// check if we have objects selected
+	QPtrList<VObject> VNewObjectList = m_part->document().selection()->objects();
+	if( ! VNewObjectList.count() )
+		return;
+	
+	mHSVWidget->blockSignals(true);
+	mRGBWidget->blockSignals(true);
+	//mCMYKWidget->blockSignals(true);
+	
 	VCommandHistory* history = m_part->commandHistory();
 	const QPtrList<VCommand>* commandList = history->commands();
 	VStrokeCmd* command = dynamic_cast<VStrokeCmd*>(commandList->getLast());
@@ -129,9 +134,7 @@ void VColorDocker::updateFgColor(const QColor &c)
 	}
 	else
 	{
-
 		QPtrList<VObject> VOldObjectList = command->getSelection()->objects();
-		QPtrList<VObject> VNewObjectList = m_part->document().selection()->objects();
 
 		if( VOldObjectList == VNewObjectList )
 		{
@@ -154,15 +157,20 @@ void VColorDocker::updateFgColor(const QColor &c)
 
 void VColorDocker::updateBgColor(const QColor &c)
 {
-	mHSVWidget->blockSignals(true);
-	mRGBWidget->blockSignals(true);
-	//mCMYKWidget->blockSignals(true);
-
 	m_color = c;
 
 	VColor v = VColor(c);
 	v.setOpacity( m_opacity );
+	
+	// check if we have objects selected
+	QPtrList<VObject> VNewObjectList = m_part->document().selection()->objects();
+	if( ! VNewObjectList.count() )
+		return;
 
+	mHSVWidget->blockSignals(true);
+	mRGBWidget->blockSignals(true);
+	//mCMYKWidget->blockSignals(true);
+	
 	VCommandHistory* history = m_part->commandHistory();
 	const QPtrList<VCommand>* commandList = history->commands();
 	VFillCmd* command = dynamic_cast<VFillCmd*>(commandList->getLast());
@@ -174,9 +182,7 @@ void VColorDocker::updateBgColor(const QColor &c)
 	}
 	else
 	{
-
 		QPtrList<VObject> VOldObjectList = command->getSelection()->objects();
-		QPtrList<VObject> VNewObjectList = m_part->document().selection()->objects();
 
 		if( VOldObjectList == VNewObjectList )
 		{
