@@ -1,15 +1,15 @@
 <KrossScripting>
-	<ScriptAction
+	<script
 		name="pyexporthtml"
 		text="Export to HTML"
-		description="Export an OpenDocument Spreadsheet File to a HTML File"
+		comment="Export an OpenDocument Spreadsheet File to a HTML File"
 		interpreter="python"
 		file="exporthtml.py" />
 	<!--
-	<ScriptAction
+	<script
 		name="pyunittest"
 		text="Unittest for Python"
-		description="Test the KSpread Python functionality"
+		comment="Test the KSpread Python functionality"
 		interpreter="python"
 		file="unittest.py" />
 	-->
