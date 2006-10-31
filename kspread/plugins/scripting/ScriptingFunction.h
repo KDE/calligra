@@ -31,11 +31,11 @@ class ScriptingFunction : public QObject
 {
         Q_OBJECT
 
-        Q_PROPERTY(QString name READ name);
-        Q_PROPERTY(int minparam READ minParam WRITE setMinParam);
-        Q_PROPERTY(int maxparam READ maxParam WRITE setMaxParam);
-        Q_PROPERTY(QString comment READ comment WRITE setComment);
-        Q_PROPERTY(QString syntax READ syntax WRITE setSyntax);
+        Q_PROPERTY(QString name READ name)
+        Q_PROPERTY(int minparam READ minParam WRITE setMinParam)
+        Q_PROPERTY(int maxparam READ maxParam WRITE setMaxParam)
+        Q_PROPERTY(QString comment READ comment WRITE setComment)
+        Q_PROPERTY(QString syntax READ syntax WRITE setSyntax)
 
     public:
         ScriptingFunction(QObject* parent);
