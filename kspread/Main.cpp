@@ -27,8 +27,9 @@ using namespace KSpread;
 
 static const KCmdLineOptions options[]=
 {
-	{"+[file]", I18N_NOOP("File to open"),0},
-        KCmdLineLastOption
+    {"+[file]", I18N_NOOP("File to open"),0},
+    { "scriptfile <scriptfile>", I18N_NOOP("Execute the scriptfile after startup."), 0},
+    KCmdLineLastOption
 };
 
 extern "C" KSPREAD_EXPORT int kdemain( int argc, char **argv )

@@ -29,6 +29,8 @@
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
+#include <kcmdlineargs.h>
+#include <kurl.h>
 
 #include <Doc.h>
 #include <View.h>
@@ -87,6 +89,14 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 	// Create the scripting function which provides scripts as formula-functions to KSpread.
 	new ScriptingFunction(this);
 #endif
+
+	//KApplication::kApplication()->
+	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+	foreach(QByteArray ba, args->getOptionList("scriptfile")) {
+		KUrl url(ba);
+		if( url.isValid() && ! d->guiclient->executeFile(url) )
+			kWarning() << QString("ScriptingPart: Failed to execute file \"%1\"").arg(ba.constData()) << endl;
+	}
 }
 
 ScriptingPart::~ScriptingPart()
