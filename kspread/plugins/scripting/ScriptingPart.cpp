@@ -94,7 +94,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	foreach(QByteArray ba, args->getOptionList("scriptfile")) {
 		KUrl url(ba);
-		if( url.isValid() && ! d->guiclient->executeFile(url) )
+		if( | url.isValid() || ! d->guiclient->executeFile(url) )
 			kWarning() << QString("ScriptingPart: Failed to execute file \"%1\"").arg(ba.constData()) << endl;
 	}
 }
