@@ -41,6 +41,10 @@
 //#include <core/guiclient.h>
 //#include <main/wdgscriptsmanager.h>
 
+/***************************************************************************
+ * ScriptingFunction
+ */
+
 KSpread::Value scripting_function_call(KSpread::valVector args, KSpread::ValueCalc *calc, KSpread::FuncExtra*)
 {
     QString scriptname = args[0].isString() ? args[0].asString() : QString();
@@ -64,80 +68,108 @@ KSpread::Value scripting_function_call(KSpread::valVector args, KSpread::ValueCa
     return KSpread::Value("This is a string");
 }
 
-class ScriptingFunctionImpl
-{
-	public:
-		ScriptingFunctionImpl(const QString& name, int minparam, int maxparam, const QString& comment, const QString& syntax)
-		{
-			KSpread::FunctionRepository* repo = KSpread::FunctionRepository::self();
-
-			KSpread::Function* f = new KSpread::Function(name, scripting_function_call);
-			f->setParamCount(minparam, maxparam);
-			f->setAcceptArray();
-			f->setNeedsExtra(true);
-			repo->add(f);
-
-			m_funcelem = m_domdoc.createElement("Function");
-
-			QDomElement nameelem = m_domdoc.createElement("Name");
-			nameelem.appendChild( m_domdoc.createTextNode(name) );
-			m_funcelem.appendChild(nameelem);
-
-			QDomElement typeelem = m_domdoc.createElement("Type");
-			typeelem.appendChild( m_domdoc.createTextNode("String") );
-			m_funcelem.appendChild(typeelem);
-
-			m_helpElem = m_domdoc.createElement("Help");
-			QDomElement helpTextElem = m_domdoc.createElement("Text");
-			helpTextElem.appendChild( m_domdoc.createTextNode(comment) );
-			m_helpElem.appendChild(helpTextElem);
-
-			QDomElement helpSyntaxElem = m_domdoc.createElement("Syntax");
-			helpSyntaxElem.appendChild( m_domdoc.createTextNode(syntax) );
-			m_helpElem.appendChild(helpSyntaxElem);
-
-			m_funcelem.appendChild(m_helpElem);
-		}
-		~ScriptingFunctionImpl()
-		{
-		}
-		void addExample(const QString& example)
-		{
-			QDomElement helpExampleElem = m_domdoc.createElement("Example");
-			helpExampleElem.appendChild( m_domdoc.createTextNode(example) );
-			m_helpElem.appendChild(helpExampleElem);
-
-		}
-		void addParameter(const QString& typeName, const QString& comment)
-		{
-			QDomElement paramElem = m_domdoc.createElement("Parameter");
-			QDomElement paramCommentElem = m_domdoc.createElement("Comment");
-			paramCommentElem.appendChild( m_domdoc.createTextNode(comment) );
-			paramElem.appendChild(paramCommentElem);
-			QDomElement paramTypeElem = m_domdoc.createElement("Type");
-			paramTypeElem.appendChild( m_domdoc.createTextNode(typeName) );
-			paramElem.appendChild(paramTypeElem);
-			m_funcelem.appendChild(paramElem);
-		}
-		void registerFunction()
-		{
-			KSpread::FunctionRepository* repo = KSpread::FunctionRepository::self();
-			KSpread::FunctionDescription* desc = new KSpread::FunctionDescription(m_funcelem);
-			desc->setGroup("Scripts");
-			repo->add(desc);
-		}
-	private:
-		QDomDocument m_domdoc;
-		QDomElement m_funcelem;
-		QDomElement m_helpElem;
-};
-
 class ScriptingFunction::Private
 {
-	public:
-		ScriptingFunctionImpl* script_function;
+    public:
+        QString name;
+        int minparam;
+        int maxparam;
+        QString comment;
+        QString syntax;
+
+        QDomDocument document;
+        QDomElement funcElement;
+        QDomElement helpElement;
+
+        Private() : minparam(0), maxparam(-1) {}
 };
 
+ScriptingFunction::ScriptingFunction(QObject* parent)
+    : QObject(parent)
+    , d(new Private())
+{
+    d->funcElement = d->document.createElement("Function");
+    d->helpElement = d->document.createElement("Help");
+}
+
+ScriptingFunction::~ScriptingFunction()
+{
+    delete d;
+}
+
+QString ScriptingFunction::name() const { return d->name; }
+void ScriptingFunction::setName(const QString& name) { d->name = name; }
+int ScriptingFunction::minParam() const { return d->minparam; }
+void ScriptingFunction::setMinParam(int minparam) { d->minparam = minparam; }
+int ScriptingFunction::maxParam() const { return d->maxparam; }
+void ScriptingFunction::setMaxParam(int maxparam) { d->maxparam = maxparam; }
+QString ScriptingFunction::comment() const { return d->comment; }
+void ScriptingFunction::setComment(const QString& comment) { d->comment = comment; }
+QString ScriptingFunction::syntax() const { return d->syntax; }
+void ScriptingFunction::setSyntax(const QString& syntax) { d->syntax = syntax; }
+
+void ScriptingFunction::addExample(const QString& example)
+{
+    QDomElement helpExampleElem = d->document.createElement("Example");
+    helpExampleElem.appendChild( d->document.createTextNode(example) );
+    d->helpElement.appendChild(helpExampleElem);
+}
+
+void ScriptingFunction::addParameter(const QString& typeName, const QString& comment)
+{
+    QDomElement paramElem = d->document.createElement("Parameter");
+    QDomElement paramCommentElem = d->document.createElement("Comment");
+    paramCommentElem.appendChild( d->document.createTextNode(comment) );
+    paramElem.appendChild(paramCommentElem);
+    QDomElement paramTypeElem = d->document.createElement("Type");
+    paramTypeElem.appendChild( d->document.createTextNode(typeName) );
+    paramElem.appendChild(paramTypeElem);
+    d->funcElement.appendChild(paramElem);
+}
+
+bool ScriptingFunction::registerFunction()
+{
+    if( d->name.isEmpty() ) {
+        kWarning() << "ScriptingFunction::registerFunction() name is empty!" << endl;
+        return false;
+    }
+
+    KSpread::FunctionRepository* repo = KSpread::FunctionRepository::self();
+    if( ! repo->groups().contains("Scripts") )
+        repo->addGroup("Scripts");
+
+    KSpread::Function* f = new KSpread::Function(d->name, scripting_function_call);
+    f->setParamCount(d->minparam, d->maxparam);
+    f->setAcceptArray();
+    f->setNeedsExtra(true);
+    repo->add(f);
+
+    QDomElement nameelem = d->document.createElement("Name");
+    nameelem.appendChild( d->document.createTextNode(d->name) );
+    d->funcElement.appendChild(nameelem);
+
+    QDomElement typeelem = d->document.createElement("Type");
+    typeelem.appendChild( d->document.createTextNode("String") );
+    d->funcElement.appendChild(typeelem);
+
+    QDomElement helpTextElem = d->document.createElement("Text");
+    helpTextElem.appendChild( d->document.createTextNode(d->comment) );
+    d->helpElement.appendChild(helpTextElem);
+
+    QDomElement helpSyntaxElem = d->document.createElement("Syntax");
+    helpSyntaxElem.appendChild( d->document.createTextNode(d->syntax) );
+    d->helpElement.appendChild(helpSyntaxElem);
+
+    d->funcElement.appendChild(d->helpElement);
+
+    KSpread::FunctionDescription* desc = new KSpread::FunctionDescription(d->funcElement);
+    desc->setGroup("Scripts");
+    repo->add(desc);
+
+    return true;
+}
+
+#if 0
 ScriptingFunction::ScriptingFunction(QObject* parent)
     : QObject(parent)
     , d(new Private())
@@ -146,23 +178,24 @@ ScriptingFunction::ScriptingFunction(QObject* parent)
     if( ! repo->groups().contains("Scripts") )
         repo->addGroup("Scripts");
 
-    d->script_function = new ScriptingFunctionImpl(
-        "SCRIPT", // name
-        2, // minimum arguments
-        -1, // maximum arguments
-        i18n("The SCRIPT() function calls a function in an external scriptfile. "
-             "The script file references a file relative to your KSpread scripts "
-             "folder while the function name should be an existing function "
-             "within that script file."), // comment
-        "SCRIPT(scriptfile;functionname;...)" // syntax
-    );
-    d->script_function->addParameter("String", i18n("The name of the script file"));
-    d->script_function->addParameter("String", i18n("The name of the function"));
-    d->script_function->addExample("SCRIPT(\"myscript1.py\";\"myfunction1\")");
-    d->script_function->addExample("SCRIPT(\"myscript2.rb\";\"myfunction2\";\"optional argument\")");
-    d->script_function->addExample("SCRIPT(\"myscript3.js\";\"myfunction3\";17;20.0;\"string\")");
-    d->script_function->addExample("SCRIPT(\"subfolder/myscript4.py\";\"myfunction4\"");
-    d->script_function->registerFunction();
+    ScriptingFunction* func = new ScriptingFunction(this);
+    func->setName("SCRIPT");
+    func->setMinParam(2);
+    func->setMaxParam(-1);
+    func->setComment( i18n(
+        "The SCRIPT() function calls a function in an external scriptfile. "
+        "The script file references a file relative to your KSpread scripts "
+        "folder while the function name should be an existing function "
+        "within that script file."
+    ) );
+    func->setSyntax("SCRIPT(scriptfile;functionname;...)");
+    func->addParameter("String", i18n("The name of the script file"));
+    func->addParameter("String", i18n("The name of the function"));
+    func->addExample("SCRIPT(\"myscript1.py\";\"myfunction1\")");
+    func->addExample("SCRIPT(\"myscript2.rb\";\"myfunction2\";\"optional argument\")");
+    func->addExample("SCRIPT(\"myscript3.js\";\"myfunction3\";17;20.0;\"string\")");
+    func->addExample("SCRIPT(\"subfolder/myscript4.py\";\"myfunction4\"");
+    func->registerFunction();
 
     //d->registerFunction("SCRIPT_GET");
     //d->registerFunction("SCRIPT_SET");
@@ -171,11 +204,6 @@ ScriptingFunction::ScriptingFunction(QObject* parent)
     //d->registerFunction("SCRIPT_DEBUG");
     //d->registerFunction("SCRIPT_TEST");
 }
-
-ScriptingFunction::~ScriptingFunction()
-{
-    delete d->script_function;
-    delete d;
-}
+#endif
 
 #include "ScriptingFunction.moc"

@@ -21,7 +21,6 @@
  */
 
 #include "ScriptingPart.h"
-#include "ScriptingFunction.h"
 #include "ScriptingModule.h"
 
 #include <QApplication>
@@ -84,12 +83,6 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 	// Publish the ScriptingModule which offers access to KSpread internals.
 	d->module = new ScriptingModule(view);
 	Kross::Manager::self().addObject(d->module, "KSpread");
-
-//TODO disabled for now...
-#if 0
-	// Create the scripting function which provides scripts as formula-functions to KSpread.
-	new ScriptingFunction(this);
-#endif
 
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	foreach(QByteArray ba, args->getOptionList("scriptfile")) {

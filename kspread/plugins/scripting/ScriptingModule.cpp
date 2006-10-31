@@ -21,6 +21,7 @@
  */
 
 #include "ScriptingModule.h"
+#include "ScriptingFunction.h"
 
 #include <Doc.h>
 #include <View.h>
@@ -48,6 +49,8 @@ class ScriptingModule::Private
 	public:
 		KSpread::View* view;
 		KSpread::Doc* doc;
+		QHash< QString, ScriptingFunction* > functions;
+		QStringList functionnames;
 };
 
 ScriptingModule::ScriptingModule(KSpread::View* view)
@@ -103,12 +106,27 @@ QStringList ScriptingModule::sheetNames()
 	return names;
 }
 
+bool ScriptingModule::hasFunction(const QString& name)
+{
+	return d->functions.contains(name);
+}
+
+QObject* ScriptingModule::function(const QString& name)
+{
+	if( d->functions.contains(name) )
+		return d->functions[name];
+	ScriptingFunction* function = new ScriptingFunction(this);
+	function->setName(name);
+	d->functions.insert(name, function);
+	d->functionnames.append(name);
+	return function;
+}
+
 bool ScriptingModule::fromXML(const QString& xml)
 {
 	KoXmlDocument xmldoc;
 	if(! xmldoc.setContent(xml, true))
 		return false;
-
 	return d->doc ? d->doc->loadXML(0, xmldoc) : false;
 }
 

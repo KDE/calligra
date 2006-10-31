@@ -85,6 +85,22 @@ class ScriptingModule : public QObject
 		QStringList sheetNames();
 
 		/**
+		* Returns true if there is a \a ScriptingFunction object
+		* known under the identifier \p name .
+		*/
+		bool hasFunction(const QString& name);
+
+		/**
+		* Returns the \a ScriptingFunction object with the
+		* identifier \p name . The \a ScriptingFunction provides
+		* access to the KSpread formula function functionality.
+		* If there is no \a ScriptingFunction known yet with
+		* the identifier \p name then a new one is created,
+		* remembered and returned.
+		*/
+		QObject* function(const QString& name);
+
+		/**
 		* Set the document-content to the as argument passed
 		* XML string.
 		*/

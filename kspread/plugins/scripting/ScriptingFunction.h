@@ -23,15 +23,43 @@
 
 #include <QObject>
 
+/**
+ * The ScriptingFunction class provides access to the KSpread::Function
+ * functionality to deal with formula functions.
+ */
 class ScriptingFunction : public QObject
 {
-	public:
-		ScriptingFunction(QObject* parent);
-		virtual ~ScriptingFunction();
+        Q_OBJECT
 
-	private:
-		class Private;
-		Private* const d;
+        Q_PROPERTY(QString name READ name WRITE setName);
+        Q_PROPERTY(int minparam READ minParam WRITE setMinParam);
+        Q_PROPERTY(int maxparam READ maxParam WRITE setMaxParam);
+        Q_PROPERTY(QString comment READ comment WRITE setComment);
+        Q_PROPERTY(QString syntax READ syntax WRITE setSyntax);
+
+    public:
+        ScriptingFunction(QObject* parent);
+        virtual ~ScriptingFunction();
+
+        QString name() const;
+        void setName(const QString& name);
+        int minParam() const;
+        void setMinParam(int minparam);
+        int maxParam() const;
+        void setMaxParam(int maxparam);
+        QString comment() const;
+        void setComment(const QString& comment);
+        QString syntax() const;
+        void setSyntax(const QString& syntax);
+
+    public slots:
+        void addExample(const QString& example);
+        void addParameter(const QString& typeName, const QString& comment);
+        bool registerFunction();
+
+    private:
+        class Private;
+        Private* const d;
 };
 
 #endif
