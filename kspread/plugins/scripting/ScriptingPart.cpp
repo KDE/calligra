@@ -94,16 +94,16 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	foreach(QByteArray ba, args->getOptionList("scriptfile")) {
 		KUrl url(ba);
-		const QString file = url.path();
 		if( ! url.isValid() ) {
 			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not valid.").arg(ba.constData()) << endl;
 			continue;
 		}
 		if( ! url.isLocalFile() ) {
-			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not local.").arg(file) << endl;
+			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not local.").arg(ba.constData()) << endl;
 			continue;
 		}
-		QFileInfo fi(file);
+		QFileInfo fi(url.path());
+		const QString file = fi.absoluteFilePath();
 		if( ! fi.exists() ) {
 			kWarning() << QString("ScriptingPart: scriptfile \"%1\" does not exist.").arg(file) << endl;
 			continue;
