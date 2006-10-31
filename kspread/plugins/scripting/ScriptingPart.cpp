@@ -94,25 +94,42 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	foreach(QByteArray ba, args->getOptionList("scriptfile")) {
 		KUrl url(ba);
+		const QString file = url.path();
 		if( ! url.isValid() ) {
 			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not valid.").arg(ba.constData()) << endl;
 			continue;
 		}
 		if( ! url.isLocalFile() ) {
-			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not local.").arg(ba.constData()) << endl;
+			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not local.").arg(file) << endl;
 			continue;
 		}
-		QFileInfo fi(url.path());
+		QFileInfo fi(file);
 		if( ! fi.exists() ) {
-			kWarning() << QString("ScriptingPart: scriptfile \"%1\" does not exist.").arg(ba.constData()) << endl;
+			kWarning() << QString("ScriptingPart: scriptfile \"%1\" does not exist.").arg(file) << endl;
 			continue;
 		}
 		if( ! fi.isExecutable() ) {
-			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not executable. Please set the executable-attribute on that file.").arg(ba.constData()) << endl;
+			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not executable. Please set the executable-attribute on that file.").arg(file) << endl;
 			continue;
 		}
+		{ // check whether file is not in some temporary directory.
+			QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
+			tmpDirs += KGlobal::dirs()->resourceDirs("cache");
+			tmpDirs.append("/tmp/");
+			tmpDirs.append("/var/tmp/");
+			bool inTemp = false;
+			foreach(QString tmpDir, tmpDirs)
+				if( file.startsWith(tmpDir) ) {
+					inTemp = true;
+					break;
+				}
+			if( inTemp ) {
+				kWarning() << QString("ScriptingPart: scriptfile \"%1\" is in a temporary directory. Execution denied.").arg(file) << endl;
+				continue;
+			}
+		}
 		if( ! d->guiclient->executeFile(url) )
-			kWarning() << QString("ScriptingPart: Failed to execute file \"%1\"").arg(ba.constData()) << endl;
+			kWarning() << QString("ScriptingPart: Failed to execute scriptfile \"%1\"").arg(file) << endl;
 	}
 }
 
