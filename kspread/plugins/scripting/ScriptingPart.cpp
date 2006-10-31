@@ -25,6 +25,7 @@
 #include "ScriptingModule.h"
 
 #include <QApplication>
+#include <QFileInfo>
 
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
@@ -90,11 +91,27 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 	new ScriptingFunction(this);
 #endif
 
-	//KApplication::kApplication()->
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	foreach(QByteArray ba, args->getOptionList("scriptfile")) {
 		KUrl url(ba);
-		if( ! url.isValid() || ! d->guiclient->executeFile(url) )
+		if( ! url.isValid() ) {
+			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not valid.").arg(ba.constData()) << endl;
+			continue;
+		}
+		if( ! url.isLocalFile() ) {
+			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not local.").arg(ba.constData()) << endl;
+			continue;
+		}
+		QFileInfo fi(url.path());
+		if( ! fi.exists() ) {
+			kWarning() << QString("ScriptingPart: scriptfile \"%1\" does not exist.").arg(ba.constData()) << endl;
+			continue;
+		}
+		if( ! fi.isExecutable() ) {
+			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not executable. Please set the executable-attribute on that file.").arg(ba.constData()) << endl;
+			continue;
+		}
+		if( ! d->guiclient->executeFile(url) )
 			kWarning() << QString("ScriptingPart: Failed to execute file \"%1\"").arg(ba.constData()) << endl;
 	}
 }
