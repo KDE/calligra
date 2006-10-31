@@ -351,9 +351,9 @@ KDChartParams::KDChartParams()
     // legend font size is calculated dynamically, but ignore the font size
     setLegendFont( QFont( "helvetica", 10, QFont::Normal, false ), false );
     // legend font size is calculated dynamically:
-    //                    20 / 1000 of the average value of
+    //                    40 / 1000 of the minimal value of
     //                                 the printable area height and width
-    setLegendFontRelSize( 16 );
+    setLegendFontRelSize( 40 );
     // the default legend title is "Legend"
     setLegendTitleText( tr( "Legend" ) );
     // legend title is drawn in black by default
@@ -362,9 +362,9 @@ KDChartParams::KDChartParams()
     // the font size
     setLegendTitleFont( QFont( "helvetica", 12, QFont::Normal, false ), false );
     // legend title font size is calculated dynamically:
-    //                    25 / 1000 of the average value of
+    //                    50 / 1000 of the minimal value of
     //                                 the printable area height and width
-    setLegendTitleFontRelSize( 20 );
+    setLegendTitleFontRelSize( 50 );
     // END LEGEND
 
 

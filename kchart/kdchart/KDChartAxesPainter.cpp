@@ -174,6 +174,7 @@ bool KDChartAxesPainter::calculateAllAxesLabelTextsAndCalcValues(
 {
     uint iAxis;
     double averageValueP1000 = QMIN(areaWidthP1000, areaHeightP1000);//( areaWidthP1000 + areaHeightP1000 ) / 2.0;
+    //qDebug("KChart::KDChartAxesPainter::calculateAllAxesLabelTextsAndCalcValues()  averageValueP1000: %f", averageValueP1000);
     // length of little delimiter-marks indicating axis scaling
     delimLen = 20.0 * averageValueP1000; // per mille of area
 
@@ -538,6 +539,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
 
                 // calculate font size
                 const double minTextHeight = para.axisLabelsFontMinSize();
+                //qDebug("KChart::KDChartAxesPainter::paintAxes()  cv.nTxtHeight: %f   minTextHeight: %f", cv.nTxtHeight, minTextHeight);
                 if ( minTextHeight > cv.nTxtHeight )
                     cv.nTxtHeight = minTextHeight;
                 QFont actFont( para.axisLabelsFont() );

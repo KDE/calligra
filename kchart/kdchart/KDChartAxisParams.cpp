@@ -171,8 +171,8 @@ KDChartAxisParams::KDChartAxisParams()
     _axisLabelsFont = QFont( "helvetica", 12,
                              QFont::Normal, false );
     _axisLabelsFontUseRelSize = true;
-    _axisLabelsFontRelSize = 17;
-    _axisLabelsFontMinSize = 10;
+    _axisLabelsFontRelSize = 32;
+    _axisLabelsFontMinSize =  6;
     _axisLabelsDontShrinkFont = false;
     _axisLabelsDontAutoRotate = false;
     _axisLabelsRotation = 0;

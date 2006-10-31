@@ -1349,6 +1349,19 @@ bool KDChartPainter::mustDrawVerticalLegend() const
         params()->legendPosition() == KDChartParams::LegendBottomRightRight;
 }
 
+QFont KDChartPainter::trueLegendTitleFont() const
+{
+    const double averageValueP1000 = QMIN(_areaWidthP1000, _areaHeightP1000);//( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
+    QFont font( params()->legendTitleFont() );
+    if ( params()->legendTitleFontUseRelSize() ) {
+        int nTxtHeight =
+            static_cast < int > ( params()->legendTitleFontRelSize()
+            * averageValueP1000 );
+        font.setPixelSize( nTxtHeight );
+          // qDebug("l-t-height %i",nTxtHeight);
+    }
+    return font;
+}
 
 /**
   Paints the legend for the chart. The implementation in KDChartPainter
@@ -1399,7 +1412,7 @@ void KDChartPainter::paintLegend( QPainter* painter,
 
     // first paint the title, if any
     if( _legendTitle ) {
-        painter->setFont( params()->legendTitleFont() );
+        painter->setFont( trueLegendTitleFont() );
         _legendTitle->draw( painter,
                             xpos,
                             ypos,
@@ -2225,22 +2238,14 @@ void KDChartPainter::setupGeometry( QPainter* painter,
             delete _legendTitle;
         _legendTitle = 0;
         if ( hasLegendTitle ) {
-            QFont actLegendTitleFont = params()->legendTitleFont();
-            if ( params()->legendTitleFontUseRelSize() ) {
-                int nTxtHeight =
-                    static_cast < int > ( params()->legendTitleFontRelSize()
-                                            * averageValueP1000 );
-                actLegendTitleFont.setPixelSize( nTxtHeight );
-                // qDebug("l-t-height %i",nTxtHeight);
-                const_cast < KDChartParams* > ( params() )->setLegendTitleFont( actLegendTitleFont, false );
-            }
-            painter->setFont( actLegendTitleFont );
+            const QFont font( trueLegendTitleFont() );
+            painter->setFont( font );
             QFontMetrics legendTitleMetrics( painter->fontMetrics() );
             _legendTitleMetricsHeight = legendTitleMetrics.height();
 
             _legendTitle = new KDChartTextPiece( painter,
                                                  params()->legendTitleText(),
-                                                 actLegendTitleFont );
+                                                 font );
             _legendTitleWidth = _legendTitle->width();
             _legendTitleHeight = _legendTitle->height();
             // qDebug("1. _legendTitleHeight %i",_legendTitleHeight);

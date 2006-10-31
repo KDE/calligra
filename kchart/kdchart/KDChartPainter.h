@@ -271,6 +271,7 @@ class KDCHART_EXPORT KDChartPainter
                              const KDChartParams::KDChartFrameSettings* settings ) const;
 
         int legendTitleVertGap() const;
+        QFont trueLegendTitleFont() const;
         QFont trueLegendFont() const;
         void calculateHorizontalLegendSize( QPainter* painter,
                                             QSize& size,

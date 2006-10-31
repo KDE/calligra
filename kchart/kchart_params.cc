@@ -266,7 +266,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         QFont font;
         QColor color;
         loadOasisFont( loadingContext, font, color );
-        setHeaderFooterFont( KDChartParams::HdFtPosHeader, font, true, font.pointSize() );
+        setHeaderFooterFont( KDChartParams::HdFtPosHeader, font, true, font.pointSize()*4 );
         setHeaderFooterColor( KDChartParams::HdFtPosHeader, color );
         loadingContext.styleStack().restore();
 
@@ -284,7 +284,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         QFont font;
         QColor color;
         loadOasisFont( loadingContext, font, color );
-        setHeaderFooterFont( KDChartParams::HdFtPosHeader2, font, true, font.pointSize() );
+        setHeaderFooterFont( KDChartParams::HdFtPosHeader2, font, true, font.pointSize()*4 );
         setHeaderFooterColor( KDChartParams::HdFtPosHeader2, color );
         loadingContext.styleStack().restore();
 
@@ -302,7 +302,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         QFont font;
         QColor color;
         loadOasisFont( loadingContext, font, color );
-        setHeaderFooterFont( KDChartParams::HdFtPosFooter, font, true, font.pointSize() );
+        setHeaderFooterFont( KDChartParams::HdFtPosFooter, font, true, font.pointSize()*4 );
         setHeaderFooterColor( KDChartParams::HdFtPosFooter, color );
         loadingContext.styleStack().restore();
 
@@ -322,8 +322,10 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         QColor color;
         loadOasisFont( loadingContext, font, color );
         //tz I didn't find that Oasis support seperate font/colors for the title and the rest of the legent
-        setLegendFont( font, true );
-        setLegendTitleFont( font, true );
+        setLegendFont(             font, false );
+        setLegendFontRelSize(      font.pointSize()*4 );
+        setLegendTitleFont(        font, false);
+        setLegendTitleFontRelSize( font.pointSize()*4 );
         setLegendTextColor( color );
         setLegendTitleTextColor( color );
         loadingContext.styleStack().restore();

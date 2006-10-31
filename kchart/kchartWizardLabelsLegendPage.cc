@@ -301,16 +301,18 @@ void KChartWizardLabelsLegendPage::apply(  )
     //    _chart->params()->YTitle2Color=y_color2;
     //    _chart->params()->ytitle2=_ylabel2ED->text();
 
-    _chart->params()->setHeaderFooterColor( KDChartParams::HdFtPosHeader,title_color);
-    _chart->params()->setHeader1Font(title);
+    _chart->params()->setHeaderFooterColor( KDChartParams::HdFtPosHeader, title_color );
+    _chart->params()->setHeaderFooterFont(  KDChartParams::HdFtPosHeader, title, true, title.pointSize()*4 );
     _chart->params()->setAxisTitle( KDChartAxisParams::AxisPosBottom, _xlabelED->text() );
     _chart->params()->setAxisTitle( KDChartAxisParams::AxisPosLeft, _ylabelED->text() );
 
     _chart->params()->setLegendTitleText(_legendTitleText->text());
     _chart->params()->setLegendTitleTextColor(_legendTitleColor);
-    _chart->params()->setLegendTitleFont(_legendTitleFont,true);
+    _chart->params()->setLegendTitleFont(        _legendTitleFont,false);
+    _chart->params()->setLegendTitleFontRelSize( _legendTitleFont.pointSize()*4 );
     _chart->params()->setLegendTextColor(_legendTextColor);
-    _chart->params()->setLegendFont( _legendTextFont,true);
+    _chart->params()->setLegendFont(        _legendTextFont,false);
+    _chart->params()->setLegendFontRelSize( _legendTextFont.pointSize()*4 );
 
     KDChartAxisParams leftparams;
     leftparams   = _chart->params()->axisParams( KDChartAxisParams::AxisPosLeft );
@@ -320,10 +322,14 @@ void KChartWizardLabelsLegendPage::apply(  )
         bottomparams.setAxisLineColor( x_color );
     if( y_color.isValid() )
         leftparams.setAxisLineColor( y_color );
-    if(bottomparams.axisLabelsFont()!=xlabel)
-        bottomparams.setAxisLabelsFont(xlabel,false);
-    if(leftparams.axisLabelsFont()!=ylabel)
-        leftparams.setAxisLabelsFont(ylabel,true);
+    if(bottomparams.axisLabelsFont()!=xlabel){
+        bottomparams.setAxisLabelsFont(        xlabel,false );
+        bottomparams.setAxisLabelsFontRelSize( xlabel.pointSize()*4 );
+    }
+    if(leftparams.axisLabelsFont()!=ylabel){
+      leftparams.setAxisLabelsFont(        ylabel,false );
+      leftparams.setAxisLabelsFontRelSize( ylabel.pointSize()*4 );
+    }
 
     _chart->params()->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparams );
     _chart->params()->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparams );
