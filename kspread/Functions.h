@@ -33,6 +33,7 @@ namespace KSpread
 class Sheet;
 class Value;
 class ValueCalc;
+class Function;
 
 typedef QVector<Value> valVector;
 
@@ -41,6 +42,7 @@ struct rangeInfo {
 };
 struct FuncExtra {
   // here we'll add all the extras a function may need
+  Function* function;
   QVector<rangeInfo> ranges;
   Sheet *sheet;
   int myrow, mycol;

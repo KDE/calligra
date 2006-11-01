@@ -117,6 +117,9 @@ Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
   if (!paramCountOkay (args.count()))
     return Value::errorVALUE();
 
+  if( extra )
+    extra->function = this;
+
   // do we need to perform array expansion ?
   bool mustExpandArray = false;
   if (!d->acceptArray)
