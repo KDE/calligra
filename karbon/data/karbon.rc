@@ -134,7 +134,7 @@
 		<Action name="object_align_vertical_bottom"/>
 	</ToolBar>
 	<ToolBar name="Effects" hidden="true" fullWidth="false">
-		<Text></Text>
+		<Text>Effects</Text>
 	</ToolBar>
 	<Menu name="selection_popup">
 		<Action name="edit_cut"/>
