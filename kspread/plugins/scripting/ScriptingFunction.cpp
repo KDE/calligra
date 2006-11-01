@@ -42,31 +42,71 @@
 //#include <main/wdgscriptsmanager.h>
 
 /***************************************************************************
- * ScriptingFunction
+ * ScriptingFunctionImpl
  */
 
-KSpread::Value scripting_function_call(KSpread::valVector args, KSpread::ValueCalc *calc, KSpread::FuncExtra*)
+class ScriptingFunctionImpl : public KSpread::Function
 {
-    QString scriptname = args[0].isString() ? args[0].asString() : QString();
-    QString functionname = args[1].isString() ? args[1].asString() : QString();
+    public:
 
-    KActionCollection* collection = Kross::Manager::self().actionCollection();
-    if( ! collection ) {
-        KSpread::Value err = KSpread::Value::errorNA();
-        err.setError( "#" + i18n("Scripfunctions are disabled.") );
-        return err;
-    }
+        static KSpread::Value callback(KSpread::valVector args, KSpread::ValueCalc* calc, KSpread::FuncExtra* extra)
+        {
+            Q_ASSERT(extra && extra->function);
+            ScriptingFunctionImpl* funcimpl = static_cast< ScriptingFunctionImpl* >( extra->function );
+            const QString name = funcimpl->name();
 
-    KAction* action = scriptname.isNull() ? 0 : collection->action(scriptname);
-    if( ! action ) {
-        KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
-        err.setError( "#" + i18n("No such script.") );
-        return err;
-    }
+            /*
+            QString scriptname = args[0].isString() ? args[0].asString() : QString();
+            QString functionname = args[1].isString() ? args[1].asString() : QString();
+            KActionCollection* collection = Kross::Manager::self().actionCollection();
+            if( ! collection ) {
+                KSpread::Value err = KSpread::Value::errorNA();
+                err.setError( "#" + i18n("Scripfunctions are disabled.") );
+                return err;
+            }
+            KAction* action = scriptname.isNull() ? 0 : collection->action(scriptname);
+            if( ! action ) {
+                KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
+                err.setError( "#" + i18n("No such script.") );
+                return err;
+            }
+            */
 
-    //TODO
-    return KSpread::Value("This is a string");
-}
+            //TODO
+            return KSpread::Value( QString("Function %1").arg(name) );
+        }
+
+        ScriptingFunctionImpl(const QString& name, const QDomElement& description)
+            : KSpread::Function(name, ScriptingFunctionImpl::callback)
+            , m_name(name)
+        {
+            setNeedsExtra(true);
+
+            // if there exists no "Scripts" group yet, add it
+            KSpread::FunctionRepository* repo = KSpread::FunctionRepository::self();
+            if( ! repo->groups().contains("Scripts") )
+                repo->addGroup("Scripts");
+
+            // register ourself at the repository
+            repo->add(this);
+
+            // create a new description for the function
+            KSpread::FunctionDescription* desc = new KSpread::FunctionDescription(description);
+            desc->setGroup("Scripts");
+            repo->add(desc);
+        }
+
+        virtual ~ScriptingFunctionImpl() {}
+
+        QString name() const { return m_name; }
+
+    private:
+        QString m_name;
+};
+
+/***************************************************************************
+ * ScriptingFunction
+ */
 
 class ScriptingFunction::Private
 {
@@ -134,16 +174,6 @@ bool ScriptingFunction::registerFunction()
         return false;
     }
 
-    KSpread::FunctionRepository* repo = KSpread::FunctionRepository::self();
-    if( ! repo->groups().contains("Scripts") )
-        repo->addGroup("Scripts");
-
-    KSpread::Function* f = new KSpread::Function(d->name, scripting_function_call);
-    f->setParamCount(d->minparam, d->maxparam);
-    f->setAcceptArray();
-    f->setNeedsExtra(true);
-    repo->add(f);
-
     QDomElement nameelem = d->document.createElement("Name");
     nameelem.appendChild( d->document.createTextNode(d->name) );
     d->funcElement.appendChild(nameelem);
@@ -162,10 +192,9 @@ bool ScriptingFunction::registerFunction()
 
     d->funcElement.appendChild(d->helpElement);
 
-    KSpread::FunctionDescription* desc = new KSpread::FunctionDescription(d->funcElement);
-    desc->setGroup("Scripts");
-    repo->add(desc);
-
+    ScriptingFunctionImpl* funcimpl = new ScriptingFunctionImpl(d->name, d->funcElement);
+    funcimpl->setParamCount(d->minparam, d->maxparam);
+    funcimpl->setAcceptArray();
     return true;
 }
 
