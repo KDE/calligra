@@ -1,6 +1,6 @@
 Compiling KOffice Trunk
 
-KOffice compiles using kdelibs-snapshot.
+KOffice compiles using kdelibs trunk.
 An explenation on how to install that and its dependencies is
 updated regularly on:
 
