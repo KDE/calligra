@@ -5543,9 +5543,8 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
     {
       xmlWriter.addAttribute( "office:value-type", "currency" );
       Format::Currency currency;
-      format()->currencyInfo(currency);
-      xmlWriter.addAttribute( "office:currency",
-                              Currency::getCurrencyCode(currency.type) );
+      if (format()->currencyInfo(currency))
+        xmlWriter.addAttribute( "office:currency", Currency::getCurrencyCode(currency.type) );
       xmlWriter.addAttribute( "office:value",
           QString::number( value().asFloat() ) );
       break;
