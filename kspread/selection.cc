@@ -566,7 +566,7 @@ void Selection::extend(const QRect& range, Sheet* sheet)
   if (d->multipleSelection)
   {
     d->activeElement = insert(++d->activeElement, extendToMergedAreas(QRect(topLeft, bottomRight)).normalize(), sheet, false);
-    element = *d->activeElement;
+    element = (d->activeElement == cells().end()) ? 0 : *d->activeElement;
   }
   else
   {
