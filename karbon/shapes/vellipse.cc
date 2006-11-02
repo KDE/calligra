@@ -177,9 +177,11 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainSt
 		docWriter->addAttribute( "draw:kind", "full" );
 	else
 	{
-		if( m_type == cut )
+		// the meaning of cut and section is mixed up in karbon, so just set them so for now
+		// be sure to do the right thing tm for karbon 2.0
+		if( m_type == section )
 			docWriter->addAttribute( "draw:kind", "cut" );
-		else if( m_type == section )
+		else if( m_type == cut )
 			docWriter->addAttribute( "draw:kind", "section" );
 		else
 			docWriter->addAttribute( "draw:kind", "arc" );
@@ -237,21 +239,32 @@ VEllipse::loadOasis( const QDomElement &element, KoOasisLoadingContext &context 
 	else
 		m_center.setY( m_ry + KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
 
-	m_startAngle = element.attributeNS( KoXmlNS::draw, "start-angle", QString::null ).toDouble();
-	m_endAngle = element.attributeNS( KoXmlNS::draw, "end-angle", QString::null ).toDouble();
-
+	// the meaning of cut and section is mixed up in karbon, so just set them so for now
+	// be sure to do the right thing tm for karbon 2.0
 	QString kind = element.attributeNS( KoXmlNS::draw, "kind", QString::null );
 	if( kind == "cut" )
-		m_type = cut;
-	else if( kind == "section" )
 		m_type = section;
+	else if( kind == "section" )
+		m_type = cut;
 	else if( kind == "arc" )
 		m_type = arc;
 	else
 		m_type = full;
 
+	double startAngle = element.attributeNS( KoXmlNS::draw, "start-angle", QString::null ).toDouble();
+	double endAngle = element.attributeNS( KoXmlNS::draw, "end-angle", QString::null ).toDouble();
+	
+	// the shape gets mirrored in y-direction, so make the angles temporary clockwise 
+	// just for creating the path
+	m_startAngle = 360.0 - endAngle;
+	m_endAngle = 360.0 - startAngle;
+	
 	init();
 
+	// now set the right angles
+	m_startAngle = startAngle;
+	m_endAngle = endAngle;
+	
 	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
 
 	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
