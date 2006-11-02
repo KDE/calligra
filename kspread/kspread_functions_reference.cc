@@ -316,7 +316,7 @@ Value func_rows (valVector, ValueCalc *, FuncExtra *e)
 Value func_indirect (valVector args, ValueCalc *calc, FuncExtra *e)
 {
   bool r1c1 = false;
-  QString ref = calc->conv()->asString (args[4]).asString();
+  QString ref = calc->conv()->asString (args[0]).asString();
   if (args.count() == 2)
     r1c1 = !(calc->conv()->asBoolean (args[1]).asBoolean());
 
