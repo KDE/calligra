@@ -1,4 +1,4 @@
-
+project(example)
 
 include_directories( ${KOFFICEUI_INCLUDES} )
 
