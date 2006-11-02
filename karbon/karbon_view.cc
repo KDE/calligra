@@ -1513,6 +1513,7 @@ KarbonView::pageLayout()
 		m_vertRuler->setUnit( unit );
 		m_canvas->canvasWidget()->resize( int( ( part()->pageLayout().ptWidth + 300 ) * zoom() ),
 								  int( ( part()->pageLayout().ptHeight + 460 ) * zoom() ) );
+        m_canvas->adjustSize();
 		part()->repaintAllViews();
 
 		emit pageLayoutChanged();
