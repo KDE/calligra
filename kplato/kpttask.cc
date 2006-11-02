@@ -1521,7 +1521,7 @@ bool Task::effortMetError() const {
     if (m_currentSchedule->notScheduled) {
         return false;
     }
-    return m_currentSchedule->plannedEffort() < effort()->effort(static_cast<Effort::Use>(m_currentSchedule->type()));
+    return m_currentSchedule->plannedEffort() < effort()->effort(static_cast<Effort::Use>(static_cast<int>(m_currentSchedule->type())));
 }
 
 #ifndef NDEBUG
