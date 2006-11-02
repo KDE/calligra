@@ -70,6 +70,18 @@ class Setup:
         functest1.addExample("SCRIPT(\"myscript2.rb\";\"myfunction2\";\"optional argument\")")
         functest1.addExample("SCRIPT(\"myscript3.js\";\"myfunction3\";17;20.0;\"string\")")
         functest1.addExample("SCRIPT(\"subfolder/myscript4.py\";\"myfunction4\"")
+
+        #a = functest1.action()
+        #a.setInterpreter("python")
+        #a.setCode("lambda x: x**2")
+
+        #def functiontest1(*args):
+        #   return "TeStReSuLt"
+        #functest1.__connect__("SIGNAL(...)", self.scriptaction, functiontest1)
+
+        #functest1.setAction(self.scriptaction)
+        #functest1.setAction(self.scriptaction, "functionname")
+
         functest1.registerFunction()
 
         #functest2 = self.kspread.function("SCRIPT_TEST2")

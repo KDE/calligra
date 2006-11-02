@@ -53,7 +53,9 @@ class ScriptingFunctionImpl : public KSpread::Function
         {
             Q_ASSERT(extra && extra->function);
             ScriptingFunctionImpl* funcimpl = static_cast< ScriptingFunctionImpl* >( extra->function );
+
             const QString name = funcimpl->name();
+            kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(name).arg(args.count()) << endl;
 
             /*
             QString scriptname = args[0].isString() ? args[0].asString() : QString();
@@ -84,15 +86,15 @@ class ScriptingFunctionImpl : public KSpread::Function
 
             // if there exists no "Scripts" group yet, add it
             KSpread::FunctionRepository* repo = KSpread::FunctionRepository::self();
-            if( ! repo->groups().contains("Scripts") )
-                repo->addGroup("Scripts");
+            if( ! repo->groups().contains( i18n("Scripts") ) )
+                repo->addGroup( i18n("Scripts") );
 
             // register ourself at the repository
             repo->add(this);
 
             // create a new description for the function
             KSpread::FunctionDescription* desc = new KSpread::FunctionDescription(description);
-            desc->setGroup("Scripts");
+            desc->setGroup( i18n("Scripts") );
             repo->add(desc);
         }
 
@@ -192,47 +194,13 @@ bool ScriptingFunction::registerFunction()
 
     d->funcElement.appendChild(d->helpElement);
 
+    // Create a new ScriptingFunctionImpl instance which will publish itself to the
+    // FunctionRepository. The FunctionRepository takes ownership of the instance
+    // which may live longer then this ScriptingFunction instance.
     ScriptingFunctionImpl* funcimpl = new ScriptingFunctionImpl(d->name, d->funcElement);
     funcimpl->setParamCount(d->minparam, d->maxparam);
     funcimpl->setAcceptArray();
     return true;
 }
-
-#if 0
-ScriptingFunction::ScriptingFunction(QObject* parent)
-    : QObject(parent)
-    , d(new Private())
-{
-    KSpread::FunctionRepository* repo = KSpread::FunctionRepository::self();
-    if( ! repo->groups().contains("Scripts") )
-        repo->addGroup("Scripts");
-
-    ScriptingFunction* func = new ScriptingFunction(this);
-    func->setName("SCRIPT");
-    func->setMinParam(2);
-    func->setMaxParam(-1);
-    func->setComment( i18n(
-        "The SCRIPT() function calls a function in an external scriptfile. "
-        "The script file references a file relative to your KSpread scripts "
-        "folder while the function name should be an existing function "
-        "within that script file."
-    ) );
-    func->setSyntax("SCRIPT(scriptfile;functionname;...)");
-    func->addParameter("String", i18n("The name of the script file"));
-    func->addParameter("String", i18n("The name of the function"));
-    func->addExample("SCRIPT(\"myscript1.py\";\"myfunction1\")");
-    func->addExample("SCRIPT(\"myscript2.rb\";\"myfunction2\";\"optional argument\")");
-    func->addExample("SCRIPT(\"myscript3.js\";\"myfunction3\";17;20.0;\"string\")");
-    func->addExample("SCRIPT(\"subfolder/myscript4.py\";\"myfunction4\"");
-    func->registerFunction();
-
-    //d->registerFunction("SCRIPT_GET");
-    //d->registerFunction("SCRIPT_SET");
-    //d->registerFunction("SCRIPT_CALL");
-    //d->registerFunction("SCRIPT_EVAL");
-    //d->registerFunction("SCRIPT_DEBUG");
-    //d->registerFunction("SCRIPT_TEST");
-}
-#endif
 
 #include "ScriptingFunction.moc"

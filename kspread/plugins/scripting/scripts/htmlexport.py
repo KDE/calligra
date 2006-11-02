@@ -14,11 +14,11 @@ The script could be used in two ways;
     2. As standalone script by running;
 
             # make the script executable
-            chmod 755 `kde4-config --install data`/kspread/scripts/extensions/exporthtml.py
+            chmod 755 `kde4-config --install data`/kspread/scripts/extensions/htmlexport.py
             # run the script
-            `kde4-config --install data`/kspread/scripts/extensions/exporthtml.py
+            `kde4-config --install data`/kspread/scripts/extensions/htmlexport.py
 
-       In that case the exporthtml.py-script will use the with
+       In that case the htmlexport.py-script will use the with
        Kross distributed krossrunner commandline-application
        to execute the python script. A empty document will be
        used in that case.
@@ -30,12 +30,12 @@ Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 class Config:
-    """ Some configurations for the exporthtml.py script. """
+    """ Some configurations for the htmlexport.py script. """
 
     ReaderFiles = ['/home/kde4/kspreaddocument.ods',]
-    """ If one of the files exist, use it per default if the exporthtml.py script
+    """ If one of the files exist, use it per default if the htmlexport.py script
     got run from the commandline with the krossrunner application. This option is
-    ignored if the exporthtml.py script got executed embedded within KSpreadsince
+    ignored if the htmlexport.py script got executed embedded within KSpreadsince
     in that case always the current document will be used. """
 
     Infos = {
@@ -363,24 +363,24 @@ class Dialog:
         self.exporter = exporter
 
         self.forms = Kross.module("forms")
-        self.dialog = self.forms.createDialog("Export HTML")
+        self.dialog = self.forms.createDialog("HTML Export")
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
         if not self.exporter.reader.hasFile():
             openpage = self.dialog.addPage("Open","Read from OpenDocument Spreadsheet File","fileopen")
-            self.openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kspreadexphtmlopen")
+            self.openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kspreadhtmlexportopen")
             self.openwidget.setMode("Opening")
             self.openwidget.setFilter("*.ods|OpenDocument Spreadsheet Files\n*|All Files")
 
         if not self.exporter.writer.hasFile():
             savepage = self.dialog.addPage("Save","Save to HTML File","filesave")
-            self.savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kspreadexphtmlsave")
+            self.savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kspreadhtmlexportsave")
             self.savewidget.setMode("Saving")
             self.savewidget.setFilter("*.html *.htm *.xhtml|HTML Documents\n*|All Files")
 
         infospage = self.dialog.addPage("Infos","HTML Document Informations","messagebox_info")
-        self.infoswidget = self.forms.createWidgetFromUIFile(infospage, os.path.join(self.exporter.currentpath, "exporthtmlinfos.ui"))
+        self.infoswidget = self.forms.createWidgetFromUIFile(infospage, os.path.join(self.exporter.currentpath, "htmlexportinfos.ui"))
         for i in self.exporter.reader.infos.keys():
             w = self.infoswidget[i]
             w.setText( self.exporter.reader.infos[i] )

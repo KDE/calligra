@@ -1,0 +1,27 @@
+<KrossScripting>
+	<script
+		name="pyhtmlexport"
+		text="HTML Export"
+		comment="Export an OpenDocument Spreadsheet File to a HTML File"
+		interpreter="python"
+		file="extensions/htmlexport.py" />
+	<!--
+	<script
+		name="pyunittest"
+		text="Unittest for Python"
+		comment="Test the KSpread Python functionality"
+		interpreter="python"
+		file="extensions/unittest.py" />
+	-->
+
+	<!--
+	<collection name="functions" text="Functions">
+		<script
+			name="pyfunctions"
+			text="Python Scripting Functions"
+			comment="Load the python scripting functions"
+			interpreter="python"
+			file="functions/functions.py" />
+	<collection>
+	-->
+</KrossScripting>
