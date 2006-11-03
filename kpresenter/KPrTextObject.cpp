@@ -879,7 +879,7 @@ KoTextFormat KPrTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat
     {
         QFontDatabase fdb;
         QStringList families = fdb.families();
-        if ( families.findIndex( n.attribute( attrFamily ) ) != -1 )
+        if ( families.indexOf( n.attribute( attrFamily ) ) != -1 )
             fn.setFamily( n.attribute( attrFamily ) );
         else
             fn = defaultFont;

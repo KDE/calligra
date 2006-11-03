@@ -177,7 +177,7 @@ double KPrAutoformObject::load(const QDomElement &element)
         if(filename[0]=='/') {
             kDebug(33001) << "rubbish ahead! cleaning up..." << endl;
             // remove the leading absolute path (i.e. to create Arrow/Arrow1.atf)
-            filename=filename.mid(filename.findRev('/', filename.findRev('/')-1)+1);
+            filename=filename.mid(filename.lastIndexOf('/', filename.lastIndexOf('/')-1)+1);
         }
         // okay... we changed the file format again and now the autoforms
         // are stored in .../kpresenter/autoforms/.source/foo.atf (note: we didn't have .source

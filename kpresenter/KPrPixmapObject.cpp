@@ -357,7 +357,7 @@ void KPrPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & con
     if ( !href.isEmpty() /*&& href[0] == '#'*/ )
     {
         QString strExtension;
-        const int result=href.findRev(".");
+        const int result=href.lastIndexOf(".");
         if (result>=0)
         {
             strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.

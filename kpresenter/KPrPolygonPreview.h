@@ -39,7 +39,7 @@ public:
     ~KPrPolygonPreview() {}
 
     void setPenBrush( const QPen &_pen, const QBrush &_brush )
-        { pen = _pen; brush = _brush; repaint( true ); }
+        { pen = _pen; brush = _brush; repaint(); }
 
 public slots:
     void slotConvexConcave( bool convexConcave );

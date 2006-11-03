@@ -743,10 +743,10 @@ private:
      * is moved with its bottom right to the given point.
      *
      * @param point the bottom right point of the inserted object
-     * @param The state of the mouse and modifier buttons
+     * @param modifiers The state of the modifier buttons.
      *
      */
-    void updateInsertRect( const KoPoint &point, Qt::ButtonState state );
+    void updateInsertRect( const KoPoint &point, Qt::KeyboardModifiers modifiers );
 
     /**
      * @brief Popup context menu

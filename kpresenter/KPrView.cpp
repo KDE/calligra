@@ -5175,13 +5175,13 @@ void KPrView::showZoom( int zoom )
 {
     QStringList list = actionViewZoom->items();
     QString zoomStr( i18n("%1%", zoom ) );
-    int pos = list.findIndex(zoomStr);
+    int pos = list.indexOf(zoomStr);
     if( pos == -1)
     {
         changeZoomMenu( zoom );
         list = actionViewZoom->items();
     }
-    actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
+    actionViewZoom->setCurrentItem( list.indexOf(zoomStr)  );
 }
 
 void KPrView::viewZoom( const QString &s )
@@ -5362,7 +5362,7 @@ void KPrView::updateStyleList()
     QString currentStyle = actionFormatStyle->currentText();
     // Generate list of styles
     const QStringList lst = m_pKPresenterDoc->styleCollection()->displayNameList();
-    const int pos = lst.findIndex( currentStyle );
+    const int pos = lst.indexOf( currentStyle );
     // Fill the combo - using a KSelectAction
     actionFormatStyle->setItems( lst );
     if ( pos > -1 )

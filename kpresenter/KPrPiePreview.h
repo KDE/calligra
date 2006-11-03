@@ -38,13 +38,13 @@ public:
     ~KPrPiePreview() {}
 
     void setAngle( int _angle )
-        { angle = _angle; repaint( true ); }
+        { angle = _angle; repaint(); }
     void setLength( int _len )
-        { len = _len; repaint( true ); }
+        { len = _len; repaint(); }
     void setType( PieType _type )
-        { type = _type; repaint( true ); }
+        { type = _type; repaint(); }
     void setPenBrush( const QPen &_pen, const QBrush &_brush )
-        { pen = _pen; brush = _brush; repaint( true ); }
+        { pen = _pen; brush = _brush; repaint(); }
 
 protected:
     void drawContents( QPainter* );

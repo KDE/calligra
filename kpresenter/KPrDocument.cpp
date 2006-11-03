@@ -909,11 +909,10 @@ QDomElement KPrDocument::saveUsedSoundFileToXML( QDomDocument &_doc, QStringList
 
     unsigned int i = 0;
     QStringList::Iterator it = _list.begin();
-    for ( ; it != _list.end(); ++it ) {
-        QString soundFileName = *it;
-        int position = soundFileName.findRev( '.' );
+    foreach (QString soundFileName, _list) {
+        int position = soundFileName.lastIndexOf( '.' );
         QString format = soundFileName.right( soundFileName.length() - position - 1 );
-        QString _name = QString( "sounds/sound%1.%2" ).arg( ++i ).arg( format.lower() );
+        QString _name = QString( "sounds/sound%1.%2" ).arg( ++i ).arg( format.toLower() );
 
         QDomElement fileElem = _doc.createElement( "FILE" );
         soundFiles.appendChild( fileElem );
@@ -957,9 +956,9 @@ void KPrDocument::saveUsedSoundFileToStore( KoStore *_store, QStringList _list )
     QStringList::Iterator it = _list.begin();
     for ( ; it != _list.end(); ++it ) {
         QString soundFileName = *it;
-        int position = soundFileName.findRev( '.' );
+        int position = soundFileName.lastIndexOf( '.' );
         QString format = soundFileName.right( soundFileName.length() - position - 1 );
-        QString _storeURL = QString( "sounds/sound%1.%2" ).arg( ++i ).arg( format.lower() );
+        QString _storeURL = QString( "sounds/sound%1.%2" ).arg( ++i ).arg( format.toLower() );
 
         if ( _store->open( _storeURL ) ) {
             KoStoreDevice dev( _store );
@@ -1073,7 +1072,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         QMap<QString, int>::ConstIterator it( pageNames.begin() );
         for ( ; it != pageNames.end(); ++it )
         {
-            page2name.insert( it.data(), it.key() );
+            page2name.insert( it.value(), it.key() );
         }
         saveOasisPresentationSettings( contentTmpWriter, page2name );
     }
@@ -1195,7 +1194,7 @@ void KPrDocument::loadOasisIgnoreList( const KoOasisSettings& settings )
     {
         _showPresentationDuration = configurationSettings.parseConfigItemBool( "ShowPresentationDuration", false );
         const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
-        m_spellCheckIgnoreList = QStringList::split( ',', ignorelist );
+        m_spellCheckIgnoreList = ignorelist.split( ',' );
     }
 }
 
@@ -1407,14 +1406,13 @@ void KPrDocument::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )
         {
             //kDebug()<<" e.attribute(presentation:name) :"<<e.attributeNS( KoXmlNS::presentation, "name", QString::null)<< " e.attribute(presentation:pages) :"<<e.attributeNS( KoXmlNS::presentation, "pages", QString::null)<<endl;
             QString name = e.attributeNS( KoXmlNS::presentation, "name", QString::null );
-            QStringList tmp = QStringList::split( ",", e.attributeNS( KoXmlNS::presentation, "pages", QString::null) );
             Q3ValueList<KPrPage *> pageList;
-            for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it )
+            foreach (QString s, e.attributeNS( KoXmlNS::presentation, "pages", QString::null).split( "," ))
             {
-                if ( m_loadingInfo->m_name2page.contains( *it ) )
+                if ( m_loadingInfo->m_name2page.contains( s ) )
                 {
-                    kDebug(33001) << "slide show " << name << " page = " << *it << endl;
-                    pageList.push_back( m_loadingInfo->m_name2page[*it] );
+                    kDebug(33001) << "slide show " << name << " page = " << s << endl;
+                    pageList.push_back( m_loadingInfo->m_name2page[s] );
                 }
             }
             if ( ! pageList.empty() )
@@ -1750,8 +1748,8 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
             else
             {
                 // OO uses /page[0-9]+$/ as default for no name set
-                QRegExp rx( "^page[0-9]+$" );
-                if ( rx.search( str ) == -1 )
+                QRegExp rx( "page[0-9]+" );
+                if ( ! rx.exactMatch( str ) )
                     newpage->insertManualTitle(str);
             }
             context.styleStack().setTypeProperties( "drawing-page" );
@@ -2008,8 +2006,8 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                 if ( !enhancedGeometry.isNull() )
                 {
                     QString d = enhancedGeometry.attributeNS( KoXmlNS::draw, "enhanced-path", QString::null );
-                    QRegExp rx( "^([0-9 ML]+Z) N$" );
-                    if ( rx.search( d ) != -1 )
+                    QRegExp rx( "([0-9 ML]+Z) N" );
+                    if ( rx.exactMatch( d ) != -1 )
                     {
                         d = rx.cap( 1 );
                         KPrSVGPathParser parser;
@@ -2648,14 +2646,13 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
                 QDomElement slide=elem.firstChild().toElement();
                 while(!slide.isNull()) {
                     if(slide.tagName()=="CUSTOMSLIDESHOW") {
-                        QStringList tmp = QStringList::split( ",", slide.attribute( "pages" ) );
                         Q3ValueList<KPrPage *> pageList;
-                        for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it )
+                        foreach(QString s, slide.attribute( "pages" ).split(","))
                         {
-                            if ( name2page.contains( *it ) )
+                            if ( name2page.contains(s) )
                             {
-                                kDebug(33001) << "slide show " << slide.attribute( "name" ) << " page = " << *it << endl;
-                                pageList.push_back( name2page[*it] );
+                                kDebug(33001) << "slide show " << slide.attribute( "name" ) << " page = " << s << endl;
+                                pageList.push_back( name2page[s] );
                             }
                         }
                         if ( ! pageList.empty() )
@@ -3236,7 +3233,7 @@ void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list
             char *data = new char[size];
             dev.read( data, size );
 
-            int position = soundFile.findRev( '.' );
+            int position = soundFile.lastIndexOf( '.' );
             QString format = soundFile.right( soundFile.length() - position );
             KTemporaryFile *tmpFile = new KTemporaryFile();
             tmpFile->setSuffix(format);
@@ -3764,17 +3761,17 @@ void KPrDocument::makeUsedSoundFileList()
     Q3PtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it ) {
         QString _file = it.current()->getPageSoundFileName();
-        if ( !_file.isEmpty() && usedSoundFile.findIndex( _file ) == -1 )
+        if ( !_file.isEmpty() && usedSoundFile.indexOf( _file ) == -1 )
             usedSoundFile.append( _file );
 
         Q3PtrListIterator<KPrObject> oIt( it.current()->objectList() );
         for ( ; oIt.current(); ++oIt ) {
             _file = oIt.current()->getAppearSoundEffectFileName();
-            if ( !_file.isEmpty() && usedSoundFile.findIndex( _file ) == -1 )
+            if ( !_file.isEmpty() && usedSoundFile.indexOf( _file ) == -1 )
                 usedSoundFile.append( _file );
 
             _file = oIt.current()->getDisappearSoundEffectFileName();
-            if ( !_file.isEmpty() && usedSoundFile.findIndex( _file ) == -1 )
+            if ( !_file.isEmpty() && usedSoundFile.indexOf( _file ) == -1 )
                 usedSoundFile.append( _file );
         }
     }
@@ -4531,7 +4528,7 @@ void KPrDocument::setSpellCheckIgnoreList( const QStringList& lst )
 void KPrDocument::addSpellCheckIgnoreWord( const QString & word )
 {
     // ### missing: undo/redo support
-    if( m_spellCheckIgnoreList.findIndex( word ) == -1 )
+    if( m_spellCheckIgnoreList.indexOf( word ) == -1 )
         m_spellCheckIgnoreList.append( word );
     setSpellCheckIgnoreList( m_spellCheckIgnoreList );
 }
@@ -4696,7 +4693,7 @@ void KPrDocument::addWordToDictionary( const QString & word)
 {
     if ( m_bgSpellCheck )
     {
-        if( m_spellCheckPersonalDict.findIndex( word ) == -1 )
+        if( m_spellCheckPersonalDict.indexOf( word ) == -1 )
             m_spellCheckPersonalDict.append( word );
         m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList + m_spellCheckPersonalDict );
         if ( backgroundSpellCheckEnabled() )

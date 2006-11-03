@@ -727,7 +727,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     KPrObject *kpobject = 0;
 
-    m_disableSnapping = e->state() & Qt::ShiftModifier;
+    m_disableSnapping = e->modifiers() == Qt::ShiftModifier;
 
     exitEditMode();
 
@@ -822,9 +822,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                 if ( kpobject ) {
                     // use ctrl + Button to select / deselect object
-                    if ( e->state() & Qt::ControlModifier && kpobject->isSelected() )
+                    if ( e->modifiers() == Qt::ControlModifier && kpobject->isSelected() )
                         deSelectObj( kpobject );
-                    else if ( e->state() & Qt::ControlModifier )
+                    else if ( e->modifiers() == Qt::ControlModifier )
                     {
                         selectObj( kpobject );
                         raiseObject( kpobject );
@@ -894,7 +894,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     }
                     else {
                         modType = MT_NONE;
-                        if ( !( e->state() & Qt::ShiftModifier ) && !( e->state() & Qt::ControlModifier ) )
+                        if ( !( e->modifiers() == Qt::ShiftModifier ) && !( e->modifiers() == Qt::ControlModifier ) )
                             deSelectAllObj();
 
                         drawRubber = true;
@@ -1065,7 +1065,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 QPoint pnt = QCursor::pos();
                 mousePressed = false;
                 m_view->disableAutoScroll();
-                bool state=!( e->state() & Qt::ShiftModifier ) && !( e->state() & Qt::ControlModifier ) && !kpobject->isSelected();
+                bool state=!( e->modifiers() == Qt::ShiftModifier ) && !( e->modifiers() == Qt::ControlModifier ) && !kpobject->isSelected();
 
                 if ( state )
                     deSelectAllObj();
@@ -1444,7 +1444,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         }
     }
 
-    m_disableSnapping = e->state() & Qt::ShiftModifier;
+    m_disableSnapping = e->modifiers() == Qt::ShiftModifier;
 
     if ( editMode ) {
         m_view->setRulerMousePos( e->x(), e->y() );
@@ -1500,7 +1500,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         m_moveStartPoint = objectRect( false ).topLeft();
                         m_isMoving = true;
                     }
-                    moveObjectsByMouse( docPoint, e->state() & Qt::AltModifier || e->state() & Qt::ControlModifier );
+                    moveObjectsByMouse( docPoint, e->modifiers() == Qt::AltModifier || e->modifiers() == Qt::ControlModifier );
                 } else if ( modType != MT_NONE && m_resizeObject ) {
                     if ( !m_isResizing )
                     {
@@ -1510,12 +1510,12 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     KoPoint sp( snapPoint( docPoint, false ) );
 
                     bool keepRatio = m_resizeObject->isKeepRatio();
-                    if ( e->state() & Qt::AltModifier )
+                    if ( e->modifiers() == Qt::AltModifier )
                     {
                         keepRatio = true;
                     }
                     bool scaleAroundCenter = false;
-                    if ( e->state() & Qt::ControlModifier )
+                    if ( e->modifiers() == Qt::ControlModifier )
                     {
                         scaleAroundCenter = true;
                     }
@@ -1575,7 +1575,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
                 KoPoint sp( snapPoint( docPoint ) );
                 p.drawRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
-                updateInsertRect( sp, e->state() );
+                updateInsertRect( sp, e->modifiers() );
                 p.drawRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
 
                 p.end();
@@ -1591,7 +1591,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
                 KoPoint sp( snapPoint( docPoint ) );
                 p.drawEllipse( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
-                updateInsertRect( sp, e->state() );
+                updateInsertRect( sp, e->modifiers() );
                 p.drawEllipse( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
 
                 p.end();
@@ -1607,7 +1607,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
                 KoPoint sp( snapPoint( docPoint ) );
                 p.drawRoundRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
-                updateInsertRect( sp, e->state() );
+                updateInsertRect( sp, e->modifiers() );
                 p.drawRoundRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
 
                 p.end();
@@ -1627,7 +1627,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.drawLine( m_view->zoomHandler()->zoomPointOld( m_startPoint ),
                             m_view->zoomHandler()->zoomPointOld( oldEndPoint ) );
 
-                if ( e->state() & Qt::AltModifier )
+                if ( e->modifiers() == Qt::AltModifier )
                 {
                     m_startPoint += m_endPoint - oldEndPoint;
                 }
@@ -1648,7 +1648,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
                 KoPoint sp( snapPoint( docPoint ) );
                 drawPieObject( &p, m_insertRect );
-                updateInsertRect( sp, e->state() );
+                updateInsertRect( sp, e->modifiers() );
                 drawPieObject( &p, m_insertRect );
 
                 p.end();
@@ -1667,7 +1667,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     //p.setRasterOp( NotROP );
                     p.translate( -diffx(), -diffy() );
 
-                    if ( e->state() & Qt::AltModifier )
+                    if ( e->modifiers() == Qt::AltModifier )
                     {
                         Q3PointArray pointArray = m_pointArray.zoomPointArray( m_view->zoomHandler() );
                         // erase
@@ -1705,7 +1705,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.drawLine( m_view->zoomHandler()->zoomPointOld( m_startPoint ),
                             m_view->zoomHandler()->zoomPointOld( oldEndPoint ) );
 
-                if ( e->state() & Qt::AltModifier )
+                if ( e->modifiers() == Qt::AltModifier )
                 {
                     Q3PointArray pointArray = m_pointArray.zoomPointArray( m_view->zoomHandler() );
                     // erase
@@ -1737,7 +1737,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
                 drawCubicBezierCurve( p, m_oldCubicBezierPointArray );
 
-                if ( e->state() & Qt::AltModifier )
+                if ( e->modifiers() == Qt::AltModifier )
                 {
                     // erase
                     redrawCubicBezierCurve( p );
@@ -1805,7 +1805,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 KoPoint sp( snapPoint( docPoint ) );
                 // erase old
                 drawPolygon( p, m_insertRect );
-                updateInsertRect( sp, e->state() );
+                updateInsertRect( sp, e->modifiers() );
                 // print new
                 drawPolygon( p, m_insertRect );
 
@@ -2029,12 +2029,12 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 
         if ( mouseSelectedObject )
         {
-            m_disableSnapping = e->state() & Qt::ShiftModifier;
+            m_disableSnapping = e->modifiers() == Qt::ShiftModifier;
 
             int offsetx = 1;
             int offsety = 1;
 
-            if ( e->state() & Qt::ControlModifier )
+            if ( e->modifiers() == Qt::ControlModifier )
             {
                 offsetx = qMax(1,m_view->zoomHandler()->zoomItXOld(10));
                 offsety = qMax(1,m_view->zoomHandler()->zoomItYOld(10));
@@ -2126,9 +2126,9 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                         m_gl.repaintAfterSnapping();
                     }
                     // undo snapping for move by mouse
-                    if ( e->state() & Qt::LeftButton && m_isMoving )
+                    if ( e->modifiers() == Qt::LeftButton && m_isMoving )
                     {
-                        moveObjectsByMouse( m_origMousePos, e->state() & Qt::AltModifier || e->state() & Qt::ControlModifier );
+                        moveObjectsByMouse( m_origMousePos, e->modifiers() == Qt::AltModifier || e->modifiers() == Qt::ControlModifier );
                     }
                     break;
                 }
@@ -3652,9 +3652,9 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
 }
 
 
-void KPrCanvas::updateInsertRect( const KoPoint &point, Qt::ButtonState state )
+void KPrCanvas::updateInsertRect( const KoPoint &point, Qt::KeyboardModifiers modifiers )
 {
-    if ( state & Qt::AltModifier )
+    if ( modifiers == Qt::AltModifier )
     {
         m_insertRect.moveBottomRight( point );
     }
