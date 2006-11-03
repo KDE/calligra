@@ -9,3 +9,5 @@ const KDChartTextPiece* KDChartCustomBoxWrapper::content() const
     return &_data->content();
 }
 
+
+#include "KDChartCustomBoxWrapper.moc"

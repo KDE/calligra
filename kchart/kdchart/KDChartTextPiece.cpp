@@ -288,3 +288,5 @@ bool KDChartTextPiece::isRichText() const
 }
 
 
+
+#include "KDChartTextPiece.moc"

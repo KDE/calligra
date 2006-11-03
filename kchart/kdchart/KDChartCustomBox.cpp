@@ -491,3 +491,5 @@ bool KDChartCustomBox::readCustomBoxNode( const QDomElement& element,
 
     return ok;
 }
+
+#include "KDChartCustomBox.moc"

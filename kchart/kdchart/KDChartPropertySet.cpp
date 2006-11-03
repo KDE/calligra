@@ -380,3 +380,5 @@ bool KDChartPropertySet::loadXML( const QDomElement& element, KDChartPropertySet
     }
     return bOwnIDFound;
 }
+
+#include "KDChartPropertySet.moc"

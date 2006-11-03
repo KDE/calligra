@@ -69,3 +69,5 @@ void KDChartParamsWrapper::setAxisLabelTextParams( uint n,
                                    (KDChartAxisParams::LabelsFromDataRow) takeLabelsFromDataRow, labelTextsDataRow, &l1, &l2,
                                    axisValueLeaveOut, (KDChartAxisParams::ValueScale) axisValueDeltaScale );
 }
+
+#include "KDChartParamsWrapper.moc"

@@ -614,3 +614,5 @@ bool KDFrame::KDFrameCorner::readFrameCornerNode( const QDomElement& element,
 
     return ok;
 }
+
+#include "KDFrame.moc"

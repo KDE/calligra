@@ -32,3 +32,5 @@ void KDChartTableDataWrapper::setCell( uint _row, uint _col, const KDChartData& 
 }
 
 */
+
+#include "KDChartTableDataWrapper.moc"

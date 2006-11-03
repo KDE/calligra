@@ -69,3 +69,5 @@ void KDChartAxisParamsWrapper::setAxisLabelTexts( const QVariant& axisLabelTexts
     QStringList l = axisLabelTexts.toStringList();
     _data->setAxisLabelTexts( &l );
 }
+
+#include "KDChartAxisParamsWrapper.moc"
