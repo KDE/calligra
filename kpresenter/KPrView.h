@@ -34,7 +34,7 @@
 #include <QLabel>
 #include <QWheelEvent>
 #include <QDragLeaveEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QDragEnterEvent>
 #include <QKeyEvent>
 #include <QDropEvent>
@@ -797,7 +797,7 @@ protected:
 
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
 
-    Q3ValueList<KoTextObject *> spellAddTextObject() const;
+    QList<KoTextObject *> spellAddTextObject() const;
 
     bool switchInOtherPage( const QString & text );
 
@@ -1170,7 +1170,7 @@ private:
     /// timer for duration of a page
     QTime m_duration;
     /// list for saving the duration of the pages
-    Q3ValueList<int> m_presentationDurationList;
+    QList<int> m_presentationDurationList;
 
     KoCharSelectDia *m_specialCharDlg;
 

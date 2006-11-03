@@ -62,7 +62,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QMouseEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QDragEnterEvent>
 #include <QKeyEvent>
 #include <QDropEvent>
@@ -696,7 +696,7 @@ void KPrTextObject::loadKTextObject( const QDomElement &elem )
     int topBorder = 0;
 
     while ( !e.isNull() ) {
-        Q3ValueList<QDomElement> listVariable;
+        QList<QDomElement> listVariable;
         listVariable.clear();
 
         if ( e.tagName() == tagP ) {
@@ -822,10 +822,10 @@ void KPrTextObject::loadKTextObject( const QDomElement &elem )
     }
 }
 
-void KPrTextObject::loadVariable( Q3ValueList<QDomElement> & listVariable,KoTextParag *lastParag, int offset )
+void KPrTextObject::loadVariable( QList<QDomElement> & listVariable,KoTextParag *lastParag, int offset )
 {
-    Q3ValueList<QDomElement>::Iterator it = listVariable.begin();
-    Q3ValueList<QDomElement>::Iterator end = listVariable.end();
+    QList<QDomElement>::Iterator it = listVariable.begin();
+    QList<QDomElement>::Iterator end = listVariable.end();
     for ( ; it != end ; ++it )
     {
         QDomElement elem = *it;

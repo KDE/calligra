@@ -26,7 +26,7 @@
 #include <QWidget>
 #include <q3ptrlist.h>
 #include <q3picture.h>
-#include <q3valuelist.h>
+#include <QList>
 #include <qpixmap.h>
 #include <q3pointarray.h>
 #include <q3valuevector.h>
@@ -841,11 +841,11 @@ private:
     float _presFakt;
     int m_showOnlyPage; // 1-based (-1 = all)
     /// list of all effect steps occurring on the active page
-    Q3ValueList<int> m_pageEffectSteps;
+    QList<int> m_pageEffectSteps;
     /// List of the slides used in the presentation
-    Q3ValueList<int> m_presentationSlides;
+    QList<int> m_presentationSlides;
     /// Iterator over the slides of a presentation
-    Q3ValueList<int>::Iterator m_presentationSlidesIterator;
+    QList<int>::Iterator m_presentationSlidesIterator;
     /// KPrEffectHandler for object effects
     KPrEffectHandler *m_effectHandler;
 

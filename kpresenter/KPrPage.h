@@ -25,7 +25,7 @@
 #include <QWidget>
 #include <q3ptrlist.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include "global.h"
 #include <KoBrush.h>
 #include <KoPoint.h>
@@ -184,7 +184,7 @@ public:
      *
      * @param obj objects to append
      */
-    void appendObjects( const Q3ValueList<KPrObject *> &objects );
+    void appendObjects( const QList<KPrObject *> &objects );
 
     /**
      * @brief Replaces an object
@@ -314,7 +314,7 @@ public:
     /**
      * @brief
      */
-    void copyObjs(QDomDocument &doc, QDomElement &presenter, Q3ValueList<KoPictureKey> & lst) const;
+    void copyObjs(QDomDocument &doc, QDomElement &presenter, QList<KoPictureKey> & lst) const;
 
     /**
      * @brief Get the first selected object
@@ -467,7 +467,7 @@ public:
     /**
      * return the list of steps where objects appear/disappear.
      */
-    Q3ValueList<int> getEffectSteps() const;
+    QList<int> getEffectSteps() const;
 
     bool isSlideSelected() const {return  m_selectedSlides;}
     void slideSelected(bool _b){m_selectedSlides=_b;}

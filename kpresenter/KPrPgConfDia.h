@@ -26,8 +26,7 @@
 
 #include <QMap>
 #include <qpen.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QLabel>
 
 #include <kpagedialog.h>
@@ -58,7 +57,7 @@ public:
     bool getManualSwitch() const;
     bool getPresentationDuration() const;
     QPen getPen() const;
-    Q3ValueList<bool> getSelectedSlides() const;
+    QList<bool> getSelectedSlides() const;
 
     QString presentationName() const;
 

@@ -29,7 +29,7 @@
 #include <qsize.h>
 #include "global.h"
 #include <KoPictureCollection.h>
-#include <q3valuelist.h>
+#include <QList>
 #include <qpen.h>
 #include <qbrush.h>
 #include <KoPageLayoutDia.h>
@@ -88,7 +88,7 @@ protected:
 class KPrSetOptionsCmd : public KNamedCommand
 {
 public:
-    KPrSetOptionsCmd( const QString &_name, Q3ValueList<KoPoint> &_diffs, Q3PtrList<KPrObject> &_objects,
+    KPrSetOptionsCmd( const QString &_name, QList<KoPoint> &_diffs, Q3PtrList<KPrObject> &_objects,
                    double _rastX, double _rastY, double _orastX, double _orastY,
                    const QColor &_txtBackCol, const QColor &_otxtBackCol, KPrDocument *_doc );
     ~KPrSetOptionsCmd();
@@ -98,7 +98,7 @@ public:
 
 protected:
 
-    Q3ValueList<KoPoint> diffs;
+    QList<KoPoint> diffs;
     Q3PtrList<KPrObject> objects;
     double gridX;
     double gridY;
@@ -226,7 +226,7 @@ public:
     };
 
     KPrEffectCmd( const QString &_name, const Q3PtrList<KPrObject> &_objs,
-               const Q3ValueList<EffectStruct> &_oldEffects, EffectStruct _newEffect );
+               const QList<EffectStruct> &_oldEffects, EffectStruct _newEffect );
     ~KPrEffectCmd();
 
     virtual void execute();
@@ -234,7 +234,7 @@ public:
 
 protected:
 
-    Q3ValueList<EffectStruct> oldEffects;
+    QList<EffectStruct> oldEffects;
     EffectStruct newEffect;
     Q3PtrList<KPrObject> objs;
 };
@@ -283,7 +283,7 @@ protected:
 class KPrInsertCmd : public KNamedCommand
 {
 public:
-    KPrInsertCmd( const QString &name, const Q3ValueList<KPrObject *> objects, KPrDocument *doc, KPrPage *page );
+    KPrInsertCmd( const QString &name, const QList<KPrObject *> objects, KPrDocument *doc, KPrPage *page );
     KPrInsertCmd( const QString &name, KPrObject *object, KPrDocument *doc, KPrPage *page );
     ~KPrInsertCmd();
 
@@ -291,7 +291,7 @@ public:
     virtual void unexecute();
 
 protected:
-    Q3ValueList<KPrObject *> m_objects;
+    QList<KPrObject *> m_objects;
     KPrObject *m_object;
     KPrDocument *m_doc;
     KPrPage *m_page;
@@ -480,10 +480,10 @@ class KPrPgConfCmd : public KNamedCommand
 public:
     KPrPgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
                bool _showEndOfPresentationSlide, bool _showPresentationDuration, QPen _pen,
-               Q3ValueList<bool> _selectedSlides, const QString & _presentationName,
+               QList<bool> _selectedSlides, const QString & _presentationName,
                bool _oldManualSwitch, bool _oldInfiniteLoop,
                bool _oldShowEndOfPresentationSlide, bool _oldShowPresentationDuration, QPen _oldPen,
-               Q3ValueList<bool> _oldSelectedSlides, const QString & _oldPresentationName,
+               QList<bool> _oldSelectedSlides, const QString & _oldPresentationName,
                KPrDocument *_doc );
 
     virtual void execute();
@@ -495,7 +495,7 @@ protected:
     bool showEndOfPresentationSlide, oldShowEndOfPresentationSlide;
     bool showPresentationDuration, oldShowPresentationDuration;
     QPen pen, oldPen;
-    Q3ValueList<bool> selectedSlides, oldSelectedSlides;
+    QList<bool> selectedSlides, oldSelectedSlides;
     QString oldPresentationName, presentationName;
 
     KPrDocument *doc;
@@ -960,7 +960,7 @@ public:
     enum KgpType { ProtectSize, KeepRatio};
     KPrGeometryPropertiesCommand( const QString &name, Q3PtrList<KPrObject> &objects,
                                   bool newValue, KgpType type, KPrDocument *_doc );
-    KPrGeometryPropertiesCommand( const QString &name, Q3ValueList<bool> &lst, Q3PtrList<KPrObject> &objects,
+    KPrGeometryPropertiesCommand( const QString &name, QList<bool> &lst, Q3PtrList<KPrObject> &objects,
                                   bool newValue, KgpType type, KPrDocument *_doc );
     ~KPrGeometryPropertiesCommand();
 
@@ -968,7 +968,7 @@ public:
     virtual void unexecute();
 
 protected:
-    Q3ValueList<bool> m_oldValue;
+    QList<bool> m_oldValue;
     Q3PtrList<KPrObject> m_objects;
     bool m_newValue;
     KgpType m_type;
@@ -992,7 +992,7 @@ protected:
 
     Q3PtrList<KPrTextObject> m_objects;
     bool m_protectContent;
-    Q3ValueList<bool> m_oldValues;
+    QList<bool> m_oldValues;
     KPrDocument *m_doc;
 };
 

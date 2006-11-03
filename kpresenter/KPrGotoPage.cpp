@@ -26,7 +26,7 @@
 #include <QPushButton>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
-#include <Q3ValueList>
+#include <QList>
 #include <Q3PtrList>
 
 #include <klocale.h>
@@ -36,7 +36,7 @@
 #include "KPrPage.h"
 
 KPrGotoPage::KPrGotoPage( const KPrDocument *doc,
-                        const Q3ValueList<int> &slides, int start,
+                        const QList<int> &slides, int start,
                         QWidget *parent, const char *name )
     : KDialog( parent),
       oldPage(start)
@@ -59,7 +59,7 @@ KPrGotoPage::KPrGotoPage( const KPrDocument *doc,
     ml->addWidget( spinbox );
 
     Q3PtrList<KPrPage> pageList = doc->getPageList(); // because of const doc, we can't do doc->pageList()->at()
-    Q3ValueList<int>::ConstIterator it = slides.begin();
+    QList<int>::ConstIterator it = slides.begin();
     for ( ; it != slides.end(); ++it ) {
         QString t( pageList.at( (*it) - 1 )->pageTitle() );
         // cut ultra long titles...
@@ -77,7 +77,7 @@ KPrGotoPage::KPrGotoPage( const KPrDocument *doc,
 }
 
 int KPrGotoPage::gotoPage( const KPrDocument *doc,
-                          const Q3ValueList<int> &slides, int start,
+                          const QList<int> &slides, int start,
                           QWidget *parent)
 {
     KPrGotoPage dia( doc, slides, start,parent, 0L );

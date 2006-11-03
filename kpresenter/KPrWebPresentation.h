@@ -24,8 +24,7 @@
 #include <k3wizard.h>
 
 #include <qdialog.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QCloseEvent>
 #include <QResizeEvent>
 #include <QLabel>
@@ -110,7 +109,7 @@ public:
     };
     // Each entry in this list is a page (number+title).
     // This allows to skip pages.
-    Q3ValueList<SlideInfo> getSlideInfos() const { return slideInfos; }
+    QList<SlideInfo> getSlideInfos() const { return slideInfos; }
 
     void setSlideTitle( int i, const QString &slideTitle )
         { slideInfos[i].slideTitle = slideTitle; }
@@ -142,7 +141,7 @@ protected:
     KPrView *view;
     QString config;
     QString author, title, email;
-    Q3ValueList<SlideInfo> slideInfos;
+    QList<SlideInfo> slideInfos;
     QColor backColor, titleColor, textColor;
     QString path;    
     bool xml;

@@ -57,7 +57,7 @@
 #include <KoRect.h>
 #include <qapplication.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <Q3PtrList>
 #include <KoStyleCollection.h>
 #include <KoVariable.h>
@@ -898,7 +898,7 @@ void KPrPage::appendObject(KPrObject *_obj)
     m_objectList.append(_obj);
 }
 
-void KPrPage::appendObjects( const Q3ValueList<KPrObject *> &objects )
+void KPrPage::appendObjects( const QList<KPrObject *> &objects )
 {
     QMap <QString, int> usedPageNames;
     Q3PtrListIterator<KPrObject> it( m_objectList );
@@ -923,10 +923,9 @@ void KPrPage::appendObjects( const Q3ValueList<KPrObject *> &objects )
         }
     }
 
-    Q3ValueListConstIterator<KPrObject *> oIt( objects.begin() );
-    for ( ; oIt != objects.end(); ++oIt )
+    foreach (KPrObject *obj, objects)
     {
-        QString objectName( ( *oIt )->getObjectName() );
+        QString objectName( obj->getObjectName() );
         QRegExp rx( " \\(\\d{1,}\\)$" );
         if ( rx.search( objectName ) != -1 )
         {
@@ -937,9 +936,9 @@ void KPrPage::appendObjects( const Q3ValueList<KPrObject *> &objects )
         {
             usedPageNames[objectName]++;
             objectName += QString(" (%1)").arg( usedPageNames[objectName] );
-            ( *oIt )->setObjectName( objectName );
+            obj->setObjectName( objectName );
         }
-        m_objectList.append( *oIt );
+        m_objectList.append( obj );
     }
 }
 
@@ -981,7 +980,7 @@ KCommand * KPrPage::deleteSelectedObjects()
     return deleteCmd ;
 }
 
-void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter, Q3ValueList<KoPictureKey> & savePictures) const
+void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter, QList<KoPictureKey> & savePictures) const
 {
     if ( !numSelected() )
         return;
@@ -1838,7 +1837,7 @@ KCommand * KPrPage::replaceObjs( bool createUndoRedo, double _orastX,double _ora
     KPrObject *kpobject = 0;
     double ox=0, oy=0;
     Q3PtrList<KPrObject> _objects;
-    Q3ValueList<KoPoint> _diffs;
+    QList<KoPoint> _diffs;
     _objects.setAutoDelete( false );
 
     for ( int i = 0; i < static_cast<int>( m_objectList.count() ); i++ ) {
@@ -1967,7 +1966,7 @@ void KPrPage::makeUsedPixmapListForGroupObject( KPrObject *_obj )
 }
 
 
-Q3ValueList<int> KPrPage::getEffectSteps() const
+QList<int> KPrPage::getEffectSteps() const
 {
     QMap<int,bool> stepmap;
     stepmap[0] = true;

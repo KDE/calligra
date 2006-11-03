@@ -35,7 +35,7 @@
 #include <QResizeEvent>
 #include <QDropEvent>
 #include <QDragEnterEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 #include <assert.h>
 #include <qtoolbutton.h>
@@ -3213,7 +3213,7 @@ void KPrView::propertiesOk()
 
 void KPrView::pgConfOk()
 {
-    Q3ValueList<bool> selectedSlides;
+    QList<bool> selectedSlides;
     for( unsigned i = 0; i < kPresenterDoc()->pageList().count(); i++ ) {
         selectedSlides.append( kPresenterDoc()->pageList().at( i )->isSlideSelected() );
     }
@@ -3519,11 +3519,11 @@ void KPrView::doAutomaticScreenPres()
 void KPrView::updateReadWrite( bool readwrite )
 {
     // First disable or enable everything
-    Q3ValueList<KAction*> actions = actionCollection()->actions();
+    QList<KAction*> actions = actionCollection()->actions();
     // Also grab actions from the document
     actions += m_pKPresenterDoc->actionCollection()->actions();
-    Q3ValueList<KAction*>::ConstIterator aIt = actions.begin();
-    Q3ValueList<KAction*>::ConstIterator aEnd = actions.end();
+    QList<KAction*>::ConstIterator aIt = actions.begin();
+    QList<KAction*>::ConstIterator aEnd = actions.end();
     for (; aIt != aEnd; ++aIt )
         (*aIt)->setEnabled( readwrite );
 
@@ -4447,7 +4447,7 @@ void KPrView::slotSpellCheck()
     //m_doc->setReadWrite(false); // prevent editing text - not anymore
     m_spell.macroCmdSpellCheck = 0L;
     m_spell.replaceAll.clear();
-    Q3ValueList<KoTextObject *> objects;
+    QList<KoTextObject *> objects;
     KPrTextView *edit=m_canvas->currentTextObjectView();
     int options = 0;
     if ( edit && edit->textObject()->hasSelection() )
@@ -4467,9 +4467,9 @@ void KPrView::slotSpellCheck()
     }
 }
 
-Q3ValueList<KoTextObject *> KPrView::spellAddTextObject() const
+QList<KoTextObject *> KPrView::spellAddTextObject() const
 {
-    Q3ValueList<KoTextObject *> lst;
+    QList<KoTextObject *> lst;
     Q3PtrList<KPrObject> lstObj;
     m_canvas->activePage()->getAllObjectSelectedList(lstObj, true);
     Q3PtrListIterator<KPrObject> it( lstObj );
@@ -5050,7 +5050,7 @@ void KPrView::editFind()
     KoSearchDia dialog( m_canvas, "find", m_searchEntry, hasSelection, hasCursor );
 
     /// KoFindReplace needs a QValueList<KoTextObject *>...
-    Q3ValueList<KoTextObject *> list;
+    QList<KoTextObject *> list;
     Q3PtrList<KoTextObject> list2 = m_pKPresenterDoc->allTextObjects();
     Q3PtrListIterator<KoTextObject> it( list2 );
     for ( ; it.current() ; ++it )
@@ -5080,7 +5080,7 @@ void KPrView::editReplace()
     KoReplaceDia dialog( m_canvas, "replace", m_searchEntry, m_replaceEntry, hasSelection, hasCursor );
 
     /// KoFindReplace needs a QValueList<KoTextObject *>...
-    Q3ValueList<KoTextObject *> list;
+    QList<KoTextObject *> list;
     Q3PtrList<KoTextObject> list2 = m_pKPresenterDoc->allTextObjects();
     Q3PtrListIterator<KoTextObject> it( list2 );
     for ( ; it.current() ; ++it )
@@ -5130,7 +5130,7 @@ void KPrView::changeZoomMenu( int zoom )
 
     if(zoom>0)
     {
-        Q3ValueList<int> list;
+        QList<int> list;
         bool ok;
         const QStringList itemsList ( actionViewZoom->items() );
         QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
@@ -5150,7 +5150,7 @@ void KPrView::changeZoomMenu( int zoom )
 
         qHeapSort( list );
 
-        for (Q3ValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
+        for (QList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
             lst.append( i18n("%1%",*it) );
     }
     else
@@ -5276,7 +5276,8 @@ void KPrView::setPageDuration( int _pgNum )
     if ( kPresenterDoc()->presentationDuration() )
     {
         // kDebug(33001) << "KPrView::setPageDuration( " << _pgNum << " )" << endl;
-        *m_presentationDurationList.at( _pgNum ) += m_duration.elapsed();
+        //*m_presentationDurationList.at( _pgNum ) += m_duration.elapsed(); //KDE3
+        m_presentationDurationList[ _pgNum ] += m_duration.elapsed();
         m_duration.restart();
     }
 }
@@ -5285,7 +5286,7 @@ void KPrView::openThePresentationDurationDialog()
 {
     int totalTime = 0;
     QStringList presentationDurationStringList;
-    for ( Q3ValueList<int>::Iterator it = m_presentationDurationList.begin();
+    for ( QList<int>::Iterator it = m_presentationDurationList.begin();
           it != m_presentationDurationList.end(); ++it ) {
         int _time = *it;
         QString presentationDurationString = presentationDurationDataFormatChange( _time );
@@ -6330,7 +6331,7 @@ void KPrView::initialLayoutOfSplitter()
     }
 
     QSplitter* splitterVertical = static_cast<QSplitter*>( notebar->parent() );
-    Q3ValueList<int> tmpList;
+    QList<int> tmpList;
     int noteHeight = height() / 25;
     tmpList << height() - noteHeight << noteHeight;
     splitterVertical->setSizes( tmpList );

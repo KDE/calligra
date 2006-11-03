@@ -22,8 +22,7 @@
 #define gotopage_h
 
 #include <kdialog.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QResizeEvent>
 
 class QWidget;
@@ -36,11 +35,11 @@ class KPrGotoPage : public KDialog
 {
 public:
     KPrGotoPage( const KPrDocument *doc,
-                const Q3ValueList<int> &slides, int start,
+                const QList<int> &slides, int start,
                 QWidget *parent = 0L, const char *name = 0L );
 
     static int gotoPage( const KPrDocument *doc,
-                         const Q3ValueList<int> &slides, int start,
+                         const QList<int> &slides, int start,
                          QWidget *parent = 0L );
 
     int page() const;

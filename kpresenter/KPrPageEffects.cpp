@@ -770,17 +770,21 @@ bool KPrPageEffects::effectFlyAway1()
 
         if ( m_effectStep == pSteps )
             m_pageFrom = pix;
-        
+
         int w = pix.width();
         int h = pix.height();
         int x = ( m_width - w ) / 2;
         int y = ( m_height - h ) / 2;
 
-        int ow = *(m_list.at(0));
-        int oh = *(m_list.at(1));
-        int ox = *(m_list.at(2));
-        int oy = *(m_list.at(3));
-        
+        //int ow = *(m_list.at(0)); //KDE3
+        //int oh = *(m_list.at(1));
+        //int ox = *(m_list.at(2));
+        //int oy = *(m_list.at(3));
+        int ow = m_list.at(0);
+        int oh = m_list.at(1);
+        int ox = m_list.at(2);
+        int oy = m_list.at(3);
+
         bitBlt( m_dst, x, y, &pix, 0, 0 , w, h );
         // top
         bitBlt( m_dst, ox, oy, &m_pageTo, ox, oy, ow, y - oy );
@@ -790,11 +794,15 @@ bool KPrPageEffects::effectFlyAway1()
         bitBlt( m_dst, x + w, y, &m_pageTo, x + w, y, ( ow - w + 1 ) / 2, h );
         // bottom
         bitBlt( m_dst, ox, y + h, &m_pageTo, ox, y + h, ow, ( oh - h + 1 ) / 2 );
-        
-        *(m_list.at(0)) = w;
-        *(m_list.at(1)) = h;
-        *(m_list.at(2)) = x;
-        *(m_list.at(3)) = y;
+
+        //*(m_list.at(0)) = w; //KDE3
+        //*(m_list.at(1)) = h;
+        //*(m_list.at(2)) = x;
+        //*(m_list.at(3)) = y;
+        m_list[0] = w;
+        m_list[1] = h;
+        m_list[2] = x;
+        m_list[3] = y;
     }
     else if ( m_effectStep <= 2 * pSteps )
     {
@@ -803,12 +811,14 @@ bool KPrPageEffects::effectFlyAway1()
         int x = ( m_width - w ) / 2;
         int y = ( m_height - h ) / 2 - ( m_height - h ) / 2 * ( m_effectStep - pSteps ) / pSteps;
 
-        int oy = *(m_list.at(3));
+        //int oy = *(m_list.at(3)); //KDE3
+        int oy = m_list.at(3);
 
         bitBlt( m_dst, x, y, &m_pageFrom, 0, 0 , w, h );
         bitBlt( m_dst, x, y + h, &m_pageTo, x, y + h, w, oy - y);
 
-        *(m_list.at(3)) = y;
+        //*(m_list.at(3)) = y; //KDE3
+        m_list[3] = y;
     }
     else if ( m_effectStep <= 3 * pSteps )
     {
@@ -817,15 +827,19 @@ bool KPrPageEffects::effectFlyAway1()
         int x = ( m_width - w ) / 2 - ( m_width - w ) / 2 * ( m_effectStep - 2 * pSteps ) / pSteps;
         int y = ( m_height - h ) / 2 * ( m_effectStep - 2 * pSteps ) / pSteps;
 
-        int ox = *(m_list.at(2));
-        int oy = *(m_list.at(3));
+        //int ox = *(m_list.at(2)); //KDE3
+        //int oy = *(m_list.at(3));
+        int ox = m_list.at(2);
+        int oy = m_list.at(3);
 
         bitBlt( m_dst, x, y, &m_pageFrom, 0, 0 , w, h );
         bitBlt( m_dst, ox, oy, &m_pageTo, ox, oy, w, y - oy);
         bitBlt( m_dst, x + w, oy, &m_pageTo, x + w, oy, x - ox, h );
 
-        *(m_list.at(2)) = x;
-        *(m_list.at(3)) = y;
+        //*(m_list.at(2)) = x; //KDE3
+        //*(m_list.at(3)) = y;
+        m_list[2] = x;
+        m_list[3] = y;
     }
     else 
     {
@@ -834,8 +848,10 @@ bool KPrPageEffects::effectFlyAway1()
         int x = ( m_width - w ) / 2 * ( m_effectStep - 3 * pSteps ) / pSteps;
         int y = ( m_height - h ) / 2 * ( m_effectStep - 2 * pSteps ) / pSteps;
 
-        int ox = *(m_list.at(2));
-        int oy = *(m_list.at(3));
+        //int ox = *(m_list.at(2)); //KDE3
+        //int oy = *(m_list.at(3));
+        int ox = m_list.at(2);
+        int oy = m_list.at(3);
 
         bitBlt( m_dst, x, y, &m_pageFrom, 0, 0 , w, h );
         bitBlt( m_dst, ox, oy, &m_pageTo, ox, oy, w, y - oy);
@@ -847,11 +863,13 @@ bool KPrPageEffects::effectFlyAway1()
         }
         else
         {
-            *(m_list.at(2)) = x;
-            *(m_list.at(3)) = y;
+            //*(m_list.at(2)) = x; //KDE3
+            //*(m_list.at(3)) = y;
+            m_list[2] = x;
+            m_list[3] = y;
         }
     }
-      
+
     return finished;
 }
 
@@ -1421,12 +1439,12 @@ bool KPrPageEffects::effectDissolve()
         --dissove;
 
         int index = random.getLong( m_list.count() );
-        Q3ValueListIterator<int> it = m_list.at( index );
-        
-        unsigned int x = ( *it % colno ) * blockSize;
-        unsigned int y = ( *it / colno ) * blockSize;
+        int i = m_list[index];
 
-        m_list.remove( it );
+        unsigned int x = ( i % colno ) * blockSize;
+        unsigned int y = ( i / colno ) * blockSize;
+
+        m_list.remove( i );
 
         bitBlt( m_dst, x, y, &m_pageTo, x, y, blockSize, blockSize );
     }
@@ -1558,7 +1576,7 @@ bool KPrPageEffects::effectMelting()
 
     int w = ( m_width + count - 1 ) / count;
 
-    Q3ValueListIterator<int> it = m_list.begin();
+    QList<int>::Iterator it = m_list.begin();
 
     int finished = 32;
     for ( int c = 0; c < count; c++ )

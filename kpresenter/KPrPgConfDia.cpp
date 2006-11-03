@@ -36,7 +36,7 @@
 #include <qpen.h>
 #include <QPushButton>
 #include <qradiobutton.h>
-#include <q3valuelist.h>
+#include <QList>
 #include <QWhatsThis>
 
 //Added by qt3to4:
@@ -277,9 +277,9 @@ QPen KPrPgConfDia::getPen() const
     return QPen( penColor->color(), penWidth->value() );
 }
 
-Q3ValueList<bool> KPrPgConfDia::getSelectedSlides() const
+QList<bool> KPrPgConfDia::getSelectedSlides() const
 {
-    Q3ValueList<bool> selectedSlides;
+    QList<bool> selectedSlides;
 
     Q3ListViewItem *item = slides->firstChild();
     while( item )

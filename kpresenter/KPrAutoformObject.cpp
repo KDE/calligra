@@ -32,7 +32,7 @@
 #include <qpainter.h>
 #include <qmatrix.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <KoTextZoomHandler.h>

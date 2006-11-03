@@ -54,7 +54,7 @@
 
 #include <QCheckBox>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <Q3GridLayout>
 #include <Q3PtrList>
 #include <QResizeEvent>
@@ -946,7 +946,7 @@ void KPrWebPresentationWizard::setupPage4()
     slideTitles->setResizeMode( Q3ListView::LastColumn );
     slideTitles->header()->setMovingEnabled( false );
 
-    Q3ValueList<KPrWebPresentation::SlideInfo> infos = webPres.getSlideInfos();
+    QList<KPrWebPresentation::SlideInfo> infos = webPres.getSlideInfos();
     for ( int i = infos.count() - 1; i >= 0; --i ) {
         K3ListViewItem *item = new K3ListViewItem( slideTitles );
         item->setText( 0, QString::number( i + 1 ) );

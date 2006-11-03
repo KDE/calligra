@@ -26,7 +26,7 @@
 #include <QPushButton>
 #include <q3listbox.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <kmessagebox.h>
 #include "KPrImportStyleDia.h"
 #include <KoStore.h>
@@ -86,7 +86,7 @@ void KPrImportStyleDia::loadFile()
             {
                 //todo
                 //duplicate code try to remove it !
-                Q3ValueList<QString> followingStyles;
+                QList<QString> followingStyles;
                 QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
                 for (unsigned int item = 0; item < listStyles.count(); item++)
                 {
@@ -128,7 +128,7 @@ void KPrImportStyleDia::loadFile()
                 Q_ASSERT( m_styleList.count() >= 0 && followingStyles.count() == uint( m_styleList.count() ) );
 
                 unsigned int i=0;
-                for( Q3ValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
+                for( QList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
                     QString newName =*it;
                     if ( insertStyle.contains( *it ) )
                         newName = (insertStyle)[ *it ];

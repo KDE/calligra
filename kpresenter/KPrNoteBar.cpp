@@ -27,7 +27,7 @@
 #include <Q3MimeSourceFactory>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
-#include <Q3ValueList>
+#include <QList>
 
 #include <kglobalsettings.h>
 #include <kprinter.h>
@@ -124,7 +124,7 @@ void KPrNoteBar::slotRedoAvailable( bool /*yes*/ )
     //kDebug(33001) << "slotRedoAvailable( " << yes << " )" << endl;
 }
 
-void KPrNoteBar::printNotes( QPainter *_painter, KPrinter *_printer, Q3ValueList<int> _list )
+void KPrNoteBar::printNotes( QPainter *_painter, KPrinter *_printer, QList<int> _list )
 {
     // base code from $QTDIR/example/textedit/textedit.cpp
     _painter->save();
@@ -162,7 +162,7 @@ void KPrNoteBar::printNotes( QPainter *_painter, KPrinter *_printer, Q3ValueList
     _painter->restore();
 }
 
-QString KPrNoteBar::getNotesTextForPrinting(Q3ValueList<int> _list) const
+QString KPrNoteBar::getNotesTextForPrinting(QList<int> _list) const
 {
     QString allText = QString::null;
     bool firstText = true;

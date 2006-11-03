@@ -29,7 +29,7 @@
 
 #include <sonnet/loader.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 using namespace KSpell2;
 
 #include <kdebug.h>
@@ -50,7 +50,7 @@ KPrBgSpellCheck::~KPrBgSpellCheck()
 
 KoTextIterator *KPrBgSpellCheck::createWholeDocIterator() const
 {
-    Q3ValueList<KoTextObject *> objects = m_doc->visibleTextObjects( );
+    QList<KoTextObject *> objects = m_doc->visibleTextObjects( );
 
     kDebug()<<"Number of visible text objects = "<< objects.count() << endl;
 

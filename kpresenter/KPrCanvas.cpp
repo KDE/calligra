@@ -40,7 +40,7 @@
 #include <QEvent>
 #include <QDropEvent>
 #include <QDragEnterEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 #include <QMouseEvent>
 #include <kmenu.h>
@@ -672,8 +672,8 @@ void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const Q3PtrList<KPrObje
 
 void KPrCanvas::recalcAutoGuides( )
 {
-    Q3ValueList<double> horizontalPos;
-    Q3ValueList<double> verticalPos;
+    QList<double> horizontalPos;
+    QList<double> verticalPos;
     Q3PtrListIterator<KPrObject> it( m_activePage->objectList() );
     for ( ; it.current(); ++it )
     {
@@ -2955,8 +2955,8 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
 
     // add all selected slides
     m_presentationSlides.clear();
-    Q3ValueList<int> selected = doc->displaySelectedSlides();
-    for ( Q3ValueList<int>::Iterator it = selected.begin() ; it != selected.end(); ++ it )
+    QList<int> selected = doc->displaySelectedSlides();
+    for ( QList<int>::Iterator it = selected.begin() ; it != selected.end(); ++ it )
     {
         // ARGLLLRGLRLGRLG selectedSlides gets us 0-based numbers,
         // and here we want 1-based numbers !
@@ -3046,7 +3046,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         // Then try to see if there is still one step to do in the current page
         if ( m_step.m_step < *( --m_pageEffectSteps.end() ) )
         {
-            Q3ValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
+            QList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
             m_step.m_step = *( ++it );
             m_step.m_subStep = 0;
             //kDebug(33001) << "Page::pNext setting currentEffectStep to " << m_step.m_step << endl;
@@ -3075,7 +3075,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
     }
 
     // No more steps in this page, try to go to the next page
-    Q3ValueList<int>::ConstIterator test(  m_presentationSlidesIterator );
+    QList<int>::ConstIterator test(  m_presentationSlidesIterator );
     if ( ++test != m_presentationSlides.end() )
     {
         if ( !spManualSwitch() && m_setPageTimer )
@@ -3102,7 +3102,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         QPixmap _pix2( desk.width(), desk.height() );
         drawCurrentPageInPix( _pix2 );
 
-        Q3ValueList<int>::ConstIterator it( m_presentationSlidesIterator );
+        QList<int>::ConstIterator it( m_presentationSlidesIterator );
         --it;
 
         KPrPage * page = doc->pageList().at( ( *it ) - 1 );
@@ -3182,7 +3182,7 @@ bool KPrCanvas::pPrev( bool gotoPreviousPage )
     m_drawModeLines.clear();
 
     if ( !gotoPreviousPage && m_step.m_step > *m_pageEffectSteps.begin() ) {
-        Q3ValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
+        QList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
         m_step.m_step = *( --it );
         //hopefully there are never more than 1000 sub steps :-)
         m_step.m_subStep = 1000;
@@ -3591,8 +3591,8 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
       m_view->setDiffY( ( printer->fromPage() - 1 ) * ( getPageRect( 1, 1.0, false ).height() ) -
       (int)MM_TO_POINT( top_margin ) );*/
     int current_slide = 0;
-    Q3ValueList<int> list=printer->pageList(); // 1-based
-    Q3ValueList<int>::iterator it;
+    QList<int> list=printer->pageList(); // 1-based
+    QList<int>::iterator it;
     for( it=list.begin();it!=list.end();++it)
     {
         i=(*it);
@@ -4182,7 +4182,7 @@ void KPrCanvas::copyObjs()
 
     // Save internal embedded objects first, since it might change their URL
     int i = 0;
-    Q3ValueList<KoPictureKey> savePictures;
+    QList<KoPictureKey> savePictures;
     Q3PtrListIterator<KoDocumentChild> chl( embeddedObjectsActivePage );
     for( ; chl.current(); ++chl ) {
         KoDocument* childDoc = chl.current()->document();

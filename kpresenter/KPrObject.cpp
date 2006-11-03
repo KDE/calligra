@@ -33,7 +33,7 @@
 #include <qbuffer.h>
 #include <QRegExp>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include <kapplication.h>
 #include <KoOasisContext.h>
@@ -1623,7 +1623,7 @@ void KPrObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
     orig.setY( orig.y() + mid_y + min_y );
 }
 
-void KPrObject::addSelfToGuides(Q3ValueList<double> &horizontalPos, Q3ValueList<double> &verticalPos )
+void KPrObject::addSelfToGuides(QList<double> &horizontalPos, QList<double> &verticalPos )
 {
     KoRect bounds = getRealRect();
 

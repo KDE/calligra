@@ -24,7 +24,7 @@
 #include <QWidget>
 //Added by qt3to4:
 #include <QLabel>
-#include <Q3ValueList>
+#include <QList>
 
 class QPainter;
 class QLabel;
@@ -45,9 +45,9 @@ public:
     void setCurrentNoteText( const QString &_text );
 
     // print
-    void printNotes( QPainter *_painter, KPrinter *_printer, Q3ValueList<int> );
+    void printNotes( QPainter *_painter, KPrinter *_printer, QList<int> );
 
-    QString getNotesTextForPrinting(Q3ValueList<int>) const;
+    QString getNotesTextForPrinting(QList<int>) const;
 
 private slots:
     void slotTextChanged();

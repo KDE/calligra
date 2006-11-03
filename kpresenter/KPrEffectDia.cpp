@@ -31,7 +31,7 @@
 #include <q3groupbox.h>
 #include <QCheckBox>
 #include <QLineEdit>
-#include <q3valuelist.h>
+#include <QList>
 #include <QLayout>
 #include <QSpinBox>
 #include <qstringlist.h>
@@ -329,7 +329,7 @@ KPrEffectDia::~KPrEffectDia()
 
 void KPrEffectDia::slotEffectDiaOk()
 {
-    Q3ValueList<KPrEffectCmd::EffectStruct> oldEffects;
+    QList<KPrEffectCmd::EffectStruct> oldEffects;
     for ( unsigned int i = 0; i < objs.count(); ++i ) {
         KPrObject *o = objs.at( i );
         KPrEffectCmd::EffectStruct e;

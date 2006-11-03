@@ -24,7 +24,7 @@
 #include <q3listbox.h>
 //Added by qt3to4:
 #include <QHideEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <Q3PtrList>
 #include "global.h"
 
@@ -91,10 +91,10 @@ class KPrDefineCustomSlideShow : public KDialog
 public:
     KPrDefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, const Q3PtrList<KPrPage> &pages, const char *name = 0L);
     KPrDefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow,
-                              const Q3PtrList<KPrPage> &pages, Q3ValueList<KPrPage *> &customPages, const char* name = 0L );
+                              const Q3PtrList<KPrPage> &pages, QList<KPrPage *> &customPages, const char* name = 0L );
 
     QString customSlideShowName() const;
-    Q3ValueList<KPrPage *> customSlides();
+    QList<KPrPage *> customSlides();
 
 protected slots:
     void slotMoveUpSlide();

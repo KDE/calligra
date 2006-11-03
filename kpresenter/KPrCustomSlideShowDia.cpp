@@ -28,7 +28,7 @@
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
-#include <Q3ValueList>
+#include <QList>
 #include <Q3PtrList>
 #include <QHideEvent>
 #include <Q3VBoxLayout>
@@ -280,7 +280,7 @@ KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, QStringList
 }
 
 KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow,
-                                                    const Q3PtrList<KPrPage> &pages, Q3ValueList<KPrPage *> &customPages, const char* name )
+                                                    const Q3PtrList<KPrPage> &pages, QList<KPrPage *> &customPages, const char* name )
 : KDialog( parent )
 , listNameCustomSlideShow( _listNameSlideShow )
 {
@@ -292,7 +292,7 @@ KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, const QStri
     {
         listSlide->insertItem( new KPrCustomSlideShowItem( *it ) );
     }
-    for ( Q3ValueList<KPrPage *>::ConstIterator it = customPages.begin(); it != customPages.end(); ++it )
+    for ( QList<KPrPage *>::ConstIterator it = customPages.begin(); it != customPages.end(); ++it )
     {
         listSlideShow->insertItem( new KPrCustomSlideShowItem( *it ) );
     }
@@ -437,9 +437,9 @@ void KPrDefineCustomSlideShow::slotMoveInsertSlide()
     updateButton();
 }
 
-Q3ValueList<KPrPage *> KPrDefineCustomSlideShow::customSlides()
+QList<KPrPage *> KPrDefineCustomSlideShow::customSlides()
 {
-    Q3ValueList<KPrPage *> pages;
+    QList<KPrPage *> pages;
     Q3ListBoxItem *item = listSlideShow->firstItem();
     while ( item )
     {

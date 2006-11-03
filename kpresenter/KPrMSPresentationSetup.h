@@ -26,7 +26,7 @@
 #include <k3wizard.h>
 
 #include <qdialog.h>
-#include <q3valuelist.h>
+#include <QList>
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <Q3VBoxLayout>
@@ -79,7 +79,7 @@ public:
     struct SlideInfo {
         int pageNumber; /* 0-based */
     };
-    Q3ValueList<SlideInfo> getSlideInfos() const { return slideInfos; }
+    QList<SlideInfo> getSlideInfos() const { return slideInfos; }
 
     int initSteps() const { return 7; }
     int slidesSteps() { return slideInfos.count(); }
@@ -96,7 +96,7 @@ protected:
     KPrView *view;
 
     QString title;
-    Q3ValueList<SlideInfo> slideInfos;
+    QList<SlideInfo> slideInfos;
     QColor backColor, textColor;
     QString path;
     QString slidePath; // directory relative to path, containing slides 

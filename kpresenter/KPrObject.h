@@ -25,7 +25,7 @@
 #include <qbrush.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <Q3PtrList>
 #include <QPixmap>
 
@@ -308,7 +308,7 @@ public:
     /**
      * Adds its edges to the KoGuides objectCollect all textobjects.
      */
-    void addSelfToGuides( Q3ValueList<double> &horizontalPos, Q3ValueList<double> &verticalPos );
+    void addSelfToGuides( QList<double> &horizontalPos, QList<double> &verticalPos );
 
 protected:
     /**

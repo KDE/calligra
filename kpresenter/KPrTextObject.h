@@ -29,7 +29,7 @@
 #include <KoStyleStack.h>
 //Added by qt3to4:
 #include <QKeyEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <Q3PtrList>
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
@@ -143,7 +143,7 @@ public:
     KCommand *textObjectToContents();
     void setProtectContent ( bool _protect ) { textObject()->setProtectContent(_protect);}
     bool isProtectContent() const { return textObject()->protectContent();}
-    void loadVariable( Q3ValueList<QDomElement> & listVariable,KoTextParag *lastParag, int offset=0 );
+    void loadVariable( QList<QDomElement> & listVariable,KoTextParag *lastParag, int offset=0 );
 
     void layout();
 

@@ -61,7 +61,7 @@
 #include <qxml.h>
 #include <qbuffer.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include <Q3PtrList>
 
 
@@ -114,7 +114,7 @@ void KPrShadowCmd::unexecute()
 }
 
 
-KPrSetOptionsCmd::KPrSetOptionsCmd( const QString &_name, Q3ValueList<KoPoint> &_diffs, Q3PtrList<KPrObject> &_objects,
+KPrSetOptionsCmd::KPrSetOptionsCmd( const QString &_name, QList<KoPoint> &_diffs, Q3PtrList<KPrObject> &_objects,
                               double _gridX, double _gridY, double _oldGridX, double _oldGridY,
                               const QColor &_txtBackCol, const QColor &_otxtBackCol, KPrDocument *_doc )
     : KNamedCommand( _name ),
@@ -143,8 +143,10 @@ KPrSetOptionsCmd::~KPrSetOptionsCmd()
 void KPrSetOptionsCmd::execute()
 {
     // ## use iterator
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->moveBy( *diffs.at( i ) );
+    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+        //objects.at( i )->moveBy( *diffs.at( i ) ); //KDE3
+        objects.at( i )->moveBy( diffs[i] );
+    }
     doc->setGridValue( gridX, gridY, false );
     doc->updateRuler();
     doc->setTxtBackCol( txtBackCol );
@@ -153,8 +155,10 @@ void KPrSetOptionsCmd::execute()
 
 void KPrSetOptionsCmd::unexecute()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->moveBy( -(*diffs.at( i )).x(), -(*diffs.at( i )).y() );
+    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+        //objects.at( i )->moveBy( -(*diffs.at( i )).x(), -(*diffs.at( i )).y() ); //KDE3
+        objects.at( i )->moveBy( -(diffs[i]).x(), -(diffs[i]).y() );
+    }
     doc->setGridValue( oldGridX, oldGridY, false );
     doc->updateRuler();
     doc->setTxtBackCol( otxtBackCol );
@@ -404,7 +408,7 @@ void KPrDeleteCmd::unexecute()
 
 
 KPrEffectCmd::KPrEffectCmd( const QString &_name, const Q3PtrList<KPrObject> &_objs,
-                      const Q3ValueList<EffectStruct> &_oldEffects, EffectStruct _newEffect )
+                      const QList<EffectStruct> &_oldEffects, EffectStruct _newEffect )
     : KNamedCommand( _name ), oldEffects( _oldEffects ),
       newEffect( _newEffect ), objs( _objs )
 {
@@ -595,7 +599,7 @@ void UnGroupObjCmd::unexecute()
     m_doc->updateSideBarItem( m_page );
 }
 
-KPrInsertCmd::KPrInsertCmd( const QString &name, const Q3ValueList<KPrObject *> objects, 
+KPrInsertCmd::KPrInsertCmd( const QString &name, const QList<KPrObject *> objects, 
                             KPrDocument *doc, KPrPage *page )
 : KNamedCommand( name )
 , m_objects( objects )    
@@ -603,10 +607,9 @@ KPrInsertCmd::KPrInsertCmd( const QString &name, const Q3ValueList<KPrObject *> 
 , m_doc( doc )
 , m_page( page )    
 {
-    Q3ValueListConstIterator<KPrObject *> it( m_objects.begin() );
-    for ( ; it != m_objects.end(); ++it )
+    foreach (KPrObject *obj, m_objects)
     {
-        ( *it )->incCmdRef();
+        obj->incCmdRef();
     }
 }
 
@@ -628,10 +631,9 @@ KPrInsertCmd::~KPrInsertCmd()
     }
     else
     {
-        Q3ValueListConstIterator<KPrObject *> it( m_objects.begin() );
-        for ( ; it != m_objects.end(); ++it )
+        foreach (KPrObject *obj, m_objects)
         {
-            ( *it )->decCmdRef();
+            obj->decCmdRef();
         }
     }
 }
@@ -649,14 +651,13 @@ void KPrInsertCmd::execute()
     else
     {
         m_page->appendObjects( m_objects );
-        Q3ValueListConstIterator<KPrObject *> it( m_objects.begin() );
         bool updateRuler = false;
-        for ( ; it != m_objects.end(); ++it )
+        foreach (KPrObject *obj, m_objects)
         {
-            ( *it )->addToObjList();
-            if ( ( *it )->getType() == OT_TEXT )
+            obj->addToObjList();
+            if ( obj->getType() == OT_TEXT )
                 updateRuler = true;
-            m_doc->repaint( *it );
+            m_doc->repaint( obj );
         }
         if ( updateRuler )
             m_doc->updateRuler();
@@ -687,18 +688,16 @@ void KPrInsertCmd::unexecute()
     {
         Q3PtrList<KPrObject> list(m_page->objectList());
         bool updateRuler = false;
-
-        Q3ValueListConstIterator<KPrObject *> it( m_objects.begin() );
-        for ( ; it != m_objects.end(); ++it )
+        foreach (KPrObject *obj, m_objects)
         {
-            if ( list.findRef( *it ) != -1 )
+            if ( list.findRef( obj ) != -1 )
             {
-                m_page->takeObject( *it );
-                ( *it )->removeFromObjList();
-                if ( ( *it )->getType() == OT_TEXT )
+                m_page->takeObject( obj );
+                obj->removeFromObjList();
+                if ( obj->getType() == OT_TEXT )
                 {
-                    m_doc->terminateEditing( (KPrTextObject*)( *it ) );
-                    ( (KPrTextObject*) *it )->setEditingTextObj( false );
+                    m_doc->terminateEditing( (KPrTextObject*)( obj ) );
+                    static_cast< KPrTextObject* >( obj )->setEditingTextObj( false );
                     updateRuler = true;
                 }
             }
@@ -1238,10 +1237,10 @@ void KPrBrushCmd::unexecute()
 
 KPrPgConfCmd::KPrPgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
                       bool _showEndOfPresentationSlide, bool _showPresentationDuration, QPen _pen,
-                      Q3ValueList<bool> _selectedSlides, const QString & _presentationName,
+                      QList<bool> _selectedSlides, const QString & _presentationName,
                       bool _oldManualSwitch, bool _oldInfiniteLoop,
                       bool _oldShowEndOfPresentationSlide, bool _oldShowPresentationDuration, QPen _oldPen,
-                      Q3ValueList<bool> _oldSelectedSlides, const QString & _oldPresentationName,
+                      QList<bool> _oldSelectedSlides, const QString & _oldPresentationName,
                       KPrDocument *_doc )
     : KNamedCommand( _name )
 {
@@ -2397,7 +2396,7 @@ KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name,
     }
 }
 
-KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name, Q3ValueList<bool> &lst,
+KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name, QList<bool> &lst,
                                                             Q3PtrList<KPrObject> &objects, bool newValue,
                                                             KgpType type, KPrDocument *_doc)
 : KNamedCommand( name )
@@ -2442,12 +2441,16 @@ void KPrGeometryPropertiesCommand::unexecute()
         obj = m_objects.at( i );
         if ( m_type == ProtectSize )
         {
-            obj->setProtect( *m_oldValue.at(i) );
+            //obj->setProtect( *m_oldValue.at(i) ); //KDE3
+            obj->setProtect( m_oldValue[i] );
             if ( obj->isSelected() )
                 m_doc->repaint( obj );
         }
         else if ( m_type == KeepRatio)
-            obj->setKeepRatio( *m_oldValue.at(i) );
+        {
+            //obj->setKeepRatio( *m_oldValue.at(i) ); //KDE3
+            obj->setKeepRatio( m_oldValue[i] );
+        }
     }
 }
 

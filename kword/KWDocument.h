@@ -403,7 +403,7 @@ public:
 
     /// Reimplementation from KoDocument.
     /// \note This method considers _all_ text framesets, even table cells
-    virtual Q3ValueList<KoTextDocument *> allTextDocuments() const;
+    virtual QList<KoTextDocument *> allTextDocuments() const;
 
 
     /** Gather all the frames which are on a certain page and return them.

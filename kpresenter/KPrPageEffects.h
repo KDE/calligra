@@ -25,7 +25,7 @@
 #define PAGEEFFECTS_H
 
 #include "global.h"
-#include <q3valuelist.h>
+#include <QList>
 //Added by qt3to4:
 #include <QPixmap>
 
@@ -111,7 +111,7 @@ protected:
     PageEffect m_effect;
     PageEffect m_randomEffect;
     EffectSpeed m_speed;
-    Q3ValueList<int> m_list;
+    QList<int> m_list;
     int m_effectStep;
     int m_stepWidth;
     int m_stepHeight;

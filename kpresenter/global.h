@@ -23,7 +23,7 @@
 #include <kiconloader.h>
 #include "KPrFactory.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 class KPrPage;
 
@@ -296,6 +296,6 @@ enum VerticalAlignmentType {
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
 
-typedef QMap<QString, Q3ValueList<KPrPage *> > CustomSlideShowMap;
+typedef QMap<QString, QList<KPrPage *> > CustomSlideShowMap;
 
 #endif //GLOBAL_H

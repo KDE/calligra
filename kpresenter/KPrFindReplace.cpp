@@ -29,17 +29,17 @@
 #include <KoSearchDia.h>
 #include "KPrTextDocument.h"
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 KPrFindReplace::KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoSearchDia * dialog,
-                                const Q3ValueList<KoTextObject *> & lstObjects, KPrTextView *textView)
+                                const QList<KoTextObject *> & lstObjects, KPrTextView *textView)
     : KoFindReplace( parent, dialog, lstObjects, textView )
 {
     m_canvas = canvas;
 }
 
 KPrFindReplace::KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoReplaceDia * dialog,
-                                const Q3ValueList<KoTextObject *> & lstObjects, KPrTextView *textView )
+                                const QList<KoTextObject *> & lstObjects, KPrTextView *textView )
     : KoFindReplace( parent, dialog, lstObjects, textView )
 {
     m_canvas = canvas;

@@ -49,7 +49,7 @@
 #include <qdom.h>
 #include <q3dict.h>
 #include <Q3PtrList>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 
 #include <KoDom.h>
@@ -617,15 +617,16 @@ QDomDocument KPrDocument::saveXML()
                 QDomElement slide=doc.createElement("CUSTOMSLIDESHOW");
                 slide.setAttribute("name", it.key() );
                 QString tmp;
-                Q3ValueListIterator<KPrPage*> itPage ;
-                for( itPage = ( *it ).begin(); itPage != ( *it ).end(); ++itPage )
+                int i = 0;
+                foreach(KPrPage* page, *it)
                 {
-                    int posPage = m_pageList.find( *itPage );
+                    int posPage = m_pageList.find(page);
                     if ( posPage != -1 )
                     {
-                        if ( itPage != ( *it ).begin() )
+                        if ( i > 0 )
                             tmp += ',';
-                        tmp += page2name[*itPage];
+                        tmp += page2name[page];
+                        i++;
                     }
                 }
                 slide.setAttribute( "pages", tmp );
@@ -664,8 +665,8 @@ QDomDocument KPrDocument::saveXML()
     {
         QDomElement styles = doc.createElement( "STYLES" );
         presenter.appendChild( styles );
-        Q3ValueList<KoUserStyle *> styleList(m_styleColl->styleList());
-        for ( Q3ValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
+        QList<KoUserStyle *> styleList(m_styleColl->styleList());
+        for ( QList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
               it != end ; ++it )
             saveStyle( static_cast<KoParagStyle *>( *it ), styles );
 
@@ -1046,8 +1047,8 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         m_masterPage->saveOasisPage( store, stickyTmpWriter, 0, savingContext, indexObj, partIndexObj, manifestWriter, pageNames );
 
         // Now mark all autostyles as "for styles.xml" since headers/footers need them
-        Q3ValueList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles(  KoGenStyle::STYLE_AUTO );
-        for ( Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = autoStyles.begin();
+        QList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles(  KoGenStyle::STYLE_AUTO );
+        for ( QList<KoGenStyles::NamedStyle>::const_iterator it = autoStyles.begin();
                 it != autoStyles.end(); ++it ) {
             kDebug() << "marking for styles.xml:" << (  *it ).name << endl;
             mainStyles.markStyleForStylesXml(  ( *it ).name );
@@ -1205,8 +1206,8 @@ void KPrDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles&
     {
         contentWriter.startElement( "office:automatic-styles" );
     }
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO, stylesDotXml );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO, stylesDotXml );
+    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
@@ -1272,13 +1273,13 @@ void KPrDocument::saveOasisSettings( KoXmlWriter &settingsWriter )
     //<config:config-item config:name="SnapLinesDrawing" config:type="string">H2260V14397H7693H12415H15345H1424</config:config-item>
     QString guideLinesOasis;
     //save in mm as in oo
-    for( Q3ValueList<double>::Iterator it = m_vGuideLines.begin(); it != m_vGuideLines.end(); ++it )
+    for( QList<double>::Iterator it = m_vGuideLines.begin(); it != m_vGuideLines.end(); ++it )
     {
         int tmpX = ( int ) ( KoUnit::toMM( *it  )*100 );
         guideLinesOasis += 'V' + QString::number( tmpX );
     }
 
-    for( Q3ValueList<double>::Iterator it = m_hGuideLines.begin(); it != m_hGuideLines.end(); ++it )
+    for( QList<double>::Iterator it = m_hGuideLines.begin(); it != m_hGuideLines.end(); ++it )
     {
         int tmpY = ( int ) ( KoUnit::toMM( *it  )*100 );
         guideLinesOasis += 'H' + QString::number( tmpY );
@@ -1406,7 +1407,7 @@ void KPrDocument::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )
         {
             //kDebug()<<" e.attribute(presentation:name) :"<<e.attributeNS( KoXmlNS::presentation, "name", QString::null)<< " e.attribute(presentation:pages) :"<<e.attributeNS( KoXmlNS::presentation, "pages", QString::null)<<endl;
             QString name = e.attributeNS( KoXmlNS::presentation, "name", QString::null );
-            Q3ValueList<KPrPage *> pageList;
+            QList<KPrPage *> pageList;
             foreach (QString s, e.attributeNS( KoXmlNS::presentation, "pages", QString::null).split( "," ))
             {
                 if ( m_loadingInfo->m_name2page.contains( s ) )
@@ -1452,16 +1453,17 @@ void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpW
         contentTmpWriter.startElement( "presentation:show" );
         contentTmpWriter.addAttribute( "presentation:name", it.key() );
         QString tmp;
-        Q3ValueListIterator<KPrPage*> itPage ;
-        for( itPage = ( *it ).begin(); itPage != ( *it ).end(); ++itPage )
+        int i = 0;
+        foreach(KPrPage* page, *it)
         {
-            int posPage = m_pageList.find(*itPage );
+            int posPage = m_pageList.find(page);
             if ( posPage != -1 )
             {
-                if ( itPage != ( *it ).begin() )
+                if ( i > 0 )
                     tmp += ',';
                 //tmp+=( *itPage )->oasisNamePage(posPage+1)+',';
                 tmp += page2name[posPage + 1];
+                i++;
             }
         }
         contentTmpWriter.addAttribute( "presentation:pages", tmp );
@@ -1477,8 +1479,8 @@ void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyl
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
     stylesWriter->startElement( "office:styles" );
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
+    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
@@ -2646,7 +2648,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
                 QDomElement slide=elem.firstChild().toElement();
                 while(!slide.isNull()) {
                     if(slide.tagName()=="CUSTOMSLIDESHOW") {
-                        Q3ValueList<KPrPage *> pageList;
+                        QList<KPrPage *> pageList;
                         foreach(QString s, slide.attribute( "pages" ).split(","))
                         {
                             if ( name2page.contains(s) )
@@ -2770,7 +2772,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
 {
     ObjType t = OT_LINE;
     QDomElement obj=element.firstChild().toElement();
-    Q3ValueList<KPrObject *> pasteObjects;
+    QList<KPrObject *> pasteObjects;
     while(!obj.isNull()) {
         if(obj.tagName()=="OBJECT" ) {
             bool sticky=false;
@@ -3392,7 +3394,7 @@ void KPrDocument::repaint( KPrObject *kpobject )
     repaint( m_zoomHandler->zoomRectOld( kpobject->getRepaintRect() ) );
 }
 
-Q3ValueList<int> KPrDocument::getPageEffectSteps( unsigned int num )
+QList<int> KPrDocument::getPageEffectSteps( unsigned int num )
 {
     return m_pageList.at(num)->getEffectSteps();
 }
@@ -4005,14 +4007,12 @@ bool KPrDocument::isSlideSelected( int pgNum /* 0-based */ )
     return m_pageList.at(pgNum)->isSlideSelected();
 }
 
-Q3ValueList<int> KPrDocument::listOfDisplaySelectedSlides( const Q3ValueList<KPrPage*> & lst) /* returned list is 0-based */
+QList<int> KPrDocument::listOfDisplaySelectedSlides( const QList<KPrPage*> & lst) /* returned list is 0-based */
 {
-    Q3ValueList<int> result;
-    Q3ValueListConstIterator<KPrPage*> itPage;
-    Q3ValueListConstIterator<KPrPage*> itPageEnd = lst.end();
-    for( itPage =  lst.begin() ; itPage != itPageEnd; ++itPage )
+    QList<int> result;
+    foreach(KPrPage* page, lst)
     {
-        int pageNum = m_pageList.find(*itPage );
+        int pageNum = m_pageList.find(page);
         if ( pageNum != -1 )
         {
             kDebug()<<" KPrDocument::displaySelectedSlide : add slide number :"<<pageNum<<endl;
@@ -4023,9 +4023,9 @@ Q3ValueList<int> KPrDocument::listOfDisplaySelectedSlides( const Q3ValueList<KPr
 }
 
 
-Q3ValueList<int> KPrDocument::displaySelectedSlides()  /* returned list is 0-based */
+QList<int> KPrDocument::displaySelectedSlides()  /* returned list is 0-based */
 {
-    Q3ValueList<int> result;
+    QList<int> result;
     if ( m_customListTest )
         return *m_customListTest;
     if ( m_presentationName.isEmpty() )
@@ -4038,9 +4038,9 @@ Q3ValueList<int> KPrDocument::displaySelectedSlides()  /* returned list is 0-bas
     return result;
 }
 
-Q3ValueList<int> KPrDocument::selectedSlides() /* returned list is 0-based */
+QList<int> KPrDocument::selectedSlides() /* returned list is 0-based */
 {
-    Q3ValueList<int> result;
+    QList<int> result;
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
         if(m_pageList.at(i)->isSlideSelected())
             result <<i;
@@ -4094,7 +4094,7 @@ void KPrDocument::slotRepaintChanged( KPrTextObject *kptextobj )
 void KPrDocument::recalcVariables( int type )
 {
     recalcPageNum();
-    Q3ValueList<KoVariable* > modifiedVariables = m_varColl->recalcVariables(type);
+    QList<KoVariable* > modifiedVariables = m_varColl->recalcVariables(type);
     if ( modifiedVariables.isEmpty() )
         return;
 
@@ -4284,7 +4284,7 @@ void KPrDocument::refreshAllNoteBar(int page, const QString &text, KPrView *exce
 
 void KPrDocument::loadStyleTemplates( const QDomElement &stylesElem )
 {
-    Q3ValueList<QString> followingStyles;
+    QList<QString> followingStyles;
 
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
     if( listStyles.count() > 0) { // we are going to import at least one style.
@@ -4320,7 +4320,7 @@ void KPrDocument::loadStyleTemplates( const QDomElement &stylesElem )
 
     Q_ASSERT( followingStyles.count() == m_styleColl->styleList().count() );
     unsigned int i=0;
-    for( Q3ValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
+    for( QList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
         KoParagStyle * style = m_styleColl->findStyle(*it);
         m_styleColl->styleAt( i++)->setFollowingStyle( style );
     }
@@ -4407,9 +4407,9 @@ Q3PtrList<KoTextObject> KPrDocument::allTextObjects() const
     return lst;
 }
 
-Q3ValueList<KoTextDocument *> KPrDocument::allTextDocuments() const
+QList<KoTextDocument *> KPrDocument::allTextDocuments() const
 {
-    Q3ValueList<KoTextDocument *> lst;
+    QList<KoTextDocument *> lst;
     const Q3PtrList<KoTextObject> textObjects = allTextObjects();
     Q3PtrListIterator<KoTextObject> it( textObjects );
     for ( ; it.current() ; ++it ) {
@@ -4418,9 +4418,9 @@ Q3ValueList<KoTextDocument *> KPrDocument::allTextDocuments() const
     return lst;
 }
 
-Q3ValueList<KoTextObject *> KPrDocument::visibleTextObjects( ) const
+QList<KoTextObject *> KPrDocument::visibleTextObjects( ) const
 {
-    Q3ValueList<KoTextObject *> lst;
+    QList<KoTextObject *> lst;
     Q3PtrList<KoTextObject> textFramesets = allTextObjects(  );
 
     KoTextObject *frm;
@@ -4439,12 +4439,12 @@ void KPrDocument::setShowGuideLines( bool b )
     setModified( true );
 }
 
-void KPrDocument::horizontalGuideLines( const Q3ValueList<double> &lines )
+void KPrDocument::horizontalGuideLines( const QList<double> &lines )
 {
     m_hGuideLines = lines;
 }
 
-void KPrDocument::verticalGuideLines( const Q3ValueList<double> &lines )
+void KPrDocument::verticalGuideLines( const QList<double> &lines )
 {
     m_vGuideLines = lines;
 }
@@ -4496,14 +4496,14 @@ void KPrDocument::loadGuideLines( const QDomElement &element )
 
 void KPrDocument::saveGuideLines( QDomDocument &doc, QDomElement& element )
 {
-    for(Q3ValueList<double>::Iterator it = m_vGuideLines.begin(); it != m_vGuideLines.end(); ++it)
+    for(QList<double>::Iterator it = m_vGuideLines.begin(); it != m_vGuideLines.end(); ++it)
     {
         QDomElement lines=doc.createElement("Vertical");
         lines.setAttribute("value", (double)*it);
         element.appendChild( lines );
     }
 
-    for(Q3ValueList<double>::Iterator it = m_hGuideLines.begin(); it != m_hGuideLines.end(); ++it)
+    for(QList<double>::Iterator it = m_hGuideLines.begin(); it != m_hGuideLines.end(); ++it)
     {
         QDomElement lines=doc.createElement("Horizontal");
         lines.setAttribute("value", *it);
@@ -4702,10 +4702,10 @@ void KPrDocument::addWordToDictionary( const QString & word)
     }
 }
 
-Q3ValueList <KPrPage *> KPrDocument::customListPage( const QStringList & lst, bool loadOasis )
+QList <KPrPage *> KPrDocument::customListPage( const QStringList & lst, bool loadOasis )
 {
     QStringList tmp( lst );
-    Q3ValueList <KPrPage *> tmpValueList;
+    QList <KPrPage *> tmpValueList;
     for ( QStringList::Iterator itList = tmp.begin(); itList != tmp.end(); ++itList )
     {
         for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
@@ -4754,10 +4754,10 @@ QStringList KPrDocument::presentationList()
     return lst;
 }
 
-void KPrDocument::testCustomSlideShow( const Q3ValueList<KPrPage *> &pages, KPrView *view )
+void KPrDocument::testCustomSlideShow( const QList<KPrPage *> &pages, KPrView *view )
 {
     delete m_customListTest;
-    m_customListTest = new Q3ValueList<int>( listOfDisplaySelectedSlides( pages ) );
+    m_customListTest = new QList<int>( listOfDisplaySelectedSlides( pages ) );
     if ( view )
         view->screenStartFromFirst();
 

@@ -88,6 +88,7 @@
 #include <QRegExp>
 #include <QTimer>
 #include <QBuffer>
+#include <QList>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3PtrList>
@@ -4949,7 +4950,7 @@ Q3PtrList<KWTextFrameSet> KWDocument::allTextFramesets(bool onlyReadWrite) const
     return textFramesets;
 }
 
-Q3ValueList<KoTextDocument *> KWDocument::allTextDocuments() const
+QList<KoTextDocument *> KWDocument::allTextDocuments() const
 {
 #if 0
     Q3ValueList<KoTextDocument *> lst;
@@ -4960,6 +4961,7 @@ Q3ValueList<KoTextDocument *> KWDocument::allTextDocuments() const
     }
     return lst;
 #endif
+    return QList<KoTextDocument *>();
 }
 
 int KWDocument::numberOfTextFrameSet( KWFrameSet* fs, bool onlyReadWrite )
