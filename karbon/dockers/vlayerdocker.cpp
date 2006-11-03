@@ -524,11 +524,10 @@ void VDocumentModel::setProperties( KoShape* shape, const PropertyList &properti
 
 QImage VDocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSize ) const
 {
-    KoZoomHandler zoomHandler;
-    QMatrix shapeMatrix = shape->transformationMatrix( 0 );
     // compute the transformed shape bounding box
-    QRectF shapeBox = transformedShapeBox( shape, shapeMatrix );
+    QRectF shapeBox = transformedShapeBox( shape );
     // convert the thumbnail size into document coordinates
+    KoZoomHandler zoomHandler;
     QRectF imageBox = zoomHandler.viewToDocument( QRectF( 0, 0, thumbSize.width(), thumbSize.height() ) );
 
     // compute the zoom factor based on the bounding rects in document coordinates
@@ -554,22 +553,23 @@ QImage VDocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSize )
     // move the origin into the image center
     painter.translate( QPointF(0.5*thumbSize.width(), 0.5*thumbSize.height() ) );
     // move origin so that the shapes local origin is in the image center
-    QPointF shapeOrigin = shapeMatrix.map( QPointF(0,0) );
-    painter.translate( -shapeOrigin.x(), -shapeOrigin.y() );
-    // move origin so that the transformed shapes center point in in the image center
-    double zoomX, zoomY;
-    zoomHandler.zoom( &zoomX, &zoomY );
-    QPointF translate = shapeOrigin - shapeBox.center();
-    painter.translate( zoomX * translate.x(), zoomY * translate.y() );
-    // set the shapes transformation matrix
-    painter.setMatrix( shapeMatrix, true );
+    QPointF shapeOrigin( 0.0, 0.0 );
+    if( ! dynamic_cast<KoShapeContainer*>( shape ) )
+    {
+        QMatrix shapeMatrix = shape->transformationMatrix( 0 );
+        shapeOrigin = shapeMatrix.map( shapeOrigin );
+        painter.translate( -shapeOrigin.x(), -shapeOrigin.y() );
+    }
+    // move origin so that the transformed shapes center point is in the image center
+    painter.translate( zoomHandler.documentToView( shapeOrigin - shapeBox.center() ) );
+
     // paint the shape
-    paintShape( shape, painter, zoomHandler );
+    paintShape( shape, painter, zoomHandler, true );
 
     return thumb;
 }
 
-QRectF VDocumentModel::transformedShapeBox( KoShape *shape, const QMatrix &shapeMatrix ) const
+QRectF VDocumentModel::transformedShapeBox( KoShape *shape ) const
 {
     QRectF shapeBox;
 
@@ -578,16 +578,11 @@ QRectF VDocumentModel::transformedShapeBox( KoShape *shape, const QMatrix &shape
     if( container )
     {
         foreach( KoShape *child, container->iterator() )
-        {
-            QMatrix childMatrix = child->transformationMatrix(0);
-            // undo the parents translation from the matrix
-            childMatrix.translate( -container->position().x(), -container->position().y() );
-            shapeBox = shapeBox.united( transformedShapeBox( child, childMatrix*shapeMatrix ) );
-        }
+            shapeBox = shapeBox.united( transformedShapeBox( child ) );
     }
     else
     {
-        shapeBox = shape->outline().toFillPolygon( shapeMatrix ).boundingRect();
+        shapeBox = shape->outline().toFillPolygon( shape->transformationMatrix(0) ).boundingRect();
 
         // correct shape box with border sizes
         if( shape->border() )
@@ -601,24 +596,19 @@ QRectF VDocumentModel::transformedShapeBox( KoShape *shape, const QMatrix &shape
     return shapeBox;
 }
 
-void VDocumentModel::paintShape( KoShape *shape, QPainter &painter, const KoViewConverter &converter ) const
+void VDocumentModel::paintShape( KoShape *shape, QPainter &painter, const KoViewConverter &converter, bool isSingleShape ) const
 {
-    painter.save();
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
     if( container )
     {
         foreach( KoShape *child, container->iterator() )
-        {
-            painter.save();
-            // undo the parents translation from the matrix
-            painter.translate( -1.0f * converter.documentToView( container->position() ) );
-            painter.setMatrix( child->transformationMatrix(&converter), true );
-            paintShape( child, painter, converter );
-            painter.restore();
-        }
+            paintShape( child, painter, converter, false );
     }
     else
     {
+        painter.save();
+        // set the shapes transformation matrix
+        painter.setMatrix( shape->transformationMatrix( isSingleShape ? 0 : &converter ), true );
         // paint the shape
         painter.save();
         shape->paint( painter, converter );
@@ -631,8 +621,8 @@ void VDocumentModel::paintShape( KoShape *shape, QPainter &painter, const KoView
             shape->border()->paintBorder(shape, painter, converter);
             painter.restore();
         }
+        painter.restore();
     }
-    painter.restore();
 }
 
 #include "vlayerdocker.moc"
