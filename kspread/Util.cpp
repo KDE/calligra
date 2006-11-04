@@ -131,13 +131,15 @@ QDomElement KSpread::util_createElement( const QString & tagname, const QPen & p
 
 QFont KSpread::util_toFont( KoXmlElement & element )
 {
-  QFont f;
-  f.setFamily( element.attribute( "family" ) );
-
   bool ok;
-  f.setPointSize( element.attribute("size").toInt( &ok ) );
+  int size = element.attribute("size").toInt( &ok );
   if ( !ok )
     return QFont();
+
+  QFont f;
+  f.setFamily( element.attribute( "family" ) );
+  if (size > 0)
+    f.setPointSize( size );
 
   f.setWeight( element.attribute("weight").toInt( &ok ) );
   if ( !ok )
