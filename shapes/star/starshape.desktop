@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=
+Name=Star Shape
+ServiceTypes=KOffice/Shape
+Type=Service
+X-Flake-Version=1
+X-KDE-Library=kostarshape
