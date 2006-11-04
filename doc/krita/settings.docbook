@@ -51,7 +51,7 @@ sections, which you can open via the sidebar at the left, shown below.
 
 <para>
 This section offers three options. First of all, the setting in the
-<guilabel>Cursor shape:</guilabel> dropdown box determines what the drawing
+<guilabel>Cursor shape</guilabel> dropdown box determines what the drawing
 cursor looks like. You can choose between a cursor resembling the actual tool
 you are working with, a normal cursor, a crosshair, and a brush-shaped cursor.
 Then you can select the <guilabel>Palette Behavior</guilabel>. You can set
@@ -59,7 +59,7 @@ here when palettes may be <quote>docked</quote> (set aside at a window
 border): always (<guilabel>Allow docking</guilabel>), never
 (<guilabel>Allow only floating</guilabel>), or when there is enough space
 (<guilabel>Allow docking only on large screens</guilabel>). The last option is
-<guilabel>Palette font size:</guilabel> which determines the text size used in
+<guilabel>Palette font size</guilabel> which determines the text size used in
 the palettes. Set this to a larger value if you have trouble reading the text,
 with the side effect that the palettes will take more space.
 </para>
@@ -151,7 +151,7 @@ Two options are available here. The <guilabel>Maximum number of tiles kept in
 memory</guilabel> setting indicates how many tiles (image subparts) &krita;
 will keep in memory. The default setting should be reasonable, if you are low
 or very high on memory, you may want to decrease or increase this option,
-respectively. The <guilabel>Swappiness:</guilabel> option determines how eager
+respectively. The <guilabel>Swappiness</guilabel> option determines how eager
 &krita; will be to swap to disk.
 </para>
 

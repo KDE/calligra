@@ -159,7 +159,7 @@ if you have an image of 200 x 100 pixels, and set the width to 20 pixels, the
 height will automatically be changed to 10. With this checkbox unselected, you
 can also resize the image non-proportionally. 
 </para><para>
-The <guilabel>Filter:</guilabel> dropdown box can be used to select a
+The <guilabel>Filter</guilabel> dropdown box can be used to select a
 different algorithm for determining the colors of the pixels in the newly
 resized image that did not correspond to a pixel in the old image (the
 calculated corresponding location in the old image was located in between
@@ -390,9 +390,9 @@ resized in order to give it a shadow.
 
 <para>
 This dialog shows a histogram for the current layer. With the
-<guilabel>Method:</guilabel> settings, you can choose what kind of histogram
+<guilabel>Method</guilabel> settings, you can choose what kind of histogram
 to show. You can change the channel(s) to show with the
-<guilabel>Channels:</guilabel> listbox, and the scale on which it should be
+<guilabel>Channels</guilabel> listbox, and the scale on which it should be
 drawn with the <guilabel>Linear</guilabel> and
 <guilabel>Logarithmic</guilabel> radio buttons. Under the preview, there are
 buttons available to zoom in to, and move over, the histogram. These are
@@ -454,7 +454,7 @@ original size. If you select <guilabel>Constrain proportions</guilabel>, the
 new width and height will always be set to the same percentage. For example,
 if you have a layer of 200 x 100 pixels, and set the width to 20 pixels, the
 height will automatically be changed to 10. With this checkbox unselected, you
-can also resize the layer non-proportionally. The <guilabel>Filter:</guilabel>
+can also resize the layer non-proportionally. The <guilabel>Filter</guilabel>
 dropdown list can be used to select a different algorithm for resizing the
 layer.
 </para>
@@ -521,9 +521,9 @@ descriptions.
 <para>
 You can add a new layer to your image with this dialog. If you want a
 descriptive name for your layer, you can fill one in at
-<guilabel>Name:</guilabel>. You can select the desired colorspace for the new
-layer from the <guilabel>Colorspace:</guilabel> list, and the specific
-color profile for that colorspace at <guilabel>Profile:</guilabel>.
+<guilabel>Name</guilabel>. You can select the desired colorspace for the new
+layer from the <guilabel>Colorspace</guilabel> list, and the specific
+color profile for that colorspace at <guilabel>Profile</guilabel>.
 You can preset the layer's <guilabel>Opacity</guilabel> (you can change it later with the slider in
 the <guilabel>Layer</guilabel> box), and choose the mode with which the layer should be composited
 onto the final image.
@@ -844,8 +844,8 @@ nearest one in the reference image.
 
 <para>
 This dialog has two filter-specific options. The <guilabel>Tile
-size:</guilabel> slider and spinbox determine how big the tiles are in which
-the image is subdivided, the <guilabel>Tile saturation:</guilabel> setting
+size</guilabel> slider and spinbox determine how big the tiles are in which
+the image is subdivided, the <guilabel>Tile saturation</guilabel> setting
 sets the color saturation of the tiles.
 </para>
 
@@ -877,8 +877,8 @@ assigned a new value based on these values: the old color values of the pixel
 inself and the eight surrounding pixels are each multiplied by the values in
 the respective spinboxes, these results are added, and the final result is the
 new color value for the pixel. Before being applied, this final result can be
-multiplied with a certain <guilabel>Factor:</guilabel> or a certain
-<guilabel>Offset:</guilabel> can be added to it.
+multiplied with a certain <guilabel>Factor</guilabel> or a certain
+<guilabel>Offset</guilabel> can be added to it.
 </para><para>
 In the example screenshot, each pixel is assigned a new value based on its
 own (the 1 in the center), to which are added the values of the pixels to its
@@ -909,7 +909,7 @@ a factor of -1, so subtracted by a factor of 1).
 </para>
 
 <para>
-This dialog contains just one option, the <guilabel>Depth:</guilabel> slider
+This dialog contains just one option, the <guilabel>Depth</guilabel> slider
 and spinbox which determines the depth of the embossing effect.
 </para>
 
@@ -1054,8 +1054,8 @@ behaviour.
 
 <para>
 This dialog can configure two parameters for the associated filter. The
-<guilabel>Brush size:</guilabel> setting determines the size of the brush that
-is used to simulate the oilpaint effect, the <guilabel>Smooth:</guilabel>
+<guilabel>Brush size</guilabel> setting determines the size of the brush that
+is used to simulate the oilpaint effect, the <guilabel>Smooth</guilabel>
 setting specifies if the difference in colors between adjacent
 <quote>swatches</quote> may be large (low smoothness) or should be small (high
 smoothness).
@@ -1082,8 +1082,8 @@ smoothness).
 </para>
 
 <para>
-On this dialog, you can adjust two settings. <guilabel>Pixel width:</guilabel>
-and <guilabel>Pixel height:</guilabel> indicate the width and height of the
+On this dialog, you can adjust two settings. <guilabel>Pixel width</guilabel>
+and <guilabel>Pixel height</guilabel> indicate the width and height of the
 area that should be taken together and averaged to form one new, large
 <quote>pixel</quote>.
 </para>
@@ -1110,9 +1110,9 @@ area that should be taken together and averaged to form one new, large
 
 <para>
 This filter can be configured using the settings <guilabel>Drop
-size:</guilabel> (the average diameter of the raindrops),
-<guilabel>Number:</guilabel> (the number of raindrop effects that should be
-added to the image), and <guilabel>Fish eyes:</guilabel> (the percentage of
+size</guilabel> (the average diameter of the raindrops),
+<guilabel>Number</guilabel> (the number of raindrop effects that should be
+added to the image), and <guilabel>Fish eyes</guilabel> (the percentage of
 raindrops that should be rendered as fisheye lens effects instead of plain
 raindrop effects).
 </para>
