@@ -1658,10 +1658,8 @@ QDomDocumentFragment KPrShadowObject::save( QDomDocument& doc,double offset )
 
 void KPrShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto ) const
 {
-    if ( pen!=defaultPen() )
+    switch( pen.style() )
     {
-        switch(  pen.style() )
-        {
         case Qt::NoPen:
             styleobjectauto.addProperty( "draw:stroke" , "none" );
             break;
@@ -1678,7 +1676,9 @@ void KPrShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyl
             break;
         default:
             break;
-        }
+    }
+    if ( pen.style() != Qt::NoPen )
+    {
         styleobjectauto.addProperty( "svg:stroke-color", pen.color().name() );
         styleobjectauto.addPropertyPt( "svg:stroke-width", pen.pointWidth() );
     }
