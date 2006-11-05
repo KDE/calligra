@@ -32,7 +32,7 @@ KoStarShape::KoStarShape()
     m_points = *m_subpaths[0];
     m_handles.push_back( m_points.at(base)->point() );
     m_handles.push_back( m_points.at(tip)->point() );
-    updatePath( size() );
+    m_center = computeCenter();
 }
 
 KoStarShape::~KoStarShape()
@@ -82,10 +82,10 @@ void KoStarShape::updatePath( const QSizeF &size )
         m_points[i]->setPoint( m_center + cornerPoint );
     }
 
-    QPointF movement = normalize();
-    m_center -= movement;
+    normalize();
     m_handles[base] = m_points.at(base)->point();
     m_handles[tip] = m_points.at(tip)->point();
+    m_center = computeCenter();
 }
 
 void KoStarShape::createPath()
@@ -97,35 +97,37 @@ void KoStarShape::createPath()
     m_angles[base] = M_PI_2;
     m_angles[tip] = M_PI_2;
 
-    m_center = QPointF( m_radius[tip], m_radius[tip] );
+    QPointF center = QPointF( m_radius[tip], m_radius[tip] );
 
-    moveTo( m_center + QPointF( m_radius[base], 0 ) );
+    moveTo( center + QPointF( 0, m_radius[base] ) );
     for( uint i = 1; i < 2*m_cornerCount; ++i )
     {
         uint cornerType = i % 2;
-        double radian = static_cast<double>( i*radianStep );
+        double radian = static_cast<double>( i*radianStep )  + m_angles[cornerType];
         QPointF cornerPoint( m_radius[cornerType] * cos( radian ), m_radius[cornerType] * sin( radian ) );
-        lineTo( m_center + cornerPoint );
+        lineTo( center + cornerPoint );
     }
     close();
-    QPointF movement = normalize();
-    m_center -= movement;
+    normalize();
 }
 
 void KoStarShape::resize( const QSizeF &newSize )
 {
     QSizeF oldSize = size();
-    double zoomX = newSize.width() / oldSize.width();
-    double zoomY = newSize.height() / oldSize.height();
-    QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
-
-    // transform the center point
-    m_center = matrix.map( m_center );
+    // apply the new aspect ratio
+    m_zoomX *= newSize.width() / oldSize.width();
+    m_zoomY *= newSize.height() / oldSize.height();
 
     // this transforms the handles
     KoParameterShape::resize( newSize );
 
-    // apply the new aspect ratio
-    m_zoomX *= zoomX;
-    m_zoomY *= zoomY;
+    m_center = computeCenter();
+}
+
+QPointF KoStarShape::computeCenter()
+{
+    QPointF center( 0, 0 );
+    for( uint i = 0; i < m_cornerCount; ++i )
+        center += m_points[2*i]->point();
+    return center / static_cast<double>( m_cornerCount );
 }

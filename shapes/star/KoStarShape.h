@@ -38,6 +38,8 @@ protected:
     void createPath();
 
 private:
+    // compute the star center point from the inner points
+    QPointF computeCenter();
     enum Handles { base = 0, tip = 1 };
     uint m_cornerCount; ///< number of corners
     double m_radius[2]; ///< the different radii
