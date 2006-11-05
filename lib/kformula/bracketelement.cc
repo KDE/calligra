@@ -197,19 +197,12 @@ int SingleContentElement::readContentFromMathMLDom( QDomNode& node )
         return -1;
     }
 
-    int nodeNumber = content->buildMathMLChild( node );
-    if ( nodeNumber == -1 ) {
+    if ( content->buildMathMLChild( node ) == -1 ) {
         kdWarning( DEBUGID) << "Empty content in SingleContentElement\n";
         return -1;
     }
-    for (int i = 0; i < nodeNumber; i++ ) {
-        if ( node.isNull() ) {
-            return -1;
-        }
-        node = node.nextSibling();
-    }
 
-    return nodeNumber;
+    return 1;
 }
 
 void SingleContentElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const

@@ -1426,7 +1426,7 @@ int IndexElement::readContentFromMathMLDom( QDomNode& node )
         node = node.nextSibling();
     }
 
-    QString indexType = node.parentNode().nodeName().lower();
+    QString indexType = node.parentNode().toElement().tagName().lower();
     if ( indexType == "msub" ) {
         lowerRight = new SequenceElement( this );
         int lowerRightNumber = lowerRight->buildMathMLChild( node );
@@ -1441,7 +1441,7 @@ int IndexElement::readContentFromMathMLDom( QDomNode& node )
             node = node.nextSibling();
         }
 
-        return contentNumber + lowerRightNumber;
+        return 1;
     }
 
     if ( indexType == "msup" ) {
@@ -1458,7 +1458,7 @@ int IndexElement::readContentFromMathMLDom( QDomNode& node )
             node = node.nextSibling();
         }
 
-        return contentNumber + upperRightNumber;
+        return 1;
     }
 
     if ( indexType == "msubsup" ) {
@@ -1488,7 +1488,7 @@ int IndexElement::readContentFromMathMLDom( QDomNode& node )
             node = node.nextSibling();
         }
 
-        return contentNumber + lowerRightNumber + upperRightNumber;
+        return 1;
     }
     if ( indexType == "munder" ) {
         lowerMiddle = new SequenceElement( this );
@@ -1504,7 +1504,7 @@ int IndexElement::readContentFromMathMLDom( QDomNode& node )
             node = node.nextSibling();
         }
 
-        return contentNumber + lowerMiddleNumber;
+        return 1;
     }
 
     if ( indexType == "mover" ) {
@@ -1521,7 +1521,7 @@ int IndexElement::readContentFromMathMLDom( QDomNode& node )
             node = node.nextSibling();
         }
 
-        return contentNumber + upperMiddleNumber;
+        return 1;
     }
 
     if ( indexType == "munderover" ) {
@@ -1552,10 +1552,10 @@ int IndexElement::readContentFromMathMLDom( QDomNode& node )
             node = node.nextSibling();
         }
 
-        return contentNumber + lowerMiddleNumber + upperMiddleNumber;
+        return 1;
     }
     // TODO: mmultiscripts, section 3.4.7
-    return contentNumber;
+    return 1;
 }
 
 

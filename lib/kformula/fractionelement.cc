@@ -554,19 +554,12 @@ int FractionElement::readContentFromMathMLDom(QDomNode& node)
         node = node.nextSibling();
     }
 
-    int denominatorNumber = denominator->buildMathMLChild( node );
-    if ( denominatorNumber == -1 ) {
+    if ( denominator->buildMathMLChild( node ) == -1 ) {
         kdWarning( DEBUGID ) << "Empty denominator in FractionElement." << endl;
         return -1;
     }
-    for (int i = 0; i < denominatorNumber; i++ ) {
-        if ( node.isNull() ) {
-            return -1;
-        }
-        node = node.nextSibling();
-    }
 
-    return numeratorNumber + denominatorNumber;
+    return 1;
 }
 
 QString FractionElement::toLatex()
