@@ -615,26 +615,50 @@ int RootElement::readContentFromMathMLDom(QDomNode& node)
 
     if ( square ) {
         // Any number of arguments are allowed
-        content->readContentFromMathMLDom( node );
-    }
-    else {
-        // Exactly two arguments are required
-        if ( !content->buildMathMLChild( node ) ) {
+        int contentNumber = content->readContentFromMathMLDom( node );
+        if ( contentNumber == -1 ) {
             kdWarning( DEBUGID ) << "Empty content in RootElement." << endl;
             return -1;
         }
-        node = node.nextSibling();
+        for (int i = 0; i < contentNumber; i++ ) {
+            if ( node.isNull() ) {
+                return -1;
+            }
+            node = node.nextSibling();
+        }
 
-        index=new SequenceElement( this );
-        if ( !index->buildMathMLChild( node ) ) {
+        return contentNumber;
+    }
+    else {
+        // Exactly two arguments are required
+        int contentNumber = content->buildMathMLChild( node );
+        if ( contentNumber == -1 ) {
+            kdWarning( DEBUGID ) << "Empty content in RootElement." << endl;
+            return -1;
+        }
+        for (int i = 0; i < contentNumber; i++ ) {
+            if ( node.isNull() ) {
+                return -1;
+            }
+            node = node.nextSibling();
+        }
+
+        index = new SequenceElement( this );
+        int indexNumber = index->buildMathMLChild( node );
+        if ( indexNumber == -1 ) {
             kdWarning( DEBUGID ) << "Empty index in RootElement." << endl;
             return -1;
         }
+        for (int i = 0; i < indexNumber; i++ ) {
+            if ( node.isNull() ) {
+                return -1;
+            }
+            node = node.nextSibling();
+        }
+        return contentNumber + indexNumber;
     }
 
-    node = node.nextSibling();
-
-    return 1;
+    return 0;
 }
 
 QString RootElement::toLatex()

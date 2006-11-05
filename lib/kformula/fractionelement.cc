@@ -542,19 +542,31 @@ int FractionElement::readContentFromMathMLDom(QDomNode& node)
         return -1;
     }
 
-    if ( !numerator->buildMathMLChild( node ) ) {
+    int numeratorNumber = numerator->buildMathMLChild( node );
+    if ( numeratorNumber == -1 ) {
         kdWarning( DEBUGID ) << "Empty numerator in FractionElement." << endl;
         return -1;
     }
-    node = node.nextSibling();
+    for (int i = 0; i < numeratorNumber; i++ ) {
+        if ( node.isNull() ) {
+            return -1;
+        }
+        node = node.nextSibling();
+    }
 
-    if ( !denominator->buildMathMLChild( node ) ) {
+    int denominatorNumber = denominator->buildMathMLChild( node );
+    if ( denominatorNumber == -1 ) {
         kdWarning( DEBUGID ) << "Empty denominator in FractionElement." << endl;
         return -1;
     }
-    node = node.nextSibling();
+    for (int i = 0; i < denominatorNumber; i++ ) {
+        if ( node.isNull() ) {
+            return -1;
+        }
+        node = node.nextSibling();
+    }
 
-    return 1;
+    return numeratorNumber + denominatorNumber;
 }
 
 QString FractionElement::toLatex()

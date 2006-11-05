@@ -1897,12 +1897,14 @@ int SequenceElement::readContentFromMathMLDom(QDomNode& node)
     return buildChildrenFromMathMLDom(children, node);
 }
 
-bool SequenceElement::buildMathMLChild( QDomNode node )
+int SequenceElement::buildMathMLChild( QDomNode node )
 {
+    int nodeCounter = 1;
     while ( ! node.isElement() ) {
         node = node.nextSibling();
+        nodeCounter++;
         if ( node.isNull() ) {
-            return false;
+            return -1;
         }
     }
     QDomElement e = node.toElement();
@@ -1920,14 +1922,14 @@ bool SequenceElement::buildMathMLChild( QDomNode node )
         }
         else {
             delete child;
-            return false;
+            return -1;
         }
     }
     else {
-        return false;
+        return -1;
     }
     parse();
-    return true;
+    return nodeCounter;
 }
 
 

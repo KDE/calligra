@@ -373,7 +373,7 @@ public:
 	virtual void setStyle(StyleElement *style);
 	virtual int buildChildrenFromMathMLDom(QPtrList<BasicElement>& list, QDomNode n);
 	virtual int readContentFromMathMLDom(QDomNode& node);
-	bool buildMathMLChild( QDomNode node );
+	int buildMathMLChild( QDomNode node );
 
 protected:
 
