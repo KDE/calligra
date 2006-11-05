@@ -548,16 +548,24 @@ int BracketElement::readContentFromMathMLDom(QDomNode& node)
     else {
         // if it's a mfence tag, we need to convert to equivalent expanded form.
         // See section 3.3.8
-        if ( ! node.nextSibling().isNull() ) {
+        while ( ! node.isNull() && ! node.isElement() )
+            node = node.nextSibling();
+        QDomNode next = node.nextSibling();
+        while ( ! next.isNull() && ! next.isElement() )
+            next = next.nextSibling();
+        if ( ! next.isNull()) {
             QDomDocument doc = node.ownerDocument();
             QDomNode parent = node.parentNode();
-            QDomElement de = doc.createElement( "mrow" );
+            QString ns = parent.prefix();
+            QDomElement de = doc.createElementNS( ns, "mrow" );
             uint pos = 0;
-            while ( !node.isNull() ) {
+            while ( ! node.isNull() ) {
                 QDomNode no = node.nextSibling();
+                while ( ! no.isNull() && ! no.isElement() )
+                    no = no.nextSibling();
                 de.appendChild( node.toElement() );
                 if ( ! no.isNull() && ( m_separators.isNull() || ! m_separators.isEmpty() ) ) {
-                    QDomElement sep = doc.createElement( "mo" );
+                    QDomElement sep = doc.createElementNS( ns, "mo" );
                     de.appendChild( sep );
                     if ( m_separators.isNull() ) {
                         sep.appendChild( doc.createTextNode( "," ) );
@@ -576,6 +584,8 @@ int BracketElement::readContentFromMathMLDom(QDomNode& node)
             }
             parent.appendChild( de );
             node = parent.firstChild();
+            while ( ! node.isElement() )
+                node = node.nextSibling();
         }
     }
     if ( ! empty ) {
