@@ -31,6 +31,7 @@ public:
     ~KoStarShape();
     /// sets the new number of corners
     void setCornerCount( uint cornerCount );
+    virtual void resize( const QSizeF &newSize );
 protected:
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     void updatePath( const QSizeF &size );
@@ -41,6 +42,8 @@ private:
     uint m_cornerCount; ///< number of corners
     double m_radius[2]; ///< the different radii
     double m_angles[2]; ///< the offset angles
+    double m_zoomX; ///< scaling in x
+    double m_zoomY; ///< scaling in y
     QPointF m_center;   ///< the star center point
     KoSubpath m_points;
 };

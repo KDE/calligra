@@ -25,12 +25,14 @@
 
 KoStarShape::KoStarShape()
 : m_cornerCount( 5 )
+, m_zoomX( 1.0 )
+, m_zoomY( 1.0 )
 {
     createPath();
     m_points = *m_subpaths[0];
     m_handles.push_back( m_points.at(base)->point() );
     m_handles.push_back( m_points.at(tip)->point() );
-    updatePath( QSize(100,100) );
+    updatePath( size() );
 }
 
 KoStarShape::~KoStarShape()
@@ -46,15 +48,18 @@ void KoStarShape::setCornerCount( uint cornerCount )
 void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
 {
     QPointF distVector = point - m_center;
+    // unapply scaling
+    distVector.rx() /= m_zoomX;
+    distVector.ry() /= m_zoomY;
     m_radius[handleId] = sqrt( distVector.x()*distVector.x() + distVector.y()*distVector.y() );
 
-    double radianStep = M_PI / static_cast<double>(m_cornerCount);
     double angle = atan2( distVector.y(), distVector.x() );
     if( angle < 0.0 )
         angle += 2.0*M_PI;
     double diffAngle = angle-m_angles[handleId];
     if( handleId == tip )
     {
+        double radianStep = M_PI / static_cast<double>(m_cornerCount);
         m_angles[tip] += diffAngle-radianStep;
         m_angles[base] += diffAngle-radianStep;
     }
@@ -72,7 +77,7 @@ void KoStarShape::updatePath( const QSizeF &size )
     {
         uint cornerType = i % 2;
         double radian = static_cast<double>( i*radianStep ) + m_angles[cornerType];
-        QPointF cornerPoint = QPointF( m_radius[cornerType] * cos( radian ), m_radius[cornerType] * sin( radian ) );
+        QPointF cornerPoint = QPointF( m_zoomX * m_radius[cornerType] * cos( radian ), m_zoomY * m_radius[cornerType] * sin( radian ) );
 
         m_points[i]->setPoint( m_center + cornerPoint );
     }
@@ -89,8 +94,8 @@ void KoStarShape::createPath()
 
     m_radius[base] = 25.0;
     m_radius[tip] = 50.0;
-    m_angles[base] = 0.0;
-    m_angles[tip] = 0.0;
+    m_angles[base] = M_PI_2;
+    m_angles[tip] = M_PI_2;
 
     m_center = QPointF( m_radius[tip], m_radius[tip] );
 
@@ -105,4 +110,22 @@ void KoStarShape::createPath()
     close();
     QPointF movement = normalize();
     m_center -= movement;
+}
+
+void KoStarShape::resize( const QSizeF &newSize )
+{
+    QSizeF oldSize = size();
+    double zoomX = newSize.width() / oldSize.width();
+    double zoomY = newSize.height() / oldSize.height();
+    QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
+
+    // transform the center point
+    m_center = matrix.map( m_center );
+
+    // this transforms the handles
+    KoParameterShape::resize( newSize );
+
+    // apply the new aspect ratio
+    m_zoomX *= zoomX;
+    m_zoomY *= zoomY;
 }
