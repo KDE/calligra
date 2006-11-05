@@ -1147,10 +1147,6 @@ int MatrixElement::readContentFromMathMLDom( QDomNode& node )
                     cols = cc;
             }
         }
-        else {
-            kdDebug( DEBUGID ) << "<mtable> child: " << n.nodeName() << endl;
-            return -1;
-        }
         n = n.nextSibling();
     }
 
