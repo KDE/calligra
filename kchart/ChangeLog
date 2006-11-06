@@ -1,3 +1,9 @@
+2006-11-06  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix  bug 128758: misinterpretation of the checkbox "first row as label"
+	* kchart_part.cc (createLabelsAndLegend): Pass parameters as
+	references.
+
 2006-10-10  Inge Wallin  <ingwa@dhcp-254-139.lkpg.cendio.se>
 
 	* kchart_params.cc (saveOasisAxis): Add saving of axis titles.

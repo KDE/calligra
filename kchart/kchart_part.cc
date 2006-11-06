@@ -389,8 +389,8 @@ int  KChartPart::createDisplayData()
 }
 
 
-void KChartPart::createLabelsAndLegend( QStringList  longLabels,
-					QStringList  shortLabels )
+void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
+					QStringList  &shortLabels )
 {
     longLabels.clear();
     shortLabels.clear();
@@ -570,8 +570,9 @@ void KChartPart::doSetData( const KDChartTableData&  data,
     // Generate m_rowlabels from the column headers if applicable.
     m_rowLabels.clear();
     if ( firstColHeader ) {
-        for( row = rowStart; row < data.rows(); row++ )
+	for( row = rowStart; row < data.rows(); row++ ) {
 	    m_rowLabels << data.cellVal( row, 0 ).toString();
+	}
     }
     else {
 	for( row = rowStart; row < data.rows(); row++ )
@@ -585,8 +586,9 @@ void KChartPart::doSetData( const KDChartTableData&  data,
     // Generate X labels from the row headers if applicable
     m_colLabels.clear();
     if ( firstRowHeader ) {
-        for( col = colStart; col < data.cols(); col++ )
+        for( col = colStart; col < data.cols(); col++ ) {
 	    m_colLabels << data.cellVal( 0, col ).toString();
+	}
     }
     else {
 	for( col = colStart; col < data.cols(); col++ )
