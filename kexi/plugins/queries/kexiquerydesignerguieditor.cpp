@@ -216,7 +216,6 @@ KexiQueryDesignerGuiEditor::initTableColumns()
 	col3->field()->setDefaultValue( QVariant(false, 0) );
 	col3->field()->setNotNull( true );
 	d->data->addColumn(col3);
-	d->dataTable->tableView()->adjustColumnWidthToContents( COLUMN_ID_VISIBLE );
 
 #ifndef KEXI_NO_QUERY_TOTALS
 	KexiTableViewColumn *col4 = new KexiTableViewColumn("totals", KexiDB::Field::Enum, i18n("Totals"),
