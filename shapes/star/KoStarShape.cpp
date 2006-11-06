@@ -65,7 +65,11 @@ void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::Key
     }
     else
     {
-        m_angles[base] += diffAngle;
+        // control make the base point move radially
+        if( modifiers & Qt::ControlModifier )
+            m_angles[base] = m_angles[tip];
+        else
+            m_angles[base] += diffAngle;
     }
 }
 
