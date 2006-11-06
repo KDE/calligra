@@ -170,7 +170,7 @@ static const unsigned int numOasisChartTypes
     loadingContext.fillStyleStack( chartElem, KoXmlNS::chart, "style-name" );
 
     const QString fillColor = styleStack.attributeNS( KoXmlNS::draw, "fill-color" );
-    kdDebug() << "fillColor=" << fillColor << endl;
+    kDebug() << "fillColor=" << fillColor << endl;
 
     styleStack.restore();
 #endif
