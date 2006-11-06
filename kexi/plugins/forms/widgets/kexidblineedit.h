@@ -101,6 +101,9 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		 Reimplemented after KexiDataItemChangesListener. */
 		virtual void handleAction(const QString& actionName);
 
+		/*! Called by top-level form on key press event to consume widget-specific shortcuts. */
+		virtual bool keyPressed(QKeyEvent *ke);
+
 	public slots:
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
 		inline void setDataSourceMimeType(const Q3CString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
@@ -108,6 +111,15 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 
 		//! Reimplemented, so "undo" means the same as "cancelEditor" action
 		virtual void undo();
+
+		//! Implemented for KexiDataItemInterface
+		virtual void moveCursorToEnd();
+
+		//! Implemented for KexiDataItemInterface
+		virtual void moveCursorToStart();
+
+		//! Implemented for KexiDataItemInterface
+		virtual void selectAll();
 
 	protected slots:
 		void slotTextChanged(const QString&);

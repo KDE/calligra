@@ -35,8 +35,6 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
 	public KexiDBAutoField, public KexiComboBoxBase
 {
 	Q_OBJECT
-//	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-//	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	Q_PROPERTY( bool editable READ isEditable WRITE setEditable )
 	//properties from KexiDBAutoField that should not be visible:
 	Q_OVERRIDE(QColor paletteBackgroundColor READ paletteBackgroundColor WRITE setPaletteBackgroundColor DESIGNABLE true RESET unsetPalette)
@@ -60,67 +58,46 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
 		void setEditable(bool set);
 		bool isEditable() const;
 
-//		void showPopup();
-
 		virtual void setLabelPosition(LabelPosition position);
 
 		virtual QVariant value() { return KexiComboBoxBase::value(); }
 
+		virtual QVariant visibleValue();
+
+		//! Reimpemented because to avoid taking value from the internal editor (index is taken from the popup instead)
+		virtual bool valueChanged();
+
 		virtual QSize sizeHint() const;
 
-/*
-		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline QCString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
-		virtual QVariant value();
-		virtual void setInvalidState( const QString& displayText );
-
-		//! \return true if editor's value is null (not empty)
-		//! Used for checking if a given constraint within table of form is met.
-		virtual bool valueIsNull();
-
-		//! \return true if editor's value is empty (not necessary null).
-		//! Only few data types can accept "EMPTY" property
-		//! (use KexiDB::Field::hasEmptyProperty() to check this).
-		//! Used for checking if a given constraint within table or form is met.
-		virtual bool valueIsEmpty();
-
-		//! \return 'readOnly' flag for this widget.
-		virtual bool isReadOnly() const;
-
-		//! \return the view widget of this item, e.g. line edit widget.
-		virtual QWidget* widget();
-
-		virtual bool cursorAtStart();
-		virtual bool cursorAtEnd();
-		virtual void clear();
-
+		//! Reimplemented after KexiDBAutoField: jsut sets \a cinfo without initializing a subwidget.
+		//! Initialization is performed by \ref setVisibleColumnInfo().
 		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
-*/
-		/*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue() 
-		 is displayed in a special way. Used by KexiFormDataProvider::fillDataItems(). 
-		 \a widget is equal to 'this'.
-		 Reimplemented after KexiFormDataItemInterface. */
-//		virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+
+		/*! Used internally to set visible database column information.
+		 Reimplemented: performs initialization of the subwidget. */
+		virtual void setVisibleColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+
+		/*! \return visible database column information for this item.
+		 Reimplemented. */
+		virtual KexiDB::QueryColumnInfo* visibleColumnInfo() const;
 
 		const QColor & paletteBackgroundColor() const { return KexiDBAutoField::paletteBackgroundColor(); }
 
 		//! Reimplemented to also set 'this' widget's background color, not only subwidget's.
 		virtual void setPaletteBackgroundColor( const QColor & color );
 
-	public slots:
-		void slotRowAccepted(KexiTableItem *item, int row) { KexiComboBoxBase::slotRowAccepted(item, row); }
-		void slotItemSelected(KexiTableItem* item) { KexiComboBoxBase::slotItemSelected(item); }
-//		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }
-//		inline void setDataSourceMimeType(const QCString &ds) { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
-//		virtual void setReadOnly( bool readOnly );
-//		virtual void setText( const QString & text, const QString & context );
+		/*! Undoes changes made to this item - just resets the widget to original value. 
+		 Reimplemented after KexiFormDataItemInterface to also revert the visible value 
+		 (i.e. text) to the original state. */
+		virtual void undoChanges();
 
-		//! Reimplemented, so "undo" means the same as "cancelEditor" action
-//! @todo enable "real" undo internally so user can use ctrl+z while editing
-//		virtual void undo();
+	public slots:
+		void slotRowAccepted(KexiTableItem *item, int row);
+		void slotItemSelected(KexiTableItem* item) { KexiComboBoxBase::slotItemSelected(item); }
 
 	protected slots:
-//		void slotTextChanged();
+		void slotInternalEditorValueChanged(const QVariant& v)
+			{ KexiComboBoxBase::slotInternalEditorValueChanged(v); }
 
 	protected:
 		QRect buttonGeometry() const;
@@ -151,23 +128,23 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
 		//! Implemented for KexiComboBoxBase
 		virtual QWidget *internalEditor() const { return /*WidgetWithSubpropertiesInterface*/m_subwidget; }
 
-		//! Implemented for KexiComboBoxBase
+		//! Implemented for KexiComboBoxBase. Does nothing if the widget is not editable.
 		virtual void moveCursorToEndInInternalEditor();
 
-		//! Implemented for KexiComboBoxBase
+		//! Implemented for KexiComboBoxBase. Does nothing if the widget is not editable.
 		virtual void selectAllInInternalEditor();
 
 		//! Implemented for KexiComboBoxBase
 		virtual void setValueInInternalEditor(const QVariant& value);
 
 		//! Implemented for KexiComboBoxBase
-		virtual QVariant valueFromInternalEditor() const;
+		virtual QVariant valueFromInternalEditor();
 
 		//! Implemented for KexiComboBoxBase
-		virtual void editRequested() {};
+		virtual void editRequested();
 
 		//! Implemented for KexiComboBoxBase
-		virtual void acceptRequested() {};
+		virtual void acceptRequested();
 
 		//! Implement this to return a position \a pos mapped from parent (e.g. viewport) 
 		//! to global coordinates. QPoint(-1, -1) should be returned if this cannot be computed.
@@ -176,15 +153,26 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
 		//! Implement this to return a hint for popup width.
 		virtual int popupWidthHint() const;
 
-/*		virtual void paintEvent ( QPaintEvent * );
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
-		QPopupMenu * createPopupMenu(const QPoint & pos);
 
-		//! Used for extending context menu
-		KexiDBWidgetContextMenuExtender m_menuExtender;
+		//! Implemented to handle visible value instead of index
+		virtual void setVisibleValueInternal(const QVariant& value);
 
-		//! Used to disable slotTextChanged()
-		bool m_slotTextChanged_enabled : 1;*/
+		bool handleMousePressEvent(QMouseEvent *e);
+
+		bool handleKeyPressEvent(QKeyEvent *ke);
+
+		//! Implemented for KexiDataItemInterface
+		virtual void beforeSignalValueChanged();
+
+		virtual KexiComboBoxPopup *popup() const;
+		virtual void setPopup(KexiComboBoxPopup *popup);
+
+		/*! Called by top-level form on key press event.
+		 Used for Key_Escape to if the popup is visible,
+		 so the key press won't be consumed to perform "cancel editing". */
+		virtual bool keyPressed(QKeyEvent *ke);
+
 		class Private;
 		Private * const d;
 };

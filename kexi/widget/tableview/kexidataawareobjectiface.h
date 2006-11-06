@@ -335,8 +335,9 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		inline KexiDataItemInterface *editor() const { return m_editor; }
 
 		/*! Cancels row editing All changes made to the editing 
-		 row during this current session will be undone. */
-		virtual void cancelRowEdit();
+		 row during this current session will be undone. 
+		 \return true on success or false on failure (e.g. when editor does not exist) */
+		virtual bool cancelRowEdit();
 
 		/*! Accepts row editing. All changes made to the editing 
 		 row during this current session will be accepted (saved). 
@@ -345,7 +346,14 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual bool acceptRowEdit();
 
 		virtual void removeEditor();
-		virtual void cancelEditor();
+
+		/*! Cancels changes made to the currently active editor. 
+		 Reverts the editor's value to old one. 
+		 \return true on success or false on failure (e.g. when editor does not exist) */
+		virtual bool cancelEditor();
+
+		//! Accepst changes made to the currently active editor. 
+		//! \return true on success or false on failure (e.g. when editor does not exist or there is data validation error)
 		virtual bool acceptEditor();
 
 		//! Creates editors and shows it, what usually means the beginning of a cell editing
@@ -410,7 +418,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void dataSet( KexiTableViewData *data ) = 0;
 
 		/*! \return a pointer to context menu. This can be used to plug some actions there. */
-		KMenu* contextMenu() const { return m_popup; }
+		KMenu* contextMenu() const { return m_popupMenu; }
 
 		/*! \return true if the context menu is enabled (visible) for the view.
 		  True by default. */
@@ -685,7 +693,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		KexiTableItem *m_insertItem;
 
 		//! when (current or new) row is edited - changed field values are temporary stored here
-		KexiDB::RowEditBuffer *m_rowEditBuffer; 
+//		KexiDB::RowEditBuffer *m_rowEditBuffer; 
 
 		/*! true if currently selected row is edited */
 		bool m_rowEditing : 1;
@@ -776,7 +784,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		int m_dragIndicatorLine;
 
 		/*! Context menu widget. */
-		KMenu *m_popup;
+		KMenu *m_popupMenu;
 
 		bool m_contextMenuEnabled : 1;
 

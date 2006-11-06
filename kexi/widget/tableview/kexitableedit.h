@@ -44,7 +44,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 	Q_OBJECT
 
 	public:
-		KexiTableEdit(KexiTableViewColumn &column, Q3ScrollView* parent = 0, const char* name = 0);
+		KexiTableEdit(KexiTableViewColumn &column, QWidget* parent = 0);
 
 		virtual ~KexiTableEdit();
 
@@ -128,9 +128,9 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		int leftMargin() const { return m_leftMargin; }
 
 		/*! Sometimes, editor can contain non-standard margin, for example combobox editor contains
-		 dropdown button at the right side. \return right margin;s size; 
-		 0 by default. For reimplementation.  */
-		int rightMargin() const { return m_rightMargin; }
+		 dropdown button at the right side. THe dropdown button's width is counted only if \a focused is true.
+		 \return right margin's size; 0 by default. For reimplementation.  */
+		int rightMargin(bool focused) const;
 
 		/*! Handles \a ke key event that came over the column that is bound to this editor.
 		 For implementation: true should be returned if \a ke should be accepted.
@@ -162,8 +162,10 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		 for a given font metrics \a fm. 
 		 \return true a normal tooltip should be displayed (using QToolTip,) and false if 
 		 no tooltip should be displayed or a custom tooltip was displayed internally (not yet supported).
-		 Default implementation does nothing and returns false. */
-		virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm);
+		 Default implementation does nothing and returns false. 
+		 If the cell is currentl focused (selected), \a focused is true. */
+		virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,
+			bool focused);
 
 	signals:
 		void editRequested();
@@ -177,10 +179,9 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		 for the editor, its events will be filtered, it will be resized when neede, and so on. */
 		void setViewWidget(QWidget *v);
 
-		/*! Moves child widget within the viewport. Use this for child widgets that 
-		 are outside of this editor widget, instead of calling QWidget::move(). */
-		void moveChild( QWidget * child, int x, int y ) {
-			m_scrollView->moveChild(child, x, y); }
+		/*! Moves child widget within the viewport if the parent is scrollview (otherwise does nothing). 
+		 Use this for child widgets that are outside of this editor widget, instead of calling QWidget::move(). */
+		void moveChild( QWidget * child, int x, int y );
 
 		/*! Allows to force redrawing the related cell by the editor itself. Usable when the editor is not 
 		 displayed by a QWidget but rather by table view cell itself, for example KexiBlobTableEdit. */
@@ -188,8 +189,8 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 
 		KexiTableViewColumn *m_column;
 		int m_leftMargin;
-		int m_rightMargin;
-		Q3ScrollView* m_scrollView;
+		int m_rightMargin, m_rightMarginWhenFocused;
+		Q3ScrollView* m_scrollView; //!< may be 0 if the parent is not a scrollview
 		bool m_usesSelectedTextColor : 1; //!< set in ctor, @see usesSelectedTextColor()
 
 	private:
@@ -205,7 +206,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 			virtual ~factoryclassname(); \
 	\
 		protected: \
-			virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, Q3ScrollView* parent = 0); \
+			virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QWidget* parent = 0); \
 	};
 
 //! Implementation of cell editor factory
@@ -218,7 +219,7 @@ factoryclassname::~factoryclassname() \
 {} \
 \
 KexiTableEdit* factoryclassname::createEditor( \
-	KexiTableViewColumn &column, Q3ScrollView* parent) \
+	KexiTableViewColumn &column, QWidget* parent) \
 { \
 	return new itemclassname(column, parent); \
 }

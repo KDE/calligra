@@ -321,24 +321,10 @@ void KexiTableViewData::init(
 	}
 }
 
-/*
-KexiTableViewData::KexiTableViewData(KexiTableViewColumnList& cols) 
-	: KexiTableViewDataBase()
-	, columns(cols)
-	, m_key(0)
-	, m_order(1)
-	, m_type(1)
-	, m_pRowEditBuffer(0)
-	, m_readOnly(false)
-	, m_insertingEnabled(true)
-{
-	setAutoDelete(true);
-	columns.setAutoDelete(true);
-}*/
-
 void KexiTableViewData::init()
 {
-	m_key = 0;
+	m_sortedColumn = 0;
+	m_realSortedColumn = 0;
 //	m_order = 1;
 	m_order = 0;
 	m_type = 1;
@@ -395,19 +381,24 @@ QString KexiTableViewData::dbTableName() const
 
 void KexiTableViewData::setSorting(int column, bool ascending)
 {
-//	m_order = (ascending ? 1 : -1);
-
 	if (column>=0 && column<(int)columns.count()) {
 		m_order = (ascending ? 1 : -1);
-		m_key = column;
 	} 
 	else {
 		m_order = 0;
-		m_key = -1;
+		m_sortedColumn = -1;
+		m_realSortedColumn = -1;
 		return;
 	}
+	// find proper column information for sorting (lookup column points to alternate column with visible data)
+	const KexiTableViewColumn *tvcol = columns.at(column);
+	KexiDB::QueryColumnInfo* visibleLookupColumnInfo = tvcol->visibleLookupColumnInfo;
+	const KexiDB::Field *field = visibleLookupColumnInfo ? visibleLookupColumnInfo->field : tvcol->field();
+	m_sortedColumn = column;
+	m_realSortedColumn = tvcol->columnInfo->indexForVisibleLookupValue()!=-1 
+		? tvcol->columnInfo->indexForVisibleLookupValue() : m_sortedColumn;
 
-	const KexiDB::Field *field = columns.at(m_key)->field();
+	// setup compare function
 	const int t = field->type();
 	if (field->isTextType())
 		cmpFunc = &KexiTableViewData::cmpStr;
@@ -443,10 +434,10 @@ int KexiTableViewData::compareItems(Item item1, Item item2)
 
 //! compare NULLs : NULL is smaller than everything
 #define CMP_NULLS(item1, item2) \
-	m_leftTmp = ((KexiTableItem *)item1)->at(m_key); \
+	m_leftTmp = ((KexiTableItem *)item1)->at(m_realSortedColumn); \
 	if (m_leftTmp.isNull()) \
 		return -m_order; \
-	m_rightTmp = ((KexiTableItem *)item2)->at(m_key); \
+	m_rightTmp = ((KexiTableItem *)item2)->at(m_realSortedColumn); \
 	if (m_rightTmp.isNull()) \
 		return m_order
 
@@ -584,7 +575,6 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 
 	kDebug() << "KexiTableViewData::updateRowEditBufferRef() column #" 
 		<< colnum << " = " << newval.toString() << endl;
-//	KexiTableViewColumn* col = columns.at(colnum);
 	if (!col) {
 		kWarning() << "KexiTableViewData::updateRowEditBufferRef(): column #" 
 			<< colnum << " not found! col==0" << endl;
@@ -598,7 +588,6 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 				<< colnum << " not found!" << endl;
 			return false;
 		}
-//		if (!(static_cast<KexiDBTableViewColumn*>(col)->field)) {
 		m_pRowEditBuffer->insert( *col->columnInfo, newval);
 
 		if (col->visibleLookupColumnInfo && visibleValueForLookupField) {

@@ -47,7 +47,7 @@
 #include <kexiutils/utils.h>
 
 
-KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
+KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QWidget *parent)
  : KexiInputTableEdit(column, parent)
 {
 	setName("KexiDateTableEdit");

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 #define KEXICELLEDITORFACTORY_H
 
 #include <qvariant.h>
-#include <q3scrollview.h>
+#include <qwidget.h>
 
 #include <kexidb/field.h>
 
@@ -29,7 +29,8 @@ class KexiCellEditorFactoryItem;
 class KexiTableEdit;
 class KexiTableViewColumn;
 
-class KexiCellEditorFactory
+//! A singleton class providing access to cell editor factories
+class KEXIDATATABLE_EXPORT KexiCellEditorFactory
 {
 	public:
 		KexiCellEditorFactory();
@@ -50,19 +51,25 @@ class KexiCellEditorFactory
 		 If still no item found, the default is tried. Eventually, may return NULL. */
 		static KexiCellEditorFactoryItem* item( uint type, const QString& subType = QString::null );
 
-//		static KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0);
-		static KexiTableEdit* createEditor(KexiTableViewColumn &column, Q3ScrollView* parent = 0);
+//		static KexiTableEdit* createEditor(KexiDB::Field &f, Q3ScrollView* parent = 0);
+		/*! Creates a new editor for \a column. If \a parent is of Q3ScrollView, the new editor
+		 will be created inside parent->viewport() instead. */
+		static KexiTableEdit* createEditor(KexiTableViewColumn &column, QWidget* parent = 0);
+
+	protected:
+		static void init();
 };
 
-class KexiCellEditorFactoryItem
+//! A base class for implementing cell editor factories
+class KEXIDATATABLE_EXPORT KexiCellEditorFactoryItem
 {
 	public:
 		KexiCellEditorFactoryItem();
 		virtual ~KexiCellEditorFactoryItem();
 
 	protected:
-//		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0) = 0;
-		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, Q3ScrollView* parent = 0) = 0;
+//		virtual KexiTableEdit* createEditor(KexiDB::Field &f, Q3ScrollView* parent = 0) = 0;
+		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QWidget* parent = 0) = 0;
 	
 	friend class KexiCellEditorFactory;
 };

@@ -39,7 +39,7 @@ class KexiBlobTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 	public:
-		KexiBlobTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent=0);
+		KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
 		virtual ~KexiBlobTableEdit();
 
 		bool valueIsNull();
@@ -132,7 +132,7 @@ KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)
 class KexiKIconTableEdit : public KexiTableEdit
 {
 	public:
-		KexiKIconTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent=0);
+		KexiKIconTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
 
 		virtual ~KexiKIconTableEdit();
 

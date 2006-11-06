@@ -323,7 +323,9 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 				QObjectList *children = it.current()->widget()->queryList("QWidget");
 				for (QObjectListIt childrenIt(*children); childrenIt.current(); ++childrenIt) {
 	//				if (dynamic_cast<KexiFormDataItemInterface*>(childrenIt.current())) {
-						kexipluginsdbg << "KexiDBForm::updateTabStopsOrder(): also adding '" << childrenIt.current()->className() << " " << childrenIt.current()->name()  << "' child to filtered widgets" << endl;
+						kexipluginsdbg << "KexiDBForm::updateTabStopsOrder(): also adding '" 
+							<< childrenIt.current()->className() << " " << childrenIt.current()->name()  
+							<< "' child to filtered widgets" << endl;
 						//it.current()->widget()->installEventFilter(static_cast<QWidget*>(childrenIt.current()));
 						childrenIt.current()->installEventFilter(this);
 		//			}
@@ -459,15 +461,12 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 			}
 			// handle Esc key
 			if (ke->state() == Qt::NoButton && key == Qt::Key_Escape) {
-				//cancel field editing/row editing
-				if (d->dataAwareObject->editor()) {
-					d->dataAwareObject->cancelEditor();
-				}
-				else if (d->dataAwareObject->rowEditing()) {
-					d->dataAwareObject->cancelRowEdit();
-				}
-				ke->accept();
-				return true;
+				//cancel field editing/row editing if possible
+				if (d->dataAwareObject->cancelEditor())
+					return true;
+				else if (d->dataAwareObject->cancelRowEdit())
+					return true;
+				return false; // cancelling not needed - pass the event to the active widget
 			}
 			// jstaniek: Fix for Qt bug (handling e.g. Alt+2, Ctrl+2 keys on every platform)
 			//           It's important because we're using alt+2 short cut by default

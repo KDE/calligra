@@ -179,4 +179,19 @@ void KexiDBTextEdit::setDisplayDefaultValue(QWidget* widget, bool displayDefault
 	m_slotTextChanged_enabled = true;*/
 }
 
+void KexiDBTextEdit::moveCursorToEnd()
+{
+	KTextEdit::setCursorPosition(paragraphs()-1, paragraphLength( paragraphs()-1 ));
+}
+
+void KexiDBTextEdit::moveCursorToStart()
+{
+	KTextEdit::setCursorPosition(0 /*para*/, 0 /*index*/);
+}
+
+void KexiDBTextEdit::selectAll()
+{
+	KTextEdit::selectAll();
+}
+
 #include "kexidbtextedit.moc"

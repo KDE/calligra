@@ -47,6 +47,8 @@ class KexiDataSourceComboBox::Private
 		Private()
 		 : tablesCount(0)
 		 , prevIndex(-1)
+		 , showTables(true)
+		 , showQueries(true)
 		{
 		}
 		int firstTableIndex() const {
@@ -64,6 +66,8 @@ class KexiDataSourceComboBox::Private
 		QPixmap tableIcon, queryIcon;
 		int tablesCount;
 		int prevIndex; //!< Used in slotActivated()
+		bool showTables : 1;
+		bool showQueries : 1;
 };
 
 //------------------------
@@ -92,7 +96,7 @@ KexiProject* KexiDataSourceComboBox::project() const
 	return d->prj;
 }
 
-void KexiDataSourceComboBox::setProject(KexiProject *prj)
+void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool showQueries)
 {
 	if ((KexiProject*)d->prj == prj)
 		return;
@@ -101,6 +105,8 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj)
 		disconnect(d->prj, 0, this, 0);
 	}
 	d->prj = prj;
+	d->showTables = showTables;
+	d->showQueries = showQueries;
 	clear();
 	d->tablesCount = 0;
 	if (!d->prj)
@@ -127,28 +133,33 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj)
 
 	KCompletion *comp = completionObject();
 
-	//tables
-	KexiPart::Info* partInfo = Kexi::partManager().infoForMimeType("kexi/table");
-	if (!partInfo)
-		return;
-	KexiPart::ItemList list;
-	prj->getSortedItems(list, partInfo);
-	list.sort();
-	d->tablesCount = 0;
-	for (KexiPart::ItemListIterator it(list); it.current(); ++it, d->tablesCount++) {
-		insertItem(d->tableIcon, it.current()->name()); //or caption()? 
-		comp->addItem(it.current()->name());
+	if (d->showTables) {
+		//tables
+		KexiPart::Info* partInfo = Kexi::partManager().infoForMimeType("kexi/table");
+		if (!partInfo)
+			return;
+		KexiPart::ItemList list;
+		prj->getSortedItems(list, partInfo);
+		list.sort();
+		d->tablesCount = 0;
+		for (KexiPart::ItemListIterator it(list); it.current(); ++it, d->tablesCount++) {
+			insertItem(d->tableIcon, it.current()->name()); //or caption()? 
+			comp->addItem(it.current()->name());
+		}
 	}
 
-	//queries
-	partInfo = Kexi::partManager().infoForMimeType("kexi/query");
-	if (!partInfo)
-		return;
-	prj->getSortedItems(list, partInfo);
-	list.sort();
-	for (KexiPart::ItemListIterator it(list); it.current(); ++it) {
-		insertItem(d->queryIcon, it.current()->name()); //or caption()? 
-		comp->addItem(it.current()->name());
+	if (d->showQueries) {
+		//queries
+		KexiPart::Info* partInfo = Kexi::partManager().infoForMimeType("kexi/query");
+		if (!partInfo)
+			return;
+		KexiPart::ItemList list;
+		prj->getSortedItems(list, partInfo);
+		list.sort();
+		for (KexiPart::ItemListIterator it(list); it.current(); ++it) {
+			insertItem(d->queryIcon, it.current()->name()); //or caption()? 
+			comp->addItem(it.current()->name());
+		}
 	}
 //	setCurrentText("");
 	setCurrentItem(0);

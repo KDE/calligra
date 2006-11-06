@@ -63,10 +63,10 @@ class MyLineEdit : public KLineEdit
 
 //======================================================
 
-//KexiInputTableEdit::KexiInputTableEdit(KexiDB::Field &f, QScrollView *parent, const char* name)
-KexiInputTableEdit::KexiInputTableEdit(KexiTableViewColumn &column, Q3ScrollView *parent)
- : KexiTableEdit(column, parent, "KexiInputTableEdit")
+KexiInputTableEdit::KexiInputTableEdit(KexiTableViewColumn &column, QWidget *parent)
+ : KexiTableEdit(column, parent)
 {
+	setName("KexiInputTableEdit");
 //	m_type = f.type(); //copied because the rest of code uses m_type
 //	m_field = &f;
 //	m_origValue = value;//original value
@@ -443,15 +443,31 @@ void KexiInputTableEdit::handleAction(const QString& actionName)
 	}
 }
 
-bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm)
+bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect, 
+	const QFontMetrics& fm, bool focused)
 {
 	QString text( value.type()==QVariant::String ? value.toString()
 		: valueToText(value, QString::null, false /*!setValidator*/) );
 	QRect internalRect(rect);
 	internalRect.setLeft(rect.x()+leftMargin());
-	internalRect.setWidth(internalRect.width()-rightMargin()-2*3);
+	internalRect.setWidth(internalRect.width()-rightMargin(focused)-2*3);
 	kexidbg << rect << " " << internalRect << " " << fm.width(text) << endl;
 	return fm.width(text) > internalRect.width();
+}
+
+void KexiInputTableEdit::moveCursorToEnd()
+{
+	m_lineedit->end(false/*!mark*/);
+}
+
+void KexiInputTableEdit::moveCursorToStart()
+{
+	m_lineedit->home(false/*!mark*/);
+}
+
+void KexiInputTableEdit::selectAll()
+{
+	m_lineedit->selectAll();
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiInputEditorFactoryItem, KexiInputTableEdit)

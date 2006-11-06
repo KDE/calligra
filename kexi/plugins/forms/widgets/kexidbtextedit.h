@@ -86,6 +86,15 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 //! @todo enable "real" undo internally so user can use ctrl+z while editing
 		virtual void undo();
 
+		//! Implemented for KexiDataItemInterface
+		virtual void moveCursorToEnd();
+
+		//! Implemented for KexiDataItemInterface
+		virtual void moveCursorToStart();
+
+		//! Implemented for KexiDataItemInterface
+		virtual void selectAll();
+
 	protected slots:
 		void slotTextChanged();
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,8 +27,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <tableview/kexitableitem.h>
-#include <tableview/kexitableviewdata.h>
+#include <widget/tableview/kexitableitem.h>
+#include <widget/tableview/kexitableviewdata.h>
+#include <widget/tableview/kexicomboboxbase.h>
 #include <kexidb/queryschema.h>
 #include <kexiutils/utils.h>
 
@@ -98,17 +99,30 @@ void KexiFormDataProvider::fillDataItems(KexiTableItem& row, bool cursorAtNewRow
 	for (KexiFormDataItemInterfaceToIntMap::ConstIterator it = m_fieldNumbersForDataItems.constBegin(); 
 		it!=m_fieldNumbersForDataItems.constEnd(); ++it)
 	{
-		const QVariant value( row.at(it.data()) );
 		KexiFormDataItemInterface *itemIface = it.key();
+		//1. Is this a value with a combo box (lookup)?
+		int indexForVisibleLookupValue = itemIface->columnInfo()->indexForVisibleLookupValue();
+		if (indexForVisibleLookupValue<0 && indexForVisibleLookupValue>=(int)row.count()) //sanity
+			indexForVisibleLookupValue = -1; //no
+		const QVariant value(row.at(it.data()));
+		QVariant visibleLookupValue;
+		if (indexForVisibleLookupValue!=-1)
+			visibleLookupValue = row.at(indexForVisibleLookupValue);
 		kexipluginsdbg << "fill data of '" << itemIface->dataSource() <<  "' at idx=" << it.data() 
-			<< " data=" << value << endl;
-		const bool displayDefaultValue = cursorAtNewRow && value.isNull() 
+			<< " data=" << value << (indexForVisibleLookupValue!=-1 
+				? QString(" SPECIAL: indexForVisibleLookupValue=%1 visibleValue=%2")
+					.arg(indexForVisibleLookupValue).arg(visibleLookupValue.toString())
+				: QString::null)
+			<< endl;
+		const bool displayDefaultValue = cursorAtNewRow && (value.isNull() && visibleLookupValue.isNull())
 			&& !itemIface->columnInfo()->field->defaultValue().isNull() 
 			&& !itemIface->columnInfo()->field->isAutoIncrement(); //no value to set but there is default value defined
-		if (displayDefaultValue)
-			itemIface->setValue( itemIface->columnInfo()->field->defaultValue() );
-		else
-			itemIface->setValue( value );
+		itemIface->setValue( 
+			displayDefaultValue ? itemIface->columnInfo()->field->defaultValue() : value,
+			QVariant(), /*add*/
+			/*!remove old*/false, 
+			indexForVisibleLookupValue==-1 ? 0 : &visibleLookupValue //pass visible value if available
+		);
 		// now disable/enable "display default value" if needed (do it after setValue(), before setValue() turns it off)
 		if (itemIface->hasDisplayedDefaultValue() != displayDefaultValue)
 			itemIface->setDisplayDefaultValue( dynamic_cast<QWidget*>(itemIface), displayDefaultValue );
@@ -173,10 +187,10 @@ void KexiFormDataProvider::invalidateDataSources( const Q3ValueList<uint>& inval
 	//fill m_fieldNumbersForDataItems mapping from data item to field number
 	//(needed for fillDataItems)
 	KexiDB::QueryColumnInfo::Vector fieldsExpanded;
-	uint dataFieldsCount; // == fieldsExpanded.count() if query is available or else == m_dataItems.count()
+//	uint dataFieldsCount; // == fieldsExpanded.count() if query is available or else == m_dataItems.count()
 	if (query) {
-		fieldsExpanded = query->fieldsExpanded();
-		dataFieldsCount = fieldsExpanded.count();
+		fieldsExpanded = query->fieldsExpanded( KexiDB::QuerySchema::WithInternalFields );
+//		dataFieldsCount = fieldsExpanded.count();
 		QMap<KexiDB::QueryColumnInfo*,int> columnsOrder( query->columnsOrder() );
 		for (QMapConstIterator<KexiDB::QueryColumnInfo*,int> it = columnsOrder.constBegin(); it!=columnsOrder.constEnd(); ++it) {
 			kexipluginsdbg << "query->columnsOrder()[ " << it.key()->field->name() << " ] = " << it.data() << endl;
@@ -196,7 +210,7 @@ void KexiFormDataProvider::invalidateDataSources( const Q3ValueList<uint>& inval
 		}
 	}
 	else {//!query
-		dataFieldsCount = m_dataItems.count();
+//		dataFieldsCount = m_dataItems.count();
 	}
 
 	//in 'newIndices' let's collect new indices for every data source
@@ -258,11 +272,26 @@ void KexiFormDataProvider::invalidateDataSources( const Q3ValueList<uint>& inval
 		uint fieldNumber = m_fieldNumbersForDataItems[ item ];
 		if (query) {
 			KexiDB::QueryColumnInfo *ci = fieldsExpanded[fieldNumber];
-//			KexiDB::Field *f = ci->field;
 			it.current()->setColumnInfo(ci);
 			kexipluginsdbg << "- item=" << dynamic_cast<QObject*>(it.current())->name() 
 				<< " dataSource=" << it.current()->dataSource()
 				<< " field=" << ci->field->name() << endl;
+			const int indexForVisibleLookupValue = ci->indexForVisibleLookupValue();
+			if (-1 != indexForVisibleLookupValue && indexForVisibleLookupValue < (int)fieldsExpanded.count()) {
+				//there's lookup column defined: set visible column as well
+				KexiDB::QueryColumnInfo *visibleColumnInfo = fieldsExpanded[ indexForVisibleLookupValue ];
+				if (visibleColumnInfo) {
+					it.current()->setVisibleColumnInfo( visibleColumnInfo );
+					if (dynamic_cast<KexiComboBoxBase*>(it.current()) && m_mainWidget
+						&& dynamic_cast<KexiComboBoxBase*>(it.current())->internalEditor()) {
+						// m_mainWidget (dbform) should filter the (just created using setVisibleColumnInfo()) 
+						// combo box' internal editor (actually, only if the combo is in 'editable' mode)
+						dynamic_cast<KexiComboBoxBase*>(it.current())->internalEditor()->installEventFilter(m_mainWidget);
+					}
+					kexipluginsdbg << " ALSO SET visibleColumn=" << visibleColumnInfo->debugString() 
+						<< "\n at position " << indexForVisibleLookupValue << endl;
+				}
+			}
 		}
 		tmpUsedDataSources.replace( it.current()->dataSource().lower(), (char*)1 );
 	}

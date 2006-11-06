@@ -53,7 +53,7 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 
 	connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
 
-	m_popup = new KMenu(this, "contextMenu");
+	m_popupMenu = new KMenu(this, "contextMenu");
 
 //	setFocusPolicy(NoFocus);
 }
@@ -491,10 +491,10 @@ bool KexiFormScrollView::shouldDisplayDefaultValueForItem(KexiFormDataItemInterf
 		&& !itemIface->columnInfo()->field->isAutoIncrement(); // default value defined
 }
 
-void KexiFormScrollView::cancelEditor()
+bool KexiFormScrollView::cancelEditor()
 {
 	if (!dynamic_cast<KexiFormDataItemInterface*>(m_editor))
-		return;
+		return false;
 
 	if (m_errorMessagePopup)
 		m_errorMessagePopup->close();
@@ -510,7 +510,7 @@ void KexiFormScrollView::cancelEditor()
 	fillDuplicatedDataItems(itemIface, m_editor->value());
 
 	// this will clear editor pointer and close message popup (if present)
-	KexiDataAwareObjectInterface::cancelEditor();
+	return KexiDataAwareObjectInterface::cancelEditor();
 }
 
 void KexiFormScrollView::updateAfterCancelRowEdit()

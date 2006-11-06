@@ -75,29 +75,30 @@
 KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)
 {
-//	KFormDesigner::WidgetInfo *wView = new KFormDesigner::WidgetInfo(this);
-	KexiDataAwareWidgetInfo *wView = new KexiDataAwareWidgetInfo(this);
-	wView->setPixmap("form");
-	wView->setClassName("KexiDBForm");
-	wView->setName(i18n("Form"));
-	wView->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "form"));
-	wView->setDescription(i18n("A data-aware form widget"));
-	addClass(wView);
+	KFormDesigner::WidgetInfo *wi;
+	wi = new KexiDataAwareWidgetInfo(this);
+	wi->setPixmap("form");
+	wi->setClassName("KexiDBForm");
+	wi->setName(i18n("Form"));
+	wi->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. "
+		"It must _not_ contain white spaces and non latin1 characters.", "form"));
+	wi->setDescription(i18n("A data-aware form widget"));
+	addClass(wi);
 
 #ifndef KEXI_NO_SUBFORM
-	KexiDataAwareWidgetInfo *wSubForm = new KexiDataAwareWidgetInfo(this);
-	wSubForm->setPixmap("subform");
-	wSubForm->setClassName("KexiDBSubForm");
-	wSubForm->addAlternateClassName("KexiSubForm", true/*override*/); //older
-	wSubForm->setName(i18n("Sub Form"));
-	wSubForm->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subForm"));
-	wSubForm->setDescription(i18n("A form widget included in another Form"));
-	wSubForm->setAutoSyncForProperty( "formName", false );
-	addClass(wSubForm);
+	wi = new KexiDataAwareWidgetInfo(this);
+	wi->setPixmap("subform");
+	wi->setClassName("KexiDBSubForm");
+	wi->addAlternateClassName("KexiSubForm", true/*override*/); //older
+	wi->setName(i18n("Sub Form"));
+	wi->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. "
+		"It must _not_ contain white spaces and non latin1 characters.", "subForm"));
+	wi->setDescription(i18n("A form widget included in another Form"));
+	wi->setAutoSyncForProperty( "formName", false );
+	addClass(wi);
 #endif
-	KFormDesigner::WidgetInfo *wi;
 
 	// inherited
 	wi = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KLineEdit");
@@ -108,7 +109,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setIncludeFileName("klineedit.h");
 	wi->setName(i18n("Text Box"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "textBox"));
+		i18n("Widget name. This string will be used to name widgets of this class. "
+		"It must _not_ contain white spaces and non latin1 characters.", "textBox"));
 	wi->setDescription(i18n("A widget for entering and displaying text"));
 	addClass(wi);
 
@@ -121,18 +123,20 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setIncludeFileName("ktextedit.h");
 	wi->setName(i18n("Text Editor"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "textEditor"));
+		i18n("Widget name. This string will be used to name widgets of this class. "
+		"It must _not_ contain white spaces and non latin1 characters.", "textEditor"));
 	wi->setDescription(i18n("A multiline text editor"));
 	addClass(wi);
 
 	wi = new KFormDesigner::WidgetInfo(
-		this, "containers", "QFrame" /*we're inheriting to get i18n'd strings already translated there*/);
+		this, "containers", "Q3Frame" /*we're inheriting to get i18n'd strings already translated there*/);
 	wi->setPixmap("frame");
 	wi->setClassName("KexiFrame");
-	wi->addAlternateClassName("QFrame", true/*override*/);
+	wi->addAlternateClassName("Q3Frame", true/*override*/);
 	wi->setName(i18n("Frame"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "frame"));
+		i18n("Widget name. This string will be used to name widgets of this class. "
+		"It must _not_ contain white spaces and non latin1 characters.", "frame"));
 	wi->setDescription(i18n("A simple frame widget"));
 	addClass(wi);
 
@@ -144,7 +148,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->addAlternateClassName("KexiLabel", true/*override*/); //older
 	wi->setName(i18n("Text Label", "Label"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "label"));
+		i18n("Widget name. This string will be used to name widgets of this class. "
+		"It must _not_ contain white spaces and non latin1 characters.", "label"));
 	wi->setDescription(i18n("A widget for displaying text"));
 	addClass(wi);
 
@@ -157,7 +162,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->addAlternateClassName("KexiImageBox", true/*override*/); //older
 	wi->setName(i18n("Image Box"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "image"));
+		i18n("Widget name. This string will be used to name widgets of this class. "
+		"It must _not_ contain white spaces and non latin1 characters.", "image"));
 	wi->setDescription(i18n("A widget for displaying images"));
 //	wi->setCustomTypeForProperty("pixmapData", KexiCustomPropertyFactory::PixmapData);
 	wi->setCustomTypeForProperty("pixmapId", KexiCustomPropertyFactory::PixmapId);
@@ -175,7 +181,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->addAlternateClassName("KComboBox", true/*override*/);
 	wi->setName(i18n("Combo Box"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "comboBox"));
+		i18n("Widget name. This string will be used to name widgets of this class. "
+		"It must _not_ contain white spaces and non latin1 characters.", "comboBox"));
 	wi->setDescription(i18n("A combo box widget"));
 	addClass(wi);
 #endif
@@ -186,20 +193,23 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->addAlternateClassName("QCheckBox", true/*override*/);
 	wi->setName(i18n("Check Box"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "checkBox"));
+		i18n("Widget name. This string will be used to name widgets of this class. "
+		"It must _not_ contain white spaces and non latin1 characters.", "checkBox"));
 	wi->setDescription(i18n("A check box with text label"));
 	addClass(wi);
 
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
-	KexiDataAwareWidgetInfo *wFieldEdit = new KexiDataAwareWidgetInfo(this);
-	wFieldEdit->setPixmap("edit");
-	wFieldEdit->setClassName("KexiDBAutoField");
+	wi = new KexiDataAwareWidgetInfo(this);
+	wi->setPixmap("edit");
+	wi->setClassName("KexiDBAutoField");
 	wi->addAlternateClassName("KexiDBFieldEdit", true/*override*/); //older
-	wFieldEdit->setName(i18n("Auto Field"));
-	wFieldEdit->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters", "autoField"));
-	wFieldEdit->setDescription(i18n("A widget containing an automatically selected editor and a label to edit the value of a database field of any type."));
-	addClass(wFieldEdit);
+	wi->setName(i18n("Auto Field"));
+	wi->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. "
+	"It must _not_ contain white spaces and non latin1 characters", "autoField"));
+	wi->setDescription(i18n("A widget containing an automatically selected editor "
+		"and a label to edit the value of a database field of any type."));
+	addClass(wi);
 #endif
 
 /*
@@ -276,7 +286,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->addAlternateClassName("KexiPushButton");
 	wi->setName(i18n("Command Button"));
 	wi->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "button"));
+		i18n("Widget name. This string will be used to name widgets of this class. "
+		"It must _not_ contain white spaces and non latin1 characters.", "button"));
 	wi->setDescription(i18n("A command button to execute actions"));
 	addClass(wi);
 
@@ -303,7 +314,8 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 //	m_propDesc["labelCaption"] = i18n("Label Text");
 	m_propDesc["autoCaption"] = i18n("Auto Label");
 	m_propDesc["foregroundLabelColor"] = i18n("Label Text Color");
-	m_propDesc["backgroundLabelColor"] = i18n("(a property name, keep the text narrow!)", "Label Background\nColor");
+	m_propDesc["backgroundLabelColor"] = i18n("(a property name, keep the text narrow!)", 
+		"Label Background\nColor");
 
 	m_propDesc["labelPosition"] = i18n("Label Position");
 	m_propValDesc["Left"] = i18n("Label Position", "Left");
@@ -322,12 +334,17 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 
 	//used in labels, frames...
 	m_propDesc["frameColor"] = i18n("Frame Color");
-	m_propDesc["dropDownButtonVisible"] = i18n("Drop-Down Button for Image Box Visible (a property name, keep the text narrow!)", "Drop-Down\nButton Visible");
+	m_propDesc["dropDownButtonVisible"] = 
+		i18n("Drop-Down Button for Image Box Visible (a property name, keep the text narrow!)", 
+			"Drop-Down\nButton Visible");
 
 	//for checkbox
 	m_propValDesc["TristateDefault"] = i18n("Tristate checkbox, default", "Default");
 	m_propValDesc["TristateOn"] = i18n("Tristate checkbox, yes", "Yes");
 	m_propValDesc["TristateOff"] = i18n("Tristate checkbox, no", "No");
+	
+	//for combobox
+	m_propDesc["editable"] = futureI18n2("Editable combobox", "Editable");
 }
 
 KexiDBFactory::~KexiDBFactory()
@@ -358,7 +375,7 @@ KexiDBFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 		if (designMode)
 			w->setCursor(QCursor(Qt::ArrowCursor));
 	}
-	else if(c == "QFrame" || c == "KexiFrame")
+	else if(c == "Q3Frame" || c == "KexiFrame")
 	{
 		w = new KexiFrame(p, n);
 		new KFormDesigner::Container(container, w, container);
@@ -396,7 +413,7 @@ KexiDBFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 }
 
 bool
-KexiDBFactory::createMenuActions(const Q3CString &classname, QWidget *w, Q3PopupMenu *menu,
+KexiDBFactory::createMenuActions(const Q3CString &classname, QWidget *w, QPopupMenu *menu,
 		   KFormDesigner::Container *)
 {
 	if(classname == "QPushButton" || classname == "KPushButton" || classname == "KexiPushButton")
@@ -487,7 +504,7 @@ KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigne
 		{
 			createEditor(classname, label->text(), label, container,
 				label->geometry(), label->alignment(), 
-				false, label->alignment() & Qt::TextWordWrap /*multiline*/);
+				false, label->alignment() & Qt::WordBreak /*multiline*/);
 		}
 		return true;
 	}
@@ -520,7 +537,7 @@ KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigne
 		KexiDBCheckBox *cb = static_cast<KexiDBCheckBox*>(w);
 		QRect r( cb->geometry() );
 		r.setLeft( r.left() + 2 + cb->style().subRect( QStyle::SR_CheckBoxIndicator, cb ).width() );
-		createEditor(classname, cb->text(), cb, container, r, Qt::AlignLeft);
+		createEditor(classname, cb->text(), cb, container, r, Qt::AlignAuto);
 		return true;
 	}
 	else if(classname == "KexiDBImageBox") {
@@ -638,8 +655,8 @@ KexiDBFactory::isPropertyVisibleInternal(const Q3CString& classname, QWidget *w,
 }
 
 bool
-KexiDBFactory::propertySetShouldBeReloadedAfterPropertyChange(const QCString& classname, 
-	QWidget *w, const QCString& property)
+KexiDBFactory::propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname, 
+	QWidget *w, const Q3CString& property)
 {
 	Q_UNUSED(classname);
 	Q_UNUSED(w);

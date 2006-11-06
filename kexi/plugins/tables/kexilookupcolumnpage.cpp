@@ -104,22 +104,15 @@ class KexiLookupColumnPage::Private
 		KexiDataSourceComboBox *rowSourceCombo;
 		KexiFieldComboBox *boundColumnCombo, *visibleColumnCombo;
 		KexiObjectInfoLabel *objectInfoLabel;
-//		KexiDataSourceComboBox* d->dataSourceCombo;
 		QLabel *rowSourceLabel, *boundColumnLabel, *visibleColumnLabel;
-		//, *d->noDataSourceAvailableLabel, *d->availableFieldsLabel,
-		//	*d->mousePointerLabel, *d->availableFieldsDescriptionLabel;
 		QToolButton *clearRowSourceButton, *gotoRowSourceButton, *clearBoundColumnButton,
 			*clearVisibleColumnButton;
-		//, *d->clearDSButton, *d->gotoButton, *d->addField;
-//		QFrame *d->rowSourceSeparator;
-//		QString d->noDataSourceAvailableSingleText, d->noDataSourceAvailableMultiText;
 		//! Used only in assignPropertySet() to check whether we already have the set assigned
 		int currentFieldUid;
 
 		bool insideClearRowSourceSelection : 1;
 		//! True is changeProperty() works. Used to block updating properties when within assignPropertySet().
 		bool propertySetEnabled : 1;
-//disable		KexiFieldListView* d->fieldListView;
 
 	private:
 		//! A property set that is displayed on the page. 
@@ -142,19 +135,11 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 //todo	d->noDataSourceAvailableSingleText = i18n("No data source could be assigned for this widget.");
 //todo	d->noDataSourceAvailableMultiText = i18n("No data source could be assigned for multiple widgets.");
 
-//	vlyr->addSpacing(8);
-
 	//-Row Source
 	QWidget *contents = new QWidget(this);
 	vlyr->addWidget(contents);
 	QVBoxLayout *contentsVlyr = new QVBoxLayout(contents);
 
-/*todo	d->noDataSourceAvailableLabel = new QLabel(d->noDataSourceAvailableSingleText, contents);
-	d->noDataSourceAvailableLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-	d->noDataSourceAvailableLabel->setMargin(2);
-	d->noDataSourceAvailableLabel->setAlignment(Qt::WordBreak | Qt::AlignBottom | Qt::AlignLeft);
-	contentsVlyr->addWidget(d->noDataSourceAvailableLabel);
-*/
 	QHBoxLayout *hlyr = new QHBoxLayout(contentsVlyr);
 	d->rowSourceLabel = new QLabel(i18n("Row source:"), contents);
 	d->rowSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -179,11 +164,6 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 	d->rowSourceCombo = new KexiDataSourceComboBox(contents, "rowSourceCombo");
 	d->rowSourceLabel->setBuddy(d->rowSourceCombo);
 	contentsVlyr->addWidget(d->rowSourceCombo);
-
-/*	d->rowSourceSeparator = new QFrame(contents);
-	d->rowSourceSeparator->setFrameShape(QFrame::HLine);
-z		d->rowSourceSeparator->setFrameShadow(QFrame::Sunken);
-	contentsVlyr->addWidget(d->rowSourceSeparator);*/
 
 	contentsVlyr->addSpacing(8);
 
@@ -229,87 +209,8 @@ z		d->rowSourceSeparator->setFrameShadow(QFrame::Sunken);
 	d->visibleColumnLabel->setBuddy(d->visibleColumnCombo);
 	contentsVlyr->addWidget(d->visibleColumnCombo);
 
-	
-#if 0
-
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
-	d->availableFieldsLabel = 0;
-	d->addField = 0;
-//	d->fieldListView = 0;
-	vlyr->addStretch();
-#else
-	vlyr->addSpacing(fontMetrics().height());
-/*	QFrame *separator = new QFrame(this);
-	separator->setFrameShape(QFrame::HLine);
-	separator->setFrameShadow(QFrame::Sunken);
-	vlyr->addWidget(separator);*/
-/*
-	KPopupTitle *title = new KPopupTitle(this);
-	title->setTitle(i18n("Inserting fields"));
-	vlyr->addWidget(title);
-	vlyr->addSpacing(4);*/
-
-
-	//2. Inserting fields
-	container = new KoProperty::GroupContainer(i18n("Inserting Fields"), this);
-	vlyr->addWidget(container, 1);
-
-	//helper info
-//! @todo allow to hide such helpers by adding global option
-	contents = new QWidget(container);
-	container->setContents(contents);
-	contentsVlyr = new QVBoxLayout(contents);
-	hlyr = new QHBoxLayout(contentsVlyr);
-	d->mousePointerLabel = new QLabel(contents);
-	hlyr->addWidget(d->mousePointerLabel);
-	d->mousePointerLabel->setPixmap( SmallIcon("mouse_pointer") );
-	d->mousePointerLabel->setFixedWidth( d->mousePointerLabel->pixmap() ? d->mousePointerLabel->pixmap()->width() : 0);
-	d->availableFieldsDescriptionLabel = new QLabel(
-		i18n("Select fields from the list below and drag them onto a form or click the \"Insert\" button"), contents);
-	d->availableFieldsDescriptionLabel->setAlignment( Qt::AlignAuto | Qt::WordBreak );
-	hlyr->addWidget(d->availableFieldsDescriptionLabel);
-
-	//Available Fields
-	contentsVlyr->addSpacing(4);
-	hlyr = new QHBoxLayout(contentsVlyr);
-	d->availableFieldsLabel = new QLabel(i18n("Available fields:"), contents);
-	d->availableFieldsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-	d->availableFieldsLabel->setMargin(2);
-	d->availableFieldsLabel->setMinimumHeight(IconSize(KIcon::Small));
-	hlyr->addWidget(d->availableFieldsLabel);
-
-	d->addField = new QToolButton(contents, "addFieldButton");
-	d->addField->setFocusPolicy(StrongFocus);
-	d->addField->setUsesTextLabel(true);
-	d->addField->setTextPosition(QToolButton::Right);
-	d->addField->setTextLabel(i18n("Insert selected field into form", "Insert"));
-	d->addField->setIconSet(SmallIconSet("add_field"));
-	d->addField->setMinimumHeight(d->availableFieldsLabel->minimumHeight());
-	d->addField->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-	d->addField->setAutoRaise(true);
-	d->addField->setPaletteBackgroundColor(palette().active().background());
-	QToolTip::add(d->addField, i18n("Insert selected fields into form"));
-	hlyr->addWidget(d->addField);
-	connect(d->addField, SIGNAL(clicked()), this, SLOT(slotInsertSelectedFields()));
-
-	d->fieldListView = new KexiFieldListView(contents, "fieldListView",
-		KexiFieldListView::ShowDataTypes | KexiFieldListView::AllowMultiSelection );
-	d->fieldListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding));
-	d->availableFieldsLabel->setBuddy(d->fieldListView);
-	contentsVlyr->addWidget(d->fieldListView, 1);
-	connect(d->fieldListView, SIGNAL(selectionChanged()), this, SLOT(slotFieldListViewSelectionChanged()));
-	connect(d->fieldListView, SIGNAL(fieldDoubleClicked(const QString&, const QString&, const QString&)),
-		this, SLOT(slotFieldDoubleClicked(const QString&, const QString&, const QString&)));
-#endif
-
-#endif//0
-
 	vlyr->addStretch(1);
 
-#if 0
-
-	slotFieldListViewSelectionChanged();
-#endif
 	connect(d->rowSourceCombo, SIGNAL(textChanged(const QString &)), 
 		this, SLOT(slotRowSourceTextChanged(const QString &)));
 	connect(d->rowSourceCombo, SIGNAL(dataSourceChanged()), this, SLOT(slotRowSourceChanged()));
@@ -327,7 +228,11 @@ KexiLookupColumnPage::~KexiLookupColumnPage()
 
 void KexiLookupColumnPage::setProject(KexiProject *prj)
 {
-	d->rowSourceCombo->setProject(prj);
+	d->rowSourceCombo->setProject(prj,
+		true/*showTables*/, 
+//! @todo show queries when supported
+		false/*showQueries*/
+	);
 	d->boundColumnCombo->setProject(prj);
 	d->visibleColumnCombo->setProject(prj);
 }
@@ -340,24 +245,9 @@ void KexiLookupColumnPage::assignPropertySet(KoProperty::Set* propertySet)
 		return; //already assigned
 
 	d->propertySetEnabled = false;
-
 	d->setPropertySet( propertySet );
-
 	d->updateInfoLabelForPropertySet( i18n("No field selected") );
 	
-//	if (d->propertySet && d->propertySet->contains("caption"))
-//		objectCaption = (*d->propertySet)["caption"].value().toCString();
-//	if (!objectCaption.isEmpty() && objectCaption == d->currentObjectCaption)
-//		return; //the same object
-//	d->currentObjectCaption = objectCaption;
-
-//	setEnabled(d->propertySet);
-//	d->objectInfoLabel->setObjectClassIcon(d->propertySet ? "lineedit" : "");
-//! @todo "field" icon?
-//	d->objectInfoLabel->setObjectClassName( 
-//		d->propertySet ? i18n("Table field") : "");
-//	d->objectInfoLabel->setObjectName(d->propertySet ? objectCaption : i18n("No field selected"));
-
 	const bool hasRowSource = d->hasPropertySet() && !d->propertyValue("rowSourceType").isNull()
 		&& !d->propertyValue("rowSource").isNull();
 
@@ -366,14 +256,11 @@ void KexiLookupColumnPage::assignPropertySet(KoProperty::Set* propertySet)
 		rowSourceType = typeToMimeType( d->propertyValue("rowSourceType").toString() );
 		rowSource = d->propertyValue("rowSource").toString();
 	}
-//		d->noDataSourceAvailableLabel->hide();
 	d->rowSourceCombo->setDataSource( rowSourceType, rowSource );
 	d->rowSourceLabel->setEnabled( d->hasPropertySet() );
 	d->rowSourceCombo->setEnabled( d->hasPropertySet() );
 	if (!d->hasPropertySet())
 		d->clearRowSourceButton->setEnabled( false );
-//	d->clearBoundColumnButton->setEnabled(!d->boundColumnCombo->currentText().isEmpty());
-//	d->clearVisibleColumnButton->setEnabled(!d->visibleColumnCombo->currentText().isEmpty());
 
 	int boundColumn = -1, visibleColumn = -1;
 	if (d->rowSourceCombo->isSelectionValid()) {
@@ -383,33 +270,6 @@ void KexiLookupColumnPage::assignPropertySet(KoProperty::Set* propertySet)
 	d->boundColumnCombo->setFieldOrExpression(boundColumn);
 	d->visibleColumnCombo->setFieldOrExpression(visibleColumn);
 	updateBoundColumnWidgetsAvailability();
-/*
-			d->widgetDSLabel->show();
-			d->clearWidgetDSButton->show();
-			d->sourceFieldCombo->show();
-			d->dataSourceSeparator->hide();*/
-			//updateBoundColumnWidgetsAvailability();
-	//}
-
-//	if (isForm) {
-	//	d->noDataSourceAvailableLabel->hide();
-		//d->dataSourceSeparator->hide();
-//	}
-	//else 
-	//if (!hasRowSource) {
-//		d->dataSourceSeparator->show();
-//		//make 'No data source could be assigned' label's height the same as the 'source field' combo+label
-//		d->noDataSourceAvailableLabel->setMinimumHeight(d->widgetDSLabel->height()
-//			+ d->sourceFieldCombo->height()-d->dataSourceSeparator->height());
-//		d->boundColumnCombo->setCurrentText("");
-	//}
-
-/*	if (isForm || !hasDataSourceProperty) {
-		//no source field can be set
-		d->widgetDSLabel->hide();
-		d->clearWidgetDSButton->hide();
-		d->sourceFieldCombo->hide();
-	}*/
 	d->propertySetEnabled = true;
 }
 
@@ -524,11 +384,6 @@ void KexiLookupColumnPage::slotRowSourceTextChanged(const QString & string)
 	else {
 		clearRowSourceSelection( d->rowSourceCombo->selectedName().isEmpty()/*alsoClearComboBox*/ );
 	}
-/*#ifndef KEXI_NO_AUTOFIELD_WIDGET
-	d->fieldListView->setEnabled(enable);
-//	d->addField->setEnabled(enable);
-	d->availableFieldsLabel->setEnabled(enable);
-#endif*/
 }
 
 void KexiLookupColumnPage::clearRowSourceSelection(bool alsoClearComboBox)
@@ -538,14 +393,8 @@ void KexiLookupColumnPage::clearRowSourceSelection(bool alsoClearComboBox)
 	d->insideClearRowSourceSelection = true;
 	if (alsoClearComboBox && !d->rowSourceCombo->selectedName().isEmpty())
 		d->rowSourceCombo->setDataSource("", "");
-//	if (!d->dataSourceCombo->currentText().isEmpty()) {
-//		d->dataSourceCombo->setCurrentText("");
-//		emit d->dataSourceCombo->dataSourceSelected();
-//	}
 	d->clearRowSourceButton->setEnabled(false);
 	d->gotoRowSourceButton->setEnabled(false);
-//disabled	d->addField->setEnabled(false);
-//disabled	d->fieldListView->clear();
 	d->insideClearRowSourceSelection = false;
 }
 
@@ -567,59 +416,6 @@ void KexiLookupColumnPage::updateBoundColumnWidgetsAvailability()
 	d->visibleColumnCombo->setEnabled( hasRowSource );
 	d->visibleColumnLabel->setEnabled( hasRowSource );
 	d->clearVisibleColumnButton->setEnabled( hasRowSource && !d->visibleColumnCombo->fieldOrExpression().isEmpty() );
-/*disabled	d->fieldListView->setEnabled( hasDataSource );
-	d->availableFieldsLabel->setEnabled( hasDataSource );
-	d->mousePointerLabel->setEnabled( hasDataSource );
-	d->availableFieldsDescriptionLabel->setEnabled( hasDataSource );
-*/
 }
-
-
-
-//---------------------
-#if 0
-
-void KexiDataSourcePage::slotInsertSelectedFields()
-{
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
-	QStringList selectedFieldNames(d->fieldListView->selectedFieldNames());
-	if (selectedFieldNames.isEmpty())
-		return;
-
-	emit insertAutoFields(d->fieldListView->schema()->table() ? "kexi/table" : "kexi/query",
-		d->fieldListView->schema()->name(), selectedFieldNames);
-#endif
-}
-
-void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
-	const QString& fieldName)
-{
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
-	QStringList selectedFields;
-	selectedFields.append(fieldName);
-	emit insertAutoFields(sourceMimeType, sourceName, selectedFields);
-#endif
-}
-
-void KexiDataSourcePage::setDataSource(const QString& mimeType, const QString& name)
-{
-	d->dataSourceCombo->setDataSource(mimeType, name);
-}
-
-void KexiDataSourcePage::slotFieldListViewSelectionChanged()
-{
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
-	//update "add field" button's state
-	for (QListViewItemIterator it(d->fieldListView); it.current(); ++it) {
-		if (it.current()->isSelected()) {
-			d->addField->setEnabled(true);
-			return;
-		}
-	}
-	d->addField->setEnabled(false);
-#endif
-}
-
-#endif
 
 #include "kexilookupcolumnpage.moc"

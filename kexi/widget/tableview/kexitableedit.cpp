@@ -33,13 +33,12 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-//KexiTableEdit::KexiTableEdit(KexiDB::Field &f, QScrollView* parent, const char* name)
-KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, Q3ScrollView* parent, const char* name)
-: QWidget(parent->viewport(), name)
+KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
+: QWidget(dynamic_cast<Q3ScrollView*>(parent) ? dynamic_cast<Q3ScrollView*>(parent)->viewport() : parent)
  ,m_column(&column)
 // ,m_field(&f)
 // ,m_type(f.type()) //copied because the rest of code uses m_type
- ,m_scrollView(parent)
+ ,m_scrollView(dynamic_cast<Q3ScrollView*>(parent))
  ,m_usesSelectedTextColor(true)
  ,m_view(0)
 // ,m_hasFocusableWidget(true)
@@ -71,8 +70,8 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, Q3ScrollView* parent, 
 #endif
 	}
 
-
-	m_rightMargin = 0;//TODO
+	m_rightMargin = 0;
+	m_rightMarginWhenFocused = 0;
 }
 
 KexiTableEdit::~KexiTableEdit()
@@ -93,6 +92,12 @@ void KexiTableEdit::setViewWidget(QWidget *v)
 	m_view->move(0,0);
 	m_view->installEventFilter(this);
 	setFocusProxy(m_view);
+}
+
+void KexiTableEdit::moveChild( QWidget * child, int x, int y )
+{
+	if (m_scrollView)
+		m_scrollView->moveChild(child, x, y);
 }
 
 void KexiTableEdit::resize(int w, int h)
@@ -217,12 +222,19 @@ void KexiTableEdit::repaintRelatedCell()
 		dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView)->updateCurrentCell();
 }
 
-bool KexiTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm)
+bool KexiTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,
+	bool focused)
 {
 	Q_UNUSED(value);
 	Q_UNUSED(rect);
 	Q_UNUSED(fm);
+	Q_UNUSED(focused);
 	return false;
+}
+
+int KexiTableEdit::rightMargin(bool focused) const
+{
+	return focused ? m_rightMarginWhenFocused : m_rightMargin;
 }
 
 #include "kexitableedit.moc"
