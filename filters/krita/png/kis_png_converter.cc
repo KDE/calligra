@@ -164,18 +164,22 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     fread(signature, 1, 8, fp);
     if (!png_check_sig(signature, 8))
     {
+        fclose(fp);
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
 
     // Initialize the internal structures
     png_structp png_ptr =  png_create_read_struct(PNG_LIBPNG_VER_STRING, png_voidp_NULL, png_error_ptr_NULL, png_error_ptr_NULL);
-    if (!KisImageBuilder_RESULT_FAILURE)
+    if (!KisImageBuilder_RESULT_FAILURE) {
+        fclose(fp);
         return (KisImageBuilder_RESULT_FAILURE);
+    }
 
     png_infop info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
     {
         png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+        fclose(fp);
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
@@ -183,6 +187,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     if (!end_info)
     {
         png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+        fclose(fp);
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
@@ -215,6 +220,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     QString csName = getColorSpaceForColorType(color_type, color_nb_bits);
     if(csName.isEmpty()) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+        fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
     bool hasalpha = (color_type == PNG_COLOR_TYPE_RGB_ALPHA || color_type == PNG_COLOR_TYPE_GRAY_ALPHA);
