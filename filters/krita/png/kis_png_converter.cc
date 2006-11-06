@@ -594,7 +594,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
                 color_nb_bits = 8;
             }
         } else {
-            delete palette;
+            delete [] palette;
         }
     }
 
@@ -768,7 +768,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
 
     if( color_type == PNG_COLOR_TYPE_PALETTE)
     {
-        delete palette;
+        delete [] palette;
     }
 
     fclose(fp);
