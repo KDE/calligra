@@ -22,6 +22,7 @@
 #define SCRIPTINGFUNCTION_H
 
 #include <QObject>
+#include <QVariant>
 
 /**
  * The ScriptingFunction class provides access to the KSpread::Function
@@ -56,6 +57,9 @@ class ScriptingFunction : public QObject
         void addExample(const QString& example);
         void addParameter(const QString& typeName, const QString& comment);
         bool registerFunction();
+
+    signals:
+        QVariant called(QVariantList args);
 
     private:
         class Private;

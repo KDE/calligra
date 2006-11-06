@@ -55,21 +55,49 @@ class Setup:
         print "1 ========================================================"
 
         functest1 = self.kspread.function("SCRIPT_TEST1")
-        functest1.minparam = 2
-        functest1.maxparam = -1
+        functest1.minparam = 1
+        functest1.maxparam = 1
         functest1.comment = (
-            "The SCRIPT() function calls a function in an external "
-            "scriptfile. The script file references a file relative "
-            "to your KSpread scripts folder while the function name "
-            "should be an existing function within that script file."
+            "The SCRIPT_TEST1() function demonstrates how to use scripting"
+            "functions. All it does is to take a string as argument and"
+            "return the same string."
         )
-        functest1.syntax = "SCRIPT(scriptfile;functionname;...)"
-        functest1.addParameter("String", "The name of the script file")
-        functest1.addParameter("String", "The name of the function")
-        functest1.addExample("SCRIPT(\"myscript1.py\";\"myfunction1\")")
-        functest1.addExample("SCRIPT(\"myscript2.rb\";\"myfunction2\";\"optional argument\")")
-        functest1.addExample("SCRIPT(\"myscript3.js\";\"myfunction3\";17;20.0;\"string\")")
-        functest1.addExample("SCRIPT(\"subfolder/myscript4.py\";\"myfunction4\"")
+        functest1.syntax = "SCRIPT_TEST1(string)"
+        functest1.addParameter("String", "The string that should be returned")
+        functest1.addExample("SCRIPT_TEST1(\"Some string\")")
+        def functest1callback(*args):
+            return "%s" % args
+        functest1.connect("called(QVariantList)", functest1callback)
+        functest1.registerFunction()
+
+        #functest1 = self.kspread.function("SCRIPT_TEST2")
+        #functest1.minparam = 1
+        #functest1.maxparam = 1
+        #functest1.comment = (
+            #"The SCRIPT_TEST2() function demonstrates how to use scripting"
+            #"functions. All it does is to take an integer as argument and"
+            #"return the same integer."
+        #)
+        #functest1.syntax = "SCRIPT_TEST2(integer)"
+        #functest1.addParameter("Int", "The integer that should be returned")
+        #functest1.addExample("SCRIPT_TEST2(12345)")
+
+        #functest1 = self.kspread.function("SCRIPT_TEST1")
+        #functest1.minparam = 2
+        #functest1.maxparam = -1
+        #functest1.comment = (
+            #"The SCRIPT() function calls a function in an external "
+            #"scriptfile. The script file references a file relative "
+            #"to your KSpread scripts folder while the function name "
+            #"should be an existing function within that script file."
+        #)
+        #functest1.syntax = "SCRIPT(scriptfile;functionname;...)"
+        #functest1.addParameter("String", "The name of the script file")
+        #functest1.addParameter("String", "The name of the function")
+        #functest1.addExample("SCRIPT(\"myscript1.py\";\"myfunction1\")")
+        #functest1.addExample("SCRIPT(\"myscript2.rb\";\"myfunction2\";\"optional argument\")")
+        #functest1.addExample("SCRIPT(\"myscript3.js\";\"myfunction3\";17;20.0;\"string\")")
+        #functest1.addExample("SCRIPT(\"subfolder/myscript4.py\";\"myfunction4\"")
 
         #a = functest1.action()
         #a.setInterpreter("python")
@@ -81,8 +109,6 @@ class Setup:
 
         #functest1.setAction(self.scriptaction)
         #functest1.setAction(self.scriptaction, "functionname")
-
-        functest1.registerFunction()
 
         #functest2 = self.kspread.function("SCRIPT_TEST2")
         print "2 ========================================================"

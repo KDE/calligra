@@ -24,6 +24,7 @@
 
 //#include <QApplication>
 #include <QDomDocument>
+#include <QPointer>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -54,8 +55,25 @@ class ScriptingFunctionImpl : public KSpread::Function
             Q_ASSERT(extra && extra->function);
             ScriptingFunctionImpl* funcimpl = static_cast< ScriptingFunctionImpl* >( extra->function );
 
-            const QString name = funcimpl->name();
-            kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(name).arg(args.count()) << endl;
+            if(! funcimpl->m_function) {
+                KSpread::Value err = KSpread::Value::errorNA();
+                err.setError( "#" + i18n("No such script.") );
+                return err;
+            }
+
+
+            //const QString name = funcimpl->name();
+            //kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(name).arg(args.count()) << endl;
+
+            QVariantList list;
+            int size = args.size();
+            for(int i = 0; i < size; ++i) {
+                //TODO needs to be more generic!
+                list.append( args[i].asString() );
+            }
+
+            QVariant result;
+            QMetaObject::invokeMethod(funcimpl->m_function, "called(QVariantList)", Q_RETURN_ARG(QVariant, result), Q_ARG(QVariantList, list));
 
             /*
             QString scriptname = args[0].isString() ? args[0].asString() : QString();
@@ -75,12 +93,12 @@ class ScriptingFunctionImpl : public KSpread::Function
             */
 
             //TODO
-            return KSpread::Value( QString("Function %1").arg(name) );
+            return KSpread::Value( result.toString() );
         }
 
-        ScriptingFunctionImpl(const QString& name, const QDomElement& description)
-            : KSpread::Function(name, ScriptingFunctionImpl::callback)
-            , m_name(name)
+        ScriptingFunctionImpl(ScriptingFunction* function, const QDomElement& description)
+            : KSpread::Function(function->name(), ScriptingFunctionImpl::callback)
+            , m_function(function)
         {
             setNeedsExtra(true);
 
@@ -100,10 +118,8 @@ class ScriptingFunctionImpl : public KSpread::Function
 
         virtual ~ScriptingFunctionImpl() {}
 
-        QString name() const { return m_name; }
-
     private:
-        QString m_name;
+        QPointer<ScriptingFunction> m_function;
 };
 
 /***************************************************************************
@@ -197,7 +213,7 @@ bool ScriptingFunction::registerFunction()
     // Create a new ScriptingFunctionImpl instance which will publish itself to the
     // FunctionRepository. The FunctionRepository takes ownership of the instance
     // which may live longer then this ScriptingFunction instance.
-    ScriptingFunctionImpl* funcimpl = new ScriptingFunctionImpl(d->name, d->funcElement);
+    ScriptingFunctionImpl* funcimpl = new ScriptingFunctionImpl(this, d->funcElement);
     funcimpl->setParamCount(d->minparam, d->maxparam);
     funcimpl->setAcceptArray();
     return true;
