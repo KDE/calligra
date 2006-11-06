@@ -59,7 +59,8 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
 
 	public slots:
 		//! Sets global project that is used to retrieve schema informationm for this combo box.
-		void setProject(KexiProject *prj);
+		//! Tables visibility can be set using \a showTables queries visibility using \a showQueries.
+		void setProject(KexiProject *prj, bool showTables = true, bool showQueries = true);
 
 		/*! Sets item for data source described by \a mimeType and \a name.
 		 If \a mimeType is empty, either "kexi/table" and "kexi/query" are tried. */

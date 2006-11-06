@@ -65,4 +65,3 @@ void KexiTableViewPrivate::clearVariables()
 {
 	// Initialize variables
 }
-

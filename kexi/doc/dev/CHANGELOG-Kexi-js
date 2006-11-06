@@ -15,7 +15,31 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
-2006-10-24
+2006-10-30..2006-11-06
+Table View
+- better displaying tooltips for columns with lookup data
+- sorting columns with lookup data works
+= various improvements for combo boxes
+2.0: merged
+Forms
+- database-aware combo box form widget works, improved data displaying, 
+  mouse and keyboard handling
+- fixed bug #136688 - displaying dates (e.g. with dd.mm.yyyy format)
+= do not block Escape key if there are no data changes to cancel;
+  do not block shortcuts like Shift+Left arrow
+2.0: merged
+
+2006-10-27
+Forms
+- display proper record when a new row was saved and user moved to previous record
+= fixed possible crash inside the row buffer
+2.0: merged
+Table View
+= fixed handling data in lookup fields and cursor moving
+= fixed adjusting width of column containing lookup field
+2.0: merged
+
+2006-10-24..26
 Query Designer
 - New: Added support for parameter queries in design and SQL view. 
   User is asked for entering value of a parameter in a dialog window. 
@@ -29,8 +53,10 @@ Table Designer
 2.0: merged
 Table View
 - fixed validating Big Integer numbers
+2.0: merged
 Forms
 - fixed validating Big Integer numbers
+2.0: merged
 
 2006-10-20
 Forms

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -21,10 +21,19 @@
 
 #include <qptrdict.h>
 #include <qintdict.h>
+#include <kstaticdeleter.h>
 
 #include <kexidb/indexschema.h>
 #include <kexidb/tableschema.h>
 #include "kexitableviewdata.h"
+#include "kexidatetableedit.h"
+#include "kexitimetableedit.h"
+#include "kexidatetimetableedit.h"
+#include "kexitableedit.h"
+#include "kexiinputtableedit.h"
+#include "kexicomboboxtableedit.h"
+#include "kexiblobtableedit.h"
+#include "kexibooltableedit.h"
 
 //============= KexiCellEditorFactoryItem ============
 
@@ -59,7 +68,7 @@ class KexiCellEditorFactoryPrivate
 			return key;
 		}
 
-		void registerItem( KexiCellEditorFactoryItem& item, uint type, const QString& subType )
+		void registerItem( KexiCellEditorFactoryItem& item, uint type, const QString& subType = QString::null )
 		{
 			if (!items[ &item ])
 				items.insert( &item, &item );
@@ -83,8 +92,8 @@ class KexiCellEditorFactoryPrivate
 		QDict<KexiCellEditorFactoryItem> items_by_type; //!< editor factory items accessed by a key
 };
 
-KexiCellEditorFactoryPrivate static_KexiCellEditorFactory;
-
+static KStaticDeleter<KexiCellEditorFactoryPrivate> KexiCellEditorFactory_deleter;
+static KexiCellEditorFactoryPrivate *KexiCellEditorFactory_static = 0;
 
 //============= KexiCellEditorFactory ============
 
@@ -96,13 +105,34 @@ KexiCellEditorFactory::~KexiCellEditorFactory()
 {
 }
 
-void KexiCellEditorFactory::registerItem( KexiCellEditorFactoryItem& item, uint type, const QString& subType )
+
+// Initializes standard editor cell editor factories
+void KexiCellEditorFactory::init()
 {
-	static_KexiCellEditorFactory.registerItem( item, type, subType );
+	if (KexiCellEditorFactory_static)
+		return;
+	KexiCellEditorFactory_deleter.setObject(KexiCellEditorFactory_static, new KexiCellEditorFactoryPrivate());
+
+	KexiCellEditorFactory_static->registerItem( *new KexiBlobEditorFactoryItem(), KexiDB::Field::BLOB );
+	KexiCellEditorFactory_static->registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date );
+	KexiCellEditorFactory_static->registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time );
+	KexiCellEditorFactory_static->registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime );
+	KexiCellEditorFactory_static->registerItem( *new KexiComboBoxEditorFactoryItem(), KexiDB::Field::Enum );
+	KexiCellEditorFactory_static->registerItem( *new KexiBoolEditorFactoryItem(), KexiDB::Field::Boolean );
+	KexiCellEditorFactory_static->registerItem( *new KexiKIconTableEditorFactoryItem(), KexiDB::Field::Text, "KIcon" );
+	//default type
+	KexiCellEditorFactory_static->registerItem( *new KexiInputEditorFactoryItem(), KexiDB::Field::InvalidType );
 }
 
-KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, QScrollView* parent)
+void KexiCellEditorFactory::registerItem( KexiCellEditorFactoryItem& item, uint type, const QString& subType )
 {
+	init();
+	KexiCellEditorFactory_static->registerItem( item, type, subType );
+}
+
+KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, QWidget* parent)
+{
+	init();
 	KexiDB::Field *realField;
 	if (column.visibleLookupColumnInfo) {
 		realField = column.visibleLookupColumnInfo->field;
@@ -147,6 +177,7 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, 
 
 KexiCellEditorFactoryItem* KexiCellEditorFactory::item( uint type, const QString& subType )
 {
-	return static_KexiCellEditorFactory.findItem(type, subType);
+	init();
+	return KexiCellEditorFactory_static->findItem(type, subType);
 }
 

@@ -31,9 +31,10 @@
 #include <kglobalsettings.h>
 
 
-KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QScrollView *parent)
- : KexiTableEdit(column, parent, "KexiBoolTableEdit")
+KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QWidget *parent)
+ : KexiTableEdit(column, parent)
 {
+	setName("KexiBoolTableEdit");
 	kdDebug() << "KexiBoolTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
 	kdDebug() << "KexiBoolTableEdit: type== " << field()->typeName() << endl;
 	m_hasFocusableWidget = false;
@@ -172,19 +173,7 @@ int KexiBoolTableEdit::widthForValue( QVariant &val, const QFontMetrics &fm )
 
 //======================================================
 
-KexiBoolEditorFactoryItem::KexiBoolEditorFactoryItem()
-{
-}
-
-KexiBoolEditorFactoryItem::~KexiBoolEditorFactoryItem()
-{
-}
-
-KexiTableEdit* KexiBoolEditorFactoryItem::createEditor(
-	KexiTableViewColumn &column, QScrollView* parent)
-{
-	return new KexiBoolTableEdit(column, parent);
-}
+KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiBoolEditorFactoryItem, KexiBoolTableEdit)
 
 #include "kexibooltableedit.moc"
 

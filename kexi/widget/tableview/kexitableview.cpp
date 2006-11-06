@@ -52,15 +52,7 @@
 #include <kexiutils/utils.h>
 #include <kexiutils/validator.h>
 
-#include "kexidatetableedit.h"
-#include "kexitimetableedit.h"
-#include "kexidatetimetableedit.h"
 #include "kexicelleditorfactory.h"
-#include "kexitableedit.h"
-#include "kexiinputtableedit.h"
-#include "kexicomboboxtableedit.h"
-#include "kexiblobtableedit.h"
-#include "kexibooltableedit.h"
 #include "kexitableviewheader.h"
 #include "kexitableview_p.h"
 #include <widget/utils/kexirecordmarker.h>
@@ -156,15 +148,17 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
 			int y_offset = 0;
 			int align = Qt::SingleLine | Qt::AlignVCenter;
 			QString txtValue;
-			editor->setupContents( 0, m_tableView->selectedItem() == item && col == m_tableView->currentColumn(), 
-				insertRowSelected ? editor->displayedField()->defaultValue() : item->at(col), //display default value if available
-				txtValue, align, x, y_offset, w, h );
-			QRect realRect(m_tableView->cellGeometry( row, col ));
-			realRect.moveBy(-m_tableView->contentsX(), -m_tableView->contentsY());
-
+			QVariant cellValue;
+			KexiTableViewColumn *tvcol = m_tableView->column(col);
+			if (!m_tableView->getVisibleLookupValue(cellValue, editor, item, tvcol))
+				cellValue = insertRowSelected ? editor->displayedField()->defaultValue() : item->at(col); //display default value if available
+			const bool focused = m_tableView->selectedItem() == item && col == m_tableView->currentColumn();
+			editor->setupContents( 0, focused, cellValue, txtValue, align, x, y_offset, w, h );
+			QRect realRect(m_tableView->columnPos(col)-m_tableView->contentsX(), 
+				m_tableView->rowPos(row)-m_tableView->contentsY(), w, h); //m_tableView->cellGeometry( row, col ));
 			if (editor->showToolTipIfNeeded(
 				txtValue.isEmpty() ? item->at(col) : QVariant(txtValue), 
-				realRect, m_tableView->fontMetrics()))
+				realRect, m_tableView->fontMetrics(), focused))
 			{
 				QString squeezedTxtValue;
 				if (txtValue.length() > 50)
@@ -179,51 +173,13 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
 
 //-----------------------------------------
 
-static bool KexiTableView_cellEditorFactoriesInitialized = false;
-
-// Initializes standard editor cell editor factories
-void KexiTableView::initCellEditorFactories()
-{
-	if (KexiTableView_cellEditorFactoriesInitialized)
-		return;
-	KexiCellEditorFactoryItem* item;
-	item = new KexiBlobEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::BLOB );
-
-	item = new KexiDateEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Date );
-
-	item = new KexiTimeEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Time );
-
-	item = new KexiDateTimeEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::DateTime );
-
-	item = new KexiComboBoxEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Enum );
-
-	item = new KexiBoolEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Boolean );
-
-	item = new KexiKIconTableEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::Text, "KIcon" );
-
-	//default type
-	item = new KexiInputEditorFactoryItem();
-	KexiCellEditorFactory::registerItem( *item, KexiDB::Field::InvalidType );
-
-	KexiTableView_cellEditorFactoriesInitialized = true;
-}
-
-
-
 KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const char* name)
 : QScrollView(parent, name, /*Qt::WRepaintNoErase | */Qt::WStaticContents /*| Qt::WResizeNoErase*/)
 , KexiRecordNavigatorHandler()
 , KexiSharedActionClient()
 , KexiDataAwareObjectInterface()
 {
-	KexiTableView::initCellEditorFactories();
+//not needed	KexiTableView::initCellEditorFactories();
 
 	d = new KexiTableViewPrivate(this);
 
@@ -259,24 +215,11 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	horizontalScrollBar()->raise();
 	verticalScrollBar()->raise();
 
-	/*moved
-	// setup scrollbar tooltip
-	d->scrollBarTip = new QLabel("abc",0, "scrolltip",Qt::WStyle_Customize |Qt::WStyle_NoBorder|Qt::WX11BypassWM|Qt::WStyle_StaysOnTop|Qt::WStyle_Tool);
-	d->scrollBarTip->setPalette(QToolTip::palette());
-	d->scrollBarTip->setMargin(2);
-	d->scrollBarTip->setIndent(0);
-	d->scrollBarTip->setAlignment(Qt::AlignCenter);
-	d->scrollBarTip->setFrameStyle( QFrame::Plain | QFrame::Box );
-	d->scrollBarTip->setLineWidth(1);
-	connect(verticalScrollBar(),SIGNAL(sliderReleased()),this,SLOT(vScrollBarSliderReleased()));
-	connect(verticalScrollBar(),SIGNAL(valueChanged(int)),this,SLOT(vScrollBarValueChanged(int)));
-	connect(&d->scrollBarTipTimer,SIGNAL(timeout()),this,SLOT(scrollBarTipTimeout()));*/
-	
 	//context menu
-	m_popup = new KPopupMenu(this, "contextMenu");
+	m_popupMenu = new KPopupMenu(this, "contextMenu");
 #if 0 //moved to mainwindow's actions
-	d->menu_id_addRecord = m_popup->insertItem(i18n("Add Record"), this, SLOT(addRecord()), Qt::CTRL+Qt::Key_Insert);
-	d->menu_id_removeRecord = m_popup->insertItem(
+	d->menu_id_addRecord = m_popupMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), Qt::CTRL+Qt::Key_Insert);
+	d->menu_id_removeRecord = m_popupMenu->insertItem(
 		kapp->iconLoader()->loadIcon("button_cancel", KIcon::Small),
 		i18n("Remove Record"), this, SLOT(removeRecord()), Qt::CTRL+Qt::Key_Delete);
 #endif
@@ -774,9 +717,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	int x2 = w - 1;
 	int y2 = h - 1;
 
-	if (0==qstrcmp("KexiComboBoxPopup",parentWidget()->className())) {
+/*	if (0==qstrcmp("KexiComboBoxPopup",parentWidget()->className())) {
 	  kexidbg  << parentWidget()->className() << " >>>>>> KexiTableView::paintCell(col=" << col <<"row="<<row<<") w="<<w<<endl;
-	}
+	}*/
 
 	//	Draw our lines
 	QPen pen(p->pen());
@@ -807,7 +750,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 
 	KexiTableViewColumn *tvcol = m_data->column(col);
 
-	QVariant cell_value;
+	QVariant cellValue;
 	if (col < (int)item->count()) {
 		if (m_currentItem == item) {
 			if (m_editor && row == m_curRow && col == m_curCol 
@@ -816,26 +759,26 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 				//we're over editing cell and the editor has no widget
 				// - we're displaying internal values, not buffered
 //				bool ok;
-				cell_value = m_editor->value();
+				cellValue = m_editor->value();
 			}
 			else {
 				//we're displaying values from edit buffer, if available
 				// this assignment will also get default value if there's no actual value set
-				cell_value = *bufferedValueAt(col);
+				cellValue = *bufferedValueAt(col);
 			}
 		}
 		else {
-			cell_value = item->at(col);
+			cellValue = item->at(col);
 		}
 	}
 
 	bool defaultValueDisplayed = isDefaultValueDisplayed(item, col);
 
-	if ((item == m_insertItem /*|| m_newRowEditing*/) && cell_value.isNull()) {
+	if ((item == m_insertItem /*|| m_newRowEditing*/) && cellValue.isNull()) {
 		if (!tvcol->field()->isAutoIncrement() && !tvcol->field()->defaultValue().isNull()) {
 			//display default value in the "insert row", if available
 			//(but not if there is autoincrement flag set)
-			cell_value = tvcol->field()->defaultValue();
+			cellValue = tvcol->field()->defaultValue();
 			defaultValueDisplayed = true;
 		}
 	}
@@ -889,25 +832,12 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		if (defaultValueDisplayed)
 			p->setFont( d->defaultValueDisplayParameters.font );
 		p->setPen( defaultPen );
-		edit->setupContents( p, m_currentItem == item && col == m_curCol, 
-			cell_value, txt, align, x, y_offset, w, h );
 
-//<temp>
-		//show visible lookup value instead
-		if (edit->columnInfo() && edit->columnInfo()->indexForVisibleLookupValue()!=-1
-			&& edit->columnInfo()->indexForVisibleLookupValue() < (int)item->count())
-		{
-			const QVariant *visibleFieldValue = 0;
-			if (m_currentItem == item && m_data->rowEditBuffer())
-				visibleFieldValue = m_data->rowEditBuffer()->at( *tvcol->visibleLookupColumnInfo );
-			
-			if (visibleFieldValue)
-				//(use bufferedValueAt() - try to get buffered visible value for lookup field)
-				txt = visibleFieldValue->toString();
-			else
-				txt = item->at( edit->columnInfo()->indexForVisibleLookupValue() ).toString();
-		}
-//</temp>
+		//get visible lookup value if available
+		getVisibleLookupValue(cellValue, edit, item, tvcol);
+
+		edit->setupContents( p, m_currentItem == item && col == m_curCol, 
+			cellValue, txt, align, x, y_offset, w, h );
 	}
 	if (!d->appearance.gridEnabled)
 		y_offset++; //correction because we're not drawing cell borders
@@ -941,14 +871,14 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 			p->setPen(gray_pen);
 		}
 		if (edit)
-			edit->paintFocusBorders( p, cell_value, 0, 0, x2, y2 );
+			edit->paintFocusBorders( p, cellValue, 0, 0, x2, y2 );
 		else
 			p->drawRect(0, 0, x2, y2);
 	}
 
 ///	bool autonumber = false;
 	if ((!m_newRowEditing && item == m_insertItem) 
-		|| (m_newRowEditing && item == m_currentItem && cell_value.isNull())) {
+		|| (m_newRowEditing && item == m_currentItem && cellValue.isNull())) {
 		//we're in "insert row"
 		if (tvcol->field()->isAutoIncrement()) {
 			//"autonumber" column
@@ -1192,7 +1122,7 @@ bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool relea
 
 void KexiTableView::showContextMenu(const QPoint& _pos)
 {
-	if (!d->contextMenuEnabled || m_popup->count()<1)
+	if (!d->contextMenuEnabled || m_popupMenu->count()<1)
 		return;
 	QPoint pos(_pos);
 	if (pos==QPoint(-1,-1)) {
@@ -1201,7 +1131,7 @@ void KexiTableView::showContextMenu(const QPoint& _pos)
 	//show own context menu if configured
 //	if (updateContextMenu()) {
 		selectRow(m_curRow);
-		m_popup->exec(pos);
+		m_popupMenu->exec(pos);
 /*	}
 	else {
 		//request other context menu
@@ -2073,6 +2003,26 @@ void KexiTableView::updateAfterAcceptRowEdit()
 	m_navPanel->showEditingIndicator(false);
 }
 
+bool KexiTableView::getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit, 
+	KexiTableItem *item, KexiTableViewColumn *tvcol) const
+{
+	if (edit->columnInfo() && edit->columnInfo()->indexForVisibleLookupValue()!=-1
+		&& edit->columnInfo()->indexForVisibleLookupValue() < (int)item->count())
+	{
+		const QVariant *visibleFieldValue = 0;
+		if (m_currentItem == item && m_data->rowEditBuffer())
+			visibleFieldValue = m_data->rowEditBuffer()->at( *tvcol->visibleLookupColumnInfo );
+		
+		if (visibleFieldValue)
+			//(use bufferedValueAt() - try to get buffered visible value for lookup field)
+			cellValue = *visibleFieldValue; //txt = visibleFieldValue->toString();
+		else
+			cellValue /*txt*/ = item->at( edit->columnInfo()->indexForVisibleLookupValue() ); //.toString();
+		return true;
+	}
+	return false;
+}
+
 //reimpl.
 void KexiTableView::removeEditor()
 {
@@ -2203,7 +2153,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 		return;
 	}
 
-	int indexOfVisibleColumn = m_data->column(colNum)->columnInfo 
+	int indexOfVisibleColumn = (m_data->column(colNum) && m_data->column(colNum)->columnInfo) 
 		? m_data->column(colNum)->columnInfo->indexForVisibleLookupValue() : -1;
 	if (-1==indexOfVisibleColumn)
 		indexOfVisibleColumn = colNum;
@@ -2232,7 +2182,8 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 			const int wfw = ed->widthForValue( it.current()->at( indexOfVisibleColumn ), fm );
 			maxw = QMAX( maxw, wfw );
 		}
-		maxw += (fm.width("  ") + ed->leftMargin() + ed->rightMargin());
+		const bool focused = currentColumn() == colNum;
+		maxw += (fm.width("  ") + ed->leftMargin() + ed->rightMargin(focused));
 	}
 	if (maxw < KEXITV_MINIMUM_COLUMN_WIDTH )
 		maxw = KEXITV_MINIMUM_COLUMN_WIDTH; //not too small
@@ -2371,18 +2322,6 @@ void KexiTableView::setSpreadSheetMode()
 	a.navigatorEnabled = m_navPanelEnabled;
 	setAppearance( a );
 }
-
-/*moved
-bool KexiTableView::scrollbarToolTipsEnabled() const
-{
-	return d->scrollbarToolTipsEnabled;
-}
-
-void KexiTableView::setScrollbarToolTipsEnabled(bool set)
-{
-	d->scrollbarToolTipsEnabled=set;
-}
-*/
 
 int KexiTableView::validRowNumber(const QString& text)
 {
@@ -2542,28 +2481,6 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 	}*/
 	return QScrollView::eventFilter(o,e);
 }
-
-/* moved
-void KexiTableView::vScrollBarSliderReleased()
-{
-	kdDebug(44021) << "vScrollBarSliderReleased()" << endl;
-	d->scrollBarTip->hide();
-}
-
-void KexiTableView::scrollBarTipTimeout()
-{
-	if (d->scrollBarTip->isVisible()) {
-//		kdDebug(44021) << "TIMEOUT! - hide" << endl;
-		if (d->scrollBarTipTimerCnt>0) {
-			d->scrollBarTipTimerCnt=0;
-			d->scrollBarTipTimer.start(500, true);
-			return;
-		}
-		d->scrollBarTip->hide();
-	}
-	d->scrollBarTipTimerCnt=0;
-}
-*/
 
 void KexiTableView::slotTopHeaderSizeChange( 
 	int /*section*/, int /*oldSize*/, int /*newSize*/ )

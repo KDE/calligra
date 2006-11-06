@@ -62,7 +62,7 @@ class KexiTableViewCellToolTip : public QToolTip
 		KexiTableView *m_tableView;
 };
 
-/*! KexiTableView internal data
+/*! KexiTableView's internal structures
  @internal */
 class KexiTableViewPrivate 
 {
@@ -74,9 +74,6 @@ class KexiTableViewPrivate
 	void clearVariables();
 
 	KexiTableView *tv;
-
-	// foreign widgets
-//moved to m_horizontalHeader	KexiTableViewHeader *pTopHeader;
 
 	//! editors: one for each column (indexed by KexiTableViewColumn)
 	QPtrDict<KexiTableEdit> editors;
@@ -111,10 +108,6 @@ class KexiTableViewPrivate
 	/*! used to force single skip keyPress event. */
 	bool skipKeyPress : 1;
 	
-//moved	bool vScrollBarValueChanged_enabled : 1;
-
-//moved	bool scrollbarToolTipsEnabled : 1;
-
 	/*! Needed because m_horizontalHeader->isVisible() is not always accurate. True by default.  */
 	bool horizontalHeaderVisible : 1;
 

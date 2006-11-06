@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -60,8 +60,14 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		 \a value is stored as 'old value' -it'd be usable in the future
 		 (e.g. Combo Box editor can use old value if current value does not 
 		 match any item on the list).
-		 Called by KexiTableView and others. */
-		void setValue(const QVariant& value, const QVariant& add = QVariant(), bool removeOld = false);
+
+		 \a visibleValue (if not NULL) is passed to provide visible value to display instead of \a value.
+		 This is currently used only in case of the combo box form widget, where displayed content 
+		 (usually a text of image) differs from the value of the widget (a numeric index).
+
+		 This method is called by table view's and form's editors. */
+		void setValue(const QVariant& value, const QVariant& add = QVariant(), bool removeOld = false, 
+			const QVariant* visibleValue = 0);
 
 		//! \return field information for this item
 		virtual KexiDB::Field *field() const = 0;
@@ -103,7 +109,7 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		//! \return value that should be displayed for this item.
 		//! Only used for items like combo box, where real value is an integer while
 		//! displayed value is usually a text. For other item types this method should be empty.
-		virtual QVariant visibleValueForLookupField() { return QVariant(); }
+		virtual QVariant visibleValue() { return QVariant(); }
 
 		/*! \return 'readOnly' flag for this item. The flag is usually taken from
 		 the item's widget, e.g. KLineEdit::isReadOnly(). 
@@ -131,6 +137,18 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		 is at the end of editor's contents. This can inform table/form view that 
 		 after pressing "right arrow" key should stop editing and move to a field on the right hand. */
 		virtual bool cursorAtEnd() = 0;
+
+		/*! Moves cursor after the last character (or element). 
+		 For implementation in items supporting text cursor's movement; by default does nothing. */
+		virtual void moveCursorToEnd() {};
+
+		/*! Moves cursor before the first character (or element). 
+		 For implementation in items supporting text cursor's movement; by default does nothing. */
+		virtual void moveCursorToStart() {};
+
+		/*! Selects all characters (or elements) of the item. 
+		 For implementation in items supporting text or elements; by default does nothing. */
+		virtual void selectAll() {};
 
 		//! clears item's data, so the data will contain NULL data
 		virtual void clear() = 0;
@@ -193,6 +211,12 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		 Implement this. */
 		virtual void setValueInternal(const QVariant& add, bool removeOld) = 0;
 
+		/*! Initializes this editor with \a value visible value.
+		 This is currently used only in case of the combo box form widget, where displayed content 
+		 (usually a text of image) differs from the value of the widget (a numeric index). 
+		 For implementation in the combo box widget, by default does nothing. */
+		virtual void setVisibleValueInternal(const QVariant& value);
+
 //		//! Sets value \a value for a widget. 
 //		//! Implement this method to allow setting value for this widget item.
 //		virtual void setValueInternal(const QVariant& value) = 0;
@@ -200,7 +224,12 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		/*! Call this in your implementation when value changes, 
 		 so installed listener can react on this change. If there is a parent data item defined
 		 (see setParentDataItemInterface()), parent's signalValueChanged() method will be called instead. */
-		void signalValueChanged();
+		virtual void signalValueChanged();
+
+		/*! Used to perform some actions before signalValueChanged() call. 
+		 We need this because the intrface is not QObject and thus has got no real signals. 
+		 Used in KexiDBComboBox. */
+		virtual void beforeSignalValueChanged() {};
 
 //moved to KexiFormDataItemInterface: QString m_dataSource;
 		KexiDataItemChangesListener* m_listener;

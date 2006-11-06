@@ -61,13 +61,13 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 	m_verticalHeader = 0;
 	m_horizontalHeader = 0;
 	m_insertItem = 0;
-	m_rowEditBuffer = 0;
+//	m_rowEditBuffer = 0;
 	m_spreadSheetMode = false;
 	m_dropsAtRowEnabled = false;
 	m_updateEntireRowWhenMovingToOtherRow = false;
 	m_dragIndicatorLine = -1;
 	m_emptyRowInsertingEnabled = false;
-	m_popup = 0;
+	m_popupMenu = 0;
 	m_contextMenuEnabled = true;
 	m_rowWillBeDeleted = -1;
 	m_alsoUpdateNextRow = false;
@@ -93,7 +93,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 KexiDataAwareObjectInterface::~KexiDataAwareObjectInterface()
 {
 	delete m_insertItem;
-	delete m_rowEditBuffer;
+//	delete m_rowEditBuffer;
 	delete m_itemIterator;
 	delete m_scrollBarTip;
 	//we cannot delete m_data here... subclasses should do this
@@ -102,7 +102,7 @@ KexiDataAwareObjectInterface::~KexiDataAwareObjectInterface()
 void KexiDataAwareObjectInterface::clearVariables()
 {
 	m_editor = 0;
-	m_rowEditBuffer = 0;
+//	m_rowEditBuffer = 0;
 	m_rowEditing = false;
 	m_newRowEditing = false;
 	m_curRow = -1;
@@ -349,7 +349,6 @@ void KexiDataAwareObjectInterface::sortColumnInternal(int col, int order)
 	}
 	else
 		asc = (order==1);
-
 	
 	int prevSortOrder = currentLocalSortingOrder();
 	const int prevSortColumn = currentLocalSortingOrder();
@@ -357,10 +356,7 @@ void KexiDataAwareObjectInterface::sortColumnInternal(int col, int order)
 	//-perform sorting 
 	if (!sort())
 		setLocalSortingOrder(prevSortColumn, prevSortOrder); //this will also remove indicator
-			                                                 //if prevSortColumn==-1
-//		d->pTopHeader->setSortIndicator(prevSortColumn, 
-//			(prevSortOrder==1) ? Qt::Ascending : Qt::Descending); 
-	
+		                                                     //if prevSortColumn==-1
 	if (col != prevSortColumn)
 		/*emit*/ sortedColumnChanged(col);
 }
@@ -752,11 +748,13 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 
 	if (success) {
 		//editing is finished:
+		if (m_newRowEditing) {
+			//update current-item-iterator
+			m_itemIterator->toLast();
+			m_currentItem = **m_itemIterator;
+		}
 		m_rowEditing = false;
 		m_newRowEditing = false;
-		//update current-item-iterator
-		m_itemIterator->toLast();
-		m_currentItem = **m_itemIterator;
 		//indicate on the vheader that we are not editing
 		if (m_verticalHeader)
 			m_verticalHeader->setEditRow(-1);
@@ -809,12 +807,12 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 	return success;
 }
 
-void KexiDataAwareObjectInterface::cancelRowEdit()
+bool KexiDataAwareObjectInterface::cancelRowEdit()
 {
 	if (!hasData())
-		return;
+		return false;
 	if (!m_rowEditing)
-		return;
+		return false;
 	cancelEditor();
 	m_rowEditing = false;
 	//indicate on the vheader that we are not editing
@@ -850,6 +848,7 @@ void KexiDataAwareObjectInterface::cancelRowEdit()
 	kexidbg << "EDIT ROW CANCELLED." << endl;
 
 	/*emit*/ rowEditTerminated(m_curRow);
+	return true;
 }
 
 void KexiDataAwareObjectInterface::updateAfterCancelRowEdit()
@@ -873,14 +872,15 @@ void KexiDataAwareObjectInterface::removeEditor()
 	m_editor = 0;
 }
 
-void KexiDataAwareObjectInterface::cancelEditor()
+bool KexiDataAwareObjectInterface::cancelEditor()
 {
 	if (m_errorMessagePopup) {
 		m_errorMessagePopup->close();
 	}
 	if (!m_editor)
-		return;
+		return false;
 	removeEditor();
+	return true;
 }
 
 //! @internal
@@ -1077,12 +1077,15 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 //		emit aboutToChangeCell(d->pCurrentItem, newval, allow);
 //		if (allow) {
 		//send changes to the backend
-		QVariant visibleValueForLookupField;
-		if (currentTVColumn->visibleLookupColumnInfo)
-			visibleValueForLookupField = m_editor->visibleValueForLookupField(); //visible value for lookup field 
+		QVariant visibleValue;
+		if (!newval.isNull()/* visible value should be null if value is null */ 
+			&& currentTVColumn->visibleLookupColumnInfo)
+		{
+			visibleValue = m_editor->visibleValue(); //visible value for lookup field 
+		}
 		                                                                       //should be also added to the buffer
 		if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol, currentTVColumn, 
-			newval,	/*allowSignals*/true, currentTVColumn->visibleLookupColumnInfo ? &visibleValueForLookupField : 0))
+			newval,	/*allowSignals*/true, currentTVColumn->visibleLookupColumnInfo ? &visibleValue : 0))
 		{
 			kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
 			m_data->rowEditBuffer()->debug();
@@ -1690,6 +1693,8 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
 				curRow = 0;//to 1st row and col
 				curCol = 0;
 			}
+			else
+				return false;
 		}
 		if (moveToFirstField)
 			*moveToFirstField = true;
@@ -1709,6 +1714,8 @@ bool KexiDataAwareObjectInterface::handleKeyPress(QKeyEvent *e, int &curRow, int
 				curRow = m_data->count()-1 /*+(isInsertingEnabled()?1:0)*/; //to last row and col
 				curCol = columns()-1;//to last col
 			}
+			else
+				return false;
 		}
 		if (moveToLastField)
 			*moveToLastField = true;

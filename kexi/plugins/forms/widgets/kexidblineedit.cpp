@@ -87,38 +87,43 @@ void KexiDBLineEdit::setInvalidState( const QString& displayText )
 
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-	if (removeOld && m_columnInfo) {
+	QVariant value;
+	if (removeOld)
+		value = add;
+	else {
+		if (add.toString().isEmpty())
+			value = m_origValue;
+		else
+			value = m_origValue.toString() + add.toString();
+	}
+
+	if (m_columnInfo) {
 		const KexiDB::Field::Type t = m_columnInfo->field->type();
 		if (t == KexiDB::Field::Boolean) {
 			//! @todo temporary solution for booleans!
-			setText( add.toBool() ? "1" : "0" );
+			setText( value.toBool() ? "1" : "0" );
 			return;
 		}
 		else if (t == KexiDB::Field::Date) {
-			setText( dateFormatter()->dateToString( m_origValue.toDate() ) );
+			setText( dateFormatter()->dateToString( value.toString().isEmpty() ? QDate() : value.toDate() ) );
 			setCursorPosition(0); //ok?
 			return;
 		}
 		else if (t == KexiDB::Field::Time) {
-//			if (removeOld) {
-		//new time entering... just fill the line edit
-//		QString add(add_.toString());
-//		m_lineedit->setText(add);
-//		m_lineedit->setCursorPosition(add.length());
 			setText( 
 				timeFormatter()->timeToString( 
 					//hack to avoid converting null variant to valid QTime(0,0,0)
-					m_origValue.isValid() ? m_origValue.toTime() : QTime(99,0,0) 
+					value.toString().isEmpty() ? value.toTime() : QTime(99,0,0) 
 				)
 			);
 			setCursorPosition(0); //ok?
 			return;
 		}
 		else if (t == KexiDB::Field::DateTime) {
-			if (m_origValue.isValid()) {
+			if (value.toString().isEmpty() ) {
 				setText(
-					dateFormatter()->dateToString( m_origValue.toDateTime().date() ) + " " +
-					timeFormatter()->timeToString( m_origValue.toDateTime().time() )
+					dateFormatter()->dateToString( value.toDateTime().date() ) + " " +
+					timeFormatter()->timeToString( value.toDateTime().time() )
 				);
 			}
 			else {
@@ -130,13 +135,8 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 	}
 	
 	m_slotTextChanged_enabled = false;
-
-	if (removeOld)
-		setText( add.toString() );
-	else
-		setText( m_origValue.toString() + add.toString() );
-	setCursorPosition(0); //ok?
-
+	 setText( value.toString() );
+	 setCursorPosition(0); //ok?
 	m_slotTextChanged_enabled = true;
 }
 
@@ -375,6 +375,26 @@ void KexiDBLineEdit::setDisplayDefaultValue(QWidget *widget, bool displayDefault
 void KexiDBLineEdit::undo()
 {
 	cancelEditor();
+}
+
+void KexiDBLineEdit::moveCursorToEnd()
+{
+	KLineEdit::end(false/*!mark*/);
+}
+
+void KexiDBLineEdit::moveCursorToStart()
+{
+	KLineEdit::home(false/*!mark*/);
+}
+
+void KexiDBLineEdit::selectAll()
+{
+	KLineEdit::selectAll();
+}
+
+bool KexiDBLineEdit::keyPressed(QKeyEvent *ke)
+{
+	return false;
 }
 
 #include "kexidblineedit.moc"

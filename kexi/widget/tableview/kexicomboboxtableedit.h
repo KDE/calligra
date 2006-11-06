@@ -39,7 +39,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 	Q_OBJECT
 
 	public:
-		KexiComboBoxTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+		KexiComboBoxTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
 		virtual ~KexiComboBoxTableEdit();
 
 		//! Implemented for KexiComboBoxBase
@@ -60,7 +60,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 
 		virtual bool valueChanged();
 
-		virtual QVariant visibleValueForLookupField();
+		virtual QVariant visibleValue();
 
 		/*! Reimplemented: resizes a view(). */
 		virtual void resize(int w, int h);
@@ -71,6 +71,10 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 
 		virtual void paintFocusBorders( QPainter *p, QVariant &cal, int x, int y, int w, int h );
 
+		/*! Setups contents of the cell. As a special case, if there is lookup field schema 
+		 defined, \a val already contains the visible value (usually the text)
+		 set by \ref KexiTableView::paintcell(), so there is noo need to lookup the value 
+		 in the combo box's popup. */
 		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 
@@ -78,19 +82,30 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 		virtual bool handleKeyPress( QKeyEvent *ke, bool editorActive );
 
 		virtual int widthForValue( QVariant &val, const QFontMetrics &fm );
-
-	public:
+	
 		virtual void hide();
 		virtual void show();
 
 		/*! \return total size of this editor, including popup button. */
 		virtual QSize totalSize() const;
 
+	public slots:
+		//! Implemented for KexiDataItemInterface
+		virtual void moveCursorToEnd();
+
+		//! Implemented for KexiDataItemInterface
+		virtual void moveCursorToStart();
+
+		//! Implemented for KexiDataItemInterface
+		virtual void selectAll();
+
 	protected slots:
 		void slotButtonClicked();
 		void slotRowAccepted(KexiTableItem *item, int row) { KexiComboBoxBase::slotRowAccepted(item, row); }
 		void slotItemSelected(KexiTableItem* item) { KexiComboBoxBase::slotItemSelected(item); }
-		void slotLineEditTextChanged(const QString &newtext) { KexiComboBoxBase::slotLineEditTextChanged(newtext); }
+		void slotInternalEditorValueChanged(const QVariant& v)
+			{ KexiComboBoxBase::slotInternalEditorValueChanged(v); }
+		void slotLineEditTextChanged(const QString& s);
 		void slotPopupHidden();
 
 	protected:
@@ -98,8 +113,6 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 		void updateFocus( const QRect& r );
 
 		virtual bool eventFilter( QObject *o, QEvent *e );
-
-		void updateTextForHighlightedRow();
 
 		//! Implemented for KexiComboBoxBase
 		virtual QWidget *internalEditor() const;
@@ -114,7 +127,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 		virtual void setValueInInternalEditor(const QVariant& value);
 
 		//! Implemented for KexiComboBoxBase
-		virtual QVariant valueFromInternalEditor() const;
+		virtual QVariant valueFromInternalEditor();
 
 		//! Implemented for KexiComboBoxBase
 		virtual void editRequested() { KexiInputTableEdit::editRequested(); }
@@ -130,6 +143,9 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 
 		//! Implemented this to update button state. 
 		virtual void updateButton();
+
+		virtual KexiComboBoxPopup *popup() const;
+		virtual void setPopup(KexiComboBoxPopup *popup);
 
 		class Private;
 		Private *d;

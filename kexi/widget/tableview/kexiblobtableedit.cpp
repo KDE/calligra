@@ -73,7 +73,6 @@ public:
 	QByteArray value;
 	KexiDropDownButton *button;
 	QSize totalSize;
-	int parentRightMargin;
 	KexiImageContextMenu *popup;
 	bool readOnly : 1; //!< cached for slotUpdateActionsAvailabilityRequested() 
 	bool setValueInternalEnabled : 1; //!< used to disable KexiBlobTableEdit::setValueInternal()
@@ -81,17 +80,17 @@ public:
 
 //======================================================
 
-KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QScrollView *parent)
- : KexiTableEdit(column, parent,"KexiBlobTableEdit")
+KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *parent)
+ : KexiTableEdit(column, parent)
  , d ( new Private() )
 {
+	setName("KexiBlobTableEdit");
 //	m_proc = 0;
 //	m_content = 0;
 	m_hasFocusableWidget = false;
-	d->button = new KexiDropDownButton( parent->viewport() );
+	d->button = new KexiDropDownButton( parentWidget() /*usually a viewport*/ );
 	d->button->hide();
 	QToolTip::add(d->button, i18n("Click to show available actions for this cell"));
-	d->parentRightMargin = m_rightMargin;
 
 	d->popup = new KexiImageContextMenu(this);
 	if (column.columnInfo)
@@ -529,7 +528,7 @@ void KexiBlobTableEdit::resize(int w, int h)
 	QWidget::resize(w - addWidth, h);
 	if (!d->readOnly)
 		d->button->resize( h, h );
-	m_rightMargin = d->parentRightMargin + addWidth;
+	m_rightMarginWhenFocused = m_rightMargin + addWidth;
 	QRect r( pos().x(), pos().y(), w+1, h+1 );
 	r.moveBy(m_scrollView->contentsX(),m_scrollView->contentsY());
 	updateFocus( r );
@@ -635,10 +634,11 @@ public:
 	QCache<QPixmap> pixmapCache;
 };
 
-KexiKIconTableEdit::KexiKIconTableEdit(KexiTableViewColumn &column, QScrollView *parent)
- : KexiTableEdit(column, parent, "KexiKIconTableEdit")
+KexiKIconTableEdit::KexiKIconTableEdit(KexiTableViewColumn &column, QWidget *parent)
+ : KexiTableEdit(column, parent)
  , d( new Private() )
 {
+	setName("KexiKIconTableEdit");
 	init();
 }
 

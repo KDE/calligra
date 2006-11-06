@@ -377,6 +377,8 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - add support for "set" types (e.g. AlignTop|AlignBottom) and port form's objpropertybuffer to this
 - add "description" label on the bottom of the property editor; 
   it should reuse Property::description() text
+- support Variant type (needs update in Editor) so Property::setValue() won't show a "INCOMPATIBLE TYPES!" warning
+  (needed e.g. by KexiTableDesignerView for "defaultValue" property)
 
 ==== Query Designer TODO: ======
 - add tables dropping from the browser
@@ -840,8 +842,6 @@ TODO:
 - Another Kexi instance started from KexiMainWindow using QProcess freezes after opening
   3rd table or so. Move to KProcess on Linux.
 
-TODO: entering table/query name by hand doesn't work in 'form data source' combo
-
 TODO:
 - if you place e.g. a label in a container like a tabwidget and doubleclick it to edit the content, 
   the label jumps around. ccpasteur said he fixed it last year ;)
@@ -930,7 +930,6 @@ ALTER TABLE t1_new RENAME TO t1;
 
 
 == Forms TODO ==
-- implement combo box widget
 - enable edit->copy, actions, etc. for Data View
 - ImageBox: show a tootip with large image and its name if the image was cropped
   or only its name if the image is not cropped
@@ -969,6 +968,7 @@ Table Designer TODO
 Combobox table edit TODO:
 - copy should handle "displayed" value, not the real one 
   (maybe let's use a custom clipboard mimetype?)
+- fix support for query as the row source
 
 
 === KexiDB MySQL Driver TODO ===
@@ -998,10 +998,9 @@ Form/TV Shortcuts:
 + Add moving to prev record when BackTab is pressed at the 1st field
 
 
-== Must-have TODOs for 1.1 ==
+== TODOs for 1.1.x ==
 - use transliteration script: http://bugs.kde.org/show_bug.cgi?id=133170
 (done?): notify and update data source after schema changes
 todo: fix things like SELECT *, cars.owner AS ab, 1.3 AS wyr1, persons.surname FROM cars LEFT OUTER JOIN persons ON cars.owner=persons.id  WHERE cars.owner > 3
       (crash - see Simple_Database.kexi - persons_and_cars query has lookup fields and OUTER JOIN is NOT PARSED
        -- we should generate the SQL in a different way for the Query Designer)
-

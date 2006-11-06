@@ -34,7 +34,7 @@ class KexiInputTableEdit : public KexiTableEdit
 	Q_OBJECT
 
 	public:
-		KexiInputTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+		KexiInputTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
 
 		virtual ~KexiInputTableEdit();
 
@@ -75,8 +75,20 @@ class KexiInputTableEdit : public KexiTableEdit
 		 \return true a normal tooltip should be displayed (using QToolTip,) and false if 
 		 no tooltip should be displayed or a custom tooltip was displayed internally (not yet supported).
 		 This implementation converts the value to text using valueToText() if \a calue is not string to see
-		 whether it can fit inside the cell's \a rect. */
-		virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm);
+		 whether it can fit inside the cell's \a rect. 
+		 If the cell is currentl focused (selected), \a focused is true. */
+		virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,
+			bool focused);
+
+	public slots:
+		//! Implemented for KexiDataItemInterface
+		virtual void moveCursorToEnd();
+
+		//! Implemented for KexiDataItemInterface
+		virtual void moveCursorToStart();
+
+		//! Implemented for KexiDataItemInterface
+		virtual void selectAll();
 
 	protected slots:
 		void setRestrictedCompletion();

@@ -36,7 +36,7 @@ class KexiDateTableEdit : public KexiInputTableEdit
 	Q_OBJECT
 
 	public:
-		KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+		KexiDateTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
 		virtual ~KexiDateTableEdit();
 		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );

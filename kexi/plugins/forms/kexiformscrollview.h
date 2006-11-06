@@ -116,8 +116,10 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		virtual void moveToFirstRecordRequested();
 		virtual void addNewRecordRequested() { KexiDataAwareObjectInterface::addNewRecordRequested(); }
 
-		/*! Reverts current editor's value to old one. */
-		virtual void cancelEditor();
+		/*! Cancels changes made to the currently active editor. 
+		 Reverts the editor's value to old one. 
+		 \return true on success or false on failure (e.g. when editor does not exist) */
+		virtual bool cancelEditor();
 
 	public slots:
 		/*! Reimplemented to also clear command history right after final resize. */

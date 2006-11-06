@@ -164,12 +164,24 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		//! Reimplemented to accept subproperties. @see KFormDesigner::WidgetWithSubpropertiesInterface
 		virtual bool setProperty( const char * name, const QVariant & value );
 
+		/*! Called by the top-level form on key press event to consume widget-specific shortcuts. */
+		virtual bool keyPressed(QKeyEvent *ke);
+
 	public slots:
 		virtual void unsetPalette();
 
 	protected slots:
 //		void slotValueChanged();
 		virtual void paletteChange( const QPalette& oldPal );
+
+		//! Implemented for KexiDataItemInterface
+		virtual void moveCursorToEnd();
+
+		//! Implemented for KexiDataItemInterface
+		virtual void moveCursorToStart();
+
+		//! Implemented for KexiDataItemInterface
+		virtual void selectAll();
 
 	protected:
 		virtual void setValueInternal(const QVariant&add, bool removeOld);
@@ -186,6 +198,10 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 
 		//! Used by @ref setLabelPositionInternal(LabelPosition)
 		void setLabelPositionInternal(LabelPosition position, bool noLabel);
+
+		//! Used by KexiDBAutoField::setColumnInfo() and KexiDBComboBox::setColumnInfo()
+		void setColumnInfoInternal(KexiDB::QueryColumnInfo* cinfo, KexiDB::QueryColumnInfo* visibleColumnInfo);
+
 	private:
 		class Private;
 		Private *d;

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,7 +44,8 @@ KexiDataItemInterface::~KexiDataItemInterface()
 {
 }
 
-void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add, bool removeOld)
+void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add, 
+	bool removeOld, const QVariant* visibleValue)
 {
 	m_disable_signalValueChanged = true; //to prevent emmiting valueChanged()
 //needed?	clear();
@@ -56,7 +57,14 @@ void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add,
 	}
 	m_origValue = value;
 	setValueInternal(add, removeOld);
+	if (visibleValue)
+		setVisibleValueInternal(*visibleValue);
 	m_disable_signalValueChanged = false;
+}
+
+void KexiDataItemInterface::setVisibleValueInternal(const QVariant& value)
+{
+	Q_UNUSED(value);
 }
 
 void KexiDataItemInterface::signalValueChanged()
@@ -67,8 +75,10 @@ void KexiDataItemInterface::signalValueChanged()
 		m_parentDataItemInterface->signalValueChanged();
 		return;
 	}
-	if (m_listener)
+	if (m_listener) {
+		beforeSignalValueChanged();
 		m_listener->valueChanged(this);
+	}
 }
 
 bool KexiDataItemInterface::valueChanged()

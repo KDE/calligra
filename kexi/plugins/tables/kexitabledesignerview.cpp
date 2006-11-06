@@ -399,7 +399,9 @@ KexiTableDesignerView::createPropertySet( int row, const KexiDB::Field& field, b
 
 	set->addProperty( prop 
 		= new KoProperty::Property("defaultValue", field.defaultValue(), i18n("Default Value"),
-			QString::null, (KoProperty::PropertyType)field.variantType()) );
+			QString::null, 
+//! @todo use "Variant" type here when supported by KoProperty
+			(KoProperty::PropertyType)field.variantType()) );
 	prop->setOption("3rdState", i18n("None"));
 //	prop->setVisible(false);
 

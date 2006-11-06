@@ -124,8 +124,8 @@ KexiDBAutoField::setWidgetType(WidgetType type)
 	d->widgetType_property = type;
 	if(differ) {
 		if(type == Auto) {// try to guess type from data source type
-			if (columnInfo())
-				d->widgetType = KexiDBAutoField::widgetTypeForFieldType(columnInfo()->field->type());
+			if (visibleColumnInfo())
+				d->widgetType = KexiDBAutoField::widgetTypeForFieldType(visibleColumnInfo()->field->type());
 			else
 				d->widgetType = Auto;
 		}
@@ -151,19 +151,15 @@ KexiDBAutoField::createEditor()
 		case Time:
 		case DateTime:
 			newSubwidget = new KexiDBLineEdit( this, QCString("KexiDBAutoField_KexiDBLineEdit:")+name() );
-//			connect( newSubwidget, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotValueChanged() ) );
 			break;
 		case MultiLineText:
 			newSubwidget = new KexiDBTextEdit( this, QCString("KexiDBAutoField_KexiDBTextEdit:")+name() );
-//			connect( newSubwidget, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotValueChanged() ) );
 			break;
 		case Boolean:
 			newSubwidget = new KexiDBCheckBox(dataSource(), this, QCString("KexiDBAutoField_KexiDBCheckBox:")+name());
-//			connect( newSubwidget, SIGNAL(stateChanged()), this, SLOT(slotValueChanged()));
 			break;
 		case Image:
 			newSubwidget = new KexiDBImageBox(d->designMode, this, QCString("KexiDBAutoField_KexiDBImageBox:")+name());
-//			connect( newSubwidget, SIGNAL(pixmapChanged()), this, SLOT( slotValueChanged() ) );
 			break;
 		case ComboBox:
 			newSubwidget = new KexiDBComboBox(this, QCString("KexiDBAutoField_KexiDBComboBox:")+name(), d->designMode);
@@ -179,7 +175,10 @@ KexiDBAutoField::createEditor()
 	if(newSubwidget) {
 		newSubwidget->setName( QCString("KexiDBAutoField_") + newSubwidget->className() );
 		dynamic_cast<KexiDataItemInterface*>(newSubwidget)->setParentDataItemInterface(this);
-		dynamic_cast<KexiFormDataItemInterface*>(newSubwidget)->setColumnInfo(columnInfo()); //needed at least by KexiDBImageBox
+		dynamic_cast<KexiFormDataItemInterface*>(newSubwidget)
+			->setColumnInfo(columnInfo()); //needed at least by KexiDBImageBox
+		dynamic_cast<KexiFormDataItemInterface*>(newSubwidget)
+			->setVisibleColumnInfo(visibleColumnInfo()); //needed at least by KexiDBComboBox
 		newSubwidget->setProperty("dataSource", dataSource()); //needed at least by KexiDBImageBox
 		KFormDesigner::DesignTimeDynamicChildWidgetHandler::childWidgetAdded(this);
 		newSubwidget->show();
@@ -341,12 +340,6 @@ KexiDBAutoField::value()
 	return QVariant();
 }
 
-/*void
-KexiDBAutoField::slotValueChanged()
-{
-	signalValueChanged();
-}*/
-
 bool
 KexiDBAutoField::valueIsNull()
 {
@@ -466,7 +459,7 @@ KexiDBAutoField::setFieldTypeInternal(int kexiDBFieldType)
 	KexiDB::Field::Type fieldType;
 	//find real fied type to use
 	if (d->fieldTypeInternal==KexiDB::Field::InvalidType) {
-		if (columnInfo())
+		if (visibleColumnInfo())
 			fieldType = KexiDB::Field::Text;
 		else
 			fieldType = KexiDB::Field::InvalidType;
@@ -498,13 +491,18 @@ void
 KexiDBAutoField::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
 	KexiFormDataItemInterface::setColumnInfo(cinfo);
+	setColumnInfoInternal(cinfo, cinfo);
+}
 
+void
+KexiDBAutoField::setColumnInfoInternal(KexiDB::QueryColumnInfo* cinfo, KexiDB::QueryColumnInfo* visibleColumnInfo)
+{
 	// change widget type depending on field type
 	if(d->widgetType_property == Auto) {
 		WidgetType newWidgetType = Auto;
 		KexiDB::Field::Type fieldType;
 		if (cinfo)
-			fieldType = cinfo->field->type();
+			fieldType = visibleColumnInfo->field->type();
 		else if (dataSource().isEmpty())
 			fieldType = KexiDB::Field::InvalidType;
 		else
@@ -523,7 +521,7 @@ KexiDBAutoField::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget);
 	if(iface)
-		iface->setColumnInfo(cinfo);
+		iface->setColumnInfo(visibleColumnInfo);
 }
 
 //static
@@ -623,12 +621,6 @@ KexiDBAutoField::setCaption(const QString &caption)
 		changeText(d->caption);
 }
 
-/*void
-KexiDBAutoField::setCaptionInternal(const QString& text)
-{
-	if(!d->autoCaption && !caption.isEmpty())
-}*/
-
 void
 KexiDBAutoField::setAutoCaption(bool autoCaption)
 {
@@ -644,9 +636,6 @@ KexiDBAutoField::setAutoCaption(bool autoCaption)
 	}
 	else
 		changeText(d->caption);
-
-//	if(!d->autoCaption && !d->caption.isEmpty())
-//		changeText(d->caption);
 }
 
 void
@@ -670,7 +659,6 @@ KexiDBAutoField::sizeHint() const
 	if (d->lblPosition == Top)
 		return QSize(QMAX(s1.width(), s2.width()), s1.height()+KexiDBAutoField_SPACING+s2.height());
 
-//	if (d->lblPosition == Left) 
 	//left
 	return QSize(s1.width()+KexiDBAutoField_SPACING+s2.width(), QMAX(s1.height(), s2.height()));
 }
@@ -823,18 +811,33 @@ void KexiDBAutoField::setDisplayDefaultValue(QWidget* widget, bool displayDefaul
 		dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget)->setDisplayDefaultValue(m_subwidget, displayDefaultValue);
 }
 
-/*
-int KexiDBAutoField::lineWidth () const
+void KexiDBAutoField::moveCursorToEnd()
 {
-	if (m_subwidget && m_subwidget->metaObject()->findProperty("lineWidth", true)!=-1)
-		return m_subwidget->property("lineWidth").toInt();
-	return 0;
+	KexiDataItemInterface *iface = dynamic_cast<KexiDataItemInterface*>((QWidget*)m_subwidget);
+	if (iface)
+		iface->moveCursorToEnd();
 }
 
-void KexiDBAutoField::setLineWidth( int width )
+void KexiDBAutoField::moveCursorToStart()
 {
-	if (m_subwidget && m_subwidget->metaObject()->findProperty("lineWidth", true)!=-1)
-		m_subwidget->setProperty("lineWidth", width);
-}*/
+	KexiDataItemInterface *iface = dynamic_cast<KexiDataItemInterface*>((QWidget*)m_subwidget);
+	if (iface)
+		iface->moveCursorToStart();
+}
+
+void KexiDBAutoField::selectAll()
+{
+	KexiDataItemInterface *iface = dynamic_cast<KexiDataItemInterface*>((QWidget*)m_subwidget);
+	if (iface)
+		iface->selectAll();
+}
+
+bool KexiDBAutoField::keyPressed(QKeyEvent *ke)
+{
+	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget);
+	if (iface && iface->keyPressed(ke))
+		return true;
+	return false;
+}
 
 #include "kexidbautofield.moc"

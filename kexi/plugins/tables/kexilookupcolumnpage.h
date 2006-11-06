@@ -80,35 +80,6 @@ class KexiLookupColumnPage : public QWidget
 		//! Used instead of m_propertySet->changeProperty() to honor m_propertySetEnabled
 		void changeProperty(const QCString &property, const QVariant &value);
 
-//MOC_SKIP_BEGIN
-#if 0
-		KexiDataSourceComboBox* dataSourceCombo() const { return m_dataSourceCombo; }
-		KexiObjectInfoLabel* objectInfoLabel() const { return m_objectInfoLabel; }
-
-	public slots:
-
-		//! Sets data source of a currently selected form. 
-		//! This is performed on form initialization and on activating.
-		void setDataSource(const QCString& mimeType, const QCString& name);
-
-	signals:
-		//! Signal emitted when form's data source has been changed. It's connected to the Form Manager.
-		void formDataSourceChanged(const QCString& mime, const QCString& name);
-
-		/*! Signal emitted when 'insert fields' button has been clicked */
-		void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
-			const QStringList& fields);
-
-	protected slots:
-		void slotInsertSelectedFields();
-		void slotFieldListViewSelectionChanged();
-		void slotFieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
-			const QString& fieldName);
-
-	protected:
-#endif
-//MOC_SKIP_END
-
 	private:
 		class Private;
 		Private* d;

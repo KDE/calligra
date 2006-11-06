@@ -83,7 +83,7 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 	setFrameColor(Qt::black);
 
 	//setup popup menu
-	m_popup = new KexiImageContextMenu(this);
+	m_popupMenu = new KexiImageContextMenu(this);
 
 	if (m_designMode) {
 		m_chooser = 0;
@@ -91,31 +91,31 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 	else {
 		m_chooser = new KexiDropDownButton(this);
 		m_chooser->setFocusPolicy(StrongFocus);
-		m_chooser->setPopup(m_popup);
+		m_chooser->setPopup(m_popupMenu);
 		setFocusProxy(m_chooser);
 		m_chooser->installEventFilter(this);
 //		m_chooser->setPalette(qApp->palette());
 //		hlyr->addWidget(m_chooser);
 	}
 
-	connect(m_popup, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)), 
+	connect(m_popupMenu, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)), 
 		this, SLOT(slotUpdateActionsAvailabilityRequested(bool&, bool&)));
-	connect(m_popup, SIGNAL(insertFromFileRequested(const KURL&)),
+	connect(m_popupMenu, SIGNAL(insertFromFileRequested(const KURL&)),
 		this, SLOT(handleInsertFromFileAction(const KURL&)));
-	connect(m_popup, SIGNAL(saveAsRequested(const QString&)),
+	connect(m_popupMenu, SIGNAL(saveAsRequested(const QString&)),
 		this, SLOT(handleSaveAsAction(const QString&)));
-	connect(m_popup, SIGNAL(cutRequested()),
+	connect(m_popupMenu, SIGNAL(cutRequested()),
 		this, SLOT(handleCutAction()));
-	connect(m_popup, SIGNAL(copyRequested()),
+	connect(m_popupMenu, SIGNAL(copyRequested()),
 		this, SLOT(handleCopyAction()));
-	connect(m_popup, SIGNAL(pasteRequested()),
+	connect(m_popupMenu, SIGNAL(pasteRequested()),
 		this, SLOT(handlePasteAction()));
-	connect(m_popup, SIGNAL(clearRequested()),
+	connect(m_popupMenu, SIGNAL(clearRequested()),
 		this, SLOT(clear()));
-	connect(m_popup, SIGNAL(showPropertiesRequested()),
+	connect(m_popupMenu, SIGNAL(showPropertiesRequested()),
 		this, SLOT(handleShowPropertiesAction()));
 
-//	connect(m_popup, SIGNAL(aboutToHide()), this, SLOT(slotAboutToHidePopupMenu()));
+//	connect(m_popupMenu, SIGNAL(aboutToHide()), this, SLOT(slotAboutToHidePopupMenu()));
 //	if (m_chooser) {
 		//we couldn't use m_chooser->setPopup() because of drawing problems
 //		connect(m_chooser, SIGNAL(pressed()), this, SLOT(slotChooserPressed()));
@@ -132,7 +132,7 @@ KexiDBImageBox::~KexiDBImageBox()
 
 KexiImageContextMenu* KexiDBImageBox::contextMenu() const
 {
-	return m_popup;
+	return m_popupMenu;
 }
 
 QVariant KexiDBImageBox::value()
@@ -311,7 +311,7 @@ QByteArray KexiDBImageBox::data() const
 
 void KexiDBImageBox::insertFromFile()
 {
-	m_popup->insertFromFile();
+	m_popupMenu->insertFromFile();
 }
 
 void KexiDBImageBox::handleInsertFromFileAction(const KURL& url)
@@ -489,7 +489,7 @@ void KexiDBImageBox::slotAboutToHidePopupMenu()
 void KexiDBImageBox::contextMenuEvent( QContextMenuEvent * e )
 {
 	if (popupMenuAvailable())
-		m_popup->exec( e->globalPos(), -1 );
+		m_popupMenu->exec( e->globalPos(), -1 );
 }
 
 /*void KexiDBImageBox::slotChooserPressed()
@@ -516,39 +516,39 @@ void KexiDBImageBox::slotToggled(bool on)
 	QRect screen = qApp->desktop()->availableGeometry( m_chooser );
 	QPoint p;
 	if ( QApplication::reverseLayout() ) {
-		if ( (mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popup->sizeHint().height()) <= screen.height() )
+		if ( (mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popupMenu->sizeHint().height()) <= screen.height() )
 			p = m_chooser->mapToGlobal( m_chooser->rect().bottomRight() );
 		else
-			p = m_chooser->mapToGlobal( m_chooser->rect().topRight() - QPoint( 0, m_popup->sizeHint().height() ) );
-		p.rx() -= m_popup->sizeHint().width();
+			p = m_chooser->mapToGlobal( m_chooser->rect().topRight() - QPoint( 0, m_popupMenu->sizeHint().height() ) );
+		p.rx() -= m_popupMenu->sizeHint().width();
 	}
 	else {
-		if ( (m_chooser->mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popup->sizeHint().height()) <= screen.height() )
+		if ( (m_chooser->mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popupMenu->sizeHint().height()) <= screen.height() )
 			p = m_chooser->mapToGlobal( m_chooser->rect().bottomLeft() );
 		else
-			p = m_chooser->mapToGlobal( m_chooser->rect().topLeft() - QPoint( 0, m_popup->sizeHint().height() ) );
+			p = m_chooser->mapToGlobal( m_chooser->rect().topLeft() - QPoint( 0, m_popupMenu->sizeHint().height() ) );
 	}
-	if (!m_popup->isVisible() && on) {
-		m_popup->exec( p, -1 );
-		m_popup->setFocus();
+	if (!m_popupMenu->isVisible() && on) {
+		m_popupMenu->exec( p, -1 );
+		m_popupMenu->setFocus();
 	}
 	//m_chooser->setDown( false );
 }*/
 
 void KexiDBImageBox::updateActionStrings()
 {
-	if (!m_popup)
+	if (!m_popupMenu)
 		return;
 	if (m_designMode) {
 /*		QString titleString( i18n("Image Box") );
 		if (!dataSource().isEmpty())
 			titleString.prepend(dataSource() + " : ");
-		m_popup->changeTitle(m_popup->idAt(0), m_popup->titlePixmap(m_popup->idAt(0)), titleString);*/
+		m_popupMenu->changeTitle(m_popupMenu->idAt(0), m_popupMenu->titlePixmap(m_popupMenu->idAt(0)), titleString);*/
 	}
 	else {
 		//update title in data view mode, based on the data source
 		if (columnInfo()) {
-			KexiImageContextMenu::updateTitle( m_popup, columnInfo()->captionOrAliasOrName(),
+			KexiImageContextMenu::updateTitle( m_popupMenu, columnInfo()->captionOrAliasOrName(),
 				KexiFormPart::library()->iconName(className()) );
 		}
 	}
@@ -766,7 +766,7 @@ bool KexiDBImageBox::keyPressed(QKeyEvent *ke)
 {
 	// Esc key should close the popup
 	if (ke->state() == Qt::NoButton && ke->key() == Qt::Key_Escape) {
-		if (m_popup->isVisible()) {
+		if (m_popupMenu->isVisible()) {
 			m_setFocusOnButtonAfterClosingPopup = true;
 			return true;
 		}

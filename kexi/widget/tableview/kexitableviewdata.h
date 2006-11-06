@@ -265,7 +265,7 @@ public:
 	/*! \return the column number by which the data is sorted, 
 	 or -1 if sorting is disabled. In this case sortingOrder() will return 0.
 	 Initial sorted column number for data after instantiating object is -1. */
-	inline int sortedColumn() const { return m_key; }
+	inline int sortedColumn() const { return m_sortedColumn; }
 
 	/*! \return 1 if ascending sort order is set, -1 id descending sort order is set,
 	 or 0 if no sorting is set. This is independant of whether data is sorted now. 
@@ -494,7 +494,11 @@ protected:
 	//! internal: for saveRowChanges() and saveNewRow()
 	bool saveRow(KexiTableItem& item, bool insert, bool repaint);
 
-	int m_key;
+	//! (logical) sorted column number, set by setSorting()
+	//! can differ from m_realSortedColumn if there's lookup column used
+	int m_sortedColumn;
+	//! real sorted column number, set by setSorting(), used by cmp*() methods
+	int m_realSortedColumn;
 	short m_order;
 	short m_type;
 	int m_itemSize;

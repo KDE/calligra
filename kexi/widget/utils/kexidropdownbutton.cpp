@@ -68,7 +68,7 @@ void KexiDropDownButton::keyPressEvent( QKeyEvent * e )
 {
 	const int k = e->key();
 	const bool dropDown = (e->state() == Qt::NoButton && (k==Qt::Key_Space || k==Qt::Key_Enter || k==Qt::Key_Return || k==Qt::Key_F2 || k==Qt::Key_F4))
-	  || (e->state() == Qt::AltButton && e->key()==Qt::Key_Down);
+	  || (e->state() == Qt::AltButton && k==Qt::Key_Down);
 	if (dropDown) {
 		e->accept();
 		animateClick();

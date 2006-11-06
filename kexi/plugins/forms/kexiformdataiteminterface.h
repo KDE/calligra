@@ -95,6 +95,14 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		 calling superclass implementation. */
 		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo) { m_columnInfo = cinfo; }
 
+		/*! Used internally to set visible database column information.
+		 Reimplemented in KexiDBComboBox: except for combo box, this does nothing. */
+		virtual void setVisibleColumnInfo(KexiDB::QueryColumnInfo* cinfo) {}
+
+		/*! \return visible database column information for this item.
+		 Except for combo box, this is exactly the same as columnInfo(). */
+		virtual KexiDB::QueryColumnInfo* visibleColumnInfo() const { return columnInfo(); }
+
 		/*! Does nothing, because within forms, widgets are always visible. */
 		virtual void hideWidget() { }
 
@@ -104,8 +112,10 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		/*! Undoes changes made to this item - just resets the widget to original value. 
 		 Note: This is internal method called by KexiFormScrollView::cancelEditor(). 
 		 To cancel editing of the widget's data from the widget's code,
-		 use KexiFormDataItemInterface::cancelEditor(). */
-		void undoChanges();
+		 use KexiFormDataItemInterface::cancelEditor(). 
+		 Reimplemented in KexiDBComboBox to also revert the visible value (i.e. text) to the original state.
+		 */
+		virtual void undoChanges();
 
 		/* Cancels editing of the widget's data. This method just looks for 
 		 the (grand)parent KexiFormScrollView object and calls

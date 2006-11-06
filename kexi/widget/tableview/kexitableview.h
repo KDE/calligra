@@ -334,8 +334,9 @@ public slots:
 		{ KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell(); }
 
 	/*! Cancels row editing All changes made to the editing 
-	 row during this current session will be undone. */
-	virtual void cancelRowEdit() { KexiDataAwareObjectInterface::cancelRowEdit(); }
+	 row during this current session will be undone. 
+	 \return true on success or false on failure (e.g. when editor does not exist) */
+	virtual bool cancelRowEdit() { return KexiDataAwareObjectInterface::cancelRowEdit(); }
 
 	/*! Accepts row editing. All changes made to the editing 
 	 row during this current session will be accepted (saved). 
@@ -357,7 +358,7 @@ public slots:
 	 By default this flag is set to false. */
 	virtual void setDropsAtRowEnabled(bool set) { KexiDataAwareObjectInterface::setDropsAtRowEnabled(set); }
 
-	virtual void cancelEditor() { KexiDataAwareObjectInterface::cancelEditor(); }
+	virtual bool cancelEditor() { return KexiDataAwareObjectInterface::cancelEditor(); }
 	virtual bool acceptEditor() { return KexiDataAwareObjectInterface::acceptEditor(); }
 
 signals:
@@ -615,6 +616,12 @@ protected:
 
 	void updateAfterCancelRowEdit();
 	void updateAfterAcceptRowEdit();
+
+	/*! Sets \a cellValue if there is a lookup value for the cell \a item.
+	 Used in KexiTableView::paintCell() and KexiTableViewCellToolTip::maybeTip()
+	 \return true is \a cellValue has been found. */
+	bool getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit, 
+		KexiTableItem *item, KexiTableViewColumn *tvcol) const;
 
 //	//! Called to repaint contents after a row is deleted.
 //	void repaintAfterDelete();

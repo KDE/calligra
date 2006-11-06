@@ -52,42 +52,17 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
 		//! Note: Generally in current implementation this is integer > 0; may be null if no value is set
 		virtual QVariant value();
 
+		virtual QVariant visibleValue();
+
 		//! Reimplement this and call this impl.: used to clear internal editor
 		virtual void clear();
-
-//		virtual bool cursorAtStart();
-//		virtual bool cursorAtEnd();
 
 		virtual tristate valueChangedInternal();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
-		virtual QVariant visibleValueForLookupField();
-
-		/*! Reimplemented: resizes a view(). */
-//moved		virtual void resize(int w, int h);
-
-//moved		virtual void showFocus( const QRect& r, bool readOnly );
-
-//moved		virtual void hideFocus();
-
-//moved		virtual void paintFocusBorders( QPainter *p, QVariant &cal, int x, int y, int w, int h );
-
-//moved		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
-//			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
-
-//moved		virtual bool handleKeyPress( QKeyEvent *ke, bool editorActive );
-
-//moved		virtual int widthForValue( QVariant &val, const QFontMetrics &fm );
 
 	public:
 		virtual void hide();
-//moved		virtual void show();
-
-		/*! \return total size of this editor, including popup button. */
-//moved		virtual QSize totalSize() const;
-
-//	protected slots:
-//moved		void slotButtonClicked();
 
 		void createPopup(bool show);
 
@@ -98,26 +73,19 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
 		
 		//! Call this from slot
 		virtual void slotItemSelected(KexiTableItem*);
-		
-		void slotLineEditTextChanged(const QString &newtext);
-//moved		void slotPopupHidden();
+
+		//! Call this from slot
+		void slotInternalEditorValueChanged(const QVariant &v);
+
+		//! Implement this to return the internal editor
+		virtual QWidget *internalEditor() const = 0;
 
 	protected:
-		//! internal
-//moved		void updateFocus( const QRect& r );
-
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
 
-//moved		virtual bool eventFilter( QObject *o, QEvent *e );
-
-//moved		void updateTextForHighlightedRow();
-
-		//! Used to select row item for an user-entered text \a str.
+		//! Used to select row item for an user-entered value \a v.
 		//! Only for "lookup table" mode.
-		KexiTableItem* selectItemForStringInLookupTable(const QString& str);
-
-//		//! \return value (col #1 of related data) - only reasonable for 'related table data' model
-//		QString valueForID(const QVariant& val);
+		KexiTableItem* selectItemForEnteredValueInLookupTable(const QVariant& v);
 
 		/*! \return value from \a returnFromColumn related to \a str value from column \a lookInColumn.
 		 If \a allowNulls is true, NULL is returend if no matched column found, else: 
@@ -127,16 +95,13 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
 		QString valueForString(const QString& str, int* row, uint lookInColumn, 
 			uint returnFromColumn, bool allowNulls = false);
 
-		//! sets \a value for the line edit without setting a flag (m_userEnteredText) that indicates that 
+		//! sets \a value for the line edit without setting a flag (m_userEnteredValue) that indicates that 
 		//! the text has been entered by hand (by a user)
 		void setValueOrTextInInternalEditor(const QVariant& value); //QString& text);
 
 		KexiDB::LookupFieldSchema* lookupFieldSchema() const;
 
 		int rowToHighlightForLookupTable() const;
-
-		//! Implement this to return the internal editor
-		virtual QWidget *internalEditor() const = 0;
 
 		//! Implement this to perform "move cursor to end" in the internal editor
 		virtual void moveCursorToEndInInternalEditor() = 0;
@@ -147,11 +112,8 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
 		//! Implement this to perform "set value" in the internal editor
 		virtual void setValueInInternalEditor(const QVariant& value) = 0;
 
-//		//! Implement this to perform "set value or text" in the internal editor (not entered by user)
-//		void setValueOrTextInInternalEditor(const QVariane& value) = 0;
-
 		//! Implement this to return value from the internal editor
-		virtual QVariant valueFromInternalEditor() const = 0;
+		virtual QVariant valueFromInternalEditor() = 0;
 
 		//! Implement this as signal
 		virtual void editRequested() = 0;
@@ -170,13 +132,35 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
 		//! for the button depending on visibility of the popup
 		virtual void updateButton() {}
 
-		QString m_userEnteredText; //!< text entered by hand (by user)
+		virtual KexiComboBoxPopup *popup() const = 0;
+		virtual void setPopup(KexiComboBoxPopup *popup) = 0;
+
+		virtual QVariant visibleValueForLookupField();
+
+		void updateTextForHighlightedRow();
+
+		bool handleKeyPressForPopup( QKeyEvent *ke );
+
+		void acceptPopupSelection();
+
+		//! Used by KexiDBComboBox.
+		void undoChanges();
+
+		QVariant m_visibleValue;
+
+		QVariant m_userEnteredValue; //!< value (usually a text) entered by hand (by the user)
 	
 		bool m_internalEditorValueChanged : 1; //!< true if user has text or other value inside editor
-		bool m_slotLineEditTextChanged_enabled : 1;
+		bool m_slotInternalEditorValueChanged_enabled : 1; //!< Used in slotInternalEditorValueChanged()
+		bool m_setValueOrTextInInternalEditor_enabled : 1; //!< Used in setValueOrTextInInternalEditor() and slotItemSelected()
 		bool m_mouseBtnPressedWhenPopupVisible : 1; //!< Used only by KexiComboBoxTableEdit
 		bool m_insideCreatePopup : 1; //!< true if we're inside createPopup(); used in slotItemSelected()
-		KexiComboBoxPopup *m_popup;
+		bool m_updatePopupSelectionOnShow : 1; //!< Set to false as soon as the item corresponding with the current 
+		                                       //!< value is selected in the popup table. This avoids selecting item 
+		                                       //!< for origValue() and thus loosing the recent choice.
+		bool m_moveCursorToEndInInternalEditor_enabled : 1;
+		bool m_selectAllInInternalEditor_enabled : 1;
+		bool m_setValueInInternalEditor_enabled : 1;
 };
 
 #endif
