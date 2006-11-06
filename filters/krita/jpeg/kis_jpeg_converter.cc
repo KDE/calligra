@@ -205,7 +205,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
     // Read exif information if any
     
     // Read data
-    JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
+    JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width *cinfo.num_components];
     
     for (; cinfo.output_scanline < cinfo.image_height;) {
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.output_scanline, cinfo.image_width, true);
@@ -314,7 +314,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
     fclose(fp);
-    delete row_pointer;
+    delete []row_pointer;
     return KisImageBuilder_RESULT_OK;
 }
 
