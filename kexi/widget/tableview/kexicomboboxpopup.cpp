@@ -170,6 +170,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 //! @todo errmsg
 				return;
 			cursor = field->table()->connection()->prepareQuery( *lookupTable );
+			break;
 		}
 		case KexiDB::LookupFieldSchema::RowSource::Query: {
 			KexiDB::QuerySchema *lookupQuery 
@@ -178,6 +179,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 //! @todo errmsg
 				return;
 			cursor = field->table()->connection()->prepareQuery( *lookupQuery );
+			break;
 		}
 		default:;
 		}
