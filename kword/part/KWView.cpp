@@ -302,7 +302,7 @@ void KWView::editRedo() {
 }
 
 QDockWidget *KWView::createShapeSelector() {
-    return new KoShapeSelector(0, ".*");
+    return new KoShapeSelector(0);
 }
 
 #include "KWView.moc"
