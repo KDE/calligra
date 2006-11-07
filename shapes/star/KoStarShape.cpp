@@ -47,34 +47,50 @@ void KoStarShape::setCornerCount( uint cornerCount )
 
 void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
 {
-    QPointF distVector = point - m_center;
-    // unapply scaling
-    distVector.rx() /= m_zoomX;
-    distVector.ry() /= m_zoomY;
-    m_radius[handleId] = sqrt( distVector.x()*distVector.x() + distVector.y()*distVector.y() );
-
-    double angle = atan2( distVector.y(), distVector.x() );
-    if( angle < 0.0 )
-        angle += 2.0*M_PI;
-    double diffAngle = angle-m_angles[handleId];
-    if( handleId == tip )
+    if( modifiers & Qt::ShiftModifier )
     {
-        double radianStep = M_PI / static_cast<double>(m_cornerCount);
-        m_angles[tip] += diffAngle-radianStep;
-        m_angles[base] += diffAngle-radianStep;
+        QPointF tangentVector = point - m_handles[handleId];
+        double distance = sqrt( tangentVector.x()*tangentVector.x() + tangentVector.y()*tangentVector.y() );
+        QPointF radialVector = m_handles[handleId] - m_center;
+        // cross product to determine in which direction the user is dragging
+        double moveDirection = radialVector.x()*tangentVector.y() - radialVector.y()*tangentVector.x();
+        if( modifiers & Qt::ControlModifier )
+            m_roundness[base] = m_roundness[tip] = moveDirection < 0.0f ? distance : -distance;
+        else
+            m_roundness[handleId] = moveDirection < 0.0f ? distance : -distance;
     }
     else
     {
-        // control make the base point move radially
-        if( modifiers & Qt::ControlModifier )
-            m_angles[base] = m_angles[tip];
+        QPointF distVector = point - m_center;
+        // unapply scaling
+        distVector.rx() /= m_zoomX;
+        distVector.ry() /= m_zoomY;
+        m_radius[handleId] = sqrt( distVector.x()*distVector.x() + distVector.y()*distVector.y() );
+
+        double angle = atan2( distVector.y(), distVector.x() );
+        if( angle < 0.0 )
+            angle += 2.0*M_PI;
+        double diffAngle = angle-m_angles[handleId];
+        if( handleId == tip )
+        {
+            double radianStep = M_PI / static_cast<double>(m_cornerCount);
+            m_angles[tip] += diffAngle-radianStep;
+            m_angles[base] += diffAngle-radianStep;
+        }
         else
-            m_angles[base] += diffAngle;
+        {
+            // control make the base point move radially
+            if( modifiers & Qt::ControlModifier )
+                m_angles[base] = m_angles[tip];
+            else
+                m_angles[base] += diffAngle;
+        }
     }
 }
 
 void KoStarShape::updatePath( const QSizeF &size )
 {
+    Q_UNUSED(size);
     double radianStep = M_PI / static_cast<double>(m_cornerCount);
 
     for( uint i = 0; i < 2*m_cornerCount; ++i )
@@ -84,6 +100,18 @@ void KoStarShape::updatePath( const QSizeF &size )
         QPointF cornerPoint = QPointF( m_zoomX * m_radius[cornerType] * cos( radian ), m_zoomY * m_radius[cornerType] * sin( radian ) );
 
         m_points[i]->setPoint( m_center + cornerPoint );
+        if( m_roundness[cornerType] != 0.0f )
+        {
+            // normalized cross product to compute tangential vector for handle point
+            QPointF tangentVector( cornerPoint.y()/m_radius[cornerType], -cornerPoint.x()/m_radius[cornerType] );
+            m_points[i]->setControlPoint2( m_points[i]->point() - m_roundness[cornerType] * tangentVector );
+            m_points[i]->setControlPoint1( m_points[i]->point() + m_roundness[cornerType] * tangentVector );
+        }
+        else
+        {
+            m_points[i]->unsetProperty( KoPathPoint::HasControlPoint1 );
+            m_points[i]->unsetProperty( KoPathPoint::HasControlPoint2 );
+        }
     }
 
     normalize();
@@ -100,6 +128,7 @@ void KoStarShape::createPath()
     m_radius[tip] = 50.0;
     m_angles[base] = M_PI_2;
     m_angles[tip] = M_PI_2;
+    m_roundness[base] = m_roundness[tip] = 0.0f;
 
     QPointF center = QPointF( m_radius[tip], m_radius[tip] );
 

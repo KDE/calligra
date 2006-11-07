@@ -46,6 +46,7 @@ private:
     double m_angles[2]; ///< the offset angles
     double m_zoomX; ///< scaling in x
     double m_zoomY; ///< scaling in y
+    double m_roundness[2]; ///< the roundness at the handles
     QPointF m_center;   ///< the star center point
     KoSubpath m_points;
 };
