@@ -52,18 +52,20 @@ class ScriptingFunctionImpl : public KSpread::Function
 
         static KSpread::Value callback(KSpread::valVector args, KSpread::ValueCalc* calc, KSpread::FuncExtra* extra)
         {
+            Q_UNUSED(calc);
             Q_ASSERT(extra && extra->function);
             ScriptingFunctionImpl* funcimpl = static_cast< ScriptingFunctionImpl* >( extra->function );
 
-            if(! funcimpl->m_function) {
+kDebug() << "ScriptingFunctionImpl::callback ###################################################################################" << endl;
+
+            if( ! funcimpl->m_function) {
+                kDebug() << QString("ScriptingFunctionImpl::callback ScriptingFunction instance is NULL.") << endl;
                 KSpread::Value err = KSpread::Value::errorNA();
                 err.setError( "#" + i18n("No such script.") );
                 return err;
             }
 
-
-            //const QString name = funcimpl->name();
-            //kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(name).arg(args.count()) << endl;
+            kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(funcimpl->m_function->name()).arg(args.count()) << endl;
 
             QVariantList list;
             int size = args.size();
@@ -72,28 +74,26 @@ class ScriptingFunctionImpl : public KSpread::Function
                 list.append( args[i].asString() );
             }
 
-            QVariant result;
-            QMetaObject::invokeMethod(funcimpl->m_function, "called(QVariantList)", Q_RETURN_ARG(QVariant, result), Q_ARG(QVariantList, list));
+            funcimpl->m_function->setResult( QVariant() );
 
-            /*
-            QString scriptname = args[0].isString() ? args[0].asString() : QString();
-            QString functionname = args[1].isString() ? args[1].asString() : QString();
-            KActionCollection* collection = Kross::Manager::self().actionCollection();
-            if( ! collection ) {
-                KSpread::Value err = KSpread::Value::errorNA();
-                err.setError( "#" + i18n("Scripfunctions are disabled.") );
-                return err;
-            }
-            KAction* action = scriptname.isNull() ? 0 : collection->action(scriptname);
-            if( ! action ) {
+            if( ! QMetaObject::invokeMethod(funcimpl->m_function, "called", QGenericReturnArgument(), Q_ARG(QVariantList, list)) ) {
                 KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
-                err.setError( "#" + i18n("No such script.") );
+                err.setError( "#" + i18n("No such script function.") );
                 return err;
             }
-            */
 
             //TODO
+            QVariant result = funcimpl->m_function->result();
+            if( ! result.isValid() ) {
+                KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
+                err.setError( "#" + i18n("No return value.") );
+                return err;
+            }
+            kDebug() << "result=" << result.toString() << endl;
             return KSpread::Value( result.toString() );
+
+            //kDebug() << "result=" << result << endl;
+            //return KSpread::Value( result );
         }
 
         ScriptingFunctionImpl(ScriptingFunction* function, const QDomElement& description)
@@ -134,6 +134,7 @@ class ScriptingFunction::Private
         int maxparam;
         QString comment;
         QString syntax;
+        QVariant result;
 
         QDomDocument document;
         QDomElement funcElement;
@@ -165,6 +166,8 @@ QString ScriptingFunction::comment() const { return d->comment; }
 void ScriptingFunction::setComment(const QString& comment) { d->comment = comment; }
 QString ScriptingFunction::syntax() const { return d->syntax; }
 void ScriptingFunction::setSyntax(const QString& syntax) { d->syntax = syntax; }
+QVariant ScriptingFunction::result() const { return d->result; }
+void ScriptingFunction::setResult(const QVariant& result) { d->result = result; }
 
 void ScriptingFunction::addExample(const QString& example)
 {

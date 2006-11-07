@@ -37,6 +37,7 @@ class ScriptingFunction : public QObject
         Q_PROPERTY(int maxparam READ maxParam WRITE setMaxParam)
         Q_PROPERTY(QString comment READ comment WRITE setComment)
         Q_PROPERTY(QString syntax READ syntax WRITE setSyntax)
+        Q_PROPERTY(QVariant result READ result WRITE setResult)
 
     public:
         ScriptingFunction(QObject* parent);
@@ -52,6 +53,8 @@ class ScriptingFunction : public QObject
         void setComment(const QString& comment);
         QString syntax() const;
         void setSyntax(const QString& syntax);
+        QVariant result() const;
+        void setResult(const QVariant& result);
 
     public slots:
         void addExample(const QString& example);
@@ -59,7 +62,7 @@ class ScriptingFunction : public QObject
         bool registerFunction();
 
     signals:
-        QVariant called(QVariantList args);
+        void called(QVariantList args);
 
     private:
         class Private;
