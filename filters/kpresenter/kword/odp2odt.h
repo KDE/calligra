@@ -39,6 +39,9 @@ protected:
     void fixBodyTagName( QDomElement& body );
     void processPages( QDomElement& body );
     void copyFile( const QString& fileName );
+    void adjustStyles();
+    void fixPageLayout( QDomElement& docElem );
+    void addSlideTitleStyle( QDomElement& docElem );
     QDomDocument doc;
     //QDomElement frameset;
     //QString titleStyleName;
