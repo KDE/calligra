@@ -4048,7 +4048,8 @@ bool Cell::operator==( const Cell& other ) const
 
 QRect Cell::cellRect()
 {
-  Q_ASSERT(!isDefault());
+  // this asserts if the invoicetemplate.ods file in http://kross.dipe.org/KSpreadInvoiceExample.tar.gz is opened.
+  //Q_ASSERT(!isDefault());
   return QRect(QPoint(d->column, d->row), QPoint(d->column, d->row));
 }
 
