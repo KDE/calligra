@@ -28,7 +28,7 @@ public:
     KChartPart* chart() const { return m_chart; };
 
     // Set and get the string for the data area.
-    void setDataArea( const QString &area );
+    void setDataArea( const QString &dataArea );
     QString dataArea() const;
 
     enum RowCol { Row, Col };

@@ -147,9 +147,9 @@ void KChartWizard::reject()
     QWizard::reject();
 }
 
-void KChartWizard::setDataArea( const QString &area )
+void KChartWizard::setDataArea( const QString &dataArea )
 {
-    m_dataFormatPage->setDataArea( area );
+    m_dataFormatPage->setDataArea( dataArea );
 }
 
 

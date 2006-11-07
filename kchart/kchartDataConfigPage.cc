@@ -111,6 +111,8 @@ void KChartDataConfigPage::init()
     if ( !m_params->part()->canChangeValue() ) {
 	m_firstRowAsLabel->setChecked( m_params->firstRowAsLabel() );
 	m_firstColAsLabel->setChecked( m_params->firstColAsLabel() );
+
+	m_dataArea->setText( m_params->dataArea() );
     }
 }
 
@@ -122,6 +124,8 @@ void KChartDataConfigPage::defaults()
     if ( !m_params->part()->canChangeValue() ) {
 	m_firstRowAsLabel->setChecked( false );
 	m_firstColAsLabel->setChecked( false );
+
+	m_dataArea->setText( "" );
     }
 }
 
@@ -136,6 +140,8 @@ void KChartDataConfigPage::apply()
     if ( !m_params->part()->canChangeValue() ) {
 	m_params->setFirstRowAsLabel( m_firstRowAsLabel->isChecked() );
 	m_params->setFirstColAsLabel( m_firstColAsLabel->isChecked() );
+
+	m_params->setDataArea( m_dataArea->text() );
     }
 }
 
