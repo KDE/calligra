@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KPresenter KWord Filter
+Name[fr]=Filtre KWord pour KPresenter
+Name[x-test]=xxKPresenter KWord Filterxx
+X-KDE-Import=application/vnd.oasis.opendocument.presentation
+X-KDE-Weight=1
+X-KDE-Export=application/vnd.oasis.opendocument.text
+X-KDE-Library=libkodp2odt
+ServiceTypes=KOfficeFilter
