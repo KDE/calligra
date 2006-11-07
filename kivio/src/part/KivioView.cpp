@@ -287,7 +287,7 @@ QDockWidget* KivioView::createToolBox()
 
 QDockWidget* KivioView::createShapeSelector()
 {
-    return new KoShapeSelector(this, ".*");
+    return new KoShapeSelector(this);
 }
 
 void KivioView::selectionChanged()
