@@ -67,8 +67,7 @@ class Setup:
         functest1.addExample("SCRIPT_TEST1(\"Some string\")")
 
         def functest1callback(argument):
-            functest1.result = "%s" % argument
-            #return "AAA %s" % args
+            functest1.result = "%s" % argument[0]
         functest1.connect("called(QVariantList)", functest1callback)
 
         functest1.registerFunction()
