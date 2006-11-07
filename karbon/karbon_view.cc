@@ -1753,7 +1753,7 @@ QDockWidget *KarbonView::createToolBox() {
 
 QDockWidget *KarbonView::createShapeSelector()
 {
-	return new KoShapeSelector( this, "" );
+	return new KoShapeSelector( this );
 }
 
 VToolController *
