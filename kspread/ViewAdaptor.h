@@ -68,7 +68,7 @@ public Q_SLOTS: // METHODS
     virtual void preference();
     virtual void nextSheet();
     virtual void previousSheet();
-    virtual bool showSheet(QString sheetName);
+    virtual bool showSheet(const QString& sheetName);
     virtual void sortList();
     virtual void setAreaName();
     virtual void showAreaName();
@@ -109,7 +109,7 @@ public Q_SLOTS: // METHODS
     virtual void setSelectionLower();
     virtual void setSelectionFirstLetterUpper();
     virtual void setSelectionVerticalText(bool enable);
-    virtual void setSelectionComment(QString comment);
+    virtual void setSelectionComment(const QString& comment);
     virtual void setSelectionAngle(int value);
     virtual void setSelectionTextColor(QColor txtColor );
     virtual void setSelectionBgColor(QColor bgColor );

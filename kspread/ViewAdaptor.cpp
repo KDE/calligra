@@ -139,7 +139,7 @@ void ViewAdaptor::nextSheet()
     m_view->nextSheet();
 }
 
-bool ViewAdaptor::showSheet(QString sheetName)
+bool ViewAdaptor::showSheet(const QString& sheetName)
 {
    return m_view->showSheet(sheetName);
 }
@@ -339,7 +339,7 @@ void ViewAdaptor::setSelectionVerticalText(bool enable)
   m_view->verticalText(enable);
 }
 
-void ViewAdaptor::setSelectionComment(QString comment)
+void ViewAdaptor::setSelectionComment(const QString& comment)
 {
   m_view->setSelectionComment(comment);
 }
