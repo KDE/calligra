@@ -40,7 +40,7 @@ class ScriptingFunction : public QObject
         Q_PROPERTY(QVariant result READ result WRITE setResult)
 
     public:
-        ScriptingFunction(QObject* parent);
+        explicit ScriptingFunction(QObject* parent);
         virtual ~ScriptingFunction();
 
         QString name() const;
