@@ -3358,6 +3358,9 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
         KoXmlElement rowElement = rowNode.toElement();
         if( !rowElement.isNull() )
         {
+            // slightly faster
+            KoXml::load(rowElement);
+
             kDebug(36003)<<" Sheet::loadOasis rowElement.tagName() :"<<rowElement.localName()<<endl;
             if ( rowElement.namespaceURI() == KoXmlNS::table )
             {
@@ -3388,7 +3391,11 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                 else if ( rowElement.localName() == "shapes" )
                     loadOasisObjects( rowElement, oasisContext );
             }
+
+            // don't need it anymore
+            KoXml::load(rowElement);
         }
+
         rowNode = rowNode.nextSibling();
         doc()->emitProgress( 100 * rowIndex / overallRowCount );
     }
