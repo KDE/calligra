@@ -61,7 +61,7 @@ kDebug() << "ScriptingFunctionImpl::callback ###################################
             if( ! funcimpl->m_function) {
                 kDebug() << QString("ScriptingFunctionImpl::callback ScriptingFunction instance is NULL.") << endl;
                 KSpread::Value err = KSpread::Value::errorNA();
-                err.setError( "#" + i18n("No such script.") );
+                err.setError( '#' + i18n("No such script.") );
                 return err;
             }
 
