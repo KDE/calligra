@@ -42,7 +42,7 @@ class ViewAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.view")
 public:
-    ViewAdaptor( View* );
+    explicit ViewAdaptor( View* );
     ~ViewAdaptor();
 
 public Q_SLOTS: // METHODS

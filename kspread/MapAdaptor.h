@@ -36,7 +36,7 @@ class MapAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.map")
 public:
-    MapAdaptor( Map* );
+    explicit MapAdaptor( Map* );
 
 //     virtual bool processDynamic(const DCOPCString &fun, const QByteArray &data,
 // 				DCOPCString& replyType, QByteArray &replyData);

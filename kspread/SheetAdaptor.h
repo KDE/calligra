@@ -42,7 +42,7 @@ class SheetAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.sheet")
 public:
-    SheetAdaptor( Sheet* );
+    explicit SheetAdaptor( Sheet* );
     ~SheetAdaptor();
 
 //     bool processDynamic( const DCOPCString& fun, const QByteArray& data,
