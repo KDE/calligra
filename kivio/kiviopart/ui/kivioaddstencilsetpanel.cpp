@@ -60,6 +60,9 @@ namespace Kivio {
         m_stencilSetLView->ensureItemVisible(tmp);
       }
     }
+#if KDE_IS_VERSION(3,4,0)
+    m_stencilSetLView-> setShadeSortColumn(false);
+#endif
   }
   
   
