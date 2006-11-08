@@ -347,6 +347,10 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
         {
             //kDebug()<<"  Map::loadOasis tableElement is not null \n";
             //kDebug()<<"tableElement.nodeName() :"<<sheetElement.nodeName()<<endl;
+
+            // make it slightly faster
+            KoXml::load(sheetElement);
+
             if( sheetElement.nodeName() == "table:table" )
             {
                 if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
@@ -357,6 +361,9 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
                 }
             }
         }
+
+        // reduce memory usage
+        KoXml::unload(sheetElement);
         sheetNode = sheetNode.nextSibling();
     }
 
@@ -370,6 +377,9 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
         KoXmlElement sheetElement = sheetNode.toElement();
         if( !sheetElement.isNull() )
         {
+            // make it slightly faster
+            KoXml::load(sheetElement);
+
             //kDebug()<<"tableElement.nodeName() bis :"<<sheetElement.nodeName()<<endl;
             if( sheetElement.nodeName() == "table:table" )
             {
@@ -384,6 +394,9 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
                 }
             }
         }
+
+        // reduce memory usage
+        KoXml::unload(sheetElement);
         sheetNode = sheetNode.nextSibling();
     }
 
