@@ -78,7 +78,7 @@ kDebug() << "ScriptingFunctionImpl::callback ###################################
 
             if( ! QMetaObject::invokeMethod(funcimpl->m_function, "called", QGenericReturnArgument(), Q_ARG(QVariantList, list)) ) {
                 KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
-                err.setError( "#" + i18n("No such script function.") );
+                err.setError( '#' + i18n("No such script function.") );
                 return err;
             }
 
@@ -86,7 +86,7 @@ kDebug() << "ScriptingFunctionImpl::callback ###################################
             QVariant result = funcimpl->m_function->result();
             if( ! result.isValid() ) {
                 KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
-                err.setError( "#" + i18n("No return value.") );
+                err.setError( '#' + i18n("No return value.") );
                 return err;
             }
             kDebug() << "result=" << result.toString() << endl;
