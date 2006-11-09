@@ -548,7 +548,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     }
 
     // Try to compute a table of color if the colorspace is RGB8f
-    png_colorp palette ;
+    png_colorp palette = 0;
     int num_palette = 0;
     if(!alpha && layer->paintDevice()->colorSpace()->id() == KoID("RGBA") )
     { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
