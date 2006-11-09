@@ -888,6 +888,8 @@ void KPrOutline::moveItem( int oldPos, int newPos )
             item->updateTitle();
     }
 
+    Q_ASSERT( itemToMove );
+    Q_ASSERT( itemAfter );
     K3ListView::moveItem( itemToMove, 0, itemAfter );
 }
 
