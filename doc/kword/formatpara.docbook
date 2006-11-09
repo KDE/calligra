@@ -104,14 +104,14 @@ consists of a combo box and a spin box.</para>
 <varlistentry>
 <term>Proportional</term>
 <listitem>
-<para>If this option is selected, the spin box is enabled.  When you enter a number in the spin box, KWord uses that number as a multiplier for line spacing.  To look at it another way, if you enter 1.00 in this box, &kword; will use single spacing.  If you enter 2.00 in this box, &kword; will use double spacing.  If you enter 3.00 in this box, &kword; will use triple spacing, etc.  You are not limited to whole numbers.  You could enter 1.87 in this box and &kword; would use 1.87 line spacing.</para>
+<para>If this option is selected, the spin box is enabled.  When you enter a number in the spin box, &kword; uses that number as a multiplier for line spacing.  To look at it another way, if you enter 1.00 in this box, &kword; will use single spacing.  If you enter 2.00 in this box, &kword; will use double spacing.  If you enter 3.00 in this box, &kword; will use triple spacing, etc.  You are not limited to whole numbers.  You could enter 1.87 in this box and &kword; would use 1.87 line spacing.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term>Line Distance</term>
 <listitem>
-<para>If this option is selected, the spin box is enabled.  When you enter a number in the spin box, KWord places a measured amount of space between each line.  As an example, if you enter 0.75 and the units used by &kword; are inches, then &kword; will place 0.75 inches between each line.</para>
+<para>If this option is selected, the spin box is enabled.  When you enter a number in the spin box, &kword; places a measured amount of space between each line.  As an example, if you enter 0.75 and the units used by &kword; are inches, then &kword; will place 0.75 inches between each line.</para>
 </listitem>
 </varlistentry>
 
