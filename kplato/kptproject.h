@@ -42,7 +42,6 @@ class Part;
 class Schedule;
 class StandardWorktime;
 
-//#define DEBUGPERT
 /**
  * Project is the main node in a project, it contains child nodes and
  * possibly sub-projects. A sub-project is just another instantion of this
@@ -50,6 +49,7 @@ class StandardWorktime;
  */
 class Project : public Node
 {
+    Q_OBJECT
 public:
     Project( Node *parent = 0 );
     ~Project();
@@ -106,7 +106,7 @@ public:
     bool addSubTask( Node* task, int index, Node* parent );
     void delTask( Node *node );
     bool canIndentTask( Node* node );
-    bool indentTask( Node* node );
+    bool indentTask( Node* node, int index = -1 );
     bool canUnindentTask( Node* node );
     bool unindentTask( Node* node );
     bool canMoveTaskUp( Node* node );
@@ -248,7 +248,25 @@ public:
     /// Set parent schedule for my children
     virtual void setParentSchedule( Schedule *sch );
 
+signals:
+    /// This signal is emitted when one of the nodes members is changed.
+    void nodeChanged( Node* );
+    /// This signal is emitted when the node is to be added to the project.
+    void nodeToBeAdded( Node* );
+    /// This signal is emitted when the node has been added to the project.
+    void nodeAdded( Node* );
+    /// This signal is emitted when the node is to be removed from the project.
+    void nodeToBeRemoved( Node* );
+    /// This signal is emitted when the node has been removed from the project.
+    void nodeRemoved( Node* );
+    /// This signal is emitted when the node is to be moved up, moved down, indented or unindented.
+    void nodeToBeMoved( Node* );
+    /// This signal is emitted when the node has been moved up, moved down, indented or unindented.
+    void nodeMoved( Node* );
+    
 protected:
+    virtual void changed(Node *node);
+    
     Accounts m_accounts;
     QList<ResourceGroup*> m_resourceGroups;
 

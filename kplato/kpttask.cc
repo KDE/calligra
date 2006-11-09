@@ -328,7 +328,7 @@ void Task::save(QDomElement &element)  const {
         m_requests->save(me);
     }
     for (int i=0; i<numChildren(); i++) {
-        getChildNode(i)->save(me);
+        childNode(i)->save(me);
     }
 }
 

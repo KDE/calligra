@@ -43,7 +43,8 @@ Node::Node(Node *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes(
 }
 
 Node::Node(Node &node, Node *parent) 
-    : m_nodes(), 
+    : QObject( parent),
+      m_nodes(), 
       m_dependChildNodes(), 
       m_dependParentNodes() {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
@@ -114,6 +115,37 @@ void Node::init() {
     m_shutdownCost = 0.0;
 }
 
+QString Node::typeToString( bool i ) const {
+    switch ( type() ) {
+        case Type_Node: return i ? "Node" : i18n("Node");
+        case Type_Project: return i ? "Project" : i18n("");
+        case Type_Subproject: return i ? "Sub-Project" : i18n("Sub-Project");
+        case Type_Task: return i ? "Task" : i18n("Task");
+        case Type_Milestone: return i ? "Milestone" : i18n("Milestone");
+        case Type_Periodic: return i ? "Periodic" : i18n("Periodic");
+        case Type_Summarytask: return i ? "Summary-Task" : i18n("Summary-Task");
+        return QString();
+    }
+}
+
+void Node::setName(const QString &n) 
+{
+     m_name = n;
+     changed(this);
+}
+
+void Node::setLeader(const QString &l)
+{
+     m_leader = l;
+     changed(this);
+}
+
+void Node::setDescription(const QString &d)
+{
+     m_description = d;
+     changed(this);
+}
+
 Node *Node::projectNode() {
     if ((type() == Type_Project) || (type() == Type_Subproject)) {
         return this;
@@ -145,7 +177,10 @@ void Node::takeChildNode( int number ) {
 }
 
 void Node::insertChildNode( unsigned int index, Node *node) {
-    m_nodes.insert(index,node);
+    if (index == -1)
+        m_nodes.append(node);
+    else
+        m_nodes.insert(index,node);
     node->setParent(this);
 }
 
@@ -162,11 +197,22 @@ void Node::addChildNode( Node *node, Node *after) {
 
 int Node::findChildNode( Node* node )
 {
-	return m_nodes.indexOf( node );
+    return m_nodes.indexOf( node );
+}
+
+bool Node::isChildOf( Node* node )
+{
+    if ( node == 0 || m_parent == 0 ) {
+        return false;
+    }
+    if ( node == m_parent ) {
+        return true;
+    }
+    return m_parent->isChildOf( node );
 }
 
 
-const Node* Node::getChildNode(int number) const {
+const Node* Node::childNode(int number) const {
     return m_nodes.at(number);
 }
 
@@ -344,6 +390,12 @@ void Node::saveRelations(QDomElement &element) const {
     }
 }
 
+void Node::setConstraint(Node::ConstraintType type)
+{ 
+    m_constraint = type;
+    changed( this );
+}
+
 void Node::setConstraint(QString &type) {
     // Do not i18n these, they are used in load()
     if (type == "ASAP")
@@ -364,24 +416,20 @@ void Node::setConstraint(QString &type) {
         setConstraint(ASAP);  // default
 }
 
-QString Node::constraintToString() const {
-    // Do not i18n these, they are used in save()
-    if (m_constraint == ASAP)
-        return QString("ASAP");
-    else if (m_constraint == ALAP)
-        return QString("ALAP");
-    else if (m_constraint == StartNotEarlier)
-        return QString("StartNotEarlier");
-    else if (m_constraint == FinishNotLater)
-        return QString("FinishNotLater");
-    else if (m_constraint == MustStartOn)
-        return QString("MustStartOn");
-    else if (m_constraint == MustFinishOn)
-        return QString("MustFinishOn");
-    else if (m_constraint == FixedInterval)
-        return QString("FixedInterval");
+QString Node::constraintToString( bool trans ) const {
+    return constraintList( trans ).at( m_constraint );
+}
 
-    return QString();
+QStringList Node::constraintList( bool trans ) {
+    // keep theses in the same order as the enum!
+    return QStringList() 
+            << (trans ? i18n("ASAP") : QString("ASAP"))
+            << (trans ? i18n("ALAP") : QString("ALAP"))
+            << (trans ? i18n("StartNotEarlier") : QString("StartNotEarlier"))
+            << (trans ? i18n("FinishNotLater") : QString("FinishNotLater"))
+            << (trans ? i18n("MustStartOn") : QString("MustStartOn"))
+            << (trans ? i18n("MustFinishOn") : QString("MustFinishOn"))
+            << (trans ? i18n("FixedInterval") : QString("FixedInterval"));
 }
 
 void Node::propagateEarliestStart(DateTime &time) {
@@ -723,6 +771,13 @@ void Node::setCurrentSchedule(long id) {
     }
     //kDebug()<<k_funcinfo<<m_name<<" id: "<<id<<"="<<m_currentSchedule<<endl;
 }
+
+void Node::changed(Node *node) {
+    if (m_parent)
+        m_parent->changed(this);
+}
+
+
 //////////////////////////   Effort   /////////////////////////////////
 
 Effort::Effort( Duration e, Duration p, Duration o) {
@@ -829,33 +884,36 @@ void Effort::save(QDomElement &element) const {
     me.setAttribute("risk", risktypeToString());
 }
 
-QString Effort::typeToString() const {
-    if (m_type == Type_Effort)
-        return QString("Effort");
-    if (m_type == Type_FixedDuration)
-        return QString("Type_FixedDuration");
+QString Effort::typeToString( bool trans ) const {
+    return typeToStringList( trans ).at( m_type );
+}
 
-    return QString();
+QStringList Effort::typeToStringList( bool trans ) {
+    return QStringList() 
+            << (trans ? i18n("Effort") : QString("Effort"))
+            << (trans ? i18n("FixedDuration") : QString("FixedDuration"));
 }
 
 void Effort::setType(QString type) {
     if (type == "Effort")
         setType(Type_Effort);
-    else if (type == "Type_FixedDuration")
+    else if (type == "FixedDuration")
+        setType(Type_FixedDuration);
+    else if (type == "Type_FixedDuration") // Typo, keep old xml files working
         setType(Type_FixedDuration);
     else
         setType(Type_Effort); // default
 }
 
-QString Effort::risktypeToString() const {
-    if (m_risktype == Risk_None)
-        return QString("None");
-    if (m_risktype == Risk_Low)
-        return QString("Low");
-    if (m_risktype == Risk_High)
-        return QString("High");
+QString Effort::risktypeToString( bool trans ) const {
+    return risktypeToStringList( trans ).at( m_risktype );
+}
 
-    return QString();
+QStringList Effort::risktypeToStringList( bool trans ) {
+    return QStringList() 
+            << (trans ? i18n("None") : QString("None"))
+            << (trans ? i18n("Low") : QString("Low"))
+            << (trans ? i18n("High") : QString("High"));
 }
 
 void Effort::setRisktype(QString type) {
@@ -955,3 +1013,5 @@ void Effort::printDebug(QByteArray indent) {
 #endif
 
 }  //KPlato namespace
+
+#include "kptnode.moc"

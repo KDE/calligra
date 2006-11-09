@@ -26,6 +26,7 @@
 #include "kptdatetime.h"
 #include "kptschedule.h"
 
+#include <QObject>
 #include <QHash>
 #include <QRect>
 #include <QString>
@@ -50,8 +51,9 @@ class EffortCostMap;
  * a subproject or any task.
  * This class is basically an abstract interface to make the design more OO.
  */
-class Node {
-
+class Node : public QObject
+{
+    Q_OBJECT
 public:
     enum ConstraintType { ASAP, ALAP, MustStartOn, MustFinishOn, StartNotEarlier, FinishNotLater, FixedInterval };
 
@@ -76,7 +78,8 @@ public:
     };
 
     virtual int type() const = 0;
-
+    
+    QString typeToString( bool i = false ) const;
     /**
      * Returns a pointer to the project node (main- or sub-project)
      * Returns 0 if no project exists.
@@ -102,9 +105,10 @@ public:
     virtual void insertChildNode(unsigned int index, Node *node);
     void takeChildNode(Node *node );
     void takeChildNode(int number );
-    Node* getChildNode(int number) { return m_nodes.at(number); }
-    const Node* getChildNode(int number) const;
-        int findChildNode( Node* node );
+    Node* childNode(int number) { return m_nodes.at(number); }
+    const Node* childNode(int number) const;
+    int findChildNode( Node* node );
+    bool isChildOf( Node *node );
 
     // Time-dependent child-node-management.
     // list all nodes that are dependent upon this one.
@@ -220,17 +224,20 @@ public:
     const QString &name() const { return m_name; }
     const QString &leader() const { return m_leader; }
     const QString &description() const { return m_description; }
-    void setName(const QString &n) { m_name = n; }
-    void setLeader(const QString &l) { m_leader = l; }
-    void setDescription(const QString &d) { m_description = d; }
+    void setName(const QString &n);
+    void setLeader(const QString &l);
+    void setDescription(const QString &d);
 
-    virtual void setConstraint(Node::ConstraintType type) { m_constraint = type; }
+    void setConstraint(Node::ConstraintType type);
     void setConstraint(QString &type);
     int constraint() const { return m_constraint; }
-    QString constraintToString() const;
-
-    virtual void setConstraintStartTime(QDateTime time) { m_constraintStartTime = time; }
-    virtual void setConstraintEndTime(QDateTime time) { m_constraintEndTime = time; }
+    QString constraintToString( bool trans=false ) const;
+    static QStringList constraintList( bool trans );
+    
+    virtual void setConstraintStartTime(QDateTime time) 
+        { m_constraintStartTime = time; changed( this ); }
+    virtual void setConstraintEndTime(QDateTime time) 
+        { m_constraintEndTime = time; changed( this ); }
 
     virtual DateTime constraintStartTime() const { return m_constraintStartTime; }
     virtual DateTime constraintEndTime() const { return m_constraintEndTime; }
@@ -478,6 +485,8 @@ public:
         { return m_currentSchedule ? m_currentSchedule->endTime : DateTime(); }
 
 protected:
+    virtual void changed(Node *node);
+    
     QList<Node*> m_nodes;
     QList<Relation*> m_dependChildNodes;
     QList<Relation*> m_dependParentNodes;
@@ -557,13 +566,15 @@ public:
     Type type() const { return m_type; }
     void setType(Type type) { m_type = type; }
     void setType(QString type);
-    QString typeToString() const;
+    QString typeToString( bool trans=false ) const;
+    static QStringList typeToStringList( bool trans=false );
     
     enum Risktype { Risk_None, Risk_Low, Risk_High };
     Risktype risktype() const { return m_risktype; }
     void setRisktype(Risktype type) { m_risktype = type; }
     void setRisktype(QString type);
-    QString risktypeToString() const;
+    QString risktypeToString( bool trans=false ) const;
+    static QStringList risktypeToStringList( bool trans=false );
 
     enum Use { Use_Expected=0, Use_Optimistic=1, Use_Pessimistic=2 };
     Duration effort(int use) const;

@@ -513,7 +513,7 @@ void Project::save( QDomElement &element ) const
 
     for ( int i = 0; i < numChildren(); i++ )
         // Save all children
-        getChildNode( i ) ->save( me );
+        childNode( i ) ->save( me );
 
     // Now we can save relations assuming no tasks have relations outside the project
     QListIterator<Node*> nodes( m_nodes );
@@ -617,7 +617,10 @@ bool Project::addSubTask( Node* task, Node* position )
         kError() << k_funcinfo << "Failed to register node id, can not add subtask: " << task->name() << endl;
         return false;
     }
+    emit nodeToBeAdded( position );
     position->addChildNode( task );
+    emit nodeAdded( task );
+    kDebug()<<k_funcinfo<<endl;
     return true;
 }
 
@@ -632,7 +635,9 @@ bool Project::addSubTask( Node* task, int index, Node* parent )
         kError() << k_funcinfo << "Failed to register node id, can not add subtask: " << task->name() << endl;
         return false;
     }
+    emit nodeToBeAdded( parent );
     parent->insertChildNode( index, task );
+    emit nodeAdded( task );
     return true;
 }
 
@@ -644,7 +649,9 @@ void Project::delTask( Node *node )
         return ;
     }
     removeId( node->id() );
+    emit nodeToBeRemoved( parent );
     parent->takeChildNode( node );
+    emit nodeRemoved( node );
 }
 
 
@@ -680,12 +687,15 @@ bool Project::canIndentTask( Node* node )
     return true;
 }
 
-bool Project::indentTask( Node* node )
+bool Project::indentTask( Node* node, int index )
 {
     if ( canIndentTask( node ) ) {
         Node * newParent = node->siblingBefore();
+        emit nodeToBeMoved( node );
         node->getParent() ->takeChildNode( node );
-        newParent->addChildNode( node );
+        newParent->insertChildNode( index, node );
+        emit nodeMoved( node );
+        kDebug()<<k_funcinfo<<endl;
         return true;
     }
     return false;
@@ -725,9 +735,12 @@ bool Project::unindentTask( Node* node )
 {
     if ( canUnindentTask( node ) ) {
         Node * parentNode = node->getParent();
+        emit nodeToBeMoved( node );
         Node *grandParentNode = parentNode->getParent();
         parentNode->takeChildNode( node );
         grandParentNode->addChildNode( node, parentNode );
+        emit nodeMoved( node );
+        kDebug()<<k_funcinfo<<endl;
         return true;
     }
     return false;
@@ -756,7 +769,13 @@ bool Project::canMoveTaskUp( Node* node )
 bool Project::moveTaskUp( Node* node )
 {
     if ( canMoveTaskUp( node ) ) {
-        return node->getParent() ->moveChildUp( node );
+        emit nodeToBeMoved( node );
+        if ( node->getParent()->moveChildUp( node ) ) {
+            emit nodeMoved( node );
+            kDebug()<<k_funcinfo<<endl;
+            return true;
+        }
+        emit nodeMoved( node ); // Not actually moved, but what to do ?
     }
     return false;
 }
@@ -783,7 +802,12 @@ bool Project::canMoveTaskDown( Node* node )
 bool Project::moveTaskDown( Node* node )
 {
     if ( canMoveTaskDown( node ) ) {
-        return node->getParent() ->moveChildDown( node );
+        emit nodeToBeMoved( node );
+        if ( node->getParent() ->moveChildDown( node ) ) {
+            emit nodeMoved( node );
+            return true;
+        }
+        emit nodeMoved( node ); // Not actually moved, but what to do ?
     }
     return false;
 }
@@ -1145,11 +1169,20 @@ void Project::insertCalendarId( const QString &id, Calendar *calendar )
     calendarIdDict.insert( id, calendar );
 }
 
+void Project::changed( Node *node )
+{
+    if ( m_parent == 0 ) {
+        emit nodeChanged( node );
+        return;
+    }
+    Node::changed( node );
+}
+
 #ifndef NDEBUG
 void Project::printDebug( bool children, QByteArray indent )
 {
 
-    kDebug() << indent << "+ Project node: " << name() << endl;
+    kDebug() << indent << "+ Project node: " << Node::name() << endl; //FIXME: QT3 support
     indent += "!";
     QListIterator<ResourceGroup*> it( resourceGroups() );
     while ( it.hasNext() )
@@ -1172,3 +1205,5 @@ void Project::printCalendarDebug( QByteArray indent )
 #endif
 
 }  //KPlato namespace
+
+#include "kptproject.moc"
