@@ -461,6 +461,7 @@ void KPrThumbBar::addItem( int pos )
 void KPrThumbBar::moveItem( int oldPos, int newPos )
 {
     kDebug(33001)<< "KPrThumbBar::moveItem " << oldPos << " to " << newPos << endl;
+    Q_ASSERT(oldPos != newPos);
     int page = 0;
     Q3IconViewItem *after = 0;
     Q3IconViewItem *take = 0;
@@ -478,6 +479,8 @@ void KPrThumbBar::moveItem( int oldPos, int newPos )
 
     if ( ! take )
         return;
+
+     Q_ASSERT(take != after); // this would be a problem below
 
     // workaround for a bug in qt 3.1.1 insertItem dose not work.
     // TODO remove workaround when qt 3.1.2 comes out tz
