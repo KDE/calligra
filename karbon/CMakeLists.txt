@@ -11,8 +11,6 @@ ELSE(CMAKE_SIZEOF_VOID_P EQUAL 4)
    MESSAGE(STATUS "Karbon detected that you use an 64 bit processor. Added -fPIC to the CXX_FLAGS.")
 ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 
-find_package(Freetype REQUIRED)
-find_package(Fontconfig REQUIRED)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-karbon.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-karbon.h )
 
