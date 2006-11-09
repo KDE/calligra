@@ -756,6 +756,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
             break;
             default:
                 KIO::del(uri);
+#ifdef __GNUC__
+#warning Leaks row_pointers and all rows so far allocated (CID 3087)
+#endif
                 return KisImageBuilder_RESULT_UNSUPPORTED;
         }
     }
