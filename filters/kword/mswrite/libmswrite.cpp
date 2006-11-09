@@ -740,6 +740,9 @@ namespace MSWrite
 
 					if (!m_generator->writeCharInfoBegin (charProp)) return false;
 				}
+#ifdef __GNUC__
+#warning if charProp is NULL, then this line will crash, so either the check above or the following line is buggy (CID 2839)
+#endif
 
 				// ultimately aim for end of CharProperty block; if that's not possible, aim for end of paragraph
 				DWord aimUltimateByte = charProp->getEndCharByte () > paraEndByte ? paraEndByte : charProp->getEndCharByte ();
