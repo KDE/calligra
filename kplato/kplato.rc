@@ -9,11 +9,6 @@
             <Action name="edit_copy"/>
             <Action name="edit_paste"/>
             <Separator/> -->
-            <Action name="delete_task"/>
-            <Action name="indent_task"/>
-            <Action name="unindent_task"/>
-            <Action name="move_task_up"/>
-            <Action name="move_task_down"/>
             <Separator/>
             <Action name="link_mode"/>
         </Menu>
@@ -42,11 +37,6 @@
             <!-- <Menu name="view_accounts_options"><text>Accountsview Options</text>
             </Menu> -->
             <Separator/>
-        </Menu>
-        <Menu name="insert"><text>&amp;Insert</text>
-            <Action name="add_task"/>
-            <Action name="add_sub_task"/>
-            <Action name="add_milestone"/>
         </Menu>
         <Menu name="project"><text>&amp;Project</text>
             <Action name="project_edit"/>
@@ -89,21 +79,6 @@
             <Action name="project_calculate_pessimistic"/> -->
         </Action>
         <Separator/>
-        <Action name="add_task"/>
-        <Action name="add_sub_task"/>
-        <Action name="add_milestone"/>
-        <Action name="delete_task"/>
-        <Separator/>
-        <Action name="indent_task"/>
-        <Action name="unindent_task"/>
-        <Action name="move_task_up"/>
-        <Action name="move_task_down"/>
-    </ToolBar>
-    <ToolBar name="report" position="top"><Text>Report</Text>
-        <Action name="go_firstpage"/>
-        <Action name="go_nextpage"/>
-        <Action name="go_prevpage"/>
-        <Action name="go_lastpage"/>
     </ToolBar>
     <Menu name="node_popup">
 <!--        <Action name="edit_cut"/>

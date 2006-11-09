@@ -687,10 +687,11 @@ void NodeSchedule::printDebug( QString indent )
     if ( m_parent == 0 )
         kDebug() << indent << "No parent schedule!" << endl;
     if ( !notScheduled ) {
-        if ( node() )
+//FIXME: QT3 support
+/*        if ( node() )
             kDebug() << indent << "Node: " << node() ->name() << endl;
         else
-            kDebug() << indent << "No parent node!" << endl;
+            kDebug() << indent << "No parent node!" << endl;*/
     }
     kDebug() << indent << "Not scheduled=" << notScheduled << endl;
     kDebug() << indent << "Start time: " << startTime.toString() << endl;
@@ -735,10 +736,11 @@ void MainSchedule::printDebug( QString indent )
 {
     Schedule::printDebug( indent );
     indent += "!  ";
-    if ( node() )
-        kDebug() << indent << "Node: " << node() ->name() << endl;
-    else
-        kDebug() << indent << "No parent node!" << endl;
+//FIXME: QT3 support
+//     if ( node() )
+//         kDebug() << indent << "Node: " << node() ->name() << endl;
+//     else
+//         kDebug() << indent << "No parent node!" << endl;
 
     kDebug() << indent << "Not scheduled=" << notScheduled << endl;
     kDebug() << indent << "Start time: " << startTime.toString() << endl;

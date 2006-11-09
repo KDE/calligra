@@ -73,6 +73,7 @@
 #include "kpttaskprogressdialog.h"
 #include "kptganttview.h"
 //#include "kptreportview.h"
+#include "kpttaskeditor.h"
 #include "kptdatetime.h"
 #include "kptcommand.h"
 #include "kptrelation.h"
@@ -195,6 +196,7 @@ QTreeWidgetItem *ViewListTreeWidget::findCategory( const QString cat )
 ViewListDockWidget::ViewListDockWidget( QString name, KMainWindow *parent )
         : QDockWidget( name, parent )
 {
+    setObjectName("ViewSelectorDockWidget");
     setFeatures( features() & ~QDockWidget::DockWidgetClosable );
     m_viewList = new ViewListTreeWidget( this );
     setWidget( m_viewList );
@@ -210,7 +212,7 @@ void ViewListDockWidget::slotActivated( QTreeWidgetItem *item )
     }
     QWidget *wgt = qvariant_cast<QWidget*>( item->data( 0, Qt::UserRole ) );
     if ( wgt ) {
-        kDebug() << k_funcinfo << "widget: " << wgt << endl;
+        //kDebug() << k_funcinfo << "widget: " << wgt << endl;
         emit activated( wgt );
     } else {
         kDebug() << k_funcinfo << "something else" << endl;
@@ -220,7 +222,7 @@ void ViewListDockWidget::slotActivated( QTreeWidgetItem *item )
 
 QTreeWidgetItem *ViewListDockWidget::addCategory( QString name )
 {
-    kDebug() << k_funcinfo << endl;
+    //kDebug() << k_funcinfo << endl;
     QTreeWidgetItem *item = m_viewList->findCategory( name );
     if ( item == 0 ) {
         item = new QTreeWidgetItem( m_viewList, QStringList( name ) );
@@ -235,7 +237,7 @@ void ViewListDockWidget::addView( QTreeWidgetItem *category, QString name, QWidg
     item->setData( 0, Qt::UserRole, qVariantFromValue( view ) );
     if ( !icon.isEmpty() )
         item->setData( 0, Qt::DecorationRole, KIcon( icon ) );
-    kDebug() << k_funcinfo << "added: " << item << endl;
+    //kDebug() << k_funcinfo << "added: " << item << endl;
 }
 // </Code mostly nicked from qt designer ;)>
 
@@ -257,9 +259,32 @@ View *ViewBase::mainView() const
     return m_mainview;
 }
 
+void ViewBase::setViewActive( bool active, KXMLGUIFactory*) // slot
+{
+    if ( mainView() )
+        mainView()->setTaskActionsEnabled( this, active );
+}
+
+void ViewBase::addActions( KXMLGUIFactory *factory )
+{
+    //kDebug()<<k_funcinfo<<this<<endl;
+    if (factory ) {
+        factory->addClient( this );
+    }
+}
+
+void ViewBase::removeActions()
+{
+    //kDebug()<<k_funcinfo<<this<<endl;
+    if ( factory() ) {
+        factory()->removeClient( this );
+    }
+}
+
 //-------------------------------
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
+        m_currentview(0),
         m_ganttview( 0 ),
         //    m_reportview(0),
         m_currentEstimateType( Effort::Use_Expected )
@@ -282,9 +307,10 @@ View::View( Part* part, QWidget* parent )
     layout->addWidget( m_tab );
 
     m_ganttview = new GanttView( m_tab, part->isReadWrite() );
+    m_currentview = m_ganttview;
     m_tab->addWidget( m_ganttview );
     m_updateGanttview = false;
-    m_ganttview->draw( getPart() ->getProject() );
+    m_ganttview->draw( getProject() );
 
     m_resourceview = new ResourceView( this, m_tab );
     m_updateResourceview = true;
@@ -293,6 +319,18 @@ View::View( Part* part, QWidget* parent )
     m_accountsview = new AccountsView( getProject(), this, m_tab );
     m_updateAccountsview = true;
     m_tab->addWidget( m_accountsview );
+
+    m_taskeditor = new TaskEditor( this, m_tab );
+    m_tab->addWidget( m_taskeditor );
+    m_taskeditor->draw( getProject() );
+    connect( m_taskeditor, SIGNAL( addTask() ), SLOT( slotAddTask() ) );
+    connect( m_taskeditor, SIGNAL( addMilestone() ), SLOT( slotAddMilestone() ) );
+    connect( m_taskeditor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
+    connect( m_taskeditor, SIGNAL( deleteTaskList( QList<Node*> ) ), SLOT( slotDeleteTask( QList<Node*> ) ) );
+    connect( m_taskeditor, SIGNAL( moveTaskUp() ), SLOT( slotMoveTaskUp() ) );
+    connect( m_taskeditor, SIGNAL( moveTaskDown() ), SLOT( slotMoveTaskDown() ) );
+    connect( m_taskeditor, SIGNAL( indentTask() ), SLOT( slotIndentTask() ) );
+    connect( m_taskeditor, SIGNAL( unindentTask() ), SLOT( slotUnindentTask() ) );
 
     //m_reportview = new ReportView(this, m_tab);
     //m_tab->addWidget(m_reportview);
@@ -503,10 +541,11 @@ ViewAdaptor* View::dbusObject()
 
 void View::createViewSelector()
 {
-    kDebug() << k_funcinfo << endl;
+    //kDebug() << k_funcinfo << endl;
     m_viewlist = new ViewListDockWidget( i18n( "Select" ), mainWindow() );
     QTreeWidgetItem *cat;
-    //     cat = m_viewlist->addCategory(i18n("Editors"));
+    cat = m_viewlist->addCategory(i18n("Editors"));
+    m_viewlist->addView( cat, i18n( "Tasks" ), m_taskeditor, "task_editor" );
 
     cat = m_viewlist->addCategory( i18n( "Views" ) );
     m_viewlist->addView( cat, i18n( "Gantt" ), m_ganttview, "gantt_chart" );
@@ -521,7 +560,7 @@ void View::createViewSelector()
 
 void View::slotViewActivated( QWidget *view )
 {
-    kDebug() << k_funcinfo << "view=" << view << endl;
+    //kDebug() << k_funcinfo << "view=" << view << endl;
     if ( view ) {
         m_tab->setCurrentWidget( view );
     }
@@ -713,7 +752,7 @@ void View::slotViewAccounts()
 void View::slotProjectEdit()
 {
     MainProjectDialog * dia = new MainProjectDialog( getProject() );
-    if ( dia->exec() ) {
+    if ( dia->exec()  == QDialog::Accepted) {
         KCommand * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             getPart() ->addCommand( cmd );
@@ -725,7 +764,7 @@ void View::slotProjectEdit()
 void View::slotProjectCalendar()
 {
     CalendarListDialog * dia = new CalendarListDialog( getProject() );
-    if ( dia->exec() ) {
+    if ( dia->exec()  == QDialog::Accepted) {
         KCommand * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             //kDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
@@ -738,7 +777,7 @@ void View::slotProjectCalendar()
 void View::slotProjectAccounts()
 {
     AccountsDialog * dia = new AccountsDialog( getProject().accounts() );
-    if ( dia->exec() ) {
+    if ( dia->exec()  == QDialog::Accepted) {
         KCommand * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             //kDebug()<<k_funcinfo<<"Modifying account(s)"<<endl;
@@ -751,7 +790,7 @@ void View::slotProjectAccounts()
 void View::slotProjectWorktime()
 {
     StandardWorktimeDialog * dia = new StandardWorktimeDialog( getProject() );
-    if ( dia->exec() ) {
+    if ( dia->exec()  == QDialog::Accepted) {
         KCommand * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             //kDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
@@ -764,7 +803,7 @@ void View::slotProjectWorktime()
 void View::slotProjectResources()
 {
     ResourcesDialog * dia = new ResourcesDialog( getProject() );
-    if ( dia->exec() ) {
+    if ( dia->exec()  == QDialog::Accepted) {
         KCommand * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
             //kDebug()<<k_funcinfo<<"Modifying resources"<<endl;
@@ -845,7 +884,7 @@ void View::slotAddSubTask()
     // and will not complain.
     Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
     TaskDialog *dia = new TaskDialog( *node, getProject().accounts(), getProject().standardWorktime() );
-    if ( dia->exec() ) {
+    if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
             KCommand * m = dia->buildCommand( getPart() );
@@ -853,6 +892,7 @@ void View::slotAddSubTask()
             delete m;
             SubtaskAddCmd *cmd = new SubtaskAddCmd( getPart(), &( getProject() ), node, currNode, i18n( "Add Subtask" ) );
             getPart() ->addCommand( cmd ); // add task to project
+            delete dia;
             return ;
         } else
             kDebug() << k_funcinfo << "Cannot insert new project. Hmm, no current node!?" << endl;
@@ -866,7 +906,7 @@ void View::slotAddTask()
 {
     Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
     TaskDialog *dia = new TaskDialog( *node, getProject().accounts(), getProject().standardWorktime() );
-    if ( dia->exec() ) {
+    if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
             KCommand * m = dia->buildCommand( getPart() );
@@ -874,6 +914,7 @@ void View::slotAddTask()
             delete m;
             TaskAddCmd *cmd = new TaskAddCmd( getPart(), &( getProject() ), node, currNode, i18n( "Add Task" ) );
             getPart() ->addCommand( cmd ); // add task to project
+            delete dia;
             return ;
         } else
             kDebug() << k_funcinfo << "Cannot insert new task. Hmm, no current node!?" << endl;
@@ -889,7 +930,7 @@ void View::slotAddMilestone()
     ( Duration::zeroDuration );
 
     TaskDialog *dia = new TaskDialog( *node, getProject().accounts(), getProject().standardWorktime() );
-    if ( dia->exec() ) {
+    if ( dia->exec() == QDialog::Accepted ) {
         Node * currNode = currentTask();
         if ( currNode ) {
             KCommand * m = dia->buildCommand( getPart() );
@@ -897,6 +938,7 @@ void View::slotAddMilestone()
             delete m;
             TaskAddCmd *cmd = new TaskAddCmd( getPart(), &( getProject() ), node, currNode, i18n( "Add Milestone" ) );
             getPart() ->addCommand( cmd ); // add task to project
+            delete dia;
             return ;
         } else
             kDebug() << k_funcinfo << "Cannot insert new milestone. Hmm, no current node!?" << endl;
@@ -936,6 +978,8 @@ Node *View::currentTask()
         task = m_ganttview->currentNode();
     } else if ( m_tab->currentWidget() == m_resourceview ) {
         task = m_resourceview->currentNode();
+    } else if ( m_tab->currentWidget() == m_taskeditor ) {
+        task = m_taskeditor->selectedNode();
     }
     if ( 0 != task ) {
         return task;
@@ -954,7 +998,7 @@ void View::slotOpenNode()
         case Node::Type_Project: {
                 Project * project = dynamic_cast<Project *>( node );
                 MainProjectDialog *dia = new MainProjectDialog( *project );
-                if ( dia->exec() ) {
+                if ( dia->exec()  == QDialog::Accepted) {
                     KCommand * m = dia->buildCommand( getPart() );
                     if ( m ) {
                         getPart() ->addCommand( m );
@@ -970,7 +1014,7 @@ void View::slotOpenNode()
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
                 TaskDialog *dia = new TaskDialog( *task, getProject().accounts(), getProject().standardWorktime() );
-                if ( dia->exec() ) {
+                if ( dia->exec()  == QDialog::Accepted) {
                     KCommand * m = dia->buildCommand( getPart() );
                     if ( m ) {
                         getPart() ->addCommand( m );
@@ -987,7 +1031,7 @@ void View::slotOpenNode()
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
                 TaskDialog *dia = new TaskDialog( *task, getProject().accounts(), getProject().standardWorktime() );
-                if ( dia->exec() ) {
+                if ( dia->exec()  == QDialog::Accepted) {
                     KCommand * m = dia->buildCommand( getPart() );
                     if ( m ) {
                         getPart() ->addCommand( m );
@@ -1000,7 +1044,7 @@ void View::slotOpenNode()
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
                 SummaryTaskDialog *dia = new SummaryTaskDialog( *task );
-                if ( dia->exec() ) {
+                if ( dia->exec()  == QDialog::Accepted) {
                     KCommand * m = dia->buildCommand( getPart() );
                     if ( m ) {
                         getPart() ->addCommand( m );
@@ -1032,7 +1076,7 @@ void View::slotTaskProgress()
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
                 TaskProgressDialog *dia = new TaskProgressDialog( *task, getProject().standardWorktime() );
-                if ( dia->exec() ) {
+                if ( dia->exec()  == QDialog::Accepted) {
                     KCommand * m = dia->buildCommand( getPart() );
                     if ( m ) {
                         getPart() ->addCommand( m );
@@ -1044,7 +1088,7 @@ void View::slotTaskProgress()
         case Node::Type_Milestone: {
                 Task *task = dynamic_cast<Task *>( node );
                 MilestoneProgressDialog *dia = new MilestoneProgressDialog( *task );
-                if ( dia->exec() ) {
+                if ( dia->exec()  == QDialog::Accepted) {
                     KCommand * m = dia->buildCommand( getPart() );
                     if ( m ) {
                         getPart() ->addCommand( m );
@@ -1062,16 +1106,56 @@ void View::slotTaskProgress()
     }
 }
 
-void View::slotDeleteTask()
+void View::slotDeleteTask( QList<Node*> lst )
 {
     //kDebug()<<k_funcinfo<<endl;
-    Node * node = currentTask();
+    if ( lst.count() == 1 ) {
+        slotDeleteTask( lst.takeFirst() );
+        return;
+    }
+    int num = 0;
+    KMacroCommand *cmd = new KMacroCommand( i18n( "Delete Tasks" ) );
+    while ( !lst.isEmpty() ) {
+        Node *node = lst.takeFirst();
+        if ( node == 0 || node->getParent() == 0 ) {
+            kDebug() << k_funcinfo << ( node ? "Task is main project" : "No current task" ) << endl;
+            continue;
+        }
+        bool del = true;
+        foreach ( Node *n, lst ) {
+            if ( node->isChildOf( n ) ) {
+                del = false; // node is going to be deleted when we delete n
+                break;
+            }
+        }
+        if ( del ) {
+            //kDebug()<<k_funcinfo<<num<<": delete: "<<node->name()<<endl;
+            cmd->addCommand( new NodeDeleteCmd( getPart(), node, i18n( "Delete Task" ) ) );
+            num++;
+        }
+    }
+    if ( num > 0 ) {
+        getPart()->addCommand( cmd );
+    } else {
+        delete cmd;
+    }
+}
+
+void View::slotDeleteTask( Node *node )
+{
+    //kDebug()<<k_funcinfo<<endl;
     if ( node == 0 || node->getParent() == 0 ) {
         kDebug() << k_funcinfo << ( node ? "Task is main project" : "No current task" ) << endl;
         return ;
     }
     NodeDeleteCmd *cmd = new NodeDeleteCmd( getPart(), node, i18n( "Delete Task" ) );
     getPart() ->addCommand( cmd );
+}
+
+void View::slotDeleteTask()
+{
+    //kDebug()<<k_funcinfo<<endl;
+    return slotDeleteTask( currentTask() );
 }
 
 void View::slotIndentTask()
@@ -1150,7 +1234,7 @@ void View::slotAddRelation( Node *par, Node *child )
     //kDebug()<<k_funcinfo<<endl;
     Relation * rel = new Relation( par, child );
     AddRelationDialog *dia = new AddRelationDialog( rel, this );
-    if ( dia->exec() ) {
+    if ( dia->exec()  == QDialog::Accepted) {
         KCommand * cmd = dia->buildCommand( getPart() );
         if ( cmd )
             getPart() ->addCommand( cmd );
@@ -1177,7 +1261,7 @@ void View::slotModifyRelation( Relation *rel )
 {
     //kDebug()<<k_funcinfo<<endl;
     ModifyRelationDialog * dia = new ModifyRelationDialog( rel, this );
-    if ( dia->exec() ) {
+    if ( dia->exec()  == QDialog::Accepted) {
         if ( dia->relationIsDeleted() ) {
             getPart() ->addCommand( new DeleteRelationCmd( getPart(), rel, i18n( "Delete Relation" ) ) );
         } else {
@@ -1224,7 +1308,7 @@ void View::slotEditResource()
     if ( !r )
         return ;
     ResourceDialog *dia = new ResourceDialog( getProject(), r );
-    if ( dia->exec() ) {
+    if ( dia->exec()  == QDialog::Accepted) {
         KCommand * cmd = dia->buildCommand( getPart() );
         if ( cmd )
             getPart() ->addCommand( cmd );
@@ -1273,7 +1357,14 @@ void View::slotUpdate( bool calculate )
 
 void View::slotCurrentChanged( int index )
 {
-    updateView( m_tab->currentWidget() );
+    //kDebug()<<k_funcinfo<<m_currentview<<endl;
+    if (m_currentview)
+        m_currentview->setViewActive( false );
+    m_currentview = static_cast<ViewBase*>( m_tab->currentWidget() );
+    updateView( m_currentview );
+    m_currentview->setViewActive( true, factory() );
+    m_currentview->setFocus( Qt::ActiveWindowFocusReason );
+    //kDebug()<<k_funcinfo<<m_currentview<<endl;
 }
 
 void View::updateView( QWidget *widget )
@@ -1301,6 +1392,8 @@ void View::updateView( QWidget *widget )
         if ( m_updateAccountsview )
             m_accountsview->draw();
         m_updateAccountsview = false;
+    } else if ( widget == m_taskeditor ) {
+        //kDebug()<<k_funcinfo<<"draw taskeditor"<<endl;
     }
     /*    else if (widget == m_reportview)
         {
@@ -1398,6 +1491,8 @@ void View::setTaskActionsEnabled( QWidget *w, bool on )
     Node * n = 0;
     if ( w == m_ganttview ) {
         n = m_ganttview->currentNode();
+    } else {
+        on = false;
     }
 
     actionAddTask->setEnabled( on );

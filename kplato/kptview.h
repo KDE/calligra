@@ -48,6 +48,7 @@ class ViewListDockWidget;
 class AccountsView;
 class GanttView;
 class ResourceView;
+class TaskEditor;
 //class ReportView;
 class Part;
 class Node;
@@ -106,8 +107,14 @@ public:
     virtual void draw() {}
     virtual void draw(Project &/*project*/) {}
     virtual void drawChanges(Project &project) { draw(project); }
+    
+public slots:
+    virtual void setViewActive( bool active, KXMLGUIFactory *factory=0 );
 
 protected:
+    virtual void addActions( KXMLGUIFactory *factory );
+    virtual void removeActions();
+
     View *m_mainview;
 
 };
@@ -204,6 +211,8 @@ protected slots:
 
     void slotOpenNode();
     void slotTaskProgress();
+    void slotDeleteTask( QList<Node*> lst );
+    void slotDeleteTask( Node *node );
     void slotDeleteTask();
     void slotIndentTask();
     void slotUnindentTask();
@@ -234,9 +243,11 @@ protected:
 
 private:
     QStackedWidget *m_tab;
+    ViewBase *m_currentview;
     GanttView *m_ganttview;
     ResourceView *m_resourceview;
     AccountsView *m_accountsview;
+    TaskEditor *m_taskeditor;
     //    ReportView *m_reportview;
     //    Q3PtrList<QString> m_reportTemplateFiles;
 

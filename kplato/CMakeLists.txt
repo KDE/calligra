@@ -11,6 +11,7 @@ include_directories(${KOTEXT_INCLUDES} ${KOFFICEUI_INCLUDES} ${CMAKE_SOURCE_DIR}
 
 
 set(libkplatopart_SRCS
+    kpttaskeditor.cc
     kptdurationwidget.cc
     kptsummarytaskdialog.cc
     kptsummarytaskgeneralpanel.cc
@@ -128,7 +129,9 @@ install(TARGETS kplato  DESTINATION ${BIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kplatopart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  kplato.rc kplato_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kplato)
+install( FILES  kplato.rc kplato_readonly.rc  
+                kplato_taskeditor.rc 
+         DESTINATION ${DATA_INSTALL_DIR}/kplato)
 install( FILES  kplato.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
