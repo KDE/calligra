@@ -19,6 +19,7 @@
 
 #include "kpttaskeditor.h"
 
+#include "kptglobal.h"
 #include "kptcommand.h"
 #include "kptfactory.h"
 #include "kptproject.h"
@@ -30,6 +31,7 @@
 #include <QItemDelegate>
 #include <QItemSelectionModel>
 #include <QLineEdit>
+#include <QListWidget>
 #include <QMap>
 #include <QModelIndex>
 #include <QStyleOptionViewItem>
@@ -73,7 +75,7 @@ void EnumDelegate::setEditorData(QWidget *editor, const QModelIndex &index) cons
 }
 
 void EnumDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-                                   const QModelIndex &index) const
+                                const QModelIndex &index) const
 {
     QComboBox *box = static_cast<QComboBox*>(editor);
     int value = box->currentIndex();
@@ -164,16 +166,20 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             case 1: break; // Node type
             case 4: { // constraint start
                 Node *n = node( index );
-                int c = n ? n->constraint() : -1;
-                if ( c != -1 && ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval ) ) {
+                if ( n == 0 )
+                    break;
+                int c = n->constraint();
+                if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
             case 5: { // constraint end
                 Node *n = node( index );
-                int c = n ? n->constraint() : -1;
-                if ( c != -1 && ( c == Node::MustFinishOn || c == Node::FinishNotLater || c ==  Node::FixedInterval ) ) {
+                if ( n == 0 )
+                    break;
+                int c = n->constraint();
+                if ( c == Node::MustFinishOn || c == Node::FinishNotLater || c ==  Node::FixedInterval ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
@@ -248,8 +254,8 @@ QVariant NodeItemModel::name( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            return node->name();
         case Qt::ToolTipRole:
+            return node->name();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -272,8 +278,8 @@ QVariant NodeItemModel::leader( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            return node->leader();
         case Qt::ToolTipRole:
+            return node->leader();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -296,8 +302,8 @@ QVariant NodeItemModel::description( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            return node->description();
         case Qt::ToolTipRole:
+            return node->description();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -320,10 +326,10 @@ QVariant NodeItemModel::type( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            return node->typeToString();
+        case Qt::ToolTipRole:
+            return node->typeToString( true );
         case Qt::TextAlignmentRole:
             return Qt::AlignRight;
-        case Qt::ToolTipRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -341,6 +347,7 @@ QVariant NodeItemModel::constraint( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole: 
+        case Qt::ToolTipRole:
             return node->constraintToString( true );
         case Role::EnumList: 
             return Node::constraintList( true );
@@ -348,7 +355,6 @@ QVariant NodeItemModel::constraint( const Node *node, int role ) const
             return (int)node->constraint();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
-        case Qt::ToolTipRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -372,17 +378,25 @@ QVariant NodeItemModel::constraintStartTime( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole: {
             int c = node->constraint();
-            if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) {
-                return KGlobal::locale()->formatDateTime( node->constraintStartTime() );
+            if ( ! ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) ) {
+                return " "; //HACK to show focus
             }
+            return KGlobal::locale()->formatDateTime( node->constraintStartTime() );
+        }
+        case Qt::ToolTipRole: {
+            int c = node->constraint();
+            if ( ! ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) ) {
+                return QVariant();
+            }
+            return KGlobal::locale()->formatDateTime( node->constraintStartTime() );
         }
         case Qt::EditRole: {
             int c = node->constraint();
             if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval  ) {
                 return node->constraintStartTime();
             }
+            break;
         }
-        case Qt::ToolTipRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -405,17 +419,25 @@ QVariant NodeItemModel::constraintEndTime( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole: {
             int c = node->constraint();
-            if ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) {
-                return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+            if ( ! ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) ) {
+                return " "; //HACK to show focus
             }
+            return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
+        }
+        case Qt::ToolTipRole: {
+            int c = node->constraint();
+            if ( ! ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) ) {
+                return QVariant();
+            }
+            return KGlobal::locale()->formatDateTime( node->constraintEndTime() );
         }
         case Qt::EditRole: {
             int c = node->constraint();
             if ( c == Node::FinishNotLater || c == Node::MustFinishOn || c == Node::FixedInterval ) {
                 return node->constraintEndTime();
             }
+            break;
         }
-        case Qt::ToolTipRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -438,12 +460,12 @@ QVariant NodeItemModel::estimateType( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole: 
+        case Qt::ToolTipRole:
             return node->effort()->typeToString( true );
         case Role::EnumList: 
             return Effort::typeToStringList( true );
         case Role::EnumListValue: 
             return (int)node->effort()->type();
-        case Qt::ToolTipRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -481,6 +503,10 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
                 return QVariant();
         }
         if ( result.isValid() ) {
+            if ( result.type() == QVariant::String && result.toString().isEmpty()) {
+                // HACK to show focus in empty cells
+                result = " ";
+            }
             return result;
         }
     }
@@ -528,11 +554,23 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
             }
         } else if ( role == Qt::TextAlignmentRole ) {
             switch (section) {
-                case 1: return Qt::AlignRight;
+                case 1: return Qt::AlignCenter;
                 default: return QVariant();
             }
         }
-        return QVariant();
+    }
+    if ( role == Qt::ToolTipRole ) {
+        switch ( section ) {
+            case 0: return ToolTip::NodeName;
+            case 1: return ToolTip::NodeType;
+            case 2: return ToolTip::NodeResponsible;
+            case 3: return ToolTip::NodeConstraint;
+            case 4: return ToolTip::NodeConstraintStart;
+            case 5: return ToolTip::NodeConstraintEnd;
+            case 6: return ToolTip::NodeEstimateType;
+            case 7: return ToolTip::NodeDescription;
+            default: return QVariant();
+        }
     }
     return ItemModelBase::headerData(section, orientation, role);
 }

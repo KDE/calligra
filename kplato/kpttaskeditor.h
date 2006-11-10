@@ -23,11 +23,13 @@
 #include "kptview.h"
 
 #include <QAbstractItemModel>
+#include <QFrame>
 #include <QItemDelegate>
 #include <QTreeView>
 
 #include <klocale.h>
 
+class QListWidget;
 class QModelIndex;
 class QTreeWidgetItem;
 
@@ -38,26 +40,19 @@ namespace KPlato
 
 class Project;
 
-namespace Role
-{
-    enum Roles {
-        EnumList = Qt::UserRole + 1,
-        EnumListValue = Qt::UserRole + 2
-    };
-}
 
 class EnumDelegate : public QItemDelegate
 {
     Q_OBJECT
-public:
-    EnumDelegate(QObject *parent = 0);
+    public:
+        EnumDelegate(QObject *parent = 0);
 
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    void setEditorData(QWidget *editor, const QModelIndex &index) const;
-    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+        void setEditorData(QWidget *editor, const QModelIndex &index) const;
+        void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 
-    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+        void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 class ItemModelBase : public QAbstractItemModel
@@ -135,6 +130,9 @@ protected:
     bool setConstraintEndTime( Node *node, const QVariant &value, int role );
     QVariant estimateType( const Node *node, int role ) const;
     bool setEstimateType( Node *node, const QVariant &value, int role );
+    
+    QVariant test( const Node *node, int role ) const;
+    bool setTest( Node *node, const QVariant &value, int role );
 
 };
 
