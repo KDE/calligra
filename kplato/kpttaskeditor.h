@@ -44,7 +44,7 @@ namespace Role
         EnumList = Qt::UserRole + 1,
         EnumListValue = Qt::UserRole + 2
     };
-};
+}
 
 class EnumDelegate : public QItemDelegate
 {
