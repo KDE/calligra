@@ -115,15 +115,15 @@ void Node::init() {
     m_shutdownCost = 0.0;
 }
 
-QString Node::typeToString( bool i ) const {
+QString Node::typeToString( bool trans ) const {
     switch ( type() ) {
-        case Type_Node: return i ? "Node" : i18n("Node");
-        case Type_Project: return i ? "Project" : i18n("");
-        case Type_Subproject: return i ? "Sub-Project" : i18n("Sub-Project");
-        case Type_Task: return i ? "Task" : i18n("Task");
-        case Type_Milestone: return i ? "Milestone" : i18n("Milestone");
-        case Type_Periodic: return i ? "Periodic" : i18n("Periodic");
-        case Type_Summarytask: return i ? "Summary-Task" : i18n("Summary-Task");
+        case Type_Node: return trans ? i18n("Node") : "Node";
+        case Type_Project: return trans ? i18n("") : "Project";
+        case Type_Subproject: return trans ? i18n("Sub-Project") : "Sub-Project";
+        case Type_Task: return trans ? i18n("Task") : "Task";
+        case Type_Milestone: return trans ? i18n("Milestone") : "Milestone";
+        case Type_Periodic: return trans ? i18n("Periodic") : "Periodic";
+        case Type_Summarytask: return trans ? i18n("Summary") : "Summary-Task";
         return QString();
     }
 }
@@ -423,13 +423,13 @@ QString Node::constraintToString( bool trans ) const {
 QStringList Node::constraintList( bool trans ) {
     // keep theses in the same order as the enum!
     return QStringList() 
-            << (trans ? i18n("ASAP") : QString("ASAP"))
-            << (trans ? i18n("ALAP") : QString("ALAP"))
-            << (trans ? i18n("StartNotEarlier") : QString("StartNotEarlier"))
-            << (trans ? i18n("FinishNotLater") : QString("FinishNotLater"))
-            << (trans ? i18n("MustStartOn") : QString("MustStartOn"))
-            << (trans ? i18n("MustFinishOn") : QString("MustFinishOn"))
-            << (trans ? i18n("FixedInterval") : QString("FixedInterval"));
+            << (trans ? i18n("As Soon As Possible") : QString("ASAP"))
+            << (trans ? i18n("As Late As Possible") : QString("ALAP"))
+            << (trans ? i18n("Start Not Earlier") : QString("StartNotEarlier"))
+            << (trans ? i18n("Finish Not Later") : QString("FinishNotLater"))
+            << (trans ? i18n("Must Start On") : QString("MustStartOn"))
+            << (trans ? i18n("Must Finish On") : QString("MustFinishOn"))
+            << (trans ? i18n("Fixed Interval") : QString("FixedInterval"));
 }
 
 void Node::propagateEarliestStart(DateTime &time) {

@@ -79,7 +79,7 @@ public:
 
     virtual int type() const = 0;
     
-    QString typeToString( bool i = false ) const;
+    QString typeToString( bool trans = false ) const;
     /**
      * Returns a pointer to the project node (main- or sub-project)
      * Returns 0 if no project exists.
