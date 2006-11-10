@@ -11,7 +11,7 @@ kde4_automoc(${karbon_shadoweffectplugin_PART_SRCS})
 
 kde4_add_plugin(karbon_shadoweffectplugin ${karbon_shadoweffectplugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbon_shadoweffectplugin )
+
 
 target_link_libraries(karbon_shadoweffectplugin   ${KDE4_KPARTS_LIBS} kofficeui karboncommon )
 

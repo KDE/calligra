@@ -11,7 +11,7 @@ kde4_automoc(${gnumericexport_PART_SRCS})
 
 kde4_add_plugin(gnumericexport WITH_PREFIX ${gnumericexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} gnumericexport )
+
 
 target_link_libraries(gnumericexport  ${KDE4_KDECORE_LIBS} kspreadcommon )
 
@@ -26,7 +26,7 @@ kde4_automoc(${gnumericimport_PART_SRCS})
 
 kde4_add_plugin(gnumericimport WITH_PREFIX ${gnumericimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} gnumericimport )
+
 
 target_link_libraries(gnumericimport  ${KDE4_KDECORE_LIBS} kspreadcommon )
 

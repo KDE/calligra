@@ -14,7 +14,7 @@ kde4_automoc(${oowriterimport_PART_SRCS})
 
 kde4_add_plugin(oowriterimport WITH_PREFIX ${oowriterimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} oowriterimport )
+
 
 target_link_libraries(oowriterimport  kofficecore)
 
@@ -29,7 +29,7 @@ kde4_automoc(${oowriterexport_PART_SRCS})
 
 kde4_add_plugin(oowriterexport WITH_PREFIX ${oowriterexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} oowriterexport )
+
 
 target_link_libraries(oowriterexport kofficecore kwordexportfilters  )
 

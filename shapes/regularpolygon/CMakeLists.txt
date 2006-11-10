@@ -10,7 +10,7 @@ kde4_automoc(${koregularpolygon_PART_SRCS})
 
 kde4_add_plugin(koregularpolygon ${koregularpolygon_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} koregularpolygon )
+
 
 target_link_libraries(koregularpolygon flake kofficeui)
 

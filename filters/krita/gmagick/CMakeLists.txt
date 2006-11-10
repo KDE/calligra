@@ -11,7 +11,7 @@ kde4_automoc(${kritagmagickimport_PART_SRCS})
 
 kde4_add_plugin(kritagmagickimport WITH_PREFIX ${kritagmagickimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritagmagickimport )
+
 
 target_link_libraries(kritagmagickimport kritaui ${GRAPHICSMAGICK_LIBRARIES})
 
@@ -26,7 +26,7 @@ kde4_automoc(${kritagmagickexport_PART_SRCS})
 
 kde4_add_plugin(kritagmagickexport WITH_PREFIX ${kritagmagickexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritagmagickexport )
+
 
 target_link_libraries(kritagmagickexport kritaui ${GRAPHICSMAGICK_LIBRARIES})
 

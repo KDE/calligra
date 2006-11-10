@@ -14,7 +14,7 @@ kde4_automoc(${kexihandler_table_PART_SRCS})
 
 kde4_add_plugin(kexihandler_table ${kexihandler_table_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_table )
+
 
 target_link_libraries(kexihandler_table  ${KDE4_KDECORE_LIBS} kexicore kexidb kexidatatable kexiextendedwidgets koproperty )
 

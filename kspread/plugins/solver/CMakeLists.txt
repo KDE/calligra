@@ -20,7 +20,7 @@ kde4_add_ui_files( solver_PART_SRCS
 
 kde4_add_plugin( kspreadsolver WITH_PREFIX ${solver_PART_SRCS} )
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadsolver )
+
 
 target_link_libraries( kspreadsolver
 	${GSL_LIBRARIES}

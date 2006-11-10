@@ -11,7 +11,7 @@ kde4_automoc(${kugarnopimport_PART_SRCS})
 
 kde4_add_plugin(kugarnopimport WITH_PREFIX ${kugarnopimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kugarnopimport )
+
 
 target_link_libraries(kugarnopimport  ${KDE4_KDECORE_LIBS} )
 

@@ -23,7 +23,7 @@ add_subdirectory( part )
 #
 # kde4_add_plugin(kwordpart WITH_PREFIX ${kwordpart_PART_SRCS})
 #
-# kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwordpart )
+# 
 #
 # target_link_libraries(kwordpart  ${KDE4_KDECORE_LIBS} kwordprivate )
 #

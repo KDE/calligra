@@ -22,7 +22,7 @@ kde4_automoc(${krosskexidb_PART_SRCS})
 
 kde4_add_plugin(krosskexidb ${krosskexidb_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krosskexidb )
+
 
 target_link_libraries(krosskexidb  ${KDE4_KDECORE_LIBS} krossapi krossmain kexidb kexidbparser )
 

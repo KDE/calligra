@@ -11,7 +11,7 @@ kde4_automoc(${keximigrate_mysql_PART_SRCS})
 
 kde4_add_plugin(keximigrate_mysql ${keximigrate_mysql_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} keximigrate_mysql )
+
 
 target_link_libraries(keximigrate_mysql ${MYSQL_LIBRARIES} ${KDE4_KDECORE_LIBS}
  ${KDE4_KPARTS_LIBS} keximigrate )

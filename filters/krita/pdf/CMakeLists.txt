@@ -12,7 +12,7 @@ kde4_add_ui_files(kritapdfimport_PART_SRCS pdfimportwidgetbase.ui )
 
 kde4_add_plugin(kritapdfimport WITH_PREFIX ${kritapdfimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritapdfimport )
+
 
 target_link_libraries(kritapdfimport kritaui ${POPPLER_QT4_LIBRARIES})
 

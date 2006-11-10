@@ -21,7 +21,7 @@ kde4_automoc(${kritatiffimport_PART_SRCS})
 
 kde4_add_plugin(kritatiffimport WITH_PREFIX ${kritatiffimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatiffimport )
+
 
 target_link_libraries(kritatiffimport kritaui tiff)
 
@@ -42,7 +42,7 @@ kde4_add_ui3_files(kritatiffexport_PART_SRCS kis_wdg_options_tiff.ui )
 
 kde4_add_plugin(kritatiffexport WITH_PREFIX ${kritatiffexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritatiffexport )
+
 
 target_link_libraries(kritatiffexport kritaui tiff)
 

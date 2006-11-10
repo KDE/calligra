@@ -15,7 +15,7 @@ kde4_automoc(${generickofilter_PART_SRCS})
 
 kde4_add_plugin(generickofilter WITH_PREFIX ${generickofilter_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} generickofilter )
+
 
 target_link_libraries(generickofilter  ${KDE4_KIO_LIBS} kofficecore )
 

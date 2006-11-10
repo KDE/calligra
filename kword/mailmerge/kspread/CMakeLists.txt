@@ -15,7 +15,7 @@ kde4_automoc(${kwmailmerge_kspread_PART_SRCS})
 
 kde4_add_plugin(kwmailmerge_kspread ${kwmailmerge_kspread_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwmailmerge_kspread )
+
 
 target_link_libraries(kwmailmerge_kspread  kwmailmerge_interface kspreadcommon ${KDE4_KDEUI_LIBS} )
 

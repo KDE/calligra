@@ -16,7 +16,7 @@ kde4_automoc(${latexgenerator_PART_SRCS})
 
 kde4_add_plugin(latexgenerator WITH_PREFIX ${latexgenerator_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} latexgenerator )
+
 
 target_link_libraries(latexgenerator  ${KDE4_KDECORE_LIBS} )
 

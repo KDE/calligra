@@ -11,7 +11,7 @@ kde4_automoc(${keximigrate_txtmigrate_PART_SRCS})
 
 kde4_add_plugin(keximigrate_txtmigrate ${keximigrate_txtmigrate_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} keximigrate_txtmigrate )
+
 
 target_link_libraries(keximigrate_txtmigrate  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} keximigrate )
 

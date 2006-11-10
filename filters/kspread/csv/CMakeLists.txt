@@ -17,7 +17,7 @@ kde4_add_ui3_files(csvimport_PART_SRCS dialogui.ui )
 
 kde4_add_plugin(csvimport WITH_PREFIX ${csvimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} csvimport )
+
 
 target_link_libraries(csvimport  kspreadcommon )
 
@@ -34,7 +34,7 @@ kde4_add_ui3_files(csvexport_PART_SRCS exportdialogui.ui )
 
 kde4_add_plugin(csvexport WITH_PREFIX ${csvexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} csvexport )
+
 
 target_link_libraries(csvexport  kspreadcommon )
 

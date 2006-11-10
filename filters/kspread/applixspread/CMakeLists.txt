@@ -11,7 +11,7 @@ kde4_automoc(${applixspreadimport_PART_SRCS})
 
 kde4_add_plugin(applixspreadimport WITH_PREFIX ${applixspreadimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} applixspreadimport )
+
 
 target_link_libraries(applixspreadimport  ${KDE4_KDECORE_LIBS} kofficecore )
 

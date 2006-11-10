@@ -12,7 +12,7 @@ kde4_automoc(${karbonvisitors_SRCS})
 
 kde4_add_library(karbonvisitors ${karbonvisitors_SRCS})
 
-kde4_install_libtool_file( ${LIB_INSTALL_DIR} karbonvisitors )
+
 
 install(TARGETS karbonvisitors  DESTINATION ${LIB_INSTALL_DIR})
 

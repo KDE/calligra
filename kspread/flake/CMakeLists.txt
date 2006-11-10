@@ -11,7 +11,7 @@ SET (tableshape_LIB_SRCS
 
 kde4_automoc(${tableshape_LIB_SRCS})
 kde4_add_plugin(tableshape ${tableshape_LIB_SRCS})
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} tableshape )
+
 target_link_libraries(tableshape kspreadcommon flake)
 install(TARGETS tableshape DESTINATION ${PLUGIN_INSTALL_DIR})
 

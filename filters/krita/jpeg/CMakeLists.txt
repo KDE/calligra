@@ -21,7 +21,7 @@ kde4_automoc(${kritajpegimport_PART_SRCS})
 
 kde4_add_plugin(kritajpegimport WITH_PREFIX ${kritajpegimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritajpegimport )
+
 
 target_link_libraries(kritajpegimport kritaui jpeg exif)
 
@@ -40,7 +40,7 @@ kde4_add_ui3_files(kritajpegexport_PART_SRCS kis_wdg_options_jpeg.ui )
 
 kde4_add_plugin(kritajpegexport WITH_PREFIX ${kritajpegexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritajpegexport )
+
 
 target_link_libraries(kritajpegexport kritaui jpeg exif)
 

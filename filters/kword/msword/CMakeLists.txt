@@ -17,7 +17,7 @@ kde4_automoc(${mswordimport_PART_SRCS})
 
 kde4_add_plugin(mswordimport WITH_PREFIX ${mswordimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} mswordimport )
+
 
 target_link_libraries(mswordimport  ${KDE4_KDECORE_LIBS} ${WV2_LIBRARIES} kofficecore)
 

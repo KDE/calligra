@@ -13,7 +13,7 @@ kde4_add_ui_files(krita_raw_import_PART_SRCS wdgrawimport.ui )
 
 kde4_add_plugin(krita_raw_import WITH_PREFIX ${krita_raw_import_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_raw_import )
+
 
 target_link_libraries(krita_raw_import kritaui)
 

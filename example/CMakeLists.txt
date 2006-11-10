@@ -11,7 +11,7 @@ kde4_automoc(${koexamplepart_PART_SRCS})
 
 kde4_add_plugin(koexamplepart WITH_PREFIX ${koexamplepart_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} koexamplepart )
+
 
 target_link_libraries(koexamplepart  ${KDE4_KPARTS_LIBS} kofficecore )
 

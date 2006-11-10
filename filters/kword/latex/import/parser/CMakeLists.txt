@@ -21,7 +21,7 @@ kde4_automoc(${latexparser_PART_SRCS})
 
 kde4_add_plugin(latexparser WITH_PREFIX ${latexparser_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} latexparser )
+
 
 target_link_libraries(latexparser  ${KDE4_KDECORE_LIBS} )
 

@@ -21,7 +21,7 @@ kde4_automoc(${kexidb_sqlite2driver_PART_SRCS})
 
 kde4_add_plugin(kexidb_sqlite2driver ${kexidb_sqlite2driver_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexidb_sqlite2driver )
+
 
 target_link_libraries(kexidb_sqlite2driver  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexisql2 kexidb )
 

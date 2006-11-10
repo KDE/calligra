@@ -15,7 +15,7 @@ kde4_automoc(${abiwordimport_PART_SRCS})
 
 kde4_add_plugin(abiwordimport WITH_PREFIX ${abiwordimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} abiwordimport )
+
 
 target_link_libraries(abiwordimport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
 
@@ -30,7 +30,7 @@ kde4_automoc(${abiwordexport_PART_SRCS})
 
 kde4_add_plugin(abiwordexport WITH_PREFIX ${abiwordexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} abiwordexport )
+
 
 target_link_libraries(abiwordexport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
 

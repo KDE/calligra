@@ -11,7 +11,7 @@ kde4_automoc(${kexihandler_script_PART_SRCS})
 
 kde4_add_plugin(kexihandler_script ${kexihandler_script_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_script )
+
 
 target_link_libraries(kexihandler_script  ${KDE4_KDECORE_LIBS} krossmain kexicore kexiextendedwidgets koproperty )
 

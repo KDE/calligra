@@ -18,7 +18,7 @@ kde4_automoc(${kexihandler_csv_importexport_PART_SRCS})
 
 kde4_add_plugin(kexihandler_csv_importexport ${kexihandler_csv_importexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_csv_importexport )
+
 
 target_link_libraries(kexihandler_csv_importexport  ${KDE4_KDECORE_LIBS} kexicore keximigrate )
 

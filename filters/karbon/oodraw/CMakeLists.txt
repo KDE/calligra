@@ -12,7 +12,7 @@ kde4_automoc(${oodrawimport_PART_SRCS})
 
 kde4_add_plugin(oodrawimport WITH_PREFIX ${oodrawimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} oodrawimport )
+
 
 target_link_libraries(oodrawimport  ${KDE4_KDECORE_LIBS}  karboncommon )
 

@@ -11,7 +11,7 @@ kde4_automoc(${karbon_roundcornersplugin_PART_SRCS})
 
 kde4_add_plugin(karbon_roundcornersplugin ${karbon_roundcornersplugin_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbon_roundcornersplugin )
+
 
 target_link_libraries(karbon_roundcornersplugin   ${KDE4_KPARTS_LIBS} karboncommon )
 

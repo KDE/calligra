@@ -11,7 +11,7 @@ kde4_automoc(${kpresentermngexport_PART_SRCS})
 
 kde4_add_plugin(kpresentermngexport WITH_PREFIX ${kpresentermngexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kpresentermngexport )
+
 
 target_link_libraries(kpresentermngexport  ${KDE4_KDECORE_LIBS} kpresenterprivate kpresenterimageexport )
 

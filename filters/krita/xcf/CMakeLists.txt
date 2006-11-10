@@ -13,7 +13,7 @@ kde4_automoc(${kritaxcfimport_PART_SRCS})
 
 kde4_add_plugin(kritaxcfimport WITH_PREFIX ${kritaxcfimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaxcfimport )
+
 
 target_link_libraries(kritaxcfimport kritaui)
 
@@ -28,7 +28,7 @@ kde4_automoc(${kritaxcfexport_PART_SRCS})
 
 kde4_add_plugin(kritaxcfexport WITH_PREFIX ${kritaxcfexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kritaxcfexport )
+
 
 target_link_libraries(kritaxcfexport kritaui)
 

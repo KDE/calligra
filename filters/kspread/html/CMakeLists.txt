@@ -13,7 +13,7 @@ kde4_add_ui3_files(kspreadhtmlexport_PART_SRCS exportwidget.ui )
 
 kde4_add_plugin(kspreadhtmlexport WITH_PREFIX ${kspreadhtmlexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadhtmlexport )
+
 
 target_link_libraries(kspreadhtmlexport  ${KDE4_KDECORE_LIBS} kspreadcommon )
 

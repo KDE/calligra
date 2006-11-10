@@ -13,7 +13,7 @@ kde4_add_ui3_files(kiviotexttool_PART_SRCS kivio_stenciltexteditorui.ui )
 
 kde4_add_plugin(kiviotexttool WITH_PREFIX ${kiviotexttool_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kiviotexttool )
+
 
 target_link_libraries(kiviotexttool  ${KDE4_KDECORE_LIBS} kotext kopainter kiviocommon )
 

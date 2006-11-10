@@ -14,7 +14,7 @@ kde4_automoc(${karbonshapes_SRCS})
 
 kde4_add_library(karbonshapes ${karbonshapes_SRCS})
 
-kde4_install_libtool_file( ${LIB_INSTALL_DIR} karbonshapes )
+
 
 install(TARGETS karbonshapes  DESTINATION ${LIB_INSTALL_DIR})
 

@@ -21,7 +21,7 @@ kde4_automoc(${krita_openexr_import_PART_SRCS})
 
 kde4_add_plugin(krita_openexr_import WITH_PREFIX ${krita_openexr_import_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_openexr_import )
+
 
 target_link_libraries(krita_openexr_import kritaui krita_rgb_f32 krita_rgb_f16half ${OPENEXR_LIBRARIES} )
 
@@ -36,7 +36,7 @@ kde4_automoc(${krita_openexr_export_PART_SRCS})
 
 kde4_add_plugin(krita_openexr_export WITH_PREFIX ${krita_openexr_export_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krita_openexr_export )
+
 
 target_link_libraries(krita_openexr_export kritaui krita_rgb_f32 krita_rgb_f16half ${OPENEXR_LIBRARIES})
 

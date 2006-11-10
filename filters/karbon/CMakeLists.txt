@@ -21,15 +21,3 @@ add_subdirectory( oodraw )
 
 
 
-
-########### install files ###############
-
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = eps ai svg png wmf kontour xcf msod oodraw
-#

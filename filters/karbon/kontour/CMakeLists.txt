@@ -11,7 +11,7 @@ kde4_automoc(${karbonkontourimport_PART_SRCS})
 
 kde4_add_plugin(karbonkontourimport WITH_PREFIX ${karbonkontourimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonkontourimport )
+
 
 target_link_libraries(karbonkontourimport  ${KDE4_KDECORE_LIBS} karboncommon )
 

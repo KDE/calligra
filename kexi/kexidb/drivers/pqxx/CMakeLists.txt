@@ -20,7 +20,7 @@ kde4_automoc(${kexidb_pqxxsqldriver_PART_SRCS})
 
 kde4_add_plugin(kexidb_pqxxsqldriver ${kexidb_pqxxsqldriver_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexidb_pqxxsqldriver )
+
 
 target_link_libraries(kexidb_pqxxsqldriver ${POSTGRESQL_LIBRARIES} ${PQXX_LIBRARIES} 
  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexidb )

@@ -11,7 +11,7 @@ kde4_automoc(${rtfexport_PART_SRCS})
 
 kde4_add_plugin(rtfexport WITH_PREFIX ${rtfexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} rtfexport )
+
 
 target_link_libraries(rtfexport  ${KDE4_KDECORE_LIBS} kwordexportfilters )
 

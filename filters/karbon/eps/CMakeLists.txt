@@ -8,7 +8,7 @@ kde4_automoc(${karbonepsexport_PART_SRCS})
 
 kde4_add_plugin(karbonepsexport WITH_PREFIX ${karbonepsexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonepsexport )
+
 
 target_link_libraries(karbonepsexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 
@@ -23,7 +23,7 @@ kde4_automoc(${karbonepsimport_PART_SRCS})
 
 kde4_add_plugin(karbonepsimport WITH_PREFIX ${karbonepsimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonepsimport )
+
 
 target_link_libraries(karbonepsimport  ${KDE4_KDECORE_LIBS} kofficeui )
 

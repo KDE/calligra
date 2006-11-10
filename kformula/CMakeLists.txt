@@ -19,7 +19,7 @@ kde4_automoc(${kformulapart_PART_SRCS})
 
 kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformulapart )
+
 
 target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kofficeui kformulalib )
 

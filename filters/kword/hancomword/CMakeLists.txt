@@ -11,7 +11,7 @@ kde4_automoc(${hancomwordimport_PART_SRCS})
 
 kde4_add_plugin(hancomwordimport WITH_PREFIX ${hancomwordimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} hancomwordimport )
+
 
 target_link_libraries(hancomwordimport  ${KDE4_KDECORE_LIBS} kstore kofficecore)
 

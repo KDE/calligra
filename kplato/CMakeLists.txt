@@ -104,7 +104,7 @@ kde4_automoc(${kplatopart_PART_SRCS})
 
 kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kplatopart )
+
 
 target_link_libraries(kplatopart kofficeui ${KDE4_KDEUI_LIBS} ${QT_QTXML_LIBRARY}  )
 

@@ -13,7 +13,7 @@ kde4_automoc(${kexihandler_form_PART_SRCS})
 
 kde4_add_plugin(kexihandler_form ${kexihandler_form_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_form )
+
 
 target_link_libraries(kexihandler_form  ${KDE4_KDECORE_LIBS} kexicore kexiguiutils kexidatatable kexiextendedwidgets kformdesigner koproperty kexiformutils )
 
@@ -28,7 +28,7 @@ kde4_automoc(${kformdesigner_kexidbwidgets_PART_SRCS})
 
 kde4_add_plugin(kformdesigner_kexidbwidgets ${kformdesigner_kexidbwidgets_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformdesigner_kexidbwidgets )
+
 
 target_link_libraries(kformdesigner_kexidbwidgets  ${KDE4_KDECORE_LIBS} kformdesigner kexiformutils )
 

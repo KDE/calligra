@@ -11,7 +11,7 @@ kde4_automoc(${thesaurustool_PART_SRCS})
 
 kde4_add_plugin(thesaurustool WITH_PREFIX ${thesaurustool_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} thesaurustool )
+
 
 target_link_libraries(thesaurustool  ${KDE4_KIO_LIBS} )
 

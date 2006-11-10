@@ -150,7 +150,7 @@ kde4_automoc(${kpresenterpart_PART_SRCS})
 
 kde4_add_plugin(kpresenterpart WITH_PREFIX ${kpresenterpart_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kpresenterpart )
+
 
 target_link_libraries(kpresenterpart  ${KDE4_KDE3SUPPORT_LIBS} kpresenterprivate kofficecore kofficeui)
 

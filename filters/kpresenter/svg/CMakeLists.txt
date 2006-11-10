@@ -11,7 +11,7 @@ kde4_automoc(${kpresentersvgexport_PART_SRCS})
 
 kde4_add_plugin(kpresentersvgexport WITH_PREFIX ${kpresentersvgexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kpresentersvgexport )
+
 
 target_link_libraries(kpresentersvgexport  ${KDE4_KDECORE_LIBS} kpresenterprivate )
 

@@ -5,7 +5,7 @@ kde4_automoc(${kfile_gnumeric_PART_SRCS})
 
 kde4_add_plugin(kfile_gnumeric ${kfile_gnumeric_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kfile_gnumeric )
+
 
 target_link_libraries(kfile_gnumeric  ${KDE4_KDECORE_LIBS} kofficecore )
 

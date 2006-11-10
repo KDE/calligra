@@ -11,7 +11,7 @@ kde4_automoc(${kugarpart_PART_SRCS})
 
 kde4_add_plugin(kugarpart WITH_PREFIX ${kugarpart_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kugarpart )
+
 
 target_link_libraries(kugarpart  ${KDE4_KIO_LIBS} kugarlib ${KDE4_KPARTS_LIBS} ${KDE4_KDEPRINT_LIBS} kofficecore )
 

@@ -13,7 +13,7 @@ kde4_add_ui3_files(kivioimageexport_PART_SRCS kivio_imageexportwidget.ui )
 
 kde4_add_plugin(kivioimageexport WITH_PREFIX ${kivioimageexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kivioimageexport )
+
 
 target_link_libraries(kivioimageexport  ${KDE4_KDECORE_LIBS} kiviocommon )
 

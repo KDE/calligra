@@ -13,7 +13,7 @@ kde4_automoc(${kivioselecttool_PART_SRCS})
 
 kde4_add_plugin(kivioselecttool WITH_PREFIX ${kivioselecttool_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kivioselecttool )
+
 
 target_link_libraries(kivioselecttool  ${KDE4_KDECORE_LIBS} kotext kopainter kiviocommon )
 

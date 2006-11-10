@@ -19,7 +19,7 @@ kde4_automoc(${karbonwidgets_SRCS})
 
 kde4_add_library(karbonwidgets ${karbonwidgets_SRCS})
 
-kde4_install_libtool_file( ${LIB_INSTALL_DIR} karbonwidgets )
+
 
 target_link_libraries(karbonwidgets flake) 
 

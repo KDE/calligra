@@ -11,7 +11,7 @@ kde4_automoc(${kfolatexexport_PART_SRCS})
 
 kde4_add_plugin(kfolatexexport WITH_PREFIX ${kfolatexexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kfolatexexport )
+
 
 target_link_libraries(kfolatexexport  ${KDE4_KDECORE_LIBS} kofficecore kformulalib )
 

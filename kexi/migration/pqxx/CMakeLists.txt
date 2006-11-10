@@ -11,7 +11,7 @@ kde4_automoc(${keximigrate_pqxx_PART_SRCS})
 
 kde4_add_plugin(keximigrate_pqxx ${keximigrate_pqxx_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} keximigrate_pqxx )
+
 
 target_link_libraries(keximigrate_pqxx ${POSTGRESQL_LIBRARIES} ${PQXX_LIBRARIES} 
  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} keximigrate )

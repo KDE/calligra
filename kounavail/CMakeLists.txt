@@ -11,7 +11,7 @@ kde4_automoc(${kounavailpart_PART_SRCS})
 
 kde4_add_plugin(kounavailpart WITH_PREFIX ${kounavailpart_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kounavailpart )
+
 
 target_link_libraries(kounavailpart  ${KDE4_KDECORE_LIBS} kofficecore )
 

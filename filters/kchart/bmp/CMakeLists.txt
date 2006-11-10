@@ -11,7 +11,7 @@ kde4_automoc(${kchartbmpexport_PART_SRCS})
 
 kde4_add_plugin(kchartbmpexport WITH_PREFIX ${kchartbmpexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kchartbmpexport )
+
 
 target_link_libraries(kchartbmpexport  ${KDE4_KDECORE_LIBS} kchartcommon kchartimageexport  )
 

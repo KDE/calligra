@@ -16,7 +16,7 @@ kde4_add_ui3_files(xsltexport_PART_SRCS xsltdialog.ui )
 
 kde4_add_plugin(xsltexport WITH_PREFIX ${xsltexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} xsltexport )
+
 
 target_link_libraries(xsltexport  ${KDE4_KIO_LIBS} kofficecore ${LIBXML2_LIBRARIES} ${LIBXSLT_LIBRARIES} )
 

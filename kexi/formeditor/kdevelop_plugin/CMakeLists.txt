@@ -11,7 +11,7 @@ kde4_automoc(${kformdesigner_kdev_part_PART_SRCS})
 
 kde4_add_plugin(kformdesigner_kdev_part WITH_PREFIX ${kformdesigner_kdev_part_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformdesigner_kdev_part )
+
 
 target_link_libraries(kformdesigner_kdev_part  ${KDE4_KDECORE_LIBS} kformdesigner kinterfacedesigner )
 

@@ -11,7 +11,7 @@ kde4_automoc(${applixgraphicimport_PART_SRCS})
 
 kde4_add_plugin(applixgraphicimport WITH_PREFIX ${applixgraphicimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} applixgraphicimport )
+
 
 target_link_libraries(applixgraphicimport  ${KDE4_KDECORE_LIBS} )
 

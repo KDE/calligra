@@ -34,7 +34,7 @@ kde4_automoc(${kudesignerpart_PART_SRCS})
 
 kde4_add_plugin(kudesignerpart WITH_PREFIX ${kudesignerpart_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kudesignerpart )
+
 
 target_link_libraries(kudesignerpart  kudesignercore kofficeui ${KDE4_KPARTS_LIBS} kofficecore )
 

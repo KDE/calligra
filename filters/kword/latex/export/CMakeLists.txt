@@ -37,7 +37,7 @@ kde4_add_ui3_files(kwordlatexexport_PART_SRCS latexexportdia.ui )
 
 kde4_add_plugin(kwordlatexexport WITH_PREFIX ${kwordlatexexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwordlatexexport )
+
 
 target_link_libraries(kwordlatexexport  ${KDE4_KIO_LIBS} kofficecore kformulalib ${IMAGEMAGICK_LIBRARIES} )
 

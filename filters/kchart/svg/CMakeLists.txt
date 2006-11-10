@@ -11,7 +11,7 @@ kde4_automoc(${kchartsvgexport_PART_SRCS})
 
 kde4_add_plugin(kchartsvgexport WITH_PREFIX ${kchartsvgexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kchartsvgexport )
+
 
 target_link_libraries(kchartsvgexport  ${KDE4_KDECORE_LIBS} kchartcommon )
 

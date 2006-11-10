@@ -11,7 +11,7 @@ kde4_automoc(${kiviotargettool_PART_SRCS})
 
 kde4_add_plugin(kiviotargettool WITH_PREFIX ${kiviotargettool_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kiviotargettool )
+
 
 target_link_libraries(kiviotargettool  ${KDE4_KDECORE_LIBS} kotext kopainter kiviocommon )
 

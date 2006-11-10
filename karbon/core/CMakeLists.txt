@@ -44,7 +44,7 @@ kde4_automoc(${karboncore_SRCS})
 
 kde4_add_library(karboncore ${karboncore_SRCS})
 
-kde4_install_libtool_file( ${LIB_INSTALL_DIR} karboncore )
+
 
 target_link_libraries(karboncore ${FREETYPE_LIBRARIES} ${FONTCONFIG_LIBRARIES})
 

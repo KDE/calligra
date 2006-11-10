@@ -11,7 +11,7 @@ kde4_automoc(${kexihandler_relation_PART_SRCS})
 
 kde4_add_plugin(kexihandler_relation ${kexihandler_relation_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_relation )
+
 
 target_link_libraries(kexihandler_relation  ${KDE4_KDECORE_LIBS} kexicore kexirelationsview )
 

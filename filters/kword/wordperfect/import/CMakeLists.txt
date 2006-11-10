@@ -11,7 +11,7 @@ kde4_automoc(${wpimport_PART_SRCS})
 
 kde4_add_plugin(wpimport WITH_PREFIX ${wpimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wpimport )
+
 
 target_link_libraries(wpimport  ${KDE4_KDECORE_LIBS} kofficecore ${WPD_LIBRARIES} )
 

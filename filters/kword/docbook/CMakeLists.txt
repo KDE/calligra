@@ -11,7 +11,7 @@ kde4_automoc(${docbookexport_PART_SRCS})
 
 kde4_add_plugin(docbookexport WITH_PREFIX ${docbookexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} docbookexport )
+
 
 target_link_libraries(docbookexport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
 

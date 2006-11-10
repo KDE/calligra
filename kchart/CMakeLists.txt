@@ -69,7 +69,7 @@ kde4_automoc(${kchartpart_PART_SRCS})
 
 kde4_add_plugin(kchartpart WITH_PREFIX ${kchartpart_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kchartpart )
+
 
 target_link_libraries(kchartpart  ${KDE4_KDECORE_LIBS} kchartcommon )
 

@@ -11,7 +11,7 @@ kde4_automoc(${ooimpressimport_PART_SRCS})
 
 kde4_add_plugin(ooimpressimport WITH_PREFIX ${ooimpressimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} ooimpressimport )
+
 
 target_link_libraries(ooimpressimport  ${KDE4_KDECORE_LIBS} kofficecore )
 
@@ -26,7 +26,7 @@ kde4_automoc(${ooimpressexport_PART_SRCS})
 
 kde4_add_plugin(ooimpressexport WITH_PREFIX ${ooimpressexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} ooimpressexport )
+
 
 target_link_libraries(ooimpressexport  ${KDE4_KDECORE_LIBS} kofficecore )
 

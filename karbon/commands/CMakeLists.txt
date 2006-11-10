@@ -21,7 +21,7 @@ kde4_automoc(${karboncommands_SRCS})
 
 kde4_add_library(karboncommands ${karboncommands_SRCS})
 
-kde4_install_libtool_file( ${LIB_INSTALL_DIR} karboncommands )
+
 
 install(TARGETS karboncommands  DESTINATION ${LIB_INSTALL_DIR})
 

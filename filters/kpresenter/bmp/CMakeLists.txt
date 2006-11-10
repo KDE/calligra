@@ -11,7 +11,7 @@ kde4_automoc(${kpresenterbmpexport_PART_SRCS})
 
 kde4_add_plugin(kpresenterbmpexport WITH_PREFIX ${kpresenterbmpexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kpresenterbmpexport )
+
 
 target_link_libraries(kpresenterbmpexport  ${KDE4_KDECORE_LIBS} kpresenterprivate kpresenterimageexport )
 

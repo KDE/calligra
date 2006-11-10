@@ -9,7 +9,7 @@ kde4_automoc(${vpainter_SRCS})
 
 kde4_add_library(vpainter ${vpainter_SRCS})
 
-kde4_install_libtool_file( ${LIB_INSTALL_DIR} vpainter )
+
 
 install(TARGETS vpainter  DESTINATION ${LIB_INSTALL_DIR})
 

@@ -12,7 +12,7 @@ kde4_automoc(${kformula13import_PART_SRCS})
 
 kde4_add_plugin(kformula13import WITH_PREFIX ${kformula13import_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformula13import )
+
 
 target_link_libraries(kformula13import  ${KDE4_KDECORE_LIBS} kofficecore kformulalib )
 

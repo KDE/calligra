@@ -13,7 +13,7 @@ kde4_add_ui_files(kspreadinsertcalendar_PART_SRCS kspread_insertcalendardialogba
 
 kde4_add_plugin(kspreadinsertcalendar WITH_PREFIX ${kspreadinsertcalendar_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadinsertcalendar )
+
 
 target_link_libraries(kspreadinsertcalendar  ${KDE4_KDECORE_LIBS} kspreadcommon )
 

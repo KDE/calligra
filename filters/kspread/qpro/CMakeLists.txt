@@ -18,7 +18,7 @@ kde4_automoc(${qproimport_PART_SRCS})
 
 kde4_add_plugin(qproimport WITH_PREFIX ${qproimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} qproimport )
+
 
 target_link_libraries(qproimport  ${KDE4_KDECORE_LIBS} kspreadcommon )
 

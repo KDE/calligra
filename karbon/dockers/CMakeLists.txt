@@ -13,7 +13,7 @@ kde4_automoc(${karbondockers_SRCS})
 
 kde4_add_library(karbondockers ${karbondockers_SRCS})
 
-kde4_install_libtool_file( ${LIB_INSTALL_DIR} karbondockers )
+
 
 #target_link_libraries( karbondockers ${KDE4_CORE} karbonpart )
 

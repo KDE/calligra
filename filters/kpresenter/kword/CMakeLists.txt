@@ -6,7 +6,7 @@ kde4_automoc(${kodp2odt_PART_SRCS})
 
 kde4_add_plugin(kodp2odt WITH_PREFIX ${kodp2odt_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kodp2odt )
+
 
 target_link_libraries(kodp2odt  ${KDE4_KDECORE_LIBS} kofficecore)
 
@@ -22,7 +22,7 @@ kde4_automoc(${kprkword_PART_SRCS})
 
 kde4_add_plugin(kprkword WITH_PREFIX ${kprkword_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kprkword )
+
 
 target_link_libraries(kprkword  ${KDE4_KDECORE_LIBS} kofficecore)
 

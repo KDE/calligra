@@ -16,7 +16,7 @@ kde4_add_dcop_skels(kwordlateximport_PART_SRCS lateximportdia.h )
 
 kde4_add_plugin(kwordlateximport WITH_PREFIX ${kwordlateximport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwordlateximport )
+
 
 target_link_libraries(kwordlateximport  ${KDE4_KDECORE_LIBS} )
 

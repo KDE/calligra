@@ -13,7 +13,7 @@ kde4_add_ui3_files(kwmailmerge_qtsqldb_PART_SRCS qtsqldatasourceeditor.ui )
 
 kde4_add_plugin(kwmailmerge_qtsqldb ${kwmailmerge_qtsqldb_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwmailmerge_qtsqldb )
+
 
 target_link_libraries(kwmailmerge_qtsqldb  ${KDE4_KDECORE_LIBS} mailmergesqlcommon kwmailmerge_interface ${KDE4_KDEUI_LIBS} )
 
@@ -32,7 +32,7 @@ kde4_add_dcop_skels(kwmailmerge_qtsqldb_power_PART_SRCS KWQtSqlPowerSerialDataSo
 
 kde4_add_plugin(kwmailmerge_qtsqldb_power ${kwmailmerge_qtsqldb_power_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwmailmerge_qtsqldb_power )
+
 
 target_link_libraries(kwmailmerge_qtsqldb_power  ${KDE4_KDECORE_LIBS} mailmergesqlcommon kwmailmerge_interface ${KDE4_KDEUI_LIBS} )
 

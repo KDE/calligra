@@ -12,7 +12,7 @@ add_subdirectory( scripts )
 set(krossmodulekspread_PART_SRCS ScriptingModule.cpp ScriptingFunction.cpp ScriptingPart.cpp)
 kde4_automoc(${krossmodulekspread_PART_SRCS})
 kde4_add_plugin(krossmodulekspread ${krossmodulekspread_PART_SRCS})
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} krossmodulekspread )
+
 target_link_libraries(krossmodulekspread  ${KDE4_KDECORE_LIBS} kspreadcommon krosscore )
 install(TARGETS krossmodulekspread DESTINATION ${PLUGIN_INSTALL_DIR})
 

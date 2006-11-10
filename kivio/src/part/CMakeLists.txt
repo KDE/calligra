@@ -31,7 +31,7 @@ kde4_automoc(${kiviopart_PART_SRCS})
 
 kde4_add_plugin(kiviopart WITH_PREFIX ${kiviopart_PART_SRCS})
 
-kde4_install_libtool_file(${PLUGIN_INSTALL_DIR} kiviopart)
+
 
 target_link_libraries(kiviopart  ${KDE4_KDECORE_LIBS} kivioprivate)
 

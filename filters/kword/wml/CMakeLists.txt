@@ -11,7 +11,7 @@ kde4_automoc(${wmlimport_PART_SRCS})
 
 kde4_add_plugin(wmlimport WITH_PREFIX ${wmlimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wmlimport )
+
 
 target_link_libraries(wmlimport  ${KDE4_KDECORE_LIBS} kofficecore kwordexportfilters)
 
@@ -26,7 +26,7 @@ kde4_automoc(${wmlexport_PART_SRCS})
 
 kde4_add_plugin(wmlexport WITH_PREFIX ${wmlexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} wmlexport )
+
 
 target_link_libraries(wmlexport  ${KDE4_KDECORE_LIBS} kwordexportfilters kofficecore )
 

@@ -24,7 +24,7 @@ kde4_automoc(${kwordkword1dot3import_PART_SRCS})
 
 kde4_add_plugin(kwordkword1dot3import WITH_PREFIX ${kwordkword1dot3import_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kwordkword1dot3import )
+
 
 target_link_libraries(kwordkword1dot3import  ${KDE4_KDECORE_LIBS} kstore kofficecore)
 

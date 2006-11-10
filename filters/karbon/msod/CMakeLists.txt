@@ -11,7 +11,7 @@ kde4_automoc(${karbonmsodimport_PART_SRCS})
 
 kde4_add_plugin(karbonmsodimport WITH_PREFIX ${karbonmsodimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonmsodimport )
+
 
 target_link_libraries(karbonmsodimport  ${KDE4_KDECORE_LIBS} kwmf kofficecore)
 

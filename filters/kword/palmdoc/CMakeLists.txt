@@ -11,7 +11,7 @@ kde4_automoc(${palmdocimport_PART_SRCS})
 
 kde4_add_plugin(palmdocimport WITH_PREFIX ${palmdocimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} palmdocimport )
+
 
 target_link_libraries(palmdocimport kofficecore)
 
@@ -26,7 +26,7 @@ kde4_automoc(${palmdocexport_PART_SRCS})
 
 kde4_add_plugin(palmdocexport WITH_PREFIX ${palmdocexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} palmdocexport )
+
 
 target_link_libraries(palmdocexport kofficecore kwordexportfilters)
 

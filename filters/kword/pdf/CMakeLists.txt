@@ -66,7 +66,7 @@ kde4_automoc(${pdfimport_PART_SRCS})
 
 kde4_add_plugin(pdfimport WITH_PREFIX ${pdfimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} pdfimport )
+
 
 target_link_libraries(pdfimport  ${KDE4_KDECORE_LIBS} kofficecore )
 

@@ -11,7 +11,7 @@ kde4_automoc(${kexihandler_report_PART_SRCS})
 
 kde4_add_plugin(kexihandler_report ${kexihandler_report_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_report )
+
 
 target_link_libraries(kexihandler_report  ${KDE4_KDECORE_LIBS} kexicore kexiguiutils kexiextendedwidgets kformdesigner kexiformutils kexireportutils )
 
@@ -26,7 +26,7 @@ kde4_automoc(${kexireportwidgets_PART_SRCS})
 
 kde4_add_plugin(kexireportwidgets ${kexireportwidgets_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexireportwidgets )
+
 
 target_link_libraries(kexireportwidgets  ${KDE4_KDECORE_LIBS} kformdesigner kexireportutils
 kexiformutils kexiextendedwidgets kexiformutilswidgets )

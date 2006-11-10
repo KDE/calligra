@@ -20,7 +20,7 @@ kde4_add_ui3_files(mswriteimport_PART_SRCS ImportDialogUI.ui )
 
 kde4_add_plugin(mswriteimport WITH_PREFIX ${mswriteimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} mswriteimport )
+
 
 target_link_libraries(mswriteimport kofficecore)
 
@@ -41,7 +41,7 @@ kde4_automoc(${mswriteexport_PART_SRCS})
 
 kde4_add_plugin(mswriteexport WITH_PREFIX ${mswriteexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} mswriteexport )
+
 
 target_link_libraries(mswriteexport  ${KDE4_KDECORE_LIBS} kowmf kwordexportfilters )
 

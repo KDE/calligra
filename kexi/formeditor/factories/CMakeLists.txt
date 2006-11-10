@@ -11,7 +11,7 @@ kde4_automoc(${kformdesigner_containers_PART_SRCS})
 
 kde4_add_plugin(kformdesigner_containers ${kformdesigner_containers_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformdesigner_containers )
+
 
 target_link_libraries(kformdesigner_containers  ${KDE4_KDECORE_LIBS} kformdesigner )
 
@@ -26,7 +26,7 @@ kde4_automoc(${kformdesigner_stdwidgets_PART_SRCS})
 
 kde4_add_plugin(kformdesigner_stdwidgets ${kformdesigner_stdwidgets_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kformdesigner_stdwidgets )
+
 
 target_link_libraries(kformdesigner_stdwidgets  ${KDE4_KDECORE_LIBS} kformdesigner )
 

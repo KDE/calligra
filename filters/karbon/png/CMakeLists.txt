@@ -11,7 +11,7 @@ kde4_automoc(${karbonpngexport_PART_SRCS})
 
 kde4_add_plugin(karbonpngexport WITH_PREFIX ${karbonpngexport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} karbonpngexport )
+
 
 target_link_libraries(karbonpngexport  ${KDE4_KDECORE_LIBS} kofficeui karboncommon )
 

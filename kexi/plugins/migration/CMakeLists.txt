@@ -11,7 +11,7 @@ kde4_automoc(${kexihandler_migration_PART_SRCS})
 
 kde4_add_plugin(kexihandler_migration ${kexihandler_migration_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kexihandler_migration )
+
 
 target_link_libraries(kexihandler_migration  ${KDE4_KDECORE_LIBS} kexicore keximigrate )
 

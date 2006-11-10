@@ -22,7 +22,7 @@ kde4_automoc(${excelimport_PART_SRCS})
 
 kde4_add_plugin(excelimport WITH_PREFIX ${excelimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} excelimport )
+
 
 target_link_libraries(excelimport kofficecore)
 

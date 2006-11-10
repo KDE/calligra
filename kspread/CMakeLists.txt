@@ -164,7 +164,7 @@ kde4_automoc(${kspreadpart_PART_SRCS})
 
 kde4_add_plugin(kspreadpart WITH_PREFIX ${kspreadpart_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kspreadpart )
+
 
 target_link_libraries(kspreadpart  ${KDE4_KDECORE_LIBS} kspreadcommon )
 

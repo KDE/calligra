@@ -11,7 +11,7 @@ kde4_automoc(${dbaseimport_PART_SRCS})
 
 kde4_add_plugin(dbaseimport WITH_PREFIX ${dbaseimport_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} dbaseimport )
+
 
 target_link_libraries(dbaseimport kofficecore)
 

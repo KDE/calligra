@@ -11,7 +11,7 @@ kde4_automoc(${straight_connector_PART_SRCS})
 
 kde4_add_plugin(straight_connector ${straight_connector_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} straight_connector )
+
 
 target_link_libraries(straight_connector  ${KDE4_KDECORE_LIBS} kopainter kiviocommon )
 
