@@ -33,7 +33,7 @@ class ExampleView : public KoView
 {
     Q_OBJECT
 public:
-    ExampleView( ExamplePart* part, QWidget* parent = 0 );
+    explicit ExampleView( ExamplePart* part, QWidget* parent = 0 );
 
 protected slots:
     void cut();
