@@ -221,7 +221,7 @@ UndoRemoveColumn::UndoRemoveColumn( Doc *_doc, Sheet *_sheet, int _column,int _n
     m_printRepeatColumns = _sheet->print()->printRepeatColumns();
     QRect selection;
     selection.setCoords( _column, 1, _column+m_iNbCol, KS_rowMax );
-    QDomDocument doc = _sheet->saveCellRegion( selection );
+    QDomDocument doc = _sheet->saveCellRegion( Region(selection) );
 
     // Save to buffer
     QTextStream stream( &m_data, QIODevice::WriteOnly );
@@ -330,7 +330,7 @@ UndoRemoveRow::UndoRemoveRow( Doc *_doc, Sheet *_sheet, int _row,int _nbRow) :
 
     QRect selection;
     selection.setCoords( 1, _row, KS_colMax, _row+m_iNbRow );
-    QDomDocument doc = _sheet->saveCellRegion( selection );
+    QDomDocument doc = _sheet->saveCellRegion( Region(selection) );
 
     // Save to buffer
     QTextStream stream( &m_data, QIODevice::WriteOnly );
@@ -1308,8 +1308,8 @@ void UndoSort::undo()
     sheet->updateCell( cell, (*it2).col, (*it2).row );
   }
 
-  sheet->setRegionPaintDirty(m_rctRect);
-  sheet->updateView( m_rctRect );
+  sheet->setRegionPaintDirty(Region(m_rctRect));
+  sheet->updateView( Region(m_rctRect) );
 
   doc()->setUndoLocked( false );
 }
@@ -1359,8 +1359,8 @@ void UndoSort::redo()
       cell->setLayoutDirtyFlag();
       sheet->updateCell( cell, (*it2).col, (*it2).row );
     }
-    sheet->setRegionPaintDirty(m_rctRect);
-    sheet->updateView( m_rctRect );
+    sheet->setRegionPaintDirty(Region(m_rctRect));
+    sheet->updateView( Region(m_rctRect) );
     doc()->setUndoLocked( false );
 }
 
@@ -2102,7 +2102,7 @@ UndoAutofill::~UndoAutofill()
 
 void UndoAutofill::createListCell( QByteArray &list, Sheet* sheet )
 {
-    QDomDocument doc = sheet->saveCellRegion( m_selection );
+    QDomDocument doc = sheet->saveCellRegion( Region(m_selection) );
     // Save to buffer
     QTextStream stream( &list, QIODevice::WriteOnly );
     stream.setCodec( "UTF-8" );
@@ -2120,7 +2120,7 @@ void UndoAutofill::undo()
     doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
 
-    sheet->deleteCells( m_selection );
+    sheet->deleteCells( Region(m_selection) );
     sheet->paste( m_data, m_selection );
     //if(sheet->getAutoCalc()) sheet->recalc();
 
@@ -2140,7 +2140,7 @@ void UndoAutofill::redo()
 
     doc()->emitBeginOperation();
 
-    sheet->deleteCells( m_selection );
+    sheet->deleteCells( Region(m_selection) );
     doc()->setUndoLocked( true );
     sheet->paste( m_dataRedo, m_selection );
     if ( sheet->getAutoCalc() )
@@ -2249,7 +2249,7 @@ UndoRemoveCellRow::UndoRemoveCellRow( Doc *_doc, Sheet *_sheet, const QRect &rec
 
     m_sheetName = _sheet->sheetName();
     m_rect=rect;
-    QDomDocument doc = _sheet->saveCellRegion( m_rect );
+    QDomDocument doc = _sheet->saveCellRegion( Region( m_rect ) );
     // Save to buffer
     QTextStream stream( &m_data, QIODevice::WriteOnly );
     stream.setCodec( "UTF-8" );
@@ -2298,7 +2298,7 @@ UndoRemoveCellCol::UndoRemoveCellCol( Doc *_doc, Sheet *_sheet, const QRect &_re
 
     m_sheetName = _sheet->sheetName();
     m_rect=_rect;
-    QDomDocument doc = _sheet->saveCellRegion( m_rect );
+    QDomDocument doc = _sheet->saveCellRegion( Region( m_rect ) );
     // Save to buffer
     QTextStream stream( &m_data, QIODevice::WriteOnly );
     stream.setCodec( "UTF-8" );
@@ -2550,7 +2550,7 @@ void UndoCellPaste::undo()
 
     if (!b_insert)
     {
-      sheet->deleteCells(range);
+      sheet->deleteCells(Region(range));
     }
   } // for (Region::...
 
@@ -2622,7 +2622,7 @@ void UndoCellPaste::redo()
     {
       if (!b_insert)
       {
-        sheet->deleteCells( range );
+        sheet->deleteCells( Region( range ) );
       }
     }
   } // for (Region::...
@@ -2781,8 +2781,8 @@ void UndoStyleCell::undo()
       {
 	sheet->nonDefaultCell( (*it2).col, (*it2).row);
       }
-    sheet->setRegionPaintDirty(m_selection);
-    sheet->updateView( m_selection );
+    sheet->setRegionPaintDirty(Region(m_selection));
+    sheet->updateView( Region(m_selection) );
     doc()->setUndoLocked( false );
 }
 
@@ -2802,14 +2802,14 @@ void UndoStyleCell::redo()
       {
 	sheet->nonDefaultCell( (*it2).col, (*it2).row);
       }
-    sheet->setRegionPaintDirty(m_selection);
+    sheet->setRegionPaintDirty(Region(m_selection));
     sheet->updateView();
 
     doc()->setUndoLocked( false );
 }
 
 UndoInsertData::UndoInsertData( Doc * _doc, Sheet * _sheet, QRect & _selection )
-    : UndoChangeAreaTextCell( _doc, _sheet, _selection )
+    : UndoChangeAreaTextCell( _doc, _sheet, Region(_selection) )
 {
     name = i18n("Insert Data From Database");
 }

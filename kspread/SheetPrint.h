@@ -43,7 +43,7 @@ class KSPREAD_EXPORT SheetPrint : public QObject
 
 public:
 
-    SheetPrint( Sheet *sheet );
+    explicit SheetPrint( Sheet *sheet );
     ~SheetPrint();
 
     QString saveOasisSheetStyleLayout( KoGenStyles &mainStyles );

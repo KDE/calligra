@@ -61,7 +61,7 @@ public:
    * Creates a new selection with (1,1) as initial location.
    * @param view the view this selection belongs to
    */
-  Selection(View* view);
+  explicit Selection(View* view);
 
   /**
    * Copy Constructor.

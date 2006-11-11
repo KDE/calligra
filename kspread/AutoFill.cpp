@@ -570,7 +570,7 @@ void Sheet::autofill( QRect &src, QRect &dest )
         return;
     }
 
-    setRegionPaintDirty( dest );
+    setRegionPaintDirty( Region(dest) );
 
     doc()->emitBeginOperation();
 

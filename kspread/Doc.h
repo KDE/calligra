@@ -291,6 +291,8 @@ public:
    */
   void emitEndOperation( const Region& region );
 
+  void emitEndOperation( const QRect& rect );
+
   /**
    * \ingroup Operations
    */

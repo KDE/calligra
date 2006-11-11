@@ -351,11 +351,11 @@ void Region::sub(const Region& region)
     if (element->type() == Element::Point)
     {
       Point* point = static_cast<Point*>(element);
-      sub(point->pos());
+      sub(Region(point->pos()));
     }
     else
     {
-      sub(element->rect());
+      sub(Region(element->rect()));
     }
   }
 }

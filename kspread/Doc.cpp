@@ -2156,6 +2156,11 @@ void Doc::emitEndOperation( const Region& region )
   Doc::emitEndOperation();
 }
 
+void Doc::emitEndOperation( const QRect& rect )
+{
+  emitEndOperation( Region( rect ) );
+}
+
 bool Doc::delayCalculation() const
 {
    return d->delayCalculation;

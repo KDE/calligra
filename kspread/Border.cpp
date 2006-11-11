@@ -270,7 +270,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             if ( height != 0.0 )
             {
               // TODO Stefan: replace this
-              UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, rect );
+              UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, Region(rect) );
                 m_pCanvas->d->view->doc()->addCommand( undo );
             }
           }
@@ -335,7 +335,7 @@ void VBorder::equalizeRow( double resize )
   QRect selection( m_pView->selectionInfo()->selection() );
   if ( !m_pCanvas->d->view->doc()->undoLocked() )
   {
-     UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, selection );
+     UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, Region(selection) );
      m_pCanvas->d->view->doc()->addCommand( undo );
   }
   RowFormat *rl;
@@ -903,7 +903,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             if ( width != 0.0 )
             {
               // TODO Stefan: replace this
-                UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, rect );
+                UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, Region(rect) );
                 m_pCanvas->d->view->doc()->addCommand( undo );
             }
           }
@@ -967,7 +967,7 @@ void HBorder::equalizeColumn( double resize )
   QRect selection( m_pView->selectionInfo()->selection() );
   if ( !m_pCanvas->d->view->doc()->undoLocked() )
   {
-      UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, selection );
+      UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, Region(selection) );
       m_pCanvas->d->view->doc()->addCommand( undo );
   }
   ColumnFormat *cl;

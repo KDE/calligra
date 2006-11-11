@@ -176,7 +176,7 @@ void FormatDialog::slotOk()
     if ( !m_view->doc()->undoLocked() )
     {
         QString title=i18n("Change Format");
-        UndoCellFormat *undo = new UndoCellFormat( m_view->doc(), m_view->activeSheet(), r, title);
+        UndoCellFormat *undo = new UndoCellFormat( m_view->doc(), m_view->activeSheet(), Region(r), title);
         m_view->doc()->addCommand( undo );
     }
     //

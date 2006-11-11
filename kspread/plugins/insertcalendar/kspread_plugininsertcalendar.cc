@@ -175,7 +175,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
   //@todo improve calendar size prediction!
   int sizeY = 4 + (int)(0.5*(float)(start.daysTo(end)));
 
-  if (!sheet->areaIsEmpty(QRect(selection,QSize(sizeX,sizeY))))
+  if (!sheet->areaIsEmpty(Region(QRect(selection,QSize(sizeX,sizeY)))))
   {
     if (KMessageBox::No == KMessageBox::warningYesNo(0,i18n("The area where the calendar is inserted is NOT empty, are you sure you want to continue, overwriting existing data? If you choose No the area that would be required for the desired calendar will be selected so you can see what data would be overwritten."),i18n("Warning")))
     {

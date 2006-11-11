@@ -164,7 +164,7 @@ void ChartBinding::cellChanged( Cell* /*changedCell*/ )
   int right = sheet()->rightColumn( chartGeometry.right() );
   int bottom = sheet()->bottomRow( chartGeometry.bottom() );
 
-  sheet()->setRegionPaintDirty( QRect(left,top,right-left,bottom-top) );
+  sheet()->setRegionPaintDirty( Region( QRect(left,top,right-left,bottom-top) ) );
 
     //kDebug(36001) << m_rctDataArea << endl;
 
@@ -2575,8 +2575,8 @@ void Sheet::deleteSelection( Selection* selectionInfo, bool undo )
     }
     else
     {
-  setRegionPaintDirty( range );
-        deleteCells( range );
+        setRegionPaintDirty( Region( range ) );
+        deleteCells( Region( range ) );
     }
   }
     refreshMergedCell();
@@ -2619,7 +2619,7 @@ void Sheet::refreshView( const Region& region )
         }
       }
     }
-    deleteCells( range );
+    deleteCells( Region( range ) );
     tmpRegion.add(tmp);
   }
   emit sig_updateView( this, tmpRegion );
@@ -4995,7 +4995,7 @@ void Sheet::updateCell( Cell */*cell*/, int _column, int _row )
 {
   QRect cellArea(QPoint(_column, _row), QPoint(_column, _row));
 
-  updateCellArea(cellArea);
+  updateCellArea(Region(cellArea));
 }
 
 void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
@@ -5013,7 +5013,7 @@ void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
     {
         //All the cells in this row, or below this row will need to be repainted
         //So add that region of the sheet to the paint dirty list.
-        setRegionPaintDirty( QRect( 0 , _row , KS_colMax , KS_rowMax) );
+        setRegionPaintDirty( Region(QRect( 0 , _row , KS_colMax , KS_rowMax) ) );
 
       emit sig_updateVBorder( this );
       emit sig_updateView( this );
@@ -5034,7 +5034,7 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
 
     //All the cells in this column or to the right of it will need to be repainted if the column
     //has been resized or hidden, so add that region of the sheet to the paint dirty list.
-    setRegionPaintDirty( QRect( _column , 1 , KS_colMax , KS_rowMax) );
+    setRegionPaintDirty( Region( QRect( _column , 1 , KS_colMax , KS_rowMax) ) );
 
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
@@ -5330,7 +5330,7 @@ bool Sheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
 void Sheet::updateLocale()
 {
   doc()->emitBeginOperation(true);
-  setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
+  setRegionPaintDirty( Region( QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax))));
 
   Cell* c = d->cells.firstCell();
   for( ;c; c = c->nextCell() )
@@ -5425,6 +5425,11 @@ void Sheet::setRegionPaintDirty( const Region & region )
   d->paintDirtyList.add(region);
 
   kDebug(36004) << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
+}
+
+void Sheet::setRegionPaintDirty( const QRect& rect )
+{
+  setRegionPaintDirty( Region( rect ) );
 }
 
 void Sheet::clearPaintDirtyData()

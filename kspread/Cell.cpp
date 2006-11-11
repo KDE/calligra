@@ -323,7 +323,7 @@ void Cell::setValue( const Value& value )
   // Value of the cell has changed - trigger necessary actions
   valueChanged ();
 
-  format()->sheet()->setRegionPaintDirty(cellRect());
+  format()->sheet()->setRegionPaintDirty(Region(cellRect()));
 }
 
 void Cell::setCellValue (const Value &value, FormatType fmtType, const QString &txt)
@@ -733,7 +733,7 @@ void Cell::obscure( Cell *cell, bool isForcing )
     d->extra()->obscuringCells.append( cell );
   }
   setFlag(Flag_LayoutDirty);
-  format()->sheet()->setRegionPaintDirty( cellRect() );
+  format()->sheet()->setRegionPaintDirty( Region(cellRect()) );
 }
 
 void Cell::unobscure( Cell * cell )
@@ -741,7 +741,7 @@ void Cell::unobscure( Cell * cell )
   if (d->hasExtra())
     d->extra()->obscuringCells.removeAll( cell );
   setFlag( Flag_LayoutDirty );
-  format()->sheet()->setRegionPaintDirty( cellRect() );
+  format()->sheet()->setRegionPaintDirty( Region(cellRect()) );
 }
 
 QString Cell::encodeFormula( bool _era, int _col, int _row ) const
@@ -1652,7 +1652,7 @@ void Cell::setDisplayText( const QString& _text )
   }
 
   if ( !isLoading )
-    format()->sheet()->doc()->emitEndOperation( QRect( d->column, d->row, 1, 1 ) );
+    format()->sheet()->doc()->emitEndOperation( Region( QRect( d->column, d->row, 1, 1 ) ) );
 }
 
 void Cell::setLink( const QString& link )

@@ -302,12 +302,12 @@ int SheetAdaptor::maxColumn() const
 bool SheetAdaptor::areaHasNoContent(QRect area) const
 {
 	kDebug(36001) << "SheetAdaptor::areaHasNoContent("<<area<<");"<<endl;
-	return m_sheet->areaIsEmpty(area);
+	return m_sheet->areaIsEmpty(Region(area));
 }
 
 bool SheetAdaptor::areaHasNoComments(QRect area) const
 {
-	return m_sheet->areaIsEmpty(area, Sheet::Comment);
+	return m_sheet->areaIsEmpty(Region(area), Sheet::Comment);
 }
 
 int SheetAdaptor::maxRow() const

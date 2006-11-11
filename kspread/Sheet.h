@@ -1290,6 +1290,8 @@ public:
      */
     void setRegionPaintDirty(const Region & region);
 
+    void setRegionPaintDirty(const QRect & rect);
+
     /**
      * \ingroup Painting
      * Remove all records of 'paint dirty' cells

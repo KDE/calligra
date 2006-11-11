@@ -44,9 +44,9 @@ public:
     enum Type { INTEGER, FLOAT, STRING, DAY, SHORTDAY,
       MONTH, SHORTMONTH, FORMULA, OTHER, DATE, TIME };
 
-    AutoFillSequenceItem( int _i );
-    AutoFillSequenceItem( double _d );
-    AutoFillSequenceItem( const QString &_str );
+    explicit AutoFillSequenceItem( int _i );
+    explicit AutoFillSequenceItem( double _d );
+    explicit AutoFillSequenceItem( const QString &_str );
 
     bool getDelta( AutoFillSequenceItem *_seq, double &delta );
 

@@ -135,7 +135,7 @@ protected:
 class UndoInsertRemoveAction : public UndoAction
 {
 public:
-    UndoInsertRemoveAction( Doc *_doc );
+    explicit UndoInsertRemoveAction( Doc *_doc );
     virtual ~UndoInsertRemoveAction();
 
     void saveFormulaReference( Sheet *_sheet, int col, int row, QString & formula );

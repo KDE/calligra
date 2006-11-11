@@ -4430,7 +4430,7 @@ void View::replace()
     {
         QRect region( d->findPos, d->findEnd );
         //TODO create undo/redo for comment
-        UndoChangeAreaTextCell *undo = new UndoChangeAreaTextCell( doc(), d->searchInSheets.currentSheet, region );
+        UndoChangeAreaTextCell *undo = new UndoChangeAreaTextCell( doc(), d->searchInSheets.currentSheet, Region( region ) );
         doc()->addCommand( undo );
     }
 
@@ -7130,7 +7130,7 @@ void View::handleDamages( const QList<Damage*>& damages )
 
             if ( cellDamage->changes() & CellDamage::Appearance )
             {
-                damagedSheet->setRegionPaintDirty( position );
+                damagedSheet->setRegionPaintDirty( Region( position ) );
             }
             if ( cellDamage->changes() & CellDamage::Formula )
             {

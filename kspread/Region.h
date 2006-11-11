@@ -63,7 +63,7 @@ public:
    * @param point the point's location
    * @param sheet the sheet the point belongs to
    */
-  Region(const QPoint& point, Sheet* sheet = 0);
+  explicit Region(const QPoint& point, Sheet* sheet = 0);
 
   /**
    * Constructor.
@@ -71,7 +71,7 @@ public:
    * @param range the range's location
    * @param sheet the sheet the range belongs to
    */
-  Region(const QRect& range, Sheet* sheet = 0);
+  explicit Region(const QRect& range, Sheet* sheet = 0);
 
   /**
    * Constructor.

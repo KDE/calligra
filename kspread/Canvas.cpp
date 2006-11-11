@@ -1149,7 +1149,7 @@ void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
   // The user started the drag in the lower right corner of the marker ?
   if ( d->mouseAction == ResizeCell && !sheet->isProtected() )
   {
-    sheet->mergeCells(selectionInfo->lastRange());
+    sheet->mergeCells(Region(selectionInfo->lastRange()));
     d->view->updateEditWidget();
   }
   else if ( d->mouseAction == AutoFill && !sheet->isProtected() )
@@ -1846,9 +1846,9 @@ void Canvas::dropEvent( QDropEvent * _ev )
       {
         UndoDragDrop * undo
           = new UndoDragDrop(d->view->doc(), sheet, *selectionInfo(),
-                             QRect(col, row,
+                             Region(QRect(col, row,
                                    selectionInfo()->boundingRect().width(),
-                                   selectionInfo()->boundingRect().height()));
+                                   selectionInfo()->boundingRect().height())));
         d->view->doc()->addCommand( undo );
         makeUndo = false;
       }
@@ -2092,7 +2092,7 @@ void Canvas::processEnterKey(QKeyEvent* event)
      direction, not extends the selection
   */
   QRect r( moveDirection( direction, false ) );
-  d->view->doc()->emitEndOperation( r );
+  d->view->doc()->emitEndOperation( Region(r) );
 }
 
 void Canvas::processArrowKey( QKeyEvent *event)
@@ -2147,7 +2147,7 @@ void Canvas::processArrowKey( QKeyEvent *event)
   }
 
   QRect r( moveDirection( direction, makingSelection ) );
-  d->view->doc()->emitEndOperation( r );
+  d->view->doc()->emitEndOperation( Region(r) );
 }
 
 void Canvas::processEscapeKey(QKeyEvent * event)
@@ -2169,7 +2169,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
   event->setAccepted(true); // ?
   QPoint cursor = cursorPos();
 
-  d->view->doc()->emitEndOperation( QRect( cursor, cursor ) );
+  d->view->doc()->emitEndOperation( Region(QRect( cursor, cursor )) );
 
   if ( d->mousePressed /*&& toolEditMode == TEM_MOUSE */)
   {
@@ -2189,7 +2189,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
         oldBoundingRect.translate( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
                             (int)( -yOffset() * doc()->zoomedResolutionY()) );
 
-        sheet->setRegionPaintDirty( oldBoundingRect );
+        sheet->setRegionPaintDirty( Region(oldBoundingRect) );
         repaint( oldBoundingRect );
         repaintObject( d->m_resizeObject );
         d->m_ratio = 0.0;
@@ -2270,7 +2270,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
 
     if ( selectionInfo()->marker() == destination )
     {
-      d->view->doc()->emitEndOperation( QRect( destination, destination ) );
+      d->view->doc()->emitEndOperation( Region(QRect( destination, destination ) ) );
       return false;
     }
 
@@ -2301,7 +2301,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
   if ( d->cellEditor )
   {
     QApplication::sendEvent( d->editWidget, event );
-    d->view->doc()->emitEndOperation( QRect( marker, marker ) );
+    d->view->doc()->emitEndOperation( Region( QRect( marker, marker ) ) );
     return false;
   }
   else
@@ -2319,7 +2319,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
     QPoint destination( col, marker.y() );
     if ( destination == marker )
     {
-      d->view->doc()->emitEndOperation( QRect( destination, destination ) );
+      d->view->doc()->emitEndOperation( Region( QRect( destination, destination ) ) );
       return false;
     }
 
@@ -2348,7 +2348,7 @@ bool Canvas::processPriorKey(QKeyEvent *event)
   QPoint destination(marker.x(), qMax(1, marker.y() - 10));
   if ( destination == marker )
   {
-    d->view->doc()->emitEndOperation( QRect( destination, destination ) );
+    d->view->doc()->emitEndOperation( Region( QRect( destination, destination ) ) );
     return false;
   }
 
@@ -2377,7 +2377,7 @@ bool Canvas::processNextKey(QKeyEvent *event)
 
   if ( marker == destination )
   {
-    d->view->doc()->emitEndOperation( QRect( destination, destination ) );
+    d->view->doc()->emitEndOperation( Region( QRect( destination, destination ) ) );
     return false;
   }
 
@@ -2400,7 +2400,7 @@ void Canvas::processDeleteKey(QKeyEvent* /* event */)
 
   if ( isObjectSelected() )
   {
-    d->view->doc()->emitEndOperation( visibleCells() );
+    d->view->doc()->emitEndOperation( Region( visibleCells() ) );
     d->view->deleteSelectedObjects();
     return;
   }
@@ -2410,7 +2410,7 @@ void Canvas::processDeleteKey(QKeyEvent* /* event */)
 
   QPoint cursor = cursorPos();
 
-  d->view->doc()->emitEndOperation( QRect( cursor, cursor ) );
+  d->view->doc()->emitEndOperation( Region( QRect( cursor, cursor ) ) );
   return;
 }
 
@@ -2424,7 +2424,7 @@ void Canvas::processF2Key(QKeyEvent* /* event */)
 
   QPoint cursor = cursorPos();
 
-  d->view->doc()->emitEndOperation( QRect( cursor, cursor ) );
+  d->view->doc()->emitEndOperation( Region( QRect( cursor, cursor ) ) );
   return;
 }
 
@@ -2440,7 +2440,7 @@ void Canvas::processF4Key(QKeyEvent* event)
   }
   QPoint cursor = cursorPos();
 
-  d->view->doc()->emitEndOperation( QRect( cursor, cursor ) );
+  d->view->doc()->emitEndOperation( Region( QRect( cursor, cursor ) ) );
   return;
 }
 
@@ -2468,7 +2468,7 @@ void Canvas::processOtherKey(QKeyEvent *event)
 
   QPoint cursor = cursorPos();
 
-  d->view->doc()->emitEndOperation( QRect( cursor, cursor ) );
+  d->view->doc()->emitEndOperation( Region( QRect( cursor, cursor ) ) );
 
   return;
 }
@@ -2779,7 +2779,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
 
   if ( marker == destination )
   {
-    d->view->doc()->emitEndOperation( QRect( destination, destination ) );
+    d->view->doc()->emitEndOperation( Region( QRect( destination, destination ) ) );
     return false;
   }
 
@@ -2902,7 +2902,7 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
 
   //most process*Key methods call emitEndOperation, this only gets called in some situations
   // (after some move operations)
-  d->view->doc()->emitEndOperation( visibleCells() );
+  d->view->doc()->emitEndOperation( Region( visibleCells() ) );
   return;
 }
 #if 0
@@ -3027,13 +3027,13 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
         break;
 
        default:
-         d->view->doc()->emitEndOperation( rect );
+         d->view->doc()->emitEndOperation( Region( rect ) );
         return false;
       }
       sheet->emit_updateRow( rw, r );
     }
 
-    d->view->doc()->emitEndOperation( rect );
+    d->view->doc()->emitEndOperation( Region( rect ) );
     return true;
   }
 
@@ -3099,12 +3099,12 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
         break;
 
        default:
-         d->view->doc()->emitEndOperation( rect );
+         d->view->doc()->emitEndOperation( Region( rect ) );
          return false;
       }
       sheet->emit_updateColumn( cw, c );
     }
-    d->view->doc()->emitEndOperation( rect );
+    d->view->doc()->emitEndOperation( Region( rect ) );
     return true;
   }
 

@@ -147,7 +147,7 @@ public:
    * @p style becomes the parent style. In this case, features are NOT SET.
    * @param style The style which features are copied.
    */
-  Style( Style* style );
+  explicit Style( Style* style );
 
   /**
    * Destructor.
