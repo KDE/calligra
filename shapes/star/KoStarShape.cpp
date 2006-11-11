@@ -100,7 +100,7 @@ void KoStarShape::updatePath( const QSizeF &size )
         QPointF cornerPoint = QPointF( m_zoomX * m_radius[cornerType] * cos( radian ), m_zoomY * m_radius[cornerType] * sin( radian ) );
 
         m_points[i]->setPoint( m_center + cornerPoint );
-        if( m_roundness[cornerType] != 0.0f )
+        if( m_roundness[cornerType] > 1e-10 || m_roundness[cornerType] < -1e-10 )
         {
             // normalized cross product to compute tangential vector for handle point
             QPointF tangentVector( cornerPoint.y()/m_radius[cornerType], -cornerPoint.x()/m_radius[cornerType] );
