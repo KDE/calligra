@@ -137,7 +137,7 @@ void ViewIface::nextSheet()
     m_view->nextSheet();
 }
 
-bool ViewIface::showSheet(QString sheetName)
+bool ViewIface::showSheet(const QString& sheetName)
 {
    return m_view->showSheet(sheetName);
 }
@@ -342,7 +342,7 @@ void ViewIface::setSelectionVerticalText(bool enable)
   m_view->verticalText(enable);
 }
 
-void ViewIface::setSelectionComment(QString comment)
+void ViewIface::setSelectionComment(const QString& comment)
 {
   m_view->setSelectionComment(comment);
 }

@@ -209,7 +209,7 @@ KSpread::Sheet* Point::sheet() const
 {
     return _sheet;
 }
-void Point::setSheetName(QString name)
+void Point::setSheetName(const QString& name)
 {
     _sheetName=name;
 }
@@ -723,7 +723,7 @@ KSpread::Sheet* Range::sheet() const
 {
     return _sheet;
 }
-void Range::setSheetName(QString sheetName)
+void Range::setSheetName(const QString& sheetName)
 {
     _sheetName=sheetName;
 }

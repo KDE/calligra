@@ -396,7 +396,7 @@ class EmbeddedPictureObject : public EmbeddedObject
     virtual const char * getOasisElementName() const;
     virtual bool saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const;
 
-    QPixmap changePictureSettings( QPixmap _tmpPixmap );
+    QPixmap changePictureSettings( const QPixmap& _tmpPixmap );
     virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto ) const;
     void loadOasisPictureEffect(KoOasisLoadingContext & context );
     virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;

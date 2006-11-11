@@ -2351,7 +2351,7 @@ int Doc::referenceYear() const
     return d->refYear;
 }
 
-void Doc::setReferenceDate( QDate date )
+void Doc::setReferenceDate( const QDate& date )
 {
     if ( !date.isValid() ) return;
     d->refDate.setDate( date.year(), date.month(), date.day() );

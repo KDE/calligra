@@ -775,7 +775,7 @@ public:
      *
      * \param date the new reference date
      */
-    void setReferenceDate( QDate date );
+    void setReferenceDate( const QDate& date );
 
     /**
      * Returns the reference date all date are stored relative to.

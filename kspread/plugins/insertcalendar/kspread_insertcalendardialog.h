@@ -124,13 +124,13 @@ class KSPREAD_EXPORT InsertCalendarDialog : public QDialog, public Ui::InsertCal
      * Slot for setting the start date in the KDateWidget.
      * Normally this slot is activated by a KDatePicker widget.
      */
-    void setStartDate(QDate);
+    void setStartDate(const QDate&);
 
     /**
      * Slot for setting the end date in the KDateWidget.
      * Normally this slot is activated by a KDatePicker widget.
      */
-    void setEndDate(QDate);
+    void setEndDate(const QDate&);
 
   public:
 

@@ -89,7 +89,7 @@ public:
   /**
   * Sets the name of the sheet which this point lies on.
   */
-  void      setSheetName(QString name);
+  void      setSheetName(const QString& name);
   QString   sheetName() const;
 
   /**
@@ -210,7 +210,7 @@ public:
   Sheet* sheet() const;
 
   /** Sets the name of the sheet associated with this range. */
-  void setSheetName(QString sheetName);
+  void setSheetName(const QString& sheetName);
   QString sheetName() const;
 
   /**

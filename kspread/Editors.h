@@ -196,7 +196,7 @@ public:
     int cursorPosition() const;
     void setCursorPosition(int pos);
 
-    void setText(QString text);
+    void setText(const QString& text);
 
     /** wrapper to KTextEdit::text() */
     QString text() const;

@@ -125,12 +125,12 @@ void InsertCalendarDialog::showEndDatePicker()
   }
 }
 
-void InsertCalendarDialog::setStartDate(QDate date)
+void InsertCalendarDialog::setStartDate(const QDate& date)
 {
   this->m_startDateWidget->setDate(date);
 }
 
-void InsertCalendarDialog::setEndDate(QDate date)
+void InsertCalendarDialog::setEndDate(const QDate& date)
 {
   this->m_endDateWidget->setDate(date);
 }

@@ -1138,7 +1138,7 @@ QString CellEditor::text() const
     return d->textEdit->toPlainText();
 }
 
-void CellEditor::setText(QString text)
+void CellEditor::setText(const QString& text)
 {
     d->textEdit->setPlainText(text);
     //Usability : It is usually more convenient if the cursor is positioned at the end of the text so it can

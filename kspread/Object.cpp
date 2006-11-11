@@ -1369,7 +1369,7 @@ QPixmap EmbeddedPictureObject::getOriginalPixmap()
     return _pixmap;
 }
 
-QPixmap EmbeddedPictureObject::changePictureSettings( QPixmap _tmpPixmap )
+QPixmap EmbeddedPictureObject::changePictureSettings( const QPixmap& _tmpPixmap )
 {
     QImage _tmpImage = _tmpPixmap.toImage();
 

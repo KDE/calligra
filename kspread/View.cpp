@@ -5049,7 +5049,7 @@ void View::addModifyComment()
     updateEditWidget();
 }
 
-void View::setSelectionComment( QString comment )
+void View::setSelectionComment( const QString& comment )
 {
   FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet( d->activeSheet );
