@@ -157,7 +157,7 @@ void KoStarShape::resize( const QSizeF &newSize )
     m_center = computeCenter();
 }
 
-QPointF KoStarShape::computeCenter()
+QPointF KoStarShape::computeCenter() const
 {
     QPointF center( 0, 0 );
     for( uint i = 0; i < m_cornerCount; ++i )
