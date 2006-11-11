@@ -28,7 +28,7 @@ namespace KSpread
 class TableTool : public KoTool
 {
 public:
-  TableTool( KoCanvasBase* canvas );
+  explicit TableTool( KoCanvasBase* canvas );
   ~TableTool();
 
   virtual void paint( QPainter& painter, KoViewConverter& converter );
