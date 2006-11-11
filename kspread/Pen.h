@@ -32,7 +32,7 @@ class KSpreadPen : public QPen
   public:
     KSpreadPen();
     KSpreadPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style);
-    KSpreadPen(const QColor& _color);
+    explicit KSpreadPen(const QColor& _color);
     ~KSpreadPen();
 
     /**

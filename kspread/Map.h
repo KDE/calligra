@@ -60,7 +60,7 @@ public:
   /**
    * Created an empty map.
    */
-  Map(Doc* doc, const char* name = 0);
+  explicit Map(Doc* doc, const char* name = 0);
 
   /**
    * This deletes all sheets contained in this map.

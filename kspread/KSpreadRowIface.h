@@ -33,7 +33,7 @@ class RowIface : virtual public LayoutIface
 {
     K_DCOP
 public:
-    RowIface(RowFormat *_lay);
+    explicit RowIface(RowFormat *_lay);
     virtual void update();
 k_dcop:
     virtual int row();

@@ -41,7 +41,7 @@ class SheetIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    SheetIface( Sheet* );
+    explicit SheetIface( Sheet* );
     ~SheetIface();
 
     bool processDynamic( const DCOPCString& fun, const QByteArray& data,

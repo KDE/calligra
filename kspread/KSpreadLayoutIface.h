@@ -33,7 +33,7 @@ class LayoutIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    LayoutIface(Format *_layout);
+    explicit LayoutIface(Format *_layout);
     virtual void update(){;}
 k_dcop:
 

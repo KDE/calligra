@@ -123,7 +123,7 @@ public:
         EditWidget   ///< the line edit located above the canvas
     };
 
-    Canvas (View *_view);
+    explicit Canvas (View *_view);
     ~Canvas( );
 
     View* view() const;

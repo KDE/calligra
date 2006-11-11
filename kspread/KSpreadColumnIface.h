@@ -32,7 +32,7 @@ class ColumnIface : virtual public LayoutIface
 {
     K_DCOP
 public:
-    ColumnIface(ColumnFormat *_lay);
+    explicit ColumnIface(ColumnFormat *_lay);
     virtual void update();
 k_dcop:
     virtual int column();

@@ -52,7 +52,7 @@ public:
    * \param depManager The DependencyManger which provides
    * the necessary cell dependencies.
    */
-  RecalcManager(DependencyManager* depManager);
+  explicit RecalcManager(DependencyManager* depManager);
 
   /**
    * Destructor.

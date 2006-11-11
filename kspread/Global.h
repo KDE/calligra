@@ -58,7 +58,7 @@ class ElapsedTime
     m_time.start();
   }
 
-  ElapsedTime( QString const & name, OutputMode mode = Default )
+  explicit ElapsedTime( QString const & name, OutputMode mode = Default )
     : m_name( name )
   {
     m_time.start();

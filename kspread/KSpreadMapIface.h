@@ -36,7 +36,7 @@ class MapIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    MapIface( Map* );
+    explicit MapIface( Map* );
 
     virtual bool processDynamic(const DCOPCString &fun, const QByteArray &data,
 				DCOPCString& replyType, QByteArray &replyData);

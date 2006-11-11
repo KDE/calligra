@@ -40,7 +40,7 @@ class DocIface : virtual public KoDocumentIface
 {
     K_DCOP
 public:
-    DocIface( Doc* );
+    explicit DocIface( Doc* );
 
 k_dcop:
     virtual DCOPRef map();

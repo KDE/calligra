@@ -91,7 +91,7 @@ Alphabetical list of commands:
 class UndoWrapperCommand : public KCommand
 {
 public:
-  UndoWrapperCommand( UndoAction* undoAction );
+  explicit UndoWrapperCommand( UndoAction* undoAction );
 
   virtual void execute();
   virtual void unexecute();
@@ -133,7 +133,7 @@ protected:
 class KDE_DEPRECATED DissociateCellCommand : public KCommand
 {
 public:
-  DissociateCellCommand( Cell* cell );
+  explicit DissociateCellCommand( Cell* cell );
 
   virtual void execute();
   virtual void unexecute();
@@ -170,7 +170,7 @@ protected:
 class HideSheetCommand : public KCommand
 {
 public:
-  HideSheetCommand( Sheet* sheet );
+  explicit HideSheetCommand( Sheet* sheet );
 
   virtual void execute();
   virtual void unexecute();
@@ -184,7 +184,7 @@ protected:
 class ShowSheetCommand : public KCommand
 {
 public:
-  ShowSheetCommand( Sheet* sheet );
+  explicit ShowSheetCommand( Sheet* sheet );
 
   virtual void execute();
   virtual void unexecute();
@@ -199,7 +199,7 @@ protected:
 class AddSheetCommand : public KCommand
 {
 public:
-  AddSheetCommand( Sheet* sheet );
+  explicit AddSheetCommand( Sheet* sheet );
 
   virtual void execute();
   virtual void unexecute();
@@ -214,7 +214,7 @@ protected:
 class RemoveSheetCommand : public KCommand
 {
 public:
-  RemoveSheetCommand( Sheet* sheet );
+  explicit RemoveSheetCommand( Sheet* sheet );
 
   virtual void execute();
   virtual void unexecute();
@@ -288,7 +288,7 @@ protected:
 class DefinePrintRangeCommand : public KCommand
 {
 public:
-  DefinePrintRangeCommand( Sheet* sheet );
+  explicit DefinePrintRangeCommand( Sheet* sheet );
 
   virtual void execute();
   virtual void unexecute();
@@ -304,7 +304,7 @@ protected:
 class PaperLayoutCommand : public KCommand
 {
 public:
-  PaperLayoutCommand( Sheet* sheet );
+  explicit PaperLayoutCommand( Sheet* sheet );
 
   virtual void execute();
   virtual void unexecute();
@@ -379,7 +379,7 @@ class ChangeObjectGeometryCommand : public KCommand
 class RemoveObjectCommand : public KCommand
 {
   public:
-    RemoveObjectCommand( EmbeddedObject *_obj, bool _cut = false );
+    explicit RemoveObjectCommand( EmbeddedObject *_obj, bool _cut = false );
     ~RemoveObjectCommand();
 
     virtual void execute();

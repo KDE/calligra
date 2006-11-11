@@ -41,7 +41,7 @@ class ViewIface : public KoViewIface
 {
     K_DCOP
 public:
-    ViewIface( View* );
+    explicit ViewIface( View* );
     ~ViewIface();
 
 k_dcop:

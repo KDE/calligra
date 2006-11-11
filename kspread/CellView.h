@@ -59,7 +59,7 @@ class View;
 class CellView
 {
 public:
-    CellView( Cell* cell );
+    explicit CellView( Cell* cell );
 #ifdef KSPREAD_CELL_WINDOW
     CellView( Sheet* sheet, int col, int row );
 #endif

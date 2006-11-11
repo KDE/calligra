@@ -249,7 +249,7 @@ class KSPREAD_EXPORT Formula
     /**
      * Creates a formula. It must be owned by a sheet, and optionally sheet.
      */
-    Formula (Sheet *sheet,  Cell *cell = 0);
+    explicit Formula (Sheet *sheet,  Cell *cell = 0);
 
     /**
      * Creates a formula that is not owned by any sheet.
