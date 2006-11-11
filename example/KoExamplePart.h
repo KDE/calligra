@@ -30,11 +30,11 @@ public:
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
-    virtual bool loadXML( QIODevice *, const QDomDocument & );
+    virtual bool loadXML( QIODevice *, const KoXmlDocument & );
     virtual QDomDocument saveXML();
 
-    virtual bool loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles,
-                            const QDomDocument & settings, KoStore* store );
+    virtual bool loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
+                            const KoXmlDocument & settings, KoStore* store );
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
 protected:

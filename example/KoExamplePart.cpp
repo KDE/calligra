@@ -34,7 +34,7 @@ KoView* ExamplePart::createViewInstance( QWidget* parent )
     return new ExampleView( this, parent );
 }
 
-bool ExamplePart::loadXML( QIODevice *, const QDomDocument & )
+bool ExamplePart::loadXML( QIODevice *, const KoXmlDocument & )
 {
     // TODO load the document from the QDomDocument
     return true;
@@ -46,8 +46,8 @@ QDomDocument ExamplePart::saveXML()
     return QDomDocument();
 }
 
-bool ExamplePart::loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles,
-		const QDomDocument & settings, KoStore* store )
+bool ExamplePart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
+		const KoXmlDocument & settings, KoStore* store )
 {
     // TODO load the document from the QDomDocument
     Q_UNUSED( doc );
