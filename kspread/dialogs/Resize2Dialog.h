@@ -40,7 +40,7 @@ class ResizeRow: public KDialog
   Q_OBJECT
 
 public:
-  ResizeRow( View* parent, const char* name = 0 );
+  explicit ResizeRow( View* parent, const char* name = 0 );
   double rowHeight;
 
 protected slots:

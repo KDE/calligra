@@ -35,7 +35,7 @@ class LinkDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    LinkDialog( QWidget* parent, const char* name = 0 );
+    explicit LinkDialog( QWidget* parent, const char* name = 0 );
     ~LinkDialog();
     QString text() const;
     QString link() const;

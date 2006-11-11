@@ -36,7 +36,7 @@ class FindOption : public QObject
 {
   Q_OBJECT
  public:
-    FindOption( QWidget *parent);
+    explicit FindOption( QWidget *parent);
     bool searchInAllSheet() const;
 
     enum searchTypeValue { Value, Note};

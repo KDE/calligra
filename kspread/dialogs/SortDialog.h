@@ -59,7 +59,7 @@ class SortDialog : public KDialog
     SortRows=1
   };
   
-  SortDialog( View * parent, const char * name = 0,
+  explicit SortDialog( View * parent, const char * name = 0,
                   bool modal = false );
   ~SortDialog();
  

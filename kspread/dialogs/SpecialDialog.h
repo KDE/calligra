@@ -40,7 +40,7 @@ class SpecialPasteDialog : public KDialog, public Ui::SpecialPasteWidget
 {
     Q_OBJECT
 public:
-    SpecialPasteDialog( View* parent );
+    explicit SpecialPasteDialog( View* parent );
 
 public slots:
     void slotOk();

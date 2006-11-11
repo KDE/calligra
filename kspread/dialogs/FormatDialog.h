@@ -53,7 +53,7 @@ class FormatDialog : public KDialog
 {
     Q_OBJECT
 public:
-  FormatDialog( View* view, const char* name = 0 );
+  explicit FormatDialog( View* view, const char* name = 0 );
   ~FormatDialog();
 
 private slots:

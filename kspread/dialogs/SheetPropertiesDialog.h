@@ -33,7 +33,7 @@ namespace KSpread
 class SheetPropertiesWidget : public QWidget, public Ui::SheetPropertiesWidget
 {
  public:
-  SheetPropertiesWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
+  explicit SheetPropertiesWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
 };
 
 class SheetPropertiesDialog : public KDialog
