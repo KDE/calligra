@@ -214,7 +214,7 @@ double function(const gsl_vector* vector, void *params)
 
   for ( int i = 0; i < parameters->cells.count(); ++i )
   {
-    parameters->cells[i]->setValue( gsl_vector_get(vector, i) );
+    parameters->cells[i]->setValue( KSpread::Value( gsl_vector_get(vector, i) ) );
   }
 
   // TODO check for errors/correct type

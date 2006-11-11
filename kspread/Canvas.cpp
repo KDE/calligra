@@ -143,6 +143,7 @@ Canvas::Canvas(View *view)
   d->xOffset = 0.0;
   d->yOffset = 0.0;
 #ifdef KSPREAD_CELL_WINDOW
+    d->cellWindowRect  = QRect(1,1,0,0);
     d->cellWindowSheet = 0;
 #endif
 
@@ -192,6 +193,8 @@ Canvas::Canvas(View *view)
 
 Canvas::~Canvas()
 {
+    foreach ( QList<CellView*> row, d->cellWindowMatrix )
+        qDeleteAll( row );
 // FIXME Stefan: Still needed?
 //   delete d->scrollTimer;
   delete d->validationInfo;
