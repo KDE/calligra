@@ -325,13 +325,13 @@ Value func_sqrtpi (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ROOTN
 Value func_rootn (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->pow (args[0], calc->div (1, args[1]));
+  return calc->pow (args[0], calc->div (Value(1), args[1]));
 }
 
 // Function: CUR
 Value func_cur (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->pow (args[0], 1.0/3.0);
+  return calc->pow (args[0], Value(1.0/3.0));
 }
 
 // Function: ABS
@@ -349,7 +349,7 @@ Value func_exp (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ceil
 Value func_ceil (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->roundUp (args[0], 0);
+  return calc->roundUp (args[0], Value(0));
 }
 
 // Function: ceiling
@@ -360,13 +360,13 @@ Value func_ceiling (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() == 2)
     res = args[1];
   else
-    res = calc->gequal (number, 0.0) ? 1.0 : -1.0;
+    res = calc->gequal (number, Value(0.0)) ? Value(1.0) : Value(-1.0);
 
   if (calc->isZero(res))
     return Value::errorDIV0();
 
   Value d = calc->div (number, res);
-  if (calc->greater (0, d))
+  if (calc->greater (Value(0), d))
     return Value::errorVALUE();
 
   Value rud = calc->roundDown (d);
@@ -381,7 +381,7 @@ Value func_ceiling (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: floor
 Value func_floor (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->roundDown (args[0], 0);
+  return calc->roundDown (args[0], Value(0));
 }
 
 // Function: ln
@@ -399,7 +399,7 @@ Value func_logn (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: LOG2
 Value func_log2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->log (args[0], 2.0);
+  return calc->log (args[0], Value(2.0));
 }
 
 // Function: LOG10
@@ -429,7 +429,7 @@ Value func_sumif (valVector args, ValueCalc *calc, FuncExtra *)
     sumRange = args[2];
 
   Condition cond;
-  calc->getCond (cond, condition);
+  calc->getCond (cond, Value(condition));
 
   return calc->sumIf (sumRange, checkRange, cond);
 }
@@ -437,13 +437,13 @@ Value func_sumif (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: product
 Value func_product (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->product (args, 0.0);
+  return calc->product (args, Value(0.0));
 }
 
 // Function: kproduct
 Value func_kproduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->product (args, 1.0);
+  return calc->product (args, Value(1.0));
 }
 
 // Function: DIV
@@ -463,7 +463,7 @@ Value func_div (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_sumsq (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value res;
-  calc->arrayWalk (args, res, calc->awFunc ("sumsq"), 0);
+  calc->arrayWalk (args, res, calc->awFunc ("sumsq"), Value(0));
   return res;
 }
 
@@ -519,7 +519,7 @@ Value func_eps (valVector, ValueCalc *calc, FuncExtra *)
 Value func_randexp (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // -1 * d * log (random)
-  return calc->mul (calc->mul (args[0], -1), calc->random());
+  return calc->mul (calc->mul (args[0], Value(-1)), calc->random());
 }
 
 Value func_randbinom (valVector args, ValueCalc *calc, FuncExtra *)
@@ -603,10 +603,10 @@ Value func_randnorm (valVector args, ValueCalc *calc, FuncExtra *)
     x1 = calc->sub (x1, 1);
     x1 = calc->sub (x2, 1);
     w = calc->add (calc->sqr(x1), calc->sqr (x2));
-  } while (calc->gequal (w, 1.0));   // w >= 1.0
+  } while (calc->gequal (w, Value(1.0)));   // w >= 1.0
 
   //sqrt ((-2.0 * log (w)) / w) :
-  w = calc->sqrt (calc->div (calc->mul (-2.0, calc->ln (w)), w));
+  w = calc->sqrt (calc->div (calc->mul (Value(-2.0), calc->ln (w)), w));
   Value res = calc->mul (x1, w);
 
   res = calc->add (calc->mul (res, sigma), mu);  // res*sigma + mu
@@ -615,11 +615,11 @@ Value func_randnorm (valVector args, ValueCalc *calc, FuncExtra *)
 
 Value func_randpoisson (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  if (calc->lower (args[0], 0))
+  if (calc->lower (args[0], Value(0)))
     return Value::errorVALUE();
 
   // taken from Gnumeric...
-  Value x = calc->exp (calc->mul (-1, args[0]));   // e^(-A)
+  Value x = calc->exp (calc->mul (Value(-1), args[0]));   // e^(-A)
   Value r = calc->random ();
   Value t = x;
   int i = 0;
@@ -679,7 +679,7 @@ Value func_factdouble (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_multinomial (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // (a+b+c)! / a!b!c!  (any number of params possible)
-  Value num = 0, den = 1;
+  Value num = Value(0), den = Value(1);
   for (int i = 0; i < args.count(); ++i) {
     num = calc->add (num, args[i]);
     den = calc->mul (den, calc->fact (args[i]));
@@ -706,17 +706,17 @@ Value func_mround (valVector args, ValueCalc *calc, FuncExtra *)
   Value m = args[1];
 
   // signs must be the same
-  if ((calc->greater (d, 0) && calc->lower (m, 0))
-      || (calc->lower (d, 0) && calc->greater (m, 0)))
+  if ((calc->greater (d, Value(0)) && calc->lower (m, Value(0)))
+      || (calc->lower (d, Value(0)) && calc->greater (m, Value(0))))
     return Value::errorVALUE();
 
   int sign = 1;
 
-  if (calc->lower (d, 0))
+  if (calc->lower (d, Value(0)))
   {
     sign = -1;
-    d = calc->mul (d, -1);
-    m = calc->mul (m, -1);
+    d = calc->mul (d, Value(-1));
+    m = calc->mul (m, Value(-1));
   }
 
   // from gnumeric:
@@ -724,7 +724,7 @@ Value func_mround (valVector args, ValueCalc *calc, FuncExtra *)
   Value div = calc->sub (d, mod);
 
   Value result = div;
-  if (calc->greater (mod, calc->div (m, 2)))  // mod > m/2
+  if (calc->greater (mod, calc->div (m, Value(2))))  // mod > m/2
     result = calc->add (result, m);     // result += m
   result = calc->mul (result, sign);    // add the sign
 
@@ -759,14 +759,14 @@ Value func_round (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_even (valVector args, ValueCalc *calc, FuncExtra *)
 {
   const Value value = calc->roundUp (args[0], 0);
-  return calc->isZero( calc->mod(value, 2) ) ? value : calc->add(value, 1);
+  return calc->isZero( calc->mod(value, Value(2)) ) ? value : calc->add(value, Value(1));
 }
 
 // Function: ODD
 Value func_odd (valVector args, ValueCalc *calc, FuncExtra *)
 {
   const Value value = calc->roundUp (args[0], 0);
-  return calc->isZero( calc->mod(value, 2) ) ? calc->add(value, 1) : value;
+  return calc->isZero( calc->mod(value, Value(2)) ) ? calc->add(value, Value(1)) : value;
 }
 
 Value func_trunc (valVector args, ValueCalc *calc, FuncExtra *)
@@ -779,13 +779,13 @@ Value func_trunc (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: COUNT
 Value func_count (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->count (args, false);
+  return Value(calc->count (args, false));
 }
 
 // Function: COUNTA
 Value func_counta (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->count (args);
+  return Value(calc->count (args));
 }
 
 // Function: COUNTBLANK
@@ -813,9 +813,9 @@ Value func_countif (valVector args, ValueCalc *calc, FuncExtra *)
   QString condition = calc->conv()->asString (args[1]).asString();
 
   Condition cond;
-  calc->getCond (cond, condition);
+  calc->getCond (cond, Value(condition));
 
-  return calc->countIf (range, cond);
+  return Value(calc->countIf (range,cond));
 }
 
 // Function: FIB
@@ -830,11 +830,11 @@ Lucas' formula for the nth Fibonacci number F(n) is given by
 
 */
   Value n = args[0];
-  Value s = calc->sqrt (5.0);
+  Value s = calc->sqrt (Value(5.0));
   // u1 = ((1+sqrt(5))/2)^n
-  Value u1 = calc->pow (calc->div (calc->add (1, s), 2), n);
+  Value u1 = calc->pow (calc->div (calc->add (Value(1), s), Value(2)), n);
   // u2 = ((1-sqrt(5))/2)^n
-  Value u2 = calc->pow (calc->div (calc->sub (1, s), 2), n);
+  Value u2 = calc->pow (calc->div (calc->sub (Value(1), s), Value(2)), n);
 
   Value result = calc->div (calc->sub (u1, u2), s);
   return result;
@@ -842,7 +842,7 @@ Lucas' formula for the nth Fibonacci number F(n) is given by
 
 static Value func_gcd_helper(const Value &val, ValueCalc *calc)
 {
-  Value res = 0;
+  Value res(0);
   if (!val.isArray ())
     return val;
   for (uint row = 0; row < val.rows(); ++row)
@@ -859,7 +859,7 @@ static Value func_gcd_helper(const Value &val, ValueCalc *calc)
 // Function: GCD
 Value func_gcd (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value result = 0;
+  Value result = Value(0);
   for (int i = 0; i < args.count(); ++i)
     if (args[i].isArray())
       result = calc->gcd (result, func_gcd_helper (args[i], calc));
@@ -870,7 +870,7 @@ Value func_gcd (valVector args, ValueCalc *calc, FuncExtra *)
 
 static Value func_lcm_helper(const Value &val, ValueCalc *calc)
 {
-  Value res = 0;
+  Value res = Value(0);
   if (!val.isArray ())
     return val;
   for (unsigned int row = 0; row < val.rows(); ++row)
@@ -887,7 +887,7 @@ static Value func_lcm_helper(const Value &val, ValueCalc *calc)
 // Function: lcm
 Value func_lcm (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value result = 0;
+  Value result = Value(0);
   for (int i = 0; i < args.count(); ++i)
     if (args[i].isArray())
       result = calc->lcm (result, func_lcm_helper (args[i], calc));
@@ -904,7 +904,7 @@ Value determinant (ValueCalc *calc, Value matrix)
   // as a note, gnumeric uses LUP decomposition to compute this
 
   // take first row, generate smaller matrices, recursion, multiply
-  Value res = 0.0;
+  Value res = Value(0.0);
   int n = matrix.columns();
   if (n == 1) return matrix.element (0, 0);
   if (n == 2) return calc->sub (
@@ -959,7 +959,7 @@ Value func_mmult (valVector args, ValueCalc *calc, FuncExtra *)
   // perform the multiplication - O(n^3) algorithm
   for (uint row = 0; row < r1; ++row)
     for (uint col = 0; col < c2; ++col) {
-      Value val = 0.0;
+      Value val(0.0);
       for (uint pos = 0; pos < c1; ++pos)
         val = calc->add (val,
             calc->mul (m1.element (pos, row), m2.element (col, pos)));
@@ -1008,10 +1008,10 @@ Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
     res = calc->avg (range, false);
     break;
    case 2: // Count
-    res = calc->count (range, false);
+    res = Value(calc->count (range, false));
     break;
    case 3: // CountA
-    res = calc->count (range);
+    res = Value(calc->count (range));
     break;
    case 4: // MAX
     res = calc->max (range, false);
@@ -1020,7 +1020,7 @@ Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
     res = calc->min (range, false);
     break;
    case 6: // Product
-    res = calc->product (range, 0.0, false);
+    res = calc->product (range, Value(0.0), false);
     break;
    case 7: // StDev
     res = calc->stddev (range, false);

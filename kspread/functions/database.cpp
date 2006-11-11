@@ -413,7 +413,7 @@ Value func_dproduct (valVector args, ValueCalc *calc, FuncExtra *)
   DBConditions conds (calc, database, conditions);
 
   int rows = database.rows() - 1;  // first row contains column names
-  Value res = 1.0;
+  Value res = Value((double)1.0);
   bool got = false;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {

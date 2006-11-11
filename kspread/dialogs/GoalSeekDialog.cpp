@@ -211,7 +211,7 @@ GoalSeekDialog::~GoalSeekDialog()
   if ( !m_restored )
   {
     m_pView->doc()->emitBeginOperation( false );
-    m_sourceCell->setValue(m_oldSource);
+    m_sourceCell->setValue(Value(m_oldSource));
     m_pView->slotUpdateView( m_pView->activeSheet() );
   }
 }
@@ -318,7 +318,7 @@ void GoalSeekDialog::buttonCancelClicked()
   if ( !m_restored )
   {
     m_pView->doc()->emitBeginOperation( false );
-    m_sourceCell->setValue(m_oldSource);
+    m_sourceCell->setValue(Value(m_oldSource));
     m_restored = true;
     m_pView->slotUpdateView( m_pView->activeSheet() );
   }
@@ -377,11 +377,11 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     startA = startB;
     startB = x;
 
-    m_sourceCell->setValue(startA);
+    m_sourceCell->setValue(Value(startA));
     resultA = m_targetCell->value().asFloat() - _goal;
     //    kDebug() << "Target A: " << m_targetCell->value().asFloat() << ", " << m_targetCell->text() << " Calc: " << resultA << endl;
 
-    m_sourceCell->setValue(startB);
+    m_sourceCell->setValue(Value(startB));
     resultB = m_targetCell->value().asFloat() - _goal;
     /*
       kDebug() << "Target B: " << m_targetCell->value().asFloat() << ", " << m_targetCell->text() << " Calc: " << resultB << endl;
@@ -428,7 +428,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
   m_newValueDesc->setText( i18n( "New value:" ) );
   if ( ok )
   {
-    m_sourceCell->setValue( startA );
+    m_sourceCell->setValue( Value(startA ) );
     m_sourceCell->sheet()->setRegionPaintDirty(m_sourceCell->cellRect());
 
     m_resultText->setText( i18n( "Goal seeking with cell %1 found a solution:",
@@ -440,7 +440,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
   else
   {
     // restore the old value
-    m_sourceCell->setValue( m_oldSource );
+    m_sourceCell->setValue( Value( m_oldSource ) );
     m_sourceCell->sheet()->setRegionPaintDirty(m_sourceCell->cellRect());
     m_resultText->setText( i18n( "Goal seeking with cell %1 has found NO solution.",
                                  m_selector3->textEdit()->toPlainText() ) );

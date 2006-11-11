@@ -925,36 +925,36 @@ void awImSum (ValueCalc *c, Value &res, Value val, Value)
 {
   double imag,real,imag1,real1;
   ImHelper (c, res, val, imag, real, imag1, real1);
-  res=func_create_complex(real+real1,imag+imag1);
+  res=Value(func_create_complex(real+real1,imag+imag1));
 }
 
 void awImSub (ValueCalc *c, Value &res, Value val, Value)
 {
   double imag,real,imag1,real1;
   ImHelper (c, res, val, imag, real, imag1, real1);
-  res=func_create_complex(real-real1,imag-imag1);
+  res=Value(func_create_complex(real-real1,imag-imag1));
 }
 
 void awImMul (ValueCalc *c, Value &res, Value val, Value)
 {
   double imag,real,imag1,real1;
   ImHelper (c, res, val, imag, real, imag1, real1);
-  res=func_create_complex(real*real1+(imag*imag1)*-1,real*imag1+real1*imag);
+  res=Value(func_create_complex(real*real1+(imag*imag1)*-1,real*imag1+real1*imag));
 }
 
 void awImDiv (ValueCalc *c, Value &res, Value val, Value)
 {
   double imag,real,imag1,real1;
   ImHelper (c, res, val, imag, real, imag1, real1);
-  res=func_create_complex((real*real1+imag*imag1)/(real1*real1+imag1*imag1),
-      (real1*imag-real*imag1)/(real1*real1+imag1*imag1));
+  res=Value(func_create_complex((real*real1+imag*imag1)/(real1*real1+imag1*imag1),
+      (real1*imag-real*imag1)/(real1*real1+imag1*imag1)));
 }
 
 // Function: IMSUM
 Value func_imsum (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result;
-  calc->arrayWalk (args, result, awImSum, 0);
+  calc->arrayWalk (args, result, awImSum, Value(0));
 
   bool ok;
   QString res = calc->conv()->asString (result).asString();
@@ -968,7 +968,7 @@ Value func_imsum (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_imsub (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result;
-  calc->arrayWalk (args, result, awImSub, 0);
+  calc->arrayWalk (args, result, awImSub, Value(0));
 
   bool ok;
   QString res = calc->conv()->asString (result).asString();
@@ -982,7 +982,7 @@ Value func_imsub (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_improduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result;
-  calc->arrayWalk (args, result, awImMul, 0);
+  calc->arrayWalk (args, result, awImMul, Value(0));
 
   bool ok;
   QString res = calc->conv()->asString (result).asString();
@@ -996,7 +996,7 @@ Value func_improduct (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_imdiv (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result;
-  calc->arrayWalk (args, result, awImDiv, 0);
+  calc->arrayWalk (args, result, awImDiv, Value(0));
 
   bool ok;
   QString res = calc->conv()->asString (result).asString();
@@ -1215,7 +1215,7 @@ Value func_impower (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_delta (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value val1 = args[0];
-  Value val2 = 0.0;
+  Value val2 = Value(0.0);
   if (args.count() == 2)
     val2 = args[1];
 
@@ -1242,7 +1242,7 @@ Value func_erfc (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_gestep (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value x = args[0];
-  Value y = 0.0;
+  Value y = Value(0.0);
   if (args.count() == 2)
     y = args[1];
 

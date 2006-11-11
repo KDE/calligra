@@ -186,8 +186,8 @@ static Value getPay (ValueCalc *calc, Value rate,
   fvifa = calc->div (calc->sub (pvif, 1), rate);
 
   // ( -pv * pvif - fv ) / ( ( 1.0 + rate * type ) * fvifa );
-  Value val1 = calc->sub (calc->mul (calc->mul (-1, pv), pvif), fv);
-  Value val2 = calc->mul (calc->add (1.0, calc->mul (rate, type)),
+  Value val1 = calc->sub (calc->mul (calc->mul (Value(-1), pv), pvif), fv);
+  Value val2 = calc->mul (calc->add (Value(1.0), calc->mul (rate, type)),
       fvifa);
   return calc->div (val1, val2);
 }
@@ -200,7 +200,7 @@ static Value getPrinc (ValueCalc *calc, Value start,
   // val2 = start * val1
   Value val2 = calc->mul (start, val1);
   // val3 = pay * ( ( val1 - 1 ) / rate )
-  Value val3 = calc->mul (pay, calc->div (calc->sub (val1, 1), rate));
+  Value val3 = calc->mul (pay, calc->div (calc->sub (val1, Value(1)), rate));
   // result = val2 + val3
   return calc->add (val2, val3);
 }
@@ -260,7 +260,7 @@ Value func_accrint (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() == 7)
     basis = calc->conv()->asInteger (args[6]).asInteger();
 
-  if ( basis < 0 || basis > 4 || (calc->isZero (frequency)) ||
+  if ( basis < 0 || basis > 4 || (calc->isZero (Value(frequency))) ||
       (12 % frequency != 0))
     return Value::errorVALUE();
 
@@ -271,7 +271,7 @@ Value func_accrint (valVector args, ValueCalc *calc, FuncExtra *)
   double d = daysBetweenDates (maturity, settlement, basis);
   double y = daysPerYear (maturity, basis);
 
-  if ( d < 0 || y <= 0 || calc->lower (par, 0) || calc->lower (rate, 0) ||
+  if ( d < 0 || y <= 0 || calc->lower (par, Value(0)) || calc->lower (rate, Value(0)) ||
       calc->isZero (rate))
     return Value::errorVALUE();
 
@@ -288,7 +288,7 @@ Value func_accrintm (valVector args, ValueCalc *calc, FuncExtra *)
   QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
   Value rate = args[2];
 
-  Value par = 1000;
+  Value par = Value(1000);
   int basis = 0;
   if (args.count() > 3)
     par = args[3];
@@ -299,7 +299,7 @@ Value func_accrintm (valVector args, ValueCalc *calc, FuncExtra *)
   double y = daysPerYear (issue, basis);
 
   if (d < 0 || y <= 0 || calc->isZero (par) || calc->isZero (rate) ||
-      calc->lower (par, 0) || calc->lower (rate, 0) || basis < 0 || basis > 4)
+      calc->lower (par, Value(0)) || calc->lower (rate, Value(0)) || basis < 0 || basis > 4)
     return Value::errorVALUE();
 
   // par*date * d/y
@@ -323,7 +323,7 @@ Value func_disc (valVector args, ValueCalc *calc, FuncExtra *)
   double d = daysBetweenDates (settlement, maturity, basis);
 
   if ( y <= 0 || d <= 0 || basis < 0 || basis > 4 || calc->isZero (redemp) )
-    return false;
+    return Value(false);
 
   // (redemp - par) / redemp * (y / d)
   return calc->mul (calc->div (calc->sub (redemp, par), redemp), y / d);
@@ -340,13 +340,13 @@ Value func_tbillprice (valVector args, ValueCalc *calc, FuncExtra *)
 
   double days = settlement.daysTo( maturity );
 
-  if (settlement > maturity || calc->lower (discount, 0) || days > 265)
+  if (settlement > maturity || calc->lower (discount, Value(0)) || days > 265)
     return Value::errorVALUE();
 
   // (discount * days) / 360.0
   Value val = calc->div (calc->mul (discount, days), 360.0);
   // 100 * (1.0 - val);
-  return calc->mul (calc->sub (1.0, val), 100);
+  return calc->mul (calc->sub (Value(1.0), val), Value(100));
 }
 
 // Function: TBILLYIELD
@@ -359,12 +359,12 @@ Value func_tbillyield (valVector args, ValueCalc *calc, FuncExtra *)
 
   double days = settlement.daysTo( maturity );
 
-  if (settlement > maturity || calc->isZero (rate) || calc->lower (rate, 0)
+  if (settlement > maturity || calc->isZero (rate) || calc->lower (rate, Value(0))
       || days > 265)
     return Value::errorVALUE();
 
   // (100.0 - rate) / rate * (360.0 / days);
-  return calc->mul (calc->div (calc->sub (100.0, rate), rate), 360.0 / days);
+  return calc->mul (calc->div (calc->sub (Value(100.0), rate), rate), 360.0 / days);
 }
 
 // Function: TBILLEQ
@@ -377,16 +377,16 @@ Value func_tbilleq (valVector args, ValueCalc *calc, FuncExtra *)
 
   double days = settlement.daysTo( maturity );
 
-  if (settlement > maturity || calc->lower (discount, 0) || days > 265)
+  if (settlement > maturity || calc->lower (discount, Value(0)) || days > 265)
     return Value::errorVALUE();
 
   // 360 - discount*days
-  Value divisor = calc->sub (360.0, calc->mul (discount, days));
+  Value divisor = calc->sub (Value(360.0), calc->mul (discount, days));
   if (calc->isZero (divisor))
     return Value::errorVALUE();
 
   // 365.0 * discount / divisor
-  return calc->mul (calc->div (discount, divisor), 356.0);
+  return calc->mul (calc->div (discount, divisor), Value(356.0));
 }
 
 // Function: RECEIVED
@@ -407,10 +407,10 @@ Value func_received (valVector args, ValueCalc *calc, FuncExtra *)
   double y = daysPerYear( settlement, basis );
 
   if ( d <= 0 || y <= 0 || basis < 0 || basis > 4 )
-    return false;
+    return Value(false);
 
   // 1.0 - ( discount * d / y )
-  Value x = calc->sub (1.0, (calc->mul (discount, d / y)));
+  Value x = calc->sub (Value(1.0), (calc->mul (discount, d / y)));
 
   if (calc->isZero (x))
     return Value::errorVALUE();
@@ -423,14 +423,14 @@ Value func_dollarde (valVector args, ValueCalc *calc, FuncExtra *)
   Value d = args[0];
   Value f = args[1];
 
-  if (!calc->greater (f, 0))
+  if (!calc->greater (f, Value(0)))
     return Value::errorVALUE();
 
   Value tmp = f;
   int n = 0;
-  while (calc->greater (tmp, 0))
+  while (calc->greater (tmp, Value(0)))
   {
-    tmp = calc->div (tmp, 10);
+    tmp = calc->div (tmp, Value(10));
     ++n;
   }
 
@@ -447,12 +447,12 @@ Value func_dollarfr (valVector args, ValueCalc *calc, FuncExtra *)
   Value d = args[0];
   Value f = args[1];
 
-  if (!calc->greater (f, 0))
+  if (!calc->greater (f, Value(0)))
     return Value::errorVALUE();
 
   Value tmp = f;
   int n = 0;
-  while (calc->greater (tmp, 0))
+  while (calc->greater (tmp, Value(0)))
   {
     tmp = calc->div (tmp, 10);
     ++n;
@@ -462,7 +462,7 @@ Value func_dollarfr (valVector args, ValueCalc *calc, FuncExtra *)
   Value r = calc->sub (d, fl);
 
   // fl + ((r * f) / pow (10.0, n));
-  return calc->add (fl, calc->div (calc->mul (r, f), pow (10.0, n)));
+  return calc->add (fl, calc->div (calc->mul (r, f), Value(pow (10.0, n))));
 }
 
 /// *** TODO continue here ***
@@ -498,17 +498,17 @@ Value func_duration (valVector args, ValueCalc *calc, FuncExtra *)
   Value pv   = args[1];
   Value fv   = args[2];
 
-  if (!calc->greater (rate, 0.0))
+  if (!calc->greater (rate, Value(0.0)))
     return Value::errorVALUE();
   if (calc->isZero (fv) || calc->isZero (pv))
     return Value::errorDIV0();
 
-  if (calc->lower (calc->div (fv, pv), 0))
+  if (calc->lower (calc->div (fv, pv), Value(0)))
     return Value::errorVALUE();
 
   // log(fv / pv) / log(1.0 + rate)
   return calc->div (calc->ln (calc->div (fv, pv)),
-      calc->ln (calc->add (rate, 1.0)));
+      calc->ln (calc->add (rate, Value(1.0))));
 }
 
 // Function: PMT
@@ -517,8 +517,8 @@ Value func_pmt (valVector args, ValueCalc *calc, FuncExtra *)
   Value rate = args[0];
   Value nper = args[1];
   Value pv   = args[2];
-  Value fv = 0.0;
-  Value type = 0;
+  Value fv = Value(0.0);
+  Value type = Value(0);
   if (args.count() > 3) fv = args[3];
   if (args.count() == 5) type = args[4];
 
@@ -531,12 +531,12 @@ Value func_nper (valVector args, ValueCalc *calc, FuncExtra *)
   Value rate = args[0];
   Value pmt  = args[1];
   Value pv   = args[2];
-  Value fv = 0.0;
-  Value type = 0;
+  Value fv = Value(0.0);
+  Value type = Value(0);
   if (args.count() > 3) fv = args[3];
   if (args.count() == 5) type = args[4];
 
-  if (!calc->greater (rate, 0.0))
+  if (!calc->greater (rate, Value(0.0)))
     return Value::errorVALUE();
 
   // taken from Gnumeric
@@ -549,11 +549,11 @@ Value func_nper (valVector args, ValueCalc *calc, FuncExtra *)
   Value d2 = calc->add (calc->mul (pmt, v), calc->mul (pv, rate));
   Value res = calc->div (d1, d2);
 
-  if (!calc->greater (res, 0.0))  // res must be >0
+  if (!calc->greater (res, Value(0.0)))  // res must be >0
     return Value::errorVALUE();
 
   // ln (res) / ln (rate + 1.0)
-  return calc->div (calc->ln (res), calc->ln (calc->add (rate, 1.0)));
+  return calc->div (calc->ln (res), calc->ln (calc->add (rate, Value(1.0))));
 }
 
 // Function: ISPMT
@@ -564,11 +564,11 @@ Value func_ispmt (valVector args, ValueCalc *calc, FuncExtra *)
   Value nper = args[2];
   Value pv   = args[3];
 
-  if (calc->lower (per, 1) || calc->greater (per, nper))
+  if (calc->lower (per, Value(1)) || calc->greater (per, nper))
     return Value::errorVALUE();
 
   // d = -pv * rate
-  Value d = calc->mul (calc->mul (pv, -1), rate);
+  Value d = calc->mul (calc->mul (pv, Value(-1)), rate);
 
   // d - (d / nper * per)
   return calc->sub (d, calc->mul (calc->div (d, nper), per));
@@ -582,16 +582,16 @@ Value func_ipmt (valVector args, ValueCalc *calc, FuncExtra *)
   Value nper = args[2];
   Value pv   = args[3];
 
-  Value fv = 0.0;
-  Value type = 0;
+  Value fv = Value(0.0);
+  Value type = Value(0);
   if (args.count() > 4) fv = args[4];
   if (args.count() == 6) type = args[5];
 
   Value payment = getPay (calc, rate, nper, pv, fv, type);
-  Value ineg = getPrinc (calc, pv, payment, rate, calc->sub (per, 1));
+  Value ineg = getPrinc (calc, pv, payment, rate, calc->sub (per, Value(1)));
 
   // -ineg * rate
-  return calc->mul (calc->mul (ineg, -1), rate);
+  return calc->mul (calc->mul (ineg, Value(-1)), rate);
 }
 
 // Function: PPMT
@@ -615,8 +615,8 @@ Type (optional) defines the due date. F=1 for payment at the beginning of a peri
   Value per  = args[1];
   Value nper = args[2];
   Value pv   = args[3];
-  Value fv = 0.0;
-  Value type = 0;
+  Value fv = Value(0.0);
+  Value type = Value(0);
   if (args.count() > 4) fv = args[4];
   if (args.count() == 6) type = args[5];
 
@@ -688,8 +688,8 @@ Value func_pv_annuity (valVector args, ValueCalc *calc, FuncExtra *)
   // recpow = 1 / pow (1 + interest, periods)
   // result = amount * (1 - recpow) / interest;
   Value recpow;
-  recpow = calc->div (1, calc->pow (calc->add (interest, 1), periods));
-  return calc->mul (amount, calc->div (calc->sub (1, recpow), interest));
+  recpow = calc->div (Value(1), calc->pow (calc->add (interest, Value(1)), periods));
+  return calc->mul (amount, calc->div (calc->sub (Value(1), recpow), interest));
 }
 
 // Function: FV_annnuity
@@ -753,8 +753,8 @@ Value func_level_coupon (valVector args, ValueCalc *calc, FuncExtra *)
   // result = coupon * pv_annuity + face / pw
   coupon = calc->mul (coupon_rate, calc->div (face, coupon_year));
   interest = calc->div (market_rate, coupon_year);
-  pw = calc->pow (calc->add (interest, 1), calc->mul (years, coupon_year));
-  pv_annuity = calc->div (calc->sub (1, calc->div (1, pw)), interest);
+  pw = calc->pow (calc->add (interest, Value(1)), calc->mul (years, coupon_year));
+  pv_annuity = calc->div (calc->sub (Value(1), calc->div (Value(1), pw)), interest);
   return calc->add (calc->mul (coupon, pv_annuity), calc->div (face, pw));
 }
 
@@ -770,8 +770,8 @@ Value func_nominal (valVector args, ValueCalc *calc, FuncExtra *)
   // pw = pow (effective + 1, 1 / periods)
   // result = periods * (pw - 1);
   Value pw;
-  pw = calc->pow (calc->add (effective, 1), calc->div (1, periods));
-  return calc->mul (periods, calc->sub (pw, 1));
+  pw = calc->pow (calc->add (effective, Value(1)), calc->div (Value(1), periods));
+  return calc->mul (periods, calc->sub (pw, Value(1)));
 }
 
 // Function: SLN
@@ -783,7 +783,7 @@ Value func_sln (valVector args, ValueCalc *calc, FuncExtra *)
   Value life = args[2];
 
   // sentinel check
-  if (!calc->greater (life, 0.0))
+  if (!calc->greater (life, Value(0.0)))
     return Value::errorVALUE();
 
   // (cost - salvage_value) / life
@@ -800,7 +800,7 @@ Value func_syd (valVector args, ValueCalc *calc, FuncExtra *)
   Value period = args[3];
 
   // sentinel check
-  if (!calc->greater (life, 0.0))
+  if (!calc->greater (life, Value(0.0)))
     return Value::errorVALUE();
 
   // v1 = cost - salvage_value
@@ -833,7 +833,7 @@ Value func_db (valVector args, ValueCalc *calc, FuncExtra *)
   if (cost == 0 || life <= 0.0)
     return Value::errorVALUE ();
 
-  if (calc->lower (calc->div (salvage, cost), 0))
+  if (calc->lower (calc->div (Value(salvage), Value(cost)), Value(0)))
     return Value::errorVALUE ();
 
   double rate = 1000 * (1 - pow( (salvage/cost), (1/life) ));

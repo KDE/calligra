@@ -168,7 +168,7 @@ Value ValueConverter::asString (const Value &value) const
   int pos;
   switch (value.type()) {
     case Value::Empty:
-      val = QString();
+      val = Value(QString());
     break;
     case Value::Boolean:
       val.setValue (value.asBoolean() ? ki18n("True").toString(parser->locale()) :
@@ -178,25 +178,25 @@ Value ValueConverter::asString (const Value &value) const
     {
       fmt = value.format();
       if (fmt == Value::fmt_Percent)
-        val = QString::number (value.asInteger() * 100) + " %";
+        val = Value(QString::number (value.asInteger() * 100) + " %");
       else if (fmt == Value::fmt_DateTime)
-        val = parser->locale()->formatDateTime (value.asDateTime( doc() ));
+        val = Value(parser->locale()->formatDateTime (value.asDateTime( doc() )));
       else if (fmt == Value::fmt_Date)
-        val = parser->locale()->formatDate (value.asDate( doc() ));
+        val = Value(parser->locale()->formatDate (value.asDate( doc() )));
       else if (fmt == Value::fmt_Time)
-        val = parser->locale()->formatTime (value.asTime( doc() ));
+        val = Value(parser->locale()->formatTime (value.asTime( doc() )));
       else
-        val = QString::number (value.asInteger());
+        val = Value(QString::number (value.asInteger()));
     }
     break;
     case Value::Float:
       fmt = value.format();
       if (fmt == Value::fmt_DateTime)
-        val = parser->locale()->formatDateTime (value.asDateTime( doc() ));
+        val = Value(parser->locale()->formatDateTime (value.asDateTime( doc() )));
       else if (fmt == Value::fmt_Date)
-        val = parser->locale()->formatDate (value.asDate( doc() ), true);
+        val = Value(parser->locale()->formatDate (value.asDate( doc() ), true));
       else if (fmt == Value::fmt_Time)
-        val = parser->locale()->formatTime (value.asTime( doc() ));
+        val = Value(parser->locale()->formatTime (value.asTime( doc() )));
       else
       {
         //convert the number, change decimal point from English to local
@@ -213,7 +213,7 @@ Value ValueConverter::asString (const Value &value) const
       val = value;
     break;
     case Value::Array:
-      val = asString (value.element (0, 0));
+      val = Value(asString (value.element (0, 0)));
     break;
     case Value::CellRange:
       /* NOTHING */

@@ -1084,8 +1084,8 @@ void Formula::compile( const Tokens& tokens ) const
             syntaxStack.pop();
             syntaxStack.push( arg );
             const int rowCount = argStack.pop();
-            d->constants.append( (int)argCount ); // cols
-            d->constants.append( rowCount );
+            d->constants.append( Value( (int)argCount ) ); // cols
+            d->constants.append( Value( rowCount ) );
             d->codes.append( Opcode( Opcode::Array, d->constants.count()-2 ) );
             argCount = argStack.empty() ? 0 : argStack.pop();
           }

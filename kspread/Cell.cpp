@@ -1973,7 +1973,7 @@ void Cell::convertToDouble ()
   if (isDefault())
     return;
 
-  setValue (getDouble ());
+  setValue (Value(getDouble ()));
 }
 
 void Cell::convertToPercent ()
@@ -1981,7 +1981,7 @@ void Cell::convertToPercent ()
   if (isDefault())
     return;
 
-  setValue (getDouble ());
+  setValue (Value(getDouble ()));
   d->value.setFormat (Value::fmt_Percent);
 }
 
@@ -1990,7 +1990,7 @@ void Cell::convertToMoney ()
   if (isDefault())
     return;
 
-  setValue (getDouble ());
+  setValue (Value(getDouble ()));
   d->value.setFormat (Value::fmt_Money);
   format()->setPrecision (locale()->fracDigits());
 }
@@ -2004,7 +2004,7 @@ void Cell::convertToTime ()
   if (isDefault() || isEmpty())
     return;
 
-  setValue (getDouble ());
+  setValue (Value(getDouble ()));
   QTime time = value().asDateTime( sheet()->doc() ).time();
   int msec = (int) ( (value().asFloat() - (int) value().asFloat()) * 1000 );
   time = time.addMSecs( msec );
@@ -2020,7 +2020,7 @@ void Cell::convertToDate ()
   if (isDefault() || isEmpty())
     return;
 
-  setValue (getDouble ());
+  setValue (Value(getDouble ()));
 
   //TODO: why did we call setValue(), when we override it here?
   QDate date(1900, 1, 1);
@@ -2588,7 +2588,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
             if( ( val == "true" ) || ( val == "false" ) )
             {
                 bool value = val == "true";
-                setCellValue( value );
+                setCellValue( Value(value) );
             }
         }
 
@@ -2598,7 +2598,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
             bool ok = false;
             double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if( ok )
-                setCellValue( value );
+                setCellValue( Value(value) );
 
             if ( !isFormula && d->strText.isEmpty())
             {
@@ -2614,7 +2614,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
             double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if( ok )
             {
-                setCellValue( value, Money_format );
+                setCellValue( Value(value), Money_format );
 
                 if (element.hasAttributeNS( KoXmlNS::office, "currency" ) )
                 {
@@ -2632,7 +2632,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
                 Value value;
                 value.setValue(percent);
                 value.setFormat (Value::fmt_Percent);
-                setCellValue( value );
+                setCellValue( Value(value) );
 
                 if ( !isFormula && d->strText.isEmpty())
                 {
@@ -2730,7 +2730,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
             {
                 //if there is not string-value entry don't overwrite value stored into <text:p>
                 value = element.attributeNS( KoXmlNS::office, "string-value", QString::null );
-                setCellValue( value );
+                setCellValue( Value(value) );
             }
             format()->setFormatType (Text_format);
         }
@@ -2824,7 +2824,7 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
                     QString link = textA.attributeNS( KoXmlNS::xlink, "href", QString::null );
                     cellText = textA.text();
                     setCellText( cellText );
-                    setValue( cellText );
+                    setValue( Value(cellText) );
                     if ( (!link.isEmpty()) && (link[0]=='#') )
                         link=link.remove( 0, 1 );
                     setLink( link );
@@ -2836,7 +2836,7 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
     if (!cellText.isNull())
     {
         setCellText( cellText );
-        setValue( cellText );
+        setValue( Value(cellText) );
     }
 
     //Enable word wrapping if multiple lines of text have been found.
@@ -3467,9 +3467,9 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         if( dataType == "Bool" )
         {
           if ( t == "false" )
-            setValue( false );
+            setValue( Value(false) );
           else if ( t == "true" )
-            setValue( true );
+            setValue( Value(true) );
           else
             clear = false;
         }
@@ -3478,7 +3478,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
           bool ok = false;
           double dd = t.toDouble( &ok );
           if ( ok )
-            setValue ( dd );
+            setValue ( Value(dd) );
           else
             clear = false;
         }
@@ -3487,7 +3487,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
           bool ok = false;
           double dd = t.toDouble( &ok );
           if ( ok )
-            setValue ( dd );
+            setValue ( Value(dd) );
           else
           {
             int pos   = t.indexOf( '/' );
@@ -3507,7 +3507,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
           bool ok = false;
           double dd = t.toDouble( &ok );
           if ( ok )
-            setCellValue( dd );
+            setCellValue( Value(dd) );
           else
           {
             int hours   = -1;
@@ -3528,7 +3528,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         }
         else
         {
-          setValue( t );
+          setValue( Value(t) );
         }
 
         // if ( clear )
@@ -3604,7 +3604,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
       if( !qml_link.isEmpty() )
         d->extra()->link = qml_link;
       d->strText = qml_text;
-      setValue( d->strText );
+      setValue( Value(d->strText) );
   }
   else
   {
@@ -3640,7 +3640,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
       if( dataType == "Bool" )
       {
         bool val = (t.toLower() == "true");
-        setCellValue (val);
+        setCellValue (Value(val));
       }
 
       // number ?
@@ -3725,7 +3725,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
       {
         // Set the cell's text
         d->strText = pasteOperation( t, d->strText, op );
-        setValue( d->strText );
+        setValue( Value(d->strText) );
       }
     }
   }

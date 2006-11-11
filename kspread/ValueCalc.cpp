@@ -853,7 +853,7 @@ Value ValueCalc::tg (const Value &number)
 
 Value ValueCalc::cotg (const Value &number)
 {
-  Value res = Value (div (1, ::tan (converter->asFloat (number).asFloat())));
+  Value res = Value (div (Value(1), Value(::tan (converter->asFloat (number).asFloat()))));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -1034,7 +1034,7 @@ Value ValueCalc::gauss (Value xx)
     nVal = taylor_helper(t4, 20, (xAbs - 4.0));
   else
   {
-    double phiAbs = converter->asFloat (phi (xAbs)).asFloat();
+    double phiAbs = converter->asFloat (phi (Value(xAbs))).asFloat();
     nVal = 0.5 + phiAbs * taylor_helper(asympt, 4, 1.0 / (xAbs * xAbs)) / xAbs;
   }
 
@@ -1339,11 +1339,11 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha,
 Value ValueCalc::GetBeta (Value _x, Value _alpha,
     Value _beta)
 {
-  if (equal (_beta, 1.0))
+  if (equal (_beta, Value(1.0)))
     return pow (_x, _alpha);
-  else if (equal (_alpha, 1.0))
+  else if (equal (_alpha, Value(1.0)))
     // 1.0 - pow (1.0-_x, _beta)
-    return sub (1.0, pow (sub (1.0, _x), _beta));
+    return sub (Value(1.0), pow (sub (Value(1.0), _x), _beta));
 
   double x = converter->asFloat (_x).asFloat();
   double alpha = converter->asFloat (_alpha).asFloat();
@@ -1402,8 +1402,8 @@ Value ValueCalc::GetBeta (Value _x, Value _alpha,
     if (fB < fEps)
       b1 = 1.0E30;
     else
-      b1 = ::exp(GetLogGamma(fA).asFloat()+GetLogGamma(fB).asFloat()-
-          GetLogGamma(fA+fB).asFloat());
+      b1 = ::exp(GetLogGamma(Value(fA)).asFloat()+GetLogGamma(Value(fB)).asFloat()-
+          GetLogGamma(Value(fA+fB)).asFloat());
 
     cf *= ::pow(x, fA)*::pow(1.0-x,fB)/(fA*b1);
   }
@@ -1696,14 +1696,14 @@ void ValueCalc::registerAwFunc (const QString &name, arrayWalkFunc func)
 Value ValueCalc::sum (const Value &range, bool full)
 {
   Value res;
-  arrayWalk (range, res, awFunc (full ? "suma" : "sum"), 0);
+  arrayWalk (range, res, awFunc (full ? "suma" : "sum"), Value(0));
   return res;
 }
 
 Value ValueCalc::sum (QVector<Value> range, bool full)
 {
   Value res;
-  arrayWalk (range, res, awFunc (full ? "suma" : "sum"), 0);
+  arrayWalk (range, res, awFunc (full ? "suma" : "sum"), Value(0));
   return res;
 }
 
@@ -1711,7 +1711,7 @@ Value ValueCalc::sum (QVector<Value> range, bool full)
 Value ValueCalc::sumsq (const Value &range, bool full)
 {
   Value res;
-  arrayWalk (range, res, awFunc (full ? "sumsqa" : "sumsq"), 0);
+  arrayWalk (range, res, awFunc (full ? "sumsqa" : "sumsq"), Value(0));
   return res;
 }
 
@@ -1750,15 +1750,15 @@ Value ValueCalc::sumIf (const Value &range,
 
 int ValueCalc::count (const Value &range, bool full)
 {
-  Value res = 0;
-  arrayWalk (range, res, awFunc (full ? "counta" : "count"), 0);
+  Value res(0);
+  arrayWalk (range, res, awFunc (full ? "counta" : "count"), Value(0));
   return converter->asInteger (res).asInteger ();
 }
 
 int ValueCalc::count (QVector<Value> range, bool full)
 {
-  Value res = 0;
-  arrayWalk (range, res, awFunc (full ? "counta" : "count"), 0);
+  Value res(0);
+  arrayWalk (range, res, awFunc (full ? "counta" : "count"), Value(0));
   return converter->asInteger (res).asInteger ();
 }
 
@@ -1809,28 +1809,28 @@ Value ValueCalc::avg (QVector<Value> range, bool full)
 Value ValueCalc::max (const Value &range, bool full)
 {
   Value res;
-  arrayWalk (range, res, awFunc (full ? "maxa" : "max"), 0);
+  arrayWalk (range, res, awFunc (full ? "maxa" : "max"), Value(0));
   return res;
 }
 
 Value ValueCalc::max (QVector<Value> range, bool full)
 {
   Value res;
-  arrayWalk (range, res, awFunc (full ? "maxa" : "max"), 0);
+  arrayWalk (range, res, awFunc (full ? "maxa" : "max"), Value(0));
   return res;
 }
 
 Value ValueCalc::min (const Value &range, bool full)
 {
   Value res;
-  arrayWalk (range, res, awFunc (full ? "mina" : "min"), 0);
+  arrayWalk (range, res, awFunc (full ? "mina" : "min"), Value(0));
   return res;
 }
 
 Value ValueCalc::min (QVector<Value> range, bool full)
 {
   Value res;
-  arrayWalk (range, res, awFunc (full ? "mina" : "min"), 0);
+  arrayWalk (range, res, awFunc (full ? "mina" : "min"), Value(0));
   return res;
 }
 
@@ -1842,9 +1842,9 @@ Value ValueCalc::product (const Value &range, Value init,
   {
     if (count (range, full) == 0)
       return init;
-    res = 1.0;
+    res = Value(1.0);
   }
-  arrayWalk (range, res, awFunc (full ? "proda" : "prod"), 0);
+  arrayWalk (range, res, awFunc (full ? "proda" : "prod"), Value(0));
   return res;
 }
 
@@ -1856,9 +1856,9 @@ Value ValueCalc::product (QVector<Value> range,
   {
     if (count (range, full) == 0)
       return init;
-    res = 1.0;
+    res = Value(1.0);
   }
-  arrayWalk (range, res, awFunc (full ? "proda" : "prod"), 0);
+  arrayWalk (range, res, awFunc (full ? "proda" : "prod"), Value(0));
   return res;
 }
 
@@ -2004,7 +2004,7 @@ bool ValueCalc::matches (const Condition &cond, Value val)
     switch ( cond.comp )
     {
       case isEqual:
-      if (approxEqual (d, cond.value)) return true;
+      if (approxEqual (Value(d), Value(cond.value))) return true;
       break;
 
       case isLess:

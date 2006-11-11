@@ -194,7 +194,7 @@ Value func_areas (valVector args, ValueCalc *calc, FuncExtra *e)
     if ((e->ranges[0].col1 != -1) && (e->ranges[0].row1 != -1) &&
         (e->ranges[0].col2 != -1) && (e->ranges[0].row2 != -1))
       // we have a range reference - return 1
-      return 1;
+      return Value(1);
   }
 
   QString s = calc->conv()->asString (args[0]).asString();

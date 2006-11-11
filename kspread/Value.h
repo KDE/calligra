@@ -76,7 +76,7 @@ class KSPREAD_EXPORT Value
     /**
      * Creates a value of certain type.
      */
-    Value( Type _type );
+    explicit Value( Type _type );
 
     /**
      * Destroys the value.
@@ -104,29 +104,29 @@ class KSPREAD_EXPORT Value
     /**
      * Creates a boolean value.
      */
-    Value( bool b );
+    explicit Value( bool b );
 
     /**
      * Creates an integer value.
      */
-    Value( long i );
+    explicit Value( long i );
 
     /**
      * Creates an integer value.
      */
-    Value( int i );
+    explicit Value( int i );
 
     /**
      * Create a floating-point value.
      */
-    Value( double f );
+    explicit Value( double f );
 
     /**
      * Create a string value.
      */
-    Value( const QString& s );
+    explicit Value( const QString& s );
 
-    Value (const char *s);
+    explicit Value (const char *s);
 
     /**
      * Create a floating-point value from date/time.

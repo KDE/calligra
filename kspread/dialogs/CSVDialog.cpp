@@ -158,7 +158,7 @@ void CSVDialog::accept()
   Value val (numCols, numRows);
   for (int row = 0; row < numRows; ++row)
     for (int col = 0; col < numCols; ++col)
-      val.setElement (col, row, getText (row, col));
+      val.setElement (col, row, Value(getText (row, col)));
 
   DataManipulator *manipulator = new DataManipulator;
   manipulator->setName (i18n ("Text to Columns"));

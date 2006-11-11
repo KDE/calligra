@@ -52,7 +52,7 @@ void ValueParser::parse (const QString& str, Cell *cell)
   // then we don't parse as a value, but as string.
   if ( str.isEmpty() || format == Text_format || str.at(0)=='\'' )
   {
-    cell->setValue (str);
+    cell->setValue (Value(str));
     return;
   }
 
@@ -77,7 +77,7 @@ void ValueParser::parse (const QString& str, Cell *cell)
     cell->format()->setPrecision(2);
     Value val (money);
     val.setFormat (Value::fmt_Money);
-    cell->setValue (val);
+    cell->setValue (Value(val));
     return;
   }
 

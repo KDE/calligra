@@ -331,12 +331,12 @@ Value ArrayFormulaManipulator::newValue (Element *element, int col, int row,
   // fill in the cells ... top-left one gets the formula, the rest gets =INDEX
   // TODO: also fill in information about cells being a part of a range for GUI
   if (colidx || rowidx) {
-    return (cellRef + QString::number (rowidx+1) + ';' +
+    return Value(cellRef + QString::number (rowidx+1) + ';' +
         QString::number (colidx+1) + ')');
   } else {
     Cell *cell = m_sheet->nonDefaultCell (col, row);
     cellRef = "=INDEX(" + cell->name() + ';';
-    return m_text;
+    return Value(m_text);
   }
 }
 

@@ -388,12 +388,12 @@ void FormulaEvalTester::run()
 #ifdef KSPREAD_INLINE_ARRAYS
   // inline arrays
   Value array(2,2);
-  array.setElement(0,0,1);
-  array.setElement(1,0,2);
-  array.setElement(0,1,3);
-  array.setElement(1,1,4);
+  array.setElement(0,0,Value(1));
+  array.setElement(1,0,Value(2));
+  array.setElement(0,1,Value(3));
+  array.setElement(1,1,Value(4));
   CHECK_EVAL( "={1;2|3;4}", array );
-  array.setElement(1,0,0);
+  array.setElement(1,0,Value(0));
   CHECK_EVAL( "={1;SIN(0)|3;4}", array ); // "dynamic"
   CHECK_EVAL( "=SUM({1;2|3;4})", Value(10) );
 #endif

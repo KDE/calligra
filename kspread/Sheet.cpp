@@ -894,7 +894,7 @@ void Sheet::setText( int _row, int _column, const QString& _text, bool asString 
 {
   DataManipulator *dm = new DataManipulator ();
   dm->setSheet (this);
-  dm->setValue (_text);
+  dm->setValue (Value(_text));
   dm->setParsing (!asString);
   dm->add (QPoint (_column, _row));
   dm->execute ();
@@ -1892,7 +1892,7 @@ class SetWordSpellingManipulator : public AbstractDataManipulator {
       QString txt = cell->value().asString();
       if (!txt.isEmpty())
         // yes it was - return new data
-        return list[idx++];
+        return Value(list[idx++]);
       // no it wasn't - keep old data
     }
     return cell->value();

@@ -235,21 +235,21 @@ Value func_iseven (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ISERR
 Value func_iserr (valVector args, ValueCalc *, FuncExtra *)
 {
-  return (args[0].isError() &&
-      (args[0].errorMessage() != Value::errorNA().errorMessage()));
+  return Value((args[0].isError() &&
+      (args[0].errorMessage() != Value::errorNA().errorMessage())));
 }
 
 // Function: ISERROR
 Value func_iserror (valVector args, ValueCalc *, FuncExtra *)
 {
-  return args[0].isError();
+  return Value(args[0].isError());
 }
 
 // Function: ISNA
 Value func_isna (valVector args, ValueCalc *, FuncExtra *)
 {
-  return (args[0].isError() &&
-      (args[0].errorMessage() == Value::errorNA().errorMessage()));
+  return Value((args[0].isError() &&
+      (args[0].errorMessage() == Value::errorNA().errorMessage())));
 }
 
 // Function: TYPE

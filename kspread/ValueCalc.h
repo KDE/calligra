@@ -121,6 +121,21 @@ class ValueCalc {
   
   int sign (const Value &a);
 
+  // just a quick workaround
+  Value add(double a, const Value& b){ return add(Value(a), b); }
+  Value sub(double a, const Value& b){ return sub(Value(a), b); }
+  Value mul(double a, const Value& b){ return mul(Value(a), b); }
+  Value div(double a, const Value& b){ return div(Value(a), b); }
+  Value pow(double a, const Value& b){ return pow(Value(a), b); }
+
+  bool equal (const Value &a, double b)   { return equal(a, Value(b)); }
+  bool greater (const Value &a, double b) { return greater(a, Value(b)); }
+  bool lower (const Value &a, double b)   { return lower(a, Value(b)); }
+  bool equal (double a, const Value &b)   { return equal(Value(a), b); }
+  bool greater (double a, const Value &b) { return greater(Value(a), b); }
+  bool lower (double a, const Value &b)   { return lower(Value(a), b); }
+
+
   /** rounding */
   Value roundDown (const Value &a, const Value &digits);
   Value roundUp (const Value &a, const Value &digits);

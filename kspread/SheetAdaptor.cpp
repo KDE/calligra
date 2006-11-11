@@ -201,7 +201,7 @@ bool SheetAdaptor::setText( int x, int y, const QString& text, bool parse )
 
 	KSpread::DataManipulator *dm = new KSpread::DataManipulator();
 	dm->setSheet(m_sheet);
-	dm->setValue(text);
+	dm->setValue(Value(text));
 	dm->setParsing(parse);
 	dm->add(QPoint(x, y));
 	dm->execute();
