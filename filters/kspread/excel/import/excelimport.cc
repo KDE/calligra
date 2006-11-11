@@ -185,8 +185,8 @@ KoFilter::ConversionStatus ExcelImport::convert( const QByteArray& from, const Q
   // we are done!
   delete d->workbook;
   delete storeout;
-  d->inputFile = QString::null;
-  d->outputFile = QString::null;
+  d->inputFile.clear();
+  d->outputFile.clear();
   d->workbook = 0;
 
   return KoFilter::OK;
