@@ -595,7 +595,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
         if ( ok )
         {
           if ( !isFormula )
-            cell->setValue( dv );
+            cell->setValue( Value( dv ) );
 
           if ( type == "currency" )
           {
@@ -611,7 +611,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
           if ( ok )
           {
             if ( !isFormula )
-              cell->setValue( dv );
+              cell->setValue( Value( dv ) );
             //TODO fixme
 			//cell->setFactor( 100 );
             // TODO: replace with custom...
@@ -625,9 +625,9 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
 
           kDebug(30518) << "Type: boolean" << endl;
           if ( value == "true" )
-            cell->setValue( true );
+            cell->setValue( Value( true ) );
           else
-            cell->setValue( false );
+            cell->setValue( Value( false ) );
           ok = true;
           cell->format()->setFormatType( Custom_format );
         }

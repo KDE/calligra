@@ -2046,12 +2046,12 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                     if ( valuetype == "40" )//percentage
                     {
                         kspread_cell->format()->setFormatType( Percentage_format );
-                        kspread_cell->setValue( cell_content );
+                        kspread_cell->setValue( Value( cell_content ) );
                     }
                     else if ( valuetype =="60" )//string
                     {
                         kspread_cell->format()->setFormatType( Text_format );
-                        kspread_cell->setValue( cell_content );
+                        kspread_cell->setValue( Value( cell_content ) );
                     }
                 }
 
@@ -2114,12 +2114,12 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                     if ( valuetype == "40" )//percentage
                     {
                         kspread_cell->format()->setFormatType( Percentage_format );
-                        kspread_cell->setValue( cell_content );
+                        kspread_cell->setValue( Value( cell_content ) );
                     }
                     else if ( valuetype =="60" )//string
                     {
                         kspread_cell->format()->setFormatType( Text_format );
-                        kspread_cell->setValue( cell_content );
+                        kspread_cell->setValue( Value( cell_content ) );
                     }
 
                 }
