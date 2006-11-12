@@ -13,5 +13,5 @@ MimeType=application/x-kchart;application/vnd.oasis.opendocument.chart
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.chart
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.chart
 X-KDE-StartupNotify=true
-X-DCOP-ServiceType=Multi
+X-DBUS-StartupType=Multi
 Categories=Qt;KDE;Office;X-KDE-More;

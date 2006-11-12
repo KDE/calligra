@@ -11,5 +11,5 @@ Type=Application
 Icon=kivio
 X-KDE-NativeMimeType=application/x-kivio
 DocPath=kivio/index.html
-X-DCOP-ServiceType=Multi
+X-DBUS-StartupType=Multi
 Categories=Qt;KDE;Office;

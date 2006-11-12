@@ -11,5 +11,5 @@ Type=Application
 Icon=krita
 Categories=Qt;KDE;Office;Graphics;
 X-KDE-StartupNotify=true
-X-DCOP-ServiceType=Multi
+X-DBUS-StartupType=Multi
 NoDisplay=true

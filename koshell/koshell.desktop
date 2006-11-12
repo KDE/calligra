@@ -11,5 +11,5 @@ GenericName[x-test]=xxOffice Suitexx
 Type=Application
 Icon=koshell
 X-KDE-StartupNotify=true
-X-DCOP-ServiceType=Multi
+X-DBUS-StartupType=Multi
 Categories=Qt;KDE;Office;
