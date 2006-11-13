@@ -22,7 +22,16 @@
 
 #include <kdialog.h>
 
-class ExportWidget;
+#include <ui_exportwidget.h>
+
+class ExportWidget : public QWidget, public Ui::ExportWidget
+{
+public:
+  ExportWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class ExportDialog : public KDialog
 {

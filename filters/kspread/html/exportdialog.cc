@@ -30,7 +30,6 @@
 #include <kurlrequester.h>
 
 #include <exportdialog.h>
-#include <exportwidget.h>
 
 ExportDialog::ExportDialog( QWidget *parent )
   : KDialog( parent ), m_mainwidget( new ExportWidget( this ) )
