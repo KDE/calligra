@@ -105,7 +105,7 @@ column and enter <emphasis>Name</emphasis> as field caption.
 <itemizedlist>
 <title>Notes about field names and captions</title>
 <listitem><para>
-Every table field must have a name and a capation, these cannot be empty.
+Every table field must have a name and a caption, these cannot be empty.
 </para></listitem>
 <listitem><para>
 Field name is a word used by the database, usually not visible for users of the database application. The name may not contain special (national) characters (like ±, ¶, Ü)
