@@ -232,7 +232,7 @@
             </widget>
           </item>
           <item>
-            <widget class="Q3WidgetStack" name="m_widgetStack" >
+            <widget class="QStackedWidget" name="m_widgetStack" >
               <property name="sizePolicy" >
                 <sizepolicy>
                   <hsizetype>5</hsizetype>

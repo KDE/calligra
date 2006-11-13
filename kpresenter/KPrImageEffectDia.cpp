@@ -328,7 +328,7 @@ void KPrImageEffectDia::setEffect(ImageEffect eff, QVariant p1, QVariant p2, QVa
     }
 
     base->m_effectCombo->setCurrentIndex(static_cast<int>(m_effect));
-    base->m_widgetStack->raiseWidget(static_cast<int>(m_effect)); //bug in Qt? the above doesn't emit this :(
+    base->m_widgetStack->setCurrentIndex (static_cast<int>(m_effect)); //bug in Qt? the above doesn't emit this :(
 }
 
 void KPrImageEffectDia::showEvent(QShowEvent * e)
