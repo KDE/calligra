@@ -47,7 +47,7 @@ KPrImageEffectDia::KPrImageEffectDia(QWidget * parent, const char * name):
     m_param2 = QVariant();
     m_param3 = QVariant();
 
-    base = new EffectBrowserBase(this, "effect_base");
+    base = new EffectBrowserBase(this);
 
     setMainWidget(base);
 

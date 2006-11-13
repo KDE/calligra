@@ -30,12 +30,21 @@
 #include <kdialog.h>
 
 #include "global.h"
+#include "ui_slidetransitionwidget.h"
 
 class KPrPageEffects;
 class KPrView;
 class KPrSoundPlayer;
 class KUrlRequester;
-class SlideTransitionWidget;
+
+class SlideTransitionWidget : public QWidget, public Ui::SlideTransitionWidget
+{
+public:
+  SlideTransitionWidget( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class KPrSlideTransitionDia : public KDialog
 {

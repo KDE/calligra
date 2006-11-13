@@ -41,7 +41,6 @@
 #include "KPrView.h"
 #include "KPrPage.h"
 #include "KPrPageEffects.h"
-#include "slidetransitionwidget.h"
 
 KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name, KPrView *view )
 : KDialog( parent )

@@ -124,15 +124,12 @@ kde4_add_ui3_files(kpresenterprivate_LIB_SRCS
    insertpagedia.ui
    shadowdialog.ui
    rotationpropertyui.ui
-   imageEffectBase.ui
    penstyle.ui
-   gradientpropertyui.ui
    polygonpropertyui.ui
    piepropertyui.ui
-   picturepropertyui.ui
-   slidetransitionwidget.ui )
+   picturepropertyui.ui)
 
-kde4_add_ui_files(kpresenterprivate_LIB_SRCS brushpropertyui.ui rectpropertyui.ui marginui.ui )
+kde4_add_ui_files(kpresenterprivate_LIB_SRCS brushpropertyui.ui rectpropertyui.ui marginui.ui gradientpropertyui.ui imageEffectBase.ui slidetransitionwidget.ui )
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 

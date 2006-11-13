@@ -24,13 +24,22 @@
 
 #include "KPrCommand.h"
 #include "ui_brushpropertyui.h"
+#include "ui_gradientpropertyui.h"
 
-class GradientPropertyUI;
 class KPrPBPreview;
 
 class QStackedWidget;
 
 class KComboBox;
+
+class GradientPropertyUI : public QWidget, public Ui::GradientPropertyUI
+{
+public:
+  GradientPropertyUI( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class BrushPropertyUI : public QWidget, public Ui::BrushPropertyUI
 {

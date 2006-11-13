@@ -27,8 +27,18 @@
 
 #include <kdialog.h>
 
-#include "imageEffectBase.h"
+#include "ui_imageEffectBase.h"
 #include "global.h"
+
+
+class EffectBrowserBase : public QWidget, public Ui::EffectBrowserBase
+{
+public:
+  EffectBrowserBase( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class KPrImageEffectDia: public KDialog {
     Q_OBJECT

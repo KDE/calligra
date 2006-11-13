@@ -18,7 +18,6 @@
 */
 #include "KPrBrushProperty.h"
 
-#include "gradientpropertyui.h"
 #include "KPrPBPreview.h"
 
 #include <QCheckBox>
