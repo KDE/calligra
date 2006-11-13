@@ -1165,7 +1165,9 @@ void CellEditor::setCursorPosition( int pos )
     QTextCursor textCursor( d->textEdit->textCursor() );
     textCursor.setPosition( pos );
     d->textEdit->setTextCursor( textCursor );
-    canvas()->view()->editWidget()->setCursorPosition( pos );
+    // FIXME Stefan: The purpose of this connection is?
+    //               Disabled to avoid cursor jumps to the end of the line on every key event.
+//     canvas()->view()->editWidget()->setCursorPosition( pos );
 }
 
 bool CellEditor::eventFilter( QObject* obj, QEvent* ev )
