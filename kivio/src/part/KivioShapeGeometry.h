@@ -20,18 +20,20 @@
 #ifndef KIVIOSHAPEGEOMETRY_H
 #define KIVIOSHAPEGEOMETRY_H
 
-#include <QWidget>
+#include <QDockWidget>
+
+#include <KoDockFactory.h>
 
 #include "ui_KivioShapeGeometry.h"
 
 class KoSelection;
 class KivioDocument;
 
-class KivioShapeGeometry : public QWidget, public Ui::KivioShapeGeometry
+class KivioShapeGeometry : public QDockWidget, public Ui::KivioShapeGeometry
 {
     Q_OBJECT
     public:
-        KivioShapeGeometry(QWidget* parent, KivioDocument* doc);
+        KivioShapeGeometry(KivioDocument* doc);
 
     public slots:
         void setSelection(KoSelection* selection);
@@ -48,6 +50,19 @@ class KivioShapeGeometry : public QWidget, public Ui::KivioShapeGeometry
         KoSelection* m_selection;
 
         bool m_lockedForUpdate;
+};
+
+class KivioShapeGeometryFactory : public KoDockFactory
+{
+    public:
+        KivioShapeGeometryFactory(KivioDocument* doc);
+
+        virtual QString dockId() const;
+        virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
+        virtual QDockWidget* createDockWidget();
+
+    private:
+        KivioDocument* m_doc;
 };
 
 #endif

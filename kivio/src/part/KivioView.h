@@ -123,7 +123,7 @@ class KivioView : public KoView, public KoShapeControllerBase
 
     KivioAbstractPage* m_activePage;
 
-    KivioShapeGeometry* m_geometryWidget;
+    KivioShapeGeometry* m_geometryDocker;
 };
 
 #endif

@@ -65,6 +65,8 @@ KivioView::KivioView(KivioDocument* document, QWidget* parent)
 
 KivioView::~KivioView()
 {
+    KoToolManager::instance()->removeCanvasController(m_canvasController);
+
     delete m_zoomHandler;
     m_zoomHandler = 0;
 }
@@ -117,9 +119,13 @@ void KivioView::initGUI()
     connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
             m_verticalRuler, SLOT(setOffset(int)));
 
-    m_geometryWidget = new KivioShapeGeometry(this, document());
-    m_geometryWidget->setEnabled(false);
-    createDock(i18n("Geometry"), m_geometryWidget);
+    if(shell()) {
+        KivioShapeGeometryFactory geometryFactory(document());
+        m_geometryDocker = qobject_cast<KivioShapeGeometry*>(shell()->createDockWidget(&geometryFactory));
+        m_geometryDocker->setEnabled(false);
+    } else {
+        m_geometryDocker = 0;
+    }
 
     connect(m_canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
@@ -294,11 +300,12 @@ void KivioView::selectionChanged()
 {
     bool selected = m_canvas->shapeManager()->selection()->count() > 0;
 
-    if(selected) {
-        m_geometryWidget->setEnabled(true);
-        m_geometryWidget->setSelection(m_canvas->shapeManager()->selection());
-    } else {
-        m_geometryWidget->setEnabled(false);
+    if(m_geometryDocker) {
+        if(selected) {
+            m_geometryDocker->setSelection(m_canvas->shapeManager()->selection());
+        }
+
+        m_geometryDocker->setEnabled(selected);
     }
 }
 

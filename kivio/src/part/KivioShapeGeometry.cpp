@@ -21,6 +21,9 @@
 
 #include <QSizeF>
 #include <QPointF>
+#include <QDockWidget>
+
+#include <KLocale>
 
 #include <KoShape.h>
 #include <KoSelection.h>
@@ -28,13 +31,18 @@
 
 #include "KivioDocument.h"
 
-KivioShapeGeometry::KivioShapeGeometry(QWidget* parent, KivioDocument* doc)
-    : QWidget(parent), Ui::KivioShapeGeometry(), m_doc(doc)
+KivioShapeGeometry::KivioShapeGeometry(KivioDocument* doc)
+    : QDockWidget(i18n("Geometry")), Ui::KivioShapeGeometry(), m_doc(doc)
 {
     m_lockedForUpdate = false;
     m_selection = 0;
 
-    setupUi(this);
+    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+
+    QWidget* mainWidget = new QWidget(this);
+    setWidget(mainWidget);
+
+    setupUi(mainWidget);
 
     connect(m_xInput, SIGNAL(valueChangedPt(double)), this, SLOT(positionChanged()));
     connect(m_yInput, SIGNAL(valueChangedPt(double)), this, SLOT(positionChanged()));
@@ -188,6 +196,35 @@ void KivioShapeGeometry::rotationChanged()
     KoShapeRotateCommand* rotateCommand = new KoShapeRotateCommand(shapes, prevRotation, newRotation);
     rotateCommand->execute();
     m_doc->addCommand(rotateCommand, false);
+}
+
+
+//
+// KivioShapeGeometryFactory
+//
+
+KivioShapeGeometryFactory::KivioShapeGeometryFactory(KivioDocument* doc)
+    : KoDockFactory()
+{
+    m_doc = doc;
+}
+
+QString KivioShapeGeometryFactory::dockId() const
+{
+    return QString("KivioShapeGeometry");
+}
+
+Qt::DockWidgetArea KivioShapeGeometryFactory::defaultDockWidgetArea() const
+{
+    return Qt::RightDockWidgetArea;
+}
+
+QDockWidget* KivioShapeGeometryFactory::createDockWidget()
+{
+    KivioShapeGeometry* dockWidget = new KivioShapeGeometry(m_doc);
+    dockWidget->setObjectName(dockId());
+
+    return dockWidget;
 }
 
 #include "KivioShapeGeometry.moc"
