@@ -52,7 +52,7 @@ class KEXI_DB_EXPORT MessageTitle
 class KEXI_DB_EXPORT MessageHandler
 {
 	public:
-		enum MessageType { Error, Sorry };
+		enum MessageType { Error, Sorry, Warning };
 
 		/*! Constructs mesage handler, \a parent is a widget that will be a parent 
 		 for displaying gui elements (e.g. message boxes). Can be 0 for non-gui usage. */

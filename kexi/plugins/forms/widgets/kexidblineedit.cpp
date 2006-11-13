@@ -397,6 +397,7 @@ void KexiDBLineEdit::selectAll()
 
 bool KexiDBLineEdit::keyPressed(QKeyEvent *ke)
 {
+	Q_UNUSED(ke);
 	return false;
 }
 

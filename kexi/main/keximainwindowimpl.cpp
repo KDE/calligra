@@ -1433,13 +1433,13 @@ KexiMainWindowImpl::initNavigator()
 	if(d->prj->isConnected()) {
 		d->nav->clear();
 
+		QString partManagerErrorMessages;
 		KexiPart::PartInfoList *pl = Kexi::partManager().partInfoList();
 		for(KexiPart::Info *it = pl->first(); it; it = pl->next())
 		{
 			if (!it->isVisibleInNavigator())
 				continue;
 			kDebug() << "KexiMainWindowImpl::initNavigator(): adding " << it->groupName() << endl;
-			d->nav->addGroup(*it);
 
 /*			KexiPart::Part *p=Kexi::partManager().part(it);
 			if (!p) {
@@ -1449,20 +1449,39 @@ KexiMainWindowImpl::initNavigator()
 			p->createGUIClient(this);*/
 
 			//load part - we need this to have GUI merged with part's actions
-			//js: FUTURE TODO - don't do that when DESIGN MODE is OFF
+//! @todo FUTURE - don't do that when DESIGN MODE is OFF
 			KexiPart::Part *p=Kexi::partManager().part(it);
-			if (!p) {
-				//TODO: js - OPTIONALLY: show error
+			if (p) {
+				d->nav->addGroup(*it);
+				//lookup project's objects (part items)
+	//! @todo FUTURE - don't do that when DESIGN MODE is OFF
+				KexiPart::ItemDict *item_dict = d->prj->items(it);
+				if (!item_dict)
+					continue;
+				for (KexiPart::ItemDictIterator item_it( *item_dict ); item_it.current(); ++item_it) {
+					d->nav->addItem(*item_it.current());
+				}
 			}
-
-			//lookup project's objects (part items)
-			//js: FUTURE TODO - don't do that when DESIGN MODE is OFF
-			KexiPart::ItemDict *item_dict = d->prj->items(it);
-			if (!item_dict)
-				continue;
-			for (KexiPart::ItemDictIterator item_it( *item_dict ); item_it.current(); ++item_it) {
-				d->nav->addItem(*item_it.current());
+			else {
+				//add this error to the list that will be displayed later
+				QString msg, details;
+				KexiDB::getHTMLErrorMesage(&Kexi::partManager(), msg, details);
+				if (!msg.isEmpty()) {
+					if (partManagerErrorMessages.isEmpty()) {
+						partManagerErrorMessages = QString("<qt><p>")
+							+futureI18n("Errors encountered during loading plugins:")+"<ul>";
+					}
+					partManagerErrorMessages.append( QString("<li>") + msg );
+					if (!details.isEmpty())
+						partManagerErrorMessages.append(QString("<br>")+details);
+					partManagerErrorMessages.append("</li>");
+				}
 			}
+		}
+		if (!partManagerErrorMessages.isEmpty()) {
+			partManagerErrorMessages.append("</ul></p>");
+			showWarningContinueMessage(partManagerErrorMessages, QString::null,
+				"dontShowWarningsRelatedToPluginsLoading");
 		}
 	}
 	connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)), d->nav, SLOT(addItem(KexiPart::Item&)));
@@ -2138,8 +2157,14 @@ void KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 	}
 	d->curDialog=dlg;
 
-	propertySetSwitched(d->curDialog);
+//moved below:	propertySetSwitched(d->curDialog);
+
 	updateCustomPropertyPanelTabs(prevDialog, prevDialog ? prevDialog->currentViewMode() : Kexi::NoViewMode);
+
+	// inform the current view of the new dialog about property switching
+	// (this will also call KexiMainWindowImpl::propertySetSwitched() to update the current property editor's set
+	if (dialogChanged && d->curDialog)
+		d->curDialog->selectedView()->propertySetSwitched();
 
 	if (dialogChanged) {
 //		invalidateSharedActions();
@@ -3614,8 +3639,8 @@ void KexiMainWindowImpl::acceptPropertySetEditing()
 		d->propEditor->editor()->acceptInput();
 }
 
-void KexiMainWindowImpl::propertySetSwitched(KexiDialogBase *dlg, bool force, bool preservePrevSelection,
-	const QCString& propertyToSelect)
+void KexiMainWindowImpl::propertySetSwitched(KexiDialogBase *dlg, bool force, 
+	bool preservePrevSelection, const Q3CString& propertyToSelect)
 {
 	kDebug() << "KexiMainWindowImpl::propertySetSwitched() d->curDialog: "
 		<< (d->curDialog ? d->curDialog->caption() : QString("NULL")) << " dlg: " << (dlg ? dlg->caption() : QString("NULL"))<< endl;

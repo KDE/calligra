@@ -2794,12 +2794,12 @@ bool Connection::storeDataBlock( int objectID, const QString &dataString, const 
 		return false;
 	if (exists) {
 		return executeSQL( "UPDATE kexi__objectdata SET o_data="
-			+ m_driver->valueToSQL( KexiDB::Field::BLOB, dataString )
+			+ m_driver->valueToSQL( KexiDB::Field::LongText, dataString )
 			+ " WHERE o_id=" + QString::number(objectID) + " AND " + sql_sub );
 	}
 	return executeSQL(
 		QString::fromLatin1("INSERT INTO kexi__objectdata (o_id, o_data, o_sub_id) VALUES (")
-		+ QString::number(objectID) +"," + m_driver->valueToSQL( KexiDB::Field::BLOB, dataString )
+		+ QString::number(objectID) +"," + m_driver->valueToSQL( KexiDB::Field::LongText, dataString )
 		+ "," + m_driver->valueToSQL( KexiDB::Field::Text, dataID ) + ")" );
 }
 
@@ -2927,7 +2927,7 @@ bool Connection::setupKexiDBSystemSchema()
 
 	TableSchema *t_objectdata = newKexiDBSystemTableSchema("kexi__objectdata");
 	t_objectdata->addField( new Field("o_id", Field::Integer, Field::NotNull, Field::Unsigned) )
-	.addField( new Field("o_data", Field::BLOB) )
+	.addField( new Field("o_data", Field::LongText) )
 	.addField( new Field("o_sub_id", Field::Text) );
 
 	TableSchema *t_fields = newKexiDBSystemTableSchema("kexi__fields");

@@ -144,13 +144,13 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void showTablesForQuery(KexiDB::QuerySchema *query);
 		//! @internal
 		void showFieldsOrRelationsForQueryInternal(
-			KexiDB::QuerySchema *query, bool showFields, bool showRelations);
+			KexiDB::QuerySchema *query, bool showFields, bool showRelations, KexiDB::ResultInfo& result);
 		//! convenience method equal to showFieldsOrRelationsForQueryInternal(query, true, true)
-		void showFieldsAndRelationsForQuery(KexiDB::QuerySchema *query);
+		void showFieldsAndRelationsForQuery(KexiDB::QuerySchema *query, KexiDB::ResultInfo& result);
 		//! convenience method equal to showFieldsOrRelationsForQueryInternal(query, true, false)
-		void showFieldsForQuery(KexiDB::QuerySchema *query);
+		void showFieldsForQuery(KexiDB::QuerySchema *query, KexiDB::ResultInfo& result);
 		//! convenience method equal to showFieldsOrRelationsForQueryInternal(query, false, true)
-		void showRelationsForQuery(KexiDB::QuerySchema *query);
+		void showRelationsForQuery(KexiDB::QuerySchema *query, KexiDB::ResultInfo& result);
 
 		void addConnection(KexiDB::Field *masterField, KexiDB::Field *detailsField);
 

@@ -34,8 +34,20 @@ class KEXICORE_EXPORT KexiGUIMessageHandler : public KexiDB::MessageHandler
 		void showErrorMessage(const QString&,const QString&,KexiDB::Object *obj);
 		void showErrorMessage(Kexi::ObjectStatus *status);
 		void showErrorMessage(const QString &message, Kexi::ObjectStatus *status);
+
+		/*! Displays a "Sorry" message with \a title text and optional \a details. */
 		void showSorryMessage(const QString &title, const QString &details = QString::null);
-		virtual void showMessage(MessageType type, const QString &title, const QString &details);
+
+		/*! Displays a message of a type \a type, with \a title text and optional \a details.
+		 \a dontShowAgainName can be specified to add "Do not show again" option if \a type is Warning. */
+		virtual void showMessage(MessageType type, const QString &title, const QString &details,
+			const QString& dontShowAgainName = QString::null);
+
+		/*! Displays a Warning message with \a title text and optional \a details 
+		 with "Continue" button instead "OK".
+		 \a dontShowAgainName can be specified to add "Do not show again" option. */
+		virtual void showWarningContinueMessage(const QString &title, const QString &details = QString::null,
+			const QString& dontShowAgainName = QString::null);
 
 		/*! Interactively asks a question using KMessageBox.
 		 See KexiDB::MessageHandler::askQuestion() for details. */

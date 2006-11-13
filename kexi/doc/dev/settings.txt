@@ -31,9 +31,14 @@ Group: PropertyEditor
 -FontSize [integer]
 
 Group: Notification Messages
--dontAskBeforeDeleteRow [boolean] (default: true)
+-dontAskBeforeDeleteRow [boolean] (default: false)
 
 -askBeforeOpeningFileReadOnly [boolean] (default: true)
+
+# If true, warning messages related to plugins, e.g. 
+# "Errors encountered during loading plugins" 
+# will not be displayed on the application's startup.
+-dontShowWarningsRelatedToPluginsLoading [boolean] (default: false)
 
 Group: General
 #especially useful for SQL-related messages

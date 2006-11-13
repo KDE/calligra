@@ -22,6 +22,7 @@
 
 #include "kexiformdataiteminterface.h"
 #include <q3ptrdict.h>
+#include <qdict.h>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3PtrList>
@@ -34,7 +35,7 @@ namespace KexiDB {
 //! @short The KexiFormDataProvider class is a data provider for Kexi Forms
 /*! This provider collects data-aware widgets using setMainWidget().
  Then, usedDataSources() unique list of required field names is available.
- On every call of fillDataItems() method, thew provider will fill data items 
+ On every call of fillDataItems() method, the provider will fill data items 
  with appropriate data from a database cursor.
 
  Field names are collected effectively, so eg. having widgets using data sources:
@@ -73,10 +74,10 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 		virtual bool cursorAtNewRow() const;
 
 		/*! Invalidates data sources collected by this provided.
-		 \a invalidSources is the list of data sources that should 
+		 \a invalidSources is the set of data sources that should 
 		 be ommited for fillDataItems(). 
 		 Used by KexiFormView::initDataSource(). */
-		void invalidateDataSources( const Q3ValueList<uint>& invalidSources, 
+		void invalidateDataSources( const Q3Dict<char>& invalidSources, 
 			KexiDB::QuerySchema* query = 0 );
 
 		/*! Fills the same data provided by \a value to every data item (other than \a item) 
@@ -91,7 +92,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 		Q3PtrList<KexiFormDataItemInterface> m_dataItems;
 		QStringList m_usedDataSources;
 		KexiFormDataItemInterfaceToIntMap m_fieldNumbersForDataItems;
-		bool m_disableFillDuplicatedDataItems;
+		bool m_disableFillDuplicatedDataItems : 1;
 };
 
 #endif

@@ -412,6 +412,10 @@ namespace KexiDB
 
 	/*! Shows debug information about \a rowData row data. */
 	KEXI_DB_EXPORT void debugRowData(const RowData& rowData);
+
+	/*! \return type that's maximum of two integer types \a t1 and \a t2, e.g. Integer for (Byte, Integer). 
+	 If one of the types is not of the integer group, Field::InvalidType is returned. */
+	KEXI_DB_EXPORT Field::Type maximumForIntegerTypes(Field::Type t1, Field::Type t2);
 }
 
 #endif

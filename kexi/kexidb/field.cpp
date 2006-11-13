@@ -267,6 +267,11 @@ bool Field::isTextType( uint type )
 	return false;
 }
 
+bool Field::isQueryAsterisk() const
+{
+	return dynamic_cast<QueryAsterisk const *>(this);
+}
+
 bool Field::hasEmptyProperty(uint type)
 {
 	return Field::isTextType(type) || type==BLOB;

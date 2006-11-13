@@ -591,15 +591,16 @@ void KexiFormView::initDataSource()
 		}
 	}
 
-	Q3ValueList<uint> invalidSources;
+	Q3Dict<char> invalidSources(997);
 	if (ok) {
 		KexiDB::IndexSchema *pkey = tableSchema ? tableSchema->primaryKey() : 0;
 		if (pkey) {
 			//always add all fields from table's primary key
-			// (don't worry about duplicated, unique list will be computed later)
+			// (don't worry about duplicates, unique list will be computed later)
 			sources += pkey->names();
-			KexiDBDbg << "KexiFormView::initDataSource(): pkey added to data sources: " << pkey->names() << endl;
+			kexipluginsdbg << "KexiFormView::initDataSource(): pkey added to data sources: " << pkey->names() << endl;
 		}
+		kexipluginsdbg << "KexiFormView::initDataSource(): sources=" << sources << endl;
 
 		uint index = 0;
 		for (QStringList::ConstIterator it = sources.constBegin();
@@ -616,7 +617,10 @@ void KexiFormView::initDataSource()
 			if (!f) {
 /*! @todo show error */
 				//remove this widget from the set of data widgets in the provider
-				invalidSources += index;
+/*! @todo fieldName is ok, but what about expressions? */
+				invalidSources.insert( fieldName, (const char*)1 ); // += index;
+				kexipluginsdbg << "KexiFormView::initDataSource(): invalidSources+=" << index << " (" 
+					<< (*it) << ")" << endl;
 				continue;
 			}
 			if (tableSchema) {

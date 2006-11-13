@@ -99,7 +99,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 
 		/*! Used internally to set visible database column information.
 		 Reimplemented in KexiDBComboBox: except for combo box, this does nothing. */
-		virtual void setVisibleColumnInfo(KexiDB::QueryColumnInfo* cinfo) {}
+		virtual void setVisibleColumnInfo(KexiDB::QueryColumnInfo* cinfo) { Q_UNUSED(cinfo); }
 
 		/*! \return visible database column information for this item.
 		 Except for combo box, this is exactly the same as columnInfo(). */

@@ -108,7 +108,14 @@ namespace Kexi
 
 			//! Note: for safety, \a dbObject needs to be derived from QObject, 
 			//! otherwise it won't be assigned
-			void setStatus(KexiDB::Object* dbObject, const QString& message = QString::null, const QString& description = QString::null);
+			void setStatus(KexiDB::Object* dbObject, 
+				const QString& message = QString::null, const QString& description = QString::null);
+
+			void setStatus(KexiDB::ResultInfo* result, 
+				const QString& message = QString::null, const QString& description = QString::null);
+
+			void setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* result, 
+				const QString& message = QString::null, const QString& description = QString::null);
 
 			void clearStatus();
 

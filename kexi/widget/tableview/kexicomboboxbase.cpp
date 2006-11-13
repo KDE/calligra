@@ -265,7 +265,6 @@ QVariant KexiComboBoxBase::visibleValueForLookupField()
 	if (!popup() || !lookupFieldSchema)
 		return QVariant();
 	KexiTableItem *it = popup()->tableView()->selectedItem();
-	KexiTableItem *item2 = popup()->tableView()->highlightedItem();
 	return it ? it->at( lookupFieldSchema->visibleColumn() ) : QVariant();
 }
 

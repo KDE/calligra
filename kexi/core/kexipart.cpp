@@ -51,6 +51,36 @@ public:
 	: instanceActionsInitialized(false)
 	{
 	}
+
+	//! Helper, used in Part::openInstance()
+	tristate askForOpeningInTextMode(KexiDialogBase *dlg, KexiPart::Item &item, 
+		int supportedViewModes, int viewMode)
+	{
+		if (viewMode != Kexi::TextViewMode
+			&& supportedViewModes & Kexi::TextViewMode 
+			&& dlg->tempData()->proposeOpeningInTextViewModeBecauseOfProblems)
+		{
+			//ask
+			KexiUtils::WaitCursorRemover remover;
+	//! @todo use message handler for this to enable non-gui apps
+			QString singleStatusString( dlg->singleStatusString() );
+			if (!singleStatusString.isEmpty())
+				singleStatusString.prepend(QString("\n\n")+futureI18n("Details:")+" ");
+			if (KMessageBox::No==KMessageBox::questionYesNo(0, 
+				((viewMode == Kexi::DesignViewMode) 
+					? i18n("Object \"%1\" could not be opened in Design View.").arg(item.name())
+					: i18n("Object could not be opened in Data View."))+"\n"
+				+ i18n("Do you want to open it in Text View?") + singleStatusString, 0, 
+				KStdGuiItem::open(), KStdGuiItem::cancel()))
+			{
+	//			dlg->close(); //this will destroy dlg
+				return false;
+			}
+			return true;
+		}
+		return cancelled;
+	}
+
 	bool instanceActionsInitialized : 1;
 };
 }
@@ -250,27 +280,12 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 		dlg->m_schemaData = loadSchemaData(dlg, sdata, viewMode);
 		if (!dlg->m_schemaData) {
 			//last chance:
-			if (viewMode != Kexi::TextViewMode
-				&& dlg->m_supportedViewModes & Kexi::TextViewMode 
-				&& dlg->tempData()->proposeOpeningInTextViewModeBecauseOfProblems)
-			{
-				//ask
-				KexiUtils::removeWaitCursor();
-//! @todo use message handler for this to enable non-gui apps
-				if (KMessageBox::No==KMessageBox::questionYesNo(0, 
-					((viewMode == Kexi::DesignViewMode) 
-					 ? i18n("Object \"%1\" could not be opened in Design View.").arg(item.name())
-					 : i18n("Object could not be opened in Data View."))+"\n"
-					+ i18n("Do you want to open it in Text View?"), 0, 
-					KStdGuiItem::open(), KStdGuiItem::cancel()))
-				{
-//					dlg->close(); //this will destroy dlg
-					delete dlg;
-					return 0;
-				}
-				viewMode = Kexi::TextViewMode;
-				dlg->m_schemaData = loadSchemaData(dlg, sdata, viewMode);
+			if (false == d->askForOpeningInTextMode(dlg, item, dlg->m_supportedViewModes, viewMode)) {
+				delete dlg;
+				return 0;
 			}
+			viewMode = Kexi::TextViewMode;
+			dlg->m_schemaData = loadSchemaData(dlg, sdata, viewMode);
 		}
 		if (!dlg->m_schemaData) {
 			if (!m_status.error())
@@ -287,8 +302,27 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 	}
 
 	bool switchingFailed = false;
-	tristate res = dlg->switchToViewMode( viewMode, staticObjectArgs );
+	bool dummy;
+	tristate res = dlg->switchToViewMode( viewMode, staticObjectArgs, dummy );
 	if (!res) {
+		tristate askForOpeningInTextModeRes
+			= d->askForOpeningInTextMode(dlg, item, dlg->m_supportedViewModes, viewMode);
+//		if (viewMode==Kexi::DesignViewMode && dlg->isDesignModePreloadedForTextModeHackUsed(Kexi::TextViewMode))
+//			askForOpeningInTextModeRes = cancelled; //do not try
+//		else
+		if (true == askForOpeningInTextModeRes) {
+			delete dlg->m_schemaData; //old one
+			dlg->close();
+			delete dlg;
+			//try in text mode
+			return openInstance(win, item, Kexi::TextViewMode, staticObjectArgs);
+		}
+		else if (false == askForOpeningInTextModeRes) {
+			delete dlg->m_schemaData; //old one
+			dlg->close();
+			delete dlg;
+			return 0;
+		}
 		//dlg has an error info
 		switchingFailed = true;
 	}

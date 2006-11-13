@@ -111,6 +111,16 @@ void KexiDialogBase::addView(KexiViewBase *view, int mode)
 	m_openedViewModes |= mode;
 }
 
+void KexiDialogBase::removeView(int mode)
+{
+	KexiViewBase *view = viewForMode(mode);
+	if (view)
+		m_stack->removeWidget(view);
+
+	m_openedViewModes |= mode;
+	m_openedViewModes ^= mode;
+}
+
 QSize KexiDialogBase::minimumSizeHint() const
 {
 	KexiViewBase *v = selectedView();
@@ -272,20 +282,26 @@ KexiPart::GUIClient* KexiDialogBase::commonGUIClient() const
 	return m_part->instanceGuiClient(0);
 }
 
-tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString>* staticObjectArgs )
+bool KexiDialogBase::isDesignModePreloadedForTextModeHackUsed(int newViewMode) const
+{
+	return newViewMode==Kexi::TextViewMode 
+		&& !viewForMode(Kexi::DesignViewMode) 
+		&& supportsViewMode(Kexi::DesignViewMode);
+}
+
+tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString>* staticObjectArgs,
+	bool& proposeOpeningInTextViewModeBecauseOfProblems)
 {
 	m_parentWindow->acceptPropertySetEditing();
 
-	const bool designModePreloadedForTextModeHack = 
-		newViewMode==Kexi::TextViewMode 
-		&& !viewForMode(Kexi::DesignViewMode) 
-		&& supportsViewMode(Kexi::DesignViewMode);
-
+	const bool designModePreloadedForTextModeHack = isDesignModePreloadedForTextModeHackUsed(newViewMode);
 	tristate res = true;
 	if (designModePreloadedForTextModeHack) {
 		/* A HACK: open design BEFORE text mode: otherwise Query schema becames crazy */
-		res = switchToViewMode( Kexi::DesignViewMode, staticObjectArgs );
-		if (!res || ~res)
+		bool _proposeOpeningInTextViewModeBecauseOfProblems = false; // used because even if opening the view failed,
+		                                                             // text view can be opened
+		res = switchToViewMode( Kexi::DesignViewMode, staticObjectArgs, _proposeOpeningInTextViewModeBecauseOfProblems);
+		if ((!res && !_proposeOpeningInTextViewModeBecauseOfProblems) || ~res)
 			return res;
 	}
 
@@ -344,7 +360,10 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString
 		m_currentViewMode = Kexi::NoViewMode; //SAFE?
 	}
 	res = newView->beforeSwitchTo(newViewMode, dontStore);
+	proposeOpeningInTextViewModeBecauseOfProblems = tempData()->proposeOpeningInTextViewModeBecauseOfProblems;
 	if (!res) {
+		removeView(newViewMode);
+		delete newView;
 		kDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< m_currentViewMode << " restored." << endl;
 		return false;
@@ -356,11 +375,16 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString
 
 	res = newView->afterSwitchFrom(
 			designModePreloadedForTextModeHack ? Kexi::NoViewMode : prevViewMode);
+	proposeOpeningInTextViewModeBecauseOfProblems = tempData()->proposeOpeningInTextViewModeBecauseOfProblems;
 	if (!res) {
+		removeView(newViewMode);
+		delete newView;
 		kDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< prevViewMode << " restored." << endl;
+		const Kexi::ObjectStatus status(*this);
 		setStatus(mainWin()->project()->dbConnection(), 
 			i18n("Switching to other view failed (%1).").arg(Kexi::nameForViewMode(newViewMode)),"");
+		append( status );
 		m_currentViewMode = prevViewMode;
 		return false;
 	}
@@ -382,7 +406,8 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString
 
 tristate KexiDialogBase::switchToViewMode( int newViewMode )
 {
-	return switchToViewMode( newViewMode, 0 );
+	bool dummy;
+	return switchToViewMode( newViewMode, 0, dummy );
 }
 
 void KexiDialogBase::setFocus()

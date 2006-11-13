@@ -166,23 +166,24 @@ void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsInde
 		Field *f1 = it1.current(); //masterIndex->fields()->first();
 		Field *f2 = it2.current(); //detailsIndex->fields()->first();
 	//	while (f1 && f2) {
-		if (f1->type()!=f1->type()) {
-			KexiDBDbg << "Relationship::setIndices(INDEX on '"<<masterIndex->table()->name()
+		if (f1->type()!=f1->type() && f1->isIntegerType()!=f2->isIntegerType() && f1->isTextType()!=f2->isTextType()) {
+			KexiDBWarn << "Relationship::setIndices(INDEX on '"<<masterIndex->table()->name()
 			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal field types: "
 			<<Driver::defaultSQLTypeName(f1->type())<<" "<<f1->name()<<", "
 			<<Driver::defaultSQLTypeName(f2->type())<<" "<<f2->name() <<endl;
 			m_pairs.clear();
 			return;
 		}
+#if 0 //too STRICT!
 		if ((f1->isUnsigned() && !f2->isUnsigned()) || (!f1->isUnsigned() && f1->isUnsigned())) {
-			KexiDBDbg << "Relationship::setIndices(INDEX on '"<<masterIndex->table()->name()
+			KexiDBWarn << "Relationship::setIndices(INDEX on '"<<masterIndex->table()->name()
 			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal signedness of field types: "
 			<<Driver::defaultSQLTypeName(f1->type())<<" "<<f1->name()<<", "
 			<<Driver::defaultSQLTypeName(f2->type())<<" "<<f2->name() <<endl;
 			m_pairs.clear();
 			return;
-			
 		}
+#endif
 		m_pairs.append( new Field::Pair(f1,f2) );
 	}
 	//ok: update information
