@@ -3246,7 +3246,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		for (uint i=0; (ci = ci_it.current()); ++ci_it, i++) {
 //			KexiDBDbg << "Connection::insertRow(): AUTOINCREMENTED FIELD " << fi->field->name() << " == "
 //				<< aif_data[i].toInt() << endl;
-			( data[ columnsOrderExpanded[ ci ] ] = aif_data[i] ).cast( ci->field->variantType() ); //cast to get proper type
+			( data[ columnsOrderExpanded[ ci ] ] = aif_data[i] ).convert( ci->field->variantType() ); //cast to get proper type
 		}
 	}
 	else {
