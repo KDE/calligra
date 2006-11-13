@@ -581,10 +581,12 @@ void NodeItemModel::sort( int column, Qt::SortOrder order )
 
 QMimeData * NodeItemModel::mimeData( const QModelIndexList &indexes ) const
 {
+    return 0;
 }
 
 QStringList NodeItemModel::mimeTypes () const
 {
+    return QStringList();
 }
 
 Node *NodeItemModel::node( const QModelIndex &index ) const

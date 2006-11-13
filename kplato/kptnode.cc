@@ -124,8 +124,8 @@ QString Node::typeToString( bool trans ) const {
         case Type_Milestone: return trans ? i18n("Milestone") : "Milestone";
         case Type_Periodic: return trans ? i18n("Periodic") : "Periodic";
         case Type_Summarytask: return trans ? i18n("Summary") : "Summary-Task";
-        return QString();
     }
+    return QString();
 }
 
 void Node::setName(const QString &n) 
