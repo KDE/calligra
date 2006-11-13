@@ -31,6 +31,17 @@ class KoShape;
 namespace KSpread
 {
 
+class KSPREAD_EXPORT TableShapePlugin : public QObject
+{
+    Q_OBJECT
+
+public:
+
+    TableShapePlugin( QObject * parent,  const QStringList & );
+    ~TableShapePlugin() {}
+
+};
+
 class KSPREAD_EXPORT TableShapeFactory : public KoShapeFactory
 {
     Q_OBJECT

@@ -16,7 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
+#include <KoShapeRegistry.h>
+#include <KoShapeFactory.h>
 #include "KoStarShapeFactory.h"
 #include "KoStarShape.h"
 #include "KoLineBorder.h"
@@ -27,10 +28,16 @@
 #include <QDebug>
 
 K_EXPORT_COMPONENT_FACTORY(kostarshape,
-	         KGenericFactory<KoStarShapeFactory>( "StarShape" ) )
+                           KGenericFactory<KoStarShapePlugin>( "StarShape" ) )
 
-KoStarShapeFactory::KoStarShapeFactory( QObject *parent, const QStringList& )
-: KoShapeFactory( parent, KoStarShapeId, i18n( "A star shape" ) )
+KoStarShapePlugin::KoStarShapePlugin( QObject *parent, const QStringList& )
+    : QObject(parent)
+{
+    KoShapeRegistry::instance()->add( new KoStarShapeFactory( parent));
+}
+
+KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
+    : KoShapeFactory( parent, KoStarShapeId, i18n( "A star shape" ) )
 {
     setToolTip( i18n( "A star" ) );
     setIcon("star");
@@ -52,3 +59,4 @@ KoShape * KoStarShapeFactory::createShape( const KoProperties * params ) const
     return new KoStarShape();
 }
 
+#include "KoStarShapeFactory.moc"

@@ -18,6 +18,7 @@
  */
 
 #include <KoProperties.h>
+#include <KoShapeRegistry.h>
 
 #include "KoRegularPolygonShapeFactory.h"
 #include "KoRegularPolygonShape.h"
@@ -26,7 +27,14 @@
 #include <kgenericfactory.h>
 
 K_EXPORT_COMPONENT_FACTORY(koregularpolygon,
-	         KGenericFactory<KoRegularPolygonShapeFactory>( "RegularPolygonShape" ) )
+	         KGenericFactory<KoRegularPolygonShapePlugin>( "RegularPolygonShape" ) )
+
+
+KoRegularPolygonShapePlugin::KoRegularPolygonShapePlugin( QObject *parent, const QStringList& l )
+{
+    KoShapeRegistry::instance()->add( new KoRegularPolygonShapeFactory( parent, l ));
+}
+
 
 KoRegularPolygonShapeFactory::KoRegularPolygonShapeFactory(QObject *parent, const QStringList&)
 : KoShapeFactory(parent, "KoRegularPolygonShape", i18n("A regular polygon shape"))
@@ -72,3 +80,5 @@ KoShape *KoRegularPolygonShapeFactory::createShape(const KoProperties* props) co
 	s->setBackground(QBrush(Qt::red));
 	return s;
 }
+
+#include <KoRegularPolygonShapeFactory.moc>

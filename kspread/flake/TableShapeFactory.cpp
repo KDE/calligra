@@ -16,12 +16,14 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include <QStringList>
 
 #include <kgenericfactory.h>
 #include <klocale.h>
 
 #include <KoProperties.h>
 #include <KoToolRegistry.h>
+#include <KoShapeRegistry.h>
 
 #include "TableShape.h"
 #include "TableToolFactory.h"
@@ -30,7 +32,17 @@
 
 using namespace KSpread;
 
-K_EXPORT_COMPONENT_FACTORY( tableshape, KGenericFactory<KSpread::TableShapeFactory>( "TableShape" ) )
+K_EXPORT_COMPONENT_FACTORY( tableshape, KGenericFactory<KSpread::TableShapePlugin>( "TableShape" ) )
+
+TableShapePlugin::TableShapePlugin( QObject * parent,  const QStringList & list )
+{
+    KoShapeRegistry::instance()->add( new TableShapeFactory( parent, list ) );
+#if 0
+    KoToolRegistry::instance()->add( new TableToolFactory( parent, list ) );
+# endif
+
+}
+
 
 TableShapeFactory::TableShapeFactory( QObject* parent, const QStringList& list )
     : KoShapeFactory( parent, TableShapeId, i18n( "Table" ) )
@@ -48,8 +60,7 @@ TableShapeFactory::TableShapeFactory( QObject* parent, const QStringList& list )
     props->setProperty( "rows", 2 );
     addTemplate( t );
 
-    // init tool factory here, since this is the only public factory in the lib
-    KoToolRegistry::instance()->add( new TableToolFactory( parent, list ) );
+
 #endif
 }
 

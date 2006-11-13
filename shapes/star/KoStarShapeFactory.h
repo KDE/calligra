@@ -24,12 +24,25 @@
 
 class KoShape;
 
+class KoStarShapePlugin : public QObject {
+
+    Q_OBJECT
+
+public:
+
+    KoStarShapePlugin(QObject * parent,  const QStringList & );
+    ~KoStarShapePlugin() {}
+
+};
+
 /// Factory for path shapes
 class KoStarShapeFactory : public KoShapeFactory
 {
+    Q_OBJECT
+
 public:
     /// constructor
-    KoStarShapeFactory(QObject *parent, const QStringList&);
+    KoStarShapeFactory(QObject *parent);
     ~KoStarShapeFactory() {}
     KoShape * createDefaultShape();
     KoShape * createShape(const KoProperties * params) const;

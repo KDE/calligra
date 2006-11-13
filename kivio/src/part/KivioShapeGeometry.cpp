@@ -23,7 +23,7 @@
 #include <QPointF>
 #include <QDockWidget>
 
-#include <KLocale>
+#include <klocale.h>
 
 #include <KoShape.h>
 #include <KoSelection.h>

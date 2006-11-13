@@ -23,8 +23,21 @@
 #include <KoShape.h>
 #include <KoShapeFactory.h>
 
-class KoRegularPolygonShapeFactory : public KoShapeFactory 
+class KoRegularPolygonShapePlugin : public QObject {
+
+    Q_OBJECT
+
+public:
+
+    KoRegularPolygonShapePlugin(QObject * parent,  const QStringList & );
+    ~KoRegularPolygonShapePlugin() {}
+
+};
+
+class KoRegularPolygonShapeFactory : public KoShapeFactory
 {
+    Q_OBJECT
+
 public:
 	KoRegularPolygonShapeFactory(QObject *parent, const QStringList&);
 	~KoRegularPolygonShapeFactory() {}
