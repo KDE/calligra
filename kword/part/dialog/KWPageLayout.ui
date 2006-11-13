@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>615</width>
-    <height>446</height>
+    <height>426</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -20,43 +20,55 @@
     <number>6</number>
    </property>
    <item row="0" column="0" colspan="2" >
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="label" >
-       <property name="text" >
-        <string>Unit:</string>
-       </property>
-       <property name="buddy" >
-        <cstring>unitCombo</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="unitCombo" />
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+    <widget class="QWidget" native="1" name="unitBox" >
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="unitLabel" >
+          <property name="text" >
+           <string>Unit:</string>
+          </property>
+          <property name="buddy" >
+           <cstring>unitCombo</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="unitCombo" />
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>461</width>
+            <height>27</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item row="1" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
+    <widget class="QGroupBox" name="pageSizeGB" >
      <property name="title" >
       <string>Page Size</string>
      </property>
@@ -68,7 +80,7 @@
        <number>6</number>
       </property>
       <item row="0" column="0" >
-       <widget class="QLabel" name="label_2" >
+       <widget class="QLabel" name="sizeLabel" >
         <property name="text" >
          <string>Size:</string>
         </property>
@@ -111,22 +123,22 @@
        </layout>
       </item>
       <item row="1" column="0" >
-       <widget class="QLabel" name="label_3" >
+       <widget class="QLabel" name="widthLabel" >
         <property name="text" >
          <string>Width:</string>
         </property>
         <property name="buddy" >
-         <cstring>width</cstring>
+         <cstring>widthLabel</cstring>
         </property>
        </widget>
       </item>
       <item row="1" column="2" >
-       <widget class="QLabel" name="label_4" >
+       <widget class="QLabel" name="heightLabel" >
         <property name="text" >
          <string>Height:</string>
         </property>
         <property name="buddy" >
-         <cstring>height</cstring>
+         <cstring>heightLabel</cstring>
         </property>
        </widget>
       </item>
@@ -144,7 +156,7 @@
        </spacer>
       </item>
       <item row="1" column="1" >
-       <widget class="KoUnitDoubleSpinBox" name="width" >
+       <widget class="KoUnitDoubleSpinBox" name="widthUSB" >
         <property name="accessibleName" >
          <string>width</string>
         </property>
@@ -154,7 +166,7 @@
        </widget>
       </item>
       <item row="1" column="3" >
-       <widget class="KoUnitDoubleSpinBox" name="height" >
+       <widget class="KoUnitDoubleSpinBox" name="heightUSB" >
         <property name="accessibleName" >
          <string>height</string>
         </property>
@@ -174,7 +186,7 @@
     </widget>
    </item>
    <item row="2" column="0" >
-    <widget class="QGroupBox" name="groupBox_2" >
+    <widget class="QGroupBox" name="pageSetupGB" >
      <property name="title" >
       <string>Page Setup</string>
      </property>
@@ -185,7 +197,7 @@
       <property name="spacing" >
        <number>6</number>
       </property>
-      <item row="0" column="0" colspan="4" >
+      <item row="0" column="0" >
        <widget class="QCheckBox" name="facingPagesCB" >
         <property name="toolTip" >
          <string>Combines two pages into one area</string>
@@ -205,47 +217,62 @@
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QLabel" name="portraitLabel" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>5</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QGroupBox" name="orientationGB" >
+        <property name="title" >
+         <string>Orientation</string>
         </property>
-        <property name="text" >
-         <string>[]</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QRadioButton" name="portrait" >
-        <property name="text" >
-         <string>Portait</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2" >
-       <widget class="QLabel" name="landscapeLabel" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>0</hsizetype>
-          <vsizetype>5</vsizetype>
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text" >
-         <string>[]</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3" >
-       <widget class="QRadioButton" name="landscape" >
-        <property name="text" >
-         <string>Landscape</string>
-        </property>
+        <layout class="QGridLayout" >
+         <property name="margin" >
+          <number>9</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item row="0" column="0" >
+          <widget class="QLabel" name="portraitIconLabel" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>5</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text" >
+            <string>[]</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" >
+          <widget class="QRadioButton" name="portraitRB" >
+           <property name="text" >
+            <string>Portrait</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2" >
+          <widget class="QLabel" name="landscapeIconLabel" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>0</hsizetype>
+             <vsizetype>5</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text" >
+            <string>[]</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3" >
+          <widget class="QRadioButton" name="landscapeRB" >
+           <property name="text" >
+            <string>Landscape</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>
@@ -286,7 +313,7 @@
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="KoUnitDoubleSpinBox" name="top" >
+       <widget class="KoUnitDoubleSpinBox" name="topUSB" >
         <property name="toolTip" >
          <string>Top Margin</string>
         </property>
@@ -299,7 +326,7 @@
        </widget>
       </item>
       <item row="2" column="0" >
-       <widget class="KoUnitDoubleSpinBox" name="left" >
+       <widget class="KoUnitDoubleSpinBox" name="leftUSB" >
         <property name="toolTip" >
          <string>Left Margin</string>
         </property>
@@ -312,7 +339,7 @@
        </widget>
       </item>
       <item row="3" column="1" >
-       <widget class="KoUnitDoubleSpinBox" name="bottom" >
+       <widget class="KoUnitDoubleSpinBox" name="bottomUSB" >
         <property name="statusTip" >
          <string>Bottom Margin</string>
         </property>
@@ -325,7 +352,7 @@
        </widget>
       </item>
       <item row="2" column="2" >
-       <widget class="KoUnitDoubleSpinBox" name="right" >
+       <widget class="KoUnitDoubleSpinBox" name="rightUSB" >
         <property name="toolTip" >
          <string>Right Margin</string>
         </property>
