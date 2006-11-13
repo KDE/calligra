@@ -18,11 +18,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
-#include "Damages.h"
+#include <QPoint>
 
 #include "Cell.h"
 #include "Sheet.h"
+
+#include "Damages.h"
 
 namespace KSpread
 {
@@ -65,6 +66,16 @@ CellDamage::~CellDamage()
 KSpread::Cell* CellDamage::cell() const
 {
   return d->sheet->cellAt( d->column, d->row );
+}
+
+KSpread::Sheet* CellDamage::sheet() const
+{
+  return d->sheet;
+}
+
+QPoint CellDamage::position() const
+{
+  return QPoint( d->column, d->row );
 }
 
 CellDamage::Changes CellDamage::changes() const

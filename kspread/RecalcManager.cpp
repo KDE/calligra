@@ -234,6 +234,8 @@ void RecalcManager::recalcRegion(const Region& region)
       for (int row = range.top(); row <= bottom; ++row)
       {
         Cell* const cell = sheet->cellAt(col, row);
+        if ( cell->isDefault() )
+            continue;
 
         // If we have not processed this cell yet.
         if (!d->cells.contains(cell))

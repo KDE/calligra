@@ -7124,9 +7124,8 @@ void View::handleDamages( const QList<Damage*>& damages )
         if( damage->type() == Damage::Cell )
         {
             CellDamage* cellDamage = static_cast<CellDamage*>( damage );
-            Cell* damagedCell = cellDamage->cell();
-            Sheet* damagedSheet = damagedCell->sheet();
-            const QPoint position( damagedCell->column(), damagedCell->row() );
+            Sheet* const damagedSheet = cellDamage->sheet();
+            const QPoint position = cellDamage->position();
 
             if ( cellDamage->changes() & CellDamage::Appearance )
             {

@@ -66,6 +66,8 @@ class CellDamage : public Damage
     virtual Type type() const { return Damage::Cell; }
 
     KSpread::Cell* cell() const;
+    KSpread::Sheet* sheet() const;
+    QPoint position() const;
 
     Changes changes() const;
 
