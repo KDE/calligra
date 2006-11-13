@@ -28,10 +28,17 @@ KoStarShape::KoStarShape()
 , m_zoomX( 1.0 )
 , m_zoomY( 1.0 )
 {
+    m_radius[base] = 25.0;
+    m_radius[tip] = 50.0;
+    m_angles[base] = M_PI_2;
+    m_angles[tip] = M_PI_2;
+    m_roundness[base] = m_roundness[tip] = 0.0f;
+
+    m_handles.push_back( QPointF() );
+    m_handles.push_back( QPointF() );
+
     createPath();
-    m_points = *m_subpaths[0];
-    m_handles.push_back( m_points.at(base)->point() );
-    m_handles.push_back( m_points.at(tip)->point() );
+
     m_center = computeCenter();
 }
 
@@ -42,7 +49,49 @@ KoStarShape::~KoStarShape()
 void KoStarShape::setCornerCount( uint cornerCount )
 {
     if( cornerCount >= 3 )
+    {
         m_cornerCount = cornerCount;
+        createPath();
+    }
+}
+
+uint KoStarShape::cornerCount()
+{
+    return m_cornerCount;
+}
+
+void KoStarShape::setBaseRadius( double baseRadius )
+{
+    m_radius[base] = fabs( baseRadius );
+    updatePath( QSize() );
+}
+
+double KoStarShape::baseRadius()
+{
+    return m_radius[base];
+}
+
+void KoStarShape::setTipRadius( double tipRadius )
+{
+    m_radius[tip] = fabs( tipRadius );
+    updatePath( QSize() );
+}
+
+double KoStarShape::tipRadius()
+{
+    return m_radius[tip];
+}
+
+void KoStarShape::setBaseRoundness( double baseRoundness )
+{
+    m_roundness[base] = baseRoundness;
+    updatePath( QSize() );
+}
+
+void KoStarShape::setTipRoundness( double tipRoundness )
+{
+    m_roundness[tip] = tipRoundness;
+    updatePath( QSize() );
 }
 
 void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
@@ -54,10 +103,11 @@ void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::Key
         QPointF radialVector = m_handles[handleId] - m_center;
         // cross product to determine in which direction the user is dragging
         double moveDirection = radialVector.x()*tangentVector.y() - radialVector.y()*tangentVector.x();
+        // control changes roundness on both handles, else only the actual handle roundness is changed
         if( modifiers & Qt::ControlModifier )
-            m_roundness[base] = m_roundness[tip] = moveDirection < 0.0f ? distance : -distance;
-        else
             m_roundness[handleId] = moveDirection < 0.0f ? distance : -distance;
+        else
+            m_roundness[base] = m_roundness[tip] = moveDirection < 0.0f ? distance : -distance;
     }
     else
     {
@@ -79,11 +129,11 @@ void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::Key
         }
         else
         {
-            // control make the base point move radially
+            // control make the base point move freely
             if( modifiers & Qt::ControlModifier )
-                m_angles[base] = m_angles[tip];
-            else
                 m_angles[base] += diffAngle;
+            else
+                m_angles[base] = m_angles[tip];
         }
     }
 }
@@ -122,13 +172,15 @@ void KoStarShape::updatePath( const QSizeF &size )
 
 void KoStarShape::createPath()
 {
-    double radianStep = M_PI / static_cast<double>(m_cornerCount);
+    if( m_subpaths.size() )
+    {
+        foreach( KoPathPoint *p, *m_subpaths[0] )
+            delete p;
+        delete m_subpaths[0];
+        m_subpaths.clear();
+    }
 
-    m_radius[base] = 25.0;
-    m_radius[tip] = 50.0;
-    m_angles[base] = M_PI_2;
-    m_angles[tip] = M_PI_2;
-    m_roundness[base] = m_roundness[tip] = 0.0f;
+    double radianStep = M_PI / static_cast<double>(m_cornerCount);
 
     QPointF center = QPointF( m_radius[tip], m_radius[tip] );
 
@@ -142,6 +194,10 @@ void KoStarShape::createPath()
     }
     close();
     normalize();
+
+    m_points = *m_subpaths[0];
+    m_handles[base] = m_points.at(base)->point();
+    m_handles[tip] = m_points.at(tip)->point();
 }
 
 void KoStarShape::resize( const QSizeF &newSize )

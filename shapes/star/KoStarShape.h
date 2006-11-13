@@ -29,8 +29,55 @@ class KoStarShape : public KoParameterShape
 public:
     KoStarShape();
     ~KoStarShape();
-    /// sets the new number of corners
+
+    /**
+     * Sets the number of corners.
+     *
+     * The minimum accepted number of corners is 3.
+     *
+     * @param cornerCount the new number of corners
+     */
     void setCornerCount( uint cornerCount );
+
+    /// Returns the number of corners
+    uint cornerCount();
+
+    /**
+     * Sets the radius of the base points.
+     * @param baseRadius the new base radius
+     */
+    void setBaseRadius( double baseRadius );
+
+    /// Returns the base radius
+    double baseRadius();
+
+    /**
+     * Sets the radius of the tip points.
+     * @param tipRadius the new tip radius
+     */
+    void setTipRadius( double tipRadius );
+
+    /// Returns the tip radius
+    double tipRadius();
+
+    /**
+     * Sets the roundness at the base points.
+     *
+     * A roundness value of zero disables the roundness.
+     *
+     * @param baseRoundness the new base roundness
+     */
+    void setBaseRoundness( double baseRoundness );
+
+    /**
+     * Sets the roundness at the tip points.
+     *
+     * A roundness value of zero disables the roundness.
+     *
+     * @param tipRoundness the new base roundness
+     */
+    void setTipRoundness( double tipRoundness );
+
     virtual void resize( const QSizeF &newSize );
 protected:
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
@@ -38,7 +85,7 @@ protected:
     void createPath();
 
 private:
-    // compute the star center point from the inner points
+    /// Computes the star center point from the inner points
     QPointF computeCenter() const;
     enum Handles { base = 0, tip = 1 };
     uint m_cornerCount; ///< number of corners
