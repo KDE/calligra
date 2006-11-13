@@ -18,7 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <dialogui.h>
 #include <csvdialog.h>
 
 #include <q3table.h>

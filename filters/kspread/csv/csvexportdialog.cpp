@@ -19,7 +19,6 @@
 */
 
 #include <csvexportdialog.h>
-#include <exportdialogui.h>
 
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>

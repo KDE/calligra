@@ -22,6 +22,7 @@
 #define CSVEXPORTDIALOG_H
 
 #include <kdialog.h>
+#include <ui_exportdialogui.h>
 
 class ExportDialogUI;
 class QValidator;
@@ -30,6 +31,15 @@ namespace KSpread
 {
 class Map;
 }
+
+class ExportDialogUI : public QWidget, public Ui::ExportDialogUI
+{
+public:
+  ExportDialogUI( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class CSVExportDialog : public KDialog
 {

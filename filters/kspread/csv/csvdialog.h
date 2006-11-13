@@ -25,7 +25,16 @@
 
 #include <kdialog.h>
 
-class DialogUI;
+#include <ui_dialogui.h>
+
+class DialogUI : public QWidget, public Ui::DialogUI
+{
+public:
+  DialogUI( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class CSVDialog : public KDialog
 {
