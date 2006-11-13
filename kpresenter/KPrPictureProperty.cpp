@@ -20,7 +20,6 @@
 
 #include "KPrPictureProperty.h"
 
-#include "picturepropertyui.h"
 #include "KPrPicturePreview.h"
 
 #include <knuminput.h>

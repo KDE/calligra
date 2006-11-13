@@ -26,9 +26,18 @@
 #include <QPixmap>
 
 #include "KPrCommand.h"
+#include "ui_picturepropertyui.h"
 
-class PicturePropertyUI;
 class QPixmap;
+
+class PicturePropertyUI : public QWidget, public Ui::PicturePropertyUI
+{
+public:
+  PicturePropertyUI( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class KPrPictureProperty : public QWidget
 {

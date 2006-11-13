@@ -24,7 +24,16 @@
 
 #include "KPrCommand.h"
 
-class PolygonPropertyUI;
+#include "ui_polygonpropertyui.h"
+
+class PolygonPropertyUI : public QWidget, public Ui::PolygonPropertyUI
+{
+public:
+  PolygonPropertyUI( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class KPrPolygonProperty : public QWidget
 {

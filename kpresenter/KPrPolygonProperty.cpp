@@ -28,7 +28,6 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include "polygonpropertyui.h"
 #include "KPrPolygonPreview.h"
 
 KPrPolygonProperty::KPrPolygonProperty( QWidget *parent, const char *name, KPrPolygonSettingCmd::PolygonSettings &polygonSettings )
