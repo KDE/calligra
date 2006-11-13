@@ -29,6 +29,7 @@
 #include <core/kexi.h>
 #include <core/kexiproject.h>
 #include <kexidb/drivermanager.h>
+#include <kexidb/utils.h>
 #include <q3tl.h>
 //Added by qt3to4:
 #include <Q3ValueList>
@@ -42,7 +43,6 @@ KexiMigrate::KexiMigrate(QObject *parent, const char *name,
   : QObject( parent, name )
   , m_migrateData(0)
   , m_destPrj(0)
-//  , m_copyOfKexi__objects(0)
 {
 }
 
@@ -174,21 +174,21 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 		result->setStatus(&drvManager);
 		return false;
 	}
-	foreach(QStringList::ConstIterator, it, tables) {
-		if (destDriver->isSystemObjectName( *it ) //"kexi__objects", etc.
-			|| (*it).lower().startsWith("kexi__")) //tables at KexiProject level, e.g. "kexi__blobs"
+	foreach(const QString tableName, tables) {
+		if (destDriver->isSystemObjectName( tableName ) //"kexi__objects", etc.
+			|| tableName.toLower().startsWith("kexi__")) //tables at KexiProject level, e.g. "kexi__blobs"
 			continue;
 
-		const QString tableName( KexiUtils::string2Identifier(*it) );
+		const QString tableNameId( KexiUtils::string2Identifier(tableName) );
 		KexiDB::TableSchema *tableSchema;
-//		if (tableName.lower().startsWith("kexi__"))
+//		if (tableName.toLower().startsWith("kexi__"))
 //			tableSchema = new KexiDB::InternalTableSchema(tableName);
 //		else
-		tableSchema = new KexiDB::TableSchema(tableName);
+		tableSchema = new KexiDB::TableSchema(tableNameId);
 
-		tableSchema->setCaption( *it ); //caption is equal to the original name
+		tableSchema->setCaption( tableName ); //caption is equal to the original name
 
-		if (drv_readTableSchema(*it, *tableSchema)) {
+		if (drv_readTableSchema(tableName, *tableSchema)) {
 			//yeah, got a table
 			//Add it to list of tables which we will create if all goes well
 			m_tableSchemas.append(tableSchema);
@@ -227,13 +227,13 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 	}
 	if (ok) {
 		// Copy data for "kexi__objectdata" as well, if available in the source db
-		if (tables.find("kexi__objectdata")!=tables.end())
+		if (tables.contains("kexi__objectdata"))
 			m_tableSchemas.append(destConn->tableSchema("kexi__objectdata")); 
 	}
 
 	for(Q3PtrListIterator<TableSchema> ts(m_tableSchemas); ok && ts.current() != 0 ; ++ts)
 	{
-		const QString tname( ts.current()->name().lower() );
+		const QString tname( ts.current()->name().toLower() );
 		if (destConn->driver()->isSystemObjectName( tname )
 //! @todo what if these two tables are not compatible with tables created in detination db
 //! because newer db format was used?
@@ -261,7 +261,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 
 	// 5.1. Copy remaining "kexi__objects" contents (queries, forms, etc.) 
 	//      if "kexi__objects" table is available in the source db
-	if (ok && tables.find("kexi__objects")!=tables.end()) {
+	if (ok && tables.contains("kexi__objects")) {
 		// At 'source' side, we can only can use drv_copyTable, so let's create 
 		// a temporary copy of "kexi__objects" and copy everything there
 		KexiDB::TableSchema *kexi__objectsCopy = 
@@ -451,74 +451,38 @@ void KexiMigrate::updateProgress(quint64 step) {
 // Prompt the user to choose a field type
 KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
 {
-	KInputDialog *dlg;
-	QStringList  types;
-	QString res;
+	QStringList types;
+	for (uint i = KexiDB::Field::InvalidType+1; i <= KexiDB::Field::LastType; i++)
+		types.append( KexiDB::Field::typeName((KexiDB::Field::Type)i) );
 
-	types << "Byte";
-	types << "Short Integer";
-	types << "Integer";
-	types << "Big Integer";
-	types << "Boolean";
-	types << "Date";
-	types << "Date Time";
-	types << "Time";
-	types << "Float";
-	types << "Double";
-	types << "Text";
-	types << "Long Text";
-	types << "Binary Large Object";
+	bool ok;
+	const QString res = KInputDialog::getItem( i18n("Select Field Type"),
+		i18n("The data type for %1 could not be determined. "
+		"Please select one of the following data "
+		"types").arg(fname), types, 0, false, &ok);
 
-	res = dlg->getItem( i18n("Field Type"),
-	                    i18n("The data type for %1 could not be determined. "
-				 "Please select one of the following data "
-				 "types").arg(fname),
-                      types, 0, false);
-
-//! @todo use QMap<QCString, KexiDB::Field::Type> here!
-	if (res == *types.at(0))
-		return KexiDB::Field::Byte;
-	else if (res == *types.at(1))
-		return KexiDB::Field::ShortInteger;
-	else if (res == *types.at(2))
-		return KexiDB::Field::Integer;
-	else if (res == *types.at(3))
-		return KexiDB::Field::BigInteger;
-	else if (res == *types.at(4))
-		return KexiDB::Field::Boolean;
-	else if (res == *types.at(5))
-		return KexiDB::Field::Date;
-	else if (res == *types.at(6))
-		return KexiDB::Field::DateTime;
-	else if (res == *types.at(7))
-		return KexiDB::Field::Time;
-	else if (res == *types.at(8))
-		return KexiDB::Field::Float;
-	else if (res == *types.at(9))
-		return KexiDB::Field::Double;
-	else if (res == *types.at(10))
-		return KexiDB::Field::Text;
-	else if (res == *types.at(11))
-		return KexiDB::Field::LongText;
-	else if (res == *types.at(12))
-		return KexiDB::Field::BLOB;
-	else
-		return KexiDB::Field::Text;
+//! @todo use KexiDB::Field::typeForString()
+	const int index = types.indexOf( res );
+	if (index==-1 || !ok)
+		return KexiDB::Field::InvalidType;
+	const KexiDB::Field::Type t = KexiDB::intToFieldType( 
+		(int)KexiDB::Field::InvalidType + 1 + index );
+	return t==KexiDB::Field::InvalidType ? KexiDB::Field::Text : t;
 }
 
 QVariant KexiMigrate::propertyValue( const Q3CString& propName )
 {
-	return m_properties[propName.lower()];
+	return m_properties[propName.toLower()];
 }
 
 QString KexiMigrate::propertyCaption( const Q3CString& propName ) const
 {
-	return m_propertyCaptions[propName.lower()];
+	return m_propertyCaptions[propName.toLower()];
 }
 
 void KexiMigrate::setPropertyValue( const Q3CString& propName, const QVariant& value )
 {
-	m_properties[propName.lower()] = value;
+	m_properties[propName.toLower()] = value;
 }
 
 Q3ValueList<Q3CString> KexiMigrate::propertyNames() const
@@ -535,7 +499,7 @@ bool KexiMigrate::isValid()
 	{
 		setError(ERR_INCOMPAT_DRIVER_VERSION,
 		i18n("Incompatible migration driver's \"%1\" version: found version %2, expected version %3.")
-		.arg(name())
+		.arg(objectName())
 		.arg(QString("%1.%2").arg(versionMajor()).arg(versionMinor()))
 		.arg(QString("%1.%2").arg(KexiMigration::versionMajor()).arg(KexiMigration::versionMinor())));
 		return false;
