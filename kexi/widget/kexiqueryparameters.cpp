@@ -29,9 +29,10 @@
 #include "utils/kexidatetimeformatter.h"
 
 //static
-QValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent, const KexiDB::Driver &driver, 
-	KexiDB::QuerySchema& querySchema, bool &ok)
+QValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent, 
+	const KexiDB::Driver &driver, KexiDB::QuerySchema& querySchema, bool &ok)
 {
+	Q_UNUSED(driver);
 	ok = false;
 	const KexiDB::QuerySchemaParameterList params( querySchema.parameters() );
 	QValueList<QVariant> values;

@@ -1135,4 +1135,19 @@ void KexiDB::debugRowData(const RowData& rowData)
 		KexiDBDbg << "- " << (*it) << endl;
 }
 
+Field::Type KexiDB::maximumForIntegerTypes(Field::Type t1, Field::Type t2)
+{
+	if (!Field::isIntegerType(t1) || !Field::isIntegerType(t2))
+		return Field::InvalidType;
+	if (t1==t2)
+		return t2;
+	if (t1==Field::ShortInteger && t2!=Field::Integer && t2!=Field::BigInteger)
+		return t1;
+	if (t1==Field::Integer && t2!=Field::BigInteger)
+		return t1;
+	if (t1==Field::BigInteger)
+		return t1;
+	return KexiDB::maximumForIntegerTypes(t2, t1); //swap
+}
+
 #include "utils_p.moc"

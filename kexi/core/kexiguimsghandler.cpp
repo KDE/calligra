@@ -24,6 +24,7 @@
 #include <kexiutils/utils.h>
 
 #include <kmessagebox.h>
+#include <kdialogbase.h>
 
 KexiGUIMessageHandler::KexiGUIMessageHandler(QWidget *parent)
 : KexiDB::MessageHandler(parent)
@@ -86,7 +87,7 @@ KexiGUIMessageHandler::showErrorMessage(const QString &message, Kexi::ObjectStat
 {
 	if (status && status->error()) {
 		QString msg(message);
-		if (msg.isEmpty()) {
+		if (msg.isEmpty() || msg==status->message) {
 			msg = status->message;
 			status->message = status->description;
 			status->description = "";
@@ -110,7 +111,7 @@ KexiGUIMessageHandler::showErrorMessage(const QString &message, Kexi::ObjectStat
 
 void
 KexiGUIMessageHandler::showMessage(MessageType type,
-	const QString &title, const QString &details)
+	const QString &title, const QString &details, const QString& dontShowAgainName)
 {
 	if (!m_enableMessages)
 		return;
@@ -127,6 +128,9 @@ KexiGUIMessageHandler::showMessage(MessageType type,
 		case Error:
 			KMessageBox::detailedError(m_messageHandlerParentWidget, msg, details);
 			break;
+		case Warning:
+			showWarningContinueMessage(title, details, dontShowAgainName);
+			break;
 		default: //Sorry
 			KMessageBox::detailedSorry(m_messageHandlerParentWidget, msg, details);
 		}
@@ -135,6 +139,23 @@ KexiGUIMessageHandler::showMessage(MessageType type,
 		KMessageBox::messageBox(m_messageHandlerParentWidget, 
 			type==Error ? KMessageBox::Error : KMessageBox::Sorry, msg);
 	}
+}
+
+void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, const QString &details,
+	const QString& dontShowAgainName)
+{
+	if (!KMessageBox::shouldBeShownContinue(dontShowAgainName))
+		return;
+	KDialogBase *dialog = new KDialogBase(
+		futureI18n("Warning"), KDialogBase::Yes, KDialogBase::Yes, KDialogBase::No,
+		m_messageHandlerParentWidget, "warningContinue", true, true, KStdGuiItem::cont() );
+	bool checkboxResult = false;
+	KMessageBox::createKMessageBox(dialog, QMessageBox::Warning, 
+		title + (details.isEmpty() ? QString::null : (QString("\n")+details)), QStringList(),
+		dontShowAgainName.isEmpty() ? QString::null : futureI18n("Do not show this message again"),
+		&checkboxResult, 0);
+	if (checkboxResult)
+		KMessageBox::saveDontShowAgainContinue(dontShowAgainName);
 }
 
 int KexiGUIMessageHandler::askQuestion( const QString& message, 

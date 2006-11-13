@@ -15,6 +15,27 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-11-07..13
+Main Window
+- switch contents of custom property tabs after switching the current tab/window
+  (needed for Table Designer's tab)
+- added a warning message box with "Errors encountered during loading plugins" 
+  message, controled by dontShowWarningsRelatedToPluginsLoading configuration setting.
+- groups and items for nonexisting plugins are not visible now
+Query Designer
+- show more error messages on opening query in design view 
+  (e.g. for unsupported column expressions)
+- fixed saving relationships: removed too strict checking for datatypes when crating 
+  relationships (signedness)
+KexiDB
+- Parser: improved types evaluation for expressions
+- kexi__objectdata.o_data field type changed from BLOB to LongText (backward compatible)
+  to improve human-readability
+Forms
+- fixed problem with setting "invalid" flag for fields with invalid data source
+
+~~~~~~~~~~~~~~~~ 1.1.1 bugfix release (with KOffice 1.6.1)  ~~~~~~~~~~~~~~~~
+
 2006-10-30..2006-11-06
 Table View
 - better displaying tooltips for columns with lookup data

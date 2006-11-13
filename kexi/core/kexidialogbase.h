@@ -264,7 +264,8 @@ class KEXICORE_EXPORT KexiDialogBase :
 		/*! Used by Part::openInstance(), 
 		 like switchToViewMode( int newViewMode ), but passed \a staticObjectArgs.
 		 Only used for parts of class KexiPart::StaticPart. */
-		tristate switchToViewMode( int newViewMode, QMap<QString,QString>* staticObjectArgs );
+		tristate switchToViewMode( int newViewMode, QMap<QString,QString>* staticObjectArgs,
+			bool& proposeOpeningInTextViewModeBecauseOfProblems);
 
 		void registerDialog();
 
@@ -272,6 +273,9 @@ class KEXICORE_EXPORT KexiDialogBase :
 
 		//! \internal
 		void addView(KexiViewBase *view, int mode);
+
+		//! \internal
+		void removeView(int mode);
 
 		int m_supportedViewModes;
 		int m_openedViewModes;
@@ -309,6 +313,8 @@ class KEXICORE_EXPORT KexiDialogBase :
 		bool storeDataBlock_internal( const QString &dataString, int o_id, const QString& dataID );
 #endif
 //		void setError(const QString& message, const QString& details);
+
+		bool isDesignModePreloadedForTextModeHackUsed(int newViewMode) const;
 
 	private:
 		KexiMainWindow *m_parentWindow;

@@ -21,6 +21,7 @@
  */
 
 #include "expression.h"
+#include "utils.h"
 #include "parser/sqlparser.h"
 #include "parser/parser_p.h"
 
@@ -266,6 +267,8 @@ bool UnaryExpr::validate(ParseInfo& parseInfo)
 	if (!m_arg->validate(parseInfo))
 		return false;
 
+//! @todo compare types... e.g. NOT applied to Text makes no sense...
+
 	// update type
 	if (m_arg->toQueryParameter()) {
 		m_arg->toQueryParameter()->setType(type());
@@ -326,6 +329,8 @@ bool BinaryExpr::validate(ParseInfo& parseInfo)
 	if (!m_rarg->validate(parseInfo))
 		return false;
 
+//! @todo compare types..., BITWISE_SHIFT_RIGHT requires integers, etc...
+
 	//update type for query parameters
 	QueryParameterExpr * queryParameter = m_larg->toQueryParameter();
 	if (queryParameter)
@@ -340,13 +345,12 @@ bool BinaryExpr::validate(ParseInfo& parseInfo)
 Field::Type BinaryExpr::type()
 {
 	const Field::Type lt = m_larg->type(), rt = m_rarg->type();
+	if (lt==Field::InvalidType || rt == Field::InvalidType)
+		return Field::InvalidType;
 	if (lt==Field::Null || rt == Field::Null) {
 		if (m_token!=OR) //note that NULL OR something   != NULL
 			return Field::Null;
 	}
-
-	if (Field::isFPNumericType(lt) && Field::isIntegerType(rt))
-		return lt;
 
 	switch (m_token) {
 	case BITWISE_SHIFT_RIGHT:
@@ -354,6 +358,21 @@ Field::Type BinaryExpr::type()
 	case CONCATENATION:
 		return lt;
 	}
+
+	const bool ltInt = Field::isIntegerType(lt);
+	const bool rtInt = Field::isIntegerType(rt);
+	if (ltInt && rtInt)
+		return KexiDB::maximumForIntegerTypes(lt, rt);
+
+	if (Field::isFPNumericType(lt) && rtInt)
+		return lt;
+	if (Field::isFPNumericType(rt) && ltInt)
+		return rt;
+	if ((lt==Field::Double || lt==Field::Float) && rtInt)
+		return lt;
+	if ((rt==Field::Double || rt==Field::Float) && ltInt)
+		return rt;
+
 	return Field::Boolean;
 }
 
@@ -565,7 +584,7 @@ VariableExpr::~VariableExpr()
 QString VariableExpr::debugString()
 {
 	return QString("VariableExpr(") + name
-		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
+		+ QString(",type=%1)").arg(field ? Driver::defaultSQLTypeName(type()) : QString("FIELD NOT DEFINED YET"));
 }
 
 QString VariableExpr::toString(QuerySchemaParameterValueListIterator* params)

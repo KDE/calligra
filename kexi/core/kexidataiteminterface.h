@@ -185,7 +185,7 @@ class KEXICORE_EXPORT KexiDataItemInterface
 
 		inline virtual void setFocus() { if (widget()) widget()->setFocus(); }
 
-		inline bool cursorAtNewRow() const { return m_listener ? m_listener->cursorAtNewRow() : false; }
+		bool cursorAtNewRow();
 
 		/*! Sets a pointer to a Parent Data Item Interface. This pointer is 0 by default, 
 		 but can be set by parent widget if this interface is a building block of a larger data widget. 
@@ -231,8 +231,12 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		 Used in KexiDBComboBox. */
 		virtual void beforeSignalValueChanged() {};
 
+		KexiDataItemChangesListener* listener();
+
 //moved to KexiFormDataItemInterface: QString m_dataSource;
+		QGuardedPtr<QObject> m_listenerObject;
 		KexiDataItemChangesListener* m_listener;
+		bool m_listenerIsQObject;
 		QVariant m_origValue;
 
 		/*! @see parentDataItemInterface() */
