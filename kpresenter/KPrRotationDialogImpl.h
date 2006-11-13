@@ -27,12 +27,21 @@
 #include <Q3PtrList>
 #include <QPixmap>
 #include <kdialog.h>
+#include "ui_rotationpropertyui.h"
 
 class KPrTextPreview;
-class RotationPropertyUI;
 class QObject;
 class QEvent;
 class KPrCircleGroup;
+
+class RotationPropertyUI : public QWidget, public Ui::RotationPropertyUI
+{
+public:
+  RotationPropertyUI( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 /**
   * A dialog that lets the user interactively choose an angle for rotation.

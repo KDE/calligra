@@ -22,10 +22,18 @@
 #define PIEPROPERTY_H
 
 #include <QWidget>
-
+#include "ui_piepropertyui.h"
 #include "KPrCommand.h"
 
-class PiePropertyUI;
+
+class PiePropertyUI : public QWidget, public Ui::PiePropertyUI
+{
+public:
+  PiePropertyUI( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 class KPrPieProperty : public QWidget
 {

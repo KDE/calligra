@@ -20,7 +20,6 @@
 
 #include "KPrPenStyleWidget.h"
 
-#include "penstyle.h"
 #include "KPrPBPreview.h"
 
 #include <QLayout>

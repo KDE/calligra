@@ -27,8 +27,16 @@
 
 #include "KPrCommand.h"
 #include <KoPen.h>
+#include "ui_penstyle.h"
 
-class PenStyleUI;
+class PenStyleUI : public QWidget, public Ui::PenStyleUI
+{
+public:
+  PenStyleUI( QWidget *parent ) : QWidget( parent ) {
+    setupUi( this );
+  }
+};
+
 
 
 class KPrPenStyleWidget : public QWidget

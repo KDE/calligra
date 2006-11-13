@@ -37,12 +37,11 @@
 #include <kvbox.h>
 
 #include "KPrRotationDialogImpl.h"
-#include "rotationpropertyui.h"
 #include "KPrTextPreview.h"
 
 KPrRotationDialogImpl::KPrRotationDialogImpl( QWidget *parent, const char* name )
 : KDialog( parent )
-, m_dialog( new RotationPropertyUI( this, name ) )
+, m_dialog( new RotationPropertyUI( this ) )
 {
     setCaption(i18n( "Rotation"));
     setButtons(Ok|Cancel|Apply);

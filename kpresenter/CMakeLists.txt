@@ -123,13 +123,10 @@ kde4_automoc(${kpresenterprivate_LIB_SRCS})
 kde4_add_ui3_files(kpresenterprivate_LIB_SRCS
    insertpagedia.ui
    shadowdialog.ui
-   rotationpropertyui.ui
-   penstyle.ui
    polygonpropertyui.ui
-   piepropertyui.ui
    picturepropertyui.ui)
 
-kde4_add_ui_files(kpresenterprivate_LIB_SRCS brushpropertyui.ui rectpropertyui.ui marginui.ui gradientpropertyui.ui imageEffectBase.ui slidetransitionwidget.ui )
+kde4_add_ui_files(kpresenterprivate_LIB_SRCS brushpropertyui.ui rectpropertyui.ui marginui.ui gradientpropertyui.ui imageEffectBase.ui slidetransitionwidget.ui piepropertyui.ui rotationpropertyui.ui penstyle.ui)
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 

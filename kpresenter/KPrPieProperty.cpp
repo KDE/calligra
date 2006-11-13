@@ -29,7 +29,6 @@
 #include <knuminput.h>
 
 #include "global.h"
-#include "piepropertyui.h"
 #include "KPrPiePreview.h"
 
 
