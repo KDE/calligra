@@ -119,12 +119,11 @@ void KivioView::initGUI()
     connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
             m_verticalRuler, SLOT(setOffset(int)));
 
-    if(shell()) {
-        KivioShapeGeometryFactory geometryFactory(document());
-        m_geometryDocker = qobject_cast<KivioShapeGeometry*>(shell()->createDockWidget(&geometryFactory));
+    KivioShapeGeometryFactory geometryFactory(document());
+    m_geometryDocker = qobject_cast<KivioShapeGeometry*>(createDockWidget(&geometryFactory));
+
+    if(m_geometryDocker) {
         m_geometryDocker->setEnabled(false);
-    } else {
-        m_geometryDocker = 0;
     }
 
     connect(m_canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
