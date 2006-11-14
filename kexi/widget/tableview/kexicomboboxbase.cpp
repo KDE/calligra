@@ -228,7 +228,7 @@ QVariant KexiComboBoxBase::value()
 		}
 		else {
 			//use 'related table data' model
-			KexiTableItem *it = popup()->tableView()->selectedItem();
+			KexiTableItem *it = popup() ? popup()->tableView()->selectedItem() : 0;
 			return it ? it->at(0) : origValue();//QVariant();
 		}
 	}
@@ -562,7 +562,8 @@ void KexiComboBoxBase::undoChanges()
 	KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
 	if (lookupFieldSchema) {
 //		kexidbg << "KexiComboBoxBase::undoChanges(): m_visibleValue BEFORE = " << m_visibleValue << endl;
-		popup()->tableView()->selectRow( popup()->tableView()->highlightedRow() );
+		if (popup())
+			popup()->tableView()->selectRow( popup()->tableView()->highlightedRow() );
 		m_visibleValue = visibleValueForLookupField();
 //		kexidbg << "KexiComboBoxBase::undoChanges(): m_visibleValue AFTER = " << m_visibleValue << endl;
 		setValueOrTextInInternalEditor( m_visibleValue );
