@@ -114,6 +114,7 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 			values.append( result );
 			break;
 		}
+		case KexiDB::Field::Text:
 		case KexiDB::Field::LongText: {
 			const QString result = KInputDialog::getText( 
 				caption, (*it).message, QString::null, &ok, parent);
