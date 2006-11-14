@@ -1150,7 +1150,7 @@ void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 		if (row > (rows() - 1 + (isInsertingEnabled()?1:0)))
 			row = -1; //no row to paint
 	}
-	kexidbg << " row="<<row<< " col="<<col<<endl;
+//	kexidbg << " row="<<row<< " col="<<col<<endl;
 	//update row highlight if needed
 	if (d->appearance.rowMouseOverHighlightingEnabled) {
 		if (row != d->highlightedRow) {
