@@ -18,6 +18,7 @@
  */
 #include <KoShapeFactory.h>
 #include <KoLineBorder.h>
+#include <KoProperties.h>
 
 #include "star/KoStarShapeFactory.h"
 #include "star/KoStarShape.h"
@@ -29,6 +30,34 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
 {
     setToolTip( i18n( "A star" ) );
     setIcon("star");
+
+    KoShapeTemplate t;
+    t.id = KoPathShapeId;
+    t.name = "Star";
+    t.toolTip = "A star";
+    t.icon = "star";
+    KoProperties *props = new KoProperties();
+    props->setProperty( "corners", 5 );
+    QVariant v;
+    v.setValue( QColor( Qt::yellow ) );
+    props->setProperty( "background", v );
+    t.properties = props;
+    addTemplate(t);
+
+    t.id = KoPathShapeId;
+    t.name = "Flower";
+    t.toolTip = "A flower";
+    t.icon = "";
+    props = new KoProperties();
+    props->setProperty( "corners", 5 );
+    props->setProperty( "baseRadius", 10.0 );
+    props->setProperty( "tipRadius", 50.0 );
+    props->setProperty( "baseRoundness", 0.0 );
+    props->setProperty( "tipRoundness", 40.0 );
+    v.setValue( QColor( Qt::magenta ) );
+    props->setProperty( "background", v );
+    t.properties = props;
+    addTemplate(t);
 }
 
 KoShape * KoStarShapeFactory::createDefaultShape()
@@ -43,8 +72,22 @@ KoShape * KoStarShapeFactory::createDefaultShape()
 
 KoShape * KoStarShapeFactory::createShape( const KoProperties * params ) const
 {
-    Q_UNUSED(params);
-    return new KoStarShape();
+    KoStarShape *star = new KoStarShape();
+    if( ! star )
+        return 0;
+
+    star->setCornerCount( params->getInt("corners", 5 ) );
+    star->setBaseRadius( params->getDouble( "baseRadius", 25.0 ) );
+    star->setTipRadius( params->getDouble( "tipRadius", 50.0 ) );
+    star->setBaseRoundness( params->getDouble( "baseRoundness", 0.0 ) );
+    star->setTipRoundness( params->getDouble( "tipRoundness", 0.0 ) );
+    star->setBorder( new KoLineBorder( 1.0 ) );
+    star->setShapeId( KoPathShapeId );
+    QVariant v;
+    if( params->getProperty( "background", v ) )
+        star->setBackground( v.value<QColor>() );
+
+    return star;
 }
 
 #include "KoStarShapeFactory.moc"
