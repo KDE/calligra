@@ -16,7 +16,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoLineBorder.h>
 
@@ -24,7 +23,6 @@
 #include "star/KoStarShape.h"
 
 #include <klocale.h>
-#include <kgenericfactory.h>
 
 KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     : KoShapeFactory( parent, KoStarShapeId, i18n( "A star shape" ) )

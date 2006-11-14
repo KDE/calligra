@@ -23,13 +23,7 @@
 #include "star/KoStarShapeFactory.h"
 #include "regularpolygon/KoRegularPolygonShapeFactory.h"
 
-//   #include "KoStarShape.h"
-//   #include "KoLineBorder.h"
-//
-//   #include <klocale.h>
 #include <kgenericfactory.h>
-//
-//   #include <QDebug>
 
 K_EXPORT_COMPONENT_FACTORY(pathshapes,
                            KGenericFactory<KoPathShapesPlugin>( "PathShapes" ) )

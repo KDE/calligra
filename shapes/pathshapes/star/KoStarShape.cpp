@@ -19,7 +19,6 @@
 
 #include "star/KoStarShape.h"
 
-#include <QDebug>
 #include <QPainter>
 #include <math.h>
 

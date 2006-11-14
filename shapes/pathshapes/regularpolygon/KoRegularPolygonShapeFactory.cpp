@@ -17,14 +17,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <KoShape.h>
 #include <KoProperties.h>
-#include <KoShapeRegistry.h>
 
 #include "regularpolygon/KoRegularPolygonShapeFactory.h"
 #include "regularpolygon/KoRegularPolygonShape.h"
 
 #include <klocale.h>
-#include <kgenericfactory.h>
 
 KoRegularPolygonShapeFactory::KoRegularPolygonShapeFactory(QObject *parent)
 : KoShapeFactory(parent, "KoRegularPolygonShape", i18n("A regular polygon shape"))

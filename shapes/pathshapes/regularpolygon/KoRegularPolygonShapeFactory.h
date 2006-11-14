@@ -20,8 +20,9 @@
 #ifndef KOREGULARPOLYGONSHAPEFACTORY_H
 #define KOREGULARPOLYGONSHAPEFACTORY_H
 
-#include <KoShape.h>
 #include <KoShapeFactory.h>
+
+class KoShape;
 
 class KoRegularPolygonShapeFactory : public KoShapeFactory
 {
