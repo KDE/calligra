@@ -94,6 +94,9 @@ KexiDBAutoField::KexiDBAutoField(QWidget *parent, const char *name, bool designM
 
 KexiDBAutoField::~KexiDBAutoField()
 {
+	setUpdatesEnabled(false);
+	if (m_subwidget)
+		m_subwidget->setUpdatesEnabled(false);
 	delete d;
 }
 
