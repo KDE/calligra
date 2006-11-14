@@ -53,6 +53,7 @@
 #include <Q3ValueList>
 #include <QDropEvent>
 #include <QPixmap>
+#include <q3tl.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -74,7 +75,7 @@
 #include "kexitableview_p.h"
 #include <widget/utils/kexirecordmarker.h>
 #include <widget/utils/kexidisplayutils.h>
-#include <q3tl.h>
+#include <kexidb/cursor.h>
 
 KexiTableView::Appearance::Appearance(QWidget *widget)
  : alternateBackgroundColor( KGlobalSettings::alternateBackgroundColor() )
@@ -1509,6 +1510,9 @@ KexiDataItemInterface *KexiTableView::editor( int col, bool ignoreMissingEditor 
 		return 0;
 	}
 	editor->hide();
+	if (m_data->cursor() && m_data->cursor()->query())
+		editor->createInternalEditor(*m_data->cursor()->query());
+
 	connect(editor,SIGNAL(editRequested()),this,SLOT(slotEditRequested()));
 	connect(editor,SIGNAL(cancelRequested()),this,SLOT(cancelEditor()));
 	connect(editor,SIGNAL(acceptRequested()),this,SLOT(acceptEditor()));

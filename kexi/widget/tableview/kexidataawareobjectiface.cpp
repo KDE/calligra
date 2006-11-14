@@ -1086,7 +1086,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 		{
 			visibleValue = m_editor->visibleValue(); //visible value for lookup field 
 		}
-		                                                                       //should be also added to the buffer
+		//should be also added to the buffer
 		if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol, currentTVColumn, 
 			newval,	/*allowSignals*/true, currentTVColumn->visibleLookupColumnInfo ? &visibleValue : 0))
 		{

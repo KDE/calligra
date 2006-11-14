@@ -93,6 +93,8 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 		/*! \return total size of this editor, including popup button. */
 		virtual QSize totalSize() const;
 
+		virtual void createInternalEditor(KexiDB::QuerySchema& schema);
+
 	public slots:
 		//! Implemented for KexiDataItemInterface
 		virtual void moveCursorToEnd();

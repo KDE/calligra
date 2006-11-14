@@ -66,13 +66,14 @@ class KEXIDATATABLE_EXPORT KexiCellEditorFactoryItem
 	public:
 		KexiCellEditorFactoryItem();
 		virtual ~KexiCellEditorFactoryItem();
+		QString className() { return m_className; }
 
 	protected:
 //		virtual KexiTableEdit* createEditor(KexiDB::Field &f, Q3ScrollView* parent = 0) = 0;
 		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QWidget* parent = 0) = 0;
-	
+
+		QString m_className;
 	friend class KexiCellEditorFactory;
 };
-
 
 #endif
