@@ -26,7 +26,7 @@ class KAction;
 #include <kexi_export.h>
 
 //! The KexiSharedActionClient is an interface using application-wide (shared) actions.
-/** See KexiTableView for example usage. 
+/** See KexiTableView and KexiFormScrollView for example usage. 
 */
 class KEXIGUIUTILS_EXPORT KexiSharedActionClient
 {
@@ -37,7 +37,7 @@ class KEXIGUIUTILS_EXPORT KexiSharedActionClient
 		/*! Plugs action \a a for a widget. The action will be later looked up (by name) 
 		 on key press event, to get proper shortcut. If found, we know that the action is already 
 		 performed at main window's level, so we should give up. Otherwise - default shortcut 
-		 will be used (example: Shift+Enter key for "data_save_row" action). \sa shortCutPressed()
+		 will be used (example: Shift+Enter key for "data_save_row" action). \sa KexiTableView::shortCutPressed()
 		*/
 		void plugSharedAction(KAction* a);
 
