@@ -52,7 +52,7 @@ public:
     bool hitTest( const QPointF &position ) const;
     virtual QRectF boundingRect() const;
 private:
-    class LayerMembers: public KoGraphicsContainerModel {
+    class LayerMembers: public KoShapeContainerModel {
         public:
             LayerMembers();
             ~LayerMembers();
