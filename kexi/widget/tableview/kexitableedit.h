@@ -164,6 +164,11 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,
 			bool focused);
 
+		/*! Created internal editor for this editor is needed. This method is only implemented 
+		 in KexiComboBoxTableEdit since it's visible value differs from internal value,
+		 so a different KexiTableEdit object is used to displaying the data. */
+		virtual void createInternalEditor(KexiDB::QuerySchema& schema) { Q_UNUSED(schema); }
+
 	signals:
 		void editRequested();
 		void cancelRequested();
@@ -210,7 +215,9 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 #define KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(factoryclassname, itemclassname) \
 factoryclassname::factoryclassname() \
  : KexiCellEditorFactoryItem() \
-{} \
+{ \
+	m_className = "" #itemclassname ""; \
+} \
 \
 factoryclassname::~factoryclassname() \
 {} \

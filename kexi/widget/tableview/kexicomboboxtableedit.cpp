@@ -39,13 +39,22 @@ public:
 	Private()
 	 : popup(0)
 	 , currentEditorWidth(0)
+	 , visibleTableViewColumn(0)
+	 , internalEditor(0)
 	{
 	}
+	~Private()
+	{
+		delete internalEditor;
+		delete visibleTableViewColumn;
+	}
+
 	KPushButton *button;
 	KexiComboBoxPopup *popup;
 	int currentEditorWidth;
 	QSize totalSize;
-//	bool userEnteredTextChanged : 1;
+	KexiTableViewColumn* visibleTableViewColumn;
+	KexiTableEdit* internalEditor;
 };
 
 //======================================================
@@ -91,6 +100,30 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QWidge
 KexiComboBoxTableEdit::~KexiComboBoxTableEdit()
 {
 	delete d;
+}
+
+void KexiComboBoxTableEdit::createInternalEditor(KexiDB::QuerySchema& schema)
+{
+	if (!m_column->visibleLookupColumnInfo || d->visibleTableViewColumn/*sanity*/)
+		return;
+	const KexiDB::Field::Type t = m_column->visibleLookupColumnInfo->field->type();
+//! @todo subtype?
+	KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item(t);
+	if (!item || item->className()=="KexiInputTableEdit")
+		return; //unsupported type or there is no need to use subeditor for KexiInputTableEdit
+	//special cases: BLOB, Bool datatypes
+//todo
+	//find real type to display
+	KexiDB::QueryColumnInfo *ci = m_column->visibleLookupColumnInfo;
+	KexiDB::QueryColumnInfo *visibleLookupColumnInfo = 0;
+	if (ci->indexForVisibleLookupValue() != -1) {
+		//Lookup field is defined
+		visibleLookupColumnInfo = schema.expandedOrInternalField( ci->indexForVisibleLookupValue() );
+	}
+	d->visibleTableViewColumn = new KexiTableViewColumn(schema, *ci, visibleLookupColumnInfo);
+//! todo set d->internalEditor visible and use it to enable data entering by hand
+	d->internalEditor = KexiCellEditorFactory::createEditor(*d->visibleTableViewColumn, 0);
+	m_lineedit->hide();
 }
 
 KexiComboBoxPopup *KexiComboBoxTableEdit::popup() const
@@ -184,7 +217,12 @@ void KexiComboBoxTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, i
 void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
 	QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
 {
-	KexiInputTableEdit::setupContents( p, focused, val, txt, align, x, y_offset, w, h );
+	if (d->internalEditor) {
+		d->internalEditor->setupContents( p, focused, val, txt, align, x, y_offset, w, h );
+	}
+	else {
+		KexiInputTableEdit::setupContents( p, focused, val, txt, align, x, y_offset, w, h );
+	}
 	if (!column()->isReadOnly() && focused && (w > d->button->width()))
 		w -= (d->button->width() - x);
 	if (!val.isNull()) {

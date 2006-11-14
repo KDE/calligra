@@ -77,6 +77,9 @@ class KexiBlobTableEdit : public KexiTableEdit
 		 Reimplemented after KexiTableEdit. */
 		virtual void handleCopyAction(const QVariant& value);
 
+		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
+			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+
 	protected slots:
 		void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
 
@@ -92,9 +95,6 @@ class KexiBlobTableEdit : public KexiTableEdit
 	protected:
 		//! initializes this editor with \a add value
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
-
-		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
-			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 
 		//todo QString openWithDlg(const QString& file);
 		//todo void execute(const QString& app, const QString& file);
