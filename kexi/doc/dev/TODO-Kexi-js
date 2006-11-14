@@ -291,6 +291,10 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
   (my example: 'microsoft_terminology' table's 1st column) because the text us unreadable 
   valid even when we use arow keys only
 
+- KexiComboBoxTableEdit::createInternalEditor():
+   set d->internalEditor visible and use it to enable data entering by hand 
+   (for now only types based that use KexiInputTableEdit (Text, Integer..) allows data entry using keyboard
+
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
   2 methods: 1) in additional dock 2) in property editor
@@ -360,6 +364,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
   This definition shgould be made during table design, so we can reuse groupping information also in
   autoreports and auto web forms. Especially usable for tables with lots of fields.
   We could even define the groupping levels so top-level groups can be splitted using Tab Wigget.
+- fix support for blob visible values for the combo box widget
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -1005,3 +1010,8 @@ Form/TV Shortcuts:
 todo: fix things like SELECT *, cars.owner AS ab, 1.3 AS wyr1, persons.surname FROM cars LEFT OUTER JOIN persons ON cars.owner=persons.id  WHERE cars.owner > 3
       (crash - see Simple_Database.kexi - persons_and_cars query has lookup fields and OUTER JOIN is NOT PARSED
        -- we should generate the SQL in a different way for the Query Designer)
+
+TODO
+- tv combobox bug: combo box visible value sometimes disappears after changes made 
+   to the database schema (e.g. Ks. telef.)
+- delete row (ctrl+Del) crashes in the form view

@@ -15,6 +15,25 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-11-14
+Forms
+- fixed displaying Date/Time values
+- fixed crash when "Esc" key is pressed to "cancel row changes" 
+  and a combobox widget is focused
+- fixed handling Ctrl+Delete key for "Delete current row" action
+- fixed crash when an autofield's subwidget is painted but the parent 
+  is about to be deleted
+2.0: merged
+Table View
+- fixed displaying visible values (usually a text) for lookup columns
+  when there's a default value defined in the referenced table
+- visible values of types other than text or numbers are properly 
+  displayed (including images)
+2.0: merged
+Queries
+- fixed retrieving parameters of type Text
+2.0: merged
+
 2006-11-07..13
 Main Window
 - switch contents of custom property tabs after switching the current tab/window
@@ -22,17 +41,27 @@ Main Window
 - added a warning message box with "Errors encountered during loading plugins" 
   message, controled by dontShowWarningsRelatedToPluginsLoading configuration setting.
 - groups and items for nonexisting plugins are not visible now
+2.0: merged
 Query Designer
 - show more error messages on opening query in design view 
   (e.g. for unsupported column expressions)
 - fixed saving relationships: removed too strict checking for datatypes when crating 
   relationships (signedness)
+2.0: merged
 KexiDB
 - Parser: improved types evaluation for expressions
 - kexi__objectdata.o_data field type changed from BLOB to LongText (backward compatible)
   to improve human-readability
+2.0: merged
 Forms
 - fixed problem with setting "invalid" flag for fields with invalid data source
+2.0: merged
+Core
+= fixed possible crash on application exit when data changes listener is removed
+2.0: merged
+General
+- Simple_Database.kexi example updated: combo boxes are now used; example data looks better
+2.0: merged
 
 ~~~~~~~~~~~~~~~~ 1.1.1 bugfix release (with KOffice 1.6.1)  ~~~~~~~~~~~~~~~~
 
