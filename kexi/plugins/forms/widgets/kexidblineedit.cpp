@@ -124,13 +124,13 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 		}
 		else if (t == KexiDB::Field::DateTime) {
 			if (value.toString().isEmpty() ) {
+				setText( QString::null );
+			}
+			else {
 				setText(
 					dateFormatter()->dateToString( value.toDateTime().date() ) + " " +
 					timeFormatter()->timeToString( value.toDateTime().time() )
 				);
-			}
-			else {
-				setText( QString::null );
 			}
 			setCursorPosition(0); //ok?
 			return;
