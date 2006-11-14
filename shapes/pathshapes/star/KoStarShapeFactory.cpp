@@ -18,23 +18,13 @@
  */
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
-#include "KoStarShapeFactory.h"
-#include "KoStarShape.h"
-#include "KoLineBorder.h"
+#include <KoLineBorder.h>
+
+#include "star/KoStarShapeFactory.h"
+#include "star/KoStarShape.h"
 
 #include <klocale.h>
 #include <kgenericfactory.h>
-
-#include <QDebug>
-
-K_EXPORT_COMPONENT_FACTORY(kostarshape,
-                           KGenericFactory<KoStarShapePlugin>( "StarShape" ) )
-
-KoStarShapePlugin::KoStarShapePlugin( QObject *parent, const QStringList& )
-    : QObject(parent)
-{
-    KoShapeRegistry::instance()->add( new KoStarShapeFactory( parent));
-}
 
 KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     : KoShapeFactory( parent, KoStarShapeId, i18n( "A star shape" ) )

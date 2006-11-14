@@ -1,7 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Regular Polygon Shape
+Icon=
+Name=Path Shapes
 ServiceTypes=KOffice/Shape
 Type=Service
-X-KDE-Library=koregularpolygon
 X-Flake-Version=1
+X-KDE-Library=pathshapes

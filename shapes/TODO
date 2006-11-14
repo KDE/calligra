@@ -1,2 +1,0 @@
-Move all default shapes into one plugin -- saves loading time,
-and these shapes are not optional anyway.

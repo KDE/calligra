@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Isaac Clerencia <isaac@warp.es>
+ * Copyright (C) 2006 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,32 +17,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOREGULARPOLYGONSHAPEFACTORY_H
-#define KOREGULARPOLYGONSHAPEFACTORY_H
+#ifndef KOPATHSHAPESPLUGIN_H
+#define KOPATHSHAPESPLUGIN_H
 
-#include <KoShape.h>
 #include <KoShapeFactory.h>
 
-class KoRegularPolygonShapePlugin : public QObject {
-
+class KoPathShapesPlugin : public QObject {
     Q_OBJECT
 
 public:
+    KoPathShapesPlugin(QObject * parent,  const QStringList & );
+    ~KoPathShapesPlugin() {}
 
-    KoRegularPolygonShapePlugin(QObject * parent,  const QStringList & );
-    ~KoRegularPolygonShapePlugin() {}
-
-};
-
-class KoRegularPolygonShapeFactory : public KoShapeFactory
-{
-    Q_OBJECT
-
-public:
-	KoRegularPolygonShapeFactory(QObject *parent, const QStringList&);
-	~KoRegularPolygonShapeFactory() {}
-	KoShape *createDefaultShape();
-	KoShape *createShape(const KoProperties*) const;
 };
 
 #endif

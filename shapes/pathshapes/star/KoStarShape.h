@@ -20,7 +20,7 @@
 #ifndef KOSTARSHAPE_H
 #define KOSTARSHAPE_H
 
-#include "KoParameterShape.h"
+#include <KoParameterShape.h>
 
 #define KoStarShapeId "KoStarShape"
 

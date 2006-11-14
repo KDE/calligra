@@ -1,2 +1,1 @@
-add_subdirectory(regularpolygon)
-add_subdirectory(star)
+add_subdirectory( pathshapes )

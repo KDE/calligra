@@ -20,23 +20,13 @@
 #include <KoProperties.h>
 #include <KoShapeRegistry.h>
 
-#include "KoRegularPolygonShapeFactory.h"
-#include "KoRegularPolygonShape.h"
+#include "regularpolygon/KoRegularPolygonShapeFactory.h"
+#include "regularpolygon/KoRegularPolygonShape.h"
 
 #include <klocale.h>
 #include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(koregularpolygon,
-	         KGenericFactory<KoRegularPolygonShapePlugin>( "RegularPolygonShape" ) )
-
-
-KoRegularPolygonShapePlugin::KoRegularPolygonShapePlugin( QObject *parent, const QStringList& l )
-{
-    KoShapeRegistry::instance()->add( new KoRegularPolygonShapeFactory( parent, l ));
-}
-
-
-KoRegularPolygonShapeFactory::KoRegularPolygonShapeFactory(QObject *parent, const QStringList&)
+KoRegularPolygonShapeFactory::KoRegularPolygonShapeFactory(QObject *parent)
 : KoShapeFactory(parent, "KoRegularPolygonShape", i18n("A regular polygon shape"))
 {
 	setToolTip(i18n("A regular polygon shape"));

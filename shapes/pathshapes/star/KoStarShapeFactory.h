@@ -20,20 +20,9 @@
 #ifndef KOSTARHAPEFACTORY_H
 #define KOSTARHAPEFACTORY_H
 
-#include "KoShapeFactory.h"
+#include <KoShapeFactory.h>
 
 class KoShape;
-
-class KoStarShapePlugin : public QObject {
-
-    Q_OBJECT
-
-public:
-
-    KoStarShapePlugin(QObject * parent,  const QStringList & );
-    ~KoStarShapePlugin() {}
-
-};
 
 /// Factory for path shapes
 class KoStarShapeFactory : public KoShapeFactory
