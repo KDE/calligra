@@ -2028,8 +2028,10 @@ bool KexiTableView::getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *ed
 		&& edit->columnInfo()->indexForVisibleLookupValue() < (int)item->count())
 	{
 		const QVariant *visibleFieldValue = 0;
-		if (m_currentItem == item && m_data->rowEditBuffer())
-			visibleFieldValue = m_data->rowEditBuffer()->at( *tvcol->visibleLookupColumnInfo );
+		if (m_currentItem == item && m_data->rowEditBuffer()) {
+			visibleFieldValue = m_data->rowEditBuffer()->at( 
+				*tvcol->visibleLookupColumnInfo, false/*!useDefaultValueIfPossible*/ );
+		}
 		
 		if (visibleFieldValue)
 			//(use bufferedValueAt() - try to get buffered visible value for lookup field)
