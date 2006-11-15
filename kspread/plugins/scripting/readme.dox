@@ -10,6 +10,9 @@
 * to integrate scripting into KSpread.
 * The \a ScriptingModule class enables access to the KSpread
 * functionality from within the scripting backends.
+* The \a ScriptingFunction class provides access to the KSpread::Function
+* functionality to deal with formula functions that are written in
+* a scripting language like Python or Ruby.
 *
 * \see http://www.koffice.org/kspread
 * \see http://kross.dipe.org
@@ -18,16 +21,54 @@
 *
 * @section Examples
 *
-* Python example to uppercase a sheetname;
+* Python example to write content of a sheet to stdout;
 * @code
-* # Import the KSpread module.
-* import KSpread
-* # Print a list of avaible sheets.
-* print KSpread.sheetNames()
-* # Get the current sheet.
-* sheet = KSpread.currentSheet()
-* # Change the name of the current sheet to uppercase.
-* sheet.setSheetName( str( sheet.name() ).upper() )
+* #!/usr/bin/env kross
+* # The OpenDocument Spreadsheet file that we like to read.
+* filename = "/home/kde4/invoicetemplate.ods"
+* # Import Kross and fetch the KSpread module.
+* import Kross
+* kspread = Kross.module("kspread")
+* # Try to open the file.
+* if not kspread.openUrl(filename):
+*     raise "Failed to open the file \"%s\"." % filename
+* # Get the sheet we like to print to stdout.
+* sheet = kspread.sheetByName( kspread.sheetNames()[0] )
+* # Iterate now through all cells on the sheet.
+* for row in range(sheet.maxRow()):
+*     # Put the content of the row into the record-list.
+*     record = []
+*     for col in range(sheet.maxColumn(), 0, -1):
+*         value = sheet.text(col, row)
+*         if value or len(record) > 0:
+*             record.insert(0,value)
+*     # If the record has at least one cell print it.
+*     if len(record) > 0:
+*         print record
+* @endcode
+*
+* Python example to read template, set content and write new file;
+* @code
+* #!/usr/bin/env kross
+* # The OpenDocument Spreadsheet file that we like to read from.
+* templatefile = "/home/kde4/invoicetemplate.ods"
+* # The OpenDocument Spreadsheet file that we like to write to.
+* savefile = "/home/kde4/invoice.ods"
+* # Import Kross and fetch the KSpread module.
+* import Kross
+* kspread = Kross.module("kspread")
+* # Try to open the file.
+* if not kspread.openUrl(templatefile):
+*     raise "Failed to open the file \"%s\"." % templatefile
+* # Get the sheet we like to manipulate.
+* sheet = kspread.sheetByName( kspread.sheetNames()[0] )
+* # Set the content of some cells.
+* sheet.setText(0,7,"Joe User")
+* sheet.setText(0,8,"Userstreet. 1")
+* sheet.setText(0,9,"Testcasecity")
+* # Finally write the new OpenDocument Spreadsheet file.
+* if not kspread.saveUrl(savefile):
+*     raise "Failed to save the file \"%s\"." % savefile
 * @endcode
 *
 ***************************************************************************

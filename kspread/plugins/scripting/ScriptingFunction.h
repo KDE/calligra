@@ -26,7 +26,11 @@
 
 /**
  * The ScriptingFunction class provides access to the KSpread::Function
- * functionality to deal with formula functions.
+ * functionality to deal with formula functions that are written in
+ * a scripting language like Python or Ruby.
+ *
+ * For an example how to use scripted formula functions see;
+ * \see http://websvn.kde.org/trunk/koffice/kspread/plugins/scripting/scripts/functions.py?&view=markup
  */
 class ScriptingFunction : public QObject
 {
@@ -65,7 +69,9 @@ class ScriptingFunction : public QObject
         void called(QVariantList args);
 
     private:
+        /// \internal d-pointer class.
         class Private;
+        /// \internal d-pointer instance.
         Private* const d;
 };
 

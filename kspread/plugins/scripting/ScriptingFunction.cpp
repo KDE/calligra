@@ -50,7 +50,7 @@ class ScriptingFunctionImpl : public KSpread::Function
             Q_ASSERT(extra && extra->function);
             ScriptingFunctionImpl* funcimpl = static_cast< ScriptingFunctionImpl* >( extra->function );
 
-kDebug() << "ScriptingFunctionImpl::callback ###########################################" << endl;
+            kDebug() << "ScriptingFunctionImpl::callback" << endl;
 
             if( ! funcimpl->m_function) {
                 kDebug() << QString("ScriptingFunctionImpl::callback ScriptingFunction instance is NULL.") << endl;
@@ -141,14 +141,14 @@ ScriptingFunction::ScriptingFunction(QObject* parent)
     : QObject(parent)
     , d(new Private())
 {
-    kDebug() << "..................ScriptingFunction::ScriptingFunction" << endl;
+    kDebug() << "ScriptingFunction::ScriptingFunction" << endl;
     d->funcElement = d->document.createElement("Function");
     d->helpElement = d->document.createElement("Help");
 }
 
 ScriptingFunction::~ScriptingFunction()
 {
-    kDebug() << "..................ScriptingFunction::~ScriptingFunction" << endl;
+    kDebug() << "ScriptingFunction::~ScriptingFunction" << endl;
     delete d;
 }
 
@@ -186,7 +186,7 @@ void ScriptingFunction::addParameter(const QString& typeName, const QString& com
 
 bool ScriptingFunction::registerFunction()
 {
-    kDebug() << "..................ScriptingFunction::registerFunction" << endl;
+    kDebug() << "ScriptingFunction::registerFunction" << endl;
 
     if( d->name.isEmpty() ) {
         kWarning() << "ScriptingFunction::registerFunction() name is empty!" << endl;

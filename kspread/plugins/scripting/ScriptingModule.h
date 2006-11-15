@@ -115,13 +115,16 @@ class ScriptingModule : public QObject
 		*/
 		QString toXML();
 
-        bool openUrl(const QString& url);
+		//do we need them anyway or is it enough to use KoDocument here?!
+		bool openUrl(const QString& url);
 		bool saveUrl(const QString& url);
 		bool importUrl(const QString& url);
 		bool exportUrl(const QString& url);
 
 	private:
+		/// \internal d-pointer class.
 		class Private;
+		/// \internal d-pointer instance.
 		Private* const d;
 };
 

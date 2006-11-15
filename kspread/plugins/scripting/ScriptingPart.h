@@ -38,7 +38,9 @@ class ScriptingPart : public KParts::Plugin
 		virtual ~ScriptingPart();
 
 	private:
+		/// \internal d-pointer class.
 		class Private;
+		/// \internal d-pointer instance.
 		Private* const d;
 };
 

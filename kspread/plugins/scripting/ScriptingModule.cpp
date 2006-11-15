@@ -65,7 +65,7 @@ ScriptingModule::ScriptingModule()
 
 ScriptingModule::~ScriptingModule()
 {
-	kDebug() << "...................ScriptingModule::~ScriptingModule()" << endl;
+	kDebug() << "ScriptingModule::~ScriptingModule()" << endl;
 	delete d;
 }
 

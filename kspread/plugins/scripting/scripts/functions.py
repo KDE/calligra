@@ -24,9 +24,14 @@ http://www.koffice.org/kspread
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
-class Setup:
+class Functions:
+    """ The Functions class adds some KSpread formula functions on
+    the fly and provides them to KSpread. """
 
     def __init__(self, scriptaction):
+        """ Some initial work like the import of the Kross and KSpread functionality
+        and test functions are added to demonstrate the usage. """
+
         import os, sys
 
         try:
@@ -52,7 +57,7 @@ class Setup:
         self.addTestFunctions()
 
     def addTestFunctions(self):
-        print "1 ========================================================"
+        """ This method adds a new scripted formula function to KSpread. """
 
         functest1 = self.kspread.function("SCRIPT_TEST1")
         functest1.minparam = 1
@@ -72,6 +77,4 @@ class Setup:
 
         functest1.registerFunction()
 
-        print "2 ========================================================"
-
-Setup( self )
+Functions( self )

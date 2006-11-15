@@ -126,7 +126,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 
 ScriptingPart::~ScriptingPart()
 {
-    kDebug() << "..................ScriptingPart::~ScriptingPart()" << endl;
+    kDebug() << "ScriptingPart::~ScriptingPart()" << endl;
     delete d;
 }
 
