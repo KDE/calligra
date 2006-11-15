@@ -102,6 +102,12 @@ void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::Key
         QPointF radialVector = m_handles[handleId] - m_center;
         // cross product to determine in which direction the user is dragging
         double moveDirection = radialVector.x()*tangentVector.y() - radialVector.y()*tangentVector.x();
+        // make the roundness stick to zero if distance is under a certain value
+        float snapDistance = 3.0;
+        if( distance >= 0.0 )
+            distance = distance < snapDistance ? 0.0 : distance-snapDistance;
+        else
+            distance = distance > -snapDistance ? 0.0 : distance+snapDistance;
         // control changes roundness on both handles, else only the actual handle roundness is changed
         if( modifiers & Qt::ControlModifier )
             m_roundness[handleId] = moveDirection < 0.0f ? distance : -distance;
