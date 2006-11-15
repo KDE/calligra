@@ -19,16 +19,12 @@
  */
 
 #include "ScriptingFunction.h"
-//#include "ScriptingPart.h"
-//#include "ScriptingModule.h"
 
-//#include <QApplication>
 #include <QDomDocument>
 #include <QPointer>
 
 #include <kaction.h>
 #include <kactioncollection.h>
-//#include <kstandarddirs.h>
 #include <klocale.h>
 
 //#include <Doc.h>
@@ -39,8 +35,6 @@
 //#define KROSS_MAIN_EXPORT KDE_EXPORT
 #include <core/manager.h>
 #include <core/actioncollection.h>
-//#include <core/guiclient.h>
-//#include <main/wdgscriptsmanager.h>
 
 /***************************************************************************
  * ScriptingFunctionImpl
@@ -56,7 +50,7 @@ class ScriptingFunctionImpl : public KSpread::Function
             Q_ASSERT(extra && extra->function);
             ScriptingFunctionImpl* funcimpl = static_cast< ScriptingFunctionImpl* >( extra->function );
 
-kDebug() << "ScriptingFunctionImpl::callback ###################################################################################" << endl;
+kDebug() << "ScriptingFunctionImpl::callback ###########################################" << endl;
 
             if( ! funcimpl->m_function) {
                 kDebug() << QString("ScriptingFunctionImpl::callback ScriptingFunction instance is NULL.") << endl;
@@ -147,12 +141,14 @@ ScriptingFunction::ScriptingFunction(QObject* parent)
     : QObject(parent)
     , d(new Private())
 {
+    kDebug() << "..................ScriptingFunction::ScriptingFunction" << endl;
     d->funcElement = d->document.createElement("Function");
     d->helpElement = d->document.createElement("Help");
 }
 
 ScriptingFunction::~ScriptingFunction()
 {
+    kDebug() << "..................ScriptingFunction::~ScriptingFunction" << endl;
     delete d;
 }
 
@@ -190,6 +186,8 @@ void ScriptingFunction::addParameter(const QString& typeName, const QString& com
 
 bool ScriptingFunction::registerFunction()
 {
+    kDebug() << "..................ScriptingFunction::registerFunction" << endl;
+
     if( d->name.isEmpty() ) {
         kWarning() << "ScriptingFunction::registerFunction() name is empty!" << endl;
         return false;

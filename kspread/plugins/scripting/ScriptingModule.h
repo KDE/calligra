@@ -28,7 +28,7 @@
 #include <QObject>
 
 namespace KSpread {
-	//class Doc;
+	class Doc;
 	class View;
 	class ViewAdaptor;
 	//class Sheet;
@@ -43,8 +43,12 @@ class ScriptingModule : public QObject
 {
 		Q_OBJECT
 	public:
-		ScriptingModule(KSpread::View* view = 0);
+		ScriptingModule();
 		virtual ~ScriptingModule();
+
+		KSpread::Doc* doc();
+		KSpread::View* view() const;
+		void setView(KSpread::View* view = 0);
 
 	public slots:
 

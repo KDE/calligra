@@ -23,6 +23,10 @@
 #include "ScriptingModule.h"
 #include "ScriptingFunction.h"
 
+#include <QPointer>
+#include <kapplication.h>
+#include <kdebug.h>
+
 #include <Doc.h>
 #include <View.h>
 #include <ViewAdaptor.h>
@@ -32,9 +36,6 @@
 
 #include <KoDocumentAdaptor.h>
 #include <KoApplicationAdaptor.h>
-
-#include <kapplication.h>
-#include <kdebug.h>
 
 extern "C"
 {
@@ -47,24 +48,42 @@ extern "C"
 class ScriptingModule::Private
 {
 	public:
-		KSpread::View* view;
-		KSpread::Doc* doc;
+		QPointer<KSpread::View> view;
+		QPointer<KSpread::Doc> doc;
 		QHash< QString, ScriptingFunction* > functions;
 		QStringList functionnames;
 };
 
-ScriptingModule::ScriptingModule(KSpread::View* view)
+ScriptingModule::ScriptingModule()
 	: QObject()
 	, d( new Private() )
 {
 	setObjectName("KSpreadScriptingModule");
-	d->view = view;
-	d->doc = view ? view->doc() : new KSpread::Doc(0, this);
+	d->view = 0;
+	d->doc = 0;
 }
 
 ScriptingModule::~ScriptingModule()
 {
+	kDebug() << "...................ScriptingModule::~ScriptingModule()" << endl;
 	delete d;
+}
+
+KSpread::Doc* ScriptingModule::doc()
+{
+	if(! d->doc)
+		d->doc = d->view ? d->view->doc() : new KSpread::Doc(0, this);
+	return d->doc;
+}
+
+KSpread::View* ScriptingModule::view() const
+{
+	return d->view;
+}
+
+void ScriptingModule::setView(KSpread::View* view)
+{
+	d->view = view;
 }
 
 QObject* ScriptingModule::application()

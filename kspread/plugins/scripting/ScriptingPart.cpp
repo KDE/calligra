@@ -50,7 +50,7 @@ class ScriptingPart::Private
 		ScriptingModule* module;
 
 		Private() : module(0) {}
-		~Private() { delete module; }
+		~Private() {}
 };
 
 ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
@@ -67,7 +67,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 
 	// Create the Kross GUIClient which is the higher level to let
 	// Kross deal with scripting code.
-	d->guiclient = new Kross::GUIClient(view, view);
+	d->guiclient = new Kross::GUIClient(this, this);
 	//d->guiclient ->setXMLFile(locate("data","kspreadplugins/scripting.rc"), true);
 
 	// Setup the actions Kross provides and KSpread likes to have.
@@ -81,8 +81,14 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 	actionCollection()->insert(scriptmenuaction);
 
 	// Publish the ScriptingModule which offers access to KSpread internals.
-	d->module = new ScriptingModule(view);
-	Kross::Manager::self().addObject(d->module, "KSpread");
+	ScriptingModule* module = Kross::Manager::self().hasObject("KSpread")
+		? dynamic_cast< ScriptingModule* >( Kross::Manager::self().object("KSpread") )
+		: 0;
+	if( ! module ) {
+		module = new ScriptingModule();
+		Kross::Manager::self().addObject(module, "KSpread");
+	}
+	module->setView(view);
 
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	foreach(QByteArray ba, args->getOptionList("scriptfile")) {
@@ -120,6 +126,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList&)
 
 ScriptingPart::~ScriptingPart()
 {
+    kDebug() << "..................ScriptingPart::~ScriptingPart()" << endl;
     delete d;
 }
 
