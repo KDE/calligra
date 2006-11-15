@@ -43,7 +43,15 @@ class KexiTimeTableEdit : public KexiInputTableEdit
 		virtual bool valueIsEmpty();
 		virtual bool valueIsValid();
 
+		/*! Reimplemented after KexiInputTableEdit. */
+		virtual void handleAction(const QString& actionName);
+
+		/*! Reimplemented after KexiInputTableEdit. */
+		virtual void handleCopyAction(const QVariant& value);
+
 	protected:
+		//! helper
+		void setValueInInternalEditor(const QVariant &value);
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
 		QTime timeValue();
 

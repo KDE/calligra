@@ -34,6 +34,7 @@
 #include <qlayout.h>
 #include <qtoolbutton.h>
 #include <qdatetimeedit.h>
+#include <qclipboard.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -61,6 +62,14 @@ KexiDateTableEdit::~KexiDateTableEdit()
 {
 }
 
+void KexiDateTableEdit::setValueInInternalEditor(const QVariant &value)
+{
+	if (value.isValid() && value.toDate().isValid()) 
+		m_lineedit->setText( m_formatter.dateToString( value.toDate() ) );
+	else
+		m_lineedit->setText( QString::null );
+}
+
 void KexiDateTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
 	if (removeOld) {
@@ -71,7 +80,7 @@ void KexiDateTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 		m_lineedit->setCursorPosition(add.length());
 		return;
 	}
-	m_lineedit->setText( m_formatter.dateToString( m_origValue.toDate() ) );
+	setValueInInternalEditor( m_origValue );
 	m_lineedit->setCursorPosition(0); //ok?
 }
 
@@ -122,6 +131,31 @@ bool KexiDateTableEdit::valueIsValid()
 	if (m_formatter.isEmpty(m_lineedit->text())) //empty date is valid
 		return true;
 	return m_formatter.stringToDate( m_lineedit->text() ).isValid();
+}
+
+void KexiDateTableEdit::handleCopyAction(const QVariant& value)
+{
+	if (!value.isNull() && value.toDate().isValid())
+		qApp->clipboard()->setText( m_formatter.dateToString(value.toDate()) );
+	else
+		qApp->clipboard()->setText( QString::null );
+}
+
+void KexiDateTableEdit::handleAction(const QString& actionName)
+{
+	const bool alreadyVisible = m_lineedit->isVisible();
+
+	if (actionName=="edit_paste") {
+		const QVariant newValue( m_formatter.stringToDate(qApp->clipboard()->text()) );
+		if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
+			emit editRequested();
+			m_lineedit->clear();
+		}
+		setValueInInternalEditor( newValue );
+	;
+	}
+	else
+		KexiInputTableEdit::handleAction(actionName);
 }
 
 /*
