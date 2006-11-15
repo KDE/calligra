@@ -93,25 +93,25 @@ QObject* ScriptingModule::application()
 
 QObject* ScriptingModule::document()
 {
-	return d->doc->findChild< KoDocumentAdaptor* >();
+	return doc()->findChild< KoDocumentAdaptor* >();
 }
 
 QObject* ScriptingModule::view()
 {
-	//return d->view->findChild< KSpread::ViewAdaptor* >();
+	//return view()->findChild< KSpread::ViewAdaptor* >();
 	return 0;
 }
 
 QObject* ScriptingModule::currentSheet()
 {
-	KSpread::Sheet* sheet = d->doc ? d->doc->displaySheet() : 0;
+	KSpread::Sheet* sheet = doc()->displaySheet();
 	return sheet ? sheet->findChild< KSpread::SheetAdaptor* >() : 0;
 }
 
 QObject* ScriptingModule::sheetByName(const QString& name)
 {
-	if(d->doc && d->doc->map())
-		foreach(KSpread::Sheet* sheet, d->doc->map()->sheetList())
+	if(doc()->map())
+		foreach(KSpread::Sheet* sheet, doc()->map()->sheetList())
 			if(sheet->sheetName() == name)
 				return sheet->findChild< KSpread::SheetAdaptor* >();
 	return 0;
@@ -120,7 +120,7 @@ QObject* ScriptingModule::sheetByName(const QString& name)
 QStringList ScriptingModule::sheetNames()
 {
 	QStringList names;
-	foreach(KSpread::Sheet* sheet, d->doc->map()->sheetList())
+	foreach(KSpread::Sheet* sheet, doc()->map()->sheetList())
 		names.append(sheet->sheetName());
 	return names;
 }
@@ -146,32 +146,32 @@ bool ScriptingModule::fromXML(const QString& xml)
 	KoXmlDocument xmldoc;
 	if(! xmldoc.setContent(xml, true))
 		return false;
-	return d->doc ? d->doc->loadXML(0, xmldoc) : false;
+	return doc()->loadXML(0, xmldoc);
 }
 
 QString ScriptingModule::toXML()
 {
-	return d->doc ? d->doc->saveXML().toString(2) : QString();
+	return doc()->saveXML().toString(2);
 }
 
 bool ScriptingModule::openUrl(const QString& url)
 {
-    return d->doc ? d->doc->openURL(url) : false;
+    return doc()->openURL(url);
 }
 
 bool ScriptingModule::saveUrl(const QString& url)
 {
-	return d->doc ? d->doc->saveAs(url) : false;
+	return doc()->saveAs(url);
 }
 
 bool ScriptingModule::importUrl(const QString& url)
 {
-	return d->doc ? d->doc->import(url) : false;
+	return doc()->import(url);
 }
 
 bool ScriptingModule::exportUrl(const QString& url)
 {
-	return d->doc ? d->doc->exp0rt(url) : false;
+	return doc()->exp0rt(url);
 }
 
 #include "ScriptingModule.moc"
