@@ -5,6 +5,8 @@ set(pathshapes_PART_SRCS
     regularpolygon/KoRegularPolygonShapeFactory.cpp
     star/KoStarShape.cpp
     star/KoStarShapeFactory.cpp
+    rectangle/KoRectangleShape.cpp
+    rectangle/KoRectangleShapeFactory.cpp
     KoPathShapesPlugin.cpp
 )
 

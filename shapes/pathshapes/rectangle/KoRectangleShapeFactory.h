@@ -29,7 +29,7 @@ class KoRectangleShapeFactory : public KoShapeFactory
 {
 public:
     /// constructor
-    KoRectangleShapeFactory(QObject *parent, const QStringList&);
+    KoRectangleShapeFactory(QObject *parent);
     ~KoRectangleShapeFactory() {}
     KoShape * createDefaultShape();
     KoShape * createShape(const KoProperties * params) const;

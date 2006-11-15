@@ -23,9 +23,7 @@
 
 #include <klocale.h>
 
-#include <QDebug>
-
-KoRectangleShapeFactory::KoRectangleShapeFactory( QObject *parent, const QStringList& )
+KoRectangleShapeFactory::KoRectangleShapeFactory( QObject *parent )
 : KoShapeFactory( parent, KoRectangleShapeId, i18n( "A simple path shape" ) )
 {
     setToolTip( i18n( "A rectangle" ) );
@@ -38,7 +36,7 @@ KoShape * KoRectangleShapeFactory::createDefaultShape()
 
     rect->setBorder( new KoLineBorder( 1.0 ) );
     rect->setShapeId( KoPathShapeId );
-                 
+
     return rect;
 }
 

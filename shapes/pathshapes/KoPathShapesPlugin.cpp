@@ -22,6 +22,7 @@
 #include "KoPathShapesPlugin.h"
 #include "star/KoStarShapeFactory.h"
 #include "regularpolygon/KoRegularPolygonShapeFactory.h"
+#include "rectangle/KoRectangleShapeFactory.h"
 
 #include <kgenericfactory.h>
 
@@ -33,6 +34,7 @@ KoPathShapesPlugin::KoPathShapesPlugin( QObject *parent, const QStringList& )
 {
     KoShapeRegistry::instance()->add( new KoStarShapeFactory( parent));
     KoShapeRegistry::instance()->add( new KoRegularPolygonShapeFactory( parent));
+    KoShapeRegistry::instance()->add( new KoRectangleShapeFactory( parent));
 }
 
 #include "KoPathShapesPlugin.moc"
