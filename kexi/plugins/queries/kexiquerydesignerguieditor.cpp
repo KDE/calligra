@@ -513,11 +513,12 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	//  after all QueryColumnInfo items are instantiated
 	KexiDB::OrderByColumnList orderByColumns;
 	it = d->data->iterator();
-	uint fieldNumber = 0;
+	uint fieldNumber = -1; //field number (empty rows are omitted)
 	for (uint i=0/*row number*/; i<count && it.current(); ++it, i++) {
 		KoProperty::Set *set = d->sets->at(i);
 		if (!set)
 			continue;
+		fieldNumber++;
 		KexiDB::Field *currentField = 0;
 		KexiDB::QueryColumnInfo *currentColumn = 0;
 		QString sortingString( (*set)["sorting"].value().toString() );
