@@ -1339,7 +1339,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 	{
 		valueExpr = new KexiDB::ConstExpr(CHARACTER_STRING_LITERAL, str.mid(1,str.length()-2));
 	}
-	if (str.startsWith("[") && str.endsWith("]")) {
+	else if (str.startsWith("[") && str.endsWith("]")) {
 		valueExpr = new KexiDB::QueryParameterExpr(str.mid(1,str.length()-2));
 	}
 	else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})")).exactMatch( str ))
