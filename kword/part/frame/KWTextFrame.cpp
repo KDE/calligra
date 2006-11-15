@@ -30,9 +30,30 @@
 #include <kdebug.h>
 
 KWTextFrame::KWTextFrame(KoShape *shape, KWTextFrameSet *parent)
-    : KWFrame(shape, parent)
+    : KWFrame(shape, parent),
+    m_sortingId( -1 )
 {
 }
 
 KWTextFrame::~KWTextFrame() {
+}
+
+bool KWTextFrame::operator<(const KWTextFrame &other) const {
+    QPointF pos = shape()->absolutePosition();
+    QRectF bounds = other.shape()->boundingRect();
+    if(m_sortingId >= 0 && other.sortingId() >= 0) {
+        return m_sortingId > other.sortingId();
+    }
+
+    // reverse the next 2 return values if the frameset is RTL
+    if(pos.x() > bounds.right()) return false;
+    if(pos.x() < bounds.left()) return true;
+
+    // check the Y position. Y is greater only when it is below the other frame.
+    if(pos.y() > bounds.bottom()) return false;
+    if(pos.y() < bounds.top()) return true;
+
+    // my center lies inside other. Lets check the topleft pos.
+    if(shape()->boundingRect().top() > bounds.top()) return false;
+    return true;
 }

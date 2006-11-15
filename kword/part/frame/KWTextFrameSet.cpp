@@ -20,6 +20,7 @@
 #include "KWTextFrameSet.h"
 #include "KWTextDocumentLayout.h"
 #include "KWFrame.h"
+#include "KWTextFrame.h"
 
 #include <KoTextShapeData.h>
 
@@ -82,7 +83,6 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
         if(m_textFrameSetType != KWord::MainTextFrameSet && frameCount() > 1)
             frame->setCopy(true);
     }
-    // TODO sort frames
     KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
     Q_ASSERT(data);
     if(frameCount() == 1 && m_document->isEmpty()) { // just added first frame...
@@ -107,6 +107,8 @@ void KWTextFrameSet::requestLayout() {
 
 void KWTextFrameSet::relayout() {
     m_layoutTriggered = false;
+    qSort(m_frames.begin(), m_frames.end(), sortTextFrames); // make sure the ordering is proper
+    // TODO check if ordering changed and mark the first changed frame as 'dirty'
     KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>( m_document->documentLayout() );
     if(lay)
         lay->layout();
@@ -132,6 +134,11 @@ void KWTextFrameSet::requestMoreFrames() {
 
 void KWTextFrameSet::framesEmpty(int framesInUse) {
     kDebug() << "KWTextFrameSet::framesEmpty " << framesInUse << endl;
+}
+
+// static
+bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2) {
+    return static_cast<const KWTextFrame*>(frame1)->operator<( *static_cast<const KWTextFrame*>(frame2));
 }
 
 #ifndef NDEBUG

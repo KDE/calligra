@@ -101,8 +101,9 @@ protected:
      */
     virtual void setupFrame(KWFrame *frame) { Q_UNUSED(frame); }
 
-private:
     QList<KWFrame*> m_frames;
+
+private:
     QString m_name;
 };
 

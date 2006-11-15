@@ -24,6 +24,7 @@
 #include "kword_export.h"
 
 class QTextDocument;
+class KWTextFrame;
 
 /**
  * A frameset with a TextDocument backing it.
@@ -78,6 +79,8 @@ private:
     QTextDocument *m_document;
     bool m_protectContent, m_layoutTriggered;
     KWord::TextFrameSetType m_textFrameSetType;
+
+    static bool sortTextFrames(const KWFrame *frame1, const KWFrame *frame2);
 };
 
 #endif

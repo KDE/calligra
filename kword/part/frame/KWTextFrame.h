@@ -42,10 +42,34 @@ public:
     KWTextFrame(KoShape *shape, KWTextFrameSet *parent);
     ~KWTextFrame();
 
+    /// Will do a compare based on the coordinate of the frame.
+    bool operator<(const KWTextFrame &other) const;
+
+    /**
+     * Set the sorting Id that influences the sorting order of the text frames.
+     * Text frames have an order in which they are used to flow the text in,
+     * this typically is from top/left to bottom/right in the document in contrary
+     * to order of insertion.
+     * Since KWord2 the sorting Id is used to allow frames to have an explicit position
+     * in the list of frames and thus the ordering of the text.
+     * @return the id of sorting, where -1 means sorting based on position, and heigher
+     *      means later in the sequence.
+     */
+    int sortingId() const { return m_sortingId; }
+    /**
+     * Set the sorting id of the frame in the frameset.
+     * @param id of sorting, where -1 means sorting based on position, and heigher
+     *      means later in the sequence.
+     * @see sortingId()
+     */
+    void setSortingId(int id) { m_sortingId = id; }
+
 private:
     /* TODO
     int m_minimumFrameHeight;
     bool m_drawFootNoteLine; */
+
+    int m_sortingId;
 };
 
 #endif
