@@ -32,6 +32,7 @@
 #include <qlayout.h>
 #include <qtoolbutton.h>
 #include <q3datetimeedit.h>
+#include <qclipboard.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -58,6 +59,14 @@ KexiTimeTableEdit::~KexiTimeTableEdit()
 {
 }
 
+void KexiTimeTableEdit::setValueInInternalEditor(const QVariant &value)
+{
+	if (value.isValid() && value.toTime().isValid()) 
+		m_lineedit->setText( m_formatter.timeToString( value.toTime() ) );
+	else
+		m_lineedit->setText( QString::null );
+}
+
 void KexiTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
 	if (removeOld) {
@@ -68,12 +77,7 @@ void KexiTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 		m_lineedit->setCursorPosition(add.length());
 		return;
 	}
-	m_lineedit->setText( 
-		m_formatter.timeToString( 
-			//hack to avoid converting null variant to valid QTime(0,0,0)
-			m_origValue.isValid() ? m_origValue.toTime() : QTime(99,0,0) 
-		)
-	);
+	setValueInInternalEditor( m_origValue );
 	m_lineedit->setCursorPosition(0); //ok?
 }
 
@@ -122,6 +126,30 @@ bool KexiTimeTableEdit::valueIsValid()
 	if (m_formatter.isEmpty( m_lineedit->text() )) //empty time is valid
 		return true;
 	return m_formatter.stringToTime( m_lineedit->text() ).isValid();
+}
+
+void KexiTimeTableEdit::handleCopyAction(const QVariant& value)
+{
+	if (!value.isNull() && value.toTime().isValid())
+		qApp->clipboard()->setText( m_formatter.timeToString(value.toTime()) );
+	else
+		qApp->clipboard()->setText( QString::null );
+}
+
+void KexiTimeTableEdit::handleAction(const QString& actionName)
+{
+	const bool alreadyVisible = m_lineedit->isVisible();
+
+	if (actionName=="edit_paste") {
+		const QVariant newValue( m_formatter.stringToTime( qApp->clipboard()->text() ) );
+		if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
+			emit editRequested();
+			m_lineedit->clear();
+		}
+		setValueInInternalEditor( newValue );
+	}
+	else
+		KexiInputTableEdit::handleAction(actionName);
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiTimeEditorFactoryItem, KexiTimeTableEdit)

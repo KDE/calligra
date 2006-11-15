@@ -34,6 +34,7 @@
 #include <qlayout.h>
 #include <qtoolbutton.h>
 #include <q3datetimeedit.h>
+#include <qclipboard.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -61,6 +62,16 @@ KexiDateTimeTableEdit::~KexiDateTimeTableEdit()
 {
 }
 
+void KexiDateTimeTableEdit::setValueInInternalEditor(const QVariant &value)
+{
+	if (value.isValid() && value.toDateTime().isValid()) 
+		m_lineedit->setText( 
+			m_dateFormatter.dateToString( value.toDateTime().date() ) + " " +
+			m_timeFormatter.timeToString( value.toDateTime().time() ) );
+	else
+		m_lineedit->setText( QString::null );
+}
+
 void KexiDateTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
 	if (removeOld) {
@@ -71,15 +82,7 @@ void KexiDateTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOl
 		m_lineedit->setCursorPosition(add.length());
 		return;
 	}
-	if (m_origValue.isValid()) {
-		m_lineedit->setText(
-			m_dateFormatter.dateToString( m_origValue.toDateTime().date() ) + " " +
-			m_timeFormatter.timeToString( m_origValue.toDateTime().time() )
-		);
-	}
-	else {
-		m_lineedit->setText( QString::null );
-	}
+	setValueInInternalEditor( m_origValue );
 	m_lineedit->setCursorPosition(0); //ok?
 }
 
@@ -129,6 +132,32 @@ bool KexiDateTimeTableEdit::valueIsValid()
 bool KexiDateTimeTableEdit::textIsEmpty() const
 {
 	return dateTimeIsEmpty( m_dateFormatter, m_timeFormatter, m_lineedit->text() );
+}
+
+void KexiDateTimeTableEdit::handleCopyAction(const QVariant& value)
+{
+	if (!value.isNull() && value.toDateTime().isValid())
+		qApp->clipboard()->setText( m_dateFormatter.dateToString(value.toDateTime().date()) + " " 
+			+ m_timeFormatter.timeToString(value.toDateTime().time()) );
+	else
+		qApp->clipboard()->setText( QString::null );
+}
+
+void KexiDateTimeTableEdit::handleAction(const QString& actionName)
+{
+	const bool alreadyVisible = m_lineedit->isVisible();
+
+	if (actionName=="edit_paste") {
+		const QVariant newValue( stringToDateTime(m_dateFormatter, m_timeFormatter, qApp->clipboard()->text()) );
+		if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
+			emit editRequested();
+			m_lineedit->clear();
+		}
+		setValueInInternalEditor( newValue );
+	;
+	}
+	else
+		KexiInputTableEdit::handleAction(actionName);
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiDateTimeEditorFactoryItem, KexiDateTimeTableEdit)
