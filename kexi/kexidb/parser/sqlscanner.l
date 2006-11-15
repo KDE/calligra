@@ -46,7 +46,7 @@ whitespace	[ \t\n]
 digit				[0-9]
 /*identifier	[a-zA-Z_][a-zA-Z_0-9]* */
 identifier	[a-zA-Z_0-9]+
-quoted_identifier (\"[a-zA-Z_0-9]+\")
+/* quoted_identifier (\"[a-zA-Z_0-9]+\") */
 query_parameter	\[[^\[\]]+\]
 
 integer			{digit}+
@@ -270,7 +270,7 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	return DESC;
 }
 
-['][^']*['] {
+(['][^']*[']|["][^\"]*["]) {
 	ECOUNT;
 	yylval.stringValue = new QString(QString::fromUtf8(yytext+1, yyleng-2));
 	return CHARACTER_STRING_LITERAL;
@@ -295,18 +295,6 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 	ECOUNT;
 	yylval.stringValue = new QString(QString::fromUtf8(yytext+1, yyleng-2));
 	return QUERY_PARAMETER;
-}
-
-{quoted_identifier} {
-	KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
-	ECOUNT;
-	yylval.stringValue = new QString(QString::fromUtf8(yytext+1, yyleng-2));
-	if (yytext[1]>='0' && yytext[1]<='9') {
-		setError(i18n("Invalid identifier"),
-		  i18n("Identifiers should start with a letter or '_' character"));
-		return SCAN_ERROR;
-	}
-	return IDENTIFIER;
 }
 
 {whitespace}+ {
