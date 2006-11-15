@@ -152,7 +152,6 @@ void KexiDateTableEdit::handleAction(const QString& actionName)
 			m_lineedit->clear();
 		}
 		setValueInInternalEditor( newValue );
-	;
 	}
 	else
 		KexiInputTableEdit::handleAction(actionName);
