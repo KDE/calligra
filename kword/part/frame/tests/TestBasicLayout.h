@@ -17,6 +17,7 @@ private slots:
     // tests
     void testGetOrCreateFrameSet();
     void testCreateNewFramesForPage();
+    void testShouldHaveHeaderOrFooter();
 
     // helper
     void addFS(KWFrameSet*);

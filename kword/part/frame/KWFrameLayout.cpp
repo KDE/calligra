@@ -340,10 +340,16 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
 bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin) {
     if(pageNumber == m_pageManager->startPage()) {
         if(header) {
-            *origin = KWord::FirstPageHeaderTextFrameSet;
+            if(m_pageSettings->firstHeader() == KWord::HFTypeUniform)
+                *origin = KWord::FirstPageHeaderTextFrameSet;
+            else
+                *origin = KWord::OddPagesHeaderTextFrameSet;
             return m_pageSettings->firstHeader() != KWord::HFTypeNone;
         }
-        *origin = KWord::FirstPageFooterTextFrameSet;
+        if(m_pageSettings->firstFooter() == KWord::HFTypeUniform)
+            *origin = KWord::FirstPageFooterTextFrameSet;
+        else
+            *origin = KWord::OddPagesFooterTextFrameSet;
         return m_pageSettings->firstFooter() != KWord::HFTypeNone;
     }
     // otherwise
