@@ -498,16 +498,11 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
     {
         if ( frameElem.tagName() == "FRAME" )
         {
-            QPointF origin( frameElem.attribute("left").toDouble(),
-                    frameElem.attribute("top").toDouble() );
-            QSizeF size( frameElem.attribute("right").toDouble() - origin.x(),
-                   frameElem.attribute("bottom").toDouble() - origin.y() );
             KoShapeFactory *factory = KoShapeRegistry::instance()->get(KoTextShape_SHAPEID);
             Q_ASSERT(factory);
             KoShape *shape = factory->createDefaultShape();
-            shape->setPosition(origin);
-            shape->resize(size);
             KWTextFrame *frame = new KWTextFrame(shape, fs); // TODO make more general and not assume these are text frames
+            fill(frame, frameElem);
 
             //frame->load( frameElem, this, m_doc->syntaxVersion() );
             //m_doc->progressItemLoaded();
@@ -783,6 +778,24 @@ void KWDLoader::fill(KoCharacterStyle *style, QDomElement formatElem) {
        //LANGUAGE
        //TEXTBACKGROUNDCOLOR
        //OFFSETFROMBASELINE
+}
+
+void KWDLoader::fill(KWFrame *frame, QDomElement frameElem) {
+    Q_ASSERT(frame);
+    Q_ASSERT(frame->shape());
+    QPointF origin( frameElem.attribute("left").toDouble(),
+            frameElem.attribute("top").toDouble() );
+    QSizeF size( frameElem.attribute("right").toDouble() - origin.x(),
+            frameElem.attribute("bottom").toDouble() - origin.y() );
+
+    frame->shape()->setPosition(origin);
+    frame->shape()->resize(size);
+
+    QColor background (frameElem.attribute("bkRed", "255").toInt(),
+                  frameElem.attribute("bkGreen", "255").toInt(),
+                  frameElem.attribute("bkBlue", "255").toInt());
+    Qt::BrushStyle bs = static_cast<Qt::BrushStyle> ( frameElem.attribute("bkStyle", "1").toInt());
+    frame->shape()->setBackground(QBrush(background, bs));
 }
 
 void KWDLoader::loadStyleTemplates( const QDomElement &stylesElem ) {

@@ -24,6 +24,7 @@
 
 class KWDocument;
 class KWFrameSet;
+class KWFrame;
 class KWPageSettings;
 class KWPageManager;
 class KWTextFrameSet;
@@ -69,6 +70,7 @@ private:
     /// fill the data of style with the info from the element
     void fill(KoParagraphStyle *style, QDomElement layoutElem);
     void fill(KoCharacterStyle *style, QDomElement formatElem);
+    void fill(KWFrame *frame, QDomElement frameElem);
 
     // load the document wide styles
     void loadStyleTemplates( const QDomElement &styles );
