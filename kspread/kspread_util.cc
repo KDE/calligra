@@ -1069,6 +1069,8 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
        {
          ++i;
          state = InReference;
+         // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
+         if ( ex[i] == '$' ) ++i;
        }
 
        // decimal dot ?
@@ -1132,6 +1134,8 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
        {
          result.append( ex[i] );
          state = InSheetName;
+         // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
+         if ( ex[i] == '$' ) ++i;
        }
        else if ( ch != '.' )
        {
