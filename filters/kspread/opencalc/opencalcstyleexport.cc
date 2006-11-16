@@ -447,66 +447,62 @@ bool CellStyle::isEqual( CellStyle const * const t1, CellStyle const & t2 )
 // all except the number style
 void CellStyle::loadData( CellStyle & cs, Cell const * const cell )
 {
-  int col = cell->column();
-  int row = cell->row();
+  const KSpread::Style style = cell->style();
+  const KSpread::Style* defaultStyle = cell->sheet()->doc()->styleManager()->defaultStyle();
 
-  Format * f = new Format( 0, cell->sheet()->doc()->styleManager()->defaultStyle() );
-
-  QFont font = cell->format()->textFont( col, row );
-  if ( font != f->font() )
+  QFont font = style.font();
+  if ( font != defaultStyle->font() )
     cs.font = font;
 
-  QColor color = cell->format()->textColor( col, row );
-  if ( color != f->textColor( col, row ) )
+  QColor color = style.fontColor();
+  if ( color != defaultStyle->fontColor() )
     cs.color   = color;
 
-  QColor bgColor = cell->bgColor( col, row );
-  if ( bgColor != f->bgColor( col, row ) )
+  QColor bgColor = style.backgroundColor();
+  if ( bgColor != defaultStyle->backgroundColor() )
     cs.bgColor = bgColor;
 
-  if ( cell->format()->hasProperty( KSpread::Style::SHAlign ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SHAlign ) )
-    cs.alignX = cell->format()->align( col, row );
+  if ( style.hasAttribute( KSpread::Style::HorizontalAlignment ) )
+    cs.alignX = style.halign();
 
-  if ( cell->format()->hasProperty( KSpread::Style::SVAlign ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SVAlign ) )
-    cs.alignY = cell->format()->alignY( col, row );
+  if ( style.hasAttribute( KSpread::Style::VerticalAlignment ) )
+    cs.alignY = style.valign();
 
-  if ( cell->format()->hasProperty( KSpread::Style::SIndent ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SIndent ) )
-    cs.indent = cell->format()->getIndent( col, row );
+  if ( style.hasAttribute( KSpread::Style::Indentation ) )
+    cs.indent = style.indentation();
 
-  if ( cell->format()->hasProperty( KSpread::Style::SAngle ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SAngle ) )
-    cs.angle  = -cell->format()->getAngle( col, row );
+  if ( style.hasAttribute( KSpread::Style::Angle ) )
+    cs.angle  = -style.angle();
 
-  if ( cell->format()->hasProperty( KSpread::Style::SMultiRow ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SMultiRow ) )
-    cs.wrap   = cell->format()->multiRow( col, row );
+  if ( style.hasAttribute( KSpread::Style::MultiRow ) )
+    cs.wrap   = style.wrapText();
 
-  if ( cell->format()->hasProperty( KSpread::Style::SVerticalText )
-       || !cell->format()->hasNoFallBackProperties( KSpread::Style::SVerticalText ) )
-    cs.vertical = cell->format()->verticalText( col, row );
+  if ( style.hasAttribute( KSpread::Style::VerticalText ) )
+    cs.vertical = style.verticalText();
 
-  if ( cell->format()->hasProperty( KSpread::Style::SDontPrintText )
-       || !cell->format()->hasNoFallBackProperties( KSpread::Style::SDontPrintText ) )
-    cs.print = !cell->format()->getDontprintText( col, row );
+  if ( style.hasAttribute( KSpread::Style::DontPrintText ) )
+    cs.print = style.printText();
 
-  if ( cell->format()->hasProperty( KSpread::Style::SLeftBorder ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SLeftBorder ) )
-    cs.left  = cell->leftBorderPen( col, row );
+  if ( style.hasAttribute( KSpread::Style::LeftPen ) )
+    cs.left  = style.leftBorderPen();
 
-  if ( cell->format()->hasProperty( KSpread::Style::SRightBorder ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SRightBorder ) )
-    cs.right = cell->rightBorderPen( col, row );
+  if ( style.hasAttribute( KSpread::Style::RightPen ) )
+    cs.right = style.rightBorderPen();
 
-  if ( cell->format()->hasProperty( KSpread::Style::STopBorder ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::STopBorder ) )
-    cs.top  = cell->topBorderPen( col, row );
+  if ( style.hasAttribute( KSpread::Style::TopPen ) )
+    cs.top  = style.topBorderPen();
 
-  if ( cell->format()->hasProperty( KSpread::Style::SBottomBorder ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SBottomBorder ) )
-    cs.bottom  = cell->bottomBorderPen( col, row );
+  if ( style.hasAttribute( KSpread::Style::BottomPen ) )
+    cs.bottom  = style.bottomBorderPen();
 
-  if ( cell->format()->hasProperty( KSpread::Style::SNotProtected ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SNotProtected ) )
-    cs.notProtected = cell->format()->notProtected( col, row );
+  if ( style.hasAttribute( KSpread::Style::NotProtected ) )
+    cs.notProtected = style.notProtected();
 
-  if ( cell->format()->hasProperty( KSpread::Style::SHideAll ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SHideAll ) )
-    cs.hideAll = cell->format()->isHideAll( col, row );
+  if ( style.hasAttribute( KSpread::Style::HideAll ) )
+    cs.hideAll = style.hideAll();
 
-  if ( cell->format()->hasProperty( KSpread::Style::SHideFormula ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SHideFormula ) )
-    cs.hideFormula = cell->format()->isHideFormula( col, row );
+  if ( style.hasAttribute( KSpread::Style::HideFormula ) )
+    cs.hideFormula = style.hideFormula();
 }
 
 bool NumberStyle::isEqual( NumberStyle const * const t1, NumberStyle const & t2 )

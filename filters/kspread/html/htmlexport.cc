@@ -258,11 +258,12 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
         for ( int currentcolumn = 1 ; currentcolumn <= iMaxUsedColumn ; currentcolumn++ )
         {
             Cell * cell = sheet->cellAt( currentcolumn, currentrow, false );
+            const Style style = cell->style( currentcolumn, currentrow );
             colspan_cells=cell->extraXCells();
             if (cell->needsPrinting())
                 nonempty_cells++;
             QString text;
-            QColor bgcolor = cell->bgColor(currentcolumn,currentrow);
+            QColor bgcolor = style.fontColor();
             // FIXME: some formatting seems to be missing with cell->text(), e.g.
             // "208.00" in KSpread will be "208" in HTML (not always?!)
             bool link = false;
@@ -318,7 +319,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             case Style::HAlignUndefined:
                 break;
             }
-            switch((Style::VAlign)cell-> format()->alignY(currentrow, currentcolumn))
+            switch((Style::VAlign) style.valign())
             {
             case Style::Top:
                 line+=" valign=\"" + html_top +"\"";
@@ -355,22 +356,22 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             }
             line += ">\n";
 
-            if (cell->format()->textFontBold(currentcolumn,currentrow))
+            if (style.bold())
             {
                 text.insert(0, "<" + html_bold + ">");
                 text.append("</" + html_bold + ">");
             }
-            if (cell->format()->textFontItalic(currentcolumn,currentrow))
+            if (style.italic())
             {
                 text.insert(0, "<" + html_italic + ">");
                 text.append("</" + html_italic + ">");
             }
-            if (cell->format()->textFontUnderline(currentcolumn,currentrow))
+            if (style.underline())
             {
                 text.insert(0, "<" + html_underline + ">");
                 text.append("</" + html_underline + ">");
             }
-            QColor textColor = cell->format()->textColor(currentcolumn,currentrow);
+            QColor textColor = style.fontColor();
             if (textColor.isValid() && textColor.name()!="#000000") // change color only for non-default text
             {
                 text.insert(0, "<font color=\"" + textColor.name() + "\">");

@@ -23,8 +23,8 @@
 #include "Cell.h"
 #include "Doc.h"
 #include "Selection.h"
-#include "Format.h"
 #include "Sheet.h"
+#include "Style.h"
 #include "View.h"
 #include "Util.h"
 #include "Formula.h"
@@ -538,7 +538,7 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
   connect( d->functionCompletionTimer, SIGNAL( timeout() ),
     SLOT( triggerFunctionAutoComplete() ) );
 
-  if (!cell()->format()->multiRow(cell()->column(),cell()->row()))
+  if ( !_cell->style().wrapText() )
     d->textEdit->setWordWrapMode( QTextOption::NoWrap );
   else
     d->textEdit->setWordWrapMode( QTextOption::WordWrap );
@@ -561,7 +561,7 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
 //  canvas()->setChooseMarkerColumn( canvas()->markerColumn() );
 
   // set font size according to zoom factor
-  QFont font( _cell->format()->font() );
+  QFont font( _cell->style().font() );
   font.setPointSizeF( 0.01 * _parent->doc()->zoomInPercent() * font.pointSizeF() );
   d->textEdit->setFont( font );
 

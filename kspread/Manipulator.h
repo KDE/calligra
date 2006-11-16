@@ -125,9 +125,13 @@ protected:
    */
   virtual bool process(Cell* cell) { Q_UNUSED(cell); return true; }
   /**
-   * Processes \p format , a row or column format.
+   * Processes \p format , a column format.
    */
-  virtual bool process(Format* format) { Q_UNUSED(format); return true; }
+  virtual bool process(ColumnFormat* format) { Q_UNUSED(format); return true; }
+  /**
+   * Processes \p format , a row format.
+   */
+  virtual bool process(RowFormat* format) { Q_UNUSED(format); return true; }
 
   /**
    * Preprocessing the region.
@@ -211,6 +215,29 @@ private:
   Manipulator* m_unmerger; // to restore old merging
 };
 
+
+/**
+ * \class CommentManipulator
+ * \brief Adds/Removes comments to/of a cell region.
+ */
+class CommentManipulator : public Manipulator
+{
+public:
+  CommentManipulator();
+
+  void setComment( const QString& comment ) { m_comment = comment; }
+
+protected:
+  virtual bool process(Element* element);
+
+  virtual bool mainProcessing();
+
+  virtual QString name() const;
+
+private:
+  QString m_comment;
+  QList< QPair<QRectF, QString> > m_undoData;
+};
 
 /**
  * \class ConditionalManipulator

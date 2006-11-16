@@ -64,10 +64,9 @@ CommentDialog::CommentDialog( View* parent, const char* name,const QPoint &_mark
 
     multiLine->setFocus();
 
-
-    Cell *cell = m_pView->activeSheet()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
-    if(!cell->format()->comment(marker.x(),marker.y()).isEmpty())
-      multiLine->setText(cell->format()->comment(marker.x(),marker.y()));
+    const QString comment = m_pView->activeSheet()->comment( marker.x(), marker.y() );
+    if ( !comment.isEmpty() )
+        multiLine->setText( comment );
 
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
     connect(multiLine, SIGNAL(textChanged ()),this, SLOT(slotTextChanged()));

@@ -136,7 +136,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
       widths[i] = init;
 
     Cell* c = sheet->nonDefaultCell( 1, 1 );
-    QFontMetrics fm( c->format()->textFont( 1, 1 ) );
+    QFontMetrics fm( c->style().font() );
 
     Style * s = ksdoc->styleManager()->defaultStyle();
 
@@ -156,6 +156,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
             switch (dialog->getHeader(col))
             {
              case CSVDialog::TEXT:
+             {
                //see CSVDialog::accept(), Tomas introduced the Generic format between KOffice 1.3 and 1.4
                //the Insert->External Data-> ... dialog uses the generic format for everything (see mentioned method)
                //I will use this approach only for the TEXT format in the CSV import filter... (raphael)
@@ -164,7 +165,9 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                cell = sheet->nonDefaultCell( col + 1, row + 1, s );
                cell->setCellText( text );
 
-               cell->format()->setFormatType (Generic_format);
+               Style style;
+               style.setFormatType (Generic_format);
+               cell->setStyle(style);
 
                /* old code
               cell = sheet->nonDefaultCell( col + 1, row + 1, s );
@@ -172,6 +175,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                */
               break;
              // ### TODO: put the code for the different numbers together (at least partially)
+             }
              case CSVDialog::NUMBER:
                 {
                     bool ok = false;
@@ -189,7 +193,9 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                         cell = sheet->nonDefaultCell( col + 1, row + 1, s );
                         cell->setNumber( d );
                     }
-                    cell->format()->setPrecision( 2 );
+                    Style style;
+                    style.setPrecision( 2 );
+                    cell->setStyle(style);
                     break;
                 }
              case CSVDialog::COMMANUMBER:
@@ -210,7 +216,9 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                         cell = sheet->nonDefaultCell( col + 1, row + 1, s );
                         cell->setNumber( d );
                     }
-                    cell->format()->setPrecision( 2 );
+                    Style style;
+                    style.setPrecision( 2 );
+                    cell->setStyle(style);
                     break;
                 }
              case CSVDialog::POINTNUMBER:
@@ -231,20 +239,30 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                         cell = sheet->nonDefaultCell( col + 1, row + 1, s );
                         cell->setNumber( d );
                     }
-                    cell->format()->setPrecision( 2 );
+                    Style style;
+                    style.setPrecision( 2 );
+                    cell->setStyle(style);
                     break;
                 }
              case CSVDialog::DATE:
+             {
               cell = sheet->nonDefaultCell( col + 1, row + 1, s );
               cell->setCellText( text );
-              cell->format()->setFormatType( ShortDate_format );
+              Style style;
+              style.setFormatType( ShortDate_format );
+              cell->setStyle(style);
               break;
+             }
              case CSVDialog::CURRENCY:
+             {
               cell = sheet->nonDefaultCell( col + 1, row + 1, s );
               cell->setCellText( text, false );
-              cell->format()->setFormatType( Money_format );
-              cell->format()->setPrecision( 2 );
+              Style style;
+              style.setFormatType( Money_format );
+              style.setPrecision( 2 );
+              cell->setStyle(style);
               break;
+             }
             }
         }
     }

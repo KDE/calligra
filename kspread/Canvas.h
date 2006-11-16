@@ -43,7 +43,6 @@
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
-#define KSPREAD_CELL_WINDOW
 #define KSPREAD_CLIPPED_PAINTING
 
 class QDragLeaveEvent;
@@ -69,6 +68,7 @@ namespace KSpread
 {
 
 class Cell;
+class CellView;
 class EditWidget;
 class Canvas;
 class HBorder;
@@ -199,13 +199,13 @@ public:
      */
     QRect visibleCells() const;
 
-#ifdef KSPREAD_CELL_WINDOW
     /**
      * Updates the CellView s for the visible cells.
      * \see visibleCells()
      */
     void updateCellWindow();
-#endif
+
+    CellView* cellView( int col, int row ) const;
 
     /**
      * @return a pointer to the active sheet
@@ -550,9 +550,6 @@ private:
 
 
   bool formatKeyPress( QKeyEvent * _ev );
-
-  /** helper method for formatKeyPress */
-  bool formatCellByKey(Cell *cell, int key, const QRect &rect);
 
   void processClickSelectionHandle(QMouseEvent *event);
   void processLeftClickAnchor();

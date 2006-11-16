@@ -101,7 +101,7 @@ bool HideShowManipulator::process(Element* element)
     for (int col = range.left(); col <= range.right(); ++col)
     {
       ColumnFormat* format = m_sheet->nonDefaultColumnFormat(col);
-      format->setHide(!m_reverse);
+      format->setHidden(!m_reverse);
     }
   }
   if (m_manipulateRows)
@@ -109,7 +109,7 @@ bool HideShowManipulator::process(Element* element)
     for (int row = range.top(); row <= range.bottom(); ++row)
     {
       RowFormat* format = m_sheet->nonDefaultRowFormat(row);
-      format->setHide(!m_reverse);
+      format->setHidden(!m_reverse);
     }
   }
   return true;
@@ -132,7 +132,7 @@ bool HideShowManipulator::preProcessing()
           for (col = 1; col < range.left(); ++col)
           {
             ColumnFormat* format = m_sheet->columnFormat(col);
-            if (!format->isHide())
+            if (!format->hidden())
             {
               break;
             }
@@ -145,7 +145,7 @@ bool HideShowManipulator::preProcessing()
         for (int col = range.left(); col <= range.right(); ++col)
         {
           ColumnFormat* format = m_sheet->columnFormat(col);
-          if (format->isHide())
+          if (format->hidden())
           {
             region.add(QRect(col, 1, 1, KS_rowMax));
           }
@@ -159,7 +159,7 @@ bool HideShowManipulator::preProcessing()
           for (row = 1; row < range.top(); ++row)
           {
             RowFormat* format = m_sheet->rowFormat(row);
-            if (!format->isHide())
+            if (!format->hidden())
             {
               break;
             }
@@ -172,7 +172,7 @@ bool HideShowManipulator::preProcessing()
         for (int row = range.top(); row <= range.bottom(); ++row)
         {
           RowFormat* format = m_sheet->rowFormat(row);
-          if (format->isHide())
+          if (format->hidden())
           {
             region.add(QRect(1, row, KS_colMax, 1));
           }
@@ -502,17 +502,12 @@ bool AdjustColumnRowManipulator::preProcessing()
 double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
 {
   double long_max = 0.0;
-#ifdef KSPREAD_CELL_WINDOW
-  CellView tmpCellView( cell );
-  CellView* cellView = &tmpCellView;
-#else
-  CellView* cellView = cell->cellView();
-#endif
-  cellView->calculateTextParameters();
-  if ( cellView->textWidth() > long_max )
+  CellView cellView( cell );
+  cellView.calculateTextParameters();
+  if ( cellView.textWidth() > long_max )
   {
     double indent = 0.0;
-    Style::HAlign alignment = cell->format()->align(cell->column(), cell->row());
+    Style::HAlign alignment = cell->style().halign();
     if (alignment == Style::HAlignUndefined)
     {
       if (cell->value().isNumber() || cell->isDate() || cell->isTime())
@@ -527,11 +522,11 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
 
     if (alignment == Style::Left)
     {
-      indent = cell->format()->getIndent( cell->column(), cell->row() );
+      indent = cell->style().indentation();
     }
-    long_max = indent + cellView->textWidth()
-        + cell->format()->leftBorderWidth( cell->column(), cell->row() )
-        + cell->format()->rightBorderWidth( cell->column(), cell->row() );
+    long_max = indent + cellView.textWidth()
+        + cell->style().leftBorderPen().width()
+        + cell->style().rightBorderPen().width();
   }
 
   // add 4 because long_max is the length of the text
@@ -549,18 +544,14 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
 double AdjustColumnRowManipulator::adjustRowHelper(Cell* cell)
 {
   double long_max = 0.0;
-#ifdef KSPREAD_CELL_WINDOW
-  CellView tmpCellView( cell );
-  CellView* cellView = &tmpCellView;
-#else
-  CellView* cellView = cell->cellView();
-#endif
-  cellView->calculateTextParameters();
-  if ( cellView->textHeight() > long_max )
+
+  CellView cellView( cell ); // FIXME
+  cellView.calculateTextParameters();
+  if ( cellView.textHeight() > long_max )
   {
-    long_max = cellView->textHeight()
-        + cell->format()->topBorderWidth(cell->column(), cell->row())
-        + cell->format()->bottomBorderWidth(cell->column(), cell->row());
+    long_max = cellView.textHeight()
+        + cell->style().topBorderPen().width()
+        + cell->style().bottomBorderPen().width();
   }
 
   //  add 1 because long_max is the height of the text

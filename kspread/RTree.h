@@ -75,6 +75,26 @@ public:
    */
   virtual void insert( const QRectF& bb, const T& data );
 
+  void remove( const QRectF& rect, const T& data );
+
+  /**
+   * Finds all data items at the location \p point .
+   *
+   * \param point where the objects have to be in
+   *
+   * \return objects at the location
+   */
+  virtual QList<T> contains( const QPointF& point ) const;
+
+  /**
+   * Finds all data items that cover \p rect completely.
+   *
+   * \param rect where the objects have to be in
+   *
+   * \return objects containing the rect
+   */
+  virtual QList<T> contains( const QRectF& rect ) const;
+
   /**
    * @brief Find all data items which intersects rect
    *
@@ -89,6 +109,8 @@ public:
    * @return objects intersecting the rect
    */
   virtual QList<T> intersects( const QRectF& rect ) const;
+
+  virtual QList< QPair<QRectF,T> > intersectingPairs( const QRectF& rect ) const;
 
   /**
    * Inserts \p number rows at the position \p position .
@@ -140,6 +162,10 @@ public:
   Node(int capacity, int level, Node * parent)
   : KoRTree<T>::Node(capacity, level, parent) {}
   virtual ~Node() {}
+
+  virtual void remove( const QRectF& rect, const T& data ) = 0;
+  virtual void contains( const QRectF& rect, QMap<int,T>& result ) const = 0;
+  virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const = 0;
   virtual void insertRows(int position, int number) = 0;
   virtual void insertColumns(int position, int number) = 0;
   virtual void deleteRows(int position, int number) = 0;
@@ -159,6 +185,9 @@ public:
   , KoRTree<T>::LeafNode(capacity, level, parent) {}
   virtual ~LeafNode() {}
 
+  virtual void remove( const QRectF& rect, const T& data );
+  virtual void contains( const QRectF& rect, QMap<int,T>& result ) const;
+  virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const;
   virtual void insertRows(int position, int number);
   virtual void insertColumns(int position, int number);
   virtual void deleteRows(int position, int number);
@@ -178,6 +207,9 @@ public:
   , KoRTree<T>::NoneLeafNode(capacity, level, parent) {}
   virtual ~NoneLeafNode() {}
 
+  virtual void remove( const QRectF& rect, const T& data );
+  virtual void contains( const QRectF& rect, QMap<int,T>& result ) const;
+  virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const;
   virtual void insertRows(int position, int number);
   virtual void insertColumns(int position, int number);
   virtual void deleteRows(int position, int number);
@@ -208,9 +240,37 @@ void RTree<T>::insert( const QRectF& bb, const T& data )
 }
 
 template<typename T>
+void RTree<T>::remove( const QRectF& rect, const T& data )
+{
+  dynamic_cast<Node*>(this->m_root)->remove( rect.normalized().adjusted(0, 0, -0.1, -0.1), data );
+}
+
+template<typename T>
+QList<T> RTree<T>::contains( const QPointF& point ) const
+{
+  return KoRTree<T>::contains( point );
+}
+
+template<typename T>
+QList<T> RTree<T>::contains( const QRectF& bb ) const
+{
+    QMap<int,T> result;
+    dynamic_cast<Node*>(this->m_root)->contains( bb.normalized().adjusted(0, 0, -0.1, -0.1), result );
+    return result.values();
+}
+
+template<typename T>
 QList<T> RTree<T>::intersects( const QRectF& bb ) const
 {
-  return KoRTree<T>::intersects( bb.normalized().adjusted(0, 0, -0.1, -0.1) );
+    return KoRTree<T>::intersects( bb.normalized().adjusted(0, 0, -0.1, -0.1) );
+}
+
+template<typename T>
+QList< QPair<QRectF,T> > RTree<T>::intersectingPairs( const QRectF& rect ) const
+{
+    QMap<int,QPair<QRectF,T> > result;
+    dynamic_cast<Node*>(this->m_root)->intersectingPairs( rect.normalized().adjusted(0, 0, -0.1, -0.1), result );
+    return result.values();
 }
 
 template<typename T>
@@ -240,6 +300,50 @@ void RTree<T>::deleteColumns(int position, int number)
 /////////////////////////////////////////////////////////////////////////////
 // RTree<T>::LeafNode definition
 //
+template<typename T>
+void RTree<T>::LeafNode::remove( const QRectF& rect, const T& data )
+{
+    int old_counter = this->m_counter;
+    for ( int i = 0; i < this->m_counter; ++i )
+    {
+        if ( this->m_childBoundingBox[i] == rect && this->m_data[i] == data )
+        {
+            //qDebug() << "LeafNode::remove id" << i;
+            KoRTree<T>::LeafNode::remove( i );
+            break;
+        }
+    }
+    if ( old_counter == this->m_counter )
+    {
+        qWarning( "LeafNode::remove( const T&data) data not found" );
+    }
+}
+
+template<typename T>
+void RTree<T>::LeafNode::contains( const QRectF& rect, QMap<int,T>& result ) const
+{
+    for ( int i = 0; i < this->m_counter; ++i )
+    {
+        if ( this->m_childBoundingBox[i].contains( rect ) )
+        {
+            result.insert( this->m_dataIds[i], this->m_data[i] );
+        }
+    }
+}
+
+template<typename T>
+void RTree<T>::LeafNode::intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const
+{
+    for ( int i = 0; i < this->m_counter; ++i )
+    {
+        if ( this->m_childBoundingBox[i].intersects( rect ) )
+        {
+            QRectF rect = this->m_childBoundingBox[i].adjusted(0, 0, 0.1, 0.1);
+            result.insert( this->m_dataIds[i], qMakePair(rect, this->m_data[i]) );
+        }
+    }
+}
+
 template<typename T>
 void RTree<T>::LeafNode::insertRows(int position, int number)
 {
@@ -292,11 +396,10 @@ void RTree<T>::LeafNode::deleteRows(int position, int number)
 
   for ( int i = 0; i < this->childCount(); ++i )
   {
-    QRectF rect = this->m_childBoundingBox.value( i );
-    rect.adjust(0, (position < rect.top()) ? -number : 0, 0, -number);
-    if (rect.isEmpty())
+    this->m_childBoundingBox[ i ].adjust(0, (position < this->m_childBoundingBox[ i ].top()) ? -number : 0, 0, -number);
+    if (this->m_childBoundingBox[ i ].isEmpty())
     {
-      this->remove( i-- );
+      KoRTree<T>::LeafNode::remove( i-- );
     }
   }
 }
@@ -319,11 +422,10 @@ void RTree<T>::LeafNode::deleteColumns(int position, int number)
 
   for ( int i = 0; i < this->childCount(); ++i )
   {
-    QRectF rect = this->m_childBoundingBox.value( i );
-    rect.adjust((position < rect.left()) ? -number : 0, 0, -number, 0);
-    if (rect.isEmpty())
+    this->m_childBoundingBox[ i ].adjust((position < this->m_childBoundingBox[ i ].left()) ? -number : 0, 0, -number, 0);
+    if (this->m_childBoundingBox[ i ].isEmpty())
     {
-      this->remove( i-- );
+      KoRTree<T>::LeafNode::remove( i-- );
     }
   }
 }
@@ -332,6 +434,42 @@ void RTree<T>::LeafNode::deleteColumns(int position, int number)
 /////////////////////////////////////////////////////////////////////////////
 // RTree<T>::NoneLeafNode definition
 //
+template<typename T>
+void RTree<T>::NoneLeafNode::remove( const QRectF& rect, const T& data )
+{
+    for ( int i = 0; i < this->m_counter; ++i )
+    {
+        if ( this->m_childBoundingBox[i].contains( rect ) )
+        {
+            dynamic_cast<Node*>(this->m_childs[i])->remove( rect, data );
+        }
+    }
+}
+
+template<typename T>
+void RTree<T>::NoneLeafNode::contains( const QRectF& rect, QMap<int,T>& result ) const
+{
+    for ( int i = 0; i < this->m_counter; ++i )
+    {
+        if ( this->m_childBoundingBox[i].intersects( rect ) )
+        {
+            this->m_childs[i]->intersects( rect, result );
+        }
+    }
+}
+
+template<typename T>
+void RTree<T>::NoneLeafNode::intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const
+{
+    for ( int i = 0; i < this->m_counter; ++i )
+    {
+        if ( this->m_childBoundingBox[i].intersects( rect ) )
+        {
+           dynamic_cast<Node*>(this->m_childs[i])->intersectingPairs( rect, result );
+        }
+    }
+}
+
 template<typename T>
 void RTree<T>::NoneLeafNode::insertRows(int position, int number)
 {

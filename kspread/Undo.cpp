@@ -161,6 +161,7 @@ QString Undo::getUndoName()
     return  m_stckUndo.top()->getName();
 }
 
+
 /****************************************************************************
  *
  * UndoInsertRemoveAction
@@ -203,6 +204,7 @@ void UndoInsertRemoveAction::undoFormulaReference()
         }
     }
 }
+
 
 /****************************************************************************
  *
@@ -458,7 +460,7 @@ RowFormat *rl;
 for(int i=m_iRow;i<=(m_iRow+m_iNbRow);i++)
         {
         rl= tab->nonDefaultRowFormat( i );
-        if(!rl->isHide())
+        if(!rl->hidden())
                 list.append(rl->row());
         }
 }
@@ -515,7 +517,7 @@ ColumnFormat *cl;
 for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
   {
     cl= tab->nonDefaultColumnFormat( i );
-    if(!cl->isHide())
+    if(!cl->hidden())
       list.append(cl->column());
   }
 }
@@ -572,7 +574,7 @@ RowFormat *rl;
 for(int i=m_iRow;i<=(m_iRow+m_iNbRow);i++)
         {
         rl= tab->nonDefaultRowFormat( i );
-        if(rl->isHide())
+        if(rl->hidden())
                 list.append(rl->row());
         }
 }
@@ -629,7 +631,7 @@ ColumnFormat *cl;
 for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
   {
     cl= tab->nonDefaultColumnFormat( i );
-    if(cl->isHide())
+    if(cl->hidden())
       list.append(cl->column());
   }
 
@@ -773,7 +775,7 @@ void UndoPaperLayout::redo()
     doc()->setUndoLocked( false );
 }
 
-
+#if 0
 /****************************************************************************
  *
  * UndoCellFormat
@@ -848,7 +850,7 @@ void UndoCellFormat::copyFormat(QLinkedList<layoutCell> & list,
         layoutCell tmplayout;
         tmplayout.col = c;
         tmplayout.row = cell->row();
-        tmplayout.l = new Format( sheet, 0 );
+        tmplayout.l = new Style();
         tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )->format()) );
         list.append(tmplayout);
 
@@ -1076,7 +1078,8 @@ void UndoCellFormat::redo()
   sheet->updateView( m_region );
   doc()->setUndoLocked( false );
 }
-
+#endif
+#if 0
 /****************************************************************************
  *
  * UndoChangeAngle
@@ -1363,6 +1366,7 @@ void UndoSort::redo()
     sheet->updateView( Region(m_rctRect) );
     doc()->setUndoLocked( false );
 }
+#endif
 
 /****************************************************************************
  *
@@ -1633,7 +1637,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
     for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
         {
            ColumnFormat *cl=sheet->columnFormat(y);
-	   if(!cl->isHide())
+	   if(!cl->hidden())
 	     {
 	       columnSize tmpSize;
 	       tmpSize.columnNumber=y;
@@ -1647,7 +1651,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
     for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
         {
            RowFormat *rw=sheet->rowFormat(y);
-	   if(!rw->isHide())
+	   if(!rw->hidden())
 	     {
 	       rowSize tmpSize;
 	       tmpSize.rowNumber=y;
@@ -1661,7 +1665,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
     for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
         {
            ColumnFormat *cl=sheet->columnFormat(y);
-	   if(!cl->isHide())
+	   if(!cl->hidden())
 	     {
 	       columnSize tmpSize;
 	       tmpSize.columnNumber=y;
@@ -1672,7 +1676,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
     for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
         {
            RowFormat *rw=sheet->rowFormat(y);
-	   if(!rw->isHide())
+	   if(!rw->hidden())
 	     {
 	       rowSize tmpSize;
 	       tmpSize.rowNumber=y;
@@ -2025,12 +2029,12 @@ void UndoChangeAreaTextCell::redo()
     doc()->setUndoLocked( false );
 }
 
+#if 0
 /****************************************************************************
  *
  * UndoMergedCell
  *
  ***************************************************************************/
-
 
 UndoMergedCell::UndoMergedCell( Doc *_doc, Sheet *_sheet, int _column, int _row , int _extraX,int _extraY) :
     UndoAction( _doc )
@@ -2078,6 +2082,7 @@ void UndoMergedCell::redo()
 
     doc()->setUndoLocked( false );
 }
+#endif
 
 /****************************************************************************
  *
@@ -2334,6 +2339,7 @@ void UndoRemoveCellCol::redo()
     doc()->setUndoLocked( false );
 }
 
+#if 0
 /****************************************************************************
  *
  * UndoConditional
@@ -2399,7 +2405,7 @@ void UndoConditional::redo()
 
     doc()->setUndoLocked( false );
 }
-
+#endif
 
 /****************************************************************************
  *
@@ -2685,7 +2691,7 @@ void UndoCellPaste::redo()
   doc()->setUndoLocked( false );
 }
 
-
+#if 0
 /****************************************************************************
  *
  * UndoStyleCell
@@ -2802,11 +2808,12 @@ void UndoStyleCell::redo()
       {
 	sheet->nonDefaultCell( (*it2).col, (*it2).row);
       }
-    sheet->setRegionPaintDirty(Region(m_selection));
+    sheet->setRegionPaintDirty(m_selection);
     sheet->updateView();
 
     doc()->setUndoLocked( false );
 }
+#endif
 
 UndoInsertData::UndoInsertData( Doc * _doc, Sheet * _sheet, QRect & _selection )
     : UndoChangeAreaTextCell( _doc, _sheet, Region(_selection) )

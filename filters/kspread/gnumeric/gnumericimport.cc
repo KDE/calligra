@@ -363,7 +363,7 @@ void setColInfo(QDomNode * sheet, Sheet * table)
     double d = def.attribute( "DefaultSizePts" ).toDouble( &ok );
     if ( ok )
     {
-      Format::setGlobalColWidth( d );
+      ColumnFormat::setGlobalColWidth( d );
       table->setDefaultWidth( d );
     }
   }
@@ -379,7 +379,7 @@ void setColInfo(QDomNode * sheet, Sheet * table)
     {
       if (e.attribute("Hidden")=="1")
       {
-        cl->setHide(true);
+        cl->setHidden(true);
       }
     }
     if (e.hasAttribute("Unit"))
@@ -407,7 +407,7 @@ void setRowInfo(QDomNode *sheet, Sheet *table)
     d = def.attribute( "DefaultSizePts" ).toDouble( &ok );
     if ( ok )
     {
-      Format::setGlobalRowHeight( d );
+      RowFormat::setGlobalRowHeight( d );
       table->setDefaultHeight( d );
     }
   }
@@ -423,7 +423,7 @@ void setRowInfo(QDomNode *sheet, Sheet *table)
     {
       if (e.attribute("Hidden") == "1")
       {
-        rl->setHide(true);
+        rl->setHidden(true);
       }
     }
     if (e.hasAttribute("Unit"))
@@ -476,7 +476,7 @@ void setObjectInfo(QDomNode * sheet, Sheet * table)
       {
         Point point(e.attribute("ObjectBound"));
         Cell * cell = table->nonDefaultCell( point.pos().x(), point.pos().y() );
-        cell->format()->setComment(e.attribute("Text"));
+        cell->setComment(e.attribute("Text"));
       }
     }
 
@@ -617,32 +617,39 @@ void GNUMERICFilter::importBorder( QDomElement border, borderStyle _style,  Cell
         QDomElement e = border.toElement(); // try to convert the node to an element.
         if ( e.hasAttribute( "Style" ) )
         {
-            int style = e.attribute( "Style" ).toInt();
+            Style style;
+            int penStyle = e.attribute( "Style" ).toInt();
 
             QPen pen;
-            convertToPen( pen, style );
+            convertToPen( pen, penStyle );
+            QPen leftPen( Qt::NoPen );
+            QPen rightPen( Qt::NoPen );
+            QPen topPen( Qt::NoPen );
+            QPen bottomPen( Qt::NoPen );
+            QPen fallPen( Qt::NoPen );
+            QPen goUpPen( Qt::NoPen );
 
-            if ( style > 0 )
+            if ( penStyle > 0 )
             {
                 switch( _style )
                 {
                 case Left:
-                    cell->setLeftBorderPen( pen );
+                    leftPen = pen;
                     break;
                 case Right:
-                    cell->setRightBorderPen( pen );
+                    rightPen = pen;
                     break;
                 case Top:
-                    cell->setTopBorderPen( pen );
+                    topPen = pen;
                     break;
                 case Bottom:
-                    cell->setBottomBorderPen( pen );
+                    bottomPen = pen;
                     break;
                 case Diagonal:
-                    cell->format()->setFallDiagonalPen( pen ); // check if this is really Fall border
+                    fallPen = pen;
                     break;
                 case Revdiagonal:
-                    cell->format()->setGoUpDiagonalPen( pen ); // check if this is really GoUp
+                    goUpPen = pen;
                     break;
                 }
             }
@@ -655,29 +662,35 @@ void GNUMERICFilter::importBorder( QDomElement border, borderStyle _style,  Cell
                     switch( _style )
                     {
                     case Left:
-                        cell->format()->setLeftBorderColor( color );
+                        leftPen.setColor( color );
                         break;
                     case Right:
-                        cell->format()->setRightBorderColor( color );
+                        rightPen.setColor( color );
                         break;
                     case Top:
-                        cell->format()->setTopBorderColor( color );
+                        topPen.setColor( color );
                         break;
                     case Bottom:
-                        cell->format()->setBottomBorderColor( color );
+                        bottomPen.setColor( color );
                         break;
                     case Diagonal:
-                        cell->format()->setFallDiagonalColor( color );
+                        fallPen.setColor( color );
                         break;
                     case Revdiagonal:
-                        cell->format()->setGoUpDiagonalPen( color );
+                        goUpPen.setColor( color );
                         break;
                     }
                 }
             }
+            if ( leftPen.style() != Qt::NoPen ) style.setLeftBorderPen( leftPen );
+            if ( rightPen.style() != Qt::NoPen ) style.setRightBorderPen( rightPen );
+            if ( topPen.style() != Qt::NoPen ) style.setTopBorderPen( topPen );
+            if ( bottomPen.style() != Qt::NoPen ) style.setBottomBorderPen( bottomPen );
+            if ( fallPen.style() != Qt::NoPen ) style.setFallDiagonalPen( fallPen );
+            if ( goUpPen.style() != Qt::NoPen ) style.setGoUpDiagonalPen( goUpPen );
+            cell->setStyle(style);
         }
     }
-
 }
 
 bool GNUMERICFilter::setType( Cell * kspread_cell,
@@ -750,7 +763,9 @@ bool GNUMERICFilter::setType( Cell * kspread_cell,
       kDebug(30521) << "i: " << i << ", Type: " << type << ", Date: " << date.toString() << endl;
 
       kspread_cell->setValue( Value( date, kspread_cell->sheet()->doc() ) );
-      kspread_cell->format()->setFormatType( type );
+      Style style;
+      style.setFormatType( type );
+      kspread_cell->setStyle(style);
 
       return true;
     }
@@ -793,7 +808,9 @@ bool GNUMERICFilter::setType( Cell * kspread_cell,
 
       kDebug(30521) << "i: " << i << ", Type: " << type << endl;
       kspread_cell->setValue( Value( time, kspread_cell->sheet()->doc() ) );
-      kspread_cell->format()->setFormatType( type );
+      Style style;
+      style.setFormatType( type );
+      kspread_cell->setStyle( style );
 
       return true;
     }
@@ -956,30 +973,43 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
   int l = formatString.length();
   int lastPos = 0;
 
+  Style style;
   if (formatString[l - 1] == '%')
-    kspread_cell->format()->setFormatType(Percentage_format);
+    style.setFormatType(Percentage_format);
   else if (formatString[0] == '$')
   {
-    kspread_cell->format()->setFormatType(Money_format);
-    kspread_cell->format()->setCurrency( 1, "$" );
+    style.setFormatType(Money_format);
+    Style::Currency currency;
+    currency.type = 1;
+    currency.symbol = "$";
+    style.setCurrency( currency );
     lastPos = 1;
   }
   else if (formatString[0] == '£')
   {
-    kspread_cell->format()->setFormatType(Money_format);
-    kspread_cell->format()->setCurrency( 1, "£" );
+    style.setFormatType(Money_format);
+    Style::Currency currency;
+    currency.type = 1;
+    currency.symbol = "£";
+    style.setCurrency( currency );
     lastPos = 1;
   }
   else if (formatString[0] == '¥')
   {
-    kspread_cell->format()->setFormatType(Money_format);
-    kspread_cell->format()->setCurrency( 1, "¥" );
+    style.setFormatType(Money_format);
+    Style::Currency currency;
+    currency.type = 1;
+    currency.symbol = "¥";
+    style.setCurrency( currency );
     lastPos = 1;
   }
   else if (formatString[0] == '¤')
   {
-    kspread_cell->format()->setFormatType(Money_format);
-    kspread_cell->format()->setCurrency( 1, "¤" );
+    style.setFormatType(Money_format);
+    Style::Currency currency;
+    currency.type = 1;
+    currency.symbol = "¤";
+    style.setCurrency( currency );
     lastPos = 1;
   }
   else if (l > 1)
@@ -989,15 +1019,17 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
       int n = formatString.indexOf(']');
       if (n != -1)
       {
-        QString currency = formatString.mid(2, n - 2);
-        kspread_cell->format()->setFormatType(Money_format);
-        kspread_cell->format()->setCurrency( 1, currency );
+        style.setFormatType(Money_format);
+        Style::Currency currency;
+        currency.type = 1;
+        currency.symbol = formatString.mid(2, n - 2);
+        style.setCurrency( currency );
       }
       lastPos = ++n;
     }
     else if (formatString.indexOf("E+0") != -1)
     {
-      kspread_cell->format()->setFormatType(Scientific_format);
+      style.setFormatType(Scientific_format);
     }
     else
     {
@@ -1010,7 +1042,8 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
       if (formatString.indexOf("?/?") != -1)
       {
         // TODO: fixme!
-        kspread_cell->format()->setFormatType( fraction_three_digits );
+        style.setFormatType( fraction_three_digits );
+        kspread_cell->setStyle(style);
         return;
       }
       // so it's nothing we want to understand:-)
@@ -1050,22 +1083,23 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
     lastPos = precision;
     precision -= tmp;
 
-    kspread_cell->format()->setPrecision( precision );
+    style.setPrecision( precision );
   }
 
   bool red = false;
   if (formatString.indexOf("[RED]", lastPos) != -1)
   {
     red = true;
-    kspread_cell->format()->setFloatColor( Style::NegRed );
+    style.setFloatColor( Style::NegRed );
   }
   if ( formatString.indexOf('(', lastPos) != -1 )
   {
     if ( red )
-      kspread_cell->format()->setFloatColor( Style::NegRedBrackets );
+      style.setFloatColor( Style::NegRedBrackets );
     else
-      kspread_cell->format()->setFloatColor( Style::NegBrackets );
+      style.setFloatColor( Style::NegBrackets );
   }
+  kspread_cell->setStyle(style);
 }
 
 void GNUMERICFilter::convertFormula( QString & formula ) const
@@ -1105,11 +1139,11 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
         {
             QDomElement e = style_region.toElement(); // try to convert the node to an element.
 
-            QDomNode style = style_region.namedItem( "gmr:Style" );
-            QDomNode font = style.namedItem( "gmr:Font" );
-            QDomNode validation = style.namedItem( "gmr:Validation" );
-            QDomNode gmr_styleborder = style.namedItem( "gmr:StyleBorder" );
-            QDomNode hyperlink = style.namedItem( "gmr:HyperLink" );
+            QDomNode gnumericStyle = style_region.namedItem( "gmr:Style" );
+            QDomNode font = gnumericStyle.namedItem( "gmr:Font" );
+            QDomNode validation = gnumericStyle.namedItem( "gmr:Validation" );
+            QDomNode gmr_styleborder = gnumericStyle.namedItem( "gmr:StyleBorder" );
+            QDomNode hyperlink = gnumericStyle.namedItem( "gmr:HyperLink" );
             int startCol = e.attribute( "startCol" ).toInt() + 1;
             int endCol   = e.attribute( "endCol" ).toInt() + 1;
             int startRow = e.attribute( "startRow" ).toInt() + 1;
@@ -1130,6 +1164,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                 {
                     kDebug(30521) << "Cell: " << column << ", " << row << endl;
                     Cell * kspread_cell = table->cellAt( column, row, false );
+                    Style style;
 
                     // don't create new cells -> don't apply format on empty cells, if bigger region
                     if ( ( kspread_cell->isDefault() || kspread_cell->isEmpty() )
@@ -1139,7 +1174,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         continue;
                     }
 
-                    QDomElement style_element = style.toElement(); // try to convert the node to an element.
+                    QDomElement style_element = gnumericStyle.toElement(); // try to convert the node to an element.
 
                     kDebug(30521) << "Style valid for kspread" << endl;
                     kspread_cell = table->nonDefaultCell( column, row );
@@ -1149,7 +1184,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         QString color_string = style_element.attribute("Fore");
                         QColor color;
                         convert_string_to_qcolor(color_string, &color);
-                        kspread_cell->format()->setTextColor(color);
+                        style.setFontColor(color);
                     }
 
                     if (style_element.hasAttribute("Back"))
@@ -1157,15 +1192,16 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         QString color_string = style_element.attribute("Back");
                         QColor color;
                         convert_string_to_qcolor(color_string, &color);
-                        kspread_cell->format()->setBgColor(color);
+                        style.setBackgroundColor(color);
                     }
 
+                    QBrush backgroundBrush;
                     if (style_element.hasAttribute("PatternColor"))
                     {
                         QString color_string = style_element.attribute("PatternColor");
                         QColor color;
                         convert_string_to_qcolor(color_string, &color);
-                        kspread_cell->format()->setBackGroundBrushColor( color );
+                        backgroundBrush.setColor( color );
                     }
 
                     if (style_element.hasAttribute("Shade"))
@@ -1181,7 +1217,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         else if (shade == "1")
                         {
                             /* 1 Solid */
-                            //kspread_cell->format()->setBackGroundBrushStyle(Qt::SolidPattern);
+                            //backgroundBrush.setStyle(Qt::SolidPattern);
                             //This is as empty
                             /* What should this be? */
 
@@ -1189,86 +1225,86 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         else if (shade == "2")
                         {
                             /* 2 75% */
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::Dense2Pattern);
+                            backgroundBrush.setStyle(Qt::Dense2Pattern);
                         }
                         else if (shade == "3")
                         {
                             /* 3 50% */
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::Dense4Pattern);
+                            backgroundBrush.setStyle(Qt::Dense4Pattern);
                         }
                         else if (shade == "4")
                         {
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::Dense5Pattern);
+                            backgroundBrush.setStyle(Qt::Dense5Pattern);
                             /* This should be 25%... All qt has is 37% */
 
                             /* 4 25% */
                         }
                         else if (shade == "5")
                         {
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::Dense6Pattern);
+                            backgroundBrush.setStyle(Qt::Dense6Pattern);
                             /* 5 12.5% */
                         }
                         else if (shade == "6")
                         {
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::Dense7Pattern);
+                            backgroundBrush.setStyle(Qt::Dense7Pattern);
                             /* 6 6.25% */
 
                         }
                         else if (shade == "7")
                         {
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::HorPattern);
+                            backgroundBrush.setStyle(Qt::HorPattern);
                             /* 7 Horizontal Stripe */
                         }
                         else if (shade == "8")
                         {
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::VerPattern);
+                            backgroundBrush.setStyle(Qt::VerPattern);
                             /* 8 Vertical Stripe */
                         }
                         else if (shade == "9")
                         {
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::BDiagPattern);
+                            backgroundBrush.setStyle(Qt::BDiagPattern);
                             /* 9 Reverse Diagonal Stripe */
                         }
                         else if (shade == "10")
                         {
                             /* 10 Diagonal Stripe */
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::FDiagPattern);
+                            backgroundBrush.setStyle(Qt::FDiagPattern);
                         }
                         else if (shade == "11")
                         {
                             /* 11 Diagonal Crosshatch */
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::DiagCrossPattern);
+                            backgroundBrush.setStyle(Qt::DiagCrossPattern);
                         }
                         else if (shade == "12")
                         {
                             /* 12 Thick Diagonal Crosshatch TODO!*/
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::DiagCrossPattern);
+                            backgroundBrush.setStyle(Qt::DiagCrossPattern);
                         }
                         else if (shade == "13")
                         {
                             /* 13 Thin Horizontal Stripe TODO: wrong: this is thick!*/
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::HorPattern);
+                            backgroundBrush.setStyle(Qt::HorPattern);
                         }
                         else if (shade == "14")
                         {
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::VerPattern);
+                            backgroundBrush.setStyle(Qt::VerPattern);
                         }
                         else if (shade == "15")
                         {
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::FDiagPattern);
+                            backgroundBrush.setStyle(Qt::FDiagPattern);
                         }
                         else if (shade == "16")
                         {
                             /* 16 Thick Reverse Stripe TODO:*/
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::BDiagPattern);
+                            backgroundBrush.setStyle(Qt::BDiagPattern);
                         }
                         else if (shade == "17")
                         {
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::DiagCrossPattern);
+                            backgroundBrush.setStyle(Qt::DiagCrossPattern);
                         }
                         else if (shade == "18")
                         {
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::DiagCrossPattern);
+                            backgroundBrush.setStyle(Qt::DiagCrossPattern);
                         }
                         else if (shade == "19")
                         {
@@ -1293,25 +1329,26 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         else if (shade == "24")
                         {
                             /* 24 100% */
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::SolidPattern);
+                            backgroundBrush.setStyle(Qt::SolidPattern);
                         }
                         else if (shade == "25")
                         {
                             /* 25 87.5% */
-                            kspread_cell->format()->setBackGroundBrushStyle(Qt::Dense2Pattern);
+                            backgroundBrush.setStyle(Qt::Dense2Pattern);
                         }
                     }
+                    style.setBackgroundBrush( backgroundBrush );
 
                     if ( style_element.hasAttribute( "Rotation" ) )
                     {
                         int rot = style_element.attribute( "Rotation" ).toInt();
-                        kspread_cell->format()->setAngle( -1* rot );
+                        style.setAngle( -1* rot );
                     }
                     if (style_element.hasAttribute("Indent"))
                     {
                         double indent = style_element.attribute("Indent").toDouble();
                         // gnumeric saves indent in characters, we in points:
-                        kspread_cell->format()->setIndent( indent * 10.0 );
+                        style.setIndentation( indent * 10.0 );
                     }
 
                     if (style_element.hasAttribute("HAlign"))
@@ -1324,15 +1361,15 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         }
                         else if (halign_string == "2")
                         {
-                            kspread_cell->format()->setAlign(Style::Left);
+                            style.setHAlign(Style::Left);
                         }
                         else if (halign_string == "4")
                         {
-                            kspread_cell->format()->setAlign(Style::Right);
+                            style.setHAlign(Style::Right);
                         }
                         else if (halign_string == "8")
                         {
-                            kspread_cell->format()->setAlign(Style::Center);
+                            style.setHAlign(Style::Center);
                         }
                         else if (halign_string == "16")
                         {
@@ -1356,15 +1393,15 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         if (valign_string == "1")
                         {
                             /* General: No equivalent in Kspread. */
-                            kspread_cell->format()->setAlignY(Style::Top);
+                            style.setVAlign(Style::Top);
                         }
                         else if (valign_string == "2")
                         {
-                            kspread_cell->format()->setAlignY(Style::Bottom);
+                            style.setVAlign(Style::Bottom);
                         }
                         else if (valign_string == "4")
                         {
-                            kspread_cell->format()->setAlignY(Style::Middle);
+                            style.setVAlign(Style::Middle);
                         }
                         else if (valign_string == "8")
                         {
@@ -1377,7 +1414,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         QString multiRow = style_element.attribute("WrapText");
 
                         if ( multiRow == "1" )
-                            kspread_cell->format()->setMultiRow( true );
+                            style.setWrapText( true );
                     }
 
                     if (style_element.hasAttribute("Format"))
@@ -1751,24 +1788,24 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                     {
                         QDomElement font_element = font.toElement();
 
-                        kspread_cell->format()->setTextFontFamily( font_element.text() );
+                        style.setFontFamily( font_element.text() );
 
                         if (!font_element.isNull())
                         {
                             if (font_element.attribute("Italic") == "1")
-                            { kspread_cell->format()->setTextFontItalic(true); }
+                            { style.setFontItalic(true); }
 
                             if (font_element.attribute("Bold") == "1")
-                            { kspread_cell->format()->setTextFontBold(true); }
+                            { style.setFontBold(true); }
 
                             if (font_element.hasAttribute("Underline") && ( font_element.attribute("Underline") != "0") )
-                            { kspread_cell->format()->setTextFontUnderline(true); }
+                            { style.setFontUnderline(true); }
 
                             if (font_element.hasAttribute("StrikeThrough" ) && ( font_element.attribute("StrikeThrough") != "0") )
-                            { kspread_cell->format()->setTextFontStrike(true); }
+                            { style.setFontStrikeOut(true); }
 
                             if (font_element.hasAttribute("Unit"))
-                            { kspread_cell->format()->setTextFontSize(font_element.attribute("Unit").toInt()); }
+                            { style.setFontSize(font_element.attribute("Unit").toInt()); }
 
                         }
                         if ( !hyperlink.isNull() )
@@ -1809,6 +1846,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                             }
                         }
                     }
+                    kspread_cell->setStyle(style);
                 }
             }
             style_region = style_region.nextSibling();
@@ -2030,6 +2068,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                   convertFormula( cell_content );
 
                 Cell * kspread_cell = table->nonDefaultCell( column, row );
+                Style style;
 
                 if (e.hasAttribute("ValueType"))
                 {
@@ -2045,12 +2084,12 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                     QString valuetype = e.attribute( "ValueType" );
                     if ( valuetype == "40" )//percentage
                     {
-                        kspread_cell->format()->setFormatType( Percentage_format );
+                        style.setFormatType( Percentage_format );
                         kspread_cell->setValue( Value( cell_content ) );
                     }
                     else if ( valuetype =="60" )//string
                     {
-                        kspread_cell->format()->setFormatType( Text_format );
+                        style.setFormatType( Text_format );
                         kspread_cell->setValue( Value( cell_content ) );
                     }
                 }
@@ -2082,6 +2121,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 		    kDebug(30521) << e.attribute("ExprID") << endl;
 
 		  }
+                  kspread_cell->setStyle(style);
 	      }
 	    }
 	    else
@@ -2096,6 +2136,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                   convertFormula( cell_content );
 
                 Cell * kspread_cell = table->nonDefaultCell( column, row );
+                Style style;
 
                 if (e.hasAttribute("ValueType"))
                 {
@@ -2109,16 +2150,16 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                     //<xsd:enumeration value="70"/> <!-- cellrange -->
                     //<xsd:enumeration value="80"/> <!-- array     -->
                     //kspread_cell->setValue( date );
-                    //kspread_cell->format()->setFormatType( type );
+                    //style.setFormatType( type );
                     QString valuetype = e.attribute( "ValueType" );
                     if ( valuetype == "40" )//percentage
                     {
-                        kspread_cell->format()->setFormatType( Percentage_format );
+                        style.setFormatType( Percentage_format );
                         kspread_cell->setValue( Value( cell_content ) );
                     }
                     else if ( valuetype =="60" )//string
                     {
-                        kspread_cell->format()->setFormatType( Text_format );
+                        style.setFormatType( Text_format );
                         kspread_cell->setValue( Value( cell_content ) );
                     }
 
@@ -2151,6 +2192,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                                    table->cellAt( column, row, false )->decodeFormula( expr, column, row ),
                                    false);
 		  }
+                  kspread_cell->setStyle(style);
 	      }
 	  }
 	  cell = cell.nextSibling();

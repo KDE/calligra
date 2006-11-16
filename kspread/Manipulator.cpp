@@ -275,7 +275,7 @@ bool ProtectedCheck::check ()
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
         Cell *cell = m_sheet->cellAt (col, row);
-        if (!cell->format()->notProtected (col, row))
+        if (!cell->style().notProtected())
         {
           prot = true;
           break;
@@ -527,6 +527,68 @@ bool MergeManipulator::postProcessing()
     m_sheet->refreshMergedCell();
   }
   return true;
+}
+
+
+
+/***************************************************************************
+  class CommentManipulator
+****************************************************************************/
+
+CommentManipulator::CommentManipulator()
+    : Manipulator()
+{
+    m_format = false;
+}
+
+bool CommentManipulator::process( Element* element )
+{
+    if ( !m_reverse )
+    {
+        // create undo
+        if ( m_firstrun )
+        {
+            m_undoData << m_sheet->commentStorage()->undoData( element->rect() );
+        }
+        m_sheet->setComment( Region(element->rect()), m_comment );
+    }
+    else // m_reverse
+    {
+    }
+    return true;
+}
+
+bool CommentManipulator::mainProcessing()
+{
+    if ( !m_reverse )
+    {
+        if ( m_firstrun )
+        {
+            m_undoData.clear();
+        }
+    }
+    else
+    {
+        m_sheet->setComment( *this, QString() );
+        QPair<QRectF, QString> pair;
+        foreach ( pair, m_undoData )
+        {
+            m_sheet->setComment( Region(pair.first.toRect()), pair.second );
+        }
+    }
+    return Manipulator::mainProcessing();
+}
+
+QString CommentManipulator::name() const
+{
+    if ( m_comment.isEmpty() )
+    {
+        return i18n( "Remove Conditional Formatting" );
+    }
+    else
+    {
+        return i18n( "Add Conditional Formatting" );
+    }
 }
 
 

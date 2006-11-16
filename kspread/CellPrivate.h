@@ -47,8 +47,6 @@
 // KSpread
 #include "Formula.h"
 
-#define KSPREAD_CELL_WINDOW
-
 namespace KSpread
 {
 class Cell;
@@ -131,7 +129,7 @@ public:
 
     // Default is to not have the "extra" stuff in a cell.
     cellExtra = 0;
-    format = 0;
+    sheet = 0;
     flags = 0;
   }
 
@@ -208,11 +206,8 @@ public:
     return cellExtra;
   }
 
-#ifndef KSPREAD_CELL_WINDOW
-  CellView*   cellView;
-#endif
-  Format*     format;
-  StatusFlags flags;
+    Sheet* sheet;
+    StatusFlags flags;
 
 private:
   // "Extra stuff", see explanation for Cell::Extra.

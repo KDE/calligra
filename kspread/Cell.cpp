@@ -52,6 +52,7 @@
 
 #include "Canvas.h"
 #include "Condition.h"
+#include "Currency.h"
 #include "Damages.h"
 #include "Doc.h"
 #include "Format.h"
@@ -94,49 +95,73 @@
 using namespace KSpread;
 
 Cell::Cell( Sheet * _sheet, int _column, int _row )
-  : d(new Private)
+    : d(new Private)
 {
-  d->row = _row;
-  d->column = _column;
-#ifndef KSPREAD_CELL_WINDOW
-  d->cellView = new CellView( this );
-#endif
-  d->format = new Format(_sheet, _sheet->doc()->styleManager()->defaultStyle());
-  d->format->setCell(this);
-  clearAllErrors();
+    d->row = _row;
+    d->column = _column;
+    d->sheet = _sheet;
+
+    clearAllErrors();
 }
 
-
-Cell::Cell( Sheet * _sheet, Style * _style,  int _column, int _row )
-  : d(new Private)
+Style Cell::style( int col, int row ) const
 {
-  d->row = _row;
-  d->column = _column;
-#ifndef KSPREAD_CELL_WINDOW
-  d->cellView = new CellView( this );
-#endif
-  d->format = new Format( _sheet, _style );
-  d->format->setCell(this);
-
-  clearAllErrors();
+    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
+    if ( col == 0 )
+        col = this->column();
+    if ( row == 0 )
+        row = this->row();
+    return sheet()->style( col, row );
 }
 
-#ifndef KSPREAD_CELL_WINDOW
-CellView* Cell::cellView() const
+void Cell::setStyle( const Style& style, int col, int row ) const
 {
-  return d->cellView;
+    if ( style.isEmpty() )
+        return;
+    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
+    if ( col == 0 )
+        col = this->column();
+    if ( row == 0 )
+        row = this->row();
+    sheet()->setStyle( Region(QPoint(col, row)), style );
 }
-#endif
 
-Format* Cell::format() const
+Style Cell::format( int col, int row ) const
 {
-  return d->format;
+    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
+    if ( col == 0 )
+        col = this->column();
+    if ( row == 0 )
+        row = this->row();
+    return sheet()->style( col, row );
+}
+
+QString Cell::comment( int col, int row ) const
+{
+    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
+    if ( col == 0 )
+        col = this->column();
+    if ( row == 0 )
+        row = this->row();
+    return sheet()->comment( col, row );
+}
+
+void Cell::setComment( const QString& comment, int col, int row ) const
+{
+    if ( comment.isEmpty() )
+        return;
+    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
+    if ( col == 0 )
+        col = this->column();
+    if ( row == 0 )
+        row = this->row();
+    sheet()->setComment( Region(QPoint(col, row)), comment );
 }
 
 // Return the sheet that this cell belongs to.
 Sheet * Cell::sheet() const
 {
-  return d->format->sheet();
+    return d->sheet;
 }
 
 // Return true if this is the default cell.
@@ -222,7 +247,7 @@ QString Cell::columnName() const
 
 KLocale* Cell::locale() const
 {
-  return d->format->sheet()->doc()->locale();
+  return sheet()->doc()->locale();
 }
 
 // Return the symbolic name of any column.
@@ -323,7 +348,7 @@ void Cell::setValue( const Value& value )
   // Value of the cell has changed - trigger necessary actions
   valueChanged ();
 
-  format()->sheet()->setRegionPaintDirty(Region(cellRect()));
+  sheet()->setRegionPaintDirty(Region(cellRect()));
 }
 
 void Cell::setCellValue (const Value &value, FormatType fmtType, const QString &txt)
@@ -337,7 +362,11 @@ void Cell::setCellValue (const Value &value, FormatType fmtType, const QString &
     else if ( !isFormula() )
         d->strText = sheet()->doc()->converter()->asString( value ).asString();
     if ( fmtType != No_format )
-        format()->setFormatType( fmtType );
+    {
+        Style style;
+        style.setFormatType( fmtType );
+        setStyle( style );
+    }
     setValue( value );
 }
 
@@ -387,11 +416,14 @@ void Cell::removeValidity()
 
 void Cell::copyFormat( const Cell* cell )
 {
-
     Q_ASSERT(cell);
 
     d->value.setFormat(cell->d->value.format());
-    format()->copy(*(cell->format()));
+    // FIXME KSPREAD_NEW_STYLE_STORAGE: not the right place anymore
+    Style style;
+    if ( !cell->isDefault() )
+        style = cell->style();
+    setStyle( style );
 
     /*format()->setAlign( cell->format()->align( _column, _row ) );
     format()->setAlignY( cell->format()->alignY( _column, _row ) );
@@ -460,19 +492,18 @@ void Cell::copyContent( const Cell* cell )
 
 void Cell::defaultStyle()
 {
-  format()->defaultStyleFormat();
+    Style style;
+    style.setDefault();
+    setStyle( style );
 
-  if (!d->hasExtra())
-    return;
+    if (!d->hasExtra())
+        return;
 
-  if ( d->extra()->conditions )
-  {
     delete d->extra()->conditions;
     d->extra()->conditions = 0;
-  }
 
-  delete d->extra()->validity;
-  d->extra()->validity = 0;
+    delete d->extra()->validity;
+    d->extra()->validity = 0;
 }
 
 
@@ -487,7 +518,7 @@ void Cell::mergeCells( int _col, int _row, int _x, int _y )
   for ( int x = _col; x <= _col + extraXCells; ++x ) {
     for ( int y = _row; y <= _row + extraYCells; ++y ) {
       if ( x != _col || y != _row )
-        format()->sheet()->cellAt( x, y )->unobscure(this);
+        sheet()->cellAt( x, y )->unobscure(this);
     }
   }
 
@@ -519,7 +550,7 @@ void Cell::mergeCells( int _col, int _row, int _x, int _y )
   for ( int x = _col; x <= _col + _x; ++x ) {
     for ( int y = _row; y <= _row + _y; ++y ) {
       if ( x != _col || y != _row )
-  format()->sheet()->nonDefaultCell( x, y )->obscure( this, true );
+  sheet()->nonDefaultCell( x, y )->obscure( this, true );
     }
   }
 
@@ -532,7 +563,7 @@ void Cell::move( int col, int row )
     // For the old position (the new is handled in valueChanged() at the end):
     setFlag( Flag_TextFormatDirty );
     setLayoutDirtyFlag( false );
-    format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Value ) );
+    sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Value ) );
 
     //int ex = extraXCells();
     //int ey = d->extra()->extraYCells();
@@ -573,45 +604,44 @@ void Cell::setLayoutDirtyFlag( bool format )
 
 bool Cell::needsPrinting() const
 {
-  if ( isDefault() )
+    if ( isDefault() )
+        return false;
+
+    if ( !d->strText.trimmed().isEmpty() )
+        return true;
+
+    const Style style = this->style();
+
+    // Cell borders?
+    if ( style.hasAttribute( Style::TopPen ) ||
+         style.hasAttribute( Style::LeftPen ) ||
+         style.hasAttribute( Style::RightPen ) ||
+         style.hasAttribute( Style::BottomPen ) ||
+         style.hasAttribute( Style::FallDiagonalPen ) ||
+         style.hasAttribute( Style::GoUpDiagonalPen ) )
+        return true;
+
+    // Background color or brush?
+    if ( style.hasAttribute( Style::BackgroundBrush ) ) {
+        QBrush brush = style.backgroundBrush();
+
+        // Only brushes that are visible (ie. they have a brush style
+        // and are not white) need to be drawn
+        if ( (brush.style() != Qt::NoBrush) &&
+             (brush.color() != Qt::white || !brush.texture().isNull()) )
+            return true;
+    }
+
+    if ( style.hasAttribute( Style::BackgroundColor ) ) {
+        kDebug(36004) << "needsPrinting: Has background color" << endl;
+        QColor backgroundColor = style.backgroundColor();
+
+        // We don't need to print anything if the background is white
+        if (backgroundColor != Qt::white)
+            return true;
+    }
+
     return false;
-
-  if ( !d->strText.trimmed().isEmpty() ) {
-    return true;
-  }
-
-  // Cell borders?
-  if ( format()->hasProperty( Style::STopBorder )
-       || format()->hasProperty( Style::SLeftBorder )
-       || format()->hasProperty( Style::SRightBorder )
-       || format()->hasProperty( Style::SBottomBorder )
-       || format()->hasProperty( Style::SFallDiagonal )
-       || format()->hasProperty( Style::SGoUpDiagonal ) ) {
-    return true;
-  }
-
-  // Background color or brush?
-  if ( format()->hasProperty( Style::SBackgroundBrush ) )
-  {
-    const QBrush& brush=backGroundBrush(column(),row());
-
-    // Only brushes that are visible (ie. they have a brush style
-    // and are not white) need to be drawn
-    if ( (brush.style() != Qt::NoBrush) &&
-         (brush.color() != Qt::white || !brush.texture().isNull()) )
-      return true;
-  }
-
-  if ( format()->hasProperty( Style::SBackgroundColor ) ) {
-    kDebug(36004) << "needsPrinting: Has background color" << endl;
-    QColor backgroundColor=bgColor(column(),row());
-
-    //We don't need to print anything if the background is white
-    if (backgroundColor != Qt::white)
-      return true;
-  }
-
-  return false;
 }
 
 bool Cell::isEmpty() const
@@ -733,7 +763,7 @@ void Cell::obscure( Cell *cell, bool isForcing )
     d->extra()->obscuringCells.append( cell );
   }
   setFlag(Flag_LayoutDirty);
-  format()->sheet()->setRegionPaintDirty( Region(cellRect()) );
+  sheet()->setRegionPaintDirty(Region(cellRect()));
 }
 
 void Cell::unobscure( Cell * cell )
@@ -741,7 +771,7 @@ void Cell::unobscure( Cell * cell )
   if (d->hasExtra())
     d->extra()->obscuringCells.removeAll( cell );
   setFlag( Flag_LayoutDirty );
-  format()->sheet()->setRegionPaintDirty( Region(cellRect()) );
+  sheet()->setRegionPaintDirty(Region(cellRect()));
 }
 
 QString Cell::encodeFormula( bool _era, int _col, int _row ) const
@@ -983,7 +1013,7 @@ void Cell::freeAllObscuredCells()
   for ( int x = d->column + d->extra()->mergedXCells; x <= d->column + extraXCells; ++x ) {
     for ( int y = d->row + d->extra()->mergedYCells; y <= d->row + extraYCells; ++y ) {
       if ( x != d->column || y != d->row ) {
-        Cell *cell = format()->sheet()->cellAt( x, y );
+        Cell *cell = sheet()->cellAt( x, y );
         cell->unobscure(this);
       }
     }
@@ -1006,7 +1036,7 @@ void Cell::valueChanged ()
   {
     for (int y = d->row; y <= d->row + extraYCells(); y++)
     {
-      Cell* cell = format()->sheet()->cellAt(x,y);
+      Cell* cell = sheet()->cellAt(x,y);
       cell->setLayoutDirtyFlag();
     }
   }
@@ -1014,7 +1044,7 @@ void Cell::valueChanged ()
   /* TODO - is this a good place for this? */
   updateChart( true );
 
-  format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Value ) );
+  sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Value ) );
 }
 
 
@@ -1041,14 +1071,11 @@ void Cell::setOutputText()
 
   // Display a formula if warranted.  If not, display the value instead;
   // this is the most common case.
-  if ( (!hasError()) && isFormula() && format()->sheet()->getShowFormula()
-       && !( format()->sheet()->isProtected() && format()->isHideFormula( d->column, d->row ) )
-       || isEmpty() )
+  if ( (!hasError()) && isFormula() && sheet()->getShowFormula()
+       && !( sheet()->isProtected() && style().hideFormula() ) || isEmpty() )
     d->strOutText = d->strText;
-  else {
-    d->strOutText = sheet()->doc()->formatter()->formatText (this,
-                   formatType());
-  }
+  else
+    d->strOutText = sheet()->doc()->formatter()->formatText(this, formatType());
 
   // Check conditions if needed.
   if ( d->hasExtra() && d->extra()->conditions )
@@ -1073,7 +1100,7 @@ bool Cell::makeFormula()
   // Did a syntax error occur ?
     clearFormula();
 
-    if (format()->sheet()->doc()->showMessageError())
+    if (sheet()->doc()->showMessageError())
     {
       QString tmp(i18n("Error in cell %1\n\n"));
       tmp = tmp.arg( fullName() );
@@ -1087,7 +1114,7 @@ bool Cell::makeFormula()
   }
 
   // Update the dependencies and recalculate.
-  format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula |
+  sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula |
                                                              CellDamage::Value ) );
 
   return true;
@@ -1098,10 +1125,10 @@ void Cell::clearFormula()
     // Update the dependencies, if this was a formula.
     if (d->formula)
     {
-        if ( !format()->sheet()->isLoading() )
+        if ( !sheet()->isLoading() )
         {
             kDebug(36002) << "This was a formula. Dependency update triggered." << endl;
-            format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula ) );
+            sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula ) );
         }
         delete d->formula;
         d->formula = 0;
@@ -1134,7 +1161,7 @@ bool Cell::calc(bool delay)
 
   if ( delay )
   {
-    if ( format()->sheet()->doc()->delayCalculation() )
+    if ( sheet()->doc()->delayCalculation() )
       return true;
   }
 
@@ -1154,30 +1181,30 @@ bool Cell::calc(bool delay)
 
 int Cell::defineAlignX()
 {
-  int a = format()->align( column(), row() );
-  if ( a == Style::HAlignUndefined )
-  {
-    //numbers should be right-aligned by default, as well as BiDi text
-    if ((formatType() == Text_format) || value().isString())
-      a = (d->strOutText.isRightToLeft()) ?
-                               Style::Right : Style::Left;
-    else {
-      Value val = value();
-      while (val.isArray()) val = val.element (0, 0);
-      if (val.isBoolean() || val.isNumber())
-        a = Style::Right;
-      else
-        a = Style::Left;
+    int align = style().halign();
+    if ( align == Style::HAlignUndefined )
+    {
+        //numbers should be right-aligned by default, as well as BiDi text
+        if ((formatType() == Text_format) || value().isString())
+            align = (d->strOutText.isRightToLeft()) ? Style::Right : Style::Left;
+        else
+        {
+            Value val = value();
+            while (val.isArray()) val = val.element (0, 0);
+            if (val.isBoolean() || val.isNumber())
+                align = Style::Right;
+            else
+                align = Style::Left;
+        }
     }
-  }
-  return a;
+    return align;
 }
 
 int Cell::effAlignX()
 {
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SHAlign, true ) )
+       && d->extra()->conditions->matchedStyle()->hasAttribute( Style::HorizontalAlignment ) )
     return d->extra()->conditions->matchedStyle()->halign();
 
   return defineAlignX();
@@ -1192,7 +1219,7 @@ double Cell::dblWidth( int _col ) const
   if ( testFlag(Flag_Merged) )
     return d->extra()->extraWidth;
 
-  const ColumnFormat *cl = format()->sheet()->columnFormat( _col );
+  const ColumnFormat *cl = sheet()->columnFormat( _col );
   return cl->dblWidth();
 }
 
@@ -1209,7 +1236,7 @@ double Cell::dblHeight( int _row ) const
   if ( testFlag(Flag_Merged) )
     return d->extra()->extraHeight;
 
-  const RowFormat *rl = format()->sheet()->rowFormat( _row );
+  const RowFormat *rl = sheet()->rowFormat( _row );
   return rl->dblHeight();
 }
 
@@ -1220,368 +1247,80 @@ int Cell::height( int _row ) const
 
 ///////////////////////////////////////////
 //
-// Misc Properties.
-// Reimplementation of Format methods.
-//
-///////////////////////////////////////////
-
-const QBrush& Cell::backGroundBrush( int _col, int _row ) const
-{
-  if ( d->hasExtra() && (!d->extra()->obscuringCells.isEmpty()) )
-  {
-    const Cell* cell = d->extra()->obscuringCells.first();
-    return cell->backGroundBrush( cell->column(), cell->row() );
-  }
-
-  return format()->backGroundBrush( _col, _row );
-}
-
-const QColor Cell::bgColor( int _col, int _row ) const
-{
-  if ( d->hasExtra() && (!d->extra()->obscuringCells.isEmpty()) )
-  {
-    const Cell* cell = d->extra()->obscuringCells.first();
-    return cell->bgColor( cell->column(), cell->row() );
-  }
-
-  return format()->bgColor( _col, _row );
-}
-
-///////////////////////////////////////////
-//
-// Borders.
-// Reimplementation of Format methods.
-//
-///////////////////////////////////////////
-
-void Cell::setLeftBorderPen( const QPen& p )
-{
-  if ( column() == 1 )
-  {
-    Cell* cell = format()->sheet()->cellAt( column() - 1, row() );
-    if ( cell && cell->format()->hasProperty( Style::SRightBorder )
-         && format()->sheet()->cellAt( column(), row() ) == this )
-        cell->format()->clearProperty( Style::SRightBorder );
-  }
-
-  format()->setLeftBorderPen( p );
-}
-
-void Cell::setTopBorderPen( const QPen& p )
-{
-  if ( row() == 1 )
-  {
-    Cell* cell = format()->sheet()->cellAt( column(), row() - 1 );
-    if ( cell && cell->format()->hasProperty( Style::SBottomBorder )
-         && format()->sheet()->cellAt( column(), row() ) == this )
-        cell->format()->clearProperty( Style::SBottomBorder );
-  }
-  format()->setTopBorderPen( p );
-}
-
-void Cell::setRightBorderPen( const QPen& p )
-{
-    Cell* cell = 0;
-    if ( column() < KS_colMax )
-        cell = format()->sheet()->cellAt( column() + 1, row() );
-
-    if ( cell && cell->format()->hasProperty( Style::SLeftBorder )
-         && format()->sheet()->cellAt( column(), row() ) == this )
-        cell->format()->clearProperty( Style::SLeftBorder );
-
-    format()->setRightBorderPen( p );
-}
-
-void Cell::setBottomBorderPen( const QPen& p )
-{
-    Cell* cell = 0;
-    if ( row() < KS_rowMax )
-        cell = format()->sheet()->cellAt( column(), row() + 1 );
-
-    if ( cell && cell->format()->hasProperty( Style::STopBorder )
-         && format()->sheet()->cellAt( column(), row() ) == this )
-        cell->format()->clearProperty( Style::STopBorder );
-
-    format()->setBottomBorderPen( p );
-}
-
-const QPen& Cell::rightBorderPen( int _col, int _row ) const
-{
-    if ( !format()->hasProperty( Style::SRightBorder ) && ( _col < KS_colMax ) )
-    {
-        Cell * cell = format()->sheet()->cellAt( _col + 1, _row );
-        if ( cell && cell->format()->hasProperty( Style::SLeftBorder ) )
-            return cell->leftBorderPen( _col + 1, _row );
-    }
-
-    return format()->rightBorderPen( _col, _row );
-}
-
-const QPen& Cell::leftBorderPen( int _col, int _row ) const
-{
-    if ( !format()->hasProperty( Style::SLeftBorder ) )
-    {
-        const Cell * cell = format()->sheet()->cellAt( _col - 1, _row );
-        if ( cell && cell->format()->hasProperty( Style::SRightBorder ) )
-            return cell->rightBorderPen( _col - 1, _row );
-    }
-
-    return format()->leftBorderPen( _col, _row );
-}
-
-const QPen& Cell::bottomBorderPen( int _col, int _row ) const
-{
-    if ( !format()->hasProperty( Style::SBottomBorder ) && ( _row < KS_rowMax ) )
-    {
-        const Cell * cell = format()->sheet()->cellAt( _col, _row + 1 );
-        if ( cell && cell->format()->hasProperty( Style::STopBorder ) )
-            return cell->topBorderPen( _col, _row + 1 );
-    }
-
-    return format()->bottomBorderPen( _col, _row );
-}
-
-const QPen& Cell::topBorderPen( int _col, int _row ) const
-{
-    if ( !format()->hasProperty( Style::STopBorder ) )
-    {
-        const Cell * cell = format()->sheet()->cellAt( _col, _row - 1 );
-        if ( cell->format()->hasProperty( Style::SBottomBorder ) )
-            return cell->bottomBorderPen( _col, _row - 1 );
-    }
-
-    return format()->topBorderPen( _col, _row );
-}
-
-const QColor Cell::effTextColor( int col, int row ) const
-{
-  if ( d->hasExtra() && d->extra()->conditions
-       && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( Style::STextPen, true ) )
-    return d->extra()->conditions->matchedStyle()->pen().color();
-
-  return format()->textColor( col, row );
-}
-
-const QPen& Cell::effLeftBorderPen( int col, int row ) const
-{
-  if ( isPartOfMerged() )
-  {
-    Cell * cell = d->extra()->obscuringCells.first();
-    return cell->effLeftBorderPen( cell->column(), cell->row() );
-  }
-
-  if ( d->hasExtra() && d->extra()->conditions
-       && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SLeftBorder, true ) )
-    return d->extra()->conditions->matchedStyle()->leftBorderPen();
-
-  return leftBorderPen( col, row );
-}
-
-const QPen& Cell::effTopBorderPen( int col, int row ) const
-{
-  if ( isPartOfMerged() )
-  {
-    Cell * cell = d->extra()->obscuringCells.first();
-    return cell->effTopBorderPen( cell->column(), cell->row() );
-  }
-
-  if ( d->hasExtra() && d->extra()->conditions
-       && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( Style::STopBorder, true ) )
-    return d->extra()->conditions->matchedStyle()->topBorderPen();
-
-  return topBorderPen( col, row );
-}
-
-const QPen& Cell::effRightBorderPen( int col, int row ) const
-{
-  if ( isPartOfMerged() )
-  {
-    Cell * cell = d->extra()->obscuringCells.first();
-    return cell->effRightBorderPen( cell->column(), cell->row() );
-  }
-
-  if ( d->hasExtra() && d->extra()->conditions
-       && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SRightBorder, true ) )
-    return d->extra()->conditions->matchedStyle()->rightBorderPen();
-
-  return rightBorderPen( col, row );
-}
-
-const QPen& Cell::effBottomBorderPen( int col, int row ) const
-{
-  if ( isPartOfMerged() )
-  {
-    Cell * cell = d->extra()->obscuringCells.first();
-    return cell->effBottomBorderPen( cell->column(), cell->row() );
-  }
-
-  if ( d->hasExtra() && d->extra()->conditions
-       && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SBottomBorder, true ) )
-    return d->extra()->conditions->matchedStyle()->bottomBorderPen();
-
-  return bottomBorderPen( col, row );
-}
-
-const QPen & Cell::effGoUpDiagonalPen( int col, int row ) const
-{
-  if ( d->hasExtra() && d->extra()->conditions
-       && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SGoUpDiagonal, true ) )
-    return d->extra()->conditions->matchedStyle()->goUpDiagonalPen();
-
-  return format()->goUpDiagonalPen( col, row );
-}
-
-const QPen & Cell::effFallDiagonalPen( int col, int row ) const
-{
-  if ( d->hasExtra() && d->extra()->conditions
-       && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SFallDiagonal, true ) )
-    return d->extra()->conditions->matchedStyle()->fallDiagonalPen();
-
-  return format()->fallDiagonalPen( col, row );
-}
-
-uint Cell::effBottomBorderValue( int col, int row ) const
-{
-  if ( isPartOfMerged() )
-  {
-    Cell * cell = d->extra()->obscuringCells.first();
-    return cell->effBottomBorderValue( cell->column(), cell->row() );
-  }
-
-  if ( d->hasExtra() && d->extra()->conditions
-      && d->extra()->conditions->matchedStyle() )
-    return d->extra()->conditions->matchedStyle()->bottomPenValue();
-
-  return format()->bottomBorderValue( col, row );
-}
-
-uint Cell::effRightBorderValue( int col, int row ) const
-{
-  if ( isPartOfMerged() )
-  {
-    Cell * cell = d->extra()->obscuringCells.first();
-    return cell->effRightBorderValue( cell->column(), cell->row() );
-  }
-
-  if ( d->hasExtra() && d->extra()->conditions
-      && d->extra()->conditions->matchedStyle() )
-    return d->extra()->conditions->matchedStyle()->rightPenValue();
-
-  return format()->rightBorderValue( col, row );
-}
-
-uint Cell::effLeftBorderValue( int col, int row ) const
-{
-  if ( isPartOfMerged() )
-  {
-    Cell * cell = d->extra()->obscuringCells.first();
-    return cell->effLeftBorderValue( cell->column(), cell->row() );
-  }
-
-  if ( d->hasExtra() && d->extra()->conditions
-      && d->extra()->conditions->matchedStyle() )
-    return d->extra()->conditions->matchedStyle()->leftPenValue();
-
-  return format()->leftBorderValue( col, row );
-}
-
-uint Cell::effTopBorderValue( int col, int row ) const
-{
-  if ( isPartOfMerged() )
-  {
-    Cell * cell = d->extra()->obscuringCells.first();
-    return cell->effTopBorderValue( cell->column(), cell->row() );
-  }
-
-  if ( d->hasExtra() && d->extra()->conditions
-      && d->extra()->conditions->matchedStyle() )
-    return d->extra()->conditions->matchedStyle()->topPenValue();
-
-  return format()->topBorderValue( col, row );
-}
-
-///////////////////////////////////////////
-//
 // Precision
 //
 ///////////////////////////////////////////
 
 void Cell::incPrecision()
 {
-  //TODO: This is ugly. Why not simply regenerate the text to display? Tomas
+    //TODO: This is ugly. Why not simply regenerate the text to display? Tomas
 
-  if ( !value().isNumber() )
-    return;
-  int tmpPreci = format()->precision( column(), row() );
+    if ( !value().isNumber() )
+        return;
+    int tmpPreci = style().precision();
 
-  if ( tmpPreci == -1 )
-  {
-    int pos = d->strOutText.indexOf( locale()->decimalSymbol() );
-    if ( pos == -1 )
-        pos = d->strOutText.indexOf('.');
-    if ( pos == -1 )
-      format()->setPrecision(1);
-    else
+    Style style;
+    if ( tmpPreci == -1 )
     {
-      int start = 0;
-      if ( d->strOutText.indexOf('%') != -1 )
-        start = 2;
-      else if ( d->strOutText.indexOf(locale()->currencySymbol()) == ((int)(d->strOutText.length()-locale()->currencySymbol().length())) )
-        start = locale()->currencySymbol().length() + 1;
-      else if ( (start=d->strOutText.indexOf('E')) != -1 )
-        start = d->strOutText.length() - start;
+        int pos = d->strOutText.indexOf( locale()->decimalSymbol() );
+        if ( pos == -1 )
+            pos = d->strOutText.indexOf('.');
+        if ( pos == -1 )
+            style.setPrecision( 1 );
+        else
+        {
+            int start = 0;
+            if ( d->strOutText.indexOf('%') != -1 )
+                start = 2;
+            else if ( d->strOutText.indexOf(locale()->currencySymbol()) == ((int)(d->strOutText.length()-locale()->currencySymbol().length())) )
+                start = locale()->currencySymbol().length() + 1;
+            else if ( (start=d->strOutText.indexOf('E')) != -1 )
+                start = d->strOutText.length() - start;
 
-      //kDebug() << "start=" << start << " pos=" << pos << " length=" << d->strOutText.length() << endl;
-      format()->setPrecision( qMax( 0, (int)d->strOutText.length() - start - pos ) );
+            //kDebug() << "start=" << start << " pos=" << pos << " length=" << d->strOutText.length() << endl;
+            style.setPrecision( qMax( 0, (int)d->strOutText.length() - start - pos ) );
+        }
     }
-  }
-  else if ( tmpPreci < 10 )
-  {
-    format()->setPrecision( ++tmpPreci );
-  }
-  setFlag(Flag_LayoutDirty);
+    else if ( tmpPreci < 10 )
+        style.setPrecision( ++tmpPreci );
+    setStyle( style );
+    setFlag(Flag_LayoutDirty);
 }
 
 void Cell::decPrecision()
 {
-  //TODO: This is ugly. Why not simply regenerate the text to display? Tomas
+    //TODO: This is ugly. Why not simply regenerate the text to display? Tomas
 
-  if ( !value().isNumber() )
-    return;
-  int preciTmp = format()->precision( column(), row() );
-//  kDebug() << "decPrecision: tmpPreci = " << tmpPreci << endl;
-  if ( format()->precision(column(),row()) == -1 )
-  {
-    int pos = d->strOutText.indexOf( locale()->decimalSymbol() );
-    int start = 0;
-    if ( d->strOutText.indexOf('%') != -1 )
-        start = 2;
-    else if ( d->strOutText.indexOf(locale()->currencySymbol()) == ((int)(d->strOutText.length()-locale()->currencySymbol().length())) )
-        start = locale()->currencySymbol().length() + 1;
-    else if ( (start = d->strOutText.indexOf('E')) != -1 )
-        start = d->strOutText.length() - start;
-    else
-        start = 0;
+    if ( !value().isNumber() )
+        return;
+    int preciTmp = style().precision();
 
-    if ( pos == -1 )
-      return;
+    //  kDebug() << "decPrecision: tmpPreci = " << tmpPreci << endl;
+    Style style;
+    if ( preciTmp == -1 )
+    {
+        int pos = d->strOutText.indexOf( locale()->decimalSymbol() );
+        int start = 0;
+        if ( d->strOutText.indexOf('%') != -1 )
+            start = 2;
+        else if ( d->strOutText.indexOf(locale()->currencySymbol()) == ((int)(d->strOutText.length()-locale()->currencySymbol().length())) )
+            start = locale()->currencySymbol().length() + 1;
+        else if ( (start = d->strOutText.indexOf('E')) != -1 )
+            start = d->strOutText.length() - start;
+        else
+            start = 0;
 
-    format()->setPrecision(d->strOutText.length() - pos - 2 - start);
-    //   if ( preciTmp < 0 )
-    //      format()->setPrecision( preciTmp );
-  }
-  else if ( preciTmp > 0 )
-  {
-    format()->setPrecision( --preciTmp );
-  }
-  setFlag( Flag_LayoutDirty );
+        if ( pos == -1 )
+            return;
+
+        style.setPrecision(d->strOutText.length() - pos - 2 - start);
+        //   if ( preciTmp < 0 )
+        //      format()->setPrecision( preciTmp );
+    }
+    else if ( preciTmp > 0 )
+        style.setPrecision( --preciTmp );
+    setStyle( style );
+    setFlag( Flag_LayoutDirty );
 }
 
 //set numerical value
@@ -1622,7 +1361,7 @@ void Cell::setCellText( const QString& _text, bool asText )
 
   const QString oldText = d->strText;
   setDisplayText( _text );
-  if ( !format()->sheet()->isLoading() && !testValidity() )
+  if ( !sheet()->isLoading() && !testValidity() )
   {
     //reapply old value if action == stop
     setDisplayText( oldText );
@@ -1632,10 +1371,10 @@ void Cell::setCellText( const QString& _text, bool asText )
 void Cell::setDisplayText( const QString& _text )
 {
 //   kDebug() << k_funcinfo << endl;
-  const bool isLoading = format()->sheet()->isLoading();
+  const bool isLoading = sheet()->isLoading();
 
   if ( !isLoading )
-    format()->sheet()->doc()->emitBeginOperation( false );
+    sheet()->doc()->emitBeginOperation( false );
 
   d->strText = _text;
 
@@ -1652,7 +1391,7 @@ void Cell::setDisplayText( const QString& _text )
   }
 
   if ( !isLoading )
-    format()->sheet()->doc()->emitEndOperation( Region( QRect( d->column, d->row, 1, 1 ) ) );
+    sheet()->doc()->emitEndOperation( Region( QRect( d->column, d->row, 1, 1 ) ) );
 }
 
 void Cell::setLink( const QString& link )
@@ -1873,7 +1612,7 @@ bool Cell::testValidity() const
 
 FormatType Cell::formatType() const
 {
-    return format()->getFormatType( d->column, d->row );
+    return style().formatType();
 }
 
 int Cell::mergedXCells() const
@@ -1929,7 +1668,7 @@ bool Cell::updateChart(bool refresh)
     // Update a chart for example if it depends on this cell.
     if ( d->row != 0 && d->column != 0 )
     {
-        foreach ( CellBinding* binding, format()->sheet()->cellBindings() )
+        foreach ( CellBinding* binding, sheet()->cellBindings() )
         {
             if ( binding->contains( d->column, d->row ) )
             {
@@ -1992,7 +1731,9 @@ void Cell::convertToMoney ()
 
   setValue (Value(getDouble ()));
   d->value.setFormat (Value::fmt_Money);
-  format()->setPrecision (locale()->fracDigits());
+  Style style;
+  style.setPrecision (locale()->fracDigits());
+  setStyle( style );
 }
 
 void Cell::convertToTime ()
@@ -2049,7 +1790,7 @@ void Cell::checkTextInput()
     d->strText = locale()->formatTime( value().asDateTime( sheet()->doc() ).time(), true);
 
   // convert first letter to uppercase ?
-  if (format()->sheet()->getFirstLetterUpper() && value().isString() &&
+  if (sheet()->getFirstLetterUpper() && value().isString() &&
       (!d->strText.isEmpty()))
   {
     QString str = value().asString();
@@ -2063,7 +1804,11 @@ void Cell::checkNumberFormat()
     if ( formatType() == Number_format && value().isNumber() )
     {
         if ( value().asFloat() > 1e+10 )
-            format()->setFormatType( Scientific_format );
+        {
+            Style style;
+            style.setFormatType( Scientific_format );
+            setStyle( style );
+        }
     }
 }
 
@@ -2080,10 +1825,12 @@ QDomElement Cell::save( QDomDocument& doc,
     QDomElement cell = doc.createElement( "cell" );
     cell.setAttribute( "row", row() - _y_offset );
     cell.setAttribute( "column", column() - _x_offset );
+
     //
     // Save the formatting information
     //
-    QDomElement formatElement = format()->save( doc, column(), row(), force, copy );
+    QDomElement formatElement;
+    style().saveXML( doc, formatElement, force, copy );
     if ( formatElement.hasChildNodes() || formatElement.attributes().length() ) // don't save empty tags
         cell.appendChild( formatElement );
 
@@ -2173,11 +1920,12 @@ QDomElement Cell::save( QDomDocument& doc,
         cell.appendChild( validityElement );
     }
 
-    if ( format()->comment() )
+    const QString comment = this->comment();
+    if ( !comment.isEmpty() )
     {
-        QDomElement comment = doc.createElement( "comment" );
-        comment.appendChild( doc.createCDATASection( *format()->comment() ) );
-        cell.appendChild( comment );
+        QDomElement commentElement = doc.createElement( "comment" );
+        commentElement.appendChild( doc.createCDATASection( comment ) );
+        cell.appendChild( commentElement );
     }
 
     //
@@ -2276,13 +2024,14 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
   return true; /* really isn't much of a way for this function to fail */
 }
 
-void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
+void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter, int row, int column )
 {
-    if ( format()->comment() )
+    const QString comment = this->comment( column, row );
+    if ( !comment.isEmpty() )
     {
         //<office:annotation draw:style-name="gr1" draw:text-style-name="P1" svg:width="2.899cm" svg:height="2.691cm" svg:x="2.858cm" svg:y="0.001cm" draw:caption-point-x="-2.858cm" draw:caption-point-y="-0.001cm">
         xmlwriter.startElement( "office:annotation" );
-        QStringList text = format()->comment()->split( "\n", QString::SkipEmptyParts );
+        QStringList text = comment.split( "\n", QString::SkipEmptyParts );
         for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
             xmlwriter.startElement( "text:p" );
             xmlwriter.addTextNode( *it );
@@ -2292,9 +2041,7 @@ void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
     }
 }
 
-
-
-QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles )
+QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles, int col, int row )
 {
     if ( d->hasExtra() && d->extra()->conditions )
     {
@@ -2302,7 +2049,7 @@ QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mai
         currentCellStyle = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
         d->extra()->conditions->saveOasisConditions( currentCellStyle );
     }
-    return format()->saveOasisCellStyle( currentCellStyle, mainStyles );
+    return style( col, row ).saveOasis( currentCellStyle, mainStyles );
 }
 
 
@@ -2332,17 +2079,18 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
       saveOasisValue (xmlwriter);
 
     KoGenStyle currentCellStyle; // the type determined in saveOasisCellStyle
-    saveOasisCellStyle( currentCellStyle,mainStyles );
+    saveOasisCellStyle( currentCellStyle, mainStyles, column, row );
     // skip 'table:style-name' attribute for the default style
     if ( !currentCellStyle.isDefaultStyle() )
       xmlwriter.addAttribute( "table:style-name", mainStyles.styles()[currentCellStyle] );
 
     // group empty cells with the same style
-    if ( isEmpty() && !format()->hasProperty( Style::SComment ) && !isPartOfMerged() && !doesMergeCells() )
+    const QString comment = this->comment( column, row );
+    if ( isEmpty() && comment.isEmpty() && !isPartOfMerged() && !doesMergeCells() )
     {
       bool refCellIsDefault = isDefault();
       int j = column + 1;
-      Cell *nextCell = format()->sheet()->getNextCellRight( column, row );
+      Cell *nextCell = sheet()->getNextCellRight( column, row );
       while ( nextCell )
       {
         // if
@@ -2364,17 +2112,17 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         }
 
         KoGenStyle nextCellStyle; // the type is determined in saveOasisCellStyle
-        nextCell->saveOasisCellStyle( nextCellStyle,mainStyles );
+        nextCell->saveOasisCellStyle( nextCellStyle, mainStyles, nextCell->column(), nextCell->row() );
 
         if ( nextCell->isPartOfMerged() || nextCell->doesMergeCells() ||
-             nextCell->format()->hasProperty( Style::SComment ) ||
+             !nextCell->comment().isEmpty() ||
              !(nextCellStyle == currentCellStyle) )
         {
           break;
         }
         ++repeated;
         // get the next cell and set the index to the adjacent cell
-        nextCell = format()->sheet()->getNextCellRight( j++, row );
+        nextCell = sheet()->getNextCellRight( j++, row );
       }
       kDebug(36003) << "Cell::saveOasis: empty cell in column " << column << " "
                     << "repeated " << repeated << " time(s)" << endl;
@@ -2429,7 +2177,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         xmlwriter.endElement();
     }
 
-    saveOasisAnnotation( xmlwriter );
+    saveOasisAnnotation( xmlwriter, row, column );
 
     xmlwriter.endElement();
     return true;
@@ -2466,11 +2214,13 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
     case Value::fmt_Money:
     {
       xmlWriter.addAttribute( "office:value-type", "currency" );
-      Style::Currency currency;
-      if (format()->currencyInfo(currency))
+      const Style style = this->style();
+      if ( style.hasAttribute( Style::CurrencyFormat ) )
+      {
+        Style::Currency currency = style.currency();
         xmlWriter.addAttribute( "office:currency", Currency::getCurrencyCode(currency.type) );
-      xmlWriter.addAttribute( "office:value",
-          QString::number( value().asFloat() ) );
+      }
+      xmlWriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
       break;
     }
     case Value::fmt_DateTime: break;  //NOTHING HERE
@@ -2520,7 +2270,7 @@ void Cell::loadOasisConditional( const KoXmlElement* style )
     }
 }
 
-bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasisContext , Style* style )
+bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisContext )
 {
     kDebug(36003) << "*** Loading cell properties ***** at " << column() << ',' << row () << endl;
 
@@ -2534,11 +2284,6 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
 
         if ( cellStyle )
             loadOasisConditional( cellStyle );
-    }
-
-    if (style)
-    {
-        format()->setStyle( style );
     }
 
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
@@ -2619,7 +2364,13 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
                 if (element.hasAttributeNS( KoXmlNS::office, "currency" ) )
                 {
                   Currency currency(element.attributeNS( KoXmlNS::office, "currency", QString::null ) );
-                  format()->setCurrency( currency.getIndex(), currency.getDisplayCode() );
+                  Style style;
+                  // FIXME: Use KSpread::Currency instead Style::Currency
+                  Style::Currency sCurrency;
+                  sCurrency.type = currency.getIndex();
+                  sCurrency.symbol = currency.getDisplayCode();
+                  style.setCurrency( sCurrency );
+                  setStyle( style );
                 }
             }
         }
@@ -2639,8 +2390,9 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
                     QString str = locale()->formatNumber( percent, 15 );
                     setCellText( str );
                 }
-
-                format()->setFormatType (Percentage_format);
+                Style style;
+                style.setFormatType( Percentage_format );
+                setStyle( style );
             }
         }
         else if ( valuetype == "date" )
@@ -2675,7 +2427,9 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
             if ( ok )
             {
                 setCellValue( Value( QDate( year, month, day ), sheet()->doc() ) );
-                format()->setFormatType (ShortDate_format);
+                Style style;
+                style.setFormatType(ShortDate_format);
+                setStyle( style );
                 kDebug(36003) << "Set QDate: " << year << " - " << month << " - " << day << endl;
             }
 
@@ -2720,7 +2474,9 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
                 // Value kval( timeToNum( hours, minutes, seconds ) );
                 // cell->setValue( kval );
                 setCellValue( Value( QTime( hours % 24, minutes, seconds ), sheet()->doc() ) );
-                format()->setFormatType (Time_format);
+                Style style;
+                style.setFormatType (Time_format);
+                setStyle( style );
             }
         }
         else if( valuetype == "string" )
@@ -2732,7 +2488,9 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
                 value = element.attributeNS( KoXmlNS::office, "string-value", QString::null );
                 setCellValue( Value(value) );
             }
-            format()->setFormatType (Text_format);
+            Style style;
+            style.setFormatType (Text_format);
+            setStyle( style );
         }
         else
             kDebug(36003)<<" type of value found : "<<valuetype<<endl;
@@ -2778,9 +2536,8 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
 
             node = node.nextSibling();
         }
-
         if( !comment.isEmpty() )
-            format()->setComment( comment );
+            setComment( comment );
     }
 
     KoXmlElement frame = KoDom::namedItemNS( element, KoXmlNS::draw, "frame" );
@@ -2788,7 +2545,7 @@ bool Cell::loadOasis( const KoXmlElement& element , KoOasisLoadingContext& oasis
       loadOasisObjects( frame, oasisContext );
 
     if (isFormula)   // formulas must be recalculated
-      format()->sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula |
+      sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula |
                                                                  CellDamage::Value ) );
 
     return true;
@@ -2842,7 +2599,9 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
     //Enable word wrapping if multiple lines of text have been found.
     if ( multipleTextParagraphsFound )
     {
-        format()->setMultiRow(true);
+        Style style;
+        style.setWrapText( true );
+        setStyle( style );
     }
 }
 
@@ -3232,7 +2991,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     {
         // send pm parameter. Didn't load Borders if pm==NoBorder
 
-      if ( !format()->load( formatElement, pm, paste ) )
+        if ( !style().loadXML( formatElement, pm, paste ) )
             return false;
 
         if ( formatElement.hasAttribute( "colspan" ) )
@@ -3411,7 +3170,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     {
         QString t = comment.text();
         //t = t.trimmed();
-        format()->setComment( t );
+        setComment( t );
     }
 
     //
@@ -3656,7 +3415,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
           kWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
         }
         /* We will need to localize the text version of the number */
-        KLocale* locale = format()->sheet()->doc()->locale();
+        KLocale* locale = sheet()->doc()->locale();
 
         /* KLocale::formatNumber requires the precision we want to return.
         */
@@ -3737,7 +3496,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
       clearFlag( Flag_TextFormatDirty );
   }
 
-  if ( !format()->sheet()->isLoading() )
+  if ( !sheet()->isLoading() )
     setCellText( d->strText );
 
   if ( d->hasExtra() && d->extra()->conditions )
@@ -3917,7 +3676,7 @@ Cell::~Cell()
         for( int y = (x == 0) ? 1 : 0; // avoid looking at (+0,+0)
              y <= extraYCells; ++y )
     {
-        Cell* cell = format()->sheet()->cellAt( d->column + x, d->row + y );
+        Cell* cell = sheet()->cellAt( d->column + x, d->row + y );
         if ( cell )
             cell->unobscure(this);
     }
@@ -3927,10 +3686,6 @@ Cell::~Cell()
     if (!isDefault())
       valueChanged ();  //our value has been changed (is now null), but only if we aren't default
 
-    delete d->format;
-#ifndef KSPREAD_CELL_WINDOW
-    delete d->cellView;
-#endif
     delete d;
 }
 
@@ -4016,7 +3771,7 @@ bool Cell::operator==( const Cell& other ) const
     return false;
   if ( d->value != other.d->value )
     return false;
-  if ( *d->format != *other.d->format )
+  if ( !isDefault() && !other.isDefault() && style() != other.style() )
     return false;
   if ( d->hasExtra() )
   {

@@ -76,7 +76,7 @@ class Sheet;
 class CustomStyle;
 class StyleManager;
 class CellFormatDialog;
-class FormatManipulator;
+class StyleManipulator;
 
 enum BorderType
 {
@@ -172,7 +172,7 @@ public:
     CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg );
 
     void apply( CustomStyle * style );
-    void apply( FormatManipulator *_obj );
+    void apply( StyleManipulator *_obj );
 
 signals:
     /**
@@ -213,7 +213,7 @@ class CellFormatPageFloat : public QWidget
 public:
     CellFormatPageFloat( QWidget *parent, CellFormatDialog *_dlg );
     void apply( CustomStyle * style );
-    void apply( FormatManipulator *_obj );
+    void apply( StyleManipulator *_obj );
 
 public slots:
     void slotChangeState();
@@ -257,7 +257,7 @@ public:
     CellFormatPagePosition( QWidget *parent, CellFormatDialog *_dlg );
 
     void apply( CustomStyle * style );
-    void apply( FormatManipulator *_obj );
+    void apply( StyleManipulator *_obj );
 
     double getSizeHeight() const;
     double getSizeWidth() const;
@@ -328,7 +328,7 @@ class CellFormatPageBorder : public QWidget
 public:
     CellFormatPageBorder( QWidget *parent, CellFormatDialog *_dlg );
 
-    void apply(FormatManipulator* obj);
+    void apply(StyleManipulator* obj);
     void invertState(BorderButton *_button);
     QPixmap paintFormatPixmap(Qt::PenStyle _style);
 
@@ -370,13 +370,13 @@ private:
   void InitializeBorderButtons();
   void InitializePatterns();
   void SetConnections();
-  void applyTopOutline(FormatManipulator* obj);
-  void applyBottomOutline(FormatManipulator* obj);
-  void applyLeftOutline(FormatManipulator* obj);
-  void applyRightOutline(FormatManipulator* obj);
-  void applyVerticalOutline(FormatManipulator* obj);
-  void applyHorizontalOutline(FormatManipulator* obj);
-  void applyDiagonalOutline(FormatManipulator* obj);
+  void applyTopOutline(StyleManipulator* obj);
+  void applyBottomOutline(StyleManipulator* obj);
+  void applyLeftOutline(StyleManipulator* obj);
+  void applyRightOutline(StyleManipulator* obj);
+  void applyVerticalOutline(StyleManipulator* obj);
+  void applyHorizontalOutline(StyleManipulator* obj);
+  void applyDiagonalOutline(StyleManipulator* obj);
 };
 
 class BrushSelect : public QFrame
@@ -415,7 +415,7 @@ public:
     CellFormatPagePattern( QWidget *parent, CellFormatDialog *_dlg );
 
     void apply( CustomStyle * style );
-    void apply( FormatManipulator *_obj );
+    void apply( StyleManipulator *_obj );
 
     void init();
 public slots:
@@ -461,7 +461,7 @@ class CellFormatPageProtection : public QWidget, public Ui::ProtectionWidget
   ~CellFormatPageProtection();
   ///when protection is set through Style Manager
   void apply( CustomStyle * style );
-  void apply( FormatManipulator * _obj );
+  void apply( StyleManipulator * _obj );
 
  protected:
   CellFormatDialog * m_dlg;
@@ -491,13 +491,13 @@ public:
     void initGUI();
     void initMembers();
 
-    void initParameters(Format *_obj,int column,int row);
-    void checkBorderRight(Format *obj,int x,int y);
-    void checkBorderLeft(Format *obj,int x,int y);
-    void checkBorderTop(Format *obj,int x,int y);
-    void checkBorderBottom(Format *obj,int x,int y);
-    void checkBorderVertical(Format *obj,int x,int y);
-    void checkBorderHorizontal(Format *obj,int x,int y);
+    void initParameters(const Style& _obj);
+    void checkBorderRight(const Style& obj);
+    void checkBorderLeft(const Style& obj);
+    void checkBorderTop(const Style& obj);
+    void checkBorderBottom(const Style& obj);
+    void checkBorderVertical(const Style& obj);
+    void checkBorderHorizontal(const Style& obj);
     /**
      * Run the dialogs event loop and return when closed.
      */
@@ -544,18 +544,18 @@ public:
     QColor textColor;
     bool bTextColor;
     bool bTextFontBold;
-    bool textFontBold;
+    bool fontBold;
     bool bTextFontItalic;
-    bool textFontItalic;
+    bool fontItalic;
     bool bTextFontSize;
-    int textFontSize;
+    int fontSize;
     bool bTextFontFamily;
-    QString textFontFamily;
+    QString fontFamily;
     bool bStrike;
     bool strike;
     bool bUnderline;
     bool underline;
-    QFont textFont;
+    QFont font;
     QColor bgColor;
     bool bBgColor;
     QString actionText;

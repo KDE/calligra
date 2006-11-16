@@ -74,7 +74,9 @@ void ValueParser::parse (const QString& str, Cell *cell)
   double money = m_doc->locale()->readMoney (strStripped, &ok);
   if (ok)
   {
-    cell->format()->setPrecision(2);
+    Style style;
+    style.setPrecision( 2 );
+    cell->setStyle( style );
     Value val (money);
     val.setFormat (Value::fmt_Money);
     cell->setValue (Value(val));

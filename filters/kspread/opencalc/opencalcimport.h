@@ -21,8 +21,9 @@
 #ifndef OpenCalc_IMPORT_H__
 #define OpenCalc_IMPORT_H__
 
+#include "Global.h"
+
 #include <KoFilter.h>
-#include "kspread/Format.h"
 
 #include <q3dict.h>
 #include <qdom.h>
@@ -38,6 +39,7 @@ class Cell;
 class Conditional;
 class Doc;
 class Sheet;
+class Style;
 class Validity;
 }
 
@@ -68,14 +70,14 @@ class OpenCalcImport : public KoFilter
   enum bPos { Left, Top, Right, Bottom, Fall, GoUp, Border };
 
   KSpread::Doc *    m_doc;
-  KSpread::Format * m_defaultLayout;
+  KSpread::Style *  m_defaultStyle;
 
   QDomDocument    m_content;
   QDomDocument    m_meta;
   QDomDocument    m_settings;
 
   Q3Dict<QDomElement>   m_styles;
-  Q3Dict<KSpread::Format> m_defaultStyles;
+  Q3Dict<KSpread::Style> m_defaultStyles;
   Q3Dict<QString>       m_formats;
   QMap<QString,QDomElement> m_validationList;
 
@@ -91,10 +93,10 @@ class OpenCalcImport : public KoFilter
   bool readRowsAndCells( QDomElement & content, KSpread::Sheet * table );
   bool readCells( QDomElement & rowNode, KSpread::Sheet  * table, int row, int & columns );
   void convertFormula( QString & text, QString const & f ) const;
-  void loadFontStyle( KSpread::Format * layout, QDomElement const * font ) const;
-  void readInStyle( KSpread::Format * layout, QDomElement const & style );
-  void loadStyleProperties( KSpread::Format * layout, QDomElement const & property ) const;
-  void loadBorder( KSpread::Format * layout, QString const & borderDef, bPos pos ) const;
+  void loadFontStyle( KSpread::Style * layout, QDomElement const * font ) const;
+  void readInStyle( KSpread::Style * layout, QDomElement const & style );
+  void loadStyleProperties( KSpread::Style * layout, QDomElement const & property ) const;
+  void loadBorder( KSpread::Style * layout, QString const & borderDef, bPos pos ) const;
   void loadTableMasterStyle( KSpread::Sheet * table, QString const & stylename );
   QString * loadFormat( QDomElement * element,
                         KSpread::FormatType & formatType,

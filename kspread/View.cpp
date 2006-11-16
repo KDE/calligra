@@ -107,7 +107,6 @@
 #include "DataManipulators.h"
 #include "DependencyManager.h"
 #include "Digest.h"
-#include "FormatManipulators.h"
 #include "inspector.h"
 #include "LoadingInfo.h"
 #include "Border.h"
@@ -125,6 +124,7 @@
 #include "SortManipulator.h"
 #include "Style.h"
 #include "StyleManager.h"
+#include "StyleManipulators.h"
 #include "testrunner.h"
 #include "Undo.h"
 #include "ValueCalc.h"
@@ -1365,12 +1365,14 @@ void View::Private::adjustActions( Cell* cell, int column, int row )
 {
   toolbarLock = true;
 
+  const Style style = cell->style( column, row );
+
   // workaround for bug #59291 (crash upon starting from template)
   // certain Qt and Fontconfig combination fail miserably if can not
   // find the font name (e.g. not installed in the system)
   QStringList fontList;
   KFontChooser::getFontList( fontList, 0 );
-  QString fontFamily = cell->format()->textFontFamily( column,row );
+  QString fontFamily = style.fontFamily();
   for ( QStringList::Iterator it = fontList.begin(); it != fontList.end(); ++it )
   {
     if ((*it).toLower() == fontFamily.toLower())
@@ -1380,38 +1382,37 @@ void View::Private::adjustActions( Cell* cell, int column, int row )
     }
   }
 
-  actions->selectFontSize->setFontSize( cell->format()->textFontSize( column, row ) );
-  actions->bold->setChecked( cell->format()->textFontBold( column, row ) );
-  actions->italic->setChecked( cell->format()->textFontItalic(  column, row) );
-  actions->underline->setChecked( cell->format()->textFontUnderline( column, row ) );
-  actions->strikeOut->setChecked( cell->format()->textFontStrike( column, row ) );
+  actions->selectFontSize->setFontSize( style.fontSize() );
+  actions->bold->setChecked( style.bold() );
+  actions->italic->setChecked( style.italic() );
+  actions->underline->setChecked( style.underline() );
+  actions->strikeOut->setChecked( style.strikeOut() );
 
-  actions->alignLeft->setChecked( cell->format()->align( column, row ) == Style::Left );
-  actions->alignCenter->setChecked( cell->format()->align( column, row ) == Style::Center );
-  actions->alignRight->setChecked( cell->format()->align( column, row ) == Style::Right );
+  actions->alignLeft->setChecked( style.halign() == Style::Left );
+  actions->alignCenter->setChecked( style.halign() == Style::Center );
+  actions->alignRight->setChecked( style.halign() == Style::Right );
 
-  actions->alignTop->setChecked( cell->format()->alignY( column, row ) == Style::Top );
-  actions->alignMiddle->setChecked( cell->format()->alignY( column, row ) == Style::Middle );
-  actions->alignBottom->setChecked( cell->format()->alignY( column, row ) == Style::Bottom );
+  actions->alignTop->setChecked( style.valign() == Style::Top );
+  actions->alignMiddle->setChecked( style.valign() == Style::Middle );
+  actions->alignBottom->setChecked( style.valign() == Style::Bottom );
 
-  actions->verticalText->setChecked( cell->format()->verticalText( column,row ) );
+  actions->verticalText->setChecked( style.verticalText() );
 
-  actions->wrapText->setChecked( cell->format()->multiRow( column,row ) );
+  actions->wrapText->setChecked( style.wrapText() );
 
-  FormatType ft = cell->formatType();
+  FormatType ft = style.formatType();
   actions->percent->setChecked( ft == Percentage_format );
   actions->money->setChecked( ft == Money_format );
 
   if ( activeSheet && !activeSheet->isProtected() )
-    actions->removeComment->setEnabled( !cell->format()->comment(column,row).isEmpty() );
+    actions->removeComment->setEnabled( !cell->comment( column, row ).isEmpty() );
 
   if ( activeSheet && !activeSheet->isProtected() )
-    actions->decreaseIndent->setEnabled( cell->format()->getIndent( column, row ) > 0.0 );
+    actions->decreaseIndent->setEnabled( style.indentation() > 0.0 );
 
   toolbarLock = false;
 
-  if ( activeSheet && activeSheet->isProtected() && !cell->isDefault() &&
-       cell->format()->notProtected( cell->column(), cell->row() ) )
+  if ( activeSheet && activeSheet->isProtected() && !cell->isDefault() && style.notProtected() )
   {
     if ( selection->isSingular() )
     {
@@ -2486,9 +2487,10 @@ void View::updateEditWidgetOnPress()
         d->editWidget->setText( "" );
         return;
     }
-    if ( d->activeSheet->isProtected() && cell->format()->isHideFormula( column, row ) )
+    const Style style = d->activeSheet->style( column, row );
+    if ( d->activeSheet->isProtected() && style.hideFormula() )
         d->editWidget->setText( cell->strOutText() );
-    else if ( d->activeSheet->isProtected() && cell->format()->isHideAll( column, row ) )
+    else if ( d->activeSheet->isProtected() && style.hideAll() )
         d->editWidget->setText( "" );
     else
         d->editWidget->setText( cell->text() );
@@ -2505,8 +2507,9 @@ void View::updateEditWidget()
     int row    = d->canvas->markerRow();
 
     Cell * cell = d->activeSheet->cellAt( column, row );
+    const Style style = cell->style( column, row );
     bool active = activeSheet()->getShowFormula()
-        && !( d->activeSheet->isProtected() && cell && cell->format()->isHideFormula( column, row ) );
+        && !( d->activeSheet->isProtected() && cell && style.hideFormula() );
 
     if ( d->activeSheet && !d->activeSheet->isProtected() )
     {
@@ -2525,21 +2528,21 @@ void View::updateEditWidget()
         return;
     }
 
-    if ( d->activeSheet->isProtected() && cell->format()->isHideFormula( column, row ) )
+    if ( d->activeSheet->isProtected() && style.hideFormula() )
         d->editWidget->setText( cell->strOutText() );
-    else if ( d->activeSheet->isProtected() && cell->format()->isHideAll( column, row ) )
+    else if ( d->activeSheet->isProtected() && style.hideAll() )
         d->editWidget->setText( "" );
     else
         d->editWidget->setText( cell->text() );
 
-    if ( d->activeSheet->isProtected() && !cell->format()->notProtected( column, row ) )
+    if ( d->activeSheet->isProtected() && !style.notProtected() )
       d->editWidget->setEnabled( false );
     else
       d->editWidget->setEnabled( true );
 
     if ( d->canvas->editor() )
     {
-      d->canvas->editor()->setEditorFont(cell->format()->textFont(column, row), true);
+      d->canvas->editor()->setEditorFont(style.font(), true);
       d->canvas->editor()->setFocus();
     }
 
@@ -2738,42 +2741,42 @@ void View::oszilloscope()
 
 void View::changeTextColor()
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Text Color") );
-  manipulator->setTextColor( d->actions->textColor->color() );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Text Color") );
+    manipulator->setFontColor( d->actions->textColor->color() );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::setSelectionTextColor(const QColor &txtColor)
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Text Color") );
-  manipulator->setTextColor( txtColor );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Text Color") );
+    manipulator->setFontColor( txtColor );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::changeBackgroundColor()
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Background Color") );
-  manipulator->setBackgroundColor( d->actions->bgColor->color() );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Background Color") );
+    manipulator->setBackgroundColor( d->actions->bgColor->color() );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::setSelectionBackgroundColor(const QColor &bgColor)
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Background Color") );
-  manipulator->setBackgroundColor( bgColor );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Background Color") );
+    manipulator->setBackgroundColor( bgColor );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::changeBorderColor()
@@ -2983,25 +2986,26 @@ void View::slotShowRowDialog()
 
 void View::fontSelected( const QString & _font )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Font") );
-  manipulator->setFontFamily( _font.toLatin1() );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Font") );
+    manipulator->setFontFamily( _font.toLatin1() );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 
-  // Dont leave the focus in the toolbars combo box ...
-  if ( d->canvas->editor() )
-  {
-    Cell * cell = d->activeSheet->cellAt( d->selection->marker() );
-    d->canvas->editor()->setEditorFont( cell->format()->textFont( cell->column(), cell->row() ), true );
-    d->canvas->editor()->setFocus();
-  }
-  else
-    d->canvas->setFocus();
+    // Dont leave the focus in the toolbars combo box ...
+    if ( d->canvas->editor() )
+    {
+        const QPoint marker = selectionInfo()->marker();
+        const Style style = d->activeSheet->style( marker.x(), marker.y() );
+        d->canvas->editor()->setEditorFont( style.font(), true );
+        d->canvas->editor()->setFocus();
+    }
+    else
+        d->canvas->setFocus();
 }
 
 void View::decreaseFontSize()
@@ -3016,19 +3020,19 @@ void View::increaseFontSize()
 
 void View::setSelectionFontSize( int deltaSize )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  const QPoint marker = selectionInfo()->marker();
-  const Cell* cell = d->activeSheet->cellAt(marker);
-  const int size = cell->format()->textFontSize(marker.x(), marker.y());
+    const QPoint marker = selectionInfo()->marker();
+    const Style style = d->activeSheet->style( marker.x(), marker.y() );
+    const int size = style.fontSize();
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Font") );
-  manipulator->setFontSize( size + deltaSize );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Font") );
+    manipulator->setFontSize( size + deltaSize );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::lower()
@@ -3063,14 +3067,14 @@ void View::firstLetterUpper()
 
 void View::verticalText(bool b)
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n( "Vertical Text" ) );
-  manipulator->setVerticalText( b );
-  manipulator->setMultiRow( false );
-  manipulator->setAngle( 0 );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n( "Vertical Text" ) );
+    manipulator->setVerticalText( b );
+    manipulator->setMultiRow( false );
+    manipulator->setAngle( 0 );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::insertSpecialChar()
@@ -3104,18 +3108,20 @@ void View::slotSpecialCharDlgClosed()
 
 void View::slotSpecialChar( QChar c, const QString & _font )
 {
-  if ( d->activeSheet )
-  {
-    QPoint marker( d->selection->marker() );
-    Cell * cell = d->activeSheet->nonDefaultCell( marker );
-    if ( cell->format()->textFont( marker.x(), marker.y() ).family() != _font )
+    if ( d->activeSheet )
     {
-      cell->format()->setTextFontFamily( _font );
+        QPoint marker( d->selection->marker() );
+        const Style style = d->activeSheet->style( marker.x(), marker.y() );
+        if ( style.fontFamily() != _font )
+        {
+            Style newStyle;
+            newStyle.setFontFamily( _font );
+            d->activeSheet->setStyle( Region(marker), newStyle );
+        }
+        EditWidget * edit = d->editWidget;
+        QKeyEvent keyEvent( QEvent::KeyPress, 0, Qt::NoModifier, QString( c ) );
+        QApplication::sendEvent( edit, &keyEvent );
     }
-    EditWidget * edit = d->editWidget;
-    QKeyEvent keyEvent( QEvent::KeyPress, 0, Qt::NoModifier, QString( c ) );
-    QApplication::sendEvent( edit, &keyEvent );
-  }
 }
 
 void View::insertMathExpr()
@@ -3150,111 +3156,110 @@ void View::formulaSelection( const QString &_math )
 
 void View::fontSizeSelected( int _size )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Font") );
-  manipulator->setFontSize(_size);
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Font") );
+    manipulator->setFontSize(_size);
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 
-  // Dont leave the focus in the toolbars combo box ...
-  if ( d->canvas->editor() )
-  {
-    Cell * cell = d->activeSheet->cellAt( d->selection->marker() );
-    d->canvas->editor()->setEditorFont( cell->format()->textFont( d->canvas->markerColumn(),
-                                                                  d->canvas->markerRow() ), true );
-    d->canvas->editor()->setFocus();
-  }
-  else
-    d->canvas->setFocus();
+    // Dont leave the focus in the toolbars combo box ...
+    if ( d->canvas->editor() )
+    {
+        Cell * cell = d->activeSheet->cellAt( d->selection->marker() );
+        d->canvas->editor()->setEditorFont( cell->style().font(), true );
+        d->canvas->editor()->setFocus();
+    }
+    else
+        d->canvas->setFocus();
 }
 
 void View::bold( bool b )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Font") );
-  manipulator->setFontBold( b );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Font") );
+    manipulator->setFontBold( b );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 
-  if ( d->canvas->editor() )
-  {
-    int col = d->canvas->markerColumn();
-    int row = d->canvas->markerRow();
-    Cell * cell = d->activeSheet->cellAt( col, row );
-    d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
-  }
+    if ( d->canvas->editor() )
+    {
+        int col = d->canvas->markerColumn();
+        int row = d->canvas->markerRow();
+        Cell * cell = d->activeSheet->cellAt( col, row );
+        d->canvas->editor()->setEditorFont( cell->style().font(), true );
+    }
 }
 
 void View::underline( bool b )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Font") );
-  manipulator->setFontUnderline( b );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Font") );
+    manipulator->setFontUnderline( b );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 
-  if ( d->canvas->editor() )
-  {
-    int col = d->canvas->markerColumn();
-    int row = d->canvas->markerRow();
-    Cell * cell = d->activeSheet->cellAt( col, row );
-    d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
-  }
+    if ( d->canvas->editor() )
+    {
+        int col = d->canvas->markerColumn();
+        int row = d->canvas->markerRow();
+        Cell * cell = d->activeSheet->cellAt( col, row );
+        d->canvas->editor()->setEditorFont( cell->style().font(), true );
+    }
 }
 
 void View::strikeOut( bool b )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Font") );
-  manipulator->setFontStrike( b );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Font") );
+    manipulator->setFontStrike( b );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 
-  if ( d->canvas->editor() )
-  {
-    int col = d->canvas->markerColumn();
-    int row = d->canvas->markerRow();
-    Cell * cell = d->activeSheet->cellAt( col, row );
-    d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
-  }
+    if ( d->canvas->editor() )
+    {
+        int col = d->canvas->markerColumn();
+        int row = d->canvas->markerRow();
+        Cell * cell = d->activeSheet->cellAt( col, row );
+        d->canvas->editor()->setEditorFont( cell->style().font(), true );
+    }
 }
 
 
 void View::italic( bool b )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Font") );
-  manipulator->setFontItalic( b );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Font") );
+    manipulator->setFontItalic( b );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 
-  if ( d->canvas->editor() )
-  {
-    int col = d->canvas->markerColumn();
-    int row = d->canvas->markerRow();
-    Cell * cell = d->activeSheet->cellAt( col, row );
-    d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
-  }
+    if ( d->canvas->editor() )
+    {
+        int col = d->canvas->markerColumn();
+        int row = d->canvas->markerRow();
+        Cell * cell = d->activeSheet->cellAt( col, row );
+        d->canvas->editor()->setEditorFont( cell->style().font(), true );
+    }
 }
 
 void View::sortInc()
@@ -3270,7 +3275,7 @@ void View::sortInc()
 
   SortManipulator *sm = new SortManipulator ();
   sm->setSheet (activeSheet());
-  
+
   // Entire row(s) selected ? Or just one row ? Sort by columns if yes.
   QRect range = d->selection->selection();
   bool sortCols = d->selection->isRowSelected();
@@ -3293,7 +3298,7 @@ void View::sortDec()
 
   SortManipulator *sm = new SortManipulator ();
   sm->setSheet (activeSheet());
-  
+
   // Entire row(s) selected ? Or just one row ? Sort by rows if yes.
   QRect range = d->selection->selection();
   bool sortCols = d->selection->isRowSelected();
@@ -3309,165 +3314,165 @@ void View::sortDec()
 
 void View::borderBottom()
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setBottomBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    manipulator->setBottomBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::setSelectionBottomBorderColor( const QColor & color )
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setBottomBorderPen( QPen( color, 1, Qt::SolidLine ) );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    manipulator->setBottomBorderPen( QPen( color, 1, Qt::SolidLine ) );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::borderRight()
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
-    manipulator->setLeftBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
-  else
-    manipulator->setRightBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+        manipulator->setLeftBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+    else
+        manipulator->setRightBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::setSelectionRightBorderColor( const QColor & color )
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
-    manipulator->setLeftBorderPen( QPen( color, 1, Qt::SolidLine ) );
-  else
-    manipulator->setRightBorderPen( QPen( color, 1, Qt::SolidLine ) );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+        manipulator->setLeftBorderPen( QPen( color, 1, Qt::SolidLine ) );
+    else
+        manipulator->setRightBorderPen( QPen( color, 1, Qt::SolidLine ) );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::borderLeft()
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
-    manipulator->setRightBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
-  else
-    manipulator->setLeftBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+        manipulator->setRightBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+    else
+        manipulator->setLeftBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::setSelectionLeftBorderColor( const QColor & color )
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
-    manipulator->setRightBorderPen( QPen( color, 1, Qt::SolidLine ) );
-  else
-    manipulator->setLeftBorderPen( QPen( color, 1, Qt::SolidLine ) );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
+        manipulator->setRightBorderPen( QPen( color, 1, Qt::SolidLine ) );
+    else
+        manipulator->setLeftBorderPen( QPen( color, 1, Qt::SolidLine ) );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::borderTop()
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setTopBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    manipulator->setTopBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::setSelectionTopBorderColor( const QColor & color )
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setTopBorderPen( QPen( color, 1, Qt::SolidLine ) );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    manipulator->setTopBorderPen( QPen( color, 1, Qt::SolidLine ) );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::borderOutline()
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setTopBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
-  manipulator->setBottomBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
-  manipulator->setLeftBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
-  manipulator->setRightBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    manipulator->setTopBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+    manipulator->setBottomBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+    manipulator->setLeftBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+    manipulator->setRightBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::setSelectionOutlineBorderColor( const QColor & color )
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setTopBorderPen(QPen( color, 1, Qt::SolidLine));
-  manipulator->setBottomBorderPen(QPen( color, 1, Qt::SolidLine));
-  manipulator->setLeftBorderPen(QPen( color, 1, Qt::SolidLine));
-  manipulator->setRightBorderPen(QPen( color, 1, Qt::SolidLine));
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    manipulator->setTopBorderPen(QPen( color, 1, Qt::SolidLine));
+    manipulator->setBottomBorderPen(QPen( color, 1, Qt::SolidLine));
+    manipulator->setLeftBorderPen(QPen( color, 1, Qt::SolidLine));
+    manipulator->setRightBorderPen(QPen( color, 1, Qt::SolidLine));
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::borderAll()
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setTopBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-  manipulator->setBottomBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-  manipulator->setLeftBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-  manipulator->setRightBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-  manipulator->setHorizontalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-  manipulator->setVerticalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    manipulator->setTopBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    manipulator->setBottomBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    manipulator->setLeftBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    manipulator->setRightBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    manipulator->setHorizontalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    manipulator->setVerticalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::setSelectionAllBorderColor( const QColor & color )
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setTopBorderPen(QPen( color, 1, Qt::SolidLine));
-  manipulator->setBottomBorderPen(QPen( color, 1, Qt::SolidLine));
-  manipulator->setLeftBorderPen(QPen( color, 1, Qt::SolidLine));
-  manipulator->setRightBorderPen(QPen( color, 1, Qt::SolidLine));
-  manipulator->setHorizontalPen(QPen( color, 1, Qt::SolidLine));
-  manipulator->setVerticalPen(QPen( color, 1, Qt::SolidLine));
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    manipulator->setTopBorderPen(QPen( color, 1, Qt::SolidLine));
+    manipulator->setBottomBorderPen(QPen( color, 1, Qt::SolidLine));
+    manipulator->setLeftBorderPen(QPen( color, 1, Qt::SolidLine));
+    manipulator->setRightBorderPen(QPen( color, 1, Qt::SolidLine));
+    manipulator->setHorizontalPen(QPen( color, 1, Qt::SolidLine));
+    manipulator->setVerticalPen(QPen( color, 1, Qt::SolidLine));
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::borderRemove()
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Border") );
-  manipulator->setTopBorderPen(QPen(Qt::NoPen));
-  manipulator->setBottomBorderPen(QPen(Qt::NoPen));
-  manipulator->setLeftBorderPen(QPen(Qt::NoPen));
-  manipulator->setRightBorderPen(QPen(Qt::NoPen));
-  manipulator->setHorizontalPen(QPen(Qt::NoPen));
-  manipulator->setVerticalPen(QPen(Qt::NoPen));
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Border") );
+    manipulator->setTopBorderPen(QPen(Qt::NoPen));
+    manipulator->setBottomBorderPen(QPen(Qt::NoPen));
+    manipulator->setLeftBorderPen(QPen(Qt::NoPen));
+    manipulator->setRightBorderPen(QPen(Qt::NoPen));
+    manipulator->setHorizontalPen(QPen(Qt::NoPen));
+    manipulator->setVerticalPen(QPen(Qt::NoPen));
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::addSheet( Sheet * _t )
@@ -4006,19 +4011,19 @@ void View::changeAngle()
 
 void View::setSelectionAngle( int angle )
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Angle") );
-  manipulator->setAngle( angle );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Angle") );
+    manipulator->setAngle( angle );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 
-  AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator();
-  manipulator2->setSheet( d->activeSheet );
-  manipulator2->setAdjustColumn(true);
-  manipulator2->setAdjustRow(true);
-  manipulator2->add( *selectionInfo() );
-  manipulator2->execute();
+    AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator();
+    manipulator2->setSheet( d->activeSheet );
+    manipulator2->setAdjustColumn(true);
+    manipulator2->setAdjustRow(true);
+    manipulator2->add( *selectionInfo() );
+    manipulator2->execute();
 }
 
 void View::mergeCell()
@@ -4246,7 +4251,7 @@ void View::findNext()
         if ( findObj->needData() )
         {
             if ( d->typeValue == FindOption::Note )
-                findObj->setData( cell->format()->comment( cell->column(), cell->row() ) );
+                findObj->setData( cell->comment( cell->column(), cell->row() ) );
             else
                 findObj->setData( cell->text() );
             d->findPos = QPoint( cell->column(), cell->row() );
@@ -4302,7 +4307,7 @@ Cell* View::nextFindValidCell( int col, int row )
     Cell *cell = d->searchInSheets.currentSheet->cellAt( col, row );
     if ( cell->isDefault() || cell->isObscured() || cell->isFormula() )
         cell = 0;
-    if ( d->typeValue == FindOption::Note && cell && cell->format()->comment(col, row).isEmpty())
+    if ( d->typeValue == FindOption::Note && cell && cell->comment(col, row).isEmpty())
         cell = 0;
     return cell;
 }
@@ -4471,7 +4476,7 @@ void View::slotReplace( const QString &newText, int, int, int )
     if ( d->typeValue == FindOption::Value )
         cell->setCellText( newText );
     else if ( d->typeValue == FindOption::Note )
-      cell->format()->setComment( newText );
+      cell->setComment( newText ); // FIXME decouple from cell
 }
 
 void View::conditional()
@@ -5051,12 +5056,12 @@ void View::addModifyComment()
 
 void View::setSelectionComment( const QString& comment )
 {
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n( "Add Comment" ) );
-  manipulator->setComment( comment.trimmed() );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    CommentManipulator* manipulator = new CommentManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n( "Add Comment" ) );
+    manipulator->setComment( comment.trimmed() );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::editCell()
@@ -5381,7 +5386,7 @@ void View::popupColumnMenu( const QPoint & _point )
         {
           format = activeSheet()->columnFormat(col);
 
-          if ( format->isHide() )
+          if ( format->hidden() )
           {
             d->actions->showSelColumns->setEnabled( true );
             d->popupColumn->addAction( d->actions->showSelColumns );
@@ -5395,7 +5400,7 @@ void View::popupColumnMenu( const QPoint & _point )
           {
             format = activeSheet()->columnFormat(col);
 
-            allHidden &= format->isHide();
+            allHidden &= format->hidden();
           }
           if (allHidden)
           {
@@ -5468,7 +5473,7 @@ void View::popupRowMenu( const QPoint & _point )
         {
           format = activeSheet()->rowFormat(row);
 
-          if ( format->isHide() )
+          if ( format->hidden() )
           {
             d->actions->showSelRows->setEnabled( true );
             d->popupRow->addAction( d->actions->showSelRows );
@@ -5482,7 +5487,7 @@ void View::popupRowMenu( const QPoint & _point )
           {
             format = activeSheet()->rowFormat(row);
 
-            allHidden &= format->isHide();
+            allHidden &= format->hidden();
           }
           if (allHidden)
           {
@@ -5632,8 +5637,7 @@ void View::openPopupMenu( const QPoint & _point )
     Cell * cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
 
     bool isProtected = d->activeSheet->isProtected();
-    if ( !cell->isDefault() && cell->format()->notProtected( d->canvas->markerColumn(), d->canvas->markerRow() )
-         && d->selection->isSingular() )
+    if ( !cell->isDefault() && cell->style().notProtected() && d->selection->isSingular() )
       isProtected = false;
 
     if ( !isProtected )
@@ -5666,15 +5670,15 @@ void View::openPopupMenu( const QPoint & _point )
 
       d->popupMenu->addSeparator();
       d->popupMenu->addAction( d->actions->addModifyComment );
-      if ( !cell->format()->comment(d->canvas->markerColumn(), d->canvas->markerRow()).isEmpty() )
+      if ( !activeSheet()->comment(d->canvas->markerColumn(), d->canvas->markerRow()).isEmpty() )
       {
         d->popupMenu->addAction( d->actions->removeComment );
       }
 
       if (activeSheet()->testListChoose(selectionInfo()))
       {
-  d->popupMenu->addSeparator();
-  d->popupMenu->addAction( i18n("Selection List..."), this, SLOT( slotListChoosePopupMenu() ) );
+            d->popupMenu->addSeparator();
+            d->popupMenu->addAction( i18n("Selection List..."), this, SLOT( slotListChoosePopupMenu() ) );
       }
     }
 
@@ -5811,16 +5815,16 @@ void View::clearTextSelection()
 
 void View::clearCommentSelection()
 {
-  // TODO Stefan: Actually this check belongs into the manipulator!
-  if ( d->activeSheet->areaIsEmpty( *selectionInfo(), Sheet::Comment ) )
-    return;
+    // TODO Stefan: Actually this check belongs into the manipulator!
+    if ( d->activeSheet->areaIsEmpty( *selectionInfo(), Sheet::Comment ) )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n( "Remove Comment" ) );
-  manipulator->setComment( QString() );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    CommentManipulator* manipulator = new CommentManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n( "Remove Comment" ) );
+    manipulator->setComment( QString() );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::clearValiditySelection()
@@ -5899,11 +5903,13 @@ void View::fillDown()
 
 void View::setDefaultStyle()
 {
-  StyleApplicator* manipulator = new StyleApplicator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setStyle( 0 );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    Style style;
+    style.setDefault();
+    StyleApplicator* manipulator = new StyleApplicator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setStyle( style );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::slotInsert()
@@ -6134,153 +6140,153 @@ void View::resetPrintRange()
 
 void View::wrapText( bool b )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n( "Wrap Text" ) );
-  manipulator->setMultiRow( b );
-  manipulator->setVerticalText( false );
-  manipulator->setAngle( 0 );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n( "Wrap Text" ) );
+    manipulator->setMultiRow( b );
+    manipulator->setVerticalText( false );
+    manipulator->setAngle( 0 );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::alignLeft( bool b )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Horizontal Alignment") );
-  manipulator->setHorizontalAlignment( b ? Style::Left : Style::HAlignUndefined );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Horizontal Alignment") );
+    manipulator->setHorizontalAlignment( b ? Style::Left : Style::HAlignUndefined );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::alignRight( bool b )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Horizontal Alignment") );
-  manipulator->setHorizontalAlignment( b ? Style::Right : Style::HAlignUndefined );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Horizontal Alignment") );
+    manipulator->setHorizontalAlignment( b ? Style::Right : Style::HAlignUndefined );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::alignCenter( bool b )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Horizontal Alignment") );
-  manipulator->setHorizontalAlignment( b ? Style::Center : Style::HAlignUndefined );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Horizontal Alignment") );
+    manipulator->setHorizontalAlignment( b ? Style::Center : Style::HAlignUndefined );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::alignTop( bool b )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Vertical Alignment") );
-  manipulator->setVerticalAlignment( b ? Style::Top : Style::VAlignUndefined );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Vertical Alignment") );
+    manipulator->setVerticalAlignment( b ? Style::Top : Style::VAlignUndefined );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::alignBottom( bool b )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Vertical Alignment") );
-  manipulator->setVerticalAlignment( b ? Style::Bottom : Style::VAlignUndefined );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Vertical Alignment") );
+    manipulator->setVerticalAlignment( b ? Style::Bottom : Style::VAlignUndefined );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::alignMiddle( bool b )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n("Change Vertical Alignment") );
-  manipulator->setVerticalAlignment( b ? Style::Middle : Style::VAlignUndefined );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n("Change Vertical Alignment") );
+    manipulator->setVerticalAlignment( b ? Style::Middle : Style::VAlignUndefined );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::moneyFormat(bool b)
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n( "Format Money" ) );
-  manipulator->setFormatType( b ? Money_format : Generic_format );
-  manipulator->setPrecision( b ?  d->doc->locale()->fracDigits() : 0 );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n( "Format Money" ) );
+    manipulator->setFormatType( b ? Money_format : Generic_format );
+    manipulator->setPrecision( b ?  d->doc->locale()->fracDigits() : 0 );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::createStyleFromCell()
 {
-  if ( !d->activeSheet )
-    return;
+    if ( !d->activeSheet )
+        return;
 
-  QPoint p( d->selection->selection().topLeft() );
-  Cell * cell = d->activeSheet->nonDefaultCell( p.x(), p.y() );
+    QPoint p( d->selection->marker() );
+    Cell * cell = d->activeSheet->nonDefaultCell( p.x(), p.y() );
 
-  bool ok = false;
-  QString styleName( "" );
+    bool ok = false;
+    QString styleName( "" );
 
-  while( true )
-  {
-    styleName = KInputDialog::getText( i18n( "Create Style From Cell" ),
-                                       i18n( "Enter name:" ), styleName, &ok, this );
-
-    if ( !ok ) // User pushed an OK button.
-      return;
-
-    styleName = styleName.trimmed();
-
-    if ( styleName.length() < 1 )
+    while( true )
     {
-      KMessageBox::sorry( this, i18n( "The style name cannot be empty." ) );
-      continue;
+        styleName = KInputDialog::getText( i18n( "Create Style From Cell" ),
+                                           i18n( "Enter name:" ), styleName, &ok, this );
+
+        if ( !ok ) // User pushed an OK button.
+            return;
+
+        styleName = styleName.trimmed();
+
+        if ( styleName.length() < 1 )
+        {
+            KMessageBox::sorry( this, i18n( "The style name cannot be empty." ) );
+            continue;
+        }
+
+        if ( doc()->styleManager()->style( styleName ) != 0 )
+        {
+            KMessageBox::sorry( this, i18n( "A style with this name already exists." ) );
+            continue;
+        }
+        break;
     }
 
-    if ( doc()->styleManager()->style( styleName ) != 0 )
-    {
-      KMessageBox::sorry( this, i18n( "A style with this name already exists." ) );
-      continue;
-    }
-    break;
-  }
+    CustomStyle * style = new CustomStyle( &cell->style(), styleName );
 
-  CustomStyle * style = new CustomStyle( cell->format()->style(), styleName );
-
-  doc()->styleManager()->m_styles[ styleName ] = style;
-  cell->format()->setStyle( style );
-  QStringList lst( d->actions->selectStyle->items() );
-  lst.push_back( styleName );
-  d->actions->selectStyle->setItems( lst );
+    doc()->styleManager()->m_styles[ styleName ] = style;
+    cell->setStyle( *style );
+    QStringList lst( d->actions->selectStyle->items() );
+    lst.push_back( styleName );
+    d->actions->selectStyle->setItems( lst );
 }
 
 void View::setStyle( const QString & stylename )
@@ -6293,7 +6299,7 @@ void View::setStyle( const QString & stylename )
   {
     StyleApplicator* manipulator = new StyleApplicator();
     manipulator->setSheet( d->activeSheet );
-    manipulator->setStyle( style );
+    manipulator->setStyle( *style );
     manipulator->add( *selectionInfo() );
     manipulator->execute();
   }
@@ -6318,15 +6324,15 @@ void View::decreasePrecision()
 
 void View::percent( bool b )
 {
-  if ( d->toolbarLock )
-    return;
+    if ( d->toolbarLock )
+        return;
 
-  FormatManipulator* manipulator = new FormatManipulator();
-  manipulator->setSheet( d->activeSheet );
-  manipulator->setName( i18n( "Format Percent" ) );
-  manipulator->setFormatType( b ? Percentage_format : Generic_format );
-  manipulator->add( *selectionInfo() );
-  manipulator->execute();
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setName( i18n( "Format Percent" ) );
+    manipulator->setFormatType( b ? Percentage_format : Generic_format );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 

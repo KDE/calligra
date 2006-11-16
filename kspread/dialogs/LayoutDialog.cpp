@@ -60,16 +60,18 @@
 
 #include <KoUnitWidgets.h>
 
-#include "Cell.h"
 #include "Canvas.h"
+#include "Cell.h"
+#include "Currency.h"
 #include "LayoutDialog.h"
 #include "Localization.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
+#include "StyleManipulators.h"
+#include "StyleStorage.h"
 #include "Undo.h"
 #include "Util.h"
-#include "FormatManipulators.h"
 #include "RowColumnManipulators.h"
 #include "Selection.h"
 #include "ValueFormatter.h"
@@ -365,99 +367,93 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
                top + obj->extraYCells() >= bottom));
 
   // Initialize with the upper left object.
-  borders[BorderType_Left].style = obj->format()->leftBorderStyle( left, top );
-  borders[BorderType_Left].width = obj->format()->leftBorderWidth( left, top );
-  borders[BorderType_Left].color = obj->format()->leftBorderColor( left, top );
-  borders[BorderType_Top].style = obj->format()->topBorderStyle( left, top );
-  borders[BorderType_Top].width = obj->format()->topBorderWidth( left, top );
-  borders[BorderType_Top].color = obj->format()->topBorderColor( left, top );
-  borders[BorderType_FallingDiagonal].style =
-      obj->format()->fallDiagonalStyle( left, top );
-  borders[BorderType_FallingDiagonal].width =
-      obj->format()->fallDiagonalWidth( left, top );
-  borders[BorderType_FallingDiagonal].color =
-      obj->format()->fallDiagonalColor( left, top );
-  borders[BorderType_RisingDiagonal].style =
-      obj->format()->goUpDiagonalStyle( left, top );
-  borders[BorderType_RisingDiagonal].width =
-      obj->format()->goUpDiagonalWidth( left, top );
-  borders[BorderType_RisingDiagonal].color =
-      obj->format()->goUpDiagonalColor( left, top );
+  const Style styleTopLeft = m_sheet->style( left, top );
+  borders[BorderType_Left].style = styleTopLeft.leftBorderPen().style();
+  borders[BorderType_Left].width = styleTopLeft.leftBorderPen().width();
+  borders[BorderType_Left].color = styleTopLeft.leftBorderPen().color();
+  borders[BorderType_Top].style = styleTopLeft.topBorderPen().style();
+  borders[BorderType_Top].width = styleTopLeft.topBorderPen().width();
+  borders[BorderType_Top].color = styleTopLeft.topBorderPen().color();
+  borders[BorderType_FallingDiagonal].style = styleTopLeft.fallDiagonalPen().style();
+  borders[BorderType_FallingDiagonal].width = styleTopLeft.fallDiagonalPen().width();
+  borders[BorderType_FallingDiagonal].color = styleTopLeft.fallDiagonalPen().color();
+  borders[BorderType_RisingDiagonal].style = styleTopLeft.goUpDiagonalPen().style();
+  borders[BorderType_RisingDiagonal].width = styleTopLeft.goUpDiagonalPen().width();
+  borders[BorderType_RisingDiagonal].color = styleTopLeft.goUpDiagonalPen().color();
 
   // Look at the upper right one for the right border.
-  obj = m_sheet->cellAt( right, top );
-  borders[BorderType_Right].style = obj->format()->rightBorderStyle( right, top );
-  borders[BorderType_Right].width = obj->format()->rightBorderWidth( right, top );
-  borders[BorderType_Right].color = obj->format()->rightBorderColor( right, top );
+  const Style styleTopRight = m_sheet->style( right, top );
+  borders[BorderType_Right].style = styleTopRight.rightBorderPen().style();
+  borders[BorderType_Right].width = styleTopRight.rightBorderPen().width();
+  borders[BorderType_Right].color = styleTopRight.rightBorderPen().color();
 
   // Look at the bottom left cell for the bottom border.
-  obj = m_sheet->cellAt( left, bottom );
-  borders[BorderType_Bottom].style = obj->format()->bottomBorderStyle( left, bottom );
-  borders[BorderType_Bottom].width = obj->format()->bottomBorderWidth( left, bottom );
-  borders[BorderType_Bottom].color = obj->format()->bottomBorderColor( left, bottom );
+  const Style styleBottomLeft = m_sheet->style( left, bottom );
+  borders[BorderType_Bottom].style = styleBottomLeft.bottomBorderPen().style();
+  borders[BorderType_Bottom].width = styleBottomLeft.bottomBorderPen().width();
+  borders[BorderType_Bottom].color = styleBottomLeft.bottomBorderPen().color();
 
   // Just an assumption
   obj = m_sheet->cellAt( right, top );
   if ( obj->isPartOfMerged() )
   {
     obj = obj->obscuringCells().first();
-    int moveX  = obj->column();
-    int moveY  = top;
-    int moveX2 = right;
-    int moveY2 = obj->row();
-    borders[BorderType_Vertical].style = obj->format()->leftBorderStyle( moveX, moveY );
-    borders[BorderType_Vertical].width = obj->format()->leftBorderWidth( moveX, moveY );
-    borders[BorderType_Vertical].color = obj->format()->leftBorderColor( moveX, moveY );
 
-    obj = m_sheet->cellAt( moveX2,  moveY2 );
-    borders[BorderType_Horizontal].style = obj->format()->topBorderStyle( moveX2, moveY2 );
-    borders[BorderType_Horizontal].width = obj->format()->topBorderWidth( moveX2, moveY2 );
-    borders[BorderType_Horizontal].color = obj->format()->topBorderColor( moveX2, moveY2 );
+    const Style styleMove1 = m_sheet->style( obj->column(), top );
+    borders[BorderType_Vertical].style = styleMove1.leftBorderPen().style();
+    borders[BorderType_Vertical].width = styleMove1.leftBorderPen().width();
+    borders[BorderType_Vertical].color = styleMove1.leftBorderPen().color();
+
+    const Style styleMove2 = m_sheet->style( right, obj->row() );
+    borders[BorderType_Horizontal].style = styleMove2.topBorderPen().style();
+    borders[BorderType_Horizontal].width = styleMove2.topBorderPen().width();
+    borders[BorderType_Horizontal].color = styleMove2.topBorderPen().color();
   }
   else
   {
-    borders[BorderType_Vertical].style = obj->format()->leftBorderStyle( right, top );
-    borders[BorderType_Vertical].width = obj->format()->leftBorderWidth( right, top );
-    borders[BorderType_Vertical].color = obj->format()->leftBorderColor( right, top );
-    borders[BorderType_Horizontal].style = obj->format()->topBorderStyle(right, bottom);
-    borders[BorderType_Horizontal].width = obj->format()->topBorderWidth(right, bottom);
-    borders[BorderType_Horizontal].color = obj->format()->topBorderColor(right, bottom);
+    borders[BorderType_Vertical].style = styleTopRight.leftBorderPen().style();
+    borders[BorderType_Vertical].width = styleTopRight.leftBorderPen().width();
+    borders[BorderType_Vertical].color = styleTopRight.leftBorderPen().color();
+    const Style styleBottomRight = m_sheet->style( right, bottom );
+    borders[BorderType_Horizontal].style = styleBottomRight.topBorderPen().style();
+    borders[BorderType_Horizontal].width = styleBottomRight.topBorderPen().width();
+    borders[BorderType_Horizontal].color = styleBottomRight.topBorderPen().color();
   }
 
   obj = m_sheet->cellAt( left, top );
-  prefix = obj->format()->prefix( left, top );
-  postfix = obj->format()->postfix( left, top );
-  precision = obj->format()->precision( left, top );
-  floatFormat = obj->format()->floatFormat( left, top );
-  floatColor = obj->format()->floatColor( left, top );
-  alignX = obj->format()->align( left, top );
-  alignY = obj->format()->alignY( left, top );
-  textColor = obj->format()->textColor( left, top );
-  bgColor = obj->bgColor( left, top );
-  textFontSize = obj->format()->textFontSize( left, top );
-  textFontFamily = obj->format()->textFontFamily( left, top );
-  textFontBold = obj->format()->textFontBold( left, top );
-  textFontItalic = obj->format()->textFontItalic( left, top );
-  strike=obj->format()->textFontStrike( left, top );
-  underline = obj->format()->textFontUnderline( left, top );
+  prefix = styleTopLeft.prefix();
+  postfix = styleTopLeft.postfix();
+  precision = styleTopLeft.precision();
+  floatFormat = styleTopLeft.floatFormat();
+  floatColor = styleTopLeft.floatColor();
+  alignX = styleTopLeft.halign();
+  alignY = styleTopLeft.valign();
+  textColor = styleTopLeft.fontColor();
+  bgColor = styleTopLeft.backgroundColor();
+  fontSize = styleTopLeft.fontSize();
+  fontFamily = styleTopLeft.fontFamily();
+  fontBold = styleTopLeft.bold();
+  fontItalic = styleTopLeft.italic();
+  strike=styleTopLeft.strikeOut();
+  underline = styleTopLeft.underline();
   // Needed to initialize the font correctly ( bug in Qt )
-  textFont = obj->format()->textFont( left, top );
-  obj->format()->currencyInfo( cCurrency );
+  font = styleTopLeft.font();
+  cCurrency = styleTopLeft.currency();
 
-  brushColor = obj->format()->backGroundBrushColor( left, top );
-  brushStyle = obj->format()->backGroundBrushStyle( left,top );
+  brushColor = styleTopLeft.backgroundBrush().color();
+  brushStyle = styleTopLeft.backgroundBrush().style();
 
-  bMultiRow = obj->format()->multiRow( left, top );
-  bVerticalText = obj->format()->verticalText( left, top );
-  textRotation = obj->format()->getAngle(left, top);
-  formatType = obj->format()->getFormatType(left, top);
+  bMultiRow = styleTopLeft.wrapText();
+  bVerticalText = styleTopLeft.verticalText();
+  textRotation = styleTopLeft.angle();
+  formatType = styleTopLeft.formatType();
 
-  bDontPrintText = obj->format()->getDontprintText( left, top );
-  bHideFormula   = obj->format()->isHideFormula( left, top );
-  bHideAll       = obj->format()->isHideAll( left, top );
-  bIsProtected   = !obj->format()->notProtected( left, top );
+  bDontPrintText = !styleTopLeft.printText();
+  bHideFormula   = styleTopLeft.hideFormula();
+  bHideAll       = styleTopLeft.hideAll();
+  bIsProtected   = !styleTopLeft.notProtected();
 
-  indent = obj->format()->getIndent(left, top);
+  indent = styleTopLeft.indentation();
 
   value = obj->value();
 
@@ -466,175 +462,60 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   widthSize = 0.0;
   heightSize = 0.0;
 
-  if ( !isRowSelected )
-  {
-    for ( int x = left; x <= right; x++ )
+    Selection::ConstIterator end(m_pView->selectionInfo()->constEnd());
+    for (Selection::ConstIterator it(m_pView->selectionInfo()->constBegin()); it != end; ++it)
     {
-      cl = m_pView->activeSheet()->columnFormat( x );
-      widthSize = qMax( cl->dblWidth(), widthSize );
-    }
-  }
+        QRect range = (*it)->rect();
+        Style style = m_pView->activeSheet()->style( range ); // FIXME merge
+        initParameters( style );
 
-  if ( !isColumnSelected )
-  {
-    for ( int y = top; y <= bottom; y++ )
-    {
-      rl = m_pView->activeSheet()->rowFormat(y);
-      heightSize = qMax( rl->dblHeight(), heightSize );
-    }
-  }
-
-  //select column(s)
-  if ( isColumnSelected )
-  {
-    int y = 1;
-    Cell* cell = 0;
-    for (int x = left;x <= right; x++)
-    {
-      ColumnFormat *obj = m_sheet->nonDefaultColumnFormat(x);
-      initParameters( obj,x,y);
-
-      for (cell = m_sheet->getFirstCellColumn(x); cell != 0;
-           cell = m_sheet->getNextCellDown(cell->column(), cell->row()))
-      {
-        initParameters( cell->format(), x, cell->row());
-      }
+        // left border
+        range.setWidth( 1 );
+        checkBorderLeft( m_pView->activeSheet()->style( range ) );
+        // right border
+        range = (*it)->rect();
+        range.setLeft( range.right() );
+        checkBorderRight( m_pView->activeSheet()->style( range ) );
+        // inner borders
+        range = (*it)->rect();
+        range = range.adjusted( 1, 1, -1, -1 );
+        style = m_pView->activeSheet()->style( range );
+        checkBorderHorizontal( style );
+        checkBorderVertical( style );
+        // top border
+        range = (*it)->rect();
+        range.setHeight( 1 );
+        checkBorderTop( style );
+        // bottom border
+        range = (*it)->rect();
+        range.setBottom( range.top() );
+        checkBorderBottom( m_pView->activeSheet()->style( range ) );
     }
 
-  }
-  else if ( isRowSelected )
-  {
-    int x = 1;
-    Cell* c = 0;
-    for ( int y = top;y<=bottom;y++)
+    // column width
+    if ( !isRowSelected )
     {
-      RowFormat *obj = m_sheet->nonDefaultRowFormat(y);
-      initParameters( obj,x,y);
-
-      for (c = m_sheet->getFirstCellRow(y); c != 0;
-           c = m_sheet->getNextCellRight(c->column(), c->row()) )
-      {
-        initParameters( c->format(), c->column(), c->row());
-      }
-      }
-  }
-  else
-  {
-    // Do the other objects have the same values ?
-    for ( int x = left; x <= right; x++ )
-    {
-      for ( int y = top; y <= bottom; y++ )
-      {
-        Cell *obj = m_sheet->cellAt( x, y );
-
-        if ( obj->isPartOfMerged() )
-          continue;
-
-        initParameters( obj->format(),x,y);
-      }
-    }
-  }
-  if ( !bTextRotation )
-    textRotation = 0;
-
-  if ( isColumnSelected )
-  {
-    int y=1;
-    ColumnFormat *obj=m_sheet->nonDefaultColumnFormat(left);
-    checkBorderLeft( obj,left, y);
-
-    Cell* c = 0;
-    for (c = m_sheet->getFirstCellColumn(left); c != 0;
-         c = m_sheet->getNextCellDown(c->column(), c->row()) )
-    {
-      checkBorderLeft(c->format(), c->column(), c->row());
+        for ( int x = left; x <= right; x++ )
+        {
+            cl = m_pView->activeSheet()->columnFormat( x );
+            widthSize = qMax( cl->dblWidth(), widthSize );
+        }
     }
 
-
-    obj=m_sheet->nonDefaultColumnFormat(right);
-    checkBorderRight(obj,right,y);
-    c = 0;
-    for (c = m_sheet->getFirstCellColumn(right); c != 0;
-         c = m_sheet->getNextCellDown(c->column(), c->row()) )
+    // row height
+    if ( !isColumnSelected )
     {
-      checkBorderRight(c->format(), c->column(), c->row());
+        for ( int y = top; y <= bottom; y++ )
+        {
+            rl = m_pView->activeSheet()->rowFormat(y);
+            heightSize = qMax( rl->dblHeight(), heightSize );
+        }
     }
 
-    for ( int x = left; x <= right; x++ )
-    {
-      Cell *obj = m_sheet->cellAt( x, top );
-      checkBorderTop(obj->format(),x, top);
-      obj = m_sheet->cellAt( x, bottom );
-      checkBorderBottom(obj->format(),x, bottom);
-      if ( x > left )
-      {
-        ColumnFormat *obj = m_sheet->nonDefaultColumnFormat(x);
-        checkBorderHorizontal(obj,x, y);
-        checkBorderVertical(obj,x, y);
-      }
-    }
-  }
-  else if ( isRowSelected )
-  {
-    int x=1;
-    for ( int y = top; y <= bottom; y++ )
-    {
-      Cell *obj = m_sheet->cellAt( right, y );
-      checkBorderRight(obj->format(),right,y);
-      obj = m_sheet->cellAt( left, y );
-      checkBorderLeft( obj->format(),left, y);
-      if ( y > top )
-      {
-        RowFormat* obj = m_sheet->nonDefaultRowFormat(y);
-        checkBorderHorizontal(obj,x, y);
-        checkBorderVertical(obj,x, y);
-      }
-    }
+    if ( !bTextRotation )
+        textRotation = 0;
 
-    RowFormat *obj=m_sheet->nonDefaultRowFormat(top);
-    checkBorderTop(obj,x, top);
-    obj=m_sheet->nonDefaultRowFormat(bottom);
-    checkBorderBottom(obj,x, bottom);
-  }
-  else
-  {
-    for ( int y = top; y <= bottom; y++ )
-    {
-      Cell *obj = m_sheet->cellAt( left, y );
-      checkBorderLeft( obj->format(),left, y);
-      obj = m_sheet->cellAt( right, y );
-      checkBorderRight(obj->format(),right,y);
-    }
-
-    for ( int x = left; x <= right; x++ )
-    {
-      Cell *obj = m_sheet->cellAt( x, top );
-      checkBorderTop( obj->format(), x, top );
-      obj = m_sheet->cellAt( x, bottom );
-      checkBorderBottom( obj->format(), x, bottom );
-    }
-
-    // Look for the Outline
-    for ( int x = left; x <= right; x++ )
-    {
-      for ( int y = top+1; y <= bottom; y++ )
-      {
-        Cell *obj = m_sheet->cellAt( x, y );
-        checkBorderHorizontal(obj->format(),x, y);
-      }
-    }
-
-    for ( int x = left+1; x <= right; x++ )
-    {
-      for ( int y = top; y <= bottom; y++ )
-      {
-        Cell *obj = m_sheet->cellAt( x, y );
-        checkBorderVertical(obj->format(),x,y);
-      }
-    }
-  }
-
-  init();
+    init();
 }
 
 CellFormatDialog::CellFormatDialog( View * _view, CustomStyle * _style,
@@ -695,36 +576,35 @@ void CellFormatDialog::initGUI()
   floatColor     = m_style->floatColor();
   alignX         = m_style->halign();
   alignY         = m_style->valign();
-  textColor      = m_style->pen().color();
-  bgColor        = m_style->bgColor();
-  textFontSize   = m_style->fontSize();
-  textFontFamily = m_style->fontFamily();
+  textColor      = m_style->fontColor();
+  bgColor        = m_style->backgroundColor();
+  fontSize       = m_style->fontSize();
+  fontFamily     = m_style->fontFamily();
 
-  uint flags     = m_style->fontFlags();
-  textFontBold   = ( flags & (uint) Style::FBold );
-  textFontItalic = ( flags & (uint) Style::FItalic );
-  strike         = ( flags & (uint) Style::FStrike );
-  underline      = ( flags & (uint) Style::FUnderline );
+  fontBold       = m_style->bold();
+  fontItalic     = m_style->italic();
+  strike         = m_style->strikeOut();
+  underline      = m_style->underline();
 
   // Needed to initialize the font correctly ( bug in Qt )
-  textFont   = m_style->font();
-  cCurrency  = m_style->currency();
-  brushColor = m_style->backGroundBrush().color();
-  brushStyle = m_style->backGroundBrush().style();
+  font           = m_style->font();
+  cCurrency      = m_style->currency();
+  brushColor     = m_style->backgroundBrush().color();
+  brushStyle     = m_style->backgroundBrush().style();
 
-  bMultiRow     = m_style->hasProperty( Style::PMultiRow );
-  bVerticalText = m_style->hasProperty( Style::PVerticalText );
-  textRotation  = m_style->rotateAngle();
-  formatType    = m_style->formatType();
-  indent        = m_style->indent();
+  bMultiRow      = m_style->wrapText();
+  bVerticalText  = m_style->verticalText();
+  textRotation   = m_style->angle();
+  formatType     = m_style->formatType();
+  indent         = m_style->indentation();
 
-  bDontPrintText = m_style->hasProperty( Style::PDontPrintText );
-  bHideFormula   = m_style->hasProperty( Style::PHideFormula );
-  bHideAll       = m_style->hasProperty( Style::PHideAll );
-  bIsProtected   = !m_style->hasProperty( Style::PNotProtected );
+  bDontPrintText = !m_style->printText();
+  bHideFormula   = m_style->hideFormula();
+  bHideAll       = m_style->hideAll();
+  bIsProtected   = !m_style->notProtected();
 
-  widthSize  = defaultWidthSize;
-  heightSize = defaultHeightSize;
+  widthSize      = defaultWidthSize;
+  heightSize     = defaultHeightSize;
 }
 
 CellFormatDialog::~CellFormatDialog()
@@ -781,116 +661,113 @@ bool CellFormatDialog::checkCircle( QString const & name, QString const & parent
   return m_styleManager->checkCircle( name, parent );
 }
 
-void CellFormatDialog::checkBorderRight(Format *obj,int x,int y)
+void CellFormatDialog::checkBorderRight(const Style& style)
 {
-  if ( borders[BorderType_Right].style != obj->rightBorderStyle( x, y ) ||
-       borders[BorderType_Right].width != obj->rightBorderWidth( x, y ) )
+  if ( borders[BorderType_Right].style != style.rightBorderPen().style() ||
+       borders[BorderType_Right].width != style.rightBorderPen().width() )
     borders[BorderType_Right].bStyle = false;
-  if ( borders[BorderType_Right].color != obj->rightBorderColor( x, y ) )
+  if ( borders[BorderType_Right].color != style.rightBorderPen().color() )
     borders[BorderType_Right].bColor = false;
 }
 
-void CellFormatDialog::checkBorderLeft(Format *obj,int x,int y)
+void CellFormatDialog::checkBorderLeft(const Style& style)
 {
-  if ( borders[BorderType_Left].style != obj->leftBorderStyle( x, y ) ||
-       borders[BorderType_Left].width != obj->leftBorderWidth( x, y ) )
+  if ( borders[BorderType_Left].style != style.leftBorderPen().style() ||
+       borders[BorderType_Left].width != style.leftBorderPen().width() )
     borders[BorderType_Left].bStyle = false;
-  if ( borders[BorderType_Left].color != obj->leftBorderColor( x, y ) )
+  if ( borders[BorderType_Left].color != style.leftBorderPen().color() )
     borders[BorderType_Left].bColor = false;
 }
 
-void CellFormatDialog::checkBorderTop(Format *obj,int x,int y)
+void CellFormatDialog::checkBorderTop(const Style& style)
 {
-  if ( borders[BorderType_Top].style != obj->topBorderStyle( x, y ) ||
-       borders[BorderType_Top].width != obj->topBorderWidth( x, y ) )
+  if ( borders[BorderType_Top].style != style.topBorderPen().style() ||
+       borders[BorderType_Top].width != style.topBorderPen().width() )
     borders[BorderType_Top].bStyle = false;
-  if ( borders[BorderType_Top].color != obj->topBorderColor( x, y ) )
+  if ( borders[BorderType_Top].color != style.topBorderPen().color() )
     borders[BorderType_Top].bColor = false;
 }
 
-void CellFormatDialog::checkBorderBottom(Format *obj,int x,int y)
+void CellFormatDialog::checkBorderBottom(const Style& style)
 {
-  if ( borders[BorderType_Bottom].style != obj->bottomBorderStyle( x, y ) ||
-       borders[BorderType_Bottom].width != obj->bottomBorderWidth( x, y ) )
+  if ( borders[BorderType_Bottom].style != style.bottomBorderPen().style() ||
+       borders[BorderType_Bottom].width != style.bottomBorderPen().width() )
     borders[BorderType_Bottom].bStyle = false;
-  if ( borders[BorderType_Bottom].color != obj->bottomBorderColor( x, y ) )
+  if ( borders[BorderType_Bottom].color != style.bottomBorderPen().color() )
     borders[BorderType_Bottom].bColor = false;
 }
 
-void CellFormatDialog::checkBorderVertical(Format *obj,int x,int y)
+void CellFormatDialog::checkBorderVertical(const Style& style)
 {
-  if (borders[BorderType_Vertical].style != obj->leftBorderStyle( x, y ) ||
-      borders[BorderType_Vertical].width != obj->leftBorderWidth( x, y ))
+  if (borders[BorderType_Vertical].style != style.leftBorderPen().style() ||
+      borders[BorderType_Vertical].width != style.leftBorderPen().width())
     borders[BorderType_Vertical].bStyle = false;
-  if ( borders[BorderType_Vertical].color != obj->leftBorderColor( x, y ) )
+  if ( borders[BorderType_Vertical].color != style.leftBorderPen().color() )
     borders[BorderType_Vertical].bColor = false;
 }
 
-void CellFormatDialog::checkBorderHorizontal(Format *obj,int x,int y)
+void CellFormatDialog::checkBorderHorizontal(const Style& style)
 {
-  if ( borders[BorderType_Horizontal].style != obj->topBorderStyle( x, y ) ||
-       borders[BorderType_Horizontal].width != obj->topBorderWidth( x, y ) )
+  if ( borders[BorderType_Horizontal].style != style.topBorderPen().style() ||
+       borders[BorderType_Horizontal].width != style.topBorderPen().width() )
     borders[BorderType_Horizontal].bStyle = false;
-  if ( borders[BorderType_Horizontal].color != obj->topBorderColor( x, y ) )
+  if ( borders[BorderType_Horizontal].color != style.topBorderPen().color() )
     borders[BorderType_Horizontal].bColor = false;
 }
 
 
-void CellFormatDialog::initParameters(Format *obj,int x,int y)
+void CellFormatDialog::initParameters(const Style& style)
 {
-  if (borders[BorderType_FallingDiagonal].style != obj->fallDiagonalStyle( x, y ))
+  if (borders[BorderType_FallingDiagonal].style != style.fallDiagonalPen().style())
     borders[BorderType_FallingDiagonal].bStyle = false;
-  if (borders[BorderType_FallingDiagonal].width != obj->fallDiagonalWidth( x, y ))
+  if (borders[BorderType_FallingDiagonal].width != style.fallDiagonalPen().width())
     borders[BorderType_FallingDiagonal].bStyle = false;
-  if (borders[BorderType_FallingDiagonal].color != obj->fallDiagonalColor( x, y ))
+  if (borders[BorderType_FallingDiagonal].color != style.fallDiagonalPen().color())
     borders[BorderType_FallingDiagonal].bColor = false;
 
-  if (borders[BorderType_RisingDiagonal].style != obj->goUpDiagonalStyle( x, y ))
+  if (borders[BorderType_RisingDiagonal].style != style.goUpDiagonalPen().style())
     borders[BorderType_RisingDiagonal].bStyle = false;
-  if (borders[BorderType_RisingDiagonal].width != obj->goUpDiagonalWidth( x, y ))
+  if (borders[BorderType_RisingDiagonal].width != style.goUpDiagonalPen().width())
     borders[BorderType_RisingDiagonal].bStyle = false;
-  if (borders[BorderType_RisingDiagonal].color != obj->goUpDiagonalColor( x, y ))
+  if (borders[BorderType_RisingDiagonal].color != style.goUpDiagonalPen().color())
     borders[BorderType_RisingDiagonal].bColor = false;
-  if ( strike != obj->textFontStrike( x, y ) )
+  if ( strike != style.strikeOut() )
     bStrike = false;
-  if ( underline != obj->textFontUnderline( x, y ) )
+  if ( underline != style.underline() )
     bUnderline = false;
-  if ( prefix != obj->prefix( x, y ) )
+  if ( prefix != style.prefix() )
     prefix.clear();
-  if ( postfix != obj->postfix( x, y ) )
+  if ( postfix != style.postfix() )
     postfix.clear();
-  if ( floatFormat != obj->floatFormat( x, y ) )
+  if ( floatFormat != style.floatFormat() )
     bFloatFormat = false;
-  if ( floatColor != obj->floatColor( x, y ) )
+  if ( floatColor != style.floatColor() )
     bFloatColor = false;
-  if ( textColor != obj->textColor( x, y ) )
+  if ( textColor != style.fontColor() )
     bTextColor = false;
-  if ( textFontFamily != obj->textFontFamily( x, y ) )
+  if ( fontFamily != style.fontFamily() )
     bTextFontFamily = false;
-  if ( textFontSize != obj->textFontSize( x, y ) )
+  if ( fontSize != style.fontSize() )
     bTextFontSize = false;
-  if ( textFontBold != obj->textFontBold( x, y ) )
+  if ( fontBold != style.bold() )
     bTextFontBold = false;
-  if ( textFontItalic != obj->textFontItalic( x, y ) )
+  if ( fontItalic != style.italic() )
     bTextFontItalic = false;
-  if ( bgColor != obj->bgColor( x, y ) )
+  if ( bgColor != style.backgroundColor() )
     bBgColor = false;
-  if ( textRotation != obj->getAngle(left, top) )
+  if ( textRotation != style.angle() )
     bTextRotation = false;
-  if ( formatType != obj->getFormatType(left, top) )
+  if ( formatType != style.formatType() )
     bFormatType = false;
-  if ( bMultiRow != obj->multiRow( left, top ) )
+  if ( bMultiRow != style.wrapText() )
     bMultiRow = false;
-  if ( bVerticalText!=obj->verticalText( left, top ) )
+  if ( bVerticalText!=style.verticalText() )
     bVerticalText = false;
-  if (  bDontPrintText!=obj->getDontprintText( left, top ) )
+  if ( !bDontPrintText!=style.printText() )
     bDontPrintText= false;
 
-  Style::Currency cur;
-  if (!obj->currencyInfo(cur))
-    bCurrency = false;
-  else
-    if (cur.symbol != cCurrency.symbol)
+  Style::Currency cur = style.currency();
+  if (cur.symbol != cCurrency.symbol)
       bCurrency = false;
 }
 
@@ -1029,7 +906,7 @@ void CellFormatDialog::slotApply()
     }
   }
 
-  FormatManipulator* manipulator = new FormatManipulator();
+  StyleManipulator* manipulator = new StyleManipulator();
   manipulator->setSheet(m_pView->activeSheet());
   manipulator->setRegisterUndo(false);
   manipulator->add(*m_pView->selectionInfo());
@@ -1738,50 +1615,50 @@ void CellFormatPageFloat::apply( CustomStyle * style )
   if ( postfix->text() != dlg->postfix )
   {
       if ( postfix->isEnabled())
-        style->changePostfix( postfix->text() );
+        style->setPostfix( postfix->text() );
       else
-        style->changePostfix( "" );
+        style->setPostfix( "" );
   }
   if ( prefix->text() != dlg->prefix )
   {
       if (prefix->isEnabled())
-        style->changePrefix( prefix->text() );
+        style->setPrefix( prefix->text() );
       else
-        style->changePrefix( "" );
+        style->setPrefix( "" );
   }
 
   if ( dlg->precision != precision->value() )
-    style->changePrecision( precision->value() );
+    style->setPrecision( precision->value() );
 
   if ( m_bFormatColorChanged )
   {
     switch( format->currentIndex() )
     {
      case 0:
-      style->changeFloatFormat( Style::OnlyNegSigned );
-      style->changeFloatColor( Style::AllBlack );
+      style->setFloatFormat( Style::OnlyNegSigned );
+      style->setFloatColor( Style::AllBlack );
       break;
      case 1:
-      style->changeFloatFormat( Style::OnlyNegSigned );
-      style->changeFloatColor( Style::NegRed );
+      style->setFloatFormat( Style::OnlyNegSigned );
+      style->setFloatColor( Style::NegRed );
       break;
      case 2:
-      style->changeFloatFormat( Style::AlwaysUnsigned );
-      style->changeFloatColor( Style::NegRed );
+      style->setFloatFormat( Style::AlwaysUnsigned );
+      style->setFloatColor( Style::NegRed );
       break;
      case 3:
-      style->changeFloatFormat( Style::AlwaysSigned );
-      style->changeFloatColor( Style::AllBlack );
+      style->setFloatFormat( Style::AlwaysSigned );
+      style->setFloatColor( Style::AllBlack );
       break;
      case 4:
-      style->changeFloatFormat( Style::AlwaysSigned );
-      style->changeFloatColor( Style::NegRed );
+      style->setFloatFormat( Style::AlwaysSigned );
+      style->setFloatColor( Style::NegRed );
       break;
     }
   }
   if ( m_bFormatTypeChanged )
   {
-    style->changeFormatType (newFormatType);
+    style->setFormatType (newFormatType);
     if ( money->isChecked() )
     {
       Style::Currency cur;
@@ -1805,12 +1682,12 @@ void CellFormatPageFloat::apply( CustomStyle * style )
         cur.symbol = Currency::getDisplaySymbol( index );
       }
 
-      style->changeCurrency( cur );
+      style->setCurrency( cur );
     }
   }
 }
 
-void CellFormatPageFloat::apply(FormatManipulator* _obj)
+void CellFormatPageFloat::apply(StyleManipulator* _obj)
 {
   if ( postfix->text() != dlg->postfix )
     if ( postfix->isEnabled())
@@ -1917,38 +1794,26 @@ void CellFormatPageProtection::apply( CustomStyle * style )
 {
   if ( m_dlg->bDontPrintText != m_bDontPrint->isChecked() )
   {
-    if ( m_bDontPrint->isChecked() )
-      style->addProperty( Style::PDontPrintText );
-    else
-      style->removeProperty( Style::PDontPrintText );
+            style->setDontPrintText( m_bDontPrint->isChecked() );
   }
 
   if ( m_dlg->bIsProtected != m_bIsProtected->isChecked() )
   {
-    if ( !m_bIsProtected->isChecked() )
-      style->addProperty( Style::PNotProtected );
-    else
-      style->removeProperty( Style::PNotProtected );
+            style->setNotProtected( !m_bIsProtected->isChecked() );
   }
 
   if ( m_dlg->bHideAll != m_bHideAll->isChecked() )
   {
-    if ( m_bHideAll->isChecked() )
-      style->addProperty( Style::PHideAll );
-    else
-      style->removeProperty( Style::PHideAll );
+            style->setHideAll( m_bHideAll->isChecked() );
   }
 
   if ( m_dlg->bHideFormula != m_bHideFormula->isChecked() )
   {
-    if ( m_bHideFormula->isChecked() )
-      style->addProperty( Style::PHideFormula );
-    else
-      style->removeProperty( Style::PHideFormula );
+            style->setHideFormula( m_bHideFormula->isChecked() );
   }
 }
 
-void CellFormatPageProtection::apply(FormatManipulator* _obj)
+void CellFormatPageProtection::apply(StyleManipulator* _obj)
 {
   if ( m_dlg->bDontPrintText != m_bDontPrint->isChecked())
     _obj->setDontPrintText( m_bDontPrint->isChecked() );
@@ -1990,20 +1855,22 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
   delete fontDataBase;
 
   family_combo->insertStringList(tmpListFont);
-  selFont = dlg->textFont;
+  selFont = dlg->font;
 
    if ( dlg->bTextFontFamily )
    {
-        selFont.setFamily( dlg->textFontFamily );
-        kDebug(36001) << "Family = " << dlg->textFontFamily << endl;
+        selFont.setFamily( dlg->fontFamily );
+        kDebug(36001) << "Family = " << dlg->fontFamily << endl;
 
-        if ( !family_combo->findItem(dlg->textFontFamily))
+        // NOTE Stefan: the code below crashes, so assert, that we have a family
+        Q_ASSERT( family_combo->findItem( dlg->fontFamily ) );
+/*        if ( !family_combo->findItem(dlg->fontFamily))
                 {
                 family_combo->insertItem(0,"");
                 family_combo->setCurrentItem(0);
                 }
-        else
-                family_combo->setCurrentItem(family_combo->index(family_combo->findItem(dlg->textFontFamily)));
+        else*/
+                family_combo->setCurrentItem(family_combo->index(family_combo->findItem(dlg->fontFamily)));
    }
    else
    {
@@ -2063,51 +1930,32 @@ void CellFormatPageFont::slotSetTextColor( const QColor &_color )
 void CellFormatPageFont::apply( CustomStyle * style )
 {
   if ( !bTextColorUndefined && textColor != dlg->textColor )
-    style->changeTextColor( textColor );
+    style->setFontColor( textColor );
 
   if ( ( size_combo->currentIndex() != 0 )
-       && ( dlg->textFontSize != selFont.pointSize() ) )
-    style->changeFontSize( selFont.pointSize() );
+       && ( dlg->fontSize != selFont.pointSize() ) )
+    style->setFontSize( selFont.pointSize() );
 
-  if ( ( selFont.family() != dlg->textFontFamily )
+  if ( ( selFont.family() != dlg->fontFamily )
        && !family_combo->currentText().isEmpty() )
-    style->changeFontFamily( selFont.family() );
+    style->setFontFamily( selFont.family() );
 
-  uint flags = 0;
-
-  if ( weight_combo->currentIndex() != 0 && selFont.bold() )
-    flags |= Style::FBold;
-  else
-    flags &= ~(uint) Style::FBold;
-
-  if ( style_combo->currentIndex() != 0 && selFont.italic() )
-    flags |= Style::FItalic;
-  else
-    flags &= ~(uint) Style::FItalic;
-
-  if ( strike->isChecked() )
-    flags |= Style::FStrike;
-  else
-    flags &= ~(uint) Style::FStrike;
-
-  if ( underline->isChecked() )
-    flags |= Style::FUnderline;
-  else
-    flags &= ~(uint) Style::FUnderline;
-
-  style->changeFontFlags( flags );
+  style->setFontBold( weight_combo->currentIndex() != 0 && selFont.bold() );
+  style->setFontItalic( style_combo->currentIndex() != 0 && selFont.italic() );
+  style->setFontStrikeOut( strike->isChecked() );
+  style->setFontUnderline( underline->isChecked() );
 }
 
-void CellFormatPageFont::apply(FormatManipulator* _obj)
+void CellFormatPageFont::apply(StyleManipulator* _obj)
 {
   if ( !bTextColorUndefined && textColor != dlg->textColor )
-    _obj->setTextColor( textColor );
+    _obj->setFontColor( textColor );
   if (fontChanged)
   {
     if ( ( size_combo->currentIndex() != 0 )
-         && ( dlg->textFontSize != selFont.pointSize() ) )
+         && ( dlg->fontSize != selFont.pointSize() ) )
       _obj->setFontSize( selFont.pointSize() );
-    if ( ( selFont.family() != dlg->textFontFamily ) && ( !family_combo->currentText().isEmpty() ) )
+    if ( ( selFont.family() != dlg->fontFamily ) && ( !family_combo->currentText().isEmpty() ) )
       _obj->setFontFamily( selFont.family() );
     if ( weight_combo->currentIndex() != 0 )
       _obj->setFontBold( selFont.bold() );
@@ -2196,10 +2044,10 @@ void CellFormatPageFont::setCombos()
  combo = size_combo;
  if ( dlg->bTextFontSize )
  {
-     kDebug(36001) << "SIZE=" << dlg->textFontSize << endl;
-     selFont.setPointSize( dlg->textFontSize );
+     kDebug(36001) << "SIZE=" << dlg->fontSize << endl;
+     selFont.setPointSize( dlg->fontSize );
      number_of_entries = size_combo->count();
-     string.setNum( dlg->textFontSize );
+     string.setNum( dlg->fontSize );
      found = false;
 
      for (int i = 0; i < number_of_entries ; i++){
@@ -2216,27 +2064,27 @@ void CellFormatPageFont::setCombos()
 
  if ( !dlg->bTextFontBold )
      weight_combo->setCurrentIndex(0);
- else if ( dlg->textFontBold )
+ else if ( dlg->fontBold )
  {
-     selFont.setBold( dlg->textFontBold );
+     selFont.setBold( dlg->fontBold );
      weight_combo->setCurrentIndex(2);
  }
  else
  {
-     selFont.setBold( dlg->textFontBold );
+     selFont.setBold( dlg->fontBold );
      weight_combo->setCurrentIndex(1);
  }
 
  if ( !dlg->bTextFontItalic )
      weight_combo->setCurrentIndex(0);
- else if ( dlg->textFontItalic )
+ else if ( dlg->fontItalic )
  {
-     selFont.setItalic( dlg->textFontItalic );
+     selFont.setItalic( dlg->fontItalic );
      style_combo->setCurrentIndex(2);
  }
  else
  {
-     selFont.setItalic( dlg->textFontItalic );
+     selFont.setItalic( dlg->fontItalic );
      style_combo->setCurrentIndex(1);
  }
 }
@@ -2420,29 +2268,26 @@ void CellFormatPagePosition::slotChangeAngle(int _angle)
 void CellFormatPagePosition::apply( CustomStyle * style )
 {
   if ( top->isChecked() && dlg->alignY != Style::Top )
-    style->changeVAlign( Style::Top );
+    style->setVAlign( Style::Top );
   else if ( bottom->isChecked() && dlg->alignY != Style::Bottom )
-    style->changeVAlign( Style::Bottom );
+    style->setVAlign( Style::Bottom );
   else if ( middle->isChecked() && dlg->alignY != Style::Middle )
-    style->changeVAlign( Style::Middle );
+    style->setVAlign( Style::Middle );
 
   if ( left->isChecked() && dlg->alignX != Style::Left )
-    style->changeHAlign( Style::Left );
+    style->setHAlign( Style::Left );
   else if ( right->isChecked() && dlg->alignX != Style::Right )
-    style->changeHAlign( Style::Right );
+    style->setHAlign( Style::Right );
   else if ( center->isChecked() && dlg->alignX != Style::Center )
-    style->changeHAlign( Style::Center );
+    style->setHAlign( Style::Center );
   else if ( standard->isChecked() && dlg->alignX != Style::HAlignUndefined )
-    style->changeHAlign( Style::HAlignUndefined );
+    style->setHAlign( Style::HAlignUndefined );
 
   if ( m_bOptionText )
   {
     if ( multi->isEnabled() )
     {
-      if ( multi->isChecked() )
-        style->addProperty( Style::PMultiRow );
-      else
-        style->removeProperty( Style::PMultiRow );
+            style->setWrapText( multi->isChecked() );
     }
   }
 
@@ -2450,35 +2295,32 @@ void CellFormatPagePosition::apply( CustomStyle * style )
   {
     if ( vertical->isEnabled() )
     {
-      if ( vertical->isChecked() )
-        style->addProperty( Style::PVerticalText );
-      else
-        style->removeProperty( Style::PVerticalText );
+            style->setVerticalText( vertical->isChecked() );
     }
   }
 
   if ( dlg->textRotation != angleRotation->value() )
-    style->changeRotateAngle( (-angleRotation->value()) );
+    style->setAngle( (-angleRotation->value()) );
 
   if ( m_indent->isEnabled()
        && dlg->indent != m_indent->value() )
-    style->changeIndent( m_indent->value() );
+    style->setIndentation( m_indent->value() );
 
   // setting the default column width and row height
   if ( dlg->getStyle()->type() == Style::BUILTIN && dlg->getStyle()->name() == "Default" )
   {
     if ( (int) height->value() != (int) dlg->heightSize )
     {
-      Format::setGlobalRowHeight( height->value() );
+      RowFormat::setGlobalRowHeight( height->value() );
     }
     if ( (int) width->value() != (int) dlg->widthSize )
     {
-      Format::setGlobalColWidth( width->value() );
+      ColumnFormat::setGlobalColWidth( width->value() );
     }
   }
 }
 
-void CellFormatPagePosition::apply(FormatManipulator* _obj)
+void CellFormatPagePosition::apply(StyleManipulator* _obj)
 {
   Style::HAlign  ax;
   Style::VAlign ay;
@@ -2539,7 +2381,7 @@ void CellFormatPagePosition::apply(FormatManipulator* _obj)
     _obj->setAngle( (-angleRotation->value() ) );
   if ( m_indent->isEnabled()
        && dlg->indent != m_indent->value() )
-    _obj->setIndent( m_indent->value() );
+    _obj->setIndentation( m_indent->value() );
 }
 
 double CellFormatPagePosition::getSizeHeight() const
@@ -3032,7 +2874,7 @@ void CellFormatPageBorder::loadIcon( const QString& _pix, BorderButton *_button)
   _button->setIcon( QPixmap( BarIcon(_pix, Factory::global()) ) );
 }
 
-void CellFormatPageBorder::apply(FormatManipulator* obj)
+void CellFormatPageBorder::apply(StyleManipulator* obj)
 {
   if (borderButtons[BorderType_Horizontal]->isChanged())
     applyHorizontalOutline(obj);
@@ -3057,7 +2899,7 @@ void CellFormatPageBorder::apply(FormatManipulator* obj)
     applyDiagonalOutline(obj);
 }
 
-void CellFormatPageBorder::applyTopOutline(FormatManipulator* obj)
+void CellFormatPageBorder::applyTopOutline(StyleManipulator* obj)
 {
   BorderButton * top = borderButtons[BorderType_Top];
 
@@ -3065,7 +2907,7 @@ void CellFormatPageBorder::applyTopOutline(FormatManipulator* obj)
 
   if ( dlg->getStyle() )
   {
-    dlg->getStyle()->changeTopBorderPen( tmpPen );
+    dlg->getStyle()->setTopBorderPen( tmpPen );
   }
   else
   {
@@ -3074,7 +2916,7 @@ void CellFormatPageBorder::applyTopOutline(FormatManipulator* obj)
   }
 }
 
-void CellFormatPageBorder::applyBottomOutline(FormatManipulator* obj)
+void CellFormatPageBorder::applyBottomOutline(StyleManipulator* obj)
 {
   BorderButton * bottom = borderButtons[BorderType_Bottom];
 
@@ -3082,7 +2924,7 @@ void CellFormatPageBorder::applyBottomOutline(FormatManipulator* obj)
 
   if ( dlg->getStyle() )
   {
-    dlg->getStyle()->changeBottomBorderPen( tmpPen );
+    dlg->getStyle()->setBottomBorderPen( tmpPen );
   }
   else
   {
@@ -3091,14 +2933,14 @@ void CellFormatPageBorder::applyBottomOutline(FormatManipulator* obj)
   }
 }
 
-void CellFormatPageBorder::applyLeftOutline(FormatManipulator* obj)
+void CellFormatPageBorder::applyLeftOutline(StyleManipulator* obj)
 {
   BorderButton * left = borderButtons[BorderType_Left];
   QPen tmpPen( left->getColor(), left->getPenWidth(), left->getPenStyle() );
 
   if ( dlg->getStyle() )
   {
-    dlg->getStyle()->changeLeftBorderPen( tmpPen );
+    dlg->getStyle()->setLeftBorderPen( tmpPen );
   }
   else
   {
@@ -3107,14 +2949,14 @@ void CellFormatPageBorder::applyLeftOutline(FormatManipulator* obj)
   }
 }
 
-void CellFormatPageBorder::applyRightOutline(FormatManipulator* obj)
+void CellFormatPageBorder::applyRightOutline(StyleManipulator* obj)
 {
   BorderButton* right = borderButtons[BorderType_Right];
   QPen tmpPen( right->getColor(), right->getPenWidth(), right->getPenStyle() );
 
   if ( dlg->getStyle() )
   {
-    dlg->getStyle()->changeRightBorderPen( tmpPen );
+    dlg->getStyle()->setRightBorderPen( tmpPen );
   }
   else
   {
@@ -3123,7 +2965,7 @@ void CellFormatPageBorder::applyRightOutline(FormatManipulator* obj)
   }
 }
 
-void CellFormatPageBorder::applyDiagonalOutline(FormatManipulator* obj)
+void CellFormatPageBorder::applyDiagonalOutline(StyleManipulator* obj)
 {
   BorderButton * fallDiagonal = borderButtons[BorderType_FallingDiagonal];
   BorderButton * goUpDiagonal = borderButtons[BorderType_RisingDiagonal];
@@ -3135,9 +2977,9 @@ void CellFormatPageBorder::applyDiagonalOutline(FormatManipulator* obj)
   if ( dlg->getStyle() )
   {
     if ( fallDiagonal->isChanged() )
-      dlg->getStyle()->changeFallBorderPen( tmpPenFall );
+      dlg->getStyle()->setFallDiagonalPen( tmpPenFall );
     if ( goUpDiagonal->isChanged() )
-      dlg->getStyle()->changeGoUpBorderPen( tmpPenGoUp );
+      dlg->getStyle()->setGoUpDiagonalPen( tmpPenGoUp );
   }
   else
   {
@@ -3148,7 +2990,7 @@ void CellFormatPageBorder::applyDiagonalOutline(FormatManipulator* obj)
   }
 }
 
-void CellFormatPageBorder::applyHorizontalOutline(FormatManipulator* obj)
+void CellFormatPageBorder::applyHorizontalOutline(StyleManipulator* obj)
 {
   QPen tmpPen( borderButtons[BorderType_Horizontal]->getColor(),
                borderButtons[BorderType_Horizontal]->getPenWidth(),
@@ -3156,7 +2998,7 @@ void CellFormatPageBorder::applyHorizontalOutline(FormatManipulator* obj)
 
   if ( dlg->getStyle() )
   {
-    dlg->getStyle()->changeTopBorderPen( tmpPen );
+    dlg->getStyle()->setTopBorderPen( tmpPen );
   }
   else
   {
@@ -3165,7 +3007,7 @@ void CellFormatPageBorder::applyHorizontalOutline(FormatManipulator* obj)
   }
 }
 
-void CellFormatPageBorder::applyVerticalOutline(FormatManipulator* obj)
+void CellFormatPageBorder::applyVerticalOutline(StyleManipulator* obj)
 {
   BorderButton* vertical = borderButtons[BorderType_Vertical];
   QPen tmpPen( vertical->getColor(), vertical->getPenWidth(),
@@ -3173,7 +3015,7 @@ void CellFormatPageBorder::applyVerticalOutline(FormatManipulator* obj)
 
   if ( dlg->getStyle() )
   {
-    dlg->getStyle()->changeLeftBorderPen( tmpPen );
+    dlg->getStyle()->setLeftBorderPen( tmpPen );
   }
   else
   {
@@ -3950,19 +3792,19 @@ void CellFormatPagePattern::apply( CustomStyle * style )
   if ( selectedBrush != 0
     && ( dlg->brushStyle != selectedBrush->getBrushStyle()
          || dlg->brushColor != selectedBrush->getBrushColor() ) )
-    style->changeBackGroundBrush( QBrush( selectedBrush->getBrushColor(), selectedBrush->getBrushStyle() ) );
+    style->setBackgroundBrush( QBrush( selectedBrush->getBrushColor(), selectedBrush->getBrushStyle() ) );
 
   /*
     TODO: check...
   if ( b_notAnyColor)
-    style->changeBgColor( QColor() );
+    style->setBgColor( QColor() );
   else
   */
-  if ( bgColor != dlg->getStyle()->bgColor() )
-    style->changeBgColor( bgColor );
+  if ( bgColor != dlg->getStyle()->backgroundColor() )
+    style->setBackgroundColor( bgColor );
 }
 
-void CellFormatPagePattern::apply(FormatManipulator *_obj)
+void CellFormatPagePattern::apply(StyleManipulator *_obj)
 {
   if ( selectedBrush != 0
        && ( dlg->brushStyle != selectedBrush->getBrushStyle()

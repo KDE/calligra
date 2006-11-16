@@ -87,7 +87,7 @@ Value SortManipulator::newValue (Element *element, int col, int row,
   return stored (colidx, rowidx, parse);
 }
 
-Format *SortManipulator::newFormat (Element *element, int col, int row)
+Style SortManipulator::newFormat (Element *element, int col, int row)
 {
   QRect range = element->rect();
   int colidx = col - range.left();
@@ -113,7 +113,7 @@ void SortManipulator::sort (Element *element)
   // initially, all values are at their original positions
   sorted.clear ();
   for (int i = 0; i < count; ++i) sorted[i] = i;
-  
+
   // for each position, find the lowest value and move it there
   int start = m_skipfirst ? 1 : 0;
   for (int i = start; i < count - 1; ++i) {
@@ -126,7 +126,7 @@ void SortManipulator::sort (Element *element)
     sorted[i] = sorted[lowest];
     sorted[lowest] = tmp;
   }
-  
+
   // that's all - process will take care of the rest, together with our
   // newValue/newFormat
 }

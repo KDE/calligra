@@ -529,7 +529,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
     ColumnStyle cs;
     cs.breakB = ::Style::automatic;
     cs.size   = column->mmWidth() / 10;
-    bool hide = column->isHide();
+    bool hide = column->hidden();
 
     int j        = i + 1;
     int repeated = 1;
@@ -540,7 +540,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
       cs1.breakB = ::Style::automatic;
       cs1.size   = c->mmWidth() / 10;
 
-      if ( ColumnStyle::isEqual( &cs, cs1 ) && ( hide == c->isHide() ) )
+      if ( ColumnStyle::isEqual( &cs, cs1 ) && ( hide == c->hidden() ) )
         ++repeated;
       else
         break;
@@ -569,7 +569,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
 
     QDomElement rowElem = doc.createElement( "table:table-row" );
     rowElem.setAttribute( "table:style-name", m_styles.rowStyle( rs ) );
-    if ( row->isHide() )
+    if ( row->hidden() )
       rowElem.setAttribute( "table:visibility", "collapse" );
 
     exportCells( doc, rowElem, sheet, i, maxCols );
@@ -585,8 +585,8 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
   while ( i <= maxCols )
   {
     int  repeated = 1;
-    bool hasComment = false;
     const Cell* cell = sheet->cellAt( i, row );
+    const KSpread::Style style = cell->style( i, row );
     QDomElement cellElem;
 
     if ( !cell->isPartOfMerged() )
@@ -596,14 +596,9 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
 
     QFont font;
     Value const value( cell->value() );
-    if ( !cell->isDefault() )
-    {
-      font = cell->format()->textFont( i, row );
-      m_styles.addFont( font );
-
-      if ( cell->format()->hasProperty( KSpread::Style::SComment ) )
-        hasComment = true;
-    }
+    font = style.font();
+    m_styles.addFont( font );
+    QString comment = cell->comment( i, row );
 
     CellStyle c;
     CellStyle::loadData( c, cell ); // TODO: number style
@@ -611,7 +606,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
     cellElem.setAttribute( "table:style-name", m_styles.cellStyle( c ) );
 
     // group empty cells with the same style
-    if ( cell->isEmpty() && !hasComment && !cell->isPartOfMerged() && !cell->doesMergeCells() )
+    if ( cell->isEmpty() && !comment.isEmpty() && !cell->isPartOfMerged() && !cell->doesMergeCells() )
     {
       int j = i + 1;
       while ( j <= maxCols )
@@ -621,7 +616,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
         CellStyle c1;
         CellStyle::loadData( c1, cell1 ); // TODO: number style
 
-        if ( cell1->isEmpty() && !cell->format()->hasProperty( KSpread::Style::SComment )
+        if ( cell1->isEmpty() && !comment.isEmpty()
              && CellStyle::isEqual( &c, c1 ) && !cell->isPartOfMerged() && !cell->doesMergeCells() )
           ++repeated;
         else
@@ -641,7 +636,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
     else if ( value.isNumber() )
     {
       kDebug(30518) << "Type: Number" << endl;
-      FormatType type = cell->format()->getFormatType( i, row );
+      FormatType type = style.formatType();
 
       if ( type == Percentage_format )
         cellElem.setAttribute( "table:value-type", "percentage" );
@@ -699,9 +694,8 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
         cellElem.setAttribute( "table:number-rows-spanned", QString::number( rowSpan ) );
     }
 
-    if ( hasComment )
+    if ( !comment.isEmpty() )
     {
-      QString comment( cell->format()->comment( i, row ) );
       QDomElement annotation = doc.createElement( "office:annotation" );
       QDomElement text = doc.createElement( "text:p" );
       text.appendChild( doc.createTextNode( comment ) );
@@ -825,7 +819,6 @@ void OpenCalcExport::exportDefaultCellStyle( QDomDocument & doc, QDomElement & o
   KoDocument * document = m_chain->inputDocument();
   Doc * ksdoc    = static_cast<Doc *>(document);
 
-  Format * format = new Format( 0, ksdoc->styleManager()->defaultStyle() );
   const KLocale *locale = ksdoc->locale();
   QString language;
   QString country;
@@ -833,7 +826,7 @@ void OpenCalcExport::exportDefaultCellStyle( QDomDocument & doc, QDomElement & o
 
   QString l( locale->language() );
   KLocale::splitLocale( l, language, country, charSet );
-  QFont font( format->font() );
+  QFont font( ksdoc->styleManager()->defaultStyle()->font() );
   m_styles.addFont( font, true );
 
   QDomElement style = doc.createElement( "style:properties" );
@@ -852,7 +845,6 @@ void OpenCalcExport::exportDefaultCellStyle( QDomDocument & doc, QDomElement & o
 
   defStyle.appendChild( style );
   officeStyles.appendChild( defStyle );
-  delete format;
 }
 
 void OpenCalcExport::createDefaultStyles()

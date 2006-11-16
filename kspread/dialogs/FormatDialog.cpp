@@ -43,7 +43,6 @@
 #include "Doc.h"
 #include "Localization.h"
 #include "Sheet.h"
-#include "Format.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "Undo.h"
@@ -62,7 +61,7 @@ FormatDialog::FormatDialog( View* view, const char* name )
     setButtons( Ok|Cancel );
 
     for( int i = 0; i < 16; ++i )
-	m_cells[ i ] = 0;
+	m_styles[ i ] = 0;
 
     m_view = view;
     QWidget *page = mainWidget();
@@ -109,7 +108,7 @@ FormatDialog::FormatDialog( View* view, const char* name )
 FormatDialog::~FormatDialog()
 {
     for( int i = 0; i < 16; ++i )
-	delete m_cells[ i ];
+	delete m_styles[ i ];
 }
 
 void FormatDialog::slotActivated( int index )
@@ -173,6 +172,7 @@ void FormatDialog::slotOk()
 
     QRect r = m_view->selectionInfo()->selection();
 
+#ifndef KSPREAD_NEW_STYLE_STORAGE // copy
     if ( !m_view->doc()->undoLocked() )
     {
         QString title=i18n("Change Format");
@@ -185,7 +185,7 @@ void FormatDialog::slotOk()
 
     // Top left corner
     Cell* cell = m_view->activeSheet()->nonDefaultCell( r.left(), r.top() );
-    cell->format()->copy( *m_cells[0] );
+    cell->format()->copy( *m_styles[0] );
 
     // Top column
     int x, y;
@@ -195,30 +195,30 @@ void FormatDialog::slotOk()
 	Cell* cell = m_view->activeSheet()->nonDefaultCell( x, r.top() );
         if(!cell->isPartOfMerged())
         {
-          cell->format()->copy( *m_cells[ pos ] );
+          cell->format()->copy( *m_styles[ pos ] );
 
-	Format* c;
+	Style* style;
 	if ( x == r.right() )
-	    c = m_cells[2];
+	    style = m_styles[2];
 	else
-	    c = m_cells[1];
+	    style = m_styles[1];
 
-	if ( c )
-	    cell->setTopBorderPen( c->topBorderPen( 0, 0 ) );
+	if ( style )
+	    cell->setTopBorderPen( style->topBorderPen( 0, 0 ) );
 
 	if ( x == r.left() + 1 )
-	    c = m_cells[1];
+	    style = m_styles[1];
 	else
-	    c = m_cells[2];
+	    style = m_styles[2];
 
-	if ( c )
-	    cell->setLeftBorderPen( c->leftBorderPen( 0, 0 ) );
+	if ( style )
+	    cell->setLeftBorderPen( style->leftBorderPen( 0, 0 ) );
         }
     }
 
     cell = m_view->activeSheet()->nonDefaultCell( r.right(), r.top() );
-    if ( m_cells[3] )
-	cell->setRightBorderPen( m_cells[3]->leftBorderPen( 0, 0 ) );
+    if ( m_styles[3] )
+	cell->setRightBorderPen( m_styles[3]->leftBorderPen( 0, 0 ) );
 
     // Left row
     for( y = r.top() + 1; y <= r.bottom(); ++y )
@@ -227,24 +227,24 @@ void FormatDialog::slotOk()
 	Cell* cell = m_view->activeSheet()->nonDefaultCell( r.left(), y );
         if(!cell->isPartOfMerged())
         {
-          cell->format()->copy( *m_cells[ pos ] );
+          cell->format()->copy( *m_styles[ pos ] );
 
-	Format* c;
+	Style* style;
 	if ( y == r.bottom() )
-	    c = m_cells[8];
+	    style = m_styles[8];
 	else
-	    c = m_cells[4];
+	    style = m_styles[4];
 
-	if ( c )
-	    cell->setLeftBorderPen( c->leftBorderPen( 0, 0 ) );
+	if ( style )
+	    cell->setLeftBorderPen( style->leftBorderPen( 0, 0 ) );
 
 	if ( y == r.top() + 1 )
-	    c = m_cells[4];
+	    style = m_styles[4];
 	else
-	    c = m_cells[8];
+	    style = m_styles[8];
 
-	if ( c )
-	    cell->setTopBorderPen( c->topBorderPen( 0, 0 ) );
+	if ( style )
+	    cell->setTopBorderPen( style->topBorderPen( 0, 0 ) );
         }
     }
 
@@ -256,24 +256,24 @@ void FormatDialog::slotOk()
 	    Cell* cell = m_view->activeSheet()->nonDefaultCell( x, y );
             if(!cell->isPartOfMerged())
             {
-              cell->format()->copy( *m_cells[ pos ] );
+              cell->format()->copy( *m_styles[ pos ] );
 
-	    Format* c;
+	    Style* style;
 	    if ( x == r.left() + 1 )
-		c = m_cells[ 5 + ( ( y - r.top() - 1 ) % 2 ) * 4 ];
+		style = m_styles[ 5 + ( ( y - r.top() - 1 ) % 2 ) * 4 ];
 	    else
-		c = m_cells[ 6 + ( ( y - r.top() - 1 ) % 2 ) * 4 ];
+		style = m_styles[ 6 + ( ( y - r.top() - 1 ) % 2 ) * 4 ];
 
-	    if ( c )
-		cell->setLeftBorderPen( c->leftBorderPen( 0, 0 ) );
+	    if ( style )
+		cell->setLeftBorderPen( style->leftBorderPen( 0, 0 ) );
 
 	    if ( y == r.top() + 1 )
-		c = m_cells[ 5 + ( ( x - r.left() - 1 ) % 2 ) ];
+		style = m_styles[ 5 + ( ( x - r.left() - 1 ) % 2 ) ];
 	    else
-		c = m_cells[ 9 + ( ( x - r.left() - 1 ) % 2 ) ];
+		style = m_styles[ 9 + ( ( x - r.left() - 1 ) % 2 ) ];
 
-	    if ( c )
-		cell->setTopBorderPen( c->topBorderPen( 0, 0 ) );
+	    if ( style )
+		cell->setTopBorderPen( style->topBorderPen( 0, 0 ) );
             }
 	}
 
@@ -285,18 +285,18 @@ void FormatDialog::slotOk()
         {
 	if ( y == r.top() )
         {
-	    if ( m_cells[3] )
-		cell->setRightBorderPen( m_cells[3]->leftBorderPen( 0, 0 ) );
+	    if ( m_styles[3] )
+		cell->setRightBorderPen( m_styles[3]->leftBorderPen( 0, 0 ) );
 	}
 	else if ( y == r.right() )
         {
-	    if ( m_cells[11] )
-		cell->setRightBorderPen( m_cells[11]->leftBorderPen( 0, 0 ) );
+	    if ( m_styles[11] )
+		cell->setRightBorderPen( m_styles[11]->leftBorderPen( 0, 0 ) );
 	}
 	else
         {
-	    if ( m_cells[7] )
-		cell->setRightBorderPen( m_cells[7]->leftBorderPen( 0, 0 ) );
+	    if ( m_styles[7] )
+		cell->setRightBorderPen( m_styles[7]->leftBorderPen( 0, 0 ) );
 	}
         }
     }
@@ -309,21 +309,22 @@ void FormatDialog::slotOk()
         {
         if ( x == r.left() )
         {
-	    if ( m_cells[12] )
-		cell->setBottomBorderPen( m_cells[12]->topBorderPen( 0, 0 ) );
+	    if ( m_styles[12] )
+		cell->setBottomBorderPen( m_styles[12]->topBorderPen( 0, 0 ) );
 	}
 	else if ( x == r.right() )
         {
-	    if ( m_cells[14] )
-		cell->setBottomBorderPen( m_cells[14]->topBorderPen( 0, 0 ) );
+	    if ( m_styles[14] )
+		cell->setBottomBorderPen( m_styles[14]->topBorderPen( 0, 0 ) );
 	}
 	else
         {
-	    if ( m_cells[13] )
-		cell->setBottomBorderPen( m_cells[13]->topBorderPen( 0, 0 ) );
+	    if ( m_styles[13] )
+		cell->setBottomBorderPen( m_styles[13]->topBorderPen( 0, 0 ) );
 	}
         }
     }
+#endif
 
     m_view->selectionInfo()->initialize(r);//,       m_view->activeSheet() );
     m_view->doc()->setModified( true );
@@ -335,29 +336,29 @@ bool FormatDialog::parseXML( const KoXmlDocument& doc )
 {
     for( int i = 0; i < 16; ++i )
     {
-	delete m_cells[ i ];
-	m_cells[ i ] = 0;
+	delete m_styles[ i ];
+	m_styles[ i ] = 0;
     }
 
     KoXmlElement e = doc.documentElement().firstChild().toElement();
     for( ; !e.isNull(); e = e.nextSibling().toElement() )
     {
-	if ( e.tagName() == "cell" )
+        if ( e.tagName() == "cell" )
         {
-	    Sheet* sheet = m_view->activeSheet();
-	    Format* cell = new Format( sheet, sheet->doc()->styleManager()->defaultStyle() );
+            Style* style = new Style();
+            style->setDefault();
+            KoXmlElement tmpElement( e.namedItem("format").toElement() );
+            if ( !style->loadXML( tmpElement ) )
+                return false;
 
-     if ( !cell->load( e.namedItem("format").toElement(), Paste::Normal ) )
-		return false;
+            int row = e.attribute("row").toInt();
+            int column = e.attribute("column").toInt();
+            int i = (row-1)*4 + (column-1);
+            if ( i < 0 || i >= 16 )
+                return false;
 
-	    int row = e.attribute("row").toInt();
-	    int column = e.attribute("column").toInt();
-	    int i = (row-1)*4 + (column-1);
-	    if ( i < 0 || i >= 16 )
-		return false;
-
-	    m_cells[ i ] = cell;
-	}
+            m_styles[ i ] = style;
+        }
     }
 
     return true;

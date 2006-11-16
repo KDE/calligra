@@ -41,6 +41,7 @@
 #include "Style.h"
 #include "Global.h"
 //#include "Object.h"
+#include "Storage.h"
 
 class QWidget;
 class QPainter;
@@ -79,6 +80,7 @@ class Selection;
 class Sheet;
 class SheetPrint;
 class Style;
+class StyleStorage;
 class UndoInsertRemoveAction;
 class Validity;
 class View;
@@ -775,14 +777,19 @@ public:
     //
 
     /**
-     * \return the default
+     * \return the Style associated with the Cell at \p column , \p row .
      */
-    Format* defaultFormat();
+    Style style( int column, int row ) const;
+    Style style( const QRect& rect ) const;
+    void setStyle( const Region& region, const Style& style ) const;
+    StyleStorage* styleStorage() const;
 
     /**
-     * \return the default
+     * \return the comment associated with the Cell at \p column , \p row .
      */
-    const Format* defaultFormat() const;
+    QString comment( int column, int row ) const;
+    void setComment( const Region& region, const QString& style ) const;
+    CommentStorage* commentStorage() const;
 
     /** retrieve a value */
     Value value (int col, int row) const;
@@ -1304,6 +1311,10 @@ public:
      */
     const Region& paintDirtyData() const;
 
+    void addLayoutDirtyRegion(const Region& region);
+    void clearLayoutDirtyRegion();
+    const Region& layoutDirtyRegion() const;
+
     /**
      * \ingroup Painting
      * Marks the Cell at @p col , @p row as dirty.
@@ -1424,7 +1435,7 @@ protected:
      */
     bool loadRowFormat( const KoXmlElement& row, int &rowIndex,
                         KoOasisLoadingContext& oasisContext,
-                        const Styles& styleMap );
+                        QHash<QString, QRegion>& styleRegions );
 
     /**
      * \ingroup OpenDocument
@@ -1433,7 +1444,7 @@ protected:
      */
     bool loadColumnFormat(const KoXmlElement& row,
                           const KoOasisStyles& oasisStyles, int & indexCol,
-                          const Styles& styleMap);
+                          QHash<QString, QRegion>& styleRegions );
 
     /**
      * \ingroup OpenDocument
@@ -1475,7 +1486,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void maxRowCols( int & maxCols, int & maxRows );
+    void usedArea( int & maxCols, int & maxRows );
 
     /**
      * \ingroup OpenDocument

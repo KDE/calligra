@@ -18,6 +18,7 @@
 */
 
 #include <qdom.h>
+#include <QPen>
 #include <QStringList>
 
 #include <kdebug.h>
@@ -204,15 +205,15 @@ void StyleManager::createBuiltinStyles()
   f.setItalic( true );
   f.setPointSize( f.pointSize() + 2 );
   f.setBold( true );
-  header1->changeFont( f );
+  header1->setFont( f );
   header1->setType( Style::BUILTIN );
   m_styles[ header1->name() ] = header1;
 
   CustomStyle * header2 = new CustomStyle( i18n( "Header1" ), header1 );
   QColor color( "#F0F0FF" );
-  header2->changeBgColor( color );
+  header2->setBackgroundColor( color );
   QPen pen( Qt::black, 1, Qt::SolidLine );
-  header2->changeBottomBorderPen( pen );
+  header2->setBottomBorderPen( pen );
   header2->setType( Style::BUILTIN );
 
   m_styles[ header2->name() ] = header2;
@@ -342,21 +343,21 @@ Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles )
     {
       QString name = it.current()->attributeNS( KoXmlNS::style , "name" , QString::null );
       kDebug(36003) << "StyleManager: Preloading automatic cell style: " << name << endl;
-      autoStyles.insert( name , new Style());
-      autoStyles[name]->loadOasisStyle( oasisStyles , *(it.current()) );
+      autoStyles.remove( name );
+      autoStyles[name].loadOasisStyle( oasisStyles, *(it.current()) );
 
       if ( it.current()->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
       {
         QString parentStyleName = it.current()->attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
         if ( m_oasisStyles.contains( parentStyleName ) )
         {
-          autoStyles[name]->setParent( m_oasisStyles[parentStyleName] );
+          autoStyles[name].setParent( m_oasisStyles[parentStyleName] );
         }
         kDebug(36003) << "\t parent-style-name:" << parentStyleName << endl;
       }
       else
       {
-        autoStyles[name]->setParent( m_defaultStyle );
+        autoStyles[name].setParent( m_defaultStyle );
       }
     }
   }
@@ -365,12 +366,9 @@ Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles )
 
 void StyleManager::releaseUnusedAutoStyles( Styles autoStyles )
 {
-  foreach ( Style* style, autoStyles.values() )
-  {
-    if ( style->release() )
-      delete style;
-  }
+    // Just clear the list. The styles are released, if not used.
+    autoStyles.clear();
 
-  // Now, we can clear the map of styles sorted by OpenDocument name.
-  m_oasisStyles.clear();
+    // Now, we can clear the map of styles sorted by OpenDocument name.
+    m_oasisStyles.clear();
 }

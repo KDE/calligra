@@ -86,11 +86,45 @@ Things not in bugzilla
   + Zooming	    						      1 ----
     Make it view dependent and not document dependent.
 
-  + Format Storage						      1 ----
+  + Style Storage						      1 STEF
     This would dramatically reduce memory consumption and allows
     styles for empty cells.
-    - Use new Format Storage						----
-    - Remove old KSpreadFormat						----
+    - Merge new Style Storage into trunk				done
+    - Remove old Format							done
+    - reuse existing sub-styles (book-keeping)				done
+      Done on a per substyle basis.
+      Lookup: O(n)
+      n: number of different aggregations of a substyle,
+         e.g. red, blue, etc. for the background color substyle
+    - Garbage collection						done
+      Every minute a list of pairs, consisting of a rect and a
+      substyle, is filled. Every now and then one pair is checked
+      wether it's obsolete.
+    - Keep track of the used area.					done
+      Styled cells do not necessarily occur in the cluster anymore.
+      Same goes for rows and columns.
+    - Speedup the OpenDocument loading by 'collecting' the used area	done
+      of each style and insert a minimal set of rectangles into the
+      style storage.
+    - Undo of style changes						----
+      This should insert the inverse substyles or something similar.
+    - Add insertion/deletion of columns/rows				done
+    - Get rid of KSpread::Style::Currency. Use KSpread::Currency.	----
+    - OpenDocument loading/saving					done
+    - Old native format loading/saving					----
+    - Seek & destroy R-Tree data rects, if they get empty after		----
+      deletion of columns/rows, but store them for undo.
+    - Add configure option to choose wether the style of the current	----
+      or of the previous (default) column/row is used on insertion.
+    - Replace Cell::format() by Cell::style().				----
+    - Move the StyleManipulator class into the FormatManipulators file	done
+      and rename the file to StyleManipulators.
+    - Improve the caching of the styles.				----
+    - Fix the border outline operation.					----
+    - OpenDocument saving of cell styles should not include the		----
+      attributes set for column/rows.
+    - Fix Style::isDefault(). Use the StyleManager's default style.	----
+    - Port the filters.							done
 
   + Speed up selection.						      1 ----
     (probably improved with Format Storage?)

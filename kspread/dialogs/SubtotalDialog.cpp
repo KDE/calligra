@@ -283,48 +283,50 @@ void SubtotalDialog::fillFunctionBox()
 }
 
 bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
-                                      bool addRow, QString const & text )
+                                  bool addRow, QString const & text )
 {
-  kDebug() << "Adding subtotal: " << mainCol << ", " << column << ", Rows: " << row << ", " << topRow
+    kDebug() << "Adding subtotal: " << mainCol << ", " << column << ", Rows: " << row << ", " << topRow
             << ": addRow: " << addRow << ", Text: " << text << endl;
-  if ( addRow )
-  {
-    QRect rect(m_selection.left(), row + 1, m_selection.width(), 1);
-    if ( !m_pSheet->shiftColumn( rect ) )
-      return false;
+    if ( addRow )
+    {
+        QRect rect(m_selection.left(), row + 1, m_selection.width(), 1);
+        if ( !m_pSheet->shiftColumn( rect ) )
+            return false;
 
-    m_selection.setHeight( m_selection.height() + 1 );
+        m_selection.setHeight( m_selection.height() + 1 );
 
-    Cell * cell = m_pSheet->nonDefaultCell( mainCol, row + 1 );
-    cell->setCellText( text );
-    cell->format()->setTextFontBold( true );
-    cell->format()->setTextFontItalic( true );
-    cell->format()->setTextFontUnderline( true );
-  }
+        Cell * cell = m_pSheet->nonDefaultCell( mainCol, row + 1 );
+        cell->setCellText( text );
+        Style style;
+        style.setFontBold( true );
+        style.setFontItalic( true );
+        style.setFontUnderline( true );
+        cell->setStyle( style );
+    }
 
-  QString colName = Cell::columnName( column );
+    QString colName = Cell::columnName( column );
 
-  QString formula("=SUBTOTAL(");
-  formula += QString::number( m_functionBox->currentIndex() + 1 );
-  formula += "; ";
-  formula += colName;
-  formula += QString::number( topRow );
-  // if ( topRow != row )
-  {
-    formula += ':';
+    QString formula("=SUBTOTAL(");
+    formula += QString::number( m_functionBox->currentIndex() + 1 );
+    formula += "; ";
     formula += colName;
-    formula += QString::number( row );
-  }
-  formula += ')';
+    formula += QString::number( topRow );
+    // if ( topRow != row )
+    {
+        formula += ':';
+        formula += colName;
+        formula += QString::number( row );
+    }
+    formula += ')';
 
-  Cell * cell = m_pSheet->nonDefaultCell( column, row + 1 );
-  cell->setCellText( formula );
-  cell->format()->setTextFontBold( true );
-  cell->format()->setTextFontItalic( true );
-  cell->format()->setTextFontUnderline( true );
-
-  return true;
+    Cell * cell = m_pSheet->nonDefaultCell( column, row + 1 );
+    cell->setCellText( formula );
+    Style style;
+    style.setFontBold( true );
+    style.setFontItalic( true );
+    style.setFontUnderline( true );
+    cell->setStyle( style );
+    return true;
 }
 
 #include "SubtotalDialog.moc"
-

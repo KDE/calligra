@@ -46,14 +46,12 @@ QString ValueFormatter::formatText (Cell *cell, FormatType fmtType)
 
   QString str;
 
-  Style::FloatFormat floatFormat =
-      cell->format()->floatFormat (cell->column(), cell->row());
-  int precision = cell->format()->precision (cell->column(), cell->row());
-  QString prefix = cell->format()->prefix (cell->column(), cell->row());
-  QString postfix = cell->format()->postfix (cell->column(), cell->row());
-  Style::Currency currency;
-  bool valid = cell->format()->currencyInfo(currency);
-  QString currencySymbol = valid ? currency.symbol : QString::null;
+  Style::FloatFormat floatFormat = cell->style().floatFormat();
+  int precision = cell->style().precision();
+  QString prefix = cell->style().prefix();
+  QString postfix = cell->style().postfix();
+  Style::Currency currency = cell->style().currency();
+  QString currencySymbol = currency.symbol;
 
   return formatText (cell->value(), fmtType, precision,
       floatFormat, prefix, postfix, currencySymbol);

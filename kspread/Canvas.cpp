@@ -99,6 +99,7 @@
 #include "Format.h"
 #include "Selection.h"
 #include "Sheet.h"
+#include "StyleManipulators.h"
 #include "Undo.h"
 #include "Util.h"
 #include "Validity.h"
@@ -142,10 +143,8 @@ Canvas::Canvas(View *view)
 
   d->xOffset = 0.0;
   d->yOffset = 0.0;
-#ifdef KSPREAD_CELL_WINDOW
     d->cellWindowRect  = QRect(1,1,0,0);
     d->cellWindowSheet = 0;
-#endif
 
   d->view = view;
   // m_eAction = DefaultAction;
@@ -701,7 +700,7 @@ void Canvas::slotScrollHorz( int _value )
 #ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     d->view->doc()->emitEndOperation();
 #else
-    d->view->doc()->emitEndOperation( visibleCells() );
+    d->view->doc()->emitEndOperation( Region( visibleCells() ) );
 #endif
 #endif
 }
@@ -767,7 +766,7 @@ void Canvas::slotScrollVert( int _value )
 #ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     d->view->doc()->emitEndOperation();
 #else
-    d->view->doc()->emitEndOperation( visibleCells() );
+    d->view->doc()->emitEndOperation( Region( visibleCells() ) );
 #endif
 #endif
 }
@@ -1027,23 +1026,15 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     QString anchor;
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
-#ifdef KSPREAD_CELL_WINDOW
-        CellView tmpCellView( cell );
+        CellView tmpCellView( sheet, col, row );
         CellView* cellView = &tmpCellView;
-#else
-        CellView* cellView = cell->cellView();
-#endif
-      anchor = cellView->testAnchor( cell->dblWidth() - ev_PosX + xpos, ev_PosY - ypos );
+        anchor = cellView->testAnchor( cell->dblWidth() - ev_PosX + xpos, ev_PosY - ypos );
     }
     else
     {
-#ifdef KSPREAD_CELL_WINDOW
-        CellView tmpCellView( cell );
+        CellView tmpCellView( sheet, col, row );
         CellView* cellView = &tmpCellView;
-#else
-        CellView* cellView = cell->cellView();
-#endif
-      anchor = cellView->testAnchor( ev_PosX - xpos, ev_PosY - ypos );
+        anchor = cellView->testAnchor( ev_PosX - xpos, ev_PosY - ypos );
     }
     if ( !anchor.isEmpty() && anchor != d->anchor )
     {
@@ -1593,9 +1584,7 @@ void Canvas::paintEvent( QPaintEvent* event )
 
     ElapsedTime et( "Painting cells", ElapsedTime::PrintOnlyTime );
 
-#ifdef KSPREAD_CELL_WINDOW
     updateCellWindow();
-#endif
 #ifndef KSPREAD_CACHED_PAINTING_ATTRIBUTES
   // repaint whole visible region, if no cells are marked as dirty
   if (sheet->paintDirtyData().isEmpty())
@@ -1638,6 +1627,25 @@ void Canvas::paintEvent( QPaintEvent* event )
     sheet->setRegionPaintDirty( vr );
   }
 #endif
+
+    // mark visible cells, that need relayouting
+    const QRect visibleCells = this->visibleCells();
+    const Region layoutDirtyRegion = sheet->layoutDirtyRegion();
+    sheet->clearLayoutDirtyRegion();
+    Region::ConstIterator end(layoutDirtyRegion.constEnd());
+    for ( Region::ConstIterator it(layoutDirtyRegion.constBegin()); it != end; ++it)
+    {
+        const QRect range = (*it)->rect() & visibleCells;
+        for ( int col = range.left(); col <= range.right(); ++col )
+        {
+            for ( int row = range.top(); row <= range.bottom(); ++row )
+            {
+                CellView* const cellView = d->cellWindowMatrix[col-visibleCells.left()][row-visibleCells.top()];
+                cellView->setDirty( true );
+            }
+        }
+    }
+
     QPainter painter(this);
     paintUpdates( painter, event->rect() );
     event->accept();
@@ -1984,7 +1992,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
     case Bottom:
       offset = cell->mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
       rl = sheet->rowFormat( cursor.y() + offset );
-      while ( ((cursor.y() + offset) <= KS_rowMax) && rl->isHide())
+      while ( ((cursor.y() + offset) <= KS_rowMax) && rl->hidden())
       {
         offset++;
         rl = sheet->rowFormat( cursor.y() + offset );
@@ -1995,7 +2003,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
     case Top:
       offset = (cellCorner.y() - cursor.y()) - 1;
       rl = sheet->rowFormat( cursor.y() + offset );
-      while ( ((cursor.y() + offset) >= 1) && rl->isHide())
+      while ( ((cursor.y() + offset) >= 1) && rl->hidden())
       {
         offset--;
         rl = sheet->rowFormat( cursor.y() + offset );
@@ -2005,7 +2013,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
     case Left:
       offset = (cellCorner.x() - cursor.x()) - 1;
       cl = sheet->columnFormat( cursor.x() + offset );
-      while ( ((cursor.x() + offset) >= 1) && cl->isHide())
+      while ( ((cursor.x() + offset) >= 1) && cl->hidden())
       {
         offset--;
         cl = sheet->columnFormat( cursor.x() + offset );
@@ -2015,7 +2023,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
     case Right:
       offset = cell->mergedXCells() - (cursor.x() - cellCorner.x()) + 1;
       cl = sheet->columnFormat( cursor.x() + offset );
-      while ( ((cursor.x() + offset) <= KS_colMax) && cl->isHide())
+      while ( ((cursor.x() + offset) <= KS_colMax) && cl->hidden())
       {
         offset++;
         cl = sheet->columnFormat( cursor.x() + offset );
@@ -2025,7 +2033,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
     case BottomFirst:
       offset = cell->mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
       rl = sheet->rowFormat( cursor.y() + offset );
-      while ( ((cursor.y() + offset) <= KS_rowMax) && rl->isHide())
+      while ( ((cursor.y() + offset) <= KS_rowMax) && rl->hidden())
       {
         ++offset;
         rl = sheet->rowFormat( cursor.y() + offset );
@@ -2505,7 +2513,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->cellAt(cell->column(), row);
       while ((cell != 0) && (row > 0) && (!cell->isEmpty()) )
       {
-        if (!(sheet->rowFormat(cell->row())->isHide()))
+        if (!(sheet->rowFormat(cell->row())->hidden()))
         {
           lastCell = cell;
           searchThroughEmpty = false;
@@ -2521,7 +2529,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->getNextCellUp(marker.x(), marker.y());
 
       while ((cell != 0) &&
-            (cell->isEmpty() || (sheet->rowFormat(cell->row())->isHide())))
+            (cell->isEmpty() || (sheet->rowFormat(cell->row())->hidden())))
       {
         cell = sheet->getNextCellUp(cell->column(), cell->row());
       }
@@ -2532,7 +2540,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     else
       row = cell->row();
 
-    while ( sheet->rowFormat(row)->isHide() )
+    while ( sheet->rowFormat(row)->hidden() )
     {
       row++;
     }
@@ -2552,7 +2560,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->cellAt(cell->column(), row);
       while ((cell != 0) && (row < KS_rowMax) && (!cell->isEmpty()) )
       {
-        if (!(sheet->rowFormat(cell->row())->isHide()))
+        if (!(sheet->rowFormat(cell->row())->hidden()))
         {
           lastCell = cell;
           searchThroughEmpty = false;
@@ -2567,7 +2575,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->getNextCellDown(marker.x(), marker.y());
 
       while ((cell != 0) &&
-            (cell->isEmpty() || (sheet->rowFormat(cell->row())->isHide())))
+            (cell->isEmpty() || (sheet->rowFormat(cell->row())->hidden())))
       {
         cell = sheet->getNextCellDown(cell->column(), cell->row());
       }
@@ -2578,7 +2586,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     else
       row = cell->row();
 
-    while ( sheet->rowFormat(row)->isHide() )
+    while ( sheet->rowFormat(row)->hidden() )
     {
       row--;
     }
@@ -2600,7 +2608,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->cellAt(col, cell->row());
       while ((cell != 0) && (col < KS_colMax) && (!cell->isEmpty()) )
       {
-        if (!(sheet->columnFormat(cell->column())->isHide()))
+        if (!(sheet->columnFormat(cell->column())->hidden()))
         {
           lastCell = cell;
           searchThroughEmpty = false;
@@ -2615,7 +2623,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->getNextCellRight(marker.x(), marker.y());
 
       while ((cell != 0) &&
-            (cell->isEmpty() || (sheet->columnFormat(cell->column())->isHide())))
+            (cell->isEmpty() || (sheet->columnFormat(cell->column())->hidden())))
       {
         cell = sheet->getNextCellRight(cell->column(), cell->row());
       }
@@ -2626,7 +2634,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     else
       col = cell->column();
 
-    while ( sheet->columnFormat(col)->isHide() )
+    while ( sheet->columnFormat(col)->hidden() )
     {
       col--;
     }
@@ -2644,7 +2652,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->cellAt(col, cell->row());
       while ((cell != 0) && (col > 0) && (!cell->isEmpty()) )
       {
-        if (!(sheet->columnFormat(cell->column())->isHide()))
+        if (!(sheet->columnFormat(cell->column())->hidden()))
         {
           lastCell = cell;
           searchThroughEmpty = false;
@@ -2660,7 +2668,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->getNextCellLeft(marker.x(), marker.y());
 
       while ((cell != 0) &&
-            (cell->isEmpty() || (sheet->columnFormat(cell->column())->isHide())))
+            (cell->isEmpty() || (sheet->columnFormat(cell->column())->hidden())))
       {
         cell = sheet->getNextCellLeft(cell->column(), cell->row());
       }
@@ -2671,7 +2679,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     else
       col = cell->column();
 
-    while ( sheet->columnFormat(col)->isHide() )
+    while ( sheet->columnFormat(col)->hidden() )
     {
       col++;
     }
@@ -2694,7 +2702,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->cellAt(col, cell->row());
       while ((cell != 0) && (col > 0) && (!cell->isEmpty()) )
       {
-        if (!(sheet->columnFormat(cell->column())->isHide()))
+        if (!(sheet->columnFormat(cell->column())->hidden()))
         {
           lastCell = cell;
           searchThroughEmpty = false;
@@ -2710,7 +2718,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->getNextCellLeft(marker.x(), marker.y());
 
       while ((cell != 0) &&
-            (cell->isEmpty() || (sheet->columnFormat(cell->column())->isHide())))
+            (cell->isEmpty() || (sheet->columnFormat(cell->column())->hidden())))
       {
         cell = sheet->getNextCellLeft(cell->column(), cell->row());
       }
@@ -2721,7 +2729,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     else
       col = cell->column();
 
-    while ( sheet->columnFormat(col)->isHide() )
+    while ( sheet->columnFormat(col)->hidden() )
     {
       col++;
     }
@@ -2739,7 +2747,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->cellAt(col, cell->row());
       while ((cell != 0) && (col < KS_colMax) && (!cell->isEmpty()) )
       {
-        if (!(sheet->columnFormat(cell->column())->isHide()))
+        if (!(sheet->columnFormat(cell->column())->hidden()))
         {
           lastCell = cell;
           searchThroughEmpty = false;
@@ -2754,7 +2762,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->getNextCellRight(marker.x(), marker.y());
 
       while ((cell != 0) &&
-            (cell->isEmpty() || (sheet->columnFormat(cell->column())->isHide())))
+            (cell->isEmpty() || (sheet->columnFormat(cell->column())->hidden())))
       {
         cell = sheet->getNextCellRight(cell->column(), cell->row());
       }
@@ -2765,7 +2773,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     else
       col = cell->column();
 
-    while ( sheet->columnFormat(col)->isHide() )
+    while ( sheet->columnFormat(col)->hidden() )
     {
       col--;
     }
@@ -2934,259 +2942,72 @@ void Canvas::processIMEvent( QIMEvent * event )
 
 bool Canvas::formatKeyPress( QKeyEvent * _ev )
 {
-  register Sheet * const sheet = activeSheet();
-  if (!sheet)
-    return false;
-
-  if (!(_ev->modifiers() & Qt::ControlModifier ))
-    return false;
-
-  int key = _ev->key();
-  if ( key != Qt::Key_Exclam && key != Qt::Key_At && key != Qt::Key_Ampersand
-       && key != Qt::Key_Dollar && key != Qt::Key_Percent && key != Qt::Key_AsciiCircum
-       && key != Qt::Key_NumberSign )
-    return false;
-
-  Cell  * cell = 0;
-
-  d->view->doc()->emitBeginOperation(false);
-
-  if ( !d->view->doc()->undoLocked() )
-  {
-    QString dummy;
-    UndoCellFormat * undo = new UndoCellFormat( d->view->doc(), sheet, *selectionInfo(), dummy );
-    d->view->doc()->addCommand( undo );
-  }
-
-  Region::ConstIterator end(selectionInfo()->constEnd());
-  for (Region::ConstIterator it = selectionInfo()->constBegin(); it != end; ++it)
-  {
-    QRect rect = (*it)->rect();
-
-  int right  = rect.right();
-  int bottom = rect.bottom();
-
-  if ( util_isRowSelected(rect) )
-  {
-    for ( int r = rect.top(); r <= bottom; ++r )
-    {
-      cell = sheet->getFirstCellRow( r );
-      while ( cell )
-      {
-        if ( cell->isPartOfMerged() )
-        {
-          cell = sheet->getNextCellRight( cell->column(), r );
-          continue;
-        }
-
-        formatCellByKey (cell, _ev->key(), rect);
-
-        cell = sheet->getNextCellRight( cell->column(), r );
-      } // while (cell)
-      RowFormat * rw = sheet->nonDefaultRowFormat( r );
-      QPen pen;
-      switch ( _ev->key() )
-      {
-       case Qt::Key_Exclam:
-        rw->setFormatType (Number_format);
-        rw->setPrecision( 2 );
-        break;
-
-       case Qt::Key_Dollar:
-        rw->setFormatType (Money_format);
-        rw->setPrecision( d->view->doc()->locale()->fracDigits() );
-        break;
-
-       case Qt::Key_Percent:
-        rw->setFormatType (Percentage_format);
-        break;
-
-       case Qt::Key_At:
-        rw->setFormatType( SecondeTime_format );
-        break;
-
-       case Qt::Key_NumberSign:
-        rw->setFormatType( ShortDate_format );
-        break;
-
-       case Qt::Key_AsciiCircum:
-        rw->setFormatType( Scientific_format );
-        break;
-
-       case Qt::Key_Ampersand:
-        if ( r == rect.top() )
-        {
-          pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
-          rw->setTopBorderPen( pen );
-        }
-        if ( r == rect.bottom() )
-        {
-          pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
-          rw->setBottomBorderPen( pen );
-        }
-        break;
-
-       default:
-         d->view->doc()->emitEndOperation( Region( rect ) );
+    if (!(_ev->modifiers() & Qt::ControlModifier ))
         return false;
-      }
-      sheet->emit_updateRow( rw, r );
+
+    int key = _ev->key();
+    if ( key != Qt::Key_Exclam && key != Qt::Key_At &&
+         key != Qt::Key_Ampersand && key != Qt::Key_Dollar &&
+         key != Qt::Key_Percent && key != Qt::Key_AsciiCircum &&
+         key != Qt::Key_NumberSign )
+        return false;
+
+    StyleManipulator* manipulator = new StyleManipulator();
+    manipulator->setSheet( activeSheet() );
+
+    switch ( _ev->key() )
+    {
+        case Qt::Key_Exclam:
+            manipulator->setName( i18n("Number Format") );
+            manipulator->setFormatType (Number_format);
+            manipulator->setPrecision( 2 );
+            break;
+
+        case Qt::Key_Dollar:
+            manipulator->setName( i18n("Currency Format") );
+            manipulator->setFormatType (Money_format);
+            manipulator->setPrecision( d->view->doc()->locale()->fracDigits() );
+            break;
+
+        case Qt::Key_Percent:
+            manipulator->setName( i18n("Percentage Format") );
+            manipulator->setFormatType (Percentage_format);
+            break;
+
+        case Qt::Key_At:
+            manipulator->setName( i18n("Time Format") );
+            manipulator->setFormatType( SecondeTime_format );
+            break;
+
+        case Qt::Key_NumberSign:
+            manipulator->setName( i18n("Date Format") );
+            manipulator->setFormatType( ShortDate_format );
+            break;
+
+        case Qt::Key_AsciiCircum:
+            manipulator->setName( i18n("Scientific Format") );
+            manipulator->setFormatType( Scientific_format );
+            break;
+
+        case Qt::Key_Ampersand:
+            manipulator->setName( i18n("Change Border") );
+            manipulator->setTopBorderPen( QPen( d->view->borderColor(), 1, Qt::SolidLine) );
+            manipulator->setBottomBorderPen( QPen( d->view->borderColor(), 1, Qt::SolidLine) );
+            manipulator->setLeftBorderPen( QPen( d->view->borderColor(), 1, Qt::SolidLine) );
+            manipulator->setRightBorderPen( QPen( d->view->borderColor(), 1, Qt::SolidLine) );
+            break;
+
+        default:
+            delete manipulator;
+            return false;
     }
 
-    d->view->doc()->emitEndOperation( Region( rect ) );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
+    _ev->setAccepted(true);
+
     return true;
-  }
-
-  if ( util_isColumnSelected(rect) )
-  {
-    for ( int c = rect.left(); c <= right; ++c )
-    {
-      cell = sheet->getFirstCellColumn( c );
-      while ( cell )
-      {
-        if ( cell->isPartOfMerged() )
-        {
-          cell = sheet->getNextCellDown( c, cell->row() );
-          continue;
-        }
-
-        formatCellByKey (cell, _ev->key(), rect);
-
-        cell = sheet->getNextCellDown( c, cell->row() );
-      }
-
-      ColumnFormat * cw = sheet->nonDefaultColumnFormat( c );
-      QPen pen;
-      switch ( _ev->key() )
-      {
-       case Qt::Key_Exclam:
-        cw->setFormatType( Number_format );
-        cw->setPrecision( 2 );
-        break;
-
-       case Qt::Key_Dollar:
-        cw->setFormatType( Money_format );
-        cw->setPrecision( d->view->doc()->locale()->fracDigits() );
-        break;
-
-       case Qt::Key_Percent:
-        cw->setFormatType( Percentage_format );
-        break;
-
-       case Qt::Key_At:
-        cw->setFormatType( SecondeTime_format );
-        break;
-
-       case Qt::Key_NumberSign:
-        cw->setFormatType( ShortDate_format );
-        break;
-
-       case Qt::Key_AsciiCircum:
-        cw->setFormatType( Scientific_format );
-        break;
-
-       case Qt::Key_Ampersand:
-        if ( c == rect.left() )
-        {
-          pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
-          cw->setLeftBorderPen( pen );
-        }
-        if ( c == rect.right() )
-        {
-          pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
-          cw->setRightBorderPen( pen );
-        }
-        break;
-
-       default:
-         d->view->doc()->emitEndOperation( Region( rect ) );
-         return false;
-      }
-      sheet->emit_updateColumn( cw, c );
-    }
-    d->view->doc()->emitEndOperation( Region( rect ) );
-    return true;
-  }
-
-  for ( int row = rect.top(); row <= bottom; ++row )
-  {
-    for ( int col = rect.left(); col <= right; ++ col )
-    {
-      cell = sheet->nonDefaultCell( col, row );
-
-      if ( cell->isPartOfMerged() )
-        continue;
-
-      formatCellByKey (cell, _ev->key(), rect);
-    } // for left .. right
-  } // for top .. bottom
-
-  }
-  _ev->setAccepted(true);
-
-  d->view->doc()->emitEndOperation( *selectionInfo() );
-  return true;
 }
-
-bool Canvas::formatCellByKey (Cell *cell, int key, const QRect &rect)
-{
-  QPen pen;
-  switch (key)
-  {
-    case Qt::Key_Exclam:
-    cell->convertToDouble ();
-    cell->format()->setFormatType (Number_format);
-    cell->format()->setPrecision( 2 );
-    break;
-
-    case Qt::Key_Dollar:
-    cell->convertToMoney ();
-    break;
-
-    case Qt::Key_Percent:
-    cell->convertToPercent ();
-    break;
-
-    case Qt::Key_At:
-    cell->convertToTime ();
-    break;
-
-    case Qt::Key_NumberSign:
-    cell->convertToDate ();
-    break;
-
-    case Qt::Key_AsciiCircum:
-    cell->format()->setFormatType (Scientific_format);
-    cell->convertToDouble ();
-    break;
-
-    case Qt::Key_Ampersand:
-    if ( cell->row() == rect.top() )
-    {
-      pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
-      cell->setTopBorderPen( pen );
-    }
-    if ( cell->row() == rect.bottom() )
-    {
-      pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
-      cell->setBottomBorderPen( pen );
-    }
-    if ( cell->column() == rect.left() )
-    {
-      pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
-      cell->setLeftBorderPen( pen );
-    }
-    if ( cell->column() == rect.right() )
-    {
-      pen = QPen( d->view->borderColor(), 1, Qt::SolidLine);
-      cell->setRightBorderPen( pen );
-    }
-    break;
-  } // switch
-
-  return true;
-}
-
 
 void Canvas::slotAutoScroll(const QPoint &scrollDistance)
 {
@@ -3701,7 +3522,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
 
     Cell* const cell = sheet->nonDefaultCell( marker().x(), marker().y() );
 
-    if ( sheet->isProtected() && !cell->format()->notProtected( marker().x(), marker().y() ) )
+    if ( sheet->isProtected() && !cell->style().notProtected() )
         return false;
 
     // Set the starting sheet of the choice.
@@ -3748,18 +3569,21 @@ bool Canvas::createEditor( bool clear,  bool focus )
         double ypos = sheet->dblRowPos( markerRow() ) - yOffset();
         QPalette editorPalette( d->cellEditor->palette() );
 
-        QColor color = cell->format()->textColor( markerColumn(), markerRow() );
+        QColor color = cell->style().fontColor();
+
         if ( !color.isValid() )
             color = palette().text().color();
         editorPalette.setColor( QPalette::Text, color );
 
-        color = cell->bgColor( markerColumn(), markerRow() );
+        color = sheet->style(  marker().x(), marker().y() ).backgroundColor(); // FIXME effective!
         if ( !color.isValid() )
             color = editorPalette.base().color();
         editorPalette.setColor( QPalette::Background, color );
 
         d->cellEditor->setPalette( editorPalette );
-        QFont tmpFont = cell->format()->textFont( markerColumn(), markerRow() );
+
+        QFont tmpFont = cell->style().font();
+
         tmpFont.setPointSizeF( 0.01 * d->view->doc()->zoomInPercent() * tmpFont.pointSizeF() );
         d->cellEditor->setFont( tmpFont );
 
@@ -4015,7 +3839,6 @@ QRect Canvas::visibleCells() const
   return viewToCellCoordinates( QRectF( 0, 0, width(), height() ) );
 }
 
-#ifdef KSPREAD_CELL_WINDOW
 void Canvas::updateCellWindow()
 {
     if ( d->cellWindowSheet == activeSheet() && d->cellWindowRect == visibleCells() )
@@ -4066,7 +3889,13 @@ void Canvas::updateCellWindow()
     d->cellWindowRect = cellRect;
     d->cellWindowSheet = sheet;
 }
-#endif
+
+CellView* Canvas::cellView( int col, int row ) const
+{
+    if ( !d->cellWindowRect.contains( QPoint(col, row) ) )
+        return 0;
+    return d->cellWindowMatrix[col-1][row-1];
+}
 
 //---------------------------------------------
 //
@@ -4147,7 +3976,6 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
             {
                 cell = sheet->cellAt( x, y );
 
-#ifdef KSPREAD_CELL_WINDOW
                 // relayout in CellView
                 Q_ASSERT( visibleRect == d->cellWindowRect );
                 CellView* cellView = d->cellWindowMatrix[x-visibleRect.left()][y-visibleRect.top()];
@@ -4155,16 +3983,6 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
                 cellView->paintCell( unzoomedRect, painter, d->view, dblCorner,
                                      QPoint( x, y ),
                                      mergedCellsPainted );
-#else
-                // relayout only for non default cells
-                if ( !cell->isDefault() && cell->testFlag(Cell::Flag_LayoutDirty) )
-                    cell->cellView()->makeLayout( x, y );
-
-                cell->cellView()->paintCell( unzoomedRect, painter, d->view, dblCorner,
-                QPoint( x, y), paintBorder,
-                rightPen,bottomPen,leftPen,topPen,
-                mergedCellsPainted);
-#endif
 
                 dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight() );
             }
@@ -4181,13 +3999,9 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
             {
                 cell = sheet->cellAt( x, y );
 
-#ifdef KSPREAD_CELL_WINDOW
                 Q_ASSERT( visibleRect == d->cellWindowRect );
                 CellView* cellView = d->cellWindowMatrix[x-visibleRect.left()][y-visibleRect.top()];
                 Q_ASSERT( cellView->cell() == cell );
-#else
-                CellView* cellView = cell->cellView();
-#endif
                 cellView->paintCellBorders( unzoomedRect, painter, d->view, dblCorner,
                                             QPoint( x, y ), QRect( 1, 1, KS_colMax, KS_rowMax ),
                                             mergedCellsPainted );
@@ -4643,8 +4457,7 @@ void Canvas::showToolTip( const QPoint& p )
     //  - cell comment
     //  - hyperlink
     QString tipText;
-    QString comment = cell->format()->comment( col, row );
-
+    QString comment = sheet->comment( col, row );
     // If cell is too small, show the content
     if ( cell->testFlag( Cell::Flag_CellTooShortX ) ||
          cell->testFlag( Cell::Flag_CellTooShortY ) )

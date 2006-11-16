@@ -85,12 +85,15 @@ class View;
  */
 class KSPREAD_EXPORT Cell
 {
-  friend class CellView;
-  friend class Conditions;
+    friend class CellView;
+    friend class Conditions;
 public:
 
-  Cell (Sheet *_sheet, int _column, int _row);
-  Cell (Sheet *_sheet, Style * _style, int _column, int _row);
+    /**
+     * Constructor.
+     * Creates a cell in \p sheet at position \p col , \p row .
+     */
+    Cell( Sheet* sheet, int column, int row );
 
     /**
      * @see #sheetDies
@@ -183,8 +186,21 @@ public:
      */
     const Formula* formula() const;
 
-    /** Returns the format object of this cell */
-    Format* format() const;
+    /**
+     * \return the Style associated with this Cell
+     */
+    Style style( int col = 0, int row = 0 ) const;
+
+    void setStyle( const Style& style, int col = 0, int row = 0 ) const;
+
+    Style format( int col = 0, int row = 0 ) const;
+
+    /**
+     * \return the comment associated with this cell
+     */
+    QString comment( int col = 0, int row = 0 ) const;
+
+    void setComment( const QString& style, int col = 0, int row = 0 ) const;
 
     /**
      * Returns the value that this cell holds. It could be from the user
@@ -283,16 +299,15 @@ public:
      * \ingroup OpenDocument
      * @return the OASIS style's name
      */
-    QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles );
+    QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles, int col, int row );
 
     /**
      * \ingroup OpenDocument
      * Loads a cell from an OASIS XML element.
      * @param element An OASIS XML element
      * @param oasisContext The loading context assoiated with the XML element
-     * @param style preloaded cell style
      */
-    bool loadOasis( const KoXmlElement & element, KoOasisLoadingContext &oasisContext , Style* style);
+    bool loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisContext );
 
 
     QTime toTime(const KoXmlElement &element);
@@ -348,11 +363,16 @@ public:
      */
     double dblHeight( int _row = -1 ) const;
 
-    // TODO Stefan: Replace with a position() method!!!
     /**
+     * \deprecated
      * @return a QRect for this cell (i.e., a 1x1 rect).  @see zoomedCellRect
      */
     QRect cellRect();
+
+    /**
+     * \return the position of this cell
+     */
+    const QPoint& cellPosition() const;
 
     /**
      * @return true if the cell should be printed in a print out.
@@ -399,130 +419,6 @@ public:
      * contains no link.
      */
     QString link() const;
-
-    ////////////////////////////////
-    //
-    // Methods for querying format stuff.
-    //
-    ////////////////////////////////
-
-    /**
-     * @return effective pen for the left border
-     * If this cell is merged by another cell, the other cell's
-     * left border pen. If this cell's conditional formatting contains
-     * a left border pen and the condition is matched, the conditional
-     * formatting's pen. Otherwise, its own left border pen.
-     */
-    const QPen & effLeftBorderPen( int col, int row ) const;
-    /**
-     * @return effective pen for the top border
-     * @see effLeftBorderPen
-     */
-    const QPen & effTopBorderPen( int col, int row ) const;
-    /**
-     * @return effective pen for the right border
-     * @see effLeftBorderPen
-     */
-    const QPen & effRightBorderPen( int col, int row ) const;
-    /**
-     * @return effective pen for the bottom border
-     * @see effLeftBorderPen
-     */
-    const QPen & effBottomBorderPen( int col, int row ) const;
-    /**
-     * @return effective pen for the go up diagonal border
-     * If this cell's conditional formatting contains a go up diagonal pen and
-     * the condition is matched, the conditional formatting's pen. Otherwise,
-     * its own go up diagonal pen.
-     */
-    const QPen & effGoUpDiagonalPen( int col, int row ) const;
-    /**
-     * @return effective pen for the go up diagonal border
-     * @see effGoUpDiagonalPen
-     */
-    const QPen & effFallDiagonalPen( int col, int row ) const;
-    const QColor effTextColor( int col, int row ) const;
-
-    /**
-     * @return "worth" of the effective bottom border pen
-     * @see Style::calculateValue
-     * @see effLeftBorderPen
-     */
-    uint effBottomBorderValue( int col, int row ) const;
-    /**
-     * @return "worth" of the effective right border pen
-     * @see Style::calculateValue
-     * @see effLeftBorderPen
-     */
-    uint effRightBorderValue( int col, int row ) const;
-    /**
-     * @return "worth" of the effective left border pen
-     * @see Style::calculateValue
-     * @see effLeftBorderPen
-     */
-    uint effLeftBorderValue( int col, int row ) const;
-    /**
-     * @return "worth" of the effective top border pen
-     * @see Style::calculateValue
-     * @see effLeftBorderPen
-     */
-    uint effTopBorderValue( int col, int row ) const;
-
-    /**
-     * @see Format::leftBorderPen
-     */
-    const QPen& leftBorderPen( int col, int row ) const;
-
-    /**
-     * @see Format::topBorderPen
-     */
-    const QPen& topBorderPen( int col, int row ) const;
-
-    /**
-     * @see Format::rightBorderPen
-     */
-    const QPen& rightBorderPen( int col, int row ) const;
-
-    /**
-     * @see Format::bottomBorderPen
-     */
-    const QPen& bottomBorderPen( int col, int row ) const;
-
-    /**
-     * @see Format::bgColor
-     */
-    const QColor bgColor( int col, int row ) const;
-
-    /**
-     * @see Format::backGroundBrush
-     */
-    const QBrush& backGroundBrush( int col, int row ) const;
-
-    ////////////////////////////////
-    //
-    // Methods for setting format stuff.
-    //
-    ////////////////////////////////
-
-    /**
-     * @see Format::setLeftBorderPen
-     */
-    void setLeftBorderPen( const QPen& p );
-
-    /**
-     * @see Format::setTopBorderPen
-     */
-    void setTopBorderPen( const QPen& p );
-
-    /**
-     * @see Format::setRightBorderPen
-     */
-    void setRightBorderPen( const QPen& p );
-
-    /**
-     * @see Format::setBottomBorderPen
-     */
-    void setBottomBorderPen( const QPen& p );
 
     //////////////////////
     //
@@ -912,7 +808,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void saveOasisAnnotation( KoXmlWriter &xmlwriter );
+    void saveOasisAnnotation( KoXmlWriter &xmlwriter, int row, int column );
 
     /**
      * \ingroup OpenDocument

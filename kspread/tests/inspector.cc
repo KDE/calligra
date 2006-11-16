@@ -31,8 +31,8 @@
 
 // KSpread
 #include "Cell.h"
+#include "Currency.h"
 #include "DependencyManager.h"
-#include "Format.h"
 #include "Map.h"
 #include "Region.h"
 #include "Sheet.h"
@@ -45,7 +45,7 @@ class Inspector::Private
 {
 public:
   Cell* cell;
-  Format* format;
+  Style style;
   Sheet* sheet;
 
   Q3ListView *cellView;
@@ -71,10 +71,12 @@ static QString boolAsString( bool b )
   else return QString( "False" );
 }
 
+#if 0
 static QString longAsHexstring( long l )
 {
     return QString("%1").arg(l, 8, 16);
 }
+#endif
 
 static QString dirAsString( Sheet::LayoutDirection dir )
 {
@@ -102,8 +104,8 @@ void Inspector::Private::handleCell()
   new Q3ListViewItem( cellView, "Default", boolAsString( cell->isDefault() ) );
   new Q3ListViewItem( cellView, "Empty", boolAsString( cell->isEmpty() ) );
   new Q3ListViewItem( cellView, "Formula", boolAsString( cell->isFormula() ) );
-  new Q3ListViewItem( cellView, "Format Properties", longAsHexstring( static_cast<long>( cell->format()->propertiesMask() ) ) );
-  new Q3ListViewItem( cellView, "Style Properties", longAsHexstring( static_cast<long>( cell->format()->style()->features() ) ) );
+//   new Q3ListViewItem( cellView, "Format Properties", longAsHexstring( static_cast<long>( cell->style()->propertiesMask() ) ) );
+//   new Q3ListViewItem( cellView, "Style Properties", longAsHexstring( static_cast<long>( cell->style()->style()->features() ) ) );
   new Q3ListViewItem( cellView, "Text", cell->text() );
   new Q3ListViewItem( cellView, "Text (Displayed)",
 		     cell->strOutText().replace( QChar('\n'), "\\n" ) );
@@ -121,55 +123,50 @@ void Inspector::Private::handleCell()
 void Inspector::Private::handleFormat()
 {
   formatView->clear();
-  int col = cell->column();
-  int row = cell->row();
 
-  new Q3ListViewItem( formatView, "Angle", QString::number( format->getAngle(col, row) ) );
-  new Q3ListViewItem( formatView, "Multirow", boolAsString( format->multiRow(col, row) ) );
-  new Q3ListViewItem( formatView, "Protected", format->hasProperty( Style::SVerticalText )
-    ? "Not specified" : boolAsString( format->isProtected(col, row) ) );
-  new Q3ListViewItem( formatView, "Vertical Text", boolAsString( format->verticalText(col, row ) ) );
+  new Q3ListViewItem( formatView, "Angle", QString::number( style.angle() ) );
+  new Q3ListViewItem( formatView, "Multirow", boolAsString( style.wrapText() ) );
+  new Q3ListViewItem( formatView, "Protected", boolAsString( !style.notProtected() ) );
+  new Q3ListViewItem( formatView, "Vertical Text", boolAsString( style.verticalText() ) );
 
-  Style::Currency currrency;
-  bool valid = format->currencyInfo(currrency);
-  new Q3ListViewItem( formatView, "Currency symbol", valid ? currrency.symbol : "Invalid" );
+  Style::Currency currrency = style.currency();
+  new Q3ListViewItem( formatView, "Currency symbol", currrency.symbol );
   bool ok = false;
   QString currencyType;
-  if (valid)
-    currencyType = Currency::getChooseString(currrency.type, ok);
-  new Q3ListViewItem( formatView, "Currency type", valid && ok ? currencyType : "Invalid" );
+  currencyType = Currency::getChooseString(currrency.type, ok);
+  new Q3ListViewItem( formatView, "Currency type", ok ? currencyType : "Invalid" );
 
   Q3ListViewItem* flags = new Q3ListViewItem( formatView, "Flags" );
   new Q3ListViewItem( flags, "Border (left)",
-                     boolAsString( format->hasProperty(Style::SLeftBorder, true) ) );
+                     boolAsString( style.hasAttribute(Style::LeftPen) ) );
   new Q3ListViewItem( flags, "Border (right)",
-                     boolAsString( format->hasProperty(Style::SRightBorder, true) ) );
+                     boolAsString( style.hasAttribute(Style::RightPen) ) );
   new Q3ListViewItem( flags, "Border (top)",
-                     boolAsString( format->hasProperty(Style::STopBorder, true) ) );
+                     boolAsString( style.hasAttribute(Style::TopPen) ) );
   new Q3ListViewItem( flags, "Border (bottom)",
-                     boolAsString( format->hasProperty(Style::SBottomBorder, true) ) );
+                     boolAsString( style.hasAttribute(Style::BottomPen) ) );
 
   new Q3ListViewItem( formatView, "Border pen width (bottom)",
-                     QString::number( format->bottomBorderPen(col,row).width() ) );
+                     QString::number( style.bottomBorderPen().width() ) );
 }
 
 void Inspector::Private::handleStyle() // direct style access
 {
   styleView->clear();
-  const Style* style = cell->format()->style();
+  const Style style = cell->style();
 
   Q3ListViewItem* flags = new Q3ListViewItem( styleView, "Flags" );
   new Q3ListViewItem( flags, "Border (left)",
-                     boolAsString( style->hasFeature(Style::SLeftBorder, true) ) );
+                     boolAsString( style.hasAttribute(Style::LeftPen) ) );
   new Q3ListViewItem( flags, "Border (right)",
-                     boolAsString( style->hasFeature(Style::SRightBorder, true) ) );
+                     boolAsString( style.hasAttribute(Style::RightPen) ) );
   new Q3ListViewItem( flags, "Border (top)",
-                     boolAsString( style->hasFeature(Style::STopBorder, true) ) );
+                     boolAsString( style.hasAttribute(Style::TopPen) ) );
   new Q3ListViewItem( flags, "Border (bottom)",
-                     boolAsString( style->hasFeature(Style::SBottomBorder, true) ) );
+                     boolAsString( style.hasAttribute(Style::BottomPen) ) );
 
   new Q3ListViewItem( styleView, "Border pen width (bottom)",
-                     QString::number( style->bottomBorderPen().width() ) );
+                     QString::number( style.bottomBorderPen().width() ) );
 }
 
 void Inspector::Private::handleSheet()
@@ -213,7 +210,7 @@ Inspector::Inspector( Cell* cell ):
   d = new Private;
 
   d->cell = cell;
-  d->format = cell->format();
+  d->style = cell->style();
   d->sheet = cell->sheet();
 
   QFrame* cellPage = new QFrame();

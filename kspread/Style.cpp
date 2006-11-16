@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Norbert Andres, nandres@web.de
+   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2003 Norbert Andres <nandres@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,25 +15,29 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#include <qdom.h>
-#include <QBuffer>
+#include <QBrush>
+#include <QHash>
+#include <QPen>
 
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <KoGlobal.h>
 #include <KoGenStyles.h>
+#include <KoGlobal.h>
 #include <KoOasisStyles.h>
 #include <KoStyleStack.h>
-#include <KoXmlWriter.h>
+#include <KoUnit.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
-#include "Util.h"
+#include "Currency.h"
 #include "Doc.h"
 #include "Format.h"
+#include "Global.h"
+#include "Util.h"
 
 #include "Style.h"
 
@@ -48,76 +53,84 @@ static uint calculateValue( QPen const & pen )
   return n;
 }
 
-Style::Style()
-  : m_parent( 0 ),
-    m_type( AUTO ),
-    m_usageCount( 1 ),
-    m_featuresSet( 0 ),
-    m_alignX( HAlignUndefined ),
-    m_alignY( Middle ),
-    m_floatFormat( OnlyNegSigned ),
-    m_floatColor( AllBlack ),
-    m_formatType( Generic_format ),
-    m_fontFlags( 0 ),
-    m_bgColor( Qt::white ),
-    m_backGroundBrush( Qt::red, Qt::NoBrush ),
-    m_rotateAngle( 0 ),
-    m_indent( 0.0 ),
-    m_precision( -1 ),
-    m_properties( 0 )
+template<Style::Key key, class Value1>
+class SubStyleOne : public SubStyle
 {
-  QFont f( KoGlobal::defaultFont() );
-  m_fontFamily = f.family();
-  m_fontSize = f.pointSize();
+public:
+    SubStyleOne( const Value1& v = Value1() ) : SubStyle(), value1( v ) {}
 
-  QPen pen( Qt::black, 1, Qt::NoPen );
+    virtual Style::Key type() const { /*kDebug() << "S1" << endl;*/ return key; }
 
-  m_textPen         = pen;
-  m_leftBorderPen   = pen;
-  m_topBorderPen    = pen;
-  m_rightBorderPen  = pen;
-  m_bottomBorderPen = pen;
-  m_fallDiagonalPen = pen;
-  m_goUpDiagonalPen = pen;
+    virtual void dump() const { kDebug() << key << " " << value1 << endl; }
 
-  m_leftPenValue    = calculateValue( pen );
-  m_topPenValue     = calculateValue( pen );
-  m_rightPenValue   = calculateValue( pen );
-  m_bottomPenValue  = calculateValue( pen );
+    Value1 value1;
+};
 
-  m_currency.type   = 0;
+// template<Style::Key Key, class Value1, class Value2>
+// class SubStyleTwo : public SubStyleOne<Key, Value1>
+// {
+// public:
+//     SubStyleTwo() : SubStyleOne<Key, Value1>() {}
+// 
+//     Value2 value2;
+// };
+
+class NamedStyle : public SubStyle
+{
+public:
+    NamedStyle( CustomStyle* s, const QString& n = QString() ) : SubStyle(), style( s ), name( n ) {}
+
+    virtual Style::Key type() const { /*kDebug() << "NS" << endl;*/ return Style::NamedStyleKey; }
+
+    virtual void dump() const { kDebug() << Style::NamedStyleKey << " " << style << name << endl; }
+
+    CustomStyle* style;
+    QString name;
+};
+
+template<Style::Key key>
+class PenStyle : public SubStyleOne<key, QPen>
+{
+public:
+    PenStyle( const QPen& p = Qt::NoPen ) : SubStyleOne<key, QPen>( p ) {}
+};
+
+template<Style::Key key>
+class BorderPenStyle : public PenStyle<key>
+{
+public:
+    BorderPenStyle( const QPen& p = Qt::NoPen ) : PenStyle<key>(p), value( calculateValue(p) ) {}
+    int value;
+};
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Style::Private
+//
+/////////////////////////////////////////////////////////////////////////////
+
+class Style::Private : public QSharedData
+{
+public:
+    QHash<Key, QSharedDataPointer<SubStyle> > subStyles;
+    StyleType type;
+};
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Style
+//
+/////////////////////////////////////////////////////////////////////////////
+
+Style::Style()
+    : d( new Private )
+{
 }
 
-Style::Style( Style * style )
-  : m_parent( ( style->m_type == BUILTIN || style->m_type == CUSTOM ) ? (CustomStyle *) style : 0 ),
-    m_type( AUTO ),
-    m_usageCount( 1 ),
-    m_featuresSet( ( style->m_type == BUILTIN || style->m_type == CUSTOM ) ? 0 : style->m_featuresSet ),
-    m_alignX( style->m_alignX ),
-    m_alignY( style->m_alignY ),
-    m_floatFormat( style->m_floatFormat ),
-    m_floatColor( style->m_floatColor ),
-    m_formatType( style->m_formatType ),
-    m_fontFamily( style->m_fontFamily ),
-    m_fontFlags( style->m_fontFlags ),
-    m_fontSize( style->m_fontSize ),
-    m_textPen( style->m_textPen ),
-    m_bgColor( style->m_bgColor ),
-    m_rightBorderPen( style->m_rightBorderPen ),
-    m_bottomBorderPen( style->m_bottomBorderPen ),
-    m_leftBorderPen( style->m_leftBorderPen ),
-    m_topBorderPen( style->m_topBorderPen ),
-    m_fallDiagonalPen( style->m_fallDiagonalPen ),
-    m_goUpDiagonalPen( style->m_goUpDiagonalPen ),
-    m_backGroundBrush( style->m_backGroundBrush ),
-    m_rotateAngle( style->m_rotateAngle ),
-    m_indent( style->m_indent ),
-    m_strFormat( style->m_strFormat ),
-    m_precision( style->m_precision ),
-    m_prefix( style->m_prefix ),
-    m_postfix( style->m_postfix ),
-    m_currency( style->m_currency ),
-    m_properties( style->m_properties )
+Style::Style( const Style& style )
+    : d( style.d )
 {
 }
 
@@ -125,464 +138,410 @@ Style::~Style()
 {
 }
 
-bool Style::operator == (const Style& style) const
+Style::StyleType Style::type() const
 {
-	//This is prone to error because if someone adds additional
-	//properties to the style class they will have to remember
-	//to correct this function - can we do this a better way?
-  if ( m_featuresSet != style.m_featuresSet )
-    return false;
-  if ( m_type != style.m_type )
-    return false;
-  // NOTE Stefan: Only compare the values of the set features.
-  if ( // layout (4)
-       ( m_featuresSet & SHAlign ) && ( m_alignX != style.m_alignX ) ||
-       ( m_featuresSet & SVAlign ) && ( m_alignY != style.m_alignY ) ||
-       ( m_featuresSet & SAngle )  && ( m_rotateAngle != style.m_rotateAngle ) ||
-       ( m_featuresSet & SIndent ) && ( m_indent != style.m_indent ) ||
-       // background (2)
-       ( m_featuresSet & SBackgroundColor ) && ( m_bgColor != style.m_bgColor ) ||
-       ( m_featuresSet & SBackgroundBrush ) && ( m_backGroundBrush != style.m_backGroundBrush ) ||
-       // borders (6)
-       ( m_featuresSet & SRightBorder )  && ( m_rightBorderPen != style.m_rightBorderPen ) ||
-       ( m_featuresSet & SBottomBorder ) && ( m_bottomBorderPen != style.m_bottomBorderPen ) ||
-       ( m_featuresSet & SLeftBorder )   && ( m_leftBorderPen != style.m_leftBorderPen ) ||
-       ( m_featuresSet & STopBorder )    && ( m_topBorderPen != style.m_topBorderPen ) ||
-       ( m_featuresSet & SFallDiagonal ) && ( m_fallDiagonalPen != style.m_fallDiagonalPen ) ||
-       ( m_featuresSet & SGoUpDiagonal ) && ( m_goUpDiagonalPen != style.m_goUpDiagonalPen ) ||
-       // format (7) (SFormatType twice)
-       ( m_featuresSet & SPrecision )    && ( m_precision != style.m_precision ) ||
-       ( m_featuresSet & SPrefix )       && ( m_prefix != style.m_prefix ) ||
-       ( m_featuresSet & SPostfix )      && ( m_postfix != style.m_postfix ) ||
-       ( m_featuresSet & SFloatFormat )  && ( m_floatFormat != style.m_floatFormat ) ||
-       ( m_featuresSet & SFloatColor )   && ( m_floatColor != style.m_floatColor ) ||
-       ( m_featuresSet & SFormatType )   && ( m_formatType != style.m_formatType ) ||
-       ( m_featuresSet & SFormatType )   && ( m_currency.type != style.m_currency.type ) ||
-       ( m_featuresSet & SCustomFormat ) && ( m_strFormat != style.m_strFormat ) ||
-       // font (4)
-       ( m_featuresSet & SFontFamily ) && ( m_fontFamily != style.m_fontFamily ) ||
-       ( m_featuresSet & SFontFlag )   && ( m_fontFlags != style.m_fontFlags ) ||
-       ( m_featuresSet & SFontSize )   && ( m_fontSize != style.m_fontSize ) ||
-       ( m_featuresSet & STextPen )    && ( m_textPen != style.m_textPen ) )
-  {
-    return false;
-  }
-  // Properties (7)
-  const uint differingProperties = m_properties xor style.m_properties;
-  if ( ( m_featuresSet & SDontPrintText ) && ( differingProperties & PDontPrintText ) ||
-       ( m_featuresSet & SCustomFormat )  && ( differingProperties & PCustomFormat ) ||
-       ( m_featuresSet & SNotProtected )  && ( differingProperties & PNotProtected ) ||
-       ( m_featuresSet & SHideAll )       && ( differingProperties & PHideAll ) ||
-       ( m_featuresSet & SHideFormula )   && ( differingProperties & PHideFormula ) ||
-       ( m_featuresSet & SMultiRow )      && ( differingProperties & PMultiRow ) ||
-       ( m_featuresSet & SVerticalText )  && ( differingProperties & PVerticalText ) )
-  {
-    return false;
-  }
-  return true;
+    return AUTO;
+}
+
+CustomStyle* Style::parent() const
+{
+    if ( !d->subStyles.contains( NamedStyleKey ) )
+        return 0;
+    return static_cast<const NamedStyle*>( d->subStyles[NamedStyleKey].data() )->style;
+}
+
+void Style::setParent( CustomStyle* parent )
+{
+    d->subStyles.remove( NamedStyleKey );
+    d->subStyles.insert( NamedStyleKey, QSharedDataPointer<SubStyle>( new NamedStyle( parent ) ) );
+}
+
+// setParentName is needed by loading code, which doesn't set the real parent
+QString Style::parentName() const
+{
+    if ( !d->subStyles.contains( NamedStyleKey ) )
+        return QString();
+    const NamedStyle* style = static_cast<const NamedStyle*>( d->subStyles[NamedStyleKey].data() );
+    if ( style->style )
+        return style->style->name();
+    else
+        return style->name;
+}
+
+void Style::setParentName( const QString& name )
+{
+    d->subStyles.remove( NamedStyleKey );
+    d->subStyles.insert( NamedStyleKey, QSharedDataPointer<SubStyle>( new NamedStyle( 0, name ) ) );
+}
+
+void Style::clearAttribute( Key key )
+{
+    d->subStyles.remove( key );
+}
+
+bool Style::hasAttribute( Key key ) const
+{
+    return d->subStyles.contains( key );
+}
+
+void Style::loadAttributes( const QList< QSharedDataPointer<SubStyle> >& subStyles )
+{
+    d->subStyles.clear();
+    foreach ( QSharedDataPointer<SubStyle> subStyle, subStyles )
+    {
+        // already existing items are replaced
+        d->subStyles.insert( subStyle->type(), subStyle );
+    }
 }
 
 void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement & element )
 {
   // NOTE Stefan: Don't fill the style stack with the parent styles!
-  KoStyleStack styleStack;
-  styleStack.push( element );
-  styleStack.setTypeProperties( "table-cell" );
-  loadOasisTableCellProperties( oasisStyles, styleStack );
-  styleStack.setTypeProperties( "text" );
-  loadOasisTextProperties( oasisStyles, styleStack );
-  styleStack.setTypeProperties( "paragraph" );
-  loadOasisParagraphProperties( oasisStyles, styleStack );
+    KoStyleStack styleStack;
+    styleStack.push( element );
+    styleStack.setTypeProperties( "table-cell" );
+    loadOasisTableCellProperties( oasisStyles, styleStack );
+    styleStack.setTypeProperties( "text" );
+    loadOasisTextProperties( oasisStyles, styleStack );
+    styleStack.setTypeProperties( "paragraph" );
+    loadOasisParagraphProperties( oasisStyles, styleStack );
 
-  loadOasisDataStyle( oasisStyles, element );
+    loadOasisDataStyle( oasisStyles, element );
 }
 
 void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element )
 {
-  QString str;
-  if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
-  {
-//     kDebug()<<"styleStack.attribute( style:data-style-name ) :"<<styleStack.attributeNS( KoXmlNS::style, "data-style-name", QString::null )<<endl;
-//     kDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[styleStack.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].formatStr<<endl;
-//     kDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[styleStack.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix<<endl;
-//     kDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[styleStack.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix<<endl;
-
-    const QString styleName = element.attributeNS( KoXmlNS::style, "data-style-name", QString() );
-    if ( oasisStyles.dataFormats().contains(styleName) )
+    QString str;
+    if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
     {
-      const KoOasisStyles::NumericStyleFormat dataStyle = oasisStyles.dataFormats()[styleName];
+        const QString styleName = element.attributeNS( KoXmlNS::style, "data-style-name", QString() );
+        if ( oasisStyles.dataFormats().contains(styleName) )
+        {
+            const KoOasisStyles::NumericStyleFormat dataStyle = oasisStyles.dataFormats()[styleName];
 
-      QString tmp = dataStyle.prefix;
-      if ( !tmp.isEmpty() )
-      {
-        m_prefix = tmp;
-        m_featuresSet |= SPrefix;
-      }
-      tmp = dataStyle.suffix;
-      if ( !tmp.isEmpty() )
-      {
-        m_postfix = tmp;
-        m_featuresSet |= SPostfix;
-      }
-      // determine data formatting
-      switch (dataStyle.type)
-      {
-        case KoOasisStyles::NumericStyleFormat::Number:
-          m_formatType = Number_format;
-          m_featuresSet |= SFormatType;
-          break;
-        case KoOasisStyles::NumericStyleFormat::Scientific:
-          m_formatType = Scientific_format;
-          m_featuresSet |= SFormatType;
-          break;
-        case KoOasisStyles::NumericStyleFormat::Currency:
-          kDebug(36003) << " currency-symbol: " << dataStyle.currencySymbol << endl;
-          if (!dataStyle.currencySymbol.isEmpty())
-          {
-            KSpread::Currency currency(dataStyle.currencySymbol);
-            m_currency.type = currency.getIndex();
-            m_currency.symbol = currency.getDisplayCode();
-          }
-          m_formatType = Money_format;
-          m_featuresSet |= SFormatType;
-          break;
-        case KoOasisStyles::NumericStyleFormat::Percentage:
-          m_formatType = Percentage_format;
-          m_featuresSet |= SFormatType;
-          break;
-        case KoOasisStyles::NumericStyleFormat::Fraction:
-          // determine format of fractions, dates and times by using the
-          // formatting string
-          tmp = dataStyle.formatStr;
-          if ( !tmp.isEmpty() )
-          {
-            m_formatType = Style::fractionType( tmp );
-            m_featuresSet |= SFormatType;
-          }
-          break;
-        case KoOasisStyles::NumericStyleFormat::Date:
-          // determine format of fractions, dates and times by using the
-          // formatting string
-          tmp = dataStyle.formatStr;
-          if ( !tmp.isEmpty() )
-          {
-            m_formatType = Style::dateType( tmp );
-            m_featuresSet |= SFormatType;
-          }
-          break;
-        case KoOasisStyles::NumericStyleFormat::Time:
-          // determine format of fractions, dates and times by using the
-          // formatting string
-          tmp = dataStyle.formatStr;
-          if ( !tmp.isEmpty() )
-          {
-            m_formatType = Style::timeType( tmp );
-            m_featuresSet |= SFormatType;
-          }
-          break;
-        case KoOasisStyles::NumericStyleFormat::Boolean:
-          m_formatType = Number_format;
-          m_featuresSet |= SFormatType;
-          break;
-        case KoOasisStyles::NumericStyleFormat::Text:
-          m_formatType = Text_format;
-          m_featuresSet |= SFormatType;
-          break;
-      }
+            QString tmp = dataStyle.prefix;
+            if ( !tmp.isEmpty() )
+            {
+                setPrefix( tmp );
+            }
+            tmp = dataStyle.suffix;
+            if ( !tmp.isEmpty() )
+            {
+                setPostfix( tmp );
+            }
+            // determine data formatting
+            switch (dataStyle.type)
+            {
+                case KoOasisStyles::NumericStyleFormat::Number:
+                    setFormatType( Number_format );
+                    break;
+                case KoOasisStyles::NumericStyleFormat::Scientific:
+                    setFormatType( Scientific_format );
+                    break;
+                case KoOasisStyles::NumericStyleFormat::Currency:
+                    kDebug(36003) << " currency-symbol: " << dataStyle.currencySymbol << endl;
+                    if (!dataStyle.currencySymbol.isEmpty())
+                    {
+                        KSpread::Currency currency(dataStyle.currencySymbol);
+                        Currency currencyInfo;
+                        currencyInfo.type = currency.getIndex();
+                        currencyInfo.symbol = currency.getDisplayCode();
+                        setCurrency( currencyInfo );
+                    }
+                    break;
+                case KoOasisStyles::NumericStyleFormat::Percentage:
+                    setFormatType( Percentage_format );
+                    break;
+                case KoOasisStyles::NumericStyleFormat::Fraction:
+                    // determine format of fractions, dates and times by using the
+                    // formatting string
+                    tmp = dataStyle.formatStr;
+                    if ( !tmp.isEmpty() )
+                    {
+                        setFormatType( Style::fractionType( tmp ) );
+                    }
+                    break;
+                case KoOasisStyles::NumericStyleFormat::Date:
+                    // determine format of fractions, dates and times by using the
+                    // formatting string
+                    tmp = dataStyle.formatStr;
+                    if ( !tmp.isEmpty() )
+                    {
+                        setFormatType( Style::dateType( tmp ) );
+                    }
+                    break;
+                case KoOasisStyles::NumericStyleFormat::Time:
+                    // determine format of fractions, dates and times by using the
+                    // formatting string
+                    tmp = dataStyle.formatStr;
+                    if ( !tmp.isEmpty() )
+                    {
+                        setFormatType( Style::timeType( tmp ) );
+                    }
+                    break;
+                case KoOasisStyles::NumericStyleFormat::Boolean:
+                    setFormatType( Number_format );
+                    break;
+                case KoOasisStyles::NumericStyleFormat::Text:
+                    setFormatType( Text_format );
+                    break;
+            }
 
-      if (dataStyle.precision > -1)
-      {
-        m_precision = dataStyle.precision;
-        m_featuresSet |= SPrecision;
-      }
+            if (dataStyle.precision > -1)
+            {
+                setPrecision( dataStyle.precision );
+            }
+        }
     }
-  }
 }
 
 void Style::loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack )
 {
-  Q_UNUSED( oasisStyles );
-  kDebug(36003) << "\t paragraph-properties" << endl;
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
-  {
-    QString str = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
-    if ( str == "center" )
-      m_alignX = Style::Center;
-    else if ( str == "end" )
-      m_alignX = Style::Right;
-    else if ( str == "start" )
-      m_alignX = Style::Left;
-    else
-      m_alignX = Style::HAlignUndefined;
-    m_featuresSet |= SHAlign;
-    kDebug(36003) << "\t\t text-align: " << str << endl;
-  }
+    Q_UNUSED( oasisStyles );
+    kDebug(36003) << "\t paragraph-properties" << endl;
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
+    {
+        QString str = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
+        if ( str == "center" )
+            setHAlign( Style::Center );
+        else if ( str == "end" )
+            setHAlign( Style::Right );
+        else if ( str == "start" )
+            setHAlign( Style::Left );
+        else
+            setHAlign( Style::HAlignUndefined );
+        kDebug(36003) << "\t\t text-align: " << str << endl;
+    }
 }
 
 void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack )
 {
-  QString str;
-  if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
-  {
-    m_alignY = Style::VAlignUndefined;
-
-    str = styleStack.attributeNS( KoXmlNS::style, "vertical-align" );
-    if ( str == "bottom" )
-      m_alignY = Style::Bottom;
-    else if ( str =="top" )
-      m_alignY = Style::Top;
-    else if ( str =="middle" )
-      m_alignY = Style::Middle;
-
-    if (m_alignY != Style::VAlignUndefined) // file's property is invalid
-      m_featuresSet |= SVAlign;
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
-  {
-    m_bgColor = QColor(  styleStack.attributeNS( KoXmlNS::fo, "background-color" ) );
-    if ( m_bgColor.isValid() && m_bgColor != Qt::white )
-      m_featuresSet |= SBackgroundColor;
-  }
-
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" )&&( styleStack.attributeNS( KoXmlNS::fo, "wrap-option" )=="wrap" ) )
-  {
-    setProperty( PMultiRow );
-    m_featuresSet |= SMultiRow;
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::style, "cell-protect" ) )
-  {
-    str = styleStack.attributeNS( KoXmlNS::style, "cell-protect" );
-    if ( str=="hidden-and-protected" )
+    QString str;
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
     {
-      setProperty( PHideAll );
-      m_featuresSet |= SHideAll;
+        str = styleStack.attributeNS( KoXmlNS::style, "vertical-align" );
+        if ( str == "bottom" )
+            setVAlign( Style::Bottom );
+        else if ( str =="top" )
+            setVAlign( Style::Top );
+        else if ( str =="middle" )
+            setVAlign( Style::Middle );
+        else
+        setVAlign( Style::VAlignUndefined );
     }
-    else if ( str == "protected formula-hidden" )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
     {
-      setProperty( PHideFormula );
-      m_featuresSet |= SHideFormula;
+        setBackgroundColor( QColor(  styleStack.attributeNS( KoXmlNS::fo, "background-color" ) ) );
     }
-    else if ( str == "protected" )
+
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" )&&( styleStack.attributeNS( KoXmlNS::fo, "wrap-option" )=="wrap" ) )
     {
-      setProperty( PNotProtected );
-      m_featuresSet |= SNotProtected;
+        setWrapText( true );
     }
-    else if ( str =="formula-hidden" )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "cell-protect" ) )
     {
+        str = styleStack.attributeNS( KoXmlNS::style, "cell-protect" );
+        if ( str=="hidden-and-protected" )
+        {
+            setHideAll( true );
+        }
+        else if ( str == "protected formula-hidden" )
+        {
+            setHideFormula( true );
+        }
+        else if ( str == "protected" )
+        {
+            setNotProtected( false );
+        }
+        else if ( str =="formula-hidden" )
+        {
             //FIXME !!!!
 #if 0
             setNotProtected( true );
             setHideFormula( true );
             setHideAll( false );
 #endif
-    }
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::style, "print-content" ) && ( styleStack.attributeNS( KoXmlNS::style, "print-content" )=="false" ) )
-  {
-    setProperty( PDontPrintText );
-    m_featuresSet |= SDontPrintText;
-
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::style, "direction" ) && ( styleStack.attributeNS( KoXmlNS::style, "direction" )=="ttb" ) )
-  {
-    setProperty( PVerticalText );
-    m_featuresSet |= SVerticalText;
-
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::style, "rotation-angle" ) )
-  {
-    bool ok;
-    int a = styleStack.attributeNS( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
-    kDebug(36003)<<" rotation-angle :"<<a<<endl;
-    if ( a != 0 )
-    {
-      m_rotateAngle= ( -a  );
-      m_featuresSet |= SAngle;
-    }
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
-  {
-        //todo fix me
-    setIndent( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 ) );
-    m_featuresSet |= SIndent;
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border" ) )
-  {
-    str=styleStack.attributeNS( KoXmlNS::fo, "border" );
-    QPen pen = Oasis::decodePen( str );
-    m_featuresSet |= SLeftBorder;
-    m_featuresSet |= SRightBorder;
-    m_featuresSet |= STopBorder;
-    m_featuresSet |= SBottomBorder;
-    m_leftBorderPen = pen;
-    m_topBorderPen = pen;
-    m_bottomBorderPen = pen;
-    m_rightBorderPen = pen;
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-left" ) )
-  {
-    str=styleStack.attributeNS( KoXmlNS::fo, "border-left" );
-    m_leftBorderPen = Oasis::decodePen( str );
-    m_featuresSet |= SLeftBorder;
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-right" ) )
-  {
-    str=styleStack.attributeNS( KoXmlNS::fo, "border-right" );
-    m_rightBorderPen = Oasis::decodePen( str );
-    m_featuresSet |= SRightBorder;
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-top" ) )
-  {
-    str=styleStack.attributeNS( KoXmlNS::fo, "border-top" );
-    m_topBorderPen = Oasis::decodePen( str );
-    m_featuresSet |= STopBorder;
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-bottom" ) )
-  {
-    str=styleStack.attributeNS( KoXmlNS::fo, "border-bottom" );
-    m_bottomBorderPen = Oasis::decodePen( str );
-    m_featuresSet |= SBottomBorder;
-  }
-  if (styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-tl-br" ) )
-  {
-    str=styleStack.attributeNS( KoXmlNS::style, "diagonal-tl-br" );
-    m_fallDiagonalPen = Oasis::decodePen( str );
-    m_featuresSet |= SFallDiagonal;
-  }
-  if (styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-bl-tr" ) )
-  {
-    str=styleStack.attributeNS( KoXmlNS::style, "diagonal-bl-tr" );
-    m_goUpDiagonalPen = Oasis::decodePen( str );
-    m_featuresSet |= SGoUpDiagonal;
-  }
-
-  if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
-  {
-    kDebug(36003)<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
-
-    const KoXmlElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
-    kDebug(36003)<<" style :"<<style<<endl;
-    if ( style )
-    {
-      KoStyleStack drawStyleStack;
-      drawStyleStack.push( *style );
-      drawStyleStack.setTypeProperties( "graphic" );
-      if ( drawStyleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
-      {
-        const QString fill = drawStyleStack.attributeNS( KoXmlNS::draw, "fill" );
-        kDebug(36003)<<" load object gradient fill type :"<<fill<<endl;
-
-        if ( fill == "solid" || fill == "hatch" )
-        {
-          kDebug(36003)<<" Style ******************************************************\n";
-          m_backGroundBrush=KoOasisStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles );
-          m_featuresSet |= SBackgroundBrush;
         }
-        else
-          kDebug(36003)<<" fill style not supported into kspread : "<<fill<<endl;
-      }
     }
-  }
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "print-content" ) &&
+         ( styleStack.attributeNS( KoXmlNS::style, "print-content" )=="false" ) )
+    {
+        setDontPrintText( true );
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "direction" ) &&
+         ( styleStack.attributeNS( KoXmlNS::style, "direction" )=="ttb" ) )
+    {
+        setVerticalText( true );
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "rotation-angle" ) )
+    {
+        bool ok;
+        int a = styleStack.attributeNS( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
+        kDebug(36003)<<" rotation-angle :"<<a<<endl;
+        if ( a != 0 )
+        {
+            setAngle( -a  );
+        }
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
+    {
+        //todo fix me
+        setIndentation( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 ) );
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border" ) )
+    {
+        str=styleStack.attributeNS( KoXmlNS::fo, "border" );
+        QPen pen = Oasis::decodePen( str );
+        setLeftBorderPen( pen );
+        setTopBorderPen( pen );
+        setBottomBorderPen( pen );
+        setRightBorderPen( pen );
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-left" ) )
+    {
+        str=styleStack.attributeNS( KoXmlNS::fo, "border-left" );
+        setLeftBorderPen( Oasis::decodePen( str ) );
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-right" ) )
+    {
+        str=styleStack.attributeNS( KoXmlNS::fo, "border-right" );
+        setRightBorderPen( Oasis::decodePen( str ) );
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-top" ) )
+    {
+        str=styleStack.attributeNS( KoXmlNS::fo, "border-top" );
+        setTopBorderPen( Oasis::decodePen( str ) );
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-bottom" ) )
+    {
+        str=styleStack.attributeNS( KoXmlNS::fo, "border-bottom" );
+        setBottomBorderPen( Oasis::decodePen( str ) );
+    }
+    if (styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-tl-br" ) )
+    {
+        str=styleStack.attributeNS( KoXmlNS::style, "diagonal-tl-br" );
+        setFallDiagonalPen( Oasis::decodePen( str ) );
+    }
+    if (styleStack.hasAttributeNS( KoXmlNS::style, "diagonal-bl-tr" ) )
+    {
+        str=styleStack.attributeNS( KoXmlNS::style, "diagonal-bl-tr" );
+        setGoUpDiagonalPen( Oasis::decodePen( str ) );
+    }
+
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
+    {
+        kDebug(36003)<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
+
+        const KoXmlElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
+        kDebug(36003)<<" style :"<<style<<endl;
+        if ( style )
+        {
+            KoStyleStack drawStyleStack;
+            drawStyleStack.push( *style );
+            drawStyleStack.setTypeProperties( "graphic" );
+            if ( drawStyleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
+            {
+                const QString fill = drawStyleStack.attributeNS( KoXmlNS::draw, "fill" );
+                kDebug(36003)<<" load object gradient fill type :"<<fill<<endl;
+
+                if ( fill == "solid" || fill == "hatch" )
+                {
+                    kDebug(36003)<<" Style ******************************************************\n";
+                    setBackgroundBrush( KoOasisStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles ) );
+
+                }
+                else
+                    kDebug(36003)<<" fill style not supported into kspread : "<<fill<<endl;
+            }
+        }
+    }
 }
 
 void Style::loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack )
 {
-  Q_UNUSED( oasisStyles );
+    Q_UNUSED( oasisStyles );
   // fo:font-size="13pt"
   // fo:font-style="italic"
   // style:text-underline="double"
   // style:text-underline-color="font-color"
   // fo:font-weight="bold"
-  kDebug(36003) << "\t text-properties" << endl;
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
-  {
-    m_fontFamily = styleStack.attributeNS( KoXmlNS::fo, "font-family" ); // FIXME Stefan: sanity check
-    m_featuresSet |= SFontFamily;
-    m_featuresSet |= SFont;
-    kDebug(36003) << "\t\t fo:font-family: " << m_fontFamily << endl;
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
-  {
-    m_fontSize = (int) KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "font-size" ), 10.0 ); // FIXME Stefan: fallback to default
-    m_featuresSet |= SFontSize;
-    m_featuresSet |= SFont;
-    kDebug(36003) << "\t\t fo:font-size: " << m_fontSize << endl;
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) )
-  {
-    if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "italic" ) // "normal", "oblique"
+    kDebug(36003) << "\t text-properties" << endl;
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
     {
-      m_fontFlags |= FItalic;
-      m_featuresSet |= SFontFlag;
-      m_featuresSet |= SFont;
-      kDebug(36003) << "\t\t fo:font-style: " << "italic" << endl;
+        setFontFamily( styleStack.attributeNS( KoXmlNS::fo, "font-family" ) ); // FIXME Stefan: sanity check
+        kDebug(36003) << "\t\t fo:font-family: " << fontFamily() << endl;
     }
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
-  {
-    if ( styleStack.attributeNS( KoXmlNS::fo, "font-weight" ) == "bold" ) // "normal", "100", "200", ...
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
     {
-      m_fontFlags |= FBold;
-      m_featuresSet |= SFontFlag;
-      m_featuresSet |= SFont;
-      kDebug(36003) << "\t\t fo:font-weight: " << "bold" << endl;
+        setFontSize( (int) KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "font-size" ), 10.0 ) ); // FIXME Stefan: fallback to default
+        kDebug(36003) << "\t\t fo:font-size: " << fontSize() << endl;
     }
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) )
-  {
-    if ( styleStack.attributeNS( KoXmlNS::style, "text-underline-style" ) != "none" )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) )
     {
-      m_fontFlags |= FUnderline;
-      m_featuresSet |= SFontFlag;
-      m_featuresSet |= SFont;
-      kDebug(36003) << "\t\t style:text-underline-style: " << "solid (actually: !none)" << endl;
+        if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "italic" ) // "normal", "oblique"
+        {
+            setFontItalic( true );
+            kDebug(36003) << "\t\t fo:font-style: " << "italic" << endl;
+        }
     }
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-width" ) )
-  {
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) )
+    {
+        if ( styleStack.attributeNS( KoXmlNS::fo, "font-weight" ) == "bold" ) // "normal", "100", "200", ...
+        {
+            setFontBold( true );
+            kDebug(36003) << "\t\t fo:font-weight: " << "bold" << endl;
+        }
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-style" ) )
+    {
+        if ( styleStack.attributeNS( KoXmlNS::style, "text-underline-style" ) != "none" )
+        {
+            setFontUnderline( true );
+            kDebug(36003) << "\t\t style:text-underline-style: " << "solid (actually: !none)" << endl;
+        }
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-width" ) )
+    {
         //TODO
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-color" ) )
-  {
-        //TODO
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::fo, "color" ) )
-  {
-    QColor color = QColor( styleStack.attributeNS( KoXmlNS::fo, "color" ) );
-    if ( color.isValid() )
-    {
-      m_featuresSet |= STextPen;
-      m_textPen = QPen( color );
-      kDebug(36003) << "\t\t fo:color: " << color.name() << endl;
     }
-  }
-  if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-line-through-style" ) )
-  {
-    if ( styleStack.attributeNS( KoXmlNS::style, "text-line-through-style" ) != "none"
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-underline-color" ) )
+    {
+        //TODO
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "color" ) )
+    {
+        QColor color = QColor( styleStack.attributeNS( KoXmlNS::fo, "color" ) );
+        if ( color.isValid() )
+        {
+            setFontColor( color );
+            kDebug(36003) << "\t\t fo:color: " << color.name() << endl;
+        }
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "text-line-through-style" ) )
+    {
+        if ( styleStack.attributeNS( KoXmlNS::style, "text-line-through-style" ) != "none"
          /*&& styleStack.attributeNS("text-line-through-style")=="solid"*/ )
-    {
-      m_fontFlags |= FStrike;
-      m_featuresSet |= SFontFlag;
-      m_featuresSet |= SFont;
-      kDebug(36003) << "\t\t text-line-through-style: " << "solid (actually: !none)" << endl;
+        {
+            setFontStrikeOut( true );
+            kDebug(36003) << "\t\t text-line-through-style: " << "solid (actually: !none)" << endl;
+        }
     }
-  }
 }
 
 static QString convertDateFormat( const QString& date )
 {
-  QString result = date;
-  result.replace( "%Y", "yyyy" );
-  result.replace( "%y", "yy" );
-  result.replace( "%n", "M" );
-  result.replace( "%m", "MM" );
-  result.replace( "%e", "d" );
-  result.replace( "%d", "dd" );
-  result.replace( "%b", "MMM" );
-  result.replace( "%B", "MMMM" );
-  result.replace( "%a", "ddd" );
-  result.replace( "%A", "dddd" );
-  return result;
+    QString result = date;
+    result.replace( "%Y", "yyyy" );
+    result.replace( "%y", "yy" );
+    result.replace( "%n", "M" );
+    result.replace( "%m", "MM" );
+    result.replace( "%e", "d" );
+    result.replace( "%d", "dd" );
+    result.replace( "%b", "MMM" );
+    result.replace( "%B", "MMMM" );
+    result.replace( "%a", "ddd" );
+    result.replace( "%A", "dddd" );
+    return result;
 }
 
 FormatType Style::dateType( const QString &_format )
@@ -695,140 +654,140 @@ FormatType Style::fractionType( const QString &_format )
 }
 
 QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles,
-                                      FormatType _style,
-                                      const QString &_prefix, const QString &_postfix,
-                                      int _precision, const QString& symbol )
+                                         FormatType _style,
+                                         const QString &_prefix, const QString &_postfix,
+                                         int _precision, const QString& symbol )
 {
 //  kDebug() << k_funcinfo << endl;
     QString styleName;
     QString valueType;
     switch( _style )
     {
-    case Number_format:
-        styleName = saveOasisStyleNumericNumber( mainStyles, _style, _precision, _prefix, _postfix );
-        valueType = "float";
-        break;
-    case Text_format:
-        styleName = saveOasisStyleNumericText( mainStyles, _style, _precision, _prefix, _postfix );
-        valueType = "string";
-        break;
-    case Money_format:
-        styleName = saveOasisStyleNumericMoney( mainStyles, _style, symbol, _precision, _prefix, _postfix );
-        valueType = "currency";
-        break;
-    case Percentage_format:
-        styleName = saveOasisStyleNumericPercentage( mainStyles, _style, _precision, _prefix, _postfix );
-        valueType = "percentage";
-        break;
-    case Scientific_format:
-        styleName = saveOasisStyleNumericScientific( mainStyles, _style, _prefix, _postfix, _precision );
-        valueType = "float";
-        break;
-    case ShortDate_format:
-    case TextDate_format:
-        styleName = saveOasisStyleNumericDate( mainStyles, _style, _prefix, _postfix );
-        valueType = "date";
-        break;
-    case Time_format:
-    case SecondeTime_format:
-    case Time_format1:
-    case Time_format2:
-    case Time_format3:
-    case Time_format4:
-    case Time_format5:
-    case Time_format6:
-    case Time_format7:
-    case Time_format8:
-        styleName = saveOasisStyleNumericTime( mainStyles, _style, _prefix, _postfix );
-        valueType = "time";
-        break;
-    case fraction_half:
-    case fraction_quarter:
-    case fraction_eighth:
-    case fraction_sixteenth:
-    case fraction_tenth:
-    case fraction_hundredth:
-    case fraction_one_digit:
-    case fraction_two_digits:
-    case fraction_three_digits:
-        styleName = saveOasisStyleNumericFraction( mainStyles, _style, _prefix, _postfix );
-        valueType = "float";
-        break;
-    case date_format1:
-    case date_format2:
-    case date_format3:
-    case date_format4:
-    case date_format5:
-    case date_format6:
-    case date_format7:
-    case date_format8:
-    case date_format9:
-    case date_format10:
-    case date_format11:
-    case date_format12:
-    case date_format13:
-    case date_format14:
-    case date_format15:
-    case date_format16:
-    case date_format17:
-    case date_format18:
-    case date_format19:
-    case date_format20:
-    case date_format21:
-    case date_format22:
-    case date_format23:
-    case date_format24:
-    case date_format25:
-    case date_format26:
-        styleName = saveOasisStyleNumericDate( mainStyles, _style, _prefix, _postfix );
-        valueType = "date";
-        break;
-    case Custom_format:
-        styleName = saveOasisStyleNumericCustom( mainStyles, _style, _prefix, _postfix );
-        break;
-    case Generic_format:
-    case No_format:
-      if (_precision > -1 || !_prefix.isEmpty() || !_postfix.isEmpty())
-      {
-        styleName = saveOasisStyleNumericNumber( mainStyles, _style, _precision, _prefix, _postfix );
-        valueType = "float";
-      }
-      break;
+        case Number_format:
+            styleName = saveOasisStyleNumericNumber( mainStyles, _style, _precision, _prefix, _postfix );
+            valueType = "float";
+            break;
+        case Text_format:
+            styleName = saveOasisStyleNumericText( mainStyles, _style, _precision, _prefix, _postfix );
+            valueType = "string";
+            break;
+        case Money_format:
+            styleName = saveOasisStyleNumericMoney( mainStyles, _style, symbol, _precision, _prefix, _postfix );
+            valueType = "currency";
+            break;
+        case Percentage_format:
+            styleName = saveOasisStyleNumericPercentage( mainStyles, _style, _precision, _prefix, _postfix );
+            valueType = "percentage";
+            break;
+        case Scientific_format:
+            styleName = saveOasisStyleNumericScientific( mainStyles, _style, _prefix, _postfix, _precision );
+            valueType = "float";
+            break;
+        case ShortDate_format:
+        case TextDate_format:
+            styleName = saveOasisStyleNumericDate( mainStyles, _style, _prefix, _postfix );
+            valueType = "date";
+            break;
+        case Time_format:
+        case SecondeTime_format:
+        case Time_format1:
+        case Time_format2:
+        case Time_format3:
+        case Time_format4:
+        case Time_format5:
+        case Time_format6:
+        case Time_format7:
+        case Time_format8:
+            styleName = saveOasisStyleNumericTime( mainStyles, _style, _prefix, _postfix );
+            valueType = "time";
+            break;
+        case fraction_half:
+        case fraction_quarter:
+        case fraction_eighth:
+        case fraction_sixteenth:
+        case fraction_tenth:
+        case fraction_hundredth:
+        case fraction_one_digit:
+        case fraction_two_digits:
+        case fraction_three_digits:
+            styleName = saveOasisStyleNumericFraction( mainStyles, _style, _prefix, _postfix );
+            valueType = "float";
+            break;
+        case date_format1:
+        case date_format2:
+        case date_format3:
+        case date_format4:
+        case date_format5:
+        case date_format6:
+        case date_format7:
+        case date_format8:
+        case date_format9:
+        case date_format10:
+        case date_format11:
+        case date_format12:
+        case date_format13:
+        case date_format14:
+        case date_format15:
+        case date_format16:
+        case date_format17:
+        case date_format18:
+        case date_format19:
+        case date_format20:
+        case date_format21:
+        case date_format22:
+        case date_format23:
+        case date_format24:
+        case date_format25:
+        case date_format26:
+            styleName = saveOasisStyleNumericDate( mainStyles, _style, _prefix, _postfix );
+            valueType = "date";
+            break;
+        case Custom_format:
+            styleName = saveOasisStyleNumericCustom( mainStyles, _style, _prefix, _postfix );
+            break;
+        case Generic_format:
+        case No_format:
+            if (_precision > -1 || !_prefix.isEmpty() || !_postfix.isEmpty())
+            {
+                styleName = saveOasisStyleNumericNumber( mainStyles, _style, _precision, _prefix, _postfix );
+                valueType = "float";
+            }
+            break;
     }
     if ( !styleName.isEmpty() )
     {
-      style.addAttribute( "style:data-style-name", styleName );
+        style.addAttribute( "style:data-style-name", styleName );
     }
     return styleName;
 }
 
 QString Style::saveOasisStyleNumericNumber( KoGenStyles& mainStyles, FormatType /*_style*/, int _precision,
-                                            const QString& _prefix, const QString& _postfix )
+                                               const QString& _prefix, const QString& _postfix )
 {
-  QString format;
-  if ( _precision == -1 )
-    format='0';
-  else
-  {
-    QString tmp;
-    for ( int i = 0; i <_precision; i++ )
+    QString format;
+    if ( _precision == -1 )
+        format='0';
+    else
     {
-      tmp+='0';
+        QString tmp;
+        for ( int i = 0; i <_precision; i++ )
+        {
+            tmp+='0';
+        }
+        format = "0."+tmp;
     }
-    format = "0."+tmp;
-  }
-  return KoOasisStyles::saveOasisNumberStyle( mainStyles, format, _prefix, _postfix );
+    return KoOasisStyles::saveOasisNumberStyle( mainStyles, format, _prefix, _postfix );
 }
 
 QString Style::saveOasisStyleNumericText( KoGenStyles& /*mainStyles*/, FormatType /*_style*/, int /*_precision*/,
-                                          const QString& /*_prefix*/, const QString& /*_postfix*/ )
+                                             const QString& /*_prefix*/, const QString& /*_postfix*/ )
 {
     return "";
 }
 
 QString Style::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, FormatType /*_style*/,
-                                           const QString& symbol, int _precision,
-                                           const QString& _prefix, const QString& _postfix )
+                                              const QString& symbol, int _precision,
+                                              const QString& _prefix, const QString& _postfix )
 {
     QString format;
     if ( _precision == -1 )
@@ -846,7 +805,7 @@ QString Style::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, FormatType /
 }
 
 QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatType /*_style*/, int _precision,
-                                                const QString& _prefix, const QString& _postfix )
+        const QString& _prefix, const QString& _postfix )
 {
     //<number:percentage-style style:name="N106" style:family="data-style">
     //<number:number number:decimal-places="6" number:min-integer-digits="1"/>
@@ -870,7 +829,7 @@ QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatTy
 
 
 QString Style::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatType /*_style*/,
-                                                const QString &_prefix, const QString _suffix, int _precision )
+        const QString &_prefix, const QString _suffix, int _precision )
 {
     //<number:number-style style:name="N60" style:family="data-style">
     //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
@@ -891,108 +850,108 @@ QString Style::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatTy
 }
 
 QString Style::saveOasisStyleNumericDate( KoGenStyles&mainStyles, FormatType _style,
-                                          const QString& _prefix, const QString& _postfix )
+                                             const QString& _prefix, const QString& _postfix )
 {
     QString format;
     bool locale = false;
     switch( _style )
     {
         //TODO fixme use locale of kspread and not kglobal
-    case ShortDate_format:
-        format = KGlobal::locale()->dateFormatShort();
-        locale = true;
-        break;
-    case TextDate_format:
-        format = KGlobal::locale()->dateFormat();
-        locale = true;
-        break;
-    case date_format1:
-        format = "dd-MMM-yy";
-        break;
-    case date_format2:
-        format = "dd-MMM-yyyy";
-        break;
-    case date_format3:
-        format = "dd-M";
-        break;
-    case date_format4:
-        format = "dd-MM";
-        break;
-    case date_format5:
-        format = "dd/MM/yy";
-        break;
-    case date_format6:
-        format = "dd/MM/yyyy";
-        break;
-    case date_format7:
-        format = "MMM-yy";
-        break;
-    case date_format8:
-        format = "MMMM-yy";
-        break;
-    case date_format9:
-        format = "MMMM-yyyy";
-        break;
-    case date_format10:
-        format = "MMMMM-yy";
-        break;
-    case date_format11:
-        format = "dd/MMM";
-        break;
-    case date_format12:
-        format = "dd/MM";
-        break;
-    case date_format13:
-        format = "dd/MMM/yyyy";
-        break;
-    case date_format14:
-        format = "yyyy/MMM/dd";
-        break;
-    case date_format15:
-        format = "yyyy-MMM-dd";
-        break;
-    case date_format16:
-        format = "yyyy/MM/dd";
-        break;
-    case date_format17:
-        format = "d MMMM yyyy";
-        break;
-    case date_format18:
-        format = "MM/dd/yyyy";
-        break;
-    case date_format19:
-        format = "MM/dd/yy";
-        break;
-    case date_format20:
-        format = "MMM/dd/yy";
-        break;
-    case date_format21:
-        format = "MMM/dd/yyyy";
-        break;
-    case date_format22:
-        format = "MMM-yyyy";
-        break;
-    case date_format23:
-        format = "yyyy";
-        break;
-    case date_format24:
-        format = "yy";
-        break;
-    case date_format25:
-        format = "yyyy/MM/dd";
-        break;
-    case date_format26:
-        format = "yyyy/MMM/dd";
-        break;
-    default:
-        kDebug(36003)<<"this date format is not defined ! :"<<_style<<endl;
-        break;
+        case ShortDate_format:
+            format = KGlobal::locale()->dateFormatShort();
+            locale = true;
+            break;
+        case TextDate_format:
+            format = KGlobal::locale()->dateFormat();
+            locale = true;
+            break;
+        case date_format1:
+            format = "dd-MMM-yy";
+            break;
+        case date_format2:
+            format = "dd-MMM-yyyy";
+            break;
+        case date_format3:
+            format = "dd-M";
+            break;
+        case date_format4:
+            format = "dd-MM";
+            break;
+        case date_format5:
+            format = "dd/MM/yy";
+            break;
+        case date_format6:
+            format = "dd/MM/yyyy";
+            break;
+        case date_format7:
+            format = "MMM-yy";
+            break;
+        case date_format8:
+            format = "MMMM-yy";
+            break;
+        case date_format9:
+            format = "MMMM-yyyy";
+            break;
+        case date_format10:
+            format = "MMMMM-yy";
+            break;
+        case date_format11:
+            format = "dd/MMM";
+            break;
+        case date_format12:
+            format = "dd/MM";
+            break;
+        case date_format13:
+            format = "dd/MMM/yyyy";
+            break;
+        case date_format14:
+            format = "yyyy/MMM/dd";
+            break;
+        case date_format15:
+            format = "yyyy-MMM-dd";
+            break;
+        case date_format16:
+            format = "yyyy/MM/dd";
+            break;
+        case date_format17:
+            format = "d MMMM yyyy";
+            break;
+        case date_format18:
+            format = "MM/dd/yyyy";
+            break;
+        case date_format19:
+            format = "MM/dd/yy";
+            break;
+        case date_format20:
+            format = "MMM/dd/yy";
+            break;
+        case date_format21:
+            format = "MMM/dd/yyyy";
+            break;
+        case date_format22:
+            format = "MMM-yyyy";
+            break;
+        case date_format23:
+            format = "yyyy";
+            break;
+        case date_format24:
+            format = "yy";
+            break;
+        case date_format25:
+            format = "yyyy/MM/dd";
+            break;
+        case date_format26:
+            format = "yyyy/MMM/dd";
+            break;
+        default:
+            kDebug(36003)<<"this date format is not defined ! :"<<_style<<endl;
+            break;
     }
     return KoOasisStyles::saveOasisDateStyle( mainStyles, format, locale, _prefix, _postfix );
 }
 
 QString Style::saveOasisStyleNumericCustom( KoGenStyles& /*mainStyles*/, FormatType /*_style*/,
-                                            const QString& /*_prefix*/, const QString& /*_postfix*/ )
+                                               const QString& /*_prefix*/, const QString& /*_postfix*/ )
 {
     //TODO
     //<number:date-style style:name="N50" style:family="data-style" number:automatic-order="true" number:format-source="language">
@@ -1012,7 +971,7 @@ QString Style::saveOasisStyleNumericCustom( KoGenStyles& /*mainStyles*/, FormatT
 }
 
 QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, FormatType _style,
-                                          const QString& _prefix, const QString& _postfix )
+                                             const QString& _prefix, const QString& _postfix )
 {
     //<number:time-style style:name="N42" style:family="data-style">
     //<number:hours number:style="long"/>
@@ -1027,46 +986,46 @@ QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, FormatType _s
     //TODO use format
     switch( _style )
     {
-    case Time_format: //TODO FIXME
-        format = "hh:mm:ss";
-        break;
-    case SecondeTime_format: //TODO FIXME
-        format = "hh:mm";
-        break;
-    case Time_format1:
-        format = "h:mm AP";
-        break;
-    case Time_format2:
-        format = "h:mm:ss AP";
-        break;
-    case Time_format3: // 9 h 01 min 28 s
-        format = "hh \\h mm \\m\\i\\n ss \\s";
-        break;
-    case Time_format4:
-        format = "hh:mm";
-        break;
-    case Time_format5:
-        format = "hh:mm:ss";
-        break;
-    case Time_format6:
-        format = "m:ss";
-        break;
-    case Time_format7:
-        format = "h:mm:ss";
-        break;
-    case Time_format8:
-        format = "h:mm";
-        break;
-    default:
-        kDebug(36003)<<"time format not defined :"<<_style<<endl;
-        break;
+        case Time_format: //TODO FIXME
+            format = "hh:mm:ss";
+            break;
+            case SecondeTime_format: //TODO FIXME
+                format = "hh:mm";
+                break;
+        case Time_format1:
+            format = "h:mm AP";
+            break;
+        case Time_format2:
+            format = "h:mm:ss AP";
+            break;
+            case Time_format3: // 9 h 01 min 28 s
+                format = "hh \\h mm \\m\\i\\n ss \\s";
+                break;
+        case Time_format4:
+            format = "hh:mm";
+            break;
+        case Time_format5:
+            format = "hh:mm:ss";
+            break;
+        case Time_format6:
+            format = "m:ss";
+            break;
+        case Time_format7:
+            format = "h:mm:ss";
+            break;
+        case Time_format8:
+            format = "h:mm";
+            break;
+        default:
+            kDebug(36003)<<"time format not defined :"<<_style<<endl;
+            break;
     }
     return KoOasisStyles::saveOasisTimeStyle( mainStyles, format, locale, _prefix, _postfix );
 }
 
 
 QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatType _style,
-                                              const QString &_prefix, const QString _suffix )
+        const QString &_prefix, const QString _suffix )
 {
     //<number:number-style style:name="N71" style:family="data-style">
     //<number:fraction number:min-integer-digits="0" number:min-numerator-digits="2" number:min-denominator-digits="2"/>
@@ -1074,53 +1033,53 @@ QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatTyp
     QString format;
     switch( _style )
     {
-    case fraction_half:
-        format = "# ?/2";
-        break;
-    case fraction_quarter:
-        format = "# ?/4";
-        break;
-    case fraction_eighth:
-        format = "# ?/8";
-        break;
-    case fraction_sixteenth:
-        format = "# ?/16";
-        break;
-    case fraction_tenth:
-        format = "# ?/10";
-        break;
-    case fraction_hundredth:
-        format = "# ?/100";
-        break;
-    case fraction_one_digit:
-        format = "# ?/?";
-        break;
-    case fraction_two_digits:
-        format = "# \?\?/\?\?";
-        break;
-    case fraction_three_digits:
-        format = "# \?\?\?/\?\?\?";
-        break;
-    default:
-        kDebug(36003)<<" fraction format not defined :"<<_style<<endl;
-        break;
+        case fraction_half:
+            format = "# ?/2";
+            break;
+        case fraction_quarter:
+            format = "# ?/4";
+            break;
+        case fraction_eighth:
+            format = "# ?/8";
+            break;
+        case fraction_sixteenth:
+            format = "# ?/16";
+            break;
+        case fraction_tenth:
+            format = "# ?/10";
+            break;
+        case fraction_hundredth:
+            format = "# ?/100";
+            break;
+        case fraction_one_digit:
+            format = "# ?/?";
+            break;
+        case fraction_two_digits:
+            format = "# \?\?/\?\?";
+            break;
+        case fraction_three_digits:
+            format = "# \?\?\?/\?\?\?";
+            break;
+        default:
+            kDebug(36003)<<" fraction format not defined :"<<_style<<endl;
+            break;
     }
 
     return KoOasisStyles::saveOasisFractionStyle( mainStyles, format, _prefix, _suffix );
 }
 
-QString Style::saveOasis( KoGenStyle& style, KoGenStyles& mainStyles )
+QString Style::saveOasis( KoGenStyle& style, KoGenStyles& mainStyles ) const
 {
-  // KSpread::Style is definitly an OASIS auto style,
-  // but don't overwrite it, if it already exists
-  if (style.type() == 0)
-      style = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
-  // doing the real work
-  saveOasisStyle( style, mainStyles );
-  return QString();
+    // KSpread::Style is definitly an OASIS auto style,
+    // but don't overwrite it, if it already exists
+    if (style.type() == 0)
+        style = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
+    // doing the real work
+    saveOasisStyle( style, mainStyles );
+    return mainStyles.lookup( style, "ce" );
 }
 
-void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
+void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
 {
 #ifndef NDEBUG
     //if (type() == BUILTIN )
@@ -1132,26 +1091,27 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
 #endif
 
     // don't store parent, if it's the default style
-    if ( m_parent && (m_parent->type() != BUILTIN || m_parent->name() != "Default") )
-        // FIXME this is not the OASIS parent style's name. it's its display name!
-        style.addAttribute( "style:parent-style-name", m_parent->name() );
+#warning FIXME
+//     if ( m_parent && (m_parent->type() != BUILTIN || m_parent->name() != "Default") )
+//         // FIXME this is not the OASIS parent style's name. it's its display name!
+//         style.addAttribute( "style:parent-style-name", m_parent->name() );
 
-    if ( featureSet( SHAlign ) && halign() != HAlignUndefined )
+    if ( d->subStyles.contains( HorizontalAlignment ) )
     {
         QString value;
         switch( halign() )
         {
-        case Center:
-            value = "center";
-            break;
-        case Right:
-            value = "end";
-            break;
-        case Left:
-            value = "start";
-            break;
-        case HAlignUndefined:
-            break;
+            case Center:
+                value = "center";
+                break;
+            case Right:
+                value = "end";
+                break;
+            case Left:
+                value = "start";
+                break;
+            case HAlignUndefined:
+                break;
         }
         if ( !value.isEmpty() )
         {
@@ -1160,202 +1120,202 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         }
     }
 
-    if ( featureSet( SVAlign ) )
+    if ( d->subStyles.contains( VerticalAlignment ) )
     {
         QString value;
         switch( valign() )
         {
-        case Top:
-            value = "top";
-            break;
-        case Middle:
-            value = "middle";
-            break;
-        case Bottom:
-            value = "bottom";
-            break;
-        case VAlignUndefined:
-        default:
-            break;
+            case Top:
+                value = "top";
+                break;
+            case Middle:
+                value = "middle";
+                break;
+            case Bottom:
+                value = "bottom";
+                break;
+            case VAlignUndefined:
+            default:
+                break;
         }
         if (!value.isEmpty()) // sanity
             style.addProperty( "style:vertical-align", value );
     }
 
-    if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
-        style.addProperty( "fo:background-color", colorName(m_bgColor) );
+    if ( d->subStyles.contains( BackgroundColor ) && backgroundColor() != QColor() && backgroundColor().isValid() )
+        style.addProperty( "fo:background-color", colorName(backgroundColor()) );
 
-    if ( featureSet( SMultiRow ) && hasProperty( PMultiRow ) )
+    if ( d->subStyles.contains( MultiRow ) && d->subStyles.contains( MultiRow ) )
         style.addProperty( "fo:wrap-option", "wrap" );
 
-    if ( featureSet( SVerticalText ) && hasProperty( PVerticalText ) )
+    if ( d->subStyles.contains( VerticalText ) && d->subStyles.contains( VerticalText ) )
     {
         style.addProperty( "style:direction", "ttb" );
         style.addProperty( "style:rotation-angle", "0" );
         style.addProperty( "style:rotation-align", "none" );
     }
 #if 0
-    if ( featureSet( SFloatFormat ) )
-        format.setAttribute( "float", (int) m_floatFormat );
+    if ( d->subStyles.contains( FloatFormat ) )
+    format.setAttribute( "float", (int) floatFormat() );
 
-    if ( featureSet( SFloatColor ) )
-        format.setAttribute( "floatcolor", (int)m_floatColor );
+                                 if ( d->subStyles.contains( FloatColor ) )
+                                 format.setAttribute( "floatcolor", (int)floatColor() );
 
-    if ( featureSet( SCustomFormat ) && !strFormat().isEmpty() )
-        format.setAttribute( "custom", m_strFormat );
+                                 if ( d->subStyles.contains( CustomFormat ) && !customFormat().isEmpty() )
+                                 format.setAttribute( "custom", customFormat() );
 
-    if ( featureSet( SFormatType ) && formatType() == Money )
-    {
-        format.setAttribute( "type", (int) m_currency.type );
-        format.setAttribute( "symbol", m_currency.symbol );
-    }
+                                 if ( d->subStyles.contains( FormatType ) && formatType() == Money )
+                         {
+                                 format.setAttribute( "type", (int) currency().type );
+                                 format.setAttribute( "symbol", currency().symbol );
+}
 #endif
-    if ( featureSet( SAngle ) && m_rotateAngle != 0 )
-    {
-        style.addProperty( "style:rotation-align", "none" );
-        style.addProperty( "style:rotation-angle", QString::number( -1.0 *m_rotateAngle  ) );
-    }
+                                 if ( d->subStyles.contains( Angle ) && angle() != 0 )
+                         {
+                             style.addProperty( "style:rotation-align", "none" );
+                             style.addProperty( "style:rotation-angle", QString::number( -1.0 * angle()  ) );
+                         }
 
-    if ( featureSet( SIndent ) && m_indent != 0.0 )
-    {
-        style.addPropertyPt("fo:margin-left", m_indent, KoGenStyle::ParagraphType );
+                         if ( d->subStyles.contains( Indentation ) && indentation() != 0.0 )
+                         {
+                             style.addPropertyPt("fo:margin-left", indentation(), KoGenStyle::ParagraphType );
         //FIXME
         //if ( a == HAlignUndefined )
         //currentCellStyle.addProperty("fo:text-align", "start" );
-    }
+                         }
 
-    if ( featureSet( SDontPrintText ) && hasProperty( PDontPrintText ) )
-        style.addProperty( "style:print-content", "false");
+                         if ( d->subStyles.contains( DontPrintText ) && d->subStyles.contains( DontPrintText ) )
+                             style.addProperty( "style:print-content", "false");
 
     // protection
-    bool hideAll = false;
-    bool hideFormula = false;
-    bool isNotProtected = false;
+                         bool hideAll = false;
+                         bool hideFormula = false;
+                         bool isNotProtected = false;
 
-    if ( featureSet( SNotProtected ) && hasProperty( PNotProtected ) )
-        isNotProtected = true;
+                         if ( d->subStyles.contains( NotProtected ) && d->subStyles.contains( NotProtected ) )
+                             isNotProtected = true;
 
-    if ( featureSet( SHideAll ) && hasProperty( PHideAll ) )
-        hideAll=true;
+                         if ( d->subStyles.contains( HideAll ) && d->subStyles.contains( HideAll ) )
+                             hideAll=true;
 
-    if ( featureSet( SHideFormula ) && hasProperty( PHideFormula ) )
-        hideFormula = true;
+                         if ( d->subStyles.contains( HideFormula ) && d->subStyles.contains( HideFormula ) )
+                             hideFormula = true;
 
-    if ( hideAll )
-        style.addProperty( "style:cell-protect", "hidden-and-protected" );
-    else
-    {
-        if ( isNotProtected && !hideFormula )
-            style.addProperty( "style:cell-protect", "none" );
-        else if ( isNotProtected && hideFormula )
-            style.addProperty( "style:cell-protect", "Formula.hidden" );
-        else if ( hideFormula )
-            style.addProperty( "style:cell-protect", "protected Formula.hidden" );
-        else if ( featureSet( SNotProtected ) && !hasProperty( PNotProtected ) )
+                         if ( hideAll )
+                             style.addProperty( "style:cell-protect", "hidden-and-protected" );
+                         else
+                         {
+                             if ( isNotProtected && !hideFormula )
+                                 style.addProperty( "style:cell-protect", "none" );
+                             else if ( isNotProtected && hideFormula )
+                                 style.addProperty( "style:cell-protect", "Formula.hidden" );
+                             else if ( hideFormula )
+                                 style.addProperty( "style:cell-protect", "protected Formula.hidden" );
+                             else if ( d->subStyles.contains( NotProtected ) && !d->subStyles.contains( NotProtected ) )
             // write out, only if it is explicitly set
-            style.addProperty( "style:cell-protect", "protected" );
-    }
+                                 style.addProperty( "style:cell-protect", "protected" );
+                         }
 
     // borders
     // NOTE Stefan: QPen api docs:
     //              A line width of zero indicates a cosmetic pen. This means
     //              that the pen width is always drawn one pixel wide,
     //              independent of the transformation set on the painter.
-    if ( featureSet( SLeftBorder ) && featureSet( SRightBorder ) &&
-         featureSet( STopBorder ) && featureSet( SBottomBorder ) &&
-         ( m_leftBorderPen == m_topBorderPen ) &&
-         ( m_leftBorderPen == m_rightBorderPen ) &&
-         ( m_leftBorderPen == m_bottomBorderPen ) )
-    {
-        if ( m_leftBorderPen.style() != Qt::NoPen )
-            style.addProperty("fo:border", Oasis::encodePen( m_leftBorderPen ) );
-    }
-    else
-    {
-        if ( featureSet( SLeftBorder ) && ( m_leftBorderPen.style() != Qt::NoPen ) )
-            style.addProperty( "fo:border-left", Oasis::encodePen( m_leftBorderPen ) );
+                         if ( d->subStyles.contains( LeftPen ) && d->subStyles.contains( RightPen ) &&
+                              d->subStyles.contains( TopPen ) && d->subStyles.contains( BottomPen ) &&
+                              ( leftBorderPen() == topBorderPen() ) &&
+                              ( leftBorderPen() == rightBorderPen() ) &&
+                              ( leftBorderPen() == bottomBorderPen() ) )
+                         {
+                             if ( leftBorderPen().style() != Qt::NoPen )
+                                 style.addProperty("fo:border", Oasis::encodePen( leftBorderPen() ) );
+                         }
+                         else
+                         {
+                             if ( d->subStyles.contains( LeftPen ) && ( leftBorderPen().style() != Qt::NoPen ) )
+                                 style.addProperty( "fo:border-left", Oasis::encodePen( leftBorderPen() ) );
 
-        if ( featureSet( SRightBorder ) && ( m_rightBorderPen.style() != Qt::NoPen ) )
-            style.addProperty( "fo:border-right", Oasis::encodePen( m_rightBorderPen ) );
+                             if ( d->subStyles.contains( RightPen ) && ( rightBorderPen().style() != Qt::NoPen ) )
+                                 style.addProperty( "fo:border-right", Oasis::encodePen( rightBorderPen() ) );
 
-        if ( featureSet( STopBorder ) && ( m_topBorderPen.style() != Qt::NoPen ) )
-            style.addProperty( "fo:border-top", Oasis::encodePen( m_topBorderPen ) );
+                             if ( d->subStyles.contains( TopPen ) && ( topBorderPen().style() != Qt::NoPen ) )
+                                 style.addProperty( "fo:border-top", Oasis::encodePen( topBorderPen() ) );
 
-        if ( featureSet( SBottomBorder ) && ( m_bottomBorderPen.style() != Qt::NoPen ) )
-            style.addProperty( "fo:border-bottom", Oasis::encodePen( m_bottomBorderPen ) );
-    }
-    if ( featureSet( SFallDiagonal ) && ( m_fallDiagonalPen.style() != Qt::NoPen ) )
-    {
-        style.addProperty("style:diagonal-tl-br", Oasis::encodePen( m_fallDiagonalPen ) );
-    }
-    if ( featureSet( SGoUpDiagonal ) && ( m_goUpDiagonalPen.style() != Qt::NoPen ) )
-    {
-        style.addProperty("style:diagonal-bl-tr", Oasis::encodePen(m_goUpDiagonalPen ) );
-    }
+                             if ( d->subStyles.contains( BottomPen ) && ( bottomBorderPen().style() != Qt::NoPen ) )
+                                 style.addProperty( "fo:border-bottom", Oasis::encodePen( bottomBorderPen() ) );
+                         }
+                         if ( d->subStyles.contains( FallDiagonalPen ) && ( fallDiagonalPen().style() != Qt::NoPen ) )
+                         {
+                             style.addProperty("style:diagonal-tl-br", Oasis::encodePen( fallDiagonalPen() ) );
+                         }
+                         if ( d->subStyles.contains( GoUpDiagonalPen ) && ( goUpDiagonalPen().style() != Qt::NoPen ) )
+                         {
+                             style.addProperty("style:diagonal-bl-tr", Oasis::encodePen( goUpDiagonalPen() ) );
+                         }
 
     // font
-    if ( featureSet( SFontFamily ) ) // !m_fontFamily.isEmpty() == true
-    {
-        style.addProperty("fo:font-family", m_fontFamily, KoGenStyle::TextType );
-    }
-    if ( featureSet( SFontSize ) ) // m_fontSize != 0
-    {
-        style.addPropertyPt("fo:font-size",m_fontSize, KoGenStyle::TextType  );
-    }
+                         if ( d->subStyles.contains( FontFamily ) ) // !fontFamily().isEmpty() == true
+                         {
+                             style.addProperty("fo:font-family", fontFamily(), KoGenStyle::TextType );
+                         }
+                         if ( d->subStyles.contains( FontSize ) ) // fontSize() != 0
+                         {
+                             style.addPropertyPt("fo:font-size",fontSize(), KoGenStyle::TextType  );
+                         }
 
-    if ( featureSet( SFontFlag ) && m_fontFlags & (uint) FBold )
-        style.addProperty("fo:font-weight","bold", KoGenStyle::TextType );
+                         if ( d->subStyles.contains( FontBold ) && bold() )
+                             style.addProperty("fo:font-weight","bold", KoGenStyle::TextType );
 
-    if ( featureSet( SFontFlag ) && m_fontFlags & (uint) FItalic )
-        style.addProperty("fo:font-style", "italic", KoGenStyle::TextType );
+                         if ( d->subStyles.contains( FontItalic ) && italic() )
+                             style.addProperty("fo:font-style", "italic", KoGenStyle::TextType );
 
-    if ( featureSet( SFontFlag ) && m_fontFlags & (uint) FUnderline )
-    {
+                         if ( d->subStyles.contains( FontUnderline ) && underline() )
+                         {
         //style:text-underline-style="solid" style:text-underline-width="auto"
-        style.addProperty( "style:text-underline-style", "solid", KoGenStyle::TextType );
+                             style.addProperty( "style:text-underline-style", "solid", KoGenStyle::TextType );
         //copy from oo-129
-        style.addProperty( "style:text-underline-width", "auto", KoGenStyle::TextType );
-        style.addProperty( "style:text-underline-color", "font-color", KoGenStyle::TextType );
-    }
+                             style.addProperty( "style:text-underline-width", "auto", KoGenStyle::TextType );
+                             style.addProperty( "style:text-underline-color", "font-color", KoGenStyle::TextType );
+                         }
 
-    if ( featureSet( SFontFlag ) && m_fontFlags & (uint) FStrike )
-        style.addProperty( "style:text-line-through-style", "solid", KoGenStyle::TextType );
+                         if ( d->subStyles.contains( FontStrike ) && strikeOut() )
+                             style.addProperty( "style:text-line-through-style", "solid", KoGenStyle::TextType );
 
-    if ( featureSet( STextPen ) && m_textPen.color().isValid() ) // always save; default: m_textPen.style() == Qt::NoPen
-    {
-        style.addProperty("fo:color", colorName(m_textPen.color()), KoGenStyle::TextType );
-    }
+                         if ( d->subStyles.contains( FontColor ) && fontColor().isValid() ) // always save
+                         {
+                             style.addProperty("fo:color", colorName( fontColor() ), KoGenStyle::TextType );
+                         }
 
     //I don't think there is a reason why the background brush should be saved if it is null,
     //but remove the check if it causes problems.  -- Robert Knight <robertknight@gmail.com>
-    if ( featureSet( SBackgroundBrush ) && (m_backGroundBrush.style() != Qt::NoBrush) )
-    {
-        QString tmp = saveOasisBackgroundStyle( mainStyles, m_backGroundBrush );
-        if ( !tmp.isEmpty() )
-            style.addProperty("draw:style-name", tmp );
-    }
+                         if ( d->subStyles.contains( BackgroundBrush ) && (backgroundBrush().style() != Qt::NoBrush) )
+                         {
+                             QString tmp = saveOasisBackgroundStyle( mainStyles, backgroundBrush() );
+                             if ( !tmp.isEmpty() )
+                                 style.addProperty("draw:style-name", tmp );
+                         }
 
-    QString _prefix;
-    QString _postfix;
-    int _precision = -1;
-    if ( featureSet( SPrefix ) && !prefix().isEmpty() )
-        _prefix = m_prefix;
-    if ( featureSet( SPostfix ) && !postfix().isEmpty() )
-        _postfix = m_postfix;
-    if ( featureSet( SPrecision ) && m_precision != -1 )
-        _precision =  m_precision;
+                         QString _prefix;
+                         QString _postfix;
+                         int _precision = -1;
+                         if ( d->subStyles.contains( Prefix ) && !prefix().isEmpty() )
+                             _prefix = prefix();
+                         if ( d->subStyles.contains( Postfix ) && !postfix().isEmpty() )
+                             _postfix = postfix();
+                         if ( d->subStyles.contains( Precision ) && precision() != -1 )
+                             _precision = precision();
 
-    QString symbol;
-    if ( featureSet( SFormatType ) && m_formatType == Money_format )
-    {
-      symbol = KSpread::Currency::getCurrencyCode(m_currency.type);
-    }
+                         QString symbol;
+                         if ( d->subStyles.contains( FormatTypeKey ) && formatType() == Money_format )
+                         {
+                             symbol = KSpread::Currency::getCurrencyCode(currency().type);
+                         }
 
-    QString numericStyle = saveOasisStyleNumeric( style, mainStyles, m_formatType,
-                                                  _prefix, _postfix, _precision,
-                                                  symbol );
-    if ( !numericStyle.isEmpty() )
-        style.addAttribute( "style:data-style-name", numericStyle );
+                         QString numericStyle = saveOasisStyleNumeric( style, mainStyles, formatType(),
+                                 _prefix, _postfix, _precision,
+                                 symbol );
+                         if ( !numericStyle.isEmpty() )
+                             style.addAttribute( "style:data-style-name", numericStyle );
 }
 
 QString Style::saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush )
@@ -1365,1398 +1325,1255 @@ QString Style::saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &
     return mainStyles.lookup( styleobjectauto, "gr" );
 }
 
-void Style::saveXML( QDomDocument & doc, QDomElement & format ) const
+void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool copy ) const
 {
-  if ( featureSet( SHAlign ) && halign() != HAlignUndefined )
-    format.setAttribute( "alignX", (int) m_alignX );
+    if ( d->subStyles.contains( HorizontalAlignment ) && halign() != HAlignUndefined )
+        format.setAttribute( "alignX", (int) halign() );
 
-  if ( featureSet( SVAlign ) && valign() != Middle )
-    format.setAttribute( "alignY", (int) m_alignY );
+    if ( d->subStyles.contains( VerticalAlignment ) && valign() != Middle )
+        format.setAttribute( "alignY", (int) valign() );
 
-  if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
-    format.setAttribute( "bgcolor", m_bgColor.name() );
+    if ( d->subStyles.contains( BackgroundColor ) && backgroundColor() != QColor() && backgroundColor().isValid() )
+        format.setAttribute( "bgcolor", backgroundColor().name() );
 
-  if ( featureSet( SMultiRow ) && hasProperty( PMultiRow ) )
-    format.setAttribute( "multirow", "yes" );
+    if ( d->subStyles.contains( MultiRow ) && d->subStyles.contains( MultiRow ) )
+        format.setAttribute( "multirow", "yes" );
 
-  if ( featureSet( SVerticalText ) && hasProperty( PVerticalText ) )
-    format.setAttribute( "verticaltext", "yes" );
+    if ( d->subStyles.contains( VerticalText ) && d->subStyles.contains( VerticalText ) )
+        format.setAttribute( "verticaltext", "yes" );
 
-  if ( featureSet( SPrecision ) )
-    format.setAttribute( "precision", m_precision );
+    if ( d->subStyles.contains( Precision ) )
+        format.setAttribute( "precision", precision() );
 
-  if ( featureSet( SPrefix ) && !prefix().isEmpty() )
-    format.setAttribute( "prefix", m_prefix );
+    if ( d->subStyles.contains( Prefix ) && !prefix().isEmpty() )
+        format.setAttribute( "prefix", prefix() );
 
-  if ( featureSet( SPostfix ) && !postfix().isEmpty() )
-    format.setAttribute( "postfix", m_postfix );
+    if ( d->subStyles.contains( Postfix ) && !postfix().isEmpty() )
+        format.setAttribute( "postfix", postfix() );
 
-  if ( featureSet( SFloatFormat ) )
-    format.setAttribute( "float", (int) m_floatFormat );
+    if ( d->subStyles.contains( FloatFormatKey ) )
+        format.setAttribute( "float", (int) floatFormat() );
 
-  if ( featureSet( SFloatColor ) )
-  format.setAttribute( "floatcolor", (int)m_floatColor );
+    if ( d->subStyles.contains( FloatColorKey ) )
+        format.setAttribute( "floatcolor", (int)floatColor() );
 
-  if ( featureSet( SFormatType ) )
-    format.setAttribute( "format",(int) m_formatType );
+    if ( d->subStyles.contains( FormatTypeKey ) )
+        format.setAttribute( "format",(int) formatType() );
 
-  if ( featureSet( SCustomFormat ) && !strFormat().isEmpty() )
-    format.setAttribute( "custom", m_strFormat );
+    if ( d->subStyles.contains( CustomFormat ) && !customFormat().isEmpty() )
+        format.setAttribute( "custom", customFormat() );
 
-  if ( featureSet( SFormatType ) && formatType() == Money_format )
-  {
-    format.setAttribute( "type", (int) m_currency.type );
-    format.setAttribute( "symbol", m_currency.symbol );
-  }
+    if ( d->subStyles.contains( FormatTypeKey ) && formatType() == Money_format )
+    {
+        format.setAttribute( "type", (int) currency().type );
+        format.setAttribute( "symbol", currency().symbol );
+    }
 
-  if ( featureSet( SAngle ) )
-    format.setAttribute( "angle", m_rotateAngle );
+    if ( d->subStyles.contains( Angle ) )
+        format.setAttribute( "angle", angle() );
 
-  if ( featureSet( SIndent ) )
-    format.setAttribute( "indent", m_indent );
+    if ( d->subStyles.contains( Indentation ) )
+        format.setAttribute( "indent", indentation() );
 
-  if ( featureSet( SDontPrintText ) && hasProperty( PDontPrintText ) )
-    format.setAttribute( "dontprinttext", "yes" );
+    if ( d->subStyles.contains( DontPrintText ) && d->subStyles.contains( DontPrintText ) )
+        format.setAttribute( "dontprinttext", "yes" );
 
-  if ( featureSet( SNotProtected ) && hasProperty( PNotProtected ) )
-    format.setAttribute( "noprotection", "yes" );
+    if ( d->subStyles.contains( NotProtected ) && d->subStyles.contains( NotProtected ) )
+        format.setAttribute( "noprotection", "yes" );
 
-  if ( featureSet( SHideAll ) && hasProperty( PHideAll ) )
-    format.setAttribute( "hideall", "yes" );
+    if ( d->subStyles.contains( HideAll ) && d->subStyles.contains( HideAll ) )
+        format.setAttribute( "hideall", "yes" );
 
-  if ( featureSet( SHideFormula ) && hasProperty( PHideFormula ) )
-    format.setAttribute( "hideformula", "yes" );
+    if ( d->subStyles.contains( HideFormula ) && d->subStyles.contains( HideFormula ) )
+        format.setAttribute( "hideformula", "yes" );
 
-  if ( featureSet( SFontFamily ) )
-    format.setAttribute( "font-family", m_fontFamily );
-  if ( featureSet( SFontSize ) )
-    format.setAttribute( "font-size", m_fontSize );
-  if ( featureSet( SFontFlag ) )
-    format.setAttribute( "font-flags", m_fontFlags );
+    if ( d->subStyles.contains( FontFamily ) )
+        format.setAttribute( "font-family", fontFamily() );
+    if ( d->subStyles.contains( FontSize ) )
+        format.setAttribute( "font-size", fontSize() );
+    if ( d->subStyles.contains( FontBold ) || d->subStyles.contains( FontItalic ) ||
+         d->subStyles.contains( FontUnderline ) || d->subStyles.contains( FontStrike ) )
+    {
+        enum FontFlags
+        {
+            FBold      = 0x01,
+            FUnderline = 0x02,
+            FItalic    = 0x04,
+            FStrike    = 0x08
+        };
+        int fontFlags = 0;
+        fontFlags |= bold()      ? FBold      : 0;
+        fontFlags |= italic()    ? FItalic    : 0;
+        fontFlags |= underline() ? FUnderline : 0;
+        fontFlags |= strikeOut() ? FStrike    : 0;
+        format.setAttribute( "font-flags", fontFlags );
+    }
 
-  //  if ( featureSet( SFont ) )
+  //  if ( d->subStyles.contains( Font ) )
   //    format.appendChild( util_createElement( "font", m_textFont, doc ) );
 
-  if ( featureSet( STextPen ) && m_textPen.color().isValid() )
-    format.appendChild( util_createElement( "pen", m_textPen, doc ) );
+    if ( d->subStyles.contains( FontColor ) && fontColor().isValid() )
+        format.appendChild( util_createElement( "pen", fontColor(), doc ) );
 
-  if ( featureSet( SBackgroundBrush ) )
-  {
-    format.setAttribute( "brushcolor", m_backGroundBrush.color().name() );
-    format.setAttribute( "brushstyle", (int) m_backGroundBrush.style() );
-  }
+    if ( d->subStyles.contains( BackgroundBrush ) )
+    {
+        format.setAttribute( "brushcolor", backgroundBrush().color().name() );
+        format.setAttribute( "brushstyle", (int) backgroundBrush().style() );
+    }
 
-  if ( featureSet( SLeftBorder ) )
-  {
-    QDomElement left = doc.createElement( "left-border" );
-    left.appendChild( util_createElement( "pen", m_leftBorderPen, doc ) );
-    format.appendChild( left );
-  }
+    if ( d->subStyles.contains( LeftPen ) )
+    {
+        QDomElement left = doc.createElement( "left-border" );
+        left.appendChild( util_createElement( "pen", leftBorderPen(), doc ) );
+        format.appendChild( left );
+    }
 
-  if ( featureSet( STopBorder ) )
-  {
-    QDomElement top = doc.createElement( "top-border" );
-    top.appendChild( util_createElement( "pen", m_topBorderPen, doc ) );
-    format.appendChild( top );
-  }
+    if ( d->subStyles.contains( TopPen ) )
+    {
+        QDomElement top = doc.createElement( "top-border" );
+        top.appendChild( util_createElement( "pen", topBorderPen(), doc ) );
+        format.appendChild( top );
+    }
 
-  if ( featureSet( SRightBorder ) )
-  {
-    QDomElement right = doc.createElement( "right-border" );
-    right.appendChild( util_createElement( "pen", m_rightBorderPen, doc ) );
-    format.appendChild( right );
-  }
+    if ( d->subStyles.contains( RightPen ) )
+    {
+        QDomElement right = doc.createElement( "right-border" );
+        right.appendChild( util_createElement( "pen", rightBorderPen(), doc ) );
+        format.appendChild( right );
+    }
 
-  if ( featureSet( SBottomBorder ) )
-  {
-    QDomElement bottom = doc.createElement( "bottom-border" );
-    bottom.appendChild( util_createElement( "pen", m_bottomBorderPen, doc ) );
-    format.appendChild( bottom );
-  }
+    if ( d->subStyles.contains( BottomPen ) )
+    {
+        QDomElement bottom = doc.createElement( "bottom-border" );
+        bottom.appendChild( util_createElement( "pen", bottomBorderPen(), doc ) );
+        format.appendChild( bottom );
+    }
 
-  if ( featureSet( SFallDiagonal ) )
-  {
-    QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
-    fallDiagonal.appendChild( util_createElement( "pen", m_fallDiagonalPen, doc ) );
-    format.appendChild( fallDiagonal );
-  }
+    if ( d->subStyles.contains( FallDiagonalPen ) )
+    {
+        QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
+        fallDiagonal.appendChild( util_createElement( "pen", fallDiagonalPen(), doc ) );
+        format.appendChild( fallDiagonal );
+    }
 
-  if ( featureSet( SGoUpDiagonal ) )
-  {
-    QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
-    goUpDiagonal.appendChild( util_createElement( "pen", m_goUpDiagonalPen, doc ) );
-    format.appendChild( goUpDiagonal );
-  }
+    if ( d->subStyles.contains( GoUpDiagonalPen ) )
+    {
+        QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
+        goUpDiagonal.appendChild( util_createElement( "pen", goUpDiagonalPen(), doc ) );
+        format.appendChild( goUpDiagonal );
+    }
 }
 
-bool Style::loadXML( KoXmlElement & format )
+bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
 {
-  bool ok;
-  if ( format.hasAttribute( "type" ) )
-  {
-    m_type = (StyleType) format.attribute( "type" ).toInt( &ok );
-    if ( !ok )
-      return false;
-  }
-
-  if ( format.hasAttribute( "alignX" ) )
-  {
-    HAlign a = (HAlign) format.attribute( "alignX" ).toInt( &ok );
-    if ( !ok )
-      return false;
-    if ( (unsigned int) a >= 1 || (unsigned int) a <= 4 )
-    {
-      m_alignX = a;
-      m_featuresSet |= SHAlign;
-    }
-  }
-  if ( format.hasAttribute( "alignY" ) )
-  {
-    VAlign a = (VAlign) format.attribute( "alignY" ).toInt( &ok );
-    if ( !ok )
-      return false;
-    if ( (unsigned int) a >= 1 || (unsigned int) a < 4 )
-    {
-      m_alignY = a;
-      m_featuresSet |= SVAlign;
-    }
-  }
-
-  if ( format.hasAttribute( "bgcolor" ) )
-  {
-    m_bgColor = QColor( format.attribute( "bgcolor" ) );
-    // FIXME: Is white always correct here?
-    if ( m_bgColor != Qt::white )
-	m_featuresSet |= SBackgroundColor;
-  }
-
-  if ( format.hasAttribute( "multirow" ) )
-  {
-    setProperty( PMultiRow );
-    m_featuresSet |= SMultiRow;
-  }
-
-  if ( format.hasAttribute( "verticaltext" ) )
-  {
-    setProperty( PVerticalText );
-    m_featuresSet |= SVerticalText;
-  }
-
-  if ( format.hasAttribute( "precision" ) )
-  {
-    int i = format.attribute( "precision" ).toInt( &ok );
-    if ( i < -1 )
-    {
-      kDebug(36003) << "Value out of range Cell::precision=" << i << endl;
-      return false;
-    }
-    m_precision = i;
-    m_featuresSet |= SPrecision;
-  }
-
-  if ( format.hasAttribute( "float" ) )
-  {
-    FloatFormat a = (FloatFormat)format.attribute( "float" ).toInt( &ok );
-    if ( !ok )
-      return false;
-    if ( (unsigned int) a >= 1 || (unsigned int) a <= 3 )
-    {
-      m_floatFormat = a;
-      m_featuresSet |= SFloatFormat;
-    }
-  }
-
-  if ( format.hasAttribute( "floatcolor" ) )
-  {
-    FloatColor a = (FloatColor) format.attribute( "floatcolor" ).toInt( &ok );
-    if ( !ok ) return false;
-    if ( (unsigned int) a >= 1 || (unsigned int) a <= 2 )
-    {
-      m_floatColor = a;
-      m_featuresSet |= SFloatColor;
-    }
-  }
-
-  if ( format.hasAttribute( "format" ) )
-  {
-    int fo = format.attribute( "format" ).toInt( &ok );
-    if ( ! ok )
-      return false;
-    m_formatType = ( FormatType ) fo;
-    m_featuresSet |= SFormatType;
-  }
-  if ( format.hasAttribute( "custom" ) )
-  {
-    m_strFormat = format.attribute( "custom" );
-    m_featuresSet |= SCustomFormat;
-  }
-  if ( m_formatType == Money_format )
-  {
+    bool ok;
     if ( format.hasAttribute( "type" ) )
     {
-      m_currency.type   = format.attribute( "type" ).toInt( &ok );
-      if (!ok)
-        m_currency.type = 1;
+        d->type = (StyleType) format.attribute( "type" ).toInt( &ok );
+        if ( !ok )
+            return false;
     }
-    if ( format.hasAttribute( "symbol" ) )
+
+    if ( format.hasAttribute( "alignX" ) )
     {
-      m_currency.symbol = format.attribute( "symbol" );
+        HAlign a = (HAlign) format.attribute( "alignX" ).toInt( &ok );
+        if ( !ok )
+            return false;
+        if ( (unsigned int) a >= 1 || (unsigned int) a <= 4 )
+        {
+            setHAlign( a );
+        }
     }
-    m_featuresSet |= SFormatType;
-  }
-  if ( format.hasAttribute( "angle" ) )
-  {
-    m_rotateAngle = format.attribute( "angle" ).toInt( &ok );
-    if ( !ok )
-      return false;
-    m_featuresSet |= SAngle;
-  }
-  if ( format.hasAttribute( "indent" ) )
-  {
-    m_indent = format.attribute( "indent" ).toDouble( &ok );
-    if ( !ok )
-      return false;
-    m_featuresSet |= SIndent;
-  }
-  if ( format.hasAttribute( "dontprinttext" ) )
-  {
-    setProperty( PDontPrintText );
-    m_featuresSet |= SDontPrintText;
-  }
+    if ( format.hasAttribute( "alignY" ) )
+    {
+        VAlign a = (VAlign) format.attribute( "alignY" ).toInt( &ok );
+        if ( !ok )
+            return false;
+        if ( (unsigned int) a >= 1 || (unsigned int) a < 4 )
+        {
+            setVAlign( a );
+        }
+    }
 
-  if ( format.hasAttribute( "noprotection" ) )
-  {
-    setProperty( PNotProtected );
-    m_featuresSet |= SNotProtected;
-  }
+    if ( format.hasAttribute( "bgcolor" ) )
+    {
+        setBackgroundColor( QColor( format.attribute( "bgcolor" ) ) );
+    }
 
-  if ( format.hasAttribute( "hideall" ) )
-  {
-    setProperty( PHideAll );
-    m_featuresSet |= SHideAll;
-  }
+    if ( format.hasAttribute( "multirow" ) )
+    {
+        setWrapText( true );
+    }
 
-  if ( format.hasAttribute( "hideformula" ) )
-  {
-    setProperty( PHideFormula );
-    m_featuresSet |= SHideFormula;
-  }
+    if ( format.hasAttribute( "verticaltext" ) )
+    {
+        setVerticalText( true );
+    }
+
+    if ( format.hasAttribute( "precision" ) )
+    {
+        int i = format.attribute( "precision" ).toInt( &ok );
+        if ( i < -1 )
+        {
+            kDebug(36003) << "Value out of range Cell::precision=" << i << endl;
+            return false;
+        }
+        setPrecision( i );
+    }
+
+    if ( format.hasAttribute( "float" ) )
+    {
+        FloatFormat a = (FloatFormat)format.attribute( "float" ).toInt( &ok );
+        if ( !ok )
+            return false;
+        if ( (unsigned int) a >= 1 || (unsigned int) a <= 3 )
+        {
+            setFloatFormat( a );
+        }
+    }
+
+    if ( format.hasAttribute( "floatcolor" ) )
+    {
+        FloatColor a = (FloatColor) format.attribute( "floatcolor" ).toInt( &ok );
+        if ( !ok ) return false;
+        if ( (unsigned int) a >= 1 || (unsigned int) a <= 2 )
+        {
+            setFloatColor( a );
+        }
+    }
+
+    if ( format.hasAttribute( "format" ) )
+    {
+        int fo = format.attribute( "format" ).toInt( &ok );
+        if ( ! ok )
+            return false;
+        setFormatType( static_cast<FormatType>(fo) );
+    }
+    if ( format.hasAttribute( "custom" ) )
+    {
+        setCustomFormat( format.attribute( "custom" ) );
+    }
+    if ( formatType() == Money_format )
+    {
+        Currency currency;
+        if ( format.hasAttribute( "type" ) )
+        {
+            currency.type = format.attribute( "type" ).toInt( &ok );
+            if (!ok)
+                currency.type = 1;
+        }
+        if ( format.hasAttribute( "symbol" ) )
+        {
+            currency.symbol = format.attribute( "symbol" );
+        }
+        setCurrency( currency );
+    }
+    if ( format.hasAttribute( "angle" ) )
+    {
+        setAngle( format.attribute( "angle" ).toInt( &ok ) );
+        if ( !ok )
+            return false;
+    }
+    if ( format.hasAttribute( "indent" ) )
+    {
+        setIndentation( format.attribute( "indent" ).toDouble( &ok ) );
+        if ( !ok )
+            return false;
+    }
+    if ( format.hasAttribute( "dontprinttext" ) )
+    {
+        setDontPrintText( true );
+    }
+
+    if ( format.hasAttribute( "noprotection" ) )
+    {
+        setNotProtected( true );
+    }
+
+    if ( format.hasAttribute( "hideall" ) )
+    {
+        setHideAll( true );
+    }
+
+    if ( format.hasAttribute( "hideformula" ) )
+    {
+        setHideFormula( true );
+    }
 
   // TODO: remove that...
-  KoXmlElement font = format.namedItem( "font" ).toElement();
-  if ( !font.isNull() )
-  {
-    QFont f( util_toFont( font ) );
-    m_fontFamily = f.family();
-    m_fontSize = f.pointSize();
-    if ( f.italic() )
-      m_fontFlags |= FItalic;
-    if ( f.bold() )
-      m_fontFlags |= FBold;
-    if ( f.underline() )
-      m_fontFlags |= FUnderline;
-    if ( f.strikeOut() )
-      m_fontFlags |= FStrike;
+    KoXmlElement font = format.namedItem( "font" ).toElement();
+    if ( !font.isNull() )
+    {
+        QFont f( util_toFont( font ) );
+        setFontFamily( f.family() );
+        setFontSize( f.pointSize() );
+        if ( f.italic() )
+            setFontItalic( true );
+        if ( f.bold() )
+            setFontBold( true );
+        if ( f.underline() )
+            setFontUnderline( true );
+        if ( f.strikeOut() )
+            setFontStrikeOut( true );
 
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFamily;
-    m_featuresSet |= SFontFlag;
-    m_featuresSet |= SFontSize;
-  }
+    }
 
-  if ( format.hasAttribute( "font-family" ) )
-  {
-    m_fontFamily = format.attribute( "font-family" );
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFamily;
-  }
-  if ( format.hasAttribute( "font-size" ) )
-  {
-    m_fontSize = format.attribute( "font-size" ).toInt( &ok );
-    if ( !ok )
-      return false;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontSize;
-  }
+    if ( format.hasAttribute( "font-family" ) )
+    {
+        setFontFamily( format.attribute( "font-family" ) );
+    }
+    if ( format.hasAttribute( "font-size" ) )
+    {
+        setFontSize( format.attribute( "font-size" ).toInt( &ok ) );
+        if ( !ok )
+            return false;
+    }
 
-  if ( format.hasAttribute( "font-flags" ) )
-  {
-    m_fontFlags = format.attribute( "font-flags" ).toInt( &ok );
-    if ( !ok )
-      return false;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFlag;
-  }
+    if ( format.hasAttribute( "font-flags" ) )
+    {
+        int fontFlags = format.attribute( "font-flags" ).toInt( &ok );
+        if ( !ok )
+            return false;
 
-  if ( format.hasAttribute( "brushcolor" ) )
-  {
-    m_backGroundBrush.setColor( QColor( format.attribute( "brushcolor" ) ) );
-    // It is not necessary to set this feature just because the color changes.
-    // FIXME: Or is it?
-    //m_featuresSet |= SBackgroundBrush;
-  }
+        enum FontFlags
+        {
+            FBold      = 0x01,
+            FUnderline = 0x02,
+            FItalic    = 0x04,
+            FStrike    = 0x08
+        };
+        setFontBold     ( fontFlags & FBold );
+        setFontItalic   ( fontFlags & FItalic );
+        setFontUnderline( fontFlags & FUnderline );
+        setFontStrikeOut( fontFlags & FStrike );
+    }
 
-  if ( format.hasAttribute( "brushstyle" ) )
-  {
-    m_backGroundBrush.setStyle( (Qt::BrushStyle) format.attribute( "brushstyle" ).toInt( &ok )  );
-    if ( !ok )
-      return false;
+    if ( format.hasAttribute( "brushcolor" ) )
+    {
+        QBrush brush = backgroundBrush();
+        brush.setColor( QColor( format.attribute( "brushcolor" ) ) );
+        setBackgroundBrush( brush );
+    }
 
-    if ( m_backGroundBrush.style() != Qt::NoBrush )
-	m_featuresSet |= SBackgroundBrush;
-  }
+    if ( format.hasAttribute( "brushstyle" ) )
+    {
+        QBrush brush = backgroundBrush();
+        brush.setStyle( (Qt::BrushStyle) format.attribute( "brushstyle" ).toInt( &ok )  );
+        if ( !ok )
+            return false;
+        setBackgroundBrush( brush );
+    }
 
-  KoXmlElement pen = format.namedItem( "pen" ).toElement();
-  if ( !pen.isNull() )
-  {
-    m_textPen = util_toPen( pen );
-    if ( m_textPen.style() != Qt::NoPen )
-	m_featuresSet |= STextPen;
-  }
-
-  KoXmlElement left = format.namedItem( "left-border" ).toElement();
-  if ( !left.isNull() )
-  {
-    KoXmlElement pen = left.namedItem( "pen" ).toElement();
+    KoXmlElement pen = format.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
     {
-      m_leftBorderPen = util_toPen( pen );
-      if ( m_leftBorderPen.style() != Qt::NoPen )
-	  m_featuresSet |= SLeftBorder;
+        setFontColor( util_toPen( pen ).color() );
     }
-  }
 
-  KoXmlElement top = format.namedItem( "top-border" ).toElement();
-  if ( !top.isNull() )
-  {
-    KoXmlElement pen = top.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
+    KoXmlElement left = format.namedItem( "left-border" ).toElement();
+    if ( !left.isNull() )
     {
-      m_topBorderPen = util_toPen( pen );
-      if ( m_topBorderPen.style() != Qt::NoPen )
-	  m_featuresSet |= STopBorder;
+        KoXmlElement pen = left.namedItem( "pen" ).toElement();
+        if ( !pen.isNull() )
+        {
+            setLeftBorderPen( util_toPen( pen ) );
+        }
     }
-  }
 
-  KoXmlElement right = format.namedItem( "right-border" ).toElement();
-  if ( !right.isNull() )
-  {
-    KoXmlElement pen = right.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
+    KoXmlElement top = format.namedItem( "top-border" ).toElement();
+    if ( !top.isNull() )
     {
-      m_rightBorderPen = util_toPen( pen );
-      if ( m_rightBorderPen.style() != Qt::NoPen )
-	  m_featuresSet |= SRightBorder;
+        KoXmlElement pen = top.namedItem( "pen" ).toElement();
+        if ( !pen.isNull() )
+        {
+            setTopBorderPen( util_toPen( pen ) );
+        }
     }
-  }
 
-  KoXmlElement bottom = format.namedItem( "bottom-border" ).toElement();
-  if ( !bottom.isNull() )
-  {
-    KoXmlElement pen = bottom.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
+    KoXmlElement right = format.namedItem( "right-border" ).toElement();
+    if ( !right.isNull() )
     {
-      m_bottomBorderPen = util_toPen( pen );
-      if ( m_bottomBorderPen.style() != Qt::NoPen )
-	  m_featuresSet |= SBottomBorder;
+        KoXmlElement pen = right.namedItem( "pen" ).toElement();
+        if ( !pen.isNull() )
+        {
+            setRightBorderPen( util_toPen( pen ) );
+        }
     }
-  }
 
-  KoXmlElement fallDiagonal = format.namedItem( "fall-diagonal" ).toElement();
-  if ( !fallDiagonal.isNull() )
-  {
-    KoXmlElement pen = fallDiagonal.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
+    KoXmlElement bottom = format.namedItem( "bottom-border" ).toElement();
+    if ( !bottom.isNull() )
     {
-      m_fallDiagonalPen = util_toPen( pen );
-      if ( m_fallDiagonalPen.style() != Qt::NoPen )
-	  m_featuresSet |= SFallDiagonal;
+        KoXmlElement pen = bottom.namedItem( "pen" ).toElement();
+        if ( !pen.isNull() )
+        {
+            setBottomBorderPen( util_toPen( pen ) );
+        }
     }
-  }
 
-  KoXmlElement goUpDiagonal = format.namedItem( "up-diagonal" ).toElement();
-  if ( !goUpDiagonal.isNull() )
-  {
-    KoXmlElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
-    if ( !pen.isNull() )
+    KoXmlElement fallDiagonal = format.namedItem( "fall-diagonal" ).toElement();
+    if ( !fallDiagonal.isNull() )
     {
-      m_goUpDiagonalPen = util_toPen( pen );
-      if ( m_goUpDiagonalPen.style() != Qt::NoPen )
-	  m_featuresSet |= SGoUpDiagonal;
+        KoXmlElement pen = fallDiagonal.namedItem( "pen" ).toElement();
+        if ( !pen.isNull() )
+        {
+            setFallDiagonalPen( util_toPen( pen ) );
+        }
     }
-  }
 
-  if ( format.hasAttribute( "prefix" ) )
-  {
-    m_prefix = format.attribute( "prefix" );
-    m_featuresSet |= SPrefix;
-  }
-  if ( format.hasAttribute( "postfix" ) )
-  {
-    m_postfix = format.attribute( "postfix" );
-    m_featuresSet |= SPostfix;
-  }
+    KoXmlElement goUpDiagonal = format.namedItem( "up-diagonal" ).toElement();
+    if ( !goUpDiagonal.isNull() )
+    {
+        KoXmlElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
+        if ( !pen.isNull() )
+        {
+            setGoUpDiagonalPen( util_toPen( pen ) );
+        }
+    }
 
-  return true;
-}
+    if ( format.hasAttribute( "prefix" ) )
+    {
+        setPrefix( format.attribute( "prefix" ) );
+    }
+    if ( format.hasAttribute( "postfix" ) )
+    {
+        setPostfix( format.attribute( "postfix" ) );
+    }
 
-void Style::setParent( CustomStyle * parent )
-{
-  m_parent = parent;
-  if ( m_parent )
-    m_parentName = m_parent->name();
-}
-
-CustomStyle * Style::parent() const
-{
-  return m_parent;
-}
-
-bool Style::release()
-{
-  --m_usageCount;
-
-  if ( m_type == CUSTOM || m_type == BUILTIN )
-    return false; // never delete builtin styles...
-
-  if ( m_usageCount < 1 )
     return true;
-
-  return false;
 }
 
-void Style::addRef()
+uint Style::bottomPenValue() const
 {
-  ++m_usageCount;
+    if ( !d->subStyles.contains( BottomPen ) )
+        return BorderPenStyle<BottomPen>().value;
+    return static_cast<const BorderPenStyle<BottomPen>*>( d->subStyles[BottomPen].data() )->value;
 }
 
-bool Style::hasProperty( Properties p ) const
+uint Style::rightPenValue() const
 {
-  FlagsSet f;
-  switch( p )
-  {
-   case PDontPrintText:
-    f = SDontPrintText;
-    break;
-   case PCustomFormat:
-    f = SCustomFormat;
-    break;
-   case PNotProtected:
-    f = SNotProtected;
-    break;
-   case PHideAll:
-    f = SHideAll;
-    break;
-   case PHideFormula:
-    f = SHideFormula;
-    break;
-   case PMultiRow:
-    f = SMultiRow;
-    break;
-   case PVerticalText:
-    f = SVerticalText;
-    break;
-   default:
-    kWarning() << "Unhandled property" << endl;
-    return ( m_properties  & (uint) p );
-  }
-
-  return ( !m_parent || featureSet( f ) ? ( m_properties & (uint) p ) : m_parent->hasProperty( p ) );
+    if ( !d->subStyles.contains( RightPen ) )
+        return BorderPenStyle<RightPen>().value;
+    return static_cast<const BorderPenStyle<RightPen>*>( d->subStyles[RightPen].data() )->value;
 }
 
-bool Style::hasFeature( FlagsSet f, bool withoutParent ) const
+uint Style::leftPenValue() const
 {
-  bool b = ( m_featuresSet & (uint) f );
-
-  // check if feature is defined here or at parent level
-  if ( m_parent && !withoutParent )
-    b = ( m_parent->hasFeature( f, withoutParent ) ? true : b );
-
-  return b;
+    if ( !d->subStyles.contains( LeftPen ) )
+        return BorderPenStyle<LeftPen>().value;
+    return static_cast<const BorderPenStyle<LeftPen>*>( d->subStyles[LeftPen].data() )->value;
 }
 
-void Style::clearFeature( FlagsSet f )
+uint Style::topPenValue() const
 {
-  m_featuresSet &= ~(uint)f;
+    if ( !d->subStyles.contains( TopPen ) )
+        return BorderPenStyle<TopPen>().value;
+    return static_cast<const BorderPenStyle<TopPen>*>( d->subStyles[TopPen].data() )->value;
 }
 
-QFont Style::font() const
+QColor Style::fontColor() const
 {
-  QString family = fontFamily();
-  int  size      = fontSize();
-  uint ff        = fontFlags();
-
-  QFont f( family, size );
-  if ( ff & (uint) FBold )
-    f.setBold( true );
-  if ( ff & (uint) FItalic )
-    f.setItalic( true );
-  if ( ff & (uint) FUnderline )
-    f.setUnderline( true );
-  if ( ff & (uint) FStrike )
-    f.setStrikeOut( true );
-
-  return f;
+    if ( !d->subStyles.contains( FontColor ) )
+        return Qt::black;//SubStyleOne<FontColor, QColor>().value1;
+    return static_cast<const SubStyleOne<FontColor, QColor>*>( d->subStyles[FontColor].data() )->value1;;
 }
 
-QString const & Style::fontFamily() const
+QColor Style::backgroundColor() const
 {
-  return ( !m_parent || featureSet( SFontFamily ) ? m_fontFamily : m_parent->fontFamily() );
+    if ( !d->subStyles.contains( BackgroundColor ) )
+        return SubStyleOne<BackgroundColor, QColor>().value1;
+    return static_cast<const SubStyleOne<BackgroundColor, QColor>*>( d->subStyles[BackgroundColor].data() )->value1;;
 }
 
-uint Style::fontFlags() const
+QPen Style::rightBorderPen() const
 {
-  return ( !m_parent || featureSet( SFontFlag ) ? m_fontFlags : m_parent->fontFlags() );
+    if ( !d->subStyles.contains( RightPen ) )
+        return BorderPenStyle<RightPen>().value1;
+    return static_cast<const BorderPenStyle<RightPen>*>( d->subStyles[RightPen].data() )->value1;;
 }
 
-int Style::fontSize() const
+QPen Style::bottomBorderPen() const
 {
-  return ( !m_parent || featureSet( SFontSize ) ? m_fontSize : m_parent->fontSize() );
+    if ( !d->subStyles.contains( BottomPen ) )
+        return BorderPenStyle<BottomPen>().value1;
+    return static_cast<const BorderPenStyle<BottomPen>*>( d->subStyles[BottomPen].data() )->value1;;
 }
 
-QPen const & Style::pen() const
+QPen Style::leftBorderPen() const
 {
-  return ( !m_parent || featureSet( STextPen ) ? m_textPen : m_parent->pen() );
+    if ( !d->subStyles.contains( LeftPen ) )
+        return BorderPenStyle<LeftPen>().value1;
+    return static_cast<const BorderPenStyle<LeftPen>*>( d->subStyles[LeftPen].data() )->value1;;
 }
 
-QColor const & Style::bgColor() const
+QPen Style::topBorderPen() const
 {
-  return ( !m_parent || featureSet( SBackgroundColor ) ? m_bgColor : m_parent->bgColor() );
+    if ( !d->subStyles.contains( TopPen ) )
+        return BorderPenStyle<TopPen>().value1;
+    return static_cast<const BorderPenStyle<TopPen>*>( d->subStyles[TopPen].data() )->value1;;
 }
 
-QPen const & Style::rightBorderPen() const
+QPen Style::fallDiagonalPen() const
 {
-  return ( !m_parent || featureSet( SRightBorder ) ? m_rightBorderPen : m_parent->rightBorderPen() );
+    if ( !d->subStyles.contains( FallDiagonalPen ) )
+        return PenStyle<FallDiagonalPen>().value1;
+    return static_cast<const PenStyle<FallDiagonalPen>*>( d->subStyles[FallDiagonalPen].data() )->value1;;
 }
 
-QPen const & Style::bottomBorderPen() const
+QPen Style::goUpDiagonalPen() const
 {
-  return ( !m_parent || featureSet( SBottomBorder ) ? m_bottomBorderPen : m_parent->bottomBorderPen() );
+    if ( !d->subStyles.contains( GoUpDiagonalPen ) )
+        return PenStyle<GoUpDiagonalPen>().value1;
+    return static_cast<const PenStyle<GoUpDiagonalPen>*>( d->subStyles[GoUpDiagonalPen].data() )->value1;;
 }
 
-QPen const & Style::leftBorderPen() const
+QBrush Style::backgroundBrush() const
 {
-  return ( !m_parent || featureSet( SLeftBorder ) ? m_leftBorderPen : m_parent->leftBorderPen() );
+    if ( !d->subStyles.contains( BackgroundBrush ) )
+        return SubStyleOne<BackgroundBrush, QBrush>().value1;
+    return static_cast<const SubStyleOne<BackgroundBrush, QBrush>*>( d->subStyles[BackgroundBrush].data() )->value1;;
 }
 
-QPen const & Style::topBorderPen() const
+QString Style::customFormat() const
 {
-  return ( !m_parent || featureSet( STopBorder ) ? m_topBorderPen : m_parent->topBorderPen() );
+    if ( !d->subStyles.contains( CustomFormat ) )
+        return SubStyleOne<CustomFormat,QString>().value1;
+    return static_cast<const SubStyleOne<CustomFormat, QString>*>( d->subStyles[CustomFormat].data() )->value1;;
 }
 
-QPen const & Style::fallDiagonalPen() const
+QString Style::prefix() const
 {
-  return ( !m_parent || featureSet( SFallDiagonal ) ? m_fallDiagonalPen : m_parent->fallDiagonalPen() );
+    if ( !d->subStyles.contains( Prefix ) )
+        return SubStyleOne<Prefix, QString>().value1;
+    return static_cast<const SubStyleOne<Prefix, QString>*>( d->subStyles[Prefix].data() )->value1;;
 }
 
-QPen const & Style::goUpDiagonalPen() const
+QString Style::postfix() const
 {
-  return ( !m_parent || featureSet( SGoUpDiagonal ) ? m_goUpDiagonalPen : m_parent->goUpDiagonalPen() );
+    if ( !d->subStyles.contains( Postfix ) )
+        return SubStyleOne<Postfix, QString>().value1;
+    return static_cast<const SubStyleOne<Postfix, QString>*>( d->subStyles[Postfix].data() )->value1;;
 }
 
-int Style::precision() const
+QString Style::fontFamily() const
 {
-  return ( !m_parent || featureSet( SPrecision ) ? m_precision : m_parent->precision() );
-}
-
-int Style::rotateAngle() const
-{
-  return ( !m_parent || featureSet( SAngle ) ? m_rotateAngle : m_parent->rotateAngle() );
-}
-
-double Style::indent() const
-{
-  return ( !m_parent || featureSet( SIndent ) ? m_indent : m_parent->indent() );
-}
-
-QBrush const & Style::backGroundBrush() const
-{
-  return ( !m_parent || featureSet( SBackgroundBrush ) ? m_backGroundBrush : m_parent->backGroundBrush() );
+    if ( !d->subStyles.contains( FontFamily ) )
+        return KoGlobal::defaultFont().family(); // SubStyleOne<FontFamily, QString>().value1;
+    return static_cast<const SubStyleOne<FontFamily, QString>*>( d->subStyles[FontFamily].data() )->value1;;
 }
 
 Style::HAlign Style::halign() const
 {
-  return ( !m_parent || featureSet( SHAlign ) ? m_alignX : m_parent->halign() );
+    if ( !d->subStyles.contains( HorizontalAlignment ) )
+        return SubStyleOne<HorizontalAlignment, Style::HAlign>().value1;
+    return static_cast<const SubStyleOne<HorizontalAlignment, Style::HAlign>*>( d->subStyles[HorizontalAlignment].data() )->value1;;
 }
 
 Style::VAlign Style::valign() const
 {
-  return ( !m_parent || featureSet( SVAlign ) ? m_alignY : m_parent->valign() );
+    if ( !d->subStyles.contains( VerticalAlignment ) )
+        return SubStyleOne<VerticalAlignment, Style::VAlign>().value1;
+    return static_cast<const SubStyleOne<VerticalAlignment, Style::VAlign>*>( d->subStyles[VerticalAlignment].data() )->value1;;
 }
 
 Style::FloatFormat Style::floatFormat() const
 {
-  return ( !m_parent || featureSet( SFloatFormat ) ? m_floatFormat : m_parent->floatFormat() );
+    if ( !d->subStyles.contains( FloatFormatKey ) )
+        return SubStyleOne<FloatFormatKey, FloatFormat>().value1;
+    return static_cast<const SubStyleOne<FloatFormatKey, FloatFormat>*>( d->subStyles[FloatFormatKey].data() )->value1;;
 }
 
 Style::FloatColor Style::floatColor() const
 {
-  return ( !m_parent || featureSet( SFloatColor ) ? m_floatColor : m_parent->floatColor() );
+    if ( !d->subStyles.contains( FloatColorKey ) )
+        return SubStyleOne<FloatColorKey, FloatColor>().value1;
+    return static_cast<const SubStyleOne<FloatColorKey, FloatColor>*>( d->subStyles[FloatColorKey].data() )->value1;;
 }
 
 FormatType Style::formatType() const
 {
-  return ( !m_parent || featureSet( SFormatType ) ? m_formatType : m_parent->formatType() );
+    if ( !d->subStyles.contains( FormatTypeKey ) )
+        return SubStyleOne<FormatTypeKey, FormatType>().value1;
+    return static_cast<const SubStyleOne<FormatTypeKey, FormatType>*>( d->subStyles[FormatTypeKey].data() )->value1;;
 }
 
-Style::Currency const & Style::currency() const
+Style::Currency Style::currency() const
 {
-  return ( !m_parent || featureSet( SFormatType ) ? m_currency : m_parent->currency() );
+    if ( !d->subStyles.contains( CurrencyFormat ) )
+        return Currency();
+    return static_cast<const SubStyleOne<CurrencyFormat, Style::Currency>*>( d->subStyles[CurrencyFormat].data() )->value1;;
 }
 
-QString const & Style::strFormat() const
+QFont Style::font() const
 {
-  return ( !m_parent || featureSet( SCustomFormat ) ? m_strFormat : m_parent->strFormat() );
+    QFont font;
+    font.setFamily( fontFamily() );
+    font.setPointSize( fontSize() );
+    font.setBold( bold() );
+    font.setItalic( italic() );
+    font.setUnderline( underline() );
+    font.setStrikeOut( strikeOut() );
+    return font;
 }
 
-QString const & Style::prefix() const
+bool Style::bold() const
 {
-  return ( !m_parent || featureSet( SPrefix ) ? m_prefix : m_parent->prefix() );
+    if ( !d->subStyles.contains( FontBold ) )
+        return SubStyleOne<FontBold, bool>().value1;
+    return static_cast<const SubStyleOne<FontBold, bool>*>( d->subStyles[FontBold].data() )->value1;;
 }
 
-QString const & Style::postfix() const
+bool Style::italic() const
 {
-  return ( !m_parent || featureSet( SPostfix ) ? m_postfix : m_parent->postfix() );
+    if ( !d->subStyles.contains( FontItalic ) )
+        return SubStyleOne<FontItalic, bool>().value1;
+    return static_cast<const SubStyleOne<FontItalic, bool>*>( d->subStyles[FontItalic].data() )->value1;;
 }
 
-
-
-Style * Style::setHAlign( HAlign alignX )
+bool Style::underline() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_alignX = alignX;
-    style->m_featuresSet |= SHAlign;
-    return style;
-  }
-
-  m_alignX      = alignX;
-  m_featuresSet |= SHAlign;
-  return this;
+    if ( !d->subStyles.contains( FontUnderline ) )
+        return SubStyleOne<FontUnderline, bool>().value1;
+    return static_cast<const SubStyleOne<FontUnderline, bool>*>( d->subStyles[FontUnderline].data() )->value1;;
 }
 
-Style * Style::setVAlign( VAlign alignY )
+bool Style::strikeOut() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_alignY = alignY;
-    style->m_featuresSet |= SVAlign;
-    return style;
-  }
-
-  m_alignY = alignY;
-  m_featuresSet |= SVAlign;
-  return this;
+    if ( !d->subStyles.contains( FontStrike ) )
+        return SubStyleOne<FontStrike, bool>().value1;
+    return static_cast<const SubStyleOne<FontStrike, bool>*>( d->subStyles[FontStrike].data() )->value1;;
 }
 
-Style * Style::setFont( QFont const & f )
+int Style::fontSize() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    if ( style->m_fontFamily != f.family() )
-    {
-      style->m_fontFamily = f.family();
-      style->m_featuresSet |= SFont;
-      style->m_featuresSet |= SFontFamily;
-    }
-    if ( style->m_fontSize != f.pointSize() )
-    {
-      style->m_fontSize = f.pointSize();
-      style->m_featuresSet |= SFont;
-      style->m_featuresSet |= SFontSize;
-    }
-    if ( f.italic() != (m_fontFlags & (uint) FItalic ) )
-    {
-      if ( f.italic() )
-        style->m_fontFlags |= FItalic;
-      else
-        style->m_fontFlags &= ~(uint) FItalic;
-      style->m_featuresSet |= SFont;
-      style->m_featuresSet |= SFontFlag;
-    }
-    if ( f.bold() != (m_fontFlags & (uint) FBold ) )
-    {
-      if ( f.bold() )
-        style->m_fontFlags |= FBold;
-      else
-        style->m_fontFlags &= ~(uint) FBold;
-      style->m_featuresSet |= SFont;
-      style->m_featuresSet |= SFontFlag;
-    }
-    if ( f.underline() != (m_fontFlags & (uint) FUnderline ) )
-    {
-      if ( f.underline() )
-        style->m_fontFlags |= FUnderline;
-      else
-        style->m_fontFlags &= ~(uint) FUnderline;
-      style->m_featuresSet |= SFont;
-      style->m_featuresSet |= SFontFlag;
-    }
-    if ( f.strikeOut() != (m_fontFlags & (uint) FStrike ) )
-    {
-      if ( f.strikeOut() )
-        style->m_fontFlags |= FStrike;
-      else
-        style->m_fontFlags &= ~(uint) FStrike;
-      style->m_featuresSet |= SFont;
-      style->m_featuresSet |= SFontFlag;
-    }
-
-    return style;
-  }
-
-  if ( m_fontFamily != f.family() )
-  {
-    m_fontFamily = f.family();
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFamily;
-  }
-  if ( m_fontSize != f.pointSize() )
-  {
-    m_fontSize = f.pointSize();
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontSize;
-  }
-  if ( f.italic() != (m_fontFlags & (uint) FItalic ) )
-  {
-    if ( f.italic() )
-      m_fontFlags |= FItalic;
-    else
-      m_fontFlags &= ~(uint) FItalic;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFlag;
-  }
-  if ( f.bold() != (m_fontFlags & (uint) FBold ) )
-  {
-    if ( f.bold() )
-      m_fontFlags |= FBold;
-    else
-      m_fontFlags &= ~(uint) FBold;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFlag;
-  }
-  if ( f.underline() != (m_fontFlags & (uint) FUnderline ) )
-  {
-    if ( f.underline() )
-      m_fontFlags |= FUnderline;
-    else
-      m_fontFlags &= ~(uint) FUnderline;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFlag;
-  }
-  if ( f.strikeOut() != (m_fontFlags & (uint) FStrike ) )
-  {
-    if ( f.strikeOut() )
-      m_fontFlags |= FStrike;
-    else
-      m_fontFlags &= ~(uint) FStrike;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFlag;
-  }
-
-  return this;
+    if ( !d->subStyles.contains( FontSize ) )
+        return KoGlobal::defaultFont().pointSize(); //SubStyleOne<FontSize, int>().value1;
+    return static_cast<const SubStyleOne<FontSize, int>*>( d->subStyles[FontSize].data() )->value1;;
 }
 
-Style * Style::setFontFamily( QString const & fam )
+int Style::precision() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    if ( m_fontFamily != fam )
-    {
-      Style * style  = new Style( this );
-      style->m_fontFamily   = fam;
-      style->m_featuresSet |= SFontFamily;
-      style->m_featuresSet |= SFont;
-      return style;
-    }
-    return this;
-  }
-
-  m_fontFamily   = fam;
-  m_featuresSet |= SFont;
-  m_featuresSet |= SFontFamily;
-  return this;
+    if ( !d->subStyles.contains( Precision ) )
+        return SubStyleOne<Precision, int>().value1;
+    return static_cast<const SubStyleOne<Precision, int>*>( d->subStyles[Precision].data() )->value1;;
 }
 
-Style * Style::setFontFlags( uint flags )
+int Style::angle() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    if ( m_fontFlags != flags )
-    {
-      Style * style = new Style( this );
-      style->m_fontFlags = flags;
-      style->m_featuresSet |= SFontFlag;
-      style->m_featuresSet |= SFont;
-      return style;
-    }
-    return this;
-  }
-
-  m_fontFlags    = flags;
-  m_featuresSet |= SFont;
-  m_featuresSet |= SFontFlag;
-  return this;
+    if ( !d->subStyles.contains( Angle ) )
+        return SubStyleOne<Angle, int>().value1;
+    return static_cast<const SubStyleOne<Angle, int>*>( d->subStyles[Angle].data() )->value1;;
 }
 
-Style * Style::setFontSize( int size )
+double Style::indentation() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    if ( m_fontSize != size )
-    {
-      Style * style  = new Style( this );
-      style->m_fontSize     = size;
-      style->m_featuresSet |= SFontSize;
-      style->m_featuresSet |= SFont;
-      return style;
-    }
-    return this;
-  }
-
-  m_fontSize     = size;
-  m_featuresSet |= SFont;
-  m_featuresSet |= SFontSize;
-  return this;
+    if ( !d->subStyles.contains( Indentation ) )
+        return SubStyleOne<Indentation, int>().value1;
+    return static_cast<const SubStyleOne<Indentation, int>*>( d->subStyles[Indentation].data() )->value1;;
 }
 
-Style * Style::setPen( QPen const & pen )
+bool Style::verticalText() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_textPen = pen;
-    if ( style->m_textPen.style() != Qt::NoPen )
-	style->m_featuresSet |= STextPen;
-    return style;
-  }
-
-  m_textPen = pen;
-  if ( m_textPen.style() != Qt::NoPen )
-      m_featuresSet |= STextPen;
-  return this;
+    if ( !d->subStyles.contains( VerticalText ) )
+        return SubStyleOne<VerticalText, bool>().value1;
+    return static_cast<const SubStyleOne<VerticalText, bool>*>( d->subStyles[VerticalText].data() )->value1;;
 }
 
-Style * Style::setBgColor( QColor const & color )
+bool Style::wrapText() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_bgColor = color;
-    if ( style->m_bgColor != Qt::white )
-	style->m_featuresSet |= SBackgroundColor;
-    return style;
-  }
-
-  m_bgColor = color;
-  if ( m_bgColor != Qt::white )
-      m_featuresSet |= SBackgroundColor;
-  return this;
+    if ( !d->subStyles.contains( MultiRow ) )
+        return SubStyleOne<MultiRow, bool>().value1;
+    return static_cast<const SubStyleOne<MultiRow, bool>*>( d->subStyles[MultiRow].data() )->value1;;
 }
 
-Style * Style::setRightBorderPen( QPen const & pen )
+bool Style::printText() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_rightBorderPen = pen;
-    style->m_rightPenValue = calculateValue( pen );
-    if ( style->m_rightBorderPen.style() != Qt::NoPen )
-	style->m_featuresSet |= SRightBorder;
-    return style;
-  }
-
-  m_rightBorderPen = pen;
-  m_rightPenValue = calculateValue( pen );
-  if ( m_rightBorderPen.style() != Qt::NoPen )
-      m_featuresSet |= SRightBorder;
-  return this;
+    if ( !d->subStyles.contains( DontPrintText ) )
+        return !SubStyleOne<DontPrintText, bool>().value1;
+    return !static_cast<const SubStyleOne<DontPrintText, bool>*>( d->subStyles[DontPrintText].data() )->value1;;
 }
 
-Style * Style::setBottomBorderPen( QPen const & pen )
+bool Style::hideAll() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_bottomBorderPen = pen;
-    style->m_bottomPenValue = calculateValue( pen );
-    if ( style->m_bottomBorderPen.style() != Qt::NoPen )
-        style->m_featuresSet |= SBottomBorder;
-    return style;
-  }
-
-  m_bottomBorderPen = pen;
-  m_bottomPenValue = calculateValue( pen );
-  if ( m_bottomBorderPen.style() != Qt::NoPen )
-      m_featuresSet |= SBottomBorder;
-  return this;
+    if ( !d->subStyles.contains( HideAll ) )
+        return SubStyleOne<HideAll, bool>().value1;
+    return static_cast<const SubStyleOne<HideAll, bool>*>( d->subStyles[HideAll].data() )->value1;;
 }
 
-Style * Style::setLeftBorderPen( QPen const & pen )
+bool Style::hideFormula() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_leftBorderPen = pen;
-    style->m_leftPenValue = calculateValue( pen );
-    if ( style->m_leftBorderPen.style() != Qt::NoPen )
-	style->m_featuresSet |= SLeftBorder;
-    return style;
-  }
-
-  m_leftBorderPen = pen;
-  m_leftPenValue = calculateValue( pen );
-  if ( m_leftBorderPen.style() != Qt::NoPen )
-      m_featuresSet |= SLeftBorder;
-  return this;
+    if ( !d->subStyles.contains( HideFormula ) )
+        return SubStyleOne<HideFormula, bool>().value1;
+    return static_cast<const SubStyleOne<HideFormula, bool>*>( d->subStyles[HideFormula].data() )->value1;;
 }
 
-Style * Style::setTopBorderPen( QPen const & pen )
+bool Style::notProtected() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_topBorderPen = pen;
-    style->m_topPenValue = calculateValue( pen );
-    if ( style->m_topBorderPen.style() != Qt::NoPen )
-	style->m_featuresSet |= STopBorder;
-    return style;
-  }
-
-  m_topBorderPen = pen;
-  m_topPenValue = calculateValue( pen );
-  if ( m_topBorderPen.style() != Qt::NoPen )
-      m_featuresSet |= STopBorder;
-  return this;
+    if ( !d->subStyles.contains( NotProtected ) )
+        return SubStyleOne<NotProtected, bool>().value1;
+    return static_cast<const SubStyleOne<NotProtected, bool>*>( d->subStyles[NotProtected].data() )->value1;;
 }
 
-Style * Style::setFallDiagonalPen( QPen const & pen )
+bool Style::isDefault() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_fallDiagonalPen = pen;
-    if ( style->m_fallDiagonalPen.style() != Qt::NoPen )
-	style->m_featuresSet |= SFallDiagonal;
-    return style;
-  }
-
-  m_fallDiagonalPen = pen;
-  if ( m_fallDiagonalPen.style() != Qt::NoPen )
-      m_featuresSet |= SFallDiagonal;
-  return this;
+    return isEmpty() || ( d->subStyles.count() == 1 && d->subStyles.contains( DefaultStyleKey ) );
 }
 
-Style * Style::setGoUpDiagonalPen( QPen const & pen )
+bool Style::isEmpty() const
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_goUpDiagonalPen = pen;
-    if ( style->m_goUpDiagonalPen.style() != Qt::NoPen )
-	style->m_featuresSet |= SGoUpDiagonal;
-    return style;
-  }
-
-  m_goUpDiagonalPen = pen;
-  if ( m_goUpDiagonalPen.style() != Qt::NoPen )
-      m_featuresSet |= SGoUpDiagonal;
-  return this;
+    return d->subStyles.isEmpty();
 }
 
-Style * Style::setRotateAngle( int angle )
+void Style::setHAlign( HAlign align )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_rotateAngle = angle;
-    style->m_featuresSet |= SAngle;
-    return style;
-  }
-
-  m_rotateAngle = angle;
-  m_featuresSet |= SAngle;
-  return this;
+    insertSubStyle( HorizontalAlignment, align );
 }
 
-Style * Style::setIndent( double indent )
+void Style::setVAlign( VAlign align )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_indent = qMax( 0.0, indent );
-    style->m_featuresSet |= SIndent;
-    return style;
-  }
-
-  m_indent = qMax( 0.0, indent );
-  m_featuresSet |= SIndent;
-  return this;
+    insertSubStyle( VerticalAlignment, align );
 }
 
-Style * Style::setBackGroundBrush( QBrush const & brush )
+void Style::setFont( QFont const & font )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_backGroundBrush = brush;
-    if ( style->m_backGroundBrush.style() != Qt::NoBrush )
-	style->m_featuresSet |= SBackgroundBrush;
-    return style;
-  }
-
-  m_backGroundBrush = brush;
-  if ( m_backGroundBrush.style() != Qt::NoBrush )
-      m_featuresSet |= SBackgroundBrush;
-  return this;
+    insertSubStyle( FontFamily,     font.family() );
+    insertSubStyle( FontSize,       font.pointSize() );
+    insertSubStyle( FontBold,       font.bold() );
+    insertSubStyle( FontItalic,     font.italic() );
+    insertSubStyle( FontStrike,     font.strikeOut() );
+    insertSubStyle( FontUnderline,  font.underline() );
 }
 
-Style * Style::setFloatFormat( FloatFormat format )
+void Style::setFontFamily( QString const & family )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_floatFormat = format;
-    style->m_featuresSet |= SFloatFormat;
-    return style;
-  }
-
-  m_floatFormat = format;
-  m_featuresSet |= SFloatFormat;
-  return this;
+    insertSubStyle( FontFamily, family );
 }
 
-Style * Style::setFloatColor( FloatColor color )
+void Style::setFontBold( bool enabled )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_floatColor = color;
-    style->m_featuresSet |= SFloatColor;
-    return style;
-  }
-
-  m_floatColor = color;
-  m_featuresSet |= SFloatColor;
-  return this;
+    insertSubStyle( FontBold, enabled );
 }
 
-Style * Style::setStrFormat( QString const & strFormat )
+void Style::setFontItalic( bool enabled )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_strFormat = strFormat;
-    style->m_featuresSet |= SCustomFormat;
-    return style;
-  }
-
-  m_strFormat = strFormat;
-  m_featuresSet |= SCustomFormat;
-  return this;
+    insertSubStyle( FontItalic, enabled );
 }
 
-Style * Style::setPrecision( int precision )
+void Style::setFontUnderline( bool enabled )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_precision = precision;
-    style->m_featuresSet |= SPrecision;
-    return style;
-  }
-
-  m_precision = precision;
-  m_featuresSet |= SPrecision;
-  return this;
+    insertSubStyle( FontUnderline, enabled );
 }
 
-Style * Style::setPrefix( QString const & prefix )
+void Style::setFontStrikeOut( bool enabled )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_prefix = prefix;
-    style->m_featuresSet |= SPrefix;
-    return style;
-  }
-
-  m_prefix = prefix;
-  m_featuresSet |= SPrefix;
-  return this;
+    insertSubStyle( FontStrike, enabled );
 }
 
-Style * Style::setPostfix( QString const & postfix )
+void Style::setFontSize( int size )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_postfix = postfix;
-    style->m_featuresSet |= SPostfix;
-    return style;
-  }
-
-  m_postfix = postfix;
-  m_featuresSet |= SPostfix;
-  return this;
+    insertSubStyle( FontSize, size );
 }
 
-Style * Style::setCurrency( Currency const & currency )
+void Style::setFontColor( QColor const & color )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_currency = currency;
-    style->m_featuresSet |= SFormatType;
-    return style;
-  }
-
-  m_currency = currency;
-  m_featuresSet |= SFormatType;
-  return this;
+    insertSubStyle( FontColor, color );
 }
 
-Style * Style::setProperty( Properties p )
+void Style::setBackgroundColor( QColor const & color )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_properties |= (uint) p;
-    switch( p )
-    {
-     case PDontPrintText:
-      style->m_featuresSet |= SDontPrintText;
-      break;
-     case PCustomFormat:
-      style->m_featuresSet |= SCustomFormat;
-      break;
-     case PNotProtected:
-      style->m_featuresSet |= SNotProtected;
-      break;
-     case PHideAll:
-      style->m_featuresSet |= SHideAll;
-      break;
-     case PHideFormula:
-      style->m_featuresSet |= SHideFormula;
-      break;
-     case PMultiRow:
-      style->m_featuresSet |= SMultiRow;
-      break;
-     case PVerticalText:
-      style->m_featuresSet |= SVerticalText;
-      break;
-     default:
-      kWarning() << "Unhandled property" << endl;
-    }
-    return style;
-  }
-
-  m_properties |= (uint) p;
-  switch( p )
-  {
-   case PDontPrintText:
-    m_featuresSet |= SDontPrintText;
-    break;
-   case PCustomFormat:
-    m_featuresSet |= SCustomFormat;
-    break;
-   case PNotProtected:
-     m_featuresSet |= SNotProtected;
-    break;
-   case PHideAll:
-    m_featuresSet |= SHideAll;
-    break;
-   case PHideFormula:
-    m_featuresSet |= SHideFormula;
-    break;
-   case PMultiRow:
-    m_featuresSet |= SMultiRow;
-    break;
-   case PVerticalText:
-    m_featuresSet |= SVerticalText;
-    break;
-   default:
-    kWarning() << "Unhandled property" << endl;
-  }
-  return this;
+    insertSubStyle( BackgroundColor, color );
 }
 
-Style * Style::clearProperty( Properties p )
+void Style::setRightBorderPen( QPen const & pen )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style = new Style( this );
-    style->m_properties &= ~(uint) p;
-    switch( p )
-    {
-     case PDontPrintText:
-      style->m_featuresSet |= SDontPrintText;
-      break;
-     case PCustomFormat:
-      style->m_featuresSet |= SCustomFormat;
-      break;
-     case PNotProtected:
-      style->m_featuresSet |= SNotProtected;
-      break;
-     case PHideAll:
-      style->m_featuresSet |= SHideAll;
-      break;
-     case PHideFormula:
-      style->m_featuresSet |= SHideFormula;
-      break;
-     case PMultiRow:
-      style->m_featuresSet |= SMultiRow;
-      break;
-     case PVerticalText:
-      style->m_featuresSet |= SVerticalText;
-      break;
-     default:
-      kWarning() << "Unhandled property" << endl;
-    }
-    return style;
-  }
-
-  m_properties &= ~(uint) p;
-  switch( p )
-  {
-   case PDontPrintText:
-    m_featuresSet |= SDontPrintText;
-    break;
-   case PCustomFormat:
-    m_featuresSet |= SCustomFormat;
-    break;
-   case PNotProtected:
-    m_featuresSet |= SNotProtected;
-    break;
-   case PHideAll:
-    m_featuresSet |= SHideAll;
-    break;
-   case PHideFormula:
-    m_featuresSet |= SHideFormula;
-    break;
-   case PMultiRow:
-    m_featuresSet |= SMultiRow;
-    break;
-   case PVerticalText:
-    m_featuresSet |= SVerticalText;
-    break;
-   default:
-    kWarning() << "Unhandled property" << endl;
-  }
-  return this;
+    insertSubStyle( RightPen, pen );
 }
 
-
-Style * Style::setFormatType( FormatType format )
+void Style::setBottomBorderPen( QPen const & pen )
 {
-  if ( m_type != AUTO || m_usageCount > 1 )
-  {
-    Style * style  = new Style( this );
-    style->m_formatType  = format;
-    style->m_featuresSet |= SFormatType;
-    return style;
-  }
+    insertSubStyle( BottomPen, pen );
+}
 
-  m_formatType  = format;
-  m_featuresSet |= SFormatType;
-  return this;
+void Style::setLeftBorderPen( QPen const & pen )
+{
+    insertSubStyle( LeftPen, pen );
+}
+
+void Style::setTopBorderPen( QPen const & pen )
+{
+    insertSubStyle( TopPen, pen );
+}
+
+void Style::setFallDiagonalPen( QPen const & pen )
+{
+    insertSubStyle( FallDiagonalPen, pen );
+}
+
+void Style::setGoUpDiagonalPen( QPen const & pen )
+{
+    insertSubStyle( GoUpDiagonalPen, pen );
+}
+
+void Style::setAngle( int angle )
+{
+    insertSubStyle( Angle, angle );
+}
+
+void Style::setIndentation( double indent )
+{
+    insertSubStyle( Indentation, indent );
+}
+
+void Style::setBackgroundBrush( QBrush const & brush )
+{
+    insertSubStyle( BackgroundBrush, brush );
+}
+
+void Style::setFloatFormat( FloatFormat format )
+{
+    insertSubStyle( FloatFormatKey, format );
+}
+
+void Style::setFloatColor( FloatColor color )
+{
+    insertSubStyle( FloatColorKey, color );
+}
+
+void Style::setFormatType( FormatType format )
+{
+    insertSubStyle( FormatTypeKey, format );
+}
+
+void Style::setCustomFormat( QString const & strFormat )
+{
+    insertSubStyle( CustomFormat, strFormat );
+}
+
+void Style::setPrecision( int precision )
+{
+    insertSubStyle( Precision, precision );
+}
+
+void Style::setPrefix( QString const & prefix )
+{
+    insertSubStyle( Prefix, prefix );
+}
+
+void Style::setPostfix( QString const & postfix )
+{
+    insertSubStyle( Postfix, postfix );
+}
+
+void Style::setCurrency( Currency const & currency )
+{
+//    insertSubStyle( CurrencyFormat, currency );
+}
+
+void Style::setWrapText( bool enable )
+{
+    insertSubStyle( MultiRow, enable );
+}
+
+void Style::setHideAll( bool enable )
+{
+    insertSubStyle( HideAll, enable );
+}
+
+void Style::setHideFormula( bool enable )
+{
+    insertSubStyle( HideFormula, enable );
+}
+
+void Style::setNotProtected( bool enable )
+{
+    insertSubStyle( NotProtected, enable );
+}
+
+void Style::setDontPrintText( bool enable )
+{
+    insertSubStyle( DontPrintText, enable );
+}
+
+void Style::setVerticalText( bool enable )
+{
+    insertSubStyle( VerticalText, enable );
+}
+
+void Style::setDefault()
+{
+    insertSubStyle( DefaultStyleKey, true );
 }
 
 QString Style::colorName( const QColor& color )
 {
-	static QMap<QRgb , QString> map;
-
-	QRgb rgb = color.rgb();
-
-	if (!map.contains( rgb ))
-	{
-		map[rgb] = color.name();
-		return map[rgb];
-	}
-	else
-	{
-		return map[rgb];
-	}
+    static QMap<QRgb, QString> map;
+    QRgb rgb = color.rgb();
+    if (!map.contains( rgb ))
+    {
+        map[rgb] = color.name();
+        return map[rgb];
+    }
+    else
+    {
+        return map[rgb];
+    }
 }
 
-/**
- * ************************************************************
- * CustomStyle
- * ************************************************************
- */
+bool Style::compare( const SubStyle* one, const SubStyle* two )
+{
+    if ( !one || !two )
+        return one == two;
+    if ( one->type() != two->type() )
+        return false;
+    switch ( one->type() )
+    {
+        case DefaultStyleKey:
+            return true;
+        case NamedStyleKey:
+            if ( static_cast<const NamedStyle*>(one)->style != static_cast<const NamedStyle*>(two)->style )
+                return false;
+            if ( static_cast<const NamedStyle*>(one)->name != static_cast<const NamedStyle*>(two)->name )
+                return false;
+            return true;
+        // borders
+        case LeftPen:
+            return static_cast<const SubStyleOne<LeftPen,QPen>*>(one)->value1 == static_cast<const SubStyleOne<LeftPen,QPen>*>(two)->value1;
+        case RightPen:
+            return static_cast<const SubStyleOne<RightPen,QPen>*>(one)->value1 == static_cast<const SubStyleOne<RightPen,QPen>*>(two)->value1;
+        case TopPen:
+            return static_cast<const SubStyleOne<TopPen,QPen>*>(one)->value1 == static_cast<const SubStyleOne<TopPen,QPen>*>(two)->value1;
+        case BottomPen:
+            return static_cast<const SubStyleOne<BottomPen,QPen>*>(one)->value1 == static_cast<const SubStyleOne<BottomPen,QPen>*>(two)->value1;
+        case FallDiagonalPen:
+            return static_cast<const SubStyleOne<FallDiagonalPen,QPen>*>(one)->value1 == static_cast<const SubStyleOne<FallDiagonalPen,QPen>*>(two)->value1;
+        case GoUpDiagonalPen:
+            return static_cast<const SubStyleOne<GoUpDiagonalPen,QPen>*>(one)->value1 == static_cast<const SubStyleOne<GoUpDiagonalPen,QPen>*>(two)->value1;
+        // layout
+        case HorizontalAlignment:
+            return static_cast<const SubStyleOne<HorizontalAlignment,HAlign>*>(one)->value1 == static_cast<const SubStyleOne<HorizontalAlignment,HAlign>*>(two)->value1;
+        case VerticalAlignment:
+            return static_cast<const SubStyleOne<VerticalAlignment,VAlign>*>(one)->value1 == static_cast<const SubStyleOne<VerticalAlignment,VAlign>*>(two)->value1;
+        case MultiRow:
+            return static_cast<const SubStyleOne<MultiRow,bool>*>(one)->value1 == static_cast<const SubStyleOne<MultiRow,bool>*>(two)->value1;
+        case VerticalText:
+            return static_cast<const SubStyleOne<VerticalText,bool>*>(one)->value1 == static_cast<const SubStyleOne<VerticalText,bool>*>(two)->value1;
+        case Angle:
+            return static_cast<const SubStyleOne<Angle,int>*>(one)->value1 == static_cast<const SubStyleOne<Angle,int>*>(two)->value1;
+        case Indentation:
+            return static_cast<const SubStyleOne<Indentation,int>*>(one)->value1 == static_cast<const SubStyleOne<Indentation,int>*>(two)->value1;
+        // content format
+        case Prefix:
+            return static_cast<const SubStyleOne<Prefix,QString>*>(one)->value1 == static_cast<const SubStyleOne<Prefix,QString>*>(two)->value1;
+        case Postfix:
+            return static_cast<const SubStyleOne<Postfix,QString>*>(one)->value1 == static_cast<const SubStyleOne<Postfix,QString>*>(two)->value1;
+        case Precision:
+            return static_cast<const SubStyleOne<Precision,int>*>(one)->value1 == static_cast<const SubStyleOne<Precision,int>*>(two)->value1;
+        case FormatTypeKey:
+            return static_cast<const SubStyleOne<FormatTypeKey,FormatType>*>(one)->value1 == static_cast<const SubStyleOne<FormatTypeKey,FormatType>*>(two)->value1;
+        case FloatFormatKey:
+            return static_cast<const SubStyleOne<FloatFormatKey,FloatFormat>*>(one)->value1 == static_cast<const SubStyleOne<FloatFormatKey,FloatFormat>*>(two)->value1;
+        case FloatColorKey:
+            return static_cast<const SubStyleOne<FloatColorKey,FloatColor>*>(one)->value1 == static_cast<const SubStyleOne<FloatColorKey,FloatColor>*>(two)->value1;
+        case CurrencyFormat:
+        {
+            Currency currencyOne = static_cast<const SubStyleOne<CurrencyFormat,Style::Currency>*>(one)->value1;
+            Currency currencyTwo = static_cast<const SubStyleOne<CurrencyFormat,Style::Currency>*>(two)->value1;
+            if ( currencyOne.type != currencyTwo.type )
+                return false;
+            if ( currencyOne.symbol != currencyTwo.symbol )
+                return false;
+            return true;
+        }
+        case CustomFormat:
+            return static_cast<const SubStyleOne<CustomFormat,QString>*>(one)->value1 == static_cast<const SubStyleOne<CustomFormat,QString>*>(two)->value1;
+        // background
+        case BackgroundBrush:
+            return static_cast<const SubStyleOne<BackgroundBrush,QBrush>*>(one)->value1 == static_cast<const SubStyleOne<BackgroundBrush,QBrush>*>(two)->value1;
+        case BackgroundColor:
+            return static_cast<const SubStyleOne<BackgroundColor,QColor>*>(one)->value1 == static_cast<const SubStyleOne<BackgroundColor,QColor>*>(two)->value1;
+        // font
+        case FontColor:
+           return static_cast<const SubStyleOne<FontColor,QColor>*>(one)->value1 == static_cast<const SubStyleOne<FontColor,QColor>*>(two)->value1;
+        case FontFamily:
+           return static_cast<const SubStyleOne<FontFamily,QString>*>(one)->value1 == static_cast<const SubStyleOne<FontFamily,QString>*>(two)->value1;
+        case FontSize:
+           return static_cast<const SubStyleOne<FontSize,int>*>(one)->value1 == static_cast<const SubStyleOne<FontSize,int>*>(two)->value1;
+        case FontBold:
+            return static_cast<const SubStyleOne<FontBold,bool>*>(one)->value1 == static_cast<const SubStyleOne<FontBold,bool>*>(two)->value1;
+        case FontItalic:
+            return static_cast<const SubStyleOne<FontItalic,bool>*>(one)->value1 == static_cast<const SubStyleOne<FontItalic,bool>*>(two)->value1;
+        case FontStrike:
+            return static_cast<const SubStyleOne<FontStrike,bool>*>(one)->value1 == static_cast<const SubStyleOne<FontStrike,bool>*>(two)->value1;
+        case FontUnderline:
+            return static_cast<const SubStyleOne<FontUnderline,bool>*>(one)->value1 == static_cast<const SubStyleOne<FontUnderline,bool>*>(two)->value1;
+        //misc
+        case DontPrintText:
+            return static_cast<const SubStyleOne<DontPrintText,bool>*>(one)->value1 == static_cast<const SubStyleOne<DontPrintText,bool>*>(two)->value1;
+        case NotProtected:
+            return static_cast<const SubStyleOne<NotProtected,bool>*>(one)->value1 == static_cast<const SubStyleOne<NotProtected,bool>*>(two)->value1;
+        case HideAll:
+            return static_cast<const SubStyleOne<HideAll,bool>*>(one)->value1 == static_cast<const SubStyleOne<HideAll,bool>*>(two)->value1;
+        case HideFormula:
+            return static_cast<const SubStyleOne<HideFormula,bool>*>(one)->value1 == static_cast<const SubStyleOne<HideFormula,bool>*>(two)->value1;
+        default:
+            return false;
+    }
+}
+
+bool Style::operator==( const Style& other ) const
+{
+    if ( other.isEmpty() )
+        return isEmpty() ? true : false;
+    QList<Key> attributes = d->subStyles.keys() + other.d->subStyles.keys();
+    foreach ( Key key, attributes )
+    {
+        if ( !compare( d->subStyles.value(key).data(), other.d->subStyles.value( key ).data() ) )
+            return false;
+    }
+    return true;
+}
+
+void Style::operator=( const Style& other )
+{
+    d = other.d;
+}
+
+void Style::dump() const
+{
+    foreach( const QSharedDataPointer<SubStyle>& subStyle, d->subStyles )
+        subStyle->dump();
+}
+
+void Style::setType( StyleType type )
+{
+    d->type = type;
+}
+
+QList< QSharedDataPointer<SubStyle> > Style::subStyles() const
+{
+    return d->subStyles.values();
+}
+
+const QSharedDataPointer<SubStyle> Style::createSubStyle( Key key, const QVariant& value )
+{
+    QSharedDataPointer<SubStyle> newSubStyle;
+    switch ( key )
+    {
+        // special cases
+        case DefaultStyleKey:
+            newSubStyle = new SubStyle();
+            break;
+        case NamedStyleKey:
+            break;
+        case LeftPen:
+            newSubStyle = new BorderPenStyle<LeftPen>( value.value<QPen>() );
+            break;
+        case RightPen:
+            newSubStyle = new BorderPenStyle<RightPen>( value.value<QPen>() );
+            break;
+        case TopPen:
+            newSubStyle = new BorderPenStyle<TopPen>( value.value<QPen>() );
+            break;
+        case BottomPen:
+            newSubStyle = new BorderPenStyle<BottomPen>( value.value<QPen>() );
+            break;
+        case FallDiagonalPen:
+            newSubStyle = new BorderPenStyle<FallDiagonalPen>( value.value<QPen>() );
+            break;
+        case GoUpDiagonalPen:
+            newSubStyle = new BorderPenStyle<GoUpDiagonalPen>( value.value<QPen>() );
+            break;
+        // layout
+        case HorizontalAlignment:
+            newSubStyle = new SubStyleOne<HorizontalAlignment, HAlign>( (HAlign)value.value<int>() );
+            break;
+        case VerticalAlignment:
+            newSubStyle = new SubStyleOne<VerticalAlignment, VAlign>( (VAlign)value.value<int>() );
+            break;
+        case MultiRow:
+            newSubStyle = new SubStyleOne<MultiRow, bool>( value.value<bool>() );
+            break;
+        case VerticalText:
+            newSubStyle = new SubStyleOne<VerticalText, bool>( value.value<bool>() );
+            break;
+        case Angle:
+            newSubStyle = new SubStyleOne<Angle, int>( value.value<int>() );
+            break;
+        case Indentation:
+            newSubStyle = new SubStyleOne<Indentation, int>( value.value<int>() );
+            break;
+        // content format
+        case Prefix:
+            newSubStyle = new SubStyleOne<Prefix, QString>( value.value<QString>() );
+            break;
+        case Postfix:
+            newSubStyle = new SubStyleOne<Postfix, QString>( value.value<QString>() );
+            break;
+        case Precision:
+            newSubStyle = new SubStyleOne<Precision, int>( value.value<int>() );
+            break;
+        case FormatTypeKey:
+            newSubStyle = new SubStyleOne<FormatTypeKey, FormatType>( (FormatType)value.value<int>() );
+            break;
+        case FloatFormatKey:
+            newSubStyle = new SubStyleOne<FloatFormatKey, FloatFormat>( (FloatFormat)value.value<int>() );
+            break;
+        case FloatColorKey:
+            newSubStyle = new SubStyleOne<FloatColorKey, FloatColor>( (FloatColor)value.value<int>() );
+            break;
+        case CurrencyFormat:
+            newSubStyle = new SubStyleOne<CurrencyFormat, Style::Currency>();
+            break;
+        case CustomFormat:
+            newSubStyle = new SubStyleOne<CustomFormat, QString>( value.value<QString>() );
+            break;
+        // background
+        case BackgroundBrush:
+            newSubStyle = new SubStyleOne<BackgroundBrush, QBrush>( value.value<QBrush>() );
+            break;
+        case BackgroundColor:
+            newSubStyle = new SubStyleOne<BackgroundColor, QColor>( value.value<QColor>() );
+            break;
+        // font
+        case FontColor:
+            newSubStyle = new SubStyleOne<FontBold, QColor>( value.value<QColor>() );
+            break;
+        case FontFamily:
+            newSubStyle = new SubStyleOne<FontFamily, QString>( value.value<QString>() );
+            break;
+        case FontSize:
+            newSubStyle = new SubStyleOne<FontSize, int>( value.value<int>() );
+            break;
+        case FontBold:
+            newSubStyle = new SubStyleOne<FontBold, bool>( value.value<bool>() );
+            break;
+        case FontItalic:
+            newSubStyle = new SubStyleOne<FontItalic, bool>( value.value<bool>() );
+            break;
+        case FontStrike:
+            newSubStyle = new SubStyleOne<FontStrike, bool>( value.value<bool>() );
+            break;
+        case FontUnderline:
+            newSubStyle = new SubStyleOne<FontUnderline, bool>( value.value<bool>() );
+            break;
+        //misc
+        case DontPrintText:
+            newSubStyle = new SubStyleOne<DontPrintText, bool>( value.value<bool>() );
+            break;
+        case NotProtected:
+            newSubStyle = new SubStyleOne<NotProtected, bool>( value.value<bool>() );
+            break;
+        case HideAll:
+            newSubStyle = new SubStyleOne<HideAll, bool>( value.value<bool>() );
+            break;
+        case HideFormula:
+            newSubStyle = new SubStyleOne<HideFormula, bool>( value.value<bool>() );
+            break;
+    }
+    return newSubStyle;
+}
+
+void Style::insertSubStyle( Key key, const QVariant& value )
+{
+    const QSharedDataPointer<SubStyle> subStyle = createSubStyle( key, value );
+    Q_ASSERT( !!subStyle );
+    //subStyle->aquire( 0 );
+    insertSubStyle( subStyle );
+}
+
+void Style::insertSubStyle( const QSharedDataPointer<SubStyle> subStyle )
+{
+    if ( !subStyle )
+        return;
+    releaseSubStyle( subStyle->type() );
+    d->subStyles.insert( subStyle->type(), subStyle );
+}
+
+bool Style::releaseSubStyle( Key key )
+{
+    if ( !d->subStyles.contains( key ) )
+        return false;
+
+    d->subStyles.remove( key );
+    return true;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// CustomStyle::Private
+//
+/////////////////////////////////////////////////////////////////////////////
+
+class CustomStyle::Private : public QSharedData
+{
+public:
+    QString name;
+};
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// CustomStyle
+//
+/////////////////////////////////////////////////////////////////////////////
 
 CustomStyle::CustomStyle()
-  : Style(),
-    m_name( "Default" )
+    : Style()
+    , d( new Private )
 {
-  m_type   = BUILTIN;
-  m_parent = 0;
 }
 
-CustomStyle::CustomStyle( Style * parent, QString const & name )
-  : Style(),
-    m_name( name )
+CustomStyle::CustomStyle( const Style * style, QString const & name )
+    : Style( *style )
+    , d( new Private )
 {
-  m_type   = CUSTOM;
-  m_parent = 0;
-
-  // one to one copy
-  if ( parent->hasProperty( PDontPrintText ) )
-    addProperty( PDontPrintText );
-  if ( parent->hasProperty( PCustomFormat ) )
-    addProperty( PCustomFormat );
-  if ( parent->hasProperty( PNotProtected ) )
-    addProperty( PNotProtected );
-  if ( parent->hasProperty( PHideAll ) )
-    addProperty( PHideAll );
-  if ( parent->hasProperty( PHideFormula ) )
-    addProperty( PHideFormula );
-  if ( parent->hasProperty( PMultiRow ) )
-    addProperty( PMultiRow );
-  if ( parent->hasProperty( PVerticalText ) )
-    addProperty( PVerticalText );
-
-  changeHAlign( parent->halign() );
-  changeVAlign( parent->valign() );
-  changeFloatFormat( parent->floatFormat() );
-  changeFloatColor( parent->floatColor() );
-  changeFormatType( parent->formatType() );
-  changeFontFamily( parent->fontFamily() );
-  changeFontSize( parent->fontSize() );
-  changeFontFlags( parent->fontFlags() );
-  changePen( parent->pen() );
-  changeBgColor( parent->bgColor() );
-  changeRightBorderPen( parent->rightBorderPen() );
-  changeBottomBorderPen( parent->bottomBorderPen() );
-  changeLeftBorderPen( parent->leftBorderPen() );
-  changeTopBorderPen( parent->topBorderPen() );
-  changeFallBorderPen( parent->fallDiagonalPen() );
-  changeGoUpBorderPen( parent->goUpDiagonalPen() );
-  changeBackGroundBrush( parent->backGroundBrush() );
-  changeRotateAngle( parent->rotateAngle() );
-  changeIndent( parent->indent() );
-  changeStrFormat( parent->strFormat() );
-  changePrecision( parent->precision() );
-  changePrefix( parent->prefix() );
-  changePostfix( parent->postfix() );
-  changeCurrency( parent->currency() );
+    d->name = name;
 }
 
 CustomStyle::CustomStyle( QString const & name, CustomStyle * parent )
-  : Style(),
-    m_name( name )
+    : Style()
+    , d( new Private )
 {
-  setParent (parent);
+    d->name = name;
+    setParent( parent );
 }
 
 CustomStyle::~CustomStyle()
 {
 }
 
-QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles )
+Style::StyleType CustomStyle::type() const
+{
+    return AUTO;
+}
+
+void CustomStyle::setType( StyleType type )
+{
+    Style::setType( type );
+}
+
+const QString& CustomStyle::name() const
+{
+    return d->name;
+}
+
+void CustomStyle::setName( QString const & name )
+{
+    d->name = name;
+}
+
+void CustomStyle::refreshParentName()
+{
+    if ( parent() )
+        setParentName( parent()->name() );
+}
+
+bool CustomStyle::definesAll() const
+{
+    // TODO
+    return false;
+}
+
+QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles ) const
 {
     // If the type is undefined, we're called from Format
     // and the OASIS style is not an automatic style.
@@ -2765,14 +2582,14 @@ QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles )
 //     if ( style.type() == 0 && ( m_type == BUILTIN ) && ( m_name == "Default" ) )
 //       return "Default";
     if ( style.type() == 0 )
-      style = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
+        style = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
 
     if ( name().isEmpty() )
-      return QString(); // TODO fallback to Style::saveOasis() ???
+        return QString(); // TODO fallback to Style::saveOasis() ???
 
     // default style does not need display name
     if( type() != BUILTIN || name() != "Default" )
-      style.addAttribute( "style:display-name", name() );
+        style.addAttribute( "style:display-name", name() );
 
     // doing the real work
     saveOasisStyle( style, mainStyles );
@@ -2796,7 +2613,7 @@ void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& sty
 {
     setName (name);
     if ( style.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
-      setParentName (style.attributeNS( KoXmlNS::style, "parent-style-name", QString() ));
+        setParentName (style.attributeNS( KoXmlNS::style, "parent-style-name", QString::null ));
 
     setType (CUSTOM);
 
@@ -2805,403 +2622,55 @@ void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& sty
 
 void CustomStyle::save( QDomDocument & doc, QDomElement & styles )
 {
-  if ( name().isEmpty() )
-    return;
+    if ( name().isEmpty() )
+        return;
 
-  QDomElement style( doc.createElement( "style" ) );
-  style.setAttribute( "type", (int) type() );
-  if (parent())
-    style.setAttribute( "parent", parent()->name() );
-  style.setAttribute( "name", name() );
+    QDomElement style( doc.createElement( "style" ) );
+    style.setAttribute( "type", (int) type() );
+    if (parent())
+        style.setAttribute( "parent", parent()->name() );
+    style.setAttribute( "name", name() );
 
-  QDomElement format( doc.createElement( "format" ) );
-  saveXML( doc, format );
-  style.appendChild( format );
+    QDomElement format( doc.createElement( "format" ) );
+    saveXML( doc, format );
+    style.appendChild( format );
 
-  styles.appendChild( style );
+    styles.appendChild( style );
 }
 
 bool CustomStyle::loadXML( KoXmlElement const & style, QString const & name )
 {
-  setName (name);
+    setName (name);
 
-  if ( style.hasAttribute( "parent" ) )
-    setParentName (style.attribute( "parent" ));
+    if ( style.hasAttribute( "parent" ) )
+        setParentName (style.attribute( "parent" ));
 
-  if ( !style.hasAttribute( "type" ) )
-    return false;
+    if ( !style.hasAttribute( "type" ) )
+        return false;
 
-  bool ok = true;
-  setType ((StyleType) style.attribute( "type" ).toInt( &ok ));
-  if ( !ok )
-    return false;
+    bool ok = true;
+    setType ((StyleType) style.attribute( "type" ).toInt( &ok ));
+    if ( !ok )
+        return false;
 
-  KoXmlElement f( style.namedItem( "format" ).toElement() );
-  if ( !f.isNull() )
-    if ( !Style::loadXML( f ) )
-      return false;
+    KoXmlElement f( style.namedItem( "format" ).toElement() );
+    if ( !f.isNull() )
+        if ( !Style::loadXML( f ) )
+            return false;
 
-  return true;
+    return true;
 }
 
-void CustomStyle::setName( QString const & name )
+#if 0
+void CustomStyle::insertSubStyle( Key key, const QVariant& value )
 {
-  m_name = name;
+    QSharedDataPointer<SubStyle> subStyle = createSubStyle( key, value );
+    Q_ASSERT( subStyle );
+    Style::insertSubStyle( subStyle );
 }
+#endif
 
-void CustomStyle::refreshParentName()
+int CustomStyle::usage() const
 {
-  if ( m_parent )
-    m_parentName = m_parent->name();
-}
-
-bool CustomStyle::definesAll() const
-{
-  if ( !( m_featuresSet & (uint) SHAlign ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SVAlign ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SPrefix ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SPostfix ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SLeftBorder ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SRightBorder ) )
-    return false;
-  if ( !( m_featuresSet & (uint) STopBorder ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SBottomBorder ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SFallDiagonal ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SGoUpDiagonal ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SBackgroundBrush ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SFontFamily ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SFontSize ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SFontFlag ) )
-    return false;
-  if ( !( m_featuresSet & (uint) STextPen ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SBackgroundColor ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SFloatFormat ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SFloatColor ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SMultiRow ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SVerticalText ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SPrecision ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SFormatType ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SAngle ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SIndent ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SDontPrintText ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SCustomFormat ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SNotProtected ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SHideAll ) )
-    return false;
-  if ( !( m_featuresSet & (uint) SHideFormula ) )
-    return false;
-
-  return true;
-}
-
-void CustomStyle::changeHAlign( HAlign alignX )
-{
-  m_alignX = alignX;
-  m_featuresSet |= SHAlign;
-}
-
-void CustomStyle::changeVAlign( VAlign alignY )
-{
-  m_alignY = alignY;
-  m_featuresSet |= SVAlign;
-}
-
-void CustomStyle::changeFont( QFont const & f )
-{
-  if ( m_fontFamily != f.family() )
-  {
-    m_fontFamily = f.family();
-    m_featuresSet |= SFontFamily;
-    m_featuresSet |= SFont;
-  }
-  if ( m_fontSize != f.pointSize() )
-  {
-    m_fontSize = f.pointSize();
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontSize;
-  }
-
-  if ( f.italic() != (m_fontFlags & (uint) FItalic ) )
-  {
-    if ( f.italic() )
-      m_fontFlags |= FItalic;
-    else
-      m_fontFlags &= ~(uint) FItalic;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFlag;
-  }
-  if ( f.bold() != (m_fontFlags & (uint) FBold ) )
-  {
-    if ( f.bold() )
-      m_fontFlags |= FBold;
-    else
-      m_fontFlags &= ~(uint) FBold;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFlag;
-  }
-  if ( f.underline() != (m_fontFlags & (uint) FUnderline ) )
-  {
-    if ( f.underline() )
-      m_fontFlags |= FUnderline;
-    else
-      m_fontFlags &= ~(uint) FUnderline;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFlag;
-  }
-  if ( f.strikeOut() != (m_fontFlags & (uint) FStrike ) )
-  {
-    if ( f.strikeOut() )
-      m_fontFlags |= FStrike;
-    else
-      m_fontFlags &= ~(uint) FStrike;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFlag;
-  }
-}
-
-void CustomStyle::changeFontFamily( QString const & fam )
-{
-  if ( m_fontFamily != fam )
-  {
-    m_fontFamily   = fam;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFamily;
-  }
-}
-
-void CustomStyle::changeFontSize( int size )
-{
-  if ( m_fontSize != size )
-  {
-    m_fontSize     = size;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontSize;
-  }
-}
-
-void CustomStyle::changeFontFlags( uint flags )
-{
-  if ( m_fontFlags != flags )
-  {
-    m_fontFlags    = flags;
-    m_featuresSet |= SFont;
-    m_featuresSet |= SFontFlag;
-  }
-}
-
-void CustomStyle::changeTextColor( QColor const & color )
-{
-  m_textPen.setColor( color );
-  m_featuresSet |= STextPen;
-}
-
-void CustomStyle::changePen( QPen const & pen )
-{
-  m_textPen = pen;
-  m_featuresSet |= STextPen;
-}
-
-void CustomStyle::changeBgColor( QColor const & color )
-{
-  m_bgColor = color;
-  m_featuresSet |= SBackgroundColor;
-}
-
-void CustomStyle::changeRightBorderPen( QPen const & pen )
-{
-  m_rightBorderPen = pen;
-  m_rightPenValue  = calculateValue( pen );
-  m_featuresSet   |= SRightBorder;
-}
-
-void CustomStyle::changeBottomBorderPen( QPen const & pen )
-{
-  m_bottomBorderPen = pen;
-  m_bottomPenValue  = calculateValue( pen );
-  m_featuresSet    |= SBottomBorder;
-}
-
-void CustomStyle::changeLeftBorderPen( QPen const & pen )
-{
-  m_leftBorderPen = pen;
-  m_leftPenValue  = calculateValue( pen );
-  m_featuresSet  |= SLeftBorder;
-}
-
-void CustomStyle::changeTopBorderPen( QPen const & pen )
-{
-  m_topBorderPen = pen;
-  m_topPenValue  = calculateValue( pen );
-  m_featuresSet |= STopBorder;
-}
-
-void CustomStyle::changeFallBorderPen( QPen const & pen )
-{
-  m_fallDiagonalPen = pen;
-  m_featuresSet |= SFallDiagonal;
-}
-
-void CustomStyle::changeGoUpBorderPen( QPen const & pen )
-{
-  m_goUpDiagonalPen = pen;
-  m_featuresSet |= SGoUpDiagonal;
-}
-
-void CustomStyle::changeRotateAngle( int angle )
-{
-  m_rotateAngle = angle;
-  m_featuresSet |= SAngle;
-}
-
-void CustomStyle::changeIndent( double indent )
-{
-  m_indent = indent;
-  m_featuresSet |= SIndent;
-}
-
-void CustomStyle::changeBackGroundBrush( QBrush const & brush )
-{
-  m_backGroundBrush = brush;
-  m_featuresSet |= SBackgroundBrush;
-}
-
-void CustomStyle::changeFloatFormat( FloatFormat format )
-{
-  m_floatFormat = format;
-  m_featuresSet |= SFloatFormat;
-}
-
-void CustomStyle::changeFloatColor( FloatColor color )
-{
-  m_floatColor = color;
-  m_featuresSet |= SFloatColor;
-}
-
-void CustomStyle::changeFormatType( FormatType format )
-{
-  m_formatType = format;
-  m_featuresSet |= SFormatType;
-}
-
-void CustomStyle::changeStrFormat( QString const & strFormat )
-{
-  m_strFormat = strFormat;
-  m_featuresSet |= SCustomFormat;
-}
-
-void CustomStyle::changePrecision( int precision )
-{
-  m_precision = precision;
-  m_featuresSet |= SPrecision;
-}
-
-void CustomStyle::changePrefix( QString const & prefix )
-{
-  m_prefix = prefix;
-  m_featuresSet |= SPrefix;
-}
-
-void CustomStyle::changePostfix( QString const & postfix )
-{
-  m_postfix = postfix;
-  m_featuresSet |= SPostfix;
-}
-
-void CustomStyle::changeCurrency( Currency const & currency )
-{
-  m_currency = currency;
-}
-
-void CustomStyle::addProperty( Properties p )
-{
-  m_properties |= (uint) p;
-  switch( p )
-  {
-   case PDontPrintText:
-    m_featuresSet |= SDontPrintText;
-    break;
-   case PCustomFormat:
-    m_featuresSet |= SCustomFormat;
-    break;
-   case PNotProtected:
-    m_featuresSet |= SNotProtected;
-    break;
-   case PHideAll:
-    m_featuresSet |= SHideAll;
-    break;
-   case PHideFormula:
-    m_featuresSet |= SHideFormula;
-    break;
-   case PMultiRow:
-    m_featuresSet |= SMultiRow;
-    break;
-   case PVerticalText:
-    m_featuresSet |= SVerticalText;
-    break;
-   default:
-    kWarning() << "Unhandled property" << endl;
-  }
-}
-
-void CustomStyle::removeProperty( Properties p )
-{
-  m_properties &= ~(uint) p;
-  switch( p )
-  {
-   case PDontPrintText:
-    m_featuresSet &= SDontPrintText;
-    break;
-   case PCustomFormat:
-    m_featuresSet &= SCustomFormat;
-    break;
-   case PNotProtected:
-    m_featuresSet &= SNotProtected;
-    break;
-   case PHideAll:
-    m_featuresSet &= SHideAll;
-    break;
-   case PHideFormula:
-    m_featuresSet &= SHideFormula;
-    break;
-   case PMultiRow:
-    m_featuresSet &= SMultiRow;
-    break;
-   case PVerticalText:
-    m_featuresSet &= SVerticalText;
-    break;
-   default:
-    kWarning() << "Unhandled property" << endl;
-  }
-}
-
-bool CustomStyle::operator==( const CustomStyle& other ) const
-{
-  if ( m_name != other.m_name )
-    return false;
-  return Style::operator==( other );
+    return d->ref;
 }

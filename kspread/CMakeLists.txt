@@ -94,6 +94,7 @@ SET (kspreadcommon_LIB_SRCS
 	Cluster.cpp
 	Commands.cpp
 	Condition.cpp
+	Currency.cpp
 	Damages.cpp
 	DataManipulators.cpp
 	DependencyManager.cpp
@@ -103,7 +104,6 @@ SET (kspreadcommon_LIB_SRCS
 	Events.cpp
 	Factory.cpp
 	Format.cpp
-	FormatManipulators.cpp
 	Formula.cpp
 	Functions.cpp
 	GeneralProperty.cpp
@@ -126,6 +126,8 @@ SET (kspreadcommon_LIB_SRCS
 	SortManipulator.cpp
 	Style.cpp
 	StyleManager.cpp
+	StyleManipulators.cpp
+	StyleStorage.cpp
 	Toolbox.cpp
 	Undo.cpp
 	Util.cpp

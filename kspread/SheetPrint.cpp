@@ -473,12 +473,8 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
             cell = m_pSheet->cellAt( x, y );
             double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft ) ?
                              view.width() - xpos - col_lay->dblWidth() : xpos;
-#ifdef KSPREAD_CELL_WINDOW
               CellView tmpCellView( m_pSheet, x, y );
               CellView* cellView = &tmpCellView;
-#else
-              CellView* cellView = cell->cellView();
-#endif
               cellView->paintCell( rect, painter, 0,
                                    KoPoint( effXPos, ypos ), QPoint( x, y ),
                                    mergedCellsPainted );
@@ -504,12 +500,8 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 
             double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft )
                              ? view.width() - xpos - col_lay->dblWidth() : xpos;
-#ifdef KSPREAD_CELL_WINDOW
             CellView tmpCellView( m_pSheet, x, y );
             CellView* cellView = &tmpCellView;
-#else
-            CellView* cellView = cell->cellView();
-#endif
             cellView->paintCellBorders( rect, painter, 0, KoPoint( effXPos, ypos ),
                                         QPoint( x, y ), printRect,
                                         mergedCellsPainted );

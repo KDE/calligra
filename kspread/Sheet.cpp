@@ -68,6 +68,7 @@
 #include "Cluster.h"
 #include "Condition.h"
 #include "Doc.h"
+#include "Format.h"
 #include "Global.h"
 #include "LoadingInfo.h"
 #include "Localization.h"
@@ -76,8 +77,10 @@
 #include "RecalcManager.h"
 #include "Selection.h"
 #include "SheetPrint.h"
+#include "Storage.h"
 #include "Style.h"
 #include "StyleManager.h"
+#include "StyleStorage.h"
 #include "Undo.h"
 #include "Util.h"
 #include "Validity.h"
@@ -236,10 +239,11 @@ public:
   Cluster cells;
   RowCluster rows;
   ColumnCluster columns;
+  StyleStorage* styleStorage;
+  Storage<QString>* commentStorage;
 
   // default objects
   Cell* defaultCell;
-  Format* defaultFormat;
   RowFormat* defaultRowFormat;
   ColumnFormat* defaultColumnFormat;
 
@@ -248,6 +252,8 @@ public:
 
   // cells that need painting
   Region paintDirtyList;
+  // cells that need relayouting
+  Region layoutDirtyRegion;
 
   // List of all cell bindings. For example charts use bindings to get
   // informed about changing cell contents.
@@ -310,7 +316,6 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
 
   d->layoutDirection = LeftToRight;
 
-  d->defaultFormat = new Format (this, d->workbook->doc()->styleManager()->defaultStyle());
   d->emptyPen.setStyle( Qt::NoPen );
   d->name = sheetName;
 
@@ -320,12 +325,13 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->cells.setAutoDelete( true );
   d->rows.setAutoDelete( true );
   d->columns.setAutoDelete( true );
+  d->styleStorage = new StyleStorage( this );
+  d->styleStorage->setStyleManager( d->workbook->doc()->styleManager() );
+  d->commentStorage = new Storage<QString>( this );
 
-  d->defaultCell = new Cell( this, d->workbook->doc()->styleManager()->defaultStyle(), 0, 0);
+  d->defaultCell = new Cell( this, 0, 0 );
   d->defaultRowFormat = new RowFormat( this, 0 );
-  d->defaultRowFormat->setDefault();
   d->defaultColumnFormat = new ColumnFormat( this, 0 );
-  d->defaultColumnFormat->setDefault();
 
   d->maxColumn = 256;
   d->maxRow = 256;
@@ -503,16 +509,6 @@ Cell* Sheet::defaultCell() const
     return d->defaultCell;
 }
 
-Format* Sheet::defaultFormat()
-{
-    return d->defaultFormat;
-}
-
-const Format* Sheet::defaultFormat() const
-{
-    return d->defaultFormat;
-}
-
 const ColumnFormat* Sheet::columnFormat( int _column ) const
 {
     const ColumnFormat *p = d->columns.lookup( _column );
@@ -587,6 +583,45 @@ bool Sheet::checkPassword( QByteArray const & passwd ) const
 SheetPrint* Sheet::print() const
 {
     return d->print;
+}
+
+Style Sheet::style( int column, int row ) const
+{
+    return styleStorage()->contains( QPoint( column, row ) );
+}
+
+Style Sheet::style( const QRect& rect ) const
+{
+    return styleStorage()->contains( rect );
+}
+
+void Sheet::setStyle( const Region& region, const Style& style ) const
+{
+    if ( style.isEmpty() )
+        return;
+    styleStorage()->insert( region, style );
+}
+
+StyleStorage* Sheet::styleStorage() const
+{
+    return d->styleStorage;
+}
+
+QString Sheet::comment( int column, int row ) const
+{
+    return d->commentStorage->at( QPoint( column, row ) );
+}
+
+void Sheet::setComment( const Region& region, const QString& comment ) const
+{
+    if ( comment.isEmpty() )
+        return;
+    d->commentStorage->insert( region, comment );
+}
+
+CommentStorage* Sheet::commentStorage() const
+{
+    return d->commentStorage;
 }
 
 void Sheet::setDefaultHeight( double height )
@@ -874,20 +909,17 @@ RowFormat* Sheet::nonDefaultRowFormat( int _row, bool force_creation )
 
 Cell* Sheet::nonDefaultCell( int _column, int _row, Style* _style )
 {
-  Cell * p = d->cells.lookup( _column, _row );
-  if ( p != 0 )
-    return p;
+    Cell* cell = d->cells.lookup( _column, _row );
+    if ( cell != 0 )
+        return cell;
 
-  Cell * cell = 0;
-
-  if ( _style )
-    cell = new Cell( this, _style, _column, _row );
-  else
     cell = new Cell( this, _column, _row );
+    insertCell( cell );
 
-  insertCell( cell );
+    if ( _style )
+        cell->setStyle( *_style );
 
-  return cell;
+    return cell;
 }
 
 void Sheet::setText( int _row, int _column, const QString& _text, bool asString )
@@ -1207,6 +1239,7 @@ bool Sheet::insertColumn( int col, int nbCol, bool makeUndo )
         //Recalculate range max (plus size of new column)
         d->sizeMaxX += columnFormat( col+i )->dblWidth();
     }
+    styleStorage()->insertColumns(col, nbCol + 1);
 
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
@@ -1251,6 +1284,7 @@ bool Sheet::insertRow( int row, int nbRow, bool makeUndo )
         //Recalculate range max (plus size of new row)
         d->sizeMaxY += rowFormat( row )->dblHeight();
     }
+    styleStorage()->insertRows(row, nbRow + 1);
 
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
@@ -1291,6 +1325,7 @@ void Sheet::removeColumn( int col, int nbCol, bool makeUndo )
         //Recalculate range max (plus size of new column)
         d->sizeMaxX += columnFormat( KS_colMax )->dblWidth();
     }
+    styleStorage()->deleteColumns(col, nbCol + 1);
 
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
@@ -1329,6 +1364,7 @@ void Sheet::removeRow( int row, int nbRow, bool makeUndo )
         //Recalculate range max (plus size of new row)
         d->sizeMaxY += rowFormat( KS_rowMax )->dblHeight();
     }
+    styleStorage()->deleteRows(row, nbRow + 1);
 
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
@@ -1689,7 +1725,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
                             return false;
                         break;
                     case Comment:
-                        if ( !c->format()->comment(c->column(), row).isEmpty())
+                        if ( !comment( c->column(), row ).isEmpty())
                             return false;
                         break;
                     case ConditionalCellAttribute:
@@ -1724,7 +1760,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
                             return false;
                         break;
                     case Comment:
-                        if ( !c->format()->comment(col, c->row()).isEmpty())
+                        if ( !comment( col, c->row() ).isEmpty() )
                             return false;
                         break;
                     case ConditionalCellAttribute:
@@ -1761,7 +1797,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
                             return false;
                         break;
                     case Comment:
-                        if ( !cell->format()->comment(x, y).isEmpty())
+                        if ( !comment(x, y).isEmpty() )
                             return false;
                         break;
                     case ConditionalCellAttribute:
@@ -2264,7 +2300,7 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
 //                     << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
 
           cell = nonDefaultCell( col + coff, row + roff );
-          if (isProtected() && !cell->format()->notProtected(col + coff, row + roff))
+          if (isProtected() && !cell->style().notProtected())
           {
             continue;
           }
@@ -3345,6 +3381,9 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     //Maps from a column index to the name of the default cell style for that column
     QMap<int,QString> defaultColumnCellStyles;
 
+    // Assigns regions to style names
+    QHash<QString, QRegion> styleRegions;
+
     const int overallRowCount = workbook()->overallRowCount();
     int rowIndex = 1;
     int indexCol = 1;
@@ -3367,7 +3406,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                 if ( rowElement.localName()=="table-column" && indexCol <= KS_colMax )
                 {
                     kDebug(36003)<<" table-column found : index column before "<< indexCol<<endl;
-                    loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol , styleMap);
+                    loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol , styleRegions);
                     kDebug(36003)<<" table-column found : index column after "<< indexCol<<endl;
                 }
                 else if ( rowElement.localName() == "table-header-rows" )
@@ -3378,14 +3417,14 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                     // NOTE Handle header rows as ordinary ones
                     //      as long as they're not supported.
                     loadRowFormat( headerRowNode.toElement(), rowIndex,
-                                   oasisContext, /*rowNode.isNull() ,*/ styleMap );
+                                   oasisContext, /*rowNode.isNull() ,*/ styleRegions );
                     headerRowNode = headerRowNode.nextSibling();
                   }
                 }
                 else if( rowElement.localName() == "table-row" )
                 {
                     kDebug(36003)<<" table-row found :index row before "<<rowIndex<<endl;
-                    loadRowFormat( rowElement, rowIndex, oasisContext, /*rowNode.isNull() ,*/ styleMap );
+                    loadRowFormat( rowElement, rowIndex, oasisContext, /*rowNode.isNull() ,*/ styleRegions );
                     kDebug(36003)<<" table-row found :index row after "<<rowIndex<<endl;
                 }
                 else if ( rowElement.localName() == "shapes" )
@@ -3398,6 +3437,19 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
 
         rowNode = rowNode.nextSibling();
         doc()->emitProgress( 100 * rowIndex / overallRowCount );
+    }
+
+    foreach ( QString styleName, styleRegions.keys() )
+    {
+        if ( !styleMap.contains( styleName ) && !doc()->styleManager()->style( styleName ) )
+             continue;
+        foreach ( QRect rect, styleRegions[styleName].rects() )
+        {
+            if ( styleMap.contains( styleName ) )
+                setStyle( Region(rect), styleMap[styleName] );
+            else
+                setStyle( Region(rect), *doc()->styleManager()->style( styleName ) );
+        }
     }
 
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
@@ -3614,9 +3666,8 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
 
 bool Sheet::loadColumnFormat(const KoXmlElement& column,
                              const KoOasisStyles& oasisStyles, int & indexCol,
-                             const Styles& styleMap)
+                             QHash<QString, QRegion>& styleRegions )
 {
-  Q_UNUSED(styleMap)
 //   kDebug(36003)<<"bool Sheet::loadColumnFormat(const KoXmlElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
 
     bool isNonDefaultColumn = false;
@@ -3634,18 +3685,12 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
         kDebug(36003) << "Repeated: " << number << endl;
     }
 
-    Format layout( this , doc()->styleManager()->defaultStyle() );
     if ( column.hasAttributeNS( KoXmlNS::table, "default-cell-style-name" ) )
     {
       const QString styleName = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
       if ( !styleName.isEmpty() )
       {
-        Style* const style = styleMap[ styleName ];
-        if ( style )
-        {
-          layout.setStyle( style );
-          isNonDefaultColumn = true;
-        }
+          styleRegions[styleName] += QRect( indexCol, 1, indexCol + number - 1, KS_rowMax /*FIXME*/ );
       }
     }
 
@@ -3710,14 +3755,12 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
         // if ( insertPageBreak )
         //   columnFormat->setPageBreak( true )
           if ( collapsed )
-            columnFormat->setHide( true );
+            columnFormat->setHidden( true );
         }
         else
         {
           columnFormat = this->columnFormat( indexCol );
         }
-        columnFormat->copy( layout );
-
         ++indexCol;
     }
 //     kDebug(36003)<<" after index column !!!!!!!!!!!!!!!!!! :"<<indexCol<<endl;
@@ -3727,7 +3770,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
 
 bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                            KoOasisLoadingContext& oasisContext,
-                           const Styles& styleMap )
+                           QHash<QString, QRegion>& styleRegions )
 {
 //    kDebug(36003)<<"Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
 
@@ -3747,29 +3790,6 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
     }
     styleStack.setTypeProperties( "table-row" );
 
-    Format layout( this , doc()->styleManager()->defaultStyle() );
-    if ( row.hasAttributeNS( KoXmlNS::table,"default-cell-style-name" ) )
-    {
-      const QString styleName = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
-      if ( !styleName.isEmpty() )
-      {
-        Style* const style = styleMap[ styleName ];
-        if ( style )
-        {
-          layout.setStyle( style );
-          isNonDefaultRow = true;
-        }
-      }
-    }
-
-    double height = -1.0;
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
-    {
-        height = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "row-height" ) , -1.0 );
-    //    kDebug(36003)<<" properties style:row-height : height :"<<height<<endl;
-        isNonDefaultRow = true;
-    }
-
     int number = 1;
     if ( row.hasAttributeNS( KoXmlNS::table, "number-rows-repeated" ) )
     {
@@ -3780,6 +3800,23 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
             // limit the number of repeated rows.
             // FIXME POSSIBLE DATA LOSS!
             number = qMin( n, KS_rowMax - rowIndex + 1 );
+    }
+
+    if ( row.hasAttributeNS( KoXmlNS::table,"default-cell-style-name" ) )
+    {
+      const QString styleName = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
+      if ( !styleName.isEmpty() )
+      {
+          styleRegions[styleName] += QRect( 1, rowIndex, KS_colMax /*FIXME*/, rowIndex + number - 1 );
+      }
+    }
+
+    double height = -1.0;
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
+    {
+        height = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "row-height" ) , -1.0 );
+    //    kDebug(36003)<<" properties style:row-height : height :"<<height<<endl;
+        isNonDefaultRow = true;
     }
 
     bool collapse = false;
@@ -3821,14 +3858,12 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
         if ( height != -1.0 )
           rowFormat->setHeight( (int) height );
         if ( collapse )
-          rowFormat->setHide( true );
+          rowFormat->setHidden( true );
       }
       else
       {
         rowFormat = this->rowFormat( rowIndex );
       }
-      rowFormat->copy( layout );
-
       ++rowIndex;
     }
 
@@ -3849,15 +3884,13 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
             {
                 //kDebug(36003) << "Loading cell #" << cellCount << endl;
 
-                Style* style = 0;
                 const bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
-                if ( cellHasStyle )
-                {
-                    style = styleMap[ cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null ) ];
-                }
+                const QString styleName = cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null );
+                if ( cellHasStyle && !styleName.isEmpty())
+                    styleRegions[styleName] += QRect( columnIndex, backupRow, 1, 1 );
 
                 Cell* const cell = nonDefaultCell( columnIndex, backupRow );
-                cell->loadOasis( cellElement, oasisContext, style );
+                cell->loadOasis( cellElement, oasisContext );
 
                 int cols = 1;
 
@@ -3874,7 +3907,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                         // FIXME POSSIBLE DATA LOSS!
                         cols = qMin( n, KS_colMax - columnIndex + 1 );
 
-                    if ( !cellHasStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
+                    if ( !cellHasStyle && ( cell->isEmpty() && comment( columnIndex, backupRow ).isEmpty() ) )
                     {
                         // just increment it
                         columnIndex += cols - 1;
@@ -3888,17 +3921,26 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
 
                             for ( int newRow = backupRow; newRow < endRow; ++newRow )
                             {
-                                Cell* target = nonDefaultCell( columnIndex, newRow );
-
-                                if (cell != target)
-                                    target->copyAll( cell );
+                                if ( !cell->isEmpty() )
+                                {
+                                    Cell* target = nonDefaultCell( columnIndex, newRow );
+                                    if (cell != target)
+                                        target->copyContent( cell );
+                                }
+                                // FIXME KSPREAD_NEW_STYLE_STORAGE: not the right place anymore
+                                if ( cellHasStyle && !styleName.isEmpty())
+                                    styleRegions[styleName] += QRect( columnIndex, newRow, 1, 1 );
+                                if ( !comment( columnIndex, backupRow ).isEmpty() )
+                                {
+                                    setComment( Region(QPoint(columnIndex, newRow)), comment(columnIndex, backupRow) );
+                                }
                             }
                         }
                     }
                 }
 
                 // delete non-default cell, if it is empty
-                if ( !cellHasStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
+                if ( cell->isEmpty() )
                 {
                     d->cells.remove( cell->column(), cell->row() );
                 }
@@ -3910,38 +3952,42 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
     return true;
 }
 
-void Sheet::maxRowCols( int & maxCols, int & maxRows )
+void Sheet::usedArea( int& maxCols, int& maxRows )
 {
-  const Cell * cell = firstCell();
-  while ( cell )
-  {
-    if ( cell->column() > maxCols )
-      maxCols = cell->column();
+    const Cell * cell = firstCell();
+    while ( cell )
+    {
+        if ( cell->column() > maxCols )
+            maxCols = cell->column();
 
-    if ( cell->row() > maxRows )
-      maxRows = cell->row();
+        if ( cell->row() > maxRows )
+            maxRows = cell->row();
 
-    cell = cell->nextCell();
-  }
+        cell = cell->nextCell();
+    }
 
-  const RowFormat * row = firstRow();
-  while ( row )
-  {
-    if ( row->row() > maxRows )
-      maxRows = row->row();
+    const RowFormat * row = firstRow();
+    while ( row )
+    {
+        if ( row->row() > maxRows )
+            maxRows = row->row();
 
-    row = row->next();
-  }
-  const ColumnFormat* col = firstCol();
-  while ( col )
-  {
-    if ( col->column() > maxCols )
-      maxCols = col->column();
+        row = row->next();
+    }
 
-    col = col->next();
-  }
+    const ColumnFormat* col = firstCol();
+    while ( col )
+    {
+        if ( col->column() > maxCols )
+            maxCols = col->column();
+
+        col = col->next();
+    }
+
+    QRect usedStyleArea = styleStorage()->usedArea();
+    maxCols = qMax( maxCols, usedStyleArea.right() );
+    maxRows = qMax( maxRows, usedStyleArea.bottom() );
 }
-
 
 bool Sheet::compareRows( int row1, int row2, int& maxCols ) const
 {
@@ -4227,8 +4273,6 @@ void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter ) const
 
 bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle, KoStore *store, KoXmlWriter* /*manifestWriter*/, int &indexObj, int &partIndexObj )
 {
-    int maxCols= 1;
-    int maxRows= 1;
     xmlWriter.startElement( "table:table" );
     xmlWriter.addAttribute( "table:name", sheetName() );
     xmlWriter.addAttribute( "table:style-name", saveOasisSheetStyleName(mainStyles )  );
@@ -4250,7 +4294,9 @@ bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenVali
     }
 
     saveOasisObjects( store, xmlWriter, mainStyles, indexObj, partIndexObj );
-    maxRowCols( maxCols, maxRows );
+    int maxCols= 1;
+    int maxRows= 1;
+    usedArea( maxCols, maxRows );
     saveOasisColRowCell( xmlWriter, mainStyles, maxCols, maxRows, valStyle );
     xmlWriter.endElement();
     return true;
@@ -4306,10 +4352,10 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     int i = 1;
     while ( i <= maxCols )
     {
+        ColumnFormat* column = columnFormat( i );
 //         kDebug(36003) << "Sheet::saveOasisColRowCell: first col loop:"
 //                   << " i: " << i
-//                   << " column: " << column->column() << endl;
-        ColumnFormat* column = columnFormat( i );
+//                   << ", column: " << (column ? column->column() : 0) << endl;
 
         KoGenStyle currentColumnStyle( Doc::STYLE_COLUMN_AUTO, "table-column" );
         currentColumnStyle.addPropertyPt( "style:column-width", column->dblWidth() );
@@ -4317,34 +4363,41 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         //style default layout for column
         KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
-        QString currentDefaultCellStyleName = column->saveOasisCellStyle( currentDefaultCellStyle, mainStyles );
+        const Style style = this->style( QRect( i, 1, 1, KS_rowMax ) );
+        QString currentDefaultCellStyleName = style.saveOasis( currentDefaultCellStyle, mainStyles );
 
-        bool hide = column->isHide();
-        bool refColumnIsDefault = column->isDefault();
+        bool hide = column->hidden();
+        bool refColumnIsDefault = column->isDefault() && style.isDefault();
         int j = i;
         int repeated = 1;
 
         while ( j <= maxCols )
         {
-//           kDebug(36003) << "Sheet::saveOasisColRowCell: second col loop:"
-//                     << " j: " << j
-//                     << " column: " << nextColumn->column() << endl;
+          int nextStyleColumnIndex = styleStorage()->nextColumn( j );
           ColumnFormat* nextColumn = d->columns.next( j++ );
+//           kDebug(36003) << "Sheet::saveOasisColRowCell: second col loop:"
+//                         << " j: " << j
+//                         << ", next column: " << (nextColumn ? nextColumn->column() : 0)
+//                         << ", next styled column: " << nextStyleColumnIndex << endl;
 
           // no next or not the adjacent column?
-          if ( !nextColumn || nextColumn->column() != j )
+          if ( ( !nextColumn || nextColumn->column() != j ) && nextStyleColumnIndex != j )
           {
             if ( refColumnIsDefault )
             {
               // if the origin column was a default column,
               // we count the default columns
-              if ( !nextColumn )
+              if ( !nextColumn && !nextStyleColumnIndex )
               {
                 repeated = maxCols - i + 1;
               }
+              else if ( nextColumn )
+              {
+                repeated = qMin(nextColumn->column(), nextStyleColumnIndex) - j + 1;
+              }
               else
               {
-                repeated = nextColumn->column() - j + 1;
+                repeated = nextStyleColumnIndex - j + 1;
               }
             }
             // otherwise we just stop here to process the adjacent
@@ -4359,22 +4412,23 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
           KoGenStyle nextDefaultCellStyle; // the type is determined in saveOasisCellStyle
           QString nextDefaultCellStyleName = nextColumn->saveOasisCellStyle( nextDefaultCellStyle, mainStyles );
 
-          if ( hide != nextColumn->isHide() ||
+          if ( hide != nextColumn->hidden() ||
                nextDefaultCellStyleName != currentDefaultCellStyleName ||
                !( nextColumnStyle == currentColumnStyle ) )
           {
             break;
           }
 #endif
-          if ( *column != *nextColumn )
-          {
-            break;
-          }
+          if ( nextColumn && ( *column != *nextColumn ) )
+              break;
+          const Style nextStyle = this->style( QRect( j, 1, 1, KS_rowMax ) );
+          if ( style != nextStyle )
+              break;
           ++repeated;
         }
 
         xmlWriter.startElement( "table:table-column" );
-        if ( !column->isDefault() )
+        if ( !column->isDefault() || !style.isDefault() )
         {
           xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentColumnStyle, "co" ) );
 
@@ -4406,7 +4460,8 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         // default cell style for row
         KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
-        QString currentDefaultCellStyleName = row->saveOasisCellStyle( currentDefaultCellStyle, mainStyles );
+        const Style style = this->style( QRect( 1, i, KS_colMax, 1 ) );
+        QString currentDefaultCellStyleName = style.saveOasis( currentDefaultCellStyle, mainStyles );
 
         xmlWriter.startElement( "table:table-row" );
 
@@ -4416,13 +4471,13 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         }
         int repeated = 1;
         // empty row?
-        if ( !getFirstCellRow( i ) )
+        if ( !getFirstCellRow( i ) && styleStorage()->intersects( QRect( 1, i, KS_colMax, 1 ) ).isDefault() ) // row is empty
         {
 //               kDebug(36003) << "Sheet::saveOasisColRowCell: first row loop:"
 //                         << " i: " << i
 //                         << " row: " << row->row() << endl;
-            //bool isHidden = row->isHide();
-            bool isDefault = row->isDefault();
+            //bool isHidden = row->hidden();
+            bool isDefault = row->isDefault() && style.isDefault();
             int j = i + 1;
 
             // search for
@@ -4440,7 +4495,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               if ( isDefault )
               {
                 // if the next is not default, stop here
-                if ( !nextRow->isDefault() )
+                if ( !nextRow->isDefault() || !styleStorage()->intersects( QRect( 1, j, KS_colMax, 1 ) ).isDefault() )
                   break;
                 // otherwise, jump to the next
                 ++j;
@@ -4457,7 +4512,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               QString nextDefaultCellStyleName = nextRow->saveOasisCellStyle( nextDefaultCellStyle, mainStyles );
 
               // if the formats differ, stop here
-              if ( isHidden != nextRow->isHide() ||
+              if ( isHidden != nextRow->hidden() ||
                    nextDefaultCellStyleName != currentDefaultCellStyleName ||
                    !(nextRowStyle == currentRowStyle) )
               {
@@ -4465,9 +4520,10 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               }
 #endif
               if ( *row != *nextRow )
-              {
-                break;
-              }
+                  break;
+              const Style nextStyle = this->style( QRect( 1, j, KS_colMax, 1 ) );
+              if ( style != nextStyle )
+                  break;
               // otherwise, process the next
               ++j;
             }
@@ -4477,7 +4533,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
                 xmlWriter.addAttribute( "table:number-rows-repeated", repeated  );
             if ( !currentDefaultCellStyle.isDefaultStyle() )
               xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
-            if ( row->isHide() ) // never true for the default row
+            if ( row->hidden() ) // never true for the default row
               xmlWriter.addAttribute( "table:visibility", "collapse" );
 
             // NOTE Stefan: Even if paragraph 8.1 states, that rows may be empty, the
@@ -4495,7 +4551,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         {
             if ( !currentDefaultCellStyle.isDefaultStyle() )
               xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
-            if ( row->isHide() ) // never true for the default row
+            if ( row->hidden() ) // never true for the default row
               xmlWriter.addAttribute( "table:visibility", "collapse" );
 
             int j = i + 1;
@@ -4526,11 +4582,13 @@ void Sheet::saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int
     int i = 1;
     Cell* cell = cellAt( i, row );
     Cell* nextCell = getNextCellRight( i, row );
+    Style style = this->style( i, row );
+    int nextStyleColumnIndex = styleStorage()->nextStyleRight( i, row );
     // while
     //   the current cell is not a default one
     // or
     //   we have a further cell in this row
-    while ( !cell->isDefault() || nextCell )
+    while ( !cell->isDefault() || nextCell || !style.isDefault() || nextStyleColumnIndex )
     {
 //         kDebug(36003) << "Sheet::saveOasisCells:"
 //                   << " i: " << i
@@ -4543,6 +4601,8 @@ void Sheet::saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int
           break;
         cell = cellAt( i, row );
         nextCell = getNextCellRight( i, row );
+        style = this->style( i, row );
+        nextStyleColumnIndex = styleStorage()->nextStyleRight( i, row );
     }
 }
 
@@ -5013,7 +5073,7 @@ void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
     {
         //All the cells in this row, or below this row will need to be repainted
         //So add that region of the sheet to the paint dirty list.
-        setRegionPaintDirty( Region(QRect( 0 , _row , KS_colMax , KS_rowMax) ) );
+        setRegionPaintDirty( Region(QRect(QPoint(0, _row), QPoint(KS_colMax, KS_rowMax)) ) );
 
       emit sig_updateVBorder( this );
       emit sig_updateView( this );
@@ -5034,7 +5094,7 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
 
     //All the cells in this column or to the right of it will need to be repainted if the column
     //has been resized or hidden, so add that region of the sheet to the paint dirty list.
-    setRegionPaintDirty( Region( QRect( _column , 1 , KS_colMax , KS_rowMax) ) );
+    setRegionPaintDirty( Region( QRect(QPoint(_column, 1), QPoint(KS_colMax, KS_rowMax) ) ) );
 
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
@@ -5245,10 +5305,11 @@ Sheet::~Sheet()
 
     d->cells.clear(); // cells destructor needs sheet to still exist
 
-    delete d->defaultFormat;
     delete d->defaultCell;
     delete d->defaultRowFormat;
     delete d->defaultColumnFormat;
+    delete d->styleStorage;
+    delete d->commentStorage;
     delete d->print;
 
     delete d;
@@ -5368,6 +5429,8 @@ Cell* Sheet::getNextCellRight(int col, int row) const
 
 void Sheet::convertObscuringBorders()
 {
+    // FIXME Stefan: Verify that this is not needed anymore.
+#if 0
   /* a word of explanation here:
      beginning with KSpread 1.2 (actually, cvs of Mar 28, 2002), border information
      is stored differently.  Previously, for a cell obscuring a region, the entire
@@ -5387,10 +5450,11 @@ void Sheet::convertObscuringBorders()
   {
     if (c->extraXCells() > 0 || c->extraYCells() > 0)
     {
-      topPen = c->topBorderPen(c->column(), c->row());
-      leftPen = c->leftBorderPen(c->column(), c->row());
-      rightPen = c->rightBorderPen(c->column(), c->row());
-      bottomPen = c->bottomBorderPen(c->column(), c->row());
+      const Style* style = this->style( c->column(), c->row() );
+      topPen = style->topBorderPen();
+      leftPen = style->leftBorderPen();
+      rightPen = style->rightBorderPen();
+      bottomPen = style->bottomBorderPen();
 
       c->format()->setTopBorderStyle(Qt::NoPen);
       c->format()->setLeftBorderStyle(Qt::NoPen);
@@ -5411,6 +5475,7 @@ void Sheet::convertObscuringBorders()
       }
     }
   }
+#endif
 }
 
 /**********************
@@ -5440,6 +5505,23 @@ void Sheet::clearPaintDirtyData()
 const Region& Sheet::paintDirtyData() const
 {
   return d->paintDirtyList;
+}
+
+void Sheet::addLayoutDirtyRegion(const Region& region)
+{
+    if ( isLoading() )
+        return;
+    d->layoutDirtyRegion.add( region );
+}
+
+void Sheet::clearLayoutDirtyRegion()
+{
+    d->layoutDirtyRegion.clear();
+}
+
+const Region& Sheet::layoutDirtyRegion() const
+{
+    return d->layoutDirtyRegion;
 }
 
 #ifndef NDEBUG

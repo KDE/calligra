@@ -40,8 +40,11 @@
 // KOffice
 #include <KoPoint.h>
 
+// KSpread
+#include "Global.h"
+#include "Style.h"
+
 #define KSPREAD_CACHED_PAINTING_ATTRIBUTES
-#define KSPREAD_CELL_WINDOW
 
 class QRectF;
 
@@ -49,6 +52,7 @@ namespace KSpread
 {
 class Cell;
 class Sheet;
+class Style;
 class View;
 
 /**
@@ -60,9 +64,7 @@ class CellView
 {
 public:
     explicit CellView( Cell* cell );
-#ifdef KSPREAD_CELL_WINDOW
-    CellView( Sheet* sheet, int col, int row );
-#endif
+    CellView( const Sheet* sheet, int col, int row );
     ~CellView();
 
   enum Border
@@ -80,11 +82,20 @@ public:
      */
     Cell* cell() const;
 
+    /**
+     * \return the style for the cell associated with this view
+     */
+    Style style() const;
+
+    Style effStyle( Style::Key ) const;
+
 #ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     /**
      * Updates the cached painting attributes.
      */
     void update();
+
+    void setDirty( bool enable );
 #endif
 
   /**
@@ -356,6 +367,61 @@ private:
    */
   void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect,
                                const QPoint &cellRef );
+
+    /**
+     * @return effective pen for the left border
+     * If this cell is merged by another cell, the other cell's
+     * left border pen. If this cell's conditional formatting contains
+     * a left border pen and the condition is matched, the conditional
+     * formatting's pen. Otherwise, its own left border pen.
+     */
+    QPen effLeftBorderPen() const;
+
+    /**
+     * @return effective pen for the top border
+     * @see effLeftBorderPen
+     */
+    QPen effTopBorderPen() const;
+
+    /**
+     * @return effective pen for the right border
+     * @see effLeftBorderPen
+     */
+    QPen effRightBorderPen() const;
+
+    /**
+     * @return effective pen for the bottom border
+     * @see effLeftBorderPen
+     */
+    QPen effBottomBorderPen() const;
+
+    /**
+     * @return "worth" of the effective bottom border pen
+     * @see Style::calculateValue
+     * @see effLeftBorderPen
+     */
+    uint effBottomBorderValue() const;
+
+    /**
+     * @return "worth" of the effective right border pen
+     * @see Style::calculateValue
+     * @see effLeftBorderPen
+     */
+    uint effRightBorderValue() const;
+
+    /**
+     * @return "worth" of the effective left border pen
+     * @see Style::calculateValue
+     * @see effLeftBorderPen
+     */
+    uint effLeftBorderValue() const;
+
+    /**
+     * @return "worth" of the effective top border pen
+     * @see Style::calculateValue
+     * @see effLeftBorderPen
+     */
+    uint effTopBorderValue() const;
 
   class Private;
   Private * const d;

@@ -58,7 +58,6 @@
 #include "KoRect.h"
 
 // KSpread
-#include "View.h"
 #include "Cell.h"
 #include "Canvas.h"
 #include "CanvasPrivate.h"
@@ -67,6 +66,7 @@
 #include "Format.h"
 #include "Selection.h"
 #include "Undo.h"
+#include "View.h"
 
 // Local
 #include "Border.h"
@@ -153,7 +153,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
       row = KS_rowMax;
     if ( ( ev_PosY >= y + h - 2 ) &&
          ( ev_PosY <= y + h + 1 ) &&
-         !( sheet->rowFormat( row )->isHide() && row == 1 ) )
+         !( sheet->rowFormat( row )->hidden() && row == 1 ) )
       m_bResize = true;
     y += h;
   }
@@ -162,7 +162,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
   //you mustn't resize it.
   double tmp2;
   int tmpRow = sheet->topRow( ev_PosY - 1, tmp2 );
-  if ( sheet->rowFormat( tmpRow )->isHide() && tmpRow == 1 )
+  if ( sheet->rowFormat( tmpRow )->hidden() && tmpRow == 1 )
       m_bResize = false;
 
   // So he clicked between two rows ?
@@ -280,7 +280,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             RowFormat *rl = sheet->nonDefaultRowFormat( i );
             if ( height != 0.0 )
             {
-              if ( !rl->isHide() )
+              if ( !rl->hidden() )
                 rl->setDblHeight( height );
             }
             else
@@ -311,7 +311,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             for ( i = rect.top(); i <= rect.bottom(); ++i )
             {
                 row = sheet->rowFormat( i );
-                if ( row->isHide() )
+                if ( row->hidden() )
                 {
                     hiddenRows.append(i);
                 }
@@ -420,7 +420,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
       //you mustn't resize it.
       if ( ev_PosY >= y + h - 2 * unzoomedPixel &&
            ev_PosY <= y + h + unzoomedPixel &&
-           !( sheet->rowFormat( tmpRow )->isHide() && tmpRow == 1 ) )
+           !( sheet->rowFormat( tmpRow )->hidden() && tmpRow == 1 ) )
       {
         setCursor( Qt::SplitVCursor );
         return;
@@ -616,7 +616,7 @@ void VBorder::paintEvent( QPaintEvent* event )
       painter.setFont( boldFont );
 
     double len = painter.fontMetrics().width( rowText );
-    if (!rowFormat->isHide())
+    if (!rowFormat->hidden())
         painter.drawText( QPointF( ( width - len ) / 2,
                                    yPos + ( height + painter.fontMetrics().ascent()
                                                    - painter.fontMetrics().descent() ) / 2 ),
@@ -730,7 +730,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
 
       if ( ev_PosX >= x + w - unzoomedPixel &&
            ev_PosX <= x + w + unzoomedPixel &&
-           !( sheet->columnFormat( tmpCol )->isHide() && tmpCol == 1 ) )
+           !( sheet->columnFormat( tmpCol )->hidden() && tmpCol == 1 ) )
       {
         m_bResize = true;
       }
@@ -741,9 +741,9 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     //you mustn't resize it.
     double tmp2;
     tmpCol = sheet->leftColumn( dWidth - ev_PosX + 1, tmp2 );
-    if ( sheet->columnFormat( tmpCol )->isHide() && tmpCol == 0 )
+    if ( sheet->columnFormat( tmpCol )->hidden() && tmpCol == 0 )
     {
-      kDebug() << "No resize: " << tmpCol << ", " << sheet->columnFormat( tmpCol )->isHide() << endl;
+      kDebug() << "No resize: " << tmpCol << ", " << sheet->columnFormat( tmpCol )->hidden() << endl;
       m_bResize = false;
     }
 
@@ -762,7 +762,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
         col = KS_colMax;
       if ( ( ev_PosX >= x + w - unzoomedPixel ) &&
          ( ev_PosX <= x + w + unzoomedPixel ) &&
-           !( sheet->columnFormat( col )->isHide() && col == 1 ) )
+           !( sheet->columnFormat( col )->hidden() && col == 1 ) )
         m_bResize = true;
       x += w;
     }
@@ -771,7 +771,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     //you mustn't resize it.
     double tmp2;
     int tmpCol = sheet->leftColumn( ev_PosX - 1, tmp2 );
-    if ( sheet->columnFormat( tmpCol )->isHide() && tmpCol == 1 )
+    if ( sheet->columnFormat( tmpCol )->hidden() && tmpCol == 1 )
       m_bResize = false;
   }
 
@@ -913,7 +913,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             ColumnFormat *cl = sheet->nonDefaultColumnFormat( i );
             if ( width != 0.0 )
             {
-                if ( !cl->isHide() )
+                if ( !cl->hidden() )
                     cl->setDblWidth( width );
             }
             else
@@ -944,7 +944,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             for ( i = rect.left(); i <= rect.right(); ++i )
             {
                 col = sheet->columnFormat( i );
-                if ( col->isHide() )
+                if ( col->hidden() )
                 {
                     hiddenCols.append(i);
                 }
@@ -1078,7 +1078,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
         //you mustn't resize it.
         if ( ev_PosX >= x + w - unzoomedPixel &&
              ev_PosX <= x + w + unzoomedPixel &&
-             !( sheet->columnFormat( tmpCol )->isHide() && tmpCol == 0 ) )
+             !( sheet->columnFormat( tmpCol )->hidden() && tmpCol == 0 ) )
         {
           setCursor( Qt::SplitHCursor );
           return;
@@ -1098,7 +1098,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
         //you mustn't resize it.
         if ( ev_PosX >= x + w - unzoomedPixel &&
              ev_PosX <= x + w + unzoomedPixel &&
-             !( sheet->columnFormat( tmpCol )->isHide() && tmpCol == 1 ) )
+             !( sheet->columnFormat( tmpCol )->hidden() && tmpCol == 1 ) )
         {
           setCursor( Qt::SplitHCursor );
           return;
@@ -1349,7 +1349,7 @@ void HBorder::paintEvent( QPaintEvent* event )
       {
         QString colText = Cell::columnName( x );
         double len = painter.fontMetrics().width( colText );
-        if ( !col_lay->isHide() )
+        if ( !col_lay->hidden() )
           painter.drawText( QPointF( xPos + ( width - len ) / 2,
                                      ( height + painter.fontMetrics().ascent() -
                                                 painter.fontMetrics().descent() ) / 2 ),
@@ -1359,7 +1359,7 @@ void HBorder::paintEvent( QPaintEvent* event )
       {
         QString tmp;
         double len = painter.fontMetrics().width( tmp.setNum(x) );
-        if (!col_lay->isHide())
+        if (!col_lay->hidden())
           painter.drawText( QPointF( xPos + ( width - len ) / 2,
                                      ( height + painter.fontMetrics().ascent() -
                                                 painter.fontMetrics().descent() ) / 2 ),
@@ -1408,7 +1408,7 @@ void HBorder::paintEvent( QPaintEvent* event )
       {
         QString colText = Cell::columnName( x );
         int len = painter.fontMetrics().width( colText );
-        if (!col_lay->isHide())
+        if (!col_lay->hidden())
           painter.drawText( QPointF( xPos + ( width - len ) / 2,
                                      ( height + painter.fontMetrics().ascent() -
                                                 painter.fontMetrics().descent() ) / 2 ),
@@ -1418,7 +1418,7 @@ void HBorder::paintEvent( QPaintEvent* event )
       {
         QString tmp;
         int len = painter.fontMetrics().width( tmp.setNum(x) );
-        if (!col_lay->isHide())
+        if (!col_lay->hidden())
           painter.drawText( QPointF( xPos + ( width - len ) / 2,
                                      ( height + painter.fontMetrics().ascent() -
                                                 painter.fontMetrics().descent() ) / 2 ),

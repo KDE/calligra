@@ -33,9 +33,7 @@ namespace KSpread
 
 class EditWidget;
 class CellEditor;
-#ifdef KSPREAD_CELL_WINDOW
 class CellWindow;
-#endif
 class View;
 class ComboboxLocationEditWidget;
 
@@ -60,11 +58,9 @@ public:
     // the height of the invisible rows '1' to '4'.
     double yOffset;
 
-#ifdef KSPREAD_CELL_WINDOW
     QRect cellWindowRect;
     QList< /*columns*/ QList< /*rows*/ CellView* > > cellWindowMatrix;
     Sheet* cellWindowSheet;
-#endif
 
     // Used to draw the grey grid that is usually only visible on the
     // screen, but not by printing on paper.

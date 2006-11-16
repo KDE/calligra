@@ -42,8 +42,8 @@ class QDomDocument;
 
 namespace KSpread
 {
-class Format;
 class Sheet;
+class Style;
 class View;
 
 /**
@@ -76,7 +76,7 @@ private:
     };
     QList<Entry> m_entries;
 
-    Format* m_cells[ 16 ];
+    Style* m_styles[ 16 ];
 };
 
 } // namespace KSpread

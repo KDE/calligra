@@ -206,8 +206,8 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->captureAllArrowKeys = true;
 
   QFont font( KoGlobal::defaultFont() );
-  Format::setGlobalRowHeight( font.pointSizeF() + 3 );
-  Format::setGlobalColWidth( ( font.pointSizeF() + 3 ) * 5 );
+  RowFormat::setGlobalRowHeight( font.pointSizeF() + 3 );
+  ColumnFormat::setGlobalColWidth( ( font.pointSizeF() + 3 ) * 5 );
 
   d->delayCalculation = false;
 
@@ -500,8 +500,8 @@ QDomDocument Doc::saveXML()
 #endif
 
     QDomElement defaults = doc.createElement( "defaults" );
-    defaults.setAttribute( "row-height", Format::globalRowHeight() );
-    defaults.setAttribute( "col-width", Format::globalColWidth() );
+    defaults.setAttribute( "row-height", RowFormat::globalRowHeight() );
+    defaults.setAttribute( "col-width", ColumnFormat::globalColWidth() );
     spread.appendChild( defaults );
 
     QDomElement s = styleManager()->save( doc );
@@ -572,13 +572,13 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
 
     // Saving the default column style
     KoGenStyle defaultColumnStyle( Doc::STYLE_COLUMN_USER, "table-column" );
-    defaultColumnStyle.addPropertyPt( "style:column-width", Format::globalColWidth() );
+    defaultColumnStyle.addPropertyPt( "style:column-width", ColumnFormat::globalColWidth() );
     defaultColumnStyle.setDefaultStyle( true );
     mainStyles.lookup( defaultColumnStyle, "Default", KoGenStyles::DontForceNumbering );
 
     // Saving the default row style
     KoGenStyle defaultRowStyle( Doc::STYLE_ROW_USER, "table-row" );
-    defaultRowStyle.addPropertyPt( "style:row-height", Format::globalRowHeight() );
+    defaultRowStyle.addPropertyPt( "style:row-height", RowFormat::globalRowHeight() );
     defaultRowStyle.setDefaultStyle( true );
     mainStyles.lookup( defaultRowStyle, "Default", KoGenStyles::DontForceNumbering );
 
@@ -925,7 +925,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
         if ( width != -1.0 )
         {
 //           kDebug() << "\tstyle:column-width: " << width << endl;
-          Format::setGlobalColWidth( width );
+          ColumnFormat::setGlobalColWidth( width );
         }
       }
     }
@@ -944,7 +944,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
         if ( height != -1.0 )
         {
 //           kDebug() << "\tstyle:row-height: " << height << endl;
-          Format::setGlobalRowHeight( height );
+          RowFormat::setGlobalRowHeight( height );
         }
       }
     }
@@ -1021,14 +1021,14 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
     double d = defaults.attribute( "row-height" ).toDouble( &ok );
     if ( !ok )
       return false;
-    Format::setGlobalRowHeight( d );
+    RowFormat::setGlobalRowHeight( d );
 
     d = defaults.attribute( "col-width" ).toDouble( &ok );
 
     if ( !ok )
       return false;
 
-    Format::setGlobalColWidth( d );
+    ColumnFormat::setGlobalColWidth( d );
   }
 
   d->refs.clear();
@@ -1715,12 +1715,8 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
             QPoint cellRef( x, y );
 
             const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
-#ifdef KSPREAD_CELL_WINDOW
-            CellView tmpCellView( cell );
+            CellView tmpCellView( sheet, x, y );
             CellView* cellView = &tmpCellView;
-#else
-            CellView* cellView = cell->cellView();
-#endif
             cellView->paintCell( viewRegionF, painter, view, dblCurrentCellPos,
                                  cellRef,
                                  mergedCellsPainted );
@@ -1749,12 +1745,8 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
             QPoint cellRef( x, y );
 
             const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
-#ifdef KSPREAD_CELL_WINDOW
-            CellView tmpCellView( cell );
+            CellView tmpCellView( sheet, x, y );
             CellView* cellView = &tmpCellView;
-#else
-            CellView* cellView = cell->cellView();
-#endif
             cellView->paintCellBorders( viewRegionF, painter, view, dblCurrentCellPos,
                                         cellRef, cellRegion,
                                         mergedCellsPainted );

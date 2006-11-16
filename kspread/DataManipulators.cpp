@@ -76,7 +76,11 @@ bool AbstractDataManipulator::process (Element* element)
       if (parse) {
         Cell *cell = m_sheet->nonDefaultCell (col, row);
         if (fmtType != No_format)
-          cell->format()->setFormatType (fmtType);
+        {
+            Style style;
+            style.setFormatType (fmtType);
+            cell->setStyle( style );
+        }
         cell->setCellText (text);
       } else {
         Cell *cell = m_sheet->cellAt (col, row);
@@ -142,12 +146,7 @@ AbstractDFManipulator::AbstractDFManipulator ()
 AbstractDFManipulator::~AbstractDFManipulator ()
 {
   // delete all stored formats ...
-  QMap<int, QMap<int, Format *> >::iterator it1;
-  QMap<int, Format *>::iterator it2;
-  for (it1 = formats.begin(); it1 != formats.end(); ++it1)
-    for (it2 = (*it1).begin(); it2 != (*it1).end(); ++it2)
-      delete (*it2);
-  formats.clear ();
+  formats.clear();
 }
 
 bool AbstractDFManipulator::process (Element* element)
@@ -169,12 +168,8 @@ bool AbstractDFManipulator::process (Element* element)
       // TODO: is this really correct ?
       if (!cell->isDefault())
       {
-        Format *f = 0;
-        if (m_reverse)
-          f = formats[colidx][rowidx];
-        else
-          f = newFormat (element, col, row);
-        if (f) cell->format()->copy (*f);
+        Style style = m_reverse ? formats[colidx][rowidx] : newFormat (element, col, row);
+        cell->setStyle( style );
         cell->setLayoutDirtyFlag();
       }
     }
@@ -201,9 +196,8 @@ bool AbstractDFManipulator::preProcessing ()
         {
           int colidx = col - range.left();
           int rowidx = row - range.top();
-          Format *f = new Format (m_sheet, 0);
-          f->copy (*cell->format());
-          formats[colidx][rowidx] = f;
+          Style style = cell->style();
+          formats[colidx][rowidx] = style;
         }
       }
   }
@@ -369,7 +363,7 @@ Value FillManipulator::newValue (Element *element, int col, int row,
   return stored (colidx, rowidx, parse);
 }
 
-Format *FillManipulator::newFormat (Element *element, int col, int row)
+Style FillManipulator::newFormat (Element *element, int col, int row)
 {
   QRect range = element->rect();
   int colidx = col - range.left();

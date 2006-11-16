@@ -23,7 +23,7 @@
 
 #include "Manipulator.h"
 #include "Global.h"
-#include "Format.h"
+#include "Style.h"
 #include "Value.h"
 #include <koffice_export.h>
 
@@ -81,19 +81,19 @@ class AbstractDFManipulator : public AbstractDataManipulator {
     AbstractDFManipulator ();
     virtual ~AbstractDFManipulator ();
     virtual bool process (Element* element);
-    
+
     /** returns whether this manipulator changes formats */
     bool changeFormat () { return m_changeformat; };
     /** set whether this manipulator changes formats */
     void setChangeFormat (bool chf) { m_changeformat = chf; };
   protected:
     /** this method should return new format for a given cell */
-    virtual Format *newFormat (Element *element, int col, int row) = 0;
+    virtual Style newFormat (Element *element, int col, int row) = 0;
 
     /** preProcessing will store the old cell's data */
     virtual bool preProcessing ();
-    
-    QMap<int, QMap<int, Format *> > formats;
+
+    QMap<int, QMap<int, Style> > formats;
     bool m_changeformat;
 };
 
@@ -166,7 +166,7 @@ class KSPREAD_EXPORT FillManipulator : public AbstractDFManipulator {
   protected:
     virtual Value newValue (Element *element, int col, int row,
         bool *parse, FormatType *fmtType);
-    virtual Format *newFormat (Element *element, int col, int row);
+    virtual Style newFormat (Element *element, int col, int row);
     Direction m_dir;
 };
 

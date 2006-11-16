@@ -38,6 +38,12 @@ class Sheet;
 class StyleDialog;
 class View;
 
+/**
+ * \class StyleManager
+ * \brief Manages cell styles
+ * The StyleManager takes care of named styles. It also provides some static
+ * methods for the preloading of OpenDocument autostyles.
+ */
 class KSPREAD_EXPORT StyleManager
 {
  public:

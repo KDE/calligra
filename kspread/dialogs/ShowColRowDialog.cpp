@@ -83,7 +83,7 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
         QStringList listCol;
         for( ; col; col = col->next() )
 	  {
-	    if(col->isHide())
+	    if(col->hidden())
 	      listInt.append(col->column());
 	  }
         qHeapSort(listInt);
@@ -105,7 +105,7 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
         QStringList listRow;
         for( ; row; row = row->next() )
 	  {
-	    if(row->isHide())
+	    if(row->hidden())
 	      listInt.append(row->row());
 	  }
         qHeapSort(listInt);

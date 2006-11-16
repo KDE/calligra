@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Norbert Andres, nandres@web.de
+   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2003 Norbert Andres <nandres@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,22 +15,19 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_style__
-#define __kspread_style__
+#ifndef KSPREAD_STYLE
+#define KSPREAD_STYLE
 
-#include <QBrush>
-#include <QColor>
+#define KSPREAD_NEW_STYLE_STORAGE
+
 #include <QFont>
-#include <QPen>
+#include <QSharedDataPointer>
 
 #include <KoXmlReader.h>
-//#include "Format.h"
 
-class QDomDocument;
-class QDomElement;
 class KoGenStyle;
 class KoGenStyles;
 class KoOasisStyles;
@@ -37,127 +35,251 @@ class KoStyleStack;
 
 namespace KSpread
 {
+
+// sizeof(void*) = 8
+// sizeof(QVariant) = 4
+// sizeof(QVariant::Private) = 12
+// sizeof(QPen) = 4
+// sizeof(QPenPrivate) >= 64
+// sizeof(QHash) = 4
+// sizeof(QHashData) >= 64
+
 class Style;
+class StyleManipulator;
+class SubStyle;
 class CustomStyle;
 
 // used for preloading OASIS auto styles
-typedef QHash<QString, Style*>      Styles;
+typedef QHash<QString, Style>       Styles;
 // needs to be ordered (QMap) for the style dialog
 typedef QMap<QString, CustomStyle*> CustomStyles;
 
 
 /**
- * @brief The Style class represents a cell style.
- * Built-in and custom styles, the ones shown in the StyleManager dialog,
- * are CustomStyles. Pure Styles have no name, for instance, and are only
- * used as AUTO styles.
+ * A cell style.
  */
 class Style
 {
 public:
-  enum HAlign { Left = 1, Center = 2, Right = 3, HAlignUndefined = 4 };
-  enum VAlign { Top = 1, Middle = 2, Bottom = 3, VAlignUndefined = 4 };
-  enum FloatFormat { AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = 3 };
-  enum FloatColor { NegRed = 1, AllBlack = 2, NegBrackets = 3, NegRedBrackets = 4 };
-
-
     struct Currency
     {
       int type;
       QString symbol;
     };
 
-
-  /// The style type
-  enum StyleType
-  {
-    BUILTIN,   ///< built-in style (the default style)
-    CUSTOM,    ///< custom style (defined in the StyleManager dialog)
-    AUTO,      ///< automatically generated on cell format changes
-    TENTATIVE  ///< @internal temporary state
-  };
-
-  enum FontFlags
+    enum HAlign
     {
-      FBold      = 0x01,
-      FUnderline = 0x02,
-      FItalic    = 0x04,
-      FStrike    = 0x08
+        Left = 1,
+        Center = 2,
+        Right = 3,
+        HAlignUndefined = 0
+    };
+    enum VAlign
+    {
+        Top = 1,
+        Middle = 2,
+        Bottom = 3,
+        VAlignUndefined = 0
+    };
+    enum FloatFormat
+    {
+        DefaultFloatFormat = 0,
+        AlwaysSigned = 1,
+        AlwaysUnsigned = 2,
+        OnlyNegSigned = DefaultFloatFormat
+    };
+    enum FloatColor
+    {
+        DefaultFloatColor = 0,
+        NegRed = 1,
+        AllBlack = DefaultFloatColor,
+        NegBrackets = 3,
+        NegRedBrackets = 4
     };
 
-  /// @see Format::FormatFlags
-  enum Properties
+    /// The style type
+    enum StyleType
     {
-      PDontPrintText = 0x01,
-      PCustomFormat  = 0x02,
-      PNotProtected  = 0x04,
-      PHideAll       = 0x08,
-      PHideFormula   = 0x10,
-      PMultiRow      = 0x20,
-      PVerticalText  = 0x40
+        BUILTIN,   ///< built-in style (the default style)
+        CUSTOM,    ///< custom style (defined in the StyleManager dialog)
+        AUTO,      ///< automatically generated on cell format changes
+        TENTATIVE  ///< @internal temporary state
     };
 
-    // TODO Stefan: merge with Format::Properties
-    /// @see Format::Properties
-    enum FlagsSet
+    enum Key
     {
-      SHAlign          = 0x01,
-      SVAlign          = 0x02,
-      //SFactor was here
-      SPrefix          = 0x08,
-      SPostfix         = 0x10,
-      SLeftBorder      = 0x20,
-      SRightBorder     = 0x40,
-      STopBorder       = 0x80,
-      SBottomBorder    = 0x100,
-      SFallDiagonal    = 0x200,
-      SGoUpDiagonal    = 0x400,
-      SBackgroundBrush = 0x800,
-      SFont            = 0x1000,
-      STextPen         = 0x2000,
-      SBackgroundColor = 0x4000,
-      SFloatFormat     = 0x8000,
-      SFloatColor      = 0x10000,
-      SMultiRow        = 0x20000,
-      SVerticalText    = 0x40000,
-      SPrecision       = 0x80000,
-      SFormatType      = 0x100000,
-      SAngle           = 0x200000,
-      SComment         = 0x400000,
-      SIndent          = 0x800000,
-      SDontPrintText   = 0x1000000,
-      SCustomFormat    = 0x2000000,
-      SNotProtected    = 0x4000000,
-      SHideAll         = 0x8000000,
-      SHideFormula     = 0x10000000,
-      SFontSize        = 0x20000000,
-      SFontFlag        = 0x40000000,
-      SFontFamily      = 0x80000000
+        // special cases
+        DefaultStyleKey,
+        NamedStyleKey,
+        // borders
+        LeftPen,
+        RightPen,
+        TopPen,
+        BottomPen,
+        FallDiagonalPen,
+        GoUpDiagonalPen,
+        // layout
+        HorizontalAlignment,
+        VerticalAlignment,
+        MultiRow,
+        VerticalText,
+        Angle,
+        Indentation,
+        // content format
+        Prefix,
+        Postfix,
+        Precision,
+        FormatTypeKey,
+        FloatFormatKey,
+        FloatColorKey,
+        CurrencyFormat,
+        CustomFormat,
+        // background
+        BackgroundBrush,
+        BackgroundColor,
+        // font
+        FontColor,
+        FontFamily,
+        FontSize,
+        FontBold,
+        FontItalic,
+        FontStrike,
+        FontUnderline,
+        //misc
+        DontPrintText,
+        NotProtected,
+        HideAll,
+        HideFormula
     };
 
-  /**
-   * Constructor.
-   * Creates an empty automatic style.
-   */
-  Style();
-  /**
-   * Constructor.
-   * Creates an automatic style.
-   * If @p style is a custom or built-in style (e.g. the default style),
-   * @p style becomes the parent style. In this case, features are NOT SET.
-   * @param style The style which features are copied.
-   */
-  explicit Style( Style* style );
+    Style();
+    Style( const Style& style );
+    virtual ~Style();
 
-  /**
-   * Destructor.
-   */
-  virtual ~Style();
+    virtual StyleType type() const;
 
-  /** Returns true if both styles have the same properties */
-  bool operator == (const Style& style) const;
-  inline bool operator!=( const Style& other ) const { return !operator==( other ); }
+    CustomStyle* parent() const;
+    void setParent( CustomStyle* parent );
 
+    // setParentName is needed by loading code, which doesn't set the real parent
+    QString parentName() const;
+    void setParentName (const QString &n);
+
+
+    bool loadXML( KoXmlElement& format, Paste::Mode pm = Paste::Normal, bool paste = false );
+    void saveXML( QDomDocument& doc, QDomElement& format, bool force = false, bool copy = false ) const;
+    void loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement & element );
+    /**
+     * Saves an OASIS automatic style.
+     * Reimplemented by CustomStyle for OASIS user styles.
+     * @return always QString::null
+     */
+    virtual QString saveOasis( KoGenStyle& style, KoGenStyles& mainStyles) const;
+
+
+    void clearAttribute( Key key );
+    bool hasAttribute( Key key ) const;
+    void loadAttributes( const QList< QSharedDataPointer<SubStyle> >& subStyles );
+
+
+    uint bottomPenValue() const;
+    uint rightPenValue() const;
+    uint leftPenValue() const;
+    uint topPenValue() const;
+
+    QColor  fontColor()       const;
+    QColor  backgroundColor() const;
+    QPen    rightBorderPen()  const;
+    QPen    bottomBorderPen() const;
+    QPen    leftBorderPen()   const;
+    QPen    topBorderPen()    const;
+    QPen    fallDiagonalPen() const;
+    QPen    goUpDiagonalPen() const;
+    QBrush  backgroundBrush() const;
+    QString customFormat()    const;
+    QString prefix()          const;
+    QString postfix()         const;
+    QString fontFamily()      const;
+
+    HAlign      halign()      const;
+    VAlign      valign()      const;
+    FloatFormat floatFormat() const;
+    FloatColor  floatColor()  const;
+    FormatType  formatType()  const;
+
+    Currency currency() const;
+
+    QFont  font()         const;
+    bool   bold()         const;
+    bool   italic()       const;
+    bool   underline()    const;
+    bool   strikeOut()    const;
+    uint   fontFlags()    const;
+    int    fontSize()     const;
+    int    precision()    const;
+    int    angle()        const;
+    double indentation()  const;
+    bool   verticalText() const;
+    bool   wrapText()     const;
+    bool   printText()    const;
+    bool   hideAll()      const;
+    bool   hideFormula()  const;
+    bool   notProtected() const;
+    bool   isDefault()    const;
+    bool   isEmpty()      const;
+
+protected:
+    /**
+     * Helper function for saveOasis
+     * Does the real work by determining the used attributes.
+     */
+    void saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const;
+
+    void loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element );
+    void loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
+    void loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
+    void loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
+
+public:
+    void setHAlign( HAlign align );
+    void setVAlign( VAlign align );
+    void setFont( QFont const & font );
+    void setFontFamily( QString const & fam );
+    void setFontBold( bool enable );
+    void setFontItalic( bool enable );
+    void setFontUnderline( bool enable );
+    void setFontStrikeOut( bool enable );
+    void setFontSize( int size );
+    void setFontColor( QColor const & color );
+    void setRightBorderPen( QPen const & pen );
+    void setBottomBorderPen( QPen const & pen );
+    void setLeftBorderPen( QPen const & pen );
+    void setTopBorderPen( QPen const & pen );
+    void setFallDiagonalPen( QPen const & pen );
+    void setGoUpDiagonalPen( QPen const & pen );
+    void setAngle( int angle );
+    void setIndentation( double indent );
+    void setBackgroundBrush( QBrush const & brush );
+    void setFloatFormat( FloatFormat format );
+    void setFloatColor( FloatColor color );
+    void setFormatType( FormatType format );
+    void setCustomFormat( QString const & strFormat );
+    void setPrecision( int precision );
+    void setPrefix( QString const & prefix );
+    void setPostfix( QString const & postfix );
+    void setCurrency( Currency const & currency );
+    void setWrapText( bool enable );
+    void setHideAll( bool enable );
+    void setHideFormula( bool enable );
+    void setNotProtected( bool enable );
+    void setDontPrintText( bool enable );
+    void setVerticalText( bool enable );
+    void setBackgroundColor( QColor const & color );
+    void setDefault();
+
+
+    // static functions
+    //
     static FormatType dateType( const QString &_format );
     static FormatType timeType( const QString &_format );
     static FormatType fractionType( const QString &_format );
@@ -187,330 +309,141 @@ public:
                                               const QString &_prefix, const QString &_suffix );
     static QString saveOasisStyleNumericNumber( KoGenStyles&mainStyles, FormatType _style, int _precision,
                                                 const QString &_prefix, const QString &_suffix );
+    static QString saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush );
+
+    /**
+     * Returns the name of a color.  This is the same as returned by QColor::name, but an internal cache
+     * is used to reduce the overhead when asking for the name of the same color.
+     */
+    static QString colorName( const QColor& color );
+
+    static bool compare( const SubStyle* one, const SubStyle* two );
 
 
-  StyleType type() const { return m_type; }
+    /** Returns true if both styles have the same properties */
+    bool operator== (const Style& style) const;
+    inline bool operator!=( const Style& other ) const { return !operator==( other ); }
+    void operator=( const Style& style );
+    void merge( const Style& style );
 
-  void saveXML( QDomDocument & doc, QDomElement & format ) const;
-  bool loadXML( KoXmlElement & format );
+    void dump() const;
 
-  /**
-   * Saves an OASIS automatic style.
-   * Reimplemented by CustomStyle for OASIS user styles.
-   * @return always QString::null
-   */
-  virtual QString saveOasis( KoGenStyle& style, KoGenStyles& mainStyles);
-  void loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement & element );
-  static QString saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush );
-
-  /**
-   * Releases this style. The internal reference counter is decremented.
-   * @return true, if this style is not used anymore and should be deleted.
-   */
-  bool release();
-  /**
-   * Marks this style as used. The internal reference counter is incremented.
-   */
-  void addRef();
-  /**
-   * @return the number of references to this style.
-   */
-  int usage() const { return m_usageCount; }
-
-  bool   hasProperty( Properties p ) const;
-  bool   hasFeature( FlagsSet f, bool withoutParent ) const;
-  void   clearFeature( FlagsSet f );
-  uint   features() const { return m_featuresSet; }
-
-  uint bottomPenValue() const { return m_bottomPenValue; }
-  uint rightPenValue() const { return m_rightPenValue; }
-  uint leftPenValue() const { return m_leftPenValue; }
-  uint topPenValue() const { return m_topPenValue; }
-
-  QPen    const & pen()             const;
-  QColor  const & bgColor()         const;
-  QPen    const & rightBorderPen()  const;
-  QPen    const & bottomBorderPen() const;
-  QPen    const & leftBorderPen()   const;
-  QPen    const & topBorderPen()    const;
-  QPen    const & fallDiagonalPen() const;
-  QPen    const & goUpDiagonalPen() const;
-  QBrush  const & backGroundBrush() const;
-  QString const & strFormat()       const;
-  QString const & prefix()          const;
-  QString const & postfix()         const;
-  QString const & fontFamily()      const;
-
-  HAlign      halign()      const;
-  VAlign      valign()      const;
-  FloatFormat floatFormat() const;
-  FloatColor  floatColor()  const;
-  FormatType  formatType()  const;
-
-  Currency const & currency() const;
-
-  QFont  font()        const;
-  uint   fontFlags()   const;
-  int    fontSize()    const;
-  int    precision()   const;
-  int    rotateAngle() const;
-  double indent()      const;
-
-  Style * setHAlign( HAlign  align );
-  Style * setVAlign( VAlign align );
-  Style * setFont( QFont const & f );
-  Style * setFontFamily( QString const & fam );
-  Style * setFontFlags( uint flags );
-  Style * setFontSize( int size );
-  Style * setPen( QPen const & pen );
-  Style * setBgColor( QColor const & color );
-  Style * setRightBorderPen( QPen const & pen );
-  Style * setBottomBorderPen( QPen const & pen );
-  Style * setLeftBorderPen( QPen const & pen );
-  Style * setTopBorderPen( QPen const & pen );
-  Style * setFallDiagonalPen( QPen const & pen );
-  Style * setGoUpDiagonalPen( QPen const & pen );
-  Style * setRotateAngle( int angle );
-  Style * setIndent( double indent );
-  Style * setBackGroundBrush( QBrush const & brush );
-  Style * setFloatFormat( FloatFormat format );
-  Style * setFloatColor( FloatColor color );
-  Style * setFormatType( FormatType format );
-  Style * setStrFormat( QString const & strFormat );
-  Style * setPrecision( int precision );
-  Style * setPrefix( QString const & prefix );
-  Style * setPostfix( QString const & postfix );
-  Style * setCurrency( Currency const & currency );
-  Style * setProperty( Properties p );
-  Style * clearProperty( Properties p );
-
-  CustomStyle * parent() const;
-  QString const & parentName() const { return m_parentName; }
-  void setParent( CustomStyle * parent );
-  // setParentName is needed by loading code, which doesn't set the real parent
-  void setParentName (const QString &n) { m_parentName = n; };
-
-  /**
-   * Returns the name of a color.  This is the same as returned by QColor::name, but an internal cache
-   * is used to reduce the overhead when asking for the name of the same color.
-   */
-  static QString colorName( const QColor& color );
-
-  bool featureSet( FlagsSet f ) const { return ( !m_parent || ( m_featuresSet & (uint) f ) ); }
 protected:
-  /**
-   * Helper function for saveOasis
-   * Does the real work by determining the used attributes.
-   */
-  void saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles );
+    virtual void setType( StyleType type );
 
-  void loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element );
-  void loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
-  void loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
-  void loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
+    QList< QSharedDataPointer<SubStyle> > subStyles() const;
 
-  CustomStyle * m_parent;
-  QString        m_parentName;
-  StyleType      m_type;
-  uint           m_usageCount;
-  uint           m_featuresSet;
+    const QSharedDataPointer<SubStyle> createSubStyle( Key key, const QVariant& value );
+    virtual void insertSubStyle( Key key, const QVariant& value );
+    void insertSubStyle( const QSharedDataPointer<SubStyle> subStyle );
+    bool releaseSubStyle( Key key );
 
-  /**
-   * Alignment of the text
-   */
-  HAlign m_alignX;
-  /**
-   * Aligment of the text at top middle or bottom
-   */
-  VAlign m_alignY;
+    virtual int initialUsage() const { return 0; }
 
-  FloatFormat m_floatFormat;
-  /**
-   * The color format of a floating point value
-   */
-  FloatColor m_floatColor;
+private:
+    friend class StyleManipulator;
+    friend class StyleStorage;
 
-  FormatType m_formatType;
-
-  /**
-   * The font used to draw the text
-   */
-  QString   m_fontFamily;
-  uint      m_fontFlags;
-  int       m_fontSize;
-
-  /**
-   * The pen used to draw the text
-   */
-  QPen m_textPen;
-  /**
-   * The background color
-   */
-  QColor m_bgColor;
-
-  /**
-   * The pen used to draw the right border
-   */
-  QPen m_rightBorderPen;
-
-  /**
-   * The pen used to draw the bottom border
-   */
-  QPen m_bottomBorderPen;
-
-  /**
-   * The pen used to draw the left border
-   */
-  QPen m_leftBorderPen;
-
-  /**
-   * The pen used to draw the top border
-   */
-  QPen m_topBorderPen;
-
-  /**
-   * The pen used to draw the diagonal
-   */
-  QPen m_fallDiagonalPen;
-  /**
-   * The pen used to draw the the diagonal which go up
-   */
-  QPen m_goUpDiagonalPen;
-
-  /**
-   * The brush used to draw the background.
-   */
-  QBrush m_backGroundBrush;
-
-  int m_rotateAngle;
-  /**
-   * Give indent
-   */
-  double m_indent;
-  /**
-   * Format of the content, e.g. #.##0.00, dd/mmm/yyyy,...
-   */
-  QString m_strFormat;
-  /**
-   * The precision of the floating point representation
-   * If precision is -1, this means that no precision is specified.
-   */
-  int m_precision;
-  /**
-   * The prefix of a numeric value ( for example "$" )
-   * May be empty.
-   */
-  QString m_prefix;
-  /**
-   * The postfix of a numeric value ( for example "DM" )
-   * May be empty.
-   */
-  QString m_postfix;
-  /**
-   * Currency information:
-   * about which currency from which country
-   */
-  Currency m_currency;
-
-  /**
-   * Stores information like: DonPrint, DontShowFormula, Protected...
-   */
-  uint m_properties;
-
-  uint m_bottomPenValue;
-  uint m_rightPenValue;
-  uint m_leftPenValue;
-  uint m_topPenValue;
-
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
+
+
 /**
- * @brief Built-in or custom style defined in StyleManager dialog.
+ * A named cell style.
  */
 class CustomStyle : public Style
 {
 public:
-  /**
-   * Constructor.
-   * Creates a custom style.
-   * @param style The style which's features are copied.
-   * @param name The name of this style.
-   */
-  CustomStyle( Style * style, QString const & name );
-  CustomStyle( QString const & name, CustomStyle * parent );
-  ~CustomStyle();
+    /**
+     * Constructor.
+     * Creates a custom style.
+     * @param style The style which's features are copied.
+     * @param name The name of this style.
+     */
+    CustomStyle( const Style * style, QString const & name );
+    CustomStyle( QString const & name, CustomStyle * parent );
+    virtual ~CustomStyle();
 
-  QString const & name() const { return m_name; }
+    virtual StyleType type() const;
+    virtual void setType( StyleType type );
 
-  void save( QDomDocument & doc, QDomElement & styles );
-  /**
-   * @reimp
-   * Stores an OASIS user style.
-   * @return the OASIS style's name
-   */
-  virtual QString saveOasis( KoGenStyle& style, KoGenStyles &mainStyles );
-  /**
-   * Loads the style properties from @p style .
-   * Determines also the parent's name.
-   * @param oasisStyles map of all styles
-   * @param style the DOM element defining the style
-   * @param name the style's new name
-   */
-  void loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement & style, const QString & name );
+    void setName( QString const & name );
+    QString const & name() const;
 
-  bool loadXML( KoXmlElement const & style, QString const & name );
+    void refreshParentName();
+    bool definesAll() const;
 
-  void setType( StyleType type ) { m_type = type; }
+    bool loadXML( KoXmlElement const & style, QString const & name );
+    void save( QDomDocument & doc, QDomElement & styles );
 
-  void setName( QString const & name );
-  void refreshParentName();
-  bool definesAll() const;
+    /**
+     * Loads the style properties from @p style .
+     * Determines also the parent's name.
+     * @param oasisStyles map of all styles
+     * @param style the DOM element defining the style
+     * @param name the style's new name
+     */
+    void loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement & style, const QString & name );
 
-  void changeHAlign( HAlign  alignX );
-  void changeVAlign( VAlign alignY );
-  void changeFont( QFont const & f );
-  void changeFontFamily( QString const & fam );
-  void changeFontSize( int size );
-  void changeFontFlags( uint flags );
-  void changePen( QPen const & pen );
-  void changeTextColor( QColor const & color );
-  void changeBgColor( QColor const & color );
-  void changeRightBorderPen( QPen const & pen );
-  void changeBottomBorderPen( QPen const & pen );
-  void changeLeftBorderPen( QPen const & pen );
-  void changeTopBorderPen( QPen const & pen );
-  void changeFallBorderPen( QPen const & pen );
-  void changeGoUpBorderPen( QPen const & pen );
-  void changeRotateAngle( int angle );
-  void changeIndent( double indent );
-  void changeBackGroundBrush( QBrush const & brush );
-  void changeFloatFormat( FloatFormat format );
-  void changeFloatColor( FloatColor color );
-  void changeFormatType( FormatType format );
-  void changeStrFormat( QString const & strFormat );
-  void changePrecision( int precision );
-  void changePrefix( QString const & prefix );
-  void changePostfix( QString const & postfix );
-  void changeCurrency( Currency const & currency );
+    /**
+     * @reimp
+     * Stores an OASIS user style.
+     * @return the OASIS style's name
+     */
+    virtual QString saveOasis( KoGenStyle& style, KoGenStyles &mainStyles ) const;
 
-  void addProperty( Properties p );
-  void removeProperty( Properties p );
 
-  bool operator==( const CustomStyle& other ) const;
-  inline bool operator!=( const CustomStyle& other ) const { return !operator==( other ); }
+    bool operator==( const CustomStyle& other ) const;
+    inline bool operator!=( const CustomStyle& other ) const { return !operator==( other ); }
 
- private:
-  friend class StyleManager;
+    /**
+     * @return the number of references to this style.
+     */
+    int usage() const;
 
-  QString              m_name;
+protected:
+//     virtual void insertSubStyle( Key key, const QVariant& value );
 
-  /**
-   * Constructor.
-   * Constructs the default cell style.
-   */
-  CustomStyle();
+private:
+    friend class StyleManager;
+
+    /**
+     * Constructor.
+     * Constructs the default cell style.
+     */
+    CustomStyle();
+
+    class Private;
+    QSharedDataPointer<Private> d;
 };
+
+
+/**
+ * A single style attribute.
+ */
+class SubStyle : public QSharedData
+{
+public:
+    SubStyle() {}
+    virtual ~SubStyle() {}
+
+    virtual Style::Key type() const { return Style::DefaultStyleKey; }
+
+    virtual void dump() const { kDebug() << Style::DefaultStyleKey << " Default SubStyle" << endl; }
+};
+
+/***************************************************************************
+  kDebug support
+****************************************************************************/
+
+inline kdbgstream operator<<( kdbgstream str, const KSpread::Style::Currency& c )
+{
+  str << c.symbol;
+  return str;
+}
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_STYLE

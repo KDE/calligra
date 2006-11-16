@@ -52,6 +52,7 @@
 #include <kspread/Sheet.h>
 #include <kspread/SheetPrint.h>
 #include <kspread/Format.h>
+#include <kspread/Region.h>
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
 #include <kspread/Util.h>
@@ -173,7 +174,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
 
   double height = -1.0;
   bool insertPageBreak = false;
-  Format layout( table, table->doc()->styleManager()->defaultStyle() );
+  Style layout;
 
   while( !node.isNull() )
   {
@@ -224,7 +225,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
   for ( int i = 0; i < number; ++i )
   {
     RowFormat * rowL = table->nonDefaultRowFormat( row );
-    rowL->copy( layout );
+    table->setStyle( KSpread::Region(QRect(1,row,KS_colMax,1)), layout );
 
     if ( height != -1 )
     {
@@ -466,10 +467,8 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
 
         if( !comment.isEmpty() )
         {
-            if ( !cell )
-                cell = table->nonDefaultCell( columns, row );
             kDebug(30518)<<" columns :"<<columns<<" row :"<<row<<endl;
-            cell->format()->setComment( comment );
+            table->setComment( KSpread::Region(QPoint(columns,row)), comment );
         }
     }
 
@@ -480,16 +479,17 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
     {
       if ( !cell )
         cell = table->nonDefaultCell( columns, row );
+      Style style = cell->style( columns, row );
 
       QString psName( "Default" );
       if ( e.hasAttributeNS( ooNS::style, "parent-style-name" ) )
         psName = e.attributeNS( ooNS::style, "parent-style-name", QString::null );
 
       kDebug(30518) << "Default style: " << psName << endl;
-      Format * layout = m_defaultStyles[psName];
+      Style * layout = m_defaultStyles[psName];
 
       if ( layout )
-        cell->format()->copy( *layout );
+        style = *layout;
 
       QDomElement * st = 0;
       if ( e.hasAttributeNS( ooNS::table, "style-name" ) )
@@ -515,11 +515,11 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
             }
             if ( property.localName() == "properties" && property.namespaceURI() == ooNS::style )
             {
-              loadStyleProperties( cell->format(), property );
-              if ( cell->format()->getAngle( columns, row ) != 0 )
+              loadStyleProperties( &style, property );
+              if ( style.angle() != 0 )
               {
-                QFontMetrics fm( cell->format()->textFont( columns, row ) );
-                int tmpAngle = cell->format()->getAngle( columns, row );
+                QFontMetrics fm( style.font() );
+                int tmpAngle = style.angle();
                 int textHeight = static_cast<int>( cos( tmpAngle * M_PI / 180 )
                                                    * ( fm.ascent() + fm.descent() )
                                                    + abs ( ( int )(  fm.width( cell->strOutText() )
@@ -549,15 +549,12 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
     }
     else
     {
-      if ( !cell )
-        cell = table->nonDefaultCell( columns, row );
-
       QString psName( "Default" );
       kDebug(30518) << "Default style: " << psName << endl;
-      Format * layout = m_defaultStyles[psName];
+      Style * layout = m_defaultStyles[psName];
 
       if ( layout )
-        cell->format()->copy( *layout );
+        table->setStyle( KSpread::Region(QPoint(columns,row)), *layout );
     }
     if ( e.hasAttributeNS( ooNS::table, "formula" ) )
     {
@@ -578,6 +575,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
     {
       if ( !cell )
         cell = table->nonDefaultCell( columns, row );
+      Style style;
 
       cell->setCellText( text );
 
@@ -599,8 +597,11 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
 
           if ( type == "currency" )
           {
-            cell->format()->setCurrency( 1, e.attributeNS( ooNS::table, "currency", QString::null ) );
-            cell->format()->setFormatType( Money_format );
+              Style::Currency currency;
+              currency.type = 1;
+              currency.symbol = e.attributeNS( ooNS::table, "currency", QString::null );
+            style.setCurrency( currency );
+            style.setFormatType( Money_format );
           }
         }
       }
@@ -615,7 +616,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
             //TODO fixme
 			//cell->setFactor( 100 );
             // TODO: replace with custom...
-            cell->format()->setFormatType( Percentage_format );
+            style.setFormatType( Percentage_format );
           }
         }
         else if ( type == "boolean" )
@@ -629,7 +630,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
           else
             cell->setValue( Value( false ) );
           ok = true;
-          cell->format()->setFormatType( Custom_format );
+          style.setFormatType( Custom_format );
         }
         else if ( type == "date" )
         {
@@ -709,11 +710,11 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
             // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
             // cell->setValue( kval );
             cell->setValue( Value( QTime( hours % 24, minutes, seconds ), cell->sheet()->doc() ) );
-            cell->format()->setFormatType( Custom_format );
+            style.setFormatType( Custom_format );
           }
         }
 
-
+      cell->setStyle( style );
       if ( !ok ) // just in case we couldn't set the value directly
         cell->setCellText( text );
     }
@@ -965,16 +966,17 @@ bool OpenCalcImport::readRowsAndCells( QDomElement & content, Sheet * table )
       return false;
 
     RowFormat * srcLayout = table->nonDefaultRowFormat( backupRow );
-    RowFormat * layout = 0;
+//     RowFormat * layout = 0;
 
     if ( collapsed )
-      srcLayout->setHide( true );
+      srcLayout->setHidden( true );
 
     for ( i = 1; i < number; ++i )
     {
-      layout = table->nonDefaultRowFormat( backupRow + i );
-
-      layout->copy( *srcLayout );
+        // FIXME KSPREAD_NEW_STYLE_STORAGE
+//       layout = table->nonDefaultRowFormat( backupRow + i );
+// 
+//       table->setStyle( KSpread::Region(QRect(1,backupRow + i,KS_colMax,1)), srcLayout );
 
       /*
        * TODO: Test: do we need to copy the cells, too?
@@ -1025,7 +1027,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
     double width   = -1.0;
     bool collapsed = ( e.attributeNS( ooNS::table, "visibility", QString::null ) == "collapse" );
     bool insertPageBreak = false;
-    Format styleLayout( table, table->doc()->styleManager()->defaultStyle() );
+    Style styleLayout;
 
     kDebug(30518) << "Check table:number-columns-repeated" << endl;
     if ( e.hasAttributeNS( ooNS::table, "number-columns-repeated" ) )
@@ -1043,7 +1045,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
     {
       QString n( e.attributeNS( ooNS::table, "default-cell-style-name", QString::null ) );
       kDebug(30518) << "Has attribute default-cell-style-name: " << n << endl;
-      Format * defaultStyle = m_defaultStyles[ n ];
+      Style * defaultStyle = m_defaultStyles[ n ];
       if ( !defaultStyle )
       {
         QString name = e.attributeNS( ooNS::table, "default-cell-style-name", QString::null );
@@ -1053,7 +1055,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
 
         if ( st && !st->isNull() )
         {
-          Format * layout = new Format( 0, m_doc->styleManager()->defaultStyle() );
+          Style * layout = new Style();
 
           readInStyle( layout, *st );
 
@@ -1067,7 +1069,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
       if ( defaultStyle )
       {
         //        kDebug(30518) << "Copying default style, Font: " << defaultStyle->font().toString() << endl;
-        styleLayout.copy( *defaultStyle );
+        styleLayout = *defaultStyle;
       }
     }
 
@@ -1121,7 +1123,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
       kDebug(30518) << "Inserting colLayout: " << column << endl;
 
       ColumnFormat * col = new ColumnFormat( table, column );
-      col->copy( styleLayout );
+      table->setStyle( KSpread::Region(QRect(column,1,1,KS_rowMax)), styleLayout );
       if ( width != -1.0 )
         col->setWidth( int( width ) );
 
@@ -1129,7 +1131,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
       //   col->setPageBreak( true )
 
       if ( collapsed )
-        col->setHide( true );
+        col->setHidden( true );
 
       table->insertColumnFormat( col );
       ++column;
@@ -1450,8 +1452,8 @@ bool OpenCalcImport::parseBody( int numOfTables )
   int step = (int) ( 80 / numOfTables );
   int progress = 15;
 
-  Format::setGlobalColWidth( MM_TO_POINT( 22.7 ) );
-  Format::setGlobalRowHeight( MM_TO_POINT( 4.3 ) );
+  ColumnFormat::setGlobalColWidth( MM_TO_POINT( 22.7 ) );
+  RowFormat::setGlobalRowHeight( MM_TO_POINT( 4.3 ) );
   kDebug(30518) << "Global Height: " << MM_TO_POINT( 4.3 ) << ", Global width: " << MM_TO_POINT( 22.7) << endl;
 
   while ( !sheet.isNull() )
@@ -1477,12 +1479,12 @@ bool OpenCalcImport::parseBody( int numOfTables )
       continue;
     }
 
-    Format * defaultStyle = m_defaultStyles[ "Default" ];
+    Style * defaultStyle = m_defaultStyles[ "Default" ];
     if ( defaultStyle )
     {
       Cell* defaultCell = table->defaultCell();
       kDebug(30518) << "Copy default style to default cell" << endl;
-      defaultCell->format()->copy( *defaultStyle );
+      defaultCell->setStyle( *defaultStyle );
     }
     table->setDefaultHeight( MM_TO_POINT( 4.3 ) );
     table->setDefaultWidth( MM_TO_POINT( 22.7 ) );
@@ -1969,7 +1971,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
   return format;
 }
 
-void OpenCalcImport::loadFontStyle( Format * layout, QDomElement const * font ) const
+void OpenCalcImport::loadFontStyle( Style * layout, QDomElement const * font ) const
 {
   if ( !font || !layout )
     return;
@@ -1977,24 +1979,24 @@ void OpenCalcImport::loadFontStyle( Format * layout, QDomElement const * font ) 
   kDebug(30518) << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
 
   if ( font->hasAttributeNS( ooNS::fo, "font-family" ) )
-    layout->setTextFontFamily( font->attributeNS( ooNS::fo, "font-family", QString::null ) );
+    layout->setFontFamily( font->attributeNS( ooNS::fo, "font-family", QString::null ) );
   if ( font->hasAttributeNS( ooNS::fo, "color" ) )
-    layout->setTextColor( QColor( font->attributeNS( ooNS::fo, "color", QString::null ) ) );
+    layout->setFontColor( QColor( font->attributeNS( ooNS::fo, "color", QString::null ) ) );
   if ( font->hasAttributeNS( ooNS::fo, "font-size" ) )
-      layout->setTextFontSize( int( KoUnit::parseValue( font->attributeNS( ooNS::fo, "font-size", QString::null ), 10 ) ) );
+      layout->setFontSize( int( KoUnit::parseValue( font->attributeNS( ooNS::fo, "font-size", QString::null ), 10 ) ) );
   else
-    layout->setTextFontSize( 10 );
+    layout->setFontSize( 10 );
   if ( font->hasAttributeNS( ooNS::fo, "font-style" ) )
   {
     kDebug(30518) << "italic" << endl;
-    layout->setTextFontItalic( true ); // only thing we support
+    layout->setFontItalic( true ); // only thing we support
   }
   if ( font->hasAttributeNS( ooNS::fo, "font-weight" ) )
-    layout->setTextFontBold( true ); // only thing we support
+    layout->setFontBold( true ); // only thing we support
   if ( font->hasAttributeNS( ooNS::fo, "text-underline" ) || font->hasAttributeNS( ooNS::style, "text-underline" ) )
-    layout->setTextFontUnderline( true ); // only thing we support
+    layout->setFontUnderline( true ); // only thing we support
   if ( font->hasAttributeNS( ooNS::style, "text-crossing-out" ) )
-    layout->setTextFontStrike( true ); // only thing we support
+    layout->setFontStrikeOut( true ); // only thing we support
   if ( font->hasAttributeNS( ooNS::style, "font-pitch" ) )
   {
     // TODO: possible values: fixed, variable
@@ -2003,7 +2005,7 @@ void OpenCalcImport::loadFontStyle( Format * layout, QDomElement const * font ) 
   // text-underline-color
 }
 
-void OpenCalcImport::loadBorder( Format * layout, QString const & borderDef, bPos pos ) const
+void OpenCalcImport::loadBorder( Style * layout, QString const & borderDef, bPos pos ) const
 {
   if ( borderDef == "none" )
     return;
@@ -2062,7 +2064,7 @@ void OpenCalcImport::loadBorder( Format * layout, QString const & borderDef, bPo
   // TODO Diagonals not supported by oocalc
 }
 
-void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & property ) const
+void OpenCalcImport::loadStyleProperties( Style * layout, QDomElement const & property ) const
 {
   kDebug(30518) << "*** Loading style properties *****" << endl;
 
@@ -2108,21 +2110,21 @@ void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & p
   {
     QString s = property.attributeNS( ooNS::fo, "text-align", QString::null );
     if ( s == "center" )
-      layout->setAlign( Style::Center );
+      layout->setHAlign( Style::Center );
     else if ( s == "end" )
-      layout->setAlign( Style::Right );
+      layout->setHAlign( Style::Right );
     else if ( s == "start" )
-      layout->setAlign( Style::Left );
+      layout->setHAlign( Style::Left );
     else if ( s == "justify" ) // TODO in KSpread!
-      layout->setAlign( Style::Center );
+      layout->setHAlign( Style::Center );
   }
   if (  property.hasAttributeNS( ooNS::fo, "margin-left" ) )
   {
       kDebug(30518)<<"margin-left :"<<KoUnit::parseValue( property.attributeNS( ooNS::fo, "margin-left", QString::null ),0.0 )<<endl;
-      layout->setIndent( KoUnit::parseValue( property.attributeNS( ooNS::fo, "margin-left", QString::null ),0.0 ) );
+      layout->setIndentation( KoUnit::parseValue( property.attributeNS( ooNS::fo, "margin-left", QString::null ),0.0 ) );
   }
   if ( property.hasAttributeNS( ooNS::fo, "background-color" ) )
-    layout->setBgColor( QColor( property.attributeNS( ooNS::fo, "background-color", QString::null ) ) );
+    layout->setBackgroundColor( QColor( property.attributeNS( ooNS::fo, "background-color", QString::null ) ) );
 
   if ( property.hasAttributeNS( ooNS::style, "print-content" ) )
   {
@@ -2166,24 +2168,24 @@ void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & p
   }
 
   if ( property.hasAttributeNS( ooNS::fo, "padding-left" ) )
-    layout->setIndent(  KoUnit::parseValue(property.attributeNS( ooNS::fo, "padding-left", QString::null ) ) );
+    layout->setIndentation(  KoUnit::parseValue(property.attributeNS( ooNS::fo, "padding-left", QString::null ) ) );
 
   if ( property.hasAttributeNS( ooNS::fo, "vertical-align" ) )
   {
     QString s = property.attributeNS( ooNS::fo, "vertical-align", QString::null );
     if ( s == "middle" )
-      layout->setAlignY( Style::Middle );
+      layout->setVAlign( Style::Middle );
     else if ( s == "bottom" )
-      layout->setAlignY( Style::Bottom );
+      layout->setVAlign( Style::Bottom );
     else
-      layout->setAlignY( Style::Top );
+      layout->setVAlign( Style::Top );
   }
   else
-      layout->setAlignY( Style::Bottom );
+      layout->setVAlign( Style::Bottom );
 
   if ( property.hasAttributeNS( ooNS::fo, "wrap-option" ) )
   {
-    layout->setMultiRow( true );
+    layout->setWrapText( true );
 
     /* we do not support anything else yet
       QString s = property.attributeNS( ooNS::fo, "wrap-option", QString::null );
@@ -2223,29 +2225,29 @@ void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & p
   }
 }
 
-void OpenCalcImport::readInStyle( Format * layout, QDomElement const & style )
+void OpenCalcImport::readInStyle( Style * layout, QDomElement const & style )
 {
   kDebug(30518) << "** Reading Style: " << style.tagName() << "; " << style.attributeNS( ooNS::style, "name", QString::null) << endl;
   if ( style.localName() == "style" && style.namespaceURI()==ooNS::style)
   {
     if ( style.hasAttributeNS( ooNS::style, "parent-style-name" ) )
     {
-      Format * cp
+      Style * cp
         = m_defaultStyles.find( style.attributeNS( ooNS::style, "parent-style-name", QString::null ) );
       kDebug(30518) << "Copying layout from " << style.attributeNS( ooNS::style, "parent-style-name", QString::null ) << endl;
 
       if ( cp != 0 )
-        layout->copy( *cp );
+        layout = cp;
     }
     else if ( style.hasAttributeNS( ooNS::style, "family") )
     {
       QString name = style.attribute( "style-family" ) + "default";
-      Format * cp = m_defaultStyles.find( name );
+      Style * cp = m_defaultStyles.find( name );
 
       kDebug(30518) << "Copying layout from " << name << ", " << !cp << endl;
 
       if ( cp != 0 )
-        layout->copy( *cp );
+        layout = cp;
     }
 
     if ( style.hasAttributeNS( ooNS::style, "data-style-name" ) )
@@ -2262,7 +2264,7 @@ void OpenCalcImport::readInStyle( Format * layout, QDomElement const & style )
 
       if ( format )
       {
-        layout->setFormatString( *format );
+        layout->setCustomFormat( *format );
         layout->setFormatType( formatType );
       }
 
@@ -2276,7 +2278,7 @@ void OpenCalcImport::readInStyle( Format * layout, QDomElement const & style )
     if ( property.localName() == "properties" && property.namespaceURI() == ooNS::style )
       loadStyleProperties( layout, property );
 
-    kDebug(30518) << layout->textFontFamily( 0, 0 ) << endl;
+    kDebug(30518) << layout->fontFamily() << endl;
   }
 }
 
@@ -2365,7 +2367,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
     if ( !e.isNull() )
     {
-      Format * layout = new Format( 0, m_doc->styleManager()->defaultStyle() );
+      Style * layout = new Style();
 
       readInStyle( layout, e );
       kDebug(30518) << "Default style " << e.attributeNS( ooNS::style, "family", QString::null ) << "default" << " loaded " << endl;
@@ -2391,7 +2393,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
       continue;
     }
 
-    Format * layout = new Format( 0, m_doc->styleManager()->defaultStyle() );
+    Style * layout = new Style();
     readInStyle( layout, defs );
     kDebug(30518) << "Default style " << defs.attributeNS( ooNS::style, "name", QString::null ) << " loaded " << endl;
 
