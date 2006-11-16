@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,10 +58,9 @@ void KoRectangleShape::moveHandleAction( int handleId, const QPointF & point, Qt
                 p.setX( size().width() );
             }
             p.setY( 0 );
-            m_cornerRadiusX = ( size().width() - p.x() ) / ( size().width() / 2.0 ) * 100.0;
-            // this is needed otherwise undo/redo might not end in the same result
-            if ( 100 - m_cornerRadiusX < 1e-10 )
-                m_cornerRadiusX = 100;
+            m_cornerRadiusX = ( size().width() - p.x() ) / width2 * 100.0;
+            if( ! (modifiers & Qt::ControlModifier) )
+                m_cornerRadiusY = ( size().width() - p.x() ) / height2 * 100.0;
             break;
         case 1:
             if ( p.y() < 0 )
@@ -69,16 +69,22 @@ void KoRectangleShape::moveHandleAction( int handleId, const QPointF & point, Qt
             }
             else if ( p.y() > height2 )
             {
-                p.setY( height2 ); 
+                p.setY( height2 );
             }
             p.setX( size().width() );
-            m_cornerRadiusY = p.y() / ( size().height() / 2.0 ) * 100.0;
-            if ( 100 - m_cornerRadiusY < 1e-10 )
-                m_cornerRadiusY = 100;
+            m_cornerRadiusY = p.y() / height2 * 100.0;
+            if( !( modifiers & Qt::ControlModifier ) )
+                m_cornerRadiusX = p.y() / width2 * 100.0;
             break;
     }
+    // this is needed otherwise undo/redo might not end in the same result
+    if ( 100 - m_cornerRadiusX < 1e-10 )
+        m_cornerRadiusX = 100;
+    if ( 100 - m_cornerRadiusY < 1e-10 )
+        m_cornerRadiusY = 100;
 
-    m_handles[handleId] = p;
+    m_handles[0] = QPointF( size().width() - m_cornerRadiusX/100.0 * width2, 0.0 );
+    m_handles[1] = QPointF( size().width(), m_cornerRadiusY/100.0 * height2 );
 }
 
 void KoRectangleShape::updatePath( const QSizeF &size )
