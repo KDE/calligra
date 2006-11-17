@@ -58,9 +58,6 @@
                         <property name="resizeMode">
                             <enum>LastColumn</enum>
                         </property>
-                        <property name="shadeSortColumn">
-                            <bool>false</bool>
-                        </property>
                     </widget>
                     <widget class="KPushButton">
                         <property name="name">

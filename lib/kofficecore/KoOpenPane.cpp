@@ -102,6 +102,9 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
 
   m_sectionList->header()->hide();
   m_sectionList->setSorting(0);
+#if KDE_IS_VERSION(3,4,0)
+  m_sectionList->setShadeSortColumn(false);
+#endif
   connect(m_sectionList, SIGNAL(selectionChanged(QListViewItem*)),
           this, SLOT(selectionChanged(QListViewItem*)));
   connect(m_sectionList, SIGNAL(pressed(QListViewItem*)),
