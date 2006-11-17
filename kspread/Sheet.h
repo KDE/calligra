@@ -1522,6 +1522,8 @@ protected:
                        const QList<AutoFillSequence*>& _seqList,
                        bool down = true );
 
+    // helper function for areaIsEmpty
+    bool cellIsEmpty (Cell *c, TestType _type);
 
     static Sheet* find( int _id );
     static int s_id;

@@ -1698,115 +1698,73 @@ void Sheet::refreshPreference()
 }
 
 
+// helper function for Sheet::areaIsEmpty
+bool Sheet::cellIsEmpty (Cell *c, TestType _type)
+{
+  if ( !c->isPartOfMerged())
+  {
+    switch( _type )
+    {
+    case Text :
+      if ( !c->text().isEmpty())
+        return false;
+      break;
+    case Validity:
+      if ( c->validity())
+        return false;
+      break;
+    case Comment:
+      if ( !comment( c->column(), c->row() ).isEmpty())
+        return false;
+      break;
+    case ConditionalCellAttribute:
+      if ( c->conditionList().count() > 0)
+        return false;
+      break;
+    }
+  }
+  return true;
+}
+
+// TODO: convert into a manipulator, similar to the Dilation one
 bool Sheet::areaIsEmpty(const Region& region, TestType _type)
 {
   Region::ConstIterator endOfList = region.constEnd();
-  for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
-  {
+  for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it) {
     QRect range = (*it)->rect();
     // Complete rows selected ?
     if ((*it)->isRow())
     {
-        for ( int row = range.top(); row <= range.bottom(); ++row )
-        {
-            Cell * c = getFirstCellRow( row );
-            while ( c )
-            {
-                if ( !c->isPartOfMerged())
-                {
-                    switch( _type )
-                    {
-                    case Text :
-                        if ( !c->text().isEmpty())
-                            return false;
-                        break;
-                    case Validity:
-                        if ( c->validity())
-                            return false;
-                        break;
-                    case Comment:
-                        if ( !comment( c->column(), row ).isEmpty())
-                            return false;
-                        break;
-                    case ConditionalCellAttribute:
-                        if ( c->conditionList().count()> 0)
-                            return false;
-                        break;
-                    }
-                }
-
-                c = getNextCellRight( c->column(), row );
-            }
+      for ( int row = range.top(); row <= range.bottom(); ++row ) {
+        Cell * c = getFirstCellRow( row );
+        while ( c ) {
+          if (!cellIsEmpty (c, _type))
+            return false;
+          c = getNextCellRight( c->column(), row );
         }
+      }
     }
     // Complete columns selected ?
-    else if ((*it)->isColumn())
-    {
-        for ( int col = range.left(); col <= range.right(); ++col )
-        {
-            Cell * c = getFirstCellColumn( col );
-            while ( c )
-            {
-                if ( !c->isPartOfMerged() )
-                {
-                    switch( _type )
-                    {
-                    case Text :
-                        if ( !c->text().isEmpty())
-                            return false;
-                        break;
-                    case Validity:
-                        if ( c->validity())
-                            return false;
-                        break;
-                    case Comment:
-                        if ( !comment( col, c->row() ).isEmpty() )
-                            return false;
-                        break;
-                    case ConditionalCellAttribute:
-                        if ( c->conditionList().count()> 0)
-                            return false;
-                        break;
-                    }
-                }
-
-                c = getNextCellDown( col, c->row() );
-            }
+    else if ((*it)->isColumn()) {
+      for ( int col = range.left(); col <= range.right(); ++col ) {
+        Cell * c = getFirstCellColumn( col );
+        while ( c ) {
+          if (!cellIsEmpty (c, _type))
+            return false;
+          c = getNextCellDown( col, c->row() );
         }
+      }
     }
-    else
-    {
-        Cell * cell;
-
-        int right  = range.right();
-        int bottom = range.bottom();
-        for ( int x = range.left(); x <= right; ++x )
-            for ( int y = range.top(); y <= bottom; ++y )
-            {
-                cell = cellAt( x, y );
-                if (!cell->isPartOfMerged() )
-                {
-                    switch( _type )
-                    {
-                    case Text :
-                        if ( !cell->text().isEmpty())
-                            return false;
-                        break;
-                    case Validity:
-                        if ( cell->validity())
-                            return false;
-                        break;
-                    case Comment:
-                        if ( !comment(x, y).isEmpty() )
-                            return false;
-                        break;
-                    case ConditionalCellAttribute:
-                        if ( cell->conditionList().count()> 0)
-                            return false;
-                        break;
-                    }
-                }
-            }
+    else {
+      Cell * c;
+      int right  = range.right();
+      int bottom = range.bottom();
+      for ( int x = range.left(); x <= right; ++x )
+        for ( int y = range.top(); y <= bottom; ++y ) {
+          c = cellAt( x, y );
+          if (!cellIsEmpty (c, _type))
+            return false;
+        }
     }
   }
   return true;
