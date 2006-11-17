@@ -381,7 +381,9 @@ signals:
 	virtual void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue);
 	virtual void itemDeleteRequest(KexiTableItem *, int row, int col);
 	virtual void currentItemDeleteRequest();
-	void addRecordRequest();
+	//! Emitted for spreadsheet mode when an item was deleted and a new item has been appended
+	virtual void newItemAppendedForAfterDeletingInSpreadSheetMode();
+//	void addRecordRequest();
 //	void contextMenuRequested(KexiTableItem *,  int row, int col, const QPoint &);
 	void sortedColumnChanged(int col);
 

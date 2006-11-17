@@ -119,6 +119,8 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);
 		void slotDroppedAtRow(KexiTableItem *item, int row,
 			QDropEvent *ev, KexiTableItem*& newItem);
+		//! Reaction on appending a new item after deleting one
+		void slotNewItemAppendedForAfterDeletingInSpreadSheetMode();
 		void slotTableAdded(KexiDB::TableSchema &t);
 		void slotTableHidden(KexiDB::TableSchema &t);
 
@@ -157,10 +159,11 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void slotItemRemoved(const KexiPart::Item& item);
 		void slotItemRenamed(const KexiPart::Item& item, const QCString& oldName);
 
-		friend class KexiQueryView; // for storeNewData() and storeData() only
 	private:
 		class Private;
 		Private *d;
+
+		friend class KexiQueryView; // for storeNewData() and storeData() only
 };
 
 #endif

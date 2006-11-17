@@ -175,6 +175,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 			this, SLOT(slotDragOverTableRow(KexiTableItem*,int,QDragMoveEvent*)));
 		connect(d->dataTable->tableView(), SIGNAL(droppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)),
 			this, SLOT(slotDroppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)));
+		connect(d->dataTable->tableView(), SIGNAL(newItemAppendedForAfterDeletingInSpreadSheetMode()),
+			this, SLOT(slotNewItemAppendedForAfterDeletingInSpreadSheetMode()));
 	}
 	connect(d->data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)),
 		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)));
@@ -1227,6 +1229,13 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem * /*item*/, int /*row
 	d->droppedNewTable = srcTable;
 	d->droppedNewField = srcField;
 	//TODO
+}
+
+void KexiQueryDesignerGuiEditor::slotNewItemAppendedForAfterDeletingInSpreadSheetMode()
+{
+	KexiTableItem *item = d->data->last();
+	if (item)
+		item->at(COLUMN_ID_VISIBLE) = QVariant(false, 0); //the same init as in initTableRows()
 }
 
 void KexiQueryDesignerGuiEditor::slotRowInserted(KexiTableItem* item, uint row, bool /*repaint*/)
