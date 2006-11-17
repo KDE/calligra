@@ -1550,6 +1550,7 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiTableItem *item)/*, bool moveC
 			m_verticalHeader->addLabels(1);
 		if (lastRowDeleted) //back to the last row
 			setCursorPosition(rows()-1, m_curCol, true/*forceSet*/);
+		/*emit*/ newItemAppendedForAfterDeletingInSpreadSheetMode();
 	}
 	return true;
 }

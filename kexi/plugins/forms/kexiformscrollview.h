@@ -147,6 +147,7 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		virtual void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue);
 		virtual void itemDeleteRequest(KexiTableItem *, int row, int col);
 		virtual void currentItemDeleteRequest();
+		virtual void newItemAppendedForAfterDeletingInSpreadSheetMode(); //!< does nothing
 		virtual void dataRefreshed();
 		virtual void dataSet( KexiTableViewData *data );
 		virtual void itemSelected(KexiTableItem *);
