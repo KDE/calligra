@@ -515,7 +515,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	//  after all QueryColumnInfo items are instantiated
 	KexiDB::OrderByColumnList orderByColumns;
 	it = d->data->iterator();
-	uint fieldNumber = -1; //field number (empty rows are omitted)
+	int fieldNumber = -1; //field number (empty rows are omitted)
 	for (uint i=0/*row number*/; i<count && it.current(); ++it, i++) {
 		KoProperty::Set *set = d->sets->at(i);
 		if (!set)
@@ -542,7 +542,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 			orderByColumns.appendField(*currentField, sortingString=="ascending");
 			continue;
 		}
-		currentField = temp->query()->field( fieldNumber );
+		currentField = temp->query()->field( (uint)fieldNumber );
 		if (!currentField || currentField->isExpression() || currentField->isQueryAsterisk())
 //! @todo support expressions here
 			continue;
