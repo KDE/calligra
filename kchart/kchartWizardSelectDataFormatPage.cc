@@ -72,10 +72,13 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
 
     grid1->activate();
 
+    // Enter the data into the widgets.
     if ( m_chart->params()->dataDirection() == KChartParams::DataColumns)
       m_colMajor->setChecked(true);
     else
       m_rowMajor->setChecked(true);
+
+    m_dataArea->setText( m_chart->params()->dataArea() );
 }
 
 
@@ -99,6 +102,9 @@ void KChartWizardSelectDataFormatPage::apply()
 
     m_chart->params()->setFirstRowAsLabel( m_firstRowAsLabel->isChecked() );
     m_chart->params()->setFirstColAsLabel( m_firstColAsLabel->isChecked() );
+
+    m_chart->params()->setDataArea( m_dataArea->text() );
+    // FIXME: Actually take use the new data area.
 }
 
 

@@ -53,7 +53,7 @@ public:
 		     bool  firstRowHeader,
 		     bool  firstRowHeader );
 
-    bool showWizard( QString &area );
+    bool showWizard( QString &dataArea );
     void initLabelAndLegend();
     void loadConfig(KConfig *conf);
     void saveConfig(KConfig *conf);
@@ -142,8 +142,8 @@ public:
     WizardExt( KoChart::Part *part )
         : KoChart::WizardExtension( part ) {};
 
-    virtual bool show( QString &area ) {
-        return static_cast<KChartPart *>( part() )->showWizard( area );
+    virtual bool show( QString &dataArea ) {
+        return static_cast<KChartPart *>( part() )->showWizard( dataArea );
     }
 };
 

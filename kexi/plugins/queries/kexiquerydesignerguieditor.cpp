@@ -83,6 +83,20 @@ public:
 		slotTableAdded_enabled = true;
 	}
 
+	bool changeSingleCellValue(KexiTableItem &item, int columnNumber, 
+		const QVariant& value, KexiDB::ResultInfo* result)
+	{
+		data->clearRowEditBuffer();
+		if (!data->updateRowEditBuffer(&item, columnNumber, value)
+			|| !data->saveRowChanges(item, true))
+		{
+			if (result)
+				*result = *data->result();
+			return false;
+		}
+		return true;
+	}
+
 	KexiTableViewData *data;
 	KexiDataTable *dataTable;
 	QGuardedPtr<KexiDB::Connection> conn;
@@ -161,6 +175,8 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 			this, SLOT(slotDragOverTableRow(KexiTableItem*,int,QDragMoveEvent*)));
 		connect(d->dataTable->tableView(), SIGNAL(droppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)),
 			this, SLOT(slotDroppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)));
+		connect(d->dataTable->tableView(), SIGNAL(newItemAppendedForAfterDeletingInSpreadSheetMode()),
+			this, SLOT(slotNewItemAppendedForAfterDeletingInSpreadSheetMode()));
 	}
 	connect(d->data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)),
 		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)));
@@ -499,11 +515,12 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	//  after all QueryColumnInfo items are instantiated
 	KexiDB::OrderByColumnList orderByColumns;
 	it = d->data->iterator();
-	uint fieldNumber = 0;
+	int fieldNumber = -1; //field number (empty rows are omitted)
 	for (uint i=0/*row number*/; i<count && it.current(); ++it, i++) {
 		KoProperty::Set *set = d->sets->at(i);
 		if (!set)
 			continue;
+		fieldNumber++;
 		KexiDB::Field *currentField = 0;
 		KexiDB::QueryColumnInfo *currentColumn = 0;
 		QString sortingString( (*set)["sorting"].value().toString() );
@@ -525,7 +542,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 			orderByColumns.appendField(*currentField, sortingString=="ascending");
 			continue;
 		}
-		currentField = temp->query()->field( fieldNumber );
+		currentField = temp->query()->field( (uint)fieldNumber );
 		if (!currentField || currentField->isExpression() || currentField->isQueryAsterisk())
 //! @todo support expressions here
 			continue;
@@ -601,12 +618,13 @@ tristate
 KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 {
 	const bool was_dirty = dirty();
+	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 	if (mode==Kexi::NoViewMode || (mode==Kexi::DataViewMode && !tempData()->query())) {
 		//this is not a SWITCH but a fresh opening in this view mode
 		if (!m_dialog->neverSaved()) {
 			if (!loadLayout()) {
 				//err msg
-				parentDialog()->setStatus(parentDialog()->mainWin()->project()->dbConnection(),
+				parentDialog()->setStatus(conn,
 					i18n("Query definition loading failed."),
 					i18n("Query design may be corrupted so it could not be opened even in text view.\n"
 						"You can delete the query and create it again."));
@@ -617,9 +635,16 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 			// and then KexiQueryPart::loadSchemaData() doesn't allocate QuerySchema object
 			// do we're carefully looking at parentDialog()->schemaData()
 			KexiDB::QuerySchema * q = dynamic_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
-			if (q)
-				showFieldsForQuery( q );
-			//todo: load global query properties
+			if (q) {
+				KexiDB::ResultInfo result;
+				showFieldsForQuery( q, result );
+				if (!result.success) {
+					parentDialog()->setStatus(&result, i18n("Query definition loading failed."));
+					tempData()->proposeOpeningInTextViewModeBecauseOfProblems = true;
+					return false;
+				}
+			}
+//! @todo load global query properties
 		}
 	}
 	else if (mode==Kexi::TextViewMode || mode==Kexi::DataViewMode) {
@@ -634,7 +659,12 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 				//there is a query schema to show
 				showTablesForQuery( tempData()->query() );
 				//-show fields
-				showFieldsAndRelationsForQuery( tempData()->query() );
+				KexiDB::ResultInfo result;
+				showFieldsAndRelationsForQuery( tempData()->query(), result );
+				if (!result.success) {
+					parentDialog()->setStatus(&result, i18n("Query definition loading failed."));
+					return false;
+				}
 			}
 			else {
 				d->relations->clear();
@@ -713,7 +743,6 @@ tristate KexiQueryDesignerGuiEditor::storeData(bool dontAsk)
 	return res;
 }
 
-//void KexiQueryDesignerGuiEditor::showTablesAndConnectionsForQuery(KexiDB::QuerySchema *query)
 void KexiQueryDesignerGuiEditor::showTablesForQuery(KexiDB::QuerySchema *query)
 {
 //replaced by code below that preserves geometries d->relations->clear();
@@ -742,24 +771,26 @@ void KexiQueryDesignerGuiEditor::addConnection(
 	d->relations->addConnection( conn );
 }
 
-void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
+void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query, KexiDB::ResultInfo& result)
 {
-	showFieldsOrRelationsForQueryInternal(query, true, false);
+	showFieldsOrRelationsForQueryInternal(query, true, false, result);
 }
 
-void KexiQueryDesignerGuiEditor::showRelationsForQuery(KexiDB::QuerySchema *query)
+void KexiQueryDesignerGuiEditor::showRelationsForQuery(KexiDB::QuerySchema *query, KexiDB::ResultInfo& result)
 {
-	showFieldsOrRelationsForQueryInternal(query, false, true);
+	showFieldsOrRelationsForQueryInternal(query, false, true, result);
 }
 
-void KexiQueryDesignerGuiEditor::showFieldsAndRelationsForQuery(KexiDB::QuerySchema *query)
+void KexiQueryDesignerGuiEditor::showFieldsAndRelationsForQuery(KexiDB::QuerySchema *query, 
+	KexiDB::ResultInfo& result)
 {
-	showFieldsOrRelationsForQueryInternal(query, true, true);
+	showFieldsOrRelationsForQueryInternal(query, true, true, result);
 }
 
 void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
-	KexiDB::QuerySchema *query, bool showFields, bool showRelations)
+	KexiDB::QuerySchema *query, bool showFields, bool showRelations, KexiDB::ResultInfo& result)
 {
+	result.clear();
 	const bool was_dirty = dirty();
 
 	//1. Show explicity declared relations:
@@ -909,11 +940,10 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 		if (!criteriaString.isEmpty())
 			set["criteria"].setValue( criteriaString, false );
 		if (field->isExpression()) {
-			(*newItem)[COLUMN_ID_COLUMN] = criteriaString;
-			d->data->clearRowEditBuffer();
-			d->data->updateRowEditBuffer(newItem, COLUMN_ID_COLUMN,
-				QVariant(columnAlias + ": " + field->expression()->toString()));
-			d->data->saveRowChanges(*newItem, true);
+//			(*newItem)[COLUMN_ID_COLUMN] = ;
+			if (!d->changeSingleCellValue(*newItem, COLUMN_ID_COLUMN, 
+					QVariant(columnAlias + ": " + field->expression()->toString()), &result))
+				return; //problems with setting column expression
 		}
 	}
 
@@ -1050,7 +1080,12 @@ bool KexiQueryDesignerGuiEditor::loadLayout()
 		KexiDB::QuerySchema * q =	dynamic_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
 		if (q) {
 			showTablesForQuery( q );
-			showRelationsForQuery( q );
+			KexiDB::ResultInfo result;
+			showRelationsForQuery( q, result );
+			if (!result.success) {
+				parentDialog()->setStatus(&result, i18n("Query definition loading failed."));
+				return false;
+			}
 		}
 		return true;
 	}
@@ -1196,6 +1231,13 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem * /*item*/, int /*row
 	//TODO
 }
 
+void KexiQueryDesignerGuiEditor::slotNewItemAppendedForAfterDeletingInSpreadSheetMode()
+{
+	KexiTableItem *item = d->data->last();
+	if (item)
+		item->at(COLUMN_ID_VISIBLE) = QVariant(false, 0); //the same init as in initTableRows()
+}
+
 void KexiQueryDesignerGuiEditor::slotRowInserted(KexiTableItem* item, uint row, bool /*repaint*/)
 {
 	if (d->droppedNewItem && d->droppedNewItem==item) {
@@ -1299,7 +1341,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 	{
 		valueExpr = new KexiDB::ConstExpr(CHARACTER_STRING_LITERAL, str.mid(1,str.length()-2));
 	}
-	if (str.startsWith("[") && str.endsWith("]")) {
+	else if (str.startsWith("[") && str.endsWith("]")) {
 		valueExpr = new KexiDB::QueryParameterExpr(str.mid(1,str.length()-2));
 	}
 	else if ((re = QRegExp("(\\d{1,4})-(\\d{1,2})-(\\d{1,2})")).exactMatch( str ))

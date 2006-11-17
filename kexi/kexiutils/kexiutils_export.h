@@ -20,7 +20,7 @@
 #ifndef _KEXIUTILS_EXPORT_H_
 #define _KEXIUTILS_EXPORT_H_
 
-#include <kdelibs_export.h>
+#include <kdemacros.h>
 
 #ifdef MAKE_KEXIUTILS_LIB
 # define KEXIUTILS_EXPORT KDE_EXPORT

@@ -33,6 +33,7 @@ KexiDataItemChangesListener::~KexiDataItemChangesListener()
 
 KexiDataItemInterface::KexiDataItemInterface()
  : m_listener(0)
+ , m_listenerIsQObject(false)
  , m_parentDataItemInterface(0)
  , m_hasFocusableWidget(true)
  , m_disable_signalValueChanged(false)
@@ -98,9 +99,21 @@ void KexiDataItemInterface::setValue(const QVariant& value)
 	m_disable_signalValueChanged = false;
 }*/
 
+KexiDataItemChangesListener* KexiDataItemInterface::listener()
+{
+	if (!m_listener || !m_listenerIsQObject)
+		return m_listener;
+	if (!m_listenerObject)
+		m_listener = 0; //destroyed, update pointer
+	return m_listener;
+}
+
 void KexiDataItemInterface::installListener(KexiDataItemChangesListener* listener)
 {
 	m_listener = listener;
+	m_listenerIsQObject = dynamic_cast<QObject*>(listener);
+	if (m_listenerIsQObject)
+		m_listenerObject = dynamic_cast<QObject*>(listener);
 }
 
 void KexiDataItemInterface::showFocus( const QRect& r, bool readOnly )
@@ -127,3 +140,7 @@ void KexiDataItemInterface::setParentDataItemInterface(KexiDataItemInterface* pa
 	m_parentDataItemInterface = parentDataItemInterface;
 }
 
+bool KexiDataItemInterface::cursorAtNewRow()
+{
+	return listener() ? listener()->cursorAtNewRow() : false;
+}

@@ -74,8 +74,11 @@ class KexiBlobTableEdit : public KexiTableEdit
 
 		/*! Handles copy action for value. The \a value is copied to clipboard in format appropriate 
 		 for the editor's impementation, e.g. for image cell it can be a pixmap. 
-		 Reimplemented after KexiTableEdit. */
-		virtual void handleCopyAction(const QVariant& value);
+		 \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
+		virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
+
+		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
+			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 
 	protected slots:
 		void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
@@ -92,9 +95,6 @@ class KexiBlobTableEdit : public KexiTableEdit
 	protected:
 		//! initializes this editor with \a add value
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
-
-		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
-			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 
 		//todo QString openWithDlg(const QString& file);
 		//todo void execute(const QString& app, const QString& file);
@@ -149,8 +149,8 @@ class KexiKIconTableEdit : public KexiTableEdit
 			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 
 		/*! Handles copy action for value. Does nothing.
-		 Reimplemented after KexiTableEdit. */
-		virtual void handleCopyAction(const QVariant& value);
+		 \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
+		virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
 	protected:
 		//! initializes this editor with \a add value

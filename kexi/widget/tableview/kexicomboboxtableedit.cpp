@@ -22,6 +22,8 @@
 #include <qstyle.h>
 #include <qwindowsstyle.h>
 #include <qpainter.h>
+#include <qapplication.h>
+#include <qclipboard.h>
 
 #include "kexicomboboxtableedit.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
@@ -39,13 +41,22 @@ public:
 	Private()
 	 : popup(0)
 	 , currentEditorWidth(0)
+	 , visibleTableViewColumn(0)
+	 , internalEditor(0)
 	{
 	}
+	~Private()
+	{
+		delete internalEditor;
+		delete visibleTableViewColumn;
+	}
+
 	KPushButton *button;
 	KexiComboBoxPopup *popup;
 	int currentEditorWidth;
 	QSize totalSize;
-//	bool userEnteredTextChanged : 1;
+	KexiTableViewColumn* visibleTableViewColumn;
+	KexiTableEdit* internalEditor;
 };
 
 //======================================================
@@ -56,7 +67,7 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QWidge
  , d(new Private())
 {
 	setName("KexiComboBoxTableEdit");
-//	QHBoxLayout* layout = new QHBoxLayout(this);
+	m_setVisibleValueOnSetValueInternal = true;
 	d->button = new KexiComboBoxDropDownButton( parentWidget() /*usually a viewport*/ );
 	d->button->hide();
 	d->button->setFocusPolicy( NoFocus );
@@ -91,6 +102,30 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QWidge
 KexiComboBoxTableEdit::~KexiComboBoxTableEdit()
 {
 	delete d;
+}
+
+void KexiComboBoxTableEdit::createInternalEditor(KexiDB::QuerySchema& schema)
+{
+	if (!m_column->visibleLookupColumnInfo || d->visibleTableViewColumn/*sanity*/)
+		return;
+	const KexiDB::Field::Type t = m_column->visibleLookupColumnInfo->field->type();
+//! @todo subtype?
+	KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item(t);
+	if (!item || item->className()=="KexiInputTableEdit")
+		return; //unsupported type or there is no need to use subeditor for KexiInputTableEdit
+	//special cases: BLOB, Bool datatypes
+//todo
+	//find real type to display
+	KexiDB::QueryColumnInfo *ci = m_column->visibleLookupColumnInfo;
+	KexiDB::QueryColumnInfo *visibleLookupColumnInfo = 0;
+	if (ci->indexForVisibleLookupValue() != -1) {
+		//Lookup field is defined
+		visibleLookupColumnInfo = schema.expandedOrInternalField( ci->indexForVisibleLookupValue() );
+	}
+	d->visibleTableViewColumn = new KexiTableViewColumn(schema, *ci, visibleLookupColumnInfo);
+//! todo set d->internalEditor visible and use it to enable data entering by hand
+	d->internalEditor = KexiCellEditorFactory::createEditor(*d->visibleTableViewColumn, 0);
+	m_lineedit->hide();
 }
 
 KexiComboBoxPopup *KexiComboBoxTableEdit::popup() const
@@ -184,7 +219,12 @@ void KexiComboBoxTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, i
 void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
 	QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
 {
-	KexiInputTableEdit::setupContents( p, focused, val, txt, align, x, y_offset, w, h );
+	if (d->internalEditor) {
+		d->internalEditor->setupContents( p, focused, val, txt, align, x, y_offset, w, h );
+	}
+	else {
+		KexiInputTableEdit::setupContents( p, focused, val, txt, align, x, y_offset, w, h );
+	}
 	if (!column()->isReadOnly() && focused && (w > d->button->width()))
 		w -= (d->button->width() - x);
 	if (!val.isNull()) {
@@ -376,6 +416,30 @@ int KexiComboBoxTableEdit::popupWidthHint() const
 {
 	return m_lineedit->width() + m_leftMargin + m_rightMarginWhenFocused; //QMAX(popup()->width(), d->currentEditorWidth);
 }
+
+void KexiComboBoxTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
+{
+	Q_UNUSED(value);
+//! @todo does not work with BLOBs!
+	qApp->clipboard()->setText( visibleValue.toString() );
+}
+
+void KexiComboBoxTableEdit::handleAction(const QString& actionName)
+{
+	const bool alreadyVisible = m_lineedit->isVisible();
+
+	if (actionName=="edit_paste") {
+		if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
+			emit editRequested();
+			m_lineedit->clear();
+		}
+//! @todo does not work with BLOBs!
+		setValueInInternalEditor( qApp->clipboard()->text() );
+	}
+	else
+		KexiInputTableEdit::handleAction(actionName);
+}
+
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiComboBoxEditorFactoryItem, KexiComboBoxTableEdit)
 

@@ -1083,7 +1083,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 		{
 			visibleValue = m_editor->visibleValue(); //visible value for lookup field 
 		}
-		                                                                       //should be also added to the buffer
+		//should be also added to the buffer
 		if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol, currentTVColumn, 
 			newval,	/*allowSignals*/true, currentTVColumn->visibleLookupColumnInfo ? &visibleValue : 0))
 		{
@@ -1154,7 +1154,7 @@ void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText)
 	}
 //	ensureVisible(columnPos(m_curCol), rowPos(m_curRow)+rowHeight(), 
 //		columnWidth(m_curCol), rowHeight());
-//OK?
+//OK?	
 	//ensureCellVisible(m_curRow+1, m_curCol);
 	if (!m_editor)
 		createEditor(m_curRow, m_curCol, setText, !setText.isEmpty());
@@ -1547,6 +1547,7 @@ bool KexiDataAwareObjectInterface::deleteItem(KexiTableItem *item)/*, bool moveC
 			m_verticalHeader->addLabels(1);
 		if (lastRowDeleted) //back to the last row
 			setCursorPosition(rows()-1, m_curCol, true/*forceSet*/);
+		/*emit*/ newItemAppendedForAfterDeletingInSpreadSheetMode();
 	}
 	return true;
 }

@@ -143,8 +143,10 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 
 		/*! Handles copy action for value. The \a value is copied to clipboard in format appropriate 
 		 for the editor's impementation, e.g. for image cell it can be a pixmap. 
+		 For a special case (combo box), \a visibleValue can be provided,
+		 so it can be copied to the clipboard instead of unreadable \a value. 
 		 For reimplementation. */
-		virtual void handleCopyAction(const QVariant& value) = 0;
+		virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue) = 0;
 
 		/*! \return width of \a value. For the default implementation \a val is converted to a string 
 		 and width of this string is returned. */
@@ -163,6 +165,11 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		 If the cell is currentl focused (selected), \a focused is true. */
 		virtual bool showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,
 			bool focused);
+
+		/*! Created internal editor for this editor is needed. This method is only implemented 
+		 in KexiComboBoxTableEdit since it's visible value differs from internal value,
+		 so a different KexiTableEdit object is used to displaying the data. */
+		virtual void createInternalEditor(KexiDB::QuerySchema& schema) { Q_UNUSED(schema); }
 
 	signals:
 		void editRequested();
@@ -210,7 +217,9 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 #define KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(factoryclassname, itemclassname) \
 factoryclassname::factoryclassname() \
  : KexiCellEditorFactoryItem() \
-{} \
+{ \
+	m_className = "" #itemclassname ""; \
+} \
 \
 factoryclassname::~factoryclassname() \
 {} \

@@ -1,5 +1,11 @@
 == Kexi CHANGES ==
 
+1.1.1 "Access Granted" - within KOffice 1.6.1
+ * Support for parameter queries in Design and SQL view;
+    user is asked for entering value of a parameter in a dialog window.
+ * Data-aware combo box is for use with forms and tabular views;
+    data source for the combo box can be defined in the Table Designer.
+
 1.1 "Access Granted" - within KOffice 1.6
    (alpha 1: 2006-07-01, beta 1: 2006-09-9, rc 1: 2006-09-26, stable: 2006-10-10)
  * Object data type and data-aware image form widget

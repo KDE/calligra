@@ -112,7 +112,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 		*/
 		void insert(uint row, KoProperty::Set* set, bool newOne = false);
 
-		/*! Removed a property set at \a row position. */
+		/*! Removes a property set at \a row position. */
 		void remove(uint row);
 
 	protected slots:

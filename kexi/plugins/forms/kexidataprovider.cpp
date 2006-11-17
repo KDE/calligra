@@ -93,11 +93,15 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 
 void KexiFormDataProvider::fillDataItems(KexiTableItem& row, bool cursorAtNewRow)
 {
-	kexidbg << "KexiFormDataProvider::fillDataItems() cnt=" << row.count() << endl;
+	kexipluginsdbg << "KexiFormDataProvider::fillDataItems() cnt=" << row.count() << endl;
 	for (KexiFormDataItemInterfaceToIntMap::ConstIterator it = m_fieldNumbersForDataItems.constBegin(); 
 		it!=m_fieldNumbersForDataItems.constEnd(); ++it)
 	{
 		KexiFormDataItemInterface *itemIface = it.key();
+		if (!itemIface->columnInfo()) {
+			kexipluginsdbg << "KexiFormDataProvider::fillDataItems(): itemIface->columnInfo() == 0" << endl;
+			continue;
+		}
 		//1. Is this a value with a combo box (lookup)?
 		int indexForVisibleLookupValue = itemIface->columnInfo()->indexForVisibleLookupValue();
 		if (indexForVisibleLookupValue<0 && indexForVisibleLookupValue>=(int)row.count()) //sanity
@@ -179,13 +183,14 @@ bool KexiFormDataProvider::cursorAtNewRow() const
 	return false;
 }
 
-void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invalidSources,
+void KexiFormDataProvider::invalidateDataSources( const QDict<char>& invalidSources,
  KexiDB::QuerySchema* query)
 {
 	//fill m_fieldNumbersForDataItems mapping from data item to field number
 	//(needed for fillDataItems)
 	KexiDB::QueryColumnInfo::Vector fieldsExpanded;
 //	uint dataFieldsCount; // == fieldsExpanded.count() if query is available or else == m_dataItems.count()
+
 	if (query) {
 		fieldsExpanded = query->fieldsExpanded( KexiDB::QuerySchema::WithInternalFields );
 //		dataFieldsCount = fieldsExpanded.count();
@@ -199,7 +204,7 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 			int index = ci ? columnsOrder[ ci ] : -1;
 			kexipluginsdbg << "query->columnsOrder()[ " << (ci ? ci->field->name() : "") << " ] = " << index 
 				<< " (dataSource: " << item->dataSource() << ", name=" << dynamic_cast<QObject*>(item)->name() << ")" << endl;
-			if (index!=-1)
+			if (index!=-1 && !m_fieldNumbersForDataItems[ item ])
 				m_fieldNumbersForDataItems.insert( item, index );
 	//todo
 	//WRONG: not only used data sources can be fetched!
@@ -211,12 +216,13 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 //		dataFieldsCount = m_dataItems.count();
 	}
 
+#if 0 //moved down
 	//in 'newIndices' let's collect new indices for every data source
 	foreach(QValueList<uint>::ConstIterator, it, invalidSources) {
 		//all previous indices have corresponding data source
 //		for (; i < (*it); i++) {
 //			newIndices[i] = number++;
-			//kexidbg << "invalidateDataSources(): " << i << " -> " << number-1 << endl;
+			//kexipluginsdbg << "invalidateDataSources(): " << i << " -> " << number-1 << endl;
 //		}
 		//this index have no corresponding data source
 //		newIndices[i]=-1;
@@ -224,13 +230,14 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 		if (item)
 			item->setInvalidState( QString::fromLatin1("#") + i18n("NAME") + QString::fromLatin1("?") );
 		m_dataItems.remove(*it);
-		kexidbg << "invalidateDataSources(): " << (*it) << " -> " << -1 << endl;
+		kexipluginsdbg << "invalidateDataSources(): " << (*it) << " -> " << -1 << endl;
 //		i++;
 	}
+#endif
 	//fill remaining part of the vector
 //	for (; i < dataFieldsCount; i++) { //m_dataItems.count(); i++) {
 		//newIndices[i] = number++;
-		//kexidbg << "invalidateDataSources(): " << i << " -> " << number-1 << endl;
+		//kexipluginsdbg << "invalidateDataSources(): " << i << " -> " << number-1 << endl;
 	//}
 
 #if 0
@@ -240,11 +247,11 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 		bool ok;
 		const int newIndex = newIndices.at( it.data(), &ok );
 		if (ok && newIndex!=-1) {
-			kexidbg << "invalidateDataSources(): " << it.key()->dataSource() << ": " << it.data() << " -> " << newIndex << endl;
+			kexipluginsdbg << "invalidateDataSources(): " << it.key()->dataSource() << ": " << it.data() << " -> " << newIndex << endl;
 			newFieldNumbersForDataItems.replace(it.key(), newIndex);
 		}
 		else {
-			kexidbg << "invalidateDataSources(): removing " << it.key()->dataSource() << endl;
+			kexipluginsdbg << "invalidateDataSources(): removing " << it.key()->dataSource() << endl;
 			m_dataItems.remove(it.key());
 			it.key()->setInvalidState( QString::fromLatin1("#") + i18n("NAME") + QString::fromLatin1("?") );
 		}
@@ -265,33 +272,39 @@ void KexiFormDataProvider::invalidateDataSources( const QValueList<uint>& invali
 	//i = 0;
 	m_disableFillDuplicatedDataItems = true; // temporary disable fillDuplicatedDataItems()
 	                                         // because setColumnInfo() can activate it
-	foreach_list(QPtrListIterator<KexiFormDataItemInterface>, it, m_dataItems) {
+	for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current();) {
 		KexiFormDataItemInterface * item = it.current();
+		if (invalidSources[ item->dataSource().lower() ]) {
+			item->setInvalidState( QString::fromLatin1("#") + i18n("NAME") + QString::fromLatin1("?") );
+			m_dataItems.remove(item);
+			continue;
+		}
 		uint fieldNumber = m_fieldNumbersForDataItems[ item ];
 		if (query) {
 			KexiDB::QueryColumnInfo *ci = fieldsExpanded[fieldNumber];
-			it.current()->setColumnInfo(ci);
-			kexipluginsdbg << "- item=" << dynamic_cast<QObject*>(it.current())->name() 
-				<< " dataSource=" << it.current()->dataSource()
+			item->setColumnInfo(ci);
+			kexipluginsdbg << "- item=" << dynamic_cast<QObject*>(item)->name() 
+				<< " dataSource=" << item->dataSource()
 				<< " field=" << ci->field->name() << endl;
 			const int indexForVisibleLookupValue = ci->indexForVisibleLookupValue();
 			if (-1 != indexForVisibleLookupValue && indexForVisibleLookupValue < (int)fieldsExpanded.count()) {
 				//there's lookup column defined: set visible column as well
 				KexiDB::QueryColumnInfo *visibleColumnInfo = fieldsExpanded[ indexForVisibleLookupValue ];
 				if (visibleColumnInfo) {
-					it.current()->setVisibleColumnInfo( visibleColumnInfo );
-					if (dynamic_cast<KexiComboBoxBase*>(it.current()) && m_mainWidget
-						&& dynamic_cast<KexiComboBoxBase*>(it.current())->internalEditor()) {
+					item->setVisibleColumnInfo( visibleColumnInfo );
+					if (dynamic_cast<KexiComboBoxBase*>(item) && m_mainWidget
+						&& dynamic_cast<KexiComboBoxBase*>(item)->internalEditor()) {
 						// m_mainWidget (dbform) should filter the (just created using setVisibleColumnInfo()) 
 						// combo box' internal editor (actually, only if the combo is in 'editable' mode)
-						dynamic_cast<KexiComboBoxBase*>(it.current())->internalEditor()->installEventFilter(m_mainWidget);
+						dynamic_cast<KexiComboBoxBase*>(item)->internalEditor()->installEventFilter(m_mainWidget);
 					}
 					kexipluginsdbg << " ALSO SET visibleColumn=" << visibleColumnInfo->debugString() 
 						<< "\n at position " << indexForVisibleLookupValue << endl;
 				}
 			}
 		}
-		tmpUsedDataSources.replace( it.current()->dataSource().lower(), (char*)1 );
+		tmpUsedDataSources.replace( item->dataSource().lower(), (char*)1 );
+		++it;
 	}
 	m_disableFillDuplicatedDataItems = false;
 	m_usedDataSources.clear();

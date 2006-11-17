@@ -90,6 +90,12 @@ class KChartParams : public KDChartParams
     bool       firstColAsLabel() const { return m_firstColAsLabel; }
     void       setFirstColAsLabel( bool _val );
 
+    // Data area
+    QString    dataArea() const    { return m_dataArea; }
+    void       setDataArea( QString dataArea ) {
+	m_dataArea = dataArea;
+    }
+
 
     // ----------------------------------------------------------------
     // BAR CHART EXTENSIONS TO SUPPORT OPENDOCUMENT
@@ -144,6 +150,8 @@ public slots:
     DataDirection  m_dataDirection; // Rows or Columns
     bool           m_firstRowAsLabel;
     bool           m_firstColAsLabel;
+
+    QString        m_dataArea;
 
     // Extensions to support OpenDocument
     int            m_barNumLines; // Number of lines in a bar chart.

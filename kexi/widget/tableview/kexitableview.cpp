@@ -57,6 +57,7 @@
 #include "kexitableview_p.h"
 #include <widget/utils/kexirecordmarker.h>
 #include <widget/utils/kexidisplayutils.h>
+#include <kexidb/cursor.h>
 
 KexiTableView::Appearance::Appearance(QWidget *widget)
  : alternateBackgroundColor( KGlobalSettings::alternateBackgroundColor() )
@@ -1150,7 +1151,7 @@ void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 		if (row > (rows() - 1 + (isInsertingEnabled()?1:0)))
 			row = -1; //no row to paint
 	}
-	kexidbg << " row="<<row<< " col="<<col<<endl;
+//	kexidbg << " row="<<row<< " col="<<col<<endl;
 	//update row highlight if needed
 	if (d->appearance.rowMouseOverHighlightingEnabled) {
 		if (row != d->highlightedRow) {
@@ -1491,6 +1492,9 @@ KexiDataItemInterface *KexiTableView::editor( int col, bool ignoreMissingEditor 
 		return 0;
 	}
 	editor->hide();
+	if (m_data->cursor() && m_data->cursor()->query())
+		editor->createInternalEditor(*m_data->cursor()->query());
+
 	connect(editor,SIGNAL(editRequested()),this,SLOT(slotEditRequested()));
 	connect(editor,SIGNAL(cancelRequested()),this,SLOT(cancelEditor()));
 	connect(editor,SIGNAL(acceptRequested()),this,SLOT(acceptEditor()));
@@ -2010,8 +2014,10 @@ bool KexiTableView::getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *ed
 		&& edit->columnInfo()->indexForVisibleLookupValue() < (int)item->count())
 	{
 		const QVariant *visibleFieldValue = 0;
-		if (m_currentItem == item && m_data->rowEditBuffer())
-			visibleFieldValue = m_data->rowEditBuffer()->at( *tvcol->visibleLookupColumnInfo );
+		if (m_currentItem == item && m_data->rowEditBuffer()) {
+			visibleFieldValue = m_data->rowEditBuffer()->at( 
+				*tvcol->visibleLookupColumnInfo, false/*!useDefaultValueIfPossible*/ );
+		}
 		
 		if (visibleFieldValue)
 			//(use bufferedValueAt() - try to get buffered visible value for lookup field)
@@ -2373,9 +2379,13 @@ void KexiTableView::copySelection()
 		QVariant defaultValue;
 		const bool defaultValueDisplayed 
 			= isDefaultValueDisplayed(m_currentItem, m_curCol, &defaultValue);
-		if (edit)
+		if (edit) {
+			QVariant visibleValue;
+			getVisibleLookupValue(visibleValue, edit, m_currentItem, m_data->column(m_curCol));
 			edit->handleCopyAction( 
-				defaultValueDisplayed ? defaultValue : m_currentItem->at( m_curCol ) );
+				defaultValueDisplayed ? defaultValue : m_currentItem->at( m_curCol ),
+				visibleValue );
+		}
 	}
 }
 

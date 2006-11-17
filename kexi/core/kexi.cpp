@@ -221,6 +221,36 @@ void ObjectStatus::setStatus(KexiDB::Object* dbObject, const QString& message, c
 	this->description=description;
 }
 
+void ObjectStatus::setStatus(KexiDB::ResultInfo* result, const QString& message, const QString& description)
+{
+	if (result) {
+		if (message.isEmpty())
+			this->message = result->msg;
+		else
+			this->message = message + " " + result->msg;
+
+		if (description.isEmpty())
+			this->description = result->desc;
+		else
+			this->description = description + " " + result->desc;
+	}
+	else
+		clearStatus();
+}
+
+void ObjectStatus::setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* result, 
+	const QString& message, const QString& description)
+{
+	if (!dbObject)
+		setStatus(result, message, description);
+	else if (!result)
+		setStatus(dbObject, message, description);
+	else {
+		setStatus(dbObject, message, description);
+		setStatus(result, this->message, this->description);
+	}
+}
+
 void ObjectStatus::clearStatus()
 {
 	message=QString::null;
@@ -239,7 +269,7 @@ void ObjectStatus::append( const ObjectStatus& otherStatus ) {
 		description = otherStatus.description;
 		return;
 	}
-	QString s = otherStatus.singleStatusString();
+	const QString s( otherStatus.singleStatusString() );
 	if (s.isEmpty())
 		return;
 	if (description.isEmpty()) {

@@ -435,13 +435,18 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 					ke->accept();
 					return true;
 				}
+				if (key == Qt::Key_Delete && ke->state()==Qt::ControlButton) {
+//! @todo remove hardcoded shortcuts: can be reconfigured...
+					d->dataAwareObject->deleteCurrentRow();
+					return true;
+				}
 				// allow the editor widget to grab the key press event
 				while (true) {
 					if (!o || o == dynamic_cast<QObject*>(d->dataAwareObject))
 						break;
 					if (dynamic_cast<KexiFormDataItemInterface*>(o)) {
-						realWidget = dynamic_cast<QWidget*>(o); //will beused below (for tab/backtab handling)
-						if (realWidget == this) //we have ancountered 'this' form surface, give up
+						realWidget = dynamic_cast<QWidget*>(o); //will be used below (for tab/backtab handling)
+						if (realWidget == this) //we have encountered 'this' form surface, give up
 							return false;
 						if (dynamic_cast<KexiFormDataItemInterface*>(o)->keyPressed(ke))
 							return false;

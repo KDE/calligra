@@ -42,7 +42,8 @@ KexiComboBoxBase::KexiComboBoxBase()
 	m_updatePopupSelectionOnShow = true;
 	m_moveCursorToEndInInternalEditor_enabled = true;
 	m_selectAllInInternalEditor_enabled = true;
-  m_setValueInInternalEditor_enabled = true;
+	m_setValueInInternalEditor_enabled = true;
+	m_setVisibleValueOnSetValueInternal = false;
 }
 
 KexiComboBoxBase::~KexiComboBoxBase()
@@ -100,13 +101,24 @@ void KexiComboBoxBase::setValueInternal(const QVariant& add_, bool removeOld)
 			if (lookupFieldSchema->boundColumn()==-1)
 //! @todo errmsg
 				return;
-			if (popup()) {
-					const int rowToHighlight = rowToHighlightForLookupTable();
-					popup()->tableView()->setHighlightedRow(rowToHighlight);
+			if (m_setVisibleValueOnSetValueInternal) {
+				//only for table views
+				if (!popup())
+					createPopup(false/*!show*/);
 			}
-//			else {
+			if (popup()) {
+				const int rowToHighlight = rowToHighlightForLookupTable();
+				popup()->tableView()->setHighlightedRow(rowToHighlight);
+			}
+			if (m_setVisibleValueOnSetValueInternal && -1!=lookupFieldSchema->visibleColumn()) {
+				//only for table views
+				KexiTableItem *it = popup()->tableView()->highlightedItem();
+				if (it)
+					valueToSet = it->at( lookupFieldSchema->visibleColumn() );
+			}
+			else {
 				hasValueToSet = false;
-	//		}
+			}
 		}
 		else if (relData) {
 			//use 'related table data' model
@@ -228,7 +240,7 @@ QVariant KexiComboBoxBase::value()
 		}
 		else {
 			//use 'related table data' model
-			KexiTableItem *it = popup()->tableView()->selectedItem();
+			KexiTableItem *it = popup() ? popup()->tableView()->selectedItem() : 0;
 			return it ? it->at(0) : origValue();//QVariant();
 		}
 	}
@@ -265,7 +277,6 @@ QVariant KexiComboBoxBase::visibleValueForLookupField()
 	if (!popup() || !lookupFieldSchema)
 		return QVariant();
 	KexiTableItem *it = popup()->tableView()->selectedItem();
-	KexiTableItem *item2 = popup()->tableView()->highlightedItem();
 	return it ? it->at( lookupFieldSchema->visibleColumn() ) : QVariant();
 }
 
@@ -563,7 +574,8 @@ void KexiComboBoxBase::undoChanges()
 	KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
 	if (lookupFieldSchema) {
 //		kexidbg << "KexiComboBoxBase::undoChanges(): m_visibleValue BEFORE = " << m_visibleValue << endl;
-		popup()->tableView()->selectRow( popup()->tableView()->highlightedRow() );
+		if (popup())
+			popup()->tableView()->selectRow( popup()->tableView()->highlightedRow() );
 		m_visibleValue = visibleValueForLookupField();
 //		kexidbg << "KexiComboBoxBase::undoChanges(): m_visibleValue AFTER = " << m_visibleValue << endl;
 		setValueOrTextInInternalEditor( m_visibleValue );

@@ -152,13 +152,14 @@ void KexiBoolTableEdit::handleAction(const QString& actionName)
 		m_currentValue = field()->isNotNull() 
 			? QVariant(0, false)/*0 instead of NULL - handle case when null is not allowed*/
 			: QVariant();
-		handleCopyAction(m_origValue);
+		handleCopyAction(m_origValue, QVariant());
 		repaintRelatedCell();
 	}
 }
 
-void KexiBoolTableEdit::handleCopyAction(const QVariant& value)
+void KexiBoolTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
+	Q_UNUSED(visibleValue);
 	if (value.type()==QVariant::Bool)
 		qApp->clipboard()->setText(value.toBool() ? "1" : "0");
 	else

@@ -409,6 +409,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue) = 0;
 		virtual void itemDeleteRequest(KexiTableItem *, int row, int col) = 0;
 		virtual void currentItemDeleteRequest() = 0;
+		//! Emitted for spreadsheet mode when an item was deleted and a new item has been appended
+		virtual void newItemAppendedForAfterDeletingInSpreadSheetMode() = 0;
 
 		/*! Data has been refreshed on-screen - emitted from initDataContents(). */
 		virtual void dataRefreshed() = 0;

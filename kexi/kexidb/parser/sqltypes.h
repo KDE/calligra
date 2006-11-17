@@ -38,8 +38,6 @@ struct realType
 	int fractional;
 };
 
-#define SHORT_STRING_MAX_LENGTH 4096
-
 //! @internal
 struct OrderByColumnInternal
 {
