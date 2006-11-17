@@ -564,16 +564,17 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
                 while(! format.isNull()) {
                     QString id = format.attribute("id", "0");
                     if(id == "1") {
-                        fill(style, format);
+                        KoCharacterStyle s2(style);
+                        fill(&s2, format);
                         int pos = format.attribute("pos", "-1").toInt();
                         if(format.hasAttribute("pos") && pos >= 0) {
                             int length = format.attribute("len").toInt();
                             if(length > 0) {
-                                cursor.setPosition(block.position() + pos);
-                                cursor.setPosition(block.position() + pos + length,
+                                QTextCursor c2(block) ;
+                                c2.setPosition(block.position() + pos);
+                                c2.setPosition(block.position() + pos + length,
                                         QTextCursor::KeepAnchor);
-                                style->applyStyle(&cursor);
-                                cursor.clearSelection();
+                                s2.applyStyle(&c2);
                             }
                             else
                                 kWarning("Format has missing or invalid 'len' value, ignoring\n");

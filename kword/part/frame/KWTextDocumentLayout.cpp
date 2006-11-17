@@ -403,8 +403,6 @@ void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) 
     if(document()->begin().layout()->lineCount() == 0) // only first time
         layout();
     const QRegion clipRegion = painter->clipRegion();
-    painter->setBrush(QBrush(Qt::black));
-    painter->setPen(QPen(Qt::black));
     // da real work
     QTextBlock block = document()->begin();
     while(block.isValid()) {
