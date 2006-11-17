@@ -61,8 +61,8 @@ class KexiBoolTableEdit : public KexiTableEdit
 		virtual void handleAction(const QString& actionName);
 
 		/*! Handles copy action for value. Copies empty string for null, "1" for true, "0" for false.
-		 Reimplemented after KexiTableEdit. */
-		virtual void handleCopyAction(const QVariant& value);
+		 \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
+		virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
 		/*! \return width of \a value. Reimplemented  after KexiTableEdit. */
 		virtual int widthForValue( QVariant &val, const QFontMetrics &fm );

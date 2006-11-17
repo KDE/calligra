@@ -95,6 +95,14 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 
 		virtual void createInternalEditor(KexiDB::QuerySchema& schema);
 
+		/*! Reimplemented after KexiInputTableEdit. */
+		virtual void handleAction(const QString& actionName);
+
+		/*! Reimplemented after KexiInputTableEdit. 
+		 For a special case (combo box), \a visibleValue can be provided,
+		 so it can be copied to the clipboard instead of unreadable \a value. */
+		virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
+
 	public slots:
 		//! Implemented for KexiDataItemInterface
 		virtual void moveCursorToEnd();

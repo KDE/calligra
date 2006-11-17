@@ -429,6 +429,10 @@ public:
 	inline KexiTableItem* createItem() const
 	{ return new KexiTableItem(m_itemSize); }
 
+public slots:
+	//! @internal The same as QObject::deleteLater() but also sets smart pointer m_cursor to 0 to avoid crashes...
+	void deleteLater();
+
 signals:
 	void destroying();
 

@@ -133,8 +133,9 @@ bool KexiDateTableEdit::valueIsValid()
 	return m_formatter.stringToDate( m_lineedit->text() ).isValid();
 }
 
-void KexiDateTableEdit::handleCopyAction(const QVariant& value)
+void KexiDateTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
+	Q_UNUSED(visibleValue);
 	if (!value.isNull() && value.toDate().isValid())
 		qApp->clipboard()->setText( m_formatter.dateToString(value.toDate()) );
 	else

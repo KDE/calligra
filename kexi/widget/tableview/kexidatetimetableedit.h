@@ -49,7 +49,7 @@ class KexiDateTimeTableEdit : public KexiInputTableEdit
 		virtual void handleAction(const QString& actionName);
 
 		/*! Reimplemented after KexiInputTableEdit. */
-		virtual void handleCopyAction(const QVariant& value);
+		virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
 	protected:
 		//! helper

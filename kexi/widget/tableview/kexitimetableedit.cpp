@@ -128,8 +128,9 @@ bool KexiTimeTableEdit::valueIsValid()
 	return m_formatter.stringToTime( m_lineedit->text() ).isValid();
 }
 
-void KexiTimeTableEdit::handleCopyAction(const QVariant& value)
+void KexiTimeTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
+	Q_UNUSED(visibleValue);
 	if (!value.isNull() && value.toTime().isValid())
 		qApp->clipboard()->setText( m_formatter.timeToString(value.toTime()) );
 	else

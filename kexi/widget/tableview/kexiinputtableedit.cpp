@@ -416,8 +416,9 @@ QSize KexiInputTableEdit::totalSize()
 	return m_lineedit->size();
 }
 
-void KexiInputTableEdit::handleCopyAction(const QVariant& value)
+void KexiInputTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
+	Q_UNUSED(visibleValue);
 //! @todo handle rich text?
 	qApp->clipboard()->setText( valueToText(value, QString::null) );
 }

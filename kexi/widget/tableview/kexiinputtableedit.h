@@ -69,8 +69,8 @@ class KexiInputTableEdit : public KexiTableEdit
 
 		/*! Handles copy action for value. The \a value is copied to clipboard in format appropriate 
 		 for the editor's impementation, e.g. for image cell it can be a pixmap. 
-		 Reimplemented after KexiTableEdit. */
-		virtual void handleCopyAction(const QVariant& value);
+		 \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
+		virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
 		/*! Shows a special tooltip for \a value if needed, i.e. if the value could not fit inside \a rect
 		 for a given font metrics \a fm. 

@@ -2397,9 +2397,13 @@ void KexiTableView::copySelection()
 		QVariant defaultValue;
 		const bool defaultValueDisplayed 
 			= isDefaultValueDisplayed(m_currentItem, m_curCol, &defaultValue);
-		if (edit)
+		if (edit) {
+			QVariant visibleValue;
+			getVisibleLookupValue(visibleValue, edit, m_currentItem, m_data->column(m_curCol));
 			edit->handleCopyAction( 
-				defaultValueDisplayed ? defaultValue : m_currentItem->at( m_curCol ) );
+				defaultValueDisplayed ? defaultValue : m_currentItem->at( m_curCol ),
+				visibleValue );
+		}
 	}
 }
 
