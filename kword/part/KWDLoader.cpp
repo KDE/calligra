@@ -102,7 +102,9 @@ bool KWDLoader::load(QDomElement &root) {
         switch(paper.attribute("hType").toInt()) {
             // assume its on; will turn it off in the next section.
             case 0:
-                m_pageSettings->setHeaderPolicy(KWord::HFTypeSameAsFirst); break;
+                m_pageSettings->setHeaderPolicy(KWord::HFTypeSameAsFirst);
+                m_pageSettings->setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
+                break;
             case 1:
                 m_pageSettings->setHeaderPolicy(KWord::HFTypeEvenOdd); break;
             case 2:
@@ -114,7 +116,9 @@ bool KWDLoader::load(QDomElement &root) {
         switch(paper.attribute("fType").toInt()) {
             // assume its on; will turn it off in the next section.
             case 0:
-                m_pageSettings->setFooterPolicy(KWord::HFTypeSameAsFirst); break;
+                m_pageSettings->setFooterPolicy(KWord::HFTypeSameAsFirst);
+                m_pageSettings->setFirstFooterPolicy(KWord::HFTypeEvenOdd);
+                break;
             case 1:
                 m_pageSettings->setFooterPolicy(KWord::HFTypeEvenOdd); break;
             case 2:
@@ -501,14 +505,12 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
             KoShapeFactory *factory = KoShapeRegistry::instance()->get(KoTextShape_SHAPEID);
             Q_ASSERT(factory);
             KoShape *shape = factory->createDefaultShape();
-            KWTextFrame *frame = new KWTextFrame(shape, fs); // TODO make more general and not assume these are text frames
+            KWTextFrame *frame = new KWTextFrame(shape, fs);
             fill(frame, frameElem);
 
-            //frame->load( frameElem, this, m_doc->syntaxVersion() );
             //m_doc->progressItemLoaded();
         }
     }
-    // move above to be fs-type independent
 
 
     //m_info = static_cast<KWFrameSet::Info>( KWDocument::getAttribute( framesetElem, "frameInfo", KWFrameSet::FI_BODY ) ); // TODO

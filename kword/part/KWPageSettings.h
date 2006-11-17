@@ -47,7 +47,13 @@ public:
 
     /// Return the type of header the first page will get.
     KWord::HeaderFooterType firstHeader() const { return m_firstHeader; }
-    /// Set the type of header the first page will get.
+    /**
+     * Set the type of header the first page will get.
+     * @param p There are 2 ways to 'enable' the header, KWord::HFTypeEvenOdd will
+     *   use the OddHeaders frameSet for the text and KWord::HFTypeUniform will use
+     *   the FirstHeader frameset for the text.
+     * This distinction is usefull when reconfiguring a document without moving text
+     */
     void setFirstHeaderPolicy(KWord::HeaderFooterType p) { m_firstHeader = p; }
 
     /// Return the type of footer the first page will get.

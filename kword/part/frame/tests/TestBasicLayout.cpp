@@ -102,13 +102,6 @@ void TestBasicLayout::testShouldHaveHeaderOrFooter() {
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, false, &origin), true);
     QCOMPARE(origin, KWord::FirstPageFooterTextFrameSet);
 
-    helper.pageSettings->setFirstHeaderPolicy(KWord::HFTypeSameAsFirst);
-    helper.pageSettings->setFirstFooterPolicy(KWord::HFTypeEvenOdd);
-    QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, true, &origin), true);
-    QCOMPARE(origin, KWord::OddPagesHeaderTextFrameSet);
-    QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, false, &origin), true);
-    QCOMPARE(origin, KWord::OddPagesFooterTextFrameSet);
-
     helper.pageSettings->setFirstHeaderPolicy(KWord::HFTypeUniform);
     helper.pageSettings->setFirstFooterPolicy(KWord::HFTypeEvenOdd);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, true, &origin), true);

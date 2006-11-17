@@ -50,18 +50,41 @@ KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFra
 void KWFrameLayout::createNewFramesForPage(int pageNumber) {
     m_setup=false; // force reindexing of types
     KWPage *page = m_pageManager->page(pageNumber);
+
+    // Header footer handling.
+    // first make a list of all types.
+    QList<KWord::TextFrameSetType> allHFTypes;
+    allHFTypes.append(KWord::FirstPageHeaderTextFrameSet);
+    allHFTypes.append(KWord::OddPagesHeaderTextFrameSet);
+    allHFTypes.append(KWord::EvenPagesHeaderTextFrameSet);
+    allHFTypes.append(KWord::FirstPageFooterTextFrameSet);
+    allHFTypes.append(KWord::OddPagesFooterTextFrameSet);
+    allHFTypes.append(KWord::EvenPagesFooterTextFrameSet);
+
     // create headers & footers
     KWord::TextFrameSetType origin;
     if(shouldHaveHeaderOrFooter(pageNumber, true, &origin)) {
+        allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin);
         if(!hasFrameOn(fs, pageNumber))
             new KWTextFrame(createTextShape(page), fs);
     }
     if(shouldHaveHeaderOrFooter(pageNumber, false, &origin)) {
+        allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin);
         if(!hasFrameOn(fs, pageNumber))
             new KWTextFrame(createTextShape(page), fs);
     }
+
+    // delete headers/footer frames that are not needed on this page
+    foreach (KWFrame *frame, framesInPage(page->rect())) {
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (frame->frameSet());
+        if (tfs && allHFTypes.contains(tfs->textFrameSetType())) {
+            frame->frameSet()->removeFrame(frame);
+            delete frame;
+        }
+    }
+
     if(page->pageSide() == KWPage::PageSpread) {
         // inline helper method
         class PageSpreadShapeFactory {
