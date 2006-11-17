@@ -42,7 +42,8 @@ KexiComboBoxBase::KexiComboBoxBase()
 	m_updatePopupSelectionOnShow = true;
 	m_moveCursorToEndInInternalEditor_enabled = true;
 	m_selectAllInInternalEditor_enabled = true;
-  m_setValueInInternalEditor_enabled = true;
+	m_setValueInInternalEditor_enabled = true;
+	m_setVisibleValueOnSetValueInternal = false;
 }
 
 KexiComboBoxBase::~KexiComboBoxBase()
@@ -100,13 +101,24 @@ void KexiComboBoxBase::setValueInternal(const QVariant& add_, bool removeOld)
 			if (lookupFieldSchema->boundColumn()==-1)
 //! @todo errmsg
 				return;
-			if (popup()) {
-					const int rowToHighlight = rowToHighlightForLookupTable();
-					popup()->tableView()->setHighlightedRow(rowToHighlight);
+			if (m_setVisibleValueOnSetValueInternal) {
+				//only for table views
+				if (!popup())
+					createPopup(false/*!show*/);
 			}
-//			else {
+			if (popup()) {
+				const int rowToHighlight = rowToHighlightForLookupTable();
+				popup()->tableView()->setHighlightedRow(rowToHighlight);
+			}
+			if (m_setVisibleValueOnSetValueInternal && -1!=lookupFieldSchema->visibleColumn()) {
+				//only for table views
+				KexiTableItem *it = popup()->tableView()->highlightedItem();
+				if (it)
+					valueToSet = it->at( lookupFieldSchema->visibleColumn() );
+			}
+			else {
 				hasValueToSet = false;
-	//		}
+			}
 		}
 		else if (relData) {
 			//use 'related table data' model

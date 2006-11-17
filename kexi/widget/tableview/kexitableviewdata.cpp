@@ -342,6 +342,12 @@ void KexiTableViewData::init()
 	m_itemSize = 0;
 }
 
+void KexiTableViewData::deleteLater()
+{
+	m_cursor = 0;
+	QObject::deleteLater();
+}
+
 void KexiTableViewData::addColumn( KexiTableViewColumn* col )
 {
 //	if (!col->isDBAware) {

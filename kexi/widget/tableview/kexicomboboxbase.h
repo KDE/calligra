@@ -161,6 +161,9 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
 		bool m_moveCursorToEndInInternalEditor_enabled : 1;
 		bool m_selectAllInInternalEditor_enabled : 1;
 		bool m_setValueInInternalEditor_enabled : 1;
+		bool m_setVisibleValueOnSetValueInternal : 1; //!< Used in setValueInternal() to control whether 
+		                                              //!< we want to set visible value on setValueInternal() 
+		                                              //!< - true for table view's combo box
 };
 
 #endif

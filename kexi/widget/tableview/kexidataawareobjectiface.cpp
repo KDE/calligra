@@ -1154,7 +1154,7 @@ void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText)
 	}
 //	ensureVisible(columnPos(m_curCol), rowPos(m_curRow)+rowHeight(), 
 //		columnWidth(m_curCol), rowHeight());
-//OK?
+//OK?	
 	//ensureCellVisible(m_curRow+1, m_curCol);
 	if (!m_editor)
 		createEditor(m_curRow, m_curCol, setText, !setText.isEmpty());

@@ -143,8 +143,10 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 
 		/*! Handles copy action for value. The \a value is copied to clipboard in format appropriate 
 		 for the editor's impementation, e.g. for image cell it can be a pixmap. 
+		 For a special case (combo box), \a visibleValue can be provided,
+		 so it can be copied to the clipboard instead of unreadable \a value. 
 		 For reimplementation. */
-		virtual void handleCopyAction(const QVariant& value) = 0;
+		virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue) = 0;
 
 		/*! \return width of \a value. For the default implementation \a val is converted to a string 
 		 and width of this string is returned. */

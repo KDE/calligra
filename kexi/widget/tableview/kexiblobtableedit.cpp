@@ -599,8 +599,9 @@ bool KexiBlobTableEdit::handleDoubleClick()
 	return true;
 }
 
-void KexiBlobTableEdit::handleCopyAction(const QVariant& value)
+void KexiBlobTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
+	Q_UNUSED(visibleValue);
 	executeCopyAction(value.toByteArray());
 }
 
@@ -728,9 +729,10 @@ void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVa
 	}
 }
 
-void KexiKIconTableEdit::handleCopyAction(const QVariant& value)
+void KexiKIconTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
 	Q_UNUSED(value);
+	Q_UNUSED(visibleValue);
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiKIconTableEditorFactoryItem, KexiKIconTableEdit)

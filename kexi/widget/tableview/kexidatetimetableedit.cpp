@@ -134,8 +134,9 @@ bool KexiDateTimeTableEdit::textIsEmpty() const
 	return dateTimeIsEmpty( m_dateFormatter, m_timeFormatter, m_lineedit->text() );
 }
 
-void KexiDateTimeTableEdit::handleCopyAction(const QVariant& value)
+void KexiDateTimeTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
+	Q_UNUSED(visibleValue);
 	if (!value.isNull() && value.toDateTime().isValid())
 		qApp->clipboard()->setText( m_dateFormatter.dateToString(value.toDateTime().date()) + " " 
 			+ m_timeFormatter.timeToString(value.toDateTime().time()) );

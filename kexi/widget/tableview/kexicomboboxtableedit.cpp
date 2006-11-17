@@ -22,6 +22,8 @@
 #include <qstyle.h>
 #include <qwindowsstyle.h>
 #include <qpainter.h>
+#include <qapplication.h>
+#include <qclipboard.h>
 
 #include "kexicomboboxtableedit.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
@@ -65,7 +67,7 @@ KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QWidge
  , d(new Private())
 {
 	setName("KexiComboBoxTableEdit");
-//	QHBoxLayout* layout = new QHBoxLayout(this);
+	m_setVisibleValueOnSetValueInternal = true;
 	d->button = new KexiComboBoxDropDownButton( parentWidget() /*usually a viewport*/ );
 	d->button->hide();
 	d->button->setFocusPolicy( NoFocus );
@@ -414,6 +416,30 @@ int KexiComboBoxTableEdit::popupWidthHint() const
 {
 	return m_lineedit->width() + m_leftMargin + m_rightMarginWhenFocused; //QMAX(popup()->width(), d->currentEditorWidth);
 }
+
+void KexiComboBoxTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
+{
+	Q_UNUSED(value);
+//! @todo does not work with BLOBs!
+	qApp->clipboard()->setText( visibleValue.toString() );
+}
+
+void KexiComboBoxTableEdit::handleAction(const QString& actionName)
+{
+	const bool alreadyVisible = m_lineedit->isVisible();
+
+	if (actionName=="edit_paste") {
+		if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
+			emit editRequested();
+			m_lineedit->clear();
+		}
+//! @todo does not work with BLOBs!
+		setValueInInternalEditor( qApp->clipboard()->text() );
+	}
+	else
+		KexiInputTableEdit::handleAction(actionName);
+}
+
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiComboBoxEditorFactoryItem, KexiComboBoxTableEdit)
 
