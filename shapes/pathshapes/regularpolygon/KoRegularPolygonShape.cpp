@@ -19,6 +19,8 @@
 
 #include "regularpolygon/KoRegularPolygonShape.h"
 
+#include <KoViewConverter.h>
+
 #include <QPainter>
 #include <QPainterPath>
 
