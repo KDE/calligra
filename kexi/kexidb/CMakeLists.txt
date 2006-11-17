@@ -85,7 +85,11 @@ install(TARGETS kexidb  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  connection.h connectiondata.h cursor.h    driver.h drivermanager.h    error.h expression.h field.h fieldlist.h global.h object.h    schemadata.h tableschema.h queryschema.h indexschema.h    relationship.h parser/parser.h transaction.h preparedstatement.h    kexidb_export.h  DESTINATION ${INCLUDE_INSTALL_DIR}/kexidb)
+install( FILES  connection.h connectiondata.h cursor.h 
+ driver.h drivermanager.h error.h expression.h field.h fieldlist.h global.h object.h 
+ schemadata.h tableschema.h queryschema.h queryschemaparameter.h indexschema.h 
+ relationship.h parser/parser.h transaction.h preparedstatement.h  
+ kexidb_export.h  DESTINATION ${INCLUDE_INSTALL_DIR}/kexidb)
 install( FILES  kexidb_driver.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 
