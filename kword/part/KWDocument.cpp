@@ -30,6 +30,7 @@
 #include "frame/KWTextFrameSet.h"
 #include "frame/KWFrame.h"
 #include "frame/KWFrameLayout.h"
+#include "frame/KWTextDocumentLayout.h"
 #include "dialog/KWFrameDialog.h"
 
 // koffice libs includes
@@ -166,6 +167,10 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
     if(tfs) {
         m_styleManager->add( tfs->document() );
+        KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*> (tfs->document()->documentLayout());
+        if(lay) {
+            lay->setStyleManager(m_styleManager);
+        }
         if(tfs->textFrameSetType() == KWord::MainTextFrameSet ||
                 tfs->textFrameSetType() == KWord::OtherTextFrameSet) {
             connect(tfs, SIGNAL(moreFramesNeeded(KWTextFrameSet*)),
