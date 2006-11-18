@@ -269,33 +269,37 @@ void StyleStorage::garbageCollection()
     bool found = false;
     foreach ( const QSharedDataPointer<SubStyle> subStyle, subStyles )
     {
+        // as long as the substyle in question was not found, skip the substyle
         if ( !found )
         {
             if ( Style::compare( subStyle.data(), currentPair.second.data() ) )
             {
                 found = true;
-                continue;
             }
+            continue;
         }
-        else
+
+        // remove the current pair, if another substyle of the same type,
+        // the default style or a named style follows
+        if ( subStyle->type() == currentPair.second->type() ||
+             subStyle->type() == Style::DefaultStyleKey ||
+             subStyle->type() == Style::NamedStyleKey )
         {
-            // remove the current pair, if another substyle of the same type,
-            // the default style or a named style follows
-            if ( subStyle->type() == currentPair.second->type() ||
-                 subStyle->type() == Style::DefaultStyleKey ||
-                 subStyle->type() == Style::NamedStyleKey )
+            kDebug(36006) << "StyleStorage: removing " << currentPair.second << " at " << currentPair.first << endl;
+            d->tree.remove( currentPair.first, currentPair.second );
+            kDebug(36006) << "StyleStorage: usage of " << currentPair.second << " is " << currentPair.second->ref << endl;
+            // FIXME Stefan: The usage of substyles used once should be
+            //               two (?) here, not more. Why is this not the case?
+            //               The shared pointers are used by:
+            //               a) the tree
+            //               b) the reusage list (where it should be removed)
+            //               c) the cached styles (!)
+            if ( currentPair.second->ref == 2 )
             {
-                kDebug(36006) << "StyleStorage: removing " << currentPair.second << " at " << currentPair.first << endl;
-                d->tree.remove( currentPair.first, currentPair.second );
-                kDebug(36006) << "StyleStorage: usage of " << currentPair.second << " is " << currentPair.second->ref << endl;
-                // FIXME Stefan: The usage of substyles used once should be 2 here, not more. Why is this not the case?
-                if ( currentPair.second->ref == 2 )
-                {
-                    kDebug(36006) << "StyleStorage: removing " << currentPair.second << " from the used subStyles" << endl;
-                    d->subStyles[currentPair.second->type()].removeAll( currentPair.second );
-                }
-                break;
+                kDebug(36006) << "StyleStorage: removing " << currentPair.second << " from the used subStyles" << endl;
+                d->subStyles[currentPair.second->type()].removeAll( currentPair.second );
             }
+            break;
         }
     }
 }

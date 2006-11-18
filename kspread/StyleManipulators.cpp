@@ -48,7 +48,15 @@ bool StyleManipulator::process(Element* element)
     {
         if ( m_firstrun )
         {
-            m_undoData << m_sheet->styleStorage()->undoData( element->rect() );
+            const QList< QPair<QRectF,QSharedDataPointer<SubStyle> > > rawUndoData
+                    = m_sheet->styleStorage()->undoData( element->rect() );
+            for ( int i = 0; i < rawUndoData.count(); ++i )
+            {
+                if ( m_style->hasAttribute( rawUndoData[i].second->type() ) ||
+                     rawUndoData[i].second->type() == Style::DefaultStyleKey ||
+                     rawUndoData[i].second->type() == Style::NamedStyleKey )
+                    m_undoData << rawUndoData[i];
+            }
         }
         m_sheet->setStyle( Region(range), *m_style );
     }
@@ -295,27 +303,35 @@ StyleApplicator::StyleApplicator()
 
 bool StyleApplicator::process( Element* element )
 {
-  if ( !m_reverse )
-  {
-    if ( m_firstrun )
+    if ( !m_reverse )
     {
-      m_undoData << m_sheet->styleStorage()->undoData( element->rect() );
-    }
+        if ( m_firstrun )
+        {
+            const QList< QPair<QRectF,QSharedDataPointer<SubStyle> > > rawUndoData
+                    = m_sheet->styleStorage()->undoData( element->rect() );
+            for ( int i = 0; i < rawUndoData.count(); ++i )
+            {
+                if ( m_style.hasAttribute( rawUndoData[i].second->type() ) ||
+                     rawUndoData[i].second->type() == Style::DefaultStyleKey ||
+                     rawUndoData[i].second->type() == Style::NamedStyleKey )
+                    m_undoData << rawUndoData[i];
+            }
+        }
 
-    if ( !m_style.isEmpty() )
-    {
-      kDebug() << "Aplying style at " << element->rect() << endl;
-      m_sheet->setStyle( Region(element->rect()), m_style );
+        if ( !m_style.isEmpty() )
+        {
+            kDebug() << "Aplying style at " << element->rect() << endl;
+            m_sheet->setStyle( Region(element->rect()), m_style );
+        }
+        else
+        {
+            kDebug() << "Aplying default style at " << element->rect() << endl;
+            Style style;
+            style.setDefault();
+            m_sheet->setStyle( Region(element->rect()), style );
+        }
     }
-    else
-    {
-      kDebug() << "Aplying default style at " << element->rect() << endl;
-      Style style;
-      style.setDefault();
-      m_sheet->setStyle( Region(element->rect()), style );
-    }
-  }
-  return true;
+    return true;
 }
 
 bool StyleApplicator::mainProcessing()

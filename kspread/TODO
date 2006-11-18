@@ -83,7 +83,7 @@ Things not in bugzilla
     consumption. Caching the attributes should make the painting
     way faster.
 
-  + Zooming	    						      1 ----
+  + Zooming							      1 ----
     Make it view dependent and not document dependent.
 
   + Style Storage						      1 STEF
@@ -125,6 +125,8 @@ Things not in bugzilla
       attributes set for column/rows.
     - Fix Style::isDefault(). Use the StyleManager's default style.	----
     - Port the filters.							done
+    - Decouple validity and conditions from cells.			----
+      (think of the select all feature)
 
   + Speed up selection.						      1 ----
     (probably improved with Format Storage?)
