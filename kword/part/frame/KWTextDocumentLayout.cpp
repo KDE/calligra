@@ -422,13 +422,35 @@ void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) 
         QTextLayout *layout = block.layout();
         if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
             KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
-            if(data && data->hasCounterData()) {
-                QTextCursor cursor(block); // I know this is longwinded, but just using the blocks
-                                           // charformat does not work, apparantly
-                QFont font(cursor.charFormat().font(), paintDevice());
-
+            QTextList *list = block.textList();
+            if(list && data && data->hasCounterData()) {
+                QTextCharFormat cf;
+                bool filled=false;
+                if(m_styleManager) {
+                    const int id = list->format().intProperty(KoListStyle::CharacterStyleId);
+                    KoCharacterStyle *cs = m_styleManager->characterStyle(id);
+                    if(cs) {
+                        cs->applyStyle(cf);
+                        filled = true;
+                    }
+                }
+                if(! filled) {
+                    // use first char of block.
+                    QTextCursor cursor(block); // I know this is longwinded, but just using the blocks
+                                               // charformat does not work, apparantly
+                    cf = cursor.charFormat();
+                }
+                QFont font(cf.font(), paintDevice());
                 QTextLayout layout(data->counterText(), font, paintDevice());
                 layout.setCacheEnabled(true);
+                QList<QTextLayout::FormatRange> layouts;
+                QTextLayout::FormatRange format;
+                format.start=0;
+                format.length=data->counterText().length();
+                format.format = cf;
+                layouts.append(format);
+                layout.setAdditionalFormats(layouts);
+
                 QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
                 option.setTextDirection(block.blockFormat().layoutDirection());
                 layout.setTextOption(option);
