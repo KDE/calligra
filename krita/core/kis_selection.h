@@ -85,6 +85,8 @@ public:
     /**
      * Tests if the the rect is totally outside the selection, but uses selectedRect
      * instead of selectedRect, and this is faster (but might deliver false positives!)
+     *
+     * XXX: This comment makes no sense anymore! (BSAR)
      */
     bool isProbablyTotallyUnselected(QRect r);
 
@@ -92,13 +94,13 @@ public:
      * Rough, but fastish way of determining the area
      * of the tiles used by the selection.
      */
-    QRect selectedRect();
+    QRect selectedRect() const;
 
     /**
      * Slow, but exact way of determining the rectangle
      * that encloses the selection
      */
-    QRect selectedExactRect();
+    QRect selectedExactRect() const;
 
     void paintSelection(QImage img, Q_INT32 x, Q_INT32 y, Q_INT32 w, Q_INT32 h);
     void paintSelection(QImage img, const QRect& scaledImageRect, const QSize& scaledImageSize, const QSize& imageSize);
@@ -115,6 +117,37 @@ public:
     virtual void setDirty();
 private:
     void paintUniformSelectionRegion(QImage img, const QRect& imageRect, const QRegion& uniformRegion);
+
+private:
+
+    // We don't want these methods to be used on selections:
+    void extent(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const 
+        { 
+            KisPaintDevice::extent(x,y,w,h);
+        }
+    
+    QRect extent() const { return KisPaintDevice::extent(); }
+    
+    void exactBounds(Q_INT32 &x, Q_INT32 &y, Q_INT32 &w, Q_INT32 &h) const 
+        {
+            return KisPaintDevice::exactBounds(x,y,w,h);
+        }   
+
+    QRect exactBounds() const
+        {
+            return KisPaintDevice::extent();
+        }
+
+    QRect exactBoundsOldMethod() const 
+        {
+            return KisPaintDevice::exactBoundsOldMethod();
+        }
+
+    QRect exactBoundsImprovedOldMethod() const
+        {
+            return KisPaintDevice::exactBoundsImprovedOldMethod();
+        }
+
 
 private:
     KisPaintDeviceSP m_parentPaintDevice;
