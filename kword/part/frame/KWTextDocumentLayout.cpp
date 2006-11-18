@@ -217,15 +217,28 @@ public:
             return false;
         }
         m_format = m_block.blockFormat();
-        if(! m_newShape) { // ignore margins at top of shape
-            m_y += m_format.topMargin();
-            if(m_format.boolProperty(KoParagraphStyle::BreakBefore)) {
-                m_data->setEndPosition(m_block.position()-1);
-                nextFrame();
-                if(m_data)
-                    m_data->setPosition(m_block.position());
+
+        if(!m_newShape && m_format.boolProperty(KoParagraphStyle::BreakBefore)) {
+            m_data->setEndPosition(m_block.position()-1);
+            nextFrame();
+            if(m_data)
+                m_data->setPosition(m_block.position());
+        }
+        bool allowMargin = true; // wheather to allow margins at top of shape
+        if(m_newShape) {
+            allowMargin = false; // false by default, but check 2 exceptions.
+            if(m_format.boolProperty(KoParagraphStyle::BreakBefore))
+                allowMargin = true;
+            else if( m_styleManager && m_format.topMargin() > 0) {
+                // also allow it when the paragraph has the margin, but the style has a different one.
+                KoParagraphStyle *ps = m_styleManager->paragraphStyle(
+                        m_format.intProperty(KoParagraphStyle::StyleId));
+                if(ps == 0 || ps->topMargin() != m_format.topMargin())
+                    allowMargin = true;
             }
         }
+        if(allowMargin)
+            m_y += m_format.topMargin();
         layout = m_block.layout();
         QTextOption options = layout->textOption();
         options.setAlignment(m_format.alignment());

@@ -56,6 +56,7 @@ private slots:
 // relativeBulletSize
 
     //etc
+    void testParagOffset();
 
 private:
     void initForNewTest(const QString &initText = QString());
