@@ -2203,6 +2203,11 @@ void Style::setDefault()
     insertSubStyle( DefaultStyleKey, true );
 }
 
+void Style::clear()
+{
+    d->subStyles.clear();
+}
+
 QString Style::colorName( const QColor& color )
 {
     static QMap<QRgb, QString> map;

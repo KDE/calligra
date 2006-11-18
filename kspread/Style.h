@@ -276,6 +276,7 @@ public:
     void setVerticalText( bool enable );
     void setBackgroundColor( QColor const & color );
     void setDefault();
+    void clear();
 
 
     // static functions

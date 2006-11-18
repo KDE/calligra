@@ -82,6 +82,15 @@ Style StyleStorage::contains(const QPoint& point) const
     Style style;
     foreach ( const QSharedDataPointer<SubStyle> subStyle, subStyles )
     {
+        if ( subStyle->type() == Style::DefaultStyleKey )
+        {
+            style.clear();
+        }
+        if ( subStyle->type() == Style::NamedStyleKey )
+        {
+            style.clear();
+            style = *d->styleManager->defaultStyle();
+        }
         style.insertSubStyle( subStyle );
     }
     return subStyles.isEmpty() ? *d->styleManager->defaultStyle() : style;
@@ -94,6 +103,15 @@ Style StyleStorage::contains(const QRect& rect) const
     Style style;
     foreach ( const QSharedDataPointer<SubStyle> subStyle, subStyles )
     {
+        if ( subStyle->type() == Style::DefaultStyleKey )
+        {
+            style.clear();
+        }
+        if ( subStyle->type() == Style::NamedStyleKey )
+        {
+            style.clear();
+            style = *d->styleManager->defaultStyle();
+        }
         style.insertSubStyle( subStyle );
     }
     return subStyles.isEmpty() ? *d->styleManager->defaultStyle() : style;
@@ -106,6 +124,15 @@ Style StyleStorage::intersects(const QRect& rect) const
     Style style;
     foreach ( const QSharedDataPointer<SubStyle> subStyle, subStyles )
     {
+        if ( subStyle->type() == Style::DefaultStyleKey )
+        {
+            style.clear();
+        }
+        if ( subStyle->type() == Style::NamedStyleKey )
+        {
+            style.clear();
+            style = *d->styleManager->defaultStyle();
+        }
         style.insertSubStyle( subStyle );
     }
     return subStyles.isEmpty() ? *d->styleManager->defaultStyle() : style;

@@ -52,9 +52,9 @@ bool StyleManipulator::process(Element* element)
                     = m_sheet->styleStorage()->undoData( element->rect() );
             for ( int i = 0; i < rawUndoData.count(); ++i )
             {
-                if ( m_style->hasAttribute( rawUndoData[i].second->type() ) ||
-                     rawUndoData[i].second->type() == Style::DefaultStyleKey ||
-                     rawUndoData[i].second->type() == Style::NamedStyleKey )
+//                 if ( m_style->hasAttribute( rawUndoData[i].second->type() ) ||
+//                      rawUndoData[i].second->type() == Style::DefaultStyleKey ||
+//                      rawUndoData[i].second->type() == Style::NamedStyleKey )
                     m_undoData << rawUndoData[i];
             }
         }
@@ -77,10 +77,9 @@ bool StyleManipulator::mainProcessing()
         Style style;
         style.setDefault();
         m_sheet->setStyle( *this, style );
-        QPair<QRectF, QSharedDataPointer<SubStyle> > pair;
-        foreach ( pair, m_undoData )
+        for ( int i = 0; i < m_undoData.count(); ++i )
         {
-            m_sheet->styleStorage()->insert( pair.first.toRect(), pair.second );
+            m_sheet->styleStorage()->insert( m_undoData[i].first.toRect(), m_undoData[i].second );
         }
     }
     return Manipulator::mainProcessing();
@@ -311,9 +310,9 @@ bool StyleApplicator::process( Element* element )
                     = m_sheet->styleStorage()->undoData( element->rect() );
             for ( int i = 0; i < rawUndoData.count(); ++i )
             {
-                if ( m_style.hasAttribute( rawUndoData[i].second->type() ) ||
-                     rawUndoData[i].second->type() == Style::DefaultStyleKey ||
-                     rawUndoData[i].second->type() == Style::NamedStyleKey )
+//                 if ( m_style.hasAttribute( rawUndoData[i].second->type() ) ||
+//                      rawUndoData[i].second->type() == Style::DefaultStyleKey ||
+//                      rawUndoData[i].second->type() == Style::NamedStyleKey )
                     m_undoData << rawUndoData[i];
             }
         }
