@@ -1,0 +1,208 @@
+/* This file is part of the KDE project
+   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+*/
+
+#include "KoEllipseShape.h"
+
+#include <QDebug>
+#include <QPainter>
+#include <math.h>
+
+KoEllipseShape::KoEllipseShape()
+: m_startAngle( 0 )
+, m_endAngle( 0 )    
+, m_kindAngle( M_PI )    
+, m_type( Arc )    
+{
+    m_handles.push_back( QPointF( 100, 50 ) );
+    m_handles.push_back( QPointF( 100, 50 ) );
+    m_handles.push_back( QPointF( 0, 50 ) );
+    QSizeF size( 100, 100 );
+    createPath( size );
+    m_points = *m_subpaths[0];
+    updatePath( size );
+}
+
+KoEllipseShape::~KoEllipseShape()
+{
+}
+
+void KoEllipseShape::resize( const QSizeF &newSize )
+{
+    QSizeF oldSize = size();
+    QMatrix matrix( newSize.width() / oldSize.width(), 0, 0, newSize.height() / oldSize.height(), 0, 0 );
+    m_center = matrix.map( m_center );
+    m_radii = matrix.map( m_radii );
+    KoParameterShape::resize( newSize );
+}
+
+QPointF KoEllipseShape::normalize()
+{
+    QPointF offset( KoParameterShape::normalize() );
+    QMatrix matrix;
+    matrix.translate( -offset.x(), -offset.y() );
+    m_center = matrix.map( m_center );
+    return offset;
+}
+
+void KoEllipseShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
+{
+    Q_UNUSED( modifiers );
+    QPointF p( point );
+
+    QPointF diff( m_center - point );
+    diff.setX( -diff.x() );
+    double angle = 0;
+    if ( diff.x() == 0 )
+    {
+        angle = diff.y() < 0 ? 270 : 90;
+    }
+    else
+    {
+        diff.setY( diff.y() * m_radii.x() / m_radii.y() );
+        angle = atan( diff.y() / diff.x () );
+        if ( angle < 0 )
+            angle = M_PI + angle;
+        if ( diff.y() < 0 )
+            angle += M_PI;
+    }
+
+    switch ( handleId )
+    {
+        case 0:
+            p = QPointF( m_center + QPointF( cos( angle ) * m_radii.x(), -sin( angle ) * m_radii.y() ) );
+            m_startAngle = angle * 180.0 / M_PI;
+            m_handles[handleId] = p;
+            updateKindHandle();
+            break;
+        case 1:
+            p = QPointF( m_center + QPointF( cos( angle ) * m_radii.x(), -sin( angle ) * m_radii.y() ) );
+            m_endAngle = angle * 180.0 / M_PI;
+            m_handles[handleId] = p;
+            updateKindHandle();
+            break;
+        case 2:
+        {
+            qDebug() << "kindAngle:" << m_kindAngle;
+            QList<QPointF> kindHandlePositions;
+            kindHandlePositions.push_back( QPointF( m_center + QPointF( cos( m_kindAngle ) * m_radii.x(), -sin( m_kindAngle ) * m_radii.y() ) ) );
+            kindHandlePositions.push_back( m_center );
+            kindHandlePositions.push_back( ( m_handles[0] + m_handles[1] ) / 2.0 );
+
+            QPointF diff = m_center * 2.0;
+            int handlePos = 0;
+            for ( int i = 0; i < kindHandlePositions.size(); ++i )
+            {
+                QPointF pointDiff( p - kindHandlePositions[i] );
+                if ( i == 0 || qAbs( pointDiff.x() ) + qAbs( pointDiff.y() ) < qAbs( diff.x() ) + qAbs( diff.y() ) )
+                {
+                    diff = pointDiff;
+                    handlePos = i;
+                    qDebug() << i << "diff:" << diff;
+                }
+            }
+            m_handles[handleId] = kindHandlePositions[handlePos];
+            m_type = KoEllipseType( handlePos );
+        } break;
+    }
+}
+
+void KoEllipseShape::updatePath( const QSizeF &size )
+{
+    QPointF startpoint( m_handles[0] );
+
+    QPointF curvePoints[12];
+    double sweepAngle = m_endAngle == m_startAngle ? 360 : m_endAngle - m_startAngle;
+    if ( m_startAngle > m_endAngle )
+    {
+        sweepAngle = 360 - m_startAngle + m_endAngle;
+    }
+    int pointCnt = arcToCurve( m_radii.x(), m_radii.y(), m_startAngle, sweepAngle , startpoint, curvePoints );
+
+    int cp = 0;
+    m_points[cp]->setPoint( startpoint );
+    m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint1 );
+    for ( int i = 0; i < pointCnt; i += 3 )
+    {
+        m_points[cp]->setControlPoint2( curvePoints[i] );
+        m_points[++cp]->setControlPoint1( curvePoints[i+1] ); 
+        m_points[cp]->setPoint( curvePoints[i+2] );
+        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
+    }
+    if ( m_type == Pie )
+    {
+        m_points[++cp]->setPoint( m_center );
+        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint1 );
+        m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
+    }
+    else if ( m_type == Arc && m_startAngle == m_endAngle )
+    {
+        m_points[0]->setControlPoint1( m_points[cp]->controlPoint1() );
+        m_points[0]->setPoint( m_points[cp]->point() );
+        --cp;
+    }
+
+    qDebug() << "KoEllipseShape" << cp;
+    m_subpaths[0]->clear();
+    for ( int i = 0; i <= cp; ++i )
+    {
+        if ( i < cp || ( m_type == Arc && m_startAngle != m_endAngle ) )
+        {
+            m_points[i]->unsetProperty( KoPathPoint::CloseSubpath );
+        }
+        else
+        {
+            m_points[i]->setProperty( KoPathPoint::CloseSubpath );
+        }
+        m_subpaths[0]->push_back( m_points[i] );
+    }
+
+    normalize();
+}
+
+void KoEllipseShape::createPath( const QSizeF &size )
+{
+    m_radii = QPointF( size.width() / 2.0, size.height() / 2.0 );
+    m_center = QPointF( m_radii.x(), m_radii.y() );
+    moveTo( QPointF( size.width(), m_radii.y() ) );
+    arcTo( m_radii.x(), m_radii.y(), 0, 360.0 );
+    lineTo( QPointF( m_radii.x(), m_radii.y() ) );
+    close();
+}
+
+
+void KoEllipseShape::updateKindHandle()
+{
+   m_kindAngle = ( m_startAngle + m_endAngle ) * M_PI / 360.0;
+   if ( m_startAngle > m_endAngle )
+   {
+       m_kindAngle += M_PI;
+   }
+   switch ( m_type )
+   {
+       case Arc:
+           m_handles[2] = m_center + QPointF( cos( m_kindAngle ) * m_radii.x(), -sin( m_kindAngle ) * m_radii.y() );
+           break;
+       case Pie:    
+           m_handles[2] = m_center;
+           break;
+       case Chord:    
+           m_handles[2] = ( m_handles[0] + m_handles[1] ) / 2.0;
+           break;
+   }
+}

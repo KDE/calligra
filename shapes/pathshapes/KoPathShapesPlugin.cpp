@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +24,7 @@
 #include "star/KoStarShapeFactory.h"
 #include "regularpolygon/KoRegularPolygonShapeFactory.h"
 #include "rectangle/KoRectangleShapeFactory.h"
+#include "ellipse/KoEllipseShapeFactory.h"
 
 #include <kgenericfactory.h>
 
@@ -35,6 +37,7 @@ KoPathShapesPlugin::KoPathShapesPlugin( QObject *parent, const QStringList& )
     KoShapeRegistry::instance()->add( new KoStarShapeFactory( parent));
     KoShapeRegistry::instance()->add( new KoRegularPolygonShapeFactory( parent));
     KoShapeRegistry::instance()->add( new KoRectangleShapeFactory( parent));
+    KoShapeRegistry::instance()->add( new KoEllipseShapeFactory( parent));
 }
 
 #include "KoPathShapesPlugin.moc"

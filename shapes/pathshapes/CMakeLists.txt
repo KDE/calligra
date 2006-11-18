@@ -1,6 +1,8 @@
 include_directories( ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} )
 
 set(pathshapes_PART_SRCS
+    ellipse/KoEllipseShape.cpp
+    ellipse/KoEllipseShapeFactory.cpp
     regularpolygon/KoRegularPolygonShape.cpp
     regularpolygon/KoRegularPolygonShapeFactory.cpp
     star/KoStarShape.cpp
