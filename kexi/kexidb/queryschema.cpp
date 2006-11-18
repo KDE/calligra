@@ -38,8 +38,10 @@
 
 using namespace KexiDB;
 
-QueryColumnInfo::QueryColumnInfo(Field *f, QCString _alias, bool _visible)
+QueryColumnInfo::QueryColumnInfo(Field *f, const QCString& _alias, bool _visible, 
+	QueryColumnInfo *foreignColumn)
  : field(f), alias(_alias), visible(_visible), m_indexForVisibleLookupValue(-1)
+ , m_foreignColumn(foreignColumn)
 {
 }
 
@@ -1193,7 +1195,7 @@ void QuerySchema::computeFieldsExpanded()
 						&& (visibleField = lookupTable->field( lookupFieldSchema->visibleColumn()))
 						&& (boundField = lookupTable->field( lookupFieldSchema->boundColumn() )))
 					{
-						lookup_list.append( new QueryColumnInfo(visibleField, QCString(), true/*visible*/) );
+						lookup_list.append( new QueryColumnInfo(visibleField, QCString(), true/*visible*/, ci/*foreign*/) );
 /*
 						//add visibleField to the list of SELECTed fields if it is not yes present there
 						if (!findTableField( visibleField->table()->name()+"."+visibleField->name() )) {
@@ -1229,43 +1231,44 @@ void QuerySchema::computeFieldsExpanded()
 	d->columnInfosByName.clear();
 	d->columnInfosByNameExpanded.clear();
 	i=0;
-	for (QueryColumnInfo::ListIterator it(list); it.current(); ++it, i++) 
+	QueryColumnInfo *ci;
+	for (QueryColumnInfo::ListIterator it(list); (ci = it.current()); ++it, i++) 
 	{
-		d->fieldsExpanded->insert(i, it.current());
-		d->columnsOrderExpanded->insert(it.current(), i);
+		d->fieldsExpanded->insert(i, ci);
+		d->columnsOrderExpanded->insert(ci, i);
 		//remember field by name/alias/table.name if there's no such string yet in d->columnInfosByNameExpanded
-		if (!it.current()->alias.isEmpty()) {
+		if (!ci->alias.isEmpty()) {
 			//store alias and table.alias
-			if (!d->columnInfosByNameExpanded[ it.current()->alias ])
-				d->columnInfosByNameExpanded.insert( it.current()->alias, it.current() );
-			QString tableAndAlias( it.current()->alias );
-			if (it.current()->field->table())
-				tableAndAlias.prepend(it.current()->field->table()->name() + ".");
+			if (!d->columnInfosByNameExpanded[ ci->alias ])
+				d->columnInfosByNameExpanded.insert( ci->alias, ci );
+			QString tableAndAlias( ci->alias );
+			if (ci->field->table())
+				tableAndAlias.prepend(ci->field->table()->name() + ".");
 			if (!d->columnInfosByNameExpanded[ tableAndAlias ])
-				d->columnInfosByNameExpanded.insert( tableAndAlias, it.current() );
+				d->columnInfosByNameExpanded.insert( tableAndAlias, ci );
 			//the same for "unexpanded" list
-			if (columnInfosOutsideAsterisks.contains(it.current())) {
-				if (!d->columnInfosByName[ it.current()->alias ])
-					d->columnInfosByName.insert( it.current()->alias, it.current() );
+			if (columnInfosOutsideAsterisks.contains(ci)) {
+				if (!d->columnInfosByName[ ci->alias ])
+					d->columnInfosByName.insert( ci->alias, ci );
 				if (!d->columnInfosByName[ tableAndAlias ])
-					d->columnInfosByName.insert( tableAndAlias, it.current() );
+					d->columnInfosByName.insert( tableAndAlias, ci );
 			}
 		}
 		else {
 			//no alias: store name and table.name
-			if (!d->columnInfosByNameExpanded[ it.current()->field->name() ])
-				d->columnInfosByNameExpanded.insert( it.current()->field->name(), it.current() );
-			QString tableAndName( it.current()->field->name() );
-			if (it.current()->field->table())
-				tableAndName.prepend(it.current()->field->table()->name() + ".");
+			if (!d->columnInfosByNameExpanded[ ci->field->name() ])
+				d->columnInfosByNameExpanded.insert( ci->field->name(), ci );
+			QString tableAndName( ci->field->name() );
+			if (ci->field->table())
+				tableAndName.prepend(ci->field->table()->name() + ".");
 			if (!d->columnInfosByNameExpanded[ tableAndName ])
-				d->columnInfosByNameExpanded.insert( tableAndName, it.current() );
+				d->columnInfosByNameExpanded.insert( tableAndName, ci );
 			//the same for "unexpanded" list
-			if (columnInfosOutsideAsterisks.contains(it.current())) {
-				if (!d->columnInfosByName[ it.current()->field->name() ])
-					d->columnInfosByName.insert( it.current()->field->name(), it.current() );
+			if (columnInfosOutsideAsterisks.contains(ci)) {
+				if (!d->columnInfosByName[ ci->field->name() ])
+					d->columnInfosByName.insert( ci->field->name(), ci );
 				if (!d->columnInfosByName[ tableAndName ])
-					d->columnInfosByName.insert( tableAndName, it.current() );
+					d->columnInfosByName.insert( tableAndName, ci );
 			}
 		}
 	}
@@ -1274,17 +1277,20 @@ void QuerySchema::computeFieldsExpanded()
 	QDict<uint> lookup_dict; //used to fight duplicates and to update QueryColumnInfo::indexForVisibleLookupValue()
 	                         // (a mapping from table.name string to uint* lookupFieldIndex
 	lookup_dict.setAutoDelete(true);
+#define LOOKUP_COLUMN_KEY(foreignField, field) ( field->table()->name() + "." + field->name() \
+			+ "_" + foreignField->table()->name() + "." + foreignField->name() )
 	i=0;
-	for (QueryColumnInfo::ListIterator it(lookup_list); it.current();)
+	for (QueryColumnInfo::ListIterator it(lookup_list); (ci = it.current());)
 	{
-		QString tableAndFieldName( it.current()->field->table()->name()+"."+it.current()->field->name() );
-		if ( columnInfo( tableAndFieldName )
-			|| lookup_dict[tableAndFieldName] ) {
+		QString key( LOOKUP_COLUMN_KEY(ci->foreignColumn()->field, ci->field) );
+		if ( /* not needed   columnInfo( tableAndFieldName ) || */
+			lookup_dict[ key ]) {
 			// this table.field is already fetched by this query
-			lookup_list.removeRef( it.current() );
+			++it;
+			lookup_list.removeRef( ci );
 		}
 		else {
-			lookup_dict.replace( tableAndFieldName, new uint( i ) );
+			lookup_dict.replace( key, new uint( i ) );
 			++it;
 			i++;
 		}
@@ -1325,8 +1331,8 @@ void QuerySchema::computeFieldsExpanded()
 				&& (uint)lookupFieldSchema->boundColumn() < lookupTable->fieldCount()
 				&& (visibleField = lookupTable->field( lookupFieldSchema->visibleColumn())))
 			{
-				QString visibleTableAndFieldName( visibleField->table()->name()+"."+visibleField->name() );
-				uint *index = lookup_dict[ visibleTableAndFieldName ];
+				QString key( LOOKUP_COLUMN_KEY(ci->field, visibleField) );//visibleTableAndFieldName( visibleField->table()->name()+"."+visibleField->name() );
+				uint *index = lookup_dict[ key ];
 				if (index)
 					ci->setIndexForVisibleLookupValue( d->fieldsExpanded->size() + *index );
 			}

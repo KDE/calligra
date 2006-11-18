@@ -52,7 +52,7 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		typedef QPtrList<QueryColumnInfo> List;
 		typedef QPtrListIterator<QueryColumnInfo> ListIterator;
 
-		QueryColumnInfo(Field *f, QCString _alias, bool _visible);
+		QueryColumnInfo(Field *f, const QCString& _alias, bool _visible, QueryColumnInfo *foreignColumn = 0);
 		~QueryColumnInfo();
 
 		//! \return alias if it is not empty, field's name otherwise.
@@ -77,6 +77,9 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		/*! Sets index of column with visible lookup value within the 'fields expanded' vector. */
 		inline void setIndexForVisibleLookupValue(int index) { m_indexForVisibleLookupValue = index; }
 
+		//! \return non-0 if this column is a visible column for other column
+		QueryColumnInfo *foreignColumn() const { return m_foreignColumn; }
+
 		/*! \return string for debugging purposes. */
 		QString debugString() const;
 
@@ -87,6 +90,9 @@ class KEXI_DB_EXPORT QueryColumnInfo
 		/*! Index of column with visible lookup value within the 'fields expanded' vector.
 		 @see indexForVisibleLookupValue() */
 		int m_indexForVisibleLookupValue;
+
+		//! Non-0 if this column is a visible column for \a m_foreignColumn
+		QueryColumnInfo *m_foreignColumn;
 };
 
 //! @short KexiDB::OrderByColumn provides information about a single query column used for sorting

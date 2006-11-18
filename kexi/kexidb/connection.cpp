@@ -1090,10 +1090,11 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 	}
 
 	QString sql; //final sql string
+	sql.reserve(4096);
 //unused	QString s_from_additional; //additional tables list needed for lookup fields
 	QString s_additional_joins; //additional joins needed for lookup fields
 	QString s_additional_fields; //additional fields to append to the fields list
-	sql.reserve(4096);
+	uint internalUniqueTableAliasNumber = 0; //used to build internalUniqueTableAliases
 	number = 0;
 	for (Field::ListIterator it = querySchema.fieldsIterator(); (f = it.current()); ++it, number++) {
 		if (querySchema.isColumnVisible(number)) {
@@ -1151,15 +1152,18 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 						//add LEFT OUTER JOIN
 						if (!s_additional_joins.isEmpty())
 							s_additional_joins += QString::fromLatin1(" ");
-						s_additional_joins += QString("LEFT OUTER JOIN %1 ON %2.%3=%4.%5")
+						QString internalUniqueTableAlias( QString("__kexidb_") + lookupTable->name() + "_"
+							+ QString::number(internalUniqueTableAliasNumber++) );
+						s_additional_joins += QString("LEFT OUTER JOIN %1 AS %2 ON %3.%4=%5.%6")
 							.arg(escapeIdentifier(lookupTable->name(), options.identifierEscaping))
+							.arg(internalUniqueTableAlias)
 							.arg(escapeIdentifier(f->table()->name(), options.identifierEscaping))
 							.arg(escapeIdentifier(f->name(), options.identifierEscaping))
-							.arg(escapeIdentifier(lookupTable->name(), options.identifierEscaping))
+							.arg(internalUniqueTableAlias)
 							.arg(escapeIdentifier(boundField->name(), options.identifierEscaping));
 
-						//add visibleField to the list of SELECTed fields if it is not yes present there
-						if (!querySchema.findTableField( visibleField->table()->name()+"."+visibleField->name() )) {
+						//add visibleField to the list of SELECTed fields //if it is not yet present there
+//not needed						if (!querySchema.findTableField( visibleField->table()->name()+"."+visibleField->name() )) {
 							if (!querySchema.table( visibleField->table()->name() )) {
 /* not true
 								//table should be added after FROM
@@ -1170,9 +1174,9 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 							}
 							if (!s_additional_fields.isEmpty())
 								s_additional_fields += QString::fromLatin1(", ");
-							s_additional_fields += (escapeIdentifier(visibleField->table()->name(), options.identifierEscaping) + "."
+							s_additional_fields += (internalUniqueTableAlias + "." //escapeIdentifier(visibleField->table()->name(), options.identifierEscaping) + "."
 								+ escapeIdentifier(visibleField->name(), options.identifierEscaping));
-						}
+//not needed						}
 					}
 				}
 			}

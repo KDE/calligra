@@ -154,6 +154,10 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		/*! \overload LookupFieldSchema *TableSchema::lookupFieldSchema( Field& field ) const */
 		LookupFieldSchema *lookupFieldSchema( const QString& fieldName );
 
+		/*! \return list of lookup field schemas for this table. 
+		 The order is the same as the order of fields within the table. */
+		const QPtrVector<LookupFieldSchema>& lookupFieldsList();
+
 	protected:
 		/*! Automatically retrieves table schema via connection. */
 		TableSchema(Connection *conn, const QString & name = QString::null);
