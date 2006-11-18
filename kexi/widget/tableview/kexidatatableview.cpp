@@ -96,7 +96,8 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	}
 
 	if (!m_cursor->isOpened() && !m_cursor->open()) {
-		kDebug() << "KexiDataTableView::setData(): WARNING: cannot open cursor\n--aborting setData()." << endl;
+		kDebug() << "KexiDataTableView::setData(): WARNING: cannot open cursor\n--aborting setData(). \n" <<
+			m_cursor->serverErrorMsg() << endl;
 		m_cursor->debug();
 		clearColumns();
 		return false;

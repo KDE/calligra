@@ -55,6 +55,7 @@ public:
 
 	Field *anyNonPKField;
 	QMap<const Field*, LookupFieldSchema*> lookupFields;
+	QPtrVector<LookupFieldSchema> lookupFieldsList;
 };
 }
 //-------------------------------------
@@ -391,6 +392,7 @@ bool TableSchema::setLookupFieldSchema( const QString& fieldName, LookupFieldSch
 		delete d->lookupFields[f];
 		d->lookupFields.remove( f );
 	}
+	d->lookupFieldsList.clear(); //this will force to rebuid the internal cache
 	return true;
 }
 
@@ -405,6 +407,27 @@ LookupFieldSchema *TableSchema::lookupFieldSchema( const QString& fieldName )
 	if (!f)
 		return 0;
 	return lookupFieldSchema( *f );
+}
+
+const QPtrVector<LookupFieldSchema>& TableSchema::lookupFieldsList()
+{
+	if (d->lookupFields.isEmpty())
+		return d->lookupFieldsList;
+	if (!d->lookupFields.isEmpty() && !d->lookupFieldsList.isEmpty())
+		return d->lookupFieldsList; //already updated
+	//update
+	d->lookupFieldsList.clear();
+	d->lookupFieldsList.resize( d->lookupFields.count() );
+	uint i = 0;
+	Field *f;
+	for (Field::ListIterator it(m_fields); it.current(); ++it) {
+		QMap<const Field*, LookupFieldSchema*>::ConstIterator itMap = d->lookupFields.find( it.current() );
+		if (itMap != d->lookupFields.constEnd()) {
+			d->lookupFieldsList.insert( i, itMap.data() );
+			i++;
+		}
+	}
+	return d->lookupFieldsList;
 }
 
 //--------------------------------------
