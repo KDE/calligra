@@ -55,7 +55,7 @@ public:
 
 	Field *anyNonPKField;
 	QMap<const Field*, LookupFieldSchema*> lookupFields;
-	QPtrVector<LookupFieldSchema> lookupFieldsList;
+	Q3PtrVector<LookupFieldSchema> lookupFieldsList;
 };
 }
 //-------------------------------------
@@ -409,7 +409,7 @@ LookupFieldSchema *TableSchema::lookupFieldSchema( const QString& fieldName )
 	return lookupFieldSchema( *f );
 }
 
-const QPtrVector<LookupFieldSchema>& TableSchema::lookupFieldsList()
+const Q3PtrVector<LookupFieldSchema>& TableSchema::lookupFieldsList()
 {
 	if (d->lookupFields.isEmpty())
 		return d->lookupFieldsList;

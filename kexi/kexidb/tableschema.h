@@ -25,6 +25,7 @@
 #include <q3ptrlist.h>
 #include <qstring.h>
 #include <qpointer.h>
+#include <q3ptrvector.h>
 
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
@@ -156,7 +157,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 
 		/*! \return list of lookup field schemas for this table. 
 		 The order is the same as the order of fields within the table. */
-		const QPtrVector<LookupFieldSchema>& lookupFieldsList();
+		const Q3PtrVector<LookupFieldSchema>& lookupFieldsList();
 
 	protected:
 		/*! Automatically retrieves table schema via connection. */
