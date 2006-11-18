@@ -102,7 +102,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 	if (!query)
 		query = tableOrQuery.table()->query();
 
-	KexiDB::QueryColumnInfo::Vector fields( query->fieldsExpanded() );
+	KexiDB::QueryColumnInfo::Vector fields( query->fieldsExpanded( KexiDB::QuerySchema::WithInternalFields ) );
 	QString buffer;
 
 	KSaveFile *kSaveFile = 0;
@@ -153,7 +153,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 #define CSV_EOLN "\r\n"
 
 	// 0. Cache information
-	const uint fieldsCount = fields.count();
+	const uint fieldsCount = query->fieldsExpanded().count(); //real fields count without internals
 	const QCString delimiter( options.delimiter.left(1).latin1() );
 	const bool hasTextQuote = !options.textQuote.isEmpty();
 	const QString textQuote( options.textQuote.left(1) );
@@ -163,13 +163,25 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 	bool *isDateTime = new bool[fieldsCount]; 
 	bool *isTime = new bool[fieldsCount]; 
 	bool *isBLOB = new bool[fieldsCount]; 
+	uint *visibleFieldIndex = new uint[fieldsCount];
 //	bool isInteger[fieldsCount]; //cache for faster checks
 //	bool isFloatingPoint[fieldsCount]; //cache for faster checks
 	for (uint i=0; i<fieldsCount; i++) {
-		isText[i] = fields[i]->field->isTextType();
-		isDateTime[i] = fields[i]->field->type()==KexiDB::Field::DateTime;
-		isTime[i] = fields[i]->field->type()==KexiDB::Field::Time;
-		isBLOB[i] = fields[i]->field->type()==KexiDB::Field::BLOB;
+		KexiDB::QueryColumnInfo* ci;
+		const int indexForVisibleLookupValue = fields[i]->indexForVisibleLookupValue();
+		if (-1 != indexForVisibleLookupValue) {
+			ci = query->expandedOrInternalField( indexForVisibleLookupValue );
+			visibleFieldIndex[i] = indexForVisibleLookupValue;
+		}
+		else {
+			ci = fields[i];
+			visibleFieldIndex[i] = i;
+		}
+
+		isText[i] = ci->field->isTextType();
+		isDateTime[i] = ci->field->type()==KexiDB::Field::DateTime;
+		isTime[i] = ci->field->type()==KexiDB::Field::Time;
+		isBLOB[i] = ci->field->type()==KexiDB::Field::BLOB;
 //		isInteger[i] = fields[i]->field->isIntegerType() 
 //			|| fields[i]->field->type()==KexiDB::Field::Boolean;
 //		isFloatingPoint[i] = fields[i]->field->isFPNumericType();
@@ -199,32 +211,33 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 	for (cursor->moveFirst(); !cursor->eof() && !cursor->error(); cursor->moveNext()) {
 		const uint realFieldCount = QMIN(cursor->fieldCount(), fieldsCount);
 		for (uint i=0; i<realFieldCount; i++) {
+			const uint real_i = visibleFieldIndex[i];
 			if (i>0)
 				APPEND( delimiter );
-			if (cursor->value(i).isNull())
+			if (cursor->value(real_i).isNull())
 				continue;
-			if (isText[i]) {
+			if (isText[real_i]) {
 				if (hasTextQuote)
-					APPEND( textQuote + QString(cursor->value(i).toString()).replace(textQuote, escapedTextQuote) + textQuote );
+					APPEND( textQuote + QString(cursor->value(real_i).toString()).replace(textQuote, escapedTextQuote) + textQuote );
 				else
-					APPEND( cursor->value(i).toString() );
+					APPEND( cursor->value(real_i).toString() );
 			}
-			else if (isDateTime[i]) { //avoid "T" in ISO DateTime
-				APPEND( cursor->value(i).toDateTime().date().toString(Qt::ISODate)+" "
-					+ cursor->value(i).toDateTime().time().toString(Qt::ISODate) );
+			else if (isDateTime[real_i]) { //avoid "T" in ISO DateTime
+				APPEND( cursor->value(real_i).toDateTime().date().toString(Qt::ISODate)+" "
+					+ cursor->value(real_i).toDateTime().time().toString(Qt::ISODate) );
 			}
-			else if (isTime[i]) { //time is temporarily stored as null date + time...
-				APPEND( cursor->value(i).toTime().toString(Qt::ISODate) );
+			else if (isTime[real_i]) { //time is temporarily stored as null date + time...
+				APPEND( cursor->value(real_i).toTime().toString(Qt::ISODate) );
 			}
-			else if (isBLOB[i]) { //BLOB is escaped in a special way
+			else if (isBLOB[real_i]) { //BLOB is escaped in a special way
 				if (hasTextQuote)
 //! @todo add options to suppport other types from KexiDB::BLOBEscapingType enum...
-					APPEND( textQuote + KexiDB::escapeBLOB(cursor->value(i).toByteArray(), KexiDB::BLOBEscapeHex) + textQuote );
+					APPEND( textQuote + KexiDB::escapeBLOB(cursor->value(real_i).toByteArray(), KexiDB::BLOBEscapeHex) + textQuote );
 				else
-					APPEND( KexiDB::escapeBLOB(cursor->value(i).toByteArray(), KexiDB::BLOBEscapeHex) );
+					APPEND( KexiDB::escapeBLOB(cursor->value(real_i).toByteArray(), KexiDB::BLOBEscapeHex) );
 			}
 			else {//other types
-				APPEND( cursor->value(i).toString() );
+				APPEND( cursor->value(real_i).toString() );
 			}
 		}
 		APPEND(CSV_EOLN);
@@ -245,6 +258,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 	delete [] isDateTime;
 	delete [] isTime;
 	delete [] isBLOB;
+	delete [] visibleFieldIndex;
 
 	if (kSaveFile) {
 		if (!kSaveFile->close()) {

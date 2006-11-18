@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005,2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -124,6 +124,7 @@ KexiSimplePrintingEngine::KexiSimplePrintingEngine(
 {
 	m_cursor = 0;
 	m_data = 0;
+	m_visibleFieldsCount = 0;
 	m_dataOffsets.setAutoDelete(true);
 	clear();
 }
@@ -161,7 +162,8 @@ bool KexiSimplePrintingEngine::init(KexiDB::Connection& conn,
 		m_data = new KexiTableViewData(m_cursor);
 //! @todo primitive: data should be loaded on demand
 		m_data->preloadAllRows();
-		m_fieldsExpanded = KexiDB::QueryColumnInfo::Vector( query->fieldsExpanded() );
+		m_fieldsExpanded = query->fieldsExpanded( KexiDB::QuerySchema::WithInternalFields );
+		m_visibleFieldsCount = m_cursor->query()->fieldsExpanded().count(); //real fields count without internals
 	}
 	else {
 		conn.debugError();
@@ -185,6 +187,7 @@ bool KexiSimplePrintingEngine::done()
 	m_pagesCount = 0;
 	m_paintInitialized = false;
 	m_fieldsExpanded.clear();
+	m_visibleFieldsCount = 0;
 	return result;
 }
 
@@ -295,7 +298,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 		m_maxFieldNameWidth = 0;
 		
 		painter.setFont(m_mainFont);
-		for (uint i=0; i < m_fieldsExpanded.count(); i++) {
+		for (uint i=0; i < m_visibleFieldsCount; i++) {
 			const int newW =
 				painter.fontMetrics().width(m_fieldsExpanded[i]->captionOrAliasOrName()+":");
 //			kdDebug() << "row"<<i<<": "<<m_fieldsExpanded[i]->captionOrAliasOrName()<<" " 
@@ -349,7 +352,8 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 	//--print records
 	KexiDB::RowData row;
 	KexiTableItem *item;
-	const uint count = m_fieldsExpanded.count();
+//	const uint count = m_fieldsExpanded.count();
+//	const uint count = m_cursor->query()->fieldsExpanded().count(); //real fields count without internals
 	const uint rows = m_data->count();
 	const int cellMargin = m_settings->addTableBorders ? 
 		painter.fontMetrics().width("i") : 0;
@@ -359,7 +363,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 
 		//compute height of this record
 		uint newY = y;
-		paintRecord(painter, item, count, cellMargin, newY, paintedRows, false);
+		paintRecord(painter, item, cellMargin, newY, paintedRows, false);
 		if ((int(topMargin + m_pageHeight-(int)newY-m_footerHeight)) < 0 /*(1)*/ && paintedRows > 0/*(2)*/) {
 			//(1) do not break records between pages
 			//(2) but paint at least one record
@@ -373,7 +377,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 		}*/
 //		kdDebug() << " -------- " << y << " / " << m_pageHeight << endl;
 		if (paint)
-			paintRecord(painter, item, count, cellMargin, y, paintedRows, paint);
+			paintRecord(painter, item, cellMargin, y, paintedRows, paint);
 		else
 			y = newY; //speedup
 		paintedRows++;
@@ -386,7 +390,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 }
 
 void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *item, 
-	uint count, int cellMargin, uint &y, uint paintedRows, bool paint)
+	int cellMargin, uint &y, uint paintedRows, bool paint)
 {
 	if (paintedRows>0 && !m_settings->addTableBorders) {//separator
 		if (paint) {
@@ -398,7 +402,7 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *ite
 		}
 	}
 
-	for (uint i=0; i<count; i++) {
+	for (uint i=0; i<m_visibleFieldsCount; i++) {
 //			kdDebug() << "row"<<i<<": "<<row.at(i).toString()<<endl;
 		if (paint) {
 			painter.drawText(
@@ -407,8 +411,19 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *ite
 				+ (m_settings->addTableBorders ? "" : ":"));
 		}
 		QString text;
-		QVariant v(item->at(i));
-		KexiDB::Field::Type ftype = m_fieldsExpanded[i]->field->type();
+//! @todo optimize like in KexiCSVExport::exportData()
+		//get real column and real index to get the visible value
+		KexiDB::QueryColumnInfo* ci;
+		int indexForVisibleLookupValue = m_fieldsExpanded[i]->indexForVisibleLookupValue();
+		if (-1 != indexForVisibleLookupValue && indexForVisibleLookupValue < (int)item->count()/*sanity*/)
+			ci = m_fieldsExpanded[ indexForVisibleLookupValue ];
+		else {
+			ci = m_fieldsExpanded[ i ];
+			indexForVisibleLookupValue = i;
+		}
+
+		QVariant v(item->at( indexForVisibleLookupValue ));
+		KexiDB::Field::Type ftype = ci->field->type();
 		if (v.isNull() || !v.isValid()) {
 			//nothing to do
 		}
@@ -431,7 +446,7 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *ite
 				text = KGlobal::locale()->formatTime(time);
 		}
 //! todo currency, decimal...
-		else if (m_fieldsExpanded[i]->field->isFPNumericType())
+		else if (ci->field->isFPNumericType())
 			text = KGlobal::locale()->formatNumber(v.toDouble());
 		else if (ftype==KexiDB::Field::Boolean)
 			text = v.toBool() 

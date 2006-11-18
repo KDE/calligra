@@ -93,7 +93,7 @@ class KexiSimplePrintingEngine : public QObject
 
 	protected:
 		void paintRecord(QPainter& painter, KexiTableItem *item, 
-			uint count, int cellMargin, uint &y, uint paintedRows, bool paint);
+			int cellMargin, uint &y, uint paintedRows, bool paint);
 
 		const KexiSimplePrintingSettings* m_settings;
 
@@ -115,6 +115,7 @@ class KexiSimplePrintingEngine : public QObject
 		int m_mainLineSpacing;
 		int m_footerHeight;
 		KexiDB::QueryColumnInfo::Vector m_fieldsExpanded;
+		uint m_visibleFieldsCount;
 		uint m_pagesCount;
 		bool m_eof;
 		bool m_paintInitialized; //!< used by paintPage()
