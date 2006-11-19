@@ -23,6 +23,7 @@
 
 #include <QDomElement>
 #include <QLinkedList>
+#include <QSharedData>
 
 #include <koffice_export.h>
 #include <KoXmlReader.h>
@@ -36,6 +37,7 @@ class KoGenStyle;
 namespace KSpread
 {
 class Cell;
+class Sheet;
 class Style;
 
 /**
@@ -73,16 +75,14 @@ public:
  * \class Conditions
  * Manages a set of conditions for a cell.
  */
-class Conditions
+class Conditions : public QSharedData
 {
- public:
-
-  /**
-   * Constructor.  There is no default constructor - you must use this one
-   * with the owner cell as a parameter
-   */
-  Conditions( const Cell * ownerCell );
-  virtual ~Conditions();
+public:
+    /**
+     * Constructor.
+     */
+    explicit Conditions( const Sheet* sheet );
+    virtual ~Conditions();
 
   /**
    * Use this function to see what conditions actually apply currently
@@ -94,7 +94,7 @@ class Conditions
    *
    * @return true if one of the conditions is true, false if not.
    */
-  bool currentCondition( Conditional & condition );
+  bool currentCondition( const Cell* cell, Conditional & condition );
 
   /**
    * Retrieve the current list of conditions we're checking
@@ -128,23 +128,21 @@ class Conditions
    */
   Style * matchedStyle() const { return m_matchedStyle; }
 
-  void checkMatches();
+  void checkMatches( const Cell* cell );
 
   bool operator==( const Conditions& other ) const;
   inline bool operator!=( const Conditions& other ) const { return !operator==( other ); }
 
- private:
-  Conditions() {}
-
+private:
     QString saveOasisConditionValue(Conditional &cond);
     void loadOasisConditionValue( const QString &styleCondition, Conditional &newCondition );
     void loadOasisValidationValue( const QStringList &listVal, Conditional &newCondition );
     void loadOasisCondition( QString &valExpression, Conditional &newCondition );
 
 
-  const Cell * m_cell;
-  QLinkedList<Conditional> m_condList;
-  Style * m_matchedStyle;
+    QLinkedList<Conditional> m_condList;
+    const Sheet * m_sheet;
+    Style * m_matchedStyle;
 };
 
 } // namespace KSpread

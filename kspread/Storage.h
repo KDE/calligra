@@ -69,7 +69,7 @@ template<typename T>
 T Storage<T>::at(const QPoint& point) const
 {
     QList<T> results = m_tree.contains(point);
-    return results.isEmpty() ? QString() : results.last();
+    return results.isEmpty() ? T() : results.last();
 }
 
 template<typename T>
@@ -93,8 +93,6 @@ void Storage<T>::insert(const Region& region, const T& data)
         m_tree.insert((*it)->rect(), data);
     }
 }
-
-typedef Storage<QString> CommentStorage;
 
 } // namespace KSpread
 

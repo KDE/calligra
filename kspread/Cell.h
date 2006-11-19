@@ -201,6 +201,13 @@ public:
     void setComment( const QString& comment, int col = 0, int row = 0 ) const;
 
     /**
+     * \return the conditions associated with this cell
+     */
+    QSharedDataPointer<Conditions> conditions( int col = 0, int row = 0 ) const;
+
+    void setConditions( QSharedDataPointer<Conditions> conditions, int col = 0, int row = 0 ) const;
+
+    /**
      * Returns the value that this cell holds. It could be from the user
      * (i.e. when s/he enters a value) or a result of formula.
      */
@@ -616,7 +623,7 @@ public:
     /**
      * Gets a copy of the list of current conditions
      */
-    QLinkedList<Conditional> conditionList() const;
+    QLinkedList<Conditional> conditionList( int column = 0, int row = 0 ) const;
 
     /**
      * Replace the old set of conditions with a new one
@@ -839,7 +846,6 @@ private:
   bool loadCellData(const KoXmlElement &text, Paste::Operation op);
   bool saveCellResult( QDomDocument& doc, QDomElement& result,
                        QString str );
-  int effAlignX();
 
   /**
    * \ingroup OpenDocument

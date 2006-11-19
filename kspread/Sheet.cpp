@@ -240,7 +240,8 @@ public:
   RowCluster rows;
   ColumnCluster columns;
   StyleStorage* styleStorage;
-  Storage<QString>* commentStorage;
+  CommentStorage* commentStorage;
+  ConditionsStorage* conditionsStorage;
 
   // default objects
   Cell* defaultCell;
@@ -327,7 +328,8 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->columns.setAutoDelete( true );
   d->styleStorage = new StyleStorage( this );
   d->styleStorage->setStyleManager( d->workbook->doc()->styleManager() );
-  d->commentStorage = new Storage<QString>( this );
+  d->commentStorage = new CommentStorage( this );
+  d->conditionsStorage = new ConditionsStorage( this );
 
   d->defaultCell = new Cell( this, 0, 0 );
   d->defaultRowFormat = new RowFormat( this, 0 );
@@ -614,14 +616,27 @@ QString Sheet::comment( int column, int row ) const
 
 void Sheet::setComment( const Region& region, const QString& comment ) const
 {
-    if ( comment.isEmpty() )
-        return;
     d->commentStorage->insert( region, comment );
 }
 
 CommentStorage* Sheet::commentStorage() const
 {
     return d->commentStorage;
+}
+
+QSharedDataPointer<Conditions> Sheet::conditions( int column, int row ) const
+{
+    return d->conditionsStorage->at( QPoint( column, row ) );
+}
+
+void Sheet::setConditions( const Region& region, QSharedDataPointer<Conditions> conditions ) const
+{
+    d->conditionsStorage->insert( region, conditions );
+}
+
+ConditionsStorage* Sheet::conditionsStorage() const
+{
+    return d->conditionsStorage;
 }
 
 void Sheet::setDefaultHeight( double height )
@@ -1718,7 +1733,7 @@ bool Sheet::cellIsEmpty (Cell *c, TestType _type, int col, int row)
         return false;
       break;
     case ConditionalCellAttribute:
-      if ( c->conditionList().count() > 0)
+      if ( c->conditionList( col, row ).count() > 0)
         return false;
       break;
     }
@@ -5268,6 +5283,7 @@ Sheet::~Sheet()
     delete d->defaultColumnFormat;
     delete d->styleStorage;
     delete d->commentStorage;
+    delete d->conditionsStorage;
     delete d->print;
 
     delete d;

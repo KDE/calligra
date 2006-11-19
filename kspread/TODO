@@ -127,6 +127,7 @@ Things not in bugzilla
     - Port the filters.							done
     - Decouple validity and conditions from cells.			----
       (think of the select all feature)
+    - Fix named styles.							----
 
   + Speed up selection.						      1 ----
     (probably improved with Format Storage?)
@@ -166,8 +167,10 @@ Things not in bugzilla
       static members of Region.
     - Move all util_foo() functions to 'Util' namespace and remove	----
       the prefix 'util_'.
-    - Reduce amount of parameters for methods which takes many of
+    - Reduce amount of parameters for methods which takes many of	----
       them, e.g. Sheet::paste(). bools -> QFlags, static variables
+    - Revisit Conditions class.						----
+      Make it an implicitly shared class - like Style.
 
 * GUI
   + Indent and multiline doesn't work together			      2 ----

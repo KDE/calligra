@@ -88,6 +88,9 @@ class EmbeddedKOfficeObject;
 class EmbeddedObject;
 class SheetAdaptor;
 
+typedef Storage<QString> CommentStorage;
+typedef Storage<QSharedDataPointer<Conditions> > ConditionsStorage;
+
 /********************************************************************
  *
  * CellBinding
@@ -788,8 +791,15 @@ public:
      * \return the comment associated with the Cell at \p column , \p row .
      */
     QString comment( int column, int row ) const;
-    void setComment( const Region& region, const QString& style ) const;
+    void setComment( const Region& region, const QString& comment ) const;
     CommentStorage* commentStorage() const;
+
+    /**
+     * \return the conditions associated with the Cell at \p column , \p row .
+     */
+    QSharedDataPointer<Conditions> conditions( int column, int row ) const;
+    void setConditions( const Region& region, QSharedDataPointer<Conditions> conditions ) const;
+    ConditionsStorage* conditionsStorage() const;
 
     /** retrieve a value */
     Value value (int col, int row) const;

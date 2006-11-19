@@ -49,6 +49,7 @@
 
 // KSpread
 #include "Canvas.h"
+#include "Condition.h"
 #include "Doc.h"
 #include "Format.h"
 #include "Selection.h"
@@ -96,6 +97,8 @@ public:
   double  textY;
   double  textWidth;
   double  textHeight;
+
+  QSharedDataPointer<Conditions> conditions;
 };
 
 CellView::CellView( Cell* cell )
@@ -176,13 +179,50 @@ Style CellView::effStyle( Style::Key key ) const
         CellView cellView( cell()->obscuringCells().first() ); // FIXME
         return cellView.effStyle( key );
     }
-#ifndef KSPREAD_NEW_STYLE_STORAGE // conditions
-    if ( d->hasExtra() && d->extra()->conditions
-         && d->extra()->conditions->matchedStyle()
-         && d->extra()->conditions->matchedStyle()->hasAttribute( key ) )
-        return d->extra()->conditions->matchedStyle();
-#endif
+
+    QSharedDataPointer<Conditions> conditions = this->conditions();
+    if ( conditions && conditions->matchedStyle()
+         && conditions->matchedStyle()->hasAttribute( key ) )
+        return *conditions->matchedStyle();
+
     return style();
+}
+
+int CellView::effAlignX()
+{
+    if ( cell()->isPartOfMerged() )
+    {
+        CellView cellView( cell()->obscuringCells().first() ); // FIXME
+        return cellView.effAlignX();
+    }
+    QSharedDataPointer<Conditions> conditions = this->conditions();
+    if ( conditions &&
+         conditions->matchedStyle() &&
+         conditions->matchedStyle()->hasAttribute( Style::HorizontalAlignment ) )
+        return conditions->matchedStyle()->halign();
+
+    int align = style().halign();
+    if ( align == Style::HAlignUndefined )
+    {
+        //numbers should be right-aligned by default, as well as BiDi text
+        if ((cell()->formatType() == Text_format) || cell()->value().isString())
+            align = (cell()->d->strOutText.isRightToLeft()) ? Style::Right : Style::Left;
+        else
+        {
+            Value val = cell()->value();
+            while (val.isArray()) val = val.element (0, 0);
+            if (val.isBoolean() || val.isNumber())
+                align = Style::Right;
+            else
+                align = Style::Left;
+        }
+    }
+    return align;
+}
+
+QSharedDataPointer<Conditions> CellView::conditions() const
+{
+    return d->conditions;
 }
 
 #ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
@@ -1481,20 +1521,20 @@ void CellView::paintText( QPainter& painter,
   // Set the font according to the current zoom.
   painter.setFont( effectiveFont( cellRef.x(), cellRef.y() ) );
 
-  // Check for red font color for negative values.
-  if ( !cell()->d->hasExtra()
-        || !cell()->d->extra()->conditions
-        || !cell()->d->extra()->conditions->matchedStyle() ) {
-    if ( cell()->value().isNumber()
-         && !( cell()->sheet()->getShowFormula()
-         && !( cell()->sheet()->isProtected()
-         && style().hideFormula() ) ) )
+    // Check for red font color for negative values.
+    QSharedDataPointer<Conditions> conditions = this->conditions();
+    if ( !conditions || !conditions->matchedStyle() )
     {
-      double value = cell()->value().asFloat();
-      if ( style().floatColor() == Style::NegRed && value < 0.0 )
-        tmpPen.setColor( Qt::red );
+        if ( cell()->value().isNumber()
+            && !( cell()->sheet()->getShowFormula()
+            && !( cell()->sheet()->isProtected()
+            && style().hideFormula() ) ) )
+        {
+        double value = cell()->value().asFloat();
+        if ( style().floatColor() == Style::NegRed && value < 0.0 )
+            tmpPen.setColor( Qt::red );
+        }
     }
-  }
 
   // Check for blue color, for hyperlink.
   if ( !cell()->link().isEmpty() ) {
@@ -1571,23 +1611,18 @@ void CellView::paintText( QPainter& painter,
 
   double indent = 0.0;
   double offsetCellTooShort = 0.0;
-  int a = cell()->effAlignX();
+  int a = effAlignX();
 
-  // Apply indent if text is align to left not when text is at right or middle.
-  if (  a == Style::Left && !cell()->isEmpty() ) {
-    // FIXME: The following condition should be remade into a call to
-    //        a new convenience function:
-    //   if ( hasConditionStyleFeature( Style::SIndent, true )...
-    //        This should be done throughout the entire file.
-    //
-    if ( cell()->d->hasExtra()
-        && cell()->d->extra()->conditions
-        && cell()->d->extra()->conditions->matchedStyle()
-        && cell()->d->extra()->conditions->matchedStyle()->hasAttribute( Style::Indentation ) )
-      indent = cell()->d->extra()->conditions->matchedStyle()->indentation();
-    else
-      indent = style().indentation();
-  }
+    // Apply indent if text is align to left not when text is at right or middle.
+    if (  a == Style::Left && !cell()->isEmpty() )
+    {
+        // FIXME: The following condition should be remade into a call to
+        //        a new convenience function:
+        //   if ( hasConditionStyleFeature( Style::SIndent, true )...
+        //        This should be done throughout the entire file.
+        //
+        indent = effStyle( Style::Indentation ).indentation();
+    }
 
   // Made an offset, otherwise ### is under red triangle.
   if ( a == Style::Right && !cell()->isEmpty() && cell()->testFlag( Cell::Flag_CellTooShortX ) )
@@ -1599,39 +1634,10 @@ void CellView::paintText( QPainter& painter,
   if ( style().valign() == Style::Bottom && style().underline() )
     offsetFont = fm2.underlinePos() + 1;
 
-  int  tmpAngle;
-  bool tmpMultiRow;
-  bool tmpVerticalText;
-
-  // Check for angled or vertical text.
-  if ( cell()->d->hasExtra()
-      && cell()->d->extra()->conditions
-      && cell()->d->extra()->conditions->matchedStyle() )
-  {
-    Style* matchedStyle = cell()->d->extra()->conditions->matchedStyle();
-
-    if ( matchedStyle->hasAttribute( Style::Angle ) )
-      tmpAngle = matchedStyle->angle();
-    else
-      tmpAngle = style().angle();
-
-    if ( matchedStyle->hasAttribute( Style::VerticalText ) )
-      tmpVerticalText = matchedStyle->verticalText();
-    else
-      tmpVerticalText = style().verticalText();
-
-    if ( matchedStyle->hasAttribute( Style::MultiRow ) )
-      tmpMultiRow = matchedStyle->wrapText();
-    else
-      tmpMultiRow = style().wrapText();
-  }
-  else {
-    tmpAngle        = style().angle();
-    tmpVerticalText = style().verticalText();
-    tmpMultiRow     = style().wrapText();
-  }
-  // force multiple rows on explicitly set line breaks
-  tmpMultiRow = tmpMultiRow || cell()->strOutText().contains( '\n' );
+    int tmpAngle = effStyle( Style::Angle ).angle();
+    bool tmpVerticalText = effStyle( Style::VerticalText ).verticalText();
+    // force multiple rows on explicitly set line breaks
+    bool tmpMultiRow = effStyle( Style::MultiRow ).wrapText() || cell()->strOutText().contains( '\n' );
 
   // Actually paint the text.
   //    There are 4 possible cases:
@@ -1686,7 +1692,7 @@ void CellView::paintText( QPainter& painter,
         pos = i + 1;
       }
 
-      int align = cell()->effAlignX();
+      int align = effAlignX();
       if ( cell()->sheet()->getShowFormula()
           && !( cell()->sheet()->isProtected()
           && style().hideFormula() ) )
@@ -2417,64 +2423,16 @@ QString CellView::textDisplaying( const QFontMetrics& fm )
 //
 QFont CellView::effectiveFont( int _col, int _row ) const
 {
-    QFont tmpFont( style().font() );
-
-    // If there is a matching condition on this cell then set the
-    // according style parameters.
-    if ( cell()->d->hasExtra()
-         && cell()->d->extra()->conditions
-         && cell()->d->extra()->conditions->matchedStyle() )
-    {
-        Style* matchedStyle = cell()->d->extra()->conditions->matchedStyle();
-
-        // Other size?
-        if ( matchedStyle->hasAttribute( Style::FontSize ) )
-            tmpFont.setPointSizeF( matchedStyle->fontSize() );
-
-        // Other attributes?
-        if ( matchedStyle->hasAttribute( Style::FontBold ) )
-        {
-            tmpFont.setBold( matchedStyle->bold() );
-        }
-        if ( matchedStyle->hasAttribute( Style::FontUnderline ) )
-        {
-            tmpFont.setUnderline( matchedStyle->underline() );
-        }
-        if ( matchedStyle->hasAttribute( Style::FontItalic ) )
-        {
-            tmpFont.setItalic( matchedStyle->italic() );
-        }
-        if ( matchedStyle->hasAttribute( Style::FontStrike ) )
-        {
-            tmpFont.setStrikeOut( matchedStyle->strikeOut() );
-        }
-
-        // Other family?
-        if ( matchedStyle->hasAttribute( Style::FontFamily ) )
-            tmpFont.setFamily( matchedStyle->fontFamily() );
-    }
-#if 0
-  else
-  /*
-   * could somebody please explaint why we check for isProtected or isHideFormula here
-  */
-   if ( cell()->d->extra()->conditions
-  && cell()->d->extra()->conditions->currentCondition( condition )
-  && !(cell()->sheet()->getShowFormula()
-       && !( cell()->sheet()->isProtected()
-       && cell()->format()->isHideFormula( cell()->column(), cell()->row() ) ) ) )
-{
-     if ( condition.fontcond )
-       tmpFont = *(condition.fontcond);
-     else
-       tmpFont = condition.style.font();
-}
-#endif
-
-  // Scale the font size according to the current zoom.
-  tmpFont.setPointSizeF( tmpFont.pointSizeF() / cell()->sheet()->doc()->resolutionY() );
-
-  return tmpFont;
+    QFont tmpFont;
+    tmpFont.setPointSizeF( effStyle( Style::FontSize ).fontSize() );
+    tmpFont.setBold( effStyle( Style::FontBold ).bold() );
+    tmpFont.setUnderline( effStyle( Style::FontUnderline ).underline() );
+    tmpFont.setItalic( effStyle( Style::FontItalic ).italic() );
+    tmpFont.setStrikeOut( effStyle( Style::FontStrike ).strikeOut() );
+    tmpFont.setFamily( effStyle( Style::FontFamily ).fontFamily() );
+    // Scale the font size according to the current zoom.
+    tmpFont.setPointSizeF( tmpFont.pointSizeF() / cell()->sheet()->doc()->resolutionY() );
+    return tmpFont;
 }
 
 
@@ -2622,51 +2580,12 @@ void CellView::calculateTextParameters()
 //
 void CellView::textOffset( const QFontMetrics& fontMetrics )
 {
-  int       a;
-  Style::VAlign  ay;
-  int       tmpAngle;
-  bool      tmpVerticalText;
-  bool      tmpMultiRow;
-  const double ascent = fontMetrics.ascent();
-
-  if ( cell()->d->hasExtra()
-       && cell()->d->extra()->conditions
-       && cell()->d->extra()->conditions->matchedStyle() )
-  {
-    const Style* style = cell()->d->extra()->conditions->matchedStyle();
-
-    if ( style->hasAttribute( Style::HorizontalAlignment ) )
-      a = style->halign();
-    else
-      a = this->style().halign();
-
-    if ( style->hasAttribute( Style::VerticalText ) )
-      tmpVerticalText = style->verticalText();
-    else
-      tmpVerticalText = this->style().verticalText();
-
-    if ( style->hasAttribute( Style::MultiRow ) )
-      tmpMultiRow = style->wrapText();
-    else
-      tmpMultiRow = this->style().wrapText();
-
-    if ( style->hasAttribute( Style::VerticalAlignment ) )
-      ay = style->valign();
-    else
-      ay = this->style().valign();
-
-    if ( style->hasAttribute( Style::Angle ) )
-      tmpAngle = style->angle();
-    else
-      tmpAngle = this->style().angle();
-  }
-  else {
-    a               = style().halign();
-    ay              = style().valign();
-    tmpAngle        = style().angle();
-    tmpVerticalText = style().verticalText();
-    tmpMultiRow     = style().wrapText();
-  }
+    const double ascent = fontMetrics.ascent();
+    int hAlign = effStyle( Style::HorizontalAlignment ).halign();
+    Style::VAlign vAlign = effStyle( Style::VerticalAlignment ).valign();
+    int tmpAngle = effStyle( Style::Angle ).angle();
+    bool tmpVerticalText = effStyle( Style::VerticalText ).verticalText();
+    bool tmpMultiRow = effStyle( Style::MultiRow ).wrapText();
 
   RowFormat     *rl = cell()->sheet()->rowFormat( cell()->row() );
   ColumnFormat  *cl = cell()->sheet()->columnFormat( cell()->column() );
@@ -2685,7 +2604,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics )
 
   // Calculate d->textY based on the vertical alignment and a few
   // other inputs.
-  switch( ay )
+  switch( vAlign )
   {
     case Style::Top:
     {
@@ -2820,14 +2739,14 @@ void CellView::textOffset( const QFontMetrics& fontMetrics )
     }
   }
 
-  a = cell()->effAlignX();
+  hAlign = effAlignX();
   if ( cell()->sheet()->getShowFormula() && !( cell()->sheet()->isProtected() && style().hideFormula() ) )
   {
-    a = Style::Left;
+    hAlign = Style::Left;
   }
 
   // Calculate d->textX based on alignment and textwidth.
-  switch ( a ) {
+  switch ( hAlign ) {
     case Style::Left:
       d->textX = 0.5 * effStyle( Style::LeftPen ).leftBorderPen().width() + s_borderSpace;
       break;
@@ -2850,80 +2769,44 @@ void CellView::textOffset( const QFontMetrics& fontMetrics )
 //
 void CellView::textSize( const QFontMetrics& fm )
 {
-  int    tmpAngle;
-  bool   tmpVerticalText;
-  bool   fontUnderlined;
-  Style::VAlign ay;
+    Style::VAlign vAlign = effStyle( Style::VerticalAlignment ).valign();
+    int tmpAngle = effStyle( Style::Angle ).angle();
+    bool tmpVerticalText = effStyle( Style::VerticalText ).verticalText();
+    bool fontUnderlined = effStyle( Style::FontUnderline ).underline();
 
-  // Set tmpAngle, tmpeVerticalText, ay and fontUnderlined according
-  // to if there is a matching condition or not.
-  if ( cell()->d->hasExtra()
-       && cell()->d->extra()->conditions
-       && cell()->d->extra()->conditions->matchedStyle() )
-  {
-    const Style* style = cell()->d->extra()->conditions->matchedStyle();
+    // Set d->textWidth and d->textHeight to correct values according to
+    // if the text is horizontal, vertical or rotated.
+    if ( !tmpVerticalText && !tmpAngle ) {
+        // Horizontal text.
 
-    if ( style->hasAttribute( Style::Angle ) )
-      tmpAngle = style->angle();
-    else
-      tmpAngle = this->style().angle();
+        d->textWidth = ( fm.size( 0, cell()->strOutText() ).width() );
+        int offsetFont = 0;
+        if ( ( vAlign == Style::Bottom ) && fontUnderlined ) {
+            offsetFont = fm.underlinePos() + 1;
+        }
 
-    if ( style->hasAttribute( Style::VerticalText ) )
-      tmpVerticalText = style->verticalText();
-    else
-      tmpVerticalText = this->style().verticalText();
-
-    if ( style->hasAttribute( Style::VerticalAlignment ) )
-      ay = style->valign();
-    else
-      ay = this->style().valign();
-
-    if ( style->hasAttribute( Style::FontUnderline ) )
-      fontUnderlined = style->underline();
-    else
-      fontUnderlined = this->style().underline();
-  }
-  else {
-    // The cell has no condition with a matched style.
-    tmpAngle        = style().angle();
-    tmpVerticalText = style().verticalText();
-    ay              = style().valign();
-    fontUnderlined  = style().underline();
-  }
-
-  // Set d->textWidth and d->textHeight to correct values according to
-  // if the text is horizontal, vertical or rotated.
-  if ( !tmpVerticalText && !tmpAngle ) {
-    // Horizontal text.
-
-    d->textWidth = ( fm.size( 0, cell()->strOutText() ).width() );
-    int offsetFont = 0;
-    if ( ( ay == Style::Bottom ) && fontUnderlined ) {
-      offsetFont = fm.underlinePos() + 1;
+        d->textHeight = ( fm.ascent() + fm.descent() + offsetFont )
+                * ( cell()->strOutText().count( '\n' ) + 1 );
     }
+    else if ( tmpAngle!= 0 ) {
+        // Rotated text.
 
-    d->textHeight = ( fm.ascent() + fm.descent() + offsetFont )
-        * ( cell()->strOutText().count( '\n' ) + 1 );
-  }
-  else if ( tmpAngle!= 0 ) {
-    // Rotated text.
+        const double height = fm.ascent() + fm.descent();
+        const double width  = fm.width( cell()->strOutText() );
+        d->textHeight = height * cos( tmpAngle * M_PI / 180 ) + qAbs( width * sin( tmpAngle * M_PI / 180 ) );
 
-    const double height = fm.ascent() + fm.descent();
-    const double width  = fm.width( cell()->strOutText() );
-    d->textHeight = height * cos( tmpAngle * M_PI / 180 ) + qAbs( width * sin( tmpAngle * M_PI / 180 ) );
+        d->textWidth = qAbs( height * sin( tmpAngle * M_PI / 180 ) ) + width * cos( tmpAngle * M_PI / 180 );
+    }
+    else {
+        // Vertical text.
 
-    d->textWidth = qAbs( height * sin( tmpAngle * M_PI / 180 ) ) + width * cos( tmpAngle * M_PI / 180 );
-  }
-  else {
-    // Vertical text.
+        int width = 0;
+        for ( int i = 0; i < cell()->strOutText().length(); i++ )
+            width = qMax( width, fm.width( cell()->strOutText().at( i ) ) );
 
-    int width = 0;
-    for ( int i = 0; i < cell()->strOutText().length(); i++ )
-      width = qMax( width, fm.width( cell()->strOutText().at( i ) ) );
-
-    d->textWidth  = width;
-    d->textHeight = ( fm.ascent() + fm.descent() ) * cell()->strOutText().length();
-  }
+        d->textWidth  = width;
+        d->textHeight = ( fm.ascent() + fm.descent() ) * cell()->strOutText().length();
+    }
 }
 
 void CellView::breakLines( const QFontMetrics& fontMetrics )
@@ -3011,7 +2894,7 @@ void CellView::obscureHorizontalCells()
   double height = cell()->dblHeight( cell()->row() );
   double width  = cell()->dblWidth( cell()->column() );
 
-  int align = cell()->effAlignX();
+  int align = effAlignX();
 
   // Get indentation.  This is only used for left aligned text.
   double indent = 0.0;

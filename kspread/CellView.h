@@ -51,6 +51,7 @@ class QRectF;
 namespace KSpread
 {
 class Cell;
+class Conditions;
 class Sheet;
 class Style;
 class View;
@@ -88,6 +89,10 @@ public:
     Style style() const;
 
     Style effStyle( Style::Key ) const;
+
+    int effAlignX();
+
+    QSharedDataPointer<Conditions> conditions() const;
 
 #ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     /**

@@ -138,14 +138,32 @@ QString Cell::comment( int col, int row ) const
 
 void Cell::setComment( const QString& comment, int col, int row ) const
 {
-    if ( comment.isEmpty() )
-        return;
     Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
     if ( col == 0 )
         col = this->column();
     if ( row == 0 )
         row = this->row();
     sheet()->setComment( Region(QPoint(col, row)), comment );
+}
+
+QSharedDataPointer<Conditions> Cell::conditions( int col, int row ) const
+{
+    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
+    if ( col == 0 )
+        col = this->column();
+    if ( row == 0 )
+        row = this->row();
+    return sheet()->conditions( col, row );
+}
+
+void Cell::setConditions( QSharedDataPointer<Conditions> conditions, int col, int row ) const
+{
+    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
+    if ( col == 0 )
+        col = this->column();
+    if ( row == 0 )
+        row = this->row();
+    sheet()->setConditions( Region(QPoint(col, row)), conditions );
 }
 
 // Return the sheet that this cell belongs to.
@@ -403,58 +421,20 @@ void Cell::removeValidity()
     d->extra()->validity = 0;
 }
 
-
 void Cell::copyFormat( const Cell* cell )
 {
-    Q_ASSERT(cell);
+    Q_ASSERT( !isDefault() ); // trouble ahead...
+    Q_ASSERT( cell );
 
     d->value.setFormat(cell->d->value.format());
-    // FIXME KSPREAD_NEW_STYLE_STORAGE: not the right place anymore
-    Style style;
-    if ( !cell->isDefault() )
-        style = cell->style();
-    setStyle( style );
+    setStyle( cell->style() );
 
-    /*format()->setAlign( cell->format()->align( _column, _row ) );
-    format()->setAlignY( cell->format()->alignY( _column, _row ) );
-    format()->setTextFont( cell->format()->textFont( _column, _row ) );
-    format()->setTextColor( cell->format()->textColor( _column, _row ) );
-    format()->setBgColor( cell->bgColor( _column, _row) );
-    setLeftBorderPen( cell->leftBorderPen( _column, _row ) );
-    setTopBorderPen( cell->topBorderPen( _column, _row ) );
-    setBottomBorderPen( cell->bottomBorderPen( _column, _row ) );
-    setRightBorderPen( cell->rightBorderPen( _column, _row ) );
-    format()->setFallDiagonalPen( cell->format()->fallDiagonalPen( _column, _row ) );
-    format()->setGoUpDiagonalPen( cell->format()->goUpDiagonalPen( _column, _row ) );
-    format()->setBackGroundBrush( cell->backGroundBrush( _column, _row) );
-    format()->setPrecision( cell->format()->precision( _column, _row ) );
-    format()->setPrefix( cell->format()->prefix( _column, _row ) );
-    format()->setPostfix( cell->format()->postfix( _column, _row ) );
-    format()->setFloatFormat( cell->format()->floatFormat( _column, _row ) );
-    format()->setFloatColor( cell->format()->floatColor( _column, _row ) );
-    format()->setMultiRow( cell->format()->multiRow( _column, _row ) );
-    format()->setVerticalText( cell->format()->verticalText( _column, _row ) );
-    format()->setDontPrintText( cell->format()->getDontprintText(_column, _row ) );
-    format()->setNotProtected( cell->format()->notProtected(_column, _row ) );
-    format()->setHideAll(cell->format()->isHideAll(_column, _row ) );
-    format()->setHideFormula(cell->format()->isHideFormula(_column, _row ) );
-    format()->setIndent( cell->format()->getIndent(_column, _row ) );
-    format()->setAngle( cell->format()->getAngle(_column, _row) );
-    format()->setFormatType( cell->format()->getFormatType(_column, _row) );
-    Style::Currency currency;
-    if ( cell->format()->currencyInfo( currency ) )
-      format()->setCurrency( currency );*/
-
-    QLinkedList<Conditional> conditionList = cell->conditionList();
-    if (d->hasExtra())
-      delete d->extra()->conditions;
-    if ( cell->d->hasExtra() && cell->d->extra()->conditions )
-      setConditionList( conditionList );
-    else
-      if (d->hasExtra())
-        d->extra()->conditions = 0;
-
-    /*format()->setComment( cell->format()->comment( _column, _row ) );*/
+    QSharedDataPointer<Conditions> conditions = cell->conditions();
+    if ( conditions )
+    {
+        QLinkedList<Conditional> conditionList = conditions->conditionList();
+        setConditionList( conditionList );
+    }
 }
 
 void Cell::copyAll( Cell *cell )
@@ -486,11 +466,12 @@ void Cell::defaultStyle()
     style.setDefault();
     setStyle( style );
 
+    QSharedDataPointer<Conditions> conditions;
+    conditions = 0;
+    setConditions( conditions );
+
     if (!d->hasExtra())
         return;
-
-    delete d->extra()->conditions;
-    d->extra()->conditions = 0;
 
     delete d->extra()->validity;
     d->extra()->validity = 0;
@@ -1045,10 +1026,6 @@ void Cell::setOutputText()
 {
   if ( isDefault() ) {
     d->strOutText.clear();
-
-    if ( d->hasExtra() && d->extra()->conditions )
-      d->extra()->conditions->checkMatches();
-
     return;
   }
 
@@ -1067,9 +1044,11 @@ void Cell::setOutputText()
   else
     d->strOutText = sheet()->doc()->formatter()->formatText(this, formatType());
 
+#if 0 // KSPREAD_NEW_STYLE_STORAGE // conditions
   // Check conditions if needed.
   if ( d->hasExtra() && d->extra()->conditions )
-    d->extra()->conditions->checkMatches();
+    d->extra()->conditions->checkMatches( this );
+#endif
 }
 
 
@@ -1189,17 +1168,6 @@ int Cell::defineAlignX()
     }
     return align;
 }
-
-int Cell::effAlignX()
-{
-  if ( d->hasExtra() && d->extra()->conditions
-       && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasAttribute( Style::HorizontalAlignment ) )
-    return d->extra()->conditions->matchedStyle()->halign();
-
-  return defineAlignX();
-}
-
 
 double Cell::dblWidth( int _col ) const
 {
@@ -1832,9 +1800,10 @@ QDomElement Cell::save( QDomDocument& doc,
             formatElement.setAttribute( "rowspan", extraYCells() );
     }
 
-    if ( d->hasExtra() && d->extra()->conditions )
+    QSharedDataPointer<Conditions> conditions = this->conditions();
+    if ( conditions )
     {
-      QDomElement conditionElement = d->extra()->conditions->saveConditions( doc );
+      QDomElement conditionElement = conditions->saveConditions( doc );
 
       if ( !conditionElement.isNull() )
         cell.appendChild( conditionElement );
@@ -2033,11 +2002,12 @@ void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter, int row, int column )
 
 QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles, int col, int row )
 {
-    if ( d->hasExtra() && d->extra()->conditions )
+    QSharedDataPointer<Conditions> conditions = this->conditions();
+    if ( conditions )
     {
         // this has to be an automatic style
         currentCellStyle = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
-        d->extra()->conditions->saveOasisConditions( currentCellStyle );
+        conditions->saveOasisConditions( currentCellStyle );
     }
     return style( col, row ).saveOasis( currentCellStyle, mainStyles );
 }
@@ -2247,11 +2217,10 @@ void Cell::loadOasisConditional( const KoXmlElement* style )
         {
             if ( e.localName() == "map" && e.namespaceURI() == KoXmlNS::style )
             {
-                if ( d->hasExtra() )
-                    delete d->extra()->conditions;
-                d->extra()->conditions = new Conditions( this );
-                d->extra()->conditions->loadOasisConditions( e );
-                d->extra()->conditions->checkMatches();
+                QSharedDataPointer<Conditions> conditions( new Conditions( d->sheet ) );
+                conditions->loadOasisConditions( e );
+                // conditions->checkMatches( this );
+                setConditions( conditions );
                 // break here
                 // Conditions::loadOasisConditions finishes the iteration
                 break;
@@ -3034,20 +3003,15 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     KoXmlElement conditionsElement = cell.namedItem( "condition" ).toElement();
     if ( !conditionsElement.isNull())
     {
-      if (d->hasExtra())
-        delete d->extra()->conditions;
-      d->extra()->conditions = new Conditions( this );
-      d->extra()->conditions->loadConditions( conditionsElement );
-      d->extra()->conditions->checkMatches();
+        QSharedDataPointer<Conditions> conditions( new Conditions( d->sheet ) );
+        conditions->loadConditions( conditionsElement );
+        // conditions->checkMatches( this );
+        setConditions( conditions );
     }
     else if ((pm == Paste::Normal) || (pm == Paste::NoBorder))
     {
       //clear the conditional formatting
-      if (d->hasExtra())
-      {
-        delete d->extra()->conditions;
-        d->extra()->conditions = 0;
-      }
+      setConditions( QSharedDataPointer<Conditions>() );
     }
 
     KoXmlElement validityElement = cell.namedItem( "validity" ).toElement();
@@ -3489,9 +3453,10 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
   if ( !sheet()->isLoading() )
     setCellText( d->strText );
 
+#if 0 // KSPREAD_NEW_STYLE_STORAGE // conditions
   if ( d->hasExtra() && d->extra()->conditions )
-    d->extra()->conditions->checkMatches();
-
+    d->extra()->conditions->checkMatches( this );
+#endif
   return true;
 }
 
@@ -3761,7 +3726,10 @@ bool Cell::operator==( const Cell& other ) const
     return false;
   if ( d->value != other.d->value )
     return false;
+  // FIXME KSPREAD_NEW_STYLE_STORAGE // comparison
   if ( !isDefault() && !other.isDefault() && style() != other.style() )
+    return false;
+  if ( !isDefault() && !other.isDefault() && conditions() != other.conditions() )
     return false;
   if ( d->hasExtra() )
   {
@@ -3773,13 +3741,6 @@ bool Cell::operator==( const Cell& other ) const
       return false;
     if ( d->extra()->mergedYCells != other.d->extra()->mergedYCells )
       return false;
-    if ( d->extra()->conditions )
-    {
-      if ( !other.d->extra()->conditions )
-        return false;
-      if ( *d->extra()->conditions != *other.d->extra()->conditions )
-        return false;
-    }
     if ( d->extra()->validity )
     {
       if ( !other.d->extra()->validity )
@@ -3798,24 +3759,18 @@ QRect Cell::cellRect()
   return QRect(QPoint(d->column, d->row), QPoint(d->column, d->row));
 }
 
-QLinkedList<Conditional> Cell::conditionList() const
+QLinkedList<Conditional> Cell::conditionList( int col, int row ) const
 {
-  if ( !d->hasExtra() || !d->extra()->conditions )
-  {
-    QLinkedList<Conditional> emptyList;
-    return emptyList;
-  }
-
-  return d->extra()->conditions->conditionList();
+    QSharedDataPointer<Conditions> conditions = this->conditions( col, row );
+    return conditions ? conditions->conditionList() : QLinkedList<Conditional>();
 }
 
 void Cell::setConditionList( const QLinkedList<Conditional> & newList )
 {
-  if (d->hasExtra())
-    delete d->extra()->conditions;
-  d->extra()->conditions = new Conditions( this );
-  d->extra()->conditions->setConditionList( newList );
-  d->extra()->conditions->checkMatches();
+    QSharedDataPointer<Conditions> conditions( new Conditions( d->sheet ) );
+    conditions->setConditionList( newList );
+    // conditions->checkMatches( this );
+    setConditions( conditions );
 }
 
 bool Cell::hasError() const

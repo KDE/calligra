@@ -305,10 +305,8 @@ void ConditionalDialog::init()
   QLinkedList<Conditional>::iterator it1;
   QLinkedList<Conditional>::iterator it2;
 
-  Cell * obj = m_view->activeSheet()->cellAt( m_marker.left(),
-                                                     m_marker.top() );
-
-  conditionList = obj->conditionList();
+  Cell * obj = m_view->activeSheet()->cellAt( m_marker.left(), m_marker.top() );
+  conditionList = obj->conditionList( m_marker.left(), m_marker.top() );
   /* this is the list, but only display the conditions common to all selected
      cells*/
 
@@ -317,7 +315,7 @@ void ConditionalDialog::init()
     for ( int y = m_marker.top(); y <= m_marker.bottom(); y++ )
     {
       Cell * obj2 = m_view->activeSheet()->cellAt( x, y );
-      otherList = obj2->conditionList();
+      otherList = obj2->conditionList( x, y );
 
       it1 = conditionList.begin();
       while ( it1 != conditionList.end() )

@@ -92,10 +92,10 @@ bool Conditional::operator==(const Conditional& other) const
   return false;
 }
 
-Conditions::Conditions( const Cell * ownerCell )
-  : m_cell( ownerCell ), m_matchedStyle( 0 )
+Conditions::Conditions( const Sheet* sheet )
+    : m_sheet( sheet )
+    , m_matchedStyle( 0 )
 {
-  Q_ASSERT( ownerCell != 0 );
 }
 
 Conditions::~Conditions()
@@ -103,23 +103,23 @@ Conditions::~Conditions()
   m_condList.clear();
 }
 
-void Conditions::checkMatches()
+void Conditions::checkMatches( const Cell* cell )
 {
   Conditional condition;
 
-  if ( currentCondition( condition ) )
+  if ( currentCondition( cell, condition ) )
     m_matchedStyle = condition.style;
   else
     m_matchedStyle = 0;
 }
 
-bool Conditions::currentCondition( Conditional & condition )
+bool Conditions::currentCondition( const Cell* cell, Conditional & condition )
 {
   /* for now, the first condition that is true is the one that will be used */
 
   QLinkedList<Conditional>::const_iterator it;
-  double value   = m_cell->value().asFloat();
-  QString strVal = m_cell->text();
+  double value   = cell->value().asFloat();
+  QString strVal = cell->text();
 
 
   for ( it = m_condList.begin(); it != m_condList.end(); ++it )
@@ -132,7 +132,7 @@ bool Conditions::currentCondition( Conditional & condition )
 //     kDebug()<<"*it style :"<<(  *it ).style <<endl;
 
 
-    if ( condition.strVal1 && m_cell->value().isNumber() )
+    if ( condition.strVal1 && cell->value().isNumber() )
       continue;
 
     switch ( condition.cond )
@@ -440,7 +440,7 @@ void Conditions::loadOasisConditions( const KoXmlElement & element )
 {
     kDebug(36003) << "Loading conditional styles" << endl;
     KoXmlNode node( element );
-    StyleManager * manager = m_cell->sheet()->doc()->styleManager();
+    StyleManager * manager = m_sheet->doc()->styleManager();
 
     while ( !node.isNull() )
     {
@@ -585,7 +585,7 @@ void Conditions::loadConditions( const KoXmlElement & element )
 {
   Conditional newCondition;
   bool ok;
-  StyleManager * manager = m_cell->sheet()->doc()->styleManager();
+  StyleManager * manager = m_sheet->doc()->styleManager();
 
   KoXmlElement conditionElement;
   forEachElement ( conditionElement, element )
