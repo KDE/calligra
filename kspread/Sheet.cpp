@@ -1699,7 +1699,7 @@ void Sheet::refreshPreference()
 
 
 // helper function for Sheet::areaIsEmpty
-bool Sheet::cellIsEmpty (Cell *c, TestType _type)
+bool Sheet::cellIsEmpty (Cell *c, TestType _type, int col, int row)
 {
   if ( !c->isPartOfMerged())
   {
@@ -1714,7 +1714,7 @@ bool Sheet::cellIsEmpty (Cell *c, TestType _type)
         return false;
       break;
     case Comment:
-      if ( !comment( c->column(), c->row() ).isEmpty())
+      if ( !comment( col, row ).isEmpty())
         return false;
       break;
     case ConditionalCellAttribute:
@@ -1738,7 +1738,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
       for ( int row = range.top(); row <= range.bottom(); ++row ) {
         Cell * c = getFirstCellRow( row );
         while ( c ) {
-          if (!cellIsEmpty (c, _type))
+          if (!cellIsEmpty (c, _type, c->column(), row))
             return false;
           c = getNextCellRight( c->column(), row );
         }
@@ -1749,20 +1749,20 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
       for ( int col = range.left(); col <= range.right(); ++col ) {
         Cell * c = getFirstCellColumn( col );
         while ( c ) {
-          if (!cellIsEmpty (c, _type))
+          if (!cellIsEmpty (c, _type, col, c->row()))
             return false;
           c = getNextCellDown( col, c->row() );
         }
       }
     }
     else {
-      Cell * c;
+      Cell *c;
       int right  = range.right();
       int bottom = range.bottom();
       for ( int x = range.left(); x <= right; ++x )
         for ( int y = range.top(); y <= bottom; ++y ) {
           c = cellAt( x, y );
-          if (!cellIsEmpty (c, _type))
+          if (!cellIsEmpty (c, _type, x, y))
             return false;
         }
     }

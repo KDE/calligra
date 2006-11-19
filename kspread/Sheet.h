@@ -1523,7 +1523,7 @@ protected:
                        bool down = true );
 
     // helper function for areaIsEmpty
-    bool cellIsEmpty (Cell *c, TestType _type);
+    bool cellIsEmpty (Cell *c, TestType _type, int col, int row);
 
     static Sheet* find( int _id );
     static int s_id;
