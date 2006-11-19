@@ -616,7 +616,7 @@ CreateTableStatement :
 CREATE TABLE IDENTIFIER
 {
 	parser->setOperation(Parser::OP_CreateTable);
-	parser->createTable($3->latin1());
+	parser->createTable($3->toLatin1());
 	delete $3;
 }
 '(' ColDefs ')'
@@ -632,7 +632,7 @@ ColDef:
 IDENTIFIER ColType
 {
 	KexiDBDbg << "adding field " << *$1 << endl;
-	field->setName($1->latin1());
+	field->setName($1->toLatin1());
 	parser->table()->addField(field);
 	field = 0;
 	delete $1;
