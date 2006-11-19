@@ -113,6 +113,7 @@ public:
             ptWidth -= m_format.textIndent();
         if(m_newParag && m_block.textList()) // is a listItem
             ptWidth -= listIndent();
+        ptWidth -= m_leftBorderInset + m_rightBorderInset;
         return ptWidth;
     }
 
@@ -125,6 +126,7 @@ public:
             data->setCounterPosition(QPointF(result, y()));
             result += indent;
         }
+        result += m_leftBorderInset;
         return result;
     }
 
@@ -209,6 +211,8 @@ public:
                         m_data->setPosition(m_block.position());
                 }
             }
+            if(!m_newShape) // only add bottom of prev parag if we did not go to a new shape for this parag.
+                m_y += m_bottomBorderInset;
         }
         layout = 0;
         if(! m_block.isValid()) {
@@ -217,6 +221,9 @@ public:
             return false;
         }
         m_format = m_block.blockFormat();
+
+        updateBorders(); // fill the border inset member vars.
+        m_y += m_topBorderInset;
 
         if(!m_newShape && m_format.boolProperty(KoParagraphStyle::BreakBefore)) {
             m_data->setEndPosition(m_block.position()-1);
@@ -363,6 +370,60 @@ public:
             frameNumber++;
     }
 
+    /// called from nextParag to calculate the text-layout insets due to borders.
+    void updateBorders() {
+        m_topBorderInset = m_format.doubleProperty(KoParagraphStyle::TopPadding);
+        m_leftBorderInset = m_format.doubleProperty(KoParagraphStyle::LeftPadding);
+        m_bottomBorderInset = m_format.doubleProperty(KoParagraphStyle::BottomPadding);
+        m_rightBorderInset = m_format.doubleProperty(KoParagraphStyle::RightPadding);
+
+        KoParagraphStyle::BorderStyle borderStyle;
+        borderStyle = static_cast<KoParagraphStyle::BorderStyle> (m_format.intProperty(KoParagraphStyle::LeftBorderStyle));
+        switch(borderStyle) {
+            case KoParagraphStyle::None:
+                break;
+            case KoParagraphStyle::BorderDouble:
+                m_leftBorderInset += m_format.doubleProperty(KoParagraphStyle::LeftBorderSpacing);
+                m_leftBorderInset += m_format.doubleProperty(KoParagraphStyle::LeftInnerBorderWidth);
+                // fall through!
+            default: // has a single line border
+                m_leftBorderInset += m_format.doubleProperty(KoParagraphStyle::LeftBorderWidth);
+        }
+        borderStyle = static_cast<KoParagraphStyle::BorderStyle> (m_format.intProperty(KoParagraphStyle::RightBorderStyle));
+        switch(borderStyle) {
+            case KoParagraphStyle::None:
+                break;
+            case KoParagraphStyle::BorderDouble:
+                m_rightBorderInset += m_format.doubleProperty(KoParagraphStyle::RightBorderSpacing);
+                m_rightBorderInset += m_format.doubleProperty(KoParagraphStyle::RightInnerBorderWidth);
+                // fall through!
+            default: // has a single line border
+                m_rightBorderInset += m_format.doubleProperty(KoParagraphStyle::RightBorderWidth);
+        }
+        borderStyle = static_cast<KoParagraphStyle::BorderStyle> (m_format.intProperty(KoParagraphStyle::TopBorderStyle));
+        switch(borderStyle) {
+            case KoParagraphStyle::None:
+                break;
+            case KoParagraphStyle::BorderDouble:
+                m_topBorderInset += m_format.doubleProperty(KoParagraphStyle::TopBorderSpacing);
+                m_topBorderInset += m_format.doubleProperty(KoParagraphStyle::TopInnerBorderWidth);
+                // fall through!
+            default: // has a single line border
+                m_topBorderInset += m_format.doubleProperty(KoParagraphStyle::TopBorderWidth);
+        }
+        borderStyle = static_cast<KoParagraphStyle::BorderStyle> (m_format.intProperty(KoParagraphStyle::BottomBorderStyle));
+        switch(borderStyle) {
+            case KoParagraphStyle::None:
+                break;
+            case KoParagraphStyle::BorderDouble:
+                m_bottomBorderInset += m_format.doubleProperty(KoParagraphStyle::BottomBorderSpacing);
+                m_bottomBorderInset += m_format.doubleProperty(KoParagraphStyle::BottomInnerBorderWidth);
+                // fall through!
+            default: // has a single line border
+                m_bottomBorderInset += m_format.doubleProperty(KoParagraphStyle::BottomBorderWidth);
+        }
+    }
+
   private:
     KWTextFrameSet *m_frameSet;
     KoStyleManager *m_styleManager;
@@ -373,6 +434,7 @@ public:
     QTextBlock::Iterator m_fragmentIterator;
     KoTextShapeData *m_data;
     bool m_newShape, m_newParag, m_reset;
+    double m_topBorderInset, m_leftBorderInset, m_bottomBorderInset, m_rightBorderInset;
 };
 
 

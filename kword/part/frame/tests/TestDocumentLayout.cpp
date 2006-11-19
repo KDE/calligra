@@ -851,5 +851,89 @@ void TestDocumentLayout::testParagOffset() {
     QCOMPARE(blockLayout->lineAt(0).y(), 140.0);
 }
 
+void TestDocumentLayout::testParagraphBorders() {
+    initForNewTest("Paragraph with Borders\nAnother parag\n");
+    QTextCursor cursor(doc->begin());
+    QTextBlockFormat bf = cursor.blockFormat();
+    bf.setProperty(KoParagraphStyle::LeftBorderStyle, KoParagraphStyle::BorderSolid);
+    bf.setProperty(KoParagraphStyle::TopBorderStyle, KoParagraphStyle::BorderSolid);
+    bf.setProperty(KoParagraphStyle::BottomBorderStyle, KoParagraphStyle::BorderSolid);
+    bf.setProperty(KoParagraphStyle::RightBorderStyle, KoParagraphStyle::BorderSolid);
+    bf.setProperty(KoParagraphStyle::LeftBorderWidth, 8.0);
+    bf.setProperty(KoParagraphStyle::TopBorderWidth, 9.0);
+    bf.setProperty(KoParagraphStyle::BottomBorderWidth, 10.0);
+    bf.setProperty(KoParagraphStyle::RightBorderWidth, 11.0);
+    cursor.setBlockFormat(bf);
+
+    layout->layout();
+    QTextBlock block = doc->begin();
+    blockLayout = block.layout();
+    QCOMPARE(blockLayout->lineAt(0).x(), 8.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 9.0);
+    QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0);
+    block = block.next();
+    blockLayout = block.layout();
+    //qDebug() << blockLayout->lineAt(0).y();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - ( 9.0 + 14.4 + 10)) < ROUNDING); // 14.4 is 12 pt font + 20% linespacing
+
+    // borders + padding create the total inset.
+    bf.setProperty(KoParagraphStyle::LeftPadding, 5.0);
+    bf.setProperty(KoParagraphStyle::RightPadding, 5.0);
+    bf.setProperty(KoParagraphStyle::TopPadding, 5.0);
+    bf.setProperty(KoParagraphStyle::BottomPadding, 5.0);
+    cursor.setBlockFormat(bf);
+
+    layout->layout();
+    block = doc->begin();
+    blockLayout = block.layout();
+    QCOMPARE(blockLayout->lineAt(0).x(), 13.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 14.0);
+    QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0 - 5.0 * 2);
+    block = block.next();
+    blockLayout = block.layout();
+    //qDebug() << blockLayout->lineAt(0).y();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - ( 9.0 + 14.4 + 10 + 5.0 * 2)) < ROUNDING);
+
+    // double borders.  Specify an additional width for each side.
+    bf.setProperty(KoParagraphStyle::LeftBorderStyle, KoParagraphStyle::BorderDouble);
+    bf.setProperty(KoParagraphStyle::TopBorderStyle, KoParagraphStyle::BorderDouble);
+    bf.setProperty(KoParagraphStyle::BottomBorderStyle, KoParagraphStyle::BorderDouble);
+    bf.setProperty(KoParagraphStyle::RightBorderStyle, KoParagraphStyle::BorderDouble);
+    bf.setProperty(KoParagraphStyle::LeftInnerBorderWidth, 2.0);
+    bf.setProperty(KoParagraphStyle::RightInnerBorderWidth, 2.0);
+    bf.setProperty(KoParagraphStyle::BottomInnerBorderWidth, 2.0);
+    bf.setProperty(KoParagraphStyle::TopInnerBorderWidth, 2.0);
+    cursor.setBlockFormat(bf);
+
+    layout->layout();
+    block = doc->begin();
+    blockLayout = block.layout();
+    QCOMPARE(blockLayout->lineAt(0).x(), 15.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 16.0);
+    QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0 - (5.0 + 2.0) * 2);
+    block = block.next();
+    blockLayout = block.layout();
+    //qDebug() << blockLayout->lineAt(0).y();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - ( 9.0 + 14.4 + 10 + (5.0 + 2.0) * 2)) < ROUNDING);
+
+    // and last, make the 2 double border have a blank space in the middle.
+    bf.setProperty(KoParagraphStyle::LeftBorderSpacing, 3.0);
+    bf.setProperty(KoParagraphStyle::RightBorderSpacing, 3.0);
+    bf.setProperty(KoParagraphStyle::BottomBorderSpacing, 3.0);
+    bf.setProperty(KoParagraphStyle::TopBorderSpacing, 3.0);
+    cursor.setBlockFormat(bf);
+
+    layout->layout();
+    block = doc->begin();
+    blockLayout = block.layout();
+    QCOMPARE(blockLayout->lineAt(0).x(), 18.0);
+    QCOMPARE(blockLayout->lineAt(0).y(), 19.0);
+    QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0 - (5.0 + 2.0 + 3.0) * 2);
+    block = block.next();
+    blockLayout = block.layout();
+    //qDebug() << blockLayout->lineAt(0).y();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - ( 9.0 + 14.4 + 10 + (5.0 + 2.0 + 3.0) * 2)) < ROUNDING);
+}
+
 QTEST_MAIN(TestDocumentLayout)
 #include "TestDocumentLayout.moc"
