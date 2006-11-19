@@ -638,12 +638,6 @@ public:
     void setConditionList(const QLinkedList<Conditional> &newList);
 
     /**
-     * return true if value is good
-     * else show a messagebox
-     */
-    bool testValidity() const;
-
-    /**
      * return align X when align is undefined
      */
     int defineAlignX();

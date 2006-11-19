@@ -82,6 +82,9 @@ class Validity : public QSharedData
 {
 public:
   Validity();
+
+  bool testValidity( const Cell* cell ) const;
+
   void operator=( const Validity& other ) const;
   bool operator==( const Validity& other ) const;
   inline bool operator!=( const Validity& other ) const { return !operator==( other ); }

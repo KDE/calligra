@@ -173,7 +173,7 @@ Things not in bugzilla
       Make it an implicitly shared class - like Style.
     - Revisit Validity class.						----
       Make it an implicitly shared class - like Style.
-    - Move Cell::testValidity() into Validity class.			----
+    - Move Cell::testValidity() into Validity class.			done
 
 * GUI
   + Indent and multiline doesn't work together			      2 ----
