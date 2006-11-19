@@ -534,8 +534,11 @@ void KWTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock
     class BorderSection {
       public:
         BorderSection(const QTextBlockFormat &bf, KoParagraphStyle::Property style, KoParagraphStyle::Property width,
-                KoParagraphStyle::Property color) {
+                KoParagraphStyle::Property color, KoParagraphStyle::Property space,
+                KoParagraphStyle::Property width2) {
             hasBorder = true;
+            spacing = 0.0;
+            outerWidth = 0.0;
             KoParagraphStyle::BorderStyle borderStyle;
             borderStyle = static_cast<KoParagraphStyle::BorderStyle> (bf.intProperty(style));
             switch(borderStyle) {
@@ -557,52 +560,87 @@ void KWTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock
             pen.setColor(bf.colorProperty(color));
             pen.setJoinStyle( Qt::MiterJoin );
             pen.setCapStyle(Qt::FlatCap);
+
+            spacing = bf.doubleProperty(space);
+            outerWidth = bf.doubleProperty(width2);
         }
         QPen pen;
         bool hasBorder;
+        double spacing, outerWidth;
     };
 
     QTextBlockFormat blockFormat = block.blockFormat();
     BorderSection left(blockFormat, KoParagraphStyle::LeftBorderStyle,
-            KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor);
+            KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor,
+            KoParagraphStyle::LeftBorderSpacing, KoParagraphStyle::LeftInnerBorderWidth);
     BorderSection right(blockFormat, KoParagraphStyle::RightBorderStyle,
-            KoParagraphStyle::RightBorderWidth, KoParagraphStyle::RightBorderColor);
+            KoParagraphStyle::RightBorderWidth, KoParagraphStyle::RightBorderColor,
+            KoParagraphStyle::RightBorderSpacing, KoParagraphStyle::RightInnerBorderWidth);
     BorderSection top(blockFormat, KoParagraphStyle::TopBorderStyle,
-            KoParagraphStyle::TopBorderWidth, KoParagraphStyle::TopBorderColor);
+            KoParagraphStyle::TopBorderWidth, KoParagraphStyle::TopBorderColor,
+            KoParagraphStyle::TopBorderSpacing, KoParagraphStyle::TopInnerBorderWidth);
     BorderSection bottom(blockFormat, KoParagraphStyle::BottomBorderStyle,
-            KoParagraphStyle::BottomBorderWidth, KoParagraphStyle::BottomBorderColor);
+            KoParagraphStyle::BottomBorderWidth, KoParagraphStyle::BottomBorderColor,
+            KoParagraphStyle::BottomBorderSpacing, KoParagraphStyle::BottomInnerBorderWidth);
 
-    QRectF bounds;
+    QRectF bounds, outerBounds;
     if(left.hasBorder || right.hasBorder || top.hasBorder || bottom.hasBorder) {
         QTextLayout *layout = block.layout();
         bounds = layout->boundingRect();
         bounds.setTopLeft(layout->lineAt(0).position()); // annoying that this is needed...
         // TODO bounds should include the counter
+        outerBounds = bounds;
     }
 
     if(top.hasBorder) {
         painter->setPen(top.pen);
         const double t = bounds.top() - top.pen.widthF() / 2.0; // drawline uses the center
         bounds.setTop( bounds.top() - top.pen.widthF());
+        outerBounds.setTop(bounds.top() - top.spacing - top.outerWidth);
         painter->drawLine(QLineF(bounds.left(), t, bounds.right(), t));
     }
     if(bottom.hasBorder) {
         painter->setPen(bottom.pen);
         const double b = bounds.bottom() + bottom.pen.widthF() / 2.0;
         bounds.setBottom( bounds.bottom() + bottom.pen.widthF() );
+        outerBounds.setBottom(bounds.bottom() + bottom.spacing + bottom.outerWidth);
         painter->drawLine(QLineF(bounds.left(), b, bounds.right() , b));
     }
     if(left.hasBorder) {
         painter->setPen(left.pen);
         const double l = bounds.left() - left.pen.widthF() / 2.0;
         bounds.setLeft( bounds.left() - left.pen.widthF());
+        outerBounds.setLeft(bounds.left() - left.spacing - left.outerWidth);
         painter->drawLine(QLineF(l, bounds.top(), l, bounds.bottom()));
     }
     if(right.hasBorder) {
         painter->setPen(right.pen);
         const double r = bounds.right() + right.pen.widthF() / 2.0;
         bounds.setRight( bounds.right() + right.pen.widthF() );
+        outerBounds.setRight(bounds.right() + right.spacing + right.outerWidth);
         painter->drawLine(QLineF(r, bounds.top(), r, bounds.bottom()));
+    }
+
+    // for those that have a double border...
+    if(top.hasBorder && top.spacing > 0.0) {
+        painter->setPen(top.pen);
+        const double t = outerBounds.top() + top.pen.widthF() / 2.0; // drawline uses the center
+        painter->drawLine(QLineF(outerBounds.left(), t, outerBounds.right(), t));
+    }
+    if(bottom.hasBorder && bottom.spacing > 0.0) {
+        painter->setPen(bottom.pen);
+        const double b = outerBounds.bottom() - bottom.pen.widthF() / 2.0;
+        painter->drawLine(QLineF(outerBounds.left(), b, outerBounds.right() , b));
+    }
+    if(left.hasBorder && left.spacing > 0.0) {
+        painter->setPen(left.pen);
+        const double l = outerBounds.left() + left.pen.widthF() / 2.0;
+        painter->drawLine(QLineF(l, outerBounds.top(), l, outerBounds.bottom()));
+    }
+    if(right.hasBorder && right.spacing > 0.0) {
+        painter->setPen(right.pen);
+        const double r = outerBounds.right() - right.pen.widthF() / 2.0;
+        painter->drawLine(QLineF(r, outerBounds.top(), r, outerBounds.bottom()));
     }
 }
 
