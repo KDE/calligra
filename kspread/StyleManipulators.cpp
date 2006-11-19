@@ -177,7 +177,7 @@ bool BorderColorManipulator::process( Cell* cell )
   const int row = cell->row();
   const int col = cell->column();
 
-  processHelper( cell->format(), col, row );
+  processHelper( cell->style( col, row ), col, row );
   return true;
 }
 

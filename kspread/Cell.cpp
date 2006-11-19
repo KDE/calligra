@@ -126,16 +126,6 @@ void Cell::setStyle( const Style& style, int col, int row ) const
     sheet()->setStyle( Region(QPoint(col, row)), style );
 }
 
-Style Cell::format( int col, int row ) const
-{
-    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
-    if ( col == 0 )
-        col = this->column();
-    if ( row == 0 )
-        row = this->row();
-    return sheet()->style( col, row );
-}
-
 QString Cell::comment( int col, int row ) const
 {
     Q_ASSERT( !isDefault() || (col!=0 && row!=0) );

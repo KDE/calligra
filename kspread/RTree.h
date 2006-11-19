@@ -68,12 +68,12 @@ public:
    * the one of QRect. Intersection or containment for boundary lines or points is
    * not the same, e.g. QRectF(1, 1, 1, 1) intersects QRectF(2, 1, 1, 1) while for
    * QRect it does not. Therefore, this method substracts 0.1 from the width and
-   * height of \p bb .
+   * height of \p rect .
    *
    * @param data
-   * @param bb
+   * @param rect
    */
-  virtual void insert( const QRectF& bb, const T& data );
+  virtual void insert( const QRectF& rect, const T& data );
 
   void remove( const QRectF& rect, const T& data );
 
@@ -102,7 +102,7 @@ public:
    * the one of QRect. Intersection or containment for boundary lines or points is
    * not the same, e.g. QRectF(1, 1, 1, 1) intersects QRectF(2, 1, 1, 1) while for
    * QRect it does not. Therefore, this method substracts 0.1 from the width and
-   * height of \p bb .
+   * height of \p rect .
    *
    * @param rect where the objects have to be in
    *
@@ -234,9 +234,9 @@ RTree<T>::~RTree()
 }
 
 template<typename T>
-void RTree<T>::insert( const QRectF& bb, const T& data )
+void RTree<T>::insert( const QRectF& rect, const T& data )
 {
-  KoRTree<T>::insert( bb.normalized().adjusted(0, 0, -0.1, -0.1), data );
+  KoRTree<T>::insert( rect.normalized().adjusted(0, 0, -0.1, -0.1), data );
 }
 
 template<typename T>
@@ -252,17 +252,17 @@ QList<T> RTree<T>::contains( const QPointF& point ) const
 }
 
 template<typename T>
-QList<T> RTree<T>::contains( const QRectF& bb ) const
+QList<T> RTree<T>::contains( const QRectF& rect ) const
 {
     QMap<int,T> result;
-    dynamic_cast<Node*>(this->m_root)->contains( bb.normalized().adjusted(0, 0, -0.1, -0.1), result );
+    dynamic_cast<Node*>(this->m_root)->contains( rect.normalized().adjusted(0, 0, -0.1, -0.1), result );
     return result.values();
 }
 
 template<typename T>
-QList<T> RTree<T>::intersects( const QRectF& bb ) const
+QList<T> RTree<T>::intersects( const QRectF& rect ) const
 {
-    return KoRTree<T>::intersects( bb.normalized().adjusted(0, 0, -0.1, -0.1) );
+    return KoRTree<T>::intersects( rect.normalized().adjusted(0, 0, -0.1, -0.1) );
 }
 
 template<typename T>

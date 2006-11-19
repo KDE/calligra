@@ -193,14 +193,12 @@ public:
 
     void setStyle( const Style& style, int col = 0, int row = 0 ) const;
 
-    Style format( int col = 0, int row = 0 ) const;
-
     /**
      * \return the comment associated with this cell
      */
     QString comment( int col = 0, int row = 0 ) const;
 
-    void setComment( const QString& style, int col = 0, int row = 0 ) const;
+    void setComment( const QString& comment, int col = 0, int row = 0 ) const;
 
     /**
      * Returns the value that this cell holds. It could be from the user

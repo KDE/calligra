@@ -106,7 +106,7 @@ Things not in bugzilla
     - Speedup the OpenDocument loading by 'collecting' the used area	done
       of each style and insert a minimal set of rectangles into the
       style storage.
-    - Undo of style changes						----
+    - Undo of style changes						done
       This should insert the inverse substyles or something similar.
     - Add insertion/deletion of columns/rows				done
     - Get rid of KSpread::Style::Currency. Use KSpread::Currency.	----
@@ -116,7 +116,7 @@ Things not in bugzilla
       deletion of columns/rows, but store them for undo.
     - Add configure option to choose wether the style of the current	----
       or of the previous (default) column/row is used on insertion.
-    - Replace Cell::format() by Cell::style().				----
+    - Replace Cell::format() by Cell::style().				done
     - Move the StyleManipulator class into the FormatManipulators file	done
       and rename the file to StyleManipulators.
     - Improve the caching of the styles.				----
