@@ -78,7 +78,7 @@ private:
 
 
     // helper method. Gets the color from an element assuming there are 'red','green', 'blue' attributes on it.
-    QColor getColorFrom(const QDomElement &element);
+    QColor colorFrom(const QDomElement &element);
 
 private:
     KWDocument *m_document;

@@ -78,6 +78,8 @@ protected:
 private:
     friend class KWTextFrameSet;
     bool layout(KWTextFrame *frame, double offset);
+    /// paints paragraph specific decorations.
+    void decorateParagraph(QPainter *painter, const QTextBlock &block);
 
 private:
     KWTextFrameSet *m_frameSet;

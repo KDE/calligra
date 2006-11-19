@@ -733,7 +733,7 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
     };
     element = layout.firstChildElement( "LEFTBORDER" );
     if ( !element.isNull() ) {
-        // TODO color
+        style->setLeftBorderColor(colorFrom(element));
         BorderConverter bc(element);
         style->setLeftBorderWidth(bc.width);
         style->setLeftBorderStyle(bc.borderStyle);
@@ -744,7 +744,7 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
     }
     element = layout.firstChildElement( "RIGHTBORDER" );
     if ( !element.isNull() ) {
-        // TODO color
+        style->setRightBorderColor(colorFrom(element));
         BorderConverter bc(element);
         style->setRightBorderWidth(bc.width);
         style->setRightBorderStyle(bc.borderStyle);
@@ -755,7 +755,7 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
     }
     element = layout.firstChildElement( "TOPBORDER" );
     if ( !element.isNull() ) {
-        // TODO color
+        style->setTopBorderColor(colorFrom(element));
         BorderConverter bc(element);
         style->setTopBorderWidth(bc.width);
         style->setTopBorderStyle(bc.borderStyle);
@@ -766,7 +766,7 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
     }
     element = layout.firstChildElement( "BOTTOMBORDER" );
     if ( !element.isNull() ) {
-        // TODO color
+        style->setBottomBorderColor(colorFrom(element));
         BorderConverter bc(element);
         style->setBottomBorderWidth(bc.width);
         style->setBottomBorderStyle(bc.borderStyle);
@@ -783,7 +783,7 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
     // OHEAD, OFOOT, IFIRST, ILEFT
 }
 
-QColor KWDLoader::getColorFrom(const QDomElement &element) {
+QColor KWDLoader::colorFrom(const QDomElement &element) {
     QColor color(element.attribute("red").toInt(),
             element.attribute("green").toInt(),
             element.attribute("blue").toInt());
@@ -794,7 +794,7 @@ void KWDLoader::fill(KoCharacterStyle *style, QDomElement formatElem) {
     QDomElement element = formatElem.firstChildElement( "COLOR" );
     if( !element.isNull() ) {
         QBrush fg = style->foreground();
-        fg.setColor(getColorFrom(element));
+        fg.setColor(colorFrom(element));
         style->setForeground(fg);
     }
     element = formatElem.firstChildElement( "FONT" );

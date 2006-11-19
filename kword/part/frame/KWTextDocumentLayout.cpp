@@ -380,7 +380,7 @@ public:
         KoParagraphStyle::BorderStyle borderStyle;
         borderStyle = static_cast<KoParagraphStyle::BorderStyle> (m_format.intProperty(KoParagraphStyle::LeftBorderStyle));
         switch(borderStyle) {
-            case KoParagraphStyle::None:
+            case KoParagraphStyle::BorderNone:
                 break;
             case KoParagraphStyle::BorderDouble:
                 m_leftBorderInset += m_format.doubleProperty(KoParagraphStyle::LeftBorderSpacing);
@@ -391,7 +391,7 @@ public:
         }
         borderStyle = static_cast<KoParagraphStyle::BorderStyle> (m_format.intProperty(KoParagraphStyle::RightBorderStyle));
         switch(borderStyle) {
-            case KoParagraphStyle::None:
+            case KoParagraphStyle::BorderNone:
                 break;
             case KoParagraphStyle::BorderDouble:
                 m_rightBorderInset += m_format.doubleProperty(KoParagraphStyle::RightBorderSpacing);
@@ -402,7 +402,7 @@ public:
         }
         borderStyle = static_cast<KoParagraphStyle::BorderStyle> (m_format.intProperty(KoParagraphStyle::TopBorderStyle));
         switch(borderStyle) {
-            case KoParagraphStyle::None:
+            case KoParagraphStyle::BorderNone:
                 break;
             case KoParagraphStyle::BorderDouble:
                 m_topBorderInset += m_format.doubleProperty(KoParagraphStyle::TopBorderSpacing);
@@ -413,7 +413,7 @@ public:
         }
         borderStyle = static_cast<KoParagraphStyle::BorderStyle> (m_format.intProperty(KoParagraphStyle::BottomBorderStyle));
         switch(borderStyle) {
-            case KoParagraphStyle::None:
+            case KoParagraphStyle::BorderNone:
                 break;
             case KoParagraphStyle::BorderDouble:
                 m_bottomBorderInset += m_format.doubleProperty(KoParagraphStyle::BottomBorderSpacing);
@@ -483,48 +483,115 @@ void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) 
     while(block.isValid()) {
         QTextLayout *layout = block.layout();
         if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
-            KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
-            QTextList *list = block.textList();
-            if(list && data && data->hasCounterData()) {
-                QTextCharFormat cf;
-                bool filled=false;
-                if(m_styleManager) {
-                    const int id = list->format().intProperty(KoListStyle::CharacterStyleId);
-                    KoCharacterStyle *cs = m_styleManager->characterStyle(id);
-                    if(cs) {
-                        cs->applyStyle(cf);
-                        filled = true;
-                    }
-                }
-                if(! filled) {
-                    // use first char of block.
-                    QTextCursor cursor(block); // I know this is longwinded, but just using the blocks
-                                               // charformat does not work, apparantly
-                    cf = cursor.charFormat();
-                }
-                QFont font(cf.font(), paintDevice());
-                QTextLayout layout(data->counterText(), font, paintDevice());
-                layout.setCacheEnabled(true);
-                QList<QTextLayout::FormatRange> layouts;
-                QTextLayout::FormatRange format;
-                format.start=0;
-                format.length=data->counterText().length();
-                format.format = cf;
-                layouts.append(format);
-                layout.setAdditionalFormats(layouts);
-
-                QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
-                option.setTextDirection(block.blockFormat().layoutDirection());
-                layout.setTextOption(option);
-                layout.beginLayout();
-                layout.createLine();
-                layout.endLayout();
-                QFontMetricsF fm(font);
-                layout.draw(painter, data->counterPosition());
-            }
+            decorateParagraph(painter, block);
             layout->draw(painter, QPointF(0,0));
         }
         block = block.next();
+    }
+}
+void KWTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock &block) {
+    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+    QTextList *list = block.textList();
+    if(list && data && data->hasCounterData()) {
+        QTextCharFormat cf;
+        bool filled=false;
+        if(m_styleManager) {
+            const int id = list->format().intProperty(KoListStyle::CharacterStyleId);
+            KoCharacterStyle *cs = m_styleManager->characterStyle(id);
+            if(cs) {
+                cs->applyStyle(cf);
+                filled = true;
+            }
+        }
+        if(! filled) {
+            // use first char of block.
+            QTextCursor cursor(block); // I know this is longwinded, but just using the blocks
+            // charformat does not work, apparantly
+            cf = cursor.charFormat();
+        }
+        QFont font(cf.font(), paintDevice());
+        QTextLayout layout(data->counterText(), font, paintDevice());
+        layout.setCacheEnabled(true);
+        QList<QTextLayout::FormatRange> layouts;
+        QTextLayout::FormatRange format;
+        format.start=0;
+        format.length=data->counterText().length();
+        format.format = cf;
+        layouts.append(format);
+        layout.setAdditionalFormats(layouts);
+
+        QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
+        option.setTextDirection(block.blockFormat().layoutDirection());
+        layout.setTextOption(option);
+        layout.beginLayout();
+        layout.createLine();
+        layout.endLayout();
+        QFontMetricsF fm(font);
+        layout.draw(painter, data->counterPosition());
+    }
+
+    class BorderSection {
+      public:
+        BorderSection(const QTextBlockFormat &bf, KoParagraphStyle::Property style, KoParagraphStyle::Property width,
+                KoParagraphStyle::Property color) {
+            hasBorder = true;
+            KoParagraphStyle::BorderStyle borderStyle;
+            borderStyle = static_cast<KoParagraphStyle::BorderStyle> (bf.intProperty(style));
+            switch(borderStyle) {
+                case KoParagraphStyle::BorderNone:
+                    hasBorder = false;
+                    return;
+                case KoParagraphStyle::BorderDotted: pen.setStyle(Qt::DotLine); break;
+                case KoParagraphStyle::BorderDashed: pen.setStyle(Qt::DashLine); break;
+                case KoParagraphStyle::BorderDashDotPattern: pen.setStyle(Qt::DashDotLine); break;
+                case KoParagraphStyle::BorderDashDotDotPattern: pen.setStyle(Qt::DashDotDotLine); break;
+                case KoParagraphStyle::BorderGroove: /* TODO */ break;
+                case KoParagraphStyle::BorderRidge: /* TODO */ break;
+                case KoParagraphStyle::BorderInset: /* TODO */ break;
+                case KoParagraphStyle::BorderOutset: /* TODO */ break;
+                default:
+                    pen.setStyle(Qt::SolidLine);
+            }
+            pen.setWidth( bf.doubleProperty(width) );
+            pen.setColor(bf.colorProperty(color));
+        }
+        QPen pen;
+        bool hasBorder;
+    };
+
+    QTextLayout *layout = block.layout();
+    QRectF bounds;
+    QTextBlockFormat blockFormat = block.blockFormat();
+    BorderSection left(blockFormat, KoParagraphStyle::LeftBorderStyle,
+            KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor);
+    if(left.hasBorder) {
+        bounds = layout->boundingRect();
+        painter->setPen(left.pen);
+        painter->drawLine(bounds.topLeft(), bounds.bottomLeft());
+    }
+    BorderSection right(blockFormat, KoParagraphStyle::RightBorderStyle,
+            KoParagraphStyle::RightBorderWidth, KoParagraphStyle::RightBorderColor);
+    if(right.hasBorder) {
+        if(bounds.isEmpty())
+            bounds = layout->boundingRect();
+        painter->setPen(right.pen);
+        painter->drawLine(bounds.topRight(), bounds.bottomRight());
+    }
+    BorderSection top(blockFormat, KoParagraphStyle::TopBorderStyle,
+            KoParagraphStyle::TopBorderWidth, KoParagraphStyle::TopBorderColor);
+    if(right.hasBorder) {
+        if(bounds.isEmpty())
+            bounds = layout->boundingRect();
+        painter->setPen(top.pen);
+        painter->drawLine(bounds.topLeft(), bounds.topRight());
+    }
+    BorderSection bottom(blockFormat, KoParagraphStyle::BottomBorderStyle,
+            KoParagraphStyle::BottomBorderWidth, KoParagraphStyle::BottomBorderColor);
+    if(right.hasBorder) {
+        if(bounds.isEmpty())
+            bounds = layout->boundingRect();
+        painter->setPen(bottom.pen);
+        painter->drawLine(bounds.bottomLeft(), bounds.bottomRight());
     }
 }
 
