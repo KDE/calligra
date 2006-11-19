@@ -33,7 +33,7 @@
 #include <Sheet.h>
 #include <SheetAdaptor.h>
 #include <Map.h>
-
+#include <MapAdaptor.h>
 #include <KoDocumentAdaptor.h>
 #include <KoApplicationAdaptor.h>
 
@@ -76,11 +76,6 @@ KSpread::Doc* ScriptingModule::doc()
 	return d->doc;
 }
 
-KSpread::View* ScriptingModule::view() const
-{
-	return d->view;
-}
-
 void ScriptingModule::setView(KSpread::View* view)
 {
 	d->view = view;
@@ -96,10 +91,14 @@ QObject* ScriptingModule::document()
 	return doc()->findChild< KoDocumentAdaptor* >();
 }
 
+QObject* ScriptingModule::map()
+{
+	return doc()->map()->findChild< KSpread::MapAdaptor* >();
+}
+
 QObject* ScriptingModule::view()
 {
-	//return view()->findChild< KSpread::ViewAdaptor* >();
-	return 0;
+	return d->view ? d->view->findChild< KSpread::ViewAdaptor* >() : 0;
 }
 
 QObject* ScriptingModule::currentSheet()

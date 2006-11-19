@@ -59,22 +59,33 @@ class Functions:
     def addTestFunctions(self):
         """ This method adds a new scripted formula function to KSpread. """
 
+        # create the new formula function "SCRIPT_TEST1"
         functest1 = self.kspread.function("SCRIPT_TEST1")
+        # set the minimal number of parameters
         functest1.minparam = 1
+        # set the maximal number of parameters, -1 means unlimited.
         functest1.maxparam = 1
+        # set the comment displayed at "Help"
         functest1.comment = (
             "The SCRIPT_TEST1() function demonstrates how to use scripting"
             "functions. All it does is to take a string as argument and"
             "return the same string."
         )
+        # set the syntax which is displayed at "Help".
         functest1.syntax = "SCRIPT_TEST1(string)"
+        # set details about the parameter the formula functions expects.
         functest1.addParameter("String", "The string that should be returned")
+        # add an example displayed at "Help".
         functest1.addExample("SCRIPT_TEST1(\"Some string\")")
 
+        # this python function will be called by the KSpread formula function
         def functest1callback(argument):
+            # just return the first argument
             functest1.result = "%s" % argument[0]
+        # connect the python function with the KSpread formula function
         functest1.connect("called(QVariantList)", functest1callback)
 
+        # and finally register the function to be able to use it within KSpread
         functest1.registerFunction()
 
 Functions( self )

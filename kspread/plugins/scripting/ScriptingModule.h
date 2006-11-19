@@ -47,7 +47,6 @@ class ScriptingModule : public QObject
 		virtual ~ScriptingModule();
 
 		KSpread::Doc* doc();
-		KSpread::View* view() const;
 		void setView(KSpread::View* view = 0);
 
 	public slots:
@@ -63,28 +62,35 @@ class ScriptingModule : public QObject
 		QObject* document();
 
 		/**
-		* Returns the \a KSpread::ViewAdaptor object in which
-		* the document is displayed.
+		* Returns the \a KSpread::MapAdaptor object.
+		*/
+		QObject* map();
+
+		/**
+		* Returns the \a KSpread::ViewAdaptor object in which the document is
+		* displayed. Such a ViewAdaptor is only available if the script runs
+		* embedded in a running KSpread instance. If the script runs for example
+		* from within the commandline by using the kross-application there is no
+		* View and therefore no ViewAdaptor and this method returns NULL.
 		*/
 		QObject* view();
 
 		/**
-		* Returns the \a KSpread::SheetAdaptor object currently
-		* active in the document.
+		* Returns the \a KSpread::SheetAdaptor object currently active in the
+		* document.
 		*/
 		QObject* currentSheet();
 
 		/**
-		* Returns a \a KSpread::SheetAdaptor object by name. The
-		* name should be listened in the list returned by the
-		* \a sheetNames() method.
+		* Returns a \a KSpread::SheetAdaptor object by the name \p name . The name
+		* should be listened in the list returned by the \a sheetNames() method.
+		* If there exists no sheet with such a name NULL is returned.
 		*/
 		QObject* sheetByName(const QString& name);
 
 		/**
-		* Returns a list of the sheet names. The \a sheetByName
-		* method could then be used to access the sheet object
-		* who's name is in the list.
+		* Returns a list of the sheet names. The \a sheetByName method could then
+		* be used to access the sheet object who's name is in the list.
 		*/
 		QStringList sheetNames();
 
@@ -95,18 +101,15 @@ class ScriptingModule : public QObject
 		bool hasFunction(const QString& name);
 
 		/**
-		* Returns the \a ScriptingFunction object with the
-		* identifier \p name . The \a ScriptingFunction provides
-		* access to the KSpread formula function functionality.
-		* If there is no \a ScriptingFunction known yet with
-		* the identifier \p name then a new one is created,
-		* remembered and returned.
+		* Returns the \a ScriptingFunction object with the identifier \p name . The
+		* \a ScriptingFunction provides access to the KSpread formula function
+		* functionality. If there is no \a ScriptingFunction known yet with the
+		* identifier \p name then a new one is created, remembered and returned.
 		*/
 		QObject* function(const QString& name);
 
 		/**
-		* Set the document-content to the as argument passed
-		* XML string.
+		* Set the document-content to the as argument passed XML string.
 		*/
 		bool fromXML(const QString& xml);
 
