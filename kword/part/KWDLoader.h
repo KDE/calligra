@@ -31,6 +31,7 @@ class KWTextFrameSet;
 class KoParagraphStyle;
 class KoCharacterStyle;
 class QDomElement;
+class QColor;
 
 /// KWDocument delegates to this class the loading of (old style) KWD documents
 class KWDLoader : public QObject
@@ -74,6 +75,10 @@ private:
 
     // load the document wide styles
     void loadStyleTemplates( const QDomElement &styles );
+
+
+    // helper method. Gets the color from an element assuming there are 'red','green', 'blue' attributes on it.
+    QColor getColorFrom(const QDomElement &element);
 
 private:
     KWDocument *m_document;

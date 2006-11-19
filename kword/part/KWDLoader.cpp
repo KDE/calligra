@@ -543,7 +543,9 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
                 QTextBlock block = cursor.block();
                 paragStyle.applyStyle(block);
             }
-            cursor.insertText( paragraph.firstChildElement("TEXT").text() );
+            //cursor.insertText( paragraph.firstChildElement("TEXT").text() );
+            QString txt =  paragraph.firstChildElement("TEXT").text();
+            cursor.insertText( txt);
 
             // re-apply char format after we added the text
             KoCharacterStyle *style = m_document->styleManager()->characterStyle(
@@ -707,25 +709,92 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
         delete lstyle;
     }
 
+    class BorderConverter {
+      public:
+        BorderConverter(const QDomElement &element) {
+            width = element.attribute("width").toInt(),
+            innerWidth = 0.0;
+            spacing = 0.0;
+            switch(element.attribute("style").toInt()) {
+                case 0: borderStyle = KoParagraphStyle::BorderSolid; break;
+                case 1: borderStyle = KoParagraphStyle::BorderDashed; break;
+                case 2: borderStyle = KoParagraphStyle::BorderDotsPattern; break;
+                case 3: borderStyle = KoParagraphStyle::BorderDashDotPattern; break;
+                case 4: borderStyle = KoParagraphStyle::BorderDashDotDotPattern; break;
+                case 5:
+                    borderStyle = KoParagraphStyle::BorderDouble;
+                    spacing = width;
+                    innerWidth = width;
+                    break;
+            }
+        }
+        double width, innerWidth, spacing;
+        KoParagraphStyle::BorderStyle borderStyle;
+    };
+    element = layout.firstChildElement( "LEFTBORDER" );
+    if ( !element.isNull() ) {
+        // TODO color
+        BorderConverter bc(element);
+        style->setLeftBorderWidth(bc.width);
+        style->setLeftBorderStyle(bc.borderStyle);
+        if(bc.spacing > 0.0) {
+            style->setLeftInnerBorderWidth(bc.innerWidth);
+            style->setLeftBorderSpacing(bc.spacing);
+        }
+    }
+    element = layout.firstChildElement( "RIGHTBORDER" );
+    if ( !element.isNull() ) {
+        // TODO color
+        BorderConverter bc(element);
+        style->setRightBorderWidth(bc.width);
+        style->setRightBorderStyle(bc.borderStyle);
+        if(bc.spacing > 0.0) {
+            style->setRightInnerBorderWidth(bc.innerWidth);
+            style->setRightBorderSpacing(bc.spacing);
+        }
+    }
+    element = layout.firstChildElement( "TOPBORDER" );
+    if ( !element.isNull() ) {
+        // TODO color
+        BorderConverter bc(element);
+        style->setTopBorderWidth(bc.width);
+        style->setTopBorderStyle(bc.borderStyle);
+        if(bc.spacing > 0.0) {
+            style->setTopInnerBorderWidth(bc.innerWidth);
+            style->setTopBorderSpacing(bc.spacing);
+        }
+    }
+    element = layout.firstChildElement( "BOTTOMBORDER" );
+    if ( !element.isNull() ) {
+        // TODO color
+        BorderConverter bc(element);
+        style->setBottomBorderWidth(bc.width);
+        style->setBottomBorderStyle(bc.borderStyle);
+        if(bc.spacing > 0.0) {
+            style->setBottomInnerBorderWidth(bc.innerWidth);
+            style->setBottomBorderSpacing(bc.spacing);
+        }
+    }
+
     // TODO read rest of properties
-    // LEFTBORDER
-    // RIGHTBORDER
-    // TOPBORDER
-    // BOTTOMBORDER
     // FORMAT
     // TABULATOR
 
     // OHEAD, OFOOT, IFIRST, ILEFT
 }
 
+QColor KWDLoader::getColorFrom(const QDomElement &element) {
+    QColor color(element.attribute("red").toInt(),
+            element.attribute("green").toInt(),
+            element.attribute("blue").toInt());
+    return color;
+}
+
 void KWDLoader::fill(KoCharacterStyle *style, QDomElement formatElem) {
     QDomElement element = formatElem.firstChildElement( "COLOR" );
     if( !element.isNull() ) {
-        QColor color(element.attribute("red").toInt(),
-                element.attribute("green").toInt(),
-                element.attribute("blue").toInt());
         QBrush fg = style->foreground();
-        fg.setColor(color);
+        fg.setColor(getColorFrom(element));
         style->setForeground(fg);
     }
     element = formatElem.firstChildElement( "FONT" );
