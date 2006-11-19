@@ -269,7 +269,7 @@ class ValidityManipulator : public Manipulator
 public:
   ValidityManipulator();
 
-  void setValidity( const Validity& validity ) { m_validity = validity; }
+  void setValidity( QSharedDataPointer<Validity> validity ) { m_validity = validity; }
 
 protected:
   virtual bool process( Cell* cell );
@@ -277,8 +277,8 @@ protected:
   virtual QString name() const;
 
 private:
-  Validity m_validity;
-  QHash<int, QHash<int, Validity> > m_undoData;
+  QSharedDataPointer<Validity> m_validity;
+  QHash<int, QHash<int, QSharedDataPointer<Validity> > > m_undoData;
 };
 
 } // namespace KSpread

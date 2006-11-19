@@ -448,9 +448,8 @@ void DlgValidity::changeIndexCond(int _index)
 
 void DlgValidity::init()
 {
-  Cell *c = m_pView->activeSheet()->cellAt( marker.left(), marker.top() );
-  Validity * tmpValidity = c->validity();
-  if(tmpValidity!=0)
+  QSharedDataPointer<Validity> tmpValidity = m_pView->activeSheet()->validity( marker.left(), marker.top() );
+  if ( !!tmpValidity )
   {
     message->setText(tmpValidity->message);
     title->setText(tmpValidity->title);
@@ -584,6 +583,7 @@ void DlgValidity::clearAllPressed()
 
 void DlgValidity::OkPressed()
 {
+    QSharedDataPointer<Validity> validity( new Validity() );
   if( chooseType->currentIndex()==1)
   {
     bool ok;
@@ -657,45 +657,45 @@ void DlgValidity::OkPressed()
 
   if( chooseType->currentIndex()==0)
   {//no validity
-    result.m_restriction=Restriction::None;
-    result.m_action=Action::Stop;
-    result.m_cond=Conditional::Equal;
-    result.message=message->toPlainText();
-    result.title=title->text();
-    result.valMin=0;
-    result.valMax=0;
-    result.timeMin=QTime(0,0,0);
-    result.timeMax=QTime(0,0,0);
-    result.dateMin=QDate(0,0,0);
-    result.dateMax=QDate(0,0,0);
+    validity->m_restriction=Restriction::None;
+    validity->m_action=Action::Stop;
+    validity->m_cond=Conditional::Equal;
+    validity->message=message->toPlainText();
+    validity->title=title->text();
+    validity->valMin=0;
+    validity->valMax=0;
+    validity->timeMin=QTime(0,0,0);
+    validity->timeMax=QTime(0,0,0);
+    validity->dateMin=QDate(0,0,0);
+    validity->dateMax=QDate(0,0,0);
   }
   else
   {
     switch( chooseType->currentIndex())
     {
      case 0:
-      result.m_restriction=Restriction::None;
+      validity->m_restriction=Restriction::None;
       break;
      case 1:
-      result.m_restriction=Restriction::Number;
+      validity->m_restriction=Restriction::Number;
       break;
      case 2:
-      result.m_restriction=Restriction::Integer;
+      validity->m_restriction=Restriction::Integer;
       break;
      case 3:
-      result.m_restriction=Restriction::Text;
+      validity->m_restriction=Restriction::Text;
       break;
      case 4:
-      result.m_restriction=Restriction::Date;
+      validity->m_restriction=Restriction::Date;
       break;
      case 5:
-      result.m_restriction=Restriction::Time;
+      validity->m_restriction=Restriction::Time;
       break;
      case 6:
-      result.m_restriction=Restriction::TextLength;
+      validity->m_restriction=Restriction::TextLength;
       break;
      case 7:
-      result.m_restriction=Restriction::List;
+      validity->m_restriction=Restriction::List;
       break;
 
      default :
@@ -704,13 +704,13 @@ void DlgValidity::OkPressed()
     switch (chooseAction->currentIndex())
     {
      case 0:
-       result.m_action=Action::Stop;
+       validity->m_action=Action::Stop;
       break;
      case 1:
-       result.m_action=Action::Warning;
+       validity->m_action=Action::Warning;
       break;
      case 2:
-       result.m_action=Action::Information;
+       validity->m_action=Action::Information;
       break;
      default :
       break;
@@ -718,82 +718,82 @@ void DlgValidity::OkPressed()
     switch ( choose->currentIndex())
     {
      case 0:
-       result.m_cond=Conditional::Equal;
+       validity->m_cond=Conditional::Equal;
       break;
      case 1:
-       result.m_cond=Conditional::Superior;
+       validity->m_cond=Conditional::Superior;
       break;
      case 2:
-       result.m_cond=Conditional::Inferior;
+       validity->m_cond=Conditional::Inferior;
       break;
      case 3:
-       result.m_cond=Conditional::SuperiorEqual;
+       validity->m_cond=Conditional::SuperiorEqual;
       break;
      case 4:
-       result.m_cond=Conditional::InferiorEqual;
+       validity->m_cond=Conditional::InferiorEqual;
       break;
      case 5:
-       result.m_cond=Conditional::Between;
+       validity->m_cond=Conditional::Between;
       break;
      case 6:
-       result.m_cond=Conditional::Different;
+       validity->m_cond=Conditional::Different;
       break;
      case 7:
-       result.m_cond=Conditional::DifferentTo;
+       validity->m_cond=Conditional::DifferentTo;
       break;
      default :
       break;
     }
-    result.message=message->toPlainText();
-    result.title=title->text();
-    result.valMin=0;
-    result.valMax=0;
-    result.timeMin=QTime(0,0,0);
-    result.timeMax=QTime(0,0,0);
-    result.dateMin=QDate(0,0,0);
-    result.dateMax=QDate(0,0,0);
+    validity->message=message->toPlainText();
+    validity->title=title->text();
+    validity->valMin=0;
+    validity->valMax=0;
+    validity->timeMin=QTime(0,0,0);
+    validity->timeMax=QTime(0,0,0);
+    validity->dateMin=QDate(0,0,0);
+    validity->dateMax=QDate(0,0,0);
 
     if( chooseType->currentIndex()==1)
     {
       if(choose->currentIndex()  <5)
       {
-        result.valMin=val_min->text().toDouble();
+        validity->valMin=val_min->text().toDouble();
       }
       else
       {
-        result.valMin=qMin(val_min->text().toDouble(),val_max->text().toDouble());
-        result.valMax=qMax(val_max->text().toDouble(),val_min->text().toDouble());
+        validity->valMin=qMin(val_min->text().toDouble(),val_max->text().toDouble());
+        validity->valMax=qMax(val_max->text().toDouble(),val_min->text().toDouble());
       }
     }
     else if( chooseType->currentIndex()==2 || chooseType->currentIndex()==6)
     {
       if(choose->currentIndex()  <5)
       {
-        result.valMin=val_min->text().toInt();
+        validity->valMin=val_min->text().toInt();
       }
       else
       {
-        result.valMin=qMin(val_min->text().toInt(),val_max->text().toInt());
-        result.valMax=qMax(val_max->text().toInt(),val_min->text().toInt());
+        validity->valMin=qMin(val_min->text().toInt(),val_max->text().toInt());
+        validity->valMax=qMax(val_max->text().toInt(),val_min->text().toInt());
       }
     }
     else  if(  chooseType->currentIndex()==4)
     {
       if(choose->currentIndex()  <5)
       {
-        result.dateMin=m_pView->doc()->locale()->readDate(val_min->text());
+        validity->dateMin=m_pView->doc()->locale()->readDate(val_min->text());
       }
       else
       {
         if(m_pView->doc()->locale()->readDate(val_min->text())<m_pView->doc()->locale()->readDate(val_max->text()))
         {
-          result.dateMin=m_pView->doc()->locale()->readDate(val_min->text());
-          result.dateMax=m_pView->doc()->locale()->readDate(val_max->text());
+          validity->dateMin=m_pView->doc()->locale()->readDate(val_min->text());
+          validity->dateMax=m_pView->doc()->locale()->readDate(val_max->text());
         }
         else
         {
-          result.dateMin=m_pView->doc()->locale()->readDate(val_max->text());
-          result.dateMax=m_pView->doc()->locale()->readDate(val_min->text());
+          validity->dateMin=m_pView->doc()->locale()->readDate(val_max->text());
+          validity->dateMax=m_pView->doc()->locale()->readDate(val_min->text());
         }
       }
     }
@@ -801,36 +801,36 @@ void DlgValidity::OkPressed()
     {
       if(choose->currentIndex()  <5)
       {
-        result.timeMin=m_pView->doc()->locale()->readTime(val_min->text());
+        validity->timeMin=m_pView->doc()->locale()->readTime(val_min->text());
       }
       else
       {
         if(m_pView->doc()->locale()->readTime(val_min->text())<m_pView->doc()->locale()->readTime(val_max->text()))
         {
-          result.timeMax=m_pView->doc()->locale()->readTime(val_max->text());
-          result.timeMin=m_pView->doc()->locale()->readTime(val_min->text());
+          validity->timeMax=m_pView->doc()->locale()->readTime(val_max->text());
+          validity->timeMin=m_pView->doc()->locale()->readTime(val_min->text());
         }
         else
         {
-          result.timeMax=m_pView->doc()->locale()->readTime(val_min->text());
-          result.timeMin=m_pView->doc()->locale()->readTime(val_max->text());
+          validity->timeMax=m_pView->doc()->locale()->readTime(val_min->text());
+          validity->timeMin=m_pView->doc()->locale()->readTime(val_max->text());
         }
       }
     }
     else if ( chooseType->currentIndex()==7 )
     {
-      result.listValidity = validityList->toPlainText().split( '\n', QString::SkipEmptyParts );
+      validity->listValidity = validityList->toPlainText().split( '\n', QString::SkipEmptyParts );
     }
   }
-  result.displayMessage = displayMessage->isChecked();
-  result.allowEmptyCell = allowEmptyCell->isChecked();
-  result.displayValidationInformation = displayHelp->isChecked();
-  result.messageInfo= messageHelp->toPlainText();
-  result.titleInfo = titleHelp->text();
+  validity->displayMessage = displayMessage->isChecked();
+  validity->allowEmptyCell = allowEmptyCell->isChecked();
+  validity->displayValidationInformation = displayHelp->isChecked();
+  validity->messageInfo= messageHelp->toPlainText();
+  validity->titleInfo = titleHelp->text();
 
   ValidityManipulator* manipulator = new ValidityManipulator();
   manipulator->setSheet( m_pView->activeSheet() );
-  manipulator->setValidity( result );
+  manipulator->setValidity( validity );
   manipulator->add( *m_pView->selectionInfo() );
   manipulator->execute();
 

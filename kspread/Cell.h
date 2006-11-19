@@ -208,6 +208,13 @@ public:
     void setConditions( QSharedDataPointer<Conditions> conditions, int col = 0, int row = 0 ) const;
 
     /**
+     * \return the conditions associated with this cell
+     */
+    QSharedDataPointer<Validity> validity( int col = 0, int row = 0 ) const;
+
+    void setValidity( QSharedDataPointer<Validity> validity, int col = 0, int row = 0 ) const;
+
+    /**
      * Returns the value that this cell holds. It could be from the user
      * (i.e. when s/he enters a value) or a result of formula.
      */
@@ -629,10 +636,6 @@ public:
      * Replace the old set of conditions with a new one
      */
     void setConditionList(const QLinkedList<Conditional> &newList);
-
-    Validity* validity( bool create = false );
-
-    void removeValidity();
 
     /**
      * return true if value is good

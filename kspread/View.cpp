@@ -5835,7 +5835,7 @@ void View::clearValiditySelection()
 
   ValidityManipulator* manipulator = new ValidityManipulator();
   manipulator->setSheet( d->activeSheet );
-  manipulator->setValidity( Validity() ); // empty object removes validity
+  manipulator->setValidity( QSharedDataPointer<Validity>() ); // empty object removes validity
   manipulator->add( *selectionInfo() );
   manipulator->execute();
 }
@@ -6280,7 +6280,8 @@ void View::createStyleFromCell()
         break;
     }
 
-    CustomStyle * style = new CustomStyle( &cell->style(), styleName );
+    const Style cellStyle = cell->style();
+    CustomStyle * style = new CustomStyle( &cellStyle, styleName );
 
     doc()->styleManager()->m_styles[ styleName ] = style;
     cell->setStyle( *style );

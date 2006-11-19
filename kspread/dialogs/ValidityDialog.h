@@ -42,33 +42,34 @@ class View;
 
 class DlgValidity : public KPageDialog
 {
-  Q_OBJECT
+    Q_OBJECT
+
 public:
-DlgValidity(View* parent, const char* name ,const QRect &_marker );
-void init();
+    DlgValidity(View* parent, const char* name ,const QRect &_marker );
+    void init();
 
 public slots:
- void OkPressed();
- void clearAllPressed();
- void changeIndexCond(int);
- void changeIndexType(int);
+    void OkPressed();
+    void clearAllPressed();
+    void changeIndexCond(int);
+    void changeIndexType(int);
+
 protected:
     void displayOrNotListOfValidity( bool _displayList);
 
-  View* m_pView;
-  QRect  marker;
-  QLineEdit *val_max;
-  QLineEdit *val_min;
-  QLabel *edit1;
-  QLabel *edit2;
-  QComboBox *choose;
-  QComboBox *chooseAction;
-  QComboBox *chooseType;
-  QLineEdit * title;
-  QTextEdit *message;
-  Validity result;
-  QCheckBox *displayMessage;
-  QCheckBox *allowEmptyCell;
+    View* m_pView;
+    QRect  marker;
+    QLineEdit *val_max;
+    QLineEdit *val_min;
+    QLabel *edit1;
+    QLabel *edit2;
+    QComboBox *choose;
+    QComboBox *chooseAction;
+    QComboBox *chooseType;
+    QLineEdit * title;
+    QTextEdit *message;
+    QCheckBox *displayMessage;
+    QCheckBox *allowEmptyCell;
     QCheckBox *displayHelp;
     QTextEdit *messageHelp;
     QLineEdit *titleHelp;

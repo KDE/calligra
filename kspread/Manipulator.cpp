@@ -656,30 +656,30 @@ bool ValidityManipulator::process( Cell* cell )
     // create undo
     if ( m_firstrun )
     {
-      if ( Validity* validity = cell->validity() )
+      if ( QSharedDataPointer<Validity> validity = cell->validity() )
       {
-        m_undoData[cell->column()][cell->row()] = *validity;
+        m_undoData[cell->column()][cell->row()] = validity;
       }
     }
 
-    if ( m_validity.m_restriction == Restriction::None )
+    if ( m_validity->m_restriction == Restriction::None )
     {
-      cell->removeValidity();
+      cell->setValidity( QSharedDataPointer<Validity>() );
     }
     else
     {
-      *cell->validity(true) = m_validity;
+      cell->setValidity( m_validity );
     }
   }
   else // m_reverse
   {
-    if ( m_undoData[cell->column()][cell->row()].m_restriction == Restriction::None )
+    if ( m_undoData[cell->column()][cell->row()]->m_restriction == Restriction::None )
     {
-      cell->removeValidity();
+      cell->setValidity( QSharedDataPointer<Validity>() );
     }
     else
     {
-      *cell->validity(true) = m_undoData[cell->column()][cell->row()];
+      cell->setValidity( m_undoData[cell->column()][cell->row()] );
     }
   }
   return true;
@@ -687,12 +687,12 @@ bool ValidityManipulator::process( Cell* cell )
 
 QString ValidityManipulator::name() const
 {
-  if ( m_validity.m_restriction == Restriction::None )
+  if ( m_validity->m_restriction == Restriction::None )
   {
-    return i18n( "Remove Validity" );
+    return i18n( "Remove Validity Check" );
   }
   else
   {
-    return i18n( "Add Validity" );
+    return i18n( "Add Validity Check" );
   }
 }

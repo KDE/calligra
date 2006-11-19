@@ -242,6 +242,7 @@ public:
   StyleStorage* styleStorage;
   CommentStorage* commentStorage;
   ConditionsStorage* conditionsStorage;
+  ValidityStorage* validityStorage;
 
   // default objects
   Cell* defaultCell;
@@ -330,6 +331,7 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->styleStorage->setStyleManager( d->workbook->doc()->styleManager() );
   d->commentStorage = new CommentStorage( this );
   d->conditionsStorage = new ConditionsStorage( this );
+  d->validityStorage = new ValidityStorage( this );
 
   d->defaultCell = new Cell( this, 0, 0 );
   d->defaultRowFormat = new RowFormat( this, 0 );
@@ -637,6 +639,21 @@ void Sheet::setConditions( const Region& region, QSharedDataPointer<Conditions> 
 ConditionsStorage* Sheet::conditionsStorage() const
 {
     return d->conditionsStorage;
+}
+
+QSharedDataPointer<KSpread::Validity> Sheet::validity( int column, int row ) const
+{
+    return d->validityStorage->at( QPoint( column, row ) );
+}
+
+void Sheet::setValidity( const Region& region, QSharedDataPointer<KSpread::Validity> validity ) const
+{
+    d->validityStorage->insert( region, validity );
+}
+
+ValidityStorage* Sheet::validityStorage() const
+{
+    return d->validityStorage;
 }
 
 void Sheet::setDefaultHeight( double height )
@@ -5284,6 +5301,7 @@ Sheet::~Sheet()
     delete d->styleStorage;
     delete d->commentStorage;
     delete d->conditionsStorage;
+    delete d->validityStorage;
     delete d->print;
 
     delete d;

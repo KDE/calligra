@@ -36,6 +36,7 @@
 
 // Qt
 #include <QDate>
+#include <QSharedData>
 #include <QStringList>
 #include <QTime>
 
@@ -77,10 +78,11 @@ namespace Action
   };
 }
 
-class Validity
+class Validity : public QSharedData
 {
 public:
   Validity();
+  void operator=( const Validity& other ) const;
   bool operator==( const Validity& other ) const;
   inline bool operator!=( const Validity& other ) const { return !operator==( other ); }
 

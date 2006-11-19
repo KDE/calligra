@@ -171,6 +171,9 @@ Things not in bugzilla
       them, e.g. Sheet::paste(). bools -> QFlags, static variables
     - Revisit Conditions class.						----
       Make it an implicitly shared class - like Style.
+    - Revisit Validity class.						----
+      Make it an implicitly shared class - like Style.
+    - Move Cell::testValidity() into Validity class.			----
 
 * GUI
   + Indent and multiline doesn't work together			      2 ----

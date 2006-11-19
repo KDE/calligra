@@ -23,6 +23,7 @@
 using namespace KSpread;
 
 Validity::Validity()
+    : QSharedData()
 {
   valMin = 0.0;
   valMax = 0.0;
@@ -32,6 +33,12 @@ Validity::Validity()
   displayMessage = true;
   allowEmptyCell = false;
   displayValidationInformation = false;
+}
+
+void Validity::operator=( const Validity& other ) const
+{
+    // FIXME KSPREAD_NEW_STYLE_STORAGE
+    return;
 }
 
 bool Validity::operator==( const Validity& other ) const

@@ -102,10 +102,6 @@ public:
   //                  is important?
   QList<Cell*> obscuringCells;
 
-  // If non-0, contains a pointer to a condition or a validity test.
-  Conditions  *conditions;
-  Validity    *validity;
-
 private:
   // Don't allow implicit copy.
   Extra& operator=( const Extra& );
@@ -191,9 +187,6 @@ public:
   {
     if ( !cellExtra ) {
       cellExtra = new Extra;
-      cellExtra->conditions   = 0;
-      cellExtra->validity     = 0;
-
       cellExtra->mergedXCells = 0;
       cellExtra->mergedYCells = 0;
       cellExtra->extraXCells  = 0;
