@@ -489,6 +489,7 @@ void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) 
         block = block.next();
     }
 }
+
 void KWTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock &block) {
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
     QTextList *list = block.textList();
@@ -552,46 +553,56 @@ void KWTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock
                 default:
                     pen.setStyle(Qt::SolidLine);
             }
-            pen.setWidth( bf.doubleProperty(width) );
+            pen.setWidthF( bf.doubleProperty(width) ); // TODO check if this does not need any conversion
             pen.setColor(bf.colorProperty(color));
+            pen.setJoinStyle( Qt::MiterJoin );
+            pen.setCapStyle(Qt::FlatCap);
         }
         QPen pen;
         bool hasBorder;
     };
 
-    QTextLayout *layout = block.layout();
-    QRectF bounds;
     QTextBlockFormat blockFormat = block.blockFormat();
     BorderSection left(blockFormat, KoParagraphStyle::LeftBorderStyle,
             KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor);
-    if(left.hasBorder) {
-        bounds = layout->boundingRect();
-        painter->setPen(left.pen);
-        painter->drawLine(bounds.topLeft(), bounds.bottomLeft());
-    }
     BorderSection right(blockFormat, KoParagraphStyle::RightBorderStyle,
             KoParagraphStyle::RightBorderWidth, KoParagraphStyle::RightBorderColor);
-    if(right.hasBorder) {
-        if(bounds.isEmpty())
-            bounds = layout->boundingRect();
-        painter->setPen(right.pen);
-        painter->drawLine(bounds.topRight(), bounds.bottomRight());
-    }
     BorderSection top(blockFormat, KoParagraphStyle::TopBorderStyle,
             KoParagraphStyle::TopBorderWidth, KoParagraphStyle::TopBorderColor);
-    if(right.hasBorder) {
-        if(bounds.isEmpty())
-            bounds = layout->boundingRect();
-        painter->setPen(top.pen);
-        painter->drawLine(bounds.topLeft(), bounds.topRight());
-    }
     BorderSection bottom(blockFormat, KoParagraphStyle::BottomBorderStyle,
             KoParagraphStyle::BottomBorderWidth, KoParagraphStyle::BottomBorderColor);
-    if(right.hasBorder) {
-        if(bounds.isEmpty())
-            bounds = layout->boundingRect();
+
+    QRectF bounds;
+    if(left.hasBorder || right.hasBorder || top.hasBorder || bottom.hasBorder) {
+        QTextLayout *layout = block.layout();
+        bounds = layout->boundingRect();
+        bounds.setTopLeft(layout->lineAt(0).position()); // annoying that this is needed...
+        // TODO bounds should include the counter
+    }
+
+    if(top.hasBorder) {
+        painter->setPen(top.pen);
+        const double t = bounds.top() - top.pen.widthF() / 2.0; // drawline uses the center
+        bounds.setTop( bounds.top() - top.pen.widthF());
+        painter->drawLine(QLineF(bounds.left(), t, bounds.right(), t));
+    }
+    if(bottom.hasBorder) {
         painter->setPen(bottom.pen);
-        painter->drawLine(bounds.bottomLeft(), bounds.bottomRight());
+        const double b = bounds.bottom() + bottom.pen.widthF() / 2.0;
+        bounds.setBottom( bounds.bottom() + bottom.pen.widthF() );
+        painter->drawLine(QLineF(bounds.left(), b, bounds.right() , b));
+    }
+    if(left.hasBorder) {
+        painter->setPen(left.pen);
+        const double l = bounds.left() - left.pen.widthF() / 2.0;
+        bounds.setLeft( bounds.left() - left.pen.widthF());
+        painter->drawLine(QLineF(l, bounds.top(), l, bounds.bottom()));
+    }
+    if(right.hasBorder) {
+        painter->setPen(right.pen);
+        const double r = bounds.right() + right.pen.widthF() / 2.0;
+        bounds.setRight( bounds.right() + right.pen.widthF() );
+        painter->drawLine(QLineF(r, bounds.top(), r, bounds.bottom()));
     }
 }
 
