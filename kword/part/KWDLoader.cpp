@@ -718,7 +718,7 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
             switch(element.attribute("style").toInt()) {
                 case 0: borderStyle = KoParagraphStyle::BorderSolid; break;
                 case 1: borderStyle = KoParagraphStyle::BorderDashed; break;
-                case 2: borderStyle = KoParagraphStyle::BorderDotsPattern; break;
+                case 2: borderStyle = KoParagraphStyle::BorderDotted; break;
                 case 3: borderStyle = KoParagraphStyle::BorderDashDotPattern; break;
                 case 4: borderStyle = KoParagraphStyle::BorderDashDotDotPattern; break;
                 case 5:
