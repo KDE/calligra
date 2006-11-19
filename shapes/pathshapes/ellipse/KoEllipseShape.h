@@ -24,6 +24,10 @@
 
 #define KoEllipseShapeId "KoEllipseShape"
 
+/**
+ * This class adds support for arc, pie, chord, circle and ellipse 
+ * shapes.
+ */
 class KoEllipseShape : public KoParameterShape
 {
 public:    
@@ -48,10 +52,15 @@ private:
 
     void updateKindHandle();
 
+    // start angle in degree
     double m_startAngle;
+    // end angle in degree
     double m_endAngle;
+    // angle for modifying the kind in radiant
     double m_kindAngle;
+    // the center of the ellipse
     QPointF m_center;
+    // the radii of the ellips
     QPointF m_radii;
     KoEllipseType m_type;
 
