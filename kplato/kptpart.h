@@ -28,6 +28,7 @@
 #include "kptxmlloaderobject.h"
 
 #include <KoDocument.h>
+#include <KoDocumentChild.h>
 #include <KoTextZoomHandler.h>
 
 class KoView;
@@ -37,6 +38,7 @@ class KCommand;
 namespace KPlato
 {
 
+class DocumentChild;
 class View;
 class Project;
 class MainProjectDialog;
@@ -83,6 +85,10 @@ public:
     WBSDefinition &wbsDefinition() { return m_wbsDefinition; }
 
     const XMLLoaderObject &xmlLoader() const { return m_xmlLoader; }
+    
+    void activate( QWidget *w = 0 );
+    DocumentChild *createChild( KoDocument *doc, const QRect &geometry );
+    
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
 
@@ -115,6 +121,18 @@ private:
     WBSDefinition m_wbsDefinition;
 
     XMLLoaderObject m_xmlLoader;
+};
+
+class DocumentChild : public KoDocumentChild
+{
+public:
+    DocumentChild ( KoDocument* parent, KoDocument* doc, const QRect& geometry );
+    //void setEmbedded( bool emb ) { m_embedded = emb; }
+    void activate( QWidget *w = 0 );
+    virtual KoDocument* hitTest( const QPoint& p, KoView* view, const QMatrix& _matrix = QMatrix() );
+    
+private:
+    //bool m_embedded;
 };
 
 }  //KPlato namespace

@@ -40,6 +40,8 @@
 #include <kstandarddirs.h>
 #include <kcommand.h>
 #include <kcommand.h>
+#include <kparts/partmanager.h>
+
 #include <KoGlobal.h>
 
 #define CURRENT_SYNTAX_VERSION "0.5"
@@ -356,6 +358,41 @@ void Part::generateWBS()
 {
     m_project->generateWBS( 1, m_wbsDefinition );
 }
+
+void Part::activate( QWidget *w )
+{
+    if ( manager() )
+        manager()->setActivePart( this, w );
+}
+
+DocumentChild *Part::createChild( KoDocument *doc, const QRect& geometry )
+{
+    DocumentChild *ch = new DocumentChild( this, doc, geometry );
+    insertChild( ch );
+    return ch;
+}
+
+
+//--------------------------------
+DocumentChild::DocumentChild ( KoDocument* parent, KoDocument* doc, const QRect& geometry )
+    : KoDocumentChild ( parent, doc, geometry )
+{
+}
+
+void DocumentChild::activate( QWidget *w )
+{
+   if ( document()->manager() )
+        document()->manager()->setActivePart( document(), w );
+}
+
+KoDocument* DocumentChild::hitTest( const QPoint& p, KoView* view, const QMatrix& _matrix )
+{
+    if ( document()->views().contains( view ) ) {
+        return document();
+    }
+    return 0;
+}
+
 
 }  //KPlato namespace
 

@@ -29,6 +29,8 @@
 
 #include <klocale.h>
 
+#include "KoView.h"
+
 class QListWidget;
 class QModelIndex;
 class QTreeWidgetItem;
@@ -182,6 +184,8 @@ public:
     Node *currentNode() const;
     QList<Node*> selectedNodes() const ;
     Node *selectedNode() const;
+
+    virtual void updateReadWrite( bool /*readwrite*/ ) {};
 
 signals:
     void openNode();

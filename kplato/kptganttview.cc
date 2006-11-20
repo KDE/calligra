@@ -80,8 +80,8 @@ public:
         }*/
 };
 
-GanttView::GanttView( QWidget *parent, bool readWrite, const char* name )
-        : ViewBase( parent ),
+GanttView::GanttView( Part *part, QWidget *parent, bool readWrite, const char* name )
+        : ViewBase( part, parent ),
         m_readWrite( readWrite ),
         m_currentItem( 0 ),
         m_taskView( 0 ),

@@ -329,7 +329,7 @@ QVariant NodeItemModel::type( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return node->typeToString( true );
         case Qt::TextAlignmentRole:
-            return Qt::AlignRight;
+            return Qt::AlignCenter;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -787,13 +787,14 @@ void TaskEditor::draw()
 
 void TaskEditor::setViewActive( bool activate, KXMLGUIFactory *factory ) // slot
 {
+    kDebug()<<k_funcinfo<<activate<<endl;
     if ( activate ) {
         addActions( factory );
         updateActionsEnabled( true );
     } else {
         removeActions();
     }
-    if ( !m_editor->currentIndex().isValid() ) {
+    if ( activate && !m_editor->currentIndex().isValid() ) {
         m_editor->selectionModel()->setCurrentIndex(m_editor->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
 }

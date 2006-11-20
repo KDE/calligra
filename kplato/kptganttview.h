@@ -61,7 +61,7 @@ class GanttView : public ViewBase
 
 public:
 
-    GanttView( QWidget *parent, bool readWrite = true, const char* name = 0 );
+    GanttView( Part *part, QWidget *parent, bool readWrite = true, const char* name = 0 );
 
     //~GanttView();
 

@@ -22,6 +22,7 @@
 #define KPLATO_VIEW
 
 #include <KoView.h>
+#include <KoQueryTrader.h>
 
 #include "kptcontext.h"
 
@@ -32,6 +33,7 @@
 #include <kxmlguiclient.h>
 
 class QStackedWidget;
+class QSplitter;
 
 class KPrinter;
 class KAction;
@@ -39,23 +41,29 @@ class KActionMenu;
 class KSelectAction;
 class KToggleAction;
 class KStatusBarLabel;
+class KSeparatorAction;
+
+class KoView;
 
 namespace KPlato
 {
 
 class View;
-class ViewListDockWidget;
+class ViewListItem;
+class ViewListWidget;
 class AccountsView;
 class GanttView;
 class ResourceView;
 class TaskEditor;
 //class ReportView;
 class Part;
+class DocumentChild;
 class Node;
 class Project;
 class Relation;
 class Context;
 class ViewAdaptor;
+class ViewBase;
 
 class ViewListTreeWidget : public QTreeWidget
 {
@@ -66,6 +74,7 @@ public:
 
 protected:
     void drawRow( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+    virtual void mousePressEvent ( QMouseEvent *event );
 
 signals:
     void activated( QTreeWidgetItem* );
@@ -74,31 +83,57 @@ private slots:
     void handleMousePress( QTreeWidgetItem *item );
 };
 
-class ViewListDockWidget : public QDockWidget
+class ViewListWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ViewListDockWidget( QString name, KMainWindow *parent );
+    enum ItemType { Category = QTreeWidgetItem::Type, View = QTreeWidgetItem::UserType, SubView, ChildDocument };
+    
+    ViewListWidget( QWidget *parent );//QString name, KMainWindow *parent );
+    ~ViewListWidget();
+    
     QTreeWidgetItem *addCategory( QString name );
-    void addView( QTreeWidgetItem *category, QString name, QWidget *widget, QString icon = QString::null );
-
+    ViewListItem *addView(QTreeWidgetItem *category, const QString name, KoView *view, KoDocument *doc, QString icon = QString::null );
+    ViewListItem *addView( QTreeWidgetItem *category, QString name, KoView *view, DocumentChild *ch, QString icon = QString::null );
+    void setSelected( QTreeWidgetItem *item );
+    ViewListItem *findItem( KoView *view, QTreeWidgetItem* parent = 0 );
+    
 signals:
-    void activated( QWidget* );
-
+    void activated( ViewListItem*, ViewListItem* );
+    void createKofficeDocument( KoDocumentEntry &entry );
+    
 protected slots:
-    void slotActivated( QTreeWidgetItem *item );
+    void slotActionTriggered();
+    void slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev );
+    void renameCategory();
+    
+protected:
+    virtual void contextMenuEvent ( QContextMenuEvent *event );
 
 private:
-    ViewListTreeWidget *m_viewList;
+    void setupContextMenus();
+    
+private:
+    ViewListTreeWidget *m_viewlist;
+    Q3ValueList<KoDocumentEntry> m_lstEntries;
+    KoDocumentEntry m_documentEntry;
+    
+    ViewListItem *m_contextitem;
+    KSeparatorAction *m_separator;
+    QList<QAction*> m_noitem;
+    QList<QAction*> m_category;
+    QList<QAction*> m_view;
+    QList<QAction*> m_document;
+    QList<QAction*> m_parts;
 };
 
 //-----------
-class ViewBase : public QWidget, public KXMLGUIClient
+class ViewBase : public KoView
 {
     Q_OBJECT
 public:
+    ViewBase(KoDocument *doc, QWidget *parent);
     ViewBase(View *mainview, QWidget *parent);
-    ViewBase(QWidget *parent);
 
     View *mainView() const;
     virtual ~ViewBase() {}
@@ -108,10 +143,13 @@ public:
     virtual void draw(Project &/*project*/) {}
     virtual void drawChanges(Project &project) { draw(project); }
     
+    virtual void updateReadWrite( bool );
+    
 public slots:
     virtual void setViewActive( bool active, KXMLGUIFactory *factory=0 );
 
 protected:
+    virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
     virtual void addActions( KXMLGUIFactory *factory );
     virtual void removeActions();
 
@@ -152,6 +190,12 @@ public:
     void setTaskActionsEnabled( QWidget *w, bool on );
     void setScheduleActionsEnabled();
 
+    QWidget *canvas() const;
+
+    //virtual QDockWidget *createToolBox();
+    
+    KoDocument *hitTest( const QPoint &viewPos );
+
 public slots:
     void slotUpdate( bool calculate );
     void slotEditResource();
@@ -176,12 +220,16 @@ public slots:
     void slotViewResources();
     void slotViewResourceAppointments();
     void slotViewAccounts();
+    void slotViewTaskEditor();
     void slotAddTask();
     void slotAddSubTask();
     void slotAddMilestone();
     void slotProjectEdit();
     void slotDefineWBS();
     void slotGenerateWBS();
+    
+    void slotCreateKofficeDocument( KoDocumentEntry& );
+    
     void slotConfigure();
     void slotAddRelation( Node *par, Node *child );
     void slotModifyRelation( Relation *rel );
@@ -193,10 +241,11 @@ public slots:
 
     void slotRenameNode( Node *node, const QString& name );
 
-    void slotPopupMenu( const QString& menuname, const QPoint & pos );
+    void slotPopupMenu( const QString& menuname, const QPoint &pos );
+    void slotPopupMenu( const QString& menuname, const QPoint &pos, ViewListItem *item );
 
 protected slots:
-    void slotViewActivated( QWidget* );
+    void slotViewActivated( ViewListItem*, ViewListItem* );
 
     void slotProjectCalendar();
     void slotProjectWorktime();
@@ -236,14 +285,16 @@ protected slots:
 #endif
 
 protected:
-    void createViewSelector();
+    virtual void partActivateEvent( KParts::PartActivateEvent *event );
+    virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
+
     virtual void updateReadWrite( bool readwrite );
     Node *currentTask();
     void updateView( QWidget *widget );
 
 private:
+    QSplitter *m_sp;
     QStackedWidget *m_tab;
-    ViewBase *m_currentview;
     GanttView *m_ganttview;
     ResourceView *m_resourceview;
     AccountsView *m_accountsview;
@@ -251,8 +302,11 @@ private:
     //    ReportView *m_reportview;
     //    Q3PtrList<QString> m_reportTemplateFiles;
 
-    ViewListDockWidget *m_viewlist;
-
+    ViewListWidget *m_viewlist;
+    ViewListItem *m_viewlistItem; // requested popupmenu item
+    
+    //QDockWidget *m_toolbox;
+    
     int m_viewGrp;
     int m_defaultFontSize;
     int m_currentEstimateType;
@@ -322,7 +376,7 @@ private:
     // ------ Tools
     KAction *actionDefineWBS;
     KAction *actionGenerateWBS;
-
+    
     // ------ Export (testing)
     KAction *actionExportGantt;
 
@@ -337,6 +391,7 @@ private:
 
     //Test
     KAction *actNoInformation;
+    
 };
 
 } //Kplato namespace

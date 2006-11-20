@@ -21,8 +21,10 @@
 #include <kprinter.h>
 #include <kmessagebox.h>
 
+#include "KoDocumentInfo.h"
 #include <KoMainWindow.h>
 #include <KoToolManager.h>
+#include <KoToolBox.h>
 
 #include <QApplication>
 #include <QDockWidget>
@@ -35,6 +37,7 @@
 #include <qsize.h>
 #include <QStackedWidget>
 #include <QHeaderView>
+#include <QRect>
 #include <QVBoxLayout>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -58,6 +61,11 @@
 #include <kdesktopfile.h>
 #include <kcommand.h>
 #include <kfiledialog.h>
+#include <kparts/event.h>
+#include <kparts/partmanager.h>
+#include <kseparatoraction.h>
+
+#include <KoQueryTrader.h>
 
 #include "kptview.h"
 #include "kptaccountsview.h"
@@ -92,6 +100,8 @@
 #include "KDGanttView.h"
 #include "KDGanttViewTaskItem.h"
 #include "KPtViewAdaptor.h"
+
+#include <assert.h>
 
 namespace KPlato
 {
@@ -143,7 +153,7 @@ void ViewCategoryDelegate::paint( QPainter * painter, const QStyleOptionViewItem
         QRect textrect = QRect( r.left() + i * 2, r.top(), r.width() - ( ( 5 * i ) / 2 ), r.height() );
         QString text = elidedText( option.fontMetrics, textrect.width(), Qt::ElideMiddle,
                                    model->data( index, Qt::DisplayRole ).toString() );
-        m_view->style() ->drawItemText( painter, textrect, Qt::AlignCenter,
+        m_view->style() ->drawItemText( painter, textrect, Qt::AlignLeft,
                                         option.palette, m_view->isEnabled(), text );
 
     } else {
@@ -152,14 +162,79 @@ void ViewCategoryDelegate::paint( QPainter * painter, const QStyleOptionViewItem
 
 }
 
+class ViewListItem : public QTreeWidgetItem
+{
+public:
+    ViewListItem( QTreeWidget *parent, const QStringList &strings, int type = Type );
+    ViewListItem( QTreeWidgetItem *parent, const QStringList &strings, int type = Type );
+    void setView( KoView *view );
+    KoView *view() const;
+    void setDocumentChild( DocumentChild *child );
+    DocumentChild *documentChild() const;
+    void setDocument( KoDocument *doc );
+    KoDocument *document() const;
+};
+
+ViewListItem::ViewListItem( QTreeWidget *parent, const QStringList &strings, int type )
+    : QTreeWidgetItem( parent, strings, type )
+{
+}
+
+ViewListItem::ViewListItem( QTreeWidgetItem *parent, const QStringList &strings, int type )
+    : QTreeWidgetItem( parent, strings, type )
+{
+}
+
+void ViewListItem::setView( KoView *view )
+{
+    setData( 0, Qt::UserRole,  qVariantFromValue(static_cast<QWidget*>( view ) ) );
+}
+
+KoView *ViewListItem::view() const
+{
+    if ( data(0, Qt::UserRole ).isValid() ) {
+        return static_cast<KoView*>( data(0, Qt::UserRole ).value<QWidget*>() );
+    }
+    return 0;
+}
+
+void ViewListItem::setDocument( KoDocument *doc )
+{
+    setData( 0, Qt::UserRole+1,  qVariantFromValue(static_cast<QObject*>( doc ) ) );
+}
+
+KoDocument *ViewListItem::document() const
+{
+    if ( data(0, Qt::UserRole+1 ).isValid() ) {
+        return static_cast<KoDocument*>( data(0, Qt::UserRole+1 ).value<QObject*>() );
+    }
+}
+
+void ViewListItem::setDocumentChild( DocumentChild *child )
+{
+    setData( 0, Qt::UserRole+2,  qVariantFromValue(static_cast<QObject*>( child ) ) );
+}
+
+DocumentChild *ViewListItem::documentChild() const
+{
+    if ( data(0, Qt::UserRole+2 ).isValid() ) {
+        return static_cast<DocumentChild*>( data(0, Qt::UserRole+2 ).value<QObject*>() );
+    }
+    return 0;
+}
+
+
 ViewListTreeWidget::ViewListTreeWidget( QWidget *parent )
-        : QTreeWidget( parent )
+    : QTreeWidget( parent )
 {
     header() ->hide();
     setRootIsDecorated( false );
     setItemDelegate( new ViewCategoryDelegate( this, this ) );
     setItemsExpandable( true );
+    setSelectionMode( QAbstractItemView::SingleSelection );
 
+    //setContextMenuPolicy( Qt::ActionsContextMenu );
+    
     connect( this, SIGNAL( itemPressed( QTreeWidgetItem*, int ) ), SLOT( handleMousePress( QTreeWidgetItem* ) ) );
 }
 
@@ -170,16 +245,25 @@ void ViewListTreeWidget::drawRow( QPainter *painter, const QStyleOptionViewItem 
 
 void ViewListTreeWidget::handleMousePress( QTreeWidgetItem *item )
 {
+    kDebug()<<k_funcinfo<<endl;
     if ( item == 0 )
         return ;
 
     if ( item->parent() == 0 ) {
         setItemExpanded( item, !isItemExpanded( item ) );
         return ;
-    } else {
-        emit activated( item );
     }
 }
+void ViewListTreeWidget::mousePressEvent ( QMouseEvent *event )
+{
+    if ( event->button() == Qt::RightButton ) {
+        event->accept();
+        return;
+    }
+    QTreeWidget::mousePressEvent( event );
+}
+
+// </Code mostly nicked from qt designer ;)>
 
 QTreeWidgetItem *ViewListTreeWidget::findCategory( const QString cat )
 {
@@ -193,63 +277,193 @@ QTreeWidgetItem *ViewListTreeWidget::findCategory( const QString cat )
     return 0;
 }
 
-ViewListDockWidget::ViewListDockWidget( QString name, KMainWindow *parent )
-        : QDockWidget( name, parent )
+ViewListWidget::ViewListWidget( QWidget *parent )//QString name, KMainWindow *parent )
+        : QWidget( parent )
 {
     setObjectName("ViewSelectorDockWidget");
-    setFeatures( features() & ~QDockWidget::DockWidgetClosable );
-    m_viewList = new ViewListTreeWidget( this );
-    setWidget( m_viewList );
-    parent->addDockWidget( Qt::LeftDockWidgetArea, this );
-    connect( m_viewList, SIGNAL( activated( QTreeWidgetItem* ) ), SLOT( slotActivated( QTreeWidgetItem* ) ) );
+    m_viewlist = new ViewListTreeWidget( this );
+    QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin( 0 );
+    l->addWidget( m_viewlist );
+    m_viewlist->setEditTriggers( QAbstractItemView::DoubleClicked );
+
+    connect( m_viewlist, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), SLOT( slotActivated( QTreeWidgetItem*, QTreeWidgetItem* ) ) );
+    
+    setupContextMenus();
 }
 
-void ViewListDockWidget::slotActivated( QTreeWidgetItem *item )
+ViewListWidget::~ViewListWidget()
 {
-    if ( item == 0 ) {
-        kDebug() << k_funcinfo << "item=0" << endl;
+    delete m_separator;
+}
+
+void ViewListWidget::slotActionTriggered()
+{
+    kDebug()<<k_funcinfo<<endl;
+    QString servName = sender()->objectName();
+    kDebug()<<k_funcinfo<<servName<<endl;
+    KService::Ptr serv = KService::serviceByName( servName );
+    KoDocumentEntry entry = KoDocumentEntry( serv );
+    emit createKofficeDocument( entry );
+}
+
+void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev )
+{
+    kDebug()<<k_funcinfo<<endl;
+    if ( item == 0 || item->type() == ViewListWidget::Category ) {
         return ;
     }
-    QWidget *wgt = qvariant_cast<QWidget*>( item->data( 0, Qt::UserRole ) );
-    if ( wgt ) {
-        //kDebug() << k_funcinfo << "widget: " << wgt << endl;
-        emit activated( wgt );
-    } else {
-        kDebug() << k_funcinfo << "something else" << endl;
-        //emit activated(item);
-    }
+    emit activated( static_cast<ViewListItem*>( item ), static_cast<ViewListItem*>( prev ) );
 }
 
-QTreeWidgetItem *ViewListDockWidget::addCategory( QString name )
+QTreeWidgetItem *ViewListWidget::addCategory( QString name )
 {
     //kDebug() << k_funcinfo << endl;
-    QTreeWidgetItem *item = m_viewList->findCategory( name );
+    QTreeWidgetItem *item = m_viewlist->findCategory( name );
     if ( item == 0 ) {
-        item = new QTreeWidgetItem( m_viewList, QStringList( name ) );
+        item = new ViewListItem( m_viewlist, QStringList( name ), ViewListWidget::Category );
         item->setExpanded( true );
+        item->setFlags( item->flags() | Qt::ItemIsEditable );
     }
     return item;
 }
 
-void ViewListDockWidget::addView( QTreeWidgetItem *category, QString name, QWidget *view, QString icon )
+ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString name, KoView *view, KoDocument *doc, QString icon )
 {
-    QTreeWidgetItem * item = new QTreeWidgetItem( category, QStringList( name ) );
-    item->setData( 0, Qt::UserRole, qVariantFromValue( view ) );
+    ViewListItem * item = new ViewListItem( category, QStringList( name ), ViewListWidget::SubView );
+    item->setView( view );
+    item->setDocument( doc );
     if ( !icon.isEmpty() )
         item->setData( 0, Qt::DecorationRole, KIcon( icon ) );
     //kDebug() << k_funcinfo << "added: " << item << endl;
+    return item;
 }
-// </Code mostly nicked from qt designer ;)>
+
+ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString name, KoView *view, DocumentChild *ch, QString icon )
+{
+    ViewListItem * item = new ViewListItem( category, QStringList( name ), ViewListWidget::ChildDocument );
+    item->setView( view );
+    item->setDocument( ch->document() );
+    item->setDocumentChild( ch );
+    if ( !icon.isEmpty() )
+        item->setData( 0, Qt::DecorationRole, KIcon( icon ) );
+    //kDebug() << k_funcinfo << "added: " << item << endl;
+    return item;
+}
+
+void ViewListWidget::setSelected( QTreeWidgetItem *item )
+{
+    kDebug()<<k_funcinfo<<item<<", "<<m_viewlist->currentItem()<<endl;
+    if ( item == 0 ) {
+        return;
+    }
+    m_viewlist->setCurrentItem( item );
+    kDebug()<<k_funcinfo<<item<<", "<<m_viewlist->currentItem()<<endl;
+}
+
+ViewListItem *ViewListWidget::findItem(  KoView *view, QTreeWidgetItem *parent )
+{
+    if ( parent == 0 ) {
+        return findItem( view, m_viewlist->invisibleRootItem() );
+    }
+    for (int i = 0; i < parent->childCount(); ++i ) {
+        ViewListItem * ch = static_cast<ViewListItem*>( parent->child( i ) );
+        if ( ch->view() == view ) {
+            kDebug()<<k_funcinfo<<ch<<", "<<view<<endl;
+            return ch;
+        }
+        ch = findItem( view, ch );
+        if ( ch ) {
+            return ch;
+        }
+    }
+    return 0;
+}
+
+void ViewListWidget::setupContextMenus()
+{
+    // NOTE: can't use xml file as there may not be a factory()
+    QAction *action;
+    m_separator = new KSeparatorAction();
+    // Query for documents
+    m_lstEntries = KoDocumentEntry::query();
+    Q3ValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
+    for( ; it != m_lstEntries.end(); ++it ) {
+        KService::Ptr serv = (*it).service();
+        if ( serv->genericName().isEmpty() ||
+             serv->serviceTypes().contains( "application/vnd.oasis.opendocument.formula" ) ||
+             serv->serviceTypes().contains( "application/x-vnd.kde.kplato" ) ) {
+            continue;
+        }
+        action = new QAction( KIcon(serv->icon()), serv->genericName().replace('&',"&&"), this );
+        action->setObjectName( serv->name().toLatin1() );
+        connect(action, SIGNAL( triggered( bool ) ), this, SLOT( slotActionTriggered() ) );
+        m_parts.append( action );
+    }
+    // no item actions
+    //action = new QAction( KIcon( "filenew" ), i18n( "New Category..." ), this );
+    //m_noitem.append( action );
+    
+    // Category actions
+/*    action = new QAction( KIcon( "rename" ), i18n( "Rename Category" ), this );
+    m_category.append( action );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( renameCategory() ) );*/
+    //action = new QAction( KIcon( "remove" ), i18n( "Remove Category" ), this );
+    //m_category.append( action );
+    
+    // view actions
+    //action = new QAction( KIcon( "show" ), i18n( "Show" ), this );
+    //m_view.append( action );
+    // document actions
+    //action = new QAction( KIcon( "show" ), i18n( "Show" ), this );
+    //m_document.append( action );
+/*    action = new QAction( KIcon( "info" ), i18n( "Document information" ), this );
+    m_document.append( action );*/
+}
+
+void ViewListWidget::renameCategory()
+{
+    if ( m_contextitem ) {
+        m_viewlist->editItem( m_contextitem, 0 );
+    }
+}
+
+void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
+{
+    m_contextitem = static_cast<ViewListItem*>(m_viewlist->itemAt( event->pos() ) );
+    QList<QAction*> lst;
+    if ( m_contextitem == 0 ) {
+        lst = m_noitem;
+        lst.append( m_separator );
+        lst += m_parts;
+    } else if ( m_contextitem->type() == Category ) {
+        lst = m_category;
+        lst.append( m_separator );
+        lst += m_parts;
+    } else if ( m_contextitem->type() == SubView ) {
+        lst = m_view;
+        lst.append( m_separator );
+        lst += m_parts;
+    } else if ( m_contextitem->type() == ChildDocument ) {
+        lst = m_document;
+        lst.append( m_separator );
+        lst += m_parts;
+    }
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec(lst, event->globalPos());
+    }
+}
+
 
 //--------------
 ViewBase::ViewBase(View *mainview, QWidget *parent)
-    : QWidget(parent),
+    : KoView( mainview->koDocument(), parent ), //QWidget(parent),
     m_mainview(mainview)
 {
 }
-    
-ViewBase::ViewBase(QWidget *parent)
-    : QWidget(parent),
+
+ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
+    : KoView( doc, parent ), //QWidget(parent),
     m_mainview(0)
 {
 }
@@ -259,10 +473,24 @@ View *ViewBase::mainView() const
     return m_mainview;
 }
 
+void ViewBase::updateReadWrite( bool /*readwrite*/ )
+{
+}
+
+void ViewBase::guiActivateEvent( KParts::GUIActivateEvent *ev )
+{
+    KoView *v = dynamic_cast<KoView*>( parentWidget() );
+    KXMLGUIFactory *f = 0;
+    if ( m_mainview ) {
+        f = m_mainview->factory();
+    }
+    kDebug()<<k_funcinfo<<this<<" "<<ev->activated()<<", "<<f<<endl;
+    setViewActive( ev->activated(), f );
+}
 void ViewBase::setViewActive( bool active, KXMLGUIFactory*) // slot
 {
-    if ( mainView() )
-        mainView()->setTaskActionsEnabled( this, active );
+/*    if ( mainView() )
+    mainView()->setTaskActionsEnabled( this, active );*/
 }
 
 void ViewBase::addActions( KXMLGUIFactory *factory )
@@ -284,9 +512,7 @@ void ViewBase::removeActions()
 //-------------------------------
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
-        m_currentview(0),
         m_ganttview( 0 ),
-        //    m_reportview(0),
         m_currentEstimateType( Effort::Use_Expected )
 {
     //kDebug()<<k_funcinfo<<endl;
@@ -301,13 +527,21 @@ View::View( Part* part, QWidget* parent )
     m_dbus = new ViewAdaptor( this );
     QDBusConnection::sessionBus().registerObject( "/" + objectName(), this );
 
-    m_tab = new QStackedWidget( this );
+    m_sp = new QSplitter( this );
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setMargin(0);
-    layout->addWidget( m_tab );
-
-    m_ganttview = new GanttView( m_tab, part->isReadWrite() );
-    m_currentview = m_ganttview;
+    layout->addWidget( m_sp );
+    
+    // to the left
+    m_viewlist = new ViewListWidget( m_sp );
+    // to the right
+    m_tab = new QStackedWidget( m_sp );
+    
+    m_taskeditor = new TaskEditor( this, m_tab );
+    m_tab->addWidget( m_taskeditor );
+    m_taskeditor->draw( getProject() );
+    
+    m_ganttview = new GanttView( getPart(), m_tab, part->isReadWrite() );
     m_tab->addWidget( m_ganttview );
     m_updateGanttview = false;
     m_ganttview->draw( getProject() );
@@ -320,9 +554,6 @@ View::View( Part* part, QWidget* parent )
     m_updateAccountsview = true;
     m_tab->addWidget( m_accountsview );
 
-    m_taskeditor = new TaskEditor( this, m_tab );
-    m_tab->addWidget( m_taskeditor );
-    m_taskeditor->draw( getProject() );
     connect( m_taskeditor, SIGNAL( addTask() ), SLOT( slotAddTask() ) );
     connect( m_taskeditor, SIGNAL( addMilestone() ), SLOT( slotAddMilestone() ) );
     connect( m_taskeditor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
@@ -335,8 +566,16 @@ View::View( Part* part, QWidget* parent )
     //m_reportview = new ReportView(this, m_tab);
     //m_tab->addWidget(m_reportview);
 
-    createViewSelector();
+    QTreeWidgetItem *cat;
+    cat = m_viewlist->addCategory( i18n( "Editors" ) );
+    m_viewlist->addView( cat, i18n( "Tasks" ), m_taskeditor, getPart(), "task_editor" );
 
+    cat = m_viewlist->addCategory( i18n( "Views" ) );
+    m_viewlist->addView( cat, i18n( "Gantt" ), m_ganttview, getPart(), "gantt_chart" );
+    m_viewlist->addView( cat, i18n( "Resources" ), m_resourceview, getPart(), "resources" );
+    m_viewlist->addView( cat, i18n( "Accounts" ), m_accountsview, getPart(), "accounts" );
+    
+    connect( m_viewlist, SIGNAL( activated( ViewListItem*, ViewListItem* ) ), SLOT( slotViewActivated( ViewListItem*, ViewListItem* ) ) );
     connect( m_tab, SIGNAL( currentChanged( int ) ), this, SLOT( slotCurrentChanged( int ) ) );
 
     connect( m_ganttview, SIGNAL( enableActions( bool ) ), SLOT( setTaskActionsEnabled( bool ) ) );
@@ -471,7 +710,7 @@ View::View( Part* part, QWidget* parent )
 
     actionGenerateWBS = new KAction( KIcon( "tools_generate_wbs" ), i18n( "Generate WBS Code" ), actionCollection(), "tools_define_wbs" );
     connect( actionGenerateWBS, SIGNAL( triggered( bool ) ), SLOT( slotGenerateWBS() ) );
-
+    
     // ------ Export (testing)
     //actionExportGantt = new KAction(i18n("Export Ganttview"), "export_gantt", 0, this,
     //    SLOT(slotExportGantt()), actionCollection(), "export_gantt");
@@ -491,6 +730,9 @@ View::View( Part* part, QWidget* parent )
     actionEditResource = new KAction( KIcon( "edit" ), i18n( "Edit Resource..." ), actionCollection(), "edit_resource" );
     connect( actionEditResource, SIGNAL( triggered( bool ) ), SLOT( slotEditResource() ) );
 
+    // Viewlist popup
+    connect( m_viewlist, SIGNAL( createKofficeDocument( KoDocumentEntry& ) ), SLOT( slotCreateKofficeDocument( KoDocumentEntry& ) ) );
+    
     // ------------------- Actions with a key binding and no GUI item
     // Temporary, till we get a menu entry
     actNoInformation = new KAction( "Toggle no information", actionCollection(), "show_noinformation" );
@@ -511,6 +753,7 @@ View::View( Part* part, QWidget* parent )
     connect( actExportGantt, SIGNAL( triggered( bool ) ), SLOT( slotExportGantt() ) );
     actExportGantt->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_G );
 
+    
 #endif
     // Stupid compilers ;)
 #ifndef NDEBUG 
@@ -526,6 +769,8 @@ View::View( Part* part, QWidget* parent )
     slotViewExpected();
 
     setTaskActionsEnabled( false );
+    
+    //kDebug()<<k_funcinfo<<" end "<<endl;
 }
 
 View::~View()
@@ -539,32 +784,12 @@ ViewAdaptor* View::dbusObject()
     return m_dbus;
 }
 
-void View::createViewSelector()
-{
-    //kDebug() << k_funcinfo << endl;
-    m_viewlist = new ViewListDockWidget( i18n( "Select" ), mainWindow() );
-    QTreeWidgetItem *cat;
-    cat = m_viewlist->addCategory(i18n("Editors"));
-    m_viewlist->addView( cat, i18n( "Tasks" ), m_taskeditor, "task_editor" );
-
-    cat = m_viewlist->addCategory( i18n( "Views" ) );
-    m_viewlist->addView( cat, i18n( "Gantt" ), m_ganttview, "gantt_chart" );
-    m_viewlist->addView( cat, i18n( "Resources" ), m_resourceview, "resources" );
-    m_viewlist->addView( cat, i18n( "Accounts" ), m_accountsview, "accounts" );
-
-    //    cat = m_viewlist->addCategory(i18n("Reports"));
-
-    connect( m_viewlist, SIGNAL( activated( QWidget* ) ), SLOT( slotViewActivated( QWidget* ) ) );
-}
-
-
-void View::slotViewActivated( QWidget *view )
-{
-    //kDebug() << k_funcinfo << "view=" << view << endl;
-    if ( view ) {
-        m_tab->setCurrentWidget( view );
-    }
-}
+// TODO
+// QDockWidget *View::createToolBox() {
+//     m_toolbox = KoToolManager::instance()->toolBox("KPlato");
+//     m_toolbox->hide();
+//     return m_toolbox;
+// }
 
 Project& View::getProject() const
 {
@@ -724,14 +949,15 @@ void View::slotViewSelector( bool show )
 
 void View::slotViewGantt()
 {
-    //kDebug()<<k_funcinfo<<endl;
-    m_tab->setCurrentWidget( m_ganttview );
+    kDebug()<<k_funcinfo<<endl;
+    m_viewlist->setSelected( m_viewlist->findItem( m_ganttview ) );
+    //m_tab->setCurrentWidget( m_ganttview );
 }
 
 void View::slotViewResources()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_tab->setCurrentWidget( m_resourceview );
+    m_viewlist->setSelected( m_viewlist->findItem( m_resourceview ) );
 }
 
 void View::slotViewResourceAppointments()
@@ -746,7 +972,13 @@ void View::slotViewResourceAppointments()
 void View::slotViewAccounts()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_tab->setCurrentWidget( m_accountsview );
+    m_viewlist->setSelected( m_viewlist->findItem( m_accountsview ) );
+}
+
+void View::slotViewTaskEditor()
+{
+    kDebug()<<k_funcinfo<<endl;
+    m_viewlist->setSelected( m_viewlist->findItem( m_taskeditor ) );
 }
 
 void View::slotProjectEdit()
@@ -1355,16 +1587,141 @@ void View::slotUpdate( bool calculate )
     updateView( m_tab->currentWidget() );
 }
 
+void View::partActivateEvent( KParts::PartActivateEvent *event )
+{
+    kDebug()<<k_funcinfo<<"main: "<<event->activated()<<", "<<event->part()<<", "<<event->widget()<<endl;
+    if ( event->part() != (KParts::Part *)koDocument() ) {
+        assert( event->part()->inherits( "KoDocument" ) );
+
+        if ( event->activated() && event->part() == getPart() ) {
+            kDebug()<<k_funcinfo<<"maindoc: partManager()->setActivePart"<<endl;
+            partManager()->setActivePart( getPart(), m_tab->currentWidget() );
+        }
+        emit activated( event->activated() );
+    } else {
+        KoView::partActivateEvent( event );
+    }
+}
+
+void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
+{
+    KoView::guiActivateEvent( ev );
+    // propagate to sub-view
+    QApplication::sendEvent( m_tab->currentWidget(), ev );
+}
+
+KoDocument *View::hitTest( const QPoint &pos )
+{
+    // pos is in m_tab->currentWidget() coordinates
+    QPoint gl = m_tab->currentWidget()->mapToGlobal(pos);
+    if ( m_tab->currentWidget()->frameGeometry().contains( m_tab->currentWidget()->mapFromGlobal( gl ) ) ) {
+        return koDocument()->hitTest( pos, this );
+    }
+    // get a 0 based geometry
+    QRect r = m_viewlist->frameGeometry();
+    r.translate( -r.topLeft() );
+    if ( r.contains( m_viewlist->mapFromGlobal( gl ) ) ) {
+        if ( getPart()->isEmbedded() ) {
+            // TODO: Needs testing
+            return dynamic_cast<KoDocument*>(partManager()->activePart()); // NOTE: We only handle koffice parts!
+        }
+        return 0;
+    }
+    for (int i = 0; i < m_sp->count(); ++i ) {
+        QWidget *w = m_sp->handle( i );
+        r = w->frameGeometry();
+        r.translate( -r.topLeft() );
+        if ( r.contains( w->mapFromGlobal( gl ) ) ) {
+            if ( getPart()->isEmbedded() ) {
+            // TODO: Needs testing
+                return dynamic_cast<KoDocument*>(partManager()->activePart()); // NOTE: We only handle koffice parts!
+            }
+            return 0;
+        }
+    }
+    kDebug()<<k_funcinfo<<"No hit: "<<pos<<endl;
+    return 0;
+
+}
+
+void View::slotCreateKofficeDocument( KoDocumentEntry &entry)
+{
+    QString e;
+    KoDocument *doc = entry.createDoc( &e, getPart() );
+    if ( doc == 0 ) {
+        return;
+    }
+    if ( ! doc->showEmbedInitDialog( this ) ) {
+        delete doc;
+        return;
+    }
+    DocumentChild *ch = getPart()->createChild( doc, geometry() );
+    
+    QTreeWidgetItem *cat = m_viewlist->addCategory( i18n( "Documents" ) );
+    cat->setIcon( 0, KIcon( "koshell" ) );
+    QString title;
+    if ( doc->documentInfo() ) {
+        title = doc->documentInfo()->aboutInfo( "title" );
+    }
+    if ( title.isEmpty() ) {
+        title = doc->url().pathOrUrl();
+    }
+    if ( title.isEmpty() ) {
+        title = "Untitled";
+    }
+    KoView *v = doc->createView( this );
+    ViewListItem *i = m_viewlist->addView( cat, title, v, ch );
+    i->setIcon( 0, KIcon( entry.service()->icon() ) );
+    m_tab->addWidget( v );
+    kDebug()<<k_funcinfo<<"Added: "<<v<<endl;
+    m_viewlist->setSelected( i );
+}
+
+void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
+{
+    kDebug() << k_funcinfo << "item=" << item << ", "<<prev<<endl;
+    if ( prev && prev->type() != ViewListWidget::ChildDocument ) {
+        // Remove sub-view specific gui
+        kDebug()<<k_funcinfo<<"Deactivate: "<<prev<<endl;
+        KParts::GUIActivateEvent ev(false);
+        QApplication::sendEvent( m_tab->currentWidget(), &ev );
+    }
+    if ( item->type() == ViewListWidget::SubView ) {
+        m_tab->setCurrentWidget( item->view() );
+        if (  prev && prev->type() != ViewListWidget::SubView ) {
+            // Put back my own gui (removed when viewing different doc)
+            getPart()->activate( this );
+        }
+        kDebug()<<k_funcinfo<<"Activate: "<<item<<endl;
+        // Add sub-view specific gui
+        KParts::GUIActivateEvent ev(true);
+        QApplication::sendEvent( item->view(), &ev );
+        return;
+    }
+    if ( item->type() == ViewListWidget::ChildDocument ) {
+        kDebug()<<k_funcinfo<<"Activated: "<<item->view()<<endl;
+        // changing doc also takes care of all gui
+        m_tab->setCurrentWidget( item->view() );
+        item->documentChild()->activate( item->view() );
+        return;
+    }
+}
+
+QWidget *View::canvas() const
+{
+    return m_tab->currentWidget();//KoView::canvas();
+}
+
 void View::slotCurrentChanged( int index )
 {
-    //kDebug()<<k_funcinfo<<m_currentview<<endl;
-    if (m_currentview)
-        m_currentview->setViewActive( false );
-    m_currentview = static_cast<ViewBase*>( m_tab->currentWidget() );
-    updateView( m_currentview );
-    m_currentview->setViewActive( true, factory() );
-    m_currentview->setFocus( Qt::ActiveWindowFocusReason );
-    //kDebug()<<k_funcinfo<<m_currentview<<endl;
+    //kDebug()<<k_funcinfo<<m_tab->currentIndex()<<endl;
+    
+    KoView *currentview = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+    if ( currentview ) {
+        kDebug()<<k_funcinfo<<"ViewBase: "<<currentview<<endl;
+        updateView( currentview );
+        return;
+    }
 }
 
 void View::updateView( QWidget *widget )
@@ -1419,6 +1776,13 @@ void View::slotPopupMenu( const QString& menuname, const QPoint & pos )
         menu->exec( pos );
 }
 
+void View::slotPopupMenu( const QString& menuname, const QPoint &pos, ViewListItem *item )
+{
+    kDebug()<<k_funcinfo<<menuname<<endl;
+    m_viewlistItem = item;
+    slotPopupMenu( menuname, pos );
+}
+
 bool View::setContext( Context &context )
 {
     //kDebug()<<k_funcinfo<<endl;
@@ -1451,8 +1815,8 @@ bool View::setContext( Context &context )
         slotViewResources();
     } else if ( context.currentView == "accountsview" ) {
         slotViewAccounts();
-    } else if ( context.currentView == "reportview" ) {
-        //slotViewReport();
+    } else if ( context.currentView == "taskeditor" ) {
+        slotViewTaskEditor();
     } else {
         slotViewGantt();
     }
@@ -1476,8 +1840,8 @@ void View::getContext( Context &context ) const
         context.currentView = "resourceview";
     } else if ( m_tab->currentWidget() == m_accountsview ) {
         context.currentView = "accountsview";
-        /*    } else if (m_tab->currentWidget() == m_reportview) {
-                context.currentView = "reportview";*/
+    } else if (m_tab->currentWidget() == m_taskeditor) {
+        context.currentView = "taskeditor";
     }
     m_ganttview->getContext( context.ganttview );
     m_resourceview->getContext( context.resourceview );
