@@ -106,12 +106,6 @@ VBorder::~VBorder()
 //     delete m_scrollTimer;
 }
 
-QSize VBorder::sizeHint() const
-{
-  return QSize( 40, 10 );
-}
-
-
 void VBorder::mousePressEvent( QMouseEvent * _ev )
 {
   if ( !m_pView->koDocument()->isReadWrite() )
@@ -668,11 +662,6 @@ HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
 HBorder::~HBorder()
 {
 //     delete m_scrollTimer;
-}
-
-QSize HBorder::sizeHint() const
-{
-  return QSize( 40, 10 );
 }
 
 void HBorder::mousePressEvent( QMouseEvent * _ev )
@@ -1456,11 +1445,6 @@ SelectAllButton::SelectAllButton( View* view  )
 
 SelectAllButton::~SelectAllButton()
 {
-}
-
-QSize SelectAllButton::sizeHint() const
-{
-  return QSize( 40, 10 );
 }
 
 void SelectAllButton::paintEvent( QPaintEvent* event )

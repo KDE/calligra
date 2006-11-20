@@ -45,8 +45,6 @@ public:
 
     void updateColumns( int from, int to );
 
-    QSize sizeHint() const;
-
 private slots:
     void slotAutoScroll(const QPoint& distance);
 
@@ -132,8 +130,6 @@ public:
     void equalizeRow( double resize );
     void updateRows( int from, int to );
 
-    QSize sizeHint() const;
-
 private slots:
     void slotAutoScroll(const QPoint& distance);
 
@@ -182,8 +178,6 @@ class SelectAllButton : public QWidget
 public:
     SelectAllButton( View* view );
     virtual ~SelectAllButton();
-
-    QSize sizeHint() const;
 
 protected:
     virtual void paintEvent( QPaintEvent* event );
