@@ -144,6 +144,10 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
 #ifndef NDEBUG
 void KWTextFrameSet::printDebug(KWFrame *frame) {
     KWFrameSet::printDebug(frame);
+    KoTextShapeData *m_textShapeData = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
+    Q_ASSERT(m_textShapeData);
+    kDebug() << "     Text position: " << m_textShapeData->position() << ", end: " << m_textShapeData->endPosition() << endl;
+    kDebug() << "     Offset in text-document; " << m_textShapeData->documentOffset() << endl;
 }
 
 void KWTextFrameSet::printDebug() {

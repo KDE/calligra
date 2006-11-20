@@ -78,7 +78,7 @@ public:
     /// use kDebug calls to print internal info on this frameset
     virtual void printDebug();
     /// use kDebug calls to print internal info of the argument frame
-    void printDebug(KWFrame *frame);
+    virtual void printDebug(KWFrame *frame);
 #endif
 
 signals:
