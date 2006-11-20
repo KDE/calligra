@@ -1312,7 +1312,8 @@ void Cell::setCellText( const QString& _text, bool asText )
 
   const QString oldText = d->strText;
   setDisplayText( _text );
-  if ( !sheet()->isLoading() && !validity()->testValidity( this ) )
+  QSharedDataPointer<Validity> validity = this->validity();
+  if ( !sheet()->isLoading() && validity && !validity->testValidity( this ) )
   {
     //reapply old value if action == stop
     setDisplayText( oldText );
