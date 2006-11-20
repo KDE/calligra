@@ -24,6 +24,8 @@
 #include <qstring.h>
 #include <q3ptrlist.h>
 
+#include "../kexi_export.h"
+
 namespace KexiDB {
 
 /*! ConnectionDataBase is a helper class for ConnectionData.  It
