@@ -3410,7 +3410,8 @@ Cell::~Cell()
     if ( d->previousCell )
         d->previousCell->setNextCell( d->nextCell );
 
-    setValidity( QSharedDataPointer<Validity>() );
+    if ( !isDefault() )
+        setValidity( QSharedDataPointer<Validity>() );
     // FIXME Stefan: Clear conditions?
 
     // Unobscure cells.
