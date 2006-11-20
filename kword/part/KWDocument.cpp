@@ -166,6 +166,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
 
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
     if(tfs) {
+        tfs->setPageManager(pageManager());
         m_styleManager->add( tfs->document() );
         KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*> (tfs->document()->documentLayout());
         if(lay) {

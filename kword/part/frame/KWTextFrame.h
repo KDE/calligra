@@ -42,9 +42,6 @@ public:
     KWTextFrame(KoShape *shape, KWTextFrameSet *parent);
     ~KWTextFrame();
 
-    /// Will do a compare based on the coordinate of the frame.
-    bool operator<(const KWTextFrame &other) const;
-
     /**
      * Set the sorting Id that influences the sorting order of the text frames.
      * Text frames have an order in which they are used to flow the text in,

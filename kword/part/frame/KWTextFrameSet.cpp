@@ -21,6 +21,8 @@
 #include "KWTextDocumentLayout.h"
 #include "KWFrame.h"
 #include "KWTextFrame.h"
+#include "KWPageManager.h"
+#include "KWPage.h"
 
 #include <KoTextShapeData.h>
 
@@ -34,7 +36,8 @@ KWTextFrameSet::KWTextFrameSet()
     m_protectContent(false),
     m_layoutTriggered(false),
     m_allowLayoutRequests(true),
-    m_textFrameSetType( KWord::OtherTextFrameSet )
+    m_textFrameSetType( KWord::OtherTextFrameSet ),
+    m_pageManager(0)
 {
     m_document->setDocumentLayout(new KWTextDocumentLayout(this));
     m_document->setUseDesignMetrics(true);
@@ -45,7 +48,8 @@ KWTextFrameSet::KWTextFrameSet(KWord::TextFrameSetType type)
     m_protectContent(false),
     m_layoutTriggered(false),
     m_allowLayoutRequests(true),
-    m_textFrameSetType( type )
+    m_textFrameSetType( type ),
+    m_pageManager(0)
 {
     m_document->setDocumentLayout(new KWTextDocumentLayout(this));
     m_document->setUseDesignMetrics(true);
@@ -148,7 +152,34 @@ void KWTextFrameSet::setAllowLayout(bool allow) {
 
 // static
 bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2) {
-    return static_cast<const KWTextFrame*>(frame1)->operator<( *static_cast<const KWTextFrame*>(frame2));
+    KWTextFrame *f1 = static_cast<const KWTextFrame*>(frame1);
+    KWTextFrame *f2 = static_cast<const KWTextFrame*>(frame2);
+
+    if(f1->sortingId() >= 0 && f2->sortingId() >= 0) {
+        return f1->sortingId() > f2->sortingId();
+    }
+    QPointF pos = f1->shape()->absolutePosition();
+    QRectF bounds = f2->shape()->boundingRect();
+
+    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (f1->frameSet());
+    if(tfs && tfs->pageManager()) { // check per page.
+        KWPage *page1 = tfs->pageManager()->page(f1->shape());
+        KWPage *page2 = tfs->pageManager()->page(f2->shape());
+        if(page1 != page2 && page1 != 0 && page2 != 0)
+            return page1->pageNumber() < page2->pageNumber();
+    }
+
+    // reverse the next 2 return values if the frameset is RTL
+    if(pos.x() > bounds.right()) return false;
+    if(pos.x() < bounds.left()) return true;
+
+    // check the Y position. Y is greater only when it is below the second frame.
+    if(pos.y() > bounds.bottom()) return false;
+    if(pos.y() < bounds.top()) return true;
+
+    // my center lies inside f2. Lets check the topleft pos.
+    if(f1->shape()->boundingRect().top() > bounds.top()) return false;
+    return true;
 }
 
 #ifndef NDEBUG

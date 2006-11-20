@@ -25,6 +25,7 @@
 
 class QTextDocument;
 class KWTextFrame;
+class KWPageManager;
 
 /**
  * A frameset with a TextDocument backing it.
@@ -53,6 +54,8 @@ public:
     void setProtectContent(bool protect) { m_protectContent = protect; }
 
     void setAllowLayout(bool allow);
+    void setPageManager(const KWPageManager *pageMager) { m_pageManager = pageMager; }
+    const KWPageManager* pageManager() const { return m_pageManager; }
 
 #ifndef NDEBUG
     void printDebug();
@@ -81,6 +84,7 @@ private:
     QTextDocument *m_document;
     bool m_protectContent, m_layoutTriggered, m_allowLayoutRequests;
     KWord::TextFrameSetType m_textFrameSetType;
+    const KWPageManager *m_pageManager;
 
     static bool sortTextFrames(const KWFrame *frame1, const KWFrame *frame2);
 };
