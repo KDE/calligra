@@ -1,4 +1,4 @@
-find_package(GSL)
+macro_optional_find_package(GSL)
 
 if(GSL_FOUND)
 
