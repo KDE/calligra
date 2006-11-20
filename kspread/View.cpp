@@ -224,6 +224,7 @@ public:
 
     // selection/marker
     Selection* selection;
+    Region oldSelection; // for 'Select All'
     Selection* choice;
     QMap<Sheet*, QPoint> savedAnchors;
     QMap<Sheet*, QPoint> savedMarkers;
@@ -1716,7 +1717,6 @@ void View::initView()
     d->formulaBarLayout->addWidget( d->editWidget, 2 );
 
     d->canvas->setEditWidget( d->editWidget );
-
     d->hBorderWidget = new HBorder( this, d->canvas,this );
     d->vBorderWidget = new VBorder( this, d->canvas ,this );
     d->hBorderWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -3596,6 +3596,7 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
     d->tabBar->setActiveTab( _t->sheetName() );
     d->vBorderWidget->repaint();
     d->hBorderWidget->repaint();
+    d->selectAllButton->repaint();
     d->activeSheet->setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
     d->canvas->slotMaxColumn( d->activeSheet->maxColumn() );
     d->canvas->slotMaxRow( d->activeSheet->maxRow() );
@@ -3678,6 +3679,7 @@ void View::changeSheet( const QString& _name )
     //update visible area
     d->vBorderWidget->repaint();
     d->hBorderWidget->repaint();
+    d->selectAllButton->repaint();
     d->canvas->slotMaxColumn( d->activeSheet->maxColumn() );
     d->canvas->slotMaxRow( d->activeSheet->maxRow() );
     t->setRegionPaintDirty( d->canvas->visibleCells() );
@@ -4013,7 +4015,16 @@ void View::specialPaste()
 
 void View::selectAll()
 {
-    selectionInfo()->initialize( QRect( 1, 1, KS_colMax, KS_rowMax ) );
+    if ( !selectionInfo()->isAllSelected() )
+    {
+        d->oldSelection = *selectionInfo();
+        selectionInfo()->initialize( QRect( QPoint(KS_colMax, KS_rowMax), QPoint(1,1) ) );
+    }
+    else
+    {
+        selectionInfo()->initialize( d->oldSelection );
+        d->oldSelection.clear();
+    }
 }
 
 void View::changeAngle()
@@ -5274,6 +5285,7 @@ void View::refreshView()
   d->editWidget->showEditWidget( doc()->showFormulaBar() );
   d->hBorderWidget->setVisible( doc()->showColumnHeader() );
   d->vBorderWidget->setVisible( doc()->showRowHeader() );
+  d->selectAllButton->setVisible( doc()->showColumnHeader() && doc()->showRowHeader() );
   d->vertScrollBar->setVisible( doc()->showVerticalScrollBar() );
   d->horzScrollBar->setVisible( doc()->showHorizontalScrollBar() );
   d->tabBar->setVisible( doc()->showTabBar() );
@@ -5283,6 +5295,8 @@ void View::refreshView()
 
   d->hBorderWidget->setMinimumHeight( doc()->zoomItYOld( KoGlobal::defaultFont().pointSizeF() + 5 ) );
   d->vBorderWidget->setMinimumWidth( doc()->zoomItXOld( YBORDER_WIDTH ) );
+  d->selectAllButton->setMinimumHeight( doc()->zoomItYOld( KoGlobal::defaultFont().pointSizeF() + 5 ) );
+  d->selectAllButton->setMinimumWidth( doc()->zoomItXOld( YBORDER_WIDTH ) );
 
   Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
   bool interfaceIsRTL = QApplication::isRightToLeft();
@@ -6571,6 +6585,7 @@ void View::slotRefreshView()
   d->canvas->repaint();
   d->vBorderWidget->repaint();
   d->hBorderWidget->repaint();
+  d->selectAllButton->repaint();
 }
 
 void View::slotUpdateView( Sheet *_sheet )
@@ -6686,6 +6701,7 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
   d->activeSheet->setRegionPaintDirty( changedRegion );
   d->vBorderWidget->update();
   d->hBorderWidget->update();
+  d->selectAllButton->update();
 
   if (colSelected || rowSelected)
   {

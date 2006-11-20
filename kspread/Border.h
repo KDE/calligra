@@ -192,7 +192,6 @@ protected:
 
 private:
     View*  m_view;
-    Region m_oldSelection;
     bool   m_mousePressed;
 };
 

@@ -1450,7 +1450,6 @@ void HBorder::focusOutEvent( QFocusEvent* )
 SelectAllButton::SelectAllButton( View* view  )
     : QWidget( view )
     , m_view( view )
-    , m_oldSelection()
     , m_mousePressed( false )
 {
 }
@@ -1510,16 +1509,7 @@ void SelectAllButton::mouseReleaseEvent( QMouseEvent* event )
     if ( !m_mousePressed )
         return;
     m_mousePressed = false;
-    if ( !m_view->selectionInfo()->isAllSelected() )
-    {
-        m_oldSelection = *m_view->selectionInfo();
-        m_view->selectionInfo()->initialize( QRect( 1, 1, KS_colMax, KS_rowMax ) );
-    }
-    else
-    {
-        m_view->selectionInfo()->initialize( m_oldSelection );
-        m_oldSelection.clear();
-    }
+    m_view->selectAll();
 }
 
 #include "Border.moc"

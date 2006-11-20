@@ -4198,7 +4198,9 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
 
     bool current = (currentRange == range);
 
-    retrieveMarkerInfo( selectionInfo()->extendToMergedAreas( range ), viewRect, positions, paintSides );
+    if (!(*it)->isAll())
+        range = selectionInfo()->extendToMergedAreas( range );
+    retrieveMarkerInfo( range, viewRect, positions, paintSides );
 
     double left =   positions[0];
     double top =    positions[1];
