@@ -31,7 +31,7 @@
 #include <QEvent>
 #include <QCloseEvent>
 
-#include <k3mdichildview.h>
+//#include <k3mdichildview.h>
 #include <kxmlguiclient.h>
 
 class Q3WidgetStack;
@@ -53,9 +53,11 @@ class KEXICORE_EXPORT KexiDialogTempData : public QObject
 {
 	public:
 	KexiDialogTempData(QObject* parent)
-	 : QObject(parent, "KexiDialogTempData")
+	 : QObject(parent)
 	 , proposeOpeningInTextViewModeBecauseOfProblems(false)
-	{}
+	{
+		setObjectName("KexiDialogTempData");
+	}
 	/*! Initially false, KexiPart::Part implementation can set this to true
 	 on data loading (e.g. in loadSchemaData()), to indicate that TextView mode
 	 could be used instead of DataView or DesignView, because there are problems
@@ -75,10 +77,11 @@ class KEXICORE_EXPORT KexiDialogTempData : public QObject
 /*! This class can contain a number of configurable views, switchable using toggle action.
  It also automatically works as a proxy for shared (application-wide) actions.
 */
-class KEXICORE_EXPORT KexiDialogBase :
-	public KMdiChildView,
-	public KexiActionProxy,
-	public Kexi::ObjectStatus
+class KEXICORE_EXPORT KexiDialogBase
+	//: public KMdiChildView
+	: public QObject
+	, public KexiActionProxy
+	, public Kexi::ObjectStatus
 {
 	Q_OBJECT
 

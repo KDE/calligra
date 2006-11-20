@@ -26,17 +26,19 @@
 
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kactioncollection.h>
 //Added by qt3to4:
 #include <Q3PtrList>
 
 KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h)
-: QObject(0,"KexiSharedActionHostPrivate")
+: QObject()
 , actionProxies(401)
 , actionMapper( this )
 , volatileActions(401)
 , enablers(401, false)
 , host(h)
 {
+	setObjectName("KexiSharedActionHostPrivate");
 	volatileActions.setAutoDelete(true);
 	connect(&actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
 }
@@ -49,15 +51,15 @@ void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
 
 	KexiActionProxy *proxy = w ? actionProxies[ w ] : 0;
 
-	if (!proxy || !proxy->activateSharedAction(act_id.latin1())) {
+	if (!proxy || !proxy->activateSharedAction(act_id.toLatin1())) {
 		//also try to find previous enabler
-		w = enablers[act_id.latin1()];
+		w = enablers[act_id.toLatin1()];
 		if (!w)
 			return;
 		proxy = actionProxies[ w ];
 		if (!proxy)
 			return;
-		proxy->activateSharedAction(act_id.latin1());
+		proxy->activateSharedAction(act_id.toLatin1());
 	}
 }
 

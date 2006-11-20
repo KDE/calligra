@@ -46,7 +46,8 @@
 #include <kiconloader.h>
 
 KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
- : KMdiChildView(caption, parent, "KexiDialogBase")
+ //: KMdiChildView(caption, parent, "KexiDialogBase")
+ : QObject(parent)
  , KexiActionProxy(this, parent)
  , m_isRegistered(false)
  , m_origCaption(caption)
