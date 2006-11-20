@@ -1440,4 +1440,86 @@ void HBorder::focusOutEvent( QFocusEvent* )
     m_bMousePressed = false;
 }
 
+
+/****************************************************************
+ *
+ * HBorder
+ *
+ ****************************************************************/
+
+SelectAllButton::SelectAllButton( View* view  )
+    : QWidget( view )
+    , m_view( view )
+    , m_oldSelection()
+    , m_mousePressed( false )
+{
+}
+
+SelectAllButton::~SelectAllButton()
+{
+}
+
+QSize SelectAllButton::sizeHint() const
+{
+  return QSize( 40, 10 );
+}
+
+void SelectAllButton::paintEvent( QPaintEvent* event )
+{
+    // painting rectangle
+    const QRectF paintRect = m_view->doc()->viewToDocument( event->rect() );
+
+    // the painter
+    QPainter painter( this );
+    painter.scale( m_view->doc()->zoomedResolutionX(), m_view->doc()->zoomedResolutionY() );
+
+    painter.setClipRect( paintRect );
+
+    // if all cells are selected
+    if ( m_view->selectionInfo()->isAllSelected() )
+    {
+        // selection brush/color
+        QColor selectionColor( palette().highlight().color() );
+        selectionColor.setAlpha( 127 );
+        const QBrush selectionBrush( selectionColor );
+
+        painter.setPen( selectionColor.dark(150) );
+        painter.setBrush( selectionBrush );
+    }
+    else
+    {
+        // background brush/color
+        const QBrush backgroundBrush( palette().window() );
+        const QColor backgroundColor( backgroundBrush.color() );
+
+        painter.setPen( backgroundColor.dark(150) );
+        painter.setBrush( backgroundBrush );
+    }
+    painter.drawRect( QRectF( 0, 0, width(), height() ) );
+}
+
+void SelectAllButton::mousePressEvent( QMouseEvent* event )
+{
+    if ( event->button() == Qt::LeftButton )
+        m_mousePressed = true;
+}
+
+void SelectAllButton::mouseReleaseEvent( QMouseEvent* event )
+{
+    Q_UNUSED(event);
+    if ( !m_mousePressed )
+        return;
+    m_mousePressed = false;
+    if ( m_oldSelection.isEmpty() )
+    {
+        m_oldSelection = *m_view->selectionInfo();
+        m_view->selectionInfo()->initialize( QRect( 1, 1, KS_colMax, KS_rowMax ) );
+    }
+    else
+    {
+        m_view->selectionInfo()->initialize( m_oldSelection );
+        m_oldSelection.clear();
+    }
+}
+
 #include "Border.moc"

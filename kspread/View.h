@@ -258,7 +258,7 @@ public:
 
     void deleteSelectedObjects();
 
-public slots:
+public Q_SLOTS:
     /**
     * refresh view when you hide/show vertical scrollbar
     */
@@ -267,6 +267,7 @@ public slots:
     /**
      * Actions
      */
+    void selectAll();
     void createTemplate();
     void transformPart();
     void copySelection();

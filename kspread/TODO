@@ -125,9 +125,10 @@ Things not in bugzilla
       attributes set for column/rows.
     - Fix Style::isDefault(). Use the StyleManager's default style.	----
     - Port the filters.							done
-    - Decouple validity and conditions from cells.			----
-      (think of the select all feature)
+    - Decouple validity and conditions from cells.			done
     - Fix named styles.							----
+    - Extend the Storage template to the StyleStorage level.		----
+      Garbage collection, book-keeping, ...
 
   + Speed up selection.						      1 ----
     (probably improved with Format Storage?)

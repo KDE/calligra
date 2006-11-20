@@ -650,6 +650,14 @@ bool Region::isColumnOrRowSelected() const
   return false;
 }
 
+bool Region::isAllSelected() const
+{
+    if (d->cells.count() != 1)
+        return false;
+    Q_ASSERT( d->cells.first() );
+    return d->cells.first()->isAll();
+}
+
 bool Region::contains(const QPoint& point, Sheet* sheet) const
 {
   if (d->cells.isEmpty())

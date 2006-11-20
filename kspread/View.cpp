@@ -194,6 +194,7 @@ public:
     Canvas *canvas;
     VBorder *vBorderWidget;
     HBorder *hBorderWidget;
+    SelectAllButton* selectAllButton;
     QScrollBar *horzScrollBar;
     QScrollBar *vertScrollBar;
     KoTabBar *tabBar;
@@ -432,6 +433,7 @@ public:
     KAction* paste;
     KAction* specialPaste;
     KAction* insertCellCopy;
+    KAction* selectAll;
     KAction* find;
     KAction* replace;
 
@@ -1022,8 +1024,10 @@ void View::Private::initActions()
 
   actions->insertCellCopy = new KAction( KIcon( "insertcellcopy" ), i18n("Paste with Insertion"), ac, "insertCellCopy" );
   connect(actions->insertCellCopy, SIGNAL(triggered(bool)), view, SLOT( slotInsertCellCopy() ));
-
   actions->insertCellCopy->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet"));
+
+  actions->selectAll = KStdAction::selectAll( view, SLOT( selectAll() ), ac, "selectAll" );
+  actions->selectAll->setToolTip(i18n("Selects all cells in the current sheet"));
 
   actions->find = KStdAction::find( view, SLOT(find()), ac );
   /*actions->findNext =*/ KStdAction::findNext( view, SLOT( findNext() ), ac );
@@ -1246,6 +1250,7 @@ void View::Private::adjustActions( bool mode )
   actions->paste->setEnabled( mode );
   actions->cut->setEnabled( mode );
   actions->specialPaste->setEnabled( mode );
+  actions->selectAll->setEnabled( mode );
   actions->deleteCell->setEnabled( mode );
   actions->clearText->setEnabled( mode );
   actions->clearComment->setEnabled( mode );
@@ -1716,6 +1721,8 @@ void View::initView()
     d->vBorderWidget = new VBorder( this, d->canvas ,this );
     d->hBorderWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
     d->vBorderWidget->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
+    d->selectAllButton = new SelectAllButton( this );
+    d->selectAllButton->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
     d->canvas->setFocusPolicy( Qt::StrongFocus );
     QWidget::setFocusPolicy( Qt::StrongFocus );
@@ -1749,6 +1756,7 @@ void View::initView()
     d->viewLayout->setColumnStretch( 1, 10 );
     d->viewLayout->setRowStretch( 2, 10 );
     d->viewLayout->addWidget( d->toolWidget, 0, 0, 1, 3 );
+    d->viewLayout->addWidget( d->selectAllButton, 1, 0 );
     d->viewLayout->addWidget( d->hBorderWidget, 1, 1, 1, 2 );
     d->viewLayout->addWidget( d->vBorderWidget, 2, 0 );
     d->viewLayout->addWidget( d->canvas, 2, 1 );
@@ -4001,6 +4009,11 @@ void View::specialPaste()
     calcStatusBarOp();
     updateEditWidget();
   }
+}
+
+void View::selectAll()
+{
+    selectionInfo()->initialize( QRect( 1, 1, KS_colMax, KS_rowMax ) );
 }
 
 void View::changeAngle()

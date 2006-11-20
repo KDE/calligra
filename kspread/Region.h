@@ -165,7 +165,7 @@ public:
   /**
    * @param row the row to check
    *
-   * @return @c true, if the row @p row is selected. If row @p row
+   * @return @c true , if the row @p row is selected. If row @p row
    * is not given, it returns true, if at least one row is selected
    *
    * \note If you want to check more than one row for selection, use
@@ -174,9 +174,14 @@ public:
   bool isRowSelected(uint row = 0) const;
 
   /**
-   * @return @c true,if at least one column or one row is selected
+   * @return @c true , if at least one column or one row is selected
    */
   bool isColumnOrRowSelected() const;
+
+  /**
+   * @return @c true , if all cells in the sheet are selected
+   */
+  bool isAllSelected() const;
 
   /**
    * @return a set of column numbers, for those columns, that are selected
@@ -389,6 +394,7 @@ public:
   virtual bool isValid() const { return false; }
   virtual bool isColumn() const { return false; }
   virtual bool isRow() const { return false; }
+  virtual bool isAll() const { return false; }
 
   virtual bool contains(const QPoint&) const { return false; }
   virtual bool contains(const QRect&) const { return false; }
@@ -435,6 +441,7 @@ public:
   virtual bool isValid() const { return (!m_point.isNull() && Region::isValid(m_point)); }
   virtual bool isColumn() const { return false; }
   virtual bool isRow() const { return false; }
+  virtual bool isAll() const { return false; }
 
   virtual bool contains(const QPoint&) const;
   virtual bool contains(const QRect&) const;
@@ -489,6 +496,7 @@ public:
   virtual bool isValid() const { return !m_range.isNull() && Region::isValid(m_range); }
   virtual bool isColumn() const { return (m_range.top() == 1 && m_range.bottom() == KS_rowMax); }
   virtual bool isRow() const { return (m_range.left() == 1 && m_range.right() == KS_colMax); }
+  virtual bool isAll() const { return (m_range == QRect( 1, 1, KS_colMax, KS_rowMax )); }
 
   virtual bool contains(const QPoint&) const;
   virtual bool contains(const QRect&) const;

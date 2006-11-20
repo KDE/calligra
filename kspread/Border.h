@@ -170,5 +170,31 @@ private:
     QRubberBand* m_rubberband;
 };
 
+
+
+/**
+ * The widget in the top left corner of the canvas,
+ * responsible for selecting all cells in a sheet.
+ */
+class SelectAllButton : public QWidget
+{
+    Q_OBJECT
+public:
+    SelectAllButton( View* view );
+    virtual ~SelectAllButton();
+
+    QSize sizeHint() const;
+
+protected:
+    virtual void paintEvent( QPaintEvent* event );
+    virtual void mousePressEvent( QMouseEvent* event );
+    virtual void mouseReleaseEvent( QMouseEvent* event );
+
+private:
+    View*  m_view;
+    Region m_oldSelection;
+    bool   m_mousePressed;
+};
+
 } // namespace KSpread
 #endif
