@@ -31,8 +31,6 @@ using namespace KSpread;
 StyleManipulator::StyleManipulator()
     : m_horizontalPen( QPen(QColor(), 0, Qt::NoPen) )
     , m_verticalPen( QPen(QColor(), 0, Qt::NoPen) )
-    , m_horizontalBorders( false )
-    , m_verticalBorders( false )
     , m_style( new Style() )
 {
 }
@@ -58,7 +56,56 @@ bool StyleManipulator::process(Element* element)
                     m_undoData << rawUndoData[i];
             }
         }
+        // special handling for the border
+        const QPen leftPen = m_style->leftBorderPen();
+        const QPen rightPen = m_style->rightBorderPen();
+        const QPen topPen = m_style->topBorderPen();
+        const QPen bottomPen = m_style->bottomBorderPen();
+        m_style->clearAttribute( Style::LeftPen );
+        m_style->clearAttribute( Style::RightPen );
+        m_style->clearAttribute( Style::TopPen );
+        m_style->clearAttribute( Style::BottomPen );
+
+        // use the horizontal/vertical pens
+        if ( m_horizontalPen.style() != Qt::NoPen )
+        {
+            m_style->setTopBorderPen( m_horizontalPen );
+            m_style->setBottomBorderPen( m_horizontalPen );
+        }
+        if ( m_verticalPen.style() != Qt::NoPen )
+        {
+            m_style->setLeftBorderPen( m_verticalPen );
+            m_style->setRightBorderPen( m_verticalPen );
+        }
+
+        // set the actual style
         m_sheet->setStyle( Region(range), *m_style );
+
+        // set the outer border styles
+        Style style;
+        if ( leftPen.style() != Qt::NoPen )
+        {
+            style.setLeftBorderPen( leftPen );
+            m_sheet->setStyle( Region(QRect(range.left(), range.top(), 1, range.height())), style );
+        }
+        if ( rightPen.style() != Qt::NoPen )
+        {
+            style.clear();
+            style.setRightBorderPen( rightPen );
+            m_sheet->setStyle( Region(QRect(range.right(), range.top(), 1, range.height())), style );
+        }
+        if ( topPen.style() != Qt::NoPen )
+        {
+            style.clear();
+            style.setTopBorderPen( topPen );
+            m_sheet->setStyle( Region(QRect(range.left(), range.top(), range.width(), 1)), style );
+        }
+        if ( bottomPen.style() != Qt::NoPen )
+        {
+            style.clear();
+            style.setBottomBorderPen( bottomPen );
+            m_sheet->setStyle( Region(QRect(range.left(), range.bottom(), range.width(), 1)), style );
+        }
     }
     return true;
 }
