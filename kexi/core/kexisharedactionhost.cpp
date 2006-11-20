@@ -81,7 +81,7 @@ void KexiSharedActionHost::setAsDefaultHost()
 
 //--------------------------------------------------
 
-KexiSharedActionHost::KexiSharedActionHost(KMainWindow* mainWin)
+KexiSharedActionHost::KexiSharedActionHost(KexiMainWindow* mainWin)
 : d( new KexiSharedActionHostPrivate(this) )
 {
 	d->mainWin = mainWin;
@@ -97,7 +97,7 @@ KexiSharedActionHost::~KexiSharedActionHost()
 	d=0; //! to let takeActionProxyFor() know that we are almost dead :)
 }
 
-void KexiSharedActionHost::setActionAvailable(const char *action_name, bool avail)
+void KexiSharedActionHost::setActionAvailable(const QString& action_name, bool avail)
 {
 	KAction *act = d->mainWin->actionCollection()->action(action_name);
 	if (act) {
@@ -105,7 +105,7 @@ void KexiSharedActionHost::setActionAvailable(const char *action_name, bool avai
 	}
 }
 
-void KexiSharedActionHost::updateActionAvailable(const char *action_name, bool avail, QObject *obj)
+void KexiSharedActionHost::updateActionAvailable(const QString& action_name, bool avail, QObject *obj)
 {
 /*test	if (qstrcmp(action_name, "tablepart_toggle_pkey")==0) {
 		kDebug() << "tablepart_toggle_pkey" << endl;
@@ -133,7 +133,7 @@ void KexiSharedActionHost::plugActionProxy(KexiActionProxy *proxy)
 	d->actionProxies.insert( proxy->receiver(), proxy );
 }
 
-KMainWindow* KexiSharedActionHost::mainWindow() const
+KexiMainWindow* KexiSharedActionHost::mainWindow() const
 {
 	return d->mainWin;
 }
@@ -221,7 +221,7 @@ KAction* KexiSharedActionHost::createSharedActionInternal( KAction *action )
 	return action;
 }
 
-KActionPtrList KexiSharedActionHost::sharedActions() const
+QList<KAction*> KexiSharedActionHost::sharedActions() const
 {
 	return d->sharedActions;
 }

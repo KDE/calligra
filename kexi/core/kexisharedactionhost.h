@@ -28,10 +28,12 @@
 #include <kstdaction.h>
 #include <kaction.h>
 
+#include "../kexi_export.h"
+
 class KShortcut;
-class KMainWindow;
 class KexiActionProxy;
 class KexiSharedActionHostPrivate;
+class KexiMainWindow;
 
 namespace KexiPart {
 	class Part;
@@ -39,7 +41,7 @@ namespace KexiPart {
 
 //! Acts as application-wide host that offers shared actions.
 /*!
- You can inherit this class together with KMainWindow (or any KMainWindow).
+ You can inherit this class together with KexiMainWindow.
  Call setAsDefaultHost() to make the host default for all shared actions that have 
  not explicity specified host.
 
@@ -53,7 +55,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 	public:
 
 		/*! Constructs host for main window \a mainWin. */
-		KexiSharedActionHost(KMainWindow* mainWin);
+		KexiSharedActionHost(KexiMainWindow* mainWin);
 
 		virtual ~KexiSharedActionHost();
 
@@ -85,7 +87,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		static KexiSharedActionHost& defaultHost();
 
 		/*! \return shared actions list. */
-		KActionPtrList sharedActions() const;
+		QList<KAction*> sharedActions() const;
 
 		/*! PROTOTYPE, DO NOT USE YET */
 		void setActionVolatile( KAction *a, bool set );
@@ -107,17 +109,17 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		*/
 		virtual void invalidateSharedActions(QObject *o);
 
-		void setActionAvailable(const char *action_name, bool avail);
+		void setActionAvailable(const QString& action_name, bool avail);
 
 		/*! Plugs shared actions proxy \a proxy for this host. */
 		void plugActionProxy(KexiActionProxy *proxy);
 
 		/*! Updates availability of action \a action_name for object \a obj.
 		 Object is mainly the window. */
-		void updateActionAvailable(const char *action_name, bool avail, QObject *obj);
+		void updateActionAvailable(const QString& action_name, bool avail, QObject *obj);
 
 		/*! \return main window for which this host is defined. */
-		KMainWindow* mainWindow() const;
+		KexiMainWindow* mainWindow() const;
 
 		/*! Creates shared action using \a text, \a pix_name pixmap, shortcut \a cut,
 		 optional \a name. You can pass your own action collection as \a col. 

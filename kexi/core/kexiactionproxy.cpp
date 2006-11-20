@@ -19,11 +19,13 @@
 
 #include "kexiactionproxy.h"
 #include "kexiactionproxy_p.h"
+#include "keximainwindow.h"
 
 #include <kdebug.h>
 #include <kaction.h>
-#include <kmainwindow.h>
 #include <kshortcut.h>
+#include <kxmlguiclient.h>
+#include <kactioncollection.h>
 
 #include <qwidget.h>
 #include <q3signal.h>
@@ -33,16 +35,17 @@
 #include <Q3CString>
 
 KAction_setEnabled_Helper::KAction_setEnabled_Helper(KexiActionProxy* proxy)
- : QObject(0,"KAction_setEnabled_Helper")
+ : QObject()
  , m_proxy( proxy )
 {
+	setObjectName("KAction_setEnabled_Helper");
 }
 
 void KAction_setEnabled_Helper::slotSetEnabled(bool enabled)
 {
 	if (sender()->inherits("KAction")) {
-		const KAction *a = static_cast<const KAction*>(sender());
-		m_proxy->setAvailable(a->name(), enabled);
+		const KAction *a = static_cast<const KAction*>( sender() );
+		m_proxy->setAvailable(a->objectName(), enabled);
 	}
 }
 
@@ -58,19 +61,19 @@ KexiSharedActionConnector::~KexiSharedActionConnector()
 {
 }
 
-void KexiSharedActionConnector::plugSharedAction(const char *action_name, const char *slot)
+void KexiSharedActionConnector::plugSharedAction(const QString& action_name, const char *slot)
 {
 	m_proxy->plugSharedAction(action_name, m_object, slot);
 }
 
 void KexiSharedActionConnector::plugSharedActionToExternalGUI(
-	const char *action_name, KXMLGUIClient *client) 
+	const QString& action_name, KXMLGUIClient *client) 
 {
 	m_proxy->plugSharedActionToExternalGUI(action_name, client);
 }
 
 void KexiSharedActionConnector::plugSharedActionsToExternalGUI(
-	const Q3ValueList<Q3CString>& action_names, KXMLGUIClient *client)
+	QList<QString> action_names, KXMLGUIClient *client)
 {
 	m_proxy->plugSharedActionsToExternalGUI(action_names, client);
 }
@@ -81,20 +84,20 @@ void KexiSharedActionConnector::plugSharedActionsToExternalGUI(
 KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
  : m_host( host ? host : &KexiSharedActionHost::defaultHost() )
  , m_receiver(receiver)
- , m_signals(47)
  , m_actionProxyParent(0)
- , m_signal_parent( 0, "signal_parent" )
+ , m_signal_parent( 0 )
  , m_KAction_setEnabled_helper( new KAction_setEnabled_Helper(this) )
  , m_focusedChild(0)
 {
-	m_signals.setAutoDelete(true);
-	m_sharedActionChildren.setAutoDelete(false);
-	m_alternativeActions.setAutoDelete(true);
+	m_signal_parent.setObjectName("signal_parent");
+	//m_sharedActionChildren.setAutoDelete(false); //TODO port logic to KDE4
+	//m_alternativeActions.setAutoDelete(true); //TODO port logic to KDE4
 	m_host->plugActionProxy( this );
 }
 
 KexiActionProxy::~KexiActionProxy()
 {
+	qDeleteAll(m_signals);
 	Q3PtrListIterator<KexiActionProxy> it(m_sharedActionChildren);
 	//detach myself from every child
 	for (;it.current();++it) {
@@ -109,12 +112,12 @@ KexiActionProxy::~KexiActionProxy()
 	delete m_KAction_setEnabled_helper;
 }
 
-void KexiActionProxy::plugSharedAction(const char *action_name, QObject* receiver, const char *slot)
+void KexiActionProxy::plugSharedAction(const QString& action_name, QObject* receiver, const char *slot)
 {
-	if (!action_name)// || !receiver || !slot)
+	if (action_name.isNull())// || !receiver || !slot)
 		return;
-	QPair<Q3Signal*,bool> *p = m_signals[action_name];
-	if (!p) {
+	QPair<Q3Signal*,bool> *p = m_signals.contains(action_name) ? m_signals[action_name] : 0;
+	if( ! p ) {
 		p = new QPair<Q3Signal*,bool>( new Q3Signal(&m_signal_parent), true );
 		m_signals.insert(action_name, p);
 	}
@@ -122,16 +125,16 @@ void KexiActionProxy::plugSharedAction(const char *action_name, QObject* receive
 		p->first->connect( receiver, slot );
 }
 
-void KexiActionProxy::unplugSharedAction(const char *action_name)
+void KexiActionProxy::unplugSharedAction(const QString& action_name)
 {
 	QPair<Q3Signal*,bool> *p = m_signals.take(action_name);
-	if (!p)
+	if (! p)
 		return;
 	delete p->first;
 	delete p;
 }
 
-int KexiActionProxy::plugSharedAction(const char *action_name, QWidget* w)
+int KexiActionProxy::plugSharedAction(const QString& action_name, QWidget* w)
 {
 	KAction *a = sharedAction(action_name);
 	if (!a) {
@@ -141,7 +144,7 @@ int KexiActionProxy::plugSharedAction(const char *action_name, QWidget* w)
 	return a->plug(w);
 }
 
-void KexiActionProxy::unplugSharedAction(const char *action_name, QWidget* w)
+void KexiActionProxy::unplugSharedAction(const QString& action_name, QWidget* w)
 {
 	KAction *a = sharedAction(action_name);
 	if (!a) {
@@ -151,17 +154,17 @@ void KexiActionProxy::unplugSharedAction(const char *action_name, QWidget* w)
 	a->unplug(w);
 }
 
-KAction* KexiActionProxy::plugSharedAction(const char *action_name, const QString& alternativeText, QWidget* w)
+KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w)
 {
 	KAction *a = sharedAction(action_name);
 	if (!a) {
 		kWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name << endl;
 		return 0;
 	}
-	Q3CString altName = a->name();
+	QString altName = a->objectName();
 	altName += "_alt";
-	KAction *alt_act = new KAction(alternativeText, a->iconSet(), a->shortcut(), 
-		0, 0, a->parent(), altName);
+	KAction *alt_act = new KAction(alternativeText, a->iconSet(), a->shortcut(),
+		a->parent(), 0, 0, altName);
 	QObject::connect(alt_act, SIGNAL(activated()), a, SLOT(activate()));
 	alt_act->plug(w);
 
@@ -171,28 +174,27 @@ KAction* KexiActionProxy::plugSharedAction(const char *action_name, const QStrin
 	return alt_act;
 }
 
-void KexiActionProxy::plugSharedActionToExternalGUI(const char *action_name, KXMLGUIClient *client)
+void KexiActionProxy::plugSharedActionToExternalGUI(const QString& action_name, KXMLGUIClient *client)
 {
-	KAction *a = client->action(action_name);
+	KAction *a = client->action( action_name.toLatin1().constData() );
 	if (!a)
 		return;
-	plugSharedAction(a->name(), a, SLOT(activate()));
+	plugSharedAction(a->objectName(), a, SLOT(activate()));
 
 	//update availability
-	setAvailable(a->name(), a->isEnabled());
+	setAvailable(a->objectName(), a->isEnabled());
 	//changes will be signaled
 	QObject::connect(a, SIGNAL(enabled(bool)), m_KAction_setEnabled_helper, SLOT(slotSetEnabled(bool)));
 }
 
-void KexiActionProxy::plugSharedActionsToExternalGUI(
-	const Q3ValueList<Q3CString>& action_names, KXMLGUIClient *client)
+void KexiActionProxy::plugSharedActionsToExternalGUI(QList<QString> action_names, KXMLGUIClient *client)
 {
-	for (Q3ValueList<Q3CString>::const_iterator it = action_names.constBegin(); it!=action_names.constEnd(); ++it) {
-		plugSharedActionToExternalGUI(*it, client);
+	foreach(QString n, action_names) {
+		plugSharedActionToExternalGUI(n, client);
 	}
 }
 
-bool KexiActionProxy::activateSharedAction(const char *action_name, bool alsoCheckInChildren)
+bool KexiActionProxy::activateSharedAction(const QString& action_name, bool alsoCheckInChildren)
 {
 	QPair<Q3Signal*,bool> *p = m_signals[action_name];
 	if (!p || !p->second) {
@@ -211,12 +213,12 @@ bool KexiActionProxy::activateSharedAction(const char *action_name, bool alsoChe
 	return true;
 }
 
-KAction* KexiActionProxy::sharedAction(const char* action_name)
+KAction* KexiActionProxy::sharedAction(const QString& action_name)
 {
 	return m_host->mainWindow()->actionCollection()->action(action_name);
 }
 
-bool KexiActionProxy::isSupported(const char* action_name) const
+bool KexiActionProxy::isSupported(const QString& action_name) const
 {
 	QPair<Q3Signal*,bool> *p = m_signals[action_name];
 	if (!p) {
@@ -233,7 +235,7 @@ bool KexiActionProxy::isSupported(const char* action_name) const
 	return p != 0;
 }
 
-bool KexiActionProxy::isAvailable(const char* action_name, bool alsoCheckInChildren) const
+bool KexiActionProxy::isAvailable(const QString& action_name, bool alsoCheckInChildren) const
 {
 	QPair<Q3Signal*,bool> *p = m_signals[action_name];
 	if (!p) {
@@ -253,7 +255,7 @@ bool KexiActionProxy::isAvailable(const char* action_name, bool alsoCheckInChild
 	return p->second != 0;
 }
 
-void KexiActionProxy::setAvailable(const char* action_name, bool set)
+void KexiActionProxy::setAvailable(const QString& action_name, bool set)
 {
 	QPair<Q3Signal*,bool> *p = m_signals[action_name];
 	if (!p)

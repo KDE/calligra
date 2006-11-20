@@ -27,7 +27,7 @@
 #include <Q3PopupMenu>
 #include <Q3CString>
 
-#include <k3mdimainfrm.h>
+//#include <k3mdimainfrm.h>
 #include <kexiutils/tristate.h>
 
 #include "kexisharedactionhost.h"
@@ -45,7 +45,8 @@ namespace KexiPart {
  * KexiMainWindow offers simple features what lowers cross-dependency (and also avoids
  * circular dependencies between Kexi modules).
  */
-class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActionHost
+//class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActionHost
+class KEXICORE_EXPORT KexiMainWindow : public QObject, public KexiSharedActionHost
 {
 	Q_OBJECT
 	public:
@@ -67,10 +68,13 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 To generate this ID, just app-wide internal counter is used. */
 		virtual int generatePrivateID() = 0;
 
+		/*! \return the KActionCollection instance that belongs to this mainwindow. */
+		virtual KActionCollection* actionCollection() const = 0;
+
 		/*! \return a list of all actions defined by application.
 		 Not all of them are shared. Don't use plug these actions
 		 in your windows by hand but user methods from KexiViewBase! */
-		virtual KActionPtrList allActions() const = 0;
+		virtual QList<KAction*> allActions() const = 0;
 
 		/*! \return currently active dialog (window) od 0 if there is no active dialog. */
 		virtual KexiDialogBase* currentDialog() const = 0;
@@ -107,7 +111,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 set before call, previously selected item will be preselected
 		 in the editor (if found). */
 		virtual void propertySetSwitched(KexiDialogBase *dlg, bool force=false,
-			bool preservePrevSelection = true, const QCString& propertyToSelect = QCString()) = 0;
+			bool preservePrevSelection = true, const QString& propertyToSelect = QString()) = 0;
 
 		/*! Saves dialog's \a dlg data. If dialog's data is never saved,
 		 user is asked for name and title, before saving (see getNewObjectInfo()).

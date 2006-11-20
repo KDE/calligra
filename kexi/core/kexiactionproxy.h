@@ -63,12 +63,11 @@ class KEXICORE_EXPORT KexiSharedActionConnector
 		~KexiSharedActionConnector();
 
 	protected:
-		void plugSharedAction(const char *action_name, const char *slot);
+		void plugSharedAction(const QString& action_name, const char *slot);
 
-		void plugSharedActionToExternalGUI(const char *action_name, KXMLGUIClient *client);
+		void plugSharedActionToExternalGUI(const QString& action_name, KXMLGUIClient *client);
 
-		void plugSharedActionsToExternalGUI(
-			const Q3ValueList<Q3CString>& action_names, KXMLGUIClient *client);
+		void plugSharedActionsToExternalGUI(QList<QString> action_names, KXMLGUIClient *client);
 
 		KexiActionProxy* m_proxy;
 		QObject *m_object;
@@ -94,7 +93,7 @@ class KEXICORE_EXPORT KexiActionProxy
 
 		/*! Activates  action named \a action_name for this proxy. If the action is executed
 		 (accepted), true is returned. */
-		bool activateSharedAction(const char *action_name, bool alsoCheckInChildren = true);
+		bool activateSharedAction(const QString& action_name, bool alsoCheckInChildren = true);
 
 		/*! Sets host to \a host; rerely used. */
 		void setSharedActionHost(KexiSharedActionHost& host) { m_host = &host; }
@@ -102,21 +101,21 @@ class KEXICORE_EXPORT KexiActionProxy
 		/*! \return true, if action named \a action_name is enabled within the proxy.
 		 False is returned either if the action is not available or is not supported.
 		 \ sa isSupported() */
-		bool isAvailable(const char* action_name, bool alsoCheckInChildren = true) const;
+		bool isAvailable(const QString& action_name, bool alsoCheckInChildren = true) const;
 
 		/*! \return true, if action named \a action_name is supported by the proxy. */
-		bool isSupported(const char* action_name) const;
+		bool isSupported(const QString& action_name) const;
 
 	protected:
 		/*! Plugs shared action named \a action_name to slot \a slot in \a receiver.
 		 \a Receiver is usually a child of _this_ widget. */
-		void plugSharedAction(const char *action_name, QObject* receiver, const char *slot);
+		void plugSharedAction(const QString& action_name, QObject* receiver, const char *slot);
 
-		void unplugSharedAction(const char *action_name);
+		void unplugSharedAction(const QString& action_name);
 
 		/*! Typical version of plugAction() method -- plugs action named \a action_name
 		 to slot \a slot in _this_ widget. */
-		inline void plugSharedAction(const char *action_name, const char *slot) {
+		inline void plugSharedAction(const QString& action_name, const char *slot) {
 			plugSharedAction(action_name, m_receiver, slot);
 		}
 
@@ -126,30 +125,29 @@ class KEXICORE_EXPORT KexiActionProxy
 		 <code> action("myaction")->plug(myPopup); </code> 
 		 \return index of inserted item, or -1 if there is not action with name \a action_name.
 		 \sa action(), KAction::plug(QWidget*, int) */
-		int plugSharedAction(const char *action_name, QWidget* w);
+		int plugSharedAction(const QString& action_name, QWidget* w);
 
-		void plugSharedActionToExternalGUI(const char *action_name, KXMLGUIClient *client);
+		void plugSharedActionToExternalGUI(const QString& action_name, KXMLGUIClient *client);
 
-		void plugSharedActionsToExternalGUI(
-			const Q3ValueList<Q3CString>& action_names, KXMLGUIClient *client);
+		void plugSharedActionsToExternalGUI(QList<QString> action_names, KXMLGUIClient *client);
 
 		/*! Unplugs action named \a action_name from a widget \a w.
 		 \sa plugSharedAction(const char *action_name, QWidget* w) */
-		void unplugSharedAction(const char *action_name, QWidget* w);
+		void unplugSharedAction(const QString& action_name, QWidget* w);
 
 		/*! Like above, but creates alternative action as a copy of \a action_name,
 		 with \a alternativeText set. When this action is activated, just original action
 		 specified by \a action_name is activated. The aternative action has autmatically set name as:
 		 action_name + "_alt". 
 		 \return newly created action or 0 if \a action_name not found. */
-		KAction* plugSharedAction(const char *action_name, const QString& alternativeText, QWidget* w);
+		KAction* plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w);
 
 		/*! \return action named with \a name or NULL if there is no such action. */
-		virtual KAction* sharedAction(const char* action_name);
+		virtual KAction* sharedAction(const QString& action_name);
 
 		inline QObject *receiver() const { return m_receiver; }
 
-		virtual void setAvailable(const char* action_name, bool set);
+		virtual void setAvailable(const QString& action_name, bool set);
 
 		/*! Adds \a child of this proxy. Children will receive activateSharedAction() event,
 		 If activateSharedAction() "event" is not consumed by the main proxy,
@@ -164,7 +162,7 @@ class KEXICORE_EXPORT KexiActionProxy
 
 		KexiSharedActionHost *m_host;
 		QPointer<QObject> m_receiver;
-		Q3AsciiDict< QPair<Q3Signal*,bool> > m_signals;
+		QMap<QString, QPair<Q3Signal*,bool>* > m_signals;
 
 		Q3PtrList<KexiActionProxy> m_sharedActionChildren;
 

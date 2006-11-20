@@ -51,12 +51,11 @@ class KEXICORE_EXPORT KexiSharedActionHostPrivate : public QObject
 
 	public:
 		Q3PtrDict<KexiActionProxy> actionProxies;
-		KMainWindow *mainWin;
-		KActionPtrList sharedActions;
+		KexiMainWindow *mainWin;
+		QList<KAction*> sharedActions;
 		QSignalMapper actionMapper;
 		Q3PtrDict<KexiVolatileActionData> volatileActions;
 		Q3AsciiDict<QWidget> enablers;
-
 		KexiSharedActionHost *host;
 };
 

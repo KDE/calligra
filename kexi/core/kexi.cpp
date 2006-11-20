@@ -20,7 +20,7 @@
 #include "kexi.h"
 #include "kexiaboutdata.h"
 #include "kexicmdlineargs.h"
-#include <config-kexi.h>
+//#include <config-kexi.h> //why this new KDE4 include?
 #include <kexiutils/identifier.h>
 #include <kexidb/msghandler.h>
 

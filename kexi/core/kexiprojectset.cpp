@@ -102,10 +102,10 @@ KexiProjectData::List KexiProjectSet::list() const
 
 KexiProjectData* KexiProjectSet::findProject(const QString &dbName) const
 {
-	const QString _dbName = dbName.lower();
+	const QString _dbName = dbName.toLower();
 	Q3PtrListIterator<KexiProjectData> it( d->list );
 	for (;it.current();++it) {
-		if (it.current()->databaseName().lower()==_dbName)
+		if (it.current()->databaseName().toLower()==_dbName)
 			return it.current();
 	}
 	return 0;
