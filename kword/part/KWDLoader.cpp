@@ -842,11 +842,15 @@ void KWDLoader::fill(KoCharacterStyle *style, QDomElement formatElem) {
         //style->setFontUnderline(underline != QTextCharFormat::NoUnderline);
         style->setUnderlineStyle(underline);
     }
+    element = formatElem.firstChildElement( "TEXTBACKGROUNDCOLOR" );
+    if( !element.isNull() ) {
+        style->setBackground(QBrush(colorFrom(element)));
+    }
+
        //VERTALIGN
        //SHADOW
        //FONTATTRIBUTE
        //LANGUAGE
-       //TEXTBACKGROUNDCOLOR
        //OFFSETFROMBASELINE
 }
 
