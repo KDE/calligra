@@ -69,6 +69,8 @@
 #include <KoShapeSelector.h>
 #include <KoPathShape.h>
 #include <KoPathCommand.h>
+#include <KoToolBoxFactory.h>
+#include <KoShapeSelectorFactory.h>
 
 // Commands.
 #include "vcleanupcmd.h"
@@ -220,6 +222,11 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		createDocumentTabDock();
 		createLayersTabDock();
 		createResourceDock();
+
+		KoToolBoxFactory toolBoxFactory( "Karbon" );
+		createDockWidget( &toolBoxFactory );
+		KoShapeSelectorFactory shapeSelectorFactory;
+		createDockWidget( &shapeSelectorFactory );
 
 		m_strokeFillPreview = new VStrokeFillPreview( part() );
         createDock(i18n("Stroke/Fills"), m_strokeFillPreview);
@@ -1745,15 +1752,6 @@ void KarbonView::createResourceDock()
 	m_styleDocker = new VStyleDocker( part(), this );
 	m_styleDocker->setWindowTitle(i18n("Resources"));
     createDock(i18n("Resources"), m_styleDocker);
-}
-
-QDockWidget *KarbonView::createToolBox() {
-	return KoToolManager::instance()->toolBox("Karbon");
-}
-
-QDockWidget *KarbonView::createShapeSelector()
-{
-	return new KoShapeSelector( this );
 }
 
 VToolController *

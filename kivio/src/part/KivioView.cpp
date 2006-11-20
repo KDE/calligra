@@ -39,6 +39,8 @@
 #include <KoMainWindow.h>
 #include <KoRuler.h>
 #include <KoSelection.h>
+#include <KoToolBoxFactory.h>
+#include <KoShapeSelectorFactory.h>
 
 #include "KivioCanvas.h"
 #include "KivioDocument.h"
@@ -125,6 +127,11 @@ void KivioView::initGUI()
     if(m_geometryDocker) {
         m_geometryDocker->setEnabled(false);
     }
+
+    KoToolBoxFactory toolBoxFactory("Kivio");
+    createDockWidget(&toolBoxFactory);
+    KoShapeSelectorFactory shapeSelectorFactory;
+    createDockWidget(&shapeSelectorFactory);
 
     connect(m_canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
@@ -283,16 +290,6 @@ void KivioView::updateMousePosition(QPoint position)
 {
     m_horizontalRuler->updateMouseCoordinate(position.x());
     m_verticalRuler->updateMouseCoordinate(position.y());
-}
-
-QDockWidget* KivioView::createToolBox()
-{
-    return KoToolManager::instance()->toolBox("Kivio");
-}
-
-QDockWidget* KivioView::createShapeSelector()
-{
-    return new KoShapeSelector(this);
 }
 
 void KivioView::selectionChanged()

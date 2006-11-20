@@ -74,12 +74,6 @@ public:
     KoViewConverter *viewConverter() { return &m_zoomHandler; }
     void setZoom( int zoom ); ///< change the zoom value
 
-    /// overwritten method from superclass
-    QDockWidget *createToolBox();
-
-    /// overwritten method from superclass
-    QDockWidget *createShapeSelector();
-
 signals:
     /// emitted when this view wants to go back in the document command-history.
     void undo();

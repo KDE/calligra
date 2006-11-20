@@ -126,9 +126,6 @@ public:
 	VStrokeFillPreview* strokeFillPreview()
 		{ return m_strokeFillPreview; }
 
-	QDockWidget *createToolBox();
-	QDockWidget *createShapeSelector();
-
 public slots:
 	// editing:
 	void editCut();

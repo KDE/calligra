@@ -37,6 +37,8 @@
 #include <KoToolBox.h>
 #include <KoTextShapeData.h>
 #include <KoShapeSelector.h>
+#include <KoToolBoxFactory.h>
+#include <KoShapeSelectorFactory.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -62,6 +64,11 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     m_currentPage = m_document->pageManager()->page(m_document->startPage());
 
     setupActions();
+
+    KoToolBoxFactory toolBoxFactory( "KWord" );
+    createDockWidget( &toolBoxFactory );
+    KoShapeSelectorFactory shapeSelectorFactory;
+    createDockWidget( &shapeSelectorFactory );
 
     connect( kwcanvas()->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 }
@@ -205,10 +212,6 @@ void KWView::editFrameProperties() {
     delete frameDialog;
 }
 
-QDockWidget *KWView::createToolBox() {
-    return KoToolManager::instance()->toolBox("KWord");
-}
-
 // Actions
 void KWView::print() {
 // options;
@@ -299,10 +302,6 @@ void KWView::editRedo() {
         }
     }
     emit redo();
-}
-
-QDockWidget *KWView::createShapeSelector() {
-    return new KoShapeSelector(0);
 }
 
 #include "KWView.moc"
