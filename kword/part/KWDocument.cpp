@@ -391,6 +391,12 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     foreach(KWPage *page, m_pageManager.pages())
         m_frameLayout.createNewFramesForPage(page->pageNumber());
 
+    foreach(KWFrameSet *fs, m_frameSets) {
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+        if(tfs)
+            tfs->setAllowLayout(true);
+    }
+
     emit sigProgress(-1);
 
     kDebug(32001) << "KWDocument::loadXML done" << endl;

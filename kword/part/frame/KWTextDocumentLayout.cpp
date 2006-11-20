@@ -475,8 +475,6 @@ QSizeF KWTextDocumentLayout::documentSize() const {
 
 void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) {
     Q_UNUSED(context);
-    if(document()->begin().layout()->lineCount() == 0) // only first time
-        layout();
     const QRegion clipRegion = painter->clipRegion();
     // da real work
     QTextBlock block = document()->begin();

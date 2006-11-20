@@ -52,6 +52,8 @@ public:
     /// set wheater the content of this frameset should not be allowed to be altered
     void setProtectContent(bool protect) { m_protectContent = protect; }
 
+    void setAllowLayout(bool allow);
+
 #ifndef NDEBUG
     void printDebug();
     void printDebug(KWFrame *frame);
@@ -77,7 +79,7 @@ protected slots:
 
 private:
     QTextDocument *m_document;
-    bool m_protectContent, m_layoutTriggered;
+    bool m_protectContent, m_layoutTriggered, m_allowLayoutRequests;
     KWord::TextFrameSetType m_textFrameSetType;
 
     static bool sortTextFrames(const KWFrame *frame1, const KWFrame *frame2);

@@ -33,6 +33,7 @@ KWTextFrameSet::KWTextFrameSet()
     : m_document( new QTextDocument() ),
     m_protectContent(false),
     m_layoutTriggered(false),
+    m_allowLayoutRequests(true),
     m_textFrameSetType( KWord::OtherTextFrameSet )
 {
     m_document->setDocumentLayout(new KWTextDocumentLayout(this));
@@ -43,6 +44,7 @@ KWTextFrameSet::KWTextFrameSet(KWord::TextFrameSetType type)
     : m_document( new QTextDocument() ),
     m_protectContent(false),
     m_layoutTriggered(false),
+    m_allowLayoutRequests(true),
     m_textFrameSetType( type )
 {
     m_document->setDocumentLayout(new KWTextDocumentLayout(this));
@@ -100,7 +102,9 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
 }
 
 void KWTextFrameSet::requestLayout() {
-    if(!m_layoutTriggered)
+    if(! m_allowLayoutRequests)
+        return;
+    if(! m_layoutTriggered)
         QTimer::singleShot(0, this, SLOT(relayout()));
     m_layoutTriggered = true;
 }
@@ -134,6 +138,12 @@ void KWTextFrameSet::requestMoreFrames() {
 
 void KWTextFrameSet::framesEmpty(int framesInUse) {
     kDebug() << "KWTextFrameSet::framesEmpty " << framesInUse << endl;
+}
+
+void KWTextFrameSet::setAllowLayout(bool allow) {
+    m_allowLayoutRequests = allow;
+    if(m_allowLayoutRequests)
+        requestLayout();
 }
 
 // static
