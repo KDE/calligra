@@ -47,7 +47,7 @@
 
 KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
  //: KMdiChildView(caption, parent, "KexiDialogBase")
- : QObject(parent)
+ : KMainWindow(parent)
  , KexiActionProxy(this, parent)
  , m_isRegistered(false)
  , m_origCaption(caption)
@@ -56,6 +56,8 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
  , m_disableDirtyChanged(false)
 // , m_neverSaved(false)
 {
+	setCaption(caption);
+
 	m_supportedViewModes = 0; //will be set by KexiPart
 	m_openedViewModes = 0;
 	m_currentViewMode = Kexi::NoViewMode; //no view available yet
@@ -125,8 +127,10 @@ void KexiDialogBase::removeView(int mode)
 QSize KexiDialogBase::minimumSizeHint() const
 {
 	KexiViewBase *v = selectedView();
-	if (!v)
-		return KMdiChildView::minimumSizeHint();
+	if (!v) {
+		//sebsauer 20061120: return KMdiChildView::minimumSizeHint();
+		return KMainWindow::minimumSizeHint();
+	}
 	return v->minimumSizeHint() + QSize(0, mdiParent() ? mdiParent()->captionHeight() : 0);
 }
 

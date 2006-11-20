@@ -25,7 +25,7 @@
 KexiMainWindow::KexiMainWindow()
  //: KMdiMainFrm(0L, "keximainwindow")
  //, KexiSharedActionHost(this)
- : QObject()
+ : KMainWindow()
  , KexiSharedActionHost(this)
 {
 }

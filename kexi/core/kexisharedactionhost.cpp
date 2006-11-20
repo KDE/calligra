@@ -24,9 +24,13 @@
 
 #include <kexiutils/utils.h>
 
+#include <QApplication>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <ktoggleaction.h>
+#include <kactionmenu.h>
 #include <kactioncollection.h>
+#include <kicon.h>
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -35,7 +39,6 @@ KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h
 , actionProxies(401)
 , actionMapper( this )
 , volatileActions(401)
-, enablers(401, false)
 , host(h)
 {
 	setObjectName("KexiSharedActionHostPrivate");
@@ -53,7 +56,7 @@ void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
 
 	if (!proxy || !proxy->activateSharedAction(act_id.toLatin1())) {
 		//also try to find previous enabler
-		w = enablers[act_id.toLatin1()];
+		w = enablers.contains(act_id) ? enablers[act_id] : 0;
 		if (!w)
 			return;
 		proxy = actionProxies[ w ];
@@ -122,7 +125,7 @@ void KexiSharedActionHost::updateActionAvailable(const QString& action_name, boo
 
 	setActionAvailable(action_name, avail);
 	if (avail) {
-		d->enablers.replace(action_name, fw);
+		d->enablers.insert(action_name, fw);
 	}
 	else {
 		d->enablers.take(action_name);
@@ -144,34 +147,34 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 {
 	if (!d)
 		return;
-	bool insideDialogBase = o && (o->inherits("KexiDialogBase") || 0!=KexiUtils::findParent<KexiDialogBase>(o, "KexiDialogBase"));
+	//KDE3: bool insideDialogBase = o && (o->inherits("KexiDialogBase") || 0 != KexiUtils::findParent<KexiDialogBase>(o, "KexiDialogBase"));
+	bool insideDialogBase = o && (o->inherits("KexiDialogBase") || 0 != KexiUtils::findParent<KexiDialogBase>(o));
 
 	KexiActionProxy *p = o ? d->actionProxies[ o ] : 0;
-	for (KActionPtrList::ConstIterator it=d->sharedActions.constBegin(); it!=d->sharedActions.constEnd(); ++it) {
-//			setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
-		KAction *a = *it;
+	foreach(KAction* a, d->sharedActions) {
+		//setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
 		if (!insideDialogBase && d->mainWin->actionCollection()!=a->parentCollection()) {
 			//o is not KexiDialogBase or its child:
 			// only invalidate action if it comes from mainwindow's KActionCollection
 			// (thus part-actions are untouched when the focus is e.g. in the Property Editor)
 			continue;
 		}
-		const bool avail = p && p->isAvailable(a->name());
+		const bool avail = p && p->isAvailable(a->objectName());
 		KexiVolatileActionData *va = d->volatileActions[ a ];
 		if (va != 0) {
-			if (p && p->isSupported(a->name())) {
-				Q3PtrList<KAction> actions_list;
+			if (p && p->isSupported(a->objectName())) {
+				QList< KAction* > actions_list;
 				actions_list.append( a );
 				if (!va->plugged) {
 					va->plugged=true;
-	//				d->mainWin->unplugActionList( a->name() );
-					d->mainWin->plugActionList( a->name(), actions_list );
+					//d->mainWin->unplugActionList( a->objectName() );
+					d->mainWin->plugActionList( a->objectName(), actions_list );
 				}
 			}
 			else {
 				if (va->plugged) {
 					va->plugged=false;
-					d->mainWin->unplugActionList( a->name() );
+					d->mainWin->unplugActionList( a->objectName() );
 				}
 			}
 		}
@@ -200,7 +203,7 @@ bool KexiSharedActionHost::acceptsSharedActions(QObject *)
 
 QWidget* KexiSharedActionHost::focusWindow()
 {
-	QWidget *fw;
+#if 0 //sebsauer 20061120: KDE3
 	if (dynamic_cast<KMdiMainFrm*>(d->mainWin)) {
 		fw = dynamic_cast<KMdiMainFrm*>(d->mainWin)->activeWindow();
 	}
@@ -213,12 +216,21 @@ QWidget* KexiSharedActionHost::focusWindow()
 	while (fw && !acceptsSharedActions(fw))
 		fw = fw->parentWidget();
 	return fw;
+#else
+	QWidget *aw = QApplication::activeWindow();
+	if (!aw)
+		aw = d->mainWin;
+	QWidget *fw = aw->focusWidget();
+	while (fw && !acceptsSharedActions(fw))
+		fw = fw->parentWidget();
+	return fw;
+#endif
 }
 
 KAction* KexiSharedActionHost::createSharedActionInternal( KAction *action )
 {
 	QObject::connect(action,SIGNAL(activated()), &d->actionMapper, SLOT(map()));
-	d->actionMapper.setMapping(action, action->name());
+	d->actionMapper.setMapping(action, action->objectName());
 	d->sharedActions.append( action );
 	return action;
 }
@@ -256,7 +268,7 @@ KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QSt
 		);
 	else if (qstricmp(subclassName,"KActionMenu")==0)
 		return createSharedActionInternal(
-			new KActionMenu(text, pix_name, col ? col : d->mainWin->actionCollection(), name)
+			new KActionMenu(KIcon(pix_name), text, col ? col : d->mainWin->actionCollection(), name)
 		);
 //TODO: more KAction subclasses
 

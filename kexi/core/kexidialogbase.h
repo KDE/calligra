@@ -25,13 +25,15 @@
 #include "kexiactionproxy.h"
 #include "kexi.h"
 #include "kexipart.h"
+#include "kexiviewbase.h"
 
-#include <qpointer.h>
+#include <QPointer>
 //Added by qt3to4:
 #include <QEvent>
 #include <QCloseEvent>
 
 //#include <k3mdichildview.h>
+#include <kmainwindow.h>
 #include <kxmlguiclient.h>
 
 class Q3WidgetStack;
@@ -79,7 +81,7 @@ class KEXICORE_EXPORT KexiDialogTempData : public QObject
 */
 class KEXICORE_EXPORT KexiDialogBase
 	//: public KMdiChildView
-	: public QObject
+	: public KMainWindow
 	, public KexiActionProxy
 	, public Kexi::ObjectStatus
 {

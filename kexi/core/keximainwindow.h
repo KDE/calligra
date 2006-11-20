@@ -27,7 +27,7 @@
 #include <Q3PopupMenu>
 #include <Q3CString>
 
-//#include <k3mdimainfrm.h>
+#include <kmainwindow.h>
 #include <kexiutils/tristate.h>
 
 #include "kexisharedactionhost.h"
@@ -46,7 +46,7 @@ namespace KexiPart {
  * circular dependencies between Kexi modules).
  */
 //class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActionHost
-class KEXICORE_EXPORT KexiMainWindow : public QObject, public KexiSharedActionHost
+class KEXICORE_EXPORT KexiMainWindow : public KMainWindow, public KexiSharedActionHost
 {
 	Q_OBJECT
 	public:
@@ -67,10 +67,6 @@ class KEXICORE_EXPORT KexiMainWindow : public QObject, public KexiSharedActionHo
 		 generated and in most cases there is at most one unique instance document of such type (part).
 		 To generate this ID, just app-wide internal counter is used. */
 		virtual int generatePrivateID() = 0;
-
-		//sebsauer, 20061120: added to provide a KMainWindow-compatible interface
-		/*! \return the KActionCollection instance that belongs to this mainwindow. */
-		virtual KActionCollection* actionCollection() const = 0;
 
 		/*! \return a list of all actions defined by application.
 		 Not all of them are shared. Don't use plug these actions

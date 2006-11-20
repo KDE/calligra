@@ -41,6 +41,7 @@
 #include <kexiutils/utils.h>
 
 #include "kexiproject.h"
+#include "kexiprojectdata.h"
 #include "kexipartmanager.h"
 #include "kexipartitem.h"
 #include "kexipartinfo.h"
@@ -212,7 +213,7 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
 
 		if (d->connection->errorNum() == ERR_NO_DB_PROPERTY) {
 //! @todo <temp> this is temporary workaround as we have no import driver for SQLite
-			if (/*supported?*/ !d->data->connectionData()->driverName.lower().startsWith("sqlite")) {
+			if (/*supported?*/ !d->data->connectionData()->driverName.toLower().startsWith("sqlite")) {
 //! </temp> 
 				if (incompatibleWithKexi)
 					*incompatibleWithKexi = true;
@@ -611,9 +612,9 @@ KexiProject::itemForMimeType(const Q3CString &mimeType, const QString &name)
 	KexiPart::ItemDict *dict = itemsForMimeType(mimeType);
 	if (!dict)
 		return 0;
-	const QString l_name = name.lower();
+	const QString l_name = name.toLower();
 	for (KexiPart::ItemDictIterator it( *dict ); it.current(); ++it) {
-		if (it.current()->name().lower()==l_name)
+		if (it.current()->name().toLower()==l_name)
 			return it.current();
 	}
 	return 0;
@@ -625,9 +626,9 @@ KexiProject::item(KexiPart::Info *i, const QString &name)
 	KexiPart::ItemDict *dict = items(i);
 	if (!dict)
 		return 0;
-	const QString l_name = name.lower();
+	const QString l_name = name.toLower();
 	for (KexiPart::ItemDictIterator it( *dict ); it.current(); ++it) {
-		if (it.current()->name().lower()==l_name)
+		if (it.current()->name().toLower()==l_name)
 			return it.current();
 	}
 	return 0;
@@ -813,7 +814,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 		setError(d->connection);
 		return false;
 	}
-	Q3CString oldName( item.name().latin1() );
+	Q3CString oldName( item.name().toLatin1() );
 	item.setName( newName );
 	emit itemRenamed(item, oldName);
 	return true;
@@ -841,9 +842,9 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 	}
 	else {
 		n = 0; //means: try not to add 'n'
-		base_name = KexiUtils::string2Identifier(suggestedCaption).lower();
+		base_name = KexiUtils::string2Identifier(suggestedCaption).toLower();
 	}
-	base_name = KexiUtils::string2Identifier(base_name).lower();
+	base_name = KexiUtils::string2Identifier(base_name).toLower();
 	KexiPart::ItemDictIterator it(*dict);
 	Q3PtrDictIterator<KexiPart::Item> itUnstored(d->unstoredItems);
 	do {
@@ -851,7 +852,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 		if (n>=1)
 			new_name += QString::number(n);
 		for (it.toFirst(); it.current(); ++it) {
-			if (it.current()->name().lower()==new_name)
+			if (it.current()->name().toLower()==new_name)
 				break;
 		}
 		if ( it.current() ) {
@@ -859,7 +860,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 			continue; //stored exists!
 		}
 		for (itUnstored.toFirst(); itUnstored.current(); ++itUnstored) {
-			if (itUnstored.current()->name().lower()==new_name)
+			if (itUnstored.current()->name().toLower()==new_name)
 				break;
 		}
 		if ( !itUnstored.current() )
@@ -947,7 +948,7 @@ tristate KexiProject::dropProject(KexiProjectData* data,
 	KexiDB::MessageHandler* handler, bool dontAsk)
 {
 	if (!dontAsk && KMessageBox::Yes != KMessageBox::warningYesNo(0, 
-		i18n("Do you want to drop the project \"%1\"?").arg(data->objectName())+"\n"+warningNoUndo ))
+		i18n("Do you want to drop the project \"%1\"?").arg(static_cast< KexiDB::SchemaData* >(data)->objectName())+"\n"+warningNoUndo ))
 		return cancelled;
 
 	KexiProject prj( new KexiProjectData(*data), handler );

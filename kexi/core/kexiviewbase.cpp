@@ -32,6 +32,8 @@
 //Added by qt3to4:
 #include <QEvent>
 #include <QCloseEvent>
+//Added by qt3to4:
+#include <Q3CString>
 
 KexiViewBase::KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : QWidget(parent, name)
@@ -110,7 +112,7 @@ void KexiViewBase::propertySetSwitched()
 		m_mainWin->propertySetSwitched( parentDialog(), false );
 }
 
-void KexiViewBase::propertySetReloaded(bool preservePrevSelection, const QCString& propertyToSelect)
+void KexiViewBase::propertySetReloaded(bool preservePrevSelection, const Q3CString& propertyToSelect)
 {
 	if (parentDialog())
 		m_mainWin->propertySetSwitched( parentDialog(), true, preservePrevSelection, propertyToSelect );

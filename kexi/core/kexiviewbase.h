@@ -25,6 +25,8 @@
 #include <QEvent>
 #include <QCloseEvent>
 #include <Q3PtrList>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include "kexiactionproxy.h"
 
@@ -160,7 +162,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 If \a preservePrevSelection is true and there was a property set
 		 assigned before call, previously selected item will be preselected
 		 in the editor (if found). */
-		void propertySetReloaded(bool preservePrevSelection = false, const QCString& propertyToSelect = QCString());
+		void propertySetReloaded(bool preservePrevSelection = false, const Q3CString& propertyToSelect = Q3CString());
 
 		/*! Tells this dialog to create and store data of the new object
 		 pointed by \a sdata on the backend.
