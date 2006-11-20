@@ -37,12 +37,6 @@ public:
     StyleManipulator();
     virtual ~StyleManipulator();
 
-    /**
-     * Processes \p style .
-     * \return pointer to the changed style
-     */
-    Style* process(Style* style) const;
-
     // SetSelectionFontWorker
     // SetSelectionSizeWorker
     void setFontFamily(const QString& font) { m_style->setFontFamily( font ); }

@@ -382,7 +382,7 @@ QDomElement ColumnFormat::save( QDomDocument& doc, int xshift, bool copy ) const
     if ( !style.isEmpty() )
     {
         kDebug(36003) << "saving cell style of column " << d->column << endl;
-        QDomElement format;
+        QDomElement format( doc.createElement( "format" ) );;
         style.saveXML( doc, format, false, copy );
         col.appendChild( format );
     }

@@ -120,7 +120,7 @@ Things not in bugzilla
     - Move the StyleManipulator class into the FormatManipulators file	done
       and rename the file to StyleManipulators.
     - Improve the caching of the styles.				----
-    - Fix the border outline operation.					----
+    - Fix the border outline operation.					done
     - OpenDocument saving of cell styles should not include the		----
       attributes set for column/rows.
     - Fix Style::isDefault(). Use the StyleManager's default style.	----

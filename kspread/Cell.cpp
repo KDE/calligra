@@ -1578,7 +1578,7 @@ QDomElement Cell::save( QDomDocument& doc,
     //
     // Save the formatting information
     //
-    QDomElement formatElement;
+    QDomElement formatElement( doc.createElement( "format" ) );
     style().saveXML( doc, formatElement, force, copy );
     if ( formatElement.hasChildNodes() || formatElement.attributes().length() ) // don't save empty tags
         cell.appendChild( formatElement );

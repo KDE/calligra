@@ -2984,40 +2984,81 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
     sheet.setAttribute( "printPageLimitY", print()->pageLimitY() );
 
     // Save all cells.
-    Cell* c = firstCell();
-    for( ;c; c = c->nextCell() )
+    int maxCols = 0;
+    int maxRows = 0;
+    usedArea( maxCols, maxRows );
+    for ( int row = 1; row <= maxRows; ++row )
     {
-        if ( !c->isDefault() )
+        Cell* cell = getFirstCellRow( row );
+        int nextStyleColumnIndex = styleStorage()->nextStyleRight( 0, row );
+        while ( cell || nextStyleColumnIndex )
         {
-            QDomElement e = c->save( dd );
-            if ( !e.isNull() )
-                sheet.appendChild( e );
+            if ( cell && ( !nextStyleColumnIndex || cell->column() <= nextStyleColumnIndex ) )
+            {
+                QDomElement e = cell->save( dd );
+                if ( !e.isNull() )
+                    sheet.appendChild( e );
+                if ( cell->column() == nextStyleColumnIndex )
+                    nextStyleColumnIndex = styleStorage()->nextStyleRight( nextStyleColumnIndex, row );
+                cell = getNextCellRight( cell->column(), row );
+            }
+            else if ( nextStyleColumnIndex )
+            {
+                QDomElement e = Cell( this, nextStyleColumnIndex, row ).save( dd );
+                if ( !e.isNull() )
+                    sheet.appendChild( e );
+                nextStyleColumnIndex = styleStorage()->nextStyleRight( nextStyleColumnIndex, row );
+            }
         }
     }
 
     // Save all RowFormat objects.
-    RowFormat* rl = firstRow();
-    for( ; rl; rl = rl->next() )
+    RowFormat* rowFormat = firstRow();
+    int styleIndex = styleStorage()->nextRow( 0 );
+    while ( rowFormat || styleIndex )
     {
-        if ( !rl->isDefault() )
+        if ( rowFormat && ( !styleIndex || rowFormat->row() <= styleIndex ) )
         {
-            QDomElement e = rl->save( dd );
+            QDomElement e = rowFormat->save( dd );
             if ( e.isNull() )
                 return QDomElement();
             sheet.appendChild( e );
+            if ( rowFormat->row() == styleIndex )
+                styleIndex = styleStorage()->nextRow( styleIndex );
+            rowFormat = rowFormat->next();
+        }
+        else if ( styleIndex )
+        {
+            QDomElement e = RowFormat( this, styleIndex ).save( dd );
+            if ( e.isNull() )
+                return QDomElement();
+            sheet.appendChild( e );
+            styleIndex = styleStorage()->nextRow( styleIndex );
         }
     }
 
     // Save all ColumnFormat objects.
-    ColumnFormat* cl = firstCol();
-    for( ; cl; cl = cl->next() )
+    ColumnFormat* columnFormat = firstCol();
+    styleIndex = styleStorage()->nextColumn( 0 );
+    while ( columnFormat || styleIndex )
     {
-        if ( !cl->isDefault() )
+        if ( columnFormat && ( !styleIndex || columnFormat->column() <= styleIndex ) )
         {
-            QDomElement e = cl->save( dd );
+            QDomElement e = columnFormat->save( dd );
             if ( e.isNull() )
                 return QDomElement();
             sheet.appendChild( e );
+            if ( columnFormat->column() == styleIndex )
+                styleIndex = styleStorage()->nextColumn( styleIndex );
+            columnFormat = columnFormat->next();
+        }
+        else if ( styleIndex )
+        {
+            QDomElement e = ColumnFormat( this, styleIndex ).save( dd );
+            if ( e.isNull() )
+                return QDomElement();
+            sheet.appendChild( e );
+            styleIndex = styleStorage()->nextColumn( styleIndex );
         }
     }
 
