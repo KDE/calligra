@@ -1443,7 +1443,7 @@ void HBorder::focusOutEvent( QFocusEvent* )
 
 /****************************************************************
  *
- * HBorder
+ * SelectAllButton
  *
  ****************************************************************/
 
@@ -1510,7 +1510,7 @@ void SelectAllButton::mouseReleaseEvent( QMouseEvent* event )
     if ( !m_mousePressed )
         return;
     m_mousePressed = false;
-    if ( m_oldSelection.isEmpty() )
+    if ( !m_view->selectionInfo()->isAllSelected() )
     {
         m_oldSelection = *m_view->selectionInfo();
         m_view->selectionInfo()->initialize( QRect( 1, 1, KS_colMax, KS_rowMax ) );
