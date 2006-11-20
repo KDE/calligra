@@ -543,9 +543,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
                 QTextBlock block = cursor.block();
                 paragStyle.applyStyle(block);
             }
-            //cursor.insertText( paragraph.firstChildElement("TEXT").text() );
-            QString txt =  paragraph.firstChildElement("TEXT").text();
-            cursor.insertText( txt);
+            cursor.insertText( paragraph.firstChildElement("TEXT").text() );
 
             // re-apply char format after we added the text
             KoCharacterStyle *style = m_document->styleManager()->characterStyle(
@@ -566,7 +564,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
                 while(! format.isNull()) {
                     QString id = format.attribute("id", "0");
                     if(id == "1") {
-                        KoCharacterStyle s2(style);
+                        KoCharacterStyle s2(*style);
                         fill(&s2, format);
                         int pos = format.attribute("pos", "-1").toInt();
                         if(format.hasAttribute("pos") && pos >= 0) {
