@@ -113,9 +113,9 @@ KoTextParagCommand::KoTextParagCommand( KoTextDocument *d, int fParag, int lPara
                                         const QValueList<KoParagLayout> &oldParagLayouts,
                                         KoParagLayout newParagLayout,
                                         int flags,
-                                        QStyleSheetItem::Margin margin, bool borderOutline )
+                                        QStyleSheetItem::Margin margin )
     : KoTextDocCommand( d ), firstParag( fParag ), lastParag( lParag ), m_oldParagLayouts( oldParagLayouts ),
-      m_newParagLayout( newParagLayout ), m_flags( flags ), m_margin( margin ), m_borderOutline( borderOutline )
+      m_newParagLayout( newParagLayout ), m_flags( flags ), m_margin( margin )
 {
     Q_ASSERT( fParag >= 0 );
     Q_ASSERT( lParag >= 0 );
@@ -136,24 +136,11 @@ KoTextCursor * KoTextParagCommand::execute( KoTextCursor *c )
         else
         {
             p->setParagLayout( m_newParagLayout, m_flags );
-            if ( (m_flags & KoParagLayout::Borders) && m_borderOutline)
-            {
-                KoBorder tmpBorder;
-                tmpBorder.setPenWidth(0);
-                p->setTopBorder(tmpBorder);
-                p->setBottomBorder(tmpBorder);
-            }
         }
         if ( p->paragId() == lastParag )
             break;
         p = p->next();
     }
-    if ( (m_flags & KoParagLayout::Borders) && m_borderOutline)
-    {
-        p->setBottomBorder( m_newParagLayout.bottomBorder);
-        doc->paragAt( firstParag )->setTopBorder( m_newParagLayout.topBorder);
-    }
-
     //kdDebug(32500) << "KoTextParagCommand::execute done" << endl;
     // Set cursor to end of selection. Like in KoTextFormatCommand::[un]execute...
     c->setParag( p );

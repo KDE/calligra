@@ -90,7 +90,7 @@ public:
                         const QValueList<KoParagLayout> &oldParagLayouts,
                         KoParagLayout newParagLayout,
                         int /*KoParagLayout::Flags*/ flags,
-                        QStyleSheetItem::Margin margin = (QStyleSheetItem::Margin)-1, bool borderOutline=false );
+                        QStyleSheetItem::Margin margin = (QStyleSheetItem::Margin)-1 );
                         // margin is only meaningful if flags==Margins only. -1 means all.
     KoTextCursor *execute( KoTextCursor *c );
     KoTextCursor *unexecute( KoTextCursor *c );
@@ -100,7 +100,6 @@ protected:
     KoParagLayout m_newParagLayout;
     int m_flags;
     int m_margin;
-    bool m_borderOutline;
 };
 
 /**
