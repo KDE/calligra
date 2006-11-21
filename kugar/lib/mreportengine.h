@@ -37,7 +37,7 @@
 namespace Kugar
 {
 
-class KUGAR_EXPORT MReportEngine : public QObject
+class KUGARLIB_EXPORT MReportEngine : public QObject
 {
     Q_OBJECT
 

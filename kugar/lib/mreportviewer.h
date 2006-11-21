@@ -41,7 +41,7 @@ extern QApplication *mAppRef;
 namespace Kugar
 {
 
-class KUGAR_EXPORT MReportViewer : public QWidget
+class KUGARLIB_EXPORT MReportViewer : public QWidget
 {
     Q_OBJECT
 
