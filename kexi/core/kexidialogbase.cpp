@@ -126,20 +126,27 @@ void KexiDialogBase::removeView(int mode)
 
 QSize KexiDialogBase::minimumSizeHint() const
 {
+#if 0 //sebsauer 20061120
 	KexiViewBase *v = selectedView();
 	if (!v) {
-		//sebsauer 20061120: return KMdiChildView::minimumSizeHint();
-		return KMainWindow::minimumSizeHint();
+		return KMdiChildView::minimumSizeHint();
 	}
 	return v->minimumSizeHint() + QSize(0, mdiParent() ? mdiParent()->captionHeight() : 0);
+#else
+	return KMainWindow::minimumSizeHint();
+#endif
 }
 
 QSize KexiDialogBase::sizeHint() const
 {
+#if 0 //sebsauer 20061120
 	KexiViewBase *v = selectedView();
 	if (!v)
 		return KMdiChildView::sizeHint();
 	return v->preferredSizeHint( v->sizeHint() );
+#else
+	return KMainWindow::sizeHint();
+#endif
 }
 
 /*
@@ -148,6 +155,7 @@ KInstance *KexiDialogBase::instance() {
 }*/
 
 void KexiDialogBase::registerDialog() {
+#if 0 //sebsauer 20061120
 	if (m_isRegistered)
 		return;
 	m_parentWindow->registerChild(this);
@@ -158,8 +166,9 @@ void KexiDialogBase::registerDialog() {
 	}
 	else
 		m_parentWindow->addWindow((KMdiChildView *)this);
-//later	show();
-//	m_parentWindow->activeWindowChanged(this);
+	//later	show();
+	//m_parentWindow->activeWindowChanged(this);
+#endif
 }
 
 bool KexiDialogBase::isRegistered(){
@@ -197,10 +206,9 @@ void KexiDialogBase::closeEvent( QCloseEvent * e )
 	m_parentWindow->acceptPropertySetEditing();
 
 	//let any view send "closing" signal
-	QObjectList *list = m_stack->queryList( "KexiViewBase", 0, false, false);
-	KexiViewBase *view;
-	QObjectListIt it( *list );
-	for ( ;(view = static_cast<KexiViewBase*>(it.current()) ) != 0; ++it ) {
+	QObjectList list = m_stack->queryList( "KexiViewBase", 0, false, false);
+	foreach(QObject* obj, list) {
+		KexiViewBase *view = static_cast<KexiViewBase*>(obj);
 		bool cancel = false;
 		emit view->closing(cancel);
 		if (cancel) {
@@ -208,9 +216,12 @@ void KexiDialogBase::closeEvent( QCloseEvent * e )
 			return;
 		}
 	}
-	delete list;
 	emit closing();
+#if 0 //sebsauer 20061120
 	KMdiChildView::closeEvent(e);
+#else
+	KMainWindow::closeEvent(e);
+#endif
 }
 
 #if 0
@@ -423,9 +434,11 @@ void KexiDialogBase::setFocus()
 		else
 			m_stack->visibleWidget()->setFocus();
 	}
+#if 0 //sebsauer 20061120
 	else {
 		KMdiChildView::setFocus();
 	}
+#endif
 	activate();
 }
 
@@ -440,9 +453,10 @@ KexiDialogBase::propertySet()
 
 bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
 {
+#if 0 //sebsauer 20061120
 	if (KMdiChildView::eventFilter(obj, e))
 		return true;
-/*	if (e->type()==QEvent::FocusIn) {
+	/*if (e->type()==QEvent::FocusIn) {
 		QWidget *w = m_parentWindow->activeWindow();
 		w=0;
 	}*/
@@ -454,6 +468,15 @@ bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
 		}
 	}
 	return false;
+#else
+	if (KMainWindow::eventFilter(obj, e))
+		return true;
+	/*if (e->type()==QEvent::FocusIn) {
+		QWidget *w = m_parentWindow->activeWindow();
+		w=0;
+	}*/
+	return false;
+#endif
 }
 
 void KexiDialogBase::dirtyChanged(KexiViewBase* view)
@@ -491,6 +514,7 @@ void KexiDialogBase::updateCaption()
 	QString fullCapt = capt;
 	if (m_part)
 		fullCapt += (" : " + m_part->instanceCaption());
+#if 0 //sebsauer 20061120
 	if (dirty()) {
 		KMdiChildView::setCaption(fullCapt+"*");
 		KMdiChildView::setTabCaption(capt+"*");
@@ -499,6 +523,14 @@ void KexiDialogBase::updateCaption()
 		KMdiChildView::setCaption(fullCapt);
 		KMdiChildView::setTabCaption(capt);
 	}
+#else
+	if (dirty()) {
+		KMainWindow::setCaption(fullCapt+"*");
+	}
+	else {
+		KMainWindow::setCaption(fullCapt);
+	}
+#endif
 }
 
 bool KexiDialogBase::neverSaved() const
@@ -558,12 +590,12 @@ tristate KexiDialogBase::storeNewData()
 		}
 
 		KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
-		kexidbg << "KexiMainWindowImpl::newObject(): fieldlist: " 
+		kDebug() << "KexiMainWindowImpl::newObject(): fieldlist: " 
 			<< (fl ? fl->debugString() : QString::null) << endl;
 		if (!fl)
 			return false;
 
-		kexidbg << part()->info()->ptr()->untranslatedGenericName() << endl;
+		kDebug() << part()->info()->ptr()->untranslatedGenericName() << endl;
 //		QStringList sl = part()->info()->ptr()->propertyNames();
 //		for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
 //			kexidbg << *it << " " << part()->info()->ptr()->property(*it).toString() <<  endl;
@@ -632,6 +664,7 @@ tristate KexiDialogBase::storeData(bool dontAsk)
 
 void KexiDialogBase::activate()
 {
+#if 0 //sebsauer 20061120
 	KexiViewBase *v = selectedView();
 	//kDebug() << "focusWidget(): " << focusWidget()->name() << endl;
 	if (KexiUtils::hasParent( v, KMdiChildView::focusedChildWidget()))//focusWidget()))
@@ -643,6 +676,11 @@ void KexiDialogBase::activate()
 	if (v)
 		v->updateActions(true);
 //js: not neeed??	m_parentWindow->invalidateSharedActions(this);
+#else
+	KexiViewBase *v = selectedView();
+	if (v)
+		v->updateActions(true);
+#endif
 }
 
 void KexiDialogBase::deactivate()
