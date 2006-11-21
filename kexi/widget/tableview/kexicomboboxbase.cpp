@@ -172,6 +172,8 @@ KexiTableItem* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(const QV
 	const QString txt( valueIsText ? v.toString().trimmed().lower() : QString::null );
 	KexiTableViewData *lookupData = popup()->tableView()->data();
 	const int visibleColumn = lookupFieldSchema->visibleColumn();
+	if (-1 == visibleColumn)
+		return 0;
 	KexiTableViewData::Iterator it(lookupData->iterator());
 	int row;
 	for (row = 0;it.current();++it, row++) {
@@ -274,7 +276,7 @@ QVariant KexiComboBoxBase::value()
 QVariant KexiComboBoxBase::visibleValueForLookupField()
 {
 	KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
-	if (!popup() || !lookupFieldSchema)
+	if (!popup() || !lookupFieldSchema || -1 == lookupFieldSchema->visibleColumn())
 		return QVariant();
 	KexiTableItem *it = popup()->tableView()->selectedItem();
 	return it ? it->at( lookupFieldSchema->visibleColumn() ) : QVariant();
