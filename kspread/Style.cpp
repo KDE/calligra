@@ -2481,7 +2481,6 @@ void Style::insertSubStyle( Key key, const QVariant& value )
 {
     const QSharedDataPointer<SubStyle> subStyle = createSubStyle( key, value );
     Q_ASSERT( !!subStyle );
-    //subStyle->aquire( 0 );
     insertSubStyle( subStyle );
 }
 

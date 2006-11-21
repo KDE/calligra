@@ -525,7 +525,7 @@ QString Currency::getChooseString( int type, bool & ok )
     if ( !gMoneyList[type].country )
     {
         ok = false;
-        return QString::null;
+        return QString();
     }
     if ( type < 24 )
     {

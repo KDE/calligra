@@ -32,7 +32,7 @@ public:
     enum currencyFormat { Native, Gnumeric, OpenCalc, ApplixSpread, GobeProductiveSpread, HancomSheet };
 
     Currency();
-    Currency(int index);
+    explicit Currency(int index);
     ~Currency();
 
     /**

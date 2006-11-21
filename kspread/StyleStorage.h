@@ -41,7 +41,7 @@ class KSPREAD_EXPORT StyleStorage : public QObject
     Q_OBJECT
 
 public:
-    StyleStorage( Sheet* sheet );
+    explicit StyleStorage( Sheet* sheet );
     virtual ~StyleStorage();
 
     /**
