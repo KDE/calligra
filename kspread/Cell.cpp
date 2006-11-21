@@ -2742,8 +2742,10 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     {
         // send pm parameter. Didn't load Borders if pm==NoBorder
 
-        if ( !style().loadXML( formatElement, pm, paste ) )
+        Style style;
+        if ( !style.loadXML( formatElement, pm, paste ) )
             return false;
+        setStyle( style );
 
         if ( formatElement.hasAttribute( "colspan" ) )
         {

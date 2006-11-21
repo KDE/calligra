@@ -111,7 +111,7 @@ Things not in bugzilla
     - Add insertion/deletion of columns/rows				done
     - Get rid of KSpread::Style::Currency. Use KSpread::Currency.	----
     - OpenDocument loading/saving					done
-    - Old native format loading/saving					----
+    - Old native format loading/saving					done
     - Seek & destroy R-Tree data rects, if they get empty after		----
       deletion of columns/rows, but store them for undo.
     - Add configure option to choose wether the style of the current	----
