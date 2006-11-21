@@ -2919,8 +2919,8 @@ void CellView::obscureHorizontalCells()
   //        empty and use the extra space?  No, probably not.
   //
   if ( d->textWidth + indent > ( width - 2 * s_borderSpace
-       - style().leftBorderPen().width() - style().rightBorderPen().width() &&
-       ( !cell()->d->hasExtra() || cell()->mergedYCells() == 0 ) ) )
+       - style().leftBorderPen().width() - style().rightBorderPen().width() ) &&
+       ( !cell()->d->hasExtra() || cell()->mergedYCells() == 0 ) )
   {
     int col = cell()->column();
 
