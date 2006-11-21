@@ -23,8 +23,6 @@
 
 #include "kexipartinfo.h"
 #include <kservice.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 namespace KexiPart
 {
@@ -40,7 +38,7 @@ class Info::Private
 		KService::Ptr ptr;
 		QString errorMessage;
 		QString groupName;
-		Q3CString mimeType;
+		QString mimeType;
 		QString itemIcon;
 		QString objectName;
 		int projectPartID;

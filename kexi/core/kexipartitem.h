@@ -24,8 +24,8 @@
 #include <qobject.h>
 #include <q3intdict.h>
 #include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
+
+#include "../kexi_export.h"
 
 namespace KexiDB
 {
@@ -55,8 +55,8 @@ class KEXICORE_EXPORT Item
 		int identifier() const { return m_id; }
 		void setIdentifier(int id) { m_id = id; }
 
-		Q3CString mimeType() const { return m_mime; }
-		void setMimeType(const Q3CString &mime) { m_mime = mime; }
+		QString mimeType() const { return m_mime; }
+		void setMimeType(const QString &mime) { m_mime = mime; }
 
 		QString name() const { return m_name; }
 		void setName(const QString &name) { m_name = name; }
@@ -84,7 +84,7 @@ class KEXICORE_EXPORT Item
 		inline QString captionOrName() const { return m_caption.isEmpty() ? m_name : m_caption; }
 
 	private:
-		Q3CString m_mime;
+		QString m_mime;
 		QString m_name;
 		QString m_caption;
 		QString m_desc;

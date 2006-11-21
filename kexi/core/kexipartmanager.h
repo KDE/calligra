@@ -55,7 +55,7 @@ namespace KexiPart
 		QString url;
 	};
 
-	typedef Q3AsciiDict<Info> PartInfoDict;
+	typedef QMap<QString, Info*> PartInfoDict;
 	typedef Q3DictIterator<Info> PartInfoDictIterator;
 	typedef Q3ValueList<Missing> MissingList;
 	typedef Q3PtrList<Info> PartInfoList;

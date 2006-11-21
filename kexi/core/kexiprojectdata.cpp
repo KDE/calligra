@@ -156,7 +156,7 @@ QString KexiProjectData::infoString(bool nobr) const
 	if (constConnectionData()->fileName().isEmpty()) {
 		//server-based
 		return QString(nobr ? "<nobr>" : "") + QString("\"%1\"").arg(databaseName()) + (nobr ? "</nobr>" : "")
-			+ (nobr ? " <nobr>" : " ") + i18n("database connection", "(connection %1)")
+			+ (nobr ? " <nobr>" : " ") + i18nc("database connection", "(connection %1)")
 			.arg(constConnectionData()->serverInfoString()) + (nobr ? "</nobr>" : "");
 	}
 	//file-based

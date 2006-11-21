@@ -96,4 +96,9 @@ KexiMdiChildView* KexiMdiMainFrm::activeWindow()
 	return 0;
 }
 
+KexiMdiMainFrm::MdiWindowState KexiMdiMainFrm::state () const
+{
+	return Normal;
+}
+
 #include "keximdi.moc"

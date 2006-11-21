@@ -21,9 +21,12 @@
 #ifndef KEXIINTERNALPART_H
 #define KEXIINTERNALPART_H
 
-#include <qobject.h>
-#include <qpointer.h>
-#include <qvariant.h>
+#include <QObject>
+#include <QPointer>
+#include <QVariant>
+#include <QDialog>
+
+#include "../kexi_export.h"
 
 class KexiMainWindow;
 class KexiDialogBase;

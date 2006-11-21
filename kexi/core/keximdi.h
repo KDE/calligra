@@ -62,6 +62,9 @@ class KEXICORE_EXPORT KexiMdiMainFrm : public KMainWindow
 		void detachWindow(KexiMdiChildView *pWnd, bool bShow=true);
 
 		KexiMdiChildView* activeWindow();
+
+		enum MdiWindowState { Normal, Maximized, Minimized };
+		MdiWindowState state () const;
 };
 
 #endif

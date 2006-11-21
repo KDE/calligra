@@ -5,6 +5,8 @@
 #include <qstring.h>
 #include <qvariant.h>
 
+#include "../kexi_export.h"
+
 typedef Q3ValueVector<int> ArgTypes;
 typedef Q3ValueVector<QString> ArgNames;
 

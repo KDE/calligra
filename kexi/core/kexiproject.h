@@ -25,8 +25,6 @@
 #include <q3intdict.h>
 #include <q3ptrdict.h>
 #include <qpointer.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kexiutils/tristate.h>
 #include <kexidb/object.h>
@@ -140,7 +138,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 * @return all items of a type \a mime in this project
 		 * It is a convenience function.
 		 */
-		KexiPart::ItemDict* itemsForMimeType(const Q3CString &mimeType);
+		KexiPart::ItemDict* itemsForMimeType(const QString &mimeType);
 
 		/**
 		 * Puts a list of items of a type \a i in this project into \a list.
@@ -152,12 +150,12 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 * Puts a sorted list of items of a type \a mimeType in this project into \a list.
 		 * You can then sort this list using ItemList::sort().
 		 */
-		void getSortedItemsForMimeType(KexiPart::ItemList& list, const Q3CString &mimeType);
+		void getSortedItemsForMimeType(KexiPart::ItemList& list, const QString &mimeType);
 
 		/**
 		 * @return item of type \a mime and name \a name
 		 */
-		KexiPart::Item* itemForMimeType(const Q3CString &mimeType, const QString &name);
+		KexiPart::Item* itemForMimeType(const QString &mimeType, const QString &name);
 
 		/**
 		 * @return item of type \a i and name \a name
@@ -186,7 +184,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 			int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 		//! For convenience
-		KexiDialogBase* openObject(KexiMainWindow *wnd, const Q3CString &mimeType, 
+		KexiDialogBase* openObject(KexiMainWindow *wnd, const QString &mimeType, 
 			const QString& name, int viewMode = Kexi::DataViewMode);
 
 		/*! Remove a part instance pointed by \a item.
@@ -319,7 +317,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		void itemRemoved(const KexiPart::Item &item);
 
 		/** instance pointed by \a item is renamed */
-		void itemRenamed(const KexiPart::Item &item, const Q3CString& oldName);
+		void itemRenamed(const KexiPart::Item &item, const QString& oldName);
 
 //		/** new table \a schema created */
 //		void tableCreated(KexiDB::TableSchema& schema);

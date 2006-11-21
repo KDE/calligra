@@ -54,7 +54,7 @@ KexiFieldDrag::KexiFieldDrag(const QString& sourceMimeType, const QString& sourc
 		if (fields.count() == 1)
 			field = fields.first();
 		else
-			kexidbg << "KexiFieldDrag::KexiFieldDrag(): fields list is empty!" << endl;
+			kDebug() << "KexiFieldDrag::KexiFieldDrag(): fields list is empty!" << endl;
 		stream1 << sourceMimeType << sourceName << field;
 	}
 	setEncodedData(data);
@@ -80,7 +80,7 @@ bool
 KexiFieldDrag::decodeSingle( QDropEvent* e, QString& sourceMimeType, 
 	QString& sourceName, QString& field )
 {
-	QByteArray payload( e->data("kexi/field") );
+	QByteArray payload( e->encodedData("kexi/field") );
 	if (payload.isEmpty())
 		return false;
 	e->accept();
@@ -97,7 +97,7 @@ bool
 KexiFieldDrag::decodeMultiple( QDropEvent* e, QString& sourceMimeType, 
 	QString& sourceName, QStringList& fields )
 {
-	QByteArray payload( e->data("kexi/fields") );
+	QByteArray payload( e->encodedData("kexi/fields") );
 	if (payload.isEmpty()) {//try single
 		QString field;
 		bool res = KexiFieldDrag::decodeSingle( e, sourceMimeType, sourceName, field );
@@ -140,7 +140,7 @@ bool
 KexiDataProviderDrag::decode( QDropEvent* e, QString& sourceMimeType, QString& sourceName)
 {
 	Q3CString tmp;
-	QByteArray payload = e->data("kexidataprovider");
+	QByteArray payload = e->encodedData("kexidataprovider");
 	if(payload.size())
 	{
 		e->accept();

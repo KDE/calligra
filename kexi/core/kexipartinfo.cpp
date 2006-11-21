@@ -29,7 +29,7 @@ using namespace KexiPart;
 Info::Private::Private(const KService::Ptr& aPtr)
  : ptr(aPtr)
  , groupName(aPtr->name())
- , mimeType(aPtr->property("X-Kexi-TypeMime").toCString())
+ , mimeType(aPtr->property("X-Kexi-TypeMime").toString())
  , itemIcon(aPtr->property("X-Kexi-ItemIcon").toString())
  , objectName(aPtr->property("X-Kexi-TypeName").toString())
  , broken(false)
@@ -76,7 +76,7 @@ Info::~Info()
 
 QString Info::groupName() const { return d->groupName; }
 
-Q3CString Info::mimeType() const { return d->mimeType; }
+QString Info::mimeType() const { return d->mimeType; }
 
 QString Info::itemIcon() const { return d->itemIcon; }
 
@@ -131,5 +131,5 @@ bool Info::isExecuteSupported() const
 
 Q3CString KexiPart::nameForCreateAction(const Info& info)
 {
-	return (info.objectName()+"part_create").latin1();
+	return (info.objectName()+"part_create").toLatin1();
 }

@@ -4,6 +4,7 @@
 #include <kaction.h>
 
 #include "kexiuseractionmethod.h"
+#include "../kexi_export.h"
 
 namespace KexiDB
 {

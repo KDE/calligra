@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <klibloader.h>
 #include <klocale.h>
-#include <ktrader.h>
+//#include <kmimetypetrader.h>
 #include <kparts/componentfactory.h>
 #include <kexidb/msghandler.h>
 
@@ -52,8 +52,7 @@ class KexiInternalPartManager
 			if (!part) {
 				Q3CString fullname("kexihandler_");
 				fullname += Q3CString(partName).lower();
-				part = KLibLoader::createInstance<KexiInternalPart>(
-					fullname, 0, fullname);
+				part = KLibLoader::createInstance<KexiInternalPart>(fullname);
 				if (!part) {
 					if (msgHdr)
 						msgHdr->showErrorMessage(i18n("Could not load \"%1\" plugin.").arg(partName));

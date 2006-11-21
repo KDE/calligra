@@ -22,8 +22,6 @@
 #define KEXIPARTINFO_H
 
 #include "kexipartmanager.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class KexiMainWindowImpl;
 class KexiProject;
@@ -53,7 +51,7 @@ class KEXICORE_EXPORT Info
 		/**
 		 * @return the internal mime type of this part
 		 */
-		Q3CString mimeType() const;
+		QString mimeType() const;
 
 //		/**
 //		 * @return the icon for groups

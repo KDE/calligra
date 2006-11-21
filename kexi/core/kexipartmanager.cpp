@@ -43,9 +43,11 @@ Manager::Manager(QObject *parent)
  : QObject(parent)
 {
 	m_lookupDone = false;
+#if 0 //sebsauer 20061121
 	m_partlist.setAutoDelete(true);
 	m_partsByMime.setAutoDelete(false);
 	m_parts.setAutoDelete(false);//KApp will remove parts
+#endif
 	m_nextTempProjectPartID = -1;
 }
 
@@ -72,7 +74,7 @@ Manager::lookup()
 	//compute order
 	foreach(KService::Ptr ptr, tlist)
 	{
-		Q3CString mime = ptr->property("X-Kexi-TypeMime").toCString();
+		QString mime = ptr->property("X-Kexi-TypeMime").toString();
 		kDebug() << "Manager::lookup(): " << mime << endl;
 //<TEMP>: disable some parts if needed
 		if (!Kexi::tempShowForms() && mime=="kexi/form")
@@ -129,8 +131,7 @@ Manager::part(Info *i)
 	if(!p) {
 		kDebug() << "Manager::part().." << endl;
 		int error=0;
-		p = KService::createInstance<Part>(i->ptr(), this,
-			QString(i->objectName()+"_part").toLatin1(), QStringList(), &error);
+		p = KService::createInstance<Part>(i->ptr(), this, QStringList(), &error);
 		if(!p) {
 			kDebug() << "Manager::part(): failed :( (ERROR #" << error << ")" << endl;
 			kDebug() << "  " << KLibLoader::self()->lastErrorMessage() << endl;
@@ -192,13 +193,13 @@ Manager::removeClients( KexiMainWindow *win )
 Part *
 Manager::partForMimeType(const QString &mimeType)
 {
-	return mimeType.isEmpty() ? 0 : part(m_partsByMime[mimeType.latin1()]);
+	return mimeType.isEmpty() ? 0 : part(m_partsByMime[mimeType.toLatin1()]);
 }
 
 Info *
 Manager::infoForMimeType(const QString &mimeType)
 {
-	Info *i = mimeType.isEmpty() ? 0 : m_partsByMime[mimeType.latin1()];
+	Info *i = mimeType.isEmpty() ? 0 : m_partsByMime[mimeType.toLatin1()];
 	if (i)
 		return i;
 	setError(i18n("No plugin for mime type \"%1\"").arg(mimeType));

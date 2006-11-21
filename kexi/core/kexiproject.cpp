@@ -569,7 +569,7 @@ KexiProject::items(KexiPart::Info *i)
 }
 
 KexiPart::ItemDict*
-KexiProject::itemsForMimeType(const Q3CString &mimeType)
+KexiProject::itemsForMimeType(const QString &mimeType)
 {
 	KexiPart::Info *info = Kexi::partManager().infoForMimeType(mimeType);
 	return items(info);
@@ -587,7 +587,7 @@ KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i)
 }
 
 void
-KexiProject::getSortedItemsForMimeType(KexiPart::ItemList& list, const Q3CString &mimeType)
+KexiProject::getSortedItemsForMimeType(KexiPart::ItemList& list, const QString &mimeType)
 {
 	KexiPart::Info *info = Kexi::partManager().infoForMimeType(mimeType);
 	getSortedItems(list, info);
@@ -607,7 +607,7 @@ KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
 }
 
 KexiPart::Item*
-KexiProject::itemForMimeType(const Q3CString &mimeType, const QString &name)
+KexiProject::itemForMimeType(const QString &mimeType, const QString &name)
 {
 	KexiPart::ItemDict *dict = itemsForMimeType(mimeType);
 	if (!dict)
@@ -716,7 +716,7 @@ KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& ite
 	return dlg;
 }
 
-KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const Q3CString &mimeType, 
+KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const QString &mimeType, 
 	const QString& name, int viewMode)
 {
 	KexiPart::Item *it = itemForMimeType(mimeType, name);
@@ -814,7 +814,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 		setError(d->connection);
 		return false;
 	}
-	Q3CString oldName( item.name().toLatin1() );
+	QString oldName( item.name() );
 	item.setName( newName );
 	emit itemRenamed(item, oldName);
 	return true;

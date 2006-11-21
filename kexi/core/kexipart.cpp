@@ -38,9 +38,11 @@
 //Added by qt3to4:
 #include <Q3CString>
 
+#include <kactioncollection.h>
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <kxmlguifactory.h>
 
 namespace KexiPart {
 //! @internal
@@ -90,11 +92,12 @@ public:
 using namespace KexiPart;
 
 Part::Part(QObject *parent, const char *name, const QStringList &)
-: QObject(parent, name)
+: QObject(parent)
 , m_guiClient(0)
 , m_registeredPartID(-1) //no registered ID by default
 , d(new PartPrivate())
 {
+	setObjectName(name);
 	m_info = 0;
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
 	m_mainWin = 0;
@@ -102,11 +105,12 @@ Part::Part(QObject *parent, const char *name, const QStringList &)
 }
 
 Part::Part(QObject* parent, StaticInfo *info)
-: QObject(parent, "StaticPart")
+: QObject(parent)
 , m_guiClient(0)
 , m_registeredPartID(-1) //no registered ID by default
 , d(new PartPrivate())
 {
+	setObjectName("StaticPart");
 	m_info = info;
 	m_supportedViewModes = Kexi::DesignViewMode;
 	m_mainWin = 0;
@@ -131,7 +135,7 @@ void Part::createGUIClients(KexiMainWindow *win)
 			KexiPart::nameForCreateAction(*info()));
 		act->plug( m_mainWin->findPopupMenu("insert") );
 //		new KAction(m_names["instance"]+"...", info()->itemIcon(), 0, this, 
-//		SLOT(create()), m_guiClient->actionCollection(), (info()->objectName()+"part_create").latin1());
+//		SLOT(create()), m_guiClient->actionCollection(), (info()->objectName()+"part_create").toLatin1());
 		//let init specific actions for parts
 //		initPartActions( m_guiClient->actionCollection() );
 		m_mainWin->guiFactory()->addClient(m_guiClient); //this client is added permanently
@@ -145,7 +149,7 @@ void Part::createGUIClients(KexiMainWindow *win)
 		for (int mode = 1; mode <= 0x01000; mode <<= 1) {
 			if (m_supportedViewModes & mode) {
 				GUIClient *instanceGuiClient = new GUIClient(m_mainWin, 
-					this, true, Kexi::nameForViewMode(mode).latin1());
+					this, true, Kexi::nameForViewMode(mode).toLatin1());
 				m_instanceGuiClients.insert(mode, instanceGuiClient);
 //				initInstanceActions( mode, instanceGuiClient->actionCollection() );
 			}
@@ -221,15 +225,13 @@ KAction* Part::sharedPartAction(int mode, const char* name, const char *classnam
 
 void Part::setActionAvailable(const char *action_name, bool avail)
 {
-	Q3IntDictIterator<GUIClient> it( m_instanceGuiClients );
-	for (;it.current();++it) {
-		KAction *act = it.current()->actionCollection()->action(action_name);
+	for(QMap<int, GUIClient*>::Iterator it = m_instanceGuiClients.begin(); it != m_instanceGuiClients.end(); ++it) {
+		KAction *act = it.value()->actionCollection()->action(action_name);
 		if (act) {
 			act->setEnabled(avail);
 			return;
 		}
 	}
-
 	m_mainWin->setActionAvailable(action_name, avail);
 }
 
@@ -338,7 +340,7 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 	dlg->registerDialog(); //ok?
 	dlg->show();
 
-	if (dlg->mdiParent() && dlg->mdiParent()->state()==KMdiChildFrm::Normal) //only resize dialog if it is in normal state
+	if (dlg->mdiParent() && dlg->mdiParent()->state()==KexiMdiMainFrm::Normal) //only resize dialog if it is in normal state
 		dlg->resize(dlg->sizeHint());
 
 	dlg->setMinimumSize(dlg->minimumSizeHint().width(),dlg->minimumSizeHint().height());
@@ -398,7 +400,9 @@ KexiDialogTempData* Part::createTempData(KexiDialogBase* dialog)
 QString Part::i18nMessage(const Q3CString& englishMessage, KexiDialogBase* dlg) const
 {
 	Q_UNUSED(dlg);
-	return QString(englishMessage).startsWith(":") ? QString::null : englishMessage;
+	if( QString(englishMessage).startsWith(":") )
+		return QString::null;
+	return englishMessage;
 }
 
 void Part::setupCustomPropertyPanelTabs(KTabWidget *, KexiMainWindow*)
@@ -409,7 +413,7 @@ Q3CString Part::instanceName() const
 {
 	// "instanceName" should be already valid identifier but we're using
 	// KexiUtils::string2Identifier() to be sure translators did it right.
-	return KexiUtils::string2Identifier(m_names["instanceName"]).lower().latin1();
+	return KexiUtils::string2Identifier(m_names["instanceName"]).toLower().toLatin1();
 }
 
 QString Part::instanceCaption() const
@@ -431,7 +435,7 @@ tristate Part::rename(KexiMainWindow *win, KexiPart::Item &item, const QString& 
 GUIClient::GUIClient(KexiMainWindow *win, Part* part, bool partInstanceClient, const char* nameSuffix)
  : QObject(part, 
    (part->info()->objectName() 
-    + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString())).latin1() )
+    + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString())).toLatin1() )
  , KXMLGUIClient(win)
 {
 	if(!win->project()->final())
@@ -439,10 +443,10 @@ GUIClient::GUIClient(KexiMainWindow *win, Part* part, bool partInstanceClient, c
 			+"part"+(partInstanceClient?"inst":"")+"ui.rc");
 
 //	new KAction(part->m_names["new"], part->info()->itemIcon(), 0, this, 
-//		SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").latin1());
+//		SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
 
 //	new KAction(i18nInstanceName+"...", part->info()->itemIcon(), 0, this, 
-//		SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").latin1());
+//		SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
 
 //	win->guiFactory()->addClient(this);
 }

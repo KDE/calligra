@@ -292,7 +292,7 @@ class KEXICORE_EXPORT Part : public QObject
 
 		Info *m_info;
 		GUIClient *m_guiClient;
-		Q3IntDict<GUIClient> m_instanceGuiClients;
+		QMap<int, GUIClient*> m_instanceGuiClients;
 		KexiMainWindow* m_mainWin;
 		Kexi::ObjectStatus m_status;
 
