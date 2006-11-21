@@ -152,8 +152,8 @@ void KWTextFrameSet::setAllowLayout(bool allow) {
 
 // static
 bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2) {
-    KWTextFrame *f1 = static_cast<const KWTextFrame*>(frame1);
-    KWTextFrame *f2 = static_cast<const KWTextFrame*>(frame2);
+    const KWTextFrame *f1 = static_cast<const KWTextFrame*>(frame1);
+    const KWTextFrame *f2 = static_cast<const KWTextFrame*>(frame2);
 
     if(f1->sortingId() >= 0 && f2->sortingId() >= 0) {
         return f1->sortingId() > f2->sortingId();
