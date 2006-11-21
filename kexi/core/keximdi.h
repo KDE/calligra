@@ -26,6 +26,8 @@
 #include <kmainwindow.h>
 //#include <kxmlguiclient.h>
 
+#include "../kexi_export.h"
+
 class KexiMdiMainFrm;
 
 /// KMdiChildView replacment
@@ -46,7 +48,7 @@ class KEXICORE_EXPORT KexiMdiMainFrm : public KMainWindow
 {
 		Q_OBJECT
 	public:
-		KexiMdiMainFrm(QObject* parent = 0);
+		KexiMdiMainFrm(QWidget* parent = 0);
 		virtual ~KexiMdiMainFrm();
 
 		int captionHeight() const;

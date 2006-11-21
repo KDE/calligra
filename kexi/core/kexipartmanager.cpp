@@ -19,7 +19,9 @@
 */
 
 #include <klibloader.h>
-#include <ktrader.h>
+//#include <ktrader.h>
+//#include <kservicetypetrader.h>
+#include <kmimetypetrader.h>
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kparts/componentfactory.h>
@@ -57,20 +59,19 @@ Manager::lookup()
 	m_partlist.clear();
 	m_partsByMime.clear();
 	m_parts.clear();
-	KTrader::OfferList tlist = KTrader::self()->query("Kexi/Handler", 
+	KService::List tlist = KMimeTypeTrader::self()->query("Kexi/Handler", 
 		"[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
 	
 	KConfig conf("kexirc", true);
 	conf.setGroup("Parts");
 	QStringList sl_order = QStringList::split( ",", conf.readEntry("Order") );//we'll set parts in defined order
 	const int size = qMax( tlist.count(), sl_order.count() );
-	Q3PtrVector<KService> ordered( size*2 );
+	QList<KService::Ptr> ordered;
 	int offset = size; //we will insert not described parts from #offset
 	
 	//compute order
-	for(KTrader::OfferList::ConstIterator it(tlist.constBegin()); it != tlist.constEnd(); ++it)
+	foreach(KService::Ptr ptr, tlist)
 	{
-		KService::Ptr ptr = (*it);
 		Q3CString mime = ptr->property("X-Kexi-TypeMime").toCString();
 		kDebug() << "Manager::lookup(): " << mime << endl;
 //<TEMP>: disable some parts if needed
@@ -87,7 +88,7 @@ Manager::lookup()
 		if (idx!=-1)
 			ordered.insert(idx, ptr);
 		else //add to end
-			ordered.insert(offset++, ptr);	
+			ordered.insert(offset++, ptr);
 	}
 	//fill final list using computed order
 	for (int i = 0; i< (int)ordered.size(); i++) {
@@ -128,8 +129,8 @@ Manager::part(Info *i)
 	if(!p) {
 		kDebug() << "Manager::part().." << endl;
 		int error=0;
-		p = KService::createInstance<Part>(i->ptr(), this, 
-			QString(i->objectName()+"_part").latin1(), QStringList(), &error);
+		p = KService::createInstance<Part>(i->ptr(), this,
+			QString(i->objectName()+"_part").toLatin1(), QStringList(), &error);
 		if(!p) {
 			kDebug() << "Manager::part(): failed :( (ERROR #" << error << ")" << endl;
 			kDebug() << "  " << KLibLoader::self()->lastErrorMessage() << endl;

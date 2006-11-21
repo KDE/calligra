@@ -34,6 +34,7 @@
 
 #include <kexidb/object.h>
 
+#include "../kexi_export.h"
 //#include "kexipartdatasource.h"
 
 namespace KexiDB

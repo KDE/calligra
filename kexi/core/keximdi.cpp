@@ -59,8 +59,8 @@ void KexiMdiChildView::activate()
  * KexiMdiMainFrm
  */
 
-KexiMdiMainFrm::KexiMdiMainFrm(QObject* parent)
-	: KMainWindow(KMainWindow)
+KexiMdiMainFrm::KexiMdiMainFrm(QWidget* parent)
+	: KMainWindow(parent)
 {
 }
 
@@ -78,7 +78,7 @@ QRect KexiMdiMainFrm::mdiAreaContentsRect() const
 	return QRect();
 }
 
-MdiMode KexiMdiMainFrm::mdiMode()
+KexiMdiMainFrm::MdiMode KexiMdiMainFrm::mdiMode()
 {
 	return ToplevelMode;
 }
