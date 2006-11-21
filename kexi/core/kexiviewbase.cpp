@@ -29,6 +29,7 @@
 #include <kexiutils/utils.h>
 
 #include <kdebug.h>
+#include <kactioncollection.h>
 //Added by qt3to4:
 #include <QEvent>
 #include <QCloseEvent>
@@ -231,7 +232,7 @@ bool KexiViewBase::eventFilter( QObject *o, QEvent *e )
 			if (e->type()==QEvent::FocusOut) { // && focusWidget() && Kexi::hasParent( this, focusWidget())) { // && focusWidget()->inherits("KexiViewBase")) {
 //				kDebug() << focusWidget()->className() << " " << focusWidget()->name()<< endl;
 //				kDebug() << o->className() << " " << o->name()<< endl;
-				KexiViewBase *v = KexiUtils::findParent<KexiViewBase>(o, "KexiViewBase") ;
+				KexiViewBase *v = KexiUtils::findParent<KexiViewBase>(o);
 //				QWidget *www=v->focusWidget();
 				if (v) {
 					while (v->m_parentView)

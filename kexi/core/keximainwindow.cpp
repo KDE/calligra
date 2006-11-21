@@ -23,9 +23,7 @@
 #include <kdebug.h>
 
 KexiMainWindow::KexiMainWindow()
- //: KMdiMainFrm(0L, "keximainwindow")
- //, KexiSharedActionHost(this)
- : KMainWindow()
+ : KexiMdiMainFrm()
  , KexiSharedActionHost(this)
 {
 }

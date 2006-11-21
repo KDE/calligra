@@ -32,6 +32,7 @@
 
 #include "kexisharedactionhost.h"
 #include "kexi.h"
+#include "keximdi.h"
 
 class KexiDialogBase;
 class KexiProject;
@@ -45,8 +46,7 @@ namespace KexiPart {
  * KexiMainWindow offers simple features what lowers cross-dependency (and also avoids
  * circular dependencies between Kexi modules).
  */
-//class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActionHost
-class KEXICORE_EXPORT KexiMainWindow : public KMainWindow, public KexiSharedActionHost
+class KEXICORE_EXPORT KexiMainWindow : public KexiMdiMainFrm, public KexiSharedActionHost
 {
 	Q_OBJECT
 	public:

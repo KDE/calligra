@@ -46,8 +46,7 @@
 #include <kiconloader.h>
 
 KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
- //: KMdiChildView(caption, parent, "KexiDialogBase")
- : KMainWindow(parent)
+ : KexiMdiChildView(parent, caption)
  , KexiActionProxy(this, parent)
  , m_isRegistered(false)
  , m_origCaption(caption)
@@ -56,8 +55,6 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
  , m_disableDirtyChanged(false)
 // , m_neverSaved(false)
 {
-	setCaption(caption);
-
 	m_supportedViewModes = 0; //will be set by KexiPart
 	m_openedViewModes = 0;
 	m_currentViewMode = Kexi::NoViewMode; //no view available yet
@@ -126,27 +123,19 @@ void KexiDialogBase::removeView(int mode)
 
 QSize KexiDialogBase::minimumSizeHint() const
 {
-#if 0 //sebsauer 20061120
 	KexiViewBase *v = selectedView();
 	if (!v) {
-		return KMdiChildView::minimumSizeHint();
+		return KexiMdiChildView::minimumSizeHint();
 	}
 	return v->minimumSizeHint() + QSize(0, mdiParent() ? mdiParent()->captionHeight() : 0);
-#else
-	return KMainWindow::minimumSizeHint();
-#endif
 }
 
 QSize KexiDialogBase::sizeHint() const
 {
-#if 0 //sebsauer 20061120
 	KexiViewBase *v = selectedView();
 	if (!v)
-		return KMdiChildView::sizeHint();
+		return KexiMdiChildView::sizeHint();
 	return v->preferredSizeHint( v->sizeHint() );
-#else
-	return KMainWindow::sizeHint();
-#endif
 }
 
 /*
@@ -155,20 +144,18 @@ KInstance *KexiDialogBase::instance() {
 }*/
 
 void KexiDialogBase::registerDialog() {
-#if 0 //sebsauer 20061120
 	if (m_isRegistered)
 		return;
 	m_parentWindow->registerChild(this);
 	m_isRegistered=true;
-	if ( m_parentWindow->mdiMode() == KMdi::ToplevelMode ) {
-		m_parentWindow->addWindow( (KMdiChildView *)this, KMdi::Detach );
-		m_parentWindow->detachWindow((KMdiChildView *)this, true);
+	if ( m_parentWindow->mdiMode() == KexiMdiMainFrm::ToplevelMode ) {
+		m_parentWindow->addWindow(this, KexiMdiMainFrm::Detach);
+		m_parentWindow->detachWindow(this, true);
 	}
 	else
-		m_parentWindow->addWindow((KMdiChildView *)this);
+		m_parentWindow->addWindow(this, KexiMdiMainFrm::StandardAdd);
 	//later	show();
 	//m_parentWindow->activeWindowChanged(this);
-#endif
 }
 
 bool KexiDialogBase::isRegistered(){
@@ -217,11 +204,7 @@ void KexiDialogBase::closeEvent( QCloseEvent * e )
 		}
 	}
 	emit closing();
-#if 0 //sebsauer 20061120
-	KMdiChildView::closeEvent(e);
-#else
-	KMainWindow::closeEvent(e);
-#endif
+	KexiMdiChildView::closeEvent(e);
 }
 
 #if 0
@@ -434,11 +417,9 @@ void KexiDialogBase::setFocus()
 		else
 			m_stack->visibleWidget()->setFocus();
 	}
-#if 0 //sebsauer 20061120
 	else {
-		KMdiChildView::setFocus();
+		KexiMdiChildView::setFocus();
 	}
-#endif
 	activate();
 }
 
@@ -453,8 +434,7 @@ KexiDialogBase::propertySet()
 
 bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
 {
-#if 0 //sebsauer 20061120
-	if (KMdiChildView::eventFilter(obj, e))
+	if (KexiMdiChildView::eventFilter(obj, e))
 		return true;
 	/*if (e->type()==QEvent::FocusIn) {
 		QWidget *w = m_parentWindow->activeWindow();
@@ -468,15 +448,6 @@ bool KexiDialogBase::eventFilter(QObject *obj, QEvent *e)
 		}
 	}
 	return false;
-#else
-	if (KMainWindow::eventFilter(obj, e))
-		return true;
-	/*if (e->type()==QEvent::FocusIn) {
-		QWidget *w = m_parentWindow->activeWindow();
-		w=0;
-	}*/
-	return false;
-#endif
 }
 
 void KexiDialogBase::dirtyChanged(KexiViewBase* view)
@@ -514,23 +485,14 @@ void KexiDialogBase::updateCaption()
 	QString fullCapt = capt;
 	if (m_part)
 		fullCapt += (" : " + m_part->instanceCaption());
-#if 0 //sebsauer 20061120
 	if (dirty()) {
-		KMdiChildView::setCaption(fullCapt+"*");
-		KMdiChildView::setTabCaption(capt+"*");
+		KexiMdiChildView::setCaption(fullCapt+"*");
+		KexiMdiChildView::setTabCaption(capt+"*");
 	}
 	else {
-		KMdiChildView::setCaption(fullCapt);
-		KMdiChildView::setTabCaption(capt);
+		KexiMdiChildView::setCaption(fullCapt);
+		KexiMdiChildView::setTabCaption(capt);
 	}
-#else
-	if (dirty()) {
-		KMainWindow::setCaption(fullCapt+"*");
-	}
-	else {
-		KMainWindow::setCaption(fullCapt);
-	}
-#endif
 }
 
 bool KexiDialogBase::neverSaved() const
@@ -664,23 +626,17 @@ tristate KexiDialogBase::storeData(bool dontAsk)
 
 void KexiDialogBase::activate()
 {
-#if 0 //sebsauer 20061120
 	KexiViewBase *v = selectedView();
 	//kDebug() << "focusWidget(): " << focusWidget()->name() << endl;
-	if (KexiUtils::hasParent( v, KMdiChildView::focusedChildWidget()))//focusWidget()))
-		KMdiChildView::activate();
+	if (KexiUtils::hasParent( v, KexiMdiChildView::focusedChildWidget()))//focusWidget()))
+		KexiMdiChildView::activate();
 	else {//ah, focused widget is not in this view, move focus:
 		if (v)
 			v->setFocus();
 	}
 	if (v)
 		v->updateActions(true);
-//js: not neeed??	m_parentWindow->invalidateSharedActions(this);
-#else
-	KexiViewBase *v = selectedView();
-	if (v)
-		v->updateActions(true);
-#endif
+	//js: not neeed??	m_parentWindow->invalidateSharedActions(this);
 }
 
 void KexiDialogBase::deactivate()

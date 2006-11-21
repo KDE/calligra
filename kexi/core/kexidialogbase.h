@@ -26,6 +26,7 @@
 #include "kexi.h"
 #include "kexipart.h"
 #include "kexiviewbase.h"
+#include "keximdi.h"
 
 #include <QPointer>
 //Added by qt3to4:
@@ -80,8 +81,7 @@ class KEXICORE_EXPORT KexiDialogTempData : public QObject
  It also automatically works as a proxy for shared (application-wide) actions.
 */
 class KEXICORE_EXPORT KexiDialogBase
-	//: public KMdiChildView
-	: public KMainWindow
+	: public KexiMdiChildView
 	, public KexiActionProxy
 	, public Kexi::ObjectStatus
 {
