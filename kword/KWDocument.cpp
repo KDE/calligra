@@ -3112,6 +3112,9 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
+    // Yeah we need to save the same font faces in both content.xml and styles.xml...
+    savingContext.writeFontFaces( *stylesWriter );
+
     stylesWriter->startElement( "office:styles" );
 
     if ( saveFlag == SaveAll )
