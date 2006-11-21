@@ -538,16 +538,14 @@ Document</guilabel> dialog, your very own template will be available to
 select!</para>
 
 <screenshot>
-<screeninfo>Your new template in the &kpresenter; <guilabel>Create
-Document</guilabel>
+<screeninfo>Your new template in the &kpresenter; startup
 dialog.</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="template07.png" format="PNG"/>
 </imageobject>
 <textobject><phrase>Your new template in the &kpresenter;
-<guilabel>Create Document</guilabel>
-dialog.</phrase></textobject>
+startup dialog.</phrase></textobject>
 </mediaobject>
 </screenshot>
 </step>

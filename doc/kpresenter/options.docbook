@@ -34,10 +34,10 @@
 <sect2 id="enabling-autocorrection">
 <title>Enabling/Disabling Autocorrection</title>
 
-<para>To toggle autocorrection on, select <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem></menuchoice> from the menubar. When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>. You can determine which changes to make by configuring autocorrection, as explained below.
+<para>To toggle autocorrection on, select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem></menuchoice> from the menubar. When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>. You can determine which changes to make by configuring autocorrection, as explained below.
 </para>
 
-<para>To toggle autocorrection off, select <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Disable Autocorrection</guimenuitem></menuchoice> from the menubar. When disabled, autocorrection changes are not made. You can, however, <link linkend="manually">apply autocorrection manually</link>, using the <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice> menu.
+<para>To toggle autocorrection off, select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Disable Autocorrection</guimenuitem></menuchoice> from the menubar. When disabled, autocorrection changes are not made. You can, however, <link linkend="manually">apply autocorrection manually</link>, using the <menuchoice><guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice> menu.
 </para>
 
 <para>To adjust the options for autocorrection, select <menuchoice><guimenu>Settings</guimenu>
@@ -205,7 +205,7 @@ to substitute in the text box labeled <guilabel>Replace:</guilabel>.</para>
 keyboard, you can click the
 buttons with three periods on them and select a special character from the table provided.</para></note>
 
-<para>When these are entered, click <guibutton>Add</guibutton>. Your text
+<para>When these are entered, click <guibutton>Add...</guibutton>. Your text
 strings are now added to the table.</para>
 </sect3>
 
@@ -402,7 +402,7 @@ see <link linkend="enabling-autocorrection">Enabling/Disabling Autocorrection</l
 </sect1>
 
 <sect1  id="configure-completion">
-<title>The <guilabel>Configure Completion...</guilabel> Dialog</title>
+<title>The <guilabel>Configure Completion</guilabel> Dialog</title>
 
 <para>Autocompletion allows you to type the first few letters of a commonly
 used word (often technical or job specific), and tells &kpresenter; to
@@ -435,12 +435,12 @@ This is selected using <link linkend="autocomplete-dialog">the dialog</link>.</p
 from the menubar.  This will bring up a dialog.</para>
 
 <screenshot>
-<screeninfo>Configure Completion... Dialog</screeninfo>
+<screeninfo><guilabel>Completion</guilabel> Dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="completion.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>Configure Completion... Dialog</phrase></textobject>
+<textobject><phrase><guilabel>Completion</guilabel> Dialog</phrase></textobject>
 </mediaobject>
 </screenshot>
 
@@ -554,7 +554,7 @@ using this new list for autocompletion, click this button.</para>
 </sect1>
 
 <sect1 id="configure-dialog">
-<title>The <guilabel>Configure &kpresenter;...</guilabel> Dialog</title>
+<title>The <guilabel>Configure &kpresenter;</guilabel> Dialog</title>
 
 <sect2 id="configure-interface">
 <title><guilabel>Interface</guilabel></title>

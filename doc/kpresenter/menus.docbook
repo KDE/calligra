@@ -192,7 +192,7 @@ The &kpresenter; menus are discussed in the following sections.
 <listitem>
 <para>
 <action>Begins a new presentation.</action> The
-<guilabel>Create Document</guilabel> dialog will open, allowing you to choose a
+startup dialog will open, allowing you to choose a
 template for your presentation.
 </para>
 </listitem>

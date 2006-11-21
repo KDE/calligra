@@ -194,8 +194,7 @@ and another to contain a bulleted list of items.
 
 <para>
 Double-click and type a title. Then double-click on the second text
-box. Note that a bullet automatically appears when you start
-typing. Type some text and end the paragraph by pressing the
+box with the bullet. Type some text and end the paragraph by pressing the
 <keycap>Enter</keycap> or <keycap>Return</keycap> key. As you type new
 paragraphs, bullets automatically appear in front of them.
 </para>
@@ -294,7 +293,7 @@ That's it. Now you have a picture on the title page!
 </sect1>
 
 <sect1 id="insert-object">
-<title>Insert a KOffice object</title>
+<title>Insert a &koffice; object</title>
 <para>Let's insert another &koffice; object under the picture, for example
 a chart.</para>
 
@@ -474,7 +473,7 @@ Now click away from the text to de-select it.
 
 <para>
 Now that there are two slides, why not try a slide show! To start the
-slide show, press the <guiicon>play</guiicon> button (the gray arrow) on
+slide show, press the <guiicon>play</guiicon> button (the blue double arrow) on
 the top toolbar. The first slide should appear on your screen.
 </para>
 

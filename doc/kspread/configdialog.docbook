@@ -358,6 +358,11 @@ the title case, for example My Own Spreadsheet or My own spreadsheet. If this is
 
 </variablelist></para>
 </sect1>
+
+<sect1 id="opt-tts"><title>Configure Text-To-Speech options</title>
+<para>See the <link linkend="a11y-tts">Text-to-Speech</link> section 
+in the accessibility chapter for further details.</para>
+</sect1>
 </chapter>
 
 <!--

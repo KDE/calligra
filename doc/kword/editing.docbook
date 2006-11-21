@@ -285,7 +285,7 @@ the menubar.</para>
 clipboard.</emphasis></para>
 
 <para>Now place the mouse cursor directly behind the word 
-<quote>dog</quote> and click once.</para>
+<quote>lazy</quote> and click once.</para>
 
 <para>Now select <menuchoice>
 <guimenu>Edit</guimenu><guimenuitem>Paste</guimenuitem></menuchoice>
@@ -1249,7 +1249,7 @@ ask about this word again.</para>
 <para>Keep the current changes, but stop any further checking.</para>
 </listitem>
 </varlistentry>
-
+<!-- FIXME lueck 08.11.2006 -->
 <varlistentry>
 <term><guibutton>Cancel</guibutton></term>
 <listitem>
@@ -1319,7 +1319,7 @@ from the menubar</para></listitem>
 </mediaobject>
 </screenshot>
 <para>The word you selected from your document appears in the combo box labeled <guilabel>Search for:</guilabel>.</para>
-<para>There are three columns of alternate words:  Synonyms, More General words, More Specific Words.</para>
+<para>There are three columns of alternate words:  <guilabel>Synonyms</guilabel>, <guilabel>More General words</guilabel> (hypernyms), <guilabel>More Specific Words</guilabel> (hyponyms).</para>
 <para>If you find an appropriate alternate word, simply click on the word in the list, and this word will now be listed in the text box labeled
 <guilabel>Replace With:</guilabel>.</para>
 <para>To finalize the replacement click <guibutton>Replace</guibutton>.</para>
