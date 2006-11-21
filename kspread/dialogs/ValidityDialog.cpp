@@ -202,7 +202,6 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   message =new QTextEdit( tmpQButtonGroup);
   grid2->addWidget(message,3, 4,1, 1);
   lay1->addWidget(tmpQButtonGroup);
-  message->setTextFormat( Qt::PlainText );
 
   QFrame *page3 = new QFrame();
   addPage(page3, i18n("Input Help"));
@@ -234,8 +233,6 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   messageHelp =new QTextEdit( tmpQButtonGroup);
   grid3->addWidget(messageHelp,3, 4,1, 1);
   lay1->addWidget(tmpQButtonGroup);
-  messageHelp->setTextFormat( Qt::PlainText );
-
 
   connect(choose,SIGNAL(activated(int )),this,SLOT(changeIndexCond(int)));
   connect(chooseType,SIGNAL(activated(int )),this,SLOT(changeIndexType(int)));
@@ -451,7 +448,7 @@ void DlgValidity::init()
   QSharedDataPointer<Validity> tmpValidity = m_pView->activeSheet()->validity( marker.left(), marker.top() );
   if ( !!tmpValidity )
   {
-    message->setText(tmpValidity->message);
+    message->setPlainText(tmpValidity->message);
     title->setText(tmpValidity->title);
     QString tmp;
     switch( tmpValidity->m_restriction)
@@ -555,7 +552,7 @@ void DlgValidity::init()
     displayMessage->setChecked( tmpValidity->displayMessage );
     allowEmptyCell->setChecked( tmpValidity->allowEmptyCell );
     titleHelp->setText( tmpValidity->titleInfo );
-    messageHelp->setText( tmpValidity->messageInfo );
+    messageHelp->setPlainText( tmpValidity->messageInfo );
     displayHelp->setChecked( tmpValidity->displayValidationInformation );
   }
   changeIndexType(chooseType->currentIndex()) ;
@@ -566,7 +563,7 @@ void DlgValidity::clearAllPressed()
 {
   val_min->setText("");
   val_max->setText("");
-  message->setText("");
+  message->setPlainText("");
   title->setText("");
   displayMessage->setChecked( true );
   allowEmptyCell->setChecked( false );
@@ -575,7 +572,7 @@ void DlgValidity::clearAllPressed()
   chooseAction->setCurrentIndex(0);
   changeIndexType(0);
   changeIndexCond(0);
-  messageHelp->setText("" );
+  messageHelp->setPlainText("" );
   titleHelp->setText( "" );
   validityList->setText( "" );
   displayHelp->setChecked( false );
