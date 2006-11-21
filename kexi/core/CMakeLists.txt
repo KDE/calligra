@@ -8,6 +8,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/libs/kofficecore ${CMAKE_SOURCE_DIR}/li
 set(kexicore_LIB_SRCS 
    kexi_global.cpp 
    kexi.cpp 
+   keximdi.cpp
    keximainwindow.cpp 
    kexidbconnectionset.cpp 
    kexiprojectset.cpp 
