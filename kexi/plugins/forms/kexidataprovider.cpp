@@ -108,7 +108,7 @@ void KexiFormDataProvider::fillDataItems(KexiTableItem& row, bool cursorAtNewRow
 			indexForVisibleLookupValue = -1; //no
 		const QVariant value(row.at(it.data()));
 		QVariant visibleLookupValue;
-		if (indexForVisibleLookupValue!=-1)
+		if (indexForVisibleLookupValue!=-1 && (int)row.size()>indexForVisibleLookupValue)
 			visibleLookupValue = row.at(indexForVisibleLookupValue);
 		kexipluginsdbg << "fill data of '" << itemIface->dataSource() <<  "' at idx=" << it.data() 
 			<< " data=" << value << (indexForVisibleLookupValue!=-1 

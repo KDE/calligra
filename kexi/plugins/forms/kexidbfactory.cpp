@@ -196,7 +196,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
 	wi = new KexiDataAwareWidgetInfo(this);
-	wi->setPixmap("edit");
+	wi->setPixmap("autofield");
 	wi->setClassName("KexiDBAutoField");
 	wi->addAlternateClassName("KexiDBFieldEdit", true/*override*/); //older
 	wi->setName(i18n("Auto Field"));
