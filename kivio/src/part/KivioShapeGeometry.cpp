@@ -39,10 +39,11 @@ KivioShapeGeometry::KivioShapeGeometry(KivioDocument* doc)
 
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-    QWidget* mainWidget = new QWidget(this);
-    setWidget(mainWidget);
+    m_mainWidget = new QWidget(this);
+    m_mainWidget->setEnabled(false);
+    setWidget(m_mainWidget);
 
-    setupUi(mainWidget);
+    setupUi(m_mainWidget);
 
     connect(m_xInput, SIGNAL(valueChangedPt(double)), this, SLOT(positionChanged()));
     connect(m_yInput, SIGNAL(valueChangedPt(double)), this, SLOT(positionChanged()));
@@ -56,14 +57,23 @@ void KivioShapeGeometry::setSelection(KoSelection* selection)
 {
     m_selection = selection;
 
-    if(!m_selection)
+    if(!m_selection) {
+        m_mainWidget->setEnabled(false);
         return;
+    }
+
+    bool selected = m_selection->count() > 0;
+    m_mainWidget->setEnabled(selected);
 
     update();
 }
 
 void KivioShapeGeometry::update()
 {
+    if(m_selection && m_selection->count() <= 0) {
+        return;
+    }
+
     m_lockedForUpdate = true;
     KoShape* firstShape = *(m_selection->selectedShapes(KoFlake::StrippedSelection).begin());
     QPointF position = firstShape->position();
@@ -198,6 +208,14 @@ void KivioShapeGeometry::rotationChanged()
     m_doc->addCommand(rotateCommand, false);
 }
 
+void KivioShapeGeometry::setUnit(KoUnit::Unit unit)
+{
+    m_xInput->setUnit(unit);
+    m_yInput->setUnit(unit);
+    m_widthInput->setUnit(unit);
+    m_heightInput->setUnit(unit);
+}
+
 
 //
 // KivioShapeGeometryFactory
@@ -223,6 +241,9 @@ QDockWidget* KivioShapeGeometryFactory::createDockWidget()
 {
     KivioShapeGeometry* dockWidget = new KivioShapeGeometry(m_doc);
     dockWidget->setObjectName(dockId());
+    dockWidget->setUnit(m_doc->unit());
+
+    QObject::connect(m_doc, SIGNAL(unitChanged(KoUnit::Unit)), dockWidget, SLOT(setUnit(KoUnit::Unit)));
 
     return dockWidget;
 }

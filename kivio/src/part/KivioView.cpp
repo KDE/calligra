@@ -107,8 +107,13 @@ void KivioView::initGUI()
 
     m_horizontalRuler = new KoRuler(this, Qt::Horizontal, m_zoomHandler);
     m_horizontalRuler->setShowMousePosition(true);
+    m_horizontalRuler->setUnit(document()->unit());
     m_verticalRuler = new KoRuler(this, Qt::Vertical, m_zoomHandler);
+    m_verticalRuler->setUnit(document()->unit());
     m_verticalRuler->setShowMousePosition(true);
+
+    connect(document(), SIGNAL(unitChanged(KoUnit::Unit)), m_horizontalRuler, SLOT(setUnit(KoUnit::Unit)));
+    connect(document(), SIGNAL(unitChanged(KoUnit::Unit)), m_verticalRuler, SLOT(setUnit(KoUnit::Unit)));
 
     layout->addWidget(m_horizontalRuler, 0, 1);
     layout->addWidget(m_verticalRuler, 1, 0);
@@ -123,10 +128,6 @@ void KivioView::initGUI()
 
     KivioShapeGeometryFactory geometryFactory(document());
     m_geometryDocker = qobject_cast<KivioShapeGeometry*>(createDockWidget(&geometryFactory));
-
-    if(m_geometryDocker) {
-        m_geometryDocker->setEnabled(false);
-    }
 
     KoToolBoxFactory toolBoxFactory("Kivio");
     createDockWidget(&toolBoxFactory);
@@ -294,14 +295,8 @@ void KivioView::updateMousePosition(QPoint position)
 
 void KivioView::selectionChanged()
 {
-    bool selected = m_canvas->shapeManager()->selection()->count() > 0;
-
     if(m_geometryDocker) {
-        if(selected) {
-            m_geometryDocker->setSelection(m_canvas->shapeManager()->selection());
-        }
-
-        m_geometryDocker->setEnabled(selected);
+        m_geometryDocker->setSelection(m_canvas->shapeManager()->selection());
     }
 }
 

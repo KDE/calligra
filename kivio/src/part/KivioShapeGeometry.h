@@ -39,6 +39,8 @@ class KivioShapeGeometry : public QDockWidget, public Ui::KivioShapeGeometry
         void setSelection(KoSelection* selection);
         void update();
 
+        void setUnit(KoUnit::Unit unit);
+
     protected slots:
         void positionChanged();
         void sizeChanged();
@@ -48,6 +50,7 @@ class KivioShapeGeometry : public QDockWidget, public Ui::KivioShapeGeometry
     private:
         KivioDocument* m_doc;
         KoSelection* m_selection;
+        QWidget* m_mainWidget;
 
         bool m_lockedForUpdate;
 };
