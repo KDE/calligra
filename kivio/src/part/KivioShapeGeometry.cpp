@@ -126,6 +126,8 @@ void KivioShapeGeometry::sizeChanged()
     if(m_lockedForUpdate)
         return;
 
+    m_lockedForUpdate = true;
+
     KoSelectionSet selectionSet = m_selection->selectedShapes(KoFlake::StrippedSelection);
     KoShape* firstShape = *(selectionSet.begin());
     QSizeF size = firstShape->size();
@@ -143,6 +145,17 @@ void KivioShapeGeometry::sizeChanged()
         shapes.append(shape);
         QSizeF s = shape->size();
         prevSize.append(s);
+
+        if(m_aspectRatioCheck->isChecked()) {
+            double ratio = s.width() / s.height();
+
+            if(dx != 0.0) {
+                dy = dx / ratio;
+            } else if(dy != 0.0) {
+                dx = dy * ratio;
+            }
+        }
+
         s.setWidth(s.width() + dx);
         s.setHeight(s.height() + dy);
         newSize.append(s);
@@ -151,6 +164,13 @@ void KivioShapeGeometry::sizeChanged()
     KoShapeSizeCommand* sizeCommand = new KoShapeSizeCommand(shapes, prevSize, newSize);
     sizeCommand->execute();
     m_doc->addCommand(sizeCommand, false);
+
+    // Make sure we show the correct values (needed for keep ratio)
+    size = firstShape->size();
+    m_widthInput->changeValue(size.width());
+    m_heightInput->changeValue(size.height());
+
+    m_lockedForUpdate = false;
 }
 
 void KivioShapeGeometry::protectSizeChanged(bool protect)

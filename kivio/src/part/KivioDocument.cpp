@@ -152,6 +152,10 @@ void KivioDocument::addCommand(KCommand* command, bool execute)
     if(!command) return;
 
     m_commandHistory->addCommand(command, execute);
+
+    if(!execute) {
+        slotCommandExecuted();
+    }
 }
 
 void KivioDocument::slotDocumentRestored()
