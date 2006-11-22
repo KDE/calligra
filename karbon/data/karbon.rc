@@ -32,7 +32,6 @@
 		<Action name="view_zoom"/>
         <Action name="view_mode"/>
 	<Separator/>
-	<Action name="view_palette_action_menu"/>
 	<Action name="view_tool_options"/>
 	<Action name="view_context_help"/>
 	<Separator/>
