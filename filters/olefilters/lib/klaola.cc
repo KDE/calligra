@@ -197,11 +197,21 @@ bool KLaola::parseHeader() {
     num_of_bbd_blocks=read32(0x2c);
     root_startblock=read32(0x30);
     sbd_startblock=read32(0x3c);
+
+    if (num_of_bbd_blocks >= 0x800000) {
+        kdError(s_area) << "KLaola::parseHeader(): Too many bbd blocks found in header!" << endl;
+        return false;
+    }
     bbd_list=new unsigned int[num_of_bbd_blocks];
 
     unsigned int i, j;
-    for(i=0, j=0; i<num_of_bbd_blocks; ++i, j=j+4)
+    for(i=0, j=0; i<num_of_bbd_blocks; ++i, j=j+4) {
         bbd_list[i]=read32(0x4c+j);
+        if (bbd_list[i] >= (0x800000 - 1)) {
+            kdError(s_area) << "KLaola::parseHeader(): bbd " << i << " offset (" << bbd_list[i] << ") too large" << endl;
+            return false;
+        }
+    }
     return true;
 }
 
@@ -283,7 +293,8 @@ const unsigned char *KLaola::readBBStream(int start, bool setmaxSblock)
     unsigned char *p=0;
 
     tmp=start;
-    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxblock)) {
+    /* 0x10000 chosen as arbitrary "too many blocks" limit to not loop forver */
+    while(tmp!=-2 && tmp>=0 && i<0x10000 && tmp<=static_cast<int>(maxblock)) {
         ++i;
         tmp=nextBigBlock(tmp);
     }
@@ -293,7 +304,7 @@ const unsigned char *KLaola::readBBStream(int start, bool setmaxSblock)
             maxSblock=i*8-1;
         i=0;
         tmp=start;
-        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxblock)) {
+        while(tmp!=-2 && tmp>=0 && i<0x10000 && tmp<=static_cast<int>(maxblock)) {
             memcpy(&p[i*0x200], &m_file.data[(tmp+1)*0x200], 0x200);
             tmp=nextBigBlock(tmp);
             ++i;
@@ -308,7 +319,8 @@ const unsigned char *KLaola::readSBStream(int start) const {
     unsigned char *p=0;
 
     tmp=start;
-    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxSblock)) {
+    /* 0x10000 chosen as arbitrary "too many blocks" limit to not loop forver */
+    while(tmp!=-2 && tmp>=0 && i<0x10000 && tmp<=static_cast<int>(maxSblock)) {
         ++i;
         tmp=nextSmallBlock(tmp);
     }
@@ -316,7 +328,7 @@ const unsigned char *KLaola::readSBStream(int start) const {
         p=new unsigned char[i*0x40];
         i=0;
         tmp=start;
-        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxSblock)) {
+        while(tmp!=-2 && tmp>=0 && i<0x10000 && tmp<=static_cast<int>(maxSblock)) {
             memcpy(&p[i*0x40], &smallBlockFile[tmp*0x40], 0x40);
             tmp=nextSmallBlock(tmp);
             ++i;
@@ -326,10 +338,20 @@ const unsigned char *KLaola::readSBStream(int start) const {
 }
 
 void KLaola::readBigBlockDepot() {
+    if (num_of_bbd_blocks >= 0x800000)
+        return;
 
     bigBlockDepot=new unsigned char[0x200*num_of_bbd_blocks];
-    for(unsigned int i=0; i<num_of_bbd_blocks; ++i)
-        memcpy(&bigBlockDepot[i*0x200], &m_file.data[(bbd_list[i]+1)*0x200], 0x200);
+    for(unsigned int i=0; i<num_of_bbd_blocks; ++i) {
+        unsigned int offset = (bbd_list[i]+1)*0x200;
+        if (offset > m_file.length - 0x200) {
+            /* attempting to read past end of file */
+            memset(&bigBlockDepot[i*0x200], 0, 0x200);
+        }
+        else {
+            memcpy(&bigBlockDepot[i*0x200], &m_file.data[offset], 0x200);
+        }
+    }
 }
 
 void KLaola::readSmallBlockDepot() {
