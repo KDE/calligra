@@ -100,8 +100,6 @@ public:
      */
     ~Cell();
 
-    CellView* cellView() const;
-
     /**
      * Returns the worksheet which owns this cell.
      */
@@ -167,6 +165,7 @@ public:
      * Returns the locale setting of this cell.
      */
     KLocale* locale() const;
+
     /**
      * Returns true if this cell holds a formula.
      */
@@ -178,11 +177,14 @@ public:
      */
     QString text() const;
 
+    /**
+     * \return the output text, e.g. the result of a formula
+     */
     QString strOutText() const;
 
     /**
      * The cell's formula. Usable to analyze the formula's tokens.
-     * \return point to the cell's formula object
+     * \return pointer to the cell's formula object
      */
     const Formula* formula() const;
 
@@ -208,7 +210,7 @@ public:
     void setConditions( QSharedDataPointer<Conditions> conditions, int col = 0, int row = 0 ) const;
 
     /**
-     * \return the conditions associated with this cell
+     * \return the validity checks associated with this cell
      */
     QSharedDataPointer<Validity> validity( int col = 0, int row = 0 ) const;
 
@@ -228,7 +230,6 @@ public:
      */
     void setValue( const Value& value );
 
-
     /**
      * Sets the value for this cell and its formatting and input text, if
      * appropriate. Can therefore be used as a replacement for setCellText,
@@ -246,10 +247,29 @@ public:
     void setCellValue (const Value& value, FormatType fmtType = No_format,
                        const QString& inputText = QString::null);
 
+    /**
+     * \return the previous cell in the cell cluster
+     * \see Cluster
+     */
     Cell* previousCell() const;
+
+    /**
+     * \return the next cell in the cell cluster
+     * \see Cluster
+     */
     Cell* nextCell() const;
-    void setPreviousCell( Cell* c );
-    void setNextCell( Cell* c );
+
+    /**
+     * Sets \p cell as the previous cell in the cell cluster.
+     * \see Cluster
+     */
+    void setPreviousCell( Cell* cell );
+
+    /**
+     * Sets \p cell as the next cell in the cell cluster.
+     * \see Cluster
+     */
+    void setNextCell( Cell* cell );
 
     /**
      * Moves around the cell. It cares about obscured and obscuring cells and
@@ -294,6 +314,13 @@ public:
                       int _x_offset = 0, int _y_offset = 0,
                       bool force = false, bool copy = false, bool era = false );
 
+    /**
+     * \ingroup OpenDocument
+     * Loads a cell from an OASIS XML element.
+     * @param element An OASIS XML element
+     * @param oasisContext The loading context assoiated with the XML element
+     */
+    bool loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisContext );
 
     /**
      * \ingroup OpenDocument
@@ -303,35 +330,17 @@ public:
                     GenValidationStyles &valStyle );
 
     /**
-     * \ingroup OpenDocument
-     */
-    void saveOasisValue (KoXmlWriter &xmlWriter);
-
-    /**
-     * \ingroup OpenDocument
-     * @return the OASIS style's name
-     */
-    QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles, int col, int row );
-
-    /**
-     * \ingroup OpenDocument
-     * Loads a cell from an OASIS XML element.
-     * @param element An OASIS XML element
-     * @param oasisContext The loading context assoiated with the XML element
-     */
-    bool loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisContext );
-
-
-    QTime toTime(const KoXmlElement &element);
-    QDate toDate(const KoXmlElement &element);
-
-    /**
-     * Copies the format from the Cell @p cell .
+     * Copies the format from \p cell .
      *
      * @see copyAll(Cell *cell)
      */
     void copyFormat( const Cell* cell );
 
+    /**
+     * Copies the content from \p cell .
+     *
+     * @see copyAll(Cell *cell)
+     */
     void copyContent( const Cell* cell );
 
     /**
@@ -340,29 +349,30 @@ public:
      * content.
      *
      * @see copyFormat( const Cell* cell )
-     * @see copyFormat( const int column, const int row )
      */
     void copyAll(Cell *cell);
 
-
     /**
      * @param _col the column this cell is assumed to be in.
-     *             This parameter defaults to the return value of @ref #column.
+     *             This parameter defaults to the return value of column().
      *
      * @return the width of this cell as int
+     * \deprecated
      */
     int width( int _col = -1 ) const;
 
     /**
      * @param _row the row this cell is assumed to be in.
+     *             This parameter defaults to the return value of row().
      *
      * @return the height of this cell as int
+     * \deprecated
      */
     int height( int _row = -1 ) const;
 
     /**
      * @param _col the column this cell is assumed to be in.
-     *             This parameter defaults to the return value of @ref #column.
+     *             This parameter defaults to the return value of column().
      *
      * @return the width of this cell as double
      */
@@ -370,14 +380,17 @@ public:
 
     /**
      * @param _row the row this cell is assumed to be in.
+     *             This parameter defaults to the return value of row().
      *
      * @return the height of this cell as double
      */
     double dblHeight( int _row = -1 ) const;
 
     /**
-     * \deprecated
-     * @return a QRect for this cell (i.e., a 1x1 rect).  @see zoomedCellRect
+     * \return a QRect for this cell (i.e., a 1x1 rect).
+     * \see zoomedCellRect
+     * \note does NOT take merged cells into account
+     * \todo replace by a position method
      */
     QRect cellRect();
 
@@ -388,7 +401,7 @@ public:
 
     /**
      * @return true if the cell should be printed in a print out.
-     *         That si the case if it has any content, border, backgroundcolor,
+     *         That's the case, if it has any content, border, backgroundcolor,
      *         or background brush.
      *
      * @see Sheet::print
@@ -403,6 +416,7 @@ public:
      * behind the dot plus 1.
      */
     void incPrecision();
+
     /**
      * Decreases the precision of the
      * value displayed. Precision means here the amount of
@@ -451,6 +465,10 @@ public:
     /** returns true, if cell format is of time type or content is a time */
     bool isTime() const;
 
+    /**
+     * Sets the cell content to \p number .
+     * \note Used by some filters.
+     */
     void setNumber( double number );
 
     /** return the cell's value as a double */
@@ -466,7 +484,6 @@ public:
     void convertToTime ();
     /** converts content to date format */
     void convertToDate ();
-
 
     /**
     * Refreshing chart
@@ -490,8 +507,18 @@ public:
      * Causes the format to be recalculated when the cell is drawn next time.
      * This flag is for example set if the width of the column changes or if
      * some cell specific format value like font or text change.
+     *
+     * Also sets the flag for the obscured cells.
      */
     void setLayoutDirtyFlag( bool format = false );
+
+    //
+    //END
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Merging/obscuring
+    //
 
     /**
      * Tells this cell that the Cell @p cell obscures this one.
@@ -536,8 +563,10 @@ public:
      */
     QList<Cell*> obscuringCells() const;
 
+    /**
+     * Clears the list obscured cells.
+     */
     void clearObscuringCells();
-
 
     /**
      * Merge a number of cells, i.e. force the cell to occupy other
@@ -579,19 +608,48 @@ public:
      */
     int extraYCells() const;
 
+    /**
+     * \return the width including any obscured cells
+     */
     double extraWidth() const;
+
+    /**
+     * \return the height including any obscured cells
+     */
     double extraHeight() const;
 
     /**
-     * encode a formula into a text representation
+     * Releases all obscured cells except the explicitly merged ones.
+     */
+    void freeAllObscuredCells();
+
+    //
+    //END Merging/obscuring
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Cut & paste
+    //
+
+    /**
+     * Encodes a formula into a text representation.
      *
      * @param _era encode relative references absolutely (this is used for copying
      *             a cell to make the paste operation create a formula that points
      *             to the original cells, not the cells at the same relative position)
      * @param _col row the formula is in
      * @param _row column the formula is in
+     *
+     * \todo possibly rewrite to make use of the formula tokenizer
      */
     QString encodeFormula( bool _era = false, int _col = -1, int _row = -1 ) const;
+
+    /**
+     * inverse operation to encodeFormula()
+     * \see encodeFormula()
+     *
+     * \todo possibly rewrite to make use of the formula tokenizer
+     */
     QString decodeFormula( const QString &_text, int _col = -1, int _row = -1 ) const;
 
     /**
@@ -604,6 +662,14 @@ public:
      * @return the merged text.
      */
     QString pasteOperation( const QString &new_text, const QString &old_text, Paste::Operation op );
+
+    //
+    //END Cut & paste
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN
+    //
 
     /**
      * \return \c true if the cell contains a formula, that could not
@@ -624,8 +690,19 @@ public:
      */
     bool makeFormula();
 
-
+    /**
+     * Resets the used style to the default. Clears any conditional styles and
+     * any content validity checks.
+     */
     void defaultStyle();
+
+    //
+    //END 
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Conditional styles / content validity
+    //
 
     /**
      * Gets a copy of the list of current conditions
@@ -637,24 +714,56 @@ public:
      */
     void setConditionList(const QLinkedList<Conditional> &newList);
 
+    //
+    //END Conditional styles / content validity
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN 
+    //
+
     /**
      * return align X when align is undefined
      */
     int defineAlignX();
 
-
-
+    //
+    //END 
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Operators
+    //
 
     /**
+     * Tests wether the cell content is greater than that in \p other .
      * Used for comparing cells (when sorting)
      */
-    bool operator > ( const Cell & ) const;
-    bool operator < ( const Cell & ) const;
+    bool operator>( const Cell& other ) const;
 
+    /**
+     * Tests wether the cell content is less than that in \p other .
+     * Used for comparing cells (when sorting)
+     */
+    bool operator<( const Cell& other ) const;
+
+    /**
+     * Tests for equality of all cell attributes to those in \p other .
+     */
     bool operator==( const Cell& other ) const;
+
+    /**
+     * Tests for inequality of all cell attributes to those in \p other .
+     */
     inline bool operator!=( const Cell& other ) const { return !operator==( other ); }
 
-    void freeAllObscuredCells();
+    //
+    //END Operators
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN
+    //
 
     /**
      * Cell status flags.
@@ -726,7 +835,7 @@ public:
       Flag_CircularCalculation   = 0x0100,
       /**
        * DependencyError
-       * \todo TODO Stefan: never set so far
+       * \todo never set so far
        */
       Flag_DependencyError       = 0x0200,
       /**
@@ -748,10 +857,21 @@ public:
        */
       Flag_PaintingDirty         = 0x1000
     };
-    Q_DECLARE_FLAGS(StatusFlags, StatusFlag)
+    Q_DECLARE_FLAGS(StatusFlags, StatusFlag);
 
+    /**
+     * Clears the status flag \p flag .
+     */
     void clearFlag( StatusFlag flag );
+
+    /**
+     * Sets the status flag \p flag .
+     */
     void setFlag( StatusFlag flag );
+
+    /**
+     * Checks wether the status flag \p flag is set.
+     */
     bool testFlag( StatusFlag flag ) const;
 
 protected:
@@ -821,39 +941,66 @@ private:
     class Extra;
     class Private;
     Private * const d;
-    // static const char* s_dataTypeToString[];
 
+    /**
+     * Handle the fact that a cell has been updated - calls cellUpdated()
+     * in the parent Sheet object.
+     */
+    void valueChanged();
 
-  /** handle the fact that a cell has been updated - calls cellUpdated()
-  in the parent Sheet object */
-  void valueChanged ();
+    /**
+     * Determines the text to be displayed.
+     *
+     * This depends on the following variables:
+     * \li wether the value or the formula should be shown
+     *
+     * \see ValueFormatter::formatText
+     */
+    void setOutputText();
 
-  /**
-   * Determines the text to be displayed.
-   *
-   * This depends on the following variables:
-   * \li wether the value or the formula should be shown
-   *
-   * \see ValueFormatter::formatText
-   */
-  void setOutputText();
+    /**
+     * \ingroup NativeFormat
+     */
+    bool loadCellData(const KoXmlElement &text, Paste::Operation op);
 
+    /**
+     * \ingroup NativeFormat
+     */
+    bool saveCellResult( QDomDocument& doc, QDomElement& result, QString str );
 
-  /* helper functions to the load/save routines */
-  bool loadCellData(const KoXmlElement &text, Paste::Operation op);
-  bool saveCellResult( QDomDocument& doc, QDomElement& result,
-                       QString str );
+    /**
+     * \ingroup NativeFormat
+     * Decodes a string into a time value.
+     */
+    QTime toTime(const KoXmlElement &element);
 
-  /**
-   * \ingroup OpenDocument
-   * \todo TODO Stefan: merge this into Oasis::decodeFormula
-   */
-  void checkForNamedAreas( QString & formula ) const;
+    /**
+     * \ingroup NativeFormat
+     * Decodes a string into a date value.
+     */
+    QDate toDate(const KoXmlElement &element);
 
-  /**
-   * \ingroup OpenDocument
-   */
-  void loadOasisValidationValue( const QStringList &listVal );
+    /**
+     * \ingroup OpenDocument
+     * \todo TODO Stefan: merge this into Oasis::decodeFormula
+     */
+    void checkForNamedAreas( QString & formula ) const;
+
+    /**
+     * \ingroup OpenDocument
+     */
+    void loadOasisValidationValue( const QStringList &listVal );
+
+    /**
+     * \ingroup OpenDocument
+     */
+    void saveOasisValue (KoXmlWriter &xmlWriter);
+
+    /**
+     * \ingroup OpenDocument
+     * @return the OASIS style's name
+     */
+    QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles, int column, int row );
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Cell::StatusFlags)

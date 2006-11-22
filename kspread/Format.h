@@ -61,6 +61,7 @@ public:
 
     /**
      * @return the height in zoomed pixels as integer value.
+     * \deprecated
      */
     int height() const;
 
@@ -72,6 +73,7 @@ public:
 
     /**
      * @return the height in millimeters.
+     * \deprecated
      */
     double mmHeight() const;
 
@@ -104,8 +106,6 @@ public:
 
     /**
      * @return the row for this RowFormat. May be 0 if this is the default format.
-     *
-     * @see #row
      */
     int row() const;
     void setRow( int row );
@@ -148,15 +148,12 @@ public:
     bool load( const KoXmlElement& row, int xshift = 0,Paste::Mode sp = Paste::Normal, bool paste = false );
 
     /**
-     * @param _canvas is needed to get information about the zooming factor.
-     *
      * @return the width in zoomed pixels as integer.
+     * \deprecated
      */
     int width() const;
 
     /**
-     * @param _canvas is needed to get information about the zooming factor.
-     *
      * @return the width in zoomed pixels as double.
      * Use this function, if you want to use the width and later restore it back,
      * so you don't get rounding problems
@@ -165,6 +162,7 @@ public:
 
     /**
      * @return the width in millimeters.
+     * \deprecated
      */
     double mmWidth() const;
 
@@ -173,7 +171,6 @@ public:
      *
      * @param _w is calculated in display pixels. The function cares for
      *           zooming.
-     * @param _canvas is needed to get information about the zooming factor.
      */
     void setWidth( int _w );
 
@@ -183,7 +180,6 @@ public:
      *
      * @param _w is calculated in display pixels. The function cares for
      *           zooming.
-     * @param _canvas is needed to get information about the zooming factor.
      */
     void setDblWidth( double _w );
 
@@ -201,8 +197,6 @@ public:
 
     /**
      * @return the column of this ColumnFormat. May be 0 if this is the default format.
-     *
-     * @see #column
      */
     int column() const;
     void setColumn( int column );
