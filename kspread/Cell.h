@@ -857,7 +857,7 @@ public:
        */
       Flag_PaintingDirty         = 0x1000
     };
-    Q_DECLARE_FLAGS(StatusFlags, StatusFlag);
+    Q_DECLARE_FLAGS(StatusFlags, StatusFlag)
 
     /**
      * Clears the status flag \p flag .
