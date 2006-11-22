@@ -1882,7 +1882,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         xmlwriter.addAttribute( "table:number-columns-repeated", QString::number( repeated ) );
     }
 
-    QSharedDataPointer<Validity> validity = this->validity();
+    QSharedDataPointer<Validity> validity = this->validity( column, row );
     if (validity)
     {
         GenValidationStyle styleVal(validity);

@@ -1742,7 +1742,7 @@ bool Sheet::cellIsEmpty (Cell *c, TestType _type, int col, int row)
         return false;
       break;
     case Validity:
-      if ( c->validity())
+      if ( c->validity( col, row ) )
         return false;
       break;
     case Comment:
