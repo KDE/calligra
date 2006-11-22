@@ -71,7 +71,7 @@ VStrokeDocker::VStrokeDocker()
 
 	QPushButton *button;
 
-	QWidget *mainWidget = new QWidget();
+	QWidget *mainWidget = new QWidget( this );
 	QGridLayout *mainLayout = new QGridLayout( mainWidget );
 	
 	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), mainWidget );
@@ -81,8 +81,8 @@ VStrokeDocker::VStrokeDocker()
 	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 	m_setLineWidth->setUnit( canvasController->canvas()->unit() );
     m_setLineWidth->setToolTip( i18n( "Set line width of actual selection" ) );
-	mainLayout->addWidget ( m_setLineWidth, 0, 1 );
-	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), mainWidget, SLOT( widthChanged() ) );
+	mainLayout->addWidget( m_setLineWidth, 0, 1 );
+	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) );
 	
 	QLabel* capLabel = new QLabel( i18n ( "Cap:" ), mainWidget );
 	mainLayout->addWidget( capLabel, 1, 0 );
@@ -109,7 +109,7 @@ VStrokeDocker::VStrokeDocker()
 	mainLayout->addWidget( m_capGroup, 1, 1 );
 	connect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
 	
-	QLabel* joinLabel = new QLabel( i18n ( "Join:" ), this );
+	QLabel* joinLabel = new QLabel( i18n ( "Join:" ), mainWidget );
 	mainLayout->addWidget( joinLabel, 2, 0 );
 	
 	m_joinGroup = new Q3HButtonGroup( mainWidget );
@@ -137,7 +137,6 @@ VStrokeDocker::VStrokeDocker()
 
 	mainLayout->setRowStretch( 3, 1 );
 	mainLayout->setColumnStretch( 1, 1 );
-	mainLayout->activate();
 
 	setWidget( mainWidget );
 
