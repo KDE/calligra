@@ -218,6 +218,8 @@ public:
         if(! m_block.isValid()) {
             QTextBlock block = m_block.previous(); // last correct one.
             m_data->setEndPosition(block.position() + block.length());
+
+            cleanupFrames();
             return false;
         }
         m_format = m_block.blockFormat();
@@ -266,20 +268,30 @@ public:
   private:
     /// move to next frame (aka shape)
     void nextFrame() {
-        frameNumber++;
         m_newShape = true;
-        if(frameNumber >= m_frameSet->frameCount()) {
-            shape = 0;
-            m_data = 0;
-            return;
-        }
 
         if(m_data) {
             Q_ASSERT(m_data->endPosition() >= m_data->position());
             m_y = m_data->documentOffset() + shape->size().height() + 10.0;
             m_data->wipe();
         }
-        shape = m_frameSet->frames()[frameNumber]->shape();
+
+        KWFrame *frame = 0;
+        while(frame == 0 && frameNumber < m_frameSet->frameCount()) {
+            frame = m_frameSet->frames()[++frameNumber];
+            if(frame->isCopy()) {
+                cleanupFrame(frame);
+                frame = 0;
+            }
+        }
+
+        if(frame == 0) {
+            shape = 0;
+            m_data = 0;
+            return;
+        }
+
+        shape = frame->shape();
         m_data = static_cast<KoTextShapeData*> (shape->userData());
         m_data->setDocumentOffset(m_y);
         m_data->faul(); // make dirty since this one needs relayout at this point.
@@ -422,6 +434,27 @@ public:
             default: // has a single line border
                 m_bottomBorderInset += m_format.doubleProperty(KoParagraphStyle::BottomBorderWidth);
         }
+    }
+
+    // and the end of text, make sure the rest of the frames have something sane to show.
+    void cleanupFrames() {
+        int i = frameNumber + 1;
+        while(i < m_frameSet->frameCount())
+            cleanupFrame(m_frameSet->frames()[i++]);
+    }
+
+    void cleanupFrame(KWFrame *frame) {
+        KoShape *copyShape = frame->shape();
+        KoTextShapeData *textData = static_cast<KoTextShapeData*> (copyShape->userData());
+
+        if(m_data && frame->isCopy()) {
+            textData->setDocumentOffset(m_data->documentOffset());
+            textData->setPosition(m_data->position());
+            textData->setEndPosition(m_data->endPosition());
+        }
+        else
+            textData->setPosition(-1);
+        textData->wipe();
     }
 
   private:
