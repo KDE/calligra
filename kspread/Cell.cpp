@@ -1793,7 +1793,7 @@ void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter, int row, int column )
 
 QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles, int col, int row )
 {
-    QSharedDataPointer<Conditions> conditions = this->conditions();
+    QSharedDataPointer<Conditions> conditions = this->conditions( col, row );
     if ( conditions )
     {
         // this has to be an automatic style
