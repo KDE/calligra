@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002-2005 The Karbon Developers
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,21 +22,27 @@
 #ifndef __VSTROKEDOCKER_H__
 #define __VSTROKEDOCKER_H__
 
+class QDockWidget;
 class Q3HButtonGroup;
-class QWidget;
-
 class KoUnitDoubleSpinBox;
+class KoDockFactory;
 
-class KoMainWindow;
-class KarbonView;
-class KarbonPart;
+class VStrokeDockerFactory : public KoDockFactory
+{
+public:
+    VStrokeDockerFactory();
 
-class VStrokeDocker : public QWidget
+    virtual QString dockId() const;
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
+    virtual QDockWidget* createDockWidget();
+};
+
+class VStrokeDocker : public QDockWidget
 {
 	Q_OBJECT
 
 public:
-	 VStrokeDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
+	 VStrokeDocker();
 
 public slots:
 	virtual void setStroke( const VStroke & );
@@ -44,8 +51,6 @@ public slots:
 private:
 	Q3HButtonGroup *m_capGroup;
 	Q3HButtonGroup *m_joinGroup;
-	KarbonPart *m_part;
-	KarbonView *m_view;
 	KoUnitDoubleSpinBox *m_setLineWidth;
 
 private slots:

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002-2005 The Karbon Developers
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,42 +27,66 @@
 #include <QToolTip>
 #include <QGridLayout>
 #include <QFrame>
+#include <QDockWidget>
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <KoMainWindow.h>
+#include <KoToolManager.h>
+#include <KoCanvasController.h>
+#include <KoDockFactory.h>
+#include <KoUnitWidgets.h>
 
-#include "KoUnitWidgets.h"
-
-#include "karbon_part.h"
-#include "karbon_view.h"
 #include "vstroke.h"
 #include "vselection.h"
 #include "vstrokecmd.h"
 
 #include "vstrokedocker.h"
 
-VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
-	: QWidget(), m_part ( part ), m_view( parent )
+VStrokeDockerFactory::VStrokeDockerFactory()
+{
+}
+
+QString VStrokeDockerFactory::dockId() const
+{
+    return QString("Stroke Properties");
+}
+
+Qt::DockWidgetArea VStrokeDockerFactory::defaultDockWidgetArea() const
+{
+    return Qt::RightDockWidgetArea;
+}
+
+QDockWidget* VStrokeDockerFactory::createDockWidget()
+{
+    VStrokeDocker* widget = new VStrokeDocker();
+    widget->setObjectName(dockId());
+
+    return widget;
+}
+
+
+VStrokeDocker::VStrokeDocker()
 {
 	setWindowTitle( i18n( "Stroke Properties" ) );
 
 	QPushButton *button;
 
-	QGridLayout *mainLayout = new QGridLayout;
+	QWidget *mainWidget = new QWidget();
+	QGridLayout *mainLayout = new QGridLayout( mainWidget );
 	
-	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), this );
+	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), mainWidget );
 	mainLayout->addWidget( widthLabel, 0, 0 );
 	// set min/max/step and value in points, then set actual unit
-	m_setLineWidth = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 2 );
-	m_setLineWidth->setUnit( part->unit() );
+	m_setLineWidth = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 2 );
+	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+	m_setLineWidth->setUnit( canvasController->canvas()->unit() );
     m_setLineWidth->setToolTip( i18n( "Set line width of actual selection" ) );
 	mainLayout->addWidget ( m_setLineWidth, 0, 1 );
-	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
+	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), mainWidget, SLOT( widthChanged() ) );
 	
-	QLabel* capLabel = new QLabel( i18n ( "Cap:" ), this );
+	QLabel* capLabel = new QLabel( i18n ( "Cap:" ), mainWidget );
 	mainLayout->addWidget( capLabel, 1, 0 );
-	m_capGroup = new Q3HButtonGroup( this );
+	m_capGroup = new Q3HButtonGroup( mainWidget );
 	//port:
         // m_capGroup->setFrameShape( QFrame::NoFrame );
 	m_capGroup->setInsideMargin( 1 );
@@ -87,7 +112,7 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	QLabel* joinLabel = new QLabel( i18n ( "Join:" ), this );
 	mainLayout->addWidget( joinLabel, 2, 0 );
 	
-	m_joinGroup = new Q3HButtonGroup( this );
+	m_joinGroup = new Q3HButtonGroup( mainWidget );
 	//port:
         // m_joinGroup->setFrameShape( QFrame::NoFrame );
 	m_joinGroup->setInsideMargin( 1 );
@@ -114,15 +139,17 @@ VStrokeDocker::VStrokeDocker( KarbonPart* part, KarbonView* parent, const char* 
 	mainLayout->setColumnStretch( 1, 1 );
 	mainLayout->activate();
 
-	setLayout(mainLayout);
+	setWidget( mainWidget );
 
 	updateDocker();
 }
 
 void VStrokeDocker::updateCanvas()
 {
+	/*
 	if( m_part && m_part->document().selection()->objects().count() > 0 )
 		m_part->addCommand( new VStrokeCmd( &m_part->document(), &m_stroke ), true );
+	*/
 }
 
 void VStrokeDocker::slotCapChanged( int ID )

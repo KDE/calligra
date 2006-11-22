@@ -1718,9 +1718,8 @@ void KarbonView::createStrokeDock()
 {
 	debugView("KarbonView::createStrokeDock()");
 
-	m_strokeDocker = new VStrokeDocker(part(), this);
-	m_strokeDocker->setWindowTitle(i18n("Stroke Properties"));
-    createDock(i18n("Stroke Properties"), m_strokeDocker);
+	VStrokeDockerFactory strokeFactory;
+	m_strokeDocker = qobject_cast<VStrokeDocker*>(createDockWidget(&strokeFactory));
 	connect( part(), SIGNAL( unitChanged( KoUnit::Unit ) ), m_strokeDocker, SLOT( setUnit( KoUnit::Unit ) ) );
 }
 
@@ -1728,8 +1727,9 @@ void KarbonView::createColorDock()
 {
 	debugView("KarbonView::createColorDock()");
 
-	m_ColorManager = new VColorDocker(part(),this);
-    createDock(i18n("Colors"), m_ColorManager);
+	VColorDockerFactory colorFactory;
+	m_ColorManager = qobject_cast<VColorDocker*>(createDockWidget(&colorFactory));
+
 	connect( this, SIGNAL( selectionChange() ), m_ColorManager, SLOT( update() ) );
 }
 
