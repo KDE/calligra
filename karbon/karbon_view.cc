@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001, 2002, 2003 The Karbon Developers
-
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -215,6 +215,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 	if( shell() )
 	{
+		KoToolManager::instance()->addControllers( m_canvasView, p );
+
 		//Create Dockers
 		createColorDock();
 		createStrokeDock();
@@ -244,8 +246,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 			//create toolbars
 // 			m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
 // 			mainWindow()->addToolBar( m_selectToolBar );
-
-		KoToolManager::instance()->addControllers( m_canvasView, p );
 
 		if( m_showRulerAction->isChecked() )
 		{
@@ -1709,10 +1709,9 @@ void KarbonView::createLayersTabDock()
 {
 	debugView("KarbonView::createLayersTabDock()");
 
-    m_layerDocker = new VLayerDocker( this, &part()->document() );
-    m_layerDocker->setWindowTitle(i18n("Layers"));
-    createDock(i18n("Layers"), m_layerDocker);
-    connect( this, SIGNAL( selectionChange() ), m_layerDocker, SLOT( updateView() ) );
+	VLayerDockerFactory layerFactory( m_part, &part()->document() );
+	m_layerDocker = qobject_cast<VLayerDocker*>(createDockWidget(&layerFactory));
+	connect( this, SIGNAL( selectionChange() ), m_layerDocker, SLOT( updateView() ) );
 }
 
 void KarbonView::createStrokeDock()

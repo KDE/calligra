@@ -35,11 +35,14 @@
 #include <KoShapeManager.h>
 #include <KoShapeBorderModel.h>
 #include <KoShapeContainer.h>
+#include <KoToolManager.h>
+#include <KoCanvasController.h>
+#include <KoShapeControllerBase.h>
+#include <KoSelection.h>
+#include <KoCommand.h>
+#include <KoZoomHandler.h>
 
-#include "karbon_view.h"
-#include "karbon_part.h"
 #include "vdocument.h"
-#include "vcanvas.h"
 #include "vlayer.h"
 #include "vlayercmd.h"
 
@@ -51,42 +54,63 @@ enum ButtonIds
     Button_Delete
 };
 
-VLayerDocker::VLayerDocker( KarbonView *view, VDocument *doc )
-: QWidget( view )
-, m_view( view )
-, m_document( doc )
-, m_model( 0 )
+VLayerDockerFactory::VLayerDockerFactory( KoShapeControllerBase *shapeController, VDocument *document )
+    : m_shapeController( shapeController ), m_document( document )
+{
+}
+
+QString VLayerDockerFactory::dockId() const
+{
+    return QString("Layers");
+}
+
+Qt::DockWidgetArea VLayerDockerFactory::defaultDockWidgetArea() const
+{
+    return Qt::RightDockWidgetArea;
+}
+
+QDockWidget* VLayerDockerFactory::createDockWidget()
+{
+    VLayerDocker* widget = new VLayerDocker( m_shapeController, m_document);
+    widget->setObjectName(dockId());
+
+    return widget;
+}
+
+VLayerDocker::VLayerDocker( KoShapeControllerBase *shapeController, VDocument *document )
+    : m_shapeController( shapeController ), m_document( document ), m_model( 0 )
 {
     setObjectName("Layers");
 
-    QGridLayout* layout = new QGridLayout;
-    layout->addWidget( m_layerView = new KoDocumentSectionView( this ), 0, 0, 1, 5 );
+    QWidget *mainWidget = new QWidget( this );
+    QGridLayout* layout = new QGridLayout( mainWidget );
+    layout->addWidget( m_layerView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, 5 );
 
-    QButtonGroup *buttonGroup = new QButtonGroup( this );
+    QButtonGroup *buttonGroup = new QButtonGroup( mainWidget );
     buttonGroup->setExclusive( false );
 
-    QToolButton *button = new QToolButton( this );
+    QToolButton *button = new QToolButton( mainWidget );
     button->setIcon( SmallIcon( "14_layer_newlayer" ) );
     button->setText( i18n( "New" ) );
     button->setToolTip( i18n("Add a new layer") );
     buttonGroup->addButton( button, Button_New );
     layout->addWidget( button, 1, 0 );
 
-    button = new QToolButton( this );
+    button = new QToolButton( mainWidget );
     button->setIcon( SmallIcon( "14_layer_raiselayer" ) );
     button->setText( i18n( "Raise" ) );
     button->setToolTip( i18n("Raise selected objects") );
     buttonGroup->addButton( button, Button_Raise );
     layout->addWidget( button, 1, 1 );
 
-    button = new QToolButton( this );
+    button = new QToolButton( mainWidget );
     button->setIcon( SmallIcon( "14_layer_lowerlayer" ) );
     button->setText( i18n( "Lower" ) );
     button->setToolTip( i18n("Lower selected objects") );
     buttonGroup->addButton( button, Button_Lower );
     layout->addWidget( button, 1, 2 );
 
-    button = new QToolButton( this );
+    button = new QToolButton( mainWidget );
     button->setIcon( SmallIcon( "14_layer_deletelayer" ) );
     button->setText( i18n( "Delete" ) );
     button->setToolTip( i18n("Delete selected objects") );
@@ -96,12 +120,13 @@ VLayerDocker::VLayerDocker( KarbonView *view, VDocument *doc )
     layout->setSpacing( 0 );
     layout->setMargin( 3 );
 
+    setWidget( mainWidget );
+
     connect( buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 
-    layout->activate();
-    setLayout(layout);
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 
-    m_canvas = qobject_cast<KarbonCanvas*>( m_view->canvas() );
+    m_canvas = canvasController->canvas();
     m_model = new VDocumentModel( m_document, m_canvas->shapeManager() );
     m_layerView->setItemsExpandable( true );
     m_layerView->setModel( m_model );
@@ -183,7 +208,7 @@ void VLayerDocker::addLayer()
     if( ok )
     {
         KoLayerShape* layer = new KoLayerShape();
-        m_view->part()->commandHistory()->addCommand( new VLayerCreateCmd( m_document, layer ), true );
+        m_canvas->addCommand( new VLayerCreateCmd( m_document, layer ), true );
         m_document->setObjectName( layer, name );
         m_model->update();
     }
@@ -202,20 +227,20 @@ void VLayerDocker::deleteItem()
     if( selectedLayers.count() )
     {
         if( m_document->layers().count() > selectedLayers.count() )
-            cmd = new VLayerDeleteCmd( m_document, m_view->part(), selectedLayers );
+            cmd = new VLayerDeleteCmd( m_document, m_shapeController, selectedLayers );
         else
         {
-            KMessageBox::error( 0L, i18n( "Could not delete all layers. At least one layer is requiered."), i18n( "Error deleting layers") );
+            KMessageBox::error( 0L, i18n( "Could not delete all layers. At least one layer is required."), i18n( "Error deleting layers") );
         }
     }
     else if( selectedShapes.count() )
     {
-        cmd = new KoShapeDeleteCommand( m_view->part(), selectedShapes.toSet() );
+        cmd = new KoShapeDeleteCommand( m_shapeController, selectedShapes.toSet() );
     }
 
     if( cmd )
     {
-        m_view->part()->commandHistory()->addCommand( cmd, true );
+        m_canvas->addCommand( cmd, true );
         m_model->update();
     }
 }
@@ -246,7 +271,7 @@ void VLayerDocker::raiseItem()
 
     if( cmd )
     {
-        m_view->part()->commandHistory()->addCommand( cmd, true );
+        m_canvas->addCommand( cmd, true );
         m_model->update();
     }
 }
@@ -277,7 +302,7 @@ void VLayerDocker::lowerItem()
 
     if( cmd )
     {
-        m_view->part()->commandHistory()->addCommand( cmd, true );
+        m_canvas->addCommand( cmd, true );
         m_model->update();
     }
 }

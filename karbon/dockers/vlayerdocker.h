@@ -19,26 +19,41 @@
 #ifndef V_LAYER_DOCKER
 #define V_LAYER_DOCKER
 
-#include <QWidget>
+#include <QDockWidget>
 #include <KoDocumentSectionModel.h>
+#include <KoDockFactory.h>
 
 class KarbonView;
 class VDocument;
 class KoDocumentSectionView;
-class KarbonCanvas;
+class KoCanvasBase;
 class KoShapeManager;
+class KoShapeControllerBase;
 class KoShape;
 class KoLayerShape;
 class QAbstractItemModel;
 class VDocumentModel;
 class KoViewConverter;
 
-class VLayerDocker : public QWidget
+class VLayerDockerFactory : public KoDockFactory
+{
+public:
+    VLayerDockerFactory( KoShapeControllerBase *shapeController, VDocument *document );
+
+    virtual QString dockId() const;
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
+    virtual QDockWidget* createDockWidget();
+private:
+    KoShapeControllerBase * m_shapeController;
+    VDocument *m_document;
+};
+
+class VLayerDocker : public QDockWidget
 {
 Q_OBJECT
 
 public:
-    VLayerDocker( KarbonView *view, VDocument *doc );
+    VLayerDocker( KoShapeControllerBase *shapeController, VDocument *document );
     virtual ~VLayerDocker();
 public slots:
     void updateView();
@@ -51,9 +66,9 @@ private slots:
     void itemClicked( const QModelIndex &index );
 private:
     void extractSelectedLayersAndShapes( QList<KoLayerShape*> &layers, QList<KoShape*> &shapes );
-    KarbonView *m_view;
+    KoShapeControllerBase *m_shapeController;
     VDocument *m_document;
-    KarbonCanvas *m_canvas;
+    KoCanvasBase *m_canvas;
     KoDocumentSectionView *m_layerView;
     VDocumentModel *m_model;
 };
