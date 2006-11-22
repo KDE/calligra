@@ -619,7 +619,9 @@ void KWTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock
         QTextLayout *layout = block.layout();
         bounds = layout->boundingRect();
         bounds.setTopLeft(layout->lineAt(0).position()); // annoying that this is needed...
-        // TODO bounds should include the counter
+        if(list && data && data->hasCounterData())
+            // hmm, and what about RTL text?
+            bounds.setLeft(data->counterPosition().x());
         outerBounds = bounds;
     }
 
