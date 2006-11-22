@@ -126,8 +126,7 @@ VLayerDocker::VLayerDocker( KoShapeControllerBase *shapeController, VDocument *d
 
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 
-    m_canvas = canvasController->canvas();
-    m_model = new VDocumentModel( m_document, m_canvas->shapeManager() );
+    m_model = new VDocumentModel( m_document, canvasController->canvas()->shapeManager() );
     m_layerView->setItemsExpandable( true );
     m_layerView->setModel( m_model );
     m_layerView->setDisplayMode( KoDocumentSectionView::MinimalMode );
@@ -184,7 +183,9 @@ void VLayerDocker::itemClicked( const QModelIndex &index )
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
 
-    KoSelection *selection = m_canvas->shapeManager()->selection();
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     foreach( KoShape* shape, selection->selectedShapes() )
         shape->repaint();
 
@@ -208,7 +209,8 @@ void VLayerDocker::addLayer()
     if( ok )
     {
         KoLayerShape* layer = new KoLayerShape();
-        m_canvas->addCommand( new VLayerCreateCmd( m_document, layer ), true );
+        KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+        canvasController->canvas()->addCommand( new VLayerCreateCmd( m_document, layer ), true );
         m_document->setObjectName( layer, name );
         m_model->update();
     }
@@ -240,7 +242,8 @@ void VLayerDocker::deleteItem()
 
     if( cmd )
     {
-        m_canvas->addCommand( cmd, true );
+        KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+        canvasController->canvas()->addCommand( cmd, true );
         m_model->update();
     }
 }
@@ -271,7 +274,8 @@ void VLayerDocker::raiseItem()
 
     if( cmd )
     {
-        m_canvas->addCommand( cmd, true );
+        KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+        canvasController->canvas()->addCommand( cmd, true );
         m_model->update();
     }
 }
@@ -302,7 +306,8 @@ void VLayerDocker::lowerItem()
 
     if( cmd )
     {
-        m_canvas->addCommand( cmd, true );
+        KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+        canvasController->canvas()->addCommand( cmd, true );
         m_model->update();
     }
 }

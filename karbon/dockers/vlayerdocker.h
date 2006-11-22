@@ -68,7 +68,6 @@ private:
     void extractSelectedLayersAndShapes( QList<KoLayerShape*> &layers, QList<KoShape*> &shapes );
     KoShapeControllerBase *m_shapeController;
     VDocument *m_document;
-    KoCanvasBase *m_canvas;
     KoDocumentSectionView *m_layerView;
     VDocumentModel *m_model;
 };
