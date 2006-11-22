@@ -250,6 +250,7 @@ browser to open the <filename>index.html</filename> file. Click where prompted,
 and the first slide of your presentation is displayed. It will now behave as a
 &kpresenter; slideshow.</para>
 
+<!-- FIXME lueck -->
 <para>Each click on the slide image takes you to the next slide.</para>
 
 <tip><para>To share your presentation with the world, transfer the
@@ -496,8 +497,8 @@ type a heading for your slide:</para>
 </mediaobject>
 </screenshot>
 
-<para>When you are happy with your template, go to <guimenu>File</guimenu> >
-<guimenuitem>Template Manager</guimenuitem>:</para>
+<para>When you are happy with your template, go to <menuchoice><guimenu>File</guimenu>
+<guimenuitem>Template Manager</guimenuitem></menuchoice>:</para>
 
 <screenshot>
 <screeninfo><guimenu>File</guimenu><guimenuitem>Template

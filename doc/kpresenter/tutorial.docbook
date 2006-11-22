@@ -119,7 +119,7 @@ typing.
 <para>
 Let's now add a new slide to our document. To do so, click the
 <guimenu>Insert</guimenu> menu, and then click on
-<guimenuitem>Slide</guimenuitem>.
+<guimenuitem>Slide...</guimenuitem>.
 </para>
 
 <screenshot>
@@ -225,7 +225,7 @@ of your screen.
 In this section, we'll liven our presentation up a bit by adding a nice
 logo to the title page. To do so, the first step is to click on the
 <guimenu>Insert</guimenu> menu item, and then on
-<guimenuitem>Picture</guimenuitem>.
+<guimenuitem>Picture...</guimenuitem>.
 </para>
 
 <screenshot>
@@ -301,7 +301,7 @@ a chart.</para>
 Every &koffice; supported document can be embedded in a &kpresenter; slide.
 Let's choose a chart from &kchart;. To do so, the first step is to click on the
 <guimenu>Insert</guimenu> menu item, and then
-on <guimenuitem>Object</guimenuitem>.
+on <guisubmenu>Object</guisubmenu>.
 </para>
 
 <screenshot>

@@ -793,35 +793,11 @@ see an overview of all the notes in your presentation.</para>
 <term>
 <menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Slide  Master</guimenuitem>
+<guimenuitem>Slide Master</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Toggle the display of the slide master</action> where you can put objects that you want to appear on each slide in your presentation.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>View</guimenu>
-<guimenuitem>Show Header</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Toggle the display of the header field</action> on the current slide. Header content can only be added in the master slide but you can choose to display the header only on some slides with this action.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>View</guimenu>
-<guimenuitem>Show Footer</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Toggle the display of the footer field</action> on the current slide. Footer content can only be added in the master slide but you can choose to display the footer only on some slides with this action.</para>
 </listitem>
 </varlistentry>
 
@@ -1024,7 +1000,8 @@ before or after the currently selected page.
 </term>
 <listitem>
 <para><action>Insert an already existing presentation.</action> A standard &kde; file
-open dialog will appear, allowing you to choose a .kpr file which will be inserted after the last slide in your current presentation.</para>
+open dialog will appear, allowing you to choose a <guilabel>&kpresenter; Document</guilabel> (.kpr) or a 
+<guilabel>OASIS OpenDocument Presentation</guilabel> (.odp), which will be inserted after the last slide in your current presentation.</para>
 </listitem>
 </varlistentry>
 
@@ -1126,7 +1103,7 @@ role="extension">.png</literal> and many more.</para>
 </term>
 <listitem>
 <para>You can insert several types of lines. Line drawing is described
-further in the <!-- FIXME: Make a drawing tools section --> section.</para>
+further in the drawing tools<!-- FIXME: Make a drawing tools section --> section.</para>
 </listitem>
 </varlistentry>
 
@@ -1154,7 +1131,7 @@ section.</para>
 </term>
 <listitem>
 <para><action>Scan an image with a scanner.</action> This requires you have a
-scanner installed. It opens the Acquire Image dialog to allow the use of the scanner.<!--FIXME: Document how to set up a scanner that &kpresenter; can
+scanner installed. It opens the <guilabel>Acquire Image</guilabel> dialog to allow the use of the scanner.<!--FIXME: Document how to set up a scanner that &kpresenter; can
 use.--></para>
 </listitem>
 </varlistentry>
@@ -1296,6 +1273,9 @@ vertically or horizontally.</para>
 <varlistentry>
 <term>
 <menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>G</keycap></keycombo>
+</shortcut>
 <guimenu>Format</guimenu>
 <guimenuitem>Group Objects</guimenuitem>
 </menuchoice>
@@ -1314,6 +1294,9 @@ if they are just one thing. It glues things together.</para>
 <varlistentry>
 <term>
 <menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>G</keycap></keycombo>
+</shortcut>
 <guimenu>Format</guimenu>
 <guimenuitem>Ungroup Objects</guimenuitem>
 </menuchoice>
@@ -1352,12 +1335,34 @@ the result.</para>
 <guimenuitem>Page Layout...</guimenuitem>
 </menuchoice></term>
 <listitem>
-
 <para>Allows you to set the page details. You can specify the margins,
 the orientation, either portrait (higher than wide) or Landscape
 (wider than high) formats. There are many templates, such as screen,
 A4, US legal.</para>
+</listitem>
+</varlistentry>
 
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Enable/Disable Document Header</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggle the display of the header field</action> on the current slide. Header content can only be added in the master slide but you can choose to display the header only on some slides with this action.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>Enable/Disable Document Footer</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggle the display of the footer field</action> on the current slide. Footer content can only be added in the master slide but you can choose to display the footer only on some slides with this action.</para>
 </listitem>
 </varlistentry>
 
@@ -1711,8 +1716,8 @@ can also force a <guimenuitem>Spelling...</guimenuitem> check here.</para>
 </menuchoice>
 </term>
 <listitem>
-<para>Use this submenu to utilize autocorrection options. If you enable
-<guimenuitem>Autocorrection</guimenuitem>, common spelling errors will be
+<para>Use this submenu to utilize autocorrection options. If you 
+<guimenuitem>Enable Autocorrection</guimenuitem>, common spelling errors will be
 corrected as you type. For example, if you entered <userinput>Teh</userinput>,
 it would be autocorrected to <userinput>The</userinput>.</para>
 
@@ -1824,6 +1829,7 @@ transition <emphasis>from</emphasis> this slide
 <varlistentry>
 <term>
 <menuchoice>
+<shortcut><keycap>Home</keycap></shortcut>
 <guimenu>Slide Show</guimenu>
 <guimenuitem>Go to Start</guimenuitem>
 </menuchoice>
@@ -1877,7 +1883,7 @@ transition <emphasis>from</emphasis> this slide
 </sect1>
 
 <sect1 id="settingsmenu">
-<title>The <guimenu>Settings</guimenu> Menu</title>
+<title><guimenu>Settings</guimenu> Menu</title>
 
 <para>The <guimenu>Settings</guimenu> menu allows you to customize
 &kpresenter;.</para>
