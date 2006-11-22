@@ -3789,12 +3789,12 @@ void Canvas::equalizeRow()
 
   QRect s( selectionInfo()->lastRange() );
   RowFormat* rowFormat = sheet->rowFormat(s.top());
-  int size = rowFormat->height();
+  double size = rowFormat->dblHeight();
   if ( s.top() == s.bottom() )
       return;
   for ( int i = s.top() + 1; i <= s.bottom(); i++ )
   {
-      size = qMax( sheet->rowFormat(i)->height(), size );
+      size = qMax( sheet->rowFormat(i)->dblHeight(), size );
   }
   d->view->vBorderWidget()->equalizeRow(size);
 }
@@ -3807,13 +3807,13 @@ void Canvas::equalizeColumn()
 
   QRect s( selectionInfo()->lastRange() );
   ColumnFormat* columnFormat = sheet->columnFormat(s.left());
-  int size = columnFormat->width();
+  double size = columnFormat->dblWidth();
   if ( s.left() == s.right() )
       return;
 
   for(int i=s.left()+1;i<=s.right();i++)
   {
-    size = qMax( sheet->columnFormat(i)->width(), size );
+    size = qMax( sheet->columnFormat(i)->dblWidth(), size );
   }
   d->view->hBorderWidget()->equalizeColumn(size);
 }
