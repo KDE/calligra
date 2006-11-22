@@ -390,7 +390,8 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord:
             *origin = header?KWord::OddPagesHeaderTextFrameSet:KWord::OddPagesFooterTextFrameSet;
             break;
         case KWord::HFTypeSameAsFirst:
-            *origin = header?KWord::FirstPageHeaderTextFrameSet:KWord::FirstPageFooterTextFrameSet;
+            // depends on the property of the first page, then.
+            shouldHaveHeaderOrFooter(m_pageManager->startPage(), header, origin);
             break;
     }
     if(header)

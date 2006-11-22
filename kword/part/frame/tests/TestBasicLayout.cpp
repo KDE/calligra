@@ -130,6 +130,7 @@ void TestBasicLayout::testShouldHaveHeaderOrFooter() {
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(3, false, &origin), true);
     QCOMPARE(origin, KWord::OddPagesFooterTextFrameSet);
 
+    helper.pageSettings->setFirstHeaderPolicy(KWord::HFTypeUniform);
     helper.pageSettings->setHeaderPolicy(KWord::HFTypeSameAsFirst);
     helper.pageSettings->setFooterPolicy(KWord::HFTypeEvenOdd);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(2, true, &origin), true);
@@ -140,6 +141,14 @@ void TestBasicLayout::testShouldHaveHeaderOrFooter() {
     QCOMPARE(origin, KWord::FirstPageHeaderTextFrameSet);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(3, false, &origin), true);
     QCOMPARE(origin, KWord::OddPagesFooterTextFrameSet);
+
+    // changing the first header will change the rest of the pages
+    // if those pages use 'HFTypeSameAsFirst'
+    helper.pageSettings->setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
+    QCOMPARE(bfl.shouldHaveHeaderOrFooter(2, true, &origin), true);
+    QCOMPARE(origin, KWord::OddPagesHeaderTextFrameSet);
+    QCOMPARE(bfl.shouldHaveHeaderOrFooter(3, true, &origin), true);
+    QCOMPARE(origin, KWord::OddPagesHeaderTextFrameSet);
 
     helper.pageSettings->setHeaderPolicy(KWord::HFTypeUniform);
     helper.pageSettings->setFooterPolicy(KWord::HFTypeEvenOdd);
