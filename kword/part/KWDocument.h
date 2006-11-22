@@ -194,9 +194,23 @@ public:
     /// return a suggestion for a new frameset name that does not collide with known ones.
     QString uniqueFrameSetName( const QString& suggestion );
 
+    /**
+     * Return the style manager for this document.
+     * The text (paragraph/character) styles are managed per document and are all
+     * stored in this construct.
+     */
     KoStyleManager *styleManager() { return m_styleManager; }
+    /**
+     * Return the style manager for this document.
+     * The text (paragraph/character) styles are managed per document and are all
+     * stored in this construct.
+     */
     const KoStyleManager *styleManager() const { return m_styleManager; }
 
+    /**
+     * Add a command to the history.
+     * @see KCommandHistory::addCommand()
+     */
     void addCommand(KCommand *command, bool execute = true);
 
 #ifndef NDEBUG
@@ -258,6 +272,7 @@ private:
     KWMultiViewCommandHistory m_commandHistory;
 };
 
+/// \internal
 class PageProcessingQueue : public QObject {
     Q_OBJECT
 public:

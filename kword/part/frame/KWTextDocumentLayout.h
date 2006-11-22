@@ -44,6 +44,11 @@ public:
     KWTextDocumentLayout(KWTextFrameSet *frameSet);
     ~KWTextDocumentLayout();
 
+    /**
+     * While the text document is standalone, the text can refer to the character
+     * and paragraph styles, and doing so is needed in doing proper text-layout.
+     * Setting the stylemanager on this layouter is therefor required if there is one.
+     */
     void setStyleManager(KoStyleManager *sm);
 
     /// Returns the bounding rectangle of block.
@@ -69,6 +74,11 @@ public:
     /// reimplemented to always return 1
     int pageCount () const;
 
+    /**
+     * Actually do the layout of the text.
+     * This method will layout the text into lines and shapes, chunk by chunk. It will
+     * return quite quick and have requested for another layout if its unfinished.
+     */
     void layout();
 
 protected:
@@ -91,7 +101,7 @@ private:
 };
 
 class ListItemsPrivate;
-/// helper class for calculating text-lists prefixes and indents
+/// \internal helper class for calculating text-lists prefixes and indents
 class KWORD_TEST_EXPORT ListItemsHelper {
 public:
     ListItemsHelper(QTextList *textList, const QFont &font);

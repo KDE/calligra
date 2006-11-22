@@ -101,6 +101,7 @@ protected:
      */
     virtual void setupFrame(KWFrame *frame) { Q_UNUSED(frame); }
 
+    /// The list of frames that this frameset owns.
     QList<KWFrame*> m_frames;
 
 private:

@@ -73,11 +73,23 @@ signals:
 protected:
     friend class KWTextDocumentLayout;
     void setupFrame(KWFrame *frame);
+    /**
+     * Call this to make it know that the text we want to layout needs more space to be shown fully.
+     * This will resize the frame, or emit a moreFramesNeeded signal based on the settings.
+     */
     void requestMoreFrames();
     void framesEmpty(int framesInUse);
 
 protected slots:
+    /**
+     * calling this will do a layout run.  This slot is only called from requestLayout()
+     * @see KWTextDocumentLayout::layout()
+     */
     void relayout();
+    /**
+     * Call this slot in order to schedule a new layout run.
+     * Calling this multiple times will make sure the relayout() is only called ones.
+     */
     void requestLayout();
 
 private:
