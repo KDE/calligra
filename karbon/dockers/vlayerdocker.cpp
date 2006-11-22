@@ -61,7 +61,7 @@ VLayerDockerFactory::VLayerDockerFactory( KoShapeControllerBase *shapeController
 
 QString VLayerDockerFactory::dockId() const
 {
-    return QString("Layers");
+    return QString("Layer view");
 }
 
 Qt::DockWidgetArea VLayerDockerFactory::defaultDockWidgetArea() const
@@ -80,7 +80,7 @@ QDockWidget* VLayerDockerFactory::createDockWidget()
 VLayerDocker::VLayerDocker( KoShapeControllerBase *shapeController, VDocument *document )
     : m_shapeController( shapeController ), m_document( document ), m_model( 0 )
 {
-    setObjectName("Layers");
+    setWindowTitle( i18n( "Layer view" ) );
 
     QWidget *mainWidget = new QWidget( this );
     QGridLayout* layout = new QGridLayout( mainWidget );
