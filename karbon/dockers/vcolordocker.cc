@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
    Copyright (C) 2002 - 2005, The Karbon Developers
+   Copyright (C) 2006 Jan Hambecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,64 +19,60 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QLabel>
-#include <QLayout>
-#include <qtabwidget.h>
-#include <QWidget>
+#include <QDockWidget>
 #include <QColor>
 #include <QToolTip>
 #include <qevent.h>
-#include <q3ptrlist.h>
-#include <QVBoxLayout>
 #include <QMouseEvent>
 
 #include <klocale.h>
-#include <KoMainWindow.h>
 #include <KoUniColorChooser.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoCommand.h>
+#include <KoToolManager.h>
+#include <KoCanvasController.h>
 
-#include "karbon_part.h"
-#include "karbon_view.h"
-#include "karbon_factory.h"
-#include "karbon_resourceserver.h"
-#include "vcolor.h"
-#include "vcolorslider.h"
-#include "vselection.h"
-#include "vfillcmd.h"
-#include "vstrokecmd.h"
-#include "vcommand.h"
-#include "vobject.h"
-#include "vcanvas.h"
 #include "vcolordocker.h"
 
 #include <kdebug.h>
 
-VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
-	: QWidget(), m_part ( part ), m_view( parent )
+VColorDockerFactory::VColorDockerFactory()
 {
-	m_isStrokeDocker = false;
+}
+
+QString VColorDockerFactory::dockId() const
+{
+    return QString("Color Chooser");
+}
+
+Qt::DockWidgetArea VColorDockerFactory::defaultDockWidgetArea() const
+{
+    return Qt::RightDockWidgetArea;
+}
+
+QDockWidget* VColorDockerFactory::createDockWidget()
+{
+    VColorDocker* widget = new VColorDocker();
+    widget->setObjectName(dockId());
+
+    return widget;
+}
+
+VColorDocker::VColorDocker()
+: m_isStrokeDocker( false )
+{
 	setWindowTitle( i18n( "Color Chooser" ) );
 
-	m_strokeCmd = 0;
-
-	/* ##### HSV WIDGET ##### */
-	// TODO port to KoUniColorChooser
 	m_colorChooser = new KoUniColorChooser( this, true );
+	setWidget( m_colorChooser );
+	//setMaximumHeight( 174 );
+	setMinimumWidth( 194 );
+	
 	connect( m_colorChooser, SIGNAL( sigColorChanged( const KoColor &) ), this, SLOT( updateColor( const KoColor &) ) );
 	//connect( m_colorChooser, SIGNAL( sigColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
 	connect(this, SIGNAL(colorChanged(const KoColor &)), m_colorChooser, SLOT(setColor(const KoColor &)));
 	//connect(this, SIGNAL(bgColorChanged(const QColor &)), mHSVWidget, SLOT(setBgColor(const QColor &)));
-
-	QVBoxLayout *mainWidgetLayout = new QVBoxLayout;
-	mainWidgetLayout->addWidget( m_colorChooser );
-	mainWidgetLayout->activate();
-
-	setLayout(mainWidgetLayout);
-
-	//setMaximumHeight( 174 );
-	setMinimumWidth( 194 );
 }
 
 VColorDocker::~VColorDocker()
@@ -84,7 +81,8 @@ VColorDocker::~VColorDocker()
 
 void VColorDocker::updateColor( const KoColor &c )
 {
-	KoSelection *selection = m_view->canvasWidget()->shapeManager()->selection();
+	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+	KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 	if( ! selection )
 		return;
 
@@ -94,7 +92,7 @@ void VColorDocker::updateColor( const KoColor &c )
 	color.setAlpha(opacity);
 
 	KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush( color ) );
-	m_part->commandHistory()->addCommand( cmd, true );
+	canvasController->canvas()->addCommand( cmd, true );
 }
 
 void VColorDocker::updateFgColor(const KoColor &c)

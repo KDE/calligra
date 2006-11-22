@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
    Copyright (C) 2002 - 2005, The Karbon Developers
+   Copyright (C) 2006 Jan Hambecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,17 +24,28 @@
 
 #include <QMouseEvent>
 #include <KoColor.h>
+#include <KoDockFactory.h>
 
-class QWidget;
+class QDockWidget;
 class KarbonView;
 class KoUniColorChooser;
 
-class VColorDocker : public QWidget
+class VColorDockerFactory : public KoDockFactory
+{
+public:
+    VColorDockerFactory();
+
+    virtual QString dockId() const;
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
+    virtual QDockWidget* createDockWidget();
+};
+
+class VColorDocker : public QDockWidget
 {
 	Q_OBJECT
 
 public:
-	 VColorDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
+	 VColorDocker();
 	 virtual ~VColorDocker();
 
 	 virtual bool isStrokeDocker() { return m_isStrokeDocker; };
@@ -43,11 +55,6 @@ public slots:
 	virtual void setFillDocker();
 	virtual void setStrokeDocker();
 	virtual void update();
-
-private:
-	virtual void mouseReleaseEvent( QMouseEvent *e );
-
-	KoUniColorChooser *m_colorChooser;
 
 signals:
 	void colorChanged( const KoColor &c );
@@ -59,15 +66,13 @@ private slots:
 	void updateFgColor(const KoColor &c);
 	void updateBgColor(const KoColor &c);
 
-protected:
+private:
+	virtual void mouseReleaseEvent( QMouseEvent *e );
+
+	KoUniColorChooser *m_colorChooser;
 	bool m_isStrokeDocker; //Are we setting stroke color ( true ) or fill color ( false )
 	KoColor m_color;
 	KoColor m_oldColor;
-
-private:
-	KarbonPart *m_part;
-	KarbonView *m_view;
-	VStrokeCmd *m_strokeCmd;
 };
 
 #endif
