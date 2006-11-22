@@ -366,7 +366,6 @@ bool KHTMLReader::parse_p(DOM::Element e)
         // For every starting paragraph, a line break has to be inserted.
         // exception: the first paragraph, e.g. if the <body> starts with a <p>.
         kdDebug() << "entering parse_p" << endl;
-        static bool firstparagraph=true;
         if (!(_writer->getText(state()->paragraph).isEmpty())) 
           startNewParagraph(false,false); 
 	parse_CommonAttributes(e);
@@ -641,6 +640,7 @@ bool KHTMLReader::parse_font(DOM::Element e) {
 }
 
 bool KHTMLReader::parse_ul(DOM::Element e) {
+// Parse the tag ul and all its subnodes. Take special care for the li tag.
         _list_depth++;
         bool popstateneeded = false;
         for (DOM::Node items=e.firstChild();!items.isNull();items=items.nextSibling()) {
