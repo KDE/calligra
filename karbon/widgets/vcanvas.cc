@@ -43,13 +43,15 @@
 #include <kcommand.h>
 
 #include "vdocument.h"
+#include "karbon_part.h"
 
 const int defaultMargin = 50;
 
-KarbonCanvas::KarbonCanvas( VDocument &document )
+KarbonCanvas::KarbonCanvas( KarbonPart *p )
     : QWidget()
+    , KoCanvasBase( p )
     , m_zoomHandler()
-    , m_doc( &document )
+    , m_doc( &( p->document() ) )
     , m_marginX( defaultMargin )
     , m_marginY( defaultMargin )
     , m_visibleWidth( 500 )
@@ -82,6 +84,7 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
 
     gc.translate( m_origin.x(), m_origin.y() );
     gc.setPen( Qt::black );
+    //gc.setBrush( Qt::white );
     gc.drawRect( m_zoomHandler.documentToView( m_documentRect ) );
 
     if( m_doc->grid().visible() )

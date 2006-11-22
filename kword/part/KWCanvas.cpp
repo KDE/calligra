@@ -41,6 +41,7 @@
 
 KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, KWGui *parent )
     : QWidget(parent),
+    KoCanvasBase( document ),
     m_document( document ),
     m_viewMode(0)
 {

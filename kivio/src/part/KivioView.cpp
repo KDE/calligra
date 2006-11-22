@@ -119,7 +119,7 @@ void KivioView::initGUI()
     layout->addWidget(m_verticalRuler, 1, 0);
     layout->addWidget(m_canvasController, 1, 1);
 
-    KoToolManager::instance()->addControllers(m_canvasController, this);
+    KoToolManager::instance()->addControllers(m_canvasController);
 
     connect(m_canvasController, SIGNAL(canvasOffsetXChanged(int)),
             m_horizontalRuler, SLOT(setOffset(int)));

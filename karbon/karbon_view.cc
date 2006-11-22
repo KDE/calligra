@@ -195,7 +195,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	m_vertRuler->setUnit(p->unit());
 	connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), m_vertRuler, SLOT( setUnit( KoUnit::Unit ) ) );
 
-	m_canvas = new KarbonCanvas( p->document() );
+	m_canvas = new KarbonCanvas( p );
 	m_canvas->setCommandHistory( p->commandHistory() );
 	m_canvas->setParent( this );
 
@@ -215,7 +215,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 	if( shell() )
 	{
-		KoToolManager::instance()->addControllers( m_canvasView, p );
+		KoToolManager::instance()->addControllers( m_canvasView );
 
 		//Create Dockers
 		createColorDock();

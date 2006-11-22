@@ -49,13 +49,14 @@ class KoToolProxy;
 class KCommand;
 class KCommandHistory;
 class VDocument;
+class KarbonPart;
 
 class KarbonCanvas: public QWidget, public KoCanvasBase
 {
     Q_OBJECT
 
 public:
-    KarbonCanvas( VDocument &document );
+    KarbonCanvas( KarbonPart *p );
     virtual ~KarbonCanvas();
 
     // from KoCanvasBase

@@ -38,7 +38,7 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     m_canvas = new KWCanvas( viewMode, static_cast<KWDocument*>(parent->koDocument()), parent, this );
     m_canvasController = new KoCanvasController(this);
     m_canvasController->setCanvas(m_canvas);
-    KoToolManager::instance()->addControllers(m_canvasController, static_cast<KWDocument*>(parent->koDocument()));
+    KoToolManager::instance()->addControllers(m_canvasController);
 
     gridLayout->addWidget( m_canvasController, 0, 0 );
 }
