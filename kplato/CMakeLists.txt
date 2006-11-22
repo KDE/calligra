@@ -93,9 +93,6 @@ kde4_add_ui_files(libkplatopart_SRCS
     kptconfigtaskpanelbase.ui
 )
 
-kde4_add_ui3_files(libkplatopart_SRCS
-)
-
 ########### next target ###############
 
 set(kplatopart_PART_SRCS kptfactoryinit.cc ${libkdgantt_SRCS} ${libkplatopart_SRCS} )
