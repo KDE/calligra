@@ -315,6 +315,18 @@ public:
                       bool force = false, bool copy = false, bool era = false );
 
     /**
+     * \ingroup NativeFormat
+     * Decodes a string into a time value.
+     */
+    QTime toTime(const KoXmlElement &element);
+
+    /**
+     * \ingroup NativeFormat
+     * Decodes a string into a date value.
+     */
+    QDate toDate(const KoXmlElement &element);
+
+    /**
      * \ingroup OpenDocument
      * Loads a cell from an OASIS XML element.
      * @param element An OASIS XML element
@@ -967,18 +979,6 @@ private:
      * \ingroup NativeFormat
      */
     bool saveCellResult( QDomDocument& doc, QDomElement& result, QString str );
-
-    /**
-     * \ingroup NativeFormat
-     * Decodes a string into a time value.
-     */
-    QTime toTime(const KoXmlElement &element);
-
-    /**
-     * \ingroup NativeFormat
-     * Decodes a string into a date value.
-     */
-    QDate toDate(const KoXmlElement &element);
 
     /**
      * \ingroup OpenDocument

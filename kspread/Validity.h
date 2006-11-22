@@ -40,6 +40,9 @@
 #include <QStringList>
 #include <QTime>
 
+// KOffice
+#include <KoXmlReader.h>
+
 // KSpread
 #include "Condition.h"
 
@@ -84,6 +87,9 @@ public:
   Validity();
 
   bool testValidity( const Cell* cell ) const;
+
+  bool loadXML( Cell* const cell, const KoXmlElement& validityElement );
+  QDomElement saveXML( QDomDocument& doc ) const;
 
   void operator=( const Validity& other ) const;
   bool operator==( const Validity& other ) const;

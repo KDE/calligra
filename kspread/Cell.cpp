@@ -1594,80 +1594,17 @@ QDomElement Cell::save( QDomDocument& doc,
     QSharedDataPointer<Conditions> conditions = this->conditions();
     if ( conditions )
     {
-      QDomElement conditionElement = conditions->saveConditions( doc );
-
-      if ( !conditionElement.isNull() )
-        cell.appendChild( conditionElement );
+        QDomElement conditionElement = conditions->saveConditions( doc );
+        if ( !conditionElement.isNull() )
+            cell.appendChild( conditionElement );
     }
 
-    if (validity())
+    QSharedDataPointer<Validity> validity = this->validity();
+    if ( validity )
     {
-        QSharedDataPointer<Validity> validity = this->validity();
-        QDomElement validityElement = doc.createElement("validity");
-
-        QDomElement param=doc.createElement("param");
-        param.setAttribute("cond",(int)validity->m_cond);
-        param.setAttribute("action",(int)validity->m_action);
-        param.setAttribute("allow",(int)validity->m_restriction);
-        param.setAttribute("valmin",validity->valMin);
-        param.setAttribute("valmax",validity->valMax);
-        param.setAttribute("displaymessage",validity->displayMessage);
-        param.setAttribute("displayvalidationinformation",validity->displayValidationInformation);
-        param.setAttribute("allowemptycell",validity->allowEmptyCell);
-        if ( !validity->listValidity.isEmpty() )
-            param.setAttribute( "listvalidity", validity->listValidity.join( ";" ) );
-        validityElement.appendChild(param);
-        QDomElement title = doc.createElement( "title" );
-        title.appendChild( doc.createTextNode( validity->title ) );
-        validityElement.appendChild( title );
-        QDomElement message = doc.createElement( "message" );
-        message.appendChild( doc.createCDATASection( validity->message ) );
-        validityElement.appendChild( message );
-
-        QDomElement inputTitle = doc.createElement( "inputtitle" );
-        inputTitle.appendChild( doc.createTextNode( validity->titleInfo ) );
-        validityElement.appendChild( inputTitle );
-
-        QDomElement inputMessage = doc.createElement( "inputmessage" );
-        inputMessage.appendChild( doc.createTextNode( validity->messageInfo ) );
-        validityElement.appendChild( inputMessage );
-
-
-
-        QString tmp;
-        if ( validity->timeMin.isValid() )
-        {
-                QDomElement timeMin = doc.createElement( "timemin" );
-                tmp=validity->timeMin.toString();
-                timeMin.appendChild( doc.createTextNode( tmp ) );
-                validityElement.appendChild( timeMin );
-        }
-        if ( validity->timeMax.isValid() )
-        {
-                QDomElement timeMax = doc.createElement( "timemax" );
-                tmp=validity->timeMax.toString();
-                timeMax.appendChild( doc.createTextNode( tmp ) );
-                validityElement.appendChild( timeMax );
-        }
-
-        if ( validity->dateMin.isValid() )
-        {
-                QDomElement dateMin = doc.createElement( "datemin" );
-                QString tmp("%1/%2/%3");
-                tmp = tmp.arg(validity->dateMin.year()).arg(validity->dateMin.month()).arg(validity->dateMin.day());
-                dateMin.appendChild( doc.createTextNode( tmp ) );
-                validityElement.appendChild( dateMin );
-        }
-        if ( validity->dateMax.isValid() )
-        {
-                QDomElement dateMax = doc.createElement( "datemax" );
-                QString tmp("%1/%2/%3");
-                tmp = tmp.arg(validity->dateMax.year()).arg(validity->dateMax.month()).arg(validity->dateMax.day());
-                dateMax.appendChild( doc.createTextNode( tmp ) );
-                validityElement.appendChild( dateMax );
-        }
-
-        cell.appendChild( validityElement );
+        QDomElement validityElement = validity->saveXML( doc );
+        if ( !validityElement.isNull() )
+            cell.appendChild( validityElement );
     }
 
     const QString comment = this->comment();
@@ -2811,98 +2748,9 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     KoXmlElement validityElement = cell.namedItem( "validity" ).toElement();
     if ( !validityElement.isNull())
     {
-        KoXmlElement param = validityElement.namedItem( "param" ).toElement();
-        QSharedDataPointer<Validity> validity = this->validity (true);
-        if(!param.isNull())
-        {
-          if ( param.hasAttribute( "cond" ) )
-          {
-            validity->m_cond = (Conditional::Type) param.attribute("cond").toInt( &ok );
-            if ( !ok )
-              return false;
-          }
-          if ( param.hasAttribute( "action" ) )
-          {
-            validity->m_action = (Action::Type) param.attribute("action").toInt( &ok );
-            if ( !ok )
-              return false;
-          }
-          if ( param.hasAttribute( "allow" ) )
-          {
-            validity->m_restriction = (Restriction::Type) param.attribute("allow").toInt( &ok );
-            if ( !ok )
-              return false;
-          }
-          if ( param.hasAttribute( "valmin" ) )
-          {
-            validity->valMin = param.attribute("valmin").toDouble( &ok );
-            if ( !ok )
-              return false;
-          }
-          if ( param.hasAttribute( "valmax" ) )
-          {
-            validity->valMax = param.attribute("valmax").toDouble( &ok );
-            if ( !ok )
-              return false;
-          }
-          if ( param.hasAttribute( "displaymessage" ) )
-          {
-              validity->displayMessage = ( bool )param.attribute("displaymessage").toInt();
-          }
-          if ( param.hasAttribute( "displayvalidationinformation" ) )
-          {
-              validity->displayValidationInformation = ( bool )param.attribute("displayvalidationinformation").toInt();
-          }
-          if ( param.hasAttribute( "allowemptycell" ) )
-          {
-              validity->allowEmptyCell = ( bool )param.attribute("allowemptycell").toInt();
-          }
-          if ( param.hasAttribute("listvalidity") )
-          {
-            validity->listValidity = param.attribute("listvalidity").split(';', QString::SkipEmptyParts );
-          }
-        }
-        KoXmlElement inputTitle = validityElement.namedItem( "inputtitle" ).toElement();
-        if (!inputTitle.isNull())
-        {
-            validity->titleInfo = inputTitle.text();
-        }
-        KoXmlElement inputMessage = validityElement.namedItem( "inputmessage" ).toElement();
-        if (!inputMessage.isNull())
-        {
-            validity->messageInfo = inputMessage.text();
-        }
-
-        KoXmlElement title = validityElement.namedItem( "title" ).toElement();
-        if (!title.isNull())
-        {
-            validity->title = title.text();
-        }
-        KoXmlElement message = validityElement.namedItem( "message" ).toElement();
-        if (!message.isNull())
-        {
-            validity->message = message.text();
-        }
-        KoXmlElement timeMin = validityElement.namedItem( "timemin" ).toElement();
-        if ( !timeMin.isNull()  )
-        {
-            validity->timeMin = toTime(timeMin);
-        }
-        KoXmlElement timeMax = validityElement.namedItem( "timemax" ).toElement();
-        if ( !timeMax.isNull()  )
-        {
-            validity->timeMax = toTime(timeMax);
-        }
-        KoXmlElement dateMin = validityElement.namedItem( "datemin" ).toElement();
-        if ( !dateMin.isNull()  )
-        {
-            validity->dateMin = toDate(dateMin);
-        }
-        KoXmlElement dateMax = validityElement.namedItem( "datemax" ).toElement();
-        if ( !dateMax.isNull()  )
-        {
-            validity->dateMax = toDate(dateMax);
-        }
+        QSharedDataPointer<Validity> validity( new Validity() );
+        if ( validity->loadXML( this, validityElement ) )
+            setValidity( validity );
     }
     else if ((pm == Paste::Normal) || (pm == Paste::NoBorder))
     {
