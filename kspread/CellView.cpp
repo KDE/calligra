@@ -78,7 +78,6 @@ public:
   // flag indicating, that we need to recalculate the attributes
   bool dirty;
 
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
   QPen leftBorderPen;
   QPen rightBorderPen;
   QPen topBorderPen;
@@ -89,7 +88,6 @@ public:
   uint rightBorderValue;
   uint topBorderValue;
   uint bottomBorderValue;
-#endif
 
   // Position and dimension of displayed text.
   // Doc coordinate system; points; no zoom
@@ -141,7 +139,6 @@ CellView::CellView( const Sheet* sheet, int col, int row )
     d->textWidth  = 0.0;
     d->textHeight = 0.0;
 
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     d->leftBorderPen     = QPen( Qt::NoPen );
     d->rightBorderPen    = QPen( Qt::NoPen );
     d->topBorderPen      = QPen( Qt::NoPen );
@@ -152,7 +149,6 @@ CellView::CellView( const Sheet* sheet, int col, int row )
     d->rightBorderValue  = 0;
     d->topBorderValue    = 0;
     d->bottomBorderValue = 0;
-#endif
 }
 
 CellView::~CellView()
@@ -225,22 +221,21 @@ QSharedDataPointer<Conditions> CellView::conditions() const
     return d->conditions;
 }
 
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
 void CellView::update()
 {
     Cell* const cell = this->cell();
     d->style = d->sheet->style( d->col, d->row );
 //     kDebug(36004) << "updating painting attributes for " << cell->name() << endl;
-    d->leftBorderPen     = effLeftBorderPen();
-    d->rightBorderPen    = effRightBorderPen();
-    d->topBorderPen      = effTopBorderPen();
-    d->bottomBorderPen   = effBottomBorderPen();
+    d->leftBorderPen     = effStyle( Style::LeftPen ).leftBorderPen();
+    d->rightBorderPen    = effStyle( Style::RightPen ).rightBorderPen();
+    d->topBorderPen      = effStyle( Style::TopPen ).topBorderPen();
+    d->bottomBorderPen   = effStyle( Style::BottomPen ).bottomBorderPen();
     d->goUpDiagonalPen   = effStyle( Style::GoUpDiagonalPen ).goUpDiagonalPen();
     d->fallDiagonalPen   = effStyle( Style::FallDiagonalPen ).fallDiagonalPen();
-    d->leftBorderValue   = effLeftBorderValue();
-    d->rightBorderValue  = effRightBorderValue();
-    d->topBorderValue    = effTopBorderValue();
-    d->bottomBorderValue = effBottomBorderValue();
+    d->leftBorderValue   = effStyle( Style::LeftPen ).leftPenValue();
+    d->rightBorderValue  = effStyle( Style::RightPen ).rightPenValue();
+    d->topBorderValue    = effStyle( Style::TopPen ).topPenValue();
+    d->bottomBorderValue = effStyle( Style::BottomPen ).bottomPenValue();
     cell->clearFlag( Cell::Flag_PaintingDirty );
 }
 
@@ -248,7 +243,6 @@ void CellView::setDirty( bool enable )
 {
     d->dirty = enable;
 }
-#endif
 
 double CellView::textWidth() const
 {
@@ -400,12 +394,10 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
     }
 #endif
 
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     // Need to update the painting attributes cache?
     //
     if (/* !cell()->isDefault() &&*/ ( d->dirty || cell()->testFlag( Cell::Flag_PaintingDirty ) ) )
         update();
-#endif
 
     // Need to make a new layout ?
     //
@@ -708,17 +700,10 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
 
     CellView::Borders paintBorder = CellView::NoBorder;
 
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     QPen leftPen  ( d->leftBorderPen );
     QPen rightPen ( d->rightBorderPen );
     QPen topPen   ( d->topBorderPen );
     QPen bottomPen( d->bottomBorderPen );
-#else
-    QPen rightPen( cell->effRightBorderPen( col, row ) );
-    QPen leftPen( cell->effLeftBorderPen( col, row ) );
-    QPen topPen( cell->effTopBorderPen( col, row ) );
-    QPen bottomPen( cell->effBottomBorderPen( col, row ) );
-#endif
 
     // Paint border if outermost cell or if the pen is more "worth"
     // than the border pen of the cell on the other side of the
@@ -731,19 +716,11 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     else if ( col == regionRight )
     {
         paintBorder |= CellView::RightBorder;
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
         if ( d->rightBorderValue
-#else
-        if ( cell->effRightBorderValue( col, row )
-#endif
                 < CellView( sheet, col + 1, row ).effStyle( Style::LeftPen ).leftPenValue() ) // FIXME
             rightPen = CellView( sheet, col + 1, row ).effStyle( Style::LeftPen ).leftBorderPen();
     }
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     else if ( d->rightBorderValue
-#else
-    else if ( cell->effRightBorderValue( col, row )
-#endif
                 > CellView( sheet, col + 1, row ).effStyle( Style::LeftPen ).leftPenValue() )
     {
         paintBorder |= CellView::RightBorder;
@@ -757,19 +734,11 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     else if ( row == regionBottom )
     {
         paintBorder |= CellView::BottomBorder;
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
         if ( d->bottomBorderValue
-#else
-        if ( cell->effBottomBorderValue( col, row )
-#endif
                 < CellView( sheet, col, row + 1 ).effStyle( Style::TopPen ).topPenValue() )
             bottomPen = CellView( sheet, col, row + 1 ).effStyle( Style::TopPen ).topBorderPen();
     }
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     else if ( d->bottomBorderValue
-#else
-    else if ( cell->effBottomBorderValue( col, row )
-#endif
                 > CellView( sheet, col, row + 1 ).effStyle( Style::TopPen ).topPenValue() )
     {
         paintBorder |= CellView::BottomBorder;
@@ -782,19 +751,11 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     else if ( col == regionLeft )
     {
         paintBorder |= CellView::LeftBorder;
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
         if ( d->leftBorderValue
-#else
-        if ( cell->effLeftBorderValue( col, row )
-#endif
                 < CellView( sheet, col - 1, row ).effStyle( Style::RightPen ).rightPenValue() )
             leftPen = CellView( sheet, col - 1, row ).effStyle( Style::RightPen ).rightBorderPen();
     }
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     else if ( d->leftBorderValue
-#else
-    else if ( cell->effLeftBorderValue( col, row )
-#endif
                 >= CellView( sheet, col - 1, row ).effStyle( Style::RightPen ).rightPenValue() )
     {
         paintBorder |= CellView::LeftBorder;
@@ -807,19 +768,11 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     else if ( row == regionTop )
     {
         paintBorder |= CellView::TopBorder;
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
         if ( d->topBorderValue
-#else
-        if ( cell->effTopBorderValue( col, row )
-#endif
                 < CellView( sheet, col, row - 1 ).effStyle( Style::BottomPen ).bottomPenValue() )
             topPen = CellView( sheet, col, row - 1 ).effStyle( Style::BottomPen ).bottomBorderPen();
     }
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     else if ( d->topBorderValue
-#else
-    else if ( cell->effTopBorderValue( col, row )
-#endif
                 >= CellView( sheet, col, row - 1 ).effStyle( Style::BottomPen ).bottomPenValue() )
     {
         paintBorder |= CellView::TopBorder;
@@ -2254,13 +2207,8 @@ void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect
     if ( cell()->isPartOfMerged() )
         return;
 
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     QPen fallDiagonalPen( d->fallDiagonalPen );
     QPen goUpDiagonalPen( d->goUpDiagonalPen );
-#else
-    QPen fallDiagonalPen( effStyle( Style::FallDiagonalPen )->fallDiagonalPen() );
-    QPen goUpDiagonalPen( effStyle( Style::GoUpDiagonalPen )->goUpDiagonalPen() );
-#endif
 
     if ( fallDiagonalPen.style() != Qt::NoPen ) {
         painter.setPen( fallDiagonalPen );

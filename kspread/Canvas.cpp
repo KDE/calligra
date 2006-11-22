@@ -698,11 +698,7 @@ void Canvas::slotScrollHorz( int _value )
     sheet->enableScrollBarUpdates( true );
 
 #ifndef KSPREAD_CLIPPED_PAINTING
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     d->view->doc()->emitEndOperation();
-#else
-    d->view->doc()->emitEndOperation( Region( visibleCells() ) );
-#endif
 #endif
 }
 
@@ -764,11 +760,7 @@ void Canvas::slotScrollVert( int _value )
     sheet->enableScrollBarUpdates( true );
 
 #ifndef KSPREAD_CLIPPED_PAINTING
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     d->view->doc()->emitEndOperation();
-#else
-    d->view->doc()->emitEndOperation( Region( visibleCells() ) );
-#endif
 #endif
 }
 
@@ -1586,48 +1578,6 @@ void Canvas::paintEvent( QPaintEvent* event )
     ElapsedTime et( "Painting cells", ElapsedTime::PrintOnlyTime );
 
     updateCellWindow();
-#ifndef KSPREAD_CACHED_PAINTING_ATTRIBUTES
-  // repaint whole visible region, if no cells are marked as dirty
-  if (sheet->paintDirtyData().isEmpty())
-  {
-
-    // painting rectangle
-    const QRect paintRect( event->rect() );
-
-    // ElapsedTime et( "Canvas::paintEvent" );
-
-    double dwidth = d->view->doc()->unzoomItXOld( width() );
-    KoRect rect = d->view->doc()->unzoomRectOld( paintRect & QWidget::rect() );
-    if ( sheet->layoutDirection()==Sheet::RightToLeft )
-      rect.moveBy( -xOffset(), yOffset() );
-    else
-      rect.moveBy( xOffset(), yOffset() );
-
-    KoPoint tl = rect.topLeft();
-    KoPoint br = rect.bottomRight();
-
-    double tmp;
-    int left_col;
-    int right_col;
-    //Philipp: I don't know why we need the +1, but otherwise we don't get it correctly
-    //Testcase: Move a dialog slowly up left. Sometimes the top/left most points are not painted
-    if ( sheet->layoutDirection()==Sheet::RightToLeft )
-    {
-      right_col = sheet->leftColumn( dwidth - tl.x(), tmp );
-      left_col  = sheet->rightColumn( dwidth - br.x() + 1.0 );
-    }
-    else
-    {
-      left_col  = sheet->leftColumn( tl.x(), tmp );
-      right_col = sheet->rightColumn( br.x() + 1.0 );
-    }
-    int top_row = sheet->topRow( tl.y(), tmp );
-    int bottom_row = sheet->bottomRow( br.y() + 1.0 );
-
-    QRect vr( QPoint(left_col, top_row), QPoint(right_col, bottom_row) );
-    sheet->setRegionPaintDirty( vr );
-  }
-#endif
 
     // mark visible cells, that need relayouting
     const QRect visibleCells = this->visibleCells();
@@ -3950,7 +3900,6 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
     {
         QRect range = (*it)->rect() & visibleRect;
 
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
         int right  = range.right();
         for ( int x = range.left(); x <= right; ++x )
         {
@@ -3964,7 +3913,6 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
     }
 
         QRect range = visibleRect;
-#endif
         const double topPos = sheet->dblRowPos(range.top());
         const double leftPos = sheet->dblColumnPos(range.left());
         KoPoint dblCorner( leftPos - xOffset(), topPos - yOffset() );
@@ -4012,9 +3960,6 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
             dblCorner.setY( topPos - yOffset() );
             dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth() );
         }
-#ifndef KSPREAD_CACHED_PAINTING_ATTRIBUTES
-    }
-#endif
 
     /* now paint the selection */
     //Nb.  No longer necessary to paint choose Selection.here as the cell reference highlight

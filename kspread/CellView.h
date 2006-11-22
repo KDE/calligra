@@ -44,8 +44,6 @@
 #include "Global.h"
 #include "Style.h"
 
-#define KSPREAD_CACHED_PAINTING_ATTRIBUTES
-
 class QRectF;
 
 namespace KSpread
@@ -94,14 +92,12 @@ public:
 
     QSharedDataPointer<Conditions> conditions() const;
 
-#ifdef KSPREAD_CACHED_PAINTING_ATTRIBUTES
     /**
      * Updates the cached painting attributes.
      */
     void update();
 
     void setDirty( bool enable );
-#endif
 
   /**
    * \ingroup Painting
