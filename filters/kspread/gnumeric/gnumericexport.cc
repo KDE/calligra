@@ -238,16 +238,16 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
     //      </gmr:Validation>
     Validity *kspread_validity = cell->validity(true);
     QDomElement val = gnumeric_doc.createElement( "gmr:Validation" );
-    val.setAttribute( "Title", kspread_validity->title );
-    val.setAttribute( "Message", kspread_validity->message );
-    val.setAttribute( "AllowBlank", kspread_validity->allowEmptyCell ? "true":"false" );
-    if ( !kspread_validity->displayMessage )
+    val.setAttribute( "Title", kspread_validity->title() );
+    val.setAttribute( "Message", kspread_validity->message() );
+    val.setAttribute( "AllowBlank", kspread_validity->allowEmptyCell() ? "true":"false" );
+    if ( !kspread_validity->displayMessage() )
     {
         val.setAttribute("Style", "0" );
     }
     else
     {
-        switch( kspread_validity->m_action )
+        switch( kspread_validity->action() )
         {
           case Action::Stop:
             val.setAttribute("Style", "1" );
@@ -261,7 +261,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
         }
     }
 
-    switch( kspread_validity->m_cond )
+    switch( kspread_validity->condition() )
     {
       case Conditional::None:
         //Nothing
@@ -291,7 +291,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
         val.setAttribute("Operator", "1" );
         break;
     }
-    switch( kspread_validity->m_restriction )
+    switch( kspread_validity->restriction() )
     {
     case Restriction::None:
         val.setAttribute("Type", "0" );
@@ -299,7 +299,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
     case Restriction::Number:
     {
         val.setAttribute("Type", "2" );
-        switch( kspread_validity->m_cond )
+        switch( kspread_validity->condition() )
         {
           case Conditional::None:
             //Nothing
@@ -312,7 +312,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
           case Conditional::Different:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
-            tmp.appendChild( gnumeric_doc.createTextNode( QString::number( kspread_validity->valMin ) ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number( kspread_validity->minimumValue() ) ) );
             val.appendChild( tmp );
         }
         break;
@@ -320,10 +320,10 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
           case Conditional::DifferentTo:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
-            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->minimumValue() ) ) );
             val.appendChild( tmp );
             tmp = gnumeric_doc.createElement( "gmr:Expression1" );
-            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMax ) ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->maximumValue() ) ) );
             val.appendChild( tmp );
         }
         break;
@@ -337,7 +337,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
         break;
     case Restriction::Time:
         val.setAttribute("Type", "5" );
-        switch( kspread_validity->m_cond )
+        switch( kspread_validity->condition() )
         {
           case Conditional::None:
             //Nothing
@@ -350,7 +350,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
           case Conditional::Different:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
-            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->timeMin.toString() ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->minimumTime().toString() ) );
             val.appendChild( tmp );
         }
         break;
@@ -358,10 +358,10 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
           case Conditional::DifferentTo:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
-            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->timeMin.toString() ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->minimumTime().toString() ) );
             val.appendChild( tmp );
             tmp = gnumeric_doc.createElement( "gmr:Expression1" );
-            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->timeMax.toString() ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->maximumTime().toString() ) );
             val.appendChild( tmp );
         }
         break;
@@ -370,7 +370,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
         break;
     case Restriction::Date:
         val.setAttribute("Type", "4" );
-        switch( kspread_validity->m_cond )
+        switch( kspread_validity->condition() )
         {
           case Conditional::None:
             //Nothing
@@ -383,7 +383,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
           case Conditional::Different:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
-            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->dateMin.toString() ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->minimumDate().toString() ) );
             val.appendChild( tmp );
         }
         break;
@@ -391,10 +391,10 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
           case Conditional::DifferentTo:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
-            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->dateMin.toString() ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->minimumDate().toString() ) );
             val.appendChild( tmp );
             tmp = gnumeric_doc.createElement( "gmr:Expression1" );
-            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->dateMax.toString() ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->maximumDate().toString() ) );
             val.appendChild( tmp );
         }
         break;
@@ -403,7 +403,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
         break;
     case Restriction::Integer:
         val.setAttribute("Type", "1" );
-        switch( kspread_validity->m_cond )
+        switch( kspread_validity->condition() )
         {
           case Conditional::None:
             //Nothing
@@ -416,7 +416,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
           case Conditional::Different:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
-            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->minimumValue() ) ) );
             val.appendChild( tmp );
         }
         break;
@@ -424,10 +424,10 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
           case Conditional::DifferentTo:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
-            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->minimumValue() ) ) );
             val.appendChild( tmp );
             tmp = gnumeric_doc.createElement( "gmr:Expression1" );
-            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMax ) ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->maximumValue() ) ) );
             val.appendChild( tmp );
         }
         break;
@@ -435,7 +435,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
         break;
     case Restriction::TextLength:
         val.setAttribute("Type", "6" );
-        switch( kspread_validity->m_cond )
+        switch( kspread_validity->condition() )
         {
           case Conditional::None:
             //Nothing
@@ -448,7 +448,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
           case Conditional::Different:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
-            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->minimumValue() ) ) );
             val.appendChild( tmp );
         }
         break;
@@ -456,10 +456,10 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
           case Conditional::DifferentTo:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
-            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->minimumValue() ) ) );
             val.appendChild( tmp );
             tmp = gnumeric_doc.createElement( "gmr:Expression1" );
-            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMax ) ) );
+            tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->maximumValue() ) ) );
             val.appendChild( tmp );
         }
         break;
@@ -467,7 +467,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
         break;
     case Restriction::List:
         val.setAttribute("Type", "3" );
-        switch( kspread_validity->m_cond )
+        switch( kspread_validity->condition() )
         {
           case Conditional::None:
             //Nothing

@@ -2454,15 +2454,15 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
             //"cell-content-text-length()>45"
             valExpression = valExpression.remove("cell-content-text-length()" );
             kDebug(30518)<<" valExpression = :"<<valExpression<<endl;
-            val->m_restriction = Restriction::TextLength;
+            val->setRestriction( Restriction::TextLength );
 
             loadOasisValidationCondition( val, valExpression );
         }
         //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
         else if ( valExpression.contains( "cell-content-text-length-is-between" ) )
         {
-            val->m_restriction = Restriction::TextLength;
-            val->m_cond = Conditional::Between;
+            val->setRestriction( Restriction::TextLength );
+            val->setCondition( Conditional::Between );
             valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
             kDebug(30518)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
@@ -2471,8 +2471,8 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
         {
-            val->m_restriction = Restriction::TextLength;
-            val->m_cond = Conditional::Different;
+            val->setRestriction( Restriction::TextLength );
+            val->setCondition( Conditional::Different );
             valExpression = valExpression.remove( "cell-content-text-length-is-not-between(" );
             kDebug(30518)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
@@ -2486,22 +2486,22 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
         {
             if (valExpression.contains( "cell-content-is-whole-number()" ) )
             {
-                val->m_restriction =  Restriction::Number;
+                val->setRestriction(  Restriction::Number );
                 valExpression = valExpression.remove( "cell-content-is-whole-number() and " );
             }
             else if (valExpression.contains( "cell-content-is-decimal-number()" ) )
             {
-                val->m_restriction = Restriction::Integer;
+                val->setRestriction( Restriction::Integer );
                 valExpression = valExpression.remove( "cell-content-is-decimal-number() and " );
             }
             else if (valExpression.contains( "cell-content-is-date()" ) )
             {
-                val->m_restriction = Restriction::Date;
+                val->setRestriction( Restriction::Date );
                 valExpression = valExpression.remove( "cell-content-is-date() and " );
             }
             else if (valExpression.contains( "cell-content-is-time()" ) )
             {
-                val->m_restriction = Restriction::Time;
+                val->setRestriction( Restriction::Time );
                 valExpression = valExpression.remove( "cell-content-is-time() and " );
             }
             kDebug(30518)<<"valExpression :"<<valExpression<<endl;
@@ -2520,7 +2520,7 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
                 QStringList listVal = valExpression.split( "," );
                 loadOasisValidationValue( val, listVal );
 
-                val->m_cond = Conditional::Between;
+                val->setCondition( Conditional::Between );
             }
             if ( valExpression.contains( "cell-content-is-not-between(" ) )
             {
@@ -2528,13 +2528,13 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
                 valExpression = valExpression.remove( ")" );
                 QStringList listVal = valExpression.split( "," );
                 loadOasisValidationValue( val, listVal );
-                val->m_cond = Conditional::Different;
+                val->setCondition( Conditional::Different );
             }
         }
     }
     if ( element.hasAttributeNS( ooNS::table, "allow-empty-cell" ) )
     {
-        val->allowEmptyCell = ( ( element.attributeNS( ooNS::table, "allow-empty-cell", QString::null )=="true" ) ? true : false );
+        val->setAllowEmptyCell( ( ( element.attributeNS( ooNS::table, "allow-empty-cell", QString::null )=="true" ) ? true : false ) );
 
     }
     if ( element.hasAttributeNS( ooNS::table, "base-cell-address" ) )
@@ -2546,28 +2546,28 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
     if ( !help.isNull() )
     {
         if ( help.hasAttributeNS( ooNS::table, "title" ) )
-             val->titleInfo = help.attributeNS( ooNS::table, "title", QString::null );
+             val->setTitleInfo( help.attributeNS( ooNS::table, "title", QString::null ) );
         if ( help.hasAttributeNS( ooNS::table, "display" ) )
-            val->displayValidationInformation = ( ( help.attributeNS( ooNS::table, "display", QString::null )=="true" ) ? true : false );
+            val->setDisplayValidationInformation( ( ( help.attributeNS( ooNS::table, "display", QString::null )=="true" ) ? true : false ) );
         QDomElement attrText = KoDom::namedItemNS( help, ooNS::text, "p" );
         if ( !attrText.isNull() )
-            val->messageInfo = attrText.text();
+            val->setMessageInfo( attrText.text() );
     }
 
     QDomElement error = KoDom::namedItemNS( element, ooNS::table, "error-message" );
     if ( !error.isNull() )
     {
         if ( error.hasAttributeNS( ooNS::table, "title" ) )
-            val->title = error.attributeNS( ooNS::table, "title", QString::null );
+            val->setTitle( error.attributeNS( ooNS::table, "title", QString::null ) );
         if ( error.hasAttributeNS( ooNS::table, "message-type" ) )
         {
             QString str = error.attributeNS( ooNS::table, "message-type", QString::null );
             if ( str == "warning" )
-              val->m_action = Action::Warning;
+              val->setAction( Action::Warning );
             else if ( str == "information" )
-              val->m_action = Action::Information;
+              val->setAction( Action::Information );
             else if ( str == "stop" )
-              val->m_action = Action::Stop;
+              val->setAction( Action::Stop );
             else
                 kDebug(30518)<<"validation : message type unknown  :"<<str<<endl;
         }
@@ -2575,11 +2575,11 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
         if ( error.hasAttributeNS( ooNS::table, "display" ) )
         {
             kDebug(30518)<<" display message :"<<error.attributeNS( ooNS::table, "display", QString::null )<<endl;
-            val->displayMessage = (error.attributeNS( ooNS::table, "display", QString::null )=="true");
+            val->setDisplayMessage( (error.attributeNS( ooNS::table, "display", QString::null )=="true") );
         }
         QDomElement attrText = KoDom::namedItemNS( error, ooNS::text, "p" );
         if ( !attrText.isNull() )
-            val->message = attrText.text();
+            val->setMessage( attrText.text() );
     }
 }
 
@@ -2588,41 +2588,41 @@ void OpenCalcImport::loadOasisValidationValue( Validity* val, const QStringList 
     bool ok = false;
     kDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
 
-    if ( val->m_restriction == Restriction::Date )
+    if ( val->restriction() == Restriction::Date )
     {
-        val->dateMin = QDate::fromString( listVal[0] );
-        val->dateMax = QDate::fromString( listVal[1] );
+        val->setMinimumDate( QDate::fromString( listVal[0] ) );
+        val->setMaximumDate( QDate::fromString( listVal[1] ) );
     }
-    else if ( val->m_restriction == Restriction::Time )
+    else if ( val->restriction() == Restriction::Time )
     {
-        val->timeMin = QTime::fromString( listVal[0] );
-        val->timeMax = QTime::fromString( listVal[1] );
+        val->setMinimumTime( QTime::fromString( listVal[0] ) );
+        val->setMaximumTime( QTime::fromString( listVal[1] ) );
     }
     else
     {
-        val->valMin = listVal[0].toDouble(&ok);
+        val->setMinimumValue( listVal[0].toDouble(&ok) );
         if ( !ok )
         {
-            val->valMin = listVal[0].toInt(&ok);
+            val->setMinimumValue( listVal[0].toInt(&ok) );
             if ( !ok )
                 kDebug(30518)<<" Try to parse this value :"<<listVal[0]<<endl;
 
 #if 0
             if ( !ok )
-                val->valMin = listVal[0];
+                val->setMinimumValue( listVal[0] );
 #endif
         }
         ok=false;
-        val->valMax = listVal[1].toDouble(&ok);
+        val->setMaximumValue( listVal[1].toDouble(&ok) );
         if ( !ok )
         {
-            val->valMax = listVal[1].toInt(&ok);
+            val->setMaximumValue( listVal[1].toInt(&ok) );
             if ( !ok )
                 kDebug(30518)<<" Try to parse this value :"<<listVal[1]<<endl;
 
 #if 0
             if ( !ok )
-                val->valMax = listVal[1];
+                val->setMaximumValue( listVal[1] );
 #endif
         }
     }
@@ -2635,58 +2635,58 @@ void OpenCalcImport::loadOasisValidationCondition( Validity* val,QString &valExp
     if (valExpression.contains( "<=" ) )
     {
         value = valExpression.remove( "<=" );
-        val->m_cond = Conditional::InferiorEqual;
+        val->setCondition( Conditional::InferiorEqual );
     }
     else if (valExpression.contains( ">=" ) )
     {
         value = valExpression.remove( ">=" );
-        val->m_cond = Conditional::SuperiorEqual;
+        val->setCondition( Conditional::SuperiorEqual );
     }
     else if (valExpression.contains( "!=" ) )
     {
         //add Differentto attribute
         value = valExpression.remove( "!=" );
-        val->m_cond = Conditional::DifferentTo;
+        val->setCondition( Conditional::DifferentTo );
     }
     else if ( valExpression.contains( "<" ) )
     {
         value = valExpression.remove( "<" );
-        val->m_cond = Conditional::Inferior;
+        val->setCondition( Conditional::Inferior );
     }
     else if(valExpression.contains( ">" ) )
     {
         value = valExpression.remove( ">" );
-        val->m_cond = Conditional::Superior;
+        val->setCondition( Conditional::Superior );
     }
     else if (valExpression.contains( "=" ) )
     {
         value = valExpression.remove( "=" );
-        val->m_cond = Conditional::Equal;
+        val->setCondition( Conditional::Equal );
     }
     else
         kDebug(30518)<<" I don't know how to parse it :"<<valExpression<<endl;
     kDebug(30518)<<" value :"<<value<<endl;
-    if ( val->m_restriction == Restriction::Date )
+    if ( val->restriction() == Restriction::Date )
     {
-        val->dateMin = QDate::fromString( value );
+        val->setMinimumDate( QDate::fromString( value ) );
     }
-    else if ( val->m_restriction == Restriction::Date )
+    else if ( val->restriction() == Restriction::Date )
     {
-        val->timeMin = QTime::fromString( value );
+        val->setMinimumTime( QTime::fromString( value ) );
     }
     else
     {
         bool ok = false;
-        val->valMin = value.toDouble(&ok);
+        val->setMinimumValue( value.toDouble(&ok) );
         if ( !ok )
         {
-            val->valMin = value.toInt(&ok);
+            val->setMinimumValue( value.toInt(&ok) );
             if ( !ok )
                 kDebug(30518)<<" Try to parse this value :"<<value<<endl;
 
 #if 0
             if ( !ok )
-                val->valMin = value;
+                val->setMinimumValue( value );
 #endif
         }
     }

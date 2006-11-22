@@ -106,17 +106,17 @@ void GenValidationStyles::writeStyle( KoXmlWriter& writer )
     }
 }
 
-void GenValidationStyle::initVal( Validity *_val )
+void GenValidationStyle::initVal( Validity *validity )
 {
-    if ( _val )
+    if ( validity )
     {
-        allowEmptyCell = ( _val->allowEmptyCell ? "true" : "false" );
-        condition = createValidationCondition( _val );
-        title = _val->title;
-        displayValidationInformation = ( _val->displayValidationInformation ? "true" : "false" );
-        messageInfo = _val->messageInfo;
+        allowEmptyCell = ( validity->allowEmptyCell() ? "true" : "false" );
+        condition = createValidationCondition( validity );
+        title = validity->title();
+        displayValidationInformation = ( validity->displayValidationInformation() ? "true" : "false" );
+        messageInfo = validity->messageInfo();
 
-        switch( _val->m_action )
+        switch( validity->action() )
         {
           case Action::Warning:
             messageType = "warning";
@@ -129,16 +129,16 @@ void GenValidationStyle::initVal( Validity *_val )
             break;
         }
 
-        titleInfo = _val->titleInfo;
-        displayMessage = ( _val->displayMessage ? "true" : "false" );
-        message = _val->message;
+        titleInfo = validity->titleInfo();
+        displayMessage = ( validity->displayMessage() ? "true" : "false" );
+        message = validity->message();
     }
 }
 
-QString GenValidationStyle::createValidationCondition( Validity* _val )
+QString GenValidationStyle::createValidationCondition( Validity* validity )
 {
     QString result;
-    switch( _val->m_restriction )
+    switch( validity->restriction() )
     {
     case Restriction::None:
         //nothing
@@ -148,41 +148,41 @@ QString GenValidationStyle::createValidationCondition( Validity* _val )
         result = "cell-content-is-text()";
         break;
     case Restriction::Time:
-        result = createTimeValidationCondition( _val );
+        result = createTimeValidationCondition( validity );
         break;
     case Restriction::Date:
-        result = createDateValidationCondition( _val );
+        result = createDateValidationCondition( validity );
         break;
     case Restriction::Integer:
     case Restriction::Number:
-        result = createNumberValidationCondition( _val );
+        result = createNumberValidationCondition( validity );
         break;
     case Restriction::TextLength:
-        result = createTextValidationCondition( _val );
+        result = createTextValidationCondition( validity );
          break;
     case Restriction::List:
-        result = createListValidationCondition( _val );
+        result = createListValidationCondition( validity );
         break;
     }
     return result;
 }
 
-QString GenValidationStyle::createListValidationCondition( Validity* _val )
+QString GenValidationStyle::createListValidationCondition( Validity* validity )
 {
     QString result = "oooc:cell-content-is-in-list(";
-    result = _val->listValidity.join( ";" );
+    result = validity->validityList().join( ";" );
     result +=')';
     return result;
 }
 
-QString GenValidationStyle::createNumberValidationCondition( Validity* _val )
+QString GenValidationStyle::createNumberValidationCondition( Validity* validity )
 {
     QString result;
-    if ( _val->m_restriction == Restriction::Number )
+    if ( validity->restriction() == Restriction::Number )
         result = "oooc:cell-content-is-whole-number() and ";
-    else if ( _val->m_restriction == Restriction::Integer )
+    else if ( validity->restriction() == Restriction::Integer )
         result = "oooc:cell-content-is-decimal-number() and ";
-    switch( _val->m_cond )
+    switch( validity->condition() )
     {
       case Conditional::None:
         //nothing
@@ -190,45 +190,45 @@ QString GenValidationStyle::createNumberValidationCondition( Validity* _val )
       case Conditional::Equal:
         result+="cell-content()";
         result+='=';
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         break;
       case Conditional::Superior:
         result+="cell-content()";
         result+='>';
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         break;
       case Conditional::Inferior:
         result+="cell-content()";
         result+='<';
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         break;
       case Conditional::SuperiorEqual:
         result+="cell-content()";
         result+=">=";
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         break;
       case Conditional::InferiorEqual:
         result+="cell-content()";
         result+="<=";
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         break;
       case Conditional::Different:
         result+="cell-content()";
         result+="!=";
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         break;
       case Conditional::Between:
         result+="cell-content-is-between(";
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         result+=',';
-        result+=QString::number( _val->valMax );
+        result+=QString::number( validity->maximumValue() );
         result+=')';
         break;
       case Conditional::DifferentTo:
         result+="cell-content-is-not-between(";
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         result+=',';
-        result+=QString::number( _val->valMax );
+        result+=QString::number( validity->maximumValue() );
         result+=')';
         break;
     }
@@ -236,10 +236,10 @@ QString GenValidationStyle::createNumberValidationCondition( Validity* _val )
 }
 
 
-QString GenValidationStyle::createTimeValidationCondition( Validity* _val )
+QString GenValidationStyle::createTimeValidationCondition( Validity* validity )
 {
     QString result( "oooc:cell-content-is-time() and " );
-    switch( _val->m_cond )
+    switch( validity->condition() )
     {
       case Conditional::None:
         //nothing
@@ -247,55 +247,55 @@ QString GenValidationStyle::createTimeValidationCondition( Validity* _val )
       case Conditional::Equal:
         result+="cell-content()";
         result+='=';
-        result+=_val->timeMin.toString( );
+        result+=validity->minimumTime().toString( );
         break;
       case Conditional::Superior:
         result+="cell-content()";
         result+='>';
-        result+=_val->timeMin.toString( );
+        result+=validity->minimumTime().toString( );
         break;
       case Conditional::Inferior:
         result+="cell-content()";
         result+='<';
-        result+=_val->timeMin.toString( );
+        result+=validity->minimumTime().toString( );
         break;
       case Conditional::SuperiorEqual:
         result+="cell-content()";
         result+=">=";
-        result+=_val->timeMin.toString( );
+        result+=validity->minimumTime().toString( );
         break;
       case Conditional::InferiorEqual:
         result+="cell-content()";
         result+="<=";
-        result+=_val->timeMin.toString( );
+        result+=validity->minimumTime().toString( );
         break;
       case Conditional::Different:
         result+="cell-content()";
         result+="!=";
-        result+=_val->timeMin.toString( );
+        result+=validity->minimumTime().toString( );
         break;
       case Conditional::Between:
         result+="cell-content-is-between(";
-        result+=_val->timeMin.toString( );
+        result+=validity->minimumTime().toString( );
         result+=',';
-        result+=_val->timeMax.toString( );
+        result+=validity->maximumTime().toString( );
         result+=')';
         break;
       case Conditional::DifferentTo:
         result+="cell-content-is-not-between(";
-        result+=_val->timeMin.toString( );
+        result+=validity->minimumTime().toString( );
         result+=',';
-        result+=_val->timeMax.toString( );
+        result+=validity->maximumTime().toString( );
         result+=')';
         break;
     }
     return result;
 }
 
-QString GenValidationStyle::createDateValidationCondition( Validity* _val )
+QString GenValidationStyle::createDateValidationCondition( Validity* validity )
 {
     QString result( "oooc:cell-content-is-date() and " );
-    switch( _val->m_cond )
+    switch( validity->condition() )
     {
       case Conditional::None:
         //nothing
@@ -303,55 +303,55 @@ QString GenValidationStyle::createDateValidationCondition( Validity* _val )
       case Conditional::Equal:
         result+="cell-content()";
         result+='=';
-        result+=_val->dateMin.toString();
+        result+=validity->minimumDate().toString();
         break;
       case Conditional::Superior:
         result+="cell-content()";
         result+='>';
-        result+=_val->dateMin.toString();
+        result+=validity->minimumDate().toString();
         break;
       case Conditional::Inferior:
         result+="cell-content()";
         result+='<';
-        result+=_val->dateMin.toString();
+        result+=validity->minimumDate().toString();
         break;
       case Conditional::SuperiorEqual:
         result+="cell-content()";
         result+=">=";
-        result+=_val->dateMin.toString();
+        result+=validity->minimumDate().toString();
         break;
       case Conditional::InferiorEqual:
         result+="cell-content()";
         result+="<=";
-        result+=_val->dateMin.toString();
+        result+=validity->minimumDate().toString();
         break;
       case Conditional::Different:
         result+="cell-content()";
         result+="!=";
-        result+=_val->dateMin.toString();
+        result+=validity->minimumDate().toString();
         break;
       case Conditional::Between:
         result+="cell-content-is-between(";
-        result+=_val->dateMin.toString();
+        result+=validity->minimumDate().toString();
         result+=',';
-        result+=_val->dateMax.toString();
+        result+=validity->maximumDate().toString();
         result+=')';
         break;
       case Conditional::DifferentTo:
         result+="cell-content-is-not-between(";
-        result+=_val->dateMin.toString();
+        result+=validity->minimumDate().toString();
         result+=',';
-        result+=_val->dateMax.toString();
+        result+=validity->maximumDate().toString();
         result+=')';
         break;
     }
     return result;
 }
 
-QString GenValidationStyle::createTextValidationCondition( Validity* _val )
+QString GenValidationStyle::createTextValidationCondition( Validity* validity )
 {
     QString result;
-    switch( _val->m_cond )
+    switch( validity->condition() )
     {
       case Conditional::None:
         //nothing
@@ -359,45 +359,45 @@ QString GenValidationStyle::createTextValidationCondition( Validity* _val )
       case Conditional::Equal:
         result+="oooc:cell-content-text-length()";
         result+='=';
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         break;
       case Conditional::Superior:
         result+="oooc:cell-content-text-length()";
         result+='>';
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         break;
       case Conditional::Inferior:
         result+="oooc:cell-content-text-length()";
         result+='<';
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         break;
       case Conditional::SuperiorEqual:
         result+="oooc:cell-content-text-length()";
         result+=">=";
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         break;
       case Conditional::InferiorEqual:
         result+="oooc:cell-content-text-length()";
         result+="<=";
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         break;
       case Conditional::Different:
         result+="oooc:cell-content-text-length()";
         result+="!=";
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         break;
       case Conditional::Between:
         result+="oooc:cell-content-text-length-is-between(";
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         result+=',';
-        result+=QString::number( _val->valMax );
+        result+=QString::number( validity->maximumValue() );
         result+=')';
         break;
       case Conditional::DifferentTo:
         result+="oooc:cell-content-text-length-is-not-between(";
-        result+=QString::number( _val->valMin );
+        result+=QString::number( validity->minimumValue() );
         result+=',';
-        result+=QString::number( _val->valMax );
+        result+=QString::number( validity->maximumValue() );
         result+=')';
         break;
     }

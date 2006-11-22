@@ -84,34 +84,71 @@ namespace Action
 class Validity : public QSharedData
 {
 public:
-  Validity();
+    Validity();
 
-  bool testValidity( const Cell* cell ) const;
+    bool testValidity( const Cell* cell ) const;
 
-  bool loadXML( Cell* const cell, const KoXmlElement& validityElement );
-  QDomElement saveXML( QDomDocument& doc ) const;
+    bool loadXML( Cell* const cell, const KoXmlElement& validityElement );
+    QDomElement saveXML( QDomDocument& doc ) const;
 
-  void operator=( const Validity& other ) const;
-  bool operator==( const Validity& other ) const;
-  inline bool operator!=( const Validity& other ) const { return !operator==( other ); }
+    Action::Type action() const;
+    bool allowEmptyCell() const;
+    Conditional::Type condition() const;
+    bool displayMessage() const;
+    bool displayValidationInformation() const;
+    const QString& messageInfo() const;
+    const QDate& maximumDate() const;
+    const QTime& maximumTime() const;
+    double maximumValue() const;
+    const QString& message() const;
+    const QDate& minimumDate() const;
+    const QTime& minimumTime() const;
+    double minimumValue() const;
+    Restriction::Type restriction() const;
+    const QString& title() const;
+    const QString& titleInfo() const;
+    const QStringList& validityList() const;
 
-  QString message;
-  QString title;
-  QString titleInfo;
-  QString messageInfo;
-  double valMin;
-  double valMax;
-  Conditional::Type m_cond;
-  Action::Type m_action;
-  Restriction::Type m_restriction;
-  QTime  timeMin;
-  QTime  timeMax;
-  QDate  dateMin;
-  QDate  dateMax;
-  bool displayMessage;
-  bool allowEmptyCell;
-  bool displayValidationInformation;
-  QStringList listValidity;
+    void setAction( Action::Type action );
+    void setAllowEmptyCell( bool allow );
+    void setCondition( Conditional::Type condition );
+    void setDisplayMessage( bool display );
+    void setDisplayValidationInformation( bool display );
+    void setMaximumDate( const QDate& date );
+    void setMaximumTime( const QTime& time );
+    void setMaximumValue( double value );
+    void setMessage( const QString& message );
+    void setMessageInfo( const QString& info );
+    void setMinimumDate( const QDate& date );
+    void setMinimumTime( const QTime& time );
+    void setMinimumValue( double value );
+    void setRestriction( Restriction::Type restriction );
+    void setTitle( const QString& title );
+    void setTitleInfo( const QString& info );
+    void setValidityList( const QStringList& list );
+
+    void operator=( const Validity& other ) const;
+    bool operator==( const Validity& other ) const;
+    inline bool operator!=( const Validity& other ) const { return !operator==( other ); }
+
+private:
+    QString m_message;
+    QString m_title;
+    QString m_titleInfo;
+    QString m_messageInfo;
+    double valMin;
+    double valMax;
+    Conditional::Type m_cond;
+    Action::Type m_action;
+    Restriction::Type m_restriction;
+    QTime  timeMin;
+    QTime  timeMax;
+    QDate  dateMin;
+    QDate  dateMax;
+    bool m_displayMessage;
+    bool m_allowEmptyCell;
+    bool m_displayValidationInformation;
+    QStringList m_listValidity;
 };
 
 } // namespace KSpread

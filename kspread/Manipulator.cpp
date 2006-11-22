@@ -662,7 +662,7 @@ bool ValidityManipulator::process( Cell* cell )
       }
     }
 
-    if ( m_validity->m_restriction == Restriction::None )
+    if ( m_validity->restriction() == Restriction::None )
     {
       cell->setValidity( QSharedDataPointer<Validity>() );
     }
@@ -673,7 +673,7 @@ bool ValidityManipulator::process( Cell* cell )
   }
   else // m_reverse
   {
-    if ( m_undoData[cell->column()][cell->row()]->m_restriction == Restriction::None )
+    if ( m_undoData[cell->column()][cell->row()]->restriction() == Restriction::None )
     {
       cell->setValidity( QSharedDataPointer<Validity>() );
     }
@@ -687,7 +687,7 @@ bool ValidityManipulator::process( Cell* cell )
 
 QString ValidityManipulator::name() const
 {
-  if ( m_validity->m_restriction == Restriction::None )
+  if ( m_validity->restriction() == Restriction::None )
   {
     return i18n( "Remove Validity Check" );
   }

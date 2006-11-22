@@ -40,9 +40,9 @@ Validity::Validity()
   m_cond = Conditional::None;
   m_action = Action::Stop;
   m_restriction = Restriction::None;
-  displayMessage = true;
-  allowEmptyCell = false;
-  displayValidationInformation = false;
+  m_displayMessage = true;
+  m_allowEmptyCell = false;
+  m_displayValidationInformation = false;
 }
 
 bool Validity::loadXML( Cell* const cell, const KoXmlElement& validityElement )
@@ -53,71 +53,71 @@ bool Validity::loadXML( Cell* const cell, const KoXmlElement& validityElement )
     {
         if ( param.hasAttribute( "cond" ) )
         {
-        m_cond = (Conditional::Type) param.attribute("cond").toInt( &ok );
-        if ( !ok )
-            return false;
+            m_cond = (Conditional::Type) param.attribute("cond").toInt( &ok );
+            if ( !ok )
+                return false;
         }
         if ( param.hasAttribute( "action" ) )
         {
-        m_action = (Action::Type) param.attribute("action").toInt( &ok );
-        if ( !ok )
-            return false;
+            m_action = (Action::Type) param.attribute("action").toInt( &ok );
+            if ( !ok )
+                return false;
         }
         if ( param.hasAttribute( "allow" ) )
         {
-        m_restriction = (Restriction::Type) param.attribute("allow").toInt( &ok );
-        if ( !ok )
-            return false;
+            m_restriction = (Restriction::Type) param.attribute("allow").toInt( &ok );
+            if ( !ok )
+                return false;
         }
         if ( param.hasAttribute( "valmin" ) )
         {
-        valMin = param.attribute("valmin").toDouble( &ok );
-        if ( !ok )
-            return false;
+            valMin = param.attribute("valmin").toDouble( &ok );
+            if ( !ok )
+                return false;
         }
         if ( param.hasAttribute( "valmax" ) )
         {
-        valMax = param.attribute("valmax").toDouble( &ok );
-        if ( !ok )
-            return false;
+            valMax = param.attribute("valmax").toDouble( &ok );
+            if ( !ok )
+                return false;
         }
         if ( param.hasAttribute( "displaymessage" ) )
         {
-            displayMessage = ( bool )param.attribute("displaymessage").toInt();
+            m_displayMessage = ( bool )param.attribute("displaymessage").toInt();
         }
         if ( param.hasAttribute( "displayvalidationinformation" ) )
         {
-            displayValidationInformation = ( bool )param.attribute("displayvalidationinformation").toInt();
+            m_displayValidationInformation = ( bool )param.attribute("displayvalidationinformation").toInt();
         }
         if ( param.hasAttribute( "allowemptycell" ) )
         {
-            allowEmptyCell = ( bool )param.attribute("allowemptycell").toInt();
+            m_allowEmptyCell = ( bool )param.attribute("allowemptycell").toInt();
         }
         if ( param.hasAttribute("listvalidity") )
         {
-        listValidity = param.attribute("listvalidity").split(';', QString::SkipEmptyParts );
+            m_listValidity = param.attribute("listvalidity").split(';', QString::SkipEmptyParts );
         }
     }
     KoXmlElement inputTitle = validityElement.namedItem( "inputtitle" ).toElement();
     if (!inputTitle.isNull())
     {
-        titleInfo = inputTitle.text();
+        m_titleInfo = inputTitle.text();
     }
     KoXmlElement inputMessage = validityElement.namedItem( "inputmessage" ).toElement();
     if (!inputMessage.isNull())
     {
-        messageInfo = inputMessage.text();
+        m_messageInfo = inputMessage.text();
     }
 
     KoXmlElement titleElement = validityElement.namedItem( "title" ).toElement();
     if (!titleElement.isNull())
     {
-        title = titleElement.text();
+        m_title = titleElement.text();
     }
     KoXmlElement messageElement = validityElement.namedItem( "message" ).toElement();
     if (!messageElement.isNull())
     {
-        message = messageElement.text();
+        m_message = messageElement.text();
     }
     KoXmlElement timeMinElement = validityElement.namedItem( "timemin" ).toElement();
     if ( !timeMinElement.isNull()  )
@@ -152,25 +152,25 @@ QDomElement Validity::saveXML( QDomDocument& doc ) const
     param.setAttribute("allow",(int)m_restriction);
     param.setAttribute("valmin",valMin);
     param.setAttribute("valmax",valMax);
-    param.setAttribute("displaymessage",displayMessage);
-    param.setAttribute("displayvalidationinformation",displayValidationInformation);
-    param.setAttribute("allowemptycell",allowEmptyCell);
-    if ( !listValidity.isEmpty() )
-        param.setAttribute( "listvalidity", listValidity.join( ";" ) );
+    param.setAttribute("displaymessage",m_displayMessage);
+    param.setAttribute("displayvalidationinformation",m_displayValidationInformation);
+    param.setAttribute("allowemptycell",m_allowEmptyCell);
+    if ( !m_listValidity.isEmpty() )
+        param.setAttribute( "listvalidity", m_listValidity.join( ";" ) );
     validityElement.appendChild(param);
     QDomElement titleElement = doc.createElement( "title" );
-    titleElement.appendChild( doc.createTextNode( title ) );
+    titleElement.appendChild( doc.createTextNode( m_title ) );
     validityElement.appendChild( titleElement );
     QDomElement messageElement = doc.createElement( "message" );
-    messageElement.appendChild( doc.createCDATASection( message ) );
+    messageElement.appendChild( doc.createCDATASection( m_message ) );
     validityElement.appendChild( messageElement );
 
     QDomElement inputTitle = doc.createElement( "inputtitle" );
-    inputTitle.appendChild( doc.createTextNode( titleInfo ) );
+    inputTitle.appendChild( doc.createTextNode( m_titleInfo ) );
     validityElement.appendChild( inputTitle );
 
     QDomElement inputMessage = doc.createElement( "inputmessage" );
-    inputMessage.appendChild( doc.createTextNode( messageInfo ) );
+    inputMessage.appendChild( doc.createTextNode( m_messageInfo ) );
     validityElement.appendChild( inputMessage );
 
 
@@ -178,36 +178,206 @@ QDomElement Validity::saveXML( QDomDocument& doc ) const
     QString tmp;
     if ( timeMin.isValid() )
     {
-            QDomElement timeMinElement = doc.createElement( "timemin" );
-            tmp=timeMin.toString();
-            timeMinElement.appendChild( doc.createTextNode( tmp ) );
-            validityElement.appendChild( timeMinElement );
+        QDomElement timeMinElement = doc.createElement( "timemin" );
+        tmp=timeMin.toString();
+        timeMinElement.appendChild( doc.createTextNode( tmp ) );
+        validityElement.appendChild( timeMinElement );
     }
     if ( timeMax.isValid() )
     {
-            QDomElement timeMaxElement = doc.createElement( "timemax" );
-            tmp=timeMax.toString();
-            timeMaxElement.appendChild( doc.createTextNode( tmp ) );
-            validityElement.appendChild( timeMaxElement );
+        QDomElement timeMaxElement = doc.createElement( "timemax" );
+        tmp=timeMax.toString();
+        timeMaxElement.appendChild( doc.createTextNode( tmp ) );
+        validityElement.appendChild( timeMaxElement );
     }
 
     if ( dateMin.isValid() )
     {
-            QDomElement dateMinElement = doc.createElement( "datemin" );
-            QString tmp("%1/%2/%3");
-            tmp = tmp.arg(dateMin.year()).arg(dateMin.month()).arg(dateMin.day());
-            dateMinElement.appendChild( doc.createTextNode( tmp ) );
-            validityElement.appendChild( dateMinElement );
+        QDomElement dateMinElement = doc.createElement( "datemin" );
+        QString tmp("%1/%2/%3");
+        tmp = tmp.arg(dateMin.year()).arg(dateMin.month()).arg(dateMin.day());
+        dateMinElement.appendChild( doc.createTextNode( tmp ) );
+        validityElement.appendChild( dateMinElement );
     }
     if ( dateMax.isValid() )
     {
-            QDomElement dateMaxElement = doc.createElement( "datemax" );
-            QString tmp("%1/%2/%3");
-            tmp = tmp.arg(dateMax.year()).arg(dateMax.month()).arg(dateMax.day());
-            dateMaxElement.appendChild( doc.createTextNode( tmp ) );
-            validityElement.appendChild( dateMaxElement );
+        QDomElement dateMaxElement = doc.createElement( "datemax" );
+        QString tmp("%1/%2/%3");
+        tmp = tmp.arg(dateMax.year()).arg(dateMax.month()).arg(dateMax.day());
+        dateMaxElement.appendChild( doc.createTextNode( tmp ) );
+        validityElement.appendChild( dateMaxElement );
     }
     return validityElement;
+}
+
+Action::Type Validity::action() const
+{
+    return m_action;
+}
+
+bool Validity::allowEmptyCell() const
+{
+    return m_allowEmptyCell;
+}
+
+Conditional::Type Validity::condition() const
+{
+    return m_cond;
+}
+
+bool Validity::displayMessage() const
+{
+    return m_displayMessage;
+}
+
+bool Validity::displayValidationInformation() const
+{
+    return m_displayValidationInformation;
+}
+
+const QString& Validity::messageInfo() const
+{
+    return m_messageInfo;
+}
+
+const QDate& Validity::maximumDate() const
+{
+    return dateMax;
+}
+
+const QTime& Validity::maximumTime() const
+{
+    return timeMax;
+}
+
+double Validity::maximumValue() const
+{
+    return valMax;
+}
+
+const QString& Validity::message() const
+{
+    return m_message;
+}
+
+const QDate& Validity::minimumDate() const
+{
+    return dateMin;
+}
+
+const QTime& Validity::minimumTime() const
+{
+    return timeMin;
+}
+
+double Validity::minimumValue() const
+{
+    return valMin;
+}
+
+Restriction::Type Validity::restriction() const
+{
+    return m_restriction;
+}
+
+const QString& Validity::title() const
+{
+    return m_title;
+}
+
+const QString& Validity::titleInfo() const
+{
+    return m_titleInfo;
+}
+
+const QStringList& Validity::validityList() const
+{
+    return m_listValidity;
+}
+
+void Validity::setAction( Action::Type action )
+{
+    m_action = action;
+}
+
+void Validity::setAllowEmptyCell( bool allow )
+{
+    m_allowEmptyCell = allow;
+}
+
+void Validity::setCondition( Conditional::Type condition )
+{
+    m_cond = condition;
+}
+
+void Validity::setDisplayMessage( bool display )
+{
+    m_displayMessage = display;
+}
+
+void Validity::setDisplayValidationInformation( bool display )
+{
+    m_displayValidationInformation = display;
+}
+
+void Validity::setMaximumDate( const QDate& date )
+{
+    dateMax = date;
+}
+
+void Validity::setMaximumTime( const QTime& time )
+{
+    timeMax = time;
+}
+
+void Validity::setMaximumValue( double value )
+{
+    valMax = value;
+}
+
+void Validity::setMessage( const QString& msg )
+{
+    m_message = msg;
+}
+
+void Validity::setMessageInfo( const QString& info )
+{
+    m_messageInfo = info;
+}
+
+void Validity::setMinimumDate( const QDate& date )
+{
+    dateMin = date;
+}
+
+void Validity::setMinimumTime( const QTime& time )
+{
+    timeMin = time;
+}
+
+void Validity::setMinimumValue( double value )
+{
+    valMin = value;
+}
+
+void Validity::setRestriction( Restriction::Type restriction )
+{
+    m_restriction = restriction;
+}
+
+void Validity::setTitle( const QString& t )
+{
+    m_title = t;
+}
+
+void Validity::setTitleInfo( const QString& info )
+{
+    m_titleInfo = info;
+}
+
+void Validity::setValidityList( const QStringList& list )
+{
+    m_listValidity = list;
 }
 
 bool Validity::testValidity( const Cell* cell ) const
@@ -216,7 +386,7 @@ bool Validity::testValidity( const Cell* cell ) const
     if ( m_restriction != Restriction::None )
     {
         //fixme
-        if ( allowEmptyCell && cell->text().isEmpty() )
+        if ( m_allowEmptyCell && cell->text().isEmpty() )
             return true;
 
         if ( cell->value().isNumber() &&
@@ -267,7 +437,7 @@ bool Validity::testValidity( const Cell* cell ) const
         else if ( m_restriction == Restriction::List )
         {
             //test int value
-            if ( cell->value().isString() && listValidity.contains( cell->value().asString() ) )
+            if ( cell->value().isString() && m_listValidity.contains( cell->value().asString() ) )
                 valid = true;
         }
         else if(m_restriction==Restriction::TextLength)
@@ -390,21 +560,21 @@ bool Validity::testValidity( const Cell* cell ) const
         valid= true;
     }
 
-    if ( !valid && displayMessage )
+    if ( !valid && m_displayMessage )
     {
         switch (m_action )
         {
           case Action::Stop:
-            KMessageBox::error((QWidget*)0, message,
-                               title);
+            KMessageBox::error((QWidget*)0, m_message,
+                               m_title);
             break;
           case Action::Warning:
-            KMessageBox::warningYesNo((QWidget*)0, message,
-                                      title);
+            KMessageBox::warningYesNo((QWidget*)0, m_message,
+                                      m_title);
             break;
           case Action::Information:
-            KMessageBox::information((QWidget*)0, message,
-                                     title);
+            KMessageBox::information((QWidget*)0, m_message,
+                                     m_title);
             break;
         }
     }
@@ -419,10 +589,10 @@ void Validity::operator=( const Validity& other ) const
 
 bool Validity::operator==( const Validity& other ) const
 {
-  if ( message == other.message &&
-       title == other.title &&
-       titleInfo == other.titleInfo &&
-       messageInfo == other.messageInfo &&
+  if ( m_message == other.m_message &&
+       m_title == other.m_title &&
+       m_titleInfo == other.m_titleInfo &&
+       m_messageInfo == other.m_messageInfo &&
        valMin == other.valMin &&
        valMax == other.valMax &&
        m_cond == other.m_cond &&
@@ -432,10 +602,10 @@ bool Validity::operator==( const Validity& other ) const
        timeMax == other.timeMax &&
        dateMin == other.dateMin &&
        dateMax == other.dateMax &&
-       displayMessage == other.displayMessage &&
-       allowEmptyCell == other.allowEmptyCell &&
-       displayValidationInformation == other.displayValidationInformation &&
-       listValidity == other.listValidity )
+       m_displayMessage == other.m_displayMessage &&
+       m_allowEmptyCell == other.m_allowEmptyCell &&
+       m_displayValidationInformation == other.m_displayValidationInformation &&
+       m_listValidity == other.m_listValidity )
   {
     return true;
   }
