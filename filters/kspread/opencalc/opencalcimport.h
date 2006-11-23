@@ -103,11 +103,11 @@ class OpenCalcImport : public KoFilter
                         QString name );
   void checkForNamedAreas( QString & formula ) const;
   void loadOasisCellValidation( const QDomElement&body );
-  void loadOasisValidation( KSpread::Validity* val, const QString& validationName );
-  void loadOasisValidationCondition( KSpread::Validity* val,QString &valExpression );
+  void loadOasisValidation( KSpread::Validity val, const QString& validationName );
+  void loadOasisValidationCondition( KSpread::Validity val,QString &valExpression );
   void loadOasisAreaName( const QDomElement&body );
   void loadOasisMasterLayoutPage( KSpread::Sheet * table,KoStyleStack &styleStack );
-  void loadOasisValidationValue( KSpread::Validity* val, const QStringList &listVal );
+  void loadOasisValidationValue( KSpread::Validity val, const QStringList &listVal );
     QString translatePar( QString & par ) const;
     void loadCondition( KSpread::Cell*cell,const QDomElement &property );
     void loadOasisCondition(KSpread::Cell*cell,const QDomElement &property );

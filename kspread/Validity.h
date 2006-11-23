@@ -36,7 +36,7 @@
 
 // Qt
 #include <QDate>
-#include <QSharedData>
+#include <QSharedDataPointer>
 #include <QStringList>
 #include <QTime>
 
@@ -49,49 +49,39 @@
 namespace KSpread
 {
 
-/**
- * This namespace collects enumerations related to
- * cell content restrictions.
- */
-namespace Restriction
-{
-  /**
-   * The type of the restriction
-   */
-  enum Type
-  {
-    None /** No restriction */,
-    Number /** Restrict to numbers */,
-    Text /** Restrict to texts */,
-    Time /** Restrict to times */,
-    Date /** Restrict to dates */,
-    Integer /** Restrict to integers  */,
-    TextLength /** Restrict text length */,
-    List /** Restrict to lists */
-  };
-} // namespace Restriction
-
-namespace Action
-{
-  enum Type
-  {
-    Stop,
-    Warning,
-    Information
-  };
-}
-
-class Validity : public QSharedData
+class Validity
 {
 public:
+    /// The action invoked, if the validity check fails.
+    enum Action
+    {
+        Stop,       ///< Stop
+        Warning,    ///< Warn
+        Information ///< Inform
+    };
+    /// The type of the restriction.
+    enum Restriction
+    {
+        None,       ///< No restriction
+        Number,     ///< Restrict to numbers
+        Text,       ///< Restrict to texts
+        Time,       ///< Restrict to times
+        Date,       ///< Restrict to dates
+        Integer,    ///< Restrict to integers
+        TextLength, ///< Restrict text length
+        List        ///< Restrict to lists
+    };
+
     Validity();
+
+    bool isEmpty() const;
 
     bool testValidity( const Cell* cell ) const;
 
     bool loadXML( Cell* const cell, const KoXmlElement& validityElement );
     QDomElement saveXML( QDomDocument& doc ) const;
 
-    Action::Type action() const;
+    Action action() const;
     bool allowEmptyCell() const;
     Conditional::Type condition() const;
     bool displayMessage() const;
@@ -104,12 +94,12 @@ public:
     const QDate& minimumDate() const;
     const QTime& minimumTime() const;
     double minimumValue() const;
-    Restriction::Type restriction() const;
+    Restriction restriction() const;
     const QString& title() const;
     const QString& titleInfo() const;
     const QStringList& validityList() const;
 
-    void setAction( Action::Type action );
+    void setAction( Action action );
     void setAllowEmptyCell( bool allow );
     void setCondition( Conditional::Type condition );
     void setDisplayMessage( bool display );
@@ -122,33 +112,39 @@ public:
     void setMinimumDate( const QDate& date );
     void setMinimumTime( const QTime& time );
     void setMinimumValue( double value );
-    void setRestriction( Restriction::Type restriction );
+    void setRestriction( Restriction restriction );
     void setTitle( const QString& title );
     void setTitleInfo( const QString& info );
     void setValidityList( const QStringList& list );
 
-    void operator=( const Validity& other ) const;
+    /// \note fake implementation to make QMap happy
+    bool operator<( const Validity& ) const { return true; }
     bool operator==( const Validity& other ) const;
     inline bool operator!=( const Validity& other ) const { return !operator==( other ); }
 
 private:
-    QString m_message;
-    QString m_title;
-    QString m_titleInfo;
-    QString m_messageInfo;
-    double valMin;
-    double valMax;
-    Conditional::Type m_cond;
-    Action::Type m_action;
-    Restriction::Type m_restriction;
-    QTime  timeMin;
-    QTime  timeMax;
-    QDate  dateMin;
-    QDate  dateMax;
-    bool m_displayMessage;
-    bool m_allowEmptyCell;
-    bool m_displayValidationInformation;
-    QStringList m_listValidity;
+    class Private : public QSharedData
+    {
+    public:
+        QString message;
+        QString title;
+        QString titleInfo;
+        QString messageInfo;
+        double valMin;
+        double valMax;
+        Conditional::Type cond;
+        Action action;
+        Restriction restriction;
+        QTime  timeMin;
+        QTime  timeMax;
+        QDate  dateMin;
+        QDate  dateMax;
+        bool displayMessage;
+        bool allowEmptyCell;
+        bool displayValidationInformation;
+        QStringList listValidity;
+    };
+    QSharedDataPointer<Private> d;
 };
 
 } // namespace KSpread

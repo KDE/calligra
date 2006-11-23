@@ -5862,7 +5862,7 @@ void View::clearValiditySelection()
 
   ValidityManipulator* manipulator = new ValidityManipulator();
   manipulator->setSheet( d->activeSheet );
-  manipulator->setValidity( QSharedDataPointer<Validity>() ); // empty object removes validity
+  manipulator->setValidity( Validity() ); // empty object removes validity
   manipulator->add( *selectionInfo() );
   manipulator->execute();
 }

@@ -641,12 +641,12 @@ ConditionsStorage* Sheet::conditionsStorage() const
     return d->conditionsStorage;
 }
 
-QSharedDataPointer<KSpread::Validity> Sheet::validity( int column, int row ) const
+KSpread::Validity Sheet::validity( int column, int row ) const
 {
     return d->validityStorage->at( QPoint( column, row ) );
 }
 
-void Sheet::setValidity( const Region& region, QSharedDataPointer<KSpread::Validity> validity ) const
+void Sheet::setValidity( const Region& region, KSpread::Validity validity ) const
 {
     d->validityStorage->insert( region, validity );
 }
@@ -1742,7 +1742,7 @@ bool Sheet::cellIsEmpty (Cell *c, TestType _type, int col, int row)
         return false;
       break;
     case Validity:
-      if ( c->validity( col, row ) )
+      if ( !c->validity( col, row ).isEmpty() )
         return false;
       break;
     case Comment:

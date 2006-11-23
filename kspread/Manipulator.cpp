@@ -656,15 +656,16 @@ bool ValidityManipulator::process( Cell* cell )
     // create undo
     if ( m_firstrun )
     {
-      if ( QSharedDataPointer<Validity> validity = cell->validity() )
+      Validity validity = cell->validity();
+      if ( !validity.isEmpty() )
       {
         m_undoData[cell->column()][cell->row()] = validity;
       }
     }
 
-    if ( m_validity->restriction() == Restriction::None )
+    if ( m_validity.isEmpty() )
     {
-      cell->setValidity( QSharedDataPointer<Validity>() );
+      cell->setValidity( Validity() );
     }
     else
     {
@@ -673,9 +674,9 @@ bool ValidityManipulator::process( Cell* cell )
   }
   else // m_reverse
   {
-    if ( m_undoData[cell->column()][cell->row()]->restriction() == Restriction::None )
+    if ( m_undoData[cell->column()][cell->row()].isEmpty() )
     {
-      cell->setValidity( QSharedDataPointer<Validity>() );
+      cell->setValidity( Validity() );
     }
     else
     {
@@ -687,7 +688,7 @@ bool ValidityManipulator::process( Cell* cell )
 
 QString ValidityManipulator::name() const
 {
-  if ( m_validity->restriction() == Restriction::None )
+  if ( m_validity.isEmpty() )
   {
     return i18n( "Remove Validity Check" );
   }

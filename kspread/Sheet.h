@@ -90,7 +90,7 @@ class SheetAdaptor;
 
 typedef Storage<QString> CommentStorage;
 typedef Storage<QSharedDataPointer<Conditions> > ConditionsStorage;
-typedef Storage<QSharedDataPointer<Validity> > ValidityStorage;
+typedef Storage<Validity> ValidityStorage;
 
 /********************************************************************
  *
@@ -805,8 +805,8 @@ public:
     /**
      * \return the validity checks associated with the Cell at \p column , \p row .
      */
-    QSharedDataPointer<KSpread::Validity> validity( int column, int row ) const;
-    void setValidity( const Region& region, QSharedDataPointer<KSpread::Validity> validity ) const;
+    KSpread::Validity validity( int column, int row ) const;
+    void setValidity( const Region& region, KSpread::Validity validity ) const;
     ValidityStorage* validityStorage() const;
 
     /** retrieve a value */

@@ -430,11 +430,11 @@ void Canvas::validateSelection()
         int col = selectionInfo()->marker().x();
         int row = selectionInfo()->marker().y();
         Cell * cell = sheet->cellAt( col,row );
-        QSharedDataPointer<Validity> validity = cell->validity( col, row );
-        if ( cell && validity && validity->displayValidationInformation() )
+        Validity validity = cell->validity( col, row );
+        if ( cell && validity.displayValidationInformation() )
         {
-            QString title = validity->titleInfo();
-            QString message = validity->messageInfo();
+            QString title = validity.titleInfo();
+            QString message = validity.messageInfo();
             if ( title.isEmpty() && message.isEmpty() )
                 return;
 

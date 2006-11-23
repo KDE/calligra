@@ -118,13 +118,13 @@ void GenValidationStyle::initVal( Validity *validity )
 
         switch( validity->action() )
         {
-          case Action::Warning:
+          case Validity::Warning:
             messageType = "warning";
             break;
-          case Action::Information:
+          case Validity::Information:
             messageType = "information";
             break;
-          case Action::Stop:
+          case Validity::Stop:
             messageType = "stop";
             break;
         }
@@ -140,27 +140,27 @@ QString GenValidationStyle::createValidationCondition( Validity* validity )
     QString result;
     switch( validity->restriction() )
     {
-    case Restriction::None:
+    case Validity::None:
         //nothing
         break;
-    case Restriction::Text:
+    case Validity::Text:
         //doesn't exist into oo spec
         result = "cell-content-is-text()";
         break;
-    case Restriction::Time:
+    case Validity::Time:
         result = createTimeValidationCondition( validity );
         break;
-    case Restriction::Date:
+    case Validity::Date:
         result = createDateValidationCondition( validity );
         break;
-    case Restriction::Integer:
-    case Restriction::Number:
+    case Validity::Integer:
+    case Validity::Number:
         result = createNumberValidationCondition( validity );
         break;
-    case Restriction::TextLength:
+    case Validity::TextLength:
         result = createTextValidationCondition( validity );
          break;
-    case Restriction::List:
+    case Validity::List:
         result = createListValidationCondition( validity );
         break;
     }
@@ -178,9 +178,9 @@ QString GenValidationStyle::createListValidationCondition( Validity* validity )
 QString GenValidationStyle::createNumberValidationCondition( Validity* validity )
 {
     QString result;
-    if ( validity->restriction() == Restriction::Number )
+    if ( validity->restriction() == Validity::Number )
         result = "oooc:cell-content-is-whole-number() and ";
-    else if ( validity->restriction() == Restriction::Integer )
+    else if ( validity->restriction() == Validity::Integer )
         result = "oooc:cell-content-is-decimal-number() and ";
     switch( validity->condition() )
     {

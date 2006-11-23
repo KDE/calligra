@@ -212,9 +212,9 @@ public:
     /**
      * \return the validity checks associated with this cell
      */
-    QSharedDataPointer<Validity> validity( int col = 0, int row = 0 ) const;
+    Validity validity( int col = 0, int row = 0 ) const;
 
-    void setValidity( QSharedDataPointer<Validity> validity, int col = 0, int row = 0 ) const;
+    void setValidity( Validity validity, int col = 0, int row = 0 ) const;
 
     /**
      * Returns the value that this cell holds. It could be from the user
@@ -937,7 +937,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisValidationCondition( QString &valExpression );
+    void loadOasisValidationCondition( Validity validity, QString &valExpression );
 
     /**
      * \ingroup OpenDocument
@@ -989,7 +989,7 @@ private:
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisValidationValue( const QStringList &listVal );
+    void loadOasisValidationValue( Validity validity, const QStringList &listVal );
 
     /**
      * \ingroup OpenDocument

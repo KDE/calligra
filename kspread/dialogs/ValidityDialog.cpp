@@ -445,54 +445,54 @@ void DlgValidity::changeIndexCond(int _index)
 
 void DlgValidity::init()
 {
-  QSharedDataPointer<Validity> tmpValidity = m_pView->activeSheet()->validity( marker.left(), marker.top() );
-  if ( !!tmpValidity )
+  Validity validity = m_pView->activeSheet()->validity( marker.left(), marker.top() );
+  if ( !validity.isEmpty() )
   {
-    message->setPlainText(tmpValidity->message());
-    title->setText(tmpValidity->title());
+    message->setPlainText(validity.message());
+    title->setText(validity.title());
     QString tmp;
-    switch( tmpValidity->restriction())
+    switch( validity.restriction())
     {
-     case Restriction::None:
+     case Validity::None:
       chooseType->setCurrentIndex(0);
       break;
-     case Restriction::Number:
+     case Validity::Number:
       chooseType->setCurrentIndex(1);
-      if(tmpValidity->condition() >=5 )
-        val_max->setText(tmp.setNum(tmpValidity->maximumValue()));
-      val_min->setText(tmp.setNum(tmpValidity->minimumValue()));
+      if(validity.condition() >=5 )
+        val_max->setText(tmp.setNum(validity.maximumValue()));
+      val_min->setText(tmp.setNum(validity.minimumValue()));
       break;
-     case Restriction::Integer:
+     case Validity::Integer:
       chooseType->setCurrentIndex(2);
-      if(tmpValidity->condition() >=5 )
-        val_max->setText(tmp.setNum(tmpValidity->maximumValue()));
-      val_min->setText(tmp.setNum(tmpValidity->minimumValue()));
+      if(validity.condition() >=5 )
+        val_max->setText(tmp.setNum(validity.maximumValue()));
+      val_min->setText(tmp.setNum(validity.minimumValue()));
       break;
-     case Restriction::TextLength:
+     case Validity::TextLength:
       chooseType->setCurrentIndex(6);
-      if(tmpValidity->condition() >=5 )
-        val_max->setText(tmp.setNum(tmpValidity->maximumValue()));
-      val_min->setText(tmp.setNum(tmpValidity->minimumValue()));
+      if(validity.condition() >=5 )
+        val_max->setText(tmp.setNum(validity.maximumValue()));
+      val_min->setText(tmp.setNum(validity.minimumValue()));
       break;
-     case Restriction::Text:
+     case Validity::Text:
       chooseType->setCurrentIndex(3);
       break;
-     case Restriction::Date:
+     case Validity::Date:
       chooseType->setCurrentIndex(4);
-      val_min->setText(m_pView->doc()->locale()->formatDate(tmpValidity->minimumDate(),true));
-      if(tmpValidity->condition() >=5 )
-        val_max->setText(m_pView->doc()->locale()->formatDate(tmpValidity->maximumDate(),true));
+      val_min->setText(m_pView->doc()->locale()->formatDate(validity.minimumDate(),true));
+      if(validity.condition() >=5 )
+        val_max->setText(m_pView->doc()->locale()->formatDate(validity.maximumDate(),true));
       break;
-     case Restriction::Time:
+     case Validity::Time:
       chooseType->setCurrentIndex(5);
-      val_min->setText(m_pView->doc()->locale()->formatTime(tmpValidity->minimumTime(),true));
-      if(tmpValidity->condition() >=5 )
-        val_max->setText(m_pView->doc()->locale()->formatTime(tmpValidity->maximumTime(),true));
+      val_min->setText(m_pView->doc()->locale()->formatTime(validity.minimumTime(),true));
+      if(validity.condition() >=5 )
+        val_max->setText(m_pView->doc()->locale()->formatTime(validity.maximumTime(),true));
       break;
-     case Restriction::List:
+     case Validity::List:
      {
          chooseType->setCurrentIndex(7);
-         QStringList lst =tmpValidity->validityList();
+         QStringList lst =validity.validityList();
          QString tmp;
          for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it ) {
              tmp +=( *it ) + '\n';
@@ -504,22 +504,22 @@ void DlgValidity::init()
       chooseType->setCurrentIndex(0);
       break;
     }
-    switch (tmpValidity->action())
+    switch (validity.action())
     {
-      case Action::Stop:
+      case Validity::Stop:
       chooseAction->setCurrentIndex(0);
       break;
-      case Action::Warning:
+      case Validity::Warning:
       chooseAction->setCurrentIndex(1);
       break;
-      case Action::Information:
+      case Validity::Information:
       chooseAction->setCurrentIndex(2);
       break;
      default :
       chooseAction->setCurrentIndex(0);
       break;
     }
-    switch ( tmpValidity->condition() )
+    switch ( validity.condition() )
     {
       case Conditional::Equal:
       choose->setCurrentIndex(0);
@@ -549,11 +549,11 @@ void DlgValidity::init()
       choose->setCurrentIndex(0);
       break;
     }
-    displayMessage->setChecked( tmpValidity->displayMessage() );
-    allowEmptyCell->setChecked( tmpValidity->allowEmptyCell() );
-    titleHelp->setText( tmpValidity->titleInfo() );
-    messageHelp->setPlainText( tmpValidity->messageInfo() );
-    displayHelp->setChecked( tmpValidity->displayValidationInformation() );
+    displayMessage->setChecked( validity.displayMessage() );
+    allowEmptyCell->setChecked( validity.allowEmptyCell() );
+    titleHelp->setText( validity.titleInfo() );
+    messageHelp->setPlainText( validity.messageInfo() );
+    displayHelp->setChecked( validity.displayValidationInformation() );
   }
   changeIndexType(chooseType->currentIndex()) ;
   changeIndexCond(choose->currentIndex()) ;
@@ -580,7 +580,7 @@ void DlgValidity::clearAllPressed()
 
 void DlgValidity::OkPressed()
 {
-    QSharedDataPointer<Validity> validity( new Validity() );
+  Validity validity;
   if( chooseType->currentIndex()==1)
   {
     bool ok;
@@ -654,45 +654,45 @@ void DlgValidity::OkPressed()
 
   if( chooseType->currentIndex()==0)
   {//no validity
-    validity->setRestriction( Restriction::None );
-    validity->setAction( Action::Stop );
-    validity->setCondition( Conditional::Equal );
-    validity->setMessage( message->toPlainText() );
-    validity->setTitle( title->text() );
-    validity->setMinimumValue( 0 );
-    validity->setMaximumValue( 0 );
-    validity->setMinimumTime( QTime(0,0,0) );
-    validity->setMaximumTime( QTime(0,0,0) );
-    validity->setMinimumDate( QDate(0,0,0) );
-    validity->setMaximumDate( QDate(0,0,0) );
+    validity.setRestriction( Validity::None );
+    validity.setAction( Validity::Stop );
+    validity.setCondition( Conditional::Equal );
+    validity.setMessage( message->toPlainText() );
+    validity.setTitle( title->text() );
+    validity.setMinimumValue( 0 );
+    validity.setMaximumValue( 0 );
+    validity.setMinimumTime( QTime(0,0,0) );
+    validity.setMaximumTime( QTime(0,0,0) );
+    validity.setMinimumDate( QDate(0,0,0) );
+    validity.setMaximumDate( QDate(0,0,0) );
   }
   else
   {
     switch( chooseType->currentIndex())
     {
      case 0:
-      validity->setRestriction( Restriction::None );
+      validity.setRestriction( Validity::None );
       break;
      case 1:
-      validity->setRestriction( Restriction::Number );
+      validity.setRestriction( Validity::Number );
       break;
      case 2:
-      validity->setRestriction( Restriction::Integer );
+      validity.setRestriction( Validity::Integer );
       break;
      case 3:
-      validity->setRestriction( Restriction::Text );
+      validity.setRestriction( Validity::Text );
       break;
      case 4:
-      validity->setRestriction( Restriction::Date );
+      validity.setRestriction( Validity::Date );
       break;
      case 5:
-      validity->setRestriction( Restriction::Time );
+      validity.setRestriction( Validity::Time );
       break;
      case 6:
-      validity->setRestriction( Restriction::TextLength );
+      validity.setRestriction( Validity::TextLength );
       break;
      case 7:
-      validity->setRestriction( Restriction::List );
+      validity.setRestriction( Validity::List );
       break;
 
      default :
@@ -701,13 +701,13 @@ void DlgValidity::OkPressed()
     switch (chooseAction->currentIndex())
     {
      case 0:
-       validity->setAction( Action::Stop );
+       validity.setAction( Validity::Stop );
       break;
      case 1:
-       validity->setAction( Action::Warning );
+       validity.setAction( Validity::Warning );
       break;
      case 2:
-       validity->setAction( Action::Information );
+       validity.setAction( Validity::Information );
       break;
      default :
       break;
@@ -715,82 +715,82 @@ void DlgValidity::OkPressed()
     switch ( choose->currentIndex())
     {
      case 0:
-       validity->setCondition( Conditional::Equal );
+       validity.setCondition( Conditional::Equal );
       break;
      case 1:
-       validity->setCondition( Conditional::Superior );
+       validity.setCondition( Conditional::Superior );
       break;
      case 2:
-       validity->setCondition( Conditional::Inferior );
+       validity.setCondition( Conditional::Inferior );
       break;
      case 3:
-       validity->setCondition( Conditional::SuperiorEqual );
+       validity.setCondition( Conditional::SuperiorEqual );
       break;
      case 4:
-       validity->setCondition( Conditional::InferiorEqual );
+       validity.setCondition( Conditional::InferiorEqual );
       break;
      case 5:
-       validity->setCondition( Conditional::Between );
+       validity.setCondition( Conditional::Between );
       break;
      case 6:
-       validity->setCondition( Conditional::Different );
+       validity.setCondition( Conditional::Different );
       break;
      case 7:
-       validity->setCondition( Conditional::DifferentTo );
+       validity.setCondition( Conditional::DifferentTo );
       break;
      default :
       break;
     }
-    validity->setMessage( message->toPlainText() );
-    validity->setTitle( title->text() );
-    validity->setMinimumValue( 0 );
-    validity->setMaximumValue( 0 );
-    validity->setMinimumTime( QTime(0,0,0) );
-    validity->setMaximumTime( QTime(0,0,0) );
-    validity->setMinimumDate( QDate(0,0,0) );
-    validity->setMaximumDate( QDate(0,0,0) );
+    validity.setMessage( message->toPlainText() );
+    validity.setTitle( title->text() );
+    validity.setMinimumValue( 0 );
+    validity.setMaximumValue( 0 );
+    validity.setMinimumTime( QTime(0,0,0) );
+    validity.setMaximumTime( QTime(0,0,0) );
+    validity.setMinimumDate( QDate(0,0,0) );
+    validity.setMaximumDate( QDate(0,0,0) );
 
     if( chooseType->currentIndex()==1)
     {
       if(choose->currentIndex()  <5)
       {
-        validity->setMinimumValue( val_min->text().toDouble() );
+        validity.setMinimumValue( val_min->text().toDouble() );
       }
       else
       {
-        validity->setMinimumValue( qMin(val_min->text().toDouble(),val_max->text().toDouble()) );
-        validity->setMaximumValue( qMax(val_max->text().toDouble(),val_min->text().toDouble()) );
+        validity.setMinimumValue( qMin(val_min->text().toDouble(),val_max->text().toDouble()) );
+        validity.setMaximumValue( qMax(val_max->text().toDouble(),val_min->text().toDouble()) );
       }
     }
     else if( chooseType->currentIndex()==2 || chooseType->currentIndex()==6)
     {
       if(choose->currentIndex()  <5)
       {
-        validity->setMinimumValue( val_min->text().toInt() );
+        validity.setMinimumValue( val_min->text().toInt() );
       }
       else
       {
-        validity->setMinimumValue( qMin(val_min->text().toInt(),val_max->text().toInt()) );
-        validity->setMaximumValue( qMax(val_max->text().toInt(),val_min->text().toInt()) );
+        validity.setMinimumValue( qMin(val_min->text().toInt(),val_max->text().toInt()) );
+        validity.setMaximumValue( qMax(val_max->text().toInt(),val_min->text().toInt()) );
       }
     }
     else  if(  chooseType->currentIndex()==4)
     {
       if(choose->currentIndex()  <5)
       {
-        validity->setMinimumDate( m_pView->doc()->locale()->readDate(val_min->text()) );
+        validity.setMinimumDate( m_pView->doc()->locale()->readDate(val_min->text()) );
       }
       else
       {
         if(m_pView->doc()->locale()->readDate(val_min->text())<m_pView->doc()->locale()->readDate(val_max->text()))
         {
-          validity->setMinimumDate( m_pView->doc()->locale()->readDate(val_min->text()) );
-          validity->setMaximumDate( m_pView->doc()->locale()->readDate(val_max->text()) );
+          validity.setMinimumDate( m_pView->doc()->locale()->readDate(val_min->text()) );
+          validity.setMaximumDate( m_pView->doc()->locale()->readDate(val_max->text()) );
         }
         else
         {
-          validity->setMinimumDate( m_pView->doc()->locale()->readDate(val_max->text()) );
-          validity->setMaximumDate( m_pView->doc()->locale()->readDate(val_min->text()) );
+          validity.setMinimumDate( m_pView->doc()->locale()->readDate(val_max->text()) );
+          validity.setMaximumDate( m_pView->doc()->locale()->readDate(val_min->text()) );
         }
       }
     }
@@ -798,32 +798,32 @@ void DlgValidity::OkPressed()
     {
       if(choose->currentIndex()  <5)
       {
-        validity->setMinimumTime( m_pView->doc()->locale()->readTime(val_min->text()) );
+        validity.setMinimumTime( m_pView->doc()->locale()->readTime(val_min->text()) );
       }
       else
       {
         if(m_pView->doc()->locale()->readTime(val_min->text())<m_pView->doc()->locale()->readTime(val_max->text()))
         {
-          validity->setMaximumTime( m_pView->doc()->locale()->readTime(val_max->text()) );
-          validity->setMinimumTime( m_pView->doc()->locale()->readTime(val_min->text()) );
+          validity.setMaximumTime( m_pView->doc()->locale()->readTime(val_max->text()) );
+          validity.setMinimumTime( m_pView->doc()->locale()->readTime(val_min->text()) );
         }
         else
         {
-          validity->setMaximumTime( m_pView->doc()->locale()->readTime(val_min->text()) );
-          validity->setMinimumTime( m_pView->doc()->locale()->readTime(val_max->text()) );
+          validity.setMaximumTime( m_pView->doc()->locale()->readTime(val_min->text()) );
+          validity.setMinimumTime( m_pView->doc()->locale()->readTime(val_max->text()) );
         }
       }
     }
     else if ( chooseType->currentIndex()==7 )
     {
-      validity->setValidityList( validityList->toPlainText().split( '\n', QString::SkipEmptyParts ) );
+      validity.setValidityList( validityList->toPlainText().split( '\n', QString::SkipEmptyParts ) );
     }
   }
-  validity->setDisplayMessage( displayMessage->isChecked() );
-  validity->setAllowEmptyCell( allowEmptyCell->isChecked() );
-  validity->setDisplayValidationInformation( displayHelp->isChecked() );
-  validity->setMessageInfo( messageHelp->toPlainText() );
-  validity->setTitleInfo( titleHelp->text() );
+  validity.setDisplayMessage( displayMessage->isChecked() );
+  validity.setAllowEmptyCell( allowEmptyCell->isChecked() );
+  validity.setDisplayValidationInformation( displayHelp->isChecked() );
+  validity.setMessageInfo( messageHelp->toPlainText() );
+  validity.setTitleInfo( titleHelp->text() );
 
   ValidityManipulator* manipulator = new ValidityManipulator();
   manipulator->setSheet( m_pView->activeSheet() );
