@@ -36,7 +36,9 @@
 namespace KPlato
 {
 
-ResourceGroup::ResourceGroup(Project *project) {
+ResourceGroup::ResourceGroup(Project *project) 
+    : QObject() 
+{
     m_project = project;
     m_type = Type_Work;
     generateId();
@@ -52,6 +54,36 @@ ResourceGroup::~ResourceGroup() {
         delete m_resources.takeFirst();
     }
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+}
+
+void ResourceGroup::changed() {
+    if ( m_project ) {
+        m_project->changed( this );
+    }
+}
+
+void ResourceGroup::resourceToBeAdded( Resource *res ) {
+    if ( m_project ) {
+        m_project->sendResourceToBeAdded( this, res );
+    }
+}
+
+void ResourceGroup::resourceAdded( Resource *res ) {
+    if ( m_project ) {
+        m_project->sendResourceAdded( this, res );
+    }
+}
+
+void ResourceGroup::resourceToBeRemoved( Resource *res ) {
+    if ( m_project ) {
+        m_project->sendResourceToBeRemoved( this, res );
+    }
+}
+
+void ResourceGroup::resourceRemoved( Resource *res ) {
+    if ( m_project ) {
+        m_project->sendResourceRemoved( this, res );
+    }
 }
 
 bool ResourceGroup::setId(QString id) {
@@ -94,33 +126,56 @@ void ResourceGroup::generateId() {
     m_id = QString();
 }
 
-void ResourceGroup::addResource(Resource* resource, Risk*) {
-    m_resources.append(resource);
+void ResourceGroup::setName( QString n )
+{
+    m_name = n;
+    changed();
 }
 
-Resource* ResourceGroup::getResource(int) {
-    return 0L;
+void ResourceGroup::setType( Type type )
+{
+     m_type = type;
+     changed();
+}
+
+QString ResourceGroup::typeToString( bool trans ) const {
+    return typeToStringList( trans ).at( m_type );
+}
+
+QStringList ResourceGroup::typeToStringList( bool trans ) {
+    // keep theese in the same order as the enum!
+    return QStringList() 
+            << (trans ? i18n("Work") : QString("Work"))
+            << (trans ? i18n("Material") : QString("Material"));
+}
+
+
+void ResourceGroup::addResource(Resource* resource, Risk*) {
+    resourceToBeAdded( resource );
+    resource->setParent( this );
+    m_resources.append( resource );
+    resourceAdded( resource );
+}
+
+int ResourceGroup::indexOf( const Resource *resource ) const
+{
+    return m_resources.indexOf( const_cast<Resource*>( resource ) ); //???
 }
 
 Risk* ResourceGroup::getRisk(int) {
     return 0L;
 }
 
-void ResourceGroup::deleteResource(Resource *resource) {
-    int i = m_resources.indexOf(resource);
-    if (i != -1)
-        m_resources.removeAt(i);
-    delete resource;
-}
-
 Resource *ResourceGroup::takeResource(Resource *resource) {
     int i = m_resources.indexOf(resource);
-    if (i != -1)
-        return m_resources.takeAt(i);
+    if (i != -1) {
+        resourceToBeRemoved( resource );
+        Resource *r = m_resources.takeAt(i);
+        r->setParent( 0 );
+        resourceRemoved( r );
+        return r;
+    }
     return 0;
-}
-
-void ResourceGroup::deleteResource(int) {
 }
 
 void ResourceGroup::addRequiredResource(ResourceGroup*) {
@@ -140,16 +195,17 @@ bool ResourceGroup::load(QDomElement &element) {
 
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
-    	if (list.item(i).isElement()) {
-	        QDomElement e = list.item(i).toElement();
-    	    if (e.tagName() == "resource") {
-	    	    // Load the resource
-		        Resource *child = new Resource(m_project);
-    		    if (child->load(e))
-	    	        addResource(child, 0);
-		        else
-		            // TODO: Complain about this
-    		        delete child;
+        if (list.item(i).isElement()) {
+            QDomElement e = list.item(i).toElement();
+            if (e.tagName() == "resource") {
+               // Load the resource
+                Resource *child = new Resource(m_project);
+                if (child->load(e)) {
+                    addResource(child, 0);
+                } else {
+                    // TODO: Complain about this
+                    delete child;
+                }
             }
         }
     }
@@ -206,7 +262,12 @@ Appointment ResourceGroup::appointmentIntervals() const {
     return a;
 }
 
-Resource::Resource(Project *project) : m_project(project), m_schedules(), m_workingHours() {
+Resource::Resource(Project *project) 
+    : QObject(),
+    m_project(project), 
+    m_schedules(), 
+    m_workingHours() 
+{
     m_type = Type_Work;
     m_units = 100; // %
 
@@ -222,7 +283,8 @@ Resource::Resource(Project *project) : m_project(project), m_schedules(), m_work
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
-Resource::Resource(Resource *resource) { 
+Resource::Resource(Resource *resource)
+    : QObject() { 
     //kDebug()<<k_funcinfo<<"("<<this<<") from ("<<resource<<")"<<endl;
     copy(resource); 
 }
@@ -284,22 +346,6 @@ void Resource::generateId() {
     m_id = QString();
 }
 
-void Resource::setType(const QString &type) {
-    if (type == "Work")
-        m_type = Type_Work;
-    else if (type == "Material")
-        m_type = Type_Material;
-}
-
-QString Resource::typeToString() const {
-    if (m_type == Type_Work)
-        return QString("Work");
-    else if (m_type == Type_Material)
-        return QString("Material");
-
-    return QString();
-}
-
 void Resource::copy(Resource *resource) {
     m_project = resource->project();
     //m_appointments = resource->appointments(); // Note
@@ -318,9 +364,60 @@ void Resource::copy(Resource *resource) {
 
     cost.normalRate = resource->normalRate();
     cost.overtimeRate = resource->overtimeRate();
-    cost.fixed = resource->fixedCost();
     
     m_calendar = resource->m_calendar;
+}
+
+void Resource::changed()
+{
+    if ( m_project ) {
+        m_project->changed( this );
+    }
+}
+
+void Resource::setType( Type type )
+{
+    m_type = type;
+    changed();
+}
+
+void Resource::setType(const QString &type)
+{
+    if (type == "Work")
+        setType( Type_Work );
+    else if (type == "Material")
+        setType( Type_Material );
+    else
+        setType( Type_Work );
+}
+
+QString Resource::typeToString( bool trans ) const {
+    return typeToStringList( trans ).at( m_type );
+}
+
+QStringList Resource::typeToStringList( bool trans ) {
+    // keep theese in the same order as the enum!
+    return QStringList() 
+            << (trans ? i18n("Work") : QString("Work"))
+            << (trans ? i18n("Material") : QString("Material"));
+}
+
+void Resource::setName( const QString n )
+{
+    m_name = n;
+    changed();
+}
+
+void Resource::setInitials( const QString initials )
+{
+    m_initials = initials;
+    changed();
+}
+
+void Resource::setEmail( const QString email )
+{
+    m_email = email;
+    changed();
 }
 
 void Resource::addWorkingHour(QTime from, QTime until) {
@@ -1249,3 +1346,5 @@ void ResourceRequestCollection::printDebug(QString indent)
 #endif
 
 }  //KPlato namespace
+
+#include "kptresource.moc"

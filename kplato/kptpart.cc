@@ -374,6 +374,7 @@ DocumentChild *Part::createChild( KoDocument *doc, const QRect& geometry )
 
 
 //--------------------------------
+//TODO: test when embedded
 DocumentChild::DocumentChild ( KoDocument* parent, KoDocument* doc, const QRect& geometry )
     : KoDocumentChild ( parent, doc, geometry )
 {

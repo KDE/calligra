@@ -1577,6 +1577,26 @@ void ModifyResourceGroupNameCmd::unexecute()
     setCommandType( 0 );
 }
 
+ModifyResourceGroupTypeCmd::ModifyResourceGroupTypeCmd( Part *part, ResourceGroup *group, int value, QString name )
+    : NamedCommand( part, name ),
+        m_group( group ),
+        m_newvalue( value )
+{
+    m_oldvalue = group->type();
+}
+void ModifyResourceGroupTypeCmd::execute()
+{
+    m_group->setType( static_cast<ResourceGroup::Type>( m_newvalue) );
+
+    setCommandType( 0 );
+}
+void ModifyResourceGroupTypeCmd::unexecute()
+{
+    m_group->setType( static_cast<ResourceGroup::Type>( m_oldvalue ) );
+
+    setCommandType( 0 );
+}
+
 TaskModifyProgressCmd::TaskModifyProgressCmd( Part *part, Task &task, struct Task::Progress &value, QString name )
         : NamedCommand( part, name ),
         m_task( task ),

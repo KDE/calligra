@@ -20,9 +20,11 @@
 #include "kpttaskeditor.h"
 
 #include "kptglobal.h"
+#include "kptitemmodelbase.h"
 #include "kptcommand.h"
 #include "kptfactory.h"
 #include "kptproject.h"
+#include "kptview.h"
 
 #include <QAbstractItemModel>
 #include <QApplication>
@@ -52,75 +54,6 @@
 namespace KPlato
 {
 
-EnumDelegate::EnumDelegate( QObject *parent )
-    : QItemDelegate( parent )
-{
-}
-
-QWidget *EnumDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
-{
-    QComboBox *editor = new QComboBox(parent);
-    editor->installEventFilter(const_cast<EnumDelegate*>(this));
-    return editor;
-}
-
-void EnumDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
-{
-    QStringList lst = index.model()->data( index, Role::EnumList ).toStringList();
-    int value = index.model()->data(index, Role::EnumListValue).toInt();
-
-    QComboBox *box = static_cast<QComboBox*>(editor);
-    box->addItems( lst );
-    box->setCurrentIndex( value );
-}
-
-void EnumDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-                                const QModelIndex &index) const
-{
-    QComboBox *box = static_cast<QComboBox*>(editor);
-    int value = box->currentIndex();
-    model->setData( index, value, Qt::EditRole );
-}
-
-void EnumDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
-{
-    kDebug()<<k_funcinfo<<editor<<": "<<option.rect<<", "<<editor->sizeHint()<<endl;
-    QRect r = option.rect;
-    //r.setHeight(r.height() + 50);
-    editor->setGeometry(r);
-}
-
-//--------------------------
-ItemModelBase::ItemModelBase( Part *part, QObject *parent )
-    : QAbstractItemModel( parent ),
-    m_part(part),
-    m_project(0),
-    m_readWrite( part->isReadWrite() )
-{
-}
-
-ItemModelBase::~ItemModelBase()
-{
-}
-    
-void ItemModelBase::setProject( Project *project )
-{
-    m_project = project;
-}
-    
-void ItemModelBase::slotLayoutChanged()
-{
-    kDebug()<<k_funcinfo<<endl;
-    emit layoutChanged();
-}
-
-void ItemModelBase::slotLayoutToBeChanged()
-{
-    kDebug()<<k_funcinfo<<endl;
-    emit layoutAboutToBeChanged();
-}
-
-//--------------------------
 NodeItemModel::NodeItemModel( Part *part, QObject *parent )
     : ItemModelBase( part, parent )
 {

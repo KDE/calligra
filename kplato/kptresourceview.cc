@@ -402,8 +402,7 @@ QSize ResourceView::sizeHint() const
 
 ResourceView::ResourceView( View *view, QWidget *parent )
         : ViewBase(view, parent),
-        m_selectedItem( 0 ),
-        m_currentNode( 0 )
+        m_selectedItem( 0 )
 {
     QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin(0);
@@ -463,7 +462,7 @@ ResourceView::ResourceView( View *view, QWidget *parent )
 void ResourceView::zoom( double /*zoom*/ )
 {}
 
-Resource *ResourceView::currentResource()
+Resource *ResourceView::currentResource() const
 {
     if ( m_selectedItem )
         return m_selectedItem->resource;
@@ -585,16 +584,13 @@ void ResourceView::slotItemActivated( QTreeWidgetItem* )
 
 void ResourceView::popupMenuRequested( QTreeWidgetItem *item, const QPoint & pos, int )
 {
+    kDebug()<<k_funcinfo<<pos<<endl;
     ResourceItemPrivate * ritem = dynamic_cast<ResourceItemPrivate *>( item );
     if ( ritem ) {
-        if ( ritem != m_selectedItem )
+        if ( ritem != m_selectedItem ) {
             resSelectionChanged( ritem );
-        QMenu *menu = m_mainview->popupMenu( "resource_popup" );
-        if ( menu ) {
-            menu->exec( pos );
-            //kDebug()<<k_funcinfo<<"id="<<id<<endl;
-        } else
-            kDebug() << k_funcinfo << "No menu!" << endl;
+        }
+        emit requestPopupMenu( "resourceview_popup", pos );
     }
 }
 

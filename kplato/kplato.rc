@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KPlato" version="5">
+<kpartgui name="KPlato" version="6">
     <MenuBar>
         <Menu name="edit"><text>&amp;Edit</text>
             <Action name="edit_undo"/>
@@ -119,9 +119,16 @@
         <Action name="move_task_up"/>
         <Action name="move_task_down"/>
     </Menu>
-    <Menu name="resource_popup">
+    <Menu name="resourceview_popup">
         <Action name="edit_resource"/>
-<!--        <Separator/>
+        <!--        <Separator/>
+        <Action name="edit_cut"/>
+        <Action name="edit_copy"/>
+        <Action name="edit_paste"/> -->
+    </Menu>
+    <Menu name="resourceeditor_resource_popup">
+        <Action name="edit_resource"/>
+        <!--        <Separator/>
         <Action name="edit_cut"/>
         <Action name="edit_copy"/>
         <Action name="edit_paste"/> -->

@@ -68,6 +68,7 @@
 #include <KoQueryTrader.h>
 
 #include "kptview.h"
+#include "kptviewbase.h"
 #include "kptaccountsview.h"
 #include "kptfactory.h"
 #include "kptmilestoneprogressdialog.h"
@@ -87,6 +88,7 @@
 #include "kptrelation.h"
 #include "kptrelationdialog.h"
 #include "kptresourceview.h"
+#include "kptresourceeditor.h"
 #include "kptresourcedialog.h"
 #include "kptresource.h"
 #include "kptresourcesdialog.h"
@@ -208,6 +210,7 @@ KoDocument *ViewListItem::document() const
     if ( data(0, Qt::UserRole+1 ).isValid() ) {
         return static_cast<KoDocument*>( data(0, Qt::UserRole+1 ).value<QObject*>() );
     }
+    return 0;
 }
 
 void ViewListItem::setDocumentChild( DocumentChild *child )
@@ -280,7 +283,7 @@ QTreeWidgetItem *ViewListTreeWidget::findCategory( const QString cat )
 ViewListWidget::ViewListWidget( QWidget *parent )//QString name, KMainWindow *parent )
         : QWidget( parent )
 {
-    setObjectName("ViewSelectorDockWidget");
+    setObjectName("ViewListWidget");
     m_viewlist = new ViewListTreeWidget( this );
     QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );
@@ -455,60 +458,6 @@ void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
 }
 
 
-//--------------
-ViewBase::ViewBase(View *mainview, QWidget *parent)
-    : KoView( mainview->koDocument(), parent ), //QWidget(parent),
-    m_mainview(mainview)
-{
-}
-
-ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
-    : KoView( doc, parent ), //QWidget(parent),
-    m_mainview(0)
-{
-}
-    
-View *ViewBase::mainView() const
-{
-    return m_mainview;
-}
-
-void ViewBase::updateReadWrite( bool /*readwrite*/ )
-{
-}
-
-void ViewBase::guiActivateEvent( KParts::GUIActivateEvent *ev )
-{
-    KoView *v = dynamic_cast<KoView*>( parentWidget() );
-    KXMLGUIFactory *f = 0;
-    if ( m_mainview ) {
-        f = m_mainview->factory();
-    }
-    kDebug()<<k_funcinfo<<this<<" "<<ev->activated()<<", "<<f<<endl;
-    setViewActive( ev->activated(), f );
-}
-void ViewBase::setViewActive( bool active, KXMLGUIFactory*) // slot
-{
-/*    if ( mainView() )
-    mainView()->setTaskActionsEnabled( this, active );*/
-}
-
-void ViewBase::addActions( KXMLGUIFactory *factory )
-{
-    //kDebug()<<k_funcinfo<<this<<endl;
-    if (factory ) {
-        factory->addClient( this );
-    }
-}
-
-void ViewBase::removeActions()
-{
-    //kDebug()<<k_funcinfo<<this<<endl;
-    if ( factory() ) {
-        factory()->removeClient( this );
-    }
-}
-
 //-------------------------------
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
@@ -541,6 +490,10 @@ View::View( Part* part, QWidget* parent )
     m_tab->addWidget( m_taskeditor );
     m_taskeditor->draw( getProject() );
     
+    m_resourceeditor = new ResourceEditor( this, m_tab );
+    m_tab->addWidget( m_resourceeditor );
+    m_resourceeditor->draw( getProject() );
+
     m_ganttview = new GanttView( getPart(), m_tab, part->isReadWrite() );
     m_tab->addWidget( m_ganttview );
     m_updateGanttview = false;
@@ -569,6 +522,7 @@ View::View( Part* part, QWidget* parent )
     QTreeWidgetItem *cat;
     cat = m_viewlist->addCategory( i18n( "Editors" ) );
     m_viewlist->addView( cat, i18n( "Tasks" ), m_taskeditor, getPart(), "task_editor" );
+    m_viewlist->addView( cat, i18n( "Resources" ), m_resourceeditor, getPart(), "resource_editor" );
 
     cat = m_viewlist->addCategory( i18n( "Views" ) );
     m_viewlist->addView( cat, i18n( "Gantt" ), m_ganttview, getPart(), "gantt_chart" );
@@ -585,7 +539,12 @@ View::View( Part* part, QWidget* parent )
     connect( m_ganttview, SIGNAL( itemDoubleClicked() ), SLOT( slotOpenNode() ) );
     connect( m_ganttview, SIGNAL( itemRenamed( Node*, const QString& ) ), this, SLOT( slotRenameNode( Node*, const QString& ) ) );
     connect( m_ganttview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    
     connect( m_resourceview, SIGNAL( itemDoubleClicked() ), SLOT( slotEditResource() ) );
+    connect( m_resourceview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+    connect( m_resourceeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
 
     // The menu items
     // ------ Edit
@@ -963,10 +922,7 @@ void View::slotViewResources()
 void View::slotViewResourceAppointments()
 {
     //kDebug()<<k_funcinfo<<endl;
-    m_resourceview->setShowAppointments( actionViewResourceAppointments->isChecked() );
-    m_updateResourceview = true;
-    if ( m_tab->currentWidget() == m_resourceview )
-        slotUpdate( false );
+
 }
 
 void View::slotViewAccounts()
@@ -1205,19 +1161,35 @@ void View::slotConfigure()
 
 Node *View::currentTask()
 {
-    Node * task = 0;
-    if ( m_tab->currentWidget() == m_ganttview ) {
-        task = m_ganttview->currentNode();
-    } else if ( m_tab->currentWidget() == m_resourceview ) {
-        task = m_resourceview->currentNode();
-    } else if ( m_tab->currentWidget() == m_taskeditor ) {
-        task = m_taskeditor->selectedNode();
+    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+    if ( v == 0 ) {
+        return 0;
     }
+    Node * task = v->currentNode();
     if ( 0 != task ) {
         return task;
     }
     return &( getProject() );
 }
+
+Resource *View::currentResource()
+{
+    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+    if ( v == 0 ) {
+        return 0;
+    }
+    return v->currentResource();
+}
+
+ResourceGroup *View::currentResourceGroup()
+{
+    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+    if ( v == 0 ) {
+        return 0;
+    }
+    return v->currentResourceGroup();
+}
+
 
 void View::slotOpenNode()
 {
@@ -1536,7 +1508,7 @@ void View::slotExportGantt()
 void View::slotEditResource()
 {
     //kDebug()<<k_funcinfo<<endl;
-    Resource * r = m_resourceview->currentResource();
+    Resource * r = currentResource();
     if ( !r )
         return ;
     ResourceDialog *dia = new ResourceDialog( getProject(), r );
@@ -1751,6 +1723,8 @@ void View::updateView( QWidget *widget )
         m_updateAccountsview = false;
     } else if ( widget == m_taskeditor ) {
         //kDebug()<<k_funcinfo<<"draw taskeditor"<<endl;
+    } else if ( widget == m_resourceview ) {
+        //kDebug()<<k_funcinfo<<"draw resourceeditor"<<endl;
     }
     /*    else if (widget == m_reportview)
         {
@@ -1842,9 +1816,11 @@ void View::getContext( Context &context ) const
         context.currentView = "accountsview";
     } else if (m_tab->currentWidget() == m_taskeditor) {
         context.currentView = "taskeditor";
+    } else if (m_tab->currentWidget() == m_resourceeditor) {
+        context.currentView = "resourceeditor";
     }
-    m_ganttview->getContext( context.ganttview );
-    m_resourceview->getContext( context.resourceview );
+m_ganttview->getContext( context.ganttview );
+//    m_resourceview->getContext( context.resourceview );
     m_accountsview->getContext( context.accountsview );
     //    m_reportview->getContext(context.reportview);
 }

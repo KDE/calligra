@@ -1123,7 +1123,7 @@ bool GanttView::exportGantt( QIODevice* device )
     return m_gantt->saveProject( device );
 }
 
-void GanttView::slotCreateTaskLink( KDGanttViewItem* from, KDGanttViewItem::Connector fc, KDGanttViewItem* to, KDGanttViewItem::Connector tc )
+void GanttView::slotCreateTaskLink( KDGanttViewItem* from, int fc, KDGanttViewItem* to, int tc )
 {
     kDebug() << k_funcinfo << ( from ? from->listViewText() : "null" ) << " fc=" << fc << " to " << ( to ? to->listViewText() : "null" ) << " tc=" << tc << endl;
     Node *par = getNode( from );
@@ -1146,7 +1146,7 @@ void GanttView::slotCreateTaskLink( KDGanttViewItem* from, KDGanttViewItem::Conn
     return ;
 }
 
-int GanttView::linkTypeToRelation( KDGanttViewItem::Connector fc, KDGanttViewItem::Connector tc )
+int GanttView::linkTypeToRelation( int fc, int tc )
 {
     if ( fc == KDGanttViewItem::TaskLinkStart ) {
         // TODO: support StartFinish

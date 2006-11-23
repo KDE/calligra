@@ -24,6 +24,7 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 
+#include <QtCore>
 #include <qdom.h>
 #include <QHash>
 #include <QString>
@@ -63,8 +64,9 @@ class Schedule;
  *  and friends based on the schedules we got from the PIM projects.
  *  (Thomas Zander mrt-2003 by suggestion of Shaheed)
  */
-class ResourceGroup
+class ResourceGroup : public QObject
 {
+    Q_OBJECT
 public:
     ResourceGroup( Project *project );
     ~ResourceGroup();
@@ -77,11 +79,13 @@ public:
 
     Project *project() { return m_project; }
 
-    void setName( QString n ) {m_name = n;}
+    void setName( QString n );
     const QString &name() const { return m_name;}
-    void setType( Type type ) { m_type = type; }
+    void setType( Type type );
     //void setType(const QString &type);
     Type type() const { return m_type; }
+    QString typeToString( bool trans = false ) const;
+    static QStringList typeToStringList( bool trans = false );
 
     /** Manage the resources in this list
      * <p>At some point we will have to look at not mixing types of resources
@@ -91,12 +95,12 @@ public:
      * to manipulate risks (@ref Risk) separately
          */
     void addResource( Resource*, Risk* );
-    void insertResource( unsigned int index, Resource *resource );
-    void deleteResource( Resource *resource );
     Resource *takeResource( Resource *resource );
-    void deleteResource( int );
-
-    Resource* getResource( int );
+    QList<Resource*> &resources() { return m_resources; }
+    int indexOf( const Resource *resource ) const;
+    Resource *resourceAt( int pos ) const { return m_resources.value( pos ); }
+    int numResources() const { return m_resources.count(); }
+    
     Risk* getRisk( int );
 
     /** Get the "num" resources which is available in the time frame
@@ -124,8 +128,6 @@ public:
      * <p>see also @ref getRequiredResource, @ref addRequiredResource
          */
     void deleteRequiredResource( int );
-    int numResources() const { return m_resources.count(); }
-    QList<Resource*> &resources() { return m_resources; }
 
     bool load( QDomElement &element );
     void save( QDomElement &element ) const;
@@ -163,6 +165,13 @@ public:
     void printDebug( QString ident );
 #endif
 
+protected:
+    virtual void changed();
+    void resourceToBeAdded( Resource *res );
+    void resourceAdded( Resource *res );
+    void resourceToBeRemoved( Resource *res );
+    void resourceRemoved( Resource *res );
+
 private:
     Project *m_project;
     QString m_id;   // unique id
@@ -190,8 +199,9 @@ private:
   * See also @ref ResourceGroup
   */
 
-class Resource
+class Resource : public QObject
 {
+    Q_OBJECT
 public:
 
     Resource( Project *project );
@@ -203,18 +213,19 @@ public:
     void generateId();
 
     enum Type { Type_Work, Type_Material };
-    void setType( Type type ) { m_type = type; }
+    void setType( Type type );
     void setType( const QString &type );
     Type type() const { return m_type; }
-    QString typeToString() const;
+    QString typeToString( bool trans = false ) const;
+    static QStringList typeToStringList( bool trans = false );
 
-    void setName( QString n ) {m_name = n;}
+    void setName( const QString n );
     const QString &name() const { return m_name;}
 
-    void setInitials( QString initials ) {m_initials = initials;}
+    void setInitials( const QString initials );
     const QString &initials() const { return m_initials;}
 
-    void setEmail( QString email ) {m_email = email;}
+    void setEmail( const QString email );
     const QString &email() const { return m_email;}
 
     void copy( Resource *resource );
@@ -261,8 +272,6 @@ public:
     void setNormalRate( double rate ) { cost.normalRate = rate; }
     double overtimeRate() const { return cost.overtimeRate; }
     void setOvertimeRate( double rate ) { cost.overtimeRate = rate; }
-    double fixedCost() const { return cost.fixed; }
-    void setFixedCost( double value ) { cost.fixed = value; }
 
     /**
      * Return available units in percent
@@ -342,6 +351,7 @@ public:
 
 protected:
     void makeAppointment( Schedule *node, const DateTime &from, const DateTime &end );
+    virtual void changed();
 
 private:
     Project *m_project;

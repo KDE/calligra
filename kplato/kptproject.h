@@ -92,15 +92,11 @@ public:
 
     QList<ResourceGroup*> &resourceGroups();
     virtual void addResourceGroup( ResourceGroup *resource );
-    virtual void insertResourceGroup( unsigned int index, ResourceGroup *resource );
-    void deleteResourceGroup( ResourceGroup *resource );
-    void deleteResourceGroup( int number );
-    ResourceGroup *takeResourceGroup( ResourceGroup *resource )
-    {
-        int i = m_resourceGroups.indexOf( resource );
-        return i != -1 ? m_resourceGroups.takeAt( i ) : 0;
-    }
-
+    ResourceGroup *takeResourceGroup( ResourceGroup *resource );
+    int indexOf( ResourceGroup *resource ) const { return m_resourceGroups.indexOf( resource ); }
+    ResourceGroup *resourceGroupAt( int pos ) const { return m_resourceGroups.value( pos ); }
+    int numResourceGroups() const { return m_resourceGroups.count(); }
+    
     bool addTask( Node* task, Node* position );
     bool addSubTask( Node* task, Node* position );
     bool addSubTask( Node* task, int index, Node* parent );
@@ -248,6 +244,14 @@ public:
     /// Set parent schedule for my children
     virtual void setParentSchedule( Schedule *sch );
 
+    void changed( ResourceGroup *group );
+    void sendResourceAdded( const ResourceGroup *group, const Resource *resource );
+    void sendResourceToBeAdded( const ResourceGroup *group, const Resource *resource );
+    void sendResourceRemoved( const ResourceGroup *group, const Resource *resource );
+    void sendResourceToBeRemoved( const ResourceGroup *group, const Resource *resource );
+    
+    void changed( Resource *resource );
+    
 signals:
     /// This signal is emitted when one of the nodes members is changed.
     void nodeChanged( Node* );
@@ -264,6 +268,18 @@ signals:
     /// This signal is emitted when the node has been moved up, moved down, indented or unindented.
     void nodeMoved( Node* );
     
+    void resourceGroupChanged( ResourceGroup *group );
+    void resourceGroupAdded( const ResourceGroup *group );
+    void resourceGroupToBeAdded( const ResourceGroup *group );
+    void resourceGroupRemoved( const ResourceGroup *group );
+    void resourceGroupToBeRemoved( const ResourceGroup *group );
+    
+    void resourceChanged( Resource *resource );
+    void resourceAdded( const ResourceGroup *group, const Resource *resource );
+    void resourceToBeAdded( const ResourceGroup *group, const Resource *resource );
+    void resourceRemoved( const ResourceGroup *group, const Resource *resource );
+    void resourceToBeRemoved( const ResourceGroup *group, const Resource *resource );
+
 protected:
     virtual void changed(Node *node);
     

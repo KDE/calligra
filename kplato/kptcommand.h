@@ -751,15 +751,28 @@ public:
 
 class ModifyResourceGroupNameCmd : public NamedCommand
 {
-public:
-    ModifyResourceGroupNameCmd( Part *part, ResourceGroup *group, QString value, QString name = 0 );
-    void execute();
-    void unexecute();
+    public:
+        ModifyResourceGroupNameCmd( Part *part, ResourceGroup *group, QString value, QString name = 0 );
+        void execute();
+        void unexecute();
 
-private:
-    ResourceGroup *m_group;
-    QString m_newvalue;
-    QString m_oldvalue;
+    private:
+        ResourceGroup *m_group;
+        QString m_newvalue;
+        QString m_oldvalue;
+};
+
+class ModifyResourceGroupTypeCmd : public NamedCommand
+{
+    public:
+        ModifyResourceGroupTypeCmd( Part *part, ResourceGroup *group, int value, QString name = 0 );
+        void execute();
+        void unexecute();
+
+    private:
+        ResourceGroup *m_group;
+        int m_newvalue;
+        int m_oldvalue;
 };
 
 class TaskModifyProgressCmd : public NamedCommand

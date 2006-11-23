@@ -20,7 +20,9 @@
 #ifndef TASKEDTIOR_H
 #define TASKEDTIOR_H
 
-#include "kptview.h"
+#include "kptglobal.h"
+#include "kptitemmodelbase.h"
+#include "kptviewbase.h"
 
 #include <QAbstractItemModel>
 #include <QFrame>
@@ -41,43 +43,7 @@ namespace KPlato
 {
 
 class Project;
-
-
-class EnumDelegate : public QItemDelegate
-{
-    Q_OBJECT
-    public:
-        EnumDelegate(QObject *parent = 0);
-
-        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
-        void setEditorData(QWidget *editor, const QModelIndex &index) const;
-        void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
-
-        void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-};
-
-class ItemModelBase : public QAbstractItemModel
-{
-    Q_OBJECT
-public:
-    ItemModelBase( Part *part, QObject *parent = 0 );
-    ~ItemModelBase();
-
-    Project *project() const { return m_project; }
-    virtual void setProject( Project *project );
-    virtual void setReadWrite( bool rw ) { m_readWrite = rw; }
-    bool isReadWrite() { return m_readWrite; }
-    
-protected slots:
-    virtual void slotLayoutToBeChanged();
-    virtual void slotLayoutChanged();
-
-protected:
-    Part *m_part;
-    Project *m_project;
-    bool m_readWrite;
-};
+class Node;
 
 class NodeItemModel : public ItemModelBase
 {
@@ -181,7 +147,7 @@ public:
     virtual void draw( Project &project );
     virtual void draw();
 
-    Node *currentNode() const;
+    virtual Node *currentNode() const;
     QList<Node*> selectedNodes() const ;
     Node *selectedNode() const;
 

@@ -20,6 +20,7 @@
 #ifndef KPTACCOUNTSVIEW_H
 #define KPTACCOUNTSVIEW_H
 
+#include "kptviewbase.h"
 #include "kptview.h"
 
 #include <QDate>

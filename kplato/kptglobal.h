@@ -20,6 +20,8 @@
 #ifndef KPLATO_GLOBAL_H
 #define KPLATO_GLOBAL_H
 
+#include <QtCore>
+
 namespace KPlato
 {
 
@@ -45,6 +47,17 @@ namespace ToolTip
     static QString NodeDescription = "Task notes.";
     static QString NodeWBS = "Work Breakdown Structure Code";
     static QString NodeRisk = "Risk controles the PERT distribution used when calculating the actual estimate for this task.";
+
+    static QString ResourceName = "The name of the resource or resource group.";
+    static QString ResourceType = "The type of the resource or resource group.";
+    static QString ResourceInitials = "The initials of the resource..";
+    static QString ResourceEMail = "The e-mail address of the resource.";
+    static QString ResourceUnits = "The maximum load that can be assigned.";
+    static QString ResourceAvailableFrom = "Defines when the resource is available to the project.";
+    static QString ResourceAvailableUntil ="Defines when the resource is available to the project.";
+    static QString ResourceNormalRate = "The cost pr hour, normal hours.";
+    static QString ResourceOvertimeRate = "The cost pr hour, overtime hours.";
+    static QString ResourceFixedCost = "The fixed cost.";
 
 } //namespace ToolTip
 

@@ -20,7 +20,7 @@
 #ifndef KPTRESOURCEVIEW_H
 #define KPTRESOURCEVIEW_H
 
-#include <kptview.h>
+#include <kptviewbase.h>
 #include <QTreeWidget>
 
 #include "kptcontext.h"
@@ -90,12 +90,10 @@ public:
 
     void draw( Project &project );
 
-    Resource *currentResource();
+    virtual Resource *currentResource() const;
 
     QList<int> listOffsets( int pageHeight ) const;
     void print( KPrinter &printer );
-
-    Node *currentNode() const { return m_currentNode; }
 
     virtual bool setContext( Context::Resourceview &context );
     virtual void getContext( Context::Resourceview &context ) const;
@@ -107,7 +105,8 @@ public slots:
 
 signals:
     void itemDoubleClicked();
-
+    void requestPopupMenu( const QString&, const QPoint& );
+    
 protected slots:
     void resSelectionChanged();
     void resSelectionChanged( QTreeWidgetItem *item );
@@ -127,7 +126,6 @@ private:
     ResListView *m_resListView;
     QTreeWidgetItem *m_header;
     ResourceAppointmentsView *m_appview;
-    Node *m_currentNode;
     QDate m_start;
     QDate m_end;
 

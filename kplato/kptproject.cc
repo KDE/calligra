@@ -548,27 +548,19 @@ void Project::setParentSchedule( Schedule *sch )
 void Project::addResourceGroup( ResourceGroup * group )
 {
     m_resourceGroups.append( group );
+    emit resourceGroupAdded( group );
 }
 
-
-void Project::deleteResourceGroup( ResourceGroup *group )
+ResourceGroup *Project::takeResourceGroup( ResourceGroup *resource )
 {
-    int i = m_resourceGroups.indexOf( group );
-    if ( i != -1 )
-        m_resourceGroups.removeAt( i );
-    delete group;
+    int i = m_resourceGroups.indexOf( resource );
+    if ( i == -1 ) {
+        return 0;
+    }
+    ResourceGroup *g = m_resourceGroups.takeAt( i );
+    emit resourceGroupRemoved( g );
+    return g;
 }
-
-
-void Project::deleteResourceGroup( int /* number */ )
-{
-    // always auto remove
-}
-
-
-void Project::insertResourceGroup( unsigned int /* index */,
-                                   ResourceGroup * /* resource */ )
-{}
 
 QList<ResourceGroup*> &Project::resourceGroups()
 {
@@ -1176,6 +1168,35 @@ void Project::changed( Node *node )
         return;
     }
     Node::changed( node );
+}
+
+void Project::changed( ResourceGroup *group )
+{
+    emit resourceGroupChanged( group );
+}
+
+void Project::sendResourceAdded( const ResourceGroup *group, const Resource *resource )
+{
+    emit resourceAdded( group, resource );
+}
+
+void Project::sendResourceToBeAdded( const ResourceGroup *group, const Resource *resource )
+{
+    emit resourceToBeAdded( group, resource );
+}
+
+void Project::sendResourceRemoved( const ResourceGroup *group, const Resource *resource )
+{
+    emit resourceRemoved( group, resource );
+}
+void Project::sendResourceToBeRemoved( const ResourceGroup *group, const Resource *resource )
+{
+    emit resourceToBeRemoved( group, resource );
+}
+
+void Project::changed( Resource *resource )
+{
+    emit resourceChanged( resource );
 }
 
 #ifndef NDEBUG

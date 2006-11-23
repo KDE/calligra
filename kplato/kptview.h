@@ -30,7 +30,6 @@
 #include <QDockWidget>
 #include <QTreeWidget>
 
-#include <kxmlguiclient.h>
 
 class QStackedWidget;
 class QSplitter;
@@ -55,15 +54,17 @@ class AccountsView;
 class GanttView;
 class ResourceView;
 class TaskEditor;
+class ResourceEditor;
 //class ReportView;
 class Part;
 class DocumentChild;
 class Node;
 class Project;
+class Resource;
+class ResourceGroup;
 class Relation;
 class Context;
 class ViewAdaptor;
-class ViewBase;
 
 class ViewListTreeWidget : public QTreeWidget
 {
@@ -125,36 +126,6 @@ private:
     QList<QAction*> m_view;
     QList<QAction*> m_document;
     QList<QAction*> m_parts;
-};
-
-//-----------
-class ViewBase : public KoView
-{
-    Q_OBJECT
-public:
-    ViewBase(KoDocument *doc, QWidget *parent);
-    ViewBase(View *mainview, QWidget *parent);
-
-    View *mainView() const;
-    virtual ~ViewBase() {}
-
-    virtual void setZoom(double /*zoom*/) {}
-    virtual void draw() {}
-    virtual void draw(Project &/*project*/) {}
-    virtual void drawChanges(Project &project) { draw(project); }
-    
-    virtual void updateReadWrite( bool );
-    
-public slots:
-    virtual void setViewActive( bool active, KXMLGUIFactory *factory=0 );
-
-protected:
-    virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
-    virtual void addActions( KXMLGUIFactory *factory );
-    virtual void removeActions();
-
-    View *m_mainview;
-
 };
 
 
@@ -290,6 +261,8 @@ protected:
 
     virtual void updateReadWrite( bool readwrite );
     Node *currentTask();
+    Resource *currentResource();
+    ResourceGroup *currentResourceGroup();
     void updateView( QWidget *widget );
 
 private:
@@ -299,6 +272,7 @@ private:
     ResourceView *m_resourceview;
     AccountsView *m_accountsview;
     TaskEditor *m_taskeditor;
+    ResourceEditor *m_resourceeditor;
     //    ReportView *m_reportview;
     //    Q3PtrList<QString> m_reportTemplateFiles;
 

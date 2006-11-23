@@ -21,12 +21,10 @@
 #ifndef KPTGANTTVIEW_H
 #define KPTGANTTVIEW_H
 
-#include "kptview.h"
+#include "kptviewbase.h"
 #include "kptcontext.h"
 
-#include <KDGanttViewItem.h>
-
-#include <QList>
+#include <q3ptrlist.h>
 
 class QLayout;
 class Q3ListViewItem;
@@ -36,6 +34,7 @@ class QLineEdit;
 class QSpinBox;
 class QSplitter;
 
+class KDGanttViewItem;
 class KDGanttViewSummaryItem;
 class KDGanttViewTaskItem;
 class KDGanttViewEventItem;
@@ -52,6 +51,7 @@ class TaskAppointmentsView;
 
 class Node;
 class Task;
+class Part;
 class Project;
 class Relation;
 
@@ -134,14 +134,14 @@ private slots:
     void slotItemDoubleClicked( KDGanttViewItem* );
     void slotItemRenamed( KDGanttViewItem*, int, const QString& );
 
-    void slotCreateTaskLink( KDGanttViewItem* from, KDGanttViewItem::Connector fc, KDGanttViewItem* to, KDGanttViewItem::Connector tc );
+    void slotCreateTaskLink( KDGanttViewItem* from, int fc, KDGanttViewItem* to, int tc );
 
     void slotGvItemClicked( KDGanttViewItem* );
 
     void slotModifyLink( KDGanttViewTaskLink* link );
 
 protected:
-    int linkTypeToRelation( KDGanttViewItem::Connector fc, KDGanttViewItem::Connector tc );
+    int linkTypeToRelation( int fc, int tc );
     void setRenameEnabled( Q3ListViewItem *item, bool on );
 private:
     KDGanttViewItem *findItem( Node *node );

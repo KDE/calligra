@@ -23,7 +23,6 @@
 #include "kptcontext.h"
 #include "kptdatetime.h"
 #include "kptproject.h"
-#include "kptview.h"
 #include "kpteffortcostmap.h"
 
 #include <QApplication>
