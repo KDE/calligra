@@ -172,7 +172,7 @@ Things not in bugzilla
       them, e.g. Sheet::paste(). bools -> QFlags, static variables
     - Revisit Conditions class.						----
       Make it an implicitly shared class - like Style.
-    - Revisit Validity class.						----
+    - Revisit Validity class.						done
       Make it an implicitly shared class - like Style.
     - Move Cell::testValidity() into Validity class.			done
 

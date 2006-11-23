@@ -49,6 +49,13 @@
 namespace KSpread
 {
 
+/**
+ * \class Validity
+ *
+ * Validity checks for cell contents
+ *
+ * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ */
 class Validity
 {
 public:
@@ -72,17 +79,38 @@ public:
         List        ///< Restrict to lists
     };
 
+    /**
+     * Constructor.
+     * Creates a validity check, that allows any content.
+     */
     Validity();
 
+    /**
+     * \return \c true if this validity check allows any content
+     */
     bool isEmpty() const;
 
+    /**
+     * Tests wether the content of \p cell is allowed.
+     * \return \c true if the content is valid
+     */
     bool testValidity( const Cell* cell ) const;
 
+    /**
+     * \ingroup NativeFormat
+     * Loads validity checks.
+     */
     bool loadXML( Cell* const cell, const KoXmlElement& validityElement );
+
+    /**
+     * \ingroup NativeFormat
+     * Saves validity checks.
+     */
     QDomElement saveXML( QDomDocument& doc ) const;
 
     /**
      * \ingroup OpenDocument
+     * Loads validity checks.
      */
     void loadOasisValidation( Cell* const cell, const QString& validationName );
 
@@ -130,11 +158,13 @@ public:
 private:
     /**
      * \ingroup OpenDocument
+     * Helper method for loadOasisValidation().
      */
     void loadOasisValidationCondition( QString &valExpression );
 
     /**
      * \ingroup OpenDocument
+     * Helper method for loadOasisValidation().
      */
     void loadOasisValidationValue( const QStringList &listVal );
 
