@@ -77,7 +77,8 @@ public:
     virtual QStringList mimeTypes () const;
     
     Node *node( const QModelIndex &index ) const;
-            
+    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+
 protected slots:
     void slotNodeChanged( Node* );
     
@@ -98,6 +99,12 @@ protected:
     bool setConstraintEndTime( Node *node, const QVariant &value, int role );
     QVariant estimateType( const Node *node, int role ) const;
     bool setEstimateType( Node *node, const QVariant &value, int role );
+    QVariant estimate( const Node *node, int role ) const;
+    bool setEstimate( Node *node, const QVariant &value, int role );
+    QVariant optimisticRatio( const Node *node, int role ) const;
+    bool setOptimisticRatio( Node *node, const QVariant &value, int role );
+    QVariant pessimisticRatio( const Node *node, int role ) const;
+    bool setPessimisticRatio( Node *node, const QVariant &value, int role );
     
     QVariant test( const Node *node, int role ) const;
     bool setTest( Node *node, const QVariant &value, int role );

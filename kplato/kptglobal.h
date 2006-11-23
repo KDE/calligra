@@ -29,9 +29,13 @@ namespace Role
 {
     enum Roles {
         EnumList = Qt::UserRole + 1,
-        EnumListValue = Qt::UserRole + 2,
-        List = Qt::UserRole + 3,
-        ListValues = Qt::UserRole + 4
+        EnumListValue,
+        List,
+        ListValues,
+        DurationValue,
+        DurationScales,
+        Maximum,
+        Minimum
     };
 } //namespace Role
 
@@ -43,10 +47,14 @@ namespace ToolTip
     static QString NodeConstraint = "The scheduling constraint type.";
     static QString NodeConstraintStart = "Constraint start time.";
     static QString NodeConstraintEnd = "Constraint end time.";
-    static QString NodeEstimateType = "Type of estimate.";
     static QString NodeDescription = "Task notes.";
     static QString NodeWBS = "Work Breakdown Structure Code";
     static QString NodeRisk = "Risk controles the PERT distribution used when calculating the actual estimate for this task.";
+
+    static QString EstimateType = "Type of estimate.";
+    static QString Estimate = "The expected estimate.";
+    static QString OptimisticRatio = "Optimistic estimate.";
+    static QString PessimisticRatio = "Pessimistic estimate.";
 
     static QString ResourceName = "The name of the resource or resource group.";
     static QString ResourceType = "The type of the resource or resource group.";

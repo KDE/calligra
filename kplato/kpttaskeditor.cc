@@ -97,7 +97,19 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
     } else {
         switch ( index.column() ) {
             case 1: break; // Node type
-            case 4: { // constraint start
+            
+            case 3: // estimateType
+            case 4: // estimate
+            case 5: // optimisticRatio
+            case 6: // pessimisticRatio
+            {
+                Node *n = node( index );
+                if ( n && n->type() == Node::Type_Task ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            }
+            case 8: { // constraint start
                 Node *n = node( index );
                 if ( n == 0 )
                     break;
@@ -107,7 +119,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-            case 5: { // constraint end
+            case 9: { // constraint end
                 Node *n = node( index );
                 if ( n == 0 )
                     break;
@@ -157,17 +169,6 @@ QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent
     Node *n = p->childNode( row );
 
     return createIndex(row, column, n);
-}
-
-int NodeItemModel::columnCount( const QModelIndex &parent ) const
-{
-    return 8;
-}
-
-int NodeItemModel::rowCount( const QModelIndex &parent ) const
-{
-    Node *p = node( parent );
-    return p->numChildren();
 }
 
 bool NodeItemModel::insertRows( int row, int count, const QModelIndex &parent )
@@ -394,7 +395,10 @@ QVariant NodeItemModel::estimateType( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::EditRole: 
         case Qt::ToolTipRole:
-            return node->effort()->typeToString( true );
+            if ( node->type() == Node::Type_Task ) {
+                return node->effort()->typeToString( true );
+            }
+            return QString();
         case Role::EnumList: 
             return Effort::typeToStringList( true );
         case Role::EnumListValue: 
@@ -417,6 +421,111 @@ bool NodeItemModel::setEstimateType( Node *node, const QVariant &value, int role
     return false;
 }
 
+QVariant NodeItemModel::estimate( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+            if ( node->type() == Node::Type_Task ) {
+                return node->effort()->expected().toString( Duration::Format_i18nDay );
+            }
+            return QString();
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task ) {
+                return node->effort()->expected().toString( Duration::Format_i18nDay );
+            }
+            break;
+        case Role::DurationValue:
+            return node->effort()->expected().milliseconds();
+        case Role::DurationScales: {
+            QList<QVariant> lst; // TODO: week
+            if ( node->effort()->type() == Effort::Type_Effort ) {
+                lst.append( m_project->standardWorktime()->day() );
+            } else {
+                lst.append( 24.0 );
+            }
+            return lst;
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool NodeItemModel::setEstimate( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            Duration v = Duration( value.toLongLong() );
+            m_part->addCommand( new ModifyEffortCmd( m_part, *node, node->effort()->expected(), v, "Modify estimate" ) );
+            return true;
+    }
+    return false;
+}
+
+QVariant NodeItemModel::optimisticRatio( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task ) {
+                return node->effort()->optimisticRatio();
+            }
+            return QString();
+        case Role::Minimum:
+            return -99;
+        case Role::Maximum:
+            return 0;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool NodeItemModel::setOptimisticRatio( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            m_part->addCommand( new EffortModifyOptimisticRatioCmd( m_part, *node, node->effort()->optimisticRatio(), value.toInt(), "Modify estimate" ) );
+            return true;
+    }
+    return false;
+}
+
+QVariant NodeItemModel::pessimisticRatio( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task ) {
+                return node->effort()->pessimisticRatio();
+            }
+            return QString();
+        case Role::Minimum:
+            return 0;
+        case Role::Maximum:
+            return 999;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool NodeItemModel::setPessimisticRatio( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            m_part->addCommand( new EffortModifyPessimisticRatioCmd( m_part, *node, node->effort()->pessimisticRatio(), value.toInt(), "Modify estimate" ) );
+            return true;
+    }
+    return false;
+}
+
 QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
 {
     QVariant result;
@@ -426,11 +535,14 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
             case 0: result = name( n, role ); break;
             case 1: result = type( n, role ); break;
             case 2: result = leader( n, role ); break;
-            case 3: result = constraint( n, role ); break;
-            case 4: result = constraintStartTime( n, role ); break;
-            case 5: result = constraintEndTime( n, role ); break;
-            case 6: result = estimateType( n, role ); break;
-            case 7: result = description( n, role ); break;
+            case 3: result = estimateType( n, role ); break;
+            case 4: result = estimate( n, role ); break;
+            case 5: result = optimisticRatio( n, role ); break;
+            case 6: result = pessimisticRatio( n, role ); break;
+            case 7: result = constraint( n, role ); break;
+            case 8: result = constraintStartTime( n, role ); break;
+            case 9: result = constraintEndTime( n, role ); break;
+            case 10: result = description( n, role ); break;
             default:
                 kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
                 return QVariant();
@@ -458,11 +570,14 @@ bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, in
         case 0: return setName( n, value, role );
         case 1: return setType( n, value, role );
         case 2: return setLeader( n, value, role );
-        case 3: return setConstraint( n, value, role );
-        case 4: return setConstraintStartTime( n, value, role );
-        case 5: return setConstraintEndTime( n, value, role );
-        case 6: return setEstimateType( n, value, role );
-        case 7: return setDescription( n, value, role );
+        case 3: return setEstimateType( n, value, role );
+        case 4: return setEstimate( n, value, role );
+        case 5: return setOptimisticRatio( n, value, role );
+        case 6: return setPessimisticRatio( n, value, role );
+        case 7: return setConstraint( n, value, role );
+        case 8: return setConstraintStartTime( n, value, role );
+        case 9: return setConstraintEndTime( n, value, role );
+        case 10: return setDescription( n, value, role );
         default:
             qWarning("data: invalid display value column %d", index.column());
             return false;
@@ -478,11 +593,14 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
                 case 0: return i18n( "Name" );
                 case 1: return i18n( "Type" );
                 case 2: return i18n( "Responsible" );
-                case 3: return i18n( "Constraint" );
-                case 4: return i18n( "Constraint Start" );
-                case 5: return i18n( "Constraint End" );
-                case 6: return i18n( "Estimate" );
-                case 7: return i18n( "Description" );
+                case 3: return i18n( "Estimate Type" );
+                case 4: return i18n( "Estimate" );
+                case 5: return i18n( "Optimistic" );
+                case 6: return i18n( "Pessimistic" );
+                case 7: return i18n( "Constraint" );
+                case 8: return i18n( "Constraint Start" );
+                case 9: return i18n( "Constraint End" );
+                case 10: return i18n( "Description" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -497,15 +615,42 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
             case 0: return ToolTip::NodeName;
             case 1: return ToolTip::NodeType;
             case 2: return ToolTip::NodeResponsible;
-            case 3: return ToolTip::NodeConstraint;
-            case 4: return ToolTip::NodeConstraintStart;
-            case 5: return ToolTip::NodeConstraintEnd;
-            case 6: return ToolTip::NodeEstimateType;
-            case 7: return ToolTip::NodeDescription;
+            case 3: return ToolTip::EstimateType;
+            case 4: return ToolTip::Estimate;
+            case 5: return ToolTip::OptimisticRatio;
+            case 6: return ToolTip::PessimisticRatio;
+            case 7: return ToolTip::NodeConstraint;
+            case 8: return ToolTip::NodeConstraintStart;
+            case 9: return ToolTip::NodeConstraintEnd;
+            case 10: return ToolTip::NodeDescription;
             default: return QVariant();
         }
     }
     return ItemModelBase::headerData(section, orientation, role);
+}
+
+QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) const
+{
+    switch ( column ) {
+        case 3: return new EnumDelegate( parent );
+        case 4: return new DurationDelegate( parent );
+        case 5: return new SpinBoxDelegate( parent );
+        case 6: return new SpinBoxDelegate( parent );
+        case 7: return new EnumDelegate( parent );
+        default: return 0;
+    }
+    return 0;
+}
+
+int NodeItemModel::columnCount( const QModelIndex &parent ) const
+{
+    return 11;
+}
+
+int NodeItemModel::rowCount( const QModelIndex &parent ) const
+{
+    Node *p = node( parent );
+    return p->numChildren();
 }
 
 void NodeItemModel::sort( int column, Qt::SortOrder order )
@@ -553,9 +698,12 @@ NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     
-    setItemDelegateForColumn( 3, new EnumDelegate( this ) );
-    setItemDelegateForColumn( 6, new EnumDelegate( this ) );
-
+    for ( int c = 0; c < itemModel()->columnCount(); ++c ) {
+        QItemDelegate *delegate = itemModel()->createDelegate( c, this );
+        if ( delegate ) {
+            setItemDelegateForColumn( c, delegate );
+        }
+    }
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 

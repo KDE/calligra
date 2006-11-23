@@ -21,6 +21,7 @@
 
 #include "kptpart.h"
 #include "kptproject.h"
+#include "kptdurationwidget.h"
 
 #include <QAbstractItemModel>
 #include <QItemDelegate>
@@ -65,6 +66,86 @@ void EnumDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 }
 
 void EnumDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    kDebug()<<k_funcinfo<<editor<<": "<<option.rect<<", "<<editor->sizeHint()<<endl;
+    QRect r = option.rect;
+    //r.setHeight(r.height() + 50);
+    editor->setGeometry(r);
+}
+
+DurationDelegate::DurationDelegate( QObject *parent )
+    : QItemDelegate( parent )
+{
+}
+
+QWidget *DurationDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
+{
+    DurationWidget *editor = new DurationWidget(parent);
+    editor->installEventFilter(const_cast<DurationDelegate*>(this));
+    return editor;
+}
+
+void DurationDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    DurationWidget *dw = static_cast<DurationWidget*>(editor);
+    Duration value = Duration( index.model()->data(index, Role::DurationValue).toLongLong() / 1000 ); //FIXME??
+    QVariantList scales = index.model()->data(index, Role::DurationScales ).value<QVariantList>();
+    for(int i = 0; i < scales.count(); ++i ) {
+        dw->setFieldScale( i, scales[ i ].toDouble() );
+        dw->setFieldRightscale(i, scales[ i ].toDouble());
+        dw->setFieldLeftscale(i+1, scales[ i ].toDouble());
+    }
+    dw->setVisibleFields( DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes );
+    dw->setValue( value );
+}
+
+void DurationDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                const QModelIndex &index) const
+{
+    DurationWidget *dw = static_cast<DurationWidget*>(editor);
+    qint64 value = dw->value().seconds();
+    model->setData( index, value, Qt::EditRole );
+}
+
+void DurationDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    kDebug()<<k_funcinfo<<editor<<": "<<option.rect<<", "<<editor->sizeHint()<<endl;
+    QRect r = option.rect;
+    //r.setHeight(r.height() + 50);
+    editor->setGeometry(r);
+}
+
+SpinBoxDelegate::SpinBoxDelegate( QObject *parent )
+    : QItemDelegate( parent )
+{
+}
+
+QWidget *SpinBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
+{
+    QSpinBox *editor = new QSpinBox(parent);
+    editor->installEventFilter(const_cast<SpinBoxDelegate*>(this));
+    return editor;
+}
+
+void SpinBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    int value = index.model()->data(index, Qt::EditRole).toInt();
+    int min = index.model()->data(index, Role::Minimum).toInt();
+    int max = index.model()->data(index, Role::Maximum).toInt();
+
+    QSpinBox *box = static_cast<QSpinBox*>(editor);
+    box->setRange( min, max );
+    box->setValue( value );
+}
+
+void SpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                const QModelIndex &index) const
+{
+    QSpinBox *box = static_cast<QSpinBox*>(editor);
+    model->setData( index, box->value(), Qt::EditRole );
+}
+
+void SpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
     kDebug()<<k_funcinfo<<editor<<": "<<option.rect<<", "<<editor->sizeHint()<<endl;
     QRect r = option.rect;
