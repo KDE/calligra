@@ -90,7 +90,7 @@ public:
 
     int effAlignX();
 
-    QSharedDataPointer<Conditions> conditions() const;
+    Conditions conditions() const;
 
     /**
      * Updates the cached painting attributes.

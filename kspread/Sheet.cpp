@@ -626,12 +626,12 @@ CommentStorage* Sheet::commentStorage() const
     return d->commentStorage;
 }
 
-QSharedDataPointer<Conditions> Sheet::conditions( int column, int row ) const
+Conditions Sheet::conditions( int column, int row ) const
 {
     return d->conditionsStorage->at( QPoint( column, row ) );
 }
 
-void Sheet::setConditions( const Region& region, QSharedDataPointer<Conditions> conditions ) const
+void Sheet::setConditions( const Region& region, Conditions conditions ) const
 {
     d->conditionsStorage->insert( region, conditions );
 }

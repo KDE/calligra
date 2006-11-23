@@ -205,9 +205,9 @@ public:
     /**
      * \return the conditions associated with this cell
      */
-    QSharedDataPointer<Conditions> conditions( int col = 0, int row = 0 ) const;
+    Conditions conditions( int col = 0, int row = 0 ) const;
 
-    void setConditions( QSharedDataPointer<Conditions> conditions, int col = 0, int row = 0 ) const;
+    void setConditions( Conditions conditions, int col = 0, int row = 0 ) const;
 
     /**
      * \return the validity checks associated with this cell

@@ -170,7 +170,7 @@ Things not in bugzilla
       the prefix 'util_'.
     - Reduce amount of parameters for methods which takes many of	----
       them, e.g. Sheet::paste(). bools -> QFlags, static variables
-    - Revisit Conditions class.						----
+    - Revisit Conditions class.						done
       Make it an implicitly shared class - like Style.
     - Revisit Validity class.						done
       Make it an implicitly shared class - like Style.

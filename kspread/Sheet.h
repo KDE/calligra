@@ -88,9 +88,9 @@ class EmbeddedKOfficeObject;
 class EmbeddedObject;
 class SheetAdaptor;
 
-typedef Storage<QString> CommentStorage;
-typedef Storage<QSharedDataPointer<Conditions> > ConditionsStorage;
-typedef Storage<Validity> ValidityStorage;
+typedef Storage<QString>    CommentStorage;
+typedef Storage<Conditions> ConditionsStorage;
+typedef Storage<Validity>   ValidityStorage;
 
 /********************************************************************
  *
@@ -798,8 +798,8 @@ public:
     /**
      * \return the conditional formattings associated with the Cell at \p column , \p row .
      */
-    QSharedDataPointer<Conditions> conditions( int column, int row ) const;
-    void setConditions( const Region& region, QSharedDataPointer<Conditions> conditions ) const;
+    Conditions conditions( int column, int row ) const;
+    void setConditions( const Region& region, Conditions conditions ) const;
     ConditionsStorage* conditionsStorage() const;
 
     /**

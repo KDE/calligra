@@ -96,7 +96,7 @@ public:
   double  textWidth;
   double  textHeight;
 
-  QSharedDataPointer<Conditions> conditions;
+  Conditions conditions;
 };
 
 CellView::CellView( Cell* cell )
@@ -176,10 +176,10 @@ Style CellView::effStyle( Style::Key key ) const
         return cellView.effStyle( key );
     }
 
-    QSharedDataPointer<Conditions> conditions = this->conditions();
-    if ( conditions && conditions->matchedStyle()
-         && conditions->matchedStyle()->hasAttribute( key ) )
-        return *conditions->matchedStyle();
+    Conditions conditions = this->conditions();
+    if ( Style* style = conditions.testConditions( cell() ) )
+        if ( style->hasAttribute( key ) )
+            return *style;
 
     return style();
 }
@@ -191,11 +191,11 @@ int CellView::effAlignX()
         CellView cellView( cell()->obscuringCells().first() ); // FIXME
         return cellView.effAlignX();
     }
-    QSharedDataPointer<Conditions> conditions = this->conditions();
-    if ( conditions &&
-         conditions->matchedStyle() &&
-         conditions->matchedStyle()->hasAttribute( Style::HorizontalAlignment ) )
-        return conditions->matchedStyle()->halign();
+
+    Conditions conditions = this->conditions();
+    if ( Style* style = conditions.testConditions( cell() ) )
+        if ( style->hasAttribute( Style::HorizontalAlignment ) )
+            return style->halign();
 
     int align = style().halign();
     if ( align == Style::HAlignUndefined )
@@ -216,7 +216,7 @@ int CellView::effAlignX()
     return align;
 }
 
-QSharedDataPointer<Conditions> CellView::conditions() const
+Conditions CellView::conditions() const
 {
     return d->conditions;
 }
@@ -1475,8 +1475,8 @@ void CellView::paintText( QPainter& painter,
   painter.setFont( effectiveFont( cellRef.x(), cellRef.y() ) );
 
     // Check for red font color for negative values.
-    QSharedDataPointer<Conditions> conditions = this->conditions();
-    if ( !conditions || !conditions->matchedStyle() )
+    Conditions conditions = this->conditions();
+    if ( !conditions.testConditions( cell() ) )
     {
         if ( cell()->value().isNumber()
             && !( cell()->sheet()->getShowFormula()
