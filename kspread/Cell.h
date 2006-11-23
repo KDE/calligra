@@ -932,16 +932,6 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisValidation( const QString& validationName );
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOasisValidationCondition( Validity validity, QString &valExpression );
-
-    /**
-     * \ingroup OpenDocument
-     */
     void saveOasisAnnotation( KoXmlWriter &xmlwriter, int row, int column );
 
     /**
@@ -985,11 +975,6 @@ private:
      * \todo TODO Stefan: merge this into Oasis::decodeFormula
      */
     void checkForNamedAreas( QString & formula ) const;
-
-    /**
-     * \ingroup OpenDocument
-     */
-    void loadOasisValidationValue( Validity validity, const QStringList &listVal );
 
     /**
      * \ingroup OpenDocument

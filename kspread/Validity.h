@@ -81,6 +81,11 @@ public:
     bool loadXML( Cell* const cell, const KoXmlElement& validityElement );
     QDomElement saveXML( QDomDocument& doc ) const;
 
+    /**
+     * \ingroup OpenDocument
+     */
+    void loadOasisValidation( Cell* const cell, const QString& validationName );
+
     Action action() const;
     bool allowEmptyCell() const;
     Conditional::Type condition() const;
@@ -123,6 +128,16 @@ public:
     inline bool operator!=( const Validity& other ) const { return !operator==( other ); }
 
 private:
+    /**
+     * \ingroup OpenDocument
+     */
+    void loadOasisValidationCondition( QString &valExpression );
+
+    /**
+     * \ingroup OpenDocument
+     */
+    void loadOasisValidationValue( const QStringList &listVal );
+
     class Private : public QSharedData
     {
     public:

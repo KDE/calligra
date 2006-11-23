@@ -22,8 +22,14 @@
 // KDE
 #include <kmessagebox.h>
 
+// KOffice
+#include <KoDom.h>
+#include <KoXmlNS.h>
+
 // KSpread
 #include "Cell.h"
+#include "Doc.h"
+#include "LoadingInfo.h"
 #include "Sheet.h"
 #include "Value.h"
 
@@ -213,6 +219,291 @@ QDomElement Validity::saveXML( QDomDocument& doc ) const
         validityElement.appendChild( dateMaxElement );
     }
     return validityElement;
+}
+
+
+void Validity::loadOasisValidation( Cell* const cell, const QString& validationName )
+{
+    KoXmlElement element = cell->sheet()->doc()->loadingInfo()->validation( validationName);
+    Validity validity;
+    if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
+    {
+        QString valExpression = element.attributeNS( KoXmlNS::table, "condition", QString::null );
+        kDebug(36003)<<" element.attribute( table:condition ) "<<valExpression<<endl;
+        //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
+        //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
+        //ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
+        //TrueCondition ::= GetFunction | cell-content() Operator Value
+        //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
+        //ExtendedGetFunction ::= cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
+        //Operator ::= '<' | '>' | '<=' | '>=' | '=' | '!='
+        //Value ::= NumberValue | String | Formula
+        //A Formula is a formula without an equals (=) sign at the beginning. See section 8.1.3 for more information.
+        //A String comprises one or more characters surrounded by quotation marks.
+        //A NumberValue is a whole or decimal number. It must not contain comma separators for numbers of 1000 or greater.
+
+        //ExtendedTrueCondition
+        if ( valExpression.contains( "cell-content-text-length()" ) )
+        {
+            //"cell-content-text-length()>45"
+            valExpression = valExpression.remove("oooc:cell-content-text-length()" );
+            kDebug(36003)<<" valExpression = :"<<valExpression<<endl;
+            setRestriction( Validity::TextLength );
+
+            loadOasisValidationCondition( valExpression );
+        }
+        else if ( valExpression.contains( "cell-content-is-text()" ) )
+        {
+            setRestriction( Validity::Text );
+        }
+        //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value) | cell-content-is-in-list( StringList )
+        else if ( valExpression.contains( "cell-content-text-length-is-between" ) )
+        {
+            setRestriction( Validity::TextLength );
+            setCondition( Conditional::Between );
+            valExpression = valExpression.remove( "oooc:cell-content-text-length-is-between(" );
+            kDebug(36003)<<" valExpression :"<<valExpression<<endl;
+            valExpression = valExpression.remove( ')' );
+            QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
+            loadOasisValidationValue( listVal );
+        }
+        else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
+        {
+            setRestriction( Validity::TextLength );
+            setCondition( Conditional::Different );
+            valExpression = valExpression.remove( "oooc:cell-content-text-length-is-not-between(" );
+            kDebug(36003)<<" valExpression :"<<valExpression<<endl;
+            valExpression = valExpression.remove( ')' );
+            kDebug(36003)<<" valExpression :"<<valExpression<<endl;
+            QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
+            loadOasisValidationValue( listVal );
+        }
+        else if ( valExpression.contains( "cell-content-is-in-list(" ) )
+        {
+            setRestriction( Validity::List );
+            valExpression = valExpression.remove( "oooc:cell-content-is-in-list(" );
+            kDebug(36003)<<" valExpression :"<<valExpression<<endl;
+            valExpression = valExpression.remove( ')' );
+            setValidityList( valExpression.split( ';',  QString::SkipEmptyParts ) );
+
+        }
+        //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
+        else
+        {
+            if (valExpression.contains( "cell-content-is-whole-number()" ) )
+            {
+                setRestriction(  Validity::Number );
+                valExpression = valExpression.remove( "oooc:cell-content-is-whole-number() and " );
+            }
+            else if (valExpression.contains( "cell-content-is-decimal-number()" ) )
+            {
+                setRestriction( Validity::Integer );
+                valExpression = valExpression.remove( "oooc:cell-content-is-decimal-number() and " );
+            }
+            else if (valExpression.contains( "cell-content-is-date()" ) )
+            {
+                setRestriction( Validity::Date );
+                valExpression = valExpression.remove( "oooc:cell-content-is-date() and " );
+            }
+            else if (valExpression.contains( "cell-content-is-time()" ) )
+            {
+                setRestriction( Validity::Time );
+                valExpression = valExpression.remove( "oooc:cell-content-is-time() and " );
+            }
+            kDebug(36003)<<"valExpression :"<<valExpression<<endl;
+
+            if ( valExpression.contains( "cell-content()" ) )
+            {
+                valExpression = valExpression.remove( "cell-content()" );
+                loadOasisValidationCondition( valExpression );
+            }
+            //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
+            //for the moment we support just int/double value, not text/date/time :(
+            if ( valExpression.contains( "cell-content-is-between(" ) )
+            {
+                valExpression = valExpression.remove( "cell-content-is-between(" );
+                valExpression = valExpression.remove( ')' );
+                QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
+                loadOasisValidationValue( listVal );
+                setCondition( Conditional::Between );
+            }
+            if ( valExpression.contains( "cell-content-is-not-between(" ) )
+            {
+                valExpression = valExpression.remove( "cell-content-is-not-between(" );
+                valExpression = valExpression.remove( ')' );
+                QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
+                loadOasisValidationValue( listVal );
+                setCondition( Conditional::Different );
+            }
+        }
+    }
+    if ( element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" ) )
+    {
+        kDebug(36003)<<" element.hasAttribute( table:allow-empty-cell ) :"<<element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" )<<endl;
+        setAllowEmptyCell( ( ( element.attributeNS( KoXmlNS::table, "allow-empty-cell", QString::null )=="true" ) ? true : false ) );
+    }
+    if ( element.hasAttributeNS( KoXmlNS::table, "base-cell-address" ) )
+    {
+        //todo what is it ?
+    }
+
+    KoXmlElement help = KoDom::namedItemNS( element, KoXmlNS::table, "help-message" );
+    if ( !help.isNull() )
+    {
+        if ( help.hasAttributeNS( KoXmlNS::table, "title" ) )
+        {
+            kDebug(36003)<<"help.attribute( table:title ) :"<<help.attributeNS( KoXmlNS::table, "title", QString::null )<<endl;
+            setTitleInfo( help.attributeNS( KoXmlNS::table, "title", QString::null ) );
+        }
+        if ( help.hasAttributeNS( KoXmlNS::table, "display" ) )
+        {
+            kDebug(36003)<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
+            setDisplayValidationInformation( ( ( help.attributeNS( KoXmlNS::table, "display", QString::null )=="true" ) ? true : false ) );
+        }
+        KoXmlElement attrText = KoDom::namedItemNS( help, KoXmlNS::text, "p" );
+        if ( !attrText.isNull() )
+        {
+            kDebug(36003)<<"help text :"<<attrText.text()<<endl;
+            setMessageInfo( attrText.text() );
+        }
+    }
+
+    KoXmlElement error = KoDom::namedItemNS( element, KoXmlNS::table, "error-message" );
+    if ( !error.isNull() )
+    {
+        if ( error.hasAttributeNS( KoXmlNS::table, "title" ) )
+            setTitle( error.attributeNS( KoXmlNS::table, "title", QString::null ) );
+        if ( error.hasAttributeNS( KoXmlNS::table, "message-type" ) )
+        {
+            QString str = error.attributeNS( KoXmlNS::table, "message-type", QString::null );
+            if ( str == "warning" )
+              setAction( Validity::Warning );
+            else if ( str == "information" )
+              setAction( Validity::Information );
+            else if ( str == "stop" )
+              setAction( Validity::Stop );
+            else
+                kDebug(36003)<<"validation : message type unknown  :"<<str<<endl;
+        }
+
+        if ( error.hasAttributeNS( KoXmlNS::table, "display" ) )
+        {
+            kDebug(36003)<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
+            setDisplayMessage( (error.attributeNS( KoXmlNS::table, "display", QString::null )=="true") );
+        }
+        KoXmlElement attrText = KoDom::namedItemNS( error, KoXmlNS::text, "p" );
+        if ( !attrText.isNull() )
+            setMessage( attrText.text() );
+    }
+    cell->setValidity( validity );
+}
+
+void Validity::loadOasisValidationValue( const QStringList &listVal )
+{
+    bool ok = false;
+    kDebug(36003)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+
+    if ( restriction() == Validity::Date )
+    {
+        setMinimumDate( QDate::fromString( listVal[0] ) );
+        setMaximumDate( QDate::fromString( listVal[1] ) );
+    }
+    else if ( restriction() == Validity::Time )
+    {
+        setMinimumTime( QTime::fromString( listVal[0] ) );
+        setMaximumTime( QTime::fromString( listVal[1] ) );
+    }
+    else
+    {
+        setMinimumValue( listVal[0].toDouble(&ok) );
+        if ( !ok )
+        {
+            setMinimumValue( listVal[0].toInt(&ok) );
+            if ( !ok )
+                kDebug(36003)<<" Try to parse this value :"<<listVal[0]<<endl;
+
+#if 0
+            if ( !ok )
+                setMinimumValue( listVal[0] );
+#endif
+        }
+        ok=false;
+        setMaximumValue( listVal[1].toDouble(&ok) );
+        if ( !ok )
+        {
+            setMaximumValue( listVal[1].toInt(&ok) );
+            if ( !ok )
+                kDebug(36003)<<" Try to parse this value :"<<listVal[1]<<endl;
+
+#if 0
+            if ( !ok )
+                setMaximumValue( listVal[1] );
+#endif
+        }
+    }
+}
+
+void Validity::loadOasisValidationCondition( QString &valExpression )
+{
+    if (isEmpty()) return;
+    QString value;
+    if (valExpression.indexOf( "<=" )==0 )
+    {
+        value = valExpression.remove( 0,2 );
+        setCondition( Conditional::InferiorEqual );
+    }
+    else if (valExpression.indexOf( ">=" )==0 )
+    {
+        value = valExpression.remove( 0,2 );
+        setCondition( Conditional::SuperiorEqual );
+    }
+    else if (valExpression.indexOf( "!=" )==0 )
+    {
+        //add Differentto attribute
+        value = valExpression.remove( 0,2 );
+        setCondition( Conditional::DifferentTo );
+    }
+    else if ( valExpression.indexOf( '<' )==0 )
+    {
+        value = valExpression.remove( 0,1 );
+        setCondition( Conditional::Inferior );
+    }
+    else if(valExpression.indexOf( '>' )==0 )
+    {
+        value = valExpression.remove( 0,1 );
+        setCondition( Conditional::Superior );
+    }
+    else if (valExpression.indexOf( '=' )==0 )
+    {
+        value = valExpression.remove( 0,1 );
+        setCondition( Conditional::Equal );
+    }
+    else
+        kDebug(36003)<<" I don't know how to parse it :"<<valExpression<<endl;
+    if ( restriction() == Validity::Date )
+    {
+        setMinimumDate( QDate::fromString( value ) );
+    }
+    else if (restriction() == Validity::Date )
+    {
+        setMinimumTime( QTime::fromString( value ) );
+    }
+    else
+    {
+        bool ok = false;
+        setMinimumValue( value.toDouble(&ok) );
+        if ( !ok )
+        {
+            setMinimumValue( value.toInt(&ok) );
+            if ( !ok )
+                kDebug(36003)<<" Try to parse this value :"<<value<<endl;
+
+#if 0
+            if ( !ok )
+                setMinimumValue( value );
+#endif
+        }
+    }
 }
 
 Validity::Action Validity::action() const
