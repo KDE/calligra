@@ -194,7 +194,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
   int row = selection.y();
   int col = selection.x();
   int colstart = col; //this is where we get back after each week
-  sheet->setText(row,colstart,i18n("Calendar from %1 to %2").arg(start.toString()).arg(end.toString()));
+  sheet->setText(row,colstart,i18n("Calendar from %1 to %2",start.toString(),end.toString()));
 
   QDate current(start);
 //   QDate previous(current);

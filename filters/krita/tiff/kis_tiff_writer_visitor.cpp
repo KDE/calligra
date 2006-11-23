@@ -64,7 +64,7 @@ namespace {
             return true;
         }
 
-        KMessageBox::error(0, i18n("Cannot export images in %1.\n").arg(cs->name()) ) ;
+        KMessageBox::error(0, i18n("Cannot export images in %1.\n",cs->name()) ) ;
         return false;
 
     }

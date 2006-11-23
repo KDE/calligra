@@ -304,7 +304,7 @@ void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel, bool calcWi
     grid->addRowSpacing( 0, fHeight );
 
     //maximum size for result column (don't know how to do this better..)
-    QString init = i18n("approximately %1").arg( "00000000" );
+    QString init = i18n("approximately %1", "00000000" );
 
     // insert labels
     QLabel *label1 = new QLabel( i18n( "Characters including spaces:" ), box );

@@ -103,7 +103,7 @@
         </layout>
       </item>
       <item rowspan="4" row="0" column="1" colspan="1" >
-        <widget class="Q3Frame" name="previewPanel" >
+        <widget class="QFrame" name="previewPanel" >
           <property name="minimumSize" >
             <size>
               <width>160</width>
@@ -135,7 +135,7 @@
         </spacer>
       </item>
       <item row="0" column="0" >
-        <widget class="Q3Frame" name="angleFrame" >
+        <widget class="QFrame" name="angleFrame" >
           <property name="frameShape" >
             <enum>NoFrame</enum>
           </property>
