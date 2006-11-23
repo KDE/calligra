@@ -21,10 +21,7 @@
 #define KROSS_KEXIDB_KEXIDBPARSER_H
 
 #include <qstring.h>
-
-#include <api/object.h>
-#include <api/list.h>
-#include <api/class.h>
+#include <qobject.h>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/parser/parser.h>
@@ -52,13 +49,13 @@ namespace Kross { namespace KexiDB {
     * print "Successfully parsed the SQL-statement %s" % parser.statement()
     * @endcode
     */
-    class KexiDBParser : public Kross::Api::Class<KexiDBParser>
+    class KexiDBParser : public QObject
     {
         public:
             KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser);
             virtual ~KexiDBParser();
-            virtual const QString getClassName() const;
 
+#if 0
         private:
 
             /** Clears previous results and runs the parser on the SQL statement passed as an argument. */
@@ -83,7 +80,7 @@ namespace Kross { namespace KexiDB {
             const QString errorMsg();
             /** Returns the position where the last error occurred. */
             int errorAt();
-
+#endif
         private:
             KexiDBConnection* m_connection;
             ::KexiDB::Parser* m_parser;

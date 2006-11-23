@@ -24,8 +24,6 @@
 #include <qregexp.h>
 #include <kdebug.h>
 
-#include <api/variant.h>
-
 using namespace Kross::KexiDB;
 
 /***************************************************************************
@@ -33,11 +31,15 @@ using namespace Kross::KexiDB;
  */
 
 template<class T>
-KexiDBSchema<T>::KexiDBSchema(const QString& name, ::KexiDB::SchemaData* schema, ::KexiDB::FieldList* fieldlist)
-    : Kross::Api::Class<T>(name)
+KexiDBSchema<T>::KexiDBSchema(QObject* parent, const QString& name, ::KexiDB::SchemaData* schema, ::KexiDB::FieldList* fieldlist, bool owner)
+    : QObject(parent)
     , m_schema(schema)
     , m_fieldlist(fieldlist)
+    , m_owner(owner)
 {
+    setObjectName(name);
+
+/*
     this->template addFunction0<Kross::Api::Variant>("name", this, &KexiDBSchema<T>::name);
     this->template addFunction1<void, Kross::Api::Variant>("setName", this, &KexiDBSchema<T>::setName);
 
@@ -48,12 +50,14 @@ KexiDBSchema<T>::KexiDBSchema(const QString& name, ::KexiDB::SchemaData* schema,
     this->template addFunction1<void, Kross::Api::Variant>("setDescription", this, &KexiDBSchema<T>::setDescription);
 
     this->template addFunction0<KexiDBFieldList>("fieldlist", this, &KexiDBSchema<T>::fieldlist);
+*/
 }
 
 template<class T>
 KexiDBSchema<T>::~KexiDBSchema<T>() {
 }
 
+#if 0
 template<class T>
 const QString KexiDBSchema<T>::name() const {
     return m_schema->name();
@@ -88,55 +92,56 @@ template<class T>
 KexiDBFieldList* KexiDBSchema<T>::fieldlist() const {
     return new KexiDBFieldList(m_fieldlist);
 }
+#endif
 
 /***************************************************************************
  * KexiDBTableSchema
  */
 
-KexiDBTableSchema::KexiDBTableSchema(::KexiDB::TableSchema* tableschema)
-    : KexiDBSchema<KexiDBTableSchema>("KexiDBTableSchema", tableschema, tableschema)
+KexiDBTableSchema::KexiDBTableSchema(QObject* parent, ::KexiDB::TableSchema* tableschema, bool owner)
+    : KexiDBSchema<KexiDBTableSchema>(parent, "KexiDBTableSchema", tableschema, tableschema, owner)
 {
-    this->addFunction0<KexiDBQuerySchema>("query", this, &KexiDBTableSchema::query);
 }
 
-KexiDBTableSchema::~KexiDBTableSchema() {
+KexiDBTableSchema::~KexiDBTableSchema()
+{
+    if( m_owner )
+        delete tableschema();
 }
 
-const QString KexiDBTableSchema::getClassName() const {
-    return "Kross::KexiDB::KexiDBTableSchema";
-}
-
-::KexiDB::TableSchema* KexiDBTableSchema::tableschema() {
+::KexiDB::TableSchema* KexiDBTableSchema::tableschema()
+{
     return static_cast< ::KexiDB::TableSchema* >(m_schema);
 }
 
-KexiDBQuerySchema* KexiDBTableSchema::query() {
+#if 0
+KexiDBQuerySchema* KexiDBTableSchema::query()
+{
     return new KexiDBQuerySchema( tableschema()->query() );
 }
+#endif
 
 /***************************************************************************
  * KexiDBQuerySchema
  */
 
-KexiDBQuerySchema::KexiDBQuerySchema(::KexiDB::QuerySchema* queryschema)
-    : KexiDBSchema<KexiDBQuerySchema>("KexiDBQuerySchema", queryschema, queryschema)
+KexiDBQuerySchema::KexiDBQuerySchema(QObject* parent, ::KexiDB::QuerySchema* queryschema, bool owner)
+    : KexiDBSchema<KexiDBQuerySchema>(parent, "KexiDBQuerySchema", queryschema, queryschema, owner)
 {
-    this->addFunction0<Kross::Api::Variant>("statement", this, &KexiDBQuerySchema::statement);
-    this->addFunction1<void, Kross::Api::Variant>("setStatement", this, &KexiDBQuerySchema::setStatement);
-    this->addFunction1<Kross::Api::Variant, Kross::Api::Variant>("setWhereExpression", this, &KexiDBQuerySchema::setWhereExpression);
 }
 
-KexiDBQuerySchema::~KexiDBQuerySchema() {
+KexiDBQuerySchema::~KexiDBQuerySchema()
+{
+    if( m_owner )
+        delete queryschema();
 }
 
-const QString KexiDBQuerySchema::getClassName() const {
-    return "Kross::KexiDB::KexiDBQuerySchema";
-}
-
-::KexiDB::QuerySchema* KexiDBQuerySchema::queryschema() {
+::KexiDB::QuerySchema* KexiDBQuerySchema::queryschema()
+{
     return static_cast< ::KexiDB::QuerySchema* >(m_schema);
 }
 
+#if 0
 const QString KexiDBQuerySchema::statement() const {
     return static_cast< ::KexiDB::QuerySchema* >(m_schema)->statement();
 }
@@ -195,3 +200,4 @@ bool KexiDBQuerySchema::setWhereExpression(const QString& whereexpression) {
     }
     return true;
 }
+#endif

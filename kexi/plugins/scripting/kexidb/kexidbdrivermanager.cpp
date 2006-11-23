@@ -23,11 +23,9 @@
 #include "kexidbfield.h"
 #include "kexidbschema.h"
 
-#include <api/exception.h>
-
-#include <qpointer.h>
+//#include <qpointer.h>
 #include <kdebug.h>
-#include <kmimetype.h>
+//#include <kmimetype.h>
 
 #include <kexidb/driver.h>
 #include <kexidb/connectiondata.h>
@@ -37,9 +35,11 @@
 
 using namespace Kross::KexiDB;
 
-KexiDBDriverManager::KexiDBDriverManager()
-    : Kross::Api::Class<KexiDBDriverManager>("DriverManager")
+KexiDBDriverManager::KexiDBDriverManager(QObject* parent)
+    : QObject(parent)
 {
+    setObjectName("DriverManager");
+    /*
     //krossdebug( QString("Kross::KexiDB::KexiDBDriverManager::KexiDBDriverManager()") );
 
     this->addFunction0< Kross::Api::Variant >("driverNames", this, &KexiDBDriverManager::driverNames);
@@ -53,16 +53,14 @@ KexiDBDriverManager::KexiDBDriverManager()
     this->addFunction0< KexiDBField >("field", this, &KexiDBDriverManager::field);
     this->addFunction1< KexiDBTableSchema, Kross::Api::Variant >("tableSchema", this, &KexiDBDriverManager::tableSchema);
     this->addFunction0< KexiDBQuerySchema>("querySchema", this, &KexiDBDriverManager::querySchema);
+    */
 }
 
 KexiDBDriverManager::~KexiDBDriverManager() {
     //krossdebug( QString("Kross::KexiDB::KexiDBDriverManager::~KexiDBDriverManager()") );
 }
 
-const QString KexiDBDriverManager::getClassName() const {
-    return "Kross::KexiDB::KexiDBDriverManager";
-}
-
+#if 0
 KexiDB::DriverManager& KexiDBDriverManager::driverManager()
 {
     if(m_drivermanager.error())
@@ -175,4 +173,4 @@ KexiDBTableSchema* KexiDBDriverManager::tableSchema(const QString& tablename) {
 KexiDBQuerySchema* KexiDBDriverManager::querySchema() {
     return new KexiDBQuerySchema( new ::KexiDB::QuerySchema() );
 }
-
+#endif

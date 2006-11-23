@@ -23,8 +23,8 @@
 #include "kexidbconnection.h"
 #include "kexidbconnectiondata.h"
 
-#include <q3valuelist.h>
-#include <q3ptrlist.h>
+//#include <q3valuelist.h>
+//#include <q3ptrlist.h>
 #include <kdebug.h>
 
 #include <kexidb/connection.h>
@@ -32,9 +32,12 @@
 using namespace Kross::KexiDB;
 
 KexiDBDriver::KexiDBDriver(::KexiDB::Driver* driver)
-    : Kross::Api::Class<KexiDBDriver>("KexiDBDriver")
+    : QObject()
     , m_driver(driver)
 {
+    setObjectName("KexiDBDriver");
+
+/*
     this->addFunction0<Kross::Api::Variant>("isValid", this, &KexiDBDriver::isValid );
     this->addFunction0<Kross::Api::Variant>("versionMajor", this, &KexiDBDriver::versionMajor );
     this->addFunction0<Kross::Api::Variant>("versionMinor", this, &KexiDBDriver::versionMinor );
@@ -48,17 +51,14 @@ KexiDBDriver::KexiDBDriver(::KexiDB::Driver* driver)
 
     this->addFunction1<KexiDBConnection, KexiDBConnectionData>("createConnection", this, &KexiDBDriver::createConnection);
     this->addFunction0< Kross::Api::ListT< KexiDBConnection > >("connectionsList", this, &KexiDBDriver::connectionsList);
+*/
 }
 
 KexiDBDriver::~KexiDBDriver()
 {
 }
 
-const QString KexiDBDriver::getClassName() const
-{
-    return "Kross::KexiDB::KexiDBDriver";
-}
-
+#if 0
 bool KexiDBDriver::isValid() { return m_driver->isValid(); }
 int KexiDBDriver::versionMajor() { return m_driver->version().major; }
 int KexiDBDriver::versionMinor() { return m_driver->version().minor; }
@@ -71,3 +71,4 @@ bool KexiDBDriver::isSystemFieldName(const QString& name) { return m_driver->isS
 QString KexiDBDriver::valueToSQL(const QString& fieldtype, const QVariant& value) { return m_driver->valueToSQL(fieldtype, value); }
 KexiDBConnection* KexiDBDriver::createConnection(KexiDBConnectionData* data) { return new KexiDBConnection( m_driver->createConnection(*data) ); }
 Q3PtrList< ::KexiDB::Connection > KexiDBDriver::connectionsList() { return m_driver->connectionsList(); }
+#endif

@@ -22,11 +22,6 @@
 
 #include <qstring.h>
 
-#include <api/object.h>
-#include <api/variant.h>
-#include <api/list.h>
-#include <api/class.h>
-
 #include <kexidb/drivermanager.h>
 
 namespace Kross { namespace KexiDB {
@@ -56,13 +51,13 @@ namespace Kross { namespace KexiDB {
      * driver = drivermanager.driver(drivername)
      * @endcode
      */
-    class KexiDBDriverManager : public Kross::Api::Class<KexiDBDriverManager>
+    class KexiDBDriverManager : public QObject
     {
         public:
-            KexiDBDriverManager();
+            KexiDBDriverManager(QObject* parent = 0);
             virtual ~KexiDBDriverManager();
-            virtual const QString getClassName() const;
 
+#if 0
         private:
 
             /** Returns a list with avaible drivernames. */
@@ -97,6 +92,7 @@ namespace Kross { namespace KexiDB {
         private:
             inline ::KexiDB::DriverManager& driverManager();
             ::KexiDB::DriverManager m_drivermanager;
+#endif
     };
 
 }}

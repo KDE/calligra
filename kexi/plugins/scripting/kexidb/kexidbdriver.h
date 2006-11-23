@@ -22,11 +22,7 @@
 
 #include <qstring.h>
 //#include <qguardedptr.h>
-
-#include <api/object.h>
-#include <api/variant.h>
-#include <api/list.h>
-#include <api/class.h>
+#include <qobject.h>
 
 #include <kexidb/driver.h>
 
@@ -58,15 +54,14 @@ namespace Kross { namespace KexiDB {
      * print driver.connectionsList()
      * @endcode
      */
-    class KexiDBDriver : public Kross::Api::Class<KexiDBDriver>
+    class KexiDBDriver : public QObject
     {
         public:
             KexiDBDriver(::KexiDB::Driver* driver);
             virtual ~KexiDBDriver();
-            virtual const QString getClassName() const;
 
         private:
-
+#if 0
             /** Return true if this driver is valid else false. */
             bool isValid();
             /** The drivers major versionnumber. */
@@ -99,7 +94,7 @@ namespace Kross { namespace KexiDB {
             KexiDBConnection* createConnection(KexiDBConnectionData* data);
             /** Return a list of KexiDBConnection objects. */
             Q3PtrList< ::KexiDB::Connection > connectionsList();
-
+#endif
         private:
             ::KexiDB::Driver* m_driver;
     };

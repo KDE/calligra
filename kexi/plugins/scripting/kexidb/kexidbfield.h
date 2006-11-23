@@ -21,10 +21,7 @@
 #define KROSS_KEXIDB_KEXIDBFIELD_H
 
 #include <qstring.h>
-
-#include <api/object.h>
-#include <api/list.h>
-#include <api/class.h>
+#include <qobject.h>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/field.h>
@@ -34,14 +31,14 @@ namespace Kross { namespace KexiDB {
     /**
     * A field in a record.
     */
-    class KexiDBField : public Kross::Api::Class<KexiDBField>
+    class KexiDBField : public QObject
     {
         public:
-            KexiDBField(::KexiDB::Field* field);
+            KexiDBField(QObject* parent, ::KexiDB::Field* field, bool owner);
             virtual ~KexiDBField();
-            virtual const QString getClassName() const;
             ::KexiDB::Field* field() { return m_field; }
 
+#if 0
         private:
 
             /** Returns the type string for this field, e.g. "Integer" for Integer type. */
@@ -138,8 +135,10 @@ namespace Kross { namespace KexiDB {
             /** Sets the default value this field has. */
             void setDefaultValue(const QVariant& defaultvalue);
 
+#endif
         private:
             ::KexiDB::Field* m_field;
+            bool m_owner;
     };
 
 }}

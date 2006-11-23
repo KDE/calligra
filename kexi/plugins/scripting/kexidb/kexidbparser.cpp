@@ -22,15 +22,16 @@
 #include "kexidbschema.h"
 #include "kexidbconnection.h"
 
-#include <api/variant.h>
-
 using namespace Kross::KexiDB;
 
 KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser)
-    : Kross::Api::Class<KexiDBParser>("KexiDBParser")
+    : QObject()
     , m_connection(connection)
     , m_parser(parser)
 {
+    setObjectName("KexiDBParser");
+
+/*
     this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("parse", this, &KexiDBParser::parse);
     this->addFunction0< void >("clear", this, &KexiDBParser::clear);
 
@@ -44,17 +45,14 @@ KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parse
     this->addFunction0< Kross::Api::Variant >("errorType", this, &KexiDBParser::errorType);
     this->addFunction0< Kross::Api::Variant >("errorMsg", this, &KexiDBParser::errorMsg);
     this->addFunction0< Kross::Api::Variant >("errorAt", this, &KexiDBParser::errorAt);
+*/
 }
 
 KexiDBParser::~KexiDBParser()
 {
 }
 
-const QString KexiDBParser::getClassName() const
-{
-    return "Kross::KexiDB::KexiDBParser";
-}
-
+#if 0
 bool KexiDBParser::parse(const QString& sql) { return m_parser->parse(sql); }
 void KexiDBParser::clear() { m_parser->clear(); }
 const QString KexiDBParser::operation() { return m_parser->operationString(); }
@@ -75,3 +73,4 @@ const QString KexiDBParser::statement() { return m_parser->statement(); }
 const QString KexiDBParser::errorType() { return m_parser->error().type(); }
 const QString KexiDBParser::errorMsg() { return m_parser->error().error(); }
 int KexiDBParser::errorAt() { return m_parser->error().at(); }
+#endif

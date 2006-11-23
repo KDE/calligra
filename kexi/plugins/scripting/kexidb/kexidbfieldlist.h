@@ -21,10 +21,7 @@
 #define KROSS_KEXIDB_KEXIDBFIELDLIST_H
 
 #include <qstring.h>
-
-#include <api/object.h>
-#include <api/list.h>
-#include <api/class.h>
+#include <qobject.h>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/fieldlist.h>
@@ -56,14 +53,14 @@ namespace Kross { namespace KexiDB {
     * cursor = connection.executeQuerySchema(query)
     * @endcode
     */
-    class KexiDBFieldList : public Kross::Api::Class<KexiDBFieldList>
+    class KexiDBFieldList : public QObject
     {
         public:
             KexiDBFieldList(::KexiDB::FieldList* fieldlist);
             virtual ~KexiDBFieldList();
-            virtual const QString getClassName() const;
             ::KexiDB::FieldList* fieldlist() { return m_fieldlist; }
 
+#if 0
         private:
 
             /** Returns the number of fields. */
@@ -93,6 +90,7 @@ namespace Kross { namespace KexiDB {
             void setFields(KexiDBFieldList* fieldlist);
             /** Creates and returns list that contain fields selected by name. */
             KexiDBFieldList* subList(Q3ValueList<QVariant> list);
+#endif
 
         private:
             ::KexiDB::FieldList* m_fieldlist;

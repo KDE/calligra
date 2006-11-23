@@ -1,9 +1,8 @@
 
-
-add_subdirectory( kexiscripting )
-add_subdirectory( kexiapp )
 add_subdirectory( kexidb )
-add_subdirectory( scripts )
+#add_subdirectory( kexiscripting )
+#add_subdirectory( kexiapp )
+#add_subdirectory( scripts )
 
 
 

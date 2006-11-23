@@ -1,7 +1,4 @@
-
-
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
-
 
 ########### next target ###############
 
@@ -24,18 +21,11 @@ kde4_add_plugin(krosskexidb ${krosskexidb_PART_SRCS})
 
 
 
-target_link_libraries(krosskexidb  ${KDE4_KDECORE_LIBS} krossapi krossmain kexidb kexidbparser )
+target_link_libraries(krosskexidb  ${KDE4_KDECORE_LIBS} kexidb kexidbparser )
 
 install(TARGETS krosskexidb  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-
 ########### install files ###############
-
-
-
-
-
-
 #original Makefile.am contents follow:
 
 #include $(top_srcdir)/kexi/Makefile.global

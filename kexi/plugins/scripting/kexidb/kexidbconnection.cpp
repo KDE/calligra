@@ -27,22 +27,23 @@
 #include "kexidbtransaction.h"
 #include "kexidbparser.h"
 
-#include <api/exception.h>
-
 #include <kdebug.h>
 
 #include <kexidb/transaction.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+//#include <Q3ValueList>
 
 using namespace Kross::KexiDB;
 
 KexiDBConnection::KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver, KexiDBConnectionData* connectiondata)
-    : Kross::Api::Class<KexiDBConnection>("KexiDBConnection")
-    , m_connection(connection)
-    , m_connectiondata(connectiondata ? connectiondata : new KexiDBConnectionData(connection->data()))
-    , m_driver(driver ? driver : new KexiDBDriver(connection->driver()))
+    : QObject()
+    //, m_connection(connection)
+    //, m_connectiondata(connectiondata ? connectiondata : new KexiDBConnectionData(connection->data()))
+    //, m_driver(driver ? driver : new KexiDBDriver(connection->driver()))
 {
+    setObjectName("KexiDBConnection");
+
+/*
     this->addFunction0< Kross::Api::Variant >("hadError", this, &KexiDBConnection::hadError);
     this->addFunction0< Kross::Api::Variant >("lastError", this, &KexiDBConnection::lastError);
 
@@ -91,15 +92,13 @@ KexiDBConnection::KexiDBConnection(::KexiDB::Connection* connection, KexiDBDrive
     this->addFunction0<Kross::Api::List>("transactions", this, &KexiDBConnection::transactions);
 
     this->addFunction0< KexiDBParser >("parser", this, &KexiDBConnection::parser);
+*/
 }
 
 KexiDBConnection::~KexiDBConnection() {
 }
 
-const QString KexiDBConnection::getClassName() const {
-    return "Kross::KexiDB::KexiDBConnection";
-}
-
+#if 0
 ::KexiDB::Connection* KexiDBConnection::connection() const {
     if(! m_connection)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Connection is NULL.")) );
@@ -221,3 +220,4 @@ Kross::Api::List* KexiDBConnection::transactions() {
 }
 
 KexiDBParser* KexiDBConnection::parser() { return new KexiDBParser(this, new ::KexiDB::Parser(connection())); }
+#endif

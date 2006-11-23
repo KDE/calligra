@@ -21,12 +21,8 @@
 #define KROSS_KEXIDB_KEXIDBCONNECTION_H
 
 #include <qstring.h>
-#include <ksharedptr.h>
-
-#include <api/object.h>
-#include <api/variant.h>
-#include <api/list.h>
-#include <api/class.h>
+#include <qobject.h>
+//#include <ksharedptr.h>
 
 //#include <kexidb/driver.h>
 #include <kexidb/connection.h>
@@ -65,15 +61,14 @@ namespace Kross { namespace KexiDB {
      * if not connection.useDatabase("/home/user/kexisqlite3file.kexi"): raise("Failed to use db")
      * @endcode
      */
-    class KexiDBConnection : public Kross::Api::Class<KexiDBConnection>
+    class KexiDBConnection : public QObject
     {
         public:
             KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver = 0, KexiDBConnectionData* connectiondata = 0);
             virtual ~KexiDBConnection();
-            virtual const QString getClassName() const;
 
         private:
-
+#if 0
             /** Return true if there was an error during last operation on the database. */
             bool hadError() const;
             /** Return the last errormessage. */
@@ -185,7 +180,7 @@ namespace Kross { namespace KexiDB {
 
             /// Initialize the class instance.
             void initialize();
-
+#endif
     };
 
 }}

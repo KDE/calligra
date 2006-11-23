@@ -20,19 +20,19 @@
 #include "kexidbfieldlist.h"
 #include "kexidbfield.h"
 
-#include <api/variant.h>
-#include <api/exception.h>
-
 #include <kdebug.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+//#include <Q3ValueList>
 
 using namespace Kross::KexiDB;
 
 KexiDBFieldList::KexiDBFieldList(::KexiDB::FieldList* fieldlist)
-    : Kross::Api::Class<KexiDBFieldList>("KexiDBFieldList")
+    : QObject()
     , m_fieldlist(fieldlist)
 {
+    setObjectName("KexiDBFieldList");
+
+/*
     this->addFunction0< Kross::Api::Variant >("fieldCount", this, &KexiDBFieldList::fieldCount);
     this->addFunction1< KexiDBField, Kross::Api::Variant >("field", this, &KexiDBFieldList::field);
     this->addFunction1< KexiDBField, Kross::Api::Variant >("fieldByName", this, &KexiDBFieldList::fieldByName);
@@ -49,17 +49,14 @@ KexiDBFieldList::KexiDBFieldList(::KexiDB::FieldList* fieldlist)
     this->addFunction1< void, KexiDBFieldList >("setFields", this, &KexiDBFieldList::setFields);
 
     this->addFunction1< KexiDBFieldList, Kross::Api::Variant >("subList", this, &KexiDBFieldList::subList);
+*/
 }
 
 KexiDBFieldList::~KexiDBFieldList()
 {
 }
 
-const QString KexiDBFieldList::getClassName() const
-{
-    return "Kross::KexiDB::KexiDBFieldList";
-}
-
+#if 0
 uint KexiDBFieldList::fieldCount() {
     return m_fieldlist->fieldCount();
 }
@@ -99,4 +96,4 @@ KexiDBFieldList* KexiDBFieldList::subList(Q3ValueList<QVariant> list) {
     ::KexiDB::FieldList* fl = m_fieldlist->subList(sl);
     return fl ? new Kross::KexiDB::KexiDBFieldList(fl) : 0;
 }
-
+#endif

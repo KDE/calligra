@@ -22,31 +22,68 @@
 
 #include <qstring.h>
 #include <qvariant.h>
+#include <qobject.h>
 
-#include <api/module.h>
+#include <kexidb/drivermanager.h>
 
-namespace Kross { namespace Api {
-    class Manager;
-}}
+namespace Kross { namespace KexiDB {
 
-namespace Kross { 
-
-/**
- * KrossKexiDB provides access to the KexiDB database functionality.
- */
-namespace KexiDB {
+    // Forward declarations.
+    class KexiDBDriver;
+    class KexiDBConnectionData;
+    class KexiDBField;
+    class KexiDBTableSchema;
+    class KexiDBQuerySchema;
 
     /**
-     * \internal
-     * The KexiDBModule is the implementation of a kross-module.
+     * The KexiDBModule class provides the main entry point to deal with
+     * the KexiDB functionality.
      */
-    class KexiDBModule : public Kross::Api::Module
+    class KexiDBModule : public QObject
     {
+            Q_OBJECT
         public:
-            KexiDBModule(Kross::Api::Manager* manager);
+            explicit KexiDBModule(QObject* parent = 0);
             virtual ~KexiDBModule();
-            virtual const QString getClassName() const;
 
+        public slots:
+
+            /** Return the version number. */
+            int version();
+
+            /** Returns a list with avaible drivernames. */
+            const QStringList driverNames();
+
+            /** Return the to the defined \p drivername matching \a KexiDBDriver object. */
+            QObject* driver(const QString& drivername);
+
+            /** Return the to the defined mimetype-string matching drivername. */
+            const QString lookupByMime(const QString& mimetype);
+
+            /** Return the matching mimetype for the defined file. */
+            const QString mimeForFile(const QString& filename);
+
+            /** Return a new \a KexiDBConnectionData object. */
+            QObject* createConnectionData();
+
+            /** Create and return a \a KexiDBConnectionData object. Fill the content of the
+            KexiDBConnectionData object with the defined file as. The file could be e.g.
+            a *.kexi file or a *.kexis file. */
+            QObject* createConnectionDataByFile(const QString& filename);
+
+            /** Return a new \a KexiDBField object. */
+            QObject* field();
+
+            /** Return a new \a KexiDBTableSchema object. */
+            QObject* tableSchema(const QString& tablename);
+
+            /** Return a new \a KexiDBQuerySchema object. */
+            QObject* querySchema();
+
+        private:
+            ::KexiDB::DriverManager m_drivermanager;
+
+#if 0
             /**
              * \internal
              * Variable module-method use to call transparent some functionality
@@ -60,7 +97,7 @@ namespace KexiDB {
              * \return a \a Kross::Api::Object or NULL.
              */
             virtual Kross::Api::Object::Ptr get(const QString& name, void* p = 0);
-
+#endif
     };
 
 }}

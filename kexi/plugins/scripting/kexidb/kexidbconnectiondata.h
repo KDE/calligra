@@ -21,11 +21,7 @@
 #define KROSS_KEXIDB_KEXIDBCONNECTIONDATA_H
 
 #include <qstring.h>
-
-#include <api/object.h>
-#include <api/variant.h>
-#include <api/list.h>
-#include <api/class.h>
+#include <qobject.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/connectiondata.h>
@@ -36,18 +32,17 @@ namespace Kross { namespace KexiDB {
      * A KexiDBConnectionData is used to store the details needed for
      * a connection with a database.
      */
-    class KexiDBConnectionData : public Kross::Api::Class<KexiDBConnectionData>
+    class KexiDBConnectionData : public QObject
     {
-            friend class KexiDBDriverManager;
+            Q_OBJECT
         public:
-            KexiDBConnectionData(::KexiDB::ConnectionData* data);
+            KexiDBConnectionData(QObject* parent, ::KexiDB::ConnectionData* data, bool owner);
             virtual ~KexiDBConnectionData();
             operator ::KexiDB::ConnectionData& () { return *m_data; }
             operator ::KexiDB::ConnectionData* () { return m_data; }
-            virtual const QString getClassName() const;
             ::KexiDB::ConnectionData* data() { return m_data; }
 
-        private:
+        public slots:
 
             /** Return the connection name. */
             const QString caption() const;
@@ -118,6 +113,7 @@ namespace Kross { namespace KexiDB {
         private:
             ::KexiDB::ConnectionData* m_data;
             QString m_dbname;
+            bool m_owner;
     };
 
 }}

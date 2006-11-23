@@ -21,8 +21,7 @@
 #define KROSS_KEXIDB_KEXIDBTRANSACTION_H
 
 #include <qstring.h>
-
-#include <api/class.h>
+#include <qobject.h>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/transaction.h>
@@ -36,22 +35,21 @@ namespace Kross { namespace KexiDB {
     * Transactions are used to ensure that integrity of a database is
     * maintained.
     */
-    class KexiDBTransaction : public Kross::Api::Class<KexiDBTransaction>
+    class KexiDBTransaction : public QObject
     {
         public:
             KexiDBTransaction(::KexiDB::Transaction& transaction);
             virtual ~KexiDBTransaction();
-            virtual const QString getClassName() const;
             ::KexiDB::Transaction& transaction();
 
         private:
-
+#if 0
             /** Return true if the transaction is active (ie. started). */
             bool isActive() const;
 
             /** Return true if the transaction is uninitialized (null). */
             bool isNull() const;
-
+#endif
         private:
             ::KexiDB::Transaction& m_transaction;
     };

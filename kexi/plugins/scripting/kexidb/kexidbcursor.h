@@ -21,11 +21,7 @@
 #define KROSS_KEXIDB_KEXIDBCURSOR_H
 
 #include <qstring.h>
-
-#include <api/object.h>
-#include <api/variant.h>
-#include <api/list.h>
-#include <api/class.h>
+#include <qobject.h>
 
 #include <kexidb/cursor.h>
 #include <kexidb/roweditbuffer.h>
@@ -82,15 +78,14 @@ namespace Kross { namespace KexiDB {
      * if not cursor.save(): raise "Failed to save changes"
      * @endcode
      */
-    class KexiDBCursor : public Kross::Api::Class<KexiDBCursor>
+    class KexiDBCursor : public QObject
     {
         public:
             KexiDBCursor(::KexiDB::Cursor* cursor);
             virtual ~KexiDBCursor();
-            virtual const QString getClassName() const;
 
         private:
-
+#if 0
             /** Opens the cursor. */
             bool open();
             /** Returns true if the cursor is opened else false. */
@@ -132,8 +127,6 @@ namespace Kross { namespace KexiDB {
             bool save();
 
         private:
-            ::KexiDB::Cursor* m_cursor;
-
             class Record {
                 public:
                     ::KexiDB::RowData rowdata;
@@ -151,6 +144,9 @@ namespace Kross { namespace KexiDB {
             QMap<Q_LLONG, Record*> m_modifiedrecords;
 
             void clearBuffers();
+#endif
+
+            ::KexiDB::Cursor* m_cursor;
     };
 
 }}

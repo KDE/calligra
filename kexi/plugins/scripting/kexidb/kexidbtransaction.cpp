@@ -20,27 +20,24 @@
 
 #include "kexidbtransaction.h"
 #include "kexidbconnection.h"
-#include <api/variant.h>
 
 //#include <kdebug.h>
 
 using namespace Kross::KexiDB;
 
 KexiDBTransaction::KexiDBTransaction(::KexiDB::Transaction& transaction)
-    : Kross::Api::Class<KexiDBTransaction>("KexiDBTransaction")
+    : QObject()
     , m_transaction(transaction)
 {
+    setObjectName("KexiDBTransaction");
+/*
     this->addFunction0< Kross::Api::Variant >("isActive", this, &KexiDBTransaction::isActive);
     this->addFunction0< Kross::Api::Variant >("isNull", this, &KexiDBTransaction::isNull);
+*/
 }
 
 KexiDBTransaction::~KexiDBTransaction()
 {
-}
-
-const QString KexiDBTransaction::getClassName() const
-{
-    return "Kross::KexiDB::KexiDBTransaction";
 }
 
 ::KexiDB::Transaction& KexiDBTransaction::transaction()
@@ -48,5 +45,14 @@ const QString KexiDBTransaction::getClassName() const
     return m_transaction;
 }
 
-bool KexiDBTransaction::isActive() const { return m_transaction.active(); }
-bool KexiDBTransaction::isNull() const { return m_transaction.isNull(); }
+#if 0
+bool KexiDBTransaction::isActive() const
+{
+    return m_transaction.active();
+}
+
+bool KexiDBTransaction::isNull() const
+{
+    return m_transaction.isNull();
+}
+#endif

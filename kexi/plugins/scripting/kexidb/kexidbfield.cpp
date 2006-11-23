@@ -20,78 +20,23 @@
 
 #include "kexidbfield.h"
 
-#include <api/variant.h>
-
 using namespace Kross::KexiDB;
 
-KexiDBField::KexiDBField(::KexiDB::Field* field)
-    : Kross::Api::Class<KexiDBField>("KexiDBField")
+KexiDBField::KexiDBField(QObject* parent, ::KexiDB::Field* field, bool owner)
+    : QObject(parent)
     , m_field(field)
+    , m_owner(owner)
 {
-    this->addFunction0< Kross::Api::Variant >("type", this, &KexiDBField::type);
-    this->addFunction1< void, Kross::Api::Variant >("setType", this, &KexiDBField::setType);
-
-    this->addFunction0< Kross::Api::Variant >("subType", this, &KexiDBField::subType);
-    this->addFunction1< void, Kross::Api::Variant >("setSubType", this, &KexiDBField::setSubType);
-
-    this->addFunction0< Kross::Api::Variant >("variantType", this, &KexiDBField::variantType);
-    this->addFunction0< Kross::Api::Variant >("typeGroup", this, &KexiDBField::typeGroup);
-
-    this->addFunction0< Kross::Api::Variant >("isAutoInc", this, &KexiDBField::isAutoInc);
-    this->addFunction1< void, Kross::Api::Variant >("setAutoInc", this, &KexiDBField::setAutoInc);
-
-    this->addFunction0< Kross::Api::Variant >("isUniqueKey", this, &KexiDBField::isUniqueKey);
-    this->addFunction1< void, Kross::Api::Variant >("setUniqueKey", this, &KexiDBField::setUniqueKey);
-
-    this->addFunction0< Kross::Api::Variant >("isPrimaryKey", this, &KexiDBField::isPrimaryKey);
-    this->addFunction1< void, Kross::Api::Variant >("setPrimaryKey", this, &KexiDBField::setPrimaryKey);
-
-    this->addFunction0< Kross::Api::Variant >("isForeignKey", this, &KexiDBField::isForeignKey);
-    this->addFunction1< void, Kross::Api::Variant >("setForeignKey", this, &KexiDBField::setForeignKey);
-
-    this->addFunction0< Kross::Api::Variant >("isNotNull", this, &KexiDBField::isNotNull);
-    this->addFunction1< void, Kross::Api::Variant >("setNotNull", this, &KexiDBField::setNotNull);
-
-    this->addFunction0< Kross::Api::Variant >("isNotEmpty", this, &KexiDBField::isNotEmpty);
-    this->addFunction1< void, Kross::Api::Variant >("setNotEmpty", this, &KexiDBField::setNotEmpty);
-
-    this->addFunction0< Kross::Api::Variant >("isIndexed", this, &KexiDBField::isIndexed);
-    this->addFunction1< void, Kross::Api::Variant >("setIndexed", this, &KexiDBField::setIndexed);
-
-    this->addFunction0< Kross::Api::Variant >("isUnsigned", this, &KexiDBField::isUnsigned);
-    this->addFunction1< void, Kross::Api::Variant >("setUnsigned", this, &KexiDBField::setUnsigned);
-
-    this->addFunction0< Kross::Api::Variant >("name", this, &KexiDBField::name);
-    this->addFunction1< void, Kross::Api::Variant >("setName", this, &KexiDBField::setName);
-
-    this->addFunction0< Kross::Api::Variant >("caption", this, &KexiDBField::caption);
-    this->addFunction1< void, Kross::Api::Variant >("setCaption", this, &KexiDBField::setCaption);
-
-    this->addFunction0< Kross::Api::Variant >("description", this, &KexiDBField::description);
-    this->addFunction1< void, Kross::Api::Variant >("setDescription", this, &KexiDBField::setDescription);
-
-    this->addFunction0< Kross::Api::Variant >("length", this, &KexiDBField::length);
-    this->addFunction1< void, Kross::Api::Variant >("setLength", this, &KexiDBField::setLength);
-
-    this->addFunction0< Kross::Api::Variant >("precision", this, &KexiDBField::precision);
-    this->addFunction1< void, Kross::Api::Variant >("setPrecision", this, &KexiDBField::setPrecision);
-
-    this->addFunction0< Kross::Api::Variant >("width", this, &KexiDBField::width);
-    this->addFunction1< void, Kross::Api::Variant >("setWidth", this, &KexiDBField::setWidth);
-
-    this->addFunction0< Kross::Api::Variant >("defaultValue", this, &KexiDBField::defaultValue);
-    this->addFunction1< void, Kross::Api::Variant >("setDefaultValue", this, &KexiDBField::setDefaultValue);
+    setObjectName("KexiDBField");
 }
 
 KexiDBField::~KexiDBField()
 {
+    if( m_owner )
+        delete m_field;
 }
 
-const QString KexiDBField::getClassName() const
-{
-    return "Kross::KexiDB::KexiDBField";
-}
-
+#if 0
 const QString KexiDBField::type() { return m_field->typeString(); }
 void KexiDBField::setType(const QString type) { m_field->setType( ::KexiDB::Field::typeForString(type) ); }
 
@@ -145,3 +90,4 @@ void KexiDBField::setWidth(uint width) { m_field->setWidth(width); }
 
 QVariant KexiDBField::defaultValue() { return m_field->defaultValue(); }
 void KexiDBField::setDefaultValue(const QVariant& defaultvalue) { m_field->setDefaultValue(defaultvalue); }
+#endif

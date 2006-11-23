@@ -28,9 +28,12 @@
 using namespace Kross::KexiDB;
 
 KexiDBCursor::KexiDBCursor(::KexiDB::Cursor* cursor)
-    : Kross::Api::Class<KexiDBCursor>("KexiDBCursor")
+    : QObject()
     , m_cursor(cursor)
 {
+    setObjectName("KexiDBCursor");
+
+/*
     this->addFunction0<Kross::Api::Variant>("open", this, &KexiDBCursor::open );
     this->addFunction0<Kross::Api::Variant>("isOpened", this, &KexiDBCursor::isOpened );
     this->addFunction0<Kross::Api::Variant>("reopen", this, &KexiDBCursor::reopen );
@@ -46,16 +49,19 @@ KexiDBCursor::KexiDBCursor(::KexiDB::Cursor* cursor)
     this->addFunction1<Kross::Api::Variant, Kross::Api::Variant>("value", this, &KexiDBCursor::value );
     this->addFunction2<Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant>("setValue", this, &KexiDBCursor::setValue );
     this->addFunction0<Kross::Api::Variant>("save", this, &KexiDBCursor::save );
+*/
 }
 
 KexiDBCursor::~KexiDBCursor()
 {
     ///@todo check ownership
     //delete m_cursor;
-
+#if 0
     clearBuffers();
+#endif
 }
 
+#if 0
 void KexiDBCursor::clearBuffers()
 {
     QMap<Q_LLONG, Record*>::ConstIterator
@@ -63,11 +69,6 @@ void KexiDBCursor::clearBuffers()
     for( ; it != end; ++it)
         delete it.data();
     m_modifiedrecords.clear();
-}
-
-const QString KexiDBCursor::getClassName() const
-{
-    return "Kross::KexiDB::KexiDBCursor";
 }
 
 bool KexiDBCursor::open() { return m_cursor->open(); }
@@ -137,3 +138,4 @@ bool KexiDBCursor::save()
     clearBuffers();
     return ok;
 }
+#endif

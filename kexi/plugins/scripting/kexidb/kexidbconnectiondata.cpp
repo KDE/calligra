@@ -23,56 +23,18 @@
 
 using namespace Kross::KexiDB;
 
-KexiDBConnectionData::KexiDBConnectionData(::KexiDB::ConnectionData* data)
-    : Kross::Api::Class<KexiDBConnectionData>("KexiDBConnectionData")
+KexiDBConnectionData::KexiDBConnectionData(QObject* parent, ::KexiDB::ConnectionData* data, bool owner)
+    : QObject(parent)
     , m_data(data)
+    , m_owner(owner)
 {
-    this->addFunction0< Kross::Api::Variant >("caption", this, &KexiDBConnectionData::caption);
-    this->addFunction1< void, Kross::Api::Variant >("setCaption", this, &KexiDBConnectionData::setCaption);
-
-    this->addFunction0< Kross::Api::Variant >("description", this, &KexiDBConnectionData::description);
-    this->addFunction1< void, Kross::Api::Variant >("setDescription", this, &KexiDBConnectionData::setDescription);
-
-    this->addFunction0< Kross::Api::Variant >("driverName", this, &KexiDBConnectionData::driverName);
-    this->addFunction1< void, Kross::Api::Variant >("setDriverName", this, &KexiDBConnectionData::setDriverName);
-
-    this->addFunction0< Kross::Api::Variant >("localSocketFileUsed", this, &KexiDBConnectionData::localSocketFileUsed);
-    this->addFunction1< void, Kross::Api::Variant >("setLocalSocketFileUsed", this, &KexiDBConnectionData::setLocalSocketFileUsed);
-
-    this->addFunction0< Kross::Api::Variant >("localSocketFileName", this, &KexiDBConnectionData::localSocketFileName);
-    this->addFunction1< void, Kross::Api::Variant >("setLocalSocketFileName", this, &KexiDBConnectionData::setLocalSocketFileName);
-
-    this->addFunction0< Kross::Api::Variant >("databaseName", this, &KexiDBConnectionData::databaseName);
-    this->addFunction1< void, Kross::Api::Variant >("setDatabaseName", this, &KexiDBConnectionData::setDatabaseName);
-
-    this->addFunction0< Kross::Api::Variant >("hostName", this, &KexiDBConnectionData::hostName);
-    this->addFunction1< void, Kross::Api::Variant >("setHostName", this, &KexiDBConnectionData::setHostName);
-
-    this->addFunction0< Kross::Api::Variant >("port", this, &KexiDBConnectionData::port);
-    this->addFunction1< void, Kross::Api::Variant >("setPort", this, &KexiDBConnectionData::setPort);
-
-    this->addFunction0< Kross::Api::Variant >("password", this, &KexiDBConnectionData::password);
-    this->addFunction1< void, Kross::Api::Variant >("setPassword", this, &KexiDBConnectionData::setPassword);
-
-    this->addFunction0< Kross::Api::Variant >("userName", this, &KexiDBConnectionData::userName);
-    this->addFunction1< void, Kross::Api::Variant >("setUserName", this, &KexiDBConnectionData::setUserName);
-
-    this->addFunction0< Kross::Api::Variant >("fileName", this, &KexiDBConnectionData::fileName);
-    this->addFunction1< void, Kross::Api::Variant >("setFileName", this, &KexiDBConnectionData::setFileName);
-
-    this->addFunction0< Kross::Api::Variant >("dbPath", this, &KexiDBConnectionData::dbPath);
-    this->addFunction0< Kross::Api::Variant >("dbFileName", this, &KexiDBConnectionData::dbFileName);
-    this->addFunction0< Kross::Api::Variant >("serverInfoString", this, &KexiDBConnectionData::serverInfoString);
+    setObjectName("KexiDBConnectionData");
 }
 
 KexiDBConnectionData::~KexiDBConnectionData()
 {
-    //delete m_data;
-}
-
-const QString KexiDBConnectionData::getClassName() const
-{
-    return "Kross::KexiDB::KexiDBConnectionData";
+    if(m_owner)
+        delete m_data;
 }
 
 const QString KexiDBConnectionData::caption() const { return m_data->caption; }
@@ -110,3 +72,5 @@ void KexiDBConnectionData::setFileName(const QString& filename) { m_data->setFil
 const QString KexiDBConnectionData::dbPath() const { return m_data->dbPath(); }
 const QString KexiDBConnectionData::dbFileName() const { return m_data->dbFileName(); }
 const QString KexiDBConnectionData::serverInfoString() const { return m_data->serverInfoString(true); }
+
+#include "kexidbconnectiondata.moc"
