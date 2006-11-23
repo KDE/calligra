@@ -22,6 +22,7 @@
 
 #include <qstring.h>
 #include <qobject.h>
+#include <qpointer.h>
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/parser/parser.h>
@@ -51,12 +52,12 @@ namespace Kross { namespace KexiDB {
     */
     class KexiDBParser : public QObject
     {
+            Q_OBJECT
         public:
-            KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser);
+            KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser, bool owner);
             virtual ~KexiDBParser();
 
-#if 0
-        private:
+        public slots:
 
             /** Clears previous results and runs the parser on the SQL statement passed as an argument. */
             bool parse(const QString& sql);
@@ -65,15 +66,16 @@ namespace Kross { namespace KexiDB {
             /** Returns the resulting operation. */
             const QString operation();
 
-            /** Returns the KexiDBTableSchema object on a CREATE TABLE operation. */
-            KexiDBTableSchema* table();
-            /** Returns the KexiDBQuerySchema object on a SELECT operation. */
-            KexiDBQuerySchema* query();
-            /** Returns the KexiDBConnection object pointing to the used database connection. */
-            KexiDBConnection* connection();
+            /** Returns the \a KexiDBTableSchema object on a CREATE TABLE operation. */
+            QObject* table();
+            /** Returns the \a KexiDBQuerySchema object on a SELECT operation. */
+            QObject* query();
+            /** Returns the \a KexiDBConnection object pointing to the used database connection. */
+            QObject* connection();
             /** Returns the SQL query statement. */
             const QString statement();
 
+#if 0
             /** Returns the type string of the last error. */
             const QString errorType();
             /** Returns the message of the last error. */
@@ -82,8 +84,9 @@ namespace Kross { namespace KexiDB {
             int errorAt();
 #endif
         private:
-            KexiDBConnection* m_connection;
+            QPointer<KexiDBConnection> m_connection;
             ::KexiDB::Parser* m_parser;
+            bool m_owner;
     };
 
 }}

@@ -48,7 +48,7 @@ namespace Kross { namespace KexiDB {
 
         public slots:
 
-            /** Return the version number. */
+            /** Returns the version number the KexiDB module defines. */
             int version();
 
             /** Returns a list with avaible drivernames. */

@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 #include <qobject.h>
-//#include <ksharedptr.h>
+#include <qpointer.h>
 
 //#include <kexidb/driver.h>
 #include <kexidb/connection.h>
@@ -35,7 +35,6 @@ namespace Kross { namespace KexiDB {
     class KexiDBCursor;
     class KexiDBTableSchema;
     class KexiDBQuerySchema;
-    class KexiDBTransaction;
     class KexiDBParser;
 
     /**
@@ -68,16 +67,16 @@ namespace Kross { namespace KexiDB {
             virtual ~KexiDBConnection();
 
         private:
-#if 0
+
             /** Return true if there was an error during last operation on the database. */
             bool hadError() const;
             /** Return the last errormessage. */
             const QString lastError() const;
 
-            /** Return the KexiDBConnectionData object used to create this connection. */
-            KexiDBConnectionData* data();
-            /** Return the KexiDBDriver object this connection belongs too. */
-            KexiDBDriver* driver();
+            /** Return the \a KexiDBConnectionData object used to create this connection. */
+            QObject* data();
+            /** Return the \a KexiDBDriver object this connection belongs too. */
+            QObject* driver();
 
             /** Try to connect and return true if we are successfully connected now. */
             bool connect();
@@ -113,16 +112,16 @@ namespace Kross { namespace KexiDB {
             const QStringList queryNames() const;
 
             /** Executes query described by the as argument passed sqlstatement-string. Returns the
-            opened cursor created for results of this query. */
-            KexiDBCursor* executeQueryString(const QString& sqlquery);
-            /** Executes query described by the as argument passed KexiDBQuerySchema object. Returns
-            the opened cursor created for results of this query. */
-            KexiDBCursor* executeQuerySchema(KexiDBQuerySchema* queryschema);
-
+            opened cursor \a KexiDBCursor instance created for results of this query or NULL on error. */
+            QObject* executeQueryString(const QString& sqlquery);
+            /** Executes query described by the as argument passed KexiDBQuerySchema object. Returns the
+            opened cursor \a KexiDBCursor instance created for results of this query or NULL on error. */
+            QObject* executeQuerySchema(KexiDBQuerySchema* queryschema);
+#if 0
 //TODO replace following method with a proxymethod.
             /** Inserts the as argument passed KexiDBField object. */
             Kross::Api::Object::Ptr insertRecord(Kross::Api::List::Ptr);
-
+#endif
             /** Creates new database with the as argument passed databasename. */
             bool createDatabase(const QString& dbname);
             /** Drops the as argument passed databasename. */
@@ -139,13 +138,13 @@ namespace Kross { namespace KexiDB {
             the as second argument passed new tablename. */
             bool alterTableName(KexiDBTableSchema* tableschema, const QString& newtablename);
 
-            /** Returns the KexiDBTableSchema object of the table matching to the as argument
+            /** Returns the \a KexiDBTableSchema object of the table matching to the as argument
             passed tablename. */
-            KexiDBTableSchema* tableSchema(const QString& tablename) const;
+            QObject* tableSchema(const QString& tablename);
             /** Returns true if there is at least one valid record in the as argument passed tablename. */
             bool isEmptyTable(KexiDBTableSchema* tableschema) const;
-            /** Returns the KexiDBQuerySchema object of the query matching to the as argument passed queryname. */
-            KexiDBQuerySchema* querySchema(const QString& queryname) const;
+            /** Returns the \a KexiDBQuerySchema object of the query matching to the as argument passed queryname. */
+            QObject* querySchema(const QString& queryname);
 
             /** Return true if the \"auto commit\" option is on. */
             bool autoCommit() const;
@@ -153,6 +152,7 @@ namespace Kross { namespace KexiDB {
             be changed even when connection is not established. */
             bool setAutoCommit(bool enabled);
 
+#if 0
             /** Creates new transaction handle and starts a new transaction. */
             KexiDBTransaction* beginTransaction();
             /** Commits the as rgument passed KexiDBTransaction object. */
@@ -164,23 +164,22 @@ namespace Kross { namespace KexiDB {
             /** Sets default transaction that will be used as context for operations on data in opened
             database for this connection. */
             void setDefaultTransaction(KexiDBTransaction* transaction);
-
-            /** Return list of currently active KexiDBTransaction objects. */
+            /** Returns list of currently active KexiDBTransaction objects. */
             Kross::Api::List* transactions();
 
-            /** Return a KexiDBParser object. */
-            KexiDBParser* parser();
+            /** Return true if the transaction is active (ie. started). */
+            bool isTransactionActive() const { m_transaction.active(); }
+            /** Return true if the transaction is uninitialized (null). */
+            bool isTransactionNull() const { m_transaction.isNull(); }
+#endif
+
+            /** Return a \a KexiDBParser object. */
+            QObject* parser();
 
         private:
-            ::KexiDB::Connection* connection() const;
             ::KexiDB::Connection* m_connection;
-
-            KSharedPtr<KexiDBConnectionData> m_connectiondata;
-            KSharedPtr<KexiDBDriver> m_driver;
-
-            /// Initialize the class instance.
-            void initialize();
-#endif
+            QPointer<KexiDBConnectionData> m_connectiondata;
+            QPointer<KexiDBDriver> m_driver;
     };
 
 }}

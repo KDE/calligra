@@ -81,7 +81,7 @@ namespace Kross { namespace KexiDB {
     class KexiDBCursor : public QObject
     {
         public:
-            KexiDBCursor(::KexiDB::Cursor* cursor);
+            KexiDBCursor(QObject* parent, ::KexiDB::Cursor* cursor, bool owner);
             virtual ~KexiDBCursor();
 
         private:
@@ -147,6 +147,7 @@ namespace Kross { namespace KexiDB {
 #endif
 
             ::KexiDB::Cursor* m_cursor;
+            bool m_owner;
     };
 
 }}

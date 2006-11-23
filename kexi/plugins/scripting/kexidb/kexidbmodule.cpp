@@ -97,7 +97,7 @@ QObject* KexiDBModule::driver(const QString& drivername)
         kDebug() << QString("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg()) << endl;
         return 0;
     }
-    return new KexiDBDriver(driver);
+    return new KexiDBDriver(this, driver);
 }
 
 const QString KexiDBModule::lookupByMime(const QString& mimetype)

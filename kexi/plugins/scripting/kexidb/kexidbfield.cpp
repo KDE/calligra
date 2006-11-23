@@ -36,7 +36,6 @@ KexiDBField::~KexiDBField()
         delete m_field;
 }
 
-#if 0
 const QString KexiDBField::type() { return m_field->typeString(); }
 void KexiDBField::setType(const QString type) { m_field->setType( ::KexiDB::Field::typeForString(type) ); }
 
@@ -90,4 +89,5 @@ void KexiDBField::setWidth(uint width) { m_field->setWidth(width); }
 
 QVariant KexiDBField::defaultValue() { return m_field->defaultValue(); }
 void KexiDBField::setDefaultValue(const QVariant& defaultvalue) { m_field->setDefaultValue(defaultvalue); }
-#endif
+
+#include "kexidbfield.moc"

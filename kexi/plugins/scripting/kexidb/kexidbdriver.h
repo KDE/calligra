@@ -56,13 +56,14 @@ namespace Kross { namespace KexiDB {
      */
     class KexiDBDriver : public QObject
     {
+            Q_OBJECT
         public:
-            KexiDBDriver(::KexiDB::Driver* driver);
+            KexiDBDriver(QObject* parent, ::KexiDB::Driver* driver);
             virtual ~KexiDBDriver();
 
-        private:
-#if 0
-            /** Return true if this driver is valid else false. */
+        public slots:
+
+            /** Returns true if this driver is valid else false is returned. */
             bool isValid();
             /** The drivers major versionnumber. */
             int versionMajor();
@@ -90,6 +91,7 @@ namespace Kross { namespace KexiDB {
             The first argument defines the fieldtype to what we should escape the
             second argument to. */
             QString valueToSQL(const QString& fieldtype, const QVariant& value);
+#if 0
             /** Create a new KexiDBConnection object and return it. */
             KexiDBConnection* createConnection(KexiDBConnectionData* data);
             /** Return a list of KexiDBConnection objects. */

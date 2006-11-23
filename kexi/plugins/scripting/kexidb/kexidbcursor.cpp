@@ -27,35 +27,20 @@
 
 using namespace Kross::KexiDB;
 
-KexiDBCursor::KexiDBCursor(::KexiDB::Cursor* cursor)
-    : QObject()
+KexiDBCursor::KexiDBCursor(QObject* parent, ::KexiDB::Cursor* cursor, bool owner)
+    : QObject(parent)
     , m_cursor(cursor)
+    , m_owner(owner)
 {
     setObjectName("KexiDBCursor");
-
-/*
-    this->addFunction0<Kross::Api::Variant>("open", this, &KexiDBCursor::open );
-    this->addFunction0<Kross::Api::Variant>("isOpened", this, &KexiDBCursor::isOpened );
-    this->addFunction0<Kross::Api::Variant>("reopen", this, &KexiDBCursor::reopen );
-    this->addFunction0<Kross::Api::Variant>("close", this, &KexiDBCursor::close );
-    this->addFunction0<Kross::Api::Variant>("moveFirst", this, &KexiDBCursor::moveFirst );
-    this->addFunction0<Kross::Api::Variant>("moveLast", this, &KexiDBCursor::moveLast );
-    this->addFunction0<Kross::Api::Variant>("movePrev", this, &KexiDBCursor::movePrev );
-    this->addFunction0<Kross::Api::Variant>("moveNext", this, &KexiDBCursor::moveNext );
-    this->addFunction0<Kross::Api::Variant>("bof", this, &KexiDBCursor::bof );
-    this->addFunction0<Kross::Api::Variant>("eof", this, &KexiDBCursor::eof );
-    this->addFunction0<Kross::Api::Variant>("at", this, &KexiDBCursor::at );
-    this->addFunction0<Kross::Api::Variant>("fieldCount", this, &KexiDBCursor::fieldCount );
-    this->addFunction1<Kross::Api::Variant, Kross::Api::Variant>("value", this, &KexiDBCursor::value );
-    this->addFunction2<Kross::Api::Variant, Kross::Api::Variant, Kross::Api::Variant>("setValue", this, &KexiDBCursor::setValue );
-    this->addFunction0<Kross::Api::Variant>("save", this, &KexiDBCursor::save );
-*/
 }
 
 KexiDBCursor::~KexiDBCursor()
 {
-    ///@todo check ownership
-    //delete m_cursor;
+    if( m_owner ) {
+        m_cursor->close();
+        delete m_cursor;
+    }
 #if 0
     clearBuffers();
 #endif

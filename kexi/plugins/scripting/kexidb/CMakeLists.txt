@@ -8,11 +8,9 @@ set(krosskexidb_PART_SRCS
    kexidbschema.cpp 
    kexidbparser.cpp 
    kexidbcursor.cpp 
-   kexidbtransaction.cpp 
    kexidbconnectiondata.cpp 
    kexidbconnection.cpp 
    kexidbdriver.cpp 
-   kexidbdrivermanager.cpp 
    kexidbmodule.cpp )
 
 kde4_automoc(${krosskexidb_PART_SRCS})

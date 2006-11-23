@@ -24,53 +24,44 @@
 
 using namespace Kross::KexiDB;
 
-KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser)
-    : QObject()
+KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser, bool owner)
+    : QObject(connection)
     , m_connection(connection)
     , m_parser(parser)
+    , m_owner(owner)
 {
     setObjectName("KexiDBParser");
-
-/*
-    this->addFunction1< Kross::Api::Variant, Kross::Api::Variant >("parse", this, &KexiDBParser::parse);
-    this->addFunction0< void >("clear", this, &KexiDBParser::clear);
-
-    this->addFunction0< Kross::Api::Variant >("operation", this, &KexiDBParser::operation);
-
-    this->addFunction0< KexiDBTableSchema >("table", this, &KexiDBParser::table);
-    this->addFunction0< KexiDBQuerySchema >("query", this, &KexiDBParser::query);
-    this->addFunction0< KexiDBConnection >("connection", this, &KexiDBParser::connection);
-    this->addFunction0< Kross::Api::Variant >("statement", this, &KexiDBParser::statement);
-
-    this->addFunction0< Kross::Api::Variant >("errorType", this, &KexiDBParser::errorType);
-    this->addFunction0< Kross::Api::Variant >("errorMsg", this, &KexiDBParser::errorMsg);
-    this->addFunction0< Kross::Api::Variant >("errorAt", this, &KexiDBParser::errorAt);
-*/
 }
 
 KexiDBParser::~KexiDBParser()
 {
+    if( m_owner )
+        delete m_parser;
 }
 
-#if 0
 bool KexiDBParser::parse(const QString& sql) { return m_parser->parse(sql); }
 void KexiDBParser::clear() { m_parser->clear(); }
 const QString KexiDBParser::operation() { return m_parser->operationString(); }
 
-KexiDBTableSchema* KexiDBParser::table() {
+QObject* KexiDBParser::table()
+{
     ::KexiDB::TableSchema* t = m_parser->table();
-    return t ? new KexiDBTableSchema(t) : 0;
+    return t ? new KexiDBTableSchema(this, t, false) : 0;
 }
 
-KexiDBQuerySchema* KexiDBParser::query() {
+QObject* KexiDBParser::query()
+{
     ::KexiDB::QuerySchema* q = m_parser->query();
-    return q ? new KexiDBQuerySchema(q) : 0;
+    return q ? new KexiDBQuerySchema(this, q, false) : 0;
 }
 
-KexiDBConnection* KexiDBParser::connection() { return m_connection; }
+QObject* KexiDBParser::connection() { return m_connection; }
 const QString KexiDBParser::statement() { return m_parser->statement(); }
 
+#if 0
 const QString KexiDBParser::errorType() { return m_parser->error().type(); }
 const QString KexiDBParser::errorMsg() { return m_parser->error().error(); }
 int KexiDBParser::errorAt() { return m_parser->error().at(); }
 #endif
+
+#include "kexidbparser.moc"

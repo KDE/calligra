@@ -33,13 +33,13 @@ namespace Kross { namespace KexiDB {
     */
     class KexiDBField : public QObject
     {
+            Q_OBJECT
         public:
             KexiDBField(QObject* parent, ::KexiDB::Field* field, bool owner);
             virtual ~KexiDBField();
             ::KexiDB::Field* field() { return m_field; }
 
-#if 0
-        private:
+        public slots:
 
             /** Returns the type string for this field, e.g. "Integer" for Integer type. */
             const QString type();
@@ -135,7 +135,6 @@ namespace Kross { namespace KexiDB {
             /** Sets the default value this field has. */
             void setDefaultValue(const QVariant& defaultvalue);
 
-#endif
         private:
             ::KexiDB::Field* m_field;
             bool m_owner;
