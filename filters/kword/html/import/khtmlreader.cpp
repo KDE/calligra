@@ -642,16 +642,9 @@ bool KHTMLReader::parse_font(DOM::Element e) {
 bool KHTMLReader::parse_ul(DOM::Element e) {
 // Parse the tag ul and all its subnodes. Take special care for the li tag.
         _list_depth++;
-        bool popstateneeded = false;
         for (DOM::Node items=e.firstChild();!items.isNull();items=items.nextSibling()) {
                   if (items.nodeName().string().lower() == "li") {
-                  		if (popstateneeded) {
-                  			popState();
-                  			//popstateneeded = false;
-                  		}
-                  		pushNewState();
-                  		startNewLayout();
-                  		popstateneeded = true;
+        			if (!(_writer->getText(state()->paragraph).isEmpty())) startNewLayout();
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext",".");
                   		if (e.tagName().string().lower() == "ol")
@@ -670,8 +663,7 @@ bool KHTMLReader::parse_ul(DOM::Element e) {
                   }
                   parseNode(items);
         }
-        if (popstateneeded)
-            popState();
+	startNewLayout();
         _list_depth--;
 	return false;
 }
