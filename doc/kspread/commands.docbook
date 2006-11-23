@@ -42,7 +42,7 @@
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Open Recent</guimenuitem>
+<guisubmenu>Open Recent</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Open an existing document</action> by selecting it
 from a combo box of recently used files.</para></listitem>
@@ -265,7 +265,7 @@ or down and paste item(s) from the clipboard to the selected cell(s).</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
-<guimenuitem>Fill</guimenuitem>
+<guisubmenu>Fill</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Fills up the selected area with the values from the
 first item-set.</action> All four directions are supported. Note that the
@@ -326,7 +326,7 @@ selection.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
-<guimenuitem>Clear</guimenuitem>
+<guisubmenu>Clear</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Clear <guimenuitem>Text</guimenuitem>, 
 <guimenuitem>Comment</guimenuitem>, <guimenuitem>Validity</guimenuitem> or 
@@ -447,7 +447,7 @@ contains two or more views)
 <varlistentry>
 <term><menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Splitter Orientation</guimenuitem>
+<guisubmenu>Splitter Orientation</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Change view split to <guilabel>Horizontal</guilabel> or <guilabel>Vertical</guilabel>.</action>
 </para></listitem>
@@ -487,7 +487,7 @@ is shown in the upper right corner of the cell.
 <varlistentry>
 <term><menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Zoom</guimenuitem>
+<guisubmenu>Zoom</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Increase or decrease the magnification used to display 
 the spreadsheet. Range from 33% to 500%.
@@ -517,7 +517,7 @@ the spreadsheet. Range from 33% to 500%.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Insert</guimenu>
-<guimenuitem>Cell Comment</guimenuitem>
+<guisubmenu>Cell Comment</guisubmenu>
 </menuchoice></term>
 <listitem><para><action><guimenuitem>Add/Modify Comment...</guimenuitem> or 
 <guimenuitem>Remove Comment</guimenuitem>.</action>
@@ -567,7 +567,7 @@ See the section
 <varlistentry>
 <term><menuchoice>
 <guimenu>Insert</guimenu>
-<guimenuitem>Object...</guimenuitem>
+<guisubmenu>Object</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Embed another &koffice; document into the sheet.</action>
 </para></listitem>
@@ -596,7 +596,7 @@ to insert a picture.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Insert</guimenu>
-<guimenuitem>External Data</guimenuitem>
+<guisubmenu>External Data</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Insert data <guilabel>From Database...</guilabel>, 
 <guilabel>From Text File...</guilabel> or <guilabel>From 
@@ -698,7 +698,7 @@ properly.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Row</guimenuitem>
+<guisubmenu>Row</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Resize, equalize, hide or show row(s).</action>
 </para></listitem>
@@ -707,7 +707,7 @@ properly.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Column</guimenuitem>
+<guisubmenu>Column</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Resize, equalize, hide or show column(s).</action>
 </para></listitem>
@@ -716,7 +716,7 @@ properly.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Sheet</guimenuitem>
+<guisubmenu>Sheet</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Remove, hide, show worksheet or configure
 advanced sheet properties.</action>
@@ -744,7 +744,7 @@ advanced sheet properties.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Style</guimenuitem>
+<guisubmenu>Style</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Apply a style to selected cell(s).</action>
 To manage styles use <menuchoice>
@@ -778,7 +778,7 @@ To manage styles use <menuchoice>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Print Range</guimenuitem>
+<guisubmenu>Print Range</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Define or reset the print range.</action>
 </para></listitem>
@@ -1012,6 +1012,24 @@ is protected.</action>
 </para></listitem>
 </varlistentry>
 
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Script Manager...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens</action> the <guilabel>Scripts Manager</guilabel> dialog to execute, load, unload, install, uninstall and get more scripts.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guisubmenu>Scripts</guisubmenu>
+</menuchoice></term>
+<listitem><para>Here you can execute the script <guilabel>Export to HTML File</guilabel> or start the <guilabel>Script Editor</guilabel>.
+</para></listitem>
+</varlistentry>
+
 </variablelist></para>
 </sect1>
 
@@ -1053,7 +1071,7 @@ The Formula Bar can be used to edit the content of the selected cell.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Toolbars</guimenuitem>
+<guisubmenu>Toolbars</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Show or hide the toolbars: <guilabel>File</guilabel>,
 <guilabel>Edit</guilabel>, <guilabel>Navigation</guilabel>, 

@@ -43,7 +43,7 @@ want to edit.  Click once with the &RMB;.  A popup menu will appear.  Select <gu
 <sect2 id="comments-hide"><title>Hiding all comments in a document</title>
 <para>To hide all comments, select <menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Configure KWord...</guimenuitem>
+<guimenuitem>Configure &kword;...</guimenuitem>
 </menuchoice> from the menubar. </para>
 <para>This will bring up a dialog box.</para>
 

@@ -123,7 +123,7 @@ Table</guimenuitem></menuchoice> from the menubar</para>
 
 <para>To insert a row into a table, place the mouse pointer over the border of any cell of the table you want to add
 a row to.  Using your mouse, select either <menuchoice> <guimenu>Table</guimenu>
-<guimenuitem>Row</guimenuitem>
+<guisubmenu>Row</guisubmenu>
 <guimenuitem>Insert Row...</guimenuitem>
 </menuchoice> from the menubar or 
 click <inlinemediaobject><imageobject><imagedata
@@ -157,7 +157,7 @@ limits you to the rows currently in the table.</para>
 <indexterm><primary>tables</primary><secondary>inserting a column</secondary></indexterm>
 
 <para>To insert a column into a table, place the mouse pointer over the border of any cell of the table you want to add
-a column to.  Select either <menuchoice> <guimenu>Table</guimenu><guimenuitem>Column</guimenuitem>
+a column to.  Select either <menuchoice> <guimenu>Table</guimenu><guisubmenu>Column</guisubmenu>
 <guimenuitem>Insert Column...</guimenuitem></menuchoice> from the menubar or click 
 <inlinemediaobject><imageobject><imagedata fileref="colin.png" format="PNG"/></imageobject></inlinemediaobject> on the
 toolbar.</para>
@@ -195,7 +195,7 @@ box limits you to the columns currently in the table.</para>
 
 <itemizedlist>
 <listitem>
-<para>select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Row</guimenuitem>
+<para>select <menuchoice> <guimenu>Table</guimenu><guisubmenu>Row</guisubmenu>
 <guimenuitem>Delete Selected
 Rows...</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
@@ -227,7 +227,7 @@ delete any rows.</para>
 
 <itemizedlist>
 <listitem>
-<para>select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Column</guimenuitem>
+<para>select <menuchoice> <guimenu>Table</guimenu><guisubmenu>Column</guisubmenu>
 <guimenuitem>Delete Selected
 Columns...</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
@@ -269,7 +269,7 @@ cell to the desired width.  When you release the &LMB;, the entire column will a
 <para>First, select any cell in the column you want to change, by holding down the &Ctrl; key and clicking once with the &LMB;.</para>
 <tip><para>You can select any cell in the table to change column widths.  By selecting a cell in the column you want to change 
 the dialog box will default to the correct column automatically.</para></tip>
-<para>Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Column</guimenuitem>
+<para>Select <menuchoice> <guimenu>Table</guimenu><guisubmenu>Column</guisubmenu>
 <guimenuitem>Resize
 Column...</guimenuitem></menuchoice> from the menubar.</para>
 <para>A dialog box will appear.  In the spin box labeled <guilabel>Column:</guilabel>, you can chose a different column to set.  
@@ -321,7 +321,7 @@ end of the row or column you want to join.</para>
 
 
 <para>Once you have selected all the cells you want to join,
-select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem>
+select <menuchoice> <guimenu>Table</guimenu><guisubmenu>Cell</guisubmenu>
 <guimenuitem>Join Cells</guimenuitem></menuchoice> from the menubar</para>
 
 <para>The cells will now be joined.</para>
@@ -343,7 +343,7 @@ to have been previously joined.</para>
 
 <para>To split a cell, select the cell you want to split by holding the &Ctrl; button down and
 clicking on it with the
-&LMB;.  Select <menuchoice> <guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem>
+&LMB;.  Select <menuchoice> <guimenu>Table</guimenu><guisubmenu>Cell</guisubmenu>
 <guimenuitem>Split Cell...</guimenuitem></menuchoice> from the menubar.</para>
 
 <para>This will bring up a small dialog box which allows you to set the number of rows and 
@@ -371,7 +371,7 @@ into an individual frame.  You can then move these frames around independently o
 <para>You can protect any or all cells in a table from accidental modification or deletion.</para>
 <para>Simply select the cell(s) you want to protect, then:</para>
 <para>Select <menuchoice> <guimenu>Table</guimenu>
-<guimenuitem>Cell</guimenuitem><guimenuitem>Protect Cells</guimenuitem></menuchoice>
+<guisubmenu>Cell</guisubmenu><guimenuitem>Protect Cells</guimenuitem></menuchoice>
 from the menubar or hold down the &Ctrl; button, click in the cell once with the &RMB; and select
 <menuchoice> <guimenuitem>Cell</guimenuitem><guimenuitem>Protect Cells</guimenuitem></menuchoice> 
 from the popup menu.</para>
@@ -519,7 +519,7 @@ which are grouped together and named.</para>
 <para>Select the cell(s) by holding down &Ctrl; and clicking within the cell with the &LMB;.  You can also 
 <link linkend="table-format-selcol">select columns</link> and <link linkend="table-format-selrow">rows</link>.</para>
 <para>Select <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Tablestyle</guimenuitem></menuchoice>
+<guimenu>Table</guimenu><guisubmenu>Tablestyle</guisubmenu></menuchoice>
 from the menubar.  A submenu will appear, listing all the currently defined table styles.  Select the name of the table style
 you want and all selected cells will automatically be formatting using the options of that table style.</para>
 </sect3>

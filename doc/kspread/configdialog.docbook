@@ -65,8 +65,8 @@ option <guilabel>Blank Worksheet</guilabel> is chosen when
 <varlistentry>
 <term><guilabel>Number of files to show in Recent Files list:</guilabel></term>
 <listitem><para>Controls the maximum number of filenames that are shown
-when you select <menuchoice><guimenu>File</guimenu><guimenuitem>
-Open Recent</guimenuitem></menuchoice>.
+when you select <menuchoice><guimenu>File</guimenu><guisubmenu>
+Open Recent</guisubmenu></menuchoice>.
 </para></listitem>
 </varlistentry>
 
@@ -217,7 +217,7 @@ marked by a small red triangle at the top right corner.
 </para>
 <para>This page of &kspread;'s configuration dialog box lets you choose the 
 color of the sheet grid. If you do not want the grid to appear at all, uncheck the <guilabel>Show grid</guilabel> box in 
-the <menuchoice><guimenu>Format</guimenu><guimenuitem>Sheet</guimenuitem><guimenuitem>Sheet Properties</guimenuitem></menuchoice> dialog.</para>
+the <menuchoice><guimenu>Format</guimenu><guisubmenu>Sheet</guisubmenu><guimenuitem>Sheet Properties</guimenuitem></menuchoice> dialog.</para>
 
 <para>This page also lets you select the color of the lines used to indicate 
 the printed page borders when the <guimenuitem>Show Page Borders</guimenuitem> 

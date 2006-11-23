@@ -140,7 +140,7 @@ Updates in one view will be immediately visible in the other.</para>
 <title>Changing the split view orientation </title>
 <indexterm><primary>views</primary><secondary>change split view orientation</secondary></indexterm>
 <para>To change the direction that the views are split, simply select
-<menuchoice><guimenu>View</guimenu><guimenuitem>Splitter Orientation</guimenuitem></menuchoice> from the menubar.
+<menuchoice><guimenu>View</guimenu><guisubmenu>Splitter Orientation</guisubmenu></menuchoice> from the menubar.
 This will show a submenu.  Select either <guilabel>Horizontal</guilabel> or <guilabel>Vertical</guilabel>.</para>
 
 <para>All views in the current window will immediately change to the new orientation.</para>
@@ -1175,7 +1175,7 @@ the entire document.</para></note>
 <itemizedlist>
 <listitem>
 <para>By selecting <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice>
+<guimenu>Tools</guimenu><guisubmenu>Spellcheck</guisubmenu><guimenuitem>Spelling...</guimenuitem></menuchoice>
 from the menubar</para>
 </listitem>
 
@@ -1288,7 +1288,7 @@ For more details, please see the section entitled
 
 <para>&kword; can check the spelling of your document as you edit it.  It will underline in red any word which 
 it cannot find in the dictionary.  This behavior can be turned on and off by the user. By selecting <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Autospellcheck</guimenuitem></menuchoice>
+<guimenu>Tools</guimenu><guisubmenu>Spellcheck</guisubmenu><guimenuitem>Autospellcheck</guimenuitem></menuchoice>
 from the menubar you can toggle autospellchecking on and off. </para> 
 </sect2>
 
@@ -1342,13 +1342,13 @@ automatically, while you are editing your document.</para>
 <title>Enabling/Disabling Autocorrection</title>
 
 <para>To toggle autocorrection on, select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem>
+<guimenu>Tools</guimenu><guisubmenu>Autocorrection</guisubmenu>
 <guimenuitem>Enable Autocorrection</guimenuitem></menuchoice>
 from the menubar.  When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>.  You can
 determine which changes to make by <link linkend="configure-autocorrection">configuring autocorrection</link>.</para>
 
 <para>To toggle autocorrection off, select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem>
+<guimenu>Tools</guimenu><guisubmenu>Autocorrection</guisubmenu>
 <guimenuitem>Disable Autocorrection</guimenuitem></menuchoice>
 from the menubar. When disabled, autocorrection changes are not made. You can, however,
 <link linkend="autoformat">apply autocorrection manually</link>.</para>
@@ -1734,7 +1734,7 @@ applying</secondary></indexterm>
 <para>To manually apply autocorrection, first configure your options by using the
 <link linkend="configure-autocorrection">autocorrection dialogs</link>.</para>
 <para>Then select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem>
+<guimenu>Tools</guimenu><guisubmenu>Autocorrection</guisubmenu>
 <guimenuitem>Apply Autocorrection</guimenuitem></menuchoice>
 from the menubar.</para>
 <para>&kword; will start at the beginning of the document and apply all selected

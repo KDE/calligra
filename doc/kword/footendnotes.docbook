@@ -166,7 +166,7 @@ footnotes.</para>
 <indexterm><primary>endnotes</primary><secondary>change appearance</secondary></indexterm>
 
 <para>To configure the appearance of endnotes, select <menuchoice> <guimenu>Format</guimenu>
-<guimenuitem>Footnote/Endnote...</guimenuitem></menuchoice> from the menubar.  A dialog will appear.</para>
+<guimenuitem>Footnote...</guimenuitem></menuchoice> from the menubar.  A dialog will appear.</para>
 
 <screenshot>
 <mediaobject>

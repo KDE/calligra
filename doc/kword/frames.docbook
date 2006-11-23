@@ -306,7 +306,7 @@ move to another frameset.</para>
 
 <para>You can change the frameset of the currently selected frame by
 selecting <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset Properties...</guimenuitem></menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset Properties</guimenuitem></menuchoice>
 from the menubar</para>
 
 <tip><para>You can also accomplish this by clicking on the frame border once with the &RMB;, and selecting
@@ -403,7 +403,7 @@ cursor where you want the break to be located in the document.</para>
 
 <itemizedlist>
 <listitem>
-<para>Select <menuchoice> <guimenu>Insert</guimenu><guimenuitem>Hard Frame Break</guimenuitem></menuchoice> from the menubar</para>
+<para>Select <menuchoice> <guimenu>Insert</guimenu><guimenuitem>Page Break</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 
 <listitem>

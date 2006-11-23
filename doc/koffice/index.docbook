@@ -249,7 +249,7 @@ Start a new, blank document. You may want to type some sample text.
 </step>
 <step>
 <para>
-Select <menuchoice><guimenu>Insert</guimenu> <guimenuitem>Object Frame</guimenuitem>
+Select <menuchoice><guimenu>Insert</guimenu> <guisubmenu>Object Frame</guisubmenu>
  <guimenuitem>Spreadsheets</guimenuitem></menuchoice>. You'll notice that the mouse cursor has
 changed to a cross. This form of the cursor indicates that you are supposed 
 to select an area.
