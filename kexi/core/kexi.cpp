@@ -316,8 +316,13 @@ ObjectStatus::operator KexiDB::MessageHandler*()
 void Kexi::initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData)
 {
 	KAboutData *about = aboutData;
-	if (!about)
+	if (!about) {
+#if 0 //sebsauer 20061123
 		about = Kexi::createAboutData();
+#else
+		about = 0;
+#endif
+	}
 #ifdef CUSTOM_VERSION
 # include "../custom_startup.h"
 #endif
