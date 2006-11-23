@@ -69,9 +69,9 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 	QString groupKey;
 	if (!_groupKey || _groupKey->isEmpty()) {
 		QStringList groups(config.groupList());
-		foreach (QStringList::ConstIterator, it, groups) {
-			if ((*it).lower()!="file information") {
-				groupKey = *it;
+		foreach(QString s, groups) {
+			if (s.toLower()!="file information") {
+				groupKey = s;
 				break;
 			}
 		}
@@ -89,7 +89,7 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 	}
 
 	config.setGroup(groupKey);
-	QString type( config.readEntry("type", "database").lower() );
+	QString type( config.readEntry("type", "database").toLower() );
 
 	if (type=="database") {
 		d->isDatabaseShortcut = true;
@@ -137,7 +137,7 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 	}
 	data.connectionData()->hostName = config.readEntry("server"); //empty allowed
 	data.connectionData()->port = config.readEntry("port", 0);
-	data.connectionData()->useLocalSocketFile = config.readBoolEntry("useLocalSocketFile", false);
+	data.connectionData()->useLocalSocketFile = config.readEntry("useLocalSocketFile", false);
 	data.connectionData()->localSocketFileName = config.readEntry("localSocketFile");
 	data.connectionData()->savePassword = config.hasKey("password") || config.hasKey("encryptedPassword");
 	if (data.formatVersion >= 2) {
@@ -178,9 +178,9 @@ bool KexiDBShortcutFile::saveProjectData(const KexiProjectData& data,
 		const QStringList groups(config.groupList());
 		if (overwriteFirstGroup && !groups.isEmpty()) {
 //			groupKey = groups.first(); //found
-			foreach (QStringList::ConstIterator, it, groups) {
-				if ((*it).lower()!="file information") {
-					groupKey = *it;
+			foreach(QString s, groups) {
+				if (s.toLower()!="file information") {
+					groupKey = s;
 					break;
 				}
 			}
@@ -223,7 +223,7 @@ bool KexiDBShortcutFile::saveProjectData(const KexiProjectData& data,
 		config.writeEntry("server", data.constConnectionData()->hostName);
 
 	if (data.constConnectionData()->port!=0)
-		config.writeEntry("port", data.constConnectionData()->port);
+		config.writeEntry("port", int(data.constConnectionData()->port));
 	config.writeEntry("useLocalSocketFile", data.constConnectionData()->useLocalSocketFile);
 	if (!data.constConnectionData()->localSocketFileName.isEmpty())
 		config.writeEntry("localSocketFile", data.constConnectionData()->localSocketFileName);

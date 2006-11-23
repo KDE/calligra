@@ -24,7 +24,7 @@
 #include <kexiutils/utils.h>
 
 #include <kmessagebox.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 
 KexiGUIMessageHandler::KexiGUIMessageHandler(QWidget *parent)
 : KexiDB::MessageHandler(parent)
@@ -146,6 +146,7 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
 {
 	if (!KMessageBox::shouldBeShownContinue(dontShowAgainName))
 		return;
+#if 0 //sebsauer 20061123
 	KDialogBase *dialog = new KDialogBase(
 		futureI18n("Warning"), KDialogBase::Yes, KDialogBase::Yes, KDialogBase::No,
 		m_messageHandlerParentWidget, "warningContinue", true, true, KStdGuiItem::cont() );
@@ -156,6 +157,9 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
 		&checkboxResult, 0);
 	if (checkboxResult)
 		KMessageBox::saveDontShowAgainContinue(dontShowAgainName);
+#else
+	KMessageBox::warningContinueCancel(m_messageHandlerParentWidget, details, title, KStdGuiItem::cont());
+#endif
 }
 
 int KexiGUIMessageHandler::askQuestion( const QString& message, 
@@ -163,13 +167,14 @@ int KexiGUIMessageHandler::askQuestion( const QString& message,
 	const KGuiItem &buttonYes, 
 	const KGuiItem &buttonNo,
 	const QString &dontShowAskAgainName,
-	int options )
+	KMessageBox::Options options )
 {
 	Q_UNUSED(defaultResult);
 	if (KMessageBox::WarningContinueCancel == dlgType)
 		return KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
 			message, QString::null, buttonYes, dontShowAskAgainName, options);
 	else
+	
 		return KMessageBox::messageBox(m_messageHandlerParentWidget,
 			dlgType, message, QString::null, buttonYes, buttonNo, dontShowAskAgainName, options);
 }

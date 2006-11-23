@@ -132,7 +132,7 @@ KexiBLOBBuffer::Item::Item(const QByteArray& data, KexiBLOBBuffer::Id_t ident, b
 
 KexiBLOBBuffer::Item::~Item()
 {
-	kexipluginsdbg << "KexiBLOBBuffer::Item::~Item()" << endl;
+	kDebug() << "KexiBLOBBuffer::Item::~Item()" << endl;
 	delete m_pixmap;
 	m_pixmap = 0;
 	delete m_data;
@@ -143,8 +143,12 @@ KexiBLOBBuffer::Item::~Item()
 QPixmap KexiBLOBBuffer::Item::pixmap() const
 {
 	if (!*m_pixmapLoaded && m_pixmap->isNull() && !m_data->isEmpty()) {
+#if 0 //sebsauer 20061123
 		QString type( KImageIO::typeForMime(mimeType) );
-		if (!KImageIO::canRead( type ) || !m_pixmap->loadFromData(*m_data, type.latin1())) {
+#else
+		QString type( KImageIO::typeForMime(mimeType).at(0) );
+#endif
+		if (!KImageIO::isSupported(type, KImageIO::Reading) || !m_pixmap->loadFromData(*m_data, type.toLatin1())) {
 			//! @todo inform about error?
 		}
 		*m_pixmapLoaded = true;
@@ -163,9 +167,9 @@ QByteArray KexiBLOBBuffer::Item::data() const
 	if (m_data->isEmpty() && !m_pixmap->isNull()) {
 		//convert pixmap to byte array
 		//(do it only on demand)
-		QBuffer buffer( *m_data );
+		QBuffer buffer( m_data );
 		buffer.open( QIODevice::WriteOnly );
-		m_pixmap->save( &buffer, mimeType.isEmpty() ? (const char*)"PNG"/*! @todo default? */ : mimeType.latin1() );
+		m_pixmap->save( &buffer, mimeType.isEmpty() ? "PNG"/*! @todo default? */ : mimeType.toLatin1() );
 	}
 	return *m_data;
 }
@@ -191,23 +195,26 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
 	if (url.isEmpty() )
 		return KexiBLOBBuffer::Handle();
 	if (!url.isValid()) {
-		kexipluginswarn << "::insertPixmap: INVALID URL '" << url << "'" << endl;
+		kDebug() << "::insertPixmap: INVALID URL '" << url << "'" << endl;
 		return KexiBLOBBuffer::Handle();
 	}
 //! @todo what about searching by filename only and then compare data?
-	Item * item = d->itemsByURL.find(url.prettyURL());
+	Item * item = d->itemsByURL.find(url.prettyUrl());
 	if (item)
 		return KexiBLOBBuffer::Handle(item);
 
-	QString fileName = url.isLocalFile() ? url.path() : url.prettyURL();
+	QString fileName = url.isLocalFile() ? url.path() : url.prettyUrl();
 //! @todo download the file if remote, then set fileName properly
 	QFile f(fileName);
 	if (!f.open(QIODevice::ReadOnly)) {
 		//! @todo err msg
 		return KexiBLOBBuffer::Handle();
 	}
+#if 0 //sebsauer 20061122
 	QString mimeType( KImageIO::mimeType( fileName ) );
-
+#else
+	QString mimeType( KImageIO::typeForMime( fileName ).at(0) );
+#endif
 	QByteArray data( f.readAll() );
 	if (f.status()!=IO_Ok) {
 		//! @todo err msg
@@ -220,8 +227,8 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
 	insertItem(item);
 
 	//cache
-	item->prettyURL = url.prettyURL();
-	d->itemsByURL.replace(url.prettyURL(), item);
+	item->prettyURL = url.prettyUrl();
+	d->itemsByURL.replace(url.prettyUrl(), item);
 	return KexiBLOBBuffer::Handle(item);
 }
 

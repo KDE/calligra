@@ -56,7 +56,7 @@ class KEXICORE_EXPORT KexiGUIMessageHandler : public KexiDB::MessageHandler
 			const KGuiItem &buttonYes=KStdGuiItem::yes(), 
 			const KGuiItem &buttonNo=KStdGuiItem::no(),
 			const QString &dontShowAskAgainName = QString::null,
-			int options = KMessageBox::Notify );
+			KMessageBox::Options options = KMessageBox::Notify );
 };
 
 #endif

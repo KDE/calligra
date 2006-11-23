@@ -24,6 +24,8 @@
 #include <qwidget.h>
 #include <qpointer.h>
 
+#include "../kexi_export.h"
+
 class KexiDataItemInterface;
 namespace KexiDB {
 	class Field;
