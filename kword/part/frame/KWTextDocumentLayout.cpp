@@ -819,7 +819,7 @@ void KWTextDocumentLayout::layout() {
         QRectF repaintRect = line.rect();
         repaintRect.moveTop(repaintRect.y() - m_state->docOffsetInShape());
         repaintRect.setX(0.0); // just take full width since we can't force a repaint of
-        repaintRect.setY(m_state->shape->size().width()); // where lines were before layout.
+        repaintRect.setWidth(m_state->shape->size().width()); // where lines were before layout.
         m_state->shape->repaint(repaintRect);
     }
     // finished normally. Meaning that amount of frames is perfect for this text.
