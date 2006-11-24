@@ -444,8 +444,8 @@ public:
     }
 
     void cleanupFrame(KWFrame *frame) {
-        KoShape *copyShape = frame->shape();
-        KoTextShapeData *textData = static_cast<KoTextShapeData*> (copyShape->userData());
+        KoShape *daShape = frame->shape();
+        KoTextShapeData *textData = static_cast<KoTextShapeData*> (daShape->userData());
 
         if(m_data && frame->isCopy()) {
             textData->setDocumentOffset(m_data->documentOffset());
@@ -455,6 +455,7 @@ public:
         else
             textData->setPosition(-1);
         textData->wipe();
+        daShape->repaint();
     }
 
   private:
