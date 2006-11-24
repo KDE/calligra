@@ -50,7 +50,7 @@ namespace Scripting {
      * # Create the connection now.
      * connection = driver.createConnection(connectiondata)
      * # Print the list of connections again. This includes our just created connection now.
-     * print driver.connectionsList()
+     * for i in range(driver.connectionCount()): print driver.connection(i)
      * @endcode
      */
     class KexiDBDriver : public QObject
@@ -95,10 +95,11 @@ namespace Scripting {
             argument passed \a KexiDBConnectionData object or NULL if the connection
             could not be created. */
             QObject* createConnection(QObject* data);
-#if 0
-            /** Return a list of KexiDBConnection objects. */
-            Q3PtrList< ::KexiDB::Connection > connectionsList();
-#endif
+            /** Returns the number of connections. */
+            uint connectionCount();
+            /** Return the \a KexiDBConnection specified by the index-number passed as an argument. */
+            QObject* connection(uint index);
+
         private:
             ::KexiDB::Driver* m_driver;
     };

@@ -117,10 +117,11 @@ namespace Scripting {
             /** Executes query described by the as argument passed KexiDBQuerySchema object. Returns the
             opened cursor \a KexiDBCursor instance created for results of this query or NULL on error. */
             QObject* executeQuerySchema(KexiDBQuerySchema* queryschema);
-#if 0
-            /** Inserts the as argument passed KexiDBField object. */
-            Kross::Api::Object::Ptr insertRecord(Kross::Api::List::Ptr);
-#endif
+
+            /** Inserts a new record with the as argument passed \p values values. The
+            \p obj could be a \a KexiDBFieldList or a \a KexiDBTableSchema object. */
+            bool insertRecord(QObject* obj, QVariantList values);
+
             /** Creates new database with the as argument passed databasename. */
             bool createDatabase(const QString& dbname);
             /** Drops the as argument passed databasename. */

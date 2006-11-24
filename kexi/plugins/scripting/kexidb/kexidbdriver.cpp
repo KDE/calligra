@@ -54,11 +54,16 @@ QString KexiDBDriver::valueToSQL(const QString& fieldtype, const QVariant& value
 
 QObject* KexiDBDriver::createConnection(QObject* data) {
     KexiDBConnectionData* d = dynamic_cast<KexiDBConnectionData*>(data);
-    return d ? new KexiDBConnection(m_driver->createConnection(*d)) : 0;
+    return d ? new KexiDBConnection(m_driver->createConnection(*d->data())) : 0;
 }
 
-#if 0
-Q3PtrList< ::KexiDB::Connection > KexiDBDriver::connectionsList() { return m_driver->connectionsList(); }
-#endif
+uint KexiDBDriver::connectionCount() {
+    return m_driver->connectionsList().count();
+}
+
+QObject* KexiDBDriver::connection(uint index) {
+    Q3PtrList<KexiDB::Connection> list = m_driver->connectionsList();
+    return (index < list.count()) ? list.at(index) : 0;
+}
 
 #include "kexidbdriver.moc"

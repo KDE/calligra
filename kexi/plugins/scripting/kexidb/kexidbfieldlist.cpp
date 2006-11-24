@@ -52,12 +52,6 @@ QObject* KexiDBFieldList::fieldByName(const QString& name) {
     return field ? new KexiDBField(this, field, false) : 0;
 }
 
-#if 0
-Kross::Api::List* KexiDBFieldList::fields() {
-    return new Kross::Api::ListT<KexiDBField>( *m_fieldlist->fields() );
-}
-#endif
-
 bool KexiDBFieldList::hasField(QObject* field) {
     KexiDBField* f = dynamic_cast<KexiDBField*>(field);
     return f ? m_fieldlist->hasField( f->field() ) : false;
@@ -102,14 +96,12 @@ bool KexiDBFieldList::setFields(QObject* fieldlist) {
     return true;
 }
 
-#if 0
-KexiDBFieldList* KexiDBFieldList::subList(Q3ValueList<QVariant> list) {
-    Q3ValueList<QVariant>::ConstIterator it( list.constBegin() ), end( list.constEnd() );
+QObject* KexiDBFieldList::subList(QVariantList list) {
     QStringList sl;
-    for(; it != end; ++it) sl.append( (*it).toString() );
+    foreach(QVariant v, list)
+        sl.append(v.toString());
     ::KexiDB::FieldList* fl = m_fieldlist->subList(sl);
-    return fl ? new Kross::KexiDB::KexiDBFieldList(fl) : 0;
+    return fl ? new KexiDBFieldList(this, fl, false) : 0;
 }
-#endif
 
 #include "kexidbfieldlist.moc"

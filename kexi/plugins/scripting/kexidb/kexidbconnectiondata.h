@@ -38,8 +38,6 @@ namespace Scripting {
         public:
             KexiDBConnectionData(QObject* parent, ::KexiDB::ConnectionData* data, bool owner);
             virtual ~KexiDBConnectionData();
-            operator ::KexiDB::ConnectionData& () { return *m_data; }
-            operator ::KexiDB::ConnectionData* () { return m_data; }
             ::KexiDB::ConnectionData* data() { return m_data; }
 
         public slots:

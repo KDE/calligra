@@ -44,7 +44,6 @@ extern "C"
      */
     QObject* krossmodule()
     {
-        kDebug()<<"=============> Kross::KexiDB::krossmodule()"<<endl;
         return new Scripting::KexiDBModule();
     }
 }

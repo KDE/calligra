@@ -5,13 +5,12 @@
  * within Kexi to deal with all supported database-backends like
  * SQLite, MySQL and Postqre.
  *
- * The @a KexiDBDriverManager is the manager module which provides
- * the entry point to access the KexiDB functionality from
- * scripting languages like Python and Ruby. 
+ * The @a KexiDBModule class is the main module which provides
+ * the entry point to access the KexiDB functionality from within
+ * scripting languages like Python and Ruby.
  *
- * @see http://www.kexi-project.org/scripting/
  * @see http://kross.dipe.org
- * @see http://www.kexi-project.org/wiki/wikiview/index.php?Scripting
+ * @see http://www.kexi-project.org/scripting/
  *
  * @section Legal
  *

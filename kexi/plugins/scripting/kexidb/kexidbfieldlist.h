@@ -70,11 +70,6 @@ namespace Scripting {
             /** Return the \a KexiDBField specified by the as an argument passed fieldname. */
             QObject* fieldByName(const QString& name);
 
-#if 0
-            /** Returns a list of all fields. */
-            Kross::Api::List* fields();
-#endif
-
             /** Returns true if the passed \a KexiDBField \p field object is in the field list. */
             bool hasField(QObject* field);
             /** Return a list of field names. */
@@ -92,10 +87,9 @@ namespace Scripting {
 
             /** Set the list of field to the as argument passed \a KexiDBFieldList \p fieldlist . */
             bool setFields(QObject* fieldlist);
-#if 0
-            /** Creates and returns list that contain fields selected by name. */
-            KexiDBFieldList* subList(Q3ValueList<QVariant> list);
-#endif
+
+            /** Creates and returns a \a KexiDBFieldList object that contain fields selected by name. */
+            QObject* subList(QVariantList list);
 
         private:
             ::KexiDB::FieldList* m_fieldlist;

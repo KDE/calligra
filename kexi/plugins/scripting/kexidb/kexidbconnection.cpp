@@ -100,33 +100,16 @@ QObject* KexiDBConnection::executeQuerySchema(KexiDBQuerySchema* queryschema)
     return cursor ? new KexiDBCursor(this, cursor, true) : 0;
 }
 
-/*TODO
-bool KexiDBConnection::insertRecordIntoFieldlist(KexiDBFieldList* fieldlist, Q3ValueList<QVariant> values) {
-    return m_connection->insertRecord(*fieldlist->fieldlist(), values);
-}
-
-bool KexiDBConnection::insertRecordIntoTable(KexiDBTableSchema* tableschema, Q3ValueList<QVariant> values) {
-    return m_connection->insertRecord(*tableschema->tableschema(), values);
-}
-*/
-#if 0
-Kross::Api::Object::Ptr KexiDBConnection::insertRecord(Kross::Api::List::Ptr args)
+bool KexiDBConnection::insertRecord(QObject* obj, QVariantList values)
 {
-    Q3ValueList<QVariant> values = Kross::Api::Variant::toList(args->item(1));
-    Kross::Api::Object::Ptr obj = args->item(0);
-    if(obj->getClassName() == "Kross::KexiDB::KexiDBFieldList")
-        return new Kross::Api::Variant(
-                   QVariant(m_connection->insertRecord(
-                       *Kross::Api::Object::fromObject<KexiDBFieldList>(obj)->fieldlist(),
-                       values
-                   ), 0));
-    return new Kross::Api::Variant(
-               QVariant(m_connection->insertRecord(
-                   *Kross::Api::Object::fromObject<KexiDBTableSchema>(obj)->tableschema(),
-                   values
-               ), 0));
+    KexiDBFieldList* fieldlist = dynamic_cast< KexiDBFieldList* >(obj);
+    if( fieldlist )
+        return m_connection->insertRecord(*fieldlist->fieldlist(), values);
+    KexiDBTableSchema* tableschema = dynamic_cast< KexiDBTableSchema* >(obj);
+    if( tableschema )
+        return m_connection->insertRecord(*tableschema->tableschema(), values);
+    return false;
 }
-#endif
 
 bool KexiDBConnection::createDatabase(const QString& dbname) { return m_connection->createDatabase(dbname); }
 bool KexiDBConnection::dropDatabase(const QString& dbname) { return m_connection->dropDatabase(dbname); }
