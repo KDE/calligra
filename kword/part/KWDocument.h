@@ -133,7 +133,8 @@ public:
 
     /**
      * Remove frameset from the document stopping it from being saved or displayed.
-     * Note that the document is normally the one that deletes framesets, the
+     * Note that the document is normally the one that deletes framesets when the
+     * document is closed, after removing it the
      * caller will have the responsibility to delete it when its no longer of use.
      * @param fs the frameset that should be removed from the doc
      */
@@ -179,9 +180,6 @@ public:
      * With a higher startPage and a constante pagecount this number will also get higher.
      */
     int lastPage() const;
-
-    /// return the frame that holds the argument shape
-    KWFrame *frameForShape(KoShape *shape) const;
 
     /// return the amount of framesets this document holds
     int frameSetCount() const { return m_frameSets.count(); }
@@ -236,7 +234,6 @@ signals:
 private slots:
     /// Frame maintenance on already registered framesets
     void addFrame( KWFrame *frame );
-    void removeFrame( KWFrame *frame );
     void requestMoreSpace(KWTextFrameSet *fs);
 
 private:
@@ -266,7 +263,6 @@ private:
     KWPageManager m_pageManager;
     KWPageSettings m_pageSettings;
     KWFrameLayout m_frameLayout;
-    QMap<KoShape*, KWFrame*> m_frameMap;
 
     KoStyleManager *m_styleManager;
     KWMultiViewCommandHistory m_commandHistory;

@@ -1,0 +1,35 @@
+KWord stores all its data as shapes. textshapes, imageshapes, vector shapes, formula shapes. etc.
+Each shape can have a hierarchy of child shapes. So a text can contain an image shape.
+
+For shapes that don't have a parent shape we store them in KoFrame instances.
+Each KoFrame instance will need a parent KoFrameSet.
+Which means that if you have 1 image the data structure is like this;
+
+KFrameSet
+ +- KWFrame
+    +- imageShape (KoShape inheriting class)
+
+
+Lifetime
+--------
+
+A shape is created and then wrapped in KFrame/KWFrameSet instances. This
+happens at loading time, or by user interaction.
+
+Deletion of a shape is done by Flake.  For that reason deleting a shape is
+always the trigger to delete the frame and the frameset. So if a user wants
+to delete a Frame, we should delete the shape instead. The frame will
+automatically follow.
+
+
+How delete works
+----------------
+
+A KWFrame implements the interface KoShapeApplicationData.  In the constructor of the frame
+we set the frame to be a member of the shape using KoShape::setApplicationData(this);
+When the shape is deleted (destructor) it will thus also delete the Frame.
+This has the implication that the application can NEVER delete a frame, if
+it wants to get rid of the frame, it should delete the shape instead. (KWFrame::shape())
+
+
+

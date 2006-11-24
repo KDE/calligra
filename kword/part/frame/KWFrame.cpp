@@ -35,13 +35,19 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
     m_isCopy(false),
     m_frameSet( parent )
 {
+    Q_ASSERT(shape);
+    shape->setApplicationData(this);
     if(parent)
         parent->addFrame(this);
 }
 
 KWFrame::~KWFrame() {
-    delete m_shape;
-    m_shape = 0;
+    m_shape = 0; // no delete is needed as the shape deletes us.
+    if(m_frameSet && m_frameSet->frameCount() == 1) { // just me
+        m_frameSet->removeFrame(this); // so the FS won't delete us.
+        delete m_frameSet;
+        m_frameSet = 0;
+    }
 }
 
 void KWFrame::setFrameSet(KWFrameSet *fs) {

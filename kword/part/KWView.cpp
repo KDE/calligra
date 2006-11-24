@@ -25,10 +25,12 @@
 #include "KWCanvas.h"
 #include "KWPage.h"
 #include "KWViewMode.h"
+#include "frame/KWFrame.h"
 #include "dialog/KWFrameDialog.h"
 
 // koffice libs includes
 #include <KoShape.h>
+#include <KoShapeContainer.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoZoomAction.h>
@@ -203,9 +205,12 @@ void KWView::resizeEvent( QResizeEvent *e )
 void KWView::editFrameProperties() {
     QList<KWFrame*> frames;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes()) {
-        KWFrame *frame = m_document->frameForShape(shape);
-        if(frame)
-            frames.append(frame);
+        KoShape *parent = shape;
+        while(parent->parent())
+            parent = parent->parent();
+        KWFrame *frame = dynamic_cast<KWFrame*> (parent->applicationData());
+        Q_ASSERT(frame);
+        frames.append(frame);
     }
     KWFrameDialog *frameDialog = new KWFrameDialog(frames, m_document, this);
     frameDialog->exec();

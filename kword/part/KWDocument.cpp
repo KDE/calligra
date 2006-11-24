@@ -92,17 +92,34 @@ KWDocument::~KWDocument() {
 }
 
 void KWDocument::addShape (KoShape *shape) {
-    Q_UNUSED(shape);
-    // we don't actually add a shape; we assume the FrameDia and friends call a addFrame instead
+    // KWord adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
+    // will call addFrameSet.  Which will itself cal addFrame()
+    // any call coming in here is due to the undo/redo framework or for nested frames
+
+    KWFrame *frame = dynamic_cast<KWFrame*> (shape->applicationData());
+    if( frame )
+        addFrameSet(frame->frameSet());
+
+    foreach(KoView *view, views()) {
+        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+        canvas->shapeManager()->add(shape);
+    }
 }
 
 void KWDocument::removeShape (KoShape *shape) {
-    shape->repaint();
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->shapeManager()->remove(shape);
     }
-    m_frameMap.remove(shape);
+    KWFrame *frame = dynamic_cast<KWFrame*> (shape->applicationData());
+    if( frame ) {
+        KWFrameSet *fs = frame->frameSet();
+        Q_ASSERT(fs);
+        if(fs->frameCount() == 1) // last frame on FrameSet
+            removeFrameSet(fs); // frame and frameset will be deleted when the shape is deleted
+        else
+            fs->removeFrame(frame);
+    }
 }
 
 void KWDocument::paintContent(QPainter&, const QRect&, bool, double, double) {
@@ -180,7 +197,6 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
     }
 
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
-    connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
     emit frameSetAdded(fs);
 }
 
@@ -197,20 +213,11 @@ int KWDocument::lastPage() const {
 }
 
 void KWDocument::addFrame(KWFrame *frame) {
-    m_frameMap.insert(frame->shape(), frame);
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->shapeManager()->add(frame->shape());
     }
     frame->shape()->repaint();
-}
-
-void KWDocument::removeFrame(KWFrame *frame) {
-    m_frameMap.remove(frame->shape());
-}
-
-KWFrame *KWDocument::frameForShape(KoShape *shape) const {
-    return m_frameMap.value(shape);
 }
 
 KWFrameSet *KWDocument::frameSetByName( const QString & name )
