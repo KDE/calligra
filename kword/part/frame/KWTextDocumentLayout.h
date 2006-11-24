@@ -81,6 +81,8 @@ public:
      */
     void layout();
 
+    void interruptLayout();
+
 protected:
     /// reimplemented
     void documentChanged(int position, int charsRemoved, int charsAdded);

@@ -509,6 +509,7 @@ QSizeF KWTextDocumentLayout::documentSize() const {
 }
 
 void KWTextDocumentLayout::draw(QPainter *painter, const PaintContext &context) {
+painter->setPen(Qt::black);
     Q_UNUSED(context);
     const QRegion clipRegion = painter->clipRegion();
     // da real work
@@ -738,7 +739,7 @@ void KWTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
             // found our (first) frame to re-layout
             data->faul();
             m_state->reset();
-            m_frameSet->requestLayout();
+            m_frameSet->scheduleLayout();
             return;
         }
     }
@@ -749,7 +750,11 @@ void KWTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     data->faul();
 
     m_state->reset();
-    m_frameSet->requestLayout();
+    m_frameSet->scheduleLayout();
+}
+
+void KWTextDocumentLayout::interruptLayout() {
+    m_state->reset();
 }
 
 void KWTextDocumentLayout::layout() {
@@ -791,7 +796,7 @@ void KWTextDocumentLayout::layout() {
         }
         if(m_state->interrupted() || newParagraph && m_state->y() > endPos) {
             // enough for now. Try again later.
-            m_frameSet->requestLayout();
+            m_frameSet->scheduleLayout();
             return;
         }
         newParagraph = false;

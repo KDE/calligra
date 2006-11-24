@@ -100,17 +100,27 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
     else {
         data->setDocument(m_document, false);
         data->faul();
-        requestLayout();
+        updateLayout();
     }
-    connect (data, SIGNAL(relayout()), this, SLOT(requestLayout())); 
+    connect (data, SIGNAL(relayout()), this, SLOT(updateLayout()));
 }
 
-void KWTextFrameSet::requestLayout() {
+void KWTextFrameSet::updateLayout(bool reset) {
     if(! m_allowLayoutRequests)
         return;
-    if(! m_layoutTriggered)
+    if(! m_layoutTriggered) {
         QTimer::singleShot(0, this, SLOT(relayout()));
+        if( reset ) {
+            KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>( m_document->documentLayout() );
+            if(lay)
+                lay->interruptLayout();
+        }
+    }
     m_layoutTriggered = true;
+}
+
+void KWTextFrameSet::scheduleLayout() {
+    updateLayout(false);
 }
 
 void KWTextFrameSet::relayout() {
@@ -147,7 +157,7 @@ void KWTextFrameSet::framesEmpty(int framesInUse) {
 void KWTextFrameSet::setAllowLayout(bool allow) {
     m_allowLayoutRequests = allow;
     if(m_allowLayoutRequests)
-        requestLayout();
+        updateLayout(false);
 }
 
 // static

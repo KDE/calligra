@@ -79,8 +79,14 @@ protected:
      */
     void requestMoreFrames();
     void framesEmpty(int framesInUse);
+    /**
+     * Schedules a followup schedule run.
+     * This method is used to 'chunk' layout runs. It will followup where the last stopped.
+     * Calling this multiple times will make sure the relayout() is only called ones.
+     */
+    void scheduleLayout();
 
-protected slots:
+private slots:
     /**
      * calling this will do a layout run.  This slot is only called from requestLayout()
      * @see KWTextDocumentLayout::layout()
@@ -88,9 +94,10 @@ protected slots:
     void relayout();
     /**
      * Call this slot in order to schedule a new layout run.
+     * @param if reset is false, then the current run will continue. If true, start from the start.
      * Calling this multiple times will make sure the relayout() is only called ones.
      */
-    void requestLayout();
+    void updateLayout(bool reset = true);
 
 private:
     QTextDocument *m_document;
