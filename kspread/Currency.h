@@ -46,7 +46,7 @@ public:
      * currencyFormat: in Gnumeric the code is: [$EUR]
      *                 saves some work in the filter...
      */
-    Currency(QString const & code, currencyFormat format = Native);
+    explicit Currency(QString const & code, currencyFormat format = Native);
     Currency & operator=(int type);
     Currency & operator=(char const * code);
     bool operator==(Currency const & cur) const;

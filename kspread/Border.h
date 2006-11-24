@@ -176,7 +176,7 @@ class SelectAllButton : public QWidget
 {
     Q_OBJECT
 public:
-    SelectAllButton( View* view );
+    explicit SelectAllButton( View* view );
     virtual ~SelectAllButton();
 
 protected:
