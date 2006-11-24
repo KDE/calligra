@@ -277,8 +277,9 @@ public:
         }
 
         KWFrame *frame = 0;
+        frameNumber++;
         while(frame == 0 && frameNumber < m_frameSet->frameCount()) {
-            frame = m_frameSet->frames()[++frameNumber];
+            frame = m_frameSet->frames()[frameNumber++];
             if(frame->isCopy()) {
                 cleanupFrame(frame);
                 frame = 0;
