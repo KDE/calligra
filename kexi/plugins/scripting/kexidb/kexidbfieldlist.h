@@ -55,45 +55,51 @@ namespace Kross { namespace KexiDB {
     */
     class KexiDBFieldList : public QObject
     {
+            Q_OBJECT
         public:
-            KexiDBFieldList(::KexiDB::FieldList* fieldlist);
+            KexiDBFieldList(QObject* parent, ::KexiDB::FieldList* fieldlist, bool owner);
             virtual ~KexiDBFieldList();
             ::KexiDB::FieldList* fieldlist() { return m_fieldlist; }
 
-#if 0
-        private:
+        public slots:
 
             /** Returns the number of fields. */
             uint fieldCount();
-            /** Return the field specified by the index-number passed as an argument. */
-            KexiDBField* field(uint index);
-            /** Return the field specified by the as an argument passed fieldname. */
-            KexiDBField* fieldByName(const QString& name);
+            /** Return the \a KexiDBField specified by the index-number passed as an argument. */
+            QObject* field(uint index);
+            /** Return the \a KexiDBField specified by the as an argument passed fieldname. */
+            QObject* fieldByName(const QString& name);
 
+#if 0
             /** Returns a list of all fields. */
             Kross::Api::List* fields();
-            /** Returns true if the KexiDBField object passed as an argument is in the field list. */
-            bool hasField(KexiDBField* field);
+#endif
+
+            /** Returns true if the passed \a KexiDBField \p field object is in the field list. */
+            bool hasField(QObject* field);
             /** Return a list of field names. */
             const QStringList names() const;
 
-            /** Adds the KexiDBField object passed as an argument to the field list. */
-            void addField(KexiDBField* field);
-            /** Inserts the KexiDBField object passed as the second argument
+            /** Adds the \a KexiDBField object passed as an argument to the field list. */
+            bool addField(QObject* field);
+            /** Inserts the \a KexiDBField object passed as the second argument
             into the field list at the position defined by the first argument. */
-            void insertField(uint index, KexiDBField* field);
-            /** Removes the KexiDBField object passed as an argument from the field list. */
-            void removeField(KexiDBField* field);
+            bool insertField(uint index, QObject* field);
+            /** Removes the \a KexiDBField object passed as an argument from the field list. */
+            bool removeField(QObject* field);
             /** Removes all KexiDBField objects from the fieldlist. */
             void clear();
-            /** Set the fieldlist to the as argument passed list of fields. */
-            void setFields(KexiDBFieldList* fieldlist);
+
+            /** Set the list of field to the as argument passed \a KexiDBFieldList \p fieldlist . */
+            bool setFields(QObject* fieldlist);
+#if 0
             /** Creates and returns list that contain fields selected by name. */
             KexiDBFieldList* subList(Q3ValueList<QVariant> list);
 #endif
 
         private:
             ::KexiDB::FieldList* m_fieldlist;
+            bool m_owner;
     };
 
 }}

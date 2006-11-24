@@ -37,22 +37,19 @@ KexiDBCursor::KexiDBCursor(QObject* parent, ::KexiDB::Cursor* cursor, bool owner
 
 KexiDBCursor::~KexiDBCursor()
 {
+    clearBuffers();
     if( m_owner ) {
         m_cursor->close();
         delete m_cursor;
     }
-#if 0
-    clearBuffers();
-#endif
 }
 
-#if 0
 void KexiDBCursor::clearBuffers()
 {
     QMap<Q_LLONG, Record*>::ConstIterator
         it( m_modifiedrecords.constBegin() ), end( m_modifiedrecords.constEnd() );
     for( ; it != end; ++it)
-        delete it.data();
+        delete it.value();
     m_modifiedrecords.clear();
 }
 
@@ -69,7 +66,7 @@ bool KexiDBCursor::moveNext() { return m_cursor->moveNext(); }
 bool KexiDBCursor::bof() { return m_cursor->bof(); }
 bool KexiDBCursor::eof() { return m_cursor->eof(); }
 
-Q_LLONG KexiDBCursor::at() { return m_cursor->at(); }
+int KexiDBCursor::at() { return m_cursor->at(); }
 uint KexiDBCursor::fieldCount() { return m_cursor->fieldCount(); }
 
 QVariant KexiDBCursor::value(uint index)
@@ -93,7 +90,7 @@ bool KexiDBCursor::setValue(uint index, QVariant value)
 
     const Q_LLONG position = m_cursor->at();
     if(! m_modifiedrecords.contains(position))
-        m_modifiedrecords.replace(position, new Record(m_cursor));
+        m_modifiedrecords.insert(position, new Record(m_cursor));
     m_modifiedrecords[position]->buffer->insert(*column, value);
     return true;
 }
@@ -113,7 +110,7 @@ bool KexiDBCursor::save()
     QMap<Q_LLONG, Record*>::ConstIterator
         it( m_modifiedrecords.constBegin() ), end( m_modifiedrecords.constEnd() );
     for( ; it != end; ++it) {
-        bool b = m_cursor->updateRow(it.data()->rowdata, * it.data()->buffer, m_cursor->isBuffered());
+        bool b = m_cursor->updateRow(it.value()->rowdata, * it.value()->buffer, m_cursor->isBuffered());
         if(ok) {
             ok = b;
             //break;
@@ -123,4 +120,6 @@ bool KexiDBCursor::save()
     clearBuffers();
     return ok;
 }
-#endif
+
+#include "kexidbcursor.moc"
+

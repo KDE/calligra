@@ -80,12 +80,13 @@ namespace Kross { namespace KexiDB {
      */
     class KexiDBCursor : public QObject
     {
+            Q_OBJECT
         public:
             KexiDBCursor(QObject* parent, ::KexiDB::Cursor* cursor, bool owner);
             virtual ~KexiDBCursor();
 
-        private:
-#if 0
+        public slots:
+
             /** Opens the cursor. */
             bool open();
             /** Returns true if the cursor is opened else false. */
@@ -112,7 +113,7 @@ namespace Kross { namespace KexiDB {
             /** Returns current internal position of the cursor's query. Records
             are numbered from 0; the value -1 means that the cursor does not
             point to a valid record. */
-            Q_LLONG at();
+            int at();
             /** Returns the number of fields available for this cursor. */
             uint fieldCount();
             /** Returns the value stored in the passed column number (counting from 0). */
@@ -142,9 +143,7 @@ namespace Kross { namespace KexiDB {
                     }
             };
             QMap<Q_LLONG, Record*> m_modifiedrecords;
-
             void clearBuffers();
-#endif
 
             ::KexiDB::Cursor* m_cursor;
             bool m_owner;

@@ -53,15 +53,14 @@ namespace Kross { namespace KexiDB {
      * cursor = connection.executeQuerySchema(queryschema)
      * @endcode
      */
-    template<class T>
     class KexiDBSchema : public QObject
     {
+            Q_OBJECT
         public:
             KexiDBSchema(QObject* parent, const QString& name, ::KexiDB::SchemaData* schema, ::KexiDB::FieldList* fieldlist, bool owner);
             virtual ~KexiDBSchema();
 
-#if 0
-        private:
+        public slots:
 
             /** Returns the name of the schema. */
             const QString name() const;
@@ -78,9 +77,8 @@ namespace Kross { namespace KexiDB {
             /** Set a description of the schema. */
             void setDescription(const QString& description);
 
-            /** Returns the KexiDBFieldList object this schema has. */
-            KexiDBFieldList* fieldlist() const;
-#endif
+            /** Returns the \a KexiDBFieldList object this schema has. */
+            QObject* fieldlist();
 
         protected:
             ::KexiDB::SchemaData* m_schema;
@@ -91,41 +89,38 @@ namespace Kross { namespace KexiDB {
     /**
      * The KexiDBTableSchema object implements a KexiDBSchema for tables.
      */
-    class KexiDBTableSchema : public KexiDBSchema<KexiDBTableSchema>
+    class KexiDBTableSchema : public KexiDBSchema
     {
+            Q_OBJECT
         public:
             KexiDBTableSchema(QObject* parent, ::KexiDB::TableSchema* tableschema, bool owner);
             virtual ~KexiDBTableSchema();
             ::KexiDB::TableSchema* tableschema();
 
-        private:
-#if 0
-            /** Return the KexiDBQuerySchema object that represents a
+        public slots:
+            /** Return the \a KexiDBQuerySchema object that represents a
             "SELECT * FROM this_KexiDBTableSchema_object" SQL-statement. */
-            KexiDBQuerySchema* query();
-#endif
+            QObject* query();
     };
 
     /**
      * The KexiDBTableSchema object implements a KexiDBSchema for queries.
      */
-    class KexiDBQuerySchema : public KexiDBSchema<KexiDBQuerySchema>
+    class KexiDBQuerySchema : public KexiDBSchema
     {
+            Q_OBJECT
         public:
             KexiDBQuerySchema(QObject* parent, ::KexiDB::QuerySchema* queryschema, bool owner);
             virtual ~KexiDBQuerySchema();
             ::KexiDB::QuerySchema* queryschema();
 
         private:
-#if 0
             /** Returns the SQL-statement of this query schema. */
             const QString statement() const;
             /** Set the SQL-statement of this query schema. */
             void setStatement(const QString& statement);
             /** Set the where-expression. */
             bool setWhereExpression(const QString& whereexpression);
-#endif
-
     };
 
 }}
