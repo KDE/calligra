@@ -863,6 +863,12 @@ void KWDLoader::fill(KWFrame *frame, QDomElement frameElem) {
     QSizeF size( frameElem.attribute("right").toDouble() - origin.x(),
             frameElem.attribute("bottom").toDouble() - origin.y() );
 
+    // increase offset of each frame to account for the padding.
+    double pageHeight = m_pageManager->defaultPage()->ptHeight;
+    Q_ASSERT(pageHeight); // can not be 0
+    double offset =  (int) (origin.y() / pageHeight) * (m_pageManager->padding().top + m_pageManager->padding().bottom);
+    origin.setY(origin.y() + offset);
+
     frame->shape()->setPosition(origin);
     frame->shape()->resize(size);
 

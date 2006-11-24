@@ -121,6 +121,11 @@ public:
     void setDefaultPage(const KoPageLayout &layout);
 
     /**
+     * Return the default page layout.
+     */
+    const KoPageLayout *defaultPage() const { return &m_defaultPageLayout; }
+
+    /**
      * Returns the argument point, with altered coordinats if the point happens to be
      * outside all pages.
      * The resulting point is the shortest distance from the argument inside the document.
