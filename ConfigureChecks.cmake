@@ -13,6 +13,7 @@ set(CMAKE_REQUIRED_DEFINITIONS ${_KDE4_PLATFORM_DEFINITIONS})
 #check for libz using the cmake supplied FindZLIB.cmake
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 macro_bool_to_01(PYTHON_INCLUDE_PATH HAVE_PYTHON)
+macro_bool_to_01(X11_dpms_FOUND HAVE_DPMS) # kpresenter
 
 # If definitions like -D_GNU_SOURCE are needed for these checks they
 # should be added to _KDE4_PLATFORM_DEFINITIONS when it is originally
@@ -37,6 +38,7 @@ check_include_files(sys/dir.h HAVE_SYS_NDIR_H)
 check_include_files(sys/ndir.h HAVE_SYS_NDIR_H)
 check_include_files(dirent.h HAVE_DIRENT_H)
 
+check_prototype_exists(DPMSCapable "X11/Xlib.h;X11/extensions/dpms.h" HAVE_DPMSCAPABLE_PROTO)
 
 check_type_size("int" SIZEOF_INT)
 check_type_size("char *"  SIZEOF_CHAR_P)

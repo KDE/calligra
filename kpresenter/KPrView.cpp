@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "config-kpresenter.h"
 #include <kprinter.h>
 #include <kicon.h>
 #include <kglobalsettings.h>
@@ -243,7 +244,7 @@ extern "C" {
 static void enableDPMS(bool enable)
 {
 #ifdef HAVE_DPMS
-    Display *display = qt_xdisplay();
+    Display *display = QX11Info::display();
 
     int dummy;
     bool hasDPMS = DPMSQueryExtension(display, &dummy, &dummy);
@@ -273,7 +274,7 @@ static bool isDPMSEnabled()
     CARD16 x_standby;
     CARD16 x_suspend;
     CARD16 x_off;
-    Display *display = qt_xdisplay();
+    Display *display = QX11Info::display();
     if (DPMSQueryExtension(display, &event_base, &error_base))
         if (DPMSCapable(display))
             result = (DPMSGetTimeouts(display, &x_standby, &x_suspend, &x_off));
