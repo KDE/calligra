@@ -1,7 +1,7 @@
 /***************************************************************************
  * kexidbdriver.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_KEXIDB_KEXIDBDRIVER_H
-#define KROSS_KEXIDB_KEXIDBDRIVER_H
+#ifndef SCRIPTING_KEXIDBDRIVER_H
+#define SCRIPTING_KEXIDBDRIVER_H
 
 #include <qstring.h>
 //#include <qguardedptr.h>
@@ -26,7 +26,7 @@
 
 #include <kexidb/driver.h>
 
-namespace Kross { namespace KexiDB {
+namespace Scripting {
 
     /**
      * Drivers are the implementations Kexi uses to access the
@@ -34,16 +34,15 @@ namespace Kross { namespace KexiDB {
      *
      * Example (in Python) ;
      * @code
-     * # Import the kexidb module.
-     * import krosskexidb
-     * # Get the drivermanager.
-     * drivermanager = krosskexidb.DriverManager()
+     * # Import the Kross module and fetch the kexidb module.
+     * import Kross
+     * kexidb = Kross.module("kexidb")
      * # Create the driver now.
-     * driver = drivermanager.driver("SQLite3")
+     * driver = kexidb.driver("SQLite3")
      * # Check if the driver is valid.
      * if not driver.isValid(): raise "Invalid driver"
      * # Create a connectiondata object.
-     * connectiondata = drivermanager.createConnectionData()
+     * connectiondata = kexidb.createConnectionData()
      * # Fill the new connectiondata object with what we need to connect.
      * connectiondata.setFileName("/home/user/kexisqlite3file.kexi")
      * # Print the list of connections before.
@@ -91,9 +90,12 @@ namespace Kross { namespace KexiDB {
             The first argument defines the fieldtype to what we should escape the
             second argument to. */
             QString valueToSQL(const QString& fieldtype, const QVariant& value);
+
+            /** Create and return new \a KexiDBConnection object that uses the as
+            argument passed \a KexiDBConnectionData object or NULL if the connection
+            could not be created. */
+            QObject* createConnection(QObject* data);
 #if 0
-            /** Create a new KexiDBConnection object and return it. */
-            KexiDBConnection* createConnection(KexiDBConnectionData* data);
             /** Return a list of KexiDBConnection objects. */
             Q3PtrList< ::KexiDB::Connection > connectionsList();
 #endif
@@ -101,7 +103,7 @@ namespace Kross { namespace KexiDB {
             ::KexiDB::Driver* m_driver;
     };
 
-}}
+}
 
 #endif
 

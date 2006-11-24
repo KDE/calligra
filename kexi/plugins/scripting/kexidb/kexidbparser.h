@@ -1,7 +1,7 @@
 /***************************************************************************
  * kexidbparser.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_KEXIDB_KEXIDBPARSER_H
-#define KROSS_KEXIDB_KEXIDBPARSER_H
+#ifndef SCRIPTING_KEXIDBPARSER_H
+#define SCRIPTING_KEXIDBPARSER_H
 
 #include <qstring.h>
 #include <qobject.h>
@@ -27,7 +27,7 @@
 #include <kexidb/drivermanager.h>
 #include <kexidb/parser/parser.h>
 
-namespace Kross { namespace KexiDB {
+namespace Scripting {
 
     // Forward declaration.
     class KexiDBConnection;
@@ -75,21 +75,20 @@ namespace Kross { namespace KexiDB {
             /** Returns the SQL query statement. */
             const QString statement();
 
-#if 0
             /** Returns the type string of the last error. */
             const QString errorType();
             /** Returns the message of the last error. */
             const QString errorMsg();
             /** Returns the position where the last error occurred. */
             int errorAt();
-#endif
+
         private:
             QPointer<KexiDBConnection> m_connection;
             ::KexiDB::Parser* m_parser;
             bool m_owner;
     };
 
-}}
+}
 
 #endif
 

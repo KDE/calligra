@@ -5,17 +5,59 @@
   functionality using the Kross scripting framework.
 """
 
+#TODO following code segfaults (please note the Qt3 vs Qt4 confusion in the backtrace)
+import Kross
+kexidb = Kross.module("kexidb")
+
+#Program received signal SIGSEGV, Segmentation fault.
+#0xb54d0f54 in QMutexPool::get () from /usr/lib/libqt-mt.so.3
+#(gdb) bt
+##0  0xb54d0f54 in QMutexPool::get () from /usr/lib/libqt-mt.so.3
+##1  0xb51b8358 in QMetaObjectCleanUp::QMetaObjectCleanUp () from /usr/lib/libqt-mt.so.3
+##2  0xb60c308a in KParts::BrowserHostExtension::~BrowserHostExtension () from /usr/lib/libkparts.so.2
+##3  0xb60e00c5 in QValueListPrivate<KParts::Plugin::PluginInfo>::~QValueListPrivate () from /usr/lib/libkparts.so.2
+##4  0xb60bfe71 in _init () from /usr/lib/libkparts.so.2
+##5  0xb7fd37f5 in _dl_rtld_di_serinfo () from /lib/ld-linux.so.2
+##6  0xb7fd3921 in _dl_rtld_di_serinfo () from /lib/ld-linux.so.2
+##7  0xb6a31eb7 in _dl_open () from /lib/tls/libc.so.6
+##8  0xb7fd344f in _dl_rtld_di_serinfo () from /lib/ld-linux.so.2
+##9  0xb6a3154f in _dl_open () from /lib/tls/libc.so.6
+##10 0xb689bd8e in dlopen () from /lib/tls/libdl.so.2
+##11 0xb7fd344f in _dl_rtld_di_serinfo () from /lib/ld-linux.so.2
+##12 0xb689c42d in dlerror () from /lib/tls/libdl.so.2
+##13 0xb689bd21 in dlopen () from /lib/tls/libdl.so.2
+##14 0xb7f52482 in QLibraryPrivate::load_sys (this=0x813e118) at plugin/qlibrary_unix.cpp:177
+##15 0xb7f4e42a in QLibraryPrivate::load (this=0xb60c22c9) at plugin/qlibrary.cpp:418
+##16 0xb7f4e46e in QLibrary::load (this=0xb60c22c9) at plugin/qlibrary.cpp:641
+##17 0xb7351132 in KLibLoader::library (this=0x80c0bb0, _name=0x80f1fb8 "krossmodulekexidb", hint=@0xbfafe46c)
+    #at /home/kde4/kdelibs/kdelibs/kdecore/klibloader.cpp:467
+##18 0xb734f444 in KLibLoader::globalLibrary (this=0x80c0bb0, _name=0x80f1fb8 "krossmodulekexidb")
+    #at /home/kde4/kdelibs/kdelibs/kdecore/klibloader.cpp:422
+##19 0xb71f4585 in Kross::Manager::module (this=0x80be830, modulename=@0x811911c)
+    #at /home/kde4/koffice/libs/kross/core/manager.cpp:259
+
+CurrentPath = self.currentPath()
+
 import unittest
 
 class TestKexiDB(unittest.TestCase):
-	
+
 	def setUp(self):
 		import Kross
 		self.kexidb = Kross.module("kexidb")
 
 	def testGeneral(self):
 		self.assert_( self.kexidb != None )
-		self.assert_( self.version() >= 1 )
+		self.assert_( self.kexidb.version() >= 1 )
+
+	def testKexiFile(self):
+		import os
+		global CurrentPath
+		file = os.path.join(CurrentPath,'testcase.kexi')
+		self.assert_( os.path.isfile(file) )
+
+		connectiondata = self.kexidb.createConnectionDataByFile(file)
+		self.assert_( connectiondata != None )
 
 suite = unittest.makeSuite(TestKexiDB)
 unittest.TextTestRunner(verbosity=2).run(suite)

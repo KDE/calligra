@@ -1,7 +1,7 @@
 /***************************************************************************
  * kexidbparser.cpp
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,7 +22,7 @@
 #include "kexidbschema.h"
 #include "kexidbconnection.h"
 
-using namespace Kross::KexiDB;
+using namespace Scripting;
 
 KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser, bool owner)
     : QObject(connection)
@@ -58,10 +58,8 @@ QObject* KexiDBParser::query()
 QObject* KexiDBParser::connection() { return m_connection; }
 const QString KexiDBParser::statement() { return m_parser->statement(); }
 
-#if 0
 const QString KexiDBParser::errorType() { return m_parser->error().type(); }
 const QString KexiDBParser::errorMsg() { return m_parser->error().error(); }
 int KexiDBParser::errorAt() { return m_parser->error().at(); }
-#endif
 
 #include "kexidbparser.moc"

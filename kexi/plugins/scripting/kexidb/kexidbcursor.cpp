@@ -1,7 +1,7 @@
 /***************************************************************************
  * kexidbcursor.cpp
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +25,7 @@
 
 #include <kdebug.h>
 
-using namespace Kross::KexiDB;
+using namespace Scripting;
 
 KexiDBCursor::KexiDBCursor(QObject* parent, ::KexiDB::Cursor* cursor, bool owner)
     : QObject(parent)

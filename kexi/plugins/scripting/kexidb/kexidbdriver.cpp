@@ -1,7 +1,7 @@
 /***************************************************************************
  * kexidbdriver.cpp
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +28,7 @@
 
 #include <kexidb/connection.h>
 
-using namespace Kross::KexiDB;
+using namespace Scripting;
 
 KexiDBDriver::KexiDBDriver(QObject* parent, ::KexiDB::Driver* driver)
     : QObject(parent)
@@ -52,8 +52,12 @@ bool KexiDBDriver::isSystemDatabaseName(const QString& name) { return m_driver->
 bool KexiDBDriver::isSystemFieldName(const QString& name) { return m_driver->isSystemFieldName(name); }
 QString KexiDBDriver::valueToSQL(const QString& fieldtype, const QVariant& value) { return m_driver->valueToSQL(fieldtype, value); }
 
+QObject* KexiDBDriver::createConnection(QObject* data) {
+    KexiDBConnectionData* d = dynamic_cast<KexiDBConnectionData*>(data);
+    return d ? new KexiDBConnection(m_driver->createConnection(*d)) : 0;
+}
+
 #if 0
-KexiDBConnection* KexiDBDriver::createConnection(KexiDBConnectionData* data) { return new KexiDBConnection( m_driver->createConnection(*data) ); }
 Q3PtrList< ::KexiDB::Connection > KexiDBDriver::connectionsList() { return m_driver->connectionsList(); }
 #endif
 

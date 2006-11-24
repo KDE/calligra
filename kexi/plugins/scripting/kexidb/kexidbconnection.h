@@ -1,7 +1,7 @@
 /***************************************************************************
  * kexidbconnection.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,17 +17,16 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_KEXIDB_KEXIDBCONNECTION_H
-#define KROSS_KEXIDB_KEXIDBCONNECTION_H
+#ifndef SCRIPTING_KEXIDBCONNECTION_H
+#define SCRIPTING_KEXIDBCONNECTION_H
 
 #include <qstring.h>
 #include <qobject.h>
 #include <qpointer.h>
 
-//#include <kexidb/driver.h>
 #include <kexidb/connection.h>
 
-namespace Kross { namespace KexiDB {
+namespace Scripting {
 
     // Forward declarations.
     class KexiDBDriver;
@@ -62,11 +61,12 @@ namespace Kross { namespace KexiDB {
      */
     class KexiDBConnection : public QObject
     {
+            Q_OBJECT
         public:
             KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver = 0, KexiDBConnectionData* connectiondata = 0);
             virtual ~KexiDBConnection();
 
-        private:
+        public slots:
 
             /** Return true if there was an error during last operation on the database. */
             bool hadError() const;
@@ -118,7 +118,6 @@ namespace Kross { namespace KexiDB {
             opened cursor \a KexiDBCursor instance created for results of this query or NULL on error. */
             QObject* executeQuerySchema(KexiDBQuerySchema* queryschema);
 #if 0
-//TODO replace following method with a proxymethod.
             /** Inserts the as argument passed KexiDBField object. */
             Kross::Api::Object::Ptr insertRecord(Kross::Api::List::Ptr);
 #endif
@@ -166,11 +165,10 @@ namespace Kross { namespace KexiDB {
             void setDefaultTransaction(KexiDBTransaction* transaction);
             /** Returns list of currently active KexiDBTransaction objects. */
             Kross::Api::List* transactions();
-
             /** Return true if the transaction is active (ie. started). */
-            bool isTransactionActive() const { m_transaction.active(); }
+            //bool isTransactionActive() const { m_transaction.active(); }
             /** Return true if the transaction is uninitialized (null). */
-            bool isTransactionNull() const { m_transaction.isNull(); }
+            //bool isTransactionNull() const { m_transaction.isNull(); }
 #endif
 
             /** Return a \a KexiDBParser object. */
@@ -182,7 +180,7 @@ namespace Kross { namespace KexiDB {
             QPointer<KexiDBDriver> m_driver;
     };
 
-}}
+}
 
 #endif
 

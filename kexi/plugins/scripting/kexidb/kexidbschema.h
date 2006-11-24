@@ -1,7 +1,7 @@
 /***************************************************************************
  * kexidbschema.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_KEXIDB_KEXIDBSCHEMA_H
-#define KROSS_KEXIDB_KEXIDBSCHEMA_H
+#ifndef SCRIPTING_KEXIDBSCHEMA_H
+#define SCRIPTING_KEXIDBSCHEMA_H
 
 #include <qstring.h>
 #include <qobject.h>
@@ -28,7 +28,7 @@
 #include <kexidb/tableschema.h>
 #include <kexidb/queryschema.h>
 
-namespace Kross { namespace KexiDB {
+namespace Scripting {
 
     // Forward-declarations.
     class KexiDBFieldList;
@@ -123,7 +123,7 @@ namespace Kross { namespace KexiDB {
             bool setWhereExpression(const QString& whereexpression);
     };
 
-}}
+}
 
 #endif
 

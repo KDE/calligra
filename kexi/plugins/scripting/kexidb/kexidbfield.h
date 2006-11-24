@@ -1,7 +1,7 @@
 /***************************************************************************
  * kexidbfield.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_KEXIDB_KEXIDBFIELD_H
-#define KROSS_KEXIDB_KEXIDBFIELD_H
+#ifndef SCRIPTING_KEXIDBFIELD_H
+#define SCRIPTING_KEXIDBFIELD_H
 
 #include <qstring.h>
 #include <qobject.h>
@@ -26,7 +26,7 @@
 #include <kexidb/drivermanager.h>
 #include <kexidb/field.h>
 
-namespace Kross { namespace KexiDB {
+namespace Scripting {
 
     /**
     * A field in a record.
@@ -140,7 +140,7 @@ namespace Kross { namespace KexiDB {
             bool m_owner;
     };
 
-}}
+}
 
 #endif
 

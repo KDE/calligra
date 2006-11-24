@@ -1,7 +1,7 @@
 /***************************************************************************
  * kexidbmodule.cpp
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,50 +36,37 @@
 // The as version() published versionnumber of this kross-module.
 #define KROSS_KEXIDB_VERSION 1
 
-#if 0
 extern "C"
 {
     /**
      * Exported an loadable function as entry point to use
      * the \a KexiDBModule.
      */
-    Kross::Api::Object* KDE_EXPORT init_module(Kross::Api::Manager* manager)
+    QObject* krossmodule()
     {
-        return new Kross::KexiDB::KexiDBModule(manager);
+        kDebug()<<"=============> Kross::KexiDB::krossmodule()"<<endl;
+        return new Scripting::KexiDBModule();
     }
 }
-#endif
 
-using namespace Kross::KexiDB;
+using namespace Scripting;
 
 KexiDBModule::KexiDBModule(QObject* parent)
     : QObject(parent)
 {
+    kDebug() << "Kross::KexiDB::KexiDBModule Ctor" << endl;
     setObjectName("KexiDB");
-    //kDebug() << "Kross::KexiDB::KexiDBModule Ctor" << endl;
 }
 
 KexiDBModule::~KexiDBModule()
 {
-    //kDebug() << "Kross::KexiDB::KexiDBModule Dtor" << endl;
+    kDebug() << "Kross::KexiDB::KexiDBModule Dtor" << endl;
 }
 
 int KexiDBModule::version()
 {
     return KROSS_KEXIDB_VERSION;
 }
-
-#if 0
-Kross::Api::Object::Ptr KexiDBModule::get(const QString& name, void* p)
-{
-    if(name == "KexiDBConnection") {
-        ::KexiDB::Connection* connection = (::KexiDB::Connection*)p;
-        if(connection)
-            return new KexiDBConnection(connection);
-    }
-    return 0;
-}
-#endif
 
 const QStringList KexiDBModule::driverNames()
 {

@@ -1,7 +1,7 @@
 /***************************************************************************
  * kexidbmodule.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2004-2006 by Sebastian Sauer (mail@dipe.org)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_KEXIDB_KEXIDBMODULE_H
-#define KROSS_KEXIDB_KEXIDBMODULE_H
+#ifndef SCRIPTING_KEXIDBMODULE_H
+#define SCRIPTING_KEXIDBMODULE_H
 
 #include <qstring.h>
 #include <qvariant.h>
@@ -26,7 +26,7 @@
 
 #include <kexidb/drivermanager.h>
 
-namespace Kross { namespace KexiDB {
+namespace Scripting {
 
     // Forward declarations.
     class KexiDBDriver;
@@ -82,25 +82,9 @@ namespace Kross { namespace KexiDB {
 
         private:
             ::KexiDB::DriverManager m_drivermanager;
-
-#if 0
-            /**
-             * \internal
-             * Variable module-method use to call transparent some functionality
-             * the module provides.
-             * 
-             * \param name A name passed to the method. This name is used internaly
-             *        to determinate what the caller likes to do. Each implemented
-             *        module have to implement what should be done.
-             * \param p A variable pointer passed to the method. It depends on
-             *        the module and the name what this pointer is.
-             * \return a \a Kross::Api::Object or NULL.
-             */
-            virtual Kross::Api::Object::Ptr get(const QString& name, void* p = 0);
-#endif
     };
 
-}}
+}
 
 #endif
 
