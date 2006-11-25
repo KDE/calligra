@@ -68,7 +68,7 @@ public:
    * Creates a copy of @p selection
    * @param selection the Selection to copy
    */
-  Selection(const Selection& selelction);
+  Selection(const Selection& selection);
 
   /**
    * Destructor.

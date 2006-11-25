@@ -33,34 +33,34 @@
 */
 
 /**
- * \defgroup OpenDocument
+ * \defgroup OpenDocument OpenDocument file format
  * Classes and methods related to the OpenDocument loading/saving.
  */
 
 /**
- * \defgroup Operations
+ * \defgroup Operations Operations
  * Classes and methods related to KSpread Operations.
  * These are all actions that can be un- and redone.
  */
 
 /**
- * \defgroup NativeFormat
+ * \defgroup NativeFormat Old native file format
  * Classes and methods related to the KSpread's old native file format loading/saving.
  */
 
 /**
- * \defgroup Painting
+ * \defgroup Painting Painting
  * Classes and methods related to the painting of cells and objects.
  * \ref painting
  */
 
 /**
- * \defgroup Plugins
+ * \defgroup Plugins Plugins
  * Classes and methods related to the plugins.
  */
 
 /**
- * \defgroup Embedding
+ * \defgroup Embedding Object embedding
  * Classes and methods related to the embedding of objects (charts, pictures, ...).
  */
 

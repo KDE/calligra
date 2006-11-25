@@ -110,16 +110,6 @@ public:
    * @param coordinate coordinates on the painter where the top left corner
    *                    of the cell should be painted plus width and height
    * @param cellRef the column/row coordinates of the cell.
-   * @param paintBorder a combination of flags from the Cell::Border
-   *                    enum which specifies which cell borders to paint
-   * @param rightPen pen to use to draw the right border
-   *                 if @p paintBorder includes the RightBorder flag
-   * @param bottomPen pen to use to draw the bottom border
-   *                  if @p paintBorder includes the BottomBorder flag
-   * @param leftPen pen to use to draw the left border
-   *                if @p paintBorder includes the LeftBorder flag
-   * @param topPen pen to use to draw the top border
-   *               if @p paintBorder includes the TopBorder flag
    * @param mergedCellsPainted list of merged cells being painted
    */
   void paintCell( const QRectF & rect, QPainter & painter,

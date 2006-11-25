@@ -623,7 +623,7 @@ public:
      * @param column the cell's column index
      * @param row the cell's row index
      */
-    Cell* cellAt( int _column, int _row ) const;
+    Cell* cellAt( int column, int row ) const;
 
     /**
      * @param column the cell's column index
