@@ -7733,7 +7733,7 @@ QString KDChartParams::headerFooterText( uint pos ) const
     if ( HdFtPosEND >= pos )
         return _hdFtParams[ pos ]._text;
     else
-        return QString::null;
+        return QString();
 }
 
 

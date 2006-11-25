@@ -67,7 +67,7 @@ QString KWord13Layout::getProperty( const QString& name ) const
     if ( it == m_layoutProperties.end() )
     {
         // Property does not exist
-        return QString::null;
+        return QString();
     }
     else
     {

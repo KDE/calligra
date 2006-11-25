@@ -67,7 +67,7 @@ protected:
     virtual void closeSpan(const FormatData& formatOrigin, const FormatData& format)=0;
     virtual void writeDocType(void);
 
-    virtual QString customCSSURL(void) const { return QString::null; }
+    virtual QString customCSSURL(void) const { return QString(); }
 public:
     inline bool isXML  (void) const { return m_xml; }
     inline void setXML (const bool flag ) { m_xml=flag; }

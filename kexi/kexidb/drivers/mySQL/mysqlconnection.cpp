@@ -156,7 +156,7 @@ int MySqlConnection::serverResult()
 
 QString MySqlConnection::serverResultName()
 {
-	return QString::null;
+	return QString();
 }
 
 void MySqlConnection::drv_clearServerResult()

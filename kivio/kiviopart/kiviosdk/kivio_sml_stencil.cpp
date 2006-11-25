@@ -2066,7 +2066,7 @@ QString KivioSMLStencil::getTextBoxName(const KoPoint& p)
     return first->shapeData()->name();
   }
   
-  return QString::null;
+  return QString();
 }
 
 void KivioSMLStencil::setText(const QString& text, const QString& name)
@@ -2099,7 +2099,7 @@ QString KivioSMLStencil::text(const QString& name)
     pShape = m_pShapeList->next();
   }
   
-  return QString::null;
+  return QString();
 }
 
 void KivioSMLStencil::addConnectorTarget(const KoPoint& p)

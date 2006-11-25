@@ -138,7 +138,7 @@ QString KPrDocumentIface::customVariableValue(const QString & varname)const
 {
     if(doc->getVariableCollection()->customVariableExist(varname))
         return doc->getVariableCollection()->getVariableValue( varname );
-    return QString::null;
+    return QString();
 }
 
 bool KPrDocumentIface::insertNewPage(int pos )

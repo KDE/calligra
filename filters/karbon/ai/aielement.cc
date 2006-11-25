@@ -373,21 +373,21 @@ const QString AIElement::toString() const
   if ( d->typ == Byte )
 	  return QString::number( toByte() );
   if ( d->typ != String )
-	  return QString::null;
+	  return QString();
   return *((QString*)d->value.ptr);
 }
 
 const QString AIElement::toReference() const
 {
   if ( d->typ != Reference )
-	  return QString::null;
+	  return QString();
   return *((QString*)d->value.ptr);
 }
 
 const QString AIElement::toOperator() const
 {
   if ( d->typ != Operator )
-	  return QString::null;
+	  return QString();
   return *((QString*)d->value.ptr);
 }
 

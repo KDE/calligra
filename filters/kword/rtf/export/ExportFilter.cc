@@ -227,7 +227,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
         if( !loadAndConvertToImage(anchor.picture.koStoreName,strExt,"PNG",image) )
         {
             kWarning(30515) << "Unable to convert " << anchor.picture.koStoreName << endl;
-            return QString::null;
+            return QString();
         }
     }
     // ### TODO: SVG, QPicture
@@ -237,7 +237,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
         if (!loadSubFile(anchor.picture.koStoreName,image))
         {
             kWarning(30515) << "Unable to load picture " << anchor.picture.koStoreName << endl;
-            return QString::null;
+            return QString();
         }
 
 
@@ -280,7 +280,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
         if( img.isNull() )
         {
             kWarning(30515) << "Unable to load picture as image " << anchor.picture.koStoreName << endl;
-            return QString::null;
+            return QString();
         }
         // check resolution, assume 2835 dpm (72 dpi) if not available
         int resx = img.dotsPerMeterX();
@@ -1630,7 +1630,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
 QString RTFWorker::lookupFont(const QString& markup, const QString& fontName)
 {
     if (fontName.isEmpty())
-        return QString::null;
+        return QString();
 
     // First we have to remove Qt-typical foundry names, as some RTF readers are confused by them.
     QString cookedFontName(fontName);
@@ -1667,7 +1667,7 @@ QString RTFWorker::lookupFont(const QString& markup, const QString& fontName)
 QString RTFWorker::lookupColor(const QString& markup, const QColor& color)
 {
     if (!color.isValid())
-        return QString::null;
+        return QString();
 
     uint counter=1;  // counts position in color table starting at 1
     QString strColor(markup);  // Holds RTF markup for the color
@@ -1694,7 +1694,7 @@ QString RTFWorker::lookupColor(const QString& markup, const QColor& color)
 QString RTFWorker::lookupStyle(const QString& styleName, LayoutData& returnLayout)
 {
     if (styleName.isEmpty())
-        return QString::null;
+        return QString();
 
     uint counter=0;  // counts position in style table starting at 0
     QString strMarkup("\\s");  // Holds RTF markup for the style

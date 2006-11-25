@@ -59,7 +59,7 @@ ObjectTreeViewItem::name() const
 	if(m_item)
 		return m_item->name();
     else
-        return QString::null;
+        return QString();
 }
 
 void

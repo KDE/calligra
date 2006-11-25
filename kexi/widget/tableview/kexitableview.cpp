@@ -129,7 +129,7 @@ class KexiTableView::WhatsThis : public Q3WhatsThis
 			}
 			KexiDB::Field *f = m_tv->field( m_tv->columnAt(pos.x()-leftMargin) );
 			if (!f)
-				return QString::null;
+				return QString();
 			return f->description().isEmpty() ? f->captionOrName() : f->description();
 		}
 		protected:

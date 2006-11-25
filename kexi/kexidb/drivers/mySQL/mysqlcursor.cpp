@@ -196,7 +196,7 @@ int MySqlCursor::serverResult()
 
 QString MySqlCursor::serverResultName()
 {
-	return QString::null;
+	return QString();
 }
 
 void MySqlCursor::drv_clearServerResult()

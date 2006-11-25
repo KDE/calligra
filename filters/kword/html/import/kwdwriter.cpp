@@ -402,7 +402,7 @@ QString KWDWriter::getLayoutAttribute(QDomElement paragraph, QString name, QStri
 	  QDomElement el=qdnl.item(0).toElement();
 	  return el.attribute(attrName);
 	}
-	return QString::null;
+	return QString();
 }
 
 QDomElement KWDWriter::layoutAttribute(QDomElement paragraph, QString name, QString attrName, QString attr) {

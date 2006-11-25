@@ -706,7 +706,7 @@ VText::buildRequest( QString family, int weight, int slant, double size, int &id
 					FcPatternGetInteger(pattern, FC_INDEX, 0, &id) != FcResultMatch )
 				{
 					kDebug(38000) << "VText::buildRequest(), could not load font file for requested font \"" << family.toLatin1() << "\"" << endl;
-					return QString::null;
+					return QString();
 				}
 		
 				fileName = QFile::decodeName(reinterpret_cast<const char *>( temp ));

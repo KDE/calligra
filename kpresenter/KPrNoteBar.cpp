@@ -193,7 +193,7 @@ QString KPrNoteBar::getNotesTextForPrinting(QList<int> _list) const
     allText += doc->masterPage()->noteText();
 
     if( noteIsEmpty )
-        return QString::null;
+        return QString();
     return allText;
 }
 

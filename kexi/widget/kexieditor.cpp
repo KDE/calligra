@@ -155,7 +155,7 @@ QString KexiEditor::text()
 	return d->view->text();
 #else
 	if (!d->doc)
-		return QString::null;
+		return QString();
 	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
 	return eIface->text();
 #endif

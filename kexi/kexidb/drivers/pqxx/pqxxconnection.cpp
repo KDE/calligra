@@ -421,7 +421,7 @@ int pqxxSqlConnection::serverResult()
 
 QString pqxxSqlConnection::serverResultName()
 {
-	return QString::null;
+	return QString();
 }
 
 void pqxxSqlConnection::drv_clearServerResult()

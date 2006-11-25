@@ -62,7 +62,7 @@ bool KWord13Picture::loadPicture( KoStore* store )
 QString KWord13Picture::getOasisPictureName( void ) const
 {
     if ( ! m_valid || ! m_tempFile )
-        return QString::null;
+        return QString();
         
     // We need a 32 digit hex value of the picture number
     // Please note: it is an exact 32 digit value, truncated if the value is more than 512 bits wide. :-)

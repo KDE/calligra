@@ -236,14 +236,14 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		 to refer a documentation. SQLite is one of such engines. 
 		 Note for driver developers: Leave the default implementation (null 
 		 string is returned ) if your engine has no such capability. */
-		virtual QString serverResultName() { return QString::null; }
+		virtual QString serverResultName() { return QString(); }
 
 		/*! \return (not i18n'd) description text (message) of last operation's error/result.
 		 In most cases engines do return such a messages, any user can then use this
 		 to refer a documentation.
 		 Note for driver developers: Leave the default implementation (null 
 		 string is returned ) if your engine has no such capability. */
-		virtual QString serverErrorMsg() { return QString::null; }
+		virtual QString serverErrorMsg() { return QString(); }
 	
 		/*! \return Debug information. */
 		QString debugString() const;

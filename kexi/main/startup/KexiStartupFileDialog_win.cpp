@@ -458,7 +458,7 @@ QString KexiStartupFileDialogBase::realStartDir(const QString& startDir)
 	QString recentDir; //dummy
 	QString path( KFileDialog::getStartURL(startDir, recentDir).path() );
 	if (path.isEmpty())
-		return QString::null;
+		return QString();
 	QFileInfo fi(path);
 	return fi.isDir() ? fi.absoluteFilePath() : fi.dir(true).absolutePath();
 }

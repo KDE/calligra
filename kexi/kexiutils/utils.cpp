@@ -90,7 +90,7 @@ WaitCursorRemover::~WaitCursorRemover()
 QString KexiUtils::fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat)
 {
 	if (mime.isNull())
-		return QString::null;
+		return QString();
 
 	QString str;
 	if (kdeFormat) {

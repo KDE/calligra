@@ -144,7 +144,7 @@ KexiCSVTextQuoteComboBox::KexiCSVTextQuoteComboBox( QWidget * parent )
 QString KexiCSVTextQuoteComboBox::textQuote() const
 {
 	if (currentItem()==2)
-		return QString::null;
+		return QString();
 	return currentText();
 }
 

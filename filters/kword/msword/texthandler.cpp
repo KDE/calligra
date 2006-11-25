@@ -484,7 +484,7 @@ QString KWordTextHandler::getFont(unsigned fc) const
 {
     Q_ASSERT( m_parser );
     if ( !m_parser )
-        return QString::null;
+        return QString();
     const wvWare::Word97::FFN& ffn ( m_parser->font( fc ) );
 
     QConstString fontName( Conversion::string( ffn.xszFfn ) );

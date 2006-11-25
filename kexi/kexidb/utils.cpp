@@ -304,7 +304,7 @@ QString TableOrQuerySchema::debugString()
 		return m_table->debugString();
 	else if (m_query)
 		return m_query->debugString();
-	return QString::null;
+	return QString();
 }
 
 void TableOrQuerySchema::debug()
@@ -1012,7 +1012,7 @@ QString KexiDB::escapeBLOB(const QByteArray& array, BLOBEscapingType type)
 {
 	const int size = array.size();
 	if (size==0)
-		return QString::null;
+		return QString();
 	int escaped_length = size*2;
 	if (type == BLOBEscape0xHex || type == BLOBEscapeOctal)
 		escaped_length += 2/*0x or X'*/;
@@ -1023,7 +1023,7 @@ QString KexiDB::escapeBLOB(const QByteArray& array, BLOBEscapingType type)
 	if (str.capacity() < escaped_length) {
 		KexiDBWarn << "KexiDB::Driver::escapeBLOB(): no enough memory (cannot allocate "<< 
 			escaped_length<<" chars)" << endl;
-		return QString::null;
+		return QString();
 	}
 	if (type == BLOBEscapeXHex)
 		str = QString::fromLatin1("X'");

@@ -367,7 +367,7 @@ public:
         if ((1 == valNo) && isString( valNo ))
             return sValue;
         else
-            return QString::null;
+            return QString();
     }
     double doubleValue( int valNo=1 ) const
     {

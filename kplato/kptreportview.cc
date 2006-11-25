@@ -85,7 +85,7 @@ public:
             if (tag == "currentdate") {
                 return l->formatDate(QDate::currentDate(), true);
             }
-            return QString::null;
+            return QString();
         }
         if (tag.section(".", 0, 0) == "project") {
             if (tag.section(".", 1, 1) == "name")
@@ -133,7 +133,7 @@ public:
             if (tag.section(".", 1, 1) == "overtimerate")
                 return (m_resource ? l->formatMoney(m_resource->overtimeRate()) : QString::null);
         }
-	return QString::null;
+	return QString();
     }
 
     Project *m_project;

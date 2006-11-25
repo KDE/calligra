@@ -364,7 +364,7 @@ AlignWidgetsCommand::name() const
 		case AlignToBottom:
 			return i18n("Align Widgets to Bottom");
 		default:
-			return QString::null;
+			return QString();
 	}
 }
 
@@ -603,7 +603,7 @@ AdjustSizeCommand::name() const
 		case SizeToBigHeight:
 			return i18n("Resize Widgets to Tallest");
 		default:
-			return QString::null;
+			return QString();
 	}
 }
 

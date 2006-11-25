@@ -1924,7 +1924,7 @@ public slots:
             if( _legendText.find( dataset ) != _legendText.end() )
                 return _legendText[ dataset ];
             else
-                return QString::null;
+                return QString();
         }
 
 

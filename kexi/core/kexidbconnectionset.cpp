@@ -172,7 +172,7 @@ void KexiDBConnectionSet::load()
 QString KexiDBConnectionSet::fileNameForConnectionData(KexiDB::ConnectionData *data) const
 {
 	if (!data)
-		return QString::null;
+		return QString();
 	QMap<KexiDB::ConnectionData*, QString>::ConstIterator it = d->filenamesForData.find( data );
 	return (it == d->filenamesForData.constEnd()) ? QString::null : it.value();
 }

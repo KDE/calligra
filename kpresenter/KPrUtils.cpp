@@ -276,7 +276,7 @@ QString lineEndBeginName( LineEnd type )
     case L_DOUBLE_LINE_ARROW:
         return QString("DOUBLE_LINE_ARROW");
     }
-    return QString::null;
+    return QString();
 }
 
 LineEnd lineEndBeginFromString( const QString & type )
@@ -446,5 +446,5 @@ QString readOasisSettingsString( const QDomElement & element )
         QString str = element.text();
         return str;
     }
-    return QString::null;
+    return QString();
 }

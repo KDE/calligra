@@ -57,7 +57,7 @@ QString LookupFieldSchema::RowSource::typeName() const
 	case FieldList: return "fieldlist";
 	default:;
 	}
-	return QString::null;
+	return QString();
 }
 
 void LookupFieldSchema::RowSource::setTypeByName( const QString& typeName )

@@ -152,7 +152,7 @@ void  KivioStencilIface::setText( const QString & )
 
 QString  KivioStencilIface::text()
 {
-  return QString::null;
+  return QString();
 }
 
 bool  KivioStencilIface::isSelected()

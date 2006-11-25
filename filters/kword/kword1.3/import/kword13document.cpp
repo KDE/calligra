@@ -154,7 +154,7 @@ QString KWord13Document::getDocumentInfo( const QString& name ) const
     if ( it == m_documentInfo.end() )
     {
         // Property does not exist
-        return QString::null;
+        return QString();
     }
     else
     {
@@ -183,7 +183,7 @@ QString KWord13Document::getPropertyInternal( const QString& name ) const
     if ( it == m_documentProperties.end() )
     {
         // Property does not exist
-        return QString::null;
+        return QString();
     }
     else
     {

@@ -112,7 +112,7 @@ QString BaseExpr::tokenToString()
 {
 	if (m_token < 255 && isprint(m_token))
 		return tokenToDebugString();
-	return QString::null;
+	return QString();
 }
 
 NArgExpr* BaseExpr::toNArg() { return dynamic_cast<NArgExpr*>(this); }

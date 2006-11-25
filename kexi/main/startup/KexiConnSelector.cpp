@@ -284,7 +284,7 @@ KexiDB::ConnectionData* KexiConnSelectorWidget::selectedConnectionData() const
 QString KexiConnSelectorWidget::selectedFileName()
 {
 	if (selectedConnectionType()!=KexiConnSelectorWidget::FileBased)
-		return QString::null;
+		return QString();
 	return m_fileDlg->currentFileName();
 }
 

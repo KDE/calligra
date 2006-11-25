@@ -76,7 +76,7 @@ QString KexiDBDriverComboBox::selectedDriverName() const
 {
 	QMapConstIterator<QString,QString> it( m_driversMap.find( text( currentItem() ) ) );
 	if (it==m_driversMap.constEnd())
-		return QString::null;
+		return QString();
 	return it.data();
 }
 

@@ -1069,7 +1069,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 {
 //"SELECT FROM ..." is theoretically allowed "
 //if (querySchema.fieldCount()<1)
-//		return QString::null;
+//		return QString();
 // Each SQL identifier needs to be escaped in the generated query.
 
 	if (!querySchema.statement().isEmpty())
@@ -1116,7 +1116,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 				}
 				else {
 					if (!f->table()) //sanity check
-						return QString::null;
+						return QString();
 
 					QString tableName;
 					int tablePosition = querySchema.tableBoundToColumn(number);

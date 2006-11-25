@@ -262,7 +262,7 @@ QString KexiDialogBase::itemIcon()
 		if (v) {//m_stack->visibleWidget() && m_stack->visibleWidget()->inherits("KexiViewBase")) {
 			return v->m_defaultIconName;
 		}
-		return QString::null;
+		return QString();
 	}
 	return m_part->info()->itemIcon();
 }

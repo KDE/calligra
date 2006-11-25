@@ -280,7 +280,7 @@ QString InputMask::maskString( uint pos, const QString &str, bool clear ) const
 QString InputMask::clearString( uint pos, uint len ) const
 {
     if ( pos >= ( uint ) m_maxLength )
-        return QString::null;
+        return QString();
 
     QString s;
     int end = qMin( ( uint ) m_maxLength, pos + len );

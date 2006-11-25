@@ -114,7 +114,7 @@ QString Conversion::headerTypeToFramesetName( const QString& localName, bool has
     // ######
     //return i18n("First Page Header");
     //return i18n("First Page Footer");
-    return QString::null;
+    return QString();
 }
 
 int Conversion::headerTypeToFrameInfo( const QString& localName, bool /*hasEvenOdd*/ )

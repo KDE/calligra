@@ -314,7 +314,7 @@ QString KPrTextObjectIface::verticalAlignment() const
     default:
         break;
     }
-    return QString::null;
+    return QString();
 }
 
 //bool KPrTextObjectIface::textShadow() const

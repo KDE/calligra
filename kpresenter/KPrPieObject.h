@@ -66,7 +66,7 @@ public:
                 return i18n("Chord");
                 break;
             }
-            return QString::null;
+            return QString();
         }
 
     virtual PieType getPieType() const

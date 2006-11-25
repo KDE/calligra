@@ -75,7 +75,7 @@ QString KPrObject2DAdaptor::gradientFillType() const
     case FT_GRADIENT:
         return QString("GRADIENT");
     }
-    return QString::null;
+    return QString();
 }
 
 void KPrObject2DAdaptor::setGradientType( const QString & type)

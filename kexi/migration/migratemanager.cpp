@@ -322,7 +322,7 @@ QString MigrateManager::driverForMimeType(const QString &mimeType)
 	KService::Ptr ptr = d_int->m_services_by_mimetype[mimeType.lower()];
 	if (!ptr) {
 		kDebug() << QString("MigrateManager::driverForMimeType(%1) No such mimetype").arg(mimeType) << endl;
-		return QString::null;
+		return QString();
 	}
 
 	return ptr->property("X-Kexi-MigrationDriverName").toString();
@@ -363,7 +363,7 @@ void MigrateManager::drv_clearServerResult()
 QString MigrateManager::possibleProblemsInfoMsg() const
 {
 	if (d_int->possibleProblems.isEmpty())
-		return QString::null;
+		return QString();
 	QString str;
 	str.reserve(1024);
 	str = "<ul>";

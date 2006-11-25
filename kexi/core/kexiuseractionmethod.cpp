@@ -26,7 +26,7 @@ KexiUserActionMethod::methodName(int method)
 		case KexiUserAction::ExitKexi:
 			return i18n("Exit Main Application");
 		default:
-			return QString::null;
+			return QString();
 	}
 }
 

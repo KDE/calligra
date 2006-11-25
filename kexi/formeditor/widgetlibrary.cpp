@@ -490,7 +490,7 @@ WidgetLibrary::textForWidgetName(const Q3CString &name, const Q3CString &classNa
 	loadFactories();
 	WidgetInfo *widget = d->widgets[className];
 	if(!widget)
-		return QString::null;
+		return QString();
 
 	QString newName = name;
 	newName.remove(widget->namePrefix());
@@ -522,7 +522,7 @@ WidgetLibrary::includeFileName(const Q3CString &classname)
 	if(wi)
 		return wi->includeFileName();
 
-	return QString::null;
+	return QString();
 }
 
 QString
@@ -642,17 +642,17 @@ WidgetLibrary::factoryForClassName(const char* classname)
 QString WidgetLibrary::propertyDescForName(WidgetInfo *winfo, const Q3CString& propertyName)
 {
 	if (!winfo || !winfo->factory())
-		return QString::null;
+		return QString();
 	QString desc( winfo->factory()->propertyDescForName(propertyName) );
 	if (!desc.isEmpty())
 		return desc;
 	if (winfo->m_parentFactoryName.isEmpty())
-		return QString::null;
+		return QString();
 
 	//try in parent factory, if exists
 	WidgetFactory *parentFactory = d->factories[winfo->m_parentFactoryName];
 	if (!parentFactory)
-		return QString::null;
+		return QString();
 
 	return parentFactory->propertyDescForName(propertyName);
 }
@@ -660,17 +660,17 @@ QString WidgetLibrary::propertyDescForName(WidgetInfo *winfo, const Q3CString& p
 QString WidgetLibrary::propertyDescForValue(WidgetInfo *winfo, const Q3CString& name)
 {
 	if (!winfo->factory())
-		return QString::null;
+		return QString();
 	QString desc( winfo->factory()->propertyDescForValue(name) );
 	if (!desc.isEmpty())
 		return desc;
 	if (winfo->m_parentFactoryName.isEmpty())
-		return QString::null;
+		return QString();
 
 	//try in parent factory, if exists
 	WidgetFactory *parentFactory = d->factories[winfo->m_parentFactoryName];
 	if (!parentFactory)
-		return QString::null;
+		return QString();
 
 	return parentFactory->propertyDescForValue(name);
 }
@@ -698,7 +698,7 @@ QString WidgetLibrary::internalProperty(const Q3CString& classname, const Q3CStr
 	loadFactories();
 	WidgetInfo *wclass = d->widgets[classname];
 	if(!wclass)
-		return QString::null;
+		return QString();
 	QString value( wclass->factory()->internalProperty(classname, property) );
 	if (value.isEmpty() && wclass->inheritedClass())
 		return wclass->inheritedClass()->factory()->internalProperty(classname, property);

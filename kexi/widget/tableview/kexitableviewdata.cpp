@@ -382,7 +382,7 @@ QString KexiTableViewData::dbTableName() const
 {
 	if (m_cursor && m_cursor->query() && m_cursor->query()->masterTable())
 		return m_cursor->query()->masterTable()->name();
-	return QString::null;
+	return QString();
 }
 
 void KexiTableViewData::setSorting(int column, bool ascending)

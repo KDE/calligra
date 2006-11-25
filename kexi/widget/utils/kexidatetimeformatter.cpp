@@ -289,7 +289,7 @@ bool KexiTimeFormatter::isEmpty( const QString& str ) const
 QString KexiTimeFormatter::timeToString( const QTime& time ) const
 {
 	if (!time.isValid())
-		return QString::null;
+		return QString();
 
 	QString s(m_outputFormat);
 	if (m_24h) {

@@ -213,7 +213,7 @@ QStringList FieldList::names() const
 QString FieldList::sqlFieldsList(Field::List* list, Driver *driver)
 {
 	if (!list)
-		return QString::null;
+		return QString();
 	QString result;
 	result.reserve(256);
 	Field::ListIterator it( *list );

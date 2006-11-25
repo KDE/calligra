@@ -389,7 +389,7 @@ QString Conversion::headerTypeToFramesetName( unsigned char type )
     case wvWare::HeaderData::FooterFirst:
         return i18n("First Page Footer");
     }
-    return QString::null;
+    return QString();
 }
 
 bool Conversion::isHeader( unsigned char type )

@@ -52,7 +52,7 @@ QString KWord13FormatOneData::getProperty( const QString& name ) const
     if ( it == m_properties.end() )
     {
         // Property does not exist
-        return QString::null;
+        return QString();
     }
     else
     {

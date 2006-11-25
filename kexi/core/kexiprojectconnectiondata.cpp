@@ -63,7 +63,7 @@ KexiProjectConnectionData::KexiProjectConnectionData(const QString &driverName, 
 const QString &
 KexiProjectConnectionData::generateTmpName()
 {
-	return QString::null;
+	return QString();
 }
 
 KexiProjectConnectionData*

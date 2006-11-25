@@ -624,7 +624,7 @@ QString KivioGroupStencil::getTextBoxName(const KoPoint& p)
   int id = checkForCollision(p);
   
   if(id < 0) {
-    return QString::null;
+    return QString();
   }
   
   KivioStencil* pStencil = m_pGroupList->at(id);

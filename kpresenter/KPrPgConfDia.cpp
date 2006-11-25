@@ -320,7 +320,7 @@ QString KPrPgConfDia::presentationName() const
     if ( m_customSlide->isChecked() )
         return m_customSlideCombobox->currentText();
     else
-        return QString::null;
+        return QString();
 }
 
 #include "KPrGradient.h"

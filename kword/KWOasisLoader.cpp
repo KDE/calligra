@@ -169,7 +169,7 @@ static QString headerTypeToFramesetName( const QString& localName, bool hasEvenO
     if ( localName == "footer-first" ) // NOT OASIS COMPLIANT
         return i18n("First Page Footer");
     kWarning(32001) << "Unknown tag in headerTypeToFramesetName: " << localName << endl;
-    return QString::null;
+    return QString();
 }
 
 static KWFrameSet::Info headerTypeToFrameInfo( const QString& localName, bool /*hasEvenOdd*/ )

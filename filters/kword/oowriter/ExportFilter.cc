@@ -1017,7 +1017,7 @@ QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) c
 
     return properties;
 #else
-    return QString::null;
+    return QString();
 #endif
 }
 

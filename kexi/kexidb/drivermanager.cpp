@@ -392,7 +392,7 @@ QString DriverManager::lookupByMime(const QString &mimeType)
 
 	KService::Ptr ptr = d_int->m_services_by_mimetype[mimeType.toLower()];
 	if (!ptr)
-		return QString::null;
+		return QString();
 	return ptr->property("X-Kexi-DriverName").toString();
 }
 
@@ -429,7 +429,7 @@ void DriverManager::drv_clearServerResult()
 QString DriverManager::possibleProblemsInfoMsg() const
 {
 	if (d_int->possibleProblems.isEmpty())
-		return QString::null;
+		return QString();
 	QString str;
 	str.reserve(1024);
 	str = "<ul>";

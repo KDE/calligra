@@ -401,7 +401,7 @@ QString Part::i18nMessage(const Q3CString& englishMessage, KexiDialogBase* dlg) 
 {
 	Q_UNUSED(dlg);
 	if( QString(englishMessage).startsWith(":") )
-		return QString::null;
+		return QString();
 	return englishMessage;
 }
 

@@ -261,7 +261,7 @@ class KIVIO_EXPORT KivioStencil
       Returns the name of the text box that is at the specified point.
       If there exist no text box at the specified point then it returns QString::null.
     */
-    virtual QString getTextBoxName(const KoPoint& /*p*/) { return QString::null; }
+    virtual QString getTextBoxName(const KoPoint& /*p*/) { return QString(); }
 
     virtual void setText(const QString& /*text*/, const QString& /*name*/) { ; }
     virtual QString text(const QString& /*name*/) { return QString(""); }

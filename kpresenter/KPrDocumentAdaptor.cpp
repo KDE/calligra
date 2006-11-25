@@ -143,7 +143,7 @@ QString KPrDocumentAdaptor::customVariableValue(const QString & varname)const
 {
     if(doc->getVariableCollection()->customVariableExist(varname))
         return doc->getVariableCollection()->getVariableValue( varname );
-    return QString::null;
+    return QString();
 }
 
 bool KPrDocumentAdaptor::insertNewPage(int pos )

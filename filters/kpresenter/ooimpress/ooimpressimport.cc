@@ -2072,7 +2072,7 @@ QString OoImpressImport::storeSound(const QDomElement & object, QDomElement & p,
 
     QFile file(url);
     if (!file.exists())
-        return QString::null;
+        return QString();
 
     QString extension = url.mid( url.find( '.' ) );
     QString fileName = QString( "sound%1" ).arg( m_numSound++ ) + extension;
@@ -2082,7 +2082,7 @@ QString OoImpressImport::storeSound(const QDomElement & object, QDomElement & p,
     if (out)
     {
         if (!file.open(QIODevice::ReadOnly))
-            return QString::null;
+            return QString();
 
         QByteArray data(8*1024);
 
@@ -2096,7 +2096,7 @@ QString OoImpressImport::storeSound(const QDomElement & object, QDomElement & p,
         file.close();
     }
     else
-        return QString::null;
+        return QString();
 
     QDomElement key = doc.createElement("FILE");
     key.setAttribute("name", fileName);

@@ -1645,7 +1645,7 @@ QString KexiTableDesignerView::debugStringForCurrentTableSchema(tristate& result
 	static_cast<KexiDB::SchemaData&>(tempTable) = static_cast<KexiDB::SchemaData&>(*tempData()->table);
 	result = buildSchema(tempTable, true /*beSilent*/);
 	if (true!=result)
-		return QString::null;
+		return QString();
 	return tempTable.debugString(false /*without name*/);
 }
 

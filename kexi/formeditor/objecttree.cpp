@@ -116,7 +116,7 @@ ObjectTreeItem::pixmapName(const Q3CString &property)
 {
 	if(m_pixmapNames.contains(property))
 		return m_pixmapNames[property];
-	return QString::null;
+	return QString();
 }
 
 void

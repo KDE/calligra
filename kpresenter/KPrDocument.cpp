@@ -3558,7 +3558,7 @@ QString KPrDocument::templateFileName( bool chooseTemplate, const QString &theFi
         if ( KoTemplateChooseDia::choose( KPrFactory::global(), _template,
                                           KoTemplateChooseDia::OnlyTemplates,
                                           "kpresenter_template", parentWidget ) == KoTemplateChooseDia::Cancel )
-            return QString::null;
+            return QString();
         QFileInfo fileInfo( _template );
         fileName = fileInfo.dirPath( true ) + '/' + fileInfo.baseName() + ".kpt";
 

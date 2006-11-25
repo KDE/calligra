@@ -129,7 +129,7 @@ QString DatabaseProperties::caption( const QString& _name )
 		QString::fromLatin1("SELECT db_value FROM kexi__db WHERE db_property=")
 		+ m_conn->driver()->escapeString(name), result)) {
 		setError(m_conn, i18n("Could not read database property \"%1\".", name));
-		return QString::null;
+		return QString();
 	}
 	return result;
 }

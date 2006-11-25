@@ -298,9 +298,9 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 			return "!INVALIDTYPE!";
 		default:
 			KexiDBDbg << "Driver::valueToSQL(): UNKNOWN!" << endl;
-			return QString::null;
+			return QString();
 	}
-	return QString::null;
+	return QString();
 }
 
 QVariant Driver::propertyValue( const Q3CString& propName ) const

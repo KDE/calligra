@@ -204,7 +204,7 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
 {
 	KexiTableViewData *relData = column() ? column()->relatedData() : 0;
 	if (!relData)
-		return QString::null; //safety
+		return QString(); //safety
 	//use 'related table data' model
 	//-not effective for large sets: please cache it!
 	//.trimmed() is not generic!
@@ -225,7 +225,7 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
 
 	kexiwarn << "KexiComboBoxBase::valueForString(): no related row found, ID will be painted!" << endl;
 	if (allowNulls)
-		return QString::null;
+		return QString();
 	return str; //for sanity but it's weird to show id to the user
 }
 

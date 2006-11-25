@@ -311,7 +311,7 @@ QString KPrTextObjectAdaptor::verticalAlignment() const
     default:
         break;
     }
-    return QString::null;
+    return QString();
 }
 
 //bool KPrTextObjectAdaptor::textShadow() const

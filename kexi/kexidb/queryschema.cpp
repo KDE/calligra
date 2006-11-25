@@ -1431,7 +1431,7 @@ QueryColumnInfo::List* QuerySchema::autoIncrementFields()
 QString QuerySchema::sqlColumnsList(QueryColumnInfo::List* infolist, Driver *driver)
 {
 	if (!infolist)
-		return QString::null;
+		return QString();
 	QString result;
 	result.reserve(256);
 	QueryColumnInfo::ListIterator it( *infolist );
