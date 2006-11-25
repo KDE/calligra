@@ -2328,7 +2328,7 @@ KexiMainWindowImpl::createBlankProjectData(bool &cancelled, bool confirmOverwrit
 	KexiProjectData *new_data;
 
 	if (shortcutFileName)
-		*shortcutFileName.clear();
+		shortcutFileName->clear();
 	if (wiz.projectConnectionData()) {
 		//server-based project
 		KexiDB::ConnectionData *cdata = wiz.projectConnectionData();

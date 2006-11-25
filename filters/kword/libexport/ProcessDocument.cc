@@ -308,7 +308,7 @@ void ProcessAnchorTag ( QDomNode       myNode,
     QString *instance = (QString *) tagData;
 
     QString type;
-    *instance.clear();
+    instance->clear();
     Q3ValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "type",     type    )
                        << AttrProcessing ( "instance", "QString", instance );
