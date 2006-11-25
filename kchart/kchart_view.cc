@@ -628,8 +628,8 @@ void KChartView::importData()
 {
     // Get the name of the file to open.
     QString filename = 
-KFileDialog::getOpenFileName(KUrl(QString::null),// startDir
-						    QString::null,// filter
+KFileDialog::getOpenFileName(KUrl(QString()),// startDir
+						    QString(),// filter
 						    0,
 						    i18n("Import Data"));
     kDebug(35001) << "Filename = <" << filename << ">" << endl;

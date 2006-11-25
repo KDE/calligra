@@ -187,7 +187,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 #if 0
     setDefaultButton( i18n( "&Defaults" ) );
 #else
-    setDefaultButton( QString::null );
+    setDefaultButton( QString() );
 #endif
     setCancelButton( i18n( "&Cancel" ) );
 

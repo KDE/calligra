@@ -797,7 +797,7 @@ void kchartDataEditor::updateRowHeaders()
         
         QString tableCellText=m_table->text(i,0);
         
-        if (tableCellText == QString::null)
+        if (tableCellText.isNull())
             tableCellText=QString("");
         
         header->setLabel(header->mapToSection(i),tableCellText);
@@ -812,7 +812,7 @@ void kchartDataEditor::updateColHeaders()
         
         QString tableCellText=m_table->text(0,i);
         
-        if (tableCellText == QString::null)
+        if (tableCellText.isNull())
             tableCellText=QString("");
             
         header->setLabel(header->mapToSection(i),tableCellText);

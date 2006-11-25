@@ -102,11 +102,11 @@ QString dateTimeToString( const QDateTime& dt )  // ISODate is returned
             QString::number( dt.date().month() ).rightJustified( 2, '0' ) );
     QString day(
             QString::number( dt.date().day() ).rightJustified( 2, '0' ) );
-    date = QString::number( dt.date().year() ) + "-" + month + "-" + day;
+    date = QString::number( dt.date().year() ) + '-' + month + '-' + day;
     QString time;
     time.sprintf( "%.2d:%.2d:%.2d",
             dt.time().hour(), dt.time().minute(), dt.time().second() );
-    return date + "T" + time;
+    return date + 'T' + time;
 }
 #endif
 

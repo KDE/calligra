@@ -228,7 +228,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
 			      KoStore               */*store*/ )
 {
     const QString chartClass = chartElem.attributeNS( KoXmlNS::chart,
-						      "class", QString::null );
+						      "class", QString() );
     bool          knownType = false;
 
     // Find out what KChart charttype the OASIS charttype corresponds to.
@@ -323,12 +323,12 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         QString lp;
         if ( legendElem.hasAttributeNS( KoXmlNS::chart, "legend-position" ) )
         {
-            lp = legendElem.attributeNS( KoXmlNS::chart, "legend-position", QString::null );
+            lp = legendElem.attributeNS( KoXmlNS::chart, "legend-position", QString() );
         }
         QString lalign;
         if ( legendElem.hasAttributeNS( KoXmlNS::chart, "legend-align" ) )
         {
-            lalign = legendElem.attributeNS( KoXmlNS::chart, "legend-align", QString::null );
+            lalign = legendElem.attributeNS( KoXmlNS::chart, "legend-align", QString() );
         }
 
         LegendPosition lpos = NoLegend;
@@ -395,7 +395,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         //bodyWriter->addAttribute( "koffice:title", legendTitleText() );
         if ( legendElem.hasAttributeNS( KoXmlNS::koffice, "title" ) )
         {
-            setLegendTitleText( legendElem.attributeNS( KoXmlNS::koffice, "title", QString::null ) );
+            setLegendTitleText( legendElem.attributeNS( KoXmlNS::koffice, "title", QString() ) );
         }
     }
     else
@@ -429,10 +429,10 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     //
     // NOTE: Only used in spreadsheets.
     tmp = plotareaElem.attributeNS( KoXmlNS::chart,
-				    "data-source-has-labels", QString::null );
+				    "data-source-has-labels", QString() );
     m_firstRowAsLabel = false;
     m_firstColAsLabel = false;
-    if ( tmp == "none" || tmp == "" )
+    if ( tmp == "none" || tmp.isEmpty() )
 	; // NOTHING
     else if ( tmp == "row" )
 	m_firstRowAsLabel = true;
@@ -455,7 +455,7 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 
 
     tmp = plotareaElem.attributeNS( KoXmlNS::chart, "style-name",
-				    QString::null );
+				    QString() );
     //kDebug(35001) << "Style name for the plot area: " << tmp << endl;
     styleStack.save();
     styleStack.setTypeProperties( "chart" ); // load chart properties
@@ -593,7 +593,7 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 	    continue;
 
 	tmp = axisElem.attributeNS( KoXmlNS::chart, "name",
-				    QString::null);
+				    QString());
 	//kDebug(35001) << "Got axis " << tmp << endl;
 	//cerr << "Got axis " << tmp.latin1() << "\n";
 	if ( tmp == "primary-x" )
@@ -655,10 +655,10 @@ bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
 
     //cerr << ">>> ----------------------------------------------------------\n";
     //cerr << "Loading axis " << axisElem.attributeNS( KoXmlNS::chart, "name",
-    //						     QString::null).latin1()
+    //						     QString()).latin1()
     //	 << "\n";
 
-    tmp = axisElem.attributeNS( KoXmlNS::chart, "style-name", QString::null );
+    tmp = axisElem.attributeNS( KoXmlNS::chart, "style-name", QString() );
     //kDebug(35001) << "Style name for the axis: " << tmp << endl;
     //cerr << "Style name for the axis: " << tmp.latin1() << "\n";
     styleStack.save();
@@ -993,7 +993,7 @@ void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter,
 
     // Write axis titles if any.
     QString tmpStr = axisTitle( axisPos );
-    if ( tmpStr != "" ) {
+    if ( !tmpStr.isEmpty() ) {
 	bodyWriter->startElement( "chart:title" );
 	// TODO: Save style, svg:x, svg:y
 

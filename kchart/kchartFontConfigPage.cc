@@ -50,9 +50,9 @@ using namespace std;
 class KChartFontListBoxItem : public Q3ListBoxText
 {
 public:
-    KChartFontListBoxItem( Q3ListBox* lb,  const QString& text = QString::null ) :
+    KChartFontListBoxItem( Q3ListBox* lb,  const QString& text = QString() ) :
         Q3ListBoxText( lb,  text )  {}
-    KChartFontListBoxItem( const QString& text = QString::null ) :
+    KChartFontListBoxItem( const QString& text = QString() ) :
         Q3ListBoxText( text )  {}
 
     void setFont( const QFont& font )  {

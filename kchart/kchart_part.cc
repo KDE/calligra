@@ -415,7 +415,7 @@ void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
 	    // taken from the row headers.
 	    for ( uint row = 0; row < dataRowCount ; row++ ) {
 
-                QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
+                QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString();
 
                 longLabels  << label;
 		shortLabels << label.left( 3 );
@@ -426,7 +426,7 @@ void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
 	    // be taken from the column headers.
 	    for ( uint col = 0; col < dataColumnCount; col++ ) {
 
-                QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
+                QString label = (col < columnLabelCount) ? m_colLabels[col] : QString();
 
                 longLabels  << m_colLabels[col];
 		shortLabels << m_colLabels[col].left( 3 );
@@ -439,7 +439,7 @@ void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
 	// Set X axis labels from column headers.
 	for ( uint col = 0; col < dataColumnCount; col++ ) {
 
-            QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
+            QString label = (col < columnLabelCount) ? m_colLabels[col] : QString();
 
             longLabels  << label;
 	    shortLabels << label.left( 3 );
@@ -447,7 +447,7 @@ void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
 
 	// Set legend from row headers.
         for ( uint row = 0; row < dataRowCount; row++ ) {
-            QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
+            QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString();
 
             m_params->setLegendText( row, label );
         }
@@ -458,7 +458,7 @@ void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
 	// Set X axis labels from row headers.
 	for ( uint row = 0; row < dataRowCount; row++ ) {
 
-            QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
+            QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString();
 
             longLabels  << label;
 	    shortLabels << label.left( 3 );
@@ -466,7 +466,7 @@ void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
 
 	// Set legend from column headers.
         for ( uint col = 0; col < dataColumnCount ; col++ ) {
-            QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
+            QString label = (col < columnLabelCount) ? m_colLabels[col] : QString();
 
             m_params->setLegendText( col, label );
         }
@@ -986,7 +986,7 @@ bool KChartPart::loadOasisData( const QDomElement& tableElem )
     QDomElement  elem;
     forEachElement( elem, tableHeaderColumns ) {
         if ( elem.localName() == "table-column" ) {
-            int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt();
+            int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString() ).toInt();
             numberHeaderColumns += qMax( 1, repeated );
         }
     }
@@ -998,7 +998,7 @@ bool KChartPart::loadOasisData( const QDomElement& tableElem )
     QDomElement tableColumns = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-columns" );
     forEachElement( elem, tableColumns ) {
         if ( elem.localName() == "table-column" ) {
-            int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt();
+            int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString() ).toInt();
             numberDataColumns += qMax( 1, repeated );
         }
     }
@@ -1035,7 +1035,7 @@ bool KChartPart::loadOasisData( const QDomElement& tableElem )
     m_rowLabels.clear();
     forEachElement( elem, tableRows ) {
         if ( elem.localName() == "table-row" ) {
-            int repeated = elem.attributeNS( KoXmlNS::table, "number-rows-repeated", QString::null ).toInt();
+            int repeated = elem.attributeNS( KoXmlNS::table, "number-rows-repeated", QString() ).toInt();
             Q_ASSERT( repeated <= 1 ); // we don't handle yet the case where data rows are repeated (can this really happen?)
             numberDataRows += qMax( 1, repeated );
             if ( numberHeaderColumns > 0 ) {
@@ -1070,11 +1070,11 @@ bool KChartPart::loadOasisData( const QDomElement& tableElem )
                 if ( cellElem.localName() == "table-cell" ) {
                     ++cellNum;
                     if ( cellNum > numberHeaderColumns ) {
-                        QString valueType = cellElem.attributeNS( KoXmlNS::office, "value-type", QString::null );
+                        QString valueType = cellElem.attributeNS( KoXmlNS::office, "value-type", QString() );
                         if ( valueType != "float" )
                             kWarning(35001) << "Don't know how to handle value-type " << valueType << endl;
                         else {
-                            QString  value = cellElem.attributeNS( KoXmlNS::office, "value", QString::null );
+                            QString  value = cellElem.attributeNS( KoXmlNS::office, "value", QString() );
                             double   val = value.toDouble();
 
                             m_currentData.setCell( row, col, val );
@@ -1395,7 +1395,7 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 	// Get the legend.
 	QString  str;
 	uint     index = 0;
-	while ((str = m_params->legendText(index++)) != QString::null)
+	while ( !(str = m_params->legendText(index++)).isNull() )
 	    legendLabels << str;
 
 	if (m_params->dataDirection() == KChartParams::DataRows) {
