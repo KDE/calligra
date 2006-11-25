@@ -227,6 +227,13 @@ void VStrokeDocker::setStroke( const KoShapeBorderModel *border )
 		m_border.setJoinStyle( lineBorder->joinStyle() );
 		m_border.setMiterLimit( lineBorder->miterLimit() );
 	}
+	else
+	{
+		m_border.setLineWidth( 0.0 );
+		m_border.setCapStyle( Qt::FlatCap );
+		m_border.setJoinStyle( Qt::MiterJoin );
+		m_border.setMiterLimit( 0.0 );
+	}
 	updateDocker();
 }
 
