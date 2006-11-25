@@ -17,8 +17,6 @@ inge	Inge has taken this subtask
 RAPH	Raphael has taken this task
 
 
-Before release of KOffice 1.6.0
-===============================
 
 Item								   Prio Status
 ------------------------------------------------------------------------------
@@ -60,7 +58,6 @@ Item								   Prio Status
   + The Data Editor shows wrong when first row/column is checked      1 DONE
   + The title is miniscule					      2 ---- 
      - small fonts everywhere, in fact
-  + 128758:							      1 DONE
 
 * Issues with KSpread
   + Make it actually change the data area.			      1 ----
