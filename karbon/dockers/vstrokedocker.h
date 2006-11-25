@@ -22,10 +22,13 @@
 #ifndef __VSTROKEDOCKER_H__
 #define __VSTROKEDOCKER_H__
 
+#include <KoLineBorder.h>
+
 class QDockWidget;
-class Q3HButtonGroup;
+class QButtonGroup;
 class KoUnitDoubleSpinBox;
 class KoDockFactory;
+class KoShapeBorderModel;
 
 class VStrokeDockerFactory : public KoDockFactory
 {
@@ -45,13 +48,14 @@ public:
 	 VStrokeDocker();
 
 public slots:
-	virtual void setStroke( const VStroke & );
+	virtual void setStroke( const KoShapeBorderModel * );
 	virtual void setUnit( KoUnit::Unit unit );
 
 private:
-	Q3HButtonGroup *m_capGroup;
-	Q3HButtonGroup *m_joinGroup;
+	QButtonGroup *m_capGroup;
+	QButtonGroup *m_joinGroup;
 	KoUnitDoubleSpinBox *m_setLineWidth;
+	KoUnitDoubleSpinBox *m_miterLimit;
 
 private slots:
 	void slotCapChanged( int ID );
@@ -59,9 +63,10 @@ private slots:
 	void updateCanvas();
 	void updateDocker();
 	void widthChanged();
+	void miterLimitChanged();
 
 protected:
-	VStroke m_stroke;
+	KoLineBorder m_border;
 };
 
 #endif

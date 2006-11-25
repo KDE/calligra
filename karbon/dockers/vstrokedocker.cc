@@ -19,15 +19,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <Q3HButtonGroup>
 #include <QLabel>
-#include <QLayout>
 #include <QPushButton>
 #include <QWidget>
 #include <QToolTip>
 #include <QGridLayout>
-#include <QFrame>
 #include <QDockWidget>
+#include <QButtonGroup>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -35,10 +33,9 @@
 #include <KoCanvasController.h>
 #include <KoDockFactory.h>
 #include <KoUnitWidgets.h>
-
-#include "vstroke.h"
-#include "vselection.h"
-#include "vstrokecmd.h"
+#include <KoShapeManager.h>
+#include <KoCommand.h>
+#include <KoShapeBorderModel.h>
 
 #include "vstrokedocker.h"
 
@@ -69,8 +66,6 @@ VStrokeDocker::VStrokeDocker()
 {
 	setWindowTitle( i18n( "Stroke Properties" ) );
 
-	QPushButton *button;
-
 	QWidget *mainWidget = new QWidget( this );
 	QGridLayout *mainLayout = new QGridLayout( mainWidget );
 	
@@ -81,62 +76,82 @@ VStrokeDocker::VStrokeDocker()
 	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 	m_setLineWidth->setUnit( canvasController->canvas()->unit() );
     m_setLineWidth->setToolTip( i18n( "Set line width of actual selection" ) );
-	mainLayout->addWidget( m_setLineWidth, 0, 1 );
+	mainLayout->addWidget( m_setLineWidth, 0, 1, 1, 3 );
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) );
 	
 	QLabel* capLabel = new QLabel( i18n ( "Cap:" ), mainWidget );
 	mainLayout->addWidget( capLabel, 1, 0 );
-	m_capGroup = new Q3HButtonGroup( mainWidget );
-	//port:
-        // m_capGroup->setFrameShape( QFrame::NoFrame );
-	m_capGroup->setInsideMargin( 1 );
+    m_capGroup = new QButtonGroup( mainWidget );
+    m_capGroup->setExclusive( true );
 	m_capGroup->setExclusive( true );
-	button = new QPushButton( "", m_capGroup );
+
+	QPushButton *button = 0;
+
+	button = new QPushButton( mainWidget );
 	button->setIcon( SmallIcon( "cap_butt" ) );
 	button->setCheckable( true );
     button->setToolTip( i18n( "Butt cap" ) );
-	m_capGroup->insert( button );
-	button = new QPushButton( "", m_capGroup );
+	m_capGroup->addButton( button, Qt::FlatCap );
+	mainLayout->addWidget( button, 1, 1 );
+	
+	button = new QPushButton( mainWidget );
 	button->setIcon( SmallIcon( "cap_round" ) );
 	button->setCheckable( true );
     button->setToolTip( i18n( "Round cap" ) );
-	m_capGroup->insert( button );
-	button = new QPushButton( "", m_capGroup );
+	m_capGroup->addButton( button, Qt::RoundCap );
+	mainLayout->addWidget( button, 1, 2 );
+	
+	button = new QPushButton( mainWidget );
 	button->setIcon( SmallIcon( "cap_square" ) );
 	button->setCheckable( true );
     button->setToolTip( i18n( "Square cap" ) );
-	m_capGroup->insert( button );
-	mainLayout->addWidget( m_capGroup, 1, 1 );
-	connect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
+	m_capGroup->addButton( button, Qt::SquareCap );
+	mainLayout->addWidget( button, 1, 3 );
+	
+	connect( m_capGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
 	
 	QLabel* joinLabel = new QLabel( i18n ( "Join:" ), mainWidget );
 	mainLayout->addWidget( joinLabel, 2, 0 );
 	
-	m_joinGroup = new Q3HButtonGroup( mainWidget );
-	//port:
-        // m_joinGroup->setFrameShape( QFrame::NoFrame );
-	m_joinGroup->setInsideMargin( 1 );
+	m_joinGroup = new QButtonGroup( mainWidget );
 	m_joinGroup->setExclusive( true );
-	button = new QPushButton( "", m_joinGroup );
+
+	button = new QPushButton( mainWidget );
 	button->setIcon( SmallIcon( "join_miter" ) );
 	button->setCheckable( true );
 	button->setToolTip( i18n( "Miter join" ) );
-	m_joinGroup->insert( button );
-	button = new QPushButton( "", m_joinGroup );
+	m_joinGroup->addButton( button, Qt::MiterJoin );
+	mainLayout->addWidget( button, 2, 1 );
+	
+	button = new QPushButton( mainWidget );
 	button->setIcon( SmallIcon( "join_round" ) );
 	button->setCheckable( true );
 	button->setToolTip( i18n( "Round join" ) );
-	m_joinGroup->insert( button );
-	button = new QPushButton( "", m_joinGroup );
+	m_joinGroup->addButton( button, Qt::RoundJoin );
+	mainLayout->addWidget( button, 2, 2 );
+	
+	button = new QPushButton( mainWidget );
 	button->setIcon( SmallIcon( "join_bevel" ) );
 	button->setCheckable( true );
 	button->setToolTip( i18n( "Bevel join" ) );
-	m_joinGroup->insert( button );
-	mainLayout->addWidget( m_joinGroup, 2, 1 );
-	connect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
+	m_joinGroup->addButton( button, Qt::BevelJoin );
+	mainLayout->addWidget( button, 2, 3 );
+	
+	connect( m_joinGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
 
-	mainLayout->setRowStretch( 3, 1 );
+	QLabel* miterLabel = new QLabel( i18n ( "Miter limit:" ), mainWidget );
+	mainLayout->addWidget( miterLabel, 3, 0 );
+	// set min/max/step and value in points, then set actual unit
+	m_miterLimit = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 2 );
+	m_miterLimit->setUnit( canvasController->canvas()->unit() );
+    m_miterLimit->setToolTip( i18n( "Set miter limit" ) );
+	mainLayout->addWidget( m_miterLimit, 3, 1, 1, 3 );
+	connect( m_miterLimit, SIGNAL( valueChanged( double ) ), this, SLOT( miterLimitChanged() ) );
+
+	mainLayout->setRowStretch( 4, 1 );
 	mainLayout->setColumnStretch( 1, 1 );
+	mainLayout->setColumnStretch( 2, 1 );
+	mainLayout->setColumnStretch( 3, 1 );
 
 	setWidget( mainWidget );
 
@@ -145,96 +160,89 @@ VStrokeDocker::VStrokeDocker()
 
 void VStrokeDocker::updateCanvas()
 {
-	/*
-	if( m_part && m_part->document().selection()->objects().count() > 0 )
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), &m_stroke ), true );
-	*/
+	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+	KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+	if( ! selection )
+		return;
+
+	KoLineBorder *newBorder = new KoLineBorder();
+	newBorder->setLineWidth( m_border.lineWidth() );
+	newBorder->setCapStyle( m_border.capStyle() );
+	newBorder->setJoinStyle( m_border.joinStyle() );
+	newBorder->setMiterLimit( m_border.miterLimit() );
+
+	KoShapeBorderCommand *cmd = new KoShapeBorderCommand( selection->selectedShapes(), newBorder );
+	canvasController->canvas()->addCommand( cmd, true );
 }
 
 void VStrokeDocker::slotCapChanged( int ID )
 {
-	switch( ID )
-	{
-		case 1:
-			m_stroke.setLineCap( VStroke::capRound ); break;
-		case 2:
-			m_stroke.setLineCap( VStroke::capSquare ); break;
-		default:
-			m_stroke.setLineCap( VStroke::capButt );
-	}
+	m_border.setCapStyle( static_cast<Qt::PenCapStyle>( ID ) );
 	updateCanvas();
 }
 
 void VStrokeDocker::slotJoinChanged( int ID )
 {
-	switch( ID )
-	{
-		case 1:
-			m_stroke.setLineJoin( VStroke::joinRound ); break;
-		case 2:
-			m_stroke.setLineJoin( VStroke::joinBevel ); break;
-		default:
-			m_stroke.setLineJoin( VStroke::joinMiter );
-	}
+	m_border.setJoinStyle( static_cast<Qt::PenJoinStyle>( ID ) );
 	updateCanvas();
 }
 
 void VStrokeDocker::updateDocker()
 {
 	disconnect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
-	disconnect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
-	disconnect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
+	disconnect( m_capGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
+	disconnect( m_joinGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
+	disconnect( m_miterLimit, SIGNAL( valueChanged( double ) ), this, SLOT( miterLimitChanged() ) );
 
-	switch( m_stroke.lineCap() )
-	{
-		case VStroke::capRound:
-			m_capGroup->setButton( 1 ); break;
-		case VStroke::capSquare:
-			m_capGroup->setButton( 2 ); break;
-		default:
-			m_capGroup->setButton( 0 );
-	}
-
-	switch( m_stroke.lineJoin() )
-	{
-		case VStroke::joinRound:
-			m_joinGroup->setButton( 1 ); break;
-		case VStroke::joinBevel:
-			m_joinGroup->setButton( 2 ); break;
-		default:
-			m_joinGroup->setButton( 0 );
-	}
-	
-	m_setLineWidth->changeValue( m_stroke.lineWidth() );
+	m_capGroup->button( m_border.capStyle() )->setChecked( true );
+	m_joinGroup->button( m_border.joinStyle() )->setChecked( true );
+	m_setLineWidth->changeValue( m_border.lineWidth() );
+	m_miterLimit->changeValue( m_border.miterLimit() );
 	
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
-	connect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
-	connect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
+	connect( m_capGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
+	connect( m_joinGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
+	connect( m_miterLimit, SIGNAL( valueChanged( double ) ), this, SLOT( miterLimitChanged() ) );
 }
 
 void VStrokeDocker::widthChanged()
 {
-	m_stroke.setLineWidth( m_setLineWidth->value() );
+	m_border.setLineWidth( m_setLineWidth->value() );
 	updateCanvas();
 }
 
-void VStrokeDocker::setStroke( const VStroke &stroke )
+void VStrokeDocker::miterLimitChanged()
 {
-	m_stroke = stroke;
+	m_border.setMiterLimit( m_miterLimit->value() );
+	updateCanvas();
+}
+
+void VStrokeDocker::setStroke( const KoShapeBorderModel *border )
+{
+	const KoLineBorder *lineBorder = dynamic_cast<const KoLineBorder*>( border );
+	if( lineBorder )
+	{
+		m_border.setLineWidth( lineBorder->lineWidth() );
+		m_border.setCapStyle( lineBorder->capStyle() );
+		m_border.setJoinStyle( lineBorder->joinStyle() );
+		m_border.setMiterLimit( lineBorder->miterLimit() );
+	}
 	updateDocker();
 }
 
 void VStrokeDocker::setUnit( KoUnit::Unit unit )
 {
 	disconnect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
-	disconnect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
-	disconnect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
+	disconnect( m_capGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
+	disconnect( m_joinGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
+	disconnect( m_miterLimit, SIGNAL( valueChanged( double ) ), this, SLOT( miterLimitChanged() ) );
 
 	m_setLineWidth->setUnit( unit );
 
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
-	connect( m_capGroup, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
-	connect( m_joinGroup, SIGNAL( clicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
+	connect( m_capGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
+	connect( m_joinGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
+	connect( m_miterLimit, SIGNAL( valueChanged( double ) ), this, SLOT( miterLimitChanged() ) );
 }
 #include "vstrokedocker.moc"
 

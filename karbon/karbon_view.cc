@@ -220,10 +220,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		//Create Dockers
 		createColorDock();
 		createStrokeDock();
-		createTransformDock();
-		createDocumentTabDock();
+		//createTransformDock();
+		//createDocumentTabDock();
 		createLayersTabDock();
-		createResourceDock();
+		//createResourceDock();
 
 		KoToolBoxFactory toolBoxFactory( "Karbon" );
 		createDockWidget( &toolBoxFactory );
@@ -1585,6 +1585,9 @@ KarbonView::selectionChanged()
 
 	if( count > 0 )
 	{
+		KoShape *shape = *selection->selectedShapes().begin();
+		if( shape )
+			m_strokeDocker->setStroke( shape->border() );
 		/** TODO needs porting to flake
 		VObject *obj = part()->document().selection()->objects().getFirst();
 
