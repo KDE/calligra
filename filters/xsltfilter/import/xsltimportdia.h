@@ -48,7 +48,7 @@ class XSLTImportDia : public XSLTDialog
 	QStringList _namesList;
 
 public:
-    XSLTImportDia(KoStore*, const QByteArray &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+    XSLTImportDia(KoStore*, const QByteArray &format, QWidget* parent = 0, const char* name = 0, bool modal = false, Qt::WFlags fl = 0 );
     ~XSLTImportDia();
 
 	void setInputFile(QString file)  { _fileIn = file; }

@@ -38,7 +38,7 @@ class KSpreadLatexExportDiaImpl : public LatexExportDia
 
 	public:
     KSpreadLatexExportDiaImpl( KoStore*, QWidget* parent = 0,
-				const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+				const char* name = 0, bool modal = false, Qt::WFlags fl = 0 );
     virtual ~KSpreadLatexExportDiaImpl();
 
     void setOutputFile(QString file) { _fileOut = file; }

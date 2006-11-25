@@ -80,8 +80,8 @@ extern void setup_read_icc_profile JPP((j_decompress_ptr cinfo));
  * See if there was an ICC profile in the JPEG file being read;
  * if so, reassemble and return the profile data.
  *
- * TRUE is returned if an ICC profile was found, FALSE if not.
- * If TRUE is returned, *icc_data_ptr is set to point to the
+ * true is returned if an ICC profile was found, false if not.
+ * If true is returned, *icc_data_ptr is set to point to the
  * returned data, and *icc_data_len is set to its length.
  *
  * IMPORTANT: the data at **icc_data_ptr has been allocated with malloc()

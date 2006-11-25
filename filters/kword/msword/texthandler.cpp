@@ -515,7 +515,7 @@ QString KWordTextHandler::getFont(unsigned fc) const
     for (i = 0; i < ENTRIES; i++)
     {
         // The loop will leave unchanged any MS font name not fuzzy-matched.
-        if (font.find(fuzzyLookup[i][0], 0, FALSE) != -1)
+        if (font.find(fuzzyLookup[i][0], 0, false) != -1)
         {
             font = fuzzyLookup[i][1];
             break;

@@ -342,14 +342,14 @@ void Leader::updateMaxCells(KSpreadSheet *spreadSheet) {
 	// Maybe we should have something which does that in the KSpreadSheet class,
 	// it would be easy to keep track of this each time a new Cellis instanciated.
 	for (int row = 1; row < maxRow; ++row) {
-		bool usedColumn = FALSE;
+		bool usedColumn = false;
 		for (int column = 1; column < maxColumn; ++column) {
 			Cell*cell = spreadSheet->cellAt(column, row);
 			if (!cell->isDefault() && !cell->isEmpty()) {
 				if (column > m_maxCellColumn) {
 					m_maxCellColumn = column;
 				}
-				usedColumn = TRUE;
+				usedColumn = true;
 			}
 		}
 		if (usedColumn) {

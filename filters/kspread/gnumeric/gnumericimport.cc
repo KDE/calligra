@@ -1971,7 +1971,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 
     // This is a mapping of exprID to expressions.
 
-    Q3Dict<char> exprID_dict( 17, FALSE );
+    Q3Dict<char> exprID_dict( 17, false );
     int num = 1;
 
     while (!sheet.isNull())

@@ -121,7 +121,7 @@ xcf_load_image (XcfInfo * info)
     info->cp += xcf_read_int32 (info->fp, (qint32 *) & height, 1);
     info->cp += xcf_read_int32 (info->fp, (qint32 *) & image_type, 1);
 
-    gimage = gimp_create_image (gimp, width, height, image_type, FALSE);
+    gimage = gimp_create_image (gimp, width, height, image_type, false);
 
     gimp_image_undo_disable (gimage);
 
@@ -141,11 +141,11 @@ xcf_load_image (XcfInfo * info)
             gimp_parasite_list_remove (GIMP_IMAGE (gimage)->parasites,
                                        gimp_parasite_name (parasite));
 
-            gimp_image_set_grid (GIMP_IMAGE (gimage), grid, FALSE);
+            gimp_image_set_grid (GIMP_IMAGE (gimage), grid, false);
 	}
     }
 
-    while (TRUE)
+    while (true)
     {
         /* read in the offset of the next layer */
         info->cp += xcf_read_int32 (info->fp, &offset, 1);
@@ -184,7 +184,7 @@ xcf_load_image (XcfInfo * info)
             goto error;
     }
 
-    while (TRUE)
+    while (true)
     {
         /* read in the offset of the next channel */
         info->cp += xcf_read_int32 (info->fp, &offset, 1);
@@ -266,15 +266,15 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
     PropType prop_type;
     qint32 prop_size;
 
-    while (TRUE)
+    while (true)
     {
         if (!xcf_load_prop (info, &prop_type, &prop_size))
-            return FALSE;
+            return false;
 
         switch (prop_type)
 	{
 	case PROP_END:
-            return TRUE;
+            return true;
 
 	case PROP_COLORMAP:
             if (info->file_version == 0)
@@ -288,7 +288,7 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
                     xcf_read_int32 (info->fp, (qint32 *) & gimage->num_cols, 1);
                 gimage->cmap = g_new (guchar, gimage->num_cols * 3);
                 if (!xcf_seek_pos (info, info->cp + gimage->num_cols, NULL))
-                    return FALSE;
+                    return false;
 
                 for (i = 0; i < gimage->num_cols; i++)
 		{
@@ -333,7 +333,7 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
 		(compression != COMPRESS_FRACTAL))
             {
 		g_message ("unknown compression type: %d", (int) compression);
-		return FALSE;
+		return false;
             }
 
 	    info->compression = compression;
@@ -361,11 +361,11 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
 		switch (orientation)
                 {
                 case XCF_ORIENTATION_HORIZONTAL:
-		    gimp_image_add_hguide (gimage, position, FALSE);
+		    gimp_image_add_hguide (gimage, position, false);
 		    break;
 
                 case XCF_ORIENTATION_VERTICAL:
-		    gimp_image_add_vguide (gimage, position, FALSE);
+		    gimp_image_add_vguide (gimage, position, false);
 		    break;
 
                 default:
@@ -542,7 +542,7 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
 	}
     }
 
-    return FALSE;
+    return false;
 }
 
 static bool
@@ -556,15 +556,15 @@ xcf_load_layer_props (XcfInfo * info,
     PropType prop_type;
     qint32 prop_size;
 
-    while (TRUE)
+    while (true)
     {
         if (!xcf_load_prop (info, &prop_type, &prop_size))
-            return FALSE;
+            return false;
 
         switch (prop_type)
 	{
 	case PROP_END:
-            return TRUE;
+            return true;
 
 	case PROP_ACTIVE_LAYER:
             info->active_layer = layer;
@@ -594,7 +594,7 @@ xcf_load_layer_props (XcfInfo * info,
 
 	    info->cp += xcf_read_int32 (info->fp, (qint32 *) & visible, 1);
 	    gimp_item_set_visible (GIMP_ITEM (layer),
-				   visible ? TRUE : FALSE, FALSE);
+				   visible ? true : false, FALSE);
         }
         break;
 
@@ -604,7 +604,7 @@ xcf_load_layer_props (XcfInfo * info,
 
 	    info->cp += xcf_read_int32 (info->fp, (qint32 *) & linked, 1);
 	    gimp_item_set_linked (GIMP_ITEM (layer),
-				  linked ? TRUE : FALSE, FALSE);
+				  linked ? true : false, FALSE);
         }
         break;
 
@@ -684,7 +684,7 @@ xcf_load_layer_props (XcfInfo * info,
 	}
     }
 
-    return FALSE;
+    return false;
 }
 
 static bool
@@ -694,15 +694,15 @@ xcf_load_channel_props (XcfInfo * info,
     PropType prop_type;
     qint32 prop_size;
 
-    while (TRUE)
+    while (true)
     {
         if (!xcf_load_prop (info, &prop_type, &prop_size))
-            return FALSE;
+            return false;
 
         switch (prop_type)
 	{
 	case PROP_END:
-            return TRUE;
+            return true;
 
 	case PROP_ACTIVE_CHANNEL:
             info->active_channel = *channel;
@@ -723,8 +723,8 @@ xcf_load_channel_props (XcfInfo * info,
             GIMP_DRAWABLE (*channel)->tiles = NULL;
             g_object_unref (*channel);
             *channel = gimage->selection_mask;
-            (*channel)->boundary_known = FALSE;
-            (*channel)->bounds_known = FALSE;
+            (*channel)->boundary_known = false;
+            (*channel)->bounds_known = false;
             break;
 
 	case PROP_OPACITY:
@@ -742,7 +742,7 @@ xcf_load_channel_props (XcfInfo * info,
 
 	    info->cp += xcf_read_int32 (info->fp, (qint32 *) & visible, 1);
 	    gimp_item_set_visible (GIMP_ITEM (*channel),
-				   visible ? TRUE : FALSE, FALSE);
+				   visible ? true : false, FALSE);
         }
         break;
 
@@ -752,7 +752,7 @@ xcf_load_channel_props (XcfInfo * info,
 
 	    info->cp += xcf_read_int32 (info->fp, (qint32 *) & linked, 1);
 	    gimp_item_set_linked (GIMP_ITEM (*channel),
-				  linked ? TRUE : FALSE, FALSE);
+				  linked ? true : false, FALSE);
         }
         break;
 
@@ -818,7 +818,7 @@ xcf_load_channel_props (XcfInfo * info,
 	}
     }
 
-    return FALSE;
+    return false;
 }
 
 static bool
@@ -826,7 +826,7 @@ xcf_load_prop (XcfInfo * info, PropType * prop_type, qint32 * prop_size)
 {
     info->cp += xcf_read_int32 (info->fp, (qint32 *) prop_type, 1);
     info->cp += xcf_read_int32 (info->fp, (qint32 *) prop_size, 1);
-    return TRUE;
+    return true;
 }
 
 static KisLayer *
@@ -836,9 +836,9 @@ xcf_load_layer (XcfInfo * info, KisImage * gimage)
     GimpLayerMask *layer_mask;
     qint32 hierarchy_offset;
     qint32 layer_mask_offset;
-    bool apply_mask = TRUE;
-    bool edit_mask = FALSE;
-    bool show_mask = FALSE;
+    bool apply_mask = true;
+    bool edit_mask = false;
+    bool show_mask = false;
     bool active;
     bool floating;
     qint32 text_layer_flags = 0;
@@ -912,7 +912,7 @@ xcf_load_layer (XcfInfo * info, KisImage * gimage)
         layer_mask->edit_mask = edit_mask;
         layer_mask->show_mask = show_mask;
 
-        gimp_layer_add_mask (layer, layer_mask, FALSE);
+        gimp_layer_add_mask (layer, layer_mask, false);
     }
 
     /* attach the floating selection... */
@@ -1051,7 +1051,7 @@ xcf_load_hierarchy (XcfInfo * info, TileManager * tiles)
     if (width != tile_manager_width (tiles) ||
         height != tile_manager_height (tiles) ||
         bpp != tile_manager_bpp (tiles))
-        return FALSE;
+        return false;
 
     /* load in the levels...we make sure that the number of levels
      *  calculated when the TileManager was created is the same
@@ -1075,19 +1075,19 @@ xcf_load_hierarchy (XcfInfo * info, TileManager * tiles)
 
     /* seek to the level offset */
     if (!xcf_seek_pos (info, offset, NULL))
-        return FALSE;
+        return false;
 
     /* read in the level */
     if (!xcf_load_level (info, tiles))
-        return FALSE;
+        return false;
 
     /* restore the saved position so we'll be ready to
      *  read the next offset.
      */
     if (!xcf_seek_pos (info, saved_pos, NULL))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 
@@ -1109,7 +1109,7 @@ xcf_load_level (XcfInfo * info, TileManager * tiles)
 
     if (width != tile_manager_width (tiles) ||
         height != tile_manager_height (tiles))
-        return FALSE;
+        return false;
 
     /* read in the first tile offset.
      *  if it is '0', then this tile level is empty
@@ -1117,7 +1117,7 @@ xcf_load_level (XcfInfo * info, TileManager * tiles)
      */
     info->cp += xcf_read_int32 (info->fp, &offset, 1);
     if (offset == 0)
-        return TRUE;
+        return true;
 
     /* Initialise the reference for the in-memory tile-compression
      */
@@ -1126,12 +1126,12 @@ xcf_load_level (XcfInfo * info, TileManager * tiles)
     ntiles = tiles->ntile_rows * tiles->ntile_cols;
     for (i = 0; i < ntiles; i++)
     {
-        fail = FALSE;
+        fail = false;
 
         if (offset == 0)
 	{
             g_message ("not enough tiles found in level");
-            return FALSE;
+            return false;
 	}
 
         /* save the current position as it is where the
@@ -1152,36 +1152,36 @@ xcf_load_level (XcfInfo * info, TileManager * tiles)
 
         /* seek to the tile offset */
         if (!xcf_seek_pos (info, offset, NULL))
-            return FALSE;
+            return false;
 
         /* get the tile from the tile manager */
-        tile = tile_manager_get (tiles, i, TRUE, TRUE);
+        tile = tile_manager_get (tiles, i, true, TRUE);
 
         /* read in the tile */
         switch (info->compression)
 	{
 	case COMPRESS_NONE:
             if (!xcf_load_tile (info, tile))
-                fail = TRUE;
+                fail = true;
             break;
 	case COMPRESS_RLE:
             if (!xcf_load_tile_rle (info, tile, offset2 - offset))
-                fail = TRUE;
+                fail = true;
             break;
 	case COMPRESS_ZLIB:
             g_error ("xcf: zlib compression unimplemented");
-            fail = TRUE;
+            fail = true;
             break;
 	case COMPRESS_FRACTAL:
             g_error ("xcf: fractal compression unimplemented");
-            fail = TRUE;
+            fail = true;
             break;
 	}
 
         if (fail)
 	{
-            tile_release (tile, TRUE);
-            return FALSE;
+            tile_release (tile, true);
+            return false;
 	}
 
         /* To potentially save memory, we compare the
@@ -1199,16 +1199,16 @@ xcf_load_level (XcfInfo * info, TileManager * tiles)
                         tile_data_pointer (previous, 0, 0),
                         tile_size (tile)) == 0)
                 tile_manager_map (tiles, i, previous);
-            tile_release (previous, FALSE);
+            tile_release (previous, false);
 	}
-        tile_release (tile, TRUE);
-        previous = tile_manager_get (tiles, i, FALSE, FALSE);
+        tile_release (tile, true);
+        previous = tile_manager_get (tiles, i, false, FALSE);
 
         /* restore the saved position so we'll be ready to
          *  read the next offset.
          */
         if (!xcf_seek_pos (info, saved_pos, NULL))
-            return FALSE;
+            return false;
 
         /* read in the offset of the next tile */
         info->cp += xcf_read_int32 (info->fp, &offset, 1);
@@ -1217,10 +1217,10 @@ xcf_load_level (XcfInfo * info, TileManager * tiles)
     if (offset != 0)
     {
         g_message ("encountered garbage after reading level: %d", offset);
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -1246,7 +1246,7 @@ xcf_load_tile (XcfInfo * info, Tile * tile)
 
 #endif
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -1362,12 +1362,12 @@ xcf_load_tile_rle (XcfInfo * info, Tile * tile, int data_length)
 	}
     }
     g_free (xcfodata);
-    return TRUE;
+    return true;
 
 bogus_rle:
     if (xcfodata)
         g_free (xcfodata);
-    return FALSE;
+    return false;
 }
 
 static KisAnnotation *
@@ -1404,7 +1404,7 @@ xcf_load_old_paths (XcfInfo * info, KisImage * gimage)
     if (active_vectors)
         gimp_image_set_active_vectors (gimage, active_vectors);
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -1447,12 +1447,12 @@ xcf_load_old_path (XcfInfo * info, KisImage * gimage)
     {
         g_warning ("Unknown path type. Possibly corrupt XCF file");
 
-        return FALSE;
+        return false;
     }
 
     /* skip empty compatibility paths */
     if (num_points == 0)
-        return FALSE;
+        return false;
 
     points = g_new0 (GimpVectorsCompatPoint, num_points);
 
@@ -1498,7 +1498,7 @@ xcf_load_old_path (XcfInfo * info, KisImage * gimage)
     gimp_image_add_vectors (gimage, vectors,
                             gimp_container_num_children (gimage->vectors));
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -1521,7 +1521,7 @@ xcf_load_vectors (XcfInfo * info, KisImage * gimage)
     if (version != 1)
     {
         g_message ("Unknown vectors version: %d (skipping)", version);
-        return FALSE;
+        return false;
     }
 
     info->cp += xcf_read_int32 (info->fp, &active_index, 1);
@@ -1533,7 +1533,7 @@ xcf_load_vectors (XcfInfo * info, KisImage * gimage)
 
     while (num_paths-- > 0)
         if (!xcf_load_vector (info, gimage))
-            return FALSE;
+            return false;
 
     active_vectors = (GimpVectors *)
                      gimp_container_get_child_by_index (gimage->vectors, active_index);
@@ -1544,7 +1544,7 @@ xcf_load_vectors (XcfInfo * info, KisImage * gimage)
 #ifdef GIMP_XCF_PATH_DEBUG
     g_printerr ("xcf_load_vectors: loaded %d bytes\n", info->cp - base);
 #endif
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -1579,8 +1579,8 @@ xcf_load_vector (XcfInfo * info, KisImage * gimage)
 
     vectors = gimp_vectors_new (gimage, name);
 
-    GIMP_ITEM (vectors)->visible = visible ? TRUE : FALSE;
-    GIMP_ITEM (vectors)->linked = linked ? TRUE : FALSE;
+    GIMP_ITEM (vectors)->visible = visible ? true : false;
+    GIMP_ITEM (vectors)->linked = linked ? true : false;
 
     if (tattoo)
         GIMP_ITEM (vectors)->tattoo = tattoo;
@@ -1592,7 +1592,7 @@ xcf_load_vector (XcfInfo * info, KisImage * gimage)
         parasite = xcf_load_parasite (info);
 
         if (!parasite)
-            return FALSE;
+            return false;
 
         gimp_item_parasite_attach (GIMP_ITEM (vectors), parasite);
         gimp_parasite_free (parasite);
@@ -1641,7 +1641,7 @@ xcf_load_vector (XcfInfo * info, KisImage * gimage)
 
         control_points = g_value_array_new (num_control_points);
 
-        anchor.selected = FALSE;
+        anchor.selected = false;
 
         for (j = 0; j < num_control_points; j++)
 	{
@@ -1678,7 +1678,7 @@ xcf_load_vector (XcfInfo * info, KisImage * gimage)
     gimp_image_add_vectors (gimage, vectors,
                             gimp_container_num_children (gimage->vectors));
 
-    return TRUE;
+    return true;
 }
 
 #ifdef SWAP_FROM_FILE
@@ -1712,7 +1712,7 @@ xcf_swap_func (qint32 fd, Tile * tile, qint32 cmd, gpointer user_data)
 	    {
                 g_message ("unable to read tile data from xcf file: "
                            "%d ( %d ) bytes read", err, nleft);
-                return FALSE;
+                return false;
 	    }
 
             nleft -= err;
@@ -1733,10 +1733,10 @@ xcf_swap_func (qint32 fd, Tile * tile, qint32 cmd, gpointer user_data)
         tile->swap_num = 1;
         tile->swap_offset = -1;
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 #endif

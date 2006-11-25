@@ -48,7 +48,7 @@
  *  name 'name' and widget flags set to 'f'.
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
+ *  true to construct a modal dialog.
  */
 XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const QByteArray &format, QWidget* parent,  const char* name_, bool modal, Qt::WFlags fl )
     : XSLTDialog( parent, name_, modal, fl )

@@ -416,8 +416,8 @@ const Q3CString AIElement::toCString() const
   Returns the aielement as an int if the aielement has type()
   String, CString, Int, UInt, Double, Byte, or 0 otherwise.
 
-  If \a ok is non-null, \a *ok is set to TRUE if the value could be
-  converted to an int and FALSE otherwise.
+  If \a ok is non-null, \a *ok is set to true if the value could be
+  converted to an int and false otherwise.
 
   \sa asInt() canCast()
 */
@@ -464,8 +464,8 @@ uchar AIElement::toByte( bool * ok ) const
   Returns the aielement as an unsigned int if the aielement has type()
   String, CString, UInt, Int, Double, Byte, or 0 otherwise.
 
-  If \a ok is non-null, \a *ok is set to TRUE if the value could be
-  converted to a uint and FALSE otherwise.
+  If \a ok is non-null, \a *ok is set to true if the value could be
+  converted to a uint and false otherwise.
 
   \sa asUInt()
 */
@@ -493,8 +493,8 @@ uint AIElement::toUInt( bool * ok ) const
   Returns the aielement as a double if the aielement has type()
   String, CString, Double, Int, UInt, Byte, or 0.0 otherwise.
 
-  If \a ok is non-null, \a *ok is set to TRUE if the value could be
-  converted to a double and FALSE otherwise.
+  If \a ok is non-null, \a *ok is set to true if the value could be
+  converted to a double and false otherwise.
 
   \sa asDouble()
 */
@@ -673,7 +673,7 @@ QByteArray& AIElement::asByteArray()
 }
 
 /*!
-  Returns TRUE if the aielement's type can be cast to the requested
+  Returns true if the aielement's type can be cast to the requested
   type, \p t. Such casting is done automatically when calling the
   toInt(), ... or asInt(), ... methods.
 
@@ -689,19 +689,19 @@ QByteArray& AIElement::asByteArray()
 bool AIElement::canCast( Type t ) const
 {
   if ( d->typ == t )
-	  return TRUE;
+	  return true;
   if ( t == Int && ( d->typ == String || d->typ == Double || d->typ == UInt || d->typ == Byte) )
-	  return TRUE;
+	  return true;
   if ( t == UInt && ( d->typ == String || d->typ == Double || d->typ == Int || d->typ == Byte) )
-	  return TRUE;
+	  return true;
   if ( t == Double && ( d->typ == String || d->typ == Int || d->typ == UInt || d->typ == Byte) )
-	  return TRUE;
+	  return true;
   if ( t == CString && d->typ == String )
-	  return TRUE;
+	  return true;
   if ( t == String && ( d->typ == CString || d->typ == Int || d->typ == UInt || d->typ == Double || d->typ == Byte) )
-	  return TRUE;
+	  return true;
 
-  return FALSE;
+  return false;
 }
 
 /*!
@@ -713,8 +713,8 @@ bool AIElement::canCast( Type t ) const
   AIElement::String, an empty point array if the requested type \p t is
   AIElement::PointArray, etc).
 
-  \returns TRUE if the current type of the
-  aielement was successfully casted; otherwise returns FALSE.
+  \returns true if the current type of the
+  aielement was successfully casted; otherwise returns false.
 
   \see canCast()
 */
@@ -762,14 +762,14 @@ bool AIElement::cast( Type t )
   return canCast( t );
 }
 
-/*!  Compares this AIElement with \a v and returns TRUE if they are
-  equal; otherwise returns FALSE.
+/*!  Compares this AIElement with \a v and returns true if they are
+  equal; otherwise returns false.
 */
 
 bool AIElement::operator==( const AIElement &v ) const
 {
   if ( !v.canCast( type() ) )
-	  return FALSE;
+	  return false;
   switch( d->typ ) {
 /*    case List:
 	     return v.toList() == toList(); */
@@ -797,11 +797,11 @@ bool AIElement::operator==( const AIElement &v ) const
     case Invalid:
 	     break;
     }
-    return FALSE;
+    return false;
 }
 
-/*!  Compares this AIElement with \a v and returns TRUE if they are
-  not equal; otherwise returns FALSE.
+/*!  Compares this AIElement with \a v and returns true if they are
+  not equal; otherwise returns false.
 */
 
 bool AIElement::operator!=( const AIElement &v ) const

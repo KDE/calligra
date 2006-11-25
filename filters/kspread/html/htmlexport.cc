@@ -292,7 +292,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
                 text = cell->text(); // untested
                 break;
             case Cell::Formula:
-                cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened
+                cell->calc( true ); // Incredible, cells are not calculated if the document was just opened
                 text = cell->valueString();
                 break;
             }

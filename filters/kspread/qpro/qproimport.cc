@@ -174,7 +174,7 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
             table=ksdoc->map()->addNewSheet();
             // set up a default name for the table
             table->setSheetName( lTableNames.name(lPageIdx)
-                               , TRUE
+                               , true
                                );
             lTableNames.table(lPageIdx, table);
          }
@@ -212,7 +212,7 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
 
                // set up a default name for the table
                lNewTable->setSheetName( lTableNames.name(lIdx)
-                                      , TRUE
+                                      , true
                                       );
                lTableNames.table(lIdx, lNewTable);
             }
@@ -243,7 +243,7 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
          if( lTableNames.allocated(lPageIdx) && lTableNames.table(lPageIdx) )
          {
             lTableNames.table(lPageIdx)->setSheetName( lRecPageName->pageName()
-//                                                     , TRUE
+//                                                     , true
                                                      );
             lTableNames.name(lPageIdx, lRecPageName->pageName());
          }

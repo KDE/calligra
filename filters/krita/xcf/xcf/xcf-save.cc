@@ -121,7 +121,7 @@ static bool xcf_save_vectors       (XcfInfo           *info,
         if (tmp_error)                                                  \
         {                                                               \
             g_propagate_error (error, tmp_error);                       \
-            return FALSE;                                               \
+            return false;                                               \
         }                                                               \
     } G_STMT_END
 
@@ -130,7 +130,7 @@ static bool xcf_save_vectors       (XcfInfo           *info,
         if (tmp_error)                                                  \
         {                                                               \
             g_propagate_error (error, tmp_error);                       \
-            return FALSE;                                               \
+            return false;                                               \
         }                                                               \
     } G_STMT_END
 
@@ -139,7 +139,7 @@ static bool xcf_save_vectors       (XcfInfo           *info,
         if (tmp_error)                                                  \
         {                                                               \
             g_propagate_error (error, tmp_error);                       \
-            return FALSE;                                               \
+            return false;                                               \
         }                                                               \
     } G_STMT_END
 
@@ -148,7 +148,7 @@ static bool xcf_save_vectors       (XcfInfo           *info,
         if (tmp_error)                                                  \
         {                                                               \
             g_propagate_error (error, tmp_error);                       \
-            return FALSE;                                               \
+            return false;                                               \
         }                                                               \
     } G_STMT_END
 
@@ -158,7 +158,7 @@ static bool xcf_save_vectors       (XcfInfo           *info,
         {                                                               \
             g_message (_("Error saving XCF file: %s"),                  \
                        error->message);                                 \
-            return FALSE;                                               \
+            return false;                                               \
         }                                                               \
     } G_STMT_END
 
@@ -168,7 +168,7 @@ static bool xcf_save_vectors       (XcfInfo           *info,
         {                                                               \
             g_message (_("Error saving XCF file: %s"),                  \
                        error->message);                                 \
-            return FALSE;                                               \
+            return false;                                               \
         }                                                               \
     } G_STMT_END
 
@@ -178,7 +178,7 @@ static bool xcf_save_vectors       (XcfInfo           *info,
         {                                                               \
             g_message (_("Error saving XCF file: %s"),                  \
                        error->message);                                 \
-            return FALSE;                                               \
+            return false;                                               \
         }                                                               \
     } G_STMT_END
 
@@ -188,7 +188,7 @@ static bool xcf_save_vectors       (XcfInfo           *info,
         {                                                               \
             g_message (_("Error saving XCF file: %s"),                  \
                        error->message);                                 \
-            return FALSE;                                               \
+            return false;                                               \
         }                                                               \
     } G_STMT_END
 
@@ -204,7 +204,7 @@ static bool xcf_save_vectors       (XcfInfo           *info,
 
 #define xcf_check_error(x) G_STMT_START {       \
         if (! (x))                              \
-            return FALSE;                       \
+            return false;                       \
     } G_STMT_END
 
 #define xcf_print_error(x) G_STMT_START {               \
@@ -212,7 +212,7 @@ static bool xcf_save_vectors       (XcfInfo           *info,
         {                                               \
             g_message (_("Error saving XCF file: %s"),  \
                        error->message);                 \
-            return FALSE;                               \
+            return false;                               \
         }                                               \
     } G_STMT_END
 
@@ -272,7 +272,7 @@ xcf_save_image (XcfInfo   *info,
 
     floating_layer = gimp_image_floating_sel (gimage);
     if (floating_layer)
-        floating_sel_relax (floating_layer, FALSE);
+        floating_sel_relax (floating_layer, false);
 
     /* write out the tag information for the image */
     if (info->file_version > 0)
@@ -368,7 +368,7 @@ xcf_save_image (XcfInfo   *info,
         else
 	{
             channel = gimage->selection_mask;
-            have_selection = FALSE;
+            have_selection = false;
 	}
 
         /* save the start offset of where we are writing
@@ -405,7 +405,7 @@ xcf_save_image (XcfInfo   *info,
     saved_pos = info->cp;
 
     if (floating_layer)
-        floating_sel_rigor (floating_layer, FALSE);
+        floating_sel_rigor (floating_layer, false);
 
     return !ferror(info->fp);
 }
@@ -478,7 +478,7 @@ xcf_save_image_props (XcfInfo   *info,
 
     xcf_check_error (xcf_save_prop (info, gimage, PROP_END, error));
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -520,11 +520,11 @@ xcf_save_layer_props (XcfInfo   *info,
     else
     {
         xcf_check_error (xcf_save_prop (info, gimage, PROP_APPLY_MASK,
-                                        error, FALSE));
+                                        error, false));
         xcf_check_error (xcf_save_prop (info, gimage, PROP_EDIT_MASK,
-                                        error, FALSE));
+                                        error, false));
         xcf_check_error (xcf_save_prop (info, gimage, PROP_SHOW_MASK,
-                                        error, FALSE));
+                                        error, false));
     }
 
     xcf_check_error (xcf_save_prop (info, gimage, PROP_OFFSETS, error,
@@ -563,7 +563,7 @@ xcf_save_layer_props (XcfInfo   *info,
 
     xcf_check_error (xcf_save_prop (info, gimage, PROP_END, error));
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -601,7 +601,7 @@ xcf_save_channel_props (XcfInfo     *info,
 
     xcf_check_error (xcf_save_prop (info, gimage, PROP_END, error));
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -931,7 +931,7 @@ xcf_save_prop (XcfInfo   *info,
 	    if (tmp_error)
             {
 	        g_propagate_error (error, tmp_error);
-	        return FALSE;
+	        return false;
             }
 
             xcf_check_error (xcf_seek_end (info, error));
@@ -978,7 +978,7 @@ xcf_save_prop (XcfInfo   *info,
         if (tmp_error)
         {
             g_propagate_error (error, tmp_error);
-            return FALSE;
+            return false;
         }
 
         xcf_check_error (xcf_seek_end (info, error));
@@ -1044,7 +1044,7 @@ xcf_save_prop (XcfInfo   *info,
         if (tmp_error)
         {
             g_propagate_error (error, tmp_error);
-            return FALSE;
+            return false;
         }
 
         xcf_check_error (xcf_seek_end (info, error));
@@ -1067,7 +1067,7 @@ xcf_save_prop (XcfInfo   *info,
 
     va_end (args);
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -1138,7 +1138,7 @@ xcf_save_layer (XcfInfo   *info,
     xcf_check_error (xcf_seek_pos (info, saved_pos, error));
     xcf_write_int32_check_error (info, &offset, 1);
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -1191,7 +1191,7 @@ xcf_save_channel (XcfInfo      *info,
     xcf_write_int32_check_error (info, &offset, 1);
     saved_pos = info->cp;
 
-    return TRUE;
+    return true;
 }
 
 static qint32
@@ -1287,7 +1287,7 @@ xcf_save_hierarchy (XcfInfo     *info,
     xcf_check_error (xcf_seek_pos (info, saved_pos, error));
     xcf_write_int32_check_error (info, &offset, 1);
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -1375,7 +1375,7 @@ xcf_save_level (XcfInfo     *info,
     xcf_check_error (xcf_seek_pos (info, saved_pos, error));
     xcf_write_int32_check_error (info, &offset, 1);
 
-    return TRUE;
+    return true;
 
 }
 
@@ -1389,9 +1389,9 @@ xcf_save_tile (XcfInfo  *info,
     tile_lock (tile);
     xcf_write_int8_check_error (info, tile_data_pointer (tile, 0, 0),
                                 tile_size (tile));
-    tile_release (tile, FALSE);
+    tile_release (tile, false);
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -1505,9 +1505,9 @@ xcf_save_tile_rle (XcfInfo  *info,
             g_message ("xcf: uh oh! xcf rle tile saving error: %d", count);
     }
     xcf_write_int8_check_error (info, rlebuf, len);
-    tile_release (tile, FALSE);
+    tile_release (tile, false);
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -1525,7 +1525,7 @@ xcf_save_parasite (XcfInfo       *info,
         xcf_write_int8_check_error   (info, parasite->data, parasite->size);
     }
 
-    return TRUE;
+    return true;
 }
 
 typedef struct
@@ -1558,10 +1558,10 @@ xcf_save_parasite_list (XcfInfo           *info,
     if (data.error)
     {
         g_propagate_error (error, data.error);
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -1667,7 +1667,7 @@ xcf_save_old_paths (XcfInfo    *info,
         g_free (points);
     }
 
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -1820,9 +1820,9 @@ xcf_save_vectors (XcfInfo    *info,
                 xcf_write_float_check_error (info, coords, num_axes);
             }
 
-            g_array_free (control_points, TRUE);
+            g_array_free (control_points, true);
         }
     }
 
-    return TRUE;
+    return true;
 }

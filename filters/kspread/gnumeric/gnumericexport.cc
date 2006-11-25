@@ -1417,7 +1417,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
                         QString tmp = cell->text();
                         if ( tmp =="==" )
                             tmp=replace( "==", "=" );
-                        /* cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened text = cell->valueString(); */
+                        /* cell->calc( true ); // Incredible, cells are not calculated if the document was just opened text = cell->valueString(); */
                         text = tmp;
                         break;
                     }

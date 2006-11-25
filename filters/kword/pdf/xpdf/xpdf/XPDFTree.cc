@@ -134,7 +134,7 @@ externaldef(xpdftreeclassrec) XPDFTreeClassRec xpdfTreeClassRec = {
     sizeof(XPDFTreeRec),			// widget_size
     NULL,					// class_initialize
     &classPartInitialize,			// class_part_initialize
-    FALSE,					// class_inited
+    false,					// class_inited
     &initialize,				// initialize
     NULL,					// initialize_hook
     XtInheritRealize,				// realize
@@ -143,10 +143,10 @@ externaldef(xpdftreeclassrec) XPDFTreeClassRec xpdfTreeClassRec = {
     resources,					// resources
     XtNumber(resources),			// num_resources
     NULLQUARK,					// xrm_class
-    TRUE,					// compress_motion
+    true,					// compress_motion
     XtExposeCompressMaximal,			// compress_exposure
-    TRUE,					// compress_enterleave
-    FALSE,					// visible_interest
+    true,					// compress_enterleave
+    false,					// visible_interest
     &destroy,					// destroy
     &resize,					// resize
     &redisplay,					// expose

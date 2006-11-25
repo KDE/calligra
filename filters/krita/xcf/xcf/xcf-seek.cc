@@ -44,11 +44,11 @@ xcf_seek_pos (XcfInfo  *info,
                          _("Could not seek in XCF file: %s"),
                          g_strerror (errno));
 
-            return FALSE;
+            return false;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 bool
@@ -61,7 +61,7 @@ xcf_seek_end (XcfInfo  *info,
                      _("Could not seek in XCF file: %s"),
                      g_strerror (errno));
 
-        return FALSE;
+        return false;
     }
 
     info->cp = ftell (info->fp);
@@ -72,8 +72,8 @@ xcf_seek_end (XcfInfo  *info,
                      _("Could not seek in XCF file: %s"),
                      g_strerror (errno));
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }

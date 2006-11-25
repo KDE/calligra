@@ -48,7 +48,7 @@ class XSLTExportDia : public XSLTDialog
     QStringList _namesList;
 
 public:
-    XSLTExportDia( KoStoreDevice*, const QByteArray &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
+    XSLTExportDia( KoStoreDevice*, const QByteArray &format, QWidget* parent = 0, const char* name = 0, bool modal = false, Qt::WFlags fl = 0 );
     ~XSLTExportDia();
 
     void setOutputFile(QString file) { _fileOut = file; }
