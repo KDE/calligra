@@ -576,7 +576,7 @@ bool KexiDB::splitToTableAndFieldParts(const QString& string,
 {
 	const int id = string.indexOf('.');
 	if (option & SetFieldNameIfNoTableName && id==-1) {
-		tableName = QString::null;
+		tableName.clear();
 		fieldName = string;
 		return !fieldName.isEmpty();
 	}

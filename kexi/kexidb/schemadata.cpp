@@ -38,9 +38,9 @@ SchemaData::~SchemaData()
 void SchemaData::clear()
 {
 	m_id = -1;
-	m_name = QString::null;
-	m_caption = QString::null;
-	m_desc = QString::null;
+	m_name.clear();
+	m_caption.clear();
+	m_desc.clear();
 }
 
 QString SchemaData::schemaDataDebugString() const

@@ -1085,7 +1085,7 @@ void Msod::Options::initialise()
     m_lTxid = 0;
 
     m_pib = 0;
-    m_pibName = QString::null;
+    m_pibName.clear();
     m_pibFlags = 0;
     m_pictureId = 0;
     m_fNoHitTestPicture = false;

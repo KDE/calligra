@@ -3928,7 +3928,7 @@ void KPrDocument::clipboardDataChanged()
     {
         kDebug(33001) << "KPrDocument::clipboardDataChanged, deleting temp file " << m_tempFileInClipboard << endl;
         unlink( QFile::encodeName( m_tempFileInClipboard ) );
-        m_tempFileInClipboard = QString::null;
+        m_tempFileInClipboard.clear();
     }
     // TODO enable paste as well, when a txtobject is activated
     // and there is plain text in the clipboard. Then enable this code.

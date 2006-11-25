@@ -132,12 +132,12 @@ void Object::clearError()
 { 
 	m_errno = 0;
 	m_hasError = false;
-	m_errMsg = QString::null;
-	m_sql = QString::null;
-	m_errorSql = QString::null;
+	m_errMsg.clear();
+	m_sql.clear();
+	m_errorSql.clear();
 	m_serverResult = 0;
-	m_serverResultName = QString::null;
-	m_serverErrorMsg = QString::null;
+	m_serverResultName.clear();
+	m_serverErrorMsg.clear();
 	drv_clearServerResult();
 }
 

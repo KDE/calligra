@@ -111,7 +111,7 @@ tristate readLineFromTestFile(const QString& expectedCommandName = QString::null
 				skipWhiteSpace = true;
 				quoted = false;
 				testFileLine.append( item );
-				item = QString::null;
+				item.clear();
 				continue;
 			}
 			item.append(ch);

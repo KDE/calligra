@@ -276,8 +276,8 @@ bool KexiStartupDialog::shouldBeShown()
 void KexiStartupDialog::show()
 {
 	//just some cleanup
-	d->selectedTemplateKey=QString::null;
-	d->existingFileToOpen=QString::null;
+	d->selectedTemplateKey.clear();
+	d->existingFileToOpen.clear();
 	d->result=-1;
 
 	KDialog::centerOnScreen(this);
@@ -313,7 +313,7 @@ void KexiStartupDialog::done(int r)
 //				d->existingFileToOpen = d->openExistingFileDlg->currentURL().path();
 				d->selectedExistingConnection = 0;
 			} else {
-				d->existingFileToOpen = QString::null;
+				d->existingFileToOpen.clear();
 				d->selectedExistingConnection
 					= d->openExistingConnWidget->selectedConnectionData();
 			}
@@ -483,7 +483,7 @@ void KexiStartupDialog::templateItemExecuted(Q3IconViewItem *item)
 void KexiStartupDialog::updateSelectedTemplateKeyInfo()
 {
 	if (activePageIndex()!=d->pageTemplatesID) {//not a 'new db' tab is selected
-		d->selectedTemplateKey=QString::null;
+		d->selectedTemplateKey.clear();
 		return;
 	}
 	Q3IconViewItem *item;
@@ -497,7 +497,7 @@ void KexiStartupDialog::updateSelectedTemplateKeyInfo()
 	else if (d->templatesWidget->activePageIndex()==d->templatesSectionID_custom1) {
 		item = d->viewPersonalTempl->templates->currentItem();
 		if (!item) {
-			d->selectedTemplateKey=QString::null;
+			d->selectedTemplateKey.clear();
 			return;
 		}
 		d->selectedTemplateKey=QString("personal/")+static_cast<TemplateItem*>(item)->key;
@@ -505,7 +505,7 @@ void KexiStartupDialog::updateSelectedTemplateKeyInfo()
 	else  if (d->templatesWidget->activePageIndex()==d->templatesSectionID_custom2) {
 		item = d->viewBusinessTempl->templates->currentItem();
 		if (!item) {
-			d->selectedTemplateKey=QString::null;
+			d->selectedTemplateKey.clear();
 			return;
 		}
 		d->selectedTemplateKey=QString("business/")+static_cast<TemplateItem*>(item)->key;

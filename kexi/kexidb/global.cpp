@@ -47,7 +47,7 @@ void ServerVersionInfo::clear()
 	major = 0;
 	minor = 0;
 	release = 0;
-	string = QString::null;
+	string.clear();
 }
 
 //------------------------

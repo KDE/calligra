@@ -142,7 +142,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QB
 
       if( m_dialog->separateFiles() || sheets[i] == sheets.first() )
       {
-        str = QString::null;
+        str.clear();
         openPage( sheet, document, str );
         writeTOC( sheets, filenameBase, str );
       }
@@ -391,7 +391,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             str += "<" + html_row_tag + html_row_options + ">\n";
             str += line;
             str += "</" + html_row_tag + ">";
-            emptyLines = QString::null;
+            emptyLines.clear();
             // Append a CR, but in a temp string -> if no other real line,
             // then those will be dropped
             emptyLines += "\n";

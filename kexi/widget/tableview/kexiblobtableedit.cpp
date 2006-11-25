@@ -289,7 +289,7 @@ KexiBlobTableEdit::openWithDlg(const QString& file)
 	KUrl url;
 	url.setPath(file);
 	ul.append(url);
-	QString exec = QString::null;
+	QString exec;
 
 	KOpenWithDlg* dlg = new KOpenWithDlg(ul, this);
 

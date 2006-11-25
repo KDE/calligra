@@ -123,7 +123,7 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
 {
     QString textBody; // Text to be returned
     textBody += m_prefix;
-    m_prefix = QString::null;
+    m_prefix.clear();
     QString rowText;
 
     int rowCurrent = 0;
@@ -147,8 +147,8 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
             textBody += writeRow( textCellHeader, rowText, firstFrameData);
             textBody += "\\row";
             textBody += m_eol;
-            rowText = QString::null;
-            textCellHeader = QString::null;
+            rowText.clear();
+            textCellHeader.clear();
             firstCellInRow=true;
             debugRowCurrent ++; // DEBUG
             debugCellCurrent = 0; //DEBUG
@@ -768,7 +768,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
 			str += content;
 			str += "}";
 			str += m_eol;
-			content = QString::null;
+			content.clear();
 			if (!m_inTable)
 			{
 			    m_prefix = "\\par";
@@ -853,7 +853,7 @@ bool RTFWorker::doHeader(const HeaderData& header)
 
     m_textBody += str;
     }
-    m_prefix=QString::null;
+    m_prefix.clear();
     return true;
 }
 
@@ -888,7 +888,7 @@ bool RTFWorker::doFooter(const FooterData& footer)
 
     m_textBody += str;
     }
-    m_prefix=QString::null;
+    m_prefix.clear();
     return true;
 }
 

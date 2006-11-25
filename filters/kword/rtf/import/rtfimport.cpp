@@ -1320,7 +1320,7 @@ void RTFImport::parseFontTable( RTFProperty * )
 {
     if (token.type == RTFTokenizer::OpenGroup)
     {
-	font.name = QString::null;
+	font.name.clear();
 	font.styleHint = QFont::AnyStyle;
 	font.fixedPitch = 0;
     }
@@ -1420,7 +1420,7 @@ void RTFImport::parseBlipUid( RTFProperty * )
 {
     if (token.type == RTFTokenizer::OpenGroup)
     {
-        picture.identifier = QString::null;
+        picture.identifier.clear();
     }
     else if (token.type == RTFTokenizer::PlainText)
     {
@@ -1452,7 +1452,7 @@ void RTFImport::parsePicture( RTFProperty * )
 	picture.cropBottom	= 0;
 	picture.nibble		= 0;
 	picture.bits.truncate( 0 );
-	picture.identifier = QString::null;
+	picture.identifier.clear();
     }
     else if (token.type == RTFTokenizer::PlainText)
     {
@@ -1556,7 +1556,7 @@ void RTFImport::parsePicture( RTFProperty * )
         frameSets.addKey( dt, idStr );
         frameSets.closeNode( "PICTURE" );
         frameSets.closeNode( "FRAMESET" );
-        picture.identifier = QString::null;
+        picture.identifier.clear();
     }
 }
 
@@ -1749,7 +1749,7 @@ void RTFImport::parseField( RTFProperty * )
 	    }
 	    else if (fieldTable[i].type == 9)
 	    {
-		QString hrefName = QString::null;
+		QString hrefName;
 
                 // Use ConstIterator
 		for (int i=1; i < list.count(); i++)
@@ -1953,7 +1953,7 @@ void RTFImport::parseRichText( RTFProperty * )
 		kwFormat.pos = textState->length;
 		kwFormat.len = len;
 		textState->formats << kwFormat;
-		kwFormat.xmldata = QString::null;
+		kwFormat.xmldata.clear();
 	    }
 	    else
 	    {

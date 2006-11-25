@@ -649,7 +649,7 @@ KexiProject::item(int identifier)
 /*void KexiProject::clearMsg()
 {
 	clearError();
-//	d->error_title=QString::null;
+//	d->error_title.clear();
 }
 
 void KexiProject::setError(int code, const QString &msg )

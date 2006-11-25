@@ -235,9 +235,9 @@ KPrObject::KPrObject()
     disappearTimer = 1;
     appearSoundEffect = false;
     disappearSoundEffect = false;
-    a_fileName = QString::null;
-    d_fileName = QString::null;
-    m_objectName = QString::null;
+    a_fileName.clear();
+    d_fileName.clear();
+    m_objectName.clear();
     angle = 0.0;
     shadowDirection = SD_RIGHT_BOTTOM;
     shadowDistance = 0;
@@ -1101,7 +1101,7 @@ double KPrObject::load(const QDomElement &element) {
     }
     else {
         appearSoundEffect = false;
-        a_fileName = QString::null;
+        a_fileName.clear();
     }
     e=element.namedItem("DISAPPEARSOUNDEFFECT").toElement();
     if(!e.isNull()) {
@@ -1112,7 +1112,7 @@ double KPrObject::load(const QDomElement &element) {
     }
     else {
         disappearSoundEffect = false;
-        d_fileName = QString::null;
+        d_fileName.clear();
     }
     e=element.namedItem("OBJECTNAME").toElement();
     if(!e.isNull()) {
@@ -1120,7 +1120,7 @@ double KPrObject::load(const QDomElement &element) {
             m_objectName = e.attribute("objectName");
     }
     else {
-        m_objectName = QString::null;
+        m_objectName.clear();
     }
     e=element.namedItem("PROTECT").toElement();
     if (!e.isNull())

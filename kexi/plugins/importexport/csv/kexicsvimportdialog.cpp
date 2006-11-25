@@ -476,7 +476,7 @@ void KexiCSVImportDialog::fillTable()
 		m_table->setCurrentCell(0,0);
 
 	int row, column, maxColumn;
-	QString field = QString::null;
+	QString field;
 
 	for (row = 0; row < m_table->numRows(); ++row)
 		for (column = 0; column < m_table->numCols(); ++column)
@@ -498,7 +498,7 @@ void KexiCSVImportDialog::fillTable()
 	{
 		setText(row - m_startline, column, field, true);
 		++row;
-		field = QString::null;
+		field.clear();
 	}
 
 	adjustRows( row - m_startline - (m_1stRowForFieldNames->isChecked()?1:0) );
@@ -656,7 +656,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 {
 	enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_END_OF_QUOTED_FIELD,
 		 S_MAYBE_NORMAL_FIELD, S_NORMAL_FIELD } state = S_START;
-	field = QString::null;
+	field.clear();
 	const bool ignoreDups = m_ignoreDuplicates->isChecked();
 	bool lastCharDelimiter = false;
 	bool nextRow = false;
@@ -729,7 +729,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 			else if (x == delimiter)
 			{
 				setText(row - m_startline, column, field, inGUI);
-				field = QString::null;
+				field.clear();
 				if ((ignoreDups == false) || (lastCharDelimiter == false))
 					++column;
 				lastCharDelimiter = true;
@@ -790,7 +790,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 			else if (x == delimiter || x == '\n')
 			{
 				setText(row - m_startline, column, field, inGUI);
-				field = QString::null;
+				field.clear();
 				if (x == '\n')
 				{
 					nextRow = true;
@@ -814,7 +814,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 			if (x == delimiter || x == '\n')
 			{
 				setText(row - m_startline, column, field, inGUI);
-				field = QString::null;
+				field.clear();
 				if (x == '\n')
 				{
 					nextRow = true;
@@ -837,7 +837,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 		case S_MAYBE_NORMAL_FIELD :
 			if (x == m_textquote)
 			{
-				field = QString::null;
+				field.clear();
 				state = S_QUOTED_FIELD;
 				break;
 			}
@@ -845,7 +845,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 			if (x == delimiter || x == '\n')
 			{
 				setText(row - m_startline, column, field, inGUI);
-				field = QString::null;
+				field.clear();
 				if (x == '\n')
 				{
 					nextRow = true;
@@ -1536,7 +1536,7 @@ void KexiCSVImportDialog::accept()
 	}
 
 	int row, column, maxColumn;
-	QString field = QString::null;
+	QString field;
 
 	// main job
 	res = loadRows(field, row, column, maxColumn, false /*!gui*/ );
@@ -1563,7 +1563,7 @@ void KexiCSVImportDialog::accept()
 			_DROP_DEST_TABLE_AND_RETURN;
 		}
 		++row;
-		field = QString::null;
+		field.clear();
 	}
 
 	if (!tg.commit()) {

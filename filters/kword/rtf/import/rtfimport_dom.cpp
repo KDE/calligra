@@ -83,7 +83,7 @@ DomNode::DomNode( const char *doctype )
  */
 void DomNode::clear( int level )
 {
-    str = QString::null;
+    str.clear();
     documentLevel	= level;
     hasChildren		= true;
     hasAttributes	= false;

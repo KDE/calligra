@@ -121,8 +121,8 @@ class KEXI_DB_EXPORT ResultInfo
 			success = true;
 			allowToDiscardChanges = false;
 			column = -1;
-			msg = QString::null;
-			desc = QString::null;
+			msg.clear();
+			desc.clear();
 		}
 	bool success : 1; //!< result of the operation, true by default
 	bool allowToDiscardChanges : 1; //!< True if changes can be discarded, false by default

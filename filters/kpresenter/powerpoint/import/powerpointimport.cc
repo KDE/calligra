@@ -144,8 +144,8 @@ KoFilter::ConversionStatus PowerPointImport::convert( const QByteArray& from, co
   // we are done!
   delete d->presentation;
   delete storeout;
-  d->inputFile = QString::null;
-  d->outputFile = QString::null;
+  d->inputFile.clear();
+  d->outputFile.clear();
   d->presentation = 0;
 
   return KoFilter::OK;

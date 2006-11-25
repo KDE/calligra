@@ -196,9 +196,9 @@ void KWEFUtil::GetNativePaperFormat(const int format,
         default:
         {
             // TODO
-            width=QString::null;
-            height=QString::null;
-            units=QString::null;
+            width.clear();
+            height.clear();
+            units.clear();
             break;
         }
     }

@@ -28,8 +28,8 @@ KexiTextMessageHandler::KexiTextMessageHandler(QString &messageTarget, QString &
 	, m_messageTarget(&messageTarget)
 	, m_detailsTarget(&detailsTarget)
 {
-	*m_messageTarget = QString::null;
-	*m_detailsTarget = QString::null;
+	*m_messageTarget.clear();
+	*m_detailsTarget.clear();
 }
 
 KexiTextMessageHandler::~KexiTextMessageHandler()

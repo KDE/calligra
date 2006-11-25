@@ -255,7 +255,7 @@ bool StructureParser::StartElementA(StackItem* stackItem, StackItem* stackCurren
         stackItem->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // <FORMATS>
         stackItem->pos=stackCurrent->pos; //Propagate the position
         stackItem->strTemp1=attributes.value("xlink:href").trimmed(); // link reference
-        stackItem->strTemp2=QString::null; // link name
+        stackItem->strTemp2.clear(); // link name
 
         // We must be careful: AbiWord permits anchors to bookmarks.
         //  However, KWord does not know what a bookmark is.
@@ -619,7 +619,7 @@ static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
     stackItem->fontName=strName;        // Store the data name as font name.
     stackItem->bold=(strBase64=="yes"); // Store base64-coded as bold
     stackItem->strTemp1=strMime;        // Mime type
-    stackItem->strTemp2=QString::null;  // Image data
+    stackItem->strTemp2.clear();  // Image data
 
     return true;
 }
@@ -734,7 +734,7 @@ static bool StartElementM(StackItem* stackItem, StackItem* /*stackCurrent*/,
     }
 
     stackItem->strTemp1=strKey;        // Key
-    stackItem->strTemp2=QString::null;  // Meta data
+    stackItem->strTemp2.clear();  // Meta data
 
     return true;
 }
@@ -1537,7 +1537,7 @@ bool StructureParser :: characters ( const QString & ch )
 
 bool StructureParser::startDocument(void)
 {
-    indent = QString::null;  //DEBUG
+    indent.clear();  //DEBUG
     styleDataMap.defineDefaultStyles();
     return true;
 }

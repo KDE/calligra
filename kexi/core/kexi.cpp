@@ -253,8 +253,8 @@ void ObjectStatus::setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* resul
 
 void ObjectStatus::clearStatus()
 {
-	message=QString::null;
-	description=QString::null;
+	message.clear();
+	description.clear();
 }
 
 QString ObjectStatus::singleStatusString() const { 

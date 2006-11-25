@@ -324,24 +324,24 @@ void ATFInterpreter::interpret()
                     case LEVEL_X:
                     {
                         coordPtr->pntX = value;
-                        coord.a = QString::null;
-                        coord.b = QString::null;
-                        coord.c = QString::null;
-                        coord.d = QString::null;
-                        coord.e = QString::null;
-                        coord.f = QString::null;
-                        coord.result = QString::null;
+                        coord.a.clear();
+                        coord.b.clear();
+                        coord.c.clear();
+                        coord.d.clear();
+                        coord.e.clear();
+                        coord.f.clear();
+                        coord.result.clear();
                     } break;
                     case LEVEL_Y:
                     {
                         coordPtr->pntY = value;
-                        coord.a = QString::null;
-                        coord.b = QString::null;
-                        coord.c = QString::null;
-                        coord.d = QString::null;
-                        coord.e = QString::null;
-                        coord.f = QString::null;
-                        coord.result = QString::null;
+                        coord.a.clear();
+                        coord.b.clear();
+                        coord.c.clear();
+                        coord.d.clear();
+                        coord.e.clear();
+                        coord.f.clear();
+                        coord.result.clear();
                     } break;
                     case LEVEL_ATTR:
                     {
@@ -349,7 +349,7 @@ void ATFInterpreter::interpret()
                         coordPtr->pwDiv = pw;
                         pw = 1;
                         v = false;
-                        attrib.isVariable = QString::null;
+                        attrib.isVariable.clear();
                         attrib.pwDiv = 1;
                     } break;
                     }

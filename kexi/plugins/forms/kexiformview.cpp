@@ -792,7 +792,7 @@ KexiFormView::storeData(bool dontAsk)
 	//all blobs are now saved
 	m_unsavedLocalBLOBs.clear();
 
-	tempData()->tempForm = QString::null;
+	tempData()->tempForm.clear();
 	return true;
 }
 

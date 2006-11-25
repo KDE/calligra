@@ -760,12 +760,12 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
                         kWarning(30513) << "ilvl " << pap.ilvl << " found twice in listInfo text..." << endl;
                     else
                         depthFound = true;
-                    suffix = QString::null;
+                    suffix.clear();
                 } else {
                     Q_ASSERT( ch < pap.ilvl ); // Can't see how level 1 would have a <0> in it...
                     if ( ch < pap.ilvl )
                         ++displayLevels; // we found a 'parent level', to be displayed
-                    prefix = QString::null; // get rid of previous prefixes
+                    prefix.clear(); // get rid of previous prefixes
                 }
             } else { // Normal character
                 if ( depthFound )
@@ -781,7 +781,7 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
             // so it will indeed look like that).
             // The question is whether the '.' is the suffix of the parent level already..
             if ( depth > 0 && !prefix.isEmpty() && m_listSuffixes[ depth - 1 ] == prefix )  {
-                prefix = QString::null; // it's already the parent's suffix -> remove it
+                prefix.clear(); // it's already the parent's suffix -> remove it
                 kDebug(30513) << "depth=" << depth << " parent suffix is " << prefix << " -> clearing" << endl;
             }
         }
@@ -827,7 +827,7 @@ void KWordTextHandler::setFrameSetElement( const QDomElement& frameset )
 {
     m_framesetElement = frameset;
     for ( uint i = 0 ; i < 9 ; ++i )
-        m_listSuffixes[i] = QString::null;
+        m_listSuffixes[i].clear();
 }
 
 QDomDocument KWordTextHandler::mainDocument() const

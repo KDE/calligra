@@ -296,7 +296,7 @@ void KexiActionSelectionDialog::slotOk()
 		d->currentActionName = dynamic_cast<ActionSelectorDialogListItem*>( item )->data;
 	}
 	else {
-		d->currentActionName = QString::null; // "No Action"
+		d->currentActionName.clear(); // "No Action"
 	}
 	KDialogBase::slotOk();
 }

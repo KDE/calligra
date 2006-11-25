@@ -104,7 +104,7 @@ m_shapeManager->add(rs);
     m_table.width = KWTableFrameSet::TblAuto;
     m_table.height = KWTableFrameSet::TblAuto;
     m_table.floating = true;
-    m_table.tableTemplateName=QString::null;
+    m_table.tableTemplateName.clear();
     m_table.format=31;
 #endif
 

@@ -305,7 +305,7 @@ KWFrame* KWOasisLoader::loadOasisTextBox( const QDomElement& frameTag, const QDo
         KWFrame* nextFrame = loadingInfo->frameByName( chainNextName );
         if ( nextFrame ) {
             fs = dynamic_cast<KWTextFrameSet *>( nextFrame->frameSet() );
-            chainNextName = QString::null; // already found, no need to store it
+            chainNextName.clear(); // already found, no need to store it
             kDebug(32001) << "  found " << nextFrame << " -> frameset " << ( fs ? fs->name() : QString::null ) << endl;
         }
     }

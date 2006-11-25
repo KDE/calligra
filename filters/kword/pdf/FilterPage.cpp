@@ -433,7 +433,7 @@ void Page::checkSpecialChars(Paragraph &par) const
                 if ( !res.isEmpty() ) {
                     blocks.push_back(b);
                     blocks.back().text = res;
-                    res = QString::null;
+                    res.clear();
                 }
                 blocks.push_back(b);
                 blocks.back().font.setFamily(family);

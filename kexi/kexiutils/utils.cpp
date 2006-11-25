@@ -192,7 +192,7 @@ void KexiUtils::serializeMap(const QMap<QString,QString>& map, QString& string)
 	ds << map;
 	kDebug() << array[3] << " " << array[4] << " " << array[5] << endl;
 	const uint size = array.size();
-	string = QString::null;
+	string.clear();
 	string.reserve(size);
 	for (uint i=0; i<size; i++) {
 		string[i]=QChar(ushort(array[i])+1);

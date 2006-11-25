@@ -355,9 +355,9 @@ QString MigrateManager::serverResultName()
 
 void MigrateManager::drv_clearServerResult()
 {
-	d_int->m_serverErrMsg=QString::null;
+	d_int->m_serverErrMsg.clear();
 	d_int->m_serverResultNum=0;
-	d_int->m_serverResultName=QString::null;
+	d_int->m_serverResultName.clear();
 }
 
 QString MigrateManager::possibleProblemsInfoMsg() const

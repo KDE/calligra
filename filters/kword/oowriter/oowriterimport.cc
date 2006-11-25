@@ -115,7 +115,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QByteArray const & from, QBy
         return preStatus;
     }
 
-    m_currentMasterPage = QString::null;
+    m_currentMasterPage.clear();
     QDomDocument mainDocument;
     QDomElement framesetsElem;
     prepareDocument( mainDocument, framesetsElem );

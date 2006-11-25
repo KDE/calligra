@@ -120,7 +120,7 @@ KexiDBSubForm::setFormName(const QString &name)
 		delete m_widget;
 		m_widget = 0;
 		updateScrollBars();
-		m_formName = QString::null;
+		m_formName.clear();
 		return;
 	}
 	m_form->setDesignMode(false);

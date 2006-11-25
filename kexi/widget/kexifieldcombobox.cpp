@@ -194,7 +194,7 @@ void KexiFieldComboBox::setFieldOrExpression(int index)
 	}
 	if (index<=0) {
 		setCurrentItem(0);
-		d->fieldOrExpression = QString::null;
+		d->fieldOrExpression.clear();
 	}
 	else {
 		setCurrentItem(index);

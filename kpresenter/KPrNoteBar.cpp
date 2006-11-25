@@ -56,7 +56,7 @@ KPrNoteBar::KPrNoteBar( QWidget *_parent, KPrView *_view )
     textEdit->setCurrentFont( font );
 
     int currentPageNum = view->getCurrentPresPage(); // 1 base.
-    QString text=QString::null;
+    QString text;
     if (currentPageNum!=-1)
         text = view->kPresenterDoc()->pageList().at(currentPageNum - 1)->noteText( );
     textEdit->setText( text );
@@ -164,7 +164,7 @@ void KPrNoteBar::printNotes( QPainter *_painter, KPrinter *_printer, QList<int> 
 
 QString KPrNoteBar::getNotesTextForPrinting(QList<int> _list) const
 {
-    QString allText = QString::null;
+    QString allText;
     bool firstText = true;
     bool noteIsEmpty = true;
     int pageCount = 1;

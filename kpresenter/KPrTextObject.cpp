@@ -2574,7 +2574,7 @@ void KPrTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomEle
             if ( lastFormat )
                 paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
             lastFormat = static_cast<KoTextFormat*> (c.format());
-            tmpText=QString::null;
+            tmpText.clear();
         }
         tmpText+=QString(c.c);
     }

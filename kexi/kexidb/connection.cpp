@@ -269,7 +269,7 @@ bool Connection::isDatabaseUsed() const
 void Connection::clearError()
 {
 	Object::clearError();
-	m_sql = QString::null;
+	m_sql.clear();
 }
 
 bool Connection::disconnect()
@@ -1001,7 +1001,7 @@ bool Connection::insertRecord(TableSchema &tableSchema, Q3ValueList<QVariant>& v
 	Field *f = fields->first();
 //	QString s_val;
 //	s_val.reserve(4096);
-	m_sql = QString::null;
+	m_sql.clear();
 	Q3ValueList<QVariant>::ConstIterator it = values.constBegin();
 //	int i=0;
 	while (f && (it!=values.end())) {
@@ -1031,7 +1031,7 @@ bool Connection::insertRecord(FieldList& fields, Q3ValueList<QVariant>& values)
 		return false;
 //	QString s_val;
 //	s_val.reserve(4096);
-	m_sql = QString::null;
+	m_sql.clear();
 	Q3ValueList<QVariant>::ConstIterator it = values.constBegin();
 //	int i=0;
 	while (f && (it!=values.constEnd())) {
@@ -1055,7 +1055,7 @@ bool Connection::executeSQL( const QString& statement )
 {
 	m_sql = statement; //remember for error handling
 	if (!drv_executeSQL( m_sql )) {
-		m_errMsg = QString::null; //clear as this could be most probably jsut "Unknown error" string.
+		m_errMsg.clear(); //clear as this could be most probably jsut "Unknown error" string.
 		m_errorSql = statement;
 		setError(this, ERR_SQL_EXECUTION_ERROR, i18n("Error while executing SQL statement."));
 		return false;

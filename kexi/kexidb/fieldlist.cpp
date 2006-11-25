@@ -57,10 +57,10 @@ FieldList::~FieldList()
 
 void FieldList::clear()
 {
-//	m_name = QString::null;
+//	m_name.clear();
 	m_fields.clear();
 	m_fields_by_name.clear();
-	m_sqlFields = QString::null;
+	m_sqlFields.clear();
 	delete m_autoinc_fields;
 	m_autoinc_fields = 0;
 }
@@ -78,7 +78,7 @@ FieldList& FieldList::insertField(uint index, KexiDB::Field *field)
 		return *this;
 	if (!field->name().isEmpty())
 		m_fields_by_name.insert(field->name().toLower(),field);
-	m_sqlFields = QString::null;
+	m_sqlFields.clear();
 	return *this;
 }
 
@@ -112,7 +112,7 @@ void FieldList::removeField(KexiDB::Field *field)
 		return;
 	m_fields_by_name.remove(field->name());
 	m_fields.remove(field);
-	m_sqlFields = QString::null;
+	m_sqlFields.clear();
 }
 
 Field* FieldList::field(const QString& name)

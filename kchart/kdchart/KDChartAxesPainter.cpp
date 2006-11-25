@@ -3697,7 +3697,7 @@ QString KDChartAxesPainter::applyLabelsFormat( const double nVal,
      *return an empty string 
      */
     if ( behindComma == 0 && QString::number(nVal).indexOf('.') > 0 )
-      sVal = QString::null;//sVal = "";
+      sVal.clear();//sVal = "";
     return sVal;
 }
 

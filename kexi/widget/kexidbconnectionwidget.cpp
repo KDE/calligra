@@ -283,7 +283,7 @@ KexiProjectData KexiDBConnectionTabWidget::currentProjectData()
 			data.setDatabaseName( QString::null );
 		}
 		else {
-			data.connectionData()->caption = QString::null; /* connection name is not specified... */
+			data.connectionData()->caption.clear(); /* connection name is not specified... */
 			data.setCaption( mainWidget->titleEdit->text() );
 			data.setDescription( detailsWidget->descriptionEdit->text() );
 			data.setDatabaseName( mainWidget->nameCombo->currentText() );

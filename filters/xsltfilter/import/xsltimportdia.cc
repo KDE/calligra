@@ -135,7 +135,7 @@ void XSLTImportDia::chooseSlot()
 {
 
 	/* Use dir from currently selected file */
-    QString dir = QString::null;
+    QString dir;
     if ( _currentFile.isLocalFile() && QFile::exists( _currentFile.path() ) )
         dir = QFileInfo( _currentFile.path() ).absoluteFilePath();
 

@@ -144,7 +144,7 @@ class QuerySchemaPrivate
 				columnsOrderExpanded = 0;
 				delete autoincFields;
 				autoincFields = 0;
-				autoIncrementSQLFieldsList = QString::null;
+				autoIncrementSQLFieldsList.clear();
 				columnInfosByNameExpanded.clear();
 				columnInfosByName.clear();
 			}
@@ -516,7 +516,7 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 	init();
 	if (!d->masterTable) {
 		KexiDBWarn << "QuerySchema(TableSchema*): !d->masterTable" << endl;
-		m_name = QString::null;
+		m_name.clear();
 		return;
 	}
 	addTable(d->masterTable);

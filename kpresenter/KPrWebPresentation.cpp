@@ -1294,7 +1294,7 @@ void KPrWebPresentationCreateDialog::saveConfig()
     if ( QFileInfo( filename ).exists() )
         filename = QFileInfo( filename ).absoluteFilePath();
     else
-        filename = QString::null;
+        filename.clear();
 
     KFileDialog fd (filename, i18n("*.kpweb|KPresenter Web-Presentation (*.kpweb)"), this
                     );

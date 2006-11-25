@@ -742,7 +742,7 @@ tristate KexiStartupHandler::detectActionForFile(
 {
 	detectedImportAction = KexiStartupData::Import(); //clear
 	QString suggestedDriverName(_suggestedDriverName); //safe
-	detectedDriverName = QString::null;
+	detectedDriverName.clear();
 	QFileInfo finfo(dbFileName);
 	if (dbFileName.isEmpty() || !finfo.isReadable()) {
 		if (!(options & SkipMessages))

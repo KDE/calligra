@@ -452,7 +452,7 @@ void ASCIIImport::processParagraph(QDomDocument& mainDocument,
                     "Standard", text.simplified(), firstindent, secondindent);
 
                 firstindent = Indent(*it);
-                text = QString::null;  // reinitialize paragraph text
+                text.clear();  // reinitialize paragraph text
             }
         }
         previousLine=it;

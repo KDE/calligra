@@ -2357,7 +2357,7 @@ bool KWDocument::completeLoading( KoStore *store )
     processFootNoteRequests();
 
     // Save memory
-    m_urlIntern = QString::null;
+    m_urlIntern.clear();
 
     // The fields and dates just got loaded -> update vars
     recalcVariables( VT_FIELD );

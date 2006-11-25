@@ -83,7 +83,7 @@ QStringList LookupFieldSchema::RowSource::values() const
 
 void LookupFieldSchema::RowSource::setValues(const QStringList& values)
 {
-	m_name = QString::null;
+	m_name.clear();
 	if (m_values)
 		*m_values = values;
 	else

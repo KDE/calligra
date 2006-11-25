@@ -47,7 +47,7 @@ void AbiPropsMap::splitAndAddAbiProps(const QString& strProps)
         if (result==-1)
         {
             name=(*it);
-            value=QString::null;
+            value.clear();
             kWarning(30506) << "Property without value: " << name << endl;
         }
         else

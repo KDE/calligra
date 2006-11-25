@@ -134,7 +134,7 @@ bool KexiDBQuerySchema::setWhereExpression(const QString& whereexpression)
         }
         else {
             value = s;
-            s = QString::null;
+            s.clear();
         }
 
         ::KexiDB::Field* field = static_cast< ::KexiDB::QuerySchema* >(m_schema)->field(key);

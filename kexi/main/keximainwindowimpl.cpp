@@ -2328,7 +2328,7 @@ KexiMainWindowImpl::createBlankProjectData(bool &cancelled, bool confirmOverwrit
 	KexiProjectData *new_data;
 
 	if (shortcutFileName)
-		*shortcutFileName = QString::null;
+		*shortcutFileName.clear();
 	if (wiz.projectConnectionData()) {
 		//server-based project
 		KexiDB::ConnectionData *cdata = wiz.projectConnectionData();
@@ -2960,7 +2960,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 		QString additionalMessage = dlg->part()->i18nMessage(
 			":additional message before saving design", dlg);
 		if (additionalMessage.startsWith(":"))
-			additionalMessage = QString::null;
+			additionalMessage.clear();
 		if (!additionalMessage.isEmpty())
 			additionalMessage = "<p>"+additionalMessage+"</p>";
 
@@ -3989,7 +3989,7 @@ tristate KexiMainWindowImpl::showProjectMigrationWizard(
 		else {
 			// file-based
 			fileName = destinationDatabaseName;
-			destinationDatabaseName = QString::null;
+			destinationDatabaseName.clear();
 		}
 		tristate res = openProject(fileName, destinationConnectionShortcut, 
 			destinationDatabaseName);

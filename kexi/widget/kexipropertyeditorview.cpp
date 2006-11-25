@@ -198,8 +198,8 @@ void KexiPropertyEditorView::updateInfoLabelForPropertySet(KexiObjectInfoLabel *
 	}
 	if (!set || objectName.isEmpty()) {
 		objectName = textToDisplayForNullSet;
-		className = QString::null;
-		iconName = QString::null;
+		className.clear();
+		iconName.clear();
 	}
 
 	if (className.isEmpty() && objectName.isEmpty())

@@ -279,7 +279,7 @@ void KPrPage::load( const QDomElement &element )
             m_soundFileName=e.attribute("soundFileName");
     }
     else {
-        m_soundFileName=QString::null;
+        m_soundFileName.clear();
     }
 
     e=element.namedItem("HEADERFOOTER").toElement();

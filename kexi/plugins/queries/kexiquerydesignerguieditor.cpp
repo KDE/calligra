@@ -1549,7 +1549,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		if (set) {
 			if ((*set)["isExpression"].value().toBool()==false) {
 				(*set)["table"] = newValue;
-				(*set)["caption"] = QString::null;
+				(*set)["caption"].clear();
 			}
 			else {
 				//do not set table for expr. columns

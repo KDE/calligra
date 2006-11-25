@@ -77,7 +77,7 @@ void MFieldObject::setText( const QString txt )
     // Check for empty string
     if ( txt.isEmpty() && dataType == MFieldObject::Date )
     {
-        text = QString::null;
+        text.clear();
         return ;
     }
 
@@ -126,7 +126,7 @@ void MFieldObject::setText( const QString txt )
         bool ok;
         text.setNum( txt.toDouble( &ok ), 'f', prec );
         if( !ok )
-            text = QString::null;
+            text.clear();
         else
         {
             if ( comma )

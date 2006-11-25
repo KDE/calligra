@@ -213,7 +213,7 @@ void CSVDialog::fillTable( )
             else if (x == m_delimiter || x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
-                field = QString::null;
+                field.clear();
                 if (x == '\n')
                 {
                     ++row;
@@ -238,7 +238,7 @@ void CSVDialog::fillTable( )
             if (x == m_delimiter || x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
-                field = QString::null;
+                field.clear();
                 if (x == '\n')
                 {
                     ++row;
@@ -258,7 +258,7 @@ void CSVDialog::fillTable( )
          case S_MAYBE_NORMAL_FIELD :
             if (x == m_textquote)
             {
-                field = QString::null;
+                field.clear();
                 state = S_QUOTED_FIELD;
                 break;
             }
@@ -266,7 +266,7 @@ void CSVDialog::fillTable( )
             if (x == m_delimiter || x == '\n')
             {
                 setText(row - m_startRow, column - m_startCol, field);
-                field = QString::null;
+                field.clear();
                 if (x == '\n')
                 {
                     ++row;
@@ -296,7 +296,7 @@ void CSVDialog::fillTable( )
       // the last line of the file had not any line end
       setText(row - m_startRow, column - m_startCol, field);
       ++row;
-      field = QString::null;
+      field.clear();
     }
 
     m_adjustCols = true;

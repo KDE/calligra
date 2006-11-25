@@ -140,7 +140,7 @@ KexiSimplePrintingEngine::~KexiSimplePrintingEngine()
 bool KexiSimplePrintingEngine::init(KexiDB::Connection& conn, 
 	KexiDB::TableOrQuerySchema& tableOrQuery, const QString& titleText, QString& errorMessage)
 {
-	errorMessage = QString::null;
+	errorMessage.clear();
 	done();
 	m_headerText = titleText; //tableOrQuery.captionOrName();
 

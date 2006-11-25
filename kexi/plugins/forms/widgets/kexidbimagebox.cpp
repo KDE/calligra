@@ -165,7 +165,7 @@ void KexiDBImageBox::setValueInternal( const QVariant& add, bool removeOld, bool
 		}
 	}
 	if (!ok) {
-		m_valueMimeType = QString::null;
+		m_valueMimeType.clear();
 		m_pixmap = QPixmap();
 	}
 	repaint();
@@ -182,7 +182,7 @@ void KexiDBImageBox::setInvalidState( const QString& displayText )
 		m_value = QByteArray();
 	}
 //	m_pixmap = QPixmap();
-//	m_originalFileName = QString::null;
+//	m_originalFileName.clear();
 
 //! @todo m_pixmapLabel->setText( displayText );
 
@@ -444,7 +444,7 @@ void KexiDBImageBox::clear()
 		//m_pixmap = QPixmap();
 	}
 
-//	m_originalFileName = QString::null;
+//	m_originalFileName.clear();
 
 	//! @todo emit signal for setting "dirty" flag within the design
 

@@ -572,7 +572,7 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
 		if (d->designMode)
 			realText = QString::fromLatin1(name())+" "+i18n("Unbound Auto Field", "(unbound)");
 		else
-			realText = QString::null;
+			realText.clear();
 		unbound = true;
 	}
 	else {
@@ -629,7 +629,7 @@ KexiDBAutoField::setAutoCaption(bool autoCaption)
 {
 	d->autoCaption = autoCaption;
 	if(d->autoCaption) {
-		//d->caption = QString::null;
+		//d->caption.clear();
 		if(columnInfo()) {
 			changeText(columnInfo()->captionOrAliasOrName());
 		}

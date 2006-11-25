@@ -158,8 +158,8 @@ KoFilter::ConversionStatus HancomWordImport::convert( const QByteArray& from, co
   storeout->close();
 
   // we are done!
-  d->inputFile = QString::null;
-  d->outputFile = QString::null;
+  d->inputFile.clear();
+  d->outputFile.clear();
   delete storeout;
 
   return KoFilter::OK;

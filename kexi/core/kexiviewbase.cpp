@@ -187,7 +187,7 @@ bool KexiViewBase::loadDataBlock( QString &dataString, const QString& dataID, bo
 		return false;
 	const tristate res = m_mainWin->project()->dbConnection()->loadDataBlock(m_dialog->id(), dataString, dataID);
 	if (canBeEmpty && ~res) {
-		dataString = QString::null;
+		dataString.clear();
 		return true;
 	}
 	return res == true;

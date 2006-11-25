@@ -57,7 +57,7 @@ struct OrderByColumnInternal
 		}
 		else {
 			columnNumber = nameOrNumber.toInt();
-			aliasOrName = QString::null;
+			aliasOrName.clear();
 		}
 	}
 	

@@ -119,8 +119,8 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 	if (d->isDatabaseShortcut) {
 		data.setCaption( config.readEntry("caption") );
 		data.setDescription( config.readEntry("comment") );
-		data.connectionData()->description = QString::null;
-		data.connectionData()->caption = QString::null; /* connection name is not specified... */
+		data.connectionData()->description.clear();
+		data.connectionData()->caption.clear(); /* connection name is not specified... */
 		data.setDatabaseName( config.readEntry("name") );
 	}
 	else {

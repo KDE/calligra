@@ -1389,7 +1389,7 @@ void KPrView::extraWebPres()
         return;
 
     KUrl url;
-    QString config = QString::null;
+    QString config;
     int ret =KMessageBox::questionYesNoCancel( this,
                                                i18n( "Do you want to load a previously saved configuration"
                                                      " which will be used for this HTML Presentation?" ),
@@ -5411,7 +5411,7 @@ void KPrView::updateStyleList()
 void KPrView::extraStylist()
 {
     KPrTextView *edit=m_canvas->currentTextObjectView();
-    QString activeStyleName  = QString::null;
+    QString activeStyleName;
     if ( edit )
     {
         edit->hideCursor();
