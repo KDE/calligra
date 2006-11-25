@@ -276,7 +276,7 @@ To build the plugin run:
 <title>kugar_plugin.h</title>
 
 <programlisting>
-#include &lt;qwidgetplugin.h>&gt;
+#include &lt;qwidgetplugin.h&gt;
 
 class KugarWidgetPlugin:public QWidgetPlugin
 {
