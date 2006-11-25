@@ -176,6 +176,7 @@ void KWCanvas::paintEvent(QPaintEvent * ev) {
         foreach(KWViewMode::ViewMap vm, map) {
             painter.save();
             painter.translate(vm.distance.x(), vm.distance.y());
+            vm.clipRect = vm.clipRect.adjusted(1, 1, 1, 1);
             painter.setClipRect(vm.clipRect);
             QColor color = Qt::white; // TODO paper background
 #ifdef DEBUG_REPAINT
@@ -190,7 +191,7 @@ void KWCanvas::paintEvent(QPaintEvent * ev) {
     }
     else {
         // TODO paint the main-text-flake directly
-        kWarning() << "Non-page paiting not implemented yet!\n";
+        kWarning() << "Non-page painting not implemented yet!\n";
     }
 
     painter.end();
