@@ -101,6 +101,7 @@ void KivioView::initGUI()
     setLayout(layout);
 
     m_canvas = new KivioCanvas(this);
+    setFocusProxy(m_canvas);
 
     m_canvasController = new KoCanvasController(this);
     m_canvasController->setCanvas(m_canvas);
@@ -167,23 +168,14 @@ void KivioView::setActivePage(KivioAbstractPage* page)
     }
 
     m_activePage = page;
-    shapeManager()->setShapes(page->shapeList());
+    m_canvas->shapeController()->setShapeControllerBase(m_activePage);
+    shapeManager()->setShapes(m_activePage->shapeList());
     m_canvas->updateSize();
-    KoPageLayout layout = page->pageLayout();
+    KoPageLayout layout = m_activePage->pageLayout();
     m_horizontalRuler->setRulerLength(layout.ptWidth);
     m_verticalRuler->setRulerLength(layout.ptHeight);
     m_horizontalRuler->setActiveRange(layout.ptLeft, layout.ptWidth - layout.ptRight);
     m_verticalRuler->setActiveRange(layout.ptTop, layout.ptHeight - layout.ptBottom);
-}
-
-void KivioView::addShape(KoShape* shape)
-{
-    m_document->addShape(m_activePage, shape);
-}
-
-void KivioView::removeShape(KoShape* shape)
-{
-    m_document->removeShape(m_activePage, shape);
 }
 
 KoZoomHandler* KivioView::zoomHandler() const

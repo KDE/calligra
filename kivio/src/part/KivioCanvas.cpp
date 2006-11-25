@@ -38,7 +38,7 @@
 #include "KivioAbstractPage.h"
 
 KivioCanvas::KivioCanvas(KivioView* parent)
-  : QWidget(parent), KoCanvasBase(parent), m_view(parent)
+  : QWidget(parent), KoCanvasBase(0), m_view(parent)
 {
   m_shapeManager = new KoShapeManager(this);
   m_toolProxy = KoToolManager::instance()->toolProxy();

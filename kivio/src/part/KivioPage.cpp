@@ -22,9 +22,10 @@
 #include <KoPageLayout.h>
 
 #include "KivioMasterPage.h"
+#include "KivioDocument.h"
 
 KivioPage::KivioPage(KivioMasterPage* master, const QString& title)
-  : KivioAbstractPage(title), m_masterPage(master)
+  : KivioAbstractPage(master->document(), title), m_masterPage(master)
 {
 }
 

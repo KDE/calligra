@@ -96,11 +96,11 @@ class KivioDocument : public KoDocument
         /// Returns the number of pages in the document
         int pageCount() const;
 
-        /// Adds @p shape to @p page and updates the views
-        void addShape(KivioAbstractPage* page, KoShape* shape);
+        /// Adds @p shape to the views
+        void addShapeToViews(KivioAbstractPage* page, KoShape* shape);
 
-        /// Removes @p shape from @p page and updates the views
-        void removeShape(KivioAbstractPage* page, KoShape* shape);
+        /// Removes @p shape from the views
+        void removeShapeFromViews(KivioAbstractPage* page, KoShape* shape);
 
     public slots:
         /// This is called when the last saved state of the document has been restored

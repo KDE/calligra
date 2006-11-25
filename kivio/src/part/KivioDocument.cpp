@@ -32,12 +32,15 @@
 #include <KoShape.h>
 #include <KoShapeManager.h>
 #include <KoUnit.h>
+#include <KoToolManager.h>
+#include <KoCanvasController.h>
 
 #include "KivioView.h"
 #include "KivioMasterPage.h"
 #include "KivioPage.h"
 #include "KivioAbstractPage.h"
 #include "KivioFactory.h"
+#include "KivioCanvas.h"
 
 KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode)
   : KoDocument(parentWidget, parent, singleViewMode)
@@ -179,7 +182,7 @@ void KivioDocument::addShell(KoMainWindow* shell)
 
 KivioMasterPage* KivioDocument::addMasterPage(const QString& title)
 {
-    KivioMasterPage* masterPage = new KivioMasterPage(title);
+    KivioMasterPage* masterPage = new KivioMasterPage(this, title);
     m_masterPageList.append(masterPage);
 
     return masterPage;
@@ -207,13 +210,11 @@ KivioPage* KivioDocument::pageByIndex(int index)
     return m_pageList.at(index);
 }
 
-void KivioDocument::addShape(KivioAbstractPage* page, KoShape* shape)
+void KivioDocument::addShapeToViews(KivioAbstractPage* page, KoShape* shape)
 {
     if(page == 0 || shape == 0) {
         return;
     }
-
-    page->addShape(shape);
 
     KoView* view = 0;
     KivioView* kivioView = 0;
@@ -225,24 +226,24 @@ void KivioDocument::addShape(KivioAbstractPage* page, KoShape* shape)
         if(kivioView && kivioView->activePage()) {
             if(kivioView->activePage() == page) {
                 kivioView->shapeManager()->add(shape);
+                kivioView->canvasWidget()->update();
             } else {
                 kivioPage = dynamic_cast<KivioPage*>(kivioView->activePage());
 
                 if(kivioPage && (kivioPage->masterPage() == page)) {
                     kivioView->shapeManager()->add(shape);
+                    kivioView->canvasWidget()->update();
                 }
             }
         }
     }
 }
 
-void KivioDocument::removeShape(KivioAbstractPage* page, KoShape* shape)
+void KivioDocument::removeShapeFromViews(KivioAbstractPage* page, KoShape* shape)
 {
     if(page == 0 || shape == 0) {
         return;
     }
-
-    page->removeShape(shape);
 
     KoView* view = 0;
     KivioView* kivioView = 0;
@@ -254,11 +255,13 @@ void KivioDocument::removeShape(KivioAbstractPage* page, KoShape* shape)
         if(kivioView && kivioView->activePage()) {
             if(kivioView->activePage() == page) {
                 kivioView->shapeManager()->remove(shape);
+                kivioView->canvasWidget()->update();
             } else {
                 kivioPage = dynamic_cast<KivioPage*>(kivioView->activePage());
 
                 if(kivioPage && (kivioPage->masterPage() == page)) {
                     kivioView->shapeManager()->remove(shape);
+                    kivioView->canvasWidget()->update();
                 }
             }
         }

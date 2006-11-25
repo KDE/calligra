@@ -21,7 +21,6 @@
 #define KIVIOVIEW_H
 
 #include <KoView.h>
-#include <KoShapeControllerBase.h>
 #include <KoZoomMode.h>
 
 class KAction;
@@ -37,7 +36,7 @@ class KivioDocument;
 class KivioAbstractPage;
 class KivioShapeGeometry;
 
-class KivioView : public KoView, public KoShapeControllerBase
+class KivioView : public KoView
 {
   Q_OBJECT
 
@@ -62,11 +61,6 @@ class KivioView : public KoView, public KoShapeControllerBase
 
     /// The shape manager that handles drawing of the shapes on the canvas
     KoShapeManager* shapeManager() const;
-
-    /// Adds @p shape to the document and updates all views
-    virtual void addShape(KoShape* shape);
-    /// Removes @p shape from the document and updates all views
-    virtual void removeShape(KoShape* shape);
 
   public Q_SLOTS:
     /// Change the page that will be shown on the canvas

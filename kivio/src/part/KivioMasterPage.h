@@ -27,7 +27,7 @@
 class KivioMasterPage : public KivioAbstractPage
 {
   public:
-    KivioMasterPage(const QString& title);
+    KivioMasterPage(KivioDocument* doc, const QString& title);
     ~KivioMasterPage();
 
     virtual KoPageLayout pageLayout() const;

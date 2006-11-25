@@ -23,8 +23,9 @@
 
 #include "KivioDocument.h"
 
-KivioAbstractPage::KivioAbstractPage(const QString& title)
+KivioAbstractPage::KivioAbstractPage(KivioDocument* doc, const QString& title)
 {
+  m_document = doc;
   setTitle(title);
 }
 
@@ -53,6 +54,7 @@ void KivioAbstractPage::addShape(KoShape* shape)
   }
 
   m_shapeList.append(shape);
+  m_document->addShapeToViews(this, shape);
 }
 
 void KivioAbstractPage::removeShape(KoShape* shape)
@@ -61,6 +63,7 @@ void KivioAbstractPage::removeShape(KoShape* shape)
     return;
   }
 
+  m_document->removeShapeFromViews(this, shape);
   m_shapeList.removeAll(shape);
 }
 
