@@ -1904,12 +1904,12 @@ void  KDChartAxisParams::setAxisValues( bool axisSteadyValueCalc,
   the default, KD Chart just takes the value specified by you, e.g.
   if you specify 75003.00 as start value you will get exactly this.
 
-  By setting this flag to FALSE you let KD Chart find a better
+  By setting this flag to false you let KD Chart find a better
   value for you: if your value is not Zero the axis will start
   with the next value lower than your start value that can be
   divided by the delta factor.
 
-  \param isExactValue set this to FALSE if KD Chart shall find
+  \param isExactValue set this to false if KD Chart shall find
   a better value than the one you have specified by setAxisValueStart()
   \sa setAxisValues, setAxisValueEnd, setAxisValueDelta
   \sa axisValueStartIsExact, axisValueStart

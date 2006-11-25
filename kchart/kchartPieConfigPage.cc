@@ -55,7 +55,7 @@ KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
     list->resize( list->sizeHint() );
     grid->addMultiCellWidget(list,0,9,0,0);
     list->addColumn( i18n("Hide Piece") );
-    list->setRootIsDecorated( TRUE );
+    list->setRootIsDecorated( true );
 
     QLabel* label = new QLabel( i18n( "Column active:" ), this );
     label->resize( label->sizeHint() );

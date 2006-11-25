@@ -186,7 +186,7 @@ public slots:
       \param coordinate the number of the coordinate to be retrieved, normally
       1 is the Y value and 2 is the X value.
 
-      \returns TRUE if the row and col are addressing a cell in the table.
+      \returns true if the row and col are addressing a cell in the table.
 
       \sa cellCoords, cellProp, cellContent, cellVal, setCell, setProp
       */
@@ -231,7 +231,7 @@ const double xVal = data.cellVal( r, c, 2 ).toDouble(); \endverbatim
 
       \param _prop the property set ID of the cell to be retrieved.
 
-      \returns TRUE if the row and col are addressing a cell in the table.
+      \returns true if the row and col are addressing a cell in the table.
 
       \sa cellCoord, cellCoords, cellContent, setCell, setProp
       */
@@ -372,7 +372,7 @@ const double xVal = data.cellVal( r, c, 2 ).toDouble(); \endverbatim
         special value KDCHART_POS_INFINITE
         to indicate positive infinite values
 
-        \returns TRUE if the value given is a positive infinite value.
+        \returns true if the value given is a positive infinite value.
     */
     virtual bool isPosInfinite( double value ) const
     {
@@ -388,7 +388,7 @@ const double xVal = data.cellVal( r, c, 2 ).toDouble(); \endverbatim
         special value KDCHART_NEG_INFINITE
         to indicate negative infinite values
         
-        \returns TRUE if the value given is a negative infinite value.
+        \returns true if the value given is a negative infinite value.
     */
     virtual bool isNegInfinite( double value ) const
     {
@@ -405,7 +405,7 @@ const double xVal = data.cellVal( r, c, 2 ).toDouble(); \endverbatim
         \note To improve runtime speed this virtual function
         may be reimplemented by classes derived from KDChartTableDataBase.
 
-        \returns TRUE if the value given is neither positive infinite nor negativr infinite.
+        \returns true if the value given is neither positive infinite nor negativr infinite.
     */
     virtual bool isNormalDouble( double value ) const
     {
@@ -422,7 +422,7 @@ const double xVal = data.cellVal( r, c, 2 ).toDouble(); \endverbatim
         \param value The QVariant value to be tested and converted.
         \param dVal Points to the double variable to be filled with the converted value.
 
-        \returns TRUE if the value given is neither positive infinite nor negative
+        \returns true if the value given is neither positive infinite nor negative
         infinite, \c value is set to the converted value if the type of \c value
         is QVariant::Double, otherwise it is not modified.
     */

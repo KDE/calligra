@@ -184,7 +184,7 @@ class KDCHART_EXPORT KDChartPropertySet :public QObject
       after calling \c load() if you want to use the loaded
       property set in the context of KDChartParam settings.
 
-      \returns TRUE if the property set could be read.
+      \returns true if the property set could be read.
 
       \sa id, saveXLM
       */
@@ -249,13 +249,13 @@ public slots:
       \note This function should be used for Bar Charts only, otherwise
       the settings specified here will be ignored.
 
-      \returns TRUE if this property set is specifying it's own showBar flag,
-      FALSE if the settings of another property set are to be used instead.
+      \returns true if this property set is specifying it's own showBar flag,
+      false if the settings of another property set are to be used instead.
 
-      \note The return value will also be FALSE if the 'default' properties
+      \note The return value will also be false if the 'default' properties
       are to be used: in this case idShowBar will be KDChartParams::NormalData
 
-      \param idShowBar to be ignored if return value is TRUE.
+      \param idShowBar to be ignored if return value is true.
       If idShowBar is KDChartPropertySet::UndefinedID
       then neither a property set ID
       nor an own flag were specified (so no special
@@ -263,10 +263,10 @@ public slots:
       respective data cell), else idShowBar contains the
       ID of another property set that is specifying the flag
       to be used.
-      \param showBar  this parameter's value is not modified if return value is FALSE.
+      \param showBar  this parameter's value is not modified if return value is false.
       Parameter showBar contains the showBar flag
       associated with the respective data cell.
-      If return value is FALSE the showBar
+      If return value is false the showBar
       flag is not set (so the parameter keeps its previous value)
       but this is to be overridden by the respective value
       of another property set that is indicated
@@ -321,23 +321,23 @@ public slots:
       \note This function should be used for Bar Charts only, otherwise
       the settings specified here will be ignored.
 
-      \returns TRUE if this property set is specifying it's own bar color settings,
-      FALSE if the settings of another property set are to be used instead.
+      \returns true if this property set is specifying it's own bar color settings,
+      false if the settings of another property set are to be used instead.
 
-      \note The return value will also be FALSE if the 'default' properties
+      \note The return value will also be false if the 'default' properties
       are to be used: in this case idBarColor will be KDChartParams::NormalData
 
-      \param idBarColor to be ignored if return value is TRUE.
+      \param idBarColor to be ignored if return value is true.
       If idBarColor is KDChartPropertySet::UndefinedID
       then neither a property set ID
       nor an own bar color were specified (so no special
       Bar color is associated to the respective data cell),
       else idBarColor contains the ID of another property set
       that is specifying the Bar color to be used.
-      \param barColor   this parameter's value is not modified if return value is FALSE.
+      \param barColor   this parameter's value is not modified if return value is false.
       Parameter barColor contains the bar color value
       associated with the respective data cell.
-      If return value is FALSE the barColor
+      If return value is false the barColor
       value is not set (so the parameter keeps its previous value)
       but this is to be overridden by the respective value
       of another property set that is indicated
@@ -391,20 +391,20 @@ public slots:
 
       \note This function should be used for Line Charts only.
 
-      \returns TRUE if this property set is specifying it's own line width settings,
-      FALSE if the settings of another property set are to be used instead.
+      \returns true if this property set is specifying it's own line width settings,
+      false if the settings of another property set are to be used instead.
 
-      \param idLineWidth to be ignored if return value is TRUE.
+      \param idLineWidth to be ignored if return value is true.
       If idLineWidth is KDChartPropertySet::UndefinedID
       then neither a property set ID
       nor an own line width were specified (so no special
       line width is associated to the respective data cell),
       else idLineWidth contains the ID of another property set
       that is specifying the line width to be used.
-      \param lineWidth   this parameter's value is not modified if return value is FALSE.
+      \param lineWidth   this parameter's value is not modified if return value is false.
       Parameter lineWidth contains the line width value
       associated with the respective data cell.
-      If return value is FALSE the lineWidth
+      If return value is false the lineWidth
       value is not set (so the parameter keeps its previous value)
       but this is to be overridden by the respective value
       of another property set that is indicated
@@ -459,23 +459,23 @@ public slots:
       \note This function should be used for Line Charts only, otherwise
       the settings specified here will be ignored.
 
-      \returns TRUE if this property set is specifying it's own line color settings,
-      FALSE if the settings of another property set are to be used instead.
+      \returns true if this property set is specifying it's own line color settings,
+      false if the settings of another property set are to be used instead.
 
-      \note The return value will also be FALSE if the 'default' properties
+      \note The return value will also be false if the 'default' properties
       are to be used: in this case idLineColor will be KDChartParams::NormalData
 
-      \param idLineColor to be ignored if return value is TRUE.
+      \param idLineColor to be ignored if return value is true.
       If idLineColor is KDChartPropertySet::UndefinedID
       then neither a property set ID
       nor an own line color were specified (so no special
       line color is associated to the respective data cell),
       else idLineColor contains the ID of another property set
       that is specifying the line color to be used.
-      \param lineColor   this parameter's value is not modified if return value is FALSE.
+      \param lineColor   this parameter's value is not modified if return value is false.
       Parameter lineColor contains the line color value
       associated with the respective data cell.
-      If return value is FALSE the lineColor
+      If return value is false the lineColor
       value is not set (so the parameter keeps its previous value)
       but this is to be overridden by the respective value
       of another property set that is indicated
@@ -530,23 +530,23 @@ public slots:
       \note This function should be used for Line Charts only, otherwise
       the settings specified here will be ignored.
 
-      \returns TRUE if this property set is specifying it's own line style settings,
-      FALSE if the settings of another property set are to be used instead.
+      \returns true if this property set is specifying it's own line style settings,
+      false if the settings of another property set are to be used instead.
 
-      \note The return value will also be FALSE if the 'default' properties
+      \note The return value will also be false if the 'default' properties
       are to be used: in this case idLineStyle will be KDChartParams::NormalData
 
-      \param idLineStyle to be ignored if return value is TRUE.
+      \param idLineStyle to be ignored if return value is true.
       If idLineStyle is KDChartPropertySet::UndefinedID
       then neither a property set ID
       nor an own line style were specified (so no special
       line style is associated to the respective data cell),
       else idLineStyle contains the ID of another property set
       that is specifying the line style to be used.
-      \param lineStyle   this parameter's value is not modified if return value is FALSE.
+      \param lineStyle   this parameter's value is not modified if return value is false.
       Parameter lineStyle contains the line style value
       associated with the respective data cell.
-      If return value is FALSE the lineStyle
+      If return value is false the lineStyle
       value is not set (so the parameter keeps its previous value)
       but this is to be overridden by the respective value
       of another property set that is indicated
@@ -602,23 +602,23 @@ public slots:
       \note This function should be used for Area Charts in <b>Normal</b> mode
       only, otherwise the settings specified here will be ignored.
 
-      \returns TRUE if this property set is specifying it's own area brush settings,
-      FALSE if the settings of another property set are to be used instead.
+      \returns true if this property set is specifying it's own area brush settings,
+      false if the settings of another property set are to be used instead.
 
-      \note The return value will also be FALSE if the 'default' properties
+      \note The return value will also be false if the 'default' properties
       are to be used: in this case idAreaBrush will be KDChartParams::NormalData
 
-      \param idAreaBrush to be ignored if return value is TRUE.
+      \param idAreaBrush to be ignored if return value is true.
       If idAreaBrush is KDChartPropertySet::UndefinedID
       then neither a property set ID
       nor an own area brush were specified (so no special
       area brush is associated to the respective data cell),
       else idAreaBrush contains the ID of another property set
       that is specifying the area brush to be used.
-      \param areaBrush   this parameter's value is not modified if return value is FALSE.
+      \param areaBrush   this parameter's value is not modified if return value is false.
       Parameter areaBrush contains the area brush value
       associated with the respective data cell.
-      If return value is FALSE the areaBrush
+      If return value is false the areaBrush
       value is not set (so the parameter keeps its previous value)
       but this is to be overridden by the respective value
       of another property set that is indicated
@@ -679,13 +679,13 @@ public slots:
       \note This function should be used for Line Charts only, otherwise
       the settings specified here will be ignored.
 
-      \returns TRUE if this property set is specifying it's own showMarker flag,
-      FALSE if the settings of another property set are to be used instead.
+      \returns true if this property set is specifying it's own showMarker flag,
+      false if the settings of another property set are to be used instead.
 
-      \note The return value will also be FALSE if the 'default' properties
+      \note The return value will also be false if the 'default' properties
       are to be used: in this case idShowMarker will be KDChartParams::NormalData
 
-      \param idShowMarker to be ignored if return value is TRUE.
+      \param idShowMarker to be ignored if return value is true.
       If idShowMarker is KDChartPropertySet::UndefinedID
       then neither a property set ID
       nor an own flag were specified (so no special
@@ -693,10 +693,10 @@ public slots:
       respective data cell), else idShowMarker contains the
       ID of another property set that is specifying the flag
       to be used.
-      \param showMarker  this parameter's value is not modified if return value is FALSE.
+      \param showMarker  this parameter's value is not modified if return value is false.
       Parameter showMarker contains the showMarker flag
       associated with the respective data cell.
-      If return value is FALSE the showMarker
+      If return value is false the showMarker
       flag is not set (so the parameter keeps its previous value)
       but this is to be overridden by the respective value
       of another property set that is indicated

@@ -2043,7 +2043,7 @@ void KDChartAxesPainter::calculateLabelTexts(
             pYDelimDeltaFaktor = 1.0;
             pXDeltaFactor      = bDecreasing ? -1.0 : 1.0;
             //qDebug("\nsetting pXDeltaFactor for axis %x", axisNumber);
-            //qDebug(bDecreasing ? "bDecreasing =  TRUE" : "bDecreasing = FALSE");
+            //qDebug(bDecreasing ? "bDecreasing =  true" : "bDecreasing = false");
             //qDebug("pXDeltaFactor = %f\n",pXDeltaFactor);
         }
         break;
@@ -4061,8 +4061,8 @@ void KDChartAxesPainter::calculateAbscissaInfos( const KDChartParams& params,
                                     ? ( infos.abscissaSpan / infos.numLabels )
                                     : infos.abscissaSpan );
 
-    //qDebug( bAbscissaDecreasing ? "bAbscissaDecreasing =  TRUE" : "bAbscissaDecreasing = FALSE");
-    //qDebug( abscissaHasTrueAxisValues ? "abscissaHasTrueAxisValues =  TRUE" : "abscissaHasTrueAxisValues = FALSE");
+    //qDebug( bAbscissaDecreasing ? "bAbscissaDecreasing =  true" : "bAbscissaDecreasing = false");
+    //qDebug( abscissaHasTrueAxisValues ? "abscissaHasTrueAxisValues =  true" : "abscissaHasTrueAxisValues = false");
     //qDebug( "abscissaDelta = %f", abscissaDelta);
 
     infos.bAbscissaHasTrueAxisDtValues =
@@ -4162,8 +4162,8 @@ void KDChartAxesPainter::calculateAbscissaInfos( const KDChartParams& params,
        "\nabscissaPara: OK" :
        "\nabscissaPara: leer");
        qDebug(abscissaHasTrueAxisValues ?
-       "abscissaHasTrueAxisValues: TRUE" :
-       "abscissaHasTrueAxisValues: FALSE");
+       "abscissaHasTrueAxisValues: true" :
+       "abscissaHasTrueAxisValues: false");
        qDebug("abscissaStart: %f", abscissaStart);
        qDebug("abscissaEnd  : %f",   abscissaEnd);
        qDebug("abscissaPara->trueAxisDelta(): %f", abscissaPara->trueAxisDelta());

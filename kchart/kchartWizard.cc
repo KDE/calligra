@@ -35,7 +35,7 @@ KChartWizard::KChartWizard ( KChartPart* _chart, QWidget *parent, const char* na
     // Second page: select the major chart type
     m_chartTypePage = new KChartWizardSelectChartTypePage( this, m_chart );
     addPage( m_chartTypePage, i18n( "Select Chart Type" ) );
-    //finishButton()->setEnabled( TRUE );
+    //finishButton()->setEnabled( true );
     setFinishEnabled(m_chartTypePage, true);
     setHelpEnabled(m_chartTypePage, false);
 

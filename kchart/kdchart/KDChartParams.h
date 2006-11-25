@@ -391,7 +391,7 @@ public slots:
                    bool           addFrameWidthToLayout = true,
                    bool           addFrameHeightToLayout = true )
         {
-            _areaDict.setAutoDelete( TRUE );
+            _areaDict.setAutoDelete( true );
             _areaDict.insert( QString( "%1/-----/-----/-----" ).arg( area, 5 ),
                               new KDChartFrameSettings(0,0,0,
                                                        frame,
@@ -423,7 +423,7 @@ public slots:
                          int                     shadowWidth    = 0,
                          KDFrame::CornerName     sunPos         = KDFrame::CornerTopLeft )
         {
-            _areaDict.setAutoDelete( TRUE );
+            _areaDict.setAutoDelete( true );
             KDFrame frame( QRect(0,0,0,0),
                      simpleFrame,
                      lineWidth,
@@ -462,7 +462,7 @@ public slots:
                              int                     shadowWidth    = 0,
                              KDFrame::CornerName     sunPos         = KDFrame::CornerTopLeft )
         {
-            _areaDict.setAutoDelete( TRUE );
+            _areaDict.setAutoDelete( true );
             KDFrame frame( QRect(0,0,0,0),
                            simpleFrame,
                            lineWidth,

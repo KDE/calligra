@@ -525,7 +525,7 @@ void KChartPart::analyzeHeaders( const KDChartTableData& data )
     // label text => prevents crash.
 #if 1
     if ( data.cols() == 1 )
-        isStringFirstRow = FALSE;
+        isStringFirstRow = false;
 #endif
 
     bool hasColHeader = false;

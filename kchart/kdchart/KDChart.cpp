@@ -326,7 +326,7 @@ void KDChart::paint( QPainter*              painter,
   like the paint() method described above but additionally
   it takes care for the output mode flag: Before painting is
   started the internal optimizeOutputForScreen flag is set
-  to FALSE and after painting is done it is restored to
+  to false and after painting is done it is restored to
   it's previous value.
 
   \sa paint

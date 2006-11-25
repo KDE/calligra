@@ -262,7 +262,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
             // calculate font size
             actFont = paraCircular.axisLabelsFont();
             if ( paraCircular.axisLabelsFontUseRelSize() ) {
-//qDebug("paraCircular.axisLabelsFontUseRelSize() is TRUE");
+//qDebug("paraCircular.axisLabelsFontUseRelSize() is true");
                 actFont.setPointSizeF( nTxtHeight );
             }
             QFontMetrics fm( actFont );

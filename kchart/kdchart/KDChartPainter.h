@@ -243,7 +243,7 @@ class KDCHART_EXPORT KDChartPainter
                         const KDChartAxisParams* ordinatePara,
                         const double areaWidthP1000,
                         const double areaHeightP1000,
-                        bool bDrawInFront = FALSE );
+                        bool bDrawInFront = false );
 
         static KDChartDataRegion* drawMarker( QPainter* painter,
                                                const KDChartParams* params,

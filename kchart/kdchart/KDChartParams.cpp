@@ -506,8 +506,8 @@ int KDChartParams::registerProperties( KDChartPropertySet& rSet )
   in general it is better to use the registerProperties function
   to initially obtain a unique ID number for your new property set.
 
-  \returns TRUE if the property set had been stored before,
-  or FALSE if the set was now stored initially.
+  \returns true if the property set had been stored before,
+  or false if the set was now stored initially.
 
   \sa KDCHART_PROPSET_TRANSPARENT_DATA
   \sa KDCHART_PROPSET_HORI_LINE, KDCHART_PROPSET_VERT_LINE
@@ -529,7 +529,7 @@ void KDChartParams::setProperties( int id, KDChartPropertySet& rSet )
   function calls using KDCHART_PROPSET_NORMAL_DATA as ID
   will be ignored.
 
-  \returns TRUE if the property set was found and removed, or FALSE
+  \returns true if the property set was found and removed, or false
   if the set was not found or KDCHART_PROPSET_NORMAL_DATA
   was specified as ID value.
 
@@ -561,7 +561,7 @@ bool KDChartParams::removeProperties( int id )
   stored therein. To change a stored property set
   you may use the setProperties() function.
 
-  \returns TRUE if the property set was found, FALSE
+  \returns true if the property set was found, false
   if it no property set was registred with this ID.
 
   \sa registerProperties, KDChartData::setPropertySet
@@ -616,7 +616,7 @@ KDChartPropertySet* KDChartParams::properties( int id )
   Don't use this function to retrieve the exact specification
   of a property set but use KDChartParams::properties() instead.
 
-  \returns TRUE if the property set was found, FALSE
+  \returns true if the property set was found, false
   if it no property set was registred with this ID.
 
   \sa registerProperties, KDChartData::setPropertySet
@@ -2261,7 +2261,7 @@ void KDChartParams::activateDefaultAxes()
   screen output or whether other routines should be used to obtain
   best quality when using a printer.
 
-  \note The default of this flag is TRUE, so make sure to deactivate
+  \note The default of this flag is true, so make sure to deactivate
   it before painting your KDChart onto a QPrinter device!
 
   \note This setting is NOT stored together with the other parameters,
@@ -2557,9 +2557,9 @@ void KDChartParams::setGlobalLeading( int left, int top, int right, int bottom )
   \param newData3rd The third table coordinate of the new cell (parameter not used, its value will be ignored, set to 0, reserved for future use).
 
   \note Using KDCHART_NO_DATASET for the newDataRow parameter will not
-  result in returning FALSE because it is an allowed action: the frame is just removed then.
+  result in returning false because it is an allowed action: the frame is just removed then.
 
-  \return TRUE if the frame could be moved or was removed; FALSE if either there was no frame around the old cell or the target cell does not exist.
+  \return true if the frame could be moved or was removed; false if either there was no frame around the old cell or the target cell does not exist.
   */
 bool KDChartParams::moveDataRegionFrame( uint oldDataRow,
                              uint oldDataCol,
@@ -2579,7 +2579,7 @@ bool KDChartParams::moveDataRegionFrame( uint oldDataRow,
             frame->setDataRow( newDataRow );
             frame->setDataCol( newDataCol );
             frame->setData3rd( 0 ); // newData3rd );
-            _areaDict.setAutoDelete( TRUE );
+            _areaDict.setAutoDelete( true );
             _areaDict.insert(
                 dataRegionFrameAreaName( newDataRow, newDataCol, 0 ), //data3rd 5 ),
                 frame );
@@ -3203,7 +3203,7 @@ void KDChartParams::setAdditionalChartType( ChartType chartType )
   Specifies whether a data value text may be drawn even if it's
   region intersects with another data value text's region.
 
-  By default this is FALSE to prevent ugly mutual overwriting of
+  By default this is false to prevent ugly mutual overwriting of
   data value texts and to speed up drawing of cahrts containing
   thousands of data points.
   */
@@ -3215,7 +3215,7 @@ void KDChartParams::setAdditionalChartType( ChartType chartType )
   Returns whether a data value text may be drawn even if it's region
   intersects with another data value text's region.
 
-  By default this is FALSE to prevent ugly mutual overwriting of data
+  By default this is false to prevent ugly mutual overwriting of data
   value texts and to speed up drawing of cahrts containing thousands
   of data points.
   */
@@ -8486,7 +8486,7 @@ int KDChartParams::headerFooterFontRelSize( uint pos ) const
   Stores whether a data value may be drawn near it's respective entry
   even if it's region intersects with another data value text's region.
 
-  By default this is FALSE to prevent ugly mutual overwriting of data
+  By default this is false to prevent ugly mutual overwriting of data
   value texts and to speed up drawing of cahrts containing thousands
   of data points.
   */
@@ -9130,9 +9130,9 @@ int KDChartParams::headerFooterFontRelSize( uint pos ) const
   your custom box will become the default axis title text box: you then can access/modify
   its properties using these convenience functions.
 
-  \return TRUE if a KDChartCustomBox was found that is anchored to axis \c n.
+  \return true if a KDChartCustomBox was found that is anchored to axis \c n.
   \param n the axis number, this could be KDChartAxisParams::AxisPosLeft or KDChartAxisParams::AxisPosBottom...
-  \param boxID will obtain the respective KDChartCustomBox's ID if return value is TRUE, otherwise the parameter's value remains unchanged.
+  \param boxID will obtain the respective KDChartCustomBox's ID if return value is true, otherwise the parameter's value remains unchanged.
   \sa setAxisTitle, setAxisTitleColor, setAxisTitleFont, setAxisTitleFontUseRelSize, setAxisTitleFontRelSize
   */
 bool KDChartParams::findFirstAxisCustomBoxID( uint n, uint& boxID ) const
@@ -9472,7 +9472,7 @@ bool KDChartParams::axisTitleFontUseRelSize( uint n ) const
 /**
   Specifies whether a relative size to be used for the default axis title text instead of the fixed size of the font.
 
-  Calling this function implicitely sets this axis's \c axisTitleFontUseRelSize flag to TRUE.
+  Calling this function implicitely sets this axis's \c axisTitleFontUseRelSize flag to true.
 
   \param axisTitleFontRelSize the size to be used, this is interpreted as per mil value of the printable area size.
   \sa setAxisTitle, setAxisTitleColor,setAxisTitleFont, setAxisTitleFontUseRelSize

@@ -155,7 +155,7 @@ public:
       <b>Note: </b> If greater 0, the value is taken as exact offset,
       if less than 0, it is interpreted as being a per-mille value of the
       size of the drawing area (or as percent value of the actual font size
-      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is FALSE, resp.).
+      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is false, resp.).
       Actual drawing position/size is calculated dynamically in methode trueRect.
       \param deltaY The Y distance between the box and its anchor.
       \param width The width of the box.
@@ -264,13 +264,13 @@ public:
       <b>Note: </b> If greater 0, the value is taken as exact offset,
       if less than 0, it is interpreted as being a per-mille value of the
       width of the drawing area (or as percent value of the actual font size
-      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is FALSE, resp.).
+      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is false, resp.).
       Actual drawing position/size is calculated dynamically in method trueRect.
       \param deltaY The Y distance between the box and its anchor.
       <b>Note: </b> If greater 0, the value is taken as exact offset,
       if less than 0, it is interpreted as being a per-mille value of the
       height of the drawing area (or as percent value of the actual font size
-      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is FALSE, resp.).
+      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is false, resp.).
       Actual drawing position/size is calculated dynamically in method trueRect.
       \param width The width of the box.
       \param height The height of the box.
@@ -545,7 +545,7 @@ public slots: // PENDING(blackie) merge slots sections.
       <b>Note: </b> If greater 0, the value is taken as exact offset,
       if less than 0, it is interpreted as being a per-mille value of the
       size of the drawing area (or as percent value of the actual font size
-      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is FALSE, resp.).
+      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is false, resp.).
       Actual drawing position/size is calculated dynamically in methode trueRect.
       \param deltaY The Y distance between the box and its anchor.
       \param width The width of the drawing region.
@@ -588,7 +588,7 @@ public slots: // PENDING(blackie) merge slots sections.
       <b>Note: </b> If greater 0, the value is taken as exact offset,
       if less than 0, it is interpreted as being a per-mille value of the
       size of the drawing area (or as percent value of the actual font size
-      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is FALSE, resp.).
+      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is false, resp.).
       Actual drawing position/size is calculated dynamically in methode trueRect.
       \param deltaY The Y distance between the box and its anchor.
       \param align the way how the values specified for deltaX and/or deltaY
@@ -812,7 +812,7 @@ public slots: // PENDING(blackie) merge slots sections.
       <b>Note: </b> If greater 0, the value is taken as exact offset,
       if less than 0, it is interpreted as being a per-mille value of the
       size of the drawing area (or as percent value of the actual font size
-      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is FALSE, resp.).
+      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is false, resp.).
       Actual drawing position/size is calculated dynamically in methode trueRect.
 
       \sa deltaY, deltaAlign, deltaScaleGlobal
@@ -827,7 +827,7 @@ public slots: // PENDING(blackie) merge slots sections.
       <b>Note: </b> If greater 0, the value is taken as exact offset,
       if less than 0, it is interpreted as being a per-mille value of the
       size of the drawing area (or as percent value of the actual font size
-      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is FALSE, resp.).
+      (as returned by QFontMetrics::lineSpacing() ) if deltaScaleGlobal is false, resp.).
       Actual drawing position/size is calculated dynamically in methode trueRect.
 
       \sa deltaX, deltaAlign, deltaScaleGlobal
