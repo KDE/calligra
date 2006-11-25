@@ -17,21 +17,17 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_KEXIAPP_KEXIAPPMAINWINDOW_H
-#define KROSS_KEXIAPP_KEXIAPPMAINWINDOW_H
+#ifndef SCRIPTING_KEXIAPPMAINWINDOW_H
+#define SCRIPTING_KEXIAPPMAINWINDOW_H
 
 #include <qstring.h>
 #include <qvariant.h>
 
-#include <api/object.h>
-#include <api/variant.h>
-#include <api/list.h>
-#include <api/class.h>
-
 // Forward declarations.
 class KexiMainWindow;
+class KexiProject;
 
-namespace Kross { namespace KexiApp {
+namespace Scripting {
 
     // Forward declarations.
     class KexiAppMainWindowPrivate;
@@ -39,42 +35,30 @@ namespace Kross { namespace KexiApp {
     /**
      * Class to handle Kexi's mainwindow instance.
      */
-    class KexiAppMainWindow : public Kross::Api::Class<KexiAppMainWindow>
+    class KexiAppMainWindow : public QObject
     {
+            Q_OBJECT
         public:
-
-            /**
-             * Constructor.
-             *
-             * \param mainwindow The \a KexiMainWindow instance
-             *       this class provides access to.
-             */
             KexiAppMainWindow(KexiMainWindow* mainwindow);
-
-            /**
-             * Destructor.
-             */
             virtual ~KexiAppMainWindow();
-
-            /// \see Kross::Api::Object::getClassName
-            virtual const QString getClassName() const;
+            KexiProject* project();
 
         private:
-            /// Private d-pointer class.
-            KexiAppMainWindowPrivate* d;
+            KexiMainWindow* m_mainwindow;
 
-            Kross::Api::Object::Ptr isConnected(Kross::Api::List::Ptr);
+            bool isConnected();
 
+#if 0
             /** \return the \a Kross::KexiDB::KexiDBConnection object that 
             belongs to the opened project or throw an exception if there 
             was no project opened (no connection established). */
             Kross::Api::Object::Ptr getConnection(Kross::Api::List::Ptr);
-
             Kross::Api::Object::Ptr getPartItems(Kross::Api::List::Ptr);
             Kross::Api::Object::Ptr openPartItem(Kross::Api::List::Ptr);
+#endif
     };
 
-}}
+}
 
 #endif
 

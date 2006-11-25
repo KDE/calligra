@@ -1,29 +1,18 @@
-
-
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
-
 
 ########### next target ###############
 
-set(krosskexiapp_PART_SRCS kexiapppart.cpp kexiappmainwindow.cpp kexiappmodule.cpp )
+set(krosskexiapp_PART_SRCS kexiapppart.cpp kexiappmainwindow.cpp )
 
 kde4_automoc(${krosskexiapp_PART_SRCS})
 
 kde4_add_plugin(krosskexiapp ${krosskexiapp_PART_SRCS})
 
-
-
-target_link_libraries(krosskexiapp  ${KDE4_KDECORE_LIBS} krossapi krossmain kexicore )
+target_link_libraries(krosskexiapp  ${KDE4_KDECORE_LIBS} kexicore )
 
 install(TARGETS krosskexiapp  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-
 ########### install files ###############
-
-
-
-
-
 
 #original Makefile.am contents follow:
 

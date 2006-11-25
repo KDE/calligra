@@ -21,15 +21,17 @@
 
 #include "core/kexipart.h"
 #include "core/kexipartitem.h"
-//Added by qt3to4:
-#include <Q3CString>
 //#include "core/kexiproject.h"
 
-using namespace Kross::KexiApp;
+using namespace Scripting;
 
 KexiAppPartItem::KexiAppPartItem(KexiPart::Item* item)
-    : Kross::Api::Class<KexiAppPartItem>("KexiAppPartItem")
+    : QObject()
+    , m_item(item)
 {
+    setObjectName("KexiAppPartItem");
+
+#if 0
     this->addFunction0< Kross::Api::ProxyValue<Kross::Api::Variant,int> >
         ("identifier", item, &::KexiPart::Item::identifier );
     this->addFunction1< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,int> >
@@ -54,4 +56,7 @@ KexiAppPartItem::KexiAppPartItem(KexiPart::Item* item)
         ("description", item, &::KexiPart::Item::description );
     this->addFunction1< Kross::Api::ProxyValue<Kross::Api::Variant,void>, Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
         ("setDescription", item, &::KexiPart::Item::setDescription );
+#endif
 }
+
+#include "kexiapppart.moc"

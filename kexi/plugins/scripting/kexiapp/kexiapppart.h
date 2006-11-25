@@ -17,15 +17,11 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_KEXIAPP_KEXIAPPPART_H
-#define KROSS_KEXIAPP_KEXIAPPPART_H
+#ifndef SCRIPTING_KEXIAPPPART_H
+#define SCRIPTING_KEXIAPPPART_H
 
 #include <qstring.h>
 #include <qvariant.h>
-
-#include <api/object.h>
-#include <api/variant.h>
-#include <api/class.h>
 
 // Forward declarations.
 namespace KexiPart {
@@ -33,24 +29,23 @@ namespace KexiPart {
     class Part;
 }
 
-namespace Kross { namespace KexiApp {
+namespace Scripting {
 
     /**
      * Class to handle Kexi Part::Item instance.
      */
-    class KexiAppPartItem : public Kross::Api::Class<KexiAppPartItem>
+    class KexiAppPartItem : public QObject
     {
+            Q_OBJECT
         public:
             KexiAppPartItem(KexiPart::Item*);
             virtual ~KexiAppPartItem() {}
-            virtual const QString getClassName() const { return "Kross::KexiApp::KexiAppPartItem"; }
-
             KexiPart::Item* item() { return m_item; }
         private:
             KexiPart::Item* m_item;
     };
 
-}}
+}
 
 #endif
 
