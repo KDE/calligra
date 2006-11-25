@@ -176,7 +176,7 @@ void KWCanvas::paintEvent(QPaintEvent * ev) {
         foreach(KWViewMode::ViewMap vm, map) {
             painter.save();
             painter.translate(vm.distance.x(), vm.distance.y());
-            vm.clipRect = vm.clipRect.adjusted(1, 1, 1, 1);
+            vm.clipRect = vm.clipRect.adjusted(-1, -1, 1, 1);
             painter.setClipRect(vm.clipRect);
             QColor color = Qt::white; // TODO paper background
 #ifdef DEBUG_REPAINT
