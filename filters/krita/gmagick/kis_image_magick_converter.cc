@@ -440,11 +440,11 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
 
         kDebug(41008) << "image has " << csName << " colorspace\n";
 
-        KoColorProfile * profile = profile(image);
-        if (profile)
+        KoColorProfile * colorProfile = profile(image);
+        if (colorProfile)
         {
-            kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
-            cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(csName, profile);
+            kDebug(41008) << "image has embedded profile: " << colorProfile -> productName() << "\n";
+            cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(csName, colorProfile);
         }
         else
             cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(csName,""),"");
