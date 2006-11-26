@@ -80,7 +80,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     bool isThereAlpha = false;
     while( !it.isDone() )
     {
-        if(cs->getAlpha( it.rawData() ) != 255)
+        if(cs->alpha( it.rawData() ) != 255)
         {
             isThereAlpha = true;
             break;

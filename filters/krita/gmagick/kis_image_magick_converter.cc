@@ -120,7 +120,7 @@ namespace {
 
     }
 
-    KoColorProfile * getProfileForProfileInfo(const Image * image)
+    KoColorProfile * profile(const Image * image)
     {
         size_t length;
 
@@ -440,7 +440,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
 
         kDebug(41008) << "image has " << csName << " colorspace\n";
 
-        KoColorProfile * profile = getProfileForProfileInfo(image);
+        KoColorProfile * profile = profile(image);
         if (profile)
         {
             kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
@@ -707,7 +707,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             return KisImageBuilder_RESULT_NOT_LOCAL;
 
 
-        Q_UINT32 layerBytesPerChannel = layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
+        Q_UINT32 layerBytesPerChannel = layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
 
         GetExceptionInfo(&ei);
 

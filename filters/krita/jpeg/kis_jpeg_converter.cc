@@ -185,7 +185,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     if(profile && !profile->isSuitableForOutput())
     {
         transform = cmsCreateTransform(profile->profile(), cs->colorSpaceType(),
-                                       cs->getProfile()->profile() , cs->colorSpaceType(),
+                                       cs->profile()->profile() , cs->colorSpaceType(),
                                        INTENT_PERCEPTUAL, 0);
     }
 
@@ -447,7 +447,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Write data information
 
     JSAMPROW row_pointer = new JSAMPLE[width*cinfo.input_components];
-    int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
+    int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
 
     for (; cinfo.next_scanline < height;) {
         KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(0, cinfo.next_scanline, width);

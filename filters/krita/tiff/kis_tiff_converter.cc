@@ -272,7 +272,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     {
         kDebug(41008) << "The profile can't be used in krita, need conversion" << endl;
         transform = cmsCreateTransform(profile->profile(), cs->colorSpaceType(),
-                                       cs->getProfile()->profile() , cs->colorSpaceType(),
+                                       cs->profile()->profile() , cs->colorSpaceType(),
                                        INTENT_PERCEPTUAL, 0);
     }
 

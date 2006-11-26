@@ -275,7 +275,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     if(profile && !profile->isSuitableForOutput())
     {
         transform = cmsCreateTransform(profile->profile(), cs->colorSpaceType(),
-                                       cs->getProfile()->profile() , cs->colorSpaceType(),
+                                       cs->profile()->profile() , cs->colorSpaceType(),
                                        INTENT_PERCEPTUAL, 0);
     }
 
@@ -539,7 +539,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     png_set_compression_method(png_ptr, 8);
     png_set_compression_buffer_size(png_ptr, 8192);
 
-    int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
+    int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
     int color_type = getColorTypeforColorSpace(layer->paintDevice()->colorSpace(), alpha);
 
     if(color_type == -1)

@@ -133,16 +133,16 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     kDebug(41008) << "visiting on paint layer " << layer->name() << "\n";
     KisPaintDeviceSP pd = layer->paintDevice();
     // Save depth
-    int depth = 8 * pd->pixelSize() / pd->nChannels();
+    int depth = 8 * pd->pixelSize() / pd->channelCount();
     TIFFSetField(image(), TIFFTAG_BITSPERSAMPLE, depth);
     // Save number of samples
     if(saveAlpha())
     {
-        TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->nChannels());
+        TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount());
         uint16 sampleinfo[1] = { EXTRASAMPLE_UNASSALPHA };
         TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 1, sampleinfo);
     } else {
-        TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->nChannels() - 1);
+        TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount() - 1);
         TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 0);
     }
     // Save colorspace information
@@ -173,7 +173,7 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     TIFFSetField(image(), TIFFTAG_ROWSPERSTRIP, 8);
 
     // Save profile
-    KoColorProfile* profile = pd->colorSpace()->getProfile();
+    KoColorProfile* profile = pd->colorSpace()->profile();
     if(profile)
     {
         QByteArray ba = profile->rawData();
