@@ -20,7 +20,7 @@
 */
 
 #include <QLabel>
-#include <QPushButton>
+#include <QRadioButton>
 #include <QWidget>
 #include <QToolTip>
 #include <QGridLayout>
@@ -85,23 +85,23 @@ VStrokeDocker::VStrokeDocker()
     m_capGroup->setExclusive( true );
 	m_capGroup->setExclusive( true );
 
-	QPushButton *button = 0;
+	QRadioButton *button = 0;
 
-	button = new QPushButton( mainWidget );
+	button = new QRadioButton( mainWidget );
 	button->setIcon( SmallIcon( "cap_butt" ) );
 	button->setCheckable( true );
     button->setToolTip( i18n( "Butt cap" ) );
 	m_capGroup->addButton( button, Qt::FlatCap );
 	mainLayout->addWidget( button, 1, 1 );
 	
-	button = new QPushButton( mainWidget );
+	button = new QRadioButton( mainWidget );
 	button->setIcon( SmallIcon( "cap_round" ) );
 	button->setCheckable( true );
     button->setToolTip( i18n( "Round cap" ) );
 	m_capGroup->addButton( button, Qt::RoundCap );
 	mainLayout->addWidget( button, 1, 2 );
 	
-	button = new QPushButton( mainWidget );
+	button = new QRadioButton( mainWidget );
 	button->setIcon( SmallIcon( "cap_square" ) );
 	button->setCheckable( true );
     button->setToolTip( i18n( "Square cap" ) );
@@ -116,21 +116,21 @@ VStrokeDocker::VStrokeDocker()
 	m_joinGroup = new QButtonGroup( mainWidget );
 	m_joinGroup->setExclusive( true );
 
-	button = new QPushButton( mainWidget );
+	button = new QRadioButton( mainWidget );
 	button->setIcon( SmallIcon( "join_miter" ) );
 	button->setCheckable( true );
 	button->setToolTip( i18n( "Miter join" ) );
 	m_joinGroup->addButton( button, Qt::MiterJoin );
 	mainLayout->addWidget( button, 2, 1 );
 	
-	button = new QPushButton( mainWidget );
+	button = new QRadioButton( mainWidget );
 	button->setIcon( SmallIcon( "join_round" ) );
 	button->setCheckable( true );
 	button->setToolTip( i18n( "Round join" ) );
 	m_joinGroup->addButton( button, Qt::RoundJoin );
 	mainLayout->addWidget( button, 2, 2 );
 	
-	button = new QPushButton( mainWidget );
+	button = new QRadioButton( mainWidget );
 	button->setIcon( SmallIcon( "join_bevel" ) );
 	button->setCheckable( true );
 	button->setToolTip( i18n( "Bevel join" ) );
