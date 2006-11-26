@@ -1,9 +1,7 @@
-
-
-
-
 add_subdirectory(api)
+if(SHOULD_BUILD_KARBON)
 add_subdirectory(karbon)
+endif(SHOULD_BUILD_KARBON)
 add_subdirectory(kchart)
 add_subdirectory(kexi)
 add_subdirectory(kformula)
@@ -12,24 +10,10 @@ add_subdirectory(koffice)
 add_subdirectory(koshell)
 add_subdirectory(kplato)
 add_subdirectory(kpresenter)
+if(SHOULD_BUILD_KRITA)
 add_subdirectory(krita)
+endif(SHOULD_BUILD_KRITA)
 add_subdirectory(kspread)
 add_subdirectory(kugar)
 add_subdirectory(kword)
 add_subdirectory(thesaurus)
-
-########### install files ###############
-
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#
-#
-#KDE_LANG = en
-#KDE_DOCS = koffice
-#SUBDIRS = $(AUTODIRS)
-#
