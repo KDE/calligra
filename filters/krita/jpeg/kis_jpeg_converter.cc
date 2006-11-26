@@ -382,7 +382,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
     cinfo.image_width = width;  // image width and height, in pixels
     cinfo.image_height = height;
-    cinfo.input_components = img->colorSpace()->nColorChannels(); // number of color channels per pixel */
+    cinfo.input_components = img->colorSpace()->colorChannelCount(); // number of color channels per pixel */
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(img->colorSpace());
     if(color_type == JCS_UNKNOWN)
     {

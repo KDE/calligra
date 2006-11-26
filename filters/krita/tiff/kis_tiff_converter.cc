@@ -285,7 +285,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     {
         for(int i = 0; i < extrasamplescount; i ++)
         {
-            kDebug(41008) << i << " " << extrasamplescount << " "  << (cs->nColorChannels()) <<  nbchannels << " " << sampleinfo[i] << endl;
+            kDebug(41008) << i << " " << extrasamplescount << " "  << (cs->colorChannelCount()) <<  nbchannels << " " << sampleinfo[i] << endl;
             if(sampleinfo[i] == EXTRASAMPLE_ASSOCALPHA)
             {
                 // XXX: dangelo: the color values are already multiplied with
@@ -476,7 +476,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             tiffstream = new TIFFStreamSeperate( (uint8**) ps_buf, nbchannels, depth, lineSizes);
             delete [] lineSizes;
         }
-        kDebug(41008) << linewidth << " " << nbchannels << " " << layer->paintDevice()->colorSpace()->nColorChannels() << endl;
+        kDebug(41008) << linewidth << " " << nbchannels << " " << layer->paintDevice()->colorSpace()->colorChannelCount() << endl;
         for (y = 0; y < height; y+= tileHeight)
         {
             for (x = 0; x < width; x += tileWidth)
