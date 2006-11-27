@@ -22,6 +22,7 @@
 #include "ooutils.h"
 #include <KoDocument.h>
 #include <KoStyleStack.h>
+#include <KoXmlReader.h>
 #include <qdom.h>
 #include <QColor>
 #include <QImage>
@@ -203,11 +204,11 @@ void OoUtils::importTabulators( QDomElement& parentElement, const KoStyleStack& 
 {
     if ( !styleStack.hasChildNodeNS( ooNS::style, "tab-stops" ) ) // 3.11.10
         return;
-    QDomElement tabStops = styleStack.childNodeNS( ooNS::style, "tab-stops" );
+    KoXmlElement tabStops = styleStack.childNodeNS( ooNS::style, "tab-stops" );
     //kDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
-    for ( QDomNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
+    for ( KoXmlNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
     {
-        QDomElement tabStop = it.toElement();
+        KoXmlElement tabStop = it.toElement();
         Q_ASSERT( tabStop.tagName() == "style:tab-stop" );
         QString type = tabStop.attributeNS( ooNS::style, "type", QString::null ); // left, right, center or char
 
@@ -423,16 +424,16 @@ void OoUtils::importTextPosition( const QString& text_position, QString& value, 
         value = "0";
 }
 
-void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
+void OoUtils::createDocumentInfo(KoXmlDocument &_meta, QDomDocument & docinfo)
 {
-    QDomNode meta   = KoDom::namedItemNS( _meta, ooNS::office, "document-meta" );
-    QDomNode office = KoDom::namedItemNS( meta, ooNS::office, "meta" );
+    KoXmlNode meta   = KoXml::namedItemNS( _meta, ooNS::office, "document-meta" );
+    KoXmlNode office = KoXml::namedItemNS( meta, ooNS::office, "meta" );
 
     if ( office.isNull() )
         return;
     QDomElement elementDocInfo  = docinfo.documentElement();
 
-    QDomElement e = KoDom::namedItemNS( office, ooNS::dc, "creator" );
+    KoXmlElement e = KoXml::namedItemNS( office, ooNS::dc, "creator" );
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         QDomElement author = docinfo.createElement( "author" );
@@ -442,7 +443,7 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
         elementDocInfo.appendChild( author);
     }
 
-    e = KoDom::namedItemNS( office, ooNS::dc, "title" );
+    e = KoXml::namedItemNS( office, ooNS::dc, "title" );
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         QDomElement about = docinfo.createElement( "about" );
@@ -452,7 +453,7 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
         elementDocInfo.appendChild( about );
     }
 
-    e = KoDom::namedItemNS( office, ooNS::dc, "description" );
+    e = KoXml::namedItemNS( office, ooNS::dc, "description" );
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
@@ -464,7 +465,7 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
         about.appendChild( title );
         title.appendChild( docinfo.createTextNode( e.text() ) );
     }
-    e = KoDom::namedItemNS( office, ooNS::dc, "subject" );
+    e = KoXml::namedItemNS( office, ooNS::dc, "subject" );
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
@@ -476,7 +477,7 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
         about.appendChild( subject );
         subject.appendChild( docinfo.createTextNode( e.text() ) );
     }
-    e = KoDom::namedItemNS( office, ooNS::meta, "keywords" );
+    e = KoXml::namedItemNS( office, ooNS::meta, "keywords" );
     if ( !e.isNull() )
     {
         QDomElement about = elementDocInfo.namedItem( "about" ).toElement();
@@ -484,7 +485,7 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
             about = docinfo.createElement( "about" );
             elementDocInfo.appendChild( about );
         }
-        QDomElement tmp = KoDom::namedItemNS( e, ooNS::meta, "keyword" );
+        KoXmlElement tmp = KoDom::namedItemNS( e, ooNS::meta, "keyword" );
         if ( !tmp.isNull() && !tmp.text().isEmpty() )
         {
             QDomElement keyword = docinfo.createElement( "keyword" );
@@ -494,7 +495,7 @@ void OoUtils::createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo)
     }
 }
 
-KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& fileName, QDomDocument& doc, KoStore *m_store )
+KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& fileName, KoXmlDocument& doc, KoStore *m_store )
 {
     kDebug(30518) << "loadAndParse: Trying to open " << fileName << endl;
 
@@ -509,7 +510,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& fileName, QDomDo
 
 }
 
-KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice* io, QDomDocument& doc, const QString & fileName)
+KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice* io, KoXmlDocument& doc, const QString & fileName)
 {
     QXmlInputSource source( io );
     // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
@@ -533,7 +534,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice* io, QDomDocument& do
 
 }
 
-KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, QDomDocument& doc, KZip * m_zip)
+KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlDocument& doc, KZip * m_zip)
 {
     kDebug(30519) << "Trying to open " << filename << endl;
 

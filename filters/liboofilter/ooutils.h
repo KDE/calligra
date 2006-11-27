@@ -28,6 +28,7 @@ class QColor;
 class QDomElement;
 class KoStyleStack;
 class QDomDocument;
+class KoXmlDocument;
 class KZip;
 
 class ooNS {
@@ -79,15 +80,15 @@ namespace OoUtils
     // to kword/kpresenter's value/relativetextsize
     void importTextPosition( const QString& text_position, QString& value, QString& relativetextsize );
 
-    void createDocumentInfo(QDomDocument &_meta, QDomDocument & docinfo);
-    KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc, KZip * m_zip);
-    KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc, KoStore *m_store );
+    void createDocumentInfo(KoXmlDocument &_meta, QDomDocument & docinfo);
+    KoFilter::ConversionStatus loadAndParse(const QString& filename, KoXmlDocument& doc, KZip * m_zip);
+    KoFilter::ConversionStatus loadAndParse(const QString& filename, KoXmlDocument& doc, KoStore *m_store );
 
     /// Load an OASIS thumbnail
     KoFilter::ConversionStatus loadThumbnail( QImage& thumbnail, KZip * m_zip );
 
     // Internal
-    KoFilter::ConversionStatus loadAndParse(QIODevice* io, QDomDocument& doc, const QString & fileName);
+    KoFilter::ConversionStatus loadAndParse(QIODevice* io, KoXmlDocument& doc, const QString & fileName);
 }
 
 #endif /* OOUTILS_H */

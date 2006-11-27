@@ -20,6 +20,7 @@
 
 #include "liststylestack.h"
 #include "ooutils.h" // for ooNS
+#include <qdom.h>
 #include <KoDom.h>
 
 ListStyleStack::ListStyleStack()
@@ -53,8 +54,24 @@ QDomElement ListStyleStack::currentListStyle() const
     return m_stack.top();
 }
 
+QDomElement _namedItemNS( const QDomElement& e, const QString& nsURI, const QString& name )
+{
+  QDomNode node = e.firstChild();
+  while ( !node.isNull() ) 
+  {
+    if( node.prefix().isNull() )
+    if( node.namespaceURI() == nsURI )
+    if( node.localName() == name )
+      return node.toElement();
+    node = node.nextSibling();
+  }
+
+  // not found
+  return QDomElement();
+}
+
 QDomElement ListStyleStack::currentListStyleProperties() const
 {
     QDomElement style = currentListStyle();
-    return KoDom::namedItemNS( style, ooNS::style, "properties" );
+    return _namedItemNS( style, ooNS::style, "properties" );
 }
