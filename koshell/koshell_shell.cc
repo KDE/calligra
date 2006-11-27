@@ -162,7 +162,7 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
   
   /*if (!KIO::NetAccess::exists(url,true,0) )
   {
-    KMessageBox::error(0L, i18n("The file %1 doesn't exist.",url.url()) );
+    KMessageBox::error(0L, i18n("The file %1 does not exist.",url.url()) );
     recentAction()->removeUrl(url); //remove the file from the recent-opened-file-list
     saveRecentFiles();
     return false;
@@ -403,7 +403,7 @@ void KoShellWindow::updateCaption()
 
 void KoShellWindow::slotSidebar_Part(int _item)
 {
-  //kDebug() << "Component part choosed:" << _item << endl;
+  //kDebug() << "Component part chosen:" << _item << endl;
   kapp->setOverrideCursor( QCursor(Qt::WaitCursor) );
   m_documentEntry = m_mapComponents[ _item ];
   kDebug() << m_documentEntry.service() << endl;
