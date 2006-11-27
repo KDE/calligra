@@ -24,11 +24,11 @@
 
 #include <QString>
 #include <KoFilterChain.h>
+#include <KoXmlReader.h>
 class QColor;
 class QDomElement;
 class KoStyleStack;
 class QDomDocument;
-class KoXmlDocument;
 class KZip;
 
 class ooNS {
