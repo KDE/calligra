@@ -22,9 +22,8 @@
 #include <QList>
 #include <QTime>
 #include <QVector>
+#include <QCoreApplication>
 
-#include <kapplication.h>
-#include <kcmdlineargs.h>
 #include <kdebug.h>
 
 // #include "rtree.h"
@@ -35,9 +34,7 @@ using namespace KSpread;
 
 int main( int argc, char** argv )
 {
-  // Initialize command line args
-  KCmdLineArgs::init(argc, argv, "rtreetest", "rtreetest", "rtreee test", "0.1");
-  KApplication app(false);
+  QCoreApplication app(argc,argv);
 
   RTree<double> tree;
 
@@ -91,4 +88,5 @@ int main( int argc, char** argv )
     }
   }
   cout << "\t Found " << counter << " positions in " << time.elapsed() << " ms" << endl;
+  return 0;
 }
