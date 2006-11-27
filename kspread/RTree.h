@@ -390,6 +390,7 @@ void RTree<T>::LeafNode::deleteRows(int position, int number)
   this->m_boundingBox.adjust(0, (position < this->m_boundingBox.top()) ? -number : 0, 0, -number);
   if (this->m_boundingBox.isEmpty())
   {
+      kDebug() << "bounding box is empty." << endl;
 // ###    Node::erase();
     return;
   }
@@ -416,6 +417,7 @@ void RTree<T>::LeafNode::deleteColumns(int position, int number)
   this->m_boundingBox.adjust((position < this->m_boundingBox.left()) ? -number : 0, 0, -number, 0);
   if (this->m_boundingBox.isEmpty())
   {
+      kDebug() << "bounding box is empty." << endl;
 // ###    Node::erase();
     return;
   }
@@ -524,6 +526,7 @@ void RTree<T>::NoneLeafNode::deleteRows(int position, int number)
 
   for ( int i = 0; i < this->childCount(); ++i )
   {
+    this->m_childBoundingBox[ i ].adjust(0, (position < this->m_childBoundingBox[ i ].top()) ? -number : 0, 0, -number);
     dynamic_cast<Node*>(this->m_childs[i])->deleteRows(position, number);
   }
 }
@@ -546,6 +549,7 @@ void RTree<T>::NoneLeafNode::deleteColumns(int position, int number)
 
   for ( int i = 0; i < this->childCount(); ++i )
   {
+    this->m_childBoundingBox[ i ].adjust((position < this->m_childBoundingBox[ i ].left()) ? -number : 0, 0, -number, 0);
     dynamic_cast<Node*>(this->m_childs[i])->deleteColumns(position, number);
   }
 }
