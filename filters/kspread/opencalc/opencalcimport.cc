@@ -158,14 +158,14 @@ double timeToNum( int h, int m, int s )
   return (double) secs / (double) SECSPERDAY;
 }
 
-bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyle,
+bool OpenCalcImport::readRowFormat( KoXmlElement & rowNode, KoXmlElement * rowStyle,
                                     Sheet * table, int & row, int & number,
                                     bool isLast )
 {
   if ( rowNode.isNull() )
     return false;
 
-  QDomNode node;
+  KoXmlNode node;
   if ( rowStyle )
   {
     node = rowStyle->firstChild();
@@ -178,7 +178,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
 
   while( !node.isNull() )
   {
-    QDomElement property = node.toElement();
+    KoXmlElement property = node.toElement();
 
     kDebug(30518) << "Row: Child exists: " << property.tagName() << endl;
     if ( !property.isNull() && property.localName() == "properties" && property.namespaceURI() == ooNS::style )
@@ -384,20 +384,20 @@ void OpenCalcImport::convertFormula( QString & text, QString const & f ) const
   kDebug(30518) << "New formula: " << text << endl;
 }
 
-bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, int & columns )
+bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row, int & columns )
 {
   bool ok = true;
   int spanC = 1;
   int spanR = 1;
   //Cell* defCell = table->defaultCell();
 
-  QDomNode cellNode = KoDom::namedItemNS( rowNode, ooNS::table, "table-cell" );
+  KoXmlNode cellNode = KoXml::namedItemNS( rowNode, ooNS::table, "table-cell" );
 
   while ( !cellNode.isNull() )
   {
     spanR = 1; spanC = 1;
 
-    QDomElement e = cellNode.toElement();
+    KoXmlElement e = cellNode.toElement();
     if ( e.isNull() )
     {
       ++columns;
@@ -425,10 +425,10 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
     }
 
     QString text;
-    QDomElement textP = KoDom::namedItemNS( e, ooNS::text, "p" );
+    KoXmlElement textP = KoXml::namedItemNS( e, ooNS::text, "p" );
     if ( !textP.isNull() )
     {
-      QDomElement subText = textP.firstChild().toElement(); // ## wrong
+      KoXmlElement subText = textP.firstChild().toElement(); // ## wrong
       if ( !subText.isNull() )
       {
         // something in <text:p>, e.g. links
@@ -447,14 +447,14 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
       else
         text = textP.text(); // our text, could contain formating for value or result of formula
     }
-    QDomElement annotation = KoDom::namedItemNS( e, ooNS::office, "annotation" );
+    KoXmlElement annotation = KoXml::namedItemNS( e, ooNS::office, "annotation" );
     if ( !annotation.isNull() )
     {
        QString comment;
-        QDomNode node = annotation.firstChild();
+        KoXmlNode node = annotation.firstChild();
         while( !node.isNull() )
         {
-            QDomElement commentElement = node.toElement();
+            KoXmlElement commentElement = node.toElement();
             if( !commentElement.isNull() )
                 if ( commentElement.localName() == "p" && e.namespaceURI()==ooNS::text)
                 {
@@ -491,7 +491,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
       if ( layout )
         style = *layout;
 
-      QDomElement * st = 0;
+      KoXmlElement * st = 0;
       if ( e.hasAttributeNS( ooNS::table, "style-name" ) )
       {
         kDebug(30518) << "Style: " << e.attributeNS( ooNS::table, "style-name", QString::null ) << endl;
@@ -500,11 +500,11 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
       if ( st )
       {
         kDebug(30518) << "Style: adapting " << endl;
-        QDomNode node = st->firstChild();
+        KoXmlNode node = st->firstChild();
         bool foundValidation = false;
         while( !node.isNull() )
         {
-          QDomElement property = node.toElement();
+          KoXmlElement property = node.toElement();
           if ( !property.isNull() )
           {
             kDebug(30518)<<"property.tagName() :"<<property.tagName()<<endl;
@@ -767,15 +767,15 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
 }
 
 
-void OpenCalcImport::loadCondition( Cell*cell,const QDomElement &property )
+void OpenCalcImport::loadCondition( Cell*cell,const KoXmlElement &property )
 {
-    kDebug(30518)<<"void OpenCalcImport::loadCondition( Cell*cell,const QDomElement &property )*******\n";
+    kDebug(30518)<<"void OpenCalcImport::loadCondition( Cell*cell,const KoXmlElement &property )*******\n";
     loadOasisCondition( cell, property );
 }
 
-void OpenCalcImport::loadOasisCondition(Cell*cell,const QDomElement &property )
+void OpenCalcImport::loadOasisCondition(Cell*cell,const KoXmlElement &property )
 {
-    QDomElement elementItem( property );
+    KoXmlElement elementItem( property );
     StyleManager * manager = cell->sheet()->doc()->styleManager();
 
     Q3ValueList<Conditional> cond;
@@ -922,7 +922,7 @@ void OpenCalcImport::loadOasisValidationValue( const QStringList &listVal, Condi
 }
 
 
-bool OpenCalcImport::readRowsAndCells( QDomElement & content, Sheet * table )
+bool OpenCalcImport::readRowsAndCells( KoXmlElement & content, Sheet * table )
 {
   kDebug(30518) << endl << "Reading in rows " << endl;
 
@@ -930,18 +930,18 @@ bool OpenCalcImport::readRowsAndCells( QDomElement & content, Sheet * table )
   int row = 1;
   int columns = 1;
   int backupRow = 1;
-  QDomElement * rowStyle = 0;
+  KoXmlElement * rowStyle = 0;
   //Cell* cell = 0;
   //Cell* cellDest = 0;
   //Cell* defCell = table->defaultCell();
-  QDomNode rowNode = KoDom::namedItemNS( content, ooNS::table, "table-row" );
+  KoXmlNode rowNode = KoXml::namedItemNS( content, ooNS::table, "table-row" );
 
   while ( !rowNode.isNull() )
   {
     bool collapsed = false;
 
     int number = 1;
-    QDomElement r = rowNode.toElement();
+    KoXmlElement r = rowNode.toElement();
 
     if ( r.isNull() )
       return false;
@@ -1004,11 +1004,11 @@ bool OpenCalcImport::readRowsAndCells( QDomElement & content, Sheet * table )
   return true;
 }
 
-bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
+bool OpenCalcImport::readColLayouts( KoXmlElement & content, Sheet * table )
 {
   kDebug(30518) << endl << "Reading in columns..." << endl;
 
-  QDomNode colLayout = KoDom::namedItemNS( content, ooNS::table, "table-column" );
+  KoXmlNode colLayout = KoXml::namedItemNS( content, ooNS::table, "table-column" );
   int column = 1;
 
   while ( !colLayout.isNull() )
@@ -1016,7 +1016,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
     if ( colLayout.nodeName() != "table:table-column" )
       return true; // all cols read in.
 
-    QDomElement e = colLayout.toElement();
+    KoXmlElement e = colLayout.toElement();
 
     if ( e.isNull() )
       return false; // error, that's it...
@@ -1049,7 +1049,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
       if ( !defaultStyle )
       {
         QString name = e.attributeNS( ooNS::table, "default-cell-style-name", QString::null );
-        QDomElement * st = m_styles[ name ];
+        KoXmlElement * st = m_styles[ name ];
 
         kDebug(30518) << "Default cell style: " << name << endl;
 
@@ -1073,7 +1073,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
       }
     }
 
-    QDomElement * colStyle = 0;
+    KoXmlElement * colStyle = 0;
     if ( e.hasAttributeNS( ooNS::table, "style-name" ) )
     {
       QString style = e.attributeNS( ooNS::table, "style-name", QString::null );
@@ -1082,14 +1082,14 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
       kDebug(30518) << "Col Style: " << style << endl;
     }
 
-    QDomNode node;
+    KoXmlNode node;
 
     if ( colStyle )
       node = colStyle->firstChild();
 
     while( !node.isNull() )
     {
-      QDomElement property = node.toElement();
+      KoXmlElement property = node.toElement();
       if ( !property.isNull() && property.localName() == "properties" && property.namespaceURI() == ooNS::style )
       {
         if ( property.hasAttributeNS( ooNS::style, "column-width" ) )
@@ -1148,40 +1148,40 @@ void replaceMacro( QString & text, QString const & old, QString const & newS )
     text = text.replace( n, old.length(), newS );
 }
 
-QString getPart( QDomNode const & part )
+QString getPart( KoXmlNode const & part )
 {
   QString result;
-  QDomElement e = KoDom::namedItemNS( part, ooNS::text, "p" );
+  KoXmlElement e = KoXml::namedItemNS( part, ooNS::text, "p" );
   while ( !e.isNull() )
   {
     QString text = e.text();
     kDebug(30518) << "PART: " << text << endl;
 
-    QDomElement macro = KoDom::namedItemNS( e, ooNS::text, "time" );
+    KoXmlElement macro = KoXml::namedItemNS( e, ooNS::text, "time" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<time>" );
 
-    macro = KoDom::namedItemNS( e, ooNS::text, "date" );
+    macro = KoXml::namedItemNS( e, ooNS::text, "date" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<date>" );
 
-    macro = KoDom::namedItemNS( e, ooNS::text, "page-number" );
+    macro = KoXml::namedItemNS( e, ooNS::text, "page-number" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<page>" );
 
-    macro = KoDom::namedItemNS( e, ooNS::text, "page-count" );
+    macro = KoXml::namedItemNS( e, ooNS::text, "page-count" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<pages>" );
 
-    macro = KoDom::namedItemNS( e, ooNS::text, "sheet-name" );
+    macro = KoXml::namedItemNS( e, ooNS::text, "sheet-name" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<sheet>" );
 
-    macro = KoDom::namedItemNS( e, ooNS::text, "title" );
+    macro = KoXml::namedItemNS( e, ooNS::text, "title" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<name>" );
 
-    macro = KoDom::namedItemNS( e, ooNS::text, "file-name" );
+    macro = KoXml::namedItemNS( e, ooNS::text, "file-name" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<file>" );
 
@@ -1199,7 +1199,7 @@ void OpenCalcImport::loadTableMasterStyle( Sheet * table,
 {
   kDebug(30518) << "Loading table master style: " << stylename << endl;
 
-  QDomElement * style = m_styles[ stylename ];
+  KoXmlElement * style = m_styles[ stylename ];
 
   if ( !style )
   {
@@ -1207,7 +1207,7 @@ void OpenCalcImport::loadTableMasterStyle( Sheet * table,
     return;
   }
 
-  QDomNode header = KoDom::namedItemNS( *style, ooNS::style, "header" );
+  KoXmlNode header = KoXml::namedItemNS( *style, ooNS::style, "header" );
   kDebug(30518) << "Style header " << endl;
 
   QString hleft, hmiddle, hright;
@@ -1216,7 +1216,7 @@ void OpenCalcImport::loadTableMasterStyle( Sheet * table,
   if ( !header.isNull() )
   {
     kDebug(30518) << "Header exists" << endl;
-    QDomNode part = KoDom::namedItemNS( header, ooNS::style, "region-left" );
+    KoXmlNode part = KoXml::namedItemNS( header, ooNS::style, "region-left" );
     if ( !part.isNull() )
     {
       hleft = getPart( part );
@@ -1224,13 +1224,13 @@ void OpenCalcImport::loadTableMasterStyle( Sheet * table,
     }
     else
       kDebug(30518) << "Style:region:left doesn't exist!" << endl;
-    part = KoDom::namedItemNS( header, ooNS::style, "region-center" );
+    part = KoXml::namedItemNS( header, ooNS::style, "region-center" );
     if ( !part.isNull() )
     {
       hmiddle = getPart( part );
       kDebug(30518) << "Header middle: " << hmiddle << endl;
     }
-    part = KoDom::namedItemNS( header, ooNS::style, "region-right" );
+    part = KoXml::namedItemNS( header, ooNS::style, "region-right" );
     if ( !part.isNull() )
     {
       hright = getPart( part );
@@ -1238,23 +1238,23 @@ void OpenCalcImport::loadTableMasterStyle( Sheet * table,
     }
   }
 
-  QDomNode footer = KoDom::namedItemNS( *style, ooNS::style, "footer" );
+  KoXmlNode footer = KoXml::namedItemNS( *style, ooNS::style, "footer" );
 
   if ( !footer.isNull() )
   {
-    QDomNode part = KoDom::namedItemNS( footer, ooNS::style, "region-left" );
+    KoXmlNode part = KoXml::namedItemNS( footer, ooNS::style, "region-left" );
     if ( !part.isNull() )
     {
       fleft = getPart( part );
       kDebug(30518) << "Footer left: " << fleft << endl;
     }
-    part = KoDom::namedItemNS( footer, ooNS::style, "region-center" );
+    part = KoXml::namedItemNS( footer, ooNS::style, "region-center" );
     if ( !part.isNull() )
     {
       fmiddle = getPart( part );
       kDebug(30518) << "Footer middle: " << fmiddle << endl;
     }
-    part = KoDom::namedItemNS( footer, ooNS::style, "region-right" );
+    part = KoXml::namedItemNS( footer, ooNS::style, "region-right" );
     if ( !part.isNull() )
     {
       fright = getPart( part );
@@ -1268,7 +1268,7 @@ void OpenCalcImport::loadTableMasterStyle( Sheet * table,
   {
       QString masterPageLayoutStyleName=style->attributeNS( ooNS::style, "page-master-name", QString::null );
       kDebug(30518)<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
-      QDomElement *masterLayoutStyle = m_styles[masterPageLayoutStyleName];
+      KoXmlElement *masterLayoutStyle = m_styles[masterPageLayoutStyleName];
       kDebug(30518)<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
       if ( !masterLayoutStyle )
           return;
@@ -1410,8 +1410,8 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
 
 bool OpenCalcImport::parseBody( int numOfTables )
 {
-  QDomElement content = m_content.documentElement();
-  QDomNode body = KoDom::namedItemNS( content, ooNS::office, "body" );
+  KoXmlElement content = m_content.documentElement();
+  KoXmlNode body = KoXml::namedItemNS( content, ooNS::office, "body" );
 
   if ( body.isNull() )
     return false;
@@ -1420,7 +1420,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
   loadOasisCellValidation( body.toElement() );
 
   Sheet * table;
-  QDomNode sheet = KoDom::namedItemNS( body, ooNS::table, "table" );
+  KoXmlNode sheet = KoXml::namedItemNS( body, ooNS::table, "table" );
 
   kDebug()<<" sheet :"<<sheet.isNull()<<endl;
   if ( sheet.isNull() )
@@ -1428,7 +1428,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
 
   while ( !sheet.isNull() )
   {
-    QDomElement t = sheet.toElement();
+    KoXmlElement t = sheet.toElement();
     if ( t.isNull() )
     {
       sheet = sheet.nextSibling();
@@ -1458,7 +1458,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
 
   while ( !sheet.isNull() )
   {
-    QDomElement t = sheet.toElement();
+    KoXmlElement t = sheet.toElement();
     if ( t.isNull() )
     {
       KMessageBox::sorry( 0, i18n( "The file seems to be corrupt. Skipping a table." ) );
@@ -1494,16 +1494,16 @@ bool OpenCalcImport::parseBody( int numOfTables )
     if ( t.hasAttributeNS( ooNS::table, "style-name" ) )
     {
       QString style = t.attributeNS( ooNS::table, "style-name", QString::null );
-      QDomElement * tableStyle = m_styles[ style ];
+      KoXmlElement * tableStyle = m_styles[ style ];
 
-      QDomNode node;
+      KoXmlNode node;
 
       if ( tableStyle )
         node = tableStyle->firstChild();
 
       while( !node.isNull() )
       {
-        QDomElement property = node.toElement();
+        KoXmlElement property = node.toElement();
         if ( property.localName() == "properties" && property.namespaceURI() == ooNS::style )
         {
           if ( property.hasAttributeNS( ooNS::table, "display" ) )
@@ -1565,7 +1565,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
     sheet = sheet.nextSibling();
   }
 
-  QDomElement b = body.toElement();
+  KoXmlElement b = body.toElement();
   if ( b.hasAttributeNS( ooNS::table, "structure-protected" ) )
   {
     QByteArray passwd( "" );
@@ -1586,12 +1586,12 @@ bool OpenCalcImport::parseBody( int numOfTables )
   return true;
 }
 
-void OpenCalcImport::insertStyles( QDomElement const & element )
+void OpenCalcImport::insertStyles( KoXmlElement const & element )
 {
   if ( element.isNull() )
     return;
 
-  QDomElement e;
+  KoXmlElement e;
   forEachElement( e, element )
   {
     if ( e.isNull() || !e.hasAttributeNS( ooNS::style, "name" ) )
@@ -1601,17 +1601,17 @@ void OpenCalcImport::insertStyles( QDomElement const & element )
 
     QString name = e.attributeNS( ooNS::style, "name", QString::null );
     kDebug(30518) << "Style: '" << name << "' loaded " << endl;
-    m_styles.insert( name, new QDomElement( e ) );
+    m_styles.insert( name, new KoXmlElement( e ) );
   }
 }
 
 
-void OpenCalcImport::loadOasisAreaName( const QDomElement&body )
+void OpenCalcImport::loadOasisAreaName( const KoXmlElement&body )
 {
-  QDomNode namedAreas = KoDom::namedItemNS( body, ooNS::table, "named-expressions" );
+  KoXmlNode namedAreas = KoXml::namedItemNS( body, ooNS::table, "named-expressions" );
   if ( !namedAreas.isNull() )
   {
-    QDomElement e;
+    KoXmlElement e;
     forEachElement( e, namedAreas )
     {
       if ( e.isNull() || !e.hasAttributeNS( ooNS::table, "name" ) || !e.hasAttributeNS( ooNS::table, "cell-range-address" ) )
@@ -1651,12 +1651,12 @@ void OpenCalcImport::loadOasisAreaName( const QDomElement&body )
   }
 }
 
-void OpenCalcImport::loadOasisCellValidation( const QDomElement&body )
+void OpenCalcImport::loadOasisCellValidation( const KoXmlElement&body )
 {
-    QDomNode validation = KoDom::namedItemNS( body, ooNS::table, "content-validations" );
+    KoXmlNode validation = KoXml::namedItemNS( body, ooNS::table, "content-validations" );
     if ( !validation.isNull() )
     {
-        QDomElement element;
+        KoXmlElement element;
         forEachElement( element, validation )
         {
             if ( element.localName() ==  "content-validation" ) {
@@ -1671,7 +1671,7 @@ void OpenCalcImport::loadOasisCellValidation( const QDomElement&body )
 }
 
 
-QString * OpenCalcImport::loadFormat( QDomElement * element,
+QString * OpenCalcImport::loadFormat( KoXmlElement * element,
                                       FormatType & formatType,
                                       QString name )
 {
@@ -1682,7 +1682,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
   bool ok;
 
   QString * format = 0;
-  QDomElement e = element->firstChild( ).toElement();
+  KoXmlElement e = element->firstChild( ).toElement();
   int precision = 0;
   int leadingZ  = 1;
 #warning (coverity) what's the purpose of this constant?
@@ -1971,7 +1971,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
   return format;
 }
 
-void OpenCalcImport::loadFontStyle( Style * layout, QDomElement const * font ) const
+void OpenCalcImport::loadFontStyle( Style * layout, KoXmlElement const * font ) const
 {
   if ( !font || !layout )
     return;
@@ -2064,7 +2064,7 @@ void OpenCalcImport::loadBorder( Style * layout, QString const & borderDef, bPos
   // TODO Diagonals not supported by oocalc
 }
 
-void OpenCalcImport::loadStyleProperties( Style * layout, QDomElement const & property ) const
+void OpenCalcImport::loadStyleProperties( Style * layout, KoXmlElement const & property ) const
 {
   kDebug(30518) << "*** Loading style properties *****" << endl;
 
@@ -2078,7 +2078,7 @@ void OpenCalcImport::loadStyleProperties( Style * layout, QDomElement const & pr
 
   if ( property.hasAttributeNS( ooNS::style, "font-name" ) )
   {
-    QDomElement * font = m_styles[ property.attributeNS( ooNS::style, "font-name", QString::null ) ];
+    KoXmlElement * font = m_styles[ property.attributeNS( ooNS::style, "font-name", QString::null ) ];
     loadFontStyle( layout, font ); // generell font style
   }
 
@@ -2225,7 +2225,7 @@ void OpenCalcImport::loadStyleProperties( Style * layout, QDomElement const & pr
   }
 }
 
-void OpenCalcImport::readInStyle( Style * layout, QDomElement const & style )
+void OpenCalcImport::readInStyle( Style * layout, KoXmlElement const & style )
 {
   kDebug(30518) << "** Reading Style: " << style.tagName() << "; " << style.attributeNS( ooNS::style, "name", QString::null) << endl;
   if ( style.localName() == "style" && style.namespaceURI()==ooNS::style)
@@ -2272,7 +2272,7 @@ void OpenCalcImport::readInStyle( Style * layout, QDomElement const & style )
     }
   }
 
-  QDomElement property;
+  KoXmlElement property;
   forEachElement( property, style )
   {
     if ( property.localName() == "properties" && property.namespaceURI() == ooNS::style )
@@ -2282,10 +2282,10 @@ void OpenCalcImport::readInStyle( Style * layout, QDomElement const & style )
   }
 }
 
-bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
+bool OpenCalcImport::createStyleMap( KoXmlDocument const & styles )
 {
-  QDomElement content  = styles.documentElement();
-  QDomNode docStyles   = KoDom::namedItemNS( content, ooNS::office, "document-styles" );
+  KoXmlElement content  = styles.documentElement();
+  KoXmlNode docStyles   = KoXml::namedItemNS( content, ooNS::office, "document-styles" );
 
   if ( content.hasAttributeNS( ooNS::office, "version" ) )
   {
@@ -2305,7 +2305,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
     }
   }
 
-  QDomNode fontStyles = KoDom::namedItemNS( content, ooNS::office, "font-decls" );
+  KoXmlNode fontStyles = KoXml::namedItemNS( content, ooNS::office, "font-decls" );
 
   if ( !fontStyles.isNull() )
   {
@@ -2318,7 +2318,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
   kDebug(30518) << "Starting reading in auto:styles" << endl;
 
-  QDomNode autoStyles = KoDom::namedItemNS( content, ooNS::office, "automatic-styles" );
+  KoXmlNode autoStyles = KoXml::namedItemNS( content, ooNS::office, "automatic-styles" );
   if ( !autoStyles.isNull() )
     insertStyles( autoStyles.toElement() );
   else
@@ -2327,20 +2327,20 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
   kDebug(30518) << "Reading in master styles" << endl;
 
-  QDomNode masterStyles = KoDom::namedItemNS( content, ooNS::office, "master-styles" );
+  KoXmlNode masterStyles = KoXml::namedItemNS( content, ooNS::office, "master-styles" );
 
   if ( masterStyles.isNull() )
   {
     kDebug(30518) << "Nothing found " << endl;
   }
 
-  QDomElement master = KoDom::namedItemNS( masterStyles, ooNS::style, "master-page");
+  KoXmlElement master = KoXml::namedItemNS( masterStyles, ooNS::style, "master-page");
   if ( !master.isNull() )
   {
     QString name( "pm" );
     name += master.attributeNS( ooNS::style, "name", QString::null );
     kDebug(30518) << "Master style: '" << name << "' loaded " << endl;
-    m_styles.insert( name, new QDomElement( master ) );
+    m_styles.insert( name, new KoXmlElement( master ) );
 
     master = master.nextSibling().toElement();
   }
@@ -2348,15 +2348,15 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
   kDebug(30518) << "Starting reading in office:styles" << endl;
 
-  QDomNode fixedStyles = KoDom::namedItemNS( content, ooNS::office, "styles" );
+  KoXmlNode fixedStyles = KoXml::namedItemNS( content, ooNS::office, "styles" );
 
   kDebug(30518) << "Reading in default styles" << endl;
 
-  QDomNode def = KoDom::namedItemNS( fixedStyles, ooNS::style, "default-style" );
+  KoXmlNode def = KoXml::namedItemNS( fixedStyles, ooNS::style, "default-style" );
   kDebug()<<" def !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<def.isNull()<<endl;
   while ( !def.isNull() )
   {
-    QDomElement e = def.toElement();
+    KoXmlElement e = def.toElement();
     kDebug(30518) << "Style found " << e.nodeName() << ", tag: " << e.tagName() << endl;
 
     if ( e.nodeName() != "style:default-style" )
@@ -2380,7 +2380,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
     def = def.nextSibling();
   }
 
-  QDomElement defs = KoDom::namedItemNS( fixedStyles, ooNS::style, "style" );
+  KoXmlElement defs = KoXml::namedItemNS( fixedStyles, ooNS::style, "style" );
   while ( !defs.isNull() )
   {
     if ( defs.nodeName() != "style:style" )
@@ -2409,12 +2409,12 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
   kDebug(30518) << "Starting reading in automatic styles" << endl;
 
   content = m_content.documentElement();
-  autoStyles = KoDom::namedItemNS( content, ooNS::office, "automatic-styles" );
+  autoStyles = KoXml::namedItemNS( content, ooNS::office, "automatic-styles" );
 
   if ( !autoStyles.isNull() )
     insertStyles( autoStyles.toElement() );
 
-  fontStyles = KoDom::namedItemNS( content, ooNS::office, "font-decls" );
+  fontStyles = KoXml::namedItemNS( content, ooNS::office, "font-decls" );
 
   if ( !fontStyles.isNull() )
   {
@@ -2431,7 +2431,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 void OpenCalcImport::loadOasisValidation( Validity validity, const QString& validationName )
 {
     kDebug(30518)<<"validationName:"<<validationName<<endl;
-    QDomElement element = m_validationList[validationName];
+    KoXmlElement element = m_validationList[validationName];
     if ( element.hasAttributeNS( ooNS::table, "condition" ) )
     {
         QString valExpression = element.attributeNS( ooNS::table, "condition", QString::null );
@@ -2542,19 +2542,19 @@ void OpenCalcImport::loadOasisValidation( Validity validity, const QString& vali
         //todo what is it ?
     }
 
-    QDomElement help = KoDom::namedItemNS( element, ooNS::table, "help-message" );
+    KoXmlElement help = KoXml::namedItemNS( element, ooNS::table, "help-message" );
     if ( !help.isNull() )
     {
         if ( help.hasAttributeNS( ooNS::table, "title" ) )
              validity.setTitleInfo( help.attributeNS( ooNS::table, "title", QString::null ) );
         if ( help.hasAttributeNS( ooNS::table, "display" ) )
             validity.setDisplayValidationInformation( ( ( help.attributeNS( ooNS::table, "display", QString::null )=="true" ) ? true : false ) );
-        QDomElement attrText = KoDom::namedItemNS( help, ooNS::text, "p" );
+        KoXmlElement attrText = KoXml::namedItemNS( help, ooNS::text, "p" );
         if ( !attrText.isNull() )
             validity.setMessageInfo( attrText.text() );
     }
 
-    QDomElement error = KoDom::namedItemNS( element, ooNS::table, "error-message" );
+    KoXmlElement error = KoXml::namedItemNS( element, ooNS::table, "error-message" );
     if ( !error.isNull() )
     {
         if ( error.hasAttributeNS( ooNS::table, "title" ) )
@@ -2577,7 +2577,7 @@ void OpenCalcImport::loadOasisValidation( Validity validity, const QString& vali
             kDebug(30518)<<" display message :"<<error.attributeNS( ooNS::table, "display", QString::null )<<endl;
             validity.setDisplayMessage( (error.attributeNS( ooNS::table, "display", QString::null )=="true") );
         }
-        QDomElement attrText = KoDom::namedItemNS( error, ooNS::text, "p" );
+        KoXmlElement attrText = KoXml::namedItemNS( error, ooNS::text, "p" );
         if ( !attrText.isNull() )
             validity.setMessage( attrText.text() );
     }
@@ -2698,37 +2698,37 @@ int OpenCalcImport::readMetaData()
   int result = 5;
   KoDocumentInfo * docInfo          = m_doc->documentInfo();
 
-  QDomNode meta   = KoDom::namedItemNS( m_meta, ooNS::office, "document-meta" );
-  QDomNode office = KoDom::namedItemNS( meta, ooNS::office, "meta" );
+  KoXmlNode meta   = KoXml::namedItemNS( m_meta, ooNS::office, "document-meta" );
+  KoXmlNode office = KoXml::namedItemNS( meta, ooNS::office, "meta" );
 
   if ( office.isNull() )
     return 2;
 
-  QDomElement e = KoDom::namedItemNS( office, ooNS::dc, "creator" );
+  KoXmlElement e = KoXml::namedItemNS( office, ooNS::dc, "creator" );
   if ( !e.isNull() && !e.text().isEmpty() )
     docInfo->setAuthorInfo( "creator", e.text() );
 
-  e = KoDom::namedItemNS( office, ooNS::dc, "title" );
+  e = KoXml::namedItemNS( office, ooNS::dc, "title" );
   if ( !e.isNull() && !e.text().isEmpty() )
     docInfo->setAboutInfo( "title", e.text() );
 
-  e = KoDom::namedItemNS( office, ooNS::dc, "description" );
+  e = KoXml::namedItemNS( office, ooNS::dc, "description" );
   if ( !e.isNull() && !e.text().isEmpty() )
     docInfo->setAboutInfo( "description", e.text() ); // ### was: abstract
 
-  e = KoDom::namedItemNS( office, ooNS::dc, "subject" );
+  e = KoXml::namedItemNS( office, ooNS::dc, "subject" );
   if ( !e.isNull() && !e.text().isEmpty() )
     docInfo->setAboutInfo( "subject", e.text() );
 
-  e= KoDom::namedItemNS( office, ooNS::meta, "keywords" );
+  e= KoXml::namedItemNS( office, ooNS::meta, "keywords" );
   if ( !e.isNull() )
   {
-      e = KoDom::namedItemNS( e,  ooNS::meta, "keyword" );
+      e = KoXml::namedItemNS( e,  ooNS::meta, "keyword" );
       if ( !e.isNull() && !e.text().isEmpty() )
         docInfo->setAboutInfo( "keyword", e.text() );
   }
 
-  e = KoDom::namedItemNS( office, ooNS::meta, "document-statistic" );
+  e = KoXml::namedItemNS( office, ooNS::meta, "document-statistic" );
   if ( !e.isNull() && e.hasAttributeNS( ooNS::meta, "table-count" ) )
   {
     bool ok = false;
@@ -2806,7 +2806,7 @@ KoFilter::ConversionStatus OpenCalcImport::openFile()
   loadAndParse( m_content, "content.xml", store);
   kDebug(30518) << "Opened" << endl;
 
-  QDomDocument styles;
+  KoXmlDocument styles;
   kDebug(30518) << "file content.xml loaded " << endl;
 
   loadAndParse( styles, "styles.xml", store);
@@ -2824,7 +2824,7 @@ KoFilter::ConversionStatus OpenCalcImport::openFile()
   return KoFilter::OK;
 }
 
-KoFilter::ConversionStatus OpenCalcImport::loadAndParse( QDomDocument& doc, const QString& fileName,KoStore *m_store )
+KoFilter::ConversionStatus OpenCalcImport::loadAndParse( KoXmlDocument& doc, const QString& fileName,KoStore *m_store )
 {
     return OoUtils::loadAndParse( fileName, doc, m_store);
 }

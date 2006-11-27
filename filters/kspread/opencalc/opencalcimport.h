@@ -29,6 +29,7 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <QByteArray>
+#include <KoXmlReader.h>
 
 class KoStyleStack;
 class KoStore;
@@ -72,49 +73,49 @@ class OpenCalcImport : public KoFilter
   KSpread::Doc *    m_doc;
   KSpread::Style *  m_defaultStyle;
 
-  QDomDocument    m_content;
-  QDomDocument    m_meta;
-  QDomDocument    m_settings;
+  KoXmlDocument   m_content;
+  KoXmlDocument   m_meta;
+  KoXmlDocument   m_settings;
 
-  Q3Dict<QDomElement>   m_styles;
+  Q3Dict<KoXmlElement>   m_styles;
   Q3Dict<KSpread::Style> m_defaultStyles;
   Q3Dict<QString>       m_formats;
-  QMap<QString,QDomElement> m_validationList;
+  QMap<QString,KoXmlElement> m_validationList;
 
   QStringList          m_namedAreas;
 
   int  readMetaData();
   bool parseBody( int numOfTables );
-  void insertStyles( QDomElement const & element );
-  bool createStyleMap( QDomDocument const & styles );
-  bool readRowFormat( QDomElement & rowNode, QDomElement * rowStyle,
+  void insertStyles( KoXmlElement const & element );
+  bool createStyleMap( KoXmlDocument const & styles );
+  bool readRowFormat( KoXmlElement & rowNode, KoXmlElement * rowStyle,
                       KSpread::Sheet * table, int & row, int & number, bool last );
-  bool readColLayouts( QDomElement & content, KSpread::Sheet * table );
-  bool readRowsAndCells( QDomElement & content, KSpread::Sheet * table );
-  bool readCells( QDomElement & rowNode, KSpread::Sheet  * table, int row, int & columns );
+  bool readColLayouts( KoXmlElement & content, KSpread::Sheet * table );
+  bool readRowsAndCells( KoXmlElement & content, KSpread::Sheet * table );
+  bool readCells( KoXmlElement & rowNode, KSpread::Sheet  * table, int row, int & columns );
   void convertFormula( QString & text, QString const & f ) const;
-  void loadFontStyle( KSpread::Style * layout, QDomElement const * font ) const;
-  void readInStyle( KSpread::Style * layout, QDomElement const & style );
-  void loadStyleProperties( KSpread::Style * layout, QDomElement const & property ) const;
+  void loadFontStyle( KSpread::Style * layout, KoXmlElement const * font ) const;
+  void readInStyle( KSpread::Style * layout, KoXmlElement const & style );
+  void loadStyleProperties( KSpread::Style * layout, KoXmlElement const & property ) const;
   void loadBorder( KSpread::Style * layout, QString const & borderDef, bPos pos ) const;
   void loadTableMasterStyle( KSpread::Sheet * table, QString const & stylename );
-  QString * loadFormat( QDomElement * element,
+  QString * loadFormat( KoXmlElement * element,
                         KSpread::FormatType & formatType,
                         QString name );
   void checkForNamedAreas( QString & formula ) const;
-  void loadOasisCellValidation( const QDomElement&body );
+  void loadOasisCellValidation( const KoXmlElement&body );
   void loadOasisValidation( KSpread::Validity val, const QString& validationName );
   void loadOasisValidationCondition( KSpread::Validity val,QString &valExpression );
-  void loadOasisAreaName( const QDomElement&body );
+  void loadOasisAreaName( const KoXmlElement&body );
   void loadOasisMasterLayoutPage( KSpread::Sheet * table,KoStyleStack &styleStack );
   void loadOasisValidationValue( KSpread::Validity val, const QStringList &listVal );
     QString translatePar( QString & par ) const;
-    void loadCondition( KSpread::Cell*cell,const QDomElement &property );
-    void loadOasisCondition(KSpread::Cell*cell,const QDomElement &property );
+    void loadCondition( KSpread::Cell*cell,const KoXmlElement &property );
+    void loadOasisCondition(KSpread::Cell*cell,const KoXmlElement &property );
     void loadOasisConditionValue( const QString &styleCondition, KSpread::Conditional &newCondition );
     void loadOasisCondition( QString &valExpression, KSpread::Conditional &newCondition );
     void loadOasisValidationValue( const QStringList &listVal, KSpread::Conditional &newCondition );
-    KoFilter::ConversionStatus loadAndParse( QDomDocument& doc, const QString& fileName,KoStore *m_store );
+    KoFilter::ConversionStatus loadAndParse( KoXmlDocument& doc, const QString& fileName,KoStore *m_store );
 
   KoFilter::ConversionStatus openFile();
 };
