@@ -338,7 +338,59 @@ INSERT INTO "kexi__objectdata" VALUES(96, '<!DOCTYPE UI>
  </tabstops>
 </UI>
 ', NULL);
-INSERT INTO "kexi__objectdata" VALUES(101, 'example', NULL);
+INSERT INTO "kexi__objectdata" VALUES(101, '<!DOCTYPE script>
+<script language="python" ># This is Technology Preview (BETA) version of scripting
+# support in Kexi. The scripting API may change in details
+# in the next Kexi version.
+# For more information and documentation see
+# http://www.kexi-project.org/scripting/
+
+# Saves the contents of &quot;persons&quot; table, without the &quot;id&quot; column
+# to a &quot;SimpleReport54321.txt&quot; text file in the current user''s home
+# directory. Totals about average, minimum, maximum age are appended.
+
+import krosskexidb, krosskexiapp, os, codecs
+
+keximainwindow = krosskexiapp.get(&quot;KexiAppMainWindow&quot;)
+connection = keximainwindow.getConnection()
+table = connection.tableSchema(&quot;persons&quot;)
+if not table:
+	raise(&quot;No table ''persons''&quot;)
+query = table.query()
+
+cursor = connection.executeQuerySchema(query)
+if not cursor:
+	raise(&quot;Query failed&quot;)
+
+sum = 0
+max = 0
+min = 1000
+count = 0
+
+# Walk through all items in the table.
+filename = os.path.expanduser(&quot;~&quot;)+os.sep+&quot;SimpleReport54321.txt&quot;
+f = codecs.open(filename, &quot;wt&quot;, &quot;utf-8&quot;)
+if not f:
+	raise(&quot;Opening file failed&quot;)
+f.write(&quot;%s\t%s\t%s\n-------------------------\n&quot; 
+	% (query.fieldlist().field(1).caption(),
+	query.fieldlist().field(2).caption(),
+	query.fieldlist().field(3).caption()))
+while cursor.moveNext():
+	count += 1
+	sum += cursor.value(1)
+	if max &lt; cursor.value(1):
+		max = cursor.value(1)
+	if min > cursor.value(1):
+		min = cursor.value(1)
+	f.write( &quot;%s\t%s\t%s\n&quot; % (cursor.value(1), cursor.value(2),cursor.value(3)))
+
+f.write( &quot;\nAverage age:\t%.2f\n&quot; % (sum / count) )
+f.write( &quot;Minimum age:\t%.2f\n&quot; % min)
+f.write( &quot;Maximum age:\t%.2f\n&quot; % max)
+f.close()
+</script>
+', NULL);
 INSERT INTO "kexi__objectdata" VALUES(104, 'SELECT persons.name, persons.surname, persons.age, cars.model, ownership.since FROM persons, ownership, cars WHERE cars.id = ownership.car AND persons.id = ownership.owner', 'sql');
 INSERT INTO "kexi__objectdata" VALUES(104, '<query_layout><table name="persons" x="380" y="54" width="110" height="132"/><table name="ownership" x="180" y="49" width="110" height="132"/><table name="cars" x="9" y="57" width="110" height="92"/><conn mtable="cars" mfield="id" dtable="ownership" dfield="car"/><conn mtable="persons" mfield="id" dtable="ownership" dfield="owner"/></query_layout>', 'query_layout');
 INSERT INTO "kexi__objectdata" VALUES(103, '<!DOCTYPE EXTENDED_TABLE_SCHEMA>
@@ -587,7 +639,7 @@ INSERT INTO "kexi__objects" VALUES(2, 1, 'cars', 'Cars owned by persons', NULL);
 INSERT INTO "kexi__objects" VALUES(4, 3, 'persons', 'Formularz1', NULL);
 INSERT INTO "kexi__objects" VALUES(65, 3, 'cars', 'Form1', NULL);
 INSERT INTO "kexi__objects" VALUES(96, 4, 'report', 'Report2', NULL);
-INSERT INTO "kexi__objects" VALUES(101, 5, 'script1', 'Skrypt1', NULL);
+INSERT INTO "kexi__objects" VALUES(101, 5, 'write_simple_text_report', 'Skrypt1', NULL);
 INSERT INTO "kexi__objects" VALUES(103, 1, 'ownership', 'Ownership', NULL);
 INSERT INTO "kexi__objects" VALUES(104, 2, 'persons_and_cars', 'Persons and cars', NULL);
 INSERT INTO "kexi__objects" VALUES(105, 3, 'ownership', 'Ownership', NULL);
