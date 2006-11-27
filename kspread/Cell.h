@@ -49,6 +49,8 @@ class QDomDocument;
 class QFont;
 class QFontMetrics;
 class QPainter;
+class QRect;
+class QPoint;
 
 class KLocale;
 class KoXmlWriter;
