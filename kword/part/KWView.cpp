@@ -96,7 +96,7 @@ void KWView::setupActions() {
     if ( kwcanvas() && kwcanvas()->viewMode()->hasPages() )
         modes |= KoZoomMode::ZOOM_PAGE;
 
-    m_actionViewZoom = new KoZoomAction( modes, i18n( "Zoom" ), 0, 0,
+    m_actionViewZoom = new KoZoomAction( modes, i18n( "Zoom" ), 0, KShortcut(),
             actionCollection(), "view_zoom" );
     m_zoomHandler.setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
     m_zoomHandler.setZoomMode( m_document->zoomMode() );

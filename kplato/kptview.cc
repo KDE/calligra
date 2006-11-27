@@ -696,21 +696,21 @@ View::View( Part* part, QWidget* parent )
     // Temporary, till we get a menu entry
     actNoInformation = new KAction( "Toggle no information", actionCollection(), "show_noinformation" );
     connect( actNoInformation, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttNoInformation() ) );
-    actNoInformation->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_T );
+    actNoInformation->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_T ) );
 
 #ifndef NDEBUG
     //new KAction("Print Debug", CTRL+Qt::SHIFT+Qt::Key_P, this, SLOT( slotPrintDebug()), actionCollection(), "print_debug");
     KAction *action = new KAction( "Print Debug", actionCollection(), "print_debug" );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( slotPrintSelectedDebug() ) );
-    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_P );
+    action->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_P ) );
     action = new KAction( "Print Calendar Debug", actionCollection(), "print_calendar_debug" );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( slotPrintCalendarDebug() ) );
-    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_C );
+    action->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_C ) );
     //     new KAction("Print Test Debug", CTRL+Qt::SHIFT+Qt::Key_T, this, SLOT(slotPrintTestDebug()), actionCollection(), "print_test_debug");
 
     KAction *actExportGantt = new KAction( i18n( "Export Gantt" ), actionCollection(), "export_gantt" );
     connect( actExportGantt, SIGNAL( triggered( bool ) ), SLOT( slotExportGantt() ) );
-    actExportGantt->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_G );
+    actExportGantt->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_G ) );
 
     
 #endif

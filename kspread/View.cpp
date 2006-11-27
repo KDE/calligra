@@ -492,7 +492,7 @@ void View::Private::initActions()
   // -- cell formatting actions --
 
   actions->cellLayout = new KAction( KIcon( "cell_layout" ), i18n("Cell Format..."), ac, "cellLayout" );
-  actions->cellLayout->setShortcut( Qt::CTRL+ Qt::ALT+ Qt::Key_F);
+  actions->cellLayout->setShortcut( QKeySequence( Qt::CTRL+ Qt::ALT+ Qt::Key_F));
   connect(actions->cellLayout, SIGNAL(triggered(bool)), view, SLOT( layoutDlg() ));
 
   actions->cellLayout->setToolTip( i18n("Set the cell formatting") );
@@ -507,17 +507,17 @@ void View::Private::initActions()
   actions->defaultFormat->setToolTip( i18n("Resets to the default format") );
 
   actions->bold = new KToggleAction( KIcon( "text_bold" ), i18n("Bold"), ac, "bold");
-  actions->bold->setShortcut( Qt::CTRL+Qt::Key_B);
+  actions->bold->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_B));
   connect( actions->bold, SIGNAL( toggled( bool) ),
                     view, SLOT( bold( bool ) ) );
 
   actions->italic = new KToggleAction( KIcon( "text_italic" ), i18n("Italic"), ac, "italic");
-  actions->italic->setShortcut( Qt::CTRL+Qt::Key_I);
+  actions->italic->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_I));
   connect( actions->italic, SIGNAL( toggled( bool) ),
                     view, SLOT( italic( bool ) ) );
 
   actions->underline = new KToggleAction( KIcon( "text_under" ), i18n("Underline"), ac, "underline");
-  actions->underline->setShortcut( Qt::CTRL+Qt::Key_U);
+  actions->underline->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_U));
   connect( actions->underline, SIGNAL( toggled( bool) ),
                     view, SLOT( underline( bool ) ) );
 
@@ -696,7 +696,7 @@ void View::Private::initActions()
   // -- cell operation actions --
 
   actions->editCell = new KAction( KIcon("cell_edit" ), i18n("Modify Cell"), ac, "editCell" );
-  actions->editCell->setShortcut( Qt::CTRL+Qt::Key_M);
+  actions->editCell->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_M));
   connect(actions->editCell, SIGNAL(triggered(bool)), view, SLOT( editCell() ));
 
   actions->editCell->setToolTip(i18n("Edit the highlighted cell"));
@@ -987,13 +987,13 @@ void View::Private::initActions()
   actions->showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be" ) );
 
   actions->recalcWorksheet = new KAction( i18n("Recalculate Sheet"), ac, "RecalcWorkSheet" );
-  actions->recalcWorksheet->setShortcut(      Qt::SHIFT + Qt::Key_F9);
+  actions->recalcWorksheet->setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_F9));
   connect(actions->recalcWorksheet, SIGNAL(triggered(bool)),view, SLOT( recalcWorkSheet() ));
 
   actions->recalcWorksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet"));
 
   actions->recalcWorkbook = new KAction( i18n("Recalculate Document"), ac, "RecalcWorkBook" );
-  actions->recalcWorkbook->setShortcut(      Qt::Key_F9);
+  actions->recalcWorkbook->setShortcut( QKeySequence( Qt::Key_F9));
   connect(actions->recalcWorkbook, SIGNAL(triggered(bool)),view, SLOT( recalcWorkBook() ));
 
   actions->recalcWorkbook->setToolTip(i18n("Recalculate the value of every cell in all worksheets"));
@@ -1084,7 +1084,7 @@ void View::Private::initActions()
       view, SLOT( formulaSelection( const QString& ) ) );
 
   actions->viewZoom = new KoZoomAction(KoZoomMode::ZOOM_CONSTANT, i18n( "Zoom" ),
-                                        "viewmag", 0, ac, "view_zoom" );
+                                        "viewmag", KShortcut(), ac, "view_zoom" );
   connect( actions->viewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, int ) ),
       view, SLOT( viewZoom( KoZoomMode::Mode, int ) ) );
 
@@ -1128,13 +1128,13 @@ void View::Private::initActions()
   actions->gotoCell->setToolTip(i18n("Move to a particular cell"));
 
   actions->nextSheet = new KAction( KIcon( "forward" ), i18n("Next Sheet"), ac, "nextSheet");
-  actions->nextSheet->setShortcut( Qt::CTRL+Qt::Key_PageDown);
+  actions->nextSheet->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_PageDown));
   connect(actions->nextSheet, SIGNAL(triggered(bool)), view, SLOT( nextSheet() ));
 
   actions->nextSheet->setToolTip(i18n("Move to the next sheet"));
 
   actions->prevSheet = new KAction( KIcon( "back" ), i18n("Previous Sheet"), ac, "previousSheet");
-  actions->prevSheet->setShortcut( Qt::CTRL+Qt::Key_PageUp);
+  actions->prevSheet->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_PageUp));
   connect(actions->prevSheet, SIGNAL(triggered(bool)), view, SLOT( previousSheet() ));
 
   actions->prevSheet->setToolTip(i18n("Move to the previous sheet"));
@@ -1214,11 +1214,11 @@ void View::Private::initActions()
   // -- special action, only for developers --
 
   actions->internalTests = new KAction( KIcon( "internalTests" ), i18n("Run Internal Tests..."), ac, "internalTests" );
-  actions->internalTests->setShortcut( Qt::CTRL+ Qt::SHIFT + Qt::Key_T);
+  actions->internalTests->setShortcut( QKeySequence( Qt::CTRL+ Qt::SHIFT + Qt::Key_T));
   connect(actions->internalTests, SIGNAL(triggered(bool)), view, SLOT( runInternalTests() ));
 
   actions->inspector = new KAction( KIcon( "inspector" ), i18n("Run Inspector..."), ac, "inspector" );
-  actions->inspector->setShortcut( Qt::CTRL+ Qt::SHIFT + Qt::Key_I);
+  actions->inspector->setShortcut( QKeySequence( Qt::CTRL+ Qt::SHIFT + Qt::Key_I));
   connect(actions->inspector, SIGNAL(triggered(bool)), view, SLOT( runInspector() ));
 
 

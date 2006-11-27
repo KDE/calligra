@@ -192,7 +192,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
     coll->action( "forward" )->setWhatsThis(i18n("Click this button to move forward one step in the browsing history."));
     coll->action( "reload" )->plug( toolbar );
     coll->action( "reload" )->setWhatsThis(i18n("Click this button to reload the contents of the current location."));
-    coll->action( "mkdir" )->setShortcut(Qt::Key_F10);
+    coll->action( "mkdir" )->setShortcut(QKeySequence(Qt::Key_F10));
     coll->action( "mkdir" )->plug( toolbar );
     coll->action( "mkdir" )->setWhatsThis(i18n("Click this button to create a new directory."));
 
@@ -227,17 +227,17 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
                             "<li>separating directories from files</li></ul></qt>"));
     menu->insert( coll->action( "sorting menu" ));
     menu->insert( coll->action( "separator" ));
-    coll->action( "short view" )->setShortcut(Qt::Key_F6);
+    coll->action( "short view" )->setShortcut(QKeySequence(Qt::Key_F6));
     menu->insert( coll->action( "short view" ));
-    coll->action( "detailed view" )->setShortcut(Qt::Key_F7);
+    coll->action( "detailed view" )->setShortcut(QKeySequence(Qt::Key_F7));
     menu->insert( coll->action( "detailed view" ));
     menu->insert( coll->action( "separator" ));
-    coll->action( "show hidden" )->setShortcut(Qt::Key_F8);
+    coll->action( "show hidden" )->setShortcut(QKeySequence(Qt::Key_F8));
     menu->insert( coll->action( "show hidden" ));
     menu->insert( showSidebarAction );
-    coll->action( "preview" )->setShortcut(Qt::Key_F11);
+    coll->action( "preview" )->setShortcut(QKeySequence(Qt::Key_F11));
     menu->insert( coll->action( "preview" ));
-    coll->action( "separate dirs" )->setShortcut(Qt::Key_F12);
+    coll->action( "separate dirs" )->setShortcut(QKeySequence(Qt::Key_F12));
     menu->insert( coll->action( "separate dirs" ));
 
     menu->setDelayed( false );

@@ -42,7 +42,7 @@ K_EXPORT_COMPONENT_FACTORY( karbon_whirlpinchplugin, WhirlPinchPluginFactory( "k
 WhirlPinchPlugin::WhirlPinchPlugin( KarbonView *parent, const QStringList & ) : Plugin( parent )
 {
 	new KAction(
-		i18n( "&Whirl/Pinch..." ), "14_whirl", 0, this,
+		i18n( "&Whirl/Pinch..." ), "14_whirl", KShortcut(), this,
 		SLOT( slotWhirlPinch() ), actionCollection(), "path_whirlpinch" );
 
 	m_whirlPinchDlg = new VWhirlPinchDlg();

@@ -1139,7 +1139,7 @@ KarbonView::initActions()
 	connect(m_viewAction, SIGNAL(triggered()), this, SLOT(viewModeChanged()));
 
 	m_zoomAction = new KoZoomAction( KoZoomMode::ZOOM_CONSTANT|KoZoomMode::ZOOM_PAGE|KoZoomMode::ZOOM_WIDTH,
-	i18n("Zoom"), KIcon("14_zoom"), 0, actionCollection(), "view_zoom");
+	i18n("Zoom"), KIcon("14_zoom"), KShortcut(), actionCollection(), "view_zoom");
 	connect(m_zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
           this, SLOT(zoomChanged(KoZoomMode::Mode, int)));
 

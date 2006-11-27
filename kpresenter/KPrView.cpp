@@ -2338,7 +2338,7 @@ void KPrView::setupActions()
 
     actionEditDelete = new KAction(KIcon("editdelete"),  i18n( "&Delete" ), actionCollection(), "edit_delete" );
     connect(actionEditDelete, SIGNAL(triggered(bool) ), SLOT( editDelete() ));
-    actionEditDelete->setShortcut(Qt::CTRL + Qt::Key_Delete);
+    actionEditDelete->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete));
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionEditDeSelectAll= KStdAction::deselect( this, SLOT( editDeSelectAll()), actionCollection(), "edit_deselectall");
     actionEditCopyPage = new KAction(KIcon("editcopy"),  i18n( "Copy Slide" ), actionCollection(), "edit_copypage" );
@@ -2357,37 +2357,37 @@ void KPrView::setupActions()
 
     if ( !m_pKPresenterDoc->isEmbedded() )
     {
-        actionViewShowSideBar = new KToggleAction( i18n("Show Sidebar"), 0,
+        actionViewShowSideBar = new KToggleAction( i18n("Show Sidebar"), KShortcut(),
                                                    this, SLOT( viewShowSideBar() ),
                                                    actionCollection(), "view_showsidebar" );
         actionViewShowSideBar->setCheckedState(KGuiItem(i18n("Hide Sidebar")));
 
-        actionViewShowNoteBar = new KToggleAction( i18n("Show Notebar"), 0,
+        actionViewShowNoteBar = new KToggleAction( i18n("Show Notebar"), KShortcut(),
                                                    this, SLOT( viewShowNoteBar() ),
                                                    actionCollection(), "view_shownotebar" );
         actionViewShowNoteBar->setCheckedState(KGuiItem(i18n("Hide Notebar")));
     }
 
-    actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
+    actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), KShortcut(),
                                                    this, SLOT( slotViewFormattingChars() ),
                                                    actionCollection(), "view_formattingchars" );
     actionViewFormattingChars->setToolTip( i18n( "Toggle the display of non-printing characters" ) );
     actionViewFormattingChars->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br><br>When this is enabled, KPresenter shows you tabs, spaces, carriage returns and other non-printing characters." ) );
 
-    actionViewSlideMaster = new KToggleAction( i18n( "Slide &Master" ), 0,
+    actionViewSlideMaster = new KToggleAction( i18n( "Slide &Master" ), KShortcut(),
                                                this, SLOT( viewSlideMaster() ),
                                                actionCollection(), "view_master" );
 
-    actionViewShowGuideLine= new KToggleAction( i18n( "Guide Lines" ), 0,
+    actionViewShowGuideLine= new KToggleAction( i18n( "Guide Lines" ), KShortcut(),
                                                this, SLOT( viewGuideLines() ),
                                                actionCollection(), "view_guidelines" );
 
-    actionViewShowGrid = new KToggleAction( i18n( "Show &Grid" ), 0,
+    actionViewShowGrid = new KToggleAction( i18n( "Show &Grid" ), KShortcut(),
                                             this, SLOT( viewGrid() ),
                                             actionCollection(), "view_grid" );
     actionViewShowGrid->setCheckedState(KGuiItem(i18n("Hide &Grid")));
 
-    actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), 0,
+    actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), KShortcut(),
                                              this, SLOT(viewSnapToGrid() ),
                                              actionCollection(), "view_snaptogrid" );
 
@@ -2395,14 +2395,14 @@ void KPrView::setupActions()
 
     actionInsertPage = new KAction(KIcon("slide"),  i18n( "&Slide..." ), actionCollection(), "insert_page" );
     connect(actionInsertPage, SIGNAL(triggered(bool) ), SLOT( insertPage() ));
-    actionInsertPage->setShortcut(Qt::Key_F2);
+    actionInsertPage->setShortcut(QKeySequence(Qt::Key_F2));
 
     KAction *action = new KAction(KIcon("newslide"),  i18n( "Insert &Slide..." ), actionCollection(), "insert_page_popup" );
     connect(action, SIGNAL(triggered(bool) ), SLOT( insertPage() ));
 
     actionInsertPicture = new KAction(KIcon("frame_image"),  i18n( "P&icture..." ), actionCollection(), "insert_picture" );
     connect(actionInsertPicture, SIGNAL(triggered(bool) ), SLOT( insertPicture() ));
-    actionInsertPicture->setShortcut(Qt::SHIFT+Qt::Key_F5);
+    actionInsertPicture->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_F5));
 
     // ----------------- tools actions
 	QActionGroup* toolsGroup = new QActionGroup( this );
@@ -2438,7 +2438,7 @@ void KPrView::setupActions()
 
     actionToolsText = new KToggleAction(KIcon("frame_text"), i18n( "&Text" ), actionCollection(), "tools_text" );
     connect(actionToolsText, SIGNAL(triggered(bool)), SLOT( toolsText() ));
-    actionToolsText->setShortcut(Qt::Key_F10); // same shortcut as KWord this
+    actionToolsText->setShortcut(QKeySequence(Qt::Key_F10)); // same shortcut as KWord this
     actionToolsText->setActionGroup( toolsGroup );
 
     actionToolsAutoform = new KToggleAction(KIcon("autoform"),  i18n( "&Arrows && Connections" ), actionCollection(), "tools_autoform" );
@@ -2451,7 +2451,7 @@ void KPrView::setupActions()
 
     actionToolsTable = new KToggleAction(KIcon("frame_spreadsheet"),  i18n( "Ta&ble"), actionCollection(), "tools_table" );
     connect(actionToolsTable, SIGNAL(triggered(bool)), SLOT( toolsTable() ));
-    actionToolsTable->setShortcut(Qt::Key_F5 /*same as kword*/);
+    actionToolsTable->setShortcut(QKeySequence(Qt::Key_F5) /*same as kword*/);
     actionToolsTable->setActionGroup( toolsGroup );
 
     actionToolsObject = new KoPartSelectAction( i18n( "&Object" ), "frame_query",
@@ -2534,15 +2534,15 @@ void KPrView::setupActions()
 
     actionTextBold = new KToggleAction(KIcon("text_bold"),  i18n( "&Bold" ), actionCollection(), "text_bold" );
     connect(actionTextBold, SIGNAL(triggered(bool)), SLOT( textBold() ));
-    actionTextBold->setShortcut(Qt::CTRL + Qt::Key_B);
+    actionTextBold->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 
     actionTextItalic = new KToggleAction(KIcon("text_italic"),  i18n( "&Italic" ), actionCollection(), "text_italic" );
     connect(actionTextItalic, SIGNAL(triggered(bool)), SLOT( textItalic() ));
-    actionTextItalic->setShortcut(Qt::CTRL + Qt::Key_I);
+    actionTextItalic->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
 
     actionTextUnderline = new KToggleAction(KIcon("text_under"),  i18n( "&Underline" ), actionCollection(), "text_underline" );
     connect(actionTextUnderline, SIGNAL(triggered(bool)), SLOT( textUnderline() ));
-    actionTextUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
+    actionTextUnderline->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
 
     actionFormatStrikeOut = new KToggleAction(KIcon("text_strike"),  i18n( "&Strike Out" ), actionCollection(), "format_strike" );
     connect(actionFormatStrikeOut, SIGNAL(triggered(bool)), SLOT( textStrikeOut() ));
@@ -2556,23 +2556,23 @@ void KPrView::setupActions()
 	QActionGroup* alignGroup = new QActionGroup( this );
     actionTextAlignLeft = new KToggleAction(KIcon("text_left"),  i18n( "Align &Left" ), actionCollection(), "text_alignleft" );
     connect(actionTextAlignLeft, SIGNAL(triggered(bool)), SLOT( textAlignLeft() ));
-    actionTextAlignLeft->setShortcut(Qt::ALT + Qt::Key_L);
+    actionTextAlignLeft->setShortcut(QKeySequence(Qt::ALT + Qt::Key_L));
     actionTextAlignLeft->setActionGroup( alignGroup );
     actionTextAlignLeft->setChecked( true );
 
     actionTextAlignCenter = new KToggleAction(KIcon("text_center"),  i18n( "Align &Center" ), actionCollection(), "text_aligncenter" );
     connect(actionTextAlignCenter, SIGNAL(triggered(bool)), SLOT( textAlignCenter() ));
-    actionTextAlignCenter->setShortcut(Qt::ALT + Qt::Key_C);
+    actionTextAlignCenter->setShortcut(QKeySequence(Qt::ALT + Qt::Key_C));
     actionTextAlignCenter->setActionGroup( alignGroup );
 
     actionTextAlignRight = new KToggleAction(KIcon("text_right"),  i18n( "Align &Right" ), actionCollection(), "text_alignright" );
     connect(actionTextAlignRight, SIGNAL(triggered(bool)), SLOT( textAlignRight() ));
-    actionTextAlignRight->setShortcut(Qt::ALT + Qt::Key_R);
+    actionTextAlignRight->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
     actionTextAlignRight->setActionGroup( alignGroup );
 
     actionTextAlignBlock = new KToggleAction(KIcon("text_block"),  i18n( "Align &Block" ), actionCollection(), "text_alignblock" );
     connect(actionTextAlignBlock, SIGNAL(triggered(bool)), SLOT( textAlignBlock() ));
-    actionTextAlignBlock->setShortcut(Qt::CTRL + Qt::Key_J);
+    actionTextAlignBlock->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_J));
     actionTextAlignBlock->setActionGroup( alignGroup );
 
 
@@ -2588,7 +2588,7 @@ void KPrView::setupActions()
         // Dynamically create toggle-actions for each list style.
         // This approach allows to edit toolbars and extract separate actions from this menu
         KToggleAction* act = new KToggleAction( styleIt.current()->name(), /*TODO icon,*/
-                                                0, this, SLOT( slotCounterStyleSelected() ),
+                                                KShortcut(), this, SLOT( slotCounterStyleSelected() ),
                                                 actionCollection(), QString("counterstyle_%1").arg(styleIt.current()->style() ).toLatin1() );
         act->setActionGroup( counterGroup);
         // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
@@ -2602,11 +2602,11 @@ void KPrView::setupActions()
     }
     actionTextDepthPlus = new KAction(KIcon(QApplication::isRightToLeft() ?"format_decreaseindent" : "format_increaseindent"),  i18n( "&Increase Depth" ), actionCollection(), "text_depthPlus" );
     connect(actionTextDepthPlus, SIGNAL(triggered(bool) ), SLOT( textDepthPlus() ));
-    actionTextDepthPlus->setShortcut(Qt::CTRL + Qt::Key_Plus);
+    actionTextDepthPlus->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus));
 
     actionTextDepthMinus = new KAction(KIcon(QApplication::isRightToLeft() ?"format_increaseindent" : "format_decreaseindent"),  i18n( "&Decrease Depth" ), actionCollection(), "text_depthMinus" );
     connect(actionTextDepthMinus, SIGNAL(triggered(bool) ), SLOT( textDepthMinus() ));
-    actionTextDepthMinus->setShortcut(Qt::CTRL + Qt::Key_Minus);
+    actionTextDepthMinus->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus));
 
     actionTextExtentCont2Height = new KAction( i18n( "Extend Contents to Object &Height" ), actionCollection(), "text_con2hei" );
     connect(actionTextExtentCont2Height, SIGNAL(triggered(bool)), SLOT( textContentsToHeight() ));
@@ -2628,11 +2628,11 @@ void KPrView::setupActions()
 
     actionExtraRaise = new KAction(KIcon("raise"),  i18n( "Ra&ise Objects" ), actionCollection(), "extra_raise" );
     connect(actionExtraRaise, SIGNAL(triggered(bool) ), SLOT( extraRaise() ));
-    actionExtraRaise->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_R);
+    actionExtraRaise->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_R));
 
     actionExtraLower = new KAction(KIcon("lower"),  i18n( "&Lower Objects" ), actionCollection(), "extra_lower" );
     connect(actionExtraLower, SIGNAL(triggered(bool) ), SLOT( extraLower() ));
-    actionExtraLower->setShortcut(Qt::CTRL +Qt::SHIFT+ Qt::Key_L);
+    actionExtraLower->setShortcut(QKeySequence(Qt::CTRL +Qt::SHIFT+ Qt::Key_L));
 
     actionExtraBringForward = new KAction(KIcon("bring_forward"),  i18n( "Bring to Front" ), actionCollection(), "extra_bring_forward" );
     connect(actionExtraBringForward, SIGNAL(triggered(bool) ), SLOT( extraBringForward() ));
@@ -2673,13 +2673,13 @@ void KPrView::setupActions()
     actionExtraLayout = new KAction( i18n( "Page &Layout..." ), actionCollection(), "extra_layout" );
     connect(actionExtraLayout, SIGNAL(triggered(bool)), SLOT( extraLayout() ));
 
-    m_actionExtraHeader = new KToggleAction( i18n( "Enable Document &Header" ), 0,
+    m_actionExtraHeader = new KToggleAction( i18n( "Enable Document &Header" ), KShortcut(),
                                              this, SLOT( viewHeader() ),
                                              actionCollection(), "extra_header" );
     m_actionExtraHeader->setCheckedState( KGuiItem(i18n( "Disable Document &Header" )) );
     m_actionExtraHeader->setToolTip( i18n( "Shows and hides header display for the current slide" ) );
 
-    m_actionExtraFooter = new KToggleAction( i18n( "Enable Document Foo&ter" ), 0,
+    m_actionExtraFooter = new KToggleAction( i18n( "Enable Document Foo&ter" ), KShortcut(),
                                              this, SLOT( viewFooter() ),
                                              actionCollection(), "extra_footer" );
     m_actionExtraFooter->setCheckedState( KGuiItem(i18n( "Disable Document Foo&ter" )) );
@@ -2745,7 +2745,7 @@ void KPrView::setupActions()
 
     actionScreenStart = new KAction(KIcon("2rightarrow"),  i18n( "&Start" ), actionCollection(), "screen_start" );
     connect(actionScreenStart, SIGNAL(triggered(bool) ), SLOT( screenStart() ));
-    actionScreenStart->setShortcut(Qt::Key_F12);
+    actionScreenStart->setShortcut(QKeySequence(Qt::Key_F12));
 
     actionScreenStartFromFirst = new KAction(KIcon("1rightarrow"),  i18n( "Start From &First Slide" ), actionCollection(), "screen_startfromfirst" );
     connect(actionScreenStartFromFirst, SIGNAL(triggered(bool) ), SLOT( screenStartFromFirst() ));
@@ -2755,11 +2755,11 @@ void KPrView::setupActions()
 
     actionScreenPrev = new KAction(KIcon("back"),  i18n( "&Previous Slide" ), actionCollection(), "screen_prev" );
     connect(actionScreenPrev, SIGNAL(triggered(bool) ), SLOT( screenPrev() ));
-    actionScreenPrev->setShortcut(Qt::Key_PageUp);
+    actionScreenPrev->setShortcut(QKeySequence(Qt::Key_PageUp));
 
     actionScreenNext = new KAction(KIcon("forward"),  i18n( "&Next Slide" ), actionCollection(), "screen_next" );
     connect(actionScreenNext, SIGNAL(triggered(bool) ), SLOT( screenNext() ));
-    actionScreenNext->setShortcut(Qt::Key_PageDown);
+    actionScreenNext->setShortcut(QKeySequence(Qt::Key_PageDown));
 
     actionScreenLast = new KAction(KIcon("finish"),  i18n( "Go to &End" ), actionCollection(), "screen_last" );
     connect(actionScreenLast, SIGNAL(triggered(bool) ), SLOT( screenLast() ));
@@ -2823,7 +2823,7 @@ void KPrView::setupActions()
 
     actionInsertSpecialChar = new KAction(KIcon("char"),  i18n( "Sp&ecial Character..." ), actionCollection(), "insert_specialchar" );
     connect(actionInsertSpecialChar, SIGNAL(triggered(bool) ), SLOT( insertSpecialChar() ));
-    actionInsertSpecialChar->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_C);
+    actionInsertSpecialChar->setShortcut(QKeySequence(Qt::ALT + Qt::SHIFT + Qt::Key_C));
 
     actionInsertLink = new KAction( i18n( "Link..." ), actionCollection(), "insert_link" );
     connect(actionInsertLink, SIGNAL(triggered(bool)), SLOT( insertLink() ));
@@ -2840,7 +2840,7 @@ void KPrView::setupActions()
 
     actionFormatParag = new KAction( i18n( "&Paragraph..." ), actionCollection(), "format_paragraph" );
     connect(actionFormatParag, SIGNAL(triggered(bool)), SLOT( formatParagraph() ));
-    actionFormatParag->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
+    actionFormatParag->setShortcut(QKeySequence(Qt::ALT + Qt::CTRL + Qt::Key_P));
 
     actionFormatDefault = new KAction( i18n( "Default Format" ), actionCollection(), "text_default" );
     connect(actionFormatDefault, SIGNAL(triggered(bool)), SLOT( textDefaultFormat() ));
@@ -2906,7 +2906,7 @@ void KPrView::setupActions()
 
     actionFormatStylist = new KAction( i18n( "&Style Manager" ), actionCollection(), "format_stylist" );
     connect(actionFormatStylist, SIGNAL(triggered(bool)), SLOT( extraStylist() ));
-    actionFormatStylist->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_S);
+    actionFormatStylist->setShortcut(QKeySequence(Qt::ALT + Qt::CTRL + Qt::Key_S));
 
     actionFormatStyleMenu = new KActionMenu( i18n( "St&yle" ),
                                              actionCollection(), "format_stylemenu" );
@@ -2919,7 +2919,7 @@ void KPrView::setupActions()
     actionFormatStyle->setMenuAccelsEnabled( true );
     updateStyleList();
 
-    actionAllowAutoFormat = new KToggleAction( i18n( "Enable Autocorrection" ), 0,
+    actionAllowAutoFormat = new KToggleAction( i18n( "Enable Autocorrection" ), KShortcut(),
                                                this, SLOT( slotAllowAutoFormat() ),
                                                actionCollection(), "enable_autocorrection" );
     actionAllowAutoFormat->setCheckedState(KGuiItem(i18n("Disable Autocorrection")));
@@ -2927,26 +2927,26 @@ void KPrView::setupActions()
     // ------------------- Actions with a key binding and no GUI item
     action = new KAction( i18n( "Insert Non-Breaking Space" ), actionCollection(), "nonbreaking_space" );
     connect(action, SIGNAL(triggered(bool)), SLOT( slotNonbreakingSpace() ));
-    action->setShortcut(Qt::CTRL+Qt::Key_Space);
+    action->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Space));
     action = new KAction( i18n( "Insert Non-Breaking Hyphen" ), actionCollection(), "nonbreaking_hyphen" );
     connect(action, SIGNAL(triggered(bool)), SLOT( slotNonbreakingHyphen() ));
-    action->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_Minus);
+    action->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_Minus));
     action = new KAction( i18n( "Insert Soft Hyphen" ), actionCollection(), "soft_hyphen" );
     connect(action, SIGNAL(triggered(bool)), SLOT( slotSoftHyphen() ));
-    action->setShortcut(Qt::CTRL+Qt::Key_Minus);
+    action->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Minus));
     action = new KAction( i18n( "Line Break" ), actionCollection(), "line_break" );
     connect(action, SIGNAL(triggered(bool)), SLOT( slotLineBreak() ));
-    action->setShortcut(Qt::SHIFT+Qt::Key_Return);
+    action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_Return));
     action = new KAction( i18n( "Completion" ), actionCollection(), "completion" );
     connect(action, SIGNAL(triggered(bool)), SLOT( slotCompletion() ));
     action->setShortcut(KStdAccel::shortcut(KStdAccel::TextCompletion));
 
     action = new KAction( i18n( "Increase Numbering Level" ), actionCollection(), "increase_numbering_level" );
     connect(action, SIGNAL(triggered(bool)), SLOT( slotIncreaseNumberingLevel() ));
-    action->setShortcut(Qt::ALT+Qt::Key_Right);
+    action->setShortcut(QKeySequence(Qt::ALT+Qt::Key_Right));
     action = new KAction( i18n( "Decrease Numbering Level" ), actionCollection(), "decrease_numbering_level" );
     connect(action, SIGNAL(triggered(bool)), SLOT( slotDecreaseNumberingLevel() ));
-    action->setShortcut(Qt::ALT+Qt::Key_Left);
+    action->setShortcut(QKeySequence(Qt::ALT+Qt::Key_Left));
 
 
     actionInsertComment = new KAction( i18n( "Comment..." ), actionCollection(), "insert_comment" );
@@ -3003,19 +3003,19 @@ void KPrView::setupActions()
 
 	QActionGroup* verticalAlignment = new QActionGroup( this );
 	verticalAlignment->setExclusive( true );
-    actionAlignVerticalTop = new KToggleAction( i18n( "Align Top" ), 0,
+    actionAlignVerticalTop = new KToggleAction( i18n( "Align Top" ), KShortcut(),
                                                 this, SLOT( alignVerticalTop() ),
                                                 actionCollection(), "align_top" );
     actionAlignVerticalTop->setActionGroup( verticalAlignment );
     actionAlignVerticalTop->setChecked( true );
 
 
-    actionAlignVerticalBottom = new KToggleAction( i18n( "Align Bottom" ), 0,
+    actionAlignVerticalBottom = new KToggleAction( i18n( "Align Bottom" ), KShortcut(),
                                                    this, SLOT( alignVerticalBottom() ),
                                                    actionCollection(), "align_bottom" );
     actionAlignVerticalBottom->setActionGroup( verticalAlignment );
 
-    actionAlignVerticalCenter = new KToggleAction( i18n( "Align Middle" ), 0,
+    actionAlignVerticalCenter = new KToggleAction( i18n( "Align Middle" ), KShortcut(),
                                                    this, SLOT( alignVerticalCenter() ),
                                                    actionCollection(), "align_center" );
     actionAlignVerticalCenter->setActionGroup( verticalAlignment );
@@ -3024,7 +3024,7 @@ void KPrView::setupActions()
     actionSavePicture = new KAction( i18n("Save Picture..."), actionCollection(), "save_picture");
     connect(actionSavePicture, SIGNAL(triggered(bool)), SLOT( savePicture() ));
 
-    actionAllowBgSpellCheck = new KToggleAction( i18n( "Autospellcheck" ), 0,
+    actionAllowBgSpellCheck = new KToggleAction( i18n( "Autospellcheck" ), KShortcut(),
                                                  this, SLOT( autoSpellCheck() ),
                                                  actionCollection(), "tool_auto_spellcheck" );
 
@@ -3049,13 +3049,13 @@ void KPrView::setupActions()
     actionCustomSlideShow = new KAction( i18n( "Custom Slide Show..." ), actionCollection(), "custom_slide_show" );
     connect(actionCustomSlideShow, SIGNAL(triggered(bool)), SLOT( customSlideShow() ));
 
-    actionDisplayObjectFromMasterPage = new KToggleAction( i18n( "Hide Object From Slide Master" ), 0,
+    actionDisplayObjectFromMasterPage = new KToggleAction( i18n( "Hide Object From Slide Master" ), KShortcut(),
                                          this, SLOT( displayObjectFromMasterPage() ),
                                          actionCollection(), "display_object_from_master_page" );
     actionDisplayObjectFromMasterPage->setCheckedState(KGuiItem(i18n("Display Object From Slide Master")));
 
 
-    actionDisplayBackgroundPage = new KToggleAction( i18n( "Hide Background" ), 0,
+    actionDisplayBackgroundPage = new KToggleAction( i18n( "Hide Background" ), KShortcut(),
                                          this, SLOT( displayBackground() ),
                                          actionCollection(), "display_background" );
     actionDisplayBackgroundPage->setCheckedState(KGuiItem(i18n("Display Background")));

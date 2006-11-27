@@ -67,12 +67,13 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     setLayout( m_widgetLayout );
 
     m_position->setText( trUtf8( "1:1" ) );
-    m_btnHelp->setShortcut( 4144 );
+//TODO: use Qt::Key_<x>, that is more helpful for developers
+    m_btnHelp->setShortcut( KShortcut( 4144 ) );
     m_btnHelp->setAutoDefault( true );
-    m_btnOk->setShortcut( 0 );
+    m_btnOk->setShortcut( KShortcut() );
     m_btnOk->setAutoDefault( true );
     m_btnOk->setDefault( true );
-    m_btnCancel->setShortcut( 0 );
+    m_btnCancel->setShortcut( KShortcut() );
     m_btnCancel->setAutoDefault( true );
 
     // signals and slots connections

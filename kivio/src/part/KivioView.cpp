@@ -145,7 +145,7 @@ void KivioView::initActions()
     m_viewZoomIn = KStdAction::zoomIn(this, SLOT(viewZoomIn()), actionCollection(), "view_zoom_in");
     m_viewZoomOut = KStdAction::zoomOut(this, SLOT(viewZoomOut()), actionCollection(), "view_zoom_out");
     m_viewZoomAction = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
-                                        i18n("Zoom"), KIcon("viewmag"), 0,
+                                        i18n("Zoom"), KIcon("viewmag"), KShortcut(),
                                         actionCollection(), "view_zoom");
     connect(m_viewZoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
             this, SLOT(viewZoom(KoZoomMode::Mode, int)));
