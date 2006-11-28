@@ -32,7 +32,7 @@ LatexParser::LatexParser()
 {
 }
 
-LatexParser::LatexParser(QString fileIn)
+LatexParser::LatexParser(const QString& fileIn)
 {
 	_filename= fileIn;
 }

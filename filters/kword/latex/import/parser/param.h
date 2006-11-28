@@ -27,7 +27,7 @@ class Param
 	public:
 		Param();
 		Param(const char* key, const char* value);
-		Param(QString key, QString value);
+		Param(const QString& key, const QString& value);
 
 		virtual ~Param();
 

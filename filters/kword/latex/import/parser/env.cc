@@ -39,7 +39,7 @@ Env::Env(const char* command)
 	_name = _name.trimmed();
 }
 
-Env::Env(QString name) : _name(name)
+Env::Env(const QString& name) : _name(name)
 {
 	setType(Element::LATEX_ENV);
 	_name = _name.trimmed();
