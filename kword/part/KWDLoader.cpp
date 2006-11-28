@@ -158,7 +158,7 @@ bool KWDLoader::load(QDomElement &root) {
                 pos = KWord::FootNoteSeparatorCenter;
             else if ( tmp =="right")
                 pos = KWord::FootNoteSeparatorRight;
-            else if ( tmp =="left" )
+            else // default: if ( tmp =="left" )
                 pos = KWord::FootNoteSeparatorLeft;
             m_pageSettings->setFootNoteSeparatorLinePosition(pos);
         }
@@ -816,11 +816,9 @@ void KWDLoader::fill(KoCharacterStyle *style, QDomElement formatElem) {
     }
     element = formatElem.firstChildElement( "UNDERLINE" );
     if( !element.isNull() ) {
-        QTextCharFormat::UnderlineStyle underline;
-        QString value = element.attribute("value", "0");
-        if(value == "0")
-            underline = QTextCharFormat::NoUnderline;
-        else if(value == "1" || value=="single")
+        QTextCharFormat::UnderlineStyle underline = QTextCharFormat::NoUnderline;
+        QString value = element.attribute("value", "0"); // "0" is NoUnderline
+        if(value == "1" || value=="single")
             underline = QTextCharFormat::SingleUnderline;
         else if(value == "double")
             underline = QTextCharFormat::SingleUnderline; // TODO support double underline!
