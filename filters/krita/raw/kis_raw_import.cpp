@@ -79,6 +79,7 @@ KisRawImport::KisRawImport(KoFilter *, const char *, const QStringList&)
     , m_data(0)
     , m_process(0)
     , m_progress(0)
+    , m_err(false)
 {
     m_dialog = new KDialogBase();
     m_dialog->enableButtonApply(false);
@@ -106,6 +107,10 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
 {
     if (from != "image/x-raw" || to != "application/x-krita") {
         return KoFilter::NotImplemented;
+    }
+
+    if (m_err) {
+        return KoFilter::CreationError;
     }
 
     kdDebug(41008) << "Krita importing from Raw\n";
@@ -437,6 +442,7 @@ void KisRawImport::getImageData( QStringList arguments )
     }
     else {
         kdDebug(41008) << "Process did not exit normally. Exit signal: " << process.exitSignal() << "\n";
+        m_err = true;
     }
 
 }
@@ -461,7 +467,8 @@ void KisRawImport::slotReceivedStderr(KProcess *, char *buffer, int buflen)
     QByteArray b(buflen);
     memcpy(b.data(), buffer, buflen);
     kdDebug(41008) << QString(b) << "\n";
-    //KMessageBox::error(0, i18n("dcraw says: ") + QString(b));
+    KMessageBox::error(0, i18n("Error: Dcraw cannot load this image. Message: ") + QString(b));
+    m_err = true;
 }
 
 

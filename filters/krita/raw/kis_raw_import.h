@@ -63,6 +63,7 @@ private:
     KisProfile * m_monitorProfile;
     KProcess * m_process;
     QProgressDialog* m_progress;
+    bool m_err; // Set to true when slotReceivedStderr is called
 };
 
 #endif // KIS_RAW_IMPORT_H_
