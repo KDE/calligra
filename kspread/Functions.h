@@ -25,6 +25,7 @@
 #include <QList>
 #include <QStringList>
 #include <QVector>
+#include <koffice_export.h>
 
 class QDomElement;
 
@@ -131,7 +132,7 @@ private:
   QList<FunctionParameter> m_params;
 };
 
-class FunctionRepository
+class KSPREAD_EXPORT FunctionRepository
 {
 public:
   FunctionRepository();
