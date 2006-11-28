@@ -40,6 +40,7 @@
 #include <KoTextShapeData.h>
 #include <KoShapeSelector.h>
 #include <KoToolBoxFactory.h>
+#include <KoToolDockerFactory.h>
 #include <KoShapeSelectorFactory.h>
 
 // KDE + Qt includes
@@ -71,6 +72,9 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     createDockWidget( &toolBoxFactory );
     KoShapeSelectorFactory shapeSelectorFactory;
     createDockWidget( &shapeSelectorFactory );
+    KoToolDockerFactory toolDockerFactory;
+    KoToolDocker *d =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
+    m_gui->setToolOptionDocker( d );
 
     connect( kwcanvas()->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 }

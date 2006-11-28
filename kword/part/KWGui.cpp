@@ -23,9 +23,10 @@
 #include "KWDocument.h"
 #include "KWCanvas.h"
 
-#include "KoCanvasController.h"
-#include "KoToolManager.h"
-#include "KoShapeSelector.h"
+#include <KoCanvasController.h>
+#include <KoToolManager.h>
+#include <KoShapeSelector.h>
+#include <KoToolDocker.h>
 
 #include <QGridLayout>
 
@@ -57,6 +58,10 @@ int KWGui::visibleHeight() const {
 bool KWGui::verticalScrollBarVisible() {
     return m_canvasController->verticalScrollBar() &&
         m_canvasController->verticalScrollBar()->isVisible();
+}
+
+void KWGui::setToolOptionDocker(KoToolDocker *docker) {
+    m_canvasController->setToolOptionDocker(docker);
 }
 
 #include "KWGui.moc"
