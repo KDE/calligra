@@ -59,7 +59,7 @@ class View;
  * The CellView class is responsible for the painting of the cell.
  * For each visible Cell exists a CellView.
  */
-class CellView
+class KSPREAD_EXPORT CellView
 {
 public:
     explicit CellView( Cell* cell );

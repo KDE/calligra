@@ -5522,7 +5522,7 @@ void Sheet::setRegionPaintDirty( const Region & region )
 
   d->paintDirtyList.add(region);
 
-  kDebug(36004) << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
+//   kDebug(36004) << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
 }
 
 void Sheet::setRegionPaintDirty( const QRect& rect )

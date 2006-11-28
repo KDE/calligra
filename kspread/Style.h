@@ -58,7 +58,7 @@ typedef QMap<QString, CustomStyle*> CustomStyles;
 /**
  * A cell style.
  */
-class Style
+class KSPREAD_EXPORT Style
 {
 public:
     struct Currency
