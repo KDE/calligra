@@ -106,6 +106,11 @@ void KarbonCanvas::mousePressEvent(QMouseEvent *e)
     m_toolProxy->mousePressEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
 }
 
+void KarbonCanvas::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    m_toolProxy->mouseDoubleClickEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
+}
+
 void KarbonCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
     m_toolProxy->mouseReleaseEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );

@@ -109,6 +109,7 @@ protected:
     void keyPressEvent (QKeyEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
+    void mouseDoubleClickEvent(QMouseEvent *e);
     void tabletEvent( QTabletEvent *e );
     void wheelEvent( QWheelEvent *e );
 
