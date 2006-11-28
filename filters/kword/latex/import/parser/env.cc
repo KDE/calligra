@@ -57,7 +57,7 @@ void Env::setChildren(Q3PtrList<Element>* children)
 
 void Env::print(int tab)
 {
-	cout << "ENV " << getName().latin1() << "{" << endl;
+	cout << "ENV " << qPrintable(getName()) << "{" << endl;
 	
 	Element* elt;
 	for ( elt = _children.first(); elt; elt = _children.next() )

@@ -33,7 +33,7 @@ Text::~Text()
 {
 }
 
-void Text::print(int tab = 0)
+void Text::print(int tab)
 {
 	cout << getText().latin1();
 }

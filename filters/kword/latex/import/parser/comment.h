@@ -29,7 +29,7 @@ class Comment: public Element
 	public:
 		Comment();
 
-		Comment(const char* comment);
+		explicit Comment(const char* comment);
 		~Comment();
 
 		QString getComment() const { return _comment; }

@@ -35,7 +35,7 @@ class Command: public Element
 		/**
 		 * Create a command which match to \\today
 		 */
-		Command(const char* command);
+		explicit Command(const char* command);
 
 		/**
 		 * Create a command which match to \\renewcommand{\\headrulewidth}{opt}

@@ -30,7 +30,7 @@ class LatexParser
 	public:
 		LatexParser();
 
-		LatexParser(QString fileIn);
+		explicit LatexParser(QString fileIn);
 
 		~LatexParser();
 

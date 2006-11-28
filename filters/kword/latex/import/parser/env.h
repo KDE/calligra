@@ -33,9 +33,9 @@ class Env: public Element
 	public:
 		Env();
 
-		Env(const char*);
+		explicit Env(const char*);
 
-		Env(QString);
+		explicit Env(QString);
 
 		~Env();
 
