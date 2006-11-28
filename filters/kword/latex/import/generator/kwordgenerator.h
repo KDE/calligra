@@ -37,7 +37,7 @@ class KwordGenerator
 		{
 		}
 
-		KwordGenerator(Q3PtrList<Element>* root)
+		explicit KwordGenerator(Q3PtrList<Element>* root)
 		{
 			_root = root;
 		}

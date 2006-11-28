@@ -59,7 +59,7 @@ class LATEXImportDia : public KDialog, public DCOPObject
 	KoStore* _out;	/* the zipped file containing all pictures, part, ... */
 
 	public:
-		LATEXImportDia(KoStore*, QWidget *parent=0L);
+		explicit LATEXImportDia(KoStore*, QWidget *parent=0L);
 
 		virtual ~LATEXImportDia() {}
 		void createDialog();
