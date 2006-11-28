@@ -31,7 +31,7 @@ class KoStarShapeFactory : public KoShapeFactory
 
 public:
     /// constructor
-    KoStarShapeFactory(QObject *parent);
+    explicit KoStarShapeFactory(QObject *parent);
     ~KoStarShapeFactory() {}
     KoShape * createDefaultShape();
     KoShape * createShape(const KoProperties * params) const;

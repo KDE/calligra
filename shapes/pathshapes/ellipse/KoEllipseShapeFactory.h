@@ -29,7 +29,7 @@ class KoEllipseShapeFactory : public KoShapeFactory
 {
 public:
     /// constructor
-    KoEllipseShapeFactory( QObject *parent );
+    explicit KoEllipseShapeFactory( QObject *parent );
     ~KoEllipseShapeFactory() {}
     KoShape * createDefaultShape();
     KoShape * createShape( const KoProperties * params ) const;
