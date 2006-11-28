@@ -36,8 +36,8 @@
 #include <View.h>
 
 #define KROSS_MAIN_EXPORT KDE_EXPORT
-#include <core/manager.h>
-#include <core/guiclient.h>
+#include <kross/core/manager.h>
+#include <kross/core/guiclient.h>
 //#include <main/wdgscriptsmanager.h>
 
 typedef KGenericFactory< ScriptingPart > KSpreadScriptingFactory;

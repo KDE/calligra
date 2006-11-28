@@ -33,8 +33,8 @@
 #include <Functions.h>
 
 //#define KROSS_MAIN_EXPORT KDE_EXPORT
-#include <core/manager.h>
-#include <core/actioncollection.h>
+#include <kross/core/manager.h>
+#include <kross/core/actioncollection.h>
 
 /***************************************************************************
  * ScriptingFunctionImpl
