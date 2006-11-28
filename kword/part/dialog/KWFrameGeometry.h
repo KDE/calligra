@@ -48,8 +48,8 @@ private slots:
 
 private:
     Ui::KWFrameGeometry widget;
-    KWFrame *m_frame;
     FrameConfigSharedState *m_state;
+    KWFrame *m_frame;
     QPointF mOriginalPosition;
     QSizeF mOriginalSize;
 };
