@@ -664,7 +664,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
 
       QString tmp = cell->link();
        if ( localReferenceAnchor( tmp ) )
-           linkref.setAttribute( "xlink:href", ( "#"+tmp ) );
+           linkref.setAttribute( "xlink:href", ( '#'+tmp ) );
        else
            linkref.setAttribute( "xlink:href", tmp  );
 

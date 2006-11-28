@@ -269,7 +269,7 @@ void OpenCalcImport::checkForNamedAreas( QString & formula ) const
     {
       if ( m_namedAreas.contains( word ) )
       {
-        formula = formula.replace( start, word.length(), "'" + word + "'" );
+        formula = formula.replace( start, word.length(), '\'' + word + '\'' );
         l = formula.length();
         ++i;
         kDebug(30518) << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
@@ -284,7 +284,7 @@ void OpenCalcImport::checkForNamedAreas( QString & formula ) const
   {
     if ( m_namedAreas.contains( word ) )
     {
-      formula = formula.replace( start, word.length(), "'" + word + "'" );
+      formula = formula.replace( start, word.length(), '\'' + word + '\'' );
       l = formula.length();
       ++i;
       kDebug(30518) << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
@@ -370,7 +370,7 @@ void OpenCalcImport::convertFormula( QString & text, QString const & f ) const
     else if ( f[p] == ')' )
     {
       if ( !inQuote )
-        parameter += ")";
+        parameter += ')';
     }
     else
       parameter += f[p];
@@ -1638,7 +1638,7 @@ void OpenCalcImport::loadOasisAreaName( const KoXmlElement&body )
 
         int n = range.indexOf( '!' );
         if ( n > 0 )
-          range = range + ":" + range.right( range.length() - n - 1);
+          range = range + ':' + range.right( range.length() - n - 1);
 
         kDebug(30518) << "=> Area: " << range << endl;
       }
