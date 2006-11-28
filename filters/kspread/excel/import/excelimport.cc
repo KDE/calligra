@@ -87,7 +87,7 @@ public:
   void processCellForBody( Cell* cell, KoXmlWriter* xmlWriter );
   void processCellForStyle( Cell* cell, KoXmlWriter* xmlWriter );
   void processFormat( Format* format, KoXmlWriter* xmlWriter );
-  void processValueFormat( QString valueFormat, QString refName, KoXmlWriter* xmlWriter );
+  void processValueFormat( const QString& valueFormat, const QString& refName, KoXmlWriter* xmlWriter );
 };
 
 
@@ -536,14 +536,14 @@ void ExcelImport::Private::processRowForStyle( Row* row, int repeat, KoXmlWriter
   }
 }
 
-static bool isPercentageFormat( QString valueFormat )
+static bool isPercentageFormat( const QString& valueFormat )
 {
   if( valueFormat.isEmpty() ) return false;
   if( valueFormat.length() < 1 ) return false;
   return valueFormat[valueFormat.length()-1] == QChar('%');
 }
 
-static bool isDateFormat( QString valueFormat )
+static bool isDateFormat( const QString& valueFormat )
 {
   QString vfu = valueFormat.toUpper();
 
@@ -575,7 +575,7 @@ static bool isDateFormat( QString valueFormat )
   return false;
 }
 
-static bool isTimeFormat( QString valueFormat )
+static bool isTimeFormat( const QString& valueFormat )
 {
   QString vf = valueFormat;
 
@@ -837,7 +837,7 @@ void ExcelImport::Private::processFormat( Format* format, KoXmlWriter* xmlWriter
   xmlWriter->endElement(); // style:paragraph-properties
 }
 
-void ExcelImport::Private::processValueFormat( QString valueFormat, QString refName,
+void ExcelImport::Private::processValueFormat( const QString& valueFormat, const QString& refName,
 KoXmlWriter* xmlWriter )
 {
   /*int decimalPlaces = 2;
