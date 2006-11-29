@@ -3923,12 +3923,9 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
             int bottom = range.bottom();
             for ( int y = range.top(); y <= bottom; ++y )
             {
-                cell = sheet->cellAt( x, y );
-
                 // relayout in CellView
                 Q_ASSERT( visibleRect == d->cellWindowRect );
                 CellView* cellView = d->cellWindowMatrix[x-visibleRect.left()][y-visibleRect.top()];
-                Q_ASSERT( cellView->cell() == cell );
                 cellView->paintCell( unzoomedRect, painter, d->view, dblCorner,
                                      QPoint( x, y ),
                                      mergedCellsPainted );
@@ -3946,11 +3943,8 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
             int bottom = range.bottom();
             for ( int y = range.top(); y <= bottom; ++y )
             {
-                cell = sheet->cellAt( x, y );
-
                 Q_ASSERT( visibleRect == d->cellWindowRect );
                 CellView* cellView = d->cellWindowMatrix[x-visibleRect.left()][y-visibleRect.top()];
-                Q_ASSERT( cellView->cell() == cell );
                 cellView->paintCellBorders( unzoomedRect, painter, d->view, dblCorner,
                                             QPoint( x, y ), QRect( 1, 1, KS_colMax, KS_rowMax ),
                                             mergedCellsPainted );

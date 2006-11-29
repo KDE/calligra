@@ -437,7 +437,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
 
     // 1. Paint the background.
     if ( !cell()->isPartOfMerged() )
-        paintBackground( painter, cellRect0, cellRef, selected, backgroundColor );
+        paintBackground( painter, cellRect0, selected, backgroundColor );
 
     // 3. Paint all the cells that this one obscures.  They may only be
     //    partially obscured.
@@ -819,7 +819,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
         painter.setClipping( true );
 
     // 5. Paint diagonal lines and page borders.
-    paintCellDiagonalLines( painter, cellRect, cellCoordinate );
+    paintCellDiagonalLines( painter, cellRect );
     paintPageBorders( painter, cellRect, cellCoordinate, paintBorder );
 
     // We are done with the painting, so remove the flag on the cell.
@@ -947,9 +947,10 @@ void CellView::paintObscuredCells(const QRectF& rect, QPainter& painter,
                 uint  column = cellRef.x() + x;
                 uint  row    = cellRef.y() + y;
 
-                Cell* cell = this->cell()->sheet()->cellAt( column, row );
                 KoPoint corner( xpos, ypos );
 #if 0
+                Cell* cell = this->cell()->sheet()->cellAt( column, row );
+
                 // Check if the upper and lower borders should be painted, and
                 // if so which pens we should use.  There used to be a nasty
                 // bug here (#61452).
@@ -998,8 +999,7 @@ void CellView::paintObscuredCells(const QRectF& rect, QPainter& painter,
 // Paint the background of this cell.
 //
 void CellView::paintBackground( QPainter& painter, const QRectF& cellRect,
-                                const QPoint& cellRef, bool selected,
-                                QColor& backgroundColor )
+                                bool selected, QColor& backgroundColor )
 {
     Q_UNUSED( selected );
 
@@ -1472,7 +1472,7 @@ void CellView::paintText( QPainter& painter,
   QPen tmpPen( textColorPrint );
 
   // Set the font according to the current zoom.
-  painter.setFont( effectiveFont( cellRef.x(), cellRef.y() ) );
+  painter.setFont( effectiveFont() );
 
     // Check for red font color for negative values.
     Conditions conditions = this->conditions();
@@ -1537,7 +1537,7 @@ void CellView::paintText( QPainter& painter,
   // FIXME: Make this dependent on the height as well.
   //
   if ( cell()->testFlag( Cell::Flag_CellTooShortX ) ) {
-    QFontMetrics fontMetrics( effectiveFont( cellRef.x(), cellRef.y() ) );
+    QFontMetrics fontMetrics( effectiveFont() );
     cell()->d->strOutText = textDisplaying( fontMetrics );
 
     // Recalculate the text dimensions and the offset.
@@ -2201,8 +2201,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
 
 // Paint diagonal lines through the cell.
 //
-void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect,
-                                       const QPoint &cellRef )
+void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect )
 {
     if ( cell()->isPartOfMerged() )
         return;
@@ -2369,7 +2368,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm )
 //
 // Used in makeLayout() and calculateTextParameters().
 //
-QFont CellView::effectiveFont( int _col, int _row ) const
+QFont CellView::effectiveFont() const
 {
     QFont tmpFont;
     tmpFont.setPointSizeF( effStyle( Style::FontSize ).fontSize() );
@@ -2454,7 +2453,7 @@ void CellView::makeLayout( int _col, int _row )
   //
   // First, Determine the correct font with zoom taken into account.
   // Then calculate text dimensions, i.e. d->textWidth and d->textHeight.
-  QFontMetrics fontMetrics( effectiveFont( _col, _row ) );
+  QFontMetrics fontMetrics( effectiveFont() );
   textSize( fontMetrics );
 
   // Calculate the size of the cell.
@@ -2513,7 +2512,7 @@ void CellView::calculateCellDimension() const
 void CellView::calculateTextParameters()
 {
   // Get the font metrics for the effective font.
-  QFontMetrics fontMetrics( effectiveFont( cell()->column(), cell()->row() ) );
+  QFontMetrics fontMetrics( effectiveFont() );
 
   // Recalculate text dimensions, i.e. d->textWidth and d->textHeight
   textSize( fontMetrics );

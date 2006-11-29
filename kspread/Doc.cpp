@@ -1710,12 +1710,7 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
         for ( int x = regionLeft; x <= regionRight && dblCurrentCellPos.x() <= viewRegion.right(); ++x )
         {
             const ColumnFormat *col_lay = sheet->columnFormat( x );
-
-            // this is not needed (Ariya)
-            // Cell* cell = sheet->cellAt( x, y );
-
             QPoint cellRef( x, y );
-
             const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
             CellView tmpCellView( sheet, x, y );
             CellView* cellView = &tmpCellView;
@@ -1742,12 +1737,7 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
               ++x )
         {
             const ColumnFormat *col_lay = sheet->columnFormat( x );
-
-            // this is not needed (Ariya)
-            // Cell* cell = sheet->cellAt( x, y );
-
             QPoint cellRef( x, y );
-
             const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
             CellView tmpCellView( sheet, x, y );
             CellView* cellView = &tmpCellView;

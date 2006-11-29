@@ -242,7 +242,7 @@ private:
    *
    * \internal
    */
-  QFont effectiveFont( int _col, int _row ) const;
+  QFont effectiveFont() const;
 
   /**
    * \ingroup Painting
@@ -336,8 +336,7 @@ private:
    * @internal
    */
   void paintBackground( QPainter& painter, const QRectF &cellRect,
-                        const QPoint &cellRef, bool selected,
-                        QColor &backgroundColor );
+                        bool selected, QColor &backgroundColor );
 
   /**
    * \ingroup Painting
@@ -356,8 +355,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect,
-                               const QPoint &cellRef );
+  void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect );
 
     /**
      * @return effective pen for the left border

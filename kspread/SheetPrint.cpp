@@ -436,7 +436,6 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     //
     // Draw the cells.
     //
-    Cell *cell;
     RowFormat *row_lay;
     ColumnFormat *col_lay;
 
@@ -469,15 +468,13 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
         for ( int x = regionLeft; x <= regionRight; ++x )
         {
             col_lay = m_pSheet->columnFormat( x );
-
-            cell = m_pSheet->cellAt( x, y );
             double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft ) ?
                              view.width() - xpos - col_lay->dblWidth() : xpos;
-              CellView tmpCellView( m_pSheet, x, y );
-              CellView* cellView = &tmpCellView;
-              cellView->paintCell( rect, painter, 0,
-                                   KoPoint( effXPos, ypos ), QPoint( x, y ),
-                                   mergedCellsPainted );
+            CellView tmpCellView( m_pSheet, x, y );
+            CellView* cellView = &tmpCellView;
+            cellView->paintCell( rect, painter, 0,
+                                KoPoint( effXPos, ypos ), QPoint( x, y ),
+                                mergedCellsPainted );
 
             xpos += col_lay->dblWidth();
         }
@@ -495,9 +492,6 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
         for ( int x = regionLeft; x <= regionRight; ++x )
         {
             col_lay = m_pSheet->columnFormat( x );
-
-            cell = m_pSheet->cellAt( x, y );
-
             double effXPos = ( m_pSheet->layoutDirection()==Sheet::RightToLeft )
                              ? view.width() - xpos - col_lay->dblWidth() : xpos;
             CellView tmpCellView( m_pSheet, x, y );
