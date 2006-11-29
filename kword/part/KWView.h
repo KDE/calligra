@@ -34,6 +34,7 @@ class KWPage;
 
 class KoShape;
 class KoZoomAction;
+class KToggleAction;
 
 class QResizeEvent;
 
@@ -106,6 +107,7 @@ private slots:
 
     // actions
     void print();
+    void textBold(bool bold);
 
 private:
     KWGui *m_gui;
@@ -116,6 +118,7 @@ private:
 
     KoZoomAction *m_actionViewZoom;
     KAction *m_actionFormatFrameSet;
+    KToggleAction *m_actionFormatBold;
 };
 
 #endif

@@ -42,6 +42,7 @@
 #include <KoToolBoxFactory.h>
 #include <KoToolDockerFactory.h>
 #include <KoShapeSelectorFactory.h>
+#include <KoTextSelectionHandler.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -118,6 +119,10 @@ void KWView::setupActions() {
 
     KAction *print = new KAction("MyPrint", actionCollection(), "file_my_print");
     connect(print, SIGNAL(triggered()), this, SLOT(print()));
+
+    m_actionFormatBold = new KToggleAction( i18n( "&Bold" ), actionCollection(), "format_bold");
+    m_actionFormatBold->setShortcut(KShortcut(Qt::CTRL + Qt::Key_B));
+    connect( m_actionFormatBold, SIGNAL(toggled(bool)), this, SLOT(textBold(bool)) );
 }
 
 void KWView::setZoom( int zoom ) {
@@ -221,7 +226,7 @@ void KWView::editFrameProperties() {
     delete frameDialog;
 }
 
-// Actions
+// -------------------- Actions -----------------------
 void KWView::print() {
 // options;
 //   DPI
@@ -278,6 +283,12 @@ const bool clipToPage=false; // should become a setting in the GUI
     }
 
     painter.end();
+}
+
+void KWView::textBold(bool bold) {
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->bold(bold);
 }
 
 void KWView::selectionChanged()
