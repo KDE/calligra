@@ -42,6 +42,7 @@
 
 // KOffice
 #include <KoXmlReader.h>
+#include <koffice_export.h>
 
 // KSpread
 #include "Condition.h"
@@ -56,7 +57,7 @@ namespace KSpread
  *
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class Validity
+class KSPREAD_EXPORT Validity
 {
 public:
     /// The action invoked, if the validity check fails.

@@ -21,7 +21,7 @@
 #include <KoRect.h>
 #include "KWPageManager.h"
 #include "KoPageLayout.h"
-
+#include <koffice_export.h>
 class KoZoomHandler;
 
 /**
@@ -31,7 +31,7 @@ class KoZoomHandler;
  * on this class.  Margins and sizes are inherited from the page managers default, setting the
  * size to the same size as the default will from then on update the size automatically.
  */
-class KWPage {
+class KWORD_EXPORT KWPage {
 public:
     /// An enum to define if this is a page that is printed to be a left or a right page
     enum PageSideEnum {

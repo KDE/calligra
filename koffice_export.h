@@ -371,6 +371,48 @@
 # endif
 #endif
 
+#ifndef KRITARGB_EXPORT
+# ifdef MAKE_KRITARGB_LIB
+#  define KRITARGB_EXPORT KDE_EXPORT
+# elif KDE_MAKE_LIB
+#  define KRITARGB_EXPORT KDE_IMPORT
+# else
+#  define KRITARGB_EXPORT
+# endif
+#endif
+
+#ifndef KRITA_GRAY_U16_EXPORT
+# ifdef MAKE_KRITA_GRAY_U16_LIB
+#  define KRITA_GRAY_U16_EXPORT KDE_EXPORT
+# elif KDE_MAKE_LIB
+#  define KRITA_GRAY_U16_EXPORT KDE_IMPORT
+# else
+#  define KRITA_GRAY_U16_EXPORT
+# endif
+#endif
+
+
+#ifndef KRITAGRAYSCALE_EXPORT
+# ifdef MAKE_KRITAGRAYSCALE_LIB
+#  define KRITAGRAYSCALE_EXPORT KDE_EXPORT
+# elif KDE_MAKE_LIB
+#  define KRITAGRAYSCALE_EXPORT KDE_IMPORT
+# else
+#  define KRITAGRAYSCALE_EXPORT
+# endif
+#endif
+
+#ifndef KRITA_CMYK_U16_EXPORT
+# ifdef MAKE_KRITA_CMYK_U16_LIB
+#  define KRITA_CMYK_U16_EXPORT KDE_EXPORT
+# elif KDE_MAKE_LIB
+#  define KRITA_CMYK_U16_EXPORT KDE_IMPORT
+# else
+#  define KRITA_CMYK_U16_EXPORT
+# endif
+#endif
+
+
 #else // not windows
 
 /* kdemacros is OK, we can use gcc visibility macros */
@@ -412,6 +454,10 @@
 #define EXAMPLE_EXPORT KDE_EXPORT
 #define FLAKE_EXPORT KDE_EXPORT
 #define PIGMENT_EXPORT KDE_EXPORT
+#define KRITARGB_EXPORT KDE_EXPORT
+#define KRITA_GRAY_U16_EXPORT KDE_EXPORT
+#define KRITAGRAYSCALE_EXPORT KDE_EXPORT
+#define KRITA_CMYK_U16_EXPORT KDE_EXPORT
 #endif /* not windows */
 
 #endif /* _KOFFICE_EXPORT_H */
