@@ -485,7 +485,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                         kDebug (30508) << "DEBUG - FRAMESET: table " << name << " col, row = "
                                         << col << ", " << row << ", Mgr = "<< grpMgr << endl;
 #endif
-                        FrameAnchor *frameAnchor = findAnchor (grpMgr, *paraList);
+                        FrameAnchor *frameAnchor = findAnchor (KoPictureKey(grpMgr), *paraList);
                         if ( frameAnchor )
                         {
                             ProcessTableAnchor( myNode, leader, frameAnchor, col, row, cols, rows );
@@ -544,7 +544,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             kDebug (30508) << "DEBUG: FRAMESET name of picture is " << name << endl;
 #endif
 
-            FrameAnchor *frameAnchor = findAnchor ( leader->m_currentFramesetName, *paraList );
+            FrameAnchor *frameAnchor = findAnchor ( KoPictureKey(leader->m_currentFramesetName), *paraList );
 
             if ( frameAnchor )
             {

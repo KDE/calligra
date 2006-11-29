@@ -617,7 +617,7 @@ static void SubProcessFormatSixTag(QDomNode myNode,
         kDebug (30508) << "DEBUG: Adding frame anchor " << instance << endl;
 #endif
 
-        (*formatDataList) << FormatData ( formatPos, formatLen, FrameAnchor (instance) );
+        (*formatDataList) << FormatData ( formatPos, formatLen, FrameAnchor (KoPictureKey(instance)) );
     }
     else
     {
