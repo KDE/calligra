@@ -646,7 +646,7 @@ INSERT INTO "kexi__objects" VALUES(103, 1, 'ownership', 'Ownership', NULL);
 INSERT INTO "kexi__objects" VALUES(104, 2, 'persons_and_cars', 'Persons and cars', NULL);
 INSERT INTO "kexi__objects" VALUES(105, 3, 'ownership', 'Ownership', NULL);
 INSERT INTO "kexi__objects" VALUES(106, 7, 'open_cars_and_go_to_last', 'Open cars and go to the last row', NULL);
-INSERT INTO "kexi__objects" VALUES(107, 2, 'persons_by_age', 'owners_by_age', NULL);
+INSERT INTO "kexi__objects" VALUES(107, 2, 'persons_by_age', 'Persons by age', NULL);
 CREATE TABLE kexi__parts (p_id INTEGER PRIMARY KEY, p_name Text(200), p_mime Text(200), p_url Text(200));
 INSERT INTO "kexi__parts" VALUES(1, 'Tables', 'kexi/table', 'http://koffice.org/kexi/');
 INSERT INTO "kexi__parts" VALUES(2, 'Queries', 'kexi/query', 'http://koffice.org/kexi/');
