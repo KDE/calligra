@@ -60,15 +60,15 @@ namespace {
 
     J_COLOR_SPACE getColorTypeforColorSpace( KoColorSpace * cs)
     {
-        if ( cs->id() == KoID("GRAYA") || cs->id() == KoID("GRAYA16") )
+        if ( KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16") )
         {
             return JCS_GRAYSCALE;
         }
-        if ( cs->id() == KoID("RGBA") || cs->id() == KoID("RGBA16") )
+        if ( KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16") )
         {
             return JCS_RGB;
         }
-        if ( cs->id() == KoID("CMYK") || cs->id() == KoID("CMYK16") )
+        if ( KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYK16") )
         {
             return JCS_CMYK;
         }

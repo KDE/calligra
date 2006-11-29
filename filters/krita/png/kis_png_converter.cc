@@ -53,11 +53,11 @@ namespace {
 
     int getColorTypeforColorSpace( KoColorSpace * cs , bool alpha)
     {
-        if ( cs->id() == KoID("GRAYA") || cs->id() == KoID("GRAYA16") )
+        if ( KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16") )
         {
             return alpha ? PNG_COLOR_TYPE_GRAY_ALPHA : PNG_COLOR_TYPE_GRAY;
         }
-        if ( cs->id() == KoID("RGBA") || cs->id() == KoID("RGBA16") )
+        if ( KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16") )
         {
             return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
         }
@@ -550,7 +550,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     // Try to compute a table of color if the colorspace is RGB8f
     png_colorp palette = 0;
     int num_palette = 0;
-    if(!alpha && layer->paintDevice()->colorSpace()->id() == KoID("RGBA") )
+    if(!alpha && KoID(layer->paintDevice()->colorSpace()->id()) == KoID("RGBA") )
     { // png doesn't handle indexed images and alpha, and only have indexed for RGB8
         palette = new png_color[255];
         KisRectConstIteratorPixel it = layer->paintDevice()->createRectConstIterator(0,0, img->width(), img->height());

@@ -41,12 +41,12 @@ namespace {
             color_type = PHOTOMETRIC_MINISBLACK;
             return true;
         }
-        if ( cs->id() == KoID("RGBA") || cs->id() == KoID("RGBA16") )
+        if ( KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16") )
         {
             color_type = PHOTOMETRIC_RGB;
             return true;
         }
-        if ( cs->id() == KoID("RGBAF16HALF") || cs->id() == KoID("RGBAF32") )
+        if ( KoID(cs->id()) == KoID("RGBAF16HALF") || KoID(cs->id()) == KoID("RGBAF32") )
         {
             color_type = PHOTOMETRIC_RGB;
             sample_type = SAMPLEFORMAT_IEEEFP;

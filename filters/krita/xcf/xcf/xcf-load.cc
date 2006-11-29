@@ -594,7 +594,7 @@ xcf_load_layer_props (XcfInfo * info,
 
 	    info->cp += xcf_read_int32 (info->fp, (qint32 *) & visible, 1);
 	    gimp_item_set_visible (GIMP_ITEM (layer),
-				   visible ? true : false, FALSE);
+				   visible ? true : false, false);
         }
         break;
 
@@ -604,7 +604,7 @@ xcf_load_layer_props (XcfInfo * info,
 
 	    info->cp += xcf_read_int32 (info->fp, (qint32 *) & linked, 1);
 	    gimp_item_set_linked (GIMP_ITEM (layer),
-				  linked ? true : false, FALSE);
+				  linked ? true : false, false);
         }
         break;
 
@@ -742,7 +742,7 @@ xcf_load_channel_props (XcfInfo * info,
 
 	    info->cp += xcf_read_int32 (info->fp, (qint32 *) & visible, 1);
 	    gimp_item_set_visible (GIMP_ITEM (*channel),
-				   visible ? true : false, FALSE);
+				   visible ? true : false, false);
         }
         break;
 
@@ -752,7 +752,7 @@ xcf_load_channel_props (XcfInfo * info,
 
 	    info->cp += xcf_read_int32 (info->fp, (qint32 *) & linked, 1);
 	    gimp_item_set_linked (GIMP_ITEM (*channel),
-				  linked ? true : false, FALSE);
+				  linked ? true : false, false);
         }
         break;
 
@@ -1155,7 +1155,7 @@ xcf_load_level (XcfInfo * info, TileManager * tiles)
             return false;
 
         /* get the tile from the tile manager */
-        tile = tile_manager_get (tiles, i, true, TRUE);
+        tile = tile_manager_get (tiles, i, true, true);
 
         /* read in the tile */
         switch (info->compression)
@@ -1202,7 +1202,7 @@ xcf_load_level (XcfInfo * info, TileManager * tiles)
             tile_release (previous, false);
 	}
         tile_release (tile, true);
-        previous = tile_manager_get (tiles, i, false, FALSE);
+        previous = tile_manager_get (tiles, i, false, false);
 
         /* restore the saved position so we'll be ready to
          *  read the next offset.
