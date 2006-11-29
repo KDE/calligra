@@ -129,6 +129,12 @@ Things not in bugzilla
     - Fix named styles.							----
     - Extend the Storage template to the StyleStorage level.		----
       Garbage collection, book-keeping, ...
+    - Check for orphaned (nonDefault)Cell lookups.			----
+    - Insertion/deletion of cell ranges.				----
+    - Improve the saving.						----
+      Only StyleStorage::Private::usedArea should track the occupied
+      cells only - not those of columns or rows. Adjust the saving algo
+      appropriately.
 
   + Speed up selection.						      1 ----
     (probably improved with Format Storage?)

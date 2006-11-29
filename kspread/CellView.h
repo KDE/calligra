@@ -62,7 +62,6 @@ class View;
 class KSPREAD_EXPORT CellView
 {
 public:
-    explicit CellView( Cell* cell );
     CellView( const Sheet* sheet, int col, int row );
     ~CellView();
 

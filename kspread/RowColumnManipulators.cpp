@@ -391,7 +391,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 ColumnFormat* format = m_sheet->columnFormat(col);
                 m_oldWidths[col] = format->dblWidth();
               }
-              if (!cell->isEmpty() && !cell->isObscured())
+              if (!cell->isDefault() && !cell->isEmpty() && !cell->isObscured())
               {
                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
@@ -501,8 +501,9 @@ bool AdjustColumnRowManipulator::preProcessing()
 
 double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
 {
+    Q_ASSERT(!cell->isDefault());
   double long_max = 0.0;
-  CellView cellView( cell );
+  CellView cellView( cell->sheet(), cell->column(), cell->row() );
   cellView.calculateTextParameters();
   if ( cellView.textWidth() > long_max )
   {
@@ -543,9 +544,10 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
 
 double AdjustColumnRowManipulator::adjustRowHelper(Cell* cell)
 {
+    Q_ASSERT(!cell->isDefault());
   double long_max = 0.0;
 
-  CellView cellView( cell ); // FIXME
+  CellView cellView( cell->sheet(), cell->column(), cell->row() ); // FIXME
   cellView.calculateTextParameters();
   if ( cellView.textHeight() > long_max )
   {

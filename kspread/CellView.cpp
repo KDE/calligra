@@ -99,26 +99,6 @@ public:
   Conditions conditions;
 };
 
-CellView::CellView( Cell* cell )
-    : d( new Private )
-{
-    Q_ASSERT( cell );
-    d->cell = cell;
-    d->style = cell->style();
-
-    d->sheet = cell->sheet();
-    d->col = cell->isDefault() ? 0 : cell->column();
-    d->row = cell->isDefault() ? 0 : cell->row();
-
-    d->dirty = true;
-
-    // Formatting
-    d->textX      = 0.0;
-    d->textY      = 0.0;
-    d->textWidth  = 0.0;
-    d->textHeight = 0.0;
-}
-
 CellView::CellView( const Sheet* sheet, int col, int row )
     : d( new Private )
 {
@@ -172,7 +152,8 @@ Style CellView::effStyle( Style::Key key ) const
 {
     if ( cell()->isPartOfMerged() )
     {
-        CellView cellView( cell()->obscuringCells().first() ); // FIXME
+        const Cell* firstCell = cell()->obscuringCells().first();
+        CellView cellView( d->sheet, firstCell->column(), firstCell->row() ); // FIXME
         return cellView.effStyle( key );
     }
 
@@ -188,7 +169,8 @@ int CellView::effAlignX()
 {
     if ( cell()->isPartOfMerged() )
     {
-        CellView cellView( cell()->obscuringCells().first() ); // FIXME
+        const Cell* firstCell = cell()->obscuringCells().first();
+        CellView cellView( d->sheet, firstCell->column(), firstCell->row() ); // FIXME
         return cellView.effAlignX();
     }
 
