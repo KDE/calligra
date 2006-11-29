@@ -1710,7 +1710,9 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
         for ( int x = regionLeft; x <= regionRight && dblCurrentCellPos.x() <= viewRegion.right(); ++x )
         {
             const ColumnFormat *col_lay = sheet->columnFormat( x );
-            Cell* cell = sheet->cellAt( x, y );
+
+            // this is not needed (Ariya)
+            // Cell* cell = sheet->cellAt( x, y );
 
             QPoint cellRef( x, y );
 
@@ -1740,7 +1742,9 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
               ++x )
         {
             const ColumnFormat *col_lay = sheet->columnFormat( x );
-            Cell* cell = sheet->cellAt( x, y );
+
+            // this is not needed (Ariya)
+            // Cell* cell = sheet->cellAt( x, y );
 
             QPoint cellRef( x, y );
 
