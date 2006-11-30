@@ -152,6 +152,20 @@ void KWView::setupActions() {
     action->setShortcut( KShortcut( Qt::SHIFT+Qt::Key_Return));
     connect(action, SIGNAL(triggered()), this, SLOT( slotLineBreak() ));
 
+    m_actionInsertFrameBreak = new KAction( QString::null, actionCollection(), "insert_framebreak" );
+    m_actionInsertFrameBreak->setShortcut( KShortcut( Qt::CTRL + Qt::Key_Return));
+    connect(m_actionInsertFrameBreak, SIGNAL(triggered()), this, SLOT( insertFrameBreak() ));
+    //if ( m_document->processingType() == KWDocument::WP ) {
+        m_actionInsertFrameBreak->setText( i18n( "Page Break" ) );
+        m_actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next page" ) );
+        m_actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next page." ) );
+    /*} else {
+        m_actionInsertFrameBreak->setText( i18n( "Hard Frame Break" ) );
+        m_actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next frame" ) );
+        m_actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
+    } */
+
+
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
 This saves problems with finding out which we missed near the end.
@@ -305,19 +319,6 @@ This saves problems with finding out which we missed near the end.
             actionCollection(), "insert_specialchar" );
     m_actionInsertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard" ) );
     m_actionInsertSpecialChar->setWhatsThis( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
-
-    m_actionInsertFrameBreak = new KAction( QString::null, Qt::CTRL + Qt::Key_Return,
-            this, SLOT( insertFrameBreak() ),
-            actionCollection(), "insert_framebreak" );
-    if ( m_doc->processingType() == KWDocument::WP ) {
-        m_actionInsertFrameBreak->setText( i18n( "Page Break" ) );
-        m_actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next page" ) );
-        m_actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next page." ) );
-    } else {
-        m_actionInsertFrameBreak->setText( i18n( "Hard Frame Break" ) );
-        m_actionInsertFrameBreak->setToolTip( i18n( "Force the remainder of the text into the next frame" ) );
-        m_actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
-    }
 
     new KAction( m_doc->processingType() == KWDocument::WP ? i18n( "Page" ) : i18n( "Page..." ), "page", 0,
             this, SLOT( insertPage() ),
@@ -1086,21 +1087,34 @@ void KWView::textStrikeOut(bool strikeout) {
 }
 
 void KWView::slotNonbreakingSpace() {
-    // TODO
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->insert(QString(QChar(0xa0)));
 }
 
 void KWView::slotNonbreakingHyphen() {
-    // TODO
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->insert(QString(QChar(0x2013)));
 }
 
 void KWView::slotSoftHyphen() {
-    // TODO
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->insert(QString(QChar(0xad)));
 }
 
 void KWView::slotLineBreak() {
-    // TODO
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->insert(QString(QChar('\n')));
 }
 
+void KWView::insertFrameBreak() {
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->insertFrameBreak();
+}
 
 void KWView::selectionChanged()
 {
