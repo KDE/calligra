@@ -29,6 +29,8 @@
 
 #include <KoRTree.h>
 
+#include "Global.h"
+
 namespace KSpread
 {
 
@@ -48,6 +50,34 @@ template<typename T>
 class RTree : public KoRTree<T>
 {
 public:
+    /**
+     * Column/row insertion mode.
+     */
+    enum InsertMode
+    {
+        /// default insertion mode
+        DefaultInsertMode = 0,
+        /**
+         * Shifts the rectangles, starting from the column/row preceeding the
+         * insertion position.
+         * Thus, the inserted columns/rows carry the same data as the previous
+         * column/row.
+         */
+        CopyPrevious = DefaultInsertMode,
+        /**
+         * Shifts the rectangles, starting from the column/row at the insertion
+         * position.
+         * Thus, the inserted columns/rows carry the same data as the current
+         * column/row.
+         */
+        CopyCurrent,
+        /**
+         * Splits the rectangles at the insertion column/row position.
+         * Thus, the inserted columns/rows do not carry any data.
+         */
+        CopyNone
+    };
+
   /**
    * Constructs an empty R-Tree.
    */
@@ -116,25 +146,25 @@ public:
    * Inserts \p number rows at the position \p position .
    * It extends or shifts rectangles, respectively.
    */
-  virtual void insertRows(int position, int number = 1);
+  virtual void insertRows(int position, int number, InsertMode mode = DefaultInsertMode);
 
   /**
    * Inserts \p number columns at the position \p position .
    * It extends or shifts rectangles, respectively.
    */
-  virtual void insertColumns(int position, int number = 1);
+  virtual void insertColumns(int position, int number, InsertMode mode = DefaultInsertMode);
 
   /**
    * Deletes \p number rows at the position \p position .
    * It shrinks or shifts rectangles, respectively.
    */
-  virtual void deleteRows(int position, int number = 1);
+  virtual void deleteRows(int position, int number, InsertMode mode = DefaultInsertMode);
 
   /**
    * Deletes \p number columns at the position \p position .
    * It shrinks or shifts rectangles, respectively.
    */
-  virtual void deleteColumns(int position, int number = 1);
+  virtual void deleteColumns(int position, int number, InsertMode mode = DefaultInsertMode);
 
 protected:
   class Node;
@@ -274,27 +304,39 @@ QList< QPair<QRectF,T> > RTree<T>::intersectingPairs( const QRectF& rect ) const
 }
 
 template<typename T>
-void RTree<T>::insertRows(int position, int number)
+void RTree<T>::insertRows(int position, int number, InsertMode mode)
 {
-  dynamic_cast<Node*>(this->m_root)->insertRows(position, number);
+    if (position < 1 || position > KS_rowMax)
+        return;
+    const int pos = position - (mode == CopyPrevious) ? 1 : 0;
+    dynamic_cast<Node*>(this->m_root)->insertRows(pos, number);
 }
 
 template<typename T>
-void RTree<T>::insertColumns(int position, int number)
+void RTree<T>::insertColumns(int position, int number, InsertMode mode)
 {
-  dynamic_cast<typename RTree<T>::Node*>(this->m_root)->insertColumns(position, number);
+    if (position < 1 || position > KS_colMax)
+        return;
+    const int pos = position - (mode == CopyPrevious) ? 1 : 0;
+    dynamic_cast<Node*>(this->m_root)->insertColumns(pos, number);
 }
 
 template<typename T>
-void RTree<T>::deleteRows(int position, int number)
+void RTree<T>::deleteRows(int position, int number, InsertMode mode)
 {
-  dynamic_cast<typename RTree<T>::Node*>(this->m_root)->deleteRows(position, number);
+    if (position < 1 || position > KS_rowMax)
+        return;
+    const int pos = position - (mode == CopyPrevious) ? 1 : 0;
+    dynamic_cast<Node*>(this->m_root)->deleteRows(pos, number);
 }
 
 template<typename T>
-void RTree<T>::deleteColumns(int position, int number)
+void RTree<T>::deleteColumns(int position, int number, InsertMode mode)
 {
-  dynamic_cast<typename RTree<T>::Node*>(this->m_root)->deleteColumns(position, number);
+    if (position < 1 || position > KS_colMax)
+        return;
+    const int pos = position - (mode == CopyPrevious) ? 1 : 0;
+    dynamic_cast<Node*>(this->m_root)->deleteColumns(pos, number);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -347,7 +389,7 @@ void RTree<T>::LeafNode::intersectingPairs( const QRectF& rect, QMap<int,QPair<Q
 template<typename T>
 void RTree<T>::LeafNode::insertRows(int position, int number)
 {
-  if (position < 1 || position > this->m_boundingBox.bottom())
+  if (position > this->m_boundingBox.bottom())
   {
     return;
   }
@@ -364,7 +406,7 @@ void RTree<T>::LeafNode::insertRows(int position, int number)
 template<typename T>
 void RTree<T>::LeafNode::insertColumns(int position, int number)
 {
-  if (position < 1 || position > this->m_boundingBox.right())
+  if (position > this->m_boundingBox.right())
   {
     return;
   }
@@ -381,7 +423,7 @@ void RTree<T>::LeafNode::insertColumns(int position, int number)
 template<typename T>
 void RTree<T>::LeafNode::deleteRows(int position, int number)
 {
-  if (position < 1 || position > this->m_boundingBox.bottom())
+  if (position > this->m_boundingBox.bottom())
   {
     return;
   }
@@ -408,7 +450,7 @@ void RTree<T>::LeafNode::deleteRows(int position, int number)
 template<typename T>
 void RTree<T>::LeafNode::deleteColumns(int position, int number)
 {
-  if (position < 1 || position > this->m_boundingBox.right())
+  if (position > this->m_boundingBox.right())
   {
     return;
   }
@@ -475,10 +517,8 @@ void RTree<T>::NoneLeafNode::intersectingPairs( const QRectF& rect, QMap<int,QPa
 template<typename T>
 void RTree<T>::NoneLeafNode::insertRows(int position, int number)
 {
-  if (position < 1 || position > this->m_boundingBox.bottom())
-  {
+  if (position > this->m_boundingBox.bottom())
     return;
-  }
 
   for ( int i = 0; i < this->childCount(); ++i )
   {
@@ -493,7 +533,7 @@ void RTree<T>::NoneLeafNode::insertRows(int position, int number)
 template<typename T>
 void RTree<T>::NoneLeafNode::insertColumns(int position, int number)
 {
-  if (position < 1 || position > this->m_boundingBox.right())
+  if (position > this->m_boundingBox.right())
   {
     return;
   }
@@ -511,10 +551,8 @@ void RTree<T>::NoneLeafNode::insertColumns(int position, int number)
 template<typename T>
 void RTree<T>::NoneLeafNode::deleteRows(int position, int number)
 {
-  if (position < 1 || position > this->m_boundingBox.bottom())
-  {
+  if (position > this->m_boundingBox.bottom())
     return;
-  }
 
   // position < m_rect.top() ? shift : extend
   this->m_boundingBox.adjust(0, (position < this->m_boundingBox.top()) ? -number : 0, 0, -number);
@@ -534,10 +572,8 @@ void RTree<T>::NoneLeafNode::deleteRows(int position, int number)
 template<typename T>
 void RTree<T>::NoneLeafNode::deleteColumns(int position, int number)
 {
-  if (position < 1 || position > this->m_boundingBox.right())
-  {
+  if (position > this->m_boundingBox.right())
     return;
-  }
 
   // position < m_rect.left() ? shift : extend
   this->m_boundingBox.adjust((position < this->m_boundingBox.left()) ? -number : 0, 0, -number, 0);
