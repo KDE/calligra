@@ -39,7 +39,6 @@ TestBasicLayout::TestBasicLayout() {
 
 void TestBasicLayout::testGetOrCreateFrameSet() {
     Helper helper;
-    qDeleteAll(m_frames);
     m_frames.clear();
     KWFrameLayout bfl(helper.pageManager, m_frames, helper.pageSettings);
     connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
@@ -62,7 +61,6 @@ void TestBasicLayout::testGetOrCreateFrameSet() {
 
 void TestBasicLayout::testCreateNewFramesForPage() {
     Helper helper;
-    qDeleteAll(m_frames);
     m_frames.clear();
     QVERIFY(m_frames.count() == 0);
     KWFrameLayout bfl(helper.pageManager, m_frames, helper.pageSettings);
@@ -84,7 +82,6 @@ void TestBasicLayout::testCreateNewFramesForPage() {
 
 void TestBasicLayout::testShouldHaveHeaderOrFooter() {
     Helper helper;
-    qDeleteAll(m_frames);
     m_frames.clear();
     KWFrameLayout bfl(helper.pageManager, m_frames, helper.pageSettings);
     connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));

@@ -46,9 +46,7 @@ void TestDocumentLayout::cleanupTestCase() {
 }
 
 void TestDocumentLayout::initForNewTest(const QString &initText) {
-    // all members are deleted as a result of this delete:
-    delete frameSet;
-
+    // this leaks memory like mad, but who cares ;)
     frameSet = new KWTextFrameSet();
     shape1 = new MockTextShape();
     shape1->resize(QSizeF(200, 1000));
@@ -524,6 +522,7 @@ void TestDocumentLayout::testPageBreak() {
     block = block.next();
     QVERIFY(block.isValid());
     blockLayout = block.layout(); // parag 4
+    QCOMPARE(blockLayout->lineCount(), 1);
     QCOMPARE(blockLayout->lineAt(0).y(), 160.0);
 }
 
