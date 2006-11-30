@@ -635,7 +635,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         key += fontName;
     }
 
-    key += ",";
+    key += ',';
 
     if (force || (formatOrigin.italic!=formatData.italic))
     {
@@ -654,7 +654,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         strElement+="\" ";
     }
 
-    key += ",";
+    key += ',';
 
     if (force || ((formatOrigin.weight>=75)!=(formatData.weight>=75)))
     {
@@ -672,7 +672,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         strElement+="\" ";
     }
 
-    key += ",";
+    key += ',';
 
     if (force || (formatOrigin.fontSize!=formatData.fontSize))
     {
@@ -686,7 +686,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         }
     }
 
-    key += ",";
+    key += ',';
 
     if (force || (formatOrigin.fgColor!=formatData.fgColor))
     {
@@ -699,7 +699,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         }
     }
 
-    key += ",";
+    key += ',';
 
     if (force || (formatOrigin.bgColor!=formatData.bgColor))
     {
@@ -755,13 +755,13 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
                 else
                 {
                     strElement += "single";
-                    key += "1";
+                    key += '1';
                 }
             }
             else if ( underlineValue == "double" )
             {
                 strElement += "double";
-                key += "2";
+                key += '2';
             }
             else if ( underlineValue == "single-bold" )
             {
@@ -776,7 +776,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
             else
             {
                 strElement += "single";
-                key += "?";
+                key += '?';
             }
         }
         else
@@ -810,17 +810,17 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         if ( ( formatData.strikeoutType == "single" ) || ( formatData.strikeoutType == "1" ) )
         {
             strElement+="single-line";
-            key += "1";
+            key += '1';
         }
         else if ( formatData.strikeoutType == "double" )
         {
             strElement+="double-line";
-            key += "2";
+            key += '2';
         }
         else if ( formatData.strikeoutType == "single-bold" )
         {
             strElement+="thick";
-            key += "T";
+            key += 'T';
         }
         else
         {
@@ -884,7 +884,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         }
     }
 
-    key += ",";
+    key += ',';
 
     if ( force || ( formatOrigin.fontAttribute != formatData.fontAttribute ) )
     {
@@ -913,7 +913,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         }
     }
 
-    key += ",";
+    key += ',';
 
     if ( force || ( formatOrigin.verticalAlignment != formatData.verticalAlignment ) )
     {
@@ -945,7 +945,7 @@ QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) c
 
     key += "!L"; // left border
     key += frame.lColor.name();
-    key += ",";
+    key += ',';
     key += QString::number( frame.lWidth );
     properties += " fo:border-left=\"";
     if ( frame.lColor.isValid() && frame.lWidth > 0.0 )
@@ -963,7 +963,7 @@ QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) c
 
     key += "!R"; // right border
     key += frame.rColor.name();
-    key += ",";
+    key += ',';
     key += QString::number( frame.rWidth );
     properties += " fo:border-right=\"";
     if ( frame.rColor.isValid() && frame.rWidth > 0.0 )
@@ -981,7 +981,7 @@ QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) c
 
     key += "!T"; // top border
     key += frame.tColor.name();
-    key += ",";
+    key += ',';
     key += QString::number( frame.tWidth );
     properties += " fo:border-top=\"";
     if ( frame.tColor.isValid() && frame.tWidth > 0.0 )
@@ -999,7 +999,7 @@ QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) c
 
     key += "!B"; // bottom border
     key += frame.bColor.name();
-    key += ",";
+    key += ',';
     key += QString::number( frame.bWidth );
     properties += " fo:border-bottom=\"";
     if ( frame.bColor.isValid() && frame.bWidth > 0.0 )
@@ -1862,7 +1862,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
                 props += mult;
                 props += "%\" ";
                 styleKey += mult;
-                styleKey += "%";
+                styleKey += '%';
                 break;
             }
         case LayoutData::LS_FIXED:
@@ -1917,7 +1917,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
 
     props += textFormatToStyle(layoutOrigin.formatData.text,layout.formatData.text,force,styleKey);
 
-    props += ">";
+    props += '>';
 
     styleKey += '@'; // A more visible separator
 
@@ -1936,11 +1936,11 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
             styleKey += QString::number((*it).m_ptpos);
             switch ((*it).m_type)
             {
-                case 0:  props += " style:type=\"left\""; styleKey += "L"; break;
-                case 1:  props += " style:type=\"center\""; styleKey += "C"; break;
-                case 2:  props += " style:type=\"right\""; styleKey += "R"; break;
-                case 3:  props += " style:type=\"char\" style:char=\".\""; styleKey += "D"; break; // decimal
-                default: props += " style:type=\"left\""; styleKey += "L"; break;
+                case 0:  props += " style:type=\"left\""; styleKey += 'L'; break;
+                case 1:  props += " style:type=\"center\""; styleKey += 'C'; break;
+                case 2:  props += " style:type=\"right\""; styleKey += 'R'; break;
+                case 3:  props += " style:type=\"char\" style:char=\".\""; styleKey += 'D'; break; // decimal
+                default: props += " style:type=\"left\""; styleKey += 'L'; break;
             }
             switch ((*it).m_filling) // ### TODO: check if the characters are right
             {
@@ -2216,7 +2216,7 @@ QString OOWriterWorker::makeAutomaticStyleName(const QString& prefix, ulong& cou
     // If it is still not unique, try a time stamp.
     const QDateTime dt(QDateTime::currentDateTime(Qt::UTC));
 
-    str2 = str + "_" + QString::number(dt.toTime_t(),16);
+    str2 = str + '_' + QString::number(dt.toTime_t(),16);
     if (m_styleMap.find(str2)==m_styleMap.end())
         return str2;
 
