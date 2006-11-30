@@ -108,6 +108,13 @@ private slots:
     // actions
     void print();
     void textBold(bool bold);
+    void textItalic(bool italic);
+    void textUnderline(bool underline);
+    void textStrikeOut(bool strikeout);
+    void slotNonbreakingSpace();
+    void slotNonbreakingHyphen();
+    void slotSoftHyphen();
+    void slotLineBreak();
 
 private:
     KWGui *m_gui;
@@ -119,6 +126,9 @@ private:
     KoZoomAction *m_actionViewZoom;
     KAction *m_actionFormatFrameSet;
     KToggleAction *m_actionFormatBold;
+    KToggleAction *m_actionFormatItalic;
+    KToggleAction *m_actionFormatUnderline;
+    KToggleAction *m_actionFormatStrikeOut;
 };
 
 #endif
