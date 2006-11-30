@@ -51,7 +51,7 @@ struct FuncExtra {
 
 typedef Value (*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
 
-class Function
+class KSPREAD_EXPORT Function
 {
 public:
   Function (const QString& name, FunctionPtr ptr);
@@ -99,7 +99,7 @@ private:
   bool m_range;
 };
 
-class FunctionDescription
+class KSPREAD_EXPORT FunctionDescription
 {
 public:
   FunctionDescription();

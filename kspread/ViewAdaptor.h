@@ -31,13 +31,13 @@
 #include <QString>
 
 #include <QtDBus/QtDBus>
-
+#include <koffice_export.h>
 namespace KSpread
 {
 class View;
 class CellProxy;
 
-class ViewAdaptor : public QDBusAbstractAdaptor
+class KSPREAD_EXPORT ViewAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.view")

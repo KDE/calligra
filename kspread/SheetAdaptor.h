@@ -28,7 +28,7 @@
 #define KSPREAD_TABLE_IFACE_H
 
 #include <QtDBus/QtDBus>
-
+#include <koffice_export.h>
 #include <QRect>
 #include <QString>
 
@@ -37,7 +37,7 @@ namespace KSpread
 class Sheet;
 class CellProxy;
 
-class SheetAdaptor : public QDBusAbstractAdaptor
+class KSPREAD_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.sheet")

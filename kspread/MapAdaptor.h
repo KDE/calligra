@@ -25,13 +25,13 @@
 #include <QStringList>
 
 #include <QtDBus/QtDBus>
-
+#include <koffice_export.h>
 
 namespace KSpread
 {
 class Map;
 
-class MapAdaptor : public QDBusAbstractAdaptor
+class KSPREAD_EXPORT MapAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.spreadsheet.map")
