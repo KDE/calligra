@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <QCache>
 #include <QRegion>
 #include <QSet>
 #include <QTimer>
@@ -30,9 +31,23 @@
 
 #include "StyleStorage.h"
 
+#define KSPREAD_STYLE_CACHING
+#define KSPREAD_CACHE_KEY_QPOINT
+
 static const int g_garbageCollectionTimeOut = 60000; // one minute
+static const int g_maximumCachedStyles = 10000;
 
 using namespace KSpread;
+
+#ifdef KSPREAD_CACHE_KEY_QPOINT
+inline uint qHash( const QPoint& point )
+{
+    // FIXME Stefan: Restricts us to 2^16 x 2^16 cells!
+    //               Even if we support 'just' 2^15 x 2^15 cells atm, it's not nice.
+    //               Harder restriction (2^15 x 2^15) on Windows due to usage of QRegion!
+    return ( static_cast<uint>( point.x() ) << 16 ) + static_cast<uint>( point.y() );
+}
+#endif
 
 class KDE_NO_EXPORT StyleStorage::Private
 {
@@ -47,6 +62,14 @@ public:
     QTimer* garbageCollectionInitializationTimer;
     QTimer* garbageCollectionTimer;
     QList< QPair<QRectF,QSharedDataPointer<SubStyle> > > possibleGarbage;
+#ifdef KSPREAD_STYLE_CACHING
+#ifdef KSPREAD_CACHE_KEY_QPOINT
+    QCache<QPoint, Style> cache;
+#else
+    QCache<QString, Style> cache; // key: cell name, e.g. A1
+#endif
+    QRegion cachedArea;
+#endif
 };
 
 StyleStorage::StyleStorage( Sheet* sheet )
@@ -61,6 +84,9 @@ StyleStorage::StyleStorage( Sheet* sheet )
     d->garbageCollectionTimer = new QTimer(this);
     connect(d->garbageCollectionTimer, SIGNAL(timeout()), this, SLOT(garbageCollection()));
     d->garbageCollectionTimer->start();
+#ifdef KSPREAD_STYLE_CACHING
+    d->cache.setMaxCost( g_maximumCachedStyles );
+#endif
 }
 
 StyleStorage::~StyleStorage()
@@ -78,22 +104,51 @@ void StyleStorage::setStyleManager(StyleManager* manager)
 Style StyleStorage::contains(const QPoint& point) const
 {
     Q_ASSERT(d->styleManager);
+#ifdef KSPREAD_STYLE_CACHING
+    // first, lookup point in the cache
+#ifdef KSPREAD_CACHE_KEY_QPOINT
+    if ( d->cache.contains( point ) )
+    {
+//         kDebug(36006) << "StyleStorage: Using cached style for " << cellName << endl;
+        return *d->cache.object( point );
+    }
+#else
+    const QString cellName = Cell::name( point.x(), point.y() );
+    if ( d->cache.contains( cellName ) )
+    {
+//         kDebug(36006) << "StyleStorage: Using cached style for " << cellName << endl;
+        return *d->cache.object( cellName );
+    }
+#endif
+#endif
+    // not found, lookup in the tree
     QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.contains(point);
-    Style style;
+    Style* style = new Style();
     foreach ( const QSharedDataPointer<SubStyle> subStyle, subStyles )
     {
         if ( subStyle->type() == Style::DefaultStyleKey )
         {
-            style.clear();
+            style->clear();
         }
         if ( subStyle->type() == Style::NamedStyleKey )
         {
-            style.clear();
-            style = *d->styleManager->defaultStyle();
+            style->clear();
+            style = d->styleManager->defaultStyle();
         }
-        style.insertSubStyle( subStyle );
+        style->insertSubStyle( subStyle );
     }
-    return subStyles.isEmpty() ? *d->styleManager->defaultStyle() : style;
+    if ( subStyles.isEmpty() )
+        return *d->styleManager->defaultStyle();
+#ifdef KSPREAD_STYLE_CACHING
+    // insert style into the cache
+#ifdef KSPREAD_CACHE_KEY_QPOINT
+    d->cache.insert( point, style );
+#else
+    d->cache.insert( cellName, style );
+#endif
+    d->cachedArea += QRect( point, point );
+#endif
+    return *style;
 }
 
 Style StyleStorage::contains(const QRect& rect) const
@@ -193,7 +248,9 @@ int StyleStorage::nextStyleRight( int column, int row ) const
 
 void StyleStorage::insert(const QRect& rect, const QSharedDataPointer<SubStyle> subStyle)
 {
-//     kDebug() << "StyleStorage: inserting " << subStyle->type() << " into " << rect << endl;
+//     kDebug(36006) << "StyleStorage: inserting " << subStyle->type() << " into " << rect << endl;
+    // invalidate the affected, cached styles
+    invalidateCache( rect );
     // lookup already used substyles
     typedef const QList< QSharedDataPointer<SubStyle> > StoredSubStyleList;
     StoredSubStyleList& storedSubStyles( d->subStyles.value(subStyle->type()) );
@@ -202,7 +259,7 @@ void StyleStorage::insert(const QRect& rect, const QSharedDataPointer<SubStyle> 
     {
         if ( Style::compare( subStyle.data(), (*it).data() ) )
         {
-//             kDebug() << "[REUSING EXISTING SUBSTYLE]" << endl;
+//             kDebug(36006) << "[REUSING EXISTING SUBSTYLE]" << endl;
             d->tree.insert(rect, *it);
             return;
         }
@@ -248,6 +305,8 @@ void StyleStorage::insert(const Region& region, const Style& style)
             else
                 d->usedArea += (*it)->rect();
 
+            // invalidate the affected, cached styles
+            invalidateCache( (*it)->rect() );
             // insert substyle
             insert((*it)->rect(), subStyle);
         }
@@ -256,26 +315,38 @@ void StyleStorage::insert(const Region& region, const Style& style)
 
 void StyleStorage::insertRows(int position, int number)
 {
+    const QRect invalidRect(1,position,KS_colMax,KS_rowMax);
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
     d->tree.insertRows(position, number);
-    d->sheet->addLayoutDirtyRegion( Region(QRect(1,position,KS_colMax,KS_rowMax)) );
+    d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
 }
 
 void StyleStorage::insertColumns(int position, int number)
 {
+    const QRect invalidRect(position,1,KS_colMax,KS_rowMax);
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
     d->tree.insertColumns(position, number);
-    d->sheet->addLayoutDirtyRegion( Region(QRect(position,1,KS_colMax,KS_rowMax)) );
+    d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
 }
 
 void StyleStorage::deleteRows(int position, int number)
 {
+    const QRect invalidRect(1,position,KS_colMax,KS_rowMax);
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
     d->tree.deleteRows(position, number);
-    d->sheet->addLayoutDirtyRegion( Region(QRect(1,position,KS_colMax,KS_rowMax)) );
+    d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
 }
 
 void StyleStorage::deleteColumns(int position, int number)
 {
+    const QRect invalidRect(position,1,KS_colMax,KS_rowMax);
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
     d->tree.deleteColumns(position, number);
-    d->sheet->addLayoutDirtyRegion( Region(QRect(position,1,KS_colMax,KS_rowMax)) );
+    d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
 }
 
 void StyleStorage::garbageCollectionInitialization()
@@ -329,6 +400,30 @@ void StyleStorage::garbageCollection()
             break;
         }
     }
+}
+
+void StyleStorage::invalidateCache( const QRect& rect )
+{
+#ifdef KSPREAD_STYLE_CACHING
+//     kDebug(36006) << "StyleStorage: Invalidating " << rect << endl;
+    const QRegion region = d->cachedArea.intersected( rect );
+    d->cachedArea = d->cachedArea.subtracted( rect );
+    foreach ( QRect rect, region.rects() )
+    {
+        for ( int col = rect.left(); col <= rect.right(); ++col )
+        {
+            for ( int row = rect.top(); row <= rect.bottom(); ++row )
+            {
+//                 kDebug(36006) << "StyleStorage: Removing cached style for " << Cell::name( col, row ) << endl;
+#ifdef KSPREAD_CACHE_KEY_QPOINT
+                d->cache.remove( QPoint( col, row ) ); // also deletes it
+#else
+                d->cache.remove( Cell::name( col, row ) ); // also deletes it
+#endif
+            }
+        }
+    }
+#endif
 }
 
 #include "StyleStorage.moc"

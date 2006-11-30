@@ -135,6 +135,12 @@ protected Q_SLOTS:
     void garbageCollectionInitialization();
     void garbageCollection();
 
+protected:
+    /**
+     * Invalidates all cached styles lying in \p rect .
+     */
+    void invalidateCache( const QRect& rect );
+
 private:
     class Private;
     Private * const d;

@@ -59,9 +59,9 @@ class SubStyleOne : public SubStyle
 public:
     SubStyleOne( const Value1& v = Value1() ) : SubStyle(), value1( v ) {}
 
-    virtual Style::Key type() const { /*kDebug() << "S1" << endl;*/ return key; }
+    virtual Style::Key type() const { /*kDebug(36006) << "S1" << endl;*/ return key; }
 
-    virtual void dump() const { kDebug() << key << " " << value1 << endl; }
+    virtual void dump() const { kDebug(36006) << key << " " << value1 << endl; }
 
     Value1 value1;
 };
@@ -80,9 +80,9 @@ class NamedStyle : public SubStyle
 public:
     NamedStyle( CustomStyle* s, const QString& n = QString() ) : SubStyle(), style( s ), name( n ) {}
 
-    virtual Style::Key type() const { /*kDebug() << "NS" << endl;*/ return Style::NamedStyleKey; }
+    virtual Style::Key type() const { /*kDebug(36006) << "NS" << endl;*/ return Style::NamedStyleKey; }
 
-    virtual void dump() const { kDebug() << Style::NamedStyleKey << " " << style << name << endl; }
+    virtual void dump() const { kDebug(36006) << Style::NamedStyleKey << " " << style << name << endl; }
 
     CustomStyle* style;
     QString name;
@@ -658,7 +658,7 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
                                          const QString &_prefix, const QString &_postfix,
                                          int _precision, const QString& symbol )
 {
-//  kDebug() << k_funcinfo << endl;
+//  kDebug(36003) << k_funcinfo << endl;
     QString styleName;
     QString valueType;
     switch( _style )
@@ -1083,11 +1083,11 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
 {
 #ifndef NDEBUG
     //if (type() == BUILTIN )
-    //  kDebug() << "BUILTIN" << endl;
+    //  kDebug(36006) << "BUILTIN" << endl;
     //else if (type() == CUSTOM )
-    //  kDebug() << "CUSTOM" << endl;
+    //  kDebug(36006) << "CUSTOM" << endl;
     //else if (type() == AUTO )
-    //  kDebug() << "AUTO" << endl;
+    //  kDebug(36006) << "AUTO" << endl;
 #endif
 
     // don't store parent, if it's the default style
