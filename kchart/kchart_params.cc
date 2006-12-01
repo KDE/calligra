@@ -31,6 +31,7 @@ using std::cerr;
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoDom.h>
+#include <KoXmlReader.h>
 #include <KoOasisLoadingContext.h>
 
 #include <QRegExp>
@@ -222,7 +223,7 @@ void KChartParams::loadOasisFont( KoOasisLoadingContext& context, QFont& font, Q
     }
 }
     
-bool KChartParams::loadOasis( const QDomElement     &chartElem,
+bool KChartParams::loadOasis( const KoXmlElement     &chartElem,
 			      KoOasisLoadingContext &loadingContext,
                               QString               &errorMessage,
 			      KoStore               */*store*/ )
@@ -251,7 +252,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
     }
 
     // Title TODO (more details, e.g. font, placement etc)
-    QDomElement titleElem = KoDom::namedItemNS( chartElem,
+    KoXmlElement titleElem = KoXml::namedItemNS( chartElem,
 						 KoXmlNS::chart, "title" );
     if ( !titleElem.isNull() ) {
         loadingContext.styleStack().save();
@@ -263,13 +264,13 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         setHeaderFooterColor( KDChartParams::HdFtPosHeader, color );
         loadingContext.styleStack().restore();
 
-	QDomElement  pElem = KoDom::namedItemNS( titleElem,
+	KoXmlElement  pElem = KoXml::namedItemNS( titleElem,
 						 KoXmlNS::text, "p" );
 	setHeader1Text( pElem.text() );
     }
 
     // Subtitle TODO (more details)
-    QDomElement subtitleElem = KoDom::namedItemNS( chartElem, KoXmlNS::chart,
+    KoXmlElement subtitleElem = KoXml::namedItemNS( chartElem, KoXmlNS::chart,
 						   "subtitle" );
     if ( !subtitleElem.isNull() ) {
         loadingContext.styleStack().save();
@@ -281,13 +282,13 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         setHeaderFooterColor( KDChartParams::HdFtPosHeader2, color );
         loadingContext.styleStack().restore();
 
-	QDomElement  pElem = KoDom::namedItemNS( subtitleElem,
+	KoXmlElement  pElem = KoXml::namedItemNS( subtitleElem,
 						 KoXmlNS::text, "p" );
 	setHeader2Text( pElem.text() );
     }
 
     // Footer TODO (more details)
-    QDomElement footerElem = KoDom::namedItemNS( chartElem, KoXmlNS::chart,
+    KoXmlElement footerElem = KoXml::namedItemNS( chartElem, KoXmlNS::chart,
 						 "footer" );
     if ( !footerElem.isNull() ) {
         loadingContext.styleStack().save();
@@ -299,13 +300,13 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         setHeaderFooterColor( KDChartParams::HdFtPosFooter, color );
         loadingContext.styleStack().restore();
 
-	QDomElement  pElem = KoDom::namedItemNS( footerElem,
+	KoXmlElement  pElem = KoXml::namedItemNS( footerElem,
 						 KoXmlNS::text, "p" );
 	setFooterText( pElem.text() );
     }
 
     // TODO: Get legend settings
-    QDomElement legendElem = KoDom::namedItemNS( chartElem, KoXmlNS::chart,
+    KoXmlElement legendElem = KoXml::namedItemNS( chartElem, KoXmlNS::chart,
 						 "legend" );
     if ( !legendElem.isNull() )
     {
@@ -404,7 +405,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
     }
 
     // Get the plot-area.  This is where the action is.
-    QDomElement  plotareaElem = KoDom::namedItemNS( chartElem,
+    KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElem,
 						    KoXmlNS::chart, "plot-area" );
     if ( !plotareaElem.isNull() ) {
 	return loadOasisPlotarea( plotareaElem, loadingContext, errorMessage );
@@ -414,7 +415,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
 }
 
 
-bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
+bool KChartParams::loadOasisPlotarea( const KoXmlElement     &plotareaElem,
 				      KoOasisLoadingContext &loadingContext,
 				      QString               &errorMessage )
 {
@@ -582,10 +583,10 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     // ----------------------------------------------------------------
     // In the plot-area element there are two chart:axis elements
 
-    QDomElement  xAxisElem;
-    QDomElement  yAxisElem;
+    KoXmlElement  xAxisElem;
+    KoXmlElement  yAxisElem;
 
-    QDomElement  axisElem;
+    KoXmlElement  axisElem;
     forEachElement( axisElem, plotareaElem ) {
 
 	// If this element is not an axis, then continue
@@ -629,7 +630,7 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 }
 
 
-bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
+bool KChartParams::loadOasisAxis( const KoXmlElement      &axisElem,
 				  KoOasisLoadingContext  &loadingContext,
 				  QString                &errorMessage,
 				  KDChartAxisParams::AxisPos  axisPos )
@@ -637,17 +638,17 @@ bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
     Q_UNUSED( errorMessage );
 
     QString        tmp;
-    QDomElement    tmpElem;
+    KoXmlElement    tmpElem;
     KoStyleStack  &styleStack = loadingContext.styleStack();
 
     // Get the axis to manipulate.
     // TODO
 
     // Get the axis title (== axis label) if any.
-    QDomElement  titleElem = KoDom::namedItemNS( axisElem,
+    KoXmlElement  titleElem = KoXml::namedItemNS( axisElem,
 						 KoXmlNS::chart, "title" );
     if ( !titleElem.isNull() ) {
-	tmpElem = KoDom::namedItemNS( titleElem, KoXmlNS::text, "p" );
+	tmpElem = KoXml::namedItemNS( titleElem, KoXmlNS::text, "p" );
 	setAxisTitle( axisPos, tmpElem.text() );
     }
 

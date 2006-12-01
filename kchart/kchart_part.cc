@@ -23,6 +23,7 @@ using std::cerr;
 #include <KoDom.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <KoOasisStore.h>
 #include <KoOasisLoadingContext.h>
 
@@ -890,9 +891,9 @@ void KChartPart::saveConfig( KConfig *conf )
 //              Save and Load OpenDocument file format
 
 
-bool KChartPart::loadOasis( const QDomDocument& doc,
+bool KChartPart::loadOasis( const KoXmlDocument& doc,
 			    KoOasisStyles&      oasisStyles,
-			    const QDomDocument& /*settings*/,
+			    const KoXmlDocument& /*settings*/,
 			    KoStore            *store )
 {
     kDebug(35001) << "kchart loadOasis called" << endl;
@@ -900,8 +901,8 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
     // Set some sensible defaults.
     setChartDefaults();
 
-    QDomElement  content = doc.documentElement();
-    QDomElement  bodyElem ( KoDom::namedItemNS( content,
+    KoXmlElement  content = doc.documentElement();
+    KoXmlElement  bodyElem ( KoDom::namedItemNS( content,
 						KoXmlNS::office, "body" ) );
     if ( bodyElem.isNull() ) {
         kError(32001) << "No office:body found!" << endl;
@@ -910,11 +911,11 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
     }
 
     // Get the office:chart element.
-    QDomElement officeChartElem = KoDom::namedItemNS( bodyElem,
+    KoXmlElement officeChartElem = KoDom::namedItemNS( bodyElem,
 						      KoXmlNS::office, "chart" );
     if ( officeChartElem.isNull() ) {
         kError(32001) << "No office:chart found!" << endl;
-        QDomElement  childElem;
+        KoXmlElement  childElem;
         QString      localName;
         forEachElement( childElem, bodyElem ) {
             localName = childElem.localName();
@@ -928,7 +929,7 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
         return false;
     }
 
-    QDomElement chartElem = KoDom::namedItemNS( officeChartElem,
+    KoXmlElement chartElem = KoDom::namedItemNS( officeChartElem,
 						KoXmlNS::chart, "chart" );
     if ( chartElem.isNull() ) {
         setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No chart:chart tag found." ) );
@@ -964,7 +965,7 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
     // TODO Load data direction (see loadAuxiliary)
 
     // Load the data table.
-    QDomElement tableElem = KoDom::namedItemNS( chartElem,
+    KoXmlElement tableElem = KoDom::namedItemNS( chartElem,
 						KoXmlNS::table, "table" );
     if ( !tableElem.isNull() ) {
         ok = loadOasisData( tableElem );
@@ -976,14 +977,14 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
 }
 
 
-bool KChartPart::loadOasisData( const QDomElement& tableElem )
+bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
 {
     int          numberHeaderColumns = 0;
-    QDomElement  tableHeaderColumns = KoDom::namedItemNS( tableElem,
+    KoXmlElement  tableHeaderColumns = KoDom::namedItemNS( tableElem,
 							  KoXmlNS::table,
 							  "table-header-columns" );
 
-    QDomElement  elem;
+    KoXmlElement  elem;
     forEachElement( elem, tableHeaderColumns ) {
         if ( elem.localName() == "table-column" ) {
             int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString() ).toInt();
@@ -995,7 +996,7 @@ bool KChartPart::loadOasisData( const QDomElement& tableElem )
     Q_ASSERT( numberHeaderColumns == 1 );
 
     int numberDataColumns = 0;
-    QDomElement tableColumns = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-columns" );
+    KoXmlElement tableColumns = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-columns" );
     forEachElement( elem, tableColumns ) {
         if ( elem.localName() == "table-column" ) {
             int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString() ).toInt();
@@ -1005,10 +1006,10 @@ bool KChartPart::loadOasisData( const QDomElement& tableElem )
 
     // Parse table-header-rows for the column names.
     m_colLabels.clear();
-    QDomElement tableHeaderRows = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-header-rows" );
+    KoXmlElement tableHeaderRows = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-header-rows" );
     if ( tableHeaderRows.isNull() )
         kWarning(35001) << "No table-header-rows element found!" << endl;
-    QDomElement tableHeaderRow = KoDom::namedItemNS( tableHeaderRows, KoXmlNS::table, "table-row" );
+    KoXmlElement tableHeaderRow = KoDom::namedItemNS( tableHeaderRows, KoXmlNS::table, "table-row" );
     if ( tableHeaderRow.isNull() )
         kWarning(35001) << "No table-row inside table-header-rows!" << endl;
 
@@ -1017,7 +1018,7 @@ bool KChartPart::loadOasisData( const QDomElement& tableElem )
         if ( elem.localName() == "table-cell" ) {
             ++cellNum;
             if ( cellNum > numberHeaderColumns ) {
-                QDomElement pElem = KoDom::namedItemNS( elem, KoXmlNS::text, "p" );
+                KoXmlElement pElem = KoDom::namedItemNS( elem, KoXmlNS::text, "p" );
                 m_colLabels.append( pElem.text() );
             }
         }
@@ -1030,7 +1031,7 @@ bool KChartPart::loadOasisData( const QDomElement& tableElem )
 
     // Get the number of rows, and read row labels
     int          numberDataRows = 0;
-    QDomElement  tableRows = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-rows" );
+    KoXmlElement  tableRows = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-rows" );
 
     m_rowLabels.clear();
     forEachElement( elem, tableRows ) {
@@ -1039,8 +1040,8 @@ bool KChartPart::loadOasisData( const QDomElement& tableElem )
             Q_ASSERT( repeated <= 1 ); // we don't handle yet the case where data rows are repeated (can this really happen?)
             numberDataRows += qMax( 1, repeated );
             if ( numberHeaderColumns > 0 ) {
-                QDomElement firstCell = KoDom::namedItemNS( elem, KoXmlNS::table, "table-cell" );
-                QDomElement pElem = KoDom::namedItemNS( firstCell, KoXmlNS::text, "p" );
+                KoXmlElement firstCell = KoDom::namedItemNS( elem, KoXmlNS::table, "table-cell" );
+                KoXmlElement pElem = KoDom::namedItemNS( firstCell, KoXmlNS::text, "p" );
                 m_rowLabels.append( pElem.text() );
             }
         }
@@ -1060,12 +1061,12 @@ bool KChartPart::loadOasisData( const QDomElement& tableElem )
 
     // Now really load the cells.
     int row = 0;
-    QDomElement rowElem;
+    KoXmlElement rowElem;
     forEachElement( rowElem, tableRows ) {
         if ( rowElem.localName() == "table-row" ) {
             int col = 0;
             int cellNum = 0;
-            QDomElement cellElem;
+            KoXmlElement cellElem;
             forEachElement( cellElem, rowElem ) {
                 if ( cellElem.localName() == "table-cell" ) {
                     ++cellNum;
@@ -1370,7 +1371,7 @@ QDomDocument KChartPart::saveXML()
 }
 
 
-bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
+bool KChartPart::loadXML( QIODevice*, const KoXmlDocument& doc )
 {
     kDebug(35001) << "kchart loadXML called" << endl;
 
@@ -1420,22 +1421,22 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 //
 // Currently, that means the data direction.
 //
-bool KChartPart::loadAuxiliary( const QDomDocument& doc )
+bool KChartPart::loadAuxiliary( const KoXmlDocument& doc )
 {
-    QDomElement  chart = doc.documentElement();
-    QDomElement  aux   = chart.namedItem("KChartAuxiliary").toElement();
+    KoXmlElement  chart = doc.documentElement();
+    KoXmlElement  aux   = chart.namedItem("KChartAuxiliary").toElement();
 
     // Older XML files might be missing this section.  That is OK; the
     // defaults will be used.
     if (aux.isNull())
 	return true;
 
-    QDomNode node = aux.firstChild();
+    KoXmlNode node = aux.firstChild();
 
     // If the aux section exists, it should contain data.
     while (!node.isNull()) {
 
-	QDomElement e = node.toElement();
+	KoXmlElement e = node.toElement();
 	if (e.isNull()) {
 	    // FIXME: Should this be regarded as an error?
 	    node = node.nextSibling();
@@ -1523,13 +1524,13 @@ bool KChartPart::loadAuxiliary( const QDomDocument& doc )
 }
 
 
-bool KChartPart::loadData( const QDomDocument& doc,
+bool KChartPart::loadData( const KoXmlDocument& doc,
 			   KDChartTableData& m_currentData )
 {
     kDebug(35001) << "kchart loadData called" << endl;
 
-    QDomElement chart = doc.documentElement();
-    QDomElement data = chart.namedItem("data").toElement();
+    KoXmlElement chart = doc.documentElement();
+    KoXmlElement data = chart.namedItem("data").toElement();
     bool ok;
     int cols = data.attribute("cols").toInt(&ok);
     kDebug(35001) << "cols readed as:" << cols << endl;
@@ -1547,7 +1548,7 @@ bool KChartPart::loadData( const QDomDocument& doc,
     m_currentData.setUsedCols( cols );
     m_currentData.setUsedRows( rows );
     kDebug(35001) << "Expanded!" << endl;
-    QDomNode n = data.firstChild();
+    KoXmlNode n = data.firstChild();
     //QArray<int> tmpExp(rows*cols);
     //QArray<bool> tmpMissing(rows*cols);
     for (int i=0; i!=rows; i++) {
@@ -1556,7 +1557,7 @@ bool KChartPart::loadData( const QDomDocument& doc,
                 kDebug(35001) << "Some problems, there is less data than it should be!" << endl;
                 break;
             }
-            QDomElement e = n.toElement();
+            KoXmlElement e = n.toElement();
             if ( !e.isNull() && e.tagName() == "cell" ) {
                 // add the cell to the corresponding place...
                 QVariant t;
@@ -1618,22 +1619,24 @@ bool KChartPart::loadData( const QDomDocument& doc,
 //         Save and Load real old KChart file format
 
 
-bool KChartPart::loadOldXML( const QDomDocument& doc )
+bool KChartPart::loadOldXML( const KoXmlDocument& doc )
 {
     kDebug(35001) << "kchart loadOldXML called" << endl;
+#ifdef KOXML_USE_QDOM
     if ( doc.doctype().name() != "chart" )
         return false;
+#endif
 
     kDebug(35001) << "Ok, it is a chart" << endl;
 
-    QDomElement chart = doc.documentElement();
+    KoXmlElement chart = doc.documentElement();
     if ( chart.attribute( "mime" ) != "application/x-kchart" && chart.attribute( "mime" ) != "application/vnd.kde.kchart" )
         return false;
 
     kDebug(35001) << "Mimetype ok" << endl;
 
 #if 0
-    QDomElement data = chart.namedItem("data").toElement();
+    KoXmlElement data = chart.namedItem("data").toElement();
     bool ok;
     int cols = data.attribute("cols").toInt(&ok);
     kDebug(35001) << "cols readed as:" << cols << endl;
@@ -1643,7 +1646,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
     kDebug(35001) << rows << " x " << cols << endl;
     m_currentData.expand(rows, cols);
     kDebug(35001) << "Expanded!" << endl;
-    QDomNode n = data.firstChild();
+    KoXmlNode n = data.firstChild();
     QArray<int> tmpExp(rows*cols);
     QArray<bool> tmpMissing(rows*cols);
 
@@ -1654,7 +1657,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
                 break;
             }
 
-            QDomElement e = n.toElement();
+            KoXmlElement e = n.toElement();
             if ( !e.isNull() && e.tagName() == "cell" ) {
                 // add the cell to the corresponding place...
                 double val = e.attribute("value").toDouble(&ok);
@@ -1710,7 +1713,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
   };
 */
     bool ok;
-    QDomElement params = chart.namedItem( "params" ).toElement();
+    KoXmlElement params = chart.namedItem( "params" ).toElement();
     if ( params.hasAttribute( "type" ) ) {
         int type=params.attribute("type").toInt( &ok );
         if ( !ok )
@@ -1791,82 +1794,82 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
             return false;
     }
 
-    QDomElement title = params.namedItem( "title" ).toElement();
+    KoXmlElement title = params.namedItem( "title" ).toElement();
     if ( !title.isNull()) {
         QString t = title.text();
         m_params->title=t;
     }
-    QDomElement titlefont = params.namedItem( "titlefont" ).toElement();
+    KoXmlElement titlefont = params.namedItem( "titlefont" ).toElement();
     if ( !titlefont.isNull()) {
-        QDomElement font = titlefont.namedItem( "font" ).toElement();
+        KoXmlElement font = titlefont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
             m_params->setTitleFont(toFont(font));
     }
-    QDomElement xtitle = params.namedItem( "xtitle" ).toElement();
+    KoXmlElement xtitle = params.namedItem( "xtitle" ).toElement();
     if ( !xtitle.isNull()) {
         QString t = xtitle.text();
         m_params->xtitle=t;
     }
-    QDomElement xtitlefont = params.namedItem( "xtitlefont" ).toElement();
+    KoXmlElement xtitlefont = params.namedItem( "xtitlefont" ).toElement();
     if ( !xtitlefont.isNull()) {
-        QDomElement font = xtitlefont.namedItem( "font" ).toElement();
+        KoXmlElement font = xtitlefont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
             m_params->setXTitleFont(toFont(font));
     }
-    QDomElement ytitle = params.namedItem( "ytitle" ).toElement();
+    KoXmlElement ytitle = params.namedItem( "ytitle" ).toElement();
     if ( !ytitle.isNull()) {
         QString t = ytitle.text();
         m_params->ytitle=t;
     }
-    QDomElement ytitle2 = params.namedItem( "ytitle2" ).toElement();
+    KoXmlElement ytitle2 = params.namedItem( "ytitle2" ).toElement();
     if ( !ytitle2.isNull()) {
         QString t = ytitle2.text();
         m_params->ytitle2=t;
     }
-    QDomElement ytitlefont = params.namedItem( "ytitlefont" ).toElement();
+    KoXmlElement ytitlefont = params.namedItem( "ytitlefont" ).toElement();
     if ( !ytitlefont.isNull()) {
-        QDomElement font = ytitlefont.namedItem( "font" ).toElement();
+        KoXmlElement font = ytitlefont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
             m_params->setYTitleFont(toFont(font));
     }
-    QDomElement ylabelfmt = params.namedItem( "ylabelfmt" ).toElement();
+    KoXmlElement ylabelfmt = params.namedItem( "ylabelfmt" ).toElement();
     if ( !ylabelfmt.isNull()) {
         QString t = ylabelfmt.text();
         m_params->ylabel_fmt=t;
     }
-    QDomElement ylabel2fmt = params.namedItem( "ylabel2fmt" ).toElement();
+    KoXmlElement ylabel2fmt = params.namedItem( "ylabel2fmt" ).toElement();
     if ( !ylabel2fmt.isNull()) {
         QString t = ylabel2fmt.text();
         m_params->ylabel2_fmt=t;
     }
-    QDomElement labelfont = params.namedItem( "labelfont" ).toElement();
+    KoXmlElement labelfont = params.namedItem( "labelfont" ).toElement();
     if ( !labelfont.isNull()) {
-        QDomElement font = labelfont.namedItem( "font" ).toElement();
+        KoXmlElement font = labelfont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
             m_params->setLabelFont(toFont(font));
     }
 
-    QDomElement yaxisfont = params.namedItem( "yaxisfont" ).toElement();
+    KoXmlElement yaxisfont = params.namedItem( "yaxisfont" ).toElement();
     if ( !yaxisfont.isNull()) {
-        QDomElement font = yaxisfont.namedItem( "font" ).toElement();
+        KoXmlElement font = yaxisfont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
             m_params->setYAxisFont(toFont(font));
     }
 
-    QDomElement xaxisfont = params.namedItem( "xaxisfont" ).toElement();
+    KoXmlElement xaxisfont = params.namedItem( "xaxisfont" ).toElement();
     if ( !xaxisfont.isNull()) {
-        QDomElement font = xaxisfont.namedItem( "font" ).toElement();
+        KoXmlElement font = xaxisfont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
             m_params->setXAxisFont(toFont(font));
     }
-    QDomElement annotationFont = params.namedItem("annotationfont").toElement();
+    KoXmlElement annotationFont = params.namedItem("annotationfont").toElement();
     if ( !annotationFont.isNull()) {
-        QDomElement font = annotationFont.namedItem( "font" ).toElement();
+        KoXmlElement font = annotationFont.namedItem( "font" ).toElement();
         if ( !font.isNull() )
             m_params->setAnnotationFont(toFont(font));
     }
 
-    QDomElement yaxis = params.namedItem( "yaxis" ).toElement();
+    KoXmlElement yaxis = params.namedItem( "yaxis" ).toElement();
     if ( !yaxis.isNull()) {
         if (yaxis.hasAttribute( "yinterval" )) {
             m_params->requested_yinterval= yaxis.attribute("yinterval").toDouble( &ok );
@@ -1883,7 +1886,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
     }
 #endif
 
-    QDomElement graph = params.namedItem( "graph" ).toElement();
+    KoXmlElement graph = params.namedItem( "graph" ).toElement();
     if (!graph.isNull()) {
         if (graph.hasAttribute( "grid" )) {
             bool b=(bool) graph.attribute("grid").toInt( &ok );
@@ -1970,7 +1973,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
     }
 
 #if 0
-    QDomElement graphparams = params.namedItem( "graphparams" ).toElement();
+    KoXmlElement graphparams = params.namedItem( "graphparams" ).toElement();
     if (!graphparams.isNull()) {
         if (graphparams.hasAttribute( "dept3d" )) {
             m_params->_3d_depth=graphparams.attribute("dept3d").toDouble( &ok );
@@ -2029,7 +2032,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
         }
     }
 
-    QDomElement graphcolor = params.namedItem( "graphcolor" ).toElement();
+    KoXmlElement graphcolor = params.namedItem( "graphcolor" ).toElement();
     if (!graphcolor.isNull()) {
         if (graphcolor.hasAttribute( "bgcolor" )) {
             m_params->BGColor= QColor( graphcolor.attribute( "bgcolor" ) );
@@ -2069,7 +2072,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
         }
     }
 
-    QDomElement annotation = params.namedItem( "annotation" ).toElement();
+    KoXmlElement annotation = params.namedItem( "annotation" ).toElement();
     if (!annotation.isNull()) {
         m_params->annotation=new KChartAnnotationType;
         if (annotation.hasAttribute( "color" )) {
@@ -2081,13 +2084,13 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
         }
     }
 
-    QDomElement note = params.namedItem( "note" ).toElement();
+    KoXmlElement note = params.namedItem( "note" ).toElement();
     if ( !note.isNull()) {
         QString t = note.text();
         m_params->annotation->note=t;
     }
 
-    QDomElement scatter = params.namedItem( "scatter" ).toElement();
+    KoXmlElement scatter = params.namedItem( "scatter" ).toElement();
     if ( !scatter.isNull() ) {
         m_params->scatter = new KChartScatterType;
         if ( scatter.hasAttribute( "point" ) ) {
@@ -2115,18 +2118,18 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
         }
     }
 
-    QDomElement legend = chart.namedItem("legend").toElement();
+    KoXmlElement legend = chart.namedItem("legend").toElement();
     if (!legend.isNull()) {
         int number = legend.attribute("number").toInt(&ok);
         if (!ok)  { return false; }
-        QDomNode name = legend.firstChild();
+        KoXmlNode name = legend.firstChild();
         m_params->legend.clear();
         for(int i=0; i<number; i++) {
             if (name.isNull()) {
                 kDebug(35001) << "Some problems, there is less data than it should be!" << endl;
                 break;
             }
-            QDomElement element = name.toElement();
+            KoXmlElement element = name.toElement();
             if ( !element.isNull() && element.tagName() == "name" ) {
                 QString t = element.text();
                 m_params->legend+=t;
@@ -2135,18 +2138,18 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
         }
     }
 
-    QDomElement xlbl = chart.namedItem("xlbl").toElement();
+    KoXmlElement xlbl = chart.namedItem("xlbl").toElement();
     if (!xlbl.isNull()) {
         int number = xlbl.attribute("number").toInt(&ok);
         if (!ok)  { return false; }
-        QDomNode label = xlbl.firstChild();
+        KoXmlNode label = xlbl.firstChild();
         m_params->xlbl.clear();
         for (int i=0; i<number; i++) {
             if (label.isNull()) {
                 kDebug(35001) << "Some problems, there is less data than it should be!" << endl;
                 break;
             }
-            QDomElement element = label.toElement();
+            KoXmlElement element = label.toElement();
             if ( !element.isNull() && element.tagName() == "label" ) {
                 QString t = element.text();
                 m_params->xlbl+=t;
@@ -2155,7 +2158,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
         }
     }
 
-    QDomElement backgroundPixmap = chart.namedItem( "backgroundPixmap" ).toElement();
+    KoXmlElement backgroundPixmap = chart.namedItem( "backgroundPixmap" ).toElement();
     if ( !backgroundPixmap.isNull() ) {
         if ( backgroundPixmap.hasAttribute( "name" ) )
             m_params->backgroundPixmapName = backgroundPixmap.attribute( "name" );
@@ -2181,18 +2184,18 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
         }
     }
 
-    QDomElement extcolor = chart.namedItem("extcolor").toElement();
+    KoXmlElement extcolor = chart.namedItem("extcolor").toElement();
     if (!extcolor.isNull()) {
         unsigned int number = extcolor.attribute("number").toInt(&ok);
         if (!ok)  { return false; }
-        QDomNode color = extcolor.firstChild();
+        KoXmlNode color = extcolor.firstChild();
 
         for (unsigned int i=0; i<number; i++) {
             if (color.isNull()) {
                 kDebug(35001) << "Some problems, there is less data than it should be!" << endl;
                 break;
             }
-            QDomElement element = color.toElement();
+            KoXmlElement element = color.toElement();
             if ( !element.isNull()) {
                 if (element.hasAttribute( "name" )) {
                     m_params->ExtColor.setColor(i,QColor( element.attribute( "name" ) ));

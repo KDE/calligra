@@ -7,6 +7,7 @@
 
 
 #include <kconfig.h>
+#include <KoXmlReader.h>
 
 #include <koChart.h>
 #include "kchart_params.h"
@@ -68,10 +69,10 @@ public:
 
     // Save and load
     virtual QDomDocument  saveXML();
-    virtual bool          loadXML( QIODevice *, const QDomDocument& doc );
-    virtual bool          loadOasis( const QDomDocument& doc,
+    virtual bool          loadXML( QIODevice *, const KoXmlDocument& doc );
+    virtual bool          loadOasis( const KoXmlDocument& doc,
 				     KoOasisStyles& oasisStyles,
-				     const QDomDocument& settings,
+				     const KoXmlDocument& settings,
 				     KoStore *store );
     virtual bool          saveOasis( KoStore* store,
                                      KoXmlWriter* manifestWriter );
@@ -94,10 +95,10 @@ signals:
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
-    bool  loadOldXML( const QDomDocument& doc );
-    bool  loadAuxiliary( const QDomDocument& doc );
-    bool  loadData( const QDomDocument& doc, KDChartTableData& currentData );
-    bool  loadOasisData( const QDomElement& tableElem );
+    bool  loadOldXML( const KoXmlDocument& doc );
+    bool  loadAuxiliary( const KoXmlDocument& doc );
+    bool  loadData( const KoXmlDocument& doc, KDChartTableData& currentData );
+    bool  loadOasisData( const KoXmlElement& tableElem );
     void  saveOasisData( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const;
     void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles ) const;
 

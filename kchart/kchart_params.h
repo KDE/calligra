@@ -29,6 +29,8 @@ class KoStore;
 class KDChartParams;
 // class DCOPObject;
 
+#include <KoXmlReader.h>
+
 
 #include "kdchart/KDChartParams.h"
 
@@ -106,17 +108,17 @@ public slots:
 
 //     DCOPObject  *dcopObject();
 
-    bool loadOasis( const QDomElement     &chartElem,
+    bool loadOasis( const KoXmlElement     &chartElem,
 		    KoOasisLoadingContext &loadingContext,
                     QString               &errorMessage,
 		    KoStore               *store );
     void saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const;
 
  private:
-    bool loadOasisPlotarea( const QDomElement     &plotareaElem,
+    bool loadOasisPlotarea( const KoXmlElement     &plotareaElem,
 			    KoOasisLoadingContext &loadingContext,
 			    QString               &errorMessage );
-    bool loadOasisAxis( const QDomElement         &axisElem,
+    bool loadOasisAxis( const KoXmlElement         &axisElem,
 			KoOasisLoadingContext     &loadingContext,
 			QString                   &errorMessage,
 			KDChartAxisParams::AxisPos axisPos );
