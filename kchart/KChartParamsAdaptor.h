@@ -40,7 +40,7 @@ class KChartParamsAdaptor : public QDBusAbstractAdaptor
   Q_OBJECT
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.chart.params")
 public:
-    KChartParamsAdaptor( KChartParams *_params );
+    explicit KChartParamsAdaptor( KChartParams *_params );
 
 public Q_SLOTS: // METHODS
     virtual QString chartType()const;

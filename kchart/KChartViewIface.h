@@ -33,7 +33,7 @@ class KChartViewIface : public KoViewIface
 {
     K_DCOP
 public:
-    KChartViewIface( KChartView *view_ );
+    explicit KChartViewIface( KChartView *view_ );
 
 k_dcop:
     virtual void wizard();

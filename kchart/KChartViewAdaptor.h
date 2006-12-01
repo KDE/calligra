@@ -34,7 +34,7 @@ class ViewAdaptor : public QDBusAbstractAdaptor
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.chart.view")
 public:
-    ViewAdaptor( KChartView *view_ );
+    explicit ViewAdaptor( KChartView *view_ );
 
 public Q_SLOTS: // METHODS
     virtual void wizard();

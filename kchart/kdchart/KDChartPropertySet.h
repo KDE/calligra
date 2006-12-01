@@ -111,7 +111,7 @@ class KDCHART_EXPORT KDChartPropertySet :public QObject
       \param idParent the ID of the parent property set. Skip this paramter
       to define a property set without specifying a parent.
       */
-    KDChartPropertySet( const QString& name, int idParent=KDChartPropertySet::UndefinedID ) :
+    explicit KDChartPropertySet( const QString& name, int idParent=KDChartPropertySet::UndefinedID ) :
         mOwnID( UndefinedID )
     { fullReset( name, idParent ); }
 

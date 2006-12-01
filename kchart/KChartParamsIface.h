@@ -35,7 +35,7 @@ class KChartParamsIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    KChartParamsIface( KChartParams *_params );
+    explicit KChartParamsIface( KChartParams *_params );
 
 k_dcop:
     virtual QString chartType()const;

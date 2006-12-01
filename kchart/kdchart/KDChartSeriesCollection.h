@@ -53,7 +53,7 @@ class KDCHART_EXPORT KDChartSeriesCollection : public KDChartTableDataBase,
 {
     // Standard KDChartTableDataBase interface
     public:
-        KDChartSeriesCollection( KDChartParams *params );
+        explicit KDChartSeriesCollection( KDChartParams *params );
         virtual ~KDChartSeriesCollection();
 
         virtual uint rows() const;

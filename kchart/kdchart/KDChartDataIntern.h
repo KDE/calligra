@@ -57,13 +57,13 @@ public:
 
     // 1. simple c'tors: used for 1-coordinate data
 
-    KDChartData( double value ) :
+    explicit KDChartData( double value ) :
         _valueType(  QVariant::Double ), dValue( value ),
         _valueType2( QVariant::Invalid ),
         _propSetID(  0 )
     {}
     /* string values are only supported for legend texts or axis labels */
-    KDChartData( const QString& value ) :
+    explicit KDChartData( const QString& value ) :
         _valueType(  QVariant::String ), sValue( value ),
         _valueType2( QVariant::Invalid ),
         _propSetID(  0 )

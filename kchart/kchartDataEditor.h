@@ -45,7 +45,7 @@ class kchartDataSpinBox : public QSpinBox
 {
     Q_OBJECT
 public:
-    kchartDataSpinBox(QWidget *);
+    explicit kchartDataSpinBox(QWidget *);
     ~kchartDataSpinBox();
 };
 

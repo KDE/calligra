@@ -42,7 +42,7 @@
 class KDCHART_EXPORT KDChartUnknownTypeException
 {
     public:
-        KDChartUnknownTypeException( const QString& type ) :
+        explicit KDChartUnknownTypeException( const QString& type ) :
             _type( type )
             {}
 

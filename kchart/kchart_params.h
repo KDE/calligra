@@ -62,7 +62,7 @@ class KChartParams : public KDChartParams
     } DataDirection;
 
 
-    KChartParams( KChartPart *_part );
+    explicit KChartParams( KChartPart *_part );
     ~KChartParams();
     // Reimplementation of selected KDChartParams methods
     ChartType  chartType() const            { return m_chartType; }
