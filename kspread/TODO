@@ -128,7 +128,10 @@ Things not in bugzilla
     - Decouple validity and conditions from cells.			done
     - Fix named styles.							----
     - Extend the Storage template to the StyleStorage level.		----
-      Garbage collection, book-keeping, ...
+      - Garbage collection						done
+      - Book-keeping							done
+      - Used area tracking						----
+      - Cache								----
     - Check for orphaned (nonDefault)Cell lookups.			----
     - Insertion/deletion of cell ranges.				----
     - Improve the saving.						----

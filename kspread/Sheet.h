@@ -41,7 +41,6 @@
 #include "Style.h"
 #include "Global.h"
 //#include "Object.h"
-#include "Storage.h"
 
 class QWidget;
 class QPainter;
@@ -68,6 +67,8 @@ class AutoFillSequence;
 class Canvas;
 class Cell;
 class ColumnFormat;
+class CommentStorage;
+class ConditionsStorage;
 class RowFormat;
 class EmbeddedChart;
 class Doc;
@@ -83,14 +84,11 @@ class Style;
 class StyleStorage;
 class UndoInsertRemoveAction;
 class Validity;
+class ValidityStorage;
 class View;
 class EmbeddedKOfficeObject;
 class EmbeddedObject;
 class SheetAdaptor;
-
-typedef Storage<QString>    CommentStorage;
-typedef Storage<Conditions> ConditionsStorage;
-typedef Storage<Validity>   ValidityStorage;
 
 /********************************************************************
  *

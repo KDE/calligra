@@ -124,6 +124,7 @@ SET (kspreadcommon_LIB_SRCS
 	SheetAdaptor.cpp
 	SheetPrint.cpp
 	SortManipulator.cpp
+	Storage.cpp
 	Style.cpp
 	StyleManager.cpp
 	StyleManipulators.cpp
