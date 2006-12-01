@@ -5838,7 +5838,8 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             if ( ok )
             {
                 setCellValue( QDate( year, month, day ) );
-                format()->setFormatType (ShortDate_format);
+                if ( style )
+                    format()->setFormatType (style->formatType());
                 kdDebug() << "Set QDate: " << year << " - " << month << " - " << day << endl;
             }
 
@@ -5883,7 +5884,8 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
                 // Value kval( timeToNum( hours, minutes, seconds ) );
                 // cell->setValue( kval );
                 setCellValue( QTime( hours % 24, minutes, seconds ) );
-                format()->setFormatType (Time_format);
+                if ( style )
+                    format()->setFormatType (style->formatType());
             }
         }
         else if( valuetype == "string" )
