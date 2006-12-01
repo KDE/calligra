@@ -85,6 +85,16 @@ public:
     Conditions();
 
     /**
+     * Copy Constructor.
+     */
+    Conditions( const Conditions& other );
+
+    /**
+     * Destructor..
+     */
+    ~Conditions();
+
+    /**
      * \return \c true if there are no conditions defined
      */
     bool isEmpty() const;
@@ -132,6 +142,7 @@ public:
 
     /// \note fake implementation to make QMap happy
     bool operator<( const Conditions& ) const { return true; }
+    void operator=( const Conditions& other );
     bool operator==( const Conditions& other ) const;
     inline bool operator!=( const Conditions& other ) const { return !operator==( other ); }
 
@@ -168,12 +179,7 @@ private:
      */
     QString saveOasisConditionValue(Conditional &cond) const;
 
-
-    class Private : public QSharedData
-    {
-    public:
-        QLinkedList<Conditional> conditionList;
-    };
+    class Private;
     QSharedDataPointer<Private> d;
 };
 

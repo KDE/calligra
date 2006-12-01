@@ -111,8 +111,23 @@ bool Conditional::operator==(const Conditional& other) const
 //
 /////////////////////////////////////////////////////////////////////////////
 
+class Conditions::Private : public QSharedData
+{
+public:
+    QLinkedList<Conditional> conditionList;
+};
+
 Conditions::Conditions()
     : d( new Private )
+{
+}
+
+Conditions::Conditions( const Conditions& other )
+    : d( other.d )
+{
+}
+
+Conditions::~Conditions()
 {
 }
 
@@ -647,6 +662,11 @@ void Conditions::loadConditions( const StyleManager* styleManager, const KoXmlEl
             kDebug(36001) << "Error loading condition " << conditionElement.nodeName()<< endl;
         }
     }
+}
+
+void Conditions::operator=( const Conditions& other )
+{
+    d = other.d;
 }
 
 bool Conditions::operator==( const Conditions& other ) const

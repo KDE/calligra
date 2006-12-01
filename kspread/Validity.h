@@ -87,6 +87,17 @@ public:
     Validity();
 
     /**
+     * Copy Constructor.
+     * Copies the validity \p other .
+     */
+    Validity( const Validity& other );
+
+    /**
+     * Destructor.
+     */
+    ~Validity();
+
+    /**
      * \return \c true if this validity check allows any content
      */
     bool isEmpty() const;
@@ -153,6 +164,7 @@ public:
 
     /// \note fake implementation to make QMap happy
     bool operator<( const Validity& ) const { return true; }
+    void operator=( const Validity& );
     bool operator==( const Validity& other ) const;
     inline bool operator!=( const Validity& other ) const { return !operator==( other ); }
 
@@ -169,27 +181,7 @@ private:
      */
     void loadOasisValidationValue( const QStringList &listVal );
 
-    class Private : public QSharedData
-    {
-    public:
-        QString message;
-        QString title;
-        QString titleInfo;
-        QString messageInfo;
-        double valMin;
-        double valMax;
-        Conditional::Type cond;
-        Action action;
-        Restriction restriction;
-        QTime  timeMin;
-        QTime  timeMax;
-        QDate  dateMin;
-        QDate  dateMax;
-        bool displayMessage;
-        bool allowEmptyCell;
-        bool displayValidationInformation;
-        QStringList listValidity;
-    };
+    class Private;
     QSharedDataPointer<Private> d;
 };
 

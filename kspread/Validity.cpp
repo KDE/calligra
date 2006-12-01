@@ -38,6 +38,28 @@
 
 using namespace KSpread;
 
+class Validity::Private : public QSharedData
+{
+public:
+    QString message;
+    QString title;
+    QString titleInfo;
+    QString messageInfo;
+    double valMin;
+    double valMax;
+    Conditional::Type cond;
+    Action action;
+    Restriction restriction;
+    QTime  timeMin;
+    QTime  timeMax;
+    QDate  dateMin;
+    QDate  dateMax;
+    bool displayMessage;
+    bool allowEmptyCell;
+    bool displayValidationInformation;
+    QStringList listValidity;
+};
+
 Validity::Validity()
     : d( new Private )
 {
@@ -49,6 +71,15 @@ Validity::Validity()
   d->displayMessage = true;
   d->allowEmptyCell = false;
   d->displayValidationInformation = false;
+}
+
+Validity::Validity( const Validity& other )
+    : d( other.d )
+{
+}
+
+Validity::~Validity()
+{
 }
 
 bool Validity::isEmpty() const
@@ -875,6 +906,11 @@ bool Validity::testValidity( const Cell* cell ) const
         }
     }
     return (valid || d->action != Stop);
+}
+
+void Validity::operator=( const Validity& other )
+{
+    d = other.d;
 }
 
 bool Validity::operator==( const Validity& other ) const
