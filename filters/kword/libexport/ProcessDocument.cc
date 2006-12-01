@@ -158,8 +158,8 @@ void ProcessDocumentInfoTag ( QDomNode         myNode,
 
 
 static void ProcessOneAttrTag ( QDomNode  myNode,
-                                QString   attrName,
-                                QString   attrType,
+                                const QString&   attrName,
+                                const QString&   attrType,
                                 void     *attrData,
                                 KWEFKWordLeader *leader )
 {
@@ -188,7 +188,7 @@ static void ProcessColorAttrTag ( QDomNode myNode, void *tagData, KWEFKWordLeade
 
 
 static void ProcessBoolIntAttrTag ( QDomNode  myNode,
-                                    QString   attrName,
+                                    const QString&   attrName,
                                     void     *attrData,
                                     KWEFKWordLeader *leader )
 {

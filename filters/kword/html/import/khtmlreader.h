@@ -53,7 +53,7 @@ public:
 	KHTMLReader(KWDWriter *writer);
 	~KHTMLReader();
 	
-	bool filter(KUrl url);
+	bool filter(const KUrl& url);
 
 private slots:
 	void completed();

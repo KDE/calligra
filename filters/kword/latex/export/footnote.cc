@@ -37,23 +37,23 @@ Footnote::~Footnote()
 }
 
 /* Modifiers */
-void Footnote::setSpace (QString new_space)
+void Footnote::setSpace (const QString& new_space)
 {
 	_space = new_space;
 }
 
-void Footnote::setBefore(QString new_before)
+void Footnote::setBefore(const QString& new_before)
 {
 	_before = new_before;
 
 }
 
-void Footnote::setAfter(QString new_after)
+void Footnote::setAfter(const QString& new_after)
 {
 	_after = new_after;
 }
 
-void Footnote::setRef(QString new_ref)
+void Footnote::setRef(const QString& new_ref)
 {
 	_ref = new_ref;
 }

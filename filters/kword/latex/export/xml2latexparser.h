@@ -48,7 +48,7 @@ class Xml2LatexParser : public XmlParser
 		 * @param fileOut Output latex filename.
 		 * @param config ???
 		 */
-		Xml2LatexParser(const KoStore* in, QString fileOut, Config* config);
+		Xml2LatexParser(const KoStore* in, const QString& fileOut, Config* config);
 
 		virtual ~Xml2LatexParser() {}
 

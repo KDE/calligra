@@ -58,13 +58,13 @@ private:
     bool addHeaders();
     bool addFooters();
     bool addBody();
-    QString convertToKWordString(QByteArray s);
+    QString convertToKWordString(const QByteArray& s);
 
     // Node routines
-    bool parseNodes(QByteArray n);
-    bool parseText(QByteArray n);
-    bool parseTable(QByteArray n);
-    bool parseGraphics(QByteArray n);
+    bool parseNodes(const QByteArray& n);
+    bool parseText(const QByteArray& n);
+    bool parseTable(const QByteArray& n);
+    bool parseGraphics(const QByteArray& n);
 
     // finished KWord document
     QString maindoc;

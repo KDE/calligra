@@ -85,14 +85,14 @@ class Document: public XmlParser
 		void analyzePixmaps(const QDomNode);
 
 		void generate(QTextStream&, bool);
-		Element* searchAnchor(QString);
-		Element* searchFootnote(QString);
-		Key* searchKey(QString keyName);
+		Element* searchAnchor(const QString&);
+		Element* searchFootnote(const QString&);
+		Key* searchKey(const QString& keyName);
 		/** Save the file in a temp file. */
-		QString extractData(QString key);
+		QString extractData(const QString& key);
 		/** Build a DOM tree (e.g. a KOffice part) */
-		//QDomNode extractKoData(QString key);
-		//Pixmap*  searchPixmap(QString);
+		//QDomNode extractKoData(const QString& key);
+		//Pixmap*  searchPixmap(const QString&);
 
 	private:
 		/**

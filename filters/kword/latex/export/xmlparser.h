@@ -56,7 +56,7 @@ class XmlParser
 		static QString _filename;
 
 	public:
-		XmlParser(Config*, QString);
+		XmlParser(Config*, const QString&);
     XmlParser(Config*, QByteArray);	/* deprecated */
 		XmlParser(Config*, const KoStore*);
 		XmlParser();
@@ -68,14 +68,14 @@ class XmlParser
 		//FileHeader* getFileHeader   () const { return _fileHeader; }
 		KoStore*    getStorage      () const { return _in; }
 		QString     getChildName(QDomNode, int);
-		QDomNode    getChild(QDomNode, QString);
-		QDomNode    getChild(QDomNode, QString, int);
+		QDomNode    getChild(QDomNode, const QString&);
+		QDomNode    getChild(QDomNode, const QString&, int);
 		QDomNode    getChild(QDomNode, int);
 		QString     getData(QDomNode, int);
-		int         getNbChild(QDomNode, QString);
+		int         getNbChild(QDomNode, const QString&);
 		int         getNbChild(QDomNode);
-		QString     getAttr(QDomNode, QString) const;
-		bool        isChild(QDomNode, QString);
+		QString     getAttr(QDomNode, const QString&) const;
+		bool        isChild(QDomNode, const QString&);
 
 		//void setFileHeader(FileHeader* h) { _fileHeader = h; }
 		void setRoot      (Document*   r) { _root       = r; }

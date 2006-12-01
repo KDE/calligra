@@ -72,12 +72,12 @@ class Footnote: public Format
 		 */
 		void setFrom  (int   f) { _from   = f; }
 		void setTo    (int   t) { _to     = t; }
-		void setSpace (QString);
+		void setSpace (const QString&);
 		void setStart (int   s) { _start  = s; }
 		void setEnd   (int   e) { _end    = e; }
-		void setBefore(QString);
-		void setAfter (QString);
-		void setRef   (QString);
+		void setBefore(const QString&);
+		void setAfter (const QString&);
+		void setRef   (const QString&);
 
 		/**
 		 * Helpful functions

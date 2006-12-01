@@ -44,7 +44,7 @@ void qt_enter_modal( QWidget *widget );
 void qt_leave_modal( QWidget *widget );
 
 
-bool KHTMLReader::filter(KUrl url) {
+bool KHTMLReader::filter(const KUrl& url) {
 	kDebug(30503) << "KHTMLReader::filter" << endl;
 	QObject::connect(_html,SIGNAL(completed()),this,SLOT(completed()));
 

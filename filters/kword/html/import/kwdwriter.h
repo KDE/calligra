@@ -46,7 +46,7 @@ public:
 	 * adds a frameset to parent FIXME
 	 **/
 	QDomElement addFrameSet(QDomElement parent, int frametype=1,
-				   int frameinfo=0, QString name=QString::null,
+				   int frameinfo=0, const QString& name=QString::null,
 				   int visible=1);
 
 	/**
@@ -119,18 +119,18 @@ public:
 	/**
 	 * adds/changes an attribute to/of the current format
 	 **/
-        QDomElement formatAttribute(QDomElement paragraph, QString name, QString attrName, QString attr);
+        QDomElement formatAttribute(QDomElement paragraph, const QString& name, const QString& attrName, const QString& attr);
 
         /**
          * get a layout attribute
          **/
-	QString getLayoutAttribute(QDomElement paragraph, QString name, QString attrName);
+	QString getLayoutAttribute(QDomElement paragraph, const QString& name, const QString& attrName);
 
 
         /**
          * adds/changes an attribute to/of the current layout
          **/
-        QDomElement layoutAttribute(QDomElement paragraph, QString name, QString attrName, QString attr);
+        QDomElement layoutAttribute(QDomElement paragraph, const QString& name, const QString& attrName, const QString& attr);
 
         /**
          * creates a new format in the current paragraph. do this before adding text
@@ -149,7 +149,7 @@ public:
 	/**
 	 * adds some text to the current format in this paragraph
 	 **/
-	void addText(QDomElement paragraph, QString text, int format_id, bool keep_formatting=false);
+	void addText(QDomElement paragraph, const QString& text, int format_id, bool keep_formatting=false);
 
 	/**
 	 * returns the current format
@@ -160,7 +160,7 @@ public:
 	/**
 	 * create a Link (URL)
 	 **/
-	QDomElement createLink(QDomElement paragraph, QString linkName, QString hrefName);
+	QDomElement createLink(QDomElement paragraph, const QString& linkName, const QString& hrefName);
 
 	/**
 	 * copy the given layout, and set it as layout of the given paragraph
@@ -185,7 +185,7 @@ public:
 	/**
 	 * mark document as being written by author, and having title title
 	 **/
-	void createDocInfo(QString author, QString title);
+	void createDocInfo(const QString& author, const QString& title);
 
         /**
          * returns the document root

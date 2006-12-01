@@ -52,7 +52,7 @@ TextZone::TextZone(Para *para)
 /*******************************************/
 /* TextZone                                */
 /*******************************************/
-TextZone::TextZone(QString text, Para *para): _text(text)
+TextZone::TextZone(const QString& text, Para *para): _text(text)
 {
 	setPara(para);
 	if(para != NULL)
@@ -90,7 +90,7 @@ bool TextZone::useFormat() const
 /* Convert special characters (unicode) in */
 /* latex usable characters.                */
 /*******************************************/
-QString TextZone::escapeLatin1(QString text)
+QString TextZone::escapeLatin1(const QString& text)
 {
 	static const char *escapes[64] =
 	{
@@ -345,7 +345,7 @@ void TextZone::generate(QTextStream &out)
 /* Trunc the text in about 80 characters of*/
 /* width except if there are not spaces.   */
 /*******************************************/
-void TextZone::display(QString text, QTextStream& out)
+void TextZone::display(const QString& text, QTextStream& out)
 {
 	QString line;
 	int index = 0, end = 0;

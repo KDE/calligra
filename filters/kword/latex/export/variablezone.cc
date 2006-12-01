@@ -47,7 +47,7 @@ VariableZone::VariableZone(Para* para): VariableFormat(para)
 /*******************************************/
 /* VariableZone                             */
 /*******************************************/
-VariableZone::VariableZone(QString text, Para* para): VariableFormat(para)
+VariableZone::VariableZone(const QString& text, Para* para): VariableFormat(para)
 {
 	setText(text);
 	/*setPara(para);

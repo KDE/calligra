@@ -30,7 +30,7 @@ QString getFootnoteFramesetName(const QString& id)
 }
 
 static void InsertTimeVariable(QDomDocument& mainDocument,
-    QDomElement& variableElement, QString strKey)
+    QDomElement& variableElement, const QString& strKey)
 {
     QDomElement typeElement=mainDocument.createElement("TYPE");
     typeElement.setAttribute("key",strKey);
@@ -47,7 +47,7 @@ static void InsertTimeVariable(QDomDocument& mainDocument,
 }
 
 static void InsertDateVariable(QDomDocument& mainDocument,
-    QDomElement& variableElement, QString strKey)
+    QDomElement& variableElement, const QString& strKey)
 {
     QDomElement typeElement=mainDocument.createElement("TYPE");
     typeElement.setAttribute("key",strKey);
@@ -64,7 +64,7 @@ static void InsertDateVariable(QDomDocument& mainDocument,
 }
 
 static bool ProcessTimeField(QDomDocument& mainDocument,
-    QDomElement& variableElement, QString strType)
+    QDomElement& variableElement, const QString& strType)
 // strType: AbiWord's type
 {
     if (strType=="time")
@@ -90,7 +90,7 @@ static bool ProcessTimeField(QDomDocument& mainDocument,
 }
 
 static bool ProcessDateField(QDomDocument& mainDocument,
-    QDomElement& variableElement, QString strType)
+    QDomElement& variableElement, const QString& strType)
 // strType: AbiWord's type
 // Help for the % formats:
 //   man date
@@ -138,7 +138,7 @@ static bool ProcessDateField(QDomDocument& mainDocument,
 }
 
 bool ProcessField(QDomDocument& mainDocument,
-    QDomElement& variableElement, QString strType, const QXmlAttributes& attributes)
+    QDomElement& variableElement, const QString& strType, const QXmlAttributes& attributes)
 {
     // In AbiWord:
     //   field names are in the file: src/text/fmt/xp/fp_Fields.h

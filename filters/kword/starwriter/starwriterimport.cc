@@ -36,14 +36,14 @@ typedef KGenericFactory<StarWriterImport> StarWriterImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libstarwriterimport, StarWriterImportFactory("kofficefilters"))
 
 // Get unsigned 24-bits integer at given offset
-static inline quint32 readU24(QByteArray array, quint32 p)
+static inline quint32 readU24(const QByteArray& array, quint32 p)
 {
    quint8* ptr = (quint8*) array.data();
    return (quint32) (ptr[p] + (ptr[p+1] << 8) + (ptr[p+2] << 16));
 }
 
 // Get unsigned 16-bits integer at given offset
-static inline quint16 readU16(QByteArray array, quint32 p)
+static inline quint16 readU16(const QByteArray& array, quint32 p)
 {
    quint8* ptr = (quint8*) array.data();
    return (quint16) (ptr[p] + (ptr[p+1] << 8));
@@ -232,7 +232,7 @@ QString StarWriterImport::convertToKWordString(QByteArray s)
     return result;
 }
 
-bool StarWriterImport::parseNodes(QByteArray n)
+bool StarWriterImport::parseNodes(const QByteArray& n)
 {
     QByteArray s;
     quint32 len, p;
@@ -269,7 +269,7 @@ bool StarWriterImport::parseNodes(QByteArray n)
     return true;
 }
 
-bool StarWriterImport::parseText(QByteArray n)
+bool StarWriterImport::parseText(const QByteArray& n)
 {
     QByteArray s;
     quint16 len;
@@ -335,7 +335,7 @@ bool StarWriterImport::parseText(QByteArray n)
     return true;
 }
 
-bool StarWriterImport::parseTable(QByteArray n)
+bool StarWriterImport::parseTable(const QByteArray& n)
 {
 /*
     QByteArray s;
@@ -419,7 +419,7 @@ bool StarWriterImport::parseTable(QByteArray n)
     return true;
 }
 
-bool StarWriterImport::parseGraphics(QByteArray n)
+bool StarWriterImport::parseGraphics(const QByteArray& n)
 {
     return true;
 }

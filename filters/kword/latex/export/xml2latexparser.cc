@@ -25,7 +25,7 @@
 
 #include "xml2latexparser.h"
 
-Xml2LatexParser::Xml2LatexParser(const KoStore* in, QString fileOut, Config* config):
+Xml2LatexParser::Xml2LatexParser(const KoStore* in, const QString& fileOut, Config* config):
 		XmlParser(config, in), _file(fileOut), _in( in )
 {
 	//kDebug(30522) << fileIn.latin1() << endl;

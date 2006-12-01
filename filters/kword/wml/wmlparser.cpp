@@ -446,7 +446,7 @@ bool WMLParser::doCloseDocument()
   return true;
 }
 
-bool WMLParser::doOpenCard( QString, QString )
+bool WMLParser::doOpenCard( const QString&, const QString& )
 {
   return true;
 }
@@ -456,7 +456,7 @@ bool WMLParser::doCloseCard()
   return true;
 }
 
-bool WMLParser::doParagraph( QString, WMLFormatList, WMLLayout )
+bool WMLParser::doParagraph( const QString&, WMLFormatList, WMLLayout )
 {
   return true;
 }

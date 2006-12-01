@@ -31,7 +31,7 @@ Document* XmlParser::_root = 0;
 KoStore* XmlParser::_in = NULL;
 QString XmlParser::_filename = "";
 
-XmlParser::XmlParser(Config* config, QString filename):_config(config)
+XmlParser::XmlParser(Config* config, const QString& filename):_config(config)
 	
 {
 	//_filename = filename;
@@ -48,7 +48,7 @@ XmlParser::XmlParser(Config* config, QString filename):_config(config)
 	//_eltCurrent = _document.documentElement();
 }
 
-XmlParser::XmlParser(Config* config, QByteArray in): _config(config)
+XmlParser::XmlParser(Config* config, const QByteArray& in): _config(config)
 {
 	_document.setContent(in);
 }
@@ -87,7 +87,7 @@ XmlParser::~XmlParser()
 		_in->close();*/
 }
 
-QDomNode XmlParser::getChild(QDomNode node, QString name)
+QDomNode XmlParser::getChild(QDomNode node, const QString& name)
 {
 	QDomNode childNode = getChild(node, name, 0);
 	kDebug(30522) << childNode.nodeName() << endl;
@@ -101,7 +101,7 @@ bool XmlParser::isChild(QDomNode node, QString name)
 	return false;
 }
 
-QDomNode XmlParser::getChild(QDomNode node, QString name, int index)
+QDomNode XmlParser::getChild(QDomNode node, const QString& name, int index)
 {
 	if(node.isElement()) {
 		QDomNodeList children = node.toElement().elementsByTagName(name);
@@ -129,7 +129,7 @@ int XmlParser::getNbChild(QDomNode node)
 	return node.childNodes().count();
 }
 
-int XmlParser::getNbChild(QDomNode node, QString name)
+int XmlParser::getNbChild(QDomNode node, const QString& name)
 {
 	if(node.isElement())
 		return node.toElement().elementsByTagName(name).count();
@@ -141,7 +141,7 @@ QString  XmlParser::getChildName(QDomNode node, int index)
 	return node.childNodes().item(index).nodeName();
 }
 
-QString  XmlParser::getAttr(QDomNode node, QString name) const
+QString  XmlParser::getAttr(QDomNode node, const QString& name) const
 {
 	if(node.isElement())
 		return node.toElement().attributeNode(name).value();

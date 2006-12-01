@@ -58,7 +58,7 @@ class TextZone: public TextFormat
 		 * @param text the text in this zone.
 		 * @param para which is the parent class.
 		 */
-		TextZone(QString text, Para *para = 0);
+		TextZone(const QString& text, Para *para = 0);
 
 		/* 
 		 * Destructor
@@ -76,14 +76,14 @@ class TextZone: public TextFormat
 
 		/* ==== Setters ==== */
 		
-		void setText(QString text) { _text = text; }
+		void setText(const QString& text) { _text = text; }
 
 		/* ==== Helpful functions ==== */
 
 		/**
 		 * convert a unicode text in latin1 enconding ala latex.
 		 */
-		QString escapeLatin1(QString);
+		QString escapeLatin1(const QString&);
 		
 		void analyze(const QDomNode);
 		void analyze();
@@ -93,7 +93,7 @@ class TextZone: public TextFormat
 		void generate_format_end(QTextStream &);
 
 	protected:
-		void display(QString, QTextStream&);
+		void display(const QString&, QTextStream&);
 
 	private:
 		/**

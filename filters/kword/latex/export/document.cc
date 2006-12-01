@@ -356,7 +356,7 @@ void Document::generateTypeFooter(QTextStream &out, Element *footer)
 	}
 }
 
-Element* Document::searchAnchor(QString anchor)
+Element* Document::searchAnchor(const QString& anchor)
 {
 	Element *elt = _tables.first();
 	while(elt != 0)
@@ -386,7 +386,7 @@ Element* Document::searchAnchor(QString anchor)
 
 }
 
-Element* Document::searchFootnote(QString footnote)
+Element* Document::searchFootnote(const QString& footnote)
 {
 	Element* elt = _footnotes.first();
 	while(elt != 0)
@@ -399,7 +399,7 @@ Element* Document::searchFootnote(QString footnote)
 
 }
 
-Key* Document::searchKey(QString keyName)
+Key* Document::searchKey(const QString& keyName)
 {
 	Key* key = _keys.first();
 	while(key != 0)
@@ -413,7 +413,7 @@ Key* Document::searchKey(QString keyName)
 
 }
 
-QString Document::extractData(QString key)
+QString Document::extractData(const QString& key)
 {
 	QString data = searchKey(key)->getName();
 	kDebug(30522) << "Opening " << data << endl;
@@ -440,12 +440,12 @@ QString Document::extractData(QString key)
 		tempFile.write( buffer, readBytes );
 		readBytes = getStorage()->read( buffer, buflen );
 	}
-	temp.close();
+	tempFile.close();
 	if(!getStorage()->close())
 	{
 		kError(30522) << "Unable to close " << data << endl;
 		return QString("");
 	}
-	kDebug(30522) << "temp filename : " << temp.fileName() << endl;
-	return temp.fileName();
+	kDebug(30522) << "temp filename : " << tempFile.fileName() << endl;
+	return tempFile.fileName();
 }

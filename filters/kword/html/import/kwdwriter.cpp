@@ -137,7 +137,7 @@ int KWDWriter::createTable() {
  return tableNo++;
 }
 
-void KWDWriter::createDocInfo(QString author, QString title) {
+void KWDWriter::createDocInfo(const QString& author, const QString& title) {
 	QDomElement authorTag=_docinfo->createElement("author");
 	QDomElement aboutTag=_docinfo->createElement("about");
 	QDomElement fullNameTag=_docinfo->createElement("full-name");
@@ -282,7 +282,7 @@ void KWDWriter::finishTable(int tableno,QRect rect) {
 
 
 QDomElement KWDWriter::addFrameSet(QDomElement parent, int frametype,
-				   int frameinfo, QString name, int visible) {
+				   int frameinfo, const QString& name, int visible) {
 
 	QDomElement frameset=_doc->createElement("FRAMESET");
 	parent.appendChild(frameset);
@@ -319,7 +319,7 @@ void KWDWriter::appendKWordVariable(QDomDocument& doc, QDomElement& format,
 	format.appendChild(variableElement);
 }
 
-QDomElement KWDWriter::createLink(QDomElement paragraph, QString linkName, QString hrefName) {
+QDomElement KWDWriter::createLink(QDomElement paragraph, const QString& linkName, const QString& hrefName) {
 	QDomElement linkElement = _doc->createElement("LINK");
 	linkElement.setAttribute( "linkName", linkName );
 	linkElement.setAttribute( "hrefName", hrefName );
@@ -378,7 +378,7 @@ QDomElement KWDWriter::addParagraph(QDomElement parent, QDomElement layoutToClon
 	return paragraph;
 }
 
-QDomElement KWDWriter::formatAttribute(QDomElement paragraph, QString name, QString attrName, QString attr) {
+QDomElement KWDWriter::formatAttribute(QDomElement paragraph, const QString& name, const QString& attrName, const QString& attr) {
 	QDomElement lastformat=currentFormat(paragraph,true);
 	QDomNodeList qdnl= lastformat.elementsByTagName(name);
 	if (qdnl.length()) {
@@ -395,7 +395,7 @@ QDomElement KWDWriter::formatAttribute(QDomElement paragraph, QString name, QStr
 
 }
 
-QString KWDWriter::getLayoutAttribute(QDomElement paragraph, QString name, QString attrName) {
+QString KWDWriter::getLayoutAttribute(QDomElement paragraph, const QString& name, const QString& attrName) {
 	QDomElement currentLayout=paragraph.elementsByTagName("LAYOUT").item(0).toElement();
 	QDomNodeList qdnl= currentLayout.elementsByTagName(name);
 	if (qdnl.length()) {
@@ -405,7 +405,7 @@ QString KWDWriter::getLayoutAttribute(QDomElement paragraph, QString name, QStri
 	return QString();
 }
 
-QDomElement KWDWriter::layoutAttribute(QDomElement paragraph, QString name, QString attrName, QString attr) {
+QDomElement KWDWriter::layoutAttribute(QDomElement paragraph, const QString& name, const QString& attrName, const QString& attr) {
 	QDomElement currentLayout=paragraph.elementsByTagName("LAYOUT").item(0).toElement();
 	QDomNodeList qdnl= currentLayout.elementsByTagName(name);
 
@@ -422,7 +422,9 @@ QDomElement KWDWriter::layoutAttribute(QDomElement paragraph, QString name, QStr
 	}
 }
 
-void KWDWriter::addText(QDomElement paragraph, QString text, int format_id, bool keep_formatting) {
+void KWDWriter::addText(QDomElement paragraph, const QString& _text, int format_id, bool keep_formatting) {
+        QString text = _text;
+
 	QDomNode temp=paragraph.elementsByTagName("TEXT").item(0).firstChild();
 	QDomText currentText=temp.toText();
 	if (temp.isNull()) { kDebug(30503) << "no text" << endl; return; }
