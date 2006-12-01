@@ -54,19 +54,24 @@ void RegisterLogicFunctions()
   f->setParamCount (1);
   repo->add (f);
   f = new Function ("AND", func_and);
-  f->setParamCount (2, -1);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
   repo->add (f);
   f = new Function ("NAND", func_nand);
-  f->setParamCount (2, -1);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
   repo->add (f);
   f = new Function ("NOR", func_nor);
-  f->setParamCount (2, -1);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
   repo->add (f);
   f = new Function ("OR", func_or);
-  f->setParamCount (2, -1);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
   repo->add (f);
   f = new Function ("XOR", func_xor);
-  f->setParamCount (2, -1);
+  f->setParamCount (1, -1);
+  f->setAcceptArray ();
   repo->add (f);
   f = new Function ("IF", func_if);
   f->setParamCount (3);
@@ -99,65 +104,73 @@ Value func_not (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: OR
+void awOr (ValueCalc *calc, Value &res, Value value, Value)
+{
+  if (! res.asBoolean())
+    res = Value ( asBool (value, calc) );
+}
 Value func_or (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  Value result(false);
   int cnt = args.count();
-  for (int i = 0; i < cnt; ++i)
-    if (asBool (args[i], calc))
+  for (int i = 0; i < cnt; ++i) {
+    calc->arrayWalk (args[i], result, awOr, 0);
+    if (result.asBoolean())
       // if any value is true, return true
-      return Value (true);
+      return result;
+  }
   // nothing is true -> return false
-  return Value (false);
+  return result;
 }
 
 // Function: NOR
-Value func_nor (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_nor (valVector args, ValueCalc *calc, FuncExtra *extra)
 {
   // OR in reverse
-  int cnt = args.count();
-  for (int i = 0; i < cnt; ++i)
-    if (asBool (args[i], calc))
-      // if any value is true, return false
-      return Value (false);
-  // nothing is true -> return true
-  return Value (true);
+  return Value(! func_or(args, calc, extra).asBoolean());
 }
 
 // Function: AND
+void awAnd (ValueCalc *calc, Value &res, Value value, Value)
+{
+  if (res.asBoolean())
+    res = Value ( asBool (value, calc) );
+}
 Value func_and (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  Value result(true);
   int cnt = args.count();
-  for (int i = 0; i < cnt; ++i)
-    if (!asBool (args[i], calc))
+  for (int i = 0; i < cnt; ++i) {
+    calc->arrayWalk (args[i], result, awAnd, 0);
+    if (! result.asBoolean())
       // if any value is false, return false
-      return Value (false);
+      return result;
+  }
   // nothing is false -> return true
-  return Value (true);
+  return result;
 }
 
 // Function: NAND
-Value func_nand (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_nand (valVector args, ValueCalc *calc, FuncExtra *extra)
 {
   // AND in reverse
-  int cnt = args.count();
-  for (int i = 0; i < cnt; ++i)
-    if (!asBool (args[i], calc))
-      // if any value is false, return true
-      return Value (true);
-  // nothing is false -> return false
-  return Value (false);
+  return Value(! func_and(args, calc, extra).asBoolean());
 }
 
 // Function: XOR
+void awXor (ValueCalc *calc, Value &count, Value value, Value)
+{
+  if (asBool (value, calc))
+    count = Value( count.asInteger() + 1 );
+}
 Value func_xor (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // exclusive OR - exactly one value must be true
   int cnt = args.count();
-  int count = 0;
+  Value count(0);
   for (int i = 0; i < cnt; ++i)
-    if (asBool (args[i], calc))
-      count++;
-  return Value (count == 1);
+    calc->arrayWalk (args[i], count, awXor, 0);
+  return Value (count.asInteger() == 1);
 }
 
 // Function: IF
