@@ -1255,7 +1255,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
 {
     //Warning: be careful that some element names can be lower case or upper case (not very XML)
     kDebug(30506) << indent << " <" << name << ">" << endl; //DEBUG
-    indent += "*"; //DEBUG
+    indent += '*'; //DEBUG
 
     if (structureStack.isEmpty())
     {

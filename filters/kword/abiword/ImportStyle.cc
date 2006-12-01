@@ -88,7 +88,7 @@ void StyleDataMap::defineNewStyle(const QString& strName, const int level,
     if (!strProps.isEmpty())
     {
         styleData.m_props+=strProps;
-        styleData.m_props+=";"; // Security if other properties are appended later
+        styleData.m_props+=';'; // Security if other properties are appended later
     }
 }
 

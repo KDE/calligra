@@ -444,7 +444,7 @@ void KWDWriter::addText(QDomElement paragraph, const QString& _text, int format_
 	if (keep_formatting)
 		newtext=oldtext + text;
 	else {
-		newtext=oldtext + " " + text;
+		newtext=oldtext + ' ' + text;
 		newtext=newtext.simplified(); // strip possible new space at beginning.
 	}
 	currentText.setData(newtext);

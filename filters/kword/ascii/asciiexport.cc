@@ -423,9 +423,9 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
                             {
                                 // Manual footnote
                                 *m_streamOut << value;
-                                m_manualNotes += "[" + value + "] " + notestr;
+                                m_manualNotes += '[' + value + "] " + notestr;
                             }
-                            *m_streamOut << "]";
+                            *m_streamOut << ']';
                         }
                     }
                     else

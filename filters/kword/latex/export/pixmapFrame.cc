@@ -175,7 +175,7 @@ void PixmapFrame::convert()
 			dir = Config::instance()->getPicturesDir();
 		kDebug(30522) << "file " << getFilename() << endl;
 		kDebug(30522) << "path " << dir << endl;
-		(void) strcpy(image->filename, (dir + "/" + getFilenamePS()).latin1());
+		(void) strcpy(image->filename, (dir + '/' + getFilenamePS()).latin1());
 		WriteImage(image_info, image);
 		DestroyImage(image);
 	}

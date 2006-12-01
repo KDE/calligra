@@ -224,7 +224,7 @@ QString StarWriterImport::convertToKWordString(QByteArray s)
         else if (s[i] == '>') result += "&gt;";
         else if (s[i] == '"') result += "&quot;";
         else if (s[i] == 0x27) result += "&apos;";
-        else if (s[i] == 0x09) result += "\t";
+        else if (s[i] == 0x09) result += '\t';
         // FIXME: more to add here
         //        (manual breaks, soft-hyphens, non-breaking spaces, variables)
         else result += QChar(s[i]);

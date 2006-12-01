@@ -96,7 +96,7 @@ QString RTFWorker::writeRow(const QString& textCellHeader, const QString& rowTex
     row += WritePositiveKeyword("\\trleft", qRound(PT_TO_TWIP(frame.left) - m_paperMarginLeft));
     //row += "\\trautofit0"; // ### VERIFY
     row += textCellHeader;
-    row += " "; // End of keyword
+    row += ' '; // End of keyword
     row += rowText;
 
     return row;
@@ -317,7 +317,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     textBody += "\\pichgoal";
     textBody += QString::number(origHeight, 10);
 
-    textBody+=" ";
+    textBody+=' ';
     const char hex[] = "0123456789abcdef";
     for (uint i=0; i<image.size(); i++)
     {
@@ -329,7 +329,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     }
 
 
-    textBody+="}";
+    textBody+='}';
 
     return textBody;
 }
@@ -388,7 +388,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                 markup += QString::number((2 * layout.formatData.text.fontSize));
                 markup += lookupFont("\\f",layout.formatData.text.fontName);
         }
-        markup += " ";
+        markup += ' ';
         markup += layout.counter.text;
         markup += "\\tab}{\\*\\pn";
         if (layout.counter.style > 5)
@@ -446,7 +446,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
         default:
             markup += "\\bullet";
         }
-        markup += "}";
+        markup += '}';
         }
         else
         {
@@ -527,7 +527,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
             markup += lookupFont("\\pnf", layout.formatData.text.fontName);
         }
 
-        markup += "}";
+        markup += '}';
 }
 
 
@@ -712,7 +712,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     content += "{\\field";
                     content += "{\\*\\fldinst HYPERLINK ";
                     content +=  escapeRtfText((*paraFormatDataIt).variable.getHrefName());
-                    content += "}";
+                    content += '}';
                     content += "{\\fldrslt ";
                     content += "{\\ul";   // underline, ### TODO: use style Hyperlink
                     content += lookupColor("\\cf",QColor(0,0,255));// blue
@@ -766,7 +766,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
 			str += markup;
 			str += " {";
 			str += content;
-			str += "}";
+			str += '}';
 			str += m_eol;
 			content.clear();
 			if (!m_inTable)
@@ -794,7 +794,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
 	str += markup;
 	str += " {";
 	str += content;
-	str += "}";
+	str += '}';
 	str += m_eol;
 	if (m_inTable==false)
 	{
@@ -847,9 +847,9 @@ bool RTFWorker::doHeader(const HeaderData& header)
     if (content!="\\par\\pard\\plain")
     {
     str += content;
-    str += "}";
+    str += '}';
 
-    str += "}";
+    str += '}';
 
     m_textBody += str;
     }
@@ -882,9 +882,9 @@ bool RTFWorker::doFooter(const FooterData& footer)
     if (content!="\\par\\pard\\plain")
     {
     str += content;
-    str += "}";
+    str += '}';
 
-    str += "}";
+    str += '}';
 
     m_textBody += str;
     }

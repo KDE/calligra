@@ -575,7 +575,7 @@ int ASCIIImport::Indent(const QString& line) const
    str += "\" rows=\"1\" cols=\"1\" removable=\"0\" visible=\"1\" name=\"Cell ";
    buf = QString::number(row); // convert row to string
    str += buf;
-   str += ",";
+   str += ',';
    buf = QString::number(col); // convert col to string
    str += buf;
 

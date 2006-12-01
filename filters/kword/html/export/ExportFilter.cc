@@ -100,8 +100,8 @@ QString HtmlWorker::getAdditionalFileName(const QString& additionalName)
     }
 
     QString strFileName(m_strSubDirectoryName);
-    strFileName+="/";
-    const int result=additionalName.findRev("/");
+    strFileName+='/';
+    const int result=additionalName.findRev('/');
     if (result>=0)
     {
         strFileName+=additionalName.mid(result+1);
@@ -114,7 +114,7 @@ QString HtmlWorker::getAdditionalFileName(const QString& additionalName)
     // Now, we have to create a backup file.
 
     QString strBackupName(strFileName);
-    strBackupName+="~";
+    strBackupName+='~';
     kDebug(30503) << "Remove backup file: " << strBackupName << endl;
     // We need to remove the backup file, as not all filesystems or ports can do it themselves on a rename.
     dir.remove(strBackupName);

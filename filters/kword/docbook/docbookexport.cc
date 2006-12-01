@@ -745,7 +745,7 @@ static void ProcessInfoData ( const QString &tagName,
 {
     if ( tagText.length () )
     {
-        outputText += "<" + tagName + ">" + tagText + "</" + tagName + ">\n";
+        outputText += '<' + tagName + '>' + tagText + "</" + tagName + ">\n";
     }
 }
 

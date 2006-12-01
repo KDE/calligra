@@ -771,7 +771,7 @@ public:
 
 			m_objectFrameset += "</FRAMESET>";
 		#ifdef DEBUG_XML_OUTPUT
-			m_objectFrameset += "\n";
+			m_objectFrameset += '\n';
 		#endif
 
 			m_pictures += "<KEY msec=\"0\" hour=\"0\" second=\"0\" minute=\"0\" day=\"1\" month=\"1\" year=\"1970\"";
@@ -1033,23 +1033,23 @@ public:
 
 		output += "</LAYOUT>";
 	#ifdef DEBUG_XML_OUTPUT
-		output += "\n";
+		output += '\n';
 	#endif
 
 		output += "<FORMATS>";
 	#ifdef DEBUG_XML_OUTPUT
-		output += "\n";
+		output += '\n';
 	#endif
 			// output all the charInfo for this paragraph
 			output += m_formatOutput; m_formatOutput = "";
 		output += "</FORMATS>";
 	#ifdef DEBUG_XML_OUTPUT
-		output += "\n";
+		output += '\n';
 	#endif
 
 		output += "</PARAGRAPH>";
 	#ifdef DEBUG_XML_OUTPUT
-		output += "\n";
+		output += '\n';
 	#endif
 
 		if (!writeTextInternal (output)) return false;
@@ -1073,9 +1073,9 @@ public:
 		// output type of format information (page number or normal text)
 		m_formatOutput += "<FORMAT id=\"";
 		if (charProperty->getIsPageNumber ())
-			m_formatOutput += "4";
+			m_formatOutput += '4';
 		else
-			m_formatOutput += "1";
+			m_formatOutput += '1';
 		m_formatOutput += "\" ";
 
 		m_formatOutput += "pos=\""; m_formatOutput += QString::number (m_charInfoCountStart); m_formatOutput += "\" ";

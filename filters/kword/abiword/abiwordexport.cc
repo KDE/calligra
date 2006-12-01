@@ -773,7 +773,7 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
             }
             else
             {
-                props += ",";
+                props += ',';
             }
             props += QString::number((*it).m_ptpos);
             props += "pt";
@@ -787,7 +787,7 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
                 default: props += "/L";
             }
 
-            props += "0"; // No filling
+            props += '0'; // No filling
         }
         props += "; ";
     }

@@ -630,10 +630,10 @@ bool HtmlCssWorker::doFullPaperFormat(const int format,
     m_strPageSize="size: ";
     m_strPageSize+=strWidth;
     m_strPageSize+=strUnits;
-    m_strPageSize+=" ";
+    m_strPageSize+=' ';
     m_strPageSize+=strHeight;
     m_strPageSize+=strUnits;
-    m_strPageSize+=";";
+    m_strPageSize+=';';
     return true;
 }
 

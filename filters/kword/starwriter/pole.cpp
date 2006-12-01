@@ -974,7 +974,7 @@ Stream* Storage::stream( const std::string& name )
 
   // make absolute if necessary
   std::string fullName = name;
-  if( name[0] != '/' ) fullName.insert( 0, path() + "/" );
+  if( name[0] != '/' ) fullName.insert( 0, path() + '/' );
 
   // find to which entry this stream associates
   Entry* entry =  io->entry( name );
