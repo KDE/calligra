@@ -526,6 +526,50 @@ void TestDocumentLayout::testPageBreak() {
     QCOMPARE(blockLayout->lineAt(0).y(), 160.0);
 }
 
+void TestDocumentLayout::testPageBreak2() {
+    initForNewTest("line\nParag2\nSimple Parag\nLast");
+    QTextBlock block = doc->begin();
+    QTextCursor cursor(block);
+    QTextBlockFormat bf = cursor.blockFormat();
+    bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysAfter);
+//bf.setPageBreakPolicy(PageBreak_AlwaysBefore);
+    cursor.setBlockFormat(bf);
+    block = block.next();
+    QVERIFY(block.isValid());
+    block = block.next();
+    QVERIFY(block.isValid());
+    cursor = QTextCursor(block);
+    bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysAfter);
+    cursor.setBlockFormat(bf);
+
+    shape1->resize(QSizeF(200, 40));
+    KoShape *shape2 = new MockTextShape();
+    shape2->resize(QSizeF(200, 100));
+    new KWTextFrame(shape2, frameSet);
+    KoShape *shape3 = new MockTextShape();
+    shape3->resize(QSizeF(200, 100));
+    new KWTextFrame(shape3, frameSet);
+
+    layout->layout();
+
+    QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
+    block = doc->begin().next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout(); // parag 2
+    QCOMPARE(blockLayout->lineCount(), 1);
+    QCOMPARE(blockLayout->lineAt(0).y(), 50.0);
+    block = block.next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout(); // parag 3
+    //qDebug() << qAbs(blockLayout->lineAt(0).y());
+    QVERIFY( qAbs(blockLayout->lineAt(0).y() - 64.4) < ROUNDING);
+    block = block.next();
+    QVERIFY(block.isValid());
+    blockLayout = block.layout(); // parag 4
+    QCOMPARE(blockLayout->lineCount(), 1);
+    QCOMPARE(blockLayout->lineAt(0).y(), 160.0);
+}
+
 void TestDocumentLayout::testBasicList() {
     initForNewTest("Base\nListItem\nListItem2: The quick brown fox jums over the lazy dog.\nNormal\nNormal");
 

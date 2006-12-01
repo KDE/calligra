@@ -204,7 +204,8 @@ public:
             m_block = m_block.next();
             if(!m_newShape) {// this parag is first line on new shape
                 m_y += m_format.bottomMargin();
-                if(m_format.boolProperty(KoParagraphStyle::BreakAfter)) {
+                if(m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysAfter ||
+                        m_format.boolProperty(KoParagraphStyle::BreakAfter)) {
                     m_data->setEndPosition(m_block.position()-1);
                     nextFrame();
                     if(m_data)
@@ -227,7 +228,8 @@ public:
         updateBorders(); // fill the border inset member vars.
         m_y += m_topBorderInset;
 
-        if(!m_newShape && m_format.boolProperty(KoParagraphStyle::BreakBefore)) {
+        if(!m_newShape && (m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore ||
+                m_format.boolProperty(KoParagraphStyle::BreakBefore))) {
             m_data->setEndPosition(m_block.position()-1);
             nextFrame();
             if(m_data)

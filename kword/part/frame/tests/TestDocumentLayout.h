@@ -47,6 +47,7 @@ private slots:
     void testBasicTextAlignments();
     void testTextAlignments();
     void testPageBreak();
+    void testPageBreak2();
 
 // Lists
     void testBasicList();
