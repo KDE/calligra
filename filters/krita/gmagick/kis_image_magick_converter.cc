@@ -110,10 +110,10 @@ namespace {
 
     ColorspaceType getColorTypeforColorSpace( KoColorSpace * cs )
     {
-        if ( cs->id() == KoID("GRAYA") || cs->id() == KoID("GRAYA16") ) return GRAYColorspace;
-        if ( cs->id() == KoID("RGBA") || cs->id() == KoID("RGBA16") ) return RGBColorspace;
-        if ( cs->id() == KoID("CMYK") || cs->id() == KoID("CMYK16") ) return CMYKColorspace;
-        if ( cs->id() == KoID("LABA") ) return LABColorspace;
+        if ( KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16") ) return GRAYColorspace;
+        if ( KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16") ) return RGBColorspace;
+        if ( KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYK16") ) return CMYKColorspace;
+        if ( KoID(cs->id()) == KoID("LABA") ) return LABColorspace;
 
 //         kDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
         return RGBColorspace;
