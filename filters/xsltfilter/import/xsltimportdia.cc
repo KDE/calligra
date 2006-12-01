@@ -208,7 +208,7 @@ void XSLTImportDia::okSlot()
 		return;
 	kDebug() << "XSLT FILTER --> BEGIN" << endl;
 	_out->open("root");
-	QString stylesheet = _currentFile.directory() + "/" + _currentFile.fileName();
+	QString stylesheet = _currentFile.directory() + '/' + _currentFile.fileName();
 
 	/* Add the current file in the recent list if is not and save the list. */
 	if(_recentList.contains(stylesheet) == 0)

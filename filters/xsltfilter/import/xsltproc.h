@@ -56,14 +56,14 @@ class XSLTProc
 		 */
     	XSLTProc(const char* fileIn, const char* fileOut, const char *stylesheet);
     	
-		XSLTProc(QString fileIn, QString fileOut, QString stylesheet);
+		XSLTProc(const QString& fileIn, const QString& fileOut, const QString& stylesheet);
 
 		/**
 		 * Destroy the processor
 		 */
 	    virtual ~XSLTProc() {}
 
-		void addParam(QString name, QString value);
+		void addParam(const QString& name, const QString& value);
 
 		/** Process fileIn through the stylesheet.
 		 * @return return 0 if no error occurred

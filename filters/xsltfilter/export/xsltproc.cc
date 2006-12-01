@@ -87,7 +87,7 @@ XSLTProc::XSLTProc(const char* fileIn, const char* fileOut, const char* xsltshee
 }
 #endif
 
-XSLTProc::XSLTProc(QString fileIn, QString fileOut, QString xsltsheet)
+XSLTProc::XSLTProc(const QString& fileIn, const QString& fileOut, const QString& xsltsheet)
 {
 	_fileIn = QFile::encodeName(fileIn);
 	_fileOut = QFile::encodeName(fileOut);
@@ -202,7 +202,7 @@ XSLTProc::xsltProcess(xmlDocPtr doc, xsltStylesheetPtr cur, const char *filename
     printf("      --profile or --norman : dump profiling information \n");
 }*/
 
-void XSLTProc::addParam(QString name, QString value)
+void XSLTProc::addParam(const QString& name, const QString& value)
 {
 	if(nbparams < NB_PARAMETER_MAX)
 	{
