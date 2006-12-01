@@ -80,6 +80,8 @@ public:
     void setFloatColor(Style::FloatColor floatColor) { m_style->setFloatColor( floatColor ); }
     void setFormatType(FormatType formatType) { m_style->setFormatType( formatType ); }
     void setCurrency(int type, const QString& symbol) { Style::Currency c; c.type = type; c.symbol = symbol; m_style->setCurrency( c ); }
+    void setParentName(const QString& name) { m_style->setParentName(name); }
+    void setDefault() { m_style->setDefault(); }
 
 protected:
     virtual QString name() const { return i18n("Format Change"); }
@@ -144,27 +146,6 @@ protected:
   virtual bool process( Cell* cell );
 
   virtual QString name() const;
-};
-
-
-
-class StyleApplicator : public Manipulator
-{
-public:
-  StyleApplicator();
-
-  void setStyle( const Style& style ) { m_style = style; }
-
-protected:
-  virtual bool process( Element* element );
-
-  virtual bool mainProcessing();
-
-  virtual QString name() const;
-
-private:
-  Style m_style;
-  QList< QPair<QRectF, QSharedDataPointer<SubStyle> > > m_undoData;
 };
 
 }  // namespace KSpread

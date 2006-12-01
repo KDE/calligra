@@ -141,6 +141,12 @@ protected:
      */
     void invalidateCache( const QRect& rect );
 
+    /**
+     * Composes a style of \p substyles .
+     * \return the composed style
+     */
+    Style composeStyle( const QList<QSharedDataPointer<SubStyle> >& subStyles ) const;
+
 private:
     class Private;
     Private * const d;

@@ -99,6 +99,8 @@ class KSPREAD_EXPORT StyleManager
   friend class StyleDialog;
   friend class View;
 
+  void dump() const;
+
   CustomStyle * m_defaultStyle;
   CustomStyles  m_styles; // builtin and custom made styles
 

@@ -5930,11 +5930,9 @@ void View::fillDown()
 
 void View::setDefaultStyle()
 {
-    Style style;
-    style.setDefault();
-    StyleApplicator* manipulator = new StyleApplicator();
+    StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
-    manipulator->setStyle( style );
+    manipulator->setDefault();
     manipulator->add( *selectionInfo() );
     manipulator->execute();
 }
@@ -6319,18 +6317,15 @@ void View::createStyleFromCell()
 
 void View::setStyle( const QString & stylename )
 {
-  kDebug() << "View::setStyle( " << stylename << " )" << endl;
-
-  Style* style = doc()->styleManager()->style( stylename );
-
-  if ( style )
-  {
-    StyleApplicator* manipulator = new StyleApplicator();
-    manipulator->setSheet( d->activeSheet );
-    manipulator->setStyle( *style );
-    manipulator->add( *selectionInfo() );
-    manipulator->execute();
-  }
+    kDebug() << "View::setStyle( " << stylename << " )" << endl;
+    if ( doc()->styleManager()->style( stylename ) )
+    {
+        StyleManipulator* manipulator = new StyleManipulator();
+        manipulator->setSheet( d->activeSheet );
+        manipulator->setParentName( stylename );
+        manipulator->add( *selectionInfo() );
+        manipulator->execute();
+    }
 }
 
 void View::increasePrecision()

@@ -158,12 +158,8 @@ public:
 
     virtual StyleType type() const;
 
-    CustomStyle* parent() const;
-    void setParent( CustomStyle* parent );
-
-    // setParentName is needed by loading code, which doesn't set the real parent
     QString parentName() const;
-    void setParentName (const QString &n);
+    void setParentName( const QString& name );
 
 
     bool loadXML( KoXmlElement& format, Paste::Mode pm = Paste::Normal, bool paste = false );
@@ -373,7 +369,6 @@ public:
     void setName( QString const & name );
     QString const & name() const;
 
-    void refreshParentName();
     bool definesAll() const;
 
     bool loadXML( KoXmlElement const & style, QString const & name );
@@ -429,10 +424,17 @@ class SubStyle : public QSharedData
 public:
     SubStyle() {}
     virtual ~SubStyle() {}
-
     virtual Style::Key type() const { return Style::DefaultStyleKey; }
-
     virtual void dump() const { kDebug() << Style::DefaultStyleKey << " Default SubStyle" << endl; }
+};
+
+class NamedStyle : public SubStyle
+{
+public:
+    NamedStyle( const QString& n ) : SubStyle(), name( n ) {}
+    virtual Style::Key type() const { return Style::NamedStyleKey; }
+    virtual void dump() const { kDebug() << Style::NamedStyleKey << " " << name << endl; }
+    QString name;
 };
 
 /***************************************************************************

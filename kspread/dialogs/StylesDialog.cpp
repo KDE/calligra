@@ -92,6 +92,8 @@ StyleDialog::StyleDialog( View * parent, StyleManager * manager )
            this, SLOT( slotSelectionChanged( Q3ListViewItem * ) ) );
   connect( m_dlg->m_displayBox, SIGNAL( activated( int ) ),
            this, SLOT( slotDisplayMode( int ) ) );
+  connect( this, SIGNAL( okClicked() ),
+           this, SLOT( slotOk() ) );
   connect( this, SIGNAL( user1Clicked() ),
            this, SLOT( slotUser1() ) );
   connect( this, SIGNAL( user2Clicked() ),
@@ -108,34 +110,38 @@ StyleDialog::~StyleDialog()
 
 void StyleDialog::fillComboBox()
 {
-  class Map : public QMap<CustomStyle *, K3ListViewItem *> {};
-  Map entries;
+    typedef QMap<CustomStyle*, K3ListViewItem*> Map;
+    Map entries;
 
-  entries.clear();
-  entries[m_styleManager->defaultStyle()] = new K3ListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
+    entries.clear();
+    entries[m_styleManager->defaultStyle()] = new K3ListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
 
-  CustomStyles::const_iterator iter = m_styleManager->m_styles.begin();
-  CustomStyles::const_iterator end  = m_styleManager->m_styles.end();
+    CustomStyles::const_iterator iter = m_styleManager->m_styles.begin();
+    CustomStyles::const_iterator end  = m_styleManager->m_styles.end();
 
-  while ( entries.count() != m_styleManager->m_styles.count() + 1 )
-  {
-    if ( entries.find( iter.value() ) == entries.end() )
+    while ( entries.count() != m_styleManager->m_styles.count() + 1 )
     {
-      if ( iter.value()->parent() == 0 )
-        entries[iter.value()] = new K3ListViewItem( m_dlg->m_styleList, iter.value()->name() );
-      else
-      {
-        Map::const_iterator i = entries.find( iter.value()->parent() );
-        if ( i != entries.end() )
-          entries[iter.value()] = new K3ListViewItem( i.value(), iter.value()->name() );
-      }
-    }
+        if ( entries.find( iter.value() ) == entries.end() )
+        {
+            if ( iter.value()->parentName().isNull() )
+                entries[iter.value()] = new K3ListViewItem( m_dlg->m_styleList, iter.value()->name() );
+            else
+            {
+                CustomStyle* parentStyle = m_styleManager->style( iter.value()->parentName() );
+                if ( parentStyle )
+                {
+                    Map::const_iterator i = entries.find( parentStyle );
+                    if ( i != entries.end() )
+                        entries[iter.value()] = new K3ListViewItem( i.value(), iter.value()->name() );
+                }
+            }
+        }
 
-    ++iter;
-    if ( iter == end )
-      iter = m_styleManager->m_styles.begin();
-  }
-  entries.clear();
+        ++iter;
+        if ( iter == end )
+            iter = m_styleManager->m_styles.begin();
+    }
+    entries.clear();
 }
 
 void StyleDialog::slotDisplayMode( int mode )
@@ -185,6 +191,7 @@ void StyleDialog::slotDisplayMode( int mode )
 
 void StyleDialog::slotOk()
 {
+    kDebug() << k_funcinfo << endl;
   K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
 
   if ( !item )

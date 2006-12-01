@@ -193,7 +193,7 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   tmp.removeAll( m_dlg->styleName );
   m_parentBox->insertItems( 1, tmp );
 
-  if ( m_dlg->getStyle()->parent() )
+  if ( !m_dlg->getStyle()->parentName().isNull() )
     m_parentBox->setItemText( m_parentBox->currentIndex(), m_dlg->getStyle()->parentName() );
   else
   {
@@ -238,9 +238,9 @@ void GeneralTab::slotNewParent( const QString & parentName )
     return;
 
   if ( parentName.isEmpty() || parentName == i18n( "<None>" ) )
-    m_dlg->getStyle()->setParent( 0 );
+    m_dlg->getStyle()->clearAttribute( Style::NamedStyleKey );
   else
-    m_dlg->getStyle()->setParent( m_dlg->getStyleManager()->style( parentName ) );
+    m_dlg->getStyle()->setParentName( parentName );
 
   // Set difference to new parent, set GUI to parent values, add changes made before
   //  m_dlg->initGUI();
@@ -307,9 +307,9 @@ bool GeneralTab::apply( CustomStyle * style )
       if ( m_parentBox->isEnabled() )
       {
         if ( m_parentBox->currentText() == i18n( "None" ) || m_parentBox->currentText().isEmpty() )
-          style->setParent( 0 );
+          style->clearAttribute( Style::NamedStyleKey );
         else
-          style->setParent( m_dlg->getStyleManager()->style( m_parentBox->currentText() ) );
+          style->setParentName( m_parentBox->currentText() );
       }
       m_dlg->getStyleManager()->changeName( name, m_nameEdit->text() );
     }

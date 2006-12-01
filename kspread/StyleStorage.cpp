@@ -42,9 +42,6 @@ using namespace KSpread;
 #ifdef KSPREAD_CACHE_KEY_QPOINT
 inline uint qHash( const QPoint& point )
 {
-    // FIXME Stefan: Restricts us to 2^16 x 2^16 cells!
-    //               Even if we support 'just' 2^15 x 2^15 cells atm, it's not nice.
-    //               Harder restriction (2^15 x 2^15) on Windows due to usage of QRegion!
     return ( static_cast<uint>( point.x() ) << 16 ) + static_cast<uint>( point.y() );
 }
 #endif
@@ -123,22 +120,10 @@ Style StyleStorage::contains(const QPoint& point) const
 #endif
     // not found, lookup in the tree
     QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.contains(point);
-    Style* style = new Style();
-    foreach ( const QSharedDataPointer<SubStyle> subStyle, subStyles )
-    {
-        if ( subStyle->type() == Style::DefaultStyleKey )
-        {
-            style->clear();
-        }
-        if ( subStyle->type() == Style::NamedStyleKey )
-        {
-            style->clear();
-            style = d->styleManager->defaultStyle();
-        }
-        style->insertSubStyle( subStyle );
-    }
     if ( subStyles.isEmpty() )
         return *d->styleManager->defaultStyle();
+    Style* style = new Style();
+    (*style) = composeStyle( subStyles );
 #ifdef KSPREAD_STYLE_CACHING
     // insert style into the cache
 #ifdef KSPREAD_CACHE_KEY_QPOINT
@@ -155,20 +140,7 @@ Style StyleStorage::contains(const QRect& rect) const
 {
     Q_ASSERT(d->styleManager);
     QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.contains(rect);
-    Style style;
-    foreach ( const QSharedDataPointer<SubStyle> subStyle, subStyles )
-    {
-        if ( subStyle->type() == Style::DefaultStyleKey )
-        {
-            style.clear();
-        }
-        if ( subStyle->type() == Style::NamedStyleKey )
-        {
-            style.clear();
-            style = *d->styleManager->defaultStyle();
-        }
-        style.insertSubStyle( subStyle );
-    }
+    Style style = composeStyle( subStyles );
     return subStyles.isEmpty() ? *d->styleManager->defaultStyle() : style;
 }
 
@@ -176,20 +148,7 @@ Style StyleStorage::intersects(const QRect& rect) const
 {
     Q_ASSERT(d->styleManager);
     QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.intersects(rect);
-    Style style;
-    foreach ( const QSharedDataPointer<SubStyle> subStyle, subStyles )
-    {
-        if ( subStyle->type() == Style::DefaultStyleKey )
-        {
-            style.clear();
-        }
-        if ( subStyle->type() == Style::NamedStyleKey )
-        {
-            style.clear();
-            style = *d->styleManager->defaultStyle();
-        }
-        style.insertSubStyle( subStyle );
-    }
+    Style style = composeStyle( subStyles );
     return subStyles.isEmpty() ? *d->styleManager->defaultStyle() : style;
 }
 
@@ -424,6 +383,25 @@ void StyleStorage::invalidateCache( const QRect& rect )
         }
     }
 #endif
+}
+
+Style StyleStorage::composeStyle( const QList<QSharedDataPointer<SubStyle> >& subStyles ) const
+{
+    Style style;
+    foreach ( const QSharedDataPointer<SubStyle> subStyle, subStyles )
+    {
+        if ( subStyle->type() == Style::DefaultStyleKey )
+            style.clear();
+        if ( subStyle->type() == Style::NamedStyleKey )
+        {
+            style.clear();
+            CustomStyle* namedStyle = d->styleManager->style( static_cast<const NamedStyle*>(subStyle.data())->name );
+            if ( namedStyle )
+                style = *namedStyle;
+        }
+        style.insertSubStyle( subStyle );
+    }
+    return style;
 }
 
 #include "StyleStorage.moc"

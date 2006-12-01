@@ -107,13 +107,13 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
 
     // reparent all styles
     foreach ( CustomStyle* style, m_styles )
-        if ( !style->parent() && !style->parentName().isNull() )
+        if ( /* !style->parent() &&*/ !style->parentName().isNull() )
         {
-            style->setParent( m_oasisStyles[ style->parentName() ] );
+            style->setParentName( m_oasisStyles[ style->parentName() ]->name() );
             kDebug(36003) << style->name() << " (" << style << ") gets " << m_oasisStyles[ style->parentName() ]->name() << " (" << m_oasisStyles[ style->parentName() ] << ") as parent." << endl;
         }
         else
-            kDebug(36003) << style->name() << " (" << style << ") already has " << style->parentName() << " (" << style->parent() << ") as parent." << endl;
+            kDebug(36003) << style->name() << " (" << style << ") already has " << style->parentName() << " as parent." << endl;
 }
 
 QDomElement StyleManager::save( QDomDocument & doc )
@@ -184,8 +184,8 @@ bool StyleManager::loadXML( KoXmlElement const & styles )
   for (it = names.begin(); it != names.end(); ++it) {
     if (*it != "Default") {
       CustomStyle * styleData = style (*it);
-      if ( !styleData->parent() && !styleData->parentName().isNull() )
-        styleData->setParent( m_styles[ styleData->parentName() ] );
+      if (/* !styleData->parent() &&*/ !styleData->parentName().isNull() )
+        styleData->setParentName( m_styles[ styleData->parentName() ]->name() );
     }
   }
 
@@ -232,15 +232,15 @@ CustomStyle * StyleManager::style( QString const & name ) const
 
 void StyleManager::takeStyle( CustomStyle * style )
 {
-  CustomStyle * parent = style->parent();
+  const QString parentName = style->parentName();
 
   CustomStyles::iterator iter = m_styles.begin();
   CustomStyles::iterator end  = m_styles.end();
 
   while ( iter != end )
   {
-    if ( iter.value()->parent() == style )
-      iter.value()->setParent( parent );
+    if ( iter.value()->parentName() == style->name() )
+      iter.value()->setParentName( parentName );
 
     ++iter;
   }
@@ -256,13 +256,13 @@ void StyleManager::takeStyle( CustomStyle * style )
 
 bool StyleManager::checkCircle( QString const & name, QString const & parent )
 {
-  CustomStyle * s = style( parent );
-  if ( !s || s->parent() == 0 )
+  CustomStyle* style = this->style( parent );
+  if ( !style || style->parentName().isNull() )
     return true;
-  if ( s->parentName() == name )
+  if ( style->parentName() == name )
     return false;
   else
-    return checkCircle( name, s->parentName() );
+    return checkCircle( name, style->parentName() );
 }
 
 bool StyleManager::validateStyleName( QString const & name, CustomStyle * style )
@@ -292,7 +292,7 @@ void StyleManager::changeName( QString const & oldName, QString const & newName 
   while ( iter != end )
   {
     if ( iter.value()->parentName() == oldName )
-      iter.value()->refreshParentName();
+      iter.value()->setParentName( newName );
 
     ++iter;
   }
@@ -351,13 +351,9 @@ Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles )
         QString parentStyleName = it.current()->attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
         if ( m_oasisStyles.contains( parentStyleName ) )
         {
-          autoStyles[name].setParent( m_oasisStyles[parentStyleName] );
+          autoStyles[name].setParentName( m_oasisStyles[parentStyleName]->name() );
         }
         kDebug(36003) << "\t parent-style-name:" << parentStyleName << endl;
-      }
-      else
-      {
-        autoStyles[name].setParent( m_defaultStyle );
       }
     }
   }
@@ -371,4 +367,11 @@ void StyleManager::releaseUnusedAutoStyles( Styles autoStyles )
 
     // Now, we can clear the map of styles sorted by OpenDocument name.
     m_oasisStyles.clear();
+}
+
+void StyleManager::dump() const
+{
+    kDebug(36006) << "Custom styles:" << endl;
+    foreach ( QString name, m_styles.keys() )
+        kDebug(36006) << name << endl;
 }

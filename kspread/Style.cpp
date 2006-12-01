@@ -46,10 +46,8 @@ using namespace KSpread;
 static uint calculateValue( QPen const & pen )
 {
   uint n = pen.color().red() + pen.color().green() + pen.color().blue();
-
   n += 1000 * pen.width();
   n += 10000 * (uint) pen.style();
-
   return n;
 }
 
@@ -58,34 +56,9 @@ class SubStyleOne : public SubStyle
 {
 public:
     SubStyleOne( const Value1& v = Value1() ) : SubStyle(), value1( v ) {}
-
-    virtual Style::Key type() const { /*kDebug(36006) << "S1" << endl;*/ return key; }
-
+    virtual Style::Key type() const { return key; }
     virtual void dump() const { kDebug(36006) << key << " " << value1 << endl; }
-
     Value1 value1;
-};
-
-// template<Style::Key Key, class Value1, class Value2>
-// class SubStyleTwo : public SubStyleOne<Key, Value1>
-// {
-// public:
-//     SubStyleTwo() : SubStyleOne<Key, Value1>() {}
-// 
-//     Value2 value2;
-// };
-
-class NamedStyle : public SubStyle
-{
-public:
-    NamedStyle( CustomStyle* s, const QString& n = QString() ) : SubStyle(), style( s ), name( n ) {}
-
-    virtual Style::Key type() const { /*kDebug(36006) << "NS" << endl;*/ return Style::NamedStyleKey; }
-
-    virtual void dump() const { kDebug(36006) << Style::NamedStyleKey << " " << style << name << endl; }
-
-    CustomStyle* style;
-    QString name;
 };
 
 template<Style::Key key>
@@ -143,35 +116,18 @@ Style::StyleType Style::type() const
     return AUTO;
 }
 
-CustomStyle* Style::parent() const
-{
-    if ( !d->subStyles.contains( NamedStyleKey ) )
-        return 0;
-    return static_cast<const NamedStyle*>( d->subStyles[NamedStyleKey].data() )->style;
-}
-
-void Style::setParent( CustomStyle* parent )
-{
-    d->subStyles.remove( NamedStyleKey );
-    d->subStyles.insert( NamedStyleKey, QSharedDataPointer<SubStyle>( new NamedStyle( parent ) ) );
-}
-
 // setParentName is needed by loading code, which doesn't set the real parent
 QString Style::parentName() const
 {
     if ( !d->subStyles.contains( NamedStyleKey ) )
         return QString();
-    const NamedStyle* style = static_cast<const NamedStyle*>( d->subStyles[NamedStyleKey].data() );
-    if ( style->style )
-        return style->style->name();
-    else
-        return style->name;
+    return static_cast<const NamedStyle*>( d->subStyles[NamedStyleKey].data() )->name;
 }
 
 void Style::setParentName( const QString& name )
 {
     d->subStyles.remove( NamedStyleKey );
-    d->subStyles.insert( NamedStyleKey, QSharedDataPointer<SubStyle>( new NamedStyle( 0, name ) ) );
+    d->subStyles.insert( NamedStyleKey, QSharedDataPointer<SubStyle>( new NamedStyle( name ) ) );
 }
 
 void Style::clearAttribute( Key key )
@@ -2234,11 +2190,7 @@ bool Style::compare( const SubStyle* one, const SubStyle* two )
         case DefaultStyleKey:
             return true;
         case NamedStyleKey:
-            if ( static_cast<const NamedStyle*>(one)->style != static_cast<const NamedStyle*>(two)->style )
-                return false;
-            if ( static_cast<const NamedStyle*>(one)->name != static_cast<const NamedStyle*>(two)->name )
-                return false;
-            return true;
+            return static_cast<const NamedStyle*>(one)->name != static_cast<const NamedStyle*>(two)->name;
         // borders
         case LeftPen:
             return static_cast<const SubStyleOne<LeftPen,QPen>*>(one)->value1 == static_cast<const SubStyleOne<LeftPen,QPen>*>(two)->value1;
@@ -2368,6 +2320,7 @@ const QSharedDataPointer<SubStyle> Style::createSubStyle( Key key, const QVarian
             newSubStyle = new SubStyle();
             break;
         case NamedStyleKey:
+            newSubStyle = new NamedStyle( value.value<QString>() );
             break;
         case LeftPen:
             newSubStyle = new BorderPenStyle<LeftPen>( value.value<QPen>() );
@@ -2538,7 +2491,7 @@ CustomStyle::CustomStyle( QString const & name, CustomStyle * parent )
     , d( new Private )
 {
     d->name = name;
-    setParent( parent );
+    setParentName( parent->name() );
 }
 
 CustomStyle::~CustomStyle()
@@ -2563,12 +2516,6 @@ const QString& CustomStyle::name() const
 void CustomStyle::setName( QString const & name )
 {
     d->name = name;
-}
-
-void CustomStyle::refreshParentName()
-{
-    if ( parent() )
-        setParentName( parent()->name() );
 }
 
 bool CustomStyle::definesAll() const
@@ -2631,8 +2578,8 @@ void CustomStyle::save( QDomDocument & doc, QDomElement & styles )
 
     QDomElement style( doc.createElement( "style" ) );
     style.setAttribute( "type", (int) type() );
-    if (parent())
-        style.setAttribute( "parent", parent()->name() );
+    if ( !parentName().isNull() )
+        style.setAttribute( "parent", parentName() );
     style.setAttribute( "name", name() );
 
     QDomElement format( doc.createElement( "format" ) );

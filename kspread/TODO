@@ -126,7 +126,7 @@ Things not in bugzilla
     - Fix Style::isDefault(). Use the StyleManager's default style.	----
     - Port the filters.							done
     - Decouple validity and conditions from cells.			done
-    - Fix named styles.							----
+    - Fix named styles.							done
     - Extend the Storage template to the StyleStorage level.		----
       - Garbage collection						done
       - Book-keeping							done
