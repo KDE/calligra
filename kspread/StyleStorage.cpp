@@ -133,7 +133,7 @@ Style StyleStorage::contains(const QPoint& point) const
 #endif
     d->cachedArea += QRect( point, point );
 #endif
-    return *style;
+    return style->isDefault() ? *d->styleManager->defaultStyle() : *style;
 }
 
 Style StyleStorage::contains(const QRect& rect) const
@@ -141,7 +141,7 @@ Style StyleStorage::contains(const QRect& rect) const
     Q_ASSERT(d->styleManager);
     QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.contains(rect);
     Style style = composeStyle( subStyles );
-    return subStyles.isEmpty() ? *d->styleManager->defaultStyle() : style;
+    return style.isDefault() ? *d->styleManager->defaultStyle() : style;
 }
 
 Style StyleStorage::intersects(const QRect& rect) const
@@ -149,7 +149,7 @@ Style StyleStorage::intersects(const QRect& rect) const
     Q_ASSERT(d->styleManager);
     QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.intersects(rect);
     Style style = composeStyle( subStyles );
-    return subStyles.isEmpty() ? *d->styleManager->defaultStyle() : style;
+    return style.isDefault() ? *d->styleManager->defaultStyle() : style;
 }
 
 QList< QPair<QRectF,QSharedDataPointer<SubStyle> > > StyleStorage::undoData(const QRect& rect) const
