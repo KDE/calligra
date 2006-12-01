@@ -328,7 +328,6 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->rows.setAutoDelete( true );
   d->columns.setAutoDelete( true );
   d->styleStorage = new StyleStorage( this );
-  d->styleStorage->setStyleManager( d->workbook->doc()->styleManager() );
   d->commentStorage = new CommentStorage( this );
   d->conditionsStorage = new ConditionsStorage( this );
   d->validityStorage = new ValidityStorage( this );

@@ -51,7 +51,6 @@ class KDE_NO_EXPORT StyleStorage::Private
 public:
     Sheet* sheet;
     RTree<QSharedDataPointer<SubStyle> > tree;
-    StyleManager* styleManager;
     QSet<int> usedColumns;
     QSet<int> usedRows;
     QRegion usedArea;
@@ -74,7 +73,6 @@ StyleStorage::StyleStorage( Sheet* sheet )
     , d(new Private)
 {
     d->sheet = sheet;
-    d->styleManager = 0;
     d->garbageCollectionInitializationTimer = new QTimer(this);
     connect(d->garbageCollectionInitializationTimer, SIGNAL(timeout()), this, SLOT(garbageCollectionInitialization()));
     d->garbageCollectionInitializationTimer->start(g_garbageCollectionTimeOut);
@@ -93,14 +91,9 @@ StyleStorage::~StyleStorage()
     delete d;
 }
 
-void StyleStorage::setStyleManager(StyleManager* manager)
-{
-    d->styleManager = manager;
-}
-
 Style StyleStorage::contains(const QPoint& point) const
 {
-    Q_ASSERT(d->styleManager);
+    Q_ASSERT(styleManager());
 #ifdef KSPREAD_STYLE_CACHING
     // first, lookup point in the cache
 #ifdef KSPREAD_CACHE_KEY_QPOINT
@@ -121,7 +114,7 @@ Style StyleStorage::contains(const QPoint& point) const
     // not found, lookup in the tree
     QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.contains(point);
     if ( subStyles.isEmpty() )
-        return *d->styleManager->defaultStyle();
+        return *styleManager()->defaultStyle();
     Style* style = new Style();
     (*style) = composeStyle( subStyles );
 #ifdef KSPREAD_STYLE_CACHING
@@ -133,23 +126,23 @@ Style StyleStorage::contains(const QPoint& point) const
 #endif
     d->cachedArea += QRect( point, point );
 #endif
-    return style->isDefault() ? *d->styleManager->defaultStyle() : *style;
+    return style->isDefault() ? *styleManager()->defaultStyle() : *style;
 }
 
 Style StyleStorage::contains(const QRect& rect) const
 {
-    Q_ASSERT(d->styleManager);
+    Q_ASSERT(styleManager());
     QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.contains(rect);
     Style style = composeStyle( subStyles );
-    return style.isDefault() ? *d->styleManager->defaultStyle() : style;
+    return style.isDefault() ? *styleManager()->defaultStyle() : style;
 }
 
 Style StyleStorage::intersects(const QRect& rect) const
 {
-    Q_ASSERT(d->styleManager);
+    Q_ASSERT(styleManager());
     QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.intersects(rect);
     Style style = composeStyle( subStyles );
-    return style.isDefault() ? *d->styleManager->defaultStyle() : style;
+    return style.isDefault() ? *styleManager()->defaultStyle() : style;
 }
 
 QList< QPair<QRectF,QSharedDataPointer<SubStyle> > > StyleStorage::undoData(const QRect& rect) const
@@ -326,7 +319,7 @@ void StyleStorage::garbageCollection()
 
     // check wether the named style still exists
     if ( currentPair.second->type() == Style::NamedStyleKey &&
-         !d->styleManager->style( static_cast<const NamedStyle*>(currentPair.second.data())->name ) )
+         !styleManager()->style( static_cast<const NamedStyle*>(currentPair.second.data())->name ) )
     {
         d->tree.remove( currentPair.first, currentPair.second );
         d->subStyles[currentPair.second->type()].removeAll( currentPair.second );
@@ -406,13 +399,18 @@ Style StyleStorage::composeStyle( const QList<QSharedDataPointer<SubStyle> >& su
         if ( subStyle->type() == Style::NamedStyleKey )
         {
             style.clear();
-            CustomStyle* namedStyle = d->styleManager->style( static_cast<const NamedStyle*>(subStyle.data())->name );
+            CustomStyle* namedStyle = styleManager()->style( static_cast<const NamedStyle*>(subStyle.data())->name );
             if ( namedStyle )
                 style = *namedStyle;
         }
         style.insertSubStyle( subStyle );
     }
     return style;
+}
+
+StyleManager* StyleStorage::styleManager() const
+{
+    return d->sheet->doc()->styleManager();
 }
 
 #include "StyleStorage.moc"

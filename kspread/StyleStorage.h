@@ -45,12 +45,6 @@ public:
     virtual ~StyleStorage();
 
     /**
-     * Sets the StyleManager, which is necessary for the Doc/Map-wide default cell style.
-     * \note It is mandatory, that the StyleStorage has a valid StyleManager set.
-     */
-    void setStyleManager(StyleManager* manager);
-
-    /**
      * \return the Style at the position \p point .
      */
     Style contains(const QPoint& point) const;
@@ -146,6 +140,12 @@ protected:
      * \return the composed style
      */
     Style composeStyle( const QList<QSharedDataPointer<SubStyle> >& subStyles ) const;
+
+    /**
+     * Convenience method.
+     * \return the StyleManager
+     */
+    StyleManager* styleManager() const;
 
 private:
     class Private;
