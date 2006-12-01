@@ -29,7 +29,7 @@ class XbmExport : public ImageExport
 public:
     XbmExport(QObject* parent, const QStringList&);
     virtual ~XbmExport();
-    virtual bool saveImage( QString fileName);
+    virtual bool saveImage( const QString& fileName);
     virtual void extraImageAttribute();
     virtual const char * exportFormat();
 };

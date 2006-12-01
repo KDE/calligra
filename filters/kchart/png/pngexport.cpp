@@ -60,7 +60,7 @@ const char * PngExport::exportFormat()
 	return "image/png";
 }
 
-bool PngExport::saveImage( QString fileName)
+bool PngExport::saveImage( const QString& fileName)
 {
     bool ret = pixmap.save( fileName, "PNG" );
     // Save the image.

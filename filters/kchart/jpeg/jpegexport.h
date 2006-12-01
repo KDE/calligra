@@ -29,7 +29,7 @@ class JpegExport : public ImageExport
 public:
     JpegExport(QObject* parent, const QStringList&);
     virtual ~JpegExport();
-    virtual bool saveImage( QString fileName);
+    virtual bool saveImage( const QString& fileName);
     virtual void extraImageAttribute();
     virtual const char * exportFormat();
 };

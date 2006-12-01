@@ -56,7 +56,7 @@ void BmpExport::extraImageAttribute()
 }
 
 
-bool BmpExport::saveImage( QString fileName)
+bool BmpExport::saveImage( const QString& fileName)
 {
     bool ret = pixmap.save( fileName, "BMP" );
     // Save the image.

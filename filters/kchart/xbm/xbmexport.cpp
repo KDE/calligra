@@ -56,7 +56,7 @@ void XbmExport::extraImageAttribute()
 }
 
 
-bool XbmExport::saveImage( QString fileName)
+bool XbmExport::saveImage( const QString& fileName)
 {
     bool ret = pixmap.save( fileName, "XBM" );
     // Save the image.

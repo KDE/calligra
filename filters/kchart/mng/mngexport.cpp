@@ -56,7 +56,7 @@ void MngExport::extraImageAttribute()
 }
 
 
-bool MngExport::saveImage( QString fileName)
+bool MngExport::saveImage( const QString& fileName)
 {
     bool ret = pixmap.save( fileName, "MNG" );
     // Save the image.
