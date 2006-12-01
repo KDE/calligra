@@ -237,7 +237,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
     int step=iMaxRow > 50 ? iMaxRow/50 : 1;
     int i=1;
 
-    str += "<" + html_table_tag + html_table_options.arg( m_dialog->useBorders() ? "1" : "0" ).arg( m_dialog->pixelsBetweenCells() ) +
+    str += '<' + html_table_tag + html_table_options.arg( m_dialog->useBorders() ? "1" : "0" ).arg( m_dialog->pixelsBetweenCells() ) +
         QString("dir=\"%1\">\n").arg( (sheet->layoutDirection() == Sheet::RightToLeft ) ? "rtl" : "ltr" );
 
     unsigned int nonempty_cells_prev=0;
@@ -296,7 +296,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
                 text = cell->valueString();
                 break;
             }
-            text = cell->prefix(currentrow, currentcolumn) + " " + text + " "
+            text = cell->prefix(currentrow, currentcolumn) + ' ' + text + ' '
                    + cell->postfix(currentrow, currentcolumn);
 #endif
             line += "  <" + html_cell_tag + html_cell_options;
@@ -358,18 +358,18 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
 
             if (style.bold())
             {
-                text.insert(0, "<" + html_bold + ">");
-                text.append("</" + html_bold + ">");
+                text.insert(0, '<' + html_bold + '>');
+                text.append("</" + html_bold + '>');
             }
             if (style.italic())
             {
-                text.insert(0, "<" + html_italic + ">");
-                text.append("</" + html_italic + ">");
+                text.insert(0, '<' + html_italic + '>');
+                text.append("</" + html_italic + '>');
             }
             if (style.underline())
             {
-                text.insert(0, "<" + html_underline + ">");
-                text.append("</" + html_underline + ">");
+                text.insert(0, '<' + html_underline + '>');
+                text.append("</" + html_underline + '>');
             }
             QColor textColor = style.fontColor();
             if (textColor.isValid() && textColor.name()!="#000000") // change color only for non-default text
@@ -377,7 +377,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
                 text.insert(0, "<font color=\"" + textColor.name() + "\">");
                 text.append("</font>");
             }
-            line += "  " + text;
+            line += '  ' + text;
             line += "\n  </" + html_cell_tag + ">\n";
         }
 
@@ -388,13 +388,13 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
         } else {
             nonempty_cells_prev = nonempty_cells;
             str += emptyLines;
-            str += "<" + html_row_tag + html_row_options + ">\n";
+            str += '<' + html_row_tag + html_row_options + ">\n";
             str += line;
-            str += "</" + html_row_tag + ">";
+            str += "</" + html_row_tag + '>';
             emptyLines.clear();
             // Append a CR, but in a temp string -> if no other real line,
             // then those will be dropped
-            emptyLines += "\n";
+            emptyLines += '\n';
         }
     }
     str += "\n</" + html_table_tag + ">\n<br>\n";
@@ -424,7 +424,7 @@ void HTMLExport::writeTOC( const QStringList &sheets, const QString &base, QStri
     }
     else
     {
-      str += "#" + sheets[i].toLower().trimmed();
+      str += '#' + sheets[i].toLower().trimmed();
     }
 
     str += "\">" + sheets[i] + "</a>\n";
@@ -440,7 +440,7 @@ QString HTMLExport::fileName( const QString &base, const QString &sheetName, boo
      QString fileName = base;
      if( m_dialog->separateFiles() && multipleFiles )
      {
-         fileName += "-" + sheetName;
+         fileName += '-' + sheetName;
      }
      fileName += ".html";
 

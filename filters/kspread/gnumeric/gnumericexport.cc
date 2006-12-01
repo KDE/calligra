@@ -88,7 +88,7 @@ bool GNUMERICExport::hasBorder(Cell *cell, int currentcolumn, int currentrow)
 
 const QString GNUMERICExport::ColorToString(int red, int green, int blue)
 {
-    return QString::number(red,16)+":"+QString::number(green,16)+":"+QString::number(blue,16);
+    return QString::number(red,16)+':'+QString::number(green,16)+':'+QString::number(blue,16);
 }
 
 QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell, int currentcolumn, int currentrow)
@@ -113,7 +113,7 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
         green = color.green()<<8;
         blue = color.blue()<<8;
 
-        border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
+        border.setAttribute("Color", QString::number(red,16)+':'+QString::number(green,16) +':'+QString::number(blue,16));
     }
     else
     {
@@ -134,7 +134,7 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
         green = color.green()<<8;
         blue = color.blue()<<8;
 
-        border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
+        border.setAttribute("Color", QString::number(red,16)+':'+QString::number(green,16) +':'+QString::number(blue,16));
     }
     else
     {
@@ -155,7 +155,7 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
         green = color.green()<<8;
         blue = color.blue()<<8;
 
-        border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
+        border.setAttribute("Color", QString::number(red,16)+':'+QString::number(green,16) +':'+QString::number(blue,16));
     }
     else
     {
@@ -176,7 +176,7 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
         green = color.green()<<8;
         blue = color.blue()<<8;
 
-        border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
+        border.setAttribute("Color", QString::number(red,16)+':'+QString::number(green,16) +':'+QString::number(blue,16));
     }
     else
     {
@@ -197,7 +197,7 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
         green = color.green()<<8;
         blue = color.blue()<<8;
 
-        border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
+        border.setAttribute("Color", QString::number(red,16)+':'+QString::number(green,16) +':'+QString::number(blue,16));
     }
     else
     {
@@ -218,7 +218,7 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
         green = color.green()<<8;
         blue = color.blue()<<8;
 
-        border.setAttribute("Color", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
+        border.setAttribute("Color", QString::number(red,16)+':'+QString::number(green,16) +':'+QString::number(blue,16));
     }
     else
     {
@@ -629,7 +629,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
             break;
     }
 
-	cell_style.setAttribute("Back",QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16) );
+	cell_style.setAttribute("Back",QString::number(red,16)+':'+QString::number(green,16) +':'+QString::number(blue,16) );
 
 
 	QColor textColor =  style.fontColor();
@@ -637,7 +637,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 	green = textColor.green()<<8;
 	blue = textColor.blue()<<8;
 
-	cell_style.setAttribute("Fore",QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16) );
+	cell_style.setAttribute("Fore",QString::number(red,16)+':'+QString::number(green,16) +':'+QString::number(blue,16) );
 
  if (style.halign() ==  Style::HAlignUndefined)
     {
@@ -698,7 +698,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
     green = patColor.green()<<8;
     blue = patColor.blue()<<8;
 
-    cell_style.setAttribute("PatternColor", QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16));
+    cell_style.setAttribute("PatternColor", QString::number(red,16)+':'+QString::number(green,16) +':'+QString::number(blue,16));
 
     if (isLink)
         cell_style.appendChild(GetLinkStyle(gnumeric_doc));
@@ -1200,7 +1200,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
         if ( _tmpRepeatRowStart!=0 )
         {
             repeatRows = gnumeric_doc.createElement( "gmr:repeat_top" );
-            QString value = "A"+ QString::number(_tmpRepeatRowStart ) +":IV"+QString::number( _tmpRepeatRowEnd );
+            QString value = 'A'+ QString::number(_tmpRepeatRowStart ) +":IV"+QString::number( _tmpRepeatRowEnd );
             repeatRows.setAttribute( "value", value );
             tmp.appendChild( repeatRows );
         }
@@ -1443,7 +1443,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
                         toCol = cell->columnName(currentcolumn + cell->mergedXCells());
                         toRow = QString::number(currentrow + cell->mergedYCells());
 
-                        merge.appendChild(gnumeric_doc.createTextNode(fromCol + fromRow + ":" + toCol + toRow));
+                        merge.appendChild(gnumeric_doc.createTextNode(fromCol + fromRow + ':' + toCol + toRow));
                         mergedCells = true;
                         merged.appendChild(merge);
                     }
