@@ -321,7 +321,18 @@ void StyleStorage::garbageCollection()
     // any possible garbage left?
     if ( d->possibleGarbage.isEmpty() )
         return;
+
     const QPair<QRectF, QSharedDataPointer<SubStyle> > currentPair = d->possibleGarbage.takeFirst();
+
+    // check wether the named style still exists
+    if ( currentPair.second->type() == Style::NamedStyleKey &&
+         !d->styleManager->style( static_cast<const NamedStyle*>(currentPair.second.data())->name ) )
+    {
+        d->tree.remove( currentPair.first, currentPair.second );
+        d->subStyles[currentPair.second->type()].removeAll( currentPair.second );
+        return; // already done
+    }
+
     QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.intersects(currentPair.first.toRect());
     bool found = false;
     foreach ( const QSharedDataPointer<SubStyle> subStyle, subStyles )
