@@ -79,7 +79,7 @@ public:
 class KWord13Parser : public QXmlDefaultHandler
 {
 public:
-    KWord13Parser( KWord13Document* kwordDocument );
+    explicit KWord13Parser( KWord13Document* kwordDocument );
     virtual ~KWord13Parser( void );
 protected: //QXml
     /// Process opening tag

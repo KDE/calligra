@@ -35,7 +35,7 @@
 class KOFFICEFILTER_EXPORT KWEFKWordLeader
 {
     public:
-        KWEFKWordLeader(void);
+        explicit KWEFKWordLeader(void);
         KWEFKWordLeader(KWEFBaseWorker* newWorker);
         virtual ~KWEFKWordLeader(void);
     public:

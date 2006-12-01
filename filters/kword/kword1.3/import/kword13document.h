@@ -39,7 +39,7 @@ class KWord13Picture;
 class KWord13Document
 {
 public:
-    KWord13Document( void );
+    explicit KWord13Document( void );
     ~KWord13Document( void );
     
 public:

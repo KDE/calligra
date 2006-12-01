@@ -61,7 +61,7 @@ class Key: public XmlParser
 		 *
 		 * Creates a new instance of Key.
 		 */
-		Key(eKeyType);
+		explicit Key(eKeyType);
 
 		/* 
 		 * Destructor

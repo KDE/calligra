@@ -48,7 +48,7 @@ class VariableZone: public VariableFormat
 		 *
 		 * @param para which is the parent class.
 		 */
-		VariableZone(Para* para);
+		explicit VariableZone(Para* para);
 		
 		/**
 		 * Creates a new instance of TextZOne.

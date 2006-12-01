@@ -58,7 +58,7 @@ class TextZone: public TextFormat
 		 * @param text the text in this zone.
 		 * @param para which is the parent class.
 		 */
-		TextZone(const QString& text, Para *para = 0);
+		explicit TextZone(const QString& text, Para *para = 0);
 
 		/* 
 		 * Destructor

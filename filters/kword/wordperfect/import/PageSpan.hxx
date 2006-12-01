@@ -36,7 +36,7 @@ class DocumentHandler;
 class PageSpan
 {
 public:
-	PageSpan(const WPXPropertyList &xPropList);
+	explicit PageSpan(const WPXPropertyList &xPropList);
 	virtual ~PageSpan();
 	void writePageMaster(const int iNum, DocumentHandler &xHandler) const;
 	void writeMasterPages(const int iStartingNum, const int iPageMasterNum, const bool bLastPageSpan, DocumentHandler &xHandler) const;

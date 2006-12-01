@@ -31,7 +31,7 @@ class KWord13FormatOneData;
 class KWord13Format
 {
 public:
-    KWord13Format(void);
+    explicit KWord13Format(void);
     virtual ~KWord13Format(void);
 public:
     /// Get length of format (1 except for texts)

@@ -32,7 +32,7 @@ class LatexExportAdaptor: public QDBusAbstractAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.filter.kword.latex")
 
 	public:
-    LatexExportAdaptor(KWordLatexExportDia* dia);
+    explicit LatexExportAdaptor(KWordLatexExportDia* dia);
 		
     ~LatexExportAdaptor();
 

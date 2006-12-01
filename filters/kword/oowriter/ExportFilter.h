@@ -49,7 +49,7 @@ class KZip;
 class StyleMap : public QMap<QString,LayoutData>
 {
 public:
-    StyleMap(void) {}
+    explicit StyleMap(void) {}
     ~StyleMap(void) {}
 };
 

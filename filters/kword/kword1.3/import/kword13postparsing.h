@@ -27,7 +27,7 @@ class KWord13Document;
 class KWord13PostParsing
 {
 public:
-    KWord13PostParsing(void);
+    explicit KWord13PostParsing(void);
     ~KWord13PostParsing(void);
 public:
     bool postParsePictures( KoStore* store );

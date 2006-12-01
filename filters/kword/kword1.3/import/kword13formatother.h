@@ -31,7 +31,7 @@
 class KWord13FormatFour : public KWord13Format
 {
 public:
-    KWord13FormatFour(void);
+    explicit KWord13FormatFour(void);
     virtual ~KWord13FormatFour(void);
 public:
     QString m_text; ///< replacement text

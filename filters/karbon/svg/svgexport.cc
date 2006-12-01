@@ -29,6 +29,7 @@
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 #include <KoStore.h>
+#include <KoRect.h>
 
 #include "svgexport.h"
 #include "vcolor.h"

@@ -27,7 +27,7 @@
 class HtmlDocStructWorker : public HtmlWorker
 {
 public:
-    HtmlDocStructWorker(void) { }
+    explicit HtmlDocStructWorker(void) { }
     virtual ~HtmlDocStructWorker(void) { }
 public:
 protected:

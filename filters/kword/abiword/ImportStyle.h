@@ -27,7 +27,7 @@
 class StyleData
 {
 public:
-    StyleData(void);
+    explicit StyleData(void);
 public:
     int m_level; // Depth of heading (as defined by AbiWord!)
     QString m_props; // properties

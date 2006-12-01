@@ -47,7 +47,7 @@ class FormatElt
 	}
 
 	/// Recopy Constructor
-	FormatElt(FormatElt * eltt) {
+	explicit FormatElt(FormatElt * eltt) {
 		_format = eltt->getFormat();
 		_next   = eltt->getNext();
 	}
@@ -170,7 +170,7 @@ class FormatIter {
 	/// Constructor
 	FormatIter(ListeFormat& l) { _courant = l.getFirstElt();  }
 	/// Constructor
-	FormatIter(ListeFormat*);
+	explicit FormatIter(ListeFormat*);
 //@}
 
 /**

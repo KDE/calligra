@@ -50,7 +50,7 @@ class KHTMLReader: public QObject {
 Q_OBJECT
 
 public:
-	KHTMLReader(KWDWriter *writer);
+	explicit KHTMLReader(KWDWriter *writer);
 	~KHTMLReader();
 	
 	bool filter(const KUrl& url);

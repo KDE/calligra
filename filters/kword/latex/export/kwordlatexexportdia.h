@@ -39,7 +39,7 @@ class KWordLatexExportDia : public LatexExportDia
 		LatexExportIface* _iface;
 
 	public:
-    KWordLatexExportDia( KoStore*, QWidget* parent = 0,
+    explicit KWordLatexExportDia( KoStore*, QWidget* parent = 0,
 				const char* name = 0, bool modal = true, Qt::WFlags fl = 0 );
     virtual ~KWordLatexExportDia();
 

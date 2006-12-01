@@ -31,7 +31,7 @@ class StyleFactory;
 class StrokeDashStyle
 {
 public:
-    StrokeDashStyle( int style );
+    explicit StrokeDashStyle( int style );
     ~StrokeDashStyle() {};
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
@@ -63,7 +63,7 @@ private:
 class MarkerStyle
 {
 public:
-    MarkerStyle( int style );
+    explicit MarkerStyle( int style );
     ~MarkerStyle() {};
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;
@@ -93,7 +93,7 @@ private:
 class FillImageStyle
 {
 public:
-    FillImageStyle( QString & name );
+    explicit FillImageStyle( QString & name );
     ~FillImageStyle() {};
 
     void toXML( QDomDocument & doc, QDomElement & e ) const;

@@ -37,7 +37,7 @@ class QTextStream;
 class KWord13FormatOneData
 {
 public:
-    KWord13FormatOneData( void );
+    explicit KWord13FormatOneData( void );
     ~KWord13FormatOneData( void );
     
 public:

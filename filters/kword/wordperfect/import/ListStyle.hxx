@@ -45,7 +45,7 @@ public:
 class OrderedListLevelStyle : public ListLevelStyle
 {
 public:
-	OrderedListLevelStyle(const WPXPropertyList &xPropList);
+	explicit OrderedListLevelStyle(const WPXPropertyList &xPropList);
 	virtual void write(DocumentHandler &xHandler, int iLevel) const;
 private:
         WPXPropertyList mPropList;
@@ -54,7 +54,7 @@ private:
 class UnorderedListLevelStyle : public ListLevelStyle
 {
 public:
-	UnorderedListLevelStyle(const WPXPropertyList &xPropList);
+	explicit UnorderedListLevelStyle(const WPXPropertyList &xPropList);
 	virtual void write(DocumentHandler &xHandler, int iLevel) const;
 private:
         WPXPropertyList mPropList;

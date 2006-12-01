@@ -29,7 +29,7 @@ class KoStore;
 class KWord13Picture
 {
 public:
-    KWord13Picture( void );
+    explicit KWord13Picture( void );
     ~KWord13Picture( void );
 public:
     bool loadPicture( KoStore* store );

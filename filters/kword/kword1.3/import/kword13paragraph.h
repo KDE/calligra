@@ -18,7 +18,7 @@ class KWord13Format;
 class KWord13Paragraph
 {
 public:
-    KWord13Paragraph( void );
+    explicit KWord13Paragraph( void );
     ~KWord13Paragraph( void );
 public:
     void xmldump( QTextStream& iostream );

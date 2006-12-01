@@ -33,7 +33,7 @@ public:
      * Creates a new document.
      * @param doctype the document type (tag)
      */
-    DomNode( const char *doctype );
+    explicit DomNode( const char *doctype );
     /**
      * Creates a new document node (no memory allocation).
      * @param level the document depth of the node

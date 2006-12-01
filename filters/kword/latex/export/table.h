@@ -63,7 +63,7 @@ class Table: public Q3PtrList<Element>, public Element
 		 *
 		 * @param grpMng The group manager.
 		 */
-		Table(QString grpMng);
+		explicit Table(QString grpMng);
 
 		/* 
 		 * Destructor

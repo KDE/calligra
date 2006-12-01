@@ -37,7 +37,7 @@ class KWord13Document;
 class KWord13OasisGenerator
 {
 public:
-    KWord13OasisGenerator( void );
+    explicit KWord13OasisGenerator( void );
     ~KWord13OasisGenerator( void );
     
     bool prepare( KWord13Document& kwordDocument );

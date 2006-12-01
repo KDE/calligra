@@ -32,7 +32,7 @@ class KoTextZoomHandler;
   */
 class KWDWriter {
 public: 
-	KWDWriter(KoStore *store);
+	explicit KWDWriter(KoStore *store);
 	~KWDWriter();
 
 

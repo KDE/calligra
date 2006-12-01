@@ -29,14 +29,14 @@
 class StyleMap : public QMap<QString,LayoutData>
 {
 public:
-    StyleMap(void) {}
+    explicit StyleMap(void) {}
     ~StyleMap(void) {}
 };
 
 class HtmlCssWorker : public HtmlWorker
 {
 public:
-    HtmlCssWorker(void) { }
+    explicit HtmlCssWorker(void) { }
     virtual ~HtmlCssWorker(void) { }
 public:
     virtual bool doOpenStyles(void); ///< HTML's \<style\>

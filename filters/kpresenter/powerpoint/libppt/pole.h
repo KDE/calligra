@@ -52,7 +52,7 @@ public:
   /**
    * Constructs a storage with name filename.
    **/
-  Storage( const char* filename );
+  explicit Storage( const char* filename );
 
   /**
    * Destroys the storage.

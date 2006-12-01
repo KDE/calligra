@@ -95,7 +95,7 @@ class VariableFormat: public TextZone
 		 * Creates a new instance of VariableFormat.
 		 *
 		 */
-		VariableFormat(Para* para): TextZone(para)
+		explicit VariableFormat(Para* para): TextZone(para)
 		{
 			setSize(11);
 			setWeight(0);

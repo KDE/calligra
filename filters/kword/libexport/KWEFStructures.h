@@ -313,7 +313,7 @@ public:
 class ValueListFormatData : public Q3ValueList<FormatData>
 {
 public:
-    ValueListFormatData (void) { }
+    explicit ValueListFormatData (void) { }
     virtual ~ValueListFormatData (void) { }
 };
 
@@ -408,7 +408,7 @@ public:
 class TabulatorList : public Q3ValueList<TabulatorData>
 {
 public:
-    TabulatorList(void) {}
+    explicit TabulatorList(void) {}
     virtual ~TabulatorList(void) {}
 };
 

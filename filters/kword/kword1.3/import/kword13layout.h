@@ -17,7 +17,7 @@ class QTextStream;
 class KWord13Layout
 {
 public:
-    KWord13Layout( void );
+    explicit KWord13Layout( void );
     ~KWord13Layout( void );
     
 public:
