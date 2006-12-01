@@ -29,7 +29,7 @@ class PngExport : public ImageExport
 public:
     PngExport(QObject* parent, const QStringList&);
     virtual ~PngExport();
-    virtual bool saveImage( QString fileName);
+    virtual bool saveImage( const QString& fileName);
     virtual bool extraImageAttribute();
     virtual const char * exportFormat();
 };

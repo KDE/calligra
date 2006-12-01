@@ -29,7 +29,7 @@ class XpmExport : public ImageExport
 public:
     XpmExport(QObject* parent, const QStringList&);
     virtual ~XpmExport();
-    virtual bool saveImage( QString fileName);
+    virtual bool saveImage( const QString& fileName);
     virtual bool extraImageAttribute();
     virtual const char * exportFormat();
 };

@@ -29,7 +29,7 @@ class BmpExport : public ImageExport
 public:
     BmpExport(QObject* parent, const QStringList&);
     virtual ~BmpExport();
-    virtual bool saveImage( QString fileName);
+    virtual bool saveImage( const QString& fileName);
     virtual bool extraImageAttribute();
     virtual const char * exportFormat();
 };

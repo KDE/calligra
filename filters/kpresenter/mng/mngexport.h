@@ -29,7 +29,7 @@ class MngExport : public ImageExport
 public:
     MngExport(QObject* parent, const QStringList&);
     virtual ~MngExport();
-    virtual bool saveImage( QString fileName);
+    virtual bool saveImage( const QString& fileName);
     virtual bool extraImageAttribute();
     virtual const char * exportFormat();
 };

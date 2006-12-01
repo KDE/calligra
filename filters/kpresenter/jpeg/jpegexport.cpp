@@ -62,7 +62,7 @@ bool JpegExport::extraImageAttribute()
 }
 
 
-bool JpegExport::saveImage( QString fileName)
+bool JpegExport::saveImage( const QString& fileName)
 {
     bool ret = pixmap.save( fileName, "JPEG" );
     // Save the image.

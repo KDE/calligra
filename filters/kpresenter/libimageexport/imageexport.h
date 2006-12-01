@@ -36,7 +36,7 @@ public:
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
     virtual bool extraImageAttribute() { return true;};
-    virtual bool saveImage( QString fileName) = 0;
+    virtual bool saveImage( const QString& fileName) = 0;
     virtual const char* exportFormat() = 0;
 protected:
     int width;

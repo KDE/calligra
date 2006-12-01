@@ -58,7 +58,7 @@ bool XpmExport::extraImageAttribute()
 }
 
 
-bool XpmExport::saveImage( QString fileName)
+bool XpmExport::saveImage( const QString& fileName)
 {
     bool ret = pixmap.save( fileName, "XPM" );
     // Save the image.
