@@ -43,7 +43,7 @@ template<typename T>
 class KSPREAD_EXPORT Storage
 {
 public:
-    Storage( Sheet* sheet );
+    explicit Storage( Sheet* sheet );
     virtual ~Storage();
 
     /**
@@ -175,7 +175,7 @@ class CommentStorage : public QObject, public Storage<QString>
 {
     Q_OBJECT
 public:
-    CommentStorage( Sheet* sheet ) : Storage<QString>( sheet )
+    explicit CommentStorage( Sheet* sheet ) : Storage<QString>( sheet )
     {
         connect(m_garbageCollectionInitializationTimer, SIGNAL(timeout()), this, SLOT(garbageCollectionInitialization()));
         connect(m_garbageCollectionTimer, SIGNAL(timeout()), this, SLOT(garbageCollection()));
@@ -192,7 +192,7 @@ class ConditionsStorage : public QObject, public Storage<Conditions>
 {
     Q_OBJECT
 public:
-    ConditionsStorage( Sheet* sheet ) : Storage<Conditions>( sheet )
+    explicit ConditionsStorage( Sheet* sheet ) : Storage<Conditions>( sheet )
     {
         connect(m_garbageCollectionInitializationTimer, SIGNAL(timeout()), this, SLOT(garbageCollectionInitialization()));
         connect(m_garbageCollectionTimer, SIGNAL(timeout()), this, SLOT(garbageCollection()));
@@ -209,7 +209,7 @@ class ValidityStorage : public QObject, public Storage<Validity>
 {
     Q_OBJECT
 public:
-    ValidityStorage( Sheet* sheet ) : Storage<Validity>( sheet )
+    explicit ValidityStorage( Sheet* sheet ) : Storage<Validity>( sheet )
     {
         connect(m_garbageCollectionInitializationTimer, SIGNAL(timeout()), this, SLOT(garbageCollectionInitialization()));
         connect(m_garbageCollectionTimer, SIGNAL(timeout()), this, SLOT(garbageCollection()));

@@ -58,7 +58,7 @@ public:
         /// default insertion mode
         DefaultInsertMode = 0,
         /**
-         * Shifts the rectangles, starting from the column/row preceeding the
+         * Shifts the rectangles, starting from the column/row preceding the
          * insertion position.
          * Thus, the inserted columns/rows carry the same data as the previous
          * column/row.
