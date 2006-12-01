@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __XPMEXPORT_H__
-#define __XPMEXPORT_H__
+#ifndef __JPEGEXPORT_H__
+#define __JPEGEXPORT_H__
 
 #include "imageexport.h"
 
@@ -34,5 +34,5 @@ public:
     virtual const char * exportFormat();
 };
 
-#endif // __XPMEXPORT_H__
+#endif // __JPEGEXPORT_H__
 
