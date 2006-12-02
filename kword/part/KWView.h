@@ -116,6 +116,7 @@ private slots:
     void slotSoftHyphen();
     void slotLineBreak();
     void insertFrameBreak();
+    void formatFont();
 
 private:
     KWGui *m_gui;
@@ -127,6 +128,7 @@ private:
     KoZoomAction *m_actionViewZoom;
     KAction *m_actionFormatFrameSet;
     KAction *m_actionInsertFrameBreak;
+    KAction *m_actionFormatFont;
     KToggleAction *m_actionFormatBold;
     KToggleAction *m_actionFormatItalic;
     KToggleAction *m_actionFormatUnderline;

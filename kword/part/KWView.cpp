@@ -165,6 +165,12 @@ void KWView::setupActions() {
         m_actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
     } */
 
+    m_actionFormatFont = new KAction( i18n( "Font..." ), actionCollection(), "format_font" );
+    m_actionInsertFrameBreak->setShortcut( KShortcut( Qt::ALT + Qt::CTRL + Qt::Key_F));
+    m_actionFormatFont->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
+    m_actionFormatFont->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
+    connect(m_actionFormatFont, SIGNAL(triggered()), this, SLOT( formatFont() ));
+
 
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
@@ -402,12 +408,6 @@ This saves problems with finding out which we missed near the end.
 
 
     // ------------------------- Format menu
-    m_actionFormatFont = new KAction( i18n( "Font..." ), Qt::ALT + Qt::CTRL + Qt::Key_F,
-            this, SLOT( formatFont() ),
-            actionCollection(), "format_font" );
-    m_actionFormatFont->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
-    m_actionFormatFont->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
-
     m_actionFormatParag = new KAction( i18n( "Paragraph..." ), Qt::ALT + Qt::CTRL + Qt::Key_P,
             this, SLOT( formatParagraph() ),
             actionCollection(), "format_paragraph" );
@@ -1115,6 +1115,13 @@ void KWView::insertFrameBreak() {
     if(handler)
         handler->insertFrameBreak();
 }
+
+void KWView::formatFont() {
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->selectFont(this);
+}
+
 
 void KWView::selectionChanged()
 {
