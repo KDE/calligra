@@ -36,7 +36,7 @@ class KPrPresDurationDia : public KDialog
 public:
     KPrPresDurationDia( QWidget *parent, const char *name,
                        KPrDocument *_doc,
-                       QStringList _durationListString,
+                       const QStringList& _durationListString,
                        const QString &_durationString );
 
 protected:

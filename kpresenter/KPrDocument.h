@@ -566,7 +566,7 @@ protected:
     QDomElement saveTitle( QDomDocument &doc );
     QDomElement saveNote( QDomDocument &doc );
     QDomElement saveAttribute( QDomDocument &doc );
-    QDomElement saveUsedSoundFileToXML( QDomDocument &_doc, QStringList _list );
+    QDomElement saveUsedSoundFileToXML( QDomDocument &_doc, const QStringList& _list );
     void loadTextStyle( const QDomElement& domElement );
     void saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl,QDomDocument &doc,QDomElement &presenter, double offset );
     void saveGuideLines( QDomDocument &doc, QDomElement& element );
@@ -582,8 +582,8 @@ protected:
     void makeUsedPixmapList();
     void makeUsedSoundFileList();
 
-    void saveUsedSoundFileToStore( KoStore *_store, QStringList _list );
-    void loadUsedSoundFileFromStore( KoStore *_store, QStringList _list );
+    void saveUsedSoundFileToStore( KoStore *_store, const QStringList& _list );
+    void loadUsedSoundFileFromStore( KoStore *_store, const QStringList& _list );
     void fillStyleStack( const QDomElement& object, KoOasisContext & context, const char* family );
     /*
      * increaseOrder = true by default, put to false when we have group of animation

@@ -904,12 +904,12 @@ QDomElement KPrDocument::saveAttribute( QDomDocument &doc )
     return attributes;
 }
 
-QDomElement KPrDocument::saveUsedSoundFileToXML( QDomDocument &_doc, QStringList _list )
+QDomElement KPrDocument::saveUsedSoundFileToXML( QDomDocument &_doc, const QStringList& _list )
 {
     QDomElement soundFiles = _doc.createElement( "SOUNDS" );
 
     unsigned int i = 0;
-    QStringList::Iterator it = _list.begin();
+    QStringList::ConstIterator it = _list.begin();
     foreach (QString soundFileName, _list) {
         int position = soundFileName.lastIndexOf( '.' );
         QString format = soundFileName.right( soundFileName.length() - position - 1 );
@@ -951,10 +951,10 @@ int KPrDocument::supportedSpecialFormats() const
     return KoDocument::supportedSpecialFormats();
 }
 
-void KPrDocument::saveUsedSoundFileToStore( KoStore *_store, QStringList _list )
+void KPrDocument::saveUsedSoundFileToStore( KoStore *_store, const QStringList& _list )
 {
     unsigned int i = 0;
-    QStringList::Iterator it = _list.begin();
+    QStringList::ConstIterator it = _list.begin();
     for ( ; it != _list.end(); ++it ) {
         QString soundFileName = *it;
         int position = soundFileName.lastIndexOf( '.' );
@@ -3218,10 +3218,10 @@ bool KPrDocument::completeLoading( KoStore* _store )
     return true;
 }
 
-void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list )
+void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, const QStringList& _list )
 {
     int i = m_insertFilePage;
-    QStringList::Iterator it = _list.begin();
+    QStringList::ConstIterator it = _list.begin();
     for ( ; it != _list.end(); ++it ) {
         QString soundFile = *it;
 
@@ -4706,7 +4706,7 @@ QList <KPrPage *> KPrDocument::customListPage( const QStringList & lst, bool loa
 {
     QStringList tmp( lst );
     QList <KPrPage *> tmpValueList;
-    for ( QStringList::Iterator itList = tmp.begin(); itList != tmp.end(); ++itList )
+    for ( QStringList::ConstIterator itList = tmp.begin(); itList != tmp.end(); ++itList )
     {
         for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
         {

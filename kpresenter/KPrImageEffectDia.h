@@ -50,7 +50,7 @@ public:
     /**
      * Set the initial preview pixmap
      */
-    void setPixmap(QPixmap pix);
+    void setPixmap(const QPixmap& pix);
 
     /**
      * Returns the selected effect

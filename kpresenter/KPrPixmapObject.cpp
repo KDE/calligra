@@ -716,7 +716,7 @@ QPixmap KPrPixmapObject::getOriginalPixmap()
     return _pixmap;
 }
 
-QPixmap KPrPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
+QPixmap KPrPixmapObject::changePictureSettings( const QPixmap& _tmpPixmap )
 {
     QImage _tmpImage = _tmpPixmap.convertToImage();
 
@@ -910,9 +910,10 @@ QPixmap KPrPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
         break;
     }
 
-    _tmpPixmap.convertFromImage( _tmpImage );
+    QPixmap result; 
+    result.convertFromImage( _tmpImage );
 
-    return _tmpPixmap;
+    return result;
 }
 
 void KPrPixmapObject::flip( bool horizontal )

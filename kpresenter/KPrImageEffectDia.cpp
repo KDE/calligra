@@ -211,7 +211,7 @@ void KPrImageEffectDia::okClicked()
 }
 
 
-void KPrImageEffectDia::setPixmap(QPixmap pix)
+void KPrImageEffectDia::setPixmap(const QPixmap& pix)
 {
     m_pix = pix;
     m_origpix = pix;

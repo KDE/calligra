@@ -70,7 +70,7 @@ private:
 private slots:
 
     // name changed
-    void nameChanged(QString);
+    void nameChanged(const QString&);
     void tabChanged(QWidget *);
 
     // autoform chosen

@@ -120,7 +120,7 @@ protected:
 
     KPrPixmapObject() {}
 
-    QPixmap changePictureSettings( QPixmap _tmpPixmap );
+    QPixmap changePictureSettings( const QPixmap& _tmpPixmap );
     virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto ) const;
     void loadOasisPictureEffect(KoOasisContext & context );
     virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;

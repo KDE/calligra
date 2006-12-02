@@ -163,7 +163,7 @@ void AFChoose::slotDoubleClick()
     accept();
 }
 
-void AFChoose::nameChanged(QString name)
+void AFChoose::nameChanged(const QString& name)
 {
     for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
         grpPtr->label->setText(name);
