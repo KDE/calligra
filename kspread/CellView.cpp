@@ -56,6 +56,7 @@
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "SheetView.h"
+#include "StyleManager.h"
 #include "View.h"
 
 // Local
@@ -69,7 +70,15 @@ const int s_borderSpace = 1;
 class CellView::Private : public QSharedData
 {
 public:
-    Private() {}
+    Private( Style* defaultStyle, double defaultWidth, double defaultHeight )
+        : style( *defaultStyle )
+        , width( defaultWidth )
+        , height( defaultHeight )
+        , hidden( false )
+        , textX( 0.0 )
+        , textY( 0.0 )
+        , textWidth( 0.0 )
+        , textHeight( 0.0 ) {}
     ~Private()
     {
         if ( s_empty == this )
@@ -91,10 +100,10 @@ public:
     double  textHeight;
 
     // static empty data to be shared
-    static Private* empty()
+    static Private* empty( Style* defaultStyle, double defaultWidth, double defaultHeight )
     {
         if( !s_empty)
-            s_empty = new Private;
+            s_empty = new Private( defaultStyle, defaultWidth, defaultHeight );
         return s_empty;
     }
 
@@ -107,18 +116,15 @@ CellView::Private* CellView::Private::s_empty = 0;
 
 
 CellView::CellView( SheetView* sheetView, int col, int row )
-    : d( Private::empty() )
+    : d( Private::empty( sheetView->sheet()->doc()->styleManager()->defaultStyle(),
+                         sheetView->sheet()->columnFormat( 0 )->dblWidth(),
+                         sheetView->sheet()->rowFormat( 0 )->dblHeight() ) )
 {
     Q_ASSERT( col > 0 && col <= KS_colMax );
     Q_ASSERT( row > 0 && row <= KS_rowMax );
 
     const Sheet* sheet = sheetView->sheet();
     Cell* const cell = sheet->cellAt( col, row );
-
-    d->layoutDirection = sheet->layoutDirection();
-    d->width = cell->dblWidth( col );
-    d->height = cell->dblHeight( row );
-    d->hidden = sheet->columnFormat( col )->hidden() || ( sheet->rowFormat( row )->dblHeight() <= sheet->doc()->unzoomItY( 2 ) );
 
     // create the effective style
     if ( cell->isPartOfMerged() )
@@ -129,13 +135,26 @@ CellView::CellView( SheetView* sheetView, int col, int row )
     else
     {
         // lookup the 'normal' style
-        d->style = sheet->style( col, row );
+        Style style = sheet->style( col, row );
+        if ( !style.isEmpty() && !style.isDefault() )
+            d->style = style;
 
         // use conditional formatting attributes
         Conditions conditions = sheet->conditions( col, row );
         if ( Style* style = conditions.testConditions( cell ) )
             d->style.merge( *style );
     }
+
+    if ( cell->dblWidth( col ) != sheetView->sheet()->columnFormat( 0 )->dblWidth() )
+        d->width = cell->dblWidth( col );
+    if ( cell->dblHeight( row ) != sheetView->sheet()->rowFormat( 0 )->dblHeight() )
+        d->height = cell->dblHeight( row );
+
+    // do not touch the other Private members, just return here.
+    if ( cell->isDefault() ) return;
+
+    d->layoutDirection = sheet->layoutDirection();
+    d->hidden = sheet->columnFormat( col )->hidden() || ( sheet->rowFormat( row )->dblHeight() <= sheet->doc()->unzoomItY( 2 ) );
 
     // horizontal align
     if ( d->style.halign() == Style::HAlignUndefined )
@@ -151,12 +170,6 @@ CellView::CellView( SheetView* sheetView, int col, int row )
             d->style.setHAlign( (val.isBoolean() || val.isNumber()) ? Style::Right : Style::Left );
         }
     }
-
-    // Formatting
-    d->textX      = 0.0;
-    d->textY      = 0.0;
-    d->textWidth  = 0.0;
-    d->textHeight = 0.0;
 
     makeLayout( cell );
 }
