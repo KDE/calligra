@@ -920,30 +920,6 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
 
     QLineF line;
 
-#if 0 // FIXME Stefan: I think this part is superfluous with the merge check above
-    // If there are extra cells, there might be more conditions.
-    if (cell->d->hasExtra()) {
-        QList<Cell*>::const_iterator it  = cell->d->extra()->obscuringCells.begin();
-        QList<Cell*>::const_iterator end = cell->d->extra()->obscuringCells.end();
-        for ( ; it != end; ++it ) {
-            Cell *cell = *it;
-
-            paintTop  = paintTop && ( cell->row() == cellRef.y() );
-            paintBottom = false;
-
-            if ( d->layoutDirection == Sheet::RightToLeft ) {
-                paintRight = paintRight && ( cell->column() == cellRef.x() );
-                paintLeft = false;
-            }
-            else {
-
-                paintLeft = paintLeft && ( cell->column() == cellRef.x() );
-                paintRight = false;
-            }
-        }
-    }
-#endif
-
     // The left border.
     if ( paintLeft )
     {
