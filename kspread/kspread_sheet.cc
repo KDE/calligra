@@ -2036,7 +2036,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
   */
   if ( mode == Column )
   {
-    for ( y = _marker.y(); y <= (_marker.y() + numberOfCells - 1), y <= KS_rowMax; y++ )
+    for ( y = _marker.y(); y <= (_marker.y() + numberOfCells - 1) && y <= KS_rowMax; y++ )
     {
       cell = cellAt( _marker.x(), y );
 
@@ -2061,7 +2061,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
   }
   else if(mode == Row)
   {
-    for ( x = _marker.x(); x <=(_marker.x() + numberOfCells - 1), x <= KS_colMax; x++ )
+    for ( x = _marker.x(); x <=(_marker.x() + numberOfCells - 1) && x <= KS_colMax; x++ )
     {
       /* see the code above for a column series for a description of
          what is going on here. */
