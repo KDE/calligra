@@ -34,12 +34,12 @@ class ImageExportDialog : public KDialogBase
     ImageExportDialog(QWidget* parent = 0, const char* name = 0);
 
     void setPageList(const QStringList& pages);
-    void setInitialCustomSize(const QSize& size);
+    void setInitialDPI(const int dpi);
+    void setInitialmargin(const int margin);
 
     QString selectedPage() const;
     bool usePageBorders() const;
-    bool useCustomSize() const;
-    QSize customSize() const;
+    int imageDPI() const;
     int margin() const;
 
   private:

@@ -45,10 +45,20 @@ void ImageExportDialog::setPageList(const QStringList& pages)
   m_mainWidget->m_pageCombo->insertStringList(pages);
 }
 
-void ImageExportDialog::setInitialCustomSize(const QSize& size)
+void ImageExportDialog::setInitialDPI(const int dpi)
 {
-  m_mainWidget->m_widthSpinBox->setValue(size.width());
-  m_mainWidget->m_heightSpinBox->setValue(size.height());
+    if (dpi <= 72) m_mainWidget->m_DPIcomboBox->setCurrentItem(0);
+    else if (dpi <= 96) m_mainWidget->m_DPIcomboBox->setCurrentItem(1);
+    else if (dpi <= 150) m_mainWidget->m_DPIcomboBox->setCurrentItem(2);
+    else if (dpi <= 300) m_mainWidget->m_DPIcomboBox->setCurrentItem(3);
+    else if (dpi <= 600) m_mainWidget->m_DPIcomboBox->setCurrentItem(4);
+    else if (dpi <= 720) m_mainWidget->m_DPIcomboBox->setCurrentItem(5);
+    else if (dpi <= 1200) m_mainWidget->m_DPIcomboBox->setCurrentItem(6);
+}
+
+void ImageExportDialog::setInitialmargin(const int margin)
+{
+    m_mainWidget->m_marginSpinBox->setValue(margin);
 }
 
 QString ImageExportDialog::selectedPage() const
@@ -56,24 +66,34 @@ QString ImageExportDialog::selectedPage() const
   return m_mainWidget->m_pageCombo->currentText();
 }
 
+int ImageExportDialog::imageDPI() const
+{
+    switch (m_mainWidget->m_DPIcomboBox->currentItem())
+    {
+        case 0:
+            return 72;
+        case 1:
+            return 96;
+        case 2:
+            return 150;
+        case 3:
+            return 300;
+        case 4:
+            return 600;
+        case 5:
+            return 720;
+        case 6:
+            return 1200;
+        default:
+            return 300;
+    }
+}
+
 bool ImageExportDialog::usePageBorders() const
 {
-  return (m_mainWidget->m_exportAreaCombo->currentItem() == 0);
+  return (m_mainWidget->m_exportAreaCombo->currentItem() == 1);
 }
 
-bool ImageExportDialog::useCustomSize() const
-{
-  return m_mainWidget->m_customSizeCheckBox->isChecked();
-}
-
-QSize ImageExportDialog::customSize() const
-{
-  QSize size;
-  size.setWidth(m_mainWidget->m_widthSpinBox->value());
-  size.setHeight(m_mainWidget->m_heightSpinBox->value());
-
-  return size;
-}
 
 int ImageExportDialog::margin() const
 {

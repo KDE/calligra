@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Peter Simonsson <psn@linux.se>
+   Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
+   Copyright (C) 2006 Kåre Särs <kare.sars@kolumbus.fi>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -113,39 +114,34 @@ KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCSt
     pageNames.append(it.current()->pageName());
   }
 
-  KoZoomHandler zoom;
-
   dlg.setPageList(pageNames);
-  KivioPage* page = doc.map()->firstPage();
-  QSize size = QSize(zoom.zoomItX(page->paperLayout().ptWidth), zoom.zoomItY(page->paperLayout().ptHeight));
-  dlg.setInitialCustomSize(size);
+
+  dlg.setInitialDPI(300);
+  dlg.setInitialmargin(10);
 
   if(dlg.exec() != QDialog::Accepted) {
     return KoFilter::UserCancelled;
   }
 
-  page = doc.map()->findPage(dlg.selectedPage());
+  KivioPage* page = doc.map()->findPage(dlg.selectedPage());
 
   if(!page) {
     kdDebug() << "The page named " << dlg.selectedPage() << " wasn't found!!" << endl;
     return KoFilter::InternalError;
   }
 
+  float z = (float)dlg.imageDPI()/(float)KoGlobal::dpiX();
+  KoZoomHandler zoom;
+  zoom.setZoomAndResolution(qRound(z * 100), KoGlobal::dpiX(), KoGlobal::dpiY());
+
+  QSize size;
   if(dlg.usePageBorders()) {
     size = QSize(zoom.zoomItX(page->paperLayout().ptWidth), zoom.zoomItY(page->paperLayout().ptHeight));
   } else {
     size = zoom.zoomSize(page->getRectForAllStencils().size());
   }
 
-  if(dlg.useCustomSize()) {
-    QSize customSize = dlg.customSize();
-    float zw = (float)customSize.width() / (float)size.width();
-    float zh = (float)customSize.height() / (float)size.height();
-    float z = QMIN(zw, zh);
-
-    zoom.setZoomAndResolution(qRound(z * 100), KoGlobal::dpiX(), KoGlobal::dpiY());
-    size = customSize;
-  }
+  kdDebug() << "KoGlobal::dpiX() " << KoGlobal::dpiX() << " KoGlobal::dpiY() " << KoGlobal::dpiY() << endl;
 
   int border = dlg.margin();
 
