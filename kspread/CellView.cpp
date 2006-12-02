@@ -335,16 +335,9 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
         return;
     }
 
-    // Get the background color.
-    //
-    // If there is a condition giving the background color for this cell
-    // (and it matches), use that one, otherwise get the standard
-    // background.
-    QColor backgroundColor = d->style.backgroundColor();
-
     // 1. Paint the background.
     if ( !cell->isPartOfMerged() )
-        paintBackground( painter, cellRect, selected, backgroundColor );
+        paintBackground( painter, cellRect, selected );
 
 #if 0
     // 3. Paint all the cells that this one obscures.  They may only be
@@ -374,15 +367,15 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
         // 6a. Paint possible comment indicator.
         if ( !dynamic_cast<QPrinter*>(painter.device())
               || cell->sheet()->print()->printCommentIndicator() )
-            paintCommentIndicator( painter, cellRect, cellRef, backgroundColor, cell );
+            paintCommentIndicator( painter, cellRect, cellRef, cell );
 
         // 6b. Paint possible formula indicator.
         if ( !dynamic_cast<QPrinter*>(painter.device())
               || cell->sheet()->print()->printFormulaIndicator() )
-            paintFormulaIndicator( painter, cellRect, backgroundColor, cell );
+            paintFormulaIndicator( painter, cellRect, cell );
 
         // 6c. Paint possible indicator for clipped text.
-        paintMoreTextIndicator( painter, cellRect, backgroundColor, cell );
+        paintMoreTextIndicator( painter, cellRect, cell );
 
         //6c. Paint cell highlight
 #if 0
@@ -492,7 +485,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
 }
 
 void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
-                                 View* view, const KoPoint& paintCoordinate,
+                                 const KoPoint& paintCoordinate,
                                  const QPoint& cellCoordinate, const QRect& cellRegion,
                                  QLinkedList<QPoint> &mergedCellsPainted, Cell* cell, SheetView* sheetView )
 {
@@ -530,10 +523,6 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
 
     const int col = cellCoordinate.x();
     const int row = cellCoordinate.y();
-    const int regionBottom = cellRegion.bottom();
-    const int regionRight  = cellRegion.right();
-    const int regionLeft   = cellRegion.left();
-    const int regionTop    = cellRegion.top();
 
     // See if this cell is merged or has overflown into neighbor cells.
     // In that case, the width/height is greater than just the cell
@@ -588,22 +577,17 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     else if ( d->style.bottomPenValue() >= sheetView->cellView( col, row + 1 ).style().topPenValue() )
         paintBorder |= BottomBorder;
 
-    QPen leftPen  ( d->style.leftBorderPen() );
-    QPen rightPen ( d->style.rightBorderPen() );
-    QPen topPen   ( d->style.topBorderPen() );
-    QPen bottomPen( d->style.bottomBorderPen() );
-
     // Paint border if outermost cell or if the pen is more "worth"
     // than the border pen of the cell on the other side of the
     // border or if the cell on the other side is not painted. In
     // the latter case get the pen that is of more "worth"
-    if ( col == regionRight )
+    if ( col == cellRegion.right() )
         paintBorder |= CellView::RightBorder;
-    if ( row == regionBottom )
+    if ( row == cellRegion.bottom() )
         paintBorder |= CellView::BottomBorder;
-    if ( col == regionLeft )
+    if ( col == cellRegion.left() )
         paintBorder |= CellView::LeftBorder;
-    if ( row == regionTop )
+    if ( row == cellRegion.top() )
         paintBorder |= CellView::TopBorder;
 
     // ----------------  Start the actual painting.  ----------------
@@ -621,8 +605,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     //    and the checkbox to do this is checked.
     if ( painter.device()->devType() != QInternal::Printer ||
          sheet->print()->printGrid())
-        paintDefaultBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder,
-                             rightPen, bottomPen, leftPen, topPen, cell );
+        paintDefaultBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder, cell );
 
     // 2. Paint the borders of the cell if no other cell is forcing this
     // one, i.e. this cell is not part of a merged cell.
@@ -636,8 +619,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     // Paint the borders if this cell is not part of another merged cell.
     if ( !cell->isPartOfMerged() )
     {
-        paintCustomBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder,
-                            rightPen, bottomPen, leftPen, topPen, cell );
+        paintCustomBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder, cell );
     }
 
     // Turn clipping back on.
@@ -827,7 +809,7 @@ void CellView::paintObscuredCells(const QRectF& rect, QPainter& painter,
 // Paint the background of this cell.
 //
 void CellView::paintBackground( QPainter& painter, const QRectF& cellRect,
-                                bool selected, QColor& backgroundColor )
+                                bool selected )
 {
     Q_UNUSED( selected );
 
@@ -839,16 +821,16 @@ void CellView::paintBackground( QPainter& painter, const QRectF& cellRect,
   {
     //bad hack but there is a qt bug
     //so I can print backgroundcolor
-    QBrush brush( backgroundColor );
-    if ( !backgroundColor.isValid() )
+    QBrush brush( d->style.backgroundColor() );
+    if ( !d->style.backgroundColor().isValid() )
       brush.setColor( Qt::white );
 
     painter.fillRect( cellRect, brush );
     return;
   }
 
-  if ( backgroundColor.isValid() )
-    painter.setBackground( backgroundColor );
+  if ( d->style.backgroundColor().isValid() )
+    painter.setBackground( d->style.backgroundColor() );
   else
     painter.setBackground( QApplication::palette().base().color() );
 
@@ -881,9 +863,7 @@ void CellView::paintBackground( QPainter& painter, const QRectF& cellRect,
 //
 void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
                                     const QRectF &cellRect, const QPoint &cellRef,
-                                    Borders paintBorder,
-                                    QPen const & rightPen, QPen const & bottomPen,
-                                    QPen const & leftPen, QPen const & topPen, Cell* cell )
+                                    Borders paintBorder, Cell* cell )
 {
     Q_UNUSED(cellRef);
 
@@ -918,20 +898,20 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
     const bool isMergedOrObscured = cell->isPartOfMerged() || cell->isObscured();
 
     const bool paintLeft    = ( paintBorder & LeftBorder &&
-                                leftPen.style() == Qt::NoPen &&
+                                d->style.leftBorderPen().style() == Qt::NoPen &&
                                 cell->sheet()->getShowGrid() &&
                                 !isMergedOrObscured );
     const bool paintRight   = ( paintBorder & RightBorder &&
-                                rightPen.style() == Qt::NoPen &&
+                                d->style.rightBorderPen().style() == Qt::NoPen &&
                                 cell->sheet()->getShowGrid() &&
                                 !isMergedOrObscured );
     const bool paintTop     = ( paintBorder & TopBorder &&
-                                topPen.style() == Qt::NoPen &&
+                                d->style.topBorderPen().style() == Qt::NoPen &&
                                 cell->sheet()->getShowGrid() &&
                                 !isMergedOrObscured );
     const bool paintBottom  = ( paintBorder & BottomBorder &&
                                 cell->sheet()->getShowGrid() &&
-                                bottomPen.style() == Qt::NoPen &&
+                                d->style.bottomBorderPen().style() == Qt::NoPen &&
                                 !isMergedOrObscured );
 
     // Set the single-pixel width pen for drawing the borders with.
@@ -1127,7 +1107,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
 void CellView::paintCommentIndicator( QPainter& painter,
                                       const QRectF &cellRect,
                                       const QPoint &cellRef,
-                                      QColor &backgroundColor, Cell* cell )
+                                      Cell* cell )
 {
     // Point the little corner if there is a comment attached
     // to this cell.
@@ -1140,9 +1120,9 @@ void CellView::paintCommentIndicator( QPainter& painter,
         QColor penColor = Qt::red;
 
         // If background has high red part, switch to blue.
-        if ( qRed( backgroundColor.rgb() ) > 127 &&
-             qGreen( backgroundColor.rgb() ) < 80 &&
-             qBlue( backgroundColor.rgb() ) < 80 )
+        if ( qRed( d->style.backgroundColor().rgb() ) > 127 &&
+             qGreen( d->style.backgroundColor().rgb() ) < 80 &&
+             qBlue( d->style.backgroundColor().rgb() ) < 80 )
         {
             penColor = Qt::blue;
         }
@@ -1173,7 +1153,7 @@ void CellView::paintCommentIndicator( QPainter& painter,
 //
 void CellView::paintFormulaIndicator( QPainter& painter,
                                       const QRectF &cellRect,
-                                      QColor &backgroundColor, Cell* cell )
+                                      Cell* cell )
 {
   if ( cell->isFormula() &&
        cell->sheet()->getShowFormulaIndicator() &&
@@ -1182,9 +1162,9 @@ void CellView::paintFormulaIndicator( QPainter& painter,
   {
     QColor penColor = Qt::blue;
     // If background has high blue part, switch to red.
-    if ( qRed( backgroundColor.rgb() ) < 80 &&
-         qGreen( backgroundColor.rgb() ) < 80 &&
-         qBlue( backgroundColor.rgb() ) > 127 )
+    if ( qRed( d->style.backgroundColor().rgb() ) < 80 &&
+         qGreen( d->style.backgroundColor().rgb() ) < 80 &&
+         qBlue( d->style.backgroundColor().rgb() ) > 127 )
     {
       penColor = Qt::red;
     }
@@ -1215,7 +1195,7 @@ void CellView::paintFormulaIndicator( QPainter& painter,
 //
 void CellView::paintMoreTextIndicator( QPainter& painter,
                                        const QRectF &cellRect,
-                                       QColor &backgroundColor, Cell* cell )
+                                       Cell* cell )
 {
   // Show a red triangle when it's not possible to write all text in cell.
   // Don't print the red triangle if we're printing.
@@ -1226,9 +1206,9 @@ void CellView::paintMoreTextIndicator( QPainter& painter,
   {
     QColor penColor = Qt::red;
     // If background has high red part, switch to blue.
-    if ( qRed( backgroundColor.rgb() ) > 127
-         && qGreen( backgroundColor.rgb() ) < 80
-         && qBlue( backgroundColor.rgb() ) < 80 )
+    if ( qRed( d->style.backgroundColor().rgb() ) > 127
+         && qGreen( d->style.backgroundColor().rgb() ) < 80
+         && qBlue( d->style.backgroundColor().rgb() ) < 80 )
     {
       penColor = Qt::blue;
     }
@@ -1368,11 +1348,6 @@ void CellView::paintText( QPainter& painter,
     // Apply indent if text is align to left not when text is at right or middle.
     if (  a == Style::Left && !cell->isEmpty() )
     {
-        // FIXME: The following condition should be remade into a call to
-        //        a new convenience function:
-        //   if ( hasConditionStyleFeature( Style::SIndent, true )...
-        //        This should be done throughout the entire file.
-        //
         indent = d->style.indentation();
     }
 
@@ -1582,9 +1557,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
 //
 void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
                                   const QRectF &cellRect, const QPoint &cellRef,
-                                  Borders paintBorder,
-                                  const QPen& _rightPen, const QPen& _bottomPen,
-                                  const QPen& _leftPen, const QPen& _topPen, Cell* cell )
+                                  Borders paintBorder, Cell* cell )
 {
     //Sanity check: If we are not painting any of the borders then the function
     //really shouldn't be called at all.
@@ -1623,14 +1596,14 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
 
     // Must create copies of these since otherwise the zoomIt()
     // operation will be performed on them repeatedly.
-    QPen  leftPen( _leftPen );
-    QPen  rightPen( _rightPen );
-    QPen  topPen( _topPen );
-    QPen  bottomPen( _bottomPen );
+    QPen  leftPen  ( d->style.leftBorderPen() );
+    QPen  rightPen ( d->style.rightBorderPen() );
+    QPen  topPen   ( d->style.topBorderPen() );
+    QPen  bottomPen( d->style.bottomBorderPen() );
 
     // Determine the pens that should be used for drawing
     // the borders.
-    //
+    // NOTE Stefan: This prevents cosmetic pens (width==0).
     int left_penWidth   = qMax( 1, ( leftPen.width() ) );
     int right_penWidth  = qMax( 1, ( rightPen.width() ) );
     int top_penWidth    = qMax( 1, ( topPen.width() ) );
@@ -1652,19 +1625,10 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
         if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-            // FIXME: There is probably Cut&Paste bugs here as well as below.
-            //        The qMin/qMax pairs don't really make sense.
-            //
-            //    UPDATE: In fact, most of these qMin/qMax combinations
-            //            are TOTALLY BOGUS.  For one thing, the idea
-            //            that we always have full cells on paper is wrong
-            //            since we can have embedded sheets in e.g. kword,
-            //            and those can be arbitrarily clipped.  WE HAVE TO
-            //            REVISE THIS WHOLE BORDER PAINTING SECTION!
-            //
-                line = QLineF( qMax( rect.left(),   cellRect.left() ),
-                               qMax( rect.top(),    cellRect.top() ),
-                               qMax( rect.left(),   cellRect.left() ),
+            if ( cellRect.left() >= rect.left() + left_penWidth / 2)
+                line = QLineF( cellRect.left() ,
+                               qMax( rect.top(), cellRect.top() ),
+                               cellRect.left(),
                                qMin( rect.bottom(), cellRect.bottom() ) );
         }
         else
@@ -1683,9 +1647,6 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
         if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-                // FIXME: This is the way all these things should look.
-                //        Make it so.
-                //
                 // Only print the right border if it is visible.
                 if ( cellRect.right() <= rect.right() + right_penWidth / 2)
                     line = QLineF( cellRect.right(),

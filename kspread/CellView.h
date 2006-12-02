@@ -105,7 +105,7 @@ public:
    * \ingroup Painting
    */
   void paintCellBorders( const QRectF& paintRegion, QPainter& painter,
-                         View* view, const KoPoint& paintCoordinate,
+                         const KoPoint& paintCoordinate,
                          const QPoint& cellCoordinate, const QRect& cellRegion,
                          QLinkedList<QPoint> &mergedCellsPainted, Cell* cell, SheetView* sheetView);
 
@@ -117,19 +117,7 @@ public:
    */
   void paintDefaultBorders( QPainter& painter, const QRectF &paintRegion,
                             const QRectF &cellRegion, const QPoint &cellCoordinate,
-                            Borders paintBorder,
-                            QPen const & rightPen, QPen const & bottomPen,
-                            QPen const & leftPen, QPen const & topPen, Cell* cell );
-
-  /**
-   * \ingroup Layout
-   * Calculates the layout of the cell.
-   *
-   * I.e. recalculates the text to be shown, its dimensions, its offset,
-   * breaks lines of the text to fit it into the cell, obscures neighbouring
-   * cells, if necessary.
-   */
-  void makeLayout( Cell* cell );
+                            Borders paintBorder, Cell* cell );
 
   /**
    * \ingroup Layout
@@ -151,6 +139,16 @@ public:
   QString testAnchor( const Cell* cell, double x, double y ) const;
 
 private:
+    /**
+     * \ingroup Layout
+     * Calculates the layout of the cell.
+     *
+     * I.e. recalculates the text to be shown, its dimensions, its offset,
+     * breaks lines of the text to fit it into the cell, obscures neighbouring
+     * cells, if necessary.
+     */
+    void makeLayout( Cell* cell );
+
   /**
    * \ingroup Layout
    * Determines the space needed for the text to be displayed.
@@ -264,9 +262,7 @@ private:
    */
   void paintCustomBorders( QPainter& painter, const QRectF &paintRegion,
                            const QRectF &cellRegion, const QPoint& cellCoordinate,
-                           Borders paintBorder,
-                           const QPen & rightPen, const QPen & bottomPen,
-                           const QPen & leftPen, const QPen & topPen, Cell* cell );
+                           Borders paintBorder, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -292,8 +288,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect,
-                               QColor &backgroundColor, Cell* cell );
+  void paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -302,7 +297,7 @@ private:
    * @internal
    */
   void paintCommentIndicator( QPainter& painter, const QRectF &cellRect,
-                              const QPoint &cellRef, QColor &backgroundColor, Cell* cell );
+                              const QPoint &cellRef, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -310,8 +305,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintFormulaIndicator( QPainter& painter, const QRectF &cellRect,
-                              QColor &backgroundColor, Cell* cell );
+  void paintFormulaIndicator( QPainter& painter, const QRectF &cellRect, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -320,7 +314,7 @@ private:
    * @internal
    */
   void paintBackground( QPainter& painter, const QRectF &cellRect,
-                        bool selected, QColor &backgroundColor );
+                        bool selected );
 
   /**
    * \ingroup Painting

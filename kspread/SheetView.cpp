@@ -142,8 +142,8 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
-            cellView.paintCellBorders( paintRect, painter, view, dblCorner,
-                                       QPoint( col, row ), QRect( 1, 1, KS_colMax, KS_rowMax ),
+            cellView.paintCellBorders( paintRect, painter, dblCorner,
+                                       QPoint( col, row ), d->visibleRect,
                                        mergedCellsPainted, sheet()->cellAt( col, row ), this );
             dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->dblHeight() );
         }
