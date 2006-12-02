@@ -88,7 +88,7 @@ bool CalendarDay::load(QDomElement &element) {
         return false;
     //kDebug()<<k_funcinfo<<" state="<<m_state<<endl;
     QString s = element.attribute("date");
-    if (s != "") {
+    if (!s.isEmpty()) {
         m_date = QDate::fromString(s, Qt::ISODate);
         if (!m_date.isValid())
             m_date = QDate::fromString(s);
@@ -102,7 +102,7 @@ bool CalendarDay::load(QDomElement &element) {
                 //kDebug()<<k_funcinfo<<"Interval start="<<e.attribute("start")<<" end="<<e.attribute("end")<<endl;
                 QString st = e.attribute("start");
                 QString en = e.attribute("end");
-                if (st != "" && en != "") {
+                if (!st.isEmpty() && !en.isEmpty()) {
                     QTime start = QTime::fromString(st);
                     QTime end = QTime::fromString(en);
                     addInterval(new TimeInterval(start,end));

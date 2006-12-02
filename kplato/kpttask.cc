@@ -193,10 +193,10 @@ bool Task::load(QDomElement &element, Project &project) {
         Node::setConstraint(constraint); // hmmm, why do I need Node::?
 
     s = element.attribute("constraint-starttime");
-    if (s != "")
+    if (!s.isEmpty())
         m_constraintStartTime = DateTime::fromString(s);
     s = element.attribute("constraint-endtime");
-    if ( s != "")
+    if (!s.isEmpty())
         m_constraintEndTime = DateTime::fromString(s);
     
     m_startupCost = element.attribute("startup-cost", "0.0").toDouble();
@@ -251,10 +251,10 @@ bool Task::load(QDomElement &element, Project &project) {
                 m_progress.finished = (bool)e.attribute("finished", "0").toInt();
                 
                 s = e.attribute("startTime");
-                if (s != "")
+                if (!s.isEmpty())
                     m_progress.startTime = DateTime::fromString(s);
                 s = e.attribute("finishTime");
-                if (s != "")
+                if (!s.isEmpty())
                     m_progress.finishTime = DateTime::fromString(s);
                 m_progress.percentFinished = e.attribute("percent-finished", "0").toInt();
                 m_progress.remainingEffort = Duration::fromString(e.attribute("remaining-effort"));

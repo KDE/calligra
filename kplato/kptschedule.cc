@@ -429,22 +429,22 @@ bool NodeSchedule::loadXML( const QDomElement &sch )
     QString s;
     Schedule::loadXML( sch );
     s = sch.attribute( "earlieststart" );
-    if ( s != "" )
+    if ( !s.isEmpty() )
         earliestStart = DateTime::fromString( s );
     s = sch.attribute( "latestfinish" );
-    if ( s != "" )
+    if ( !s.isEmpty() )
         latestFinish = DateTime::fromString( s );
     s = sch.attribute( "start" );
-    if ( s != "" )
+    if ( !s.isEmpty() )
         startTime = DateTime::fromString( s );
     s = sch.attribute( "end" );
-    if ( s != "" )
+    if ( !s.isEmpty() )
         endTime = DateTime::fromString( s );
     s = sch.attribute( "start-work" );
-    if ( s != "" )
+    if ( !s.isEmpty() )
         workStartTime = DateTime::fromString( s );
     s = sch.attribute( "end-work" );
-    if ( s != "" )
+    if ( !s.isEmpty() )
         workEndTime = DateTime::fromString( s );
     duration = Duration::fromString( sch.attribute( "duration" ) );
 
@@ -641,10 +641,10 @@ bool MainSchedule::loadXML( const QDomElement &sch, Project &project )
     Schedule::loadXML( sch );
 
     s = sch.attribute( "start" );
-    if ( s != "" )
+    if ( !s.isEmpty() )
         startTime = DateTime::fromString( s );
     s = sch.attribute( "end" );
-    if ( s != "" )
+    if ( !s.isEmpty() )
         endTime = DateTime::fromString( s );
 
     QDomNodeList al = sch.childNodes();

@@ -459,10 +459,10 @@ bool Resource::load(QDomElement &element) {
     m_calendar = findCalendar(element.attribute("calendar-id"));
     m_units = element.attribute("units", "100").toInt();
     s = element.attribute("available-from");
-    if (s != "")
+    if (!s.isEmpty())
         m_availableFrom = DateTime::fromString(s);
     s = element.attribute("available-until");
-    if (s != "")
+    if (!s.isEmpty())
         m_availableUntil = DateTime::fromString(s);
         
     cost.normalRate = KGlobal::locale()->readMoney(element.attribute("normal-rate"));

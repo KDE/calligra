@@ -81,10 +81,10 @@ bool AppointmentInterval::loadXML(QDomElement &element) {
     //kDebug()<<k_funcinfo<<endl;
     bool ok;
     QString s = element.attribute("start");
-    if (s != "")
+    if (!s.isEmpty())
         m_start = DateTime::fromString(s);
     s = element.attribute("end");
-    if (s != "")
+    if (!s.isEmpty())
         m_end = DateTime::fromString(s);
     m_load = element.attribute("load", "100").toDouble(&ok);
     if (!ok) m_load = 100;
@@ -262,7 +262,7 @@ bool Appointment::UsedEffort::load(QDomElement &element) {
             if (e.tagName() == "actual-effort") {
                 QDate date;
                 s = e.attribute("date");
-                if (s != "")
+                if (!s.isEmpty())
                     date = QDate::fromString(s, Qt::ISODate);
                 Duration eff = Duration::fromString(e.attribute("effort"));
                 bool ot = e.attribute("overtime", "0").toInt();
