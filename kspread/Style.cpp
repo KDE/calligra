@@ -2294,6 +2294,12 @@ void Style::operator=( const Style& other )
     d = other.d;
 }
 
+void Style::merge( const Style& style )
+{
+    foreach( const QSharedDataPointer<SubStyle>& subStyle, style.subStyles() )
+        insertSubStyle( subStyle );
+}
+
 void Style::dump() const
 {
     foreach( const QSharedDataPointer<SubStyle>& subStyle, d->subStyles )

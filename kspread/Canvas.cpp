@@ -1016,15 +1016,13 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     QString anchor;
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
-        CellView tmpCellView( sheet, col, row );
-        CellView* cellView = &tmpCellView;
-        anchor = cellView->testAnchor( cell->dblWidth() - ev_PosX + xpos, ev_PosY - ypos );
+        CellView cellView = view()->sheetView( sheet )->cellView( col, row );
+        anchor = cellView.testAnchor( cell, cell->dblWidth() - ev_PosX + xpos, ev_PosY - ypos );
     }
     else
     {
-        CellView tmpCellView( sheet, col, row );
-        CellView* cellView = &tmpCellView;
-        anchor = cellView->testAnchor( ev_PosX - xpos, ev_PosY - ypos );
+        CellView cellView = view()->sheetView( sheet )->cellView( col, row );
+        anchor = cellView.testAnchor( cell, ev_PosX - xpos, ev_PosY - ypos );
     }
     if ( !anchor.isEmpty() && anchor != d->anchor )
     {
@@ -3464,19 +3462,10 @@ bool Canvas::createEditor( bool clear,  bool focus )
         d->editWidget->setEditMode( true );
         d->cellEditor = new KSpread::CellEditor( cell, this, doc()->captureAllArrowKeys() );
 
-        double w, h;
+        double w = cell->dblWidth( markerColumn() );
+        double h = cell->dblHeight( markerRow() );
         double min_w = cell->dblWidth( markerColumn() );
         double min_h = cell->dblHeight( markerRow() );
-        if ( cell->isDefault() )
-        {
-            w = min_w;
-            h = min_h;
-        }
-        else
-        {
-            w = cell->extraWidth();
-            h = cell->extraHeight();
-        }
 
         double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
 

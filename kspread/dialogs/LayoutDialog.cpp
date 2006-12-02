@@ -363,8 +363,8 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
              !obj->doesMergeCells());
 
   isMerged = ((obj->doesMergeCells() &&
-               left + obj->extraXCells() >= right &&
-               top + obj->extraYCells() >= bottom));
+               left + obj->mergedXCells() >= right &&
+               top + obj->mergedYCells() >= bottom));
 
   // Initialize with the upper left object.
   const Style styleTopLeft = m_sheet->style( left, top );

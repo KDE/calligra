@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "CellView.h"
 #include "Format.h"
 #include "Sheet.h"
 #include "SheetView.h"

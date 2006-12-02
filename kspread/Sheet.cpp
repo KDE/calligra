@@ -1479,7 +1479,7 @@ void Sheet::refreshMergedCell()
   for( ;c; c = c->nextCell() )
   {
     if(c->doesMergeCells())
-      c->mergeCells( c->column(), c->row(), c->extraXCells(), c->extraYCells() );
+      c->mergeCells( c->column(), c->row(), c->mergedXCells(), c->mergedYCells() );
   }
 }
 
@@ -2562,7 +2562,7 @@ void Sheet::deleteCells(const Region& region)
     {
       if ( c->doesMergeCells() && !c->isDefault() )
         c->mergeCells( c->column(), c->row(),
-           c->extraXCells(), c->extraYCells() );
+           c->mergedXCells(), c->mergedYCells() );
     }
     doc()->setModified( true );
 }
@@ -2640,8 +2640,8 @@ void Sheet::refreshView( const Region& region )
       {
         if (c->doesMergeCells())
         {
-              int right=qMax(tmp.right(),c->column()+c->extraXCells());
-              int bottom=qMax(tmp.bottom(),c->row()+c->extraYCells());
+              int right=qMax(tmp.right(),c->column()+c->mergedXCells());
+              int bottom=qMax(tmp.bottom(),c->row()+c->mergedYCells());
 
               tmp.setRight(right);
               tmp.setBottom(bottom);

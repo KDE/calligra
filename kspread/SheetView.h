@@ -52,6 +52,11 @@ public:
     ~SheetView();
 
     /**
+     * \return the Sheet
+     */
+    const Sheet* sheet() const;
+
+    /**
      * Looks up a CellView for the position \p col , \p row in the cache.
      * If no CellView exists yet, one is created and inserted into the cache.
      *

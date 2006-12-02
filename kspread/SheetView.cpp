@@ -57,10 +57,15 @@ SheetView::~SheetView()
     delete d;
 }
 
+const Sheet* SheetView::sheet() const
+{
+    return d->sheet;
+}
+
 CellView SheetView::cellView( int col, int row )
 {
     if ( !d->cache.contains( QPoint(col,row) ) )
-        d->cache.insert( QPoint(col,row), new CellView( d->sheet, col, row ) );
+        d->cache.insert( QPoint(col,row), new CellView( this, col, row ) );
     return *d->cache.object( QPoint(col,row) );
 }
 
@@ -100,7 +105,8 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
         {
             CellView cellView = this->cellView( col, row );
             cellView.paintCell( paintRect, painter, view, dblCorner,
-                                QPoint( col, row ), mergedCellsPainted );
+                                QPoint( col, row ), mergedCellsPainted,
+                                sheet()->cellAt( col, row ) );
             dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->dblHeight() );
         }
         dblCorner.setY( topLeft.y() );
@@ -117,7 +123,7 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
             CellView cellView = this->cellView( col, row );
             cellView.paintCellBorders( paintRect, painter, view, dblCorner,
                                        QPoint( col, row ), QRect( 1, 1, KS_colMax, KS_rowMax ),
-                                       mergedCellsPainted );
+                                       mergedCellsPainted, sheet()->cellAt( col, row ), this );
             dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->dblHeight() );
         }
         dblCorner.setY( topLeft.y() );

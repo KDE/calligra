@@ -52,6 +52,7 @@ namespace KSpread
 class Cell;
 class Conditions;
 class Sheet;
+class SheetView;
 class Style;
 class View;
 
@@ -63,42 +64,24 @@ class View;
 class KSPREAD_EXPORT CellView
 {
 public:
-    CellView( const Sheet* sheet, int col, int row );
+    CellView( SheetView* sheetView, int col, int row );
     CellView( const CellView& other );
     ~CellView();
 
-  enum Border
-  {
-    NoBorder     = 0x0,
-    LeftBorder   = 0x1,
-    RightBorder  = 0x2,
-    TopBorder    = 0x4,
-    BottomBorder = 0x8
-  };
-  Q_DECLARE_FLAGS(Borders, Border)
-
-    /**
-     * \return the cell associated with this view
-     */
-    Cell* cell() const;
+    enum Border
+    {
+        NoBorder     = 0x0,
+        LeftBorder   = 0x1,
+        RightBorder  = 0x2,
+        TopBorder    = 0x4,
+        BottomBorder = 0x8
+    };
+    Q_DECLARE_FLAGS(Borders, Border)
 
     /**
      * \return the style for the cell associated with this view
      */
     Style style() const;
-
-    Style effStyle( Style::Key ) const;
-
-    int effAlignX();
-
-    Conditions conditions() const;
-
-    /**
-     * Updates the cached painting attributes.
-     */
-    void update();
-
-    void setDirty( bool enable );
 
   /**
    * \ingroup Painting
@@ -116,7 +99,7 @@ public:
   void paintCell( const QRectF & rect, QPainter & painter,
                   View * view, const KoPoint & coordinate,
                   const QPoint & cellRef,
-                  QLinkedList<QPoint> &mergedCellsPainted );
+                  QLinkedList<QPoint> &mergedCellsPainted, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -124,7 +107,7 @@ public:
   void paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                          View* view, const KoPoint& paintCoordinate,
                          const QPoint& cellCoordinate, const QRect& cellRegion,
-                         QLinkedList<QPoint> &mergedCellsPainted );
+                         QLinkedList<QPoint> &mergedCellsPainted, Cell* cell, SheetView* sheetView);
 
   /**
    * \ingroup Layout
@@ -134,14 +117,14 @@ public:
    * breaks lines of the text to fit it into the cell, obscures neighbouring
    * cells, if necessary.
    */
-  void makeLayout( int _col, int _row );
+  void makeLayout( Cell* cell );
 
   /**
    * \ingroup Layout
    * Calculates the text dimensions and the offset
    * for the current displayed text.
    */
-  void calculateTextParameters();
+  void calculateTextParameters( Cell* cell );
 
   /**
    * \return width of the text
@@ -153,7 +136,7 @@ public:
    */
   double textHeight() const;
 
-  QString testAnchor( double x, double y ) const;
+  QString testAnchor( const Cell* cell, double x, double y ) const;
 
 private:
   /**
@@ -171,7 +154,7 @@ private:
    *
    * \internal Called from makeLayout() and calculateTextParameters().
    */
-  void textSize( const QFontMetrics& fontMetrics );
+  void textSize( const QFontMetrics& fontMetrics, const Cell* cell );
 
   /**
    * \ingroup Layout
@@ -189,7 +172,7 @@ private:
    *
    * \internal Called from makeLayout() and calculateTextParameters().
    */
-  void textOffset( const QFontMetrics& fontMetrics );
+  void textOffset( const QFontMetrics& fontMetrics, Cell* cell );
 
   /**
    * \ingroup Layout
@@ -198,7 +181,7 @@ private:
    *
    * \internal Called from makeLayout().
    */
-  void breakLines( const QFontMetrics& fontMetrics );
+  void breakLines( const QFontMetrics& fontMetrics, Cell* cell );
 
   /**
    * \ingroup Layout
@@ -208,7 +191,7 @@ private:
    *
    * \internal Called from makeLayout().
    */
-  void calculateCellDimension() const;
+  void calculateCellDimension( const Cell* cell );
 
   /**
    * \ingroup Layout
@@ -217,7 +200,7 @@ private:
    *
    * \internal Called from makeLayout().
    */
-  void obscureHorizontalCells();
+  void obscureHorizontalCells( Cell* masterCell );
 
   /**
    * \ingroup Layout
@@ -226,7 +209,7 @@ private:
    *
    * \internal Called from makeLayout().
    */
-  void obscureVerticalCells();
+  void obscureVerticalCells( Cell* masterCell );
 
   /**
    * \ingroup Layout
@@ -243,7 +226,7 @@ private:
    *
    * \internal
    */
-  QFont effectiveFont() const;
+  QFont effectiveFont( Cell* cell ) const;
 
   /**
    * \ingroup Painting
@@ -259,7 +242,7 @@ private:
    *
    * \internal Called from paintText().
    */
-  QString textDisplaying( const QFontMetrics& fontMetrics );
+  QString textDisplaying( const QFontMetrics& fontMetrics, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -271,7 +254,7 @@ private:
                            const QRectF &cellRect, const QPoint &cellRef,
                            Borders paintBorder,
                            const QPen & rightPen, const QPen & bottomPen,
-                           const QPen & leftPen, const QPen & topPen );
+                           const QPen & leftPen, const QPen & topPen, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -280,7 +263,7 @@ private:
    * @internal
    */
   void paintPageBorders( QPainter& painter, const QRectF &cellRect,
-                         const QPoint &cellRef, Borders paintBorder );
+                         const QPoint &cellRef, Borders paintBorder, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -289,7 +272,7 @@ private:
    * @internal
    */
   void paintText( QPainter& painter, const QRectF &cellRect,
-                  const QPoint &cellRef );
+                  const QPoint &cellRef, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -298,7 +281,7 @@ private:
    * @internal
    */
   void paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect,
-                               QColor &backgroundColor );
+                               QColor &backgroundColor, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -307,7 +290,7 @@ private:
    * @internal
    */
   void paintCommentIndicator( QPainter& painter, const QRectF &cellRect,
-                              const QPoint &cellRef, QColor &backgroundColor );
+                              const QPoint &cellRef, QColor &backgroundColor, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -316,7 +299,7 @@ private:
    * @internal
    */
   void paintFormulaIndicator( QPainter& painter, const QRectF &cellRect,
-                              QColor &backgroundColor );
+                              QColor &backgroundColor, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -328,7 +311,7 @@ private:
                             const QRectF &cellRect, const QPoint &cellRef,
                             Borders paintBorder,
                             QPen const & rightPen, QPen const & bottomPen,
-                            QPen const & leftPen, QPen const & topPen );
+                            QPen const & leftPen, QPen const & topPen, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -348,7 +331,7 @@ private:
   void paintObscuredCells( const QRectF& rect, QPainter& painter,
                            View* view, const QRectF &cellRect,
                            const QPoint &cellRef,
-                           QLinkedList<QPoint> &mergedCellsPainted );
+                           QLinkedList<QPoint> &mergedCellsPainted, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -356,62 +339,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect );
-
-    /**
-     * @return effective pen for the left border
-     * If this cell is merged by another cell, the other cell's
-     * left border pen. If this cell's conditional formatting contains
-     * a left border pen and the condition is matched, the conditional
-     * formatting's pen. Otherwise, its own left border pen.
-     */
-    QPen effLeftBorderPen() const;
-
-    /**
-     * @return effective pen for the top border
-     * @see effLeftBorderPen
-     */
-    QPen effTopBorderPen() const;
-
-    /**
-     * @return effective pen for the right border
-     * @see effLeftBorderPen
-     */
-    QPen effRightBorderPen() const;
-
-    /**
-     * @return effective pen for the bottom border
-     * @see effLeftBorderPen
-     */
-    QPen effBottomBorderPen() const;
-
-    /**
-     * @return "worth" of the effective bottom border pen
-     * @see Style::calculateValue
-     * @see effLeftBorderPen
-     */
-    uint effBottomBorderValue() const;
-
-    /**
-     * @return "worth" of the effective right border pen
-     * @see Style::calculateValue
-     * @see effLeftBorderPen
-     */
-    uint effRightBorderValue() const;
-
-    /**
-     * @return "worth" of the effective left border pen
-     * @see Style::calculateValue
-     * @see effLeftBorderPen
-     */
-    uint effLeftBorderValue() const;
-
-    /**
-     * @return "worth" of the effective top border pen
-     * @see Style::calculateValue
-     * @see effLeftBorderPen
-     */
-    uint effTopBorderValue() const;
+  void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect, Cell* cell );
 
     class Private;
     QSharedDataPointer<Private> d;

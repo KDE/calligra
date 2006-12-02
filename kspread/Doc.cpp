@@ -60,7 +60,6 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-#include "CellView.h"
 #include "Canvas.h"
 #include "Commands.h"
 #include "Damages.h"

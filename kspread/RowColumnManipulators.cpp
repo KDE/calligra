@@ -24,6 +24,7 @@
 #include "CellView.h"
 #include "Format.h"
 #include "Sheet.h"
+#include "SheetView.h"
 #include "Value.h"
 
 using namespace KSpread;
@@ -503,8 +504,9 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell)
 {
     Q_ASSERT(!cell->isDefault());
   double long_max = 0.0;
-  CellView cellView( cell->sheet(), cell->column(), cell->row() );
-  cellView.calculateTextParameters();
+  SheetView sheetView( cell->sheet() );
+  CellView cellView( &sheetView, cell->column(), cell->row() ); // FIXME
+  cellView.calculateTextParameters( cell );
   if ( cellView.textWidth() > long_max )
   {
     double indent = 0.0;
@@ -547,8 +549,9 @@ double AdjustColumnRowManipulator::adjustRowHelper(Cell* cell)
     Q_ASSERT(!cell->isDefault());
   double long_max = 0.0;
 
-  CellView cellView( cell->sheet(), cell->column(), cell->row() ); // FIXME
-  cellView.calculateTextParameters();
+  SheetView sheetView( cell->sheet() );
+  CellView cellView( &sheetView, cell->column(), cell->row() ); // FIXME
+  cellView.calculateTextParameters( cell );
   if ( cellView.textHeight() > long_max )
   {
     long_max = cellView.textHeight()
