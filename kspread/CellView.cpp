@@ -69,6 +69,13 @@ const int s_borderSpace = 1;
 class CellView::Private : public QSharedData
 {
 public:
+    Private() {}
+    ~Private()
+    {
+        if ( s_empty == this )
+            s_empty = 0;
+    }
+
     Style style;
     Sheet::LayoutDirection layoutDirection;
     double  width;
@@ -82,10 +89,25 @@ public:
     double  textY;
     double  textWidth;
     double  textHeight;
+
+    // static empty data to be shared
+    static Private* empty()
+    {
+        if( !s_empty)
+            s_empty = new Private;
+        return s_empty;
+    }
+
+private:
+    static Private* s_empty;
 };
 
+// create static pointer
+CellView::Private* CellView::Private::s_empty = 0;
+
+
 CellView::CellView( SheetView* sheetView, int col, int row )
-    : d( new Private )
+    : d( Private::empty() )
 {
     Q_ASSERT( col > 0 && col <= KS_colMax );
     Q_ASSERT( row > 0 && row <= KS_rowMax );
