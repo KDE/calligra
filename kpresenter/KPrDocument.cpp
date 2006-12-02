@@ -2093,7 +2093,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                 {
                     //add an empty line between the different frames
                     if ( !note.isEmpty() )
-                        note += "\n";
+                        note += '\n';
 
                     //todo load layout for note.
                     QDomNode textBox = KoDom::namedItemNS( frameBox, KoXmlNS::draw, "text-box" );
@@ -2107,7 +2107,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                             QDomElement t = text.toElement();
                             if ( t.tagName() == "p" )
                             {
-                                note += t.text() + "\n";
+                                note += t.text() + '\n';
                             }
                         }
                     }
