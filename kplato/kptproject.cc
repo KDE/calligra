@@ -1204,7 +1204,7 @@ void Project::printDebug( bool children, QByteArray indent )
 {
 
     kDebug() << indent << "+ Project node: " << Node::name() << endl; //FIXME: QT3 support
-    indent += "!";
+    indent += '!';
     QListIterator<ResourceGroup*> it( resourceGroups() );
     while ( it.hasNext() )
         it.next() ->printDebug( indent );

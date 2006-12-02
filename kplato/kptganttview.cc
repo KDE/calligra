@@ -525,12 +525,12 @@ void GanttView::modifySummaryTask( KDGanttViewItem *item, Task *task )
     }
     QString w = i18n( "Name: %1", task->name() );
     if ( !task->notScheduled() ) {
-        w += "\n" + i18n( "Start: %1", locale->formatDateTime( task->startTime() ) );
-        w += "\n" + i18n( "End: %1", locale->formatDateTime( task->endTime() ) );
+        w += '\n' + i18n( "Start: %1", locale->formatDateTime( task->startTime() ) );
+        w += '\n' + i18n( "End: %1", locale->formatDateTime( task->endTime() ) );
     }
     bool ok = true;
     if ( task->notScheduled() ) {
-        w += "\n" + i18n( "Not scheduled" );
+        w += '\n' + i18n( "Not scheduled" );
         ok = false;
     } else {
         if ( !m_showNoInformation && m_project && m_project->notScheduled() ) {
@@ -605,49 +605,49 @@ void GanttView::modifyTask( KDGanttViewItem *item, Task *task )
     }
     QString w = i18n( "Name: %1", task->name() );
     if ( !task->notScheduled() ) {
-        w += "\n";
+        w += '\n';
         w += i18n( "Start: %1", locale->formatDateTime( task->startTime() ) );
-        w += "\n";
+        w += '\n';
         w += i18n( "End: %1", locale->formatDateTime( task->endTime() ) );
         if ( m_showProgress ) {
-            w += "\n";
+            w += '\n';
             w += i18n( "Completion: %1%", task->progress().percentFinished );
         }
         if ( task->positiveFloat() > Duration::zeroDuration ) {
-            w += "\n" + i18n( "Float: %1", task->positiveFloat().toString( Duration::Format_i18nDayTime ) );
+            w += '\n' + i18n( "Float: %1", task->positiveFloat().toString( Duration::Format_i18nDayTime ) );
         }
         if ( task->inCriticalPath() ) {
-            w += "\n" + i18n( "Critical path" );
+            w += '\n' + i18n( "Critical path" );
         } else if ( task->isCritical() ) {
-            w += "\n" + i18n( "Critical" );
+            w += '\n' + i18n( "Critical" );
         }
     }
     QString sts;
     bool ok = true;
     if ( task->notScheduled() ) {
-        sts += "\n" + i18n( "Not scheduled" );
+        sts += '\n' + i18n( "Not scheduled" );
         ok = false;
     } else {
         if ( task->resourceError() ) {
-            sts += "\n" + i18n( "No resource assigned" );
+            sts += '\n' + i18n( "No resource assigned" );
             ok = false;
         }
         if ( task->resourceNotAvailable() ) {
-            sts += "\n" + i18n( "Resource not available" );
+            sts += '\n' + i18n( "Resource not available" );
             ok = false;
         }
         if ( task->schedulingError() ) {
-            sts += "\n" + i18n( "Scheduling conflict" );
+            sts += '\n' + i18n( "Scheduling conflict" );
             ok = false;
         }
         if ( task->effortMetError() ) {
-            sts += "\n" + i18n( "Requested effort could not be met" );
+            sts += '\n' + i18n( "Requested effort could not be met" );
             ok = false;
         }
         if ( task->resourceOverbooked() ) {
             ok = false;
             QStringList rl = task->overbookedResources();
-            sts += "\n" + i18nc( "arg: list of resources", "Resource overbooked: %1" ,rl.join( "," ) );
+            sts += '\n' + i18nc( "arg: list of resources", "Resource overbooked: %1" ,rl.join( "," ) );
 
         }
         if ( !m_showNoInformation && m_project && m_project->notScheduled() ) {
@@ -710,24 +710,24 @@ void GanttView::modifyMilestone( KDGanttViewItem *item, Task *task )
 
     QString w = i18n( "Name: %1", task->name() );
     if ( !task->notScheduled() ) {
-        w += "\n" + i18n( "Time: %1", locale->formatDateTime( task->startTime() ) );
+        w += '\n' + i18n( "Time: %1", locale->formatDateTime( task->startTime() ) );
 
         if ( task->positiveFloat() > Duration::zeroDuration ) {
-            w += "\n" + i18n( "Float: %1", task->positiveFloat().toString( Duration::Format_i18nDayTime ) );
+            w += '\n' + i18n( "Float: %1", task->positiveFloat().toString( Duration::Format_i18nDayTime ) );
         }
         if ( task->inCriticalPath() ) {
-            w += "\n" + i18n( "Critical path" );
+            w += '\n' + i18n( "Critical path" );
         } else if ( task->isCritical() ) {
-            w += "\n" + i18n( "Critical" );
+            w += '\n' + i18n( "Critical" );
         }
     }
     bool ok = true;
     if ( task->notScheduled() ) {
-        w += "\n" + i18n( "Not scheduled" );
+        w += '\n' + i18n( "Not scheduled" );
         ok = false;
     } else {
         if ( task->schedulingError() ) {
-            w += "\n" + i18n( "Scheduling conflict" );
+            w += '\n' + i18n( "Scheduling conflict" );
             ok = false;
         }
         if ( !m_showNoInformation && m_project && m_project->notScheduled() ) {

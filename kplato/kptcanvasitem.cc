@@ -89,9 +89,9 @@ void GanttViewSummaryItem::insertRelations(GanttView *view)
             KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(r->type()));
             //TODO i18n
             QString t = i18n("From: %1", this->listViewText(0));
-            t += "\n" + i18n("To: %1", child->listViewText(0));
+            t += '\n' + i18n("To: %1", child->listViewText(0));
             if (r->lag() > Duration::zeroDuration) {
-                t += "\n" + i18n("Lag:  %1", r->lag().toString(Duration::Format_i18nDayTime));
+                t += '\n' + i18n("Lag:  %1", r->lag().toString(Duration::Format_i18nDayTime));
             }
             link->setTooltipText(t);
             view->addTaskLink(link);
@@ -168,9 +168,9 @@ void GanttViewTaskItem::insertRelations(GanttView *view)
         {
             KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child,  kdLinkType(r->type()));
             QString t = i18n("From: %1", this->listViewText(0));
-            t += "\n" + i18n("To: %1", child->listViewText(0));
+            t += '\n' + i18n("To: %1", child->listViewText(0));
             if (r->lag() > Duration::zeroDuration) {
-                t += "\n" + i18n("Lag:  %1", r->lag().toString(Duration::Format_i18nDayTime));
+                t += '\n' + i18n("Lag:  %1", r->lag().toString(Duration::Format_i18nDayTime));
             }
             link->setTooltipText(t);
             view->addTaskLink(link);
@@ -249,9 +249,9 @@ void GanttViewEventItem::insertRelations(GanttView *view)
             KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(r->type()));
 
             QString t = i18n("From: %1",this->listViewText(0));
-            t += "\n" + i18n("To: %1",child->listViewText(0));
+            t += '\n' + i18n("To: %1",child->listViewText(0));
             if (r->lag() > Duration::zeroDuration) {
-                t += "\n" + i18n("Lag:  %1",r->lag().toString(Duration::Format_i18nDayTime));
+                t += '\n' + i18n("Lag:  %1",r->lag().toString(Duration::Format_i18nDayTime));
             }
             link->setTooltipText(t);
             view->addTaskLink(link);

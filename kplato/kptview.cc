@@ -474,7 +474,7 @@ View::View( Part* part, QWidget* parent )
         setXMLFile( "kplato.rc" );
 
     m_dbus = new ViewAdaptor( this );
-    QDBusConnection::sessionBus().registerObject( "/" + objectName(), this );
+    QDBusConnection::sessionBus().registerObject( '/' + objectName(), this );
 
     m_sp = new QSplitter( this );
     QVBoxLayout *layout = new QVBoxLayout( this );

@@ -74,7 +74,7 @@ public:
         if (tag.contains("."))
             return getData(tag);
 
-        return getData(source + "." + tag);
+        return getData(source + '.' + tag);
     }
 
     QString getData(QString tag) const {
@@ -401,7 +401,7 @@ QString ReportView::setDetail(const QString & source, QStringList &properties, Q
     s += " level=\"" + level + "\"";
     for (unsigned int i=0; i < properties.count(); ++i) {
         //kDebug()<<k_funcinfo<<"Property: "<<properties[i]<<endl;
-        s += " " + properties[i].section('=', 0, 0) + "="; // Field
+        s += ' ' + properties[i].section('=', 0, 0) + '='; // Field
         QString data = m_reportTags->getData(source, properties[i].section('=', 1, 1));
         if (data.isNull())
             data = "";
@@ -567,7 +567,7 @@ QStringList ReportView::getProperties(QDomElement &elem) {
     for (int j = 0; j < childCount; j++) {
         QDomNode child = list.item(j);
         if (child.nodeName() == "Field") {
-            props.append(child.attributes().namedItem("Field").nodeValue()+"="+child.attributes().namedItem("Field").nodeValue());
+            props.append(child.attributes().namedItem("Field").nodeValue()+'='+child.attributes().namedItem("Field").nodeValue());
         }
     }
     return props;
