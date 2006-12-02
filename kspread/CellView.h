@@ -110,6 +110,18 @@ public:
                          QLinkedList<QPoint> &mergedCellsPainted, Cell* cell, SheetView* sheetView);
 
   /**
+   * \ingroup Painting
+   * helper function for paintCell() function
+   * @see paintCell()
+   * @internal
+   */
+  void paintDefaultBorders( QPainter& painter, const QRectF &paintRegion,
+                            const QRectF &cellRegion, const QPoint &cellCoordinate,
+                            Borders paintBorder,
+                            QPen const & rightPen, QPen const & bottomPen,
+                            QPen const & leftPen, QPen const & topPen, Cell* cell );
+
+  /**
    * \ingroup Layout
    * Calculates the layout of the cell.
    *
@@ -250,8 +262,8 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintCustomBorders( QPainter& painter, const QRectF &rect,
-                           const QRectF &cellRect, const QPoint &cellRef,
+  void paintCustomBorders( QPainter& painter, const QRectF &paintRegion,
+                           const QRectF &cellRegion, const QPoint& cellCoordinate,
                            Borders paintBorder,
                            const QPen & rightPen, const QPen & bottomPen,
                            const QPen & leftPen, const QPen & topPen, Cell* cell );
@@ -300,18 +312,6 @@ private:
    */
   void paintFormulaIndicator( QPainter& painter, const QRectF &cellRect,
                               QColor &backgroundColor, Cell* cell );
-
-  /**
-   * \ingroup Painting
-   * helper function for paintCell() function
-   * @see paintCell()
-   * @internal
-   */
-  void paintDefaultBorders( QPainter& painter, const QRectF &rect,
-                            const QRectF &cellRect, const QPoint &cellRef,
-                            Borders paintBorder,
-                            QPen const & rightPen, QPen const & bottomPen,
-                            QPen const & leftPen, QPen const & topPen, Cell* cell );
 
   /**
    * \ingroup Painting

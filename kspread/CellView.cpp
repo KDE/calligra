@@ -535,47 +535,26 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     const int regionLeft   = cellRegion.left();
     const int regionTop    = cellRegion.top();
 
-    double left = paintCoordinate.x();
-
-    // Handle right-to-left layout.
-    // In an RTL sheet the cells have to be painted at their opposite horizontal
-    // location on the canvas, meaning that column A will be the rightmost column
-    // on screen, column B will be to the left of it and so on. Here we change
-    // the horizontal coordinate at which we start painting the cell in case the
-    // sheet's direction is RTL. We do this only if paintingObscured is 0,
-    // otherwise the cell's painting location will flip back and forth in
-    // consecutive calls to paintCell when painting obscured cells.
-    if ( d->layoutDirection == Sheet::RightToLeft && paintingObscured == 0
-         && view && view->canvasWidget() )
-    {
-        double  dwidth = view->doc()->unzoomItXOld(view->canvasWidget()->width());
-        left = dwidth - paintCoordinate.x() - d->width;
-    }
-
     // See if this cell is merged or has overflown into neighbor cells.
     // In that case, the width/height is greater than just the cell
     // itself.
-    if (cell->d->hasExtra()) {
-        if (cell->mergedXCells() > 0 || cell->mergedYCells() > 0) {
-            // merged cell extends to the left if sheet is RTL
-            if ( d->layoutDirection == Sheet::RightToLeft ) {
-                left -= cell->extraWidth() - d->width;
-            }
-            d->width   = cell->extraWidth();
-            d->height  = cell->extraHeight();
-        }
-        else {
+    if (cell->mergedXCells() > 0 || cell->mergedYCells() > 0)
+    {
+        d->width   = cell->extraWidth();
+        d->height  = cell->extraHeight();
+    }
+    else
+    {
 #if 0
-            width  += cell->extraXCells() ? cell->extraWidth()  : 0;
-            height += cell->extraYCells() ? cell->extraHeight() : 0;
+        width  += cell->extraXCells() ? cell->extraWidth()  : 0;
+        height += cell->extraYCells() ? cell->extraHeight() : 0;
 #else
-            // FIXME: Make extraWidth/Height really contain the *extra* width/height.
-            if ( cell->extraXCells() )
-                d->width  = cell->extraWidth();
-            if ( cell->extraYCells() )
-                d->height = cell->extraHeight();
+        // FIXME: Make extraWidth/Height really contain the *extra* width/height.
+        if ( cell->extraXCells() )
+            d->width  = cell->extraWidth();
+        if ( cell->extraYCells() )
+            d->height = cell->extraHeight();
 #endif
-        }
     }
 
     CellView::Borders paintBorder = CellView::NoBorder;
@@ -632,20 +611,20 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     // If the rect of this cell doesn't intersect the rect that should
     // be painted, we can skip the rest and return. (Note that we need
     // to calculate `left' first before we can do this.)
-    const QRectF  cellRect( left, paintCoordinate.y(), d->width, d->height );
+    const QRectF  cellRect( paintCoordinate.x(), paintCoordinate.y(), d->width, d->height );
     if ( !cellRect.intersects( paintRegion ) ) {
         cell->clearFlag( Cell::Flag_PaintingCell );
         return;
     }
 
-    // 2. Paint the default borders if we are on screen or if we are printing
+    // 1. Paint the default borders if we are on screen or if we are printing
     //    and the checkbox to do this is checked.
     if ( painter.device()->devType() != QInternal::Printer ||
          sheet->print()->printGrid())
         paintDefaultBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder,
                              rightPen, bottomPen, leftPen, topPen, cell );
 
-    // 4. Paint the borders of the cell if no other cell is forcing this
+    // 2. Paint the borders of the cell if no other cell is forcing this
     // one, i.e. this cell is not part of a merged cell.
     //
 
@@ -665,7 +644,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     if ( dynamic_cast<QPrinter*>(painter.device()) )
         painter.setClipping( true );
 
-    // 5. Paint diagonal lines and page borders.
+    // 3. Paint diagonal lines and page borders.
     paintCellDiagonalLines( painter, cellRect, cell );
     paintPageBorders( painter, cellRect, cellCoordinate, paintBorder, cell );
 
@@ -1008,24 +987,12 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
         if ( paintingToExternalDevice ) {
-            if ( d->layoutDirection == Sheet::RightToLeft )
-                line = QLineF( qMax( rect.left(),   cellRect.right() ),
-                               qMax( rect.top(),    cellRect.y() + dt ),
-                               qMin( rect.right(),  cellRect.right() ),
-                               qMin( rect.bottom(), cellRect.bottom() - db ) );
-            else
                 line = QLineF( qMax( rect.left(),   cellRect.x() ),
                                qMax( rect.top(),    cellRect.y() + dt ),
                                qMin( rect.right(),  cellRect.x() ),
                                qMin( rect.bottom(), cellRect.bottom() - db ) );
         }
         else {
-            if ( d->layoutDirection == Sheet::RightToLeft )
-                line = QLineF( cellRect.right(),
-                               cellRect.y() + dt,
-                               cellRect.right(),
-                               cellRect.bottom() - db );
-            else
                 line = QLineF( cellRect.x(),
                                cellRect.y() + dt,
                                cellRect.x(),
@@ -1099,12 +1066,6 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
         // On paper, we always have full cells, on screen not.
         if ( dynamic_cast<QPrinter*>(painter.device()) )
         {
-            if ( d->layoutDirection == Sheet::RightToLeft )
-                line = QLineF( qMax( rect.left(),   cellRect.x() ),
-                               qMax( rect.top(),    cellRect.y() + dt ),
-                               qMin( rect.right(),  cellRect.x() ),
-                               qMin( rect.bottom(), cellRect.bottom() - db ) );
-            else
                 line = QLineF( qMax( rect.left(),   cellRect.right() ),
                                qMax( rect.top(),    cellRect.y() + dt ),
                                qMin( rect.right(),  cellRect.right() ),
@@ -1112,12 +1073,6 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
         }
         else
         {
-            if ( d->layoutDirection == Sheet::RightToLeft )
-                line = QLineF( cellRect.x(),
-                               cellRect.y() + dt,
-                               cellRect.x(),
-                               cellRect.bottom() - db );
-            else
                 line = QLineF( cellRect.right(),
                                cellRect.y() + dt,
                                cellRect.right(),
@@ -1698,7 +1653,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
         // On paper, we always have full cells, on screen not.
         if ( dynamic_cast<QPrinter*>(painter.device()) ) {
             // FIXME: There is probably Cut&Paste bugs here as well as below.
-            //        The qMin/qMax and left/right pairs don't really make sense.
+            //        The qMin/qMax pairs don't really make sense.
             //
             //    UPDATE: In fact, most of these qMin/qMax combinations
             //            are TOTALLY BOGUS.  For one thing, the idea
@@ -1707,12 +1662,6 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
             //            and those can be arbitrarily clipped.  WE HAVE TO
             //            REVISE THIS WHOLE BORDER PAINTING SECTION!
             //
-            if ( d->layoutDirection == Sheet::RightToLeft )
-                line = QLineF( qMin( rect.right(),  cellRect.right() ),
-                               qMax( rect.top(),    cellRect.top() ),
-                               qMin( rect.right(),  cellRect.right() ),
-                               qMin( rect.bottom(), cellRect.bottom() ) );
-            else
                 line = QLineF( qMax( rect.left(),   cellRect.left() ),
                                qMax( rect.top(),    cellRect.top() ),
                                qMax( rect.left(),   cellRect.left() ),
@@ -1720,9 +1669,6 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
         }
         else
         {
-            if ( d->layoutDirection == Sheet::RightToLeft )
-                line = QLineF( cellRect.right(), cellRect.top(), cellRect.right(), cellRect.bottom() );
-            else
                 line = QLineF( cellRect.left(), cellRect.top(), cellRect.left(), cellRect.bottom() );
         }
         painter.drawLine( line );
@@ -1737,12 +1683,6 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
         if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-            if ( d->layoutDirection == Sheet::RightToLeft )
-                line = QLineF( qMax( rect.left(), cellRect.left() ),
-                               qMax( rect.top(), cellRect.top()  ),
-                               qMax( rect.left(), cellRect.left() ),
-                               qMin( rect.bottom(), cellRect.bottom() ) );
-            else {
                 // FIXME: This is the way all these things should look.
                 //        Make it so.
                 //
@@ -1752,13 +1692,9 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
                                    qMax( rect.top(), cellRect.top() ),
                                    cellRect.right(),
                                    qMin( rect.bottom(), cellRect.bottom() ) );
-            }
         }
         else
         {
-            if ( d->layoutDirection == Sheet::RightToLeft )
-                line = QLineF( cellRect.left(), cellRect.top(), cellRect.left(), cellRect.bottom() );
-            else
                 line = QLineF( cellRect.right(), cellRect.top(), cellRect.right(), cellRect.bottom() );
         }
         painter.drawLine( line );
