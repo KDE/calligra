@@ -227,7 +227,6 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
                           const QPoint& cellRef,
                           QLinkedList<QPoint> &mergedCellsPainted, Cell* cell )
 {
-#if 0
     // If we are already painting this cell, then return immediately.
     // This avoids infinite recursion.
     if ( cell->testFlag( Cell::Flag_PaintingCell ) )
@@ -235,7 +234,6 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
 
     // Indicate that we are painting this cell now.
     cell->setFlag( Cell::Flag_PaintingCell );
-#endif
 
     // This flag indicates that we are working on drawing the cells that
     // another cell is obscuring.  The value is the number of levels down we
@@ -339,8 +337,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
     if ( !cell->isPartOfMerged() )
         paintBackground( painter, cellRect, selected );
 
-#if 0
-    // 3. Paint all the cells that this one obscures.  They may only be
+    // 2. Paint all the cells that this one obscures.  They may only be
     //    partially obscured.
     //
     // The `paintingObscured' variable is used to avoid infinite
@@ -352,32 +349,32 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
         //kDebug(36004) << "painting obscured cells for " << name() << endl;
 
         paintObscuredCells( rect, painter, view, cellRect, cellRef,
-                            mergedCellsPainted);
+                            mergedCellsPainted, cell );
 
         // FIXME: Is this the right place for this?
         if ( cell->mergedXCells() > 0 || cell->mergedYCells() > 0 )
             mergedCellsPainted.prepend( cellRef );
     }
     paintingObscured--;
-#endif
 
-    // 6. Now paint the content, if this cell isn't obscured.
+
+    // 3. Now paint the content, if this cell isn't obscured.
     if ( !cell->isObscured() ) {
 
-        // 6a. Paint possible comment indicator.
+        // 3a. Paint possible comment indicator.
         if ( !dynamic_cast<QPrinter*>(painter.device())
               || cell->sheet()->print()->printCommentIndicator() )
             paintCommentIndicator( painter, cellRect, cellRef, cell );
 
-        // 6b. Paint possible formula indicator.
+        // 3b. Paint possible formula indicator.
         if ( !dynamic_cast<QPrinter*>(painter.device())
               || cell->sheet()->print()->printFormulaIndicator() )
             paintFormulaIndicator( painter, cellRect, cell );
 
-        // 6c. Paint possible indicator for clipped text.
+        // 3c. Paint possible indicator for clipped text.
         paintMoreTextIndicator( painter, cellRect, cell );
 
-        //6c. Paint cell highlight
+        //3d. Paint cell highlight
 #if 0
         if (highlightBorder != None)
         paintCellHighlight ( painter, cellRect, cellRef, highlightBorder,
@@ -385,7 +382,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
         leftHighlightPen,  topHighlightPen );
 #endif
 
-        // 6d. Paint the text in the cell unless:
+        // 3e. Paint the text in the cell unless:
         //  a) it is empty
         //  b) something indicates that the text should not be painted
         //  c) the sheet is protected and the cell is hidden.
@@ -397,8 +394,8 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
             paintText( painter, cellRect, cellRef, cell );
         }
     }
-#if 0
-    // 7. If this cell is obscured and we are not already painting obscured
+
+    // 4. If this cell is obscured and we are not already painting obscured
     //    cells, then paint the obscuring cell(s).  Otherwise don't do
     //    anything so that we don't cause an infinite loop.
     if ( cell->isObscured() && paintingObscured == 0 &&
@@ -466,22 +463,18 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
                     //      cells are merged, then the whole merged cell will be
                     //      painted with the color of the last cell referenced
                     //      which is inside the merged range.
-                    CellView tmpCellView( cell->sheet(), obscuringCellRef.x(), obscuringCellRef.y() );
-                    CellView* cellView = &tmpCellView;
-                    cellView->paintCell( rect, painter, view,
-                                         corner, obscuringCellRef,
-                                         mergedCellsPainted); // new pens
+                    CellView cellView = view->sheetView( cell->sheet() )->cellView( obscuringCellRef.x(), obscuringCellRef.y() );
+                    cellView.paintCell( rect, painter, view,
+                                        corner, obscuringCellRef,
+                                        mergedCellsPainted, cell ); // new pens
                     painter.restore();
                 }
             }
         }
     }
-#endif
 
-#if 0
     // We are done with the painting, so remove the flag on the cell.
     cell->clearFlag( Cell::Flag_PaintingCell );
-#endif
 }
 
 void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
@@ -491,7 +484,6 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
 {
     Sheet* const sheet = cell->sheet();
 
-#if 0
     // If we are already painting this cell, then return immediately.
     // This avoids infinite recursion.
     if ( cell->testFlag( Cell::Flag_PaintingCell ) )
@@ -499,7 +491,6 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
 
     // Indicate that we are painting this cell now.
     cell->setFlag( Cell::Flag_PaintingCell );
-#endif
 
     // This flag indicates that we are working on drawing the cells that
     // another cell is obscuring.  The value is the number of levels down we
@@ -630,10 +621,8 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     paintCellDiagonalLines( painter, cellRect, cell );
     paintPageBorders( painter, cellRect, cellCoordinate, paintBorder, cell );
 
-#if 0
     // We are done with the painting, so remove the flag on the cell.
     cell->clearFlag( Cell::Flag_PaintingCell );
-#endif
 }
 
 
@@ -730,13 +719,12 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
 }
 #endif
 
-#if 0
 // Paint all the cells that this cell obscures (helper function to paintCell).
 //
 void CellView::paintObscuredCells(const QRectF& rect, QPainter& painter,
                                   View* view, const QRectF &cellRect,
                                   const QPoint &cellRef,
-                                  QLinkedList<QPoint> &mergedCellsPainted)
+                                  QLinkedList<QPoint> &mergedCellsPainted, Cell* cell )
 {
     // If there are no obscured cells, return.
     if ( !cell->extraXCells() && !cell->extraYCells() )
@@ -792,18 +780,16 @@ void CellView::paintObscuredCells(const QRectF& rect, QPainter& painter,
 #endif
                 //kDebug(36004) << "calling paintcell for obscured cell "
                 //       << cell->name() << endl;
-                CellView tmpCellView( this->cell->sheet(), column, row  ); // FIXME
-                CellView* cellView = &tmpCellView;
-                cellView->paintCell( rect, painter, view, corner,
-                                     QPoint( cellRef.x() + x, cellRef.y() + y ),
-                                     mergedCellsPainted );
+                CellView cellView = view->sheetView( cell->sheet() )->cellView( column, row );
+                cellView.paintCell( rect, painter, view, corner,
+                                    QPoint( cellRef.x() + x, cellRef.y() + y ),
+                                    mergedCellsPainted, cell );
             }
             xpos += cl->dblWidth();
         }
         ypos += rl->dblHeight();
     }
 }
-#endif
 
 //
 // Paint the background of this cell.
