@@ -57,7 +57,7 @@ public:
     ~Part();
 
     virtual void paintContent( QPainter& painter, const QRect& rect,
-                               bool transparent = FALSE,
+                               bool transparent = false,
                                double zoomX = 1.0, double zoomY = 1.0 );
 
     /**
