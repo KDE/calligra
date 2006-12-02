@@ -33,7 +33,7 @@ class KPrTextViewAdaptor : public KoTextViewAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.text.view")
 
 public:
-    KPrTextViewAdaptor( KPrTextView *_textview );
+    explicit KPrTextViewAdaptor( KPrTextView *_textview );
 
 public Q_SLOTS:
     void insertVariable( int type, int subtype = 0 );

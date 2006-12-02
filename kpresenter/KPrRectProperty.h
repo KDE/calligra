@@ -28,7 +28,7 @@
 class RectPropertyUI : public QWidget, public Ui::RectPropertyUI
 {
 public:
-  RectPropertyUI( QWidget *parent ) : QWidget( parent ) {
+  explicit RectPropertyUI( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

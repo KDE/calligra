@@ -29,7 +29,7 @@
 class PiePropertyUI : public QWidget, public Ui::PiePropertyUI
 {
 public:
-  PiePropertyUI( QWidget *parent ) : QWidget( parent ) {
+  explicit PiePropertyUI( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

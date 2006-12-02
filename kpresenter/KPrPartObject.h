@@ -32,7 +32,7 @@ class KPrPartObject : public KPr2DObject
 {
     Q_OBJECT
 public:
-    KPrPartObject( KPrChild *_child );
+    explicit KPrPartObject( KPrChild *_child );
     virtual ~KPrPartObject() {}
 
     KPrPartObject &operator=( const KPrPartObject & );

@@ -31,7 +31,7 @@ class KPrPolyLineObjectIface : public KPrObjectIface
 {
     K_DCOP
 public:
-    KPrPolyLineObjectIface( KPrPolylineObject *obj_ );
+    explicit KPrPolyLineObjectIface( KPrPolylineObject *obj_ );
 
 k_dcop:
     void horizontalFlip();

@@ -34,7 +34,7 @@ class KPrObject2DAdaptor : public KPrObjectAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.object.2d")
 
 public:
-    KPrObject2DAdaptor( KPr2DObject *obj_ );
+    explicit KPrObject2DAdaptor( KPr2DObject *obj_ );
 
 public Q_SLOTS:
     virtual QColor gradientColor1() const;

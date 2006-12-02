@@ -32,7 +32,7 @@ class KPrAutoFormObjectAdaptor : public KPrObject2DAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.object.autoform")
 
 public:
-    KPrAutoFormObjectAdaptor( KPrAutoformObject *obj_ );
+    explicit KPrAutoFormObjectAdaptor( KPrAutoformObject *obj_ );
 
 public Q_SLOTS:
     QString fileName() const;

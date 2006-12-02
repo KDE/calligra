@@ -32,7 +32,7 @@ class KPrViewIface : public KoViewIface
 {
     K_DCOP
 public:
-    KPrViewIface( KPrView *view_ );
+    explicit KPrViewIface( KPrView *view_ );
 
 k_dcop:
     // edit menu

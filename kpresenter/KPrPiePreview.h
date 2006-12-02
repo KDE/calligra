@@ -34,7 +34,7 @@ class KPrPiePreview : public QFrame
     Q_OBJECT
 
 public:
-    KPrPiePreview( QWidget* parent );
+    explicit KPrPiePreview( QWidget* parent );
     ~KPrPiePreview() {}
 
     void setAngle( int _angle )

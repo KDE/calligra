@@ -34,7 +34,7 @@
 class EffectBrowserBase : public QWidget, public Ui::EffectBrowserBase
 {
 public:
-  EffectBrowserBase( QWidget *parent ) : QWidget( parent ) {
+  explicit EffectBrowserBase( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

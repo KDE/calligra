@@ -9,7 +9,7 @@ class KPrTextPreview : public QFrame
     Q_OBJECT
 
 public:
-    KPrTextPreview( QWidget* parent);
+    explicit KPrTextPreview( QWidget* parent);
     ~KPrTextPreview() {}
 
     void setShadowDirection( ShadowDirection sd ) { shadowDirection = sd; repaint( true ); }

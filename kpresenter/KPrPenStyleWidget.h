@@ -32,7 +32,7 @@
 class PenStyleUI : public QWidget, public Ui::PenStyleUI
 {
 public:
-  PenStyleUI( QWidget *parent ) : QWidget( parent ) {
+  explicit PenStyleUI( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

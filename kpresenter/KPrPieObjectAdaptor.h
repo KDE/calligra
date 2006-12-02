@@ -32,7 +32,7 @@ class KPrPieObjectAdaptor : public KPrObject2DAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.object.pie")
 
 public:
-    KPrPieObjectAdaptor( KPrPieObject *obj_ );
+    explicit KPrPieObjectAdaptor( KPrPieObject *obj_ );
 
 public Q_SLOTS:
     virtual void setPieAngle( int _p_angle );

@@ -34,7 +34,7 @@ class KPrViewAdaptor : public KoViewAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.view")
 
 public:
-    KPrViewAdaptor( KPrView *view_ );
+    explicit KPrViewAdaptor( KPrView *view_ );
 
 public Q_SLOTS:
     // edit menu

@@ -37,7 +37,7 @@ class KPrCircleGroup;
 class RotationPropertyUI : public QWidget, public Ui::RotationPropertyUI
 {
 public:
-  RotationPropertyUI( QWidget *parent ) : QWidget( parent ) {
+  explicit RotationPropertyUI( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

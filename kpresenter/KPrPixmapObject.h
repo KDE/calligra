@@ -42,7 +42,7 @@ class KPrPixmapObject : public KPr2DObject
 {
 
 public:
-    KPrPixmapObject( KoPictureCollection *_imageCollection );
+    explicit KPrPixmapObject( KoPictureCollection *_imageCollection );
     KPrPixmapObject( KoPictureCollection *_imageCollection, const KoPictureKey & key );
     virtual ~KPrPixmapObject() {}
 

@@ -32,7 +32,7 @@ class KPrLineObjectAdaptor : public KPrObjectAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.object.line")
 
 public:
-    KPrLineObjectAdaptor( KPrLineObject *obj_ );
+    explicit KPrLineObjectAdaptor( KPrLineObject *obj_ );
 
 public Q_SLOTS:
     void setLineBegin( const QString & );

@@ -32,7 +32,7 @@ class KoPointArray : public Q3MemArray<KoPoint>
 public:
     KoPointArray() {}
     ~KoPointArray() {}
-    KoPointArray( int size ) : Q3MemArray<KoPoint>( size ) {}
+    explicit KoPointArray( int size ) : Q3MemArray<KoPoint>( size ) {}
     KoPointArray( const KoPointArray &a ) : Q3MemArray<KoPoint>( a ) {}
 
     KoPointArray &operator=( const KoPointArray &a )

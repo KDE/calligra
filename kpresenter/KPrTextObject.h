@@ -62,7 +62,7 @@ class KPrTextObject : public KPr2DObject, public KoTextFlow
 {
     Q_OBJECT
 public:
-    KPrTextObject( KPrDocument *doc );
+    explicit KPrTextObject( KPrDocument *doc );
     virtual ~KPrTextObject();
 
     virtual KPrObjectAdaptor* dbusObject();

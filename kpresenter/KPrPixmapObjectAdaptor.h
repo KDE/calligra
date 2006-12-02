@@ -32,7 +32,7 @@ class KPrPixmapObjectAdaptor : public KPrObject2DAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.object.pixmap")
 
 public:
-    KPrPixmapObjectAdaptor( KPrPixmapObject *obj_ );
+    explicit KPrPixmapObjectAdaptor( KPrPixmapObject *obj_ );
 
 public Q_SLOTS:
     QString fileName() const;

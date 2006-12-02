@@ -32,7 +32,7 @@ class KPrLineObjectIface : public KPrObjectIface
 {
     K_DCOP
 public:
-    KPrLineObjectIface( KPrLineObject *obj_ );
+    explicit KPrLineObjectIface( KPrLineObject *obj_ );
 
 k_dcop:
 

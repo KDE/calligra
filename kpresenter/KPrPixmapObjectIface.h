@@ -32,7 +32,7 @@ class KPrPixmapObjectIface : public KPrObject2DIface
 {
     K_DCOP
 public:
-    KPrPixmapObjectIface( KPrPixmapObject *obj_ );
+    explicit KPrPixmapObjectIface( KPrPixmapObject *obj_ );
 
 k_dcop:
     QString fileName() const;

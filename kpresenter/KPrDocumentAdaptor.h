@@ -34,7 +34,7 @@ class KPrDocumentAdaptor : public KoDocumentAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.document")
 
 public:
-    KPrDocumentAdaptor( KPrDocument *doc_ );
+    explicit KPrDocumentAdaptor( KPrDocument *doc_ );
 
 public Q_SLOTS:
     virtual int numPages() const;

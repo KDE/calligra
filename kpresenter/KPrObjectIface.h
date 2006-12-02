@@ -34,7 +34,7 @@ class KPrObjectIface : public DCOPObject
 {
     K_DCOP
 public:
-    KPrObjectIface( KPrObject *obj_ );
+    explicit KPrObjectIface( KPrObject *obj_ );
 
 k_dcop:
     int getType() const;

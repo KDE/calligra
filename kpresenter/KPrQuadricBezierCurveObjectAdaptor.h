@@ -32,7 +32,7 @@ class KPrQuadricBezierCurveObjectAdaptor : public KPrObjectAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.object.quadraticbeziercurve")
 
 public:
-    KPrQuadricBezierCurveObjectAdaptor( KPrQuadricBezierCurveObject *obj_ );
+    explicit KPrQuadricBezierCurveObjectAdaptor( KPrQuadricBezierCurveObject *obj_ );
 
 public Q_SLOTS:
 

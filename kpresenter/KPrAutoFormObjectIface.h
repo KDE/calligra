@@ -32,7 +32,7 @@ class KPrAutoFormObjectIface : public KPrObject2DIface
 {
     K_DCOP
 public:
-    KPrAutoFormObjectIface( KPrAutoformObject *obj_ );
+    explicit KPrAutoFormObjectIface( KPrAutoformObject *obj_ );
 
 k_dcop:
     QString fileName() const;

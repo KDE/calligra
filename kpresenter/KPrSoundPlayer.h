@@ -46,7 +46,7 @@ class KPrSoundPlayer : public QObject
 {
     Q_OBJECT
 public:
-    KPrSoundPlayer( const QString &fileName, QObject *parent = 0, const char *name = 0 );
+    explicit KPrSoundPlayer( const QString &fileName, QObject *parent = 0, const char *name = 0 );
 
     ~KPrSoundPlayer();
 

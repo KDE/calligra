@@ -33,7 +33,7 @@ class QPixmap;
 class PicturePropertyUI : public QWidget, public Ui::PicturePropertyUI
 {
 public:
-  PicturePropertyUI( QWidget *parent ) : QWidget( parent ) {
+  explicit PicturePropertyUI( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

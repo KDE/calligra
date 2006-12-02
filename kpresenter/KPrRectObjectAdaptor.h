@@ -31,7 +31,7 @@ class KPrRectObjectAdaptor : public KPrObject2DAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.object.rect")
 
 public:
-    KPrRectObjectAdaptor( KPrRectObject *obj_ );
+    explicit KPrRectObjectAdaptor( KPrRectObject *obj_ );
 
 public Q_SLOTS:
     void setRnds( int _xRnd, int _yRnd );

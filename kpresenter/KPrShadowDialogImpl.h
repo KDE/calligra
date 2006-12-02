@@ -12,7 +12,7 @@ class KPrShadowDialogImpl : public ShadowDialogBase
     Q_OBJECT
 
 public:
-    KPrShadowDialogImpl( QWidget *parent, const char* name = 0 );
+    explicit KPrShadowDialogImpl( QWidget *parent, const char* name = 0 );
     ~KPrShadowDialogImpl() {}
 
     void setShadowDirection( ShadowDirection sd );

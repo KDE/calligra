@@ -33,7 +33,7 @@ class KPrTextObjectIface : public KPrObject2DIface
 {
     K_DCOP
 public:
-    KPrTextObjectIface( KPrTextObject *_textobject );
+    explicit KPrTextObjectIface( KPrTextObject *_textobject );
 
 k_dcop:
     DCOPRef startEditing();

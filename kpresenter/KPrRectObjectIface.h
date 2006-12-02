@@ -31,7 +31,7 @@ class KPrRectObjectIface : public KPrObject2DIface
 {
     K_DCOP
 public:
-    KPrRectObjectIface( KPrRectObject *obj_ );
+    explicit KPrRectObjectIface( KPrRectObject *obj_ );
 
 k_dcop:
     void setRnds( int _xRnd, int _yRnd );

@@ -34,7 +34,7 @@ class KPrObjectAdaptor : public QDBusAbstractAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.object")
 
 public:
-    KPrObjectAdaptor( KPrObject *obj_ );
+    explicit KPrObjectAdaptor( KPrObject *obj_ );
 
 public Q_SLOTS:
     int getType() const;

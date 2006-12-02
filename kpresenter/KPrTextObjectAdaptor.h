@@ -34,7 +34,7 @@ class KPrTextObjectAdaptor : public KPrObject2DAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.object.text")
 
 public:
-    KPrTextObjectAdaptor( KPrTextObject *_textobject );
+    explicit KPrTextObjectAdaptor( KPrTextObject *_textobject );
 
 public Q_SLOTS:
     QString startEditing();

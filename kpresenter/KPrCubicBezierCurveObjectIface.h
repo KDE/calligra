@@ -32,7 +32,7 @@ class KPrCubicBezierCurveObjectIface : public KPrObjectIface
 {
     K_DCOP
 public:
-    KPrCubicBezierCurveObjectIface( KPrCubicBezierCurveObject *obj_ );
+    explicit KPrCubicBezierCurveObjectIface( KPrCubicBezierCurveObject *obj_ );
 
 k_dcop:
 

@@ -40,7 +40,7 @@ class KUrlRequester;
 class SlideTransitionWidget : public QWidget, public Ui::SlideTransitionWidget
 {
 public:
-  SlideTransitionWidget( QWidget *parent ) : QWidget( parent ) {
+  explicit SlideTransitionWidget( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

@@ -32,7 +32,7 @@ class KPrFreehandObjectIface : public KPrObjectIface
 {
     K_DCOP
 public:
-    KPrFreehandObjectIface( KPrFreehandObject *obj_ );
+    explicit KPrFreehandObjectIface( KPrFreehandObject *obj_ );
 
 k_dcop:
 

@@ -31,7 +31,7 @@ class KPrPolyLineObjectAdaptor : public KPrObjectAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.object.polyline")
 
 public:
-    KPrPolyLineObjectAdaptor( KPrPolylineObject *obj_ );
+    explicit KPrPolyLineObjectAdaptor( KPrPolylineObject *obj_ );
 
 public Q_SLOTS:
     void horizontalFlip();

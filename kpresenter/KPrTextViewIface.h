@@ -32,7 +32,7 @@ class KPrTextViewIface : public KoTextViewIface
 {
     K_DCOP
 public:
-    KPrTextViewIface( KPrTextView *_textview );
+    explicit KPrTextViewIface( KPrTextView *_textview );
 
 k_dcop:
     void insertVariable( int type, int subtype = 0 );

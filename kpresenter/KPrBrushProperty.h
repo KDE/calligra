@@ -35,7 +35,7 @@ class KComboBox;
 class GradientPropertyUI : public QWidget, public Ui::GradientPropertyUI
 {
 public:
-  GradientPropertyUI( QWidget *parent ) : QWidget( parent ) {
+  explicit GradientPropertyUI( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

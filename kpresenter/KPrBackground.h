@@ -80,7 +80,7 @@ public:
         BackView m_backView;
     };
 
-    KPrBackGround( KPrPage *_page );
+    explicit KPrBackGround( KPrPage *_page );
     ~KPrBackGround() {}
 
     void setBackType( BackType _backType )

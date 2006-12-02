@@ -29,7 +29,7 @@
 class PolygonPropertyUI : public QWidget, public Ui::PolygonPropertyUI
 {
 public:
-  PolygonPropertyUI( QWidget *parent ) : QWidget( parent ) {
+  explicit PolygonPropertyUI( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

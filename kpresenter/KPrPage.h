@@ -70,7 +70,7 @@ public:
      * @param doc pointer to the kpresenter document
      * @param masterPage master page, 0 if it is a master page
      */
-    KPrPage(KPrDocument *_doc, KPrPage *masterPage = 0 );
+    explicit KPrPage(KPrDocument *_doc, KPrPage *masterPage = 0 );
 
     /**
      * @brief Desctructor

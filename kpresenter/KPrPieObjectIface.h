@@ -32,7 +32,7 @@ class KPrPieObjectIface : public KPrObject2DIface
 {
     K_DCOP
 public:
-    KPrPieObjectIface( KPrPieObject *obj_ );
+    explicit KPrPieObjectIface( KPrPieObject *obj_ );
 
 k_dcop:
     virtual void setPieAngle( int _p_angle );

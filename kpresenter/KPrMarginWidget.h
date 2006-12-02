@@ -31,7 +31,7 @@
 class MarginUI : public QWidget, public Ui::MarginUI
 {
 public:
-  MarginUI( QWidget *parent ) : QWidget( parent ) {
+  explicit MarginUI( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

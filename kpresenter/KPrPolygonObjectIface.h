@@ -31,7 +31,7 @@ class KPrPolygonObjectIface : public KPrObject2DIface
 {
     K_DCOP
 public:
-    KPrPolygonObjectIface( KPrPolygonObject *obj_ );
+    explicit KPrPolygonObjectIface( KPrPolygonObject *obj_ );
 
 k_dcop:
     void setCheckConcavePolygon(bool _concavePolygon);

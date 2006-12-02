@@ -42,7 +42,7 @@ public:
         PtPenWidth = 512    
     };
 
-    KPrObjectProperties( const Q3PtrList<KPrObject> &objects );
+    explicit KPrObjectProperties( const Q3PtrList<KPrObject> &objects );
     ~KPrObjectProperties();
 
     int getPropertyFlags() { return m_flags; }

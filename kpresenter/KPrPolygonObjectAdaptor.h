@@ -31,7 +31,7 @@ class KPrPolygonObjectAdaptor : public KPrObject2DAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.object.polyline")
 
 public:
-    KPrPolygonObjectAdaptor( KPrPolygonObject *obj_ );
+    explicit KPrPolygonObjectAdaptor( KPrPolygonObject *obj_ );
 
 public Q_SLOTS:
     void setCheckConcavePolygon(bool _concavePolygon);

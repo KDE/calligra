@@ -30,7 +30,7 @@ class KPrTextObject;
 class KPrBgSpellCheck : public KoBgSpellCheck
 {
 public:
-    KPrBgSpellCheck(KPrDocument *_doc);
+    explicit KPrBgSpellCheck(KPrDocument *_doc);
     virtual ~KPrBgSpellCheck();
     virtual KoTextIterator *createWholeDocIterator() const;
 

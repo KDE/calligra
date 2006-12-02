@@ -33,7 +33,7 @@ class KPrDocumentIface : public KoDocumentIface
 {
     K_DCOP
 public:
-    KPrDocumentIface( KPrDocument *doc_ );
+    explicit KPrDocumentIface( KPrDocument *doc_ );
 
 k_dcop:
     virtual int numPages() const;

@@ -35,7 +35,7 @@ class KPrPicturePreview : public QFrame
     Q_OBJECT
 
 public:
-    KPrPicturePreview( QWidget* parent);
+    explicit KPrPicturePreview( QWidget* parent);
     ~KPrPicturePreview() {}
 
     void setDepth( int depth);

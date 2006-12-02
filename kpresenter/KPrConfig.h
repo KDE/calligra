@@ -53,7 +53,7 @@ class KPrConfigureInterfacePage : public QWidget
 {
     Q_OBJECT
 public:
-    KPrConfigureInterfacePage( KPrView *_view, QWidget *parent = 0, char *name = 0 );
+    explicit KPrConfigureInterfacePage( KPrView *_view, QWidget *parent = 0, char *name = 0 );
     void apply();
     void slotDefault();
 private:
@@ -69,7 +69,7 @@ class KPrConfigureColorBackground : public QWidget
 {
     Q_OBJECT
 public:
-    KPrConfigureColorBackground( KPrView* _view, QWidget *parent = 0, char *name = 0 );
+    explicit KPrConfigureColorBackground( KPrView* _view, QWidget *parent = 0, char *name = 0 );
     void apply();
     void slotDefault();
 protected:
@@ -211,7 +211,7 @@ class KPrConfig : public KPageDialog
     Q_OBJECT
 public:
     enum { KP_INTERFACE = 1, KP_COLOR=2, KP_KSPELL=4,KP_MISC=8, KP_DOC=16, KP_TOOLS=32,KP_PATH = 64 };
-    KPrConfig( KPrView* parent );
+    explicit KPrConfig( KPrView* parent );
 public slots:
     void slotApply();
     void slotDefault();

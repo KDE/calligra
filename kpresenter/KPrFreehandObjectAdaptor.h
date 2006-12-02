@@ -32,7 +32,7 @@ class KPrFreehandObjectAdaptor : public KPrObjectAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.presentation.object.freehand")
 
 public:
-    KPrFreehandObjectAdaptor( KPrFreehandObject *obj_ );
+    explicit KPrFreehandObjectAdaptor( KPrFreehandObject *obj_ );
 
 public Q_SLOTS:
 

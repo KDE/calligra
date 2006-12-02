@@ -45,7 +45,7 @@ public:
      *
      * @param object form which the KPrClosedLineObject is constructed
      */
-    KPrClosedLineObject( const KPrPointObject &object );
+    explicit KPrClosedLineObject( const KPrPointObject &object );
 
     virtual ~KPrClosedLineObject() {}
 

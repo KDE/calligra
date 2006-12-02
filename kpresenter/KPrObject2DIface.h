@@ -35,7 +35,7 @@ class KPrObject2DIface : public KPrObjectIface
 {
     K_DCOP
 public:
-    KPrObject2DIface( KPr2DObject *obj_ );
+    explicit KPrObject2DIface( KPr2DObject *obj_ );
 
 k_dcop:
     virtual QColor gradientColor1() const;
