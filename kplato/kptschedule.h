@@ -60,14 +60,14 @@ public:
 
     Schedule();
     Schedule( Schedule *parent );
-    Schedule( QString name, Type type, long id );
+    Schedule( const QString& name, Type type, long id );
     virtual ~Schedule();
 
     QString name() const { return m_name; }
-    void setName( QString name ) { m_name = name; }
+    void setName( const QString& name ) { m_name = name; }
     Type type() const { return m_type; }
     void setType( Type type ) { m_type = type; }
-    void setType( QString type );
+    void setType( const QString& type );
     QString typeToString( bool translate = false ) const;
     long id() const { return m_id; }
     void setId( long id ) { m_id = id; }
@@ -220,7 +220,7 @@ protected:
 
 #ifndef NDEBUG
 public:
-    virtual void printDebug( QString ident );
+    virtual void printDebug( const QString& ident );
 #endif
 };
 
@@ -232,7 +232,7 @@ class NodeSchedule : public Schedule
 {
 public:
     NodeSchedule();
-    NodeSchedule( Node *node, QString name, Schedule::Type type, long id );
+    NodeSchedule( Node *node, const QString& name, Schedule::Type type, long id );
     NodeSchedule( Schedule *parent, Node *node );
     virtual ~NodeSchedule();
 
@@ -258,7 +258,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    virtual void printDebug( QString ident );
+    virtual void printDebug( const QString& ident );
 #endif
 };
 
@@ -270,7 +270,7 @@ class ResourceSchedule : public Schedule
 {
 public:
     ResourceSchedule();
-    ResourceSchedule( Resource *Resource, QString name, Schedule::Type type, long id );
+    ResourceSchedule( Resource *Resource, const QString& name, Schedule::Type type, long id );
     ResourceSchedule( Schedule *parent, Resource *Resource );
     virtual ~ResourceSchedule();
 
@@ -292,7 +292,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    virtual void printDebug( QString ident );
+    virtual void printDebug( const QString& ident );
 #endif
 };
 
@@ -304,7 +304,7 @@ class MainSchedule : public NodeSchedule
 {
 public:
     MainSchedule();
-    MainSchedule( Node *node, QString name, Schedule::Type type, long id );
+    MainSchedule( Node *node, const QString& name, Schedule::Type type, long id );
     ~MainSchedule();
     virtual bool isDeleted() const { return m_deleted; }
 
@@ -315,7 +315,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    virtual void printDebug( QString ident );
+    virtual void printDebug( const QString& ident );
 #endif
 };
 

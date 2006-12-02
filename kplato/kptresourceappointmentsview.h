@@ -80,8 +80,8 @@ private:
     public:
         NodeItem(Node *n, QTreeWidget *parent, bool highlight=false);
         NodeItem(Node *n, QTreeWidgetItem *parent, bool highlight=false);
-        NodeItem(QString text, QTreeWidget *parent, bool highlight=false);
-        NodeItem(QString text, QTreeWidgetItem *parent, bool highlight=false);
+        NodeItem(const QString& text, QTreeWidget *parent, bool highlight=false);
+        NodeItem(const QString& text, QTreeWidgetItem *parent, bool highlight=false);
         
         Node *node;
         EffortCostMap effortMap;

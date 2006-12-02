@@ -47,7 +47,7 @@ class CalendarDay {
 public:
     CalendarDay();
     CalendarDay(int state);
-    explicit CalendarDay(QDate date, int state=0);
+    explicit CalendarDay(const QDate& date, int state=0);
     CalendarDay(CalendarDay *day);
     ~CalendarDay();
 
@@ -67,7 +67,7 @@ public:
     QTime endOfDay() const;
     
     QDate date() const { return m_date; }
-    void setDate(QDate date) { m_date = date; }
+    void setDate(const QDate& date) { m_date = date; }
     int state() const { return m_state; }
     void setState(int state) { m_state = state; }
 
@@ -108,7 +108,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    void printDebug(QString indent="");
+    void printDebug(const QString& indent=QString());
 #endif
 };
 
@@ -183,7 +183,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    void printDebug(QString indent="");
+    void printDebug(const QString& indent=QString());
 #endif
 };
 
@@ -208,12 +208,12 @@ class Calendar {
 
 public:
     Calendar();
-    Calendar(QString name, Calendar *parent=0);
+    Calendar(const QString& name, Calendar *parent=0);
     explicit Calendar(Calendar *calendar);
     ~Calendar();
 
     QString name() const { return m_name; }
-    void setName(QString name) { m_name = name; }
+    void setName(const QString& name) { m_name = name; }
 
     Calendar *parent() const { return m_parent; }
     void setParent(Calendar *parent) { m_parent = parent; }
@@ -225,7 +225,7 @@ public:
     void setDeleted(bool yes);
 
     QString id() const { return m_id; }
-    bool setId(QString id);
+    bool setId(const QString& id);
     void generateId();
     
     bool load(QDomElement &element);
@@ -265,7 +265,7 @@ public:
     CalendarDay *weekday(int day) const { return m_weekdays->weekday(day); }
 
     QString parentId() const { return m_parentId; }
-    void setParentId(QString id) { m_parentId = id; }
+    void setParentId(const QString& id) { m_parentId = id; }
 
     bool hasParent(Calendar *cal);
 
@@ -342,7 +342,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    void printDebug(QString indent="");
+    void printDebug(const QString& indent=QString());
 #endif
 };
 
@@ -407,7 +407,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(QString indent="");
+    void printDebug(const QString& indent=QString());
 #endif
 };
 

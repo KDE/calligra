@@ -334,7 +334,7 @@ public:
         init();
     }
 
-    NodeItemPrivate( QString name, QTreeWidget *parent )
+    NodeItemPrivate( const QString& name, QTreeWidget *parent )
             : QTreeWidgetItem( parent ),
             node( 0 )
     {

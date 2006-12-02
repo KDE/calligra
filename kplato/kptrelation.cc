@@ -137,7 +137,8 @@ void Relation::save(QDomElement &element) const {
 }
 
 #ifndef NDEBUG
-void Relation::printDebug(QByteArray indent) {
+void Relation::printDebug(const QByteArray& _indent) { 
+    QString indent = _indent;
     indent += "  ";
     kDebug()<<indent<<"  Parent: "<<m_parent->name()<<endl;
     kDebug()<<indent<<"  Child: "<<m_child->name()<<endl;

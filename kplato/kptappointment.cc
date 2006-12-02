@@ -155,7 +155,7 @@ AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval
 
 //////
 
-Appointment::UsedEffortItem::UsedEffortItem(QDate date, Duration effort, bool overtime) {
+Appointment::UsedEffortItem::UsedEffortItem(const QDate& date, Duration effort, bool overtime) {
     m_date = date;
     m_effort = effort;
     m_overtime = overtime;

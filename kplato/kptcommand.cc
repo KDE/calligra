@@ -101,7 +101,7 @@ void NamedCommand::addSchDeleted( Schedule *sch )
 }
 
 //-------------------------------------------------
-CalendarAddCmd::CalendarAddCmd( Part *part, Project *project, Calendar *cal, QString name )
+CalendarAddCmd::CalendarAddCmd( Part *part, Project *project, Calendar *cal, const QString& name )
         : NamedCommand( part, name ),
         m_project( project ),
         m_cal( cal ),
@@ -131,7 +131,7 @@ void CalendarAddCmd::unexecute()
     //kDebug()<<k_funcinfo<<m_cal->name()<<endl;
 }
 
-CalendarDeleteCmd::CalendarDeleteCmd( Part *part, Calendar *cal, QString name )
+CalendarDeleteCmd::CalendarDeleteCmd( Part *part, Calendar *cal, const QString& name )
         : NamedCommand( part, name ),
         m_cal( cal )
 {
@@ -158,7 +158,7 @@ void CalendarDeleteCmd::unexecute()
     setCommandType( 0 );
 }
 
-CalendarModifyNameCmd::CalendarModifyNameCmd( Part *part, Calendar *cal, QString newvalue, QString name )
+CalendarModifyNameCmd::CalendarModifyNameCmd( Part *part, Calendar *cal, const QString& newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_cal( cal )
 {
@@ -180,7 +180,7 @@ void CalendarModifyNameCmd::unexecute()
     //kDebug()<<k_funcinfo<<m_cal->name()<<endl;
 }
 
-CalendarModifyParentCmd::CalendarModifyParentCmd( Part *part, Calendar *cal, Calendar *newvalue, QString name )
+CalendarModifyParentCmd::CalendarModifyParentCmd( Part *part, Calendar *cal, Calendar *newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_cal( cal )
 {
@@ -208,7 +208,7 @@ void CalendarModifyParentCmd::unexecute()
     setCommandType( 1 );
 }
 
-CalendarAddDayCmd::CalendarAddDayCmd( Part *part, Calendar *cal, CalendarDay *newvalue, QString name )
+CalendarAddDayCmd::CalendarAddDayCmd( Part *part, Calendar *cal, CalendarDay *newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_cal( cal ),
         m_mine( true )
@@ -246,7 +246,7 @@ void CalendarAddDayCmd::unexecute()
     setCommandType( 1 );
 }
 
-CalendarRemoveDayCmd::CalendarRemoveDayCmd( Part *part, Calendar *cal, const QDate &day, QString name )
+CalendarRemoveDayCmd::CalendarRemoveDayCmd( Part *part, Calendar *cal, const QDate &day, const QString& name )
         : NamedCommand( part, name ),
         m_cal( cal ),
         m_mine( false )
@@ -278,7 +278,7 @@ void CalendarRemoveDayCmd::unexecute()
     setCommandType( 1 );
 }
 
-CalendarModifyDayCmd::CalendarModifyDayCmd( Part *part, Calendar *cal, CalendarDay *value, QString name )
+CalendarModifyDayCmd::CalendarModifyDayCmd( Part *part, Calendar *cal, CalendarDay *value, const QString& name )
         : NamedCommand( part, name ),
         m_cal( cal ),
         m_mine( true )
@@ -322,7 +322,7 @@ void CalendarModifyDayCmd::unexecute()
     setCommandType( 1 );
 }
 
-CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd( Part *part, Calendar *cal, int weekday, CalendarDay *value, QString name )
+CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd( Part *part, Calendar *cal, int weekday, CalendarDay *value, const QString& name )
         : NamedCommand( part, name ),
         m_weekday( weekday ),
         m_cal( cal ),
@@ -357,7 +357,7 @@ void CalendarModifyWeekdayCmd::unexecute()
     setCommandType( 1 );
 }
 
-NodeDeleteCmd::NodeDeleteCmd( Part *part, Node *node, QString name )
+NodeDeleteCmd::NodeDeleteCmd( Part *part, Node *node, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         m_index( -1 )
@@ -427,7 +427,7 @@ void NodeDeleteCmd::unexecute()
     }
 }
 
-TaskAddCmd::TaskAddCmd( Part *part, Project *project, Node *node, Node *after, QString name )
+TaskAddCmd::TaskAddCmd( Part *part, Project *project, Node *node, Node *after, const QString& name )
         : NamedCommand( part, name ),
         m_project( project ),
         m_node( node ),
@@ -474,7 +474,7 @@ void TaskAddCmd::unexecute()
     setCommandType( 1 );
 }
 
-SubtaskAddCmd::SubtaskAddCmd( Part *part, Project *project, Node *node, Node *parent, QString name )
+SubtaskAddCmd::SubtaskAddCmd( Part *part, Project *project, Node *node, Node *parent, const QString& name )
         : NamedCommand( part, name ),
         m_project( project ),
         m_node( node ),
@@ -510,7 +510,7 @@ void SubtaskAddCmd::unexecute()
     setCommandType( 1 );
 }
 
-NodeModifyNameCmd::NodeModifyNameCmd( Part *part, Node &node, QString nodename, QString name )
+NodeModifyNameCmd::NodeModifyNameCmd( Part *part, Node &node, const QString& nodename, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         newName( nodename ),
@@ -530,7 +530,7 @@ void NodeModifyNameCmd::unexecute()
     setCommandType( 0 );
 }
 
-NodeModifyLeaderCmd::NodeModifyLeaderCmd( Part *part, Node &node, QString leader, QString name )
+NodeModifyLeaderCmd::NodeModifyLeaderCmd( Part *part, Node &node, const QString& leader, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         newLeader( leader ),
@@ -550,7 +550,7 @@ void NodeModifyLeaderCmd::unexecute()
     setCommandType( 0 );
 }
 
-NodeModifyDescriptionCmd::NodeModifyDescriptionCmd( Part *part, Node &node, QString description, QString name )
+NodeModifyDescriptionCmd::NodeModifyDescriptionCmd( Part *part, Node &node, const QString& description, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         newDescription( description ),
@@ -570,7 +570,7 @@ void NodeModifyDescriptionCmd::unexecute()
     setCommandType( 0 );
 }
 
-NodeModifyConstraintCmd::NodeModifyConstraintCmd( Part *part, Node &node, Node::ConstraintType c, QString name )
+NodeModifyConstraintCmd::NodeModifyConstraintCmd( Part *part, Node &node, Node::ConstraintType c, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         newConstraint( c ),
@@ -594,7 +594,7 @@ void NodeModifyConstraintCmd::unexecute()
     setCommandType( 1 );
 }
 
-NodeModifyConstraintStartTimeCmd::NodeModifyConstraintStartTimeCmd( Part *part, Node &node, QDateTime dt, QString name )
+NodeModifyConstraintStartTimeCmd::NodeModifyConstraintStartTimeCmd( Part *part, Node &node, const QDateTime& dt, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         newTime( dt ),
@@ -618,7 +618,7 @@ void NodeModifyConstraintStartTimeCmd::unexecute()
     setCommandType( 1 );
 }
 
-NodeModifyConstraintEndTimeCmd::NodeModifyConstraintEndTimeCmd( Part *part, Node &node, QDateTime dt, QString name )
+NodeModifyConstraintEndTimeCmd::NodeModifyConstraintEndTimeCmd( Part *part, Node &node, const QDateTime& dt, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         newTime( dt ),
@@ -642,7 +642,7 @@ void NodeModifyConstraintEndTimeCmd::unexecute()
     setCommandType( 1 );
 }
 
-NodeModifyStartTimeCmd::NodeModifyStartTimeCmd( Part *part, Node &node, QDateTime dt, QString name )
+NodeModifyStartTimeCmd::NodeModifyStartTimeCmd( Part *part, Node &node, const QDateTime& dt, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         newTime( dt ),
@@ -662,7 +662,7 @@ void NodeModifyStartTimeCmd::unexecute()
     setCommandType( 1 );
 }
 
-NodeModifyEndTimeCmd::NodeModifyEndTimeCmd( Part *part, Node &node, QDateTime dt, QString name )
+NodeModifyEndTimeCmd::NodeModifyEndTimeCmd( Part *part, Node &node, const QDateTime& dt, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         newTime( dt ),
@@ -682,7 +682,7 @@ void NodeModifyEndTimeCmd::unexecute()
     setCommandType( 1 );
 }
 
-NodeModifyIdCmd::NodeModifyIdCmd( Part *part, Node &node, QString id, QString name )
+NodeModifyIdCmd::NodeModifyIdCmd( Part *part, Node &node, const QString& id, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         newId( id ),
@@ -702,7 +702,7 @@ void NodeModifyIdCmd::unexecute()
     setCommandType( 0 );
 }
 
-NodeIndentCmd::NodeIndentCmd( Part *part, Node &node, QString name )
+NodeIndentCmd::NodeIndentCmd( Part *part, Node &node, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         m_newparent( 0 ),
@@ -731,7 +731,7 @@ void NodeIndentCmd::unexecute()
     setCommandType( 1 );
 }
 
-NodeUnindentCmd::NodeUnindentCmd( Part *part, Node &node, QString name )
+NodeUnindentCmd::NodeUnindentCmd( Part *part, Node &node, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         m_newparent( 0 ),
@@ -759,7 +759,7 @@ void NodeUnindentCmd::unexecute()
     setCommandType( 1 );
 }
 
-NodeMoveUpCmd::NodeMoveUpCmd( Part *part, Node &node, QString name )
+NodeMoveUpCmd::NodeMoveUpCmd( Part *part, Node &node, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         m_moved( false )
@@ -784,7 +784,7 @@ void NodeMoveUpCmd::unexecute()
     setCommandType( 0 );
 }
 
-NodeMoveDownCmd::NodeMoveDownCmd( Part *part, Node &node, QString name )
+NodeMoveDownCmd::NodeMoveDownCmd( Part *part, Node &node, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         m_moved( false )
@@ -808,7 +808,7 @@ void NodeMoveDownCmd::unexecute()
     setCommandType( 0 );
 }
 
-AddRelationCmd::AddRelationCmd( Part *part, Relation *rel, QString name )
+AddRelationCmd::AddRelationCmd( Part *part, Relation *rel, const QString& name )
         : NamedCommand( part, name ),
         m_rel( rel )
 {
@@ -844,7 +844,7 @@ void AddRelationCmd::unexecute()
     setCommandType( 1 );
 }
 
-DeleteRelationCmd::DeleteRelationCmd( Part *part, Relation *rel, QString name )
+DeleteRelationCmd::DeleteRelationCmd( Part *part, Relation *rel, const QString& name )
         : NamedCommand( part, name ),
         m_rel( rel )
 {
@@ -880,7 +880,7 @@ void DeleteRelationCmd::unexecute()
     setCommandType( 1 );
 }
 
-ModifyRelationTypeCmd::ModifyRelationTypeCmd( Part *part, Relation *rel, Relation::Type type, QString name )
+ModifyRelationTypeCmd::ModifyRelationTypeCmd( Part *part, Relation *rel, Relation::Type type, const QString& name )
         : NamedCommand( part, name ),
         m_rel( rel ),
         m_newtype( type )
@@ -907,7 +907,7 @@ void ModifyRelationTypeCmd::unexecute()
     setCommandType( 1 );
 }
 
-ModifyRelationLagCmd::ModifyRelationLagCmd( Part *part, Relation *rel, Duration lag, QString name )
+ModifyRelationLagCmd::ModifyRelationLagCmd( Part *part, Relation *rel, Duration lag, const QString& name )
         : NamedCommand( part, name ),
         m_rel( rel ),
         m_newlag( lag )
@@ -934,7 +934,7 @@ void ModifyRelationLagCmd::unexecute()
     setCommandType( 1 );
 }
 
-AddResourceRequestCmd::AddResourceRequestCmd( Part *part, ResourceGroupRequest *group, ResourceRequest *request, QString name )
+AddResourceRequestCmd::AddResourceRequestCmd( Part *part, ResourceGroupRequest *group, ResourceRequest *request, const QString& name )
         : NamedCommand( part, name ),
         m_group( group ),
         m_request( request )
@@ -964,7 +964,7 @@ void AddResourceRequestCmd::unexecute()
     setCommandType( 1 );
 }
 
-RemoveResourceRequestCmd::RemoveResourceRequestCmd( Part *part, ResourceGroupRequest *group, ResourceRequest *request, QString name )
+RemoveResourceRequestCmd::RemoveResourceRequestCmd( Part *part, ResourceGroupRequest *group, ResourceRequest *request, const QString& name )
         : NamedCommand( part, name ),
         m_group( group ),
         m_request( request )
@@ -999,7 +999,7 @@ void RemoveResourceRequestCmd::unexecute()
     setCommandType( 1 );
 }
 
-ModifyEffortCmd::ModifyEffortCmd( Part *part, Node &node, Duration oldvalue, Duration newvalue, QString name )
+ModifyEffortCmd::ModifyEffortCmd( Part *part, Node &node, Duration oldvalue, Duration newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_effort( node.effort() ),
         m_oldvalue( oldvalue ),
@@ -1025,7 +1025,7 @@ void ModifyEffortCmd::unexecute()
     setCommandType( 1 );
 }
 
-EffortModifyOptimisticRatioCmd::EffortModifyOptimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, QString name )
+EffortModifyOptimisticRatioCmd::EffortModifyOptimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_effort( node.effort() ),
         m_oldvalue( oldvalue ),
@@ -1049,7 +1049,7 @@ void EffortModifyOptimisticRatioCmd::unexecute()
     setCommandType( 1 );
 }
 
-EffortModifyPessimisticRatioCmd::EffortModifyPessimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, QString name )
+EffortModifyPessimisticRatioCmd::EffortModifyPessimisticRatioCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_effort( node.effort() ),
         m_oldvalue( oldvalue ),
@@ -1073,7 +1073,7 @@ void EffortModifyPessimisticRatioCmd::unexecute()
     setCommandType( 1 );
 }
 
-ModifyEffortTypeCmd::ModifyEffortTypeCmd( Part *part, Node &node, int oldvalue, int newvalue, QString name )
+ModifyEffortTypeCmd::ModifyEffortTypeCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_effort( node.effort() ),
         m_oldvalue( oldvalue ),
@@ -1097,7 +1097,7 @@ void ModifyEffortTypeCmd::unexecute()
     setCommandType( 1 );
 }
 
-EffortModifyRiskCmd::EffortModifyRiskCmd( Part *part, Node &node, int oldvalue, int newvalue, QString name )
+EffortModifyRiskCmd::EffortModifyRiskCmd( Part *part, Node &node, int oldvalue, int newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_effort( node.effort() ),
         m_oldvalue( oldvalue ),
@@ -1121,7 +1121,7 @@ void EffortModifyRiskCmd::unexecute()
     setCommandType( 1 );
 }
 
-AddResourceGroupRequestCmd::AddResourceGroupRequestCmd( Part *part, Task &task, ResourceGroupRequest *request, QString name )
+AddResourceGroupRequestCmd::AddResourceGroupRequestCmd( Part *part, Task &task, ResourceGroupRequest *request, const QString& name )
         : NamedCommand( part, name ),
         m_task( task ),
         m_request( request )
@@ -1146,7 +1146,7 @@ void AddResourceGroupRequestCmd::unexecute()
     setCommandType( 1 );
 }
 
-RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd( Part *part, ResourceGroupRequest *request, QString name )
+RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd( Part *part, ResourceGroupRequest *request, const QString& name )
         : NamedCommand( part, name ),
         m_task( request->parent() ->task() ),
         m_request( request )
@@ -1155,7 +1155,7 @@ RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd( Part *part, Resour
     m_mine = false;
 }
 
-RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd( Part *part, Task &task, ResourceGroupRequest *request, QString name )
+RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd( Part *part, Task &task, ResourceGroupRequest *request, const QString& name )
         : NamedCommand( part, name ),
         m_task( task ),
         m_request( request )
@@ -1180,7 +1180,7 @@ void RemoveResourceGroupRequestCmd::unexecute()
     setCommandType( 1 );
 }
 
-AddResourceCmd::AddResourceCmd( Part *part, ResourceGroup *group, Resource *resource, QString name )
+AddResourceCmd::AddResourceCmd( Part *part, ResourceGroup *group, Resource *resource, const QString& name )
         : NamedCommand( part, name ),
         m_group( group ),
         m_resource( resource )
@@ -1211,7 +1211,7 @@ void AddResourceCmd::unexecute()
     setCommandType( 0 );
 }
 
-RemoveResourceCmd::RemoveResourceCmd( Part *part, ResourceGroup *group, Resource *resource, QString name )
+RemoveResourceCmd::RemoveResourceCmd( Part *part, ResourceGroup *group, Resource *resource, const QString& name )
         : AddResourceCmd( part, group, resource, name )
 {
     //kDebug()<<k_funcinfo<<resource<<endl;
@@ -1257,7 +1257,7 @@ void RemoveResourceCmd::unexecute()
     setSchScheduled();
 }
 
-ModifyResourceNameCmd::ModifyResourceNameCmd( Part *part, Resource *resource, QString value, QString name )
+ModifyResourceNameCmd::ModifyResourceNameCmd( Part *part, Resource *resource, const QString& value, const QString& name )
         : NamedCommand( part, name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1276,7 +1276,7 @@ void ModifyResourceNameCmd::unexecute()
 
     setCommandType( 0 );
 }
-ModifyResourceInitialsCmd::ModifyResourceInitialsCmd( Part *part, Resource *resource, QString value, QString name )
+ModifyResourceInitialsCmd::ModifyResourceInitialsCmd( Part *part, Resource *resource, const QString& value, const QString& name )
         : NamedCommand( part, name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1295,7 +1295,7 @@ void ModifyResourceInitialsCmd::unexecute()
 
     setCommandType( 0 );
 }
-ModifyResourceEmailCmd::ModifyResourceEmailCmd( Part *part, Resource *resource, QString value, QString name )
+ModifyResourceEmailCmd::ModifyResourceEmailCmd( Part *part, Resource *resource, const QString& value, const QString& name )
         : NamedCommand( part, name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1314,7 +1314,7 @@ void ModifyResourceEmailCmd::unexecute()
 
     setCommandType( 0 );
 }
-ModifyResourceTypeCmd::ModifyResourceTypeCmd( Part *part, Resource *resource, int value, QString name )
+ModifyResourceTypeCmd::ModifyResourceTypeCmd( Part *part, Resource *resource, int value, const QString& name )
         : NamedCommand( part, name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1337,7 +1337,7 @@ void ModifyResourceTypeCmd::unexecute()
     setSchScheduled();
     setCommandType( 1 );
 }
-ModifyResourceUnitsCmd::ModifyResourceUnitsCmd( Part *part, Resource *resource, int value, QString name )
+ModifyResourceUnitsCmd::ModifyResourceUnitsCmd( Part *part, Resource *resource, int value, const QString& name )
         : NamedCommand( part, name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1361,7 +1361,7 @@ void ModifyResourceUnitsCmd::unexecute()
     setCommandType( 1 );
 }
 
-ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd( Part *part, Resource *resource, DateTime value, QString name )
+ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd( Part *part, Resource *resource, const DateTime& value, const QString& name )
         : NamedCommand( part, name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1397,7 +1397,7 @@ void ModifyResourceAvailableFromCmd::unexecute()
     setCommandType( 1 ); //FIXME
 }
 
-ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd( Part *part, Resource *resource, DateTime value, QString name )
+ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd( Part *part, Resource *resource, const DateTime& value, const QString& name )
         : NamedCommand( part, name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1433,7 +1433,7 @@ void ModifyResourceAvailableUntilCmd::unexecute()
     setCommandType( 1 ); //FIXME
 }
 
-ModifyResourceNormalRateCmd::ModifyResourceNormalRateCmd( Part *part, Resource *resource, double value, QString name )
+ModifyResourceNormalRateCmd::ModifyResourceNormalRateCmd( Part *part, Resource *resource, double value, const QString& name )
         : NamedCommand( part, name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1452,7 +1452,7 @@ void ModifyResourceNormalRateCmd::unexecute()
 
     setCommandType( 0 );
 }
-ModifyResourceOvertimeRateCmd::ModifyResourceOvertimeRateCmd( Part *part, Resource *resource, double value, QString name )
+ModifyResourceOvertimeRateCmd::ModifyResourceOvertimeRateCmd( Part *part, Resource *resource, double value, const QString& name )
         : NamedCommand( part, name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1472,7 +1472,7 @@ void ModifyResourceOvertimeRateCmd::unexecute()
     setCommandType( 0 );
 }
 
-ModifyResourceCalendarCmd::ModifyResourceCalendarCmd( Part *part, Resource *resource, Calendar *value, QString name )
+ModifyResourceCalendarCmd::ModifyResourceCalendarCmd( Part *part, Resource *resource, Calendar *value, const QString& name )
         : NamedCommand( part, name ),
         m_resource( resource ),
         m_newvalue( value )
@@ -1496,7 +1496,7 @@ void ModifyResourceCalendarCmd::unexecute()
     setCommandType( 1 );
 }
 
-RemoveResourceGroupCmd::RemoveResourceGroupCmd( Part *part, ResourceGroup *group, QString name )
+RemoveResourceGroupCmd::RemoveResourceGroupCmd( Part *part, ResourceGroup *group, const QString& name )
         : NamedCommand( part, name ),
         m_group( group )
 {
@@ -1542,7 +1542,7 @@ void RemoveResourceGroupCmd::unexecute()
     setCommandType( c );
 }
 
-AddResourceGroupCmd::AddResourceGroupCmd( Part *part, ResourceGroup *group, QString name )
+AddResourceGroupCmd::AddResourceGroupCmd( Part *part, ResourceGroup *group, const QString& name )
         : RemoveResourceGroupCmd( part, group, name )
 {
 
@@ -1557,7 +1557,7 @@ void AddResourceGroupCmd::unexecute()
     RemoveResourceGroupCmd::execute();
 }
 
-ModifyResourceGroupNameCmd::ModifyResourceGroupNameCmd( Part *part, ResourceGroup *group, QString value, QString name )
+ModifyResourceGroupNameCmd::ModifyResourceGroupNameCmd( Part *part, ResourceGroup *group, const QString& value, const QString& name )
         : NamedCommand( part, name ),
         m_group( group ),
         m_newvalue( value )
@@ -1577,7 +1577,7 @@ void ModifyResourceGroupNameCmd::unexecute()
     setCommandType( 0 );
 }
 
-ModifyResourceGroupTypeCmd::ModifyResourceGroupTypeCmd( Part *part, ResourceGroup *group, int value, QString name )
+ModifyResourceGroupTypeCmd::ModifyResourceGroupTypeCmd( Part *part, ResourceGroup *group, int value, const QString& name )
     : NamedCommand( part, name ),
         m_group( group ),
         m_newvalue( value )
@@ -1597,7 +1597,7 @@ void ModifyResourceGroupTypeCmd::unexecute()
     setCommandType( 0 );
 }
 
-TaskModifyProgressCmd::TaskModifyProgressCmd( Part *part, Task &task, struct Task::Progress &value, QString name )
+TaskModifyProgressCmd::TaskModifyProgressCmd( Part *part, Task &task, struct Task::Progress &value, const QString& name )
         : NamedCommand( part, name ),
         m_task( task ),
         m_newvalue( value )
@@ -1617,7 +1617,7 @@ void TaskModifyProgressCmd::unexecute()
     setCommandType( 0 );
 }
 
-AddAccountCmd::AddAccountCmd( Part *part, Project &project, Account *account, QString parent, QString name )
+AddAccountCmd::AddAccountCmd( Part *part, Project &project, Account *account, const QString& parent, const QString& name )
         : NamedCommand( part, name ),
         m_project( project ),
         m_account( account ),
@@ -1627,7 +1627,7 @@ AddAccountCmd::AddAccountCmd( Part *part, Project &project, Account *account, QS
     m_mine = true;
 }
 
-AddAccountCmd::AddAccountCmd( Part *part, Project &project, Account *account, Account *parent, QString name )
+AddAccountCmd::AddAccountCmd( Part *part, Project &project, Account *account, Account *parent, const QString& name )
         : NamedCommand( part, name ),
         m_project( project ),
         m_account( account ),
@@ -1666,7 +1666,7 @@ void AddAccountCmd::unexecute()
     m_mine = true;
 }
 
-RemoveAccountCmd::RemoveAccountCmd( Part *part, Project &project, Account *account, QString name )
+RemoveAccountCmd::RemoveAccountCmd( Part *part, Project &project, Account *account, const QString& name )
         : NamedCommand( part, name ),
         m_project( project ),
         m_account( account )
@@ -1708,7 +1708,7 @@ void RemoveAccountCmd::unexecute()
     m_mine = false;
 }
 
-RenameAccountCmd::RenameAccountCmd( Part *part, Account *account, QString value, QString name )
+RenameAccountCmd::RenameAccountCmd( Part *part, Account *account, const QString& value, const QString& name )
         : NamedCommand( part, name ),
         m_account( account )
 {
@@ -1727,7 +1727,7 @@ void RenameAccountCmd::unexecute()
     setCommandType( 0 );
 }
 
-ModifyAccountDescriptionCmd::ModifyAccountDescriptionCmd( Part *part, Account *account, QString value, QString name )
+ModifyAccountDescriptionCmd::ModifyAccountDescriptionCmd( Part *part, Account *account, const QString& value, const QString& name )
         : NamedCommand( part, name ),
         m_account( account )
 {
@@ -1747,7 +1747,7 @@ void ModifyAccountDescriptionCmd::unexecute()
 }
 
 
-NodeModifyStartupCostCmd::NodeModifyStartupCostCmd( Part *part, Node &node, double value, QString name )
+NodeModifyStartupCostCmd::NodeModifyStartupCostCmd( Part *part, Node &node, double value, const QString& name )
         : NamedCommand( part, name ),
         m_node( node )
 {
@@ -1766,7 +1766,7 @@ void NodeModifyStartupCostCmd::unexecute()
     setCommandType( 0 );
 }
 
-NodeModifyShutdownCostCmd::NodeModifyShutdownCostCmd( Part *part, Node &node, double value, QString name )
+NodeModifyShutdownCostCmd::NodeModifyShutdownCostCmd( Part *part, Node &node, double value, const QString& name )
         : NamedCommand( part, name ),
         m_node( node )
 {
@@ -1785,7 +1785,7 @@ void NodeModifyShutdownCostCmd::unexecute()
     setCommandType( 0 );
 }
 
-NodeModifyRunningAccountCmd::NodeModifyRunningAccountCmd( Part *part, Node &node, Account *oldvalue, Account *newvalue, QString name )
+NodeModifyRunningAccountCmd::NodeModifyRunningAccountCmd( Part *part, Node &node, Account *oldvalue, Account *newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_node( node )
 {
@@ -1816,7 +1816,7 @@ void NodeModifyRunningAccountCmd::unexecute()
     setCommandType( 0 );
 }
 
-NodeModifyStartupAccountCmd::NodeModifyStartupAccountCmd( Part *part, Node &node, Account *oldvalue, Account *newvalue, QString name )
+NodeModifyStartupAccountCmd::NodeModifyStartupAccountCmd( Part *part, Node &node, Account *oldvalue, Account *newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_node( node )
 {
@@ -1848,7 +1848,7 @@ void NodeModifyStartupAccountCmd::unexecute()
     setCommandType( 0 );
 }
 
-NodeModifyShutdownAccountCmd::NodeModifyShutdownAccountCmd( Part *part, Node &node, Account *oldvalue, Account *newvalue, QString name )
+NodeModifyShutdownAccountCmd::NodeModifyShutdownAccountCmd( Part *part, Node &node, Account *oldvalue, Account *newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_node( node )
 {
@@ -1880,7 +1880,7 @@ void NodeModifyShutdownAccountCmd::unexecute()
     setCommandType( 0 );
 }
 
-ModifyDefaultAccountCmd::ModifyDefaultAccountCmd( Part *part, Accounts &acc, Account *oldvalue, Account *newvalue, QString name )
+ModifyDefaultAccountCmd::ModifyDefaultAccountCmd( Part *part, Accounts &acc, Account *oldvalue, Account *newvalue, const QString& name )
         : NamedCommand( part, name ),
         m_accounts( acc )
 {
@@ -1902,7 +1902,7 @@ void ModifyDefaultAccountCmd::unexecute()
     setCommandType( 0 );
 }
 
-ProjectModifyConstraintCmd::ProjectModifyConstraintCmd( Part *part, Project &node, Node::ConstraintType c, QString name )
+ProjectModifyConstraintCmd::ProjectModifyConstraintCmd( Part *part, Project &node, Node::ConstraintType c, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         newConstraint( c ),
@@ -1926,7 +1926,7 @@ void ProjectModifyConstraintCmd::unexecute()
     setCommandType( 1 );
 }
 
-ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd( Part *part, Project &node, QDateTime dt, QString name )
+ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd( Part *part, Project &node, const QDateTime& dt, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         newTime( dt ),
@@ -1951,7 +1951,7 @@ void ProjectModifyStartTimeCmd::unexecute()
     setCommandType( 1 );
 }
 
-ProjectModifyEndTimeCmd::ProjectModifyEndTimeCmd( Part *part, Project &node, QDateTime dt, QString name )
+ProjectModifyEndTimeCmd::ProjectModifyEndTimeCmd( Part *part, Project &node, const QDateTime& dt, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         newTime( dt ),
@@ -1976,7 +1976,7 @@ void ProjectModifyEndTimeCmd::unexecute()
     setCommandType( 1 );
 }
 
-CalculateProjectCmd::CalculateProjectCmd( Part *part, Project &node, QString tname, int type, QString name )
+CalculateProjectCmd::CalculateProjectCmd( Part *part, Project &node, const QString& tname, int type, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         m_typename( tname ),
@@ -2009,7 +2009,7 @@ void CalculateProjectCmd::unexecute()
     setCommandType( 0 );
 }
 
-RecalculateProjectCmd::RecalculateProjectCmd( Part *part, Project &node, Schedule &sch, QString name )
+RecalculateProjectCmd::RecalculateProjectCmd( Part *part, Project &node, Schedule &sch, const QString& name )
         : NamedCommand( part, name ),
         m_node( node ),
         oldSchedule( sch ),
@@ -2044,7 +2044,7 @@ void RecalculateProjectCmd::unexecute()
 }
 
 
-ModifyStandardWorktimeYearCmd::ModifyStandardWorktimeYearCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, QString name )
+ModifyStandardWorktimeYearCmd::ModifyStandardWorktimeYearCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, const QString& name )
         : NamedCommand( part, name ),
         swt( wt ),
         m_oldvalue( oldvalue ),
@@ -2062,7 +2062,7 @@ void ModifyStandardWorktimeYearCmd::unexecute()
     setCommandType( 0 );
 }
 
-ModifyStandardWorktimeMonthCmd::ModifyStandardWorktimeMonthCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, QString name )
+ModifyStandardWorktimeMonthCmd::ModifyStandardWorktimeMonthCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, const QString& name )
         : NamedCommand( part, name ),
         swt( wt ),
         m_oldvalue( oldvalue ),
@@ -2080,7 +2080,7 @@ void ModifyStandardWorktimeMonthCmd::unexecute()
     setCommandType( 0 );
 }
 
-ModifyStandardWorktimeWeekCmd::ModifyStandardWorktimeWeekCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, QString name )
+ModifyStandardWorktimeWeekCmd::ModifyStandardWorktimeWeekCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, const QString& name )
         : NamedCommand( part, name ),
         swt( wt ),
         m_oldvalue( oldvalue ),
@@ -2098,7 +2098,7 @@ void ModifyStandardWorktimeWeekCmd::unexecute()
     setCommandType( 0 );
 }
 
-ModifyStandardWorktimeDayCmd::ModifyStandardWorktimeDayCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, QString name )
+ModifyStandardWorktimeDayCmd::ModifyStandardWorktimeDayCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, const QString& name )
         : NamedCommand( part, name ),
         swt( wt ),
         m_oldvalue( oldvalue ),

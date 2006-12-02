@@ -94,7 +94,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(QByteArray indent);
+    void printDebug(const QByteArray& indent);
 #endif
 
 };

@@ -174,7 +174,7 @@ DoubleListViewBase::MasterListItem::MasterListItem(QTreeWidget *parent, bool hig
     //kDebug()<<k_funcinfo<<endl;
 }
 
-DoubleListViewBase::MasterListItem::MasterListItem(QTreeWidget *parent, QString text,   bool highlight)
+DoubleListViewBase::MasterListItem::MasterListItem(QTreeWidget *parent, const QString& text,   bool highlight)
     : QTreeWidgetItem(parent),
       m_slaveItem(0),
       m_value(0.0),
@@ -196,7 +196,7 @@ DoubleListViewBase::MasterListItem::MasterListItem(QTreeWidgetItem *parent, bool
     //kDebug()<<k_funcinfo<<endl;
 }
 
-DoubleListViewBase::MasterListItem::MasterListItem(QTreeWidgetItem *parent, QString text,   bool highlight)
+DoubleListViewBase::MasterListItem::MasterListItem(QTreeWidgetItem *parent, const QString& text,   bool highlight)
     : QTreeWidgetItem(parent),
       m_slaveItem(0),
       m_value(0.0),
@@ -438,15 +438,15 @@ void DoubleListViewBase::slotCollapsed(QTreeWidgetItem*item) {
     }
 }
 
-void DoubleListViewBase::setDescriptionHeader(QString text) {
+void DoubleListViewBase::setDescriptionHeader(const QString& text) {
     m_masterList->headerItem()->setText(1, text);
 }
 
-void DoubleListViewBase::setNameHeader(QString text) {
+void DoubleListViewBase::setNameHeader(const QString& text) {
     m_masterList->headerItem()->setText(0, text);
 }
 
-void DoubleListViewBase::setTotalHeader(QString text) {
+void DoubleListViewBase::setTotalHeader(const QString& text) {
     m_masterList->headerItem()->setText(2, text);
 }
 

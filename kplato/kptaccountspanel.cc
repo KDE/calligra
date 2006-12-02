@@ -44,13 +44,13 @@ public:
     AccountItem(AccountsPanel &pan, QTreeWidgetItem *parent)
     : QTreeWidgetItem(parent), account(0), panel(pan)
     { init(); }
-    AccountItem(AccountsPanel &pan, QTreeWidget *parent, QString label1, QString label2 = QString::null)
+    AccountItem(AccountsPanel &pan, QTreeWidget *parent, const QString& label1, const QString& label2 = QString())
     : QTreeWidgetItem(parent), account(0), panel(pan) { 
         setText(0, label1);
         setText(1, label2);
         init(); 
     }
-    AccountItem(AccountsPanel &pan, QTreeWidgetItem *parent, QString label1, QString label2 = QString::null)
+    AccountItem(AccountsPanel &pan, QTreeWidgetItem *parent, const QString& label1, const QString& label2 = QString())
     : QTreeWidgetItem(parent), account(0), panel(pan) { 
         setText(0, label1);
         setText(1, label2);
@@ -136,7 +136,7 @@ void AccountsPanel::addElement(QTreeWidgetItem *item) {
     refreshDefaultAccount();
 }
 
-void AccountsPanel::removeElement(QString key) {
+void AccountsPanel::removeElement(const QString& key) {
     QHash<QString, QTreeWidgetItem*>::Iterator it = m_elements.find(key);
     for (it = m_elements.begin(); it != m_elements.end(); ++it) {
         removeElement(*it);

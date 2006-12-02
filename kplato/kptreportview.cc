@@ -70,14 +70,14 @@ public:
 
     ~ReportTagsPrivate() {}
 
-    QString getData(QString source, QString tag) const {
+    QString getData(const QString& source, const QString& tag) const {
         if (tag.contains("."))
             return getData(tag);
 
         return getData(source + '.' + tag);
     }
 
-    QString getData(QString tag) const {
+    QString getData(const QString& tag) const {
         //kDebug()<<k_funcinfo<<"tag="<<tag<<endl;
         KLocale *l = KGlobal::locale();
         if (!tag.contains('.')) {

@@ -57,7 +57,7 @@ Schedule::Schedule( Schedule *parent )
     //kDebug()<<k_funcinfo<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id<<endl;
 }
 
-Schedule::Schedule( QString name, Type type, long id )
+Schedule::Schedule( const QString& name, Type type, long id )
         : m_name( name ),
         m_type( type ),
         m_id( id ),
@@ -92,7 +92,7 @@ bool Schedule::isDeleted() const
     return m_parent == 0 ? m_deleted : m_parent->isDeleted();
 }
 
-void Schedule::setType( const QString type )
+void Schedule::setType( const QString& type )
 {
     m_type = Expected;
     if ( type == "Expected" )
@@ -377,7 +377,7 @@ NodeSchedule::NodeSchedule()
     init();
 }
 
-NodeSchedule::NodeSchedule( Node *node, QString name, Schedule::Type type, long id )
+NodeSchedule::NodeSchedule( Node *node, const QString& name, Schedule::Type type, long id )
         : Schedule( name, type, id ),
         m_node( node )
 {
@@ -523,7 +523,7 @@ ResourceSchedule::ResourceSchedule()
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
-ResourceSchedule::ResourceSchedule( Resource *resource, QString name, Schedule::Type type, long id )
+ResourceSchedule::ResourceSchedule( Resource *resource, const QString& name, Schedule::Type type, long id )
         : Schedule( name, type, id ),
         m_resource( resource ),
         m_parent( 0 )
@@ -622,7 +622,7 @@ MainSchedule::MainSchedule()
     init();
 }
 
-MainSchedule::MainSchedule( Node *node, QString name, Schedule::Type type, long id )
+MainSchedule::MainSchedule( Node *node, const QString& name, Schedule::Type type, long id )
         : NodeSchedule( node, name, type, id )
 {
     //kDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
@@ -676,12 +676,13 @@ void MainSchedule::saveXML( QDomElement &element ) const
 }
 
 #ifndef NDEBUG
-void Schedule::printDebug( QString indent )
+void Schedule::printDebug( const QString& indent )
 {
     kDebug() << indent << "Schedule[" << m_id << "] '" << m_name << "' type: " << typeToString() << " (" << m_type << ")" << ( isDeleted() ? "   Deleted" : "" ) << endl;
 }
-void NodeSchedule::printDebug( QString indent )
+void NodeSchedule::printDebug( const QString& _indent )
 {
+    QString indent = _indent;
     Schedule::printDebug( indent );
     indent += "!  ";
     if ( m_parent == 0 )
@@ -718,8 +719,9 @@ void NodeSchedule::printDebug( QString indent )
         it.next() ->printDebug( indent + "  " );
     }
 }
-void ResourceSchedule::printDebug( QString indent )
+void ResourceSchedule::printDebug( const QString& _indent )
 {
+    QString indent = _indent;
     Schedule::printDebug( indent );
     indent += "!  ";
     if ( m_parent == 0 )
@@ -732,8 +734,9 @@ void ResourceSchedule::printDebug( QString indent )
     kDebug() << indent << "Appointments: " << m_appointments.count() << endl;
 }
 
-void MainSchedule::printDebug( QString indent )
+void MainSchedule::printDebug( const QString& _indent )
 {
+    QString indent = _indent;
     Schedule::printDebug( indent );
     indent += "!  ";
 //FIXME: QT3 support

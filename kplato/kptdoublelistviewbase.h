@@ -68,9 +68,9 @@ public:
     ListView *slaveListView() const { return m_slaveList; }
     void setOpen(QTreeWidgetItem *item, bool open);
     
-    void setNameHeader(QString text);
-    void setTotalHeader(QString text);
-    void setDescriptionHeader(QString text);
+    void setNameHeader(const QString& text);
+    void setTotalHeader(const QString& text);
+    void setDescriptionHeader(const QString& text);
     void setSlaveLabels(const QStringList &text);
     virtual void print(KPrinter &printer);
 
@@ -118,9 +118,9 @@ public:
     class MasterListItem : public QTreeWidgetItem {
     public:
         MasterListItem(QTreeWidget *parent, bool highlight=false);
-        MasterListItem(QTreeWidget *parent, QString text, bool highlight=false);
+        MasterListItem(QTreeWidget *parent, const QString& text, bool highlight=false);
         MasterListItem(QTreeWidgetItem *parent, bool highlight=false);
-        MasterListItem(QTreeWidgetItem *parent, QString text, bool highlight=false);
+        MasterListItem(QTreeWidgetItem *parent, const QString& text, bool highlight=false);
         ~MasterListItem();
         
         /// Creates slaveitems for myself and my children

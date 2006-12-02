@@ -41,7 +41,7 @@ Account::Account()
     
 }
 
-Account::Account(QString name, QString description)
+Account::Account(const QString& name, const QString& description)
     : m_name(name),
       m_description(description),
       m_list(0),
@@ -67,7 +67,7 @@ Account::~Account() {
 }
     
 
-void Account::setName(QString name) {
+void Account::setName(const QString& name) {
     if (findAccount() == this) {
         removeId();
     }
@@ -509,9 +509,9 @@ bool Accounts::removeId(const QString &id) {
 }
 
 #ifndef NDEBUG
-void Accounts::printDebug(QString /*indent*/) {
+void Accounts::printDebug(const QString& /*indent*/) {
 }
-void Account::printDebug(QString /*indent*/) {
+void Account::printDebug(const QString& /*indent*/) {
 }
 #endif
 } //namespace KPlato

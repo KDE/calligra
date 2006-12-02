@@ -57,7 +57,7 @@ public:
     /**
      * 
      */
-    explicit Account(QString name, QString description=QString::null);
+    explicit Account(const QString& name, const QString& description=QString());
    
     /**
      * Destructor.
@@ -66,10 +66,10 @@ public:
     
 
     QString name() const { return m_name; }
-    void setName(QString name);
+    void setName(const QString& name);
     
     QString description() const { return m_description; }
-    void setDescription(QString desc) { m_description = desc; }
+    void setDescription(const QString& desc) { m_description = desc; }
 
     bool isElement() const { return m_accountList.isEmpty(); }
     
@@ -165,7 +165,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(QString indent);
+    void printDebug(const QString& indent);
 #endif
 };
 
@@ -217,7 +217,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    void printDebug(QString indent);
+    void printDebug(const QString& indent);
 #endif
 };
 

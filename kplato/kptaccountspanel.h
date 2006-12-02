@@ -80,7 +80,7 @@ protected:
     void addItems(QTreeWidget *lv, Accounts &acc);
     void addItems(QTreeWidgetItem *item, Account *acc);
     void addElement(QTreeWidgetItem *item);
-    void removeElement(QString key);
+    void removeElement(const QString& key);
     void removeElement(QTreeWidgetItem *item);
     void refreshDefaultAccount();
     KCommand *save(Part *part, Project &project);

@@ -51,7 +51,7 @@ ResourceAppointmentsView::NodeItem::NodeItem(Node *t, QTreeWidgetItem *p, bool h
     //kDebug()<<k_funcinfo<<endl;
 }
 
-ResourceAppointmentsView::NodeItem::NodeItem(QString text, QTreeWidgetItem *parent, bool highlight)
+ResourceAppointmentsView::NodeItem::NodeItem(const QString& text, QTreeWidgetItem *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       node(0) {
       
@@ -59,7 +59,7 @@ ResourceAppointmentsView::NodeItem::NodeItem(QString text, QTreeWidgetItem *pare
     //kDebug()<<k_funcinfo<<endl;
 }
 
-ResourceAppointmentsView::NodeItem::NodeItem(QString text, QTreeWidget *parent, bool highlight)
+ResourceAppointmentsView::NodeItem::NodeItem(const QString& text, QTreeWidget *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       node(0) {
       

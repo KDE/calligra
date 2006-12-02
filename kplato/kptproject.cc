@@ -860,12 +860,12 @@ bool Project::registerNodeId( Node *node )
 }
 
 
-ResourceGroup *Project::group( QString id )
+ResourceGroup *Project::group( const QString& id )
 {
     return findResourceGroup( id );
 }
 
-Resource *Project::resource( QString id )
+Resource *Project::resource( const QString& id )
 {
     return findResource( id );
 }
@@ -1034,7 +1034,7 @@ void Project::addCalendar( Calendar *calendar )
     m_calendars.append( calendar );
 }
 
-Calendar *Project::calendar( const QString id ) const
+Calendar *Project::calendar( const QString& id ) const
 {
     return findCalendar( id );
 }
@@ -1114,7 +1114,7 @@ bool Project::legalChildren( Node *par, Node *child )
     return legal;
 }
 
-void Project::generateWBS( int count, WBSDefinition &def, QString wbs )
+void Project::generateWBS( int count, WBSDefinition &def, const QString& wbs )
 {
     if ( type() == Type_Subproject || def.level0Enabled() ) {
         Node::generateWBS( count, def, wbs );
@@ -1137,7 +1137,7 @@ void Project::setCurrentSchedule( long id )
     }
 }
 
-MainSchedule *Project::createSchedule( QString name, Schedule::Type type )
+MainSchedule *Project::createSchedule( const QString& name, Schedule::Type type )
 {
     //kDebug()<<k_funcinfo<<"No of schedules: "<<m_schedules.count()<<endl;
     long i = 1;
@@ -1200,9 +1200,9 @@ void Project::changed( Resource *resource )
 }
 
 #ifndef NDEBUG
-void Project::printDebug( bool children, QByteArray indent )
+void Project::printDebug( bool children, const QByteArray& _indent )
 {
-
+    QByteArray indent = _indent;
     kDebug() << indent << "+ Project node: " << Node::name() << endl; //FIXME: QT3 support
     indent += '!';
     QListIterator<ResourceGroup*> it( resourceGroups() );
@@ -1211,8 +1211,9 @@ void Project::printDebug( bool children, QByteArray indent )
 
     Node::printDebug( children, indent );
 }
-void Project::printCalendarDebug( QByteArray indent )
+void Project::printCalendarDebug( const QByteArray& _indent )
 {
+    QByteArray indent = _indent;
     kDebug() << indent << "-------- Calendars debug printout --------" << endl;
     QListIterator
     <Calendar*> it = m_calendars;

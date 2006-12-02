@@ -48,7 +48,7 @@ CalendarDay::CalendarDay(int state)
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
-CalendarDay::CalendarDay(QDate date, int state)
+CalendarDay::CalendarDay(const QDate& date, int state)
     : m_date(date),
       m_state(state),
       m_workingIntervals() {
@@ -494,7 +494,7 @@ Calendar::Calendar()
     init();
 }
 
-Calendar::Calendar(QString name, Calendar *parent)
+Calendar::Calendar(const QString& name, Calendar *parent)
     : m_name(name),
       m_parent(parent),
       m_project(0),
@@ -547,7 +547,7 @@ void Calendar::setDeleted(bool yes) {
     }
     m_deleted = yes;
 }
-bool Calendar::setId(QString id) {
+bool Calendar::setId(const QString& id) {
     //kDebug()<<k_funcinfo<<id<<endl;
     if (id.isEmpty()) {
         kError()<<k_funcinfo<<"id is empty"<<endl;
@@ -976,7 +976,8 @@ void StandardWorktime::save(QDomElement &element) const {
 }
 
 #ifndef NDEBUG
-void CalendarDay::printDebug(QString indent) {
+void CalendarDay::printDebug(const QString& _indent) {
+    QString indent = _indent;
     QString s[] = {"None", "Non-working", "Working"};
     kDebug()<<indent<<" "<<m_date.toString()<<" = "<<s[m_state]<<endl;
     if (m_state == Map::Working) {
@@ -987,7 +988,7 @@ void CalendarDay::printDebug(QString indent) {
     }
     
 }
-void CalendarWeekdays::printDebug(QString indent) {
+void CalendarWeekdays::printDebug(const QString& indent) {
     kDebug()<<indent<<"Weekdays ------"<<endl;
     int c=1;
     foreach (CalendarDay *d, m_weekdays) {
@@ -995,7 +996,7 @@ void CalendarWeekdays::printDebug(QString indent) {
     }
 
 }
-void Calendar::printDebug(QString indent) {
+void Calendar::printDebug(const QString& indent) {
     kDebug()<<indent<<"Calendar "<<m_id<<": '"<<m_name<<"' Deleted="<<m_deleted<<endl;
     kDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : "No parent")<<endl;
     m_weekdays->printDebug(indent + "  ");
@@ -1005,7 +1006,7 @@ void Calendar::printDebug(QString indent) {
     }
 }
 
-void StandardWorktime::printDebug(QString indent) {
+void StandardWorktime::printDebug(const QString& indent) {
     kDebug()<<indent<<"StandardWorktime "<<endl;
     kDebug()<<indent<<"Year: "<<m_year.toString()<<endl;
     kDebug()<<indent<<"Month: "<<m_month.toString()<<endl;

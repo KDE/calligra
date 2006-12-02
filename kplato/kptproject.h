@@ -113,9 +113,9 @@ public:
     Task *createTask( Task &def, Node* parent );
 
     /// Returns the resourcegroup with identity id.
-    ResourceGroup *group( QString id );
+    ResourceGroup *group( const QString& id );
     /// Returns the resource with identity id.
-    Resource *resource( QString id );
+    Resource *resource( const QString& id );
 
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end ) const;
 
@@ -154,7 +154,7 @@ public:
     QList<Calendar*> calendars();
     void addCalendar( Calendar *calendar );
     /// Returns the calendar with identity id.
-    Calendar *calendar( const QString id ) const;
+    Calendar *calendar( const QString& id ) const;
 
     /**
      * Defines the length of days, weeks, months and years
@@ -233,14 +233,14 @@ public:
     /// Insert the calendar with identity id
     virtual void insertCalendarId( const QString &id, Calendar *calendar );
 
-    void generateWBS( int count, WBSDefinition &def, QString wbs = QString() );
+    void generateWBS( int count, WBSDefinition &def, const QString& wbs = QString() );
 
     Accounts &accounts() { return m_accounts; }
 
     /// Set current schedule to schedule with identity id, for me and my children
     virtual void setCurrentSchedule( long id );
     /// Create new schedule with unique id.
-    MainSchedule *createSchedule( QString name, Schedule::Type type );
+    MainSchedule *createSchedule( const QString& name, Schedule::Type type );
     /// Set parent schedule for my children
     virtual void setParentSchedule( Schedule *sch );
 
@@ -316,8 +316,8 @@ private:
 
 #ifndef NDEBUG
 public:
-    void printDebug( bool children, QByteArray indent );
-    void printCalendarDebug( QByteArray indent = "" );
+    void printDebug( bool children, const QByteArray& indent );
+    void printCalendarDebug( const QByteArray& indent = "" );
 #endif
 };
 

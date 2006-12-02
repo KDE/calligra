@@ -232,7 +232,7 @@ private:
     
     class UsedEffortItem {
     public:
-        UsedEffortItem(QDate date, Duration effort, bool overtime=false);
+        UsedEffortItem(const QDate& date, Duration effort, bool overtime=false);
         QDate date();
         Duration effort();
         bool isOvertime();
