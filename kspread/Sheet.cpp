@@ -386,11 +386,6 @@ Doc* Sheet::doc() const
   return d->workbook->doc();
 }
 
-SheetView* Sheet::sheetView() const
-{
-    return d->sheetView;
-}
-
 Sheet::LayoutDirection Sheet::layoutDirection() const
 {
   return d->layoutDirection;

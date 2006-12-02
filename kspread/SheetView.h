@@ -44,7 +44,7 @@ public:
     /**
      * Constructor.
      */
-    explicit SheetView( Sheet* sheet );
+    explicit SheetView( const Sheet* sheet );
 
     /**
      * Destructor.

@@ -58,6 +58,7 @@ using namespace KSpread;
 SheetPrint::SheetPrint( Sheet* sheet )
 {
     m_pSheet = sheet;
+    m_pSheetView = new SheetView( sheet );
     m_pDoc = m_pSheet->doc();
 
     m_bPrintGrid = false;
@@ -94,7 +95,7 @@ SheetPrint::SheetPrint( Sheet* sheet )
 
 SheetPrint::~SheetPrint()
 {
-  // nothing todo yet
+    delete m_pSheetView;
 }
 
 QString SheetPrint::saveOasisSheetStyleLayout( KoGenStyles &mainStyles )
@@ -460,9 +461,9 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     paintRect.setTopLeft( topLeft );
     paintRect.setBottomRight( bottomRight );
 
-    m_pSheet->sheetView()->setPaintCellRange( printRect );
-//     m_pSheet->sheetView()->invalidateRegion( m_pSheet->paintDirtyData() );
-    m_pSheet->sheetView()->paintCells( 0 /*view*/, painter, paintRect, topLeft );
+    m_pSheetView->setPaintCellRange( printRect );
+//     m_pSheetView->invalidateRegion( m_pSheet->paintDirtyData() );
+    m_pSheetView->paintCells( 0 /*view*/, painter, paintRect, topLeft );
 
 #if 0
     RowFormat *row_lay;

@@ -1698,9 +1698,10 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
         topLeft = QPointF( sheet->dblColumnPos( cellRegion.left() ) - view->canvasWidget()->xOffset(),
                            sheet->dblRowPos( cellRegion.top() ) - view->canvasWidget()->yOffset() );
 
-    sheet->sheetView()->setPaintCellRange( cellRegion );
-    sheet->sheetView()->invalidateRegion( sheet->paintDirtyData() );
-    sheet->sheetView()->paintCells( view, painter, viewRegionF, topLeft );
+    SheetView sheetView( sheet ); // FIXME Stefan: make member, otherwise cache lost
+    sheetView.setPaintCellRange( cellRegion );
+    sheetView.invalidateRegion( sheet->paintDirtyData() );
+    sheetView.paintCells( view, painter, viewRegionF, topLeft );
 }
 
 

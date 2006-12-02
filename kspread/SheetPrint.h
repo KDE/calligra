@@ -33,9 +33,10 @@ class KoGenStyles;
 namespace KSpread
 {
 class Doc;
-class Selection;
 class PrintNewPageEntry;
 class PrintObject;
+class Selection;
+class SheetView;
 
 class KSPREAD_EXPORT SheetPrint : public QObject
 {
@@ -435,6 +436,7 @@ signals:
 private:
 
     Sheet * m_pSheet;
+    SheetView * m_pSheetView;
     Doc * m_pDoc;
 
     /**

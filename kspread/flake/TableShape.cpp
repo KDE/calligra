@@ -35,9 +35,10 @@ using namespace KSpread;
 class TableShape::Private
 {
 public:
-    int     columns;
-    int     rows;
-    Doc*    doc;
+    int         columns;
+    int         rows;
+    Doc*        doc;
+    SheetView*  sheetView;
 };
 
 TableShape::TableShape( int columns, int rows )
@@ -47,6 +48,7 @@ TableShape::TableShape( int columns, int rows )
     d->rows     = 0;
     d->doc      = new Doc();
     d->doc->map()->addNewSheet();
+    d->sheetView = new SheetView( sheet() );
 
     setColumns( columns );
     setRows( rows );
@@ -56,6 +58,7 @@ TableShape::TableShape( int columns, int rows )
 
 TableShape::~TableShape()
 {
+    delete d->sheetView;
     delete d->doc;
     delete d;
 }
@@ -81,9 +84,9 @@ void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
 
     // painting cell contents
     KoPoint dblCorner( 0.0, 0.0 );
-    sheet()->sheetView()->setPaintCellRange( QRect( 1, 1, d->columns, d->rows ) );
-    sheet()->sheetView()->invalidateRegion( sheet()->paintDirtyData() );
-    sheet()->sheetView()->paintCells( 0 /*view*/, painter, paintRect, QPointF( 0.0, 0.0 ) );
+    d->sheetView->setPaintCellRange( QRect( 1, 1, d->columns, d->rows ) );
+    d->sheetView->invalidateRegion( sheet()->paintDirtyData() );
+    d->sheetView->paintCells( 0 /*view*/, painter, paintRect, QPointF( 0.0, 0.0 ) );
 }
 
 Sheet* TableShape::sheet() const

@@ -39,12 +39,12 @@ inline uint qHash( const QPoint& point )
 class SheetView::Private
 {
 public:
-    Sheet* sheet;
+    const Sheet* sheet;
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
 };
 
-SheetView::SheetView( Sheet* sheet )
+SheetView::SheetView( const Sheet* sheet )
     : d( new Private )
 {
     d->sheet = sheet;

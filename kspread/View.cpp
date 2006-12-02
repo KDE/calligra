@@ -121,6 +121,7 @@
 #include "RowColumnManipulators.h"
 #include "Selection.h"
 #include "SheetPrint.h"
+#include "SheetView.h"
 #include "SortManipulator.h"
 #include "Style.h"
 #include "StyleManager.h"
@@ -187,6 +188,7 @@ public:
     // the active sheet, may be 0
     // this is the sheet which has the input focus
     Sheet* activeSheet;
+    QHash<const Sheet*, SheetView*> sheetViews;
 
     // GUI elements
     QWidget *frame;
@@ -1624,6 +1626,7 @@ View::~View()
 
         }*/
 
+    qDeleteAll( d->sheetViews );
     delete d->spell.kspell;
 
     d->canvas->endChoose();
@@ -1851,6 +1854,13 @@ const Sheet* View::activeSheet() const
 Sheet* View::activeSheet()
 {
     return d->activeSheet;
+}
+
+SheetView* View::sheetView( const Sheet* sheet ) const
+{
+    if ( !d->sheetViews.contains( sheet ) )
+        d->sheetViews.insert( sheet, new SheetView( sheet ) );
+    return d->sheetViews[ sheet ];
 }
 
 void View::initConfig()

@@ -80,7 +80,6 @@ class Region;
 class Selection;
 class Sheet;
 class SheetPrint;
-class SheetView;
 class Style;
 class StyleStorage;
 class UndoInsertRemoveAction;
@@ -194,11 +193,6 @@ public:
      * \return the document this sheet belongs to
      */
     Doc* doc() const;
-
-    /**
-     * \return the SheetView for this Sheet
-     */
-    SheetView* sheetView() const;
 
     //////////////////////////////////////////////////////////////////////////
     //

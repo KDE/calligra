@@ -61,6 +61,7 @@ class HBorder;
 class LocationEditWidget;
 class Region;
 class Selection;
+class SheetView;
 class VBorder;
 class View;
 class ComboboxLocationEditWidget;
@@ -135,6 +136,11 @@ public:
 
     const Sheet* activeSheet() const;
     Sheet* activeSheet();
+
+    /**
+     * \return the SheetView for \p sheet
+     */
+    SheetView* sheetView( const Sheet* sheet ) const;
 
     void openPopupMenu( const QPoint &_global );
     void popupRowMenu(const QPoint & _point ) ;

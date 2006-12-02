@@ -3815,12 +3815,12 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
     const QRect visibleRect = visibleCells();
     const QPointF topLeft( sheet->dblColumnPos(visibleRect.left()) - xOffset(),
                            sheet->dblRowPos(visibleRect.top()) - yOffset() );
-    sheet->sheetView()->setPaintCellRange( visibleRect );
-    sheet->sheetView()->invalidateRegion( sheet->paintDirtyData() );
-    sheet->sheetView()->invalidateRegion( sheet->layoutDirtyRegion() );
+    view()->sheetView( sheet )->setPaintCellRange( visibleRect );
+    view()->sheetView( sheet )->invalidateRegion( sheet->paintDirtyData() );
+    view()->sheetView( sheet )->invalidateRegion( sheet->layoutDirtyRegion() );
     sheet->clearPaintDirtyData();
     sheet->clearLayoutDirtyRegion();
-    sheet->sheetView()->paintCells( d->view, painter, unzoomedRect, topLeft );
+    view()->sheetView( sheet )->paintCells( d->view, painter, unzoomedRect, topLeft );
 
     /* now paint the selection */
     //Nb.  No longer necessary to paint choose Selection.here as the cell reference highlight
