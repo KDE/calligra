@@ -109,35 +109,35 @@ Things not in bugzilla
     - Undo of style changes						done
       This should insert the inverse substyles or something similar.
     - Add insertion/deletion of columns/rows				done
-    - Get rid of KSpread::Style::Currency. Use KSpread::Currency.	----
     - OpenDocument loading/saving					done
     - Old native format loading/saving					done
-    - Seek & destroy R-Tree data rects, if they get empty after		----
-      deletion of columns/rows, but store them for undo.
-    - Add configure option to choose wether the style of the current	----
-      or of the previous (default) column/row is used on insertion.
     - Replace Cell::format() by Cell::style().				done
     - Move the StyleManipulator class into the FormatManipulators file	done
       and rename the file to StyleManipulators.
-    - Improve the caching of the styles.				----
     - Fix the border outline operation.					done
-    - OpenDocument saving of cell styles should not include the		----
-      attributes set for column/rows.
-    - Fix Style::isDefault(). Use the StyleManager's default style.	----
     - Port the filters.							done
     - Decouple validity and conditions from cells.			done
     - Fix named styles.							done
+    - Check for orphaned (nonDefault)Cell lookups.			done
     - Extend the Storage template to the StyleStorage level.		----
       - Garbage collection						done
       - Book-keeping							done
       - Used area tracking						----
       - Cache								----
-    - Check for orphaned (nonDefault)Cell lookups.			----
     - Insertion/deletion of cell ranges.				----
+    - Seek & destroy R-Tree data rects, if they get empty after		----
+      deletion of columns/rows, but store them for undo.
+    - Add configure option to choose wether the style of the current	----
+      or of the previous (default) column/row is used on insertion.
+    - OpenDocument saving of cell styles should not include the		----
+      attributes set for column/rows.
     - Improve the saving.						----
       Only StyleStorage::Private::usedArea should track the occupied
       cells only - not those of columns or rows. Adjust the saving algo
       appropriately.
+    - Improve the caching of the styles.				----
+    - Fix Style::isDefault(). Use the StyleManager's default style.	----
+    - Get rid of KSpread::Style::Currency. Use KSpread::Currency.	----
 
   + Speed up selection.						      1 ----
     (probably improved with Format Storage?)

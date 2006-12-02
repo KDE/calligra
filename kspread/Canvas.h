@@ -200,14 +200,6 @@ public:
     QRect visibleCells() const;
 
     /**
-     * Updates the CellView s for the visible cells.
-     * \see visibleCells()
-     */
-    void updateCellWindow();
-
-    CellView* cellView( int col, int row ) const;
-
-    /**
      * @return a pointer to the active sheet
      */
     Sheet* activeSheet() const;

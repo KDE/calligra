@@ -65,10 +65,10 @@ using namespace KSpread;
 
 const int s_borderSpace = 1;
 
-class CellView::Private
+class CellView::Private : public QSharedData
 {
 public:
-  Cell* cell;
+  mutable Cell* cell;
   Style style;
 
   mutable const Sheet* sheet;
@@ -131,9 +131,13 @@ CellView::CellView( const Sheet* sheet, int col, int row )
     d->bottomBorderValue = 0;
 }
 
+CellView::CellView( const CellView& other )
+    : d( other.d )
+{
+}
+
 CellView::~CellView()
 {
-  delete d;
 }
 
 Cell* CellView::cell() const

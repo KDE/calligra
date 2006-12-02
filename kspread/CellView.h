@@ -36,6 +36,7 @@
 
 // Qt
 #include <QLinkedList>
+#include <QSharedDataPointer>
 
 // KOffice
 #include <KoPoint.h>
@@ -63,6 +64,7 @@ class KSPREAD_EXPORT CellView
 {
 public:
     CellView( const Sheet* sheet, int col, int row );
+    CellView( const CellView& other );
     ~CellView();
 
   enum Border
@@ -411,8 +413,8 @@ private:
      */
     uint effTopBorderValue() const;
 
-  class Private;
-  Private * const d;
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CellView::Borders)

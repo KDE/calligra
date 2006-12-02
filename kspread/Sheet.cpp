@@ -77,6 +77,7 @@
 #include "RecalcManager.h"
 #include "Selection.h"
 #include "SheetPrint.h"
+#include "SheetView.h"
 #include "Storage.h"
 #include "Style.h"
 #include "StyleManager.h"
@@ -212,6 +213,7 @@ public:
   Map* workbook;
 
   SheetAdaptor* dbus;
+  SheetView* sheetView;
 
   QString name;
   int id;
@@ -324,6 +326,8 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   new SheetAdaptor(this);
   QDBusConnection::sessionBus().registerObject( '/'+map->doc()->objectName() + '/' + map->objectName()+ '/' + objectName, this);
 
+  d->sheetView = new SheetView( this );
+
   d->cells.setAutoDelete( true );
   d->rows.setAutoDelete( true );
   d->columns.setAutoDelete( true );
@@ -380,6 +384,11 @@ Map* Sheet::workbook() const
 Doc* Sheet::doc() const
 {
   return d->workbook->doc();
+}
+
+SheetView* Sheet::sheetView() const
+{
+    return d->sheetView;
 }
 
 Sheet::LayoutDirection Sheet::layoutDirection() const

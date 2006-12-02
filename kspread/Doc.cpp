@@ -72,6 +72,7 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
+#include "SheetView.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "Undo.h"
@@ -1680,6 +1681,8 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
     if ( cellRegion.left() <= 0 || cellRegion.top() <= 0 )
         return;
 
+    const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
+
     // Get the world coordinates of the upper left corner of the
     // cellRegion The view is 0, when cellRegion is called from
     // paintContent, which itself is only called, when we should paint
@@ -1687,68 +1690,17 @@ void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
     // then there is no view and we alwas start at top/left, so the
     // offset is 0.
     //
-    KoPoint  dblCorner;
+    QPointF topLeft;
     if ( view == 0 ) //Most propably we are embedded and inactive, so no offset
-        dblCorner = KoPoint( sheet->dblColumnPos( cellRegion.left() ),
-                             sheet->dblRowPos( cellRegion.top() ) );
+        topLeft = QPointF( sheet->dblColumnPos( cellRegion.left() ),
+                           sheet->dblRowPos( cellRegion.top() ) );
     else
-        dblCorner = KoPoint( sheet->dblColumnPos( cellRegion.left() ) - view->canvasWidget()->xOffset(),
-                             sheet->dblRowPos( cellRegion.top() ) - view->canvasWidget()->yOffset() );
-    KoPoint dblCurrentCellPos( dblCorner );
+        topLeft = QPointF( sheet->dblColumnPos( cellRegion.left() ) - view->canvasWidget()->xOffset(),
+                           sheet->dblRowPos( cellRegion.top() ) - view->canvasWidget()->yOffset() );
 
-    int regionBottom = cellRegion.bottom();
-    int regionRight  = cellRegion.right();
-    int regionLeft   = cellRegion.left();
-    int regionTop    = cellRegion.top();
-
-    QLinkedList<QPoint>  mergedCellsPainted;
-    for ( int y = regionTop; y <= regionBottom && dblCurrentCellPos.y() <= viewRegion.bottom(); ++y )
-    {
-        const RowFormat * row_lay = sheet->rowFormat( y );
-        dblCurrentCellPos.setX( dblCorner.x() );
-
-        for ( int x = regionLeft; x <= regionRight && dblCurrentCellPos.x() <= viewRegion.right(); ++x )
-        {
-            const ColumnFormat *col_lay = sheet->columnFormat( x );
-            QPoint cellRef( x, y );
-            const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
-            CellView tmpCellView( sheet, x, y );
-            CellView* cellView = &tmpCellView;
-            cellView->paintCell( viewRegionF, painter, view, dblCurrentCellPos,
-                                 cellRef,
-                                 mergedCellsPainted );
-
-            dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
-        }
-        dblCurrentCellPos.setY( dblCurrentCellPos.y() + row_lay->dblHeight() );
-    }
-
-    dblCurrentCellPos.setY( dblCorner.y() );
-    mergedCellsPainted.clear();
-    for ( int y = regionTop;
-          y <= regionBottom && dblCurrentCellPos.y() <= viewRegion.bottom();
-          ++y )
-    {
-        const RowFormat * row_lay = sheet->rowFormat( y );
-        dblCurrentCellPos.setX( dblCorner.x() );
-
-        for ( int x = regionLeft;
-              x <= regionRight && dblCurrentCellPos.x() <= viewRegion.right();
-              ++x )
-        {
-            const ColumnFormat *col_lay = sheet->columnFormat( x );
-            QPoint cellRef( x, y );
-            const QRectF viewRegionF( viewRegion.left(), viewRegion.right(), viewRegion.width(), viewRegion.height() );
-            CellView tmpCellView( sheet, x, y );
-            CellView* cellView = &tmpCellView;
-            cellView->paintCellBorders( viewRegionF, painter, view, dblCurrentCellPos,
-                                        cellRef, cellRegion,
-                                        mergedCellsPainted );
-
-            dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
-        }
-        dblCurrentCellPos.setY( dblCurrentCellPos.y() + row_lay->dblHeight() );
-    }
+    sheet->sheetView()->setPaintCellRange( cellRegion );
+    sheet->sheetView()->invalidateRegion( sheet->paintDirtyData() );
+    sheet->sheetView()->paintCells( view, painter, viewRegionF, topLeft );
 }
 
 

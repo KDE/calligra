@@ -99,6 +99,7 @@
 #include "Format.h"
 #include "Selection.h"
 #include "Sheet.h"
+#include "SheetView.h"
 #include "StyleManipulators.h"
 #include "Undo.h"
 #include "Util.h"
@@ -143,8 +144,6 @@ Canvas::Canvas(View *view)
 
   d->xOffset = 0.0;
   d->yOffset = 0.0;
-    d->cellWindowRect  = QRect(1,1,0,0);
-    d->cellWindowSheet = 0;
 
   d->view = view;
   // m_eAction = DefaultAction;
@@ -192,8 +191,6 @@ Canvas::Canvas(View *view)
 
 Canvas::~Canvas()
 {
-    foreach ( QList<CellView*> row, d->cellWindowMatrix )
-        qDeleteAll( row );
 // FIXME Stefan: Still needed?
 //   delete d->scrollTimer;
   delete d->validationInfo;
@@ -1568,34 +1565,17 @@ void Canvas::wheelEvent( QWheelEvent* _ev )
 
 void Canvas::paintEvent( QPaintEvent* event )
 {
-  if ( d->view->doc()->isLoading() )
-    return;
+    if ( d->view->doc()->isLoading() )
+        return;
 
-  register Sheet * const sheet = activeSheet();
-  if (!sheet)
-    return;
+    register Sheet * const sheet = activeSheet();
+    if (!sheet)
+        return;
 
     ElapsedTime et( "Painting cells", ElapsedTime::PrintOnlyTime );
 
-    updateCellWindow();
-
     // mark visible cells, that need relayouting
     const QRect visibleCells = this->visibleCells();
-    const Region layoutDirtyRegion = sheet->layoutDirtyRegion();
-    sheet->clearLayoutDirtyRegion();
-    Region::ConstIterator end(layoutDirtyRegion.constEnd());
-    for ( Region::ConstIterator it(layoutDirtyRegion.constBegin()); it != end; ++it)
-    {
-        const QRect range = (*it)->rect() & visibleCells;
-        for ( int col = range.left(); col <= range.right(); ++col )
-        {
-            for ( int row = range.top(); row <= range.bottom(); ++row )
-            {
-                CellView* const cellView = d->cellWindowMatrix[col-visibleCells.left()][row-visibleCells.top()];
-                cellView->setDirty( true );
-            }
-        }
-    }
 
     QPainter painter(this);
     paintUpdates( painter, event->rect() );
@@ -3790,64 +3770,6 @@ QRect Canvas::visibleCells() const
   return viewToCellCoordinates( QRectF( 0, 0, width(), height() ) );
 }
 
-void Canvas::updateCellWindow()
-{
-    if ( d->cellWindowSheet == activeSheet() && d->cellWindowRect == visibleCells() )
-        return;
-
-    Sheet* const sheet = activeSheet();
-    const QRect cellRect = visibleCells();
-
-    // create the new matrix, copy existing views and create missing ones
-    QList< QList<CellView*> > newMatrix;
-    const int newLeft   = cellRect.left();
-    const int newTop    = cellRect.top();
-    const int newRight  = cellRect.right();
-    const int newBottom = cellRect.bottom();
-    const int oldLeft   = d->cellWindowRect.left();
-    const int oldTop    = d->cellWindowRect.top();
-    const int oldRight  = d->cellWindowRect.right();
-    const int oldBottom = d->cellWindowRect.bottom();
-    for ( int col = newLeft; col <= newRight; ++col )
-    {
-        if ( sheet == d->cellWindowSheet && col >= oldLeft && col <= oldRight )
-        {
-            QList<CellView*> matrixRow;
-            for ( int row = newTop; row <= newBottom; ++row )
-            {
-                if ( row >= oldTop && row <= oldBottom )
-                    matrixRow.append( d->cellWindowMatrix[col-oldLeft][row-oldTop] );
-                else
-                    matrixRow.append( new CellView( sheet, col, row ) );
-            }
-            newMatrix.append( matrixRow );
-        }
-        else // no intersection
-        {
-            QList<CellView*> matrixRow;
-            for ( int row = newTop; row <= newBottom; ++row )
-                matrixRow.append( new CellView( sheet, col, row ) );
-            newMatrix.append( matrixRow );
-        }
-    }
-    // delete the unused CellViews
-    for ( int col = oldLeft; col <= oldRight; ++col )
-        for ( int row = oldTop; row <= oldBottom; ++row )
-            if ( col < newLeft || col > newRight || row < newTop || row > newBottom || sheet != d->cellWindowSheet )
-                delete d->cellWindowMatrix[col-oldLeft][row-oldTop];
-
-    d->cellWindowMatrix = newMatrix;
-    d->cellWindowRect = cellRect;
-    d->cellWindowSheet = sheet;
-}
-
-CellView* Canvas::cellView( int col, int row ) const
-{
-    if ( !d->cellWindowRect.contains( QPoint(col, row) ) )
-        return 0;
-    return d->cellWindowMatrix[col-1][row-1];
-}
-
 //---------------------------------------------
 //
 // Drawing Engine
@@ -3890,75 +3812,19 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
 #endif
 
     /* paint any visible cell that has the paintDirty flag */
-    Cell* cell = 0;
     const QRect visibleRect = visibleCells();
-    QLinkedList<QPoint> mergedCellsPainted;
-    Region paintDirtyList = sheet->paintDirtyData();
-
-    Region::ConstIterator end(paintDirtyList.constEnd());
-    for (Region::ConstIterator it(paintDirtyList.constBegin()); it != end; ++it)
-    {
-        QRect range = (*it)->rect() & visibleRect;
-
-        int right  = range.right();
-        for ( int x = range.left(); x <= right; ++x )
-        {
-            int bottom = range.bottom();
-            for ( int y = range.top(); y <= bottom; ++y )
-            {
-                cell = sheet->cellAt( x, y );
-                cell->setFlag( Cell::Flag_PaintingDirty );
-            }
-        }
-    }
-
-        QRect range = visibleRect;
-        const double topPos = sheet->dblRowPos(range.top());
-        const double leftPos = sheet->dblColumnPos(range.left());
-        KoPoint dblCorner( leftPos - xOffset(), topPos - yOffset() );
-
-        int right  = range.right();
-        for ( int x = range.left(); x <= right; ++x )
-        {
-            int bottom = range.bottom();
-            for ( int y = range.top(); y <= bottom; ++y )
-            {
-                // relayout in CellView
-                Q_ASSERT( visibleRect == d->cellWindowRect );
-                CellView* cellView = d->cellWindowMatrix[x-visibleRect.left()][y-visibleRect.top()];
-                cellView->paintCell( unzoomedRect, painter, d->view, dblCorner,
-                                     QPoint( x, y ),
-                                     mergedCellsPainted );
-
-                dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight() );
-            }
-            dblCorner.setY( topPos - yOffset() );
-            dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth() );
-        }
-
-        dblCorner = KoPoint( leftPos - xOffset(), topPos - yOffset() );
-        right  = range.right();
-        for ( int x = range.left(); x <= right; ++x )
-        {
-            int bottom = range.bottom();
-            for ( int y = range.top(); y <= bottom; ++y )
-            {
-                Q_ASSERT( visibleRect == d->cellWindowRect );
-                CellView* cellView = d->cellWindowMatrix[x-visibleRect.left()][y-visibleRect.top()];
-                cellView->paintCellBorders( unzoomedRect, painter, d->view, dblCorner,
-                                            QPoint( x, y ), QRect( 1, 1, KS_colMax, KS_rowMax ),
-                                            mergedCellsPainted );
-
-                dblCorner.setY( dblCorner.y() + sheet->rowFormat( y )->dblHeight() );
-            }
-            dblCorner.setY( topPos - yOffset() );
-            dblCorner.setX( dblCorner.x() + sheet->columnFormat( x )->dblWidth() );
-        }
+    const QPointF topLeft( sheet->dblColumnPos(visibleRect.left()) - xOffset(),
+                           sheet->dblRowPos(visibleRect.top()) - yOffset() );
+    sheet->sheetView()->setPaintCellRange( visibleRect );
+    sheet->sheetView()->invalidateRegion( sheet->paintDirtyData() );
+    sheet->sheetView()->invalidateRegion( sheet->layoutDirtyRegion() );
+    sheet->clearPaintDirtyData();
+    sheet->clearLayoutDirtyRegion();
+    sheet->sheetView()->paintCells( d->view, painter, unzoomedRect, topLeft );
 
     /* now paint the selection */
     //Nb.  No longer necessary to paint choose Selection.here as the cell reference highlight
     //stuff takes care of this anyway
-
     paintHighlightedRanges(painter, unzoomedRect);
     paintNormalMarker(painter, unzoomedRect);
 

@@ -123,6 +123,7 @@ SET (kspreadcommon_LIB_SRCS
 	Sheet.cpp
 	SheetAdaptor.cpp
 	SheetPrint.cpp
+	SheetView.cpp
 	SortManipulator.cpp
 	Storage.cpp
 	Style.cpp

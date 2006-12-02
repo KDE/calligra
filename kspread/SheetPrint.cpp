@@ -22,6 +22,7 @@
 #include "CellView.h"
 #include "Format.h"
 #include "Sheet.h"
+#include "SheetView.h"
 #include "Selection.h"
 #include "Localization.h"
 #include "Doc.h"
@@ -433,12 +434,12 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
                             const QRect& printRect, const KoRect& view,
                             QRegion& clipRegion )
 {
+    // topLeft: starting coordinate (document coordinate system)
+    // printRect: cell range to be printed
+
     //
     // Draw the cells.
     //
-    RowFormat *row_lay;
-    ColumnFormat *col_lay;
-
     double xpos =  0;
     double ypos =  topLeft.y();
 
@@ -455,9 +456,17 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     for ( int y = regionTop; y <= regionBottom; ++y )
         bottomRight.setY( bottomRight.y()
                           + m_pSheet->rowFormat( y )->dblHeight() );
-    QRectF rect;
-    rect.setTopLeft( topLeft );
-    rect.setBottomRight( bottomRight );
+    QRectF paintRect;
+    paintRect.setTopLeft( topLeft );
+    paintRect.setBottomRight( bottomRight );
+
+    m_pSheet->sheetView()->setPaintCellRange( printRect );
+//     m_pSheet->sheetView()->invalidateRegion( m_pSheet->paintDirtyData() );
+    m_pSheet->sheetView()->paintCells( 0 /*view*/, painter, paintRect, topLeft );
+
+#if 0
+    RowFormat *row_lay;
+    ColumnFormat *col_lay;
 
     QLinkedList<QPoint> mergedCellsPainted;
     for ( int y = regionTop; y <= regionBottom; ++y )
@@ -472,7 +481,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
                              view.width() - xpos - col_lay->dblWidth() : xpos;
             CellView tmpCellView( m_pSheet, x, y );
             CellView* cellView = &tmpCellView;
-            cellView->paintCell( rect, painter, 0,
+            cellView->paintCell( paintRect, painter, 0,
                                 KoPoint( effXPos, ypos ), QPoint( x, y ),
                                 mergedCellsPainted );
 
@@ -496,7 +505,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
                              ? view.width() - xpos - col_lay->dblWidth() : xpos;
             CellView tmpCellView( m_pSheet, x, y );
             CellView* cellView = &tmpCellView;
-            cellView->paintCellBorders( rect, painter, 0, KoPoint( effXPos, ypos ),
+            cellView->paintCellBorders( paintRect, painter, 0, KoPoint( effXPos, ypos ),
                                         QPoint( x, y ), printRect,
                                         mergedCellsPainted );
 
@@ -505,7 +514,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 
         ypos += row_lay->dblHeight();
     }
-
+#endif
     //
     // Draw the children
     //

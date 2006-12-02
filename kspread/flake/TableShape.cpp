@@ -26,6 +26,7 @@
 #include <Format.h>
 #include <Map.h>
 #include <Sheet.h>
+#include <SheetView.h>
 
 #include "TableShape.h"
 
@@ -37,7 +38,6 @@ public:
     int     columns;
     int     rows;
     Doc*    doc;
-    QList< /*columns*/ QList< /*rows*/ CellView* > > cellWindowMatrix;
 };
 
 TableShape::TableShape( int columns, int rows )
@@ -56,8 +56,6 @@ TableShape::TableShape( int columns, int rows )
 
 TableShape::~TableShape()
 {
-    foreach ( QList<CellView*> row, d->cellWindowMatrix )
-        qDeleteAll( row );
     delete d->doc;
     delete d;
 }
@@ -65,97 +63,27 @@ TableShape::~TableShape()
 void TableShape::setColumns( int columns )
 {
     Q_ASSERT( columns > 0 );
-
-    // create the new matrix, copy existing views and create missing ones
-    QList< QList<CellView*> > newMatrix;
-    for ( int col = 1; col <= columns; ++col )
-    {
-        QList<CellView*> matrixRow;
-        for ( int row = 1; row <= d->rows; ++row )
-            matrixRow.append( new CellView( sheet(), col, row ) );
-        newMatrix.append( matrixRow );
-    }
-    // delete the unused CellViews
-    for ( int col = 1; col <= d->columns; ++col )
-        for ( int row = 1; row <= d->rows; ++row )
-            if ( col > columns )
-                delete d->cellWindowMatrix[col-1][row-1];
-
-    d->cellWindowMatrix = newMatrix;
     d->columns = columns;
 }
 
 void TableShape::setRows( int rows )
 {
     Q_ASSERT( rows > 0 );
-
-    // create the new matrix, copy existing views and create missing ones
-    QList< QList<CellView*> > newMatrix;
-    for ( int col = 1; col <= d->columns; ++col )
-    {
-        QList<CellView*> matrixRow;
-        for ( int row = 1; row <= rows; ++row )
-        {
-            if ( row <= d->rows )
-                matrixRow.append( d->cellWindowMatrix[col-1][row-1] );
-            else
-                matrixRow.append( new CellView( sheet(), col, row ) );
-        }
-        newMatrix.append( matrixRow );
-    }
-    // delete the unused CellViews
-    for ( int col = 1; col <= d->columns; ++col )
-        for ( int row = 1; row <= d->rows; ++row )
-            if ( row > rows )
-                delete d->cellWindowMatrix[col-1][row-1];
-
-    d->cellWindowMatrix = newMatrix;
     d->rows = rows;
 }
 
 void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
-    Q_UNUSED( converter );
+    const QRectF paintRect = QRectF( QPointF( 0.0, 0.0 ), size() );
 
-    const QRectF unzoomedRect = QRectF( QPointF( 0.0, 0.0 ), size() );
-
-    painter.setClipRect( unzoomedRect, Qt::IntersectClip );
+    applyConversion( painter, converter );
+    painter.setClipRect( paintRect, Qt::IntersectClip );
 
     // painting cell contents
     KoPoint dblCorner( 0.0, 0.0 );
-    QLinkedList<QPoint> mergedCellsPainted;
-    for ( int col = 1; col <= d->columns; ++col )
-    {
-        for ( int row = 1; row <= d->rows; ++row )
-        {
-            // relayout in CellView
-            CellView* cellView = d->cellWindowMatrix[col-1][row-1];
-            cellView->paintCell( unzoomedRect, painter, 0 /*view*/, dblCorner,
-                                 QPoint( col, row ), mergedCellsPainted );
-
-            dblCorner.setY( dblCorner.y() + sheet()->rowFormat( row )->dblHeight() );
-        }
-        dblCorner.setX( dblCorner.x() + sheet()->columnFormat( col )->dblWidth() );
-        dblCorner.setY( 0.0 );
-    }
-    // painting cell borders
-    dblCorner = KoPoint( 0.0, 0.0 );
-    mergedCellsPainted.clear();
-    for ( int col = 1; col <= d->columns; ++col )
-    {
-        for ( int row = 1; row <= d->rows; ++row )
-        {
-            // relayout in CellView
-            CellView* cellView = d->cellWindowMatrix[col-1][row-1];
-            cellView->paintCellBorders( unzoomedRect, painter, 0 /*view*/, dblCorner,
-                                        QPoint( col, row ), QRect( 1, 1, d->columns, d->rows ),
-                                        mergedCellsPainted );
-
-            dblCorner.setY( dblCorner.y() + sheet()->rowFormat( row )->dblHeight() );
-        }
-        dblCorner.setX( dblCorner.x() + sheet()->columnFormat( col )->dblWidth() );
-        dblCorner.setY( 0.0 );
-    }
+    sheet()->sheetView()->setPaintCellRange( QRect( 1, 1, d->columns, d->rows ) );
+    sheet()->sheetView()->invalidateRegion( sheet()->paintDirtyData() );
+    sheet()->sheetView()->paintCells( 0 /*view*/, painter, paintRect, QPointF( 0.0, 0.0 ) );
 }
 
 Sheet* TableShape::sheet() const
