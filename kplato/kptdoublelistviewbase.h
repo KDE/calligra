@@ -40,7 +40,7 @@ class Project;
 class ListView : public QTreeWidget
 {
 public:
-    ListView(QWidget *parent)
+    explicit ListView(QWidget *parent)
     : QTreeWidget(parent)
     {}
     

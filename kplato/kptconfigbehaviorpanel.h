@@ -34,7 +34,7 @@ class Part;
 class ConfigBehaviorPanel : public ConfigBehaviorPanelBase {
     Q_OBJECT
 public:
-    ConfigBehaviorPanel(Behavior &behavior, QWidget *parent=0, const char *name=0);
+    explicit ConfigBehaviorPanel(Behavior &behavior, QWidget *parent=0, const char *name=0);
 
     void setStartValues();
     bool ok();

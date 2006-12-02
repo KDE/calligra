@@ -47,7 +47,7 @@ public:
 
     Relation(Node *parent, Node *child, Type type, Duration lag);
     Relation(Node *parent=0, Node *child=0, Type type=FinishStart);
-    Relation(Relation *rel);
+    explicit Relation(Relation *rel);
     
     /** 
     *  When deleted the relation will remove itself from 

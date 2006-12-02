@@ -47,7 +47,7 @@ class CalendarDay {
 public:
     CalendarDay();
     CalendarDay(int state);
-    CalendarDay(QDate date, int state=0);
+    explicit CalendarDay(QDate date, int state=0);
     CalendarDay(CalendarDay *day);
     ~CalendarDay();
 
@@ -209,7 +209,7 @@ class Calendar {
 public:
     Calendar();
     Calendar(QString name, Calendar *parent=0);
-    Calendar(Calendar *calendar);
+    explicit Calendar(Calendar *calendar);
     ~Calendar();
 
     QString name() const { return m_name; }

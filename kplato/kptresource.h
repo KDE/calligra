@@ -68,7 +68,7 @@ class ResourceGroup : public QObject
 {
     Q_OBJECT
 public:
-    ResourceGroup( Project *project );
+    explicit ResourceGroup( Project *project );
     ~ResourceGroup();
 
     enum Type { Type_Work, Type_Material };

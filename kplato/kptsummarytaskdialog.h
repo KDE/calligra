@@ -43,7 +43,7 @@ public:
      * @param task the task to edit
      * @param parent parent widget
      */
-    SummaryTaskDialog(Task &task,  QWidget *parent=0);
+    explicit SummaryTaskDialog(Task &task,  QWidget *parent=0);
 
     KCommand *buildCommand(Part *part);
 

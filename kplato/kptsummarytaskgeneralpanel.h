@@ -34,7 +34,7 @@ class Task;
 class SummaryTaskGeneralPanel : public QWidget, public Ui_SummaryTaskGeneralPanelBase {
     Q_OBJECT
 public:
-    SummaryTaskGeneralPanel(Task &task, QWidget *parent=0, const char *name=0);
+    explicit SummaryTaskGeneralPanel(Task &task, QWidget *parent=0, const char *name=0);
 
     KMacroCommand *buildCommand(Part *part);
 

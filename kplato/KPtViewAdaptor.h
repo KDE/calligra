@@ -38,7 +38,7 @@ class ViewAdaptor : public KoViewAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.projectmanaging.view")
 
 public:
-    ViewAdaptor( View* );
+    explicit ViewAdaptor( View* );
     virtual ~ViewAdaptor();
 
 public Q_SLOTS:

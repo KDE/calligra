@@ -35,7 +35,7 @@ namespace KPlato
 class IntervalEditBase : public QWidget, public Ui::IntervalEditBase
 {
 public:
-  IntervalEditBase( QWidget *parent ) : QWidget( parent ) {
+  explicit IntervalEditBase( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

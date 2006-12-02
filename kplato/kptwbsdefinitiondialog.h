@@ -34,7 +34,7 @@ class Part;
 class WBSDefinitionDialog : public KDialog {
     Q_OBJECT
 public:
-    WBSDefinitionDialog(WBSDefinition &def, QWidget *parent=0, const char *name=0);
+    explicit WBSDefinitionDialog(WBSDefinition &def, QWidget *parent=0, const char *name=0);
 
     KMacroCommand *buildCommand(Part *part);
 

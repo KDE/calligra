@@ -49,7 +49,7 @@ class TaskAppointmentsView : public DoubleListViewBase
     Q_OBJECT
 public:
 
-    TaskAppointmentsView( QWidget *parent );
+    explicit TaskAppointmentsView( QWidget *parent );
 
     //~TaskAppointmentsView();
 

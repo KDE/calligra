@@ -34,7 +34,7 @@ class Part;
 class MilestoneProgressDialog : public KDialog {
     Q_OBJECT
 public:
-    MilestoneProgressDialog(Task &task, QWidget *parent=0);
+    explicit MilestoneProgressDialog(Task &task, QWidget *parent=0);
 
     KCommand *buildCommand(Part *part);
 

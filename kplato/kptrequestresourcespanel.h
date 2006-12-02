@@ -94,7 +94,7 @@ public:
 class TaskResourcesPanelBase : public QWidget, public Ui::TaskResourcesPanelBase
 {
 public:
-  TaskResourcesPanelBase( QWidget *parent ) : QWidget( parent ) {
+  explicit TaskResourcesPanelBase( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

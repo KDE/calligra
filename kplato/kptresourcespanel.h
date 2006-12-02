@@ -39,7 +39,7 @@ class Part;
 class ResourcesPanelBase : public QWidget, public Ui::ResourcesPanelBase
 {
 public:
-  ResourcesPanelBase( QWidget *parent ) : QWidget( parent ) {
+  explicit ResourcesPanelBase( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };

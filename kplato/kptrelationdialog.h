@@ -78,7 +78,7 @@ class ModifyRelationDialog : public AddRelationDialog
 {
     Q_OBJECT
 public:
-    ModifyRelationDialog(Relation *rel, QWidget *p=0, const char *n=0);
+    explicit ModifyRelationDialog(Relation *rel, QWidget *p=0, const char *n=0);
 
     virtual KCommand *buildCommand(Part *part);
     bool relationIsDeleted() { return m_deleted; }

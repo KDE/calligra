@@ -46,7 +46,7 @@ class ResourceItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    ResourceItemModel( Part *part, QObject *parent = 0 );
+    explicit ResourceItemModel( Part *part, QObject *parent = 0 );
     ~ResourceItemModel();
 
     virtual void setProject( Project *project );

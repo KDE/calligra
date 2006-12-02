@@ -49,7 +49,7 @@ class NodeItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    NodeItemModel( Part *part, QObject *parent = 0 );
+    explicit NodeItemModel( Part *part, QObject *parent = 0 );
     ~NodeItemModel();
     
     virtual void setProject( Project *project );

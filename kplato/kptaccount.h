@@ -57,7 +57,7 @@ public:
     /**
      * 
      */
-    Account(QString name, QString description=QString::null);
+    explicit Account(QString name, QString description=QString::null);
    
     /**
      * Destructor.
@@ -179,7 +179,7 @@ typedef QListIterator<Account*> AccountListIterator;
 class Accounts
 {
 public:
-    Accounts(Project &project);
+    explicit Accounts(Project &project);
     ~Accounts();
     
     Account *defaultAccount() const { return m_defaultAccount; }

@@ -44,7 +44,7 @@ class Project;
 class AccountsPanelBase : public QWidget, public Ui::AccountsPanelBase
 {
 public:
-  AccountsPanelBase( QWidget *parent ) : QWidget( parent ) {
+  explicit AccountsPanelBase( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };
