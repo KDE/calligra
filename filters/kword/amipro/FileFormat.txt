@@ -1,6 +1,6 @@
 Lotus AmiPro File Format (NOT FINISHED YET)
 
-Ariya Hidayat <ariyahidayat@yahoo.de>
+Ariya Hidayat <ariya@kde.org>
 Last rev: March 16, 2002
 
 1  Foreword
