@@ -143,7 +143,7 @@ QStringList SymbolTable::allNames() const
 
 QString SymbolTable::get_name( struct UnicodeNameTable entry ) const
 {
-    if ( entry.name == "" ) {
+    if ( !*entry.name ) {
         return "U" + QString( "%1" ).arg( entry.unicode, 4, 16 ).upper();
     }
     return entry.name;

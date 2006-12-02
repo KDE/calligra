@@ -81,7 +81,7 @@ Py::Object PythonExtension::getattr(const char* n)
 #endif
 
     if(n[0] == '_') {
-        if(n == "__methods__") {
+        if(!strcmp(n,  "__methods__")) {
             Py::List methods;
             QStringList calls = m_object->getCalls();
             for(QStringList::Iterator it = calls.begin(); it != calls.end(); ++it) {
@@ -93,7 +93,7 @@ Py::Object PythonExtension::getattr(const char* n)
             return methods;
         }
 
-        if(n == "__members__") {
+        if(!strcmp(n, "__members__")) {
             Py::List members;
             Kross::Api::Callable* callable = dynamic_cast<Kross::Api::Callable*>(m_object.data());
             if(callable) {

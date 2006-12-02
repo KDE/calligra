@@ -95,7 +95,7 @@ QToolButton *KoToolBox::createButton(QWidget * parent,  const char* iconName, QS
 {
     QToolButton *button = new QToolButton(parent);
 
-    if ( iconName != "" ) {
+    if ( iconName && *iconName ) {
         QPixmap pixmap = BarIcon( iconName, m_instance );
         button->setPixmap( pixmap );
         button->setToggleButton( true );
