@@ -20,7 +20,7 @@ a later date.</para></note>
 <para>To use an expression could not be easier.</para>
 <para>Simply place the cursor at the location you want the expression inserted and select
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Expression</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Expression</guisubmenu>
 </menuchoice> from the menubar.  This will give you a submenu with groups of expressions.  Select the group that is appropriate
 for your expression.  This will bring up a list of expressions available to you.  Select the appropriate expression.</para>
 <para>Once selected, that expression will be inserted at the cursor position.</para>

@@ -920,7 +920,7 @@ graph. It also determines the size of the slices in a pie chart.
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Open Recent</guimenuitem>
+<guisubmenu>Open Recent</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Shows a list of recently opened documents</action></para></listitem>
 </varlistentry>
@@ -1178,7 +1178,7 @@ color of the legend box can be changed also.</para>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Toolbars</guimenuitem>
+<guisubmenu>Toolbars</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Show/Hide various toolbars</action> (<guimenuitem>File</guimenuitem>,
 <guimenuitem>Actions</guimenuitem> and <guimenuitem>Types</guimenuitem>).</para></listitem>

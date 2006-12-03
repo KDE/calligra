@@ -45,7 +45,7 @@ has the ability to toggle the <guilabel>Document Structure</guilabel> area on an
 Frames/Frame Sets</guilabel>
 <guilabel>Pictures</guilabel>, <guilabel>Tables</guilabel>, <guilabel>Formula
 Frames</guilabel>, 
-<guilabel>Embedded Objects</guilabel>.</para>
+<guilabel>Embedded Objects</guilabel>).</para>
 
 <variablelist>
 <varlistentry>

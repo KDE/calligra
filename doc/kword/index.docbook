@@ -1837,9 +1837,9 @@ it, as it will on the printed page.</para>
 </glossentry>
 
 <glossentry id="defx">
-<glossterm>&X-Window; system</glossterm>
+<glossterm>&X-Window;</glossterm>
 <glossdef>
-<para>The &X-Window; System (also known simply as <quote>X</quote>) is
+<para>The &X-Window; (also known simply as <quote>X</quote>) is
 required for &koffice; to operate.  More information on &X-Window; for
 &Linux; can be found at <ulink
 url="http://www.xfree86.org">http://www.xfree86.org</ulink></para>

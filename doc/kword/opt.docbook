@@ -270,8 +270,8 @@ then &kword; moves the view, but does not change the position of the text cursor
 <term><guilabel>Number of recent files:</guilabel></term>
 <listitem>
 <para>This determines the maximum number of files that are listed under
-<menuchoice> <guimenu>File</guimenu><guimenuitem>Open
-Recent</guimenuitem></menuchoice> command. You can adjust this value
+<menuchoice> <guimenu>File</guimenu><guisubmenu>Open
+Recent</guisubmenu></menuchoice> command. You can adjust this value
 from 1-20.</para>
 </listitem>
 </varlistentry>

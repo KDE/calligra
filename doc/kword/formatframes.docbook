@@ -63,7 +63,7 @@ open one of two ways:</para>
 <itemizedlist>
 <listitem>
 <para>Select <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset Properties...</guimenuitem></menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Frame/Frameset Properties</guimenuitem></menuchoice>
 from the menubar.</para>
 </listitem>
 
@@ -364,7 +364,7 @@ to determine on which side of the frame you want to have a border.</para>
 <para>To format a frame using a predefined framestyle simply:</para>
 <para>Select the frame(s) by holding down &Ctrl; and clicking within the frame with the &LMB;.</para>
 <para>Select <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Framestyle</guimenuitem></menuchoice>
+<guimenu>Frames</guimenu><guisubmenu>Framestyle</guisubmenu></menuchoice>
 from the menubar.  A submenu will appear, listing all the currently defined framestyles.  Select the name of the framestyle
 you want and all selected frames will automatically be formatting using the options of that framestyle.</para>
 </sect3>

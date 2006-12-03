@@ -20,7 +20,7 @@ create web pages in &kword;.</para>
 <sect2 id="links-new"><title>Insert a new document link</title>
 <para>To insert a document link select <menuchoice>
 <guimenu>Insert</guimenu>
-<guimenuitem>Link</guimenuitem>
+<guimenuitem>Link...</guimenuitem>
 </menuchoice> from the menubar. This will bring up a small dialog box.</para>
 
 <screenshot>

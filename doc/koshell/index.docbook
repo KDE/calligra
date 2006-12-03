@@ -243,7 +243,7 @@ window the component uses when run as a stand-alone application. </para>
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Open Recent</guimenuitem>
+<guisubmenu>Open Recent</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Display</action> a selection of recently saved documents you can open. </para></listitem>
 </varlistentry>

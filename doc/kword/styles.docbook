@@ -76,7 +76,7 @@ the text</link> you want the changes to apply to.</para>
 <itemizedlist>
 <listitem>
 <para>Select <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Style</guimenuitem></menuchoice>
+<guimenu>Format</guimenu><guisubmenu>Style</guisubmenu></menuchoice>
 from the menubar.  This will show the list of available text styles, select
 the text style from the list.</para>
 </listitem>

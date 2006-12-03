@@ -34,10 +34,10 @@
 <sect2 id="enabling-autocorrection">
 <title>Enabling/Disabling Autocorrection</title>
 
-<para>To toggle autocorrection on, select <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem></menuchoice> from the menubar. When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>. You can determine which changes to make by configuring autocorrection, as explained below.
+<para>To toggle autocorrection on, select <menuchoice><guimenu>Text</guimenu><guisubmenu>Autocorrection</guisubmenu><guimenuitem>Enable Autocorrection</guimenuitem></menuchoice> from the menubar. When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>. You can determine which changes to make by configuring autocorrection, as explained below.
 </para>
 
-<para>To toggle autocorrection off, select <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Disable Autocorrection</guimenuitem></menuchoice> from the menubar. When disabled, autocorrection changes are not made. You can, however, <link linkend="manually">apply autocorrection manually</link>, using the <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice> menu.
+<para>To toggle autocorrection off, select <menuchoice><guimenu>Text</guimenu><guisubmenu>Autocorrection</guisubmenu><guimenuitem>Disable Autocorrection</guimenuitem></menuchoice> from the menubar. When disabled, autocorrection changes are not made. You can, however, <link linkend="manually">apply autocorrection manually</link>, using the <menuchoice><guimenu>Text</guimenu><guisubmenu>Autocorrection</guisubmenu><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice> menu.
 </para>
 
 <para>To adjust the options for autocorrection, select <menuchoice><guimenu>Settings</guimenu>
@@ -205,7 +205,7 @@ to substitute in the text box labeled <guilabel>Replace:</guilabel>.</para>
 keyboard, you can click the
 buttons with three periods on them and select a special character from the table provided.</para></note>
 
-<para>When these are entered, click <guibutton>Add</guibutton>. Your text
+<para>When these are entered, click <guibutton>Add...</guibutton>. Your text
 strings are now added to the table.</para>
 </sect3>
 
@@ -391,7 +391,7 @@ and click on the <guibutton>Remove</guibutton> button.</para>
 <para>To manually apply autocorrection, first configure your options by using the
 <link linkend="configure-autocorrection">autocorrection dialogs</link>.</para>
 <para>Then select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice>
+<guimenu>Text</guimenu><guisubmenu>Autocorrection</guisubmenu><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice>
 from the menubar.</para>
 <para>&kpresenter; will start at the beginning of the document and apply all selected autocorrection options to the entire document.</para>
 <para>When &kpresenter; is finished, it will return you to your document for further editing.</para>
@@ -402,7 +402,7 @@ see <link linkend="enabling-autocorrection">Enabling/Disabling Autocorrection</l
 </sect1>
 
 <sect1  id="configure-completion">
-<title>The <guilabel>Configure Completion...</guilabel> Dialog</title>
+<title>The <guilabel>Configure Completion</guilabel> Dialog</title>
 
 <para>Autocompletion allows you to type the first few letters of a commonly
 used word (often technical or job specific), and tells &kpresenter; to
@@ -435,12 +435,12 @@ This is selected using <link linkend="autocomplete-dialog">the dialog</link>.</p
 from the menubar.  This will bring up a dialog.</para>
 
 <screenshot>
-<screeninfo>Configure Completion... Dialog</screeninfo>
+<screeninfo><guilabel>Completion</guilabel> Dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="completion.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>Configure Completion... Dialog</phrase></textobject>
+<textobject><phrase><guilabel>Completion</guilabel> Dialog</phrase></textobject>
 </mediaobject>
 </screenshot>
 
@@ -554,7 +554,7 @@ using this new list for autocompletion, click this button.</para>
 </sect1>
 
 <sect1 id="configure-dialog">
-<title>The <guilabel>Configure &kpresenter;...</guilabel> Dialog</title>
+<title>The <guilabel>Configure &kpresenter;</guilabel> Dialog</title>
 
 <sect2 id="configure-interface">
 <title><guilabel>Interface</guilabel></title>
@@ -585,8 +585,8 @@ anymore on any slide.</para></listitem>
 <varlistentry>
 <term><guilabel>Number of recent files:</guilabel></term>
 <listitem><para>Set the number of recent files which will be opened using the
-<menuchoice><guimenu>File</guimenu><guimenuitem>Open
-Recent</guimenuitem></menuchoice> menu. Default is to remember 10 filenames. The
+<menuchoice><guimenu>File</guimenu><guisubmenu>Open
+Recent</guisubmenu></menuchoice> menu. Default is to remember 10 filenames. The
 maximum you can set is 20 and the minimum is 1.</para></listitem>
 </varlistentry>
 
@@ -660,13 +660,13 @@ settings.</para></listitem>
 
 <varlistentry>
 <term><guilabel>Skip all uppercase words</guilabel></term>
-<listitem><para>If this option is checked, the all uppercase words will not be checked for spelling. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para>
+<listitem><para>If this option is checked, the all uppercase words will not be checked for spelling. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guisubmenu>Spellcheck</guisubmenu><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para>
 <tip><para>This is useful if the document you are working on uses a large number of acronyms. If this box is left unchecked, most of those acronyms will be incorrectly marked. By placing a mark in this checkbox, &kpresenter; will not mark the acronyms as misspelled.</para></tip>
 </listitem></varlistentry>
 
 <varlistentry>
 <term><guilabel>Skip run-together words</guilabel></term>
-<listitem><para>If checked, the concatenated words made of existing words are not spellchecked. This is useful in some languages. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para>
+<listitem><para>If checked, the concatenated words made of existing words are not spellchecked. This is useful in some languages. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guisubmenu>Spellcheck</guisubmenu><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para>
 <para>Examples of such words are <emphasis>shutout</emphasis>,
 <emphasis>cannot</emphasis> and <emphasis>blackout</emphasis>.</para>
 <tip>
@@ -738,7 +738,7 @@ addresses often contain words run together.</para>
 
 <varlistentry>
 <term><guilabel>Display field code</guilabel></term>
-<listitem><para>In editor mode (not in slide show) this option will display all the variable codes. This is very useful to see what variable is displayed. Variables are inserted using the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem></menuchoice> menu.</para></listitem>
+<listitem><para>In editor mode (not in slide show) this option will display all the variable codes. This is very useful to see what variable is displayed. Variables are inserted using the <menuchoice><guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu></menuchoice> menu.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -842,19 +842,19 @@ two names? -->
 <para>This dialog sets the default tools settings. There are 5 tabs in this dialog.</para>
 
 <sect3 id="outline">
-<title>Outline</title>
+<title><guilabel>Outline</guilabel></title>
 
 <screenshot>
-<screeninfo>The Outline tab</screeninfo>
+<screeninfo>The <guilabel>Outline</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="configure6.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>The Outline tab</phrase></textobject>
+<textobject><phrase>The <guilabel>Outline</guilabel> tab</phrase></textobject>
 </mediaobject>
 </screenshot>
 
-<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Line</guimenuitem></menuchoice> menu.</para>
+<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guisubmenu>Line</guisubmenu></menuchoice> menu.</para>
 
 <variablelist>
 <varlistentry>
@@ -878,15 +878,15 @@ two names? -->
 </sect3>
 
 <sect3 id="fill">
-<title>Fill</title>
+<title><guilabel>Fill</guilabel></title>
 
 <screenshot>
-<screeninfo>The Fill tab</screeninfo>
+<screeninfo>The <guilabel>Fill</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="configure6b.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>The Fill tab</phrase></textobject>
+<textobject><phrase>The <guilabel>Fill</guilabel> tab</phrase></textobject>
 </mediaobject>
 </screenshot>
 
@@ -908,17 +908,17 @@ two names? -->
 </sect3>
 
 <sect3 id="rectangle">
-<title>Rectangle</title>
+<title><guilabel>Rectangle</guilabel></title>
 
-<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Shape</guimenuitem><guimenuitem>Rectangle</guimenuitem></menuchoice> menu.</para>
+<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guisubmenu>Shape</guisubmenu><guimenuitem>Rectangle</guimenuitem></menuchoice> menu.</para>
 
 <screenshot>
-<screeninfo>The Rectangle tab</screeninfo>
+<screeninfo>The <guilabel>Rectangle</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="configure6c.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>The Rectangle tab</phrase></textobject>
+<textobject><phrase>The <guilabel>Rectangle</guilabel> tab</phrase></textobject>
 </mediaobject>
 </screenshot>
 
@@ -939,17 +939,17 @@ two names? -->
 </sect3>
 
 <sect3 id="polygon">
-<title>Polygon</title>
+<title><guilabel>Polygon</guilabel></title>
 
-<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Shape</guimenuitem><guimenuitem>Convex/Concave Polygon</guimenuitem></menuchoice> menu.</para>
+<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guisubmenu>Shape</guisubmenu><guimenuitem>Convex/Concave Polygon</guimenuitem></menuchoice> menu.</para>
 
 <screenshot>
-<screeninfo>The Polygon tab</screeninfo>
+<screeninfo>The <guilabel>Polygon</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="configure6d.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>The Polygon tab</phrase></textobject>
+<textobject><phrase>The <guilabel>Polygon</guilabel> tab</phrase></textobject>
 </mediaobject>
 </screenshot>
 
@@ -971,17 +971,17 @@ two names? -->
 </sect3>
 
 <sect3 id="pie">
-<title>Pie</title>
+<title><guilabel>Pie</guilabel></title>
 
-<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Shape</guimenuitem><guimenuitem>Pie/Arc/Chord</guimenuitem></menuchoice> menu.</para>
+<para>This is used in the <menuchoice><guimenu>Insert</guimenu><guisubmenu>Shape</guisubmenu><guimenuitem>Pie/Arc/Chord</guimenuitem></menuchoice> menu.</para>
 
 <screenshot>
-<screeninfo>The Pie tab</screeninfo>
+<screeninfo>The <guilabel>Pie</guilabel> tab</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="configure6e.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>The Pie tab</phrase></textobject>
+<textobject><phrase>The <guilabel>Pie</guilabel> tab</phrase></textobject>
 </mediaobject>
 </screenshot>
 

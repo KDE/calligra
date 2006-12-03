@@ -257,8 +257,8 @@ using the menubar.</para>
 <varlistentry>
 <term id="menu-save">
 <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Open
-Recent</guimenuitem></menuchoice></term>
+<guimenu>File</guimenu><guisubmenu>Open
+Recent</guisubmenu></menuchoice></term>
 <listitem>
 <para><action>For opening the most recently edited files. Once you
 have clicked on this option, a list of recently edited files will
@@ -800,7 +800,7 @@ linkend="views">Using Multiple Views</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>View</guimenu><guimenuitem>Splitter Orientation</guimenuitem>
+<guimenu>View</guimenu><guisubmenu>Splitter Orientation</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -817,7 +817,7 @@ Views</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>View</guimenu><guimenuitem>Display Mode</guimenuitem>
+<guimenu>View</guimenu><guisubmenu>Display Mode</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -918,7 +918,7 @@ the menu entry will show you the current status of this option.</para>
 <varlistentry>
 <term id="menu-zoom">
 <menuchoice>
-<guimenu>View</guimenu><guimenuitem>Zoom</guimenuitem>
+<guimenu>View</guimenu><guisubmenu>Zoom</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -1018,7 +1018,7 @@ linkend="toc">Table of Contents</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Variable</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -1035,7 +1035,7 @@ linkend="variables">Document Variables</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Expression</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Expression</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -1205,7 +1205,7 @@ the menubar.</para>
 <varlistentry>
 <term id="menu-create-part">
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Object Frame</guimenuitem>
+<guimenu>Insert</guimenu><guisubmenu>Object Frame</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -1307,7 +1307,7 @@ Footnotes</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Formula</guimenuitem>
+<guimenu>Format</guimenu><guisubmenu>Formula</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -1319,7 +1319,7 @@ more information go to <link linkend="formulas">Formulas</link></para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Style</guimenuitem>
+<guimenu>Format</guimenu><guisubmenu>Style</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -1557,7 +1557,7 @@ using the menubar. </para>
 <varlistentry>
 <term id="menu-framestyle">
 <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Framestyle</guimenuitem>
+<guimenu>Frames</guimenu><guisubmenu>Framestyle</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -1580,7 +1580,7 @@ using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Configure Frame Border</guimenuitem>
+<guimenu>Frames</guimenu><guisubmenu>Configure Frame Border</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -1617,7 +1617,7 @@ on tables, <link linkend="tables">click here</link>.</para>
 <varlistentry>
 <term id="menu-insert-row">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Insert Row...</guimenuitem>
+<guimenu>Table</guimenu><guisubmenu>Row</guisubmenu><guimenuitem>Insert Row...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1632,7 +1632,7 @@ equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-delete-row">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Delete Selected Rows...</guimenuitem>
+<guimenu>Table</guimenu><guisubmenu>Row</guisubmenu><guimenuitem>Delete Selected Rows...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1648,7 +1648,7 @@ is equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-insert-column">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Insert Column...</guimenuitem>
+<guimenu>Table</guimenu><guisubmenu>Column</guisubmenu><guimenuitem>Insert Column...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1663,7 +1663,7 @@ equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-delete-column">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Delete Selected Columns...</guimenuitem>
+<guimenu>Table</guimenu><guisubmenu>Column</guisubmenu><guimenuitem>Delete Selected Columns...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1678,7 +1678,7 @@ is equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-resize-column">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Resize Column...</guimenuitem>
+<guimenu>Table</guimenu><guisubmenu>Column</guisubmenu><guimenuitem>Resize Column...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1690,7 +1690,7 @@ is equivalent to using the menubar.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Join Cells</guimenuitem>
+<guimenu>Table</guimenu><guisubmenu>Cell</guisubmenu><guimenuitem>Join Cells</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1703,7 +1703,7 @@ here</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Split Cell...</guimenuitem>
+<guimenu>Table</guimenu><guisubmenu>Cell</guisubmenu><guimenuitem>Split Cell...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1715,7 +1715,7 @@ here</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Protect Cells</guimenuitem>
+<guimenu>Table</guimenu><guisubmenu>Cell</guisubmenu><guimenuitem>Protect Cells</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1763,7 +1763,7 @@ find more about tables in the section entitled <link linkend="tablestyle">Using 
 <varlistentry>
 <term id="menu-tablestyle">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Tablestyle</guimenuitem>
+<guimenu>Table</guimenu><guisubmenu>Tablestyle</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
@@ -1794,7 +1794,7 @@ find more about tables in the section entitled <link linkend="tablestyle">Using 
 <varlistentry>
 <term id="menu-auto-spell">
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Autospellcheck</guimenuitem>
+<guimenu>Tools</guimenu><guisubmenu>Spellcheck</guisubmenu><guimenuitem>Autospellcheck</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1805,7 +1805,7 @@ find more about tables in the section entitled <link linkend="tablestyle">Using 
 <varlistentry>
 <term id="menu-spell">
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem>
+<guimenu>Tools</guimenu><guisubmenu>Spellcheck</guisubmenu><guimenuitem>Spelling...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1819,7 +1819,7 @@ equivalent to using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Disable/Enable Autocorrection</guimenuitem>
+<guimenu>Tools</guimenu><guisubmenu>Autocorrection</guisubmenu><guimenuitem>Disable/Enable Autocorrection</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1832,7 +1832,7 @@ For more information see the section entitled
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem>
+<guimenu>Tools</guimenu><guisubmenu>Autocorrection</guisubmenu><guimenuitem>Apply Autocorrection</guimenuitem>
 </menuchoice>
 </term>
 <listitem><para><action>&kword; will format your document according to specific rules.</action>
@@ -1936,7 +1936,7 @@ refer to the section entitled <link linkend="variables">Document variables</link
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Toolbars</guimenuitem>
+<guimenu>Settings</guimenu><guisubmenu>Toolbars</guisubmenu>
 </menuchoice>
 </term>
 <listitem>

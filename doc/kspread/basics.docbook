@@ -170,8 +170,9 @@ Numbers are entered in the obvious way; <userinput>123</userinput>, <userinput>
 </para></listitem>
 <listitem><para>
 Dates should be entered in your <quote>System</quote> format, as defined in 
-the K menu <menuchoice><guisubmenu>Settings</guisubmenu> <guisubmenu>
-Regional &amp; Accessibility</guisubmenu> <guimenuitem>Country/Region &amp; Language</guimenuitem>
+the &kcontrolcenter; in <menuchoice><guimenu>
+Regional &amp; Accessibility</guimenu> <guisubmenu>
+Country/Region &amp; Language</guisubmenu><guimenuitem>Time &amp; Dates</guimenuitem>
 </menuchoice> dialog box.  If, for example, you are using the DD/MM/YYYY form 
 you should enter <userinput>30/03/2002</userinput> for 30th March 2002. 
 Leading zeroes can be omitted from the day and month fields and only the last
@@ -364,8 +365,9 @@ enter more complex formulae such as <userinput>=((B10 + C3) *5 - F11) / 2
 
 <para>Cells containing a formula will be marked with a small blue triangle 
 at the bottom left corner if the <guilabel>Show formula indicator</guilabel>
-check box in the <guilabel>Preferences</guilabel> page of &kspread;'s 
-<link linkend="configdialog">configuration</link> dialog is checked.</para>
+check box in the <menuchoice><guimenu>Format</guimenu>
+<guisubmenu>Sheet</guisubmenu><guisubmenu>Sheet Properties</guisubmenu>
+</menuchoice> dialog is checked.</para>
 <para>&kspread; also includes a large number of built-in functions for 
 applications such as statistical, trigonometrical and financial calculations. 
 Their use will be examined in more depth in a <link linkend="formulas">
@@ -419,13 +421,8 @@ countries of a number of mountains together with their height above sea level.
 <para>We may want the data sorted so that the names are in 
 alphabetical order. To do this select the area containing the data (A2:C7 
 in this case) and choose <guimenuitem>Sort...</guimenuitem> from the <guimenu>Data</guimenu> 
-menu. This opens the <guilabel>Sorting</guilabel> dialog box. Using the <guilabel>Sort Criteria</guilabel> page of this dialog box you 
-can choose which column of the data is to be used as a primary sort key and, 
-if you wish, other columns to be used as secondary and tertiary keys. Using
-the example in the above screenshot, choosing column B as the first key and 
-column C as the second would sort the data by country and, for each country, 
-by height.</para>
-<para>Sorting is done alphanumerically, and is case sensitive, numbers coming 
+menu. This opens the <guilabel>Sorting</guilabel> dialog box.</para> 
+<para>Sorting is done alphanumerically, and the default is case sensitive, numbers coming 
 before uppercase letters which come before lowercase letters, so that cells 
 containing the entries <userinput>Cat</userinput>, <userinput>bar</userinput>, 
 <userinput>77</userinput> and <userinput>Bat</userinput> would be sorted into 
@@ -438,21 +435,23 @@ selected area. For more complex sorting select <menuchoice><guimenu>Data
 </guimenu><guimenuitem>Sort...</guimenuitem></menuchoice> to bring up the 
 <guilabel>Sort</guilabel> dialog box.</para>
 -->
+<para>Using the <guilabel>Sort Criteria</guilabel> page of this dialog box 
+lets you <guilabel>Sort Rows</guilabel> or <guilabel>Sort Columns</guilabel>.
+If you check the <guilabel>First row contains headers</guilabel> box data in the 
+first row will not be included in the sort operation.
+You can choose which column or which row of the data is to be used as a primary sort key and, 
+if you wish, other columns or rows to be used as secondary and tertiary keys. Using
+the example in the above screenshot, choosing column B as the first key and 
+column C as the second would sort the data by country and, for each country, 
+by height.</para>
 
-<para>The <guilabel>Options</guilabel> page of the dialog lets you
-sort by row instead of by column and allows you to sort using the
+<para>The <guilabel>Options</guilabel> page of the dialog allows you to sort using the
 order of items in a custom list such as January, February... instead
-of alphanumerically.</para>
-
-<para>&kspread; can also place the results of a sort into a different area of 
-the sheet, or even into a different worksheet, rather than overwriting the 
-original data. To do this enter the top left cell reference of the target 
-area into the <guilabel>Destination Cell:</guilabel> text box and select a
-<guilabel>Destination Sheet:</guilabel> in the <guilabel>Options</guilabel> page. The cell 
-formats will also be copied to the new area if you check the <guilabel>
-Copy cell Formatting (Borders, Colors, Text Style)</guilabel> box. If you check the 
-<guilabel>First row contains headers</guilabel> box data in the first row will be copied directly to the 
-first row of the target area without being included in the sort operation.
+of alphanumerically.
+The cell format is moved with the cell content, if you select
+<guilabel>Copy cell Formatting (Borders, Colors, Text Style)</guilabel>
+Uncheck the option <guilabel>Case sensitive sort</guilabel> to get a sort 
+not depending on capitalization.
 </para>
 </sect1>
 
@@ -522,9 +521,10 @@ Save As...</guimenuitem></menuchoice>. This will bring up &kde;'s common
 <guilabel>Save Document As</guilabel> dialog box. 
 Choose the folder where you want to save the document and enter a 
 suitable file name into the <guilabel>Location:</guilabel> text box. &kspread; 
-documents are normally automatically saved with a <filename>.ksp</filename> 
+documents are normally automatically saved with a <filename>.ods</filename> 
 extension, you do not need to add this to the filename but do make sure that 
-the <guilabel>Filter:</guilabel> selection is set to &kspread;.</para>
+the <guilabel>Filter:</guilabel> selection is set to 
+<guilabel>OASIS OpenDocument SpreadSheet</guilabel>.</para>
 <para>To save your document without changing its name, just use <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice>.</para>
 
@@ -545,9 +545,9 @@ When you open a document &kspread; checks to see if an autosaved
 version exists, and if it finds one it will offer to open that instead.</para>
 <para>Autosaved documents are saved with a file name of the form
 <filename>.yourfilename.autosave</filename> (note the leading period),
-so that <filename>spread1.ksp</filename> would be autosaved as
-<filename>.spread1.ksp.autosave</filename>. The autosave feature is
-<link linkend="configinterface">user configurable</link>.</para>
+so that <filename>spread1.ods</filename> would be autosaved as
+<filename>.spread1.ods.autosave</filename>. The autosave feature is
+user configurable in the <link linkend="configinterface">settings dialog</link>.</para>
 
 <sect2 id="templates">
 <title>Templates</title>
@@ -561,14 +561,14 @@ Doing this opens the <guilabel>Create Template</guilabel> dialog box.
 Enter a name for your new template into the <guilabel>Name:</guilabel> text
 box and press <guibutton>OK</guibutton>. The next time you start a new
 document by choosing <menuchoice><guimenu>File</guimenu><guimenuitem>New
-</guimenuitem></menuchoice> or when you next start &kspread; the <guilabel>
-Choose</guilabel> dialog box will give you the option of creating the
+</guimenuitem></menuchoice> or when you next start &kspread; the 
+startup dialog window will give you the option of creating the
 new document from your template.</para>
 <para>The <guilabel>Create Template</guilabel> dialog box also lets you
 choose a different picture to be displayed above the template name in the
-<guilabel>Choose</guilabel> dialog box, and lets you save your templates
-under different group names, which will appear as different tab pages in
-the <guilabel>Choose</guilabel> dialog box.</para>
+startup dialog window, and lets you save your templates
+under different group names, which will appear as different pages in
+the dialog.</para>
 </sect2>
 
 </sect1>
