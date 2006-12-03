@@ -425,7 +425,9 @@ public:
     SubStyle() {}
     virtual ~SubStyle() {}
     virtual Style::Key type() const { return Style::DefaultStyleKey; }
-    virtual void dump() const { kDebug() << Style::DefaultStyleKey << " Default SubStyle" << endl; }
+    virtual void dump() const { kDebug() << debugData() << endl; }
+    virtual QString debugData( bool withName = true ) const { QString out; if (withName) out = name(Style::DefaultStyleKey); return out; }
+    static QString name( Style::Key key );
 };
 
 class NamedStyle : public SubStyle
@@ -433,19 +435,10 @@ class NamedStyle : public SubStyle
 public:
     NamedStyle( const QString& n ) : SubStyle(), name( n ) {}
     virtual Style::Key type() const { return Style::NamedStyleKey; }
-    virtual void dump() const { kDebug() << Style::NamedStyleKey << " " << name << endl; }
+    virtual void dump() const { kDebug() << debugData() << endl; }
+    virtual QString debugData( bool withName = true ) const { QString out; if (withName) out = SubStyle::name(Style::NamedStyleKey) + ' '; out += name; return out; }
     QString name;
 };
-
-/***************************************************************************
-  kDebug support
-****************************************************************************/
-
-inline kdbgstream operator<<( kdbgstream str, const KSpread::Style::Currency& c )
-{
-  str << c.symbol;
-  return str;
-}
 
 } // namespace KSpread
 

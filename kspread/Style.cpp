@@ -43,6 +43,12 @@
 
 using namespace KSpread;
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// SubStyles
+//
+/////////////////////////////////////////////////////////////////////////////
+
 static uint calculateValue( QPen const & pen )
 {
   uint n = pen.color().red() + pen.color().green() + pen.color().blue();
@@ -57,9 +63,15 @@ class SubStyleOne : public SubStyle
 public:
     SubStyleOne( const Value1& v = Value1() ) : SubStyle(), value1( v ) {}
     virtual Style::Key type() const { return key; }
-    virtual void dump() const { kDebug(36006) << key << " " << value1 << endl; }
+    virtual void dump() const { kDebug(36006) << debugData() << endl; }
+    virtual QString debugData( bool withName = true ) const
+    { QString out; if (withName) out = name(key) + ' '; QDebug qdbg(&out); qdbg << value1; return out; }
     Value1 value1;
 };
+
+template<>
+QString SubStyleOne<Style::CurrencyFormat, Style::Currency>::debugData( bool withName ) const
+{ QString out; if (withName) out = name(Style::CurrencyFormat) + ' '; QDebug qdbg(&out); qdbg << value1.symbol; return out; }
 
 template<Style::Key key>
 class PenStyle : public SubStyleOne<key, QPen>
@@ -76,6 +88,49 @@ public:
     int value;
 };
 
+QString SubStyle::name( Style::Key key )
+{
+    QString name;
+    switch ( key )
+    {
+        case Style::DefaultStyleKey:        name = "Default style"; break;
+        case Style::NamedStyleKey:          name = "Named style"; break;
+        case Style::LeftPen:                name = "Left pen"; break;
+        case Style::RightPen:               name = "Right pen"; break;
+        case Style::TopPen:                 name = "Top pen"; break;
+        case Style::BottomPen:              name = "Bottom pen"; break;
+        case Style::FallDiagonalPen:        name = "Fall diagonal pen"; break;
+        case Style::GoUpDiagonalPen:        name = "Go up diagonal pen"; break;
+        case Style::HorizontalAlignment:    name = "Horz. alignment"; break;
+        case Style::VerticalAlignment:      name = "Vert. alignment"; break;
+        case Style::MultiRow:               name = "Wrap text"; break;
+        case Style::VerticalText:           name = "Vertical text"; break;
+        case Style::Angle:                  name = "Angle"; break;
+        case Style::Indentation:            name = "Indentation"; break;
+        case Style::Prefix:                 name = "Prefix"; break;
+        case Style::Postfix:                name = "Postfix"; break;
+        case Style::Precision:              name = "Precision"; break;
+        case Style::FormatTypeKey:          name = "Format type"; break;
+        case Style::FloatFormatKey:         name = "Float format"; break;
+        case Style::FloatColorKey:          name = "Float color"; break;
+        case Style::CurrencyFormat:         name = "Currency"; break;
+        case Style::CustomFormat:           name = "Custom format"; break;
+        case Style::BackgroundBrush:        name = "Background brush"; break;
+        case Style::BackgroundColor:        name = "Background color"; break;
+        case Style::FontColor:              name = "Font color"; break;
+        case Style::FontFamily:             name = "Font family"; break;
+        case Style::FontSize:               name = "Font size"; break;
+        case Style::FontBold:               name = "Font bold"; break;
+        case Style::FontItalic:             name = "Font italic"; break;
+        case Style::FontStrike:             name = "Font strikeout"; break;
+        case Style::FontUnderline:          name = "Font underline"; break;
+        case Style::DontPrintText:          name = "Dont print text"; break;
+        case Style::NotProtected:           name = "Not protected"; break;
+        case Style::HideAll:                name = "Hide all"; break;
+        case Style::HideFormula:            name = "Hide formula"; break;
+    }
+    return name;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2121,6 +2176,7 @@ void Style::setPostfix( QString const & postfix )
 
 void Style::setCurrency( Currency const & currency )
 {
+#warning FIXME
 //    insertSubStyle( CurrencyFormat, currency );
 }
 

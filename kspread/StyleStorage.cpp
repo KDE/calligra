@@ -346,9 +346,9 @@ void StyleStorage::garbageCollection()
              subStyle->type() == Style::DefaultStyleKey ||
              subStyle->type() == Style::NamedStyleKey )
         {
-            kDebug(36006) << "StyleStorage: removing " << currentPair.second << " at " << currentPair.first << endl;
+            kDebug(36006) << "StyleStorage: removing " << currentPair.second->debugData() << " at " << currentPair.first << endl;
             d->tree.remove( currentPair.first, currentPair.second );
-            kDebug(36006) << "StyleStorage: usage of " << currentPair.second << " is " << currentPair.second->ref << endl;
+            kDebug(36006) << "StyleStorage: usage of " << currentPair.second->debugData() << " is " << currentPair.second->ref << endl;
             // FIXME Stefan: The usage of substyles used once should be
             //               two (?) here, not more. Why is this not the case?
             //               The shared pointers are used by:
