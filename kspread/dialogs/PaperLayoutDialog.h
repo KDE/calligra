@@ -47,7 +47,7 @@ public:
   PaperLayout( QWidget* parent, const char* name,
                       const KoPageLayout& layout,
                       const KoHeadFoot& headfoot,
-                      int tabs, KoUnit::Unit unit,
+                      int tabs, KoUnit unit,
                       Sheet * sheet, View *view);
 
   bool eventFilter( QObject* obj, QEvent* ev );

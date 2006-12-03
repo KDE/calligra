@@ -60,7 +60,7 @@ public slots:
     void reorganize();
 
 protected slots:
-    void unitChanged( KoUnit::Unit );
+    void unitChanged( KoUnit );
 
 protected:
     friend class KWView;

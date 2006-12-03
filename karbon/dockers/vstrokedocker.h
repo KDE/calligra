@@ -49,7 +49,7 @@ public:
 
 public slots:
 	virtual void setStroke( const KoShapeBorderModel * );
-	virtual void setUnit( KoUnit::Unit unit );
+	virtual void setUnit( KoUnit unit );
 
 private:
 	QButtonGroup *m_capGroup;

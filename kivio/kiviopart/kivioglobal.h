@@ -48,7 +48,7 @@ namespace Kivio
   /**
    * Convert from the old TkUnit to KoUnit
    */
-  KoUnit::Unit convToKoUnit(int tkUnit);
+  KoUnit convToKoUnit(int tkUnit);
   /**
    * Return an approperiate string for the orientation
    */

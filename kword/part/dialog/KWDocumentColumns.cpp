@@ -31,7 +31,7 @@
 #include "KWDocumentColumns.h"
 
 KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns, 
-    KoUnit::Unit unit, bool enableUnitChooser, const KoPageLayout &layout)
+    KoUnit unit, bool enableUnitChooser, const KoPageLayout &layout)
     : QWidget(parent), m_columns(columns), m_unit(unit), m_layout(layout)
 {
     setupUi(this);
@@ -41,7 +41,7 @@ KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns,
 
     // -------------- unit ----------------------
     unitCombo->addItems(KoUnit::listOfUnitName());
-    unitCombo->setCurrentIndex(unit);
+    unitCombo->setCurrentIndex(unit.indexInList());
 
     // Display layout settings in GUI.
     setGuiValues();
@@ -80,7 +80,7 @@ void KWDocumentColumns::spacingChanged(double spacing) {
     emit propertyChange(m_columns);
 }
 
-void KWDocumentColumns::setUnit(KoUnit::Unit unit) {
+void KWDocumentColumns::setUnit(KoUnit unit) {
     m_unit = unit;
     spacingUSB->setUnit(m_unit);
     double dStep = KoUnit::fromUserValue(0.2, unit);
@@ -88,7 +88,7 @@ void KWDocumentColumns::setUnit(KoUnit::Unit unit) {
 }
 
 void KWDocumentColumns::setUnitInt(int unit) {
-    setUnit((KoUnit::Unit)unit);
+    setUnit(KoUnit((KoUnit::Unit)unit));
 }
 
 bool KWDocumentColumns::queryClose() {

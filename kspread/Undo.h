@@ -296,8 +296,8 @@ protected:
     KoPageLayout m_plRedo;
     KoHeadFoot m_hf;
     KoHeadFoot m_hfRedo;
-    KoUnit::Unit m_unit;
-    KoUnit::Unit m_unitRedo;
+    KoUnit m_unit;
+    KoUnit m_unitRedo;
     bool m_printGrid;
     bool m_printGridRedo;
     bool m_printCommentIndicator;

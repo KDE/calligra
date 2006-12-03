@@ -216,7 +216,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, char* name )
     m_view = view;
     m_config = KarbonFactory::instance()->config();
 
-    KoUnit::Unit unit = view->part()->unit();
+    KoUnit unit = view->part()->unit();
 
     QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Misc" ), this );
 
@@ -249,7 +249,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, char* name )
     m_unit->addItems( KoUnit::listOfUnitName() );
     grid->addWidget( m_unit, 1, 1 );
     m_oldUnit = KoUnit::unit( unitType );
-    m_unit->setCurrentIndex( m_oldUnit );
+    m_unit->setCurrentIndex( m_oldUnit.indexInList() );
 
     grid->setRowStretch( 2, 1 );
 
@@ -264,10 +264,10 @@ void VConfigMiscPage::apply()
 
     m_config->setGroup( "Misc" );
 
-    if( m_oldUnit != m_unit->currentIndex() )
+    if( m_oldUnit.indexInList() != m_unit->currentIndex() )
     {
-        m_oldUnit = m_unit->currentIndex();
-        part->setUnit( static_cast<KoUnit::Unit>( m_oldUnit ) );
+        m_oldUnit = KoUnit((KoUnit::Unit)m_unit->currentIndex());
+        part->setUnit( static_cast<KoUnit>( m_oldUnit ) );
         part->document().setUnit(part->unit());
         m_config->writeEntry( "Units", KoUnit::unitName( part->unit() ) );
     }
@@ -295,7 +295,7 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 	m_config = KarbonFactory::instance()->config();
 
 	m_view = view;
-	KoUnit::Unit unit = view->part()->document().unit();
+	KoUnit unit = view->part()->document().unit();
 	KarbonGridData &gd = view->part()->document().grid();
 	double pgw = view->part()->document().width();
 	double pgh = view->part()->document().height();
@@ -370,7 +370,7 @@ void VConfigGridPage::setMaxVertSnap( double v )
 
 void VConfigGridPage::slotUnitChanged( int u )
 {
-	KoUnit::Unit unit = static_cast<KoUnit::Unit>( u );
+	KoUnit unit = KoUnit((KoUnit::Unit) u );
 	m_snapHorizUSpin->setUnit( unit );
 	m_snapVertUSpin->setUnit( unit );
 	m_spaceHorizUSpin->setUnit( unit );

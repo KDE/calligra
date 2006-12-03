@@ -34,7 +34,7 @@
 
 
 KPrTextProperty::KPrTextProperty( QWidget *parent, const char *name, const MarginsStruct &marginsStruct,
-                            const KoUnit::Unit unit, PropValue protectContent )
+                            const KoUnit unit, PropValue protectContent )
 : QWidget( parent, name )
 , m_unit( unit )
 , m_protectContent( protectContent )

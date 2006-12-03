@@ -45,7 +45,7 @@ VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart *pa
 	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	new QLabel( i18n( "Width:" ), group );
 	
-	KoUnit::Unit unit = KoUnit::U_CM;
+	KoUnit unit = KoUnit(KoUnit::Centimeter);
 	m_width = new KoUnitDoubleSpinBox( group, 0.0, KoUnit::fromUserValue( 1000.0, unit ), KoUnit::fromUserValue( 0.5, unit ), KoUnit::fromUserValue( 10.0, unit ), unit );
 
 	new QLabel( i18n( "Height (%1):", KoUnit::unitName( m_part->unit() )), group );

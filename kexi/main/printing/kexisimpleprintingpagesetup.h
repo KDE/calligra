@@ -104,7 +104,7 @@ class KexiSimplePrintingPageSetup : public KexiViewBase
 
 		KexiSimplePrintingSettings m_settings;
 //		KexiSimplePrintingEngine *m_engine;
-		KoUnit::Unit m_unit;
+		KoUnit m_unit;
 		KexiSimplePrintingPageSetupBase *m_contents;
 		KoPageLayoutSize *m_pageLayoutWidget;
 		KexiPart::Item *m_item;

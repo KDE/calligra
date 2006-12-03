@@ -180,7 +180,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	unsigned int max = part()->maxRecentFiles();
 	setNumberOfRecentFiles( max );
 
-        connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( setUnit( KoUnit::Unit ) ) );
+        connect( p, SIGNAL( unitChanged( KoUnit ) ), this, SLOT( setUnit( KoUnit ) ) );
 
 	// layout:
 	QGridLayout *layout = new QGridLayout();
@@ -189,11 +189,11 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	// widgets:
 	m_horizRuler = new VRuler( Qt::Horizontal, this );
 	m_horizRuler->setUnit(p->unit());
-	connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), m_horizRuler, SLOT( setUnit( KoUnit::Unit ) ) );
+	connect( p, SIGNAL( unitChanged( KoUnit ) ), m_horizRuler, SLOT( setUnit( KoUnit ) ) );
 
 	m_vertRuler = new VRuler( Qt::Vertical, this );
 	m_vertRuler->setUnit(p->unit());
-	connect( p, SIGNAL( unitChanged( KoUnit::Unit ) ), m_vertRuler, SLOT( setUnit( KoUnit::Unit ) ) );
+	connect( p, SIGNAL( unitChanged( KoUnit ) ), m_vertRuler, SLOT( setUnit( KoUnit ) ) );
 
 	m_canvas = new KarbonCanvas( p );
 	m_canvas->setCommandHistory( p->commandHistory() );
@@ -1283,7 +1283,7 @@ KarbonView::initActions()
 	//m_lineStyleAction = new KoLineStyleAction(i18n("Line Style"), "linestyle", this, SLOT(setLineStyle(int)), actionCollection(), "setLineStyle");
 
 	// line width
-	m_setLineWidth = new KoUnitDoubleSpinComboBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
+	m_setLineWidth = new KoUnitDoubleSpinComboBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit(KoUnit::Point), 1 );
 	/* TODO: port
 new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
 */
@@ -1512,7 +1512,7 @@ KarbonView::pageLayout()
 
 	KoHeadFoot hf;
 	KoPageLayout layout = part()->pageLayout();
-	KoUnit::Unit unit = part()->unit();
+	KoUnit unit = part()->unit();
 	if( KoPageLayoutDia::pageLayout( layout, hf, FORMAT_AND_BORDERS | DISABLE_UNIT, unit ) )
 	{
 		part()->setPageLayout( layout, unit );
@@ -1693,9 +1693,9 @@ KarbonView::setViewportRect( const QRectF &rect )
 }
 
 void
-KarbonView::setUnit( KoUnit::Unit /*_unit*/ )
+KarbonView::setUnit( KoUnit /*_unit*/ )
 {
-	debugView("KarbonView::setUnit(KoUnit::Unit)");
+	debugView("KarbonView::setUnit(KoUnit)");
 }
 
 void KarbonView::createDocumentTabDock()
@@ -1705,7 +1705,7 @@ void KarbonView::createDocumentTabDock()
 	m_DocumentTab = new VDocumentTab(this, this);
 	m_DocumentTab->setWindowTitle(i18n("Document"));
     createDock(i18n("Document"), m_DocumentTab);
-	connect( m_part, SIGNAL( unitChanged( KoUnit::Unit ) ), m_DocumentTab, SLOT( updateDocumentInfo() ) );
+	connect( m_part, SIGNAL( unitChanged( KoUnit ) ), m_DocumentTab, SLOT( updateDocumentInfo() ) );
 }
 
 void KarbonView::createLayersTabDock()
@@ -1723,7 +1723,7 @@ void KarbonView::createStrokeDock()
 
 	VStrokeDockerFactory strokeFactory;
 	m_strokeDocker = qobject_cast<VStrokeDocker*>(createDockWidget(&strokeFactory));
-	connect( part(), SIGNAL( unitChanged( KoUnit::Unit ) ), m_strokeDocker, SLOT( setUnit( KoUnit::Unit ) ) );
+	connect( part(), SIGNAL( unitChanged( KoUnit ) ), m_strokeDocker, SLOT( setUnit( KoUnit ) ) );
 }
 
 void KarbonView::createColorDock()
@@ -1744,7 +1744,7 @@ void KarbonView::createTransformDock()
 	m_TransformDocker->setWindowTitle(i18n("Transform"));
     createDock(i18n("Transform"), m_TransformDocker);
 	connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
-	connect( part(), SIGNAL( unitChanged( KoUnit::Unit ) ), m_TransformDocker, SLOT( setUnit( KoUnit::Unit ) ) );
+	connect( part(), SIGNAL( unitChanged( KoUnit ) ), m_TransformDocker, SLOT( setUnit( KoUnit ) ) );
 }
 
 void KarbonView::createResourceDock()

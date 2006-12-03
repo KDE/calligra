@@ -325,7 +325,7 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWi
 
 	// settings
 //! @todo default?
-	m_unit = KLocale::Metric == KGlobal::locale()->measureSystem() ? KoUnit::U_CM : KoUnit::U_INCH;
+	m_unit = KLocale::Metric == KGlobal::locale()->measureSystem() ? KoUnit::Centimeter : KoUnit::Inch;
 
 	// GUI
 	Q3VBoxLayout *lyr = new Q3VBoxLayout(this);

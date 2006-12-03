@@ -705,7 +705,7 @@ void miscParameters::apply()
     double val = valIndent->value();
     if( val != m_pView->doc()->indentValue() )
     {
-        KoUnit::Unit oldUnit = m_pView->doc()->unit();
+        KoUnit oldUnit = m_pView->doc()->unit();
         m_pView->doc()->setUnit(indentUnit);
         m_pView->doc()->setIndentValue( val );
         m_pView->doc()->setUnit(oldUnit);
@@ -870,7 +870,7 @@ void configureLayoutPage::initCombo()
         unit=config->readEntry( "Default unit page" ,0);
     }
 
-    defaultUnit->setCurrentIndex(m_pView->doc()->unit());
+    defaultUnit->setCurrentIndex(m_pView->doc()->unit().indexInList());
     defaultSizePage->setCurrentIndex(paper);
     defaultOrientationPage->setCurrentIndex(orientation);
 }
@@ -897,7 +897,7 @@ void configureLayoutPage::apply()
   {
      unsigned int unitPage = defaultUnit->currentIndex();
      config->writeEntry( "Default unit page", unitPage );
-     m_pView->doc()->setUnit( (KoUnit::Unit)unitPage );
+     m_pView->doc()->setUnit( KoUnit((KoUnit::Unit)unitPage) );
   }
   m_pView->slotUpdateView( m_pView->activeSheet() );
 }

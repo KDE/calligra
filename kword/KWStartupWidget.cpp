@@ -38,11 +38,11 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     setFocusProxy(m_createButton);
 
     Q3VBoxLayout *lay = new Q3VBoxLayout(m_sizeTab, KDialog::marginHint());
-    m_sizeWidget = new KoPageLayoutSize(m_sizeTab, m_layout, KoUnit::U_MM, m_columns , true, true);
+    m_sizeWidget = new KoPageLayoutSize(m_sizeTab, m_layout, KoUnit::Millimeter, m_columns , true, true);
     lay->addWidget(m_sizeWidget);
 
     lay = new Q3VBoxLayout(m_columnsTab, KDialog::marginHint());
-    m_columnsWidget = new KoPageLayoutColumns(m_columnsTab, m_columns, KoUnit::U_MM, m_layout);
+    m_columnsWidget = new KoPageLayoutColumns(m_columnsTab, m_columns, KoUnit::Millimeter, m_layout);
     lay->addWidget(m_columnsWidget);
 
     connect (m_columnsWidget, SIGNAL( propertyChange(KoColumns&)),

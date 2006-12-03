@@ -55,7 +55,7 @@ VRuler::VRuler(Qt::Orientation o, QWidget *parent, const char *name) : super(par
     setLineWidth(1);
     setMidLineWidth(0);
     m_orientation = o;
-    m_unit = KoUnit::U_PT;
+    m_unit = KoUnit::Point;
     m_zoom = 1.0;
     m_firstVisible = 0;
     m_pixmapBuffer = 0;
@@ -112,12 +112,12 @@ void VRuler::recalculateSize()
     updatePointer(m_currentPosition, m_currentPosition);
 }
 
-KoUnit::Unit VRuler::unit() const
+KoUnit VRuler::unit() const
 {
     return  m_unit;
 }
 
-void VRuler::setUnit(KoUnit::Unit u)
+void VRuler::setUnit(KoUnit u)
 {
     m_unit = u;
     drawRuler();
@@ -202,20 +202,20 @@ void VRuler::drawRuler()
     p.setBackground(palette().window());
     p.eraseRect(0, 0, m_pixmapBuffer -> width(), m_pixmapBuffer -> height());
 
-    switch (m_unit) {
-        case KoUnit::U_PT:
-        case KoUnit::U_MM:
-        case KoUnit::U_DD:
-        case KoUnit::U_CC:
+    switch (m_unit.indexInList()) {
+        case KoUnit::Point:
+        case KoUnit::Millimeter:
+        case KoUnit::Didot:
+        case KoUnit::Cicero:
             st1 = 1;
             st2 = 5;
             st3 = 10;
             st4 = 25;
             stt = 100;
             break;
-        case KoUnit::U_CM:
-        case KoUnit::U_PI:
-        case KoUnit::U_INCH:
+        case KoUnit::Centimeter:
+        case KoUnit::Pica:
+        case KoUnit::Inch:
             st1 = 1;
             st2 = 2;
             st3 = 5;

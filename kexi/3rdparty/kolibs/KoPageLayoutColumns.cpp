@@ -27,7 +27,7 @@
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 
-KoPageLayoutColumns::KoPageLayoutColumns(QWidget *parent, const KoColumns& columns, KoUnit::Unit unit, const KoPageLayout& layout)
+KoPageLayoutColumns::KoPageLayoutColumns(QWidget *parent, const KoColumns& columns, KoUnit unit, const KoPageLayout& layout)
     : KoPageLayoutColumnsBase(parent) {
     m_columns = columns;
     Q3HBoxLayout *lay = new Q3HBoxLayout(previewPane);

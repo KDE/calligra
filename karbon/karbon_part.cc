@@ -101,7 +101,7 @@ KarbonPart::~KarbonPart()
 }
 
 void
-KarbonPart::setPageLayout( KoPageLayout& layout, KoUnit::Unit _unit )
+KarbonPart::setPageLayout( KoPageLayout& layout, KoUnit _unit )
 {
 	m_pageLayout = layout;
 	m_doc.setUnit( _unit );
@@ -618,7 +618,7 @@ KarbonPart::addShell( KoMainWindow *shell )
 
 
 void
-KarbonPart::slotUnitChanged( KoUnit::Unit /*unit*/ )
+KarbonPart::slotUnitChanged( KoUnit /*unit*/ )
 {
 #if 0
 	// VDocument has its own storage of the unit...

@@ -52,7 +52,7 @@ KivioStencilGeometryPanel::KivioStencilGeometryPanel(QWidget* parent)
 //   grid->addWidget(rotationLbl, 4, 0);
 //   grid->addWidget(m_rotationSBox, 4, 1);
 
-  m_unit = KoUnit::U_PT;
+  m_unit = KoUnit::Point;
   m_emitSignals = true;
 }
 
@@ -60,7 +60,7 @@ KivioStencilGeometryPanel::~KivioStencilGeometryPanel()
 {
 }
 
-void KivioStencilGeometryPanel::setUnit( KoUnit::Unit m )
+void KivioStencilGeometryPanel::setUnit( KoUnit m )
 {
   bool oldEmitSignals = m_emitSignals;
   m_emitSignals = false;

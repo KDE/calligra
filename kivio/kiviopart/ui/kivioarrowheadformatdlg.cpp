@@ -39,7 +39,7 @@
 KivioArrowHeadFormatDlg::KivioArrowHeadFormatDlg(KivioView* parent, const char* name)
   : KDialogBase(parent, name, true, i18n("Arrowhead Format"), Ok|Cancel|Default, Ok)
 {
-  m_unit = KoUnit::U_PT;
+  m_unit = KoUnit::Point;
   init();
 }
 
@@ -158,7 +158,7 @@ double KivioArrowHeadFormatDlg::endAHHeight()
   return m_endAHHeightUSBox->value();
 }
 
-void KivioArrowHeadFormatDlg::setUnit(KoUnit::Unit u)
+void KivioArrowHeadFormatDlg::setUnit(KoUnit u)
 {
   m_unit = u;
   m_startAHWidthUSBox->setUnit(u);

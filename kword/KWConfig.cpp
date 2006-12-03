@@ -151,7 +151,7 @@ KWConfig::KWConfig( KWView* parent )
 
 void KWConfig::unitChanged( int u )
 {
-    KoUnit::Unit unit = static_cast<KoUnit::Unit>(u);
+    KoUnit unit = static_cast<KoUnit>(u);
     //m_spellPage->setUnit( unit );
     m_interfacePage->setUnit( unit );
     m_miscPage->setUnit( unit );
@@ -284,7 +284,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, KVBox *box, char *
     bool oldShowScrollBar = true;
     oldNbRecentFiles=10;
     int nbPagePerRow=4;
-    KoUnit::Unit unit = m_pView->kWordDocument()->unit();
+    KoUnit unit = m_pView->kWordDocument()->unit();
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
@@ -471,14 +471,14 @@ void ConfigureInterfacePage::apply()
     }
 
     config->setGroup( "Misc" );
-    KoUnit::Unit unit = static_cast<KoUnit::Unit>( m_unitCombo->currentItem() );
+    KoUnit unit = static_cast<KoUnit>( m_unitCombo->currentItem() );
     // It's already been set in the document, see unitChanged
     config->writeEntry( "Units", KoUnit::unitName( unit ) );
     if ( updateView )
         doc->repaintAllViews(false);
 }
 
-void ConfigureInterfacePage::setUnit( KoUnit::Unit unit )
+void ConfigureInterfacePage::setUnit( KoUnit unit )
 {
     m_unitCombo->blockSignals( true );
     m_unitCombo->setCurrentItem( unit );
@@ -494,7 +494,7 @@ void ConfigureInterfacePage::setUnit( KoUnit::Unit unit )
 void ConfigureInterfacePage::slotDefault()
 {
     KWDocument * doc = m_pView->kWordDocument();
-    m_unitCombo->setCurrentItem( KoUnit::U_CM );
+    m_unitCombo->setCurrentItem( KoUnit::Centimeter );
     emit unitChanged( m_unitCombo->currentItem() );
     gridX->setValue( KoUnit::toUserValue( MM_TO_POINT( 5.0 ),doc->unit() ) );
     gridY->setValue( KoUnit::toUserValue( MM_TO_POINT( 5.0 ),doc->unit() ) );
@@ -703,7 +703,7 @@ void ConfigureMiscPage::slotDefault()
    m_displayFieldCode->setChecked( false );
 }
 
-void ConfigureMiscPage::setUnit( KoUnit::Unit )
+void ConfigureMiscPage::setUnit( KoUnit )
 {
 }
 
@@ -720,7 +720,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char
     gbDocumentDefaults->setInsideSpacing( KDialog::spacingHint() );
 
     double ptColumnSpacing=3;
-    KoUnit::Unit unit = doc->unit();
+    KoUnit unit = doc->unit();
     if( config->hasGroup("Document defaults") )
     {
         config->setGroup( "Document defaults" );
@@ -960,7 +960,7 @@ void ConfigureDefaultDocPage::selectNewDefaultFont() {
     }
 }
 
-void ConfigureDefaultDocPage::setUnit( KoUnit::Unit unit )
+void ConfigureDefaultDocPage::setUnit( KoUnit unit )
 {
     m_columnSpacing->setUnit( unit );
     m_tabStopWidth->setUnit( unit );

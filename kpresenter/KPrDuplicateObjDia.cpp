@@ -42,7 +42,7 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPrDocument * _doc, const
     showButtonSeparator(true);
 
     m_doc=_doc;
-    KoUnit::Unit unit = m_doc->unit();
+    KoUnit unit = m_doc->unit();
 
     KoRect pageRect = m_doc->masterPage()->getPageRect();
 

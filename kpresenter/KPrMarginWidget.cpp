@@ -33,7 +33,7 @@
 
 #include <KoUnitWidgets.h>//for KoUnitDoubleSpinBox
 
-KPrMarginWidget::KPrMarginWidget( QWidget *parent, const char *name, const KoUnit::Unit unit )
+KPrMarginWidget::KPrMarginWidget( QWidget *parent, const char *name, const KoUnit unit )
 : QWidget( parent, name )
 , m_unit( unit )
 , m_changed( false )

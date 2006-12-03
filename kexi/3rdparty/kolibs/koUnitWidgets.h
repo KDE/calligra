@@ -62,13 +62,13 @@ private:
 class KOFFICEUI_EXPORT KoUnitDoubleBase
 {
 public:
-    KoUnitDoubleBase( KoUnit::Unit unit, unsigned int precision ) : m_unit( unit ), m_precision( precision ) {}
+    KoUnitDoubleBase( KoUnit unit, unsigned int precision ) : m_unit( unit ), m_precision( precision ) {}
     virtual ~KoUnitDoubleBase() {}
 
     virtual void changeValue( double ) = 0;
-    virtual void setUnit( KoUnit::Unit = KoUnit::U_PT ) = 0;
+    virtual void setUnit( KoUnit = KoUnit::Point ) = 0;
 
-    void setValueInUnit( double value, KoUnit::Unit unit )
+    void setValueInUnit( double value, KoUnit unit )
     {
         changeValue( KoUnit::ptToUnit( KoUnit::fromUserValue( value, unit ), m_unit ) );
     }
@@ -93,7 +93,7 @@ protected:
 
 protected:
     KoUnitDoubleValidator *m_validator;
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
     unsigned int m_precision;
 };
 
@@ -113,10 +113,10 @@ public:
     KoUnitDoubleSpinBox( QWidget *parent = 0L, const char *name = 0L );
     // lower, upper, step and value are in pt
     KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper, double step, double value = 0.0,
-                         KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
+                         KoUnit unit = KoUnit::Point, unsigned int precision = 2, const char *name = 0 );
     // added so the class can be used in .ui files(by Tymoteusz Majewski, maju7@o2.pl)
     virtual void changeValue( double );
-    virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
+    virtual void setUnit( KoUnit = KoUnit::Point );
 
     /// @return the current value, converted in points
     double value( void ) const;
@@ -161,10 +161,10 @@ class KOFFICEUI_EXPORT KoUnitDoubleLineEdit : public KLineEdit, public KoUnitDou
     Q_OBJECT
 public:
     KoUnitDoubleLineEdit( QWidget *parent = 0L, const char *name = 0L );
-    KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
+    KoUnitDoubleLineEdit( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit unit = KoUnit::Point, unsigned int precision = 2, const char *name = 0 );
 
     virtual void changeValue( double );
-    virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
+    virtual void setUnit( KoUnit = KoUnit::Point );
 
     /// @return the current value, converted in points
     double value( void ) const;
@@ -189,11 +189,11 @@ class KOFFICEUI_EXPORT KoUnitDoubleComboBox : public KComboBox, public KoUnitDou
     Q_OBJECT
 public:
     KoUnitDoubleComboBox( QWidget *parent = 0L, const char *name = 0L );
-    KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
+    KoUnitDoubleComboBox( QWidget *parent, double lower, double upper, double value = 0.0, KoUnit unit = KoUnit::Point, unsigned int precision = 2, const char *name = 0 );
 
     virtual void changeValue( double );
     void updateValue( double );
-    virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
+    virtual void setUnit( KoUnit = KoUnit::Point );
 
     /// @return the current value, converted in points
     double value( void ) const;
@@ -225,7 +225,7 @@ class KOFFICEUI_EXPORT KoUnitDoubleSpinComboBox : public QWidget
     Q_OBJECT
 public:
     KoUnitDoubleSpinComboBox( QWidget *parent = 0L, const char *name = 0L );
-    KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value = 0.0, KoUnit::Unit unit = KoUnit::U_PT, unsigned int precision = 2, const char *name = 0 );
+    KoUnitDoubleSpinComboBox( QWidget *parent, double lower, double upper, double step, double value = 0.0, KoUnit unit = KoUnit::Point, unsigned int precision = 2, const char *name = 0 );
 
     void insertItem( double, int index = -1 );
     void updateValue( double );

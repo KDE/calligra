@@ -67,7 +67,7 @@ public:
     ConfigureInterfacePage( KWView *view, KVBox *box, char *name = 0 );
     void apply();
     void slotDefault();
-    void setUnit( KoUnit::Unit unit );
+    void setUnit( KoUnit unit );
 
 signals:
     // For KWConfig
@@ -91,7 +91,7 @@ public:
     ConfigureMiscPage( KWView *view, KVBox *box, char *name = 0 );
     KCommand* apply();
     void slotDefault();
-    void setUnit( KoUnit::Unit unit );
+    void setUnit( KoUnit unit );
 private:
     KWView* m_pView;
     KConfig* config;
@@ -111,7 +111,7 @@ public:
     ~ConfigureDefaultDocPage();
     KCommand* apply();
     void slotDefault();
-    void setUnit( KoUnit::Unit unit );
+    void setUnit( KoUnit unit );
 public slots:
     void selectNewDefaultFont();
 private:

@@ -375,7 +375,7 @@ void Doc::initConfig()
     if( config->hasGroup("KSpread Page Layout" ))
     {
       config->setGroup( "KSpread Page Layout" );
-      setUnit( (KoUnit::Unit)config->readEntry( "Default unit page" ,0));
+      setUnit( KoUnit((KoUnit::Unit)config->readEntry( "Default unit page" ,0)));
     }
     if( config->hasGroup("Parameters" ))
     {

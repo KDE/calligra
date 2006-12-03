@@ -37,7 +37,7 @@
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
 
-KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,const KoColumns& columns,  bool unitChooser, bool enableBorders)
+KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, KoUnit unit,const KoColumns& columns,  bool unitChooser, bool enableBorders)
     : QWidget(parent) {
     m_layout = layout;
     m_unit = unit;
@@ -207,7 +207,7 @@ void KoPageLayoutSize::setValues() {
     pgPreview->setPageLayout( m_layout );
 }
 
-void KoPageLayoutSize::setUnit( KoUnit::Unit unit ) {
+void KoPageLayoutSize::setUnit( KoUnit unit ) {
     m_unit = unit;
 
     //setUnit always befor changeValue
@@ -240,7 +240,7 @@ void KoPageLayoutSize::setUnit( KoUnit::Unit unit ) {
 }
 
 void KoPageLayoutSize::setUnitInt( int unit ) {
-    setUnit((KoUnit::Unit)unit);
+    setUnit((KoUnit)unit);
 }
 
 void KoPageLayoutSize::formatChanged( int format ) {

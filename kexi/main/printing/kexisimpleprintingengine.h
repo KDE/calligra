@@ -47,7 +47,7 @@ class KexiSimplePrintingSettings
 		void save();
 
 		KoPageLayout pageLayout;
-		KoUnit::Unit unit;
+		KoUnit unit;
 		QFont pageTitleFont;
 		bool addPageNumbers : 1;
 		bool addDateAndTime : 1;

@@ -481,7 +481,7 @@ public slots:
 
     void displayObjectFromMasterPage();
     void displayBackground();
-    void slotUnitChanged(KoUnit::Unit);
+    void slotUnitChanged(KoUnit);
     void documentModified( bool );
 
 public:
@@ -741,7 +741,7 @@ protected slots:
 
     void newPageLayout( const KoPageLayout &_layout );
     void openPageLayoutDia() { extraLayout(); }
-    void unitChanged( KoUnit::Unit );
+    void unitChanged( KoUnit );
 
     void doAutomaticScreenPres();
 

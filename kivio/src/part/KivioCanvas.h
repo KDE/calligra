@@ -99,7 +99,7 @@ class KivioCanvas : public QWidget, public KoCanvasBase
         return m_toolProxy;
     }
 
-    KoUnit::Unit unit() { return m_view->document()->unit(); }
+    KoUnit unit() { return m_view->document()->unit(); }
 
   public slots:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)

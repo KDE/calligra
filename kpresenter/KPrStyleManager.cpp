@@ -26,7 +26,7 @@
 #include <KoStyleDialog.h>
 #include <KoStyleCollection.h>
 
-KPrStyleManager::KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPrDocument *_doc,
+KPrStyleManager::KPrStyleManager( QWidget *_parent, KoUnit unit,KPrDocument *_doc,
                                   const KoStyleCollection& styleCollection, const QString & activeStyleName)
     : KoStyleDialog(_parent,unit,styleCollection,activeStyleName)
 {

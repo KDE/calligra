@@ -40,7 +40,7 @@ VDocument::VDocument()
 , m_width(0.)
 , m_height(0.)
 , m_selectionMode( VDocument::ActiveLayer )
-, m_unit( KoUnit::U_MM )
+, m_unit( KoUnit::Millimeter )
 , m_saveAsPath(true)
 {
 	m_selection = new VSelection( this );

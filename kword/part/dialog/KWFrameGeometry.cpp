@@ -28,7 +28,7 @@ KWFrameGeometry::KWFrameGeometry(FrameConfigSharedState *state)
 {
     m_state->addUser();
     widget.setupUi(this);
-    KoUnit::Unit unit = m_state->document()->unit();
+    KoUnit unit = m_state->document()->unit();
     widget.left->setUnit(unit);
     widget.left->setMinimum(0.0);
     widget.top->setUnit(unit);

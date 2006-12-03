@@ -254,9 +254,9 @@
       <label></label>
       <whatsthis></whatsthis>
       <!-- kspread_doc.cc:466 -->
-      <!--       setUnit( (KoUnit::Unit)config->readNumEntry( "Default unit page" ,0)); -->
+      <!--       setUnit( (KoUnit)config->readNumEntry( "Default unit page" ,0)); -->
       <!-- kspread_view.cc:2139 -->
-      <!--   d->activeSheet->setPaperUnit((KoUnit::Unit)config->readNumEntry("Default unit page",0)); -->
+      <!--   d->activeSheet->setPaperUnit((KoUnit)config->readNumEntry("Default unit page",0)); -->
       <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:857 -->
       <!--         unit=config->readNumEntry( "Default unit page" ,0); -->
       <!-- /usr/local/src/kde/3.5/koffice/kspread/dialogs/kspread_dlg_preference.cc:886 -->

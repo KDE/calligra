@@ -48,7 +48,7 @@ public:
      * @param enableUnitChooser if true a combobox with the unit-type is shown for the user to change.
      * @param layout the KoPageLayout used to display the page preview.
      */
-    KWDocumentColumns(QWidget *parent, const KoColumns& columns, KoUnit::Unit unit,
+    KWDocumentColumns(QWidget *parent, const KoColumns& columns, KoUnit unit,
         bool enableUnitChooser, const KoPageLayout& layout);
 
     /**
@@ -67,7 +67,7 @@ public slots:
      * Set a new unit for the widget updating the widgets.
      * @param unit the new unit
      */
-    void setUnit(KoUnit::Unit unit);
+    void setUnit(KoUnit unit);
 
 signals:
     /**
@@ -90,7 +90,7 @@ private:
     void setGuiValues();
 
     KoColumns m_columns;
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
     KoPageLayout m_layout;
     KWPagePreview* m_pagePreview;
 };

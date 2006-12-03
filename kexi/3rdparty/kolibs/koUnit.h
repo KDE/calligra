@@ -61,15 +61,15 @@ class KOFFICECORE_EXPORT KoUnit
 public:
     /** Length units supported by KOffice. */
     enum Unit {
-        U_MM = 0,
-        U_PT = 1,
-        U_INCH = 2,
-        U_CM = 3,
-        U_DM = 4,
-        U_PI = 5, // pica
-        U_DD = 6, // didot
-        U_CC = 7, // cicero
-        U_LASTUNIT = U_CC // update when adding a new unit
+        Millimeter = 0,
+        Point = 1,
+        Inch = 2,
+        Centimeter = 3,
+        Decimeter = 4,
+        Pica = 5, // pica
+        Didot = 6, // didot
+        Cicero = 7, // cicero
+        LastUnit = Cicero // update when adding a new unit
         // when adding a new unit, make sure to implement support for it in koRuler too
     };
 

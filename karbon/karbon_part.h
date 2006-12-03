@@ -94,7 +94,7 @@ public:
 	void initConfig();
 	unsigned int maxRecentFiles() const { return m_maxRecentFiles; }
 
-	void setPageLayout( KoPageLayout& layout, KoUnit::Unit _unit );
+	void setPageLayout( KoPageLayout& layout, KoUnit _unit );
 
 	bool mergeNativeFormat( const QString & file );
 
@@ -108,7 +108,7 @@ public slots:
 	void repaintAllViews( const QRectF& );
 	void slotDocumentRestored();
 	void slotCommandExecuted( KCommand * );
-	void slotUnitChanged( KoUnit::Unit unit );
+	void slotUnitChanged( KoUnit unit );
 
 protected:
 	virtual KoView* createViewInstance( QWidget* parent );

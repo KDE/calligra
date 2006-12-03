@@ -40,11 +40,11 @@ class QFont;
 // class GuidesListViewItem : public K3ListViewItem
 // {
 //   public:
-//     GuidesListViewItem(QListView* parent, KivioGuideLineData *gd, KoUnit::Unit u);
+//     GuidesListViewItem(QListView* parent, KivioGuideLineData *gd, KoUnit u);
 //     ~GuidesListViewItem();
 // 
-//     void setUnit(KoUnit::Unit u);
-//     void setPosition(double p, KoUnit::Unit u);
+//     void setUnit(KoUnit u);
+//     void setPosition(double p, KoUnit u);
 //     void setOrientation(Qt::Orientation o);
 //     KivioGuideLineData* guideData() { return m_data; }
 // 

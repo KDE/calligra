@@ -41,7 +41,7 @@ class FileHeader: public XmlParser
 	public:
 		enum TFormat { TF_A3, TF_A4, TF_A5, TF_USLETTER, TF_USLEGAL, TF_SCREEN,
 			TF_CUSTOM, TF_B3, TF_USEXECUTIVE };
-		enum TUnit { TU_MM, TU_CM, TU_PT, TU_INCH };
+		enum TUnit { TMillimeter, TCentimeter, TPoint, TInch };
 		enum TOrient { TO_PORTRAIT, TO_LANDSCAPE };
 		enum TColonne { TC_NONE, TC_1, TC_2, TC_MORE };
 		enum THeadfoot { TH_ALL = 0, TH_XXX = 1, TH_FIRST = 2, TH_EVODD = 3 };

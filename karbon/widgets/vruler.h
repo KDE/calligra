@@ -42,13 +42,13 @@ public:
     virtual ~VRuler();
 
 public:
-    KoUnit::Unit unit() const;
+    KoUnit unit() const;
 
 public slots:
     void setZoom(double zoom);
     void updatePointer(qint32 x, qint32 y);
     void updateVisibleArea(qint32 xpos, qint32 ypos);
-    void setUnit(KoUnit::Unit u);
+    void setUnit(KoUnit u);
     void hide();
     void show();
 
@@ -63,7 +63,7 @@ protected:
     void drawNums(QPainter *gc, qint32 x, qint32 y, QString& num, bool orientationHoriz);
 
 private:
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
     Qt::Orientation m_orientation;
     qint32 m_firstVisible;
     qint32 m_currentPosition;

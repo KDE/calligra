@@ -82,7 +82,7 @@ private:
 
 	KIntNumInput* m_undoRedo;
 	int m_oldUndoRedo;
-	int m_oldUnit;
+	KoUnit m_oldUnit;
 	QComboBox *m_unit;
 };
 

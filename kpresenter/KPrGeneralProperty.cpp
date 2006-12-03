@@ -33,7 +33,7 @@
 
 #include <KoGeneralPropertyUi.h>
 
-KPrGeneralProperty::KPrGeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit::Unit unit )
+KPrGeneralProperty::KPrGeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit unit )
 : QWidget( parent, name )
 , m_ratio( 1.0 )
 , m_generalValue( generalValue )

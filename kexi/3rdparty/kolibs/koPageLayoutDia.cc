@@ -134,7 +134,7 @@ void KoPagePreview::drawContents( QPainter *painter )
 KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
                                   const KoPageLayout& layout,
                                   const KoHeadFoot& hf, int tabs,
-                                  KoUnit::Unit unit, bool modal )
+                                  KoUnit unit, bool modal )
     : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
                    KDialogBase::Ok, parent, name, modal)
 {
@@ -161,7 +161,7 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
                   const KoHeadFoot& hf,
                   const KoColumns& columns,
                   const KoKWHeaderFooter& kwhf,
-                  int tabs, KoUnit::Unit unit )
+                  int tabs, KoUnit unit )
     : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
                    KDialogBase::Ok, parent, name, true)
 {
@@ -189,7 +189,7 @@ KoPageLayoutDia::~KoPageLayoutDia()
 }
 
 /*======================= show dialog ============================*/
-bool KoPageLayoutDia::pageLayout( KoPageLayout& layout, KoHeadFoot& hf, int tabs, KoUnit::Unit& unit, QWidget* parent )
+bool KoPageLayoutDia::pageLayout( KoPageLayout& layout, KoHeadFoot& hf, int tabs, KoUnit& unit, QWidget* parent )
 {
     bool res = false;
     KoPageLayoutDia *dlg = new KoPageLayoutDia( parent, "PageLayout", layout, hf, tabs, unit );
@@ -208,7 +208,7 @@ bool KoPageLayoutDia::pageLayout( KoPageLayout& layout, KoHeadFoot& hf, int tabs
 
 /*======================= show dialog ============================*/
 bool KoPageLayoutDia::pageLayout( KoPageLayout& layout, KoHeadFoot& hf, KoColumns& columns,
-                                  KoKWHeaderFooter &_kwhf, int tabs, KoUnit::Unit& unit, QWidget* parent )
+                                  KoKWHeaderFooter &_kwhf, int tabs, KoUnit& unit, QWidget* parent )
 {
     bool res = false;
     KoPageLayoutDia *dlg = new KoPageLayoutDia( parent, "PageLayout", layout, hf, columns, _kwhf, tabs, unit );

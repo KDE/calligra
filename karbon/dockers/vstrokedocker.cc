@@ -72,7 +72,7 @@ VStrokeDocker::VStrokeDocker()
 	QLabel* widthLabel = new QLabel( i18n ( "Width:" ), mainWidget );
 	mainLayout->addWidget( widthLabel, 0, 0 );
 	// set min/max/step and value in points, then set actual unit
-	m_setLineWidth = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 2 );
+	m_setLineWidth = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit(KoUnit::Point), 2 );
 	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 	m_setLineWidth->setUnit( canvasController->canvas()->unit() );
     m_setLineWidth->setToolTip( i18n( "Set line width of actual selection" ) );
@@ -142,7 +142,7 @@ VStrokeDocker::VStrokeDocker()
 	QLabel* miterLabel = new QLabel( i18n ( "Miter limit:" ), mainWidget );
 	mainLayout->addWidget( miterLabel, 3, 0 );
 	// set min/max/step and value in points, then set actual unit
-	m_miterLimit = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 2 );
+	m_miterLimit = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit(KoUnit::Point), 2 );
 	m_miterLimit->setUnit( canvasController->canvas()->unit() );
     m_miterLimit->setToolTip( i18n( "Set miter limit" ) );
 	mainLayout->addWidget( m_miterLimit, 3, 1, 1, 3 );
@@ -237,7 +237,7 @@ void VStrokeDocker::setStroke( const KoShapeBorderModel *border )
 	updateDocker();
 }
 
-void VStrokeDocker::setUnit( KoUnit::Unit unit )
+void VStrokeDocker::setUnit( KoUnit unit )
 {
 	disconnect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) ); 
 	disconnect( m_capGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotCapChanged( int ) ) );

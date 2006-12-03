@@ -43,7 +43,7 @@ public:
     };
 
     KPrTextProperty( QWidget *parent, const char *name, const MarginsStruct &marginsStruct,
-                  const KoUnit::Unit unit, PropValue protectContent );
+                  const KoUnit unit, PropValue protectContent );
     ~KPrTextProperty();
 
     int getTextPropertyChange() const;
@@ -55,7 +55,7 @@ public:
 private:
     KPrMarginWidget *m_margins;
     QCheckBox *m_protectContentCheck;
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
 
     PropValue m_protectContent;
 

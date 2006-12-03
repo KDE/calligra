@@ -44,7 +44,7 @@ VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonView *view, QW
 	Q3GroupBox *group = new Q3GroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
 	new QLabel( i18n( "Radius:" ), group );
-	m_radius = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
+	m_radius = new KoUnitDoubleSpinBox( group, 0.0, 1000.0, 0.5, 50.0, KoUnit(KoUnit::Millimeter) );
 	refreshUnit();
 	new QLabel( i18n( "Edges:" ), group );
 	m_edges = new KIntSpinBox( group );

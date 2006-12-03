@@ -48,7 +48,7 @@ KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool single
     setInstance(KivioFactory::instance(), false);
     setTemplateType("kivio_template");
 
-    setUnit(KGlobal::locale()->measureSystem() == KLocale::Metric ? KoUnit::U_CM : KoUnit::U_INCH);
+    setUnit(KGlobal::locale()->measureSystem() == KLocale::Metric ? KoUnit(KoUnit::Centimeter) : KoUnit(KoUnit::Inch));
 
     m_commandHistory = new KCommandHistory(actionCollection(), true);
     connect(m_commandHistory, SIGNAL(documentRestored()),

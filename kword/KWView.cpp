@@ -228,8 +228,8 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     connect( m_doc, SIGNAL( docStructureChanged(int) ),
              this, SLOT( docStructChanged(int)) );
 
-    connect( m_doc, SIGNAL( unitChanged(KoUnit::Unit) ),
-             this, SLOT( slotUnitChanged(KoUnit::Unit) ) );
+    connect( m_doc, SIGNAL( unitChanged(KoUnit) ),
+             this, SLOT( slotUnitChanged(KoUnit) ) );
 
     connect( m_doc, SIGNAL( sig_refreshMenuCustomVariable()),
              this, SLOT( refreshCustomMenu()));
@@ -1605,7 +1605,7 @@ void KWView::updateFrameStatusBarItem()
     {
         if ( nbFrame == 1 )
         {
-            KoUnit::Unit unit = m_doc->unit();
+            KoUnit unit = m_doc->unit();
             QString unitName = m_doc->unitName();
             KWFrame * frame = frameViewManager()->selectedFrames()[0]->frame();
             QRectF bound = frame->boundingRect();
@@ -3872,8 +3872,8 @@ void KWView::formatPage()
     else
         flags |= DISABLE_BORDERS;
 
-    KoUnit::Unit unit = m_doc->unit();
-    KoUnit::Unit oldUnit = unit;
+    KoUnit unit = m_doc->unit();
+    KoUnit oldUnit = unit;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags, unit, this ) )
     {
@@ -6173,8 +6173,8 @@ void KWView::configureHeaderFooter()
 
     KoHeadFoot hf;
     int flags = KW_HEADER_AND_FOOTER;
-    KoUnit::Unit unit = m_doc->unit();
-    KoUnit::Unit oldUnit = unit;
+    KoUnit unit = m_doc->unit();
+    KoUnit oldUnit = unit;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags, unit ) ) {
         if( oldLayout._hf != kwhf )
@@ -7501,7 +7501,7 @@ KSpell2::Loader::Ptr KWView::loader() const
     return m_loader;
 }
 
-void KWView::slotUnitChanged( KoUnit::Unit unit )
+void KWView::slotUnitChanged( KoUnit unit )
 {
     getGUI()->getHorzRuler()->setUnit( unit );
     getGUI()->getVertRuler()->setUnit( unit );

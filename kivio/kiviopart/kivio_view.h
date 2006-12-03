@@ -257,10 +257,10 @@ class KIVIO_EXPORT KivioView : public KoView
     void addStencilSet( const QString& );
 
     void setMousePos( int mx, int my );
-    void setRulerUnit(KoUnit::Unit);
+    void setRulerUnit(KoUnit);
     void setRulerHOffset(int h);
     void setRulerVOffset(int v);
-    void rulerChangedUnit(KoUnit::Unit u);
+    void rulerChangedUnit(KoUnit u);
 
     void textFormat();
     void stencilFormat();

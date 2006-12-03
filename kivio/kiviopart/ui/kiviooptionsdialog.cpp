@@ -48,7 +48,7 @@
 #include <QLayout>
 #include <qtabwidget.h>
 
-// GuidesListViewItem::GuidesListViewItem(QListView* parent, KivioGuideLineData *gd, KoUnit::Unit u)
+// GuidesListViewItem::GuidesListViewItem(QListView* parent, KivioGuideLineData *gd, KoUnit u)
 // : K3ListViewItem(parent), m_data(gd)
 // {
 //   setPixmap(0, BarIcon(m_data->orientation() == Qt::Vertical ?
@@ -63,14 +63,14 @@
 //   delete m_data;
 // }
 // 
-// void GuidesListViewItem::setUnit(KoUnit::Unit u)
+// void GuidesListViewItem::setUnit(KoUnit u)
 // {
 //   QString s = KGlobal::_locale->formatNumber(KoUnit::toUserValue(m_data->position(), u), 2);
 //   s += " " + KoUnit::unitName(u);
 //   setText(1, s);
 // }
 // 
-// void GuidesListViewItem::setPosition(double p, KoUnit::Unit u)
+// void GuidesListViewItem::setPosition(double p, KoUnit u)
 // {
 //   m_data->setPosition(KoUnit::fromUserValue(p, u));
 //   QString s = KGlobal::_locale->formatNumber(p, 2);
@@ -102,7 +102,7 @@ void KivioOptionsDialog::initPage()
   m_pageIndex = pageIndex(page);
 
   KivioView* view = static_cast<KivioView*>(parent());
-  KoUnit::Unit unit = KoUnit::unit(Kivio::Config::unit());
+  KoUnit unit = KoUnit::unit(Kivio::Config::unit());
   m_layout = Kivio::Config::defaultPageLayout();
   m_font = Kivio::Config::font();
 
@@ -158,7 +158,7 @@ void KivioOptionsDialog::initGrid()
   QFrame* page = addPage(i18n("Grid"), i18n("Grid Settings"), BarIcon( "grid", K3Icon::SizeMedium ));
   m_gridIndex = pageIndex(page);
 
-  KoUnit::Unit unit = static_cast<KivioView*>(parent())->doc()->unit();
+  KoUnit unit = static_cast<KivioView*>(parent())->doc()->unit();
   KivioGridData d = static_cast<KivioView*>(parent())->doc()->grid();
   double pgw = m_layout.ptWidth;
   double pgh = m_layout.ptHeight;
@@ -211,7 +211,7 @@ void KivioOptionsDialog::initGrid()
 void KivioOptionsDialog::applyPage()
 {
   KivioView* view = static_cast<KivioView*>(parent());
-  view->doc()->setUnit(static_cast<KoUnit::Unit>(m_unitCombo->currentItem()));
+  view->doc()->setUnit(static_cast<KoUnit>(m_unitCombo->currentItem()));
   Kivio::Config::setUnit(KoUnit::unitName(view->doc()->unit()));
   Kivio::Config::setDefaultPageLayout(m_layout);
   Kivio::Config::setFont(m_font);
@@ -259,7 +259,7 @@ void KivioOptionsDialog::defaultGrid()
 
 void KivioOptionsDialog::setLayoutText(const KoPageLayout& l)
 {
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
+  KoUnit unit = static_cast<KoUnit>(m_unitCombo->currentItem());
   QString txt = i18n("Format: %1, Width: %2 %4, Height: %3 %5",
     KoPageFormat::formatString(l.format), KoUnit::toUserValue(l.ptWidth, unit)
     , KoUnit::toUserValue(l.ptHeight, unit), KoUnit::unitName(unit)
@@ -271,7 +271,7 @@ void KivioOptionsDialog::pageLayoutDlg()
 {
   KoHeadFoot headfoot;
   int tabs = FORMAT_AND_BORDERS | DISABLE_UNIT;
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
+  KoUnit unit = static_cast<KoUnit>(m_unitCombo->currentItem());
 
   if(KoPageLayoutDia::pageLayout(m_layout, headfoot, tabs, unit))
   {
@@ -281,7 +281,7 @@ void KivioOptionsDialog::pageLayoutDlg()
 
 void KivioOptionsDialog::unitChanged(int u)
 {
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(u);
+  KoUnit unit = static_cast<KoUnit>(u);
   setLayoutText(m_layout);
   m_snapHorizUSpin->setUnit(unit);
   m_snapVertUSpin->setUnit(unit);
@@ -312,13 +312,13 @@ void KivioOptionsDialog::slotDefault()
 
 void KivioOptionsDialog::setMaxHorizSnap(double v)
 {
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
+  KoUnit unit = static_cast<KoUnit>(m_unitCombo->currentItem());
   m_snapHorizUSpin->setMaxValue(KoUnit::fromUserValue(v, unit));
 }
 
 void KivioOptionsDialog::setMaxVertSnap(double v)
 {
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
+  KoUnit unit = static_cast<KoUnit>(m_unitCombo->currentItem());
   m_snapVertUSpin->setMaxValue(KoUnit::fromUserValue(v, unit));
 }
 

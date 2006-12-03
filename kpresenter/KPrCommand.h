@@ -536,7 +536,7 @@ class KPrPgLayoutCmd : public KNamedCommand
 {
 public:
     KPrPgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayout _oldLayout,
-                 KoUnit::Unit _oldUnit, KoUnit::Unit _unit,KPrDocument *_doc );
+                 KoUnit _oldUnit, KoUnit _unit,KPrDocument *_doc );
 
     virtual void execute();
     virtual void unexecute();
@@ -544,7 +544,7 @@ public:
 protected:
     KPrDocument *m_doc;
     KoPageLayout layout, oldLayout;
-    KoUnit::Unit unit, oldUnit;
+    KoUnit unit, oldUnit;
 };
 
 class KPrPieValueCmd : public KNamedCommand

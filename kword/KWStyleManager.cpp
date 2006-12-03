@@ -28,7 +28,7 @@
 /* Class: KWStyleManager                                          */
 /******************************************************************/
 
-KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit::Unit unit,
+KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit unit,
                                 KWDocument *_doc, const KoStyleCollection & styles,
                                 const QString & activeStyleName)
     : KoStyleManager( _parent, unit,

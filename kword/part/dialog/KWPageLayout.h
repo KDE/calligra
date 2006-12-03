@@ -49,7 +49,7 @@ public:
      * @param enableUnitChooser if true a combobox with the unit-type is shown for the user to change.
      * @param enableBorders if true enable the user to change the margins (aka borders) of the page.
      */
-    KWPageLayout(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,
+    KWPageLayout(QWidget *parent, const KoPageLayout& layout, KoUnit unit,
             const KoColumns& columns, bool enableUnitChooser, bool enableBorders);
 
     /**
@@ -67,7 +67,7 @@ public slots:
      * Set a new unit for the widget updating the widgets.
      * @param unit the new unit
      */
-    void setUnit(KoUnit::Unit unit);
+    void setUnit(KoUnit unit);
     /**
      * Enable the user to edit the page border size
      * @param on if true enable the user to change the margins (aka borders) of the page
@@ -101,7 +101,7 @@ private:
     void setGuiValues();
 
     KoPageLayout m_layout;
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
     KWPagePreview* m_pagePreview;
 
     bool m_blockSignals;

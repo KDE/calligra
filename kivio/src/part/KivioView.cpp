@@ -114,8 +114,8 @@ void KivioView::initGUI()
     m_verticalRuler->setUnit(document()->unit());
     m_verticalRuler->setShowMousePosition(true);
 
-    connect(document(), SIGNAL(unitChanged(KoUnit::Unit)), m_horizontalRuler, SLOT(setUnit(KoUnit::Unit)));
-    connect(document(), SIGNAL(unitChanged(KoUnit::Unit)), m_verticalRuler, SLOT(setUnit(KoUnit::Unit)));
+    connect(document(), SIGNAL(unitChanged(KoUnit)), m_horizontalRuler, SLOT(setUnit(KoUnit)));
+    connect(document(), SIGNAL(unitChanged(KoUnit)), m_verticalRuler, SLOT(setUnit(KoUnit)));
 
     layout->addWidget(m_horizontalRuler, 0, 1);
     layout->addWidget(m_verticalRuler, 1, 0);

@@ -73,7 +73,7 @@ public:
     /// reimplemented method from superclass
     QWidget* canvasWidget() { return this; }
     /// reimplemented method from superclass
-    KoUnit::Unit unit() { return document()->unit(); }
+    KoUnit unit() { return document()->unit(); }
     /// reimplemented method from superclass
     KoToolProxy * toolProxy() { return m_toolProxy; }
     // getters

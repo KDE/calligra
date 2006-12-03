@@ -411,7 +411,7 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent )
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateRuler()));
     connect (m_pKPresenterDoc, SIGNAL(sig_updateRuler()),this, SLOT( slotUpdateScrollBarRanges()));
     connect (m_pKPresenterDoc, SIGNAL(sig_updateMenuBar()),this, SLOT(updateSideBarMenu()));
-    connect (m_pKPresenterDoc, SIGNAL(unitChanged(KoUnit::Unit)),this, SLOT(slotUnitChanged(KoUnit::Unit)));
+    connect (m_pKPresenterDoc, SIGNAL(unitChanged(KoUnit)),this, SLOT(slotUnitChanged(KoUnit)));
     connect( m_pKPresenterDoc, SIGNAL( modified( bool ) ), this, SLOT( documentModified( bool )) );
     connect( m_pKPresenterDoc, SIGNAL(completed()), this, SLOT(loadingFinished()));
 
@@ -1330,8 +1330,8 @@ void KPrView::extraLayout()
     KoPageLayout pgLayout = m_pKPresenterDoc->pageLayout();
     KoPageLayout oldLayout = pgLayout;
     KoHeadFoot hf;
-    KoUnit::Unit oldUnit = m_pKPresenterDoc->unit();
-    KoUnit::Unit unit = oldUnit;
+    KoUnit oldUnit = m_pKPresenterDoc->unit();
+    KoUnit unit = oldUnit;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, FORMAT_AND_BORDERS, unit, this ) ) {
         KPrPgLayoutCmd *pgLayoutCmd = new KPrPgLayoutCmd( i18n( "Set Page Layout" ),
@@ -2151,7 +2151,7 @@ void KPrView::setExtraPenWidth( double width )
 void KPrView::newPageLayout( const KoPageLayout &_layout )
 {
     KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
-    KoUnit::Unit unit = m_pKPresenterDoc->unit(); // unchanged
+    KoUnit unit = m_pKPresenterDoc->unit(); // unchanged
 
     KPrPgLayoutCmd *pgLayoutCmd = new KPrPgLayoutCmd( i18n( "Set Page Layout" ), _layout, oldLayout, unit, unit,kPresenterDoc() );
     pgLayoutCmd->execute();
@@ -2720,8 +2720,8 @@ void KPrView::setupActions()
                                        actionCollection(), "extra_penwidth" );
     actionExtraPenWidth->setUnit( kPresenterDoc()->unit() );
     actionExtraPenWidth->setShowCurrentSelection(false);
-    connect( kPresenterDoc(), SIGNAL( unitChanged( KoUnit::Unit ) ),
-             actionExtraPenWidth, SLOT( setUnit( KoUnit::Unit ) ) );
+    connect( kPresenterDoc(), SIGNAL( unitChanged( KoUnit ) ),
+             actionExtraPenWidth, SLOT( setUnit( KoUnit ) ) );
 #endif
     actionExtraGroup = new KAction(KIcon("group"),  i18n( "&Group Objects" ), actionCollection(), "extra_group" );
     connect(actionExtraGroup, SIGNAL(triggered(bool) ), SLOT( extraGroup() ));
@@ -3690,8 +3690,8 @@ void KPrView::setupRulers()
     h_ruler->setGeometry( hSpace, 0, m_canvas->width(), vSpace );
     v_ruler->setGeometry( 0, vSpace, hSpace, m_canvas->height() );
 #if 0
-    QObject::connect( h_ruler, SIGNAL( unitChanged( KoUnit::Unit ) ),
-                      this, SLOT( unitChanged( KoUnit::Unit ) ) );
+    QObject::connect( h_ruler, SIGNAL( unitChanged( KoUnit ) ),
+                      this, SLOT( unitChanged( KoUnit ) ) );
     QObject::connect( h_ruler, SIGNAL( newPageLayout( const KoPageLayout & ) ),
                       this, SLOT( newPageLayout( const KoPageLayout & ) ) );
 
@@ -3700,8 +3700,8 @@ void KPrView::setupRulers()
     connect( h_ruler, SIGNAL( doubleClicked(double) ), this,
              SLOT( slotHRulerDoubleClicked(double) ) );
 
-    QObject::connect( v_ruler, SIGNAL( unitChanged( KoUnit::Unit ) ),
-                      this, SLOT( unitChanged( KoUnit::Unit ) ) );
+    QObject::connect( v_ruler, SIGNAL( unitChanged( KoUnit ) ),
+                      this, SLOT( unitChanged( KoUnit ) ) );
     QObject::connect( v_ruler, SIGNAL( newPageLayout( const KoPageLayout & ) ),
                       this, SLOT( newPageLayout( const KoPageLayout & ) ) );
     QObject::connect( v_ruler, SIGNAL( doubleClicked() ),
@@ -3713,7 +3713,7 @@ void KPrView::setupRulers()
 #endif
 }
 
-void KPrView::unitChanged( KoUnit::Unit u )
+void KPrView::unitChanged( KoUnit u )
 {
     m_pKPresenterDoc->setUnit( u );
 }
@@ -4020,7 +4020,7 @@ void KPrView::updateObjectStatusBarItem()
         int nbSelected = m_canvas->numberOfObjectSelected();
 
         if (nbSelected == 1) {
-            KoUnit::Unit unit = m_pKPresenterDoc->unit();
+            KoUnit unit = m_pKPresenterDoc->unit();
             //QString unitName = m_pKPresenterDoc->unitName();
             KPrObject * obj = m_canvas->getSelectedObj();
             KoSize size = obj->getSize();
@@ -6356,7 +6356,7 @@ KSpell2::Loader::Ptr KPrView::loader() const
     return m_loader;
 }
 
-void KPrView::slotUnitChanged( KoUnit::Unit unit )
+void KPrView::slotUnitChanged( KoUnit unit )
 {
     h_ruler->setUnit( unit );
     v_ruler->setUnit( unit );

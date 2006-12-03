@@ -1343,7 +1343,7 @@ QString KPrTransEffectCmd::name() const
 }
 
 KPrPgLayoutCmd::KPrPgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayout _oldLayout,
-                          KoUnit::Unit _oldUnit, KoUnit::Unit _unit,KPrDocument *_doc )
+                          KoUnit _oldUnit, KoUnit _unit,KPrDocument *_doc )
     : KNamedCommand( _name )
 {
     m_doc=_doc;

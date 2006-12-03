@@ -222,7 +222,7 @@ private:
     double m_oldX, m_oldY, m_oldW, m_oldH;
     double m_heightByWidthRatio;
     int /*FrameBehavior*/ m_frameBehavior;
-    KoUnit::Unit m_frameUnits;
+    KoUnit m_frameUnits;
     QString m_oldFrameSetName;
     QBrush m_newBrushStyle;
     bool m_noSignal;

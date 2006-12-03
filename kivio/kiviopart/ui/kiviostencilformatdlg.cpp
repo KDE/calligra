@@ -35,7 +35,7 @@
 KivioStencilFormatDlg::KivioStencilFormatDlg(KivioView* parent, const char* name)
   : KDialogBase(parent, name, true, i18n("Stencil & Connector Format"), Ok|Cancel|Default, Ok)
 {
-  m_unit = KoUnit::U_PT;
+  m_unit = KoUnit::Point;
   init();
 }
 
@@ -180,7 +180,7 @@ int KivioStencilFormatDlg::lineEndStyle()
   return m_lineEndStyleCBox->currentItem() * 0x10;
 }
 
-void KivioStencilFormatDlg::setLineWidth(double w, KoUnit::Unit u)
+void KivioStencilFormatDlg::setLineWidth(double w, KoUnit u)
 {
   m_unit = u;
   m_lineWidthUSBox->setUnit(u);

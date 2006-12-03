@@ -1919,7 +1919,7 @@ void View::initConfig()
     d->activeSheet->setPaperFormat((KoFormat)config->readEntry("Default size page",1));
 
     d->activeSheet->setPaperOrientation((KoOrientation)config->readEntry("Default orientation page",0));
-    d->activeSheet->setPaperUnit((KoUnit::Unit)config->readEntry("Default unit page",0));
+    d->activeSheet->setPaperUnit((KoUnit)config->readEntry("Default unit page",0));
 }
 }
 */
@@ -6153,7 +6153,7 @@ void View::paperLayoutDlg()
   hf.footRight = print->localizeHeadFootLine( print->footRight() );
   hf.footMid   = print->localizeHeadFootLine( print->footMid()   );
 
-  KoUnit::Unit unit = doc()->unit();
+  KoUnit unit = doc()->unit();
 
   PaperLayout * dlg
     = new PaperLayout( this, "PageLayout", pl, hf,

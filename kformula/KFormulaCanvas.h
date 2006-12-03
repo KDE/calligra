@@ -70,7 +70,7 @@ public:
     QWidget* canvasWidget();
 
     /// reimplemented method from superclass
-    KoUnit::Unit unit();
+    KoUnit unit();
     
 protected:
     void mousePressEvent( QMouseEvent* event );

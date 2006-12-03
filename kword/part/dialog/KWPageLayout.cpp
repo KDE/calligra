@@ -34,7 +34,7 @@
 #include "KWPagePreview.h"
 #include "KWPageLayout.h"
 
-KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,const KoColumns& columns, bool enableUnitChooser, bool enableBorders)
+KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout& layout, KoUnit unit,const KoColumns& columns, bool enableUnitChooser, bool enableBorders)
     : QWidget(parent), m_layout(layout), m_unit(unit), m_blockSignals(false), m_haveBorders(enableBorders)
 {
     setupUi(this);
@@ -44,7 +44,7 @@ KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout& layout, KoUnit::
 
     // -------------- unit ----------------------
     unitCombo->addItems(KoUnit::listOfUnitName());
-    unitCombo->setCurrentIndex(unit);
+    unitCombo->setCurrentIndex(unit.indexInList());
 
     // -------------- page size -----------------
     sizeCombo->addItems(KoPageFormat::allFormats());
@@ -116,7 +116,7 @@ void KWPageLayout::setGuiValues() {
     updatePreview();
 }
 
-void KWPageLayout::setUnit(KoUnit::Unit unit) {
+void KWPageLayout::setUnit(KoUnit unit) {
     m_unit = unit;
     m_blockSignals = true; // due to non-atomic changes the propertyChange emits should be blocked
 
@@ -150,7 +150,7 @@ void KWPageLayout::setUnit(KoUnit::Unit unit) {
 }
 
 void KWPageLayout::setUnitInt(int unit) {
-    setUnit((KoUnit::Unit)unit);
+    setUnit(KoUnit((KoUnit::Unit)unit));
 }
 
 void KWPageLayout::formatChanged(int format) {

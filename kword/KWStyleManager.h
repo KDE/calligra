@@ -33,7 +33,7 @@ class KWStyleManager : public KoStyleManager
     Q_OBJECT
 
 public:
-    KWStyleManager( QWidget *_parent, KoUnit::Unit unit, KWDocument *_doc,
+    KWStyleManager( QWidget *_parent, KoUnit unit, KWDocument *_doc,
                     const KoStyleCollection& styleCollection,
                     const QString & activeStyleName = QString::null );
 

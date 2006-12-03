@@ -99,7 +99,7 @@ public:
     KoPageLayoutDia( QWidget* parent, const char* name,
              const KoPageLayout& layout,
              const KoHeadFoot& headfoot,
-             int flags, KoUnit::Unit unit, bool modal=true );
+             int flags, KoUnit unit, bool modal=true );
 
     /**
      *  Constructor.
@@ -118,7 +118,7 @@ public:
              const KoHeadFoot& headfoot,
              const KoColumns& columns,
              const KoKWHeaderFooter& kwheadfoot,
-             int tabs, KoUnit::Unit unit );
+             int tabs, KoUnit unit );
 
     /**
      *  Destructor.
@@ -129,13 +129,13 @@ public:
      *  Show page layout dialog.
      *  See constructor for documentation on the parameters
      */
-    static bool pageLayout( KoPageLayout&, KoHeadFoot&, int tabs, KoUnit::Unit& unit, QWidget* parent = 0 );
+    static bool pageLayout( KoPageLayout&, KoHeadFoot&, int tabs, KoUnit& unit, QWidget* parent = 0 );
 
     /**
      *  Show page layout dialog.
      *  See constructor for documentation on the parameters
      */
-    static bool pageLayout( KoPageLayout&, KoHeadFoot&, KoColumns&, KoKWHeaderFooter&, int tabs, KoUnit::Unit& unit, QWidget* parent = 0 );
+    static bool pageLayout( KoPageLayout&, KoHeadFoot&, KoColumns&, KoKWHeaderFooter&, int tabs, KoUnit& unit, QWidget* parent = 0 );
     /**
      *  Retrieves a standard page layout.
      *  Deprecated: better use KoPageLayout::standardLayout()
@@ -155,7 +155,7 @@ public:
     /**
      *  Returns the unit
      */
-    KoUnit::Unit unit() const { return m_unit; }
+    KoUnit unit() const { return m_unit; }
 
 private:
     const KoColumns& columns() { return m_column; }
@@ -179,7 +179,7 @@ private:
     KoPageLayout m_layout;
     KoColumns m_column;
 
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
 
     int flags;
 

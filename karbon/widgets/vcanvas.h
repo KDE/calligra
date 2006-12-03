@@ -62,7 +62,7 @@ public:
     // from KoCanvasBase
     virtual void gridSize(double *horizontal, double *vertical) const;
     virtual bool snapToGrid() const;
-    virtual KoUnit::Unit unit();
+    virtual KoUnit unit();
 
     void addCommand(KCommand *command, bool execute = true);
 

@@ -41,7 +41,7 @@ class KPrMarginWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KPrMarginWidget( QWidget *parent, const char *name, const KoUnit::Unit unit );
+    KPrMarginWidget( QWidget *parent, const char *name, const KoUnit unit );
     ~KPrMarginWidget();
 
     bool changed() const { return m_changed; }
@@ -55,7 +55,7 @@ public:
 
 private:
     MarginUI *m_ui;
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
     bool m_changed;
     bool m_noSignal;
 

@@ -56,7 +56,7 @@ using namespace KSpread;
 PaperLayout::PaperLayout( QWidget * parent, const char * name,
                                         const KoPageLayout & layout,
                                         const KoHeadFoot & headfoot,
-                                        int tabs, KoUnit::Unit unit,
+                                        int tabs, KoUnit unit,
                                         Sheet * sheet, View * view)
   : KoPageLayoutDia( parent, name, layout, headfoot, tabs, unit, false /*no modal*/),
     m_pSheet( sheet ),
@@ -328,7 +328,7 @@ void PaperLayout::slotOk()
 
       KoPageLayout pl = layout();
       KoHeadFoot hf = headFoot();
-      KoUnit::Unit unit = sheet->doc()->unit();
+      KoUnit unit = sheet->doc()->unit();
       print->setPrintGrid( pPrintGrid->isChecked() );
       print->setPrintCommentIndicator( pPrintCommentIndicator->isChecked() );
       print->setPrintFormulaIndicator( pPrintFormulaIndicator->isChecked() );

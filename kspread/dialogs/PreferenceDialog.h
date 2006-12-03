@@ -114,7 +114,7 @@ protected:
   /**
    * Needed to ensure the same unit for loading and saving.
    */
-  KoUnit::Unit indentUnit;
+  KoUnit indentUnit;
   KConfig* config;
   QComboBox *typeCompletion;
   QComboBox *typeCalc;

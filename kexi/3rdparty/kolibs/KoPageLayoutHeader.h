@@ -31,7 +31,7 @@ class KoPageLayoutHeader : public KoPageLayoutHeaderBase {
     Q_OBJECT
 
 public:
-    KoPageLayoutHeader(QWidget *parent, KoUnit::Unit unit, const KoKWHeaderFooter &kwhf);
+    KoPageLayoutHeader(QWidget *parent, KoUnit unit, const KoKWHeaderFooter &kwhf);
     const KoKWHeaderFooter& headerFooter();
 
 private:

@@ -321,7 +321,7 @@ public:
 
   /**
    * @return the name of the unit used to display margins.
-   * For example, if unit() returns KoUnit::U_MM, then
+   * For example, if unit() returns KoUnit::Millimeter, then
    * this functions return "mm".
    */
   QString unitName() const;

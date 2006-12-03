@@ -44,7 +44,7 @@ class KivioStencilFormatDlg : public KDialogBase
     int lineEndStyle();
 
   public slots:
-    void setLineWidth(double w, KoUnit::Unit u);
+    void setLineWidth(double w, KoUnit u);
     void setLineColor(QColor c);
     void setLinePattern(int p);
     void setFillColor(QColor c);
@@ -67,7 +67,7 @@ class KivioStencilFormatDlg : public KDialogBase
     KComboBox* m_patternCBox;
     KComboBox* m_fillPatternCBox;
     KComboBox* m_lineEndStyleCBox;
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
 };
 
 #endif

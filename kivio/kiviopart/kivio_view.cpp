@@ -226,11 +226,11 @@ KivioView::KivioView( QWidget *_parent, KivioDoc* doc )
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());
   connect(m_vertScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerVOffset(int)));
   connect(m_horzScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerHOffset(int)));
-  connect(vRuler, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(rulerChangedUnit(KoUnit::Unit)));
-  connect(hRuler, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(rulerChangedUnit(KoUnit::Unit)));
+  connect(vRuler, SIGNAL(unitChanged(KoUnit)), SLOT(rulerChangedUnit(KoUnit)));
+  connect(hRuler, SIGNAL(unitChanged(KoUnit)), SLOT(rulerChangedUnit(KoUnit)));
   connect(vRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
   connect(hRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
-  connect(m_pDoc, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)));
+  connect(m_pDoc, SIGNAL(unitChanged(KoUnit)), SLOT(setRulerUnit(KoUnit)));
   connect(m_pCanvas, SIGNAL(visibleAreaChanged()), SLOT(updateRulers()));
 
   connect(vRuler, SIGNAL(addGuide(const QPoint&, bool, int)),
@@ -341,7 +341,7 @@ void KivioView::createGeometryDock()
   connect( m_pStencilGeometryPanel, SIGNAL(sizeChanged(double, double)), this, SLOT(slotChangeStencilSize(double, double)) );
 //   connect(m_pStencilGeometryPanel, SIGNAL(rotationChanged(int)), SLOT(slotChangeStencilRotation(int)));
 
-  connect( m_pDoc, SIGNAL(unitChanged(KoUnit::Unit)), m_pStencilGeometryPanel, SLOT(setUnit(KoUnit::Unit)) );
+  connect( m_pDoc, SIGNAL(unitChanged(KoUnit)), m_pStencilGeometryPanel, SLOT(setUnit(KoUnit)) );
 }
 
 void KivioView::createBirdEyeDock()
@@ -463,7 +463,7 @@ void KivioView::setupActions()
   m_lineWidthAction = new KoLineWidthAction(i18n("Line Width"), "linewidth", this, SLOT(setLineWidth(double)),
     actionCollection(), "setLineWidth");
   m_lineWidthAction->setUnit(m_pDoc->unit());
-  connect(m_pDoc, SIGNAL(unitChanged(KoUnit::Unit)), m_lineWidthAction, SLOT(setUnit(KoUnit::Unit)));
+  connect(m_pDoc, SIGNAL(unitChanged(KoUnit)), m_lineWidthAction, SLOT(setUnit(KoUnit)));
 
   m_lineStyleAction = new KoLineStyleAction(i18n("Line Style"), "linestyle", this, SLOT(setLineStyle(int)),
     actionCollection(), "setLineStyle");
@@ -775,7 +775,7 @@ void KivioView::paperLayoutDlg()
   KoPageLayout l = page->paperLayout();
   KoHeadFoot headfoot;
   int tabs = FORMAT_AND_BORDERS | DISABLE_UNIT;
-  KoUnit::Unit unit = doc()->unit();
+  KoUnit unit = doc()->unit();
 
   if(KoPageLayoutDia::pageLayout(l, headfoot, tabs, unit))
   {
@@ -1834,7 +1834,7 @@ void KivioView::setMousePos( int mx, int my )
   }
 }
 
-void KivioView::setRulerUnit(KoUnit::Unit u)
+void KivioView::setRulerUnit(KoUnit u)
 {
   vRuler->setUnit(u);
   hRuler->setUnit(u);
@@ -1854,7 +1854,7 @@ void KivioView::setRulerVOffset(int v)
   }
 }
 
-void KivioView::rulerChangedUnit(KoUnit::Unit u)
+void KivioView::rulerChangedUnit(KoUnit u)
 {
   m_pDoc->setUnit(u);
 }

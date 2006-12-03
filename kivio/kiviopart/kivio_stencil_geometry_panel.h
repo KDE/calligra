@@ -14,11 +14,11 @@ class KivioStencilGeometryPanel : public QWidget
   protected:
     KoUnitDoubleSpinBox *m_pX, *m_pY, *m_pW, *m_pH;
     KIntSpinBox* m_rotationSBox;
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
     bool m_emitSignals;
 
   public slots:
-    void setUnit(KoUnit::Unit);
+    void setUnit(KoUnit);
     void setPosition(double, double);
     void setSize(double, double);
     void setPageLayout(const KoPageLayout& l);

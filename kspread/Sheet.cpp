@@ -5222,8 +5222,8 @@ bool Sheet::insertPicture( const KoPoint& point ,  KoPicture& picture )
     double inchWidth = (double)picture.getOriginalSize().width() / KoGlobal::dpiX();
     double inchHeight = (double)picture.getOriginalSize().height() / KoGlobal::dpiY();
 
-    destinationSize.setWidth( KoUnit::fromUserValue(inchWidth,KoUnit::U_INCH) );
-    destinationSize.setHeight( KoUnit::fromUserValue(inchHeight,KoUnit::U_INCH) );
+    destinationSize.setWidth( KoUnit::fromUserValue(inchWidth,KoUnit::Inch) );
+    destinationSize.setHeight( KoUnit::fromUserValue(inchHeight,KoUnit::Inch) );
 
     destinationRect.setSize( destinationSize);
 

@@ -69,7 +69,7 @@ KoPageLayout Kivio::loadPageLayout(const QDomElement& e)
   if(e.hasAttribute("unit")) {
     // Compatibility with Kivio <= 1.2.x
     kDebug(43000) << "Compatibility mode..." << endl;
-    KoUnit::Unit unit = Kivio::convToKoUnit(XmlReadInt(e, "unit", 0));
+    KoUnit unit = Kivio::convToKoUnit(XmlReadInt(e, "unit", 0));
     layout.ptWidth = KoUnit::fromUserValue(XmlReadFloat(e, "width", 0.0), unit);
     layout.ptHeight = KoUnit::fromUserValue(XmlReadFloat(e, "height", 0.0), unit);
     layout.ptLeft = KoUnit::fromUserValue(XmlReadFloat(e, "marginLeft", 0.0), unit);
@@ -92,26 +92,26 @@ KoPageLayout Kivio::loadPageLayout(const QDomElement& e)
   return layout;
 }
 
-KoUnit::Unit Kivio::convToKoUnit(int tkUnit)
+KoUnit Kivio::convToKoUnit(int tkUnit)
 {
   switch(tkUnit) {
     case 0:
-      return KoUnit::U_PT;
+      return KoUnit::Point;
     case 1:
-      return KoUnit::U_MM;
+      return KoUnit::Millimeter;
     case 2:
-      return KoUnit::U_INCH;
+      return KoUnit::Inch;
     case 3:
-      return KoUnit::U_PI;
+      return KoUnit::Pica;
     case 4:
-      return KoUnit::U_CM;
+      return KoUnit::Centimeter;
     case 5:
-      return KoUnit::U_DD;
+      return KoUnit::Didot;
     case 6:
-      return KoUnit::U_CC;
+      return KoUnit::Cicero;
   }
 
-  return KoUnit::U_PT;
+  return KoUnit::Point;
 }
 
 QString Kivio::orientationString(KoOrientation o)
@@ -135,30 +135,30 @@ KoOrientation Kivio::orientationFromString(const QString& s)
 void Kivio::setFormatOrientation(KoPageLayout& layout)
 {
   const PaperSizeDef PapersTable[] = {
-    {"A0",841,1189,KoUnit::U_MM},
-    {"A1",594,841,KoUnit::U_MM},
-    {"A2",420,594,KoUnit::U_MM},
-    {"A3",297,420,KoUnit::U_MM},
-    {"A4",210,297,KoUnit::U_MM},
-    {"A5",148,210,KoUnit::U_MM},
+    {"A0",841,1189,KoUnit::Millimeter},
+    {"A1",594,841,KoUnit::Millimeter},
+    {"A2",420,594,KoUnit::Millimeter},
+    {"A3",297,420,KoUnit::Millimeter},
+    {"A4",210,297,KoUnit::Millimeter},
+    {"A5",148,210,KoUnit::Millimeter},
 
-    {"B4",250,353,KoUnit::U_MM},
-    {"B6",125,176,KoUnit::U_MM},
+    {"B4",250,353,KoUnit::Millimeter},
+    {"B6",125,176,KoUnit::Millimeter},
 
-    {"C4",229,324,KoUnit::U_MM},
-    {"C5",162,229,KoUnit::U_MM},
-    {"C5",114,162,KoUnit::U_MM},
+    {"C4",229,324,KoUnit::Millimeter},
+    {"C5",162,229,KoUnit::Millimeter},
+    {"C5",114,162,KoUnit::Millimeter},
 
-    {"DL",110,220,KoUnit::U_MM},
+    {"DL",110,220,KoUnit::Millimeter},
 
-    {"Letter",8.5,11,KoUnit::U_INCH},
-    {"Legal",8.5,14,KoUnit::U_INCH},
+    {"Letter",8.5,11,KoUnit::Inch},
+    {"Legal",8.5,14,KoUnit::Inch},
 
-    {"A",8.5,11,KoUnit::U_INCH},
-    {"B",11,17,KoUnit::U_INCH},
-    {"C",17,22,KoUnit::U_INCH},
-    {"D",22,34,KoUnit::U_INCH},
-    {"E",34,44,KoUnit::U_INCH},
+    {"A",8.5,11,KoUnit::Inch},
+    {"B",11,17,KoUnit::Inch},
+    {"C",17,22,KoUnit::Inch},
+    {"D",22,34,KoUnit::Inch},
+    {"E",34,44,KoUnit::Inch},
 
     {"null",0,0,-2}     // -2 for end of list
   };
@@ -170,8 +170,8 @@ void Kivio::setFormatOrientation(KoPageLayout& layout)
   layout.orientation = PG_PORTRAIT;
 
   while((sizeDef.unit != -2) && !found) {
-    width = KoUnit::fromUserValue(sizeDef.width, static_cast<KoUnit::Unit>(sizeDef.unit));
-    height = KoUnit::fromUserValue(sizeDef.height, static_cast<KoUnit::Unit>(sizeDef.unit));
+    width = KoUnit::fromUserValue(sizeDef.width, static_cast<KoUnit>(sizeDef.unit));
+    height = KoUnit::fromUserValue(sizeDef.height, static_cast<KoUnit>(sizeDef.unit));
 
     if((layout.ptWidth == width) && (layout.ptHeight == height)) {
       layout.format = KoPageFormat::formatFromString(sizeDef.title);
@@ -192,7 +192,7 @@ KoSize Kivio::loadSize(const QDomElement& e, const QString& name, const KoSize& 
   KoSize size;
   if(e.hasAttribute(name + "Unit")) {
     // Compatibility with Kivio <= 1.2.x
-    KoUnit::Unit unit = Kivio::convToKoUnit(XmlReadInt(e, name + "Unit", 0));
+    KoUnit unit = Kivio::convToKoUnit(XmlReadInt(e, name + "Unit", 0));
     size.setWidth(KoUnit::fromUserValue(XmlReadFloat(e, name + "Width", def.width()), unit));
     size.setHeight(KoUnit::fromUserValue(XmlReadFloat(e, name + "Height", def.height()), unit));
   } else {

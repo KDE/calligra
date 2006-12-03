@@ -125,7 +125,7 @@ public:
 	 *
 	 * @return the document's unit
 	 */
-	KoUnit::Unit unit() const
+	KoUnit unit() const
 		{ return m_unit; }
 
 	/**
@@ -133,7 +133,7 @@ public:
 	 *
 	 * @param unit the new document unit
 	 */
-	void setUnit( KoUnit::Unit unit )
+	void setUnit( KoUnit unit )
 		{ m_unit = unit; }
 
 	/**
@@ -337,7 +337,7 @@ private:
 	/**
 	 * The unit.
 	 */
-	KoUnit::Unit m_unit;
+	KoUnit m_unit;
 
 	QMap<const KoShape *, QString>	m_objectNames;
 

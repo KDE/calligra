@@ -34,7 +34,7 @@ class KPrStyleManager : public KoStyleDialog
     Q_OBJECT
 
 public:
-    KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPrDocument *_doc,
+    KPrStyleManager( QWidget *_parent, KoUnit unit,KPrDocument *_doc,
                      const KoStyleCollection & styleCollection, const QString & activeStyleName );
 
     virtual KoParagStyle* addStyleTemplate(KoParagStyle *style);

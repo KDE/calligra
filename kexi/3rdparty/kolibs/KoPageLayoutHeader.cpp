@@ -25,7 +25,7 @@
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 
-KoPageLayoutHeader::KoPageLayoutHeader(QWidget *parent, KoUnit::Unit unit, const KoKWHeaderFooter &kwhf)
+KoPageLayoutHeader::KoPageLayoutHeader(QWidget *parent, KoUnit unit, const KoKWHeaderFooter &kwhf)
     : KoPageLayoutHeaderBase(parent) {
     m_headerFooters = kwhf;
     Q3HBoxLayout *lay = new Q3HBoxLayout(headerSpacingPane);

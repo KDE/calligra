@@ -228,7 +228,7 @@ void KivioShapeGeometry::rotationChanged()
     m_doc->addCommand(rotateCommand, false);
 }
 
-void KivioShapeGeometry::setUnit(KoUnit::Unit unit)
+void KivioShapeGeometry::setUnit(KoUnit unit)
 {
     m_xInput->setUnit(unit);
     m_yInput->setUnit(unit);
@@ -263,7 +263,7 @@ QDockWidget* KivioShapeGeometryFactory::createDockWidget()
     dockWidget->setObjectName(dockId());
     dockWidget->setUnit(m_doc->unit());
 
-    QObject::connect(m_doc, SIGNAL(unitChanged(KoUnit::Unit)), dockWidget, SLOT(setUnit(KoUnit::Unit)));
+    QObject::connect(m_doc, SIGNAL(unitChanged(KoUnit)), dockWidget, SLOT(setUnit(KoUnit)));
 
     return dockWidget;
 }

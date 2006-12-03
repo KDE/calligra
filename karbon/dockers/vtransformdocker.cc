@@ -198,7 +198,7 @@ VTransformDocker::scale()
 }
 
 void 
-VTransformDocker::setUnit( KoUnit::Unit unit )
+VTransformDocker::setUnit( KoUnit unit )
 {
 	enableSignals( false );
 

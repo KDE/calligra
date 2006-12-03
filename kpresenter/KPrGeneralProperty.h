@@ -53,7 +53,7 @@ public:
         Height = 64
     };
 
-    KPrGeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit::Unit unit );
+    KPrGeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit unit );
     ~KPrGeneralProperty();
 
     int getGeneralPropertyChange() const;
@@ -69,7 +69,7 @@ protected:
     double m_ratio;
 
     GeneralValue m_generalValue;
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
 
 protected slots:
     void slotReset();

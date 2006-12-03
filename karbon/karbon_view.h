@@ -170,7 +170,7 @@ public slots:
 	void viewZoomIn();
 	void viewZoomOut();
 
-	void setUnit( KoUnit::Unit _unit );
+	void setUnit( KoUnit _unit );
 
 	void configure();
 

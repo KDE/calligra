@@ -42,7 +42,7 @@ class KivioArrowHeadFormatDlg : public KDialogBase
     double endAHHeight();
 
   public slots:
-    void setUnit(KoUnit::Unit u);
+    void setUnit(KoUnit u);
     void setStartAHType(int t);
     void setStartAHWidth(double w);
     void setStartAHHeight(double h);
@@ -64,7 +64,7 @@ class KivioArrowHeadFormatDlg : public KDialogBase
     KoUnitDoubleSpinBox* m_endAHHeightUSBox;
     KComboBox* m_startAHTypeCBox;
     KComboBox* m_endAHTypeCBox;
-    KoUnit::Unit m_unit;
+    KoUnit m_unit;
 };
 
 #endif

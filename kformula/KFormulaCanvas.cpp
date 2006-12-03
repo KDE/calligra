@@ -126,9 +126,9 @@ QWidget* KFormulaCanvas::canvasWidget()
     return this;
 }
 
-KoUnit::Unit KFormulaCanvas::unit()
+KoUnit KFormulaCanvas::unit()
 {
-    return KoUnit::U_CM;  // return this as default
+    return KoUnit::Centimeter;  // return this as default
 }
 
 KoToolProxy* KFormulaCanvas::toolProxy()

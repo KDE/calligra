@@ -506,7 +506,7 @@ QDomDocument KPrDocument::saveXML()
     paper.setAttribute("ptHeight", QString::number( m_pageLayout.ptHeight, 'g', 10 ));
 
     paper.setAttribute("orientation", static_cast<int>( m_pageLayout.orientation ));
-    paper.setAttribute("unit", unit() );
+    paper.setAttribute("unit", unit().indexInList() );
     paper.setAttribute("tabStopValue", m_tabStop );
 
     QDomElement paperBorders=doc.createElement("PAPERBORDERS");
@@ -2478,7 +2478,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
             else if(elem.hasAttribute("mmHeight"))   //compatibility
                 __pgLayout.ptHeight = MM_TO_POINT( elem.attribute("mmHeight").toDouble() );
             if(elem.hasAttribute("unit"))
-                setUnit( static_cast<KoUnit::Unit>(elem.attribute("unit").toInt()) );
+                setUnit( KoUnit((KoUnit::Unit)elem.attribute("unit").toInt()) );
             if ( elem.hasAttribute("tabStopValue"))
                 m_tabStop = elem.attribute("tabStopValue").toDouble();
 

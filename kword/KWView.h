@@ -370,7 +370,7 @@ public slots:
     void changeOverwriteMode( bool );
     void slotHRulerDoubleClicked();
     void slotHRulerDoubleClicked( double );
-    void slotUnitChanged(KoUnit::Unit);
+    void slotUnitChanged(KoUnit);
 
     void numPagesChanged();
 

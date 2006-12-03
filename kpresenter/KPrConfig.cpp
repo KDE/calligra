@@ -210,7 +210,7 @@ KPrConfigureInterfacePage::KPrConfigureInterfacePage( KPrView *_view, QWidget *p
     m_pView=_view;
     config = KPrFactory::global()->config();
 
-    KoUnit::Unit unit = m_pView->kPresenterDoc()->unit();
+    KoUnit unit = m_pView->kPresenterDoc()->unit();
 
     oldNbRecentFiles=10;
     double ptIndent = MM_TO_POINT(10.0);
@@ -478,7 +478,7 @@ KPrConfigureMiscPage::KPrConfigureMiscPage( KPrView *_view, QWidget *parent, cha
     QLabel *lab=new QLabel(i18n("Horizontal grid size:"), tmpQGroupBox);
     lab->setWhatsThis( i18n( "Set the space in millimeters between two horizontal points on the grid. Default is 5 millimeters." ) );
     grid->addWidget(lab,0,0);
-    KoUnit::Unit unit = doc->unit();
+    KoUnit unit = doc->unit();
     resolutionX = new KoUnitDoubleSpinBox(tmpQGroupBox, 5.0,rect.width(),1,doc->getGridX() );
     resolutionX->setUnit( unit );
 

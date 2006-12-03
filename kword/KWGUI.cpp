@@ -106,10 +106,10 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
 
     connect( m_horRuler, SIGNAL( doubleClicked() ), m_view, SLOT( slotHRulerDoubleClicked() ) );
     connect( m_horRuler, SIGNAL( doubleClicked(double) ), m_view, SLOT( slotHRulerDoubleClicked(double) ) );
-    connect( m_horRuler, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( unitChanged( KoUnit::Unit ) ) );
+    connect( m_horRuler, SIGNAL( unitChanged( KoUnit ) ), this, SLOT( unitChanged( KoUnit ) ) );
     connect( m_vertRuler, SIGNAL( newPageLayout( const KoPageLayout & ) ), m_view, SLOT( newPageLayout( const KoPageLayout & ) ) );
     connect( m_vertRuler, SIGNAL( doubleClicked() ), m_view, SLOT( formatPage() ) );
-    connect( m_vertRuler, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( unitChanged( KoUnit::Unit ) ) );
+    connect( m_vertRuler, SIGNAL( unitChanged( KoUnit ) ), this, SLOT( unitChanged( KoUnit ) ) );
 
     m_horRuler->hide();
     m_vertRuler->hide();
@@ -188,7 +188,7 @@ void KWGUI::reorganize()
     }
 }
 
-void KWGUI::unitChanged( KoUnit::Unit u )
+void KWGUI::unitChanged( KoUnit u )
 {
     m_view->kWordDocument()->setUnit( u );
 }
