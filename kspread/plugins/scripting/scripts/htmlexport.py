@@ -244,8 +244,6 @@ class Reader:
             pass
 
         def readRecord(self):
-            #FIXME this is not optimal since we need wo walk at least through 256*256 cells. It
-            #would be better, if we reuse KSpread::Cell::firstCell()-iterator here.
             if self.rowidx <= self.sheet.lastRow():
                 record = []
                 for i in range(self.sheet.lastColumn() + 1, 1, -1):
