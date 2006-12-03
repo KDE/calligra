@@ -119,11 +119,11 @@ Things not in bugzilla
     - Decouple validity and conditions from cells.			done
     - Fix named styles.							done
     - Check for orphaned (nonDefault)Cell lookups.			done
-    - Extend the Storage template to the StyleStorage level.		----
+    - Extend the Storage template to the StyleStorage level.		done
       - Garbage collection						done
       - Book-keeping							done
-      - Used area tracking						----
-      - Cache								----
+      - Used area tracking						done
+      - Cache								done
     - Insertion/deletion of cell ranges.				----
     - Seek & destroy R-Tree data rects, if they get empty after		----
       deletion of columns/rows, but store them for undo.

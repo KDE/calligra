@@ -20,6 +20,7 @@
 #ifndef KSPREAD_STORAGE
 #define KSPREAD_STORAGE
 
+#include <QCache>
 #include <QTimer>
 
 #include <koffice_export.h>
@@ -27,9 +28,15 @@
 #include "Condition.h"
 #include "Region.h"
 #include "RTree.h"
+#include "Sheet.h"
 #include "Validity.h"
 
 static const int g_garbageCollectionTimeOut = 60000; // one minute
+
+inline uint qHash( const QPoint& point )
+{
+    return ( static_cast<uint>( point.x() ) << 16 ) + static_cast<uint>( point.y() );
+}
 
 namespace KSpread
 {
@@ -54,22 +61,60 @@ public:
     QList< QPair<QRectF, T> > undoData(const QRect& rect) const;
 
     /**
+     * Returns the area, which got data attached.
+     * \return the area using data
+     */
+    QRect usedArea() const;
+
+    /**
      * Assigns \p data to \p region .
      */
     void insert(const Region& region, const T& data);
+
+    /**
+     * Inserts \p number rows at the position \p position .
+     * It extends or shifts rectangles, respectively.
+     */
+    void insertRows(int position, int number = 1);
+
+    /**
+     * Inserts \p number columns at the position \p position .
+     * It extends or shifts rectangles, respectively.
+     */
+    void insertColumns(int position, int number = 1);
+
+    /**
+     * Deletes \p number rows at the position \p position .
+     * It shrinks or shifts rectangles, respectively.
+     */
+    void deleteRows(int position, int number = 1);
+
+    /**
+     * Deletes \p number columns at the position \p position .
+     * It shrinks or shifts rectangles, respectively.
+     */
+    void deleteColumns(int position, int number = 1);
 
 protected:
     virtual void garbageCollectionInitialization();
     virtual void garbageCollection();
 
-    QTimer*     m_garbageCollectionInitializationTimer;
-    QTimer*     m_garbageCollectionTimer;
+    /**
+     * Invalidates all cached styles lying in \p rect .
+     */
+    void invalidateCache( const QRect& rect );
+
+    QTimer* m_garbageCollectionInitializationTimer;
+    QTimer* m_garbageCollectionTimer;
 
 private:
-    Sheet*      m_sheet;
-    RTree<T>    m_tree;
+    Sheet* m_sheet;
+    RTree<T> m_tree;
+    QRegion m_usedArea;
     QList< QPair<QRectF,T> > m_possibleGarbage;
-    QList<T>    m_storedData;
+    QList<T> m_storedData;
+    mutable QCache<QPoint,T> m_cache;
+    mutable QRegion m_cachedArea;
 };
 
 template<typename T>
@@ -92,8 +137,18 @@ Storage<T>::~Storage()
 template<typename T>
 T Storage<T>::at(const QPoint& point) const
 {
+    // first, lookup point in the cache
+    if ( m_cache.contains( point ) )
+    {
+        return *m_cache.object( point );
+    }
+    // not found, lookup in the tree
     QList<T> results = m_tree.contains(point);
-    return results.isEmpty() ? T() : results.last();
+    T data = results.isEmpty() ? T() : results.last();
+    // insert style into the cache
+    m_cache.insert( point, new T(data) );
+    m_cachedArea += QRect( point, point );
+    return data;
 }
 
 template<typename T>
@@ -106,6 +161,12 @@ QList< QPair<QRectF,T> > Storage<T>::undoData(const QRect& rect) const
         result[i].first = result[i].first.intersected( rect );
     }
     return result;
+}
+
+template<typename T>
+QRect Storage<T>::usedArea() const
+{
+    return m_usedArea.boundingRect();
 }
 
 template<typename T>
@@ -124,8 +185,56 @@ void Storage<T>::insert(const Region& region, const T& _data)
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
     {
+        // keep track of the used area
+        if ( data == T() )
+            m_usedArea -= (*it)->rect();
+        else
+            m_usedArea += (*it)->rect();
+        // invalidate the affected, cached styles
+        invalidateCache( (*it)->rect() );
+        // insert data
         m_tree.insert((*it)->rect(), data);
     }
+}
+
+template<typename T>
+void Storage<T>::insertRows(int position, int number)
+{
+    const QRect invalidRect(1,position,KS_colMax,KS_rowMax);
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
+    m_tree.insertRows(position, number);
+    m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
+}
+
+template<typename T>
+void Storage<T>::insertColumns(int position, int number)
+{
+    const QRect invalidRect(position,1,KS_colMax,KS_rowMax);
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
+    m_tree.insertColumns(position, number);
+    m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
+}
+
+template<typename T>
+void Storage<T>::deleteRows(int position, int number)
+{
+    const QRect invalidRect(1,position,KS_colMax,KS_rowMax);
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
+    m_tree.deleteRows(position, number);
+    m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
+}
+
+template<typename T>
+void Storage<T>::deleteColumns(int position, int number)
+{
+    const QRect invalidRect(position,1,KS_colMax,KS_rowMax);
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
+    m_tree.deleteColumns(position, number);
+    m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
 }
 
 template<typename T>
@@ -176,6 +285,25 @@ void Storage<T>::garbageCollection()
             kDebug(36006) << "Storage: removing data at " << currentPair.first << endl;
             m_tree.remove( currentPair.first, currentPair.second );
             break;
+        }
+    }
+}
+
+template<typename T>
+void Storage<T>::invalidateCache( const QRect& rect )
+{
+//     kDebug(36006) << "StyleStorage: Invalidating " << rect << endl;
+    const QRegion region = m_cachedArea.intersected( rect );
+    m_cachedArea = m_cachedArea.subtracted( rect );
+    foreach ( const QRect& rect, region.rects() )
+    {
+        for ( int col = rect.left(); col <= rect.right(); ++col )
+        {
+            for ( int row = rect.top(); row <= rect.bottom(); ++row )
+            {
+//                 kDebug(36006) << "StyleStorage: Removing cached style for " << Cell::name( col, row ) << endl;
+                m_cache.remove( QPoint( col, row ) ); // also deletes it
+            }
         }
     }
 }
