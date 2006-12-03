@@ -44,7 +44,7 @@ class Calendar;
 class ResourceDialogImpl : public QWidget, public Ui_ResourceDialogBase {
     Q_OBJECT
 public:
-    ResourceDialogImpl (QWidget *parent);
+    explicit ResourceDialogImpl (QWidget *parent);
 
 public slots:
     void slotChanged();

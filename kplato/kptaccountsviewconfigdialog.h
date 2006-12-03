@@ -36,7 +36,7 @@ class AccountsviewConfigPanel;
 class AccountsviewConfigurePanelBase : public QWidget, public Ui::AccountsviewConfigurePanelBase
 {
 public:
-  AccountsviewConfigurePanelBase( QWidget *parent ) : QWidget( parent ) {
+  explicit AccountsviewConfigurePanelBase( QWidget *parent ) : QWidget( parent ) {
     setupUi( this );
   }
 };
@@ -59,7 +59,7 @@ private:
 class AccountsviewConfigPanel : public AccountsviewConfigurePanelBase {
     Q_OBJECT
 public:
-    AccountsviewConfigPanel(QWidget *parent);
+    explicit AccountsviewConfigPanel(QWidget *parent);
     
 public slots:
     void slotChanged();
