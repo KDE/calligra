@@ -362,14 +362,24 @@ Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
 // same result would be obtained by applying number format on a date value
 Value func_datevalue (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->conv()->asFloat (calc->conv()->asDate (args[0]));
+  if (args[0].isString()) {
+    Value v = calc->conv()->asDate (args[0]);
+    if (! v.isError())
+      return calc->conv()->asFloat (v);
+  }
+  return Value::errorVALUE();
 }
 
 // Function: timevalue
 // same result would be obtained by applying number format on a time value
 Value func_timevalue (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->conv()->asFloat (calc->conv()->asTime (args[0]));
+  if (args[0].isString()) {
+    Value v = calc->conv()->asTime (args[0]);
+    if (! v.isError())
+      return calc->conv()->asFloat (v);
+  }
+  return Value::errorVALUE();
 }
 
 // Function: years
