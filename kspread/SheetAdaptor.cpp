@@ -44,118 +44,15 @@
 
 using namespace KSpread;
 
-/*********************************************
- *
- * CellProxy
- *
- *********************************************/
-
-// class KSpread::CellProxy : public DCOPObjectProxy
-// {
-// public:
-//     CellProxy( Sheet* sheet, const QByteArray& prefix );
-//     ~CellProxy();
-// 
-//     virtual bool process( const DCOPCString& obj, const DCOPCString& fun, const QByteArray& data,
-//                           DCOPCString& replyType, QByteArray &replyData );
-// 
-// private:
-//     QByteArray m_prefix;
-//     CellIface* m_cell;
-//     Sheet* m_sheet;
-// };
-
-// KSpread::CellProxy::CellProxy( Sheet* sheet, const QByteArray& prefix )
-//     : DCOPObjectProxy(), m_prefix( prefix )
-// {
-//     m_cell = new CellIface;
-//     m_sheet = sheet;
-// }
-// 
-// KSpread::CellProxy::~CellProxy()
-// {
-//     delete m_cell;
-// }
-// 
-// bool KSpread::CellProxy::process( const DCOPCString& obj, const DCOPCString& fun,
-//                                   const QByteArray& data,
-//                                   DCOPCString& replyType, QByteArray &replyData )
-// {
-// 
-// 	kDebug()<<"CellProxy::process: requested object:"<<obj<<endl;
-// 	kDebug()<<"CellProxy::process: prefix:"<<m_prefix<<endl;
-//     if ( strncmp( m_prefix.data(), obj.data(), m_prefix.length() ) != 0 )
-//         return false;
-// 
-// 	if ( fun == "functions()" ) {
-//         	replyType = "DCOPCStringList";
-// 	        QDataStream reply( &replyData,QIODevice::WriteOnly );
-// 	        reply.setVersion(QDataStream::Qt_3_1);
-// 		 DCOPCStringList repList=m_cell->functions();
-// 		reply<<repList;
-// 	        return true;
-// 	}
-// 
-//     QString cellID=QString::fromUtf8(obj.data() + m_prefix.length());
-//     cellID=m_sheet->sheetName()+'!'+cellID;
-// 
-//     kDebug()<<"CellProxy::process: cellID="<<cellID<<endl;
-// 
-//     Point p( cellID); //obj.data() + m_prefix.length() );
-//     if ( p.pos().x()<0 ) {
-// 	kDebug(36001)<<"CellProyxy::process: resulting Point is not valid"<<endl;
-//         return false;
-//     }
-// 
-//     kDebug(36001)<<"all checks finsihed, trying to access cell (x):"<<p.pos().x()<<endl;
-// 
-//     m_cell->setCell( m_sheet, p.pos() );
-//     return m_cell->process( fun, data, replyType, replyData );
-// }
-
-/************************************************
- *
- * SheetAdaptor
- *
- ************************************************/
-
 SheetAdaptor::SheetAdaptor( Sheet* t )
 : QDBusAbstractAdaptor( t )
 {
     setAutoRelaySignals(true);
-//     m_proxy=0;
     m_sheet = t;
-
-//     sheetNameHasChanged();
 }
-
-// void SheetAdaptor::sheetNameHasChanged() {
-//   ident.resize(1);
-//   QObject *currentObj = m_sheet;
-//     while (currentObj != 0) {
-//         ident.prepend( currentObj->objectName().toUtf8() );
-//         ident.prepend('/');
-//         currentObj = currentObj->parent();
-//     }
-//     if ( ident[0] == '/' )
-//         ident = ident.mid(1);
-// 
-//    if (qstrcmp(ident,objId())!=0) {
-// 	   setObjId(ident);
-// 
-// //            delete m_proxy;
-//            QString str = objId();
-//            str += '/';
-// 	   kDebug(36001)<<"SheetAdaptor::sheetNameHasChanged(): new DCOP-ID:"<<objId()<<endl;
-// //            m_proxy = new CellProxy( m_sheet, str );
-//    }
-// 
-// }
-
 
 SheetAdaptor::~SheetAdaptor()
 {
-//     delete m_proxy;
 }
 
 QString SheetAdaptor::cell( int x, int y )
@@ -169,23 +66,29 @@ QString SheetAdaptor::cell( int x, int y )
     if ( y == 0 )
         y = 1;
 
-    return /*objId() + '/' + */Cell::name( x, y ).toLatin1();
+    return Cell::name( x, y );
 }
 
 QString SheetAdaptor::cell( const QString& name )
 {
-  Q_UNUSED(name)
-//     QString str = objeId();
-//     str += '/';
-//     str += name.toLatin1();
-
-    return "str";
+    const QRect rect = (*Region( m_sheet->doc()->map(), name, m_sheet ).constBegin())->rect();
+    if ( rect.isNull() ) return QString();
+    const QPoint location = rect.topLeft();
+    return cell(location.x(), location.y());
 }
 
 QString SheetAdaptor::text( int x, int y )
 {
-    Cell* cell = m_sheet ? m_sheet->cellAt(x, y) : 0;
+    Cell* cell = m_sheet->cellAt(x, y);
     return cell ? cell->text() : QString();
+}
+
+QString SheetAdaptor::text( const QString& name )
+{
+    const QRect rect = (*Region( m_sheet->doc()->map(), name, m_sheet ).constBegin())->rect();
+    if ( rect.isNull() ) return QString();
+    const QPoint location = rect.topLeft();
+    return text(location.x(), location.y());
 }
 
 bool SheetAdaptor::setText( int x, int y, const QString& text, bool parse )
@@ -206,6 +109,14 @@ bool SheetAdaptor::setText( int x, int y, const QString& text, bool parse )
 	dm->add(QPoint(x, y));
 	dm->execute();
 	return true;
+}
+
+bool SheetAdaptor::setText( const QString& name, const QString& text )
+{
+    const QRect rect = (*Region( m_sheet->doc()->map(), name, m_sheet ).constBegin())->rect();
+    if ( rect.isNull() ) return false;
+    const QPoint location = rect.topLeft();
+    return setText(location.x(), location.y(), text);
 }
 
 QVariant valueToVariant(const KSpread::Value& value)
@@ -250,6 +161,14 @@ QVariant SheetAdaptor::value( int x, int y )
     return cell ? valueToVariant( cell->value() ) : QVariant();
 }
 
+QVariant SheetAdaptor::value( const QString& name )
+{
+    const QRect rect = (*Region( m_sheet->doc()->map(), name, m_sheet ).constBegin())->rect();
+    if ( rect.isNull() ) return QVariant();
+    const QPoint location = rect.topLeft();
+    return value(location.x(), location.y());
+}
+
 bool SheetAdaptor::setValue( int x, int y, const QVariant& value )
 {
 	Cell* cell = m_sheet ? m_sheet->cellAt(x, y) : 0;
@@ -269,6 +188,14 @@ bool SheetAdaptor::setValue( int x, int y, const QVariant& value )
 	return true;
 }
 
+bool SheetAdaptor::setValue( const QString& name, const QVariant& value )
+{
+    const QRect rect = (*Region( m_sheet->doc()->map(), name, m_sheet ).constBegin())->rect();
+    if ( rect.isNull() ) return false;
+    const QPoint location = rect.topLeft();
+    return setValue(location.x(), location.y(), value);
+}
+
 QString SheetAdaptor::column( int _col )
 {
     //First col number = 1
@@ -286,28 +213,22 @@ QString SheetAdaptor::row( int _row )
     return "";//m_sheet->nonDefaultRowFormat( _row )->/*dcopObject()->*/getName/*objectName*/();
 }
 
-
-QString SheetAdaptor::name() const
+int SheetAdaptor::lastColumn() const
 {
-    return m_sheet->sheetName();
+    Cell* cell = m_sheet->firstCell();
+    return cell ? cell->column() : 0;
 }
 
+int SheetAdaptor::lastRow() const
+{
+    Cell* cell = m_sheet->firstCell();
+    return cell ? cell->row() : 0;
+}
 
 int SheetAdaptor::maxColumn() const
 {
     return m_sheet->maxColumn();
 
-}
-
-bool SheetAdaptor::areaHasNoContent(QRect area) const
-{
-	kDebug(36001) << "SheetAdaptor::areaHasNoContent("<<area<<");"<<endl;
-	return m_sheet->areaIsEmpty(Region(area));
-}
-
-bool SheetAdaptor::areaHasNoComments(QRect area) const
-{
-	return m_sheet->areaIsEmpty(Region(area), Sheet::Comment);
 }
 
 int SheetAdaptor::maxRow() const
@@ -340,6 +261,11 @@ int SheetAdaptor::maxRow() const
 //     out << DCOPRef( kapp->dcopClient()->appId(), str );
 //     return true;
 // }
+
+QString SheetAdaptor::name() const
+{
+    return m_sheet->sheetName();
+}
 
 bool SheetAdaptor::setSheetName( const QString & name)
 {

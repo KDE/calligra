@@ -45,32 +45,31 @@ public:
     explicit SheetAdaptor( Sheet* );
     ~SheetAdaptor();
 
-//     bool processDynamic( const DCOPCString& fun, const QByteArray& data,
-// 			 DCOPCString& replyType, QByteArray &replyData );
-
-//     void sheetNameHasChanged();
 public Q_SLOTS: // METHODS
     virtual QString cell( int x, int y );
     virtual QString cell( const QString& name );
 
     virtual QString text( int x, int y );
-    //virtual QString text( const QString& name );
+    virtual QString text( const QString& name );
     virtual bool setText( int x, int y, const QString& text, bool parse = true );
-    //virtual bool setText( const QString& name, const QString& text );
+    virtual bool setText( const QString& name, const QString& text );
 
     virtual QVariant value( int x, int y );
-    //virtual QVariant value( const QString& name );
+    virtual QVariant value( const QString& name );
     virtual bool setValue( int x, int y, const QVariant& value );
-    //virtual bool setValue( const QString& name, const QVariant& value );
+    virtual bool setValue( const QString& name, const QVariant& value );
 
     virtual QString column( int _col );
     virtual QString row( int _row );
 
-    virtual QString name() const;
+    virtual int lastColumn() const;
+    virtual int lastRow() const;
+
     virtual int maxColumn() const;
     virtual int maxRow() const;
-    virtual bool setSheetName( const QString & name);
 
+    virtual QString name() const;
+    virtual bool setSheetName( const QString & name);
 
     virtual bool insertColumn( int col,int nbCol );
     virtual bool insertRow( int row,int nbRow);
@@ -78,8 +77,6 @@ public Q_SLOTS: // METHODS
     virtual void removeRow( int row,int nbRow );
 
     virtual bool isHidden()const;
-    virtual bool areaHasNoContent(QRect area) const ;
-    virtual bool areaHasNoComments(QRect area) const ;
 
     virtual bool showGrid() const;
     virtual bool showFormula() const;
