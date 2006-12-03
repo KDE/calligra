@@ -111,12 +111,12 @@ bool SheetAdaptor::setText( int x, int y, const QString& text, bool parse )
 	return true;
 }
 
-bool SheetAdaptor::setText( const QString& name, const QString& text )
+bool SheetAdaptor::setText( const QString& name, const QString& text, bool parse )
 {
     const QRect rect = (*Region( m_sheet->doc()->map(), name, m_sheet ).constBegin())->rect();
     if ( rect.isNull() ) return false;
     const QPoint location = rect.topLeft();
-    return setText(location.x(), location.y(), text);
+    return setText(location.x(), location.y(), text, parse);
 }
 
 QVariant valueToVariant(const KSpread::Value& value)

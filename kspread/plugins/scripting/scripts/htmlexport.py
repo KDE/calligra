@@ -233,12 +233,12 @@ class Reader:
                     raise "No sheets which could be exported to HTML."
                 self.sheet = self.kspread.sheetByName( sheetnames[0] )
 
-            self.rowidx = 0
-            print "Reader.openFile file=%s rowidx=%i maxRow=%i maxColumn=%i" % (self.filename, self.rowidx, self.sheet.maxRow(), self.sheet.maxColumn())
+            self.rowidx = 1
+            print "Reader.openFile file=%s rowidx=%i lastRow=%i lastColumn=%i" % (self.filename, self.rowidx, self.sheet.lastRow(), self.sheet.lastColumn())
             self.progress = progress
             if self.progress:
                 self.progress.labelText = "Processing sheet \"%s\"" % self.sheet.name()
-                self.progress.maximum = self.sheet.maxRow()
+                self.progress.maximum = self.sheet.lastRow() + 1
 
         def closeFile(self):
             pass
@@ -246,9 +246,9 @@ class Reader:
         def readRecord(self):
             #FIXME this is not optimal since we need wo walk at least through 256*256 cells. It
             #would be better, if we reuse KSpread::Cell::firstCell()-iterator here.
-            if self.rowidx < self.sheet.maxRow():
+            if self.rowidx <= self.sheet.lastRow():
                 record = []
-                for i in range(self.sheet.maxColumn(), 0, -1):
+                for i in range(self.sheet.lastColumn() + 1, 1, -1):
                     value = self.sheet.text(i, self.rowidx)
                     #print "col=%i row=%i value=%s" % (i, self.rowidx, value)
                     if value or len(record) > 0:
@@ -257,7 +257,7 @@ class Reader:
                 if self.progress:
                     self.progress.value = self.rowidx
                 return record
-            print "EXPORT DONE rowidx=%i maxRow=%i maxColumn=%i" % (self.rowidx, self.sheet.maxRow(), self.sheet.maxColumn())
+            print "EXPORT DONE rowidx=%i lastRow=%i lastColumn=%i" % (self.rowidx, self.sheet.lastRow(), self.sheet.lastColumn())
             return None
 
     def __init__(self):

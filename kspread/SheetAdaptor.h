@@ -52,7 +52,7 @@ public Q_SLOTS: // METHODS
     virtual QString text( int x, int y );
     virtual QString text( const QString& name );
     virtual bool setText( int x, int y, const QString& text, bool parse = true );
-    virtual bool setText( const QString& name, const QString& text );
+    virtual bool setText( const QString& name, const QString& text, bool parse = true );
 
     virtual QVariant value( int x, int y );
     virtual QVariant value( const QString& name );
