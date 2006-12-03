@@ -43,7 +43,7 @@ public:
 	 saveConnectionData() is called automatically, if there's no \a filename provided 
 	 or the filename is already used, a new unique will be generated. 
 	 \return true on successful creating corresponding .kexic file */
-	bool addConnectionData(KexiDB::ConnectionData *data, const QString& filename = QString::null);
+	bool addConnectionData(KexiDB::ConnectionData *data, const QString& filename = QString());
 
 	/*! Saves changes made to \a oldData to a file which name has been provided by addConnectionData(). 
 	 This function does nothing if \a oldData hasn't been added to this set. 

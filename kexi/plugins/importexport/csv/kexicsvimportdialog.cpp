@@ -199,7 +199,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	m_uniquenessTest.setAutoDelete(true);
 
 	setIcon(DesktopIcon(_IMPORT_ICON));
-	setSizeGripEnabled( TRUE );
+	setSizeGripEnabled( true );
 
 //	m_encoding = QString::fromLatin1(KGlobal::locale()->encoding());
 //	m_trimmedInTextValuesChecked = true;

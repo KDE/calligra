@@ -187,7 +187,7 @@ void KexiImageContextMenu::saveAs()
 		"<qt>"+i18n("File \"%1\" already exists."
 		"<p>Do you want to replace it with a new one?")
 		.arg(QDir::convertSeparators(fileName))+"</qt>",0, 
-		KGuiItem(i18n("&Replace")), KGuiItem(i18n("&Don't Replace"))))
+		KGuiItem(i18n("&Replace")), KGuiItem(i18n("&Do not replace"))))
 	{
 		return;
 	}

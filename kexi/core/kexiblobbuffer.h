@@ -126,9 +126,9 @@ class KEXICORE_EXPORT KexiBLOBBuffer : public QObject
 				 Only call this method for unstored (in memory) BLOBs */
 				void setStoredWidthID(Id_t id);
 
-				QString originalFileName() const { return m_item ? m_item->name: QString::null; }
+				QString originalFileName() const { return m_item ? m_item->name: QString(); }
 
-				QString mimeType() const { return m_item ? m_item->mimeType : QString::null; }
+				QString mimeType() const { return m_item ? m_item->mimeType : QString(); }
 
 				Id_t folderId() const { return m_item ? m_item->folderId : 0; }
 

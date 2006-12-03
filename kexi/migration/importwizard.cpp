@@ -617,7 +617,7 @@ QString ImportWizard::driverNameForSelectedSource()
 			//try by URL:
 			ptr = KMimeType::findByURL( m_srcConn->selectedFileName() );
 		}
-		return ptr ? m_migrateManager.driverForMimeType( ptr.data()->name() ) : QString::null;
+		return ptr ? m_migrateManager.driverForMimeType( ptr.data()->name() ) : QString();
 	}
 
 	//server-based

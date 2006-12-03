@@ -360,7 +360,7 @@ void KexiStartupDialog::setupPageTemplates()
 	connect(d->templatesWidget, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT(templatesPageShown(QWidget*)));
 
 	if (d->dialogOptions & CheckBoxDoNotShowAgain) {
-		d->chkDoNotShow = new QCheckBox(i18n("Don't show me this dialog again"), d->pageTemplates, "chkDoNotShow");
+		d->chkDoNotShow = new QCheckBox(i18n("Do not show me this dialog again"), d->pageTemplates, "chkDoNotShow");
 		lyr->addWidget(d->chkDoNotShow);
 	}
 

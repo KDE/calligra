@@ -35,7 +35,7 @@ class KMenu;
 class HistoryEntry
 {
 	public:
-		HistoryEntry(bool success, const QTime &time, const QString &statement, /*int y,*/ const QString &error = QString::null);
+		HistoryEntry(bool success, const QTime &time, const QString &statement, /*int y,*/ const QString &error = QString());
 		~HistoryEntry();
 
 		QRect	geometry(int y, int width, QFontMetrics f);

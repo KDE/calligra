@@ -129,7 +129,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	addClass(wi);
 
 	wi = new KFormDesigner::WidgetInfo(
-		this, "containers", "Q3Frame" /*we're inheriting to get i18n'd strings already translated there*/);
+		this, "containers", "Q3Frame" /*we are inheriting to get i18n'd strings already translated there*/);
 	wi->setPixmap("frame");
 	wi->setClassName("KexiFrame");
 	wi->addAlternateClassName("Q3Frame", true/*override*/);
@@ -141,7 +141,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	addClass(wi);
 
 	wi = new KexiDataAwareWidgetInfo(
-		this, "stdwidgets", "QLabel" /*we're inheriting to get i18n'd strings already translated there*/);
+		this, "stdwidgets", "QLabel" /*we are inheriting to get i18n'd strings already translated there*/);
 	wi->setPixmap("label");
 	wi->setClassName("KexiDBLabel");
 	wi->addAlternateClassName("QLabel", true/*override*/);
@@ -155,7 +155,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 
 #ifndef KEXI_NO_IMAGEBOX_WIDGET
 	wi = new KexiDataAwareWidgetInfo(
-		this, "stdwidgets", "KexiPictureLabel" /*we're inheriting to get i18n'd strings already translated there*/);
+		this, "stdwidgets", "KexiPictureLabel" /*we are inheriting to get i18n'd strings already translated there*/);
 	wi->setPixmap("pixmaplabel");
 	wi->setClassName("KexiDBImageBox");
 	wi->addAlternateClassName("KexiPictureLabel", true/*override*/);
@@ -175,7 +175,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 
 #ifdef KEXI_DB_COMBOBOX_WIDGET
 	wi = new KexiDataAwareWidgetInfo(
-		this, "stdwidgets", "KComboBox" /*we're inheriting to get i18n'd strings already translated there*/);
+		this, "stdwidgets", "KComboBox" /*we are inheriting to get i18n'd strings already translated there*/);
 	wi->setPixmap("combo");
 	wi->setClassName("KexiDBComboBox");
 	wi->addAlternateClassName("KComboBox", true/*override*/);

@@ -138,7 +138,7 @@ void KexiDBComboBox::paintEvent( QPaintEvent * )
 		flags |= QStyle::Style_MouseOver;
 
 	if ( width() < 5 || height() < 5 ) {
-		qDrawShadePanel( &p, rect(), cg, FALSE, 2, &cg.brush( QColorGroup::Button ) );
+		qDrawShadePanel( &p, rect(), cg, false, 2, &cg.brush( QColorGroup::Button ) );
 		return;
 	}
 
