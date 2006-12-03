@@ -100,10 +100,12 @@ public:
     double  textHeight;
 
     // static empty data to be shared
-    static Private* empty( Style* defaultStyle, double defaultWidth, double defaultHeight )
+    static Private* empty( const Sheet* sheet )
     {
         if( !s_empty)
-            s_empty = new Private( defaultStyle, defaultWidth, defaultHeight );
+            s_empty = new Private( sheet->doc()->styleManager()->defaultStyle(),
+                                   sheet->columnFormat( 0 )->dblWidth(),
+                                   sheet->rowFormat( 0 )->dblHeight() );
         return s_empty;
     }
 
@@ -116,9 +118,7 @@ CellView::Private* CellView::Private::s_empty = 0;
 
 
 CellView::CellView( SheetView* sheetView, int col, int row )
-    : d( Private::empty( sheetView->sheet()->doc()->styleManager()->defaultStyle(),
-                         sheetView->sheet()->columnFormat( 0 )->dblWidth(),
-                         sheetView->sheet()->rowFormat( 0 )->dblHeight() ) )
+    : d( Private::empty( sheetView->sheet() ) )
 {
     Q_ASSERT( col > 0 && col <= KS_colMax );
     Q_ASSERT( row > 0 && row <= KS_rowMax );
