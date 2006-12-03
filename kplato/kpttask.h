@@ -296,7 +296,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(bool children, QByteArray indent);
+    void printDebug(bool children, const QByteArray& indent);
 #endif
 
 };

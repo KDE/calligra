@@ -1495,7 +1495,8 @@ bool Task::effortMetError() const {
 }
 
 #ifndef NDEBUG
-void Task::printDebug(bool children, QByteArray indent) {
+void Task::printDebug(bool children, const QByteArray& _indent) {
+    QByteArray indent = _indent;
     kDebug()<<indent<<"+ Task node: "<<name()<<" type="<<type()<<endl;
     indent += "!  ";
     kDebug()<<indent<<"Requested resources (total): "<<units()<<"%"<<endl;

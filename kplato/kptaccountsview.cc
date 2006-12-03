@@ -69,7 +69,7 @@ AccountsView::AccountItem::AccountItem( Account *a, QTreeWidgetItem *p, bool hig
     //kDebug()<<k_funcinfo<<endl;
 }
 
-AccountsView::AccountItem::AccountItem( QString text, Account *a, QTreeWidgetItem *parent, bool highlight )
+AccountsView::AccountItem::AccountItem( const QString& text, Account *a, QTreeWidgetItem *parent, bool highlight )
         : DoubleListViewBase::MasterListItem( parent, text, highlight ),
         account( a )
 {

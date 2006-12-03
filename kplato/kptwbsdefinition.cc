@@ -97,7 +97,7 @@ void WBSDefinition::setLevelsDef(int level, CodeDef def) {
     m_levelsDef.insert(level, def);
 }
 
-void WBSDefinition::setLevelsDef(int level, QString c, QString s) {
+void WBSDefinition::setLevelsDef(int level, const QString& c, const QString& s) {
     m_levelsDef.insert(level, CodeDef(c, s));
 }
 
@@ -181,7 +181,7 @@ bool WBSDefinition::setDefaultCode(uint index) {
     return true;
 }
 
-void WBSDefinition::setDefaultSeparator(QString s) {
+void WBSDefinition::setDefaultSeparator(const QString& s) {
     m_defaultDef.separator = s;
 }
 

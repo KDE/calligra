@@ -93,9 +93,9 @@ public:
     ViewListWidget( QWidget *parent );//QString name, KMainWindow *parent );
     ~ViewListWidget();
     
-    QTreeWidgetItem *addCategory( QString name );
-    ViewListItem *addView(QTreeWidgetItem *category, const QString name, KoView *view, KoDocument *doc, QString icon = QString::null );
-    ViewListItem *addView( QTreeWidgetItem *category, QString name, KoView *view, DocumentChild *ch, QString icon = QString::null );
+    QTreeWidgetItem *addCategory( const QString& name );
+    ViewListItem *addView(QTreeWidgetItem *category, const QString& name, KoView *view, KoDocument *doc, QString icon = QString::null );
+    ViewListItem *addView( QTreeWidgetItem *category, const QString& name, KoView *view, DocumentChild *ch, QString icon = QString::null );
     void setSelected( QTreeWidgetItem *item );
     ViewListItem *findItem( KoView *view, QTreeWidgetItem* parent = 0 );
     

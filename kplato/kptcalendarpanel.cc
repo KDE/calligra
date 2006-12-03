@@ -60,7 +60,7 @@ public:
 };
 
 
-CalendarPanel::CalendarPanel(QWidget *parent, QDate dt, const char *name, Qt::WFlags f)
+CalendarPanel::CalendarPanel(QWidget *parent, const QDate& dt, const char *name, Qt::WFlags f)
   : Q3Frame(parent,name, f)
 {
   init( dt );
@@ -210,7 +210,7 @@ CalendarPanel::resizeEvent(QResizeEvent*)
 }
 
 void
-CalendarPanel::dateChangedSlot(QDate date)
+CalendarPanel::dateChangedSlot(const QDate& date)
 {
     //kDebug() << "CalendarPanel::dateChangedSlot: date changed (" << date.year() << "/" << date.month() << "/" << date.day() << ")." << endl;
     line->setText(KGlobal::locale()->formatDate(date, true));
@@ -512,7 +512,7 @@ bool CalendarPanel::hasCloseButton() const
     return (d->closeButton != 0L);
 }
 
-int CalendarPanel::weekOfYear(QDate date)
+int CalendarPanel::weekOfYear(const QDate& date)
 {
     // Calculate ISO 8601 week number (taken from glibc/Gnumeric)
     int year, week, wday, jan1wday, nextjan1wday;

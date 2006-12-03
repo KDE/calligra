@@ -36,7 +36,7 @@ class Part;
 class AccountsDialog : public KDialog {
     Q_OBJECT
 public:
-    AccountsDialog(Accounts &acc, QWidget *parent=0, const char *name=0);
+    explicit AccountsDialog(Accounts &acc, QWidget *parent=0, const char *name=0);
 
     KCommand *buildCommand(Part *part);
 

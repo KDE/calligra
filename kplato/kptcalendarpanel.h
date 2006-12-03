@@ -56,7 +56,7 @@ public:
     /** The usual constructor.  The given date will be displayed
     * initially.
     **/
-    CalendarPanel(QWidget *parent=0, QDate=QDate::currentDate(), const char *name=0, Qt::WFlags f=0);
+    CalendarPanel(QWidget *parent=0, const QDate& date =QDate::currentDate(), const char *name=0, Qt::WFlags f=0);
     
     /**
     * Standard qt widget constructor. The initial date will be the
@@ -169,7 +169,7 @@ protected:
     QSize maxMonthRect;
 
 protected slots:
-    void dateChangedSlot(QDate);
+    void dateChangedSlot(const QDate&);
     void tableClickedSlot();
     void monthForwardClicked();
     void monthBackwardClicked();
@@ -191,17 +191,17 @@ signals:
      *  selected.
      *  @see dateSelected
      */
-    void dateChanged(QDate);
+    void dateChanged(const QDate&);
     /** This signal is emitted each time a day has been selected by
      *  clicking on the table (hitting a day in the current month).
      */
-    void dateSelected(QDate);
+    void dateSelected(const QDate&);
     /** This signal is emitted when enter is pressed and a VALID date
      *  has been entered before into the line edit. Connect to both
      *  dateEntered() and dateSelected() to receive all events where the
      *  user really enters a date.
      */
-    void dateEntered(QDate);
+    void dateEntered(const QDate&);
     /** This signal is emitted when the day has been selected by
      *  clicking on it in the table.
      */
@@ -227,7 +227,7 @@ private:
     class CalendarPanelPrivate;
     CalendarPanelPrivate *d;
     // calculate ISO 8601 week number
-    int weekOfYear(QDate);
+    int weekOfYear(const QDate&);
 };
 
 }  //KPlato namespace

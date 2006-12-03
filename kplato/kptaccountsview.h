@@ -91,7 +91,7 @@ class AccountItem : public DoubleListViewBase::MasterListItem
     public:
         AccountItem( Account *a, QTreeWidget *parent, bool highlight = false );
         AccountItem( Account *a, QTreeWidgetItem *parent, bool highlight = false );
-        AccountItem( QString text, Account *a, QTreeWidgetItem *parent, bool _highlight = false );
+        AccountItem( const QString& text, Account *a, QTreeWidgetItem *parent, bool _highlight = false );
 
         void add
             ( int col, const QDate &date, const EffortCost &ec );

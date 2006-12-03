@@ -78,7 +78,7 @@ public:
     void setFieldLeftscale(int f, double ls);
     void setFieldRightscale(int f, double rs);
     void setFieldScale(int f, double scale);
-    void setFieldUnit(int f, QString unit);
+    void setFieldUnit(int f, const QString& unit);
 
 signals:
     void valueChanged();
@@ -98,7 +98,7 @@ private:
     qint64 setValueHours( qint64 mins );
     qint64 setValueDays( qint64 mins );
     double power( double m, int e );
-    double fraction( QString number, int * exp );
+    double fraction( const QString& number, int * exp );
 
 private slots:
     virtual void dddLostFocus();

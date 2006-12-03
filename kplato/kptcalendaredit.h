@@ -45,7 +45,7 @@ public:
     
 private slots:
     void slotCheckAllFieldsFilled();
-    void slotDateSelected(QDate date);
+    void slotDateSelected(const QDate& date);
     void slotWeekdaySelected(int day);
     void slotStateActivated(int id);
     void slotClearClicked();

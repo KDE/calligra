@@ -74,12 +74,12 @@ public:
     enum Type { Type_Work, Type_Material };
 
     QString id() const { return m_id; }
-    bool setId( QString id );
+    bool setId( const QString& id );
     void generateId();
 
     Project *project() { return m_project; }
 
-    void setName( QString n );
+    void setName( const QString& n );
     const QString &name() const { return m_name;}
     void setType( Type type );
     //void setType(const QString &type);
@@ -162,7 +162,7 @@ public:
 
 #ifndef NDEBUG
 
-    void printDebug( QString ident );
+    void printDebug( const QString& ident );
 #endif
 
 protected:
@@ -209,7 +209,7 @@ public:
     virtual ~Resource();
 
     QString id() const { return m_id; }
-    bool setId( QString id );
+    bool setId( const QString& id );
     void generateId();
 
     enum Type { Type_Work, Type_Material };
@@ -289,7 +289,7 @@ public:
      * If local=false, check if there is a default calendar.
      */
     Calendar *calendar( bool local = false ) const;
-    Calendar *calendar( const QString id ) const;
+    Calendar *calendar( const QString& id ) const;
     void setCalendar( Calendar *calendar ) { m_calendar = calendar; }
 
     /**
@@ -346,7 +346,7 @@ public:
     /// Take, don't delete.
     void takeSchedule( const Schedule *schedule );
     void addSchedule( Schedule *schedule );
-    ResourceSchedule *createSchedule( QString name, int type, long id );
+    ResourceSchedule *createSchedule( const QString& name, int type, long id );
     ResourceSchedule *createSchedule( Schedule *parent );
 
 protected:
@@ -384,7 +384,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    void printDebug( QString ident );
+    void printDebug( const QString& ident );
 #endif
 };
 
@@ -469,7 +469,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    void printDebug( QString ident );
+    void printDebug( const QString& ident );
 #endif
 };
 
@@ -548,7 +548,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    void printDebug( QString ident );
+    void printDebug( const QString& ident );
 #endif
 };
 
@@ -634,7 +634,7 @@ private:
 
 #ifndef NDEBUG
 public:
-    void printDebug( QString ident );
+    void printDebug( const QString& ident );
 #endif
 };
 

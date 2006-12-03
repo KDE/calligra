@@ -567,7 +567,7 @@ bool Node::isStartNode() const {
     return m_dependParentNodes.isEmpty();
 }
 
-bool Node::setId(QString id) {
+bool Node::setId(const QString& id) {
     //kDebug()<<k_funcinfo<<id<<endl;
     if (id.isEmpty()) {
         kError()<<k_funcinfo<<"id is empty"<<endl;
@@ -668,7 +668,7 @@ void Node::addSchedule(Schedule *schedule) {
     m_schedules.insert(schedule->id(), schedule);
 }
 
-Schedule *Node::createSchedule(QString name, Schedule::Type type, long id) {
+Schedule *Node::createSchedule(const QString& name, Schedule::Type type, long id) {
     //kDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id<<endl;
     NodeSchedule *sch = new NodeSchedule(this, name, type, id);
     addSchedule(sch);
@@ -752,7 +752,7 @@ int Node::level() {
     return n ? n->level() + 1 : 0;
 }
 
-void Node::generateWBS(int count, WBSDefinition &def, QString wbs) {
+void Node::generateWBS(int count, WBSDefinition &def, const QString& wbs) {
     m_wbs = wbs + def.code(count, level());
     //kDebug()<<k_funcinfo<<m_name<<" wbs: "<<m_wbs<<endl;
     QString w = wbs + def.wbs(count, level());
@@ -894,7 +894,7 @@ QStringList Effort::typeToStringList( bool trans ) {
             << (trans ? i18n("FixedDuration") : QString("FixedDuration"));
 }
 
-void Effort::setType(QString type) {
+void Effort::setType(const QString& type) {
     if (type == "Effort")
         setType(Type_Effort);
     else if (type == "FixedDuration")
@@ -916,7 +916,7 @@ QStringList Effort::risktypeToStringList( bool trans ) {
             << (trans ? i18n("High") : QString("High"));
 }
 
-void Effort::setRisktype(QString type) {
+void Effort::setRisktype(const QString& type) {
     if (type == "High")
         setRisktype(Risk_High);
     else if (type == "Low")
@@ -950,7 +950,8 @@ int Effort::pessimisticRatio() const {
 
 // Debugging
 #ifndef NDEBUG
-void Node::printDebug(bool children, QByteArray indent) {
+void Node::printDebug(bool children, const QByteArray& _indent) {
+    QByteArray indent = _indent;
     kDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
     if (m_effort) m_effort->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
@@ -997,7 +998,8 @@ void Node::printDebug(bool children, QByteArray indent) {
 
 
 #ifndef NDEBUG
-void Effort::printDebug(QByteArray indent) {
+void Effort::printDebug(const QByteArray& _indent) {
+    QByteArray indent = _indent;
     kDebug()<<indent<<"  Effort:"<<endl;
     indent += "  ";
     kDebug()<<indent<<"  Expected:    "<<m_expectedEffort.toString()<<endl;

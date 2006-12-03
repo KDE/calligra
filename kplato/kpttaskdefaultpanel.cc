@@ -353,7 +353,7 @@ void ConfigTaskPanelImpl::setEstimateScales( double day )
 }
 
 
-void ConfigTaskPanelImpl::setEstimateFieldUnit( int field, QString unit )
+void ConfigTaskPanelImpl::setEstimateFieldUnit( int field, const QString& unit )
 {
     estimate->setFieldUnit(field, unit);
 }

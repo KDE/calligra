@@ -57,7 +57,7 @@ public:
     void setStartValues(Task &task);
 
 protected:
-    void setCurrentItem(QComboBox *box, QString name);
+    void setCurrentItem(QComboBox *box, const QString& name);
     
 private:
     Task &m_task;

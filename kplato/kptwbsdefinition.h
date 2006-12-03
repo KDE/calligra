@@ -69,13 +69,13 @@ public:
     void setLevelsDef(QMap<int, CodeDef> def);
     CodeDef levelsDef(int level) const;
     void setLevelsDef(int level, CodeDef def);
-    void setLevelsDef(int level, QString c, QString s);
+    void setLevelsDef(int level, const QString& c, const QString& s);
     
     QStringList codeList();
     int defaultCodeIndex() const;
     bool setDefaultCode(uint index);
     QString defaultSeparator() const { return m_defaultDef.separator; }
-    void setDefaultSeparator(QString s);
+    void setDefaultSeparator(const QString& s);
 
 protected:
     QString code(CodeDef &def, uint index);

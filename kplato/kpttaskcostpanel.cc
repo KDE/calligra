@@ -66,7 +66,7 @@ void TaskCostPanel::setStartValues(Task &task) {
     }
 }
 
-void TaskCostPanel::setCurrentItem(QComboBox *box, QString name) {
+void TaskCostPanel::setCurrentItem(QComboBox *box, const QString& name) {
     box->setCurrentIndex(0);
     for (int i = 0; i < box->count(); ++i) {
         if (name == box->text(i)) {

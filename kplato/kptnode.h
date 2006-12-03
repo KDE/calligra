@@ -64,7 +64,7 @@ public:
     // Declare the class abstract
     virtual ~Node() = 0;
 
-    bool setId(QString id);
+    bool setId(const QString& id);
     QString id() const { return m_id; } // unique identity
     
     enum NodeTypes {
@@ -432,7 +432,7 @@ public:
     /// Returns the level this node is in the hierarchy. Top node is level 0.
     virtual int level();
     /// Generate WBS
-    virtual void generateWBS(int count, WBSDefinition &def, QString wbs=QString());
+    virtual void generateWBS(int count, WBSDefinition &def, const QString& wbs=QString());
     QString wbs() const { return m_wbs; }
     
     double startupCost() const { return m_startupCost; }
@@ -470,7 +470,7 @@ public:
     /// Add schedule to list, replace if schedule with same id already exists.
     void addSchedule(Schedule *schedule);
     /// Create a new schedule.
-    Schedule *createSchedule(QString name, Schedule::Type type, long id);
+    Schedule *createSchedule(const QString& name, Schedule::Type type, long id);
     /// Create a new schedule.
     Schedule *createSchedule(Schedule *parent);
     
@@ -538,7 +538,7 @@ private:
         
 #ifndef NDEBUG
 public:
-    virtual void printDebug(bool children, QByteArray indent);
+    virtual void printDebug(bool children, const QByteArray& indent);
 #endif
 
 };
@@ -565,14 +565,14 @@ public:
      };
     Type type() const { return m_type; }
     void setType(Type type) { m_type = type; }
-    void setType(QString type);
+    void setType(const QString& type);
     QString typeToString( bool trans=false ) const;
     static QStringList typeToStringList( bool trans=false );
     
     enum Risktype { Risk_None, Risk_Low, Risk_High };
     Risktype risktype() const { return m_risktype; }
     void setRisktype(Risktype type) { m_risktype = type; }
-    void setRisktype(QString type);
+    void setRisktype(const QString& type);
     QString risktypeToString( bool trans=false ) const;
     static QStringList risktypeToStringList( bool trans=false );
 
@@ -631,7 +631,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(QByteArray indent);
+    void printDebug(const QByteArray& indent);
 #endif
 
 };

@@ -45,7 +45,7 @@ RelationPanel::RelationPanel(QWidget *parent)
         l->addWidget(lag);
 }
     
-AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, QString caption, ButtonCodes buttons, const char *n)
+AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, const QString& caption, ButtonCodes buttons, const char *n)
     : KDialog(p)
 {
     setCaption( caption );

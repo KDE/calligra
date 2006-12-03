@@ -194,7 +194,7 @@ void CalendarEdit::clearEditPart() {
     state->setEnabled(false);
 }
 
-void CalendarEdit::slotDateSelected(QDate date) {
+void CalendarEdit::slotDateSelected(const QDate& date) {
     if (m_calendar == 0)
         return;
     //kDebug()<<k_funcinfo<<"("<<date.toString()<<")"<<endl;

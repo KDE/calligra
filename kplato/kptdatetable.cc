@@ -80,10 +80,11 @@ DateValidator::fixup( QString& ) const
 }
 
 
-DateTable::DateTable(QWidget *parent, QDate date_, const char* name, Qt::WFlags f)
+DateTable::DateTable(QWidget *parent, const QDate& _date, const char* name, Qt::WFlags f)
     : Q3GridView(parent, name, f),
       m_enabled(true)
 {
+    QDate date_ = _date;
     //kDebug()<<k_funcinfo<<endl;
     m_dateStartCol = 1;
     m_selectedDates.clear();
@@ -594,7 +595,7 @@ QSize DateTable::sizeHint() const {
     }
 }
 
-void DateTable::setWeekNumbers(QDate date) {
+void DateTable::setWeekNumbers(const QDate& date) {
     if (!date.isValid()) {
         kError()<<k_funcinfo<<"Invalid date"<<endl;
     }
@@ -654,7 +655,7 @@ bool DateTable::weekdayMarked(int day) {
     return m_markedWeekdays.contains(day);
 }
 
-bool DateTable::dateMarked(QDate date) {
+bool DateTable::dateMarked(const QDate& date) {
     return m_markedDates[date.toString()];
 }
 

@@ -86,7 +86,7 @@ void ResourceGroup::resourceRemoved( Resource *res ) {
     }
 }
 
-bool ResourceGroup::setId(QString id) {
+bool ResourceGroup::setId(const QString& id) {
     //kDebug()<<k_funcinfo<<id<<endl;
     if (id.isEmpty()) {
         kError()<<k_funcinfo<<"id is empty"<<endl;
@@ -126,7 +126,7 @@ void ResourceGroup::generateId() {
     m_id = QString();
 }
 
-void ResourceGroup::setName( QString n )
+void ResourceGroup::setName( const QString& n )
 {
     m_name = n;
     changed();
@@ -305,7 +305,7 @@ Resource::~Resource() {
     }
 }
 
-bool Resource::setId(QString id) {
+bool Resource::setId(const QString& id) {
     //kDebug()<<k_funcinfo<<id<<endl;
     if (id.isEmpty()) {
         kError()<<k_funcinfo<<"id is empty"<<endl;
@@ -566,7 +566,7 @@ void Resource::addSchedule(Schedule *schedule) {
     m_schedules.insert(schedule->id(), schedule);
 }
 
-ResourceSchedule *Resource::createSchedule(QString name, int type, long id) {
+ResourceSchedule *Resource::createSchedule(const QString& name, int type, long id) {
     ResourceSchedule *sch = new ResourceSchedule(this, name, (Schedule::Type)type, id);
     addSchedule(sch);
     return sch;
@@ -1304,15 +1304,17 @@ bool ResourceRequestCollection::isEmpty() const {
 }
 #ifndef NDEBUG
 
-void ResourceGroup::printDebug(QString indent)
+void ResourceGroup::printDebug(const QString& _indent)
 {
+    QString indent = _indent;
     kDebug()<<indent<<"  + Resource group: "<<m_name<<" id="<<m_id<<endl;
     indent += "   !";
     foreach (Resource *r, m_resources)
         r->printDebug(indent);
 }
-void Resource::printDebug(QString indent)
+void Resource::printDebug(const QString& _indent)
 {
+    QString indent = _indent;
     kDebug()<<indent<<"  + Resource: "<<m_name<<" id="<<m_id/*<<" Overbooked="<<isOverbooked()*/<<endl;
     indent += "      ";
     foreach (Schedule *s, m_schedules) {
@@ -1321,8 +1323,9 @@ void Resource::printDebug(QString indent)
     indent += "  !";
 }
 
-void ResourceGroupRequest::printDebug(QString indent)
+void ResourceGroupRequest::printDebug(const QString& _indent)
 {
+    QString indent = _indent;
     kDebug()<<indent<<"  + Request to group: "<<(m_group ? m_group->name() : "None")<<" units="<<m_units<<"%"<<endl;
     indent += "  !";
     
@@ -1331,12 +1334,12 @@ void ResourceGroupRequest::printDebug(QString indent)
     }
 }
 
-void ResourceRequest::printDebug(QString indent)
+void ResourceRequest::printDebug(const QString& indent)
 {
     kDebug()<<indent<<"  + Request to resource: "<<(m_resource ? m_resource->name() : "None")<<" units="<<m_units<<"%"<<endl;
 }
 
-void ResourceRequestCollection::printDebug(QString indent)
+void ResourceRequestCollection::printDebug(const QString& indent)
 {
     kDebug()<<indent<<"  + Resource requests:"<<endl;
     foreach (ResourceGroupRequest *r, m_requests) {

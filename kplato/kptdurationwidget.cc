@@ -399,7 +399,7 @@ void DurationWidget::setFieldScale(int f, double scale)
     m_fields[f].scale = scale;
 }
 
-void DurationWidget::setFieldUnit(int f, QString unit)
+void DurationWidget::setFieldUnit(int f, const QString& unit)
 {
     if (m_fields[f].unit)
     {
@@ -416,7 +416,7 @@ double DurationWidget::power(double m, int e) {
     return value;
 }
 
-double DurationWidget::fraction(QString number, int *exp) {
+double DurationWidget::fraction(const QString& number, int *exp) {
     int point = number.find(m_decimalPoint);
     if (point == -1) {
         return 0.0;

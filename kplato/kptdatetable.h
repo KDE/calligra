@@ -262,7 +262,7 @@ public:
     /**
      * The constructor.
      */
-    DateTable(QWidget *parent=0, QDate date=QDate::currentDate(),
+    DateTable(QWidget *parent=0, const QDate& date=QDate::currentDate(),
                  const char* name="DateTable", Qt::WFlags f=0);
 
     /**
@@ -284,8 +284,8 @@ public:
     const QDate& getDate() const;
     bool selectDate(const QDate& date_);
 
-    void addMarkedDate(QDate date, int state) { m_markedDates.insert(date, state); }
-    bool dateMarked(QDate date);
+    void addMarkedDate(const QDate& date, int state) { m_markedDates.insert(date, state); }
+    bool dateMarked(const QDate& date);
 
     void addMarkedWeekday(int day, int state);
     void setMarkedWeekday(int day, int state) { m_markedWeekdays.insert(day, state); }
@@ -326,14 +326,14 @@ protected:
 
     bool contentsMousePressEvent_internal(QMouseEvent *);
 
-    int weekOfYear(QDate date) const;
-    void setWeekNumbers(QDate);
+    int weekOfYear(const QDate& date) const;
+    void setWeekNumbers(const QDate&);
 
     bool weekSelected(int row);
     bool weekSelected();
     bool weekdaySelected();
     bool isWeekdaySelected(int day);
-    bool dateSelected(QDate date);
+    bool dateSelected(const QDate& date);
     bool dateSelected();
     void updateSelectedCells();
     void updateMarkedCells();
@@ -383,7 +383,7 @@ signals:
     /**
      * The selected date changed.
      */
-    void dateChanged(QDate);
+    void dateChanged(const QDate&);
     /**
      * A date has been selected by clicking on the table.
      */

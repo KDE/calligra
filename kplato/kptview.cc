@@ -319,7 +319,7 @@ void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev
     emit activated( static_cast<ViewListItem*>( item ), static_cast<ViewListItem*>( prev ) );
 }
 
-QTreeWidgetItem *ViewListWidget::addCategory( QString name )
+QTreeWidgetItem *ViewListWidget::addCategory( const QString& name )
 {
     //kDebug() << k_funcinfo << endl;
     QTreeWidgetItem *item = m_viewlist->findCategory( name );
@@ -331,7 +331,7 @@ QTreeWidgetItem *ViewListWidget::addCategory( QString name )
     return item;
 }
 
-ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString name, KoView *view, KoDocument *doc, QString icon )
+ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString& name, KoView *view, KoDocument *doc, QString icon )
 {
     ViewListItem * item = new ViewListItem( category, QStringList( name ), ViewListWidget::SubView );
     item->setView( view );
@@ -342,7 +342,7 @@ ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString 
     return item;
 }
 
-ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString name, KoView *view, DocumentChild *ch, QString icon )
+ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString& name, KoView *view, DocumentChild *ch, QString icon )
 {
     ViewListItem * item = new ViewListItem( category, QStringList( name ), ViewListWidget::ChildDocument );
     item->setView( view );
