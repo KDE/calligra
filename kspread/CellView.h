@@ -107,7 +107,8 @@ public:
   void paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                          const KoPoint& paintCoordinate,
                          const QPoint& cellCoordinate, const QRect& cellRegion,
-                         QLinkedList<QPoint> &mergedCellsPainted, Cell* cell, SheetView* sheetView);
+                         QLinkedList<QPoint> &mergedCellsPainted,
+                         Cell* cell, SheetView* sheetView );
 
   /**
    * \ingroup Painting
@@ -117,7 +118,8 @@ public:
    */
   void paintDefaultBorders( QPainter& painter, const QRectF &paintRegion,
                             const QRectF &cellRegion, const QPoint &cellCoordinate,
-                            Borders paintBorder, Cell* cell );
+                            Borders paintBorder, const QRect& cellRegion,
+                            Cell* cell, SheetView* sheetView );
 
   /**
    * \ingroup Layout

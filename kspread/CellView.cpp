@@ -592,11 +592,13 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
         return;
     }
 
+#if 0
     // 1. Paint the default borders if we are on screen or if we are printing
     //    and the checkbox to do this is checked.
     if ( painter.device()->devType() != QInternal::Printer ||
          sheet->print()->printGrid())
         paintDefaultBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder, cell );
+#endif
 
     // 2. Paint the borders of the cell if no other cell is forcing this
     // one, i.e. this cell is not part of a merged cell.
@@ -849,7 +851,8 @@ void CellView::paintBackground( QPainter& painter, const QRectF& cellRect,
 //
 void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
                                     const QRectF &cellRect, const QPoint &cellRef,
-                                    Borders paintBorder, Cell* cell )
+                                    Borders paintBorder, const QRect& cellRegion,
+                                    Cell* cell, SheetView* sheetView )
 {
     Q_UNUSED(cellRef);
 
@@ -875,6 +878,53 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
     --Robert Knight (robertknight@gmail.com)
     */
     bool paintingToExternalDevice = dynamic_cast<QPrinter*>(painter.device());
+
+    const int col = cellRef.x();
+    const int row = cellRef.y();
+
+    paintBorder = CellView::NoBorder;
+
+    // borders
+    // NOTE Stefan: the borders of the adjacent cells are taken for the case,
+    //              that the cell is located on the edge of the cell range,
+    //              that is painted.
+    if ( col == 1 )
+        paintBorder |= LeftBorder;
+    else if ( d->style.leftPenValue() < sheetView->cellView( col - 1, row ).style().rightPenValue() )
+        d->style.setLeftBorderPen( sheetView->cellView( col - 1, row ).style().rightBorderPen() );
+    else // if ( d->style.leftPenValue() >= sheetView->cellView( col - 1, row ).style().rightPenValue() )
+        paintBorder |= LeftBorder;
+    if ( col == KS_colMax )
+        paintBorder |= CellView::RightBorder;
+    else if ( d->style.rightPenValue() < sheetView->cellView( col + 1, row ).style().leftPenValue() )
+        d->style.setRightBorderPen( sheetView->cellView( col + 1, row ).style().leftBorderPen() );
+    else if ( d->style.rightPenValue() > sheetView->cellView( col + 1, row ).style().leftPenValue() )
+        paintBorder |= CellView::RightBorder;
+    if ( row == 1 )
+        paintBorder |= TopBorder;
+    else if ( d->style.topPenValue() < sheetView->cellView( col, row - 1 ).style().bottomPenValue() )
+        d->style.setTopBorderPen( sheetView->cellView( col, row - 1 ).style().bottomBorderPen() );
+    else // if ( d->style.topPenValue() >= sheetView->cellView( col, row - 1 ).style().bottomPenValue() )
+        paintBorder |= TopBorder;
+    if ( row == KS_rowMax )
+        paintBorder |= BottomBorder;
+    else if ( d->style.bottomPenValue() < sheetView->cellView( col, row + 1 ).style().topPenValue() )
+        d->style.setBottomBorderPen( sheetView->cellView( col, row + 1 ).style().topBorderPen() );
+    else if ( d->style.bottomPenValue() >= sheetView->cellView( col, row + 1 ).style().topPenValue() )
+        paintBorder |= BottomBorder;
+
+    // Paint border if outermost cell or if the pen is more "worth"
+    // than the border pen of the cell on the other side of the
+    // border or if the cell on the other side is not painted. In
+    // the latter case get the pen that is of more "worth"
+    if ( col == cellRegion.right() )
+        paintBorder |= CellView::RightBorder;
+    if ( row == cellRegion.bottom() )
+        paintBorder |= CellView::BottomBorder;
+    if ( col == cellRegion.left() )
+        paintBorder |= CellView::LeftBorder;
+    if ( row == cellRegion.top() )
+        paintBorder |= CellView::TopBorder;
 
     // Each cell is responsible for drawing it's top and left portions
     // of the "default" grid. --Or not drawing it if it shouldn't be
