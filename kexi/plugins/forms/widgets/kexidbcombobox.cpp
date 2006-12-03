@@ -232,7 +232,7 @@ QRect KexiDBComboBox::buttonGeometry() const
 	QRect arrowRect( 
 		style().querySubControlMetrics( QStyle::CC_ComboBox, d->paintedCombo, QStyle::SC_ComboBoxArrow) );
 	arrowRect = QStyle::visualRect(arrowRect, d->paintedCombo);
-	arrowRect.setHeight( QMAX(  height() - (2 * arrowRect.y()), arrowRect.height() ) ); // a fix for Motif style
+	arrowRect.setHeight( qMax(  height() - (2 * arrowRect.y()), arrowRect.height() ) ); // a fix for Motif style
 	return arrowRect;
 }
 

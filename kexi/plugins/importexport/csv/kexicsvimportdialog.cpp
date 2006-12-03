@@ -595,15 +595,15 @@ QString KexiCSVImportDialog::detectDelimiterByLookingAtFirstBytesOfFile(QTextStr
 		}
 		else if (c=='\t') {
 			tabs++;
-			detectedDelimiter = QMAX( prevChar=='"' ? CH_TAB_AFTER_QUOTE : CH_TAB, detectedDelimiter );
+			detectedDelimiter = qMax( prevChar=='"' ? CH_TAB_AFTER_QUOTE : CH_TAB, detectedDelimiter );
 		}
 		else if (c==';') {
 			semicolons++;
-			detectedDelimiter = QMAX( prevChar=='"' ? CH_SEMICOLON_AFTER_QUOTE : CH_SEMICOLON, detectedDelimiter );
+			detectedDelimiter = qMax( prevChar=='"' ? CH_SEMICOLON_AFTER_QUOTE : CH_SEMICOLON, detectedDelimiter );
 		}
 		else if (c==',') {
 			commas++;
-			detectedDelimiter = QMAX( prevChar=='"' ? CH_COMMA_AFTER_QUOTE : CH_COMMA, detectedDelimiter );
+			detectedDelimiter = qMax( prevChar=='"' ? CH_COMMA_AFTER_QUOTE : CH_COMMA, detectedDelimiter );
 		}
 		prevChar = c;
 	}

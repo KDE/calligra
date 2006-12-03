@@ -2687,7 +2687,7 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 		if (!ok)
 			break;
 		Field::Type f_type = (Field::Type)f_int_type;
-		int f_len = QMAX( 0, cursor->value(3).toInt(&ok) );
+		int f_len = qMax( 0, cursor->value(3).toInt(&ok) );
 		if (!ok)
 			break;
 		int f_prec = cursor->value(4).toInt(&ok);

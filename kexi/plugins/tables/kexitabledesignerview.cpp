@@ -150,7 +150,7 @@ KexiTableDesignerView::KexiTableDesignerView(KexiMainWindow *win, QWidget *paren
 	QFontMetrics fm(font());
 	for (uint i=1; i<=types.count(); i++) {
 		types[i-1] = KexiDB::Field::typeGroupName(i);
-		d->maxTypeNameTextWidth = QMAX(d->maxTypeNameTextWidth, fm.width(types[i-1]));
+		d->maxTypeNameTextWidth = qMax(d->maxTypeNameTextWidth, fm.width(types[i-1]));
 	}
 	col->field()->setEnumHints(types);
 
