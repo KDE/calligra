@@ -143,10 +143,10 @@ bool Style::hasAttribute( Key key ) const
 void Style::loadAttributes( const QList< QSharedDataPointer<SubStyle> >& subStyles )
 {
     d->subStyles.clear();
-    foreach ( QSharedDataPointer<SubStyle> subStyle, subStyles )
+    for ( int i = 0; i < subStyles.count(); ++i )
     {
         // already existing items are replaced
-        d->subStyles.insert( subStyle->type(), subStyle );
+        d->subStyles.insert( subStyles[i]->type(), subStyles[i] );
     }
 }
 
@@ -2281,9 +2281,9 @@ bool Style::operator==( const Style& other ) const
     if ( other.isEmpty() )
         return isEmpty() ? true : false;
     QList<Key> attributes = d->subStyles.keys() + other.d->subStyles.keys();
-    foreach ( Key key, attributes )
+    for ( int i = 0; i < attributes.count(); ++i )
     {
-        if ( !compare( d->subStyles.value(key).data(), other.d->subStyles.value( key ).data() ) )
+        if ( !compare( d->subStyles.value(attributes[i]).data(), other.d->subStyles.value(attributes[i]).data() ) )
             return false;
     }
     return true;
@@ -2296,14 +2296,14 @@ void Style::operator=( const Style& other )
 
 void Style::merge( const Style& style )
 {
-    foreach( const QSharedDataPointer<SubStyle>& subStyle, style.subStyles() )
-        insertSubStyle( subStyle );
+    for ( int i = 0; i < style.subStyles().count(); ++i )
+        insertSubStyle( style.subStyles()[i] );
 }
 
 void Style::dump() const
 {
-    foreach( const QSharedDataPointer<SubStyle>& subStyle, d->subStyles )
-        subStyle->dump();
+    for ( int i = 0; i < subStyles().count(); ++i )
+        subStyles()[i]->dump();
 }
 
 void Style::setType( StyleType type )
