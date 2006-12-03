@@ -321,14 +321,31 @@ void StyleStorage::garbageCollection()
     if ( currentPair.second->type() == Style::NamedStyleKey &&
          !styleManager()->style( static_cast<const NamedStyle*>(currentPair.second.data())->name ) )
     {
+        kDebug(36006) << "StyleStorage: removing " << currentPair.second->debugData()
+                        << " at " << currentPair.first
+                        << ", used " << currentPair.second->ref << " times" << endl;
         d->tree.remove( currentPair.first, currentPair.second );
         d->subStyles[currentPair.second->type()].removeAll( currentPair.second );
         return; // already done
     }
 
     QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.intersects(currentPair.first.toRect());
+    if ( subStyles.isEmpty() ) // actually never true, just for sanity
+         return;
+
+    // check wether the default style is placed first
+    if ( currentPair.second->type() == Style::DefaultStyleKey &&
+         subStyles[0]->type() == Style::DefaultStyleKey )
+    {
+        kDebug(36006) << "StyleStorage: removing default style"
+                        << " at " << currentPair.first
+                        << ", used " << currentPair.second->ref << " times" << endl;
+        d->tree.remove( currentPair.first, currentPair.second );
+        return; // already done
+    }
+
     bool found = false;
-    foreach ( const QSharedDataPointer<SubStyle>& subStyle, subStyles )
+    foreach( const QSharedDataPointer<SubStyle>& subStyle, subStyles )
     {
         // as long as the substyle in question was not found, skip the substyle
         if ( !found )
@@ -346,8 +363,11 @@ void StyleStorage::garbageCollection()
              subStyle->type() == Style::DefaultStyleKey ||
              subStyle->type() == Style::NamedStyleKey )
         {
-            kDebug(36006) << "StyleStorage: removing " << currentPair.second->debugData() << " at " << currentPair.first << endl;
+            kDebug(36006) << "StyleStorage: removing " << currentPair.second->debugData()
+                          << " at " << currentPair.first
+                          << ", used " << currentPair.second->ref << "times" << endl;
             d->tree.remove( currentPair.first, currentPair.second );
+#if 0
             kDebug(36006) << "StyleStorage: usage of " << currentPair.second->debugData() << " is " << currentPair.second->ref << endl;
             // FIXME Stefan: The usage of substyles used once should be
             //               two (?) here, not more. Why is this not the case?
@@ -355,11 +375,13 @@ void StyleStorage::garbageCollection()
             //               a) the tree
             //               b) the reusage list (where it should be removed)
             //               c) the cached styles (!)
+            //               d) the undo data of operations (!)
             if ( currentPair.second->ref == 2 )
             {
                 kDebug(36006) << "StyleStorage: removing " << currentPair.second << " from the used subStyles" << endl;
                 d->subStyles[currentPair.second->type()].removeAll( currentPair.second );
             }
+#endif
             break;
         }
     }
