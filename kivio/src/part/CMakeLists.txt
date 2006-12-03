@@ -12,6 +12,7 @@ set(kivioprivate_LIB_SRCS
   KivioMasterPage.cpp
   KivioPage.cpp
   KivioShapeGeometry.cpp
+  KivioLayer.cpp
 )
 
 kde4_automoc(${kivioprivate_LIB_SRCS})

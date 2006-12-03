@@ -19,20 +19,26 @@
 
 #include "KivioAbstractPage.h"
 
+#include <KLocale>
+
 #include <KoShape.h>
 
 #include "KivioDocument.h"
+#include "KivioLayer.h"
 
 KivioAbstractPage::KivioAbstractPage(KivioDocument* doc, const QString& title)
 {
   m_document = doc;
   setTitle(title);
+
+  // Add a default layer
+  addLayer(new KivioLayer(i18n("Layer 1"), this));
 }
 
 KivioAbstractPage::~KivioAbstractPage()
 {
-  qDeleteAll(m_shapeList);
-  m_shapeList.clear();
+  qDeleteAll(m_layerList);
+  m_layerList.clear();
 }
 
 void KivioAbstractPage::setTitle(const QString& newTitle)
@@ -47,27 +53,36 @@ QString KivioAbstractPage::title() const
   return m_title;
 }
 
-void KivioAbstractPage::addShape(KoShape* shape)
+QList<KivioLayer*> KivioAbstractPage::layers() const
 {
-  if(shape == 0) {
-    return;
-  }
-
-  m_shapeList.append(shape);
-  m_document->addShapeToViews(this, shape);
+  return m_layerList;
 }
 
-void KivioAbstractPage::removeShape(KoShape* shape)
+QList<KoShape*> KivioAbstractPage::layerShapes() const
 {
-  if(shape == 0) {
-    return;
-  }
+    QList<KoShape*> shapes;
 
-  m_document->removeShapeFromViews(this, shape);
-  m_shapeList.removeAll(shape);
+    foreach(KivioLayer* layer, m_layerList) {
+        shapes.append(layer);
+    }
+
+    return shapes;
 }
 
-QList<KoShape*> KivioAbstractPage::shapeList() const
+void KivioAbstractPage::addLayer(KivioLayer* layer)
 {
-  return m_shapeList;
+    if((layer == 0) || m_layerList.contains(layer))
+        return;
+
+    m_document->addShapeToViews(this, layer);
+    m_layerList.append(layer);
+}
+
+void KivioAbstractPage::removeLayer(KivioLayer* layer)
+{
+    if(layer == 0)
+        return;
+
+    m_document->removeShapeFromViews(this, layer);
+    m_layerList.removeAll(layer);
 }

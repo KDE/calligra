@@ -47,6 +47,7 @@
 #include "KivioAbstractPage.h"
 #include "KivioPage.h"
 #include "KivioShapeGeometry.h"
+#include "KivioLayer.h"
 
 KivioView::KivioView(KivioDocument* document, QWidget* parent)
   : KoView(document, parent), m_document(document)
@@ -168,8 +169,8 @@ void KivioView::setActivePage(KivioAbstractPage* page)
     }
 
     m_activePage = page;
-    m_canvas->shapeController()->setShapeControllerBase(m_activePage);
-    shapeManager()->setShapes(m_activePage->shapeList());
+    m_canvas->shapeController()->setShapeControllerBase(m_activePage->layers().last());
+    shapeManager()->setShapes(m_activePage->layerShapes());
     m_canvas->updateSize();
     KoPageLayout layout = m_activePage->pageLayout();
     m_horizontalRuler->setRulerLength(layout.ptWidth);

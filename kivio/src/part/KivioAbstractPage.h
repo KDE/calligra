@@ -29,9 +29,10 @@ class KoPageLayout;
 class KoShape;
 
 class KivioDocument;
+class KivioLayer;
 
 /** Base class for KivioPage and KivioMasterPage */
-class KivioAbstractPage : public KoShapeControllerBase
+class KivioAbstractPage
 {
   public:
     KivioAbstractPage(KivioDocument* doc, const QString& title);
@@ -47,15 +48,21 @@ class KivioAbstractPage : public KoShapeControllerBase
 
     virtual KoPageLayout pageLayout() const = 0;
 
-    virtual void addShape(KoShape* shape);
-    virtual void removeShape(KoShape* shape);
+    /// Add @p layer to the page's layer list
+    void addLayer(KivioLayer* layer);
+    /// Remove @p layer from the page's layer list
+    void removeLayer(KivioLayer* layer);
 
-    QList<KoShape*> shapeList() const;
+    /// @return list of layers
+    QList<KivioLayer*> layers() const;
+
+    /// @return the layers as a list of KoShapes to be used when KoShapes is expected
+    QList<KoShape*> layerShapes() const;
 
   private:
     KivioDocument* m_document;
     QString m_title;
-    QList<KoShape*> m_shapeList;
+    QList<KivioLayer*> m_layerList;
 };
 
 #endif
