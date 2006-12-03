@@ -56,7 +56,7 @@ public:
     /**
      * \return the stored value at the position \p point .
      */
-    T at(const QPoint& point) const;
+    T contains(const QPoint& point) const;
 
     QList< QPair<QRectF, T> > undoData(const QRect& rect) const;
 
@@ -135,7 +135,7 @@ Storage<T>::~Storage()
 }
 
 template<typename T>
-T Storage<T>::at(const QPoint& point) const
+T Storage<T>::contains(const QPoint& point) const
 {
     // first, lookup point in the cache
     if ( m_cache.contains( point ) )

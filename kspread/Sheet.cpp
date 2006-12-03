@@ -616,7 +616,7 @@ StyleStorage* Sheet::styleStorage() const
 
 QString Sheet::comment( int column, int row ) const
 {
-    return d->commentStorage->at( QPoint( column, row ) );
+    return d->commentStorage->contains( QPoint( column, row ) );
 }
 
 void Sheet::setComment( const Region& region, const QString& comment ) const
@@ -631,7 +631,7 @@ CommentStorage* Sheet::commentStorage() const
 
 Conditions Sheet::conditions( int column, int row ) const
 {
-    return d->conditionsStorage->at( QPoint( column, row ) );
+    return d->conditionsStorage->contains( QPoint( column, row ) );
 }
 
 void Sheet::setConditions( const Region& region, Conditions conditions ) const
@@ -646,7 +646,7 @@ ConditionsStorage* Sheet::conditionsStorage() const
 
 KSpread::Validity Sheet::validity( int column, int row ) const
 {
-    return d->validityStorage->at( QPoint( column, row ) );
+    return d->validityStorage->contains( QPoint( column, row ) );
 }
 
 void Sheet::setValidity( const Region& region, KSpread::Validity validity ) const
