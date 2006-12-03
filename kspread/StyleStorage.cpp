@@ -185,7 +185,7 @@ int StyleStorage::nextStyleRight( int column, int row ) const
 {
     QRegion region = d->usedArea & QRect( column + 1, row, KS_colMax, 1 );
     QList<int> usedColumns;
-    foreach ( QRect rect, region.rects() )
+    foreach ( const QRect& rect, region.rects() )
     {
         for ( int col = rect.left(); col <= rect.right(); ++col )
         {
@@ -225,7 +225,7 @@ void StyleStorage::insert(const Region& region, const Style& style)
 {
     if ( style.isEmpty() )
         return;
-    foreach ( const QSharedDataPointer<SubStyle> subStyle, style.subStyles() )
+    foreach ( const QSharedDataPointer<SubStyle>& subStyle, style.subStyles() )
     {
         const bool isDefault = subStyle->type() == Style::DefaultStyleKey;
         Region::ConstIterator end(region.constEnd());
@@ -328,7 +328,7 @@ void StyleStorage::garbageCollection()
 
     QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.intersects(currentPair.first.toRect());
     bool found = false;
-    foreach ( const QSharedDataPointer<SubStyle> subStyle, subStyles )
+    foreach ( const QSharedDataPointer<SubStyle>& subStyle, subStyles )
     {
         // as long as the substyle in question was not found, skip the substyle
         if ( !found )
@@ -371,7 +371,7 @@ void StyleStorage::invalidateCache( const QRect& rect )
 //     kDebug(36006) << "StyleStorage: Invalidating " << rect << endl;
     const QRegion region = d->cachedArea.intersected( rect );
     d->cachedArea = d->cachedArea.subtracted( rect );
-    foreach ( QRect rect, region.rects() )
+    foreach ( const QRect& rect, region.rects() )
     {
         for ( int col = rect.left(); col <= rect.right(); ++col )
         {
@@ -392,18 +392,18 @@ void StyleStorage::invalidateCache( const QRect& rect )
 Style StyleStorage::composeStyle( const QList<QSharedDataPointer<SubStyle> >& subStyles ) const
 {
     Style style;
-    foreach ( const QSharedDataPointer<SubStyle> subStyle, subStyles )
+    for ( int i = 0; i < subStyles.count(); ++i )
     {
-        if ( subStyle->type() == Style::DefaultStyleKey )
+        if ( subStyles[i]->type() == Style::DefaultStyleKey )
             style.clear();
-        if ( subStyle->type() == Style::NamedStyleKey )
+        if ( subStyles[i]->type() == Style::NamedStyleKey )
         {
             style.clear();
-            CustomStyle* namedStyle = styleManager()->style( static_cast<const NamedStyle*>(subStyle.data())->name );
+            CustomStyle* namedStyle = styleManager()->style( static_cast<const NamedStyle*>(subStyles[i].data())->name );
             if ( namedStyle )
                 style = *namedStyle;
         }
-        style.insertSubStyle( subStyle );
+        style.insertSubStyle( subStyles[i] );
     }
     return style;
 }
