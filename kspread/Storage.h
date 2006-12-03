@@ -145,6 +145,17 @@ void Storage<T>::garbageCollection()
         return;
     const QPair<QRectF,T> currentPair = m_possibleGarbage.takeFirst();
     QList<T> dataList = m_tree.intersects(currentPair.first.toRect());
+    if ( dataList.isEmpty() ) // actually never true, just for sanity
+         return;
+
+    // check wether the default style is placed first
+    if ( currentPair.second == T() && dataList[0] == T() )
+    {
+        kDebug(36006) << "Storage: removing default data at " << currentPair.first << endl;
+        m_tree.remove( currentPair.first, currentPair.second );
+        return; // already done
+    }
+
     bool found = false;
     foreach ( const T data, dataList )
     {
