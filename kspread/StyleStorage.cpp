@@ -333,13 +333,15 @@ void StyleStorage::garbageCollection()
         return; // already done
     }
 
-    QList<SharedSubStyle> subStyles = d->tree.intersects(currentPair.first.toRect());
-    if ( subStyles.isEmpty() ) // actually never true, just for sanity
+    typedef QPair<QRectF,SharedSubStyle> SharedSubStylePair;
+    QList<SharedSubStylePair> pairs = d->tree.intersectingPairs(currentPair.first.toRect());
+    if ( pairs.isEmpty() ) // actually never true, just for sanity
          return;
 
     // check wether the default style is placed first
     if ( currentPair.second->type() == Style::DefaultStyleKey &&
-         subStyles[0]->type() == Style::DefaultStyleKey )
+         pairs[0].second->type() == Style::DefaultStyleKey &&
+         pairs[0].first == currentPair.first )
     {
         kDebug(36006) << "StyleStorage: removing default style"
                         << " at " << currentPair.first
@@ -349,12 +351,13 @@ void StyleStorage::garbageCollection()
     }
 
     bool found = false;
-    foreach( const SharedSubStyle& subStyle, subStyles )
+    foreach( const SharedSubStylePair& pair, pairs )
     {
         // as long as the substyle in question was not found, skip the substyle
         if ( !found )
         {
-            if ( Style::compare( subStyle.data(), currentPair.second.data() ) )
+            if ( pair.first == currentPair.first &&
+                 Style::compare( pair.second.data(), currentPair.second.data() ) )
             {
                 found = true;
             }
@@ -362,10 +365,12 @@ void StyleStorage::garbageCollection()
         }
 
         // remove the current pair, if another substyle of the same type,
-        // the default style or a named style follows
-        if ( subStyle->type() == currentPair.second->type() ||
-             subStyle->type() == Style::DefaultStyleKey ||
-             subStyle->type() == Style::NamedStyleKey )
+        // the default style or a named style follows and the rectangle
+        // is completely convered
+        if ( ( pair.second->type() == currentPair.second->type() ||
+               pair.second->type() == Style::DefaultStyleKey ||
+               pair.second->type() == Style::NamedStyleKey ) &&
+             pair.first.contains( currentPair.first ) )
         {
             kDebug(36006) << "StyleStorage: removing " << currentPair.second->debugData()
                           << " at " << currentPair.first

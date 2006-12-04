@@ -129,7 +129,7 @@ Things not in bugzilla
       - Basic implementation.						done
       - Undo.								----
     - Fix garbage collection.						----
-      - Compare rectangles.						----
+      - Compare rectangles.						done
       - Launch in a separate thread.					----
     - Seek & destroy R-Tree data rects, if they get empty after		----
       deletion of columns/rows, but store them for undo.

@@ -323,12 +323,13 @@ void Storage<T>::garbageCollection()
     if ( m_possibleGarbage.isEmpty() )
         return;
     const QPair<QRectF,T> currentPair = m_possibleGarbage.takeFirst();
-    QList<T> dataList = m_tree.intersects(currentPair.first.toRect());
-    if ( dataList.isEmpty() ) // actually never true, just for sanity
+    typedef QPair<QRectF,T> DataPair;
+    QList<DataPair> pairs = m_tree.intersectingPairs(currentPair.first.toRect());
+    if ( pairs.isEmpty() ) // actually never true, just for sanity
          return;
 
     // check wether the default style is placed first
-    if ( currentPair.second == T() && dataList[0] == T() )
+    if ( currentPair.second == T() && pairs[0].second == T() && pairs[0].first == currentPair.first )
     {
         kDebug(36006) << "Storage: removing default data at " << currentPair.first << endl;
         m_tree.remove( currentPair.first, currentPair.second );
@@ -336,12 +337,12 @@ void Storage<T>::garbageCollection()
     }
 
     bool found = false;
-    foreach ( const T data, dataList )
+    foreach ( const DataPair pair, pairs )
     {
         // as long as the substyle in question was not found, skip the substyle
         if ( !found )
         {
-            if ( data == currentPair.second )
+            if ( pair.first == currentPair.first && pair.second == currentPair.second )
             {
                 found = true;
             }
@@ -349,8 +350,10 @@ void Storage<T>::garbageCollection()
         }
 
         // remove the current pair, if another substyle of the same type,
-        // the default style or a named style follows
-        if ( data == currentPair.second || data == T() )
+        // the default style or a named style follows and the rectangle
+        // is completely convered
+        if ( ( pair.second == currentPair.second || pair.second == T() ) &&
+             pair.first.contains( currentPair.first ) )
         {
             kDebug(36006) << "Storage: removing data at " << currentPair.first << endl;
             m_tree.remove( currentPair.first, currentPair.second );
