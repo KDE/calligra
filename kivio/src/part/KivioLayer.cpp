@@ -25,7 +25,7 @@
 #include "KivioDocument.h"
 
 KivioLayer::KivioLayer(const QString& title, KivioAbstractPage* page)
-    : KoShapeContainer()
+    : KoShapeControllerBase()
 {
     setTitle(title);
     m_page = page;
@@ -33,6 +33,8 @@ KivioLayer::KivioLayer(const QString& title, KivioAbstractPage* page)
 
 KivioLayer::~KivioLayer()
 {
+    qDeleteAll(m_shapes);
+    m_shapes.clear();
 }
 
 void KivioLayer::setTitle(const QString& newTitle)
@@ -45,20 +47,19 @@ QString KivioLayer::title() const
     return m_title;
 }
 
-void KivioLayer::paintComponent(QPainter& painter, const KoViewConverter& converter)
-{
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-}
-
 void KivioLayer::addShape(KoShape* shape)
 {
-    KoShapeContainer::addChild(shape);
+    m_shapes.append(shape);
     m_page->document()->addShapeToViews(m_page, shape);
 }
 
 void KivioLayer::removeShape(KoShape* shape)
 {
-    KoShapeContainer::removeChild(shape);
+    m_shapes.removeAll(shape);
     m_page->document()->removeShapeFromViews(m_page, shape);
+}
+
+QList<KoShape*> KivioLayer::shapes() const
+{
+    return m_shapes;
 }

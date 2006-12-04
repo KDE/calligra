@@ -20,12 +20,15 @@
 #ifndef KIVIOLAYER_H
 #define KIVIOLAYER_H
 
+#include <QList>
+
 #include <KoShapeContainer.h>
 #include <KoShapeControllerBase.h>
 
 class KivioAbstractPage;
+class KoShape;
 
-class KivioLayer : public KoShapeControllerBase, public KoShapeContainer
+class KivioLayer : public KoShapeControllerBase
 {
     public:
         KivioLayer(const QString& title, KivioAbstractPage* page);
@@ -36,14 +39,18 @@ class KivioLayer : public KoShapeControllerBase, public KoShapeContainer
         /// Get layer title
         QString title() const;
 
+        /// Add @p shape to layer (will also update the views)
         virtual void addShape(KoShape* shape);
+        /// Remove @p shape from layer (will also update the views)
         virtual void removeShape(KoShape* shape);
 
-        virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
+        /// @return shapes contained in the layer
+        QList<KoShape*> shapes() const;
 
     private:
         QString m_title;
         KivioAbstractPage* m_page;
+        QList<KoShape*> m_shapes;
 };
 
 #endif // KIVIOLAYER_H

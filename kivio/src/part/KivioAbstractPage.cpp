@@ -58,12 +58,12 @@ QList<KivioLayer*> KivioAbstractPage::layers() const
   return m_layerList;
 }
 
-QList<KoShape*> KivioAbstractPage::layerShapes() const
+QList<KoShape*> KivioAbstractPage::shapes() const
 {
     QList<KoShape*> shapes;
 
     foreach(KivioLayer* layer, m_layerList) {
-        shapes.append(layer);
+        shapes += layer->shapes();
     }
 
     return shapes;
@@ -74,7 +74,6 @@ void KivioAbstractPage::addLayer(KivioLayer* layer)
     if((layer == 0) || m_layerList.contains(layer))
         return;
 
-    m_document->addShapeToViews(this, layer);
     m_layerList.append(layer);
 }
 
@@ -83,6 +82,5 @@ void KivioAbstractPage::removeLayer(KivioLayer* layer)
     if(layer == 0)
         return;
 
-    m_document->removeShapeFromViews(this, layer);
     m_layerList.removeAll(layer);
 }

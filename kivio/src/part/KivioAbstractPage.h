@@ -56,8 +56,8 @@ class KivioAbstractPage
     /// @return list of layers
     QList<KivioLayer*> layers() const;
 
-    /// @return the layers as a list of KoShapes to be used when KoShapes is expected
-    QList<KoShape*> layerShapes() const;
+    /// @return all shapes from all layers
+    QList<KoShape*> shapes() const;
 
   private:
     KivioDocument* m_document;
