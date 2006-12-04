@@ -28,23 +28,15 @@
 #include "Style.h"
 #include "StyleManager.h"
 #include "StyleManipulators.h"
-
+#include "Storage.h"
 #include "StyleStorage.h"
 
 #define KSPREAD_STYLE_CACHING
 #define KSPREAD_CACHE_KEY_QPOINT
 
-static const int g_garbageCollectionTimeOut = 60000; // one minute
 static const int g_maximumCachedStyles = 10000;
 
 using namespace KSpread;
-
-#ifdef KSPREAD_CACHE_KEY_QPOINT
-inline uint qHash( const QPoint& point )
-{
-    return ( static_cast<uint>( point.x() ) << 16 ) + static_cast<uint>( point.y() );
-}
-#endif
 
 class KDE_NO_EXPORT StyleStorage::Private
 {
