@@ -1391,6 +1391,8 @@ void Sheet::removeColumn( int col, int nbCol, bool makeUndo )
         //Recalculate range max (plus size of new column)
         d->sizeMaxX += columnFormat( KS_colMax )->dblWidth();
     }
+    // deletes the styles, comments, conditions, validity
+#warning FIXME Stefan: handle undo
     styleStorage()->deleteColumns(col, nbCol + 1);
     commentStorage()->deleteColumns(col, nbCol + 1);
     conditionsStorage()->deleteColumns(col, nbCol + 1);
@@ -1433,6 +1435,8 @@ void Sheet::removeRow( int row, int nbRow, bool makeUndo )
         //Recalculate range max (plus size of new row)
         d->sizeMaxY += rowFormat( KS_rowMax )->dblHeight();
     }
+    // deletes the styles, comments, conditions, validity
+#warning FIXME Stefan: handle undo
     styleStorage()->deleteRows(row, nbRow + 1);
     commentStorage()->deleteRows(row, nbRow + 1);
     conditionsStorage()->deleteRows(row, nbRow + 1);

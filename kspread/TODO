@@ -125,14 +125,16 @@ Things not in bugzilla
       - Used area tracking						done
       - Cache								done
     - Improve the caching of the styles.				done
-    - Insertion/deletion of cell ranges.				----
-      - Basic implementation.						done
-      - Undo.								----
-    - Fix garbage collection.						----
-      - Compare rectangles.						done
-      - Launch in a separate thread.					----
-    - Seek & destroy R-Tree data rects, if they get empty after		----
+    - Insertion/deletion of cell ranges.				done
+    - Fix garbage collection.						done
+      Remove only data rectangles, that are completely covered.
+    - Seek & destroy R-Tree data rects, if they get empty after		done
       deletion of columns/rows, but store them for undo.
+    - Port FormatDialog.						----
+    - Port IncreaseIndentManipulator.					----
+    - Port BorderColorManipulator.					----
+    - Undo for insertion/deletion of columns/rows.			----
+    - Undo for insertion/deletion of cell ranges.			----
     - Improve the saving.						----
       Only StyleStorage::Private::usedArea should track the occupied
       cells only - not those of columns or rows. Adjust the saving algo
@@ -143,6 +145,7 @@ Things not in bugzilla
       or of the previous (default) column/row is used on insertion.
     - OpenDocument saving of cell styles should not include the		----
       attributes set for column/rows.
+    - Launch the garbage collection in a separate thread.		----
 
   + Speed up selection.						      1 ----
     (probably improved with Format Storage?)

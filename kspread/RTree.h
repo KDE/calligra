@@ -157,14 +157,16 @@ public:
   /**
    * Deletes \p number rows at the position \p position .
    * It shrinks or shifts rectangles, respectively.
+   * \return the removed rectangle/data pairs
    */
-  virtual void deleteRows(int position, int number, InsertMode mode = DefaultInsertMode);
+  virtual QList< QPair<QRectF,T> > deleteRows(int position, int number, InsertMode mode = DefaultInsertMode);
 
   /**
    * Deletes \p number columns at the position \p position .
    * It shrinks or shifts rectangles, respectively.
+   * \return the removed rectangle/data pairs
    */
-  virtual void deleteColumns(int position, int number, InsertMode mode = DefaultInsertMode);
+  virtual QList< QPair<QRectF,T> > deleteColumns(int position, int number, InsertMode mode = DefaultInsertMode);
 
   /**
    * Shifts the rows right of \p rect to the right by the width of \p rect .
@@ -226,8 +228,8 @@ public:
   virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const = 0;
   virtual void insertRows(int position, int number) = 0;
   virtual void insertColumns(int position, int number) = 0;
-  virtual void deleteRows(int position, int number) = 0;
-  virtual void deleteColumns(int position, int number) = 0;
+  virtual QList< QPair<QRectF,T> > deleteRows(int position, int number) = 0;
+  virtual QList< QPair<QRectF,T> > deleteColumns(int position, int number) = 0;
 };
 
 /**
@@ -248,8 +250,8 @@ public:
   virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const;
   virtual void insertRows(int position, int number);
   virtual void insertColumns(int position, int number);
-  virtual void deleteRows(int position, int number);
-  virtual void deleteColumns(int position, int number);
+  virtual QList< QPair<QRectF,T> > deleteRows(int position, int number);
+  virtual QList< QPair<QRectF,T> > deleteColumns(int position, int number);
 };
 
 /**
@@ -270,8 +272,8 @@ public:
   virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const;
   virtual void insertRows(int position, int number);
   virtual void insertColumns(int position, int number);
-  virtual void deleteRows(int position, int number);
-  virtual void deleteColumns(int position, int number);
+  virtual QList< QPair<QRectF,T> > deleteRows(int position, int number);
+  virtual QList< QPair<QRectF,T> > deleteColumns(int position, int number);
 };
 
 
@@ -350,21 +352,21 @@ void RTree<T>::insertColumns(int position, int number, InsertMode mode)
 }
 
 template<typename T>
-void RTree<T>::deleteRows(int position, int number, InsertMode mode)
+QList< QPair<QRectF,T> > RTree<T>::deleteRows(int position, int number, InsertMode mode)
 {
     if (position < 1 || position > KS_rowMax)
-        return;
+        return QList< QPair<QRectF,T> >();
     const int pos = position - (mode == CopyPrevious) ? 1 : 0;
-    dynamic_cast<Node*>(this->m_root)->deleteRows(pos, number);
+    return dynamic_cast<Node*>(this->m_root)->deleteRows(pos, number);
 }
 
 template<typename T>
-void RTree<T>::deleteColumns(int position, int number, InsertMode mode)
+QList< QPair<QRectF,T> > RTree<T>::deleteColumns(int position, int number, InsertMode mode)
 {
     if (position < 1 || position > KS_colMax)
-        return;
+        return QList< QPair<QRectF,T> >();
     const int pos = position - (mode == CopyPrevious) ? 1 : 0;
-    dynamic_cast<Node*>(this->m_root)->deleteColumns(pos, number);
+    return dynamic_cast<Node*>(this->m_root)->deleteColumns(pos, number);
 }
 
 template<typename T>
@@ -558,57 +560,51 @@ void RTree<T>::LeafNode::insertColumns(int position, int number)
 }
 
 template<typename T>
-void RTree<T>::LeafNode::deleteRows(int position, int number)
+QList< QPair<QRectF,T> > RTree<T>::LeafNode::deleteRows(int position, int number)
 {
-  if (position > this->m_boundingBox.bottom())
-  {
-    return;
-  }
+    if (position > this->m_boundingBox.bottom())
+        return QList< QPair<QRectF,T> >();
 
-  // position < m_rect.top() ? shift : extend
-  this->m_boundingBox.adjust(0, (position < this->m_boundingBox.top()) ? -number : 0, 0, -number);
-  if (this->m_boundingBox.isEmpty())
-  {
-      kDebug() << "bounding box is empty." << endl;
-// ###    Node::erase();
-    return;
-  }
+    QList< QPair<QRectF,T> > removedPairs;
 
-  for ( int i = 0; i < this->childCount(); ++i )
-  {
-    this->m_childBoundingBox[ i ].adjust(0, (position < this->m_childBoundingBox[ i ].top()) ? -number : 0, 0, -number);
-    if (this->m_childBoundingBox[ i ].isEmpty())
+    // position < m_rect.top() ? shift : extend
+    this->m_boundingBox.adjust(0, (position < this->m_boundingBox.top()) ? -number : 0, 0, -number);
+
+    for ( int i = 0; i < this->childCount(); ++i )
     {
-      KoRTree<T>::LeafNode::remove( i-- );
+        const QRectF oldRect( this->m_childBoundingBox[ i ] );
+        this->m_childBoundingBox[ i ].adjust(0, (position < this->m_childBoundingBox[ i ].top()) ? -number : 0, 0, -number);
+        if (this->m_childBoundingBox[ i ].isEmpty())
+        {
+            removedPairs.append( qMakePair( oldRect, this->m_data[i] ) );
+            KoRTree<T>::LeafNode::remove( i-- );
+        }
     }
-  }
+    return removedPairs;
 }
 
 template<typename T>
-void RTree<T>::LeafNode::deleteColumns(int position, int number)
+QList< QPair<QRectF,T> > RTree<T>::LeafNode::deleteColumns(int position, int number)
 {
-  if (position > this->m_boundingBox.right())
-  {
-    return;
-  }
+    if (position > this->m_boundingBox.right())
+        return QList< QPair<QRectF,T> >();
 
-  // position < m_rect.left() ? shift : extend
-  this->m_boundingBox.adjust((position < this->m_boundingBox.left()) ? -number : 0, 0, -number, 0);
-  if (this->m_boundingBox.isEmpty())
-  {
-      kDebug() << "bounding box is empty." << endl;
-// ###    Node::erase();
-    return;
-  }
+    QList< QPair<QRectF,T> > removedPairs;
 
-  for ( int i = 0; i < this->childCount(); ++i )
-  {
-    this->m_childBoundingBox[ i ].adjust((position < this->m_childBoundingBox[ i ].left()) ? -number : 0, 0, -number, 0);
-    if (this->m_childBoundingBox[ i ].isEmpty())
+    // position < m_rect.left() ? shift : extend
+    this->m_boundingBox.adjust((position < this->m_boundingBox.left()) ? -number : 0, 0, -number, 0);
+
+    for ( int i = 0; i < this->childCount(); ++i )
     {
-      KoRTree<T>::LeafNode::remove( i-- );
+        const QRectF oldRect( this->m_childBoundingBox[ i ] );
+        this->m_childBoundingBox[ i ].adjust((position < this->m_childBoundingBox[ i ].left()) ? -number : 0, 0, -number, 0);
+        if (this->m_childBoundingBox[ i ].isEmpty())
+        {
+            removedPairs.append( qMakePair( oldRect, this->m_data[i] ) );
+            KoRTree<T>::LeafNode::remove( i-- );
+        }
     }
-  }
+    return removedPairs;
 }
 
 
@@ -686,45 +682,51 @@ void RTree<T>::NoneLeafNode::insertColumns(int position, int number)
 }
 
 template<typename T>
-void RTree<T>::NoneLeafNode::deleteRows(int position, int number)
+QList< QPair<QRectF,T> > RTree<T>::NoneLeafNode::deleteRows(int position, int number)
 {
-  if (position > this->m_boundingBox.bottom())
-    return;
+    if (position > this->m_boundingBox.bottom())
+        return QList< QPair<QRectF,T> >();
 
-  // position < m_rect.top() ? shift : extend
-  this->m_boundingBox.adjust(0, (position < this->m_boundingBox.top()) ? -number : 0, 0, -number);
-  if (this->m_boundingBox.isEmpty())
-  {
-// ###    Node::erase();
-    return;
-  }
+    QList< QPair<QRectF,T> > removedPairs;
 
-  for ( int i = 0; i < this->childCount(); ++i )
-  {
-    this->m_childBoundingBox[ i ].adjust(0, (position < this->m_childBoundingBox[ i ].top()) ? -number : 0, 0, -number);
-    dynamic_cast<Node*>(this->m_childs[i])->deleteRows(position, number);
-  }
+    // position < m_rect.top() ? shift : extend
+    this->m_boundingBox.adjust(0, (position < this->m_boundingBox.top()) ? -number : 0, 0, -number);
+
+    for ( int i = 0; i < this->childCount(); ++i )
+    {
+        this->m_childBoundingBox[ i ].adjust(0, (position < this->m_childBoundingBox[ i ].top()) ? -number : 0, 0, -number);
+        removedPairs += dynamic_cast<Node*>(this->m_childs[i])->deleteRows(position, number);
+        if (this->m_childBoundingBox[ i ].isEmpty())
+        {
+            delete this->m_childs[i];
+            KoRTree<T>::NoneLeafNode::remove( i-- );
+        }
+    }
+    return removedPairs;
 }
 
 template<typename T>
-void RTree<T>::NoneLeafNode::deleteColumns(int position, int number)
+QList< QPair<QRectF,T> > RTree<T>::NoneLeafNode::deleteColumns(int position, int number)
 {
-  if (position > this->m_boundingBox.right())
-    return;
+    if (position > this->m_boundingBox.right())
+        return QList< QPair<QRectF,T> >();
 
-  // position < m_rect.left() ? shift : extend
-  this->m_boundingBox.adjust((position < this->m_boundingBox.left()) ? -number : 0, 0, -number, 0);
-  if (this->m_boundingBox.isEmpty())
-  {
-// ###    Node::erase();
-    return;
-  }
+    QList< QPair<QRectF,T> > removedPairs;
 
-  for ( int i = 0; i < this->childCount(); ++i )
-  {
-    this->m_childBoundingBox[ i ].adjust((position < this->m_childBoundingBox[ i ].left()) ? -number : 0, 0, -number, 0);
-    dynamic_cast<Node*>(this->m_childs[i])->deleteColumns(position, number);
-  }
+    // position < m_rect.left() ? shift : extend
+    this->m_boundingBox.adjust((position < this->m_boundingBox.left()) ? -number : 0, 0, -number, 0);
+
+    for ( int i = 0; i < this->childCount(); ++i )
+    {
+        this->m_childBoundingBox[ i ].adjust((position < this->m_childBoundingBox[ i ].left()) ? -number : 0, 0, -number, 0);
+        removedPairs += dynamic_cast<Node*>(this->m_childs[i])->deleteColumns(position, number);
+        if (this->m_childBoundingBox[ i ].isEmpty())
+        {
+            delete this->m_childs[i];
+            KoRTree<T>::NoneLeafNode::remove( i-- );
+        }
+    }
+    return removedPairs;
 }
 
 } // namespace KSpread
