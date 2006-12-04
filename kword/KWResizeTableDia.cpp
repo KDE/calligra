@@ -39,6 +39,9 @@ KWResizeTableDia::KWResizeTableDia( QWidget *parent, KWTableFrameSet *table, KWD
     m_doc = doc;
 
     setupTab1(resizeColumn);
+    connect(this,SIGNAL(user1Clicked()),this,SLOT(slotUser1()));
+    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 void KWResizeTableDia::setupTab1(int resizeColumn) {

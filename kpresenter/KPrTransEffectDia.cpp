@@ -329,6 +329,8 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
     lspacer->setMinimumSize( 10, spacingHint() );
 
     soundEffectChanged();
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect(this,SIGNAL(user1Clicked()),this,SLOT(slotUser1()));
 }
 
 void KPrTransEffectDia::preview()

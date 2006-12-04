@@ -58,6 +58,10 @@ SubtotalDialog::SubtotalDialog( View * parent, QRect const & selection )
 
   fillColumnBoxes();
   fillFunctionBox();
+  connect(this,SIGNAL(user1Clicked()),this,SLOT(slotUser1()));
+  connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+  connect(this,SIGNAL(cancelClicked()),this,SLOT(slotCancel()));
+
 }
 
 SubtotalDialog::~SubtotalDialog()
