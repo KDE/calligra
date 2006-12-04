@@ -284,6 +284,11 @@ void KivioView::updateMousePosition(QPoint position)
 {
     m_horizontalRuler->updateMouseCoordinate(position.x());
     m_verticalRuler->updateMouseCoordinate(position.y());
+
+    // Update the selection borders while moving with the mouse
+    QRectF boundingRect = m_canvas->shapeManager()->selection()->boundingRect();
+    m_horizontalRuler->updateSelectionBorders(boundingRect.x(), boundingRect.right());
+    m_verticalRuler->updateSelectionBorders(boundingRect.y(), boundingRect.bottom());
 }
 
 void KivioView::selectionChanged()
@@ -291,6 +296,14 @@ void KivioView::selectionChanged()
     if(m_geometryDocker) {
         m_geometryDocker->setSelection(m_canvas->shapeManager()->selection());
     }
+
+    // Show the borders of the selection
+    bool show = m_canvas->shapeManager()->selection() && (m_canvas->shapeManager()->selection()->count() > 0);
+    QRectF boundingRect = m_canvas->shapeManager()->selection()->boundingRect();
+    m_horizontalRuler->setShowSelectionBorders(show);
+    m_verticalRuler->setShowSelectionBorders(show);
+    m_horizontalRuler->updateSelectionBorders(boundingRect.x(), boundingRect.right());
+    m_verticalRuler->updateSelectionBorders(boundingRect.y(), boundingRect.bottom());
 }
 
 void KivioView::updateGui()
