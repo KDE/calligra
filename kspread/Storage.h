@@ -95,6 +95,32 @@ public:
      */
     void deleteColumns(int position, int number = 1);
 
+    /**
+     * Shifts the rows right of \p rect to the right by the width of \p rect .
+     * It extends or shifts rectangles, respectively.
+     */
+    QList< QPair<QRectF,T> > shiftRows(const QRect& rect);
+
+    /**
+     * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
+     * It extends or shifts rectangles, respectively.
+     */
+    QList< QPair<QRectF,T> > shiftColumns(const QRect& rect);
+
+    /**
+     * Shifts the rows left of \p rect to the left by the width of \p rect .
+     * It shrinks or shifts rectangles, respectively.
+     * \return the former rectangle/data pairs
+     */
+    QList< QPair<QRectF,T> > unshiftRows(const QRect& rect);
+
+    /**
+     * Shifts the columns on top of \p rect to the top by the height of \p rect .
+     * It shrinks or shifts rectangles, respectively.
+     * \return the former rectangle/data pairs
+     */
+    QList< QPair<QRectF,T> > unshiftColumns(const QRect& rect);
+
 protected:
     virtual void garbageCollectionInitialization();
     virtual void garbageCollection();
@@ -235,6 +261,50 @@ void Storage<T>::deleteColumns(int position, int number)
     invalidateCache( invalidRect );
     m_tree.deleteColumns(position, number);
     m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
+}
+
+template<typename T>
+QList< QPair<QRectF,T> > Storage<T>::shiftRows(const QRect& rect)
+{
+    const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
+    QList< QPair<QRectF,T> > undoData = m_tree.shiftRows( rect );
+    m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
+}
+
+template<typename T>
+QList< QPair<QRectF,T> > Storage<T>::shiftColumns(const QRect& rect)
+{
+    const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
+    QList< QPair<QRectF,T> > undoData = m_tree.shiftColumns( rect );
+    m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
+}
+
+template<typename T>
+QList< QPair<QRectF,T> > Storage<T>::unshiftRows(const QRect& rect)
+{
+    const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
+    QList< QPair<QRectF,T> > undoData = m_tree.unshiftRows( rect );
+    m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
+}
+
+template<typename T>
+QList< QPair<QRectF,T> > Storage<T>::unshiftColumns(const QRect& rect)
+{
+    const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
+    QList< QPair<QRectF,T> > undoData = m_tree.unshiftColumns( rect );
+    m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
 }
 
 template<typename T>

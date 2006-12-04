@@ -166,6 +166,34 @@ public:
    */
   virtual void deleteColumns(int position, int number, InsertMode mode = DefaultInsertMode);
 
+  /**
+   * Shifts the rows right of \p rect to the right by the width of \p rect .
+   * It extends or shifts rectangles, respectively.
+   * \return the former rectangle/data pairs
+   */
+  virtual QList< QPair<QRectF,T> > shiftRows(const QRect& rect, InsertMode mode = DefaultInsertMode);
+
+  /**
+   * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
+   * It extends or shifts rectangles, respectively.
+   * \return the former rectangle/data pairs
+   */
+  virtual QList< QPair<QRectF,T> > shiftColumns(const QRect& rect, InsertMode mode = DefaultInsertMode);
+
+  /**
+   * Shifts the rows left of \p rect to the left by the width of \p rect .
+   * It shrinks or shifts rectangles, respectively.
+   * \return the former rectangle/data pairs
+   */
+  virtual QList< QPair<QRectF,T> > unshiftRows(const QRect& rect, InsertMode mode = DefaultInsertMode);
+
+  /**
+   * Shifts the columns on top of \p rect to the top by the height of \p rect .
+   * It shrinks or shifts rectangles, respectively.
+   * \return the former rectangle/data pairs
+   */
+  virtual QList< QPair<QRectF,T> > unshiftColumns(const QRect& rect, InsertMode mode = DefaultInsertMode);
+
 protected:
   class Node;
   class NoneLeafNode;
@@ -337,6 +365,115 @@ void RTree<T>::deleteColumns(int position, int number, InsertMode mode)
         return;
     const int pos = position - (mode == CopyPrevious) ? 1 : 0;
     dynamic_cast<Node*>(this->m_root)->deleteColumns(pos, number);
+}
+
+template<typename T>
+QList< QPair<QRectF,T> > RTree<T>::shiftRows(const QRect& r, InsertMode mode)
+{
+    const QRect rect( r.normalized() );
+    if (rect.left() < 1 || rect.left() > KS_colMax)
+        return QList< QPair<QRectF,T> >();
+    const QRect boundingRect = QRect( rect.topLeft(), QPoint( KS_colMax, rect.bottom() ) );
+    const QList< QPair<QRectF,T> > oldPairs = intersectingPairs( boundingRect );
+    if ( oldPairs.isEmpty() )
+        return QList< QPair<QRectF,T> >();
+    // insert default data at the bounding rectangle
+    insert( boundingRect, T() );
+    // fill the inserted rectangle
+    if ( mode != CopyNone )
+    {
+        const int offset = (mode == CopyPrevious) ? 1 : 0;
+        const QRect copyRect = QRect( rect.left() - offset, rect.top(), 1, rect.height() );
+        const QList< QPair<QRectF,T> > copyPairs = intersectingPairs( copyRect );
+        for ( int i = 0; i < copyPairs.count(); ++i )
+        {
+            insert((copyPairs[i].first.toRect() & copyRect).adjusted(offset,0,rect.width()+offset-1,0), copyPairs[i].second);
+        }
+    }
+    // insert the data at the shifted rectangles
+    for ( int i = 0; i < oldPairs.count(); ++i )
+    {
+        const QRect shiftedRect = oldPairs[i].first.toRect().adjusted( rect.width(), 0, rect.width(), 0 );
+        insert( shiftedRect & boundingRect, oldPairs[i].second );
+    }
+    return oldPairs;
+}
+
+template<typename T>
+QList< QPair<QRectF,T> > RTree<T>::shiftColumns(const QRect& r, InsertMode mode)
+{
+    Q_UNUSED(mode);
+    const QRect rect( r.normalized() );
+    if (rect.top() < 1 || rect.top() > KS_rowMax)
+        return QList< QPair<QRectF,T> >();
+    const QRect boundingRect = QRect( rect.topLeft(), QPoint( rect.right(), KS_rowMax ) );
+    const QList< QPair<QRectF,T> > oldPairs = intersectingPairs( boundingRect );
+    if ( oldPairs.isEmpty() )
+        return QList< QPair<QRectF,T> >();
+    // insert default data at the bounding rectangle
+    insert( boundingRect, T() );
+    // fill the inserted rectangle
+    if ( mode != CopyNone )
+    {
+        const int offset = (mode == CopyPrevious) ? 1 : 0;
+        const QRect copyRect = QRect( rect.left(), rect.top() - offset, rect.width(), 1 );
+        const QList< QPair<QRectF,T> > copyPairs = intersectingPairs( copyRect );
+        for ( int i = 0; i < copyPairs.count(); ++i )
+        {
+            insert((copyPairs[i].first.toRect() & copyRect).adjusted(0,offset,0,rect.height()+offset-1), copyPairs[i].second);
+        }
+    }
+    // insert the data at the shifted rectangles
+    for ( int i = 0; i < oldPairs.count(); ++i )
+    {
+        const QRect shiftedRect = oldPairs[i].first.toRect().adjusted( 0, rect.height(), 0, rect.height() );
+        insert( shiftedRect & boundingRect, oldPairs[i].second );
+    }
+    return oldPairs;
+}
+
+template<typename T>
+QList< QPair<QRectF,T> > RTree<T>::unshiftRows(const QRect& r, InsertMode mode)
+{
+    Q_UNUSED(mode);
+    const QRect rect( r.normalized() );
+    if (rect.left() < 1 || rect.left() > KS_colMax)
+        return QList< QPair<QRectF,T> >();
+    const QRect boundingRect = QRect( rect.topLeft(), QPoint( KS_colMax, rect.bottom() ) );
+    const QList< QPair<QRectF,T> > oldPairs = intersectingPairs( boundingRect );
+    if ( oldPairs.isEmpty() )
+        return QList< QPair<QRectF,T> >();
+    // insert default data at the bounding rectangle
+    insert( boundingRect, T() );
+    // insert the data at the shifted rectangles
+    for ( int i = 0; i < oldPairs.count(); ++i )
+    {
+        const QRect shiftedRect = oldPairs[i].first.toRect().adjusted( -rect.width(), 0, -rect.width(), 0 );
+        insert( shiftedRect & boundingRect, oldPairs[i].second );
+    }
+    return oldPairs;
+}
+
+template<typename T>
+QList< QPair<QRectF,T> > RTree<T>::unshiftColumns(const QRect& r, InsertMode mode)
+{
+    Q_UNUSED(mode);
+    const QRect rect( r.normalized() );
+    if (rect.top() < 1 || rect.top() > KS_rowMax)
+        return QList< QPair<QRectF,T> >();
+    const QRect boundingRect = QRect( rect.topLeft(), QPoint( rect.right(), KS_rowMax ) );
+    const QList< QPair<QRectF,T> > oldPairs = intersectingPairs( boundingRect );
+    if ( oldPairs.isEmpty() )
+        return QList< QPair<QRectF,T> >();
+    // insert default data at the bounding rectangle
+    insert( boundingRect, T() );
+    // insert the data at the shifted rectangles
+    for ( int i = 0; i < oldPairs.count(); ++i )
+    {
+        const QRect shiftedRect = oldPairs[i].first.toRect().adjusted( 0, -rect.height(), 0, -rect.height() );
+        insert( shiftedRect & boundingRect, oldPairs[i].second );
+    }
+    return oldPairs;
 }
 
 /////////////////////////////////////////////////////////////////////////////

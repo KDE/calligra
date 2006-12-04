@@ -44,10 +44,11 @@ namespace KSpread
 // sizeof(QHash) = 4
 // sizeof(QHashData) >= 64
 
+class CustomStyle;
+class SharedSubStyle;
 class Style;
 class StyleManipulator;
 class SubStyle;
-class CustomStyle;
 
 // used for preloading OASIS auto styles
 typedef QHash<QString, Style>       Styles;
@@ -175,7 +176,7 @@ public:
 
     void clearAttribute( Key key );
     bool hasAttribute( Key key ) const;
-    void loadAttributes( const QList< QSharedDataPointer<SubStyle> >& subStyles );
+    void loadAttributes( const QList<SharedSubStyle>& subStyles );
 
 
     uint bottomPenValue() const;
@@ -328,11 +329,11 @@ public:
 protected:
     virtual void setType( StyleType type );
 
-    QList< QSharedDataPointer<SubStyle> > subStyles() const;
+    QList<SharedSubStyle> subStyles() const;
 
-    const QSharedDataPointer<SubStyle> createSubStyle( Key key, const QVariant& value );
+    const SharedSubStyle createSubStyle( Key key, const QVariant& value );
     virtual void insertSubStyle( Key key, const QVariant& value );
-    void insertSubStyle( const QSharedDataPointer<SubStyle> subStyle );
+    void insertSubStyle( const SharedSubStyle subStyle );
     bool releaseSubStyle( Key key );
 
     virtual int initialUsage() const { return 0; }
@@ -428,6 +429,18 @@ public:
     virtual void dump() const { kDebug() << debugData() << endl; }
     virtual QString debugData( bool withName = true ) const { QString out; if (withName) out = name(Style::DefaultStyleKey); return out; }
     static QString name( Style::Key key );
+};
+
+// Provides a default SubStyle for the tree.
+// Otherwise, we would have QSharedDataPointer<SubStyle>() as default,
+// which has a null pointer and crashes.
+// Also, this makes the code more readable:
+// QSharedDataPointer<SubStyle> vs. SharedSubStyle
+class SharedSubStyle : public QSharedDataPointer<SubStyle>
+{
+public:
+    SharedSubStyle() : QSharedDataPointer<SubStyle>(new SubStyle()) {}
+    SharedSubStyle(SubStyle* subStyle) : QSharedDataPointer<SubStyle>(subStyle) {}
 };
 
 class NamedStyle : public SubStyle

@@ -96,7 +96,7 @@ private:
     QPen m_verticalPen;
 
     Style* m_style;
-    QList< QPair<QRectF, QSharedDataPointer<SubStyle> > > m_undoData;
+    QList< QPair<QRectF,SharedSubStyle> > m_undoData;
 };
 
 

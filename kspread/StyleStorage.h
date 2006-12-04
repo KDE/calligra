@@ -62,7 +62,7 @@ public:
     /**
      *
      */
-    QList< QPair<QRectF,QSharedDataPointer<SubStyle> > > undoData(const QRect& rect) const;
+    QList< QPair<QRectF,SharedSubStyle> > undoData(const QRect& rect) const;
 
     /**
      * Returns the area, which got a style attached.
@@ -94,7 +94,7 @@ public:
     /**
      * Assigns \p subStyle to the area \p rect .
      */
-    void insert(const QRect& rect, const QSharedDataPointer<SubStyle> subStyle);
+    void insert(const QRect& rect, const SharedSubStyle subStyle);
 
     /**
      * Assigns the substyles contained in \p style to the area \p region .
@@ -125,6 +125,32 @@ public:
      */
     void deleteColumns(int position, int number = 1);
 
+    /**
+     * Shifts the rows right of \p rect to the right by the width of \p rect .
+     * It extends or shifts rectangles, respectively.
+     */
+    QList< QPair<QRectF,SharedSubStyle> > shiftRows(const QRect& rect);
+
+    /**
+     * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
+     * It extends or shifts rectangles, respectively.
+     */
+    QList< QPair<QRectF,SharedSubStyle> > shiftColumns(const QRect& rect);
+
+    /**
+     * Shifts the rows left of \p rect to the left by the width of \p rect .
+     * It shrinks or shifts rectangles, respectively.
+     * \return the former rectangle/data pairs
+     */
+    QList< QPair<QRectF,SharedSubStyle> > unshiftRows(const QRect& rect);
+
+    /**
+     * Shifts the columns on top of \p rect to the top by the height of \p rect .
+     * It shrinks or shifts rectangles, respectively.
+     * \return the former rectangle/data pairs
+     */
+    QList< QPair<QRectF,SharedSubStyle> > unshiftColumns(const QRect& rect);
+
 protected Q_SLOTS:
     void garbageCollectionInitialization();
     void garbageCollection();
@@ -139,7 +165,7 @@ protected:
      * Composes a style of \p substyles .
      * \return the composed style
      */
-    Style composeStyle( const QList<QSharedDataPointer<SubStyle> >& subStyles ) const;
+    Style composeStyle( const QList<SharedSubStyle>& subStyles ) const;
 
     /**
      * Convenience method.

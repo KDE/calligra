@@ -46,7 +46,7 @@ bool StyleManipulator::process(Element* element)
     {
         if ( m_firstrun )
         {
-            const QList< QPair<QRectF,QSharedDataPointer<SubStyle> > > rawUndoData
+            const QList< QPair<QRectF,SharedSubStyle> > rawUndoData
                     = m_sheet->styleStorage()->undoData( element->rect() );
             for ( int i = 0; i < rawUndoData.count(); ++i )
             {

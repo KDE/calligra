@@ -1126,6 +1126,13 @@ bool Sheet::shiftRow( const QRect &rect,bool makeUndo )
                 res=false;
         }
     }
+    // shift the styles, comments, conditions, validity
+#warning FIXME Stefan: handle undo
+    styleStorage()->shiftRows( rect );
+    commentStorage()->shiftRows( rect );
+    conditionsStorage()->shiftRows( rect );
+    validityStorage()->shiftRows( rect );
+
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
       for ( int i = rect.top(); i <= rect.bottom(); ++i )
@@ -1164,6 +1171,12 @@ bool Sheet::shiftColumn( const QRect& rect,bool makeUndo )
                 res=false;
         }
     }
+    // shift the styles, comments, conditions, validity
+#warning FIXME Stefan: handle undo
+    styleStorage()->shiftColumns( rect );
+    commentStorage()->shiftColumns( rect );
+    conditionsStorage()->shiftColumns( rect );
+    validityStorage()->shiftColumns( rect );
 
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
@@ -1199,6 +1212,12 @@ void Sheet::unshiftColumn( const QRect & rect,bool makeUndo )
     for(int i =rect.left();i<=rect.right();i++)
         for(int j=0;j<=(rect.bottom()-rect.top());j++)
                 d->cells.unshiftColumn( QPoint(i,rect.top()) );
+    // unshift the styles, comments, conditions, validity
+#warning FIXME Stefan: handle undo
+    styleStorage()->unshiftColumns( rect );
+    commentStorage()->unshiftColumns( rect );
+    conditionsStorage()->unshiftColumns( rect );
+    validityStorage()->unshiftColumns( rect );
 
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
@@ -1232,6 +1251,12 @@ void Sheet::unshiftRow( const QRect & rect,bool makeUndo )
     for(int i =rect.top();i<=rect.bottom();i++)
         for(int j=0;j<=(rect.right()-rect.left());j++)
                 d->cells.unshiftRow( QPoint(rect.left(),i) );
+    // unshift the styles, comments, conditions, validity
+#warning FIXME Stefan: handle undo
+    styleStorage()->unshiftRows( rect );
+    commentStorage()->unshiftRows( rect );
+    conditionsStorage()->unshiftRows( rect );
+    validityStorage()->unshiftRows( rect );
 
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
@@ -1275,6 +1300,9 @@ bool Sheet::insertColumn( int col, int nbCol, bool makeUndo )
         d->sizeMaxX += columnFormat( col+i )->dblWidth();
     }
     styleStorage()->insertColumns(col, nbCol + 1);
+    commentStorage()->insertColumns(col, nbCol + 1);
+    conditionsStorage()->insertColumns(col, nbCol + 1);
+    validityStorage()->insertColumns(col, nbCol + 1);
 
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
@@ -1320,6 +1348,9 @@ bool Sheet::insertRow( int row, int nbRow, bool makeUndo )
         d->sizeMaxY += rowFormat( row )->dblHeight();
     }
     styleStorage()->insertRows(row, nbRow + 1);
+    commentStorage()->insertRows(row, nbRow + 1);
+    conditionsStorage()->insertRows(row, nbRow + 1);
+    validityStorage()->insertRows(row, nbRow + 1);
 
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
@@ -1361,6 +1392,9 @@ void Sheet::removeColumn( int col, int nbCol, bool makeUndo )
         d->sizeMaxX += columnFormat( KS_colMax )->dblWidth();
     }
     styleStorage()->deleteColumns(col, nbCol + 1);
+    commentStorage()->deleteColumns(col, nbCol + 1);
+    conditionsStorage()->deleteColumns(col, nbCol + 1);
+    validityStorage()->deleteColumns(col, nbCol + 1);
 
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
@@ -1400,6 +1434,9 @@ void Sheet::removeRow( int row, int nbRow, bool makeUndo )
         d->sizeMaxY += rowFormat( KS_rowMax )->dblHeight();
     }
     styleStorage()->deleteRows(row, nbRow + 1);
+    commentStorage()->deleteRows(row, nbRow + 1);
+    conditionsStorage()->deleteRows(row, nbRow + 1);
+    validityStorage()->deleteRows(row, nbRow + 1);
 
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {

@@ -42,14 +42,14 @@ class KDE_NO_EXPORT StyleStorage::Private
 {
 public:
     Sheet* sheet;
-    RTree<QSharedDataPointer<SubStyle> > tree;
+    RTree<SharedSubStyle> tree;
     QSet<int> usedColumns;
     QSet<int> usedRows;
     QRegion usedArea;
-    QHash<Style::Key, QList<QSharedDataPointer<SubStyle> > > subStyles;
+    QHash<Style::Key, QList<SharedSubStyle> > subStyles;
     QTimer* garbageCollectionInitializationTimer;
     QTimer* garbageCollectionTimer;
-    QList< QPair<QRectF,QSharedDataPointer<SubStyle> > > possibleGarbage;
+    QList< QPair<QRectF,SharedSubStyle> > possibleGarbage;
 #ifdef KSPREAD_STYLE_CACHING
 #ifdef KSPREAD_CACHE_KEY_QPOINT
     QCache<QPoint, Style> cache;
@@ -104,7 +104,7 @@ Style StyleStorage::contains(const QPoint& point) const
 #endif
 #endif
     // not found, lookup in the tree
-    QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.contains(point);
+    QList<SharedSubStyle> subStyles = d->tree.contains(point);
     if ( subStyles.isEmpty() )
         return *styleManager()->defaultStyle();
     Style* style = new Style();
@@ -124,7 +124,7 @@ Style StyleStorage::contains(const QPoint& point) const
 Style StyleStorage::contains(const QRect& rect) const
 {
     Q_ASSERT(styleManager());
-    QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.contains(rect);
+    QList<SharedSubStyle> subStyles = d->tree.contains(rect);
     Style style = composeStyle( subStyles );
     return style.isDefault() ? *styleManager()->defaultStyle() : style;
 }
@@ -132,14 +132,14 @@ Style StyleStorage::contains(const QRect& rect) const
 Style StyleStorage::intersects(const QRect& rect) const
 {
     Q_ASSERT(styleManager());
-    QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.intersects(rect);
+    QList<SharedSubStyle> subStyles = d->tree.intersects(rect);
     Style style = composeStyle( subStyles );
     return style.isDefault() ? *styleManager()->defaultStyle() : style;
 }
 
-QList< QPair<QRectF,QSharedDataPointer<SubStyle> > > StyleStorage::undoData(const QRect& rect) const
+QList< QPair<QRectF,SharedSubStyle> > StyleStorage::undoData(const QRect& rect) const
 {
-    QList< QPair<QRectF,QSharedDataPointer<SubStyle> > > result = d->tree.intersectingPairs(rect);
+    QList< QPair<QRectF,SharedSubStyle> > result = d->tree.intersectingPairs(rect);
     for ( int i = 0; i < result.count(); ++i )
     {
         // trim the rects
@@ -190,13 +190,13 @@ int StyleStorage::nextStyleRight( int column, int row ) const
     return usedColumns.first();
 }
 
-void StyleStorage::insert(const QRect& rect, const QSharedDataPointer<SubStyle> subStyle)
+void StyleStorage::insert(const QRect& rect, const SharedSubStyle subStyle)
 {
 //     kDebug(36006) << "StyleStorage: inserting " << subStyle->type() << " into " << rect << endl;
     // invalidate the affected, cached styles
     invalidateCache( rect );
     // lookup already used substyles
-    typedef const QList< QSharedDataPointer<SubStyle> > StoredSubStyleList;
+    typedef const QList< SharedSubStyle> StoredSubStyleList;
     StoredSubStyleList& storedSubStyles( d->subStyles.value(subStyle->type()) );
     StoredSubStyleList::ConstIterator end(storedSubStyles.end());
     for ( StoredSubStyleList::ConstIterator it(storedSubStyles.begin()); it != end; ++it )
@@ -217,7 +217,7 @@ void StyleStorage::insert(const Region& region, const Style& style)
 {
     if ( style.isEmpty() )
         return;
-    foreach ( const QSharedDataPointer<SubStyle>& subStyle, style.subStyles() )
+    foreach ( const SharedSubStyle& subStyle, style.subStyles() )
     {
         const bool isDefault = subStyle->type() == Style::DefaultStyleKey;
         Region::ConstIterator end(region.constEnd());
@@ -293,6 +293,46 @@ void StyleStorage::deleteColumns(int position, int number)
     d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
 }
 
+QList< QPair<QRectF,SharedSubStyle> > StyleStorage::shiftRows( const QRect& rect )
+{
+    const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
+    QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.shiftRows( rect );
+    d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
+}
+
+QList< QPair<QRectF,SharedSubStyle> > StyleStorage::shiftColumns( const QRect& rect )
+{
+    const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
+    QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.shiftColumns( rect );
+    d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
+}
+
+QList< QPair<QRectF,SharedSubStyle> > StyleStorage::unshiftRows( const QRect& rect )
+{
+    const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
+    QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.unshiftRows( rect );
+    d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
+}
+
+QList< QPair<QRectF,SharedSubStyle> > StyleStorage::unshiftColumns( const QRect& rect )
+{
+    const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
+    // invalidate the affected, cached styles
+    invalidateCache( invalidRect );
+    QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.unshiftColumns( rect );
+    d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
+}
+
 void StyleStorage::garbageCollectionInitialization()
 {
     // last garbage collection finished?
@@ -307,7 +347,7 @@ void StyleStorage::garbageCollection()
     if ( d->possibleGarbage.isEmpty() )
         return;
 
-    const QPair<QRectF, QSharedDataPointer<SubStyle> > currentPair = d->possibleGarbage.takeFirst();
+    const QPair<QRectF, SharedSubStyle> currentPair = d->possibleGarbage.takeFirst();
 
     // check wether the named style still exists
     if ( currentPair.second->type() == Style::NamedStyleKey &&
@@ -321,7 +361,7 @@ void StyleStorage::garbageCollection()
         return; // already done
     }
 
-    QList<QSharedDataPointer<SubStyle> > subStyles = d->tree.intersects(currentPair.first.toRect());
+    QList<SharedSubStyle> subStyles = d->tree.intersects(currentPair.first.toRect());
     if ( subStyles.isEmpty() ) // actually never true, just for sanity
          return;
 
@@ -337,7 +377,7 @@ void StyleStorage::garbageCollection()
     }
 
     bool found = false;
-    foreach( const QSharedDataPointer<SubStyle>& subStyle, subStyles )
+    foreach( const SharedSubStyle& subStyle, subStyles )
     {
         // as long as the substyle in question was not found, skip the substyle
         if ( !found )
@@ -403,7 +443,7 @@ void StyleStorage::invalidateCache( const QRect& rect )
 #endif
 }
 
-Style StyleStorage::composeStyle( const QList<QSharedDataPointer<SubStyle> >& subStyles ) const
+Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
 {
     Style style;
     for ( int i = 0; i < subStyles.count(); ++i )

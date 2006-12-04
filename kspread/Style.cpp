@@ -141,7 +141,7 @@ QString SubStyle::name( Style::Key key )
 class Style::Private : public QSharedData
 {
 public:
-    QHash<Key, QSharedDataPointer<SubStyle> > subStyles;
+    QHash<Key, SharedSubStyle> subStyles;
     StyleType type;
 };
 
@@ -182,7 +182,7 @@ QString Style::parentName() const
 void Style::setParentName( const QString& name )
 {
     d->subStyles.remove( NamedStyleKey );
-    d->subStyles.insert( NamedStyleKey, QSharedDataPointer<SubStyle>( new NamedStyle( name ) ) );
+    d->subStyles.insert( NamedStyleKey, SharedSubStyle( new NamedStyle( name ) ) );
 }
 
 void Style::clearAttribute( Key key )
@@ -195,7 +195,7 @@ bool Style::hasAttribute( Key key ) const
     return d->subStyles.contains( key );
 }
 
-void Style::loadAttributes( const QList< QSharedDataPointer<SubStyle> >& subStyles )
+void Style::loadAttributes( const QList<SharedSubStyle>& subStyles )
 {
     d->subStyles.clear();
     for ( int i = 0; i < subStyles.count(); ++i )
@@ -2367,14 +2367,14 @@ void Style::setType( StyleType type )
     d->type = type;
 }
 
-QList< QSharedDataPointer<SubStyle> > Style::subStyles() const
+QList<SharedSubStyle> Style::subStyles() const
 {
     return d->subStyles.values();
 }
 
-const QSharedDataPointer<SubStyle> Style::createSubStyle( Key key, const QVariant& value )
+const SharedSubStyle Style::createSubStyle( Key key, const QVariant& value )
 {
-    QSharedDataPointer<SubStyle> newSubStyle;
+    SharedSubStyle newSubStyle;
     switch ( key )
     {
         // special cases
@@ -2494,12 +2494,12 @@ const QSharedDataPointer<SubStyle> Style::createSubStyle( Key key, const QVarian
 
 void Style::insertSubStyle( Key key, const QVariant& value )
 {
-    const QSharedDataPointer<SubStyle> subStyle = createSubStyle( key, value );
+    const SharedSubStyle subStyle = createSubStyle( key, value );
     Q_ASSERT( !!subStyle );
     insertSubStyle( subStyle );
 }
 
-void Style::insertSubStyle( const QSharedDataPointer<SubStyle> subStyle )
+void Style::insertSubStyle( const SharedSubStyle subStyle )
 {
     if ( !subStyle )
         return;
@@ -2677,7 +2677,7 @@ bool CustomStyle::loadXML( KoXmlElement const & style, QString const & name )
 #if 0
 void CustomStyle::insertSubStyle( Key key, const QVariant& value )
 {
-    QSharedDataPointer<SubStyle> subStyle = createSubStyle( key, value );
+    SharedSubStyle subStyle = createSubStyle( key, value );
     Q_ASSERT( subStyle );
     Style::insertSubStyle( subStyle );
 }
