@@ -43,8 +43,6 @@
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
-#define KSPREAD_CLIPPED_PAINTING
-
 class QDragLeaveEvent;
 class QDragMoveEvent;
 class QDropEvent;
