@@ -31,9 +31,6 @@
 #include "Storage.h"
 #include "StyleStorage.h"
 
-#define KSPREAD_STYLE_CACHING
-#define KSPREAD_CACHE_KEY_QPOINT
-
 static const int g_maximumCachedStyles = 10000;
 
 using namespace KSpread;
@@ -50,14 +47,8 @@ public:
     QTimer* garbageCollectionInitializationTimer;
     QTimer* garbageCollectionTimer;
     QList< QPair<QRectF,SharedSubStyle> > possibleGarbage;
-#ifdef KSPREAD_STYLE_CACHING
-#ifdef KSPREAD_CACHE_KEY_QPOINT
     QCache<QPoint, Style> cache;
-#else
-    QCache<QString, Style> cache; // key: cell name, e.g. A1
-#endif
     QRegion cachedArea;
-#endif
 };
 
 StyleStorage::StyleStorage( Sheet* sheet )
@@ -71,9 +62,7 @@ StyleStorage::StyleStorage( Sheet* sheet )
     d->garbageCollectionTimer = new QTimer(this);
     connect(d->garbageCollectionTimer, SIGNAL(timeout()), this, SLOT(garbageCollection()));
     d->garbageCollectionTimer->start();
-#ifdef KSPREAD_STYLE_CACHING
     d->cache.setMaxCost( g_maximumCachedStyles );
-#endif
 }
 
 StyleStorage::~StyleStorage()
@@ -86,38 +75,21 @@ StyleStorage::~StyleStorage()
 Style StyleStorage::contains(const QPoint& point) const
 {
     Q_ASSERT(styleManager());
-#ifdef KSPREAD_STYLE_CACHING
     // first, lookup point in the cache
-#ifdef KSPREAD_CACHE_KEY_QPOINT
     if ( d->cache.contains( point ) )
     {
 //         kDebug(36006) << "StyleStorage: Using cached style for " << cellName << endl;
         return *d->cache.object( point );
     }
-#else
-    const QString cellName = Cell::name( point.x(), point.y() );
-    if ( d->cache.contains( cellName ) )
-    {
-//         kDebug(36006) << "StyleStorage: Using cached style for " << cellName << endl;
-        return *d->cache.object( cellName );
-    }
-#endif
-#endif
     // not found, lookup in the tree
     QList<SharedSubStyle> subStyles = d->tree.contains(point);
     if ( subStyles.isEmpty() )
         return *styleManager()->defaultStyle();
     Style* style = new Style();
     (*style) = composeStyle( subStyles );
-#ifdef KSPREAD_STYLE_CACHING
     // insert style into the cache
-#ifdef KSPREAD_CACHE_KEY_QPOINT
     d->cache.insert( point, style );
-#else
-    d->cache.insert( cellName, style );
-#endif
     d->cachedArea += QRect( point, point );
-#endif
     return style->isDefault() ? *styleManager()->defaultStyle() : *style;
 }
 
@@ -421,7 +393,6 @@ void StyleStorage::garbageCollection()
 
 void StyleStorage::invalidateCache( const QRect& rect )
 {
-#ifdef KSPREAD_STYLE_CACHING
 //     kDebug(36006) << "StyleStorage: Invalidating " << rect << endl;
     const QRegion region = d->cachedArea.intersected( rect );
     d->cachedArea = d->cachedArea.subtracted( rect );
@@ -432,15 +403,10 @@ void StyleStorage::invalidateCache( const QRect& rect )
             for ( int row = rect.top(); row <= rect.bottom(); ++row )
             {
 //                 kDebug(36006) << "StyleStorage: Removing cached style for " << Cell::name( col, row ) << endl;
-#ifdef KSPREAD_CACHE_KEY_QPOINT
                 d->cache.remove( QPoint( col, row ) ); // also deletes it
-#else
-                d->cache.remove( Cell::name( col, row ) ); // also deletes it
-#endif
             }
         }
     }
-#endif
 }
 
 Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
