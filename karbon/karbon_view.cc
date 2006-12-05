@@ -1482,7 +1482,7 @@ KarbonView::showSelectionPopupMenu( const QPoint &pos )
 {
 	debugView(QString("KarbonView::showSelectionPopupMenu(QPoint(%1, %2))").arg(pos.x()).arg(pos.y()));
 
-	QList<KAction*> actionList;
+	QList<QAction*> actionList;
 	if( m_groupObjects->isEnabled() )
 		actionList.append( m_groupObjects );
 	else if( m_ungroupObjects->isEnabled() )
