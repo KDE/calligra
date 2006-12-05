@@ -2585,9 +2585,9 @@ void View::updateReadWrite( bool readwrite )
     // d->okButton->setEnabled( readwrite );
   d->editWidget->setEnabled( readwrite );
 
-  QList<KAction*> actions = actionCollection()->actions();
-  QList<KAction*>::ConstIterator aIt = actions.begin();
-  QList<KAction*>::ConstIterator aEnd = actions.end();
+  QList<QAction*> actions = actionCollection()->actions();
+  QList<QAction*>::ConstIterator aIt = actions.begin();
+  QList<QAction*>::ConstIterator aEnd = actions.end();
   for (; aIt != aEnd; ++aIt )
     (*aIt)->setEnabled( readwrite );
 
@@ -2822,13 +2822,13 @@ void View::helpUsing()
 
 void View::enableUndo( bool _b )
 {
-  KAction* action = actionCollection()->action( "office_undo" );
+  QAction* action = actionCollection()->action( "office_undo" );
   if( action ) action->setEnabled( _b );
 }
 
 void View::enableRedo( bool _b )
 {
-  KAction* action = actionCollection()->action( "office_redo" );
+  QAction* action = actionCollection()->action( "office_redo" );
   if( action ) action->setEnabled( _b );
 }
 
