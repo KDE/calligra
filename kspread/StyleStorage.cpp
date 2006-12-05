@@ -444,6 +444,8 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
             style.insertSubStyle( subStyles[i] );
             // not the default anymore
             style.clearAttribute( Style::DefaultStyleKey );
+            // and not a named style anymore
+            style.clearAttribute( Style::NamedStyleKey);
         }
     }
     return style;
