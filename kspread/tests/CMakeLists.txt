@@ -18,18 +18,6 @@ add_test(formula formulatest)
 
 ########### next target ###############
 
-set(valuetest_SRCS test_value.cpp ${libtests_SRCS})
-
-kde4_automoc(${valuetest_SRCS})
-
-kde4_add_executable(valuetest RUN_UNINSTALLED ${valuetest_SRCS})
-
-target_link_libraries(valuetest  kspreadcommon )
-
-add_test(value valuetest)
-
-########### next target ###############
-
 set(rtreeperformance_SRCS rtreeperformancetest.cpp)
 
 kde4_automoc(${rtreeperformance_SRCS})
@@ -51,6 +39,18 @@ kde4_add_executable(rtreetest RUN_UNINSTALLED ${rtreetest_SRCS})
 target_link_libraries(rtreetest kdecore ${QT_QTTEST_LIBRARY})
 
 add_test(R-Tree rtreetest)
+
+########### next target ###############
+
+set(valuetest_SRCS valuetest.cpp)
+
+kde4_automoc(${valuetest_SRCS})
+
+kde4_add_executable(valuetest RUN_UNINSTALLED ${valuetest_SRCS})
+
+target_link_libraries(valuetest kspreadcommon ${QT_QTTEST_LIBRARY})
+
+add_test(Value valuetest)
 
 ########### next target ###############
 

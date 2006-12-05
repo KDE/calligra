@@ -31,7 +31,7 @@ public:
 class RTreeTest: public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void testIntersectingPairs();
 private:
     RTree<SharedTestClass> m_tree;
