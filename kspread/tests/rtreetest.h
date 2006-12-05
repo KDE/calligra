@@ -21,11 +21,17 @@ public:
     QString member;
 };
 
-class SharedTestClass : public QSharedDataPointer<TestClass>
+class SharedTestClass
 {
 public:
-    SharedTestClass() : QSharedDataPointer<TestClass>(new TestClass()) {}
-    SharedTestClass(TestClass* subStyle) : QSharedDataPointer<TestClass>(subStyle) {}
+    SharedTestClass() : d(new TestClass()) {}
+    SharedTestClass(TestClass* subStyle) : d(subStyle) {}
+    inline const TestClass *operator->() const { return d.data(); }
+    bool operator<(const SharedTestClass& o) const { return d->operator<(*o.d.data()); }
+    bool operator==(const SharedTestClass& o) const { return d->operator==(*o.d.data()); }
+
+private:
+    QSharedDataPointer<TestClass> d;
 };
 
 class RTreeTest: public QObject

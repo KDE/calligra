@@ -439,11 +439,19 @@ public:
 // which has a null pointer and crashes.
 // Also, this makes the code more readable:
 // QSharedDataPointer<SubStyle> vs. SharedSubStyle
-class SharedSubStyle : public QSharedDataPointer<SubStyle>
+class SharedSubStyle
 {
 public:
-    SharedSubStyle() : QSharedDataPointer<SubStyle>(new SubStyle()) {}
-    SharedSubStyle(SubStyle* subStyle) : QSharedDataPointer<SubStyle>(subStyle) {}
+    inline SharedSubStyle() : d(new SubStyle()) {}
+    inline SharedSubStyle(SubStyle* subStyle) : d(subStyle) {}
+    inline const SubStyle *operator->() const { return d.data(); }
+    inline const SubStyle *data() const { return d.data(); }
+    inline bool operator<(const SharedSubStyle& o) const { return d.data() < o.d.data(); }
+    inline bool operator==(const SharedSubStyle& o) const { return d.data() == o.d.data(); }
+    inline bool operator!() const { return !d; }
+
+private:
+    QSharedDataPointer<SubStyle> d;
 };
 
 class NamedStyle : public SubStyle

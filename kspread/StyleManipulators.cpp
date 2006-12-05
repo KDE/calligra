@@ -169,7 +169,6 @@ bool IncreaseIndentManipulator::process( Element* element )
     if ( !m_reverse )
     {
         // increase the indentation set for the whole rectangle
-        Style style;
         style.setIndentation( m_sheet->styleStorage()->contains( element->rect() ).indentation() + m_sheet->doc()->indentValue()  );
         m_sheet->setStyle( Region(element->rect()), style );
         // increase the several indentations
@@ -184,7 +183,6 @@ bool IncreaseIndentManipulator::process( Element* element )
     else // m_reverse
     {
         // decrease the indentation set for the whole rectangle
-        Style style;
         style.setIndentation( m_sheet->styleStorage()->contains( element->rect() ).indentation() - m_sheet->doc()->indentValue()  );
         m_sheet->setStyle( Region(element->rect()), style );
         // decrease the several indentations
