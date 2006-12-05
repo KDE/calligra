@@ -134,13 +134,13 @@ void KexiScriptPart::initPartActions()
 			//FIXME: fix+use createSharedPartAction() whyever it doesn't work as expected right now...
 			Q3PopupMenu* popup = m_mainWin->findPopupMenu("tools");
 			if(popup) {
-				KAction* execscriptaction = d->scriptguiclient->action("executescriptfile");
+				QAction* execscriptaction = d->scriptguiclient->action("executescriptfile");
 				if(execscriptaction)
 					execscriptaction->plug( popup );
-				KAction* configscriptaction = d->scriptguiclient->action("configurescripts");
+				QAction* configscriptaction = d->scriptguiclient->action("configurescripts");
 				if(configscriptaction)
 					configscriptaction->plug( popup );
-				KAction* scriptmenuaction = d->scriptguiclient->action("installedscripts");
+				QAction* scriptmenuaction = d->scriptguiclient->action("installedscripts");
 				if(scriptmenuaction)
 					scriptmenuaction->plug( popup );
 				/*
