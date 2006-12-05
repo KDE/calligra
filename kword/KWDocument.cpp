@@ -5018,6 +5018,9 @@ void KWDocument::changeFootNoteConfig()
         {
             KWFootNoteVariable* footNoteVar = static_cast<KWFootNoteVariable *>(it.current());
             footNoteVar->formatedNote();
+            if(footNoteVar->frameSet()->isDeleted())
+	        continue;
+
             footNoteVar->resize();
             footNoteVar->frameSet()->setCounterText( footNoteVar->text() );
 
