@@ -350,8 +350,10 @@ KexiRelationWidget::slotTableFieldDoubleClicked(Q3ListViewItem *i,const QPoint&,
 {
 	if (!sender()->isA("KexiRelationViewTable"))
 		return;
-	emit tableFieldDoubleClicked( 
-		static_cast<const KexiRelationViewTable*>(sender())->schema()->table(), i->text(0) );
+	const KexiRelationViewTable* t = static_cast<const KexiRelationViewTable*>(sender());
+	const QStringList selectedFieldNames( t->selectedFieldNames() );
+	if (selectedFieldNames.count()==1)
+		emit tableFieldDoubleClicked( t->schema()->table(), selectedFieldNames.first() );
 }
 
 void 

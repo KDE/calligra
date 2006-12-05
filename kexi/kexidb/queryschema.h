@@ -141,7 +141,7 @@ class KEXI_DB_EXPORT OrderByColumn
 
 		/*! \return a string like "name ASC" usable for building a SQL statement. 
 		 If \a includeTableNames is true (the default) field is output in a form 
-		 of "tablename.fieldname". */
+		 of "tablename.fieldname" (but only if fieldname is not a name of alias). */
 		QString toSQLString(bool includeTableName = true) const;
 
 	protected:

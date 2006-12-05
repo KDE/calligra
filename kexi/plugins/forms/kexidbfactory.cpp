@@ -344,7 +344,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propValDesc["TristateOff"] = i18n("Tristate checkbox, no", "No");
 	
 	//for combobox
-	m_propDesc["editable"] = futureI18n2("Editable combobox", "Editable");
+	m_propDesc["editable"] = i18n("Editable combobox", "Editable");
 }
 
 KexiDBFactory::~KexiDBFactory()

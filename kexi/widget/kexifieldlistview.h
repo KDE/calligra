@@ -24,6 +24,8 @@
 #include <qpixmap.h>
 #include <k3listview.h>
 
+class K3ListViewItem;
+
 namespace KexiDB {
 	class TableOrQuerySchema;
 }
@@ -54,7 +56,7 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public K3ListView
 		KexiDB::TableOrQuerySchema* schema() const { return m_schema; }
 
 		/*! \return list of selected field names. */
-		QStringList selectedFieldNames();
+		QStringList selectedFieldNames() const;
 
 //		void setReadOnly(bool);
 //		virtual QSize sizeHint();
@@ -74,6 +76,7 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public K3ListView
 		QPixmap m_keyIcon; //!< a small "primary key" icon for 0-th column
 		QPixmap m_noIcon; //!< blank icon of the same size as m_keyIcon
 		int m_options;
+		K3ListViewItem *m_allColumnsItem;
 };
 
 #endif
