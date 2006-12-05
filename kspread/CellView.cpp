@@ -136,7 +136,7 @@ CellView::CellView( SheetView* sheetView, int col, int row )
     {
         // lookup the 'normal' style
         Style style = sheet->style( col, row );
-        if ( !style.isEmpty() && !style.isDefault() )
+        if ( !style.isDefault() )
             d->style = style;
 
         // use conditional formatting attributes

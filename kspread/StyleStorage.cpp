@@ -74,7 +74,6 @@ StyleStorage::~StyleStorage()
 
 Style StyleStorage::contains(const QPoint& point) const
 {
-    Q_ASSERT(styleManager());
     // first, lookup point in the cache
     if ( d->cache.contains( point ) )
     {
@@ -90,23 +89,19 @@ Style StyleStorage::contains(const QPoint& point) const
     // insert style into the cache
     d->cache.insert( point, style );
     d->cachedArea += QRect( point, point );
-    return style->isDefault() ? *styleManager()->defaultStyle() : *style;
+    return *style;
 }
 
 Style StyleStorage::contains(const QRect& rect) const
 {
-    Q_ASSERT(styleManager());
     QList<SharedSubStyle> subStyles = d->tree.contains(rect);
-    Style style = composeStyle( subStyles );
-    return style.isDefault() ? *styleManager()->defaultStyle() : style;
+    return composeStyle( subStyles );
 }
 
 Style StyleStorage::intersects(const QRect& rect) const
 {
-    Q_ASSERT(styleManager());
     QList<SharedSubStyle> subStyles = d->tree.intersects(rect);
-    Style style = composeStyle( subStyles );
-    return style.isDefault() ? *styleManager()->defaultStyle() : style;
+    return composeStyle( subStyles );
 }
 
 QList< QPair<QRectF,SharedSubStyle> > StyleStorage::undoData(const QRect& rect) const
@@ -420,16 +415,38 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
     for ( int i = 0; i < subStyles.count(); ++i )
     {
         if ( subStyles[i]->type() == Style::DefaultStyleKey )
-            style.clear();
-        if ( subStyles[i]->type() == Style::NamedStyleKey )
+            style = *styleManager()->defaultStyle();
+        else if ( subStyles[i]->type() == Style::NamedStyleKey )
         {
             style.clear();
-            CustomStyle* namedStyle = styleManager()->style( static_cast<const NamedStyle*>(subStyles[i].data())->name );
+            const CustomStyle* namedStyle = styleManager()->style( static_cast<const NamedStyle*>(subStyles[i].data())->name );
             if ( namedStyle )
-                style = *namedStyle;
+            {
+                // first, load the attributes of the parent style(s)
+                QList<CustomStyle*> parentStyles;
+                CustomStyle* parentStyle = styleManager()->style( namedStyle->parentName() );
+                while ( parentStyle )
+                {
+                    parentStyles.prepend( parentStyle->name() );
+                    parentStyle = styleManager()->style( parentStyle->parentName() );
+                }
+                for ( int i = 0; i < parentStyles.count(); ++i )
+                    style.merge( parentStyles[i] );
+                // second, merge the other attributes in
+                style.merge( *namedStyle );
+                // not the default anymore
+                style.clearAttribute( Style::DefaultStyleKey );
+            }
         }
-        style.insertSubStyle( subStyles[i] );
+        else
+        {
+            // insert the substyle
+            style.insertSubStyle( subStyles[i] );
+            // not the default anymore
+            style.clearAttribute( Style::DefaultStyleKey );
+        }
     }
+    // check wether it's still the default style
     return style;
 }
 

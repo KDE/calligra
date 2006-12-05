@@ -171,7 +171,6 @@ Style::StyleType Style::type() const
     return AUTO;
 }
 
-// setParentName is needed by loading code, which doesn't set the real parent
 QString Style::parentName() const
 {
     if ( !d->subStyles.contains( NamedStyleKey ) )
@@ -1102,7 +1101,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
 #endif
 
     // don't store parent, if it's the default style
-#warning FIXME
+#warning FIXME Stefan: check for default style
 //     if ( m_parent && (m_parent->type() != BUILTIN || m_parent->name() != "Default") )
 //         // FIXME this is not the OASIS parent style's name. it's its display name!
 //         style.addAttribute( "style:parent-style-name", m_parent->name() );
@@ -2026,7 +2025,7 @@ bool Style::notProtected() const
 
 bool Style::isDefault() const
 {
-    return isEmpty() || ( d->subStyles.count() == 1 && d->subStyles.contains( DefaultStyleKey ) );
+    return isEmpty() || d->subStyles.contains( DefaultStyleKey );
 }
 
 bool Style::isEmpty() const
@@ -2176,7 +2175,7 @@ void Style::setPostfix( QString const & postfix )
 
 void Style::setCurrency( Currency const & currency )
 {
-#warning FIXME
+#warning FIXME Stefan: handle currency format
 //    insertSubStyle( CurrencyFormat, currency );
 }
 

@@ -36,6 +36,7 @@ using namespace KSpread;
 StyleManager::StyleManager()
   : m_defaultStyle( new CustomStyle() )
 {
+    m_defaultStyle->setDefault();
 }
 
 StyleManager::~StyleManager()
