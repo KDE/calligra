@@ -63,7 +63,7 @@ public:
 	//! @todo use message handler for this to enable non-gui apps
 			QString singleStatusString( dlg->singleStatusString() );
 			if (!singleStatusString.isEmpty())
-				singleStatusString.prepend(QString("\n\n")+futureI18n("Details:")+" ");
+				singleStatusString.prepend(QString("\n\n")+i18n("Details:")+" ");
 			if (KMessageBox::No==KMessageBox::questionYesNo(0, 
 				((viewMode == Kexi::DesignViewMode) 
 					? i18n("Object \"%1\" could not be opened in Design View.").arg(item.name())

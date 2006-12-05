@@ -19,6 +19,7 @@ Kexi Handbook: README
 -empty means "translation not ready"
 
 2. TODOs
+-add a documentation for form's Auto Fields
 -add "File types supported by Kexi" (describe .kexis, .kexic, .kexi -- appendix?)
 
 3. Translation status:
@@ -52,8 +53,11 @@ DONE  4.6.3. Property pane
 DONE 5. Building simple databases
 DONE  5.1. Designing database tables
 DONE    5.1.1. Table Designer window
+ TODO: update recent changes made to 05_01_00_table_designing.html
 DONE  5.2. Entering data into tables
+ TODO: update recent changes made to 05_02_00_data_entering_into_tables.html
 DONE  5.3. Designing database queries
+ TODO: update recent changes made to 05_03_00_query_designing.html
 DONE  5.4. Designing forms
 DONE    5.4.1. Most important terms
 DONE    5.4.2. Forms versus tables
@@ -77,9 +81,10 @@ DONE  5.5. Entering data using forms
     6.1.1. File-based database
     6.1.2. Server database
   6.2. Designing advanced objects
-  6.3. Data security
+  6.3. Database administration
     6.3.1. Security in file-based databases
     6.3.2. Security in server databases
+    6.3.3. Database file compacting
   6.4. Using the command line
 7. Work with external data
   7.1. Data importing

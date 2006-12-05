@@ -209,17 +209,19 @@ I am using update_kexi_po to recreate kexi.po file. THis will run cd koffice/ &&
   "getting index schema"
 
 === Combo box editor TODO ====
--we're completely dropping using regular combobox
 -new layout: a lineedit + dropdown button + popup tableview, when needed
 -use (and add few) methods for tableview to enable adjusting it for use it as dropdown tv
---allow to hide the horizontal stripes
 --add scrolling for mouse dragging
---add highlighting under mouse pointer
 -dropdown tv has to contain:
 --QSizeGrip at the bottom corner
 -in kexidb: implement combobox settings for the foreign field:
 --ordered set of fields that are visible in popup tableview (ie. just query that is bound with the column)
--use one and multi-key relations from kexidb
+-use multi-key relations from kexidb
+- copy should handle "displayed" value, not the real one 
+  (maybe let's use a custom clipboard mimetype? (containing a bound value) -- otherwise 
+  it will be not posible to paste the copied value)
+- fix support for query as the row source
+- (forms combo) repaint (remove focus rectangle) when other widget is focused using a mouse click
 
 === Table View TODO ====
 - do not accept when enterind "-" for unsigned numeric types
@@ -294,6 +296,8 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - KexiComboBoxTableEdit::createInternalEditor():
    set d->internalEditor visible and use it to enable data entering by hand 
    (for now only types based that use KexiInputTableEdit (Text, Integer..) allows data entry using keyboard
+
+- display error message on top of table view if data fetching failed
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -399,7 +403,9 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 -- use a special dialog with validators compatible with the field type for getting query parameters
    (currently KInputDialog is used)
 -- use dialog like KInputDialog::getItemList() for supporting multiple values as query parameters
-
+- support add "PARAMETERS [prompt1] datatype1, [prompt2] datatype2;" syntax to the parser, 
+  and add query "Query parameters" dialog/pane, allowing to order parameters that user should 
+  provide (Ks. eksp., p. 73)
 
 ==== SQL Editor TODO: =====
 - intergrate editor's (KPart) actions with KexiMainWindow's Actions
@@ -455,7 +461,7 @@ CCPASTEUR:
 --what about objects (queries/forms) that use old name?
 - PGSQL: use setval(sequence) to allow setting autonumber values by hand
    http://www.postgresql.org/docs/7.4/interactive/functions-sequence.html
-- optioanlly, introduce EDITABLE_AUTONUMBER_FIELDS driver flag
+- optionally, introduce EDITABLE_AUTONUMBER_FIELDS driver flag
 PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyway at db creation time as sequence = 0
 	js	PiggZ_: but users ofter want to enter it anyway
 	js	eg. sqlite increments its autonumber to 1001 if you enter 1000
@@ -549,6 +555,9 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
   (e.g. using a special Q_LLONG+decimalplace class); needed e.g. in KexiQueryParameters::getParameters()
 - handle input mask using a special KexiDB::FieldInputMask class
   --needed in forms (KexiDBLineEdit::setColumnInfo()) and table views
+- add setValue() to cursors: this will REQUIRE a buffered cursor, since we cannot run sql 
+  before fetching is done... See http://kexi-project.org/cgi-bin/irclogger_log/kexi?date=2006-08-03,Thu&sel=229#l225
+- use ThreadWeaver library for threaded KexiDB version
 
 === KexiDB Parser TODO ===
 - add a method for replacing a single given table name in the statement (useful on table renames)
@@ -565,6 +574,18 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
   This can work in simple cases (when complex transactions are not involved).
 - report "ambiguous field name 'id'" error for ambiguous queries like "SELECT a.id, b.id FROM a, b ORDER BY id"
 - add types checking to **Expr::validate()
+
+=== KexiDB MySQL Driver TODO ===
+- use InnoDB instead of MyISAM tables because of transactions support
+ http://dev.mysql.com/doc/refman/5.0/en/ansi-diff-transactions.html
+ Kexi's MySQL driver uses MyISAM engine, but transaction support needs InnoDB
+ (there should be also an option available to set on CREATE TABLE, and on an default for CREATE DATABASE)
+
+=== KexiDB PostgreSQL Driver TODO ===
+- port to libpq
+- set version information in drv_useDatabase()
+  There's connection_base::server_version() in libpqxx trunk - 
+  http://thaiopensource.org/development/libpqxx/file/trunk/include/pqxx/connection_base.hxx
 
 === KEXIDB TESTS=== 
 - add tests for DatabaseProperties
@@ -674,10 +695,6 @@ TODO:::::::
 	dipesh	therefore column( col )->readOnly() crashes...
 
 reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-2003.ps
-
-=== CSV Import Dialog TODO ===
-- (1.0) add "skip empty columns" and "skip empty rows" option
-- add option for adding explicit primary key column with autonumber
 
 === Interesting features ===
 - Add random names/surnames generator: http://www.ruf.rice.edu/~pound/
@@ -824,24 +841,30 @@ CSV Import TODO:
 - always test using e.g. this file: http://cvs.sourceforge.net/viewcvs.py/*checkout*/wcuniverse/priv/units/units.csv
 - change boolean "First row contains column names" to 3-value combo:
   "Get column names:" ["None", "From the first row", "From the first imported row"]
+- add "skip empty columns" and "skip empty rows" option
+- (advanced) there can be a column that is a result of exporting combo box visible values;
+  in this case add option for normalizing the table using existing (or new) lookup table
 
 CSV Export TODO:
 - add "Include row count as first column - include row number in the first 
    column of each row" option
-- add "Fixed columns width" option (can be extended to support "fixed width text" format
+- add "Include column types on top" option
+- add "Fixed columns width" option (can be extended to support "fixed width text" format)
 - add "Set text to (null) on NULL value - use the string "(null)" to represent 
    a NULL value in the document" option
+- add "Replace empty/Null fields with..." option
+- add "Lines terminated with.." option (\n or \r\n or \r)
+- add option for compression (gzip, zip, bzip2...)
 - MORE TODOs here: http://www.aquafold.com/docs-qw-save-results.html
 - by default, use delimiter=\t and quote=none for clipboard (needed for copying to spreadsheets)
 - add "Strip leading and trailing blanks off of text values" option
-
-KexiDB TODO:
--implement QuerySchema::setOrderByColumnList()
--implement Cursor::setOrderByColumnList()
+- deal with lookup fields: for every such field
+-- add option for exporting lookup tables as separate files
+-- add option for exporting a) both visible values and indices b) indices only c) visible values only
+   -for now c) is supported
 
 General TODO:
 - handle KApplication::shutDown()
-
 
 TODO:
 - on opening detect whether a table exists (empty table view should not be displayed)
@@ -970,29 +993,13 @@ Table Designer TODO
   table view. Then, lookup column properties should be autoconfigured.
 - lookup column: support these properties of LookupFieldSchema:
   columnWidths(), columnHeadersVisible(), maximumListRows(), limitToList(), displayWidget()
+- show warning if there are no bound and visible columns defined (for now, this is just ignored 
+  and user cannot select a value from the list in the data view)
 
-Combobox table edit TODO:
-- copy should handle "displayed" value, not the real one 
-  (maybe let's use a custom clipboard mimetype?)
-- fix support for query as the row source
+=== Simple Printouts TODO ===
+- cell contents can be too large for a single page - split it to man pages if needed (true for large texts, blobs..)
+- add support for BLOBs
 
-
-=== KexiDB MySQL Driver TODO ===
-- use InnoDB instead of MyISAM tables because of transactions support
- http://dev.mysql.com/doc/refman/5.0/en/ansi-diff-transactions.html
- Kexi's MySQL driver uses MyISAM engine, but transaction support needs InnoDB
- (there should be also an option available to set on CREATE TABLE, and on an default for CREATE DATABASE)
-
-=== KexiDB PostgreSQL Driver TODO ===
-- port to libpq
-- set version information in drv_useDatabase()
-  There's connection_base::server_version() in libpqxx trunk - 
-  http://thaiopensource.org/development/libpqxx/file/trunk/include/pqxx/connection_base.hxx
-
-=== KexiDB TODO ===
-- add setValue() to cursors: this will REQUIRE a buffered cursor, since we cannot run sql 
-  before fetching is done... See http://kexi-project.org/cgi-bin/irclogger_log/kexi?date=2006-08-03,Thu&sel=229#l225
-- use ThreadWeaver library for threaded KexiDB version
 
 Form/TV Shortcuts:
  
@@ -1004,14 +1011,11 @@ Form/TV Shortcuts:
 + Add moving to prev record when BackTab is pressed at the 1st field
 
 
-== TODOs for 1.1.x ==
+== TODOs for 1.1.2 ==
+- support combo box within the autofield widget
 - use transliteration script: http://bugs.kde.org/show_bug.cgi?id=133170
 (done?): notify and update data source after schema changes
-todo: fix things like SELECT *, cars.owner AS ab, 1.3 AS wyr1, persons.surname FROM cars LEFT OUTER JOIN persons ON cars.owner=persons.id  WHERE cars.owner > 3
+- todo: fix things like SELECT *, cars.owner AS ab, 1.3 AS wyr1, persons.surname FROM cars LEFT OUTER JOIN persons ON cars.owner=persons.id  WHERE cars.owner > 3
       (crash - see Simple_Database.kexi - persons_and_cars query has lookup fields and OUTER JOIN is NOT PARSED
        -- we should generate the SQL in a different way for the Query Designer)
-
-TODO
-- tv combobox bug: combo box visible value sometimes disappears after changes made 
-   to the database schema (e.g. Ks. telef.)
-- delete row (ctrl+Del) crashes in the form view
+- fix horizontal scrollbar hiding in the "Available fields" list box (a problem with layouts?)

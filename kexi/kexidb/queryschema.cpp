@@ -377,7 +377,8 @@ QString OrderByColumn::toSQLString(bool includeTableName) const
 		if (m_pos>-1)
 			return QString::number(m_pos+1) + orderString;
 		else
-			return (includeTableName ? m_column->field->table()->name()+"." : QString::null)
+			return ((includeTableName && m_column->alias.isEmpty()) 
+				? m_column->field->table()->name()+"." : QString::null)
 				+ QString(m_column->aliasOrName()) + orderString;
 	}
 	else {

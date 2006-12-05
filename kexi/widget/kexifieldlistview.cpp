@@ -45,6 +45,7 @@ KexiFieldListView::KexiFieldListView(QWidget *parent, const char *name, int opti
  : KListView(parent, name)
  , m_schema(0)
  , m_options(options)
+ , m_allColumnsItem(0)
 {
 	m_keyIcon = SmallIcon("key");
 	m_noIcon = QPixmap(m_keyIcon.size());
@@ -80,6 +81,7 @@ void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
 {
 	if (schema && m_schema == schema)
 		return;
+	m_allColumnsItem = 0;
 	clear();
 	delete m_schema;
 	m_schema = schema;
@@ -97,7 +99,8 @@ void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
 		if (i==-1) {
 			if (! (m_options & ShowAsterisk))
 				continue;
-			item = new KListViewItem(this, item, "*");
+			item = new KListViewItem(this, item, i18n("* (All Columns)"));
+			m_allColumnsItem = item;
 		}
 		else {
 			colinfo = columns[i];
@@ -139,13 +142,9 @@ void KexiFieldListView::setReadOnly(bool b)
 
 QDragObject* KexiFieldListView::dragObject()
 {
-	QStringList selectedFields;
-	for (QListViewItemIterator it(this); it.current(); ++it) {
-		if (it.current()->isSelected()) {
-//! @todo what about query fields/aliases? it.current()->text(1) can be not enough
-			selectedFields.append(it.current()->text(0));
-		}
-	}
+	if (!schema())
+		return 0;
+	const QStringList selectedFields( selectedFieldNames() );
 	return new KexiFieldDrag(m_schema->table() ? "kexi/table" : "kexi/query", 
 		m_schema->name(), selectedFields, this, "KexiFieldDrag");
 /*	if (selectedItem()) {
@@ -155,15 +154,18 @@ QDragObject* KexiFieldListView::dragObject()
 	}*/
 }
 
-QStringList KexiFieldListView::selectedFieldNames()
+QStringList KexiFieldListView::selectedFieldNames() const
 {
 	if (!schema())
 		return QStringList();
 	QStringList selectedFields;
-	for (QListViewItemIterator it(this); it.current(); ++it) {
-		if (it.current()->isSelected()) {
+	for (QListViewItem *item = firstChild(); item; item = item->nextSibling()) {
+		if (item->isSelected()) {
 //! @todo what about query fields/aliases? it.current()->text(0) can be not enough
-			selectedFields.append(it.current()->text(0));
+			if (item == m_allColumnsItem && m_allColumnsItem)
+				selectedFields.append("*");
+			else
+				selectedFields.append(item->text(0));
 		}
 	}
 	return selectedFields;

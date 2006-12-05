@@ -1461,7 +1461,7 @@ KexiMainWindowImpl::initNavigator()
 				if (!msg.isEmpty()) {
 					if (partManagerErrorMessages.isEmpty()) {
 						partManagerErrorMessages = QString("<qt><p>")
-							+futureI18n("Errors encountered during loading plugins:")+"<ul>";
+							+i18n("Errors encountered during loading plugins:")+"<ul>";
 					}
 					partManagerErrorMessages.append( QString("<li>") + msg );
 					if (!details.isEmpty())

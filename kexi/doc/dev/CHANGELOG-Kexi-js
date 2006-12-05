@@ -15,6 +15,78 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
+2006-12-05
+General
+- missing i18n()
+2.0: merged
+Query Designer
+- display "(All Columns)" near the "*"
+- SQL editor on Unix: initially, clear undo/redo buffer
+  (otherwise Ctrl+Z clears the contents)
+2.0: merged
+KexiDB
+- fixed problem with constructing SQL statements: 
+  for multi-table queries "ORDER BY column" prepends "table" only if "column" 
+  is not a name of alias
+2.0: merged
+
+~~~~~~~~~~~~~~~~ 2007 (OOPL) ~~~~~~~~~~~~~~~~
+
+2006-11-28..29
+Examples
+- added parametrized query 'Owners by age'
+= update the parameter query: remove joins because there's still one related bug
+2.0: merged
+
+2006-11-21
+Table View
+- fixed crash when combo box drop down button is clicked but bound column
+  is not defined for lookup field
+2.0: merged
+Forms
+- fixed possible crash when auto field is used for field with lookup 
+  column defined
+- sane icon for the Auto Field widget and Label, improved button icon
+2.0: merged
+
+2006-11-17
+CSV Export
+- export visible values for lookup columns instead of internal values
+Simple Printouts
+- print visible values for lookup columns instead of internal values
+2.0: merged
+KexiDB
+- generate aliases for lookup table names to avoid errors because 
+ of ambiguous table names when the same lookup table is used more than once;
+ For example, use persons1 and persons1 aliases here:
+ SELECT service.id, service.emploee, service.service_man, persons1.surname, 
+ persons2.surname, service.OID FROM service 
+ LEFT OUTER JOIN persons AS persons1 ON service.emploee=persons1.id 
+ LEFT OUTER JOIN persons AS persons2 ON service.service_man=persons2.id;
+2.0: merged
+~~~~~~~~~~~~~~~~ 1.1.1 bugfix release (with KOffice 1.6.1)  ~~~~~~~~~~~~~~~~
+Query Designer
+- propery initialize newly appended rows
+2.0: merged
+
+2006-11-16
+Table View
+- fixed updating contents of the combobox's internal text editor after 
+   pressing F2 or Enter key 
+- fixed possible crash on application's close
+- fixed copying/pasting values from the combo box (visible text is now copied/pasted)
+2.0: merged
+
+2006-11-15
+Query Designer
+- fixed setting up sorting in the design view
+- fixed setting up string constants as criteria
+2.0: merged
+Table View
+- fixed copying time and date/time values to clipboard
+- fixed pasting time, date and date/time values from clipboard
+2.0: merged
+
 2006-11-14
 Forms
 - fixed displaying Date/Time values
@@ -45,7 +117,7 @@ Main Window
 Query Designer
 - show more error messages on opening query in design view 
   (e.g. for unsupported column expressions)
-- fixed saving relationships: removed too strict checking for datatypes when crating 
+- fixed saving relationships: removed too strict checking for datatypes when creating 
   relationships (signedness)
 2.0: merged
 KexiDB
@@ -63,7 +135,7 @@ General
 - Simple_Database.kexi example updated: combo boxes are now used; example data looks better
 2.0: merged
 
-~~~~~~~~~~~~~~~~ 1.1.1 bugfix release (with KOffice 1.6.1)  ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.1.1-pre ~~~~~~~~~~~~~~~~
 
 2006-10-30..2006-11-06
 Table View

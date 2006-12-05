@@ -147,12 +147,12 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
 	if (!KMessageBox::shouldBeShownContinue(dontShowAgainName))
 		return;
 	KDialogBase *dialog = new KDialogBase(
-		futureI18n("Warning"), KDialogBase::Yes, KDialogBase::Yes, KDialogBase::No,
+		i18n("Warning"), KDialogBase::Yes, KDialogBase::Yes, KDialogBase::No,
 		m_messageHandlerParentWidget, "warningContinue", true, true, KStdGuiItem::cont() );
 	bool checkboxResult = false;
 	KMessageBox::createKMessageBox(dialog, QMessageBox::Warning, 
 		title + (details.isEmpty() ? QString::null : (QString("\n")+details)), QStringList(),
-		dontShowAgainName.isEmpty() ? QString::null : futureI18n("Do not show this message again"),
+		dontShowAgainName.isEmpty() ? QString::null : i18n("Do not show this message again"),
 		&checkboxResult, 0);
 	if (checkboxResult)
 		KMessageBox::saveDontShowAgainContinue(dontShowAgainName);

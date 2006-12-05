@@ -98,7 +98,8 @@ class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiViewBase
 		void clearUndoRedo();
 
 	public slots:
-		/*! Sets editor's text to \a text. 'Dirty' flag remains unchanged. */
+		/*! Sets editor's text to \a text. 'Dirty' flag remains unchanged. 
+		 Undo/redo buffer is cleared.*/
 		void setText(const QString &text);
 		/*! Display the configuration-dialog. Only avaiable if isAdvancedEditor() returns true. */
 		void slotConfigureEditor();

@@ -68,7 +68,7 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(
 
 	m_tableView = new KexiRelationViewTable(schema, parent, this, "KexiRelationViewTable");
 	//m_tableHeader->setFocusProxy( m_tableView );
-	m_tableView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
+	m_tableView->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 	
 	m_tableView->setMaximumSize( m_tableView->sizeHint() );
 	
@@ -311,16 +311,34 @@ KexiRelationViewTable::~KexiRelationViewTable()
 
 QSize KexiRelationViewTable::sizeHint()
 {
+/*
 	QFontMetrics fm(font());
+	kdDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i") 
+		<< ", " << fm.width(schema()->name()+"  ") << endl; 
+//! @todo width is still not OK
+	int maxWidth = columnWidth(0) + fm.width("i");
+	const KexiDB::QueryColumnInfo::Vector columns(schema()->columns(true));
+	for (uint i=0; i<columns.count(); i++)
+		maxWidth = QMAX(maxWidth, fm.width(columns[i]->field->name())+20);
+
+	QSize s(
+		QMAX( maxWidth, fm.width(schema()->name()+"  ")+20), 
+		childCount()*firstChild()->totalHeight() + 4 );
+//	QSize s( columnWidth(1), childCount()*firstChild()->totalHeight() + 3*firstChild()->totalHeight()/10);
+	return s;*/
+	QFontMetrics fm(fontMetrics());
 
 	kdDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i") 
 		<< ", " << fm.width(schema()->name()+"  ") << endl; 
 
 //! @todo width is still not OK
-	int maxWidth = columnWidth(0) + fm.width("i");
-  const KexiDB::QueryColumnInfo::Vector columns(schema()->columns(true/*unique*/));
-  for (uint i=0; i<columns.count(); i++)
-  	maxWidth = QMAX(maxWidth, fm.width(columns[i]->field->name())+20);
+	int maxWidth = -1;
+	const int iconWidth = IconSize(KIcon::Small) + fm.width("i")+50;
+	for (QListViewItem *item = firstChild(); item; item	= item->nextSibling())
+		maxWidth = QMAX(maxWidth, iconWidth + fm.width(item->text(0)));
+//	const KexiDB::QueryColumnInfo::Vector columns(schema()->columns(true/*unique*/));
+//	for (uint i=0; i<columns.count(); i++)
+//		maxWidth = QMAX(maxWidth, col0Width + fm.width(columns[i]->field->name())+20);
 
 	QSize s(
 		QMAX( maxWidth, fm.width(schema()->name()+"  ")+20), 
@@ -364,7 +382,7 @@ KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 	if (sourceMimeType!="kexi/table" && sourceMimeType=="kexi/query")
 		return false;
 	QString f = receiver->text(0).stripWhiteSpace();
-	if (srcField.stripWhiteSpace()!="*" && f!="*" && ev->source() != (QWidget*)this)
+	if (!srcField.stripWhiteSpace().startsWith("*") && !f.startsWith("*") && ev->source() != (QWidget*)this)
 		return true;
 
 	return false;

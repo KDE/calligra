@@ -108,17 +108,17 @@ KexiEditor::KexiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *nam
 	d->view = d->doc->createView(fr, 0L);
 
 	KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( d->view );
-        if(popupInt) {
-            QPopupMenu *pop = (QPopupMenu*) mainWin->factory()->container("edit", mainWin);
-            if(pop) {
-                //plugSharedAction("edit_undo", pop);
-                popupInt->installPopup(pop);
-            }
-        }
+	if(popupInt) {
+			QPopupMenu *pop = (QPopupMenu*) mainWin->factory()->container("edit", mainWin);
+			if(pop) {
+				 //plugSharedAction("edit_undo", pop);
+				 popupInt->installPopup(pop);
+			}
+	}
 
 	connect(d->doc, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
 #endif
-        KexiEditorSharedActionConnector c(this, d->view);
+	KexiEditorSharedActionConnector c(this, d->view);
 	d->view->installEventFilter(this);
 
 	layout->addWidget(d->view);
@@ -168,6 +168,9 @@ void KexiEditor::setText(const QString &text)
 	const bool was_dirty = dirty();
 	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(d->doc);
 	eIface->setText(text);
+	KTextEditor::UndoInterface *undoIface = KTextEditor::undoInterface(d->doc);
+	undoIface->clearUndo();
+	undoIface->clearRedo();
 	setDirty(was_dirty);
 #endif
 }
@@ -176,15 +179,15 @@ void KexiEditor::setHighlightMode(const QString& highlightmodename)
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
-        KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( d->doc );
-        for(uint i = 0; i < hl->hlModeCount(); i++) {
-            //kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
-            if (hl->hlModeName(i).contains(highlightmodename, false))  {
-                hl->setHlMode(i);
-                return;
-            }
-        }
-        hl->setHlMode(0); // 0=None, don't highlight anything.
+	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( d->doc );
+	for(uint i = 0; i < hl->hlModeCount(); i++) {
+			//kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
+			if (hl->hlModeName(i).contains(highlightmodename, false))  {
+				hl->setHlMode(i);
+				return;
+			}
+	}
+	hl->setHlMode(0); // 0=None, don't highlight anything.
 #endif
 }
 
