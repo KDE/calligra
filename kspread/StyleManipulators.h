@@ -84,7 +84,7 @@ public:
     void setDefault() { m_style->setDefault(); }
 
 protected:
-    virtual QString name() const { return i18n("Format Change"); }
+    virtual QString name() const;
 
     virtual bool process(Element*);
 
@@ -104,21 +104,17 @@ private:
 class BorderColorManipulator : public Manipulator
 {
 public:
-  BorderColorManipulator();
-
-  void setColor( const QColor& color ) { m_color = color; }
+    BorderColorManipulator();
+    void setColor( const QColor& color ) { m_color = color; }
 
 protected:
-  virtual bool process( Cell* cell );
-  virtual bool process( const Style& style );
-
-  virtual QString name() const { return i18n( "Change Border Color" ); }
-
-  void processHelper( const Style& style, int column, int row );
+    virtual bool preProcessing();
+    virtual bool mainProcessing();
+    virtual QString name() const { return i18n( "Change Border Color" ); }
 
 private:
-  QColor m_color;
-  QHash<int, QHash<int, QHash<Style::Key, QColor> > > m_undoData;
+    QColor m_color;
+    QList< QPair<QRectF,SharedSubStyle> > m_undoData;
 };
 
 
@@ -126,13 +122,11 @@ private:
 class IncreaseIndentManipulator : public Manipulator
 {
 public:
-  IncreaseIndentManipulator();
+    IncreaseIndentManipulator();
 
 protected:
-  virtual bool process( Cell* cell );
-  virtual bool process( const Style& style );
-
-  virtual QString name() const;
+    virtual bool process(Element*);
+    virtual QString name() const;
 };
 
 
@@ -140,12 +134,11 @@ protected:
 class IncreasePrecisionManipulator : public Manipulator
 {
 public:
-  IncreasePrecisionManipulator();
+    IncreasePrecisionManipulator();
 
 protected:
-  virtual bool process( Cell* cell );
-
-  virtual QString name() const;
+    virtual bool process( Cell* cell );
+    virtual QString name() const;
 };
 
 }  // namespace KSpread

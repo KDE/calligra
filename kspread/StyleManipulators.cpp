@@ -138,6 +138,14 @@ bool StyleManipulator::postProcessing()
     return true;
 }
 
+QString StyleManipulator::name() const
+{
+    if ( m_style->isDefault() )
+        return i18n( "Reset Style" );
+    else
+        return i18n( "Change Style" );
+}
+
 
 /***************************************************************************
   class IncreaseIndentManipulator
@@ -148,52 +156,51 @@ IncreaseIndentManipulator::IncreaseIndentManipulator()
 {
 }
 
-bool IncreaseIndentManipulator::process( Cell* cell )
+bool IncreaseIndentManipulator::process( Element* element )
 {
+    QList< QPair<QRectF,SharedSubStyle> > indentationPairs;
+    if ( m_firstrun )
+    {
+        indentationPairs = m_sheet->styleStorage()->undoData( element->rect() );
+        for ( int i = 0; i < indentationPairs.count(); ++i )
+        {
+            if ( indentationPairs[i].second->type() != Style::Indentation )
+                indentationPairs.removeAt( i-- );
+        }
+    }
+
     Style style;
     if ( !m_reverse )
     {
-        style.setIndentation( cell->style(cell->column(), cell->row()).indentation() + m_sheet->doc()->indentValue() );
+        // increase the indentation set for the whole rectangle
+        Style style;
+        style.setIndentation( m_sheet->styleStorage()->contains( element->rect() ).indentation() + m_sheet->doc()->indentValue()  );
+        m_sheet->setStyle( Region(element->rect()), style );
+        // increase the several indentations
+        for ( int i = 0; i < indentationPairs.count(); ++i )
+        {
+            style.clear();
+            style.insertSubStyle( indentationPairs[i].second );
+            style.setIndentation( style.indentation() + m_sheet->doc()->indentValue() );
+            m_sheet->setStyle( Region(indentationPairs[i].first.toRect()), style );
+        }
     }
     else // m_reverse
     {
-        style.setIndentation( cell->style(cell->column(), cell->row()).indentation() - m_sheet->doc()->indentValue() );
+        // decrease the indentation set for the whole rectangle
+        Style style;
+        style.setIndentation( m_sheet->styleStorage()->contains( element->rect() ).indentation() - m_sheet->doc()->indentValue()  );
+        m_sheet->setStyle( Region(element->rect()), style );
+        // decrease the several indentations
+        for ( int i = 0; i < indentationPairs.count(); ++i )
+        {
+            style.clear();
+            style.insertSubStyle( indentationPairs[i].second );
+            style.setIndentation( style.indentation() - m_sheet->doc()->indentValue() );
+            m_sheet->setStyle( Region(indentationPairs[i].first.toRect()), style );
+        }
     }
-    cell->setStyle( style );
     return true;
-}
-
-bool IncreaseIndentManipulator::process( const Style& style )
-{
-#ifndef KSPREAD_NEW_STYLE_STORAGE
-  if ( !m_reverse )
-  {
-    if ( dynamic_cast<ColumnFormat*>(format) )
-    {
-      const ColumnFormat* columnFormat = dynamic_cast<ColumnFormat*>(format);
-      format->setIndent( format->getIndent( columnFormat->column(), 0 ) + m_sheet->doc()->indentValue() );
-    }
-    else
-    {
-      const RowFormat* rowFormat = dynamic_cast<RowFormat*>(format);
-      format->setIndent( format->getIndent( 0, rowFormat->row() ) + m_sheet->doc()->indentValue() );
-    }
-  }
-  else // m_reverse
-  {
-    if ( dynamic_cast<ColumnFormat*>(format) )
-    {
-      const ColumnFormat* columnFormat = dynamic_cast<ColumnFormat*>(format);
-      format->setIndent( format->getIndent( columnFormat->column(), 0 ) - m_sheet->doc()->indentValue() );
-    }
-    else
-    {
-      const RowFormat* rowFormat = dynamic_cast<RowFormat*>(format);
-      format->setIndent( format->getIndent( 0, rowFormat->row() ) - m_sheet->doc()->indentValue() );
-    }
-  }
-#endif
-  return true;
 }
 
 QString IncreaseIndentManipulator::name() const
@@ -219,84 +226,91 @@ BorderColorManipulator::BorderColorManipulator()
 {
 }
 
-bool BorderColorManipulator::process( Cell* cell )
+bool BorderColorManipulator::preProcessing()
 {
-  const int row = cell->row();
-  const int col = cell->column();
-
-  processHelper( cell->style( col, row ), col, row );
-  return true;
-}
-
-bool BorderColorManipulator::process( const Style& style )
-{
-#ifndef KSPREAD_NEW_STYLE_STORAGE
-  if ( dynamic_cast<ColumnFormat*>(format) )
-  {
-    ColumnFormat* const columnFormat = dynamic_cast<ColumnFormat*>(format);
-    const int col = columnFormat->column();
-    processHelper( columnFormat, col, 0 );
-  }
-  else
-  {
-    RowFormat* const rowFormat = dynamic_cast<RowFormat*>(format);
-    const int row = rowFormat->row();
-    processHelper( rowFormat, 0, row );
-  }
-#endif
-  return true;
-}
-
-void BorderColorManipulator::processHelper( const Style& style, int col, int row )
-{
-#ifndef KSPREAD_NEW_STYLE_STORAGE
-  if ( !m_reverse )
-  {
     if ( m_firstrun )
     {
-      if ( format->hasProperty( Style::STopBorder ) )
-        m_undoData[col][row][Style::STopBorder] = format->topBorderColor( col, row );
-      if ( format->hasProperty( Style::SLeftBorder ) )
-        m_undoData[col][row][Style::SLeftBorder] = format->leftBorderColor( col, row );
-      if ( format->hasProperty( Style::SFallDiagonal ) )
-        m_undoData[col][row][Style::SFallDiagonal] = format->fallDiagonalColor( col, row );
-      if ( format->hasProperty( Style::SGoUpDiagonal ) )
-        m_undoData[col][row][Style::SGoUpDiagonal] = format->goUpDiagonalColor( col, row );
-      if ( format->hasProperty( Style::SBottomBorder ) )
-        m_undoData[col][row][Style::SBottomBorder] = format->bottomBorderColor( col, row );
-      if ( format->hasProperty( Style::SRightBorder ) )
-        m_undoData[col][row][Style::SRightBorder] = format->rightBorderColor( col, row );
+        ConstIterator endOfList = constEnd();
+        for (ConstIterator it = constBegin(); it != endOfList; ++it)
+        {
+            QList< QPair<QRectF,SharedSubStyle> > undoData = m_sheet->styleStorage()->undoData( (*it)->rect() );
+            for ( int i = 0; i < undoData.count(); ++i )
+            {
+                if ( undoData[i].second->type() != Style::LeftPen ||
+                     undoData[i].second->type() != Style::RightPen ||
+                     undoData[i].second->type() != Style::TopPen ||
+                     undoData[i].second->type() != Style::BottomPen ||
+                     undoData[i].second->type() != Style::FallDiagonalPen ||
+                     undoData[i].second->type() != Style::GoUpDiagonalPen )
+                {
+                    undoData.removeAt( i-- );
+                }
+            }
+            m_undoData += undoData;
+        }
     }
+}
 
-    if ( format->hasProperty( Style::STopBorder ) )
-      format->setTopBorderColor( m_color );
-    if ( format->hasProperty( Style::SLeftBorder ) )
-      format->setLeftBorderColor( m_color );
-    if ( format->hasProperty( Style::SFallDiagonal ) )
-      format->setFallDiagonalColor( m_color );
-    if ( format->hasProperty( Style::SGoUpDiagonal ) )
-      format->setGoUpDiagonalColor( m_color );
-    if ( format->hasProperty( Style::SBottomBorder ) )
-      format->setBottomBorderColor( m_color );
-    if ( format->hasProperty( Style::SRightBorder ) )
-      format->setRightBorderColor( m_color );
-  }
-  else
-  {
-    if ( format->hasProperty( Style::STopBorder ) )
-      format->setTopBorderColor( m_undoData[col][row][Style::STopBorder] );
-    if ( format->hasProperty( Style::SLeftBorder ) )
-      format->setLeftBorderColor( m_undoData[col][row][Style::SLeftBorder] );
-    if ( format->hasProperty( Style::SFallDiagonal ) )
-      format->setFallDiagonalColor( m_undoData[col][row][Style::SFallDiagonal] );
-    if ( format->hasProperty( Style::SGoUpDiagonal ) )
-      format->setGoUpDiagonalColor( m_undoData[col][row][Style::SGoUpDiagonal] );
-    if ( format->hasProperty( Style::SBottomBorder ) )
-      format->setBottomBorderColor( m_undoData[col][row][Style::SBottomBorder] );
-    if ( format->hasProperty( Style::SRightBorder ) )
-      format->setRightBorderColor( m_undoData[col][row][Style::SRightBorder] );
-  }
-#endif
+bool BorderColorManipulator::mainProcessing()
+{
+    if ( !m_reverse )
+    {
+        // change colors
+        Style style;
+        for ( int i = 0; i < m_undoData.count(); ++i )
+        {
+            style.clear();
+            style.insertSubStyle( m_undoData[i].second );
+            QPen pen;
+            if ( m_undoData[i].second->type() == Style::LeftPen )
+            {
+                pen = style.leftBorderPen();
+                pen.setColor( m_color );
+                style.setLeftBorderPen( pen );
+            }
+            if ( m_undoData[i].second->type() == Style::RightPen )
+            {
+                pen = style.rightBorderPen();
+                pen.setColor( m_color );
+                style.setRightBorderPen( pen );
+            }
+            if ( m_undoData[i].second->type() == Style::TopPen )
+            {
+                pen = style.topBorderPen();
+                pen.setColor( m_color );
+                style.setTopBorderPen( pen );
+            }
+            if ( m_undoData[i].second->type() == Style::BottomPen )
+            {
+                pen = style.bottomBorderPen();
+                pen.setColor( m_color );
+                style.setBottomBorderPen( pen );
+            }
+            if ( m_undoData[i].second->type() == Style::FallDiagonalPen )
+            {
+                pen = style.fallDiagonalPen();
+                pen.setColor( m_color );
+                style.setFallDiagonalPen( pen );
+            }
+            if ( m_undoData[i].second->type() == Style::GoUpDiagonalPen )
+            {
+                pen = style.goUpDiagonalPen();
+                pen.setColor( m_color );
+                style.setGoUpDiagonalPen( pen );
+            }
+            m_sheet->setStyle( Region(m_undoData[i].first.toRect()), style );
+        }
+    }
+    else // m_reverse
+    {
+        for ( int i = 0; i < m_undoData.count(); ++i )
+        {
+            Style style;
+            style.insertSubStyle( m_undoData[i].second );
+            m_sheet->setStyle( Region(m_undoData[i].first.toRect()), style );
+        }
+    }
+    return true;
 }
 
 

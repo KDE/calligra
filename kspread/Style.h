@@ -341,6 +341,8 @@ protected:
 private:
     friend class StyleManipulator;
     friend class StyleStorage;
+    friend class BorderColorManipulator;
+    friend class IncreaseIndentManipulator;
 
     class Private;
     QSharedDataPointer<Private> d;

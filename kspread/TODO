@@ -131,8 +131,8 @@ Things not in bugzilla
     - Seek & destroy R-Tree data rects, if they get empty after		done
       deletion of columns/rows, but store them for undo.
     - Port FormatDialog.						----
-    - Port IncreaseIndentManipulator.					----
-    - Port BorderColorManipulator.					----
+    - Port IncreaseIndentManipulator.					done
+    - Port BorderColorManipulator.					done
     - Undo for insertion/deletion of columns/rows.			----
     - Undo for insertion/deletion of cell ranges.			----
     - Improve the saving.						----
