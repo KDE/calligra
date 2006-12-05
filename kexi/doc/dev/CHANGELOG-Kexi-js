@@ -38,6 +38,12 @@ Examples
 = update the parameter query: remove joins because there's still one related bug
 2.0: merged
 
+2006-11-27
+Examples
+- "Simple Database" example updated: added "Ownership" form and a macro 
+- "Simple Database": added "write_simple_text_report" Python script
+2.0: merged
+
 2006-11-21
 Table View
 - fixed crash when combo box drop down button is clicked but bound column
