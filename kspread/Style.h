@@ -343,6 +343,7 @@ private:
     friend class StyleStorage;
     friend class BorderColorManipulator;
     friend class IncreaseIndentManipulator;
+    friend class IncreasePrecisionManipulator;
 
     class Private;
     QSharedDataPointer<Private> d;

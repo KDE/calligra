@@ -110,6 +110,7 @@ public:
 protected:
     virtual bool preProcessing();
     virtual bool mainProcessing();
+    virtual bool postProcessing();
     virtual QString name() const { return i18n( "Change Border Color" ); }
 
 private:
@@ -126,6 +127,7 @@ public:
 
 protected:
     virtual bool process(Element*);
+    virtual bool postProcessing();
     virtual QString name() const;
 };
 
@@ -137,7 +139,8 @@ public:
     IncreasePrecisionManipulator();
 
 protected:
-    virtual bool process( Cell* cell );
+    virtual bool process(Element*);
+    virtual bool postProcessing();
     virtual QString name() const;
 };
 

@@ -158,15 +158,11 @@ IncreaseIndentManipulator::IncreaseIndentManipulator()
 
 bool IncreaseIndentManipulator::process( Element* element )
 {
-    QList< QPair<QRectF,SharedSubStyle> > indentationPairs;
-    if ( m_firstrun )
+    QList< QPair<QRectF,SharedSubStyle> > indentationPairs = m_sheet->styleStorage()->undoData( element->rect() );
+    for ( int i = 0; i < indentationPairs.count(); ++i )
     {
-        indentationPairs = m_sheet->styleStorage()->undoData( element->rect() );
-        for ( int i = 0; i < indentationPairs.count(); ++i )
-        {
-            if ( indentationPairs[i].second->type() != Style::Indentation )
-                indentationPairs.removeAt( i-- );
-        }
+        if ( indentationPairs[i].second->type() != Style::Indentation )
+            indentationPairs.removeAt( i-- );
     }
 
     Style style;
@@ -200,6 +196,12 @@ bool IncreaseIndentManipulator::process( Element* element )
             m_sheet->setStyle( Region(indentationPairs[i].first.toRect()), style );
         }
     }
+    return true;
+}
+
+bool IncreaseIndentManipulator::postProcessing()
+{
+    m_sheet->addLayoutDirtyRegion( *this );
     return true;
 }
 
@@ -249,6 +251,7 @@ bool BorderColorManipulator::preProcessing()
             m_undoData += undoData;
         }
     }
+    return true;
 }
 
 bool BorderColorManipulator::mainProcessing()
@@ -313,6 +316,12 @@ bool BorderColorManipulator::mainProcessing()
     return true;
 }
 
+bool BorderColorManipulator::postProcessing()
+{
+    m_sheet->addLayoutDirtyRegion( *this );
+    return true;
+}
+
 
 
 /***************************************************************************
@@ -325,27 +334,67 @@ IncreasePrecisionManipulator::IncreasePrecisionManipulator()
   m_format = false;
 }
 
-bool IncreasePrecisionManipulator::process( Cell* cell )
+bool IncreasePrecisionManipulator::process( Element* element )
 {
-  if ( !m_reverse )
-  {
-    cell->incPrecision();
-  }
-  else // m_reverse
-  {
-    cell->decPrecision();
-  }
-  return true;
+    QList< QPair<QRectF,SharedSubStyle> > precisionPairs = m_sheet->styleStorage()->undoData( element->rect() );
+    for ( int i = 0; i < precisionPairs.count(); ++i )
+    {
+        if ( precisionPairs[i].second->type() != Style::Precision )
+            precisionPairs.removeAt( i-- );
+    }
+
+    Style style;
+    if ( !m_reverse )
+    {
+        // increase the precision set for the whole rectangle
+        Style style;
+        int precision = m_sheet->styleStorage()->contains( element->rect() ).precision() + 1;
+        style.setPrecision( precision );
+        if ( precision <= 10 )
+            m_sheet->setStyle( Region(element->rect()), style );
+        // increase the several precisions
+        for ( int i = 0; i < precisionPairs.count(); ++i )
+        {
+            style.clear();
+            style.insertSubStyle( precisionPairs[i].second );
+            precision = style.precision() + 1;
+            style.setPrecision( precision );
+            if ( precision <= 10 )
+                m_sheet->setStyle( Region(precisionPairs[i].first.toRect()), style );
+        }
+    }
+    else // m_reverse
+    {
+        // decrease the precision set for the whole rectangle
+        Style style;
+        int precision = m_sheet->styleStorage()->contains( element->rect() ).precision() - 1;
+        style.setPrecision( precision );
+        if ( precision >= 0 )
+            m_sheet->setStyle( Region(element->rect()), style );
+        // decrease the several precisions
+        for ( int i = 0; i < precisionPairs.count(); ++i )
+        {
+            style.clear();
+            style.insertSubStyle( precisionPairs[i].second );
+            precision = style.precision() - 1;
+            if ( precision >= 0 )
+                style.setPrecision( precision );
+            m_sheet->setStyle( Region(precisionPairs[i].first.toRect()), style );
+        }
+    }
+    return true;
+}
+
+bool IncreasePrecisionManipulator::postProcessing()
+{
+    m_sheet->addLayoutDirtyRegion( *this );
+    return true;
 }
 
 QString IncreasePrecisionManipulator::name() const
 {
-  if ( !m_reverse )
-  {
-    return i18n( "Increase Precision" );
-  }
-  else
-  {
-    return i18n( "Decrease Precision" );
-  }
+    if ( !m_reverse )
+        return i18n( "Increase Precision" );
+    else
+        return i18n( "Decrease Precision" );
 }
