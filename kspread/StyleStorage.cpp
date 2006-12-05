@@ -427,11 +427,11 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
                 CustomStyle* parentStyle = styleManager()->style( namedStyle->parentName() );
                 while ( parentStyle )
                 {
-                    parentStyles.prepend( parentStyle->name() );
+                    parentStyles.prepend( parentStyle );
                     parentStyle = styleManager()->style( parentStyle->parentName() );
                 }
                 for ( int i = 0; i < parentStyles.count(); ++i )
-                    style.merge( parentStyles[i] );
+                    style.merge( *parentStyles[i] );
                 // second, merge the other attributes in
                 style.merge( *namedStyle );
                 // not the default anymore
@@ -446,7 +446,6 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
             style.clearAttribute( Style::DefaultStyleKey );
         }
     }
-    // check wether it's still the default style
     return style;
 }
 
