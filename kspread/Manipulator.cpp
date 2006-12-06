@@ -523,34 +523,19 @@ bool CommentManipulator::process( Element* element )
     {
         // create undo
         if ( m_firstrun )
-        {
-            m_undoData << m_sheet->commentStorage()->undoData( element->rect() );
-        }
+            m_undoData += m_sheet->commentStorage()->undoData( element->rect() );
         m_sheet->setComment( Region(element->rect()), m_comment );
-    }
-    else // m_reverse
-    {
     }
     return true;
 }
 
 bool CommentManipulator::mainProcessing()
 {
-    if ( !m_reverse )
-    {
-        if ( m_firstrun )
-        {
-            m_undoData.clear();
-        }
-    }
-    else
+    if ( m_reverse )
     {
         m_sheet->setComment( *this, QString() );
-        QPair<QRectF, QString> pair;
-        foreach ( pair, m_undoData )
-        {
-            m_sheet->setComment( Region(pair.first.toRect()), pair.second );
-        }
+        for ( int i = 0; i < m_undoData.count(); ++i )
+            m_sheet->setComment( Region(m_undoData[i].first.toRect()), m_undoData[i].second );
     }
     return Manipulator::mainProcessing();
 }
@@ -558,13 +543,9 @@ bool CommentManipulator::mainProcessing()
 QString CommentManipulator::name() const
 {
     if ( m_comment.isEmpty() )
-    {
-        return i18n( "Remove Conditional Formatting" );
-    }
+        return i18n( "Remove Comment" );
     else
-    {
-        return i18n( "Add Conditional Formatting" );
-    }
+        return i18n( "Add Comment" );
 }
 
 
@@ -578,38 +559,35 @@ ConditionalManipulator::ConditionalManipulator()
 {
 }
 
-bool ConditionalManipulator::process( Cell* cell )
+bool ConditionalManipulator::process( Element* element )
 {
-  if ( !m_reverse )
-  {
-    // create undo
-    if ( m_firstrun )
+    if ( !m_reverse )
     {
-      if ( !cell->conditionList().isEmpty() )
-      {
-        m_undoData[cell->column()][cell->row()] = cell->conditionList();
-      }
+        // create undo
+        if ( m_firstrun )
+            m_undoData += m_sheet->conditionsStorage()->undoData( element->rect() );
+        m_sheet->setConditions( Region(element->rect()), m_conditions );
     }
+    return true;
+}
 
-    cell->setConditionList( m_conditions );
-  }
-  else // m_reverse
-  {
-    cell->setConditionList( m_undoData[cell->column()][cell->row()] );
-  }
-  return true;
+bool ConditionalManipulator::mainProcessing()
+{
+    if ( m_reverse )
+    {
+        m_sheet->setConditions( *this, Conditions() );
+        for ( int i = 0; i < m_undoData.count(); ++i )
+            m_sheet->setConditions( Region(m_undoData[i].first.toRect()), m_undoData[i].second );
+    }
+    return Manipulator::mainProcessing();
 }
 
 QString ConditionalManipulator::name() const
 {
-  if ( m_conditions.isEmpty() )
-  {
-    return i18n( "Remove Conditional Formatting" );
-  }
-  else
-  {
-    return i18n( "Add Conditional Formatting" );
-  }
+    if ( m_conditions.isEmpty() )
+        return i18n( "Remove Conditional Formatting" );
+    else
+        return i18n( "Add Conditional Formatting" );
 }
 
 
@@ -623,51 +601,33 @@ ValidityManipulator::ValidityManipulator()
 {
 }
 
-bool ValidityManipulator::process( Cell* cell )
+bool ValidityManipulator::process( Element* element )
 {
-  if ( !m_reverse )
-  {
-    // create undo
-    if ( m_firstrun )
+    if ( !m_reverse )
     {
-      Validity validity = cell->validity();
-      if ( !validity.isEmpty() )
-      {
-        m_undoData[cell->column()][cell->row()] = validity;
-      }
+        // create undo
+        if ( m_firstrun )
+            m_undoData += m_sheet->validityStorage()->undoData( element->rect() );
+        m_sheet->setValidity( Region(element->rect()), m_validity );
     }
+    return true;
+}
 
-    if ( m_validity.isEmpty() )
+bool ValidityManipulator::mainProcessing()
+{
+    if ( m_reverse )
     {
-      cell->setValidity( Validity() );
+        m_sheet->setValidity( *this, Validity() );
+        for ( int i = 0; i < m_undoData.count(); ++i )
+            m_sheet->setValidity( Region(m_undoData[i].first.toRect()), m_undoData[i].second );
     }
-    else
-    {
-      cell->setValidity( m_validity );
-    }
-  }
-  else // m_reverse
-  {
-    if ( m_undoData[cell->column()][cell->row()].isEmpty() )
-    {
-      cell->setValidity( Validity() );
-    }
-    else
-    {
-      cell->setValidity( m_undoData[cell->column()][cell->row()] );
-    }
-  }
-  return true;
+    return Manipulator::mainProcessing();
 }
 
 QString ValidityManipulator::name() const
 {
-  if ( m_validity.isEmpty() )
-  {
-    return i18n( "Remove Validity Check" );
-  }
-  else
-  {
-    return i18n( "Add Validity Check" );
-  }
+    if ( m_validity.isEmpty() )
+        return i18n( "Remove Validity Check" );
+    else
+        return i18n( "Add Validity Check" );
 }

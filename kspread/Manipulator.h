@@ -208,20 +208,17 @@ private:
 class CommentManipulator : public Manipulator
 {
 public:
-  CommentManipulator();
-
-  void setComment( const QString& comment ) { m_comment = comment; }
+    CommentManipulator();
+    void setComment( const QString& comment ) { m_comment = comment; }
 
 protected:
-  virtual bool process(Element* element);
-
-  virtual bool mainProcessing();
-
-  virtual QString name() const;
+    virtual bool process(Element* element);
+    virtual bool mainProcessing();
+    virtual QString name() const;
 
 private:
-  QString m_comment;
-  QList< QPair<QRectF, QString> > m_undoData;
+    QString m_comment;
+    QList< QPair<QRectF, QString> > m_undoData;
 };
 
 /**
@@ -231,18 +228,17 @@ private:
 class ConditionalManipulator : public Manipulator
 {
 public:
-  ConditionalManipulator();
-
-  void setConditionList( const QLinkedList<Conditional>& list ) { m_conditions = list; }
+    ConditionalManipulator();
+    void setConditionList( const QLinkedList<Conditional>& list ) { m_conditions.setConditionList( list ); }
 
 protected:
-  virtual bool process( Cell* cell );
-
-  virtual QString name() const;
+    virtual bool process(Element* element);
+    virtual bool mainProcessing();
+    virtual QString name() const;
 
 private:
-  QLinkedList<Conditional> m_conditions;
-  QHash<int, QHash<int, QLinkedList<Conditional> > > m_undoData;
+    Conditions m_conditions;
+    QList< QPair<QRectF, Conditions> > m_undoData;
 };
 
 /**
@@ -252,18 +248,17 @@ private:
 class ValidityManipulator : public Manipulator
 {
 public:
-  ValidityManipulator();
-
-  void setValidity( Validity validity ) { m_validity = validity; }
+    ValidityManipulator();
+    void setValidity( Validity validity ) { m_validity = validity; }
 
 protected:
-  virtual bool process( Cell* cell );
-
-  virtual QString name() const;
+    virtual bool process(Element* element);
+    virtual bool mainProcessing();
+    virtual QString name() const;
 
 private:
-  Validity m_validity;
-  QHash<int, QHash<int, Validity > > m_undoData;
+    Validity m_validity;
+    QList< QPair<QRectF, Validity> > m_undoData;
 };
 
 } // namespace KSpread
