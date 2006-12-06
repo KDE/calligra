@@ -130,7 +130,7 @@ void KoToolBox::setupTools()
             m_buttonGroup->insert( bn, id++ );
             m_idToActionMap.append( tool );
         }
-        addSeparator();
+        if (i < m_tools.count() -1) addSeparator();
         m_toolBoxes.append(tools);
     }
     // select first (select tool)
