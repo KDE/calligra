@@ -58,6 +58,20 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     props->setProperty( "background", v );
     t.properties = props;
     addTemplate(t);
+
+    t.id = KoPathShapeId;
+    t.name = "Polygon";
+    t.toolTip = "A polygon";
+    t.icon = ""; //TODO add it
+    props = new KoProperties();
+    props->setProperty( "corners", 5 );
+    props->setProperty( "convex", true );
+    props->setProperty( "tipRadius", 50.0 );
+    props->setProperty( "tipRoundness", 0.0 );
+    v.setValue( QColor( Qt::blue ) );
+    props->setProperty( "background", v );
+    t.properties = props;
+    addTemplate(t);
 }
 
 KoShape * KoStarShapeFactory::createDefaultShape()
@@ -77,6 +91,7 @@ KoShape * KoStarShapeFactory::createShape( const KoProperties * params ) const
         return 0;
 
     star->setCornerCount( params->getInt("corners", 5 ) );
+    star->setConvex( params->getBool( "convex", false ) );
     star->setBaseRadius( params->getDouble( "baseRadius", 25.0 ) );
     star->setTipRadius( params->getDouble( "tipRadius", 50.0 ) );
     star->setBaseRoundness( params->getDouble( "baseRoundness", 0.0 ) );

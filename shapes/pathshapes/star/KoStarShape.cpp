@@ -26,15 +26,15 @@ KoStarShape::KoStarShape()
 : m_cornerCount( 5 )
 , m_zoomX( 1.0 )
 , m_zoomY( 1.0 )
+, m_convex( false )
 {
+    double radianStep = M_PI / static_cast<double>(m_cornerCount);
+
     m_radius[base] = 25.0;
     m_radius[tip] = 50.0;
-    m_angles[base] = M_PI_2;
-    m_angles[tip] = M_PI_2;
+    m_angles[base] = M_PI_2-2*radianStep;
+    m_angles[tip] = M_PI_2-2*radianStep;
     m_roundness[base] = m_roundness[tip] = 0.0f;
-
-    m_handles.push_back( QPointF() );
-    m_handles.push_back( QPointF() );
 
     createPath();
 
@@ -93,6 +93,12 @@ void KoStarShape::setTipRoundness( double tipRoundness )
     updatePath( QSize() );
 }
 
+void KoStarShape::setConvex( bool convex )
+{
+    m_convex = convex;
+    createPath();
+}
+
 void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
 {
     if( modifiers & Qt::ShiftModifier )
@@ -148,30 +154,35 @@ void KoStarShape::updatePath( const QSizeF &size )
     Q_UNUSED(size);
     double radianStep = M_PI / static_cast<double>(m_cornerCount);
 
+    uint index = 0;
     for( uint i = 0; i < 2*m_cornerCount; ++i )
     {
         uint cornerType = i % 2;
-        double radian = static_cast<double>( i*radianStep ) + m_angles[cornerType];
+        if( cornerType == base && m_convex )
+            continue;
+        double radian = static_cast<double>( (i+1)*radianStep ) + m_angles[cornerType];
         QPointF cornerPoint = QPointF( m_zoomX * m_radius[cornerType] * cos( radian ), m_zoomY * m_radius[cornerType] * sin( radian ) );
 
-        m_points[i]->setPoint( m_center + cornerPoint );
+        m_points[index]->setPoint( m_center + cornerPoint );
         if( m_roundness[cornerType] > 1e-10 || m_roundness[cornerType] < -1e-10 )
         {
             // normalized cross product to compute tangential vector for handle point
             QPointF tangentVector( cornerPoint.y()/m_radius[cornerType], -cornerPoint.x()/m_radius[cornerType] );
-            m_points[i]->setControlPoint2( m_points[i]->point() - m_roundness[cornerType] * tangentVector );
-            m_points[i]->setControlPoint1( m_points[i]->point() + m_roundness[cornerType] * tangentVector );
+            m_points[index]->setControlPoint2( m_points[index]->point() - m_roundness[cornerType] * tangentVector );
+            m_points[index]->setControlPoint1( m_points[index]->point() + m_roundness[cornerType] * tangentVector );
         }
         else
         {
-            m_points[i]->unsetProperty( KoPathPoint::HasControlPoint1 );
-            m_points[i]->unsetProperty( KoPathPoint::HasControlPoint2 );
+            m_points[index]->unsetProperty( KoPathPoint::HasControlPoint1 );
+            m_points[index]->unsetProperty( KoPathPoint::HasControlPoint2 );
         }
+        index++;
     }
 
     normalize();
-    m_handles[base] = m_points.at(base)->point();
     m_handles[tip] = m_points.at(tip)->point();
+    if( ! m_convex )
+        m_handles[base] = m_points.at(base)->point();
     m_center = computeCenter();
 }
 
@@ -189,20 +200,25 @@ void KoStarShape::createPath()
 
     QPointF center = QPointF( m_radius[tip], m_radius[tip] );
 
-    moveTo( center + QPointF( 0, m_radius[base] ) );
+    QPointF cornerPoint( m_radius[tip] * cos( m_angles[tip] + radianStep ), m_radius[tip] * sin( m_angles[tip] + radianStep ) );
+    moveTo( center + cornerPoint );
     for( uint i = 1; i < 2*m_cornerCount; ++i )
     {
         uint cornerType = i % 2;
-        double radian = static_cast<double>( i*radianStep )  + m_angles[cornerType];
-        QPointF cornerPoint( m_radius[cornerType] * cos( radian ), m_radius[cornerType] * sin( radian ) );
+        if( cornerType == base && m_convex )
+            continue;
+        double radian = static_cast<double>( (i+1)*radianStep )  + m_angles[cornerType];
+        cornerPoint = QPointF( m_radius[cornerType] * cos( radian ), m_radius[cornerType] * sin( radian ) );
         lineTo( center + cornerPoint );
     }
     close();
     normalize();
 
     m_points = *m_subpaths[0];
-    m_handles[base] = m_points.at(base)->point();
-    m_handles[tip] = m_points.at(tip)->point();
+    m_handles.clear();
+    m_handles.push_back( m_points.at(tip)->point() );
+    if( ! m_convex )
+        m_handles.push_back( m_points.at(base)->point() );
 }
 
 void KoStarShape::resize( const QSizeF &newSize )
@@ -222,6 +238,11 @@ QPointF KoStarShape::computeCenter() const
 {
     QPointF center( 0, 0 );
     for( uint i = 0; i < m_cornerCount; ++i )
-        center += m_points[2*i]->point();
+    {
+        if( m_convex )
+            center += m_points[i]->point();
+        else
+            center += m_points[2*i]->point();
+    }
     return center / static_cast<double>( m_cornerCount );
 }

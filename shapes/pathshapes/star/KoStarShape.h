@@ -34,6 +34,9 @@ public:
      * Sets the number of corners.
      *
      * The minimum accepted number of corners is 3.
+     * If the star is set to be convex (like a regular polygon),
+     * the corner count equals the number of polygon points.
+     * For a real star it represents the number of legs the star has.
      *
      * @param cornerCount the new number of corners
      */
@@ -44,6 +47,7 @@ public:
 
     /**
      * Sets the radius of the base points.
+     * The base radius has no meaning if the star is set convex.
      * @param baseRadius the new base radius
      */
     void setBaseRadius( double baseRadius );
@@ -78,6 +82,15 @@ public:
      */
     void setTipRoundness( double tipRoundness );
 
+    /**
+     * Sets the star to be convex, looking like a polygon.
+     * @param convex if true makes shape behave like regular polygon
+     */
+    void setConvex( bool convex );
+
+    /// Returns if the star represents a regular polygon.
+    bool convex();
+
     virtual void resize( const QSizeF &newSize );
 protected:
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
@@ -87,7 +100,7 @@ protected:
 private:
     /// Computes the star center point from the inner points
     QPointF computeCenter() const;
-    enum Handles { base = 0, tip = 1 };
+    enum Handles { tip = 0, base = 1 };
     uint m_cornerCount; ///< number of corners
     double m_radius[2]; ///< the different radii
     double m_angles[2]; ///< the offset angles
@@ -95,6 +108,7 @@ private:
     double m_zoomY; ///< scaling in y
     double m_roundness[2]; ///< the roundness at the handles
     QPointF m_center;   ///< the star center point
+    bool m_convex;   ///< controls if the star is convex
     KoSubpath m_points;
 };
 
