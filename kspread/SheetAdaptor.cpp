@@ -55,21 +55,33 @@ SheetAdaptor::~SheetAdaptor()
 {
 }
 
-QString SheetAdaptor::cell( int x, int y )
+QString SheetAdaptor::cellName( int x, int y )
 {
+    /* sebsauer 20061206: commented out cause if someone starts to believe that
+    counting starts by 0,0 then he may very surprised why the first col/row
+    got returned twice. That happened to me and I was believing that's a KSpread
+    bug too :-(
     // if someone calls us with either x or y 0 he _most_ most likely doesn't
     // know that the cell counting starts with 1 (Simon)
     // P.S.: I did that mistake for weeks and already started looking for the
     // "bug" in kspread ;-)
-    if ( x == 0 )
-        x = 1;
-    if ( y == 0 )
-        y = 1;
-
+    if ( x == 0 ) x = 1;
+    if ( y == 0 ) y = 1;
+    */
     return Cell::name( x, y );
 }
 
-QString SheetAdaptor::cell( const QString& name )
+int SheetAdaptor::cellRow( const QString& cellname )
+{
+    return cellLocation(cellname).x();
+}
+
+int SheetAdaptor::cellColumn( const QString& cellname );
+{
+    return cellLocation(cellname).y();
+}
+
+QPoint SheetAdaptor::cellLocation( const QString& cellname )
 {
     const QRect rect = (*Region( m_sheet->doc()->map(), name, m_sheet ).constBegin())->rect();
     if ( rect.isNull() ) return QString();
@@ -83,11 +95,9 @@ QString SheetAdaptor::text( int x, int y )
     return cell ? cell->text() : QString();
 }
 
-QString SheetAdaptor::text( const QString& name )
+QString SheetAdaptor::text( const QString& cellname )
 {
-    const QRect rect = (*Region( m_sheet->doc()->map(), name, m_sheet ).constBegin())->rect();
-    if ( rect.isNull() ) return QString();
-    const QPoint location = rect.topLeft();
+    const QPoint location = cellLocation(cellname);
     return text(location.x(), location.y());
 }
 
@@ -111,11 +121,9 @@ bool SheetAdaptor::setText( int x, int y, const QString& text, bool parse )
 	return true;
 }
 
-bool SheetAdaptor::setText( const QString& name, const QString& text, bool parse )
+bool SheetAdaptor::setText( const QString& cellname, const QString& text, bool parse )
 {
-    const QRect rect = (*Region( m_sheet->doc()->map(), name, m_sheet ).constBegin())->rect();
-    if ( rect.isNull() ) return false;
-    const QPoint location = rect.topLeft();
+    const QPoint location = cellLocation(cellname);
     return setText(location.x(), location.y(), text, parse);
 }
 
@@ -161,11 +169,9 @@ QVariant SheetAdaptor::value( int x, int y )
     return cell ? valueToVariant( cell->value() ) : QVariant();
 }
 
-QVariant SheetAdaptor::value( const QString& name )
+QVariant SheetAdaptor::value( const QString& cellname )
 {
-    const QRect rect = (*Region( m_sheet->doc()->map(), name, m_sheet ).constBegin())->rect();
-    if ( rect.isNull() ) return QVariant();
-    const QPoint location = rect.topLeft();
+    const QPoint location = cellLocation(cellname);
     return value(location.x(), location.y());
 }
 
@@ -188,11 +194,9 @@ bool SheetAdaptor::setValue( int x, int y, const QVariant& value )
 	return true;
 }
 
-bool SheetAdaptor::setValue( const QString& name, const QVariant& value )
+bool SheetAdaptor::setValue( const QString& cellname, const QVariant& value )
 {
-    const QRect rect = (*Region( m_sheet->doc()->map(), name, m_sheet ).constBegin())->rect();
-    if ( rect.isNull() ) return false;
-    const QPoint location = rect.topLeft();
+    const QPoint location = cellLocation(cellname);
     return setValue(location.x(), location.y(), value);
 }
 
@@ -262,7 +266,7 @@ int SheetAdaptor::maxRow() const
 //     return true;
 // }
 
-QString SheetAdaptor::name() const
+QString SheetAdaptor::sheetName() const
 {
     return m_sheet->sheetName();
 }

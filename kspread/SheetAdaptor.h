@@ -46,18 +46,20 @@ public:
     ~SheetAdaptor();
 
 public Q_SLOTS: // METHODS
-    virtual QString cell( int x, int y );
-    virtual QString cell( const QString& name );
+    virtual QString cellName( int x, int y );
+    virtual QPoint cellLocation( const QString& cellname );
+    virtual int cellRow( const QString& cellname );
+    virtual int cellColumn( const QString& cellname );
 
     virtual QString text( int x, int y );
-    virtual QString text( const QString& name );
+    virtual QString text( const QString& cellname );
     virtual bool setText( int x, int y, const QString& text, bool parse = true );
-    virtual bool setText( const QString& name, const QString& text, bool parse = true );
+    virtual bool setText( const QString& cellname, const QString& text, bool parse = true );
 
     virtual QVariant value( int x, int y );
-    virtual QVariant value( const QString& name );
+    virtual QVariant value( const QString& cellname );
     virtual bool setValue( int x, int y, const QVariant& value );
-    virtual bool setValue( const QString& name, const QVariant& value );
+    virtual bool setValue( const QString& cellname, const QVariant& value );
 
     virtual QString column( int _col );
     virtual QString row( int _row );
@@ -68,7 +70,7 @@ public Q_SLOTS: // METHODS
     virtual int maxColumn() const;
     virtual int maxRow() const;
 
-    virtual QString name() const;
+    virtual QString sheetName() const;
     virtual bool setSheetName( const QString & name);
 
     virtual bool insertColumn( int col,int nbCol );
