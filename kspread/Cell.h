@@ -750,18 +750,6 @@ public:
     //
 
     /**
-     * Tests wether the cell content is greater than that in \p other .
-     * Used for comparing cells (when sorting)
-     */
-    bool operator>( const Cell& other ) const;
-
-    /**
-     * Tests wether the cell content is less than that in \p other .
-     * Used for comparing cells (when sorting)
-     */
-    bool operator<( const Cell& other ) const;
-
-    /**
      * Tests for equality of all cell attributes to those in \p other .
      */
     bool operator==( const Cell& other ) const;
