@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002-2006, The Karbon Developers
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,16 +22,25 @@
 #ifndef __VTRANSFORMDOCKER_H__
 #define __VTRANSFORMDOCKER_H__
 
-class KarbonPart;
-class KarbonView;
 class KoUnitDoubleSpinBox;
+class KoDockFactory;
 
-class VTransformDocker : public QWidget
+class VTransformDockerFactory : public KoDockFactory
+{
+public:
+    VTransformDockerFactory();
+
+    virtual QString dockId() const;
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
+    virtual QDockWidget* createDockWidget();
+};
+
+class VTransformDocker : public QDockWidget
 {
 	Q_OBJECT
 
 public:
-	VTransformDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
+	VTransformDocker();
 
 public slots:
 	void update();
@@ -45,15 +55,13 @@ private slots:
 	void rotate();
 
 private:
-	KarbonPart *m_part;
-	KarbonView *m_view;
 	KoUnitDoubleSpinBox *m_x;
 	KoUnitDoubleSpinBox *m_y;
 	KoUnitDoubleSpinBox *m_width;
 	KoUnitDoubleSpinBox *m_height;
 	KDoubleSpinBox *m_rotate;
-	KoUnitDoubleSpinBox *m_shearX;
-	KoUnitDoubleSpinBox *m_shearY;
+	KDoubleSpinBox *m_shearX;
+	KDoubleSpinBox *m_shearY;
 };
 
 #endif

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001, 2002, 2003 The Karbon Developers
-   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005-2006 Jan Hambrecht <jaham@gmx.net>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -220,7 +221,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		//Create Dockers
 		createColorDock();
 		createStrokeDock();
-		//createTransformDock();
+		createTransformDock();
 		//createDocumentTabDock();
 		createLayersTabDock();
 		//createResourceDock();
@@ -1740,9 +1741,8 @@ void KarbonView::createTransformDock()
 {
 	debugView("KarbonView::createTransformDock()");
 
-	m_TransformDocker = new VTransformDocker(part(), this);
-	m_TransformDocker->setWindowTitle(i18n("Transform"));
-    createDock(i18n("Transform"), m_TransformDocker);
+	VTransformDockerFactory transformFactory;
+	m_TransformDocker = qobject_cast<VTransformDocker*>(createDockWidget(&transformFactory));
 	connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
 	connect( part(), SIGNAL( unitChanged( KoUnit ) ), m_TransformDocker, SLOT( setUnit( KoUnit ) ) );
 }

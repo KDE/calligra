@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002-2006, The Karbon Developers
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +22,8 @@
 #include <QLabel>
 #include <QLayout>
 #include <QWidget>
-#include <qmatrix.h>
+#include <QDockWidget>
+#include <QMatrix>
 #include <QToolTip>
 #include <QGridLayout>
 #include <QPointF>
@@ -29,70 +31,96 @@
 
 #include <klocale.h>
 #include <KoMainWindow.h>
+#include <KoDockFactory.h>
 #include <KoUnitWidgets.h>
+#include <KoSelection.h>
+#include <KoShapeManager.h>
+#include <KoCanvasController.h>
+#include <KoToolManager.h>
+#include <KoCommand.h>
+#include <KoShapeContainer.h>
 
-#include "karbon_part.h"
-#include "karbon_view.h"
-
-#include "vselection.h"
-#include "vtransformcmd.h"
+#include <kdebug.h>
 
 #include "vtransformdocker.h"
 
-VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
-	: QWidget(), m_part ( part ), m_view( parent )
+VTransformDockerFactory::VTransformDockerFactory()
+{
+}
+
+QString VTransformDockerFactory::dockId() const
+{
+    return QString("Transform");
+}
+
+Qt::DockWidgetArea VTransformDockerFactory::defaultDockWidgetArea() const
+{
+    return Qt::RightDockWidgetArea;
+}
+
+QDockWidget* VTransformDockerFactory::createDockWidget()
+{
+    VTransformDocker* widget = new VTransformDocker();
+    widget->setObjectName(dockId());
+
+    return widget;
+}
+
+VTransformDocker::VTransformDocker()
 {
 	setWindowTitle( i18n( "Transform" ) );
 
-	QGridLayout *mainLayout = new QGridLayout;
-
+	QWidget *mainWidget = new QWidget( this );
+	QGridLayout *mainLayout = new QGridLayout( mainWidget );
+	
+	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+	KoUnit documentUnit = canvasController->canvas()->unit();
 	//X: (TODO: Set 5000 limit to real Karbon14 limit)
-	QLabel* xLabel = new QLabel( i18n ( "X:" ), this );
+	QLabel* xLabel = new QLabel( i18n ( "X:" ), mainWidget );
 	mainLayout->addWidget( xLabel, 0, 0 );
-	m_x = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_x = new KoUnitDoubleSpinBox( mainWidget, -5000.0, 5000.0, 1.0, 10.0, documentUnit, 1 );
 	mainLayout->addWidget( m_x, 0, 1 );
 	m_x->setToolTip( i18n("Set x-position of actual selection") );
 
 	//Y: (TODO: Set 5000 limit to real Karbon14 limit)
-	QLabel* yLabel = new QLabel( i18n ( "Y:" ), this );
+	QLabel* yLabel = new QLabel( i18n ( "Y:" ), mainWidget );
 	mainLayout->addWidget( yLabel, 0, 2 );
-	m_y = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_y = new KoUnitDoubleSpinBox( mainWidget, -5000.0, 5000.0, 1.0, 10.0, documentUnit, 1 );
 	mainLayout->addWidget( m_y, 0, 3 );
 	m_y->setToolTip( i18n("Set y-position of actual selection") );
 
 	//Width: (TODO: Set 5000 limit to real Karbon14 limit)
-	QLabel* wLabel = new QLabel( i18n ( "W:" ), this );
+	QLabel* wLabel = new QLabel( i18n ( "W:" ), mainWidget );
 	mainLayout->addWidget( wLabel, 1, 0 );
-	m_width = new KoUnitDoubleSpinBox( this, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_width = new KoUnitDoubleSpinBox( mainWidget, 0.0, 5000.0, 1.0, 10.0, documentUnit, 1 );
 	mainLayout->addWidget( m_width, 1, 1 );
 	m_width->setToolTip( i18n("Set width of actual selection") );
 
 	//Height: (TODO: Set 5000 limit to real Karbon14 limit)
-	QLabel* hLabel = new QLabel( i18n ( "H:" ), this );
+	QLabel* hLabel = new QLabel( i18n ( "H:" ), mainWidget );
 	mainLayout->addWidget( hLabel, 1, 2 );
-	m_height = new KoUnitDoubleSpinBox( this, 0.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_height = new KoUnitDoubleSpinBox( mainWidget, 0.0, 5000.0, 1.0, 10.0, documentUnit, 1 );
 	mainLayout->addWidget( m_height, 1, 3 );
 	m_height->setToolTip( i18n("Set height of actual selection") );
 
-	//TODO: Add Rotation, Shear
 	//ROTATE: (TODO: Set 5000 limit to real Karbon14 limit)
-	QLabel* rLabel = new QLabel( i18n ( "R:" ), this );
+	QLabel* rLabel = new QLabel( i18n ( "R:" ), mainWidget );
 	mainLayout->addWidget( rLabel, 3, 0 );
-	m_rotate = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, this, 1 );
+	m_rotate = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, mainWidget, 1 );
 	mainLayout->addWidget( m_rotate, 3, 1 );
 	m_rotate->setToolTip( i18n("Rotate actual selection") );
 
 	//X-Shear: (TODO: Set 5000 limit to real Karbon14 limit)
-	QLabel* sxLabel = new QLabel( i18n ( "SX:" ), this );
+	QLabel* sxLabel = new QLabel( i18n ( "SX:" ), mainWidget );
 	mainLayout->addWidget( sxLabel, 2, 0 );
-	m_shearX = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_shearX = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, mainWidget, 1 );
 	mainLayout->addWidget( m_shearX, 2, 1 );
 	m_shearX->setToolTip( i18n("Shear actual selection in x-direction") );
 
 	//Y-Shear: (TODO: Set 5000 limit to real Karbon14 limit)
-	QLabel* syLabel = new QLabel( i18n ( "SY:" ), this );
+	QLabel* syLabel = new QLabel( i18n ( "SY:" ), mainWidget );
 	mainLayout->addWidget( syLabel, 2, 2 );
-	m_shearY = new KoUnitDoubleSpinBox( this, -5000.0, 5000.0, 1.0, 10.0, m_part->unit(), 1 );
+	m_shearY = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, mainWidget, 1 );
 	mainLayout->addWidget( m_shearY, 2, 3 );
 	m_shearY->setToolTip( i18n("Shear actual selection in y-direction") );
 
@@ -100,7 +128,7 @@ VTransformDocker::VTransformDocker( KarbonPart* part, KarbonView* parent, const 
 	mainLayout->setColumnStretch( 1, 1 );
 	mainLayout->setColumnStretch( 3, 1 );
 
-	setLayout(mainLayout);
+	setWidget( mainWidget );
 
 	update();
 }
@@ -112,8 +140,8 @@ VTransformDocker::enableSignals( bool enable )
 	{
 		connect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
 		connect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
-		connect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
-		connect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) ); 
+		connect( m_width, SIGNAL( valueChangedPt( double ) ), this, SLOT( scale() ) );
+		connect( m_height, SIGNAL( valueChangedPt( double ) ), this, SLOT( scale() ) );
 		connect( m_shearX, SIGNAL( valueChanged( double ) ), this, SLOT( shearX() ) );
 		connect( m_shearY, SIGNAL( valueChanged( double ) ), this, SLOT( shearY() ) );
 		connect( m_rotate, SIGNAL( valueChanged( double ) ), this, SLOT( rotate() ) );
@@ -122,8 +150,8 @@ VTransformDocker::enableSignals( bool enable )
 	{
 		disconnect( m_x, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
 		disconnect( m_y, SIGNAL( valueChanged( double ) ), this, SLOT( translate() ) );
-		disconnect( m_width, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
-		disconnect( m_height, SIGNAL( valueChanged( double ) ), this, SLOT( scale() ) );
+		disconnect( m_width, SIGNAL( valueChangedPt( double ) ), this, SLOT( scale() ) );
+		disconnect( m_height, SIGNAL( valueChangedPt( double ) ), this, SLOT( scale() ) );
 		disconnect( m_shearX, SIGNAL( valueChanged( double ) ), this, SLOT( shearX() ) );
 		disconnect( m_shearY, SIGNAL( valueChanged( double ) ), this, SLOT( shearY() ) );
 		disconnect( m_rotate, SIGNAL( valueChanged( double ) ), this, SLOT( rotate() ) );
@@ -135,16 +163,22 @@ VTransformDocker::update()
 {
 	enableSignals( false );
 
-	int objcount = m_view->part()->document().selection()->objects().count();
+	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+	KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+	int objcount = selection->count();
 	if ( objcount>0 )
 	{
 		setEnabled( true );
-		QRectF rect = m_view->part()->document().selection()->boundingBox();
+		QRectF rect = selection->boundingRect();
 
 		m_x->changeValue( rect.x() );
 		m_y->changeValue( rect.y() );
 		m_width->changeValue( rect.width() );
 		m_height->changeValue( rect.height() );
+
+		m_shearX->setValue( selection->shearX() );
+		m_shearY->setValue( selection->shearY() );
+		m_rotate->setValue( selection->rotation() );
 	}
 	else
 	{
@@ -152,12 +186,11 @@ VTransformDocker::update()
 		m_y->changeValue(0.0);
 		m_width->changeValue(0.0);
 		m_height->changeValue(0.0);
+		m_shearX->setValue(0.0);
+		m_shearY->setValue(0.0);
+		m_rotate->setValue(0.0);
 		setEnabled( false );
 	}
-
-	m_shearX->changeValue(0.0);
-	m_shearY->changeValue(0.0);
-	m_rotate->setValue(0.0);
 
 	enableSignals( true );
 }
@@ -165,36 +198,45 @@ VTransformDocker::update()
 void
 VTransformDocker::translate()
 {
-	//FIXME: Needs an appropriate transform command which takes absolute values of object size
-	double newX = m_x->value();
-	double newY = m_y->value();
+	QPointF newPos( m_x->value(), m_y->value() );
 
-	QRectF rect = m_view->part()->document().selection()->boundingBox();
+	kDebug(38000) << "translating to: " << newPos << endl;
 
-	if( rect.x() != newX || rect.y() != newY )
+	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+	KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+
+	QRectF rect = selection->boundingRect();
+
+	if( rect.x() != newPos.x() || rect.y() != newPos.y() )
 	{
-		VTranslateCmd *cmd = new VTranslateCmd( &m_view->part()->document(), newX-rect.x(), newY-rect.y(), false );
-		m_view->part()->addCommand( cmd );
+		KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+		QPointF moveBy = newPos - selection->position();
+		//canvasController->canvas()->addCommand( new KoShapeMoveCommand( selectedShapes, moveBy ), true );
 	}
-	m_part->repaintAllViews( true );
+	update();
 }
 
 void
 VTransformDocker::scale()
 {
-	//FIXME: Needs an appropriate transform command which takes absolute values of object size
-	double newW = m_width->value();
-	double newH = m_height->value();
+	QSizeF newSize( m_width->value(), m_height->value() );
 
-	QRectF rect = m_view->part()->document().selection()->boundingBox();
+	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+	KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+	QRectF rect = selection->boundingRect();
 
-	if( rect.width() != newW || rect.height() != newH )
+	if( rect.width() != newSize.width() || rect.height() != newSize.height() )
 	{
-		
-		VScaleCmd *cmd = new VScaleCmd( &m_view->part()->document(), rect.topLeft(), newW/rect.width(), newH/rect.height(), false );
-		m_view->part()->addCommand( cmd );
+		KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+		QList<QSizeF> oldSizes, newSizes;
+		foreach( KoShape* shape, selectedShapes )
+		{
+			kDebug(38000) << "scale from: " << shape->size() << " to: " << newSize << endl;
+			oldSizes << shape->size();
+			newSizes << newSize;
+		}
+		//canvasController->canvas()->addCommand( new KoShapeSizeCommand( selectedShapes, oldSizes, newSizes ), true );
 	}
-	m_part->repaintAllViews( true );
 }
 
 void 
@@ -206,8 +248,6 @@ VTransformDocker::setUnit( KoUnit unit )
 	m_y->setUnit( unit );
 	m_width->setUnit( unit );
 	m_height->setUnit( unit );
-	m_shearX->setUnit( unit );
-	m_shearY->setUnit( unit );
 
 	enableSignals( true );
 }
@@ -219,14 +259,16 @@ VTransformDocker::shearX()
 
 	if( shear != 0.0 )
 	{
+		/*
 		QRectF rect = m_view->part()->document().selection()->boundingBox();
 		shear /= double(rect.width()*0.5);
 		VShearCmd *cmd = new VShearCmd( &m_view->part()->document(), rect.center(), shear, 0 );
-		m_view->part()->addCommand( cmd );
+		 KoToolManager::instance()->activeCanvasController()->addCommand( cmd );
 		m_part->repaintAllViews( true );
 		disconnect( m_shearX, SIGNAL( valueChanged( double ) ), this, SLOT( shearX() ) );
 		m_shearX->changeValue(0.0);
 		connect( m_shearX, SIGNAL( valueChanged( double ) ), this, SLOT( shearX() ) );
+		*/
 	}
 }
 
@@ -237,14 +279,16 @@ VTransformDocker::shearY()
 
 	if( shear != 0.0 )
 	{
+		/*
 		QRectF rect = m_view->part()->document().selection()->boundingBox();
 		shear /= double(rect.height()*0.5);
 		VShearCmd *cmd = new VShearCmd( &m_view->part()->document(), rect.center(), 0, shear );
-		m_view->part()->addCommand( cmd );
+		 KoToolManager::instance()->activeCanvasController()->canvas()->addCommand( cmd );
 		m_part->repaintAllViews( true );
 		disconnect( m_shearY, SIGNAL( valueChanged( double ) ), this, SLOT( shearY() ) );
 		m_shearY->changeValue(0.0);
 		connect( m_shearY, SIGNAL( valueChanged( double ) ), this, SLOT( shearY() ) );
+		*/
 	}
 }
 
@@ -253,16 +297,35 @@ VTransformDocker::rotate()
 {
 	double angle = m_rotate->value();
 	
-	if( angle != 0.0 )
+	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+	KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+	KoSelectionSet selectedShapes = selection->selectedShapes();
+
+	QPointF center = selection->boundingRect().center();
+	double initialAngle = selection->rotation();
+	double relativeAngle = angle - initialAngle;
+
+	QMatrix matrix;
+	matrix.translate( center.x(), center.y() );
+	matrix.rotate( relativeAngle );
+	matrix.translate( -center.x(), -center.y() );
+
+	QList<double> oldAngles, newAngles;
+	QList<QPointF> oldPositions, newPositions;
+
+	foreach( KoShape* shape, selectedShapes )
 	{
-		QPointF center = m_view->part()->document().selection()->boundingBox().center();
-		VRotateCmd *cmd = new VRotateCmd(  &m_view->part()->document(), center, angle );
-		m_view->part()->addCommand( cmd );
-		m_part->repaintAllViews( true );
-		disconnect( m_rotate, SIGNAL( valueChanged( double ) ), this, SLOT( rotate() ) );
-		m_rotate->setValue(0.0);
-		connect( m_rotate, SIGNAL( valueChanged( double ) ), this, SLOT( rotate() ) );
+		oldAngles << shape->rotation();
+		oldPositions << shape->position();
+		shape->setAbsolutePosition( matrix.map( shape->absolutePosition() ) );
+		newAngles << shape->rotation() + relativeAngle;
+		newPositions << shape->position();
 	}
+	selection->rotate( selection->rotation() + relativeAngle );
+	KMacroCommand *cmd = new KMacroCommand("Rotate");
+	cmd->addCommand( new KoShapeMoveCommand( selectedShapes, oldPositions, newPositions ) );
+	cmd->addCommand( new KoShapeRotateCommand( selectedShapes, oldAngles, newAngles ) );
+	canvasController->canvas()->addCommand( cmd, true );
 }
 
 #include "vtransformdocker.moc"
