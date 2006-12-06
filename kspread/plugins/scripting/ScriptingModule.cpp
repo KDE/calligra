@@ -45,6 +45,7 @@ extern "C"
     }
 }
 
+/// \internal d-pointer class.
 class ScriptingModule::Private
 {
 	public:

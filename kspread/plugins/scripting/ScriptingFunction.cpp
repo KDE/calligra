@@ -40,6 +40,7 @@
  * ScriptingFunctionImpl
  */
 
+/// \internal implementation of the ScriptingFunction
 class ScriptingFunctionImpl : public KSpread::Function
 {
     public:
@@ -120,6 +121,7 @@ class ScriptingFunctionImpl : public KSpread::Function
  * ScriptingFunction
  */
 
+/// \internal d-pointer class.
 class ScriptingFunction::Private
 {
     public:

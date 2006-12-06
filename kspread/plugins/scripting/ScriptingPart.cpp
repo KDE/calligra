@@ -43,6 +43,7 @@
 typedef KGenericFactory< ScriptingPart > KSpreadScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( krossmodulekspread, KSpreadScriptingFactory( "krossmodulekspread" ) )
 
+/// \internal d-pointer class.
 class ScriptingPart::Private
 {
 	public:
