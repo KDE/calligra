@@ -425,29 +425,35 @@ void Cell::copyFormat( const Cell* cell )
 {
     Q_ASSERT( !isDefault() ); // trouble ahead...
     Q_ASSERT( cell );
-
+    Q_ASSERT( !cell->isDefault() );
     d->value.setFormat(cell->d->value.format());
-    setStyle( cell->style() );
-
-    Conditions conditions = cell->conditions();
+    const Style style = cell->style();
+    if ( !style.isDefault() )
+        setStyle( style );
+    const Conditions conditions = cell->conditions();
     if ( !conditions.isEmpty() )
-    {
-        QLinkedList<Conditional> conditionList = conditions.conditionList();
-        setConditionList( conditionList );
-    }
+        setConditions( conditions );
 }
 
 void Cell::copyAll( Cell *cell )
 {
     Q_ASSERT( !isDefault() ); // trouble ahead...
+    Q_ASSERT( cell );
+    Q_ASSERT( !cell->isDefault() );
     copyFormat( cell );
     copyContent( cell );
+    const QString comment = cell->comment();
+    if ( !comment.isEmpty() )
+        setComment( comment );
+    const Validity validity = cell->validity();
+    if ( !validity.isEmpty() )
+        setValidity( validity );
 }
 
 void Cell::copyContent( const Cell* cell )
 {
     Q_ASSERT( !isDefault() ); // trouble ahead...
-
+    Q_ASSERT( cell );
     if (cell->isFormula() && cell->column() > 0 && cell->row() > 0)
     {
       // change all the references, e.g. from A1 to A3 if copying
@@ -457,7 +463,6 @@ void Cell::copyContent( const Cell* cell )
     }
     else
       setCellText( cell->text() );
-
 }
 
 void Cell::defaultStyle()

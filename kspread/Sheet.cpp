@@ -4002,13 +4002,18 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                                     if (cell != target)
                                         target->copyContent( cell );
                                 }
-                                // FIXME KSPREAD_NEW_STYLE_STORAGE: not the right place anymore
+                                // TODO Stefan: set the attributes in one go for the repeated range
                                 if ( cellHasStyle && !styleName.isEmpty())
                                     styleRegions[styleName] += QRect( columnIndex, newRow, 1, 1 );
-                                if ( !comment( columnIndex, backupRow ).isEmpty() )
-                                {
-                                    setComment( Region(QPoint(columnIndex, newRow)), comment(columnIndex, backupRow) );
-                                }
+                                const QString comment = this->comment( columnIndex, backupRow );
+                                if ( !comment.isEmpty() )
+                                    setComment( Region(QPoint(columnIndex, newRow)), comment );
+                                const Conditions conditions = this->conditions( columnIndex, backupRow );
+                                if ( !conditions.isEmpty() )
+                                    setConditions( Region(QPoint(columnIndex, newRow)), conditions );
+                                const KSpread::Validity validity = this->validity( columnIndex, backupRow );
+                                if ( !validity.isEmpty() )
+                                    setValidity( Region(QPoint(columnIndex, newRow)), validity );
                             }
                         }
                     }
