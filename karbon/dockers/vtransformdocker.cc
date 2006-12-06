@@ -198,22 +198,29 @@ VTransformDocker::update()
 void
 VTransformDocker::translate()
 {
-	QPointF newPos( m_x->value(), m_y->value() );
+    QPointF newPos( m_x->value(), m_y->value() );
 
-	kDebug(38000) << "translating to: " << newPos << endl;
+    kDebug(38000) << "translating to: " << newPos << endl;
 
-	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-	KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
-	QRectF rect = selection->boundingRect();
+    QRectF rect = selection->boundingRect();
 
-	if( rect.x() != newPos.x() || rect.y() != newPos.y() )
-	{
-		KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
-		QPointF moveBy = newPos - selection->position();
-		//canvasController->canvas()->addCommand( new KoShapeMoveCommand( selectedShapes, moveBy ), true );
-	}
-	update();
+    if( rect.x() != newPos.x() || rect.y() != newPos.y() )
+    {
+        KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+        QPointF moveBy = newPos - selection->position();
+        QList<QPointF> oldPositions;
+        QList<QPointF> newPositions;
+        foreach( KoShape* shape, selectedShapes )
+        {
+            oldPositions.append( shape->position() );
+            newPositions.append( shape->position() + moveBy );
+        }
+        canvasController->canvas()->addCommand( new KoShapeMoveCommand( selectedShapes, oldPositions, newPositions ), true );
+    }
+    update();
 }
 
 void
