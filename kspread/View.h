@@ -90,9 +90,8 @@ class ViewAdaptor;
  */
 class KSPREAD_EXPORT View : public KoView
 {
-    friend class Canvas;
-
     Q_OBJECT
+
 public:
 
     /** Creates a new view */
@@ -263,6 +262,14 @@ public:
     void saveCurrentSheetSelection();
 
     void deleteSelectedObjects();
+
+    /**
+     * @return @c true if document is being loaded. It is useful to suppress scrolling
+     * while the "View loading" process.
+     */
+    bool isLoading() const;
+
+    virtual QMatrix matrix() const;
 
 public Q_SLOTS:
     /**
@@ -599,8 +606,6 @@ protected:
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );
 
-    virtual QMatrix matrix() const;
-
     /**
      * Returns the position of the top-left point of the currently selected cell in document coordinates.
      * This is used when inserting some types of objects or pasting images into the document (so that the newly
@@ -637,12 +642,6 @@ private:
     void spellCleanup();
 
     Cell* nextFindValidCell( int col, int row );
-
-    /**
-     * @return @c true if document is being loaded. It is useful to suppress scrolling
-     * while the "View loading" process.
-     */
-    bool isLoading() const;
 
     friend class Private;
 };

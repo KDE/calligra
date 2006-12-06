@@ -46,6 +46,7 @@ class View;
  */
 class KSPREAD_EXPORT StyleManager
 {
+    friend class StyleDialog;
  public:
   StyleManager();
   ~StyleManager();
@@ -96,9 +97,6 @@ class KSPREAD_EXPORT StyleManager
   void releaseUnusedAutoStyles( Styles autoStyles );
 
  private:
-  friend class StyleDialog;
-  friend class View;
-
   void dump() const;
 
   CustomStyle * m_defaultStyle;

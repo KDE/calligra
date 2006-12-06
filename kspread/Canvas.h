@@ -95,9 +95,9 @@ class KSPREAD_EXPORT Canvas : public QWidget
 {
     friend class HBorder;
     friend class VBorder;
-    friend class View;
 
     Q_OBJECT
+
 public:
     /**
      * The current action associated with the mouse.
@@ -244,6 +244,13 @@ public:
      * @param array if @c true , array formula was entered
      */
     void deleteEditor(bool saveChanges, bool array = false);
+
+    /**
+     * Used in choose mode. Shows/hides the editor depending on the selected
+     * sheet. Triggers an update of the regions shown in the CellEditor.
+     * @see CellEditor::updateChoice()
+     */
+    void updateEditor();
 
     /**
      * Called from EditWidget and CellEditor
@@ -567,13 +574,6 @@ private:
   bool processControlArrowKey(QKeyEvent *event);
 
   //void processIMEvent( QIMEvent * event );
-
-  /**
-   * Used in choose mode. Shows/hides the editor depending on the selected
-   * sheet. Triggers an update of the regions shown in the CellEditor.
-   * @see CellEditor::updateChoice()
-   */
-  void updateEditor();
 
   /**
    * Determines the cell at @p point and shows its tooltip.

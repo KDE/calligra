@@ -6318,7 +6318,7 @@ void View::createStyleFromCell()
     const Style cellStyle = cell->style();
     CustomStyle * style = new CustomStyle( &cellStyle, styleName );
 
-    doc()->styleManager()->m_styles[ styleName ] = style;
+    doc()->styleManager()->insertStyle( style );
     cell->setStyle( *style );
     QStringList lst( d->actions->selectStyle->items() );
     lst.push_back( styleName );
@@ -7135,7 +7135,7 @@ void View::saveCurrentSheetSelection()
     {
       d->savedAnchors.remove(d->activeSheet);
       d->savedAnchors.insert(d->activeSheet, d->selection->anchor());
-      kDebug(36005) << " Current scrollbar vert value: " << d->canvas->vertScrollBar()->value() << endl;
+      kDebug(36005) << " Current scrollbar vert value: " << d->vertScrollBar->value() << endl;
       kDebug(36005) << "Saving marker pos: " << d->selection->marker() << endl;
       d->savedMarkers.remove(d->activeSheet);
       d->savedMarkers.insert(d->activeSheet, d->selection->marker());
