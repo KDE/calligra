@@ -172,7 +172,8 @@ void FormatDialog::slotOk()
 
     QRect r = m_view->selectionInfo()->selection();
 
-#ifndef KSPREAD_NEW_STYLE_STORAGE // copy
+#warning FIXME Stefan: port to new style storage
+#if 0
     if ( !m_view->doc()->undoLocked() )
     {
         QString title=i18n("Change Format");

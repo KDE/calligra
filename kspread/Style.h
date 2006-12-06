@@ -21,8 +21,6 @@
 #ifndef KSPREAD_STYLE
 #define KSPREAD_STYLE
 
-#define KSPREAD_NEW_STYLE_STORAGE
-
 #include <QFont>
 #include <QSharedDataPointer>
 

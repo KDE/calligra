@@ -3778,7 +3778,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
       else if ( visibility == "collapse" )
         collapsed = true;
       else if ( visibility == "filter" )
-        collapsed = false; // FIXME Stefan: Set to true, if filters are supported.
+        collapsed = false; // TODO Stefan: Set to true, if filters are supported.
       isNonDefaultColumn = true;
     }
 
@@ -3903,7 +3903,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
       else if ( visibility == "collapse" )
         collapse = true;
       else if ( visibility == "filter" )
-        collapse = false; // FIXME Stefan: Set to true, if filters are supported.
+        collapse = false; // TODO Stefan: Set to true, if filters are supported.
       isNonDefaultRow = true;
     }
 

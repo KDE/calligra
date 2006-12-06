@@ -79,19 +79,18 @@ public:
   int mergedXCells;
   int mergedYCells;
 
-  // FIXME Stefan: View related
+  // TODO Stefan: View related
   // Number of additional cells.
   int extraXCells;
   int extraYCells;
 
-  // FIXME Stefan: View related
+  // TODO Stefan: View related
   // If this cell overlaps other cells, then we have the cells width and
   // height stored here.  These values do not mean anything unless
   // extraXCells and/or extraYCells are different from 0.
   double extraWidth;
   double extraHeight;
 
-  // FIXME Stefan: View related
   // A list of cells that obscure this one.
   // If this list is not empty, then this cell is obscured by another
   // enlarged object. This means that we have to call this object in order
