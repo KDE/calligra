@@ -70,6 +70,9 @@ ConfigDialog::ConfigDialog(Config &config, Project &project, QWidget *parent, co
 
 //    connect(m_behaviorPage, SIGNAL(changed()), SLOT(slotChanged()));
     connect(m_taskDefaultPage, SIGNAL(changed()), SLOT(slotChanged()));
+    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect(this,SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
 }
 
 
