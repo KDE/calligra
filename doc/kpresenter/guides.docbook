@@ -250,8 +250,8 @@ browser to open the <filename>index.html</filename> file. Click where prompted,
 and the first slide of your presentation is displayed. It will now behave as a
 &kpresenter; slideshow.</para>
 
-<!-- FIXME lueck -->
-<para>Each click on the slide image takes you to the next slide.</para>
+<para>Each click on the arrow icons take you to the next or previous slide. 
+To get back to the start of the slideshow click on the slide icon.</para>
 
 <tip><para>To share your presentation with the world, transfer the
 newly-produced files to a network-accessible location (&ie; webspace),

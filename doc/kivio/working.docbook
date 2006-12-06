@@ -18,7 +18,7 @@
 <sect1 id="opening">
 <title>Opening a Document</title>
 <para>To open a previously saved document select <menuchoice><guimenu>File</guimenu><guimenuitem>Open...</guimenuitem></menuchoice>, a standard &kde; file dialog box will appear.</para>
-<para>Recently used documents are listed under <menuchoice><guimenu>File</guimenu><guimenuitem>Open Recent</guimenuitem></menuchoice>.</para>
+<para>Recently used documents are listed under <menuchoice><guimenu>File</guimenu><guisubmenu>Open Recent</guisubmenu></menuchoice>.</para>
 </sect1>
 
 <sect1 id="saving">
@@ -44,17 +44,17 @@
 
 <sect2>
 <title>Adding Pages</title>
-<para>To <action>add additional pages</action> to a document select <menuchoice><guimenu>Page</guimenu><guimenuitem>Insert Page</guimenuitem></menuchoice>. The selector beneath the document view shows tabs for all the pages in the document that have not been hidden.</para>
+<para>To <action>add additional pages</action> to a document select <menuchoice><guimenu>Page</guimenu><guimenuitem>Insert Page</guimenuitem></menuchoice> or click with the &RMB; on the page tab and select <guimenuitem>Insert Page</guimenuitem> from the popup menu. The selector beneath the document view shows tabs for all the pages in the document that have not been hidden.</para>
 </sect2>
 
 <sect2>
 <title>Removing Pages</title>
-<para>Unwanted pages can be removed by selecting <menuchoice><guimenu>Page</guimenu><guimenuitem>Remove Page</guimenuitem></menuchoice>.</para>
+<para>Unwanted pages can be removed by selecting <menuchoice><guimenu>Page</guimenu><guimenuitem>Remove Page</guimenuitem></menuchoice> or click with the &RMB; on the page tab and select <guimenuitem>Remove Page</guimenuitem> from the popup menu.</para>
 </sect2>
 
 <sect2>
 <title>Renaming Pages</title>
-<para>The names given to each page can be adjusted by double-clicking on the page name on the page selector, a dialog box will appear allowing the name to be edited.</para>
+<para>The names given to each page can be adjusted by double-clicking on the page name on the page selector or by clicking with the &RMB; on the page tab and select <guimenuitem>Rename Page...</guimenuitem> from the popup menu.A dialog box will appear allowing the name to be edited.</para>
 </sect2>
 
 <sect2>
@@ -62,7 +62,7 @@
 <para>The order of the pages can be adjusted by dragging the tabs on the page selector bar.</para>
 <note><para>The arrow buttons on the page selector bar are for scrolling through the page tabs, they do not cycle through the pages themselves.</para></note>
 <para>If you have a lot of pages in a document and you do not want to see them all on the page selector you can hide pages by selecting <menuchoice><guimenu>Page</guimenu><guimenuitem>Hide Page</guimenuitem></menuchoice>. This will remove the currently selected page from the page selector bar.</para>
-<para>To reveal a hidden page select <menuchoice><guimenu>Page</guimenu><guimenuitem>Show Page</guimenuitem></menuchoice> and choose the page you want to see from the list box.</para>
+<para>To reveal a hidden page select <menuchoice><guimenu>Page</guimenu><guimenuitem>Show Page...</guimenuitem></menuchoice> and choose the page you want to see from the list box.</para>
 </sect2>
 
 </sect1>
@@ -75,7 +75,7 @@
 <itemizedlist>
 <listitem><para>PNG Image (.png)</para></listitem>
 <listitem><para>JPEG Image (.jpg)</para></listitem>
-<listitem><para>&Windows; Bitmap (.bmp)</para></listitem>
+<listitem><para>BMP Image (.bmp)</para></listitem>
 <listitem><para>Encapsulated Postscript Image (.eps)</para></listitem>
 <listitem><para>Portable Bitmap (.pbm)</para></listitem>
 <listitem><para>PCX Image (.pcx)</para></listitem>
@@ -87,12 +87,6 @@
 <listitem><para>Adobe Illustrator Document (.ai)</para></listitem>
 <listitem><para>TIFF Image (.tiff)</para></listitem>
 <listitem><para>ILM EXR Image (.exr)</para></listitem>
-<listitem><para>GIF Image (.gif)</para></listitem>
-<listitem><para>Computer Graphics Metafile (.cgm)</para></listitem>
-<listitem><para>&Windows; Icon (.ico)</para></listitem>
-<listitem><para>Truevision Targa Image (.tga)</para></listitem>
-<listitem><para>X BitMap Image (.xbm)</para></listitem>
-<listitem><para>Adobe Photoshop Image (.psd)</para></listitem>
 <listitem><para>Karbon14 Document (.karbon)</para></listitem>
 <listitem><para>GIMP Native Image Format (.xcf)</para></listitem>
 <listitem><para>Scalable Vector Graphics (.svg)</para></listitem>
@@ -115,7 +109,7 @@
 <title>Freestanding Text</title>
 <para>The text tool can be used to add text to a document that is not associated with any object. This is useful for noting general information about a drawing.</para>
 <para>To add freestanding text make sure no object is selected by selecting <menuchoice><guimenu>Edit</guimenu><guimenuitem>Deselect </guimenuitem></menuchoice>, then activate the text tool by selecting <menuchoice><guimenu>Tools</guimenu><guimenuitem>Text Tool</guimenuitem></menuchoice>. The mouse pointer will change to indicate the text tool is activated.</para>
-<para>Drag a box to contain the text. A dialog box will appear prompting for the text, enter some text and click <guibutton>OK</guibutton>. The formatting of the text can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Text</guimenuitem></menuchoice> or by using the toolbars.</para>
+<para>Drag a box to contain the text. A dialog box will appear prompting for the text, enter some text and click <guibutton>OK</guibutton>. The formatting of the text can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Text...</guimenuitem></menuchoice> or by using the toolbars.</para>
 </sect1>
 
 <sect1 id="page-layout">
@@ -129,7 +123,8 @@
 
 <sect2>
 <title>Adding Guides</title>
-<para>To add a guide move the mouse pointer over either the horizontal or vertical ruler, depending on the type of guide you require. Hold down the &LMB; and drag the mouse over the document and release the mouse button where you want to position the guide. As you drag the mouse the guide will move accordingly.</para>
+<para>To add a guide move the mouse pointer over either the horizontal or vertical ruler, depending on the type of guide you require. Hold down the &LMB; and drag the mouse over the document and release the mouse button where you want to position the guide. As you drag the mouse the guide will move accordingly.
+Or use <menuchoice><guimenu>View</guimenu><guimenuitem>Add Guide Line...</guimenuitem></menuchoice> to open a dialog to select the <guilabel>Orientation</guilabel> and the <guilabel>Position</guilabel> of the guide</para>
 </sect2>
 
 <sect2>
