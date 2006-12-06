@@ -972,21 +972,21 @@ void View::slotCurrentScheduleChanged()
 void View::slotViewSchedule( QAction *act )
 {
     kDebug()<<k_funcinfo<<endl;
-    Schedule *sch = m_scheduleActions.value( static_cast<KAction*>( act ), 0 );
+    Schedule *sch = m_scheduleActions.value( act, 0 );
     getProject().setCurrentSchedule( sch->id() );
 }
 
 void View::slotActionDestroyed( QObject *o )
 {
     kDebug()<<k_funcinfo<<o->name()<<endl;
-    m_scheduleActions.remove( static_cast<KAction*>( o ) );
+    m_scheduleActions.remove( static_cast<QAction*>( o ) );
 }
 
 void View::slotPlugScheduleActions()
 {
     kDebug()<<k_funcinfo<<endl;
     unplugActionList( "view_schedule_list" );
-    foreach( KAction *act, m_scheduleActions.keys() ) {
+    foreach( QAction *act, m_scheduleActions.keys() ) {
         m_scheduleActionGroup->removeAction( act );
         delete act;
     }

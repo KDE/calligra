@@ -69,9 +69,9 @@ public:
     /// Returns the list of action lists that shall be plugged/unplugged
     QStringList actionListNames() const { return m_actionListMap.keys(); }
     /// Returns the list of actions associated with the action list name
-    QList<KAction*> actionList( const QString name ) const { return m_actionListMap[name]; }
+    QList<QAction*> actionList( const QString name ) const { return m_actionListMap[name]; }
     /// Add an action to the specified action list
-    void addAction( const QString list, KAction *action ) { m_actionListMap[list].append( action ); }
+    void addAction( const QString list, QAction *action ) { m_actionListMap[list].append( action ); }
     
 public slots:
     /// Activate/deactivate the gui
@@ -82,7 +82,7 @@ signals:
     void guiActivated( ViewBase*, bool );
     
 protected:
-    QMap<QString, QList<KAction*> > m_actionListMap;
+    QMap<QString, QList<QAction*> > m_actionListMap;
 
 };
 

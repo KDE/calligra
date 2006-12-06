@@ -306,7 +306,7 @@ private:
     ViewAdaptor* m_dbus;
 
     QActionGroup *m_scheduleActionGroup;
-    QMap<KAction*, Schedule*> m_scheduleActions;
+    QMap<QAction*, Schedule*> m_scheduleActions;
     // ------ Edit
     KAction *actionCut;
     KAction *actionCopy;
