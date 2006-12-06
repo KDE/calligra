@@ -510,9 +510,9 @@ void KDChartPolarPainter::paintData( QPainter* painter,
         int r2 = static_cast < int > ( radius * 1100 / 1000 );
         int r3 = static_cast < int > ( radius * 1175 / 1000 );
         QPoint pt1, pt2, pt3;
-        uint nLabels = labelTexts ? labelTexts->count() : 0;
+        int nLabels = labelTexts ? labelTexts->count() : 0;
         int angleBetweenRays = 360 / nLabels;
-        for( uint value = 0; value < nLabels; ++value ) {
+        for( int value = 0; value < nLabels; ++value ) {
             pt1 = center + polarToXY( r1, currentAngle );
             pt2 = center + polarToXY( r2, currentAngle );
             pt3 = center + polarToXY( r3, currentAngle );

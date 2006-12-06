@@ -1043,7 +1043,7 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
 {
     QDomDocument doc( "ChartParams" );
     // would be nicer if QDomDocument could read from a QTextStream...
-    QString docString = s.read();
+    QString docString = s.readAll();
     doc.setContent( docString );
 
     p.loadXML( doc );

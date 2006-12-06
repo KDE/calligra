@@ -682,7 +682,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                     // append the previous array (there is guaranteed to be
                     // one because we are at least the second time through
                     // here) in reverse order
-                    for ( unsigned int i = 0; i < previousPoints.size(); ++i ) {
+                    for ( int i = 0; i < previousPoints.size(); ++i ) {
                         thisSection.setPoint( point + i,
                                 previousPoints.point( previousPoints.size() - i - 1 ) );
                         //qDebug("\nx: %i",previousPoints.point( previousPoints.size() - i - 1 ).x());
