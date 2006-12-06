@@ -104,7 +104,7 @@ KexiSharedActionHost::~KexiSharedActionHost()
 
 void KexiSharedActionHost::setActionAvailable(const QString& action_name, bool avail)
 {
-	KAction *act = d->mainWin->actionCollection()->action(action_name);
+	QAction *act = d->mainWin->actionCollection()->action(action_name);
 	if (act) {
 		act->setEnabled(avail);
 	}
@@ -163,7 +163,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 		KexiVolatileActionData *va = d->volatileActions[ a ];
 		if (va != 0) {
 			if (p && p->isSupported(a->objectName())) {
-				QList< KAction* > actions_list;
+				QList<QAction*> actions_list;
 				actions_list.append( a );
 				if (!va->plugged) {
 					va->plugged=true;

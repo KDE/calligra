@@ -20,7 +20,7 @@
 
 #include "keximdi.h"
 
-#ifdef __gnu__
+#ifdef __GNUC__
  #warning "Implement MDI replacment"
 #endif
 

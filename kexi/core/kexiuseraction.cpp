@@ -12,7 +12,7 @@
 #include "kexiuseraction.h"
 
 KexiUserAction::KexiUserAction(KexiMainWindow *win, KActionCollection *parent, const QString &name, const QString &text, const QString &pixmap)
- : KAction(text, pixmap, KShortcut::null(), this, SLOT(execute()), parent, name.latin1())
+ : KAction(text, pixmap, KShortcut(), this, SLOT(execute()), parent, name.toLatin1())
 {
 	m_win = win;
 	m_method = 0;
@@ -36,7 +36,7 @@ KexiUserAction::execute()
 		case OpenObject: //open a project object
 		{
 			//get partinfo
-			KexiPart::Info *i = Kexi::partManager().infoForMimeType(m_args[0].toString().latin1());
+			KexiPart::Info *i = Kexi::partManager().infoForMimeType(m_args[0].toString().toLatin1());
 			if (!i) {
 				KMessageBox::error(m_win, i18n("Specified part does not exist"));
 				return;

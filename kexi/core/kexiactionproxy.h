@@ -29,12 +29,11 @@
 #include <Q3ValueList>
 #include <Q3CString>
 
-#include <kaction.h>
-
 #include "kexiproject.h"
 #include "kexisharedactionhost.h"
 
 class Q3Signal;
+class QAction;
 class KAction;
 class KXMLGUIClient;
 class KAction_setEnabled_Helper;
@@ -123,9 +122,8 @@ class KEXICORE_EXPORT KexiActionProxy
 		 as an item. \a w will typically be a menu, popup menu or a toolbar. 
 		 Does nothing if no action found, so generally this is safer than just caling e.g.
 		 <code> action("myaction")->plug(myPopup); </code> 
-		 \return index of inserted item, or -1 if there is not action with name \a action_name.
-		 \sa action(), KAction::plug(QWidget*, int) */
-		int plugSharedAction(const QString& action_name, QWidget* w);
+		 \sa action(), QWidget::addAction(QAction*) */
+		void plugSharedAction(const QString& action_name, QWidget* w);
 
 		void plugSharedActionToExternalGUI(const QString& action_name, KXMLGUIClient *client);
 
@@ -143,7 +141,7 @@ class KEXICORE_EXPORT KexiActionProxy
 		KAction* plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w);
 
 		/*! \return action named with \a name or NULL if there is no such action. */
-		virtual KAction* sharedAction(const QString& action_name);
+		virtual QAction* sharedAction(const QString& action_name);
 
 		inline QObject *receiver() const { return m_receiver; }
 

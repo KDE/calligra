@@ -134,41 +134,43 @@ void KexiActionProxy::unplugSharedAction(const QString& action_name)
 	delete p;
 }
 
-int KexiActionProxy::plugSharedAction(const QString& action_name, QWidget* w)
+void KexiActionProxy::plugSharedAction(const QString& action_name, QWidget* w)
 {
-	KAction *a = sharedAction(action_name);
+	QAction *a = sharedAction(action_name);
 	if (!a) {
 		kWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name << endl;
-		return -1;
+		return;
 	}
-	return a->plug(w);
+	w->addAction(a);
 }
 
 void KexiActionProxy::unplugSharedAction(const QString& action_name, QWidget* w)
 {
-	KAction *a = sharedAction(action_name);
+	QAction *a = sharedAction(action_name);
 	if (!a) {
 		kWarning() << "KexiActionProxy::unplugSharedAction(): NO SUCH ACTION: " << action_name << endl;
 		return;
 	}
-	a->unplug(w);
+	w->removeAction(a);
 }
 
 KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w)
 {
-	KAction *a = sharedAction(action_name);
+	QAction *a = sharedAction(action_name);
 	if (!a) {
 		kWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name << endl;
 		return 0;
 	}
-	QString altName = a->objectName();
-	altName += "_alt";
-	KAction *alt_act = new KAction(alternativeText, a->iconSet(), a->shortcut(),
-		a->parent(), 0, 0, altName);
-	QObject::connect(alt_act, SIGNAL(activated()), a, SLOT(activate()));
-	alt_act->plug(w);
+	QString altName = a->objectName() + "_alt";
 
-//OK?
+	KAction *ka = dynamic_cast<KAction*>(a);
+	Q_ASSERT(ka);
+	KAction *alt_act = new KAction(alternativeText, ka->iconSet(), ka->shortcut(), ka->parent(), 0, 0, altName);
+
+	QObject::connect(alt_act, SIGNAL(activated()), a, SLOT(activate()));
+	w->addAction(alt_act);
+
+	//OK?
 	m_host->updateActionAvailable(action_name, true, m_receiver);
 
 	return alt_act;
@@ -176,7 +178,7 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
 
 void KexiActionProxy::plugSharedActionToExternalGUI(const QString& action_name, KXMLGUIClient *client)
 {
-	KAction *a = client->action( action_name.toLatin1().constData() );
+	QAction *a = client->action( action_name.toLatin1().constData() );
 	if (!a)
 		return;
 	plugSharedAction(a->objectName(), a, SLOT(activate()));
@@ -213,7 +215,7 @@ bool KexiActionProxy::activateSharedAction(const QString& action_name, bool also
 	return true;
 }
 
-KAction* KexiActionProxy::sharedAction(const QString& action_name)
+QAction* KexiActionProxy::sharedAction(const QString& action_name)
 {
 	return m_host->mainWindow()->actionCollection()->action(action_name);
 }

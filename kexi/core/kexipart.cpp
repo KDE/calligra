@@ -130,8 +130,13 @@ void Part::createGUIClients(KexiMainWindow *win)
 		m_guiClient = new GUIClient(m_mainWin, this, false, "part");
 
 		//default actions for part's gui client:
-		KAction *act = new KAction(m_names["instanceCaption"]+"...", info()->createItemIcon(), 0, this, 
-			SLOT(slotCreate()), m_mainWin->actionCollection(), 
+		KAction *act = new KAction(
+			m_names["instanceCaption"]+"...",
+			info()->createItemIcon(),
+			KShortcut(),
+			this,
+			SLOT(slotCreate()),
+			m_mainWin->actionCollection(),
 			KexiPart::nameForCreateAction(*info()));
 		act->plug( m_mainWin->findPopupMenu("insert") );
 //		new KAction(m_names["instance"]+"...", info()->itemIcon(), 0, this, 
@@ -226,7 +231,7 @@ KAction* Part::sharedPartAction(int mode, const char* name, const char *classnam
 void Part::setActionAvailable(const char *action_name, bool avail)
 {
 	for(QMap<int, GUIClient*>::Iterator it = m_instanceGuiClients.begin(); it != m_instanceGuiClients.end(); ++it) {
-		KAction *act = it.value()->actionCollection()->action(action_name);
+		QAction *act = it.value()->actionCollection()->action(action_name);
 		if (act) {
 			act->setEnabled(avail);
 			return;

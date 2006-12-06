@@ -129,7 +129,7 @@ bool Info::isExecuteSupported() const
 
 //--------------
 
-Q3CString KexiPart::nameForCreateAction(const Info& info)
+QString KexiPart::nameForCreateAction(const Info& info)
 {
-	return (info.objectName()+"part_create").toLatin1();
+	return info.objectName() + "part_create";
 }
