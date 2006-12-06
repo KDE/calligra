@@ -55,7 +55,7 @@ class KSPREAD_EXPORT Function
 {
 public:
   Function (const QString& name, FunctionPtr ptr);
-  ~Function();
+  virtual ~Function();
   /**
   setParamCount sets allowed parameter count for a function.
   if max=0, it means max=min. If max=-1, there is no upper limit.
