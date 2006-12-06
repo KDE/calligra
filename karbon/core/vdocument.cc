@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 The Karbon Developers
+   Copyright (C) 2001-2005 The Karbon Developers
+   Copyright (C) 2005-2006 Jan Hambecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -205,17 +206,9 @@ VDocument::add( KoShape* shape )
     if( ! m_objects.contains( shape ) )
         m_objects.append( shape );
 
+    // only add shape to active layer if it has no parent yet
     if( ! shape->parent() )
         m_activeLayer->addChild( shape );
-    else
-    {
-        if( shape->parent() && ( m_layers.contains( dynamic_cast<KoLayerShape*>( shape->parent() ) ) || m_objects.contains( shape->parent() ) ) )
-        {
-            shape->parent()->addChild( shape );
-        }
-        else
-            m_activeLayer->addChild( shape );
-    }
 }
 
 void
