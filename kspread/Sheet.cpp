@@ -2745,7 +2745,7 @@ bool Sheet::testListChoose(Selection* selectionInfo)
          {
            if ( !cell->isFormula() && !cell->value().isNumber() &&
                 !cell->value().asString().isEmpty() &&
-                !cell->isTime() && !cell->isDate() )
+                !cell->isTime( col, row ) && !cell->isDate( col, row ) )
            {
              if ( cell->text() != text )
                return true;

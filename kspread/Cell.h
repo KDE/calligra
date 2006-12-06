@@ -472,12 +472,12 @@ public:
      * Note that this is "how the user would like the data to be displayed if possible".
      * If he selects a date format, and the cell contains a string, we won't apply that format.
      */
-    FormatType formatType() const;
+    FormatType formatType( int col = 0, int row = 0 ) const;
 
     /** returns true, if cell format is of date type or content is a date */
-    bool isDate() const;
+    bool isDate( int col = 0, int row = 0 ) const;
     /** returns true, if cell format is of time type or content is a time */
-    bool isTime() const;
+    bool isTime( int col = 0, int row = 0 ) const;
 
     /**
      * Sets the cell content to \p number .

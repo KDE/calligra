@@ -1358,10 +1358,27 @@ QString Cell::link() const
   return d->hasExtra() ? d->extra()->link : QString();
 }
 
-FormatType Cell::formatType() const
+FormatType Cell::formatType( int col, int row ) const
 {
-    return style().formatType();
+    return style( col, row ).formatType();
 }
+
+bool Cell::isDate( int col, int row ) const
+{
+    FormatType ft = formatType( col, row );
+
+    return (formatIsDate (ft) || ((ft == Generic_format) &&
+            (value().format() == Value::fmt_Date)));
+}
+
+bool Cell::isTime( int col, int row ) const
+{
+    FormatType ft = formatType( col, row );
+
+    return (formatIsTime (ft) || ((ft == Generic_format) &&
+            (value().format() == Value::fmt_Time)));
+}
+
 
 int Cell::mergedXCells() const
 {
@@ -1391,23 +1408,6 @@ double Cell::extraWidth() const
 double Cell::extraHeight() const
 {
     return d->hasExtra() ? d->extra()->extraHeight : 0;
-}
-
-
-bool Cell::isDate() const
-{
-  FormatType ft = formatType();
-
-  return (formatIsDate (ft) || ((ft == Generic_format) &&
-      (value().format() == Value::fmt_Date)));
-}
-
-bool Cell::isTime() const
-{
-  FormatType ft = formatType();
-
-  return (formatIsTime (ft) || ((ft == Generic_format) &&
-      (value().format() == Value::fmt_Time)));
 }
 
 

@@ -129,7 +129,7 @@ bool AbstractDataManipulator::preProcessing ()
           if (cell->isFormula())
             st.text = cell->text();
           st.val = m_sheet->value (col, row);
-          st.format = cell->formatType();
+          st.format = cell->formatType(col, row);
           oldData[colidx][rowidx] = st;
         }
       }
