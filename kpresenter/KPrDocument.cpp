@@ -1793,9 +1793,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
     }
 
     emit sigProgress( 100 );
-    recalcVariables( VT_PGNUM );
-    recalcVariables( VT_FIELD );
-    recalcVariables( VT_STATISTIC );
+    recalcVariables( VT_ALL );
     emit sigProgress( -1 );
 
     setModified( false );
