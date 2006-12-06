@@ -76,17 +76,16 @@ int SheetAdaptor::cellRow( const QString& cellname )
     return cellLocation(cellname).x();
 }
 
-int SheetAdaptor::cellColumn( const QString& cellname );
+int SheetAdaptor::cellColumn( const QString& cellname )
 {
     return cellLocation(cellname).y();
 }
 
 QPoint SheetAdaptor::cellLocation( const QString& cellname )
 {
-    const QRect rect = (*Region( m_sheet->doc()->map(), name, m_sheet ).constBegin())->rect();
-    if ( rect.isNull() ) return QString();
-    const QPoint location = rect.topLeft();
-    return cell(location.x(), location.y());
+    const QRect rect = (*Region( m_sheet->doc()->map(), cellname, m_sheet ).constBegin())->rect();
+    if ( rect.isNull() ) return QPoint();
+    return rect.topLeft();
 }
 
 QString SheetAdaptor::text( int x, int y )
