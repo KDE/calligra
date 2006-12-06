@@ -612,7 +612,9 @@ void EmbeddedChart::loadOasis(const KoXmlElement &element, KoOasisLoadingContext
         setDataArea( range.range() );
     }
 
-    chart()->setCanChangeValue( false  );
+    KoChart::Part* chartPart = chart();
+    if ( chartPart )
+        chartPart->setCanChangeValue( false  );
 }
 
 
@@ -667,14 +669,16 @@ bool EmbeddedChart::loadDocument( KoStore* _store )
 
     update();
 
-    chart()->setCanChangeValue( false  );
+    KoChart::Part* chartPart = chart();
+    if ( chartPart )
+        chartPart->setCanChangeValue( false  );
     return true;
 }
 
 KoChart::Part* EmbeddedChart::chart()
 {
-    assert( m_embeddedObject->document()->inherits( "KoChart::Part" ) );
-    return static_cast<KoChart::Part *>( m_embeddedObject->document() );
+    // Returns 0 when the chart couldn't be loaded and we get KoUnavailPart instead.
+    return qobject_cast<KoChart::Part *>( m_embeddedObject->document() );
 }
 
 /**********************************************************
