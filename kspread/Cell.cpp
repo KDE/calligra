@@ -3071,13 +3071,6 @@ bool Cell::operator==( const Cell& other ) const
     return false;
   if ( d->value != other.d->value )
     return false;
-  // FIXME KSPREAD_NEW_STYLE_STORAGE // comparison
-  if ( !isDefault() && !other.isDefault() && style() != other.style() )
-    return false;
-  if ( !isDefault() && !other.isDefault() && conditions() != other.conditions() )
-    return false;
-  if ( !isDefault() && !other.isDefault() && validity() != other.validity() )
-    return false;
   if ( d->hasExtra() )
   {
     if ( !other.d->hasExtra() )

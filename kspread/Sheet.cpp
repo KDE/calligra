@@ -4066,21 +4066,29 @@ void Sheet::usedArea( int& maxCols, int& maxRows )
 
 bool Sheet::compareRows( int row1, int row2, int& maxCols ) const
 {
-  if ( *rowFormat( row1 ) != *rowFormat( row2 ) )
-  {
-//     kDebug(36003) << "\t Formats of " << row1 << " and " << row2 << " are different" << endl;
-    return false;
-  }
-  // FIXME Stefan: Make use of the cluster functionality.
-  for ( int col = 1; col <= maxCols; ++col )
-  {
-    if ( *cellAt( col, row1 ) != *cellAt( col, row2 ) )
+    if ( *rowFormat( row1 ) != *rowFormat( row2 ) )
     {
-//       kDebug(36003) << "\t Cell at column " << col << " in row " << row2 << " differs from the one in row " << row1 << endl;
-      return false;
+//         kDebug(36003) << "\t Formats of " << row1 << " and " << row2 << " are different" << endl;
+        return false;
     }
-  }
-  return true;
+    // TODO Stefan: Make use of the cluster functionality.
+    for ( int col = 1; col <= maxCols; ++col )
+    {
+        if ( *cellAt( col, row1 ) != *cellAt( col, row2 ) )
+        {
+//             kDebug(36003) << "\t Cell at column " << col << " in row " << row2 << " differs from the one in row " << row1 << endl;
+            return false;
+        }
+        if ( style( col, row1 ) != style( col, row2 ) )
+            return false;
+        if ( comment( col, row1 ) != comment( col, row2 ) )
+            return false;
+        if ( conditions( col, row1 ) != conditions( col, row2 ) )
+            return false;
+        if ( validity( col, row1 ) != validity( col, row2 ) )
+            return false;
+    }
+    return true;
 }
 
 
