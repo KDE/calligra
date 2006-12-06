@@ -34,7 +34,6 @@ using namespace KSpread;
 
 AbstractDataManipulator::AbstractDataManipulator ()
 {
-  m_format = false;
 }
 
 AbstractDataManipulator::~AbstractDataManipulator ()

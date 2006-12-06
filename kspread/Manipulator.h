@@ -70,12 +70,6 @@ public:
    */
   void setCreation(bool creation) { m_creation = creation; }
 
-  /** Is this a formatting manipulator ? If so, execute will call
-  process(Format*) for each complete row/column, instead of going
-  cell-by-cell. True by default. */
-  bool format() { return m_format; };
-  void setFormat (bool f) { m_format = f; };
-
   /**
    * Executes the actual operation.
    */
@@ -124,14 +118,6 @@ protected:
    * Processes \p cell .
    */
   virtual bool process(Cell* cell) { Q_UNUSED(cell); return true; }
-  /**
-   * Processes \p format , a column format.
-   */
-  virtual bool process(ColumnFormat* format) { Q_UNUSED(format); return true; }
-  /**
-   * Processes \p format , a row format.
-   */
-  virtual bool process(RowFormat* format) { Q_UNUSED(format); return true; }
 
   /**
    * Preprocessing the region.
@@ -152,7 +138,6 @@ protected:
   bool   m_creation  : 1;
   bool   m_reverse   : 1;
   bool   m_firstrun  : 1;
-  bool   m_format    : 1;
   bool   m_register  : 1;
   bool   m_protcheck : 1;
 private:

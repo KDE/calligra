@@ -329,7 +329,6 @@ bool BorderColorManipulator::postProcessing()
 IncreasePrecisionManipulator::IncreasePrecisionManipulator()
   : Manipulator()
 {
-  m_format = false;
 }
 
 bool IncreasePrecisionManipulator::process( Element* element )

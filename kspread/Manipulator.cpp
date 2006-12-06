@@ -65,7 +65,6 @@ Manipulator::Manipulator()
     m_creation(true),
     m_reverse(false),
     m_firstrun(true),
-    m_format(true),
     m_register(true),
     m_protcheck(true)
 {
@@ -153,29 +152,7 @@ bool Manipulator::process(Element* element)
     return true;
   }
 
-  QRect range = element->rect();
-  if (m_format && element->isColumn())
-  {
-    for (int col = range.left(); col <= range.right(); ++col)
-    {
-      kDebug() << "Processing column " << col << "." << endl;
-      ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
-      process(format);
-        // TODO Stefan: process cells with this property
-    }
-  }
-  else if (m_format && element->isRow())
-  {
-    for (int row = range.top(); row <= range.bottom(); ++row)
-    {
-      kDebug() << "Processing row " << row << "." << endl;
-      RowFormat* format = sheet->nonDefaultRowFormat(row);
-      process(format);
-        // TODO Stefan: process cells with this property
-    }
-  }
-  else
-  {
+    QRect range = element->rect();
     kDebug() << "Processing cell(s) at " << range << "." << endl;
     for (int col = range.left(); col <= range.right(); ++col)
     {
@@ -197,8 +174,7 @@ bool Manipulator::process(Element* element)
       sheet->checkRangeVBorder(range.bottom());
     }
     sheet->checkRangeHBorder(range.right());
-  }
-  return true;
+    return true;
 }
 
 bool Manipulator::mainProcessing()
@@ -539,7 +515,6 @@ bool MergeManipulator::postProcessing()
 CommentManipulator::CommentManipulator()
     : Manipulator()
 {
-    m_format = false;
 }
 
 bool CommentManipulator::process( Element* element )
@@ -601,7 +576,6 @@ QString CommentManipulator::name() const
 ConditionalManipulator::ConditionalManipulator()
   : Manipulator()
 {
-  m_format = false;
 }
 
 bool ConditionalManipulator::process( Cell* cell )
@@ -647,7 +621,6 @@ QString ConditionalManipulator::name() const
 ValidityManipulator::ValidityManipulator()
   : Manipulator()
 {
-  m_format = false;
 }
 
 bool ValidityManipulator::process( Cell* cell )
