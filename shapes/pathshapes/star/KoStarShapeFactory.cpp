@@ -33,8 +33,8 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
 
     KoShapeTemplate t;
     t.id = KoPathShapeId;
-    t.name = "Star";
-    t.toolTip = "A star";
+    t.name = i18n("Star");
+    t.toolTip = i18n("A star");
     t.icon = "star";
     KoProperties *props = new KoProperties();
     props->setProperty( "corners", 5 );
@@ -45,9 +45,9 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     addTemplate(t);
 
     t.id = KoPathShapeId;
-    t.name = "Flower";
-    t.toolTip = "A flower";
-    t.icon = "";
+    t.name = i18n("Flower");
+    t.toolTip = i18n("A flower");
+    t.icon = ""; //TODO add it
     props = new KoProperties();
     props->setProperty( "corners", 5 );
     props->setProperty( "baseRadius", 10.0 );

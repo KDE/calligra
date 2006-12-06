@@ -31,16 +31,16 @@ KoRegularPolygonShapeFactory::KoRegularPolygonShapeFactory(QObject *parent)
 	setToolTip(i18n("A regular polygon shape"));
 
 	KoShapeTemplate t;
-	t.name = "Nice pentagon";
-	t.toolTip = "A nice pentagon";
+	t.name = i18n("Nice pentagon");
+	t.toolTip = i18n("A nice pentagon");
 	t.icon = "redSquare";
 	KoProperties *props = new KoProperties();
 	props->setProperty("points", 5);
 	t.properties = props;
 	addTemplate(t);
 
-	t.name = "Nice hexagon";
-	t.toolTip = "A nice hexagon";
+	t.name = i18n("Nice hexagon");
+	t.toolTip = i18n("A nice hexagon");
 	t.icon = "redSquare";
 	props = new KoProperties();
 	props->setProperty("points", 6);
