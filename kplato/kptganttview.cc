@@ -172,17 +172,6 @@ void GanttView::setShowTaskLinks( bool on )
 void GanttView::draw( Project &project )
 {
     m_project = &project;
-    //kDebug()<<k_funcinfo<<endl;
-    Schedule::Type type = Schedule::Expected;
-    if ( m_showOptimistic ) {
-        type = Schedule::Optimistic;
-    } else if ( m_showPessimistic ) {
-        type = Schedule::Pessimistic;
-    }
-    Schedule *sch = project.findSchedule( type );
-    if ( sch ) {
-        project.setCurrentSchedule( sch->id() );
-    }
     //kDebug()<<k_funcinfo<<"Schedule: "<<(sch?sch->typeToString():"None")<<endl;
     m_gantt->setUpdateEnabled( false );
 
@@ -207,17 +196,6 @@ void GanttView::drawChanges( Project &project )
 void GanttView::drawChanges()
 {
     //kDebug()<<k_funcinfo<<endl;
-    Schedule::Type type = Schedule::Expected;
-    if ( m_showOptimistic ) {
-        type = Schedule::Optimistic;
-    } else if ( m_showPessimistic ) {
-        type = Schedule::Pessimistic;
-    }
-    Schedule *sch = m_project->findSchedule( type );
-    if ( sch ) {
-        m_project->setCurrentSchedule( sch->id() );
-    }
-    //kDebug()<<k_funcinfo<<"Schedule: "<<(sch?sch->typeToString():"None")<<endl;
     m_gantt->setUpdateEnabled( false );
     resetDrawn( m_gantt->firstChild() );
     updateChildren( m_project ); // don't draw project

@@ -94,6 +94,23 @@ protected:
     bool m_readWrite;
 };
 
+class TreeViewBase : public QTreeView
+{
+    Q_OBJECT
+public:
+    TreeViewBase( QWidget *parent );
+
+    void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
+    bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
+
+protected:
+    void keyPressEvent(QKeyEvent *event);
+    
+protected:
+    bool m_arrowKeyNavigation;
+};
+
+
 } // namespace KPlato
 
 #endif

@@ -212,7 +212,7 @@ bool Task::load(QDomElement &element, Project &project) {
 
             if (e.tagName() == "project") {
                 // Load the subproject
-                Project *child = new Project(this);
+/*                Project *child = new Project(this);
                 if (child->load(e)) {
                     if (!project.addSubTask(child, this)) {
                         delete child;  // TODO: Complain about this
@@ -220,7 +220,7 @@ bool Task::load(QDomElement &element, Project &project) {
                 } else {
                     // TODO: Complain about this
                     delete child;
-                }
+                }*/
             } else if (e.tagName() == "task") {
                 // Load the task
                 Task *child = new Task(this);
@@ -612,11 +612,12 @@ DateTime Task::calculatePredeccessors(const QList<Relation*> &list, int use) {
     return time;
 }
 DateTime Task::calculateForward(int use) {
-    //kDebug()<<k_funcinfo<<m_name<<<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<endl;
     if (m_currentSchedule == 0) {
         return DateTime();
     }
     Schedule *cs = m_currentSchedule;
+    bool pert = cs->usePert();
     if (m_visitedForward) {
     //kDebug()<<earliestStart.toString()<<" + "<<m_durationBackward.toString()<<" "<<m_name<<" calculateForward() (visited)"<<endl;
         return cs->earliestStart + m_durationForward;
@@ -635,7 +636,7 @@ DateTime Task::calculateForward(int use) {
         }
     }
     if (type() == Node::Type_Task) {
-        m_durationForward = m_effort->effort(use);
+        m_durationForward = m_effort->effort(use, pert);
         switch (constraint()) {
             case Node::ASAP:
             case Node::ALAP:
@@ -743,6 +744,7 @@ DateTime Task::calculateBackward(int use) {
         return DateTime();
     }
     Schedule *cs = m_currentSchedule;
+    bool pert = cs->usePert();
     if (m_visitedBackward) {
     //kDebug()<<latestFinish.toString()<<" - "<<m_durationBackward.toString()<<" "<<m_name<<" calculateBackward() (visited)"<<endl;
         return cs->latestFinish - m_durationBackward;
@@ -762,7 +764,7 @@ DateTime Task::calculateBackward(int use) {
     }
     //kDebug()<<k_funcinfo<<m_name<<": latestFinish="<<cs->latestFinish<<endl;
     if (type() == Node::Type_Task) {
-        m_durationBackward = m_effort->effort(use);
+        m_durationBackward = m_effort->effort(use, pert);
         switch (constraint()) {
             case Node::ASAP:
             case Node::ALAP:
@@ -868,6 +870,7 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
         return DateTime();
     }
     Schedule *cs = m_currentSchedule;
+    bool pert = cs->usePert();
     if (m_visitedForward) {
         return cs->endTime;
     }
@@ -887,7 +890,7 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
     }
     //kDebug()<<k_funcinfo<<m_name<<" startTime="<<cs->startTime<<endl;
     if(type() == Node::Type_Task) {
-        cs->duration = m_effort->effort(use);
+        cs->duration = m_effort->effort(use, pert);
         switch (m_constraint) {
         case Node::ASAP:
             // cs->startTime calculated above
@@ -1062,6 +1065,7 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
         return DateTime();
     }
     Schedule *cs = m_currentSchedule;
+    bool pert = cs->usePert();
     if (m_visitedBackward) {
         return cs->startTime;
     }
@@ -1078,7 +1082,7 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
         cs->endTime = time;
     }
     if (type() == Node::Type_Task) {
-        cs->duration = m_effort->effort(use);
+        cs->duration = m_effort->effort(use, pert);
         switch (m_constraint) {
         case Node::ASAP: {
             // cs->endTime calculated above
@@ -1491,7 +1495,7 @@ bool Task::effortMetError() const {
     if (m_currentSchedule->notScheduled) {
         return false;
     }
-    return m_currentSchedule->plannedEffort() < effort()->effort(static_cast<Effort::Use>(m_currentSchedule->type()));
+    return m_currentSchedule->plannedEffort() < effort()->effort(static_cast<Effort::Use>(m_currentSchedule->type()),  m_currentSchedule->usePert());
 }
 
 #ifndef NDEBUG

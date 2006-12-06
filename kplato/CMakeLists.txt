@@ -15,6 +15,7 @@ set(libkplatopart_SRCS
     kptitemmodelbase.cc
     kpttaskeditor.cc
     kptresourceeditor.cc
+    kptscheduleeditor.cc
     kptdurationwidget.cc
     kptsummarytaskdialog.cc
     kptsummarytaskgeneralpanel.cc
@@ -96,6 +97,7 @@ kde4_add_ui_files(libkplatopart_SRCS
     kptconfigtaskpanelbase.ui
 )
 
+
 ########### next target ###############
 
 set(kplatopart_PART_SRCS kptfactoryinit.cc ${libkdgantt_SRCS} ${libkplatopart_SRCS} )
@@ -129,10 +131,7 @@ install(TARGETS kplato  DESTINATION ${BIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kplatopart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  kplato.rc kplato_readonly.rc  
-                kplato_taskeditor.rc 
-                kplato_resourceeditor.rc 
-         DESTINATION ${DATA_INSTALL_DIR}/kplato)
+install( FILES  kplato.rc kplato_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kplato)
 install( FILES  kplato.desktop  DESTINATION ${XDG_APPS_DIR})
 
 

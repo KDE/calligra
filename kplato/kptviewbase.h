@@ -21,8 +21,7 @@
 #define KPLATO_VIEWBASE
 
 #include <KoView.h>
-
-class KoDocument;
+#include <QMap>
 
 class KParts::GUIActivateEvent;
 class KXMLGUIFactory;
@@ -33,21 +32,26 @@ namespace KPlato
 {
 
 class View;
+class Part;
 class Project;
 class Node;
 class Resource;
 class ResourceGroup;
 
+/** 
+ ViewBase is the baseclass of all sub-views to View.
+
+*/
 class ViewBase : public KoView
 {
     Q_OBJECT
 public:
-    ViewBase(KoDocument *doc, QWidget *parent);
-    ViewBase(View *mainview, QWidget *parent);
+    ViewBase(Part *doc, QWidget *parent);
 
-    View *mainView() const;
     virtual ~ViewBase() {}
 
+    Part *part() const;
+    
     virtual void setZoom(double /*zoom*/) {}
     virtual void draw() {}
     virtual void draw(Project &/*project*/) {}
@@ -62,15 +66,23 @@ public:
     /// Reimplement if your view handles resource groups
     virtual ResourceGroup* currentResourceGroup() const { return 0; }
 
+    /// Returns the list of action lists that shall be plugged/unplugged
+    QStringList actionListNames() const { return m_actionListMap.keys(); }
+    /// Returns the list of actions associated with the action list name
+    QList<KAction*> actionList( const QString name ) const { return m_actionListMap[name]; }
+    /// Add an action to the specified action list
+    void addAction( const QString list, KAction *action ) { m_actionListMap[list].append( action ); }
+    
 public slots:
-    virtual void setViewActive( bool active, KXMLGUIFactory *factory=0 );
+    /// Activate/deactivate the gui
+    virtual void setGuiActive( bool activate );
 
+signals:
+    /// Emitted when the gui has been activated or deactivated
+    void guiActivated( ViewBase*, bool );
+    
 protected:
-    virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
-    virtual void addActions( KXMLGUIFactory *factory );
-    virtual void removeActions();
-
-    View *m_mainview;
+    QMap<QString, QList<KAction*> > m_actionListMap;
 
 };
 

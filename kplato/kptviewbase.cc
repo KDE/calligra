@@ -19,68 +19,38 @@
 
 #include "kptviewbase.h"
 
+#include "kptpart.h"
 #include "kptproject.h"
 #include "kptview.h"
 
 #include <kparts/event.h>
 #include <kxmlguifactory.h>
 
+#include <KoDocument.h>
+
 
 namespace KPlato
 {
     
 //--------------
-ViewBase::ViewBase(View *mainview, QWidget *parent)
-    : KoView( mainview->koDocument(), parent ), //QWidget(parent),
-    m_mainview(mainview)
-{
-}
-
-ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
-    : KoView( doc, parent ), //QWidget(parent),
-    m_mainview(0)
+ViewBase::ViewBase(Part *doc, QWidget *parent)
+    : KoView( doc, parent )
 {
 }
     
-View *ViewBase::mainView() const
+Part *ViewBase::part() const
 {
-    return m_mainview;
+     return static_cast<Part*>( koDocument() );
 }
 
 void ViewBase::updateReadWrite( bool /*readwrite*/ )
 {
 }
 
-void ViewBase::guiActivateEvent( KParts::GUIActivateEvent *ev )
+void ViewBase::setGuiActive( bool active ) // virtual slot
 {
-    KoView *v = dynamic_cast<KoView*>( parentWidget() );
-    KXMLGUIFactory *f = 0;
-    if ( m_mainview ) {
-        f = m_mainview->factory();
-    }
-    kDebug()<<k_funcinfo<<this<<" "<<ev->activated()<<", "<<f<<endl;
-    setViewActive( ev->activated(), f );
-}
-void ViewBase::setViewActive( bool active, KXMLGUIFactory*) // slot
-{
-/*    if ( mainView() )
-    mainView()->setTaskActionsEnabled( this, active );*/
-}
-
-void ViewBase::addActions( KXMLGUIFactory *factory )
-{
-    //kDebug()<<k_funcinfo<<this<<endl;
-    if (factory ) {
-        factory->addClient( this );
-    }
-}
-
-void ViewBase::removeActions()
-{
-    //kDebug()<<k_funcinfo<<this<<endl;
-    if ( factory() ) {
-        factory()->removeClient( this );
-    }
+    kDebug()<<k_funcinfo<<active<<endl;
+    emit guiActivated( this, active );
 }
 
 } // namespace KPlato

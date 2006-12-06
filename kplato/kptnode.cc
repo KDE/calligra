@@ -358,7 +358,7 @@ Duration Node::duration(const DateTime &time, int use, bool backward) {
         kError()<<k_funcinfo<<"No current schedule"<<endl;
     }
     kDebug()<<k_funcinfo<<m_name<<": Use="<<use<<endl;
-    return calcDuration(time, m_effort->effort(use), backward);
+    return calcDuration(time, m_effort->effort(use, m_currentSchedule->usePert()), backward);
 }
 
 void Node::makeAppointments() {
@@ -692,6 +692,16 @@ Schedule *Node::findSchedule(const QString name, const Schedule::Type type) {
     return 0;
 }
 
+Schedule *Node::findSchedule(const QString name) {
+    QList<Schedule*> it = m_schedules.values();
+    foreach (Schedule *sch, it) {
+        if (!sch->isDeleted() && sch->name() == name)
+            return sch;
+    }
+    return 0;
+}
+
+
 Schedule *Node::findSchedule(const Schedule::Type type) {
     //kDebug()<<k_funcinfo<<m_name<<" find type="<<type<<" nr="<<m_schedules.count()<<endl;
     QHash<long, Schedule*> hash;
@@ -854,13 +864,13 @@ Duration Effort::pertPessimistic() const {
     return m_pessimisticEffort;
 }
 
-Duration Effort::effort(int use) const {
-    if (use == Effort::Use_Expected) {
-        return pertExpected();
-    } else if (use == Effort::Use_Optimistic) {
-        return pertOptimistic();
-    } else if (use == Effort::Use_Pessimistic)
-        return pertPessimistic();
+Duration Effort::effort(int valueType, bool pert) const {
+    if (valueType == Effort::Use_Expected) {
+        return pert ? pertExpected() : m_expectedEffort;
+    } else if (valueType == Effort::Use_Optimistic) {
+        return pert ? pertOptimistic() : m_optimisticEffort;
+    } else if (valueType == Effort::Use_Pessimistic)
+        return pert ? pertPessimistic() : m_pessimisticEffort;
     
     return m_expectedEffort; // default
 }

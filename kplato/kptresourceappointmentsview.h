@@ -55,13 +55,12 @@ class ResourceAppointmentsView : public DoubleListViewBase
     Q_OBJECT
 public:
 
-    ResourceAppointmentsView(View *view, QWidget *parent);
+    ResourceAppointmentsView( QWidget *parent );
 
     //~ResourceAppointmentsView();
 
     void zoom(double zoom);
 
-    View *mainView() const { return m_mainview; }
     void draw(Resource *resource, const QDate &start, const QDate &end);
     void draw();
     void print(KPrinter &printer);
@@ -88,8 +87,6 @@ private:
     };
     
 private:
-    View *m_mainview;
-    
     int m_defaultFontSize;
     Resource *m_resource;
     QDate m_start;

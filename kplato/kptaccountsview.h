@@ -60,7 +60,7 @@ class AccountsView : public ViewBase
     Q_OBJECT
 public:
 
-    AccountsView( Project &project, View *view, QWidget *parent );
+    AccountsView( Project &project, Part *part, QWidget *parent );
 
     //~AccountsView();
 

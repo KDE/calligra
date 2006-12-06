@@ -37,6 +37,7 @@ namespace KPlato
 class ResListView;
 
 class View;
+class Part;
 class Project;
 class Resource;
 class Node;
@@ -82,7 +83,7 @@ class ResourceView : public ViewBase
     Q_OBJECT
 
 public:
-    ResourceView( View *view, QWidget *parent );
+    ResourceView( Part *part, QWidget *parent );
 
     //~ResourceView();
 

@@ -970,34 +970,81 @@ private:
 };
 
 
-class CalculateProjectCmd : public NamedCommand
+class AddScheduleManagerCmd : public NamedCommand
 {
 public:
-    CalculateProjectCmd( Part *part, Project &project, const QString& tname, int type, const QString& name = QString() );
+    AddScheduleManagerCmd( Part *part, Project &project, ScheduleManager *sm, QString name = 0 );
+    ~AddScheduleManagerCmd();
     void execute();
     void unexecute();
 
 private:
     Project &m_node;
-    QString m_typename;
-    int m_type;
-    Schedule *newSchedule;
-    Schedule *oldCurrent;
+    ScheduleManager *m_sm;
+    bool m_mine;
 };
 
-class RecalculateProjectCmd : public NamedCommand
+class DeleteScheduleManagerCmd : public AddScheduleManagerCmd
 {
 public:
-    RecalculateProjectCmd( Part *part, Project &project, Schedule &sch, const QString& name = QString() );
+    DeleteScheduleManagerCmd( Part *part, Project &project, ScheduleManager *sm, QString name = 0 );
+    void execute();
+    void unexecute();
+};
+
+class ModifyScheduleManagerNameCmd : public NamedCommand
+{
+public:
+    ModifyScheduleManagerNameCmd( Part *part,ScheduleManager &sm, QString value, QString name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+    QString oldvalue, newvalue;
+};
+
+class ModifyScheduleManagerDistributionCmd : public NamedCommand
+{
+public:
+    ModifyScheduleManagerDistributionCmd( Part *part,ScheduleManager &sm, bool value, QString name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+    bool oldvalue, newvalue;
+};
+
+class ModifyScheduleManagerCalculateAllCmd : public NamedCommand
+{
+public:
+    ModifyScheduleManagerCalculateAllCmd( Part *part,ScheduleManager &sm, bool value, QString name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+    bool oldvalue, newvalue;
+};
+
+class CalculateScheduleCmd : public NamedCommand
+{
+public:
+    CalculateScheduleCmd( Part *part, Project &project, ScheduleManager &sm, QString name = 0 );
     void execute();
     void unexecute();
 
 private:
     Project &m_node;
-    Schedule &oldSchedule;
-    Schedule *newSchedule;
-    bool oldDeleted;
-    Schedule *oldCurrent;
+    ScheduleManager &m_sm;
+    bool m_first;
+    MainSchedule *m_oldexpected;
+    MainSchedule *m_oldoptimistic;
+    MainSchedule *m_oldpessimistic;
+    MainSchedule *m_newexpected;
+    MainSchedule *m_newoptimistic;
+    MainSchedule *m_newpessimistic;
 };
 
 class ModifyStandardWorktimeYearCmd : public NamedCommand

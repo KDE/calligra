@@ -36,6 +36,8 @@ class DateTime;
 class Duration;
 class Node;
 class Task;
+class ScheduleManager;
+class XMLLoaderObject;
 
 /**
  * The Schedule class holds data calculated during project
@@ -78,6 +80,8 @@ public:
 
     virtual Resource *resource() const { return 0; }
     virtual Node *node() const { return 0; }
+    
+    virtual bool usePert() const;
 
     virtual bool loadXML( const QDomElement &element );
     virtual void saveXML( QDomElement &element ) const;
@@ -160,6 +164,8 @@ public:
     DateTime start() const { return startTime; }
     DateTime end() const { return endTime; }
 
+    QStringList state() const;
+    
 protected:
     QString m_name;
     Type m_type;
@@ -174,6 +180,7 @@ protected:
     friend class Project;
     friend class Resource;
     friend class RecalculateProjectCmd;
+    friend class ScheduleManager;
     /**
       * earliestStart is calculated by PERT/CPM.
       * A task may be scheduled to start later because of constraints
@@ -307,16 +314,79 @@ public:
     MainSchedule( Node *node, const QString& name, Schedule::Type type, long id );
     ~MainSchedule();
     virtual bool isDeleted() const { return m_deleted; }
+    
+    virtual bool usePert() const;
 
     virtual bool loadXML( const QDomElement &element, Project &project );
     virtual void saveXML( QDomElement &element ) const;
 
+    void setManager( ScheduleManager *sm ) { m_manager = sm; }
+    ScheduleManager *manager() const { return m_manager; }
+    
+    int numSchedules() const;
+    int indexOf( MainSchedule *sch ) const;
+    
 private:
+    ScheduleManager *m_manager;
 
 #ifndef NDEBUG
 public:
     virtual void printDebug( const QString& ident );
 #endif
+};
+
+/**
+ ScheduleManager is used by the Project class to manage the schedules.
+ Each ScheduleManager manages a schedule group that can consist of 
+ Expected-, Optimistic- and Pessimistic schedules.
+ */
+class ScheduleManager
+{
+public:
+    ScheduleManager( Project &project, const QString name = QString() );
+
+    void setName( QString name );
+    QString name() const { return m_name; }
+
+    void createSchedules();
+    
+    void setDeleted( bool on );
+    
+    void setExpected( MainSchedule *sch );
+    MainSchedule *expected() const { return m_expected; }
+
+    void setOptimistic( MainSchedule *sch );
+    MainSchedule *optimistic() const { return m_optimistic; }
+
+    void setPessimistic( MainSchedule *sch );
+    MainSchedule *pessimistic() const { return m_pessimistic; }
+
+    QStringList state() const;
+
+    void setUsePert( bool on );
+    bool usePert() const { return m_usePert; }
+
+    void setCalculateAll( bool on );
+    bool calculateAll() const { return m_calculateAll; }
+
+    QList<MainSchedule*> schedules() const;
+    int numSchedules() const;
+    int indexOf( MainSchedule *sch ) const;
+
+    bool loadXML( QDomElement &element, XMLLoaderObject &status );
+    void saveXML( QDomElement &element ) const;
+    
+protected:
+    MainSchedule *loadMainSchedule( QDomElement &element, XMLLoaderObject &status );
+    
+protected:
+    Project &m_project;
+    QString m_name;
+    bool m_calculateAll;
+    bool m_usePert;
+    MainSchedule *m_expected;
+    MainSchedule *m_optimistic;
+    MainSchedule *m_pessimistic;
 };
 
 

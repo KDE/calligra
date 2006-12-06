@@ -1976,74 +1976,150 @@ void ProjectModifyEndTimeCmd::unexecute()
     setCommandType( 1 );
 }
 
-CalculateProjectCmd::CalculateProjectCmd( Part *part, Project &node, const QString& tname, int type, const QString& name )
-        : NamedCommand( part, name ),
-        m_node( node ),
-        m_typename( tname ),
-        m_type( type ),
-        newSchedule( 0 )
+//----------------------------
+AddScheduleManagerCmd::AddScheduleManagerCmd( Part *part, Project &node, ScheduleManager *sm, QString name )
+    : NamedCommand( part, name ),
+    m_node( node ),
+    m_sm( sm ),
+    m_mine( true)
 {
-
-    oldCurrent = node.currentSchedule();
-    //kDebug()<<k_funcinfo<<type<<endl;
 }
-void CalculateProjectCmd::execute()
+
+AddScheduleManagerCmd::~AddScheduleManagerCmd()
 {
-    if ( newSchedule == 0 ) {
-        //kDebug()<<k_funcinfo<<" create schedule"<<endl;
-        newSchedule = m_node.createSchedule( m_typename, ( Schedule::Type ) m_type );
-        m_node.calculate( newSchedule );
-    } else {
-        //kDebug()<<k_funcinfo<<" redo"<<endl;
-        newSchedule->setDeleted( false );
-        m_node.setCurrentSchedulePtr( newSchedule );
+    if ( m_mine )
+        delete m_sm;
+}
+
+void AddScheduleManagerCmd::execute()
+{
+    m_node.addScheduleManager( m_sm );
+    m_sm->setDeleted( false );
+    m_mine = false;
+}
+
+void AddScheduleManagerCmd::unexecute()
+{
+    m_node.takeScheduleManager( m_sm );
+    m_sm->setDeleted( true );
+    m_mine = true;
+}
+
+DeleteScheduleManagerCmd::DeleteScheduleManagerCmd( Part *part, Project &node, ScheduleManager *sm, QString name )
+    : AddScheduleManagerCmd( part, node, sm, name )
+{
+}
+
+void DeleteScheduleManagerCmd::execute()
+{
+    AddScheduleManagerCmd::unexecute();
+}
+
+void DeleteScheduleManagerCmd::unexecute()
+{
+    AddScheduleManagerCmd::execute();
+}
+
+ModifyScheduleManagerNameCmd::ModifyScheduleManagerNameCmd( Part *part, ScheduleManager &sm, QString value, QString name )
+    : NamedCommand( part, name ),
+    m_sm( sm ),
+    oldvalue( sm.name() ),
+    newvalue( value )
+{
+}
+
+void ModifyScheduleManagerNameCmd::execute()
+{
+    m_sm.setName( newvalue );
+}
+
+void ModifyScheduleManagerNameCmd::unexecute()
+{
+    m_sm.setName( oldvalue );
+}
+
+ModifyScheduleManagerDistributionCmd::ModifyScheduleManagerDistributionCmd( Part *part, ScheduleManager &sm, bool value, QString name )
+    : NamedCommand( part, name ),
+    m_sm( sm ),
+    oldvalue( sm.usePert() ),
+    newvalue( value )
+{
+}
+
+void ModifyScheduleManagerDistributionCmd::execute()
+{
+    m_sm.setUsePert( newvalue );
+}
+
+void ModifyScheduleManagerDistributionCmd::unexecute()
+{
+    m_sm.setUsePert( oldvalue );
+}
+
+ModifyScheduleManagerCalculateAllCmd::ModifyScheduleManagerCalculateAllCmd( Part *part, ScheduleManager &sm, bool value, QString name )
+    : NamedCommand( part, name ),
+    m_sm( sm ),
+    oldvalue( sm.calculateAll() ),
+    newvalue( value )
+{
+}
+
+void ModifyScheduleManagerCalculateAllCmd::execute()
+{
+    m_sm.setCalculateAll( newvalue );
+}
+
+void ModifyScheduleManagerCalculateAllCmd::unexecute()
+{
+    m_sm.setCalculateAll( oldvalue );
+}
+
+CalculateScheduleCmd::CalculateScheduleCmd( Part *part, Project &node, ScheduleManager &sm, QString name )
+    : NamedCommand( part, name ),
+    m_node( node ),
+    m_sm( sm ),
+    m_first( true ),
+    m_oldexpected( m_sm.expected() ),
+    m_oldoptimistic( m_sm.optimistic() ),
+    m_oldpessimistic( m_sm.pessimistic() ),
+    m_newexpected( 0 ),
+    m_newoptimistic( 0 ),
+    m_newpessimistic( 0 )
+{
+ 
+}
+
+void CalculateScheduleCmd::execute()
+{
+    m_sm.setDeleted( true );
+    
+    if ( m_first ) {
+        m_first = false;
+        m_node.calculate( m_sm );
+        m_newexpected = m_sm.expected();
+        m_newoptimistic = m_sm.optimistic();
+        m_newpessimistic = m_sm.pessimistic();
+        return;
     }
-    setCommandType( 0 );
+    m_sm.setExpected( m_newexpected );
+    m_sm.setOptimistic( m_newoptimistic );
+    m_sm.setPessimistic( m_newpessimistic );
+    m_sm.setDeleted( false );
+    
 }
-void CalculateProjectCmd::unexecute()
+
+void CalculateScheduleCmd::unexecute()
 {
-    //kDebug()<<k_funcinfo<<endl;
-    newSchedule->setDeleted( true );
-    m_node.setCurrentSchedulePtr( oldCurrent );
-
-    setCommandType( 0 );
+    m_sm.setDeleted( true );
+    
+    m_sm.setExpected( m_oldexpected );
+    m_sm.setOptimistic( m_oldoptimistic );
+    m_sm.setPessimistic( m_oldpessimistic );
+    
+    m_sm.setDeleted( false );
 }
 
-RecalculateProjectCmd::RecalculateProjectCmd( Part *part, Project &node, Schedule &sch, const QString& name )
-        : NamedCommand( part, name ),
-        m_node( node ),
-        oldSchedule( sch ),
-        newSchedule( 0 ),
-        oldDeleted( sch.isDeleted() )
-{
-
-    oldCurrent = node.currentSchedule();
-    //kDebug()<<k_funcinfo<<sch.typeToString()<<"  curr="<<(oldCurrent?oldCurrent->id():-1)<<endl;
-}
-void RecalculateProjectCmd::execute()
-{
-    oldSchedule.setDeleted( true );
-    if ( newSchedule == 0 ) {
-        newSchedule = m_node.createSchedule( oldSchedule.name(), oldSchedule.type() );
-        m_node.calculate( newSchedule );
-    } else {
-        newSchedule->setDeleted( false );
-        m_node.setCurrentSchedulePtr( newSchedule );
-        //kDebug()<<k_funcinfo<<newSchedule->typeToString()<<" redo"<<endl;
-    }
-    setCommandType( 0 );
-}
-void RecalculateProjectCmd::unexecute()
-{
-    //kDebug()<<k_funcinfo<<newSchedule->typeToString()<<(oldCurrent ? oldCurrent->id() : -1)<<endl;
-    newSchedule->setDeleted( true );
-    oldSchedule.setDeleted( oldDeleted );
-    m_node.setCurrentSchedulePtr( oldCurrent );
-
-    setCommandType( 0 );
-}
-
-
+//------------------------
 ModifyStandardWorktimeYearCmd::ModifyStandardWorktimeYearCmd( Part *part, StandardWorktime *wt, double oldvalue, double newvalue, const QString& name )
         : NamedCommand( part, name ),
         swt( wt ),

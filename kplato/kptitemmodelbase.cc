@@ -183,6 +183,91 @@ void ItemModelBase::slotLayoutToBeChanged()
     emit layoutAboutToBeChanged();
 }
 
+TreeViewBase::TreeViewBase( QWidget *parent )
+    : QTreeView( parent ),
+    m_arrowKeyNavigation( true )
+{
+}
+
+/*!
+    \reimp
+ */
+void TreeViewBase::keyPressEvent(QKeyEvent *event)
+{
+    kDebug()<<k_funcinfo<<event->key()<<", "<<m_arrowKeyNavigation<<endl;
+    if ( !m_arrowKeyNavigation ) {
+        QTreeView::keyPressEvent( event );
+        return;
+    }
+    QModelIndex current = currentIndex();
+    if ( current.isValid() ) {
+        switch (event->key()) {
+            case Qt::Key_Right: {
+                if ( current.column() < model()->columnCount() - 1 ) {
+                    QModelIndex i = model()->index( current.row(), current.column() + 1, current.parent() );
+                    selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+                }
+                event->accept();
+                return;
+                break;
+            }
+            case Qt::Key_Left: {
+                if ( current.column() > 0 ) {
+                    QModelIndex i = model()->index( current.row(), current.column() - 1, current.parent() );
+                    selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+                }
+                event->accept();
+                return;
+                break;
+            }
+            case Qt::Key_Down: {
+                QModelIndex i = indexBelow( current );
+                if ( i.isValid() ) {
+                    i = model()->index( i.row(), current.column(), i.parent() );
+                    selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+                }
+                event->accept();
+                return;
+                break;
+            }
+            case Qt::Key_Up: {
+                QModelIndex i = indexAbove( current );
+                if ( i.isValid() ) {
+                    i = model()->index( i.row(), current.column(), i.parent() );
+                    selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+                }
+                event->accept();
+                return;
+                break;
+            }
+            case Qt::Key_Plus:
+                if ( itemsExpandable()) {
+                    if ( model()->hasChildren( current ) ) {
+                        QTreeView::keyPressEvent( event );
+                    //HACK: Bug in qt??
+                        selectionModel()->setCurrentIndex(current, QItemSelectionModel::NoUpdate);
+                    }
+                    event->accept();
+                    return;
+                }
+                break;
+            case Qt::Key_Minus:
+                if ( itemsExpandable() ) {
+                    if ( model()->hasChildren( current ) ) {
+                        QTreeView::keyPressEvent( event );
+                    //HACK: Bug in qt??
+                        selectionModel()->setCurrentIndex(current, QItemSelectionModel::NoUpdate);
+                    }
+                    event->accept();
+                    return;
+                }
+                break;
+        }
+    }
+    QTreeView::keyPressEvent(event);
+}
+
+
 } //namespace KPlato
 
 #include "kptitemmodelbase.moc"

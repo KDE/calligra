@@ -44,6 +44,9 @@ public:
     void setProject(Project *proj) { m_project = proj; }
     Project &project() const { return *m_project; }
     
+    QString version() const { return m_version; }
+    void setVersion( const QString ver ) { m_version = ver; }
+    
     void startLoad() {
         m_timer.start();
         m_starttime = QDateTime::currentDateTime();
@@ -61,6 +64,11 @@ public:
     
     void setLogLevel(Severity sev) { m_logLevel = sev; }
     const QStringList &log() const { return m_log; }
+    void error( QString msg ) { addMsg( Errors, msg ); }
+    void warning( QString msg ) { addMsg( Errors, msg ); }
+    void diagnostic( QString msg ) { addMsg( Diagnostics, msg ); }
+    void debug( QString msg ) { addMsg( Debug, msg ); }
+    void message( QString msg ) { addMsg( None, msg ); }
     void addMsg(int sev, QString msg) {
         increment(sev);
         if (m_logLevel < sev) return;
@@ -93,6 +101,7 @@ protected:
     QDateTime m_starttime;
     QTime m_timer;
     int m_elapsed;
+    QString m_version;
 };
 
 } //namespace KPlato

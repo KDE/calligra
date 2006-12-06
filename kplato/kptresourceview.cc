@@ -24,6 +24,7 @@
 #include "kptresourceappointmentsview.h"
 #include "kptview.h"
 #include "kptnode.h"
+#include "kptpart.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"
@@ -400,8 +401,8 @@ QSize ResourceView::sizeHint() const
 
 //-------------------------------------------------
 
-ResourceView::ResourceView( View *view, QWidget *parent )
-        : ViewBase(view, parent),
+ResourceView::ResourceView( Part *part, QWidget *parent )
+        : ViewBase(part, parent),
         m_selectedItem( 0 )
 {
     QVBoxLayout *l = new QVBoxLayout( this );
@@ -448,9 +449,9 @@ ResourceView::ResourceView( View *view, QWidget *parent )
     //     m_resListView->addColumn(i18n("Overtime Rate"));
 
     m_showAppointments = false;
-    m_appview = new ResourceAppointmentsView( view, m_splitter );
+    m_appview = new ResourceAppointmentsView( m_splitter );
     m_appview->hide();
-    draw( view->getProject() );
+    draw( part->getProject() );
 
     connect( m_resListView, SIGNAL( itemSelectionChanged() ), SLOT( resSelectionChanged() ) );
     connect( m_resListView, SIGNAL( itemActivated( QTreeWidgetItem*, int ) ), SLOT( slotItemActivated( QTreeWidgetItem* ) ) );
@@ -566,7 +567,7 @@ void ResourceView::resSelectionChanged( QTreeWidgetItem *item )
         m_selectedItem = ritem;
         if ( m_showAppointments ) {
             m_appview->show();
-            m_appview->draw( ritem->resource, m_mainview->getProject().startTime().date(), m_mainview->getProject().endTime().date() );
+            m_appview->draw( ritem->resource, part()->getProject().startTime().date(), part()->getProject().endTime().date() );
         } else {
             m_appview->hide();
         }

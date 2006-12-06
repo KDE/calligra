@@ -26,6 +26,7 @@
 #include "kptconfig.h"
 #include "kpteffortcostmap.h"
 #include "kptschedule.h"
+#include "kptxmlloaderobject.h"
 
 #include <qdom.h>
 #include <QString>
@@ -68,9 +69,36 @@ Project::~Project()
         delete m_resourceGroups.takeFirst();
     while ( !m_calendars.isEmpty() )
         delete m_calendars.takeFirst();
+    while ( !m_managers.isEmpty() )
+        delete m_managers.takeFirst();
 }
 
 int Project::type() const { return Node::Type_Project; }
+
+void Project::calculate( ScheduleManager &sm )
+{
+    emit sigProgress( 0 );
+    kDebug()<<k_funcinfo<<endl;
+    emit scheduleToBeAdded( 0 );
+    sm.createSchedules();
+    emit scheduleAdded( 0 );
+    
+    calculate( sm.expected() );
+    emit scheduleChanged( sm.expected() );
+    if ( sm.optimistic() ) {
+        calculate( sm.optimistic() );
+        emit scheduleChanged( sm.optimistic() );
+    }
+    if ( sm.pessimistic() ) {
+        calculate( sm.pessimistic() );
+        emit scheduleChanged( sm.pessimistic() );
+    }
+    setCurrentSchedule( sm.expected()->id() );
+
+    emit sigProgress( 100 );
+    emit sigProgress( -1 );
+
+}
 
 void Project::calculate( Schedule *schedule )
 {
@@ -79,15 +107,6 @@ void Project::calculate( Schedule *schedule )
         return ;
     }
     m_currentSchedule = schedule;
-    calculate();
-}
-
-void Project::calculate( Effort::Use estType )
-{
-    m_currentSchedule = findSchedule( ( Schedule::Type ) estType );
-    if ( m_currentSchedule == 0 ) {
-        m_currentSchedule = createSchedule( i18n( "Standard" ), ( Schedule::Type ) estType );
-    }
     calculate();
 }
 
@@ -126,6 +145,7 @@ void Project::calculate()
         makeAppointments();
         calcResourceOverbooked();
         m_currentSchedule->notScheduled = false;
+        emit scheduleChanged( static_cast<MainSchedule*>( m_currentSchedule ) );
     } else if ( type() == Type_Subproject ) {
         kWarning() << k_funcinfo << "Subprojects not implemented" << endl;
     } else {
@@ -293,7 +313,7 @@ void Project::initiateCalculationLists( QList<Node*> &startnodes, QList<Node*> &
     }
 }
 
-bool Project::load( QDomElement &element )
+bool Project::load( QDomElement &element, XMLLoaderObject &status )
 {
     //kDebug()<<k_funcinfo<<"--->"<<endl;
     QString s;
@@ -376,7 +396,7 @@ bool Project::load( QDomElement &element )
 
             if ( e.tagName() == "project" ) {
                 //kDebug()<<k_funcinfo<<"Sub project--->"<<endl;
-                // Load the subproject
+/*                // Load the subproject
                 Project * child = new Project( this );
                 if ( child->load( e ) ) {
                     if ( !addTask( child, this ) ) {
@@ -385,7 +405,7 @@ bool Project::load( QDomElement &element )
                 } else {
                     // TODO: Complain about this
                     delete child;
-                }
+                }*/
             } else if ( e.tagName() == "task" ) {
                 //kDebug()<<k_funcinfo<<"Task--->"<<endl;
                 // Load the task (and resourcerequests).
@@ -425,25 +445,37 @@ bool Project::load( QDomElement &element )
                 }
                 //kDebug()<<k_funcinfo<<"Relation<---"<<endl;
             } else if ( e.tagName() == "schedules" ) {
-                //kDebug()<<k_funcinfo<<"Project schedules & task appointments--->"<<endl;
-                // Prepare for multiple schedules
+                kDebug()<<k_funcinfo<<"Project schedules & task appointments--->"<<endl;
                 // References tasks and resources
                 QDomNodeList lst = e.childNodes();
                 for ( unsigned int i = 0; i < lst.count(); ++i ) {
                     if ( lst.item( i ).isElement() ) {
                         QDomElement el = lst.item( i ).toElement();
-                        if ( el.tagName() == "schedule" ) {
-                            MainSchedule * sch = new MainSchedule();
-                            if ( sch->loadXML( el, *this ) ) {
-                                addSchedule( sch );
-                                sch->setNode( this );
-                                setParentSchedule( sch );
-                                // If it's here, it's scheduled!
-                                sch->setScheduled( true );
-                            } else {
-                                kError() << k_funcinfo << "Failed to load schedule" << endl;
-                                delete sch;
+                        kDebug()<<k_funcinfo<<el.tagName()<<" Version="<<status.version()<<endl;
+                        ScheduleManager *sm = 0;
+                        bool add = false;
+                        if ( status.version() <= "0.5" ) {
+                            if ( el.tagName() == "schedule" ) {
+                                sm = findScheduleManager( el.attribute( "name" ) );
+                                if ( sm == 0 ) {
+                                    sm = new ScheduleManager( *this, el.attribute( "name" ) );
+                                    add = true;
+                                }
                             }
+                        } else if ( el.tagName() == "plan" ) {
+                            sm = new ScheduleManager( *this );
+                            add = true;
+                        }
+                        if ( sm ) {
+                            if ( sm->loadXML( el, status ) ) {
+                                if ( add )
+                                    addScheduleManager( sm );
+                            } else {
+                                kError() << k_funcinfo << "Failed to load schedule manager" << endl;
+                                delete sm;
+                            }
+                        } else {
+                            kDebug()<<k_funcinfo<<"No schedule manager ?!"<<endl;
                         }
                     }
                 }
@@ -521,18 +553,11 @@ void Project::save( QDomElement &element ) const
         nodes.next() ->saveRelations( me );
     }
 
-    if ( !m_schedules.isEmpty() ) {
+    if ( !m_managers.isEmpty() ) {
         QDomElement el = me.ownerDocument().createElement( "schedules" );
         me.appendChild( el );
-        QHash<long, Schedule*> hash = m_schedules;
-        foreach ( Schedule * s, hash ) {
-            if ( !s->isDeleted() && s->isScheduled() ) {
-                QDomElement schs = el.ownerDocument().createElement( "schedule" );
-                el.appendChild( schs );
-                s->saveXML( schs );
-                //kDebug()<<k_funcinfo<<m_name<<" id="<<s->id()<<(s->isDeleted()?"  Deleted":"")<<endl;
-                Node::saveAppointments( schs, s->id() );
-            }
+        foreach ( ScheduleManager *sm, m_managers ) {
+            sm->saveXML( el );
         }
     }
 }
@@ -1129,24 +1154,111 @@ void Project::generateWBS( int count, WBSDefinition &def, const QString& wbs )
 
 void Project::setCurrentSchedule( long id )
 {
+    kDebug()<<k_funcinfo<<endl;
     setCurrentSchedulePtr( findSchedule( id ) );
     Node::setCurrentSchedule( id );
     QHash<QString, Resource*> hash = resourceIdDict;
     foreach ( Resource * r, hash ) {
         r->setCurrentSchedule( id );
     }
+    emit currentScheduleChanged();
+}
+
+QString Project::uniqueScheduleName() const {
+    //kDebug()<<k_funcinfo<<endl;
+    QString n = i18n( "Plan" );
+    bool unique = true;
+    foreach( ScheduleManager *sm, m_managers ) {
+        if ( n == sm->name() ) {
+            unique = false;
+            break;
+        }
+    }
+    if ( unique ) {
+        return n;
+    }
+    n += " %1";
+    int i = 1;
+    for ( ; true; ++i ) {
+        unique = true;
+        foreach( ScheduleManager *sm, m_managers ) {
+            if ( n.arg( i ) == sm->name() ) {
+                unique = false;
+                break;
+            }
+        }
+        if ( unique ) {
+            break;
+        }
+    }
+    return n.arg( i );
+}
+
+void Project::addScheduleManager( ScheduleManager *sm )
+{
+    emit scheduleManagerToBeAdded( sm );
+    m_managers.append( sm ); 
+    emit scheduleManagerAdded( 0 );
+    kDebug()<<k_funcinfo<<"Added: "<<sm->name()<<", now "<<m_managers.count()<<endl;
+}
+
+void Project::takeScheduleManager( ScheduleManager *sm )
+{
+    if ( indexOf( sm ) >= 0 ) {
+        emit scheduleManagerToBeAdded( sm );
+        m_managers.removeAt( indexOf( sm ) );
+        emit scheduleManagerAdded( 0 );
+    }
+}
+
+ScheduleManager *Project::findScheduleManager( const QString name ) const
+{
+    kDebug()<<k_funcinfo<<name<<endl;
+    foreach ( ScheduleManager *sm, m_managers ) {
+        if ( sm->name() == name )
+            return sm;
+    }
+    return 0;
+}
+
+ScheduleManager *Project::createScheduleManager( const QString name )
+{
+    kDebug()<<k_funcinfo<<name<<endl;
+    ScheduleManager *sm = new ScheduleManager( *this, name );
+    return sm;
+}
+
+ScheduleManager *Project::createScheduleManager()
+{
+    kDebug()<<k_funcinfo<<endl;
+    return createScheduleManager( uniqueScheduleName() );
 }
 
 MainSchedule *Project::createSchedule( const QString& name, Schedule::Type type )
 {
-    //kDebug()<<k_funcinfo<<"No of schedules: "<<m_schedules.count()<<endl;
+    kDebug()<<k_funcinfo<<"No of schedules: "<<m_schedules.count()<<endl;
+    MainSchedule *sch = new MainSchedule();
+    sch->setName( name );
+    sch->setType( type );
+    addMainSchedule( sch );
+    return sch;
+}
+
+void Project::addMainSchedule( MainSchedule *sch )
+{
+    if ( sch == 0 ) {
+        return;
+    }
+    emit scheduleToBeAdded( sch );
+    kDebug()<<k_funcinfo<<"No of schedules: "<<m_schedules.count()<<endl;
     long i = 1;
     while ( m_schedules.contains( i ) ) {
         ++i;
     }
-    MainSchedule *sch = new MainSchedule( this, name, type, i );
+    sch->setId( i );
+    sch->setNode( this );
     addSchedule( sch );
-    return sch;
+    emit scheduleAdded( sch );
 }
 
 bool Project::removeCalendarId( const QString &id )
@@ -1173,6 +1285,17 @@ void Project::changed( Node *node )
 void Project::changed( ResourceGroup *group )
 {
     emit resourceGroupChanged( group );
+}
+
+void Project::changed( ScheduleManager *sm, int type )
+{
+    if ( type == 0 )
+        emit scheduleManagerChanged( sm );
+    else if ( type == 1 ) {
+        emit scheduleToBeAdded( 0 );
+    } else if ( type == 2 ) {
+        emit scheduleAdded( 0 );
+    }
 }
 
 void Project::sendResourceAdded( const ResourceGroup *group, const Resource *resource )
@@ -1225,6 +1348,7 @@ void Project::printCalendarDebug( const QByteArray& _indent )
         m_standardWorktime->printDebug();
 }
 #endif
+
 
 }  //KPlato namespace
 

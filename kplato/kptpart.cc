@@ -44,7 +44,7 @@
 
 #include <KoGlobal.h>
 
-#define CURRENT_SYNTAX_VERSION "0.5"
+#define CURRENT_SYNTAX_VERSION "0.6"
 
 namespace KPlato
 {
@@ -109,9 +109,6 @@ KoView *Part::createViewInstance( QWidget *parent )
     else if ( m_embeddedContext && m_embeddedContextInitialized )
         m_view->setContext( *m_embeddedContext );
     else {
-        // Activate menu actions. Assumes ganttview, we don't get any
-        // 'aboutToShow' signal. Need to redo action control.
-        m_view->setTaskActionsEnabled( true );
     }
     //m_view->setBaselineMode(getProject().isBaselined()); FIXME: Removed for this release
     return m_view;
@@ -154,6 +151,7 @@ bool Part::loadXML( QIODevice *, const QDomDocument &document )
         return false;
     }
     QString m_syntaxVersion = plan.attribute( "version", CURRENT_SYNTAX_VERSION );
+    m_xmlLoader.setVersion( m_syntaxVersion );
     if ( m_syntaxVersion > CURRENT_SYNTAX_VERSION ) {
         int ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document was created with a newer version of KPlato (syntax version: %1)\n"
@@ -185,7 +183,8 @@ bool Part::loadXML( QIODevice *, const QDomDocument &document )
                 m_context->load( e );
             } else if ( e.tagName() == "project" ) {
                 Project * newProject = new Project();
-                if ( newProject->load( e ) ) {
+                m_xmlLoader.setProject( newProject );
+                if ( newProject->load( e, m_xmlLoader ) ) {
                     // The load went fine. Throw out the old project
                     delete m_project;
                     m_project = newProject;
@@ -211,7 +210,7 @@ bool Part::loadXML( QIODevice *, const QDomDocument &document )
     m_commandHistory->documentSaved();
     setModified( false );
     if ( m_view )
-        m_view->slotUpdate( false );
+        m_view->slotUpdate();
     return true;
 }
 
@@ -317,10 +316,8 @@ void Part::slotCommandExecuted( KCommand * )
     if ( m_view == NULL )
         return ;
 
-    if ( m_calculate )
-        m_view->slotUpdate( false /*config().behavior().calculationMode == Behavior::OnChange*/ );
-    else if ( m_update )
-        m_view->slotUpdate( false );
+    if ( m_update )
+        m_view->slotUpdate();
 
     m_update = m_calculate = false;
 }

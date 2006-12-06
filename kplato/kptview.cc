@@ -47,6 +47,7 @@
 
 #include <kicon.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kstdaction.h>
 #include <klocale.h>
@@ -64,7 +65,6 @@
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
 #include <kseparatoraction.h>
-
 #include <KoQueryTrader.h>
 
 #include "kptview.h"
@@ -89,6 +89,7 @@
 #include "kptrelationdialog.h"
 #include "kptresourceview.h"
 #include "kptresourceeditor.h"
+#include "kptscheduleeditor.h"
 #include "kptresourcedialog.h"
 #include "kptresource.h"
 #include "kptresourcesdialog.h"
@@ -486,26 +487,36 @@ View::View( Part* part, QWidget* parent )
     // to the right
     m_tab = new QStackedWidget( m_sp );
     
-    m_taskeditor = new TaskEditor( this, m_tab );
+    m_taskeditor = new TaskEditor( getPart(), m_tab );
     m_tab->addWidget( m_taskeditor );
     m_taskeditor->draw( getProject() );
+    connect( m_taskeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     
-    m_resourceeditor = new ResourceEditor( this, m_tab );
+    m_resourceeditor = new ResourceEditor( getPart(), m_tab );
     m_tab->addWidget( m_resourceeditor );
     m_resourceeditor->draw( getProject() );
+    connect( m_resourceeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    m_scheduleeditor = new ScheduleEditor( getPart(), m_tab );
+    m_tab->addWidget( m_scheduleeditor );
+    m_scheduleeditor->draw( getProject() );
+    connect( m_scheduleeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     m_ganttview = new GanttView( getPart(), m_tab, part->isReadWrite() );
     m_tab->addWidget( m_ganttview );
     m_updateGanttview = false;
     m_ganttview->draw( getProject() );
+    connect( m_ganttview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
-    m_resourceview = new ResourceView( this, m_tab );
+    m_resourceview = new ResourceView( getPart(), m_tab );
     m_updateResourceview = true;
     m_tab->addWidget( m_resourceview );
+    connect( m_resourceview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
-    m_accountsview = new AccountsView( getProject(), this, m_tab );
+    m_accountsview = new AccountsView( getProject(), getPart(), m_tab );
     m_updateAccountsview = true;
     m_tab->addWidget( m_accountsview );
+    connect( m_accountsview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( m_taskeditor, SIGNAL( addTask() ), SLOT( slotAddTask() ) );
     connect( m_taskeditor, SIGNAL( addMilestone() ), SLOT( slotAddMilestone() ) );
@@ -516,6 +527,9 @@ View::View( Part* part, QWidget* parent )
     connect( m_taskeditor, SIGNAL( indentTask() ), SLOT( slotIndentTask() ) );
     connect( m_taskeditor, SIGNAL( unindentTask() ), SLOT( slotUnindentTask() ) );
 
+    connect( m_scheduleeditor, SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
+    connect( m_scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
+    connect( m_scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
     //m_reportview = new ReportView(this, m_tab);
     //m_tab->addWidget(m_reportview);
 
@@ -523,6 +537,7 @@ View::View( Part* part, QWidget* parent )
     cat = m_viewlist->addCategory( i18n( "Editors" ) );
     m_viewlist->addView( cat, i18n( "Tasks" ), m_taskeditor, getPart(), "task_editor" );
     m_viewlist->addView( cat, i18n( "Resources" ), m_resourceeditor, getPart(), "resource_editor" );
+    m_viewlist->addView( cat, i18n( "Schedules" ), m_scheduleeditor, getPart(), "schedule_editor" );
 
     cat = m_viewlist->addCategory( i18n( "Views" ) );
     m_viewlist->addView( cat, i18n( "Gantt" ), m_ganttview, getPart(), "gantt_chart" );
@@ -552,15 +567,6 @@ View::View( Part* part, QWidget* parent )
     actionCopy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
     actionPaste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
 
-    actionIndentTask = new KAction( KIcon( "indent_task" ), i18n( "Indent Task" ), actionCollection(), "indent_task" );
-    connect( actionIndentTask, SIGNAL( triggered( bool ) ), SLOT( slotIndentTask() ) );
-    actionUnindentTask = new KAction( KIcon( "unindent_task" ), i18n( "Unindent Task" ), actionCollection(), "unindent_task" );
-    connect( actionUnindentTask, SIGNAL( triggered( bool ) ), SLOT( slotUnindentTask() ) );
-    actionMoveTaskUp = new KAction( KIcon( "move_task_up" ), i18n( "Move Up" ), actionCollection(), "move_task_up" );
-    connect( actionMoveTaskUp, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskUp() ) );
-    actionMoveTaskDown = new KAction( KIcon( "move_task_down" ), i18n( "Move Down" ), actionCollection(), "move_task_down" );
-    connect( actionMoveTaskDown, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskDown() ) );
-
     // ------ View
     actionViewGantt = new KAction( KIcon( "gantt_chart" ), i18n( "Gantt" ), actionCollection(), "view_gantt" );
     connect( actionViewGantt, SIGNAL( triggered( bool ) ), SLOT( slotViewGantt() ) );
@@ -568,18 +574,9 @@ View::View( Part* part, QWidget* parent )
     actionViewSelector = new KToggleAction( i18n( "Show Selector" ), actionCollection(), "view_show_selector" );
     connect( actionViewSelector, SIGNAL( triggered( bool ) ), SLOT( slotViewSelector( bool ) ) );
 
-    actionViewExpected = new KToggleAction( i18n( "Expected" ), actionCollection(), "view_expected" );
-    connect( actionViewExpected, SIGNAL( triggered( bool ) ), SLOT( slotViewExpected() ) );
-    actionViewOptimistic = new KToggleAction( i18n( "Optimistic" ), actionCollection(), "view_optimistic" );
-    connect( actionViewOptimistic, SIGNAL( triggered( bool ) ), SLOT( slotViewOptimistic() ) );
-    actionViewPessimistic = new KToggleAction( i18n( "Pessimistic" ), actionCollection(), "view_pessimistic" );
-    connect( actionViewPessimistic, SIGNAL( triggered( bool ) ), SLOT( slotViewPessimistic() ) );
-
-    QActionGroup *estimationType = new QActionGroup( this );
-    estimationType->setExclusive( true );
-    estimationType->addAction( actionViewExpected );
-    estimationType->addAction( actionViewOptimistic );
-    estimationType->addAction( actionViewPessimistic );
+    m_scheduleActionGroup = new QActionGroup( this );
+    m_scheduleActionGroup->setExclusive( true );
+    connect( m_scheduleActionGroup, SIGNAL( triggered( QAction* ) ), SLOT( slotViewSchedule( QAction* ) ) );
 
     actionViewGanttResources = new KToggleAction( i18n( "Resources" ), actionCollection(), "view_gantt_showResources" );
     connect( actionViewGanttResources, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttResources() ) );
@@ -613,12 +610,6 @@ View::View( Part* part, QWidget* parent )
     //actionViewReports = new KAction(i18n("Reports"), "reports", 0, this, SLOT(slotViewReports()), actionCollection(), "view_reports");
 
     // ------ Insert
-    actionAddTask = new KAction( KIcon( "add_task" ), i18n( "Task..." ), actionCollection(), "add_task" );
-    connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
-    actionAddSubtask = new KAction( KIcon( "add_sub_task" ), i18n( "Sub-Task..." ), actionCollection(), "add_sub_task" );
-    connect( actionAddSubtask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubTask() ) );
-    actionAddMilestone = new KAction( KIcon( "add_milestone" ), i18n( "Milestone..." ), actionCollection(), "add_milestone" );
-    connect( actionAddMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddMilestone() ) );
 
     // ------ Project
     actionEditMainProject = new KAction( KIcon( "edit" ), i18n( "Edit Main Project..." ), actionCollection(), "project_edit" );
@@ -632,20 +623,6 @@ View::View( Part* part, QWidget* parent )
     actionEditResources = new KAction( KIcon( "edit" ), i18n( "Edit Resources..." ), actionCollection(), "project_resources" );
     connect( actionEditResources, SIGNAL( triggered( bool ) ), SLOT( slotProjectResources() ) );
 
-    actionCalculate = new KActionMenu( KIcon( "project_calculate" ), i18n( "Calculate" ), actionCollection(), "project_calculate" );
-    connect( actionCalculate, SIGNAL( activated() ), SLOT( slotProjectCalculate() ) );
-
-    actionCalculateExpected = new KAction( i18n( "Expected" ), actionCollection(), "project_calculate_expected" );
-    connect( actionCalculateExpected, SIGNAL( triggered( bool ) ), SLOT( slotProjectCalculateExpected() ) );
-    actionCalculate->addAction( actionCalculateExpected );
-
-    actionCalculateOptimistic = new KAction( i18n( "Optimistic" ), actionCollection(), "project_calculate_optimistic" );
-    connect( actionCalculateOptimistic, SIGNAL( triggered( bool ) ), SLOT( slotProjectCalculateOptimistic() ) );
-    actionCalculate->addAction( actionCalculateOptimistic );
-
-    actionCalculatePessimistic = new KAction( i18n( "Pessimistic" ), actionCollection(), "project_calculate_pessimistic" );
-    connect( actionCalculatePessimistic, SIGNAL( triggered( bool ) ), SLOT( slotProjectCalculatePessimistic() ) );
-    actionCalculate->addAction( actionCalculatePessimistic );
 
     /*    // ------ Reports
         actionFirstpage = KStdAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");
@@ -721,14 +698,21 @@ View::View( Part* part, QWidget* parent )
     Q_UNUSED( actExportGantt );
 #endif
 
+    m_progress = 0;
     m_estlabel = new KStatusBarLabel( "", 0 );
-    addStatusBarItem( m_estlabel, 0, true );
-    actionViewExpected->setChecked( true ); //TODO: context
-    setScheduleActionsEnabled();
-    slotViewExpected();
-
-    setTaskActionsEnabled( false );
+    if ( statusBar() ) {
+        addStatusBarItem( m_estlabel, 0, true );
+        //m_progress = new QProgressBar();
+        //addStatusBarItem( m_progress, 0, true );
+        //m_progress->hide();
+    }
+    slotPlugScheduleActions();
+    connect( &getProject(), SIGNAL( scheduleAdded( const MainSchedule* ) ), SLOT( slotPlugScheduleActions() ) );
+    connect( &getProject(), SIGNAL( currentScheduleChanged() ), SLOT( slotCurrentScheduleChanged() ) );
     
+    setScheduleActionsEnabled();
+
+    m_viewlist->setSelected( m_viewlist->findItem( m_taskeditor ) );
     //kDebug()<<k_funcinfo<<" end "<<endl;
 }
 
@@ -736,6 +720,7 @@ View::~View()
 {
     removeStatusBarItem( m_estlabel );
     delete m_estlabel;
+    delete m_scheduleActionGroup;
 }
 
 ViewAdaptor* View::dbusObject()
@@ -803,36 +788,12 @@ void View::slotEditPaste()
     //kDebug()<<k_funcinfo<<endl;
 }
 
-void View::slotViewExpected()
-{
-    //kDebug()<<k_funcinfo<<endl;
-    m_currentEstimateType = Effort::Use_Expected;
-    getProject().setCurrentSchedulePtr( getProject().findSchedule( Schedule::Expected ) );
-    slotUpdate( false );
-}
-
-void View::slotViewOptimistic()
-{
-    //kDebug()<<k_funcinfo<<endl;
-    m_currentEstimateType = Effort::Use_Optimistic;
-    getProject().setCurrentSchedulePtr( getProject().findSchedule( Schedule::Optimistic ) );
-    slotUpdate( false );
-}
-
-void View::slotViewPessimistic()
-{
-    //kDebug()<<k_funcinfo<<endl;
-    m_currentEstimateType = Effort::Use_Pessimistic;
-    getProject().setCurrentSchedulePtr( getProject().findSchedule( Schedule::Pessimistic ) );
-    slotUpdate( false );
-}
-
 void View::slotViewGanttResources()
 {
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowResources( actionViewGanttResources->isChecked() );
     if ( m_tab->currentWidget() == m_ganttview )
-        slotUpdate( false );
+        slotUpdate();
 }
 
 void View::slotViewGanttTaskName()
@@ -840,7 +801,7 @@ void View::slotViewGanttTaskName()
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowTaskName( actionViewGanttTaskName->isChecked() );
     if ( m_tab->currentWidget() == m_ganttview )
-        slotUpdate( false );
+        slotUpdate();
 }
 
 void View::slotViewGanttTaskLinks()
@@ -848,7 +809,7 @@ void View::slotViewGanttTaskLinks()
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowTaskLinks( actionViewGanttTaskLinks->isChecked() );
     if ( m_tab->currentWidget() == m_ganttview )
-        slotUpdate( false );
+        slotUpdate();
 }
 
 void View::slotViewGanttProgress()
@@ -856,7 +817,7 @@ void View::slotViewGanttProgress()
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowProgress( actionViewGanttProgress->isChecked() );
     if ( m_tab->currentWidget() == m_ganttview )
-        slotUpdate( false );
+        slotUpdate();
 }
 
 void View::slotViewGanttFloat()
@@ -864,7 +825,7 @@ void View::slotViewGanttFloat()
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowPositiveFloat( actionViewGanttFloat->isChecked() );
     if ( m_tab->currentWidget() == m_ganttview )
-        slotUpdate( false );
+        slotUpdate();
 }
 
 void View::slotViewGanttCriticalTasks()
@@ -872,7 +833,7 @@ void View::slotViewGanttCriticalTasks()
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowCriticalTasks( actionViewGanttCriticalTasks->isChecked() );
     if ( m_tab->currentWidget() == m_ganttview )
-        slotUpdate( false );
+        slotUpdate();
 }
 
 void View::slotViewGanttCriticalPath()
@@ -880,7 +841,7 @@ void View::slotViewGanttCriticalPath()
     //kDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowCriticalPath( actionViewGanttCriticalPath->isChecked() );
     if ( m_tab->currentWidget() == m_ganttview )
-        slotUpdate( false );
+        slotUpdate();
 }
 
 void View::slotViewGanttNoInformation()
@@ -888,7 +849,7 @@ void View::slotViewGanttNoInformation()
     kDebug() << k_funcinfo << m_ganttview->showNoInformation() << endl;
     m_ganttview->setShowNoInformation( !m_ganttview->showNoInformation() ); //Toggle
     if ( m_tab->currentWidget() == m_ganttview )
-        slotUpdate( false );
+        slotUpdate();
 }
 
 void View::slotViewTaskAppointments()
@@ -897,7 +858,7 @@ void View::slotViewTaskAppointments()
     m_ganttview->setShowAppointments( actionViewTaskAppointments->isChecked() );
     m_updateGanttview = true;
     if ( m_tab->currentWidget() == m_ganttview )
-        slotUpdate( false );
+        slotUpdate();
 }
 
 void View::slotViewSelector( bool show )
@@ -1001,57 +962,107 @@ void View::slotProjectResources()
     delete dia;
 }
 
-void View::slotProjectCalculate()
+void View::slotCurrentScheduleChanged()
 {
-    //kDebug()<<k_funcinfo<<endl;
-    slotUpdate( true );
+    kDebug()<<k_funcinfo<<endl;
+    //TODO
+    setLabel();
 }
 
-void View::slotProjectCalculateExpected()
+void View::slotViewSchedule( QAction *act )
 {
-    m_currentEstimateType = Effort::Use_Expected;
-    m_updateGanttview = true;
-    m_updateResourceview = true;
-    m_updateAccountsview = true;
-    slotUpdate( true );
+    kDebug()<<k_funcinfo<<endl;
+    Schedule *sch = m_scheduleActions.value( static_cast<KAction*>( act ), 0 );
+    getProject().setCurrentSchedule( sch->id() );
 }
 
-void View::slotProjectCalculateOptimistic()
+void View::slotActionDestroyed( QObject *o )
 {
-    m_currentEstimateType = Effort::Use_Optimistic;
-    m_updateGanttview = true;
-    m_updateResourceview = true;
-    m_updateAccountsview = true;
-    slotUpdate( true );
+    kDebug()<<k_funcinfo<<o->name()<<endl;
+    m_scheduleActions.remove( static_cast<KAction*>( o ) );
 }
 
-void View::slotProjectCalculatePessimistic()
+void View::slotPlugScheduleActions()
 {
-    m_currentEstimateType = Effort::Use_Pessimistic;
-    m_updateGanttview = true;
-    m_updateResourceview = true;
-    m_updateAccountsview = true;
-    slotUpdate( true );
-}
-
-void View::projectCalculate()
-{
-    if ( false /*getProject().actualEffort() > 0*/ ) {
-        // NOTE: This can be removed when proper baselining etc is implemented
-        if ( KMessageBox::warningContinueCancel( this, i18n( "Progress information will be deleted if the project is recalculated." ), i18n( "Calculate" ), KGuiItem( i18n( "Calculate" ) ) ) == KMessageBox::Cancel ) {
-            return ;
+    kDebug()<<k_funcinfo<<endl;
+    unplugActionList( "view_schedule_list" );
+    foreach( KAction *act, m_scheduleActions.keys() ) {
+        m_scheduleActionGroup->removeAction( act );
+        delete act;
+    }
+    m_scheduleActions.clear();
+    Schedule *cs = getProject().currentSchedule();
+    QAction *ca = 0;
+    foreach( Schedule *sch, getProject().schedules().values() ) {
+        if ( ! sch->isDeleted() ) {
+            QString n = sch->name() + " (" + sch->typeToString( true ) + ")";
+            KAction *act = new KToggleAction( n, actionCollection(), n );
+            m_scheduleActions.insert( act, sch );
+            m_scheduleActionGroup->addAction( act );
+            if ( ca == 0 && cs == sch ) {
+                ca = act;
+            }
+            kDebug()<<k_funcinfo<<"Add: "<<act->name()<<endl;
+            connect( act, SIGNAL(destroyed( QObject* ) ), SLOT( slotActionDestroyed( QObject* ) ) );
         }
     }
-    QApplication::setOverrideCursor( Qt::WaitCursor );
-    Schedule *ns = getProject().findSchedule( ( Schedule::Type ) m_currentEstimateType );
-    KCommand *cmd;
-    if ( ns ) {
-        cmd = new RecalculateProjectCmd( getPart(), getProject(), *ns, i18n( "Calculate" ) );
-    } else {
-        cmd = new CalculateProjectCmd( getPart(), getProject(), i18n( "Standard" ), ( Effort::Use ) m_currentEstimateType, i18n( "Calculate" ) );
+    plugActionList( "view_schedule_list", m_scheduleActions.keys() );
+    if ( ca == 0 && m_scheduleActionGroup->actions().count() > 0 ) {
+        ca = m_scheduleActionGroup->actions().first();
     }
+    if ( ca ) {
+        ca->setChecked( true );
+    }
+    setLabel();
+}
+
+void View::slotProgressChanged( int value )
+{
+/*    if ( m_progress == 0 ) {
+        return;
+    }
+    if ( value < 0 ) {
+        disconnect( sender(), SIGNAL( sigProgress( int ) ), this, SLOT(slotProgressChanged( int ) ) );
+        m_progress->hide();
+        return;
+    }
+    m_progress->show();
+    m_progress->setValue( value );*/
+}
+
+void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
+{
+    if ( project == 0 || sm == 0 ) {
+        return;
+    }
+    statusBar()->showMessage( i18n( "%1: Calculating...", sm->name() ) );
+//    connect( project, SIGNAL( sigProgress( int ) ), SLOT(slotProgressChanged( int ) ) );
+    QApplication::setOverrideCursor( Qt::WaitCursor );
+    CalculateScheduleCmd *cmd =  new CalculateScheduleCmd( getPart(), *project, *sm, i18n( "Calculate %1", sm->name() ) );
     getPart() ->addCommand( cmd );
     QApplication::restoreOverrideCursor();
+    statusBar()->clearMessage();
+    statusBar()->showMessage( i18n( "%1: Calculating done", sm->name() ), 2000 );
+
+}
+
+void View::slotAddScheduleManager( Project *project )
+{
+    if ( project == 0 ) {
+        return;
+    }
+    ScheduleManager *sm = project->createScheduleManager();
+    AddScheduleManagerCmd *cmd =  new AddScheduleManagerCmd( getPart(), *project, sm, i18n( "Add Schedule %1", sm->name() ) );
+    getPart() ->addCommand( cmd );
+}
+
+void View::slotDeleteScheduleManager( Project *project, ScheduleManager *sm )
+{
+    if ( project == 0 || sm == 0) {
+        return;
+    }
+    DeleteScheduleManagerCmd *cmd =  new DeleteScheduleManagerCmd( getPart(), *project, sm, i18n( "Delete Schedule %1", sm->name() ) );
+    getPart() ->addCommand( cmd );
 }
 
 void View::slotViewReportDesign()
@@ -1148,7 +1159,7 @@ void View::slotGenerateWBS()
 {
     //kDebug()<<k_funcinfo<<endl;
     getPart() ->generateWBS();
-    slotUpdate( false );
+    slotUpdate();
 }
 
 void View::slotConfigure()
@@ -1546,11 +1557,9 @@ QMenu * View::popupMenu( const QString& name )
     return 0L;
 }
 
-void View::slotUpdate( bool calculate )
+void View::slotUpdate()
 {
     //kDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
-    if ( calculate )
-        projectCalculate();
 
     m_updateGanttview = true;
     m_updateResourceview = true;
@@ -1559,27 +1568,34 @@ void View::slotUpdate( bool calculate )
     updateView( m_tab->currentWidget() );
 }
 
-void View::partActivateEvent( KParts::PartActivateEvent *event )
+void View::slotGuiActivated( ViewBase *view, bool activate )
 {
-    kDebug()<<k_funcinfo<<"main: "<<event->activated()<<", "<<event->part()<<", "<<event->widget()<<endl;
-    if ( event->part() != (KParts::Part *)koDocument() ) {
-        assert( event->part()->inherits( "KoDocument" ) );
-
-        if ( event->activated() && event->part() == getPart() ) {
-            kDebug()<<k_funcinfo<<"maindoc: partManager()->setActivePart"<<endl;
-            partManager()->setActivePart( getPart(), m_tab->currentWidget() );
+    if ( activate ) {
+        foreach( QString name, view->actionListNames() ) {
+            kDebug()<<k_funcinfo<<"activate "<<name<<", "<<view->actionList( name ).count()<<endl;
+            plugActionList( name, view->actionList( name ) );
         }
-        emit activated( event->activated() );
     } else {
-        KoView::partActivateEvent( event );
+        foreach( QString name, view->actionListNames() ) {
+            kDebug()<<k_funcinfo<<"deactivate "<<name<<endl;
+            unplugActionList( name );
+        }
     }
 }
 
 void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
+    kDebug()<<k_funcinfo<<ev->activated()<<endl;
     KoView::guiActivateEvent( ev );
+    if ( ev->activated() ) {
+        // plug my own actionlists, they may be gone
+        slotPlugScheduleActions();
+    }
     // propagate to sub-view
-    QApplication::sendEvent( m_tab->currentWidget(), ev );
+    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+    if ( v ) {
+        v->setGuiActive( ev->activated() );
+    }
 }
 
 KoDocument *View::hitTest( const QPoint &pos )
@@ -1655,21 +1671,25 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
     if ( prev && prev->type() != ViewListWidget::ChildDocument ) {
         // Remove sub-view specific gui
         kDebug()<<k_funcinfo<<"Deactivate: "<<prev<<endl;
-        KParts::GUIActivateEvent ev(false);
-        QApplication::sendEvent( m_tab->currentWidget(), &ev );
+        ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+        if ( v ) {
+            v->setGuiActive( false );
+        }
     }
     if ( item->type() == ViewListWidget::SubView ) {
+        kDebug()<<k_funcinfo<<"Activate: "<<item<<endl;
         m_tab->setCurrentWidget( item->view() );
         if (  prev && prev->type() != ViewListWidget::SubView ) {
-            // Put back my own gui (removed when viewing different doc)
+            // Put back my own gui (removed when (if) viewing different doc)
             getPart()->activate( this );
         }
-        kDebug()<<k_funcinfo<<"Activate: "<<item<<endl;
         // Add sub-view specific gui
-        KParts::GUIActivateEvent ev(true);
-        QApplication::sendEvent( item->view(), &ev );
+        ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+        if ( v ) {
+            v->setGuiActive( true );
+        }
         return;
-    }
+    } 
     if ( item->type() == ViewListWidget::ChildDocument ) {
         kDebug()<<k_funcinfo<<"Activated: "<<item->view()<<endl;
         // changing doc also takes care of all gui
@@ -1699,17 +1719,13 @@ void View::slotCurrentChanged( int index )
 void View::updateView( QWidget *widget )
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
-    setScheduleActionsEnabled();
-    setTaskActionsEnabled( false );
+    //setScheduleActionsEnabled();
     mainWindow() ->toolBar( "report" ) ->hide();
     if ( widget == m_ganttview ) {
-        //kDebug()<<k_funcinfo<<"draw gantt"<<endl;
-        m_ganttview->setShowExpected( actionViewExpected->isChecked() );
-        m_ganttview->setShowOptimistic( actionViewOptimistic->isChecked() );
-        m_ganttview->setShowPessimistic( actionViewPessimistic->isChecked() );
+        kDebug()<<k_funcinfo<<"draw gantt"<<endl;
         if ( m_updateGanttview )
             m_ganttview->drawChanges( getProject() );
-        setTaskActionsEnabled( widget, true );
+        //setTaskActionsEnabled( widget, true );
         m_updateGanttview = false;
     } else if ( widget == m_resourceview ) {
         //kDebug()<<k_funcinfo<<"draw resourceview"<<endl;
@@ -1762,9 +1778,9 @@ bool View::setContext( Context &context )
     //kDebug()<<k_funcinfo<<endl;
     m_currentEstimateType = context.currentEstimateType;
     getProject().setCurrentSchedule( context.currentSchedule );
-    actionViewExpected->setChecked( context.actionViewExpected );
-    actionViewOptimistic->setChecked( context.actionViewOptimistic );
-    actionViewPessimistic->setChecked( context.actionViewPessimistic );
+//     actionViewExpected->setChecked( context.actionViewExpected );
+//     actionViewOptimistic->setChecked( context.actionViewOptimistic );
+//     actionViewPessimistic->setChecked( context.actionViewPessimistic );
 
     m_ganttview->setContext( context.ganttview, getProject() );
     // hmmm, can't decide if these should be here or actions moved to ganttview
@@ -1781,9 +1797,9 @@ bool View::setContext( Context &context )
     //    m_reportview->setContext(context.reportview);
 
     if ( context.currentView == "ganttview" ) {
-        m_ganttview->setShowExpected( actionViewExpected->isChecked() );
+/*        m_ganttview->setShowExpected( actionViewExpected->isChecked() );
         m_ganttview->setShowOptimistic( actionViewOptimistic->isChecked() );
-        m_ganttview->setShowPessimistic( actionViewPessimistic->isChecked() );
+        m_ganttview->setShowPessimistic( actionViewPessimistic->isChecked() );*/
         slotViewGantt();
     } else if ( context.currentView == "resourceview" ) {
         slotViewResources();
@@ -1794,7 +1810,7 @@ bool View::setContext( Context &context )
     } else {
         slotViewGantt();
     }
-    slotUpdate( false );
+    slotUpdate();
     return true;
 }
 
@@ -1804,9 +1820,9 @@ void View::getContext( Context &context ) const
     context.currentEstimateType = m_currentEstimateType;
     if ( getProject().currentSchedule() )
         context.currentSchedule = getProject().currentSchedule() ->id();
-    context.actionViewExpected = actionViewExpected->isChecked();
-    context.actionViewOptimistic = actionViewOptimistic->isChecked();
-    context.actionViewPessimistic = actionViewPessimistic->isChecked();
+//     context.actionViewExpected = actionViewExpected->isChecked();
+//     context.actionViewOptimistic = actionViewOptimistic->isChecked();
+//     context.actionViewPessimistic = actionViewPessimistic->isChecked();
 
     if ( m_tab->currentWidget() == m_ganttview ) {
         context.currentView = "ganttview";
@@ -1825,53 +1841,35 @@ m_ganttview->getContext( context.ganttview );
     //    m_reportview->getContext(context.reportview);
 }
 
-// called when widget w is about to be shown
-void View::setTaskActionsEnabled( QWidget *w, bool on )
+void View::setLabel()
 {
-    Node * n = 0;
-    if ( w == m_ganttview ) {
-        n = m_ganttview->currentNode();
+    kDebug()<<k_funcinfo<<endl;
+    Schedule *s = getProject().currentSchedule();
+    if ( s == 0 || getProject().notScheduled() ) {
+        m_estlabel->setText( i18n( "Not scheduled" ) );
     } else {
-        on = false;
+        m_estlabel->setText( s->name() + " ("+ s->typeToString( true ) + ")"  );
     }
-
-    actionAddTask->setEnabled( on );
-    actionAddMilestone->setEnabled( on );
-    // only enabled when we have a task selected
-    bool o = ( on && n );
-    actionAddSubtask->setEnabled( o );
-    actionDeleteTask->setEnabled( o );
-    actionMoveTaskUp->setEnabled( o && getProject().canMoveTaskUp( n ) );
-    actionMoveTaskDown->setEnabled( o && getProject().canMoveTaskDown( n ) );
-    actionIndentTask->setEnabled( o && getProject().canIndentTask( n ) );
-    actionUnindentTask->setEnabled( o && getProject().canUnindentTask( n ) );
-}
-
-void View::setTaskActionsEnabled( bool on )
-{
-    setTaskActionsEnabled( m_ganttview, on ); //FIXME if more than ganttview can do this
 }
 
 void View::setScheduleActionsEnabled()
 {
-    actionViewExpected->setEnabled( getProject().findSchedule( Schedule::Expected ) );
+/*    actionViewExpected->setEnabled( getProject().findSchedule( Schedule::Expected ) );
     actionViewOptimistic->setEnabled( getProject().findSchedule( Schedule::Optimistic ) );
-    actionViewPessimistic->setEnabled( getProject().findSchedule( Schedule::Pessimistic ) );
+    actionViewPessimistic->setEnabled( getProject().findSchedule( Schedule::Pessimistic ) );*/
     if ( getProject().notScheduled() ) {
-        m_estlabel->setText( i18n( "Not scheduled" ) );
+        setLabel();
         return ;
     }
     Schedule *ns = getProject().currentSchedule();
     if ( ns->type() == Schedule::Expected ) {
-        actionViewExpected->setChecked( true );
-        m_estlabel->setText( i18n( "Expected" ) );
+//        actionViewExpected->setChecked( true );
     } else if ( ns->type() == Schedule::Optimistic ) {
-        actionViewOptimistic->setChecked( true );
-        m_estlabel->setText( i18n( "Optimistic" ) );
+//        actionViewOptimistic->setChecked( true );
     } else if ( ns->type() == Schedule::Pessimistic ) {
-        actionViewPessimistic->setChecked( true );
-        m_estlabel->setText( i18n( "Pessimistic" ) );
+//        actionViewPessimistic->setChecked( true );
     }
+    setLabel();
 }
 
 

@@ -886,18 +886,14 @@ QItemSelectionModel::SelectionFlags ResourceTreeView::selectionCommand(const QMo
 }
 
 //-----------------------------------
-ResourceEditor::ResourceEditor( View *view, QWidget *parent )
-    : ViewBase( view, parent )
+ResourceEditor::ResourceEditor( Part *part, QWidget *parent )
+    : ViewBase( part, parent )
 {
-    setInstance( Factory::global() );
-    if ( view->getPart()->isReadWrite() ) {
-        setXMLFile("kplato_resourceeditor.rc");
-    }
     setupGui();
-
+    
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_editor = new ResourceTreeView( view->getPart(), this );
+    m_editor = new ResourceTreeView( part, this );
     l->addWidget( m_editor );
     m_editor->setEditTriggers( m_editor->editTriggers() | QAbstractItemView::EditKeyPressed );
 
@@ -917,15 +913,11 @@ void ResourceEditor::draw()
 {
 }
 
-void ResourceEditor::setViewActive( bool activate, KXMLGUIFactory *factory ) // slot
+void ResourceEditor::setGuiActive( bool activate )
 {
     kDebug()<<k_funcinfo<<activate<<endl;
-    if ( activate ) {
-        addActions( factory );
-        updateActionsEnabled( true );
-    } else {
-        removeActions();
-    }
+    updateActionsEnabled( true );
+    ViewBase::setGuiActive( activate );
     if ( activate && !m_editor->currentIndex().isValid() ) {
         m_editor->selectionModel()->setCurrentIndex(m_editor->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
@@ -1002,13 +994,21 @@ void ResourceEditor::updateActionsEnabled(  bool resource, bool group )
 
 void ResourceEditor::setupGui()
 {
-    actionAddResource = new KAction( KIcon( "add_resource" ), i18n( "Add Resource..." ), actionCollection(), "add_resource" );
+    KActionCollection *coll = actionCollection();
+    
+    QString name = "resourceeditor_edit_list";
+    actionAddResource = new KAction( KIcon( "filenew" ), i18n( "Add Resource..." ), coll, "add_resource" );
     connect( actionAddResource, SIGNAL( triggered( bool ) ), SLOT( slotAddResource() ) );
-    actionAddGroup = new KAction( KIcon( "add_group" ), i18n( "Add Resource Group..." ), actionCollection(), "add_group" );
+    addAction( name, actionAddResource );
+    
+    actionAddGroup = new KAction( KIcon( "filenew" ), i18n( "Add Resource Group..." ), coll, "add_group" );
     connect( actionAddGroup, SIGNAL( triggered( bool ) ), SLOT( slotAddGroup() ) );
-    actionDeleteSelection = new KAction( KIcon( "editdelete" ), i18n( "Delete Selected Items" ), actionCollection(), "delete_selection" );
+    addAction( name, actionAddGroup );
+    
+    actionDeleteSelection = new KAction( KIcon( "editdelete" ), i18n( "Delete Selected Items" ), coll, "delete_selection" );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
-
+    addAction( name, actionDeleteSelection );
+    
 }
 
 void ResourceEditor::slotAddResource()

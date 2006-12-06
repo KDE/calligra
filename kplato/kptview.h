@@ -31,6 +31,7 @@
 #include <QTreeWidget>
 
 
+class QProgressBar;
 class QStackedWidget;
 class QSplitter;
 
@@ -48,6 +49,7 @@ namespace KPlato
 {
 
 class View;
+class ViewBase;
 class ViewListItem;
 class ViewListWidget;
 class AccountsView;
@@ -55,11 +57,15 @@ class GanttView;
 class ResourceView;
 class TaskEditor;
 class ResourceEditor;
+class ScheduleEditor;
+class ScheduleManager;
 //class ReportView;
 class Part;
 class DocumentChild;
 class Node;
 class Project;
+class MainSchedule;
+class Schedule;
 class Resource;
 class ResourceGroup;
 class Relation;
@@ -151,14 +157,11 @@ public:
 
     QMenu *popupMenu( const QString& name );
 
-    void projectCalculate();
-
     virtual ViewAdaptor* dbusObject();
 
     virtual bool setContext( Context &context );
     virtual void getContext( Context &context ) const;
 
-    void setTaskActionsEnabled( QWidget *w, bool on );
     void setScheduleActionsEnabled();
 
     QWidget *canvas() const;
@@ -168,17 +171,14 @@ public:
     KoDocument *hitTest( const QPoint &viewPos );
 
 public slots:
-    void slotUpdate( bool calculate );
+    void slotUpdate();
     void slotEditResource();
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
     void slotViewSelector( bool show );
+    
     void slotViewGantt();
-    void slotViewExpected();
-    void slotViewOptimistic();
-    void slotViewPessimistic();
-
     void slotViewGanttResources();
     void slotViewGanttTaskName();
     void slotViewGanttTaskLinks();
@@ -188,9 +188,12 @@ public slots:
     void slotViewGanttCriticalPath();
     void slotViewGanttNoInformation();
     void slotViewTaskAppointments();
+    
     void slotViewResources();
     void slotViewResourceAppointments();
+    
     void slotViewAccounts();
+    
     void slotViewTaskEditor();
     void slotAddTask();
     void slotAddSubTask();
@@ -208,7 +211,6 @@ public slots:
     void slotModifyRelation( Relation *rel, int linkType );
 
     void slotExportGantt(); // testing
-    void setTaskActionsEnabled( bool on );
 
     void slotRenameNode( Node *node, const QString& name );
 
@@ -216,14 +218,19 @@ public slots:
     void slotPopupMenu( const QString& menuname, const QPoint &pos, ViewListItem *item );
 
 protected slots:
+    void slotGuiActivated( ViewBase *view, bool );
     void slotViewActivated( ViewListItem*, ViewListItem* );
-
+    void slotPlugScheduleActions();
+    void slotViewSchedule( QAction *act );
+    void slotCurrentScheduleChanged();
+    
+    void slotAddScheduleManager( Project *project );
+    void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );
+    void slotCalculateSchedule( Project*, ScheduleManager* );
+    void slotProgressChanged( int value );
+    
     void slotProjectCalendar();
     void slotProjectWorktime();
-    void slotProjectCalculate();
-    void slotProjectCalculateExpected();
-    void slotProjectCalculateOptimistic();
-    void slotProjectCalculatePessimistic();
     void slotProjectAccounts();
     void slotProjectResources();
     void slotViewReportDesign();
@@ -256,15 +263,18 @@ protected slots:
 #endif
 
 protected:
-    virtual void partActivateEvent( KParts::PartActivateEvent *event );
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
-
     virtual void updateReadWrite( bool readwrite );
+    
+    void setLabel(); 
     Node *currentTask();
     Resource *currentResource();
     ResourceGroup *currentResourceGroup();
     void updateView( QWidget *widget );
 
+private slots:
+    void slotActionDestroyed( QObject *o );
+    
 private:
     QSplitter *m_sp;
     QStackedWidget *m_tab;
@@ -273,6 +283,7 @@ private:
     AccountsView *m_accountsview;
     TaskEditor *m_taskeditor;
     ResourceEditor *m_resourceeditor;
+    ScheduleEditor *m_scheduleeditor;
     //    ReportView *m_reportview;
     //    Q3PtrList<QString> m_reportTemplateFiles;
 
@@ -290,27 +301,21 @@ private:
     bool m_updateAccountsview;
 
     KStatusBarLabel *m_estlabel;
-
+    QProgressBar *m_progress;
+    
     ViewAdaptor* m_dbus;
 
+    QActionGroup *m_scheduleActionGroup;
+    QMap<KAction*, Schedule*> m_scheduleActions;
     // ------ Edit
     KAction *actionCut;
     KAction *actionCopy;
     KAction *actionPaste;
 
-    KAction *actionIndentTask;
-    KAction *actionUnindentTask;
-    KAction *actionMoveTaskUp;
-    KAction *actionMoveTaskDown;
-
     // ------ View
     KAction *actionViewGantt;
 
     KToggleAction *actionViewSelector;
-
-    KToggleAction *actionViewExpected;
-    KToggleAction *actionViewOptimistic;
-    KToggleAction *actionViewPessimistic;
 
     KToggleAction *actionViewGanttResources;
     KToggleAction *actionViewGanttTaskName;
@@ -327,9 +332,6 @@ private:
     KAction *actionViewAccounts;
 
     // ------ Insert
-    KAction *actionAddTask;
-    KAction *actionAddSubtask;
-    KAction *actionAddMilestone;
 
     // ------ Project
     KAction *actionEditMainProject;
@@ -337,10 +339,7 @@ private:
     KAction *actionEditCalendar;
     KAction *actionEditAccounts;
     KAction *actionEditResources;
-    KActionMenu *actionCalculate;
-    KAction *actionCalculateExpected;
-    KAction *actionCalculateOptimistic;
-    KAction *actionCalculatePessimistic;
+    
     // ------ Reports
     KAction *actionFirstpage;
     KAction *actionPriorpage;

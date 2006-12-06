@@ -23,6 +23,8 @@
 #include "kptdatetime.h"
 #include "kptduration.h"
 #include "kptnode.h"
+#include "kptproject.h"
+#include "kptxmlloaderobject.h"
 
 #include <QDomElement>
 #include <QString>
@@ -34,6 +36,8 @@
 namespace KPlato
 {
 
+class ScheduleManager;
+    
 Schedule::Schedule()
         : m_type( Expected ),
         m_id( 0 ),
@@ -122,6 +126,34 @@ QString Schedule::typeToString( bool translate ) const
             return "Pessimistic";
         return "Expected";
     }
+}
+
+QStringList Schedule::state() const
+{
+    QStringList lst;
+    if ( m_deleted )
+        lst << i18n( "Deleted" );
+    if ( notScheduled )
+        lst << i18n( "Not scheduled" );
+    if ( schedulingError )
+        lst << i18n( "Cannot fullfill constraints" );
+    if ( resourceError )
+        lst << i18n( "No resource allocated" );
+    if ( resourceNotAvailable )
+        lst << i18n( "Resource not available" );
+    if ( resourceOverbooked )
+        lst << i18n( "Resource overbooked" );
+    if ( lst.isEmpty() )
+        lst << i18n( "Scheduled" );
+    return lst;
+}
+
+bool Schedule::usePert() const
+{
+    if ( m_parent ) {
+        return m_parent->usePert();
+    }
+    return false;
 }
 
 void Schedule::initiateCalculation()
@@ -407,6 +439,7 @@ void NodeSchedule::init()
     schedulingError = false;
     notScheduled = true;
     inCriticalPath = false;
+    
 }
 
 void NodeSchedule::setDeleted( bool on )
@@ -616,14 +649,16 @@ double ResourceSchedule::normalRatePrHour() const
 
 //--------------------------------------
 MainSchedule::MainSchedule()
-        : NodeSchedule()
+    : NodeSchedule(),
+    m_manager( 0 )
 {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     init();
 }
 
 MainSchedule::MainSchedule( Node *node, const QString& name, Schedule::Type type, long id )
-        : NodeSchedule( node, name, type, id )
+    : NodeSchedule( node, name, type, id ),
+    m_manager( 0 )
 {
     //kDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
     init();
@@ -632,6 +667,11 @@ MainSchedule::MainSchedule( Node *node, const QString& name, Schedule::Type type
 MainSchedule::~MainSchedule()
 {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+}
+
+bool MainSchedule::usePert() const
+{
+    return m_manager == 0 ? false : m_manager->usePert();
 }
 
 bool MainSchedule::loadXML( const QDomElement &sch, Project &project )
@@ -673,6 +713,212 @@ void MainSchedule::saveXML( QDomElement &element ) const
 
     element.setAttribute( "start", startTime.toString( Qt::ISODate ) );
     element.setAttribute( "end", endTime.toString( Qt::ISODate ) );
+}
+
+//-----------------------------------------
+ScheduleManager::ScheduleManager( Project &project, const QString name )
+    : m_project( project),
+    m_name( name ),
+    m_calculateAll( false ),
+    m_usePert( false ),
+    m_expected( 0 ),
+    m_optimistic( 0 ),
+    m_pessimistic( 0 )
+{
+    kDebug()<<k_funcinfo<<name<<endl;
+}
+
+
+void ScheduleManager::createSchedules()
+{
+    m_expected = m_project.createSchedule( m_name, Schedule::Expected );
+    m_expected->setManager( this );
+    if ( m_calculateAll ) {
+        m_optimistic = m_project.createSchedule( m_name, Schedule::Optimistic );
+        m_optimistic->setManager( this );
+        m_pessimistic = m_project.createSchedule( m_name, Schedule::Pessimistic );
+        m_pessimistic->setManager( this );
+    } else {
+        m_optimistic = 0;
+        m_pessimistic = 0;
+    }
+    m_project.changed( this );
+}
+
+void ScheduleManager::setName( QString name )
+{
+    m_name = name;
+    if ( m_expected )
+        m_expected->setName( name );
+    if ( m_optimistic )
+        m_optimistic->setName( name );
+    if ( m_pessimistic )
+        m_pessimistic->setName( name );
+
+    m_project.changed( this );
+}
+
+void ScheduleManager::setUsePert( bool on )
+{
+    m_usePert = on;
+    m_project.changed( this );
+}
+
+void ScheduleManager::setCalculateAll( bool on )
+{
+     m_calculateAll = on;
+     m_project.changed( this );
+}
+
+void ScheduleManager::setDeleted( bool on )
+{
+    foreach ( MainSchedule *s,  schedules() ) {
+        s->setDeleted( on );
+    }
+    m_project.changed( this );
+}
+
+void ScheduleManager::setExpected( MainSchedule *sch )
+{
+    m_project.changed( this, 1 );
+    m_expected = sch;
+    m_project.changed( this, 2 );
+}
+
+void ScheduleManager::setOptimistic( MainSchedule *sch )
+{
+    m_project.changed( this, 1 );
+    m_optimistic = sch;
+    m_project.changed( this, 2 );
+}
+
+void ScheduleManager::setPessimistic( MainSchedule *sch )
+{ 
+    m_project.changed( this, 1 );
+    m_pessimistic = sch; 
+    m_project.changed( this, 2 );
+}
+
+QStringList ScheduleManager::state() const
+{
+    QStringList lst;
+    if ( m_expected == 0 && m_optimistic == 0 && m_pessimistic == 0 ) {
+        return lst << i18n( "Not scheduled" );
+    }
+    if ( Schedule *s = m_pessimistic ) {
+        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->schedulingError ) {
+            return lst << i18n( "Error" );
+        }
+    }
+    if ( Schedule *s = m_optimistic ) {
+        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->schedulingError ) {
+            return lst << i18n( "Error" );
+        }
+    }
+    if ( Schedule *s = m_expected ) {
+        if ( s->resourceError || s->resourceOverbooked || s->resourceNotAvailable || s->schedulingError ) {
+            return lst << i18n( "Error" );
+        }
+        return s->state();
+    }
+    return lst;
+}
+
+int ScheduleManager::numSchedules() const
+{
+    return schedules().count();
+}
+
+int ScheduleManager::indexOf( MainSchedule* sch ) const
+{
+    return schedules().indexOf( sch );
+}
+
+QList<MainSchedule*> ScheduleManager::schedules() const
+{
+    QList<MainSchedule*> lst;
+    if ( m_expected )
+        lst << m_expected;
+    if ( m_optimistic )
+        lst << m_optimistic;
+    if ( m_pessimistic )
+        lst << m_pessimistic;
+    return lst;
+}
+
+bool ScheduleManager::loadXML( QDomElement &element, XMLLoaderObject &status )
+{
+    MainSchedule *sch = 0;
+    if ( status.version() <= "0.5" ) {
+        m_usePert = false;
+        sch = loadMainSchedule( element, status );
+        if ( sch ) {
+            sch->setManager( this );
+            switch ( sch->type() ) {
+                case Schedule::Expected: m_expected = sch; break;
+                case Schedule::Optimistic: m_optimistic = sch; break;
+                case Schedule::Pessimistic: m_pessimistic = sch; break;
+            }
+            m_calculateAll = schedules().count() > 1;
+        }
+        return true;
+    }
+    m_name = element.attribute( "name" );
+    m_usePert = (bool)(element.attribute( "distribution" ).toInt());
+    QDomNodeList list = element.childNodes();
+    for ( unsigned int i = 0; i < list.count(); ++i ) {
+        if ( list.item( i ).isElement() ) {
+            QDomElement e = list.item( i ).toElement();
+            kDebug()<<k_funcinfo<<e.tagName()<<endl;
+            if ( e.tagName() == "schedule" ) {
+                sch = loadMainSchedule( e, status );
+                if ( sch ) {
+                    sch->setManager( this );
+                    switch ( sch->type() ) {
+                        case Schedule::Expected: m_expected = sch; break;
+                        case Schedule::Optimistic: m_optimistic = sch; break;
+                        case Schedule::Pessimistic: m_pessimistic = sch; break;
+                    }
+                }
+            }
+        }
+    }
+    m_calculateAll = schedules().count() > 1;
+    return true;
+}
+
+MainSchedule *ScheduleManager::loadMainSchedule( QDomElement &element, XMLLoaderObject &status ) {
+    MainSchedule *sch = new MainSchedule();
+    if ( sch->loadXML( element, status.project() ) ) {
+        status.project().addSchedule( sch );
+        sch->setNode( &(status.project()) );
+        status.project().setParentSchedule( sch );
+        // If it's here, it's scheduled!
+        sch->setScheduled( true );
+    } else {
+        kError() << k_funcinfo << "Failed to load schedule" << endl;
+        delete sch;
+        sch = 0;
+    }
+    return sch;
+}
+
+void ScheduleManager::saveXML( QDomElement &element ) const
+{
+    QDomElement el = element.ownerDocument().createElement( "plan" );
+    element.appendChild( el );
+    el.setAttribute( "name", m_name );
+    el.setAttribute( "distribution", m_usePert );
+    foreach ( MainSchedule *s, schedules() ) {
+        //kDebug()<<k_funcinfo<<m_name<<" id="<<s->id()<<(s->isDeleted()?"  Deleted":"")<<endl;
+        if ( !s->isDeleted() && s->isScheduled() ) {
+            QDomElement schs = el.ownerDocument().createElement( "schedule" );
+            el.appendChild( schs );
+            s->saveXML( schs );
+            m_project.saveAppointments( schs, s->id() );
+        }
+    }
+
 }
 
 #ifndef NDEBUG

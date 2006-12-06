@@ -22,6 +22,7 @@
 #include "kptaccountsviewconfigdialog.h"
 #include "kptcontext.h"
 #include "kptdatetime.h"
+#include "kptpart.h"
 #include "kptproject.h"
 #include "kpteffortcostmap.h"
 
@@ -84,8 +85,8 @@ void AccountsView::AccountItem::add
         m_slaveItem->setText( col, KGlobal::locale() ->formatMoney( cm.cost(), "", 0 ) );
 }
 
-AccountsView::AccountsView( Project &project, View *view, QWidget *parent )
-        : ViewBase( view, parent ),
+AccountsView::AccountsView( Project &project, Part *part, QWidget *parent )
+        : ViewBase( part, parent ),
         m_project( project ),
         m_accounts( project.accounts() )
 {

@@ -41,6 +41,8 @@ namespace KPlato
 class Part;
 class Schedule;
 class StandardWorktime;
+class ScheduleManager;
+class XMLLoaderObject;
 
 /**
  * Project is the main node in a project, it contains child nodes and
@@ -58,17 +60,17 @@ public:
     virtual int type() const;
 
     /**
-     * Calculate the whole project.
+     * Calculate the schedules managed by the schedule manager
+     *
+     * @param sm Schedule manager
+     */
+    void calculate( ScheduleManager &sm );
+    /**
+     * Calculate the schedule.
      *
      * @param schedule Schedule to use
      */
     void calculate( Schedule *scedule );
-    /**
-     * Calculate the whole project.
-     *
-     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
-     */
-    void calculate( Effort::Use use );
     /// Calculate current schedule
     void calculate();
 
@@ -87,7 +89,7 @@ public:
      */
     Duration *getRandomDuration();
 
-    virtual bool load( QDomElement &element );
+    virtual bool load( QDomElement &element, XMLLoaderObject &status );
     virtual void save( QDomElement &element ) const;
 
     QList<ResourceGroup*> &resourceGroups();
@@ -239,11 +241,26 @@ public:
 
     /// Set current schedule to schedule with identity id, for me and my children
     virtual void setCurrentSchedule( long id );
+    /// Create new schedule with unique name and id of type Expected.
+    MainSchedule *createSchedule();
     /// Create new schedule with unique id.
     MainSchedule *createSchedule( const QString& name, Schedule::Type type );
+    /// Add the schedule to the project. A fresh id will be generated for the schedule.
+    void addMainSchedule( MainSchedule *schedule );
     /// Set parent schedule for my children
     virtual void setParentSchedule( Schedule *sch );
-
+    
+    QString uniqueScheduleName() const;
+    ScheduleManager *createScheduleManager();
+    ScheduleManager *createScheduleManager( const QString name );
+    QList<ScheduleManager*> scheduleManagers() const { return m_managers; }
+    int numScheduleManagers() const { return m_managers.count(); }
+    int indexOf( ScheduleManager *sm ) const { return m_managers.indexOf( sm ); }
+    bool isScheduleManager( void* ptr ) const { return indexOf( static_cast<ScheduleManager*>( ptr ) ) >= 0; }
+    void addScheduleManager( ScheduleManager *sm );
+    void takeScheduleManager( ScheduleManager *sm );
+    ScheduleManager *findScheduleManager( const QString name ) const;
+    
     void changed( ResourceGroup *group );
     void sendResourceAdded( const ResourceGroup *group, const Resource *resource );
     void sendResourceToBeAdded( const ResourceGroup *group, const Resource *resource );
@@ -252,7 +269,12 @@ public:
     
     void changed( Resource *resource );
     
+    void changed( ScheduleManager *sm, int type = 0 );
+            
 signals:
+    void currentScheduleChanged();
+    void sigProgress( int );
+    
     /// This signal is emitted when one of the nodes members is changed.
     void nodeChanged( Node* );
     /// This signal is emitted when the node is to be added to the project.
@@ -279,6 +301,14 @@ signals:
     void resourceToBeAdded( const ResourceGroup *group, const Resource *resource );
     void resourceRemoved( const ResourceGroup *group, const Resource *resource );
     void resourceToBeRemoved( const ResourceGroup *group, const Resource *resource );
+
+    void scheduleManagerChanged( ScheduleManager *sch );
+    void scheduleManagerAdded( const ScheduleManager *sch );
+    void scheduleManagerToBeAdded( const ScheduleManager *sch );
+    
+    void scheduleChanged( MainSchedule *sch );
+    void scheduleAdded( const MainSchedule *sch );
+    void scheduleToBeAdded( const MainSchedule *sch );
 
 protected:
     virtual void changed(Node *node);
@@ -314,12 +344,15 @@ private:
     QHash<QString, Node*> nodeIdDict;
     QHash<QString, Calendar*> calendarIdDict;
 
+    QList<ScheduleManager*> m_managers;
+    
 #ifndef NDEBUG
 public:
     void printDebug( bool children, const QByteArray& indent );
     void printCalendarDebug( const QByteArray& indent = "" );
 #endif
 };
+
 
 }  //KPlato namespace
 

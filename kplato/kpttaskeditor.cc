@@ -837,18 +837,14 @@ QItemSelectionModel::SelectionFlags NodeTreeView::selectionCommand(const QModelI
 }
 
 //-----------------------------------
-TaskEditor::TaskEditor( View *view, QWidget *parent )
-    : ViewBase( view, parent )
+TaskEditor::TaskEditor( Part *part, QWidget *parent )
+    : ViewBase( part, parent )
 {
-    setInstance(Factory::global());
-    if ( view->getPart()->isReadWrite() ) {
-        setXMLFile("kplato_taskeditor.rc");
-    }
     setupGui();
 
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_editor = new NodeTreeView( view->getPart(), this );
+    m_editor = new NodeTreeView( part, this );
     l->addWidget( m_editor );
     m_editor->setEditTriggers( m_editor->editTriggers() | QAbstractItemView::EditKeyPressed );
 
@@ -866,15 +862,11 @@ void TaskEditor::draw()
 {
 }
 
-void TaskEditor::setViewActive( bool activate, KXMLGUIFactory *factory ) // slot
+void TaskEditor::setGuiActive( bool activate )
 {
     kDebug()<<k_funcinfo<<activate<<endl;
-    if ( activate ) {
-        addActions( factory );
-        updateActionsEnabled( true );
-    } else {
-        removeActions();
-    }
+    updateActionsEnabled( true );
+    ViewBase::setGuiActive( activate );
     if ( activate && !m_editor->currentIndex().isValid() ) {
         m_editor->selectionModel()->setCurrentIndex(m_editor->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
@@ -962,24 +954,42 @@ void TaskEditor::updateActionsEnabled( bool on )
 
 void TaskEditor::setupGui()
 {
-    actionAddTask = new KAction( KIcon( "add_task" ), i18n( "Add Task..." ), actionCollection(), "add_task" );
+    KActionCollection *coll = actionCollection();
+    
+    QString name = "taskeditor_add_list";
+    actionAddTask = new KAction( KIcon( "add_task" ), i18n( "Add Task..." ), coll, "add_task" );
     connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
-    actionAddSubtask = new KAction( KIcon( "add_sub_task" ), i18n( "Add Sub-Task..." ), actionCollection(), "add_sub_task" );
+    addAction( name, actionAddTask );
+    
+    actionAddSubtask = new KAction( KIcon( "add_sub_task" ), i18n( "Add Sub-Task..." ), coll, "add_sub_task" );
     connect( actionAddSubtask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
-    actionAddMilestone = new KAction( KIcon( "add_milestone" ), i18n( "Add Milestone..." ), actionCollection(), "add_milestone" );
+    addAction( name, actionAddSubtask );
+    
+    actionAddMilestone = new KAction( KIcon( "add_milestone" ), i18n( "Add Milestone..." ), coll, "add_milestone" );
     connect( actionAddMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddMilestone() ) );
-    actionDeleteTask = new KAction( KIcon( "editdelete" ), i18n( "Delete Task" ), actionCollection(), "delete_task" );
+    addAction( name, actionAddMilestone );
+    
+    actionDeleteTask = new KAction( KIcon( "editdelete" ), i18n( "Delete Task" ), coll, "delete_task" );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
+    addAction( name, actionDeleteTask );
 
     
-    actionIndentTask = new KAction(KIcon("indent_task"), i18n("Indent Task"), actionCollection(), "indent_task");
+    name = "taskeditor_move_list";
+    actionIndentTask = new KAction(KIcon("indent_task"), i18n("Indent Task"), coll, "indent_task");
     connect(actionIndentTask, SIGNAL(triggered(bool) ), SLOT(slotIndentTask()));
-    actionUnindentTask = new KAction(KIcon("unindent_task"), i18n("Unindent Task"), actionCollection(), "unindent_task");
+    addAction( name, actionIndentTask );
+    
+    actionUnindentTask = new KAction(KIcon("unindent_task"), i18n("Unindent Task"), coll, "unindent_task");
     connect(actionUnindentTask, SIGNAL(triggered(bool) ), SLOT(slotUnindentTask()));
-    actionMoveTaskUp = new KAction(KIcon("move_task_up"), i18n("Move Up"), actionCollection(), "move_task_up");
+    addAction( name, actionUnindentTask );
+    
+    actionMoveTaskUp = new KAction(KIcon("move_task_up"), i18n("Move Up"), coll, "move_task_up");
     connect(actionMoveTaskUp, SIGNAL(triggered(bool) ), SLOT(slotMoveTaskUp()));
-    actionMoveTaskDown = new KAction(KIcon("move_task_down"), i18n("Move Down"), actionCollection(), "move_task_down");
+    addAction( name, actionMoveTaskUp );
+    
+    actionMoveTaskDown = new KAction(KIcon("move_task_down"), i18n("Move Down"), coll, "move_task_down");
     connect(actionMoveTaskDown, SIGNAL(triggered(bool) ), SLOT(slotMoveTaskDown()));
+    addAction( name, actionMoveTaskDown );
 
 }
 

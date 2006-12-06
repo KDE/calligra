@@ -68,9 +68,8 @@ ResourceAppointmentsView::NodeItem::NodeItem(const QString& text, QTreeWidget *p
 }
 
 //-------------------------------------------
-ResourceAppointmentsView::ResourceAppointmentsView(View *view, QWidget *parent)
+ResourceAppointmentsView::ResourceAppointmentsView( QWidget *parent)
     : DoubleListViewBase(parent),
-      m_mainview(view),
       m_resource(0),
       m_availItem(0),
       m_totalItem(0) {

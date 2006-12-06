@@ -453,18 +453,19 @@ public:
     Schedule *currentSchedule() const { return m_currentSchedule; }
     /// Set current schedule to schedule with identity id, for me and my children
     virtual void setCurrentSchedule(long id);
-    // NOTE: Cannot use setCurrentSchedule() due to overload/casting problems
-    void setCurrentSchedulePtr(Schedule *schedule) { m_currentSchedule = schedule; }
     
     QHash<long, Schedule*> &schedules() { return m_schedules; }
     /// Find schedule matching name and type. Does not return deleted schedule.
     Schedule *findSchedule(const QString name, const Schedule::Type type);
+    /// Find schedule matching name. Does not return deleted schedule.
+    Schedule *findSchedule(const QString name);
     /// Find schedule matching type.  Does not return deleted schedule.
     Schedule *findSchedule(const Schedule::Type type);
     /// Find schedule matching id.  Also returns deleted schedule.
     Schedule *findSchedule(long id) const { 
         return m_schedules.contains(id) ? m_schedules[id] : 0; 
     }
+    
     /// Take, don't delete (as in destruct).
     void takeSchedule(const Schedule *schedule);
     /// Add schedule to list, replace if schedule with same id already exists.
@@ -485,6 +486,8 @@ public:
         { return m_currentSchedule ? m_currentSchedule->endTime : DateTime(); }
 
 protected:
+    // NOTE: Cannot use setCurrentSchedule() due to overload/casting problems
+    void setCurrentSchedulePtr(Schedule *schedule) { m_currentSchedule = schedule; }
     virtual void changed(Node *node);
     
     QList<Node*> m_nodes;
@@ -577,7 +580,7 @@ public:
     static QStringList risktypeToStringList( bool trans=false );
 
     enum Use { Use_Expected=0, Use_Optimistic=1, Use_Pessimistic=2 };
-    Duration effort(int use) const;
+    Duration effort(int valueType, bool pert) const;
     const Duration& optimistic() const {return m_optimisticEffort;}
     const Duration& pessimistic() const {return m_pessimisticEffort;}
     const Duration& expected() const {return m_expectedEffort;}

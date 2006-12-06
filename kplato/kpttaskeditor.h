@@ -150,7 +150,9 @@ class TaskEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    TaskEditor( View *view, QWidget *parent );
+    TaskEditor( Part *part, QWidget *parent );
+    
+    void setupGui();
     virtual void draw( Project &project );
     virtual void draw();
 
@@ -172,10 +174,10 @@ signals:
     void unindentTask();
 
 public slots:
-    virtual void setViewActive( bool activate, KXMLGUIFactory *factory=0  );
+    /// Activate/deactivate the gui
+    virtual void setGuiActive( bool activate );
 
 protected:
-    void setupGui();
     void updateActionsEnabled( bool on );
     int selectedNodeCount() const;
     
