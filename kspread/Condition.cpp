@@ -92,12 +92,12 @@ bool Conditional::operator==(const Conditional& other) const
     if ( cond == other.cond &&
          val1 == other.val1 &&
          val2 == other.val2 &&
-         *strVal1 == *other.strVal1 &&
-         *strVal2 == *other.strVal2 &&
-         *colorcond == *other.colorcond &&
-         *fontcond == *other.fontcond &&
-         *styleName == *other.styleName &&
-         *style == *other.style )
+         ( strVal1 && other.strVal1 ) ? ( *strVal1 == *other.strVal1 ) : ( strVal1 == other.strVal1 ) &&
+         ( strVal2 && other.strVal2 ) ? ( *strVal2 == *other.strVal2 ) : ( strVal2 == other.strVal2 ) &&
+         ( colorcond && other.strVal2 ) ? ( *colorcond == *other.colorcond ) : ( colorcond == other.colorcond ) &&
+         ( fontcond && other.fontcond ) ? ( *fontcond == *other.fontcond ) : ( fontcond == other.fontcond ) &&
+         ( styleName && other.styleName ) ? ( *styleName == *other.styleName ) : ( styleName == other.styleName ) &&
+         ( style && other.style ) ? ( *style == *other.style ) : ( style == other.style ) )
     {
         return true;
     }

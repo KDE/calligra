@@ -1500,7 +1500,7 @@ void Canvas::wheelEvent( QWheelEvent* _ev )
 
 void Canvas::paintEvent( QPaintEvent* event )
 {
-    if ( d->view->doc()->isLoading() )
+    if ( d->view->doc()->isLoading() || d->view->isLoading() )
         return;
 
     register Sheet * const sheet = activeSheet();

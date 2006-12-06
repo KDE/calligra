@@ -425,9 +425,15 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
                 // first, load the attributes of the parent style(s)
                 QList<CustomStyle*> parentStyles;
                 CustomStyle* parentStyle = styleManager()->style( namedStyle->parentName() );
+                if ( parentStyle )
+                    kDebug(36006) << "StyleStorage: " << namedStyle->name() << "'s parent = " << parentStyle->name() << endl;
                 while ( parentStyle )
                 {
+//                     kDebug(36006) << "StyleStorage: " << parentStyle->name() << "'s parent = " << parentStyle->parentName() << endl;
                     parentStyles.prepend( parentStyle );
+                    // FIXME Stefan: Make sure, that "Default" does not inherit "Default"! OOo default style!
+                    if ( parentStyle->name() == "Default" )
+                        break;
                     parentStyle = styleManager()->style( parentStyle->parentName() );
                 }
                 for ( int i = 0; i < parentStyles.count(); ++i )

@@ -222,13 +222,13 @@ void StyleManager::createBuiltinStyles()
 
 CustomStyle * StyleManager::style( QString const & name ) const
 {
-  if (m_styles.contains(name))
-    return m_styles[name];
-
-  if ( name == "Default" )
-    return m_defaultStyle;
-
-  return 0;
+    if ( name.isEmpty() )
+        return 0;
+    if ( m_styles.contains(name) )
+        return m_styles[name];
+    if ( name == "Default" )
+        return m_defaultStyle;
+    return 0;
 }
 
 void StyleManager::takeStyle( CustomStyle * style )

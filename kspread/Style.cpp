@@ -2552,7 +2552,8 @@ CustomStyle::CustomStyle( QString const & name, CustomStyle * parent )
     , d( new Private )
 {
     d->name = name;
-    setParentName( parent->name() );
+    if ( parent )
+        setParentName( parent->name() );
 }
 
 CustomStyle::~CustomStyle()
