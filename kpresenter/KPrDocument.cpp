@@ -1200,9 +1200,9 @@ void KPrDocument::loadOasisIgnoreList( const KoOasisSettings& settings )
 
 void KPrDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context, bool stylesDotXml )
 {
-    context.writeFontFaces( contentWriter );
     if ( !stylesDotXml )
     {
+        context.writeFontFaces( contentWriter );
         contentWriter.startElement( "office:automatic-styles" );
     }
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO, stylesDotXml );
@@ -1471,6 +1471,9 @@ void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyl
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
+    // Yeah we need to save the same font faces in both content.xml and styles.xml... 
+    savingContext.writeFontFaces(  *stylesWriter ); 
+          
     stylesWriter->startElement( "office:styles" );
     QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
