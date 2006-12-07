@@ -24,7 +24,7 @@
 #include <klistview.h>
 #include <qstring.h>
 
-#include "kexipartitem.h"
+#include <core/kexipartitem.h>
 
 namespace KexiPart
 {

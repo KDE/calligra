@@ -3,7 +3,6 @@ include $(top_srcdir)/kexi/Makefile.global
 lib_LTLIBRARIES = libkeximain.la
 libkeximain_la_SOURCES = \
 	keximainwindowimpl.cpp \
-	kexibrowser.cpp kexibrowseritem.cpp \
 	kexistatusbar.cpp \
 	kexinamewidget.cpp kexinamedialog.cpp \
 	kexinewstuff.cpp
@@ -31,6 +30,6 @@ INCLUDES = $(INC_KFEEDBACK) $(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/kexi/migration -I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore \
 	$(all_includes)
 
-noinst_HEADERS = ksplitter.h kexibrowser_p.h keximainwindowimpl_p.h
+noinst_HEADERS = ksplitter.h keximainwindowimpl_p.h
 
 METASOURCES = AUTO

@@ -20,10 +20,9 @@
 
 #include "kexibrowseritem.h"
 
-#include "kexipartinfo.h"
-
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <core/kexipartinfo.h>
 
 KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiPart::Info *i)
  : KListViewItem(parent, i->groupName())

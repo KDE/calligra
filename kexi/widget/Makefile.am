@@ -2,6 +2,7 @@ include $(top_srcdir)/kexi/Makefile.global
 
 lib_LTLIBRARIES = libkexiextendedwidgets.la
 libkexiextendedwidgets_la_SOURCES = kexidataawareview.cpp \
+	kexibrowser.cpp kexibrowseritem.cpp \
 	kexidatatable.cpp kexiquerydesignersqleditor.cpp kexiqueryparameters.cpp \
 	kexisectionheader.cpp pixmapcollection.cpp \
 	kexiscrollview.cpp kexidbconnectionwidgetbase.ui kexidbconnectionwidget.cpp \
@@ -43,6 +44,8 @@ INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/widget/tableview \
 	$(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/kexi/core \
 	-I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib $(all_includes)
+
+noinst_HEADERS = kexibrowseritem.h kexibrowser_p.h
 
 METASOURCES = AUTO
 
