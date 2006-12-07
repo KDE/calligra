@@ -965,14 +965,19 @@ void View::slotProjectResources()
 void View::slotCurrentScheduleChanged()
 {
     kDebug()<<k_funcinfo<<endl;
-    //TODO
+    // hmmm, find a better way. Maybe a "current view schedule"?
+    m_ganttview->drawChanges();
+    //m_resourceview->draw();
+    m_accountsview->draw();
     setLabel();
+    
 }
 
 void View::slotViewSchedule( QAction *act )
 {
     kDebug()<<k_funcinfo<<endl;
     Schedule *sch = m_scheduleActions.value( act, 0 );
+    // hmmm, find a better way. Maybe a "current view schedule"?
     getProject().setCurrentSchedule( sch->id() );
 }
 
@@ -1797,9 +1802,6 @@ bool View::setContext( Context &context )
     //    m_reportview->setContext(context.reportview);
 
     if ( context.currentView == "ganttview" ) {
-/*        m_ganttview->setShowExpected( actionViewExpected->isChecked() );
-        m_ganttview->setShowOptimistic( actionViewOptimistic->isChecked() );
-        m_ganttview->setShowPessimistic( actionViewPessimistic->isChecked() );*/
         slotViewGantt();
     } else if ( context.currentView == "resourceview" ) {
         slotViewResources();
