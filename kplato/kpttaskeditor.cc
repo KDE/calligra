@@ -683,6 +683,9 @@ Node *NodeItemModel::node( const QModelIndex &index ) const
 
 void NodeItemModel::slotNodeChanged( Node *node )
 {
+    if ( node == 0 || node->type() == Node::Type_Project ) {
+        return;
+    }
     int row = node->getParent()->findChildNode( node );
     emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
 }
