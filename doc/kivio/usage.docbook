@@ -101,7 +101,8 @@ The adjustments will only affect the currently selected stencil.</para>
 <sect2>
 <title>Connecting Shapes Together</title>
 <para>&kivio;'s connector tool allows lines to be drawn between shapes. The lines remain connected to the shapes even when the shapes are moved to new positions on the page.</para>
-<para>The <guilabel>Connector</guilabel> tool is available from the <guilabel>Tools</guilabel> toolbar; by default shown on the top side of the window. Click on this tool to begin using it; the mouse pointer will change shape.</para>
+<para>To draw a connector select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Straight Connector</guimenuitem></menuchoice> or <menuchoice><guimenu>Tools</guimenu><guimenuitem>Polyline Connector</guimenuitem></menuchoice>.</para>
+<para>The <guilabel>Polyline Connector</guilabel> tool is also available from the <guilabel>Tools</guilabel> toolbar; by default shown on the top side of the window. Click on this tool to begin using it; the mouse pointer will change shape.</para>
 <para>Notice that all stencils have little blue crosses around their edges. These crosses mark points where connectors can be attached.</para>
 <para>To connect two stencils move to one of the connection points on the first stencil, hold down the &LMB; and drag a line to one of the connection points on the second stencil. The green square at the end of the line will change to red when it is over a connection point indicating that the line is attached to a stencil. </para>
 <para>When you have finished using the connector tool, click on the <guiicon>Arrow</guiicon> tool to regain normal selection functionality.</para>
@@ -154,7 +155,7 @@ The adjustments will only affect the currently selected stencil.</para>
 
 <sect2>
 <title>Panning the Document</title>
-<para>The <guiicon>Pan Document</guiicon> tool lets you move the document around, adjusting the portion that is visible. This is very useful when working at high magnifications where the entire document is not completely visible. The <guiicon>Pan Document</guiicon> tool shares a button with the zoom tool on the <guilabel>Tools</guilabel> toolbar. Once activated the mouse pointer turns into a hand. To move the document move the mouse over the currently visible portion, hold down the &LMB; and drag.</para>
+<para>The <guiicon>Pan Document</guiicon> tool lets you move the document around, adjusting the portion that is visible. This is very useful when working at high magnifications where the entire document is not completely visible. To pan a document select <guiicon>Pan Document</guiicon> from the <guilabel>Tools</guilabel> toolbar or <menuchoice><guimenu>Tools</guimenu><guisubmenu>Pan Document</guisubmenu></menuchoice> in the menu. Once activated the mouse pointer turns into a hand. To move the document move the mouse over the currently visible portion, hold down the &LMB; and drag.</para>
 </sect2>
 
 <sect2>
