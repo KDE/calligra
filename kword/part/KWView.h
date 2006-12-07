@@ -117,6 +117,7 @@ private slots:
     void slotLineBreak();
     void insertFrameBreak();
     void formatFont();
+    void editDeleteFrame();
 
 private:
     KWGui *m_gui;
@@ -129,6 +130,7 @@ private:
     KAction *m_actionFormatFrameSet;
     KAction *m_actionInsertFrameBreak;
     KAction *m_actionFormatFont;
+    KAction *m_actionEditDelFrame;
     KToggleAction *m_actionFormatBold;
     KToggleAction *m_actionFormatItalic;
     KToggleAction *m_actionFormatUnderline;

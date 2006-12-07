@@ -33,6 +33,7 @@
 #include <KoShapeContainer.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoShapeController.h>
 #include <KoZoomAction.h>
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
@@ -171,6 +172,11 @@ void KWView::setupActions() {
     m_actionFormatFont->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
     connect(m_actionFormatFont, SIGNAL(triggered()), this, SLOT( formatFont() ));
 
+    m_actionEditDelFrame = new KAction( i18n( "Delete Frame" ), actionCollection(), "edit_delframe");
+    m_actionEditDelFrame->setToolTip( i18n( "Delete the currently selected frame(s)" ) );
+    m_actionEditDelFrame->setWhatsThis( i18n( "Delete the currently selected frame(s)." ) );
+    connect(m_actionEditDelFrame, SIGNAL(triggered()), this, SLOT( editDeleteFrame() ));
+
 
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
@@ -217,12 +223,6 @@ This saves problems with finding out which we missed near the end.
     //    (void) new KWMailMergeComboAction::KWMailMergeComboAction(i18n("Insert Mailmerge Var"),0,this,SLOT(JWJWJW()),actionCollection(),"mailmerge_varchooser");
 
     // -------------- Frame menu
-    m_actionEditDelFrame = new KAction( i18n( "Delete Frame" ), 0,
-    this, SLOT( editDeleteFrame() ),
-    actionCollection(), "edit_delframe" );
-    m_actionEditDelFrame->setToolTip( i18n( "Delete the currently selected frame(s)" ) );
-    m_actionEditDelFrame->setWhatsThis( i18n( "Delete the currently selected frame(s)." ) );
-
     m_actionCreateLinkedFrame = new KAction( i18n( "Create Linked Copy" ), 0, this, SLOT( createLinkedFrame() ), actionCollection(), "create_linked_frame" );
     m_actionCreateLinkedFrame->setToolTip( i18n( "Create a copy of the current frame, always showing the same contents" ) );
     m_actionCreateLinkedFrame->setWhatsThis( i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies.") );
@@ -973,6 +973,8 @@ void KWView::updateZoomControls()
         case KoZoomMode::ZOOM_CONSTANT:
             m_actionViewZoom->setZoom( m_zoomHandler.zoomInPercent() );
             break;
+        case KoZoomMode::ZOOM_PIXELS:
+            kWarning(32003) << "Illegal zoommode!\n";
     }
 }
 
@@ -1122,6 +1124,12 @@ void KWView::formatFont() {
         handler->selectFont(this);
 }
 
+void KWView::editDeleteFrame() {
+    foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+        KCommand *cmd = kwcanvas()->shapeController()->removeShape(shape);
+        m_document->addCommand(cmd);
+    }
+}
 
 void KWView::selectionChanged()
 {
