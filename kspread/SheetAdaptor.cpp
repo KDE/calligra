@@ -199,6 +199,7 @@ bool SheetAdaptor::setValue( const QString& cellname, const QVariant& value )
     return setValue(location.x(), location.y(), value);
 }
 
+#if 0
 QString SheetAdaptor::column( int _col )
 {
     //First col number = 1
@@ -215,6 +216,17 @@ QString SheetAdaptor::row( int _row )
         return QString();
     return "";//m_sheet->nonDefaultRowFormat( _row )->/*dcopObject()->*/getName/*objectName*/();
 }
+#endif
+
+QString SheetAdaptor::sheetName() const
+{
+    return m_sheet->sheetName();
+}
+
+bool SheetAdaptor::setSheetName( const QString & name)
+{
+    return m_sheet->setSheetName( name);
+}
 
 int SheetAdaptor::lastColumn() const
 {
@@ -226,17 +238,6 @@ int SheetAdaptor::lastRow() const
 {
     Cell* cell = m_sheet->firstCell();
     return cell ? cell->row() : 0;
-}
-
-int SheetAdaptor::maxColumn() const
-{
-    return m_sheet->maxColumn();
-
-}
-
-int SheetAdaptor::maxRow() const
-{
-    return m_sheet->maxRow();
 }
 
 // bool SheetAdaptor::processDynamic( const DCOPCString& fun, const QByteArray&/*data*/,
@@ -265,16 +266,6 @@ int SheetAdaptor::maxRow() const
 //     return true;
 // }
 
-QString SheetAdaptor::sheetName() const
-{
-    return m_sheet->sheetName();
-}
-
-bool SheetAdaptor::setSheetName( const QString & name)
-{
-    return m_sheet->setSheetName( name);
-}
-
 bool SheetAdaptor::insertColumn( int col,int nbCol )
 {
     return m_sheet->insertColumn(col,nbCol);
@@ -295,13 +286,17 @@ void SheetAdaptor::removeRow( int row,int nbRow )
     m_sheet->removeRow( row,nbRow );
 }
 
-
-bool SheetAdaptor::isHidden()const
+bool SheetAdaptor::isHidden() const
 {
     return m_sheet->isHidden();
 }
 
+void SheetAdaptor::setHidden( bool hidden )
+{
+    m_sheet->setHidden( hidden );
+}
 
+#if 0
 bool SheetAdaptor::showGrid() const
 {
     return m_sheet->getShowGrid();
@@ -342,112 +337,115 @@ void SheetAdaptor::setShowPageBorders( bool b )
     m_sheet->setShowPageBorders( b );
     m_sheet->doc()->updateBorderButton();
 }
+#endif
 
-float SheetAdaptor::paperHeight()const
+float SheetAdaptor::printHeight()const
 {
     return m_sheet->print()->paperHeight();
 }
 
-float SheetAdaptor::paperWidth()const
+float SheetAdaptor::printWidth()const
 {
     return m_sheet->print()->paperWidth();
 }
 
-float SheetAdaptor::leftBorder()const
+float SheetAdaptor::printLeftBorder()const
 {
     return m_sheet->print()->leftBorder();
 }
 
-float SheetAdaptor::rightBorder()const
+float SheetAdaptor::printRightBorder()const
 {
     return m_sheet->print()->rightBorder();
 }
 
-float SheetAdaptor::topBorder()const
+float SheetAdaptor::printTopBorder()const
 {
     return m_sheet->print()->topBorder();
 }
 
-float SheetAdaptor::bottomBorder()const
+float SheetAdaptor::printBottomBorder()const
 {
     return m_sheet->print()->bottomBorder();
 }
 
-QString SheetAdaptor::paperFormatString() const
-{
-    return m_sheet->print()->paperFormatString();
-}
-
-QString SheetAdaptor::headLeft()const
+#if 0
+QString SheetAdaptor::printHeadLeft()const
 {
     return m_sheet->print()->headLeft();
 }
 
-QString SheetAdaptor::headMid()const
+QString SheetAdaptor::printHeadMid()const
 {
     return m_sheet->print()->headMid();
 }
 
-QString SheetAdaptor::headRight()const
+QString SheetAdaptor::printHeadRight()const
 {
     return m_sheet->print()->headRight();
 }
 
-QString SheetAdaptor::footLeft()const
+QString SheetAdaptor::printFootLeft()const
 {
     return m_sheet->print()->footLeft();
 }
 
-QString SheetAdaptor::footMid()const
+QString SheetAdaptor::printFootMid()const
 {
     return m_sheet->print()->footMid();
 }
 
-QString SheetAdaptor::footRight()const
+QString SheetAdaptor::printFootRight()const
 {
     return m_sheet->print()->footRight();
 }
 
-void SheetAdaptor::setHeaderLeft(const QString & text)
+void SheetAdaptor::setPrintHeaderLeft(const QString & text)
 {
     m_sheet->print()->setHeadFootLine( text,       headMid(), headRight(),
                                        footLeft(), footMid(), footRight() );
 }
 
-void SheetAdaptor::setHeaderMiddle(const QString & text)
+void SheetAdaptor::setPrintHeaderMiddle(const QString & text)
 {
     m_sheet->print()->setHeadFootLine( headLeft(), text,      headRight(),
                                        footLeft(), footMid(), footRight() );
 
 }
 
-void SheetAdaptor::setHeaderRight(const QString & text)
+void SheetAdaptor::setPrintHeaderRight(const QString & text)
 {
     m_sheet->print()->setHeadFootLine( headLeft(), headMid(), text,
                                        footLeft(), footMid(), footRight() );
 }
 
-void SheetAdaptor::setFooterLeft(const QString & text)
+void SheetAdaptor::setPrintFooterLeft(const QString & text)
 {
     m_sheet->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
                                        text,       footMid(), footRight() );
 }
 
-void SheetAdaptor::setFooterMiddle(const QString & text)
+void SheetAdaptor::setPrintFooterMiddle(const QString & text)
 {
     m_sheet->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
                                        footLeft(), text,      footRight() );
 }
 
-void SheetAdaptor::setFooterRight(const QString & text)
+void SheetAdaptor::setPrintFooterRight(const QString & text)
 {
     m_sheet->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
                                        footLeft(), footMid(), text );
+}
+
+QString SheetAdaptor::printFormatString() const
+{
+    return m_sheet->print()->paperFormatString();
 }
 
 bool SheetAdaptor::isProtected() const
 {
     return m_sheet->isProtected();
 }
+#endif
 
 #include "SheetAdaptor.moc"
