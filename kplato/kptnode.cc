@@ -402,14 +402,14 @@ void Node::setConstraint(QString &type) {
         setConstraint(ASAP);
     else if (type == "ALAP")
         setConstraint(ALAP);
-    else if (type == "StartNotEarlier")
-        setConstraint(StartNotEarlier);
-    else if (type == "FinishNotLater")
-        setConstraint(FinishNotLater);
     else if (type == "MustStartOn")
         setConstraint(MustStartOn);
     else if (type == "MustFinishOn")
         setConstraint(MustFinishOn);
+    else if (type == "StartNotEarlier")
+        setConstraint(StartNotEarlier);
+    else if (type == "FinishNotLater")
+        setConstraint(FinishNotLater);
     else if (type == "FixedInterval")
         setConstraint(FixedInterval);
     else
@@ -425,10 +425,10 @@ QStringList Node::constraintList( bool trans ) {
     return QStringList() 
             << (trans ? i18n("As Soon As Possible") : QString("ASAP"))
             << (trans ? i18n("As Late As Possible") : QString("ALAP"))
-            << (trans ? i18n("Start Not Earlier") : QString("StartNotEarlier"))
-            << (trans ? i18n("Finish Not Later") : QString("FinishNotLater"))
             << (trans ? i18n("Must Start On") : QString("MustStartOn"))
             << (trans ? i18n("Must Finish On") : QString("MustFinishOn"))
+            << (trans ? i18n("Start Not Earlier") : QString("StartNotEarlier"))
+            << (trans ? i18n("Finish Not Later") : QString("FinishNotLater"))
             << (trans ? i18n("Fixed Interval") : QString("FixedInterval"));
 }
 
