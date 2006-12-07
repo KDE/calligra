@@ -1,0 +1,102 @@
+#!/bin/bash
+#
+#   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
+#
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public
+#   License as published by the Free Software Foundation; either
+#   version 2 of the License, or (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#    General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; see the file COPYING.  If not, write to
+#   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+#   Boston, MA 02111-1307, USA.
+#
+
+function usage {
+	echo "This script adds a new empty column to a table in a .kexi (SQLite 3)
+	database file without removing data from the table.
+
+Usage:
+ $0 database_name table_name new_column_name new_column_type 
+    [new_column_caption]
+
+- database_name and table_name must exist
+- new_column_name must not exist and should be valid idetifier
+- new_column_type must be one of:
+   Byte, ShortInteger, Integer, BigInteger, Boolean, Date, DateTime, Time,
+   Float, Double, Text, LongText, BLOB (for images)
+- new_column_caption can be any text; enclose it in \" \" if you want to use
+   spaces there
+
+Example: to append a column 'photo' of type BLOB to the table 'cars', type
+ $0 db.kexi cars photo BLOB Photo"
+}
+
+function exit_with_error {
+	rm "$temp_db"
+	echo "Error."
+	exit 1
+}
+
+
+if [ $# -lt 4 ] ; then
+	usage
+	exit 0
+fi
+
+database_name=$1
+table_name=$2
+new_column_name=$3
+new_column_type=$4
+new_column_caption=$5
+
+# get numeric value for the data type
+case $new_column_type in
+ Byte) typenum=1;;
+ ShortInteger) typenum=2;;
+ Integer) typenum=3;;
+ BigInteger) typenum=4;;
+ Boolean) typenum=5;;
+ Date) typenum=6;;
+ DateTime) typenum=7;;
+ Time) typenum=8;;
+ Float) typenum=9;;
+ Double) typenum=10;;
+ Text) typenum=11;;
+ LongText) typenum=12;;
+ BLOB) typenum=13;;
+ *) echo "Unknown type name '$new_column_type'"; exit 1;;
+esac
+
+temp_db=`mktemp "$database_name"XXXXXXXX`
+cp $database_name $temp_db || exit_with_error
+echo "DROP TABLE '$table_name';" | ksqlite "$temp_db" || exit_with_error
+
+# 1. Receate table with a new field appended
+echo ".schema '$table_name';" | ksqlite "$database_name" | grep "^CREATE TABLE $table_name " | \
+ sed -e "s/);/, $new_column_name $new_column_type);/g" | ksqlite "$temp_db" || exit_with_error
+
+# 2.1. Get table's ID
+table_id=`echo "SELECT o_id FROM kexi__objects WHERE o_type=1 AND o_name='$table_name';" | \
+ ksqlite "$temp_db" || exit_with_error`
+
+# 2.2. Get new field's order
+order=`echo "SELECT MAX(f_order)+1 FROM kexi__fields where t_id=$table_id;" | \
+ ksqlite "$temp_db" || exit_with_error`
+
+# 2.3. Add the new column information to kexi__fields metadata table
+echo "INSERT INTO kexi__fields (t_id, f_type, f_name, f_length, f_precision, f_constraints, f_options, f_default, f_order, f_caption, f_help) VALUES ($table_id, $typenum, '$new_column_name', 0, 0, 0, 0, NULL, $order, '$new_column_caption', NULL);" | ksqlite "$temp_db" || exit_with_error
+
+# 3. Copy the old data
+echo ".dump '$table_name';" | ksqlite "$database_name" | grep -v "^CREATE TABLE " | \
+ sed -e "s/\(^INSERT.*\));$/\\1, NULL);/g" | ksqlite "$temp_db" || exit_with_error
+
+# 4. Copy the original database file to .old file and replace the original with the new one
+cp "$database_name" "$database_name.old" || exit_with_error
+mv "$temp_db" "$database_name" || exit_with_error
