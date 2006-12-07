@@ -156,8 +156,7 @@ public Q_SLOTS: // METHODS
     //void setPrintFooterMiddle(const QString & text);
     //void setPrintFooterRight(const QString & text);
 
-    /** Return the password. */
-    virtual QByteArray password() const;
+    //NOTE: don't publish "QByteArray password()" cause that may introduce insecure situations...
     /** Return true if passwd is the correct password. */
     virtual bool checkPassword(const QByteArray& passwd) const;
     /** Return true if the sheet/document is protected. */

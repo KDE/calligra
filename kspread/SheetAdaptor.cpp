@@ -463,13 +463,6 @@ void SheetAdaptor::setPrintFooterRight(const QString & text)
 }
 #endif
 
-QByteArray SheetAdaptor::password() const
-{
-    QByteArray passwd;
-    m_sheet->password(passwd);
-    return passwd;
-}
-
 bool SheetAdaptor::checkPassword(const QByteArray& passwd) const
 {
     return m_sheet->checkPassword(passwd);
