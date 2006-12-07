@@ -98,7 +98,7 @@ public Q_SLOTS: // METHODS
     are >= col are moved to the right. */
     virtual bool insertColumn( int col, int nbCol = 1 );
     /** Inserts nbRow number of new rows at the position row. All rows which
-    are >= row are moved to down. */
+    are >= row are moved down. */
     virtual bool insertRow( int row, int nbRow = 1 );
     /** Remove nbCol number of columns from the position col. */
     virtual void removeColumn( int col, int nbCol = 1 );
@@ -107,7 +107,7 @@ public Q_SLOTS: // METHODS
 
     /** Returns true if the sheet is hidden else false is returned. */
     virtual bool isHidden() const;
-    /** Hide the sheet if the argument hidden is true or show it if true. */
+    /** Hide the sheet if the argument hidden is true or show it if hidden is false. */
     virtual void setHidden( bool hidden );
 
     //virtual bool showGrid() const;
