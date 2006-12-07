@@ -30,7 +30,7 @@
  * a scripting language like Python or Ruby.
  *
  * For an example how to use scripted formula functions see;
- * \see http://websvn.kde.org/trunk/koffice/kspread/plugins/scripting/scripts/functions.py?&amp;view=markup
+ * \see http://websvn.kde.org/trunk/koffice/kspread/plugins/scripting/scripts/functions.py?view=markup
  */
 class ScriptingFunction : public QObject
 {
