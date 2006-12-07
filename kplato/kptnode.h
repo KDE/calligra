@@ -90,7 +90,7 @@ public:
     virtual bool load(QDomElement &) { return true; }
     virtual bool load(QDomElement &, Project &) { return true; }
     virtual void save(QDomElement &element) const  = 0;
-    /// Save my and my childrens relations.
+    /// Save me and my childrens relations.
     virtual void saveRelations(QDomElement &element) const;
 
     // simple child node management
@@ -159,14 +159,16 @@ public:
     Relation *findChildRelation(Node *node);
     Relation *findRelation(Node *node);
 
+    /// Set the scheduled start time
     void setStartTime(DateTime startTime, long id = -1 );
     /// Return the scheduled start time
     virtual DateTime startTime( long id = -1 ) const;
+    /// Set the scheduled end time
     void setEndTime(DateTime endTime, long id = -1 );
     /// Return the scheduled end time
     virtual DateTime endTime( long id = -1 ) const;
 
-    void setEffort(Effort* e) { m_effort = e; }
+    /// Return the estimate for this node
     Effort* effort() const { return m_effort; }
 
     /**
@@ -175,39 +177,12 @@ public:
      * estimation of Project duration.
      */
     virtual Duration *getRandomDuration() = 0;
-
     /**
      * Calculate the delay of this node. 
      * It is the difference between the actual startTime and scheduled startTime.
      */
-    Duration *getDelay();
+    Duration *getDelay(); // TODO
 
-    /**
-      * getEarliestStart() returns earliest time this node can start
-      * given the constraints of the network.
-      * @see earliestStart
-      */
-    DateTime getEarliestStart() const
-        { return m_currentSchedule ? m_currentSchedule->earliestStart : DateTime(); }
-    /**
-      * setEarliestStart() sets earliest time this node can start
-      * @see earliestStart
-      */
-    void setEarliestStart(const DateTime &dt) 
-        { if (m_currentSchedule) m_currentSchedule->earliestStart = dt; }
-    /**
-      * getLatestFinish() returns latest time this node can finish
-      * @see latestFinish
-      */
-    DateTime getLatestFinish() const 
-        { return m_currentSchedule ? m_currentSchedule->latestFinish : DateTime(); }
-    /**
-      * setLatestFinish() sets latest time this node can finish
-      * given the constraints of the network.
-      * @see latestFinish
-      */
-    void setLatestFinish(const DateTime &dt) 
-        { if (m_currentSchedule) m_currentSchedule->latestFinish = dt; }
 
     QString &name() { return m_name; }
     QString &leader() { return m_leader; }
@@ -307,38 +282,9 @@ public:
     virtual DateTime scheduleBackward(const DateTime &, int /*use*/) = 0;
     virtual void adjustSummarytask() = 0;
 
-    virtual void initiateCalculation(Schedule &sch);
-    virtual void resetVisited();
-    void propagateEarliestStart(DateTime &time);
-    void propagateLatestFinish(DateTime &time);
-    void moveEarliestStart(DateTime &time);
-    void moveLatestFinish(DateTime &time);
-    // Reimplement this
-    virtual Duration summarytaskDurationForward(const DateTime &/*time*/) 
-        { return Duration::zeroDuration; }
-    // Reimplement this
-    virtual DateTime summarytaskEarliestStart() 
-        { return DateTime(); }
-    // Reimplement this
-    virtual Duration summarytaskDurationBackward(const DateTime &/*time*/) 
-        { return Duration::zeroDuration; }
-    // Reimplement this
-    virtual DateTime summarytaskLatestFinish() 
-        { return DateTime(); }
-    // Returns the (previously) calculated duration
+    /// Returns the (previously) calculated duration
     const Duration &duration( long id = -1 );
-    /**
-     * Calculates and returns the duration of the node.
-     * Uses the correct expected-, optimistic- or pessimistic effort
-     * dependent on use.
-     * @param time Where to start calculation.
-     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
-     * @param backward If true, time specifies when the task should end.
-     */
-    Duration duration(const DateTime &time, int use, bool backward);
-    // Reimplement this
-    virtual Duration calcDuration(const DateTime &/*time*/, const Duration &/*effort*/, bool /*backward*/) { return Duration::zeroDuration;}
-
+    
     Node *siblingBefore();
     Node *childBefore(Node *node);
     Node *siblingAfter();
@@ -350,28 +296,15 @@ public:
     bool legalToLink(Node *node);
     /// Check if node par can be linked to node child. (Reimplement)
     virtual bool legalToLink(Node *, Node *) { return false; }
-    /// Check if this node has any dependent child nodes
-    virtual bool isEndNode() const;
-    /// Check if this node has any dependent parent nodes
-    virtual bool isStartNode() const;
-    virtual void clearProxyRelations() {}
-    virtual void addParentProxyRelations(QList<Relation*> &) {}
-    virtual void addChildProxyRelations(QList<Relation*> &) {}
-    virtual void addParentProxyRelation(Node *, const Relation *) {}
-    virtual void addChildProxyRelation(Node *, const Relation *) {}
 
     /// Save appointments for schedule with id
     virtual void saveAppointments(QDomElement &element, long id) const;
-    ///Return the list of appointments for current schedule.
+    ///Return the list of appointments for schedule with id.
     QList<Appointment*> appointments( long id = -1 );
-    /// Return appointment this node have with resource
-//    Appointment *findAppointment(Resource *resource);
-    /// Adds appointment to this node only (not to resource)
-    virtual bool addAppointment(Appointment *appointment);
     /// Adds appointment to this node only (not to resource)
     virtual bool addAppointment(Appointment *appointment, Schedule &main);
-    /// Adds appointment to both this node and resource
-    virtual void addAppointment(ResourceSchedule *resource, DateTime &start, DateTime &end, double load=100);
+//    /// Return appointment this node have with resource
+//    Appointment *findAppointment(Resource *resource);
     
     /// Find the node with my id
     virtual Node *findNode() const { return findNode(m_id); }
@@ -407,8 +340,6 @@ public:
     
     virtual bool isCritical( long id = -1 ) const { return false; }
     virtual bool inCriticalPath( long id = -1 ) const;
-    virtual bool calcCriticalPath(bool fromEnd);
-    
     /// Returns the level this node is in the hierarchy. Top node is level 0.
     virtual int level();
     /// Generate WBS
@@ -430,6 +361,7 @@ public:
     Account *runningAccount() const { return m_runningAccount; }
     void setRunningAccount(Account *acc) { m_runningAccount = acc; }
 
+    /// Return current schedule
     Schedule *currentSchedule() const { return m_currentSchedule; }
     /// Set current schedule to schedule with identity id, for me and my children
     virtual void setCurrentSchedule(long id);
@@ -458,6 +390,86 @@ public:
     /// Set parent schedule recursivly
     virtual void setParentSchedule(Schedule *sch);
     
+public:
+    // These shouldn't be available to other than those who inherits
+    /// Calculate the critical path
+    virtual bool calcCriticalPath(bool fromEnd);
+
+    /// Check if this node has any dependent child nodes
+    virtual bool isEndNode() const;
+    /// Check if this node has any dependent parent nodes
+    virtual bool isStartNode() const;
+    
+    virtual void initiateCalculation(Schedule &sch);
+    virtual void resetVisited();
+    void propagateEarliestStart(DateTime &time);
+    void propagateLatestFinish(DateTime &time);
+    void moveEarliestStart(DateTime &time);
+    void moveLatestFinish(DateTime &time);
+    // Reimplement this
+    virtual Duration summarytaskDurationForward(const DateTime &/*time*/) 
+    { return Duration::zeroDuration; }
+    // Reimplement this
+    virtual DateTime summarytaskEarliestStart() 
+    { return DateTime(); }
+    // Reimplement this
+    virtual Duration summarytaskDurationBackward(const DateTime &/*time*/) 
+    { return Duration::zeroDuration; }
+    // Reimplement this
+    virtual DateTime summarytaskLatestFinish() 
+    { return DateTime(); }
+    
+    /**
+     * getEarliestStart() returns earliest time this node can start
+     * given the constraints of the network.
+     * @see earliestStart
+     */
+    DateTime getEarliestStart() const
+    { return m_currentSchedule ? m_currentSchedule->earliestStart : DateTime(); }
+    /**
+     * setEarliestStart() sets earliest time this node can start
+     * @see earliestStart
+     */
+    void setEarliestStart(const DateTime &dt) 
+    { if (m_currentSchedule) m_currentSchedule->earliestStart = dt; }
+    /**
+     * getLatestFinish() returns latest time this node can finish
+     * @see latestFinish
+     */
+    DateTime getLatestFinish() const 
+    { return m_currentSchedule ? m_currentSchedule->latestFinish : DateTime(); }
+    /**
+     * setLatestFinish() sets latest time this node can finish
+     * given the constraints of the network.
+     * @see latestFinish
+     */
+    void setLatestFinish(const DateTime &dt) 
+    { if (m_currentSchedule) m_currentSchedule->latestFinish = dt; }
+    
+    /// Adds appointment to this node only (not to resource)
+    virtual bool addAppointment(Appointment *appointment);
+    /// Adds appointment to both this node and resource
+    virtual void addAppointment(ResourceSchedule *resource, DateTime &start, DateTime &end, double load=100);
+    
+    virtual void clearProxyRelations() {}
+    virtual void addParentProxyRelations(QList<Relation*> &) {}
+    virtual void addChildProxyRelations(QList<Relation*> &) {}
+    virtual void addParentProxyRelation(Node *, const Relation *) {}
+    virtual void addChildProxyRelation(Node *, const Relation *) {}
+    
+    /**
+     * Calculates and returns the duration of the node.
+     * Uses the correct expected-, optimistic- or pessimistic effort
+     * dependent on use.
+     * @param time Where to start calculation.
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     * @param backward If true, time specifies when the task should end.
+     */
+    Duration duration(const DateTime &time, int use, bool backward);
+    // Reimplement this
+    virtual Duration calcDuration(const DateTime &/*time*/, const Duration &/*effort*/, bool /*backward*/) { return Duration::zeroDuration;}
+
+
 protected:
     // NOTE: Cannot use setCurrentSchedule() due to overload/casting problems
     void setCurrentSchedulePtr(Schedule *schedule) { m_currentSchedule = schedule; }

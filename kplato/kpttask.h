@@ -122,74 +122,6 @@ public:
     /// Cost performance index
     double costPerformanceIndex(const QDate &date, bool *error=0);
     
-    void initiateCalculation(Schedule &sch);
-    /**
-     * Sets up the lists used for calculation.
-     * This includes adding summarytasks relations to subtasks
-     * and lists for start- and endnodes.
-     */
-    void initiateCalculationLists(QList<Node*> &startnodes, QList<Node*> &endnodes, QList<Node*> &summarytasks);
-    /**
-     * Calculates ref m_durationForward from ref earliestStart and
-     * returns the resulting end time, 
-     * which will be used as the succesors ref earliestStart.
-     *
-     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
-     */
-    DateTime calculateForward(int use);
-    /**
-     * Calculates ref m_durationBackward from ref latestFinish and
-     * returns the resulting start time, 
-     * which will be used as the predecessors ref latestFinish.
-     *
-     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
-     */
-    DateTime calculateBackward(int use);
-    /**
-     * Schedules the task within the limits of earliestStart and latestFinish.
-     * Calculates ref m_startTime, ref m_endTime and ref m_duration,
-     * Assumes ref calculateForward() and ref calculateBackward() has been run.
-     *
-     * @param earliest The task is not scheduled to start earlier than this
-     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
-     * @return The tasks endtime which can be used for scheduling the successor.
-     */
-    DateTime scheduleForward(const DateTime &earliest, int use);
-    /**
-     * Schedules the task within the limits of earliestStart and latestFinish.
-     * Calculates ref m_startTime, ref m_endTime and ref m_duration,
-     * Assumes ref calculateForward() and ref calculateBackward() has been run.
-     *
-     * @param latest The task is not scheduled to end later than this
-     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
-     * @return The tasks starttime which can be used for scheduling the predeccessor.
-     */
-    DateTime scheduleBackward(const DateTime &latest, int use);
-    
-    /**
-     * Summarytasks (with milestones) need special treatment because 
-     * milestones are always 'glued' to their predecessors.
-     */
-    void adjustSummarytask();
-    
-    /**
-     * Return the duration calculated on bases of the requested resources
-     */
-    Duration calcDuration(const DateTime &time, const Duration &effort, bool backward);
-
-    // Proxy relations are relations to/from summarytasks. 
-    // These relations are distrubuted to the relevant tasks before calculation.
-    void clearProxyRelations();
-    void addParentProxyRelations(QList<Relation*> &list);
-    void addChildProxyRelations(QList<Relation*> &list);
-    void addParentProxyRelation(Node *node, const Relation *rel);
-    void addChildProxyRelation(Node *node, const Relation *rel);
-    
-    /// Check if this node has any dependent child nodes.
-    bool isEndNode() const;
-    /// Check if this node has any dependent parent nodes
-    bool isStartNode() const;
-    
     /**
      * Return the time when work can actually start on this task.
      * This will be the time assigned resources can start work in accordance
@@ -235,8 +167,6 @@ public:
     
     /// A task is critical if there is no positive float
     virtual bool isCritical( long id = -1 ) const;
-    /// Calculate critical path
-    virtual bool calcCriticalPath(bool fromEnd);
     
     /// Set current schedule to schedule with identity id, for me nd my children
     virtual void setCurrentSchedule(long id);
@@ -269,6 +199,78 @@ public:
     };
     struct Progress &progress() { return m_progress; }
     
+protected:
+    /// Check if this node has any dependent child nodes
+    virtual bool isEndNode() const;
+    /// Check if this node has any dependent parent nodes
+    virtual bool isStartNode() const;
+    
+    virtual void initiateCalculation(Schedule &sch);
+    /**
+     * Sets up the lists used for calculation.
+     * This includes adding summarytasks relations to subtasks
+     * and lists for start- and endnodes.
+     */
+    virtual void initiateCalculationLists(QList<Node*> &startnodes, QList<Node*> &endnodes, QList<Node*> &summarytasks);
+    /**
+     * Calculates ref m_durationForward from ref earliestStart and
+     * returns the resulting end time, 
+     * which will be used as the succesors ref earliestStart.
+     *
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     */
+    virtual DateTime calculateForward(int use);
+    /**
+     * Calculates ref m_durationBackward from ref latestFinish and
+     * returns the resulting start time, 
+     * which will be used as the predecessors ref latestFinish.
+     *
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     */
+    virtual DateTime calculateBackward(int use);
+    /**
+     * Schedules the task within the limits of earliestStart and latestFinish.
+     * Calculates ref m_startTime, ref m_endTime and ref m_duration,
+     * Assumes ref calculateForward() and ref calculateBackward() has been run.
+     *
+     * @param earliest The task is not scheduled to start earlier than this
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     * @return The tasks endtime which can be used for scheduling the successor.
+     */
+    virtual DateTime scheduleForward(const DateTime &earliest, int use);
+    /**
+     * Schedules the task within the limits of earliestStart and latestFinish.
+     * Calculates ref m_startTime, ref m_endTime and ref m_duration,
+     * Assumes ref calculateForward() and ref calculateBackward() has been run.
+     *
+     * @param latest The task is not scheduled to end later than this
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     * @return The tasks starttime which can be used for scheduling the predeccessor.
+     */
+    virtual DateTime scheduleBackward(const DateTime &latest, int use);
+    
+    /**
+     * Summarytasks (with milestones) need special treatment because 
+     * milestones are always 'glued' to their predecessors.
+     */
+    virtual void adjustSummarytask();
+    
+    /**
+     * Return the duration calculated on bases of the requested resources
+     */
+    virtual Duration calcDuration(const DateTime &time, const Duration &effort, bool backward);
+
+    /// Calculate the critical path
+    virtual bool calcCriticalPath(bool fromEnd);
+
+    // Proxy relations are relations to/from summarytasks. 
+    // These relations are distributed to the child tasks before calculation.
+    virtual void clearProxyRelations();
+    virtual void addParentProxyRelations(QList<Relation*> &);
+    virtual void addChildProxyRelations(QList<Relation*> &);
+    virtual void addParentProxyRelation(Node *, const Relation *);
+    virtual void addChildProxyRelation(Node *, const Relation *);
+
 private:
     DateTime calculateSuccessors(const QList<Relation*> &list, int use);
     DateTime calculatePredeccessors(const QList<Relation*> &list, int use);

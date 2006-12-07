@@ -65,16 +65,6 @@ public:
      * @param sm Schedule manager
      */
     void calculate( ScheduleManager &sm );
-    /**
-     * Calculate the schedule.
-     *
-     * @param schedule Schedule to use
-     */
-    void calculate( Schedule *scedule );
-    /// Calculate current schedule
-    void calculate();
-
-    virtual bool calcCriticalPath( bool fromEnd );
 
     virtual DateTime startTime() const;
     virtual DateTime endTime() const;
@@ -306,6 +296,18 @@ signals:
     void scheduleChanged( MainSchedule *sch );
     void scheduleAdded( const MainSchedule *sch );
     void scheduleToBeAdded( const MainSchedule *sch );
+
+protected:
+    /**
+     * Calculate the schedule.
+     *
+     * @param schedule Schedule to use
+     */
+    void calculate( Schedule *scedule );
+    /// Calculate current schedule
+    void calculate();
+
+    virtual bool calcCriticalPath( bool fromEnd );
 
 protected:
     virtual void changed(Node *node);
