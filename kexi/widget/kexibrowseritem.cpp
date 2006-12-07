@@ -20,7 +20,7 @@
 
 #include "kexibrowseritem.h"
 
-#include "kexipartinfo.h"
+#include <core/kexipartinfo.h>
 
 #include <kdebug.h>
 #include <kiconloader.h>

@@ -10,8 +10,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib/kofficeui ${CMAKE_SOURCE_DIR}/kexi 
 
 set(keximain_LIB_SRCS 
    keximainwindowimpl.cpp 
-   kexibrowser.cpp 
-   kexibrowseritem.cpp 
    kexistatusbar.cpp 
    kexinamewidget.cpp 
    kexinamedialog.cpp 

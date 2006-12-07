@@ -50,7 +50,7 @@ namespace KexiPart
 }
 
 //! @short Main Kexi Navigator Widget
-class KEXIMAIN_EXPORT KexiBrowser : public QWidget
+class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 {
 	Q_OBJECT
 

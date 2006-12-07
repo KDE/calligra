@@ -30,6 +30,8 @@ set(kexiextendedwidgets_LIB_SRCS
    kexicharencodingcombobox.cpp
    kexiprjtypeselector.cpp
    kexiprjtypeselectorbase.ui
+   kexibrowser.cpp 
+   kexibrowseritem.cpp 
 )
 
 kde4_automoc(${kexiextendedwidgets_LIB_SRCS})

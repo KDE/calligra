@@ -72,7 +72,6 @@
 #include <kexiutils/utils.h>
 
 //#include "projectsettingsui.h"
-#include "kexibrowser.h"
 #include "kexiactionproxy.h"
 #include "kexidialogbase.h"
 #include "kexipartmanager.h"
@@ -87,6 +86,7 @@
 #include "kexiinternalpart.h"
 #include "kde2_closebutton.xpm"
 
+#include <widget/kexibrowser.h>
 #include <widget/kexipropertyeditorview.h>
 #include <koproperty/editor.h>
 #include <koproperty/set.h>
