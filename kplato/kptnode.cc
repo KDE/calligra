@@ -57,9 +57,6 @@ Node::Node(Node &node, Node *parent)
     m_constraintStartTime = node.constraintStartTime();
     m_constraintEndTime = node.constraintEndTime();
     
-    m_dateOnlyStartDate = node.startDate();
-    m_dateOnlyEndDate = node.endDate();
-    
     m_runningAccount = node.runningAccount();
     m_startupAccount = node.startupAccount();
     m_shutdownAccount = node.shutdownAccount();
@@ -104,9 +101,6 @@ void Node::init() {
     m_effort = 0;
     m_visitedForward = false;
     m_visitedBackward = false;
-    
-    m_dateOnlyStartDate = m_dateOnlyEndDate = QDate::currentDate();
-    m_dateOnlyDuration.addDays(1);
     
     m_runningAccount = 0;
     m_startupAccount = 0;
@@ -375,8 +369,130 @@ void Node::calcResourceOverbooked() {
     }
 }
 
-QStringList Node::overbookedResources() const {
-    return m_currentSchedule ? m_currentSchedule->overbookedResources() : QStringList();
+// Returns the (previously) calculated duration
+const Duration& Node::duration( long id )
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->duration : Duration::zeroDuration;
+}
+
+DateTime Node::startTime( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->startTime : DateTime();
+}
+DateTime Node::endTime( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->endTime : DateTime();
+}
+    
+DateTime Node::workStartTime( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->workStartTime : DateTime();
+}
+
+void Node::setWorkStartTime(const DateTime &dt, long id )
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+
+     if ( s ) s->workStartTime = dt;
+}
+
+DateTime Node::workEndTime( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->workEndTime : DateTime();
+}
+
+void Node::setWorkEndTime(const DateTime &dt, long id )
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) s->workEndTime = dt;
+}
+    
+bool Node::inCriticalPath( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->inCriticalPath : false;
+}
+
+bool Node::resourceError( long id ) const 
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->resourceError : false;
+}
+    
+bool Node::resourceOverbooked( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->resourceOverbooked : false;
+}
+    
+bool Node::resourceNotAvailable( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->resourceNotAvailable : false;
+}
+    
+bool Node::schedulingError( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->schedulingError : false;
+}
+
+bool Node::notScheduled( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s == 0 || s->isDeleted() || s->notScheduled;
+}
+
+QStringList Node::overbookedResources( long id ) const {
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    return s ? s->overbookedResources() : QStringList();
 }
 
 void Node::saveRelations(QDomElement &element) const {
@@ -595,19 +711,22 @@ bool Node::setId(const QString& id) {
     return true;
 }
 
-void Node::setStartTime(DateTime startTime) { 
-    if (m_currentSchedule)
-        m_currentSchedule->startTime = startTime;
-    m_dateOnlyStartDate = startTime.date();
+void Node::setStartTime(DateTime startTime, long id ) { 
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s )
+        s->startTime = startTime;
 }
 
-void Node::setEndTime(DateTime endTime) { 
-    if (m_currentSchedule)
-        m_currentSchedule->endTime = endTime;
-    
-    m_dateOnlyEndDate = endTime.date();
-    if (endTime.time().isNull() && m_dateOnlyEndDate > m_dateOnlyStartDate)
-        m_dateOnlyEndDate = m_dateOnlyEndDate.addDays(-1);
+void Node::setEndTime(DateTime endTime, long id ) { 
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s )
+        s->endTime = endTime;
 }
 
 void Node::saveAppointments(QDomElement &element, long id) const {
@@ -618,10 +737,14 @@ void Node::saveAppointments(QDomElement &element, long id) const {
     }
 }
 
-QList<Appointment*> Node::appointments() {
+QList<Appointment*> Node::appointments( long id ) {
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
     QList<Appointment*> lst;
-    if (m_currentSchedule)
-        lst = m_currentSchedule->appointments();
+    if ( s )
+        lst = s->appointments();
     return lst;
 }
 
@@ -631,7 +754,7 @@ QList<Appointment*> Node::appointments() {
 //     return 0;
 // }
 bool Node::addAppointment(Appointment *appointment) {
-    if (m_currentSchedule)
+    if ( m_currentSchedule )
         return m_currentSchedule->add(appointment);
     return false;
 }
@@ -680,6 +803,11 @@ Schedule *Node::createSchedule(Schedule *parent) {
     NodeSchedule *sch = new NodeSchedule(parent, this);
     addSchedule(sch);
     return sch;
+}
+
+Schedule *Node::findSchedule( long id ) const
+{
+    return m_schedules.value( id );
 }
 
 Schedule *Node::findSchedule(const QString name, const Schedule::Type type) {

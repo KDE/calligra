@@ -185,7 +185,7 @@ public:
     Account *defaultAccount() const { return m_defaultAccount; }
     void setDefaultAccount(Account *account) { m_defaultAccount = account; }
     
-    EffortCostMap plannedCost(const Account &account, const QDate &start, const QDate &end);
+    EffortCostMap plannedCost(const Account &account, const QDate &start, const QDate &end, long id = -1);
     
     void clear() { m_accountList.clear(); m_idDict.clear(); }
     void append(Account *account);

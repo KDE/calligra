@@ -79,9 +79,6 @@ public:
     virtual DateTime startTime() const;
     virtual DateTime endTime() const;
 
-    /// Returns the duration calculated as latestFinish - earliestStart.
-    Duration *getExpectedDuration();
-
     /**
      * Instead of using the expected duration, generate a random value using
      * the Distribution of each Task. This can be used for Monte-Carlo
@@ -119,38 +116,38 @@ public:
     /// Returns the resource with identity id.
     Resource *resource( const QString& id );
 
-    virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end ) const;
+    virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, long id = -1 ) const;
 
     /// Returns the total planned effort for this project (or subproject)
-    virtual Duration plannedEffort();
+    virtual Duration plannedEffort( long id = -1 );
     /// Returns the total planned effort for this project (or subproject) on date
-    virtual Duration plannedEffort( const QDate &date );
+    virtual Duration plannedEffort( const QDate &date, long id = -1  );
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo( const QDate &date );
+    virtual Duration plannedEffortTo( const QDate &date, long id = -1  );
 
     /// Returns the actual effort
-    virtual Duration actualEffort();
+    virtual Duration actualEffort( long id = -1 );
     /// Returns the actual effort on date
-    virtual Duration actualEffort( const QDate &date );
+    virtual Duration actualEffort( const QDate &date, long id = -1  );
     /// Returns the actual effort up to and including date
-    virtual Duration actualEffortTo( const QDate &date );
+    virtual Duration actualEffortTo( const QDate &date, long id = -1  );
     /**
      * Returns the total planned cost for this project
      */
-    virtual double plannedCost();
+    virtual double plannedCost( long id = -1 );
     /// Planned cost on date
-    virtual double plannedCost( const QDate &date );
+    virtual double plannedCost( const QDate &date, long id = -1  );
     /// Planned cost up to and including date
-    virtual double plannedCostTo( const QDate &date );
+    virtual double plannedCostTo( const QDate &date, long id = -1  );
 
     /**
      * Returns the actually reported cost for this project
      */
-    virtual double actualCost();
+    virtual double actualCost( long id = -1 );
     /// Actual cost on date
-    virtual double actualCost( const QDate &date );
+    virtual double actualCost( const QDate &date, long id = -1  );
     /// Actual cost up to and including date
-    virtual double actualCostTo( const QDate &date );
+    virtual double actualCostTo( const QDate &date, long id = -1  );
 
     Calendar *defaultCalendar() { return m_standardWorktime->calendar(); }
     QList<Calendar*> calendars();

@@ -98,7 +98,7 @@ public:
     // several sub-tasks. Creating a table has 4 subtasks, 1) measuring
     // 2) cutting 3) building 4) painting.
     Node *getParent() const { return m_parent; }
-	void setParent( Node* newParent ) { m_parent = newParent;}
+    void setParent( Node* newParent ) { m_parent = newParent;}
     const QList<Node*> &childNodeIterator() const { return m_nodes; }
     int numChildren() const { return m_nodes.count(); }
     virtual void addChildNode(Node *node, Node *after=0);
@@ -159,24 +159,15 @@ public:
     Relation *findChildRelation(Node *node);
     Relation *findRelation(Node *node);
 
-    void setStartTime(DateTime startTime);
+    void setStartTime(DateTime startTime, long id = -1 );
     /// Return the scheduled start time
-    virtual DateTime startTime() const
-        { return m_currentSchedule ? m_currentSchedule->startTime : DateTime(); }
-    const QDate &startDate() const { return m_dateOnlyStartDate; }
-    void setEndTime(DateTime endTime);
+    virtual DateTime startTime( long id = -1 ) const;
+    void setEndTime(DateTime endTime, long id = -1 );
     /// Return the scheduled end time
-    virtual DateTime endTime() const
-        { return m_currentSchedule ? m_currentSchedule->endTime : DateTime(); }
-    const QDate &endDate() const { return m_dateOnlyEndDate; }
+    virtual DateTime endTime( long id = -1 ) const;
 
     void setEffort(Effort* e) { m_effort = e; }
     Effort* effort() const { return m_effort; }
-
-    /**
-     * Returns the (previously) calculated duration.
-     */
-    virtual Duration *getExpectedDuration() = 0;
 
     /**
      * Instead of using the expected duration, generate a random value using
@@ -248,66 +239,61 @@ public:
 
     virtual ResourceGroupRequest *resourceRequest(ResourceGroup */*group*/) const { return 0; }
     virtual void makeAppointments();
-
-    /// EffortType == Effort, but no resource is requested
-    bool resourceError() const 
-        { return m_currentSchedule ? m_currentSchedule->resourceError : false; }
-    /// The assigned resource is overbooked
-    virtual bool resourceOverbooked() const
-        { return m_currentSchedule ? m_currentSchedule->resourceOverbooked : false; }
     /// Calculates if the assigned resource is overbooked 
     /// within the duration of this node
     virtual void calcResourceOverbooked();
+
+    /// EffortType == Effort, but no resource is requested
+    bool resourceError( long id = -1 ) const;
+    /// The assigned resource is overbooked
+    virtual bool resourceOverbooked( long id = -1 ) const;
     /// The requested resource is not available
-    bool resourceNotAvailable() const
-        { return m_currentSchedule ? m_currentSchedule->resourceNotAvailable : false; }
+    bool resourceNotAvailable( long id = -1 ) const;
     /// The task cannot be scheduled to fullfill all the constraints
-    virtual bool schedulingError() const
-        { return m_currentSchedule ? m_currentSchedule->schedulingError : false; }
+    virtual bool schedulingError( long id = -1 ) const;
     /// The node has not been scheduled
-    bool notScheduled() const
-    { return m_currentSchedule == 0 || m_currentSchedule->isDeleted() || m_currentSchedule->notScheduled; }
+    bool notScheduled( long id = -1 ) const;
     /// Return a list of overbooked resources
-    virtual QStringList overbookedResources() const;
+    virtual QStringList overbookedResources( long id = -1 ) const;
     
-    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end) const=0;
+    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end, long id = -1 ) const=0;
         
     /// Returns the total planned effort for this task (or subtasks) 
-    virtual Duration plannedEffort() { return Duration::zeroDuration; }
+    virtual Duration plannedEffort( long id = -1 ) { return Duration::zeroDuration; }
     /// Returns the total planned effort for this task (or subtasks) on date
-    virtual Duration plannedEffort(const QDate &) { return Duration::zeroDuration; }
+    virtual Duration plannedEffort(const QDate &, long id = -1 ) { return Duration::zeroDuration; }
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo(const QDate &) { return Duration::zeroDuration; }
+    virtual Duration plannedEffortTo(const QDate &, long id = -1 ) { return Duration::zeroDuration; }
     
     /// Returns the total actual effort for this task (or subtasks) 
-    virtual Duration actualEffort() { return Duration::zeroDuration; }
+    virtual Duration actualEffort( long id = -1 ) { return Duration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) on date
-    virtual Duration actualEffort(const QDate &/*date*/) { return Duration::zeroDuration; }
+    virtual Duration actualEffort(const QDate &/*date*/, long id = -1 ) { return Duration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) up to and including date
-    virtual Duration actualEffortTo(const QDate &/*date*/) { return Duration::zeroDuration; }
+    virtual Duration actualEffortTo(const QDate &/*date*/, long id = -1 ) { return Duration::zeroDuration; }
     
     /**
      * Planned cost is the sum total of all resources and other costs
      * planned for this node.
      */
-    virtual double plannedCost() { return 0; }
+    virtual double plannedCost( long id = -1 ) { return 0; }
     
     /// Planned cost on date
-    virtual double plannedCost(const QDate &/*date*/) { return 0; }
+    virtual double plannedCost(const QDate &/*date*/, long id = -1 ) { return 0; }
     /**
      * Planned cost from start of activity up to and including date
      * is the sum of all resource costs and other costs planned for this node.
      */
-    virtual double plannedCostTo(const QDate &/*date*/) { return 0; }
+    virtual double plannedCostTo(const QDate &/*date*/, long id = -1 ) { return 0; }
     /**
      * Actual cost is the sum total of the reported costs actually used
      * for this node.
      */
-    virtual double actualCost() { return 0; }
+    virtual double actualCost( long id = -1 ) { return 0; }
     /// Actual cost on date
-    virtual double actualCost(const QDate &/*date*/) { return 0; }
+    virtual double actualCost(const QDate &/*date*/, long id = -1 ) { return 0; }
     /// Actual cost up to and including date
-    virtual double actualCostTo(const QDate &/*date*/) { return 0; }
+    virtual double actualCostTo(const QDate &/*date*/, long id = -1 ) { return 0; }
     
     /// Effort based performance index
     double effortPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) { return 0.0; }
@@ -340,8 +326,7 @@ public:
     virtual DateTime summarytaskLatestFinish() 
         { return DateTime(); }
     // Returns the (previously) calculated duration
-    const Duration &duration()
-        { return m_currentSchedule ? m_currentSchedule->duration : Duration::zeroDuration; }
+    const Duration &duration( long id = -1 );
     /**
      * Calculates and returns the duration of the node.
      * Uses the correct expected-, optimistic- or pessimistic effort
@@ -378,7 +363,7 @@ public:
     /// Save appointments for schedule with id
     virtual void saveAppointments(QDomElement &element, long id) const;
     ///Return the list of appointments for current schedule.
-    QList<Appointment*> appointments();
+    QList<Appointment*> appointments( long id = -1 );
     /// Return appointment this node have with resource
 //    Appointment *findAppointment(Resource *resource);
     /// Adds appointment to this node only (not to resource)
@@ -409,24 +394,19 @@ public:
      * the calendar of allocated resources. Normally this is the same
      * as @ref startTime(), but may differ if timing constraints are set.
      */
-    virtual DateTime workStartTime() const
-        { return m_currentSchedule ? m_currentSchedule->workStartTime : DateTime(); }
-    void setWorkStartTime(const DateTime &dt) 
-        { if (m_currentSchedule) m_currentSchedule->workStartTime = dt; }
+    virtual DateTime workStartTime( long id = -1 ) const;
+    void setWorkStartTime(const DateTime &dt,  long id = -1 );
     
     /**
      * This is when work can finish on this node in accordance with 
      * the calendar of allocated resources. Normally this is the same
      * as @ref endTime(), but may differ if timing constraints are set.
      */
-    virtual DateTime workEndTime() const 
-        { return m_currentSchedule ? m_currentSchedule->workEndTime : DateTime(); }
-    void setWorkEndTime(const DateTime &dt) 
-        { if (m_currentSchedule) m_currentSchedule->workEndTime = dt; }
+    virtual DateTime workEndTime( long id = -1 ) const;
+    void setWorkEndTime(const DateTime &dt,  long id = -1 );
     
-    virtual bool isCritical() const { return false; }
-    virtual bool inCriticalPath() const
-        { return m_currentSchedule ? m_currentSchedule->inCriticalPath : false; }
+    virtual bool isCritical( long id = -1 ) const { return false; }
+    virtual bool inCriticalPath( long id = -1 ) const;
     virtual bool calcCriticalPath(bool fromEnd);
     
     /// Returns the level this node is in the hierarchy. Top node is level 0.
@@ -462,9 +442,7 @@ public:
     /// Find schedule matching type.  Does not return deleted schedule.
     Schedule *findSchedule(const Schedule::Type type);
     /// Find schedule matching id.  Also returns deleted schedule.
-    Schedule *findSchedule(long id) const { 
-        return m_schedules.contains(id) ? m_schedules[id] : 0; 
-    }
+    Schedule *findSchedule(long id) const;
     
     /// Take, don't delete (as in destruct).
     void takeSchedule(const Schedule *schedule);
@@ -480,11 +458,6 @@ public:
     /// Set parent schedule recursivly
     virtual void setParentSchedule(Schedule *sch);
     
-    DateTime startTime()
-        { return m_currentSchedule ? m_currentSchedule->startTime : DateTime(); }
-    DateTime endTime()
-        { return m_currentSchedule ? m_currentSchedule->endTime : DateTime(); }
-
 protected:
     // NOTE: Cannot use setCurrentSchedule() due to overload/casting problems
     void setCurrentSchedulePtr(Schedule *schedule) { m_currentSchedule = schedule; }
@@ -521,10 +494,6 @@ protected:
     Duration m_durationForward;
     Duration m_durationBackward;
     
-    QDate m_dateOnlyStartDate;
-    QDate m_dateOnlyEndDate;
-    Duration m_dateOnlyDuration;
- 
     QHash<long, Schedule*> m_schedules;
     Schedule *m_currentSchedule;
 

@@ -334,7 +334,7 @@ Accounts::~Accounts() {
     }
 }
 
-EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, const QDate &end) {
+EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, const QDate &end, long id) {
     EffortCostMap ec;
     foreach (Account::CostPlace *cp, account.costPlaces()) {
         Node *n = cp->node();
@@ -343,7 +343,7 @@ EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, 
         }
         //kDebug()<<k_funcinfo<<"n="<<n->name()<<endl;
         if (cp->running()) {
-            ec += n->plannedEffortCostPrDay(start, end);
+            ec += n->plannedEffortCostPrDay(start, end, id);
         }
         if (cp->startup()) {
             if (n->startTime().date() >= start &&
@@ -360,7 +360,7 @@ EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, 
         QHash<QString, Node*> hash = m_project.nodeDict();
         foreach (Node *n, hash) {
             if (n->runningAccount() == 0) {
-                ec += n->plannedEffortCostPrDay(start, end);
+                ec += n->plannedEffortCostPrDay(start, end, id);
             }
             if (n->startupAccount() == 0) {
                 if (n->startTime().date() >= start &&

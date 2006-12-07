@@ -79,23 +79,15 @@ Task::~Task() {
 }
 
 int Task::type() const {
-	if ( numChildren() > 0) {
-	  return Node::Type_Summarytask;
-	}
-	else if ( 0 == effort()->expected().seconds() ) {
-		return Node::Type_Milestone;
-	}
-	else {
-		return Node::Type_Task;
-	}
-}
-
-
-
-Duration *Task::getExpectedDuration() {
-    //kDebug()<<k_funcinfo<<endl;
-    // Duration should already be calculated
-    return m_currentSchedule ? new Duration(m_currentSchedule->duration) : new Duration();
+    if ( numChildren() > 0) {
+        return Node::Type_Summarytask;
+    }
+    else if ( 0 == effort()->expected().seconds() ) {
+        return Node::Type_Milestone;
+    }
+    else {
+        return Node::Type_Task;
+    }
 }
 
 Duration *Task::getRandomDuration() {
@@ -343,63 +335,85 @@ void Task::saveAppointments(QDomElement &element, long id) const {
     }
 }
 
-EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end) const {
+EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id ) const {
     //kDebug()<<k_funcinfo<<m_name<<endl;
-    if (m_currentSchedule) {
-        return m_currentSchedule->plannedEffortCostPrDay(start, end);
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) {
+        return s->plannedEffortCostPrDay(start, end);
     }
     return EffortCostMap();
 }
 
 // Returns the total planned effort for this task (or subtasks) 
-Duration Task::plannedEffort() {
+Duration Task::plannedEffort( long id ) {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            eff += n->plannedEffort();
+            eff += n->plannedEffort( id );
         }
-    } else if (m_currentSchedule) {
-        eff = m_currentSchedule->plannedEffort();
+        return eff;
+    }
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) {
+        eff = s->plannedEffort();
     }
     return eff;
 }
 
 // Returns the total planned effort for this task (or subtasks) on date
-Duration Task::plannedEffort(const QDate &date) {
+Duration Task::plannedEffort(const QDate &date, long id ) {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            eff += n->plannedEffort(date);
+            eff += n->plannedEffort(date, id);
         }
-    } else if (m_currentSchedule) {
-        eff = m_currentSchedule->plannedEffort(date);
+        return eff;
+    }
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) {
+        eff = s->plannedEffort(date);
     }
     return eff;
 }
 
 // Returns the total planned effort for this task (or subtasks) upto and including date
-Duration Task::plannedEffortTo(const QDate &date) {
+Duration Task::plannedEffortTo(const QDate &date, long id) {
     //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            eff += n->plannedEffortTo(date);
+            eff += n->plannedEffortTo(date, id);
         }
-    } else if (m_currentSchedule) {
-        eff = m_currentSchedule->plannedEffortTo(date);
+        return eff;
+    }
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) {
+        eff = s->plannedEffortTo(date);
     }
     return eff;
 }
 
 // Returns the total planned effort for this task (or subtasks) 
-Duration Task::actualEffort() {
+Duration Task::actualEffort( long id ) {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            eff += n->actualEffort();
+            eff += n->actualEffort(id);
         }
     } else {
         eff = m_progress.totalPerformed;
@@ -411,108 +425,151 @@ Duration Task::actualEffort() {
     return eff;
 }
 
-// Returns the total planned effort for this task (or subtasks) on date
-Duration Task::actualEffort(const QDate &date) {
+// Returns the total actual effort for this task (or subtasks) on date
+Duration Task::actualEffort(const QDate &date, long id) {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            eff += n->actualEffort(date);
+            eff += n->actualEffort(date, id);
         }
-    } else if (m_currentSchedule) {
-        eff = m_currentSchedule->actualEffort(date);
+        return eff;
+    }
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) {
+        eff = s->actualEffort(date);
     }
     return eff;
 }
 
-// Returns the total planned effort for this task (or subtasks) on date
-Duration Task::actualEffortTo(const QDate &date) {
+// Returns the total actual effort for this task (or subtasks) to date
+Duration Task::actualEffortTo(const QDate &date, long id) {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            eff += n->actualEffortTo(date);
+            eff += n->actualEffortTo(date, id);
         }
-    } else if (m_currentSchedule) {
-        eff = m_currentSchedule->actualEffortTo(date);
+        return eff;
+    }
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) {
+        eff = s->actualEffortTo(date);
     }
     return eff;
 }
 
-double Task::plannedCost() {
+double Task::plannedCost( long id ) {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            c += n->plannedCost();
+            c += n->plannedCost( id );
         }
-    } else if (m_currentSchedule) {
-        c = m_currentSchedule->plannedCost();
+        return c;
+    }
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) {
+        c = s->plannedCost();
     }
     return c;
 }
 
-double Task::plannedCost(const QDate &date) {
+double Task::plannedCost(const QDate &date, long id) {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            c += n->plannedCost(date);
+            c += n->plannedCost(date, id);
         }
-    } else if (m_currentSchedule) {
-        c = m_currentSchedule->plannedCost(date);
+    }
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) {
+        c = s->plannedCost(date);
     }
     return c;
 }
 
-double Task::plannedCostTo(const QDate &date) {
+double Task::plannedCostTo(const QDate &date, long id) {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            c += n->plannedCostTo(date);
+            c += n->plannedCostTo(date, id);
         }
-    } else if (m_currentSchedule) {
-        c = m_currentSchedule->plannedCostTo(date);
+    }
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) {
+        c = s->plannedCostTo(date);
     }
     return c;
 }
 
-double Task::actualCost() {
+double Task::actualCost( long id ) {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            c += n->actualCost();
+            c += n->actualCost( id );
         }
-    } else if (m_currentSchedule) {
-        c = m_currentSchedule->actualCost();
+    }
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) {
+        c = s->actualCost();
     }
     return c;
 }
 
-double Task::actualCost(const QDate &date) {
+double Task::actualCost(const QDate &date, long id) {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            c += n->actualCost(date);
+            c += n->actualCost(date, id);
         }
-    } else if (m_currentSchedule) {
-        c = m_currentSchedule->actualCost(date);
+    }
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) {
+        c = s->actualCost(date);
     }
     return c;
 }
 
-double Task::actualCostTo(const QDate &date) {
+double Task::actualCostTo(const QDate &date, long id) {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            c += n->actualCostTo(date);
+            c += n->actualCostTo(date, id);
         }
-    } else if (m_currentSchedule) {
-        c = m_currentSchedule->actualCostTo(date);
+    }
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s ) {
+        c = s->actualCostTo(date);
     }
     return c;
 }
@@ -1400,30 +1457,32 @@ DateTime Task::workFinishBefore(const DateTime &dt) {
     return dt;
 }
 
-Duration Task::positiveFloat() {
-    if (m_currentSchedule == 0 || 
-        m_currentSchedule->schedulingError ||
-        effortMetError()) {
+Duration Task::positiveFloat( long id ) {
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if (s == 0 || s->schedulingError || effortMetError()) {
         return Duration::zeroDuration;
     }
     Duration f;
     if (type() == Node::Type_Milestone) {
-        if (m_currentSchedule->startTime < m_currentSchedule->latestFinish) {
-            f = m_currentSchedule->latestFinish - m_currentSchedule->startTime;
+        if (s->startTime < s->latestFinish) {
+            f = s->latestFinish - s->startTime;
         }
     } else if (m_effort->type() == Effort::Type_FixedDuration) {
-        if (m_currentSchedule->endTime.isValid()) {
-            if (m_currentSchedule->endTime < m_currentSchedule->latestFinish) {
-                f = m_currentSchedule->latestFinish - m_currentSchedule->endTime;
+        if (s->endTime.isValid()) {
+            if (s->endTime < s->latestFinish) {
+                f = s->latestFinish - s->endTime;
             }
         }
     } else {
-        if (m_currentSchedule->workEndTime.isValid())
-            if (m_currentSchedule->workEndTime < m_currentSchedule->latestFinish) {
-            f = m_currentSchedule->latestFinish - m_currentSchedule->workEndTime;
-        } else if (m_currentSchedule->endTime.isValid()) {
-            if (m_currentSchedule->endTime < m_currentSchedule->latestFinish) {
-                f = m_currentSchedule->latestFinish - m_currentSchedule->endTime;
+        if (s->workEndTime.isValid())
+            if (s->workEndTime < s->latestFinish) {
+            f = s->latestFinish - s->workEndTime;
+        } else if (s->endTime.isValid()) {
+            if (s->endTime < s->latestFinish) {
+                f = s->latestFinish - s->endTime;
             }
         }
     }
@@ -1431,12 +1490,12 @@ Duration Task::positiveFloat() {
     return f;
 }
 
-bool Task::isCritical() const {
-    Schedule *cs = m_currentSchedule;
-    if (cs == 0) {
-        return false;
+bool Task::isCritical( long id ) const {
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
     }
-    return cs->earliestStart >= cs->startTime && cs->latestFinish <= cs->endTime;
+    return s->earliestStart >= s->startTime && s->latestFinish <= s->endTime;
 }
 
 bool Task::calcCriticalPath(bool fromEnd) {
@@ -1491,11 +1550,15 @@ void Task::setCurrentSchedule(long id) {
     Node::setCurrentSchedule(id);
 }
 
-bool Task::effortMetError() const {
-    if (m_currentSchedule->notScheduled) {
+bool Task::effortMetError( long id ) const {
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if (s == 0 || s->notScheduled) {
         return false;
     }
-    return m_currentSchedule->plannedEffort() < effort()->effort(static_cast<Effort::Use>(m_currentSchedule->type()),  m_currentSchedule->usePert());
+    return s->plannedEffort() < effort()->effort(static_cast<Effort::Use>(s->type()),  s->usePert());
 }
 
 #ifndef NDEBUG

@@ -47,12 +47,6 @@ public:
     virtual int type() const;
 
     /**
-     * Returns the (previously) calculated duration.
-     * The caller must delete returned object.
-     */
-    Duration *getExpectedDuration();
-
-    /**
      * Instead of using the expected duration, generate a random value using
      * the Distribution of each Task. This can be used for Monte-Carlo
      * estimation of Project duration.
@@ -89,39 +83,39 @@ public:
      * Returns a list of planned effort and cost for this task
      * for the interval start, end inclusive
      */
-    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end) const;
+    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end,  long id = -1 ) const;
     
     /// Returns the total planned effort for this task (or subtasks) 
-    virtual Duration plannedEffort();
+    virtual Duration plannedEffort( long id = -1 );
     /// Returns the total planned effort for this task (or subtasks) on date
-    virtual Duration plannedEffort(const QDate &date);
+    virtual Duration plannedEffort(const QDate &date, long id = -1 );
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo(const QDate &date);
+    virtual Duration plannedEffortTo(const QDate &date, long id = -1 );
     
     /// Returns the total actual effort for this task (or subtasks) 
-    virtual Duration actualEffort();
+    virtual Duration actualEffort( long id = -1 );
     /// Returns the total actual effort for this task (or subtasks) on date
-    virtual Duration actualEffort(const QDate &date);
+    virtual Duration actualEffort(const QDate &date, long id = -1 );
     /// Returns the actual effort up to and including date
-    virtual Duration actualEffortTo(const QDate &date);
+    virtual Duration actualEffortTo(const QDate &date, long id = -1 );
     
     /**
      * Returns the total planned cost for this task (or subtasks)
      */
-    virtual double plannedCost();
+    virtual double plannedCost( long id = -1 );
     /// Planned cost on date
-    virtual double plannedCost(const QDate &/*date*/);
+    virtual double plannedCost(const QDate &/*date*/, long id = -1 );
     /// Planned cost up to and including date
-    virtual double plannedCostTo(const QDate &/*date*/);
+    virtual double plannedCostTo(const QDate &/*date*/, long id = -1 );
     
     /**
      * Returns the actaually reported cost for this task (or subtasks)
      */
-    virtual double actualCost();
+    virtual double actualCost( long id = -1 );
     /// Actual cost on date
-    virtual double actualCost(const QDate &/*date*/);
+    virtual double actualCost(const QDate &/*date*/, long id = -1 );
     /// Actual cost up to and including date
-    virtual double actualCostTo(const QDate &/*date*/);
+    virtual double actualCostTo(const QDate &/*date*/, long id = -1 );
 
     /// Effort based performance index
     double effortPerformanceIndex(const QDate &date, bool *error=0);
@@ -217,7 +211,7 @@ public:
      * without affecting the project completion date. 
      * An activity with positive float is not on the critical path.
      */
-    Duration positiveFloat();
+    Duration positiveFloat( long id = -1 );
     /**
      * Return the duration by which the duration of an activity or path 
      * has to be reduced in order to fullfill a timing constraint.
@@ -240,14 +234,14 @@ public:
     Duration finishFloat() { return Duration(); }
     
     /// A task is critical if there is no positive float
-    virtual bool isCritical() const;
+    virtual bool isCritical( long id = -1 ) const;
     /// Calculate critical path
     virtual bool calcCriticalPath(bool fromEnd);
     
     /// Set current schedule to schedule with identity id, for me nd my children
     virtual void setCurrentSchedule(long id);
     
-    virtual bool effortMetError() const;
+    virtual bool effortMetError( long id = -1 ) const;
     
     struct Progress {
         Progress() { started = finished = false; percentFinished = 0; }
