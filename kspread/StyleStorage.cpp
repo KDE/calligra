@@ -425,8 +425,8 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
                 // first, load the attributes of the parent style(s)
                 QList<CustomStyle*> parentStyles;
                 CustomStyle* parentStyle = styleManager()->style( namedStyle->parentName() );
-                if ( parentStyle )
-                    kDebug(36006) << "StyleStorage: " << namedStyle->name() << "'s parent = " << parentStyle->name() << endl;
+//                 if ( parentStyle )
+//                     kDebug(36006) << "StyleStorage: " << namedStyle->name() << "'s parent = " << parentStyle->name() << endl;
                 while ( parentStyle )
                 {
 //                     kDebug(36006) << "StyleStorage: " << parentStyle->name() << "'s parent = " << parentStyle->parentName() << endl;

@@ -1859,7 +1859,10 @@ Sheet* View::activeSheet()
 SheetView* View::sheetView( const Sheet* sheet ) const
 {
     if ( !d->sheetViews.contains( sheet ) )
+    {
+        kDebug(36004) << "View: Creating SheetView for " << sheet->sheetName() << endl;
         d->sheetViews.insert( sheet, new SheetView( sheet ) );
+    }
     return d->sheetViews[ sheet ];
 }
 
@@ -2470,12 +2473,6 @@ void View::initialPosition()
 
     // make paint effective:
     doc()->decreaseNumOperation();
-
-    QRect vr( d->canvas->visibleCells() );
-
-    doc()->emitBeginOperation( false );
-    activeSheet()->setRegionPaintDirty( vr );
-    doc()->emitEndOperation( vr );
 
     if ( koDocument()->isReadWrite() )
         initConfig();

@@ -1163,14 +1163,11 @@ int Cell::defineAlignX()
 
 double Cell::dblWidth( int _col ) const
 {
-  if ( _col < 0 )
-    _col = d->column;
-
-  if ( testFlag(Flag_Merged) )
-    return d->extra()->extraWidth;
-
-  const ColumnFormat *cl = sheet()->columnFormat( _col );
-  return cl->dblWidth();
+    if ( _col < 0 )
+        _col = d->column;
+    if ( testFlag(Flag_Merged) )
+        return d->extra()->extraWidth;
+    return sheet()->columnFormat( _col )->dblWidth();
 }
 
 int Cell::width( int _col ) const
@@ -1180,14 +1177,11 @@ int Cell::width( int _col ) const
 
 double Cell::dblHeight( int _row ) const
 {
-  if ( _row < 0 )
-    _row = d->row;
-
-  if ( testFlag(Flag_Merged) )
-    return d->extra()->extraHeight;
-
-  const RowFormat *rl = sheet()->rowFormat( _row );
-  return rl->dblHeight();
+    if ( _row < 0 )
+        _row = d->row;
+    if ( testFlag(Flag_Merged) )
+        return d->extra()->extraHeight;
+    return sheet()->rowFormat( _row )->dblHeight();
 }
 
 int Cell::height( int _row ) const
