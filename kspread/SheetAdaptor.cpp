@@ -339,34 +339,59 @@ void SheetAdaptor::setShowPageBorders( bool b )
 }
 #endif
 
-float SheetAdaptor::printHeight()const
+float SheetAdaptor::paperHeight()const
 {
     return m_sheet->print()->paperHeight();
 }
 
-float SheetAdaptor::printWidth()const
+void SheetAdaptor::setPrinterHeight(float height)
+{
+    m_sheet->print()->setPaperHeight(height);
+}
+
+float SheetAdaptor::paperWidth()const
 {
     return m_sheet->print()->paperWidth();
 }
 
-float SheetAdaptor::printLeftBorder()const
+void SheetAdaptor::setPaperWidth(float width)
+{
+    m_sheet->print()->setPaperWidth(width);
+}
+
+float SheetAdaptor::paperLeftBorder()const
 {
     return m_sheet->print()->leftBorder();
 }
 
-float SheetAdaptor::printRightBorder()const
+float SheetAdaptor::paperRightBorder()const
 {
     return m_sheet->print()->rightBorder();
 }
 
-float SheetAdaptor::printTopBorder()const
+float SheetAdaptor::paperTopBorder()const
 {
     return m_sheet->print()->topBorder();
 }
 
-float SheetAdaptor::printBottomBorder()const
+float SheetAdaptor::paperBottomBorder()const
 {
     return m_sheet->print()->bottomBorder();
+}
+
+QString SheetAdaptor::paperFormat() const
+{
+    return m_sheet->print()->paperFormatString();
+}
+
+QString SheetAdaptor::paperOrientation() const
+{
+    return m_sheet->print()->orientationString();
+}
+
+void SheetAdaptor::setPaperLayout(float leftBorder, float topBorder, float rightBorder, float bottomBoder, const QString& format, const QString& orientation)
+{
+    m_sheet->print()->setPaperLayout(leftBorder, topBorder, rightBorder, bottomBoder, format, orientation);
 }
 
 #if 0
@@ -436,16 +461,28 @@ void SheetAdaptor::setPrintFooterRight(const QString & text)
     m_sheet->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
                                        footLeft(), footMid(), text );
 }
+#endif
 
-QString SheetAdaptor::printFormatString() const
+QByteArray SheetAdaptor::password() const
 {
-    return m_sheet->print()->paperFormatString();
+    QByteArray passwd;
+    m_sheet->password(passwd);
+    return passwd;
+}
+
+bool SheetAdaptor::checkPassword(const QByteArray& passwd) const
+{
+    return m_sheet->checkPassword(passwd);
 }
 
 bool SheetAdaptor::isProtected() const
 {
     return m_sheet->isProtected();
 }
-#endif
+
+void SheetAdaptor::setProtected(const QByteArray& passwd)
+{
+    m_sheet->setProtected(passwd);
+}
 
 #include "SheetAdaptor.moc"

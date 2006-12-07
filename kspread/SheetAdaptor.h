@@ -120,17 +120,28 @@ public Q_SLOTS: // METHODS
     //virtual void setShowPageBorders( bool b );
 
     /** Return the height the paper of the printer has. */
-    virtual float printHeight() const;
+    virtual float paperHeight() const;
+    /** Set the height the paper of the printer has. */
+    virtual void setPrinterHeight(float height);
     /** Return the width the paper of the printer has. */
-    virtual float printWidth() const ;
-    /** Return the left border the printer has. */
-    virtual float printLeftBorder() const;
-    /** Return the right border the printer has. */
-    virtual float printRightBorder() const;
-    /** Return the top border the printer has. */
-    virtual float printTopBorder() const;
-    /** Return the bottom border the printer has. */
-    virtual float printBottomBorder() const;
+    virtual float paperWidth() const;
+    /** Set the width the paper of the printer has. */
+    virtual void setPaperWidth(float width);
+    /** Return the left border the paper of the printer has. */
+    virtual float paperLeftBorder() const;
+    /** Return the right border the paper of the printer has. */
+    virtual float paperRightBorder() const;
+    /** Return the top border the paper of the printer has. */
+    virtual float paperTopBorder() const;
+    /** Return the bottom border the paper of the printer has. */
+    virtual float paperBottomBorder() const;
+    /** Return the name of the paper format (like "A4" or "Letter"). */
+    virtual QString paperFormat() const;
+    /** Return the name of the paper orientation (like "Portrait" or "Landscape"). */
+    virtual QString paperOrientation() const;
+    /** Set the left, top, right and bottom border as well as the page format and
+    orientation the paper of the printer has. */
+    virtual void setPaperLayout(float leftBorder, float topBorder, float rightBorder, float bottomBoder, const QString& format, const QString& orientation);
 
     //QString printHeadLeft() const;
     //QString printHeadMid() const;
@@ -144,8 +155,15 @@ public Q_SLOTS: // METHODS
     //void setPrintFooterLeft(const QString & text);
     //void setPrintFooterMiddle(const QString & text);
     //void setPrintFooterRight(const QString & text);
-    //QString printFormatString() const;
-    //bool isProtected() const;
+
+    /** Return the password. */
+    virtual QByteArray password() const;
+    /** Return true if passwd is the correct password. */
+    virtual bool checkPassword(const QByteArray& passwd) const;
+    /** Return true if the sheet/document is protected. */
+    virtual bool isProtected() const;
+    /** Protect the document with the password passwd. */
+    virtual void setProtected(const QByteArray& passwd);
 
 private:
     Sheet* m_sheet;
