@@ -52,6 +52,7 @@ namespace Kivio
 ImageExport::ImageExport(KoFilter *, const char *, const QStringList&)
   : KoFilter()
 {
+  KGlobal::locale()->insertCatalogue("kofficefilters");
 }
 
 KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCString& to)
