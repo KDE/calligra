@@ -102,6 +102,7 @@ private:
     bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
     bool hasFrameOn(KWTextFrameSet *fs, int pageNumber);
     void cleanFrameSet(KWTextFrameSet *fs);
+    KWFrame* createCopyFrame(KWFrameSet *fs, KWPage *page);
 
 private:
     const KWPageManager *m_pageManager;

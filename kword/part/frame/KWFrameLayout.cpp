@@ -23,6 +23,7 @@
 #include "KWTextFrame.h"
 #include "KWPageSettings.h"
 #include "KWPage.h"
+#include "KWCopyShape.h"
 
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
@@ -67,13 +68,13 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin);
         if(!hasFrameOn(fs, pageNumber))
-            new KWTextFrame(createTextShape(page), fs);
+            createCopyFrame(fs, page);
     }
     if(shouldHaveHeaderOrFooter(pageNumber, false, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin);
         if(!hasFrameOn(fs, pageNumber))
-            new KWTextFrame(createTextShape(page), fs);
+            createCopyFrame(fs, page);
     }
 
     // delete headers/footer frames that are not needed on this page
@@ -88,6 +89,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
     if(page->pageSide() == KWPage::PageSpread) {
         // inline helper method
         class PageSpreadShapeFactory {
+// TODO fix
            public:
             PageSpreadShapeFactory(KWFrameLayout *parent) {
                 m_parent = parent;
@@ -647,6 +649,20 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber) {
         frame->shape()->setPosition(QPointF(frame->shape()->position().x(),
                 offsetInDocument + offsetFromPage));
     }
+}
+
+KWFrame* KWFrameLayout::createCopyFrame(KWFrameSet *fs, KWPage *page) {
+    if(fs->frameCount() == 0) {
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+        Q_ASSERT(tfs); // an empty, non-text frameset asking for a copy? Thats a bug.
+        return new KWTextFrame(createTextShape(page), tfs);
+    }
+    KWFrame *lastFrame = fs->frames().last();
+    KWCopyShape *shape = new KWCopyShape(lastFrame->shape());
+    shape->setPosition(QPointF(0, page->offsetInDocument()));
+    KWFrame *frame = new KWFrame(shape, fs);
+    frame->setCopy(true);
+    return frame;
 }
 
 #include "KWFrameLayout.moc"

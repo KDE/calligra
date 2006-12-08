@@ -84,13 +84,13 @@ KWTextFrameSet::~KWTextFrameSet() {
 }
 
 void KWTextFrameSet::setupFrame(KWFrame *frame) {
-    if(m_textFrameSetType != KWord::OtherTextFrameSet) {
+    if(m_textFrameSetType != KWord::OtherTextFrameSet)
         frame->shape()->setLocked(true);
-        if(m_textFrameSetType != KWord::MainTextFrameSet && frameCount() > 1)
-            frame->setCopy(true);
-    }
     KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
-    Q_ASSERT(data);
+    if(data == 0) {// probably a copy frame.
+        Q_ASSERT(frameCount() > 1);
+        return;
+    }
     if(frameCount() == 1 && m_document->isEmpty()) { // just added first frame...
         delete m_document;
         m_document = data->document();
