@@ -25,6 +25,7 @@
 #include "KWCanvas.h"
 #include "KWPage.h"
 #include "KWViewMode.h"
+#include "KWFactory.h"
 #include "frame/KWFrame.h"
 #include "dialog/KWFrameDialog.h"
 
@@ -64,6 +65,7 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     layout->setMargin(0);
     layout->addWidget(m_gui);
 
+    setInstance( KWFactory::instance() );
     setXMLFile( "kword.rc" );
 
     m_currentPage = m_document->pageManager()->page(m_document->startPage());

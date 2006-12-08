@@ -1,0 +1,3 @@
+if(KOFFICE_ENABLE_SCRIPTING)
+    add_subdirectory(scripting)
+endif(KOFFICE_ENABLE_SCRIPTING)

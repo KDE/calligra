@@ -11,6 +11,7 @@ add_subdirectory( pics )
 #add_subdirectory( data )
 #add_subdirectory( tests )
 add_subdirectory( part )
+add_subdirectory( plugins )
 
 #include_directories( ${KOTEXT_INCLUDES} ${CMAKE_SOURCE_DIR}/libs/kformula ${KOFFICEUI_INCLUDES} )
 

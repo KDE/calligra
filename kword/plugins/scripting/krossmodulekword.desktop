@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Scripting plugin
+Name[fr]=Module de scriptage
+Name[x-test]=xxScripting pluginxx
+Comment=Allow execution of scripts
+Comment[fr]=Permet d'exécuter des scripts
+Comment[x-test]=xxAllow execution of scriptsxx
+Type=Service
+X-KDE-Library=krossmodulekword
+X-KDE-Version=1
