@@ -237,7 +237,7 @@ class Reader:
             print "Reader.openFile file=%s rowidx=%i lastRow=%i lastColumn=%i" % (self.filename, self.rowidx, self.sheet.lastRow(), self.sheet.lastColumn())
             self.progress = progress
             if self.progress:
-                self.progress.labelText = "Processing sheet \"%s\"" % self.sheet.name()
+                self.progress.labelText = "Processing sheet \"%s\"" % self.sheet.sheetName()
                 self.progress.maximum = self.sheet.lastRow() + 1
 
         def closeFile(self):
@@ -440,7 +440,7 @@ class Dialog:
         return result
 
     def showError(self, message):
-        self.forms.showMessageBox("Error", "Error", message)
+        self.forms.showMessageBox("Error", "Error", "%s" % message)
 
     def showProgress(self):
         progress = self.forms.showProgressDialog("Exporting...", "Initialize...")
@@ -453,7 +453,7 @@ class Exporter:
     export-process together into one task. """
 
     def __init__(self, scriptaction):
-        import os, sys
+        import os, sys, traceback
 
         try:
             import Kross
@@ -475,7 +475,7 @@ class Exporter:
                     self.doExport()
                 break
             except:
-                self.dialog.showError(sys.exc_info()[0])
+                self.dialog.showError( "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ) )
 
     def doExport(self):
         progress = self.dialog.showProgress()
