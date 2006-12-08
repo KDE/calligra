@@ -751,12 +751,12 @@ addresses often contain words run together.</para>
 <title><guilabel>Grid</guilabel></title>
 <varlistentry>
 <term><guilabel>Horizontal grid size:</guilabel></term>
-<listitem><para>Set the space in millimeters between two points on an horizontal line on the grid. Default is 5 millimeters.</para></listitem>
+<listitem><para>Set the space in centimeters between two points on an horizontal line on the grid. Default is 0.5 centimeter.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Vertical grid size:</guilabel></term>
-<listitem><para>Set the space in millimeters between two points on a vertical line on the grid. Default is 5 millimeters.</para></listitem>
+<listitem><para>Set the space in centimeters between two points on a vertical line on the grid. Default is 0.5 centimeter.</para></listitem>
 </varlistentry>
 </variablelist>
 </sect2>
@@ -797,7 +797,7 @@ addresses often contain words run together.</para>
 <title><guilabel>Document Settings</guilabel></title>
 <varlistentry>
 <term><guilabel>Create backup file</guilabel></term>
-<listitem><para>If checked, this will create a <filename>.&lt;name&gt;.kpr.autosave.kpr</filename> in the dir where your file is. This backup file can then be used in case of a problem. The backup file is updated everytime you save your document or everytime there is an autosave.</para></listitem>
+<listitem><para>If checked, this will create a <filename>.&lt;name&gt;.odp.autosave.odp</filename> in the dir where your file is. This backup file can then be used in case of a problem. The backup file is updated everytime you save your document or everytime there is an autosave.</para></listitem>
 </varlistentry>
 
 <varlistentry>

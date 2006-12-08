@@ -160,7 +160,7 @@ for the navigation aids will follow whatever you set here. To change any of
 these colors, click the colored bar next to the corresponding text label. The
 colors used in your actual slides will be unchanged.</para>
 
-<tip><para>Choose colors that are complimentary to the contents of your
+<tip><para>Choose colors that are complementary to the contents of your
 presentation.</para></tip>
 </step>
 
@@ -534,9 +534,8 @@ template to the template collection.</para>
 
 <step>
 <para>You can now close the document you have been working on (there is no need
-to save it). The next time you are presented with the <guilabel>Create
-Document</guilabel> dialog, your very own template will be available to
-select!</para>
+to save it). The next time you are presented with the startup 
+dialog, your very own template will be available to select!</para>
 
 <screenshot>
 <screeninfo>Your new template in the &kpresenter; startup
