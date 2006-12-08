@@ -29,6 +29,7 @@
 #include <kicon.h>
 
 #include <KoCanvasController.h>
+#include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoToolManager.h>
 #include <KoToolBox.h>
