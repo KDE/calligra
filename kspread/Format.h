@@ -63,7 +63,7 @@ public:
      * @return the height in zoomed pixels as integer value.
      * \deprecated
      */
-    int height() const;
+    KDE_DEPRECATED int height() const;
 
     /**
      * @return the height in zoomed pixels as double value.
@@ -75,7 +75,7 @@ public:
      * @return the height in millimeters.
      * \deprecated
      */
-    double mmHeight() const;
+    KDE_DEPRECATED double mmHeight() const;
 
     /**
      * Sets the height to _h zoomed pixels.
@@ -151,7 +151,7 @@ public:
      * @return the width in zoomed pixels as integer.
      * \deprecated
      */
-    int width() const;
+    KDE_DEPRECATED int width() const;
 
     /**
      * @return the width in zoomed pixels as double.
@@ -164,7 +164,7 @@ public:
      * @return the width in millimeters.
      * \deprecated
      */
-    double mmWidth() const;
+    KDE_DEPRECATED double mmWidth() const;
 
     /**
      * Sets the width to _w zoomed pixels.

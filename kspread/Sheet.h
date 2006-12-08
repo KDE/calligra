@@ -1126,7 +1126,7 @@ public:
      * \todo TODO Stefan: remove after Undo.cpp|h and Commands.cpp|h are obsolete
      * \deprecated use MergeManipulator
      */
-    void changeMergedCell( int /*m_iCol*/, int /*m_iRow*/, int /*m_iExtraX*/, int /*m_iExtraY*/) {}
+    KDE_DEPRECATED void changeMergedCell( int /*m_iCol*/, int /*m_iRow*/, int /*m_iExtraX*/, int /*m_iExtraY*/) {}
 
     void refreshPreference() ;
 
@@ -1345,7 +1345,7 @@ public:
      * Marks the Cell at @p col , @p row as dirty.
      * \deprecated use setRegionPaintDirty
      */
-    void updateCell( Cell* cell, int col, int row );
+    KDE_DEPRECATED void updateCell( Cell* cell, int col, int row );
 
     /**
      * \ingroup Painting
@@ -1354,14 +1354,14 @@ public:
      * will be one paint event instead of several
      * \deprecated use setRegionPaintDirty
      */
-    void updateCellArea(const Region& cellArea);
+    KDE_DEPRECATED void updateCellArea(const Region& cellArea);
 
     /**
      * \ingroup Painting
      * Updates every cell on the sheet
      * \deprecated use setRegionPaintDirty
      */
-    void update();
+    KDE_DEPRECATED void update();
 
     /**
      * \ingroup Painting

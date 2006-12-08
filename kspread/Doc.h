@@ -688,7 +688,7 @@ public:
   /**
    * @deprecated
    */
-  static QString getAttribute(const KoXmlElement &element, const char *attributeName, const QString &defaultValue)
+  KDE_DEPRECATED static QString getAttribute(const KoXmlElement &element, const char *attributeName, const QString &defaultValue)
   {
     return element.attribute( attributeName, defaultValue );
   }
@@ -696,7 +696,7 @@ public:
   /**
    * @deprecated
    */
-  static int getAttribute(const KoXmlElement &element, const char *attributeName, int defaultValue)
+  KDE_DEPRECATED static int getAttribute(const KoXmlElement &element, const char *attributeName, int defaultValue)
   {
     QString value;
     if ( ( value = element.attribute( attributeName ) ) != QString::null )
@@ -708,7 +708,7 @@ public:
   /**
    * @deprecated
    */
-  static double getAttribute(const KoXmlElement &element, const char *attributeName, double defaultValue)
+  KDE_DEPRECATED static double getAttribute(const KoXmlElement &element, const char *attributeName, double defaultValue)
   {
     QString value;
       if ( ( value = element.attribute( attributeName ) ) != QString::null )
