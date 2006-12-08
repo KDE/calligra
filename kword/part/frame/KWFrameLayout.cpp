@@ -89,15 +89,14 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
     if(page->pageSide() == KWPage::PageSpread) {
         // inline helper method
         class PageSpreadShapeFactory {
-// TODO fix
-           public:
+          public:
             PageSpreadShapeFactory(KWFrameLayout *parent) {
                 m_parent = parent;
             }
-            KoShape *create(KWPage *page) {
-                KoShape *shape = m_parent->createTextShape(page);
+            void create(KWPage *page, KWFrameSet *fs) {
+                KWFrame* frame = m_parent->createCopyFrame(fs, page);
+                KoShape *shape = frame->shape();
                 shape->setPosition(QPointF(page->width()/2+1, shape->position().y()));
-                return shape;
             }
             KWFrameLayout *m_parent;
         };
@@ -105,12 +104,12 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
         if(shouldHaveHeaderOrFooter(pageNumber+1, true, &origin)) {
             KWTextFrameSet *fs = getOrCreate(origin);
             if(!hasFrameOn(fs, pageNumber+1))
-                new KWTextFrame(factory.create(page), fs);
+                factory.create(page, fs);
         }
         if(shouldHaveHeaderOrFooter(pageNumber+1, false, &origin)) {
             KWTextFrameSet *fs = getOrCreate(origin);
             if(!hasFrameOn(fs, pageNumber+1))
-                new KWTextFrame(factory.create(page), fs);
+                factory.create(page, fs);
         }
         if(m_pageSettings->hasMainTextFrame()) {
             int columns = m_pageSettings->columns().columns;
@@ -127,7 +126,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
                 }
             }
             while (columns > 0) {
-                new KWTextFrame(factory.create(page), fs);
+                factory.create(page, fs);
                 columns--;
             }
         }
