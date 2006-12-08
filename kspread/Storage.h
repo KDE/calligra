@@ -75,25 +75,25 @@ public:
      * Inserts \p number rows at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    void insertRows(int position, int number = 1);
+    QList< QPair<QRectF,T> > insertRows(int position, int number = 1);
 
     /**
      * Inserts \p number columns at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    void insertColumns(int position, int number = 1);
+    QList< QPair<QRectF,T> > insertColumns(int position, int number = 1);
 
     /**
      * Deletes \p number rows at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    void deleteRows(int position, int number = 1);
+    QList< QPair<QRectF,T> > deleteRows(int position, int number = 1);
 
     /**
      * Deletes \p number columns at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    void deleteColumns(int position, int number = 1);
+    QList< QPair<QRectF,T> > deleteColumns(int position, int number = 1);
 
     /**
      * Shifts the rows right of \p rect to the right by the width of \p rect .
@@ -224,43 +224,47 @@ void Storage<T>::insert(const Region& region, const T& _data)
 }
 
 template<typename T>
-void Storage<T>::insertRows(int position, int number)
+QList< QPair<QRectF,T> > Storage<T>::insertRows(int position, int number)
 {
     const QRect invalidRect(1,position,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
-    m_tree.insertRows(position, number);
+    QList< QPair<QRectF,T> > undoData = m_tree.insertRows(position, number);
     m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
 }
 
 template<typename T>
-void Storage<T>::insertColumns(int position, int number)
+QList< QPair<QRectF,T> > Storage<T>::insertColumns(int position, int number)
 {
     const QRect invalidRect(position,1,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
-    m_tree.insertColumns(position, number);
+    QList< QPair<QRectF,T> > undoData = m_tree.insertColumns(position, number);
     m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
 }
 
 template<typename T>
-void Storage<T>::deleteRows(int position, int number)
+QList< QPair<QRectF,T> > Storage<T>::deleteRows(int position, int number)
 {
     const QRect invalidRect(1,position,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
-    m_tree.deleteRows(position, number);
+    QList< QPair<QRectF,T> > undoData = m_tree.deleteRows(position, number);
     m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
 }
 
 template<typename T>
-void Storage<T>::deleteColumns(int position, int number)
+QList< QPair<QRectF,T> > Storage<T>::deleteColumns(int position, int number)
 {
     const QRect invalidRect(position,1,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
-    m_tree.deleteColumns(position, number);
+    QList< QPair<QRectF,T> > undoData = m_tree.deleteColumns(position, number);
     m_sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
 }
 
 template<typename T>

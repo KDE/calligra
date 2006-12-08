@@ -1075,25 +1075,34 @@ public:
     void unshiftRow( const QRect& rect, bool makeUndo=true );
 
     /**
-     * Moves all columns which are >= @p col one position to the right and
-     * inserts a new and empty column. After this the sheet is redrawn.
-     * nbCol is the number of column which are installing
+     * Helper method.
+     * \see InsertDeleteColumnManipulator
+     * Moves all columns which are >= \p col \p number positions to the right
+     * and inserts a new and empty column.
      */
-    bool insertColumn( int col, int nbCol=0, bool makeUndo=true );
-    /**
-     * Moves all rows which are >= @p row one position down and
-     * inserts a new and empty row. After this the sheet is redrawn.
-     */
-    bool insertRow( int row, int nbRow=0, bool makeUndo=true );
+    void insertColumns( int row, int numbers );
 
     /**
-     * Deletes the column @p col and redraws the sheet.
+     * Helper method.
+     * \see InsertDeleteRowManipulator
+     * Moves all rows which are >= \p row \p number positions down
+     * and inserts a new and empty row.
      */
-    void removeColumn( int col, int nbCol=0, bool makeUndo=true );
+    void insertRows( int row, int numbers );
+
     /**
-     * Deletes the row @p row and redraws the sheet.
+     * Helper method.
+     * \see InsertDeleteColumnManipulator
+     * Deletes \p number columns beginning at \p col .
      */
-    void removeRow( int row, int nbRow=0, bool makeUndo=true );
+    void deleteColumns( int row, int numbers );
+
+    /**
+     * Helper method.
+     * \see InsertDeleteRowManipulator
+     * Deletes \p number rows beginning at \p row .
+     */
+    void deleteRows( int row, int numbers );
 
     /**
      * Updates vertical border and view.

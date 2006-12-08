@@ -24,6 +24,7 @@
 #include "Localization.h"
 #include "Map.h"
 #include "Format.h"
+#include "RowColumnManipulators.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "Style.h"
@@ -206,6 +207,7 @@ void UndoInsertRemoveAction::undoFormulaReference()
 }
 
 
+#if 0
 /****************************************************************************
  *
  * UndoRemoveColumn
@@ -430,7 +432,6 @@ void UndoInsertRow::redo()
 }
 
 
-#if 0
 /****************************************************************************
  *
  * UndoHideRow
@@ -2578,12 +2579,24 @@ void UndoCellPaste::undo()
     // delete columns
     else if (m_iInsertTo == 0 && numCols == 0 && numRows > 0)
     {
-      sheet->removeRow(rect.top(), rect.height() - 1, false);
+        InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+        manipulator->setSheet( sheet );
+        manipulator->setReverse( true );
+        manipulator->setRegisterUndo( false );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        delete manipulator;
     }
     // delete rows
     else if (m_iInsertTo == 0 && numCols > 0 && numRows == 0)
     {
-      sheet->removeColumn(rect.left(), rect.width() - 1, false);
+        InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+        manipulator->setSheet( sheet );
+        manipulator->setReverse( true );
+        manipulator->setRegisterUndo( false );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        delete manipulator;
     }
   }
   else // without insertion
@@ -2649,12 +2662,22 @@ void UndoCellPaste::redo()
     // insert columns
     else if (m_iInsertTo == 0 && numCols == 0 && numRows > 0)
     {
-      sheet->insertRow(rect.top(), rect.height() - 1, false);
+        InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+        manipulator->setSheet( sheet );
+        manipulator->setRegisterUndo( false );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        delete manipulator;
     }
     // insert rows
     else if (m_iInsertTo == 0 && numCols > 0 && numRows == 0)
     {
-      sheet->insertColumn(rect.left(), rect.width() - 1, false);
+        InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+        manipulator->setSheet( sheet );
+        manipulator->setRegisterUndo( false );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        delete manipulator;
     }
   }
 

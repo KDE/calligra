@@ -21,6 +21,8 @@
 #define KSPREAD_MANIPULATOR_ROWCOL
 
 #include "Manipulator.h"
+#include "Storage.h"
+#include "Style.h"
 
 namespace KSpread
 {
@@ -135,27 +137,51 @@ class HideShowManipulator : public Manipulator
 
 
 /**
- * \class InsertDeleteManipulator
- * \brief Inserts and deletes columns and rows.
+ * \class InsertDeleteColumnManipulator
+ * \brief Inserts and deletes rows.
  */
-class InsertDeleteManipulator : public Manipulator
+class InsertDeleteColumnManipulator : public Manipulator
 {
-  public:
-    InsertDeleteManipulator();
-    ~InsertDeleteManipulator();
+public:
+    InsertDeleteColumnManipulator();
 
-  protected:
+protected:
+    virtual bool process(Element*);
+    virtual bool postProcessing();
+    virtual QString name() const;
 
-  private:
-    bool m_manipulateColumns : 1;
-    bool m_manipulateRows    : 1;
+private:
+    QList< QPair<QRectF,SharedSubStyle> > m_undoStyles;
+    QList< QPair<QRectF,QString> >        m_undoComment;
+    QList< QPair<QRectF,Conditions> >     m_undoConditions;
+    QList< QPair<QRectF,Validity> >       m_undoValidity;
+    QHash<QPoint,QString>                 m_undoCells;
 };
 
 
 
-  
+/**
+ * \class InsertDeleteRowManipulator
+ * \brief Inserts and deletes rows.
+ */
+class InsertDeleteRowManipulator : public Manipulator
+{
+public:
+    InsertDeleteRowManipulator();
+
+protected:
+    virtual bool process(Element*);
+    virtual bool postProcessing();
+    virtual QString name() const;
+
+private:
+    QList< QPair<QRectF,SharedSubStyle> > m_undoStyles;
+    QList< QPair<QRectF,QString> >        m_undoComment;
+    QList< QPair<QRectF,Conditions> >     m_undoConditions;
+    QList< QPair<QRectF,Validity> >       m_undoValidity;
+    QHash<QPoint,QString>                 m_undoCells;
+};
+
 }  // namespace KSpread
 
-
 #endif // KSPREAD_MANIPULATOR_ROWCOL
-

@@ -94,7 +94,7 @@ public:
     /**
      * Assigns \p subStyle to the area \p rect .
      */
-    void insert(const QRect& rect, const SharedSubStyle subStyle);
+    void insert(const QRect& rect, const SharedSubStyle& subStyle);
 
     /**
      * Assigns the substyles contained in \p style to the area \p region .
@@ -105,25 +105,25 @@ public:
      * Inserts \p number rows at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    void insertRows(int position, int number = 1);
+    QList< QPair<QRectF,SharedSubStyle> > insertRows(int position, int number = 1);
 
     /**
      * Inserts \p number columns at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    void insertColumns(int position, int number = 1);
+    QList< QPair<QRectF,SharedSubStyle> > insertColumns(int position, int number = 1);
 
     /**
      * Deletes \p number rows at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    void deleteRows(int position, int number = 1);
+    QList< QPair<QRectF,SharedSubStyle> > deleteRows(int position, int number = 1);
 
     /**
      * Deletes \p number columns at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    void deleteColumns(int position, int number = 1);
+    QList< QPair<QRectF,SharedSubStyle> > deleteColumns(int position, int number = 1);
 
     /**
      * Shifts the rows right of \p rect to the right by the width of \p rect .

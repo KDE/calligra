@@ -377,36 +377,6 @@ void SheetPropertiesCommand::unexecute()
 }
 
 
-// ----- InsertColumnCommand -----
-
-InsertColumnCommand::InsertColumnCommand( Sheet* s , unsigned int _column, unsigned int _nbCol )
-{
-  doc = s->doc();
-  sheetName = s->sheetName();
-  insertPosColumn = _column;
-  nbColumnInserted = _nbCol;
-}
-
-void InsertColumnCommand::execute()
-{
-    Sheet* sheet = doc->map()->findSheet( sheetName );
-    if( !sheet ) return;
-    sheet->insertColumn( insertPosColumn,nbColumnInserted);
-}
-
-void InsertColumnCommand::unexecute()
-{
-    Sheet* sheet = doc->map()->findSheet( sheetName );
-    if( !sheet ) return;
-    sheet->removeColumn( insertPosColumn,nbColumnInserted );
-}
-
-QString InsertColumnCommand::name() const
-{
-    return i18n("Insert Columns");
-}
-
-
 // ----- DefinePrintRangeCommand -----
 
 

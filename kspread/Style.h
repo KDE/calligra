@@ -329,9 +329,9 @@ protected:
 
     QList<SharedSubStyle> subStyles() const;
 
-    const SharedSubStyle createSubStyle( Key key, const QVariant& value );
+    SharedSubStyle createSubStyle( Key key, const QVariant& value );
     virtual void insertSubStyle( Key key, const QVariant& value );
-    void insertSubStyle( const SharedSubStyle subStyle );
+    void insertSubStyle( const SharedSubStyle& subStyle );
     bool releaseSubStyle( Key key );
 
     virtual int initialUsage() const { return 0; }

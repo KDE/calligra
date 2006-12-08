@@ -86,39 +86,55 @@ public:
   /**
    * \ingroup Painting
    * Paints the cell.
-   *
-   * @param rect the portion of the canvas that is actually in view
-   * @param painter the painter object to paint on
-   * @param view the view of this data.  This may be 0, but no selection
-   *        will be included with the painting.
-   * @param coordinate coordinates on the painter where the top left corner
-   *                    of the cell should be painted plus width and height
-   * @param cellRef the column/row coordinates of the cell.
-   * @param mergedCellsPainted list of merged cells being painted
+   * \param paintRegion the portion of the canvas that is actually in view
+   * \param painter the used painter
+   * \param view the view of this data.  Used for:
+   *        \li layout direction (should become obsolete),
+   *        \li painting obscured cells (should become obsolete)
+   *        \li (was used for selection painting, which is now in Canvas)
+   * \param paintCoordinate the top left coordinate (scroll offset dependent)
+   * \param cellCoordinate the cell position (should be removed!)
+   * \param mergedCellsPainted a list of merged cells already painted
+   * \param cell the Cell (should be removed!)
    */
-  void paintCell( const QRectF & rect, QPainter & painter,
-                  View * view, const KoPoint & coordinate,
-                  const QPoint & cellRef,
+  void paintCell( const QRectF& paintRegion, QPainter& painter,
+                  View * view, const KoPoint& paintCoordinate,
+                  const QPoint & cellCoordinate,
                   QLinkedList<QPoint> &mergedCellsPainted, Cell* cell );
 
   /**
    * \ingroup Painting
+   * Paints the cell custom borders, the page borders, diagonal lines.
+   * \param paintRegion the portion of the canvas that is actually in view
+   * \param painter the used painter
+   * \param paintCoordinate the top left coordinate (scroll offset dependent)
+   * \param cellCoordinate the cell position (should be removed!)
+   * \param cellRange the cell range, that is painted (should be removed!)
+   * \param mergedCellsPainted a list of merged cells already painted
+   * \param cell the Cell (should be removed!)
+   * \param sheetView the SheetView (should be removed!)
    */
   void paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                          const KoPoint& paintCoordinate,
-                         const QPoint& cellCoordinate, const QRect& cellRegion,
+                         const QPoint& cellCoordinate, const QRect& cellRange,
                          QLinkedList<QPoint> &mergedCellsPainted,
                          Cell* cell, SheetView* sheetView );
 
   /**
    * \ingroup Painting
-   * helper function for paintCell() function
-   * @see paintCell()
-   * @internal
+   * Paints the default cell borders.
+   * \param painter the used painter
+   * \param paintRegion the portion of the canvas that is actually in view
+   * \param cellRegion the cell's dimension (should be replaced with paintCoordinate!)
+   * \param cellCoordinate the cell position (should be removed!)
+   * \param paintBorder the borders, that should be painted (should be removed???)
+   * \param cellRange the cell range, that is painted (should be removed!)
+   * \param cell the Cell (should be removed!)
+   * \param sheetView the SheetView (should be removed!)
    */
   void paintDefaultBorders( QPainter& painter, const QRectF &paintRegion,
                             const QRectF &cellRegion, const QPoint &cellCoordinate,
-                            Borders paintBorder, const QRect& cellRegion,
+                            Borders paintBorder, const QRect& cellRange,
                             Cell* cell, SheetView* sheetView );
 
   /**

@@ -96,10 +96,10 @@ public Q_SLOTS: // METHODS
 
     /** Inserts nbCol number of new columns at the position col. All columns which
     are >= col are moved to the right. */
-    virtual bool insertColumn( int col, int nbCol = 1 );
+    virtual void insertColumn( int col, int nbCol = 1 );
     /** Inserts nbRow number of new rows at the position row. All rows which
     are >= row are moved down. */
-    virtual bool insertRow( int row, int nbRow = 1 );
+    virtual void insertRow( int row, int nbRow = 1 );
     /** Remove nbCol number of columns from the position col. */
     virtual void removeColumn( int col, int nbCol = 1 );
     /** Remove nbRow number of columns from the position row. */

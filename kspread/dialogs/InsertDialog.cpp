@@ -35,6 +35,7 @@
 #include <kmessagebox.h>
 
 #include "Doc.h"
+#include "RowColumnManipulators.h"
 #include "Sheet.h"
 #include "View.h"
 
@@ -119,31 +120,43 @@ void InsertDialog::slotOk()
     }
     else if( rb3->isChecked() )
     {
-	if( insRem == Insert )
+        if( insRem == Insert )
         {
-	    if ( !m_pView->activeSheet()->insertRow( rect.top(),(rect.bottom()-rect.top() ) ) )
-		KMessageBox::error( this, i18n("The row is full. Cannot move cells to the right.") );
-	}
-	else if( insRem == Remove )
+            InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->add( Region(rect) );
+            manipulator->execute();
+        }
+        else if( insRem == Remove )
         {
-	    m_pView->activeSheet()->removeRow( rect.top(),(rect.bottom()-rect.top() ) );
-	}
+            InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setReverse( true );
+            manipulator->add( Region(rect) );
+            manipulator->execute();
+        }
     }
     else if( rb4->isChecked() )
     {
-	if( insRem == Insert )
+        if( insRem == Insert )
         {
-	    if ( !m_pView->activeSheet()->insertColumn( rect.left(),(rect.right()-rect.left() )) )
-		KMessageBox::error( this, i18n("The column is full. Cannot move cells towards the bottom.") );
-	}
-	else if( insRem == Remove )
+            InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->add( Region(rect) );
+            manipulator->execute();
+        }
+        else if( insRem == Remove )
         {
-	    m_pView->activeSheet()->removeColumn( rect.left(),(rect.right()-rect.left() ) );
-	}
+            InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setReverse( true );
+            manipulator->add( Region(rect) );
+            manipulator->execute();
+        }
     }
     else
     {
-	kDebug(36001) << "Error in kspread_dlg_InsertDialog" << endl;
+        kDebug(36001) << "Error in kspread_dlg_InsertDialog" << endl;
     }
 
     m_pView->updateEditWidget();

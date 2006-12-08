@@ -39,6 +39,7 @@
 
 // #include "KSpreadCellIface.h"
 #include "Region.h"
+#include "RowColumnManipulators.h"
 
 #include "SheetAdaptor.h"
 
@@ -266,24 +267,38 @@ int SheetAdaptor::lastRow() const
 //     return true;
 // }
 
-bool SheetAdaptor::insertColumn( int col,int nbCol )
+void SheetAdaptor::insertColumn( int col,int nbCol )
 {
-    return m_sheet->insertColumn(col,nbCol);
+    InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+    manipulator->setSheet( m_sheet );
+    manipulator->add( Region(QRect(col, 1, nbCol, 1)) );
+    manipulator->execute();
 }
 
-bool SheetAdaptor::insertRow( int row,int nbRow)
+void SheetAdaptor::insertRow( int row,int nbRow)
 {
-    return m_sheet->insertRow(row,nbRow);
+    InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+    manipulator->setSheet( m_sheet );
+    manipulator->add( Region(QRect(1, row, 1, nbRow)) );
+    manipulator->execute();
 }
 
 void SheetAdaptor::removeColumn( int col,int nbCol )
 {
-    m_sheet->removeColumn( col,nbCol );
+    InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+    manipulator->setSheet( m_sheet );
+    manipulator->setReverse( true );
+    manipulator->add( Region(QRect(col, 1, nbCol, 1)) );
+    manipulator->execute();
 }
 
 void SheetAdaptor::removeRow( int row,int nbRow )
 {
-    m_sheet->removeRow( row,nbRow );
+    InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+    manipulator->setSheet( m_sheet );
+    manipulator->setReverse( true );
+    manipulator->add( Region(QRect(1, row, 1, nbRow)) );
+    manipulator->execute();
 }
 
 bool SheetAdaptor::isHidden() const

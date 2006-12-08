@@ -1604,7 +1604,7 @@ void SheetPrint::insertColumn( int col, int nbCol )
         int left = m_printRange.left();
         int right = m_printRange.right();
 
-        for( int i = 0; i <= nbCol; i++ )
+        for( int i = 0; i < nbCol; i++ )
         {
             if ( left >= col ) left++;
             if ( right >= col ) right++;
@@ -1625,7 +1625,7 @@ void SheetPrint::insertRow( int row, int nbRow )
         int top = m_printRange.top();
         int bottom = m_printRange.bottom();
 
-        for( int i = 0; i <= nbRow; i++ )
+        for( int i = 0; i < nbRow; i++ )
         {
             if ( top >= row ) top++;
             if ( bottom >= row ) bottom++;
@@ -1646,7 +1646,7 @@ void SheetPrint::removeColumn( int col, int nbCol )
         int left = m_printRange.left();
         int right = m_printRange.right();
 
-        for( int i = 0; i <= nbCol; i++ )
+        for( int i = 0; i < nbCol; i++ )
         {
             if ( left > col ) left--;
             if ( right >= col ) right--;
@@ -1664,7 +1664,7 @@ void SheetPrint::removeColumn( int col, int nbCol )
         int left = m_printRepeatColumns.first;
         int right = m_printRepeatColumns.second;
 
-        for( int i = 0; i <= nbCol; i++ )
+        for( int i = 0; i < nbCol; i++ )
         {
             if ( left > col ) left--;
             if ( right >= col ) right--;
@@ -1684,7 +1684,7 @@ void SheetPrint::removeRow( int row, int nbRow )
         int top = m_printRange.top();
         int bottom = m_printRange.bottom();
 
-        for( int i = 0; i <= nbRow; i++ )
+        for( int i = 0; i < nbRow; i++ )
         {
             if ( top > row ) top--;
             if ( bottom >= row ) bottom--;
@@ -1702,7 +1702,7 @@ void SheetPrint::removeRow( int row, int nbRow )
         int top = m_printRepeatRows.first;
         int bottom = m_printRepeatRows.second;
 
-        for( int i = 0; i <= nbRow; i++ )
+        for( int i = 0; i < nbRow; i++ )
         {
             if ( top > row ) top--;
             if ( bottom >= row ) bottom--;

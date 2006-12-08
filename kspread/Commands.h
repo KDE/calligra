@@ -267,24 +267,6 @@ protected:
 };
 
 
-class InsertColumnCommand : public KCommand
-{
-public:
-  InsertColumnCommand( Sheet* s , unsigned int _column, unsigned int _nbCol );
-
-  virtual void execute();
-  virtual void unexecute();
-  virtual QString name() const;
-
-protected:
-    Doc* doc;
-    QString sheetName;
-    unsigned int insertPosColumn;
-    unsigned int nbColumnInserted;
-
-};
-
-
 class DefinePrintRangeCommand : public KCommand
 {
 public:

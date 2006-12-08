@@ -372,7 +372,7 @@ public:
      * @return the width of this cell as int
      * \deprecated
      */
-    int width( int _col = -1 ) const;
+    KDE_DEPRECATED int width( int _col = -1 ) const;
 
     /**
      * @param _row the row this cell is assumed to be in.
@@ -381,7 +381,7 @@ public:
      * @return the height of this cell as int
      * \deprecated
      */
-    int height( int _row = -1 ) const;
+    KDE_DEPRECATED int height( int _row = -1 ) const;
 
     /**
      * @param _col the column this cell is assumed to be in.
@@ -404,13 +404,14 @@ public:
      * \see zoomedCellRect
      * \note does NOT take merged cells into account
      * \todo replace by a position method
+     * \deprecated
      */
-    QRect cellRect();
+    KDE_DEPRECATED QRect cellRect() const;
 
     /**
      * \return the position of this cell
      */
-    const QPoint& cellPosition() const;
+    QPoint cellPosition() const;
 
     /**
      * @return true if the cell should be printed in a print out.

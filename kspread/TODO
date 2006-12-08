@@ -133,7 +133,7 @@ Things not in bugzilla
     - Port FormatDialog.						----
     - Port IncreaseIndentManipulator.					done
     - Port BorderColorManipulator.					done
-    - Undo for insertion/deletion of columns/rows.			----
+    - Undo for insertion/deletion of columns/rows.			done
     - Undo for insertion/deletion of cell ranges.			----
     - Improve the saving.						----
       Only StyleStorage::Private::usedArea should track the occupied
@@ -150,12 +150,14 @@ Things not in bugzilla
   + Speed up selection.						      1 ----
     (probably improved with Format Storage?)
 
-  + Non-continguous selection					      2 ----
+  + Non-continguous selection					      2 STEF
     Convert the operations to work on non-contiguous selections.
-    - InsertColumn							----
-    - InsertRow								----
-    - DeleteColumn							----
-    - DeleteRow								----
+    - InsertColumn							done
+    - InsertRow								done
+    - DeleteColumn							done
+    - DeleteRow								done
+    - Insert cells							----
+    - Delete cells							----
 
   + Manipulators						      2 ----
     Convert CellWorker/UndoActions/Commands to Manipulators.
@@ -165,6 +167,12 @@ Things not in bugzilla
     - Paste								----
     - Paste Special							----
     - Paste with insertion						----
+    - InsertColumn							done
+    - InsertRow								done
+    - DeleteColumn							done
+    - DeleteRow								done
+    - Insert cells							----
+    - Delete cells							----
 
   + Rich text in cells.						      1 ----
 	Use KoText.
@@ -204,7 +212,7 @@ Things not in bugzilla
   + Scrollbar that supports jumping one row/column forward or back    2 ----
 
 * Formula/Value engine
-  + DependencyManager / RecalcManager				      1 STEF
+  + DependencyManager / RecalcManager				      1 ----
     - The reference depth changes only if a formula was altered. So,
       it belongs to the DependencyManager and has to be moved. OTOH,
       it is only use for recalculation. If this is disabled, the

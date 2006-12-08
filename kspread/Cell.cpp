@@ -3008,11 +3008,17 @@ bool Cell::operator==( const Cell& other ) const
   return true;
 }
 
-QRect Cell::cellRect()
+QRect Cell::cellRect() const
 {
   // this asserts if the invoicetemplate.ods file in http://kross.dipe.org/KSpreadInvoiceExample.tar.gz is opened.
   //Q_ASSERT(!isDefault());
   return QRect(QPoint(d->column, d->row), QPoint(d->column, d->row));
+}
+
+QPoint Cell::cellPosition() const
+{
+    Q_ASSERT( !isDefault() );
+    return QPoint( d->column, d->row );
 }
 
 QLinkedList<Conditional> Cell::conditionList( int col, int row ) const

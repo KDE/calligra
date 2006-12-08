@@ -2371,7 +2371,7 @@ QList<SharedSubStyle> Style::subStyles() const
     return d->subStyles.values();
 }
 
-const SharedSubStyle Style::createSubStyle( Key key, const QVariant& value )
+SharedSubStyle Style::createSubStyle( Key key, const QVariant& value )
 {
     SharedSubStyle newSubStyle;
     switch ( key )
@@ -2498,7 +2498,7 @@ void Style::insertSubStyle( Key key, const QVariant& value )
     insertSubStyle( subStyle );
 }
 
-void Style::insertSubStyle( const SharedSubStyle subStyle )
+void Style::insertSubStyle( const SharedSubStyle& subStyle )
 {
     if ( !subStyle )
         return;

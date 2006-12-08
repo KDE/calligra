@@ -75,6 +75,7 @@
 #include "Map.h"
 #include "Object.h"
 #include "RecalcManager.h"
+#include "RowColumnManipulators.h"
 #include "Selection.h"
 #include "SheetPrint.h"
 #include "SheetView.h"
@@ -1275,112 +1276,59 @@ void Sheet::unshiftRow( const QRect & rect,bool makeUndo )
     emit sig_updateView( this );
 }
 
-bool Sheet::insertColumn( int col, int nbCol, bool makeUndo )
+void Sheet::insertColumns( int col, int number )
 {
-    UndoInsertColumn * undo = 0;
-    if ( !doc()->undoLocked() && makeUndo)
-    {
-        undo = new UndoInsertColumn( doc(), this, col, nbCol );
-        doc()->addCommand( undo );
-    }
-
-    bool res=true;
-    bool result;
-    for( int i=0; i<=nbCol; i++ )
+    for( int i=0; i<number; i++ )
     {
         // Recalculate range max (minus size of last column)
         d->sizeMaxX -= columnFormat( KS_colMax )->dblWidth();
 
-        result = d->cells.insertColumn( col );
+        d->cells.insertColumn( col );
         d->columns.insertColumn( col );
-        if(!result)
-            res = false;
 
         //Recalculate range max (plus size of new column)
         d->sizeMaxX += columnFormat( col+i )->dblWidth();
     }
-    styleStorage()->insertColumns(col, nbCol + 1);
-    commentStorage()->insertColumns(col, nbCol + 1);
-    conditionsStorage()->insertColumns(col, nbCol + 1);
-    validityStorage()->insertColumns(col, nbCol + 1);
-
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
         sheet->changeNameCellRef( QPoint( col, 1 ), true,
                                   Sheet::ColumnInsert, objectName(),
-                                  nbCol + 1, undo );
+                                  number );
     }
-
     //update print settings
-    d->print->insertColumn( col, nbCol );
-
+    d->print->insertColumn( col, number );
+    // update charts
     refreshChart( QPoint( col, 1 ), true, Sheet::ColumnInsert );
-    refreshMergedCell();
-    recalc();
-    emit sig_updateHBorder( this );
-    emit sig_updateView( this );
-
-    return res;
 }
 
-bool Sheet::insertRow( int row, int nbRow, bool makeUndo )
+void Sheet::insertRows( int row, int number )
 {
-    UndoInsertRow *undo = 0;
-    if ( !doc()->undoLocked() && makeUndo)
-    {
-        undo = new UndoInsertRow( doc(), this, row, nbRow );
-        doc()->addCommand( undo );
-    }
-
-    bool res=true;
-    bool result;
-    for( int i=0; i<=nbRow; i++ )
+    for( int i=0; i<number; i++ )
     {
         // Recalculate range max (minus size of last row)
         d->sizeMaxY -= rowFormat( KS_rowMax )->dblHeight();
 
-        result = d->cells.insertRow( row );
+        d->cells.insertRow( row );
         d->rows.insertRow( row );
-        if( !result )
-            res = false;
 
         //Recalculate range max (plus size of new row)
         d->sizeMaxY += rowFormat( row )->dblHeight();
     }
-    styleStorage()->insertRows(row, nbRow + 1);
-    commentStorage()->insertRows(row, nbRow + 1);
-    conditionsStorage()->insertRows(row, nbRow + 1);
-    validityStorage()->insertRows(row, nbRow + 1);
-
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
-      sheet->changeNameCellRef( QPoint( 1, row ), true,
-                                Sheet::RowInsert, objectName(),
-                                nbRow + 1, undo );
+        sheet->changeNameCellRef( QPoint( 1, row ), true,
+                                  Sheet::RowInsert, objectName(),
+                                  number );
     }
-
     //update print settings
-    d->print->insertRow( row, nbRow );
-
+    d->print->insertRow( row, number );
+    // update charts
     refreshChart( QPoint( 1, row ), true, Sheet::RowInsert );
-    refreshMergedCell();
-    recalc();
-    emit sig_updateVBorder( this );
-    emit sig_updateView( this );
-
-    return res;
 }
 
-void Sheet::removeColumn( int col, int nbCol, bool makeUndo )
+void Sheet::deleteColumns( int col, int number )
 {
-    UndoRemoveColumn *undo = 0;
-    if ( !doc()->undoLocked() && makeUndo)
-    {
-        undo = new UndoRemoveColumn( doc(), this, col, nbCol );
-        doc()->addCommand( undo );
-    }
-
-    for ( int i = 0; i <= nbCol; ++i )
+    for ( int i = 0; i < number; ++i )
     {
         // Recalculate range max (minus size of removed column)
         d->sizeMaxX -= columnFormat( col )->dblWidth();
@@ -1391,40 +1339,21 @@ void Sheet::removeColumn( int col, int nbCol, bool makeUndo )
         //Recalculate range max (plus size of new column)
         d->sizeMaxX += columnFormat( KS_colMax )->dblWidth();
     }
-    // deletes the styles, comments, conditions, validity
-#warning FIXME Stefan: handle undo
-    styleStorage()->deleteColumns(col, nbCol + 1);
-    commentStorage()->deleteColumns(col, nbCol + 1);
-    conditionsStorage()->deleteColumns(col, nbCol + 1);
-    validityStorage()->deleteColumns(col, nbCol + 1);
-
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
         sheet->changeNameCellRef( QPoint( col, 1 ), true,
                                   Sheet::ColumnRemove, objectName(),
-                                  nbCol + 1, undo );
+                                  number );
     }
-
     //update print settings
-    d->print->removeColumn( col, nbCol );
-
+    d->print->removeColumn( col, number );
+    // update charts
     refreshChart( QPoint( col, 1 ), true, Sheet::ColumnRemove );
-    refreshMergedCell();
-    recalc();
-    emit sig_updateHBorder( this );
-    emit sig_updateView( this );
 }
 
-void Sheet::removeRow( int row, int nbRow, bool makeUndo )
+void Sheet::deleteRows( int row, int number )
 {
-    UndoRemoveRow *undo = 0;
-    if ( !doc()->undoLocked() && makeUndo )
-    {
-        undo = new UndoRemoveRow( doc(), this, row, nbRow );
-        doc()->addCommand( undo );
-    }
-
-    for( int i=0; i<=nbRow; i++ )
+    for( int i=0; i<number; i++ )
     {
         // Recalculate range max (minus size of removed row)
         d->sizeMaxY -= rowFormat( row )->dblHeight();
@@ -1435,28 +1364,17 @@ void Sheet::removeRow( int row, int nbRow, bool makeUndo )
         //Recalculate range max (plus size of new row)
         d->sizeMaxY += rowFormat( KS_rowMax )->dblHeight();
     }
-    // deletes the styles, comments, conditions, validity
-#warning FIXME Stefan: handle undo
-    styleStorage()->deleteRows(row, nbRow + 1);
-    commentStorage()->deleteRows(row, nbRow + 1);
-    conditionsStorage()->deleteRows(row, nbRow + 1);
-    validityStorage()->deleteRows(row, nbRow + 1);
-
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
       sheet->changeNameCellRef( QPoint( 1, row ), true,
                                 Sheet::RowRemove, objectName(),
-                                nbRow + 1, undo );
+                                number );
     }
 
     //update print settings
-    d->print->removeRow( row, nbRow );
-
+    d->print->removeRow( row, number );
+    // update charts
     refreshChart( QPoint( 1, row ), true, Sheet::RowRemove );
-    refreshMergedCell();
-    recalc();
-    emit sig_updateVBorder( this );
-    emit sig_updateView( this );
 }
 
 void Sheet::emitHideRow()
@@ -2484,12 +2402,22 @@ void Sheet::loadSelectionUndo(const KoXmlDocument& d, const QRect& loadArea,
     // insert columns
     else if (insertTo == 0 && numCols == 0 && numRows > 0)
     {
-      insertRow(rect.top(), rect.height() - 1, false);
+        InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+        manipulator->setSheet( this );
+        manipulator->setRegisterUndo( false );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        delete manipulator;
     }
     // insert rows
     else if (insertTo == 0 && numCols > 0 && numRows == 0)
     {
-      insertColumn(rect.left(), rect.width() - 1, false);
+        InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+        manipulator->setSheet( this );
+        manipulator->setRegisterUndo( false );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        delete manipulator;
     }
   }
 }

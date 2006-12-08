@@ -145,6 +145,7 @@ protected:
     QLinkedList<FormulaOfCell> m_lstFormulaCells;
 };
 
+#if 0
 class UndoRemoveColumn : public UndoInsertRemoveAction
 {
 public:
@@ -211,7 +212,6 @@ protected:
     int m_iNbRow;
 };
 
-#if 0
 class UndoHideColumn : public UndoAction
 {
 public:

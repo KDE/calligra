@@ -2843,59 +2843,36 @@ void View::enableInsertRow( bool _b )
 
 void View::deleteColumn()
 {
-  if ( !d->activeSheet )
-    return;
-
-  doc()->emitBeginOperation( false );
-
-  QRect r( d->selection->selection() );
-
-  d->activeSheet->removeColumn( r.left(), ( r.right()-r.left() ) );
-
-  updateEditWidget();
-  // Stefan: update the selection after deleting (a) column(s)
-  d->selection->update();
-
-  QRect vr( d->canvas->visibleCells() );
-  vr.setLeft( r.left() );
-
-  doc()->emitEndOperation( vr );
+    InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setReverse( true );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::deleteRow()
 {
-  if ( !d->activeSheet )
-    return;
-
-  doc()->emitBeginOperation( false );
-  QRect r( d->selection->selection() );
-  d->activeSheet->removeRow( r.top(),(r.bottom()-r.top()) );
-
-  updateEditWidget();
-  // Stefan: update the selection after deleting (a) column(s)
-  d->selection->update();
-
-  QRect vr( d->canvas->visibleCells() );
-  vr.setTop( r.top() );
-
-  doc()->emitEndOperation( vr );
+    InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->setReverse( true );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::insertColumn()
 {
-  if ( !d->activeSheet )
-    return;
+    InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
+}
 
-  doc()->emitBeginOperation( false );
-  QRect r( d->selection->selection() );
-  d->activeSheet->insertColumn( r.left(), ( r.right()-r.left() ) );
-
-  updateEditWidget();
-
-  QRect vr( d->canvas->visibleCells() );
-  vr.setLeft( r.left() - 1 );
-
-  doc()->emitEndOperation( vr );
+void View::insertRow()
+{
+    InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
+    manipulator->setSheet( d->activeSheet );
+    manipulator->add( *selectionInfo() );
+    manipulator->execute();
 }
 
 void View::hideColumn()
@@ -2939,21 +2916,6 @@ void View::slotShowColumnDialog()
 
   ShowColRow dlg( this, "showCol", ShowColRow::Column );
   dlg.exec();
-}
-
-void View::insertRow()
-{
-  if ( !d->activeSheet )
-    return;
-  doc()->emitBeginOperation( false );
-  QRect r( d->selection->selection() );
-  d->activeSheet->insertRow( r.top(), ( r.bottom() - r.top() ) );
-
-  updateEditWidget();
-  QRect vr( d->canvas->visibleCells() );
-  vr.setTop( r.top() - 1 );
-
-  doc()->emitEndOperation( vr );
 }
 
 void View::hideRow()

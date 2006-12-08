@@ -157,7 +157,7 @@ int StyleStorage::nextStyleRight( int column, int row ) const
     return usedColumns.first();
 }
 
-void StyleStorage::insert(const QRect& rect, const SharedSubStyle subStyle)
+void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
 {
 //     kDebug(36006) << "StyleStorage: inserting " << subStyle->type() << " into " << rect << endl;
     // invalidate the affected, cached styles
@@ -224,40 +224,44 @@ void StyleStorage::insert(const Region& region, const Style& style)
     }
 }
 
-void StyleStorage::insertRows(int position, int number)
+QList< QPair<QRectF,SharedSubStyle> > StyleStorage::insertRows(int position, int number)
 {
     const QRect invalidRect(1,position,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
-    d->tree.insertRows(position, number);
+    QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.insertRows(position, number);
     d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
 }
 
-void StyleStorage::insertColumns(int position, int number)
+QList< QPair<QRectF,SharedSubStyle> > StyleStorage::insertColumns(int position, int number)
 {
     const QRect invalidRect(position,1,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
-    d->tree.insertColumns(position, number);
+    QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.insertColumns(position, number);
     d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
 }
 
-void StyleStorage::deleteRows(int position, int number)
+QList< QPair<QRectF,SharedSubStyle> > StyleStorage::deleteRows(int position, int number)
 {
     const QRect invalidRect(1,position,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
-    d->tree.deleteRows(position, number);
+    QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.deleteRows(position, number);
     d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
 }
 
-void StyleStorage::deleteColumns(int position, int number)
+QList< QPair<QRectF,SharedSubStyle> > StyleStorage::deleteColumns(int position, int number)
 {
     const QRect invalidRect(position,1,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache( invalidRect );
-    d->tree.deleteColumns(position, number);
+    QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.deleteColumns(position, number);
     d->sheet->addLayoutDirtyRegion( Region(invalidRect) );
+    return undoData;
 }
 
 QList< QPair<QRectF,SharedSubStyle> > StyleStorage::shiftRows( const QRect& rect )
