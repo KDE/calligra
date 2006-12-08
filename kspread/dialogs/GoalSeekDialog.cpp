@@ -429,7 +429,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
   if ( ok )
   {
     m_sourceCell->setValue( Value(startA ) );
-    m_sourceCell->sheet()->setRegionPaintDirty(m_sourceCell->cellRect());
+    m_sourceCell->sheet()->setRegionPaintDirty(Region(m_sourceCell->cellPosition()));
 
     m_resultText->setText( i18n( "Goal seeking with cell %1 found a solution:",
                                  m_selector3->textEdit()->toPlainText() ) );
@@ -441,7 +441,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
   {
     // restore the old value
     m_sourceCell->setValue( Value( m_oldSource ) );
-    m_sourceCell->sheet()->setRegionPaintDirty(m_sourceCell->cellRect());
+    m_sourceCell->sheet()->setRegionPaintDirty(Region(m_sourceCell->cellPosition()));
     m_resultText->setText( i18n( "Goal seeking with cell %1 has found NO solution.",
                                  m_selector3->textEdit()->toPlainText() ) );
     m_newValue->setText( "" );

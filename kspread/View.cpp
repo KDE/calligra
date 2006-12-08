@@ -4854,7 +4854,7 @@ void View::toggleProtectDoc( bool mode )
    QByteArray passwd;
    if ( mode )
    {
-     int result = KPasswordDialog::getNewPassword( this, passwd, i18n( "Protect Document" ) );
+     int result = KPasswordDialog::getNewPassword( this, passwd, i18n( "Protect Document" ), i18n( "Enter a password.") );
      if ( result != KPasswordDialog::Accepted )
      {
        d->actions->protectDoc->setChecked( false );
@@ -4869,7 +4869,7 @@ void View::toggleProtectDoc( bool mode )
    }
    else
    {
-     int result = KPasswordDialog::getPassword( this, passwd, i18n( "Unprotect Document" ) );
+     int result = KPasswordDialog::getPassword( this, passwd, i18n( "Unprotect Document" ), i18n( "Enter the password.") );
      if ( result != KPasswordDialog::Accepted )
      {
        d->actions->protectDoc->setChecked( true );
@@ -4902,7 +4902,7 @@ void View::toggleProtectSheet( bool mode )
    QByteArray passwd;
    if ( mode )
    {
-     int result = KPasswordDialog::getNewPassword( this, passwd, i18n( "Protect Sheet" ) );
+     int result = KPasswordDialog::getNewPassword( this, passwd, i18n( "Protect Sheet" ), i18n( "Enter a password.") );
      if ( result != KPasswordDialog::Accepted )
      {
        d->actions->protectSheet->setChecked( false );
@@ -4918,7 +4918,7 @@ void View::toggleProtectSheet( bool mode )
    }
    else
    {
-     int result = KPasswordDialog::getPassword( this, passwd, i18n( "Unprotect Sheet" ) );
+     int result = KPasswordDialog::getPassword( this, passwd, i18n( "Unprotect Sheet" ), i18n( "Enter the password.") );
      if ( result != KPasswordDialog::Accepted )
      {
        d->actions->protectSheet->setChecked( true );
