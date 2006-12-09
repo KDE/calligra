@@ -374,8 +374,8 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
             if ( e.tagName() == "resource-group" ) {
                 // Load the resources
                 // References calendars
-                ResourceGroup * child = new ResourceGroup( this );
-                if ( child->load( e ) ) {
+                ResourceGroup * child = new ResourceGroup();
+                if ( child->load( e, status ) ) {
                     addResourceGroup( child );
                 } else {
                     // TODO: Complain about this
@@ -567,6 +567,7 @@ void Project::setParentSchedule( Schedule *sch )
 void Project::addResourceGroup( ResourceGroup * group )
 {
     m_resourceGroups.append( group );
+    group->setProject( this );
     emit resourceGroupAdded( group );
 }
 
@@ -577,6 +578,7 @@ ResourceGroup *Project::takeResourceGroup( ResourceGroup *resource )
         return 0;
     }
     ResourceGroup *g = m_resourceGroups.takeAt( i );
+    g->setProject( 0 );
     emit resourceGroupRemoved( g );
     return g;
 }

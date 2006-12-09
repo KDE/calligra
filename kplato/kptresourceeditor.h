@@ -30,6 +30,9 @@
 class QPoint;
 class QTreeWidgetItem;
 class QSplitter;
+class QDropEvent;
+class QDragMoveEvent;
+class QDragEnterEvent;
 
 class KToggleAction;
 class KPrinter;
@@ -70,8 +73,10 @@ public:
 
     virtual void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
 
-    virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
     virtual QStringList mimeTypes () const;
+    virtual Qt::DropActions supportedDropActions() const;
+    virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+
 
     QObject *object( const QModelIndex &index ) const;
         
@@ -151,7 +156,7 @@ protected:
     void contextMenuEvent ( QContextMenuEvent * event );
     void keyPressEvent(QKeyEvent *event);
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
-
+    
 private:
     bool m_arrowKeyNavigation;
 };

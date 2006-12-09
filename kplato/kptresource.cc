@@ -26,6 +26,7 @@
 #include "kptcalendar.h"
 #include "kpteffortcostmap.h"
 #include "kptschedule.h"
+#include "kptxmlloaderobject.h"
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -36,10 +37,10 @@
 namespace KPlato
 {
 
-ResourceGroup::ResourceGroup(Project *project) 
+ResourceGroup::ResourceGroup()
     : QObject() 
 {
-    m_project = project;
+    m_project = 0;
     m_type = Type_Work;
     generateId();
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
@@ -149,10 +150,26 @@ QStringList ResourceGroup::typeToStringList( bool trans ) {
             << (trans ? i18n("Material") : QString("Material"));
 }
 
+void ResourceGroup::setProject( Project *project )
+{
+    if ( project != m_project ) {
+        if ( m_project  ) {
+            removeId();
+        }
+    }
+    m_project = project;
+    if ( project ) {
+        insertId( m_id );
+    }
+    foreach ( Resource *r, m_resources ) {
+        r->setProject( project );
+    }
+}
 
 void ResourceGroup::addResource(Resource* resource, Risk*) {
     resourceToBeAdded( resource );
     resource->setParent( this );
+    resource->setProject( m_project );
     m_resources.append( resource );
     resourceAdded( resource );
 }
@@ -172,6 +189,7 @@ Resource *ResourceGroup::takeResource(Resource *resource) {
         resourceToBeRemoved( resource );
         Resource *r = m_resources.takeAt(i);
         r->setParent( 0 );
+        r->setProject( 0 );
         resourceRemoved( r );
         return r;
     }
@@ -188,7 +206,7 @@ ResourceGroup* ResourceGroup::getRequiredResource(int) {
 void ResourceGroup::deleteRequiredResource(int) {
 }
 
-bool ResourceGroup::load(QDomElement &element) {
+bool ResourceGroup::load(QDomElement &element, XMLLoaderObject &status ) {
     //kDebug()<<k_funcinfo<<endl;
     setId(element.attribute("id"));
     m_name = element.attribute("name");
@@ -199,8 +217,8 @@ bool ResourceGroup::load(QDomElement &element) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "resource") {
                // Load the resource
-                Resource *child = new Resource(m_project);
-                if (child->load(e)) {
+                Resource *child = new Resource();
+                if (child->load(e, status)) {
                     addResource(child, 0);
                 } else {
                     // TODO: Complain about this
@@ -262,9 +280,9 @@ Appointment ResourceGroup::appointmentIntervals() const {
     return a;
 }
 
-Resource::Resource(Project *project) 
+Resource::Resource()
     : QObject(),
-    m_project(project), 
+    m_project(0),
     m_schedules(), 
     m_workingHours() 
 {
@@ -347,7 +365,7 @@ void Resource::generateId() {
 }
 
 void Resource::copy(Resource *resource) {
-    m_project = resource->project();
+    m_project = 0; // NOTE: Don't copy, will be set when added to a project
     //m_appointments = resource->appointments(); // Note
     m_id = resource->id();
     m_name = resource->name();
@@ -448,7 +466,7 @@ DateTime Resource::getBestAvailableTime(const DateTime /*after*/, const Duration
     return DateTime();
 }
 
-bool Resource::load(QDomElement &element) {
+bool Resource::load(QDomElement &element, XMLLoaderObject &status) {
     //kDebug()<<k_funcinfo<<endl;
     QString s;
     setId(element.attribute("id"));
@@ -456,7 +474,7 @@ bool Resource::load(QDomElement &element) {
     m_initials = element.attribute("initials");
     m_email = element.attribute("email");
     setType(element.attribute("type"));
-    m_calendar = findCalendar(element.attribute("calendar-id"));
+    m_calendar = status.project().findCalendar(element.attribute("calendar-id"));
     m_units = element.attribute("units", "100").toInt();
     s = element.attribute("available-from");
     if (!s.isEmpty())
@@ -808,6 +826,19 @@ Appointment Resource::appointmentIntervals() const {
 
 Duration Resource::plannedEffort(const QDate &date) const {
     return m_currentSchedule ? m_currentSchedule->plannedEffort(date) : Duration::zeroDuration;
+}
+
+void Resource::setProject( Project *project )
+{
+    if ( project != m_project ) {
+        if ( m_project  ) {
+            removeId();
+        }
+    }
+    m_project = project;
+    if ( project ) {
+        insertId( m_id );
+    }
 }
 
 /////////   Risk   /////////

@@ -730,7 +730,7 @@ private:
 class RemoveResourceGroupCmd : public NamedCommand
 {
 public:
-    RemoveResourceGroupCmd( Part *part, ResourceGroup *group, const QString& name = QString() );
+    RemoveResourceGroupCmd( Part *part, Project *project, ResourceGroup *group, const QString& name = QString() );
     ~RemoveResourceGroupCmd();
     void execute();
     void unexecute();
@@ -738,28 +738,29 @@ public:
 protected:
 
     ResourceGroup *m_group;
+    Project *m_project;
     bool m_mine;
 };
 
 class AddResourceGroupCmd : public RemoveResourceGroupCmd
 {
 public:
-    AddResourceGroupCmd( Part *part, ResourceGroup *group, const QString& name = QString() );
+    AddResourceGroupCmd( Part *part, Project *project, ResourceGroup *group, const QString& name = QString() );
     void execute();
     void unexecute();
 };
 
 class ModifyResourceGroupNameCmd : public NamedCommand
 {
-    public:
-        ModifyResourceGroupNameCmd( Part *part, ResourceGroup *group, const QString& value, const QString& name = QString() );
-        void execute();
-        void unexecute();
+public:
+    ModifyResourceGroupNameCmd( Part *part, ResourceGroup *group, const QString& value, const QString& name = QString() );
+    void execute();
+    void unexecute();
 
-    private:
-        ResourceGroup *m_group;
-        QString m_newvalue;
-        QString m_oldvalue;
+private:
+    ResourceGroup *m_group;
+    QString m_newvalue;
+    QString m_oldvalue;
 };
 
 class ModifyResourceGroupTypeCmd : public NamedCommand

@@ -1496,9 +1496,10 @@ void ModifyResourceCalendarCmd::unexecute()
     setCommandType( 1 );
 }
 
-RemoveResourceGroupCmd::RemoveResourceGroupCmd( Part *part, ResourceGroup *group, const QString& name )
+RemoveResourceGroupCmd::RemoveResourceGroupCmd( Part *part, Project *project, ResourceGroup *group, const QString& name )
         : NamedCommand( part, name ),
-        m_group( group )
+        m_group( group ),
+        m_project( project )
 {
 
     m_mine = false;
@@ -1518,8 +1519,8 @@ void RemoveResourceGroupCmd::execute()
         }
         c = 1;
     }
-    if ( m_group->project() )
-        m_group->project() ->takeResourceGroup( m_group );
+    if ( m_project )
+        m_project->takeResourceGroup( m_group );
     m_mine = true;
 
     setCommandType( c );
@@ -1534,16 +1535,16 @@ void RemoveResourceGroupCmd::unexecute()
         }
         c = 1;
     }
-    if ( m_group->project() )
-        m_group->project() ->addResourceGroup( m_group );
+    if ( m_project )
+        m_project->addResourceGroup( m_group );
 
     m_mine = false;
 
     setCommandType( c );
 }
 
-AddResourceGroupCmd::AddResourceGroupCmd( Part *part, ResourceGroup *group, const QString& name )
-        : RemoveResourceGroupCmd( part, group, name )
+AddResourceGroupCmd::AddResourceGroupCmd( Part *part, Project *project, ResourceGroup *group, const QString& name )
+        : RemoveResourceGroupCmd( part, project, group, name )
 {
 
     m_mine = true;

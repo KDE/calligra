@@ -278,7 +278,7 @@ ResourcesPanel::~ResourcesPanel()
 void ResourcesPanel::slotAddGroup() {
     //kDebug()<<k_funcinfo<<endl;
     listOfGroups->clearSelection();
-    ResourceGroup *r = new ResourceGroup(project);
+    ResourceGroup *r = new ResourceGroup();
     GroupItem *gitem = new GroupItem(r, GroupItem::New);
     m_groupItems.append(gitem);
     ResourcesPanelGroupLVItem *groupItem = new ResourcesPanelGroupLVItem(*this, listOfGroups, gitem);
@@ -309,7 +309,7 @@ void ResourcesPanel::slotAddResource() {
         return;
     }
     listOfResources->clearSelection();
-    Resource *r = new Resource(project);
+    Resource *r = new Resource();
     ResourceDialog *dia = new ResourceDialog(*project, r);
     if (dia->exec()) {
         KCommand *cmd = dia->buildCommand();
@@ -400,7 +400,7 @@ KCommand *ResourcesPanel::buildCommand(Part *part) {
         if (!(gitem->m_state & GroupItem::New)) {
             if (!m) m = new KMacroCommand(cmdName);
             //kDebug()<<k_funcinfo<<"Remove group: '"<<gitem->m_name<<"'"<<endl;
-            m->addCommand(new RemoveResourceGroupCmd(part, gitem->takeGroup()));
+            m->addCommand(new RemoveResourceGroupCmd(part, project, gitem->takeGroup()));
         }
     }
     foreach (GroupItem *gitem, m_groupItems) {
@@ -416,7 +416,7 @@ KCommand *ResourcesPanel::buildCommand(Part *part) {
             if (!m) m = new KMacroCommand(cmdName);
             //kDebug()<<k_funcinfo<<" Adding group: '"<<gitem->m_name<<"'"<<endl;
             gitem->saveResources();
-            m->addCommand(new AddResourceGroupCmd(part, gitem->takeGroup()));
+            m->addCommand(new AddResourceGroupCmd(part, project, gitem->takeGroup()));
             continue;
         }
         ResourceGroup *rg = gitem->takeGroup();

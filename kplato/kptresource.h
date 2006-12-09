@@ -52,6 +52,7 @@ class EffortCostMap;
 class Schedule;
 class ResourceSchedule;
 class Schedule;
+class XMLLoaderObject;
 
 /**
   * This class represents a group of similar resources to be assigned to a task
@@ -68,7 +69,7 @@ class ResourceGroup : public QObject
 {
     Q_OBJECT
 public:
-    explicit ResourceGroup( Project *project );
+    explicit ResourceGroup();
     ~ResourceGroup();
 
     enum Type { Type_Work, Type_Material };
@@ -129,7 +130,7 @@ public:
          */
     void deleteRequiredResource( int );
 
-    bool load( QDomElement &element );
+    bool load( QDomElement &element, XMLLoaderObject &status );
     void save( QDomElement &element ) const;
 
     void initiateCalculation( Schedule &sch );
@@ -159,6 +160,10 @@ public:
     void insertId( const QString &id );
 
     Appointment appointmentIntervals() const;
+
+    // m_project is set when the resourcegroup is added to the project,
+    // and reset when the resourcegroup is removed from the project
+    void setProject( Project *project );
 
 #ifndef NDEBUG
 
@@ -204,7 +209,7 @@ class Resource : public QObject
     Q_OBJECT
 public:
 
-    Resource( Project *project );
+    Resource();
     Resource( Resource *resource );
     virtual ~Resource();
 
@@ -246,7 +251,7 @@ public:
     DateTime getBestAvailableTime( Duration duration );
     DateTime getBestAvailableTime( const DateTime after, const Duration duration );
 
-    bool load( QDomElement &element );
+    bool load( QDomElement &element, XMLLoaderObject &status );
     void save( QDomElement &element ) const;
 
     ///Return the list of appointments for current schedule.
@@ -348,6 +353,10 @@ public:
     void addSchedule( Schedule *schedule );
     ResourceSchedule *createSchedule( const QString& name, int type, long id );
     ResourceSchedule *createSchedule( Schedule *parent );
+
+    // m_project is set when the resource (or the parent) is added to the project,
+    // and reset when the resource is removed from the project
+    void setProject( Project *project );
 
 protected:
     void makeAppointment( Schedule *node, const DateTime &from, const DateTime &end );

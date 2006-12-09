@@ -33,6 +33,10 @@
 #include "kptdatetime.h"
 #include "kptcontext.h"
 
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QMimeData>
 #include <QMenu>
 #include <QPainter>
 #include <QStyle>
@@ -49,6 +53,9 @@
 #include <klocale.h>
 #include <kprinter.h>
 #include <kxmlguifactory.h>
+
+#include <kabc/addressee.h>
+#include <kabc/vcardconverter.h>
 
 #include <kdebug.h>
 
@@ -110,7 +117,14 @@ void ResourceItemModel::setProject( Project *project )
 
 Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
 {
-    Qt::ItemFlags flags = QAbstractItemModel::flags( index );
+    Qt::ItemFlags flags = ItemModelBase::flags( index );
+    if ( !m_readWrite ) {
+        return flags &= ~Qt::ItemIsEditable;
+    }
+    if ( !index.isValid() ) {
+        return flags;
+    }
+
     if ( !index.isValid() )
         return flags;
     if ( !m_readWrite ) {
@@ -121,6 +135,7 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
             default: flags |= Qt::ItemIsEditable;
         }
     } else if ( qobject_cast<ResourceGroup*>( object( index ) ) ) {
+        flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
             case 0: flags |= Qt::ItemIsEditable; break;
             case 1: flags |= Qt::ItemIsEditable; break;
@@ -688,16 +703,6 @@ void ResourceItemModel::sort( int column, Qt::SortOrder order )
 {
 }
 
-QMimeData * ResourceItemModel::mimeData( const QModelIndexList &indexes ) const
-{
-    return 0;
-}
-
-QStringList ResourceItemModel::mimeTypes () const
-{
-    return QStringList();
-}
-
 QObject *ResourceItemModel::object( const QModelIndex &index ) const
 {
     QObject *o = 0;
@@ -730,6 +735,55 @@ void ResourceItemModel::slotResourceGroupChanged( ResourceGroup *res )
     }
 }
 
+Qt::DropActions ResourceItemModel::supportedDropActions() const
+{
+    return Qt::CopyAction;
+}
+
+
+QStringList ResourceItemModel::mimeTypes() const
+{
+    return QStringList() << "text/x-vcard";
+}
+
+bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+{
+    if (action == Qt::IgnoreAction)
+        return true;
+
+    if (column > 0) {
+        return false;
+    }
+    kDebug()<<k_funcinfo<<row<<" p:"<<parent.row()<<endl;
+    
+    if ( !parent.isValid() ) {
+        return false;
+    }
+    ResourceGroup *g = qobject_cast<ResourceGroup*>( object( parent ) );
+    if ( g == 0 ) {
+        return false;
+    }
+    kDebug()<<data->formats()<<endl;
+    KMacroCommand *m = 0;
+    if ( data->hasFormat( "text/x-vcard" ) ) {
+        QByteArray vcard = data->data( "text/x-vcard" );
+        KABC::VCardConverter vc;
+        KABC::Addressee::List lst = vc.parseVCards( vcard );
+        foreach( KABC::Addressee a, lst ) {
+            if ( m == 0 ) m = new KMacroCommand( i18np( "Add resource from addressbook", "Add %n resources from addressbook", lst.count() ) );
+            Resource *r = new Resource();
+            r->setName( a.formattedName() );
+            r->setEmail( a.preferredEmail() );
+            m->addCommand( new AddResourceCmd( m_part, g, r ) );
+        }
+    }
+    if ( m ) {
+        m_part->addCommand( m );
+    }
+    return true;
+}
+
+
 //--------------------
 ResourceTreeView::ResourceTreeView( Part *part, QWidget *parent )
     : QTreeView( parent ),
@@ -742,6 +796,9 @@ ResourceTreeView::ResourceTreeView( Part *part, QWidget *parent )
 
     setItemDelegateForColumn( 1, new EnumDelegate( this ) );
 
+    setAcceptDrops( true );
+    setDropIndicatorShown( true );
+    
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 
