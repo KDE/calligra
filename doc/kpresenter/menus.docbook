@@ -1318,7 +1318,7 @@ parts.</para>
 <listitem>
 <para>This puts a colored copy of either text or a drawn object behind
 it. You can make nice <quote>dropped shadows</quote> for logos with
-this tool. To enable this ite, ensure that you have object(s) 
+this tool. To enable this item, ensure that you have object(s) 
 selected (you will see the six small black boxes around the
 outline.) You choose the color, select which way the shadow is going to
 fall and select a distance. For text it looks nice if you set the
