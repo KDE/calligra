@@ -150,7 +150,7 @@ Things not in bugzilla
   + Speed up selection.						      1 ----
     (probably improved with Format Storage?)
 
-  + Non-continguous selection					      2 STEF
+  + Non-continguous selection					      2 DONE
     Convert the operations to work on non-contiguous selections.
     - InsertColumn							done
     - InsertRow								done

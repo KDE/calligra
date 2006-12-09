@@ -582,6 +582,13 @@ bool ShiftManipulator::process(Element* element)
     return true;
 }
 
+bool ShiftManipulator::postProcessing()
+{
+    m_sheet->refreshMergedCell();
+    m_sheet->recalc();
+    return true;
+}
+
 QString ShiftManipulator::name() const
 {
     if ( !m_reverse )

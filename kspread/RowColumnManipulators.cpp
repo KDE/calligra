@@ -701,6 +701,8 @@ bool InsertDeleteColumnManipulator::process( Element* element )
 
 bool InsertDeleteColumnManipulator::postProcessing()
 {
+    m_sheet->refreshMergedCell();
+    m_sheet->recalc();
     return true;
 }
 
@@ -825,6 +827,8 @@ bool InsertDeleteRowManipulator::process( Element* element )
 
 bool InsertDeleteRowManipulator::postProcessing()
 {
+    m_sheet->refreshMergedCell();
+    m_sheet->recalc();
     return true;
 }
 

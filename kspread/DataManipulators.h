@@ -206,6 +206,7 @@ public:
 
 protected:
     bool process(Element*);
+    bool postProcessing();
     QString name() const;
 
 private:
