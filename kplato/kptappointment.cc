@@ -328,7 +328,7 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dur
 Appointment::~Appointment() {
     kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     detach();
-    while (m_intervals.isEmpty())
+    while ( ! m_intervals.isEmpty() )
         delete m_intervals.takeFirst();
 }
 
