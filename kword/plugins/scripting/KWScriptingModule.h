@@ -45,14 +45,24 @@ class KWScriptingModule : public QObject
     public slots:
 
         /**
-        * Returns the \a KoApplicationAdaptor object.
+        * Return the \a KoApplicationAdaptor object.
         */
         QObject* application();
 
         /**
-        * Returns the \a KoDocumentAdaptor object.
+        * Return the \a KoDocumentAdaptor object.
         */
         QObject* document();
+
+        /**
+        * Return total number of pages the document has.
+        */
+        int pageCount();
+
+        /**
+        * Return the \a KWPageAdaptor of the specific page number.
+        */
+        QObject* page(int pageNumber);
 
     private:
         /// \internal d-pointer class.

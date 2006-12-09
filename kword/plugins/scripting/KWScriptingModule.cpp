@@ -29,6 +29,8 @@
 
 #include <KWDocument.h>
 #include <KWView.h>
+#include <KWPage.h>
+#include <KWPageAdaptor.h>
 
 extern "C"
 {
@@ -80,6 +82,17 @@ QObject* KWScriptingModule::application()
 QObject* KWScriptingModule::document()
 {
     return doc()->findChild< KoDocumentAdaptor* >();
+}
+
+int KWScriptingModule::pageCount()
+{
+    return doc()->pageManager()->pageCount();
+}
+
+QObject* KWScriptingModule::page(int pageNumber)
+{
+    KWPage* page = doc()->pageManager()->page(pageNumber);
+    return page ? new KWPageAdaptor(this, page) : 0;
 }
 
 #include "KWScriptingModule.moc"

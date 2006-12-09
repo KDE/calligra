@@ -84,7 +84,7 @@ public:
     double bottomMargin() const;
     /// return the width of the margin at left (in pt);
     double leftMargin() const;
-    /// return the width of the margin at left (in pt);
+    /// return the width of the margin at right (in pt);
     double rightMargin() const;
     /// return width of the margin that is the closest to the page edge, i.e. left for even pages
     double pageEdgeMargin() const;
