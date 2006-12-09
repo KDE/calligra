@@ -666,7 +666,7 @@ settings.</para></listitem>
 
 <varlistentry>
 <term><guilabel>Skip run-together words</guilabel></term>
-<listitem><para>If checked, the concatenated words made of existing words are not spellchecked. This is useful in some languages. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guisubmenu>Spellcheck</guisubmenu><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para>
+<listitem><para>If checked, then concatenated words made of existing words are not spellchecked. This is useful in some languages. This option is also used when you choose the <menuchoice><guimenu>Text</guimenu><guisubmenu>Spellcheck</guisubmenu><guimenuitem>Spelling...</guimenuitem></menuchoice> menu option.</para>
 <para>Examples of such words are <emphasis>shutout</emphasis>,
 <emphasis>cannot</emphasis> and <emphasis>blackout</emphasis>.</para>
 <tip>

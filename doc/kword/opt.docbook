@@ -371,8 +371,8 @@ in text frames.</para>
 <term><guilabel>Autosave every (min):</guilabel></term>
 <listitem>
 <para>You can use this to adjust how often &kword; saves a temporary
-file.  If you set this value to zero, &kword; will not autosave.  You
-can adjust the autosave from zero to 60 minutes.</para>
+file.  If you set this value to <guilabel>No autosave</guilabel>, &kword; will not autosave. 
+You can adjust the autosave from 1 minute to 60 minutes.</para>
 </listitem>
 </varlistentry>
 
@@ -481,7 +481,7 @@ marked as misspelled.  If this box is checked, the combined word will be ignored
 <para>Examples of such words are <emphasis>shutout</emphasis>,
 <emphasis>cannot</emphasis>, and <emphasis>blackout</emphasis>.</para>
 <tip>
-<para>Leaving this check box unchecked will help prevent &kword; from
+<para>Checking this box will help prevent &kword; from
 flagging website and email addresses for spelling errors.  These
 addresses often contain words run together.</para>
 </tip></listitem>
