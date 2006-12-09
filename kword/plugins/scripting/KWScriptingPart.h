@@ -18,46 +18,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef SCRIPTINGMODULE_H
-#define SCRIPTINGMODULE_H
+#ifndef KWSCRIPTINGPART_H
+#define KWSCRIPTINGPART_H
 
-#include <QString>
-#include <QStringList>
-#include <QObject>
+#include <kparts/plugin.h>
 
 /**
-* The ScriptingModule class enables access to the KWord
-* functionality from within the scripting backends.
+* The ScriptingPart class implements a KPart component
+* to integrate scripting into KWord.
 */
-class ScriptingModule : public QObject
+class KWScriptingPart : public KParts::Plugin
 {
-		Q_OBJECT
-	public:
-		ScriptingModule();
-		virtual ~ScriptingModule();
-
-		//KSpread::Doc* doc();
-		//void setView(KSpread::View* view = 0);
-
-	public slots:
-
-#if 0
-		/**
-		* Returns the \a KoApplicationAdaptor object.
-		*/
-		QObject* application();
-
-		/**
-		* Returns the \a KoDocumentAdaptor object.
-		*/
-		QObject* document();
-#endif
-
-	private:
-		/// \internal d-pointer class.
-		class Private;
-		/// \internal d-pointer instance.
-		Private* const d;
+        Q_OBJECT
+    public:
+        KWScriptingPart(QObject* parent, const QStringList&);
+        virtual ~KWScriptingPart();
+    private:
+        /// \internal d-pointer class.
+        class Private;
+        /// \internal d-pointer instance.
+        Private* const d;
 };
 
 #endif

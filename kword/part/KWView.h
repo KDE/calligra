@@ -60,6 +60,8 @@ public:
     KWView( const QString& viewMode, KWDocument *document, QWidget *parent );
     ~KWView();
 
+    KWDocument *kwdocument() const { return m_document; }
+
     // interface KoView
     /// overwritten method from superclass
     void updateReadWrite(bool readWrite);

@@ -18,52 +18,68 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "ScriptingModule.h"
+#include "KWScriptingModule.h"
 
-//#include <QPointer>
+#include <QPointer>
 #include <kapplication.h>
 #include <kdebug.h>
 
 #include <KoDocumentAdaptor.h>
 #include <KoApplicationAdaptor.h>
 
+#include <KWDocument.h>
+#include <KWView.h>
+
 extern "C"
 {
     QObject* krossmodule()
     {
-        return new ScriptingModule();
+        return new KWScriptingModule();
     }
 }
 
 /// \internal d-pointer class.
-class ScriptingModule::Private
+class KWScriptingModule::Private
 {
-	public:
+    public:
+        QPointer<KWView> view;
+        QPointer<KWDocument> doc;
 };
 
-ScriptingModule::ScriptingModule()
-	: QObject()
-	, d( new Private() )
+KWScriptingModule::KWScriptingModule()
+    : QObject()
+    , d( new Private() )
 {
-	setObjectName("KWordScriptingModule");
+    setObjectName("KWordScriptingModule");
+    d->view = 0;
+	d->doc = 0;
 }
 
-ScriptingModule::~ScriptingModule()
+KWScriptingModule::~KWScriptingModule()
 {
-	kDebug() << "ScriptingModule::~ScriptingModule()" << endl;
-	delete d;
+    delete d;
 }
 
-#if 0
-QObject* ScriptingModule::application()
+KWDocument* KWScriptingModule::doc()
 {
-	return KApplication::kApplication()->findChild< KoApplicationAdaptor* >();
+    if(! d->doc)
+        d->doc = d->view ? d->view->kwdocument() : new KWDocument(0, this);
+    return d->doc;
 }
 
-QObject* ScriptingModule::document()
+void KWScriptingModule::setView(KWView* view)
 {
-	return doc()->findChild< KoDocumentAdaptor* >();
+    d->view = view;
 }
-#endif
 
-#include "ScriptingModule.moc"
+QObject* KWScriptingModule::application()
+{
+    return KApplication::kApplication()->findChild< KoApplicationAdaptor* >();
+}
+
+QObject* KWScriptingModule::document()
+{
+    return doc()->findChild< KoDocumentAdaptor* >();
+}
+
+#include "KWScriptingModule.moc"
