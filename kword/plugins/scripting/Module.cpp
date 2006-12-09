@@ -18,7 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KWScriptingModule.h"
+#include "Module.h"
+#include "Page.h"
 
 #include <QPointer>
 #include <kapplication.h>
@@ -30,26 +31,30 @@
 #include <KWDocument.h>
 #include <KWView.h>
 #include <KWPage.h>
-#include <KWPageAdaptor.h>
 
 extern "C"
 {
     QObject* krossmodule()
     {
-        return new KWScriptingModule();
+        return new Scripting::Module();
     }
 }
 
-/// \internal d-pointer class.
-class KWScriptingModule::Private
-{
-    public:
-        QPointer<KWView> view;
-        QPointer<KWDocument> doc;
-};
+using namespace Scripting;
 
-KWScriptingModule::KWScriptingModule()
-    : QObject()
+namespace Scripting {
+
+    /// \internal d-pointer class.
+    class Module::Private
+    {
+        public:
+            QPointer<KWView> view;
+            QPointer<KWDocument> doc;
+    };
+}
+
+Module::Module(QObject* parent)
+    : QObject(parent)
     , d( new Private() )
 {
     setObjectName("KWordScriptingModule");
@@ -57,42 +62,67 @@ KWScriptingModule::KWScriptingModule()
 	d->doc = 0;
 }
 
-KWScriptingModule::~KWScriptingModule()
+Module::~Module()
 {
     delete d;
 }
 
-KWDocument* KWScriptingModule::doc()
+KWDocument* Module::doc()
 {
     if(! d->doc)
         d->doc = d->view ? d->view->kwdocument() : new KWDocument(0, this);
     return d->doc;
 }
 
-void KWScriptingModule::setView(KWView* view)
+void Module::setView(KWView* view)
 {
     d->view = view;
 }
 
-QObject* KWScriptingModule::application()
+QObject* Module::application()
 {
     return KApplication::kApplication()->findChild< KoApplicationAdaptor* >();
 }
 
-QObject* KWScriptingModule::document()
+QObject* Module::document()
 {
     return doc()->findChild< KoDocumentAdaptor* >();
 }
 
-int KWScriptingModule::pageCount()
+int Module::pageCount()
 {
+    //TODO is this always equal to doc()->pageManager()->lastPageNumber() ? I don't believe so :-/
     return doc()->pageManager()->pageCount();
 }
 
-QObject* KWScriptingModule::page(int pageNumber)
+QObject* Module::page(int pageNumber)
 {
     KWPage* page = doc()->pageManager()->page(pageNumber);
-    return page ? new KWPageAdaptor(this, page) : 0;
+    return page ? new Page(this, page) : 0;
 }
 
-#include "KWScriptingModule.moc"
+QObject* Module::insertPage( int afterPageNum )
+{
+    //TODO check for doc()->pageManager()->onlyAllowAppend()
+    KWPage* page = const_cast<KWPageManager*>( doc()->pageManager() )->insertPage(afterPageNum);
+    return page ? new Page(this, page) : 0;
+}
+
+void Module::removePage( int pageNumber )
+{
+    //TODO remove also the wrapper? and what's about pages that are "Spread" (page that represents 2 pagenumbers)?
+    const_cast<KWPageManager*>( doc()->pageManager() )->removePage(pageNumber);
+}
+
+int Module::startPage()
+{
+    return doc()->pageManager()->startPage();
+}
+
+void Module::setStartPage(int pageNumber)
+{
+    //TODO this is evil since it changes page(int pageNumber) above... we need a more persistent way to deal with pages!
+     const_cast<KWPageManager*>( doc()->pageManager() )->setStartPage(pageNumber);
+}
+
+#include "Module.moc"

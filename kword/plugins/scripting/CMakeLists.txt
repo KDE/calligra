@@ -4,7 +4,7 @@ include_directories(
 	${KOFFICEUI_INCLUDES} 
 	${KROSS_INCLUDES} )
 
-set(krossmodulekword_PART_SRCS KWScriptingModule.cpp KWScriptingPart.cpp)
+set(krossmodulekword_PART_SRCS Module.cpp Page.cpp Part.cpp)
 kde4_automoc(${krossmodulekword_PART_SRCS})
 kde4_add_plugin(krossmodulekword ${krossmodulekword_PART_SRCS})
 target_link_libraries(krossmodulekword  ${KDE4_KDECORE_LIBS} ${KDE4_KROSSCORE_LIBS} kparts kwordprivate)

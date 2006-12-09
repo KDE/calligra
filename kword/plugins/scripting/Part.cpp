@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KWScriptingPart.h"
-#include "KWScriptingModule.h"
+#include "Part.h"
+#include "Module.h"
 
 //#include <QApplication>
 //#include <QFileInfo>
@@ -36,25 +36,31 @@
 #include <kross/core/manager.h>
 #include <kross/core/guiclient.h>
 
-typedef KGenericFactory< KWScriptingPart > KWordScriptingFactory;
+typedef KGenericFactory< Scripting::Part > KWordScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( krossmodulekword, KWordScriptingFactory( "krossmodulekword" ) )
 
-/// \internal d-pointer class.
-class KWScriptingPart::Private
-{
-    public:
-        Kross::GUIClient* guiclient;
-        KWScriptingModule* module;
+using namespace Scripting;
 
-        Private() : module(0) {}
-        ~Private() {}
-};
+namespace Scripting {
 
-KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
+    /// \internal d-pointer class.
+    class Part::Private
+    {
+        public:
+            Kross::GUIClient* guiclient;
+            Module* module;
+
+            Private() : module(0) {}
+            ~Private() {}
+    };
+
+}
+
+Part::Part(QObject* parent, const QStringList&)
     : KParts::Plugin(parent)
     , d(new Private())
 {
-    setInstance(KWScriptingPart::instance());
+    setInstance(Part::instance());
     setXMLFile(KStandardDirs::locate("data","kword/kpartplugins/scripting.rc"), true);
 
     kDebug() << "KWScripting plugin. Class: " << metaObject()->className() << ", Parent: " << parent->metaObject()->className() << endl;
@@ -78,20 +84,20 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     actionCollection()->insert(scriptmenuaction);
 
     // Publish the KWScriptingModule which offers access to KSpread internals.
-    KWScriptingModule* module = Kross::Manager::self().hasObject("KWord")
-        ? dynamic_cast< KWScriptingModule* >( Kross::Manager::self().object("KWord") )
+    Module* module = Kross::Manager::self().hasObject("KWord")
+        ? dynamic_cast< Module* >( Kross::Manager::self().object("KWord") )
         : 0;
     if( ! module ) {
-        module = new KWScriptingModule();
+        module = new Module(this);
         Kross::Manager::self().addObject(module, "KWord");
     }
     module->setView(view);
 }
 
-KWScriptingPart::~KWScriptingPart()
+Part::~Part()
 {
-    kDebug() << "KWScriptingPart::~KWScriptingPart()" << endl;
+    kDebug() << "Part::~Part()" << endl;
     delete d;
 }
 
-#include "KWScriptingPart.moc"
+#include "Part.moc"
