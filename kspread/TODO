@@ -134,7 +134,7 @@ Things not in bugzilla
     - Port IncreaseIndentManipulator.					done
     - Port BorderColorManipulator.					done
     - Undo for insertion/deletion of columns/rows.			done
-    - Undo for insertion/deletion of cell ranges.			----
+    - Undo for insertion/deletion of cell ranges.			done
     - Improve the saving.						----
       Only StyleStorage::Private::usedArea should track the occupied
       cells only - not those of columns or rows. Adjust the saving algo
@@ -156,8 +156,8 @@ Things not in bugzilla
     - InsertRow								done
     - DeleteColumn							done
     - DeleteRow								done
-    - Insert cells							----
-    - Delete cells							----
+    - Insert cells							done
+    - Delete cells							done
 
   + Manipulators						      2 ----
     Convert CellWorker/UndoActions/Commands to Manipulators.
@@ -171,8 +171,8 @@ Things not in bugzilla
     - InsertRow								done
     - DeleteColumn							done
     - DeleteRow								done
-    - Insert cells							----
-    - Delete cells							----
+    - Insert cells							done
+    - Delete cells							done
 
   + Rich text in cells.						      1 ----
 	Use KoText.

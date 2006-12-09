@@ -25,6 +25,7 @@
 #include "Cell.h"
 #include "Doc.h"
 #include "Sheet.h"
+#include "StyleStorage.h"
 #include "ValueCalc.h"
 
 #include <float.h>
@@ -423,3 +424,168 @@ bool CaseManipulator::wantChange (Element *element, int col, int row)
   return true;
 }
 
+
+
+ShiftManipulator::ShiftManipulator()
+    : Manipulator()
+{
+}
+
+bool ShiftManipulator::process(Element* element)
+{
+    const QRect range = element->rect();
+    if ( !m_reverse ) // insertion
+    {
+        // create undo for cells
+        if ( m_firstrun )
+        {
+            if ( m_direction == ShiftBottom )
+            {
+                for ( int col = KS_colMax - range.width(); col <= KS_colMax; ++col )
+                {
+                    Cell* cell;
+                    for ( int row = range.top(); row<= range.bottom(); ++row )
+                    {
+                        cell = m_sheet->cellAt( col, row );
+                        if ( cell->isDefault() ) continue;
+                        m_undoCells.insert( cell->cellPosition(), cell->text() );
+                        cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
+                    }
+                }
+            }
+            else if ( m_direction == ShiftRight )
+            {
+                for ( int row = KS_rowMax - range.height(); row <= KS_rowMax; ++row )
+                {
+                    Cell* cell;
+                    for ( int col = range.left(); col <= range.right(); ++col )
+                    {
+                        cell = m_sheet->cellAt( col, row );
+                        if ( cell->isDefault() ) continue;
+                        m_undoCells.insert( cell->cellPosition(), cell->text() );
+                        cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
+                    }
+                }
+            }
+        }
+
+        // insert rows
+        QList< QPair<QRectF,SharedSubStyle> > undoStyles;
+        QList< QPair<QRectF,QString> > undoComment;
+        QList< QPair<QRectF,Conditions> > undoConditions;
+        QList< QPair<QRectF,Validity> > undoValidity;
+        if ( m_direction == ShiftBottom )
+        {
+            m_sheet->shiftColumns( range );
+            undoStyles = m_sheet->styleStorage()->shiftColumns( range );
+            undoComment = m_sheet->commentStorage()->shiftColumns( range );
+            undoConditions = m_sheet->conditionsStorage()->shiftColumns( range );
+            undoValidity = m_sheet->validityStorage()->shiftColumns( range );
+        }
+        else if ( m_direction == ShiftRight )
+        {
+            m_sheet->shiftRows( range );
+            undoStyles = m_sheet->styleStorage()->shiftRows( range );
+            undoComment = m_sheet->commentStorage()->shiftRows( range );
+            undoConditions = m_sheet->conditionsStorage()->shiftRows( range );
+            undoValidity = m_sheet->validityStorage()->shiftRows( range );
+        }
+
+        // create undo for styles, comments, conditions, validity
+        if ( m_firstrun )
+        {
+            m_undoStyles = undoStyles;
+            m_undoComment = undoComment;
+            m_undoConditions = undoConditions;
+            m_undoValidity = undoValidity;
+        }
+
+        // undo deletion
+        if ( !m_firstrun )
+        {
+            foreach ( const QPoint& position, m_undoCells.keys() )
+                m_sheet->nonDefaultCell( position.x(), position.y() )->setCellText( m_undoCells[position] );
+            for ( int i = 0; i < m_undoStyles.count(); ++i )
+                m_sheet->styleStorage()->insert( m_undoStyles[i].first.toRect(), m_undoStyles[i].second );
+            for ( int i = 0; i < m_undoComment.count(); ++i )
+                m_sheet->commentStorage()->insert( Region(m_undoComment[i].first.toRect()), m_undoComment[i].second );
+            for ( int i = 0; i < m_undoConditions.count(); ++i )
+                m_sheet->conditionsStorage()->insert( Region(m_undoConditions[i].first.toRect()), m_undoConditions[i].second );
+            for ( int i = 0; i < m_undoValidity.count(); ++i )
+                m_sheet->validityStorage()->insert( Region(m_undoValidity[i].first.toRect()), m_undoValidity[i].second );
+        }
+    }
+    else // deletion
+    {
+        // create undo for cells
+        if ( m_firstrun )
+        {
+            for ( int col = range.left(); col <= range.right(); ++col )
+            {
+                Cell* cell;
+                for ( int row = range.top(); row <= range.bottom(); ++row )
+                {
+                    cell = m_sheet->cellAt( col, row );
+                    if ( cell->isDefault() ) continue;
+                    m_undoCells.insert( cell->cellPosition(), cell->text() );
+                    cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
+                }
+            }
+        }
+
+        // delete rows
+        QList< QPair<QRectF,SharedSubStyle> > undoStyles;
+        QList< QPair<QRectF,QString> > undoComment;
+        QList< QPair<QRectF,Conditions> > undoConditions;
+        QList< QPair<QRectF,Validity> > undoValidity;
+        if ( m_direction == ShiftBottom )
+        {
+            m_sheet->unshiftColumns( range );
+            undoStyles = m_sheet->styleStorage()->unshiftColumns( range );
+            undoComment = m_sheet->commentStorage()->unshiftColumns( range );
+            undoConditions = m_sheet->conditionsStorage()->unshiftColumns( range );
+            undoValidity = m_sheet->validityStorage()->unshiftColumns( range );
+        }
+        else if ( m_direction == ShiftRight )
+        {
+            m_sheet->unshiftRows( range );
+            undoStyles = m_sheet->styleStorage()->unshiftRows( range );
+            undoComment = m_sheet->commentStorage()->unshiftRows( range );
+            undoConditions = m_sheet->conditionsStorage()->unshiftRows( range );
+            undoValidity = m_sheet->validityStorage()->unshiftRows( range );
+        }
+
+        // create undo for styles, comments, conditions, validity
+        if ( m_firstrun )
+        {
+            m_undoStyles = undoStyles;
+            m_undoComment = undoComment;
+            m_undoConditions = undoConditions;
+            m_undoValidity = undoValidity;
+        }
+
+        // undo insertion
+        if ( !m_firstrun )
+        {
+            foreach ( const QPoint& position, m_undoCells.keys() )
+                m_sheet->nonDefaultCell( position.x(), position.y() )->setCellText( m_undoCells[position] );
+            for ( int i = 0; i < m_undoStyles.count(); ++i )
+                m_sheet->styleStorage()->insert( m_undoStyles[i].first.toRect(), m_undoStyles[i].second );
+            for ( int i = 0; i < m_undoComment.count(); ++i )
+                m_sheet->commentStorage()->insert( Region(m_undoComment[i].first.toRect()), m_undoComment[i].second );
+            for ( int i = 0; i < m_undoConditions.count(); ++i )
+                m_sheet->conditionsStorage()->insert( Region(m_undoConditions[i].first.toRect()), m_undoConditions[i].second );
+            for ( int i = 0; i < m_undoValidity.count(); ++i )
+                m_sheet->validityStorage()->insert( Region(m_undoValidity[i].first.toRect()), m_undoValidity[i].second );
+        }
+    }
+    return true;
+}
+
+QString ShiftManipulator::name() const
+{
+    if ( !m_reverse )
+        return i18n( "Insert Cells" );
+    else
+        return i18n( "Remove Cells" );
+}

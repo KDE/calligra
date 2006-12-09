@@ -34,6 +34,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#include "DataManipulators.h"
 #include "Doc.h"
 #include "RowColumnManipulators.h"
 #include "Sheet.h"
@@ -96,27 +97,43 @@ void InsertDialog::slotOk()
     m_pView->doc()->emitBeginOperation( false );
     if( rb1->isChecked() )
     {
-	if( insRem == Insert )
+        if( insRem == Insert )
         {
-	    if ( !m_pView->activeSheet()->shiftRow( rect ) )
-		KMessageBox::error( this, i18n("The row is full. Cannot move cells to the right.") );
-	}
-	else if( insRem == Remove )
+            ShiftManipulator* manipulator = new ShiftManipulator();
+            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setDirection( ShiftManipulator::ShiftRight );
+            manipulator->add( Region(rect) );
+            manipulator->execute();
+        }
+        else if( insRem == Remove )
         {
-	    m_pView->activeSheet()->unshiftRow(rect);
-	}
+            ShiftManipulator* manipulator = new ShiftManipulator();
+            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setDirection( ShiftManipulator::ShiftRight );
+            manipulator->setReverse( true );
+            manipulator->add( Region(rect) );
+            manipulator->execute();
+        }
     }
     else if( rb2->isChecked() )
     {
-	if( insRem == Insert )
+        if( insRem == Insert )
         {
-	    if ( !m_pView->activeSheet()->shiftColumn( rect ) )
-		KMessageBox::error( this, i18n("The column is full. Cannot move cells towards the bottom.") );
-	}
-	else if( insRem == Remove )
+            ShiftManipulator* manipulator = new ShiftManipulator();
+            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setDirection( ShiftManipulator::ShiftBottom );
+            manipulator->add( Region(rect) );
+            manipulator->execute();
+        }
+        else if( insRem == Remove )
         {
-	    m_pView->activeSheet()->unshiftColumn( rect );
-	}
+            ShiftManipulator* manipulator = new ShiftManipulator();
+            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setDirection( ShiftManipulator::ShiftBottom );
+            manipulator->setReverse( true );
+            manipulator->add( Region(rect) );
+            manipulator->execute();
+        }
     }
     else if( rb3->isChecked() )
     {

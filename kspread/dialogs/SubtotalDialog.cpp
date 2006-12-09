@@ -31,6 +31,7 @@
 #include <kmessagebox.h>
 
 // KSpread
+#include "DataManipulators.h"
 #include "Sheet.h"
 #include "Format.h"
 #include "View.h"
@@ -230,8 +231,13 @@ void SubtotalDialog::removeSubtotalLines()
       kDebug() << "Line " << y << " contains a subtotal " << endl;
       QRect rect( l, y, m_selection.width(), 1 );
 
-      m_pSheet->unshiftColumn( rect );
-      m_selection.setHeight( m_selection.height() - 1 );
+        ShiftManipulator* manipulator = new ShiftManipulator();
+        manipulator->setSheet( m_pSheet );
+        manipulator->setDirection( ShiftManipulator::ShiftBottom );
+        manipulator->setReverse( true );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        m_selection.setHeight( m_selection.height() - 1 );
     }
   }
   kDebug() << "Done removing subtotals" << endl;
@@ -294,8 +300,11 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
     if ( addRow )
     {
         QRect rect(m_selection.left(), row + 1, m_selection.width(), 1);
-        if ( !m_pSheet->shiftColumn( rect ) )
-            return false;
+        ShiftManipulator* manipulator = new ShiftManipulator();
+        manipulator->setSheet( m_pSheet );
+        manipulator->setDirection( ShiftManipulator::ShiftBottom );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
 
         m_selection.setHeight( m_selection.height() + 1 );
 

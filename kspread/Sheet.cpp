@@ -1107,173 +1107,78 @@ void Sheet::changeCellTabName( QString const & old_name, QString const & new_nam
     }
 }
 
-bool Sheet::shiftRow( const QRect &rect,bool makeUndo )
+void Sheet::shiftRows( const QRect& rect )
 {
-    UndoInsertCellRow * undo = 0;
-    if ( !doc()->undoLocked()  &&makeUndo)
-    {
-        undo = new UndoInsertCellRow( doc(), this, rect );
-        doc()->addCommand( undo );
-    }
-
-    bool res=true;
-    bool result;
-    for( int i=rect.top(); i<=rect.bottom(); i++ )
-    {
-        for( int j=0; j<=(rect.right()-rect.left()); j++ )
-        {
-            result = d->cells.shiftRow( QPoint(rect.left(),i) );
-            if( !result )
-                res=false;
-        }
-    }
-    // shift the styles, comments, conditions, validity
-#warning FIXME Stefan: handle undo
-    styleStorage()->shiftRows( rect );
-    commentStorage()->shiftRows( rect );
-    conditionsStorage()->shiftRows( rect );
-    validityStorage()->shiftRows( rect );
-
+    for ( int i = rect.top(); i <= rect.bottom(); i++ )
+        for ( int j = 0; j < rect.width(); j++ )
+            d->cells.shiftRow( QPoint(rect.left(),i) );
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
-      for ( int i = rect.top(); i <= rect.bottom(); ++i )
-      {
-        sheet->changeNameCellRef( QPoint( rect.left(), i ), false,
-                                  Sheet::ColumnInsert, objectName(),
-                                  rect.right() - rect.left() + 1,
-                                  undo );
-      }
+        for ( int i = rect.top(); i <= rect.bottom(); ++i )
+        {
+            sheet->changeNameCellRef( QPoint( rect.left(), i ), false,
+                                      Sheet::ColumnInsert, objectName(),
+                                      rect.right() - rect.left() + 1 );
+        }
     }
     refreshChart(QPoint(rect.left(),rect.top()), false, Sheet::ColumnInsert);
-    refreshMergedCell();
-    recalc();
-    emit sig_updateView( this );
-
-    return res;
 }
 
-bool Sheet::shiftColumn( const QRect& rect,bool makeUndo )
+void Sheet::shiftColumns( const QRect& rect )
 {
-    UndoInsertCellCol * undo = 0;
-    if ( !doc()->undoLocked()  &&makeUndo)
+    for ( int i = rect.left(); i <= rect.right(); i++ )
+        for ( int j = 0; j < rect.height(); j++ )
+            d->cells.shiftColumn( QPoint(i,rect.top()) );
+    foreach ( Sheet* sheet, workbook()->sheetList() )
     {
-        undo = new UndoInsertCellCol( doc(), this,rect);
-        doc()->addCommand( undo );
-    }
-
-    bool res=true;
-    bool result;
-    for( int i =rect.left(); i<=rect.right(); i++ )
-    {
-        for( int j=0; j<=(rect.bottom()-rect.top()); j++ )
+        for ( int i = rect.left(); i <= rect.right(); ++i )
         {
-            result = d->cells.shiftColumn( QPoint(i,rect.top()) );
-            if(!result)
-                res=false;
+            sheet->changeNameCellRef( QPoint( i, rect.top() ), false,
+                                      Sheet::RowInsert, objectName(),
+                                      rect.bottom() - rect.top() + 1 );
         }
     }
-    // shift the styles, comments, conditions, validity
-#warning FIXME Stefan: handle undo
-    styleStorage()->shiftColumns( rect );
-    commentStorage()->shiftColumns( rect );
-    conditionsStorage()->shiftColumns( rect );
-    validityStorage()->shiftColumns( rect );
-
-    foreach ( Sheet* sheet, workbook()->sheetList() )
-    {
-      for ( int i = rect.left(); i <= rect.right(); ++i )
-      {
-        sheet->changeNameCellRef( QPoint( i, rect.top() ), false,
-                                  Sheet::RowInsert, objectName(),
-                                  rect.bottom() - rect.top() + 1,
-                                  undo );
-      }
-    }
     refreshChart(/*marker*/QPoint(rect.left(),rect.top()), false, Sheet::RowInsert);
-    refreshMergedCell();
-    recalc();
-    emit sig_updateView( this );
-
-    return res;
 }
 
-void Sheet::unshiftColumn( const QRect & rect,bool makeUndo )
+void Sheet::unshiftColumns( const QRect& rect )
 {
-    UndoRemoveCellCol * undo = 0;
-    if ( !doc()->undoLocked() && makeUndo )
-    {
-        undo = new UndoRemoveCellCol( doc(), this, rect );
-        doc()->addCommand( undo );
-    }
-
-    for(int i =rect.top();i<=rect.bottom();i++)
-        for(int j=rect.left();j<=rect.right();j++)
-               d->cells.remove(j,i);
-
-    for(int i =rect.left();i<=rect.right();i++)
-        for(int j=0;j<=(rect.bottom()-rect.top());j++)
-                d->cells.unshiftColumn( QPoint(i,rect.top()) );
-    // unshift the styles, comments, conditions, validity
-#warning FIXME Stefan: handle undo
-    styleStorage()->unshiftColumns( rect );
-    commentStorage()->unshiftColumns( rect );
-    conditionsStorage()->unshiftColumns( rect );
-    validityStorage()->unshiftColumns( rect );
-
+    for ( int i = rect.top(); i <= rect.bottom(); ++i )
+        for ( int j = rect.left(); j <= rect.right(); ++j )
+            d->cells.remove(j,i);
+    for ( int i = rect.left(); i <= rect.right(); ++i )
+        for ( int j = 0; j < rect.height(); ++j )
+            d->cells.unshiftColumn( QPoint(i,rect.top()) );
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
-      for ( int i = rect.left(); i <= rect.right(); ++i )
-      {
-        sheet->changeNameCellRef( QPoint( i, rect.top() ), false,
-                                  Sheet::RowRemove, objectName(),
-                                  rect.bottom() - rect.top() + 1,
-                                  undo );
-      }
+        for ( int i = rect.left(); i <= rect.right(); ++i )
+        {
+            sheet->changeNameCellRef( QPoint( i, rect.top() ), false,
+                                      Sheet::RowRemove, objectName(),
+                                      rect.bottom() - rect.top() + 1 );
+        }
     }
-
     refreshChart( QPoint(rect.left(),rect.top()), false, Sheet::RowRemove );
-    refreshMergedCell();
-    recalc();
-    emit sig_updateView( this );
 }
 
-void Sheet::unshiftRow( const QRect & rect,bool makeUndo )
+void Sheet::unshiftRows( const QRect& rect )
 {
-    UndoRemoveCellRow * undo = 0;
-    if ( !doc()->undoLocked() && makeUndo )
-    {
-        undo = new UndoRemoveCellRow( doc(), this, rect );
-        doc()->addCommand( undo );
-    }
-    for(int i =rect.top();i<=rect.bottom();i++)
-        for(int j=rect.left();j<=rect.right();j++)
-                d->cells.remove(j,i);
-
-    for(int i =rect.top();i<=rect.bottom();i++)
-        for(int j=0;j<=(rect.right()-rect.left());j++)
-                d->cells.unshiftRow( QPoint(rect.left(),i) );
-    // unshift the styles, comments, conditions, validity
-#warning FIXME Stefan: handle undo
-    styleStorage()->unshiftRows( rect );
-    commentStorage()->unshiftRows( rect );
-    conditionsStorage()->unshiftRows( rect );
-    validityStorage()->unshiftRows( rect );
-
+    for ( int i = rect.top(); i <= rect.bottom(); i++ )
+        for ( int j = rect.left(); j <= rect.right(); j++ )
+            d->cells.remove(j,i);
+    for ( int i = rect.top(); i <= rect.bottom(); i++ )
+        for ( int j = 0; j < rect.width(); j++ )
+            d->cells.unshiftRow( QPoint(rect.left(),i) );
     foreach ( Sheet* sheet, workbook()->sheetList() )
     {
-      for ( int i = rect.top(); i <= rect.bottom(); ++i )
-      {
-        sheet->changeNameCellRef( QPoint( rect.left(), i ), false,
-                                  Sheet::ColumnRemove, objectName(),
-                                  rect.right() - rect.left() + 1,
-                                  undo);
-      }
+        for ( int i = rect.top(); i <= rect.bottom(); ++i )
+        {
+            sheet->changeNameCellRef( QPoint( rect.left(), i ), false,
+                                      Sheet::ColumnRemove, objectName(),
+                                      rect.right() - rect.left() + 1 );
+        }
     }
-
     refreshChart(QPoint(rect.left(),rect.top()), false, Sheet::ColumnRemove );
-    refreshMergedCell();
-    recalc();
-    emit sig_updateView( this );
 }
 
 void Sheet::insertColumns( int col, int number )
@@ -2390,14 +2295,24 @@ void Sheet::loadSelectionUndo(const KoXmlDocument& d, const QRect& loadArea,
     // shift cells to the right
     if (insertTo == -1 && numCols == 0 && numRows == 0)
     {
-      rect.setWidth(rect.width());
-      shiftRow(rect, false);
+        rect.setWidth(rect.width());
+        ShiftManipulator* manipulator = new ShiftManipulator();
+        manipulator->setSheet( this );
+        manipulator->setDirection( ShiftManipulator::ShiftRight );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        delete manipulator;
     }
     // shift cells to the bottom
     else if (insertTo == 1 && numCols == 0 && numRows == 0)
     {
-      rect.setHeight(rect.height());
-      shiftColumn( rect, false );
+        rect.setHeight(rect.height());
+        ShiftManipulator* manipulator = new ShiftManipulator();
+        manipulator->setSheet( this );
+        manipulator->setDirection( ShiftManipulator::ShiftBottom );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        delete manipulator;
     }
     // insert columns
     else if (insertTo == 0 && numCols == 0 && numRows > 0)

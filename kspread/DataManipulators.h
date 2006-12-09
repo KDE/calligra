@@ -23,6 +23,7 @@
 
 #include "Manipulator.h"
 #include "Global.h"
+#include "Storage.h"
 #include "Style.h"
 #include "Value.h"
 #include <koffice_export.h>
@@ -195,7 +196,27 @@ class KSPREAD_EXPORT CaseManipulator: public AbstractDataManipulator {
 };
 
 
+
+class ShiftManipulator : public Manipulator
+{
+public:
+    enum Direction { ShiftRight, ShiftBottom };
+    ShiftManipulator();
+    void setDirection( Direction direction ) { m_direction = direction; }
+
+protected:
+    bool process(Element*);
+    QString name() const;
+
+private:
+    Direction m_direction;
+    QList< QPair<QRectF,SharedSubStyle> > m_undoStyles;
+    QList< QPair<QRectF,QString> >        m_undoComment;
+    QList< QPair<QRectF,Conditions> >     m_undoConditions;
+    QList< QPair<QRectF,Validity> >       m_undoValidity;
+    QHash<QPoint,QString>                 m_undoCells;
+};
+
 } // namespace KSpread
 
 #endif  // KSPREAD_MANIPULATOR_DATA
-

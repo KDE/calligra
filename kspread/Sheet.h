@@ -1060,19 +1060,28 @@ public:
     //
 
     /**
-     * Moves all cells of the row _marker.y() which are in
-     * the column _marker.x() or right hand of that one position
-     * to the right.
-     *
-     * @return true if the shift was possible, or false otherwise.
-     *         A reason for returning false is that there was a cell
-     *         in the right most position.
+     * Helper method.
+     * \see ShiftManipulator
      */
-    bool shiftRow( const QRect &_rect, bool makeUndo=true );
-    bool shiftColumn( const QRect& rect, bool makeUndo=true );
+    void shiftRows( const QRect& rect );
 
-    void unshiftColumn( const QRect& rect, bool makeUndo=true );
-    void unshiftRow( const QRect& rect, bool makeUndo=true );
+    /**
+     * Helper method.
+     * \see ShiftManipulator
+     */
+    void shiftColumns( const QRect& rect );
+
+    /**
+     * Helper method.
+     * \see ShiftManipulator
+     */
+    void unshiftColumns( const QRect& rect );
+
+    /**
+     * Helper method.
+     * \see ShiftManipulator
+     */
+    void unshiftRows( const QRect& rect );
 
     /**
      * Helper method.

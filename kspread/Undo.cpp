@@ -19,6 +19,7 @@
 
 
 #include "Cell.h"
+#include "DataManipulators.h"
 #include "Doc.h"
 #include "Global.h"
 #include "Localization.h"
@@ -2155,6 +2156,7 @@ void UndoAutofill::redo()
     doc()->setUndoLocked( false );
 }
 
+#if 0
 /****************************************************************************
  *
  * UndoInsertCellRow
@@ -2340,7 +2342,6 @@ void UndoRemoveCellCol::redo()
     doc()->setUndoLocked( false );
 }
 
-#if 0
 /****************************************************************************
  *
  * UndoConditional
@@ -2566,15 +2567,27 @@ void UndoCellPaste::undo()
     QRect rect = m_region.boundingRect();
     if (m_iInsertTo == -1 && numCols == 0 && numRows == 0)
     {
-      // substract already removed columns
-      rect.setWidth(rect.width());
-      sheet->unshiftRow(rect);
+        // substract already removed columns
+        rect.setWidth(rect.width());
+        ShiftManipulator* manipulator = new ShiftManipulator();
+        manipulator->setSheet( sheet );
+        manipulator->setDirection( ShiftManipulator::ShiftRight );
+        manipulator->setReverse( true );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        delete manipulator;
     }
     else if (m_iInsertTo == 1 && numCols == 0 && numRows == 0)
     {
-      // substract already removed rows
-      rect.setHeight(rect.height());
-      sheet->unshiftColumn(rect);
+        // substract already removed rows
+        rect.setHeight(rect.height());
+        ShiftManipulator* manipulator = new ShiftManipulator();
+        manipulator->setSheet( sheet );
+        manipulator->setDirection( ShiftManipulator::ShiftBottom );
+        manipulator->setReverse( true );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        delete manipulator;
     }
     // delete columns
     else if (m_iInsertTo == 0 && numCols == 0 && numRows > 0)
@@ -2651,13 +2664,24 @@ void UndoCellPaste::redo()
     QRect rect = m_region.boundingRect();
     if (m_iInsertTo == -1 && numCols == 0 && numRows == 0)
     {
-      rect.setWidth(rect.width());
-      sheet->shiftRow(rect);
+        rect.setWidth(rect.width());
+        ShiftManipulator* manipulator = new ShiftManipulator();
+        manipulator->setSheet( sheet );
+        manipulator->setDirection( ShiftManipulator::ShiftRight );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        delete manipulator;
     }
     else if (m_iInsertTo == 1 && numCols == 0 && numRows == 0)
     {
-      rect.setHeight(rect.height());
-      sheet->shiftColumn(rect);
+        rect.setHeight(rect.height());
+        ShiftManipulator* manipulator = new ShiftManipulator();
+        manipulator->setSheet( sheet );
+        manipulator->setDirection( ShiftManipulator::ShiftBottom );
+        manipulator->setReverse( true );
+        manipulator->add( Region(rect) );
+        manipulator->execute();
+        delete manipulator;
     }
     // insert columns
     else if (m_iInsertTo == 0 && numCols == 0 && numRows > 0)

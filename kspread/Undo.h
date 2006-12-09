@@ -500,6 +500,7 @@ protected:
     QString m_sheetName;
 };
 
+#if 0
 class UndoInsertCellCol : public UndoInsertRemoveAction
 {
 public:
@@ -573,6 +574,7 @@ protected:
     QByteArray m_dataRedo;
     QString m_sheetName;
 };
+#endif
 
 class UndoCellPaste : public UndoAction
 {
