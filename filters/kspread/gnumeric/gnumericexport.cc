@@ -712,7 +712,6 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 
 	QString stringFormat;
 
-    Style::Currency c;
     Currency currency;
 
 	switch( style.formatType())
@@ -730,20 +729,20 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
                 stringFormat = "0.00";
                 break;
             }
-            c = style.currency();
+            currency = style.currency();
 
-            if (currency.getCurrencyCode(c.type).isEmpty())
+            if (currency.code().isEmpty())
                 stringFormat = "0.00";
-            else if (currency.getCurrencyCode(c.type) == "$")
+            else if (currency.code() == "$")
                 stringFormat = "$0.00";
-            else if (currency.getCurrencyCode(c.type) == QString::fromUtf8("€"))
+            else if (currency.code() == QString::fromUtf8("€"))
                 stringFormat = "[$€-2]0.00";
-            else if (currency.getCurrencyCode(c.type) == QString::fromUtf8("£"))
+            else if (currency.code() == QString::fromUtf8("£"))
                 stringFormat = "£0.00";
-            else if (currency.getCurrencyCode(c.type) == QString::fromUtf8("¥"))
+            else if (currency.code() == QString::fromUtf8("¥"))
                 stringFormat = "¥0.00";
             else
-                stringFormat="[$" + currency.getCurrencyCode(c.type) + "]0.00";
+                stringFormat="[$" + currency.code() + "]0.00";
 
             break;
 		case Percentage_format:

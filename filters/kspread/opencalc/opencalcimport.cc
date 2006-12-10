@@ -597,11 +597,9 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
 
           if ( type == "currency" )
           {
-              Style::Currency currency;
-              currency.type = 1;
-              currency.symbol = e.attributeNS( ooNS::table, "currency", QString::null );
-            style.setCurrency( currency );
-            style.setFormatType( Money_format );
+              Currency currency( e.attributeNS( ooNS::table, "currency", QString::null ) );
+              style.setCurrency( currency );
+              style.setFormatType( Money_format );
           }
         }
       }

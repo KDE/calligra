@@ -979,36 +979,28 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
   else if (formatString[0] == '$')
   {
     style.setFormatType(Money_format);
-    Style::Currency currency;
-    currency.type = 1;
-    currency.symbol = "$";
+    Currency currency( "$" );
     style.setCurrency( currency );
     lastPos = 1;
   }
   else if (formatString[0] == '£')
   {
     style.setFormatType(Money_format);
-    Style::Currency currency;
-    currency.type = 1;
-    currency.symbol = "£";
+    Currency currency( "£" );
     style.setCurrency( currency );
     lastPos = 1;
   }
   else if (formatString[0] == '¥')
   {
     style.setFormatType(Money_format);
-    Style::Currency currency;
-    currency.type = 1;
-    currency.symbol = "¥";
+    Currency currency( "¥" );
     style.setCurrency( currency );
     lastPos = 1;
   }
   else if (formatString[0] == '¤')
   {
     style.setFormatType(Money_format);
-    Style::Currency currency;
-    currency.type = 1;
-    currency.symbol = "¤";
+    Currency currency( "¤" );
     style.setCurrency( currency );
     lastPos = 1;
   }
@@ -1020,9 +1012,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
       if (n != -1)
       {
         style.setFormatType(Money_format);
-        Style::Currency currency;
-        currency.type = 1;
-        currency.symbol = formatString.mid(2, n - 2);
+        Currency currency( formatString.mid(2, n - 2) );
         style.setCurrency( currency );
       }
       lastPos = ++n;
