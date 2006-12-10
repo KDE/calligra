@@ -1,5 +1,5 @@
-#ifndef _kchartWIZARDSETUPAXESPAGE_H
-#define _kchartWIZARDSETUPAXESPAGE_H
+#ifndef _KCWIZARDAXESPAGE_H
+#define _KCWIZARDAXESPAGE_H
 
 #include <QWidget>
 //Added by qt3to4:
@@ -18,13 +18,13 @@ namespace KChart
 class KChartPart;
 class kchartWidget;
 
-class KChartWizardSetupAxesPage : public QWidget
+class KCWizardAxesPage : public QWidget
 {
   Q_OBJECT
 
 public:
-  KChartWizardSetupAxesPage( QWidget* parent, KChartPart* chart );
-  ~KChartWizardSetupAxesPage();
+  KCWizardAxesPage( QWidget* parent, KChartPart* chart );
+  ~KCWizardAxesPage();
   bool chart3d;
 public slots:
       void apply();

@@ -35,7 +35,7 @@
 #include "kchart_factory.h"
 #include "kchart_part.h"
 #include "kchart_params.h"
-#include "kchartWizard.h"
+#include "KCWizard.h"
 #include "kchartDataEditor.h"
 #include "kchartConfigDialog.h"
 #include "KChartViewAdaptor.h"
@@ -236,8 +236,8 @@ void KChartView::applyEdit(kchartDataEditor *ed)
 void KChartView::wizard()
 {
     kDebug(35001) << "Wizard called" << endl;
-    KChartWizard *wiz = new KChartWizard((KChartPart*)koDocument(), this,
-					 "KChart Wizard", true);
+    KCWizard *wiz = new KCWizard((KChartPart*)koDocument(), this,
+				 "KChart Wizard", true);
     kDebug(35001) << "Executed. Now, display it" << endl;
     if (wiz->exec()) {
 	((KChartPart*)koDocument())->setModified(true);

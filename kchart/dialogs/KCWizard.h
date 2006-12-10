@@ -9,21 +9,20 @@ namespace KChart
 {
 
 class KChartPart;
-class KChartWizardSetupAxesPage;
-class KChartWizardLabelsLegendPage;
-class KChartWizardSelectChartSubTypePage;
-class KChartWizardSelectDataPage;
+class KCWizardDataPage;
+class KCWizardCharttype;	/* FIXME: Add ...Page suffix. */
+class KCWizardSubtypePage;
+class KCWizardLabelsLegendPage;
+class KCWizardAxesPage;
 class KChartWizardSetupDataPage;
-class KChartWizardSelectChartTypePage;
-class KChartWizardSelectDataFormatPage;
 
-class KChartWizard : public K3Wizard
+class KCWizard : public K3Wizard
 {
     Q_OBJECT
 public:
-    KChartWizard ( KChartPart* chart, QWidget *parent, const char* name,
+    KCWizard ( KChartPart* chart, QWidget *parent, const char* name,
 		   bool modal = true, Qt::WFlags f = 0 );
-    ~KChartWizard();
+    ~KCWizard();
 
     KChartPart* chart() const { return m_chart; };
 
@@ -53,15 +52,13 @@ protected slots:
 
 private:
     // The chart itself.
-    KChartPart                          *m_chart;
+    KChartPart                *m_chart;
 
-    //KChartWizardSelectDataPage          *_selectdatapage;
-    KChartWizardSelectDataFormatPage    *m_dataFormatPage;
-    KChartWizardSelectChartTypePage     *m_chartTypePage;
-    KChartWizardSelectChartSubTypePage  *m_chartSubtypePage;
-    //KChartWizardSetupDataPage           *_setupdatapage;
-    KChartWizardLabelsLegendPage        *m_labelsLegendPage;
-    KChartWizardSetupAxesPage           *m_axespage;
+    KCWizardDataPage          *m_dataPage;
+    KCWizardCharttype         *m_chartTypePage;
+    KCWizardSubtypePage       *m_chartSubtypePage;
+    KCWizardLabelsLegendPage  *m_labelsLegendPage;
+    KCWizardAxesPage          *m_axespage;
 };
 
 }  //KChart namespace

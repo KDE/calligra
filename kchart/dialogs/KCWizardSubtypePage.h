@@ -1,5 +1,5 @@
-#ifndef _kchartWIZARDSELECTCHARTSUBTYPEPAGE_H
-#define _kchartWIZARDSELECTCHARTSUBTYPEPAGE_H
+#ifndef _KCWIZARDSUBTYPEPAGE_H
+#define _KCWIZARDSUBTYPEPAGE_H
 
 
 #include "kchart_params.h"
@@ -14,11 +14,11 @@ namespace KChart
 
 class KChartPart;
 
-class KChartWizardSelectChartSubTypePage : public QWidget
+class KCWizardSubtypePage : public QWidget
 {
   Q_OBJECT
 public:
-  KChartWizardSelectChartSubTypePage( QWidget* parent, KChartPart* chart );
+  KCWizardSubtypePage( QWidget* parent, KChartPart* chart );
   void changeSubTypeName( KChartParams::ChartType _type);
 
   bool chartSubType;

@@ -8,6 +8,7 @@ add_subdirectory( templates )
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/kchart/kdchart/ 
+	${CMAKE_SOURCE_DIR}/kchart/dialogs
 	${CMAKE_SOURCE_DIR}/interfaces 
 	${KOFFICEUI_INCLUDES} )
 
@@ -30,14 +31,6 @@ set(kchartcommon_LIB_SRCS
    kchartPieConfigPage.cc 
    kchartParameterPieConfigPage.cc 
    kchartConfigDialog.cc 
-   kchartWizard.cc 
-   kchartWizardLabelsLegendPage.cc 
-   kchartWizardSelectChartSubTypePage.cc 
-   kchartWizardSelectChartTypePage.cc 
-   kchartWizardSelectDataPage.cc 
-   kchartWizardSetupAxesPage.cc 
-   kchartWizardSetupDataPage.cc 
-   kchartWizardSelectDataFormatPage.cc 
    kchartDataEditor.cc 
    kchartLegendConfigPage.cc 
    kchart_params.cc 
@@ -47,6 +40,12 @@ set(kchartcommon_LIB_SRCS
    kchartParameterPolarConfigPage.cc 
    kchartPageLayout.cc 
    kchartPrinterDlg.cc
+   dialogs/KCWizard.cc 
+   dialogs/KCWizardDataPage.cc
+   dialogs/KCWizardCharttype.cc
+   dialogs/KCWizardSubtypePage.cc
+   dialogs/KCWizardLabelsLegendPage.cc
+   dialogs/KCWizardAxesPage.cc
 )
 
 kde4_automoc(${kchartcommon_LIB_SRCS})

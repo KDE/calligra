@@ -1,5 +1,5 @@
-#ifndef _kchartWIZARDSELECTCHARTTYPEPAGE_H
-#define _kchartWIZARDSELECTCHARTTYPEPAGE_H
+#ifndef _KCWIZARDCHARTTYPEPAGE_H
+#define _KCWIZARDCHARTTYPEPAGE_H
 
 #include <QLayout>
 
@@ -22,6 +22,7 @@ class KChartPart;
 // Contains a button with a text label below it
 //
 // FIXME: Move to kchartWizardSelectChartTypePage.cc
+
 class KChartButton : public KVBox
 {
   Q_OBJECT
@@ -34,12 +35,13 @@ class KChartButton : public KVBox
     QPushButton *m_button;
 };
 
-class KChartWizardSelectChartTypePage : public QWidget
+
+class KCWizardCharttype : public QWidget
 {
   Q_OBJECT
 
 public:
-  KChartWizardSelectChartTypePage( QWidget* parent, KChartPart* chart );
+  KCWizardCharttype( QWidget* parent, KChartPart* chart );
 
 public slots:
   void  apply();

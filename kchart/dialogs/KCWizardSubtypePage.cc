@@ -1,5 +1,5 @@
 
-#include "kchartWizardSelectChartSubTypePage.h"
+#include "KCWizardSubtypePage.h"
 #include "kchart_view.h"
 #include "kchart_part.h"
 
@@ -29,10 +29,9 @@
 namespace KChart
 {
 
-KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent,
-                                                                        KChartPart* chart ) :
-  QWidget( parent ),
-  m_chart( chart )
+KCWizardSubtypePage::KCWizardSubtypePage( QWidget* parent, KChartPart* chart )
+  : QWidget( parent ),
+    m_chart( chart )
 {
     // FIXME: Use KChartPart::chartType() instead, when implemented.
     m_charttype  = (KChartParams::ChartType) m_chart->params()->chartType();
@@ -111,7 +110,7 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
 
 
 
-void KChartWizardSelectChartSubTypePage::apply()
+void KCWizardSubtypePage::apply()
 {
     if (chartSubType) {
         if( m_normal->isChecked() )
@@ -180,7 +179,7 @@ void KChartWizardSelectChartSubTypePage::apply()
     }
 }
 
-void KChartWizardSelectChartSubTypePage::changeSubTypeName( KChartParams::ChartType _type)
+void KCWizardSubtypePage::changeSubTypeName( KChartParams::ChartType _type)
 {
     if (_type==KChartParams::HiLo)
     {
@@ -196,4 +195,4 @@ void KChartWizardSelectChartSubTypePage::changeSubTypeName( KChartParams::ChartT
 
 }  //KChart namespace
 
-#include "kchartWizardSelectChartSubTypePage.moc"
+#include "KCWizardSubtypePage.moc"

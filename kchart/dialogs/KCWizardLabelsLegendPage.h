@@ -1,5 +1,5 @@
-#ifndef _kchartWIZARDLABELSLEGENDPAGE_H
-#define _kchartWIZARDLABELSLEGENDPAGE_H
+#ifndef _KCWIZARDLABELSLEGENDPAGE_H
+#define _KCWIZARDLABELSLEGENDPAGE_H
 
 #include <QWidget>
 //Added by qt3to4:
@@ -16,13 +16,13 @@ namespace KChart
 
 class KChartPart;
 
-class KChartWizardLabelsLegendPage : public QWidget
+class KCWizardLabelsLegendPage : public QWidget
 {
   Q_OBJECT
 
 public:
-  KChartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart );
-  ~KChartWizardLabelsLegendPage();
+  KCWizardLabelsLegendPage( QWidget* parent, KChartPart* chart );
+  ~KCWizardLabelsLegendPage();
 
 #if 0
   bool ytitle2;

@@ -1,12 +1,11 @@
 
-#include "kchartWizard.h"
-#include "kchartWizardSelectDataPage.h"
-#include "kchartWizardSelectChartTypePage.h"
-#include "kchartWizardSelectChartSubTypePage.h"
-#include "kchartWizardSetupDataPage.h"
-#include "kchartWizardLabelsLegendPage.h"
-#include "kchartWizardSetupAxesPage.h"
-#include "kchartWizardSelectDataFormatPage.h"
+#include "KCWizard.h"
+#include "KCWizardDataPage.h"
+#include "KCWizardCharttype.h"
+#include "KCWizardSubtypePage.h"
+#include "KCWizardLabelsLegendPage.h"
+#include "KCWizardAxesPage.h"
+//#include "kchartWizardSetupDataPage.h"
 
 #include <QLineEdit>
 #include <QWidget>
@@ -21,45 +20,45 @@
 namespace KChart
 {
 
-KChartWizard::KChartWizard ( KChartPart* _chart, QWidget *parent, const char* name,
+KCWizard::KCWizard ( KChartPart* _chart, QWidget *parent, const char* name,
                              bool modal, Qt::WFlags f ) :
     K3Wizard( parent, name, modal, f ),
     m_chart( _chart )
 {
     // First page: select the data range
-    m_dataFormatPage = new KChartWizardSelectDataFormatPage(this, m_chart);
-    addPage( m_dataFormatPage, i18n("Data"));
-    setFinishEnabled(m_dataFormatPage, true);
-    setHelpEnabled(m_dataFormatPage, false);
+    m_dataPage = new KCWizardDataPage(this, m_chart);
+    addPage( m_dataPage, i18n("Data"));
+    setFinishEnabled(m_dataPage, true);
+    setHelpEnabled(m_dataPage, false);
     
     // Second page: select the major chart type
-    m_chartTypePage = new KChartWizardSelectChartTypePage( this, m_chart );
+    m_chartTypePage = new KCWizardCharttype( this, m_chart );
     addPage( m_chartTypePage, i18n( "Select Chart Type" ) );
     //finishButton()->setEnabled( true );
     setFinishEnabled(m_chartTypePage, true);
     setHelpEnabled(m_chartTypePage, false);
 
     // Third page: select the minor chart type
-    m_chartSubtypePage = new KChartWizardSelectChartSubTypePage( this, m_chart );
+    m_chartSubtypePage = new KCWizardSubtypePage( this, m_chart );
     addPage( m_chartSubtypePage, i18n( "Select Chart Sub-type" ) );
     setFinishEnabled(m_chartSubtypePage, true);
     setHelpEnabled(m_chartSubtypePage, false);
 
     // Fourth page: labels/legends setup
-    m_labelsLegendPage = new KChartWizardLabelsLegendPage( this, m_chart );
+    m_labelsLegendPage = new KCWizardLabelsLegendPage( this, m_chart );
     addPage( m_labelsLegendPage, i18n( "Labels & Legend" ) );
     setFinishEnabled(m_labelsLegendPage, true);
     setHelpEnabled(m_labelsLegendPage, false);
 
     // Fifth page: axes setup
-    m_axespage = new KChartWizardSetupAxesPage( this, m_chart );
+    m_axespage = new KCWizardAxesPage( this, m_chart );
     addPage( m_axespage, i18n( "Setup Axes" ) );
     setFinishEnabled(m_axespage, true);
     setNextEnabled(m_axespage, false);
     setHelpEnabled(m_axespage, false);
 
     // connect( this, SIGNAL( finished() ), _selectdatapage, SLOT( apply() ) );
-    connect(this, SIGNAL(finished()), m_dataFormatPage,   SLOT(apply()));
+    connect(this, SIGNAL(finished()), m_dataPage,         SLOT(apply()));
     connect(this, SIGNAL(finished()), m_chartTypePage,    SLOT(apply()));
     connect(this ,SIGNAL(finished()), m_chartSubtypePage, SLOT(apply()));
     connect(this, SIGNAL(finished()), m_labelsLegendPage, SLOT(apply()));
@@ -74,7 +73,7 @@ KChartWizard::KChartWizard ( KChartPart* _chart, QWidget *parent, const char* na
 }
 
 
-KChartWizard::~KChartWizard()
+KCWizard::~KCWizard()
 {
     //  delete _selectdatapage;
     delete m_chartTypePage;
@@ -82,10 +81,10 @@ KChartWizard::~KChartWizard()
     //delete _setupdatapage;
     delete m_labelsLegendPage;
     delete m_axespage;
-    delete m_dataFormatPage;
+    delete m_dataPage;
 }
 
-void KChartWizard::subType(int _type)
+void KCWizard::subType(int _type)
 {
     KChartParams::ChartType  type = (KChartParams::ChartType) _type;
     if (type == KChartParams::Bar ||
@@ -115,7 +114,7 @@ void KChartWizard::subType(int _type)
 }
 
 
-bool KChartWizard::appropriate( QWidget * w ) const
+bool KCWizard::appropriate( QWidget * w ) const
 {
     // Show the sub-type page only if has anything to show
     if ( w == m_chartSubtypePage )
@@ -125,7 +124,7 @@ bool KChartWizard::appropriate( QWidget * w ) const
 }
 
 
-void KChartWizard::next()
+void KCWizard::next()
 {
     // Some sort of a hack. We want the chart-subtype-page to get
     // dynamically built when it's going to be shown
@@ -135,31 +134,31 @@ void KChartWizard::next()
     Q3Wizard::next();
 }
 
-void KChartWizard::accept()
+void KCWizard::accept()
 {
     emit finished();
     Q3Wizard::accept();
 }
 
-void KChartWizard::reject()
+void KCWizard::reject()
 {
     emit cancelled();
     Q3Wizard::reject();
 }
 
-void KChartWizard::setDataArea( const QString &area )
+void KCWizard::setDataArea( const QString &area )
 {
-    m_dataFormatPage->setDataArea( area );
+    m_dataPage->setDataArea( area );
 }
 
 
-QString KChartWizard::dataArea() const
+QString KCWizard::dataArea() const
 {
-    return m_dataFormatPage->dataArea();
+    return m_dataPage->dataArea();
 }
 
 
-void KChartWizard::emitNeedNewData( const char* area, int rowcol,
+void KCWizard::emitNeedNewData( const char* area, int rowcol,
 				    bool firstRowIsLegend,
 				    bool firstColIsLabel )
 {
@@ -168,4 +167,4 @@ void KChartWizard::emitNeedNewData( const char* area, int rowcol,
 
 }  //KChart namespace
 
-#include "kchartWizard.moc"
+#include "KCWizard.moc"

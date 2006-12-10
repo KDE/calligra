@@ -1,3 +1,9 @@
+2006-12-10  Inge Wallin  <ingwa@c83-252-232-192.bredband.comhem.se>
+
+	First step of wish 117960: (code structure): put the wizard and
+	config dialog in a "dialogs" subdirectory
+	* Created subdirectory dialogs/ and moved the wizard to it.
+
 2006-11-06  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix  bug 128758: misinterpretation of the checkbox "first row as label"

@@ -1,5 +1,6 @@
 
-#include "kchartWizardSelectChartTypePage.h"
+#include "KCWizardCharttype.h"
+
 #include "kchart_params.h"
 #include "kchart_view.h"
 #include "kchart_factory.h"
@@ -20,7 +21,6 @@
 
 namespace KChart
 {
-
 
 KChartButton::KChartButton(QWidget *parent, const QString & _text, const QPixmap &_pixmap)
   : KVBox(parent)
@@ -44,7 +44,7 @@ KChartButton::~KChartButton()
 // ================================================================
 
 
-KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* parent,
+KCWizardCharttype::KCWizardCharttype( QWidget* parent,
                                                                   KChartPart* chart )
   : QWidget( parent ),
     m_chart( chart )
@@ -91,7 +91,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
 }
 
 
-void KChartWizardSelectChartTypePage::addButton(const QString &name,
+void KCWizardCharttype::addButton(const QString &name,
                                                 const QString &icon_name,
                                                 int type)
 {
@@ -106,7 +106,7 @@ void KChartWizardSelectChartTypePage::addButton(const QString &name,
     incPos();
 }
 
-void KChartWizardSelectChartTypePage::incPos()
+void KCWizardCharttype::incPos()
 {
     if (m_colPos == 3) {
 	m_colPos=0;
@@ -116,17 +116,17 @@ void KChartWizardSelectChartTypePage::incPos()
 	m_colPos++;
 }
 
-void KChartWizardSelectChartTypePage::chartTypeSelected( int type )
+void KCWizardCharttype::chartTypeSelected( int type )
 {
     m_type = (KChartParams::ChartType) type;
     emit chartChange(type);
 }
 
-void KChartWizardSelectChartTypePage::apply()
+void KCWizardCharttype::apply()
 {
     m_chart->params()->setChartType( m_type );
 }
 
 }  //namespace KChart
 
-#include "kchartWizardSelectChartTypePage.moc"
+#include "KCWizardCharttype.moc"

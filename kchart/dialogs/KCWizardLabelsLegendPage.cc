@@ -1,4 +1,4 @@
-#include "kchartWizardLabelsLegendPage.h"
+#include "KCWizardLabelsLegendPage.h"
 #include "kchart_view.h"
 #include "kchart_part.h"
 
@@ -20,7 +20,7 @@
 namespace KChart
 {
 
-KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KChartPart* chart ) :
+KCWizardLabelsLegendPage::KCWizardLabelsLegendPage( QWidget* parent, KChartPart* chart ) :
     QWidget( parent ),
     _chart( chart )
 {
@@ -200,83 +200,83 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 }
 
 
-KChartWizardLabelsLegendPage::~KChartWizardLabelsLegendPage()
+KCWizardLabelsLegendPage::~KCWizardLabelsLegendPage()
 {
     //  _chart->removeAutoUpdate( preview );
 }
 
-void KChartWizardLabelsLegendPage::changeLegendTextFont()
+void KCWizardLabelsLegendPage::changeLegendTextFont()
 {
     if (KFontDialog::getFont( _legendTextFont,false,this ) == QDialog::Rejected )
         return;
 }
 
-void KChartWizardLabelsLegendPage::changeLegendTitleFont()
+void KCWizardLabelsLegendPage::changeLegendTitleFont()
 {
     if (KFontDialog::getFont( _legendTitleFont,false,this ) == QDialog::Rejected )
         return;
 }
 
-void KChartWizardLabelsLegendPage::changeXLabelFont()
+void KCWizardLabelsLegendPage::changeXLabelFont()
 {
     if (KFontDialog::getFont( xlabel,false,this ) == QDialog::Rejected )
         return;
 }
 
-void KChartWizardLabelsLegendPage::changeYLabelFont()
+void KCWizardLabelsLegendPage::changeYLabelFont()
 {
     if (KFontDialog::getFont( ylabel ,false,this ) == QDialog::Rejected )
         return;
 }
 
 #if 0
-void KChartWizardLabelsLegendPage::changeY2LabelFont()
+void KCWizardLabelsLegendPage::changeY2LabelFont()
 {
     if (KFontDialog::getFont( ylabel2, false, this ) == QDialog::Rejected )
         return;
 }
 #endif
 
-void KChartWizardLabelsLegendPage::changeTitleFont()
+void KCWizardLabelsLegendPage::changeTitleFont()
 {
     if (KFontDialog::getFont( title ,false,this ) == QDialog::Rejected )
         return;
 
 }
 
-void KChartWizardLabelsLegendPage::changeLegendTextColor(const QColor &_color)
+void KCWizardLabelsLegendPage::changeLegendTextColor(const QColor &_color)
 {
     _legendTextColor=_color;
 }
 
-void KChartWizardLabelsLegendPage::changeXLabelColor(const QColor &_color)
+void KCWizardLabelsLegendPage::changeXLabelColor(const QColor &_color)
 {
     x_color=_color;
 }
 
-void KChartWizardLabelsLegendPage::changeYLabelColor(const QColor &_color)
+void KCWizardLabelsLegendPage::changeYLabelColor(const QColor &_color)
 {
     y_color=_color;
 }
 
-void KChartWizardLabelsLegendPage::changeTitleColor(const QColor &_color)
+void KCWizardLabelsLegendPage::changeTitleColor(const QColor &_color)
 {
     title_color=_color;
 }
 
 #if 0
-void KChartWizardLabelsLegendPage::changeYTitle2Color(const QColor &_color)
+void KCWizardLabelsLegendPage::changeYTitle2Color(const QColor &_color)
 {
     y_color2=_color;
 }
 #endif
 
-void KChartWizardLabelsLegendPage::changeLegendTitleColor(const QColor &_color)
+void KCWizardLabelsLegendPage::changeLegendTitleColor(const QColor &_color)
 {
     _legendTitleColor=_color;
 }
 
-void KChartWizardLabelsLegendPage::paintEvent( QPaintEvent * )
+void KCWizardLabelsLegendPage::paintEvent( QPaintEvent * )
 {
 #if 0
     if( ytitle2 ) {
@@ -290,7 +290,7 @@ void KChartWizardLabelsLegendPage::paintEvent( QPaintEvent * )
 #endif
 }
 
-void KChartWizardLabelsLegendPage::apply(  )
+void KCWizardLabelsLegendPage::apply(  )
 {
     _chart->params()->setHeader1Text( _titleED->text() );
 
@@ -334,4 +334,4 @@ void KChartWizardLabelsLegendPage::apply(  )
 
 }  //KChart namespace
 
-#include "kchartWizardLabelsLegendPage.moc"
+#include "KCWizardLabelsLegendPage.moc"

@@ -1,4 +1,4 @@
-#include "kchartWizardSetupAxesPage.h"
+#include "KCWizardAxesPage.h"
 #include "kchart_view.h"
 #include "kchart_part.h"
 
@@ -27,9 +27,8 @@
 namespace KChart
 {
 
-KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
-                                                      KChartPart* chart ) :
-    QWidget( parent ),
+KCWizardAxesPage::KCWizardAxesPage( QWidget* parent, KChartPart* chart )
+  : QWidget( parent ),
     _chart( chart )
 {
     chart3d=true;
@@ -204,33 +203,33 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 }
 
 
-KChartWizardSetupAxesPage::~KChartWizardSetupAxesPage()
+KCWizardAxesPage::~KCWizardAxesPage()
 {
     // _chart->removeAutoUpdate( preview );
 }
 
-void KChartWizardSetupAxesPage::changeLabelColor(const QColor &_color)
+void KCWizardAxesPage::changeLabelColor(const QColor &_color)
 {
     ycolor=_color;
 }
 
-void KChartWizardSetupAxesPage::changeBorderColor(const QColor &_color)
+void KCWizardAxesPage::changeBorderColor(const QColor &_color)
 {
     colorBorder=_color;
 }
 
-void KChartWizardSetupAxesPage::changeGridColor(const QColor &_color)
+void KCWizardAxesPage::changeGridColor(const QColor &_color)
 {
     colorGrid=_color;
 }
 
-void KChartWizardSetupAxesPage::changeLabelFont()
+void KCWizardAxesPage::changeLabelFont()
 {
     if( KFontDialog::getFont( ylabel,false,this ) == QDialog::Rejected )
         return;
 }
 
-void KChartWizardSetupAxesPage::paintEvent( QPaintEvent *)
+void KCWizardAxesPage::paintEvent( QPaintEvent *)
 {
     if(chart3d) {
         angle->setEnabled(true);
@@ -243,7 +242,7 @@ void KChartWizardSetupAxesPage::paintEvent( QPaintEvent *)
     }
 }
 
-void KChartWizardSetupAxesPage::apply()
+void KCWizardAxesPage::apply()
 {
     _chart->params()->setAxisShowGrid(KDChartAxisParams::AxisPosLeft,gridY->isChecked() );
     _chart->params()->setAxisShowGrid(KDChartAxisParams::AxisPosBottom,gridX->isChecked() );
@@ -301,4 +300,4 @@ void KChartWizardSetupAxesPage::apply()
 
 }  //namespace KChart
 
-#include "kchartWizardSetupAxesPage.moc"
+#include "KCWizardAxesPage.moc"

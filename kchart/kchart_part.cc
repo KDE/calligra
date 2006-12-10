@@ -15,10 +15,10 @@ using std::cerr;
 #include "kchart_part.h"
 #include "kchart_view.h"
 #include "kchart_factory.h"
-#include "kchartWizard.h"
 #include "kchart_params.h"
 #include "kdchart/KDChart.h"
 #include "kdchart/KDChartTable.h"
+#include "dialogs/KCWizard.h"
 
 #include <KoDom.h>
 #include <KoXmlNS.h>
@@ -621,7 +621,7 @@ void KChartPart::setCellData( int row, int column, const QVariant &val)
 
 bool KChartPart::showWizard( QString &area )
 {
-    KChartWizard  *wizard = new KChartWizard( this, m_parentWidget, "wizard" );
+    KCWizard  *wizard = new KCWizard( this, m_parentWidget, "wizard" );
 
     connect( wizard, SIGNAL(finished()), this, SLOT(slotModified()) );
 

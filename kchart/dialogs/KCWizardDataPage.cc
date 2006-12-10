@@ -1,5 +1,5 @@
 
-#include "kchartWizardSelectDataFormatPage.h"
+#include "KCWizardDataPage.h"
 #include "kchart_view.h"
 #include "kchart_part.h"
 
@@ -29,10 +29,9 @@
 namespace KChart
 {
 
-KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* parent,
-                                                                        KChartPart* chart ) :
-  QWidget( parent ),
-  m_chart( chart )
+KCWizardDataPage::KCWizardDataPage( QWidget* parent, KChartPart* chart )
+  : QWidget( parent ),
+    m_chart( chart )
 {
     Q3GridLayout *grid1 = new Q3GridLayout(this, 6, 1, KDialog::marginHint(),
 					 KDialog::spacingHint());
@@ -81,18 +80,18 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
 }
 
 
-QString KChartWizardSelectDataFormatPage::dataArea() const
+QString KCWizardDataPage::dataArea() const
 {
     return m_dataArea->text();
 }
 
-void KChartWizardSelectDataFormatPage::setDataArea( const QString &area )
+void KCWizardDataPage::setDataArea( const QString &area )
 {
     m_dataArea->setText( area );
 }
 
 
-void KChartWizardSelectDataFormatPage::apply()
+void KCWizardDataPage::apply()
 {
     if (m_rowMajor->isChecked())
       m_chart->params()->setDataDirection( KChartParams::DataRows );
@@ -106,4 +105,4 @@ void KChartWizardSelectDataFormatPage::apply()
 
 }  //KChart namespace
 
-#include "kchartWizardSelectDataFormatPage.moc"
+#include "KCWizardDataPage.moc"

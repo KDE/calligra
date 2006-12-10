@@ -1,5 +1,5 @@
-#ifndef _kchartWIZARDSELECTDATAFORMATPAGE_H
-#define _kchartWIZARDSELECTDATAFORMATPAGE_H
+#ifndef _KCWIZARDDATAPAGE_H
+#define _KCWIZARDDATAPAGE_H
 
 
 #include "kchart_params.h"
@@ -16,11 +16,11 @@ namespace KChart
 
 class KChartPart;
 
-class KChartWizardSelectDataFormatPage : public QWidget
+class KCWizardDataPage : public QWidget
 {
   Q_OBJECT
 public:
-  KChartWizardSelectDataFormatPage( QWidget* parent, KChartPart* chart );
+  KCWizardDataPage( QWidget* parent, KChartPart* chart );
 
   QString  dataArea() const;
   void     setDataArea( const QString &area );
