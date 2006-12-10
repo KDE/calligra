@@ -679,12 +679,12 @@ addresses often contain words run together.</para>
 
 <varlistentry>
 <term><guilabel>Ignore These Words</guilabel></term>
-<listitem><para>You can have here a list of words you want to ignore in all spellchecking. Write a word in the field then click on the <guilabel>Add</guilabel> button to add it in the list. All the words in the list will be ignored by the spellchecker.</para></listitem>
+<listitem><para>You can have here a list of words you want to ignore in all spellchecking.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Add</guilabel></term>
-<listitem><para>Type a word in the field then use this button to add it in the list. Once the word is added in the list, even if you click the <guibutton>Cancel</guibutton> button of the configuration dialog, it will stay in the list.</para></listitem>
+<listitem><para>Write a word in the field then click on the <guilabel>Add</guilabel> button to add it in the list. Once the word is added in the list, even if you click the <guibutton>Cancel</guibutton> button of the configuration dialog, it will stay in the list.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -712,7 +712,7 @@ addresses often contain words run together.</para>
 <title><guilabel>Misc</guilabel></title>
 <varlistentry>
 <term><guilabel>Undo/Redo limit:</guilabel></term>
-<listitem><para>Set the number of actions you can undo and redo (how many actions &kpresenter; keeps in its Undo buffer). Default is 30. Maximum is 60 and minimum is 0. Any action that exceeds the number set will be forgotten.</para></listitem>
+<listitem><para>Set the number of actions you can undo and redo (how many actions &kpresenter; keeps in its Undo buffer). Default is 30. Maximum is 60 and minimum is 10. Any action that exceeds the number set will be forgotten.</para></listitem>
 </varlistentry>
 
 <varlistentry>
