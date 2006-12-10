@@ -170,164 +170,201 @@ void FormatDialog::slotOk()
 	return;
     }
 
-    QRect r = m_view->selectionInfo()->selection();
-
 #warning FIXME Stefan: port to new style storage
 #if 0
     if ( !m_view->doc()->undoLocked() )
     {
-        QString title=i18n("Change Format");
-        UndoCellFormat *undo = new UndoCellFormat( m_view->doc(), m_view->activeSheet(), Region(r), title);
+        QString title = i18n( "Change Format" );
+        UndoCellFormat* undo = new UndoCellFormat( m_view->doc(), m_view->activeSheet(), *m_view->selectionInfo(), title );
         m_view->doc()->addCommand( undo );
     }
+#endif
     //
     // Set colors, borders etc.
     //
-
-    // Top left corner
-    Cell* cell = m_view->activeSheet()->nonDefaultCell( r.left(), r.top() );
-    cell->format()->copy( *m_styles[0] );
-
-    // Top column
-    int x, y;
-    for( x = r.left() + 1; x <= r.right(); ++x )
+    Sheet* const sheet = m_view->activeSheet();
+    Region::ConstIterator end(m_view->selectionInfo()->constEnd());
+    for ( Region::ConstIterator it(m_view->selectionInfo()->constBegin()); it != end; ++it )
     {
-	int pos = 1 + ( ( x - r.left() - 1 ) % 2 );
-	Cell* cell = m_view->activeSheet()->nonDefaultCell( x, r.top() );
-        if(!cell->isPartOfMerged())
+        const QRect rect = (*it)->rect();
+        // Top left corner
+        if ( m_styles[0] && !m_styles[0]->isDefault() )
+            sheet->setStyle( Region(rect.topLeft()), *m_styles[0] );
+        // Top column
+        for( int col = rect.left() + 1; col <= rect.right(); ++col )
         {
-          cell->format()->copy( *m_styles[ pos ] );
+            int pos = 1 + ( ( col - rect.left() - 1 ) % 2 );
+            Cell* cell = sheet->cellAt( col, rect.top() );
+            if ( !cell->isPartOfMerged() )
+            {
+                if ( m_styles[pos] && !m_styles[pos]->isDefault() )
+                    sheet->setStyle( Region(col, rect.top()), *m_styles[pos] );
 
-	Style* style;
-	if ( x == r.right() )
-	    style = m_styles[2];
-	else
-	    style = m_styles[1];
+                Style* style = ( col == rect.right() ) ? m_styles[2] : m_styles[1];
+                if ( style )
+                {
+                    Style tmpStyle;
+                    tmpStyle.setTopBorderPen( style->topBorderPen() );
+                    sheet->setStyle( Region(col, rect.top()), tmpStyle );
+                }
 
-	if ( style )
-	    cell->setTopBorderPen( style->topBorderPen( 0, 0 ) );
-
-	if ( x == r.left() + 1 )
-	    style = m_styles[1];
-	else
-	    style = m_styles[2];
-
-	if ( style )
-	    cell->setLeftBorderPen( style->leftBorderPen( 0, 0 ) );
+                style = ( col == rect.left() + 1 ) ? m_styles[1] : m_styles[2];
+                if ( style )
+                {
+                    Style tmpStyle;
+                    tmpStyle.setLeftBorderPen( style->leftBorderPen() );
+                    sheet->setStyle( Region(col, rect.top()), tmpStyle );
+                }
+            }
         }
-    }
 
-    cell = m_view->activeSheet()->nonDefaultCell( r.right(), r.top() );
-    if ( m_styles[3] )
-	cell->setRightBorderPen( m_styles[3]->leftBorderPen( 0, 0 ) );
-
-    // Left row
-    for( y = r.top() + 1; y <= r.bottom(); ++y )
-    {
-	int pos = 4 + ( ( y - r.top() - 1 ) % 2 ) * 4;
-	Cell* cell = m_view->activeSheet()->nonDefaultCell( r.left(), y );
-        if(!cell->isPartOfMerged())
+        if ( m_styles[3] )
         {
-          cell->format()->copy( *m_styles[ pos ] );
-
-	Style* style;
-	if ( y == r.bottom() )
-	    style = m_styles[8];
-	else
-	    style = m_styles[4];
-
-	if ( style )
-	    cell->setLeftBorderPen( style->leftBorderPen( 0, 0 ) );
-
-	if ( y == r.top() + 1 )
-	    style = m_styles[4];
-	else
-	    style = m_styles[8];
-
-	if ( style )
-	    cell->setTopBorderPen( style->topBorderPen( 0, 0 ) );
+            Style tmpStyle;
+            tmpStyle.setRightBorderPen( m_styles[3]->leftBorderPen() );
+            sheet->setStyle( Region(rect.topRight()), tmpStyle );
         }
-    }
 
-    // Body
-    for( x = r.left() + 1; x <= r.right(); ++x )
-	for( y = r.top() + 1; y <= r.bottom(); ++y )
+        // Left row
+        for ( int row = rect.top() + 1; row <= rect.bottom(); ++row )
         {
-	    int pos = 5 + ( ( y - r.top() - 1 ) % 2 ) * 4 + ( ( x - r.left() - 1 ) % 2 );
-	    Cell* cell = m_view->activeSheet()->nonDefaultCell( x, y );
+            int pos = 4 + ( ( row - rect.top() - 1 ) % 2 ) * 4;
+            Cell* cell = sheet->cellAt( rect.left(), row );
+            if ( !cell->isPartOfMerged() )
+            {
+                if ( m_styles[pos] && !m_styles[pos]->isDefault() )
+                    sheet->setStyle( Region(rect.left(), row), *m_styles[pos] );
+
+                Style* style = ( row == rect.bottom() ) ? m_styles[8] : m_styles[4];
+                if ( style )
+                {
+                    Style tmpStyle;
+                    tmpStyle.setLeftBorderPen( style->leftBorderPen() );
+                    sheet->setStyle( Region(rect.left(), row), tmpStyle );
+                }
+
+                style = ( row == rect.top() + 1 ) ? m_styles[4] : m_styles[8];
+                if ( style )
+                {
+                    Style tmpStyle;
+                    tmpStyle.setTopBorderPen( style->topBorderPen() );
+                    sheet->setStyle( Region(rect.left(), row), tmpStyle );
+                }
+            }
+        }
+
+        // Body
+        for ( int col = rect.left() + 1; col <= rect.right(); ++col )
+        {
+            for ( int row = rect.top() + 1; row <= rect.bottom(); ++row )
+            {
+                int pos = 5 + ( ( row - rect.top() - 1 ) % 2 ) * 4 + ( ( col - rect.left() - 1 ) % 2 );
+                Cell* cell = sheet->cellAt( col, row );
+                if ( !cell->isPartOfMerged() )
+                {
+                    if ( m_styles[pos] && !m_styles[pos]->isDefault() )
+                        sheet->setStyle( Region(col, row), *m_styles[pos] );
+
+                    Style* style;
+                    if ( col == rect.left() + 1 )
+                        style = m_styles[ 5 + ( ( row - rect.top() - 1 ) % 2 ) * 4 ];
+                    else
+                        style = m_styles[ 6 + ( ( row - rect.top() - 1 ) % 2 ) * 4 ];
+
+                    if ( style )
+                    {
+                        Style tmpStyle;
+                        tmpStyle.setLeftBorderPen( style->leftBorderPen() );
+                        sheet->setStyle( Region(col, row), tmpStyle );
+                    }
+
+                    if ( row == rect.top() + 1 )
+                        style = m_styles[ 5 + ( ( col - rect.left() - 1 ) % 2 ) ];
+                    else
+                        style = m_styles[ 9 + ( ( col - rect.left() - 1 ) % 2 ) ];
+
+                    if ( style )
+                    {
+                        Style tmpStyle;
+                        tmpStyle.setTopBorderPen( style->topBorderPen() );
+                        sheet->setStyle( Region(col, row), tmpStyle );
+                    }
+                }
+            }
+        }
+
+        // Outer right border
+        for ( int row = rect.top(); row <= rect.bottom(); ++row )
+        {
+            Cell* cell = sheet->cellAt( rect.right(), row );
+            if ( !cell->isPartOfMerged() )
+            {
+                if ( row == rect.top() )
+                {
+                    if ( m_styles[3] )
+                    {
+                        Style tmpStyle;
+                        tmpStyle.setRightBorderPen( m_styles[3]->leftBorderPen() );
+                        sheet->setStyle( Region(rect.right(), row), tmpStyle );
+                    }
+                }
+                else if ( row == rect.right() )
+                {
+                    if ( m_styles[11] )
+                    {
+                        Style tmpStyle;
+                        tmpStyle.setRightBorderPen( m_styles[11]->leftBorderPen() );
+                        sheet->setStyle( Region(rect.right(), row), tmpStyle );
+                    }
+                }
+                else
+                {
+                    if ( m_styles[7] )
+                    {
+                        Style tmpStyle;
+                        tmpStyle.setRightBorderPen( m_styles[7]->leftBorderPen() );
+                        sheet->setStyle( Region(rect.right(), row), tmpStyle );
+                    }
+                }
+            }
+        }
+
+        // Outer bottom border
+        for ( int col = rect.left(); col <= rect.right(); ++col )
+        {
+            Cell* cell = sheet->cellAt( col, rect.bottom() );
             if(!cell->isPartOfMerged())
             {
-              cell->format()->copy( *m_styles[ pos ] );
-
-	    Style* style;
-	    if ( x == r.left() + 1 )
-		style = m_styles[ 5 + ( ( y - r.top() - 1 ) % 2 ) * 4 ];
-	    else
-		style = m_styles[ 6 + ( ( y - r.top() - 1 ) % 2 ) * 4 ];
-
-	    if ( style )
-		cell->setLeftBorderPen( style->leftBorderPen( 0, 0 ) );
-
-	    if ( y == r.top() + 1 )
-		style = m_styles[ 5 + ( ( x - r.left() - 1 ) % 2 ) ];
-	    else
-		style = m_styles[ 9 + ( ( x - r.left() - 1 ) % 2 ) ];
-
-	    if ( style )
-		cell->setTopBorderPen( style->topBorderPen( 0, 0 ) );
+                if ( col == rect.left() )
+                {
+                    if ( m_styles[12] )
+                    {
+                        Style tmpStyle;
+                        tmpStyle.setBottomBorderPen( m_styles[12]->topBorderPen() );
+                        sheet->setStyle( Region(col, rect.bottom()), tmpStyle );
+                    }
+                }
+                else if ( col == rect.right() )
+                {
+                    if ( m_styles[14] )
+                    {
+                        Style tmpStyle;
+                        tmpStyle.setBottomBorderPen( m_styles[14]->topBorderPen() );
+                        sheet->setStyle( Region(col, rect.bottom()), tmpStyle );
+                    }
+                }
+                else
+                {
+                    if ( m_styles[13] )
+                    {
+                        Style tmpStyle;
+                        tmpStyle.setBottomBorderPen( m_styles[13]->topBorderPen() );
+                        sheet->setStyle( Region(col, rect.bottom()), tmpStyle );
+                    }
+                }
             }
-	}
-
-    // Outer right border
-    for( y = r.top(); y <= r.bottom(); ++y )
-    {
-	Cell* cell = m_view->activeSheet()->nonDefaultCell( r.right(), y );
-        if(!cell->isPartOfMerged())
-        {
-	if ( y == r.top() )
-        {
-	    if ( m_styles[3] )
-		cell->setRightBorderPen( m_styles[3]->leftBorderPen( 0, 0 ) );
-	}
-	else if ( y == r.right() )
-        {
-	    if ( m_styles[11] )
-		cell->setRightBorderPen( m_styles[11]->leftBorderPen( 0, 0 ) );
-	}
-	else
-        {
-	    if ( m_styles[7] )
-		cell->setRightBorderPen( m_styles[7]->leftBorderPen( 0, 0 ) );
-	}
         }
     }
-
-    // Outer bottom border
-    for( x = r.left(); x <= r.right(); ++x )
-    {
-	Cell* cell = m_view->activeSheet()->nonDefaultCell( x, r.bottom() );
-        if(!cell->isPartOfMerged())
-        {
-        if ( x == r.left() )
-        {
-	    if ( m_styles[12] )
-		cell->setBottomBorderPen( m_styles[12]->topBorderPen( 0, 0 ) );
-	}
-	else if ( x == r.right() )
-        {
-	    if ( m_styles[14] )
-		cell->setBottomBorderPen( m_styles[14]->topBorderPen( 0, 0 ) );
-	}
-	else
-        {
-	    if ( m_styles[13] )
-		cell->setBottomBorderPen( m_styles[13]->topBorderPen( 0, 0 ) );
-	}
-        }
-    }
-#endif
-
-    m_view->selectionInfo()->initialize(r);//,       m_view->activeSheet() );
     m_view->doc()->setModified( true );
     m_view->slotUpdateView( m_view->activeSheet() );
     accept();
