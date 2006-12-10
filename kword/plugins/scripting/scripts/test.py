@@ -2,14 +2,15 @@
 
 import KWord, time
 
-f = KWord.frameSet(0)
-print "frameSet=%s" % f
-d = f.textDocument()
-print "textDocument=%s" % d
+#KWord.insertPage( KWord.pageCount() )
+KWord.insertPage(0)
 
-d.setHtml(
+fs = KWord.frameSet(0)
+doc = fs.textDocument()
+
+doc.setHtml(
     (
-        "<h1><font color=\"blue\">Test Python Script</font></h1>"
+        "<h1><font color=\"blue\">Python Test Script</font></h1>"
         "<ul>"
         "<li>Time=<b>%s</b></li>"
         "<li>pageCount=<b>%s</b></li>"
@@ -33,3 +34,14 @@ d.setHtml(
         KWord.document().documentInfoKeywords(),
     )
 )
+
+#cursor = doc.lastCursor()
+cursor = doc.rootFrame().lastCursorPosition()
+
+table = cursor.insertTable(3,3)
+print "========> rows=%s cols=%s" % (table.rows(),table.columns())
+for row in range( table.rows() ):
+    #table.insertRows(row,1)
+    for col in range( table.columns() ):
+        c = table.firstCursorPosition(row, col)
+        c.insertHtml( "(row=%s col=%s)" % (row,col) )

@@ -22,30 +22,45 @@
 
 #include <QPointer>
 #include <QObject>
-#include <koffice_export.h>
+#include <QTextDocument>
 
-class QTextDocument;
+#include "TextFrame.h"
+#include "TextTable.h"
+#include "TextCursor.h"
 
 namespace Scripting {
 
     /**
-    * A frameset holds a number of \a Frame (zero or more) objects where
-    * each frame holds the content that is displayed on screen.
+    *
     */
     class TextDocument : public QObject
     {
             Q_OBJECT
         public:
-            explicit TextDocument( QObject* parent, QTextDocument* doc );
-            ~TextDocument();
+            TextDocument(QObject* parent, QTextDocument* doc)
+                : QObject( parent ), m_doc( doc ) {}
+            virtual ~TextDocument() {}
 
         public Q_SLOTS:
 
-            QString toHtml( const QString& encoding = QString() ) const;
-            void setHtml( const QString & html );
+            //bool isEmpty() const { return m_doc->isEmpty(); }
+            //bool isModified() const { return m_doc->isModified(); }
+            //int pageCount () const { return m_doc->pageCount(); }
 
-            QString toPlainText() const;
-            void setPlainText( const QString & text );
+            QObject* rootFrame() { return new TextFrame(this, m_doc->rootFrame()); }
+
+            QObject* firstCursor() { return new TextCursor(this, QTextCursor(m_doc->begin())); }
+            QObject* lastCursor() { return new TextCursor(this, QTextCursor(m_doc->end())); }
+
+            //QTextCursor findCursor(const QString& subString, const QTextCursor& cursor, FindFlags options = 0) const;
+            //QTextBlock findBlock(int pos) const;
+            //QTextObject * object ( int objectIndex ) const 
+            //QTextObject * objectForFormat ( const QTextFormat & f ) const 
+
+            QString toText() const { return m_doc->toPlainText(); }
+            void setText(const QString & text) { m_doc->setPlainText(text); }
+            QString toHtml(const QString& encoding = QString()) const { return m_doc->toHtml( encoding.isNull() ? QByteArray() : encoding.toLatin1() ); }
+            void setHtml(const QString & html) { m_doc->setHtml(html); }
 
         private:
             QPointer<QTextDocument> m_doc;

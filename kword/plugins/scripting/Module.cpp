@@ -61,7 +61,7 @@ Module::Module(QObject* parent)
 {
     setObjectName("KWordScriptingModule");
     d->view = 0;
-	d->doc = 0;
+    d->doc = 0;
 }
 
 Module::~Module()
@@ -93,7 +93,7 @@ QObject* Module::document()
 
 int Module::pageCount()
 {
-    return doc()->pageManager()->pageCount();
+    return doc()->pageCount();
 }
 
 QObject* Module::page(int pageNumber)
@@ -105,25 +105,25 @@ QObject* Module::page(int pageNumber)
 QObject* Module::insertPage( int afterPageNum )
 {
     //TODO check for doc()->pageManager()->onlyAllowAppend()
-    KWPage* page = const_cast<KWPageManager*>( doc()->pageManager() )->insertPage(afterPageNum);
+    KWPage* page = doc()->insertPage(afterPageNum);
     return page ? new Page(this, page) : 0;
 }
 
 void Module::removePage( int pageNumber )
 {
     //TODO remove also the wrapper? and what's about pages that are "Spread" (page that represents 2 pagenumbers)?
-    const_cast<KWPageManager*>( doc()->pageManager() )->removePage(pageNumber);
+    const_cast< KWPageManager* >( doc()->pageManager() )->removePage(pageNumber);
 }
 
 int Module::startPage()
 {
-    return doc()->pageManager()->startPage();
+    return doc()->startPage();
 }
 
 void Module::setStartPage(int pageNumber)
 {
      //TODO this is evil since it changes page(int pageNumber) above... we need a more persistent way to deal with pages!
-     const_cast<KWPageManager*>( doc()->pageManager() )->setStartPage(pageNumber);
+     const_cast< KWPageManager* >( doc()->pageManager() )->setStartPage(pageNumber);
 }
 
 int Module::frameSetCount()

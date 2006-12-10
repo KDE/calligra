@@ -17,40 +17,37 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "TextDocument.h"
+#ifndef SCRIPTING_TEXTLIST_H
+#define SCRIPTING_TEXTLIST_H
 
-#include <QTextDocument>
+#include <QObject>
+#include <QTextList>
 
-using namespace Scripting;
+namespace Scripting {
 
-TextDocument::TextDocument( QObject* parent, QTextDocument* doc )
-    : QObject( parent )
-    , m_doc( doc )
-{
+    /**
+    *
+    */
+    class TextList : public QObject
+    {
+            Q_OBJECT
+        public:
+            TextList(QObject* parent, QTextList* list)
+                : QObject( parent ), m_list( list ) {}
+            virtual ~TextList() {}
+
+        public Q_SLOTS:
+
+            //void add ( const QTextBlock & block )
+            //int count () const
+            //QTextBlock item ( int i ) const
+            //void removeItem ( int i )
+            //void remove ( const QTextBlock & block )
+
+        private:
+            QTextList* m_list;
+    };
+
 }
 
-TextDocument::~TextDocument()
-{
-}
-
-QString TextDocument::toHtml( const QString& encoding ) const
-{
-    return m_doc->toHtml( encoding.isNull() ? QByteArray() : encoding.toLatin1() );
-}
-
-void TextDocument::setHtml( const QString & html )
-{
-    m_doc->setHtml(html);
-}
-
-QString TextDocument::toPlainText() const
-{
-    return m_doc->toPlainText();
-}
-
-void TextDocument::setPlainText( const QString & text )
-{
-    m_doc->setPlainText(text);
-}
-
-#include "TextDocument.moc"
+#endif
