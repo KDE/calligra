@@ -630,7 +630,8 @@ void KWTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock
     if(left.hasBorder || right.hasBorder || top.hasBorder || bottom.hasBorder) {
         QTextLayout *layout = block.layout();
         bounds = layout->boundingRect();
-        bounds.setTopLeft(layout->lineAt(0).position()); // annoying that this is needed...
+        // See if the next line can be removed for Qt4.3
+        bounds.setTopLeft(layout->lineAt(0).position()); // annoying that this is needed.
         if(list && data && data->hasCounterData())
             // hmm, and what about RTL text?
             bounds.setLeft(data->counterPosition().x());
