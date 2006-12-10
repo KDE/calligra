@@ -79,7 +79,7 @@ public:
     void setFloatFormat(Style::FloatFormat floatFormat) { m_style->setFloatFormat( floatFormat ); }
     void setFloatColor(Style::FloatColor floatColor) { m_style->setFloatColor( floatColor ); }
     void setFormatType(FormatType formatType) { m_style->setFormatType( formatType ); }
-    void setCurrency(int type, const QString& symbol) { Style::Currency c; c.type = type; c.symbol = symbol; m_style->setCurrency( c ); }
+    void setCurrency(const Currency& currency) { m_style->setCurrency( currency ); }
     void setParentName(const QString& name) { m_style->setParentName(name); }
     void setDefault() { m_style->setDefault(); }
 

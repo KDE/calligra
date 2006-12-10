@@ -26,6 +26,8 @@
 
 #include <KoXmlReader.h>
 
+#include "Currency.h"
+
 class KoGenStyle;
 class KoGenStyles;
 class KoOasisStyles;
@@ -60,12 +62,6 @@ typedef QMap<QString, CustomStyle*> CustomStyles;
 class KSPREAD_EXPORT Style
 {
 public:
-    struct Currency
-    {
-      int type;
-      QString symbol;
-    };
-
     enum HAlign
     {
         Left = 1,
@@ -73,6 +69,7 @@ public:
         Right = 3,
         HAlignUndefined = 0
     };
+
     enum VAlign
     {
         Top = 1,
@@ -80,6 +77,7 @@ public:
         Bottom = 3,
         VAlignUndefined = 0
     };
+
     enum FloatFormat
     {
         DefaultFloatFormat = 0,
@@ -87,6 +85,7 @@ public:
         AlwaysUnsigned = 2,
         OnlyNegSigned = DefaultFloatFormat
     };
+
     enum FloatColor
     {
         DefaultFloatColor = 0,

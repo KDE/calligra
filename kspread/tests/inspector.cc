@@ -31,7 +31,6 @@
 
 // KSpread
 #include "Cell.h"
-#include "Currency.h"
 #include "DependencyManager.h"
 #include "Map.h"
 #include "Region.h"
@@ -129,12 +128,8 @@ void Inspector::Private::handleFormat()
   new Q3ListViewItem( formatView, "Protected", boolAsString( !style.notProtected() ) );
   new Q3ListViewItem( formatView, "Vertical Text", boolAsString( style.verticalText() ) );
 
-  Style::Currency currrency = style.currency();
-  new Q3ListViewItem( formatView, "Currency symbol", currrency.symbol );
-  bool ok = false;
-  QString currencyType;
-  currencyType = Currency::getChooseString(currrency.type, ok);
-  new Q3ListViewItem( formatView, "Currency type", ok ? currencyType : "Invalid" );
+  new Q3ListViewItem( formatView, "Currency symbol", style.currency().symbol() );
+  new Q3ListViewItem( formatView, "Currency code", style.currency().code() );
 
   Q3ListViewItem* flags = new Q3ListViewItem( formatView, "Flags" );
   new Q3ListViewItem( flags, "Border (left)",

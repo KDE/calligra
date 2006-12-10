@@ -33,25 +33,26 @@
 //Added by qt3to4:
 #include <q3tabdialog.h>
 
+#include <QCheckBox>
 #include <QFrame>
 #include <QLabel>
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QPaintEvent>
+#include <QPushButton>
 
-#include <knuminput.h>
 #include <kcompletion.h>
-#include "View.h"
-#include "Style.h"
-#include "Format.h"
+#include <knuminput.h>
+
 #include "Doc.h"
+#include "Format.h"
+#include "Style.h"
 #include "Value.h"
+#include "View.h"
+
 #include "ui_FontWidget.h"
 #include "ui_PositionWidget.h"
 #include "ui_ProtectionWidget.h"
-
-#include <QPushButton>
-#include <QCheckBox>
 
 class KoUnitDoubleSpinBox;
 class QPixmap;
@@ -538,7 +539,7 @@ public:
     Style::FloatFormat floatFormat;
     bool bFloatFormat;
     Style::FloatColor floatColor;
-    Style::Currency   cCurrency;
+    Currency m_currency;
     bool bFloatColor;
     bool bCurrency;
     QColor textColor;

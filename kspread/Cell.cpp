@@ -52,7 +52,6 @@
 
 #include "Canvas.h"
 #include "Condition.h"
-#include "Currency.h"
 #include "Damages.h"
 #include "Doc.h"
 #include "Format.h"
@@ -1898,8 +1897,8 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
       const Style style = this->style();
       if ( style.hasAttribute( Style::CurrencyFormat ) )
       {
-        Style::Currency currency = style.currency();
-        xmlWriter.addAttribute( "office:currency", Currency::getCurrencyCode(currency.type) );
+        Currency currency = style.currency();
+        xmlWriter.addAttribute( "office:currency", currency.code() );
       }
       xmlWriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
       break;
@@ -2048,11 +2047,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
                 {
                   Currency currency(element.attributeNS( KoXmlNS::office, "currency", QString::null ) );
                   Style style;
-                  // FIXME: Use KSpread::Currency instead Style::Currency
-                  Style::Currency sCurrency;
-                  sCurrency.type = currency.getIndex();
-                  sCurrency.symbol = currency.getDisplayCode();
-                  style.setCurrency( sCurrency );
+                  style.setCurrency( currency );
                   setStyle( style );
                 }
             }

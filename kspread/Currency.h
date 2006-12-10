@@ -21,6 +21,8 @@
 #ifndef KSPREAD_CURRENCY
 #define KSPREAD_CURRENCY
 
+#include <QMetaType>
+
 #include <koffice_export.h>
 
 namespace KSpread
@@ -29,50 +31,51 @@ namespace KSpread
 class KSPREAD_EXPORT Currency
 {
 public:
-    enum currencyFormat { Native, Gnumeric, OpenCalc, ApplixSpread, GobeProductiveSpread, HancomSheet };
+    enum Format { Native, Gnumeric, OpenCalc, ApplixSpread, GobeProductiveSpread, HancomSheet };
 
-    Currency();
-    explicit Currency(int index);
+    /**
+     * Constructor.
+     * Creates a currency corresponding to the given currency table index.
+     * If \p index is omitted or zero, a currency with the locale default
+     * currency unit is created.
+     */
+    explicit Currency(int index = 0);
+
+    /**
+     * Constructor.
+     * Creates a currency corresponding to \p code .
+     * Looks up the index.
+     * If the code is found more than once: saved without country info.
+     * If the code is not found, \p code is handled as custom unit.
+     * \p code e.g. EUR, USD,..
+     * \param format in Gnumeric the code is: [$EUR]
+     */
+    explicit Currency(QString const & code, Format format = Native);
+
+    /**
+     * Destructor.
+     */
     ~Currency();
 
-    /**
-     * If code doesn't fit to index the index gets ignored
-     */
-    Currency(int index, QString const & code);
 
-    /**
-     * code: e.g. EUR, USD,..
-     * Looks up index, if code found more than once: saved without country info
-     * currencyFormat: in Gnumeric the code is: [$EUR]
-     *                 saves some work in the filter...
-     */
-    explicit Currency(QString const & code, currencyFormat format = Native);
-    Currency & operator=(int type);
-    Currency & operator=(char const * code);
-    bool operator==(Currency const & cur) const;
-    bool operator==(int type) const;
-    operator int() const;
+    bool operator==(Currency const & other) const;
+    inline bool operator!=(Currency const & other) const { return !operator==(other); }
 
-    QString getCode() const;
-    QString getCountry() const;
-    QString getName() const;
-    QString getDisplayCode() const;
-    int     getIndex() const;
+    QString code(Format format = Native) const;
+    QString country() const;
+    QString name() const;
+    QString symbol() const;
+    int     index() const;
 
-    static QString getChooseString(int type, bool & ok);
-    static QString getDisplaySymbol(int type);
-    static QString getCurrencyCode( int type);
-
-    /**
-     * Code for use in Gnumeric export filter
-     */
-    QString getExportCode(currencyFormat format) const;
+    static QString chooseString(int type, bool & ok);
 
 private:
-    int     m_type;
+    int     m_index;
     QString m_code;
 };
 
 } // namespace KSpread
+
+Q_DECLARE_METATYPE(KSpread::Currency)
 
 #endif

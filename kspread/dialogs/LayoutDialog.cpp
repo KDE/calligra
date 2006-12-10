@@ -62,7 +62,6 @@
 
 #include "Canvas.h"
 #include "Cell.h"
-#include "Currency.h"
 #include "LayoutDialog.h"
 #include "Localization.h"
 #include "Sheet.h"
@@ -438,7 +437,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   underline = styleTopLeft.underline();
   // Needed to initialize the font correctly ( bug in Qt )
   font = styleTopLeft.font();
-  cCurrency = styleTopLeft.currency();
+  m_currency = styleTopLeft.currency();
 
   brushColor = styleTopLeft.backgroundBrush().color();
   brushStyle = styleTopLeft.backgroundBrush().style();
@@ -588,7 +587,7 @@ void CellFormatDialog::initGUI()
 
   // Needed to initialize the font correctly ( bug in Qt )
   font           = m_style->font();
-  cCurrency      = m_style->currency();
+  m_currency     = m_style->currency();
   brushColor     = m_style->backgroundBrush().color();
   brushStyle     = m_style->backgroundBrush().style();
 
@@ -648,8 +647,7 @@ void CellFormatDialog::initMembers()
   bHideAll        = false;
   bIsProtected    = true;
 
-  cCurrency.symbol = locale()->currencySymbol();
-  cCurrency.type   = 0;
+  m_currency      = Currency(); // locale default
 
   Sheet* sheet = m_pView->activeSheet();
   defaultWidthSize  = sheet ? sheet->columnFormat(0)->dblWidth() : 0;
@@ -766,8 +764,8 @@ void CellFormatDialog::initParameters(const Style& style)
   if ( !bDontPrintText!=style.printText() )
     bDontPrintText= false;
 
-  Style::Currency cur = style.currency();
-  if (cur.symbol != cCurrency.symbol)
+  Currency currency = style.currency();
+  if ( currency != m_currency )
       bCurrency = false;
 }
 
@@ -1099,27 +1097,20 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     currency = new QComboBox( box );
     grid->addWidget(currency, 1, 3);
 
-    currency->insertItem( 0,i18n("Automatic") );
-
+    // fill the currency combo box
+    currency->insertItem( 0, i18n("Automatic") );
     int index = 2; //ignore first two in the list
     bool ok = true;
     QString text;
-
     while ( ok )
     {
-      text = Currency::getChooseString( index, ok );
+      text = Currency::chooseString( index, ok );
       if ( ok )
-      {
         currency->insertItem( index-1, text );
-      }
       else
-      {
         break;
-      }
-
       ++index;
     }
-
     currency->setCurrentIndex( 0 );
     currency->hide();
     currencyLabel->hide();
@@ -1157,17 +1148,16 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
                 if (dlg->bCurrency)
                 {
                   QString tmp;
-                  if (dlg->cCurrency.type != 1)
-                  {
-                    Currency curr(dlg->cCurrency.type);
-                    bool ok = true;
-                    tmp = Currency::getChooseString(dlg->cCurrency.type, ok);
-                    if ( !ok )
-                      tmp = dlg->cCurrency.symbol;
-                  }
+                  if ( dlg->m_currency.index() == 1 ) // custom currency unit
+                      tmp = dlg->m_currency.symbol();
                   else
-                    tmp = dlg->cCurrency.symbol;
-                  currency->setItemText( currency->currentIndex(), tmp );
+                  {
+                    bool ok = true;
+                    tmp = Currency::chooseString(dlg->m_currency.index(), ok);
+                    if ( !ok )
+                      tmp = dlg->m_currency.symbol();
+                  }
+                  currency->setItemText( 0, tmp );
                 }
         }
         else if ( cellFormatType == Scientific_format )
@@ -1472,8 +1462,7 @@ void CellFormatPageFloat::currencyChanged(const QString &)
   int index = currency->currentIndex();
   if (index > 0)
     ++index;
-  dlg->cCurrency.symbol = Currency::getDisplaySymbol(index);
-  dlg->cCurrency.type   = index;
+  dlg->m_currency = Currency(index);
 
   makeformat();
 }
@@ -1604,7 +1593,7 @@ void CellFormatPageFloat::makeformat()
                         floatFormat,
                         prefix->isEnabled() ? prefix->text() : QString::null,
                         postfix->isEnabled() ? postfix->text() : QString::null,
-                        newFormatType == Money_format ? dlg->cCurrency.symbol : QString::null);
+                        newFormatType == Money_format ? dlg->m_currency.symbol() : QString::null);
   if (tmp.length() > 50)
     tmp = tmp.left (50);
   exampleLabel->setText(tmp.prepend("<font color=" + color.name() + '>').append("</font>"));
@@ -1661,28 +1650,20 @@ void CellFormatPageFloat::apply( CustomStyle * style )
     style->setFormatType (newFormatType);
     if ( money->isChecked() )
     {
-      Style::Currency cur;
-      int index = currency->currentIndex();
+      Currency currency;
+      int index = this->currency->currentIndex();
       if (index == 0)
       {
-        if ( currency->currentText() == i18n( "Automatic" ) )
-        {
-          cur.symbol = dlg->locale()->currencySymbol();
-          cur.type   = 0;
-        }
+        if ( this->currency->currentText() == i18n( "Automatic" ) )
+          currency = Currency();
         else
-        {
-          cur.type   = 1;
-          cur.symbol = currency->currentText();
-        }
+          currency = Currency( this->currency->currentText() );
       }
       else
       {
-        cur.type   = ++index;
-        cur.symbol = Currency::getDisplaySymbol( index );
+        currency = Currency( ++index );
       }
-
-      style->setCurrency( cur );
+      style->setCurrency( currency );
     }
   }
 }
@@ -1738,28 +1719,20 @@ void CellFormatPageFloat::apply(StyleManipulator* _obj)
     _obj->setFormatType (newFormatType);
     if (money->isChecked())
     {
-      Style::Currency cur;
-      int index = currency->currentIndex();
+      Currency currency;
+      int index = this->currency->currentIndex();
       if (index == 0)
       {
-        if ( currency->currentText() == i18n( "Automatic" ) )
-        {
-          cur.symbol = dlg->locale()->currencySymbol();
-          cur.type   = 0;
-        }
+        if ( this->currency->currentText() == i18n( "Automatic" ) )
+          currency = Currency();
         else
-        {
-          cur.type   = 1;
-          cur.symbol = currency->currentText();
-        }
+          currency = Currency( this->currency->currentText() );
       }
       else
       {
-        cur.type   = ++index;
-        cur.symbol = Currency::getDisplaySymbol( index );
+        currency = Currency( ++index );
       }
-
-      _obj->setCurrency( cur.type, cur.symbol );
+      _obj->setCurrency( currency );
     }
   }
 }

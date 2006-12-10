@@ -72,7 +72,6 @@
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "SheetView.h"
-#include "Style.h"
 #include "StyleManager.h"
 #include "Undo.h"
 #include "Util.h"

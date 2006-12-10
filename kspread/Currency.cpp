@@ -40,7 +40,7 @@ namespace Currency_LNS
     // third column:  currency name (localized)
     // fourth column: displayed currency code (localized but maybe only in
     //                the country language it belongs to)
-    // WARNING: change the "24" in getChooseString if you change this array
+    // WARNING: change the "24" in chooseString if you change this array
     static const Money lMoney[] = {
         { "", "", "", ""}, // auto
         { "", "", "", ""}, // extension (codes imported)
@@ -340,33 +340,30 @@ namespace Currency_LNS
     class CurrencyMap
     {
         public:
-            CurrencyMap()
-            : m_List(lMoney)
-            {
-            }
+            CurrencyMap() : m_List(lMoney) {}
 
             // Those return the _untranslated_ strings from the above array
-            QString getCode(int t) const
+            QString code(int t) const
             {
                 return QString::fromUtf8( m_List[t].code );
             }
 
-            QString getCountry(int t) const
+            QString country(int t) const
             {
                 return QString::fromUtf8( m_List[t].country );
             }
 
-            QString getName(int t) const
+            QString name(int t) const
             {
                 return QString::fromUtf8( m_List[t].name );
             }
 
-            QString getDisplayCode(int t) const
+            QString symbol(int t) const
             {
                 return QString::fromUtf8( m_List[t].display );
             }
 
-            int getIndex(const QString& code) const
+            int index(const QString& code) const
             {
                 int index = 0;
                 while (m_List[index].code != 0 && m_List[index].code != code)
@@ -384,31 +381,14 @@ namespace Currency_LNS
 
 using namespace Currency_LNS;
 
-Currency::Currency()
-    : m_type( 0 )
-{
-}
-
-Currency::~Currency()
-{
-}
-
 Currency::Currency(int index)
-    : m_type( index )
-    , m_code( gCurrencyMap.getCode( index ) )
+    : m_index( index )
+    , m_code( gCurrencyMap.code( index ) )
 {
 }
 
-Currency::Currency(int index, QString const & code)
-    : m_type( 1 ) // unspec
-    , m_code( code )
-{
-    if ( gCurrencyMap.getCode( index ) == code )
-        m_type = index;
-}
-
-Currency::Currency(QString const & code, currencyFormat format)
-    : m_type( 1 ) // unspec
+Currency::Currency(QString const & code, Format format)
+    : m_index( 1 ) // unspecified first, searched at the end of this ctor
     , m_code( code )
 {
     if ( format == Gnumeric )
@@ -424,103 +404,64 @@ Currency::Currency(QString const & code, currencyFormat format)
         {
             int n = code.indexOf(']');
             if (n != -1)
-            {
                 m_code = code.mid( 2, n - 2 );
-            }
             else
-            {
-                m_type = 0;
-            }
+                m_index = 0;
         }
         else if ( code.indexOf( '$' ) != -1 )
             m_code = '$';
     } // end gnumeric
-    m_type = gCurrencyMap.getIndex( m_code );
+    // search the corresponding index
+    m_index = gCurrencyMap.index( m_code );
 }
 
-Currency & Currency::operator=(int type)
+Currency::~Currency()
 {
-    m_type = type;
-    m_code = gCurrencyMap.getCode( m_type );
-
-    return *this;
-}
-
-Currency & Currency::operator=(char const * code)
-{
-    m_type = 1;
-    m_code = code;
-
-    return *this;
 }
 
 bool Currency::operator==(Currency const & cur) const
 {
-    if ( m_type == cur.m_type )
-        return true;
-
-    if ( m_code == cur.m_code )
-        return true;
-
-    return false;
+    if ( m_index != cur.m_index )
+        return false;
+    if ( m_code != cur.m_code )
+        return false;
+    return true;
 }
 
-bool Currency::operator==(int type) const
-{
-    if ( m_type == type )
-        return true;
-
-    return false;
-}
-
-Currency::operator int() const
-{
-    return m_type;
-}
-
-QString Currency::getCode() const
-{
-    return m_code;
-}
-
-QString Currency::getCountry() const
-{
-    return gCurrencyMap.getCountry( m_type );
-}
-
-QString Currency::getName() const
-{
-    return gCurrencyMap.getName( m_type );
-}
-
-QString Currency::getDisplayCode() const
-{
-    return gMoneyList[m_type].display;
-}
-
-int Currency::getIndex() const
-{
-    return m_type;
-}
-
-QString Currency::getExportCode( currencyFormat format ) const
+QString Currency::code( Format format ) const
 {
     if ( format == Gnumeric )
     {
         if ( m_code.length() == 1 ) // symbol
             return m_code;
-
-        QString ret( "[$");
-        ret += m_code;
-        ret += ']';
-
-        return ret;
+        return QString( "[$" + m_code + ']' );
     }
-
     return m_code;
 }
 
-QString Currency::getChooseString( int type, bool & ok )
+QString Currency::country() const
+{
+    return gCurrencyMap.country( m_index );
+}
+
+QString Currency::name() const
+{
+    return gCurrencyMap.name( m_index );
+}
+
+QString Currency::symbol() const
+{
+    if ( m_index == 1 ) // undefined
+        return m_code;
+    return gMoneyList[m_index].display;
+}
+
+int Currency::index() const
+{
+    return m_index;
+}
+
+QString Currency::chooseString( int type, bool & ok )
 {
     if ( !gMoneyList[type].country )
     {
@@ -549,15 +490,4 @@ QString Currency::getChooseString( int type, bool & ok )
         }
         return ret;
     }
-}
-
-QString Currency::getDisplaySymbol( int type )
-{
-    return i18n( gMoneyList[type].display );
-}
-
-// Currently unused
-QString Currency::getCurrencyCode( int type )
-{
-    return QString::fromUtf8( gMoneyList[type].code );
 }

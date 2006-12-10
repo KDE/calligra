@@ -50,11 +50,10 @@ QString ValueFormatter::formatText (Cell *cell, FormatType fmtType)
   int precision = cell->style().precision();
   QString prefix = cell->style().prefix();
   QString postfix = cell->style().postfix();
-  Style::Currency currency = cell->style().currency();
-  QString currencySymbol = currency.symbol;
+  Currency currency = cell->style().currency();
 
   return formatText (cell->value(), fmtType, precision,
-      floatFormat, prefix, postfix, currencySymbol);
+      floatFormat, prefix, postfix, currency.symbol());
 }
 
 QString ValueFormatter::formatText (const Value &value,

@@ -33,7 +33,6 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
-#include "Currency.h"
 #include "Doc.h"
 #include "Format.h"
 #include "Global.h"
@@ -70,8 +69,8 @@ public:
 };
 
 template<>
-QString SubStyleOne<Style::CurrencyFormat, Style::Currency>::debugData( bool withName ) const
-{ QString out; if (withName) out = name(Style::CurrencyFormat) + ' '; QDebug qdbg(&out); qdbg << value1.symbol; return out; }
+QString SubStyleOne<Style::CurrencyFormat, Currency>::debugData( bool withName ) const
+{ QString out; if (withName) out = name(Style::CurrencyFormat) + ' '; QDebug qdbg(&out); qdbg << value1.symbol(); return out; }
 
 template<Style::Key key>
 class PenStyle : public SubStyleOne<key, QPen>
@@ -252,11 +251,7 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
                     kDebug(36003) << " currency-symbol: " << dataStyle.currencySymbol << endl;
                     if (!dataStyle.currencySymbol.isEmpty())
                     {
-                        KSpread::Currency currency(dataStyle.currencySymbol);
-                        Currency currencyInfo;
-                        currencyInfo.type = currency.getIndex();
-                        currencyInfo.symbol = currency.getDisplayCode();
-                        setCurrency( currencyInfo );
+                        setCurrency( Currency(dataStyle.currencySymbol) );
                     }
                     break;
                 case KoOasisStyles::NumericStyleFormat::Percentage:
@@ -1315,15 +1310,15 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
                          if ( d->subStyles.contains( Precision ) && precision() != -1 )
                              _precision = precision();
 
-                         QString symbol;
+                         QString currencyCode;
                          if ( d->subStyles.contains( FormatTypeKey ) && formatType() == Money_format )
                          {
-                             symbol = KSpread::Currency::getCurrencyCode(currency().type);
+                             currencyCode = currency().code();
                          }
 
                          QString numericStyle = saveOasisStyleNumeric( style, mainStyles, formatType(),
                                  _prefix, _postfix, _precision,
-                                 symbol );
+                                 currencyCode );
                          if ( !numericStyle.isEmpty() )
                              style.addAttribute( "style:data-style-name", numericStyle );
 }
@@ -1375,8 +1370,8 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
 
     if ( d->subStyles.contains( FormatTypeKey ) && formatType() == Money_format )
     {
-        format.setAttribute( "type", (int) currency().type );
-        format.setAttribute( "symbol", currency().symbol );
+        format.setAttribute( "type", (int) currency().index() );
+        format.setAttribute( "symbol", currency().symbol() );
     }
 
     if ( d->subStyles.contains( Angle ) )
@@ -1565,17 +1560,19 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
     }
     if ( formatType() == Money_format )
     {
+        ok = true;
         Currency currency;
         if ( format.hasAttribute( "type" ) )
         {
-            currency.type = format.attribute( "type" ).toInt( &ok );
-            if (!ok)
-                currency.type = 1;
+            currency = Currency( format.attribute( "type" ).toInt( &ok ) );
+            if ( !ok )
+            {
+                if ( format.hasAttribute( "symbol" ) )
+                    currency = Currency( format.attribute( "symbol" ) );
+            }
         }
-        if ( format.hasAttribute( "symbol" ) )
-        {
-            currency.symbol = format.attribute( "symbol" );
-        }
+        else if ( format.hasAttribute( "symbol" ) )
+            currency = Currency( format.attribute( "symbol" ) );
         setCurrency( currency );
     }
     if ( format.hasAttribute( "angle" ) )
@@ -1906,11 +1903,11 @@ FormatType Style::formatType() const
     return static_cast<const SubStyleOne<FormatTypeKey, FormatType>*>( d->subStyles[FormatTypeKey].data() )->value1;;
 }
 
-Style::Currency Style::currency() const
+Currency Style::currency() const
 {
     if ( !d->subStyles.contains( CurrencyFormat ) )
         return Currency();
-    return static_cast<const SubStyleOne<CurrencyFormat, Style::Currency>*>( d->subStyles[CurrencyFormat].data() )->value1;;
+    return static_cast<const SubStyleOne<CurrencyFormat, Currency>*>( d->subStyles[CurrencyFormat].data() )->value1;;
 }
 
 QFont Style::font() const
@@ -2175,8 +2172,9 @@ void Style::setPostfix( QString const & postfix )
 
 void Style::setCurrency( Currency const & currency )
 {
-#warning FIXME Stefan: handle currency format
-//    insertSubStyle( CurrencyFormat, currency );
+    QVariant variant;
+    variant.setValue( currency );
+    insertSubStyle( CurrencyFormat, variant );
 }
 
 void Style::setWrapText( bool enable )
@@ -2287,11 +2285,9 @@ bool Style::compare( const SubStyle* one, const SubStyle* two )
             return static_cast<const SubStyleOne<FloatColorKey,FloatColor>*>(one)->value1 == static_cast<const SubStyleOne<FloatColorKey,FloatColor>*>(two)->value1;
         case CurrencyFormat:
         {
-            Currency currencyOne = static_cast<const SubStyleOne<CurrencyFormat,Style::Currency>*>(one)->value1;
-            Currency currencyTwo = static_cast<const SubStyleOne<CurrencyFormat,Style::Currency>*>(two)->value1;
-            if ( currencyOne.type != currencyTwo.type )
-                return false;
-            if ( currencyOne.symbol != currencyTwo.symbol )
+            Currency currencyOne = static_cast<const SubStyleOne<CurrencyFormat,Currency>*>(one)->value1;
+            Currency currencyTwo = static_cast<const SubStyleOne<CurrencyFormat,Currency>*>(two)->value1;
+            if ( currencyOne != currencyTwo )
                 return false;
             return true;
         }
@@ -2440,7 +2436,7 @@ SharedSubStyle Style::createSubStyle( Key key, const QVariant& value )
             newSubStyle = new SubStyleOne<FloatColorKey, FloatColor>( (FloatColor)value.value<int>() );
             break;
         case CurrencyFormat:
-            newSubStyle = new SubStyleOne<CurrencyFormat, Style::Currency>();
+            newSubStyle = new SubStyleOne<CurrencyFormat, Currency>( value.value<Currency>() );
             break;
         case CustomFormat:
             newSubStyle = new SubStyleOne<CustomFormat, QString>( value.value<QString>() );
