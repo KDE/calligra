@@ -41,6 +41,8 @@
 
 #include <klocale.h>
 
+#define KSPREAD_UNICODE_OPERATORS
+
 /*
   To understand how this formula engine works, please refer to the documentation
   in file DESIGN.html.
@@ -154,6 +156,12 @@ Token::Op KSpread::matchOperator( const QString& text )
         case '{': result = Token::CurlyBra; break;
         case '}': result = Token::CurlyKet; break;
         case '|': result = Token::Pipe; break;
+#endif
+#ifdef KSPREAD_UNICODE_OPERATORS
+        case 0x2212: result = Token::Minus; break;
+        case 0x00D7: result = Token::Asterisk; break;
+        case 0x00F7: result = Token::Slash; break;
+        case 0x2215: result = Token::Slash; break;
 #endif
         default : result = Token::InvalidOp; break;
     }
