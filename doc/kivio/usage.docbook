@@ -63,8 +63,8 @@ To move a stencil to another position on the page, select the stencil. Note the 
 
 <sect2>
 <title>Labeling Stencils</title>
-<para>A lot of stencils in the <guilabel>Flowcharting Collections</guilabel>, <guilabel>Geographic Collections</guilabel>, <guilabel>Hardware Collections</guilabel>, <guilabel>Miscellaneous Collections</guilabel> and <guilabel>UML  Collections</guilabel> can contain text to describe their function. To add text to a stencil move the mouse pointer over the stencil and double-click it or open the popup menu with the &RMB; and select <guimenuitem>Edit Text....</guimenuitem>. A dialog box will appear prompting for some text. Enter some text and click <guibutton>OK</guibutton>. The text should be shown inside the stencil.</para>
-<para>The item <guimenuitem>Edit Text....</guimenuitem> in the menu is disabled, if a stencil can not be labeled.</para>
+<para>A lot of stencils in the <guilabel>Flowcharting Collections</guilabel>, <guilabel>Geographic Collections</guilabel>, <guilabel>Hardware Collections</guilabel>, <guilabel>Miscellaneous Collections</guilabel> and <guilabel>UML Collections</guilabel> can contain text to describe their function. To add text to a stencil move the mouse pointer over the stencil and double-click it or open the context menu with the &RMB; and select <guimenuitem>Edit Text...</guimenuitem>. A dialog box will appear prompting for some text. Enter some text and click <guibutton>OK</guibutton>. The text should be shown inside the stencil.</para>
+<para>The item <guimenuitem>Edit Text...</guimenuitem> in the menu is disabled, if a stencil cannot be labeled.</para>
 <para>The font, size, alignment and style of the text can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Text...</guimenuitem></menuchoice>. Alternatively use the buttons on the Format toolbar.
 The adjustments will only affect the currently selected stencil.</para>
 </sect2>
@@ -108,7 +108,7 @@ The adjustments will only affect the currently selected stencil.</para>
 <para>When you have finished using the connector tool, click on the <guiicon>Arrow</guiicon> tool to regain normal selection functionality.</para>
 <note><para>A stencil can have multiple connectors attached to it, even at the same connection point.</para></note>
 <para>Various properties of the connector can be adjusted including line thickness and color, this is done in the same way as for stencils.</para>
-<para><guilabel>Straight Connectors</guilabel> may also be labeled with text. To add text to a straight connector open the popup menu with the &RMB; and select <guimenuitem>Edit Text....</guimenuitem>. Enter the text in the dialog that appears. The text will be shown with a green handle next to it. Use this to modify the position of the text.</para>
+<para><guilabel>Straight Connectors</guilabel> may also be labeled with text. To add text to a straight connector open the context menu with the &RMB; and select <guimenuitem>Edit Text...</guimenuitem>. Enter the text in the dialog that appears. The text will be shown with a green handle next to it. Use this to modify the position of the text.</para>
 <para>Arrowheads can be added to either end of a connector. Select the connector and then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Arrowheads...</guimenuitem></menuchoice>.</para>
 <para>Limitations: Connectors do not currently reroute around stencils, you need to adjust them manually. Text is always displayed horizontally; rotated text is not currently possible. </para>
 </sect2>
