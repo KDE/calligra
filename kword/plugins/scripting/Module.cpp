@@ -20,6 +20,7 @@
 
 #include "Module.h"
 #include "Page.h"
+#include "FrameSet.h"
 
 #include <QPointer>
 #include <kapplication.h>
@@ -31,6 +32,7 @@
 #include <KWDocument.h>
 #include <KWView.h>
 #include <KWPage.h>
+#include <KWFrameSet.h>
 
 extern "C"
 {
@@ -91,7 +93,6 @@ QObject* Module::document()
 
 int Module::pageCount()
 {
-    //TODO is this always equal to doc()->pageManager()->lastPageNumber() ? I don't believe so :-/
     return doc()->pageManager()->pageCount();
 }
 
@@ -121,8 +122,19 @@ int Module::startPage()
 
 void Module::setStartPage(int pageNumber)
 {
-    //TODO this is evil since it changes page(int pageNumber) above... we need a more persistent way to deal with pages!
+     //TODO this is evil since it changes page(int pageNumber) above... we need a more persistent way to deal with pages!
      const_cast<KWPageManager*>( doc()->pageManager() )->setStartPage(pageNumber);
+}
+
+int Module::frameSetCount()
+{
+    return doc()->frameSetCount();
+}
+
+QObject* Module::frameSet(int frameSetNr)
+{
+    KWFrameSet* frameset = (frameSetNr>=0 && frameSetNr<doc()->frameSets().size()) ? doc()->frameSets().at(frameSetNr) : 0;
+    return new FrameSet(this, frameset);
 }
 
 #include "Module.moc"

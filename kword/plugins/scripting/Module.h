@@ -72,6 +72,14 @@ namespace Scripting {
             /** Set a new startpage for this document.  */
             void setStartPage(int pageNumber);
 
+            /** Return the amount of framesets this document holds. */
+            int frameSetCount();
+            /** Return a list of all the framesets this document holds. */
+            QObject* frameSet(int frameSetNr);
+
+            //void addFrameSet( KWFrameSet *f );
+            //void removeFrameSet( KWFrameSet *fs );
+
         private:
             /// \internal d-pointer class.
             class Private;

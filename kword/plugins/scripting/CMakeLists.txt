@@ -1,10 +1,13 @@
 include_directories( 
 	${CMAKE_SOURCE_DIR}/kword/part
+	${CMAKE_SOURCE_DIR}/kword/part/frame
 	${KOTEXT_INCLUDES} 
 	${KOFFICEUI_INCLUDES} 
 	${KROSS_INCLUDES} )
 
-set(krossmodulekword_PART_SRCS Module.cpp Page.cpp Part.cpp)
+add_subdirectory( scripts )
+
+set(krossmodulekword_PART_SRCS Module.cpp FrameSet.cpp TextDocument.cpp Page.cpp Part.cpp)
 kde4_automoc(${krossmodulekword_PART_SRCS})
 kde4_add_plugin(krossmodulekword ${krossmodulekword_PART_SRCS})
 target_link_libraries(krossmodulekword  ${KDE4_KDECORE_LIBS} ${KDE4_KROSSCORE_LIBS} kparts kwordprivate)

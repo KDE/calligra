@@ -1,0 +1,8 @@
+<KrossScripting>
+    <script
+            name="pytest"
+            text="Python Test Script"
+            comment="This is a simple python script to test things"
+            interpreter="python"
+            file="extensions/test.py" />
+</KrossScripting>
