@@ -170,7 +170,7 @@ void KivioView::setActivePage(KivioAbstractPage* page)
     }
 
     m_activePage = page;
-    m_canvas->shapeController()->setShapeControllerBase(m_activePage->layers().last());
+    m_canvas->shapeController()->setShapeControllerBase(m_activePage);
     shapeManager()->setShapes(m_activePage->shapes());
     m_canvas->updateSize();
     KoPageLayout layout = m_activePage->pageLayout();

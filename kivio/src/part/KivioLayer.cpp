@@ -25,7 +25,7 @@
 #include "KivioDocument.h"
 
 KivioLayer::KivioLayer(const QString& title, KivioAbstractPage* page)
-    : KoShapeControllerBase()
+    : KoShapeContainer()
 {
     setTitle(title);
     m_page = page;
@@ -33,8 +33,6 @@ KivioLayer::KivioLayer(const QString& title, KivioAbstractPage* page)
 
 KivioLayer::~KivioLayer()
 {
-    qDeleteAll(m_shapes);
-    m_shapes.clear();
 }
 
 void KivioLayer::setTitle(const QString& newTitle)
@@ -47,19 +45,28 @@ QString KivioLayer::title() const
     return m_title;
 }
 
-void KivioLayer::addShape(KoShape* shape)
+QRectF KivioLayer::boundingRect() const
 {
-    m_shapes.append(shape);
-    m_page->document()->addShapeToViews(m_page, shape);
+    KoPageLayout pageLayout = m_page->pageLayout();
+
+    return QRectF(0.0, 0.0, pageLayout.ptWidth, pageLayout.ptHeight);
 }
 
-void KivioLayer::removeShape(KoShape* shape)
+QPointF KivioLayer::position() const
 {
-    m_shapes.removeAll(shape);
-    m_page->document()->removeShapeFromViews(m_page, shape);
+    return QPointF(0.0, 0.0);
 }
 
-QList<KoShape*> KivioLayer::shapes() const
+QSizeF KivioLayer::size() const
 {
-    return m_shapes;
+    KoPageLayout pageLayout = m_page->pageLayout();
+
+    return QSizeF(pageLayout.ptWidth, pageLayout.ptHeight);
+}
+
+bool KivioLayer::hitTest(const QPointF& position) const
+{
+    Q_UNUSED(position);
+
+    return false;
 }

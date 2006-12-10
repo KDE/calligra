@@ -39,6 +39,8 @@ KivioAbstractPage::~KivioAbstractPage()
 {
   qDeleteAll(m_layerList);
   m_layerList.clear();
+  qDeleteAll(m_shapeList);
+  m_shapeList.clear();
 }
 
 void KivioAbstractPage::setTitle(const QString& newTitle)
@@ -60,13 +62,7 @@ QList<KivioLayer*> KivioAbstractPage::layers() const
 
 QList<KoShape*> KivioAbstractPage::shapes() const
 {
-    QList<KoShape*> shapes;
-
-    foreach(KivioLayer* layer, m_layerList) {
-        shapes += layer->shapes();
-    }
-
-    return shapes;
+    return m_shapeList;
 }
 
 void KivioAbstractPage::addLayer(KivioLayer* layer)
@@ -83,4 +79,24 @@ void KivioAbstractPage::removeLayer(KivioLayer* layer)
         return;
 
     m_layerList.removeAll(layer);
+}
+
+void KivioAbstractPage::addShape(KoShape* shape)
+{
+    m_shapeList.append(shape);
+
+    if(!shape->parent())
+        m_layerList.last()->addChild(shape);
+
+    document()->addShapeToViews(this, shape);
+}
+
+void KivioAbstractPage::removeShape(KoShape* shape)
+{
+    m_shapeList.removeAll(shape);
+
+    if(shape->parent())
+        shape->parent()->removeChild(shape);
+
+    document()->removeShapeFromViews(this, shape);
 }
