@@ -44,17 +44,17 @@
 
 <sect2>
 <title>Adding Pages</title>
-<para>To <action>add additional pages</action> to a document select <menuchoice><guimenu>Page</guimenu><guimenuitem>Insert Page</guimenuitem></menuchoice> or click with the &RMB; on the page tab and select <guimenuitem>Insert Page</guimenuitem> from the popup menu. The selector beneath the document view shows tabs for all the pages in the document that have not been hidden.</para>
+<para>To <action>add additional pages</action> to a document select <menuchoice><guimenu>Page</guimenu><guimenuitem>Insert Page</guimenuitem></menuchoice> or click with the &RMB; on the page tab and select <guimenuitem>Insert Page</guimenuitem> from the context menu. The selector beneath the document view shows tabs for all the pages in the document that have not been hidden.</para>
 </sect2>
 
 <sect2>
 <title>Removing Pages</title>
-<para>Unwanted pages can be removed by selecting <menuchoice><guimenu>Page</guimenu><guimenuitem>Remove Page</guimenuitem></menuchoice> or click with the &RMB; on the page tab and select <guimenuitem>Remove Page</guimenuitem> from the popup menu.</para>
+<para>Unwanted pages can be removed by selecting <menuchoice><guimenu>Page</guimenu><guimenuitem>Remove Page</guimenuitem></menuchoice> or click with the &RMB; on the page tab and select <guimenuitem>Remove Page</guimenuitem> from the context menu.</para>
 </sect2>
 
 <sect2>
 <title>Renaming Pages</title>
-<para>The names given to each page can be adjusted by double-clicking on the page name on the page selector or by clicking with the &RMB; on the page tab and select <guimenuitem>Rename Page...</guimenuitem> from the popup menu.A dialog box will appear allowing the name to be edited.</para>
+<para>The names given to each page can be adjusted by double-clicking on the page name on the page selector or by clicking with the &RMB; on the page tab and select <guimenuitem>Rename Page...</guimenuitem> from the context menu. A dialog box will appear allowing the name to be edited.</para>
 </sect2>
 
 <sect2>
@@ -124,7 +124,7 @@
 <sect2>
 <title>Adding Guides</title>
 <para>To add a guide move the mouse pointer over either the horizontal or vertical ruler, depending on the type of guide you require. Hold down the &LMB; and drag the mouse over the document and release the mouse button where you want to position the guide. As you drag the mouse the guide will move accordingly.
-Or use <menuchoice><guimenu>View</guimenu><guimenuitem>Add Guide Line...</guimenuitem></menuchoice> to open a dialog to select the <guilabel>Orientation</guilabel> and the <guilabel>Position</guilabel> of the guide</para>
+Or use <menuchoice><guimenu>View</guimenu><guimenuitem>Add Guide Line...</guimenuitem></menuchoice> to open a dialog to select the <guilabel>Orientation</guilabel> and the <guilabel>Position</guilabel> of the guide.</para>
 </sect2>
 
 <sect2>
