@@ -20,7 +20,7 @@
     </property>
     <layout class="QGridLayout" >
       <item rowspan="1" row="3" column="0" colspan="2" >
-        <widget class="Q3GroupBox" name="arrowGroup" >
+        <widget class="QGroupBox" name="arrowGroup" >
           <property name="sizePolicy" >
             <sizepolicy>
               <hsizetype>1</hsizetype>

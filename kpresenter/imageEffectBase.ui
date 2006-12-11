@@ -14,7 +14,7 @@
     </property>
     <layout class="QGridLayout" >
       <item row="0" column="1" >
-        <widget class="Q3GroupBox" name="gbPreview" >
+        <widget class="QGroupBox" name="gbPreview" >
           <property name="sizePolicy" >
             <sizepolicy>
               <hsizetype>3</hsizetype>
