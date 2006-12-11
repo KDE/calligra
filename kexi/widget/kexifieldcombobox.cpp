@@ -50,9 +50,9 @@ class KexiFieldComboBox::Private
 	public:
 		Private()
 //		 : schema(0)
-		 : table(true)
-		 , keyIcon( SmallIcon("key") )
+		 : keyIcon( SmallIcon("key") )
 		 , noIcon( KexiUtils::emptyIcon(KIcon::Small) )
+		 , table(true)
 		{
 		}
 		~Private()
@@ -65,7 +65,7 @@ class KexiFieldComboBox::Private
 		QString tableOrQueryName;
 		QString fieldOrExpression;
 		QMap<QString, QString> captions;
-		bool table;
+		bool table : 1;
 };
 
 //------------------------

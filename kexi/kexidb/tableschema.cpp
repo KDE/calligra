@@ -412,7 +412,6 @@ const QPtrVector<LookupFieldSchema>& TableSchema::lookupFieldsList()
 	d->lookupFieldsList.clear();
 	d->lookupFieldsList.resize( d->lookupFields.count() );
 	uint i = 0;
-	Field *f;
 	for (Field::ListIterator it(m_fields); it.current(); ++it) {
 		QMap<const Field*, LookupFieldSchema*>::ConstIterator itMap = d->lookupFields.find( it.current() );
 		if (itMap != d->lookupFields.constEnd()) {

@@ -69,13 +69,13 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 	m_toolbar->insertSeparator();
 
 	KToolBarRadioGroup *group = new KToolBarRadioGroup(m_toolbar);
-	m_toolbar->insertButton("text_left", TBLeft, true, i18n("Right Align"));
+	m_toolbar->insertButton("text_left", TBLeft, true, i18n("Left Align"));
 	m_toolbar->setToggle(TBLeft, true);
 	group->addButton(TBLeft);
-	m_toolbar->insertButton("text_center", TBCenter, true, i18n("Left Align"));
+	m_toolbar->insertButton("text_center", TBCenter, true, i18n("Centered"));
 	m_toolbar->setToggle(TBCenter, true);
 	group->addButton(TBCenter);
-	m_toolbar->insertButton("text_right", TBRight, true, i18n("Centered"));
+	m_toolbar->insertButton("text_right", TBRight, true, i18n("Right Align"));
 	m_toolbar->setToggle(TBRight, true);
 	group->addButton(TBRight);
 	m_toolbar->insertButton("text_block", TBJustify, true, i18n("Justified"));
