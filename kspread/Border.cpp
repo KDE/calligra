@@ -55,7 +55,6 @@
 #include <kwordwrap.h>
 
 // KOffice
-#include "KoRect.h"
 
 // KSpread
 #include "Cell.h"

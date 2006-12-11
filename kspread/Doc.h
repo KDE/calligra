@@ -856,7 +856,7 @@ private:
   /**
    * \ingroup Painting
    */
-  void paintRegion(QPainter& painter, const KoRect &viewRegion,
+  void paintRegion(QPainter& painter, const QRectF &viewRegion,
                    View* view, const QRect &paintRegion,
                    const Sheet* sheet);
 

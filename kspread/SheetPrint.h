@@ -448,20 +448,20 @@ private:
      * @param _page_range QRect defines a rectangle of cells which should be
      *                    painted to the device 'prn'.
      *
-     * @param view KoRect defines the sourrounding rectangle which is
+     * @param view QRectF defines the sourrounding rectangle which is
      *             the printing frame.
      *
      * @param _childOffset KoPoint used to calculate the correct position of
      *                     children, if there are repeated columns/rows.
      */
     void printPage( QPainter &_painter, const QRect& page_range,
-                    const KoRect& view, const KoPoint _childOffset );
+                    const QRectF& view, const KoPoint _childOffset );
 
     /**
      * Prints a rect of cells defined by printRect at the position topLeft.
      */
     void printRect( QPainter &painter, const QPointF& topLeft,
-                    const QRect& printRect, const KoRect& view,
+                    const QRect& printRect, const QRectF& view,
                     QRegion &clipRegion );
 
     /**

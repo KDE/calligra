@@ -86,7 +86,6 @@
 #include <KoStore.h>
 #include <KoXmlWriter.h>
 #include <KoDocumentChild.h>
-#include <KoRect.h>
 
 // KSpread
 #include "CellView.h"
@@ -3244,7 +3243,7 @@ void Canvas::resizeObject( ModifyType _modType, const KoPoint & point, bool keep
 
 //     if ( doc()->showGuideLines() && !m_disableSnapping )
 //     {
-//       KoRect rect( obj->getRealRect() );
+//       QRectF rect( obj->getRealRect() );
 //       KoPoint sp( rect.topLeft() );
 //       if ( right )
 //       {
@@ -3486,7 +3485,7 @@ void Canvas::repaintObject( EmbeddedObject *obj )
 
  /* if ( !obj->isSelected() )
   {
-    KoRect g = obj->geometry();
+    QRectF g = obj->geometry();
     g.moveBy( -xOffset(), -yOffset() );
     QRect geometry( doc()->zoomRectOld( g ) );
 

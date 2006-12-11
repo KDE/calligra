@@ -1665,11 +1665,11 @@ void Doc::paintCellRegions( QPainter& painter, const QRect &viewRect,
     Region::ConstIterator endOfList(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
     {
-        paintRegion(painter, unzoomRectOld( viewRect ), view,(*it)->rect(), (*it)->sheet());
+        paintRegion(painter, unzoomRectOldF( viewRect ), view,(*it)->rect(), (*it)->sheet());
     }
 }
 
-void Doc::paintRegion( QPainter &painter, const KoRect &viewRegion,
+void Doc::paintRegion( QPainter &painter, const QRectF &viewRegion,
                        View* view, const QRect &cellRegion, const Sheet* sheet )
 {
     // cellRegion has cell coordinates (col,row) while viewRegion has

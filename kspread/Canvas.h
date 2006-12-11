@@ -59,7 +59,6 @@ class QScrollBar;
 class QTimer;
 class QWheelEvent;
 
-class KoRect;
 class KoPoint;
 
 namespace KSpread

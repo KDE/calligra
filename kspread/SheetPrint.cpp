@@ -259,7 +259,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
     // Find out how many pages need printing
     // and which cells to print on which page.
     QLinkedList<QRect> page_list;  //contains the cols and rows of a page
-    QLinkedList<KoRect> page_frame_list;  //contains the coordinate range of a page
+    QLinkedList<QRectF> page_frame_list;  //contains the coordinate range of a page
     QLinkedList<KoPoint> page_frame_list_offset;  //contains the offset of the not repeated area
 
     QList<PrintNewPageEntry>::iterator itX;
@@ -274,12 +274,12 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
             //Append page when there is something to print
             if ( pageNeedsPrinting( page_range ) )
             {
-                KoRect view = KoRect( KoPoint( m_pSheet->dblColumnPos( page_range.left() ),
+                QRectF view = QRectF( QPointF( m_pSheet->dblColumnPos( page_range.left() ),
                                                m_pSheet->dblRowPos( page_range.top() ) ),
-                                      KoPoint( m_pSheet->dblColumnPos( page_range.right() ) +
-                                               m_pSheet->columnFormat( page_range.right() )->dblWidth(),
+                                      QSizeF( m_pSheet->dblColumnPos( page_range.right() ) +
+                                               m_pSheet->columnFormat( page_range.right() )->dblWidth()- m_pSheet->dblColumnPos( page_range.left() ),
                                                m_pSheet->dblRowPos( page_range.bottom() ) +
-                                               m_pSheet->rowFormat( page_range.bottom() )->dblHeight() ) );
+                                               m_pSheet->rowFormat( page_range.bottom() )->dblHeight()- m_pSheet->dblRowPos( page_range.top() ) ) );
                 page_list.append( page_range );
                 page_frame_list.append( view );
                 page_frame_list_offset.append( KoPoint( (*itX).offset(), (*itY).offset() ) );
@@ -333,7 +333,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
         // Print all pages in the list
         //
         QLinkedList<QRect>::Iterator it = page_list.begin();
-        QLinkedList<KoRect>::Iterator fit = page_frame_list.begin();
+        QLinkedList<QRectF>::Iterator fit = page_frame_list.begin();
         QLinkedList<KoPoint>::Iterator fito = page_frame_list_offset.begin();
 
         for( ; it != page_list.end(); ++it, ++fit, ++fito, ++pageNo )
@@ -372,7 +372,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
 }
 
 void SheetPrint::printPage( QPainter &_painter, const QRect& page_range,
-                                   const KoRect& view, const KoPoint _childOffset )
+                                   const QRectF& view, const KoPoint _childOffset )
 {
       kDebug(36001) << "Rect x=" << page_range.left() << " y=" << page_range.top() << ", r="
       << page_range.right() << " b="  << page_range.bottom() << "  offsetx: "<< _childOffset.x()
@@ -431,7 +431,7 @@ void SheetPrint::printPage( QPainter &_painter, const QRect& page_range,
 
 
 void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
-                            const QRect& printRect, const KoRect& view,
+                            const QRect& printRect, const QRectF& view,
                             QRegion& clipRegion )
 {
     // topLeft: starting coordinate (document coordinate system)
@@ -534,7 +534,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 //        kDebug(36001)<<tmp<<" offset "<<_childOffset.x()<<"/"<<_childOffset.y()<<endl;
 
           QRectF const bound = obj->geometry();
-          QRect zoomedBound = m_pDoc->zoomRectOld( KoRect(bound.left(), bound.top(),
+          QRect zoomedBound = m_pDoc->zoomRectOld( QRectF(bound.left(), bound.top(),
               bound.width(),
               bound.height() ) );
 #if 1
