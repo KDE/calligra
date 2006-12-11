@@ -1690,8 +1690,10 @@ void KWCanvas::updateRulerOffsets( int cx, int cy )
     // But we also need to offset to the current page, for the graduations
     QPoint pc = m_viewMode->pageCorner();
     //kdDebug() << "KWCanvas::updateRulerOffsets contentsX=" << cx << ", contentsY=" << cy << endl;
-    m_gui->getHorzRuler()->setOffset( cx - pc.x(), 0 );
-    m_gui->getVertRuler()->setOffset( 0, cy - pc.y() );
+    if (m_gui->getHorzRuler())
+        m_gui->getHorzRuler()->setOffset( cx - pc.x(), 0 );
+    if (m_gui->getVertRuler())
+        m_gui->getVertRuler()->setOffset( 0, cy - pc.y() );
 
 }
 
