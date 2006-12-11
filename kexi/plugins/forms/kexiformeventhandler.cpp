@@ -92,7 +92,6 @@ void KexiFormEventAction::activate()
 	if (!item)
 		return;
 	bool openingCancelled;
-	int supportedViewModes = part->supportedViewModes();
 	if (m_actionOption.isEmpty()) { // backward compatibility (good defaults)
 		if (part->info()->isExecuteSupported())
 			part->execute(item, parent());

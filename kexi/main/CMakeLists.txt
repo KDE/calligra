@@ -3,7 +3,7 @@
 add_subdirectory( startup )
 add_subdirectory( printing )
 
-include_directories( ${CMAKE_SOURCE_DIR}/lib/kofficeui ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/kofficecore ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/libs/kofficeui ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi/main ${CMAKE_SOURCE_DIR}/kexi/main/startup ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/migration ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/kofficecore ${KDE4_INCLUDES}  )
 
 
 ########### next target ###############

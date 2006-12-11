@@ -91,7 +91,7 @@ class KEXIFORMUTILS_EXPORT KexiFormEventAction : public KAction
 	public slots:
 		//! Activates the action. If the object supports executing (macro, script), 
 		//! it is executed; otherwise (table, query, form,...) it is opened in its data view.
-		void virtual activate();
+		virtual void activate();
 
 	private:
 		KexiMainWindow *m_mainWin;
