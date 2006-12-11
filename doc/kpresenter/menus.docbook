@@ -1166,13 +1166,12 @@ return to the normal selection cursor.</para>
 </menuchoice>
 </term>
 <listitem>
-<para>Changes the cursor to a double headed curved arrow. Drag with
-the cursor to rotate the object on the slide. When you are
-happy with the position of the object, click to stop
+<para>Changes the cursor to a double headed curved arrow. Click with the &LMB; onto an object
+and keep the button pressed.Drag with the cursor to rotate the object on the slide around its center. When you are
+happy with the position of the object, release the mousebutton to stop
 rotating.</para>
 
-<para>If you change your mind and wish to cancel the rotation, you can
-press the &Esc; key to cancel, or use
+<para>If you change your mind and wish to cancel the rotation, use
 <menuchoice><guimenu>Edit</guimenu><guimenuitem>Undo</guimenuitem>
 </menuchoice> to later undo it.</para>
 </listitem>
@@ -1282,8 +1281,8 @@ vertically or horizontally.</para>
 </term>
 <listitem>
 <para>If you are drawing, you might want to make something out of
-several rectangles or circles. Arrange the individual parts where you
-want them, select one, then hold down the <keycap>Shift</keycap> key
+several objects. Arrange the individual parts where you
+want them, select one, then hold down the &Ctrl; key
 as you click in the others you want to group together. Click
 <guimenuitem>Group Objects</guimenuitem> and from then on they act as
 if they are just one thing. It glues things together.</para>
@@ -1319,12 +1318,13 @@ parts.</para>
 <listitem>
 <para>This puts a colored copy of either text or a drawn object behind
 it. You can make nice <quote>dropped shadows</quote> for logos with
-this tool. To work with text, ensure that you have the text
-box selected (you will see the six small black boxes around the
+this tool. To enable this item, ensure that you have object(s) 
+selected (you will see the six small black boxes around the
 outline.) You choose the color, select which way the shadow is going to
 fall and select a distance. For text it looks nice if you set the
-distance to two or three. Click <guibutton>Apply</guibutton> to see
-the result.</para>
+distance to two or three. Click <guibutton>Apply</guibutton> 
+to see the result of your settings for all selected objects on the slide 
+without leaving the dialog.</para>
 </listitem>
 </varlistentry>
 
@@ -1380,8 +1380,8 @@ slides. Your options are <guilabel>Color/Gradient</guilabel>, (which lets you
 set either a plain color or one of many gradients)
 or <guilabel>Picture</guilabel>, which gives a dialog box to find the picture 
 you want. Set the <guilabel>View mode:</guilabel> for this picture
-to <guimenuitem>Scaled</guimenuitem>, <guimenuitem>Centered</guimenuitem>, 
-or <guimenuitem>Tiled</guimenuitem>.</para>
+to <guilabel>Scaled</guilabel>, <guilabel>Centered</guilabel>, 
+or <guilabel>Tiled</guilabel>.</para>
 
 <para> If you want a plain color, click in the box to select
 it. Gradients only work when you have chosen two colors. The picture

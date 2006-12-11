@@ -146,13 +146,13 @@ dialog</phrase></textobject>
 </screenshot>
 
 <para>
-Click <guibutton>OK</guibutton> to accept the defaults, which will add a
+Select <guilabel>Use different template</guilabel> and click <guibutton>OK</guibutton> to add a
 new page after page 1.
 </para>
 
 <para>
 The <guilabel>Create Document</guilabel> dialog comes up so that we can decide
-what the new slide should look like. This time, double click on the
+what the new slide should look like. This time, select <guilabel>Screen</guilabel> on the left and double click on the
 <guilabel>One Column</guilabel> template (highlighted in blue.)
 </para>
 
@@ -261,7 +261,9 @@ click <guibutton>OK</guibutton>.
 </screenshot>
 
 <para>
-You can now draw the logo where you want it to be with the mouse. The logo graphic is then visible where you put it. There are selection handles (little black squares) visible around the border of the graphic.
+Click with the &LMB; where you want to place the loge in it's original size or 
+draw a rectangle with the left mouse cursor to specify the position and size for the logo.
+There are selection handles (little squares) visible around the border of the graphic.
 </para>
 
 <screenshot>
@@ -427,15 +429,14 @@ Now the title has a shadow!
 
 <para>
 Let's finish by changing the color of the title text from black to
-blue. To do so, select the title text by double-clicking the text box.
+blue. To do so, select the title text by double-clicking the text box and select the text.
 </para>
 
 <para>
-Change the color to blue by clicking on the <guiicon>dark blue A</guiicon>
-icon on the right side of the editing window (this icon has
-a Color... tooltip) or choose
-the <guimenu>Text</guimenu> menu and then click on
-<guimenuitem>Color...</guimenuitem>.</para>
+Open the <guilabel>Select Color</guilabel> dialog by clicking on the <guiicon>dark blue A</guiicon>
+icon on the right side of the <guilabel>Text</guilabel> toolbar (this icon has
+a Color... tooltip) or choose the <guimenu>Text</guimenu> menu and then click on
+<guimenuitem>Color...</guimenuitem> and change the color to blue.</para>
 
 <screenshot>
 <screeninfo>The color palette</screeninfo>
@@ -446,7 +447,7 @@ the <guimenu>Text</guimenu> menu and then click on
 </screenshot>
 
 <para>
-Click <guilabel>OK</guilabel> in the Select Color dialog. Changing the color of
+Click <guilabel>OK</guilabel> in the <guilabel>Select Color</guilabel> dialog. Changing the color of
 the selected text to blue changes its appearance. The exact color that
 highlighted text turns depends on your system color scheme.
 </para>
@@ -474,7 +475,7 @@ Now click away from the text to de-select it.
 <para>
 Now that there are two slides, why not try a slide show! To start the
 slide show, press the <guiicon>play</guiicon> button (the blue double arrow) on
-the top toolbar. The first slide should appear on your screen.
+the <guilabel>Slide Show</guilabel> toolbar. The first slide should appear on your screen.
 </para>
 
 <screenshot>
