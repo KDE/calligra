@@ -4474,32 +4474,16 @@ void View::slotReplace( const QString &newText, int, int, int )
 
 void View::conditional()
 {
-  QRect rect( d->selection->selection() );
-
-  if ( util_isRowOrColumnSelected(rect))
-  {
-    KMessageBox::error( this, i18n("Area is too large.") );
-  }
-  else
-  {
+    QRect rect( d->selection->lastRange() );
     ConditionalDialog dlg( this, "ConditionalDialog", rect);
     dlg.exec();
-  }
 }
 
 void View::validity()
 {
-  QRect rect( d->selection->selection() );
-
-  if (d->selection->isColumnOrRowSelected())
-  {
-    KMessageBox::error( this, i18n("Area is too large."));
-  }
-  else
-  {
+    QRect rect( d->selection->lastRange() );
     DlgValidity dlg( this,"validity",rect);
     dlg.exec();
-  }
 }
 
 
