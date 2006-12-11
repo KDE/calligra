@@ -141,8 +141,8 @@ KexiScrollView::refreshContentsSize()
 		return;
 	if (m_preview) {
 		resizeContents(m_widget->width(), m_widget->height());
-		kdDebug() << "KexiScrollView::refreshContentsSize(): ( " 
-			<< m_widget->width() <<", "<< m_widget->height() << endl;
+//		kdDebug() << "KexiScrollView::refreshContentsSize(): ( " 
+	//		<< m_widget->width() <<", "<< m_widget->height() << endl;
 		setVScrollBarMode(m_vsmode);
 		setHScrollBarMode(m_hsmode);
 		m_smodeSet = false;
@@ -181,8 +181,8 @@ KexiScrollView::refreshContentsSize()
 
 			resizeContents(w, h);
 		}
-		kdDebug() << "KexiScrollView::refreshContentsSize(): ( " 
-			<< contentsWidth() <<", "<< contentsHeight() << endl;
+//		kdDebug() << "KexiScrollView::refreshContentsSize(): ( " 
+	//		<< contentsWidth() <<", "<< contentsHeight() << endl;
 		updateScrollBars();
 		setVScrollBarMode(Auto);
 		setHScrollBarMode(Auto);
@@ -348,7 +348,7 @@ KexiScrollView::drawContents( QPainter * p, int clipx, int clipy, int clipw, int
 		p->setPen(palette().active().foreground());
 		p->drawLine(wx+m_widget->width(), wy, wx+m_widget->width(), wy+m_widget->height());
 		p->drawLine(wx, wy+m_widget->height(), wx+m_widget->width(), wy+m_widget->height());
-kdDebug() << "KexiScrollView::drawContents() " << wy+m_widget->height() << endl;
+//kdDebug() << "KexiScrollView::drawContents() " << wy+m_widget->height() << endl;
 
 		if (!KexiScrollView_data) {
 			KexiScrollView_data_deleter.setObject( KexiScrollView_data, new KexiScrollViewData() );
@@ -388,7 +388,7 @@ void
 KexiScrollView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h )
 {
 /*todo*/
-	kdDebug(44021)<<"KexiScrollView::setHBarGeometry"<<endl;
+//	kdDebug(44021)<<"KexiScrollView::setHBarGeometry"<<endl;
 	if (m_scrollViewNavPanel && m_scrollViewNavPanel->isVisible()) {
 		m_scrollViewNavPanel->setHBarGeometry( hbar, x, y, w, h );
 	}

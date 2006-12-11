@@ -863,6 +863,10 @@ CSV Export TODO:
 -- add option for exporting a) both visible values and indices b) indices only c) visible values only
    -for now c) is supported
 
+XML Export TODO:
+- consider export to at least these three formats: http://csv2xml.sourceforge.net/xmlmodes.html
+  (templates/XSLT could be also supported)
+
 General TODO:
 - handle KApplication::shutDown()
 

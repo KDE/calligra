@@ -26,6 +26,8 @@
 #include <ktabwidget.h>
 #include <kiconloader.h>
 #include <kcombobox.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
 #include <kexiviewbase.h>
 #include <keximainwindow.h>
@@ -153,9 +155,13 @@ void KexiFormPart::initPartActions()
 
 void KexiFormPart::initInstanceActions()
 {
-#ifdef KEXI_SHOW_DEBUG_ACTIONS
-	new KAction(i18n("Show Form UI Code"), "compfile", CTRL+Key_U, KFormDesigner::FormManager::self(), SLOT(showFormUICode()),
-		actionCollectionForMode(Kexi::DesignViewMode), "show_form_ui");
+#ifdef KEXI_DEBUG_GUI
+	kapp->config()->setGroup("General");
+	if (kapp->config()->readBoolEntry("showInternalDebugger", false)) {
+		new KAction(i18n("Show Form UI Code"), "compfile", 
+			CTRL+Key_U, KFormDesigner::FormManager::self(), SLOT(showFormUICode()),
+			actionCollectionForMode(Kexi::DesignViewMode), "show_form_ui");
+	}
 #endif
 
 	KActionCollection *col = actionCollectionForMode(Kexi::DesignViewMode);
@@ -401,10 +407,16 @@ void KexiFormPart::slotAssignAction()
 		|| !(dbform = dynamic_cast<KexiDBForm*>(KFormDesigner::FormManager::self()->activeForm()->formWidget())))
 		return;
 
-	KoProperty::Property &onClickActionProp = KFormDesigner::FormManager::self()->propertySet()->property("onClickAction");
+	KFormDesigner::WidgetPropertySet * propSet = KFormDesigner::FormManager::self()->propertySet();
+
+	KoProperty::Property &onClickActionProp = propSet->property("onClickAction");
 	if (onClickActionProp.isNull())
 		return;
-	QString onClickActionValue( onClickActionProp.value().toString() );
+	KoProperty::Property &onClickActionOptionProp = propSet->property("onClickActionOption");
+	KexiFormEventAction::ActionData data;
+	data.string = onClickActionProp.value().toString();
+	if (!onClickActionOptionProp.isNull())
+		data.option = onClickActionOptionProp.value().toString();
 
 	KexiFormScrollView *scrollViewWidget = dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
 	if (!scrollViewWidget)
@@ -414,13 +426,14 @@ void KexiFormPart::slotAssignAction()
 		return;
 
 	KexiMainWindow * mainWin = formViewWidget->parentDialog()->mainWin();
-	KexiActionSelectionDialog dlg(mainWin, dbform, onClickActionValue,
-		KFormDesigner::FormManager::self()->propertySet()->property("name").value().toCString());
+	KexiActionSelectionDialog dlg(mainWin, dbform, data, 
+		propSet->property("name").value().toCString());
 
 	if(dlg.exec() == QDialog::Accepted) {
-		onClickActionValue = dlg.currentActionName();
+		data = dlg.currentAction();
 		//update property value
-		(*KFormDesigner::FormManager::self()->propertySet())["onClickAction"].setValue(onClickActionValue);
+		propSet->property("onClickAction").setValue(data.string);
+		propSet->property("onClickActionOption").setValue(data.option);
 	}
 }
 

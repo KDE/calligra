@@ -473,7 +473,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		QTimer m_deleteWidgetLater_timer;
 		QPtrList<QWidget> m_deleteWidgetLater_list;
 
-#ifdef KEXI_SHOW_DEBUG_ACTIONS
+#ifdef KEXI_DEBUG_GUI
 		KDialogBase *m_uiCodeDialog;
 		KTextEdit *m_currentUICodeDialogEditor;
 		KTextEdit *m_originalUICodeDialogEditor;

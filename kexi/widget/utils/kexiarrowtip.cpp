@@ -28,6 +28,7 @@
 #include <qfontmetrics.h>
 #include <qtimer.h>
 
+#include <kexiutils/utils.h>
 
 KexiArrowTip::KexiArrowTip(const QString& text, QWidget* parent)
  : KexiToolTip(text, parent)

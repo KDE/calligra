@@ -95,16 +95,6 @@ Notes:
 - you can assign KUser().loginName() for username if you want to get current 
   login.
 
-* KEXI_SHOW_DEBUG_ACTIONS
-Type: defined/undefined
-Default: undefined
-Description: If defined, additional toolbar "Show Form UI Code" action will 
-be available form form's design mode. This is useful for debugging: after 
-executing the action, a dialog with current (after changes) and original form's 
-GUI XML code will be presented in a tabbed dialog, so you can compare what changed 
-and look for possible problems. The "current" XML code will be saved when "save" 
-action is executed.
-
 * KEXI_USE_GRADIENT_WIDGET
 Type: defined/undefined
 Default: undefined
@@ -136,11 +126,18 @@ with some minor vendor-specific tweaks. Used for OOPL version.
 
 * KEXI_DEBUG_GUI
 Type: defined/undefined
-Default: defined (but should be undefined for releases)
-Description: If defined, showKexiDBDebugger=true (in [General] group) 
+Default: defined (but should be undefined for final releases)
+Description: If defined, showInternalDebugger=true (in [General] group) 
 can be specified to display KexiDB Debugger. 
 In the future the window will be probably used for debugging other features
 like scripts or macros. This option is useful for Kexi Developers.
+
+Also shows additional "Show Form UI Code" action in form's design mode. 
+This is useful for debugging: after executing the action, 
+a dialog with current (after changes) and original form's 
+GUI XML code will be presented in a tabbed dialog, so you can compare what changed 
+and look for possible problems. The "current" XML code will be saved when "save" 
+action is executed. TODO: it will be merged with Internal Debuger window.
 
 * KEXI_DB_COMBOBOX_WIDGET
 Type: defined/undefined

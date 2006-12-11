@@ -31,21 +31,31 @@ namespace KexiPart
 	class Info;
 }
 
-//! @internal
-class KexiBrowserItem : public KListViewItem
+//! @short List view item for the navigator widget (KexiBrowser)
+//! Used for creating group items as well as object items 
+class KEXIEXTWIDGETS_EXPORT KexiBrowserItem : public KListViewItem
 {
 	public:
+		//! Creates group item for part \a i
 		KexiBrowserItem(KListView *parent, KexiPart::Info *i);
+
+		//! Creates item for object \a item defined by part \a i for \a parent
 		KexiBrowserItem(KListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item);
+
+		//! Creates item for object \a item defined by part \a i, without parent 
+		//! (used in a case when KexiBrowser::itemsMimeType() is not empty)
+		KexiBrowserItem(KListView *parent, KexiPart::Info *i, KexiPart::Item *item);
+
+		virtual ~KexiBrowserItem();
 
 		void clearChildren();
 
+		//! \return part info; should not be null.
 		KexiPart::Info *info() const { return m_info; }
 
 		//! \return part item. Can be null if the browser item is a "folder", i.e. a parent node.
 		KexiPart::Item* item() const { return m_item; }
 
-		void updateItemName();
 	protected:
 		void initItem();
 		virtual QString key( int column, bool ascending ) const;

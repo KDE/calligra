@@ -113,7 +113,7 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 
 
 		/**
-		 * @returns a list of the available KexiParts
+		 * @returns a list of the available KexiParts in well-defined order
 		 */
 		PartInfoList *partInfoList() { return &m_partlist; }
 

@@ -107,7 +107,7 @@ FormManager* FormManager::_self = 0L;
 
 FormManager::FormManager(QObject *parent, int options, const char *name)
    : QObject(parent, name)
-#ifdef KEXI_SHOW_DEBUG_ACTIONS
+#ifdef KEXI_DEBUG_GUI
    , m_uiCodeDialog(0)
    , m_options(options)
 #endif
@@ -153,7 +153,7 @@ FormManager::~FormManager()
 	m_managerDeleter.setObject(_self, 0, false); //safe
 	delete m_popup;
 	delete m_connection;
-#ifdef KEXI_SHOW_DEBUG_ACTIONS
+#ifdef KEXI_DEBUG_GUI
 	delete m_uiCodeDialog;
 #endif
 //	delete m_propFactory;
@@ -929,7 +929,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	}
 
 	//int sigid=0;
-#ifdef KEXI_SHOW_DEBUG_ACTIONS
+#ifdef KEXI_DEBUG_GUI
 	if(!multiple && !(m_options & HideEventsInPopupMenu))
 	{
 		if (separatorNeeded)
@@ -1416,7 +1416,7 @@ FormManager::deleteWidgetLaterTimeout()
 void
 FormManager::showFormUICode()
 {
-#ifdef KEXI_SHOW_DEBUG_ACTIONS
+#ifdef KEXI_DEBUG_GUI
 	if(!activeForm())
 		return;
 

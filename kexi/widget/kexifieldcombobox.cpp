@@ -51,6 +51,8 @@ class KexiFieldComboBox::Private
 		Private()
 //		 : schema(0)
 		 : table(true)
+		 , keyIcon( SmallIcon("key") )
+		 , noIcon( KexiUtils::emptyIcon(KIcon::Small) )
 		{
 		}
 		~Private()
@@ -72,12 +74,6 @@ KexiFieldComboBox::KexiFieldComboBox(QWidget *parent, const char *name)
  : KComboBox(true/*rw*/, parent, name)
  , d(new Private())
 {
-	d->keyIcon = SmallIcon("key");
-	d->noIcon = QPixmap(d->keyIcon.size());
-	QBitmap bmp(d->noIcon.size());
-	bmp.fill(Qt::color0);
-	d->noIcon.setMask(bmp);
-
 	setInsertionPolicy(NoInsertion);
 	setCompletionMode(KGlobalSettings::CompletionPopupAuto);
 	setSizeLimit( 16 );

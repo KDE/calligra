@@ -46,6 +46,13 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 {
 	Q_OBJECT
 	public:
+		//! Used by printActionForItem()
+		enum PrintActionType {
+			PrintItem,
+			PreviewItem,
+			PageSetupForItem
+		};
+
 		KexiMainWindow();
 		virtual ~KexiMainWindow();
 
@@ -141,6 +148,22 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 This can be done in the Project Navigator or so. 
 		 If a window for the object is opened (in any mode), it should be raised. */
 		virtual void highlightObject(const QCString& mime, const QCString& name) = 0;
+
+		//! Shows "print" dialog for \a item.
+		//! \return true on success.
+		virtual tristate printItem(KexiPart::Item* item) = 0;
+
+		//! Shows "print preview" dialog. 
+		//! \return true on success.
+		virtual tristate printPreviewForItem(KexiPart::Item* item) = 0;
+
+		//! Shows "page setup" dialog for \a item.
+		//! \return true on success and cancelled when the action was cancelled.
+		virtual tristate showPageSetupForItem(KexiPart::Item* item) = 0;
+
+		/*! Executes custom action for the main window, usually provided by a plugin. 
+		 Also used by KexiFormEventAction. */
+		virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName) = 0;
 
 	protected slots:
 		virtual void slotObjectRenamed(const KexiPart::Item &item, const QCString& oldName) = 0;

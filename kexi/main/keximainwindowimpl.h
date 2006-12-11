@@ -39,13 +39,6 @@ namespace KexiPart {
 	class Part;
 }
 
-//! @internal
-enum PrintActionType {
-	PrintItem,
-	PreviewItem,
-	PageSetupForItem
-};
-
 /**
  * @short Kexi's main window implementation
  */
@@ -136,6 +129,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
 		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
 
+//! @todo move part of this to KexiProject, because currently KexiProject::openObject() allows multiple opens!
 		/*! Opens object pointed by \a item in a view \a viewMode.
 		 \a staticObjectArgs can be passed for static object 
 		 (only works when part for this item is of type KexiPart::StaticPart).
@@ -191,6 +185,22 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		 \return true on success.
 		 If closing was cancelled by user, cancelled is returned. */
 		tristate closeProject();
+
+		//! Shows "print" dialog for \a item.
+		//! \return true on success.
+		virtual tristate printItem(KexiPart::Item* item);
+
+		//! Shows "print preview" dialog. 
+		//! \return true on success.
+		virtual tristate printPreviewForItem(KexiPart::Item* item);
+
+		//! Shows "page setup" dialog for \a item.
+		//! \return true on success and cancelled when the action was cancelled.
+		virtual tristate showPageSetupForItem(KexiPart::Item* item);
+
+		/*! Executes custom action for the main window, usually provided by a plugin. 
+		 Also used by KexiFormEventAction. */
+		virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName);
 
 	signals:
 		//! Emitted after opening a project, even after slotAutoOpenObjectsLater().
@@ -453,11 +463,14 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		tristate executeItem(KexiPart::Item* item);
 
 		//! Shows "exports as data table" dialog for \a item.
-		void exportItemAsDataTable(KexiPart::Item* item);
+		tristate exportItemAsDataTable(KexiPart::Item* item);
+
+		//! Shows "copy special as data table" dialog for \a item.
+		tristate copyItemToClipboardAsDataTable(KexiPart::Item* item);
 
 		//! Shows "print" dialog for \a item.
 		//! \return true on success.
-		bool printItem(KexiPart::Item* item, const QString& titleText = QString::null);
+		bool printItem(KexiPart::Item* item, const QString& titleText);
 
 		//! Shows "print" dialog for \a item and \a settings.
 		//! \return true on success.
@@ -468,24 +481,20 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		 The preview dialog is cached, so \a reload == true is sometimes needed 
 		 if data or print settings have changed in the meantime.
 		 \return true on success. */
-		bool printPreviewForItem(KexiPart::Item* item, const QString& titleText = QString::null, 
-			bool reload = false);
+		bool printPreviewForItem(KexiPart::Item* item, const QString& titleText, 
+			bool reload);
 
-		/*! Shows "print preview" dialog for \a item and \a settings. 
-		 \return true on success. */
+		//! Shows "print preview" dialog. 
+		//! \return true on success.
 		bool printPreviewForItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, 
 			const QString& titleText = QString::null, bool reload = false);
 
-		//! Shows "page setup" dialog for \a item.
-		//! \return true on success and cancelled when the action was cancelled.
-		tristate pageSetupForItem(KexiPart::Item* item);
-
-		//! Helper for printItem() and printPreviewForItem()
-		//! \return true on success and cancelled when the action was cancelled.
+		/*! Implemented for KexiMainWindow. Helper for printItem() and printPreviewForItem().
+		 Also used by KexiFormEventAction.
+		 \return true on success and cancelled when the action was cancelled. */
 		tristate printActionForItem(KexiPart::Item* item, PrintActionType action);
 
 	private:
-
 		class MessageHandler;
 		class Private;
 		Private *d;

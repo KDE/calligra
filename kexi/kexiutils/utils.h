@@ -165,6 +165,9 @@ namespace KexiUtils
 	 with accessibility settings. */
 	KEXIUTILS_EXPORT QIconSet colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette);
 
+	/*! \return empty (fully transparent) pixmap that can be used as a place for icon of size \a iconGroup */
+	KEXIUTILS_EXPORT QPixmap emptyIcon(KIcon::Group iconGroup);
+
 	/*! Serializes \a map to \a array.
 	 KexiUtils::deserializeMap() can be used to deserialize this array back to map. */
 	KEXIUTILS_EXPORT void serializeMap(const QMap<QString,QString>& map, const QByteArray& array);

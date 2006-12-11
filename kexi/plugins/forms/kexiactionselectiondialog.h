@@ -21,37 +21,44 @@
 #define KEXIACTIONSELECTIONDIALOG_H
 
 #include <kdialogbase.h>
+#include "kexiformeventhandler.h"
 
 class KexiMainWindow;
 class KListView;
+namespace KexiPart {
+	class Item;
+}
 
+//! @short A dialog for selecting an action to be executed for a form's command button
+/*! Available actions are:
+ - application's global actions like "edit->copy" (KAction-based)
+ - opening/printing/executing of selected object (table/query/form/script/macrto, etc.)
+*/
 class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialogBase
 {
 	Q_OBJECT
-
 	public:
 		KexiActionSelectionDialog(KexiMainWindow* mainWin, QWidget *parent, 
-			const QString& currentActionName, const QCString& actionWidgetName);
+			const KexiFormEventAction::ActionData& action, const QCString& actionWidgetName);
 		~KexiActionSelectionDialog();
 
-		/*! \return selected action name or empty string 
-		 if dialog has been rejected or "<no action>" has
-		 been selected. */
-		QString currentActionName() const;
+		/*! \return selected action data or empty action if dialog has been rejected 
+		 or "No action" has been selected. */
+		KexiFormEventAction::ActionData currentAction() const;
 
-		/// \return the \a KexiMainWindow instance.
-		KexiMainWindow* mainWin();
-	
+		//! \return the \a KexiMainWindow instance.
+		KexiMainWindow* mainWin() const;
 
 	protected slots:
-		void slotActionTypeSelected(int);
-		void slotOk();
-		void closeDialog();
+		void slotActionCategorySelected(QListViewItem* item);
+		void slotKActionItemExecuted(QListViewItem*);
+		void slotKActionItemSelected(QListViewItem*);
+		void slotActionToExecuteItemExecuted(QListViewItem* item);
+		void slotActionToExecuteItemSelected(QListViewItem*);
+		void slotItemForOpeningOrExecutingSelected(KexiPart::Item* item);
 
 	protected:
-		void showKActionListView();
-		void showMacroListView();
-		void showScriptListView();
+		void updateOKButtonStatus();
 
 		class KexiActionSelectionDialogPrivate;
 		KexiActionSelectionDialogPrivate* d;
