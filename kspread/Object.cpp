@@ -84,7 +84,7 @@ void EmbeddedObject::moveBy( double _dx, double _dy )
   m_geometry.moveTopLeft( m_geometry.topLeft() + QPointF( _dx, _dy ) );
 }
 
-void EmbeddedObject::resizeBy( const KoSize & _size )
+void EmbeddedObject::resizeBy( const QSizeF & _size )
 {
   resizeBy( _size.width(), _size.height() );
 }

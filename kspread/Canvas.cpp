@@ -492,7 +492,7 @@ void Canvas::validateSelection()
             painter.end();
             d->validationInfo->setText( resultText );
 
-            KoRect unzoomedMarker( xpos - xOffset()+u,
+            QRectF unzoomedMarker( xpos - xOffset()+u,
                                    ypos - yOffset()+v,
                                    len,
                                    hei );
@@ -874,7 +874,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( ( obj = getObject( p, sheet ) ) && obj->isSelected() )
     {
       QRectF const bound = obj->geometry();
-      QRect zoomedBound = doc()->zoomRectOld( KoRect( bound.left(), bound.top(),
+      QRect zoomedBound = doc()->zoomRectOld( QRectF( bound.left(), bound.top(),
                                                       bound.width(), bound.height() ) );
       zoomedBound.translate( (int)(-xOffset() * doc()->zoomedResolutionX() ), (int)(-yOffset() * doc()->zoomedResolutionY() ));
       setCursor( obj->getCursor( p, d->modType, zoomedBound ) );
@@ -2974,7 +2974,7 @@ KSpread::EmbeddedObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
     if ( object->sheet() == _sheet )
     {
         QRectF const bound = ( object )->geometry();
-        QRect zoomedBound = doc()->zoomRectOld( KoRect(bound.left(), bound.top(),
+        QRect zoomedBound = doc()->zoomRectOld( QRectF(bound.left(), bound.top(),
                                 bound.width(),
                                 bound.height() ) );
         zoomedBound.translate( (int)( -xOffset() * doc()->zoomedResolutionX() ), (int)( -yOffset() * doc()->zoomedResolutionY() ) );
@@ -3445,7 +3445,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
         tmpFont.setPointSizeF( 0.01 * d->view->doc()->zoomInPercent() * tmpFont.pointSizeF() );
         d->cellEditor->setFont( tmpFont );
 
-        KoRect rect( xpos, ypos, w, h ); //needed to circumvent rounding issue with height/width
+        QRectF rect( xpos, ypos, w, h ); //needed to circumvent rounding issue with height/width
 
 
         QRect zoomedRect=d->view->doc()->zoomRectOld( rect );

@@ -30,7 +30,6 @@
 #include <KoPen.h>
 #include <KoPictureCollection.h>
 #include <KoRect.h>
-#include <KoSize.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlNS.h>
@@ -122,7 +121,7 @@ class EmbeddedObject
     void setGeometry( const QRectF &rect );
     virtual void moveBy( const QPointF &_point );
     virtual void moveBy( double _dx, double _dy );
-    virtual void resizeBy( const KoSize & _size );
+    virtual void resizeBy( const QSizeF & _size );
     virtual void resizeBy( double _dx, double _dy );
 
     Sheet* sheet() const { return m_sheet; }
