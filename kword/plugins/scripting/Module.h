@@ -46,11 +46,14 @@ namespace Scripting {
 
         public Q_SLOTS:
 
+            /***** Adaptor *****/
+
             /** Return the \a KoApplicationAdaptor object. */
             QObject* application();
-
             /** Return the \a KoDocumentAdaptor object. */
             QObject* document();
+
+            /***** Page *****/
 
             /** Return total number of pages the document has. */
             int pageCount();
@@ -72,6 +75,8 @@ namespace Scripting {
             /** Set a new startpage for this document.  */
             void setStartPage(int pageNumber);
 
+            /***** FrameSet *****/
+
             /** Return the amount of framesets this document holds. */
             int frameSetCount();
             /** Return a list of all the framesets this document holds. */
@@ -79,6 +84,16 @@ namespace Scripting {
 
             //void addFrameSet( KWFrameSet *f );
             //void removeFrameSet( KWFrameSet *fs );
+
+            /***** Layout *****/
+
+            /** Return the standard page layout. */
+            QObject* standardPageLayout();
+
+            /** Return the default page layout. */
+            QObject* defaultPageLayout();
+            /** Set the default page layout. */
+            void setDefaultPageLayout(QObject* pagelayout);
 
         private:
             /// \internal d-pointer class.

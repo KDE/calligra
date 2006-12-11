@@ -11,6 +11,7 @@ doc = fs.textDocument()
 doc.setHtml(
     (
         "<h1><font color=\"blue\">Python Test Script</font></h1>"
+        "<p>This is a <a href=\"test\">link</a>.</p>"
         "<ul>"
         "<li>Time=<b>%s</b></li>"
         "<li>pageCount=<b>%s</b></li>"
@@ -22,6 +23,7 @@ doc.setHtml(
         "<li>EMail=<b>%s</b></li>"
         "<li>Keywords=<b>%s</b></li>"
         "</ul>"
+        "<pre>Some text in a pre-tag</pre>"
     ) % (
         time.strftime('%H:%M.%S'),
         KWord.pageCount(),

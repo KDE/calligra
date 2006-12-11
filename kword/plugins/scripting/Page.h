@@ -21,9 +21,7 @@
 #define SCRIPTING_PAGE_H
 
 #include <QObject>
-#include <koffice_export.h>
-
-class KWPage;
+#include <KWPage.h>
 
 namespace Scripting {
 
@@ -34,53 +32,65 @@ namespace Scripting {
     {
             Q_OBJECT
         public:
-            explicit Page( QObject* parent, KWPage* page );
-            ~Page();
+            Page( QObject* parent, KWPage* page )
+                : QObject( parent ), m_page( page ) {}
+            virtual ~Page() {}
 
         public Q_SLOTS:
 
             /** Return the number of this page as it will be shown to the user. */
-            int pageNumber() const;
+            int pageNumber() const { return m_page->pageNumber(); }
 
             /** Return the pageside of this page. The string could be one of the following;
                 \li "Left" for left page used for even-numbered pages.
                 \li "Right" for right page used for odd numbered pages.
                 \li "Spread" for page spread which is one page that represents 2 pagenumbers.
             */
-            QString pageSide() const;
+            QString pageSide() const {
+                switch( m_page->pageSide() ) {
+                    case KWPage::Left: return "Left";
+                    case KWPage::Right: return "Right";
+                    case KWPage::PageSpread: return "Spread";
+                }
+                return QString();
+            }
             /** Set the pageside of this page. See the pageSide() method above for a
             list of valid arguments. */
-            void setPageSide(const QString& ps);
+            void setPageSide(const QString& ps) {
+                if(ps == "Left") m_page->setPageSide(KWPage::Left);
+                else if(ps == "Right") m_page->setPageSide(KWPage::Right);
+                else if(ps == "Spread") m_page->setPageSide(KWPage::PageSpread);
+            }
 
             /** Return the width of this page in pt. */
-            double width() const;
+            double width() const { return m_page->width(); }
             /** Set the width of the page in pt. */
-            void setWidth(double x);
+            void setWidth(double x) { m_page->setWidth(x); }
 
             /** Return the height of this page in pt. */
-            double height() const;
+            double height() const { return m_page->height(); }
             /** Set the height of the page in pt. */
-            void setHeight(double y);
+            void setHeight(double y) { m_page->setHeight(y); }
 
             /** Return the height of the margin at top in pt. */
-            double topMargin() const;
+            double topMargin() const { return m_page->topMargin(); }
             /** Set height of the top margin in pt. */
-            void setTopMargin(double x);
+            void setTopMargin(double x) { m_page->setTopMargin(x); }
 
             /** Return the height of the margin at bottom in pt. */
-            double bottomMargin() const;
+            double bottomMargin() const { return m_page->bottomMargin(); }
             /** Set height of the bottom margin in pt. */
-            void setBottomMargin(double y);
+            void setBottomMargin(double y) { m_page->setBottomMargin(y); }
 
             /** Return the width of the margin at left in pt. */
-            double leftMargin() const;
+            double leftMargin() const { return m_page->leftMargin(); }
             /** Set width of the left margin in pt. */
-            void setLeftMargin(double l);
+            void setLeftMargin(double l) { m_page->setLeftMargin(l); }
 
             /** Return the width of the margin at right in pt. */
-            double rightMargin() const;
+            double rightMargin() const { return m_page->rightMargin(); }
             /** Set width of the right margin in pt. */
-            void setRightMargin(double r);
+            void setRightMargin(double r) { m_page->setRightMargin(r); }
 
         private:
             KWPage* m_page;
