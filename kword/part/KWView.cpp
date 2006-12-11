@@ -123,19 +123,16 @@ void KWView::setupActions() {
     KAction *print = new KAction("MyPrint", actionCollection(), "file_my_print");
     connect(print, SIGNAL(triggered()), this, SLOT(print()));
 
-    m_actionFormatBold = new KToggleAction( i18n( "Bold" ), actionCollection(), "format_bold");
-    m_actionFormatBold->setShortcut(KShortcut(Qt::CTRL + Qt::Key_B));
+    m_actionFormatBold = new KToggleAction( i18n( "Bold" ), "text_bold", KShortcut(Qt::CTRL + Qt::Key_B),actionCollection(), "format_bold");
     connect( m_actionFormatBold, SIGNAL(toggled(bool)), this, SLOT(textBold(bool)) );
 
-    m_actionFormatItalic = new KToggleAction( i18n( "Italic" ), actionCollection(), "format_italic" );
-    m_actionFormatItalic->setShortcut(KShortcut( Qt::CTRL + Qt::Key_I));
+    m_actionFormatItalic = new KToggleAction( i18n( "Italic" ),"text_italic", KShortcut( Qt::CTRL + Qt::Key_I), actionCollection(), "format_italic" );
     connect( m_actionFormatBold, SIGNAL(toggled(bool)), this, SLOT(textItalic(bool)) );
 
-    m_actionFormatUnderline = new KToggleAction( i18n( "Underline" ), actionCollection(), "format_underline" );
-    m_actionFormatUnderline->setShortcut(KShortcut( Qt::CTRL + Qt::Key_U));
+    m_actionFormatUnderline = new KToggleAction( i18n( "Underline" ),"text_under",KShortcut( Qt::CTRL + Qt::Key_U), actionCollection(), "format_underline" );
     connect( m_actionFormatUnderline, SIGNAL(toggled(bool)), this, SLOT(textUnderline(bool)) );
 
-    m_actionFormatStrikeOut = new KToggleAction( i18n( "Strike Out" ), actionCollection(), "format_strike" );
+    m_actionFormatStrikeOut = new KToggleAction( i18n( "Strike Out" ),"text_strike", KShortcut(), actionCollection(), "format_strike" );
     connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), this, SLOT(textStrikeOut(bool)) );
 
     // ------------------- Actions with a key binding and no GUI item
