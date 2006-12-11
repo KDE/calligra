@@ -50,8 +50,6 @@ set(kchartcommon_LIB_SRCS
 
 kde4_automoc(${kchartcommon_LIB_SRCS})
 
-# kde4_add_dcop_skels(kchartcommon_LIB_SRCS KChartViewIface.h KChartParamsIface.h )
-
 kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 
 target_link_libraries(kchartcommon  ${KDE4_KDE3SUPPORT_LIBS} kochart kofficeui kdchart )
