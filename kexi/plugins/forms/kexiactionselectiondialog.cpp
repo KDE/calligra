@@ -219,7 +219,7 @@ class ActionToExecuteListView : public ActionsListViewBase
 			}
 			if (part->info()->isExecuteSupported()) {
 				item = new ActionSelectorDialogListItem("execute", this, i18n("Execute"));
-				item->setPixmap(0, SmallIcon("execute"));
+				item->setPixmap(0, SmallIcon("player_play"));
 			}
 			if (part->info()->isPrintingSupported()) {
 				ActionSelectorDialogListItem *printItem = new ActionSelectorDialogListItem(
