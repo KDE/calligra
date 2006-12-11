@@ -37,6 +37,7 @@ class KisTIFFWriterVisitor : public KisLayerVisitor
         KisTIFFWriterVisitor(TIFF*img, KisTIFFOptions* options);
         ~KisTIFFWriterVisitor();
     public:
+        virtual bool visit(KisExternalLayer * layer) { return true; }
         virtual bool visit(KisPaintLayer *layer);
         virtual bool visit(KisGroupLayer *layer);
         virtual bool visit(KisPartLayer *layer);

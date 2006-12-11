@@ -38,6 +38,7 @@
 #include "kis_jpeg_converter.h"
 #include "kis_wdg_options_jpeg.h"
 
+class KisExternalLayer;
 
 class KisExifInfoVisitor : public KisLayerVisitor
 {
@@ -47,6 +48,12 @@ class KisExifInfoVisitor : public KisLayerVisitor
             m_countPaintLayer(0)
         { };
     public:
+
+        virtual bool visit(KisExternalLayer*)
+        {
+            return true;
+        }
+
         virtual bool visit(KisPaintLayer* layer) {
             m_countPaintLayer++;
             if( layer->paintDevice()->hasExifInfo())
