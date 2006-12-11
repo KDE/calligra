@@ -81,8 +81,9 @@ public:
      * Sets the height to _h zoomed pixels.
      *
      * @param _h is calculated in display pixels as integer value. The function cares for zooming.
+     * \deprecated
      */
-    void setHeight( int _h );
+    KDE_DEPRECATED void setHeight( int _h );
 
     /**
      * Sets the height to _h zoomed pixels.
@@ -96,8 +97,9 @@ public:
      * Sets the height.
      *
      * @param '_h' is assumed to be a unzoomed millimeter value.
+     * \deprecated
      */
-    void setMMHeight( double _h );
+    KDE_DEPRECATED void setMMHeight( double _h );
 
     /**
      * @reimp
@@ -171,8 +173,9 @@ public:
      *
      * @param _w is calculated in display pixels. The function cares for
      *           zooming.
+     * \deprecated
      */
-    void setWidth( int _w );
+    KDE_DEPRECATED void setWidth( int _w );
 
     /**
      * Sets the width to _w zoomed pixels as double value.
@@ -187,8 +190,9 @@ public:
      * Sets the width.
      *
      * @param _w is assumed to be a unzoomed millimeter value.
+     * \deprecated
      */
-    void setMMWidth( double _w );
+    KDE_DEPRECATED void setMMWidth( double _w );
 
     /**
      * @reimp
