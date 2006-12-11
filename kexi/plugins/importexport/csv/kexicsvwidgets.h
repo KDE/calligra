@@ -27,7 +27,7 @@
 #include <kcombobox.h>
 
 class KLineEdit;
-class KActiveLabel;
+class K3ActiveLabel;
 class QLabel;
 
 #define KEXICSV_DEFAULT_FILE_TEXT_QUOTE "\""
@@ -64,13 +64,13 @@ class KexiCSVInfoLabel : public QWidget
 		void setIcon(const QString& iconName);
 
 		QLabel* leftLabel() const { return m_leftLabel; }
-		KActiveLabel* fileNameLabel() const { return m_fnameLbl; }
-		KActiveLabel* commentLabel() const { return m_commentLbl; }
+		K3ActiveLabel* fileNameLabel() const { return m_fnameLbl; }
+		K3ActiveLabel* commentLabel() const { return m_commentLbl; }
 		Q3Frame* separator() const { return m_separator; }
 
 	protected:
 		QLabel *m_leftLabel, *m_iconLbl;
-		KActiveLabel *m_fnameLbl, *m_commentLbl;
+		K3ActiveLabel *m_fnameLbl, *m_commentLbl;
 		Q3Frame* m_separator;
 };
 

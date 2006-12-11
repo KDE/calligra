@@ -30,7 +30,7 @@
 #include <klocale.h>
 #include <klineedit.h>
 #include <kdialogbase.h>
-#include <kactivelabel.h>
+#include <k3activelabel.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
 
@@ -172,7 +172,7 @@ KexiCSVInfoLabel::KexiCSVInfoLabel( const QString& labelText, QWidget* parent )
 	m_iconLbl = new QLabel(this);
 	m_iconLbl->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	m_iconLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-	m_fnameLbl = new KActiveLabel(this);
+	m_fnameLbl = new K3ActiveLabel(this);
 	m_fnameLbl->setFocusPolicy(NoFocus);
 	m_fnameLbl->setTextFormat(Qt::PlainText);
 	m_fnameLbl->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding,1,0));
@@ -183,7 +183,7 @@ KexiCSVInfoLabel::KexiCSVInfoLabel( const QString& labelText, QWidget* parent )
 	hbox->addWidget(m_iconLbl);
 	hbox->addWidget(m_fnameLbl, 1, Qt::AlignVCenter | Qt::AlignLeft | Qt::TextWordWrap);
 	hbox->addSpacing(10);
-	m_commentLbl = new KActiveLabel(this);
+	m_commentLbl = new K3ActiveLabel(this);
 	m_commentLbl->setFocusPolicy(NoFocus);
 	m_commentLbl->setTextFormat(Qt::PlainText);
 	m_commentLbl->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
