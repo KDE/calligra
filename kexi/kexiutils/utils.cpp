@@ -25,12 +25,14 @@
 #include <qimage.h>
 #include <qwmatrix.h>
 #include <qicon.h>
+#include <qbitmap.h>
 
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
 #include <kiconeffect.h>
 #include <kpixmapeffect.h>
+#include <kiconloader.h>
 
 using namespace KexiUtils;
 
@@ -175,6 +177,15 @@ QIcon KexiUtils::colorizeIconToTextColor(const QPixmap& icon, const QPalette& pa
 	return QIcon(
 		KPixmapEffect::fade( pm, 0.33, 
 			palette.color(QPalette::Active, QPalette::ButtonText) ) );
+}
+
+QPixmap KexiUtils::emptyIcon(KIcon::Group iconGroup)
+{
+	QPixmap noIcon( IconSize( iconGroup ), IconSize( iconGroup ) );
+	QBitmap bmpNoIcon(noIcon.size());
+	bmpNoIcon.fill(Qt::color0);
+	noIcon.setMask(bmpNoIcon);
+	return noIcon;
 }
 
 void KexiUtils::serializeMap(const QMap<QString,QString>& map, QByteArray& array)

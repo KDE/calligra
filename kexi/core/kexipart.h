@@ -74,6 +74,7 @@ class KEXICORE_EXPORT Part : public QObject
 		/*! Destructor. */
 		virtual ~Part();
 
+//! @todo make it protected, outside world should use KexiProject
 		/*! Try to execute the part. Implementations of this \a Part
 		are able to overwrite this method to offer execution.
 		\param item The \a KexiPart::Item that should be executed.
@@ -97,12 +98,14 @@ class KEXICORE_EXPORT Part : public QObject
 		 Default flag combination is Kexi::DataViewMode | Kexi::DesignViewMode. */
 		inline int supportedViewModes() const { return m_supportedViewModes; }
 
+//! @todo make it protected, outside world should use KexiProject
 		/*! "Opens" an instance that the part provides, pointed by \a item in a mode \a viewMode. 
 		 \a viewMode is one of Kexi::ViewMode enum. 
 		 \a staticObjectArgs can be passed for static Kexi Parts. */
 		KexiDialogBase* openInstance(KexiMainWindow *win, KexiPart::Item &item, 
 			int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
+//! @todo make it protected, outside world should use KexiProject
 		/*! Removes any stored data pointed by \a item (example: table is dropped for table part). 
 		 From now this data is inaccesible, and \a item disappear.
 		 You do not need to remove \a item, or remove object's schema stored in the database,

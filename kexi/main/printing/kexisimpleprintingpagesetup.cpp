@@ -59,7 +59,7 @@ KexiSimplePrintingCommand::KexiSimplePrintingCommand(
  , m_printPreviewNeedsReloading(false)
 {
 	connect(this, SIGNAL(showPageSetupRequested(KexiPart::Item*)), 
-		m_mainWin, SLOT(pageSetupForItem(KexiPart::Item*)));
+		m_mainWin, SLOT(showPageSetupForItem(KexiPart::Item*)));
 }
 
 KexiSimplePrintingCommand::~KexiSimplePrintingCommand()

@@ -172,7 +172,7 @@ int KexiMainWindowImpl::create(int argc, char *argv[], KAboutData* aboutdata)
 		app->setMainWidget(dummyWidget);
 #ifdef KEXI_DEBUG_GUI
 		app->config()->setGroup("General");
-		if (app->config()->readBoolEntry("showKexiDBDebugger", false)) {
+		if (app->config()->readBoolEntry("showInternalDebugger", false)) {
 			debugWindow = KexiUtils::createDebugWindow(0);
 		}
 #endif
@@ -1399,7 +1399,7 @@ KexiMainWindowImpl::initNavigator()
 
 	if(!d->nav)
 	{
-		d->nav = new KexiBrowser(this);
+		d->nav = new KexiBrowser(this, this);
 		d->nav->installEventFilter(this);
 		d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
 //		d->navToolWindow->hide();
@@ -1420,7 +1420,7 @@ KexiMainWindowImpl::initNavigator()
 		connect(d->nav,SIGNAL(printItem( KexiPart::Item* )),
 			this,SLOT(printItem(KexiPart::Item*)));
 		connect(d->nav,SIGNAL(pageSetupForItem( KexiPart::Item*)),
-			this,SLOT(pageSetupForItem(KexiPart::Item*)));
+			this,SLOT(showPageSetupForItem(KexiPart::Item*)));
 		if (d->prj) {//connect to the project
 			connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
 				d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
@@ -1431,55 +1431,9 @@ KexiMainWindowImpl::initNavigator()
 //		d->restoreNavigatorWidth();
 	}
 	if(d->prj->isConnected()) {
-		d->nav->clear();
-
 		QString partManagerErrorMessages;
-		KexiPart::PartInfoList *pl = Kexi::partManager().partInfoList();
-		for(KexiPart::Info *it = pl->first(); it; it = pl->next())
-		{
-			if (!it->isVisibleInNavigator())
-				continue;
-			kDebug() << "KexiMainWindowImpl::initNavigator(): adding " << it->groupName() << endl;
-
-/*			KexiPart::Part *p=Kexi::partManager().part(it);
-			if (!p) {
-				//TODO: js - OPTIONALLY: show error
-				continue;
-			}
-			p->createGUIClient(this);*/
-
-			//load part - we need this to have GUI merged with part's actions
-//! @todo FUTURE - don't do that when DESIGN MODE is OFF
-			KexiPart::Part *p=Kexi::partManager().part(it);
-			if (p) {
-				d->nav->addGroup(*it);
-				//lookup project's objects (part items)
-	//! @todo FUTURE - don't do that when DESIGN MODE is OFF
-				KexiPart::ItemDict *item_dict = d->prj->items(it);
-				if (!item_dict)
-					continue;
-				for (KexiPart::ItemDictIterator item_it( *item_dict ); item_it.current(); ++item_it) {
-					d->nav->addItem(*item_it.current());
-				}
-			}
-			else {
-				//add this error to the list that will be displayed later
-				QString msg, details;
-				KexiDB::getHTMLErrorMesage(&Kexi::partManager(), msg, details);
-				if (!msg.isEmpty()) {
-					if (partManagerErrorMessages.isEmpty()) {
-						partManagerErrorMessages = QString("<qt><p>")
-							+i18n("Errors encountered during loading plugins:")+"<ul>";
-					}
-					partManagerErrorMessages.append( QString("<li>") + msg );
-					if (!details.isEmpty())
-						partManagerErrorMessages.append(QString("<br>")+details);
-					partManagerErrorMessages.append("</li>");
-				}
-			}
-		}
+		d->nav->setProject( d->prj, QString::null/*all mimetypes*/, &partManagerErrorMessages );
 		if (!partManagerErrorMessages.isEmpty()) {
-			partManagerErrorMessages.append("</ul></p>");
 			showWarningContinueMessage(partManagerErrorMessages, QString::null,
 				"dontShowWarningsRelatedToPluginsLoading");
 		}
@@ -2624,7 +2578,7 @@ void
 KexiMainWindowImpl::slotProjectPageSetup()
 {
 	if (d->curDialog && d->curDialog->partItem())
-		pageSetupForItem(d->curDialog->partItem());
+		showPageSetupForItem(d->curDialog->partItem());
 }
 
 void KexiMainWindowImpl::slotProjectExportDataTable()
@@ -4025,11 +3979,23 @@ void KexiMainWindowImpl::slotProjectImportDataTable()
 	delete dlg;
 }
 
-void KexiMainWindowImpl::exportItemAsDataTable(KexiPart::Item* item)
+tristate KexiMainWindowImpl::executeCustomActionForObject(KexiPart::Item* item, 
+	const QString& actionName)
+{
+	if (actionName == "exportToCSV")
+		return exportItemAsDataTable(item);
+	else if (actionName == "copyToClipboardAsCSV")
+		return copyItemToClipboardAsDataTable(item);
+
+	kexiwarn << "KexiMainWindowImpl::executeCustomActionForObject(): no such action: " 
+		<< actionName << endl;
+	return false;
+}
+
+tristate KexiMainWindowImpl::exportItemAsDataTable(KexiPart::Item* item)
 {
 	if (!item)
-		return;
-
+		return false;
 //! @todo: check if changes to this are saved, if not: ask for saving
 //! @todo: accept row changes...
 
@@ -4039,14 +4005,20 @@ void KexiMainWindowImpl::exportItemAsDataTable(KexiPart::Item* item)
 	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
 		"csv_importexport", "KexiCSVExportWizard", this, this, 0, &args);
 	if (!dlg)
-		return; //error msg has been shown by KexiInternalPart
-	dlg->exec();
+		return false; //error msg has been shown by KexiInternalPart
+	int result = dlg->exec();
 	delete dlg;
+	return result == QDialog::Rejected ? cancelled : true;
 }
 
 bool KexiMainWindowImpl::printItem(KexiPart::Item* item, const QString& titleText)
 {
 	return printItem(item, KexiSimplePrintingSettings::load(), titleText);
+}
+
+tristate KexiMainWindowImpl::printItem(KexiPart::Item* item)
+{
+	return printItem(item, QString::null);
 }
 
 bool KexiMainWindowImpl::printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings,
@@ -4057,12 +4029,16 @@ bool KexiMainWindowImpl::printItem(KexiPart::Item* item, const KexiSimplePrintin
 	KexiSimplePrintingCommand cmd(this, item->identifier());
 	//modal
 	return cmd.print(settings, titleText);
-//	return printActionForItem(item, PrintItem);
 }
 
 bool KexiMainWindowImpl::printPreviewForItem(KexiPart::Item* item, const QString& titleText, bool reload)
 {
 	return printPreviewForItem(item, KexiSimplePrintingSettings::load(), titleText, reload);
+}
+
+tristate KexiMainWindowImpl::printPreviewForItem(KexiPart::Item* item)
+{
+	return printPreviewForItem(item, QString::null, false);
 }
 
 bool KexiMainWindowImpl::printPreviewForItem(KexiPart::Item* item, 
@@ -4080,10 +4056,9 @@ bool KexiMainWindowImpl::printPreviewForItem(KexiPart::Item* item,
 		);
 	}
 	return cmd->showPrintPreview(settings, titleText, reload);
-//	return printActionForItem(item, PreviewItem);
 }
 
-tristate KexiMainWindowImpl::pageSetupForItem(KexiPart::Item* item)
+tristate KexiMainWindowImpl::showPageSetupForItem(KexiPart::Item* item)
 {
 //! @todo: check if changes to this object's design are saved, if not: ask for saving
 //! @todo: accept row changes...
@@ -4196,17 +4171,25 @@ tristate KexiMainWindowImpl::printActionForItem(KexiPart::Item* item, PrintActio
 void KexiMainWindowImpl::slotEditCopySpecialDataTable()
 {
 	KexiPart::Item* item = d->nav->selectedPartItem();
+	if (item)
+		exportItemAsDataTable(item);
+}
+
+tristate KexiMainWindowImpl::copyItemToClipboardAsDataTable(KexiPart::Item* item)
+{
 	if (!item)
-		return;
+		return false;
+
 	QMap<QString,QString> args;
 	args.insert("destinationType", "clipboard");
 	args.insert("itemId", QString::number(item->identifier()));
 	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
 		"csv_importexport", "KexiCSVExportWizard", this, this, 0, &args);
 	if (!dlg)
-		return; //error msg has been shown by KexiInternalPart
-	dlg->exec();
+		return false; //error msg has been shown by KexiInternalPart
+	const int result = dlg->exec();
 	delete dlg;
+	return result == QDialog::Rejected ? cancelled : true;
 }
 
 void KexiMainWindowImpl::slotEditPasteSpecialDataTable()
@@ -4254,7 +4237,7 @@ void KexiMainWindowImpl::highlightObject(const Q3CString& mime, const Q3CString&
 	if (!item)
 		return;
 	if (d->nav) {
-		d->nav->highlightItem(*item);
+		d->nav->selectItem(*item);
 	}
 }
 

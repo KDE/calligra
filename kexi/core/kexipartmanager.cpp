@@ -119,7 +119,7 @@ Manager::part(Info *i)
 	if(!i)
 		return 0;
 
-	kDebug() << "Manager::part( id = " << i->projectPartID() << " )" << endl;
+//	kDebug() << "Manager::part( id = " << i->projectPartID() << " )" << endl;
 
 	if (i->isBroken()) {
 			setError(i->errorMessage());
@@ -129,7 +129,7 @@ Manager::part(Info *i)
 	Part *p = m_parts[i->projectPartID()];
 	
 	if(!p) {
-		kDebug() << "Manager::part().." << endl;
+//		kDebug() << "Manager::part().." << endl;
 		int error=0;
 		p = KService::createInstance<Part>(i->ptr(), this, QStringList(), &error);
 		if(!p) {
@@ -148,10 +148,10 @@ Manager::part(Info *i)
 		emit partLoaded(p);
 	}
 	else {
-		kDebug() << "Manager::part(): cached: " << i->groupName() << endl;
+//		kDebug() << "Manager::part(): cached: " << i->groupName() << endl;
 	}
 
-	kDebug() << "Manager::part(): fine!" << endl;
+//	kDebug() << "Manager::part(): fine!" << endl;
 	return p;
 }
 

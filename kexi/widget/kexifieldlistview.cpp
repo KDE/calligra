@@ -42,19 +42,16 @@
 #include <kexidb/queryschema.h>
 #include <kexidb/utils.h>
 #include <kexidragobjects.h>
+#include <kexiutils/utils.h>
 
 KexiFieldListView::KexiFieldListView(QWidget *parent, const char *name, int options)
  : K3ListView(parent, name)
  , m_schema(0)
+ , m_keyIcon(SmallIcon("key"))
+ , m_noIcon(KexiUtils::emptyIcon(KIcon::Small))
  , m_options(options)
  , m_allColumnsItem(0)
 {
-	m_keyIcon = SmallIcon("key");
-	m_noIcon = QPixmap(m_keyIcon.size());
-	QBitmap bmp(m_noIcon.size());
-	bmp.fill(Qt::color0);
-	m_noIcon.setMask(bmp);
-
 	setAcceptDrops(true);
 	viewport()->setAcceptDrops(true);
 	setDropVisualizer(false);

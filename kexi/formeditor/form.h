@@ -291,7 +291,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		(called for example before saving or displaying the tab order dialog) */
 		void autoAssignTabStops();
 
-#ifdef KEXI_SHOW_DEBUG_ACTIONS
+#ifdef KEXI_DEBUG_GUI
 		//! For debugging purposes
 		QString m_recentlyLoadedUICode;
 #endif

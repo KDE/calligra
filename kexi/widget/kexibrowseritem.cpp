@@ -27,11 +27,9 @@
 
 KexiBrowserItem::KexiBrowserItem(K3ListView *parent, KexiPart::Info *i)
  : K3ListViewItem(parent, i->groupName())
-// : K3ListViewItem(parent, " "+ i->groupName() + " ")
+ , m_info(i)
+ , m_item(0)
 {
-	m_item = 0;
-	m_info = i;
-//	setPixmap(0, SmallIcon(i->groupIcon()));
 	setPixmap(0, SmallIcon(i->itemIcon()));
 	setOpen(true);
 //ugly	setSelectable(false);
@@ -41,12 +39,24 @@ KexiBrowserItem::KexiBrowserItem(K3ListView *parent, KexiPart::Info *i)
 
 KexiBrowserItem::KexiBrowserItem(K3ListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item)
  : K3ListViewItem(parent, item->name())
-// : K3ListViewItem(parent, " "+ item->name() + " ")
+ , m_info(i)
+ , m_item(item)
 {
-	m_item = item;
-	m_info = i;
 	setPixmap(0, SmallIcon(i->itemIcon()));
 	initItem();
+}
+
+KexiBrowserItem::KexiBrowserItem(K3ListView *parent, KexiPart::Info *i, KexiPart::Item *item)
+ : K3ListViewItem(parent, item->name())
+ , m_info(i)
+ , m_item(item)
+{
+	setPixmap(0, SmallIcon(i->itemIcon()));
+	initItem();
+}
+
+KexiBrowserItem::~KexiBrowserItem()
+{
 }
 
 void KexiBrowserItem::initItem()

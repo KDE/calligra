@@ -294,6 +294,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propDesc["dataSource"] = i18n("Data Source");
 	m_propDesc["formName"] = i18n("Form Name");
 	m_propDesc["onClickAction"] = i18n("On Click");
+	m_propDesc["onClickActionOption"] = i18n("On Click Option");
 	m_propDesc["autoTabStops"] = i18n("Auto Tab Order");
 	m_propDesc["shadowEnabled"] = i18n("Shadow Enabled");
 
@@ -449,7 +450,7 @@ void
 KexiDBFactory::createCustomActions(KActionCollection* col)
 {
 	//this will create shared instance action for design mode (special collection is provided)
-	m_assignAction = new KAction( i18n("Assign Action..."), SmallIconSet("form_action"),
+	m_assignAction = new KAction( i18n("&Assign Action..."), SmallIconSet("form_action"),
 		0, 0, 0, col, "widget_assign_action");
 }
 
@@ -593,6 +594,7 @@ KexiDBFactory::isPropertyVisibleInternal(const Q3CString& classname, QWidget *w,
 		ok = property!="isDragEnabled"
 #ifdef KEXI_NO_UNFINISHED
 			&& property!="onClickAction" /*! @todo reenable */
+			&& property!="onClickActionOption" /*! @todo reenable */
 			&& property!="iconSet" /*! @todo reenable */
 			&& property!="stdItem" /*! @todo reenable stdItem */
 #endif

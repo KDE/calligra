@@ -256,7 +256,7 @@ FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool pr
 	int errLine;
 	int errCol;
 
-#ifdef KEXI_SHOW_DEBUG_ACTIONS
+#ifdef KEXI_DEBUG_GUI
 	form->m_recentlyLoadedUICode = src;
 #endif
 
@@ -411,7 +411,7 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
 	const QVariant &value, QWidget *w, WidgetLibrary *lib)
 {
 	// Widget specific properties and attributes ///////////////
-	kDebug() << "FormIO::savePropertyValue()  Saving the property: " << name << endl;
+//	kDebug() << "FormIO::savePropertyValue()  Saving the property: " << name << endl;
 	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
 	QWidget *subwidget = w;
 	bool addSubwidgetFlag = false;

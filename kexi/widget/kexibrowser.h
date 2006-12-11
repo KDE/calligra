@@ -48,15 +48,39 @@ namespace KexiPart
 	class Item;
 	class Part;
 }
+class KexiProject;
 
-//! @short Main Kexi Navigator Widget
+//! @short The Main Kexi navigator widget
 class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 {
 	Q_OBJECT
 
 	public:
-		KexiBrowser(KexiMainWindow *mainWin);
+		enum Features {
+			Writable = 1, //!< the browser supports actions that modify the project (e.g. delete, rename)
+			ContextMenus = 2, //!< the browser supports context menu
+			Toolbar = 4, //!< the browser displays 
+			SingleClickOpensItemOptionEnabled = 8, //!< enables "SingleClickOpensItem" option
+			DefaultFeatures = Writable | ContextMenus | Toolbar 
+				| SingleClickOpensItemOptionEnabled //!< the default
+		};
+
+		KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features = DefaultFeatures);
 		virtual ~KexiBrowser(); 
+
+		/*! Sets project \a prj for this browser. If \a partManagerErrorMessages is not NULL
+		 it will be set to error message if there's a problem with loading any KexiPart.
+		 If \a itemsMimeType is empty (the default), items of all mime types are displayed,
+		 items for only one mime type are displayed. In the latter case, no group (parent) 
+		 items are displayed.
+		 Previous items are removed. */
+		void setProject(KexiProject* prj, const QString& itemsMimeType = QString::null, 
+			QString* partManagerErrorMessages = 0);
+
+		/*! \return items' mime type previously set by setProject. Returns empty string 
+		 if setProject() was not executed yet or itemsMimeType argument of setProject() was 
+		 empty (i.e. all mime types are displayed). */
+		QString itemsMimeType() const;
 
 		KexiPart::Item* selectedPartItem() const;
 
@@ -64,16 +88,15 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		virtual bool eventFilter ( QObject *o, QEvent * e );
 
 		bool actionEnabled(const Q3CString& actionName) const;
-//		virtual bool isExecuteArea( const QPoint& point );
 
 	public slots:
-		void addGroup(KexiPart::Info& info);
-		void addItem(KexiPart::Item& item);
+		KexiBrowserItem* addGroup(KexiPart::Info& info);
+		KexiBrowserItem* addItem(KexiPart::Item& item);
 		void slotRemoveItem(const KexiPart::Item &item);
 		virtual void setFocus();
 		void updateItemName(KexiPart::Item& item, bool dirty);
-		void highlightItem(KexiPart::Item& item);
-//		virtual void rename(QListViewItem *item, int c);
+		void selectItem(KexiPart::Item& item);
+		void clearSelection();
 		void clear();
 
 		//! Sets by main window to disable actions that may try to modify the project.
@@ -107,8 +130,6 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 
 		void pageSetupForItem( KexiPart::Item* );
 
-//		void actionAvailable(const char *name, bool avail);
-
 	protected slots:
 		void slotContextMenu(K3ListView*, Q3ListViewItem *i, const QPoint &point);
 		void slotExecuteItem(Q3ListViewItem *item);
@@ -120,7 +141,6 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		void slotOpenObject();
 		void slotDesignObject();
 		void slotEditTextObject();
-		//! remove current item
 		void slotRemove();
 		void slotCut();
 		void slotCopy();
@@ -133,8 +153,10 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 
 	protected:
 		void itemRenameDone();
+		KexiBrowserItem* addItem(KexiPart::Item& item, KexiBrowserItem *parent, KexiPart::Info* info);
 
 		KexiMainWindow *m_mainWin;
+		int m_features;
 		KexiBrowserListView *m_list;
 		KActionCollection *m_actions;
 		Q3AsciiDict<KexiBrowserItem> m_baseItems;
@@ -156,6 +178,7 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		KexiPart::Part *m_prevSelectedPart;
 		KToolBar *m_toolbar;
 		KexiSmallToolButton *m_newObjectToolButton, *m_deleteObjectToolButton;
+		QString m_itemsMimeType;
 		bool m_singleClick : 1;
 		bool m_readOnly : 1;
 };
