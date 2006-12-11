@@ -873,7 +873,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
               (int) _ev->y() );
     if ( ( obj = getObject( p, sheet ) ) && obj->isSelected() )
     {
-      KoRect const bound = obj->geometry();
+      QRectF const bound = obj->geometry();
       QRect zoomedBound = doc()->zoomRectOld( KoRect( bound.left(), bound.top(),
                                                       bound.width(), bound.height() ) );
       zoomedBound.translate( (int)(-xOffset() * doc()->zoomedResolutionX() ), (int)(-yOffset() * doc()->zoomedResolutionY() ));
@@ -2973,7 +2973,7 @@ KSpread::EmbeddedObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
   {
     if ( object->sheet() == _sheet )
     {
-        KoRect const bound = ( object )->geometry();
+        QRectF const bound = ( object )->geometry();
         QRect zoomedBound = doc()->zoomRectOld( KoRect(bound.left(), bound.top(),
                                 bound.width(),
                                 bound.height() ) );
@@ -3050,7 +3050,7 @@ bool Canvas::isObjectSelected()
 
 void Canvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
 {
-  KoRect rect( objectRect( false ) );
+  QRectF rect( objectRect( false ) );
   KoPoint move( 0, 0 );
   double diffx = pos.x() - d->m_origMousePos.x();
   double diffy = pos.y() - d->m_origMousePos.y();
@@ -3059,8 +3059,8 @@ void Canvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
   d->m_origMousePos = pos;
 
     // unwind last snapping
-  KoRect movedRect( rect );
-  movedRect.moveBy( diffx, diffy );
+  QRectF movedRect( rect );
+  movedRect.translate( diffx, diffy );
 
     // don't move object off canvas
   KoPoint diffDueToBorders(0,0);
@@ -3087,13 +3087,13 @@ void Canvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
     if ( fabs( diff.x() ) > fabs( diff.y() ) )
     {
 //       m_moveSnapDiff.setY( /*m_moveSnapDiff.y() + */m_moveStartPosMouse.y() - movedRect.y() );
-      movedRect.moveTopLeft( KoPoint( movedRect.x(), d->m_moveStartPosMouse.y() ) );
+      movedRect.moveTopLeft( QPointF( movedRect.x(), d->m_moveStartPosMouse.y() ) );
       move.setY( movedRect.y() - rect.y() );
     }
     else
     {
 //       m_moveSnapDiff.setX( /*m_moveSnapDiff.x() + */m_moveStartPosMouse.x() - movedRect.x() );
-      movedRect.moveTopLeft( KoPoint( d->m_moveStartPosMouse.x(), movedRect.y() ) );
+      movedRect.moveTopLeft( QPointF( d->m_moveStartPosMouse.x(), movedRect.y() ) );
       move.setX( movedRect.x() - rect.x() );
     }
   }
@@ -3110,8 +3110,9 @@ void Canvas::resizeObject( ModifyType _modType, const KoPoint & point, bool keep
 {
     EmbeddedObject *obj = d->m_resizeObject;
 
-    KoRect objRect = obj->geometry();
-    objRect.moveBy( -xOffset(), -yOffset() );
+    QRectF objRect = obj->geometry();
+    /*objRect.moveBy( -xOffset(), -yOffset() );*/
+    objRect.translate(-xOffset(), -yOffset() );
     QRect oldBoundingRect( doc()->zoomRectOld( objRect ) );
 
     bool left = false;
@@ -3238,7 +3239,7 @@ void Canvas::resizeObject( ModifyType _modType, const KoPoint & point, bool keep
 
         if ( objRect.left() != newLeft || objRect.top() != newTop )
         {
-            obj->moveBy( KoPoint( newLeft - objRect.left(), newTop - objRect.top() ) );
+            obj->moveBy( QPointF( newLeft - objRect.left(), newTop - objRect.top() ) );
         }
 
 //     if ( doc()->showGuideLines() && !m_disableSnapping )
@@ -3267,9 +3268,9 @@ void Canvas::finishResizeObject( const QString &/*name*/, bool /*layout*/ )
 {
   if ( d->m_resizeObject )
   {
-    KoPoint move = KoPoint( d->m_resizeObject->geometry().x() - d->m_rectBeforeResize.x(),
+    QPointF move = QPointF( d->m_resizeObject->geometry().x() - d->m_rectBeforeResize.x(),
                             d->m_resizeObject->geometry().y() - d->m_rectBeforeResize.y() );
-    KoSize size = KoSize( d->m_resizeObject->geometry().width() - d->m_rectBeforeResize.width(),
+    QSizeF size = QSizeF( d->m_resizeObject->geometry().width() - d->m_rectBeforeResize.width(),
                           d->m_resizeObject->geometry().height() - d->m_rectBeforeResize.height() );
 
     if ( ( d->m_resizeObject->geometry() ) != d->m_rectBeforeResize )
@@ -3331,7 +3332,7 @@ void Canvas::displayObjectList( QList<EmbeddedObject*> &list )
 }
 
 
-KoRect Canvas::objectRect( bool all ) const
+QRectF Canvas::objectRect( bool all ) const
 {
   return activeSheet()->getRealRect( all );
 }
@@ -3535,14 +3536,14 @@ void Canvas::copyOasisObjects()
     //save the objects as pictures too so that other programs can access them
     foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
     {
-      KoRect kr = objectRect(false);
-      QRect r( kr.toQRect() );
+      QRectF kr = objectRect(false);
+      QRect r( kr.toRect() );
       QPixmap pixmap( r.width(), r.height() );
       pixmap.fill( "white" );
       QPainter p(&pixmap);
       if ( object->isSelected() )
       {
-          p.drawPixmap( object->geometry().toQRect().left() - r.left(), object->geometry().toQRect().top() - r.top(), object->toPixmap( 1.0 , 1.0 ) );
+          p.drawPixmap( object->geometry().toRect().left() - r.left(), object->geometry().toRect().top() - r.top(), object->toPixmap( 1.0 , 1.0 ) );
       }
       p.end();
       if (!pixmap.isNull())

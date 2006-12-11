@@ -344,7 +344,7 @@ protected:
 class ChangeObjectGeometryCommand : public KCommand
 {
   public:
-    ChangeObjectGeometryCommand( EmbeddedObject *_obj, const KoPoint &_m_diff, const KoSize &_r_diff );
+    ChangeObjectGeometryCommand( EmbeddedObject *_obj, const QPointF &_m_diff, const QSizeF &_r_diff );
     ~ChangeObjectGeometryCommand();
 
     virtual void execute();
@@ -352,8 +352,8 @@ class ChangeObjectGeometryCommand : public KCommand
     virtual QString name() const;
 
   protected:
-    KoPoint m_diff;
-    KoSize r_diff;
+    QPointF m_diff;
+    QSizeF r_diff;
     EmbeddedObject *obj;
     Doc *doc;
 };
@@ -378,9 +378,9 @@ class RemoveObjectCommand : public KCommand
 class InsertObjectCommand : public KCommand
 {
   public:
-    InsertObjectCommand( const KoRect& _geometry, KoDocumentEntry&, Canvas *_canvas ); //child
-    InsertObjectCommand( const KoRect& _geometry, KoDocumentEntry&, const QRect& _data, Canvas *_canvas ); //chart
-    InsertObjectCommand( const KoRect& _geometry, KUrl& _file, Canvas *_canvas ); //picture
+    InsertObjectCommand( const QRectF& _geometry, KoDocumentEntry&, Canvas *_canvas ); //child
+    InsertObjectCommand( const QRectF& _geometry, KoDocumentEntry&, const QRect& _data, Canvas *_canvas ); //chart
+    InsertObjectCommand( const QRectF& _geometry, KUrl& _file, Canvas *_canvas ); //picture
     ~InsertObjectCommand();
 
     virtual void execute();
@@ -388,7 +388,7 @@ class InsertObjectCommand : public KCommand
     virtual QString name() const;
 
   protected:
-    KoRect geometry;
+    QRectF geometry;
     Canvas *canvas;
     bool executed;
     KoDocumentEntry entry;

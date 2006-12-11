@@ -376,7 +376,7 @@ public:
      */
     void displayObjectList( QList<EmbeddedObject*> &list );
 
-    KoRect objectRect( bool all ) const;
+    QRectF objectRect( bool all ) const;
 
     void repaintObject( EmbeddedObject *obj );
 

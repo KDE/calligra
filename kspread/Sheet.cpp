@@ -161,7 +161,7 @@ void ChartBinding::cellChanged( Cell* /*changedCell*/ )
   //Ensure display gets updated by marking all cells underneath the chart as
   //dirty
 
-  const QRect chartGeometry = m_child->geometry().toQRect();
+  const QRect chartGeometry = m_child->geometry().toRect();
 
   double tmp;
     int left = sheet()->leftColumn( chartGeometry.left() , tmp );
@@ -2983,9 +2983,9 @@ QList<EmbeddedObject*> Sheet::getSelectedObjects()
      return objects;
 }
 
-KoRect Sheet::getRealRect( bool all )
+QRectF Sheet::getRealRect( bool all )
 {
-    KoRect rect;
+    QRectF rect;
 
     foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
     {
@@ -3009,8 +3009,8 @@ KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
         if ( object->isSelected() && !object->isProtect())
         {
             _objects.append( object );
-            KoRect geometry = object->geometry();
-            geometry.moveBy( -canvas->xOffset(), -canvas->yOffset() );
+            QRectF geometry = object->geometry();
+            geometry.translate( -canvas->xOffset(), -canvas->yOffset() );
             QRect br = doc()->zoomRectOld( geometry/*object->geometry()*/ );
             br.translate( doc()->zoomItXOld( diffx ), doc()->zoomItYOld( diffy ) );
             br.translate( doc()->zoomItXOld( -canvas->xOffset() ), doc()->zoomItYOld( -canvas->yOffset() ) );
@@ -3037,13 +3037,13 @@ KCommand *Sheet::moveObject(View *_view,const KoPoint &_move,bool key)
     {
         if ( object->isSelected() && !object->isProtect()) {
 
-            KoRect geometry = object->geometry();
-            geometry.moveBy( -canvas->xOffset(), -canvas->yOffset() );
+            QRectF geometry = object->geometry();
+            geometry.translate( -canvas->xOffset(), -canvas->yOffset() );
             QRect oldBoundingRect = doc()->zoomRectOld( geometry );
 
 
-            KoRect r = object->geometry();
-            r.moveBy( _move.x(), _move.y() );
+            QRectF r = object->geometry();
+            r.translate( _move.x(), _move.y() );
 
             object->setGeometry( r );
             _objects.append( object );
@@ -5032,7 +5032,7 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
     emit sig_maxColumn( maxColumn() );
 }
 
-bool Sheet::insertChart( const KoRect& rect, KoDocumentEntry& documentEntry,
+bool Sheet::insertChart( const QRectF& rect, KoDocumentEntry& documentEntry,
                          const QRect& dataArea, QWidget* parentWidget )
 {
     QString errorMsg; // TODO MESSAGE
@@ -5067,7 +5067,7 @@ bool Sheet::insertChart( const KoRect& rect, KoDocumentEntry& documentEntry,
     return true;
 }
 
-bool Sheet::insertChild( const KoRect& rect, KoDocumentEntry& documentEntry,
+bool Sheet::insertChild( const QRectF& rect, KoDocumentEntry& documentEntry,
                          QWidget* parentWidget )
 {
     QString errorMsg; // TODO MESSAGE
@@ -5100,7 +5100,7 @@ bool Sheet::insertPicture( const KoPoint& point ,  KoPicture& picture )
 
     KoPictureKey key = picture.getKey();
 
-    KoRect destinationRect;
+    QRectF destinationRect;
     destinationRect.setLeft( point.x()  );
     destinationRect.setTop( point.y()  );
 
@@ -5114,7 +5114,7 @@ bool Sheet::insertPicture( const KoPoint& point ,  KoPicture& picture )
     //using the screen display resolution and then use KoUnit to convert back into
     //the appropriate pixel size KSpread.
 
-    KoSize destinationSize;
+    QSizeF destinationSize;
 
     double inchWidth = (double)picture.getOriginalSize().width() / KoGlobal::dpiX();
     double inchHeight = (double)picture.getOriginalSize().height() / KoGlobal::dpiY();
@@ -5157,7 +5157,7 @@ void Sheet::insertObject( EmbeddedObject *_obj )
     emit sig_updateView( _obj );
 }
 
-void Sheet::changeChildGeometry( EmbeddedKOfficeObject *_child, const KoRect& _rect )
+void Sheet::changeChildGeometry( EmbeddedKOfficeObject *_child, const QRectF& _rect )
 {
     _child->setGeometry( _rect );
 

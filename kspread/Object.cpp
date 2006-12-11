@@ -54,7 +54,7 @@ class View;
  * EmbeddedObject
  *
  **********************************************************/
-EmbeddedObject::EmbeddedObject( Sheet *_sheet, const KoRect& _geometry )
+EmbeddedObject::EmbeddedObject( Sheet *_sheet, const QRectF& _geometry )
   : m_geometry( _geometry), m_sheet(_sheet), m_objectName(""), m_selected(false), m_protect(false), m_keepRatio(false), pen( Qt::black, 1, Qt::SolidLine )
 {
   angle = 0.0;
@@ -65,23 +65,23 @@ EmbeddedObject::EmbeddedObject( Sheet *_sheet, const KoRect& _geometry )
 EmbeddedObject::~EmbeddedObject()
 {
 }
-KoRect EmbeddedObject::geometry()
+QRectF EmbeddedObject::geometry()
 {
     return m_geometry;
 }
-void EmbeddedObject::setGeometry( const KoRect &rect )
+void EmbeddedObject::setGeometry( const QRectF &rect )
 {
     m_geometry = rect;
 }
 
-void EmbeddedObject::moveBy( const KoPoint &_point )
+void EmbeddedObject::moveBy( const QPointF &_point )
 {
   m_geometry.moveTopLeft( m_geometry.topLeft() + _point );
 }
 
 void EmbeddedObject::moveBy( double _dx, double _dy )
 {
-  m_geometry.moveTopLeft( m_geometry.topLeft() + KoPoint( _dx, _dy ) );
+  m_geometry.moveTopLeft( m_geometry.topLeft() + QPointF( _dx, _dy ) );
 }
 
 void EmbeddedObject::resizeBy( const KoSize & _size )
@@ -91,7 +91,7 @@ void EmbeddedObject::resizeBy( const KoSize & _size )
 
 void EmbeddedObject::resizeBy( double _dx, double _dy)
 {
-  m_geometry.setSize( KoSize( m_geometry.width()+_dx, m_geometry.height()+_dy) );
+  m_geometry.setSize( QSizeF( m_geometry.width()+_dx, m_geometry.height()+_dy) );
 } // call (possibly reimplemented) setSize
 
 bool EmbeddedObject::load( const KoXmlElement& /*element*/ )
@@ -186,7 +186,7 @@ QPixmap EmbeddedObject::toPixmap(double /*xZoom*/ , double /*yZoom*/)
 
 void EmbeddedObject::calculateRequiredZoom( QSize desiredSize, double& xZoom, double& yZoom)
 {
-	QSize actualSize = geometry().size().toQSize();
+	QSize actualSize = geometry().size().toSize();
 
 	xZoom = (double) desiredSize.width() / (double)actualSize.width();
 	yZoom = (double) desiredSize.height() / (double)actualSize.height();
@@ -198,7 +198,7 @@ void EmbeddedObject::paintSelection( QPainter *_painter, SelectionMode mode )
     return;
 
   _painter->save();
-  KoRect bound( geometry().left(), geometry().top(),
+  QRectF bound( geometry().left(), geometry().top(),
                 geometry().width() , geometry().height() );
   QRect zoomedBound = sheet()->doc()->zoomRectOld( bound ) ;
 
@@ -207,7 +207,7 @@ void EmbeddedObject::paintSelection( QPainter *_painter, SelectionMode mode )
   _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
 
   //KoRect r = rotateRectObject(); // TODO: rotation
-  KoRect r = /*KoRect::fromQRect*/( bound );
+  QRectF r = /*KoRect::fromQRect*/( bound );
   int x = sheet()->doc()->zoomItXOld( r.left() /*- orig.x()*/);
   int y = sheet()->doc()->zoomItYOld( r.top() /*- orig.y()*/);
   int zX6 = /*sheet()->doc()->zoomItXOld*/( 6 );
@@ -366,14 +366,14 @@ void EmbeddedObject::doDelete()
  * EmbeddedKOfficeObject
  *
  **********************************************************/
-EmbeddedKOfficeObject::EmbeddedKOfficeObject( Doc *parent, Sheet *_sheet, KoDocument* doc, const KoRect& geometry )
+EmbeddedKOfficeObject::EmbeddedKOfficeObject( Doc *parent, Sheet *_sheet, KoDocument* doc, const QRectF& geometry )
     : EmbeddedObject( _sheet, geometry ), m_parent(parent)
 {
-    m_embeddedObject = new KoDocumentChild(parent, doc, geometry.toQRect() );
+    m_embeddedObject = new KoDocumentChild(parent, doc, geometry.toRect() );
 }
 
 EmbeddedKOfficeObject::EmbeddedKOfficeObject( Doc *parent, Sheet *_sheet )
-    : EmbeddedObject( _sheet, KoRect() ), m_parent(parent)
+    : EmbeddedObject( _sheet, QRectF() ), m_parent(parent)
 {
     m_embeddedObject = new KoDocumentChild( parent );
 }
@@ -416,7 +416,7 @@ bool EmbeddedKOfficeObject::load( const KoXmlElement& element )
 {
     kDebug() << "Loading EmbeddedKOfficeObject" << endl;
     bool result = embeddedObject()->load( element );
-    setGeometry( KoRect::fromQRect( embeddedObject()->geometry() ) );
+    setGeometry( embeddedObject()->geometry()  );
     return result;
 }
 
@@ -435,7 +435,7 @@ void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element, KoOasisLoadin
 QDomElement EmbeddedKOfficeObject::save( QDomDocument& doc )
 {
     kDebug() << "Saving EmbeddedKOfficeObject" << endl;
-    embeddedObject()->setGeometry( geometry().toQRect() );
+    embeddedObject()->setGeometry( geometry().toRect() );
     return m_embeddedObject->save( doc );
 }
 
@@ -444,7 +444,7 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
   kDebug() << "Painting..." << endl;
 
   int const penw = pen.width() ;
-  KoRect bound( 0, 0,
+  QRectF bound( 0, 0,
                 geometry().width() - ( 2 * penw ), geometry().height() - ( 2 * penw ) );
   QRect const zoomedBound = sheet()->doc()->zoomRectOld( bound );
 
@@ -536,7 +536,7 @@ void EmbeddedKOfficeObject::updateChildGeometry()
  *
  **********************************************************/
 
-EmbeddedChart::EmbeddedChart( Doc *_spread, Sheet *_sheet, KoDocument* doc, const KoRect& geometry )
+EmbeddedChart::EmbeddedChart( Doc *_spread, Sheet *_sheet, KoDocument* doc, const QRectF& geometry )
   : EmbeddedKOfficeObject( _spread, _sheet, doc, geometry )
 {
     m_pBinding = 0;
@@ -686,7 +686,7 @@ KoChart::Part* EmbeddedChart::chart()
  * EmbeddedPictureObject
  *
  **********************************************************/
-EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, const KoRect& _geometry, KoPictureCollection *_imageCollection )
+EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, const QRectF& _geometry, KoPictureCollection *_imageCollection )
    : EmbeddedObject( _sheet, _geometry )
 {
     imageCollection = _imageCollection;
@@ -703,7 +703,7 @@ EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, const KoRect& _geom
 }
 
 
-EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, const KoRect& _geometry, KoPictureCollection *_imageCollection, const KoPictureKey & key )
+EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, const QRectF& _geometry, KoPictureCollection *_imageCollection, const KoPictureKey & key )
     : EmbeddedObject( _sheet, _geometry )
 {
     imageCollection = _imageCollection;
@@ -724,7 +724,7 @@ EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, const KoRect& _geom
 }
 
 EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, KoPictureCollection *_imageCollection )
-  : EmbeddedObject( _sheet, KoRect(0,0,0,0) )
+  : EmbeddedObject( _sheet, QRectF(0,0,0,0) )
 {
   imageCollection = _imageCollection;
 

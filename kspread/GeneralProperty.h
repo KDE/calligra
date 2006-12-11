@@ -42,7 +42,7 @@ public:
         QString m_name;
         PropValue m_keepRatio;
         PropValue m_protect;
-        KoRect m_rect;
+        QRectF m_rect;
     };
 
     enum GeneralConfigChange
@@ -65,8 +65,8 @@ public:
     void apply();
 
 protected:
-    KoRect getRect() const;
-    void setRect( KoRect &rect );
+    QRectF getRect() const;
+    void setRect( QRectF &rect );
 
     KoGeneralPropertyUI *m_ui;
     double m_ratio;

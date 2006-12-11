@@ -120,7 +120,7 @@ public:
     KoPoint m_moveStartPoint;
 
     /// size of the object at when resizing is started
-    KoRect m_rectBeforeResize;
+    QRectF m_rectBeforeResize;
     /// Start position for move with mouse
     KoPoint m_moveStartPosMouse;
 

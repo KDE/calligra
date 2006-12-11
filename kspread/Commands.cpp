@@ -547,7 +547,7 @@ QString LinkCommand::name() const
   return newLink.isEmpty() ? i18n("Remove Link") : i18n("Set Link");
 }
 
-ChangeObjectGeometryCommand::ChangeObjectGeometryCommand( EmbeddedObject *_obj, const KoPoint &_m_diff, const KoSize &_r_diff )
+ChangeObjectGeometryCommand::ChangeObjectGeometryCommand( EmbeddedObject *_obj, const QPointF &_m_diff, const QSizeF &_r_diff )
   : m_diff( _m_diff ), r_diff( _r_diff )
 {
   obj = _obj;
@@ -564,8 +564,8 @@ void ChangeObjectGeometryCommand::execute()
 {
     doc->repaint( obj->geometry() );
 
-    KoRect geometry = obj->geometry();
-    geometry.moveBy( m_diff.x(),  m_diff.y() );
+    QRectF geometry = obj->geometry();
+    geometry.translate( m_diff.x(),  m_diff.y() );
     geometry.setWidth( geometry.width() + r_diff.width() );
     geometry.setHeight( geometry.height() + r_diff.height() );
     obj->setGeometry( geometry );
@@ -579,8 +579,8 @@ void ChangeObjectGeometryCommand::unexecute()
 {
   doc->repaint( obj->geometry() );
 
-  KoRect geometry = obj->geometry();
-  geometry.moveBy( -m_diff.x(),  -m_diff.y() );
+  QRectF geometry = obj->geometry();
+  geometry.translate( -m_diff.x(),  -m_diff.y() );
   geometry.setWidth( geometry.width() - r_diff.width() );
   geometry.setHeight( geometry.height() - r_diff.height() );
   obj->setGeometry( geometry );
@@ -664,7 +664,7 @@ QString RemoveObjectCommand::name() const
     return i18n("Remove Object");
 }
 
-InsertObjectCommand::InsertObjectCommand( const KoRect& _geometry, KoDocumentEntry& _entry, Canvas *_canvas ) //child
+InsertObjectCommand::InsertObjectCommand( const QRectF& _geometry, KoDocumentEntry& _entry, Canvas *_canvas ) //child
 {
   geometry = _geometry;
   entry = _entry;
@@ -673,7 +673,7 @@ InsertObjectCommand::InsertObjectCommand( const KoRect& _geometry, KoDocumentEnt
   obj = 0;
 }
 
-InsertObjectCommand::InsertObjectCommand(const KoRect& _geometry, KoDocumentEntry& _entry, const QRect& _data, Canvas *_canvas ) //chart
+InsertObjectCommand::InsertObjectCommand(const QRectF& _geometry, KoDocumentEntry& _entry, const QRect& _data, Canvas *_canvas ) //chart
 {
   geometry = _geometry;
   entry = _entry;
@@ -683,7 +683,7 @@ InsertObjectCommand::InsertObjectCommand(const KoRect& _geometry, KoDocumentEntr
   obj = 0;
 }
 
-InsertObjectCommand::InsertObjectCommand( const KoRect& _geometry , KUrl& _file, Canvas *_canvas ) //picture
+InsertObjectCommand::InsertObjectCommand( const QRectF& _geometry , KUrl& _file, Canvas *_canvas ) //picture
 {
   //In the case of pictures, only the top left point of the rectangle is relevant
   geometry = _geometry;
@@ -892,8 +892,8 @@ void MoveObjectByCmd::execute()
     for ( int i = 0; i < objects.count(); i++ ) {
         doc->repaint( objects.at( i )->geometry() );
 
-        KoRect r = objects.at( i )->geometry();
-        r.moveBy( diff.x(), diff.y() );
+        QRectF r = objects.at( i )->geometry();
+        r.translate( diff.x(), diff.y() );
         objects.at( i )->setGeometry( r );
 
         doc->repaint( objects.at( i ) );
@@ -907,8 +907,8 @@ void MoveObjectByCmd::unexecute()
     for ( int i = 0; i < objects.count(); i++ ) {
         doc->repaint( objects.at( i )->geometry() );
 
-        KoRect r = objects.at( i )->geometry();
-        r.moveBy( -diff.x(), -diff.y() );
+        QRectF r = objects.at( i )->geometry();
+        r.translate( -diff.x(), -diff.y() );
         objects.at( i )->setGeometry( r );
 
         doc->repaint( objects.at( i ) );

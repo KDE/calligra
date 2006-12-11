@@ -112,15 +112,15 @@ enum AlignType {
 class EmbeddedObject
 {
   public:
-    EmbeddedObject( Sheet *_sheet, const KoRect& _geometry );
+    EmbeddedObject( Sheet *_sheet, const QRectF& _geometry );
     virtual ~EmbeddedObject();
     virtual ObjType getType() const { return OBJECT_GENERAL; }
     virtual QString getTypeString() const
         { return QString(); }
 
-    KoRect geometry();
-    void setGeometry( const KoRect &rect );
-    virtual void moveBy( const KoPoint &_point );
+    QRectF geometry();
+    void setGeometry( const QRectF &rect );
+    virtual void moveBy( const QPointF &_point );
     virtual void moveBy( double _dx, double _dy );
     virtual void resizeBy( const KoSize & _size );
     virtual void resizeBy( double _dx, double _dy );
@@ -221,7 +221,7 @@ class EmbeddedObject
      */
     void calculateRequiredZoom( QSize desiredSize , double& xZoom, double& yZoom );
 
-    KoRect m_geometry;
+    QRectF m_geometry;
     Sheet *m_sheet;
     Canvas *m_canvas;
     QString m_objectName;
@@ -242,7 +242,7 @@ class EmbeddedObject
 class EmbeddedKOfficeObject : public EmbeddedObject
 {
   public:
-    EmbeddedKOfficeObject( Doc *parent, Sheet *_sheet, KoDocument* doc, const KoRect& geometry );
+    EmbeddedKOfficeObject( Doc *parent, Sheet *_sheet, KoDocument* doc, const QRectF& geometry );
     EmbeddedKOfficeObject( Doc *parent, Sheet *_sheet );
     virtual ~EmbeddedKOfficeObject();
     virtual ObjType getType() const { return OBJECT_KOFFICE_PART; }
@@ -281,7 +281,7 @@ class EmbeddedKOfficeObject : public EmbeddedObject
 class EmbeddedChart : public EmbeddedKOfficeObject
 {
   public:
-    EmbeddedChart( Doc *_spread, Sheet *_sheet, KoDocument* doc, const KoRect& _rect );
+    EmbeddedChart( Doc *_spread, Sheet *_sheet, KoDocument* doc, const QRectF& _rect );
     EmbeddedChart( Doc *_spread, Sheet *_sheet );
     virtual ~EmbeddedChart();
     virtual ObjType getType() const { return OBJECT_CHART; }
@@ -318,8 +318,8 @@ class EmbeddedChart : public EmbeddedKOfficeObject
 class EmbeddedPictureObject : public EmbeddedObject
 {
   public:
-    EmbeddedPictureObject(Sheet *_sheet, const KoRect& _geometry, KoPictureCollection *_imageCollection );
-    EmbeddedPictureObject(Sheet *_sheet, const KoRect& _geometry, KoPictureCollection *_imageCollection, const KoPictureKey & key );
+    EmbeddedPictureObject(Sheet *_sheet, const QRectF& _geometry, KoPictureCollection *_imageCollection );
+    EmbeddedPictureObject(Sheet *_sheet, const QRectF& _geometry, KoPictureCollection *_imageCollection, const KoPictureKey & key );
     EmbeddedPictureObject( Sheet *_sheet, KoPictureCollection *_imageCollection );
     virtual ~EmbeddedPictureObject();
     EmbeddedPictureObject &operator=( const EmbeddedPictureObject & );

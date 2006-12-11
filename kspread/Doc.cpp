@@ -2263,6 +2263,21 @@ void Doc::repaint( const KoRect& rect )
   }
 }
 
+void Doc::repaint( const QRectF& rect )
+{
+  QRect r;
+  foreach ( KoView* view, views() )
+  {
+    Canvas* canvas = static_cast<View*>( view )->canvasWidget();
+
+    r = zoomRectOld( rect );
+    r.translate( (int)( -canvas->xOffset()*zoomedResolutionX() ) ,
+                        (int)( -canvas->yOffset() *zoomedResolutionY()) );
+    canvas->update( r );
+  }
+}
+
+
 void Doc::addShell( KoMainWindow *shell )
 {
   connect( shell, SIGNAL( documentSaved() ), d->commandHistory, SLOT( documentSaved() ) );

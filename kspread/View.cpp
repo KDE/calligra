@@ -4744,8 +4744,8 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
       return;
 
     // Transform the view coordinates to document coordinates
-    KoRect unzoomedRect = doc()->unzoomRectOld( _geometry );
-    unzoomedRect.moveBy( d->canvas->xOffset(), d->canvas->yOffset() );
+    QRectF unzoomedRect = doc()->unzoomRectOldF( _geometry );
+    unzoomedRect.translate( d->canvas->xOffset(), d->canvas->yOffset() );
 
     InsertObjectCommand *cmd = 0;
     if ( d->selection->isColumnOrRowSelected() )
@@ -4766,8 +4766,8 @@ void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
     return;
 
   // Transform the view coordinates to document coordinates
-  KoRect unzoomedRect = doc()->unzoomRectOld( _geometry );
-  unzoomedRect.moveBy( d->canvas->xOffset(), d->canvas->yOffset() );
+  QRectF unzoomedRect = doc()->unzoomRectOldF( _geometry );
+  unzoomedRect.translate( d->canvas->xOffset(), d->canvas->yOffset() );
 
   InsertObjectCommand *cmd = new InsertObjectCommand( unzoomedRect, _e, d->canvas );
   doc()->addCommand( cmd );
@@ -4799,7 +4799,7 @@ void View::insertPicture()
   if ( !d->activeSheet )
       return;
 
-  InsertObjectCommand *cmd = new InsertObjectCommand( KoRect(markerDocumentPosition(),KoSize(0,0)) , file, d->canvas );
+  InsertObjectCommand *cmd = new InsertObjectCommand( QRectF(markerDocumentPosition(),QSizeF(0,0)) , file, d->canvas );
   doc()->addCommand( cmd );
   cmd->execute();
 }

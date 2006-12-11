@@ -2321,7 +2321,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
             if ( !point.isValid() )
               continue;
 
-            KoRect geometry = obj->geometry();
+            QRectF geometry = obj->geometry();
             geometry.setLeft( geometry.left() + sheet()->columnPos( d->column ) );
             geometry.setTop( geometry.top() + sheet()->rowPos( d->row ) );
 

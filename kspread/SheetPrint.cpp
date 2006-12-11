@@ -533,7 +533,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 //        .arg(view.left()).arg(view.top()).arg(zoomedView.right()).arg(zoomedView.bottom());
 //        kDebug(36001)<<tmp<<" offset "<<_childOffset.x()<<"/"<<_childOffset.y()<<endl;
 
-          KoRect const bound = obj->geometry();
+          QRectF const bound = obj->geometry();
           QRect zoomedBound = m_pDoc->zoomRectOld( KoRect(bound.left(), bound.top(),
               bound.width(),
               bound.height() ) );

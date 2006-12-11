@@ -280,8 +280,8 @@ KCommand * PropertyEditor::getCommand()
 
                 foreach ( EmbeddedObject* object, m_objects )
                 {
-                    KoRect oldRect = object->geometry()/*getRect()*/;
-                    KoRect newRect = oldRect;
+                    QRectF oldRect = object->geometry()/*getRect()*/;
+                    QRectF newRect = oldRect;
 
                     if ( change & GeneralProperty::Left )
                         newRect.moveTopLeft( QPointF( generalValue.m_rect.left(), newRect.top() ) );

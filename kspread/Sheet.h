@@ -436,7 +436,7 @@ public:
      *
      * @return rect of the objects
      */
-    KoRect getRealRect( bool all );
+    QRectF getRealRect( bool all );
 
     /**
      * \ingroup Embedding
@@ -467,12 +467,12 @@ public:
     /**
      * \ingroup Embedding
      */
-    bool insertChild( const KoRect& _geometry, KoDocumentEntry&, QWidget* );
+    bool insertChild( const QRectF& _geometry, KoDocumentEntry&, QWidget* );
 
     /**
      * \ingroup Embedding
      */
-    bool insertChart( const KoRect& _geometry, KoDocumentEntry&, const QRect& _data, QWidget* );
+    bool insertChart( const QRectF& _geometry, KoDocumentEntry&, const QRect& _data, QWidget* );
 
     /**
      * \ingroup Embedding
@@ -499,7 +499,7 @@ public:
     /**
      * \ingroup Embedding
      */
-    void changeChildGeometry( EmbeddedKOfficeObject *_child, const KoRect& _geometry );
+    void changeChildGeometry( EmbeddedKOfficeObject *_child, const QRectF& _geometry );
 
     /**
      * \ingroup Embedding
