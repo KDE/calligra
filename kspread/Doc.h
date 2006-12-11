@@ -749,7 +749,6 @@ public:
   // repaint (update) all views
   void repaint( const QRect& );
   void repaint( EmbeddedObject* );
-  void repaint( const KoRect& );
   void repaint( const QRectF& );
 
   virtual void addShell( KoMainWindow *shell );

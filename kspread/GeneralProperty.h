@@ -23,7 +23,6 @@
 #include <QWidget>
 #include "Global.h"
 
-#include <KoRect.h>
 #include <KoUnit.h>
 
 class KoGeneralPropertyUI;

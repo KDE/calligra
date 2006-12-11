@@ -57,7 +57,6 @@ class KoXmlWriter;
 class KoGenStyles;
 class KoGenStyle;
 class KSParseNode;
-class KoRect;
 class KoOasisStyles;
 class KoOasisLoadingContext;
 

@@ -77,7 +77,6 @@
 #include "ValueParser.h"
 
 #include <KoStyleStack.h>
-#include <KoRect.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
 #include <KoOasisStyles.h>

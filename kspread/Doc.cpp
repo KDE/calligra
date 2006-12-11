@@ -2249,20 +2249,6 @@ void Doc::repaint( EmbeddedObject *obj )
   }
 }
 
-void Doc::repaint( const KoRect& rect )
-{
-  QRect r;
-  foreach ( KoView* view, views() )
-  {
-    Canvas* canvas = static_cast<View*>( view )->canvasWidget();
-
-    r = zoomRectOld( rect );
-    r.translate( (int)( -canvas->xOffset()*zoomedResolutionX() ) ,
-                        (int)( -canvas->yOffset() *zoomedResolutionY()) );
-    canvas->update( r );
-  }
-}
-
 void Doc::repaint( const QRectF& rect )
 {
   QRect r;

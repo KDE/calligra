@@ -29,7 +29,6 @@
 #include <KoOasisLoadingContext.h>
 #include <KoPen.h>
 #include <KoPictureCollection.h>
-#include <KoRect.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlNS.h>
