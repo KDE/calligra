@@ -113,16 +113,16 @@ public:
     double m_ratio;
     bool m_isResizing;
     /// The last position of the mouse during moving
-    KoPoint m_origMousePos;
+    QPointF m_origMousePos;
 
     //---- stuff needed for moving ----
     bool m_isMoving;
-    KoPoint m_moveStartPoint;
+    QPointF m_moveStartPoint;
 
     /// size of the object at when resizing is started
     QRectF m_rectBeforeResize;
     /// Start position for move with mouse
-    KoPoint m_moveStartPosMouse;
+    QPointF m_moveStartPosMouse;
 
     /// object which is selected and should be shown above all the other objects
     EmbeddedObject * m_objectDisplayAbove;

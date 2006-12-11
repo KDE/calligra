@@ -437,7 +437,7 @@ protected:
 class MoveObjectByCmd : public KNamedCommand
 {
 public:
-    MoveObjectByCmd( const QString &_name, const KoPoint &_diff, QList<EmbeddedObject*> &_objects,
+    MoveObjectByCmd( const QString &_name, const QPointF &_diff, QList<EmbeddedObject*> &_objects,
                Doc *_doc, Sheet *m_page );
     ~MoveObjectByCmd();
 
@@ -446,7 +446,7 @@ public:
 
 protected:
 
-    KoPoint diff;
+    QPointF diff;
     QList<EmbeddedObject*> objects;
     Doc *doc;
     Sheet *m_page;

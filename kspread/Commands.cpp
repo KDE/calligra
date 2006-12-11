@@ -866,7 +866,7 @@ void GeometryPropertiesCommand::unexecute()
     }
 }
 
-MoveObjectByCmd::MoveObjectByCmd( const QString &_name, const KoPoint &_diff,
+MoveObjectByCmd::MoveObjectByCmd( const QString &_name, const QPointF &_diff,
                                   QList<EmbeddedObject*> &_objects,
                                   Doc *_doc, Sheet *_page )
     : KNamedCommand( _name ), diff( _diff ), objects( _objects )

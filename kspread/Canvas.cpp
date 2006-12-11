@@ -743,8 +743,8 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 
   if ( d->mousePressed && d->modType != MT_NONE )
   {
-    KoPoint docPoint ( doc()->unzoomPointOld( _ev->pos() ) );
-    docPoint += KoPoint( xOffset(), yOffset() );
+    QPointF docPoint ( doc()->unzoomPointOldF( _ev->pos() ) );
+    docPoint += QPointF( xOffset(), yOffset() );
 
     if ( d->modType == MT_MOVE )
     {
@@ -765,7 +765,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
       {
         keepRatio = true;
       }
-      docPoint  = KoPoint( doc()->unzoomPointOld( _ev->pos() ) );
+      docPoint  = QPointF( doc()->unzoomPointOldF( _ev->pos() ) );
       resizeObject( d->modType, docPoint, keepRatio );
     }
     return;
@@ -1033,8 +1033,8 @@ void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
     {
       case MT_MOVE:
       {
-        KoPoint move( objectRect( false ).topLeft() - d->m_moveStartPosMouse );
-        if ( move != KoPoint( 0, 0 ) )
+        QPointF move( objectRect( false ).topLeft() - d->m_moveStartPosMouse );
+        if ( move != QPointF( 0, 0 ) )
         {
           KCommand *cmd= sheet->moveObject( view(), move.x(), move.y() );
           if(cmd)
@@ -1220,8 +1220,8 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
         d->m_rectBeforeResize = obj->geometry();
       }
 
-      KoPoint docPoint ( doc()->unzoomPointOld( _ev->pos() ) );
-      docPoint += KoPoint( xOffset(), yOffset() );
+      QPointF docPoint ( doc()->unzoomPointOldF( _ev->pos() ) );
+      docPoint += QPointF( xOffset(), yOffset() );
       d->m_origMousePos = docPoint;
       d->m_moveStartPosMouse = objectRect( false ).topLeft();
       return;
@@ -2077,7 +2077,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
       {
         if ( d->m_isMoving )
         {
-          KoPoint move( d->m_moveStartPoint - objectRect( false ).topLeft() );
+          QPointF move( d->m_moveStartPoint - objectRect( false ).topLeft() );
           sheet->moveObject( view(), move, false );
           view()->disableAutoScroll();
           d->mousePressed = false;
@@ -3047,14 +3047,14 @@ bool Canvas::isObjectSelected()
 }
 
 
-void Canvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
+void Canvas::moveObjectsByMouse( QPointF &pos, bool keepXorYunchanged )
 {
   QRectF rect( objectRect( false ) );
-  KoPoint move( 0, 0 );
+  QPointF move( 0, 0 );
   double diffx = pos.x() - d->m_origMousePos.x();
   double diffy = pos.y() - d->m_origMousePos.y();
 
-  move = KoPoint( diffx, diffy );
+  move = QPointF( diffx, diffy );
   d->m_origMousePos = pos;
 
     // unwind last snapping
@@ -3062,7 +3062,7 @@ void Canvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
   movedRect.translate( diffx, diffy );
 
     // don't move object off canvas
-  KoPoint diffDueToBorders(0,0);
+  QPointF diffDueToBorders(0,0);
 //   KoRect pageRect( m_activePage->getPageRect() );
   if ( rect.left() + move.x() < 0/*pageRect.left()*/ )
     diffDueToBorders.setX( -rect.left() - move.x() );
@@ -3097,7 +3097,7 @@ void Canvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
     }
   }
 
-  if ( move != KoPoint( 0, 0 ) )
+  if ( move != QPointF( 0, 0 ) )
   {
         //kDebug(33001) << "moveObjectsByMouse move = " << move << endl;
     activeSheet()->moveObject( view(), move, false );

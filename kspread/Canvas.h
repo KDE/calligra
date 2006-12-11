@@ -340,7 +340,7 @@ public:
      * @param pos The position of the mouse
      * @param keepXorYunchanged if true keep x or y position unchanged
      */
-    void moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged );
+    void moveObjectsByMouse( QPointF &pos, bool keepXorYunchanged );
 
     //---- stuff needed for resizing ----
     /// resize the m_resizeObject

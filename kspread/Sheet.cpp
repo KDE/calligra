@@ -3020,7 +3020,7 @@ KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
         }
     }
     if(createCommand) {
-        moveByCmd = new MoveObjectByCmd( i18n( "Move Objects" ), KoPoint( diffx, diffy ),
+        moveByCmd = new MoveObjectByCmd( i18n( "Move Objects" ), QPointF( diffx, diffy ),
                                    _objects, doc(), this );
 
 //         m_doc->updateSideBarItem( this );
@@ -3028,7 +3028,7 @@ KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
     return moveByCmd;
 }
 
-KCommand *Sheet::moveObject(View *_view,const KoPoint &_move,bool key)
+KCommand *Sheet::moveObject(View *_view,const QPointF &_move,bool key)
 {
     QList<EmbeddedObject*> _objects;
     MoveObjectByCmd *moveByCmd=0;
@@ -3055,7 +3055,7 @@ KCommand *Sheet::moveObject(View *_view,const KoPoint &_move,bool key)
 
     if ( key && !_objects.isEmpty())
         moveByCmd = new MoveObjectByCmd( i18n( "Move Objects" ),
-                                   KoPoint( _move ),
+                                   QPointF( _move ),
                                    _objects, doc() ,this );
 
     return moveByCmd;

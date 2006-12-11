@@ -450,7 +450,7 @@ public:
      * Moves the selected object.
      * \return command for undo
      */
-    KCommand *moveObject(View *m_view,const KoPoint &_move,bool key);
+    KCommand *moveObject(View *m_view,const QPointF &_move,bool key);
 
     /**
      * \ingroup Embedding
