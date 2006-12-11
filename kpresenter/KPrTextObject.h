@@ -268,7 +268,7 @@ public:
     virtual void drawCursor( bool b );
 
     const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
-    void showPopup( KPrView *view, const QPoint &point, QList<KAction*> &actionList );
+    void showPopup( KPrView *view, const QPoint &point, QList<QAction*> &actionList );
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
     void insertLink(const QString &_linkName, const QString & hrefName);

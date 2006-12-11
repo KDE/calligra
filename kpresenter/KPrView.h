@@ -183,7 +183,7 @@ public:
     void insertFile(const QString &path);
     void testAndCloseAllTextObjectProtectedContent();
     void updateRulerInProtectContentMode();
-    QList<KAction*> listOfResultOfCheckWord( const QString &word );
+    QList<QAction*> listOfResultOfCheckWord( const QString &word );
 
     /**
      * Returns the KPresenter global KSpell2 Loader object.
@@ -644,9 +644,9 @@ public:
     KPrNoteBar *getNoteBar() const { return notebar; }
 
     // Used by Page to plug/unplug the datatool actions
-    QList<KAction*>& actionList() { return m_actionList; }
+    QList<QAction*>& actionList() { return m_actionList; }
     // Used by Page to plug/unplug the variable actions
-    QList<KAction*> &variableActionList() { return m_variableActionList; }
+    QList<QAction*> &variableActionList() { return m_variableActionList; }
 
     // for Polygon object
     bool getCheckConcavePolygon() const { return checkConcavePolygon; }
@@ -844,8 +844,8 @@ private:
     // right button popup menus
     QMenu *rb_lbegin, *rb_lend;
     QMenu *m_arrangeObjectsPopup;
-    QList<KAction*> m_actionList; // for the kodatatools
-    QList<KAction*> m_variableActionList;
+    QList<QAction*> m_actionList; // for the kodatatools
+    QList<QAction*> m_variableActionList;
 
     // scrollbars
     QScrollBar *vert, *horz;

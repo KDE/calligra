@@ -1839,6 +1839,8 @@ void KPrView::textInsertPageNum()
 
 void KPrView::mtextFont()
 {
+#warning "kde4 port"	
+#if 0	
     KoTextFormatInterface* textAdaptor = m_canvas->applicableTextInterfaces().first();
     if (!textAdaptor)
         return;
@@ -1859,15 +1861,19 @@ void KPrView::mtextFont()
 
     delete m_fontDlg;
     m_fontDlg=0L;
+#endif    
 }
 
 void KPrView::slotApplyFont()
 {
+	//TODO adapt to new API
+#if 0	
     int flags = m_fontDlg->changedFlags();
     if ( flags )
     {
         m_canvas->setTextFormat(m_fontDlg->newFormat(), flags);
     }
+#endif    
 }
 
 void KPrView::slotCounterStyleSelected()
@@ -3520,11 +3526,11 @@ void KPrView::doAutomaticScreenPres()
 void KPrView::updateReadWrite( bool readwrite )
 {
     // First disable or enable everything
-    QList<KAction*> actions = actionCollection()->actions();
+    QList<QAction*> actions = actionCollection()->actions();
     // Also grab actions from the document
     actions += m_pKPresenterDoc->actionCollection()->actions();
-    QList<KAction*>::ConstIterator aIt = actions.begin();
-    QList<KAction*>::ConstIterator aEnd = actions.end();
+    QList<QAction*>::ConstIterator aIt = actions.begin();
+    QList<QAction*>::ConstIterator aEnd = actions.end();
     for (; aIt != aEnd; ++aIt )
         (*aIt)->setEnabled( readwrite );
 
@@ -4135,7 +4141,7 @@ void KPrView::openPopupMenuMenuPage( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() || !factory())
         return;
-    QList<KAction*> actionList= QList<KAction*>();
+    QList<QAction*> actionList= QList<QAction*>();
     KSeparatorAction *separator=new KSeparatorAction();
     switch( m_canvas->activePage()->getBackType())
     {
@@ -4750,12 +4756,13 @@ void KPrView::addVariableActions( int type, const QStringList & texts,
 void KPrView::refreshCustomMenu()
 {
 	QMap<QString, KShortcut> shortCuts;
-   QList<KAction *> actions = actionCollection()->actions("custom-variable-action");
+#if 0	
+   QList<QAction *> actions = actionCollection()->actions("custom-variable-action");
    for (int actNdx = 0; actNdx < actions.count(); ++actNdx) {
 		shortCuts.insert((actions[actNdx])->text(), (actions[actNdx])->shortcut());
         delete actions[actNdx];
     }
-
+#endif
     delete actionInsertCustom;
     actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
                                           actionCollection(), "insert_custom" );
@@ -4811,7 +4818,7 @@ void KPrView::insertCustomVariable()
     KPrTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
     {
-        KAction * act = (KAction *)(sender());
+        QAction * act = (QAction *)(sender());
         edit->insertCustomVariable(act->text());
     }
 }
@@ -5376,14 +5383,15 @@ void KPrView::updateStyleList()
     // Generate unique accelerators for the menu items
     KAccelGen::generate( lst, lstWithAccels );
     QMap<QString, KShortcut> shortCuts;
-
-	QList<KAction *> actions = actionCollection()->actions("styleList");
+#warning "KDE4 port"
+#if 0
+	QList<QAction *> actions = actionCollection()->actions("styleList");
     for (int actNdx = 0; actNdx < actions.count(); ++actNdx) {
 		shortCuts.insert( QString::fromUtf8( (actions[actNdx])->name() ), (actions[actNdx])->shortcut() );
 		actionFormatStyleMenu->remove( actions[actNdx] );
 		delete actions[actNdx];
 	}
-
+#endif
 
     uint i = 0;
 	QActionGroup* styleGroup = new QActionGroup( this );
@@ -5410,6 +5418,7 @@ void KPrView::updateStyleList()
 
 void KPrView::extraStylist()
 {
+#if 0	
     KPrTextView *edit=m_canvas->currentTextObjectView();
     QString activeStyleName;
     if ( edit )
@@ -5424,6 +5433,7 @@ void KPrView::extraStylist()
     delete styleManager;
     if ( edit )
         edit->showCursor();
+#endif
 }
 
 // Called when selecting a style in the Format / Style menu
@@ -6274,9 +6284,9 @@ void KPrView::spellAddAutoCorrect (const QString & originalword, const QString &
     m_pKPresenterDoc->getAutoFormat()->addAutoFormatEntry( originalword, newword );
 }
 
-QList<KAction*> KPrView::listOfResultOfCheckWord( const QString &word )
+QList<QAction*> KPrView::listOfResultOfCheckWord( const QString &word )
 {
-    QList<KAction*> listAction;
+    QList<QAction*> listAction;
     DefaultDictionary *dict = m_loader->defaultDictionary();
     QStringList lst = dict->suggest( word );
     if ( !lst.contains( word ))
@@ -6298,7 +6308,7 @@ QList<KAction*> KPrView::listOfResultOfCheckWord( const QString &word )
 
 void KPrView::slotCorrectWord()
 {
-    KAction * act = (KAction *)(sender());
+    QAction * act = (QAction *)(sender());
     KPrTextView* edit = m_canvas->currentTextObjectView();
     if ( edit )
     {

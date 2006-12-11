@@ -2219,14 +2219,14 @@ void KPrTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
     handleMouseReleaseEvent();
 }
 
-void KPrTextView::showPopup( KPrView *view, const QPoint &point, QList<KAction*>& actionList )
+void KPrTextView::showPopup( KPrView *view, const QPoint &point, QList<QAction*>& actionList )
 {
     QString word = wordUnderCursor( *cursor() );
     view->unplugActionList( "datatools" );
     view->unplugActionList( "datatools_link" );
     view->unplugActionList( "spell_result_action" );
     view->unplugActionList( "variable_action" );
-    QList<KAction*> &variableList = view->variableActionList();
+    QList<QAction*> &variableList = view->variableActionList();
     variableList.clear();
     actionList.clear();
 
@@ -2234,7 +2234,8 @@ void KPrTextView::showPopup( KPrView *view, const QPoint &point, QList<KAction*>
     KoVariable* var = variable();
     if ( var )
     {
-        variableList = view->kPresenterDoc()->getVariableCollection()->popupActionList();
+#warning "kde4 port"	    
+        //variableList = view->kPresenterDoc()->getVariableCollection()->popupActionList();
     }
 
     if( variableList.count()>0)
@@ -2268,7 +2269,7 @@ void KPrTextView::showPopup( KPrView *view, const QPoint &point, QList<KAction*>
             {
                 if ( singleWord )
                 {
-                    QList<KAction*> actionCheckSpellList =view->listOfResultOfCheckWord( word );
+                    QList<QAction*> actionCheckSpellList =view->listOfResultOfCheckWord( word );
                     if ( actionCheckSpellList.count()>0)
                     {
                         view->plugActionList( "spell_result_action", actionCheckSpellList );

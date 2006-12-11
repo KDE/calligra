@@ -76,7 +76,7 @@ set(kpresenterprivate_LIB_SRCS ${libaf_SRCS}
    KPrShadowDialogImpl.cpp
    KPrTextPreview.cpp
    KPrRotationDialogImpl.cpp
-   KPrStyleManager.cpp
+   #KPrStyleManager.cpp
    KPrBgSpellCheck.cpp
    KPrMoveHelpLineDia.cpp
    KPrDuplicateObjDia.cpp
