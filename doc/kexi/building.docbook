@@ -44,7 +44,7 @@ in that chapter.
 <procedure>
 <step>
 <para>
-Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Table</guimenuitem>
+Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Table...</guimenuitem>
 </menuchoice> from the Menubar. You can also use the button <guilabel>Create
 object: table</guilabel> on the <link linkend="project-navigator-pane">Project
 Navigator's toolbar</link>.
@@ -91,7 +91,7 @@ be saved within the table design and only visible in design mode.
 In the <guilabel>Table designer</guilabel> window, every row corresponds to
 a single table field. You can recognize you are in <emphasis>design
 mode</emphasis> because the <!-- <img src="icons/state_edit.png" class="icon"> -->
-<guibutton>Switch to Design View mode</guibutton> button is toggled on within
+<guibutton>Switch to design view</guibutton> button is toggled on within
 the main &kexi; toolbar.
 </para>
 
@@ -105,7 +105,7 @@ column and enter <emphasis>Name</emphasis> as field caption.
 <itemizedlist>
 <title>Notes about field names and captions</title>
 <listitem><para>
-Every table field must have a name and a capation, these cannot be empty.
+Every table field must have a name and a caption, these cannot be empty.
 </para></listitem>
 <listitem><para>
 Field name is a word used by the database, usually not visible for users of the database application. The name may not contain special (national) characters (like ±, ¶, Ü)
@@ -160,7 +160,7 @@ From now on, the <emphasis>house_number</emphasis> field only accepts numbers.
 <!-- TODO setting additional properties: e.g. caption -->
 <step><para>
 <emphasis>Persons</emphasis> table design is ready. Click <!-- <img src="icons/state_data.png" class="icon">-->
-<guibutton>Switch to Data View</guibutton> button on the toolbar to finish
+<guibutton>Switch to data view</guibutton> button on the toolbar to finish
 designing and switch to Data View for the table. This allows you entering
 data into the table.
 </para></step>
@@ -226,7 +226,7 @@ forms and prefixes.
 
 <step><para>
 Click <!--<img src="icons/state_data.png" class="icon"> --> <guibutton>Switch to
-Data View</guibutton> button on the toolbar and enter <emphasis>Phones</emphasis>
+data view</guibutton> button on the toolbar and enter <emphasis>Phones</emphasis>
 caption for the table. As for your previous table, allow &kexi; to automatically
 create a primary key.
 </para></step>

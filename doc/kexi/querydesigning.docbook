@@ -33,7 +33,7 @@
       <step>
         <para>
           Create a new empty query by selecting <!--<img src="icons/query_newobj.png" class="icon">-->
-          <menuchoice><guimenu>Insert</guimenu><guimenuitem>Query</guimenuitem></menuchoice> from
+          <menuchoice><guimenu>Insert</guimenu><guimenuitem>Query...</guimenuitem></menuchoice> from
           the menubar. The design window will appear. <!--similar to the one presented in the
           figure below. -->The window is split into two areas: query
           relationships at the top and query columns below.

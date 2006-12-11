@@ -84,7 +84,7 @@
 	    <menuchoice>
 	    <guimenu>File</guimenu>
 	    <guisubmenu>Import</guisubmenu>
-	    <guimenuitem>Data Table...</guimenuitem>
+	    <guimenuitem>Table Data From File...</guimenuitem>
 	  </menuchoice>
 	  </term>
 	  <listitem>
@@ -97,7 +97,7 @@
 	    <menuchoice>
 	    <guimenu>File</guimenu>
 	    <guisubmenu>Export</guisubmenu>
-	    <guimenuitem>Table or Query as Data Table...</guimenuitem>
+	    <guimenuitem>Table or Query Data to File...</guimenuitem>
 	  </menuchoice>
 	  </term>
 	  <listitem>
@@ -140,9 +140,6 @@ be seen after clicking on the <guimenu>Options&gt;&gt;</guimenu> button.</para><
 	<varlistentry>
 	  <term>
 	    <menuchoice>
-	      <shortcut>
-		<keycombo action="simul">&Ctrl;<keycap>W</keycap></keycombo>
-	      </shortcut>
 	      <guimenu>File</guimenu>
 	      <guimenuitem>Close Project</guimenuitem>
 	  </menuchoice>
@@ -291,6 +288,7 @@ onto the form.</para></listitem>
 <listitem><para><action>Delete currently selected row from a table.</action></para></listitem>
 </varlistentry>
 
+<!-- missing items Clear Table Contents, Insert Empty Row, Primary Key lueck 11.12.06 -->
 </variablelist>
 </sect1>
 
@@ -304,7 +302,7 @@ onto the form.</para></listitem>
 <guimenu>View</guimenu>
 <guimenuitem>Data View</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Switch to Data View.</action></para></listitem>
+<listitem><para><action>Data View.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -374,6 +372,8 @@ and means switching to the SQL View of the Query Designer.</para></listitem>
 </menuchoice></term>
 <listitem><para><action>Display or hide the Project Navigator pane.</action></para></listitem>
 </varlistentry>
+
+<!-- missing item Tool Docks lueck 11.12.06 -->
 
 </variablelist>
 </sect1>
@@ -545,6 +545,8 @@ Data from selected column is used for sorting.</para></listitem>
 Data from selected column is used for sorting.</para></listitem>
 </varlistentry>
 
+<!-- missing item Execute lueck 11.12.06 -->
+
 </variablelist>
 </sect1>
 
@@ -560,6 +562,9 @@ Data from selected column is used for sorting.</para></listitem>
 <listitem><para><action>Opens the Data Base Importing Wizard</action>
 to import an existing database into a &kexi; database.</para></listitem>
 </varlistentry>
+
+<!-- missing item Compact Database... lueck 11.12.06 -->
+
 
 <varlistentry>
 <term><menuchoice>
@@ -582,7 +587,7 @@ dialog</action> to execute, load, unload, install, unistall or download scripts.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
-<guimenuitem>Scripts</guimenuitem>
+<guisubmenu>Scripts</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Executes an already loaded script.</action></para></listitem>
 </varlistentry>
@@ -666,7 +671,7 @@ dialog</action> to execute, load, unload, install, unistall or download scripts.
 	  <term>
 	    <menuchoice>
 	      <guimenu>Settings</guimenu>
-	      <guimenuitem>Toolbars</guimenuitem>
+	      <guisubmenu>Toolbars</guisubmenu>
 	    </menuchoice>
 	  </term>
 	  <listitem>

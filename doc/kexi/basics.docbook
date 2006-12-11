@@ -52,14 +52,19 @@
 	    <shortcut>
 	      <keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
 	    </shortcut>
-	    <guimenu>File</guimenu><guimenuitem>New</guimenuitem>
+	    <guimenu>File</guimenu><guimenuitem>New...</guimenuitem>
 	  </menuchoice>.
 	</para>
       </step>
       <step>
 	<para>
-	  Click the <guibutton>OK</guibutton> to confirm the
+	  Choose <guilabel>Blank Database</guilabel> and click the <guibutton>OK</guibutton> to confirm the
 	  creation of the project.
+	</para>
+      </step>
+      <step>
+	<para>
+	  Select <guilabel>New Project Stored in File and proceed with <guibutton>Next</guibutton>.
 	</para>
       </step>
       <step>
@@ -397,7 +402,7 @@ pane in appendix Property Editor pane.
       <itemizedlist>
         <listitem><para>
             Run &kexi;. <!--(see <a href="04_02_00_running_kexi.html">Running Kexi</a>).-->
-            You should see <guilabel>Choose Project</guilabel> startup dialog.
+            You should see the <guilabel>Choose Project</guilabel> startup dialog.
             Choose <guilabel>Open Existing Project</guilabel> tab.
             You will see the following dialog:
           <!-- image: <img src="img/04_04_01_startup_open_existing.png"> -->
