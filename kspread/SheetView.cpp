@@ -94,7 +94,7 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
     QLinkedList<QPoint> mergedCellsPainted;
 
     // 1. Paint the cell content, background, ... (except borders)
-    KoPoint dblCorner( topLeft.x(), topLeft.y() );
+    QPointF dblCorner( topLeft.x(), topLeft.y() );
     int right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
@@ -112,7 +112,7 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
     }
 
     // 2. Paint the default borders
-    dblCorner = KoPoint( topLeft.x(), topLeft.y() );
+    dblCorner = QPointF( topLeft.x(), topLeft.y() );
     right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
@@ -133,7 +133,7 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
     }
 
     // 3. Paint the custom borders, diagonal lines and page borders
-    dblCorner = KoPoint( topLeft.x(), topLeft.y() );
+    dblCorner = QPointF( topLeft.x(), topLeft.y() );
     right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {

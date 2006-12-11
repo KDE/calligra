@@ -233,7 +233,7 @@ void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
       if ( view )
       {
         QPoint marker = view->markerFromSheet( sheet );
-        KoPoint offset = view->offsetFromSheet( sheet );
+        QPointF offset = view->offsetFromSheet( sheet );
         settingsWriter.addConfigItem( "CursorPositionX", marker.x() );
         settingsWriter.addConfigItem( "CursorPositionY", marker.y() );
         settingsWriter.addConfigItem( "xOffset", offset.x() );

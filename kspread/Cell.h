@@ -58,7 +58,6 @@ class KoGenStyles;
 class KoGenStyle;
 class KSParseNode;
 class KoRect;
-class KoPoint;
 class KoOasisStyles;
 class KoOasisLoadingContext;
 

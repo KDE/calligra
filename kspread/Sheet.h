@@ -40,6 +40,7 @@
 //#include "Format.h"
 #include "Style.h"
 #include "Global.h"
+#include <KoPoint.h>
 //#include "Object.h"
 
 class QWidget;

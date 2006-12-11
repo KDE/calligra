@@ -284,10 +284,10 @@ KCommand * PropertyEditor::getCommand()
                     KoRect newRect = oldRect;
 
                     if ( change & GeneralProperty::Left )
-                        newRect.moveTopLeft( KoPoint( generalValue.m_rect.left(), newRect.top() ) );
+                        newRect.moveTopLeft( QPointF( generalValue.m_rect.left(), newRect.top() ) );
 
                     if ( change & GeneralProperty::Top )
-                        newRect.moveTopLeft( KoPoint( newRect.left(), generalValue.m_rect.top() ) );
+                        newRect.moveTopLeft( QPointF( newRect.left(), generalValue.m_rect.top() ) );
 
                     if ( change & GeneralProperty::Width )
                         newRect.setWidth( generalValue.m_rect.width() );
