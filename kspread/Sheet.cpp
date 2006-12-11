@@ -4177,7 +4177,7 @@ void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
 
     double offsetX = items.parseConfigItemDouble( "xOffset" );
     double offsetY = items.parseConfigItemDouble( "yOffset" );
-    doc()->loadingInfo()->setScrollingOffset( this, KoPoint( offsetX, offsetY ) );
+    doc()->loadingInfo()->setScrollingOffset( this, QPointF( offsetX, offsetY ) );
 
     setShowFormulaIndicator (items.parseConfigItemBool( "ShowFormulaIndicator" ));
     setShowCommentIndicator (items.parseConfigItemBool( "ShowCommentIndicator" ));

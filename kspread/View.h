@@ -36,7 +36,7 @@
 #include <kprinter.h>
 #include <kdeprint/kprintdialogpage.h>
 
-#include <KoPoint.h>
+#include <QPointF>
 #include <KoView.h>
 #include <KoZoomMode.h>
 
@@ -253,7 +253,7 @@ public:
     /**
      * @return scroll offset for @p sheet
      */
-    KoPoint offsetFromSheet( Sheet* sheet ) const;
+    QPointF offsetFromSheet( Sheet* sheet ) const;
 
     /**
      * Save current sheet selection.
@@ -612,7 +612,7 @@ protected:
      * pasted object's top-left point will be aligned with the top-left point of the currently selected cell)
      *
      */
-    KoPoint markerDocumentPosition();
+    QPointF markerDocumentPosition();
 
     /**
      * Activates the formula editor for the current cell.

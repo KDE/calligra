@@ -230,7 +230,7 @@ public:
     Selection* choice;
     QMap<Sheet*, QPoint> savedAnchors;
     QMap<Sheet*, QPoint> savedMarkers;
-    QMap<Sheet*, KoPoint> savedOffsets;
+    QMap<Sheet*, QPointF> savedOffsets;
 
     // Find and Replace context. We remember the options and
     // the strings used previously.
@@ -3580,7 +3580,7 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
   /* see if there was a previous selection on this other sheet */
   QMap<Sheet*, QPoint>::Iterator it = d->savedAnchors.find(d->activeSheet);
   QMap<Sheet*, QPoint>::Iterator it2 = d->savedMarkers.find(d->activeSheet);
-  QMap<Sheet*, KoPoint>::Iterator it3 = d->savedOffsets.find(d->activeSheet);
+  QMap<Sheet*, QPointF>::Iterator it3 = d->savedOffsets.find(d->activeSheet);
 
   // TODO Stefan: store the save markers/anchors in the Selection?
   QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1,1) : *it;
@@ -4774,11 +4774,11 @@ void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
   cmd->execute();
 }
 
-KoPoint View::markerDocumentPosition()
+QPointF View::markerDocumentPosition()
 {
   QPoint marker=selectionInfo()->marker();
 
-  return KoPoint( d->activeSheet->dblColumnPos(marker.x()),
+  return QPointF( d->activeSheet->dblColumnPos(marker.x()),
             d->activeSheet->dblRowPos(marker.y()) );
 }
 
@@ -7064,10 +7064,10 @@ QPoint View::markerFromSheet( Sheet* sheet ) const
   return newMarker;
 }
 
-KoPoint View::offsetFromSheet( Sheet* sheet ) const
+QPointF View::offsetFromSheet( Sheet* sheet ) const
 {
-  QMap<Sheet*, KoPoint>::Iterator it = d->savedOffsets.find(sheet);
-  KoPoint offset = (it == d->savedOffsets.end()) ? KoPoint() : *it;
+  QMap<Sheet*, QPointF>::Iterator it = d->savedOffsets.find(sheet);
+  QPointF offset = (it == d->savedOffsets.end()) ? QPointF() : *it;
   return offset;
 }
 
@@ -7083,7 +7083,7 @@ void View::saveCurrentSheetSelection()
       d->savedMarkers.remove(d->activeSheet);
       d->savedMarkers.insert(d->activeSheet, d->selection->marker());
       d->savedOffsets.remove(d->activeSheet);
-      d->savedOffsets.insert(d->activeSheet, KoPoint(d->canvas->xOffset(),
+      d->savedOffsets.insert(d->activeSheet, QPointF(d->canvas->xOffset(),
                                                      d->canvas->yOffset()));
     }
 }

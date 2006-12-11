@@ -23,7 +23,7 @@
 #include <QPoint>
 #include <QStringList>
 
-#include <KoPoint.h>
+#include <QPointF>
 #include <KoXmlReader.h>
 
 namespace KSpread
@@ -54,12 +54,12 @@ public:
     /**
      * @return scrolling offsets
      */
-    const QMap<Sheet*, KoPoint>& scrollingOffsets() const { return m_scrollingOffsets; }
+    const QMap<Sheet*, QPointF>& scrollingOffsets() const { return m_scrollingOffsets; }
 
     /**
      * Stores the scrolling offset @p point for @p sheet .
      */
-    void setScrollingOffset( Sheet* sheet, const KoPoint& point ) { m_scrollingOffsets.insert( sheet, point );}
+    void setScrollingOffset( Sheet* sheet, const QPointF& point ) { m_scrollingOffsets.insert( sheet, point );}
 
     void setLoadTemplate( bool _b ) {
         m_loadTemplate = _b;
@@ -72,7 +72,7 @@ private:
     QStringList m_areaNamed;
     QMap<QString,KoXmlElement> m_validationList;
     QMap<Sheet*, QPoint> m_cursorPositions;
-    QMap<Sheet*, KoPoint> m_scrollingOffsets;
+    QMap<Sheet*, QPointF> m_scrollingOffsets;
     bool m_loadTemplate;
 };
 
