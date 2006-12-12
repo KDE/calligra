@@ -22,9 +22,14 @@
 
 #include <QPointer>
 #include <QObject>
-#include <koffice_export.h>
+#include <QTextDocument>
 
-class KWFrameSet;
+#include "TextDocument.h"
+#include "Frame.h"
+
+#include <KWFrame.h>
+#include <KWFrameSet.h>
+#include <KWTextFrameSet.h>
 
 namespace Scripting {
 
@@ -36,22 +41,34 @@ namespace Scripting {
     {
             Q_OBJECT
         public:
-            explicit FrameSet( QObject* parent, KWFrameSet* page );
-            ~FrameSet();
+            FrameSet(QObject* parent, KWFrameSet* frameset)
+                : QObject(parent), m_frameset(frameset) {}
+            virtual ~FrameSet() {}
 
         public Q_SLOTS:
 
             /** Return this framesets name. */
-            const QString name();
+            const QString name() { return m_frameset->name(); }
             /** Set the framesets name. */
-            void setName(const QString &name);
+            void setName(const QString &name) { m_frameset->setName(name); }
 
-            //int frameCount();
-            //QObject* frame(int frameNr);
+            /** Return the number of frames this frameset has. */
+            int frameCount() { return m_frameset->frames().count(); }
+            /** Return the \a Frame object with index \p frameNr or NULL if there exists no \a Frame with such a index. */
+            QObject* frame(int frameNr) {
+                if( frameNr >= 0 && frameNr < m_frameset->frames().count() )
+                    return new Frame(parent(), m_frameset->frames().at(frameNr));
+                return 0;
+            }
+
             //void addFrame(KWFrame *frame);
             //void removeFrame(KWFrame *frame);
 
-            QObject* textDocument();
+            /** Return the \a TextDocument object or NULL if this frameset does not have a \a TextDocument object. */
+            QObject* textDocument() {
+                KWTextFrameSet* textframeset = dynamic_cast< KWTextFrameSet* >( (KWFrameSet*)m_frameset );
+                return textframeset ? new TextDocument(this, textframeset->document()) : 0;
+            }
 
         private:
             QPointer<KWFrameSet> m_frameset;

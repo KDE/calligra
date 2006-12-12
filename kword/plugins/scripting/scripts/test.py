@@ -25,6 +25,7 @@ doc.setHtml(
         "</ul>"
         "<pre>Some text in a pre-tag</pre>"
         "<blockquote>Some text in a blockquote-tag</blockquote>"
+        "<p>Some more text in a paragraph...</p>"
     ) % (
         time.strftime('%H:%M.%S'),
         KWord.pageCount(),
@@ -38,19 +39,33 @@ doc.setHtml(
     )
 )
 
-#cursor = doc.lastCursor()
 cursor = doc.rootFrame().lastCursorPosition()
-
+#cursor = doc.lastCursor()
 cursor.insertBlock()
+cursor.insertHtml("<p><b>Framesets:</b></p>")
+framesetlist = cursor.insertList()
+for i in range( KWord.frameSetCount() ):
+    frameset = KWord.frameSet(i)
+    cursor.insertHtml( "(nr=%i name=%s)<br/>" % (i,frameset.name()) )
+    cursor.insertBlock()
 
-table = cursor.insertTable(10,5)
+cursor = doc.rootFrame().lastCursorPosition()
+cursor.insertBlock()
+cursor.insertHtml("<p><b>Table:</b></p>")
+table = cursor.insertTable(3,3)
+table.firstCursorPosition(0, 0).insertHtml("A")
+table.firstCursorPosition(0, 1).insertHtml("B")
+table.firstCursorPosition(1, 0).insertHtml("C")
+table.firstCursorPosition(1, 1).insertHtml("D")
 print "========> rows=%s cols=%s" % (table.rows(),table.columns())
-for row in range( table.rows() ):
-    #table.insertRows(row,1)
-    for col in range( table.columns() ):
-        c = table.firstCursorPosition(row, col)
-        #c.insertBlock()
-        c.insertHtml( "(row=%s col=%s)" % (row,col) )
+#for row in range(0, table.rows()):
+    ##table.insertRows(row,1)
+    #for col in range(table.columns() -1,0,-1):
+        #table.firstCursorPosition(row,col).insertText( "(row=%s col=%s)" % (row,col) )
+        ##c.insertBlock()
+        ##f = c.insertFrame()
+        ##f.firstCursorPosition().insertText( "(row=%s col=%s)" % (row,col) )
+        ##c.insertHtml( "(row=%s col=%s)" % (row,col) )
 
 #l = cursor.insertList()
 #for i in range(5):

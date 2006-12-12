@@ -40,25 +40,20 @@ namespace Scripting {
             int position() const;
             void setPosition(int pos);
 
-            void insertText(const QString& text);
-            void insertHtml(const QString& html);
-            void insertBlock(QObject* textformat = 0);
-            QObject* insertList(QObject* textformat = 0);
-            QObject* insertTable(int rows, int columns);
-
-            //int selectionEnd () const
             //int selectionStart () const
+            //int selectionEnd () const
             //QString selectedText () const
             //QString selectionToHtml(const QString& encoding = QString()) const
             //QString selectionToPlainText() const
 
-            //void insertBlock ( const QTextBlockFormat & format, const QTextCharFormat & charFormat )
+            void insertText(const QString& text);
+            void insertHtml(const QString& html);
+            void insertBlock(QObject* textformat = 0);
+            QObject* insertFrame(QObject* textformat = 0);
+            QObject* insertList(QObject* textformat = 0);
+            QObject* insertTable(int rows, int columns);
             //void insertFragment ( const QTextDocumentFragment & fragment )
-            //QTextFrame * insertFrame ( const QTextFrameFormat & format )
             //void insertImage ( const QTextImageFormat & format, QTextFrameFormat::Position alignment )
-            //QTextList * insertList ( QTextListFormat::Style style ) 
-            //QTextTable * insertTable ( int rows, int columns, const QTextTableFormat & format )
-            //void insertText ( const QString & text, const QTextCharFormat & format )
 
         private:
             QTextCursor m_cursor;

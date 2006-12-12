@@ -26,20 +26,56 @@
 namespace Scripting {
 
     /**
-    *
+    * The TextFormat class represents a format object that is used
+    * for things like the background- or the foreground-color.
     */
     class TextFormat : public QObject
     {
             Q_OBJECT
         public:
-            TextFormat(QObject* parent, const QTextFormat& format)
-                : QObject( parent ), m_format( format ) {}
+            explicit TextFormat(QObject* parent) : QObject(parent) {}
             virtual ~TextFormat() {}
-            const QTextFormat& format() const { return m_format; }
+            virtual QTextFormat* format() const = 0;
 
         public Q_SLOTS:
 
-            QString backgroundColor() { return m_format.background().color().name(); }
+            virtual QString backgroundColor() = 0;
+            virtual void setBackgroundColor(const QString& color) = 0;
+
+            virtual QString foregroundColor() = 0;
+            virtual void setForegroundColor(const QString& color) = 0;
+
+            virtual QString layoutDirection() const = 0;
+            virtual void setLayoutDirection(const QString& direction) = 0;
+
+            virtual QVariantList properties() const = 0;
+            virtual QVariant property(int propertyId) const = 0;
+            virtual void setProperty(int propertyId, const QVariant& value) = 0;
+
+    };
+
+    /**
+    * \internal template class that inherits TextFormat to provide an
+    * implementation for QTextFormat and classes inheriting from it.
+    */
+    template<class T>
+    class TextFormatImp : public TextFormat
+    {
+        public:
+            TextFormatImp(QObject* parent, const T& format)
+                : TextFormat( parent ), m_format( format ) {}
+            virtual ~TextFormatImp() {}
+            virtual QTextFormat* format() const {
+                QTextFormat* f = dynamic_cast<QTextFormat*>( &m_format );
+                Q_ASSERT(f);
+                return f;
+            }
+
+        private:
+
+            QString backgroundColor() {
+                return m_format.background().color().name();
+            }
             void setBackgroundColor(const QString& color) {
                 QBrush brush = m_format.background();
                 QColor c(color);
@@ -49,7 +85,9 @@ namespace Scripting {
                 }
             }
 
-            QString foregroundColor() { return m_format.foreground().color().name(); }
+            QString foregroundColor() {
+                return m_format.foreground().color().name();
+            }
             void setForegroundColor(const QString& color) {
                 QBrush brush = m_format.foreground();
                 QColor c(color);
@@ -77,13 +115,16 @@ namespace Scripting {
                 for(; it != end; ++it) list.append(it.key());
                 return list;
             }
-            QVariant property(int propertyId) const { return m_format.property(propertyId); }
-            void setProperty(int propertyId, const QVariant& value) { m_format.setProperty(propertyId, value); }
+            QVariant property(int propertyId) const {
+                return m_format.property(propertyId);
+            }
+            void setProperty(int propertyId, const QVariant& value) {
+                m_format.setProperty(propertyId, value);
+            }
 
         private:
-            QTextFormat m_format;
+            T m_format;
     };
-
 }
 
 #endif

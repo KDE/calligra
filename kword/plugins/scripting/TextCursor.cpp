@@ -18,6 +18,7 @@
  */
 
 #include "TextCursor.h"
+#include "TextFrame.h"
 #include "TextList.h"
 #include "TextTable.h"
 #include "TextFormat.h"
@@ -52,17 +53,27 @@ void TextCursor::insertHtml(const QString& html) {
 
 void TextCursor::insertBlock(QObject* textformat) {
     TextFormat* format = dynamic_cast<TextFormat*>(textformat);
-    if(format)
-        m_cursor.insertBlock(format->format().toBlockFormat());
+    if( format )
+        m_cursor.insertBlock(format->format()->toBlockFormat());
     else
         m_cursor.insertBlock();
+}
+
+QObject* TextCursor::insertFrame(QObject* textformat)
+{
+    TextFormat* format = dynamic_cast<TextFormat*>(textformat);
+    QTextFrameFormat f;
+    if( format )
+        f = format->format()->toFrameFormat();
+    QTextFrame* frame = m_cursor.insertFrame(f);
+    return frame ? new TextFrame(this, frame) : 0;
 }
 
 QObject* TextCursor::insertList(QObject* textformat) {
     TextFormat* format = dynamic_cast<TextFormat*>(textformat);
     QTextListFormat f;
     if(format)
-        f = format->format().toListFormat();
+        f = format->format()->toListFormat();
     else {
         f.setStyle(QTextListFormat::ListDisc); f.setIndent(f.indent()+1); //testcase
     }
@@ -72,9 +83,26 @@ QObject* TextCursor::insertList(QObject* textformat) {
 
 QObject* TextCursor::insertTable(int rows, int columns) {
     QTextTableFormat format;
-    format.setCellPadding(5); format.setCellSpacing(5); //testcase
-    QTextTable* t = m_cursor.insertTable(rows, columns, format);
-    return t ? new TextTable(this, t) : 0;
+    //format.setColumns(columns);
+    //format.setHeaderRowCount(1);
+    format.setBackground(QColor("#e0e0e0"));
+    //format.setCellPadding(1); format.setCellSpacing(1); //testcase
+
+QVector<QTextLength> constraints;
+constraints << QTextLength(QTextLength::PercentageLength, 16);
+constraints << QTextLength(QTextLength::PercentageLength, 28);
+constraints << QTextLength(QTextLength::PercentageLength, 28);
+constraints << QTextLength(QTextLength::PercentageLength, 28);
+format.setColumnWidthConstraints(constraints);
+
+    QTextTable* table = m_cursor.insertTable(rows, columns, format);
+    //QTextTable* t = m_cursor.insertTable(rows, columns);
+
+QTextTableCell cell = table->cellAt(0, 0);
+cell.firstCursorPosition().insertText(tr("aaa") /*, QTextCharFormat::charFormat*/);
+table->cellAt(0, 1).firstCursorPosition().insertText(tr("bbb"));
+
+    return table ? new TextTable(this, table) : 0;
 }
 
 #include "TextCursor.moc"
