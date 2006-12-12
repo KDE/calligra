@@ -255,15 +255,13 @@ class ActionToExecuteListView : public ActionsListViewBase
 				item = new ActionSelectorDialogListItem("editText", this, i18n("Open in Text View"));
 				item->setPixmap(0, noIcon);
 			}
-			adjustColumn(0);
-			setMinimumWidth( columnWidth(0) + 16 );
 			updateWidth();
 		}
 
 		void updateWidth()
 		{
 			adjustColumn(0);
-			setMinimumWidth( columnWidth(0) + 16 );
+			setMinimumWidth( columnWidth(0) );
 		}
 
 		QString m_currentMimeType;
