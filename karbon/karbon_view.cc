@@ -83,7 +83,6 @@
 #include "vinsertcmd.h"
 #include "vzordercmd.h"
 #include "vlayer.h"
-#include "vlayerdocker.h"
 
 // Dialogs.
 #include "vconfiguredlg.h"
@@ -94,7 +93,9 @@
 #include "vstrokedocker.h"
 #include "vstyledocker.h"
 #include "vtransformdocker.h"
-
+#include "vlayerdocker.h"
+#include <KoToolDocker.h>
+#include <KoToolDockerFactory.h>
 // ToolBars
 //#include "vselecttoolbar.h"
 
@@ -233,6 +234,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 		m_strokeFillPreview = new VStrokeFillPreview( part() );
         createDock(i18n("Stroke/Fills"), m_strokeFillPreview);
+
+		KoToolDockerFactory toolDockerFactory;
+		KoToolDocker * toolDocker =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
+		m_canvasView->setToolOptionDocker( toolDocker );
 	//	m_typeButtonBox = new VTypeButtonBox( part(), m_toolbox );
 
 		//connect( m_strokeFillPreview, SIGNAL( fillSelected() ), m_typeButtonBox, SLOT( setFill() ) );
