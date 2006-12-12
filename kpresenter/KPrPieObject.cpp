@@ -29,7 +29,7 @@
 #include <KoXmlNS.h>
 
 #include <kdebug.h>
-
+#include <math.h>
 #include <qregion.h>
 #include <q3picture.h>
 #include <qdom.h>

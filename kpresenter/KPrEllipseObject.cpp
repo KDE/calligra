@@ -30,7 +30,7 @@
 #include <qpainter.h>
 #include <KoTextZoomHandler.h>
 #include <KoOasisContext.h>
-
+#include <math.h>
 using namespace std;
 
 KPrEllipseObject::KPrEllipseObject()

@@ -21,7 +21,7 @@
 #include "qrect.h"
 #include <KoTextZoomHandler.h>
 #include <qpaintdevice.h>
-
+#include <kdebug.h>
 //Added by qt3to4:
 #include <QByteArray>
 

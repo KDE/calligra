@@ -26,7 +26,7 @@
 #include "KPrPolylineObject.h"
 #include "KPrBezierCurveObject.h"
 #include "KPrPieObject.h"
-
+#include <kdebug.h>
 #include <KoXmlNS.h>
 #include <KoTextZoomHandler.h>
 
