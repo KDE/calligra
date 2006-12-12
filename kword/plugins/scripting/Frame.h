@@ -87,7 +87,7 @@ namespace Scripting {
             void setPosition(double x, double y) { m_frame->shape()->setPosition(QPointF(x,y)); }
 
             /** Return the background color of the shape. */
-            QString backgroundColor() {
+            QString backgroundColor() const {
                 return m_frame->shape()->background().color().name();
             }
             /** Set the background color of the shape. */
