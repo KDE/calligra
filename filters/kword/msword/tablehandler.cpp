@@ -22,10 +22,10 @@
 #include <wv2/word97_generated.h>
 
 #include <kdebug.h>
-#include <KoRect.h>
 #include <q3tl.h>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <QRectF>
 
 KWordTableHandler::KWordTableHandler()
 {
@@ -156,7 +156,7 @@ void KWordTableHandler::tableCellStart()
     Q_ASSERT( rightCellNumber >= leftCellNumber ); // you'd better be...
     int colSpan = rightCellNumber - leftCellNumber; // the resulting number of merged cells
 
-    KoRect cellRect( left / 20.0, // left
+    QRectF cellRect( left / 20.0, // left
                      m_currentY, // top
                      ( right - left ) / 20.0, // width
                      rowHeight() ); // height

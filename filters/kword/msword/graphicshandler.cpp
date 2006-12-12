@@ -23,7 +23,6 @@
 #include <wv2/olestream.h>
 
 #include <KoStoreDevice.h>
-#include <KoSize.h>
 #include <kdebug.h>
 
 using namespace wvWare;

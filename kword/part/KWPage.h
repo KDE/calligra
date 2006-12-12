@@ -19,10 +19,10 @@
 #ifndef kw_page_h
 #define kw_page_h
 
-#include <KoRect.h>
 #include "KWPageManager.h"
 #include "KoPageLayout.h"
 #include <koffice_export.h>
+#include <QRectF>
 class KoZoomHandler;
 
 /**

@@ -46,7 +46,6 @@
 #include <KoPageLayout.h>
 #include <KoPicture.h>
 #include "conversion.h"
-#include <KoRect.h>
 #include <KoDom.h>
 
 
@@ -1607,7 +1606,7 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
     // TODO draw:auto-grow-height  draw:auto-grow-width - hmm? I thought min-height meant auto-grow-height...
 
 
-    KoRect frameRect( KoUnit::parseValue( object.attributeNS( ooNS::svg, "x", QString::null ) ),
+    QRectF frameRect( KoUnit::parseValue( object.attributeNS( ooNS::svg, "x", QString::null ) ),
                       KoUnit::parseValue( object.attributeNS( ooNS::svg, "y", QString::null ) ),
                       width, height );
 

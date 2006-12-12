@@ -23,7 +23,6 @@
 #include "graphicshandler.h"
 #include "versionmagic.h"
 
-#include <KoRect.h>
 #include <KoUnit.h>
 #include <KoPageLayout.h>
 #include <kdebug.h>
@@ -69,8 +68,8 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
         m_parser->setInlineReplacementHandler( m_replacementHandler );
         processStyles();
         processAssociatedStrings();
-        connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const KoRect&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ),
-                 this, SLOT( slotTableCellStart( int, int, int, int, const KoRect&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ) );
+        connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ),
+                 this, SLOT( slotTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ) );
         connect( m_tableHandler, SIGNAL( sigTableCellEnd() ),
                  this, SLOT( slotTableCellEnd() ) );
     }
@@ -347,7 +346,7 @@ void Document::footnoteEnd()
     m_textHandler->setFrameSetElement( QDomElement() );
 }
 
-void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const KoRect& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
+void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 {
     // Create footnote/endnote frameset
     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
@@ -487,7 +486,7 @@ void Document::processSubDocQueue()
     }
 }
 
-KoStoreDevice* Document::createPictureFrameSet( const KoSize& size )
+KoStoreDevice* Document::createPictureFrameSet( const QSizeF& size )
 {
     // Grab data that was stored with the functor, that triggered this parsing
     SubDocument subdoc( m_subdocQueue.front() );

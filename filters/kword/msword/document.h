@@ -29,12 +29,11 @@
 #include <qdom.h>
 #include <QObject>
 #include <QStringList>
-
+#include <QRectF>
 #include <queue>
 #include <string>
 
 class KoStoreDevice;
-class KoSize;
 
 namespace wvWare {
     class Parser;
@@ -42,7 +41,6 @@ namespace wvWare {
         class BRC;
     }
 }
-class KoRect;
 class KoFilterChain;
 class KWordReplacementHandler;
 class KWordTableHandler;
@@ -87,7 +85,7 @@ public:
     };
 
     // Called by PictureHandler
-    KoStoreDevice* createPictureFrameSet( const KoSize& size );
+    KoStoreDevice* createPictureFrameSet( const QSizeF& size );
 
 protected slots:
     // Connected to the KWordTextHandler only when parsing the body
@@ -105,7 +103,7 @@ protected slots:
 
     // Similar to footnoteStart/footnoteEnd but for cells.
     // This is connected to KWordTableHandler
-    void slotTableCellStart( int row, int column, int rowSize, int columnSize, const KoRect& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
+    void slotTableCellStart( int row, int column, int rowSize, int columnSize, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
     void slotTableCellEnd();
 
 private:
