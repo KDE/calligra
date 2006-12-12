@@ -28,19 +28,19 @@ class QPoint;
 class QColor;
 class QPainter;
 class KoZoomHandler;
-class KoSize;
-class KoPoint;
+class QSizeF;
+class QPointF;
 class QDomElement;
 class KPrObject;
 
-void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor & color,
+void drawFigure( LineEnd figure, QPainter* painter, const QPointF &coord, const QColor & color,
                  int _w, float angle, KoZoomHandler*_zoomHandler );
 void drawFigureWithOffset( LineEnd figure, QPainter* painter, const QPoint &coord, const QColor & color,
                            int _w, float angle, KoZoomHandler*_zoomHandler );
-void drawFigureWithOffset( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor &color,
+void drawFigureWithOffset( LineEnd figure, QPainter* painter, const QPointF &coord, const QColor &color,
                            int w, float angle, KoZoomHandler*_zoomHandler, bool begin);
-KoSize getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler );
-KoSize getOffset( LineEnd figure, int _w, float angle );
+QSizeF getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler );
+QSizeF getOffset( LineEnd figure, int _w, float angle );
 QString lineEndBeginName( LineEnd type );
 LineEnd lineEndBeginFromString( const QString & name );
 QString lineEndBeginSvg( LineEnd element );
@@ -52,6 +52,7 @@ class KPrUtils
 public:
     static QCursor penCursor(); // pen tool cursors
     static QCursor rotateCursor(); // rotate tool cursor
+    static double getAngle( const QPointF& p1, const QPointF& p2);
 };
 
 int readOasisSettingsInt( const QDomElement & element );

@@ -98,7 +98,7 @@ int KPrGeneralProperty::getGeneralPropertyChange() const
 
         if ( !m_ui->protect->isOn() )
         {
-            KoRect rect = getRect();
+            QRectF rect = getRect();
             if ( m_generalValue.m_rect.left() != rect.left() )
                 flags |= Left;
             if ( m_generalValue.m_rect.top() != rect.top() )
@@ -150,19 +150,19 @@ void KPrGeneralProperty::apply()
 }
 
 
-KoRect KPrGeneralProperty::getRect() const
+QRectF KPrGeneralProperty::getRect() const
 {
     double x = qMax( 0.0, m_ui->xInput->value() );
     double y = qMax( 0.0, m_ui->yInput->value() );
     double w = qMax( 0.0, m_ui->widthInput->value() );
     double h = qMax( 0.0, m_ui->heightInput->value() );
 
-    KoRect rect( x, y, w, h );
+    QRectF rect( x, y, w, h );
     return rect;
 }
 
 
-void KPrGeneralProperty::setRect( KoRect &rect )
+void KPrGeneralProperty::setRect( QRectF &rect )
 {
     m_ui->xInput->changeValue( qMax( 0.00, rect.left() ) );
     m_ui->yInput->changeValue( qMax( 0.00, rect.top() ) );

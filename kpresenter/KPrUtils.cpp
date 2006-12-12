@@ -29,8 +29,8 @@
 
 #include <KoXmlNS.h>
 #include <KoTextZoomHandler.h>
-#include <KoPoint.h>
 
+#include <math.h>
 #include <qpainter.h>
 #include <q3pointarray.h>
 #include <QPoint>
@@ -43,7 +43,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 
-void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor &color,
+void drawFigure( LineEnd figure, QPainter* painter, const QPointF &coord, const QColor &color,
                  int _w, float angle, KoZoomHandler* _zoomHandler)
 {
     painter->save();
@@ -76,9 +76,9 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
     } break;
     case L_ARROW:
     {
-        KoPoint p1( -10 - _w, -3 - _w / 2 );
-        KoPoint p2( 0 , 0 );
-        KoPoint p3( -10 - _w, 3 + _w / 2 );
+        QPointF p1( -10 - _w, -3 - _w / 2 );
+        QPointF p2( 0 , 0 );
+        QPointF p3( -10 - _w, 3 + _w / 2 );
         QPolygon pArray( 3 );
         pArray.setPoint( 0, _zoomHandler->zoomPointOld(p1) );
         pArray.setPoint( 1, _zoomHandler->zoomPointOld(p2) );
@@ -119,13 +119,13 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         painter->scale( 1, 1 );
         painter->setBrush( color );
 
-        KoPoint p1( -10 - _w , -3 - _w / 2 );
-        KoPoint p2( 0, 0 );
-        KoPoint p3( -10 - _w, 3 + _w / 2 );
+        QPointF p1( -10 - _w , -3 - _w / 2 );
+        QPointF p2( 0, 0 );
+        QPointF p3( -10 - _w, 3 + _w / 2 );
 
-        KoPoint p4( -20 - _w, -3 - _w / 2 );
-        KoPoint p5( -10, 0 );
-        KoPoint p6( -20 - _w, 3 + _w / 2 );
+        QPointF p4( -20 - _w, -3 - _w / 2 );
+        QPointF p5( -10, 0 );
+        QPointF p6( -20 - _w, 3 + _w / 2 );
 
         QPolygon pArray( 3 );
         pArray.setPoint( 0, _zoomHandler->zoomPointOld(p1) );
@@ -164,25 +164,25 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
 void drawFigureWithOffset( LineEnd figure, QPainter* painter, const QPoint &coord, const QColor &color,
                            int  _w, float angle, KoZoomHandler*_zoomHandler)
 {
-    KoSize diff = getOffset( figure, _w, angle );
-    KoPoint offsetPoint(diff.width(), diff.height());
-    offsetPoint += _zoomHandler->unzoomPointOld( coord );
+    QSizeF diff = getOffset( figure, _w, angle );
+    QPointF offsetPoint(diff.width(), diff.height());
+    offsetPoint += _zoomHandler->unzoomPointOldF( coord );
     drawFigure( figure, painter, offsetPoint, color, _w, angle,_zoomHandler );
 }
 
-void drawFigureWithOffset( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor &color,
+void drawFigureWithOffset( LineEnd figure, QPainter* painter, const QPointF &coord, const QColor &color,
                            int w, float angle, KoZoomHandler*_zoomHandler, bool begin )
 {
-    KoSize diff = getOffset( figure, w, angle );
-    KoPoint offsetPoint(diff.width(), diff.height());
+    QSizeF diff = getOffset( figure, w, angle );
+    QPointF offsetPoint(diff.width(), diff.height());
     double offsetAngle = angle + ( begin ? 90.0 : -90.0 );
-    KoPoint lineOffset( w * cos( offsetAngle * M_PI / 180.0 ) / 2,
+    QPointF lineOffset( w * cos( offsetAngle * M_PI / 180.0 ) / 2,
                         w * sin( offsetAngle * M_PI / 180.0 ) / 2 );
     offsetPoint += coord + lineOffset;
     drawFigure( figure, painter, offsetPoint, color, w, angle,_zoomHandler );
 }
 
-KoSize getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler )
+QSizeF getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler )
 {
     switch ( figure )
     {
@@ -190,33 +190,33 @@ KoSize getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler
     {
         int _h = (int)_w;
         if ( _h % 2 == 0 ) _h--;
-        return KoSize( _zoomHandler->zoomItXOld( 10 + _w), _zoomHandler->zoomItYOld( 10 + _h) );
+        return QSizeF( _zoomHandler->zoomItXOld( 10 + _w), _zoomHandler->zoomItYOld( 10 + _h) );
     } break;
     case L_CIRCLE:
-        return KoSize(  _zoomHandler->zoomItXOld(10 + _w), _zoomHandler->zoomItYOld(10 + _w) );
+        return QSizeF(  _zoomHandler->zoomItXOld(10 + _w), _zoomHandler->zoomItYOld(10 + _w) );
         break;
     case L_ARROW:
-        return KoSize( _zoomHandler->zoomItXOld( 14 + _w),_zoomHandler->zoomItYOld( 14 + _w) );
+        return QSizeF( _zoomHandler->zoomItXOld( 14 + _w),_zoomHandler->zoomItYOld( 14 + _w) );
         break;
     case L_LINE_ARROW:
-        return KoSize( _zoomHandler->zoomItXOld( 14 + _w),_zoomHandler->zoomItYOld( 14 + _w) );
+        return QSizeF( _zoomHandler->zoomItXOld( 14 + _w),_zoomHandler->zoomItYOld( 14 + _w) );
         break;
     case L_DIMENSION_LINE:
-        return KoSize( _zoomHandler->zoomItXOld( 14 +_w),_zoomHandler->zoomItYOld( 14 + _w) );
+        return QSizeF( _zoomHandler->zoomItXOld( 14 +_w),_zoomHandler->zoomItYOld( 14 + _w) );
         break;
     case L_DOUBLE_ARROW:
-        return KoSize( _zoomHandler->zoomItXOld( 28 + _w),_zoomHandler->zoomItYOld( 14 + _w) );
+        return QSizeF( _zoomHandler->zoomItXOld( 28 + _w),_zoomHandler->zoomItYOld( 14 + _w) );
         break;
     case L_DOUBLE_LINE_ARROW:
-        return KoSize( _zoomHandler->zoomItXOld( 28 + _w),_zoomHandler->zoomItYOld( 14 + _w) );
+        return QSizeF( _zoomHandler->zoomItXOld( 28 + _w),_zoomHandler->zoomItYOld( 14 + _w) );
         break;
     default: break;
     }
 
-    return KoSize( 0, 0 );
+    return QSizeF( 0, 0 );
 }
 
-KoSize getOffset( LineEnd figure, int _w, float angle )
+QSizeF getOffset( LineEnd figure, int _w, float angle )
 {
     double x = 0;
     double y = 0;
@@ -252,7 +252,7 @@ KoSize getOffset( LineEnd figure, int _w, float angle )
     default: break;
     }
 
-    return KoSize( x * cos( angle * M_PI / 180.0 ), y * sin( angle * M_PI / 180 ) );
+    return QSizeF( x * cos( angle * M_PI / 180.0 ), y * sin( angle * M_PI / 180 ) );
 }
 
 QString lineEndBeginName( LineEnd type )
@@ -373,6 +373,13 @@ QCursor KPrUtils::rotateCursor()
 
     return QCursor( pix, 11, 13 );
 }
+
+
+double KPrUtils::getAngle( const QPointF& p1, const QPointF& p2 ) {
+	double a = atan2( p2.x() - p1.x(), p2.y() - p1.y() ) + M_PI;
+        return ( ( - ( a * 360 ) / ( 2 * M_PI ) - 90 ) - 180 );
+}
+
 
 QString saveOasisTimer( int second )
 {

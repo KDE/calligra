@@ -35,7 +35,7 @@ KPrFreehandObject::KPrFreehandObject()
 {
 }
 
-KPrFreehandObject::KPrFreehandObject( const KoPointArray &_points, const KoSize &_size,
+KPrFreehandObject::KPrFreehandObject( const KoPointArray &_points, const QSizeF &_size,
                                     const KoPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
     : KPrPointObject( _pen, _lineBegin, _lineEnd )
 {
@@ -58,7 +58,7 @@ KPrObjectAdaptor* KPrFreehandObject::dbusObject()
 bool KPrFreehandObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
     // the rect for the view box have to be the rect and not the real rect
-    KoRect rect( getRect() );
+    QRectF rect( getRect() );
     sc.xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( int( rect.width() * 100 ) )
                                                                    .arg( int( rect.height() * 100 ) ) );
     unsigned int pointCount = points.count();

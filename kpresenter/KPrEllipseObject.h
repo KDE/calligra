@@ -50,7 +50,7 @@ public:
     virtual QString getTypeString() const
         { return i18n("Ellipse"); }
 
-    virtual KoSize getRealSize() const;
+    virtual QSizeF getRealSize() const;
 
 protected:
     virtual const char * getOasisElementName() const;

@@ -71,7 +71,7 @@ void KPrPBPreview::drawContents( QPainter *painter )
     if ( paintType == Pen ) {
         painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
                            colorGroup().base() );
-        KoSize diff1( 0, 0 ), diff2( 0, 0 );
+        QSizeF diff1( 0, 0 ), diff2( 0, 0 );
         int _w = int( pen.pointWidth() );
 
         if ( lineBegin != L_NORMAL )
@@ -81,11 +81,11 @@ void KPrPBPreview::drawContents( QPainter *painter )
             diff2 = getOffset( lineEnd, _w, 0 );
 
         if ( lineBegin != L_NORMAL )
-            drawFigure( lineBegin, painter, KoPoint( 5, _zoomHandler->unzoomItYOld( contentsRect().height() ) / 2 ),
+            drawFigure( lineBegin, painter, QPointF( 5, _zoomHandler->unzoomItYOld( contentsRect().height() ) / 2 ),
                         pen.color(), _w, 180.0, _zoomHandler );
 
         if ( lineEnd != L_NORMAL )
-            drawFigure( lineEnd, painter, KoPoint( _zoomHandler->unzoomItXOld( contentsRect().width() - 7 ) ,
+            drawFigure( lineEnd, painter, QPointF( _zoomHandler->unzoomItXOld( contentsRect().width() - 7 ) ,
                                                    _zoomHandler->unzoomItYOld( contentsRect().height() ) / 2 ),
                         pen.color(), _w, 0.0, _zoomHandler );
 

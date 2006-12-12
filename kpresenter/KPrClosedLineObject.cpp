@@ -46,7 +46,7 @@ KPrClosedLineObject::KPrClosedLineObject()
 {
 }
 
-KPrClosedLineObject::KPrClosedLineObject( const KoPointArray &_points, const KoSize &_size, const KoPen &_pen, const QBrush &_brush,
+KPrClosedLineObject::KPrClosedLineObject( const KoPointArray &_points, const QSizeF &_size, const KoPen &_pen, const QBrush &_brush,
                                         FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                         bool _unbalanced, int _xfactor, int _yfactor, const QString _typeString )
     : KPr2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
@@ -104,7 +104,7 @@ QDomDocumentFragment KPrClosedLineObject::save( QDomDocument& doc, double offset
         KoPointArray::ConstIterator it;
         for ( it = points.begin(); it != points.end(); ++it ) {
             QDomElement elemPoint = doc.createElement( "Point" );
-            KoPoint point = (*it);
+            QPointF point = (*it);
             elemPoint.setAttribute( "point_x", point.x() );
             elemPoint.setAttribute( "point_y", point.y() );
 
@@ -162,7 +162,7 @@ double KPrClosedLineObject::load( const QDomElement &element )
 
 void KPrClosedLineObject::setSize( double _width, double _height )
 {
-    KoSize origSize( ext );
+    QSizeF origSize( ext );
     KPrObject::setSize( _width, _height );
 
     double fx = ext.width() / origSize.width();
@@ -177,7 +177,7 @@ void KPrClosedLineObject::updatePoints( double _fx, double _fy )
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint point = (*it);
+        QPointF point = (*it);
         double tmpX = point.x() * _fx;
         double tmpY = point.y() * _fy;
 
@@ -249,7 +249,7 @@ void KPrClosedLineObject::flip( bool horizontal )
         KoPointArray::ConstIterator it;
         double horiz = getSize().height()/2;
         for ( it = points.begin(); it != points.end(); ++it ) {
-            KoPoint point = (*it);
+            QPointF point = (*it);
             if ( point.y()> horiz )
                 tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
             else
@@ -262,7 +262,7 @@ void KPrClosedLineObject::flip( bool horizontal )
         KoPointArray::ConstIterator it;
         double vert = getSize().width()/2;
         for ( it = points.begin(); it != points.end(); ++it ) {
-            KoPoint point = (*it);
+            QPointF point = (*it);
             if ( point.x()> vert )
                 tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
             else
@@ -316,17 +316,17 @@ void KPrClosedLineObject::loadOasis( const QDomElement &element, KoOasisContext 
     }
 }
 
-KoSize KPrClosedLineObject::getRealSize() const {
-    KoSize size( ext );
-    KoPoint realOrig( orig );
+QSizeF KPrClosedLineObject::getRealSize() const {
+    QSizeF size( ext );
+    QPointF realOrig( orig );
     KoPointArray p( points );
     getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
     return size;
 }
 
-KoPoint KPrClosedLineObject::getRealOrig() const {
-    KoSize size( ext );
-    KoPoint realOrig( orig );
+QPointF KPrClosedLineObject::getRealOrig() const {
+    QSizeF size( ext );
+    QPointF realOrig( orig );
     KoPointArray p( points );
     getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
     return realOrig;

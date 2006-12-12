@@ -260,8 +260,8 @@ void KPrPieObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
         {
             KoPointArray points( 2 );
             setEndPoints( points );
-            KoPoint start( points.point( 0 ) );
-            KoPoint end( points.point( 1 ) );
+            QPointF start( points.point( 0 ) );
+            QPointF end( points.point( 1 ) );
 
             double ys = ( ( 1 - start.x() / ( ext.width() * ext.width() / 4 ) ) * ext.height() * ext.height() / 4 ) / start.y();
             double s_angle = 90 + ( atan( ( start.x() - 1 ) / ( start.y() - ys ) ) * 180 / M_PI );
@@ -276,8 +276,8 @@ void KPrPieObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                 e_angle -= 180.0;
             }
 
-            start = KoPoint( ext.width() / 2.0 + start.x(), ext.height() / 2.0 - start.y() );
-            end = KoPoint( ext.width() / 2.0 + end.x(), ext.height() / 2.0 - end.y() );
+            start = QPointF( ext.width() / 2.0 + start.x(), ext.height() / 2.0 - start.y() );
+            end = QPointF( ext.width() / 2.0 + end.x(), ext.height() / 2.0 - end.y() );
 
 
 
@@ -331,7 +331,7 @@ void KPrPieObject::flip( bool horizontal )
 
 
 void KPrPieObject::setMinMax( double &min_x, double &min_y,
-                             double &max_x, double &max_y, KoPoint point ) const
+                             double &max_x, double &max_y, QPointF point ) const
 {
     double tmp_x = point.x();
     double tmp_y = point.y();
@@ -363,7 +363,7 @@ void KPrPieObject::setMinMax( double &min_x, double &min_y,
  * 4. check if the maximal points lie on the arc
  *
  */
-void KPrPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
+void KPrPieObject::getRealSizeAndOrig( QSizeF &size, QPointF &realOrig ) const {
     double radius1 = size.width() / 2.0;
     double radius2 = size.height() / 2.0;
 
@@ -389,8 +389,8 @@ void KPrPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
         }
     }
 
-    KoPoint firstPoint( points.point(0) );
-    KoPoint secondPoint( points.point(1) );
+    QPointF firstPoint( points.point(0) );
+    QPointF secondPoint( points.point(1) );
 
     // 2. calulate maximal points
     KoPointArray maxPoints(4);
@@ -422,7 +422,7 @@ void KPrPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
     double max_y = firstPoint.y();
 
     if ( pieType == PT_PIE ) {
-        KoPoint zero(0,0);
+        QPointF zero(0,0);
         setMinMax( min_x, min_y, max_x, max_y, zero );
     }
     setMinMax( min_x, min_y, max_x, max_y, secondPoint );
@@ -592,17 +592,17 @@ void KPrPieObject::setEndPoints( KoPointArray &points ) const
     }
 }
 
-KoSize KPrPieObject::getRealSize() const {
-    KoSize size( ext );
-    KoPoint realOrig( orig );
+QSizeF KPrPieObject::getRealSize() const {
+    QSizeF size( ext );
+    QPointF realOrig( orig );
     getRealSizeAndOrig( size, realOrig );
     return size;
 }
 
 
-KoPoint KPrPieObject::getRealOrig() const {
-    KoSize size( ext );
-    KoPoint realOrig( orig );
+QPointF KPrPieObject::getRealOrig() const {
+    QSizeF size( ext );
+    QPointF realOrig( orig );
     getRealSizeAndOrig( size, realOrig );
     return realOrig;
 }

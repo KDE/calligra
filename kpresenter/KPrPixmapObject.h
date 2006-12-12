@@ -31,7 +31,7 @@
 
 #include "KPrObject.h"
 #include <KoPictureCollection.h>
-#include <KoSize.h>
+
 
 class QPixmap;
 class KPrObjectAdaptor;

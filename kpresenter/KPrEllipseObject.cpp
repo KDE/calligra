@@ -102,8 +102,8 @@ void KPrEllipseObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandle
     _painter->drawEllipse( pw / 2, pw / 2, ow - pw + 1, oh - pw + 1 );
 }
 
-KoSize KPrEllipseObject::getRealSize() const {
-    KoSize size = ext;
+QSizeF KPrEllipseObject::getRealSize() const {
+    QSizeF size = ext;
 
     if ( angle != 0.0 ) {
       float angInRad = angle * M_PI / 180;

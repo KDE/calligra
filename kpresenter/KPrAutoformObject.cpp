@@ -293,7 +293,7 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
         }
         else
         {
-            KoSize diff1( 0, 0 ), diff2( 0, 0 );
+            QSizeF diff1( 0, 0 ), diff2( 0, 0 );
             int _w = int( pen.pointWidth() );
 
             if ( lineBegin != L_NORMAL )
@@ -308,7 +308,7 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
                 {
                     QPoint pnt1( pntArray2.at( 0 ) ), pnt2( pntArray2.at( 1 ) );
                     QPoint pnt3, pnt4( pntArray.at( 0 ) );
-                    float _angle = KoPoint::getAngle( KoPoint( pnt1 ), KoPoint( pnt2 ) );
+                    float _angle = KPrUtils::getAngle( QPointF( pnt1 ), QPointF( pnt2 ) );
 
                     switch ( static_cast<int>( _angle ) )
                     {
@@ -337,14 +337,14 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
                         break;
                     }
 
-                    drawFigure( lineBegin, _painter, _zoomHandler->unzoomPointOld( pnt3 ), pen2.color(), _w, _angle, _zoomHandler );
+                    drawFigure( lineBegin, _painter, _zoomHandler->unzoomPointOldF( pnt3 ), pen2.color(), _w, _angle, _zoomHandler );
                 }
 
                 if ( lineEnd != L_NORMAL && !drawContour )
                 {
                     QPoint pnt1( pntArray2.at( pntArray2.size() - 1 ) ), pnt2( pntArray2.at( pntArray2.size() - 2 ) );
                     QPoint  pnt3, pnt4( pntArray.at( pntArray.size() - 1 ) );
-                    float _angle = KoPoint::getAngle( KoPoint( pnt1 ), KoPoint( pnt2 ) );
+                    float _angle = KPrUtils::getAngle( QPointF( pnt1 ), QPointF( pnt2 ) );
 
                     switch ( ( int )_angle )
                     {
@@ -373,7 +373,7 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
                         break;
                     }
 
-                    drawFigure( lineEnd, _painter, _zoomHandler->unzoomPointOld( pnt3 ), pen2.color(), _w, _angle,_zoomHandler );
+                    drawFigure( lineEnd, _painter, _zoomHandler->unzoomPointOldF( pnt3 ), pen2.color(), _w, _angle,_zoomHandler );
                 }
             }
 

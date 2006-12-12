@@ -22,7 +22,7 @@
 #define __kprduplicateobjdia__
 
 #include <kdialog.h>
-#include <KoRect.h>
+
 
 class KIntNumInput;
 class KDoubleNumInput;

@@ -50,7 +50,7 @@ class KoTextObject;
 class KPrTextView;
 class KCommand;
 class KPrCanvas;
-class KoPoint;
+class QPointF;
 class KoVariable;
 class KPrTextDocument;
 class KPrPage;
@@ -170,7 +170,7 @@ public:
 
     void setTextMargins( double _left, double _top, double right, double bottom);
 
-    KoRect innerRect() const;
+    QRectF innerRect() const;
     double innerWidth() const;
     double innerHeight() const;
     void resizeTextDocument( bool widthChanged = true, bool heightChanged = true );

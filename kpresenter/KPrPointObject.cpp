@@ -44,20 +44,20 @@ KPrPointObject::KPrPointObject( const KoPen &_pen, LineEnd _lineBegin, LineEnd _
 }
 
 
-KoSize KPrPointObject::getRealSize() const
+QSizeF KPrPointObject::getRealSize() const
 {
-    KoSize size( ext );
-    KoPoint realOrig( orig );
+    QSizeF size( ext );
+    QPointF realOrig( orig );
     KoPointArray p( getDrawingPoints() );
     getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
     return size;
 }
 
 
-KoPoint KPrPointObject::getRealOrig() const
+QPointF KPrPointObject::getRealOrig() const
 {
-    KoSize size( ext );
-    KoPoint realOrig( orig );
+    QSizeF size( ext );
+    QPointF realOrig( orig );
     KoPointArray p( getDrawingPoints() );
     getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
     return realOrig;
@@ -86,7 +86,7 @@ QDomDocumentFragment KPrPointObject::save( QDomDocument& doc, double offset )
         KoPointArray::ConstIterator it;
         for ( it = points.begin(); it != points.end(); ++it ) {
             QDomElement elemPoint = doc.createElement( "Point" );
-            KoPoint point = (*it);
+            QPointF point = (*it);
             elemPoint.setAttribute( "point_x", point.x() );
             elemPoint.setAttribute( "point_y", point.y() );
 
@@ -148,7 +148,7 @@ double KPrPointObject::load( const QDomElement &element )
 
 void KPrPointObject::setSize( double _width, double _height )
 {
-    KoSize origSize( ext );
+    QSizeF origSize( ext );
     KPrObject::setSize( _width, _height );
 
     double fx = ext.width() / origSize.width();
@@ -169,7 +169,7 @@ void KPrPointObject::flip( bool horizontal )
         KoPointArray::ConstIterator it;
         double horiz = getSize().height()/2;
         for ( it = points.begin(); it != points.end(); ++it ) {
-            KoPoint point = (*it);
+            QPointF point = (*it);
             if ( point.y()> horiz )
                 tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
             else
@@ -182,7 +182,7 @@ void KPrPointObject::flip( bool horizontal )
         KoPointArray::ConstIterator it;
         double vert = getSize().width()/2;
         for ( it = points.begin(); it != points.end(); ++it ) {
-            KoPoint point = (*it);
+            QPointF point = (*it);
             if ( point.x()> vert )
                 tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
             else
@@ -226,7 +226,7 @@ void KPrPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
 
             QPoint point = (*it1);
             if ( startPoint != point ) {
-                float angle = KoPoint::getAngle( KoPoint( startPoint ), KoPoint( point ) );
+                float angle = KPrUtils::getAngle( QPointF( startPoint ), QPointF( point ) );
                 drawFigureWithOffset( lineBegin, _painter, startPoint, pen2.color(), _w, angle,_zoomHandler );
 
                 break;
@@ -246,7 +246,7 @@ void KPrPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
 
             QPoint point = (*it2);
             if ( endPoint != point ) {
-                float angle = KoPoint::getAngle( KoPoint( endPoint ), KoPoint( point ) );
+                float angle = KPrUtils::getAngle( QPointF( endPoint ), QPointF( point ) );
                 drawFigureWithOffset( lineEnd, _painter, endPoint, pen2.color(), _w, angle,_zoomHandler );
 
                 break;
@@ -262,7 +262,7 @@ void KPrPointObject::updatePoints( double _fx, double _fy )
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint point = (*it);
+        QPointF point = (*it);
         double tmpX = point.x() * _fx;
         double tmpY = point.y() * _fy;
 

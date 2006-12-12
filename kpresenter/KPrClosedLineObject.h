@@ -34,7 +34,7 @@ class KPrClosedLineObject : public KPr2DObject
 {
 public:
     KPrClosedLineObject();
-    KPrClosedLineObject( const KoPointArray &_points, const KoSize &_size, const KoPen &_pen, const QBrush &_brush,
+    KPrClosedLineObject( const KoPointArray &_points, const QSizeF &_size, const KoPen &_pen, const QBrush &_brush,
                         FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                         bool _unbalanced, int _xfactor, int _yfactor, const QString _type );
     /**
@@ -52,7 +52,7 @@ public:
     KPrClosedLineObject &operator=( const KPrClosedLineObject & );
 
     virtual void setSize( double _width, double _height );
-    virtual void setSize( const KoSize & _size ) { setSize( _size.width(), _size.height() ); }
+    virtual void setSize( const QSizeF & _size ) { setSize( _size.width(), _size.height() ); }
 
     virtual ObjType getType() const { return OT_CLOSED_LINE; }
     virtual QString getTypeString() const { return typeString; }
@@ -63,8 +63,8 @@ public:
     virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info );
 
     virtual void flip(bool horizontal );
-    virtual KoSize getRealSize() const;
-    virtual KoPoint getRealOrig() const;
+    virtual QSizeF getRealSize() const;
+    virtual QPointF getRealOrig() const;
 
 protected:
     virtual const char * getOasisElementName() const;

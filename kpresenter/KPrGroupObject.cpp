@@ -75,7 +75,7 @@ void KPrGroupObject::deSelectAllObj()
 
 void KPrGroupObject::setSize( double _width, double _height )
 {
-    KoSize origSize( ext );
+    QSizeF origSize( ext );
     KPrObject::setSize( _width, _height );
 
     double fx = ext.width() / origSize.width();
@@ -84,7 +84,7 @@ void KPrGroupObject::setSize( double _width, double _height )
     updateSizes( fx, fy );
 }
 
-void KPrGroupObject::setOrig( const KoPoint &_point )
+void KPrGroupObject::setOrig( const QPointF &_point )
 {
     setOrig( _point.x(), _point.y() );
 }
@@ -104,7 +104,7 @@ void KPrGroupObject::setOrig( double _x, double _y )
         updateCoords( dx, dy );
 }
 
-void KPrGroupObject::moveBy( const KoPoint &_point )
+void KPrGroupObject::moveBy( const QPointF &_point )
 {
     moveBy( _point.x(), _point.y() );
 }
@@ -163,7 +163,7 @@ void KPrGroupObject::loadOasisGroupObject( KPrDocument *_doc, KPrPage * newpage,
     updateObjs = false;
     _doc->loadOasisObject( newpage,element, context, this);
     Q3PtrListIterator<KPrObject> it( objects );
-    KoRect r=KoRect();
+    QRectF r=QRectF();
     for ( ; it.current() ; ++it )
     {
         r |= it.current()->getRealRect();
@@ -304,7 +304,7 @@ void KPrGroupObject::updateSizes( double fx, double fy )
 {
     if ( !updateObjs )
         return;
-    KoRect r = KoRect();
+    QRectF r = QRectF();
     Q3PtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {

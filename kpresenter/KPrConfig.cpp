@@ -67,7 +67,7 @@
 #include "KPrCommand.h"
 #include <kfontdialog.h>
 #include <klineedit.h>
-#include <KoRect.h>
+
 #include <kmessagebox.h>
 #include <kdeversion.h>
 #include <kurlrequesterdlg.h>
@@ -474,7 +474,7 @@ KPrConfigureMiscPage::KPrConfigureMiscPage( KPrView *_view, QWidget *parent, cha
     tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
     grid = new Q3GridLayout( tmpQGroupBox->layout(), 8, 1 );
 
-    KoRect rect = doc->masterPage()->getPageRect();
+    QRectF rect = doc->masterPage()->getPageRect();
     QLabel *lab=new QLabel(i18n("Horizontal grid size:"), tmpQGroupBox);
     lab->setWhatsThis( i18n( "Set the space in millimeters between two horizontal points on the grid. Default is 5 millimeters." ) );
     grid->addWidget(lab,0,0);
@@ -684,7 +684,7 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
 
     new QLabel(i18n("Tab stop:"), gbDocumentSettings);
     m_oldTabStopWidth = doc->tabStopValue();
-    KoRect rect = doc->masterPage()->getPageRect();
+    QRectF rect = doc->masterPage()->getPageRect();
     m_tabStopWidth = new KoUnitDoubleSpinBox( gbDocumentSettings , MM_TO_POINT(2), rect.width() ,0.1, m_oldTabStopWidth );
 
     m_tabStopWidth->setUnit( doc->unit() );

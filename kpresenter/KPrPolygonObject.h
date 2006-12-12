@@ -35,7 +35,7 @@ class KPrPolygonObject : public KPr2DObject
 {
 public:
     KPrPolygonObject();
-    KPrPolygonObject( const KoPointArray &_points, const KoSize &_size, const KoPen &_pen, const QBrush &_brush,
+    KPrPolygonObject( const KoPointArray &_points, const QSizeF &_size, const KoPen &_pen, const QBrush &_brush,
                      FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                      bool _unbalanced, int _xfactor, int _yfactor,
                      bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
@@ -46,7 +46,7 @@ public:
     KPrPolygonObject &operator=( const KPrPolygonObject & );
 
     virtual void setSize( double _width, double _height );
-    virtual void setSize( const KoSize & _size )
+    virtual void setSize( const QSizeF & _size )
         { setSize( _size.width(), _size.height() ); }
 
     virtual ObjType getType() const { return OT_POLYGON; }
@@ -65,8 +65,8 @@ public:
     virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info );
 
     virtual void flip( bool horizontal );
-    virtual KoSize getRealSize() const;
-    virtual KoPoint getRealOrig() const;
+    virtual QSizeF getRealSize() const;
+    virtual QPointF getRealOrig() const;
 
 protected:
     virtual const char * getOasisElementName() const;

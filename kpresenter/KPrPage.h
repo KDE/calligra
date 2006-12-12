@@ -28,8 +28,8 @@
 #include <QList>
 #include "global.h"
 #include <KoBrush.h>
-#include <KoPoint.h>
-#include <KoRect.h>
+
+
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
 #include <QVariant>
 #include <KoDocumentChild.h>
@@ -247,7 +247,7 @@ public:
      *
      * @return the page rect
      */
-    KoRect getPageRect() const;
+    QRectF getPageRect() const;
 
     /**
      * @brief Get the page rect with applied zoom
@@ -384,48 +384,48 @@ public:
     /**
      * Insert an object into the page
      */
-    KCommand * insertObject( const QString &name, KPrObject * object, const KoRect &r, bool addCommand = true );
+    KCommand * insertObject( const QString &name, KPrObject * object, const QRectF &r, bool addCommand = true );
 
-    virtual KPrPartObject* insertObject( const KoRect&, KoDocumentEntry& );
+    virtual KPrPartObject* insertObject( const QRectF&, KoDocumentEntry& );
 
-    void insertRectangle( const KoRect &r, const KoPen & pen, const QBrush &brush, FillType ft,
+    void insertRectangle( const QRectF &r, const KoPen & pen, const QBrush &brush, FillType ft,
                           const QColor &g1, const QColor & g2,BCType gt, int rndX, int rndY,
                           bool unbalanced, int xfactor, int yfactor );
 
-    void insertCircleOrEllipse( const KoRect &r, const KoPen &pen, const QBrush &brush, FillType ft,
+    void insertCircleOrEllipse( const QRectF &r, const KoPen &pen, const QBrush &brush, FillType ft,
                                 const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor );
 
-    void insertPie( const KoRect &r, const KoPen &pen, const QBrush &brush, FillType ft,
+    void insertPie( const QRectF &r, const KoPen &pen, const QBrush &brush, FillType ft,
                     const QColor &g1, const QColor &g2,BCType gt, PieType pt, int _angle, int _len,
                     LineEnd lb,LineEnd le,bool unbalanced, int xfactor, int yfactor );
 
-    KPrTextObject*  insertTextObject( const KoRect& r, const QString& text = QString::null, KPrView *_view = 0L );
-    void insertLine( const KoRect &r, const KoPen &pen, LineEnd lb, LineEnd le, LineType lt );
+    KPrTextObject*  insertTextObject( const QRectF& r, const QString& text = QString::null, KPrView *_view = 0L );
+    void insertLine( const QRectF &r, const KoPen &pen, LineEnd lb, LineEnd le, LineType lt );
 
-    void insertAutoform( const KoRect &r, const KoPen &pen, const QBrush &brush, LineEnd lb, LineEnd le,
+    void insertAutoform( const QRectF &r, const KoPen &pen, const QBrush &brush, LineEnd lb, LineEnd le,
                          FillType ft,const QColor &g1, const QColor &g2, BCType gt, const QString &fileName,
                          bool unbalanced,int xfactor, int yfactor );
 
-    void insertFreehand( const KoPointArray &points, const KoRect &r, const KoPen &pen,LineEnd lb, LineEnd le );
-    void insertPolyline( const KoPointArray &points, const KoRect &r, const KoPen &pen,LineEnd lb, LineEnd le );
-    void insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r,
+    void insertFreehand( const KoPointArray &points, const QRectF &r, const KoPen &pen,LineEnd lb, LineEnd le );
+    void insertPolyline( const KoPointArray &points, const QRectF &r, const KoPen &pen,LineEnd lb, LineEnd le );
+    void insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const QRectF &r,
                                    const KoPen &pen,LineEnd lb, LineEnd le );
-    void insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r,
+    void insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const QRectF &r,
                                  const KoPen &pen,LineEnd lb, LineEnd le );
 
-    void insertPolygon( const KoPointArray &points, const KoRect &r, const KoPen &pen, const QBrush &brush,
+    void insertPolygon( const KoPointArray &points, const QRectF &r, const KoPen &pen, const QBrush &brush,
                         FillType ft,const QColor &g1, const QColor &g2, BCType gt, bool unbalanced,
                         int xfactor, int yfactor, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
 
-    void insertClosedLine( const KoPointArray &points, const KoRect &r, const KoPen &pen, const QBrush &brush,
+    void insertClosedLine( const KoPointArray &points, const QRectF &r, const KoPen &pen, const QBrush &brush,
                            FillType ft,const QColor &g1, const QColor &g2,
                            BCType gt, bool unbalanced, int xfactor, int yfactor, ToolEditMode _mode );
 
     void slotRepaintVariable();
     void recalcPageNum();
     void changePicture( const KUrl & url, QWidget *parent );
-    void insertPicture( const QString &filename, const KoPoint &pos );
-    void insertPicture( const QString &_file, const KoRect &_rect );
+    void insertPicture( const QString &filename, const QPointF &pos );
+    void insertPicture( const QString &_file, const QRectF &_rect );
 
     void enableEmbeddedParts( bool f );
 
@@ -496,12 +496,12 @@ public:
      *
      * @return rect of the objects
      */
-    KoRect getRealRect( bool all ) const;
+    QRectF getRealRect( bool all ) const;
     bool chPic( KPrView *_view);
 
     //return command when we move object
     KCommand *moveObject(KPrView *_view, double diffx, double diffy);
-    KCommand *moveObject(KPrView *m_view,const KoPoint &_move,bool key);
+    KCommand *moveObject(KPrView *m_view,const QPointF &_move,bool key);
 
     KCommand *rotateSelectedObjects(float _newAngle, bool addAngle=false);
     KCommand *shadowObj(ShadowDirection dir,int dist, const QColor &col);
@@ -512,7 +512,7 @@ public:
     void repaintObj();
 
     KPrObject * getCursor(const QPoint &pos );
-    KPrObject * getCursor(const KoPoint &pos );
+    KPrObject * getCursor(const QPointF &pos );
 
     /**
      * Returns the object at position pos
@@ -520,7 +520,7 @@ public:
      * @param withoutProtected if set to true only unprotecred objects are returned
      * @return the object at position pos
      */
-    KPrObject* getObjectAt( const KoPoint &pos, bool withoutProtected = false ) const;
+    KPrObject* getObjectAt( const QPointF &pos, bool withoutProtected = false ) const;
     KPrPixmapObject * picViewOrigHelper() const;
     void applyStyleChange( KoStyleChangeDefMap changed );
 

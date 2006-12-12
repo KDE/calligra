@@ -33,7 +33,7 @@ class KPrPolylineObject : public KPrPointObject
 {
 public:
     KPrPolylineObject();
-    KPrPolylineObject( const KoPointArray &_points, const KoSize &_size,
+    KPrPolylineObject( const KoPointArray &_points, const QSizeF &_size,
                       const KoPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPrPolylineObject() {}
 

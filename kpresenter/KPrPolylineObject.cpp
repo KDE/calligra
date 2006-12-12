@@ -46,7 +46,7 @@ KPrObjectAdaptor* KPrPolylineObject::dbusObject()
     return dbus;
 }
 
-KPrPolylineObject::KPrPolylineObject(  const KoPointArray &_points, const KoSize &_size,
+KPrPolylineObject::KPrPolylineObject(  const KoPointArray &_points, const QSizeF &_size,
                                      const KoPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
     : KPrPointObject( _pen, _lineBegin, _lineEnd )
 {

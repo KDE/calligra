@@ -45,9 +45,9 @@
 #include <float.h>
 
 #include <KoTextZoomHandler.h>
-#include <KoRect.h>
-#include <KoSize.h>
-#include <KoPoint.h>
+
+
+
 #include <KoXmlNS.h>
 #include <KoDom.h>
 #include <kdebug.h>
@@ -347,12 +347,12 @@ void KPrObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
     {
         double angInRad = -angle * M_PI / 180.0;
         QMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
-        KoPoint center( ext.width() / 2, ext.height() / 2 );
+        QPointF center( ext.width() / 2, ext.height() / 2 );
         double rotX = 0.0;
         double rotY = 0.0;
         m.map( center.x(), center.y(), &rotX, &rotY );
-        KoPoint rot( rotX, rotY );
-        KoPoint trans( center - rot + orig );
+        QPointF rot( rotX, rotY );
+        QPointF trans( center - rot + orig );
 
         QString transX;
         transX.setNum( trans.x(), 'g', DBL_DIG );
@@ -644,12 +644,12 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
                 angInRad = 0.0;
             }
             QMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
-            KoPoint center( ext.width() / 2, ext.height() / 2 );
+            QPointF center( ext.width() / 2, ext.height() / 2 );
             double transX = 0.0;
             double transY = 0.0;
             m.map( center.x(), center.y(), &transX, &transY );
-            KoPoint diff( transX, transY );
-            KoPoint trans( KoUnit::parseValue( rx.cap( 2 ) ), KoUnit::parseValue( rx.cap( 3 ) ) );
+            QPointF diff( transX, transY );
+            QPointF trans( KoUnit::parseValue( rx.cap( 2 ) ), KoUnit::parseValue( rx.cap( 3 ) ) );
             orig = trans - center + diff;
             kDebug(33001) << "trans = " << trans << ", center = " << center << ", diff = " << diff << ", orig = " << orig << endl;
         }
@@ -1139,8 +1139,8 @@ double KPrObject::load(const QDomElement &element) {
     return offset;
 }
 
-KoSize KPrObject::getRealSize() const {
-    KoSize size = ext;
+QSizeF KPrObject::getRealSize() const {
+    QSizeF size = ext;
 
     if ( angle != 0.0 ) {
       float angInRad = angle * M_PI / 180;
@@ -1151,11 +1151,11 @@ KoSize KPrObject::getRealSize() const {
     return size;
 }
 
-KoPoint KPrObject::getRealOrig() const {
-    KoPoint origin = orig;
+QPointF KPrObject::getRealOrig() const {
+    QPointF origin = orig;
 
     if ( angle != 0.0 ) {
-        KoSize dist( ( getRealSize() - ext ) / 2 );
+        QSizeF dist( ( getRealSize() - ext ) / 2 );
         origin.setX( orig.x() - dist.width() );
         origin.setY( orig.y() - dist.height() );
     }
@@ -1163,13 +1163,13 @@ KoPoint KPrObject::getRealOrig() const {
     return origin;
 }
 
-KoRect KPrObject::getRealRect() const {
-    return KoRect( getRealOrig(), getRealSize() );
+QRectF KPrObject::getRealRect() const {
+    return QRectF( getRealOrig(), getRealSize() );
 }
 
-KoRect KPrObject::getRepaintRect() const
+QRectF KPrObject::getRepaintRect() const
 {
-    KoRect rect( getRealOrig(), getRealSize() );
+    QRectF rect( getRealOrig(), getRealSize() );
 
     if ( shadowDirection == SD_LEFT ||
          shadowDirection == SD_LEFT_UP ||
@@ -1215,28 +1215,28 @@ void KPrObject::flip( bool /*horizontal*/ ) {
     }
 }
 
-KoRect KPrObject::rotateRectObject() const
+QRectF KPrObject::rotateRectObject() const
 {
-    KoRect br = KoRect( 0,0, ext.width(), ext.height() );
+    QRectF br = QRectF( 0,0, ext.width(), ext.height() );
     double pw = br.width();
     double ph = br.height();
-    KoRect rr = br;
+    QRectF rr = br;
     double yPos = -rr.y();
     double xPos = -rr.x();
-    rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
+    rr.moveTopLeft( QPointF( -rr.width() / 2.0, -rr.height() / 2.0 ) );
     QMatrix m;
     m.translate( pw / 2.0, ph / 2.0 );
     m.rotate( angle );
     m.translate( rr.left() + xPos, rr.top() + yPos );
-    KoRect r = KoRect::fromQRect(m.mapRect( br.toQRect() )); // see above TODO
-    r.moveBy( orig.x() , orig.y() );
+    QRectF r = QRectF(m.mapRect( br.toRect() )); // see above TODO
+    r.translate( orig.x() , orig.y() );
     return r;
 }
 
 void KPrObject::rotateObject(QPainter *paint,KoTextZoomHandler *_zoomHandler)
 {
-    KoRect rr = KoRect( 0, 0, ext.width(), ext.height() );
-    rr.moveTopLeft( KoPoint( -ext.width() / 2.0, -ext.height() / 2.0 ) );
+    QRectF rr = QRectF( 0, 0, ext.width(), ext.height() );
+    rr.moveTopLeft( QPointF( -ext.width() / 2.0, -ext.height() / 2.0 ) );
     QMatrix m;
     m.translate( _zoomHandler->zoomItXOld(ext.width() / 2.0), _zoomHandler->zoomItYOld(ext.height() / 2.0 ));
     m.rotate( angle );
@@ -1245,17 +1245,17 @@ void KPrObject::rotateObject(QPainter *paint,KoTextZoomHandler *_zoomHandler)
     paint->setMatrix( m, true );
 }
 
-bool KPrObject::contains( const KoPoint &point ) const
+bool KPrObject::contains( const QPointF &point ) const
 {
     return getRealRect().contains( point );
 }
 
-bool KPrObject::intersects( const KoRect &rect ) const
+bool KPrObject::intersects( const QRectF &rect ) const
 {
     return getRealRect().intersects( rect );
 }
 
-QCursor KPrObject::getCursor( const KoPoint &_point, ModifyType &_modType,
+QCursor KPrObject::getCursor( const QPointF &_point, ModifyType &_modType,
                              KPrDocument *doc ) const
 {
     KoTextZoomHandler * zh = doc->zoomHandler();
@@ -1412,7 +1412,7 @@ void KPrObject::paintSelection( QPainter *_painter, KoTextZoomHandler *_zoomHand
     _painter->setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
     _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
 
-    KoRect r = getRealRect();
+    QRectF r = getRealRect();
 
     int x = _zoomHandler->zoomItXOld( r.left() - orig.x());
     int y = _zoomHandler->zoomItYOld( r.top() - orig.y());
@@ -1579,7 +1579,7 @@ KoPen KPrObject::getPen() const
 }
 
 void KPrObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
-                                            KoSize &size, KoPoint &orig )
+                                            QSizeF &size, QPointF &orig )
 {
     if ( angle == 0 )
         return;
@@ -1597,7 +1597,7 @@ void KPrObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
     float max_y = 0;
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint cord( mid_x - (*it).x(), (*it).y() - mid_y );
+        QPointF cord( mid_x - (*it).x(), (*it).y() - mid_y );
         float tmp_x = cord.x() * cosinus + cord.y() * sinus;
         float tmp_y = - cord.x() * sinus + cord.y() * cosinus;
 
@@ -1625,7 +1625,7 @@ void KPrObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
 
 void KPrObject::addSelfToGuides(QList<double> &horizontalPos, QList<double> &verticalPos )
 {
-    KoRect bounds = getRealRect();
+    QRectF bounds = getRealRect();
 
     horizontalPos.append( bounds.top() );
     verticalPos.append( bounds.left() );
@@ -1777,7 +1777,7 @@ bool KPrShadowObject::loadOasisApplyViewBox( const QDomElement &element, KoPoint
     kDebug(33001) << "loadOasisApplayViewBox svg:viewBox = " << element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) << endl;
     QStringList viewBoxPoints = QStringList::split( ' ', element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
 
-    KoRect viewBox;
+    QRectF viewBox;
     if ( viewBoxPoints.size() == 4 )
     {
         QStringList::Iterator it = viewBoxPoints.begin();
@@ -1796,7 +1796,7 @@ bool KPrShadowObject::loadOasisApplyViewBox( const QDomElement &element, KoPoint
         bool first = true;
         for ( ; it != points.end(); ++it )
         {
-            KoPoint p = (*it);
+            QPointF p = (*it);
             if ( first )
             {
                 viewBox.setCoords( p.x(), p.y(), p.x(), p.y() );
@@ -1818,7 +1818,7 @@ bool KPrShadowObject::loadOasisApplyViewBox( const QDomElement &element, KoPoint
         KoPointArray::Iterator it( points.begin() );
         for ( ; it != points.end(); ++it )
         {
-            KoPoint *p = it;
+            QPointF *p = it;
             p->setX( ( p->x() - viewBox.left() ) / viewBox.width() * ext.width() );
             p->setY( ( p->y() - viewBox.top() ) / viewBox.height() * ext.height() );
         }

@@ -30,8 +30,8 @@ public:
     KPrPointObject();
     KPrPointObject( const KoPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
 
-    virtual KoSize getRealSize() const;
-    virtual KoPoint getRealOrig() const;
+    virtual QSizeF getRealSize() const;
+    virtual QPointF getRealOrig() const;
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
 
@@ -45,7 +45,7 @@ public:
     virtual LineEnd getLineEnd() const { return lineEnd; }
 
     virtual void setSize( double _width, double _height );
-    virtual void setSize( const KoSize & _size )
+    virtual void setSize( const QSizeF & _size )
         { setSize( _size.width(), _size.height() ); }
 
     virtual void flip( bool horizontal );

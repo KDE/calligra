@@ -22,7 +22,7 @@
 #define __kprhelplinedia__
 
 #include <kdialog.h>
-#include <KoRect.h>
+
 
 class QRadioButton;
 class KPrDocument;
@@ -53,7 +53,7 @@ class KPrInsertHelpLineDia : public KDialog
 {
     Q_OBJECT
 public:
-    KPrInsertHelpLineDia( QWidget *parent, const KoRect &r, KPrDocument *_doc, const char *name=0L);
+    KPrInsertHelpLineDia( QWidget *parent, const QRectF &r, KPrDocument *_doc, const char *name=0L);
 
     double newPosition() const;
     //return true if we add a new horizontal line help
@@ -63,7 +63,7 @@ private slots:
     void slotRadioButtonClicked();
 
 protected:
-    KoRect limitOfPage;
+    QRectF limitOfPage;
     KoUnitDoubleSpinBox* position;
     QRadioButton *m_rbHoriz;
     QRadioButton *m_rbVert;
@@ -75,16 +75,16 @@ class KPrInsertHelpPointDia : public KDialog
 {
     Q_OBJECT
 public:
-    KPrInsertHelpPointDia( QWidget *parent, const KoRect &r, KPrDocument *_doc, double poxX=0.0,
+    KPrInsertHelpPointDia( QWidget *parent, const QRectF &r, KPrDocument *_doc, double poxX=0.0,
                            double posY=0.0, const char *name=0L);
 
-    KoPoint newPosition() const;
+    QPointF newPosition() const;
     bool removePoint() const { return m_bRemovePoint;}
 private slots:
     void slotRemoveHelpPoint();
 
 protected:
-    KoRect limitOfPage;
+    QRectF limitOfPage;
     bool m_bRemovePoint;
     KoUnitDoubleSpinBox* positionX;
     KoUnitDoubleSpinBox* positionY;

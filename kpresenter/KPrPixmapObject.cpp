@@ -36,7 +36,7 @@
 
 #include <kdebug.h>
 #include <kimageeffect.h>
-#include <KoSize.h>
+
 #include <KoTextZoomHandler.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -75,7 +75,7 @@ KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection, const K
 {
     imageCollection = _imageCollection;
 
-    ext = KoSize(); // invalid size means unset
+    ext = QSizeF(); // invalid size means unset
     pen = KoPen( Qt::black, 1.0, Qt::NoPen );
     mirrorType = PM_NORMAL;
     depth = 0;

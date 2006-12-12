@@ -86,8 +86,8 @@ public:
     virtual void flip(bool horizontal );
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info);
 
-    virtual KoSize getRealSize() const;
-    virtual KoPoint getRealOrig() const;
+    virtual QSizeF getRealSize() const;
+    virtual QPointF getRealOrig() const;
 
 protected:
     virtual const char * getOasisElementName() const;
@@ -97,8 +97,8 @@ protected:
     virtual void paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                         int /* pageNum */, bool drawingShadow, bool drawContour );
 
-    void setMinMax( double &min_x, double &min_y, double &max_x, double &max_y, KoPoint point ) const;
-    void getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const;
+    void setMinMax( double &min_x, double &min_y, double &max_x, double &max_y, QPointF point ) const;
+    void getRealSizeAndOrig( QSizeF &size, QPointF &realOrig ) const;
 
     void setEndPoints( KoPointArray &points ) const;
 

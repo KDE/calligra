@@ -49,7 +49,7 @@
 #include <KoQueryTrader.h>
 #include "KoPointArray.h"
 #include "global.h"
-#include <KoRect.h>
+
 #include <KoTextFormat.h>
 #include <koffice_export.h>
 #include "presstep.h"
@@ -286,42 +286,42 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
      * @param startPoint the start point of the line
      * @param endPoint the end point of the line
      */
-    void insertLine( const KoPoint &startPoint, const KoPoint &endPoint );
+    void insertLine( const QPointF &startPoint, const QPointF &endPoint );
     
     /**
      * @brief Add a rectangle
      *
      * @param rect the size and position of the rectangle
      */
-    void insertRect( const KoRect &rect);
+    void insertRect( const QRectF &rect);
 
     /**
      * @brief Add a ellipse
      *
      * @param rect the size and position of the ellipse
      */
-    void insertEllipse( const KoRect &rect );
+    void insertEllipse( const QRectF &rect );
 
     /**
      * @brief Add a pie/arc/chord
      *
      * @param rect the size and position of the pie/arc/chord
      */
-    void insertPie( const KoRect &rect );
+    void insertPie( const QRectF &rect );
 
     /**
      * @brief Add a text object
      *
      * @param rect the size and position of the text object
      */
-    KPrTextObject* insertTextObject( const KoRect &rect );
+    KPrTextObject* insertTextObject( const QRectF &rect );
 
     /**
      * @brief Add a picture
      *
      * @param rect the size and position of the picture
      */
-    void insertPicture( const KoRect &rect );
+    void insertPicture( const QRectF &rect );
     void changePicture( const KUrl & url, QWidget *window );
 
     int numberOfObjectSelected() const;
@@ -345,7 +345,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
      *
      * @return rect of the objects
      */
-    KoRect objectRect( bool all ) const;
+    QRectF objectRect( bool all ) const;
 
     void scrollTopLeftPoint( const QPoint & pos );
 
@@ -476,7 +476,7 @@ protected:
      * Only rect is painted.
      * This method is used for edit mode.
      */
-    void drawObjectsEdit( QPainter *painter, const KoRect &rect, const Q3PtrList<KPrObject> &_objects,
+    void drawObjectsEdit( QPainter *painter, const QRectF &rect, const Q3PtrList<KPrObject> &_objects,
                           SelectionMode selectionMode, int page ) const;
 
     /**
@@ -528,7 +528,7 @@ protected:
      * @param withoutProtected if set to true only unprotecred objects are returned
      * @return the object at position pos
      */
-    KPrObject *getObjectAt( const KoPoint &pos, bool withoutProtected = false );
+    KPrObject *getObjectAt( const QPointF &pos, bool withoutProtected = false );
     virtual void focusInEvent( QFocusEvent* ) {}
     virtual void focusOutEvent( QFocusEvent* ) {}
     virtual void enterEvent( QEvent *e );
@@ -577,14 +577,14 @@ protected:
      *
      * @param rect the size and position of the object
      */
-    KPrPartObject *insertObject( const KoRect &rect );
+    KPrPartObject *insertObject( const QRectF &rect );
 
     /**
      * @brief Add a autoform object
      *
      * @param rect the size and position of the autoform object
      */
-    void insertAutoform( const KoRect &rect );
+    void insertAutoform( const QRectF &rect );
     void insertFreehand( const KoPointArray &_pointArray );
     void insertPolyline( const KoPointArray &_pointArray );
     void insertCubicBezierCurve( const KoPointArray &_pointArray );
@@ -594,9 +594,9 @@ protected:
     void selectNext();
     void selectPrev();
 
-    void scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &pgSize,
+    void scalePixmapToBeOrigIn( const QSizeF &currentSize, const QSizeF &pgSize,
                                 const QSize &presSize, KPrPixmapObject *obj );
-    bool getPixmapOrigAndCurrentSize( KPrPixmapObject *&obj, KoSize *origSize, KoSize *currentSize );
+    bool getPixmapOrigAndCurrentSize( KPrPixmapObject *&obj, QSizeF *origSize, QSizeF *currentSize );
     void setTextBackground( KPrTextObject *obj );
     virtual bool eventFilter( QObject *o, QEvent *e );
     virtual bool focusNextPrevChild( bool );
@@ -622,7 +622,7 @@ protected:
     void printRTDebug( int info );
 #endif
 
-    KoRect getAlignBoundingRect() const;
+    QRectF getAlignBoundingRect() const;
 
 private:
     void picViewOrigHelper(int x, int y);
@@ -641,11 +641,11 @@ private:
      * @param pos The position of the mouse
      * @param keepXorYunchanged if true keep x or y position unchanged
      */
-    void moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged );
+    void moveObjectsByMouse( QPointF &pos, bool keepXorYunchanged );
 
     //---- stuff needed for resizing ----
     /// resize the m_resizeObject
-    void resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio, bool scaleAroundCenter );
+    void resizeObject( ModifyType _modType, const QPointF & point, bool keepRatio, bool scaleAroundCenter );
     /// create KPrResizeCmd
     void finishResizeObject( const QString &name, bool layout = true );
 
@@ -682,10 +682,10 @@ private:
     bool m_setPageTimer;
 
     /// Helper function to draw a polygon
-    void drawPolygon( QPainter &p, const KoRect &rect );
+    void drawPolygon( QPainter &p, const QRectF &rect );
 
     /// Helper function to draw a pie/arc/chord
-    void drawPieObject( QPainter *p,  const KoRect &rect );
+    void drawPieObject( QPainter *p,  const QRectF &rect );
 
     QPoint limitOfPoint(const QPoint& _point) const;
 
@@ -710,7 +710,7 @@ private:
      *
      * @return the position of the snapped point
      */
-    KoPoint snapPoint( KoPoint &pos, bool repaintSnapping = true );
+    QPointF snapPoint( QPointF &pos, bool repaintSnapping = true );
 
     /**
      * @brief Find the next grid in distance
@@ -723,7 +723,7 @@ private:
      *
      * @return the distance to the guide or (  0, 0 ) if there is no guide to snap to.
      */
-    KoPoint diffGrid( KoRect &rect, double diffx, double diffy );
+    QPointF diffGrid( QRectF &rect, double diffx, double diffy );
 
     void recalcAutoGuides( );
 
@@ -746,7 +746,7 @@ private:
      * @param modifiers The state of the modifier buttons.
      *
      */
-    void updateInsertRect( const KoPoint &point, Qt::KeyboardModifiers modifiers );
+    void updateInsertRect( const QPointF &point, Qt::KeyboardModifiers modifiers );
 
     /**
      * @brief Popup context menu
@@ -861,34 +861,34 @@ private:
     int delPageId;
     bool drawRubber;
     /// rect for drawing rubber
-    KoRect m_rubber;
+    QRectF m_rubber;
 
     //---- stuff needed for resizing ----
     /// object which gets resized
     KPrObject *m_resizeObject;
     /// size of the object at when resizing is started
-    KoRect m_rectBeforeResize;
+    QRectF m_rectBeforeResize;
     /// ratio of the object ( width / height )
     double m_ratio;
     bool m_isResizing;
 
     //---- stuff needed for moving ----
     bool m_isMoving;
-    KoPoint m_moveStartPoint;
+    QPointF m_moveStartPoint;
 
     //---- stuff needed for rotating ----
     /// object which gets rotated
     KPrObject *m_rotateObject;
     /// center of the rotated object
-    KoPoint m_rotateCenter;
+    QPointF m_rotateCenter;
     /// start point for rotation
-    KoPoint m_rotateStart;
+    QPointF m_rotateStart;
     /// angle of the object at start of rotate
     double m_angleBeforeRotate;
 
     ToolEditMode toolEditMode;
     /// The rect of the object during insert.
-    KoRect m_insertRect;
+    QRectF m_insertRect;
     KoDocumentEntry partEntry;
     QString autoform;
     QPixmap buffer;
@@ -900,11 +900,11 @@ private:
     KoPointArray m_pointArray, m_oldCubicBezierPointArray;
     QPoint m_dragStartPoint, m_dragEndPoint, m_dragSymmetricEndPoint;
     /// The start position of an insert for line objects
-    KoPoint m_startPoint;
+    QPointF m_startPoint;
     /// The end position of an insert for line objects
-    KoPoint m_endPoint;
-    KoPoint m_symmetricEndPoint;
-    KoPoint m_CubicBezierSecondPoint, m_CubicBezierThirdPoint;
+    QPointF m_endPoint;
+    QPointF m_symmetricEndPoint;
+    QPointF m_CubicBezierSecondPoint, m_CubicBezierThirdPoint;
     int m_indexPointArray;
     bool m_drawPolyline;
     bool m_drawCubicBezierCurve;
@@ -916,15 +916,15 @@ private:
     int m_xOffsetSaved, m_yOffsetSaved; // saved when going fullscreen
 
     /// Start position for move with mouse
-    KoPoint m_moveStartPosMouse;
+    QPointF m_moveStartPosMouse;
     /// This holds the distance it an object was snapped to a guide
-    KoPoint m_moveSnapDiff;
+    QPointF m_moveSnapDiff;
     /// Set to true if snapping should be disabled (by pressing shift during move)
     bool m_disableSnapping;
     /// The last position of the mouse during moving
-    KoPoint m_origMousePos;
+    QPointF m_origMousePos;
     /// start position for move with key
-    KoPoint m_moveStartPosKey; 
+    QPointF m_moveStartPosKey; 
 
     KPrPage * m_activePageBeforePresentation;
     int m_zoomBeforePresentation;

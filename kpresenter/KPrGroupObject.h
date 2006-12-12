@@ -41,9 +41,9 @@ public:
     KPrGroupObject &operator=( const KPrGroupObject & );
 
     virtual void setSize( double _width, double _height );
-    virtual void setOrig( const KoPoint &_point );
+    virtual void setOrig( const QPointF &_point );
     virtual void setOrig( double _x, double _y );
-    virtual void moveBy( const KoPoint &_point );
+    virtual void moveBy( const QPointF &_point );
     virtual void moveBy( double _dx, double _dy );
 
     virtual void rotate( float _angle );

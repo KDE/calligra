@@ -40,7 +40,7 @@ KPrBezierCurveObject::KPrBezierCurveObject()
 
 KPrBezierCurveObject::KPrBezierCurveObject( const KoPointArray &_controlPoints,
                                             const KoPointArray &_allPoints,
-                                            const KoSize &_size, const KoPen &_pen,
+                                            const QSizeF &_size, const KoPen &_pen,
                                             LineEnd _lineBegin, LineEnd _lineEnd )
 : KPrPointObject( _pen, _lineBegin, _lineEnd )
 {
@@ -59,7 +59,7 @@ KPrBezierCurveObject &KPrBezierCurveObject::operator=( const KPrBezierCurveObjec
 
 bool KPrBezierCurveObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    KoRect rect( getRect() );
+    QRectF rect( getRect() );
     sc.xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( int( rect.width() * 100 ) )
                                                                    .arg( int( rect.height() * 100 ) ) );
 
@@ -132,7 +132,7 @@ void KPrBezierCurveObject::updatePoints( double _fx, double _fy )
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
     for ( it = allPoints.begin(); it != allPoints.end(); ++it ) {
-        KoPoint point = (*it);
+        QPointF point = (*it);
         double tmpX = point.x() * _fx;
         double tmpY = point.y() * _fy;
 
@@ -184,7 +184,7 @@ KoPointArray KPrBezierCurveObject::bezier2polyline( const KoPointArray &bezierPo
                 KoPointArray::ConstIterator it;
                 for ( it = bezierPoint.begin(); it != bezierPoint.end(); ++it )
                 {
-                    KoPoint _point = (*it);
+                    QPointF _point = (*it);
                     tmpPointArray.putPoints( _tmpIndex, 1, _point.x(), _point.y() );
                     ++_tmpIndex;
                 }
@@ -223,7 +223,7 @@ void KPrBezierCurveObject::flip(bool horizontal )
         double horiz = getSize().height()/2;
         for ( it = allPoints.begin(); it != allPoints.end(); ++it )
         {
-            KoPoint point = (*it);
+            QPointF point = (*it);
             if ( point.y()> horiz )
                 tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
             else
@@ -237,7 +237,7 @@ void KPrBezierCurveObject::flip(bool horizontal )
         double vert = getSize().width()/2;
         for ( it = allPoints.begin(); it != allPoints.end(); ++it )
         {
-            KoPoint point = (*it);
+            QPointF point = (*it);
             if ( point.y()> vert )
                 tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
             else
@@ -264,7 +264,7 @@ KPrCubicBezierCurveObject::KPrCubicBezierCurveObject()
 
 KPrCubicBezierCurveObject::KPrCubicBezierCurveObject( const KoPointArray &_controlPoints,
                                                       const KoPointArray &_allPoints,
-                                                      const KoSize & _size, const KoPen &_pen,
+                                                      const QSizeF & _size, const KoPen &_pen,
                                                       LineEnd _lineBegin, LineEnd _lineEnd )
 : KPrBezierCurveObject( _controlPoints, _allPoints, _size, _pen, _lineBegin, _lineEnd )
 {
@@ -287,7 +287,7 @@ KPrQuadricBezierCurveObject::KPrQuadricBezierCurveObject()
 
 KPrQuadricBezierCurveObject::KPrQuadricBezierCurveObject( const KoPointArray &_controlPoints,
                                                           const KoPointArray &_allPoints,
-                                                          const KoSize & _size, const KoPen &_pen,
+                                                          const QSizeF & _size, const KoPen &_pen,
                                                           LineEnd _lineBegin, LineEnd _lineEnd )
 : KPrBezierCurveObject( _controlPoints, _allPoints, _size, _pen, _lineBegin, _lineEnd )
 {

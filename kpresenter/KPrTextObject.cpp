@@ -74,7 +74,7 @@
 #include <KoVariable.h>
 #include <KoCustomVariablesDia.h>
 #include <KoRuler.h>
-#include <KoSize.h>
+
 #include <KoXmlNS.h>
 #include <KoDom.h>
 #include <KoStore.h>
@@ -488,7 +488,7 @@ void KPrTextObject::drawText( QPainter* _painter, KoTextZoomHandler *zoomHandler
     else
         cg.setColor( QColorGroup::Base, m_doc->txtBackCol() );
 
-    QRect r = zoomHandler->zoomRectOld( KoRect( 0, 0, innerWidth(), innerHeight() ) );
+    QRect r = zoomHandler->zoomRectOld( QRectF( 0, 0, innerWidth(), innerHeight() ) );
     bool editMode = false;
     if( m_doc->firstView() && m_doc->firstView()->getCanvas())
         editMode = m_doc->firstView()->getCanvas()->getEditMode();
@@ -1329,7 +1329,7 @@ void KPrTextObject::drawParags( QPainter *painter, KoTextZoomHandler* zoomHandle
     if( m_doc->firstView() && m_doc->firstView()->getCanvas())
         editMode = m_doc->firstView()->getCanvas()->getEditMode();
 
-    QRect r = zoomHandler->zoomRectOld( KoRect( 0, 0, innerWidth(), innerHeight() ) );
+    QRect r = zoomHandler->zoomRectOld( QRectF( 0, 0, innerWidth(), innerHeight() ) );
     KoTextParag *parag = textDocument()->firstParag();
     while ( parag ) {
         if ( !parag->isValid() )
@@ -1358,7 +1358,7 @@ void KPrTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVi
 {
     // The implementation is very related to KWord's KWTextFrameSet::drawCursor
     KoTextZoomHandler *zh = m_doc->zoomHandler();
-    QPoint origPix = zh->zoomPointOld( orig+KoPoint(bLeft(), bTop()+alignVertical) );
+    QPoint origPix = zh->zoomPointOld( orig+QPointF(bLeft(), bTop()+alignVertical) );
     // Painter is already translated for diffx/diffy, but not for the object yet
     p->translate( origPix.x(), origPix.y() );
     if ( angle != 0 )
@@ -1693,11 +1693,11 @@ KCommand * KPrTextObject::textObjectToContents()
     double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( heightLU );
 
     // Compare with current object's size
-    KoSize sizeDiff = KoSize( txtWidth, txtHeight ) - innerRect().size();
+    QSizeF sizeDiff = QSizeF( txtWidth, txtHeight ) - innerRect().size();
     if( !sizeDiff.isNull() )
     {
         // The command isn't named since it's always put into a macro command.
-        return new KPrResizeCmd( QString::null, KoPoint( 0, 0 ), sizeDiff, this, m_doc);
+        return new KPrResizeCmd( QString::null, QPointF( 0, 0 ), sizeDiff, this, m_doc);
     }
     return 0L;
 }
@@ -1710,10 +1710,10 @@ void KPrTextObject::setTextMargins( double _left, double _top, double _right, do
     bbottom = _bottom;
 }
 
-KoRect KPrTextObject::innerRect() const
+QRectF KPrTextObject::innerRect() const
 {
-    KoRect inner( getRect());
-    inner.moveBy( bLeft(), bTop());
+    QRectF inner( getRect());
+    inner.translate( bLeft(), bTop());
     inner.setWidth( inner.width() - bLeft() - bRight() );
     inner.setHeight( inner.height() - bTop() - bBottom() );
     return inner;
@@ -1763,7 +1763,7 @@ void KPrTextObject::recalcVerticalAlignment()
 QPoint KPrTextObject::cursorPos(KPrCanvas *canvas, KoTextCursor *cursor) const
 {
   KoTextZoomHandler *zh = m_doc->zoomHandler();
-  QPoint origPix = zh->zoomPointOld( orig+KoPoint(bLeft(), bTop()+alignVertical) );
+  QPoint origPix = zh->zoomPointOld( orig+QPointF(bLeft(), bTop()+alignVertical) );
   KoTextParag* parag = cursor->parag();
   QPoint topLeft = parag->rect().topLeft();         // in QRT coords
   int lineY = 0;
@@ -1950,7 +1950,7 @@ void KPrTextView::ensureCursorVisible()
     y += parag->rect().y();
     int w = 1;
     KPrDocument *doc= m_kptextobj->kPresenterDocument();
-    KoPoint pt= kpTextObject()->getOrig();
+    QPointF pt= kpTextObject()->getOrig();
     pt.setX( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelXToPt( x) ) +pt.x());
     pt.setY( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelYToPt( y ))+pt.y() );
 
@@ -2151,13 +2151,13 @@ QPoint KPrTextView::viewToInternal( const QPoint & pos ) const
 
     kDebug(33001)<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
 
-    KoRect br = KoRect( 0, 0, kpTextObject()->getSize().width(), kpTextObject()->getSize().height() );
+    QRectF br = QRectF( 0, 0, kpTextObject()->getSize().width(), kpTextObject()->getSize().height() );
     double pw = br.width();
     double ph = br.height();
-    KoRect rr = br;
+    QRectF rr = br;
     double yPos = -rr.y();
     double xPos = -rr.x();
-    rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
+    rr.moveTopLeft( QPointF( -rr.width() / 2.0, -rr.height() / 2.0 ) );
 
     m.translate( zh->zoomItXOld(pw / 2.0),
                  zh->zoomItYOld(ph / 2.0 ));
@@ -2596,7 +2596,7 @@ QPoint KPrTextObject::viewToInternal( const QPoint & pos, KPrCanvas* canvas ) co
 {
     KoTextZoomHandler* zh = kPresenterDocument()->zoomHandler();
     QPoint iPoint = pos - zh->zoomPointOld(
-        getOrig() + KoPoint( bLeft(),
+        getOrig() + QPointF( bLeft(),
                              bTop() + alignmentValue()) );
     iPoint = zh->pixelToLayoutUnit(
         QPoint( iPoint.x() + canvas->diffx(), iPoint.y() + canvas->diffy() ) );

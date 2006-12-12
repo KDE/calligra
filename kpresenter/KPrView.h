@@ -80,7 +80,7 @@ class TKSelectColorAction;
 class KoPartSelectAction;
 class KoPicture;
 class KoParagStyle;
-class KoRect;
+class QRectF;
 
 class KoCharSelectDia;
 class KoTextFormat;
@@ -676,7 +676,7 @@ public:
      *
      * @param rect The rect which should be zoomed to.
      */
-    void setZoomRect( const KoRect & rect );
+    void setZoomRect( const QRectF & rect );
     void changeVerticalAlignmentStatus(VerticalAlignmentType _type );
 
     void closeTextObject();

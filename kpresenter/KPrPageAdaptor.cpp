@@ -34,8 +34,8 @@
 #include <kdebug.h>
 #include <kcommand.h>
 #include "KPrCommand.h"
-#include <KoPoint.h>
-#include <KoRect.h>
+
+
 
 KPrPageAdaptor::KPrPageAdaptor( KPrPage *_page, int pgnum )
   : QDBusAbstractAdaptor( _page )
@@ -498,7 +498,7 @@ QString KPrPageAdaptor::insertRectangle(double x, double y, double h, double w)
     m_page->kPresenterDoc()->deSelectAllObj();
     if ( !view  )
         return QString();
-    view->getCanvas()->insertRect( KoRect( x, y, h, w ) );
+    view->getCanvas()->insertRect( QRectF( x, y, h, w ) );
     return selectedObject();
 }
 
@@ -509,7 +509,7 @@ QString KPrPageAdaptor::insertEllipse( double x, double y, double h, double w )
     if ( !view  )
         return QString();
 
-    view->getCanvas()->insertEllipse( KoRect( x, y, h, w ) );
+    view->getCanvas()->insertEllipse( QRectF( x, y, h, w ) );
     return selectedObject();
 }
 
@@ -520,7 +520,7 @@ QString KPrPageAdaptor::insertPie( double x, double y, double h, double w )
     if ( !view  )
         return QString();
 
-    view->getCanvas()->insertPie( KoRect( x, y, h, w ) );
+    view->getCanvas()->insertPie( QRectF( x, y, h, w ) );
     return selectedObject();
 }
 
@@ -531,7 +531,7 @@ QString KPrPageAdaptor::insertLine( double x1, double y1, double x2, double y2 )
     if ( !view  )
         return QString();
 
-    view->getCanvas()->insertLine( KoPoint( x1, y1), KoPoint( x2, y2 ) );
+    view->getCanvas()->insertLine( QPointF( x1, y1), QPointF( x2, y2 ) );
     return selectedObject();
 }
 
@@ -542,7 +542,7 @@ QString KPrPageAdaptor::insertTextObject( double x, double y, double h, double w
     if ( !view  )
         return QString();
 
-    view->getCanvas()->insertTextObject( KoRect( x, y, h, w ) );
+    view->getCanvas()->insertTextObject( QRectF( x, y, h, w ) );
     return selectedObject();
 }
 
@@ -554,7 +554,7 @@ QString KPrPageAdaptor::insertPicture( const QString & file, double x, double y,
     if ( !view  )
         return QString();
 
-    view->getCanvas()->insertPicture( KoRect( x, y, h, w ) );
+    view->getCanvas()->insertPicture( QRectF( x, y, h, w ) );
     return selectedObject();
 }
 

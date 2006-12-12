@@ -21,7 +21,7 @@
 #include "KPrPixmapObjectAdaptor.h"
 #include "KPrPixmapObject.h"
 #include "KPrObject.h"
-
+#include <kdebug.h>
 #include <kapplication.h>
 
 KPrPixmapObjectAdaptor::KPrPixmapObjectAdaptor( KPrPixmapObject *_obj )

@@ -2273,7 +2273,7 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
 void KPrDocument::createHeaderFooter()
 {
     //add header/footer to sticky page
-    KoRect pageRect=m_masterPage->getPageRect();
+    QRectF pageRect=m_masterPage->getPageRect();
     _header->setOrig(pageRect.topLeft());
     _header->setSize(pageRect.width(),20);
 
@@ -3292,7 +3292,7 @@ void KPrDocument::setPageLayout( const KoPageLayout &pgLayout )
 //when we change pagelayout we must re-position header/footer
 void KPrDocument::updateHeaderFooterPosition( )
 {
-    KoRect pageRect=m_masterPage->getPageRect();
+    QRectF pageRect=m_masterPage->getPageRect();
     QRect oldBoundingRect = zoomHandler()->zoomRectOld( _header->getRepaintRect() );
     _header->setOrig(pageRect.topLeft ());
     _header->setSize(pageRect.width(),_header->getSize().height());

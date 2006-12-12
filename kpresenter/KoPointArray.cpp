@@ -19,7 +19,6 @@
 */
 
 #include "KoPointArray.h"
-#include <KoRect.h>
 #include <stdarg.h>
 #include <KoZoomHandler.h>
 //Added by qt3to4:
@@ -28,9 +27,9 @@
 
 void KoPointArray::translate( double dx, double dy )
 {
-    register KoPoint *p = data();
+    register QPointF *p = data();
     register int i = size();
-    KoPoint pt( dx, dy );
+    QPointF pt( dx, dy );
     while ( i-- ) {
         *p += pt;
         p++;
@@ -39,21 +38,21 @@ void KoPointArray::translate( double dx, double dy )
 
 void KoPointArray::point( uint index, double *x, double *y ) const
 {
-    KoPoint p = Q3MemArray<KoPoint>::at( index );
+    QPointF p = Q3MemArray<QPointF>::at( index );
     if ( x )
         *x = (double)p.x();
     if ( y )
         *y = (double)p.y();
 }
 
-KoPoint KoPointArray::point( uint index ) const
+QPointF KoPointArray::point( uint index ) const
 { // #### index out of bounds
-    return Q3MemArray<KoPoint>::at( index );
+    return Q3MemArray<QPointF>::at( index );
 }
 
 void KoPointArray::setPoint( uint index, double x, double y )
 { // #### index out of bounds
-    Q3MemArray<KoPoint>::at( index ) = KoPoint( x, y );
+    Q3MemArray<QPointF>::at( index ) = QPointF( x, y );
 }
 
 
@@ -231,11 +230,11 @@ void polygonizeQBezier( double* acc, int& accsize, const double ctrl[],
 }
 
 
-KoRect KoPointArray::boundingRect() const
+QRectF KoPointArray::boundingRect() const
 {
     if ( isEmpty() )
-        return KoRect( 0, 0, 0, 0 );        // null rectangle
-    register KoPoint *pd = data();
+        return QRectF( 0, 0, 0, 0 );        // null rectangle
+    register QPointF *pd = data();
     double minx, maxx, miny, maxy;
     minx = maxx = pd->x();
     miny = maxy = pd->y();
@@ -251,7 +250,8 @@ KoRect KoPointArray::boundingRect() const
             maxy = pd->y();
         pd++;
     }
-    return KoRect( KoPoint(minx,miny), KoPoint(maxx,maxy) );
+#warning "kde4 verify it!"    
+    return QRectF( QPointF(minx,miny), QSizeF(maxx-minx,maxy-miny) );
 }
 
 
@@ -264,7 +264,7 @@ KoPointArray KoPointArray::cubicBezier() const
         KoPointArray pa;
         return pa;
     } else {
-        KoRect r = boundingRect();
+        QRectF r = boundingRect();
         int m = (int)(4+2*qMax(r.width(),r.height()));
         double *p = new double[m];
         double ctrl[8];
@@ -280,7 +280,7 @@ KoPointArray KoPointArray::cubicBezier() const
         for (i=0; j<len; i++) {
             double x = qRound(p[j++]);
             double y = qRound(p[j++]);
-            pa[i] = KoPoint(x,y);
+            pa[i] = QPointF(x,y);
         }
         // add last pt on the line, which will be at the last control pt
         pa[(int)pa.size()-1] = at(3);
@@ -294,7 +294,7 @@ Q3PointArray KoPointArray::zoomPointArray( const KoZoomHandler* zoomHandler ) co
 {
     Q3PointArray tmpPoints(size());
     for ( uint i= 0; i<size();i++ ) {
-        KoPoint p = at( i );
+        QPointF p = at( i );
         tmpPoints.putPoints( i, 1, zoomHandler->zoomItXOld(p.x()),zoomHandler->zoomItYOld(p.y()) );
     }
     return tmpPoints;
@@ -304,7 +304,7 @@ Q3PointArray KoPointArray::zoomPointArray( const KoZoomHandler* zoomHandler, int
 {
     double fx;
     double fy;
-    KoSize ext = boundingRect().size();
+    QSizeF ext = boundingRect().size();
     int pw = zoomHandler->zoomItXOld( penWidth ) / 2;
 
     fx = (double)( zoomHandler->zoomItXOld(ext.width()) - 2 * pw ) / ext.width();

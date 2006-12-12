@@ -44,7 +44,7 @@ KPrPolygonObject::KPrPolygonObject()
 {
 }
 
-KPrPolygonObject::KPrPolygonObject( const KoPointArray &_points, const KoSize &_size,
+KPrPolygonObject::KPrPolygonObject( const KoPointArray &_points, const QSizeF &_size,
                                   const KoPen &_pen, const QBrush &_brush,
                                   FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                   bool _unbalanced, int _xfactor, int _yfactor,
@@ -106,7 +106,7 @@ QDomDocumentFragment KPrPolygonObject::save( QDomDocument& doc, double offset )
         KoPointArray::ConstIterator it;
         for ( it = points.begin(); it != points.end(); ++it ) {
             QDomElement elemPoint = doc.createElement( "Point" );
-            KoPoint point = (*it);
+            QPointF point = (*it);
             elemPoint.setAttribute( "point_x", point.x() );
             elemPoint.setAttribute( "point_y", point.y() );
 
@@ -178,7 +178,7 @@ double KPrPolygonObject::load( const QDomElement &element )
 
 void KPrPolygonObject::setSize( double _width, double _height )
 {
-    KoSize origSize( ext );
+    QSizeF origSize( ext );
     KPrObject::setSize( _width, _height );
 
     double fx = ext.width() / origSize.width();
@@ -193,7 +193,7 @@ void KPrPolygonObject::updatePoints( double _fx, double _fy )
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
-        KoPoint point = (*it);
+        QPointF point = (*it);
         double tmpX = point.x() * _fx;
         double tmpY = point.y() * _fy;
 
@@ -258,7 +258,7 @@ void KPrPolygonObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
 void KPrPolygonObject::drawPolygon()
 {
     kDebug()<<"void KPrPolygonObject::drawPolygon()***********\n";
-    KoRect _rect( 0, 0, ext.width(), ext.height() );
+    QRectF _rect( 0, 0, ext.width(), ext.height() );
     double angle = 2 * M_PI / cornersValue;
     double diameter = static_cast<double>( qMax( _rect.width(), _rect.height() ) );
     double radius = diameter * 0.5;
@@ -306,7 +306,7 @@ void KPrPolygonObject::drawPolygon()
     }
 
     // calculate the points as offsets to 0,0
-    KoRect _changRect = _points.boundingRect();
+    QRectF _changRect = _points.boundingRect();
     double fx = _rect.width() / _changRect.width();
     double fy = _rect.height() / _changRect.height();
 
@@ -314,7 +314,7 @@ void KPrPolygonObject::drawPolygon()
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
     for ( it = _points.begin(); it != _points.end(); ++it ) {
-        KoPoint point = (*it);
+        QPointF point = (*it);
         double tmpX = ( point.x() - xmin) * fx;
         double tmpY = ( point.y() - ymin) * fy;
 
@@ -339,7 +339,7 @@ void KPrPolygonObject::flip( bool horizontal )
         KoPointArray::ConstIterator it;
         double horiz = getSize().height()/2;
         for ( it = points.begin(); it != points.end(); ++it ) {
-            KoPoint point = (*it);
+            QPointF point = (*it);
             if ( point.y()> horiz )
                 tmpPoints.putPoints( index, 1, point.x(),point.y()- 2*(point.y()-horiz) );
             else
@@ -352,7 +352,7 @@ void KPrPolygonObject::flip( bool horizontal )
         KoPointArray::ConstIterator it;
         double vert = getSize().width()/2;
         for ( it = points.begin(); it != points.end(); ++it ) {
-            KoPoint point = (*it);
+            QPointF point = (*it);
             if ( point.x()> vert )
                 tmpPoints.putPoints( index, 1, point.x()- 2*(point.x()-vert), point.y() );
             else
@@ -363,17 +363,17 @@ void KPrPolygonObject::flip( bool horizontal )
     points = tmpPoints;
 }
 
-KoSize KPrPolygonObject::getRealSize() const {
-    KoSize size( ext );
-    KoPoint realOrig( orig );
+QSizeF KPrPolygonObject::getRealSize() const {
+    QSizeF size( ext );
+    QPointF realOrig( orig );
     KoPointArray p( points );
     getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
     return size;
 }
 
-KoPoint KPrPolygonObject::getRealOrig() const {
-    KoSize size( ext );
-    KoPoint realOrig( orig );
+QPointF KPrPolygonObject::getRealOrig() const {
+    QSizeF size( ext );
+    QPointF realOrig( orig );
     KoPointArray p( points );
     getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
     return realOrig;

@@ -23,17 +23,15 @@
 #include <q3memarray.h>
 //Added by qt3to4:
 #include <Q3PointArray>
-#include <KoPoint.h>
-#include <KoRect.h>
 
 class KoZoomHandler;
-class KoPointArray : public Q3MemArray<KoPoint>
+class KoPointArray : public Q3MemArray<QPointF>
 {
 public:
     KoPointArray() {}
     ~KoPointArray() {}
-    explicit KoPointArray( int size ) : Q3MemArray<KoPoint>( size ) {}
-    KoPointArray( const KoPointArray &a ) : Q3MemArray<KoPoint>( a ) {}
+    explicit KoPointArray( int size ) : Q3MemArray<QPointF>( size ) {}
+    KoPointArray( const KoPointArray &a ) : Q3MemArray<QPointF>( a ) {}
 
     KoPointArray &operator=( const KoPointArray &a )
         { return (KoPointArray&)assign( a ); }
@@ -42,12 +40,12 @@ public:
         { KoPointArray tmp; return *((KoPointArray*)&tmp.duplicate(*this)); }
 
     void    translate( double dx, double dy );
-    KoRect   boundingRect() const;
+    QRectF   boundingRect() const;
 
     void    point( uint i, double *x, double *y ) const;
-    KoPoint  point( uint i ) const;
+    QPointF  point( uint i ) const;
     void    setPoint( uint i, double x, double y );
-    void    setPoint( uint i, const KoPoint &p );
+    void    setPoint( uint i, const QPointF &p );
     bool    putPoints( int index, int nPoints, double firstx, double firsty, ... );
 
     KoPointArray cubicBezier() const;

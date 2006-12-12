@@ -47,9 +47,9 @@
 #include "KPrTextDocument.h"
 #include <kdebug.h>
 #include "KPrVariableCollection.h"
-#include <KoRect.h>
-#include <KoSize.h>
-#include <KoPoint.h>
+
+
+
 #include <KoDom.h>
 #include <KoTextParag.h>
 #include <KoXmlNS.h>
@@ -114,7 +114,7 @@ void KPrShadowCmd::unexecute()
 }
 
 
-KPrSetOptionsCmd::KPrSetOptionsCmd( const QString &_name, QList<KoPoint> &_diffs, Q3PtrList<KPrObject> &_objects,
+KPrSetOptionsCmd::KPrSetOptionsCmd( const QString &_name, QList<QPointF> &_diffs, Q3PtrList<KPrObject> &_objects,
                               double _gridX, double _gridY, double _oldGridX, double _oldGridY,
                               const QColor &_txtBackCol, const QColor &_otxtBackCol, KPrDocument *_doc )
     : KNamedCommand( _name ),
@@ -489,7 +489,7 @@ KPrGroupObjCmd::~KPrGroupObjCmd()
 
 void KPrGroupObjCmd::execute()
 {
-    KoRect r;
+    QRectF r;
     int position = 0;
     Q3PtrListIterator<KPrObject> it( m_objectsToGroup );
     for ( ; it.current() ; ++it )
@@ -575,7 +575,7 @@ void UnGroupObjCmd::execute()
 
 void UnGroupObjCmd::unexecute()
 {
-    KoRect r=KoRect();
+    QRectF r=QRectF();
     int position = 0;
     Q3PtrListIterator<KPrObject> it( m_groupedObjects );
     for ( ; it.current() ; ++it )
@@ -752,7 +752,7 @@ void KPrLowerRaiseCmd::unexecute()
 }
 
 
-KPrMoveByCmd::KPrMoveByCmd( const QString &_name, const KoPoint &_diff, Q3PtrList<KPrObject> &_objects,
+KPrMoveByCmd::KPrMoveByCmd( const QString &_name, const QPointF &_diff, Q3PtrList<KPrObject> &_objects,
                       KPrDocument *_doc,KPrPage *_page )
     : KNamedCommand( _name ), diff( _diff ), objects( _objects )
 {
@@ -821,7 +821,7 @@ KPrAlignCmd::KPrAlignCmd( const QString &_name, Q3PtrList<KPrObject> &_objects, 
     m_page = doc->findPage( _objects );
 
     Q3PtrListIterator<KPrObject> it( _objects );
-    KoRect boundingRect;
+    QRectF boundingRect;
     for ( ; it.current() ; ++it )
     {
         boundingRect |= it.current()->getRealRect();
@@ -833,29 +833,29 @@ KPrAlignCmd::KPrAlignCmd( const QString &_name, Q3PtrList<KPrObject> &_objects, 
     it.toFirst();
     for ( ; it.current() ; ++it )
     {
-        KoPoint * diff = NULL;
+        QPointF * diff = NULL;
         switch ( _at )
         {
             case AT_LEFT:
-              diff = new KoPoint( boundingRect.x() - it.current()->getRealOrig().x(), 0 );
+              diff = new QPointF( boundingRect.x() - it.current()->getRealOrig().x(), 0 );
               break;
             case AT_TOP:
-              diff = new KoPoint( 0, boundingRect.y() - it.current()->getRealOrig().y() );
+              diff = new QPointF( 0, boundingRect.y() - it.current()->getRealOrig().y() );
               break;
             case AT_RIGHT:
-              diff = new KoPoint( boundingRect.x() + boundingRect.width() -
+              diff = new QPointF( boundingRect.x() + boundingRect.width() -
                                   it.current()->getRealOrig().x() - it.current()->getRealSize().width(), 0 );
               break;
             case AT_BOTTOM:
-              diff = new KoPoint( 0, boundingRect.y() + boundingRect.height() -
+              diff = new QPointF( 0, boundingRect.y() + boundingRect.height() -
                                   it.current()->getRealOrig().y() - it.current()->getRealSize().height() );
               break;
             case AT_HCENTER:
-              diff = new KoPoint( ( boundingRect.width() - it.current()->getRealSize().width() ) / 2 -
+              diff = new QPointF( ( boundingRect.width() - it.current()->getRealSize().width() ) / 2 -
                                   it.current()->getRealOrig().x() + boundingRect.x(), 0 );
               break;
             case AT_VCENTER:
-              diff = new KoPoint( 0, ( boundingRect.height() - it.current()->getRealSize().height() ) / 2 -
+              diff = new QPointF( 0, ( boundingRect.height() - it.current()->getRealSize().height() ) / 2 -
                                   it.current()->getRealOrig().y() + boundingRect.y() );
               break;
         }
@@ -1817,7 +1817,7 @@ void KPrRectValueCmd::unexecute()
 }
 
 
-KPrResizeCmd::KPrResizeCmd( const QString &_name, const KoPoint &_m_diff, const KoSize &_r_diff,
+KPrResizeCmd::KPrResizeCmd( const QString &_name, const QPointF &_m_diff, const QSizeF &_r_diff,
                       KPrObject *_object, KPrDocument *_doc )
     : KNamedCommand( _name ), m_diff( _m_diff ), r_diff( _r_diff )
 {

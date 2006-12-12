@@ -75,7 +75,7 @@ void KPrSVGPathParser::svgMoveTo( double x1, double y1, bool /*abs*/ )
     }
     else
     {
-        m_curPoint = KoPoint( x1, y1 );
+        m_curPoint = QPointF( x1, y1 );
     }
 }
 
@@ -100,7 +100,7 @@ void KPrSVGPathParser::svgLineTo( double x1, double y1, bool /*abs*/ )
     else
     {
         m_points.putPoints( m_pointIdx, 2, m_curPoint.x(), m_curPoint.y(), x1, y1 );
-        m_curPoint = KoPoint( x1, y1 );
+        m_curPoint = QPointF( x1, y1 );
         m_pointIdx += 2; 
     }
 }
@@ -142,7 +142,7 @@ void KPrSVGPathParser::svgCurveToCubic(  double x1, double y1, double x2, double
             KoPointArray::ConstIterator it;
             for ( it = bezierPoints.begin(); it != bezierPoints.end(); ++it ) 
             {
-                KoPoint point = (*it);
+                QPointF point = (*it);
                 m_points.putPoints( m_pointIdx, 1, point.x(), point.y() );
                 ++m_pointIdx;
             }
@@ -152,7 +152,7 @@ void KPrSVGPathParser::svgCurveToCubic(  double x1, double y1, double x2, double
             m_points.putPoints( m_pointIdx, 4, m_curPoint.x(), m_curPoint.y(), x, y, x1, y1, x2, y2 );
             m_pointIdx += 4; 
         }
-        m_curPoint = KoPoint( x, y );
+        m_curPoint = QPointF( x, y );
     }
 }
 

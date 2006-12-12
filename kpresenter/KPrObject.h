@@ -34,9 +34,9 @@
 #include "KPrGradient.h"
 #include "KoPointArray.h"
 #include <klocale.h>
-#include <KoPoint.h>
-#include <KoSize.h>
-#include <KoRect.h>
+
+
+
 #include <KoStyleStack.h>
 #include <KoOasisStyles.h>
 #include <KoXmlWriter.h>
@@ -73,19 +73,19 @@ public:
         { selected = _selected; }
     virtual void rotate( float _angle )
         { angle = _angle; }
-    virtual void setSize( const KoSize & _size )
+    virtual void setSize( const QSizeF & _size )
         { setSize( _size.width(), _size.height() ); }
     virtual void setSize(double _width, double _height )
-        { ext = KoSize( qMax( (double)MIN_SIZE, _width ), qMax( (double)MIN_SIZE, _height ) ); } // no object is smaller than 10x10
-    virtual void setOrig( const KoPoint & _point )
+        { ext = QSizeF( qMax( (double)MIN_SIZE, _width ), qMax( (double)MIN_SIZE, _height ) ); } // no object is smaller than 10x10
+    virtual void setOrig( const QPointF & _point )
         { orig = _point; }
     virtual void setOrig( double _x, double _y )
-        { orig = KoPoint( _x, _y ); }
-    virtual void moveBy( const KoPoint &_point )
+        { orig = QPointF( _x, _y ); }
+    virtual void moveBy( const QPointF &_point )
         { orig = orig + _point; }
     virtual void moveBy( double _dx, double _dy )
-        { orig = orig + KoPoint( _dx, _dy ); }
-    virtual void resizeBy( const KoSize & _size )
+        { orig = orig + QPointF( _dx, _dy ); }
+    virtual void resizeBy( const QSizeF & _size )
         { resizeBy( _size.width(), _size.height() ); }
     virtual void resizeBy( double _dx, double _dy )
         { setSize( ext.width() + _dx, ext.height() + _dy ); } // call (possibly reimplemented) setSize
@@ -181,22 +181,22 @@ public:
         { return shadowDirection; }
     virtual QColor getShadowColor() const
         { return shadowColor; }
-    virtual KoSize getSize() const
+    virtual QSizeF getSize() const
         { return ext; }
-    virtual KoPoint getOrig() const
+    virtual QPointF getOrig() const
         { return orig; }
-    KoRect getRect() const
-        { return KoRect( getOrig(), getSize() ); }
+    QRectF getRect() const
+        { return QRectF( getOrig(), getSize() ); }
 
-    virtual KoSize getRealSize() const;
-    virtual KoPoint getRealOrig() const;
-    KoRect getRealRect() const;
+    virtual QSizeF getRealSize() const;
+    virtual QPointF getRealOrig() const;
+    QRectF getRealRect() const;
     /**
      * @brief Get the rect which has to be repainted
      *
      * This also contains the shadow.
      */
-    KoRect getRepaintRect() const;
+    QRectF getRepaintRect() const;
 
     virtual Effect getEffect() const
         { return effect; }
@@ -254,7 +254,7 @@ public:
      * @return true if point lies in rect of object
      * @return false otherwise
      */
-    virtual bool contains( const KoPoint &point ) const;
+    virtual bool contains( const QPointF &point ) const;
 
     /**
      * @brief Check if rect intersects with rect of object
@@ -264,11 +264,11 @@ public:
      * @return true if rect interesct with rect of object
      * @return false otherwise
      */
-    virtual bool intersects( const KoRect & rect ) const;
+    virtual bool intersects( const QRectF & rect ) const;
 
-    virtual QCursor getCursor( const KoPoint &_point, ModifyType &_modType, KPrDocument *doc ) const;
+    virtual QCursor getCursor( const QPointF &_point, ModifyType &_modType, KPrDocument *doc ) const;
 
-    KoRect rotateRectObject() const;
+    QRectF rotateRectObject() const;
     void rotateObject(QPainter *paint,KoTextZoomHandler *_zoomHandler);
 
     virtual void removeFromObjList()
@@ -318,7 +318,7 @@ protected:
      * method.
      */
     static void getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
-                                              KoSize &size, KoPoint &orig );
+                                              QSizeF &size, QPointF &orig );
 
     /**
      * Modifies x and y to add the shadow offsets
@@ -354,8 +354,8 @@ protected:
     virtual void saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const;
 
     float angle;
-    KoPoint orig;
-    KoSize ext;
+    QPointF orig;
+    QSizeF ext;
     int shadowDistance;
     ShadowDirection shadowDirection;
     QColor shadowColor;

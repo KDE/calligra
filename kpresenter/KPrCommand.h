@@ -35,8 +35,8 @@
 #include <KoPageLayoutDia.h>
 #include <KoParagLayout.h>
 #include <KoTextCommand.h>
-#include <KoPoint.h>
-#include <KoSize.h>
+
+
 #include <QVariant>
 #include <q3valuevector.h>
 #include "KPrBackground.h"
@@ -88,7 +88,7 @@ protected:
 class KPrSetOptionsCmd : public KNamedCommand
 {
 public:
-    KPrSetOptionsCmd( const QString &_name, QList<KoPoint> &_diffs, Q3PtrList<KPrObject> &_objects,
+    KPrSetOptionsCmd( const QString &_name, QList<QPointF> &_diffs, Q3PtrList<KPrObject> &_objects,
                    double _rastX, double _rastY, double _orastX, double _orastY,
                    const QColor &_txtBackCol, const QColor &_otxtBackCol, KPrDocument *_doc );
     ~KPrSetOptionsCmd();
@@ -98,7 +98,7 @@ public:
 
 protected:
 
-    QList<KoPoint> diffs;
+    QList<QPointF> diffs;
     Q3PtrList<KPrObject> objects;
     double gridX;
     double gridY;
@@ -159,7 +159,7 @@ protected:
 class KPrResizeCmd : public KNamedCommand
 {
 public:
-    KPrResizeCmd( const QString &_name, const KoPoint &_m_diff, const KoSize &_r_diff,
+    KPrResizeCmd( const QString &_name, const QPointF &_m_diff, const QSizeF &_r_diff,
                KPrObject *_object, KPrDocument *_doc );
     ~KPrResizeCmd();
 
@@ -168,8 +168,8 @@ public:
 
 protected:
 
-    KoPoint m_diff;
-    KoSize r_diff;
+    QPointF m_diff;
+    QSizeF r_diff;
     KPrObject *object;
     KPrDocument *doc;
     KPrPage *m_page;
@@ -319,7 +319,7 @@ protected:
 class KPrMoveByCmd : public KNamedCommand
 {
 public:
-    KPrMoveByCmd( const QString &_name, const KoPoint &_diff, Q3PtrList<KPrObject> &_objects,
+    KPrMoveByCmd( const QString &_name, const QPointF &_diff, Q3PtrList<KPrObject> &_objects,
                KPrDocument *_doc, KPrPage *_page );
     ~KPrMoveByCmd();
 
@@ -328,7 +328,7 @@ public:
 
 protected:
 
-    KoPoint diff;
+    QPointF diff;
     Q3PtrList<KPrObject> objects;
     KPrDocument *doc;
     KPrPage *m_page;
@@ -347,7 +347,7 @@ public:
     virtual void unexecute();
 
 protected:
-    Q3PtrList<KoPoint> diffs;
+    Q3PtrList<QPointF> diffs;
     Q3PtrList<KPrObject> objects;
     KPrDocument *doc;
     KPrPage *m_page;

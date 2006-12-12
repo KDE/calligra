@@ -70,7 +70,7 @@ double KPrMoveHelpLineDia::newPosition() const
 }
 
 
-KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pageRect,
+KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const QRectF & _pageRect,
                                             KPrDocument *_doc, const char *name)
     : KDialog( parent )
 {
@@ -127,7 +127,7 @@ void KPrInsertHelpLineDia::slotRadioButtonClicked()
     }
 }
 
-KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _pageRect,
+KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const QRectF & _pageRect,
                                               KPrDocument *_doc, double posX, double posY, const char *name)
     : KDialog( parent ),
       m_bRemovePoint( false )
@@ -160,9 +160,9 @@ KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _p
     resize( 300,100 );
 }
 
-KoPoint KPrInsertHelpPointDia::newPosition() const
+QPointF KPrInsertHelpPointDia::newPosition() const
 {
-    return KoPoint( positionX->value(),
+    return QPointF( positionX->value(),
                     positionY->value() );
 }
 

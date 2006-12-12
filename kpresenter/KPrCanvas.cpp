@@ -69,7 +69,7 @@
 #include <kio/netaccess.h>
 
 #include <KoParagCounter.h>
-#include <KoPoint.h>
+
 #include <KoTextZoomHandler.h>
 #include <KoStore.h>
 #include <KoStoreDrag.h>
@@ -394,14 +394,14 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             case INS_RECT:
                 if ( !m_insertRect.isNull() )
                 {
-                    topPainter.drawRoundRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ),
+                    topPainter.drawRoundRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalized() ),
                             m_view->getRndX(), m_view->getRndY() );
                 }
                 break;
             case INS_ELLIPSE:
                 if ( !m_insertRect.isNull() )
                 {
-                    topPainter.drawEllipse( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
+                    topPainter.drawEllipse( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalized() ) );
                 }
                 break;
             case INS_AUTOFORM:
@@ -414,7 +414,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             case INS_TEXT:
                 if ( !m_insertRect.isNull() )
                 {
-                    topPainter.drawRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
+                    topPainter.drawRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalized() ) );
                 }
                 break;
             case INS_PIE:
@@ -581,7 +581,7 @@ void KPrCanvas::drawObjectsPres( QPainter *painter, const Q3PtrList<KPrObject> &
 }
 
 
-void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const Q3PtrList<KPrObject> &_objects,
+void KPrCanvas::drawObjectsEdit( QPainter *painter, const QRectF &rect, const Q3PtrList<KPrObject> &_objects,
                                  SelectionMode selectionMode, int pageNum ) const
 {
     Q3PtrList<KPrObject> objects;
@@ -610,7 +610,7 @@ void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const Q3
 void KPrCanvas::drawEditPage( QPainter *painter, const QRect &_rect,
                               KPrPage *page, SelectionMode selectionMode ) const
 {
-    KoRect rect = m_view->zoomHandler()->unzoomRectOld(_rect);
+    QRectF rect = m_view->zoomHandler()->unzoomRectOldF(_rect);
 
     int pageNum = m_view->kPresenterDoc()->pageList().findRef( page );
     //objects on master page
@@ -623,7 +623,7 @@ void KPrCanvas::drawEditPage( QPainter *painter, const QRect &_rect,
 
 void KPrCanvas::drawPresPage( QPainter *painter, const QRect &_rect, PresStep step ) const
 {
-    KoRect rect = m_view->zoomHandler()->unzoomRectOld(_rect);
+    QRectF rect = m_view->zoomHandler()->unzoomRectOldF(_rect);
 
     KPrPage * page = m_view->kPresenterDoc()->pageList().at(step.m_pageNumber);
     //objects on master page
@@ -687,8 +687,8 @@ void KPrCanvas::recalcAutoGuides( )
 void KPrCanvas::mousePressEvent( QMouseEvent *e )
 {
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPointOld( contentsPoint );
-    m_insertRect = KoRect();
+    QPointF docPoint = m_view->zoomHandler()->unzoomPointOldF( contentsPoint );
+    m_insertRect = QRectF();
 
     if(!m_view->koDocument()->isReadWrite())
         return;
@@ -703,7 +703,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         Q_ASSERT(txtObj);
         if(txtObj->contains( docPoint ))
         {
-            KoPoint pos = docPoint - txtObj->innerRect().topLeft(); // in pt, but now translated into the object's coordinate system
+            QPointF pos = docPoint - txtObj->innerRect().topLeft(); // in pt, but now translated into the object's coordinate system
             // This is common to all mouse buttons, so that RMB and MMB place the cursor too
             m_currentTextObjectView->mousePressEvent(e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
             mousePressed = true;
@@ -756,7 +756,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     //p.setRasterOp( Qt::NotROP );
 
                     p.translate( -diffx(), -diffy() );
-                    KoPoint newStartPoint = snapPoint( docPoint );
+                    QPointF newStartPoint = snapPoint( docPoint );
 
                     p.drawLine( m_view->zoomHandler()->zoomPointOld( m_startPoint ),
                                 m_view->zoomHandler()->zoomPointOld( newStartPoint ) );
@@ -779,9 +779,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     p.translate( -diffx(), -diffy() );
                     p.save();
 
-                    KoPoint endPoint = snapPoint( docPoint );
+                    QPointF endPoint = snapPoint( docPoint );
 
-                    double angle = KoPoint::getAngle( endPoint, m_startPoint );
+                    double angle = KPrUtils::getAngle( endPoint, m_startPoint );
 
                     drawFigure( L_SQUARE, &p, endPoint, _pen.color(), _pen.width(), angle, m_view->zoomHandler() ); // erase old figure
 
@@ -793,7 +793,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     m_symmetricEndPoint = m_startPoint * 2 - endPoint;
 
                     p.save();
-                    angle = KoPoint::getAngle( m_symmetricEndPoint, m_startPoint );
+                    angle = KPrUtils::getAngle( m_symmetricEndPoint, m_startPoint );
 
                     drawFigure( L_SQUARE, &p, m_symmetricEndPoint, _pen.color(), _pen.width(), angle, m_view->zoomHandler() ); // erase old figure
 
@@ -899,7 +899,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                             deSelectAllObj();
 
                         drawRubber = true;
-                        m_rubber = KoRect( docPoint.x(), docPoint.y(), 0, 0 );
+                        m_rubber = QRectF( docPoint.x(), docPoint.y(), 0, 0 );
                     }
                 }
                 m_origMousePos = docPoint;
@@ -908,7 +908,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 modType = MT_NONE;
                 drawRubber = true;
                 m_zoomRubberDraw = false;
-                m_rubber = KoRect( docPoint.x(), docPoint.y(), 0, 0 );
+                m_rubber = QRectF( docPoint.x(), docPoint.y(), 0, 0 );
             }break;
             case TEM_ROTATE: 
             {
@@ -983,8 +983,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 deSelectAllObj();
                 recalcAutoGuides();
                 mousePressed = true;
-                KoPoint sp( snapPoint( docPoint ) );
-                m_insertRect = KoRect( sp.x(), sp.y(),0 ,0 );
+                QPointF sp( snapPoint( docPoint ) );
+                m_insertRect = QRectF( sp.x(), sp.y(),0 ,0 );
             } break;
             }
         }
@@ -1041,7 +1041,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                                              || toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE )
              && !m_pointArray.isNull() && m_drawCubicBezierCurve ) {
             if ( m_drawLineWithCubicBezierCurve ) {
-                KoPoint point = snapPoint( docPoint );
+                QPointF point = snapPoint( docPoint );
                 m_pointArray.putPoints( m_indexPointArray, 1, point.x(), point.y() );
                 ++m_indexPointArray;
             }
@@ -1132,9 +1132,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 #endif
 }
 
-KoRect KPrCanvas::getAlignBoundingRect() const
+QRectF KPrCanvas::getAlignBoundingRect() const
 {
-    KoRect boundingRect;
+    QRectF boundingRect;
 
     Q3PtrListIterator<KPrObject> it( m_activePage->objectList() );
     for ( ; it.current() ; ++it )
@@ -1183,7 +1183,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         return;
     }
 
-    m_insertRect = m_insertRect.normalize();
+    m_insertRect = m_insertRect.normalized();
 
     switch ( toolEditMode ) {
     case TEM_MOUSE: {
@@ -1201,7 +1201,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 p.end();
                 drawRubber = false;
 
-                m_rubber = m_rubber.normalize();
+                m_rubber = m_rubber.normalized();
 
                 Q3PtrListIterator<KPrObject> it( getObjectList() );
                 for ( ; it.current() ; ++it )
@@ -1221,8 +1221,8 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             }
         } break;
         case MT_MOVE: {
-            KoPoint move( objectRect( false ).topLeft() - m_moveStartPosMouse );
-            if ( move != KoPoint( 0, 0 ) )
+            QPointF move( objectRect( false ).topLeft() - m_moveStartPosMouse );
+            if ( move != QPointF( 0, 0 ) )
             {
                 KCommand *cmd=m_activePage->moveObject(m_view, move.x(), move.y());
                 if(cmd)
@@ -1284,7 +1284,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             p.drawRect( m_view->zoomHandler()->zoomRectOld( m_rubber ) );
             p.end();
             drawRubber = false;
-            m_rubber = m_rubber.normalize();
+            m_rubber = m_rubber.normalized();
             if ( m_zoomRubberDraw )
             {
                 m_view->setZoomRect( m_rubber );
@@ -1398,7 +1398,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     m_view->disableAutoScroll();
     mousePressed = false;
     modType = MT_NONE;
-    m_insertRect = KoRect();
+    m_insertRect = QRectF();
     mouseMoveEvent( e );
 }
 
@@ -1408,7 +1408,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         return;
 
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPointOld( contentsPoint );
+    QPointF docPoint = m_view->zoomHandler()->unzoomPointOldF( contentsPoint );
     if(m_currentTextObjectView)
     {
         if (m_currentTextObjectView->isLinkVariable(e->pos()) )
@@ -1422,7 +1422,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         Q_ASSERT(txtObj);
         if(txtObj->contains( docPoint )&&mousePressed)
         {
-            KoPoint pos = docPoint - txtObj->innerRect().topLeft();
+            QPointF pos = docPoint - txtObj->innerRect().topLeft();
             m_currentTextObjectView->mouseMoveEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
         }
         return;
@@ -1497,7 +1497,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 } else if ( modType == MT_MOVE ) {
                     if ( !m_isMoving )
                     {
-                        m_moveSnapDiff= KoPoint(0,0);
+                        m_moveSnapDiff= QPointF(0,0);
                         m_moveStartPoint = objectRect( false ).topLeft();
                         m_isMoving = true;
                     }
@@ -1508,7 +1508,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                       m_isResizing = true;
                     }
 
-                    KoPoint sp( snapPoint( docPoint, false ) );
+                    QPointF sp( snapPoint( docPoint, false ) );
 
                     bool keepRatio = m_resizeObject->isKeepRatio();
                     if ( e->modifiers() == Qt::AltModifier )
@@ -1544,9 +1544,9 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 {
                     drawContour = true;
                     // angle to mouse pos
-                    double angle = KoPoint::getAngle( m_rotateCenter, docPoint );
+                    double angle = KPrUtils::getAngle( m_rotateCenter, docPoint );
                     // angle to start of mouse pos
-                    double angle1 = KoPoint::getAngle( m_rotateCenter, m_rotateStart );
+                    double angle1 = KPrUtils::getAngle( m_rotateCenter, m_rotateStart );
 
                     angle -= angle1;
                     angle += m_angleBeforeRotate;
@@ -1574,10 +1574,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
-                KoPoint sp( snapPoint( docPoint ) );
-                p.drawRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
+                QPointF sp( snapPoint( docPoint ) );
+                p.drawRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalized() ) );
                 updateInsertRect( sp, e->modifiers() );
-                p.drawRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
+                p.drawRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalized() ) );
 
                 p.end();
 
@@ -1590,10 +1590,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
-                KoPoint sp( snapPoint( docPoint ) );
-                p.drawEllipse( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
+                QPointF sp( snapPoint( docPoint ) );
+                p.drawEllipse( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalized() ) );
                 updateInsertRect( sp, e->modifiers() );
-                p.drawEllipse( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ) );
+                p.drawEllipse( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalized() ) );
 
                 p.end();
 
@@ -1606,10 +1606,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
-                KoPoint sp( snapPoint( docPoint ) );
-                p.drawRoundRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
+                QPointF sp( snapPoint( docPoint ) );
+                p.drawRoundRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalized() ), m_view->getRndX(), m_view->getRndY() );
                 updateInsertRect( sp, e->modifiers() );
-                p.drawRoundRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
+                p.drawRoundRect( m_view->zoomHandler()->zoomRectOld( m_insertRect.normalized() ), m_view->getRndX(), m_view->getRndY() );
 
                 p.end();
 
@@ -1622,7 +1622,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
-                KoPoint oldEndPoint( m_endPoint );
+                QPointF oldEndPoint( m_endPoint );
                 m_endPoint = snapPoint( docPoint );
                 //remove the old line
                 p.drawLine( m_view->zoomHandler()->zoomPointOld( m_startPoint ),
@@ -1647,7 +1647,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
-                KoPoint sp( snapPoint( docPoint ) );
+                QPointF sp( snapPoint( docPoint ) );
                 drawPieObject( &p, m_insertRect );
                 updateInsertRect( sp, e->modifiers() );
                 drawPieObject( &p, m_insertRect );
@@ -1700,7 +1700,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
-                KoPoint oldEndPoint( m_endPoint );
+                QPointF oldEndPoint( m_endPoint );
                 m_endPoint = snapPoint( docPoint );
                 //remove the old line
                 p.drawLine( m_view->zoomHandler()->zoomPointOld( m_startPoint ),
@@ -1734,7 +1734,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
-                KoPoint newEndPoint( snapPoint( docPoint ) );
+                QPointF newEndPoint( snapPoint( docPoint ) );
 
                 drawCubicBezierCurve( p, m_oldCubicBezierPointArray );
 
@@ -1743,7 +1743,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     // erase
                     redrawCubicBezierCurve( p );
 
-                    KoPoint diff( newEndPoint - m_endPoint );
+                    QPointF diff( newEndPoint - m_endPoint );
                     m_pointArray.translate( diff.x(), diff.y() );
                     m_endPoint = newEndPoint;
                     m_startPoint += diff;
@@ -1772,18 +1772,18 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
                     double _secondX = m_endPoint.x() - _diffX;
                     double _secondY = m_endPoint.y() - _diffY;
-                    m_CubicBezierSecondPoint = KoPoint( _secondX, _secondY );
+                    m_CubicBezierSecondPoint = QPointF( _secondX, _secondY );
 
                     m_symmetricEndPoint = m_startPoint * 2 - m_endPoint;
 
                     double _thirdX = m_symmetricEndPoint.x() - _diffX;
                     double _thirdY = m_symmetricEndPoint.y() - _diffY;
-                    m_CubicBezierThirdPoint = KoPoint( _thirdX, _thirdY );
+                    m_CubicBezierThirdPoint = QPointF( _thirdX, _thirdY );
 
                     if ( toolEditMode == INS_QUADRICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE ) {
                         _secondX = _thirdX;
                         _secondY = _thirdY;
-                        m_CubicBezierSecondPoint = KoPoint( _secondX, _secondY );
+                        m_CubicBezierSecondPoint = QPointF( _secondX, _secondY );
                     }
                     points.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
                 }
@@ -1803,7 +1803,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 //p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
-                KoPoint sp( snapPoint( docPoint ) );
+                QPointF sp( snapPoint( docPoint ) );
                 // erase old
                 drawPolygon( p, m_insertRect );
                 updateInsertRect( sp, e->modifiers() );
@@ -1833,14 +1833,14 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     if(!m_view->koDocument()->isReadWrite())
         return;
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPointOld( contentsPoint );
+    QPointF docPoint = m_view->zoomHandler()->unzoomPointOldF( contentsPoint );
     if(m_currentTextObjectView)
     {
         KPrTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
         if(txtObj->contains( docPoint ))
         {
-            KoPoint pos = docPoint - txtObj->getOrig();
+            QPointF pos = docPoint - txtObj->getOrig();
             //pos=m_view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x(),pos.y()));
             m_currentTextObjectView->mouseDoubleClickEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) );
             return;
@@ -1904,7 +1904,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     }
 }
 
-void KPrCanvas::drawPieObject( QPainter *p, const KoRect & rect )
+void KPrCanvas::drawPieObject( QPainter *p, const QRectF & rect )
 {
     QRect pRect( m_view->zoomHandler()->zoomRectOld( rect ) );
     switch ( m_view->getPieType() ) {
@@ -2101,7 +2101,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                         if ( m_isMoving )
                         {
                           drawContour = false;
-                          KoPoint move( m_moveStartPoint - objectRect( false ).topLeft() );
+                          QPointF move( m_moveStartPoint - objectRect( false ).topLeft() );
                           m_activePage->moveObject( m_view, move, false );
                           m_view->disableAutoScroll();
                           mousePressed = false;
@@ -2179,7 +2179,7 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
             {
                 if ( !e->isAutoRepeat() )
                 {
-                    KoPoint move( objectRect( false ).topLeft() - m_moveStartPosKey);
+                    QPointF move( objectRect( false ).topLeft() - m_moveStartPosKey);
                     KCommand *cmd=m_activePage->moveObject(m_view, move.x(), move.y());
                     if(cmd)
                         m_view->kPresenterDoc()->addCommand( cmd );
@@ -2246,7 +2246,7 @@ void KPrCanvas::closeEvent( QCloseEvent * e )
     }
 }
 
-KPrObject * KPrCanvas::getObjectAt( const KoPoint &pos, bool withoutProtected )
+KPrObject * KPrCanvas::getObjectAt( const QPointF &pos, bool withoutProtected )
 {
     KPrObject *object = m_activePage->getObjectAt( pos, withoutProtected );
     if ( objectIsAHeaderFooterHidden( object ) )
@@ -3653,7 +3653,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
 }
 
 
-void KPrCanvas::updateInsertRect( const KoPoint &point, Qt::KeyboardModifiers modifiers )
+void KPrCanvas::updateInsertRect( const QPointF &point, Qt::KeyboardModifiers modifiers )
 {
     if ( modifiers == Qt::AltModifier )
     {
@@ -3667,18 +3667,18 @@ void KPrCanvas::updateInsertRect( const KoPoint &point, Qt::KeyboardModifiers mo
 }
 
 
-KPrTextObject* KPrCanvas::insertTextObject( const KoRect &rect )
+KPrTextObject* KPrCanvas::insertTextObject( const QRectF &rect )
 {
     KPrTextObject* obj = m_activePage->insertTextObject( rect );
     selectObj( obj );
     return obj;
 }
 
-void KPrCanvas::insertLine( const KoPoint &startPoint, const KoPoint &endPoint )
+void KPrCanvas::insertLine( const QPointF &startPoint, const QPointF &endPoint )
 {
-    KoRect rect( startPoint, endPoint );
+    QRectF rect( startPoint.x(),startPoint.y(), endPoint.x(),endPoint.y() );
     bool rev = rect.width() < 0 || rect.height() < 0;
-    rect = rect.normalize();
+    rect = rect.normalized();
     LineType lt = LT_LU_RD;
     if ( startPoint.x() == endPoint.x() )
     {
@@ -3703,21 +3703,21 @@ void KPrCanvas::insertLine( const KoPoint &startPoint, const KoPoint &endPoint )
 }
 
 
-void KPrCanvas::insertRect( const KoRect &rect )
+void KPrCanvas::insertRect( const QRectF &rect )
 {
     m_activePage->insertRectangle( rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                    m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getRndX(), m_view->getRndY(),
                                    m_view->getGUnbalanced(), m_view->getGXFactor(), m_view->getGYFactor() );
 }
 
-void KPrCanvas::insertEllipse( const KoRect &rect )
+void KPrCanvas::insertEllipse( const QRectF &rect )
 {
     m_activePage->insertCircleOrEllipse( rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                          m_view->getGColor1(), m_view->getGColor2(),
                                          m_view->getGType(), m_view->getGUnbalanced(), m_view->getGXFactor(), m_view->getGYFactor() );
 }
 
-void KPrCanvas::insertPie( const KoRect &rect )
+void KPrCanvas::insertPie( const QRectF &rect )
 {
     m_activePage->insertPie( rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                              m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(),
@@ -3726,7 +3726,7 @@ void KPrCanvas::insertPie( const KoRect &rect )
                              m_view->getGYFactor() );
 }
 
-void KPrCanvas::insertAutoform( const KoRect &rect )
+void KPrCanvas::insertAutoform( const QRectF &rect )
 {
     m_activePage->insertAutoform( rect, m_view->getPen(), m_view->getBrush(),
                                   m_view->getLineBegin(), m_view->getLineEnd(),
@@ -3734,7 +3734,7 @@ void KPrCanvas::insertAutoform( const KoRect &rect )
                                   autoform, m_view->getGUnbalanced(), m_view->getGXFactor(), m_view->getGYFactor() );
 }
 
-KPrPartObject* KPrCanvas::insertObject( const KoRect &rect )
+KPrPartObject* KPrCanvas::insertObject( const QRectF &rect )
 {
     KPrPartObject *kpPartObject = m_activePage->insertObject( rect, partEntry );
     return kpPartObject;
@@ -3742,7 +3742,7 @@ KPrPartObject* KPrCanvas::insertObject( const KoRect &rect )
 
 void KPrCanvas::insertFreehand( const KoPointArray &_pointArray )
 {
-    KoRect rect = _pointArray.boundingRect();
+    QRectF rect = _pointArray.boundingRect();
 
     m_activePage->insertFreehand( getObjectPoints( _pointArray ), rect, m_view->getPen(), m_view->getLineBegin(),
                                   m_view->getLineEnd() );
@@ -3755,7 +3755,7 @@ void KPrCanvas::insertPolyline( const KoPointArray &_pointArray )
 {
     if( _pointArray.count()> 1)
     {
-        KoRect rect = _pointArray.boundingRect();
+        QRectF rect = _pointArray.boundingRect();
         m_activePage->insertPolyline( getObjectPoints( _pointArray ), rect, m_view->getPen(), m_view->getLineBegin(),
                                       m_view->getLineEnd() );
     }
@@ -3769,7 +3769,7 @@ void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
     {
         KoPointArray points( _pointArray );
         KoPointArray bezierPoints( KPrBezierCurveObject::bezier2polyline( _pointArray ) );
-        KoRect rect = bezierPoints.boundingRect();
+        QRectF rect = bezierPoints.boundingRect();
         points = getObjectPoints( points );
         bezierPoints = getObjectPoints( bezierPoints );
 
@@ -3798,7 +3798,7 @@ void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
 
 void KPrCanvas::insertPolygon( const KoPointArray &_pointArray )
 {
-    KoRect rect = _pointArray.boundingRect();
+    QRectF rect = _pointArray.boundingRect();
 
     m_activePage->insertPolygon( getObjectPoints( _pointArray ), rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                  m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getGUnbalanced(),
@@ -3809,7 +3809,7 @@ void KPrCanvas::insertPolygon( const KoPointArray &_pointArray )
     m_indexPointArray = 0;
 }
 
-void KPrCanvas::insertPicture( const KoRect &rect )
+void KPrCanvas::insertPicture( const QRectF &rect )
 {
     QString file = m_activePage->insPictureFile();
 
@@ -3822,7 +3822,7 @@ void KPrCanvas::insertPicture( const KoRect &rect )
         }
         else
         {
-            KoPoint tl( rect.topLeft() );
+            QPointF tl( rect.topLeft() );
             m_activePage->insertPicture( file, tl );
         }
         m_activePage->setInsPictureFile( QString::null );
@@ -3832,7 +3832,7 @@ void KPrCanvas::insertPicture( const KoRect &rect )
 
 void KPrCanvas::insertClosedLine( const KoPointArray &_pointArray )
 {
-    KoRect rect = _pointArray.boundingRect();
+    QRectF rect = _pointArray.boundingRect();
 
     m_activePage->insertClosedLine( getObjectPoints( _pointArray ), rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                     m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getGUnbalanced(),
@@ -3860,7 +3860,7 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
         setCursor( Qt::arrowCursor );
         QPoint pos = QCursor::pos();
         // ### missing some coord transformation here?
-        KoPoint docPoint( m_view->zoomHandler()->unzoomPointOld( pos ) );
+        QPointF docPoint( m_view->zoomHandler()->unzoomPointOldF( pos ) );
         KPrObject *obj=m_activePage->getCursor( pos);
         if(obj)
             setCursor( obj->getCursor( docPoint, modType, m_view->kPresenterDoc() ) );
@@ -4000,7 +4000,7 @@ void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, i
     setCursor( Qt::waitCursor );
 
     QPoint pos( posX + diffx(), posY + diffy() );
-    KoPoint docPoint( m_view->zoomHandler()->unzoomPointOld( pos ) );
+    QPointF docPoint( m_view->zoomHandler()->unzoomPointOldF( pos ) );
 
     m_activePage->insertPicture( tmpFile.fileName(), docPoint  );
 
@@ -4014,7 +4014,7 @@ void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, i
 void KPrCanvas::dropEvent( QDropEvent *e )
 {
     //disallow dropping objects outside the "page"
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPointOld( e->pos()+QPoint(diffx(),diffy()) );
+    QPointF docPoint = m_view->zoomHandler()->unzoomPointOldF( e->pos()+QPoint(diffx(),diffy()) );
     if ( !m_activePage->getZoomPageRect().contains(e->pos()))
         return;
 
@@ -4065,7 +4065,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                         f.close();
                     }
                     kDebug()<<" text :"<<endl;
-                    m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRectOld(QRect( e->pos().x(), e->pos().y(), 250, 250 )),
+                    m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRectOldF(QRect( e->pos().x(), e->pos().y(), 250, 250 )),
                                                     text, m_view );
 
                     setCursor( c );
@@ -4085,7 +4085,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
         QString text;
         Q3TextDrag::decode( e, text );
         //kDebug()<<" QTextDrag::decode( e, text ); :"<<text<<endl;
-        m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRectOld( QRect( e->pos().x(), e->pos().y(), 250, 250 )),
+        m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRectOldF( QRect( e->pos().x(), e->pos().y(), 250, 250 )),
                                         text, m_view );
         e->accept();
     } else
@@ -4383,9 +4383,9 @@ void KPrCanvas::exitEditMode( bool repaint )
     //modType = MT_NONE;
 }
 
-bool KPrCanvas::getPixmapOrigAndCurrentSize( KPrPixmapObject *&obj, KoSize *origSize, KoSize *currentSize )
+bool KPrCanvas::getPixmapOrigAndCurrentSize( KPrPixmapObject *&obj, QSizeF *origSize, QSizeF *currentSize )
 {
-    *origSize = KoSize(obj->originalSize().width(),obj->originalSize().height());
+    *origSize = QSizeF(obj->originalSize().width(),obj->originalSize().height());
     *currentSize = obj->getSize();
     return true;
 }
@@ -4395,10 +4395,10 @@ void KPrCanvas::picViewOriginalSize()
     KPrDocument *doc = m_view->kPresenterDoc();
     KPrPixmapObject *object = m_activePage->picViewOrigHelper();
 
-    KoSize newSize( doc->zoomHandler()->pixelXToPt( object->originalSize().width() ),
+    QSizeF newSize( doc->zoomHandler()->pixelXToPt( object->originalSize().width() ),
                     doc->zoomHandler()->pixelYToPt( object->originalSize().height() ) );
 
-    KoRect pageRect = m_activePage->getPageRect();
+    QRectF pageRect = m_activePage->getPageRect();
     double fakt = 1.0;
 
     if ( newSize.width() > pageRect.width() )
@@ -4406,11 +4406,11 @@ void KPrCanvas::picViewOriginalSize()
     if ( newSize.height() > pageRect.height() )
         fakt = qMin( fakt, pageRect.height() / newSize.height() );
 
-    KoSize diff( newSize.width() * fakt - object->getSize().width(),
+    QSizeF diff( newSize.width() * fakt - object->getSize().width(),
                  newSize.height() * fakt - object->getSize().height() );
 
     KPrResizeCmd *resizeCmd = new KPrResizeCmd( i18n( "Scale to Original Size" ),
-                                          KoPoint( 0, 0 ), diff, object, doc );
+                                          QPointF( 0, 0 ), diff, object, doc );
     resizeCmd->execute();
     doc->addCommand( resizeCmd );
 }
@@ -4443,14 +4443,14 @@ void KPrCanvas::picViewOrig1600x1200()
 void KPrCanvas::picViewOrigHelper(int x, int y)
 {
     KPrPixmapObject *obj = 0;
-    KoSize origSize;
-    KoSize currentSize;
+    QSizeF origSize;
+    QSizeF currentSize;
 
     obj=m_activePage->picViewOrigHelper();
 
     if ( obj && !getPixmapOrigAndCurrentSize( obj, &origSize, &currentSize ) )
         return;
-    KoSize pgSize = m_activePage->getPageRect().size();
+    QSizeF pgSize = m_activePage->getPageRect().size();
 
     if ( x == -1 && y == -1 ) {
         x = (int)origSize.width();
@@ -4466,7 +4466,7 @@ void KPrCanvas::picViewOrigFactor()
 {
 }
 
-void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &pgSize,
+void KPrCanvas::scalePixmapToBeOrigIn( const QSizeF &currentSize, const QSizeF &pgSize,
                                        const QSize &presSize, KPrPixmapObject *obj )
 {
     QRect desk = KGlobalSettings::desktopGeometry(this);
@@ -4476,7 +4476,7 @@ void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &
     double h = pgSize.height() * faktY;
 
     KPrResizeCmd *resizeCmd = new KPrResizeCmd( i18n( "Scale Picture to Be Shown 1:1 in Presentation Mode" ),
-                                          KoPoint( 0, 0 ), KoSize( w - currentSize.width(), h - currentSize.height() ),
+                                          QPointF( 0, 0 ), QSizeF( w - currentSize.width(), h - currentSize.height() ),
                                           obj, m_view->kPresenterDoc() );
     resizeCmd->execute();
     m_view->kPresenterDoc()->addCommand( resizeCmd );
@@ -4501,10 +4501,10 @@ void KPrCanvas::setTextBackground( KPrTextObject */*obj*/ )
 }
 
 
-KoPoint KPrCanvas::diffGrid( KoRect &rect, double diffx, double diffy )
+QPointF KPrCanvas::diffGrid( QRectF &rect, double diffx, double diffy )
 {
     KPrDocument * doc( m_view->kPresenterDoc() );
-    KoPoint move( 0, 0 );
+    QPointF move( 0, 0 );
 
     double tempx = ( int( rect.topLeft().x() / doc->getGridX() ) * doc->getGridX() ) - rect.topLeft().x();
     if ( diffx > 0 )
@@ -4551,10 +4551,10 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
 {
     KPrDocument *doc( m_view->kPresenterDoc() );
 
-    KoRect rect( objectRect( false ) );
+    QRectF rect( objectRect( false ) );
     double diffx = m_view->zoomHandler()->unzoomItXOld( x );
     double diffy = m_view->zoomHandler()->unzoomItYOld( y );
-    KoPoint move( diffx, diffy );
+    QPointF move( diffx, diffy );
 
     bool snapToGrid = doc->snapToGrid() && !m_disableSnapping;
     bool snapToGuideLines = doc->showGuideLines() && !m_disableSnapping;
@@ -4612,12 +4612,12 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
         if ( !snapToGrid )
         {
             // unwind last snapping
-            KoRect movedRect( rect );
-            movedRect.moveBy( diffx, diffy );
-            movedRect.moveBy( -m_moveSnapDiff.x(), -m_moveSnapDiff.y() );
+            QRectF movedRect( rect );
+            movedRect.translate( diffx, diffy );
+            movedRect.translate( -m_moveSnapDiff.x(), -m_moveSnapDiff.y() );
             move -= m_moveSnapDiff;
 
-            m_moveSnapDiff = KoPoint( 0, 0 );
+            m_moveSnapDiff = QPointF( 0, 0 );
 
             KoGuides::SnapStatus snapStatus = KoGuides::SNAP_NONE;
 #warning "kde4: port to qrectf"	    
@@ -4633,7 +4633,7 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
     }
 
     // don't move object from canvas
-    KoRect pageRect( m_activePage->getPageRect() );
+    QRectF pageRect( m_activePage->getPageRect() );
     if ( rect.left() + move.x() < pageRect.left() )
     {
         move.setX( pageRect.left() - rect.left() );
@@ -4655,13 +4655,13 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
     if ( snapToGuideLines )
     {
         // redraw guidelines (intentionally always)
-        KoRect movedRect( rect );
+        QRectF movedRect( rect );
         movedRect.translate( move.x(), move.y() );	
 #warning "kde4: port to qrectf"	
         //m_gl.repaintSnapping( movedRect );
     }
 
-    if ( move != KoPoint( 0, 0 ) )
+    if ( move != QPointF( 0, 0 ) )
     {
         //kDebug(33001) << "moveObjectsByKey move = " << move << endl;
         m_activePage->moveObject( m_view, move, false );
@@ -4670,28 +4670,28 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
 }
 
 
-void KPrCanvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
+void KPrCanvas::moveObjectsByMouse( QPointF &pos, bool keepXorYunchanged )
 {
     KPrDocument *doc( m_view->kPresenterDoc() );
 
-    KoRect rect( objectRect( false ) );
-    KoPoint move( 0, 0 );
+    QRectF rect( objectRect( false ) );
+    QPointF move( 0, 0 );
     double diffx = pos.x() - m_origMousePos.x();
     double diffy = pos.y() - m_origMousePos.y();
 
     bool snapToGrid = doc->snapToGrid() && !m_disableSnapping;
     bool snapToGuideLines = doc->showGuideLines() && !m_disableSnapping;
 
-    move = KoPoint( diffx, diffy );
+    move = QPointF( diffx, diffy );
     m_origMousePos = pos;
 
     // unwind last snapping
-    KoRect movedRect( rect );
-    movedRect.moveBy( diffx, diffy );
-    movedRect.moveBy( -m_moveSnapDiff.x(), -m_moveSnapDiff.y() );
+    QRectF movedRect( rect );
+    movedRect.translate( diffx, diffy );
+    movedRect.translate( -m_moveSnapDiff.x(), -m_moveSnapDiff.y() );
     move -= m_moveSnapDiff;
 
-    m_moveSnapDiff = KoPoint( 0, 0 ); // needed if all snapping is off
+    m_moveSnapDiff = QPointF( 0, 0 ); // needed if all snapping is off
     KoGuides::SnapStatus snapStatus = KoGuides::SNAP_NONE;
 
     if ( snapToGrid )
@@ -4712,8 +4712,8 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
     move += m_moveSnapDiff;
 
     // don't move object off canvas
-    KoPoint diffDueToBorders(0,0);
-    KoRect pageRect( m_activePage->getPageRect() );
+    QPointF diffDueToBorders(0,0);
+    QRectF pageRect( m_activePage->getPageRect() );
     if ( rect.left() + move.x() < pageRect.left() )
         diffDueToBorders.setX( pageRect.left() - (rect.left() + move.x()) );
     else if ( rect.right() + move.x() > pageRect.right() )
@@ -4727,20 +4727,20 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
     m_moveSnapDiff += diffDueToBorders;
     move += diffDueToBorders;
 
-    movedRect.moveBy( m_moveSnapDiff.x(), m_moveSnapDiff.y() );
+    movedRect.translate( m_moveSnapDiff.x(), m_moveSnapDiff.y() );
     if ( keepXorYunchanged )
     {
-        KoPoint diff( m_moveStartPosMouse - movedRect.topLeft() );
+        QPointF diff( m_moveStartPosMouse - movedRect.topLeft() );
         if ( fabs( diff.x() ) > fabs( diff.y() ) )
         {
             m_moveSnapDiff.setY( m_moveSnapDiff.y() + m_moveStartPosMouse.y() - movedRect.y() );
-            movedRect.moveTopLeft( KoPoint( movedRect.x(), m_moveStartPosMouse.y() ) );
+            movedRect.moveTopLeft( QPointF( movedRect.x(), m_moveStartPosMouse.y() ) );
             move.setY( movedRect.y() - rect.y() );
         }
         else
         {
             m_moveSnapDiff.setX( m_moveSnapDiff.x() + m_moveStartPosMouse.x() - movedRect.x() );
-            movedRect.moveTopLeft( KoPoint( m_moveStartPosMouse.x(), movedRect.y() ) );
+            movedRect.moveTopLeft( QPointF( m_moveStartPosMouse.x(), movedRect.y() ) );
             move.setX( movedRect.x() - rect.x() );
         }
     }
@@ -4752,7 +4752,7 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
         //m_gl.repaintSnapping( movedRect );
     }
 
-    if ( move != KoPoint( 0, 0 ) )
+    if ( move != QPointF( 0, 0 ) )
     {
         //kDebug(33001) << "moveObjectsByMouse move = " << move << endl;
         m_activePage->moveObject( m_view, move, false );
@@ -4760,13 +4760,13 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
 }
 
 
-void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio, bool scaleAroundCenter )
+void KPrCanvas::resizeObject( ModifyType _modType, const QPointF & point, bool keepRatio, bool scaleAroundCenter )
 {
     KPrObject *kpobject = m_resizeObject;
 
     QRect oldBoundingRect( m_view->zoomHandler()->zoomRectOld( kpobject->getRepaintRect() ) );
 
-    KoRect objRect = kpobject->getRealRect();
+    QRectF objRect = kpobject->getRealRect();
     KoGuides::SnapStatus snapStatus( KoGuides::SNAP_NONE );
 
     bool left = false;
@@ -4888,7 +4888,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point, bool k
 
     if ( scaleAroundCenter )
     {
-        KoPoint center( m_rectBeforeResize.center() );
+        QPointF center( m_rectBeforeResize.center() );
 
         if ( newLeft != objRect.left() )
         {
@@ -4938,13 +4938,13 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point, bool k
 
         if ( objRect.left() != newLeft || objRect.top() != newTop )
         {
-            kpobject->moveBy( KoPoint( newLeft - objRect.left(), newTop - objRect.top() ) );
+            kpobject->moveBy( QPointF( newLeft - objRect.left(), newTop - objRect.top() ) );
         }
 
         if ( m_view->kPresenterDoc()->showGuideLines() && !m_disableSnapping )
         {
-            KoRect rect( kpobject->getRealRect() );
-            KoPoint sp( rect.topLeft() );
+            QRectF rect( kpobject->getRealRect() );
+            QPointF sp( rect.topLeft() );
             if ( right )
             {
                 sp.setX( rect.right() );
@@ -4968,9 +4968,9 @@ void KPrCanvas::finishResizeObject( const QString &name, bool layout )
 {
     if ( m_resizeObject )
     {
-        KoPoint move = KoPoint( m_resizeObject->getOrig().x() - m_rectBeforeResize.x(),
+        QPointF move = QPointF( m_resizeObject->getOrig().x() - m_rectBeforeResize.x(),
                                 m_resizeObject->getOrig().y() - m_rectBeforeResize.y() );
-        KoSize size = KoSize( m_resizeObject->getSize().width() - m_rectBeforeResize.width(),
+        QSizeF size = QSizeF( m_resizeObject->getSize().width() - m_rectBeforeResize.width(),
                               m_resizeObject->getSize().height() - m_rectBeforeResize.height() );
 
         if ( ( m_resizeObject->getRect() ) != m_rectBeforeResize )
@@ -5088,15 +5088,15 @@ void KPrCanvas::drawCubicBezierCurve( QPainter &p, KoPointArray &points )
     {
         QPen pen = QPen( Qt::black, 1, Qt::DashLine );
         p.setPen( pen );
-        double angle = KoPoint::getAngle( m_endPoint, m_startPoint );
+        double angle = KPrUtils::getAngle( m_endPoint, m_startPoint );
         drawFigure( L_SQUARE, &p, m_endPoint, pen.color(), pen.width(), angle,m_view->zoomHandler() );
 
         p.drawLine( m_view->zoomHandler()->zoomPointOld( m_startPoint ),
                     m_view->zoomHandler()->zoomPointOld( m_endPoint ) );
 
-        KoPoint symmetricEndPoint = m_startPoint * 2 - m_endPoint;
+        QPointF symmetricEndPoint = m_startPoint * 2 - m_endPoint;
 
-        angle = KoPoint::getAngle( symmetricEndPoint, m_startPoint );
+        angle = KPrUtils::getAngle( symmetricEndPoint, m_startPoint );
         drawFigure( L_SQUARE, &p, symmetricEndPoint, pen.color(), pen.width(), angle,m_view->zoomHandler() );
 
         // TODO only 1 draw line
@@ -5110,7 +5110,7 @@ void KPrCanvas::drawCubicBezierCurve( QPainter &p, KoPointArray &points )
     }
     else
     {
-        KoPoint startPoint( m_pointArray.at( m_indexPointArray - 1 ) );
+        QPointF startPoint( m_pointArray.at( m_indexPointArray - 1 ) );
 
         p.drawLine( m_view->zoomHandler()->zoomPointOld( startPoint ),
                     m_view->zoomHandler()->zoomPointOld( m_endPoint ) );
@@ -5146,14 +5146,14 @@ void KPrCanvas::redrawCubicBezierCurve( QPainter &p )
 }
 
 
-void KPrCanvas::drawPolygon( QPainter &p, const KoRect &rect )
+void KPrCanvas::drawPolygon( QPainter &p, const QRectF &rect )
 {
-    KoRect nRect = rect.normalize();
+    QRectF nRect = rect.normalized();
     bool checkConcavePolygon = m_view->getCheckConcavePolygon();
     int cornersValue = m_view->getCornersValue();
     int sharpnessValue = m_view->getSharpnessValue();
 
-    KoRect _rect( 0, 0, nRect.width(), nRect.height() );
+    QRectF _rect( 0, 0, nRect.width(), nRect.height() );
     double angle = 2 * M_PI / cornersValue;
     double diameter = static_cast<double>( qMax( _rect.width(), _rect.height() ) );
     double radius = diameter * 0.5;
@@ -5201,7 +5201,7 @@ void KPrCanvas::drawPolygon( QPainter &p, const KoRect &rect )
     }
 
     // calculate the points as offsets to 0,0
-    KoRect _changRect = _points.boundingRect();
+    QRectF _changRect = _points.boundingRect();
     double fx = _rect.width() / _changRect.width();
     double fy = _rect.height() / _changRect.height();
 
@@ -5209,7 +5209,7 @@ void KPrCanvas::drawPolygon( QPainter &p, const KoRect &rect )
     KoPointArray tmpPoints;
     KoPointArray::ConstIterator it;
     for ( it = _points.begin(); it != _points.end(); ++it ) {
-        KoPoint point = (*it);
+        QPointF point = (*it);
         double tmpX = ( point.x() - xmin) * fx + nRect.x();
         double tmpY = ( point.y() - ymin) * fy + nRect.y();
 
@@ -5283,7 +5283,7 @@ void KPrCanvas::groupObjects()
     m_activePage->groupObjects();
 }
 
-KoRect KPrCanvas::objectRect( bool all ) const
+QRectF KPrCanvas::objectRect( bool all ) const
 {
     return m_activePage->getRealRect( all );
 }
@@ -5552,15 +5552,15 @@ void KPrCanvas::layout()
     }
 }
 
-KoPoint KPrCanvas::snapPoint( KoPoint &pos, bool repaintSnapping )
+QPointF KPrCanvas::snapPoint( QPointF &pos, bool repaintSnapping )
 {
-    KoPoint sp( pos );
+    QPointF sp( pos );
     KPrDocument * doc( m_view->kPresenterDoc() );
 
     bool snapToGrid = doc->snapToGrid() && !m_disableSnapping;
     bool snapToGuideLines = doc->showGuideLines() && !m_disableSnapping;
 
-    KoPoint snapDiff = KoPoint( 0, 0 ); // needed if all snapping is off
+    QPointF snapDiff = QPointF( 0, 0 ); // needed if all snapping is off
     KoGuides::SnapStatus snapStatus = KoGuides::SNAP_NONE;
 
     if ( snapToGrid )
@@ -5579,7 +5579,7 @@ KoPoint KPrCanvas::snapPoint( KoPoint &pos, bool repaintSnapping )
     sp += snapDiff;
 
     // don't snap out of canvas
-    KoRect pageRect( m_activePage->getPageRect() );
+    QRectF pageRect( m_activePage->getPageRect() );
     if ( sp.x() < pageRect.left() )
         sp.setX( pageRect.left() );
     else if ( sp.x() > pageRect.right() )
@@ -5616,7 +5616,7 @@ KPrPixmapObject * KPrCanvas::getSelectedImage() const
 
 KoPointArray KPrCanvas::getObjectPoints( const KoPointArray &pointArray )
 {
-    KoRect rect = pointArray.boundingRect();
+    QRectF rect = pointArray.boundingRect();
 
     KoPointArray points( pointArray );
     points.translate( -rect.x(), -rect.y() );
@@ -5697,7 +5697,7 @@ void KPrCanvas::popupContextMenu()
     if ( m_currentTextObjectView ) {
         // TODO: Better to popup at caret position.
         // KoTextCursor* cursor = m_currentTextObjectView->cursor();
-        KoPoint kop = m_currentTextObjectView->kpTextObject()->getOrig();
+        QPointF kop = m_currentTextObjectView->kpTextObject()->getOrig();
         QPoint p = m_view->zoomHandler()->zoomPointOld( kop );
         p = mapToGlobal( p );
         m_currentTextObjectView->showPopup( m_view, p, m_view->actionList() );
@@ -5706,7 +5706,7 @@ void KPrCanvas::popupContextMenu()
     if (!m_activePage) return;
     KPrObject* obj = m_activePage->getSelectedObj();
     if (obj) {
-        KoPoint kop = obj->getOrig();
+        QPointF kop = obj->getOrig();
         QPoint p = m_view->zoomHandler()->zoomPointOld( kop );
         p = mapToGlobal( p );
         objectPopup( obj, p );

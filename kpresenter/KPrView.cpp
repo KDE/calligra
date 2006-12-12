@@ -2168,7 +2168,7 @@ void KPrView::newPageLayout( const KoPageLayout &_layout )
 void KPrView::updateRuler()
 {
     //update koruler
-    KoRect r=m_canvas->activePage()->getPageRect();
+    QRectF r=m_canvas->activePage()->getPageRect();
     getHRuler()->setActiveRange( r.left(), r.right() );
     getVRuler()->setActiveRange( r.top(), r.bottom() );
 }
@@ -4029,7 +4029,7 @@ void KPrView::updateObjectStatusBarItem()
             KoUnit unit = m_pKPresenterDoc->unit();
             //QString unitName = m_pKPresenterDoc->unitName();
             KPrObject * obj = m_canvas->getSelectedObj();
-            KoSize size = obj->getSize();
+            QSizeF size = obj->getSize();
             m_sbObjectLabel->setText( ' ' + i18nc( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)" ,
                      /*frame->frameSet()->name()*/obj->getObjectName()
                     ,KoUnit::toUserStringValue( obj->getOrig().x(), unit )
@@ -5233,7 +5233,7 @@ void KPrView::viewZoom( const QString &s )
     m_canvas->repaint();
 }
 
-void KPrView::setZoomRect( const KoRect & rect )
+void KPrView::setZoomRect( const QRectF & rect )
 {
     double height = zoomHandler()->resolutionY() * rect.height();
     double width = zoomHandler()->resolutionX() * rect.width();
@@ -5655,9 +5655,9 @@ void KPrView::addGuideLine()
 {
 #warning "port to new koguide"	
 #if 0	
-    KoRect rect( m_canvas->activePage()->getPageRect() );
+    QRectF rect( m_canvas->activePage()->getPageRect() );
 
-    KoPoint pos( zoomHandler()->unzoomPointOld( m_mousePos + QPoint( m_canvas->diffx(), m_canvas->diffy() ) ) );
+    QPointF pos( zoomHandler()->unzoomPointOld( m_mousePos + QPoint( m_canvas->diffx(), m_canvas->diffy() ) ) );
     KoGuideLineDia dia( 0, pos, rect, m_pKPresenterDoc->unit() );
     if ( dia.exec() == QDialog::Accepted )
     {
@@ -5732,7 +5732,7 @@ void KPrView::zoomSelectedObject()
 {
     if( m_canvas->isOneObjectSelected() )
     {
-        KoRect rect = m_canvas->objectRect( false );
+        QRectF rect = m_canvas->objectRect( false );
         setZoomRect( rect );
     }
 }
@@ -5747,7 +5747,7 @@ void KPrView::zoomPageHeight()
 
 void KPrView::zoomAllObject()
 {
-    KoRect rect = m_canvas->objectRect( true );
+    QRectF rect = m_canvas->objectRect( true );
     double height = zoomHandler()->resolutionY() * rect.height();
     double width = zoomHandler()->resolutionX() * rect.width();
     int zoom = qMin( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),

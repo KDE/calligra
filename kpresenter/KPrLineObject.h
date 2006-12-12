@@ -66,8 +66,8 @@ public:
 
     virtual void flip(bool horizontal );
 
-    virtual KoSize getRealSize() const;
-    virtual KoPoint getRealOrig() const;
+    virtual QSizeF getRealSize() const;
+    virtual QPointF getRealOrig() const;
 
 protected:
     virtual const char * getOasisElementName() const;

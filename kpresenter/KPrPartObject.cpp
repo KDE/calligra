@@ -152,7 +152,7 @@ void KPrPartObject::draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
 void KPrPartObject::slot_changed( KoChild *_koChild )
 {
     KoTextZoomHandler* zh = child->parent()->zoomHandler();
-    KoRect g = zh->unzoomRectOld( _koChild->geometry() );
+    QRectF g = zh->unzoomRectOldF( _koChild->geometry() );
     KPrObject::setOrig( g.x(), g.y() );
     KPrObject::setSize( g.width(), g.height() );
 }
@@ -167,7 +167,7 @@ void KPrPartObject::paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
         _painter->setPen( pen3 );
 #warning "kde4: port it"		
         //_painter->setRasterOp( Qt::NotXorROP );
-        _painter->drawRect( _zoomHandler->zoomRectOld( KoRect( KoPoint( 0.0, 0.0 ), getSize() ) ) );
+        _painter->drawRect( _zoomHandler->zoomRectOld( QRectF( QPointF( 0.0, 0.0 ), getSize() ) ) );
         return;
     }
 
@@ -175,8 +175,8 @@ void KPrPartObject::paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
         return;
 
     int penw = ( pen.style() == Qt::NoPen ) ? 0 : int( pen.pointWidth() );
-    KoRect r( KoPoint( penw, penw ), KoPoint( getSize().width() - ( penw * 2.0 ),
-              getSize().height() - ( penw * 2.0 ) ) );
+    QRectF r( QPointF( penw, penw ), QSizeF( getSize().width() - ( penw * 2.0 )-penw,
+              getSize().height() - ( penw * 2.0 )-penw ) );
     double zoomX, zoomY;
     _zoomHandler->zoom(&zoomX, &zoomY);
     child->document()->paintEverything( *_painter,

@@ -82,7 +82,7 @@ private:
     /// the points of the path
     KoPointArray m_points;
     /// the current point in the path
-    KoPoint m_curPoint;
+    QPointF m_curPoint;
     /// the index of the points in m_points
     int m_pointIdx;
     /// if true curves are converted to lines

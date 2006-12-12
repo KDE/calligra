@@ -278,13 +278,13 @@ KCommand * KPrPropertyEditor::getCommand()
                 Q3PtrListIterator<KPrObject> it( m_objects );
                 for ( ; it.current(); ++it )
                 {
-                    KoRect oldRect = it.current()->getRect();
-                    KoRect newRect = oldRect;
+                    QRectF oldRect = it.current()->getRect();
+                    QRectF newRect = oldRect;
                     if ( change & KPrGeneralProperty::Left )
-                        newRect.moveTopLeft( KoPoint( generalValue.m_rect.left(), newRect.top() ) );
+                        newRect.moveTopLeft( QPointF( generalValue.m_rect.left(), newRect.top() ) );
 
                     if ( change & KPrGeneralProperty::Top )
-                        newRect.moveTopLeft( KoPoint( newRect.left(), generalValue.m_rect.top() ) );
+                        newRect.moveTopLeft( QPointF( newRect.left(), generalValue.m_rect.top() ) );
 
                     if ( change & KPrGeneralProperty::Width )
                         newRect.setWidth( generalValue.m_rect.width() );
