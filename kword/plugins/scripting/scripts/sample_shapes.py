@@ -42,6 +42,6 @@ pathframe = KWord.addFrame("mypath","KoPathShape")
 if pathframe != None:
     pathframe.setPosition(200,200)
 
-polyframe = KWord.addFrame("mypath","KoRegularPolygonShape")
+polyframe = KWord.addFrame("mypoly","KoRegularPolygonShape")
 if polyframe != None:
     polyframe.setPosition(200,350)
