@@ -23,7 +23,6 @@ public:
 
 private slots:
     void initTestCase();
-    void cleanupTestCase();
 
     /// Test the hittest of KWTextDocumentLayout
     void testHitTest();
