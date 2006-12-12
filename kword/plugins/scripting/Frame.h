@@ -42,6 +42,17 @@ namespace Scripting {
 
         public Q_SLOTS:
 
+            /** Return the Id of this shape, indentifying the type of shape by the id of the factory. */
+            QString shapeId() const { return m_frame->shape()->shapeId(); }
+
+            /** Request a repaint to be queued. */
+            void repaint() const { m_frame->shape()->repaint(); }
+
+            /** Returns current visibility state of this shape. */
+            bool isVisible() const { return m_frame->shape()->isVisible(); }
+            /** Changes the Shape to be visible or invisible. */
+            void setVisible(bool on) { m_frame->shape()->setVisible(on); }
+
             /** Return the current scaling adjustment over the X axis. */
             double scaleX() const { return m_frame->shape()->scaleX(); }
             /** Return the current scaling adjustment over the Y axis. */

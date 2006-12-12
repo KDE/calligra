@@ -46,7 +46,8 @@ cursor.insertHtml("<p><b>Framesets:</b></p>")
 framesetlist = cursor.insertList()
 for i in range( KWord.frameSetCount() ):
     frameset = KWord.frameSet(i)
-    cursor.insertHtml( "(nr=%i name=%s)<br/>" % (i,frameset.name()) )
+    shapeids = [frameset.frame(i).shapeId() for i in range(frameset.frameCount())]
+    cursor.insertHtml( "(nr=%i name=%s shapeids=%s)<br/>" % (i,frameset.name(),shapeids) )
     cursor.insertBlock()
 
 cursor = doc.rootFrame().lastCursorPosition()
