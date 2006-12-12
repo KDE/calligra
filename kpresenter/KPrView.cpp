@@ -5653,6 +5653,8 @@ void KPrView::refreshRuler( bool state )
 
 void KPrView::addGuideLine()
 {
+#warning "port to new koguide"	
+#if 0	
     KoRect rect( m_canvas->activePage()->getPageRect() );
 
     KoPoint pos( zoomHandler()->unzoomPointOld( m_mousePos + QPoint( m_canvas->diffx(), m_canvas->diffy() ) ) );
@@ -5661,6 +5663,7 @@ void KPrView::addGuideLine()
     {
         m_pKPresenterDoc->addGuideLine( dia.orientation(), dia.pos() );
     }
+#endif    
 }
 
 void KPrView::removeComment()

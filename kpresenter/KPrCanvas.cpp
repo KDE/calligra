@@ -856,7 +856,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     recalcAutoGuides();
                     if ( m_view->kPresenterDoc()->showGuideLines() && !m_disableSnapping )
                     {
-                        m_gl.repaintSnapping( objectRect( false ) );
+#warning "port to qrectf/qpointf"			    
+                        //m_gl.repaintSnapping( objectRect( false ) );
                     }
                 }
                 else
@@ -4619,13 +4620,15 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
             m_moveSnapDiff = KoPoint( 0, 0 );
 
             KoGuides::SnapStatus snapStatus = KoGuides::SNAP_NONE;
-            m_gl.snapToGuideLines( movedRect, KEY_SNAP_DISTANCE, snapStatus, m_moveSnapDiff );
+#warning "kde4: port to qrectf"	    
+            //m_gl.snapToGuideLines( movedRect, KEY_SNAP_DISTANCE, snapStatus, m_moveSnapDiff );
 
             move += m_moveSnapDiff;
         }
         else
         {
-            m_gl.diffNextGuide( rect, move );
+#warning "kde4: port to qrectf"		
+            //m_gl.diffNextGuide( rect, move );
         }
     }
 
@@ -4653,8 +4656,9 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
     {
         // redraw guidelines (intentionally always)
         KoRect movedRect( rect );
-        movedRect.moveBy( move.x(), move.y() );
-        m_gl.repaintSnapping( movedRect );
+        movedRect.translate( move.x(), move.y() );	
+#warning "kde4: port to qrectf"	
+        //m_gl.repaintSnapping( movedRect );
     }
 
     if ( move != KoPoint( 0, 0 ) )
@@ -4701,7 +4705,8 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
 
     if ( snapToGuideLines )
     {
-        m_gl.snapToGuideLines( movedRect, MOUSE_SNAP_DISTANCE, snapStatus, m_moveSnapDiff );
+#warning "kde4 port to qrectf"	    
+        //m_gl.snapToGuideLines( movedRect, MOUSE_SNAP_DISTANCE, snapStatus, m_moveSnapDiff );
     }
 
     move += m_moveSnapDiff;
@@ -4743,7 +4748,8 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
     if ( snapToGuideLines )
     {
         // redraw guidelines (intentionally always)
-        m_gl.repaintSnapping( movedRect );
+#warning "kde4: port to qrectf" 
+        //m_gl.repaintSnapping( movedRect );
     }
 
     if ( move != KoPoint( 0, 0 ) )
@@ -4947,7 +4953,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point, bool k
             {
                 sp.setY( rect.bottom() );
             }
-            m_gl.repaintSnapping( sp, snapStatus );
+#warning "kde4 port to qrectf"	    
+            //m_gl.repaintSnapping( sp, snapStatus );
         }
 
         _repaint( oldBoundingRect );
@@ -5565,7 +5572,8 @@ KoPoint KPrCanvas::snapPoint( KoPoint &pos, bool repaintSnapping )
 
     if ( snapToGuideLines )
     {
-        m_gl.snapToGuideLines( sp, MOUSE_SNAP_DISTANCE, snapStatus, snapDiff );
+#warning "port to QPointF/QRectF"	    
+        //m_gl.snapToGuideLines( sp, MOUSE_SNAP_DISTANCE, snapStatus, snapDiff );
     }
 
     sp += snapDiff;
@@ -5585,7 +5593,8 @@ KoPoint KPrCanvas::snapPoint( KoPoint &pos, bool repaintSnapping )
     // redraw guidelines (intentionally always)
     if ( repaintSnapping && snapToGuideLines )
     {
-        m_gl.repaintSnapping( sp, KoGuides::SNAP_BOTH );
+#warning "kde4: port to QRectF/QPointF"	    
+        //m_gl.repaintSnapping( sp, KoGuides::SNAP_BOTH );
     }
 
     return sp;
