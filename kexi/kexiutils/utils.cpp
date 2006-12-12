@@ -25,7 +25,8 @@
 #include <qimage.h>
 #include <qwmatrix.h>
 #include <qicon.h>
-#include <qbitmap.h>
+#include <QMetaProperty>
+#include <QBitmap>
 
 #include <kdebug.h>
 #include <kcursor.h>
@@ -88,6 +89,136 @@ WaitCursorRemover::~WaitCursorRemover()
 }
 
 //--------------------------------------------------------------------------------
+
+QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName)
+{
+	if (!o)
+		return 0;
+	const QObjectList list(o->children());
+	foreach (QObject *child, list) {
+		if (child->inherits(className) && (!objName || child->objectName()==objName))
+			return child;
+	}
+	//try children
+	foreach (QObject *child, list) {
+		child = findFirstQObjectChild(child, className, objName);
+		if (child)
+			return child;
+	}
+	return 0;
+}
+
+int KexiUtils::indexOfPropertyWithSuperclasses(const QObject *object, const char* name) {
+	const QMetaObject *mobj = object->metaObject();
+	while (true) {
+		const int res = mobj->indexOfProperty(name);
+		if (res!=-1 || !mobj->superClass())
+			return res;
+		mobj = mobj->superClass();
+	}
+	return -1;
+}
+
+QMetaProperty KexiUtils::findPropertyWithSuperclasses(const QObject* object,
+	const char* name)
+{
+	const QMetaObject *mobj = object->metaObject();
+	while (true) {
+		const int res = mobj->indexOfProperty(name);
+		if (res!=-1)
+			return mobj->property(res);
+		if (!mobj->superClass())
+			return QMetaProperty();
+		mobj = mobj->superClass();
+	}
+	return QMetaProperty();
+}
+
+QMetaProperty KexiUtils::findPropertyWithSuperclasses(const QObject* object,
+	int index)
+{
+	const QMetaObject *mobj = object->metaObject();
+	while (true) {
+		QMetaProperty mp = mobj->property(index - mobj->propertyOffset());
+		if (mp.isValid() || !mobj->superClass())
+			return mp;
+		mobj = mobj->superClass();
+	}
+	return QMetaProperty();
+}
+
+bool KexiUtils::objectIsA(QObject* object, const QList<QByteArray>& classNames)
+{
+	foreach (const QByteArray& ba, classNames) {
+		if (objectIsA(object, ba.constData()))
+			return true;
+	}
+	return false;
+}
+
+QList<QMetaMethod> KexiUtils::methodsForMetaObject(
+	const QMetaObject *metaObject, QFlags<QMetaMethod::MethodType> types,
+	QFlags<QMetaMethod::Access> access)
+{
+	const int count = metaObject ? metaObject->methodCount() : 0;
+	QList<QMetaMethod> result;
+	for (int i=0; i<count; i++) {
+		QMetaMethod method( metaObject->method(i) );
+		if (types & method.methodType() && access & method.access())
+			result += method;
+	}
+	return result;
+}
+
+QList<QMetaMethod> KexiUtils::methodsForMetaObjectWithParents(
+	const QMetaObject *metaObject, QFlags<QMetaMethod::MethodType> types,
+	QFlags<QMetaMethod::Access> access)
+{
+	QList<QMetaMethod> result;
+	while (metaObject) {
+		const int count = metaObject->methodCount();
+		for (int i=0; i<count; i++) {
+			QMetaMethod method( metaObject->method(i) );
+			if (types & method.methodType() && access & method.access())
+			result += method;
+		}
+		metaObject = metaObject->superClass();
+	}
+	return result;
+}
+
+QList<QMetaProperty> KexiUtils::propertiesForMetaObject(
+	const QMetaObject *metaObject)
+{
+	const int count = metaObject ? metaObject->propertyCount() : 0;
+	QList<QMetaProperty> result;
+	for (int i=0; i<count; i++)
+		result += metaObject->property(i);
+	return result;
+}
+
+QList<QMetaProperty> KexiUtils::propertiesForMetaObjectWithInherited(
+	const QMetaObject *metaObject)
+{
+	QList<QMetaProperty> result;
+	while (metaObject) {
+		const int count = metaObject->propertyCount();
+		for (int i=0; i<count; i++)
+			result += metaObject->property(i);
+		metaObject = metaObject->superClass();
+	}
+	return result;
+}
+
+QStringList KexiUtils::enumKeysForProperty(const QMetaProperty& metaProperty)
+{
+	QStringList result;
+	QMetaEnum enumerator( metaProperty.enumerator() );
+	const int count = enumerator.keyCount();
+	for (int i=0; i<count; i++)
+		result.append(QString::fromLatin1(enumerator.key(i)));
+	return result;
+}
 
 QString KexiUtils::fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat)
 {
@@ -179,7 +310,7 @@ QIcon KexiUtils::colorizeIconToTextColor(const QPixmap& icon, const QPalette& pa
 			palette.color(QPalette::Active, QPalette::ButtonText) ) );
 }
 
-QPixmap KexiUtils::emptyIcon(KIcon::Group iconGroup)
+QPixmap KexiUtils::emptyIcon(K3Icon::Group iconGroup)
 {
 	QPixmap noIcon( IconSize( iconGroup ), IconSize( iconGroup ) );
 	QBitmap bmpNoIcon(noIcon.size());

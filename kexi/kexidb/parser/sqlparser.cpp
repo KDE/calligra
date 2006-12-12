@@ -2448,7 +2448,7 @@ YYACCEPT;
 #line 617 "sqlparser.y"
     {
 	parser->setOperation(Parser::OP_CreateTable);
-	parser->createTable((yyvsp[(3) - (3)].stringValue)->latin1());
+	parser->createTable((yyvsp[(3) - (3)].stringValue)->toLatin1());
 	delete (yyvsp[(3) - (3)].stringValue);
 ;}
     break;
@@ -2463,7 +2463,7 @@ YYACCEPT;
 #line 633 "sqlparser.y"
     {
 	KexiDBDbg << "adding field " << *(yyvsp[(1) - (2)].stringValue) << endl;
-	field->setName((yyvsp[(1) - (2)].stringValue)->latin1());
+	field->setName((yyvsp[(1) - (2)].stringValue)->toLatin1());
 	parser->table()->addField(field);
 	field = 0;
 	delete (yyvsp[(1) - (2)].stringValue);

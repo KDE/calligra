@@ -22,14 +22,19 @@
 
 #include "kexiutils_export.h"
 
-#include <qpointer.h>
-#include <qobject.h>
+#include <QPointer>
+#include <QObject>
 #include <QDateTime>
-#include <kmimetype.h>
+#include <QMetaMethod>
+
+#include <KMimeType>
+#include <K3Icon>
+#include <KIcon>
+
 class QColor;
+class QMetaProperty;
 
-// General Utils
-
+//! General Utils
 namespace KexiUtils
 {
 	//! \return true if \a o has parent \a par.
@@ -44,53 +49,91 @@ namespace KexiUtils
 
 	//! \return parent object of \a o that is of type \a type or NULL if no such parent
 	template<class type>
-	inline type* findParent(QObject* o)
+	inline type findParent(QObject* o)
 	{
 		if (!o)
 			return 0;
 		while ( ((o=o->parent()) && !::qobject_cast<type *>(o) ) )
 			;
-		return static_cast<type*>(o);
+		return qobject_cast<type>(o);
 	}
 
 	//! Const version of findParent()
 	template<class type>
-	inline type* findParentConst(const QObject* const o, const char* className)
+	inline type findParentConst(const QObject* const o, const char* className)
 	{
 		const QObject * obj = o;
 		if (!obj || !className || className[0]=='\0')
 			return 0;
 		while ( ((obj=obj->parent())) && !obj->inherits(className) )
 			;
-		return static_cast<type*>(obj);
-	}
-
-	/*! \return first found child of \a o, that inherit \a className.
-	 If objName is 0 (the default), all object names match. 
-	 Returned pointer type is casted. */
-
-	//! \return first found child of \a o, that inherit \a className.
-	//! If objName is 0 (the default), all object names match. 
-	//! Returned pointer type is casted.
-	template<class type>
-	type* findFirstChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName)
-	{
-		if (!o)
-			return 0;
-		return qFindChild<type>( o, objName );
+		return qobject_cast<type>(obj);
 	}
 
 	//! \return first found child of \a o, that inherit \a className.
-	//! If objName is 0 (the default), all object names match. 
+	//! If \a objName is 0 (the default), all object names match. 
+	KEXIUTILS_EXPORT QObject* findFirstQObjectChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName);
+
+	//! \return first found child of \a o, that inherit \a className.
+	//! If \a objName is 0 (the default), all object names match. 
 	//! Returned pointer type is casted.
 	template<class type>
-	type* findFirstChild(QObject *o, const char* className /* compat with Qt3 */)
+	inline type findFirstChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName = 0)
 	{
-		if (!o)
-			return 0;
-		return qFindChild<type>( o );
+		return qobject_cast<type>(findFirstQObjectChild(o, className, objName));
 	}
 
+	//! Finds property name and returns its index; otherwise returns -1.
+	//! Like QMetaObject::indexOfProperty() but also looks at superclasses.
+	KEXIUTILS_EXPORT int indexOfPropertyWithSuperclasses(
+		const QObject *object, const char* name);
+
+	//! Finds property for name \a name and object \a object returns it index; 
+	//! otherwise returns a null QMetaProperty.
+	KEXIUTILS_EXPORT QMetaProperty findPropertyWithSuperclasses(const QObject* object,
+		const char* name);
+
+	//! Finds property for index \a index and object \a object returns it index; 
+	//! otherwise returns a null QMetaProperty.
+	KEXIUTILS_EXPORT QMetaProperty findPropertyWithSuperclasses(const QObject* object,
+		int index);
+
+	//! \return true is \a object object is of class name \a className
+	inline bool objectIsA(QObject* object, const char* className) {
+		return 0 == qstrcmp(object->metaObject()->className(), className);
+	}
+	
+	//! \return true is \a object object is of the class names inside \a classNames
+	KEXIUTILS_EXPORT bool objectIsA(QObject* object, const QList<QByteArray>& classNames);
+ 
+	//! \return a list of methods for \a metaObject meta object. 
+	//! The methods are of type declared in \a types and have access declared 
+	//! in \a access.
+ 	KEXIUTILS_EXPORT QList<QMetaMethod> methodsForMetaObject(
+		const QMetaObject *metaObject, QFlags<QMetaMethod::MethodType> types 
+		= QFlags<QMetaMethod::MethodType>(QMetaMethod::Method|QMetaMethod::Signal|QMetaMethod::Slot),
+		QFlags<QMetaMethod::Access> access
+		= QFlags<QMetaMethod::Access>(QMetaMethod::Private|QMetaMethod::Protected|QMetaMethod::Public));
+
+	//! Like \ref KexiUtils::methodsForMetaObject() but includes methods from all 
+	//! parent meta objects of the \a metaObject.
+ 	KEXIUTILS_EXPORT QList<QMetaMethod> methodsForMetaObjectWithParents(
+		const QMetaObject *metaObject, QFlags<QMetaMethod::MethodType> types 
+		= QFlags<QMetaMethod::MethodType>(QMetaMethod::Method|QMetaMethod::Signal|QMetaMethod::Slot),
+		QFlags<QMetaMethod::Access> access
+		= QFlags<QMetaMethod::Access>(QMetaMethod::Private|QMetaMethod::Protected|QMetaMethod::Public));
+
+	//! \return a list with all this class's properties.
+	KEXIUTILS_EXPORT QList<QMetaProperty> propertiesForMetaObject(
+		const QMetaObject *metaObject);
+
+	//! \return a list with all this class's properties including thise inherited.
+	KEXIUTILS_EXPORT QList<QMetaProperty> propertiesForMetaObjectWithInherited(
+		const QMetaObject *metaObject);
+
+	//! \return a list of enum keys for meta property \a metaProperty.
+	KEXIUTILS_EXPORT QStringList enumKeysForProperty(const QMetaProperty& metaProperty);
+	
 	//! QDateTime - a hack needed because QVariant(QTime) has broken isNull()
 	inline QDateTime stringToHackedQTime(const QString& s)
 	{
@@ -176,7 +219,7 @@ namespace KexiUtils
 	KEXIUTILS_EXPORT QIcon colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette);
 
 	/*! \return empty (fully transparent) pixmap that can be used as a place for icon of size \a iconGroup */
-	KEXIUTILS_EXPORT QPixmap emptyIcon(KIcon::Group iconGroup);
+	KEXIUTILS_EXPORT QPixmap emptyIcon(K3Icon::Group iconGroup);
 
 	/*! Serializes \a map to \a array.
 	 KexiUtils::deserializeMap() can be used to deserialize this array back to map. */
