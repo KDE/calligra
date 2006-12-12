@@ -20,6 +20,7 @@
 #ifndef KPTSCHEDULE_H
 #define KPTSCHEDULE_H
 
+#include "kptcalendar.h"
 #include "kpteffortcostmap.h"
 #include "kptresource.h"
 
@@ -82,24 +83,32 @@ public:
     virtual Node *node() const { return 0; }
     
     virtual bool usePert() const;
+    virtual bool reserveResources() const;
 
     virtual bool loadXML( const QDomElement &element );
     virtual void saveXML( QDomElement &element ) const;
     void saveCommonXML( QDomElement &element ) const;
     void saveAppointments( QDomElement &element ) const;
 
+    virtual DateTimeInterval available( const DateTimeInterval &interval ) const
+    { return DateTimeInterval( interval.first, interval.second ); }
+    enum CalculationMode { Scheduling, CalculateForward, CalculateBackward };
+    /// Set calculation mode
+    void setCalculationMode( int mode ) { m_calculationMode = mode; }
+    /// Return calculation mode
+    int calculationMode() const { return m_calculationMode; }
     /// Return the list of appointments
     QList<Appointment*> &appointments() { return m_appointments; }
     /// Adds appointment to this schedule only
     virtual bool add( Appointment *appointment );
     /// Adds appointment to both this resource schedule and node schedule
     virtual void addAppointment( Schedule * /*other*/, DateTime & /*start*/, DateTime & /*end*/, double /*load*/ = 100 ) {}
-    /// removes appointment and deletes it.
-    void removeAppointment( Appointment *appointment );
-    /// removes appointment without deleting it.
-    virtual void takeAppointment( Appointment *appointment );
-    Appointment *findAppointment( Schedule *resource, Schedule *node );
-
+    /// Removes appointment without deleting it.
+    virtual void takeAppointment( Appointment *appointment, int type = Scheduling );
+    Appointment *findAppointment( Schedule *resource, Schedule *node, int type = Scheduling );
+    /// Attach the appointment to appropriate list (appointment->calculationMode() specifies list)
+    bool attatch( Appointment *appointment );
+    
     Appointment appointmentIntervals() const;
 
     virtual bool isOverbooked() const { return false; }
@@ -172,7 +181,10 @@ protected:
     long m_id;
     bool m_deleted;
 
+    int m_calculationMode;
     QList<Appointment*> m_appointments;
+    QList<Appointment*> m_forward;
+    QList<Appointment*> m_backward;
     Schedule *m_parent;
 
     friend class Node;
@@ -252,7 +264,7 @@ public:
 
     // tasks------------>
     virtual void addAppointment( Schedule *resource, DateTime &start, DateTime &end, double load = 100 );
-    virtual void takeAppointment( Appointment *appointment );
+    virtual void takeAppointment( Appointment *appointment, int type = Schedule::Scheduling );
 
     virtual Node *node() const { return m_node; }
     virtual void setNode( Node *n ) { m_node = n; }
@@ -284,7 +296,7 @@ public:
     virtual bool isDeleted() const
     { return m_parent == 0 ? true : m_parent->isDeleted(); }
     virtual void addAppointment( Schedule *node, DateTime &start, DateTime &end, double load = 100 );
-    virtual void takeAppointment( Appointment *appointment );
+    virtual void takeAppointment( Appointment *appointment, int type = Scheduling );
 
     virtual bool isOverbooked() const;
     virtual bool isOverbooked( const DateTime &start, const DateTime &end ) const;
@@ -316,6 +328,7 @@ public:
     virtual bool isDeleted() const { return m_deleted; }
     
     virtual bool usePert() const;
+    virtual bool reserveResources() const;
 
     virtual bool loadXML( const QDomElement &element, Project &project );
     virtual void saveXML( QDomElement &element ) const;
@@ -365,6 +378,8 @@ public:
 
     void setUsePert( bool on );
     bool usePert() const { return m_usePert; }
+
+    bool reserveResources() const { return false; }
 
     void setCalculateAll( bool on );
     bool calculateAll() const { return m_calculateAll; }

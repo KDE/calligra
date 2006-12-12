@@ -21,6 +21,7 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 #include "kptproject.h"
+#include "kptschedule.h"
 
 #include <qdom.h>
 #include <QList>
@@ -835,7 +836,7 @@ bool Calendar::hasInterval(const DateTime &start, const DateTime &end) const {
     return false;
 }
 
-DateTime Calendar::firstAvailableAfter(const DateTime &time, const DateTime &limit) {
+DateTime Calendar::firstAvailableAfter(const DateTime &time, const DateTime &limit, Schedule *sch ) {
     //kDebug()<<k_funcinfo<<m_name<<": check from "<<time.toString()<<" limit="<<limit.toString()<<endl;
     if (!time.isValid() || !limit.isValid() || time >= limit) {
         kError()<<k_funcinfo<<"Invalid input: "<<(time.isValid()?"":"(time invalid) ")<<(limit.isValid()?"":"(limit invalid) ")<<(time>limit?"":"(time>=limit)")<<endl;
@@ -849,7 +850,7 @@ DateTime Calendar::firstAvailableAfter(const DateTime &time, const DateTime &lim
     return t;
 }
 
-DateTime Calendar::firstAvailableBefore(const DateTime &time, const DateTime &limit) {
+DateTime Calendar::firstAvailableBefore(const DateTime &time, const DateTime &limit, Schedule *sch) {
     //kDebug()<<k_funcinfo<<m_name<<": check from "<<time.toString()<<" limit="<<limit.toString()<<endl;
     if (!time.isValid() || !limit.isValid() || time <= limit) {
         kError()<<k_funcinfo<<"Invalid input: "<<(time.isValid()?"":"(time invalid) ")<<(limit.isValid()?"":"(limit invalid) ")<<(time>limit?"":"(time<=limit)")<<endl;
@@ -865,13 +866,14 @@ DateTime Calendar::firstAvailableBefore(const DateTime &time, const DateTime &li
     //kDebug()<<k_funcinfo<<m_name<<": t="<<t<<", "<<lmt<<" limit="<<limit<<endl;
     while (!res.isValid() && t >= limit) {
         // check intervals for 1 day
-        DateTime r = firstInterval(t, lmt).second;
+        DateTime r = sch == 0 ? firstInterval(t, lmt).second : sch->available( firstInterval( t, lmt ) ).second;
         res = r;
         // Find the last interval
         while(r.isValid() && r < lmt) {
-            r = firstInterval(r, lmt).second;
-            if (r.isValid())
+            r = sch == 0 ? firstInterval(r, lmt).second : sch->available( firstInterval( r, lmt ) ).second;
+            if (r.isValid() ) {
                 res = r;
+            }
             //kDebug()<<k_funcinfo<<m_name<<": r="<<r<<", "<<lmt<<" res="<<res<<endl;
         }
         if (!res.isValid()) {

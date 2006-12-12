@@ -303,8 +303,6 @@ public:
     QList<Appointment*> appointments( long id = -1 );
     /// Adds appointment to this node only (not to resource)
     virtual bool addAppointment(Appointment *appointment, Schedule &main);
-//    /// Return appointment this node have with resource
-//    Appointment *findAppointment(Resource *resource);
     
     /// Find the node with my id
     virtual Node *findNode() const { return findNode(m_id); }
@@ -446,8 +444,6 @@ public:
     void setLatestFinish(const DateTime &dt) 
     { if (m_currentSchedule) m_currentSchedule->latestFinish = dt; }
     
-    /// Adds appointment to this node only (not to resource)
-    virtual bool addAppointment(Appointment *appointment);
     /// Adds appointment to both this node and resource
     virtual void addAppointment(ResourceSchedule *resource, DateTime &start, DateTime &end, double load=100);
     

@@ -78,7 +78,7 @@ int Project::type() const { return Node::Type_Project; }
 void Project::calculate( ScheduleManager &sm )
 {
     emit sigProgress( 0 );
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     emit scheduleToBeAdded( 0 );
     sm.createSchedules();
     emit scheduleAdded( 0 );
@@ -142,7 +142,7 @@ void Project::calculate()
             m_currentSchedule->startTime = scheduleBackward( m_currentSchedule->endTime, estType );
             calcCriticalPath( true );
         }
-        makeAppointments();
+        //makeAppointments();
         calcResourceOverbooked();
         m_currentSchedule->notScheduled = false;
         emit scheduleChanged( static_cast<MainSchedule*>( m_currentSchedule ) );
@@ -439,13 +439,13 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
                 }
                 //kDebug()<<k_funcinfo<<"Relation<---"<<endl;
             } else if ( e.tagName() == "schedules" ) {
-                kDebug()<<k_funcinfo<<"Project schedules & task appointments--->"<<endl;
+                //kDebug()<<k_funcinfo<<"Project schedules & task appointments--->"<<endl;
                 // References tasks and resources
                 QDomNodeList lst = e.childNodes();
                 for ( unsigned int i = 0; i < lst.count(); ++i ) {
                     if ( lst.item( i ).isElement() ) {
                         QDomElement el = lst.item( i ).toElement();
-                        kDebug()<<k_funcinfo<<el.tagName()<<" Version="<<status.version()<<endl;
+                        //kDebug()<<k_funcinfo<<el.tagName()<<" Version="<<status.version()<<endl;
                         ScheduleManager *sm = 0;
                         bool add = false;
                         if ( status.version() <= "0.5" ) {
@@ -633,7 +633,7 @@ bool Project::addSubTask( Node* task, Node* position )
     emit nodeToBeAdded( position );
     position->addChildNode( task );
     emit nodeAdded( task );
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     return true;
 }
 
@@ -708,7 +708,7 @@ bool Project::indentTask( Node* node, int index )
         node->getParent() ->takeChildNode( node );
         newParent->insertChildNode( index, node );
         emit nodeMoved( node );
-        kDebug()<<k_funcinfo<<endl;
+        //kDebug()<<k_funcinfo<<endl;
         return true;
     }
     return false;
@@ -753,7 +753,7 @@ bool Project::unindentTask( Node* node )
         parentNode->takeChildNode( node );
         grandParentNode->addChildNode( node, parentNode );
         emit nodeMoved( node );
-        kDebug()<<k_funcinfo<<endl;
+        //kDebug()<<k_funcinfo<<endl;
         return true;
     }
     return false;
@@ -785,7 +785,7 @@ bool Project::moveTaskUp( Node* node )
         emit nodeToBeMoved( node );
         if ( node->getParent()->moveChildUp( node ) ) {
             emit nodeMoved( node );
-            kDebug()<<k_funcinfo<<endl;
+            //kDebug()<<k_funcinfo<<endl;
             return true;
         }
         emit nodeMoved( node ); // Not actually moved, but what to do ?
@@ -850,13 +850,13 @@ QString Project::uniqueNodeId( int seed )
 
 bool Project::removeId( const QString &id )
 {
-    kDebug() << k_funcinfo << "id=" << id << endl;
+    //kDebug() << k_funcinfo << "id=" << id << endl;
     return ( m_parent ? m_parent->removeId( id ) : nodeIdDict.remove( id ) );
 }
 
 void Project::insertId( const QString &id, Node *node )
 {
-    kDebug() << k_funcinfo << "id=" << id << " " << node->name() << endl;
+    //kDebug() << k_funcinfo << "id=" << id << " " << node->name() << endl;
     if ( m_parent == 0 )
         return ( void ) nodeIdDict.insert( id, node );
     m_parent->insertId( id, node );
@@ -1150,7 +1150,7 @@ void Project::generateWBS( int count, WBSDefinition &def, const QString& wbs )
 
 void Project::setCurrentSchedule( long id )
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     setCurrentSchedulePtr( findSchedule( id ) );
     Node::setCurrentSchedule( id );
     QHash<QString, Resource*> hash = resourceIdDict;
@@ -1195,7 +1195,7 @@ void Project::addScheduleManager( ScheduleManager *sm )
     emit scheduleManagerToBeAdded( sm );
     m_managers.append( sm ); 
     emit scheduleManagerAdded( 0 );
-    kDebug()<<k_funcinfo<<"Added: "<<sm->name()<<", now "<<m_managers.count()<<endl;
+    //kDebug()<<k_funcinfo<<"Added: "<<sm->name()<<", now "<<m_managers.count()<<endl;
 }
 
 void Project::takeScheduleManager( ScheduleManager *sm )
@@ -1209,7 +1209,7 @@ void Project::takeScheduleManager( ScheduleManager *sm )
 
 ScheduleManager *Project::findScheduleManager( const QString name ) const
 {
-    kDebug()<<k_funcinfo<<name<<endl;
+    //kDebug()<<k_funcinfo<<name<<endl;
     foreach ( ScheduleManager *sm, m_managers ) {
         if ( sm->name() == name )
             return sm;
@@ -1219,20 +1219,20 @@ ScheduleManager *Project::findScheduleManager( const QString name ) const
 
 ScheduleManager *Project::createScheduleManager( const QString name )
 {
-    kDebug()<<k_funcinfo<<name<<endl;
+    //kDebug()<<k_funcinfo<<name<<endl;
     ScheduleManager *sm = new ScheduleManager( *this, name );
     return sm;
 }
 
 ScheduleManager *Project::createScheduleManager()
 {
-    kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     return createScheduleManager( uniqueScheduleName() );
 }
 
 MainSchedule *Project::createSchedule( const QString& name, Schedule::Type type )
 {
-    kDebug()<<k_funcinfo<<"No of schedules: "<<m_schedules.count()<<endl;
+    //kDebug()<<k_funcinfo<<"No of schedules: "<<m_schedules.count()<<endl;
     MainSchedule *sch = new MainSchedule();
     sch->setName( name );
     sch->setType( type );
@@ -1246,7 +1246,7 @@ void Project::addMainSchedule( MainSchedule *sch )
         return;
     }
     emit scheduleToBeAdded( sch );
-    kDebug()<<k_funcinfo<<"No of schedules: "<<m_schedules.count()<<endl;
+    //kDebug()<<k_funcinfo<<"No of schedules: "<<m_schedules.count()<<endl;
     long i = 1;
     while ( m_schedules.contains( i ) ) {
         ++i;
@@ -1259,13 +1259,13 @@ void Project::addMainSchedule( MainSchedule *sch )
 
 bool Project::removeCalendarId( const QString &id )
 {
-    kDebug() << k_funcinfo << "id=" << id << endl;
+    //kDebug() << k_funcinfo << "id=" << id << endl;
     return calendarIdDict.remove( id );
 }
 
 void Project::insertCalendarId( const QString &id, Calendar *calendar )
 {
-    kDebug() << k_funcinfo << "id=" << id << ": " << calendar->name() << endl;
+    //kDebug() << k_funcinfo << "id=" << id << ": " << calendar->name() << endl;
     calendarIdDict.insert( id, calendar );
 }
 

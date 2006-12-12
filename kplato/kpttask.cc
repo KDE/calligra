@@ -761,6 +761,12 @@ DateTime Task::calculateForward(int use) {
     }
     
     //kDebug()<<"Earlyfinish: "<<cs->earliestStart<<"+"<<m_durationForward.toString()<<"="<<(cs->earliestStart+m_durationForward)<<" "<<m_name<<" calculateForward()"<<endl;
+    if ( cs->reserveResources() && m_requests ) {
+        cs->setCalculationMode( Schedule::CalculateForward );
+        cs->startTime = cs->earliestStart;
+        cs->endTime = cs->earliestStart + m_durationForward;
+        m_requests->makeAppointments(cs);
+    }
     m_visitedForward = true;
     return cs->earliestStart + m_durationForward;
 }
@@ -886,6 +892,12 @@ DateTime Task::calculateBackward(int use) {
         m_durationBackward = Duration::zeroDuration;
     }
     //kDebug()<<"Latestart: "<<cs->latestFinish<<"-"<<m_durationBackward.toString()<<"="<<(cs->latestFinish-m_durationBackward).toString()<<" "<<m_name<<" calculateBackward()"<<endl;
+    if ( cs->reserveResources() && m_requests ) {
+        cs->setCalculationMode( Schedule::CalculateBackward );
+        cs->startTime = cs->latestFinish - m_durationBackward;
+        cs->endTime = cs->latestFinish;
+        m_requests->makeAppointments(cs);
+    }
     m_visitedBackward = true;
     return cs->latestFinish - m_durationBackward;
 }
@@ -1084,6 +1096,8 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
         kWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
     //kDebug()<<cs->startTime.toString()<<" : "<<cs->endTime.toString()<<" "<<m_name<<" scheduleForward()"<<endl;
+    cs->setCalculationMode( Schedule::Scheduling );
+    m_requests->makeAppointments(cs);
     m_visitedForward = true;
     return cs->endTime;
 }
@@ -1279,6 +1293,8 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
         kWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
     //kDebug()<<k_funcinfo<<m_name<<": "<<cs->startTime.toString()<<" : "<<cs->endTime.toString()<<endl;
+    cs->setCalculationMode( Schedule::Scheduling );
+    m_requests->makeAppointments(cs);
     m_visitedBackward = true;
     return cs->startTime;
 }

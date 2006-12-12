@@ -77,8 +77,8 @@ public:
     bool isValid() const;
     AppointmentInterval firstInterval(const AppointmentInterval &interval, const DateTime &from) const;
 
-    void inSort(AppointmentInterval *a);
-
+    //void inSort(AppointmentInterval *a);
+    //bool operator<( AppointmentInterval &interval ) const;
 private:
     DateTime m_start;
     DateTime m_end;
@@ -91,28 +91,9 @@ private:
  * The intervals do not overlap, an interval does not start before the
  * previous interval ends.
  */
-class AppointmentIntervalList : public QList<AppointmentInterval*> {
+class AppointmentIntervalList : public QMap<QString, AppointmentInterval*> {
 public:
-    static bool compareItems(AppointmentInterval &i1, AppointmentInterval &i2) {
-        if (i1.startTime() < i2.startTime()) {
-            return true;
-        }
-        if (i1.startTime() > i2.startTime()) {
-            return false;
-        }
-        if (i1.endTime() < i2.endTime()) {
-            return true;
-        }
-        if (i1.endTime() > i2.endTime()) {
-            return false;
-        }
-        return true;
-    }
-    
-    void inSort(AppointmentInterval *a) {
-        append(a);
-        qSort(*this);
-    }
+    void inSort(AppointmentInterval *a);
 };
 typedef QListIterator<AppointmentInterval*> AppointmentIntervalListIterator;
 
@@ -219,10 +200,13 @@ public:
     
     void addActualEffort(QDate date, Duration effort, bool overtime=false);
     
+    void setCalculationMode( int mode ) { m_calculationMode = mode; }
+    int calculationMode() const { return m_calculationMode; }
+    
 private:
     Schedule *m_node;
     Schedule *m_resource;
-    
+    int m_calculationMode; // Type of appointment
     Duration m_repeatInterval;
     int m_repeatCount;
     QList<Duration*> m_extraRepeats;

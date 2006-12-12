@@ -551,12 +551,14 @@ bool Resource::addAppointment(Appointment *appointment, Schedule &main) {
     return s->add(appointment);
 }
 
+// called from makeAppointment
 void Resource::addAppointment(Schedule *node, DateTime &start, DateTime &end, double load) {
     //kDebug()<<k_funcinfo<<endl;
     Schedule *s = findSchedule(node->id());
     if (s == 0) {
         s = createSchedule(node->parent());
     }
+    s->setCalculationMode( node->calculationMode() );
     s->addAppointment(node, start, end, load);
 }
 
@@ -597,6 +599,7 @@ ResourceSchedule *Resource::createSchedule(Schedule *parent) {
 }
 
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end) {
+    //kDebug()<<k_funcinfo<<node->calculationMode()<<" "<<from<<" - "<<end<<endl;
     if (!from.isValid() || !end.isValid()) {
         kWarning()<<k_funcinfo<<"Invalid time"<<endl;
         return;
@@ -645,6 +648,9 @@ void Resource::makeAppointment(Schedule *node) {
         kWarning()<<k_funcinfo<<m_name<<": endTime invalid"<<endl;
         return;
     }
+    node->resourceNotAvailable = false;
+    node->workStartTime = DateTime();
+    node->workEndTime = DateTime();
     Calendar *cal = calendar();
     if (m_type == Type_Material) {
         DateTime from = availableAfter(node->startTime, node->endTime);

@@ -153,6 +153,11 @@ AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval
     return a;
 }
 
+void AppointmentIntervalList::inSort(AppointmentInterval *a)
+{
+    insert( a->startTime().toString(Qt::ISODate) + a->endTime().toString(Qt::ISODate), a );
+}
+
 //////
 
 Appointment::UsedEffortItem::UsedEffortItem(const QDate& date, Duration effort, bool overtime) {
@@ -296,6 +301,7 @@ Appointment::Appointment()
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_resource=0;
     m_node=0;
+    m_calculationMode = Schedule::Scheduling;
     m_repeatInterval=Duration();
     m_repeatCount=0;
 }
@@ -306,6 +312,7 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dat
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_node = node;
     m_resource = resource;
+    m_calculationMode = Schedule::Scheduling;
     m_repeatInterval = Duration();
     m_repeatCount = 0;
 
@@ -318,6 +325,7 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dur
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_node = node;
     m_resource = resource;
+    m_calculationMode = Schedule::Scheduling;
     m_repeatInterval = Duration();
     m_repeatCount = 0;
 
@@ -326,14 +334,16 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dur
 }
 
 Appointment::~Appointment() {
-    kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     detach();
-    while ( ! m_intervals.isEmpty() )
-        delete m_intervals.takeFirst();
+    foreach ( AppointmentInterval *i,  m_intervals.values() ) {
+        delete i;
+    }
+    m_intervals.clear();
 }
 
 void Appointment::addInterval(AppointmentInterval *a) {
-    //kDebug()<<k_funcinfo<<m_resource->name()<<" to "<<m_node->name()<<endl;
+    //if ( m_resource && m_resource->resource() && m_node && m_node->node() ) kDebug()<<k_funcinfo<<m_resource->resource()->name()<<" to "<<m_node->node()->name()<<endl;
     m_intervals.inSort(a);
 }
 void Appointment::addInterval(const DateTime &start, const DateTime &end, double load) {
@@ -346,9 +356,7 @@ void Appointment::addInterval(const DateTime &start, const Duration &duration, d
 
 double Appointment::maxLoad() const {
     double v = 0.0;
-    QListIterator<AppointmentInterval*> it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
         if (v < i->load())
             v = i->load();
     }
@@ -357,9 +365,7 @@ double Appointment::maxLoad() const {
 
 DateTime Appointment::startTime() const {
     DateTime t;
-    QListIterator<AppointmentInterval*> it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
         if (!t.isValid() || t > i->startTime())
             t = i->startTime();
     }
@@ -368,9 +374,7 @@ DateTime Appointment::startTime() const {
 
 DateTime Appointment::endTime() const {
     DateTime t;
-    QListIterator<AppointmentInterval*> it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
         if (!t.isValid() || t < i->endTime())
             t = i->endTime();
     }
@@ -388,7 +392,7 @@ bool Appointment::isBusy(const DateTime &/*start*/, const DateTime &/*end*/) {
 }
 
 bool Appointment::loadXML(QDomElement &element, Project &project, Schedule &sch) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<project.name()<<endl;
     Node *node = project.findNode(element.attribute("task-id"));
     if (node == 0) {
         kError()<<k_funcinfo<<"The referenced task does not exists: "<<element.attribute("task-id")<<endl;
@@ -449,9 +453,7 @@ void Appointment::saveXML(QDomElement &element) const {
 
     me.setAttribute("resource-id", m_resource->resource()->id());
     me.setAttribute("task-id", m_node->node()->id());
-    QListIterator<AppointmentInterval*> it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
         i->saveXML(me);
     }
     m_actualEffort.save(me);
@@ -460,9 +462,7 @@ void Appointment::saveXML(QDomElement &element) const {
 // Returns the total actual effort for this appointment
 Duration Appointment::plannedEffort() const {
     Duration d;
-    QListIterator<AppointmentInterval*> it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
         d += i->effort();
     }
     return d;
@@ -473,9 +473,7 @@ Duration Appointment::plannedEffort(const QDate &date) const {
     Duration d;
     DateTime s(date);
     DateTime e(date.addDays(1));
-    QListIterator<AppointmentInterval*> it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
         d += i->effort(s, e);
     }
     return d;
@@ -485,9 +483,7 @@ Duration Appointment::plannedEffort(const QDate &date) const {
 Duration Appointment::plannedEffortTo(const QDate& date) const {
     Duration d;
     DateTime e(date.addDays(1));
-    QListIterator<AppointmentInterval*> it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
         d += i->effort(e, true);
     }
     return d;
@@ -502,9 +498,7 @@ EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) co
     DateTime dt(start);
     DateTime ndt(dt.addDays(1));
     double rate = m_resource->normalRatePrHour();
-    AppointmentIntervalListIterator it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
         DateTime st = i->startTime();
         DateTime e = i->endTime();
         if (end < st.date())
@@ -589,14 +583,15 @@ double Appointment::actualCostTo(const QDate &date) {
 }
 
 void Appointment::addActualEffort(QDate date, Duration effort, bool overtime) {
+    //kDebug()<<k_funcinfo<<endl;
     m_actualEffort.inSort(date, effort, overtime);
 }
 
 bool Appointment::attach() {
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     if (m_resource && m_node) {
-        m_resource->add(this);
-        m_node->add(this);
+        m_resource->attatch(this);
+        m_node->attatch(this);
         return true;
     }
     kWarning()<<k_funcinfo<<"Failed: "<<(m_resource ? "" : "resource=0 ")
@@ -605,21 +600,19 @@ bool Appointment::attach() {
 }
 
 void Appointment::detach() {
-    kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<") "<<m_calculationMode<<": "<<m_resource<<", "<<m_node<<endl;
     if (m_resource) {
-        m_resource->takeAppointment(this); // takes from node also
+        m_resource->takeAppointment(this, m_calculationMode); // takes from node also
     }
     if (m_node) {
-        m_node->takeAppointment(this); // to make it robust
+        m_node->takeAppointment(this, m_calculationMode); // to make it robust
     }
 }
 
 // Returns the effort from start to end
 Duration Appointment::effort(const DateTime &start, const DateTime &end) const {
     Duration d;
-    QListIterator<AppointmentInterval*> it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
         d += i->effort(start, end);
     }
     return d;
@@ -627,9 +620,7 @@ Duration Appointment::effort(const DateTime &start, const DateTime &end) const {
 // Returns the effort from start for the duration
 Duration Appointment::effort(const DateTime &start, const Duration &duration) const {
     Duration d;
-    QListIterator<AppointmentInterval*> it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
         d += i->effort(start, start+duration);
     }
     return d;
@@ -637,26 +628,23 @@ Duration Appointment::effort(const DateTime &start, const Duration &duration) co
 // Returns the effort upto time / from time
 Duration Appointment::effortFrom(const DateTime &time) const {
     Duration d;
-    QListIterator<AppointmentInterval*> it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
         d += i->effort(time, false);
     }
     return d;
 }
 
 Appointment &Appointment::operator=(const Appointment &app) {
-    m_resource = app.resource();
-    m_node = app.node();
+    //m_resource = app.resource(); // NOTE: Don't copy, the new appointment
+    //m_node = app.node();         // NOTE: doesn't belong to anyone yet.
     m_repeatInterval = app.repeatInterval();
     m_repeatCount = app.repeatCount();
 
     m_intervals.clear();
-    QListIterator<AppointmentInterval*> it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
         addInterval(new AppointmentInterval(*i));
     }
+    //kDebug()<<k_funcinfo<<this<<": "<<m_resource<<", "<<m_node<<endl;
     return *this;
 }
 
@@ -667,9 +655,9 @@ Appointment &Appointment::operator+=(const Appointment &app) {
 
 Appointment Appointment::operator+(const Appointment &app) {
     Appointment a;
-    AppointmentIntervalList lst1 = m_intervals;
+    QList<AppointmentInterval*> lst1 = m_intervals.values();
     AppointmentInterval *i1;
-    AppointmentIntervalList lst2 = app.intervals();
+    QList<AppointmentInterval*> lst2 = app.intervals().values();
     AppointmentInterval *i2;
     int index1 = 0, index2 = 0;
     DateTime from;
@@ -710,12 +698,14 @@ Appointment Appointment::operator+(const Appointment &app) {
             ++index2;
         }
     }
+    //kDebug()<<k_funcinfo<<this<<": "<<m_resource<<", "<<m_node<<endl;
     return a;
 }
 
 #ifndef NDEBUG
 void Appointment::printDebug(QString indent)
 {
+    //kDebug()<<indent<<"  + Appointment: "<<this<<endl;
     bool err = false;
     if (m_node == 0) {
         kDebug()<<indent<<"   No node schedule"<<endl;
@@ -733,12 +723,10 @@ void Appointment::printDebug(QString indent)
     }
     if (err)
         return;
-    kDebug()<<indent<<"  + Appointment to schedule: "<<m_node->name()<<" ("<<m_node->type()<<")"<<" resource: "<<m_resource->resource()->name()<<endl;
-    indent += "  ! ";
-    QListIterator<AppointmentInterval*> it = m_intervals;
-    while (it.hasNext()) {
-        AppointmentInterval *i = it.next();
-        kDebug()<<indent<<i->startTime()<<" - "<<i->endTime()<<" load="<<i->load()<<endl;
+    kDebug()<<indent<<"  + Appointment to schedule: "<<m_node->name()<<" ("<<m_node->type()<<"):"<<" task="<<m_node->node()->name()<<", resource="<<m_resource->resource()->name()<<endl;
+    indent += "  + ";
+    foreach (AppointmentInterval *i, m_intervals.values() ) {
+        kDebug()<<indent<<"----"<<i->startTime()<<" - "<<i->endTime()<<" load="<<i->load()<<endl;
     }
 }
 #endif

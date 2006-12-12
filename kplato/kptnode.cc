@@ -351,7 +351,7 @@ Duration Node::duration(const DateTime &time, int use, bool backward) {
         return Duration::zeroDuration;
         kError()<<k_funcinfo<<"No current schedule"<<endl;
     }
-    kDebug()<<k_funcinfo<<m_name<<": Use="<<use<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<": Use="<<use<<endl;
     return calcDuration(time, m_effort->effort(use, m_currentSchedule->usePert()), backward);
 }
 
@@ -753,19 +753,20 @@ QList<Appointment*> Node::appointments( long id ) {
 //         return m_currentSchedule->findAppointment(resource);
 //     return 0;
 // }
-bool Node::addAppointment(Appointment *appointment) {
-    if ( m_currentSchedule )
-        return m_currentSchedule->add(appointment);
-    return false;
-}
-
+// bool Node::addAppointment(Appointment *appointment) {
+//     if ( m_currentSchedule )
+//         return m_currentSchedule->add(appointment);
+//     return false;
+// }
+// 
+// called from resource side when resource adds appointment
 bool Node::addAppointment(Appointment *appointment, Schedule &main) {
-    //kDebug()<<k_funcinfo<<this<<endl;
     Schedule *s = findSchedule(main.id());
     if (s == 0) {
         s = createSchedule(&main);
     }
     appointment->setNode(s);
+    //kDebug()<<k_funcinfo<<this<<": "<<appointment<<", "<<s<<", "<<s->id()<<", "<<main.id()<<endl;
     return s->add(appointment);
 }
 
@@ -774,6 +775,7 @@ void Node::addAppointment(ResourceSchedule *resource, DateTime &start, DateTime 
     if (node == 0) {
         node = createSchedule(resource->parent());
     }
+    node->setCalculationMode( resource->calculationMode() );
     node->addAppointment(resource, start, end, load);
 }
 
@@ -1103,8 +1105,7 @@ void Node::printDebug(bool children, const QByteArray& _indent) {
     } else {
         kDebug()<<indent<<"  Current schedule: None"<<endl;
     }
-    QHash<long, Schedule*> hash;
-    foreach (Schedule *sch, hash) {
+    foreach (Schedule *sch, m_schedules.values()) {
         sch->printDebug(indent+"  ");
     }
     kDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;

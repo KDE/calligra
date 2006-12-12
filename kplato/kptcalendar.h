@@ -38,6 +38,7 @@ namespace KPlato
 
 class DateTime;
 class Project;
+class Schedule;
 
 typedef QPair<QTime, QTime> TimeInterval;
 typedef QPair<DateTime, DateTime> DateTimeInterval;
@@ -312,12 +313,12 @@ public:
      * Find the first available time after time before limit.
      * Return invalid datetime if not available.
      */
-    DateTime firstAvailableAfter(const DateTime &time, const DateTime &limit);
+    DateTime firstAvailableAfter(const DateTime &time, const DateTime &limit, Schedule *sch = 0);
     /** 
      * Find the first available time backwards from time. Search until limit.
      * Return invalid datetime if not available.
      */
-    DateTime firstAvailableBefore(const DateTime &time, const DateTime &limit);
+    DateTime firstAvailableBefore(const DateTime &time, const DateTime &limit, Schedule *sch = 0);
 
     Calendar *findCalendar() const { return findCalendar(m_id); }
     Calendar *findCalendar(const QString &id) const;
