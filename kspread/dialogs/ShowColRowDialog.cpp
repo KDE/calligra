@@ -25,6 +25,7 @@
 #include <QVBoxLayout>
 //Added by qt3to4:
 #include <Q3ListBox>
+#include <q3tl.h>
 
 // KDE
 #include <klocale.h>
