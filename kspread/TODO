@@ -148,7 +148,10 @@ Things not in bugzilla
     - Launch the garbage collection in a separate thread.		----
 
   + Speed up selection.						      1 ----
-    (probably improved with Format Storage?)
+    Provide a CellDamage::Selection. On selection changes the
+    changed cell range is already calculated. Now, use this
+    changed cell region, convert it into view coordinates and set
+    QPainter's clip region appropriately.
 
   + Non-continguous selection					      2 DONE
     Convert the operations to work on non-contiguous selections.
