@@ -59,8 +59,6 @@ class QScrollBar;
 class QTimer;
 class QWheelEvent;
 
-class KoPoint;
-
 namespace KSpread
 {
 
@@ -344,7 +342,7 @@ public:
 
     //---- stuff needed for resizing ----
     /// resize the m_resizeObject
-    void resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio );
+    void resizeObject( ModifyType _modType, const QPointF & point, bool keepRatio );
 
     /// create KPrResizeCmd
     void finishResizeObject( const QString &name, bool layout = true );

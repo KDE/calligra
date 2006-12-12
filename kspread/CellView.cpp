@@ -44,8 +44,6 @@
 #include <QPainter>
 #include <QRectF>
 
-// KOffice
-#include <KoPoint.h>
 
 // KSpread
 #include "Canvas.h"
@@ -223,7 +221,7 @@ QString CellView::testAnchor( const Cell* cell, double x, double y ) const
 //              coordinates.
 //
 void CellView::paintCell( const QRectF& rect, QPainter& painter,
-                          View* view, const KoPoint& coordinate,
+                          View* view, const QPointF& coordinate,
                           const QPoint& cellRef,
                           QLinkedList<QPoint> &mergedCellsPainted, Cell* cell )
 {
@@ -443,7 +441,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
                         y -= view->canvasWidget()->yOffset();
                     }
 
-                    KoPoint corner( x, y );
+                    QPointF corner( x, y );
                     painter.save();
 
                     // Get the effective pens for the borders.  These are
@@ -478,7 +476,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
 }
 
 void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
-                                 const KoPoint& paintCoordinate,
+                                 const QPointF& paintCoordinate,
                                  const QPoint& cellCoordinate, const QRect& cellRegion,
                                  QLinkedList<QPoint> &mergedCellsPainted, Cell* cell, SheetView* sheetView )
 {
@@ -747,7 +745,7 @@ void CellView::paintObscuredCells(const QRectF& rect, QPainter& painter,
                 uint  column = cellRef.x() + x;
                 uint  row    = cellRef.y() + y;
 
-                KoPoint corner( xpos, ypos );
+                QPointF corner( xpos, ypos );
 #if 0
                 Cell* cell = this->cell->sheet()->cellAt( column, row );
 

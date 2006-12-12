@@ -22,8 +22,6 @@
 #include <QPen>
 #include <QPoint>
 
-#include <KoPoint.h>
-
 #include "Canvas.h"
 
 class QLabel;

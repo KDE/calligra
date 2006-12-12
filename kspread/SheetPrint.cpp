@@ -260,7 +260,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
     // and which cells to print on which page.
     QLinkedList<QRect> page_list;  //contains the cols and rows of a page
     QLinkedList<QRectF> page_frame_list;  //contains the coordinate range of a page
-    QLinkedList<KoPoint> page_frame_list_offset;  //contains the offset of the not repeated area
+    QLinkedList<QPointF> page_frame_list_offset;  //contains the offset of the not repeated area
 
     QList<PrintNewPageEntry>::iterator itX;
     QList<PrintNewPageEntry>::iterator itY;
@@ -282,7 +282,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
                                                m_pSheet->rowFormat( page_range.bottom() )->dblHeight()- m_pSheet->dblRowPos( page_range.top() ) ) );
                 page_list.append( page_range );
                 page_frame_list.append( view );
-                page_frame_list_offset.append( KoPoint( (*itX).offset(), (*itY).offset() ) );
+                page_frame_list_offset.append( QPointF( (*itX).offset(), (*itY).offset() ) );
             }
         }
     }
@@ -334,7 +334,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
         //
         QLinkedList<QRect>::Iterator it = page_list.begin();
         QLinkedList<QRectF>::Iterator fit = page_frame_list.begin();
-        QLinkedList<KoPoint>::Iterator fito = page_frame_list_offset.begin();
+        QLinkedList<QPointF>::Iterator fito = page_frame_list_offset.begin();
 
         for( ; it != page_list.end(); ++it, ++fit, ++fito, ++pageNo )
         {
@@ -372,7 +372,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
 }
 
 void SheetPrint::printPage( QPainter &_painter, const QRect& page_range,
-                                   const QRectF& view, const KoPoint _childOffset )
+                                   const QRectF& view, const QPointF _childOffset )
 {
       kDebug(36001) << "Rect x=" << page_range.left() << " y=" << page_range.top() << ", r="
       << page_range.right() << " b="  << page_range.bottom() << "  offsetx: "<< _childOffset.x()
@@ -482,7 +482,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
             CellView tmpCellView( m_pSheet, x, y );
             CellView* cellView = &tmpCellView;
             cellView->paintCell( paintRect, painter, 0,
-                                KoPoint( effXPos, ypos ), QPoint( x, y ),
+                                QPointF( effXPos, ypos ), QPoint( x, y ),
                                 mergedCellsPainted );
 
             xpos += col_lay->dblWidth();
@@ -505,7 +505,7 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
                              ? view.width() - xpos - col_lay->dblWidth() : xpos;
             CellView tmpCellView( m_pSheet, x, y );
             CellView* cellView = &tmpCellView;
-            cellView->paintCellBorders( paintRect, painter, 0, KoPoint( effXPos, ypos ),
+            cellView->paintCellBorders( paintRect, painter, 0, QPointF( effXPos, ypos ),
                                         QPoint( x, y ), printRect,
                                         mergedCellsPainted );
 

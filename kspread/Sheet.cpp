@@ -5085,14 +5085,14 @@ bool Sheet::insertChild( const QRectF& rect, KoDocumentEntry& documentEntry,
     return true;
 }
 
-bool Sheet::insertPicture( const KoPoint& point , const KUrl& url )
+bool Sheet::insertPicture( const QPointF& point , const KUrl& url )
 {
     KoPicture picture = doc()->pictureCollection()->downloadPicture( url , 0 );
 
     return insertPicture(point,picture);
 }
 
-bool Sheet::insertPicture( const KoPoint& point ,  KoPicture& picture )
+bool Sheet::insertPicture( const QPointF& point ,  KoPicture& picture )
 {
 
     if (picture.isNull())
@@ -5131,7 +5131,7 @@ bool Sheet::insertPicture( const KoPoint& point ,  KoPicture& picture )
     return true;
 }
 
-bool Sheet::insertPicture( const KoPoint& point, const QPixmap& pixmap  )
+bool Sheet::insertPicture( const QPointF& point, const QPixmap& pixmap  )
 {
   QByteArray data;
   QBuffer buffer( &data );

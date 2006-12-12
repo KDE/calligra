@@ -40,7 +40,6 @@
 //#include "Format.h"
 #include "Style.h"
 #include "Global.h"
-#include <KoPoint.h>
 //#include "Object.h"
 
 class QWidget;
@@ -485,7 +484,7 @@ public:
      * @param file The URL of the file to insert.
      * @param point The the top-left point in the sheet where the picture should be inserted.
      */
-    bool insertPicture( const KoPoint& point , const KUrl& file );
+    bool insertPicture( const QPointF& point , const KUrl& file );
 
     /**
      * \ingroup Embedding
@@ -494,7 +493,7 @@ public:
      * @param point The top-left position for the new picture object in the sheet
      * @param pixmap The source pixmap for the new picture
      */
-    bool insertPicture( const KoPoint& point, const QPixmap& pixmap );
+    bool insertPicture( const QPointF& point, const QPixmap& pixmap );
 
     /**
      * \ingroup Embedding
@@ -1570,7 +1569,7 @@ private:
      * Inserts a picture into the sheet and the given position.  The picture should be added to the
      * document's picture collection before calling this method.
      */
-    bool insertPicture( const KoPoint& point, KoPicture& picture );
+    bool insertPicture( const QPointF& point, KoPicture& picture );
 
     /**
      * \ingroup Embedding

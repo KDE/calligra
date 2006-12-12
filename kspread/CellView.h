@@ -38,9 +38,6 @@
 #include <QLinkedList>
 #include <QSharedDataPointer>
 
-// KOffice
-#include <KoPoint.h>
-
 // KSpread
 #include "Global.h"
 #include "Style.h"
@@ -98,7 +95,7 @@ public:
    * \param cell the Cell (should be removed!)
    */
   void paintCell( const QRectF& paintRegion, QPainter& painter,
-                  View * view, const KoPoint& paintCoordinate,
+                  View * view, const QPointF& paintCoordinate,
                   const QPoint & cellCoordinate,
                   QLinkedList<QPoint> &mergedCellsPainted, Cell* cell );
 
@@ -115,7 +112,7 @@ public:
    * \param sheetView the SheetView (should be removed!)
    */
   void paintCellBorders( const QRectF& paintRegion, QPainter& painter,
-                         const KoPoint& paintCoordinate,
+                         const QPointF& paintCoordinate,
                          const QPoint& cellCoordinate, const QRect& cellRange,
                          QLinkedList<QPoint> &mergedCellsPainted,
                          Cell* cell, SheetView* sheetView );

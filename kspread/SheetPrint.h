@@ -451,11 +451,11 @@ private:
      * @param view QRectF defines the sourrounding rectangle which is
      *             the printing frame.
      *
-     * @param _childOffset KoPoint used to calculate the correct position of
+     * @param _childOffset QPointF used to calculate the correct position of
      *                     children, if there are repeated columns/rows.
      */
     void printPage( QPainter &_painter, const QRect& page_range,
-                    const QRectF& view, const KoPoint _childOffset );
+                    const QRectF& view, const QPointF _childOffset );
 
     /**
      * Prints a rect of cells defined by printRect at the position topLeft.

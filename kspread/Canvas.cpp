@@ -3082,7 +3082,7 @@ void Canvas::moveObjectsByMouse( QPointF &pos, bool keepXorYunchanged )
 //   movedRect.moveBy( m_moveSnapDiff.x(), m_moveSnapDiff.y() );
   if ( keepXorYunchanged )
   {
-    KoPoint diff( d->m_moveStartPosMouse - movedRect.topLeft() );
+    QPointF diff( d->m_moveStartPosMouse - movedRect.topLeft() );
     if ( fabs( diff.x() ) > fabs( diff.y() ) )
     {
 //       m_moveSnapDiff.setY( /*m_moveSnapDiff.y() + */m_moveStartPosMouse.y() - movedRect.y() );
@@ -3105,7 +3105,7 @@ void Canvas::moveObjectsByMouse( QPointF &pos, bool keepXorYunchanged )
 }
 
 
-void Canvas::resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio )
+void Canvas::resizeObject( ModifyType _modType, const QPointF & point, bool keepRatio )
 {
     EmbeddedObject *obj = d->m_resizeObject;
 
@@ -3244,7 +3244,7 @@ void Canvas::resizeObject( ModifyType _modType, const KoPoint & point, bool keep
 //     if ( doc()->showGuideLines() && !m_disableSnapping )
 //     {
 //       QRectF rect( obj->getRealRect() );
-//       KoPoint sp( rect.topLeft() );
+//       QPointF sp( rect.topLeft() );
 //       if ( right )
 //       {
 //         sp.setX( rect.right() );
