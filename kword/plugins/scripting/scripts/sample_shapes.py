@@ -2,23 +2,46 @@
 
 import KWord
 
-newframeset = KWord.addTextFrameSet("myframeset")
+frameset = KWord.addTextFrameSet("myframeset")
 
-newframe = newframeset.addTextFrame()
-newframe.setBackgroundColor("#ff0000")
-newframe.resize(200,200)
+######################################################
+# add text frame/shape
 
-#fr = newframeset.addFrame("TextShapeID")
-newdoc = newframeset.textDocument()
+frame = frameset.addTextFrame()
+frame.setBackgroundColor("#ff0000")
+frame.resize(200,100)
 
-newdoc.setHtml("<h1>New Text Frame</h1>")
+#fr = frameset.addFrame("TextShapeID")
+doc = frameset.textDocument()
+
+doc.setHtml("<h1> Text Frame</h1>")
 #fs.addFrame()
 
-print "shapeId=%s" % newframe.shapeId()
-print "isVisible=%s" % newframe.isVisible()
-print "width=%s" % newframe.width()
-print "height=%s" % newframe.height()
-print "positionX=%s" % newframe.positionX()
-print "positionY=%s" % newframe.positionY()
+cursor = doc.rootFrame().lastCursorPosition()
+#cursor = doc.lastCursor()
+cursor.insertBlock()
+cursor.insertHtml("<p>AAAAAAAAAAAAAA</p>")
 
-newframe.repaint()
+print "shapeId=%s" % frame.shapeId()
+print "isVisible=%s" % frame.isVisible()
+print "width=%s" % frame.width()
+print "height=%s" % frame.height()
+print "positionX=%s" % frame.positionX()
+print "positionY=%s" % frame.positionY()
+
+frame.repaint()
+
+######################################################
+# add text frame/shape
+
+starframe = KWord.addFrame("mystar","KoStarShape")
+if starframe != None:
+    starframe.setPosition(200,50)
+
+pathframe = KWord.addFrame("mypath","KoPathShape")
+if pathframe != None:
+    pathframe.setPosition(200,200)
+
+polyframe = KWord.addFrame("mypath","KoRegularPolygonShape")
+if polyframe != None:
+    polyframe.setPosition(200,350)

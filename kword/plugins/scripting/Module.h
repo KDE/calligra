@@ -87,8 +87,8 @@ namespace Scripting {
 
             /** Add and return a new \a FrameSet object for text handled with \a TextDocument . */
             QObject* addTextFrameSet(const QString& name);
-            /** Add and return a new \a FrameSet object. */
-            //QObject* addFrameSet(const QString& name, const QString& shapeId);
+            /** Add and return a new \a Frame object. */
+            QObject* addFrame(const QString& name, const QString& shapeId);
 
 #if 0
             QObject* addFrameSet(const QString& shapeId) {
