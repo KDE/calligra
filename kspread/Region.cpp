@@ -291,12 +291,12 @@ Region::Element* Region::add(const QRect& range, Sheet* sheet)
   return insert(d->cells.count(), normalizedRange, sheet, false);
 }
 
-Region::Element* Region::add(const Region& region)
+Region::Element* Region::add(const Region& region, Sheet* sheet)
 {
   ConstIterator endOfList(region.d->cells.constEnd());
   for (ConstIterator it = region.d->cells.constBegin(); it != endOfList; ++it)
   {
-    add((*it)->rect(), (*it)->sheet());
+    add((*it)->rect(), (*it)->sheet() ? (*it)->sheet() : sheet);
   }
   return d->cells.isEmpty() ? 0 : d->cells.last();
 }

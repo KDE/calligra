@@ -7117,19 +7117,19 @@ void View::handleDamages( const QList<Damage*>& damages )
             }
             if ( cellDamage->changes() & CellDamage::Formula )
             {
-                formulaChangedRegion.add( region );
+                formulaChangedRegion.add( region, damagedSheet );
             }
             if ( cellDamage->changes() & CellDamage::Layout )
             {
-                layoutChangedRegion.add( region );
+                layoutChangedRegion.add( region, damagedSheet );
             }
             if ( cellDamage->changes() & CellDamage::TextFormat )
             {
-                textFormatChagedRegion.add( region );
+                textFormatChagedRegion.add( region, damagedSheet );
             }
             if ( cellDamage->changes() & CellDamage::Value )
             {
-                valueChangedRegion.add( region );
+                valueChangedRegion.add( region, damagedSheet );
             }
         }
 

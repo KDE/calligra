@@ -231,9 +231,10 @@ public:
 
   /**
    * Adds the region @p region to this region.
-   * @param region the range's location
+   * @param region the region to be added
+   * @param sheet the fallback sheet used, if an element has no sheet set
    */
-  Element* add(const Region& region);
+  Element* add(const Region& region, Sheet* sheet = 0);
 
   /* TODO Stefan #3: Improve! */
   /**
