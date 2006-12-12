@@ -347,10 +347,11 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	setMainWidget(main);
 
 	Q3GridLayout *glyr = new Q3GridLayout(main, 2, 3, KDialog::marginHint(), KDialog::spacingHint());
+	glyr->setRowStretch(1, 1);
 
 	// 1st column: action types
 	d->actionCategoriesListView = new ActionCategoriesListView(main);
-	d->actionCategoriesListView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+	d->actionCategoriesListView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 	glyr->addWidget(d->actionCategoriesListView, 1, 0);
 	connect( d->actionCategoriesListView, SIGNAL(selectionChanged(Q3ListViewItem*)), 
 		this, SLOT(slotActionCategorySelected(Q3ListViewItem*)));
@@ -381,11 +382,11 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 		this, SLOT(slotActionToExecuteItemExecuted(Q3ListViewItem*)));
 	connect(d->actionToExecuteListView, SIGNAL(selectionChanged(Q3ListViewItem*)),
 		this, SLOT(slotActionToExecuteItemSelected(Q3ListViewItem*)));
-
-	d->actionToExecuteListView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+	d->actionToExecuteListView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 	glyr->addWidget(d->actionToExecuteListView, 1, 2);
 
 	d->actionToExecuteLbl = new QLabel(d->actionToExecuteListView, i18n("Action to execute:").arg(actionWidgetName), main);
+	d->actionToExecuteLbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	d->actionToExecuteLbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::TextWordWrap);
 	glyr->addWidget(d->actionToExecuteLbl, 0, 2, Qt::AlignTop|Qt::AlignLeft);
 
