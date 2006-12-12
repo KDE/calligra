@@ -138,6 +138,52 @@ QObject* Module::frameSet(int frameSetNr)
     return new FrameSet(this, frameset);
 }
 
+QObject* Module::addTextFrameSet(const QString& name)
+{
+    KWord::TextFrameSetType type = KWord::OtherTextFrameSet;
+    /*
+    type = KWord::MainTextFrameSet;
+    type = KWord::FirstPageHeaderTextFrameSet;
+    type = KWord::FirstPageHeaderTextFrameSet;
+    type = KWord::EvenPagesHeaderTextFrameSet;
+    type = KWord::OddPagesHeaderTextFrameSet;
+    type = KWord::FirstPageFooterTextFrameSet;
+    type = KWord::EvenPagesFooterTextFrameSet;
+    type = KWord::OddPagesFooterTextFrameSet;
+    type = KWord::FootNoteTextFrameSet;
+    type = KWord::OtherTextFrameSet;
+    */
+
+    KWTextFrameSet* frameset = new KWTextFrameSet(type);
+    frameset->setAllowLayout(false);
+    frameset->setName( name );
+
+kDebug()<<"Scripting::Module::addTextFrameSet() ------------- 1"<<endl;
+    doc()->addFrameSet(frameset); //FIXME this crashes :-/
+kDebug()<<"Scripting::Module::addTextFrameSet() ------------- 2"<<endl;
+    return new FrameSet(this, frameset);
+}
+
+#if 0
+QObject* Module::addFrameSet(const QString& name, const QString& shapeId)
+{
+    KoShapeFactory *factory = KoShapeRegistry::instance()->get(shapeId);
+    if( ! factory ) {
+        kDebug() << "Scripting::Module::addFrameSet() invalid shapeId: " << shapeId << endl;
+        return 0;
+    }
+
+    KWFrameSet* frameset = new KWFrameSet();
+    frameset->setName( name );
+    doc()->addFrameSet(frameset);
+
+    KoShape* shape = factory->createDefaultShape();
+    new KWFrame(shape, frameset);
+
+    return new FrameSet(this, frameset);
+}
+#endif
+
 QObject* Module::standardPageLayout()
 {
     return new PageLayout(this, KoPageLayout::standardLayout());

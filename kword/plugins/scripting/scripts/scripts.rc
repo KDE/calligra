@@ -1,8 +1,14 @@
 <KrossScripting>
     <script
-            name="pytest"
-            text="Python Test Script"
-            comment="This is a simple python script to test things"
+            name="pysampletext"
+            text="Python Sample: Text"
+            comment="This python script demonstrates usage of the text engine"
             interpreter="python"
-            file="extensions/test.py" />
+            file="extensions/sample_text.py" />
+    <script
+            name="pysampleshapes"
+            text="Python Sample: Shapes"
+            comment="This python script demonstrates usage of shapes"
+            interpreter="python"
+            file="extensions/sample_shapes.py" />
 </KrossScripting>

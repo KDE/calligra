@@ -86,6 +86,20 @@ namespace Scripting {
             /** Set the position of the shape in pt. */
             void setPosition(double x, double y) { m_frame->shape()->setPosition(QPointF(x,y)); }
 
+            /** Return the background color of the shape. */
+            QString backgroundColor() {
+                return m_frame->shape()->background().color().name();
+            }
+            /** Set the background color of the shape. */
+            void setBackgroundColor(const QString& color) {
+                QBrush brush = m_frame->shape()->background();
+                QColor c(color);
+                if( c.isValid() ) {
+                    brush.setColor(c);
+                    m_frame->shape()->setBackground(brush);
+                }
+            }
+
         private:
             KWFrame* m_frame;
     };

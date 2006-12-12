@@ -23,11 +23,22 @@
 #include <QPointer>
 #include <QObject>
 #include <QTextDocument>
+#include <kdebug.h>
 
 #include "TextDocument.h"
 #include "Frame.h"
 
+#include <KoShapeRegistry.h>
+#include <KoShapeFactory.h>
+
+#include <KoTextShape.h>
+#include <KoStyleManager.h>
+//#include <KoParagraphStyle.h>
+//#include <KoCharacterStyle.h>
+//#include <KoListStyle.h>
+
 #include <KWFrame.h>
+#include <KWTextFrame.h>
 #include <KWFrameSet.h>
 #include <KWTextFrameSet.h>
 
@@ -63,6 +74,41 @@ namespace Scripting {
 
             //void addFrame(KWFrame *frame);
             //void removeFrame(KWFrame *frame);
+
+            QObject* addTextFrame() {
+                KWTextFrameSet* frameset = dynamic_cast< KWTextFrameSet* >( (KWFrameSet*)m_frameset );
+                if( ! frameset ) {
+                    kDebug() << "Scripting::Module::addTextFrame() No KWTextFrameSet." << endl;
+                    return 0;
+                }
+
+                KoShapeFactory *factory = KoShapeRegistry::instance()->get(KoTextShape_SHAPEID);
+                if( ! factory ) {
+                    kDebug() << "Scripting::Module::addTextFrame() KoTextShape_SHAPEID shape missing." << endl;
+                    return 0;
+                }
+
+                KoShape *shape = factory->createDefaultShape();
+                Q_ASSERT(shape);
+                KWTextFrame* frame = new KWTextFrame(shape, frameset);
+                return new Frame(this, frame);
+            }
+
+#if 0
+            QObject* addFrame(const QString& shapeId) {
+                KoShapeFactory *factory = KoShapeRegistry::instance()->get(shapeId);
+                if( ! factory ) return 0;
+                KoShape *shape = factory->createDefaultShape();
+                KWFrame* f = 0;
+                KWTextFrameSet* textframeset = dynamic_cast<KWTextFrameSet*>( (KWFrameSet*)m_frameset );
+                if( textframeset )
+                    f = new KWTextFrame(shape, textframeset);
+                else
+                    f = new KWFrame(shape, m_frameset);
+                m_frameset->addFrame(f);
+                return new Frame(this, f);
+            }
+#endif
 
             /** Return the \a TextDocument object or NULL if this frameset does not have a \a TextDocument object. */
             QObject* textDocument() {
