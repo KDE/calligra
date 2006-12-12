@@ -11,7 +11,7 @@ doc = fs.textDocument()
 doc.setHtml(
     (
         "<h1><font color=\"blue\">Python Test Script</font></h1>"
-        "<p>This is a <a href=\"test\">link</a>.</p>"
+        "<p><i>italic</i> and <b>bold</b> and <u>underlined</u> and a <a href=\"test\">link</a></p>."
         "<ul>"
         "<li>Time=<b>%s</b></li>"
         "<li>pageCount=<b>%s</b></li>"
@@ -24,6 +24,7 @@ doc.setHtml(
         "<li>Keywords=<b>%s</b></li>"
         "</ul>"
         "<pre>Some text in a pre-tag</pre>"
+        "<blockquote>Some text in a blockquote-tag</blockquote>"
     ) % (
         time.strftime('%H:%M.%S'),
         KWord.pageCount(),
@@ -40,10 +41,18 @@ doc.setHtml(
 #cursor = doc.lastCursor()
 cursor = doc.rootFrame().lastCursorPosition()
 
-table = cursor.insertTable(3,3)
+cursor.insertBlock()
+
+table = cursor.insertTable(10,5)
 print "========> rows=%s cols=%s" % (table.rows(),table.columns())
 for row in range( table.rows() ):
     #table.insertRows(row,1)
     for col in range( table.columns() ):
         c = table.firstCursorPosition(row, col)
+        #c.insertBlock()
         c.insertHtml( "(row=%s col=%s)" % (row,col) )
+
+#l = cursor.insertList()
+#for i in range(5):
+#    c = l.addItem()
+#    print "-----> listitem-cursor=%s" % c

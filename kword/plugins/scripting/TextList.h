@@ -21,7 +21,12 @@
 #define SCRIPTING_TEXTLIST_H
 
 #include <QObject>
+#include <QPointer>
 #include <QTextList>
+#include <QTextBlock>
+#include <QTextCursor>
+
+#include "TextCursor.h"
 
 namespace Scripting {
 
@@ -38,14 +43,30 @@ namespace Scripting {
 
         public Q_SLOTS:
 
-            //void add ( const QTextBlock & block )
-            //int count () const
-            //QTextBlock item ( int i ) const
-            //void removeItem ( int i )
-            //void remove ( const QTextBlock & block )
+            int countItems() {
+                return m_list->count();
+            }
+
+            QObject* item(int i) {
+                QTextCursor cursor( m_list->item(i) );
+                return cursor.isNull() ? 0 : new TextCursor(this, cursor);
+            }
+
+#if 0
+            QObject* addItem() {
+                QTextBlock block;
+                m_list->add(block); //CRASHES
+                QTextCursor cursor(block);
+                return cursor.isNull() ? 0 : new TextCursor(this, cursor);
+            }
+#endif
+
+            void removeItem(int i) {
+                m_list->removeItem(i);
+            }
 
         private:
-            QTextList* m_list;
+            QPointer<QTextList> m_list;
     };
 
 }

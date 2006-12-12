@@ -42,6 +42,8 @@ namespace Scripting {
 
             void insertText(const QString& text);
             void insertHtml(const QString& html);
+            void insertBlock(QObject* textformat = 0);
+            QObject* insertList(QObject* textformat = 0);
             QObject* insertTable(int rows, int columns);
 
             //int selectionEnd () const

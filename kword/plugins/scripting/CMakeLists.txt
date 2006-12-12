@@ -8,7 +8,7 @@ include_directories(
 add_subdirectory( scripts )
 
 set(krossmodulekword_PART_SRCS Module.cpp FrameSet.cpp TextCursor.cpp Part.cpp)
-qt4_wrap_cpp(krossmodulekword_PART_SRCS Page.h PageLayout.h TextDocument.h TextFrame.h TextList.h TextTable.h)
+qt4_wrap_cpp(krossmodulekword_PART_SRCS Page.h PageLayout.h TextDocument.h TextFrame.h TextList.h TextTable.h TextFormat.h)
 kde4_automoc(${krossmodulekword_PART_SRCS})
 kde4_add_plugin(krossmodulekword ${krossmodulekword_PART_SRCS})
 target_link_libraries(krossmodulekword  ${KDE4_KDECORE_LIBS} ${KDE4_KROSSCORE_LIBS} kparts kwordprivate)
