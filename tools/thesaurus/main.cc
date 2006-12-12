@@ -460,8 +460,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
 
     if( !QFile::exists(m_data_file) ) {
         KMessageBox::error(0, i18n("The thesaurus file '%1' was not found. "
-            "Please use 'Change Language...' to select a thesaurus file.").
-            arg(m_data_file));
+            "Please use 'Change Language...' to select a thesaurus file.",m_data_file));
         return;
     }
 
