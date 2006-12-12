@@ -1698,7 +1698,6 @@ void Doc::paintRegion( QPainter &painter, const QRectF &viewRegion,
 
     SheetView sheetView( sheet ); // FIXME Stefan: make member, otherwise cache lost
     sheetView.setPaintCellRange( cellRegion );
-    sheetView.invalidateRegion( sheet->paintDirtyData() );
     sheetView.paintCells( view, painter, viewRegionF, topLeft );
 }
 

@@ -62,6 +62,7 @@
 #include <KoXmlWriter.h>
 
 #include "Commands.h"
+#include "Damages.h"
 #include "DataManipulators.h"
 #include "DependencyManager.h"
 #include "Canvas.h"
@@ -257,8 +258,6 @@ public:
 
   // cells that need painting
   Region paintDirtyList;
-  // cells that need relayouting
-  Region layoutDirtyRegion;
 
   // List of all cell bindings. For example charts use bindings to get
   // informed about changing cell contents.
@@ -5420,7 +5419,8 @@ void Sheet::setRegionPaintDirty( const Region & region )
   if ( isLoading() )
     return;
 
-  d->paintDirtyList.add(region);
+  d->paintDirtyList.add(region); // still needed for embedded object repainting
+  doc()->addDamage( new CellDamage( this, region, CellDamage::Appearance ) );
 
 //   kDebug(36004) << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
 }
@@ -5438,23 +5438,6 @@ void Sheet::clearPaintDirtyData()
 const Region& Sheet::paintDirtyData() const
 {
   return d->paintDirtyList;
-}
-
-void Sheet::addLayoutDirtyRegion(const Region& region)
-{
-    if ( isLoading() )
-        return;
-    d->layoutDirtyRegion.add( region );
-}
-
-void Sheet::clearLayoutDirtyRegion()
-{
-    d->layoutDirtyRegion.clear();
-}
-
-const Region& Sheet::layoutDirtyRegion() const
-{
-    return d->layoutDirtyRegion;
 }
 
 #ifndef NDEBUG

@@ -461,7 +461,6 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     paintRect.setBottomRight( bottomRight );
 
     m_pSheetView->setPaintCellRange( printRect );
-//     m_pSheetView->invalidateRegion( m_pSheet->paintDirtyData() );
     m_pSheetView->paintCells( 0 /*view*/, painter, paintRect, topLeft );
 
 #if 0

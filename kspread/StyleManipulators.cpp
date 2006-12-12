@@ -134,7 +134,7 @@ bool StyleManipulator::mainProcessing()
 
 bool StyleManipulator::postProcessing()
 {
-    m_sheet->addLayoutDirtyRegion( *this );
+    m_sheet->setRegionPaintDirty( *this );
     return true;
 }
 
@@ -199,7 +199,7 @@ bool IncreaseIndentManipulator::process( Element* element )
 
 bool IncreaseIndentManipulator::postProcessing()
 {
-    m_sheet->addLayoutDirtyRegion( *this );
+    m_sheet->setRegionPaintDirty( *this );
     return true;
 }
 
@@ -316,7 +316,7 @@ bool BorderColorManipulator::mainProcessing()
 
 bool BorderColorManipulator::postProcessing()
 {
-    m_sheet->addLayoutDirtyRegion( *this );
+    m_sheet->setRegionPaintDirty( *this );
     return true;
 }
 
@@ -384,7 +384,7 @@ bool IncreasePrecisionManipulator::process( Element* element )
 
 bool IncreasePrecisionManipulator::postProcessing()
 {
-    m_sheet->addLayoutDirtyRegion( *this );
+    m_sheet->setRegionPaintDirty( *this );
     return true;
 }
 

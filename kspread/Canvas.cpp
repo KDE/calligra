@@ -3742,10 +3742,6 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
     const QPointF topLeft( sheet->dblColumnPos(visibleRect.left()) - xOffset(),
                            sheet->dblRowPos(visibleRect.top()) - yOffset() );
     view()->sheetView( sheet )->setPaintCellRange( visibleRect );
-    view()->sheetView( sheet )->invalidateRegion( sheet->paintDirtyData() );
-    view()->sheetView( sheet )->invalidateRegion( sheet->layoutDirtyRegion() );
-    sheet->clearPaintDirtyData();
-    sheet->clearLayoutDirtyRegion();
     view()->sheetView( sheet )->paintCells( d->view, painter, unzoomedRect, topLeft );
 
     /* now paint the selection */

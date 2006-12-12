@@ -2434,8 +2434,6 @@ void View::initialPosition()
     }
     setActiveSheet( sheet );
 
-    refreshView();
-
     // Set the initial X and Y offsets for the view (Native format loading)
     if ( !doc()->loadingInfo() )
     {
@@ -2477,14 +2475,13 @@ void View::initialPosition()
     if ( koDocument()->isReadWrite() )
         initConfig();
 
-    d->adjustActions( !d->activeSheet->isProtected() );
-    d->adjustWorkbookActions( !doc()->map()->isProtected() );
-
     d->canvas->setFocus();
 
     // finish the "View Loading" process
     d->loading = false;
     doc()->deleteLoadingInfo();
+
+    refreshView();
 }
 
 
@@ -3566,7 +3563,6 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
     d->vBorderWidget->repaint();
     d->hBorderWidget->repaint();
     d->selectAllButton->repaint();
-    d->activeSheet->setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
     d->canvas->slotMaxColumn( d->activeSheet->maxColumn() );
     d->canvas->slotMaxRow( d->activeSheet->maxRow() );
   }
@@ -3600,7 +3596,7 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
   }
   calcStatusBarOp();
 
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 void View::slotSheetRenamed( Sheet* sheet, const QString& old_name )
@@ -5215,6 +5211,8 @@ int View::bottomBorder() const
 
 void View::refreshView()
 {
+    if ( d->loading ) // "View Loading" not finished yet
+        return;
   kDebug(36004) << "refreshing view" << endl;
 
   Sheet * sheet = activeSheet();
@@ -6646,7 +6644,8 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
 //   SelectionChanged ev(*selectionInfo(), activeSheet()->name());
 //   QApplication::sendEvent( this, &ev );
 
-  d->activeSheet->setRegionPaintDirty( changedRegion );
+  if ( !d->loading )
+    d->activeSheet->setRegionPaintDirty( changedRegion );
   d->vBorderWidget->update();
   d->hBorderWidget->update();
   d->selectAllButton->update();
@@ -6810,7 +6809,7 @@ void View::menuCalc( bool )
 
   calcStatusBarOp();
 
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 
@@ -7015,7 +7014,7 @@ void View::updateShowSheetMenu()
     d->actions->showSheet->setEnabled( false );
   else
     d->actions->showSheet->setEnabled( doc()->map()->hiddenSheets().count() > 0 );
-  doc()->emitEndOperation( d->canvas->visibleCells() );
+  doc()->emitEndOperation();
 }
 
 void View::closeEditor()
@@ -7042,7 +7041,7 @@ void View::paintUpdates()
   /* don't do any begin/end operation here -- this is what is called at an
      endOperation
   */
-  d->canvas->repaint();
+  d->canvas->update();
 }
 
 void View::commandExecuted()
@@ -7109,27 +7108,28 @@ void View::handleDamages( const QList<Damage*>& damages )
         {
             CellDamage* cellDamage = static_cast<CellDamage*>( damage );
             Sheet* const damagedSheet = cellDamage->sheet();
-            const QPoint position = cellDamage->position();
+            const Region region = cellDamage->region();
 
             if ( cellDamage->changes() & CellDamage::Appearance )
             {
-                damagedSheet->setRegionPaintDirty( Region( position ) );
+                damagedSheet->setRegionPaintDirty( region ); // still used for embedded object repainting
+                sheetView( damagedSheet )->invalidateRegion( region );
             }
             if ( cellDamage->changes() & CellDamage::Formula )
             {
-                formulaChangedRegion.add( position, damagedSheet );
+                formulaChangedRegion.add( region );
             }
             if ( cellDamage->changes() & CellDamage::Layout )
             {
-                layoutChangedRegion.add( position, damagedSheet );
+                layoutChangedRegion.add( region );
             }
             if ( cellDamage->changes() & CellDamage::TextFormat )
             {
-                textFormatChagedRegion.add( position, damagedSheet );
+                textFormatChagedRegion.add( region );
             }
             if ( cellDamage->changes() & CellDamage::Value )
             {
-                valueChangedRegion.add( position, damagedSheet );
+                valueChangedRegion.add( region );
             }
         }
 

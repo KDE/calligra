@@ -27,6 +27,7 @@ namespace KSpread
 {
 class Cell;
 class Sheet;
+class Region;
 
 class Damage
 {
@@ -60,14 +61,14 @@ class CellDamage : public Damage
     Q_DECLARE_FLAGS( Changes, Change )
 
     CellDamage( KSpread::Cell* cell, Changes changes );
+    CellDamage( KSpread::Sheet* sheet, const Region& region, Changes changes );
 
     virtual ~CellDamage();
 
     virtual Type type() const { return Damage::Cell; }
 
-    KSpread::Cell* cell() const;
     KSpread::Sheet* sheet() const;
-    QPoint position() const;
+    const Region& region() const;
 
     Changes changes() const;
 

@@ -1345,10 +1345,6 @@ public:
      */
     const Region& paintDirtyData() const;
 
-    void addLayoutDirtyRegion(const Region& region);
-    void clearLayoutDirtyRegion();
-    const Region& layoutDirtyRegion() const;
-
     /**
      * \ingroup Painting
      * Marks the Cell at @p col , @p row as dirty.

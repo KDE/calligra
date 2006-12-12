@@ -22,11 +22,11 @@
 
 #include "Cell.h"
 #include "Sheet.h"
+#include "Region.h"
 
 #include "Damages.h"
 
-namespace KSpread
-{
+using namespace KSpread;
 
 class SheetDamage::Private
 {
@@ -38,23 +38,24 @@ public:
 class CellDamage::Private
 {
 public:
-  int column;
-  int row;
   KSpread::Sheet* sheet;
+  Region region;
   Changes changes;
 };
-
-}
-
-using namespace KSpread;
-
 
 CellDamage::CellDamage( KSpread::Cell* cell, Changes changes )
   : d( new Private )
 {
-  d->column = cell->column();
-  d->row = cell->row();
   d->sheet = cell->sheet();
+  d->region = Region( cell->column(), cell->row(), d->sheet );
+  d->changes = changes;
+}
+
+CellDamage::CellDamage( KSpread::Sheet* sheet, const Region& region, Changes changes )
+  : d( new Private )
+{
+  d->sheet = sheet;
+  d->region = region;
   d->changes = changes;
 }
 
@@ -63,19 +64,14 @@ CellDamage::~CellDamage()
   delete d;
 }
 
-KSpread::Cell* CellDamage::cell() const
-{
-  return d->sheet->cellAt( d->column, d->row );
-}
-
-KSpread::Sheet* CellDamage::sheet() const
+Sheet* CellDamage::sheet() const
 {
   return d->sheet;
 }
 
-QPoint CellDamage::position() const
+const KSpread::Region& CellDamage::region() const
 {
-  return QPoint( d->column, d->row );
+  return d->region;
 }
 
 CellDamage::Changes CellDamage::changes() const
@@ -96,7 +92,7 @@ SheetDamage::~SheetDamage()
   delete d;
 }
 
-KSpread::Sheet* SheetDamage::sheet() const
+Sheet* SheetDamage::sheet() const
 {
   return d->sheet;
 }
