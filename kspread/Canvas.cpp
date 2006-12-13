@@ -3940,6 +3940,8 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
         // get the transparent selection color
         QColor selectionColor( QApplication::palette().highlight().color() );
         selectionColor.setAlpha( 127 );
+        // Extend the clip rect by one in each direction to avoid artefacts caused by rounding errors.
+        painter.setClipRegion( painter.clipRegion().boundingRect().adjusted(-1,-1,1,1) );
         // save old clip region
         QRegion clipRegion = painter.clipRegion();
         // clip out the marker region
