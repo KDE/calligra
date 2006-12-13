@@ -6,7 +6,7 @@
 * functionality with script-packages, automate tasks or
 * control the runtime-environment.
 *
-* The \a Scripting::Moulde class enables access to the KWord
+* The \a Scripting::Module class enables access to the KWord
 * functionality from within the scripting backends.
 *
 * \see http://www.koffice.org/kword
