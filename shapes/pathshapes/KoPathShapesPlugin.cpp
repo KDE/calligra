@@ -25,7 +25,7 @@
 #include "regularpolygon/KoRegularPolygonShapeFactory.h"
 #include "rectangle/KoRectangleShapeFactory.h"
 #include "ellipse/KoEllipseShapeFactory.h"
-
+#include "arrow/KoArrowShapeFactory.h"
 #include <kgenericfactory.h>
 
 K_EXPORT_COMPONENT_FACTORY(pathshapes,
@@ -38,6 +38,7 @@ KoPathShapesPlugin::KoPathShapesPlugin( QObject *parent, const QStringList& )
     KoShapeRegistry::instance()->add( new KoRegularPolygonShapeFactory( parent));
     KoShapeRegistry::instance()->add( new KoRectangleShapeFactory( parent));
     KoShapeRegistry::instance()->add( new KoEllipseShapeFactory( parent));
+    KoShapeRegistry::instance()->add( new KoArrowShapeFactory( parent));
 }
 
 #include "KoPathShapesPlugin.moc"

@@ -9,6 +9,8 @@ set(pathshapes_PART_SRCS
     star/KoStarShapeFactory.cpp
     rectangle/KoRectangleShape.cpp
     rectangle/KoRectangleShapeFactory.cpp
+    arrow/KoArrowShape.cpp
+    arrow/KoArrowShapeFactory.cpp
     KoPathShapesPlugin.cpp
 )
 
