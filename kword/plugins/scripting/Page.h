@@ -26,7 +26,7 @@
 namespace Scripting {
 
     /**
-    * The Page class represents a printed page of the document.
+    * The Page class represents a printed page in the document.
     */
     class Page : public QObject
     {

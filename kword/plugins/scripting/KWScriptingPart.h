@@ -18,30 +18,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef SCRIPTING_PART_H
-#define SCRIPTING_PART_H
+#ifndef KWSCRIPTINGPART_H
+#define KWSCRIPTINGPART_H
 
 #include <kparts/plugin.h>
 
-namespace Scripting {
-
-    /**
-    * The ScriptingPart class implements a KPart component
-    * to integrate scripting into KWord.
-    */
-    class Part : public KParts::Plugin
-    {
-            Q_OBJECT
-        public:
-            Part(QObject* parent, const QStringList&);
-            virtual ~Part();
-        private:
-            /// \internal d-pointer class.
-            class Private;
-            /// \internal d-pointer instance.
-            Private* const d;
-    };
-
-}
+/**
+* The KWScriptingPart class implements a KPart component
+* to integrate scripting into KWord.
+*/
+class KWScriptingPart : public KParts::Plugin
+{
+        Q_OBJECT
+    public:
+        KWScriptingPart(QObject* parent, const QStringList&);
+        virtual ~KWScriptingPart();
+    private:
+        /// \internal d-pointer class.
+        class Private;
+        /// \internal d-pointer instance.
+        Private* const d;
+};
 
 #endif

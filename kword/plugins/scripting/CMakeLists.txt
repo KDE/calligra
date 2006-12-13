@@ -10,7 +10,7 @@ add_subdirectory( scripts )
 set(krossmodulekword_PART_SRCS
 	Module.cpp
 	TextCursor.cpp
-	Part.cpp
+	KWScriptingPart.cpp
 )
 
 qt4_wrap_cpp(krossmodulekword_PART_SRCS

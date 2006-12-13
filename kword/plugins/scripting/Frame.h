@@ -30,7 +30,7 @@
 namespace Scripting {
 
     /**
-    * A Frame holds a number of \a Frame (zero or more) objects where
+    * A frame holds a number of \a Frame (zero or more) objects where
     * each frame holds the content that is displayed on screen.
     */
     class Frame : public QObject

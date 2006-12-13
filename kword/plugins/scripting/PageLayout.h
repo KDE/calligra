@@ -27,7 +27,8 @@
 namespace Scripting {
 
     /**
-    *
+    * The layout of a \a Page object that represents a printed page in
+    * the document.
     */
     class PageLayout : public QObject
     {

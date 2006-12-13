@@ -28,7 +28,7 @@
 namespace Scripting {
 
     /**
-    *
+    * The TextFrame class represents a frame within a \a TextDocument .
     */
     class TextFrame : public QObject
     {
@@ -40,18 +40,22 @@ namespace Scripting {
 
         public Q_SLOTS:
 
+            /** Return the first position in the frame. */
             int firstPosition() const {
                 return m_frame->firstPosition();
             }
 
+            /** Return a \a TextCursor object for the first position in the frame. */
             QObject* firstCursorPosition() {
                 return new TextCursor(this, m_frame->firstCursorPosition());
             }
 
+            /** Return the last position in the frame. */
             int lastPosition() const {
                 return m_frame->lastPosition();
             }
 
+            /** Return a \a TextCursor object for the last position in the frame. */
             QObject* lastCursorPosition() {
                 return new TextCursor(this, m_frame->lastCursorPosition());
             }

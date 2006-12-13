@@ -26,7 +26,8 @@
 namespace Scripting {
 
     /**
-    *
+    * A cursor to provides a control structure for the successive traversal
+    * of content within a \a TextDocument .
     */
     class TextCursor : public QObject
     {
@@ -37,7 +38,9 @@ namespace Scripting {
 
         public Q_SLOTS:
 
+            /** Return the position the cursor is on. */
             int position() const;
+            /** Set the position the cursor is on. */
             void setPosition(int pos);
 
             //int selectionStart () const
@@ -46,12 +49,19 @@ namespace Scripting {
             //QString selectionToHtml(const QString& encoding = QString()) const
             //QString selectionToPlainText() const
 
+            /** Insert the \p text plain-text at the current cursor position. */
             void insertText(const QString& text);
+            /** Insert the \p html html-text at the current cursor position. */
             void insertHtml(const QString& html);
+            /** Insert a block element at the current cursor position. */
             void insertBlock(QObject* textformat = 0);
+            /** Insert and return a new \a TextFrame object at the current cursor position. */
             QObject* insertFrame(QObject* textformat = 0);
+            /** Insert and return a new \a TextList object at the current cursor position. */
             QObject* insertList(QObject* textformat = 0);
+            /** Insert and return a new \a TextTable object at the current cursor position. */
             QObject* insertTable(int rows, int columns);
+
             //void insertFragment ( const QTextDocumentFragment & fragment )
             //void insertImage ( const QTextImageFormat & format, QTextFrameFormat::Position alignment )
 

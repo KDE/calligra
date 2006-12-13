@@ -1,0 +1,33 @@
+/** @mainpage KWord Scripting Plugin
+*
+* The KWord scripting plugin offers flexible access to the
+* Kross scripting framework. Languages like Python, Ruby or
+* KDE JavaScript could be used to script KWord, extend the
+* functionality with script-packages, automate tasks or
+* control the runtime-environment.
+*
+* The \a Scripting::Moulde class enables access to the KWord
+* functionality from within the scripting backends.
+*
+* \see http://www.koffice.org/kword
+* \see http://kross.dipe.org
+*
+* @section Legal
+*
+* @li Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
+*
+* This library is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Library General Public
+* License as published by the Free Software Foundation; either
+* version 2 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+* Library General Public License for more details.
+*
+* You should have received a copy of the GNU Library General Public License
+* along with this library; see the file COPYING.LIB.  If not, write to
+* the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+* Boston, MA 02110-1301, USA.
+*/

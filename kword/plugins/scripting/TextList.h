@@ -31,7 +31,7 @@
 namespace Scripting {
 
     /**
-    *
+    * The TextList provides a list of items within a \a TextDocument .
     */
     class TextList : public QObject
     {
@@ -43,12 +43,14 @@ namespace Scripting {
 
         public Q_SLOTS:
 
+            /** Return the number of items the list has. */
             int countItems() {
                 return m_list->count();
             }
 
-            QObject* item(int i) {
-                QTextCursor cursor( m_list->item(i) );
+            /** Return a \a TextCursor object for the item at the position \p index . */
+            QObject* item(int index) {
+                QTextCursor cursor( m_list->item(index) );
                 return cursor.isNull() ? 0 : new TextCursor(this, cursor);
             }
 
@@ -61,8 +63,9 @@ namespace Scripting {
             }
 #endif
 
-            void removeItem(int i) {
-                m_list->removeItem(i);
+            /** Remove the item at position \p index . */
+            void removeItem(int index) {
+                m_list->removeItem(index);
             }
 
         private:
