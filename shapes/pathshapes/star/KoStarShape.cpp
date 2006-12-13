@@ -54,7 +54,7 @@ void KoStarShape::setCornerCount( uint cornerCount )
     }
 }
 
-uint KoStarShape::cornerCount()
+uint KoStarShape::cornerCount() const
 {
     return m_cornerCount;
 }
@@ -65,7 +65,7 @@ void KoStarShape::setBaseRadius( double baseRadius )
     updatePath( QSize() );
 }
 
-double KoStarShape::baseRadius()
+double KoStarShape::baseRadius() const
 {
     return m_radius[base];
 }
@@ -76,7 +76,7 @@ void KoStarShape::setTipRadius( double tipRadius )
     updatePath( QSize() );
 }
 
-double KoStarShape::tipRadius()
+double KoStarShape::tipRadius() const
 {
     return m_radius[tip];
 }
@@ -246,3 +246,4 @@ QPointF KoStarShape::computeCenter() const
     }
     return center / static_cast<double>( m_cornerCount );
 }
+

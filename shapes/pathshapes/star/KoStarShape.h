@@ -43,7 +43,7 @@ public:
     void setCornerCount( uint cornerCount );
 
     /// Returns the number of corners
-    uint cornerCount();
+    uint cornerCount() const;
 
     /**
      * Sets the radius of the base points.
@@ -53,7 +53,7 @@ public:
     void setBaseRadius( double baseRadius );
 
     /// Returns the base radius
-    double baseRadius();
+    double baseRadius() const;
 
     /**
      * Sets the radius of the tip points.
@@ -62,7 +62,7 @@ public:
     void setTipRadius( double tipRadius );
 
     /// Returns the tip radius
-    double tipRadius();
+    double tipRadius() const;
 
     /**
      * Sets the roundness at the base points.
@@ -89,7 +89,7 @@ public:
     void setConvex( bool convex );
 
     /// Returns if the star represents a regular polygon.
-    bool convex();
+    bool convex() const;
 
     virtual void resize( const QSizeF &newSize );
 protected:
