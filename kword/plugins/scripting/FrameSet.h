@@ -72,43 +72,32 @@ namespace Scripting {
                 return 0;
             }
 
-            //void addFrame(KWFrame *frame);
-            //void removeFrame(KWFrame *frame);
-
-            QObject* addTextFrame() {
-                KWTextFrameSet* frameset = dynamic_cast< KWTextFrameSet* >( (KWFrameSet*)m_frameset );
-                if( ! frameset ) {
-                    kDebug() << "Scripting::Module::addTextFrame() No KWTextFrameSet." << endl;
-                    return 0;
-                }
-
-                KoShapeFactory *factory = KoShapeRegistry::instance()->get(KoTextShape_SHAPEID);
+            /** Add and return a new \a Frame to this frameset using the shape
+            defined with the \p shapeId identifier. */
+            QObject* addFrame(const QString& shapeId) {
+                KoShapeFactory *factory = KoShapeRegistry::instance()->get(shapeId);
                 if( ! factory ) {
-                    kDebug() << "Scripting::Module::addTextFrame() KoTextShape_SHAPEID shape missing." << endl;
+                    kDebug() << "Scripting::Module::addFrame() Invalid shapeId: " << shapeId << endl;
                     return 0;
                 }
-
                 KoShape *shape = factory->createDefaultShape();
                 Q_ASSERT(shape);
-                KWTextFrame* frame = new KWTextFrame(shape, frameset);
+                shape->setZIndex( 1 + m_frameset->frameCount() );
+                KWFrame* frame = 0;
+                KWTextFrameSet* textframeset = dynamic_cast<KWTextFrameSet*>( (KWFrameSet*)m_frameset );
+                if( textframeset )
+                    frame = new KWTextFrame(shape, textframeset);
+                else
+                    frame = new KWFrame(shape, m_frameset);
                 return new Frame(this, frame);
             }
 
-#if 0
-            QObject* addFrame(const QString& shapeId) {
-                KoShapeFactory *factory = KoShapeRegistry::instance()->get(shapeId);
-                if( ! factory ) return 0;
-                KoShape *shape = factory->createDefaultShape();
-                KWFrame* f = 0;
-                KWTextFrameSet* textframeset = dynamic_cast<KWTextFrameSet*>( (KWFrameSet*)m_frameset );
-                if( textframeset )
-                    f = new KWTextFrame(shape, textframeset);
-                else
-                    f = new KWFrame(shape, m_frameset);
-                m_frameset->addFrame(f);
-                return new Frame(this, f);
-            }
-#endif
+            /** Add and return a new \a Frame to this frameset which has the
+            shapeId KoTextShape_SHAPEID and is used to display the \a TextDocument . */
+            QObject* addTextFrame() { return addFrame(KoTextShape_SHAPEID); }
+
+            //void addFrame(KWFrame *frame);
+            //void removeFrame(KWFrame *frame);
 
             /** Return the \a TextDocument object or NULL if this frameset does not have a \a TextDocument object. */
             QObject* textDocument() {

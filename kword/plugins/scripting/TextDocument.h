@@ -32,7 +32,8 @@
 namespace Scripting {
 
     /**
-    *
+    * The TextDocument object represents a QTextDocument within the Scribe
+    * text-engine KWord uses to enable editing of text content.
     */
     class TextDocument : public QObject
     {
@@ -40,7 +41,6 @@ namespace Scripting {
         public:
             TextDocument(QObject* parent, QTextDocument* doc) : QObject( parent ), m_doc( doc ) {
                 connect(m_doc, SIGNAL(contentsChange(int,int,int)), this, SIGNAL(contentsChange(int,int,int)));
-                connect(m_doc, SIGNAL(contentsChanged()), this, SIGNAL(contentsChanged()));
                 connect(m_doc, SIGNAL(cursorPositionChanged(const QTextCursor&)), this, SIGNAL(cursorPositionChanged()));
                 connect(m_doc->documentLayout(), SIGNAL(documentSizeChanged(const QSizeF&)), this, SIGNAL(documentSizeChanged()));
                 connect(m_doc->documentLayout(), SIGNAL(pageCountChanged(int)), this, SIGNAL(pageCountChanged()));
@@ -49,12 +49,18 @@ namespace Scripting {
 
         public Q_SLOTS:
 
-            virtual double documentWidth() const { return m_doc->documentLayout()->documentSize().width(); }
-            virtual double documentHeight() const { return m_doc->documentLayout()->documentSize().height(); }
+            /** Return the width of the document in pt. */
+            virtual double width() const { return m_doc->documentLayout()->documentSize().width(); }
+            /** Return the height of the document in pt. */
+            virtual double height() const { return m_doc->documentLayout()->documentSize().height(); }
+            /** Return the number of pages the document has. */
             virtual int pageCount() const { return m_doc->documentLayout()->pageCount(); }
-            //bool isEmpty() const { return m_doc->isEmpty(); }
+            /** Return true if the document was modified else false is returned. */
             bool isModified() const { return m_doc->isModified(); }
 
+            //bool isEmpty() const { return m_doc->isEmpty(); }
+
+            /** Return the root \a Frame object of the document. */
             QObject* rootFrame() { return new TextFrame(this, m_doc->rootFrame()); }
 
             QObject* firstCursor() { return new TextCursor(this, QTextCursor(m_doc->begin())); }
@@ -63,18 +69,28 @@ namespace Scripting {
             //QTextObject * object ( int objectIndex ) const 
             //QTextObject * objectForFormat ( const QTextFormat & f ) const 
 
+            /** Return the content of the document as plain-text. */
             QString toText() const { return m_doc->toPlainText(); }
+            /** Set the content of the document to the \p text plain-text. */
             void setText(const QString & text) { m_doc->setPlainText(text); }
+            /** Return the stylesheet. */
             QString defaultStyleSheet() const { return m_doc->defaultStyleSheet(); }
+            /** Set the stylesheet. */
             void setDefaultStyleSheet(const QString& stylesheet) { m_doc->setDefaultStyleSheet(stylesheet); }
+            /** Return the content of the document as HTML-text. */
             QString toHtml(const QString& encoding = QString()) const { return m_doc->toHtml( encoding.isNull() ? QByteArray() : encoding.toLatin1() ); }
+            /** Set the content of the document to the \p html HTML-text. */
             void setHtml(const QString & html) { m_doc->setHtml(html); }
 
         signals:
+
+            /** This signal is emitted if content changed. */
             void contentsChange(int position, int charsRemoved, int charsAdded);
-            void contentsChanged();
+            /** This signal is emitted if the cursor-positon changed. */
             void cursorPositionChanged();
+            /** This signal is emitted if the size of the document changed. */
             void documentSizeChanged();
+            /** This signal is emitted if the number of pages changed. */
             void pageCountChanged();
 
         private:

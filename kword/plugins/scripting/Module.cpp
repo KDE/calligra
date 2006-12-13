@@ -155,29 +155,18 @@ QObject* Module::addTextFrameSet(const QString& name)
     */
 
     KWTextFrameSet* frameset = new KWTextFrameSet(type);
+    frameset->setName(name);
     frameset->setAllowLayout(false);
-    frameset->setName( name );
-
     doc()->addFrameSet(frameset);
     return new FrameSet(this, frameset);
 }
 
-QObject* Module::addFrame(const QString& name, const QString& shapeId)
+QObject* Module::addFrameSet(const QString& name)
 {
-    KoShapeFactory *factory = KoShapeRegistry::instance()->get(shapeId);
-    if( ! factory ) {
-        kDebug() << "Scripting::Module::addFrame() invalid shapeId: " << shapeId << endl;
-        return 0;
-    }
-
     KWFrameSet* frameset = new KWFrameSet();
-    frameset->setName( name );
-
-    KoShape* shape = factory->createDefaultShape();
-    KWFrame* frame = new KWFrame(shape, frameset);
-
+    frameset->setName(name);
     doc()->addFrameSet(frameset);
-    return new Frame(this, frame);
+    return new FrameSet(this, frameset);
 }
 
 QObject* Module::standardPageLayout()

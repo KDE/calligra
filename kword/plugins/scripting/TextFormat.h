@@ -39,17 +39,26 @@ namespace Scripting {
 
         public Q_SLOTS:
 
+            /** Return the background-color. */
             virtual QString backgroundColor() = 0;
+            /** Set the background-color. */
             virtual void setBackgroundColor(const QString& color) = 0;
 
+            /** Return the foreground-color. */
             virtual QString foregroundColor() = 0;
+            /** Set the foreground-color. */
             virtual void setForegroundColor(const QString& color) = 0;
 
+            /** Return the layout-direction. */
             virtual QString layoutDirection() const = 0;
+            /** Set the layout-direction. */
             virtual void setLayoutDirection(const QString& direction) = 0;
 
+            /** Return a list of propertyId items. */
             virtual QVariantList properties() const = 0;
+            /** Return the value of the property defined with the \p propertyId identifier. */
             virtual QVariant property(int propertyId) const = 0;
+            /** Set the value of the property defined with the \p propertyId identifier. */
             virtual void setProperty(int propertyId, const QVariant& value) = 0;
 
     };

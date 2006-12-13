@@ -87,19 +87,9 @@ namespace Scripting {
 
             /** Add and return a new \a FrameSet object for text handled with \a TextDocument . */
             QObject* addTextFrameSet(const QString& name);
-            /** Add and return a new \a Frame object. */
-            QObject* addFrame(const QString& name, const QString& shapeId);
+            /** Add and return a new \a FrameSet object. */
+            QObject* addFrameSet(const QString& name);
 
-#if 0
-            QObject* addFrameSet(const QString& shapeId) {
-                KoShapeFactory *factory = KoShapeRegistry::instance()->get(shapeId);
-                if( ! factory ) return 0;
-                KoShape *shape = factory->createDefaultShape();
-                KWFrame* f = new KWFrame(shape, m_frameset);
-                m_frameset->addFrame(f);
-                return new Frame(this, f);
-            }
-#endif
             /***** Layout *****/
 
             /** Return the standard page layout. */

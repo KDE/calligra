@@ -86,6 +86,11 @@ namespace Scripting {
             /** Set the position of the shape in pt. */
             void setPosition(double x, double y) { m_frame->shape()->setPosition(QPointF(x,y)); }
 
+            /** Retrieve the z-coordinate of this shape. */
+            int zIndex() const { return m_frame->shape()->zIndex(); }
+            /** Set the z-coordinate of this shape. */
+            void setZIndex(int zIndex) { m_frame->shape()->setZIndex(zIndex); }
+
             /** Return the background color of the shape. */
             QString backgroundColor() const {
                 return m_frame->shape()->background().color().name();
