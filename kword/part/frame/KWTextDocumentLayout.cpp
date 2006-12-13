@@ -27,6 +27,8 @@
 #include <KoListStyle.h>
 #include <KoStyleManager.h>
 #include <KoTextBlockData.h>
+#include <KoTextBlockBorderData.h>
+#include <KoInsets.h>
 
 #include <kdebug.h>
 #include <QTextBlock>
@@ -113,7 +115,7 @@ public:
             ptWidth -= m_format.textIndent();
         if(m_newParag && m_block.textList()) // is a listItem
             ptWidth -= listIndent();
-        ptWidth -= m_leftBorderInset + m_rightBorderInset;
+        ptWidth -= m_borderInsets.left + m_borderInsets.right;
         return ptWidth;
     }
 
@@ -121,12 +123,10 @@ public:
         double result = (m_newParag?m_format.textIndent():0.0) + m_format.leftMargin();
         if(m_block.textList()) { // is a listItem
             double indent = listIndent();
-            KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (m_block.userData());
-            Q_ASSERT(data);
-            data->setCounterPosition(QPointF(result, y()));
+            m_blockData->setCounterPosition(QPointF(result, y()));
             result += indent;
         }
-        result += m_leftBorderInset;
+        result += m_borderInsets.left;
         return result;
     }
 
@@ -213,9 +213,12 @@ public:
                 }
             }
             if(!m_newShape) // only add bottom of prev parag if we did not go to a new shape for this parag.
-                m_y += m_bottomBorderInset;
+                m_y += m_borderInsets.bottom;
         }
         layout = 0;
+        if(m_blockData && m_blockData->border())
+            m_blockData->border()->setParagraphBottom(m_y);
+        m_blockData = 0;
         if(! m_block.isValid()) {
             QTextBlock block = m_block.previous(); // last correct one.
             m_data->setEndPosition(block.position() + block.length());
@@ -224,9 +227,10 @@ public:
             return false;
         }
         m_format = m_block.blockFormat();
+        m_blockData = dynamic_cast<KoTextBlockData*> (m_block.userData());
 
         updateBorders(); // fill the border inset member vars.
-        m_y += m_topBorderInset;
+        m_y += m_borderInsets.top;
 
         if(!m_newShape && (m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysBefore ||
                 m_format.boolProperty(KoParagraphStyle::BreakBefore))) {
@@ -321,8 +325,7 @@ public:
                 charStyle = ps->characterStyle();
         }
 
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (m_block.userData());
-        if(! (data && data->hasCounterData())) {
+        if(! (m_blockData && m_blockData->hasCounterData())) {
             QFont font;
             if(charStyle)
                 font = QFont(charStyle->fontFamily(), qRound(charStyle->fontPointSize()),
@@ -333,10 +336,10 @@ public:
             }
             ListItemsHelper lih(textList, font);
             lih.recalculate();
-            data = dynamic_cast<KoTextBlockData*> (m_block.userData());
+            m_blockData = dynamic_cast<KoTextBlockData*> (m_block.userData());
         }
-        Q_ASSERT(data);
-        return data->counterWidth();
+        Q_ASSERT(m_blockData);
+        return m_blockData->counterWidth();
     }
 
     void resetPrivate() {
@@ -345,6 +348,7 @@ public:
         shape =0;
         layout = 0;
         m_newShape = true;
+        m_blockData = 0;
         m_block = m_frameSet->document()->begin();
 
         frameNumber = 0;
@@ -388,55 +392,56 @@ public:
 
     /// called from nextParag to calculate the text-layout insets due to borders.
     void updateBorders() {
-        m_topBorderInset = m_format.doubleProperty(KoParagraphStyle::TopPadding);
-        m_leftBorderInset = m_format.doubleProperty(KoParagraphStyle::LeftPadding);
-        m_bottomBorderInset = m_format.doubleProperty(KoParagraphStyle::BottomPadding);
-        m_rightBorderInset = m_format.doubleProperty(KoParagraphStyle::RightPadding);
+        m_borderInsets.top = m_format.doubleProperty(KoParagraphStyle::TopPadding);
+        m_borderInsets.left = m_format.doubleProperty(KoParagraphStyle::LeftPadding);
+        m_borderInsets.bottom = m_format.doubleProperty(KoParagraphStyle::BottomPadding);
+        m_borderInsets.right = m_format.doubleProperty(KoParagraphStyle::RightPadding);
 
-        KoParagraphStyle::BorderStyle borderStyle;
-        borderStyle = static_cast<KoParagraphStyle::BorderStyle> (m_format.intProperty(KoParagraphStyle::LeftBorderStyle));
-        switch(borderStyle) {
-            case KoParagraphStyle::BorderNone:
-                break;
-            case KoParagraphStyle::BorderDouble:
-                m_leftBorderInset += m_format.doubleProperty(KoParagraphStyle::LeftBorderSpacing);
-                m_leftBorderInset += m_format.doubleProperty(KoParagraphStyle::LeftInnerBorderWidth);
-                // fall through!
-            default: // has a single line border
-                m_leftBorderInset += m_format.doubleProperty(KoParagraphStyle::LeftBorderWidth);
+        KoTextBlockBorderData border(QRectF(x(), m_y + m_borderInsets.top, width(), 1.));
+        border.setEdge(border.Left, m_format, KoParagraphStyle::LeftBorderStyle,
+            KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor,
+            KoParagraphStyle::LeftBorderSpacing, KoParagraphStyle::LeftInnerBorderWidth);
+        border.setEdge(border.Right, m_format, KoParagraphStyle::RightBorderStyle,
+            KoParagraphStyle::RightBorderWidth, KoParagraphStyle::RightBorderColor,
+            KoParagraphStyle::RightBorderSpacing, KoParagraphStyle::RightInnerBorderWidth);
+        border.setEdge(border.Top, m_format, KoParagraphStyle::TopBorderStyle,
+            KoParagraphStyle::TopBorderWidth, KoParagraphStyle::TopBorderColor,
+            KoParagraphStyle::TopBorderSpacing, KoParagraphStyle::TopInnerBorderWidth);
+        border.setEdge(border.Bottom, m_format, KoParagraphStyle::BottomBorderStyle,
+            KoParagraphStyle::BottomBorderWidth, KoParagraphStyle::BottomBorderColor,
+            KoParagraphStyle::BottomBorderSpacing, KoParagraphStyle::BottomInnerBorderWidth);
+
+        // check if prev parag had a border.
+        QTextBlock prev = m_block.previous();
+        KoTextBlockBorderData *prevBorder = 0;
+        if(prev.isValid()) {
+            KoTextBlockData *bd = dynamic_cast<KoTextBlockData*> (prev.userData());
+            if(bd)
+                prevBorder = bd->border();
         }
-        borderStyle = static_cast<KoParagraphStyle::BorderStyle> (m_format.intProperty(KoParagraphStyle::RightBorderStyle));
-        switch(borderStyle) {
-            case KoParagraphStyle::BorderNone:
-                break;
-            case KoParagraphStyle::BorderDouble:
-                m_rightBorderInset += m_format.doubleProperty(KoParagraphStyle::RightBorderSpacing);
-                m_rightBorderInset += m_format.doubleProperty(KoParagraphStyle::RightInnerBorderWidth);
-                // fall through!
-            default: // has a single line border
-                m_rightBorderInset += m_format.doubleProperty(KoParagraphStyle::RightBorderWidth);
+        if(border.hasBorders()) {
+            if(m_blockData == 0) {
+                m_blockData = new KoTextBlockData();
+                m_block.setUserData(m_blockData);
+            }
+
+            // then check if we can merge with the previous parags border.
+            if(prevBorder && prevBorder->equals(border))
+                m_blockData->setBorder(prevBorder);
+            else {
+                // can't merge; then these are our new borders.
+                KoTextBlockBorderData *newBorder = new KoTextBlockBorderData(border);
+                m_blockData->setBorder(newBorder);
+                if(prevBorder && !m_newShape)
+                    m_y += prevBorder->inset(KoTextBlockBorderData::Bottom);
+            }
+            m_blockData->border()->applyInsets(m_borderInsets, m_y);
         }
-        borderStyle = static_cast<KoParagraphStyle::BorderStyle> (m_format.intProperty(KoParagraphStyle::TopBorderStyle));
-        switch(borderStyle) {
-            case KoParagraphStyle::BorderNone:
-                break;
-            case KoParagraphStyle::BorderDouble:
-                m_topBorderInset += m_format.doubleProperty(KoParagraphStyle::TopBorderSpacing);
-                m_topBorderInset += m_format.doubleProperty(KoParagraphStyle::TopInnerBorderWidth);
-                // fall through!
-            default: // has a single line border
-                m_topBorderInset += m_format.doubleProperty(KoParagraphStyle::TopBorderWidth);
-        }
-        borderStyle = static_cast<KoParagraphStyle::BorderStyle> (m_format.intProperty(KoParagraphStyle::BottomBorderStyle));
-        switch(borderStyle) {
-            case KoParagraphStyle::BorderNone:
-                break;
-            case KoParagraphStyle::BorderDouble:
-                m_bottomBorderInset += m_format.doubleProperty(KoParagraphStyle::BottomBorderSpacing);
-                m_bottomBorderInset += m_format.doubleProperty(KoParagraphStyle::BottomInnerBorderWidth);
-                // fall through!
-            default: // has a single line border
-                m_bottomBorderInset += m_format.doubleProperty(KoParagraphStyle::BottomBorderWidth);
+        else { // this parag has no border.
+            if(prevBorder && !m_newShape)
+                m_y += prevBorder->inset(KoTextBlockBorderData::Bottom);
+            if(m_blockData)
+                m_blockData->setBorder(0); // remove an old one, if there was one.
         }
     }
 
@@ -463,11 +468,13 @@ public:
 
     double m_y;
     QTextBlock m_block;
+    KoTextBlockData *m_blockData;
     QTextBlockFormat m_format;
     QTextBlock::Iterator m_fragmentIterator;
     KoTextShapeData *m_data;
     bool m_newShape, m_newParag, m_reset;
-    double m_topBorderInset, m_leftBorderInset, m_bottomBorderInset, m_rightBorderInset;
+    KoInsets m_borderInsets;
+//double m_topBorderInset, m_leftBorderInset, m_bottomBorderInset, m_rightBorderInset;
 };
 
 
@@ -535,8 +542,11 @@ painter->setPen(Qt::black); // TODO use theme color, or a kword wide hardcoded d
 
 void KWTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock &block) {
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+    if(data == 0)
+        return;
+
     QTextList *list = block.textList();
-    if(list && data && data->hasCounterData()) {
+    if(list && data->hasCounterData()) {
         QTextCharFormat cf;
         bool filled=false;
         if(m_styleManager) {
@@ -574,119 +584,12 @@ void KWTextDocumentLayout::decorateParagraph(QPainter *painter, const QTextBlock
         layout.draw(painter, data->counterPosition());
     }
 
-    class BorderSection {
-      public:
-        BorderSection(const QTextBlockFormat &bf, KoParagraphStyle::Property style, KoParagraphStyle::Property width,
-                KoParagraphStyle::Property color, KoParagraphStyle::Property space,
-                KoParagraphStyle::Property width2) {
-            hasBorder = true;
-            spacing = 0.0;
-            outerWidth = 0.0;
-            KoParagraphStyle::BorderStyle borderStyle;
-            borderStyle = static_cast<KoParagraphStyle::BorderStyle> (bf.intProperty(style));
-            switch(borderStyle) {
-                case KoParagraphStyle::BorderNone:
-                    hasBorder = false;
-                    return;
-                case KoParagraphStyle::BorderDotted: pen.setStyle(Qt::DotLine); break;
-                case KoParagraphStyle::BorderDashed: pen.setStyle(Qt::DashLine); break;
-                case KoParagraphStyle::BorderDashDotPattern: pen.setStyle(Qt::DashDotLine); break;
-                case KoParagraphStyle::BorderDashDotDotPattern: pen.setStyle(Qt::DashDotDotLine); break;
-                case KoParagraphStyle::BorderGroove: /* TODO */ break;
-                case KoParagraphStyle::BorderRidge: /* TODO */ break;
-                case KoParagraphStyle::BorderInset: /* TODO */ break;
-                case KoParagraphStyle::BorderOutset: /* TODO */ break;
-                default:
-                    pen.setStyle(Qt::SolidLine);
-            }
-            pen.setWidthF( bf.doubleProperty(width) ); // TODO check if this does not need any conversion
-            pen.setColor(bf.colorProperty(color));
-            pen.setJoinStyle( Qt::MiterJoin );
-            pen.setCapStyle(Qt::FlatCap);
-
-            spacing = bf.doubleProperty(space);
-            outerWidth = bf.doubleProperty(width2);
-        }
-        QPen pen;
-        bool hasBorder;
-        double spacing, outerWidth;
-    };
-
-    QTextBlockFormat blockFormat = block.blockFormat();
-    BorderSection left(blockFormat, KoParagraphStyle::LeftBorderStyle,
-            KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor,
-            KoParagraphStyle::LeftBorderSpacing, KoParagraphStyle::LeftInnerBorderWidth);
-    BorderSection right(blockFormat, KoParagraphStyle::RightBorderStyle,
-            KoParagraphStyle::RightBorderWidth, KoParagraphStyle::RightBorderColor,
-            KoParagraphStyle::RightBorderSpacing, KoParagraphStyle::RightInnerBorderWidth);
-    BorderSection top(blockFormat, KoParagraphStyle::TopBorderStyle,
-            KoParagraphStyle::TopBorderWidth, KoParagraphStyle::TopBorderColor,
-            KoParagraphStyle::TopBorderSpacing, KoParagraphStyle::TopInnerBorderWidth);
-    BorderSection bottom(blockFormat, KoParagraphStyle::BottomBorderStyle,
-            KoParagraphStyle::BottomBorderWidth, KoParagraphStyle::BottomBorderColor,
-            KoParagraphStyle::BottomBorderSpacing, KoParagraphStyle::BottomInnerBorderWidth);
-
-    QRectF bounds, outerBounds;
-    if(left.hasBorder || right.hasBorder || top.hasBorder || bottom.hasBorder) {
-        QTextLayout *layout = block.layout();
-        bounds = layout->boundingRect();
-        // See if the next line can be removed for Qt4.3
-        bounds.setTopLeft(layout->lineAt(0).position()); // annoying that this is needed.
-        if(list && data && data->hasCounterData())
-            // hmm, and what about RTL text?
-            bounds.setLeft(data->counterPosition().x());
-        outerBounds = bounds;
-    }
-
-    if(top.hasBorder) {
-        painter->setPen(top.pen);
-        const double t = bounds.top() - top.pen.widthF() / 2.0; // drawline uses the center
-        bounds.setTop( bounds.top() - top.pen.widthF());
-        outerBounds.setTop(bounds.top() - top.spacing - top.outerWidth);
-        painter->drawLine(QLineF(bounds.left(), t, bounds.right(), t));
-    }
-    if(bottom.hasBorder) {
-        painter->setPen(bottom.pen);
-        const double b = bounds.bottom() + bottom.pen.widthF() / 2.0;
-        bounds.setBottom( bounds.bottom() + bottom.pen.widthF() );
-        outerBounds.setBottom(bounds.bottom() + bottom.spacing + bottom.outerWidth);
-        painter->drawLine(QLineF(bounds.left(), b, bounds.right() , b));
-    }
-    if(left.hasBorder) {
-        painter->setPen(left.pen);
-        const double l = bounds.left() - left.pen.widthF() / 2.0;
-        bounds.setLeft( bounds.left() - left.pen.widthF());
-        outerBounds.setLeft(bounds.left() - left.spacing - left.outerWidth);
-        painter->drawLine(QLineF(l, bounds.top(), l, bounds.bottom()));
-    }
-    if(right.hasBorder) {
-        painter->setPen(right.pen);
-        const double r = bounds.right() + right.pen.widthF() / 2.0;
-        bounds.setRight( bounds.right() + right.pen.widthF() );
-        outerBounds.setRight(bounds.right() + right.spacing + right.outerWidth);
-        painter->drawLine(QLineF(r, bounds.top(), r, bounds.bottom()));
-    }
-
-    // for those that have a double border...
-    if(top.hasBorder && top.spacing > 0.0) {
-        painter->setPen(top.pen);
-        const double t = outerBounds.top() + top.pen.widthF() / 2.0; // drawline uses the center
-        painter->drawLine(QLineF(outerBounds.left(), t, outerBounds.right(), t));
-    }
-    if(bottom.hasBorder && bottom.spacing > 0.0) {
-        painter->setPen(bottom.pen);
-        const double b = outerBounds.bottom() - bottom.pen.widthF() / 2.0;
-        painter->drawLine(QLineF(outerBounds.left(), b, outerBounds.right() , b));
-    }
-    if(left.hasBorder && left.spacing > 0.0) {
-        painter->setPen(left.pen);
-        const double l = outerBounds.left() + left.pen.widthF() / 2.0;
-        painter->drawLine(QLineF(l, outerBounds.top(), l, outerBounds.bottom()));
-    }
-    if(right.hasBorder && right.spacing > 0.0) {
-        painter->setPen(right.pen);
-        const double r = outerBounds.right() - right.pen.widthF() / 2.0;
-        painter->drawLine(QLineF(r, outerBounds.top(), r, outerBounds.bottom()));
+    KoTextBlockBorderData *border = dynamic_cast<KoTextBlockBorderData*> (data->border());
+    // TODO make sure we only paint a border-set one time.
+    if(border) {
+        painter->save();
+        border->paint(*painter);
+        painter->restore();
     }
 }
 
