@@ -24,24 +24,28 @@ print "positionY=%s" % textframe.positionY()
 print "zIndex=%s" % textframe.zIndex()
 
 #textframe.repaint()
+#textframe.setZIndex(3)
 
 # add KoStarShape frame
 starframe = KWord.addFrameSet("mystar").addFrame("KoStarShape")
 if starframe != None:
-    starframe.setPosition(200, 50)
-    #starframe.setZIndex(3)
+    starframe.setPosition(400, 50)
     starframe.rotate(25.0)
 
 # add KoPathShape frame
 pathframe = KWord.addFrameSet("mypath").addFrame("KoPathShape")
 if pathframe != None:
-    pathframe.setPosition(200, 200)
-    #pathframe.setZIndex(4)
+    pathframe.setPosition(400, 150)
     pathframe.shear(0.5, 0.5)
 
 # add KoRegularPolygonShape frame
 polyframe = KWord.addFrameSet("mypoly").addFrame("KoRegularPolygonShape")
 if polyframe != None:
-    polyframe.setPosition(200, 350)
-    #polyframe.setZIndex(5)
+    polyframe.setPosition(420, 320)
     polyframe.shear(-0.5, -0.5)
+
+# add TableShape frame
+tableframe = KWord.addFrameSet("mytable").addFrame("TableShape")
+if tableframe != None:
+    tableframe.setPosition(200, 160)
+    tableframe.resize(160, 160)
