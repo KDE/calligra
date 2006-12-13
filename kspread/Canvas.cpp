@@ -3894,145 +3894,139 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const QRectF& /*viewRect*
 
 void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
 {
-  //Only the active element (the one with the anchor) will be drawn with a border
+    if( d->chooseCell )
+        return;
+    if (d->cellEditor)
+        return;
 
-  if( d->chooseCell )
-	return;
+    // disable antialiasing
+    painter.setRenderHint( QPainter::Antialiasing, false );
+    // save old clip region
+    const QRegion oldClipRegion = painter.clipRegion();
+    // Extend the clip rect by one in each direction to avoid artefacts caused by rounding errors.
+    // TODO Stefan: This unites the region's rects. May be bad. Check!
+    painter.setClipRegion( oldClipRegion.boundingRect().adjusted(-1,-1,1,1) );
 
-  if (d->cellEditor)
-	return;
+    QLineF line;
+    QPen pen( Qt::black, doc()->unzoomItX( 2 ) );
+    painter.setPen( pen );
 
-  // disable antialiasing
-  painter.setRenderHint( QPainter::Antialiasing, false );
+    const Selection* selection = selectionInfo();
+    const QRect currentRange = Region::normalized( QRect( selection->anchor(), selection->marker() ) );
+    const QRect effMarker = selectionInfo()->extendToMergedAreas( QRect( selection->marker(), selection->marker() ) );
+    const QRectF markerRegion = cellCoordinatesToDocument( effMarker ).translated( -xOffset(), -yOffset() );
+    Region::ConstIterator end(selection->constEnd());
+    for (Region::ConstIterator it(selection->constBegin()); it != end; ++it)
+    {
+        const QRect range = (*it)->isAll() ? (*it)->rect() : selectionInfo()->extendToMergedAreas( (*it)->rect() );
 
-  QLineF line;
-  QPen pen( Qt::black, doc()->unzoomItX( 2 ) );
-  painter.setPen( pen );
+        // Only the active element (the one with the anchor) will be drawn with a border
+        const bool current = (currentRange == range);
 
-  const Selection* selection = selectionInfo();
-  const QRect currentRange = Region::normalized( QRect( selection->anchor(), selection->marker() ) );
-  const QRect effMarker = selectionInfo()->extendToMergedAreas( QRect( selection->marker(), selection->marker() ) );
-  const QRectF markerRegion = cellCoordinatesToDocument( effMarker ).translated( -xOffset(), -yOffset() );
-  Region::ConstIterator end(selection->constEnd());
-  for (Region::ConstIterator it(selection->constBegin()); it != end; ++it)
-  {
-    QRect range = (*it)->rect();
+        double positions[4];
+        bool paintSides[4];
+        retrieveMarkerInfo( range, viewRect, positions, paintSides );
 
-  	double positions[4];
-  	bool paintSides[4];
+        double left =   positions[0];
+        double top =    positions[1];
+        double right =  positions[2];
+        double bottom = positions[3];
 
-    bool current = (currentRange == range);
-
-    if (!(*it)->isAll())
-        range = selectionInfo()->extendToMergedAreas( range );
-    retrieveMarkerInfo( range, viewRect, positions, paintSides );
-
-    double left =   positions[0];
-    double top =    positions[1];
-    double right =  positions[2];
-    double bottom = positions[3];
-
-    bool paintLeft =   paintSides[0];
-    bool paintTop =    paintSides[1];
-    bool paintRight =  paintSides[2];
-    bool paintBottom = paintSides[3];
+        bool paintLeft =   paintSides[0];
+        bool paintTop =    paintSides[1];
+        bool paintRight =  paintSides[2];
+        bool paintBottom = paintSides[3];
 
         // get the transparent selection color
         QColor selectionColor( QApplication::palette().highlight().color() );
         selectionColor.setAlpha( 127 );
-        // Extend the clip rect by one in each direction to avoid artefacts caused by rounding errors.
-        painter.setClipRegion( painter.clipRegion().boundingRect().adjusted(-1,-1,1,1) );
-        // save old clip region
-        QRegion clipRegion = painter.clipRegion();
-        // clip out the marker region
-        painter.setClipRegion( clipRegion.subtracted( markerRegion.toRect() ) );
-        // draw the transparent selection background
-        painter.fillRect( QRectF( left, top, right - left, bottom - top ), selectionColor );
-        // restore clip region
-        painter.setClipRegion( clipRegion );
+        if ( current )
+        {
+            // save old clip region
+            const QRegion clipRegion = painter.clipRegion();
+            // clip out the marker region
+            painter.setClipRegion( clipRegion.subtracted( markerRegion.toRect() ) );
+            // draw the transparent selection background
+            painter.fillRect( QRectF( left, top, right - left, bottom - top ), selectionColor );
+            // restore clip region
+            painter.setClipRegion( clipRegion );
+        }
+        else
+            // draw the transparent selection background
+            painter.fillRect( QRectF( left, top, right - left, bottom - top ), selectionColor );
 
-    /* the extra '-1's thrown in here account for the thickness of the pen.
-      want to look like this:                     not this:
-                              * * * * * *                     * * * *
-                              *         *                   *         *
-                              *         *                   *         *
-    */
-    int l = 0;
-    if ( paintTop )
-    {
-      line = QLineF( left - l, top, right + l, top );
-      painter.drawLine( line );
-    }
-    if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
-    {
-      if ( paintRight )
-      {
-        line = QLineF( ( right ), ( top ), ( right ), ( bottom ) );
-        painter.drawLine( line );
-      }
-      if ( paintLeft && paintBottom && current )
-      {
-        /* then the 'handle' in the bottom left corner is visible. */
-        line = QLineF( left, top, left, bottom - doc()->unzoomItY( 3 ) );
-        painter.drawLine( line );
-        line = QLineF( left + doc()->unzoomItX( 4 ),  bottom, right + l + doc()->unzoomItY( 1 ), bottom );
-        painter.drawLine( line );
-        painter.fillRect( QRectF( left - doc()->unzoomItX( 2 ), bottom - doc()->unzoomItY( 2 ),
+        if ( paintTop )
+        {
+            line = QLineF( left, top, right, top );
+            painter.drawLine( line );
+        }
+        if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
+        {
+            if ( paintRight )
+            {
+                line = QLineF( right, top, right, bottom );
+                painter.drawLine( line );
+            }
+            if ( paintLeft && paintBottom && current )
+            {
+                /* then the 'handle' in the bottom left corner is visible. */
+                line = QLineF( left, top, left, bottom - doc()->unzoomItY( 3 ) );
+                painter.drawLine( line );
+                line = QLineF( left + doc()->unzoomItX( 4 ),  bottom, right + doc()->unzoomItY( 1 ), bottom );
+                painter.drawLine( line );
+                painter.fillRect( QRectF( left - doc()->unzoomItX( 2 ), bottom - doc()->unzoomItY( 2 ),
                                   doc()->unzoomItX( 5 ), doc()->unzoomItY( 5 ) ), painter.pen().color() );
-      }
-      else
-      {
-        if ( paintLeft )
-        {
-          line = QLineF( ( left ), ( top ),
-                            ( left ), ( bottom ) );
-          painter.drawLine( line );
+            }
+            else
+            {
+                if ( paintLeft )
+                {
+                    line = QLineF( left, top, left, bottom );
+                    painter.drawLine( line );
+                }
+                if ( paintBottom )
+                {
+                    line = QLineF( left, bottom, right, bottom );
+                    painter.drawLine( line );
+                }
+            }
         }
-        if ( paintBottom )
+        else // activeSheet()->layoutDirection()==Sheet::LeftToRight
         {
-          line = QLineF( ( left ) - l,  ( bottom ),
-                            ( right ) + l, ( bottom ));
-          painter.drawLine( line );
+            if ( paintLeft )
+            {
+                line = QLineF( left, top, left, bottom );
+                painter.drawLine( line );
+            }
+            if ( paintRight && paintBottom && current )
+            {
+                /* then the 'handle' in the bottom right corner is visible. */
+                line = QLineF( right, top, right, bottom - doc()->unzoomItY( 3 ) );
+                painter.drawLine( line );
+                line = QLineF( left, bottom, right - doc()->unzoomItX( 3 ), bottom );
+                painter.drawLine( line );
+                painter.fillRect( QRectF( right - doc()->unzoomItX( 2 ), bottom - doc()->unzoomItY( 2 ),
+                                  doc()->unzoomItX( 5 ), doc()->unzoomItY( 5 ) ), painter.pen().color() );
+            }
+            else
+            {
+                if ( paintRight )
+                {
+                    line = QLineF( right, top, right, bottom );
+                    painter.drawLine( line );
+                }
+                if ( paintBottom )
+                {
+                    line = QLineF( left, bottom, right, bottom );
+                    painter.drawLine( line );
+                }
+            }
         }
-      }
     }
-    else // activeSheet()->layoutDirection()==Sheet::LeftToRight
-    {
-      if ( paintLeft )
-      {
-        line = QLineF( ( left ), ( top ),
-                          ( left ), ( bottom ) );
-        painter.drawLine( line );
-      }
-      if ( paintRight && paintBottom && current )
-      {
-        /* then the 'handle' in the bottom right corner is visible. */
-        line = QLineF( right, top, right, bottom - doc()->unzoomItY( 3 ) );
-        painter.drawLine( line );
-        line = QLineF( left - l, bottom, right - doc()->unzoomItX( 3 ), bottom );
-        painter.drawLine( line );
-        painter.fillRect( QRectF( right - doc()->unzoomItX( 2 ), bottom - doc()->unzoomItY( 2 ),
-                          doc()->unzoomItX( 5 ), doc()->unzoomItY( 5 ) ), painter.pen().color() );
-      }
-      else
-      {
-        if ( paintRight )
-        {
-          line = QLineF( ( right ), ( top ),
-                            ( right ), ( bottom ) );
-          painter.drawLine( line );
-        }
-        if ( paintBottom )
-        {
-          line = QLineF( ( left ) - l,  ( bottom ),
-                            ( right ) + l, ( bottom ) );
-          painter.drawLine( line );
-        }
-      }
-    }
-  }
-  // restore antialiasing
-  painter.setRenderHint( QPainter::Antialiasing, true );
+    // restore clip region
+    painter.setClipRegion( oldClipRegion );
+    // restore antialiasing
+    painter.setRenderHint( QPainter::Antialiasing, true );
 }
 
 QRectF Canvas::cellCoordinatesToDocument( const QRect& cellRange ) const
