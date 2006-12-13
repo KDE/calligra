@@ -93,7 +93,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
             if ( styleElem.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
                 // The style's parent name will be set in Style::loadOasis(..).
                 // After all styles are loaded the pointer to the parent is set.
-                style = new CustomStyle( name, 0 );
+                style = new CustomStyle( name );
             else
                 style = new CustomStyle( name, m_defaultStyle );
 
@@ -159,7 +159,7 @@ bool StyleManager::loadXML( KoXmlElement const & styles )
       if ( e.hasAttribute( "parent" ) && e.attribute( "parent" ) == "Default" )
         style = new CustomStyle( name, m_defaultStyle );
       else
-        style = new CustomStyle( name, 0 );
+        style = new CustomStyle( name );
 
       if ( !style->loadXML( e, name ) )
       {

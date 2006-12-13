@@ -6257,7 +6257,8 @@ void View::createStyleFromCell()
     }
 
     const Style cellStyle = cell->style();
-    CustomStyle * style = new CustomStyle( &cellStyle, styleName );
+    CustomStyle * style = new CustomStyle( styleName );
+    style->merge( cellStyle );
 
     doc()->styleManager()->insertStyle( style );
     cell->setStyle( *style );

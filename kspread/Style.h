@@ -357,11 +357,10 @@ public:
     /**
      * Constructor.
      * Creates a custom style.
-     * @param style The style which's features are copied.
-     * @param name The name of this style.
+     * \param name The name of this style.
+     * \param parent The style whose attributes are inherited - the parent style.
      */
-    CustomStyle( const Style * style, QString const & name );
-    CustomStyle( QString const & name, CustomStyle * parent );
+    CustomStyle( QString const & name, CustomStyle * parent = 0 );
     virtual ~CustomStyle();
 
     virtual StyleType type() const;

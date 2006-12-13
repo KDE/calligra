@@ -2536,13 +2536,6 @@ CustomStyle::CustomStyle()
 {
 }
 
-CustomStyle::CustomStyle( const Style * style, QString const & name )
-    : Style( *style )
-    , d( new Private )
-{
-    d->name = name;
-}
-
 CustomStyle::CustomStyle( QString const & name, CustomStyle * parent )
     : Style()
     , d( new Private )
