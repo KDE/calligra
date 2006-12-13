@@ -141,7 +141,6 @@ public:
 
     /// when a line is added, update internal vars.  Return true if line does not fit in shape
     bool addLine(const QTextLine &line) {
-//kDebug() << "addLine" << endl;
         double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
         bool useFixedLineHeight = height != 0.0;
         bool useFontProperties = m_format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
@@ -374,6 +373,14 @@ public:
                         data = dynamic_cast<KoTextShapeData*> (shape->userData());
                         m_newShape = false;
                     }
+                    // in case this parag has a border we have to subtract that as well
+                    m_blockData = dynamic_cast<KoTextBlockData*> (m_block.userData());
+                    if(m_blockData) {
+                        double top = m_blockData->border()->inset(KoTextBlockBorderData::Top);
+                        // but only when this border actually makes us have an indent.
+                        if(qAbs(m_blockData->border()->rect().top() + top - m_y) < 1E-10)
+                            m_y -= top;
+                    }
                 }
                 break;
             }
@@ -474,7 +481,6 @@ public:
     KoTextShapeData *m_data;
     bool m_newShape, m_newParag, m_reset;
     KoInsets m_borderInsets;
-//double m_topBorderInset, m_leftBorderInset, m_bottomBorderInset, m_rightBorderInset;
 };
 
 
