@@ -146,12 +146,12 @@ dialog</phrase></textobject>
 </screenshot>
 
 <para>
-Select <guilabel>Use different template</guilabel> and click <guibutton>OK</guibutton> to add a
+Select <guilabel>Choose different template</guilabel> and click <guibutton>OK</guibutton> to add a
 new page after page 1.
 </para>
 
 <para>
-The <guilabel>Create Document</guilabel> dialog comes up so that we can decide
+The startup dialog comes up so that we can decide
 what the new slide should look like. This time, select <guilabel>Screen</guilabel> on the left and double click on the
 <guilabel>One Column</guilabel> template (highlighted in blue.)
 </para>

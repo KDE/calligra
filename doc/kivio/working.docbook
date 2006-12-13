@@ -93,7 +93,7 @@
 <listitem><para>&Windows; MetaFile (.wmf)</para></listitem>
 </itemizedlist>
 
-<para>You have to confirm the export, because this may result in some loss of formatting. Click the button <guibutton>Save</guibutton> and the <guilabel>Export to Image</guilabel> dialog is displayed. In this dialog you can set some export options: <guilabel>Page:</guilabel> range, the <guilabel>Area to export:</guilabel>, the  <guilabel>Custom size (in pixels):</guilabel> and the <guilabel>Margin:</guilabel> of the page.</para>
+<para>You have to confirm the export, because this may result in some loss of formatting. Click the button <guibutton>Save</guibutton> and the <guilabel>Export to Image</guilabel> dialog is displayed. In this dialog you can set some export options: <guilabel>Page:</guilabel> range, the <guilabel>Area to export:</guilabel>, the <guilabel>Bitmap DPI:</guilabel> and the <guilabel>Margin (Pixels):</guilabel> of the page.</para>
 </sect1>
 
 <sect1 id="grid">
