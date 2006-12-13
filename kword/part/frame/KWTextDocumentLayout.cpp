@@ -375,7 +375,7 @@ public:
                     }
                     // in case this parag has a border we have to subtract that as well
                     m_blockData = dynamic_cast<KoTextBlockData*> (m_block.userData());
-                    if(m_blockData) {
+                    if(m_blockData && m_blockData->border()) {
                         double top = m_blockData->border()->inset(KoTextBlockBorderData::Top);
                         // but only when this border actually makes us have an indent.
                         if(qAbs(m_blockData->border()->rect().top() + top - m_y) < 1E-10)
@@ -442,7 +442,7 @@ public:
                 if(prevBorder && !m_newShape)
                     m_y += prevBorder->inset(KoTextBlockBorderData::Bottom);
             }
-            m_blockData->border()->applyInsets(m_borderInsets, m_y);
+            m_blockData->border()->applyInsets(m_borderInsets, m_y + m_borderInsets.top);
         }
         else { // this parag has no border.
             if(prevBorder && !m_newShape)
