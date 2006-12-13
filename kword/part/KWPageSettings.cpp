@@ -23,6 +23,22 @@
 KWPageSettings::KWPageSettings() {
     clear();
 }
+KWPageSettings::KWPageSettings(const KWPageSettings &other) {
+    m_columns = other.m_columns;
+    m_mainFrame = other.m_mainFrame;
+    m_headerDistance = other.m_headerDistance;
+    m_footerDistance = other.m_footerDistance;
+    m_footNoteDistance = other.m_footNoteDistance;
+    m_endNoteDistance = other.m_endNoteDistance;
+    m_firstHeader = other.m_firstHeader;
+    m_firstFooter = other.m_firstFooter;
+    m_headers = other.m_headers;
+    m_footers = other.m_footers;
+    m_footNoteSeparatorLineWidth = other.m_footNoteSeparatorLineWidth;
+    m_footNoteSeparatorLineLength = other.m_footNoteSeparatorLineLength;
+    m_footNoteSeparatorLineType = other.m_footNoteSeparatorLineType;
+    m_footNoteSeparatorLinePos = other.m_footNoteSeparatorLinePos;
+}
 
 void KWPageSettings::clear() {
     // defaults

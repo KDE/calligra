@@ -180,6 +180,18 @@ void KWView::setupActions() {
     m_actionEditDelFrame->setWhatsThis( i18n( "Delete the currently selected frame(s)." ) );
     connect(m_actionEditDelFrame, SIGNAL(triggered()), this, SLOT( editDeleteFrame() ));
 
+    m_actionViewHeader = new KToggleAction( i18n("Enable Document Headers"), actionCollection(), "format_header" );
+    m_actionViewHeader->setCheckedState(KGuiItem(i18n("Disable Document Headers")));
+    m_actionViewHeader->setToolTip( i18n( "Shows and hides header display" ) );
+    m_actionViewHeader->setWhatsThis( i18n( "Selecting this option toggles the display of headers in KWord.<br><br>Headers are special frames at the top of each page which can contain page numbers or other information." ) );
+    connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT( toggleHeader() ));
+
+    m_actionViewFooter = new KToggleAction( i18n( "Enable Document Footers" ), actionCollection(), "format_footer" );
+    m_actionViewFooter->setCheckedState(KGuiItem(i18n("Disable Document Footers")));
+    m_actionViewFooter->setToolTip( i18n( "Shows and hides footer display" ) );
+    m_actionViewFooter->setWhatsThis( i18n( "Selecting this option toggles the display of footers in KWord. <br><br>Footers are special frames at the bottom of each page which can contain page numbers or other information." ) );
+    connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT( toggleFooter() ));
+
 
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
@@ -298,20 +310,6 @@ This saves problems with finding out which we missed near the end.
             actionCollection(), "view_frameborders" );
     m_actionViewFrameBorders->setToolTip( i18n( "Turns the border display on and off" ) );
     m_actionViewFrameBorders->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
-
-    m_actionViewHeader = new KToggleAction( i18n( "Enable Document Headers" ), 0,
-            this, SLOT( viewHeader() ),
-            actionCollection(), "format_header" );
-    m_actionViewHeader->setCheckedState(i18n("Disable Document Headers"));
-    m_actionViewHeader->setToolTip( i18n( "Shows and hides header display" ) );
-    m_actionViewHeader->setWhatsThis( i18n( "Selecting this option toggles the display of headers in KWord.<br><br>Headers are special frames at the top of each page which can contain page numbers or other information." ) );
-
-    m_actionViewFooter = new KToggleAction( i18n( "Enable Document Footers" ), 0,
-            this, SLOT( viewFooter() ),
-            actionCollection(), "format_footer" );
-    m_actionViewFooter->setCheckedState(i18n("Disable Document Footers"));
-    m_actionViewFooter->setToolTip( i18n( "Shows and hides footer display" ) );
-    m_actionViewFooter->setWhatsThis( i18n( "Selecting this option toggles the display of footers in KWord. <br><br>Footers are special frames at the bottom of each page which can contain page numbers or other information." ) );
 
     m_actionViewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
             actionCollection(), "view_zoom" );
@@ -1133,6 +1131,41 @@ void KWView::editDeleteFrame() {
         m_document->addCommand(cmd);
     }
 }
+
+void KWView::toggleHeader() {
+    KWPageSettings pageSettings = m_document->pageSettings();
+    if(m_currentPage->pageNumber() == m_document->startPage()) { // first page
+        if(pageSettings.firstHeader() == KWord::HFTypeNone)
+            pageSettings.setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
+        else
+            pageSettings.setFirstHeaderPolicy(KWord::HFTypeNone);
+    }
+    else {
+        if(pageSettings.headers() == KWord::HFTypeNone)
+            pageSettings.setHeaderPolicy(KWord::HFTypeEvenOdd);
+        else
+            pageSettings.setHeaderPolicy(KWord::HFTypeNone);
+    }
+    m_document->setPageSettings(pageSettings);
+}
+
+void KWView::toggleFooter() {
+    KWPageSettings pageSettings = m_document->pageSettings();
+    if(m_currentPage->pageNumber() == m_document->startPage()) { // first page
+        if(pageSettings.firstFooter() == KWord::HFTypeNone)
+            pageSettings.setFirstFooterPolicy(KWord::HFTypeEvenOdd);
+        else
+            pageSettings.setFirstFooterPolicy(KWord::HFTypeNone);
+    }
+    else {
+        if(pageSettings.footers() == KWord::HFTypeNone)
+            pageSettings.setFooterPolicy(KWord::HFTypeEvenOdd);
+        else
+            pageSettings.setFooterPolicy(KWord::HFTypeNone);
+    }
+    m_document->setPageSettings(pageSettings);
+}
+
 
 void KWView::selectionChanged()
 {

@@ -41,6 +41,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoStyleManager.h>
+#include <KoInteractionTool.h>
 
 // KDE + Qt includes
 #include <klocale.h>
@@ -59,7 +60,7 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     m_gridX(MM_TO_POINT(5.0)),
     m_gridY(MM_TO_POINT(5.0)),
     m_zoom(100),
-    m_frameLayout(pageManager(), m_frameSets, pageSettings())
+    m_frameLayout(pageManager(), m_frameSets, &m_pageSettings)
 {
     m_styleManager = new KoStyleManager(this);
     m_zoomMode = KoZoomMode::ZOOM_WIDTH;
@@ -218,6 +219,30 @@ void KWDocument::addFrame(KWFrame *frame) {
         canvas->shapeManager()->add(frame->shape());
     }
     frame->shape()->repaint();
+}
+
+void KWDocument::setPageSettings(const KWPageSettings &newPageSettings) {
+    m_pageSettings = newPageSettings;
+    // TODO be much more intelligent about removing
+    // only frames that are not needed anymore in the new settings should be removed.
+    foreach(KWFrameSet *fs, m_frameSets) {
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+        if(tfs == 0) continue;
+        if(tfs->textFrameSetType() == KWord::OtherTextFrameSet) continue;
+        // we switch to the interaction tool to avoid crashes if the use was editing a frame.
+        KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+        foreach(KWFrame *frame, tfs->frames()) {
+            foreach(KoView *view, views()) {
+                KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+                canvas->shapeManager()->remove(frame->shape());
+            }
+            tfs->removeFrame(frame);
+            delete frame->shape();
+        }
+    }
+    PageProcessingQueue *ppq = new PageProcessingQueue(this);
+    foreach(KWPage *page, pageManager()->pages())
+        ppq->addPage(page);
 }
 
 KWFrameSet *KWDocument::frameSetByName( const QString & name )

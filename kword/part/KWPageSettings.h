@@ -35,6 +35,8 @@ class KWORD_TEST_EXPORT KWPageSettings {
 public:
     /// constructor, initializing the data to some default values.
     KWPageSettings();
+    /// copy constructor
+    KWPageSettings(const KWPageSettings &other);
 
     /**
      * Return the current columns settings.

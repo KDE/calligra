@@ -120,6 +120,8 @@ private slots:
     void insertFrameBreak();
     void formatFont();
     void editDeleteFrame();
+    void toggleHeader();
+    void toggleFooter();
 
 private:
     KWGui *m_gui;
@@ -137,6 +139,8 @@ private:
     KToggleAction *m_actionFormatItalic;
     KToggleAction *m_actionFormatUnderline;
     KToggleAction *m_actionFormatStrikeOut;
+    KToggleAction *m_actionViewHeader;
+    KToggleAction *m_actionViewFooter;
 };
 
 #endif

@@ -114,7 +114,15 @@ public:
     /**
      * Return the settings for page-layouts used in this document.
      */
-    const KWPageSettings *pageSettings() const { return &m_pageSettings; }
+    const KWPageSettings& pageSettings() const { return m_pageSettings; }
+    /**
+     * Return (a copy of) the settings for page-layouts used in this document.
+     */
+    KWPageSettings& pageSettings() { return m_pageSettings; }
+    /**
+     * Set new pageSettings for this document, triggering a layout change.
+     */
+    void setPageSettings(const KWPageSettings &newPageSettings);
 
     /**
      * Insert a new page after another,
