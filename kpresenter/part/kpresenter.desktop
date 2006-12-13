@@ -1,0 +1,17 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KPresenter
+Name[x-test]=xxKPresenterxx
+Exec=kpresenter %u
+GenericName=Slide Presentations
+GenericName[fr]=Présentations par diapositives
+GenericName[x-test]=xxSlide Presentationsxx
+MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/mspowerpoint
+Type=Application
+Icon=kpresenter
+X-KDE-NativeMimeType=application/vnd.oasis.opendocument.presentation
+#X-KDE-NativeMimeType=application/x-kpresenter
+X-DBUS-StartupType=multi
+DocPath=kpresenter/index.html
+X-KDE-StartupNotify=true
+Categories=Qt;KDE;Office;
