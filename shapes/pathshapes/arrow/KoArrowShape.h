@@ -27,9 +27,6 @@
 class FLAKE_EXPORT KoArrowShape : public KoPathShape
 {
 public:
-	KoArrowShape();
-	void createPath(const QSizeF &size);
-protected:
     enum KoArrowType
     {
         ArrowLeft = 0,
@@ -41,6 +38,11 @@ protected:
         ArrowRightDown = 6,
         ArrowRightTop = 7
     };
+
+    KoArrowShape();
+    void createPath(const QSizeF &size);
+    void setType(KoArrowType _type);
+protected:
     KoArrowType m_type;
 };
 

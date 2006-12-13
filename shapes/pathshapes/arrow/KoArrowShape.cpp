@@ -19,26 +19,24 @@
 
 #include "arrow/KoArrowShape.h"
 
-#include <KoViewConverter.h>
-
-#include <QPainter>
-#include <QPainterPath>
-
-#include <math.h>
 
 KoArrowShape::KoArrowShape() 
-	: m_type(ArrowLeft)
 {
+}
 
+void KoArrowShape::setType(KoArrowType _type)
+{
+    //TODO think to clear point if we change type.
+    m_type=_type;
     QSizeF size( 100, 100 );
-    createPath( size );	
+    createPath(size);
 }
 
 void KoArrowShape::createPath( const QSizeF &size )
 {
     switch(m_type)
     {
-    case ArrowLeft: 
+    case ArrowRight: 
     {
     moveTo( QPointF( 0, size.height()/3));
     lineTo( QPointF( size.width()/2, size.height()/3));
@@ -48,6 +46,18 @@ void KoArrowShape::createPath( const QSizeF &size )
     lineTo( QPointF( size.width()/2, size.height()*2/3));
     lineTo( QPointF( 0, size.height()*2/3));
     closeMerge();
+    break;
+    }
+    case ArrowLeft:
+    {
+    moveTo( QPointF( 0, size.height()/2));
+    lineTo( QPointF( size.width()/3, 0));
+    lineTo( QPointF( size.width()/3, size.height()/3));
+    lineTo( QPointF( size.width(), size.height()/3));
+    lineTo( QPointF( size.width(), size.height()*2/3));
+    lineTo( QPointF( size.width()/3, size.height()*2/3));
+    lineTo( QPointF( size.width()/3, size.height()));
+    closeMerge();      
     }
     default:
     break; //TODO

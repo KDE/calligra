@@ -29,7 +29,23 @@ KoArrowShapeFactory::KoArrowShapeFactory(QObject *parent)
 : KoShapeFactory(parent, KoArrowShapeId , i18n("A arrow shape"))
 {
 	setToolTip(i18n("A arrow"));
-	setIcon("arrow"); //TODO add it.
+        KoShapeTemplate t;
+        t.name = i18n("Right Arrow");
+        t.toolTip = i18n("A right arrow");
+        t.icon = ""; //TODO
+        KoProperties *props = new KoProperties();
+        props->setProperty("type", KoArrowShape::ArrowRight);
+        t.properties = props;
+        addTemplate(t);
+
+        t.name = i18n("Left Arrow");
+        t.toolTip = i18n("A left arrow");
+        t.icon = ""; //TODO
+        props = new KoProperties();
+        props->setProperty("type", KoArrowShape::ArrowLeft);
+        t.properties = props;
+        addTemplate(t);
+
 }
 
 KoShape *KoArrowShapeFactory::createDefaultShape()
@@ -44,6 +60,11 @@ KoShape *KoArrowShapeFactory::createDefaultShape()
 KoShape *KoArrowShapeFactory::createShape(const KoProperties* props) const
 {
 	KoArrowShape *s = new KoArrowShape();
+        bool ok;
+        int type = props->getProperty("type").toUInt(&ok);
+        if (ok) {
+                s->setType((KoArrowShape::KoArrowType)type);
+        }	
 	//define type of Arrow
 	s->resize(QSizeF(100,100));
 	s->setBackground(QBrush(Qt::red));
