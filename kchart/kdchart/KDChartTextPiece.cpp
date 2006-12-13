@@ -219,7 +219,7 @@ void KDChartTextPiece::draw( QPainter *p, int x, int y,
     if( paper )
       p->setBrush( *paper );
     p->setPen( color );
-    //dont clip to avoid truncated text 
+    //do not clip to avoid truncated text 
     //p->setClipRect( txtArea );
     if( _dirtyMetrics ){
       if( _metrics )

@@ -34,7 +34,7 @@ KarbonRectangle::KarbonRectangle() : KoRectangleShape()
 {
 }
 
-// TODO: might still be usefull/needed
+// TODO: might still be useful/needed
 /*QString
 VRectangle::name() const
 {

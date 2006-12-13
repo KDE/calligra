@@ -562,7 +562,7 @@ bool KDChartParams::removeProperties( int id )
   you may use the setProperties() function.
 
   \returns true if the property set was found, false
-  if it no property set was registred with this ID.
+  if it no property set was registered with this ID.
 
   \sa registerProperties, KDChartData::setPropertySet
   */
@@ -594,7 +594,7 @@ bool KDChartParams::properties( int id, KDChartPropertySet& rSet ) const
   To delete a stored property set you may use the removeProperties() function.
 
   \returns A pointer to the internally stored property set if the property set was found,
-  Zero if no property set was registred with this ID.
+  Zero if no property set was registered with this ID.
 
   \sa registerProperties, removeProperties, KDChartData::setPropertySet
   */
@@ -617,7 +617,7 @@ KDChartPropertySet* KDChartParams::properties( int id )
   of a property set but use KDChartParams::properties() instead.
 
   \returns true if the property set was found, false
-  if it no property set was registred with this ID.
+  if it no property set was registered with this ID.
 
   \sa registerProperties, KDChartData::setPropertySet
   */
@@ -931,7 +931,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
   Calling setPrintDataValuesWithDefaultFontParams( chart ) will
   <b>reset</b> the respective font size and colour and position
   parameters (but not the QFont itself) and <b>activate</b> printing
-  of the values for the \c chart speficied (or for all charts by
+  of the values for the \c chart specified (or for all charts by
   using \c KDCHART_ALL_CHARTS, resp.).
 
   \param active specifies whether the value texts are to be printed or not.
@@ -952,7 +952,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
   Changing of one or more of <b>the following parameters</b>
   automatically de-activates all future font parameter adjustments
   that would otherwise take place after each call of setChartType (or
-  setAdditionalChartType, resp.).  To re-enable this usefull feature
+  setAdditionalChartType, resp.).  To re-enable this useful feature
   you may call setPrintDataValuesWithDefaultFontParams at any time
   afterwards.
 
@@ -998,7 +998,7 @@ size of the chart and the specification made via parameter \c size.
 \param negativeRotation The amount of degrees (using a circle of
         360 degrees) taken to rotate the text. Positive values rotate
 clockwise, negative values rotate counter-clockwise.  There are two
-special values that you might find usefull for Pie charts or for
+special values that you might find useful for Pie charts or for
 Ring charts: \c KDCHART_SAGGITAL_ROTATION and \c
 KDCHART_TANGENTIAL_ROTATION both leading to individual
 calculation of appropriate rotation for each data value.  Rotation
@@ -1034,7 +1034,7 @@ size of the chart and the specification made via parameter \c size.
 \param positiveRotation The amount of degrees (using a circle of
         360 degrees) taken to rotate the text. Positive values rotate
 clockwise, negative values rotate counter-clockwise.  There are two
-special values that you might find usefull for Pie charts or for
+special values that you might find useful for Pie charts or for
 Ring charts: \c KDCHART_SAGGITAL_ROTATION and \c
 KDCHART_TANGENTIAL_ROTATION both leading to individual
 calculation of appropriate rotation for each data value.  Rotation
@@ -1707,7 +1707,7 @@ void KDChartParams::setDataColor( uint dataset, QColor color )
 /**
   Specifies KD Chart's default colors for the datasets 0..11.
 
-  This method may be usefull to re-set the colors after changing the
+  This method may be useful to re-set the colors after changing the
   colors of the datasets.
 
   \sa setDataColor, setDataRainbowColors, setDataSubduedColors
@@ -1764,7 +1764,7 @@ void KDChartParams::setDataRainbowColors()
   to their appearance in the color circle, if false they will be
   arranged in a logical order making it very easy ti distinguish
   two neighboring colors. Set this parameter to true if you want
-  your neighboring colors look quite similiar, the default is false.
+  your neighboring colors look quite similar, the default is false.
 
   \sa setDataColor, setDataDefaultColors, setDataRainbowColors
   \sa dataColor, maxDataColor
@@ -2050,7 +2050,7 @@ void KDChartParams::setDefaultAxesTypes()
             // End value   following the number of entries
             //             in the associated dataset(s)
             // Delta value 1.0
-            // and dont show any Digits behind the comma.
+            // and do not show any Digits behind the comma.
             setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom, false,
                     1.0,
                     KDCHART_AXIS_LABELS_AUTO_LIMIT,
@@ -2783,7 +2783,7 @@ uint KDChartParams::maxCustomBoxIdx() const
 /**
   Specifies the chart type. The default is bar charts (Bar).
 
-  \note Allways call this <b>before</b> specifying other
+  \note Always call this <b>before</b> specifying other
   axis properties and before calling \c setAdditionalChartType().<br>
   \c setChartType() deactivates the right axis and also sets the
   axisLabelsTouchEdges back to their default for all bottom and
@@ -2918,7 +2918,7 @@ void KDChartParams::setChartType( ChartType chartType )
   the right axis. Doing this will also clear the visibility flag of the
   right axis that is automatically set by setAdditionalChartType()
   implicitely assuming that the additional chart will use the right axis,
-  so there is no need to explicitely call setAxisVisible( false ) for
+  so there is no need to explicitly call setAxisVisible( false ) for
   the right axis: specifying KDCHART_NO_DATASET is enough to disable it.
   e.g. in the example shown above you would replace the
   last line by these ones:
@@ -3475,7 +3475,7 @@ void KDChartParams::setPrintDataValuesFontRelSize( uint chart, uint size )
   respective font size and colour and position parameters but not the
   QFont itself.  By setting \c callSetPrintDataValues to true you
   select general enabling of text printing, when doing so it is
-  <b>not</b> neccessary to call setPrintDataValues() after calling
+  <b>not</b> necessary to call setPrintDataValues() after calling
   setPrintDataValuesWithDefaultFontParams().
 
   \note If you want to call setChartType() after calling
@@ -3878,7 +3878,7 @@ transpProps);
 
 \note The example above uses setProperties (in the last line) to
 define a property set. This is the right way for build-in property sets,
-but it is not recomended for your additional user-defined property sets:
+but it is not recommended for your additional user-defined property sets:
 these should be registered with the registerProperties function
 to initially obtain a unique ID number for your new property set,
 see the second example given with \c KDCHART_PROPSET_VERT_LINE.
@@ -3938,7 +3938,7 @@ horiProps);
 
 \note The example above uses setProperties (in the last line) to
 define a property set. This is the right way for build-in property sets,
-but it is not recomended for your additional user-defined property sets:
+but it is not recommended for your additional user-defined property sets:
 these should be registered with the registerProperties function
 to initially obtain a unique ID number for your new property set,
 see the second example given with \c KDCHART_PROPSET_VERT_LINE.
@@ -4000,7 +4000,7 @@ vertProps);
 
 \note The example above uses setProperties (in the last line) to
 define a property set. This is the right way for build-in property sets,
-but it is not recomended for your additional user-defined property sets:
+but it is not recommended for your additional user-defined property sets:
 these should be registered with the registerProperties function
 to initially obtain a unique ID number for your new property set,
 see the following example:
@@ -4248,7 +4248,7 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   Specifies the number of pixels between two dataset values.
   In addition you might want to use \c setOutlineDataLineStyle( Qt::NoPen ) to hide the line.
 
-  Also the method \c setValueBlockGap might be usefull, please read the information given there ...
+  Also the method \c setValueBlockGap might be useful, please read the information given there...
 
   This setting only has an effect in bar charts: if there is more than one dataset shown by your chart.
 
@@ -4318,7 +4318,7 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   If there is only one dataset shown this gap is appearing between each of the bars, otherwise it is appearing between each of the bar blocks.
   In addition you might want to use \c setOutlineDataLineStyle( Qt::NoPen ) to hide the line.
 
-  Also the method \c setDatasetGap might be usefull, please read the information given there ...
+  Also the method \c setDatasetGap might be useful, please read the information given there...
 
   This setting only has an effect in bar charts.
 
@@ -4431,7 +4431,7 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   This can be different from the number of bars you
   actually wanted to display: by specifying both
   the bar width and the value block gap width you
-  may controll your chart very well but take the risk
+  may control your chart very well but take the risk
   of not getting all bars drawn if there is not enough
   horizontal space to display them with the given width
   and gap width.
@@ -4457,7 +4457,7 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   shows less bars than you
   actually wanted to display: by specifying both
   the bar width and the value block gap width you
-  may controll your chart very well but take the risk
+  may control your chart very well but take the risk
   of not getting all bars drawn if there is not enough
   horizontal space to display them with the given width
   and gap width.
@@ -4509,7 +4509,7 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   This setting only has an effect in bar charts.
 
    If \a solidArrows is true, the bars with excess values (like
-   infinity, or any other value that exceeds the y-axis labelling) will
+   infinity, or any other value that exceeds the y-axis labeling) will
    have an integrated arrow head. If \a solidArrows is false, they will
    still have an integrated arrow head at a lower position, but also
    two flat arrows on top of them to better indicate that there could
@@ -4787,7 +4787,7 @@ void KDChartParams::setLineMarkerStyles( LineMarkerStyleMap map ) {
   this default just call setLineColor() without specifying a
   parameter.
 
-  \note Setting the line color to a special value is usefull to
+  \note Setting the line color to a special value is useful to
   visualize gaps in a normally very narrow series of data values.
 
   e.g. You might want to specify setLineMarkerStyle( i, LineMarker4Pixels )
@@ -7103,7 +7103,7 @@ bool KDChartParams::showGrid() const
   Calling setAxisDataset() with a dataset number will automatically set
   the visability flag of the respective axis (or axes, resp.) while calling
   it with KDCHART_NO_DATASET will clear the visibility flag so there is no
-  need to explicitely call \c setAxisVisible() after calling setAxisDatasets().
+  need to explicitly call \c setAxisVisible() after calling setAxisDatasets().
 
   \note If you specify \c KDCHART_ALL_DATASETS the axis will
   represent all the datasets with SourceMode DataEntry
@@ -7459,7 +7459,7 @@ void KDChartParams::setAxisParams( uint n,
   like department name, print date, page number... <br>
   <b>Note:</b> Those headers <b>share the same area</b> so make sure to
   specify propper horizontal alignment for each section when using more than
-  one of them. By default \c HdFtPosHeader0 has centered alignement,
+  one of them. By default \c HdFtPosHeader0 has centered alignment,
   \c HdFtPosHeader0L is aligned to the left and \c HdFtPosHeader0R to the
   right side. All of them are vertically aligned to the bottom, you may
   change this at your own risk: the resulting output might look strange. <br>

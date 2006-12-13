@@ -437,7 +437,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
             // 2nd This height is given to calculateLabelTexts() to
             //     calculate the delimiter and sub-delimiter distances as
             //     well as the axis scaling factors.
-            //     If neccessary and possible the short replacement strings
+            //     If necessary and possible the short replacement strings
             //     are taken that might have been specified by the user.
             //     - see KDChartAxisParams::setAxisLabelStringLists() -
             //
@@ -920,7 +920,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                             pen.setWidth( penWidth );
                         }else{
                             if( cv.bLogarithmic ){
-                                break; // there is nothing we can do: we allways
+                                break; // there is nothing we can do: we always
                                 // want 10 sub-delims per logarithmic step
                             }else{
                                 if ( 0.5 != cv.nSubDelimFactor ) {
@@ -1712,7 +1712,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
 			       *drawing the submarkers	
 			       * make it visible or not		
 			       *In the case we have a null label - axisDigitsBehindComma is implicitely set to 0 -
-			       *also paint or dont paint the delimiter corresponding to this label - default is paint. 
+			       *also paint or do not paint the delimiter corresponding to this label - default is paint. 
 			       */                             
 			      if ( !label.isNull() || showDelim )
                                 painter->drawLine( QPoint( static_cast<int>( p1X ),
@@ -2436,7 +2436,7 @@ void KDChartAxesPainter::calculateLabelTexts(
             else
                 tmpList = para.axisLabelStringList();
 
-            // prepare transfering the strings into the labelTexts list
+            // prepare transferring the strings into the labelTexts list
             double ddelta
                 = ( KDCHART_AXIS_LABELS_AUTO_DELTA == para.axisValueDelta() )
                 ? 1.0
@@ -2790,7 +2790,7 @@ void KDChartAxesPainter::calculateLabelTexts(
                     //
                     // we temporarily disable week alignment until bug
                     // is fixed (1st week of year must not start in the
-                    // preceeding year but rather be shown incompletely)
+                    // preceding year but rather be shown incompletely)
                     //
                     //                                 (khz, 2003/10/10)
                     //

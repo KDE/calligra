@@ -161,7 +161,7 @@ VFill::operator=( const VFill& fill )
 {
 	if( this != &fill )
 	{
-		// dont copy the parent!
+		// do not copy the parent!
 		m_type = fill.m_type;
 		m_color = fill.m_color;
 		m_gradient = fill.m_gradient;

@@ -53,7 +53,7 @@ public:
 //	void resetToolBox( VToolBox * toolbox );
 	VTool *findTool( const QString &toolName ) const;
 
-	// Called when the toolbox is deleted because the view was made inactive in favour of another view
+	// Called when the toolbox is deleted because the view was made inactive in favor of another view
 	void youAintGotNoToolBox();
 
 private:

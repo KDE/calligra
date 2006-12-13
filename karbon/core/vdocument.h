@@ -217,7 +217,7 @@ public:
 	/**
 	 * Returns the list of layers.
      * The layer list provides a hierarchical view/access of the document data.
-     * All the documents shapes are childs of a shape container, where a layer
+     * All the documents shapes are children of a shape container, where a layer
      * resembles a root container which can contain other containers in an
      * arbitrary nesting depth.
 	 */

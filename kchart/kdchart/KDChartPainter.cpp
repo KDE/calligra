@@ -1000,7 +1000,7 @@ QPoint KDChartPainter::calculateAnchor( const KDChartCustomBox & box,
             //  The reason for this is that you may NOT use  AreasCustomBoxes
             //  as a value for the KDChartCustomBox anchor area.
             //
-            //  This is due to the fact that an anchor area allways must specify one AREA
+            //  This is due to the fact that an anchor area always must specify one AREA
             //  or some contiguous areas that form an area when combined.
             //  The flag  AreasCustomBoxes  however specifies a list of custom boxes
             //  that normally do not form a contiguos ares, so they cannot be used as anchor area.

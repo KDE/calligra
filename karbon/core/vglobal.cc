@@ -41,7 +41,7 @@ VGlobal::factorialLn( unsigned n )
 {
 	const unsigned cacheSize = 100;
 
-	// A static array is initalized to zero.
+	// A static array is initialized to zero.
 	static double cache[ cacheSize ];
 
 

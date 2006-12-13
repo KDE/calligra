@@ -231,7 +231,7 @@ VStroke::operator=( const VStroke& stroke )
 {
 	if( this != &stroke )
 	{
-		// dont copy the parent!
+		// do not copy the parent!
 		m_type = stroke.m_type;
 
 		m_lineWidth = stroke.m_lineWidth;

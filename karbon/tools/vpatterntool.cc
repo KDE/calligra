@@ -314,7 +314,7 @@ VPatternTool::mouseButtonPress()
 {
 	m_current = first();
 
-	// set the apropriate editing state
+	// set the appropriate editing state
 	if( m_origin.contains( m_current ) )
 	{
 		m_state = moveOrigin;

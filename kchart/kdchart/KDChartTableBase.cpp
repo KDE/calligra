@@ -86,7 +86,7 @@
 
    \note All of the other functions provided by KDChartTableDataBase are
    either used internally by KD Chart or they are const methods
-   returning some usefull figures like the sum of all values in a row...
+   returning some useful figures like the sum of all values in a row...
 */
 
 

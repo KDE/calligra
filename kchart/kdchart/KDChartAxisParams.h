@@ -63,7 +63,7 @@ class KDChartParams;
   Use this to specify that an automatically computed amount of
   axis labels are to be skipped if there is not enough space
   for displaying all of them.
-  This is usefull in case you have lots of entries in one dataset.
+  This is useful in case you have lots of entries in one dataset.
 
   \sa setAxisValues
   */

@@ -47,7 +47,7 @@
 
   \ifnot v200
   This class is work in progress, at present only single line frame borders
-  and (scaled/streched) background pictures are available.
+  and (scaled/stretched) background pictures are available.
   See KDChartParams::setSimpleFrame() to learn how to use them.
   \else
   A frame may consist of an (optional) border and/or an (optional) background.
@@ -71,7 +71,7 @@
   A frame may consist of an (optional) border and/or an (optional) background.
   \ifndef v200
   This class is work in progress, at present only single line frame borders
-  and (scaled/streched) background pictures are available.
+  and (scaled/stretched) background pictures are available.
   See KDChartParams::setSimpleFrame() to learn how to use them.
   \else
   The border may consist of up to four edges and/or up to four border corners.
@@ -861,7 +861,7 @@ public slots:
         use KDFrame::PaintBackground to draw only the background, use KDFrame::PaintEdges to draw just the edges,
         use KDFrame::PaintCorners to draw only the corners.
         \param innerRect The area inside the frame. Use this parameter to temporarily override the \c innerRect set by
-        the constructor of KDFrame or by setInnerRect(). This approach can be usefull if you want to draw several
+        the constructor of KDFrame or by setInnerRect(). This approach can be useful if you want to draw several
         frames that differ only regarding to their position and size but share the same edges/corners/background settings.
         In this case you could decide to instantiate only one KDFrame set up the desired settings and just call
         its paint() methode several time - giving it the appropriate innerRect for each frame. This would result in

@@ -681,7 +681,7 @@ VText::buildRequest( QString family, int weight, int slant, double size, int &id
 
 	FcResult result;
 
-	// we dont want to use bitmap fonts, so get a list of fonts sorted by closeness to pattern
+	// we do not want to use bitmap fonts, so get a list of fonts sorted by closeness to pattern
 	// and use the best matching scalable font
 	FcFontSet *fset = FcFontSort( 0, pattern, FcFalse, 0L, &result );
 

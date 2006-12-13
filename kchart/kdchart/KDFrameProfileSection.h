@@ -58,7 +58,7 @@ public:
     to compose frame border's profile and the look of each individual
     section by calling \c addProfileSection() multiple times.
 
-    Some commonly used profiles are allready pre-defined for your convenience,
+    Some commonly used profiles are already pre-defined for your convenience,
     \c setSimpleProfile is used to select one of them, see \c setProfile
     for an example how to do this.
 

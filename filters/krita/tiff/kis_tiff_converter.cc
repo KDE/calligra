@@ -207,7 +207,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         kDebug(41008) <<  "Image does not define its sample type" << endl;
         sampletype =  SAMPLEFORMAT_UINT;
     }
-    // Determine the number of channels (usefull to know if a file has an alpha or not
+    // Determine the number of channels (useful to know if a file has an alpha or not
     uint16 nbchannels;
     if(TIFFGetField(image, TIFFTAG_SAMPLESPERPIXEL, &nbchannels) == 0){
         kDebug(41008) << "Image has an undefined number of samples per pixel" << endl;

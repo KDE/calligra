@@ -451,7 +451,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
     Q3PointArray previousPoints; // no vector since only areas need it,
     // and these do not support 3d yet
 
-    // Store some (dataset-independend) default values
+    // Store some (dataset-independent) default values
     // to be used unless other properties
     // have been specified for the respective data cell:
     //
@@ -459,7 +459,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
 
     for ( dataset = datasetEnd; ( dataset >= (int)datasetStart && dataset >= 0 ); --dataset ) {
 
-        // Store some (dataset-dependend) default values
+        // Store some (dataset-dependent) default values
         // to be used unless other properties
         // have been specified for the respective data cell:
         //

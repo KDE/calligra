@@ -254,7 +254,7 @@ public:
        Method setData.
 
        \note The property set ID is <b>not</b> changed by the setData method.
-       If you want to set it please call \c KDChartData::setPropertySet() explicitely.
+       If you want to set it please call \c KDChartData::setPropertySet() explicitly.
 
        \sa setAll
     */

@@ -300,7 +300,7 @@ VGradientTool::mouseButtonPress()
 {
 	m_current = first();
 
-	// set the apropriate editing state
+	// set the appropriate editing state
 	if( m_center.contains( m_current ) && shiftPressed())
 	{
 		m_state = moveCenter;

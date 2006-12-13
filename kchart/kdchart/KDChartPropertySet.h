@@ -108,7 +108,7 @@ class KDCHART_EXPORT KDChartPropertySet :public QObject
       values.
 
       \param name (may be empty) a name describing this property set.
-      \param idParent the ID of the parent property set. Skip this paramter
+      \param idParent the ID of the parent property set. Skip this parameter
       to define a property set without specifying a parent.
       */
     explicit KDChartPropertySet( const QString& name, int idParent=KDChartPropertySet::UndefinedID ) :
