@@ -60,8 +60,8 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     addTemplate(t);
 
     t.id = KoPathShapeId;
-    t.name = "Polygon";
-    t.toolTip = "A polygon";
+    t.name = i18n("Polygon");
+    t.toolTip = i18n("A polygon");
     t.icon = ""; //TODO add it
     props = new KoProperties();
     props->setProperty( "corners", 5 );
