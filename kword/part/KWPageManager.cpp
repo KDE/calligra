@@ -68,7 +68,7 @@ KWPage* KWPageManager::page(int pageNum) const {
     }
 #ifdef DEBUG_PAGES
     kWarning(31001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist ["<< m_firstPage << "-"<< lastPageNumber() << "]"<< endl;
-    kDebug(31001) << kBacktrace();
+    kDebug(32001) << kBacktrace();
 #endif
     return 0;
 }
@@ -182,7 +182,7 @@ void KWPageManager::setDefaultPage(const KoPageLayout &layout) {
         m_defaultPageLayout.ptLeft = qMax(m_defaultPageLayout.ptLeft, 0.0);
         m_defaultPageLayout.ptRight = qMax(m_defaultPageLayout.ptRight, 0.0);
     }
-    //kDebug() << "setDefaultPage l:" << m_defaultPageLayout.ptLeft << ", r: " << m_defaultPageLayout.ptRight << ", a: " << m_defaultPageLayout.ptPageEdge << ", b: " << m_defaultPageLayout.ptBindingSide << endl;
+    //kDebug(32001) << "setDefaultPage l:" << m_defaultPageLayout.ptLeft << ", r: " << m_defaultPageLayout.ptRight << ", a: " << m_defaultPageLayout.ptPageEdge << ", b: " << m_defaultPageLayout.ptBindingSide << endl;
 }
 
 QPointF KWPageManager::clipToDocument(const QPointF &point) {

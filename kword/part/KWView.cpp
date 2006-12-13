@@ -224,7 +224,7 @@ This saves problems with finding out which we missed near the end.
     m_actionDeletePage = new KAction( i18n( "Delete Page" ), "delslide", 0,
     this, SLOT( deletePage() ),
     actionCollection(), "delete_page" );
-    kDebug() <<  m_doc->pageCount() <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
+    kDebug(32003) <<  m_doc->pageCount() <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
 
     (void) new KAction( i18n( "Configure Mail Merge..." ), "configure",0,
     this, SLOT( editMailMergeDataBase() ),
@@ -913,13 +913,13 @@ void KWView::setZoom( int zoom ) {
     //    m_sbZoomLabel->setText( ' ' + QString::number( zoom ) + "% " );
 
     // Also set the zoom in KoView (for embedded views)
-    //kDebug() << "KWView::setZoom " << zoom << " setting koview zoom to " << m_zoomHandler.zoomedResolutionY() << endl;
+    //kDebug(32003) << "KWView::setZoom " << zoom << " setting koview zoom to " << m_zoomHandler.zoomedResolutionY() << endl;
     kwcanvas()->updateSize();
 }
 
 void KWView::viewZoom( KoZoomMode::Mode mode, int zoom )
 {
-    //kDebug() << " viewZoom '" << KoZoomMode::toString( mode ) << ", " << zoom << "'" << endl;
+    //kDebug(32003) << " viewZoom '" << KoZoomMode::toString( mode ) << ", " << zoom << "'" << endl;
 
     if ( !m_currentPage )
         return;

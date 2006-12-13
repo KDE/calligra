@@ -454,7 +454,7 @@ void KWDocument::addCommand(KCommand *command, bool execute) {
 }
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {
-//kDebug() << "KWDocument::requestMoreSpace\n";
+//kDebug(32002) << "KWDocument::requestMoreSpace\n";
     Q_ASSERT(fs);
     Q_ASSERT(fs->frameCount() > 0);
     Q_ASSERT(QThread::currentThread() == thread());
@@ -486,40 +486,24 @@ void KWDocument::printDebug() {
         }
     };
 
-    kDebug() << "----------------------------------------"<<endl;
-    kDebug() << "                 Debug info"<<endl;
-    kDebug() << "Document:" << this <<endl;
-    kDebug() << "Type of document: " << (m_pageSettings.hasMainTextFrame()?"WP":"DTP") << endl;
-    kDebug() << "First Header: " << Helper::HFToString(m_pageSettings.firstHeader()) << endl;
-    kDebug() << "First Footer: " << Helper::HFToString(m_pageSettings.firstFooter()) << endl;
-    kDebug() << "Other Headers: " << Helper::HFToString(m_pageSettings.headers()) << endl;
-    kDebug() << "Other Footers: " << Helper::HFToString(m_pageSettings.footers()) << endl;
-    kDebug() << "Units: " << KoUnit::unitName( unit() ) <<endl;
-    kDebug() << "# Framesets: " << frameSetCount() <<endl;
+    kDebug(32001) << "----------------------------------------"<<endl;
+    kDebug(32001) << "                 Debug info"<<endl;
+    kDebug(32001) << "Document:" << this <<endl;
+    kDebug(32001) << "Type of document: " << (m_pageSettings.hasMainTextFrame()?"WP":"DTP") << endl;
+    kDebug(32001) << "First Header: " << Helper::HFToString(m_pageSettings.firstHeader()) << endl;
+    kDebug(32001) << "First Footer: " << Helper::HFToString(m_pageSettings.firstFooter()) << endl;
+    kDebug(32001) << "Other Headers: " << Helper::HFToString(m_pageSettings.headers()) << endl;
+    kDebug(32001) << "Other Footers: " << Helper::HFToString(m_pageSettings.footers()) << endl;
+    kDebug(32001) << "Units: " << KoUnit::unitName( unit() ) <<endl;
+    kDebug(32001) << "# Framesets: " << frameSetCount() <<endl;
     int i=0;
     foreach(KWFrameSet *fs, m_frameSets) {
-        kDebug() << "Frameset " << i++ << ": '" <<
+        kDebug(32001) << "Frameset " << i++ << ": '" <<
             fs->name() << "' (" << fs << ")" << /*(fs->isDeleted()?" Deleted":"")<<*/endl;
-//       if ( fs->isVisible())
-           fs->printDebug();
-//      else
-//           kDebug() << "  [hidden] #" << fs->frameCount() << " frames" << endl;
+        fs->printDebug();
     }
-/* TODO
-    for ( uint pgNum = 0 ; pgNum < m_sectionTitles.size() ; ++pgNum ) {
-        kDebug() << "Page " << pgNum << "  Section: '" << m_sectionTitles[ pgNum ] << "'"<< endl;
-    }
-*/
-    /*
-    kDebug() << "# Images: " << getImageCollection()->iterator().count() <<endl;
-    QDictIterator<KWImage> it( getImageCollection()->iterator() );
-    while ( it.current() ) {
-        kDebug() << " + " << it.current()->getFilename() << ": "<<it.current()->refCount() <<endl;
-        ++it;
-    }
-    */
 
-    kDebug() << "PageManager holds "<< pageCount() << " pages in the range: " << startPage() <<
+    kDebug(32001) << "PageManager holds "<< pageCount() << " pages in the range: " << startPage() <<
         "-" << lastPage() << endl;
     for (int pgnum = startPage() ; pgnum <= lastPage() ; pgnum++) {
         KWPage *page = pageManager()->page(pgnum);
@@ -529,9 +513,9 @@ void KWDocument::printDebug() {
             side = "[Right]";
         else if(page->pageSide() == KWPage::PageSpread)
             side = "[PageSpread]";
-        kDebug() << "Page " << pgnum << side << " width=" << page->width() << " height=" << page->height() << endl;
+        kDebug(32001) << "Page " << pgnum << side << " width=" << page->width() << " height=" << page->height() << endl;
     }
-    kDebug() << "  The height of the doc (in pt) is: " << pageManager()->
+    kDebug(32001) << "  The height of the doc (in pt) is: " << pageManager()->
         bottomOfPage(lastPage()) << endl;
 }
 #endif
