@@ -41,7 +41,8 @@ class Damage
       Workbook,
       Sheet,
       Range,
-      Cell
+      Cell,
+      Selection
     } Type;
 
     virtual Type type() const { return Nothing; }
@@ -109,6 +110,21 @@ class SheetDamage : public Damage
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS( SheetDamage::Changes )
 
+
+class SelectionDamage : public Damage
+{
+  public:
+    SelectionDamage( const Region& region );
+    virtual ~SelectionDamage();
+
+    virtual Type type() const { return Damage::Selection; }
+
+    const Region& region() const;
+
+  private:
+    class Private;
+    Private * const d;
+};
 
 } // namespace KSpread
 

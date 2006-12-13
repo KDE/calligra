@@ -43,6 +43,12 @@ public:
   Changes changes;
 };
 
+class SelectionDamage::Private
+{
+public:
+  Region region;
+};
+
 CellDamage::CellDamage( KSpread::Cell* cell, Changes changes )
   : d( new Private )
 {
@@ -100,4 +106,20 @@ Sheet* SheetDamage::sheet() const
 SheetDamage::Changes SheetDamage::changes() const
 {
   return d->changes;
+}
+
+SelectionDamage::SelectionDamage( const Region& region )
+  : d( new Private )
+{
+  d->region = region;
+}
+
+SelectionDamage::~SelectionDamage()
+{
+  delete d;
+}
+
+const KSpread::Region& SelectionDamage::region() const
+{
+  return d->region;
 }

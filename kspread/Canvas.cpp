@@ -1508,10 +1508,8 @@ void Canvas::paintEvent( QPaintEvent* event )
 
     ElapsedTime et( "Painting cells", ElapsedTime::PrintOnlyTime );
 
-    // mark visible cells, that need relayouting
-    const QRect visibleCells = this->visibleCells();
-
     QPainter painter(this);
+    painter.setClipRegion( event->region() );
     paintUpdates( painter, event->rect() );
     event->accept();
 }

@@ -6591,14 +6591,8 @@ void View::slotUpdateVBorder( Sheet *_sheet )
 
 void View::slotChangeSelection(const KSpread::Region& changedRegion)
 {
-//   kDebug() << *selectionInfo() << endl;
-
   if (!changedRegion.isValid())
-  {
     return;
-  }
-
-  doc()->emitBeginOperation( false );
 
   bool colSelected = d->selection->isColumnSelected();
   bool rowSelected = d->selection->isRowSelected();
@@ -6640,22 +6634,15 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
   // delayed recalculation of the operation shown in the status bar
   d->statusBarOpTimer.setSingleShot(true);
   d->statusBarOpTimer.start(250);
-  // Send some event around. This is read for example
-  // by the calculator plugin.
-//   SelectionChanged ev(*selectionInfo(), activeSheet()->name());
-//   QApplication::sendEvent( this, &ev );
 
   if ( !d->loading )
-    d->activeSheet->setRegionPaintDirty( changedRegion );
+    doc()->addDamage( new SelectionDamage( changedRegion ) );
   d->vBorderWidget->update();
   d->hBorderWidget->update();
   d->selectAllButton->update();
 
   if (colSelected || rowSelected)
-  {
-    doc()->emitEndOperation(/* *selectionInfo() */);
     return;
-  }
 
   d->canvas->validateSelection();
 
@@ -6669,12 +6656,8 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
   // Perhaps the user is entering a value in the cell.
   // In this case we may not touch the EditWidget
   if ( !d->canvas->editor() && !d->canvas->chooseMode() )
-  {
     updateEditWidgetOnPress();
-  }
   d->canvas->updatePosWidget();
-
-  doc()->emitEndOperation(/* *selectionInfo() */);
 }
 
 void View::slotChangeChoice(const KSpread::Region& changedRegion)
@@ -7096,6 +7079,8 @@ void View::handleDamages( const QList<Damage*>& damages )
     Region layoutChangedRegion;
     Region textFormatChagedRegion;
     Region valueChangedRegion;
+    QRegion paintRegion;
+    bool paintClipped = true;
 
     ElapsedTime et( "Damage processing", ElapsedTime::PrintOnlyTime );
 
@@ -7115,6 +7100,7 @@ void View::handleDamages( const QList<Damage*>& damages )
             {
                 damagedSheet->setRegionPaintDirty( region ); // still used for embedded object repainting
                 sheetView( damagedSheet )->invalidateRegion( region );
+                paintClipped = false;
             }
             if ( cellDamage->changes() & CellDamage::Formula )
             {
@@ -7150,6 +7136,18 @@ void View::handleDamages( const QList<Damage*>& damages )
                 refreshView = true;
             }
         }
+
+        if( damage->type() == Damage::Selection )
+        {
+            SelectionDamage* selectionDamage = static_cast<SelectionDamage*>( damage );
+            const Region region = selectionDamage->region();
+
+            if ( paintClipped )
+            {
+                const QRectF rect = canvasWidget()->cellCoordinatesToDocument( region.boundingRect() );
+                paintRegion += doc()->documentToView( rect.translated( -canvasWidget()->xOffset(), -canvasWidget()->yOffset() ) ).toRect().adjusted( -3, -3, 4, 4 );
+            }
+        }
     }
 
     // First, update the dependencies.
@@ -7161,7 +7159,10 @@ void View::handleDamages( const QList<Damage*>& damages )
     // TODO Stefan: handle text format changes
     // TODO Stefan: handle layout changes
     // At last repaint the dirty cells.
-    canvas()->update();
+    if ( paintClipped )
+        canvas()->update( paintRegion );
+    else
+        canvas()->update();
     if ( refreshView )
         this->refreshView();
 }
