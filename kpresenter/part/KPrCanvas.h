@@ -36,7 +36,7 @@ public:
     void gridSize( double *horizontal, double *vertical ) const;
     bool snapToGrid() const;
     void addCommand( KCommand *command, bool execute = true );
-    KoShapeManager * KPrCanvas::shapeManager() const;
+    KoShapeManager * shapeManager() const;
     void updateCanvas( const QRectF& rc );
 
     KoToolProxy * toolProxy() { return m_toolProxy; }
