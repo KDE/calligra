@@ -59,33 +59,6 @@ public:
     KWDocument( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
     ~KWDocument();
 
-    /// return the grid width
-    double gridX() const { return m_gridX; }
-    /// return the grid height
-    double gridY() const { return m_gridY; }
-    /**
-     * Set the size grid to a new value
-     * @param x the width of a grid unit
-     * @param y the height of a grid unit
-     * @see snapToGrid()
-     * @see gridX()
-     * @see gridY()
-     */
-    void setGrid(double x, double y) { m_gridX = x; m_gridY = y; }
-
-    /**
-     * return if snap to grid is enabled.
-     * @return if snap to grid is enabled.
-     * @see setGrid()
-     */
-    bool snapToGrid() { return m_snapToGrid; }
-    /**
-     * Set the snap to grid, forcing objects being moved/scaled to the grid.
-     * @param on when true, all moving and scaling will be on the grid.
-     * @see setGrid()
-     */
-    void setSnapToGrid(bool on) { m_snapToGrid = on; }
-
     // KoShapeControllerBase interface
     /// reimplemented from KoShapeControllerBase
     void addShape (KoShape *shape);
@@ -258,8 +231,7 @@ private:
     void clear();
 
 private:
-    bool m_snapToGrid, m_hasTOC;
-    double m_gridX, m_gridY;
+    bool m_hasTOC;
     double m_defaultColumnSpacing;
     double m_tabStop;   ///< pt distance for auto-tabstops
 

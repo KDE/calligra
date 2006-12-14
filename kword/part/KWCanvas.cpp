@@ -73,8 +73,8 @@ void KWCanvas::updateSize() {
 }
 
 void KWCanvas::gridSize(double *horizontal, double *vertical) const {
-    *horizontal = m_document->gridX();
-    *vertical = m_document->gridY();
+    *horizontal = m_document->gridData().gridX();
+    *vertical = m_document->gridData().gridY();
 }
 
 bool KWCanvas::snapToGrid() const {

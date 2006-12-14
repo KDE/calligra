@@ -59,7 +59,7 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     : KoView( document, parent )
 {
     m_document = document;
-    m_snapToGrid = m_document->snapToGrid();
+    m_snapToGrid = m_document->gridData().snapToGrid();
     m_gui = new KWGui( viewMode, this );
     m_canvas = m_gui->canvas();
 
@@ -1169,7 +1169,7 @@ void KWView::toggleFooter() {
 
 void KWView::toggleSnapToGrid() {
     m_snapToGrid = !m_snapToGrid;
-    m_document->setSnapToGrid(m_snapToGrid); // for persistency
+    m_document->gridData().setSnapToGrid(m_snapToGrid); // for persistency
 }
 
 // end of actions

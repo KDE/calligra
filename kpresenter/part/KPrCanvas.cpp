@@ -49,15 +49,14 @@ KPrCanvas::~KPrCanvas()
 
 void KPrCanvas::gridSize( double *horizontal, double *vertical ) const
 {
-    // TODO
-    *horizontal = 0;
-    *vertical = 0;
+    *horizontal = m_doc->gridData().gridX();
+    *vertical = m_doc->gridData().gridY();
+
 }
 
 bool KPrCanvas::snapToGrid() const
 {
-    // TODO
-    return false;
+    return m_doc->gridData().snapToGrid();
 }
 
 void KPrCanvas::addCommand( KCommand *command, bool execute )
@@ -84,7 +83,7 @@ KoViewConverter * KPrCanvas::viewConverter()
 
 KoUnit KPrCanvas::unit()
 { 
-    return KoUnit(); 
+    return m_doc->unit(); 
 }
 
 void KPrCanvas::paintEvent( QPaintEvent *event )

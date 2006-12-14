@@ -56,9 +56,6 @@
 
 KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewMode )
     : KoDocument(parentWidget, parent, singleViewMode),
-    m_snapToGrid(false),
-    m_gridX(MM_TO_POINT(5.0)),
-    m_gridY(MM_TO_POINT(5.0)),
     m_zoom(100),
     m_frameLayout(pageManager(), m_frameSets, &m_pageSettings)
 {
