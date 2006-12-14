@@ -73,7 +73,8 @@ ImageExport::convert(const QCString& from, const QCString& to)
     pixmap = QPixmap(width, height);
     QPainter  painter(&pixmap);
     kchartDoc.paintContent(painter, pixmap.rect(), false);
-    saveImage( m_chain->outputFile());
+    if(!saveImage( m_chain->outputFile()))
+	return KoFilter::CreationError;
     return KoFilter::OK; 
 }
 
