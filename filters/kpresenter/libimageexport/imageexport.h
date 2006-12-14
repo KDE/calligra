@@ -26,7 +26,7 @@
 #include <koffice_export.h>
 
 class QPixmap;
-class KOFFICEFILTER_EXPORT ImageExport : public KoFilter
+class KPRESENTERIMAGEEXPORT_EXPORT ImageExport : public KoFilter
 {
     Q_OBJECT
 
