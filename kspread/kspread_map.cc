@@ -162,7 +162,7 @@ void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
     settingsWriter.addConfigItem( "ViewId", QString::fromLatin1( "View1" ) );
     // Save visual info for the first view, such as active sheet and active cell
     // It looks like a hack, but reopening a document creates only one view anyway (David)
-    View * view = static_cast<View*>( m_doc->views().getFirst());
+    View * view = m_doc->views().isEmpty() ? 0 : dynamic_cast<View*>(m_doc->views().getFirst());
     if ( view ) // no view if embedded document
     {
         // save current sheet selection before to save marker, otherwise current pos is not saved
