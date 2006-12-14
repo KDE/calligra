@@ -71,7 +71,10 @@ void KPrView::initGUI()
 
 void KPrView::initActions()
 {
-    setXMLFile( "kpresenter.rc" );
+    if ( !m_doc->isReadWrite() )
+       setXMLFile( "kpresenter_readonly.rc" );
+    else
+       setXMLFile( "kpresenter.rc" );
 }
 
 #include "KPrView.moc"

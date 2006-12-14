@@ -53,4 +53,4 @@ install( FILES kpresenterpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES kpresenter.desktop DESTINATION ${XDG_APPS_DIR})
 
 ### GUI files ###
-install( FILES kpresenter.rc DESTINATION ${DATA_INSTALL_DIR}/kpresenter)
+install( FILES kpresenter.rc kpresenter_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kpresenter)

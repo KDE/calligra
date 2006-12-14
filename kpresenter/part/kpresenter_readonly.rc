@@ -1,0 +1,7 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="7">
+    <ToolBar name="mainToolBar">
+        <Action name="view_zoom"/>
+        <Action name="view_zoom_out"/>
+        <Action name="view_zoom_in"/>
+    </ToolBar>
+</kpartgui>
