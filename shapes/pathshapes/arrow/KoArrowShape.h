@@ -32,7 +32,7 @@ public:
         ArrowLeft = 0,
         ArrowRight = 1,
         ArrowBottom = 2,
-        Arrowtop = 3,
+        ArrowTop = 3,
         ArrowLeftDown = 4,
         ArrowLeftTop = 5,
         ArrowRightDown = 6,

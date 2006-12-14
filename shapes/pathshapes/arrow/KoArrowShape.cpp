@@ -58,6 +58,51 @@ void KoArrowShape::createPath( const QSizeF &size )
     lineTo( QPointF( size.width()/3, size.height()*2/3));
     lineTo( QPointF( size.width()/3, size.height()));
     closeMerge();      
+    break;
+    }
+    case ArrowBottom:
+    {
+    moveTo( QPointF(size.width()/3,0));
+    lineTo( QPointF(size.width()*2/3,0));
+    lineTo( QPointF(size.width()*2/3,size.height()/2));
+    lineTo( QPointF(size.width(),size.height()/2));
+    lineTo( QPointF(size.width()/2, size.height()));
+    lineTo( QPointF(0,size.height()/2));
+    lineTo( QPointF(size.width()/3,size.height()/2));
+    closeMerge();
+    break;
+    }
+    case ArrowTop:
+    {
+    moveTo( QPointF(size.width()/2,0));
+    lineTo( QPointF(size.width(),size.height()/2));
+    lineTo( QPointF(size.width()*2/3,size.height()/2));
+    lineTo( QPointF(size.width()*2/3,size.height()));
+    lineTo( QPointF(size.width()/3,size.height()));
+    lineTo( QPointF(size.width()/3,size.height()/2));
+    lineTo( QPointF(0,size.height()/2));
+    closeMerge();
+    break;
+    }
+    case ArrowLeftDown:
+    {
+    closeMerge();
+    break;
+    }
+    case ArrowLeftTop:
+    {
+    closeMerge();
+    break;
+    }
+    case ArrowRightTop:
+    {
+    closeMerge();
+    break;
+    }
+    case ArrowRightDown:
+    {
+    closeMerge();
+    break;
     }
     default:
     break; //TODO
