@@ -632,7 +632,7 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
                 {
                     // We don't care about styles as they are not supported in kpresenter.
                     // Only add a linebreak for every child.
-                    note += t.text() + "\n";
+                    note += t.text() + '\n';
                 }
                 QDomElement notesElement = doc.createElement( "Note" );
                 notesElement.setAttribute( "note", note );

@@ -628,7 +628,7 @@ QString KivioGroupStencil::getTextBoxName(const KoPoint& p)
   }
   
   KivioStencil* pStencil = m_pGroupList->at(id);
-  QString name = QString::number(id) + "-" + pStencil->getTextBoxName(p);
+  QString name = QString::number(id) + '-' + pStencil->getTextBoxName(p);
   return name;
 }
 

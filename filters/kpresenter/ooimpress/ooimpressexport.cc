@@ -546,12 +546,12 @@ void OoImpressExport::createHelpLine( QDomNode &helpline )
             if ( helplines.tagName()=="Vertical" )
             {
                 int tmpX = ( int ) ( KoUnit::toMM( helplines.attribute("value").toDouble() )*100 );
-                m_helpLine+="V"+QString::number( tmpX );
+                m_helpLine+='V'+QString::number( tmpX );
             }
             else if ( helplines.tagName()=="Horizontal" )
             {
                 int tmpY = ( int ) ( KoUnit::toMM( helplines.attribute("value").toDouble() )*100 );
-                m_helpLine+="H"+QString::number( tmpY );
+                m_helpLine+='H'+QString::number( tmpY );
             }
             else if ( helplines.tagName()=="HelpPoint" )
             {
@@ -890,7 +890,7 @@ void OoImpressExport::appendPicture( QDomDocument & doc, QDomElement & source, Q
         if (pos!=-1)
         {
             const QString extension( returnstr.mid(pos+1) );
-            pictureName +="."+extension;
+            pictureName +='.'+extension;
         }
 
         if ( m_storeinp->open( returnstr ) )
@@ -907,7 +907,7 @@ void OoImpressExport::appendPicture( QDomDocument & doc, QDomElement & source, Q
             }
         }
     }
-    image.setAttribute( "xlink:href", "#" + pictureName );
+    image.setAttribute( "xlink:href", '#' + pictureName );
 
 // set the geometry
     set2DGeometry( source, image );

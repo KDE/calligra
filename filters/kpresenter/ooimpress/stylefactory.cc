@@ -1123,16 +1123,16 @@ GraphicStyle::GraphicStyle( StyleFactory * styleFactory, QDomElement & e, const 
         switch ( direction )
         {
         case 1:
-            m_shadow_offset_x = "-" + distance;
-            m_shadow_offset_y = "-" + distance;
+            m_shadow_offset_x = '-' + distance;
+            m_shadow_offset_y = '-' + distance;
             break;
         case 2:
             m_shadow_offset_x = "0cm";
-            m_shadow_offset_y = "-" + distance;
+            m_shadow_offset_y = '-' + distance;
             break;
         case 3:
             m_shadow_offset_x = distance;
-            m_shadow_offset_y = "-" + distance;
+            m_shadow_offset_y = '-' + distance;
             break;
         case 4:
             m_shadow_offset_x = distance;
@@ -1147,11 +1147,11 @@ GraphicStyle::GraphicStyle( StyleFactory * styleFactory, QDomElement & e, const 
             m_shadow_offset_y = distance;
             break;
         case 7:
-            m_shadow_offset_x = "-" + distance;
+            m_shadow_offset_x = '-' + distance;
             m_shadow_offset_y = distance;
             break;
         case 8:
-            m_shadow_offset_x = "-" + distance;
+            m_shadow_offset_x = '-' + distance;
             m_shadow_offset_y = "0cm";
             break;
         }
@@ -1377,7 +1377,7 @@ ParagraphStyle::ParagraphStyle( QDomElement & e, const uint index )
     {
         QDomElement s = shadow.toElement();
         QString distance = QString( "%1pt" ).arg( s.attribute( "distance" ) );
-        m_text_shadow = distance + " " + distance;
+        m_text_shadow = distance + ' ' + distance;
     }
 
     if ( !indents.isNull() )

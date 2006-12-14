@@ -1038,17 +1038,17 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 kDebug(41008) << "Found import filter for: " << name << "\n";
 
                 if (!description.isEmpty() && !description.contains('/')) {
-                    all += "*." + name.lower() + " *." + name + " ";
-                    s += "*." + name.lower() + " *." + name + "|";
+                    all += "*." + name.lower() + " *." + name + ' ';
+                    s += "*." + name.lower() + " *." + name + '|';
                     s += i18n(description.utf8());
-                    s += "\n";
+                    s += '\n';
                 }
             }
         }
 // #endif
 
-        all += "|" + i18n("All Images");
-        all += "\n";
+        all += '|' + i18n("All Images");
+        all += '\n';
 
         return all + s;
     }
@@ -1117,18 +1117,18 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 description = mi -> description;
 
                 if (!description.isEmpty() && !description.contains('/')) {
-                    all += "*." + name.lower() + " *." + name + " ";
-                    s += "*." + name.lower() + " *." + name + "|";
+                    all += "*." + name.lower() + " *." + name + ' ';
+                    s += "*." + name.lower() + " *." + name + '|';
                     s += i18n(description.utf8());
-                    s += "\n";
+                    s += '\n';
                 }
             }
         }
 // #endif
 
 
-        all += "|" + i18n("All Images");
-        all += "\n";
+        all += '|' + i18n("All Images");
+        all += '\n';
 
         return all + s;
     }

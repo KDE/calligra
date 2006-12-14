@@ -144,10 +144,10 @@ bool KivioPyStencilSpawner::load( const QString &file )
 
     // Now load the xpm
     QFileInfo finfo(file);
-    QString pixFile = finfo.dirPath(true) + "/" + finfo.baseName() + ".xpm";
+    QString pixFile = finfo.dirPath(true) + '/' + finfo.baseName() + ".xpm";
 
     if(!m_icon.load( pixFile )) {
-      QString pixFile = finfo.dirPath(true) + "/" + finfo.baseName() + ".png";
+      QString pixFile = finfo.dirPath(true) + '/' + finfo.baseName() + ".png";
       m_icon.load( pixFile );
     }
 

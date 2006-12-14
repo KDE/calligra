@@ -95,7 +95,7 @@ KoFilter::ConversionStatus GenericFilter::doImport()
     }
     else
     {
-        QString exec = m_exec + " " + KProcess::quote(m_chain->inputFile()) + " "
+        QString exec = m_exec + ' ' + KProcess::quote(m_chain->inputFile()) + ' '
                        + KProcess::quote(m_chain->outputFile());
         system(QFile::encodeName(exec));
 

@@ -1000,7 +1000,7 @@ void View::slotPlugScheduleActions()
     QAction *ca = 0;
     foreach( Schedule *sch, getProject().schedules().values() ) {
         if ( ! sch->isDeleted() ) {
-            QString n = sch->name() + " (" + sch->typeToString( true ) + ")";
+            QString n = sch->name() + " (" + sch->typeToString( true ) + ')';
             KAction *act = new KToggleAction( n, actionCollection(), n );
             m_scheduleActions.insert( act, sch );
             m_scheduleActionGroup->addAction( act );
@@ -1850,7 +1850,7 @@ void View::setLabel()
     if ( s == 0 || getProject().notScheduled() ) {
         m_estlabel->setText( i18n( "Not scheduled" ) );
     } else {
-        m_estlabel->setText( s->name() + " ("+ s->typeToString( true ) + ")"  );
+        m_estlabel->setText( s->name() + " ("+ s->typeToString( true ) + ')'  );
     }
 }
 

@@ -89,7 +89,7 @@ void Formula::getFormula(QDomNode p, int indent)
 		switch( p.nodeType() )
 		{
 			case QDomNode::TextNode:
-				_formula = _formula + QString(p.toText().data()) + " ";
+				_formula = _formula + QString(p.toText().data()) + ' ';
 				break;
 		/*	case TT_Space:
 				_formula = _formula + p->zText;
@@ -100,11 +100,11 @@ void Formula::getFormula(QDomNode p, int indent)
 				//printf("%*s\n", indent, "");
 				break;*/
 			case QDomNode::ElementNode:
-				_formula = _formula + "<" + p.nodeName();
+				_formula = _formula + '<' + p.nodeName();
 				QDomNamedNodeMap attr = p.attributes();
 				for(unsigned int index = 0; index < attr.length(); index++)
 				{ // The attributes
-					_formula = _formula + " " + attr.item(index).nodeName();
+					_formula = _formula + ' ' + attr.item(index).nodeName();
 					_formula = _formula + "=\"" + attr.item(index).nodeValue() + "\"";
 				}
 				if(p.childNodes().length() == 0)

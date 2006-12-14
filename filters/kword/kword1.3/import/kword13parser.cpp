@@ -492,7 +492,7 @@ bool KWord13Parser::startElementAnchor( const QString& name, const QXmlAttribute
 bool KWord13Parser::startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes )
 {
     kDebug(30520) << indent << "<" << name << ">" << endl; // DEBUG
-    indent += "*"; //DEBUG
+    indent += '*'; //DEBUG
     if (parserStack.isEmpty())
     {
         kError(30520) << "Stack is empty!! Aborting! (in KWordParser::startElement)" << endl;

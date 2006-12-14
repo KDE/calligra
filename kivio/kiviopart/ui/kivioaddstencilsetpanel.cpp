@@ -115,7 +115,7 @@ namespace Kivio {
           li->setPixmap(0, loadIcon("icon", colFInfo->absoluteFilePath()));
         }
         
-        loadStencilSet(li, dir + "/" + colFInfo->fileName());
+        loadStencilSet(li, dir + '/' + colFInfo->fileName());
       }
       
       ++colIt;
@@ -138,7 +138,7 @@ namespace Kivio {
       if( setFInfo->fileName() != ".." && setFInfo->fileName() != "." )
       {
         K3ListViewItem* tmp = new K3ListViewItem(li, KivioStencilSpawnerSet::readTitle(setFInfo->absoluteFilePath()),
-          dir + "/" + setFInfo->fileName());
+          dir + '/' + setFInfo->fileName());
         tmp->setPixmap(0, loadIcon("icon", setFInfo->absoluteFilePath()));
 
         if(m_currentDir == setFInfo->absoluteFilePath()) {
@@ -155,10 +155,10 @@ namespace Kivio {
   {
     QString fs;
 
-    if( QFile::exists(dir + "/" + name + ".xpm") ) {
-      fs = dir + "/" + name + ".xpm";
-    } else if( QFile::exists(dir + "/" + name + ".png") ) {
-      fs = dir + "/" + name + ".png";
+    if( QFile::exists(dir + '/' + name + ".xpm") ) {
+      fs = dir + '/' + name + ".xpm";
+    } else if( QFile::exists(dir + '/' + name + ".png") ) {
+      fs = dir + '/' + name + ".png";
     } else {
       return QPixmap();
     }
@@ -188,7 +188,7 @@ namespace Kivio {
 
     for(QStringList::Iterator it = files.begin(); it != files.end(); ++it)
     {
-      spawner = spawnerSet->loadFile(m_currentDir + "/" + (*it));
+      spawner = spawnerSet->loadFile(m_currentDir + '/' + (*it));
 
       if(spawner) {
         stencil = spawner->newStencil();

@@ -742,7 +742,7 @@ VSubpath::saveSvgPath( QString &d ) const
 	}
 
 	if( isClosed() )
-		d += "Z";
+		d += 'Z';
 }
 
 // TODO: remove this backward compatibility function after koffice 1.3.x
