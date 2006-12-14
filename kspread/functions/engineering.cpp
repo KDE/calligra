@@ -64,6 +64,8 @@ Value func_imcos (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imdiv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imexp (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imln (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imlog2 (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imlog10 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_impower (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_improduct (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_imsin (valVector args, ValueCalc *calc, FuncExtra *);
@@ -148,6 +150,10 @@ void RegisterEngineeringFunctions()
   f = new Function ("IMEXP",       func_imexp);
   repo->add (f);
   f = new Function ("IMLN",        func_imln);
+  repo->add (f);
+  f = new Function ("IMLOG2",        func_imlog2);
+  repo->add (f);
+  f = new Function ("IMLOG10",        func_imlog10);
   repo->add (f);
   f = new Function ("IMPOWER",     func_impower);
   f->setParamCount (2);
@@ -1132,6 +1138,58 @@ Value func_imln (valVector args, ValueCalc *calc, FuncExtra *)
 
   return Value (tmp);
 }
+
+// Function: IMLOG2
+Value func_imlog2 (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  QString tmp = calc->conv()->asString (args[0]).asString();
+  bool ok;
+  double real=real_complexe(tmp,ok);
+  if(!ok)
+    return Value::errorVALUE();
+  double imag=imag_complexe(tmp,ok);
+  if(!ok)
+    return Value::errorVALUE();
+
+  double arg=sqrt(pow(imag,2)+pow(real,2));
+  double real_res=log(arg) / M_LN2l;
+  double imag_res=atan(imag/real) / M_LN2l;
+
+  tmp=func_create_complex(real_res,imag_res);
+
+  double result=KGlobal::locale()->readNumber(tmp, &ok);
+
+  if(ok)
+    return Value (result);
+
+  return Value (tmp);
+}
+
+// Function: IMLOG10
+Value func_imlog10 (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  QString tmp = calc->conv()->asString (args[0]).asString();
+  bool ok;
+  double real=real_complexe(tmp,ok);
+  if(!ok)
+    return Value::errorVALUE();
+  double imag=imag_complexe(tmp,ok);
+  if(!ok)
+    return Value::errorVALUE();
+
+  double arg=sqrt(pow(imag,2)+pow(real,2));
+  double real_res=log(arg) / M_LN10l;
+  double imag_res=atan(imag/real) / M_LN10l;
+
+  tmp=func_create_complex(real_res,imag_res);
+
+  double result=KGlobal::locale()->readNumber(tmp, &ok);
+  if(ok)
+    return Value (result);
+
+  return Value (tmp);
+}
+
 
 // Function: IMEXP
 Value func_imexp (valVector args, ValueCalc *calc, FuncExtra *)

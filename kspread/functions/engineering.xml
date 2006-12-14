@@ -475,6 +475,34 @@
     </Function>
 
     <Function>
+      <Name>IMLOG2</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMLOG2(string) returns the base-2 logarithm of a complex number.</Text>
+	<Syntax>IMLOG2(string)</Syntax>
+	<Example>IMLOG2("3+4i") returns "2.321928+1.337804i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>IMLOG10</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Complex number</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The IMLOG10(string) returns the base-10 logarithm of a complex number.</Text>
+	<Syntax>IMLOG10(string)</Syntax>
+	<Example>IMLOG10("3+4i") returns "0.69897+0.402719i"</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>IMSQRT</Name>
       <Type>String</Type>
       <Parameter>
