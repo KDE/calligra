@@ -43,9 +43,9 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, 
     : QWidget(parent),
     KoCanvasBase( document ),
     m_document( document ),
+    m_view(view),
     m_viewMode(0)
 {
-    m_view = view;
     m_shapeManager = new KoShapeManager(this);
     m_viewMode = KWViewMode::create(viewMode, this);
     setFocusPolicy(Qt::StrongFocus);
@@ -78,7 +78,7 @@ void KWCanvas::gridSize(double *horizontal, double *vertical) const {
 }
 
 bool KWCanvas::snapToGrid() const {
-    return m_document->snapToGrid();
+    return m_view->snapToGrid();
 }
 
 void KWCanvas::addCommand(KCommand *command, bool execute) {

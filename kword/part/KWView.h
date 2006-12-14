@@ -68,6 +68,8 @@ public:
     /// overwritten method from superclass
     QWidget *canvas() const;
 
+    bool snapToGrid() const { return m_snapToGrid; }
+
     /**
      * Return the current canvas; much like canvas(), but this one does not downcast.
      */
@@ -122,6 +124,7 @@ private slots:
     void editDeleteFrame();
     void toggleHeader();
     void toggleFooter();
+    void toggleSnapToGrid();
 
 private:
     KWGui *m_gui;
@@ -141,6 +144,9 @@ private:
     KToggleAction *m_actionFormatStrikeOut;
     KToggleAction *m_actionViewHeader;
     KToggleAction *m_actionViewFooter;
+    KToggleAction *m_actionViewSnapToGrid;
+
+    bool m_snapToGrid;
 };
 
 #endif

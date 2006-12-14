@@ -59,6 +59,7 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     : KoView( document, parent )
 {
     m_document = document;
+    m_snapToGrid = m_document->snapToGrid();
     m_gui = new KWGui( viewMode, this );
     m_canvas = m_gui->canvas();
 
@@ -191,6 +192,10 @@ void KWView::setupActions() {
     m_actionViewFooter->setToolTip( i18n( "Shows and hides footer display" ) );
     m_actionViewFooter->setWhatsThis( i18n( "Selecting this option toggles the display of footers in KWord. <br><br>Footers are special frames at the bottom of each page which can contain page numbers or other information." ) );
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT( toggleFooter() ));
+
+    m_actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), actionCollection(), "view_snaptogrid" );
+    m_actionViewSnapToGrid->setChecked(m_snapToGrid);
+    connect(m_actionViewSnapToGrid, SIGNAL(triggered()), this, SLOT( toggleSnapToGrid() ));
 
 
 /* ********** From old kwview ****
@@ -800,10 +805,6 @@ This saves problems with finding out which we missed near the end.
             actionCollection(), "view_grid" );
     m_actionViewShowGrid->setCheckedState(i18n("Hide Grid"));
 
-    m_actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), 0,
-            this, SLOT(viewSnapToGrid() ),
-            actionCollection(), "view_snaptogrid" );
-
     m_actionConfigureCompletion = new KAction( i18n( "Configure Completion..." ), 0,
             this, SLOT( configureCompletion() ),
             actionCollection(), "configure_completion" );
@@ -1165,6 +1166,13 @@ void KWView::toggleFooter() {
     }
     m_document->setPageSettings(pageSettings);
 }
+
+void KWView::toggleSnapToGrid() {
+    m_snapToGrid = !m_snapToGrid;
+    m_document->setSnapToGrid(m_snapToGrid); // for persistency
+}
+
+// end of actions
 
 
 void KWView::selectionChanged()
