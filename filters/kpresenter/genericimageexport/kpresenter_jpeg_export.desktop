@@ -7,5 +7,5 @@ Name[x-test]=xxKPresenter JPEG Export Filterxx
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/jpeg
 X-KDE-Weight=1
-X-KDE-Library=libkpresenterjpegexport
+X-KDE-Library=kpresentergenericimageexport
 ServiceTypes=KOfficeFilter

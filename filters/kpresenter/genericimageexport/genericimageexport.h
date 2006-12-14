@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Laurent Montel <montel@kde.org>
+   Copyright (C) 2006 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,22 +17,28 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __MNGEXPORT_H__
-#define __MNGEXPORT_H__
+#ifndef __GENERICIMAGEEXPORT_H__
+#define __GENERICIMAGEEXPORT_H__
 
-#include "imageexport.h"
+#include <KoFilter.h>
+#include <QPixmap>
+#include <koffice_export.h>
 
-class MngExport : public ImageExport
+class QPixmap;
+class GenericImageExport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    MngExport(QObject* parent, const QStringList&);
-    virtual ~MngExport();
-    virtual bool saveImage( const QString& fileName);
-    virtual bool extraImageAttribute();
-    virtual const char * exportFormat();
+    GenericImageExport(QObject* parent, const QStringList&);
+    virtual ~GenericImageExport();
+
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+protected:
+    int width;
+    int height;
+    QPixmap pixmap;
 };
 
-#endif // MNGPMEXPORT_H__
+#endif // ___GENERICIMAGEXPORT_H__
 

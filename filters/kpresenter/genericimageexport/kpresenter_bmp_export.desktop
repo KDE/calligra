@@ -7,5 +7,5 @@ Name[x-test]=xxKPresenter BMP Export Filterxx
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/x-bmp
 X-KDE-Weight=1
-X-KDE-Library=libkpresenterbmpexport
+X-KDE-Library=kpresentergenericimageexport
 ServiceTypes=KOfficeFilter
