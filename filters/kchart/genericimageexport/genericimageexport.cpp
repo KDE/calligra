@@ -32,6 +32,10 @@
 #include "genericimageexport.h"
 #include "kchart_part.h"
 
+typedef KGenericFactory<GenericImageExport> GenericImageExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkchartgenericimageexport, GenericImageExportFactory( "genericimageexport" ) )
+
+
 GenericImageExport::GenericImageExport(QObject* parent, const QStringList&)
     : KoFilter(parent)
 {
