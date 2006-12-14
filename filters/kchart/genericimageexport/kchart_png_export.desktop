@@ -7,5 +7,5 @@ Name[x-test]=xxKChart PNG Export Filterxx
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/png
 X-KDE-Weight=1
-X-KDE-Library=libkchartpngexport
+X-KDE-Library=libkchartgenericimageexport
 ServiceTypes=KOfficeFilter

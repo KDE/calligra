@@ -4,6 +4,6 @@ Type=Service
 X-KDE-Import=application/x-kchart
 X-KDE-Export=video/x-mng
 X-KDE-Weight=1
-X-KDE-Library=libkchartmngexport
+X-KDE-Library=libkchartgenericimageexport
 ServiceTypes=KOfficeFilter
 Name=KChart MNG Export Filter

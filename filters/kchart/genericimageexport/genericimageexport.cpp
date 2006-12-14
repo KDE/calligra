@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Laurent Montel <montel@kde.org>
+   Copyright (C) 2006 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,25 +28,31 @@
 #include <KoStore.h>
 #include <kgenericfactory.h>
 #include <KoDocument.h>
-
-#include "imageexport.h"
+#include <exportsizedia.h>
+#include "genericimageexport.h"
 #include "kchart_part.h"
 
-ImageExport::ImageExport(QObject* parent, const QStringList&)
+GenericImageExport::GenericImageExport(QObject* parent, const QStringList&)
     : KoFilter(parent)
 {
 }
 
-ImageExport::~ImageExport()
+GenericImageExport::~GenericImageExport()
 {
 }
 
 
 KoFilter::ConversionStatus
-ImageExport::convert(const QByteArray& from, const QByteArray& to)
+GenericImageExport::convert(const QByteArray& from, const QByteArray& to)
 {
     // Check for proper conversion.
-    if ( from != "application/x-kchart" || to != exportFormat() )
+    if ( from != "application/x-kchart" ||
+                    (to != "image/x-bmp" &&
+                     to != "image/jpeg" &&
+                     to != "video/x-mng" &&
+                     to != "image/png" &&
+                     to !="image/x-xbm" &&
+                     to!="image/x-xpm" ))
         return KoFilter::NotImplemented;
 
     // Read the contents of the KChart file
@@ -71,14 +77,48 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
     }
     width = 500;
     height = 400;
-    extraImageAttribute();
-    pixmap = QPixmap(width, height);
-    QPainter  painter(&pixmap);
-    kchartDoc.paintContent(painter, pixmap.rect(), false);
-    saveImage( m_chain->outputFile());
+    ExportSizeDia  *exportDialog = new ExportSizeDia( width, height,0);
+    bool ret= false;
+    if (exportDialog->exec()) {
+        width  = exportDialog->width();
+        height = exportDialog->height();
+        ret = true;
+    }
+    delete exportDialog;
+    if(ret)
+    {     
+    	pixmap = QPixmap(width, height);
+	QPainter  painter(&pixmap);
+    	kchartDoc.paintContent(painter, pixmap.rect(), false);
+        if( !saveImage( m_chain->outputFile(),to))
+            return KoFilter::CreationError;	
+    }
     return KoFilter::OK;
 }
 
+bool GenericImageExport::saveImage(const QString& fileName,const QByteArray& to)
+{
+    const char* format = NULL;
+    if(to=="image/x-bmp")
+      format="XBM";
+    else if(to=="image/jpeg")
+      format="JPEG";
+    else if(to=="video/x-mng")
+      format="MNG";
+    else if(to=="image/png")
+      format="PNG";
+    else if(to=="image/x-xbm")
+      format="XBM";
+    else if(to=="image/x-xpm")
+      format="XPM";
+    bool ret = pixmap.save( fileName, format );
+    // Save the image.
+    if ( !ret ) {
+        KMessageBox::error( 0, i18n( "Failed to write file." ),
+                            i18n( "%1 Export Error",format ) );
+    }
+    return ret;	
+}
 
-#include "imageexport.moc"
+#include "genericimageexport.moc"
 

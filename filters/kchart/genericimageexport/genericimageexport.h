@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Laurent Montel <montel@kde.org>
+   Copyright (C) 2006 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,22 +17,29 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __XPMEXPORT_H__
-#define __XPMEXPORT_H__
+#ifndef __GENERICIMAGEEXPORT_H__
+#define __GENERICIMAGEEXPORT_H__
 
-#include "imageexport.h"
+#include <KoFilter.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <QByteArray>
 
-class XpmExport : public ImageExport
+class GenericImageExport : public KoFilter
 {
     Q_OBJECT
 
 public:
-    XpmExport(QObject* parent, const QStringList&);
-    virtual ~XpmExport();
-    virtual bool saveImage( const QString& fileName);
-    virtual void extraImageAttribute();
-    virtual const char * exportFormat();
+    GenericImageExport(QObject* parent, const QStringList&);
+    virtual ~GenericImageExport();
+
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    bool saveImage(const QString& fileName,const QByteArray& to);
+protected:
+    int width;
+    int height;
+    QPixmap pixmap;
 };
 
-#endif // __XPMEXPORT_H__
+#endif // __GENERCICIMAGEEXPORT_H__
 
