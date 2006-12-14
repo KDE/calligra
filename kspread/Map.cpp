@@ -289,7 +289,7 @@ QDomElement Map::save( QDomDocument& doc )
     QDomElement mymap = doc.createElement( "map" );
   // Save visual info for the first view, such as active sheet and active cell
   // It looks like a hack, but reopening a document creates only one view anyway (David)
-  View * view = static_cast<View*>(d->doc->views().first());
+  View * view = d->doc->views().isEmpty() ? 0 : dynamic_cast<View*>(d->doc->views().first());
   if ( view ) // no view if embedded document
   {
     Canvas * canvas = view->canvasWidget();
