@@ -149,7 +149,7 @@ bool VColorSlider::eventFilter( QObject *obj, QEvent *ev )
 		else if( ev->type() == QEvent::MouseButtonRelease )
 			m_isDragging = false;
 	} 
-	return FALSE;
+	return false;
 }
 
 #include "vcolorslider.moc"
