@@ -26,11 +26,15 @@
 #include <KoStore.h>
 #include <kgenericfactory.h>
 #include <KoDocument.h>
+#include <exportsizedia.h>
 
 #include "KPrDocument.h"
 #include "KPrView.h"
 #include "KPrCanvas.h"
 #include "genericimageexport.h"
+
+typedef KGenericFactory<GenericImageExport> GenericImageExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkpresentergenericimageexport, GenericImageExportFactory( "genericimageexport" ) )
 
 GenericImageExport::GenericImageExport(QObject *parent, const QStringList&)
     : KoFilter(parent)
@@ -111,7 +115,7 @@ GenericImageExport::convert(const QByteArray& from, const QByteArray& to)
 
 bool GenericImageExport::saveImage(const QString& fileName, const QByteArray& to )
 {
-    QString format;
+    const char * format = NULL;
     if(to=="image/x-bmp")
       format="XBM";
     else if(to=="image/jpeg")

@@ -35,6 +35,8 @@ public:
 
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 protected:
+    bool saveImage(const QString& fileName, const QByteArray& to );
+
     int width;
     int height;
     QPixmap pixmap;
