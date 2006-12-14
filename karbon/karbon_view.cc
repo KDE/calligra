@@ -34,6 +34,7 @@
 #include <QDropEvent>
 #include <Q3PtrList>
 #include <QGridLayout>
+#include <QToolBar>
 
 #include <kaction.h>
 #include <kcolormimedata.h>
@@ -1148,6 +1149,10 @@ KarbonView::initActions()
 	i18n("Zoom"), KIcon("14_zoom"), KShortcut(), actionCollection(), "view_zoom");
 	connect(m_zoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
           this, SLOT(zoomChanged(KoZoomMode::Mode, int)));
+
+    QToolBar *tbar = new QToolBar( statusBar() );
+    statusBar()->insertWidget( 2, tbar);
+    tbar->addAction(m_zoomAction);
 
 	KStdAction::zoomIn( this, SLOT( viewZoomIn() ), actionCollection(), "view_zoom_in" );
 	KStdAction::zoomOut( this, SLOT( viewZoomOut() ), actionCollection(), "view_zoom_out" );
