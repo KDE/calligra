@@ -28,6 +28,7 @@
 class KoCanvasController;
 class KPrCanvas;
 class KPrDocument;
+class KToggleAction;
 
 class KPrView : public KoView
 {
@@ -42,6 +43,10 @@ public:
 
     KPrCanvas * kprcanvas() { return m_canvas; }
 
+protected slots:
+    void viewSnapToGrid();
+    void viewGrid();
+
 private:    
     void initGUI();
     void initActions();
@@ -50,6 +55,9 @@ private:
     KPrCanvas * m_canvas;
     KoCanvasController * m_canvasController;
     KoZoomHandler m_zoomHandler;
+
+    KToggleAction *m_actionViewSnapToGrid;
+    KToggleAction *m_actionViewShowGrid;
 };
 
 #endif /* KPRVIEW_H */

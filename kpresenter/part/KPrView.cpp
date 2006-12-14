@@ -31,6 +31,9 @@
 #include <KPrCanvas.h>
 #include <KPrDocument.h>
 
+#include <klocale.h>
+#include <ktoggleaction.h>
+	
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
 : KoView( document, parent )
 , m_doc( document )
@@ -75,6 +78,25 @@ void KPrView::initActions()
        setXMLFile( "kpresenter_readonly.rc" );
     else
        setXMLFile( "kpresenter.rc" );
+
+    m_actionViewShowGrid = new KToggleAction( i18n( "Show &Grid" ), KShortcut(),
+                                            this, SLOT( viewGrid() ),
+                                            actionCollection(), "view_grid" );
+    m_actionViewShowGrid->setCheckedState(KGuiItem(i18n("Hide &Grid")));
+
+    m_actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), KShortcut(),
+                                             this, SLOT(viewSnapToGrid() ),
+                                             actionCollection(), "view_snaptogrid" );
+
+}
+
+void KPrView::viewSnapToGrid()
+{
+}
+
+void KPrView::viewGrid()
+{
+
 }
 
 #include "KPrView.moc"
