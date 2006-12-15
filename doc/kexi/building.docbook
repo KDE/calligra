@@ -23,8 +23,8 @@ Creating a new database project</a> for information how to do this.
 <procedure>
 <step><para>Design database tables. Read <xref linkend="designing-tables"/>.</para></step>
 <step><para>Enter data into tables. Read <xref linkend="entering-data-into-tables"/>.</para></step>
-<step><para>Design database queries. Read <xref linkend="designing-queries"/></para></step>
-<step><para>Design forms. Read <xref linkend="designing-forms"/></para></step>
+<step><para>Design database queries. Read <xref linkend="designing-queries"/>.</para></step>
+<step><para>Design forms. Read <xref linkend="designing-forms"/></para>.</step>
 <step><para>Use forms to enter data. Read <xref linkend="entering-data-using-forms"/>.</para></step>
 </procedure>
 </sect1>
