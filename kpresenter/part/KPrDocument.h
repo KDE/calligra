@@ -24,7 +24,6 @@
 
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
-#include <KoGuideData.h>
 
 class KCommand;
 class KCommandHistory;
@@ -58,7 +57,6 @@ protected:
 private:
     KCommandHistory * m_commandHistory;
     KPrPage * m_page;
-    KoGuideData guideData;
 };
 
 #endif /* KPRDOCUMENT_H */
