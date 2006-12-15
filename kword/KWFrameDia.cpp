@@ -414,10 +414,10 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
             "multiple chained frames, it's always the last one which will be resized." );
         m_eofGrid->addWidget( m_rResizeFrame, 2, 0 );
 
-        m_rNoShow = new QRadioButton( i18n( "Don't show the extra text" ), m_endOfFrame );
-        m_rNoShow->setWhatsThis( "<b>Don't show the extra text:</b><br/> "
+        m_rNoShow = new QRadioButton( i18n( "Do not show the extra text" ), m_endOfFrame );
+        m_rNoShow->setWhatsThis( "<b>Do not show the extra text:</b><br/> "
             "if there is too much text for this text frame, nothing happens "
-            "automatically. Initially the extra text won't appear. One possibility "
+            "automatically. Initially the extra text will not appear. One possibility "
             "then is to resize the frame manually. The other possibility is, with the option "
             "\"Reconnect frame to current flow\" selected, to create a new page "
             "which will then have a followup frame with the extra text." );

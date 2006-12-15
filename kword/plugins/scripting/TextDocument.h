@@ -86,7 +86,7 @@ namespace Scripting {
 
             /** This signal is emitted if content changed. */
             void contentsChange(int position, int charsRemoved, int charsAdded);
-            /** This signal is emitted if the cursor-positon changed. */
+            /** This signal is emitted if the cursor-position changed. */
             void cursorPositionChanged();
             /** This signal is emitted if the size of the document changed. */
             void documentSizeChanged();

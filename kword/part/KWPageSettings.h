@@ -54,7 +54,7 @@ public:
      * @param p There are 2 ways to 'enable' the header, KWord::HFTypeEvenOdd will
      *   use the OddHeaders frameSet for the text and KWord::HFTypeUniform will use
      *   the FirstHeader frameset for the text.
-     * This distinction is usefull when reconfiguring a document without moving text
+     * This distinction is useful when reconfiguring a document without moving text
      */
     void setFirstHeaderPolicy(KWord::HeaderFooterType p) { m_firstHeader = p; }
 

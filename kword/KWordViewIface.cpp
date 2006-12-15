@@ -117,12 +117,12 @@ static KoPicture picture( const QString& fileName )
     return picture;
 }
 
-void KWordViewIface::insertPictureFromFile( QString fileName, double x, double y, int w, int h )
+void KWordViewIface::insertPictureFromFile( const QString& fileName, double x, double y, int w, int h )
 {
     view->getGUI()->canvasWidget()->insertPictureDirect( picture( fileName ), KoPoint( x, y ), QSize(w, h) );
 }
 
-void KWordViewIface::insertInlinePicture( QString fileName, int w, int h )
+void KWordViewIface::insertInlinePicture( const QString& fileName, int w, int h )
 {
     view->insertPicture( picture( fileName ), true /*makeInline*/, true /*keepRatio*/, w, h );
     view->getGUI()->canvasWidget()->insertInlinePicture();
