@@ -158,6 +158,30 @@ KWPage* KWDocument::appendPage() {
     return insertPage( m_pageManager.lastPageNumber() );
 }
 
+void KWDocument::removePage(int pageNumber) {
+    // TODO make this undo-able.
+    KWPage *page = m_pageManager.page(pageNumber);
+    if(page == 0) {
+        kWarning() << "remove page requested for a non exiting page!\n";
+        return;
+    }
+    emit pageRemoved(page);
+    m_pageManager.removePage(page);
+}
+
+void KWDocument::setStartPage(int pagenumber) {
+    if(pagenumber%2 != startPage()%2) {
+        // TODO remove all odd/even headers and recreate them
+        // TODO insert pages so pagespreads always start on an even pagenumber.
+    }
+    m_pageManager.setStartPage(pagenumber);
+}
+
+void KWDocument::setDefaultPageLayout(const KoPageLayout &layout) {
+    m_pageManager.setDefaultPage(layout);
+    // TODO loop over each page that doesn't have a page-specific page-layout and re-layout all the textframes there.
+}
+
 
 void KWDocument::removeFrameSet( KWFrameSet *fs ) {
     m_frameSets.removeAt( m_frameSets.indexOf(fs) );

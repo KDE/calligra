@@ -112,6 +112,8 @@ public:
      */
     KWPage* appendPage();
 
+    void removePage(int pageNumber);
+
     /**
      * Remove frameset from the document stopping it from being saved or displayed.
      * Note that the document is normally the one that deletes framesets when the
@@ -161,6 +163,10 @@ public:
      * With a higher startPage and a constante pagecount this number will also get higher.
      */
     int lastPage() const;
+
+    void setStartPage(int pageNumber);
+
+    void setDefaultPageLayout(const KoPageLayout &layout);
 
     /// return the amount of framesets this document holds
     int frameSetCount() const { return m_frameSets.count(); }

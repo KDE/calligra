@@ -113,7 +113,7 @@ QObject* Module::insertPage( int afterPageNum )
 void Module::removePage( int pageNumber )
 {
     //TODO remove also the wrapper? and what's about pages that are "Spread" (page that represents 2 pagenumbers)?
-    const_cast<KWPageManager*>( doc()->pageManager() )->removePage(pageNumber);
+    doc()->removePage(pageNumber);
 }
 
 int Module::startPage()
@@ -124,7 +124,7 @@ int Module::startPage()
 void Module::setStartPage(int pageNumber)
 {
      //TODO this is evil since it changes page(int pageNumber) above... we need a more persistent way to deal with pages!
-     const_cast<KWPageManager*>( doc()->pageManager() )->setStartPage(pageNumber);
+     doc()->setStartPage(pageNumber);
 }
 
 int Module::frameSetCount()
@@ -134,7 +134,7 @@ int Module::frameSetCount()
 
 QObject* Module::frameSet(int frameSetNr)
 {
-    KWFrameSet* frameset = (frameSetNr>=0 && frameSetNr<doc()->frameSets().size()) ? doc()->frameSets().at(frameSetNr) : 0;
+    KWFrameSet* frameset = (frameSetNr>=0 && frameSetNr<doc()->frameSetCount()) ? doc()->frameSets().at(frameSetNr) : 0;
     return new FrameSet(this, frameset);
 }
 
@@ -176,14 +176,15 @@ QObject* Module::standardPageLayout()
 
 QObject* Module::defaultPageLayout()
 {
-    const KoPageLayout *pagelayout = const_cast<KWPageManager*>( doc()->pageManager() )->defaultPage();
+    const KoPageLayout *pagelayout = doc()->pageManager()->defaultPage();
     return pagelayout ? new PageLayout(this, *pagelayout) : 0;
 }
 
 void Module::setDefaultPageLayout(QObject* pagelayout)
 {
     PageLayout* l = dynamic_cast<PageLayout*>( pagelayout );
-    if( l ) const_cast<KWPageManager*>( doc()->pageManager() )->setDefaultPage( l->pageLayout() );
+    if( l )
+        doc()->setDefaultPageLayout( l->pageLayout() );
 }
 
 #include "Module.moc"
