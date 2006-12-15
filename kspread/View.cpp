@@ -7144,8 +7144,8 @@ void View::handleDamages( const QList<Damage*>& damages )
 
             if ( paintClipped )
             {
-                const QRectF rect = canvasWidget()->cellCoordinatesToDocument( region.boundingRect() );
-                paintRegion += doc()->documentToView( rect.translated( -canvasWidget()->xOffset(), -canvasWidget()->yOffset() ) ).toRect().adjusted( -3, -3, 4, 4 );
+                const QRectF rect = canvasWidget()->cellCoordinatesToView( region.boundingRect() );
+                paintRegion += rect.toRect().adjusted( -3, -3, 4, 4 );
             }
         }
     }

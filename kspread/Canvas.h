@@ -214,13 +214,6 @@ public:
 
 
     /**
-     * Paints all visible cells that have a paint dirty flag set.
-     * @see paintEvent()
-     */
-    void paintUpdates( QPainter& painter );
-
-
-    /**
      * Makes sure a cell is visible onscreen by scrolling up/down and left/right
      * @param location the cell coordinates to scroll to
      */
@@ -497,6 +490,15 @@ private:
      * @param cellRange The range of cells on the current sheet.
      */
     QRectF cellCoordinatesToDocument( const QRect& cellRange ) const;
+
+    /**
+     * Calculates the region in view coordinates occupied by a range of cells on
+     * the currently active sheet. Respects the scrolling offset and the layout
+     * direction
+     *
+     * \param cellRange The range of cells on the current sheet.
+     */
+    QRectF cellCoordinatesToView( const QRect& cellRange ) const;
 
     /**
      * Paints the children
