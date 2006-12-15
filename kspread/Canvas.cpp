@@ -535,42 +535,12 @@ void Canvas::scrollToCell(QPoint location) const
 
   // xpos is the position of the cell in the current window in unzoomed
   // document coordinates.
-  double xpos;
-  if ( sheet->layoutDirection()==Sheet::LeftToRight )
-    xpos = sheet->dblColumnPos( location.x() ) - xOffset();
-  else
-    xpos = unzoomedWidth - sheet->dblColumnPos( location.x() ) + xOffset();
+  double xpos = sheet->dblColumnPos( location.x() ) - xOffset();
   double ypos = sheet->dblRowPos( location.y() ) - yOffset();
 
   double minY = 40.0;
   double maxY = unzoomedHeight - 40.0;
 
-  if ( sheet->layoutDirection()==Sheet::RightToLeft ) {
-    // Right to left sheet.
-
-    double minX = unzoomedWidth - 100.0; // less than that, we scroll
-    double maxX = 100.0; // more than that, we scroll
-
-    // kDebug(36005) << "rtl2: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << ", Offset: " << xOffset() << endl;
-
-    // Do we need to scroll left?
-    if ( xpos > minX )
-      horzScrollBar()->setValue( (int) (horzScrollBar()->maximum() - xOffset() - xpos + minX ) );
-
-    // Do we need to scroll right?
-    else if ( xpos < maxX )
-    {
-      double horzScrollBarValue = xOffset() - xpos + maxX;
-      double horzScrollBarValueMax = sheet->sizeMaxX() - unzoomedWidth;
-
-      //We don't want to display any area > KS_colMax widths
-      if ( horzScrollBarValue > horzScrollBarValueMax )
-        horzScrollBarValue = horzScrollBarValueMax;
-
-      horzScrollBar()->setValue( (int) (horzScrollBar()->maximum() - horzScrollBarValue ) );
-    }
-  }
-  else {
     // Left to right sheet.
 
     double minX = 100.0; // less than that, we scroll
@@ -578,7 +548,12 @@ void Canvas::scrollToCell(QPoint location) const
 
     // Do we need to scroll left?
     if ( xpos < minX )
-      horzScrollBar()->setValue( (int) (xOffset() + xpos - minX ) );
+    {
+        if ( sheet->layoutDirection() == Sheet::LeftToRight )
+            horzScrollBar()->setValue( (int) (xOffset() + xpos - minX ) );
+        else
+            horzScrollBar()->setValue( (int) ( horzScrollBar()->maximum() - (xOffset() + xpos - minX ) ) );
+    }
 
     // Do we need to scroll right?
     else if ( xpos > maxX )
@@ -590,9 +565,11 @@ void Canvas::scrollToCell(QPoint location) const
       if ( horzScrollBarValue > horzScrollBarValueMax )
         horzScrollBarValue = horzScrollBarValueMax;
 
-      horzScrollBar()->setValue( (int) horzScrollBarValue );
+        if ( sheet->layoutDirection() == Sheet::LeftToRight )
+            horzScrollBar()->setValue( (int) horzScrollBarValue );
+        else
+            horzScrollBar()->setValue( (int) ( horzScrollBar()->maximum() - horzScrollBarValue ) );
     }
-  }
 
 #if 0
   kDebug(36005) << "------------------------------------------------" << endl;
@@ -634,7 +611,7 @@ void Canvas::slotScrollHorz( int _value )
     kDebug(36005) << "slotScrollHorz: value = " << _value << endl;
     //kDebug(36005) << kBacktrace() << endl;
 
-    if ( sheet->layoutDirection()==Sheet::RightToLeft )
+    if ( sheet->layoutDirection() == Sheet::RightToLeft )
         _value = horzScrollBar()->maximum() - _value;
 
     if ( _value < 0.0 ) {
@@ -653,8 +630,6 @@ void Canvas::slotScrollHorz( int _value )
     // Relative movement
     // NOTE Stefan: Always scroll by whole pixels, otherwise we'll get offsets.
     int dx = qRound( d->view->doc()->zoomItX( d->xOffset - _value ) );
-    if ( sheet->layoutDirection()==Sheet::RightToLeft )
-        dx = -dx;
     scroll( dx, 0 );
     hBorderWidget()->scroll( dx, 0 );
 
@@ -1510,7 +1485,7 @@ void Canvas::paintEvent( QPaintEvent* event )
 
     QPainter painter(this);
     painter.setClipRegion( event->region() );
-    paintUpdates( painter, event->rect() );
+    paintUpdates( painter );
     event->accept();
 }
 
@@ -1750,19 +1725,8 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
     double ev_Width = d->view->doc()->unzoomItX( _ev->size().width() );
     double ev_Height = d->view->doc()->unzoomItY( _ev->size().height() );
 
-    // workaround to allow horizontal resizing and zoom changing when sheet
-    // direction and interface direction don't match (e.g. an RTL sheet on an
-    // LTR interface)
-    if ( sheet->layoutDirection()==Sheet::RightToLeft && !QApplication::isRightToLeft() )
-    {
-        int dx = _ev->size().width() - _ev->oldSize().width();
-        scroll(dx, 0);
-    }
-    else if ( sheet->layoutDirection()==Sheet::LeftToRight && QApplication::isRightToLeft() )
-    {
-        int dx = _ev->size().width() - _ev->oldSize().width();
-        scroll(-dx, 0);
-    }
+    int dx = _ev->size().width() - _ev->oldSize().width();
+    scroll(-dx, 0);
 
     // If we rise horizontally, then check if we are still within the valid area (KS_colMax)
     if ( _ev->size().width() > _ev->oldSize().width() )
@@ -3691,7 +3655,7 @@ QRect Canvas::viewToCellCoordinates( const QRectF& viewRegion ) const
 
 QRect Canvas::visibleCells() const
 {
-  return viewToCellCoordinates( QRectF( 0, 0, width(), height() ) );
+  return viewToCellCoordinates( rect() );
 }
 
 //---------------------------------------------
@@ -3700,7 +3664,7 @@ QRect Canvas::visibleCells() const
 //
 //---------------------------------------------
 
-void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
+void Canvas::paintUpdates( QPainter& painter )
 {
     register Sheet * const sheet = activeSheet();
     if (!sheet)
@@ -3725,8 +3689,8 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
     painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
     painter.scale( d->view->doc()->zoomedResolutionX(), d->view->doc()->zoomedResolutionY() );
 
-    QRectF unzoomedRect = d->view->doc()->viewToDocument( paintRect );
-    // unzoomedRect.translate( xOffset(), yOffset() );
+    QRectF paintRect = d->view->doc()->viewToDocument( rect() );
+//     paintRect.translate( -xOffset(), -yOffset() );
 
 #if 0
     kDebug(36004)
@@ -3737,16 +3701,18 @@ void Canvas::paintUpdates( QPainter& painter, const QRectF& paintRect )
 
     /* paint any visible cell that has the paintDirty flag */
     const QRect visibleRect = visibleCells();
+// kDebug() << "visibleCells: " << visibleRect << endl;
+// kDebug() << "offset: " << xOffset() << ", " << yOffset() << endl;
     const QPointF topLeft( sheet->dblColumnPos(visibleRect.left()) - xOffset(),
                            sheet->dblRowPos(visibleRect.top()) - yOffset() );
     view()->sheetView( sheet )->setPaintCellRange( visibleRect );
-    view()->sheetView( sheet )->paintCells( d->view, painter, unzoomedRect, topLeft );
+    view()->sheetView( sheet )->paintCells( d->view, painter, paintRect, topLeft );
 
     /* now paint the selection */
     //Nb.  No longer necessary to paint choose Selection.here as the cell reference highlight
     //stuff takes care of this anyway
-    paintHighlightedRanges(painter, unzoomedRect);
-    paintNormalMarker(painter, unzoomedRect);
+    paintHighlightedRanges(painter, paintRect);
+    paintNormalMarker(painter, paintRect);
 
     //restore clip region with children area
 //     painter.restore();

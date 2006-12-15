@@ -217,7 +217,7 @@ public:
      * Paints all visible cells that have a paint dirty flag set.
      * @see paintEvent()
      */
-    void paintUpdates( QPainter& painter, const QRectF& paintRect );
+    void paintUpdates( QPainter& painter );
 
 
     /**

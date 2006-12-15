@@ -92,12 +92,26 @@ void SheetView::invalidateRegion( const Region& region )
 void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRect, const QPointF& topLeft )
 {
     QLinkedList<QPoint> mergedCellsPainted;
-
+// kDebug() << "paintRect: " << paintRect << endl;
+// kDebug() << "topLeft: " << topLeft << endl;
     // 1. Paint the cell content, background, ... (except borders)
-    QPointF dblCorner( topLeft.x(), topLeft.y() );
+
+    // Handle right-to-left layout.
+    // In an RTL sheet the cells have to be painted at their opposite horizontal
+    // location on the canvas, meaning that column A will be the rightmost column
+    // on screen, column B will be to the left of it and so on. Here we change
+    // the horizontal coordinate at which we start painting the cell in case the
+    // sheet's direction is RTL. We do this only if paintingObscured is 0,
+    // otherwise the cell's painting location will flip back and forth in
+    // consecutive calls to paintCell when painting obscured cells.
+    const bool rightToLeft = sheet()->layoutDirection() == Sheet::RightToLeft;
+    QPointF dblCorner( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
     int right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
+        if ( rightToLeft )
+            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->dblWidth() );
+// kDebug() << "dblCorner: " << dblCorner << endl;
         int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
@@ -108,14 +122,17 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
             dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->dblHeight() );
         }
         dblCorner.setY( topLeft.y() );
-        dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
+        if ( !rightToLeft )
+            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
     }
 
     // 2. Paint the default borders
-    dblCorner = QPointF( topLeft.x(), topLeft.y() );
+    dblCorner = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
     right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
+        if ( rightToLeft )
+            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->dblWidth() );
         int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
@@ -129,14 +146,17 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
             dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->dblHeight() );
         }
         dblCorner.setY( topLeft.y() );
-        dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
+        if ( !rightToLeft )
+            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
     }
 
     // 3. Paint the custom borders, diagonal lines and page borders
-    dblCorner = QPointF( topLeft.x(), topLeft.y() );
+    dblCorner = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
     right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
+        if ( rightToLeft )
+            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->dblWidth() );
         int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
@@ -147,7 +167,8 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
             dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->dblHeight() );
         }
         dblCorner.setY( topLeft.y() );
-        dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
+        if ( !rightToLeft )
+            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
     }
 }
 

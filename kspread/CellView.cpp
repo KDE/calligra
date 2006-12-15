@@ -254,32 +254,12 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
     Q_ASSERT(cell->isDefault()
             || (((cellRef.x() == cell->column()) && (cellRef.y() == cell->row()))));
 
-    double left = coordinate.x();
-
-    // Handle right-to-left layout.
-    // In an RTL sheet the cells have to be painted at their opposite horizontal
-    // location on the canvas, meaning that column A will be the rightmost column
-    // on screen, column B will be to the left of it and so on. Here we change
-    // the horizontal coordinate at which we start painting the cell in case the
-    // sheet's direction is RTL. We do this only if paintingObscured is 0,
-    // otherwise the cell's painting location will flip back and forth in
-    // consecutive calls to paintCell when painting obscured cells.
-    if ( d->layoutDirection == Sheet::RightToLeft && paintingObscured == 0
-         && view && view->canvasWidget() )
-    {
-        double  dwidth = view->doc()->unzoomItXOld(view->canvasWidget()->width());
-        left = dwidth - coordinate.x() - d->width;
-    }
-
     // See if this cell is merged or has overflown into neighbor cells.
     // In that case, the width/height is greater than just the cell
     // itself.
     if (cell->d->hasExtra()) {
         if (cell->mergedXCells() > 0 || cell->mergedYCells() > 0) {
             // merged cell extends to the left if sheet is RTL
-            if ( d->layoutDirection == Sheet::RightToLeft ) {
-                left -= cell->extraWidth() - d->width;
-            }
             d->width  += cell->extraWidth();
             d->height += cell->extraHeight();
         }
@@ -325,7 +305,10 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
     // If the rect of this cell doesn't intersect the rect that should
     // be painted, we can skip the rest and return. (Note that we need
     // to calculate `left' first before we can do this.)
-    const QRectF  cellRect( left, coordinate.y(), d->width, d->height );
+    const QRectF cellRect( d->layoutDirection == Sheet::RightToLeft
+                               ? coordinate.x() - cell->extraWidth() - d->width
+                               : coordinate.x(),
+                           coordinate.y(), d->width, d->height );
     if ( !cellRect.intersects( rect ) ) {
         cell->clearFlag( Cell::Flag_PaintingCell );
         return;
