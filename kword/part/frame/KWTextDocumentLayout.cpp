@@ -532,16 +532,18 @@ painter->setPen(Qt::black); // TODO use theme color, or a kword wide hardcoded d
         // the following line is simpler, but due to a Qt bug doesn't work. Try to see if enabling this for Qt4.3
         // will not paint all paragraphs.
         //if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
-        QTextLine first = layout->lineAt(0);
-        QTextLine last = layout->lineAt(layout->lineCount()-1);
-        QRectF parag(qMin(first.x(), last.x()), first.y(), qMax(first.width(), last.width()), last.y() + last.height());
-        if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(parag.toRect())).isEmpty()) {
-            started=true;
-            decorateParagraph(painter, block);
-            layout->draw(painter, QPointF(0,0));
+        if(layout->lineCount() >= 1) {
+            QTextLine first = layout->lineAt(0);
+            QTextLine last = layout->lineAt(layout->lineCount()-1);
+            QRectF parag(qMin(first.x(), last.x()), first.y(), qMax(first.width(), last.width()), last.y() + last.height());
+            if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(parag.toRect())).isEmpty()) {
+                started=true;
+                decorateParagraph(painter, block);
+                layout->draw(painter, QPointF(0,0));
+            }
+            else if(started) // when out of the cliprect, then we are done drawing.
+                return;
         }
-        else if(started) // when out of the cliprect, then we are done drawing.
-            return;
         block = block.next();
     }
 }
