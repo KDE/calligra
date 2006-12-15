@@ -45,6 +45,7 @@ void KPrDocument::paintContent( QPainter &painter, const QRect &rect, bool trans
 
 bool KPrDocument::loadXML( QIODevice *, const KoXmlDocument & doc )
 {
+    //Perhaps not necessary if we use filter import/export for old file format
     return true;
 }
 
