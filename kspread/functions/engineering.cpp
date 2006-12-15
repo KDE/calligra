@@ -32,6 +32,14 @@
 #include <klocale.h>
 #include <math.h>
 
+#ifndef M_LN2l
+#define M_LN2l 0.6931471805599453094172321214581766L
+#endif
+
+#ifndef M_LN10l
+#define M_LN10l 2.3025850929940456840179914546843642L
+#endif
+
 using namespace KSpread;
 
 // prototypes (sort alphabetically)
