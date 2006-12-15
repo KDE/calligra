@@ -22,6 +22,7 @@
 #include <QGridLayout>
 #include <QScrollBar>
 #include <QTimer>
+#include <QToolBar>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -151,6 +152,8 @@ void KivioView::initActions()
                                         actionCollection(), "view_zoom");
     connect(m_viewZoomAction, SIGNAL(zoomChanged(KoZoomMode::Mode, int)),
             this, SLOT(viewZoom(KoZoomMode::Mode, int)));
+    // plug the zoom action into view bar
+    viewBar()->addAction(m_viewZoomAction);
 }
 
 KivioAbstractPage* KivioView::activePage() const
