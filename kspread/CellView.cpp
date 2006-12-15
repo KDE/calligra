@@ -215,12 +215,12 @@ QString CellView::testAnchor( const Cell* cell, double x, double y ) const
 // Paint the cell.  This is the main function that calls a lot of
 //                  helper functions.
 //
-// `rect'       is the rectangle that we should paint on.  If the cell
-//              does not overlap this rectangle, we can return immediately.
+// `paintRect'  is the rectangle that we should paint on in document coordinates.
+//              If the cell does not overlap this, we can return immediately.
 // `coordinate' is the origin (the upper left) of the cell in document
 //              coordinates.
 //
-void CellView::paintCell( const QRectF& rect, QPainter& painter,
+void CellView::paintCell( const QRectF& paintRect, QPainter& painter,
                           View* view, const QPointF& coordinate,
                           const QPoint& cellRef,
                           QLinkedList<QPoint> &mergedCellsPainted, Cell* cell )
@@ -306,10 +306,10 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
     // be painted, we can skip the rest and return. (Note that we need
     // to calculate `left' first before we can do this.)
     const QRectF cellRect( d->layoutDirection == Sheet::RightToLeft
-                               ? coordinate.x() - cell->extraWidth() - d->width
+                               ? paintRect.width() - coordinate.x() - d->width
                                : coordinate.x(),
                            coordinate.y(), d->width, d->height );
-    if ( !cellRect.intersects( rect ) ) {
+    if ( !cellRect.intersects( paintRect ) ) {
         cell->clearFlag( Cell::Flag_PaintingCell );
         return;
     }
@@ -329,7 +329,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
     if (cell->d->hasExtra() && (cell->extraXCells() > 0 || cell->extraYCells() > 0)) {
         //kDebug(36004) << "painting obscured cells for " << name() << endl;
 
-        paintObscuredCells( rect, painter, view, cellRect, cellRef,
+        paintObscuredCells( paintRect, painter, view, cellRect, cellRef,
                             mergedCellsPainted, cell );
 
         // FIXME: Is this the right place for this?
@@ -445,7 +445,7 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
                     //      painted with the color of the last cell referenced
                     //      which is inside the merged range.
                     CellView cellView = view->sheetView( cell->sheet() )->cellView( obscuringCellRef.x(), obscuringCellRef.y() );
-                    cellView.paintCell( rect, painter, view,
+                    cellView.paintCell( paintRect, painter, view,
                                         corner, obscuringCellRef,
                                         mergedCellsPainted, cell ); // new pens
                     painter.restore();
@@ -704,7 +704,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
 
 // Paint all the cells that this cell obscures (helper function to paintCell).
 //
-void CellView::paintObscuredCells(const QRectF& rect, QPainter& painter,
+void CellView::paintObscuredCells(const QRectF& paintRect, QPainter& painter,
                                   View* view, const QRectF &cellRect,
                                   const QPoint &cellRef,
                                   QLinkedList<QPoint> &mergedCellsPainted, Cell* cell )
@@ -764,7 +764,7 @@ void CellView::paintObscuredCells(const QRectF& rect, QPainter& painter,
                 //kDebug(36004) << "calling paintcell for obscured cell "
                 //       << cell->name() << endl;
                 CellView cellView = view->sheetView( cell->sheet() )->cellView( column, row );
-                cellView.paintCell( rect, painter, view, corner,
+                cellView.paintCell( paintRect, painter, view, corner,
                                     QPoint( cellRef.x() + x, cellRef.y() + y ),
                                     mergedCellsPainted, cell );
             }
@@ -830,7 +830,7 @@ void CellView::paintBackground( QPainter& painter, const QRectF& cellRect,
 
 // Paint the standard light grey borders that are always visible.
 //
-void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
+void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
                                     const QRectF &cellRect, const QPoint &cellRef,
                                     Borders paintBorder, const QRect& cellRegion,
                                     Cell* cell, SheetView* sheetView )
@@ -960,10 +960,10 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
         if ( paintingToExternalDevice ) {
-                line = QLineF( qMax( rect.left(),   cellRect.x() ),
-                               qMax( rect.top(),    cellRect.y() + dt ),
-                               qMin( rect.right(),  cellRect.x() ),
-                               qMin( rect.bottom(), cellRect.bottom() - db ) );
+                line = QLineF( qMax( paintRect.left(),   cellRect.x() ),
+                               qMax( paintRect.top(),    cellRect.y() + dt ),
+                               qMin( paintRect.right(),  cellRect.x() ),
+                               qMin( paintRect.bottom(), cellRect.bottom() - db ) );
         }
         else {
                 line = QLineF( cellRect.x(),
@@ -998,10 +998,10 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
         if ( paintingToExternalDevice ) {
-            line = QLineF( qMax( rect.left(),   cellRect.x() + dl ),
-                           qMax( rect.top(),    cellRect.y() ),
-                           qMin( rect.right(),  cellRect.right() - dr ),
-                           qMin( rect.bottom(), cellRect.y() ) );
+            line = QLineF( qMax( paintRect.left(),   cellRect.x() + dl ),
+                           qMax( paintRect.top(),    cellRect.y() ),
+                           qMin( paintRect.right(),  cellRect.right() - dr ),
+                           qMin( paintRect.bottom(), cellRect.y() ) );
         }
         else {
             line = QLineF( cellRect.x() + dl,
@@ -1039,10 +1039,10 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
         // On paper, we always have full cells, on screen not.
         if ( dynamic_cast<QPrinter*>(painter.device()) )
         {
-                line = QLineF( qMax( rect.left(),   cellRect.right() ),
-                               qMax( rect.top(),    cellRect.y() + dt ),
-                               qMin( rect.right(),  cellRect.right() ),
-                               qMin( rect.bottom(), cellRect.bottom() - db ) );
+                line = QLineF( qMax( paintRect.left(),   cellRect.right() ),
+                               qMax( paintRect.top(),    cellRect.y() + dt ),
+                               qMin( paintRect.right(),  cellRect.right() ),
+                               qMin( paintRect.bottom(), cellRect.bottom() - db ) );
         }
         else
         {
@@ -1076,10 +1076,10 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &rect,
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
         if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-            line = QLineF( qMax( rect.left(),   cellRect.x() + dl ),
-                           qMax( rect.top(),    cellRect.bottom() ),
-                           qMin( rect.right(),  cellRect.right() - dr ),
-                           qMin( rect.bottom(), cellRect.bottom() ) );
+            line = QLineF( qMax( paintRect.left(),   cellRect.x() + dl ),
+                           qMax( paintRect.top(),    cellRect.bottom() ),
+                           qMin( paintRect.right(),  cellRect.right() - dr ),
+                           qMin( paintRect.bottom(), cellRect.bottom() ) );
         }
         else {
             line = QLineF( cellRect.x() + dl,
@@ -1548,7 +1548,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
 
 // Paint the cell borders.
 //
-void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
+void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
                                   const QRectF &cellRect, const QPoint &cellRef,
                                   Borders paintBorder, Cell* cell )
 {
@@ -1618,11 +1618,11 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
         if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-            if ( cellRect.left() >= rect.left() + left_penWidth / 2)
+            if ( cellRect.left() >= paintRect.left() + left_penWidth / 2)
                 line = QLineF( cellRect.left() ,
-                               qMax( rect.top(), cellRect.top() ),
+                               qMax( paintRect.top(), cellRect.top() ),
                                cellRect.left(),
-                               qMin( rect.bottom(), cellRect.bottom() ) );
+                               qMin( paintRect.bottom(), cellRect.bottom() ) );
         }
         else
         {
@@ -1641,11 +1641,11 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
         // On paper, we always have full cells, on screen not.
         if ( dynamic_cast<QPrinter*>(painter.device()) ) {
                 // Only print the right border if it is visible.
-                if ( cellRect.right() <= rect.right() + right_penWidth / 2)
+                if ( cellRect.right() <= paintRect.right() + right_penWidth / 2)
                     line = QLineF( cellRect.right(),
-                                   qMax( rect.top(), cellRect.top() ),
+                                   qMax( paintRect.top(), cellRect.top() ),
                                    cellRect.right(),
-                                   qMin( rect.bottom(), cellRect.bottom() ) );
+                                   qMin( paintRect.bottom(), cellRect.bottom() ) );
         }
         else
         {
@@ -1665,10 +1665,10 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
         if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-            if ( cellRect.top() >= rect.top() + top_penWidth / 2)
-                line = QLineF( qMax( rect.left(),   cellRect.left() ),
+            if ( cellRect.top() >= paintRect.top() + top_penWidth / 2)
+                line = QLineF( qMax( paintRect.left(),   cellRect.left() ),
                                cellRect.top(),
-                               qMin( rect.right(),  cellRect.right() ),
+                               qMin( paintRect.right(),  cellRect.right() ),
                                cellRect.top() );
         }
         else
@@ -1689,10 +1689,10 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &rect,
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
         if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-            if ( cellRect.bottom() <= rect.bottom() + bottom_penWidth / 2)
-                line = QLineF( qMax( rect.left(),   cellRect.left() ),
+            if ( cellRect.bottom() <= paintRect.bottom() + bottom_penWidth / 2)
+                line = QLineF( qMax( paintRect.left(),   cellRect.left() ),
                                cellRect.bottom(),
-                               qMin( rect.right(),  cellRect.right() ),
+                               qMin( paintRect.right(),  cellRect.right() ),
                                cellRect.bottom() );
         }
         else {

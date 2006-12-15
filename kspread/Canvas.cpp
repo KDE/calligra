@@ -630,12 +630,16 @@ void Canvas::slotScrollHorz( int _value )
     // Relative movement
     // NOTE Stefan: Always scroll by whole pixels, otherwise we'll get offsets.
     int dx = qRound( d->view->doc()->zoomItX( d->xOffset - _value ) );
-    scroll( dx, 0 );
-    hBorderWidget()->scroll( dx, 0 );
 
     // New absolute position
     // NOTE Stefan: Always store whole pixels, otherwise we'll get offsets.
     d->xOffset -=  d->view->doc()->unzoomItX( dx );
+
+    // scrolling the widgets in the right direction
+    if ( sheet->layoutDirection() == Sheet::RightToLeft )
+        dx = -dx;
+    scroll( dx, 0 );
+    hBorderWidget()->scroll( dx, 0 );
 
     sheet->enableScrollBarUpdates( true );
 }
