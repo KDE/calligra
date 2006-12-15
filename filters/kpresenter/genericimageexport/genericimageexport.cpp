@@ -94,7 +94,7 @@ GenericImageExport::convert(const QByteArray& from, const QByteArray& to)
     delete exportDialog;
     if ( ret )
     {
-        KPrView* view = static_cast<KPrView*>( kpresenterdoc->views().first());
+        KPrView* view = kpresenterdoc->views().isEmpty() ? 0 : static_cast<KPrView*>( kpresenterdoc->views().first() );
         if ( view ) // no view if embedded document
         {
             KPrCanvas * canvas = view->getCanvas();

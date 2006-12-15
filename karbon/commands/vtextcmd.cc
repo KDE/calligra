@@ -35,6 +35,6 @@ VObject*
 VTextCmd::createPath()
 {
 	return
-		new VText( static_cast<KarbonView*>( m_part->views().first() ), m_font, m_text );
+		new VText( m_part->views().isEmpty() ? 0 : static_cast<KarbonView*>( m_part->views().first() ), m_font, m_text );
 }
 
