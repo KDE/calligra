@@ -24,6 +24,7 @@
 
 #include <KoView.h>
 #include <KoZoomHandler.h>
+#include <KoRuler.h>
 
 class KoCanvasController;
 class KPrCanvas;
@@ -58,6 +59,9 @@ private:
 
     KToggleAction *m_actionViewSnapToGrid;
     KToggleAction *m_actionViewShowGrid;
+
+    KoRuler *m_horizontalRuler;
+    KoRuler *m_verticalRuler;
 };
 
 #endif /* KPRVIEW_H */

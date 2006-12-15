@@ -63,7 +63,20 @@ void KPrView::initGUI()
     m_canvasController->setCanvas( m_canvas );
     KoToolManager::instance()->addControllers( m_canvasController );
 
-    gridLayout->addWidget( m_canvasController, 0, 0 );
+    //Ruler
+    m_horizontalRuler = new KoRuler(this, Qt::Horizontal, viewConverter());
+    m_horizontalRuler->setShowMousePosition(true);
+    m_horizontalRuler->setUnit(m_doc->unit());
+    m_verticalRuler = new KoRuler(this, Qt::Vertical, viewConverter());
+    m_verticalRuler->setUnit(m_doc->unit());
+    m_verticalRuler->setShowMousePosition(true);
+
+    connect(m_doc, SIGNAL(unitChanged(KoUnit)), m_horizontalRuler, SLOT(setUnit(KoUnit)));
+    connect(m_doc, SIGNAL(unitChanged(KoUnit)), m_verticalRuler, SLOT(setUnit(KoUnit)));
+
+    gridLayout->addWidget(m_horizontalRuler, 0, 1);
+    gridLayout->addWidget(m_verticalRuler, 1, 0);    
+    gridLayout->addWidget( m_canvasController, 1, 1 );
 
     KoToolBoxFactory toolBoxFactory( "Tools" );
     createDockWidget( &toolBoxFactory );
