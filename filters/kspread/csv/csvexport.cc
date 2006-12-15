@@ -202,7 +202,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
 
     Sheet const * const sheet = view->activeSheet();
 
-    QRect selection = view->selectionInfo()->lastRange();
+    QRect selection = view->selection()->lastRange();
     // Compute the highest row and column indexes (within the selection)
     // containing non-empty cells, respectively called CSVMaxRow CSVMaxCol.
     // The CSV will have CSVMaxRow rows, all with CSVMaxCol columns
