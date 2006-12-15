@@ -19,12 +19,38 @@ libkexidb_la_SOURCES = drivermanager.cpp driver.cpp driver_p.cpp connection.cpp 
 noinst_HEADERS = drivermanager_p.h utils_p.h
 
 kexidbincludedir=$(includedir)/kexidb
-kexidbinclude_HEADERS=connection.h connectiondata.h cursor.h \
-  driver.h drivermanager.h \
-  error.h expression.h field.h fieldlist.h global.h object.h \
-  schemadata.h tableschema.h queryschema.h queryschemaparameter.h indexschema.h \
-  relationship.h parser/parser.h transaction.h preparedstatement.h \
-  kexidb_export.h
+kexidbinclude_HEADERS= \
+admin.h \
+alter.h \
+connectiondata.h \
+connection.h \
+cursor.h \
+dbobjectnamevalidator.h \
+dbproperties.h \
+driver.h \
+drivermanager.h \
+driver_p.h \
+error.h \
+expression.h \
+field.h \
+fieldlist.h \
+fieldvalidator.h \
+global.h \
+indexschema.h \
+kexidb_export.h \
+lookupfieldschema.h \
+msghandler.h \
+object.h \
+preparedstatement.h \
+queryschema.h \
+queryschemaparameter.h \
+relationship.h \
+roweditbuffer.h \
+schemadata.h \
+simplecommandlineapp.h \
+tableschema.h \
+transaction.h \
+utils.h
 
 libkexidb_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KIO) \
 	 $(top_builddir)/kexi/kexiutils/libkexiutils.la
