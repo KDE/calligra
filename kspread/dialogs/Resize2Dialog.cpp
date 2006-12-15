@@ -72,7 +72,7 @@ ResizeRow::ResizeRow( View* parent, const char* name )
     vLay->setSpacing(KDialog::spacingHint());
     QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
-    QRect selection( m_pView->selectionInfo()->selection() );
+    QRect selection( m_pView->selection()->selection() );
     RowFormat* rl = m_pView->activeSheet()->rowFormat( selection.top() );
     rowHeight = rl->dblHeight();
 
@@ -112,7 +112,7 @@ void ResizeRow::slotOk()
     manipulator->setSize(height);
     // TODO Stefan:
     manipulator->setOldSize(rowHeight);
-    manipulator->add(*m_pView->selectionInfo());
+    manipulator->add(*m_pView->selection());
     manipulator->execute();
   }
   accept();
@@ -144,7 +144,7 @@ ResizeColumn::ResizeColumn( View* parent, const char* name )
     vLay->setSpacing(KDialog::spacingHint());
     QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
-    QRect selection( m_pView->selectionInfo()->selection() );
+    QRect selection( m_pView->selection()->selection() );
     ColumnFormat* cl = m_pView->activeSheet()->columnFormat( selection.left() );
     columnWidth = cl->dblWidth();
 
@@ -184,7 +184,7 @@ void ResizeColumn::slotOk()
     manipulator->setSize(width);
     // TODO Stefan:
     manipulator->setOldSize(columnWidth);
-    manipulator->add(*m_pView->selectionInfo());
+    manipulator->add(*m_pView->selection());
     manipulator->execute();
   }
   accept();

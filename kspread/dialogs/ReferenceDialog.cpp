@@ -233,8 +233,8 @@ void reference::slotOk()
     }
 
     Region region(m_pView->doc()->map(), Cell::fullName(m_pView->activeSheet(), area[index].rect.left(), area[index].rect.top()), m_pView->activeSheet());
-    m_pView->selectionInfo()->initialize(region);
-    m_pView->selectionInfo()->initialize(area[ index ].rect);//,                                           m_pView->activeSheet() );
+    m_pView->selection()->initialize(region);
+    m_pView->selection()->initialize(area[ index ].rect);//,                                           m_pView->activeSheet() );
   }
 
   m_pView->slotUpdateView( m_pView->activeSheet() );

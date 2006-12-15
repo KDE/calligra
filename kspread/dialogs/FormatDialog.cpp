@@ -175,7 +175,7 @@ void FormatDialog::slotOk()
     if ( !m_view->doc()->undoLocked() )
     {
         QString title = i18n( "Change Format" );
-        UndoCellFormat* undo = new UndoCellFormat( m_view->doc(), m_view->activeSheet(), *m_view->selectionInfo(), title );
+        UndoCellFormat* undo = new UndoCellFormat( m_view->doc(), m_view->activeSheet(), *m_view->selection(), title );
         m_view->doc()->addCommand( undo );
     }
 #endif
@@ -183,8 +183,8 @@ void FormatDialog::slotOk()
     // Set colors, borders etc.
     //
     Sheet* const sheet = m_view->activeSheet();
-    Region::ConstIterator end(m_view->selectionInfo()->constEnd());
-    for ( Region::ConstIterator it(m_view->selectionInfo()->constBegin()); it != end; ++it )
+    Region::ConstIterator end(m_view->selection()->constEnd());
+    for ( Region::ConstIterator it(m_view->selection()->constBegin()); it != end; ++it )
     {
         const QRect rect = (*it)->rect();
         // Top left corner

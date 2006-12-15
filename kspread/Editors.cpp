@@ -1343,7 +1343,7 @@ bool LocationEditWidget::activateItem()
             QString tmp = (*it).sheet_name;
             tmp += '!';
             tmp += util_rangeName((*it).rect);
-            m_pView->selectionInfo()->initialize( Region(m_pView->doc()->map(), tmp, m_pView->activeSheet()) );
+            m_pView->selection()->initialize( Region(m_pView->doc()->map(), tmp, m_pView->activeSheet()) );
             return true;
         }
     }
@@ -1358,7 +1358,7 @@ bool LocationEditWidget::activateItem()
 
     // Selection entered in location widget
     if ( ltext.contains( ':' ) )
-      m_pView->selectionInfo()->initialize( Region(m_pView->doc()->map(), tmp, m_pView->activeSheet()) );
+      m_pView->selection()->initialize( Region(m_pView->doc()->map(), tmp, m_pView->activeSheet()) );
     // Location entered in location widget
     else
     {
@@ -1374,7 +1374,7 @@ bool LocationEditWidget::activateItem()
         }
         if ( !region.isValid() && validName)
         {
-            QRect rect( m_pView->selectionInfo()->selection() );
+            QRect rect( m_pView->selection()->selection() );
             Sheet * t = m_pView->activeSheet();
             // set area name on current selection/cell
 
@@ -1383,7 +1383,7 @@ bool LocationEditWidget::activateItem()
 
         if (!validName)
         {
-          m_pView->selectionInfo()->initialize(region);
+          m_pView->selection()->initialize(region);
         }
     }
 
@@ -1419,15 +1419,15 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     break;
     // Escape pressed, restore original value
     case Qt::Key_Escape:
-        if ( m_pView->selectionInfo()->isSingular() ) {
+        if ( m_pView->selection()->isSingular() ) {
             setText( Cell::columnName( m_pView->canvasWidget()->markerColumn() )
                      + QString::number( m_pView->canvasWidget()->markerRow() ) );
         } else {
-            setText( Cell::columnName( m_pView->selectionInfo()->lastRange().left() )
-                     + QString::number( m_pView->selectionInfo()->lastRange().top() )
+            setText( Cell::columnName( m_pView->selection()->lastRange().left() )
+                     + QString::number( m_pView->selection()->lastRange().top() )
                      + ':'
-                     + Cell::columnName( m_pView->selectionInfo()->lastRange().right() )
-                     + QString::number( m_pView->selectionInfo()->lastRange().bottom() ) );
+                     + Cell::columnName( m_pView->selection()->lastRange().right() )
+                     + QString::number( m_pView->selection()->lastRange().bottom() ) );
         }
         m_pView->canvasWidget()->setFocus();
         _ev->accept();

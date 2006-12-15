@@ -666,7 +666,7 @@ void ConditionalDialog::slotOk()
   ConditionalManipulator* manipulator = new ConditionalManipulator();
   manipulator->setSheet( m_view->activeSheet() );
   manipulator->setConditionList( newList );
-  manipulator->add( *m_view->selectionInfo() );
+  manipulator->add( *m_view->selection() );
   manipulator->execute();
 
   accept();

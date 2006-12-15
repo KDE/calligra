@@ -318,7 +318,7 @@ void FormulaDialog::slotOk()
     }
 
     // Revert the marker to its original position
-    m_pView->selectionInfo()->initialize( QPoint( m_column, m_row ) );
+    m_pView->selection()->initialize( QPoint( m_column, m_row ) );
 
     // If there is still an editor then set the text.
     // Usually the editor is always in place.
@@ -356,7 +356,7 @@ void FormulaDialog::slotClose()
 
 
     // Revert the marker to its original position
-    m_pView->selectionInfo()->initialize( QPoint( m_column, m_row ) );
+    m_pView->selection()->initialize( QPoint( m_column, m_row ) );
 
     // If there is still an editor then reset the text.
     // Usually the editor is always in place.

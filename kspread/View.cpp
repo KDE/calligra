@@ -1823,7 +1823,7 @@ bool View::isLoading() const
     return d->loading;
 }
 
-Selection* View::selectionInfo() const
+Selection* View::selection() const
 {
     return d->selection;
 }
@@ -2757,7 +2757,7 @@ void View::changeTextColor()
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Text Color") );
     manipulator->setFontColor( d->actions->textColor->color() );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -2767,7 +2767,7 @@ void View::setSelectionTextColor(const QColor &txtColor)
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Text Color") );
     manipulator->setFontColor( txtColor );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -2777,7 +2777,7 @@ void View::changeBackgroundColor()
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Background Color") );
     manipulator->setBackgroundColor( d->actions->bgColor->color() );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -2787,7 +2787,7 @@ void View::setSelectionBackgroundColor(const QColor &bgColor)
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Background Color") );
     manipulator->setBackgroundColor( bgColor );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -2796,7 +2796,7 @@ void View::changeBorderColor()
   BorderColorManipulator* manipulator = new BorderColorManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setColor( d->actions->borderColor->color() );
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -2805,7 +2805,7 @@ void View::setSelectionBorderColor(const QColor &bdColor)
   BorderColorManipulator* manipulator = new BorderColorManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setColor( bdColor );
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -2843,7 +2843,7 @@ void View::deleteColumn()
     InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setReverse( true );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -2852,7 +2852,7 @@ void View::deleteRow()
     InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setReverse( true );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -2860,7 +2860,7 @@ void View::insertColumn()
 {
     InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
     manipulator->setSheet( d->activeSheet );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -2868,7 +2868,7 @@ void View::insertRow()
 {
     InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
     manipulator->setSheet( d->activeSheet );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -2886,7 +2886,7 @@ void View::hideColumn()
   HideShowManipulator* manipulator = new HideShowManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setManipulateColumns(true);
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -2902,7 +2902,7 @@ void View::showColumn()
   manipulator->setSheet( d->activeSheet );
   manipulator->setManipulateColumns(true);
   manipulator->setReverse( true );
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -2929,7 +2929,7 @@ void View::hideRow()
   HideShowManipulator* manipulator = new HideShowManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setManipulateRows(true);
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -2945,7 +2945,7 @@ void View::showRow()
   manipulator->setSheet( d->activeSheet );
   manipulator->setManipulateRows(true);
   manipulator->setReverse(true);
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -2967,13 +2967,13 @@ void View::fontSelected( const QString & _font )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Font") );
     manipulator->setFontFamily( _font.toLatin1() );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 
     // Dont leave the focus in the toolbars combo box ...
     if ( d->canvas->editor() )
     {
-        const QPoint marker = selectionInfo()->marker();
+        const QPoint marker = selection()->marker();
         const Style style = d->activeSheet->style( marker.x(), marker.y() );
         d->canvas->editor()->setEditorFont( style.font(), true );
         d->canvas->editor()->setFocus();
@@ -2997,7 +2997,7 @@ void View::setSelectionFontSize( int deltaSize )
     if ( d->toolbarLock )
         return;
 
-    const QPoint marker = selectionInfo()->marker();
+    const QPoint marker = selection()->marker();
     const Style style = d->activeSheet->style( marker.x(), marker.y() );
     const int size = style.fontSize();
 
@@ -3005,7 +3005,7 @@ void View::setSelectionFontSize( int deltaSize )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Font") );
     manipulator->setFontSize( size + deltaSize );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3015,7 +3015,7 @@ void View::lower()
   manipulator->setSheet( d->activeSheet );
   manipulator->setName( i18n( "Switch to lowercase" ) );
   manipulator->changeMode( CaseManipulator::Lower );
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -3025,7 +3025,7 @@ void View::upper()
   manipulator->setSheet( d->activeSheet );
   manipulator->setName( i18n( "Switch to uppercase" ) );
   manipulator->changeMode( CaseManipulator::Upper );
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -3035,7 +3035,7 @@ void View::firstLetterUpper()
   manipulator->setSheet( d->activeSheet );
   manipulator->setName( i18n( "First letter uppercase" ) );
   manipulator->changeMode( CaseManipulator::FirstUpper );
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -3047,7 +3047,7 @@ void View::verticalText(bool b)
     manipulator->setVerticalText( b );
     manipulator->setMultiRow( false );
     manipulator->setAngle( 0 );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3137,7 +3137,7 @@ void View::fontSizeSelected( int _size )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Font") );
     manipulator->setFontSize(_size);
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 
     // Dont leave the focus in the toolbars combo box ...
@@ -3160,7 +3160,7 @@ void View::bold( bool b )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Font") );
     manipulator->setFontBold( b );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 
     if ( d->canvas->editor() )
@@ -3181,7 +3181,7 @@ void View::underline( bool b )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Font") );
     manipulator->setFontUnderline( b );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 
     if ( d->canvas->editor() )
@@ -3202,7 +3202,7 @@ void View::strikeOut( bool b )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Font") );
     manipulator->setFontStrike( b );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 
     if ( d->canvas->editor() )
@@ -3224,7 +3224,7 @@ void View::italic( bool b )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Font") );
     manipulator->setFontItalic( b );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 
     if ( d->canvas->editor() )
@@ -3292,7 +3292,7 @@ void View::borderBottom()
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
     manipulator->setBottomBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3302,7 +3302,7 @@ void View::setSelectionBottomBorderColor( const QColor & color )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
     manipulator->setBottomBorderPen( QPen( color, 1, Qt::SolidLine ) );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3315,7 +3315,7 @@ void View::borderRight()
         manipulator->setLeftBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
     else
         manipulator->setRightBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3328,7 +3328,7 @@ void View::setSelectionRightBorderColor( const QColor & color )
         manipulator->setLeftBorderPen( QPen( color, 1, Qt::SolidLine ) );
     else
         manipulator->setRightBorderPen( QPen( color, 1, Qt::SolidLine ) );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3341,7 +3341,7 @@ void View::borderLeft()
         manipulator->setRightBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
     else
         manipulator->setLeftBorderPen( QPen(d->actions->borderColor->color(), 1, Qt::SolidLine ) );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3354,7 +3354,7 @@ void View::setSelectionLeftBorderColor( const QColor & color )
         manipulator->setRightBorderPen( QPen( color, 1, Qt::SolidLine ) );
     else
         manipulator->setLeftBorderPen( QPen( color, 1, Qt::SolidLine ) );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3364,7 +3364,7 @@ void View::borderTop()
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
     manipulator->setTopBorderPen( QPen( d->actions->borderColor->color(), 1, Qt::SolidLine ) );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3374,7 +3374,7 @@ void View::setSelectionTopBorderColor( const QColor & color )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Border") );
     manipulator->setTopBorderPen( QPen( color, 1, Qt::SolidLine ) );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3387,7 +3387,7 @@ void View::borderOutline()
     manipulator->setBottomBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
     manipulator->setLeftBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
     manipulator->setRightBorderPen(QPen( d->actions->borderColor->color(), 1, Qt::SolidLine));
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3400,7 +3400,7 @@ void View::setSelectionOutlineBorderColor( const QColor & color )
     manipulator->setBottomBorderPen(QPen( color, 1, Qt::SolidLine));
     manipulator->setLeftBorderPen(QPen( color, 1, Qt::SolidLine));
     manipulator->setRightBorderPen(QPen( color, 1, Qt::SolidLine));
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3415,7 +3415,7 @@ void View::borderAll()
     manipulator->setRightBorderPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
     manipulator->setHorizontalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
     manipulator->setVerticalPen(QPen(d->actions->borderColor->color(), 1, Qt::SolidLine));
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3430,7 +3430,7 @@ void View::setSelectionAllBorderColor( const QColor & color )
     manipulator->setRightBorderPen(QPen( color, 1, Qt::SolidLine));
     manipulator->setHorizontalPen(QPen( color, 1, Qt::SolidLine));
     manipulator->setVerticalPen(QPen( color, 1, Qt::SolidLine));
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3445,7 +3445,7 @@ void View::borderRemove()
     manipulator->setRightBorderPen(QPen(Qt::NoPen));
     manipulator->setHorizontalPen(QPen(Qt::NoPen));
     manipulator->setVerticalPen(QPen(Qt::NoPen));
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -3490,7 +3490,7 @@ void View::addSheet( Sheet * _t )
     doc()->emitEndOperation();
     return;
   }
-  doc()->emitEndOperation( *selectionInfo() );
+  doc()->emitEndOperation( *selection() );
 }
 
 void View::slotSheetRemoved( Sheet *_t )
@@ -3521,7 +3521,7 @@ void View::slotSheetRemoved( Sheet *_t )
     }
   }
 
-  doc()->emitEndOperation( *selectionInfo() );
+  doc()->emitEndOperation( *selection() );
 }
 
 void View::removeAllSheets()
@@ -3793,7 +3793,7 @@ void View::copySelection()
   }
   if ( !d->canvas->editor() )
   {
-    d->activeSheet->copySelection( selectionInfo() );
+    d->activeSheet->copySelection( selection() );
 
     updateEditWidget();
   }
@@ -3805,7 +3805,7 @@ void View::copyAsText()
 {
   if ( !d->activeSheet )
     return;
-  d->activeSheet->copyAsText( selectionInfo() );
+  d->activeSheet->copyAsText( selection() );
 }
 
 
@@ -3844,7 +3844,7 @@ void View::cutSelection()
   }
   if ( !d->canvas->editor())
   {
-    d->activeSheet->cutSelection( selectionInfo() );
+    d->activeSheet->cutSelection( selection() );
     calcStatusBarOp();
     updateEditWidget();
   }
@@ -3980,21 +3980,21 @@ void View::specialPaste()
 
 void View::selectAll()
 {
-    if ( !selectionInfo()->isAllSelected() )
+    if ( !selection()->isAllSelected() )
     {
-        d->oldSelection = *selectionInfo();
-        selectionInfo()->initialize( QRect( QPoint(KS_colMax, KS_rowMax), QPoint(1,1) ) );
+        d->oldSelection = *selection();
+        selection()->initialize( QRect( QPoint(KS_colMax, KS_rowMax), QPoint(1,1) ) );
     }
     else
     {
-        selectionInfo()->initialize( d->oldSelection );
+        selection()->initialize( d->oldSelection );
         d->oldSelection.clear();
     }
 }
 
 void View::changeAngle()
 {
-  AngleDialog dlg( this, "Angle", selectionInfo()->marker() );
+  AngleDialog dlg( this, "Angle", selection()->marker() );
   dlg.exec();
 }
 
@@ -4004,14 +4004,14 @@ void View::setSelectionAngle( int angle )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Angle") );
     manipulator->setAngle( angle );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 
     AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator();
     manipulator2->setSheet( d->activeSheet );
     manipulator2->setAdjustColumn(true);
     manipulator2->setAdjustRow(true);
-    manipulator2->add( *selectionInfo() );
+    manipulator2->add( *selection() );
     manipulator2->execute();
 }
 
@@ -4020,7 +4020,7 @@ void View::mergeCell()
   // sanity check
   if( !d->activeSheet )
     return;
-  d->activeSheet->mergeCells(*selectionInfo());
+  d->activeSheet->mergeCells(*selection());
 }
 
 void View::mergeCellHorizontal()
@@ -4028,7 +4028,7 @@ void View::mergeCellHorizontal()
   // sanity check
   if( !d->activeSheet )
     return;
-  d->activeSheet->mergeCells(*selectionInfo(), true);
+  d->activeSheet->mergeCells(*selection(), true);
 }
 
 void View::mergeCellVertical()
@@ -4036,7 +4036,7 @@ void View::mergeCellVertical()
   // sanity check
   if( !d->activeSheet )
     return;
-  d->activeSheet->mergeCells(*selectionInfo(), false, true);
+  d->activeSheet->mergeCells(*selection(), false, true);
 }
 
 void View::dissociateCell()
@@ -4044,7 +4044,7 @@ void View::dissociateCell()
   // sanity check
   if( !d->activeSheet )
     return;
-  d->activeSheet->dissociateCells(*selectionInfo());
+  d->activeSheet->dissociateCells(*selection());
 }
 
 
@@ -4052,7 +4052,7 @@ void View::increaseIndent()
 {
   IncreaseIndentManipulator* manipulator = new IncreaseIndentManipulator();
   manipulator->setSheet( d->activeSheet );
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -4061,7 +4061,7 @@ void View::decreaseIndent()
   IncreaseIndentManipulator* manipulator = new IncreaseIndentManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setReverse( true );
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -4772,7 +4772,7 @@ void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
 
 QPointF View::markerDocumentPosition()
 {
-  QPoint marker=selectionInfo()->marker();
+  QPoint marker=selection()->marker();
 
   return QPointF( d->activeSheet->dblColumnPos(marker.x()),
             d->activeSheet->dblRowPos(marker.y()) );
@@ -5033,7 +5033,7 @@ void View::setSelectionComment( const QString& comment )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n( "Add Comment" ) );
     manipulator->setComment( comment.trimmed() );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -5653,7 +5653,7 @@ void View::openPopupMenu( const QPoint & _point )
         d->popupMenu->addAction( d->actions->removeComment );
       }
 
-      if (activeSheet()->testListChoose(selectionInfo()))
+      if (activeSheet()->testListChoose(selection()))
       {
             d->popupMenu->addSeparator();
             d->popupMenu->addAction( i18n("Selection List..."), this, SLOT( slotListChoosePopupMenu() ) );
@@ -5664,7 +5664,7 @@ void View::openPopupMenu( const QPoint & _point )
     qDeleteAll( d->toolList );
     d->toolList.clear();
 
-    if ( !isProtected && !activeSheet()->getWordSpelling( selectionInfo() ).isEmpty() )
+    if ( !isProtected && !activeSheet()->getWordSpelling( selection() ).isEmpty() )
     {
       d->popupMenuFirstToolId = 10;
       int i = 0;
@@ -5717,10 +5717,10 @@ void View::slotActivateTool( int _id )
       return;
   }
 
-  QString text = activeSheet()->getWordSpelling (selectionInfo());
+  QString text = activeSheet()->getWordSpelling (selection());
 
   if ( tool->run( entry->command, &text, "QString", "text/plain") )
-    activeSheet()->setWordSpelling (selectionInfo(), text);
+    activeSheet()->setWordSpelling (selection(), text);
 }
 
 void View::deleteSelection()
@@ -5734,7 +5734,7 @@ void View::deleteSelection()
     }
 
     doc()->emitBeginOperation( false );
-    d->activeSheet->deleteSelection( selectionInfo() );
+    d->activeSheet->deleteSelection( selection() );
     calcStatusBarOp();
     updateEditWidget();
 
@@ -5770,14 +5770,14 @@ void View::adjust()
   manipulator->setSheet( d->activeSheet );
   manipulator->setAdjustColumn(true);
   manipulator->setAdjustRow(true);
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
 void View::clearTextSelection()
 {
   // TODO Stefan: Actually this check belongs into the manipulator!
-  if ( d->activeSheet->areaIsEmpty( *selectionInfo() ) )
+  if ( d->activeSheet->areaIsEmpty( *selection() ) )
     return;
 
   DataManipulator* manipulator = new DataManipulator();
@@ -5787,47 +5787,47 @@ void View::clearTextSelection()
   // no actual parsing shall be done
   manipulator->setParsing( true );
   manipulator->setValue( Value( "" ) );
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
 void View::clearCommentSelection()
 {
     // TODO Stefan: Actually this check belongs into the manipulator!
-    if ( d->activeSheet->areaIsEmpty( *selectionInfo(), Sheet::Comment ) )
+    if ( d->activeSheet->areaIsEmpty( *selection(), Sheet::Comment ) )
         return;
 
     CommentManipulator* manipulator = new CommentManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n( "Remove Comment" ) );
     manipulator->setComment( QString() );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
 void View::clearValiditySelection()
 {
   // TODO Stefan: Actually this check belongs into the manipulator!
-  if ( d->activeSheet->areaIsEmpty( *selectionInfo(), Sheet::Validity ) )
+  if ( d->activeSheet->areaIsEmpty( *selection(), Sheet::Validity ) )
     return;
 
   ValidityManipulator* manipulator = new ValidityManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setValidity( Validity() ); // empty object removes validity
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
 void View::clearConditionalSelection()
 {
   // TODO Stefan: Actually this check belongs into the manipulator!
-  if ( d->activeSheet->areaIsEmpty( *selectionInfo(), Sheet::ConditionalCellAttribute ) )
+  if ( d->activeSheet->areaIsEmpty( *selection(), Sheet::ConditionalCellAttribute ) )
     return;
 
   ConditionalManipulator* manipulator = new ConditionalManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setConditionList( QLinkedList<Conditional>() );
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -5884,7 +5884,7 @@ void View::setDefaultStyle()
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setDefault();
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -5973,7 +5973,7 @@ void View::adjustRow()
   AdjustColumnRowManipulator* manipulator = new AdjustColumnRowManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setAdjustRow(true);
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -5982,7 +5982,7 @@ void View::adjustColumn()
   AdjustColumnRowManipulator* manipulator = new AdjustColumnRowManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setAdjustColumn(true);
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -6106,7 +6106,7 @@ void View::paperLayoutDlg()
 
 void View::definePrintRange()
 {
-  d->activeSheet->print()->definePrintRange( selectionInfo() );
+  d->activeSheet->print()->definePrintRange( selection() );
 }
 
 void View::resetPrintRange()
@@ -6125,7 +6125,7 @@ void View::wrapText( bool b )
     manipulator->setMultiRow( b );
     manipulator->setVerticalText( false );
     manipulator->setAngle( 0 );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -6138,7 +6138,7 @@ void View::alignLeft( bool b )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Horizontal Alignment") );
     manipulator->setHorizontalAlignment( b ? Style::Left : Style::HAlignUndefined );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -6151,7 +6151,7 @@ void View::alignRight( bool b )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Horizontal Alignment") );
     manipulator->setHorizontalAlignment( b ? Style::Right : Style::HAlignUndefined );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -6164,7 +6164,7 @@ void View::alignCenter( bool b )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Horizontal Alignment") );
     manipulator->setHorizontalAlignment( b ? Style::Center : Style::HAlignUndefined );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -6177,7 +6177,7 @@ void View::alignTop( bool b )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Vertical Alignment") );
     manipulator->setVerticalAlignment( b ? Style::Top : Style::VAlignUndefined );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -6190,7 +6190,7 @@ void View::alignBottom( bool b )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Vertical Alignment") );
     manipulator->setVerticalAlignment( b ? Style::Bottom : Style::VAlignUndefined );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -6203,7 +6203,7 @@ void View::alignMiddle( bool b )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n("Change Vertical Alignment") );
     manipulator->setVerticalAlignment( b ? Style::Middle : Style::VAlignUndefined );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -6217,7 +6217,7 @@ void View::moneyFormat(bool b)
     manipulator->setName( i18n( "Format Money" ) );
     manipulator->setFormatType( b ? Money_format : Generic_format );
     manipulator->setPrecision( b ?  d->doc->locale()->fracDigits() : 0 );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -6275,7 +6275,7 @@ void View::setStyle( const QString & stylename )
         StyleManipulator* manipulator = new StyleManipulator();
         manipulator->setSheet( d->activeSheet );
         manipulator->setParentName( stylename );
-        manipulator->add( *selectionInfo() );
+        manipulator->add( *selection() );
         manipulator->execute();
     }
 }
@@ -6284,7 +6284,7 @@ void View::increasePrecision()
 {
   IncreasePrecisionManipulator* manipulator = new IncreasePrecisionManipulator();
   manipulator->setSheet( d->activeSheet );
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -6293,7 +6293,7 @@ void View::decreasePrecision()
   IncreasePrecisionManipulator* manipulator = new IncreasePrecisionManipulator();
   manipulator->setSheet( d->activeSheet );
   manipulator->setReverse( true );
-  manipulator->add( *selectionInfo() );
+  manipulator->add( *selection() );
   manipulator->execute();
 }
 
@@ -6306,7 +6306,7 @@ void View::percent( bool b )
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n( "Format Percent" ) );
     manipulator->setFormatType( b ? Percentage_format : Generic_format );
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
 }
 
@@ -6651,7 +6651,7 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
   //There is still the problem of the object no longer being visible immediately after deactivating the child
   //as the sheet jumps back to the marker though.
   if (!activeChild())
-    d->canvas->scrollToCell(selectionInfo()->marker());
+    d->canvas->scrollToCell(selection()->marker());
 
   // Perhaps the user is entering a value in the cell.
   // In this case we may not touch the EditWidget
@@ -7017,7 +7017,7 @@ void View::markSelectionAsDirty()
     if (!d->activeSheet)
       return;
 
-    d->activeSheet->setRegionPaintDirty( *selectionInfo() );
+    d->activeSheet->setRegionPaintDirty( *selection() );
 }
 
 void View::paintUpdates()

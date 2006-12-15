@@ -227,14 +227,32 @@ public:
    */
   void setSelectionMode(Mode mode);
 
+  /**
+   * \return the first selected range
+   */
   QRect firstRange() const;
+
+  /**
+   * \return the last selected range
+   */
   QRect lastRange() const;
+
+  /**
+   * Extends \p area to include the merged cells, that are not fully covered,
+   * completely.
+   * \return the extended area
+   */
   QRect extendToMergedAreas(QRect area) const;
 
   const QList<QColor>& colors() const;
 
-  // TODO Stefan #2: replace this
-  QRect selection(bool extend = true) const;
+  /**
+   * \return the last range
+   * \deprecated
+   * \todo TODO Stefan: Port the code using this method to non-contiguous selections,
+   * or, if not feasible, use lastRange().
+   */
+  KDE_DEPRECATED QRect selection(bool extend = true) const;
 
 signals:
   /**

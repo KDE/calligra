@@ -220,7 +220,7 @@ public:
     void insertSheet( Sheet* sheet );
     QColor borderColor() const;
 
-    Selection* selectionInfo() const;
+    Selection* selection() const;
     Selection* choice() const;
 
     void updateShowSheetMenu();

@@ -131,7 +131,7 @@ public:
     /**
      * @return the usual selection of cells
      */
-    Selection* selectionInfo() const;
+    Selection* selection() const;
 
     /**
      * @return a selection of cells used in formulas

@@ -305,13 +305,13 @@ void CellView::paintCell( const QRectF& rect, QPainter& painter,
     bool  selected = false;
 #if 0 // moved to Canvas::paintNormalMarker()
     if ( view != 0 ) {
-        selected = view->selectionInfo()->contains( cellRef );
+        selected = view->selection()->contains( cellRef );
 
         // But the cell doesn't look selected if this is the marker cell.
-        Cell* cell = this->cell->sheet()->cellAt( view->selectionInfo()->marker() );
-        QPoint bottomRight( view->selectionInfo()->marker().x() + cell->extraXCells(),
-                            view->selectionInfo()->marker().y() + cell->extraYCells() );
-        QRect markerArea( view->selectionInfo()->marker(), bottomRight );
+        Cell* cell = this->cell->sheet()->cellAt( view->selection()->marker() );
+        QPoint bottomRight( view->selection()->marker().x() + cell->extraXCells(),
+                            view->selection()->marker().y() + cell->extraYCells() );
+        QRect markerArea( view->selection()->marker(), bottomRight );
         selected = selected && !( markerArea.contains( cellRef ) );
 
         // Don't draw any selection at all when printing.

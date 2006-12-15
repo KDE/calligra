@@ -178,23 +178,23 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
 
     m_iSelectionAnchor = hit_row;
 
-    if ( !m_pView->selectionInfo()->contains( QPoint(1, hit_row) ) ||
+    if ( !m_pView->selection()->contains( QPoint(1, hit_row) ) ||
          !( _ev->button() == Qt::RightButton ) ||
-         !m_pView->selectionInfo()->isRowSelected() )
+         !m_pView->selection()->isRowSelected() )
     {
       QPoint newMarker( 1, hit_row );
       QPoint newAnchor( KS_colMax, hit_row );
       if (_ev->modifiers() == Qt::ControlModifier)
       {
-        m_pView->selectionInfo()->extend(QRect(newAnchor, newMarker));
+        m_pView->selection()->extend(QRect(newAnchor, newMarker));
       }
       else if (_ev->modifiers() == Qt::ShiftModifier)
       {
-        m_pView->selectionInfo()->update(newMarker);
+        m_pView->selection()->update(newMarker);
       }
       else
       {
-        m_pView->selectionInfo()->initialize(QRect(newAnchor, newMarker));
+        m_pView->selection()->initialize(QRect(newAnchor, newMarker));
       }
     }
 
@@ -238,13 +238,13 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
         int end = m_iResizedRow;
         QRect rect;
         rect.setCoords( 1, m_iResizedRow, KS_colMax, m_iResizedRow );
-        if ( m_pView->selectionInfo()->isRowSelected() )
+        if ( m_pView->selection()->isRowSelected() )
         {
-          if ( m_pView->selectionInfo()->contains( QPoint( 1, m_iResizedRow ) ) )
+          if ( m_pView->selection()->contains( QPoint( 1, m_iResizedRow ) ) )
             {
-                start = m_pView->selectionInfo()->lastRange().top();
-                end = m_pView->selectionInfo()->lastRange().bottom();
-                rect = m_pView->selectionInfo()->lastRange();
+                start = m_pView->selection()->lastRange().top();
+                end = m_pView->selection()->lastRange().bottom();
+                rect = m_pView->selection()->lastRange();
             }
         }
 
@@ -288,7 +288,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
     }
     else if ( m_bSelection )
     {
-      QRect rect = m_pView->selectionInfo()->lastRange();
+      QRect rect = m_pView->selection()->lastRange();
 
         // TODO: please don't remove. Right now it's useless, but it's for a future feature
         // Norbert
@@ -325,7 +325,7 @@ void VBorder::equalizeRow( double resize )
   if (!sheet)
     return;
 
-  QRect selection( m_pView->selectionInfo()->selection() );
+  QRect selection( m_pView->selection()->selection() );
   if ( !m_pCanvas->d->view->doc()->undoLocked() )
   {
      UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, Region(selection) );
@@ -379,11 +379,11 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
     if ( row > KS_rowMax )
       return;
 
-    QPoint newAnchor = m_pView->selectionInfo()->anchor();
-    QPoint newMarker = m_pView->selectionInfo()->marker();
+    QPoint newAnchor = m_pView->selection()->anchor();
+    QPoint newMarker = m_pView->selection()->marker();
     newMarker.setY( row );
     newAnchor.setY( m_iSelectionAnchor );
-    m_pView->selectionInfo()->update(newMarker);
+    m_pView->selection()->update(newMarker);
 
     if ( _ev->pos().y() < 0 )
       m_pCanvas->vertScrollBar()->setValue( (int) ev_PosY );
@@ -574,8 +574,8 @@ void VBorder::paintEvent( QPaintEvent* event )
   yPos = yPos - m_pCanvas->yOffset();
   double width = YBORDER_WIDTH;
 
-  const QSet<int> selectedRows = m_pView->selectionInfo()->rowsSelected();
-  const QSet<int> affectedRows = m_pView->selectionInfo()->rowsAffected();
+  const QSet<int> selectedRows = m_pView->selection()->rowsSelected();
+  const QSet<int> affectedRows = m_pView->selection()->rowsAffected();
   // Loop through the rows, until we are out of range
   while ( yPos <= paintRect.bottom() )
   {
@@ -797,23 +797,23 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
 
     m_iSelectionAnchor = hit_col;
 
-    if ( !m_pView->selectionInfo()->contains( QPoint( hit_col, 1 ) ) ||
+    if ( !m_pView->selection()->contains( QPoint( hit_col, 1 ) ) ||
          !( _ev->button() == Qt::RightButton ) ||
-         !m_pView->selectionInfo()->isColumnSelected() )
+         !m_pView->selection()->isColumnSelected() )
     {
       QPoint newMarker( hit_col, 1 );
       QPoint newAnchor( hit_col, KS_rowMax );
       if (_ev->modifiers() == Qt::ControlModifier)
       {
-        m_pView->selectionInfo()->extend(QRect(newAnchor, newMarker));
+        m_pView->selection()->extend(QRect(newAnchor, newMarker));
       }
       else if (_ev->modifiers() == Qt::ShiftModifier)
       {
-        m_pView->selectionInfo()->update(newMarker);
+        m_pView->selection()->update(newMarker);
       }
       else
       {
-        m_pView->selectionInfo()->initialize(QRect(newAnchor, newMarker));
+        m_pView->selection()->initialize(QRect(newAnchor, newMarker));
       }
     }
 
@@ -858,13 +858,13 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
         int end   = m_iResizedColumn;
         QRect rect;
         rect.setCoords( m_iResizedColumn, 1, m_iResizedColumn, KS_rowMax );
-        if ( m_pView->selectionInfo()->isColumnSelected() )
+        if ( m_pView->selection()->isColumnSelected() )
         {
-            if ( m_pView->selectionInfo()->contains( QPoint( m_iResizedColumn, 1 ) ) )
+            if ( m_pView->selection()->contains( QPoint( m_iResizedColumn, 1 ) ) )
             {
-                start = m_pView->selectionInfo()->lastRange().left();
-                end   = m_pView->selectionInfo()->lastRange().right();
-                rect  = m_pView->selectionInfo()->lastRange();
+                start = m_pView->selection()->lastRange().left();
+                end   = m_pView->selection()->lastRange().right();
+                rect  = m_pView->selection()->lastRange();
             }
         }
 
@@ -916,7 +916,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
     }
     else if ( m_bSelection )
     {
-        QRect rect = m_pView->selectionInfo()->lastRange();
+        QRect rect = m_pView->selection()->lastRange();
 
         // TODO: please don't remove. Right now it's useless, but it's for a future feature
         // Norbert
@@ -952,7 +952,7 @@ void HBorder::equalizeColumn( double resize )
   register Sheet * const sheet = m_pView->activeSheet();
   Q_ASSERT( sheet );
 
-  QRect selection( m_pView->selectionInfo()->selection() );
+  QRect selection( m_pView->selection()->selection() );
   if ( !m_pCanvas->d->view->doc()->undoLocked() )
   {
       UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), sheet, Region(selection) );
@@ -1012,11 +1012,11 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
     if ( col > KS_colMax )
       return;
 
-    QPoint newMarker = m_pView->selectionInfo()->marker();
-    QPoint newAnchor = m_pView->selectionInfo()->anchor();
+    QPoint newMarker = m_pView->selection()->marker();
+    QPoint newAnchor = m_pView->selection()->anchor();
     newMarker.setX( col );
     newAnchor.setX( m_iSelectionAnchor );
-    m_pView->selectionInfo()->update(newMarker);
+    m_pView->selection()->update(newMarker);
 
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
@@ -1302,8 +1302,8 @@ void HBorder::paintEvent( QPaintEvent* event )
 
     xPos -= sheet->columnFormat( x )->dblWidth();
 
-    const QSet<int> selectedColumns = m_pView->selectionInfo()->columnsSelected();
-    const QSet<int> affectedColumns = m_pView->selectionInfo()->columnsAffected();
+    const QSet<int> selectedColumns = m_pView->selection()->columnsSelected();
+    const QSet<int> affectedColumns = m_pView->selection()->columnsAffected();
     //Loop through the columns, until we are out of range
     while ( xPos <= paintRect.right() )
     {
@@ -1359,8 +1359,8 @@ void HBorder::paintEvent( QPaintEvent* event )
   }
   else
   {
-    const QSet<int> selectedColumns = m_pView->selectionInfo()->columnsSelected();
-    const QSet<int> affectedColumns = m_pView->selectionInfo()->columnsAffected();
+    const QSet<int> selectedColumns = m_pView->selection()->columnsSelected();
+    const QSet<int> affectedColumns = m_pView->selection()->columnsAffected();
     //Loop through the columns, until we are out of range
     while ( xPos <= paintRect.right() )
     {
@@ -1458,7 +1458,7 @@ void SelectAllButton::paintEvent( QPaintEvent* event )
     painter.setClipRect( paintRect );
 
     // if all cells are selected
-    if ( m_view->selectionInfo()->isAllSelected() )
+    if ( m_view->selection()->isAllSelected() )
     {
         // selection brush/color
         QColor selectionColor( palette().highlight().color() );

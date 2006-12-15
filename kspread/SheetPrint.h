@@ -390,7 +390,7 @@ public:
     /**
      * Define the print range with the current selection
      */
-    void definePrintRange(Selection* selectionInfo);
+    void definePrintRange(Selection* selection);
     /**
      * Reset the print range to the standard definition (whole sheet)
      */

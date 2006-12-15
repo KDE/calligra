@@ -291,12 +291,12 @@ void ViewAdaptor::copyAsText()
 
 void ViewAdaptor::setSelection(QRect selection)
 {
-  m_view->selectionInfo()->initialize(selection);//,m_view->activeSheet());
+  m_view->selection()->initialize(selection);//,m_view->activeSheet());
 }
 
 QRect ViewAdaptor::selection()
 {
-  return m_view->selectionInfo()->selection();
+  return m_view->selection()->selection();
 }
 
 void ViewAdaptor::setSelectionMoneyFormat( bool b )

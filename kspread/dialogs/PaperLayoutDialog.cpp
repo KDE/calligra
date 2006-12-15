@@ -63,7 +63,7 @@ PaperLayout::PaperLayout( QWidget * parent, const char * name,
     m_pView( view )
 {
     initTab();
-    connect(view->selectionInfo(), SIGNAL(changed(const Region&)),
+    connect(view->selection(), SIGNAL(changed(const Region&)),
             this, SLOT(slotSelectionChanged()));
     qApp->installEventFilter( this );
     m_focus= 0;
@@ -529,18 +529,18 @@ void PaperLayout::closeEvent ( QCloseEvent * )
 void PaperLayout::slotSelectionChanged()
 {
   // TODO Stefan: check for improvement
-  if (!m_pView->selectionInfo()->isValid())
+  if (!m_pView->selection()->isValid())
     return;
 
-  QString area = util_rangeName( m_pView->selectionInfo()->lastRange() );
+  QString area = util_rangeName( m_pView->selection()->lastRange() );
   if ( m_focus )
   {
       if ( m_focus == ePrintRange )
-        area = util_rangeName( m_pView->selectionInfo()->lastRange() );
+        area = util_rangeName( m_pView->selection()->lastRange() );
       else if ( m_focus == eRepeatRows )
-        area = util_rangeRowName( m_pView->selectionInfo()->lastRange() );
+        area = util_rangeRowName( m_pView->selection()->lastRange() );
       else if ( m_focus == eRepeatCols )
-        area = util_rangeColumnName( m_pView->selectionInfo()->lastRange() );
+        area = util_rangeColumnName( m_pView->selection()->lastRange() );
       else
           return;
       m_focus->setText( area );

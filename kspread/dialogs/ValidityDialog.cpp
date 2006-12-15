@@ -828,7 +828,7 @@ void DlgValidity::OkPressed()
   ValidityManipulator* manipulator = new ValidityManipulator();
   manipulator->setSheet( m_pView->activeSheet() );
   manipulator->setValidity( validity );
-  manipulator->add( *m_pView->selectionInfo() );
+  manipulator->add( *m_pView->selection() );
   manipulator->execute();
 
   accept();

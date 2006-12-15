@@ -926,13 +926,13 @@ void SheetPrint::updateNewPageListY( int _row )
     m_maxCheckedNewPageY = _row;
 }
 
-void SheetPrint::definePrintRange( Selection* selectionInfo )
+void SheetPrint::definePrintRange( Selection* selection )
 {
-    if ( !selectionInfo->isSingular() )
+    if ( !selection->isSingular() )
     {
         KCommand* command = new DefinePrintRangeCommand( m_pSheet );
         m_pDoc->addCommand( command );
-        setPrintRange( selectionInfo->selection() );
+        setPrintRange( selection->selection() );
     }
 }
 

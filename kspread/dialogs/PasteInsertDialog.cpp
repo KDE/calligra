@@ -69,11 +69,11 @@ void PasteInsertDialog::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
     if( rb1->isChecked() )
-      m_pView->activeSheet()->paste( m_pView->selectionInfo()->lastRange(),
+      m_pView->activeSheet()->paste( m_pView->selection()->lastRange(),
                                      true, Paste::Normal, Paste::OverWrite,
                                      true, -1 );
     else if( rb2->isChecked() )
-      m_pView->activeSheet()->paste( m_pView->selectionInfo()->lastRange(),
+      m_pView->activeSheet()->paste( m_pView->selection()->lastRange(),
                                      true, Paste::Normal, Paste::OverWrite,
                                      true, +1 );
 

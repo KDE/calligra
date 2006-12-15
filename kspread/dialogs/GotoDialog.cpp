@@ -83,7 +83,7 @@ void GotoDialog::slotOk()
     Region region(m_pView->doc()->map(), tmp_upper, m_pView->activeSheet());
     if ( region.isValid() )
     {
-      m_pView->selectionInfo()->initialize(region);
+      m_pView->selection()->initialize(region);
       accept();
     }
     else

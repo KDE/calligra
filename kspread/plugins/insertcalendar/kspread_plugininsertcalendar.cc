@@ -154,7 +154,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
       return;
   }
 
-  Selection* selection_info = m_kspreadView->selectionInfo();
+  Selection* selection_info = m_kspreadView->selection();
 
   Q_ASSERT(selection_info);
 

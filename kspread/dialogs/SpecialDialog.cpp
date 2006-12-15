@@ -92,7 +92,7 @@ void SpecialPasteDialog::slotOk()
       op = Paste::Div;
 
     m_pView->doc()->emitBeginOperation( false );
-    m_pView->activeSheet()->paste( m_pView->selectionInfo()->lastRange(), true, sp, op );
+    m_pView->activeSheet()->paste( m_pView->selection()->lastRange(), true, sp, op );
     m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }

@@ -338,10 +338,10 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   initMembers();
 
   //We need both conditions quite often, so store the condition here too
-  isRowSelected    = _view->selectionInfo()->isRowSelected();
-  isColumnSelected = _view->selectionInfo()->isColumnSelected();
+  isRowSelected    = _view->selection()->isRowSelected();
+  isColumnSelected = _view->selection()->isColumnSelected();
 
-  QRect range = _view->selectionInfo()->selection();
+  QRect range = _view->selection()->selection();
   left = range.left();
   top = range.top();
   right = range.right();
@@ -461,8 +461,8 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   widthSize = 0.0;
   heightSize = 0.0;
 
-    Selection::ConstIterator end(m_pView->selectionInfo()->constEnd());
-    for (Selection::ConstIterator it(m_pView->selectionInfo()->constBegin()); it != end; ++it)
+    Selection::ConstIterator end(m_pView->selection()->constEnd());
+    for (Selection::ConstIterator it(m_pView->selection()->constBegin()); it != end; ++it)
     {
         QRect range = (*it)->rect();
         Style style = m_pView->activeSheet()->style( range ); // FIXME merge
@@ -889,7 +889,7 @@ void CellFormatDialog::slotApply()
       Manipulator* manipulator = new MergeManipulator();
       manipulator->setSheet(m_pView->activeSheet());
       manipulator->setRegisterUndo(false);
-      manipulator->add(*m_pView->selectionInfo());
+      manipulator->add(*m_pView->selection());
       macroCommand->addCommand( manipulator );
     }
     else
@@ -899,7 +899,7 @@ void CellFormatDialog::slotApply()
       manipulator->setSheet(m_pView->activeSheet());
       manipulator->setReverse(true);
       manipulator->setRegisterUndo(false);
-      manipulator->add(*m_pView->selectionInfo());
+      manipulator->add(*m_pView->selection());
       macroCommand->addCommand( manipulator );
     }
   }
@@ -907,7 +907,7 @@ void CellFormatDialog::slotApply()
   StyleManipulator* manipulator = new StyleManipulator();
   manipulator->setSheet(m_pView->activeSheet());
   manipulator->setRegisterUndo(false);
-  manipulator->add(*m_pView->selectionInfo());
+  manipulator->add(*m_pView->selection());
   borderPage->apply(manipulator);
   floatPage->apply(manipulator);
   fontPage->apply(manipulator);
@@ -931,7 +931,7 @@ void CellFormatDialog::slotApply()
     manipulator->setSize(positionPage->getSizeHeight());
     // TODO Stefan:
     manipulator->setOldSize(heightSize);
-    manipulator->add(*m_pView->selectionInfo());
+    manipulator->add(*m_pView->selection());
     macroCommand->addCommand( manipulator );
   }
   if ( int( positionPage->getSizeWidth() ) != int( widthSize ) )
@@ -941,7 +941,7 @@ void CellFormatDialog::slotApply()
     manipulator->setSize(positionPage->getSizeWidth());
     // TODO Stefan:
     manipulator->setOldSize(widthSize);
-    manipulator->add(*m_pView->selectionInfo());
+    manipulator->add(*m_pView->selection());
     macroCommand->addCommand( manipulator );
   }
 

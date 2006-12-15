@@ -298,9 +298,9 @@ bool Canvas::focusNextPrevChild( bool )
     return true; // Don't allow to go out of the canvas widget by pressing "Tab"
 }
 
-Selection* Canvas::selectionInfo() const
+Selection* Canvas::selection() const
 {
-  return d->view->selectionInfo();
+  return d->view->selection();
 }
 
 Selection* Canvas::choice() const
@@ -310,17 +310,17 @@ Selection* Canvas::choice() const
 
 QPoint Canvas::marker() const
 {
-    return d->view->selectionInfo()->marker();
+    return d->view->selection()->marker();
 }
 
 int Canvas::markerColumn() const
 {
-    return d->view->selectionInfo()->marker().x();
+    return d->view->selection()->marker().x();
 }
 
 int Canvas::markerRow() const
 {
-    return d->view->selectionInfo()->marker().y();
+    return d->view->selection()->marker().y();
 }
 
 double Canvas::zoom() const
@@ -421,10 +421,10 @@ void Canvas::validateSelection()
   if (!sheet)
     return;
 
-    if ( selectionInfo()->isSingular() )
+    if ( selection()->isSingular() )
     {
-        int col = selectionInfo()->marker().x();
-        int row = selectionInfo()->marker().y();
+        int col = selection()->marker().x();
+        int row = selection()->marker().y();
         Cell * cell = sheet->cellAt( col,row );
         Validity validity = cell->validity( col, row );
         if ( cell && validity.displayValidationInformation() )
@@ -926,7 +926,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
   }
 
-  QRect rct( (d->chooseCell ? choice() : selectionInfo())->lastRange() );
+  QRect rct( (d->chooseCell ? choice() : selection())->lastRange() );
 
   QRect r1;
   QRect r2;
@@ -969,7 +969,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   }
 
   // Test wether mouse is over the Selection.handle
-  const QRectF selectionHandle = d->view->selectionInfo()->selectionHandleArea();
+  const QRectF selectionHandle = d->view->selection()->selectionHandleArea();
   if ( selectionHandle.contains( QPointF( ev_PosX, ev_PosY ) ) )
   {
     //If the cursor is over the handle, than it might be already on the next cell.
@@ -1011,7 +1011,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
 
   // Set the new extent of the selection
-  (d->chooseCell ? choice() : selectionInfo())->update(QPoint(col,row));
+  (d->chooseCell ? choice() : selection())->update(QPoint(col,row));
 }
 
 void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
@@ -1058,13 +1058,13 @@ void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
     return;
   }
 
-  Selection* selectionInfo = d->view->selectionInfo();
-  QRect s( selectionInfo->lastRange() );
+  Selection* selection = d->view->selection();
+  QRect s( selection->lastRange() );
 
   // The user started the drag in the lower right corner of the marker ?
   if ( d->mouseAction == ResizeCell && !sheet->isProtected() )
   {
-    sheet->mergeCells(Region(selectionInfo->lastRange()));
+    sheet->mergeCells(Region(selection->lastRange()));
     d->view->updateEditWidget();
   }
   else if ( d->mouseAction == AutoFill && !sheet->isProtected() )
@@ -1091,11 +1091,11 @@ void Canvas::processClickSelectionHandle( QMouseEvent *event )
   if ( event->button() == Qt::LeftButton )
   {
     d->mouseAction = AutoFill;
-    d->autoFillSource = selectionInfo()->lastRange();
+    d->autoFillSource = selection()->lastRange();
   }
   // Resize a cell (done with the right mouse button) ?
   // But for that to work there must not be a selection.
-  else if ( event->button() == Qt::MidButton && selectionInfo()->isSingular())
+  else if ( event->button() == Qt::MidButton && selection()->isSingular())
   {
     d->mouseAction = ResizeCell;
   }
@@ -1134,7 +1134,7 @@ void Canvas::processLeftClickAnchor()
     }
     else
     {
-      selectionInfo()->initialize(Region(d->view->doc()->map(), d->anchor, activeSheet()));
+      selection()->initialize(Region(d->view->doc()->map(), d->anchor, activeSheet()));
     }
 }
 
@@ -1286,7 +1286,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 //   d->scrollTimer->start( 50 );
 
   // Did we click in the lower right corner of the marker/marked-area ?
-  if ( selectionInfo()->selectionHandleArea().contains( QPointF( ev_PosX, ev_PosY ) ) )
+  if ( selection()->selectionHandleArea().contains( QPointF( ev_PosX, ev_PosY ) ) )
   {
     processClickSelectionHandle( _ev );
     return;
@@ -1296,7 +1296,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   // TODO Stefan: adapt to non-cont. selection
   {
     // start drag ?
-    QRect rct( selectionInfo()->lastRange() );
+    QRect rct( selection()->lastRange() );
 
     QRect r1;
     QRect r2;
@@ -1334,9 +1334,9 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   // Extending an existing selection with the shift button ?
   if ((_ev->modifiers() & Qt::ShiftModifier) &&
       d->view->koDocument()->isReadWrite() &&
-      !selectionInfo()->isColumnOrRowSelected())
+      !selection()->isColumnOrRowSelected())
   {
-    (d->chooseCell ? choice() : selectionInfo())->update(QPoint(col,row));
+    (d->chooseCell ? choice() : selection())->update(QPoint(col,row));
     return;
   }
 
@@ -1374,41 +1374,41 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
           // Start a marking action
           d->mouseAction = Mark;
           // extend the existing selection
-          selectionInfo()->extend(QPoint(col,row), sheet);
+          selection()->extend(QPoint(col,row), sheet);
         }
 // TODO Stefan: simplification, if NCS of choices is working
-/*        (d->chooseCell ? choice() : selectionInfo())->extend(QPoint(col,row), sheet);*/
+/*        (d->chooseCell ? choice() : selection())->extend(QPoint(col,row), sheet);*/
       }
       else
       {
         // Start a marking action
         d->mouseAction = Mark;
         // reinitialize the selection
-        (d->chooseCell ? choice() : selectionInfo())->initialize(QPoint(col,row), sheet);
+        (d->chooseCell ? choice() : selection())->initialize(QPoint(col,row), sheet);
       }
       break;
     case Qt::MidButton:
       // Paste operation with the middle button?
       if ( d->view->koDocument()->isReadWrite() && !sheet->isProtected() )
       {
-        (d->chooseCell ? choice() : selectionInfo())->initialize( QPoint( col, row ), sheet );
-        sheet->paste(selectionInfo()->lastRange(), true, Paste::Normal,
+        (d->chooseCell ? choice() : selection())->initialize( QPoint( col, row ), sheet );
+        sheet->paste(selection()->lastRange(), true, Paste::Normal,
                      Paste::OverWrite, false, 0, false, QClipboard::Selection);
-        sheet->setRegionPaintDirty(*selectionInfo());
+        sheet->setRegionPaintDirty(*selection());
       }
       break;
     case Qt::RightButton:
-      if (!selectionInfo()->contains( QPoint( col, row ) ))
+      if (!selection()->contains( QPoint( col, row ) ))
       {
         // No selection or the mouse press was outside of an existing selection?
-        (d->chooseCell ? choice() : selectionInfo())->initialize(QPoint(col,row), sheet);
+        (d->chooseCell ? choice() : selection())->initialize(QPoint(col,row), sheet);
       }
       break;
     default:
       break;
   }
 
-  scrollToCell(selectionInfo()->marker());
+  scrollToCell(selection()->marker());
   if ( !d->chooseCell )
   {
     d->view->updateEditWidgetOnPress();
@@ -1433,7 +1433,7 @@ void Canvas::startTheDrag()
   // right area for start dragging
   setCursor( KCursor::handCursor() );
 
-  QDomDocument doc = sheet->saveCellRegion(*selectionInfo());
+  QDomDocument doc = sheet->saveCellRegion(*selection());
 
   // Save to buffer
   QBuffer buffer;
@@ -1444,7 +1444,7 @@ void Canvas::startTheDrag()
   buffer.close();
 
   QMimeData* mimeData = new QMimeData();
-  mimeData->setText( sheet->copyAsText( selectionInfo() ) );
+  mimeData->setText( sheet->copyAsText( selection() ) );
   mimeData->setData( "application/x-kspread-snippet", buffer.buffer() );
 
   QDrag *drag = new QDrag(this);
@@ -1580,7 +1580,7 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
     if ( event->source() == this  )
     {
       kDebug(36005) << "source == this" << endl;
-      dragMarkingRect = selectionInfo()->boundingRect();
+      dragMarkingRect = selection()->boundingRect();
     }
     else
     {
@@ -1613,7 +1613,7 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
     dragMarkingRect = QRect(1,1,1,1);
   }
 #endif
-  const QPoint dragAnchor = selectionInfo()->boundingRect().topLeft();
+  const QPoint dragAnchor = selection()->boundingRect().topLeft();
   double xpos = sheet->dblColumnPos( dragAnchor.x() );
   double ypos = sheet->dblRowPos( dragAnchor.y() );
   double width  = sheet->columnFormat( dragAnchor.x() )->dblWidth();
@@ -1671,10 +1671,10 @@ void Canvas::dropEvent( QDropEvent * _ev )
     return;
   }
 
-  double xpos = sheet->dblColumnPos( selectionInfo()->lastRange().left() );
-  double ypos = sheet->dblRowPos( selectionInfo()->lastRange().top() );
-  double width  = sheet->columnFormat( selectionInfo()->lastRange().left() )->dblWidth();
-  double height = sheet->rowFormat( selectionInfo()->lastRange().top() )->dblHeight();
+  double xpos = sheet->dblColumnPos( selection()->lastRange().left() );
+  double ypos = sheet->dblRowPos( selection()->lastRange().top() );
+  double width  = sheet->columnFormat( selection()->lastRange().left() )->dblWidth();
+  double height = sheet->rowFormat( selection()->lastRange().top() )->dblHeight();
 
   const QRectF noGoArea( xpos - 1, ypos - 1, width + 3, height + 3 );
 
@@ -1716,14 +1716,14 @@ void Canvas::dropEvent( QDropEvent * _ev )
       if ( !d->view->doc()->undoLocked() )
       {
         UndoDragDrop * undo
-          = new UndoDragDrop(d->view->doc(), sheet, *selectionInfo(),
+          = new UndoDragDrop(d->view->doc(), sheet, *selection(),
                              Region(QRect(col, row,
-                                   selectionInfo()->boundingRect().width(),
-                                   selectionInfo()->boundingRect().height())));
+                                   selection()->boundingRect().width(),
+                                   selection()->boundingRect().height())));
         d->view->doc()->addCommand( undo );
         makeUndo = false;
       }
-      sheet->deleteSelection( selectionInfo(), false );
+      sheet->deleteSelection( selection(), false );
     }
 
 
@@ -1813,7 +1813,7 @@ QPoint Canvas::cursorPos()
   if (d->chooseCell && !choice()->isEmpty())
     cursor = choice()->cursor();
   else
-    cursor = selectionInfo()->cursor();
+    cursor = selection()->cursor();
 
   return cursor;
 }
@@ -1908,11 +1908,11 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 
   if (extendSelection)
   {
-    (d->chooseCell ? choice() : selectionInfo())->update(destination);
+    (d->chooseCell ? choice() : selection())->update(destination);
   }
   else
   {
-    (d->chooseCell ? choice() : selectionInfo())->initialize(destination, sheet);
+    (d->chooseCell ? choice() : selection())->initialize(destination, sheet);
   }
   d->view->updateEditWidget();
 
@@ -2125,7 +2125,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
     }
     else
     {
-      QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
+      QPoint marker = d->chooseCell ? choice()->marker() : selection()->marker();
 
       Cell * cell = sheet->getFirstCellRow(marker.y());
       while (cell != 0 && cell->column() < marker.x() && cell->isEmpty())
@@ -2139,7 +2139,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
       destination = QPoint(col, marker.y());
     }
 
-    if ( selectionInfo()->marker() == destination )
+    if ( selection()->marker() == destination )
     {
       d->view->doc()->emitEndOperation( Region(QRect( destination, destination ) ) );
       return false;
@@ -2147,11 +2147,11 @@ bool Canvas::processHomeKey(QKeyEvent* event)
 
     if (makingSelection)
     {
-      (d->chooseCell ? choice() : selectionInfo())->update(destination);
+      (d->chooseCell ? choice() : selection())->update(destination);
     }
     else
     {
-      (d->chooseCell ? choice() : selectionInfo())->initialize(destination, sheet);
+      (d->chooseCell ? choice() : selection())->initialize(destination, sheet);
     }
   }
   return true;
@@ -2165,7 +2165,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
 
   bool makingSelection = event->modifiers() & Qt::ShiftModifier;
   Cell* cell = 0;
-  QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
+  QPoint marker = d->chooseCell ? choice()->marker() : selection()->marker();
 
   // move to the last used cell in the row
   // We are in edit mode -> go beginning of line
@@ -2196,11 +2196,11 @@ bool Canvas::processEndKey( QKeyEvent *event )
 
     if (makingSelection)
     {
-      (d->chooseCell ? choice() : selectionInfo())->update(destination);
+      (d->chooseCell ? choice() : selection())->update(destination);
     }
     else
     {
-      (d->chooseCell ? choice() : selectionInfo())->initialize(destination, sheet);
+      (d->chooseCell ? choice() : selection())->initialize(destination, sheet);
     }
   }
   return true;
@@ -2214,7 +2214,7 @@ bool Canvas::processPriorKey(QKeyEvent *event)
     deleteEditor( true );
   }
 
-  QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
+  QPoint marker = d->chooseCell ? choice()->marker() : selection()->marker();
 
   QPoint destination(marker.x(), qMax(1, marker.y() - 10));
   if ( destination == marker )
@@ -2225,11 +2225,11 @@ bool Canvas::processPriorKey(QKeyEvent *event)
 
   if (makingSelection)
   {
-    (d->chooseCell ? choice() : selectionInfo())->update(destination);
+    (d->chooseCell ? choice() : selection())->update(destination);
   }
   else
   {
-    (d->chooseCell ? choice() : selectionInfo())->initialize(destination, activeSheet());
+    (d->chooseCell ? choice() : selection())->initialize(destination, activeSheet());
   }
   return true;
 }
@@ -2243,7 +2243,7 @@ bool Canvas::processNextKey(QKeyEvent *event)
     deleteEditor( true /*save changes*/ );
   }
 
-  QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
+  QPoint marker = d->chooseCell ? choice()->marker() : selection()->marker();
   QPoint destination(marker.x(), qMax(1, marker.y() + 10));
 
   if ( marker == destination )
@@ -2254,11 +2254,11 @@ bool Canvas::processNextKey(QKeyEvent *event)
 
   if (makingSelection)
   {
-    (d->chooseCell ? choice() : selectionInfo())->update(destination);
+    (d->chooseCell ? choice() : selection())->update(destination);
   }
   else
   {
-    (d->chooseCell ? choice() : selectionInfo())->initialize(destination, activeSheet());
+    (d->chooseCell ? choice() : selection())->initialize(destination, activeSheet());
   }
   return true;
 }
@@ -2359,7 +2359,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
   int row;
   int col;
 
-  QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
+  QPoint marker = d->chooseCell ? choice()->marker() : selection()->marker();
 
   /* here, we want to move to the first or last cell in the given direction that is
      actually being used.  Ignore empty cells and cells on hidden rows/columns */
@@ -2656,11 +2656,11 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
 
   if (makingSelection)
   {
-    (d->chooseCell ? choice() : selectionInfo())->update(destination);
+    (d->chooseCell ? choice() : selection())->update(destination);
   }
   else
   {
-    (d->chooseCell ? choice() : selectionInfo())->initialize(destination, sheet);
+    (d->chooseCell ? choice() : selection())->initialize(destination, sheet);
   }
   return true;
 }
@@ -2797,7 +2797,7 @@ void Canvas::processIMEvent( QIMEvent * event )
       cursor = choice()->cursor();
   }
   else
-    cursor = selectionInfo()->cursor();
+    cursor = selection()->cursor();
 
   d->view->doc()->emitEndOperation( QRect( cursor, cursor ) );
 }
@@ -2865,7 +2865,7 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
             return false;
     }
 
-    manipulator->add( *selectionInfo() );
+    manipulator->add( *selection() );
     manipulator->execute();
     _ev->setAccepted(true);
 
@@ -3462,7 +3462,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
         if ( focus )
             d->cellEditor->setFocus();
 
-        sheet->setRegionPaintDirty( *selectionInfo() );
+        sheet->setRegionPaintDirty( *selection() );
         repaint();
     }
 
@@ -3594,7 +3594,7 @@ void Canvas::updatePosWidget()
 
     QString buffer;
     // No selection, or only one cell merged selected
-    if ( selectionInfo()->isSingular() )
+    if ( selection()->isSingular() )
     {
         if (sheet->getLcMode())
         {
@@ -3611,21 +3611,21 @@ void Canvas::updatePosWidget()
     {
         if (sheet->getLcMode())
         {
-          buffer = QString::number( (selectionInfo()->lastRange().bottom()-selectionInfo()->lastRange().top()+1) )+"Lx";
-          if ( util_isRowSelected( selectionInfo()->lastRange() ) )
-            buffer+=QString::number((KS_colMax-selectionInfo()->lastRange().left()+1))+'C';
+          buffer = QString::number( (selection()->lastRange().bottom()-selection()->lastRange().top()+1) )+"Lx";
+          if ( util_isRowSelected( selection()->lastRange() ) )
+            buffer+=QString::number((KS_colMax-selection()->lastRange().left()+1))+'C';
             else
-              buffer+=QString::number((selectionInfo()->lastRange().right()-selectionInfo()->lastRange().left()+1))+'C';
+              buffer+=QString::number((selection()->lastRange().right()-selection()->lastRange().left()+1))+'C';
         }
         else
         {
                 //encodeColumnLabelText return @@@@ when column >KS_colMax
                 //=> it's not a good display
                 //=> for the moment I display pos of marker
-          buffer=Cell::columnName( selectionInfo()->lastRange().left() ) +
-                    QString::number(selectionInfo()->lastRange().top()) + ':' +
-                    Cell::columnName( qMin( KS_colMax, selectionInfo()->lastRange().right() ) ) +
-                    QString::number(selectionInfo()->lastRange().bottom());
+          buffer=Cell::columnName( selection()->lastRange().left() ) +
+                    QString::number(selection()->lastRange().top()) + ':' +
+                    Cell::columnName( qMin( KS_colMax, selection()->lastRange().right() ) ) +
+                    QString::number(selection()->lastRange().bottom());
                 //buffer=sheet->columnLabel( m_iMarkerColumn );
                 //buffer+=tmp.setNum(m_iMarkerRow);
         }
@@ -3641,7 +3641,7 @@ void Canvas::equalizeRow()
   if (!sheet)
     return;
 
-  QRect s( selectionInfo()->lastRange() );
+  QRect s( selection()->lastRange() );
   RowFormat* rowFormat = sheet->rowFormat(s.top());
   double size = rowFormat->dblHeight();
   if ( s.top() == s.bottom() )
@@ -3659,7 +3659,7 @@ void Canvas::equalizeColumn()
   if (!sheet)
     return;
 
-  QRect s( selectionInfo()->lastRange() );
+  QRect s( selection()->lastRange() );
   ColumnFormat* columnFormat = sheet->columnFormat(s.left());
   double size = columnFormat->dblWidth();
   if ( s.left() == s.right() )
@@ -3911,14 +3911,14 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
     QPen pen( Qt::black, doc()->unzoomItX( 2 ) );
     painter.setPen( pen );
 
-    const Selection* selection = selectionInfo();
+    const Selection* selection = this->selection();
     const QRect currentRange = Region::normalized( QRect( selection->anchor(), selection->marker() ) );
-    const QRect effMarker = selectionInfo()->extendToMergedAreas( QRect( selection->marker(), selection->marker() ) );
+    const QRect effMarker = selection->extendToMergedAreas( QRect( selection->marker(), selection->marker() ) );
     const QRectF markerRegion = cellCoordinatesToDocument( effMarker ).translated( -xOffset(), -yOffset() );
     Region::ConstIterator end(selection->constEnd());
     for (Region::ConstIterator it(selection->constBegin()); it != end; ++it)
     {
-        const QRect range = (*it)->isAll() ? (*it)->rect() : selectionInfo()->extendToMergedAreas( (*it)->rect() );
+        const QRect range = (*it)->isAll() ? (*it)->rect() : selection->extendToMergedAreas( (*it)->rect() );
 
         // Only the active element (the one with the anchor) will be drawn with a border
         const bool current = (currentRange == range);

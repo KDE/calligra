@@ -128,7 +128,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pRef, SIGNAL( returnPressed() ), this, SLOT( slotReturnPressed() ) );
 
-  connect(m_pView->selectionInfo(), SIGNAL(changed(const Region&)),
+  connect(m_pView->selection(), SIGNAL(changed(const Region&)),
           this, SLOT(slotSelectionChanged()));
 }
 
@@ -156,8 +156,8 @@ void ConsolidateDialog::slotOk()
   Map *map = m_pView->doc()->map();
 
   Sheet* sheet = m_pView->activeSheet();
-  int dx = m_pView->selectionInfo()->selection().left();
-  int dy = m_pView->selectionInfo()->selection().top();
+  int dx = m_pView->selection()->selection().left();
+  int dy = m_pView->selection()->selection().top();
 
   QString function;
 
@@ -647,13 +647,13 @@ QStringList ConsolidateDialog::refs()
 
 void ConsolidateDialog::slotSelectionChanged()
 {
-  if (!m_pView->selectionInfo()->isValid())
+  if (!m_pView->selection()->isValid())
   {
     m_pRef->setText( "" );
     return;
   }
 
-  QString area = m_pView->selectionInfo()->name();
+  QString area = m_pView->selection()->name();
   m_pRef->setText( area );
   m_pRef->setSelection( 0, area.length() );
 }

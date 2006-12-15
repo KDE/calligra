@@ -971,13 +971,13 @@ void Sheet::setText( int _row, int _column, const QString& _text, bool asString 
     emit sig_updateView( this, Region( _column, _row, this ) );
 }
 
-void Sheet::setArrayFormula (Selection *selectionInfo, const QString &_text)
+void Sheet::setArrayFormula (Selection *selection, const QString &_text)
 {
   // create and call the manipulator
   ArrayFormulaManipulator *afm = new ArrayFormulaManipulator;
   afm->setSheet (this);
   afm->setText (_text);
-  afm->add (*selectionInfo);
+  afm->add (*selection);
   afm->execute ();
 }
 
@@ -1515,11 +1515,11 @@ void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
 void Sheet::replace( const QString &_find, const QString &_replace, long options,
                             Canvas *canvas )
 {
-  Selection* selectionInfo = canvas->view()->selectionInfo();
+  Selection* selection = canvas->view()->selection();
 
     // Identify the region of interest.
-    QRect region( selectionInfo->selection() );
-    QPoint marker( selectionInfo->marker() );
+    QRect region( selection->selection() );
+    QPoint marker( selection->marker() );
 
     if (options & KReplaceDialog::SelectedText)
     {
@@ -1753,11 +1753,11 @@ class GetWordSpellingManipulator : public Manipulator {
   };  
 };
 
-QString Sheet::getWordSpelling(Selection* selectionInfo )
+QString Sheet::getWordSpelling(Selection* selection )
 {
   GetWordSpellingManipulator manipulator;
   manipulator.setSheet (this);
-  manipulator.add (*selectionInfo);
+  manipulator.add (*selection);
   return manipulator.getSpelling();
 }
 
@@ -1791,12 +1791,12 @@ class SetWordSpellingManipulator : public AbstractDataManipulator {
   }
 };
 
-void Sheet::setWordSpelling(Selection* selectionInfo, const QString _listWord )
+void Sheet::setWordSpelling(Selection* selection, const QString _listWord )
 {
   SetWordSpellingManipulator *manipulator = new SetWordSpellingManipulator;
   manipulator->setSheet (this);
   manipulator->setString (_listWord);
-  manipulator->add (*selectionInfo);
+  manipulator->add (*selection);
   manipulator->execute ();
 }
 
@@ -1840,24 +1840,24 @@ static QString cellAsText( Cell* cell, unsigned int max )
   return result;
 }
 
-QString Sheet::copyAsText( Selection* selectionInfo )
+QString Sheet::copyAsText( Selection* selection )
 {
     // Only one cell selected? => copy active cell
-    if ( selectionInfo->isSingular() )
+    if ( selection->isSingular() )
     {
-        Cell * cell = cellAt( selectionInfo->marker() );
+        Cell * cell = cellAt( selection->marker() );
         if( !cell->isDefault() )
           return cell->strOutText();
         return "";
     }
 
-    QRect selection(selectionInfo->selection());
+    QRect lastRange(selection->selection());
 
     // Find area
-    unsigned top = selection.bottom();
-    unsigned bottom = selection.top();
-    unsigned left = selection.right();
-    unsigned right = selection.left();
+    unsigned top = lastRange.bottom();
+    unsigned bottom = lastRange.top();
+    unsigned left = lastRange.right();
+    unsigned right = lastRange.left();
 
     int max = 1;
     for( Cell *c = d->cells.firstCell();c; c = c->nextCell() )
@@ -1865,7 +1865,7 @@ QString Sheet::copyAsText( Selection* selectionInfo )
       if ( !c->isDefault() )
       {
         QPoint p( c->column(), c->row() );
-        if ( selection.contains( p ) )
+        if ( lastRange.contains( p ) )
         {
           top = qMin( top, (unsigned) c->row() );
           left = qMin( left, (unsigned) c->column() );
@@ -1894,9 +1894,9 @@ QString Sheet::copyAsText( Selection* selectionInfo )
     return result;
 }
 
-void Sheet::copySelection( Selection* selectionInfo )
+void Sheet::copySelection( Selection* selection )
 {
-    QDomDocument doc = saveCellRegion( *selectionInfo, true );
+    QDomDocument doc = saveCellRegion( *selection, true );
 
     // Save to buffer
     QBuffer buffer;
@@ -1907,16 +1907,16 @@ void Sheet::copySelection( Selection* selectionInfo )
     buffer.close();
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setText( copyAsText(selectionInfo) );
+    mimeData->setText( copyAsText(selection) );
     mimeData->setData( "application/x-kspread-snippet", buffer.buffer() );
 
     QApplication::clipboard()->setMimeData( mimeData );
 }
 
-void Sheet::cutSelection( Selection* selectionInfo )
+void Sheet::cutSelection( Selection* selection )
 {
-    QDomDocument doc = saveCellRegion(*selectionInfo, true, true);
-    doc.documentElement().setAttribute( "cut", selectionInfo->Region::name() );
+    QDomDocument doc = saveCellRegion(*selection, true, true);
+    doc.documentElement().setAttribute( "cut", selection->Region::name() );
 
     // Save to buffer
     QBuffer buffer;
@@ -1927,12 +1927,12 @@ void Sheet::cutSelection( Selection* selectionInfo )
     buffer.close();
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setText( copyAsText(selectionInfo) );
+    mimeData->setText( copyAsText(selection) );
     mimeData->setData( "application/x-kspread-snippet", buffer.buffer() );
 
     QApplication::clipboard()->setMimeData( mimeData );
 
-    deleteSelection( selectionInfo, true );
+    deleteSelection( selection, true );
 }
 
 void Sheet::paste( const QRect& pasteArea, bool makeUndo,
@@ -2450,16 +2450,16 @@ void Sheet::deleteCells(const Region& region)
     doc()->setModified( true );
 }
 
-void Sheet::deleteSelection( Selection* selectionInfo, bool undo )
+void Sheet::deleteSelection( Selection* selection, bool undo )
 {
     if ( undo && !doc()->undoLocked() )
     {
-        UndoDelete *undo = new UndoDelete( doc(), this, *selectionInfo );
+        UndoDelete *undo = new UndoDelete( doc(), this, *selection );
         doc()->addCommand( undo );
     }
 
-  Region::ConstIterator endOfList = selectionInfo->constEnd();
-  for (Region::ConstIterator it = selectionInfo->constBegin(); it != endOfList; ++it)
+  Region::ConstIterator endOfList = selection->constEnd();
+  for (Region::ConstIterator it = selection->constBegin(); it != endOfList; ++it)
   {
     QRect range = (*it)->rect();
 
@@ -2569,13 +2569,13 @@ void Sheet::dissociateCells(const Region& region)
   manipulator->execute();
 }
 
-bool Sheet::testListChoose(Selection* selectionInfo)
+bool Sheet::testListChoose(Selection* selection)
 {
-   const QPoint marker( selectionInfo->marker() );
+   const QPoint marker( selection->marker() );
    const QString text = cellAt( marker.x(), marker.y() )->text();
 
-   Region::ConstIterator end( selectionInfo->constEnd() );
-   for ( Region::ConstIterator it( selectionInfo->constBegin() ); it != end; ++it )
+   Region::ConstIterator end( selection->constEnd() );
+   for ( Region::ConstIterator it( selection->constBegin() ); it != end; ++it )
    {
      const QRect range = (*it)->rect();
      for ( int col = range.left(); col <= range.right(); ++col )

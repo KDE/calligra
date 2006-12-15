@@ -65,9 +65,9 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
     m_pView( parent ),
     m_maxIter( 1000 ),
     m_restored( true ),
-    m_anchor( m_pView->selectionInfo()->anchor() ),
-    m_marker( m_pView->selectionInfo()->marker() ),
-    m_selection( m_pView->selectionInfo()->selection() )
+    m_anchor( m_pView->selection()->anchor() ),
+    m_marker( m_pView->selection()->marker() ),
+    m_selection( m_pView->selection()->selection() )
 {
   Q_UNUSED(marker)
   //setWFlags( Qt::WDestructiveClose );
@@ -344,7 +344,7 @@ void GoalSeekDialog::chooseCleanup()
     sheet = m_pView->activeSheet();
 
   // Revert the marker to its original position
-  m_pView->selectionInfo()->initialize(QRect(m_marker, m_anchor));//, sheet );
+  m_pView->selection()->initialize(QRect(m_marker, m_anchor));//, sheet );
 }
 
 
