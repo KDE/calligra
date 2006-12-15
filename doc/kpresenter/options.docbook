@@ -72,7 +72,7 @@
 
 <varlistentry>
 <term><guilabel>Autoformat URLs</guilabel></term>
-<listitem><para>When selected, &kpresenter; will scan text for patterns which suggest a certain section of text is a URL and automatically creates a link.</para></listitem>
+<listitem><para>When selected, &kpresenter; will scan text for patterns which suggest a certain section of text is a &URL; and automatically creates a link.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -482,7 +482,7 @@ autocompletion when entered into this dialog.</para></note>
 <varlistentry>
 <term><guilabel>Show words in tooltip</guilabel></term>
 <listitem>
-<para>If this option is enabled, a tool tip box will appear when you type the
+<para>If this option is enabled, a tooltip box will appear when you type the
 beginning of a word that exists in the completion list. To complete the word,
 press the key you set to accept suggestions in the <guilabel>Key to accept
 suggestion:</guilabel> drop-down list.</para>
@@ -579,7 +579,7 @@ anymore on any slide.</para></listitem>
 
 <varlistentry>
 <term><guilabel>Show status bar</guilabel></term>
-<listitem><para>Toggle the statusbar which is shown by default.</para></listitem>
+<listitem><para>Toggle the status bar which is shown by default.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -717,7 +717,7 @@ addresses often contain words run together.</para>
 
 <varlistentry>
 <term><guilabel>Display links</guilabel></term>
-<listitem><para>When you want to include a link in your slide, you will use the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Link...</guimenuitem></menuchoice> menu which allows you to insert URL, mail or file links. If the option <guilabel>Display links</guilabel> is checked, all links will be displayed in a different color. This makes document links visible. This is the default behavior. If the option is unchecked, the link will be the same color as the text color. The links are visible (or not) both in the edited slides and in the slide show. A displayed link: <inlinemediaobject><imageobject>
+<listitem><para>When you want to include a link in your slide, you will use the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Link...</guimenuitem></menuchoice> menu which allows you to insert &URL;, mail or file links. If the option <guilabel>Display links</guilabel> is checked, all links will be displayed in a different color. This makes document links visible. This is the default behavior. If the option is unchecked, the link will be the same color as the text color. The links are visible (or not) both in the edited slides and in the slide show. A displayed link: <inlinemediaobject><imageobject>
 <imagedata fileref="configure4a.png" format="PNG"/></imageobject></inlinemediaobject> A non displayed link: <inlinemediaobject><imageobject>
 <imagedata fileref="configure4a1.png" format="PNG"/></imageobject></inlinemediaobject></para></listitem>
 </varlistentry>
@@ -859,7 +859,7 @@ two names? -->
 <variablelist>
 <varlistentry>
 <term><guilabel>Color:</guilabel></term>
-<listitem><para>Set the color of the line. Clicking on the color will bring the standard KDE <guilabel>Select Color</guilabel> dialog.</para></listitem>
+<listitem><para>Set the color of the line. Clicking on the color will bring the standard &kde; <guilabel>Select Color</guilabel> dialog.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Style:</guilabel></term>
@@ -901,7 +901,7 @@ two names? -->
 </varlistentry>
 <varlistentry>
 <term><guilabel>Color:</guilabel></term>
-<listitem><para>Choose the color. White is the default one. Clicking on the color will bring you the standard KDE <guilabel>Select Color</guilabel> dialog.</para></listitem>
+<listitem><para>Choose the color. White is the default one. Clicking on the color will bring you the standard &kde; <guilabel>Select Color</guilabel> dialog.</para></listitem>
 </varlistentry>
 </variablelist>
 <para>The last field displays a preview of your settings, provided the color is not white!</para>
@@ -1016,7 +1016,7 @@ two names? -->
 <textobject><phrase>Paths</phrase></textobject>
 </mediaobject>
 </screenshot>
-<para>There are two paths that are set here, the <guilabel>Backup Path</guilabel> and the <guilabel>Picture Path</guilabel>. The <guilabel>Backup Path</guilabel> is the directory where your backup files are saved and the <guilabel>Picture Path</guilabel> is the directory where your pictures are saved. Highlight a path in order to modify it and click on <guilabel>Modify Path...</guilabel>. A small dialog appears and if you uncheck <guilabel>Default path</guilabel>, you will be able either to enter a path yourself or to choose one with the standard KDE file dialog.</para>
+<para>There are two paths that are set here, the <guilabel>Backup Path</guilabel> and the <guilabel>Picture Path</guilabel>. The <guilabel>Backup Path</guilabel> is the directory where your backup files are saved and the <guilabel>Picture Path</guilabel> is the directory where your pictures are saved. Highlight a path in order to modify it and click on <guilabel>Modify Path...</guilabel>. A small dialog appears and if you uncheck <guilabel>Default path</guilabel>, you will be able either to enter a path yourself or to choose one with the standard &kde; file dialog.</para>
 
 </sect2>
 

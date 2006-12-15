@@ -106,7 +106,7 @@ slideshow</phrase></textobject>
 </mediaobject>
 </screenshot>
 
-<para>Fill in each field (the dialog takes the informations from &kcontrol; if they exist) and ensure that the path details are correct, as this
+<para>Fill in each field (the dialog takes the informations from &kcontrolcenter; if they exist) and ensure that the path details are correct, as this
 is where &kpresenter; will save your new <acronym>HTML</acronym> files
 and pictures. Click on the <guibutton>Next</guibutton> when you are
 done.</para>
@@ -255,7 +255,7 @@ To get back to the start of the slideshow click on the slide icon.</para>
 
 <tip><para>To share your presentation with the world, transfer the
 newly-produced files to a network-accessible location (&ie; webspace),
-remembering to keep the directory structure intact.</para></tip>
+remembering to keep the folder structure intact.</para></tip>
 </sect1>
 
 <sect1 id="ms-export">
@@ -272,7 +272,7 @@ export your presentation.
 <para>
 Each exported slideshow consists of a series of image files (one for
 each slide in the original presentation, plus two title slides) and an
-index file. They are created in a fairly complex directory structure
+index file. They are created in a fairly complex folder structure
 that allows more than one presentation to be stored on a single memory
 stick. A simple example is shown below, consisting of two
 presentations.
@@ -282,7 +282,7 @@ presentations.
 <imageobject>
 <imagedata format="PNG" fileref="msexport4.png"/>
 </imageobject>
-<textobject><phrase><trademark>Memory Stick</trademark> directory
+<textobject><phrase><trademark>Memory Stick</trademark> folder
 structure</phrase></textobject>
 </mediaobject>
 
@@ -334,10 +334,10 @@ Slideshow</guilabel> dialog.</phrase></textobject>
 </screenshot>
 
 <para>
-The <guilabel>Path</guilabel> is the directory in which your presentation will
-be exported to as directories (<filename>DCIM</filename> and
+The <guilabel>Path</guilabel> is the folder in which your presentation will
+be exported to as folders (<filename>DCIM</filename> and
 <filename>MSSONY</filename>, see the <link
-linkend="ms-export-directory-structure">directory structure
+linkend="ms-export-directory-structure">folder structure
 diagram</link> above) will be created. If you are able to, you may wish to export
 directly
 to the <trademark>Memory Stick</trademark>, in which case you would enter the
@@ -411,19 +411,19 @@ If you did not export the slideshow directly onto a <trademark>Memory
 Stick</trademark>, you will need to copy the correct files onto the
 <trademark>Memory
 Stick</trademark> before you can utilise the projector. As noted above,
-you need to copy over the correct directories and files starting at
+you need to copy over the correct folders and files starting at
 <filename>DCIM</filename> and <filename>MSSONY</filename> into the
 "root", or <filename>/</filename> of the <trademark>Memory Stick</trademark>. It
 is
-critical that the directory structure is maintained, and you may
+critical that the folder structure is maintained, and you may
 find it easier to copy the whole of <filename>DCIM</filename> and
-<filename>MSSONY</filename> directories.
+<filename>MSSONY</filename> folders.
 </para>
 
 <para>
 If necessary, you can safely rename the index file (which is
 <filename>Slideshow.SPP</filename> by default), however you cannot
-rename the slide images, nor can you change the name of these directories,
+rename the slide images, nor can you change the name of these folders,
 as these are encoded into the index file.
 </para>
 </step>

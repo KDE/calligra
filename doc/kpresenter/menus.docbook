@@ -1167,7 +1167,7 @@ return to the normal selection cursor.</para>
 </term>
 <listitem>
 <para>Changes the cursor to a double headed curved arrow. Click with the &LMB; onto an object
-and keep the button pressed.Drag with the cursor to rotate the object on the slide around its center. When you are
+and keep the button pressed. Drag with the cursor to rotate the object on the slide around its center. When you are
 happy with the position of the object, release the mousebutton to stop
 rotating.</para>
 
@@ -1319,7 +1319,7 @@ parts.</para>
 <para>This puts a colored copy of either text or a drawn object behind
 it. You can make nice <quote>dropped shadows</quote> for logos with
 this tool. To enable this item, ensure that you have object(s) 
-selected (you will see the six small black boxes around the
+selected (you will see the eight small squares around the
 outline.) You choose the color, select which way the shadow is going to
 fall and select a distance. For text it looks nice if you set the
 distance to two or three. Click <guibutton>Apply</guibutton> 

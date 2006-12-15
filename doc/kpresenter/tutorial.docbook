@@ -262,7 +262,7 @@ click <guibutton>OK</guibutton>.
 
 <para>
 Click with the &LMB; where you want to place the loge in it's original size or 
-draw a rectangle with the left mouse cursor to specify the position and size for the logo.
+draw a rectangle with the left mouse (click the &LMB; and keep the button pressed) to specify the position and size for the logo.
 There are selection handles (little squares) visible around the border of the graphic.
 </para>
 
@@ -447,7 +447,7 @@ a Color... tooltip) or choose the <guimenu>Text</guimenu> menu and then click on
 </screenshot>
 
 <para>
-Click <guilabel>OK</guilabel> in the <guilabel>Select Color</guilabel> dialog. Changing the color of
+Click <guibutton>OK</guibutton> in the <guilabel>Select Color</guilabel> dialog. Changing the color of
 the selected text to blue changes its appearance. The exact color that
 highlighted text turns depends on your system color scheme.
 </para>

@@ -179,9 +179,9 @@ the items on the main menubar are not spoken.  The text of the
 <indexterm><primary>Mouseless Operation</primary></indexterm>
 
 <sect2 id="a11y-kmousetool">
-<title>KMouseTool</title>
+<title>&kmousetool;</title>
 <para>If you can operate a mouse, but have trouble clicking, the
-<ulink url="help:kmousetool">KMouseTool</ulink> application may help.  Run it from
+<ulink url="help:kmousetool">&kmousetool;</ulink> application may help.  Run it from
 <menuchoice><guimenu>K-Button</guimenu><guimenuitem>Utilities</guimenuitem>
 <guimenuitem>KMouseTool (Automatik Mouse Click)</guimenuitem></menuchoice>.
 </para>
@@ -298,7 +298,7 @@ keys.  It has a menu icon on it.
 <listitem><para>
 When inserting a new frame into the document, you can insert the frame
 at the current position of the text caret, instead of positioning it with
-the mouse.  Just press <keycap>&Enter;</keycap> when the crosshairs appear.  You can resize
+the mouse.  Just press &Enter; when the crosshairs appear.  You can resize
 the new frame or change its position by changing the numbers in the
 <guilabel>Connect Frame</guilabel> dialog.  See
 <xref linkend="add-text-frame"/> for details.

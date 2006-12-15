@@ -65,16 +65,16 @@ within the screen.  If you have trouble operating a mouse, you can also move scr
 <keycombo action="simul">&Alt;<keycap>F3</keycap></keycombo>.  In 
 the dropdown Windows Operations Menu, choose 
 <menuchoice><guimenuitem>Move</guimenuitem></menuchoice>.
-Move the screen with the arrow keys and press <keycap>&Esc;</keycap>.
+Move the screen with the arrow keys and press &Esc;.
 </para></tip>
 
 </sect2>
 
 <sect2 id="a11y-kmagnifier">
-<title>KMagnifier</title>
+<title>&kmagnifier;</title>
 <indexterm><primary>magnifier</primary></indexterm>
 <para>The <command>kdeaccessibility</command> module includes a screen magnifier
-application called <ulink url="help:kmag">KMagnifier</ulink>.
+application called <ulink url="help:kmag">&kmagnifier;</ulink>.
 If it is installed, you may run it from
 <menuchoice><guimenu>K-Button</guimenu><guimenuitem>Utilities</guimenuitem>
 <guimenuitem>Accessibility</guimenuitem><guimenuitem>Screen Magnifier</guimenuitem></menuchoice>.
@@ -178,9 +178,9 @@ the items on the main menubar are not spoken.
 <indexterm><primary>Mouseless Operation</primary></indexterm>
 
 <sect2 id="a11y-kmousetool">
-<title>KMouseTool</title>
+<title>&kmousetool;</title>
 <para>If you can operate a mouse, but have trouble clicking, the
-<ulink url="help:kmousetool">KMouseTool</ulink> application may help.  Run it from
+<ulink url="help:kmousetool">&kmousetool;</ulink> application may help.  Run it from
 <menuchoice><guimenu>K-Button</guimenu><guimenuitem>Utilities</guimenuitem>
 <guimenuitem>KMouseTool (Automatik Mouse Click)</guimenuitem></menuchoice>.
 </para>
