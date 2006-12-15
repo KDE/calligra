@@ -39,7 +39,7 @@ class View;
 class InsertCalendarDialog;
 
 /**
- * \class PluginInsertCalender kspread_plugininsertcalendar.h
+ * \class PluginInsertCalender InsertCalendar.h
  * \brief Plugin for inserting a calendar into a spreadsheet.
  * @author Raphael Langerhorst
  *

@@ -24,7 +24,7 @@
 #ifndef KSPREAD_INSERTCALENDARDIALOG_H
 #define KSPREAD_INSERTCALENDARDIALOG_H
 
-#include <ui_kspread_insertcalendardialogbase.h>
+#include <ui_InsertCalendarDialog.h>
 #include <koffice_export.h>
 
 #include <QDateTime>

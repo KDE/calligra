@@ -21,9 +21,9 @@
  *   OTHER DEALINGS IN THE SOFTWARE.                                       *
  ***************************************************************************/
 
-#include "kspread_plugininsertcalendar.h"
+#include "InsertCalendar.h"
 
-#include "kspread_insertcalendardialog.h"
+#include "InsertCalendarDialog.h"
 
 #include "../../View.h"
 #include "../../Doc.h"
@@ -278,4 +278,4 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
 
 }
 
-#include "kspread_plugininsertcalendar.moc"
+#include "InsertCalendar.moc"

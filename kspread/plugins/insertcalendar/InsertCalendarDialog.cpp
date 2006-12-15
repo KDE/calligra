@@ -21,7 +21,7 @@
  *   OTHER DEALINGS IN THE SOFTWARE.                                       *
  ***************************************************************************/
 
-#include <kspread_insertcalendardialog.h>
+#include <InsertCalendarDialog.h>
 
 #include <kdatepicker.h>
 #include <kdatewidget.h>
@@ -147,4 +147,4 @@ QDate InsertCalendarDialog::endDate() const
 
 }
 
-#include "kspread_insertcalendardialog.moc"
+#include "InsertCalendarDialog.moc"
