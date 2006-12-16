@@ -192,6 +192,7 @@ void KivioView::setZoom(int zoom)
 {
     m_zoomHandler->setZoom(zoom);
     m_canvas->updateSize();
+    m_viewZoomAction->setActualZoom(zoom);
 }
 
 void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)

@@ -907,6 +907,11 @@ This saves problems with finding out which we missed near the end.
 void KWView::setZoom( int zoom ) {
     m_zoomHandler.setZoom( zoom );
     m_document->setZoom( zoom ); // for persistency reasons
+
+    if( m_actionViewZoom ) {
+        m_actionViewZoom->setActualZoom( zoom );
+    }
+
     //getGUI()->getHorzRuler()->setZoom( m_zoomHandler.zoomedResolutionX() );
     //getGUI()->getVertRuler()->setZoom( m_zoomHandler.zoomedResolutionY() );
 
