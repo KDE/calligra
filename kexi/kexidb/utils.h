@@ -216,17 +216,27 @@ namespace KexiDB
 	};
 
 //! @todo perhaps use Q_ULLONG here?
-	/*! \return a number of rows that can be retrieved from \a tableSchema. 
+	/*! \return number of rows that can be retrieved after executing \a sql statement
+	 within a connection \a conn. The statement should be of type SELECT.
+	 For SQL data sources it does not fetch any records, only "COUNT(*)" 
+	 SQL aggregation is used at the backed. 
+	 -1 is returned if error occured. */
+	int rowCount(Connection &conn, const QString& sql);
+
+//! @todo perhaps use Q_ULLONG here?
+	/*! \return number of rows that can be retrieved from \a tableSchema. 
 	 The table must be created or retrieved using a Connection object,
 	 i.e. tableSchema.connection() must not return 0.
-	 For SQL sata sources it does not fetch any records, only "COUNT()" 
+	 For SQL data sources it does not fetch any records, only "COUNT(*)" 
 	 SQL aggregation is used at the backed. 
 	 -1 is returned if error occured. */
 	KEXI_DB_EXPORT int rowCount(const TableSchema& tableSchema);
 
+//! @todo perhaps use Q_ULLONG here?
 	/*! Like above but operates on a query schema. */
 	KEXI_DB_EXPORT int rowCount(QuerySchema& querySchema);
 
+//! @todo perhaps use Q_ULLONG here?
 	/*! Like above but operates on a table or query schema variant. */
 	KEXI_DB_EXPORT int rowCount(TableOrQuerySchema& tableOrQuery);
 
@@ -383,6 +393,12 @@ namespace KexiDB
 	 This is helper, used in Driver::escapeBLOB() and KexiDB::variantToString(). */
 	KEXI_DB_EXPORT QString escapeBLOB(const QByteArray& array, BLOBEscapingType type);
 
+	/*! \return byte array converted from \a data of length \a length.
+	 \a data is escaped in format used by PostgreSQL's bytea datatype 
+	 described at http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html 
+	 This function is used by PostgreSQL KexiDB and migration drivers. */
+	KEXI_DB_EXPORT QByteArray pgsqlByteaToByteArray(const char* data, int length);
+
 	/*! \return string value serialized from a variant value \a v.
 	 This functions works like QVariant::toString() except the case when \a v is of type ByteArray.
 	 In this case KexiDB::escapeBLOB(v.toByteArray(), KexiDB::BLOBEscapeHex) is used. 
@@ -415,6 +431,36 @@ namespace KexiDB
 	/*! \return type that's maximum of two integer types \a t1 and \a t2, e.g. Integer for (Byte, Integer). 
 	 If one of the types is not of the integer group, Field::InvalidType is returned. */
 	KEXI_DB_EXPORT Field::Type maximumForIntegerTypes(Field::Type t1, Field::Type t2);
+
+	/*! \return QVariant value converted from null-terminated \a data string. 
+	 In case of BLOB type, \a data is not nul lterminated, so passing length is needed. */
+	inline QVariant cstringToVariant(const char* data, KexiDB::Field* f, int length = -1)
+	{
+		if (!data)
+			return QVariant();
+		// from mo st to least frequently used types:
+
+		if (!f || f->isTextType())
+			return QString::fromUtf8(data, length);
+		if (f->isIntegerType()) {
+			if (f->type()==KexiDB::Field::BigInteger)
+				return QVariant( QString::fromLatin1(data, length).toLongLong() );
+			return QVariant( QString::fromLatin1(data, length).toInt() );
+		}
+		if (f->isFPNumericType())
+			return QString::fromLatin1(data, length).toDouble();
+		if (f->type()==KexiDB::Field::BLOB) {
+			QByteArray ba;
+			ba.duplicate(data, length);
+			return ba;
+		}
+		// the default
+//! @todo date/time?
+		QVariant result(QString::fromUtf8(data, length));
+		if (!result.cast( KexiDB::Field::variantType(f->type()) ))
+			return QVariant();
+		return result;
+	}
 }
 
 #endif

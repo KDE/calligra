@@ -2191,7 +2191,7 @@ tristate Connection::loadObjectSchemaData( int objectID, SchemaData &sdata )
 {
 	RowData data;
 	if (true!=querySingleRecord(QString::fromLatin1(
-		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects where o_id=%1")
+		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE o_id=%1")
 		.arg(objectID), data))
 		return cancelled;
 	return setupObjectSchemaData( data, sdata );
@@ -2345,13 +2345,13 @@ bool Connection::queryStringList(const QString& sql, QStringList& list, uint col
 		KexiDBWarn << "Connection::queryStringList(): !executeQuery() " << m_sql << endl;
 		return false;
 	}
-	if (!checkIfColumnExists(cursor, column)) {
-		deleteCursor(cursor);
-		return false;
-	}
 	cursor->moveFirst();
 	if (cursor->error()) {
 		setError(cursor);
+		deleteCursor(cursor);
+		return false;
+	}
+	if (!cursor->eof() && !checkIfColumnExists(cursor, column)) {
 		deleteCursor(cursor);
 		return false;
 	}
@@ -2403,14 +2403,6 @@ bool Connection::resultExists(const QString& sql, bool &success, bool addLimitTo
 bool Connection::isEmpty( TableSchema& table, bool &success )
 {
 	return !resultExists( selectStatement( *table.query() ), success );
-}
-
-int Connection::resultCount(const QString& sql)
-{
-	int count = -1; //will be changed only on success of querySingleNumber()
-	m_sql = QString::fromLatin1("SELECT COUNT() FROM (") + sql + ")";
-	querySingleNumber(m_sql, count);
-	return count;
 }
 
 //! Used by addFieldPropertyToExtendedTableSchemaData()
@@ -2642,6 +2634,50 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 	return true;
 }
 
+KexiDB::Field* Connection::setupField( const RowData &data )
+{
+	bool ok = true;
+	int f_int_type = data.at(1).toInt(&ok);
+	if (f_int_type<=Field::InvalidType || f_int_type>Field::LastType)
+		ok = false;
+	if (!ok)
+		return 0;
+	Field::Type f_type = (Field::Type)f_int_type;
+	int f_len = QMAX( 0, data.at(3).toInt(&ok) );
+	if (!ok)
+		return 0;
+	int f_prec = data.at(4).toInt(&ok);
+	if (!ok)
+		return 0;
+	int f_constr = data.at(5).toInt(&ok);
+	if (!ok)
+		return 0;
+	int f_opts = data.at(6).toInt(&ok);
+	if (!ok)
+		return 0;
+
+	if (!KexiUtils::isIdentifier( data.at(2).toString() )) {
+		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"")
+			.arg( data.at(2).toString() ));
+		ok = false;
+		return 0;
+	}
+
+	Field *f = new Field(
+		data.at(2).toString(), f_type, f_constr, f_opts, f_len, f_prec );
+
+	f->setDefaultValue( KexiDB::stringToVariant(data.at(7).toString(), Field::variantType( f_type ), ok) );
+	if (!ok) {
+		KexiDBWarn << "Connection::setupTableSchema() problem with KexiDB::stringToVariant(" 
+			<< data.at(7).toString() << ")" << endl;
+	}
+	ok = true; //problem with defaultValue is not critical
+
+	f->m_caption = data.at(9).toString();
+	f->m_desc = data.at(10).toString();
+	return f;
+}
+
 KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 {
 	TableSchema *t = new TableSchema( this );
@@ -2649,10 +2685,6 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 		delete t;
 		return 0;
 	}
-/*	if (!deleteCursor(table_cur)) {
-		delete t;
-		return 0;
-	}*/
 
 	KexiDB::Cursor *cursor;
 	if (!(cursor = executeQuery(
@@ -2673,48 +2705,16 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 	}
 
 	// For each field: load its schema
-	bool ok;
+	RowData fieldData;
+	bool ok = true;
 	while (!cursor->eof()) {
 //		KexiDBDbg<<"@@@ f_name=="<<cursor->value(2).asCString()<<endl;
-
-		int f_int_type = cursor->value(1).toInt(&ok);
-		if (f_int_type<=Field::InvalidType || f_int_type>Field::LastType)
+		cursor->storeCurrentRow(fieldData); 
+		Field *f = setupField(fieldData);
+		if (!f) {
 			ok = false;
-		if (!ok)
-			break;
-		Field::Type f_type = (Field::Type)f_int_type;
-		int f_len = QMAX( 0, cursor->value(3).toInt(&ok) );
-		if (!ok)
-			break;
-		int f_prec = cursor->value(4).toInt(&ok);
-		if (!ok)
-			break;
-		int f_constr = cursor->value(5).toInt(&ok);
-		if (!ok)
-			break;
-		int f_opts = cursor->value(6).toInt(&ok);
-		if (!ok)
-			break;
-
-		if (!KexiUtils::isIdentifier( cursor->value(2).asString() )) {
-			setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"")
-				.arg( cursor->value(2).asString() ));
-			ok=false;
 			break;
 		}
-
-		Field *f = new Field(
-			cursor->value(2).asString(), f_type, f_constr, f_opts, f_len, f_prec );
-
-		f->setDefaultValue( KexiDB::stringToVariant(cursor->value(7).toString(), Field::variantType( f_type ), ok) );
-		if (!ok) {
-			KexiDBWarn << "Connection::setupTableSchema() problem with KexiDB::stringToVariant(" 
-				<< cursor->value(7).toString() << ")" << endl;
-		}
-		ok = true; //problem with defaultValue is not critical
-
-		f->m_caption = cursor->value(9).asString();
-		f->m_desc = cursor->value(10).asString();
 		t->addField(f);
 		cursor->moveNext();
 	}

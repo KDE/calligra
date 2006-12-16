@@ -461,8 +461,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		tristate querySingleNumber(const QString& sql, int &number, uint column = 0, 
 			bool addLimitTo1 = true);
 
-		/*! Executes \a sql query and stores first record's first field's string value 
-		 inside \a list. The list is initially cleared.
+		/*! Executes \a sql query and stores Nth field's string value of every record 
+		 inside \a list, where N is equal to \a column. The list is initially cleared.
 		 For efficiency it's recommended that a query defined by \a sql
 		 should have just one field (SELECT one_field FROM ....). 
 		 \return true if all values were fetched successfuly,
@@ -793,15 +793,54 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 this in other way.
 
 		 Moved to public for KexiMigrate.
-		 @todo fix this after refatoring
+		 @todo fix this after refactoring
 		 */
 		virtual bool drv_createTable( const TableSchema& tableSchema );
+
+		/*! Alters table's described \a tableSchema name to \a newName. 
+		 This is the default implementation, using "ALTER TABLE <oldname> RENAME TO <newname>",
+		 what's supported by SQLite >= 3.2, PostgreSQL, MySQL.
+		 Backends lacking ALTER TABLE, for example SQLite2, reimplement this with by an inefficient 
+		 data copying to a new table. In any case, renaming is performed at the backend.
+		 It's good idea to keep the operation within a transaction. 
+		 \return true on success. 
+
+		 Moved to public for KexiProject.
+		 @todo fix this after refactoring
+		*/
+		virtual bool drv_alterTableName(TableSchema& tableSchema, const QString& newName);
+
+		/*! Physically drops table named with \a name. 
+		 Default impelmentation executes "DROP TABLE.." command,
+		 so you rarely want to change this.
+
+			Moved to public for KexiMigrate
+			@todo fix this after refatoring
+		*/
+		virtual bool drv_dropTable( const QString& name );
 
 		/*! Prepare a SQL statement and return a \a PreparedStatement instance. */
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
 			FieldList& fields) = 0;
 
 		bool isInternalTableSchema(const QString& tableName);
+
+		/*! Setups schema data for object that owns sdata (e.g. table, query)
+			using \a cursor opened on 'kexi__objects' table, pointing to a record
+			corresponding to given object. 
+
+			Moved to public for KexiMigrate
+			@todo fix this after refatoring
+		*/
+		bool setupObjectSchemaData( const RowData &data, SchemaData &sdata );
+
+		/*! \return a new field table schema for a table retrieved from \a data.
+		 Used internally by tableSchema(). 
+
+			Moved to public for KexiMigrate
+			@todo fix this after refatoring
+		*/
+		KexiDB::Field* setupField( const RowData &data );
 
 	protected:
 		/*! Used by Driver */
@@ -980,20 +1019,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		virtual bool drv_setAutoCommit(bool on);
 
-		/*! Physically drops table named with \a name. 
-		 Default impelmentation executes "DROP TABLE.." command,
-		 so you rarely want to change this. */
-		virtual bool drv_dropTable( const QString& name );
-
-		/*! Alters table's described \a tableSchema name to \a newName. 
-		 This is the default implementation, using "ALTER TABLE <oldname> RENAME TO <newname>",
-		 what's supported by SQLite >= 3.2, PostgreSQL, MySQL.
-		 Backends lacking ALTER TABLE, for example SQLite2, reimplement this with by an inefficient 
-		 data copying to a new table. In any case, renaming is performed at the backend.
-		 It's good idea to keep the operation within a transaction. 
-		 \return true on success. */
-		virtual bool drv_alterTableName(TableSchema& tableSchema, const QString& newName);
-
 		/*! Internal, for handling autocommited transactions:
 		 begins transaction if one is supported.
 		 \return true if new transaction started
@@ -1047,12 +1072,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			if not: error message is set up and false returned */
 		bool checkIsDatabaseUsed();
 
-		/*! Setups schema data for object that owns sdata (e.g. table, query)
-			using \a cursor opened on 'kexi__objects' table, pointing to a record
-			corresponding to given object. */
-		bool setupObjectSchemaData( const RowData &data, SchemaData &sdata );
-
-		/*! \return a full table schema for a table using 'kexi__*' system tables. 
+		/*! \return a full table schema for a table retrieved using 'kexi__*' system tables. 
 		 Used internally by tableSchema() methods. */
 		TableSchema* setupTableSchema( const RowData &data );
 

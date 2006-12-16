@@ -36,10 +36,9 @@ namespace KexiDB {
 class Connection;
 class LookupFieldSchema;
 
-/*! KexiDB::TableSchema provides information about native database table 
-	that can be stored using SQL database engine. 
-*/	
-
+/*! KexiDB::TableSchema provides information about native database table
+	that can be stored using KexiDB database engine.
+*/
 class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 {
 	public:
@@ -51,10 +50,16 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		TableSchema();
 
 		/*! Copy constructor. 
-		 if \a copyId is true, it's copied as well, otherwise the table id becomes -1. 
-		 This is usable when we want to store the copy as an independent table. */
+		 if \a copyId is true, it's copied as well, otherwise the table id becomes -1,
+		 what is usable when we want to store the copy as an independent table. */
 		TableSchema(const TableSchema& ts, bool copyId = true);
-		
+
+		/*! Copy constructor like \ref TableSchema(const TableSchema&, bool).
+		 \a setId is set as the table identifier. This is rarely usable, e.g. 
+		 in project and data migration routines when we need to need deal with unique identifiers;
+		 @see KexiMigrate::performImport(). */
+		TableSchema(const TableSchema& ts, int setId);
+
 		virtual ~TableSchema();
 		
 		/*! Inserts \a field into a specified position (\a index).
@@ -162,8 +167,6 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		/*! Automatically retrieves table schema via connection. */
 		TableSchema(Connection *conn, const QString & name = QString::null);
 
-		void init();
-
 		IndexSchema::List m_indices;
 
 		QGuardedPtr<Connection> m_conn;
@@ -176,6 +179,12 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		Private *d;
 
 	private:
+		//! Used by some ctors.
+		void init();
+
+		//! Used by some ctors.
+		void init(const TableSchema& ts, bool copyId);
+
 		bool m_isKexiDBSystem : 1;
 
 	friend class Connection;
@@ -189,6 +198,7 @@ class KEXI_DB_EXPORT InternalTableSchema : public TableSchema
 {
 	public:
 		InternalTableSchema(const QString& name);
+		InternalTableSchema(const TableSchema& ts);
 		virtual ~InternalTableSchema();
 };
 

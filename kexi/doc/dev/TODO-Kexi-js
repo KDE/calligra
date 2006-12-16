@@ -1023,3 +1023,4 @@ Form/TV Shortcuts:
       (crash - see Simple_Database.kexi - persons_and_cars query has lookup fields and OUTER JOIN is NOT PARSED
        -- we should generate the SQL in a different way for the Query Designer)
 - fix horizontal scrollbar hiding in the "Available fields" list box (a problem with layouts?)
+- display a message when connection is lost...

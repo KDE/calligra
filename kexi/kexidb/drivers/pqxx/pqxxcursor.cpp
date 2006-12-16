@@ -27,71 +27,15 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <migration/pqxx/pg_type.h>
 using namespace KexiDB;
 
 
 unsigned int pqxxSqlCursor_trans_num=0; //!< debug helper
 
-//! @todo move to KexiDB utils
-QByteArray processBinaryData(const pqxx::result::field r)
+static QByteArray pgsqlByteaToByteArray(const pqxx::result::field& r)
 {
-	const int size = r.size();
-	QByteArray array;
-	int output=0;
-	for (int pass=0; pass<2; pass++) {//2 passes to avoid allocating buffer twice:
-		                                //  0: count #of chars; 1: copy data
-		const char* s = r.c_str();
-		const char* end = s + size;
-		if (pass==1) {
-			KexiDBDrvDbg << "processBinaryData(): real size == " << output << endl;
-			array.resize(output);
-			output=0;
-		}
-		for (int input=0; s < end; output++) {
-	//		KexiDBDrvDbg<<(int)s[0]<<" "<<(int)s[1]<<" "<<(int)s[2]<<" "<<(int)s[3]<<" "<<(int)s[4]<<endl;
-			if (s[0]=='\\' && (s+1)<end) {
-				//special cases as in http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html
-				if (s[1]=='\'') {// \'
-					if (pass==1)
-						array[output] = '\'';
-					s+=2;
-				}
-				else if (s[1]=='\\') { // 2 backslashes 
-					if (pass==1)
-						array[output] = '\\';
-					s+=2;
-				}
-				else if ((input+3)<size) {// \\xyz where xyz are 3 octal digits
-					if (pass==1)
-						array[output] = char( (int(s[1]-'0')*8+int(s[2]-'0'))*8+int(s[3]-'0') );
-					s+=4;
-				}
-				else {
-					KexiDBDrvWarn << "processBinaryData(): no octal value after backslash" << endl;
-					s++;
-				}
-			}
-			else {
-				if (pass==1)
-					array[output] = s[0];
-				s++;
-			}
-	//		KexiDBDrvDbg<<output<<": "<<(int)array[output]<<endl;
-		}
-	}
-	return array;
+	return KexiDB::pgsqlByteaToByteArray(r.c_str(), r.size());
 }
-/*old
-QByteArray pqxxSqlCursor::processBinaryData(pqxx::binarystring *bs) const
-{
-	QByteArray ba;
-	kdDebug() << "pqxxSqlCursor::processBinaryData(): bs->data()=="<<(int)bs->data()[0]
-	 <<" "<<(int)bs->data()[1]<<" bs->size()=="<<bs->size()<<endl;
-	ba.setRawData((const char *)(bs->data()), bs->size());
-	ba.detach();
-	return ba;
-}*/
 
 //==================================================================================
 //Constructor based on query statement
@@ -281,59 +225,29 @@ QVariant pqxxSqlCursor::pValue(uint pos)const
 	{
 		if ((f->isIntegerType()) || (/*ROWID*/!f && m_containsROWIDInfo && pos==m_fieldCount))
 		{
-			return QVariant((*m_res)[at()][pos].as(int()));
+			return (*m_res)[at()][pos].as(int());
 		}
 		else if (f->isTextType())
 		{
-			return QVariant((*m_res)[at()][pos].c_str());
+			return QString::fromUtf8((*m_res)[at()][pos].c_str()); //utf8?
 		}
 		else if (f->isFPNumericType())
 		{
-			return QVariant((*m_res)[at()][pos].as(double()));
+			return (*m_res)[at()][pos].as(double());
 		}
 		else if (f->typeGroup() == Field::BLOBGroup)
 		{
 //			pqxx::result::field r = (*m_res)[at()][pos];
 //			kdDebug() << r.name() << ", " << r.c_str() << ", " << r.type() << ", " << r.size() << endl;
-			return QVariant(processBinaryData( (*m_res)[at()][pos] ));
+			return ::pgsqlByteaToByteArray((*m_res)[at()][pos]);
 		}
 	}
 	else // We probably have a raw type query so use pqxx to determin the column type
 	{
-		
-		switch((*m_res)[at()][pos].type())
-		{
-			case BOOLOID:
-				return QVariant((*m_res)[at()][pos].c_str()); //TODO check formatting
-			case INT2OID:
-			case INT4OID:
-			case INT8OID:
-				return QVariant((*m_res)[at()][pos].as(int()));
-			case FLOAT4OID:
-			case FLOAT8OID:
-			case NUMERICOID:
-				return QVariant((*m_res)[at()][pos].as(double()));
-			case DATEOID:
-				return QVariant((*m_res)[at()][pos].c_str()); //TODO check formatting
-			case TIMEOID:
-				return QVariant((*m_res)[at()][pos].c_str()); //TODO check formatting
-			case TIMESTAMPOID:
-				return QVariant((*m_res)[at()][pos].c_str()); //TODO check formatting
-			case BYTEAOID:
-				return QVariant(processBinaryData( (*m_res)[at()][pos] ));
-			case BPCHAROID:
-			case VARCHAROID:
-			case TEXTOID:
-				return QVariant((*m_res)[at()][pos].c_str());
-			default:
-				return QVariant((*m_res)[at()][pos].c_str());
-		}
-		
+		return pgsqlCStrToVariant((*m_res)[at()][pos]);
 	}
-	
-	//If all else fails just return a string
-	return QVariant((*m_res)[at()][pos].c_str());
-	
+
+	return QString::fromUtf8((*m_res)[at()][pos].c_str(), (*m_res)[at()][pos].size()); //utf8?
 }
 
 //==================================================================================

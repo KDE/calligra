@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,7 +37,6 @@ namespace KexiMigration
 		KEXIMIGRATION_DRIVER
 
 		public:
-//			PqxxMigrate();
 			PqxxMigrate(QObject *parent, const char *name, const QStringList &args = QStringList());
 			virtual ~PqxxMigrate();
 			
@@ -52,23 +52,41 @@ namespace KexiMigration
 			virtual bool drv_connect();
 			virtual bool drv_disconnect();
 
+			virtual tristate drv_queryStringListFromSQL(
+				const QString& sqlStatement, uint columnNumber, QStringList& stringList, 
+				int numRecords = -1);
+
+			/*! Fetches single record from result obtained 
+			 by running \a sqlStatement.
+			 \a firstRecord should be first initialized to true, so the method can run
+			 the query at first call and then set it will set \a firstRecord to false,
+			 so subsequent calls will only fetch records.
+			 On success the result is stored in \a data and true is returned,
+			 \a data is resized to appropriate size. cancelled is returned on EOF. */
+//! @todo SQL-dependent!
+			virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement, 
+				KexiDB::RowData& data, bool &firstRecord);
+
 			virtual bool drv_copyTable(const QString& srcTable, 
 				KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
-//TODO: move this somewhere to low level class (MIGRATION?)
-			//virtual bool drv_getTablesList( QStringList &list );
-//TODO: move this somewhere to low level class (MIGRATION?)
-			//virtual bool drv_containsTable( const QString &tableName );
 		
 		private:
 			//lowlevel functions/objects
 			//database connection
 			pqxx::connection* m_conn;
+
 			//transaction
 			pqxx::nontransaction* m_trans;
+
 			//lowlevel result
 			pqxx::result* m_res;
+
+			//! Used in drv_fetchRecordFromSQL
+			pqxx::result::const_iterator m_fetchRecordFromSQL_iter;
+
 			//perform a query on the database
 			bool query(const QString& statement);
+
 			//Clear the result info
 			void clearResultInfo ();
 			

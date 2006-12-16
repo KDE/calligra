@@ -22,6 +22,7 @@
 #include "mysqlconnection.h"
 #include "mysqlconnection_p.h"
 #include <kexidb/error.h>
+#include <kexidb/utils.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <limits.h>
@@ -114,24 +115,27 @@ QVariant MySqlCursor::value(uint pos) {
 	
 //! @todo js: use MYSQL_FIELD::type here!
 
+	return KexiDB::cstringToVariant(d->mysqlrow[pos], f, d->lengths[pos]);
+/* moved to cstringToVariant()
 	//from most to least frequently used types:
 	if (!f || f->isTextType())
-		return QVariant( QString::fromUtf8((const char*)d->mysqlrow[pos]) );
+		return QVariant( QString::fromUtf8((const char*)d->mysqlrow[pos], d->lengths[pos]) );
 	else if (f->isIntegerType())
 //! @todo support BigInteger
-		return QVariant( QCString((const char*)d->mysqlrow[pos]).toInt() );
+		return QVariant( QCString((const char*)d->mysqlrow[pos], d->lengths[pos]).toInt() );
 	else if (f->isFPNumericType())
-		return QVariant( QCString((const char*)d->mysqlrow[pos]).toDouble() );
+		return QVariant( QCString((const char*)d->mysqlrow[pos], d->lengths[pos]).toDouble() );
 
 	//default
-	return QVariant(QString::fromUtf8((const char*)d->mysqlrow[pos]));
+	return QVariant(QString::fromUtf8((const char*)d->mysqlrow[pos], d->lengths[pos]));*/
 }
 
 
 /* As with sqlite, the DB library returns all values (including numbers) as
    strings. So just put that string in a QVariant and let KexiDB deal with it.
  */
-void MySqlCursor::storeCurrentRow(RowData &data) const {
+void MySqlCursor::storeCurrentRow(RowData &data) const
+{
 //	KexiDBDrvDbg << "MySqlCursor::storeCurrentRow: Position is " << (long)m_at<< endl;
 	if (d->numRows<=0)
 		return;
@@ -146,17 +150,19 @@ void MySqlCursor::storeCurrentRow(RowData &data) const {
 		Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i)->field : 0;
 		if (m_fieldsExpanded && !f)
 			continue;
+		data[i] = KexiDB::cstringToVariant(d->mysqlrow[i], f, d->lengths[i]);
+/* moved to cstringToVariant()
 		if (f && f->type()==Field::BLOB) {
 			QByteArray ba;
-			ba.duplicate(d->mysqlrow[i], d->mysqlres->lengths[i]);
+			ba.duplicate(d->mysqlrow[i], d->lengths[i]);
 			data[i] = ba;
 			KexiDBDbg << data[i].toByteArray().size() << endl;
 		}
 //! @todo more types!
 //! @todo look at what type mysql declares!
 		else {
-			data[i] = QVariant(QString::fromUtf8((const char*)d->mysqlrow[i]));
-		}
+			data[i] = QVariant(QString::fromUtf8((const char*)d->mysqlrow[i], d->lengths[i]));
+		}*/
 	}
 }
 
