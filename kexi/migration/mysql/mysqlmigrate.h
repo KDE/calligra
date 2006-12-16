@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Martin Ellis <m.a.ellis@ncl.ac.uk>
+   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,8 +22,6 @@
 #define MYSQLMIGRATE_H
 
 #include "migration/keximigrate.h"
-#include "kexidb/field.h"
-#include "kexidb/connection.h"
 #include "kexidb/drivers/mySQL/mysqlconnection_p.h"
 
 namespace KexiMigration
@@ -35,6 +34,7 @@ namespace KexiMigration
 
 		private:
 			MySqlConnectionInternal *d;
+			MYSQL_RES *m_mysqlres;
 
 		protected:
 			//Driver specific function to return table names
@@ -46,6 +46,13 @@ namespace KexiMigration
 			//Driver specific connection implementation
 			virtual bool drv_connect();
 			virtual bool drv_disconnect();
+
+			virtual tristate drv_queryStringListFromSQL(
+				const QString& sqlStatement, uint columnNumber, 
+				QStringList& stringList, int numRecords = -1);
+
+			virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement, 
+				KexiDB::RowData& data, bool &firstRecord);
 
 			virtual bool drv_copyTable(const QString& srcTable, 
 				KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);

@@ -94,27 +94,16 @@ TableSchema::TableSchema()
 TableSchema::TableSchema(const TableSchema& ts, bool copyId)
 	: FieldList(static_cast<const FieldList&>(ts))
 	, SchemaData(static_cast<const SchemaData&>(ts))
-	, m_conn( ts.m_conn )
-	, m_query(0) //not cached
-	, m_isKexiDBSystem(false)
 {
-	d = new Private();
-	m_name = ts.m_name;
-	m_indices.setAutoDelete( true );
-	m_pkey = 0; //will be copied
-	if (!copyId)
-		m_id = -1;
+	init(ts, copyId);
+}
 
-	//deep copy all members
-	IndexSchema::ListIterator idx_it(ts.m_indices);
-	for (;idx_it.current();++idx_it) {
-		IndexSchema *idx = new IndexSchema(
-			*idx_it.current(), *this /*fields from _this_ table will be assigned to the index*/);
-		if (idx->isPrimaryKey()) {//assign pkey
-			m_pkey = idx;
-		}
-		m_indices.append(idx);
-	}
+TableSchema::TableSchema(const TableSchema& ts, int setId)
+	: FieldList(static_cast<const FieldList&>(ts))
+	, SchemaData(static_cast<const SchemaData&>(ts))
+{
+	init(ts, false);
+	m_id = setId;
 }
 
 // used by Connection
@@ -147,6 +136,30 @@ void TableSchema::init()
 	m_indices.setAutoDelete( true );
 	m_pkey = new IndexSchema(this);
 	m_indices.append(m_pkey);
+}
+
+void TableSchema::init(const TableSchema& ts, bool copyId)
+{
+	m_conn = ts.m_conn;
+	m_query = 0; //not cached
+	m_isKexiDBSystem = false;
+	d = new Private();
+	m_name = ts.m_name;
+	m_indices.setAutoDelete( true );
+	m_pkey = 0; //will be copied
+	if (!copyId)
+		m_id = -1;
+
+	//deep copy all members
+	IndexSchema::ListIterator idx_it(ts.m_indices);
+	for (;idx_it.current();++idx_it) {
+		IndexSchema *idx = new IndexSchema(
+			*idx_it.current(), *this /*fields from _this_ table will be assigned to the index*/);
+		if (idx->isPrimaryKey()) {//assign pkey
+			m_pkey = idx;
+		}
+		m_indices.append(idx);
+	}
 }
 
 void TableSchema::setPrimaryKey(IndexSchema *pkey)
@@ -433,6 +446,11 @@ const Q3PtrVector<LookupFieldSchema>& TableSchema::lookupFieldsList()
 
 InternalTableSchema::InternalTableSchema(const QString& name)
  : TableSchema(name)
+{
+}
+
+InternalTableSchema::InternalTableSchema(const TableSchema& ts)
+ : TableSchema(ts, false)
 {
 }
 

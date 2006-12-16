@@ -22,6 +22,7 @@
 
 #include <kexidb/cursor.h>
 #include <kexidb/connection.h>
+#include <kexidb/utils.h>
 
 #if 0
 #include <pqxx/all.h>
@@ -30,6 +31,7 @@
 #endif
 
 #include <pqxx/binarystring>
+#include <migration/pqxx/pg_type.h>
 
 namespace KexiDB {
 
@@ -71,6 +73,37 @@ private:
 	//QByteArray processBinaryData(pqxx::binarystring*) const;
 	friend class pqxxSqlConnection;
 };
+
+inline QVariant pgsqlCStrToVariant(const pqxx::result::field& r)
+{
+	switch(r.type())
+	{
+		case BOOLOID:
+			return QString::fromLatin1(r.c_str(), r.size())=="true"; //TODO check formatting
+		case INT2OID:
+		case INT4OID:
+		case INT8OID:
+			return r.as(int());
+		case FLOAT4OID:
+		case FLOAT8OID:
+		case NUMERICOID:
+			return r.as(double());
+		case DATEOID:
+			return QString::fromUtf8(r.c_str(), r.size()); //TODO check formatting
+		case TIMEOID:
+			return QString::fromUtf8(r.c_str(), r.size()); //TODO check formatting
+		case TIMESTAMPOID:
+			return QString::fromUtf8(r.c_str(), r.size()); //TODO check formatting
+		case BYTEAOID:
+			return KexiDB::pgsqlByteaToByteArray(r.c_str(), r.size());
+		case BPCHAROID:
+		case VARCHAROID:
+		case TEXTOID:
+			return QString::fromUtf8(r.c_str(), r.size()); //utf8?
+		default:
+			return QString::fromUtf8(r.c_str(), r.size()); //utf8?
+	}
+}
 
 }
 

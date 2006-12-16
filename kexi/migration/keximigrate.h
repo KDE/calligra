@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
    Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 
 
 #include "kexidb/tableschema.h"
+#include "kexidb/connection.h"
 #include "keximigratedata.h"
 
 #include <kgenericfactory.h>
@@ -32,6 +33,7 @@
 #include <Q3ValueList>
 #include <Q3CString>
 #include <Q3PtrList>
+#include <QPointer>
 
 class KexiProject;
 namespace Kexi
@@ -160,7 +162,54 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 		virtual bool drv_readTableSchema(
 			const QString& originalName, KexiDB::TableSchema& tableSchema) = 0;
 
+		/*! Fetches maximum number from table \a tableName, column \a columnName 
+		 into \a result. On success true is returned. If there is no records in the table, 
+		 \a result is set to 0 and true is returned. 
+		 - Note 1: implement only if the database can already contain kexidb__* tables
+		   (so e.g. keximdb driver doea not need this).
+		 - Note 2: default implementation uses drv_querySingleStringFromSQL() 
+		   with "SELECT MAX(columName) FROM tableName" statement, assuming SQL-compliant
+		   backend. 
+		*/
+		virtual bool drv_queryMaxNumber(const QString& tableName, 
+			const QString& columnName, int& result);
+
+		/*! Fetches single string at column \a columnNumber for each record from result obtained 
+		 by running \a sqlStatement. \a numRecords can be specified to limit number of records read.
+		 If \a numRecords is -1, all records are loaded.
+		 On success the result is stored in \a stringList and true is returned. 
+		 \return cancelled if there are no records available. 
+		 - Note: implement only if the database can already contain kexidb__* tables
+		  (so e.g. keximdb driver does not need this). */
+//! @todo SQL-dependent!
+		virtual tristate drv_queryStringListFromSQL(
+			const QString& sqlStatement, uint columnNumber, QStringList& stringList, int numRecords = -1)
+		 { return cancelled; }
+
+		/*! Fetches single string at column \a columnNumber from result obtained 
+		 by running \a sqlStatement.
+		 On success the result is stored in \a string and true is returned. 
+		 \return cancelled if there are no records available. 
+		 This implementation uses drv_queryStringListFromSQL() with numRecords == 1. */
+//! @todo SQL-dependent!
+		virtual tristate drv_querySingleStringFromSQL(const QString& sqlStatement, 
+			uint columnNumber, QString& string);
+
+		/*! Fetches single record from result obtained 
+		 by running \a sqlStatement.
+		 \a firstRecord should be first initialized to true, so the method can run
+		 the query at first call and then set it will set \a firstRecord to false,
+		 so subsequent calls will only fetch records.
+		 On success the result is stored in \a data and true is returned,
+		 \a data is resized to appropriate size. cancelled is returned on EOF. */
+//! @todo SQL-dependent!
+		virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement, 
+			KexiDB::RowData& data, bool &firstRecord)
+		 { return cancelled; }
+
 		//! Copy a table from source DB to target DB (driver specific)
+		//! - create copies of KexiDB tables
+		//! - create copies of non-KexiDB tables
 		virtual bool drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn, 
 			KexiDB::TableSchema* dstTable) = 0;
 
@@ -192,6 +241,9 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 		//! Prompt user to select a field type for unrecognized fields
 		KexiDB::Field::Type userType(const QString& fname);
 
+		virtual QString drv_escapeIdentifier( const QString& str ) const {
+			return m_kexiDBDriver ? m_kexiDBDriver->escapeIdentifier(str) : str; }
+
 //! @todo Remove this! KexiMigrate should be usable for multiple concurrent migrations!
 		//! Migrate Options
 		KexiMigration::Data* m_migrateData;
@@ -209,6 +261,9 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 		 -it's done automatically. */
 		QMap<Q3CString,QString> m_propertyCaptions;
 
+		//! KexiDB driver. For instance, it is used for escaping identifiers
+		QPointer<KexiDB::Driver> m_kexiDBDriver;
+
 	private:
 		//! Get the list of tables
 		bool tableNames(QStringList& tablenames);
@@ -223,9 +278,11 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 		//! Table schemas from source DB
 		Q3PtrList<KexiDB::TableSchema> m_tableSchemas;
 
-		//! Estimate size of migration job
-		/*! Calls drv_getTableSize for each table to be copied.
-			\return sum of the size of all tables to be copied.
+		QPtrList<KexiDB::TableSchema> m_kexiDBCompatibleTableSchemasToRemoveFromMemoryAfterImport;
+
+		/*! Estimate size of migration job
+		 Calls drv_getTableSize for each table to be copied.
+		 \return sum of the size of all tables to be copied.
 		*/
 		bool progressInitialise();
 
@@ -233,8 +290,10 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 
 		//! Size of migration job
 		quint64 m_progressTotal;
+
 		//! Amount of migration job complete
 		quint64 m_progressDone;
+
 		//! Don't recalculate progress done until this value is reached.
 		quint64 m_progressNextReport;
 

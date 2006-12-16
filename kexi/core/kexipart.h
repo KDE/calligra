@@ -58,7 +58,7 @@ enum ObjectTypes {
 	MacroObjectType = 7,
 	LastObjectType = 7, //ALWAYS UPDATE THIS
 
-	UserObjectType = 100 //external types
+	UserObjectType = 100 //!< external types
 };
 
 /**

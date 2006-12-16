@@ -674,7 +674,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 		result.setStatus(&manager);
 		kDebug() << "Manager error..." << endl;
 		manager.debugError();
-		result.setStatus(&manager);
+//		result.setStatus(&manager);
 	}
 
 	// Set up destination connection data
@@ -803,7 +803,7 @@ tristate ImportWizard::import()
 	bool acceptingNeeded = false;
 
 	// Perform import
-	if (!result.error())
+	if (sourceDriver && !result.error())
 	{
 		if (!m_sourceDBEncoding.isEmpty()) {
 			sourceDriver->setPropertyValue( "source_database_nonunicode_encoding", 
@@ -820,7 +820,7 @@ tristate ImportWizard::import()
 		kDebug() << "Performing import..." << endl;
 	}
 
-	if (!result.error() && acceptingNeeded) { // ok, the destination-db already exists...
+	if (sourceDriver && !result.error() && acceptingNeeded) { // ok, the destination-db already exists...
 		if (KMessageBox::Yes != KMessageBox::warningYesNo(this,
 			"<qt>"+i18n("Database %1 already exists."
 			"<p>Do you want to replace it with a new one?")
@@ -831,11 +831,11 @@ tristate ImportWizard::import()
 		}
 	}
 
-	if (!result.error() && sourceDriver->progressSupported()) {
+	if (sourceDriver && !result.error() && sourceDriver->progressSupported()) {
 		m_progressBar->show();
 	}
 
-	if (!result.error() && sourceDriver->performImport(&result))
+	if (sourceDriver && !result.error() && sourceDriver->performImport(&result))
 	{
 		if (m_args) {
 //				if (fileBasedDstSelected()) {
@@ -852,7 +852,7 @@ tristate ImportWizard::import()
 		return true;
 	}
 
-	if (result.error())
+	if (!sourceDriver || result.error())
 	{
 		m_progressBar->setProgress(0);
 		m_progressBar->hide();

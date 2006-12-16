@@ -113,7 +113,7 @@ class KEXICORE_EXPORT KexiDialogBase
 		/*! reimplemented: size hint is inherited from currently visible view. */
 		virtual QSize sizeHint() const;
 
-		KexiMainWindow	*mainWin() { return m_parentWindow; }
+		KexiMainWindow *mainWin() const { return m_parentWindow; }
 
 		//js todo: maybe remove this since it's often the same as partItem()->identifier()?:
 

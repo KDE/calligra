@@ -331,6 +331,10 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 		storedMinorVersion = 1;
 
 	bool containsKexi__blobsTable = d->connection->drv_containsTable("kexi__blobs");
+	int dummy;
+	bool contains_o_folder_id = containsKexi__blobsTable && true == d->connection->querySingleNumber(
+		"SELECT COUNT(o_folder_id) FROM kexi__blobs", dummy, 0, false/*addLimitTo1*/);
+	bool add_folder_id_column = false;
 
 //! @todo what about read-only db access?
 	if (storedMajorVersion<=0) {
@@ -338,18 +342,22 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 		d->versionMinor = KEXIPROJECT_VERSION_MINOR;
 		//For compatibility for projects created before Kexi 1.0 beta 1:
 		//1. no kexiproject_major_ver and kexiproject_minor_ver -> add them
-		if (!props.setValue("kexiproject_major_ver", d->versionMajor)
-			|| !props.setCaption("kexiproject_major_ver", i18n("Project major version"))
-			|| !props.setValue("kexiproject_minor_ver", d->versionMinor)
-			|| !props.setCaption("kexiproject_minor_ver", i18n("Project minor version")) ) {
-			return false;
+		if (!d->connection->isReadOnly()) {
+			if (!props.setValue("kexiproject_major_ver", d->versionMajor)
+				|| !props.setCaption("kexiproject_major_ver", i18n("Project major version"))
+				|| !props.setValue("kexiproject_minor_ver", d->versionMinor)
+				|| !props.setCaption("kexiproject_minor_ver", i18n("Project minor version")) ) {
+				return false;
+			}
 		}
 
-		//2. "kexi__blobs" table had no "o_folder_id" column -> add it (blobs will be lost...)
 		if (containsKexi__blobsTable) {
-			if (!d->connection->executeSQL(QString::fromLatin1("DROP TABLE kexi__blobs")))//lowlevel
-				return false;
-			containsKexi__blobsTable = false;
+//! @todo what to do for readonly connections? Should we alter kexi__blobs in memory?
+			if (!d->connection->isReadOnly()) {
+				if (!contains_o_folder_id) {
+					add_folder_id_column = true;
+				}
+			}
 		}
 	}
 	if (storedMajorVersion!=d->versionMajor || storedMajorVersion!=d->versionMinor) {
@@ -368,19 +376,48 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 	.addField( new KexiDB::Field("o_folder_id", 
 	    KexiDB::Field::Integer, 0, KexiDB::Field::Unsigned) //references kexi__gallery_folders.f_id
 	                                        //If null, the BLOB only points to virtual "All" folder
-	                                        //WILL BE USED in Kexi >=1.1
+	                                        //WILL BE USED in Kexi >=2.0
 	);
 
 	//*** create global BLOB container, if not present
 	if (containsKexi__blobsTable) {
 		//! just insert this schema
 		d->connection->insertInternalTableSchema(t_blobs);
+		if (add_folder_id_column && !d->connection->isReadOnly()) {
+			// 2. "kexi__blobs" table contains no "o_folder_id" column -> add it 
+			//    (by copying table to avoid data loss)
+			KexiDB::TableSchema *kexi__blobsCopy = new KexiDB::TableSchema( *t_blobs );
+			kexi__blobsCopy->setName("kexi__blobs__copy");
+			if (!d->connection->drv_createTable( *kexi__blobsCopy )) {
+				delete kexi__blobsCopy;
+				delete t_blobs;
+				return false;
+			}
+			// 2.1 copy data (insert 0's into o_folder_id column)
+			if (!d->connection->executeSQL(
+					QString::fromLatin1("INSERT INTO kexi__blobs (o_data, o_name, o_caption, o_mime, o_folder_id) "
+					"SELECT o_data, o_name, o_caption, o_mime, 0 FROM kexi__blobs") )
+				// 2.2 remove the original kexi__blobs
+				|| !d->connection->executeSQL(QString::fromLatin1("DROP TABLE kexi__blobs")) //lowlevel
+				// 2.3 rename the copy back into kexi__blobs
+				|| !d->connection->drv_alterTableName(*kexi__blobsCopy, "kexi__blobs")
+				)
+			{
+				//(no need to drop the copy, ROLLBACK will drop it)
+				delete kexi__blobsCopy;
+				delete t_blobs;
+				return false;
+			}
+			delete kexi__blobsCopy; //not needed - physically renamed to kexi_blobs
+		}
 	}
 	else {
 //		if (!d->connection->createTable( t_blobs, false/*!replaceExisting*/ )) {
-		if (!d->connection->createTable( t_blobs, true/*replaceExisting*/ )) {
-			delete t_blobs;
-			return false;
+		if (!d->connection->isReadOnly()) {
+			if (!d->connection->createTable( t_blobs, true/*replaceExisting*/ )) {
+				delete t_blobs;
+				return false;
+			}
 		}
 	}
 
@@ -401,16 +438,18 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 		d->connection->insertInternalTableSchema(t_parts);
 	}
 	else {
-		partsTableOk = d->connection->createTable( t_parts, true/*replaceExisting*/ );
+		if (!d->connection->isReadOnly()) {
+			partsTableOk = d->connection->createTable( t_parts, true/*replaceExisting*/ );
 
-		KexiDB::FieldList *fl = t_parts->subList("p_id", "p_name", "p_mime", "p_url");
-		if (partsTableOk)
-			partsTableOk = d->connection->insertRecord(*fl, QVariant(1), QVariant("Tables"), 
-				QVariant("kexi/table"), QVariant("http://koffice.org/kexi/"));
+			KexiDB::FieldList *fl = t_parts->subList("p_id", "p_name", "p_mime", "p_url");
+			if (partsTableOk)
+				partsTableOk = d->connection->insertRecord(*fl, QVariant(1), QVariant("Tables"), 
+					QVariant("kexi/table"), QVariant("http://koffice.org/kexi/"));
 
-		if (partsTableOk)
-			partsTableOk = d->connection->insertRecord(*fl, QVariant(2), QVariant("Queries"), 
-				QVariant("kexi/query"), QVariant("http://koffice.org/kexi/"));
+			if (partsTableOk)
+				partsTableOk = d->connection->insertRecord(*fl, QVariant(2), QVariant("Queries"), 
+					QVariant("kexi/query"), QVariant("http://koffice.org/kexi/"));
+		}
 	}
 
 	if (!partsTableOk) {

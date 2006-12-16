@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
+   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
  
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,7 +32,10 @@
 #include <vector>
 
 #include <kexidb/cursor.h>
+#include <kexidb/utils.h>
+#include <kexidb/drivermanager.h>
 #include <kexiutils/identifier.h>
+#include <kexidb/drivers/pqxx/pqxxcursor.h> //for pgsqlCStrToVariant()
 
 using namespace KexiDB;
 using namespace KexiMigration;
@@ -61,11 +65,14 @@ PqxxMigrate::PqxxMigrate(QObject *parent, const char *name, const QStringList &a
     m_res=0;
     m_trans=0;
     m_conn=0;
+    KexiDB::DriverManager manager;
+    m_kexiDBDriver = manager.driver("pqxx");
 }
 //==================================================================================
 //Destructor
 PqxxMigrate::~PqxxMigrate()
 {
+    clearResultInfo();
 }
 
 //==================================================================================
@@ -121,8 +128,11 @@ bool PqxxMigrate::drv_readTableSchema(
 //get a list of tables and put into the supplied string list
 bool PqxxMigrate::drv_tableNames(QStringList& tableNames)
 {
+	/*
     //pg_ = standard postgresql tables, pga_ = tables added by pgaccess, sql_ = probably information schemas, kexi__ = existing kexi tables
     if (query("SELECT relname FROM pg_class WHERE ((relkind = 'r') AND ((relname !~ '^pg_') AND (relname !~ '^pga_') AND (relname !~ '^sql_') AND (relname !~ '^kexi__')))"))
+	*/
+    if (query("SELECT relname FROM pg_class WHERE ((relkind = 'r') AND ((relname !~ '^pg_') AND (relname !~ '^pga_') AND (relname !~ '^sql_')))"))
     {
         for (pqxx::result::const_iterator c = m_res->begin(); c != m_res->end(); ++c)
         {
@@ -165,15 +175,14 @@ KexiDB::Field::Type PqxxMigrate::type(int t, const QString& fname)
         return KexiDB::Field::Time;
     case TIMESTAMPOID:
         return KexiDB::Field::DateTime;
-    //case BYTEAOID:
-        //    return KexiDB::Field::Type::SQLVarBinary;
+    case BYTEAOID:
+        return KexiDB::Field::BLOB;
     case BPCHAROID:
         return KexiDB::Field::Text;
     case VARCHAROID:
         return KexiDB::Field::Text;
     case TEXTOID:
         return KexiDB::Field::LongText;
-        //TODO: Binary Types (BLOB)
     }
 
     //Ask the user what to do with this field
@@ -250,7 +259,7 @@ bool PqxxMigrate::drv_disconnect()
 }
 //==================================================================================
 //Perform a query on the database and store result in m_res
-bool PqxxMigrate::query (const QString& statement)
+bool PqxxMigrate::query(const QString& statement)
 {
     kDebug() << "query: " << statement.latin1() << endl;
 
@@ -285,7 +294,7 @@ bool PqxxMigrate::query (const QString& statement)
 
 //=========================================================================
 //Clears the current result
-void PqxxMigrate::clearResultInfo ()
+void PqxxMigrate::clearResultInfo()
 {
     delete m_res;
     m_res = 0;
@@ -413,6 +422,105 @@ bool PqxxMigrate::primaryKey(pqxx::oid table_uid, int col) const
 }
 
 //=========================================================================
+/*! Fetches single string at column \a columnNumber from result obtained 
+ by running \a sqlStatement.
+ On success the result is stored in \a string and true is returned. 
+ \return cancelled if there are no records available. */
+tristate PqxxMigrate::drv_queryStringListFromSQL(
+	const QString& sqlStatement, uint columnNumber, QStringList& stringList, int numRecords)
+{
+    std::string result;
+    int i = 0;
+    if (query(sqlStatement))
+    {
+        for (pqxx::result::const_iterator it = m_res->begin(); 
+          it != m_res->end() && (numRecords == -1 || i < numRecords); ++it, i++)
+        {
+            if (it.size() > 0 && it.size() > columnNumber) {
+                it.at(columnNumber).to(result);
+                stringList.append( QString::fromUtf8(result.c_str()) );
+            }
+            else {
+                clearResultInfo();
+                return cancelled;
+            }
+        }
+    }
+    else
+        return false;
+    clearResultInfo();
+/*    delete tmpres;
+    tmpres = 0;
+    
+    delete tran;
+    tran = 0;*/
+
+    if (i < numRecords)
+        return cancelled;
+
+    return true;
+	/*
+	if (d->executeSQL(sqlStatement)) {
+		MYSQL_RES *res = mysql_use_result(d->mysql);
+		if (res != NULL) {
+			MYSQL_ROW row = mysql_fetch_row(res);
+			if (!row) {
+				tristate r = mysql_errno(d->mysql) ? false : cancelled;
+				mysql_free_result(res);
+				return r;
+			}
+			uint numFields = mysql_num_fields(res);
+			if (columnNumber > (numFields-1)) {
+				kWarning() << "PqxxMigrate::drv_querySingleStringFromSQL("<<sqlStatement
+					<< "): columnNumber too large (" 
+					<< columnNumber << "), expected 0.." << numFields << endl;
+				mysql_free_result(res);
+				return false;
+			}
+			unsigned long *lengths = mysql_fetch_lengths(res);
+			if (!lengths) {
+				mysql_free_result(res);
+				return false;
+			}
+			string = QString::fromLatin1(row[columnNumber], lengths[columnNumber]);
+			mysql_free_result(res);
+		} else {
+			kDebug() << "PqxxMigrate::drv_querySingleStringFromSQL(): null result" << endl;
+		}
+		return true;
+	} else {
+		return false;
+	}*/
+}
+
+tristate PqxxMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement, 
+    KexiDB::RowData& data, bool &firstRecord)
+{
+    if (firstRecord || !m_res) {
+        if (m_res)
+            clearResultInfo();
+        if (!query(sqlStatement))
+            return false;
+        m_fetchRecordFromSQL_iter = m_res->begin();
+        firstRecord = false;
+    }
+    else
+        ++m_fetchRecordFromSQL_iter;
+
+    if (m_fetchRecordFromSQL_iter == m_res->end()) {
+        clearResultInfo();
+        return cancelled;
+    }
+
+    std::string result;
+    const int numFields = m_fetchRecordFromSQL_iter.size();
+    data.resize(numFields);
+    for (int i=0; i < numFields; i++)
+        data[i] = KexiDB::pgsqlCStrToVariant(m_fetchRecordFromSQL_iter.at(i));
+    return true;
+}
+
+//=========================================================================
 /*! Copy PostgreSQL table to KexiDB database */
 bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
 	KexiDB::TableSchema* dstTable)
@@ -424,17 +532,22 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *des
     pqxx::tablereader stream(T, (srcTable.latin1()));
 
     //Loop round each row, reading into a vector of strings
+    const KexiDB::QueryColumnInfo::Vector fieldsExpanded( dstTable->query()->fieldsExpanded() );
     for (int n=0; (stream >> R); ++n)
     {
-        Q3ValueList<QVariant> vals = Q3ValueList<QVariant>();
+        Q3ValueList<QVariant> vals;
         std::vector<std::string>::const_iterator i, end( R.end() );
-        for ( i = R.begin(); i != end; ++i)
-        {
-             QVariant var = QVariant((*i).c_str());
-             vals << var;
+        int index = 0;
+        for ( i = R.begin(); i != end; ++i, index++) {
+             if (fieldsExpanded.at(index)->field->type()==KexiDB::Field::BLOB || fieldsExpanded.at(index)->field->type()==KexiDB::Field::LongText)
+                  vals.append( KexiDB::pgsqlByteaToByteArray((*i).c_str(), (*i).size()) );
+             else
+                  vals.append( KexiDB::cstringToVariant((*i).c_str(), 
+                    fieldsExpanded.at(index)->field, (*i).size()) );
         }
-
-        destConn->insertRecord(*dstTable, vals);
+        if (!destConn->insertRecord(*dstTable, vals))
+             return false;
+        updateProgress();
         R.clear();
     }
 

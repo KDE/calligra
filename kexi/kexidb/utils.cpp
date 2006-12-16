@@ -488,6 +488,14 @@ void KexiDB::connectionTestDialog(QWidget* parent, const KexiDB::ConnectionData&
 	dlg.exec();
 }
 
+int KexiDB::rowCount(Connection &conn, const QString& sql)
+{
+	int count = -1; //will be changed only on success of querySingleNumber()
+	QString selectSql( QString::fromLatin1("SELECT COUNT() FROM (") + sql + ")" );
+	conn.querySingleNumber(selectSql, count);
+	return count;
+}
+
 int KexiDB::rowCount(const KexiDB::TableSchema& tableSchema)
 {
 //! @todo does not work with non-SQL data sources
@@ -513,7 +521,7 @@ int KexiDB::rowCount(KexiDB::QuerySchema& querySchema)
 	}
 	int count = -1; //will be changed only on success of querySingleNumber()
 	querySchema.connection()->querySingleNumber(
-		QString::fromLatin1("SELECT COUNT() FROM (") 
+		QString::fromLatin1("SELECT COUNT(*) FROM (") 
 		+ querySchema.connection()->selectStatement(querySchema) + ")",
 		count
 	);
@@ -1061,6 +1069,54 @@ QString KexiDB::escapeBLOB(const QByteArray& array, BLOBEscapingType type)
 	if (type == BLOBEscapeXHex || type == BLOBEscapeOctal)
 		str[new_length++] = '\'';
 	return str;
+}
+
+QByteArray KexiDB::pgsqlByteaToByteArray(const char* data, int length)
+{
+	QByteArray array;
+	int output=0;
+	for (int pass=0; pass<2; pass++) {//2 passes to avoid allocating buffer twice:
+		                                //  0: count #of chars; 1: copy data
+		const char* s = data;
+		const char* end = s + length;
+		if (pass==1) {
+			KexiDBDbg << "processBinaryData(): real size == " << output << endl;
+			array.resize(output);
+			output=0;
+		}
+		for (int input=0; s < end; output++) {
+	//		KexiDBDbg<<(int)s[0]<<" "<<(int)s[1]<<" "<<(int)s[2]<<" "<<(int)s[3]<<" "<<(int)s[4]<<endl;
+			if (s[0]=='\\' && (s+1)<end) {
+				//special cases as in http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html
+				if (s[1]=='\'') {// \'
+					if (pass==1)
+						array[output] = '\'';
+					s+=2;
+				}
+				else if (s[1]=='\\') { // 2 backslashes 
+					if (pass==1)
+						array[output] = '\\';
+					s+=2;
+				}
+				else if ((input+3)<length) {// \\xyz where xyz are 3 octal digits
+					if (pass==1)
+						array[output] = char( (int(s[1]-'0')*8+int(s[2]-'0'))*8+int(s[3]-'0') );
+					s+=4;
+				}
+				else {
+					KexiDBDrvWarn << "processBinaryData(): no octal value after backslash" << endl;
+					s++;
+				}
+			}
+			else {
+				if (pass==1)
+					array[output] = s[0];
+				s++;
+			}
+	//		KexiDBDbg<<output<<": "<<(int)array[output]<<endl;
+		}
+	}
+	return array;
 }
 
 QString KexiDB::variantToString( const QVariant& v )
