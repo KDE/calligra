@@ -53,7 +53,8 @@ CellDamage::CellDamage( KSpread::Cell* cell, Changes changes )
   : d( new Private )
 {
   d->sheet = cell->sheet();
-  d->region = Region( cell->column(), cell->row(), d->sheet );
+  if ( Region::isValid( QPoint( cell->column(), cell->row() ) ) )
+    d->region = Region( cell->column(), cell->row(), d->sheet );
   d->changes = changes;
 }
 
