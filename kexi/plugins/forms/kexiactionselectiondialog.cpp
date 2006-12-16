@@ -24,6 +24,7 @@
 #include <kexiproject.h>
 #include <kexipartinfo.h>
 #include <kexipart.h>
+#include <kexiactioncategories.h>
 
 #include <klistview.h>
 #include <kaction.h>
@@ -128,10 +129,20 @@ public:
 		setSorting(0);
 		const QPixmap noIcon( KexiUtils::emptyIcon(KIcon::Small) );
 		KActionPtrList sharedActions( mainWin->allActions() ); //sharedActions() );
+		const Kexi::ActionCategories *acat = Kexi::actionCategories();
 		foreach (KActionPtrList::ConstIterator, it, sharedActions) {
 			//! @todo group actions
 			//! @todo: store KAction* here?
-			ActionSelectorDialogListItem *pitem = new ActionSelectorDialogListItem((*it)->name(), this, (*it)->text().replace("&", "") );
+			const int actionCategories = acat->actionCategories((*it)->name());
+			if (actionCategories==-1) {
+				kexipluginswarn << "ActionsListView(): no category declared for action \"" 
+					<< (*it)->name() << "\"! Fix this!" << endl;
+				continue;
+			}
+			if (! (actionCategories & Kexi::GlobalActionCategory))
+				continue;
+			ActionSelectorDialogListItem *pitem = new ActionSelectorDialogListItem((*it)->name(), 
+				this, (*it)->toolTip().isEmpty() ? (*it)->text().replace("&", "") : (*it)->toolTip() );
 			pitem->fifoSorting = false; //alpha sort
 			pitem->setPixmap( 0, (*it)->iconSet( KIcon::Small, 16 ).pixmap( QIcon::Small, QIcon::Active ) );
 			if (!pitem->pixmap(0) || pitem->pixmap(0)->isNull())
@@ -162,6 +173,10 @@ public:
 				continue;
 			item = new KexiBrowserItem(this, info);
 			item->setText(0, part->instanceCaption());
+		}
+		Q3ListViewItem *formItem = itemForAction("form");
+		if (formItem) {
+			item = new ActionSelectorDialogListItem("formActions", formItem, i18n("Form actions"));
 		}
 		adjustColumn(0);
 		setMinimumWidth( columnWidth(0) + 6 );
@@ -278,13 +293,15 @@ class KexiActionSelectionDialog::KexiActionSelectionDialogPrivate
 {
 public:
 	KexiActionSelectionDialogPrivate() 
-		: kactionListView(0), objectsListView(0)
+		: kactionPageWidget(0), kactionListView(0), objectsListView(0)
+		, secondAnd3rdColumnMainWidget(0)
+		, hideActionToExecuteListView(false)
 	{
 	}
 
 	void raiseWidget(QWidget *w)
 	{
-		stack->raiseWidget( w );
+		secondAnd3rdColumnStack->raiseWidget( w );
 		selectActionToBeExecutedLbl->setBuddy(w);
 	}
 
@@ -293,8 +310,6 @@ public:
 		QString msg;
 		if (actionType=="noaction")
 			msg = QString::null;
-		else if (actionType=="kaction")
-			msg = i18n("&Select action to be executed after clicking \"%1\" button:").arg(actionWidgetName);
 		// hardcoded, but it's not that bad
 		else if (actionType=="macro")
 			msg = i18n("&Select macro to be executed after clicking \"%1\" button:").arg(actionWidgetName);
@@ -306,28 +321,31 @@ public:
 		selectActionToBeExecutedLbl->setText(msg);
 	}
 
-	void setActionToExecuteSectionVisible(bool visible)
+	// changes 3rd column visibility
+	void setActionToExecuteSectionVisible(bool visible, bool force = false)
 	{
-		if (visible) {
-			actionToExecuteListView->show();
-			actionToExecuteLbl->show();
-		}
-		else {
-			actionToExecuteListView->hide();
-			actionToExecuteLbl->hide();
-		}
+		if (!force && hideActionToExecuteListView != visible)
+			return;
+		hideActionToExecuteListView = !visible;
+		actionToExecuteListView->hide();
+		actionToExecuteLbl->hide();
+		actionToExecuteListView->show();
+		actionToExecuteLbl->show();
 	}
 
 	KexiMainWindow* mainWin;
 	QString actionWidgetName;
 	ActionCategoriesListView* actionCategoriesListView; //!< for column #1
+	QWidget *kactionPageWidget;
 	ActionsListView* kactionListView;  //!< for column #2
 	KexiBrowser* objectsListView; //!< for column #2
 	QWidget *emptyWidget;
 	QLabel* selectActionToBeExecutedLbl;
 	ActionToExecuteListView* actionToExecuteListView;
 	QLabel *actionToExecuteLbl;
-	Q3WidgetStack *stack;
+	QWidget *secondAnd3rdColumnMainWidget;
+	QWidgetStack *secondAnd3rdColumnStack, *secondColumnStack;
+	bool hideActionToExecuteListView;
 };
 
 //-------------------------------------
@@ -342,53 +360,84 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	d->actionWidgetName = actionWidgetName;
 	setButtonOK( KGuiItem(i18n("Assign action", "&Assign"), "button_ok", i18n("Assign action")) );
 
-	QWidget *main = new QWidget( this );
-	main->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-	setMainWidget(main);
+	QWidget *mainWidget = new QWidget( this );
+	mainWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	setMainWidget(mainWidget);
 
-	Q3GridLayout *glyr = new Q3GridLayout(main, 2, 3, KDialog::marginHint(), KDialog::spacingHint());
+/*    lbl 1
+   +------------+ +-------------------------------+
+   |            | |              [a]              |
+   | 1st column | | +----------- + +------------+ |
+   |            | | | 2nd column | | 3rd column | |
+   |            | | +            + +            + |
+   |            | | +------------+ +------------+ |
+   +------------+ +-------------------------------+
+   \______________________________________________/
+                        glyr
+  [a]- QWidgetStack *secondAnd3rdColumnStack, 
+    - for displaying KActions, the stack contains d->kactionPageWidget QWidget
+    - for displaying objects, the stack contains secondAnd3rdColumnMainWidget QWidget and Q3GridLayout *secondAnd3rdColumnGrLyr
+	 - kactionPageWidget contains only a Q3VBoxLayout and label+kactionListView
+*/
+	Q3GridLayout *glyr = new Q3GridLayout(mainWidget, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
 	glyr->setRowStretch(1, 1);
 
 	// 1st column: action types
-	d->actionCategoriesListView = new ActionCategoriesListView(main);
+	d->actionCategoriesListView = new ActionCategoriesListView(mainWidget);
 	d->actionCategoriesListView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 	glyr->addWidget(d->actionCategoriesListView, 1, 0);
 	connect( d->actionCategoriesListView, SIGNAL(selectionChanged(Q3ListViewItem*)), 
 		this, SLOT(slotActionCategorySelected(Q3ListViewItem*)));
 
-	QLabel *lbl = new QLabel(d->actionCategoriesListView, i18n("Action category:").arg(actionWidgetName), main);
+	QLabel *lbl = new QLabel(d->actionCategoriesListView, i18n("Action category:"), mainWidget);
 	lbl->setMinimumHeight(lbl->fontMetrics().height()*2);
 	lbl->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	lbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::TextWordWrap);
 	glyr->addWidget(lbl, 0, 0, Qt::AlignTop|Qt::AlignLeft);
 
-	// 2nd column: list of actions/objects
-	d->stack = new Q3WidgetStack(main);
-	d->stack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-	glyr->addWidget(d->stack, 1, 1);
+	// widget stack for 2nd and 3rd column
+	d->secondAnd3rdColumnStack = new QWidgetStack(mainWidget);
+	d->secondAnd3rdColumnStack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	glyr->addMultiCellWidget(d->secondAnd3rdColumnStack, 0, 1, 1, 1);//, Qt::AlignTop|Qt::AlignLeft);
 
-	d->selectActionToBeExecutedLbl = new QLabel(main);
+	d->secondAnd3rdColumnMainWidget = new QWidget(d->secondAnd3rdColumnStack);
+	d->secondAnd3rdColumnMainWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	Q3GridLayout *secondAnd3rdColumnGrLyr = new Q3GridLayout(d->secondAnd3rdColumnMainWidget, 2, 2, 0, KDialog::spacingHint());
+	secondAnd3rdColumnGrLyr->setRowStretch(1, 2);
+	d->secondAnd3rdColumnStack->addWidget(d->secondAnd3rdColumnMainWidget);
+
+	// 2nd column: list of actions/objects
+	d->objectsListView = new KexiBrowser(d->secondAnd3rdColumnMainWidget, d->mainWin, 0/*features*/);
+	secondAnd3rdColumnGrLyr->addWidget(d->objectsListView, 1, 0);
+	connect(d->objectsListView, SIGNAL(selectionChanged(KexiPart::Item*)),
+		this, SLOT(slotItemForOpeningOrExecutingSelected(KexiPart::Item*)));
+
+	d->selectActionToBeExecutedLbl = new QLabel(d->secondAnd3rdColumnMainWidget);
 	d->selectActionToBeExecutedLbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	d->selectActionToBeExecutedLbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::TextWordWrap);
-	lbl->setMinimumHeight(lbl->minimumHeight());
-	glyr->addWidget(d->selectActionToBeExecutedLbl, 0, 1, Qt::AlignTop|Qt::AlignLeft);
+	d->selectActionToBeExecutedLbl->setMinimumHeight(d->selectActionToBeExecutedLbl->fontMetrics().height()*2);
+	secondAnd3rdColumnGrLyr->addWidget(d->selectActionToBeExecutedLbl, 0, 0, Qt::AlignTop|Qt::AlignLeft);
 
-	d->emptyWidget = new QWidget(d->stack);
-	d->stack->addWidget(d->emptyWidget);
+	d->emptyWidget = new QWidget(d->secondAnd3rdColumnStack);
+	d->secondAnd3rdColumnStack->addWidget(d->emptyWidget);
 
 	// 3rd column: actions to execute
-	d->actionToExecuteListView = new ActionToExecuteListView(main);
+	d->actionToExecuteListView = new ActionToExecuteListView(d->secondAnd3rdColumnMainWidget);
+	d->actionToExecuteListView->installEventFilter(this); //to be able to disable painting
+	d->actionToExecuteListView->viewport()->installEventFilter(this); //to be able to disable painting
+	d->actionToExecuteListView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
 	connect(d->actionToExecuteListView, SIGNAL(executed(Q3ListViewItem*)),
 		this, SLOT(slotActionToExecuteItemExecuted(Q3ListViewItem*)));
 	connect(d->actionToExecuteListView, SIGNAL(selectionChanged(Q3ListViewItem*)),
 		this, SLOT(slotActionToExecuteItemSelected(Q3ListViewItem*)));
-	d->actionToExecuteListView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
-	glyr->addWidget(d->actionToExecuteListView, 1, 2);
+	secondAnd3rdColumnGrLyr->addWidget(d->actionToExecuteListView, 1, 1);
 
-	d->actionToExecuteLbl = new QLabel(d->actionToExecuteListView, i18n("Action to execute:").arg(actionWidgetName), main);
+	d->actionToExecuteLbl = new QLabel(d->actionToExecuteListView, 
+		i18n("Action to execute:"), d->secondAnd3rdColumnMainWidget);
+	d->actionToExecuteLbl->installEventFilter(this); //to be able to disable painting
 	d->actionToExecuteLbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	d->actionToExecuteLbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::TextWordWrap);
-	glyr->addWidget(d->actionToExecuteLbl, 0, 2, Qt::AlignTop|Qt::AlignLeft);
+	secondAnd3rdColumnGrLyr->addWidget(d->actionToExecuteLbl, 0, 1, Qt::AlignTop|Qt::AlignLeft);
 
 	// temporary show all sections to avoid resizing the dialog in the future
 	d->actionCategoriesListView->selectAction("table");
@@ -469,43 +518,55 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
 	if (simpleItem) {
 		d->updateSelectActionToBeExecutedMessage(simpleItem->data);
 		if (simpleItem->data == "kaction") {
-			if (!d->kactionListView) {
-				d->kactionListView = new ActionsListView(d->stack, d->mainWin);
-				d->stack->addWidget(d->kactionListView);
+			if (!d->kactionPageWidget) {
+				//create lbl+list view with a vlayout
+				d->kactionPageWidget = new QWidget();
+				d->kactionPageWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+				Q3VBoxLayout *vlyr = new Q3VBoxLayout(d->kactionPageWidget, 0, KDialog::spacingHint());
+				d->kactionListView = new ActionsListView(d->kactionPageWidget, d->mainWin);
+				QLabel *lbl = new QLabel(d->kactionListView, 
+					i18n("&Select action to be executed after clicking \"%1\" button:").arg(d->actionWidgetName),
+					d->kactionPageWidget);
+				lbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::WordBreak);
+				lbl->setMinimumHeight(lbl->fontMetrics().height()*2);
+				vlyr->addWidget(lbl);
+				vlyr->addWidget(d->kactionListView);
+				d->secondAnd3rdColumnStack->addWidget(d->kactionPageWidget);
 				connect(d->kactionListView, SIGNAL(executed(Q3ListViewItem*)),
 					this, SLOT(slotKActionItemExecuted(Q3ListViewItem*)));
 				connect( d->kactionListView, SIGNAL(selectionChanged(Q3ListViewItem*)), 
 					this, SLOT(slotKActionItemSelected(Q3ListViewItem*)));
 			}
-			d->raiseWidget(d->kactionListView);
-			slotKActionItemSelected(d->kactionListView->selectedItem()); //to refresh column #3
 			d->setActionToExecuteSectionVisible(false);
+			d->raiseWidget(d->kactionPageWidget);
+			slotKActionItemSelected(d->kactionListView->selectedItem()); //to refresh column #3
 		}
 		else if (simpleItem->data == "noaction") {
 			d->raiseWidget(d->emptyWidget);
-			//refresh column #3
+			d->objectsListView->clearSelection();
+			//hide column #3
 			d->setActionToExecuteSectionVisible(false);
 		}
 		d->actionCategoriesListView->update();
 		updateOKButtonStatus();
 		return;
 	}
-
+	// other case
 	KexiBrowserItem* browserItem = dynamic_cast<KexiBrowserItem*>(item);
 	if (browserItem) {
 		d->updateSelectActionToBeExecutedMessage(browserItem->info()->objectName());
-		if (!d->objectsListView) {
-			d->objectsListView = new KexiBrowser(d->stack, d->mainWin, 0/*features*/);
-			d->stack->addWidget(d->objectsListView);
-			connect(d->objectsListView, SIGNAL(selectionChanged(KexiPart::Item*)),
-				this, SLOT(slotItemForOpeningOrExecutingSelected(KexiPart::Item*)));
-		}
 		if (d->objectsListView->itemsMimeType().latin1()!=browserItem->info()->mimeType()) {
 			d->objectsListView->setProject(d->mainWin->project(), browserItem->info()->mimeType());
 			d->actionToExecuteListView->showActionsForMimeType( browserItem->info()->mimeType() );
 			d->setActionToExecuteSectionVisible(false);
 		}
-		d->raiseWidget( d->objectsListView );
+		if (d->secondAnd3rdColumnStack->visibleWidget()!=d->secondAnd3rdColumnMainWidget) {
+			d->raiseWidget( d->secondAnd3rdColumnMainWidget );
+			d->objectsListView->clearSelection();
+			d->setActionToExecuteSectionVisible(false, true);
+		}
+		else
+			d->raiseWidget( d->secondAnd3rdColumnMainWidget );
 	}
 	d->actionCategoriesListView->update();
 	updateOKButtonStatus();
@@ -555,6 +616,13 @@ void KexiActionSelectionDialog::updateOKButtonStatus()
 	ActionSelectorDialogListItem *simpleItem = dynamic_cast<ActionSelectorDialogListItem*>(
 		d->actionCategoriesListView->selectedItem());
 	btn->setEnabled( (simpleItem && simpleItem->data == "noaction") || !currentAction().isEmpty() );
+}
+
+bool KexiActionSelectionDialog::eventFilter(QObject *o, QEvent *e)
+{
+	if (d->hideActionToExecuteListView)
+		return true;
+	return KDialogBase::eventFilter(o, e);
 }
 
 #include "kexiactionselectiondialog.moc"

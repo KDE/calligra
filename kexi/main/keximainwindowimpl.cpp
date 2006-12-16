@@ -84,6 +84,7 @@
 #include "kexi.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
+#include "kexiactioncategories.h"
 #include "kde2_closebutton.xpm"
 
 #include <widget/kexibrowser.h>
@@ -751,8 +752,10 @@ void KexiMainWindowImpl::initActions()
 	//d->action_data_execute->setToolTip(i18n("")); //TODO
 	//d->action_data_execute->setWhatsThis(i18n("")); //TODO
 
+#ifndef KEXI_NO_UNFINISHED
 	action = createSharedAction(i18n("&Filter"), "filter", 0, "data_filter");
 	setActionVolatile( action, true );
+#endif
 //	action->setToolTip(i18n("")); //todo
 //	action->setWhatsThis(i18n("")); //todo
 
@@ -811,10 +814,11 @@ void KexiMainWindowImpl::initActions()
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 	action = KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
 	action->setWhatsThis(i18n("Lets you configure toolbars."));
-#endif
 
 	d->action_show_other = new KActionMenu(i18n("Other"),
 		actionCollection(), "options_show_other");
+#endif
+
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", Qt::CTRL + Qt::Key_H,
 	 actionCollection(), "options_show_contexthelp");
@@ -871,6 +875,139 @@ void KexiMainWindowImpl::initActions()
 //	 actionCollection(), "kexi_settings");
 //	actionSettings->setWhatsThis(i18n("Lets you configure Kexi."));
 //	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
+
+	// ----- declare action categories, so form's "assign action to button"
+	//       (and macros in the future) will be able to recognze category 
+	//       of actions and filter them -----------------------------------
+//! @todo shouldn't we move this to core?
+	Kexi::ActionCategories *acat = Kexi::actionCategories();
+	acat->addAction("data_execute", Kexi::PartItemActionCategory);
+
+	//! @todo unused for now
+	acat->addWindowAction("data_filter",
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	acat->addWindowAction("data_save_row",
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	//! @todo support this in KexiPart::FormObjectType as well
+	acat->addWindowAction("data_sort_az",
+		KexiPart::TableObjectType, KexiPart::QueryObjectType);
+
+	//! @todo support this in KexiPart::FormObjectType as well
+	acat->addWindowAction("data_sort_za",
+		KexiPart::TableObjectType, KexiPart::QueryObjectType);
+
+	acat->addWindowAction("edit_clear_table");
+
+	//! @todo support this in KexiPart::FormObjectType as well
+	acat->addWindowAction("edit_copy_special_data_table", 
+		KexiPart::TableObjectType, KexiPart::QueryObjectType);
+
+	// GlobalActions, etc.
+	acat->addAction("edit_copy", Kexi::GlobalActionCategory|Kexi::PartItemActionCategory);
+
+	acat->addAction("edit_cut", Kexi::GlobalActionCategory|Kexi::PartItemActionCategory);
+
+	acat->addAction("edit_paste", Kexi::GlobalActionCategory|Kexi::PartItemActionCategory);
+
+	acat->addAction("edit_delete", Kexi::GlobalActionCategory|Kexi::PartItemActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	acat->addAction("edit_delete_row", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	acat->addAction("edit_insert_empty_row", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	acat->addAction("edit_edititem", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType);
+
+	acat->addAction("edit_paste_special_data_table", Kexi::GlobalActionCategory);
+
+	acat->addAction("edit_redo", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	acat->addAction("edit_undo", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	acat->addAction("edit_select_all", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	acat->addAction("edit_select_all", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	acat->addAction("help_about_app", Kexi::GlobalActionCategory);
+
+	acat->addAction("help_about_kde", Kexi::GlobalActionCategory);
+
+	acat->addAction("help_contents", Kexi::GlobalActionCategory);
+
+	acat->addAction("help_report_bug", Kexi::GlobalActionCategory);
+
+	acat->addAction("help_whats_this", Kexi::GlobalActionCategory);
+
+	acat->addAction("options_configure_keybinding", Kexi::GlobalActionCategory);
+
+	acat->addAction("project_close", Kexi::GlobalActionCategory);
+
+	//! @todo support this in FormObjectType as well
+	acat->addAction("project_export_data_table", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType);
+
+	acat->addAction("project_import_data_table", Kexi::GlobalActionCategory);
+
+	acat->addAction("project_new", Kexi::GlobalActionCategory);
+
+	acat->addAction("project_open", Kexi::GlobalActionCategory);
+
+	//! @todo support this in FormObjectType, ReportObjectType as well as others
+	acat->addAction("project_print", Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType);
+
+	//! @todo support this in FormObjectType, ReportObjectType as well as others
+	acat->addAction("project_print_preview", Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType);
+
+	//! @todo support this in FormObjectType, ReportObjectType as well as others
+	acat->addAction("project_print_setup", Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType);
+
+	acat->addAction("quit", Kexi::GlobalActionCategory);
+
+	acat->addAction("tools_compact_database", Kexi::GlobalActionCategory);
+
+	acat->addAction("tools_import_project", Kexi::GlobalActionCategory);
+
+	acat->addAction("view_data_mode", Kexi::GlobalActionCategory);
+
+	acat->addAction("view_design_mode", Kexi::GlobalActionCategory);
+
+	acat->addAction("view_text_mode", Kexi::GlobalActionCategory);
+
+	acat->addAction("view_mainarea", Kexi::GlobalActionCategory);
+
+	acat->addAction("view_navigator", Kexi::GlobalActionCategory);
+
+	acat->addAction("view_propeditor", Kexi::GlobalActionCategory);
+
+	acat->addAction("window_close", Kexi::GlobalActionCategory);
+
+	acat->addAction("window_next", Kexi::GlobalActionCategory);
+
+	acat->addAction("window_previous", Kexi::GlobalActionCategory);
+
+	//skipped - design view only
+	acat->addAction("format_font", Kexi::NoActionCategory);
+	acat->addAction("project_save", Kexi::NoActionCategory);
+	//skipped - internal: 
+	acat->addAction("tablepart_create", Kexi::NoActionCategory);
+	acat->addAction("querypart_create", Kexi::NoActionCategory);
+	acat->addAction("formpart_create", Kexi::NoActionCategory);
+	acat->addAction("reportpart_create", Kexi::NoActionCategory);
+	acat->addAction("macropart_create", Kexi::NoActionCategory);
+	acat->addAction("scriptpart_create", Kexi::NoActionCategory);
+	acat->addAction("", Kexi::NoActionCategory);
 }
 
 void KexiMainWindowImpl::invalidateActions()
