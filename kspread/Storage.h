@@ -221,6 +221,7 @@ void Storage<T>::insert(const Region& region, const T& _data)
         // insert data
         m_tree.insert((*it)->rect(), data);
     }
+    m_sheet->setRegionPaintDirty( region );
 }
 
 template<typename T>

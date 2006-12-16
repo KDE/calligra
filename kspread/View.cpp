@@ -4294,7 +4294,7 @@ void View::findNext()
 Cell* View::nextFindValidCell( int col, int row )
 {
     Cell *cell = d->searchInSheets.currentSheet->cellAt( col, row );
-    if ( cell->isDefault() || cell->isObscured() || cell->isFormula() )
+    if ( cell->isDefault() || cell->isPartOfMerged() || cell->isFormula() )
         cell = 0;
     if ( d->typeValue == FindOption::Note && cell && cell->comment(col, row).isEmpty())
         cell = 0;
@@ -5547,9 +5547,10 @@ void View::slotListChoosePopupMenu( )
   RowFormat * rl = d->activeSheet->rowFormat( d->canvas->markerRow());
   double tx = d->activeSheet->dblColumnPos( d->canvas->markerColumn() );
   double ty = d->activeSheet->dblRowPos( d->canvas->markerRow() );
-  double h = rl->dblHeight();
-  if ( cell->extraYCells() )
-    h = cell->extraHeight();
+  double h = cell->dblHeight( d->canvas->markerRow() );
+  const CellView cellView = sheetView( d->activeSheet )->cellView( d->canvas->markerColumn(), d->canvas->markerRow() );
+  if ( cellView.obscuresCells() )
+      h = cellView.cellHeight();
   ty += h;
 
   if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
@@ -6060,7 +6061,6 @@ void View::styleDialog()
   d->actions->selectStyle->setItems( doc()->styleManager()->styleNames() );
   if ( d->activeSheet )
   {
-    d->activeSheet->setLayoutDirtyFlag();
     d->activeSheet->setRegionPaintDirty( d->canvas->visibleCells() );
   }
   if ( d->canvas )

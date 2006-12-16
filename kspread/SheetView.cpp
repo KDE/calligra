@@ -38,6 +38,7 @@ public:
     const Sheet* sheet;
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
+    QRegion cachedArea;
 };
 
 SheetView::SheetView( const Sheet* sheet )
@@ -61,7 +62,10 @@ const Sheet* SheetView::sheet() const
 CellView SheetView::cellView( int col, int row )
 {
     if ( !d->cache.contains( QPoint(col,row) ) )
+    {
         d->cache.insert( QPoint(col,row), new CellView( this, col, row ) );
+        d->cachedArea += QRect( col, row, 1, 1 );
+    }
     return *d->cache.object( QPoint(col,row) );
 }
 
@@ -73,20 +77,17 @@ void SheetView::setPaintCellRange( const QRect& rect )
 
 void SheetView::invalidateRegion( const Region& region )
 {
+    QRegion qregion;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
     {
-        const QRect range = (*it)->rect() & d->visibleRect;
-        int right  = range.right();
-        for ( int col = range.left(); col <= right; ++col )
-        {
-            int bottom = range.bottom();
-            for ( int row = range.top(); row <= bottom; ++row )
-            {
-                d->cache.remove( QPoint(col,row) );
-            }
-        }
+        qregion += (*it)->rect();
     }
+    // reduce to the cached area
+    qregion &= d->cachedArea;
+    QVector<QRect> rects = qregion.rects();
+    for ( int i = 0; i < rects.count(); ++i )
+        invalidateRange( rects[i] );
 }
 
 void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRect, const QPointF& topLeft )
@@ -94,7 +95,7 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
     QLinkedList<QPoint> mergedCellsPainted;
 // kDebug() << "paintRect: " << paintRect << endl;
 // kDebug() << "topLeft: " << topLeft << endl;
-    // 1. Paint the cell content, background, ... (except borders)
+    // 1. Paint the cell background
 
     // Handle right-to-left layout.
     // In an RTL sheet the cells have to be painted at their opposite horizontal
@@ -116,9 +117,7 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
-            cellView.paintCell( paintRect, painter, view, dblCorner,
-                                QPoint( col, row ), mergedCellsPainted,
-                                sheet()->cellAt( col, row ) );
+            cellView.paintCellBackground( painter, dblCorner );
             dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->dblHeight() );
         }
         dblCorner.setY( topLeft.y() );
@@ -126,7 +125,28 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
             dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
     }
 
-    // 2. Paint the default borders
+    // 2. Paint the cell content including markers (formula, comment, ...)
+    dblCorner = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
+    right = d->visibleRect.right();
+    for ( int col = d->visibleRect.left(); col <= right; ++col )
+    {
+        if ( rightToLeft )
+            dblCorner.setX( dblCorner.x() - d->sheet->columnFormat( col )->dblWidth() );
+        int bottom = d->visibleRect.bottom();
+        for ( int row = d->visibleRect.top(); row <= bottom; ++row )
+        {
+            CellView cellView = this->cellView( col, row );
+            cellView.paintCellContents( paintRect, painter, view, dblCorner,
+                                        QPoint( col, row ), mergedCellsPainted,
+                                        sheet()->cellAt( col, row ) );
+            dblCorner.setY( dblCorner.y() + d->sheet->rowFormat( row )->dblHeight() );
+        }
+        dblCorner.setY( topLeft.y() );
+        if ( !rightToLeft )
+            dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
+    }
+
+    // 3. Paint the default borders
     dblCorner = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
     right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
@@ -150,7 +170,7 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
             dblCorner.setX( dblCorner.x() + d->sheet->columnFormat( col )->dblWidth() );
     }
 
-    // 3. Paint the custom borders, diagonal lines and page borders
+    // 4. Paint the custom borders, diagonal lines and page borders
     dblCorner = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
     right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
@@ -172,3 +192,24 @@ void SheetView::paintCells( View* view, QPainter& painter, const QRectF& paintRe
     }
 }
 
+void SheetView::invalidateRange( const QRect& range )
+{
+    const int right  = range.right();
+    for ( int col = range.left(); col <= right; ++col )
+    {
+        const int bottom = range.bottom();
+        for ( int row = range.top(); row <= bottom; ++row )
+        {
+            if ( !d->cache.contains( QPoint(col,row) ) )
+                continue;
+            const QSize obscuredRange = cellView( col, row ).obscuredRange();
+            if ( !obscuredRange.isEmpty() )
+                invalidateRange( QRect( range.topLeft(), obscuredRange ) );
+            else if ( cellView( col, row ).isObscured() )
+                if ( !range.contains( obscuredRange.width(), obscuredRange.height() ) )
+                    invalidateRange( QRect( obscuredRange.width(), obscuredRange.height(), 1, 1 ) );
+            d->cache.remove( QPoint(col,row) );
+            d->cachedArea -= QRect( col, row, 1, 1 );
+        }
+    }
+}

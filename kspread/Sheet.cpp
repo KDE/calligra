@@ -867,10 +867,10 @@ void Sheet::adjustSizeMaxY ( double _y )
 Cell* Sheet::visibleCellAt( int _column, int _row, bool _scrollbar_update )
 {
   Cell* cell = cellAt( _column, _row, _scrollbar_update );
-  if ( cell->obscuringCells().isEmpty() )
-      return cell;
+  if ( cell->masterCell() )
+      return cell->masterCell();
   else
-      return cell->obscuringCells().last();
+      return cell;
 }
 
 Cell* Sheet::firstCell() const
@@ -979,13 +979,6 @@ void Sheet::setArrayFormula (Selection *selection, const QString &_text)
   afm->setText (_text);
   afm->add (*selection);
   afm->execute ();
-}
-
-void Sheet::setLayoutDirtyFlag()
-{
-    Cell * c = d->cells.firstCell();
-    for( ; c; c = c->nextCell() )
-        c->setLayoutDirtyFlag();
 }
 
 void Sheet::recalc( bool force )
@@ -1573,7 +1566,7 @@ void Sheet::replace( const QString &_find, const QString &_replace, long options
         for(int col = colStart ; !bck ? col < colEnd : col > colEnd ; !bck ? ++col : --col )
         {
             cell = cellAt( col, row );
-            if ( !cell->isDefault() && !cell->isObscured() && !cell->isFormula() )
+            if ( !cell->isDefault() && !cell->isPartOfMerged() && !cell->isFormula() )
             {
                 QString text = cell->text();
                 cellRegion.setTop( row );
@@ -2432,8 +2425,6 @@ void Sheet::deleteCells(const Region& region)
 
     // recalculate dependent cells
     d->workbook->recalcManager()->regionChanged(region);
-    // relayout region
-    setLayoutDirtyFlag();
     // repaint region
     setRegionPaintDirty(region);
 
@@ -4994,11 +4985,6 @@ void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
     if ( doc()->isLoading() )
         return;
 
-    Cell* c = d->cells.firstCell();
-    for( ;c; c = c->nextCell() )
-      if ( c->row() == _row )
-          c->setLayoutDirtyFlag( true );
-
     if ( repaint )
     {
         //All the cells in this row, or below this row will need to be repainted
@@ -5016,11 +5002,6 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
     Q_UNUSED(_format);
     if ( doc()->isLoading() )
         return;
-
-    Cell* c = d->cells.firstCell();
-    for( ;c; c = c->nextCell() )
-        if ( c->column() == _column )
-            c->setLayoutDirtyFlag( true );
 
     //All the cells in this column or to the right of it will need to be repainted if the column
     //has been resized or hidden, so add that region of the sheet to the paint dirty list.

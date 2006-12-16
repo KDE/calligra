@@ -80,6 +80,14 @@ public:
      */
     Style style() const;
 
+    /**
+     * \ingroup Painting
+     * Paints the cell's background.
+     * \param painter the used painter
+     * \param paintCoordinate the top left coordinate (scroll offset dependent)
+     */
+    void paintCellBackground( QPainter& painter, const QPointF& paintCoordinate );
+
   /**
    * \ingroup Painting
    * Paints the cell.
@@ -94,10 +102,10 @@ public:
    * \param mergedCellsPainted a list of merged cells already painted
    * \param cell the Cell (should be removed!)
    */
-  void paintCell( const QRectF& paintRegion, QPainter& painter,
-                  View * view, const QPointF& paintCoordinate,
-                  const QPoint & cellCoordinate,
-                  QLinkedList<QPoint> &mergedCellsPainted, Cell* cell );
+  void paintCellContents( const QRectF& paintRegion, QPainter& painter,
+                          View * view, const QPointF& paintCoordinate,
+                          const QPoint & cellCoordinate,
+                          QLinkedList<QPoint> &mergedCellsPainted, Cell* cell );
 
   /**
    * \ingroup Painting
@@ -153,6 +161,18 @@ public:
 
   QString testAnchor( const Cell* cell, double x, double y ) const;
 
+    /**
+     * \return the size of the obscured cell range
+     * \note Used by SheetView to destroy the obscured CellViews.
+     */
+    QSize obscuredRange() const;
+
+    bool isObscured() const;
+    bool obscuresCells() const;
+
+    double cellHeight() const;
+    double cellWidth() const;
+
 private:
     /**
      * \ingroup Layout
@@ -162,7 +182,7 @@ private:
      * breaks lines of the text to fit it into the cell, obscures neighbouring
      * cells, if necessary.
      */
-    void makeLayout( Cell* cell );
+    void makeLayout( SheetView* sheetView, int col, int row, Cell* cell );
 
   /**
    * \ingroup Layout
@@ -225,7 +245,7 @@ private:
    *
    * \internal Called from makeLayout().
    */
-  void obscureHorizontalCells( Cell* masterCell );
+  void obscureHorizontalCells( SheetView* sheetView, Cell* cell );
 
   /**
    * \ingroup Layout
@@ -234,7 +254,7 @@ private:
    *
    * \internal Called from makeLayout().
    */
-  void obscureVerticalCells( Cell* masterCell );
+  void obscureVerticalCells( SheetView* sheetView, Cell* cell );
 
   /**
    * \ingroup Layout
@@ -328,15 +348,6 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintBackground( QPainter& painter, const QRectF &cellRect,
-                        bool selected );
-
-  /**
-   * \ingroup Painting
-   * helper function for paintCell() function
-   * @see paintCell()
-   * @internal
-   */
   void paintObscuredCells( const QRectF& rect, QPainter& painter,
                            View* view, const QRectF &cellRect,
                            const QPoint &cellRef,
@@ -349,6 +360,15 @@ private:
    * @internal
    */
   void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect, Cell* cell );
+
+    /**
+     * Tells this view that the Cell at \p col , \p row obscures this one.
+     * If this view is destructed, the SheetView deletes the obscuring CellView.
+     * If the obscuring CellView is destructed, the SheetView deletes this view.
+     * \note obscuring is not the same as merging
+     * \internal
+     */
+    void obscure( int col, int row );
 
     class Private;
     QSharedDataPointer<Private> d;

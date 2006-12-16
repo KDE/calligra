@@ -515,44 +515,13 @@ public:
      */
     bool calc(bool delay = true);
 
-    /**
-     * Causes the format to be recalculated when the cell is drawn next time.
-     * This flag is for example set if the width of the column changes or if
-     * some cell specific format value like font or text change.
-     *
-     * Also sets the flag for the obscured cells.
-     */
-    void setLayoutDirtyFlag( bool format = false );
-
     //
     //END
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN Merging/obscuring
+    //BEGIN Merging
     //
-
-    /**
-     * Tells this cell that the Cell @p cell obscures this one.
-     * If this cell has to be redrawn, then the obscuring cell is redrawn instead.
-     *
-     * @param cell the obscuring cell
-     * @param isForcing whether this is a forced obscuring (merged cells) or
-     *                  just a temporary obscure (text overlap).
-     */
-    void obscure( Cell *cell, bool isForcing = false);
-
-    /**
-     * Tells this cell that it is no longer obscured.
-     *
-     * @param cell the cell that is no longer obscuring this one.
-     */
-    void unobscure(Cell* cell);
-
-    /**
-     * @return true if this cell is obscured by another.
-     */
-    bool isObscured() const;
 
     /**
      * If this cell is part of a merged cell, then the marker may
@@ -563,22 +532,9 @@ public:
     bool isPartOfMerged() const;
 
     /**
-     * Return the cell that is obscuring this one (merged cells only).
-     * If no obscuring, return the cell itself.
-     *
-     * @return the cell that decides the format for the cell in question.
+     * \return the merging cell (might be null)
      */
-    Cell *ultimateObscuringCell() const;
-
-    /**
-     * @return the obscuring cell list (might be empty)
-     */
-    QList<Cell*> obscuringCells() const;
-
-    /**
-     * Clears the list obscured cells.
-     */
-    void clearObscuringCells();
+    Cell* masterCell() const;
 
     /**
      * Merge a number of cells, i.e. force the cell to occupy other
@@ -610,33 +566,8 @@ public:
      */
     int mergedYCells() const;
 
-    /**
-     * @return the amount of obscured cells in the horizontal direction
-     */
-    int extraXCells() const;
-
-    /**
-     * @return the amount of obscured cells in the vertical direction
-     */
-    int extraYCells() const;
-
-    /**
-     * \return the width including any obscured cells
-     */
-    double extraWidth() const;
-
-    /**
-     * \return the height including any obscured cells
-     */
-    double extraHeight() const;
-
-    /**
-     * Releases all obscured cells except the explicitly merged ones.
-     */
-    void freeAllObscuredCells();
-
     //
-    //END Merging/obscuring
+    //END Merging
     //
     //////////////////////////////////////////////////////////////////////////
     //
@@ -771,13 +702,6 @@ public:
     enum StatusFlag
     {
       /**
-       * Flag_LayoutDirty
-       * Flag showing whether the current layout is OK.
-       * If you change for example the fonts point size, set this flag. When the
-       * cell must draw itself on the screen it will first recalculate its layout.
-       */
-      Flag_LayoutDirty           = 0x0001,
-      /**
        * CalcDirty
        * Shows whether recalculation is necessary.
        * If this cell must be recalculated for some reason, for example the user
@@ -843,19 +767,6 @@ public:
        * Set during painting
        */
       Flag_PaintingCell          = 0x0400,
-      /**
-       * TextFormatDirty
-       * Indicates, that the format of the cell content has changed and needs
-       * an update, e.g. a cell content is set to the percentage format.
-       */
-      Flag_TextFormatDirty       = 0x0800,
-      /**
-       * PaintingDirty
-       * Marks cells, that need repainting.
-       * If the Flag_LayoutDirty is not set, the cached layout information is
-       * used to paint the cell.
-       */
-      Flag_PaintingDirty         = 0x1000
     };
     Q_DECLARE_FLAGS(StatusFlags, StatusFlag)
 
@@ -974,6 +885,21 @@ private:
      * @return the OASIS style's name
      */
     QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles, int column, int row );
+
+    /**
+     * Tells this cell, that it is merged into the Cell \p masterCell .
+     * If this cell has to be redrawn, then \p masterCell is redrawn instead.
+     *
+     * \param masterCell the merging cell
+     */
+    void merge( Cell* masterCell );
+
+    /**
+     * Tells this cell, that it no longer merged into the Cell \p masterCell .
+     *
+     * \param masterCell the formerly merging cell
+     */
+    void unmerge( Cell* masterCell );
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Cell::StatusFlags)

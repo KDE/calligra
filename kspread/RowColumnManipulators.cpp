@@ -286,7 +286,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
         while ( cell )
         {
           int col = cell->column();
-          if ( !cell->isEmpty() && !cell->isObscured())
+          if ( !cell->isEmpty() && !cell->isPartOfMerged())
           {
             if (widths.contains(col) && widths[col] != -1.0)
             {
@@ -326,7 +326,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
         while ( cell )
         {
           int row = cell->row();
-          if ( !cell->isEmpty() && !cell->isObscured())
+          if ( !cell->isEmpty() && !cell->isPartOfMerged())
           {
             if (heights.contains(row) && heights[row] != -1.0)
             {
@@ -393,7 +393,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 ColumnFormat* format = m_sheet->columnFormat(col);
                 m_oldWidths[col] = format->dblWidth();
               }
-              if (!cell->isDefault() && !cell->isEmpty() && !cell->isObscured())
+              if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {
                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
@@ -407,7 +407,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->dblHeight();
               }
-              if (!cell->isEmpty() && !cell->isObscured())
+              if (!cell->isEmpty() && !cell->isPartOfMerged())
               {
                 m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);
@@ -433,7 +433,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 ColumnFormat* format = m_sheet->columnFormat(col);
                 m_oldWidths[col] = format->dblWidth();
               }
-              if (!cell->isDefault() && !cell->isEmpty() && !cell->isObscured())
+              if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {
                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
@@ -447,7 +447,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->dblHeight();
               }
-              if (!cell->isDefault() && !cell->isEmpty() && !cell->isObscured())
+              if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {
                 m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);
@@ -473,7 +473,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 ColumnFormat* format = m_sheet->columnFormat(col);
                 m_oldWidths[col] = format->dblWidth();
               }
-              if (!cell->isDefault() && !cell->isEmpty() && !cell->isObscured())
+              if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {
                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
                                         m_newWidths[col] );
@@ -487,7 +487,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                 RowFormat* format = m_sheet->rowFormat(row);
                 m_oldHeights[row] = format->dblHeight();
               }
-              if (!cell->isDefault() && !cell->isEmpty() && !cell->isObscured())
+              if (!cell->isDefault() && !cell->isEmpty() && !cell->isPartOfMerged())
               {
                 m_newHeights[row] = qMax(adjustRowHelper(cell),
                                          m_newHeights[row]);

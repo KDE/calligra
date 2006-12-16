@@ -170,7 +170,6 @@ bool AbstractDFManipulator::process (Element* element)
       {
         Style style = m_reverse ? formats[colidx][rowidx] : newFormat (element, col, row);
         cell->setStyle( style );
-        cell->setLayoutDirtyFlag();
       }
     }
   }

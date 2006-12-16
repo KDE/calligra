@@ -81,6 +81,13 @@ public:
     void paintCells( View* view, QPainter& painter, const QRectF& paintRect, const QPointF& topLeft );
 
 private:
+    /**
+     * Helper method for invalidateRegion().
+     * Invalidates all cached CellViews in \p range .
+     * \internal
+     */
+    void invalidateRange( const QRect& range );
+
     class Private;
     Private * const d;
 };

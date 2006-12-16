@@ -70,40 +70,27 @@ using namespace KSpread;
 class Cell::Extra
 {
 public:
-  Extra() {}
+    Extra() {}
 
-  // Not empty when the cell holds a link
-  QString link;
+    // Not empty when the cell holds a link
+    QString link;
 
-  // Number of cells explicitly merged by the user in X and Y directions.
-  int mergedXCells;
-  int mergedYCells;
+    // Number of cells explicitly merged by the user in X and Y directions.
+    int mergedXCells : 15; // KS_colMax
+    int mergedYCells : 15; // KS_rowMax
 
-  // TODO Stefan: View related
-  // Number of additional cells.
-  int extraXCells;
-  int extraYCells;
+    // If this cell merges other cells, then we have the cells width and
+    // height stored here.
+    double mergedWidth;
+    double mergedHeight;
 
-  // TODO Stefan: View related
-  // If this cell overlaps other cells, then we have the cells width and
-  // height stored here.  These values do not mean anything unless
-  // extraXCells and/or extraYCells are different from 0.
-  double extraWidth;
-  double extraHeight;
-
-  // A list of cells that obscure this one.
-  // If this list is not empty, then this cell is obscured by another
-  // enlarged object. This means that we have to call this object in order
-  // of painting it for example instead of painting 'this'.
-  //
-  // FIXME (comment): If the list consists of more than one obscuring
-  //                  element, then is there an order between them that
-  //                  is important?
-  QList<Cell*> obscuringCells;
+    // If this cell is part of a merged cell, this points to the master cell,
+    // that does the merging.
+    Cell* masterCell;
 
 private:
-  // Don't allow implicit copy.
-  Extra& operator=( const Extra& );
+    // Don't allow implicit copy.
+    Extra& operator=( const Extra& );
 };
 
 
@@ -181,22 +168,20 @@ public:
   Cell  *nextCell;
   Cell  *previousCell;
 
-  bool        hasExtra() const { return (cellExtra != 0); };
-  Extra      *extra()
-  {
-    if ( !cellExtra ) {
-      cellExtra = new Extra;
-      cellExtra->mergedXCells = 0;
-      cellExtra->mergedYCells = 0;
-      cellExtra->extraXCells  = 0;
-      cellExtra->extraYCells  = 0;
-      cellExtra->extraWidth   = 0.0;
-      cellExtra->extraHeight  = 0.0;
-//      cellExtra->highlight    = QColor(0,0,0);
+    bool hasExtra() const { return (cellExtra != 0); };
+    Extra* extra()
+    {
+        if ( !cellExtra )
+        {
+            cellExtra = new Extra;
+            cellExtra->mergedXCells = 0;
+            cellExtra->mergedYCells = 0;
+            cellExtra->mergedWidth  = 0.0;
+            cellExtra->mergedHeight = 0.0;
+            cellExtra->masterCell   = 0;
+        }
+        return cellExtra;
     }
-
-    return cellExtra;
-  }
 
     Sheet* sheet;
     StatusFlags flags;

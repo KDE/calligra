@@ -222,6 +222,7 @@ void StyleStorage::insert(const Region& region, const Style& style)
             insert((*it)->rect(), subStyle);
         }
     }
+    d->sheet->setRegionPaintDirty( region );
 }
 
 QList< QPair<QRectF,SharedSubStyle> > StyleStorage::insertRows(int position, int number)

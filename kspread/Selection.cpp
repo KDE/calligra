@@ -138,9 +138,9 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
   // for the case of a merged cell
   QPoint topLeft(point);
   Cell* cell = d->view->activeSheet()->cellAt(point);
-  if (cell->isObscured() && cell->isPartOfMerged())
+  if (cell->isPartOfMerged())
   {
-    cell = cell->obscuringCells().first();
+    cell = cell->masterCell();
     topLeft = QPoint(cell->column(), cell->row());
   }
 
@@ -213,18 +213,18 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
   // for the case of a merged cell
   QPoint topLeft(range.topLeft());
   Cell* cell = d->view->activeSheet()->cellAt(topLeft);
-  if (cell->isObscured() && cell->isPartOfMerged())
+  if (cell->isPartOfMerged())
   {
-    cell = cell->obscuringCells().first();
+    cell = cell->masterCell();
     topLeft = QPoint(cell->column(), cell->row());
   }
 
   // for the case of a merged cell
   QPoint bottomRight(range.bottomRight());
   cell = d->view->activeSheet()->cellAt(bottomRight);
-  if (cell->isObscured() && cell->isPartOfMerged())
+  if (cell->isPartOfMerged())
   {
-    cell = cell->obscuringCells().first();
+    cell = cell->masterCell();
     bottomRight = QPoint(cell->column(), cell->row());
   }
 
@@ -308,18 +308,18 @@ void Selection::initialize(const Region& region, Sheet* sheet)
   // for the case of a merged cell
   QPoint topLeft(cells().last()->rect().topLeft());
   Cell* cell = d->view->activeSheet()->cellAt(topLeft);
-  if (cell->isObscured() && cell->isPartOfMerged())
+  if (cell->isPartOfMerged())
   {
-    cell = cell->obscuringCells().first();
+    cell = cell->masterCell();
     topLeft = QPoint(cell->column(), cell->row());
   }
 
   // for the case of a merged cell
   QPoint bottomRight(cells().last()->rect().bottomRight());
   cell = d->view->activeSheet()->cellAt(bottomRight);
-  if (cell->isObscured() && cell->isPartOfMerged())
+  if (cell->isPartOfMerged())
   {
-    cell = cell->obscuringCells().first();
+    cell = cell->masterCell();
     bottomRight = QPoint(cell->column(), cell->row());
   }
 
@@ -378,9 +378,9 @@ void Selection::update(const QPoint& point)
   // for the case of a merged cell
   QPoint topLeft(point);
   Cell* cell = d->view->activeSheet()->cellAt(point);
-  if (cell->isObscured() && cell->isPartOfMerged())
+  if (cell->isPartOfMerged())
   {
-    cell = cell->obscuringCells().first();
+    cell = cell->masterCell();
     topLeft = QPoint(cell->column(), cell->row());
   }
 
@@ -512,9 +512,9 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
   // for the case of a merged cell
   QPoint topLeft(point);
   Cell* cell = d->view->activeSheet()->cellAt(point);
-  if (cell->isObscured() && cell->isPartOfMerged())
+  if (cell->isPartOfMerged())
   {
-    cell = cell->obscuringCells().first();
+    cell = cell->masterCell();
     topLeft = QPoint(cell->column(), cell->row());
   }
 
@@ -572,18 +572,18 @@ void Selection::extend(const QRect& range, Sheet* sheet)
   // for the case of a merged cell
   QPoint topLeft(range.topLeft());
   Cell* cell = d->view->activeSheet()->cellAt(topLeft);
-  if (cell->isObscured() && cell->isPartOfMerged())
+  if (cell->isPartOfMerged())
   {
-    cell = cell->obscuringCells().first();
+    cell = cell->masterCell();
     topLeft = QPoint(cell->column(), cell->row());
   }
 
   // for the case of a merged cell
   QPoint bottomRight(range.bottomRight());
   cell = d->view->activeSheet()->cellAt(bottomRight);
-  if (cell->isObscured() && cell->isPartOfMerged())
+  if (cell->isPartOfMerged())
   {
-    cell = cell->obscuringCells().first();
+    cell = cell->masterCell();
     bottomRight = QPoint(cell->column(), cell->row());
   }
 
@@ -866,7 +866,7 @@ QRect Selection::extendToMergedAreas(QRect area) const
   {
     return area;
   }
-  else if ( !(cell->isObscured() && cell->isPartOfMerged()) &&
+  else if ( !(cell->isPartOfMerged()) &&
               (cell->mergedXCells() + 1) >= area.width() &&
               (cell->mergedYCells() + 1) >= area.height())
   {
@@ -893,9 +893,9 @@ QRect Selection::extendToMergedAreas(QRect area) const
         right=qMax(right,cell->mergedXCells()+x);
         bottom=qMax(bottom,cell->mergedYCells()+y);
       }
-      else if ( cell->isObscured() && cell->isPartOfMerged() )
+      else if ( cell->isPartOfMerged() )
       {
-        cell = cell->obscuringCells().first();
+        cell = cell->masterCell();
         left=qMin(left,cell->column());
         top=qMin(top,cell->row());
         bottom=qMax(bottom,cell->row() + cell->mergedYCells());

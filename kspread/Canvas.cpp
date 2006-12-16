@@ -442,9 +442,9 @@ void Canvas::validateSelection()
             double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
             double ypos = sheet->dblRowPos( markerRow() ) - yOffset();
             // Special treatment for obscured cells.
-            if ( cell->isObscured() && cell->isPartOfMerged() )
+            if ( cell->isPartOfMerged() )
             {
-                cell = cell->obscuringCells().first();
+                cell = cell->masterCell();
                 int moveX = cell->column();
                 int moveY = cell->row();
 
@@ -1324,7 +1324,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   Cell *cell = sheet->cellAt( col, row );
   if (cell->isPartOfMerged())
   {
-    cell = cell->obscuringCells().first();
+    cell = cell->masterCell();
     col = cell->column();
     row = cell->row();
   }
@@ -1838,7 +1838,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
   */
   if (cell->isPartOfMerged())
   {
-    cell = cell->obscuringCells().first();
+    cell = cell->masterCell();
     cellCorner = QPoint(cell->column(), cell->row());
   }
 
@@ -4124,9 +4124,9 @@ void Canvas::showToolTip( const QPoint& p )
     double v = cell->dblHeight( row );
 
     // Special treatment for obscured cells.
-    if ( cell->isObscured() && cell->isPartOfMerged() )
+    if ( cell->isPartOfMerged() )
     {
-      cell = cell->obscuringCells().first();
+      cell = cell->masterCell();
       const int moveX = cell->column();
       const int moveY = cell->row();
 

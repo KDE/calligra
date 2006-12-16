@@ -1878,7 +1878,7 @@ void UndoChangeAreaTextCell::createList( QMap<QPoint,QString> &map, Sheet* sheet
           continue;
         while ( cell && cell->row() <= bottom )
         {
-          if ( !cell->isObscured() )
+          if ( !cell->isPartOfMerged() )
           {
             //textOfCell tmpText;
             //tmpText.col  = x;

@@ -396,7 +396,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   obj = m_sheet->cellAt( right, top );
   if ( obj->isPartOfMerged() )
   {
-    obj = obj->obscuringCells().first();
+    obj = obj->masterCell();
 
     const Style styleMove1 = m_sheet->style( obj->column(), top );
     borders[BorderType_Vertical].style = styleMove1.leftBorderPen().style();

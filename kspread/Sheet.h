@@ -914,11 +914,6 @@ public:
     void adjustSizeMaxY ( double _y );
 
     /**
-     * Sets the Cell::Flag_LayoutDirty in all cells.
-     */
-    void setLayoutDirtyFlag();
-
-    /**
      * Recalculates the current sheet.
      *
      * Recalc will do nothing, if automatic calculation is disabled (via Sheet::setAutoCalc)

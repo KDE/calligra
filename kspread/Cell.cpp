@@ -479,71 +479,55 @@ void Cell::defaultStyle()
 
 void Cell::mergeCells( int _col, int _row, int _x, int _y )
 {
-  // Start by unobscuring the cells that we obscure right now
-  int  extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
-  int  extraYCells = d->hasExtra() ? d->extra()->extraYCells : 0;
-  for ( int x = _col; x <= _col + extraXCells; ++x ) {
-    for ( int y = _row; y <= _row + extraYCells; ++y ) {
-      if ( x != _col || y != _row )
-        sheet()->cellAt( x, y )->unobscure(this);
-    }
-  }
-
-  // If no merging, then remove all traces, and return.
-  if ( _x == 0 && _y == 0 ) {
-    clearFlag( Flag_Merged );
-    if (d->hasExtra()) {
-      d->extra()->extraXCells  = 0;
-      d->extra()->extraYCells  = 0;
-      d->extra()->extraWidth   = 0.0;
-      d->extra()->extraHeight  = 0.0;
-      d->extra()->mergedXCells = 0;
-      d->extra()->mergedYCells = 0;
+    // Start by unmerging the cells that we merge right now
+    const int right = _col + d->extra()->mergedXCells;
+    const int bottom = _row + d->extra()->mergedYCells;
+    for ( int x = _col; x <= right; ++x ) {
+        for ( int y = _row; y <= bottom; ++y ) {
+            if ( x != _col || y != _row )
+                sheet()->cellAt( x, y )->unmerge( this );
+        }
     }
 
-    // Refresh the layout
-    setFlag( Flag_LayoutDirty );
-    return;
-  }
-
-  // At this point, we know that we will merge some cells.
-  setFlag(Flag_Merged);
-  d->extra()->extraXCells  = _x;
-  d->extra()->extraYCells  = _y;
-  d->extra()->mergedXCells = _x;
-  d->extra()->mergedYCells = _y;
-
-  // Obscure the cells
-  for ( int x = _col; x <= _col + _x; ++x ) {
-    for ( int y = _row; y <= _row + _y; ++y ) {
-      if ( x != _col || y != _row )
-  sheet()->nonDefaultCell( x, y )->obscure( this, true );
+    // If no merging, then remove all traces, and return.
+    if ( _x == 0 && _y == 0 ) {
+        clearFlag( Flag_Merged );
+        if (d->hasExtra()) {
+            d->extra()->mergedWidth  = 0.0;
+            d->extra()->mergedHeight = 0.0;
+            d->extra()->mergedXCells = 0;
+            d->extra()->mergedYCells = 0;
+        }
+        return;
     }
-  }
 
-  // Refresh the layout
-  setFlag( Flag_LayoutDirty );
+    // At this point, we know that we will merge some cells.
+    setFlag(Flag_Merged);
+    d->extra()->mergedXCells = _x;
+    d->extra()->mergedYCells = _y;
+
+    // Merge the cells
+    for ( int x = _col; x <= _col + _x; ++x )
+        for ( int y = _row; y <= _row + _y; ++y )
+            if ( x != _col || y != _row )
+                sheet()->nonDefaultCell( x, y )->merge( this );
+
+    // calculate mergedDimension
+    d->extra()->mergedWidth = 0.0;
+    d->extra()->mergedHeight = 0.0;
+    for ( int x = _col; x <= _col + _x; ++x )
+        d->extra()->mergedWidth += sheet()->columnFormat( x )->dblWidth();
+    for ( int y = _row; y <= _row + _y; ++y )
+        d->extra()->mergedHeight += sheet()->rowFormat( y )->dblHeight();
 }
 
 void Cell::move( int col, int row )
 {
     // For the old position (the new is handled in valueChanged() at the end):
-    setFlag( Flag_TextFormatDirty );
-    setLayoutDirtyFlag( false );
-    sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Value ) );
+    sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Appearance | CellDamage::Value ) );
 
-    //int ex = extraXCells();
-    //int ey = d->extra()->extraYCells();
-
-    if (d->hasExtra())
-    {
-      d->extra()->obscuringCells.clear();
-      d->extra()->mergedXCells = 0;
-      d->extra()->mergedYCells = 0;
-    }
-
-    // Unobscure the objects we obscure right now
-    freeAllObscuredCells();
+    // Unmerge cells
+    mergeCells( d->column, d->row, 0, 0 );
 
     // move us
     d->column = col;
@@ -551,22 +535,6 @@ void Cell::move( int col, int row )
 
     // Cell value has been changed (because we're another cell now).
     valueChanged ();
-}
-
-void Cell::setLayoutDirtyFlag( bool format )
-{
-    setFlag( Flag_LayoutDirty );
-    if ( format )
-        setFlag( Flag_TextFormatDirty );
-
-    if (!d->hasExtra())
-      return;
-
-    QList<Cell*>::iterator it  = d->extra()->obscuringCells.begin();
-    QList<Cell*>::iterator end = d->extra()->obscuringCells.end();
-    for ( ; it != end; ++it ) {
-      (*it)->setLayoutDirtyFlag( format );
-    }
 }
 
 bool Cell::needsPrinting() const
@@ -617,128 +585,43 @@ bool Cell::isEmpty() const
 }
 
 
-// Return true if this cell is obscured by some other cell.
-
-bool Cell::isObscured() const
-{
-  if (!d->hasExtra())
-    return false;
-
-  return !( d->extra()->obscuringCells.isEmpty() );
-}
-
-
 // Return true if this cell is part of a merged cell, but not the
 // master cell.
 
 bool Cell::isPartOfMerged() const
 {
-  if (!d->hasExtra())
-    return false;
+    if ( isDefault() )
+        return false;
+    if ( !d->hasExtra() )
+        return false;
+    if ( !d->extra()->masterCell )
+        return false;
+    // just to be sure...
+    Q_ASSERT( column() <= d->extra()->masterCell->column() + d->extra()->masterCell->mergedXCells() );
+    Q_ASSERT( row() <= d->extra()->masterCell->row() + d->extra()->masterCell->mergedYCells() );
+    return true;
+}
 
-  QList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
-  QList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
-  for ( ; it != end; ++it ) {
-    Cell *cell = *it;
+Cell* Cell::masterCell() const
+{
+    return d->hasExtra() ? d->extra()->masterCell : 0;
+}
 
-    if (cell->doesMergeCells()) {
-      // The cell might merge extra cells, and then overlap even
-      // beyond that so just knowing that the obscuring cell merges
-      // extra isn't enough.  We have to know that this cell is one of
-      // the ones it is forcing over.
-      if (column() <= cell->column() + cell->d->extra()->mergedXCells
-    && row() <= cell->row() + cell->mergedYCells() )
-  return true;
+void Cell::merge( Cell* masterCell )
+{
+    Q_ASSERT( masterCell != this );
+    d->extra()->masterCell = masterCell;
+    sheet()->setRegionPaintDirty( Region(cellPosition()) );
+}
+
+void Cell::unmerge( Cell* masterCell )
+{
+    if ( d->hasExtra() )
+    {
+        Q_ASSERT( d->extra()->masterCell == masterCell );
+        d->extra()->masterCell = 0;
+        sheet()->setRegionPaintDirty( Region(cellPosition()) );
     }
-  }
-
-  return false;
-}
-
-
-// Return the cell that obscures this one.  If no cell is obscuring,
-// then return this.  This method is slightly complicated because we
-// can have several layers of obscuring.
-//
-// Update: it seems that if we do an actual merge, then the obscuring
-// cell is prepended and if just expanding, then it is appended.  This
-// means that we should be able to just look at the first one.
-
-Cell *Cell::ultimateObscuringCell() const
-{
-  if (!d->hasExtra())
-    return (Cell *) this;
-
-  else if (d->extra()->obscuringCells.isEmpty())
-    return (Cell *) this;
-
-  else
-    return d->extra()->obscuringCells.first();
-
-#if 0
-  QList<Cell*>::const_iterator it = d->extra()->obscuringCells.begin();
-  QList<Cell*>::const_iterator end = d->extra()->obscuringCells.end();
-  for ( ; it != end; ++it ) {
-    Cell *cell = *it;
-
-    if (cell->doesMergeCells()) {
-      // The cell might merge extra cells, and then overlap even
-      // beyond that so just knowing that the obscuring cell merges
-      // extra isn't enough.  We have to know that this cell is one of
-      // the ones it is forcing over.
-      if (column() <= cell->column() + cell->d->extra()->mergedXCells
-    && row() <= cell->row() + cell->mergedYCells() )
-  return true;
-    }
-  }
-
-  return false;
-#endif
-}
-
-
-QList<Cell*> Cell::obscuringCells() const
-{
-  if (!d->hasExtra())
-  {
-    QList<Cell*> empty;
-    return empty;
-  }
-  return d->extra()->obscuringCells;
-}
-
-void Cell::clearObscuringCells()
-{
-  if (!d->hasExtra())
-    return;
-  d->extra()->obscuringCells.clear();
-}
-
-void Cell::obscure( Cell *cell, bool isForcing )
-{
-  if (d->hasExtra())
-  {
-    d->extra()->obscuringCells.removeAll( cell ); // removes *all* occurrences
-    cell->clearObscuringCells();
-  }
-  if ( isForcing )
-  {
-    d->extra()->obscuringCells.prepend( cell );
-  }
-  else
-  {
-    d->extra()->obscuringCells.append( cell );
-  }
-  setFlag(Flag_LayoutDirty);
-  sheet()->setRegionPaintDirty(Region(cellPosition()));
-}
-
-void Cell::unobscure( Cell * cell )
-{
-  if (d->hasExtra())
-    d->extra()->obscuringCells.removeAll( cell );
-  setFlag( Flag_LayoutDirty );
-  sheet()->setRegionPaintDirty(Region(cellPosition()));
 }
 
 QString Cell::encodeFormula( bool _era, int _col, int _row ) const
@@ -966,52 +849,12 @@ QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
 }
 
 
-void Cell::freeAllObscuredCells()
-{
-    //
-    // Free all obscured cells.
-    //
-
-  if (!d->hasExtra())
-    return;
-
-  const int extraXCells = d->extra()->extraXCells;
-  const int extraYCells = d->extra()->extraYCells;
-  for ( int x = d->column + d->extra()->mergedXCells; x <= d->column + extraXCells; ++x ) {
-    for ( int y = d->row + d->extra()->mergedYCells; y <= d->row + extraYCells; ++y ) {
-      if ( x != d->column || y != d->row ) {
-        Cell *cell = sheet()->cellAt( x, y );
-        cell->unobscure(this);
-      }
-    }
-  }
-
-  d->extra()->extraXCells = d->extra()->mergedXCells;
-  d->extra()->extraYCells = d->extra()->mergedYCells;
-}
-
-
-
 void Cell::valueChanged ()
 {
-  // Those obscuring us need to redo their layout cause they can't obscure us
-  // now that we've got text, but their text has not changed.
-  setLayoutDirtyFlag( false );
-  setFlag( Flag_TextFormatDirty );
-  // Those we've obscured also need a relayout.
-  for (int x = d->column; x <= d->column + extraXCells(); x++)
-  {
-    for (int y = d->row; y <= d->row + extraYCells(); y++)
-    {
-      Cell* cell = sheet()->cellAt(x,y);
-      cell->setLayoutDirtyFlag();
-    }
-  }
-
   /* TODO - is this a good place for this? */
   updateChart( true );
 
-  sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Value ) );
+  sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Appearance | CellDamage::Value ) );
 }
 
 
@@ -1024,13 +867,6 @@ void Cell::setOutputText()
     d->strOutText.clear();
     return;
   }
-
-  // If nothing has changed, we don't need to remake the text layout.
-  if ( !testFlag(Flag_TextFormatDirty) )
-    return;
-
-  // We don't want to remake the layout unnecessarily.
-  clearFlag( Flag_TextFormatDirty );
 
   // Display a formula if warranted.  If not, display the value instead;
   // this is the most common case.
@@ -1164,7 +1000,7 @@ double Cell::dblWidth( int _col ) const
     if ( _col < 0 )
         _col = d->column;
     if ( testFlag(Flag_Merged) )
-        return d->extra()->extraWidth;
+        return d->extra()->mergedWidth;
     return sheet()->columnFormat( _col )->dblWidth();
 }
 
@@ -1178,7 +1014,7 @@ double Cell::dblHeight( int _row ) const
     if ( _row < 0 )
         _row = d->row;
     if ( testFlag(Flag_Merged) )
-        return d->extra()->extraHeight;
+        return d->extra()->mergedHeight;
     return sheet()->rowFormat( _row )->dblHeight();
 }
 
@@ -1226,7 +1062,6 @@ void Cell::incPrecision()
     else if ( tmpPreci < 10 )
         style.setPrecision( ++tmpPreci );
     setStyle( style );
-    setFlag(Flag_LayoutDirty);
 }
 
 void Cell::decPrecision()
@@ -1262,7 +1097,6 @@ void Cell::decPrecision()
     else if ( preciTmp > 0 )
         style.setPrecision( --preciTmp );
     setStyle( style );
-    setFlag( Flag_LayoutDirty );
 }
 
 //set numerical value
@@ -1380,26 +1214,6 @@ int Cell::mergedXCells() const
 int Cell::mergedYCells() const
 {
     return d->hasExtra() ? d->extra()->mergedYCells : 0;
-}
-
-int Cell::extraXCells() const
-{
-    return d->hasExtra() ? d->extra()->extraXCells : 0;
-}
-
-int Cell::extraYCells() const
-{
-    return d->hasExtra() ? d->extra()->extraYCells : 0;
-}
-
-double Cell::extraWidth() const
-{
-    return d->hasExtra() ? d->extra()->extraWidth : 0;
-}
-
-double Cell::extraHeight() const
-{
-    return d->hasExtra() ? d->extra()->extraHeight : 0;
 }
 
 
@@ -1576,10 +1390,10 @@ QDomElement Cell::save( QDomDocument& doc,
 
     if ( doesMergeCells() )
     {
-        if ( extraXCells() )
-            formatElement.setAttribute( "colspan", extraXCells() );
-        if ( extraYCells() )
-            formatElement.setAttribute( "rowspan", extraYCells() );
+        if ( mergedXCells() )
+            formatElement.setAttribute( "colspan", mergedXCells() );
+        if ( mergedYCells() )
+            formatElement.setAttribute( "rowspan", mergedYCells() );
     }
 
     Conditions conditions = this->conditions();
@@ -2396,7 +2210,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
                 return false;
             }
             if (i || d->hasExtra())
-              d->extra()->extraXCells = i;
+              d->extra()->mergedXCells = i;
             if ( i > 0 )
             {
               setFlag(Flag_Merged);
@@ -2414,7 +2228,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
                 return false;
             }
             if (i || d->hasExtra())
-              d->extra()->extraYCells = i;
+              d->extra()->mergedYCells = i;
             if ( i > 0 )
             {
               setFlag(Flag_Merged);
@@ -2424,7 +2238,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         if ( testFlag( Flag_Merged ) )
         {
             if (d->hasExtra())
-              mergeCells( d->column, d->row, d->extra()->extraXCells, d->extra()->extraYCells );
+              mergeCells( d->column, d->row, d->extra()->mergedXCells, d->extra()->mergedYCells );
         }
 
     }
@@ -2514,8 +2328,6 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         if ( result.hasAttribute( "outStr" ) )
         {
           d->strOutText = result.attribute( "outStr" );
-          if ( !d->strOutText.isEmpty() )
-            clearFlag( Flag_TextFormatDirty );
         }
 
         bool clear = true;
@@ -2602,8 +2414,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
   QString t = text.text();
   t = t.trimmed();
 
-  setFlag(Flag_LayoutDirty);
-  setFlag(Flag_TextFormatDirty);
+  sheet()->setRegionPaintDirty( Region( cellPosition() ) );
 
   // A formula like =A1+A2 ?
   if( (!t.isEmpty()) && (t[0] == '=') )
@@ -2789,8 +2600,6 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
   if ( text.hasAttribute( "outStr" ) ) // very new docs
   {
     d->strOutText = text.attribute( "outStr" );
-    if ( !d->strOutText.isEmpty() )
-      clearFlag( Flag_TextFormatDirty );
   }
 
   if ( !sheet()->isLoading() )
@@ -2896,7 +2705,7 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
             Q_ASSERT( 0 );
         }
 
-        setFlag(Flag_LayoutDirty);
+        sheet()->setRegionPaintDirty( Region( cellPosition() ) );
         clearAllErrors();
 
         return tmp_op;
@@ -2923,14 +2732,14 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
         }
 
         tmp_op = decodeFormula( tmp_op, d->column, d->row );
-        setFlag(Flag_LayoutDirty);
+        sheet()->setRegionPaintDirty( Region( cellPosition() ) );
         clearAllErrors();
 
         return tmp_op;
     }
 
     tmp = decodeFormula( new_text, d->column, d->row );
-    setFlag(Flag_LayoutDirty);
+    sheet()->setRegionPaintDirty( Region( cellPosition() ) );
     clearAllErrors();
 
     return tmp;
@@ -2941,8 +2750,6 @@ void Cell::sheetDies()
     // Avoid unobscuring the cells in the destructor.
     if (d->hasExtra())
     {
-      d->extra()->extraXCells = 0;
-      d->extra()->extraYCells = 0;
       d->extra()->mergedXCells = 0;
       d->extra()->mergedYCells = 0;
     }
@@ -2962,17 +2769,9 @@ Cell::~Cell()
         setValidity( Validity() );
     // FIXME Stefan: Clear conditions?
 
-    // Unobscure cells.
-    int extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
-    int extraYCells = d->hasExtra() ? d->extra()->extraYCells : 0;
-    for( int x = 0; x <= extraXCells; ++x )
-        for( int y = (x == 0) ? 1 : 0; // avoid looking at (+0,+0)
-             y <= extraYCells; ++y )
-    {
-        Cell* cell = sheet()->cellAt( d->column + x, d->row + y );
-        if ( cell )
-            cell->unobscure(this);
-    }
+    // Unmerge cells
+    if ( !isDefault() )
+        mergeCells( d->column, d->row, 0, 0 );
 
     d->value = Value::empty();
 
