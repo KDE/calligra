@@ -76,8 +76,8 @@ public:
     QString link;
 
     // Number of cells explicitly merged by the user in X and Y directions.
-    int mergedXCells : 15; // KS_colMax
-    int mergedYCells : 15; // KS_rowMax
+    int mergedXCells : 16; // KS_colMax
+    int mergedYCells : 16; // KS_rowMax
 
     // If this cell merges other cells, then we have the cells width and
     // height stored here.
@@ -126,8 +126,8 @@ public:
   // This cell's row and column. If either of them is 0, this is the
   // default cell and its row/column can not be determined.  Note that
   // in the isDefault() method, only column is tested.
-  int  row;
-  int  column;
+  int  row    : 16; // KS_rowMax
+  int  column : 16; // KS_colMax
 
   // Value of the cell, either typed by user or as result of formula
   Value value;

@@ -702,27 +702,19 @@ public:
     enum StatusFlag
     {
       /**
-       * CalcDirty
-       * Shows whether recalculation is necessary.
-       * If this cell must be recalculated for some reason, for example the user
-       * entered a new formula, then this flag is set. If isFormula() is false
-       * nothing will happen at all.
-       */
-      Flag_CalcDirty             = 0x0002,
-      /**
        * CalculatingCell
        * Tells whether this cell it currently under calculation.
        * If a cell thats 'progressFlag' is set is told to calculate we
        * have detected a circular reference and we must stop calulating.
        */
-      Flag_CalculatingCell       = 0x0004,
+      Flag_CalculatingCell       = 0x01,
       /**
        * UpdatingDeps
        * Tells whether we've already calculated the reverse dependancies for this
        * cell.  Similar to the Progress flag but it's for when we are calculating
        * in the reverse direction.
        */
-      Flag_UpdatingDeps          = 0x0008,
+      Flag_UpdatingDeps          = 0x02,
       /**
        * Merged
        * Tells whether the cell is merged with other cells.  Cells may
@@ -730,7 +722,7 @@ public:
        * do so by setting this flag. Merging the cell with 0 in both
        * directions, will disable this flag!
        */
-      Flag_Merged                = 0x0010,
+      Flag_Merged                = 0x04,
       /**
        * CellTooShortX
        * When it's True displays ** and/or the red triangle and when the
@@ -738,35 +730,30 @@ public:
        * it's true when text size is bigger that cell size
        * and when Align is center or left
        */
-      Flag_CellTooShortX         = 0x0020,
+      Flag_CellTooShortX         = 0x08,
       /**
        * CellTooShortY
        * When it's True when mouseover it, the tooltip displays the full value
        * it's true when text size is bigger that cell height
        */
-      Flag_CellTooShortY         = 0x0040,
+      Flag_CellTooShortY         = 0x10,
       /**
        * ParseError
        * True if the cell is calculated and there was an error during calculation
        * In that case the cell usually displays "#Parse!"
        */
-      Flag_ParseError            = 0x0080,
+      Flag_ParseError            = 0x20,
       /**
        * CircularCalculation
        * True if the cell is calculated and there was an error during calculation
        * In that case the cell usually displays "#Circle!"
        */
-      Flag_CircularCalculation   = 0x0100,
+      Flag_CircularCalculation   = 0x40,
       /**
        * DependencyError
        * \todo never set so far
        */
-      Flag_DependencyError       = 0x0200,
-      /**
-       * PaintingCell
-       * Set during painting
-       */
-      Flag_PaintingCell          = 0x0400,
+      Flag_DependencyError       = 0x80
     };
     Q_DECLARE_FLAGS(StatusFlags, StatusFlag)
 

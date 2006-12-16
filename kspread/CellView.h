@@ -348,17 +348,6 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintObscuredCells( const QRectF& rect, QPainter& painter,
-                           View* view, const QRectF &cellRect,
-                           const QPoint &cellRef,
-                           QLinkedList<QPoint> &mergedCellsPainted, Cell* cell );
-
-  /**
-   * \ingroup Painting
-   * helper function for paintCell() function
-   * @see paintCell()
-   * @internal
-   */
   void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect, Cell* cell );
 
     /**

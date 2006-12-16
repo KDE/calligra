@@ -105,8 +105,8 @@ public:
     // NOTE Stefan: d->extraXCells, d->extraYCells are used for the position
     //              of the obscuring cell OR for the amount of obscured cells.
     //              This depends on d->obscured.
-    int extraXCells : 15; // KS_colMax
-    int extraYCells : 15; // KS_rowMax
+    int extraXCells : 16; // KS_colMax
+    int extraYCells : 16; // KS_rowMax
     Sheet::LayoutDirection layoutDirection : 1;
 
     // static empty data to be shared
@@ -245,14 +245,6 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
     if ( d->obscured )
         return;
 
-    // If we are already painting this cell, then return immediately.
-    // This avoids infinite recursion.
-    if ( cell->testFlag( Cell::Flag_PaintingCell ) )
-        return;
-
-    // Indicate that we are painting this cell now.
-    cell->setFlag( Cell::Flag_PaintingCell );
-
     // The parameter cellref should be *this, unless this is the default cell.
     Q_ASSERT(cell->isDefault()
             || (((cellRef.x() == cell->column()) && (cellRef.y() == cell->row()))));
@@ -263,10 +255,8 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
     // be painted, we can skip the rest and return. (Note that we need
     // to calculate `left' first before we can do this.)
     const QRectF cellRect( coordinate, QSizeF( d->width, d->height ) );
-    if ( !cellRect.intersects( paintRect ) ) {
-        cell->clearFlag( Cell::Flag_PaintingCell );
+    if ( !cellRect.intersects( paintRect ) )
         return;
-    }
 
     // 1. Paint possible comment indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())
@@ -300,9 +290,6 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
     {
         paintText( painter, cellRect, cellRef, cell );
     }
-
-    // We are done with the painting, so remove the flag on the cell.
-    cell->clearFlag( Cell::Flag_PaintingCell );
 }
 
 void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
@@ -311,14 +298,6 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                                  QLinkedList<QPoint> &mergedCellsPainted, Cell* cell, SheetView* sheetView )
 {
     Sheet* const sheet = cell->sheet();
-
-    // If we are already painting this cell, then return immediately.
-    // This avoids infinite recursion.
-    if ( cell->testFlag( Cell::Flag_PaintingCell ) )
-        return;
-
-    // Indicate that we are painting this cell now.
-    cell->setFlag( Cell::Flag_PaintingCell );
 
     // The parameter cellCoordinate should be *this, unless this is the default cell.
     Q_ASSERT(cell->isDefault() || ((cellCoordinate.x() == cell->column()) && (cellCoordinate.y() == cell->row())));
@@ -392,10 +371,8 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     // be painted, we can skip the rest and return. (Note that we need
     // to calculate `left' first before we can do this.)
     const QRectF  cellRect( paintCoordinate.x(), paintCoordinate.y(), d->width, d->height );
-    if ( !cellRect.intersects( paintRegion ) ) {
-        cell->clearFlag( Cell::Flag_PaintingCell );
+    if ( !cellRect.intersects( paintRegion ) )
         return;
-    }
 
 #if 0
     // 1. Paint the default borders if we are on screen or if we are printing
@@ -427,9 +404,6 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     // 3. Paint diagonal lines and page borders.
     paintCellDiagonalLines( painter, cellRect, cell );
     paintPageBorders( painter, cellRect, cellCoordinate, paintBorder, cell );
-
-    // We are done with the painting, so remove the flag on the cell.
-    cell->clearFlag( Cell::Flag_PaintingCell );
 }
 
 

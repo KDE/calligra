@@ -932,9 +932,6 @@ void Cell::clearFormula()
 
 bool Cell::calc(bool delay)
 {
-  if ( !testFlag( Flag_CalcDirty ) )
-    return true;
-
   if ( !isFormula() )
     return true;
 
@@ -964,9 +961,6 @@ bool Cell::calc(bool delay)
   setValue (result);
   if (result.isNumber())
     checkNumberFormat(); // auto-chooses number or scientific
-
-  // At last we can reset the calc dirty flag.
-  clearFlag(Flag_CalcDirty);
 
   return true;
 }
@@ -2398,9 +2392,6 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         {
           setValue( Value(t) );
         }
-
-        // if ( clear )
-        //   clearFlag( Flag_CalcDirty );
       }
     }
 
