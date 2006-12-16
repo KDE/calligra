@@ -1,5 +1,7 @@
 include_directories( ${KOFFICECORE_INCLUDES} ${FLAKE_INCLUDES} )
 
+add_subdirectory(pics)
+
 set(pathshapes_PART_SRCS
     ellipse/KoEllipseShape.cpp
     ellipse/KoEllipseShapeFactory.cpp

@@ -32,7 +32,7 @@ KoArrowShapeFactory::KoArrowShapeFactory(QObject *parent)
         KoShapeTemplate t;
         t.name = i18n("Right Arrow");
         t.toolTip = i18n("A right arrow");
-        t.icon = ""; //TODO
+        t.icon = "arrow-right";
         KoProperties *props = new KoProperties();
         props->setProperty("type", KoArrowShape::ArrowRight);
         t.properties = props;
@@ -40,7 +40,7 @@ KoArrowShapeFactory::KoArrowShapeFactory(QObject *parent)
 
         t.name = i18n("Left Arrow");
         t.toolTip = i18n("A left arrow");
-        t.icon = ""; //TODO
+        t.icon = "arrow-left";
         props = new KoProperties();
         props->setProperty("type", KoArrowShape::ArrowLeft);
         t.properties = props;
@@ -48,7 +48,7 @@ KoArrowShapeFactory::KoArrowShapeFactory(QObject *parent)
 
         t.name = i18n("Top Arrow");
         t.toolTip = i18n("A top arrow");
-        t.icon = ""; //TODO
+        t.icon = "arrow-up";
         props = new KoProperties();
         props->setProperty("type", KoArrowShape::ArrowTop);
         t.properties = props;
@@ -56,7 +56,7 @@ KoArrowShapeFactory::KoArrowShapeFactory(QObject *parent)
 
         t.name = i18n("Bottom Arrow");
         t.toolTip = i18n("A bottom arrow");
-        t.icon = ""; //TODO
+        t.icon = "arrow-down";
         props = new KoProperties();
         props->setProperty("type", KoArrowShape::ArrowBottom);
         t.properties = props;
@@ -64,7 +64,7 @@ KoArrowShapeFactory::KoArrowShapeFactory(QObject *parent)
 
         t.name = i18n("Left Down Arrow");
         t.toolTip = i18n("A left down arrow");
-        t.icon = ""; //TODO
+        t.icon = "arrow-left-down";
         props = new KoProperties();
         props->setProperty("type", KoArrowShape::ArrowLeftDown);
         t.properties = props;
@@ -72,7 +72,7 @@ KoArrowShapeFactory::KoArrowShapeFactory(QObject *parent)
 
         t.name = i18n("Left Top Arrow");
         t.toolTip = i18n("A left top arrow");
-        t.icon = ""; //TODO
+        t.icon = "arrow-left-up";
         props = new KoProperties();
         props->setProperty("type", KoArrowShape::ArrowLeftTop);
         t.properties = props;
@@ -80,21 +80,19 @@ KoArrowShapeFactory::KoArrowShapeFactory(QObject *parent)
 
         t.name = i18n("Right Down Arrow");
         t.toolTip = i18n("A right down arrow");
-        t.icon = ""; //TODO
+        t.icon = "arrow-right-down";
         props = new KoProperties();
         props->setProperty("type", KoArrowShape::ArrowRightDown);
         t.properties = props;
         addTemplate(t);
 
-        t.name = i18n("Left Top Arrow");
-        t.toolTip = i18n("A left top arrow");
-        t.icon = ""; //TODO
+        t.name = i18n("Right Top Arrow");
+        t.toolTip = i18n("A right top arrow");
+        t.icon = "arrow-right-up";
         props = new KoProperties();
         props->setProperty("type", KoArrowShape::ArrowRightTop);
         t.properties = props;
         addTemplate(t);
-
-
 }
 
 KoShape *KoArrowShapeFactory::createDefaultShape()

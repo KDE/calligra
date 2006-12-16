@@ -28,8 +28,8 @@
 KoEllipseShapeFactory::KoEllipseShapeFactory( QObject *parent )
 : KoShapeFactory( parent, KoEllipseShapeId, i18n( "A ellipse shape" ) )
 {
-    setToolTip( i18n( "A ellipse" ) );
-    setIcon("ellips");
+    setToolTip( i18n( "An ellipse" ) );
+    setIcon("ellipse-shape");
 }
 
 KoShape * KoEllipseShapeFactory::createDefaultShape() 
