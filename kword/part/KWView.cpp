@@ -916,6 +916,7 @@ void KWView::setZoom( int zoom ) {
     // Also set the zoom in KoView (for embedded views)
     //kDebug(32003) << "KWView::setZoom " << zoom << " setting koview zoom to " << m_zoomHandler.zoomedResolutionY() << endl;
     kwcanvas()->updateSize();
+    m_gui->updateRulers();
 }
 
 void KWView::viewZoom( KoZoomMode::Mode mode, int zoom )

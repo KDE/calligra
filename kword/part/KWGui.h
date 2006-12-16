@@ -28,6 +28,7 @@ class KWView;
 class KWCanvas;
 class KoCanvasController;
 class KoToolDocker;
+class KoRuler;
 
 /**
  * This class is a widget that is the sole widget under a KWView instance
@@ -65,14 +66,23 @@ public:
     /// return if the there currently is a vertical scrolBar visible
     bool verticalScrollBarVisible();
 
+    void updateRulers() const;
+
     /**
      * Set the tool option dock widget.
      */
     void setToolOptionDocker(KoToolDocker *docker);
 
+private slots:
+    void pageSetupChanged();
+    void updateMousePos(const QPoint &point);
+    void shapeSelectionChanged();
+
 private:
     KWView *m_view;
     KWCanvas *m_canvas;
+    KoRuler *m_horizontalRuler;
+    KoRuler *m_verticalRuler;
 
     KoCanvasController *m_canvasController;
 };
