@@ -145,8 +145,6 @@ void KivioView::initActions()
 {
     setXMLFile("kivio.rc");
 
-    m_viewZoomIn = KStdAction::zoomIn(this, SLOT(viewZoomIn()), actionCollection(), "view_zoom_in");
-    m_viewZoomOut = KStdAction::zoomOut(this, SLOT(viewZoomOut()), actionCollection(), "view_zoom_out");
     m_viewZoomAction = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE,
                                         i18n("Zoom"), KIcon("viewmag"), KShortcut(),
                                         actionCollection(), "view_zoom");
@@ -192,7 +190,7 @@ void KivioView::setZoom(int zoom)
 {
     m_zoomHandler->setZoom(zoom);
     m_canvas->updateSize();
-    m_viewZoomAction->setActualZoom(zoom);
+    m_viewZoomAction->setEffectiveZoom(zoom);
 }
 
 void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
@@ -248,36 +246,6 @@ void KivioView::resizeEvent(QResizeEvent* event)
 
     m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX());
     m_verticalRuler->setOffset(m_canvasController->canvasOffsetY());
-}
-
-void KivioView::viewZoomIn()
-{
-    int zoom = m_zoomHandler->zoomInPercent();
-
-    if((zoom + 25) > 2000) {
-        zoom = 2000 - zoom;
-    } else {
-        zoom = 25;
-    }
-
-    zoom = m_zoomHandler->zoomInPercent() + zoom;
-    m_viewZoomAction->setZoom(i18n("%1%", zoom));
-    setZoom(zoom);
-}
-
-void KivioView::viewZoomOut()
-{
-    int zoom = m_zoomHandler->zoomInPercent();
-
-    if(zoom < 35) {
-        zoom = zoom - 10;
-    } else {
-        zoom = 25;
-    }
-
-    zoom = m_zoomHandler->zoomInPercent() - zoom;
-    m_viewZoomAction->setZoom(i18n("%1%", zoom));
-    setZoom(zoom);
 }
 
 void KivioView::recalculateZoom()

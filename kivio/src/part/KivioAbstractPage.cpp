@@ -39,7 +39,6 @@ KivioAbstractPage::~KivioAbstractPage()
 {
   qDeleteAll(m_layerList);
   m_layerList.clear();
-  qDeleteAll(m_shapeList);
   m_shapeList.clear();
 }
 

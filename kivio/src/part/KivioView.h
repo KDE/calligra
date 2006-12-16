@@ -75,10 +75,6 @@ class KivioView : public KoView
   protected Q_SLOTS:
     /// Called by the zoom action to set the zoom
     void viewZoom(KoZoomMode::Mode mode, int zoom);
-    /// Called by the zoom in action... zoom +25%
-    void viewZoomIn();
-    /// Called by the zoom out action... zoom -25%
-    void viewZoomOut();
     /// Called when the zoom mode needs a recalculation of the zoom
     void recalculateZoom();
 
@@ -105,8 +101,6 @@ class KivioView : public KoView
     KoRuler* m_horizontalRuler;
     KoRuler* m_verticalRuler;
 
-    KAction* m_viewZoomIn;
-    KAction* m_viewZoomOut;
     KoZoomAction* m_viewZoomAction;
 
     KivioAbstractPage* m_activePage;

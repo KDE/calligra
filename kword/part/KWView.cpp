@@ -909,7 +909,7 @@ void KWView::setZoom( int zoom ) {
     m_document->setZoom( zoom ); // for persistency reasons
 
     if( m_actionViewZoom ) {
-        m_actionViewZoom->setActualZoom( zoom );
+        m_actionViewZoom->setEffectiveZoom( zoom );
     }
 
     //getGUI()->getHorzRuler()->setZoom( m_zoomHandler.zoomedResolutionX() );
