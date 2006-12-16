@@ -61,6 +61,7 @@ Value func_time (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_timevalue (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_today (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weeksInYear (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_year (valVector args, ValueCalc *calc, FuncExtra *);
@@ -70,7 +71,7 @@ Value func_years (valVector args, ValueCalc *calc, FuncExtra *);
 // sadly, many of these functions aren't Excel compatible
 void RegisterDateTimeFunctions()
 {
-  // missing: Excel:    WORKDAY, NETWORKDAYS, WEEKNUM, DATEDIF
+  // missing: Excel:    WORKDAY, NETWORKDAYS, DATEDIF
   //          Gnumeric: UNIX2DATE, DATE2UNIX
   // TODO: do we really need DATEVALUE and TIMEVALUE ?
   FunctionRepository* repo = FunctionRepository::self();
@@ -157,6 +158,9 @@ void RegisterDateTimeFunctions()
   f->setParamCount (0);
   repo->add (f);
   f = new Function ("WEEKDAY",  func_weekday);
+  f->setParamCount (1, 2);
+  repo->add (f);
+  f = new Function ("WEEKNUM",  func_weekNum);
   f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("WEEKS",  func_weeks);
@@ -646,4 +650,39 @@ Value func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *)
       return Value::errorVALUE();
 
   return Value (date.weekNumber());
+}
+
+// Function: weekNum
+//
+// 		method 	startday name of day
+// default: 	1	 0	 sunday
+//		2	-1	 monday
+// 
+// weeknum = (startday + 7 + dayOfWeek of New Year + difference in days) / 7
+//
+Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  Value v( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
+  if (v.isError()) return v;
+  QDate date = v.asDate( calc->doc() );
+
+  if (!date.isValid())
+      return Value::errorVALUE();
+
+  int method = 1;
+  if (args.count() > 1)
+      method = calc->conv()->asInteger (args[1]).asInteger();
+
+  if ( method < 1 || method > 2 )
+      return Value::errorVALUE();
+
+  QDate date1 ( date.year(), 1, 1 );
+  int days = date1.daysTo (date);
+  
+  int startday=0;
+  if (method == 2)
+    startday=-1;
+
+  //kDebug(36002) << "weeknum = [startday(" << startday << ") + base(7) + New Year(" << date1.dayOfWeek() <<") + days(" << days << ")] / 7 = " << (startday+7+date1.dayOfWeek()+days)/7 << endl; 
+  return Value( (int)(startday+7+date1.dayOfWeek()+days)/7 );
 }

@@ -595,6 +595,25 @@
       </Help>
     </Function>
 
+    <Function>
+	<Name>WEEKNUM</Name>
+	<Type>Int</Type>
+	<Parameter>
+	    <Comment>Date</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Parameter>
+	    <Comment>Method (optional)</Comment>
+	    <Type>Int</Type>
+	</Parameter>
+	<Help>
+	    <Text>The WEEKNUM() function returns the non-ISO week number in which the date falls into.</Text>
+	    <Syntax>WEEKNUM(date; method)</Syntax>
+	    <Example>WEEKNUM(A1; 1) returns 11 when A1 is "9th of March 2008". Number of the week in the year, with a week beginning on Sunday (11)</Example>
+	    <Example>WEEKNUM(A1; 2) returns 10 when A1 is "9th of March 2008". Number of the week in the year, with a week beginning on Monday (10)</Example>
+	</Help>
+    </Function>
+
   </Group>
 
 </KSpreadFunctions>
