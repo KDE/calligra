@@ -592,6 +592,7 @@
 		<Text>The ISOWEEKNUM() function returns number of the week which the date falls into. Note that this function is compliant with the ISO8601 standard: a week always begins on a Monday, and ends on a Sunday. The first week of a year is that week which contains the first Thursday of the year.</Text>
 		<Syntax>ISOWEEKNUM(date)</Syntax>
 		<Example>ISOWEEKNUM(A1) returns 51 when A1 is "21st of Dec".</Example>
+		<Related>WEEKNUM</Related>
       </Help>
     </Function>
 
@@ -611,6 +612,7 @@
 	    <Syntax>WEEKNUM(date; method)</Syntax>
 	    <Example>WEEKNUM(A1; 1) returns 11 when A1 is "9th of March 2008". Number of the week in the year, with a week beginning on Sunday (11)</Example>
 	    <Example>WEEKNUM(A1; 2) returns 10 when A1 is "9th of March 2008". Number of the week in the year, with a week beginning on Monday (10)</Example>
+	    <Related>ISOWEEKNUM</Related>
 	</Help>
     </Function>
 
