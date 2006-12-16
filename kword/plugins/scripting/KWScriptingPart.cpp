@@ -77,6 +77,8 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     QAction* scriptmenuaction = d->guiclient->action("scripts");
     actionCollection()->insert(scriptmenuaction);
 
+    //TODO handle different view-instances
+#if 0
     // Publish the KWScriptingModule which offers access to KSpread internals.
     Scripting::Module* module = Kross::Manager::self().hasObject("KWord")
         ? dynamic_cast< Scripting::Module* >( Kross::Manager::self().object("KWord") )
@@ -85,6 +87,10 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
         module = new Scripting::Module(this);
         Kross::Manager::self().addObject(module, "KWord");
     }
+#else
+    Scripting::Module* module = new Scripting::Module(this);
+    Kross::Manager::self().addObject(module, "KWord");
+#endif
     module->setView(view);
 }
 
