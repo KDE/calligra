@@ -49,6 +49,8 @@ class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialogBase
 		//! \return the \a KexiMainWindow instance.
 		KexiMainWindow* mainWin() const;
 
+		virtual bool eventFilter(QObject *o, QEvent *e);
+
 	protected slots:
 		void slotActionCategorySelected(QListViewItem* item);
 		void slotKActionItemExecuted(QListViewItem*);
