@@ -259,7 +259,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
         {
             Cell * cell = sheet->cellAt( currentcolumn, currentrow, false );
             const Style style = cell->style( currentcolumn, currentrow );
-            colspan_cells=cell->extraXCells();
+            colspan_cells=cell->mergedXCells();
             if (cell->needsPrinting())
                 nonempty_cells++;
             QString text;
@@ -336,10 +336,10 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             line+=" width=\""+QString::number(cell->width())+"\"";
             line+=" height=\""+QString::number(cell->height())+"\"";
 
-            if (cell->extraXCells()>0)
+            if (cell->mergedXCells()>0)
             {
                 QString tmp;
-                int extra_cells=cell->extraXCells();
+                int extra_cells=cell->mergedXCells();
                 line += " colspan=\"" + tmp.setNum(extra_cells+1) + "\"";
                 currentcolumn += extra_cells;
             }
@@ -468,7 +468,7 @@ void HTMLExport::detectFilledCells( Sheet *sheet, int &rows, int &columns )
       }
     }
     if (cell)
-      iUsedColumn += cell->extraXCells();
+      iUsedColumn += cell->mergedXCells();
     if (iUsedColumn > columns)
       columns = iUsedColumn;
     if ( iUsedColumn > 0 )
