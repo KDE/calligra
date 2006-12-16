@@ -315,7 +315,7 @@ void CellView::paintCell( const QRectF& paintRect, QPainter& painter,
     }
 
     // 1. Paint the background.
-    if ( !cell->isPartOfMerged() )
+    if ( !cell->isObscured() )
         paintBackground( painter, cellRect, selected );
 
     // 2. Paint all the cells that this one obscures.  They may only be
