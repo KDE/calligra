@@ -1348,7 +1348,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
                 {
                     if ( cell->isFormula() )
                     {
-                        QString tmp = cell->text();
+                        QString tmp = cell->inputText();
                         if ( tmp.contains( "==" ) )
                             tmp=tmp.replace( "==", "=" );
                         text = tmp;
@@ -1361,19 +1361,19 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
                         isLinkItalic = false;
                         //TODO FIXME
                         linkUrl = cell->link();
-                        linkText = cell->text();
+                        linkText = cell->inputText();
 
                     }
                     else
                     {
-                        text = cell->text();
+                        text = cell->inputText();
                         isLink = false;
                     }
 #if 0
                     switch (cell->content())
                     {
                     case Cell::Text:
-                        text = cell->text();
+                        text = cell->inputText();
                         isLink = false;
                         break;
                     case Cell::RichText:
@@ -1382,7 +1382,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
                         isLink = true;
                         isLinkBold = false;
                         isLinkItalic = false;
-                        domLink.setContent(cell->text().section("!",1,1));
+                        domLink.setContent(cell->inputText().section("!",1,1));
 
                         domNode = domLink.firstChild();
                         domRoot = domNode.toElement();
@@ -1409,11 +1409,11 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
                         break;
                     case Cell::VisualFormula:
                         isLink = false;
-                        text = cell->text(); // untested
+                        text = cell->inputText(); // untested
                         break;
                     case Cell::Formula:
                         isLink = false;
-                        QString tmp = cell->text();
+                        QString tmp = cell->inputText();
                         if ( tmp =="==" )
                             tmp=replace( "==", "=" );
                         /* cell->calc( true ); // Incredible, cells are not calculated if the document was just opened text = cell->valueString(); */

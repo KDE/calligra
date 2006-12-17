@@ -1215,7 +1215,7 @@ void UndoSort::copyAll(QLinkedList<layoutTextCell> & list, QLinkedList<layoutCol
           tmplayout.row = y;
           tmplayout.l   = new Format( sheet, 0 );
           tmplayout.l->copy( *(sheet->cellAt( x, y )->format()) );
-          tmplayout.text = cell->text();
+          tmplayout.text = cell->inputText();
           list.append(tmplayout);
         }
       }
@@ -1302,7 +1302,7 @@ void UndoSort::undo()
     Cell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
     if ( (*it2).text.isEmpty() )
     {
-      if(!cell->text().isEmpty())
+      if(!cell->inputText().isEmpty())
         cell->setCellText( "" );
     }
     else
@@ -1354,7 +1354,7 @@ void UndoSort::redo()
 
       if ( (*it2).text.isEmpty() )
       {
-        if(!cell->text().isEmpty())
+        if(!cell->inputText().isEmpty())
           cell->setCellText( "" );
       }
       else
@@ -1842,7 +1842,7 @@ void UndoChangeAreaTextCell::createList( QMap<QPoint,QString> &map, Sheet* sheet
             //tmpText.col = col;
             //tmpText.row = c->row();
             //tmpText.text = c->text();
-            map.insert( QPoint(col,c->row()) , c->text() );
+            map.insert( QPoint(col,c->row()) , c->inputText() );
           }
           c = sheet->getNextCellDown( col, c->row() );
         }
@@ -1862,7 +1862,7 @@ void UndoChangeAreaTextCell::createList( QMap<QPoint,QString> &map, Sheet* sheet
             //tmpText.col = c->column();
             //tmpText.row = row;
             //tmpText.text = c->text();
-            map.insert( QPoint(c->column(),row) , c->text() );
+            map.insert( QPoint(c->column(),row) , c->inputText() );
           }
           c = sheet->getNextCellRight( c->column(), row );
         }
@@ -1883,8 +1883,8 @@ void UndoChangeAreaTextCell::createList( QMap<QPoint,QString> &map, Sheet* sheet
             //textOfCell tmpText;
             //tmpText.col  = x;
             //tmpText.row  = cell->row();
-            //tmpText.text = cell->text();
-            map.insert( QPoint(x,cell->row()) , cell->text());
+            //tmpText.text = cell->inputText();
+            map.insert( QPoint(x,cell->row()) , cell->inputText());
           }
           cell = sheet->getNextCellDown( x, cell->row() );
         }
@@ -1952,7 +1952,7 @@ void UndoChangeAreaTextCell::undo()
         Cell *cell = sheet->nonDefaultCell( it2.key().x(), it2.key().y() );
         if ( it2.value().isEmpty() )
         {
-          if ( !cell->text().isEmpty() )
+          if ( !cell->inputText().isEmpty() )
             cell->setCellText( "" );
         }
         else
@@ -2017,7 +2017,7 @@ void UndoChangeAreaTextCell::redo()
         Cell *cell = sheet->nonDefaultCell( it2.key().x(), it2.key().y() );
         if ( it2.value().isEmpty() )
         {
-          if ( !cell->text().isEmpty() )
+          if ( !cell->inputText().isEmpty() )
             cell->setCellText( "" );
         }
         else

@@ -522,12 +522,12 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
                 int tmpAngle = style.angle();
                 int textHeight = static_cast<int>( cos( tmpAngle * M_PI / 180 )
                                                    * ( fm.ascent() + fm.descent() )
-                                                   + abs ( ( int )(  fm.width( cell->strOutText() )
+                                                   + abs ( ( int )(  fm.width( cell->displayText() )
                                                                      * sin( tmpAngle * M_PI / 180 )  ) ) );
                 /*
                   int textWidth = static_cast<int>( abs ( ( int ) ( sin( tmpAngle * M_PI / 180 )
                   * ( fm.ascent() + fm.descent() ) ) )
-                  + fm.width( cell->strOutText() )
+                  + fm.width( cell->displayText() )
                   * cos( tmpAngle * M_PI / 180 ) );
                   */
                 kDebug(30518) << "Rotation: height: " << textHeight << endl;

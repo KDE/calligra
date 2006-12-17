@@ -115,7 +115,7 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
       cell = sheet->cellAt( col, i );
       if ( !cell->isEmpty() && !cell->isDefault() )
       {
-        m_fileArray.append( cell->strOutText().toUtf8() /* FIXME */ );
+        m_fileArray.append( cell->displayText().toUtf8() /* FIXME */ );
       }
       m_fileArray.append( '\n' );
     }

@@ -302,19 +302,16 @@ QString Cell::columnName( uint column )
 //
 bool Cell::isFormula() const
 {
-    return d->strText[0] == '=';
+    return d->inputText[0] == '=';
 }
 
 
 // Return the input text of this cell.  This could, for instance, be a
 // formula.
 //
-// FIXME: These two functions are inconsistently named.  It should be
-//        either text() and outText() or strText() and strOutText().
-//
-QString Cell::text() const
+QString Cell::inputText() const
 {
-    return d->strText;
+    return d->inputText;
 }
 
 
@@ -322,7 +319,7 @@ QString Cell::text() const
 // square when shown.  This could, for instance, be the calculated
 // result of a formula.
 //
-QString Cell::strOutText() const
+QString Cell::displayText() const
 {
     if ( isDefault() )
         return QString();
@@ -332,7 +329,7 @@ QString Cell::strOutText() const
     // this is the most common case.
     if ( (!hasError()) && isFormula() && sheet()->getShowFormula()
            && !( sheet()->isProtected() && style().hideFormula() ) || isEmpty() )
-        string = d->strText;
+        string = d->inputText;
     else
         string = sheet()->doc()->formatter()->formatText(this, formatType());
 
@@ -390,12 +387,12 @@ void Cell::setCellValue (const Value &value, FormatType fmtType, const QString &
 {
     if ( !txt.isNull() )
     {
-        d->strText = txt;
+        d->inputText = txt;
         if ( isFormula() )
             makeFormula();
     }
     else if ( !isFormula() )
-        d->strText = sheet()->doc()->converter()->asString( value ).asString();
+        d->inputText = sheet()->doc()->converter()->asString( value ).asString();
     if ( fmtType != No_format )
     {
         Style style;
@@ -469,7 +466,7 @@ void Cell::copyContent( const Cell* cell )
       setCellText( cell->decodeFormula( d ) );
     }
     else
-      setCellText( cell->text() );
+      setCellText( cell->inputText() );
 }
 
 void Cell::defaultStyle()
@@ -549,7 +546,7 @@ bool Cell::needsPrinting() const
     if ( isDefault() )
         return false;
 
-    if ( !d->strText.trimmed().isEmpty() )
+    if ( !d->inputText.trimmed().isEmpty() )
         return true;
 
     const Style style = this->style();
@@ -588,7 +585,7 @@ bool Cell::needsPrinting() const
 
 bool Cell::isEmpty() const
 {
-    return isDefault() || d->strText.isEmpty();
+    return isDefault() || d->inputText.isEmpty();
 }
 
 
@@ -640,85 +637,85 @@ QString Cell::encodeFormula( bool _era, int _col, int _row ) const
 
     QString erg = "";
 
-    if(d->strText.isEmpty())
-        return d->strText;
+    if(d->inputText.isEmpty())
+        return d->inputText;
 
     bool fix1 = false;
     bool fix2 = false;
     bool onNumber = false;
     unsigned int pos = 0;
-    const unsigned int length = d->strText.length();
+    const unsigned int length = d->inputText.length();
 
     // All this can surely be made 10 times faster, but I just "ported" it to QString
     // without any attempt to optimize things -- this is really brittle (Werner)
     while ( pos < length )
     {
-        if ( d->strText[pos] == '"' )
+        if ( d->inputText[pos] == '"' )
         {
-            erg += d->strText[pos++];
-            while ( pos < length && d->strText[pos] != '"' )  // till the end of the world^H^H^H "string"
+            erg += d->inputText[pos++];
+            while ( pos < length && d->inputText[pos] != '"' )  // till the end of the world^H^H^H "string"
             {
-                erg += d->strText[pos++];
+                erg += d->inputText[pos++];
                 // Allow escaped double quotes (\")
-                if ( pos < length && d->strText[pos] == '\\' && d->strText[pos+1] == '"' )
+                if ( pos < length && d->inputText[pos] == '\\' && d->inputText[pos+1] == '"' )
                 {
-                    erg += d->strText[pos++];
-                    erg += d->strText[pos++];
+                    erg += d->inputText[pos++];
+                    erg += d->inputText[pos++];
                 }
             }
             if ( pos < length )  // also copy the trailing double quote
-                erg += d->strText[pos++];
+                erg += d->inputText[pos++];
 
             onNumber = false;
         }
-        else if ( d->strText[pos].isDigit() )
+        else if ( d->inputText[pos].isDigit() )
         {
-          erg += d->strText[pos++];
+          erg += d->inputText[pos++];
           fix1 = fix2 = false;
           onNumber = true;
         }
-        else if ( d->strText[pos] != '$' && !d->strText[pos].isLetter() )
+        else if ( d->inputText[pos] != '$' && !d->inputText[pos].isLetter() )
         {
-            erg += d->strText[pos++];
+            erg += d->inputText[pos++];
             fix1 = fix2 = false;
             onNumber = false;
         }
         else
         {
             QString tmp = "";
-            if ( d->strText[pos] == '$' )
+            if ( d->inputText[pos] == '$' )
             {
                 tmp = '$';
                 pos++;
                 fix1 = true;
             }
-            if ( d->strText[pos].isLetter() )
+            if ( d->inputText[pos].isLetter() )
             {
                 QString buffer;
                 unsigned int pos2 = 0;
-                while ( pos < length && d->strText[pos].isLetter() )
+                while ( pos < length && d->inputText[pos].isLetter() )
                 {
-                    tmp += d->strText[pos];
-                    buffer[pos2++] = d->strText[pos++];
+                    tmp += d->inputText[pos];
+                    buffer[pos2++] = d->inputText[pos++];
                 }
-                if ( d->strText[pos] == '$' )
+                if ( d->inputText[pos] == '$' )
                 {
                     tmp += '$';
                     pos++;
                     fix2 = true;
                 }
-                if ( d->strText[pos].isDigit() )
+                if ( d->inputText[pos].isDigit() )
                 {
                     const unsigned int oldPos = pos;
-                    while ( pos < length && d->strText[pos].isDigit() ) ++pos;
+                    while ( pos < length && d->inputText[pos].isDigit() ) ++pos;
                     int row = 0;
                     if ( pos != oldPos )
-                        row = d->strText.mid(oldPos, pos-oldPos).toInt();
+                        row = d->inputText.mid(oldPos, pos-oldPos).toInt();
                     // Is it a sheet name || is it a function name like DEC2HEX
                     /* or if we're parsing a number, this could just be the
                        exponential part of it  (1.23E4) */
-                    if ( ( d->strText[pos] == '!' ) ||
-                         d->strText[pos].isLetter() ||
+                    if ( ( d->inputText[pos] == '!' ) ||
+                         d->inputText[pos].isLetter() ||
                          onNumber )
                     {
                         erg += tmp;
@@ -876,7 +873,7 @@ bool Cell::makeFormula()
 //   kDebug(36002) << k_funcinfo << endl;
 
   d->formula = new KSpread::Formula (sheet(), this);
-  d->formula->setExpression (d->strText);
+  d->formula->setExpression (d->inputText);
 
   if (!d->formula->isValid ()) {
   // Did a syntax error occur ?
@@ -962,7 +959,7 @@ int Cell::defineAlignX()
     {
         //numbers should be right-aligned by default, as well as BiDi text
         if ((formatType() == Text_format) || value().isString())
-            align = (strOutText().isRightToLeft()) ? Style::Right : Style::Left;
+            align = (displayText().isRightToLeft()) ? Style::Right : Style::Left;
         else
         {
             Value val = value();
@@ -1021,24 +1018,24 @@ void Cell::incPrecision()
     Style style;
     if ( tmpPreci == -1 )
     {
-        const QString strOutText = this->strOutText();
-        int pos = strOutText.indexOf( locale()->decimalSymbol() );
+        const QString displayText = this->displayText();
+        int pos = displayText.indexOf( locale()->decimalSymbol() );
         if ( pos == -1 )
-            pos = strOutText.indexOf('.');
+            pos = displayText.indexOf('.');
         if ( pos == -1 )
             style.setPrecision( 1 );
         else
         {
             int start = 0;
-            if ( strOutText.indexOf('%') != -1 )
+            if ( displayText.indexOf('%') != -1 )
                 start = 2;
-            else if ( strOutText.indexOf(locale()->currencySymbol()) == ((int)(strOutText.length()-locale()->currencySymbol().length())) )
+            else if ( displayText.indexOf(locale()->currencySymbol()) == ((int)(displayText.length()-locale()->currencySymbol().length())) )
                 start = locale()->currencySymbol().length() + 1;
-            else if ( (start=strOutText.indexOf('E')) != -1 )
-                start = strOutText.length() - start;
+            else if ( (start=displayText.indexOf('E')) != -1 )
+                start = displayText.length() - start;
 
-            //kDebug() << "start=" << start << " pos=" << pos << " length=" << strOutText.length() << endl;
-            style.setPrecision( qMax( 0, (int)strOutText.length() - start - pos ) );
+            //kDebug() << "start=" << start << " pos=" << pos << " length=" << displayText.length() << endl;
+            style.setPrecision( qMax( 0, (int)displayText.length() - start - pos ) );
         }
     }
     else if ( tmpPreci < 10 )
@@ -1058,22 +1055,22 @@ void Cell::decPrecision()
     Style style;
     if ( preciTmp == -1 )
     {
-        const QString strOutText = this->strOutText();
-        int pos = strOutText.indexOf( locale()->decimalSymbol() );
+        const QString displayText = this->displayText();
+        int pos = displayText.indexOf( locale()->decimalSymbol() );
         int start = 0;
-        if ( strOutText.indexOf('%') != -1 )
+        if ( displayText.indexOf('%') != -1 )
             start = 2;
-        else if ( strOutText.indexOf(locale()->currencySymbol()) == ((int)(strOutText.length()-locale()->currencySymbol().length())) )
+        else if ( displayText.indexOf(locale()->currencySymbol()) == ((int)(displayText.length()-locale()->currencySymbol().length())) )
             start = locale()->currencySymbol().length() + 1;
-        else if ( (start = strOutText.indexOf('E')) != -1 )
-            start = strOutText.length() - start;
+        else if ( (start = displayText.indexOf('E')) != -1 )
+            start = displayText.length() - start;
         else
             start = 0;
 
         if ( pos == -1 )
             return;
 
-        style.setPrecision(strOutText.length() - pos - 2 - start);
+        style.setPrecision(displayText.length() - pos - 2 - start);
         //   if ( preciTmp < 0 )
         //      format()->setPrecision( preciTmp );
     }
@@ -1088,8 +1085,8 @@ void Cell::setNumber( double number )
 {
   setValue( Value( number ) );
 
-  d->strText.setNum( number );
-  setDisplayText(d->strText);
+  d->inputText.setNum( number );
+  setDisplayText(d->inputText);
   checkNumberFormat();
 }
 
@@ -1103,7 +1100,7 @@ void Cell::setCellText( const QString& _text, bool asText )
   // empty string?
   if (_text.isEmpty())
   {
-    d->strText.clear();
+    d->inputText.clear();
     setValue( Value::empty() );
     return;
   }
@@ -1111,12 +1108,12 @@ void Cell::setCellText( const QString& _text, bool asText )
   // as text?
   if (asText)
   {
-    d->strText    = _text;
+    d->inputText    = _text;
     setValue( Value( _text ) );
     return;
   }
 
-  const QString oldText = d->strText;
+  const QString oldText = d->inputText;
   setDisplayText( _text );
   Validity validity = this->validity();
   if ( !sheet()->isLoading() && !validity.testValidity( this ) )
@@ -1134,10 +1131,10 @@ void Cell::setDisplayText( const QString& _text )
   if ( !isLoading )
     sheet()->doc()->emitBeginOperation( false );
 
-  d->strText = _text;
+  d->inputText = _text;
 
   // A real formula "=A1+A2*3" was entered.
-  if ( !d->strText.isEmpty() && d->strText[0] == '=' )
+  if ( !d->inputText.isEmpty() && d->inputText[0] == '=' )
   {
     makeFormula();
   }
@@ -1156,7 +1153,7 @@ void Cell::setLink( const QString& link )
 {
   d->extra()->link = link;
 
-  if( !link.isEmpty() && d->strText.isEmpty() )
+  if( !link.isEmpty() && d->inputText.isEmpty() )
     setCellText( link );
 }
 
@@ -1314,19 +1311,19 @@ void Cell::checkTextInput()
   d->value = Value::empty();
 
   // Get the text from that cell
-  QString str = d->strText;
+  QString str = d->inputText;
 
   // Parses the text and sets its value appropriately (calls Cell::setValue).
   sheet()->doc()->parser()->parse (str, this);
 
-  // Parsing as time acts like an autoformat: we even change d->strText
+  // Parsing as time acts like an autoformat: we even change d->inputText
   // [h]:mm:ss -> might get set by ValueParser
   if (isTime() && (formatType() != Time_format7))
-    d->strText = locale()->formatTime( value().asDateTime( sheet()->doc() ).time(), true);
+    d->inputText = locale()->formatTime( value().asDateTime( sheet()->doc() ).time(), true);
 
   // convert first letter to uppercase ?
   if (sheet()->getFirstLetterUpper() && value().isString() &&
-      (!d->strText.isEmpty()))
+      (!d->inputText.isEmpty()))
   {
     QString str = value().asString();
     setValue( Value( str[0].toUpper() + str.right( str.length()-1 ) ) );
@@ -1404,7 +1401,7 @@ QDomElement Cell::save( QDomDocument& doc,
     //
     // Save the text
     //
-    if ( !text().isEmpty() )
+    if ( !inputText().isEmpty() )
     {
         // Formulas need to be encoded to ensure that they
         // are position independent.
@@ -1417,7 +1414,7 @@ QDomElement Cell::save( QDomDocument& doc,
 
             /* we still want to save the results of the formula */
             QDomElement formulaResult = doc.createElement( "result" );
-            saveCellResult( doc, formulaResult, strOutText() );
+            saveCellResult( doc, formulaResult, displayText() );
             cell.appendChild( formulaResult );
 
         }
@@ -1426,7 +1423,7 @@ QDomElement Cell::save( QDomDocument& doc,
             // KSpread pre 1.4 saves link as rich text, marked with first char '
             // Have to be saved in some CDATA section because of too many special charatcers.
             QDomElement txt = doc.createElement( "text" );
-            QString qml = "!<a href=\"" + link() + "\">" + text() + "</a>";
+            QString qml = "!<a href=\"" + link() + "\">" + inputText() + "</a>";
             txt.appendChild( doc.createCDATASection( qml ) );
             cell.appendChild( txt );
         }
@@ -1434,7 +1431,7 @@ QDomElement Cell::save( QDomDocument& doc,
         {
             // Save the cell contents (in a locale-independent way)
             QDomElement txt = doc.createElement( "text" );
-            saveCellResult( doc, txt, text() );
+            saveCellResult( doc, txt, inputText() );
             cell.appendChild( txt );
         }
     }
@@ -1491,9 +1488,9 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
 
   result.setAttribute( "dataType", dataType );
 
-  const QString strOutText = this->strOutText();
-  if ( !strOutText.isEmpty() )
-    result.setAttribute( "outStr", strOutText );
+  const QString displayText = this->displayText();
+  if ( !displayText.isEmpty() )
+    result.setAttribute( "outStr", displayText );
   result.appendChild( doc.createTextNode( str ) );
 
   return true; /* really isn't much of a way for this function to fail */
@@ -1616,7 +1613,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     if ( isFormula() )
     {
       //kDebug(36003) << "Formula found" << endl;
-      QString formula = Oasis::encodeFormula( text(), locale() );
+      QString formula = Oasis::encodeFormula( inputText(), locale() );
       xmlwriter.addAttribute( "table:formula", formula );
     }
     else if ( !link().isEmpty() )
@@ -1629,7 +1626,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
             xmlwriter.addAttribute( " xLinkDialog.href", ( '#'+link() ) );
         else
             xmlwriter.addAttribute( " xLinkDialog.href", link() );
-        xmlwriter.addTextNode( text() );
+        xmlwriter.addTextNode( inputText() );
         xmlwriter.endElement();
         xmlwriter.endElement();
     }
@@ -1649,7 +1646,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     if ( !isEmpty() && link().isEmpty() )
     {
         xmlwriter.startElement( "text:p" );
-        xmlwriter.addTextNode( strOutText().toUtf8() );
+        xmlwriter.addTextNode( displayText().toUtf8() );
         xmlwriter.endElement();
     }
 
@@ -1783,8 +1780,8 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         oasisFormula = Oasis::decodeFormula( oasisFormula, locale() );
         setCellText( oasisFormula );
     }
-    else if ( !d->strText.isEmpty() && d->strText.at(0) == '=' ) //prepend ' to the text to avoid = to be painted
-        d->strText.prepend('\'');
+    else if ( !d->inputText.isEmpty() && d->inputText.at(0) == '=' ) //prepend ' to the text to avoid = to be painted
+        d->inputText.prepend('\'');
 
     //
     // validation
@@ -1823,7 +1820,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
             if( ok )
                 setCellValue( Value(value) );
 
-            if ( !isFormula && d->strText.isEmpty())
+            if ( !isFormula && d->inputText.isEmpty())
             {
                 QString str = locale()->formatNumber( value, 15 );
                 setCellText( str );
@@ -1859,7 +1856,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
                 value.setFormat (Value::fmt_Percent);
                 setCellValue( Value(value) );
 
-                if ( !isFormula && d->strText.isEmpty())
+                if ( !isFormula && d->inputText.isEmpty())
                 {
                     QString str = locale()->formatNumber( percent, 15 );
                     setCellText( str );
@@ -2284,7 +2281,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         // and the source cell contains a formula
         // note that we mustn't use setCellValue after this, or else we lose
         // all the formulas ...
-          d->strText = result.text();
+          d->inputText = result.text();
       else
           //otherwise copy everything
           loadCellData(text, op);
@@ -2373,7 +2370,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
 
 bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
 {
-  //TODO: use converter()->asString() to generate strText
+  //TODO: use converter()->asString() to generate d->inputText
 
   QString t = text.text();
   t = t.trimmed();
@@ -2384,7 +2381,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
   if( (!t.isEmpty()) && (t[0] == '=') )
   {
     t = decodeFormula( t, d->column, d->row );
-    setCellText (pasteOperation( t, d->strText, op ));
+    setCellText (pasteOperation( t, d->inputText, op ));
 
     clearAllErrors();
 
@@ -2434,8 +2431,8 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
 
       if( !qml_link.isEmpty() )
         d->extra()->link = qml_link;
-      d->strText = qml_text;
-      setValue( Value(d->strText) );
+      d->inputText = qml_text;
+      setValue( Value(d->inputText) );
   }
   else
   {
@@ -2455,7 +2452,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         dataType = "Time";
       else
       {
-        d->strText = pasteOperation( t, d->strText, op );
+        d->inputText = pasteOperation( t, d->inputText, op );
         checkTextInput();
         //kDebug(36001) << "Cell::load called checkTextInput, got dataType=" << dataType << "  t=" << t << endl;
         newStyleLoading = false;
@@ -2499,8 +2496,8 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
             t = locale->formatNumber( value().asInteger() * 100 );
           else
             t = locale->formatNumber( value().asFloat() * 100.0, precision );
-          d->strText = pasteOperation( t, d->strText, op );
-          d->strText += '%';
+          d->inputText = pasteOperation( t, d->inputText, op );
+          d->inputText += '%';
         }
         else
         {
@@ -2508,7 +2505,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
             t = locale->formatLong(value().asInteger());
           else
             t = locale->formatNumber(value().asFloat(), precision);
-          d->strText = pasteOperation( t, d->strText, op );
+          d->inputText = pasteOperation( t, d->inputText, op );
         }
       }
 
@@ -2522,10 +2519,10 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         int day = t.right(t.length()-pos1-1).toInt();
         setValue( Value( QDate(year,month,day), sheet()->doc() ) );
         if ( value().asDate( sheet()->doc() ).isValid() ) // Should always be the case for new docs
-          d->strText = locale()->formatDate( value().asDate( sheet()->doc() ), true );
+          d->inputText = locale()->formatDate( value().asDate( sheet()->doc() ), true );
         else // This happens with old docs, when format is set wrongly to date
         {
-          d->strText = pasteOperation( t, d->strText, op );
+          d->inputText = pasteOperation( t, d->inputText, op );
           checkTextInput();
         }
       }
@@ -2544,10 +2541,10 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         second = t.right(t.length()-pos1-1).toInt();
         setValue( Value( QTime(hours,minutes,second), sheet()->doc() ) );
         if ( value().asTime( sheet()->doc() ).isValid() ) // Should always be the case for new docs
-          d->strText = locale()->formatTime( value().asTime( sheet()->doc() ), true );
+          d->inputText = locale()->formatTime( value().asTime( sheet()->doc() ), true );
         else  // This happens with old docs, when format is set wrongly to time
         {
-          d->strText = pasteOperation( t, d->strText, op );
+          d->inputText = pasteOperation( t, d->inputText, op );
           checkTextInput();
         }
       }
@@ -2555,14 +2552,14 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
       else
       {
         // Set the cell's text
-        d->strText = pasteOperation( t, d->strText, op );
-        setValue( Value(d->strText) );
+        d->inputText = pasteOperation( t, d->inputText, op );
+        setValue( Value(d->inputText) );
       }
     }
   }
 
   if ( !sheet()->isLoading() )
-    setCellText( d->strText );
+    setCellText( d->inputText );
 
   return true;
 }
@@ -2742,7 +2739,7 @@ Cell::~Cell()
 
 bool Cell::operator==( const Cell& other ) const
 {
-  if ( d->strText != other.d->strText )
+  if ( d->inputText != other.d->inputText )
     return false;
   if ( d->value != other.d->value )
     return false;

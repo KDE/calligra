@@ -102,7 +102,7 @@ void SubtotalDialog::slotOk()
   int bottom = m_selection.bottom();
   int top    = m_selection.top();
   left       = m_selection.left();
-  QString oldText = m_pSheet->cellAt( mainCol, top )->strOutText();
+  QString oldText = m_pSheet->cellAt( mainCol, top )->displayText();
   QString newText;
   QString result( ' ' + i18n("Result") );
   int lastChangedRow = top;
@@ -117,7 +117,7 @@ void SubtotalDialog::slotOk()
     while ( y <= bottom )
     {
       addRow = true;
-      newText = m_pSheet->cellAt( mainCol, y )->strOutText();
+      newText = m_pSheet->cellAt( mainCol, y )->displayText();
 
       if ( ignoreEmptyCells && (newText.length() == 0) )
       {
@@ -218,7 +218,7 @@ void SubtotalDialog::removeSubtotalLines()
       if ( cell->isDefault() || !cell->isFormula() )
         continue;
 
-      text = cell->text();
+      text = cell->inputText();
       if ( text.indexOf( "SUBTOTAL" ) != -1 )
       {
         containsSubtotal = true;
@@ -258,7 +258,7 @@ void SubtotalDialog::fillColumnBoxes()
   for ( int i = m_selection.left(); i <= r; ++i )
   {
     cell = m_pSheet->cellAt( i, row );
-    text = cell->strOutText();
+    text = cell->displayText();
 
     if ( text.length() > 0 )
     {

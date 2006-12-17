@@ -507,8 +507,8 @@ AutoFillSequence::AutoFillSequence( Cell *_cell )
         else
             sequence.append( new AutoFillSequenceItem(_cell->value().asFloat() ) );
     }
-    else if ( !_cell->text().isEmpty() )
-        sequence.append( new AutoFillSequenceItem( _cell->text() ) );
+    else if ( !_cell->inputText().isEmpty() )
+        sequence.append( new AutoFillSequenceItem( _cell->inputText() ) );
 }
 
 AutoFillSequence::~AutoFillSequence()
@@ -1115,7 +1115,7 @@ void Sheet::fillSequenceWithCopy( const QList<Cell*>& _srcList,
         s = _srcList.count() - 1;
     }
 
-    if ( !_srcList.at( s )->text().isEmpty() )
+    if ( !_srcList.at( s )->inputText().isEmpty() )
     {
       if ( _srcList.at( s )->isFormula() )
       {
@@ -1157,20 +1157,20 @@ void Sheet::fillSequenceWithCopy( const QList<Cell*>& _srcList,
         ++incr;
       }
       else if ( !AutoFillSequenceItem::month->isEmpty()
-	        && AutoFillSequenceItem::month->contains( _srcList.at( s )->text())
+	        && AutoFillSequenceItem::month->contains( _srcList.at( s )->inputText())
 	        && _srcList.count() == 1 )
       {
-	QString strMonth=_srcList.at( s )->text();
+	QString strMonth=_srcList.at( s )->inputText();
 	int i = AutoFillSequenceItem::month->indexOf( strMonth )+incr;
 	int k = (i) % AutoFillSequenceItem::month->count();
 	cell->setCellText((AutoFillSequenceItem::month->at( k )));
         incr++;
       }
       else if ( AutoFillSequenceItem::day->isEmpty()
-	        && AutoFillSequenceItem::day->contains( _srcList.at( s )->text())
+	        && AutoFillSequenceItem::day->contains( _srcList.at( s )->inputText())
 	        && _srcList.count()==1 )
       {
-	QString strDay=_srcList.at( s )->text();
+	QString strDay=_srcList.at( s )->inputText();
 	int i = AutoFillSequenceItem::day->indexOf( strDay )+incr;
 	int k = (i) % AutoFillSequenceItem::day->count();
 	cell->setCellText((AutoFillSequenceItem::day->at( k )));
@@ -1179,22 +1179,22 @@ void Sheet::fillSequenceWithCopy( const QList<Cell*>& _srcList,
       else
       {
 	QRegExp number("(\\d+)");
-	int pos =number.indexIn(_srcList.at( s )->text());
+	int pos =number.indexIn(_srcList.at( s )->inputText());
 	if( pos!=-1 )
 	{
 	  QString tmp=number.cap(1);
 	  int num=tmp.toInt()+incr;
-	  cell->setCellText(_srcList.at( s )->text().replace(number,QString::number(num)));
+	  cell->setCellText(_srcList.at( s )->inputText().replace(number,QString::number(num)));
           ++incr;
 	}
 	else if ( !_srcList.at( s )->link().isEmpty() )
         {
-	  cell->setCellText( _srcList.at( s )->text() );
+	  cell->setCellText( _srcList.at( s )->inputText() );
 	  cell->setLink( _srcList.at( s )->link() );
         }
         else
         {
-	  cell->setCellText( _srcList.at( s )->text() );
+	  cell->setCellText( _srcList.at( s )->inputText() );
         }
       }
     }

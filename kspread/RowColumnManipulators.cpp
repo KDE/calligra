@@ -612,7 +612,7 @@ bool InsertDeleteColumnManipulator::process( Element* element )
                 Cell* cell = m_sheet->getFirstCellColumn( col );
                 while ( cell )
                 {
-                    m_undoCells.insert( cell->cellPosition(), cell->text() );
+                    m_undoCells.insert( cell->cellPosition(), cell->inputText() );
                     cell = m_sheet->getNextCellDown( cell->column(), cell->row() );
                 }
             }
@@ -659,7 +659,7 @@ bool InsertDeleteColumnManipulator::process( Element* element )
                 Cell* cell = m_sheet->getFirstCellColumn( col );
                 while ( cell )
                 {
-                    m_undoCells.insert( cell->cellPosition(), cell->text() );
+                    m_undoCells.insert( cell->cellPosition(), cell->inputText() );
                     cell = m_sheet->getNextCellDown( cell->column(), cell->row() );
                 }
             }
@@ -738,7 +738,7 @@ bool InsertDeleteRowManipulator::process( Element* element )
                 Cell* cell = m_sheet->getFirstCellRow( row);
                 while ( cell )
                 {
-                    m_undoCells.insert( cell->cellPosition(), cell->text() );
+                    m_undoCells.insert( cell->cellPosition(), cell->inputText() );
                     cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
                 }
             }
@@ -785,7 +785,7 @@ bool InsertDeleteRowManipulator::process( Element* element )
                 Cell* cell = m_sheet->getFirstCellRow( row );
                 while ( cell )
                 {
-                    m_undoCells.insert( cell->cellPosition(), cell->text() );
+                    m_undoCells.insert( cell->cellPosition(), cell->inputText() );
                     cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
                 }
             }

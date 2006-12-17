@@ -1046,7 +1046,7 @@ void Sheet::refreshRemoveAreaName(const QString & _areaName)
   {
     if ( c->isFormula() )
     {
-      if (c->text().indexOf(tmp) != -1)
+      if (c->inputText().indexOf(tmp) != -1)
       {
         c->makeFormula();
       }
@@ -1063,7 +1063,7 @@ void Sheet::refreshChangeAreaName(const QString & _areaName)
   {
     if ( c->isFormula() )
     {
-      if (c->text().indexOf(tmp) != -1)
+      if (c->inputText().indexOf(tmp) != -1)
       {
         if ( c->makeFormula() )
           region.add(QPoint(c->column(), c->row()), c->sheet());
@@ -1081,12 +1081,12 @@ void Sheet::changeCellTabName( QString const & old_name, QString const & new_nam
     {
         if( c->isFormula() )
         {
-            if(c->text().indexOf(old_name)!=-1)
+            if(c->inputText().indexOf(old_name)!=-1)
             {
-                int nb = c->text().count( old_name + '!' );
+                int nb = c->inputText().count( old_name + '!' );
                 QString tmp = old_name + '!';
                 int len = tmp.length();
-                tmp=c->text();
+                tmp=c->inputText();
 
                 for( int i=0; i<nb; i++ )
                 {
@@ -1350,7 +1350,7 @@ void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
   {
     if( c->isFormula() )
     {
-      QString origText = c->text();
+      QString origText = c->inputText();
       int i = 0;
       bool error = false;
       QString newText;
@@ -1482,7 +1482,7 @@ void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
 
       if ( error && undo != 0 ) //Save the original formula, as we cannot calculate the undo of broken formulas
       {
-          QString formulaText = c->text();
+          QString formulaText = c->inputText();
           int origCol = c->column();
           int origRow = c->row();
 
@@ -1568,7 +1568,7 @@ void Sheet::replace( const QString &_find, const QString &_replace, long options
             cell = cellAt( col, row );
             if ( !cell->isDefault() && !cell->isPartOfMerged() && !cell->isFormula() )
             {
-                QString text = cell->text();
+                QString text = cell->inputText();
                 cellRegion.setTop( row );
                 cellRegion.setLeft( col );
                 if (!dialog.replace( text, cellRegion ))
@@ -1597,7 +1597,7 @@ bool Sheet::cellIsEmpty (Cell *c, TestType _type, int col, int row)
     switch( _type )
     {
     case Text :
-      if ( !c->text().isEmpty())
+      if ( !c->inputText().isEmpty())
         return false;
       break;
     case Validity:
@@ -1798,17 +1798,17 @@ static QString cellAsText( Cell* cell, unsigned int max )
   QString result;
   if( !cell->isDefault() )
   {
-    int l = max - cell->strOutText().length();
+    int l = max - cell->displayText().length();
     if (cell->defineAlignX() == Style::Right )
     {
         for ( int i = 0; i < l; ++i )
           result += ' ';
-        result += cell->strOutText();
+        result += cell->displayText();
     }
     else if (cell->defineAlignX() == Style::Left )
       {
           result += ' ';
-          result += cell->strOutText();
+          result += cell->displayText();
           // start with '1' because we already set one space
           for ( int i = 1; i < l; ++i )
             result += ' ';
@@ -1819,7 +1819,7 @@ static QString cellAsText( Cell* cell, unsigned int max )
            int s = (int) l / 2;
            for ( i = 0; i < s; ++i )
              result += ' ';
-           result += cell->strOutText();
+           result += cell->displayText();
            for ( i = s; i < l; ++i )
              result += ' ';
           }
@@ -1840,7 +1840,7 @@ QString Sheet::copyAsText( Selection* selection )
     {
         Cell * cell = cellAt( selection->marker() );
         if( !cell->isDefault() )
-          return cell->strOutText();
+          return cell->displayText();
         return "";
     }
 
@@ -1865,8 +1865,8 @@ QString Sheet::copyAsText( Selection* selection )
           bottom = qMax( bottom, (unsigned) c->row() );
           right = qMax( right, (unsigned) c->column() );
 
-          if ( c->strOutText().length() > max )
-                 max = c->strOutText().length();
+          if ( c->displayText().length() > max )
+                 max = c->displayText().length();
         }
       }
     }
@@ -2563,7 +2563,7 @@ void Sheet::dissociateCells(const Region& region)
 bool Sheet::testListChoose(Selection* selection)
 {
    const QPoint marker( selection->marker() );
-   const QString text = cellAt( marker.x(), marker.y() )->text();
+   const QString text = cellAt( marker.x(), marker.y() )->inputText();
 
    Region::ConstIterator end( selection->constEnd() );
    for ( Region::ConstIterator it( selection->constBegin() ); it != end; ++it )
@@ -2580,7 +2580,7 @@ bool Sheet::testListChoose(Selection* selection)
                 !cell->value().asString().isEmpty() &&
                 !cell->isTime( col, row ) && !cell->isDate( col, row ) )
            {
-             if ( cell->text() != text )
+             if ( cell->inputText() != text )
                return true;
            }
          }
@@ -5309,7 +5309,7 @@ void Sheet::updateLocale()
   Cell* c = d->cells.firstCell();
   for( ;c; c = c->nextCell() )
   {
-    QString _text = c->text();
+    QString _text = c->inputText();
     c->setCellText( _text );
   }
   emit sig_updateView( this );
@@ -5446,7 +5446,7 @@ void Sheet::printDebug()
                 cellDescr += " | ";
                 cellDescr += cell->value().type();
                 cellDescr += " | ";
-                cellDescr += cell->text();
+                cellDescr += cell->inputText();
                 if ( cell->isFormula() )
                     cellDescr += QString("  [result: %1]").arg( cell->value().asString() );
                 kDebug(36001) << cellDescr << endl;

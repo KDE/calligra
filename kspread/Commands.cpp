@@ -512,7 +512,7 @@ QString PaperLayoutCommand::name() const
 LinkCommand::LinkCommand( Cell* c, const QString& text, const QString& link )
 {
   cell = c;
-  oldText = cell->text();
+  oldText = cell->inputText();
   oldLink = cell->link();
   newText = text;
   newLink = link;

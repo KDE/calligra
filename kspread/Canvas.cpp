@@ -3406,7 +3406,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
         double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
 
         Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
-        bool rtlText = cell->strOutText().isRightToLeft();
+        bool rtlText = cell->displayText().isRightToLeft();
 
         // if sheet and cell direction don't match, then the editor's location
         // needs to be shifted backwards so that it's right above the cell's text
@@ -3468,7 +3468,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
     }
 
     if ( !clear && cell )
-        d->cellEditor->setText( cell->text() );
+        d->cellEditor->setText( cell->inputText() );
 
     return true;
 }
@@ -4088,7 +4088,7 @@ void Canvas::showToolTip( const QPoint& p )
 
 #if 0
     // Quick cut
-    if( cell->strOutText().isEmpty() )
+    if( cell->displayText().isEmpty() )
         return;
 #endif
     // displayed tool tip, which has the following priorities:
@@ -4100,7 +4100,7 @@ void Canvas::showToolTip( const QPoint& p )
     // If cell is too small, show the content
     if ( !view()->sheetView( sheet )->cellView( col, row ).dimensionFits() )
     {
-        tipText = cell->strOutText();
+        tipText = cell->displayText();
     }
 
     // Show hyperlink, if any

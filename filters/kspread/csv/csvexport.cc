@@ -82,15 +82,15 @@ QString CSVExport::exportCSVCell( const KSpread::Doc* doc, Sheet const * const s
   if ( !cell->isDefault() && !cell->isEmpty() )
   {
     if ( cell->isFormula() )
-        text = cell->strOutText();
+        text = cell->displayText();
     else if ( !cell->link().isEmpty() )
-        text = cell->text(); // untested
+        text = cell->inputText(); // untested
     else if( cell->isTime() )
         text = cell->value().asTime(doc).toString("hh:mm:ss");
     else if( cell->isDate() )
         text = cell->value().asDate(doc).toString("yyyy-MM-dd");
     else
-        text = cell->strOutText();
+        text = cell->displayText();
   }
 
   if ( !text.isEmpty() )

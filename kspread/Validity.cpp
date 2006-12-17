@@ -713,7 +713,7 @@ bool Validity::testValidity( const Cell* cell ) const
     if ( d->restriction != None )
     {
         //fixme
-        if ( d->allowEmptyCell && cell->text().isEmpty() )
+        if ( d->allowEmptyCell && cell->inputText().isEmpty() )
             return true;
 
         if ( cell->value().isNumber() &&
@@ -771,7 +771,7 @@ bool Validity::testValidity( const Cell* cell ) const
         {
             if( cell->value().isString() )
             {
-                int len = cell->strOutText().length();
+                int len = cell->displayText().length();
                 switch( d->cond)
                 {
                   case Conditional::Equal:

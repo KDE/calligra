@@ -379,12 +379,12 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
 
     m_sourceCell->setValue(Value(startA));
     resultA = m_targetCell->value().asFloat() - _goal;
-    //    kDebug() << "Target A: " << m_targetCell->value().asFloat() << ", " << m_targetCell->text() << " Calc: " << resultA << endl;
+    //    kDebug() << "Target A: " << m_targetCell->value().asFloat() << ", " << m_targetCell->inputText() << " Calc: " << resultA << endl;
 
     m_sourceCell->setValue(Value(startB));
     resultB = m_targetCell->value().asFloat() - _goal;
     /*
-      kDebug() << "Target B: " << m_targetCell->value().asFloat() << ", " << m_targetCell->text() << " Calc: " << resultB << endl;
+      kDebug() << "Target B: " << m_targetCell->value().asFloat() << ", " << m_targetCell->inputText() << " Calc: " << resultB << endl;
 
       kDebug() << "Iteration: " << m_maxIter << ", StartA: " << startA
               << ", ResultA: " << resultA << " (eps: " << eps << "), StartB: "

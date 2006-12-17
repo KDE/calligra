@@ -105,9 +105,9 @@ void Inspector::Private::handleCell()
   new Q3ListViewItem( cellView, "Formula", boolAsString( cell->isFormula() ) );
 //   new Q3ListViewItem( cellView, "Format Properties", longAsHexstring( static_cast<long>( cell->style()->propertiesMask() ) ) );
 //   new Q3ListViewItem( cellView, "Style Properties", longAsHexstring( static_cast<long>( cell->style()->style()->features() ) ) );
-  new Q3ListViewItem( cellView, "Text", cell->text() );
+  new Q3ListViewItem( cellView, "Text", cell->inputText() );
   new Q3ListViewItem( cellView, "Text (Displayed)",
-		     cell->strOutText().replace( QChar('\n'), "\\n" ) );
+		     cell->displayText().replace( QChar('\n'), "\\n" ) );
 
   QTextStream ts( &str, QIODevice::WriteOnly );
   ts << cell->value();

@@ -174,12 +174,12 @@ public:
      * Return the text the user entered. This could be a value (e.g. "14.03")
      * or a formula (e.g. "=SUM(A1:A10)")
      */
-    QString text() const;
+    QString inputText() const;
 
     /**
      * \return the output text, e.g. the result of a formula
      */
-    QString strOutText() const;
+    QString displayText() const;
 
     /**
      * The cell's formula. Usable to analyze the formula's tokens.

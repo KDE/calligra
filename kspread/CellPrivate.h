@@ -135,24 +135,24 @@ public:
   // Holds the user's input.
   //
   // FIXME:
-  // Eventually, we'll want to get rid of strText and generate
+  // Eventually, we'll want to get rid of inputText and generate
   // user's input on-the-fly. Then, for normal cells, we'll generate
   // this string using converter()->asString
   // (value()).
   //
-  // Here the problem is, that strText also holds the formula -
+  // Here the problem is, that inputText also holds the formula -
   // we'll need to provide some method to generate it from the
   // parsed version, created in KSpread::Formula. Hence, we won't be
-  // able to get rid of strText until we switch to the new formula
+  // able to get rid of inputText until we switch to the new formula
   // parser and until we write some method that re-generates the
   // input formula...
   //
-  // Alternately, we can keep using strText for formulas and
+  // Alternately, we can keep using inputText for formulas and
   // generate it dynamically for static cells...
   //
   //  /Tomas
   //
-  QString  strText;
+  QString inputText;
 
   // the Formula object for the cell
   KSpread::Formula *formula;

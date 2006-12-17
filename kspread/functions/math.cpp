@@ -993,7 +993,7 @@ Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
         Cell *cell = e->sheet->cellAt (c, r);
         if (cell->isDefault())
           continue;
-        if (cell->isFormula() && cell->text().indexOf("SUBTOTAL", 0, Qt::CaseInsensitive) != -1)
+        if (cell->isFormula() && cell->inputText().indexOf("SUBTOTAL", 0, Qt::CaseInsensitive) != -1)
           // cell contains the word SUBTOTAL - replace value with empty
           range.setElement (c-c1, r-r1, empty);
       }

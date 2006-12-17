@@ -104,21 +104,21 @@ void Solver::optimize()
   if (!formulaCell->isFormula())
     return;
 
-  kDebug() << formulaCell->text() << endl;
+  kDebug() << formulaCell->inputText() << endl;
   s_formula = new Formula( sheet );
   if (d->dialog->minimizeButton->isChecked())
   {
-    s_formula->setExpression( formulaCell->text() );
+    s_formula->setExpression( formulaCell->inputText() );
   }
   else if (d->dialog->maximizeButton->isChecked())
   {
     // invert the formula
-    s_formula->setExpression( "=-(" + formulaCell->text().mid(1) + ')' );
+    s_formula->setExpression( "=-(" + formulaCell->inputText().mid(1) + ')' );
   }
   else // if (d->dialog->valueButton->isChecked())
   {
     // TODO
-    s_formula->setExpression( "=ABS(" + formulaCell->text().mid(1) + '-'
+    s_formula->setExpression( "=ABS(" + formulaCell->inputText().mid(1) + '-'
                                       + d->dialog->value->text() + ')' );
   }
 

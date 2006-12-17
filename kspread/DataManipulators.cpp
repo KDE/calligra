@@ -128,7 +128,7 @@ bool AbstractDataManipulator::preProcessing ()
           int rowidx = row - range.top();
 
           if (cell->isFormula())
-            st.text = cell->text();
+            st.text = cell->inputText();
           st.val = m_sheet->value (col, row);
           st.format = cell->formatType(col, row);
           oldData[colidx][rowidx] = st;
@@ -447,7 +447,7 @@ bool ShiftManipulator::process(Element* element)
                     {
                         cell = m_sheet->cellAt( col, row );
                         if ( cell->isDefault() ) continue;
-                        m_undoCells.insert( cell->cellPosition(), cell->text() );
+                        m_undoCells.insert( cell->cellPosition(), cell->inputText() );
                         cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
                     }
                 }
@@ -461,7 +461,7 @@ bool ShiftManipulator::process(Element* element)
                     {
                         cell = m_sheet->cellAt( col, row );
                         if ( cell->isDefault() ) continue;
-                        m_undoCells.insert( cell->cellPosition(), cell->text() );
+                        m_undoCells.insert( cell->cellPosition(), cell->inputText() );
                         cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
                     }
                 }
@@ -526,7 +526,7 @@ bool ShiftManipulator::process(Element* element)
                 {
                     cell = m_sheet->cellAt( col, row );
                     if ( cell->isDefault() ) continue;
-                    m_undoCells.insert( cell->cellPosition(), cell->text() );
+                    m_undoCells.insert( cell->cellPosition(), cell->inputText() );
                     cell = m_sheet->getNextCellRight( cell->column(), cell->row() );
                 }
             }

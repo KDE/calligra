@@ -2118,7 +2118,7 @@ void View::spellCheckerReady()
       // check text only
       if ( d->spell.currentCell->value().isString() )
       {
-        d->spell.kspell->check( d->spell.currentCell->text(), true );
+        d->spell.kspell->check( d->spell.currentCell->inputText(), true );
 
         return;
       }
@@ -2161,7 +2161,7 @@ void View::spellCheckerReady()
       d->spell.spellCurrCellX = x;
       d->spell.spellCurrCellY = y;
 
-      d->spell.kspell->check( cell->text(), true );
+      d->spell.kspell->check( cell->inputText(), true );
 
       return;
     }
@@ -2292,7 +2292,7 @@ void View::spellCheckerCorrected( const QString & old, const QString & corr,
   if ( !cell )
     return;
   
-  QString content (cell->text());
+  QString content (cell->inputText());
   content.replace (pos, old.length(), corr);
 
   DataManipulator *manipulator = new DataManipulator;
@@ -2501,11 +2501,11 @@ void View::updateEditWidgetOnPress()
     }
     const Style style = d->activeSheet->style( column, row );
     if ( d->activeSheet->isProtected() && style.hideFormula() )
-        d->editWidget->setText( cell->strOutText() );
+        d->editWidget->setText( cell->displayText() );
     else if ( d->activeSheet->isProtected() && style.hideAll() )
         d->editWidget->setText( "" );
     else
-        d->editWidget->setText( cell->text() );
+        d->editWidget->setText( cell->inputText() );
 
     d->adjustActions(cell, column, row);
 }
@@ -2541,11 +2541,11 @@ void View::updateEditWidget()
     }
 
     if ( d->activeSheet->isProtected() && style.hideFormula() )
-        d->editWidget->setText( cell->strOutText() );
+        d->editWidget->setText( cell->displayText() );
     else if ( d->activeSheet->isProtected() && style.hideAll() )
         d->editWidget->setText( "" );
     else
-        d->editWidget->setText( cell->text() );
+        d->editWidget->setText( cell->inputText() );
 
     if ( d->activeSheet->isProtected() && !style.notProtected() )
       d->editWidget->setEnabled( false );
@@ -4242,7 +4242,7 @@ void View::findNext()
             if ( d->typeValue == FindOption::Note )
                 findObj->setData( cell->comment( cell->column(), cell->row() ) );
             else
-                findObj->setData( cell->text() );
+                findObj->setData( cell->inputText() );
             d->findPos = QPoint( cell->column(), cell->row() );
             //kDebug() << "setData(cell " << d->findPos << ')' << endl;
         }
@@ -4435,8 +4435,8 @@ void View::replace()
     // TODO - after a replacement only?
     Cell *cell = activeSheet()->cellAt( canvasWidget()->markerColumn(),
                                                canvasWidget()->markerRow() );
-    if ( cell->text() != 0 )
-        d->editWidget->setText( cell->text() );
+    if ( cell->inputText() != 0 )
+        d->editWidget->setText( cell->inputText() );
     else
         d->editWidget->setText( "" );
 #endif
@@ -4514,7 +4514,7 @@ void View::removeHyperlink()
     command->execute();
 
   canvasWidget()->setFocus();
-  d->editWidget->setText( cell->text() );
+  d->editWidget->setText( cell->inputText() );
 }
 
 void View::insertHyperlink()
@@ -4531,7 +4531,7 @@ void View::insertHyperlink()
     dlg->setWindowTitle( i18n( "Insert Link" ) );
     if( cell )
     {
-      dlg->setText( cell->text() );
+      dlg->setText( cell->inputText() );
       if( !cell->link().isEmpty() )
       {
         dlg->setWindowTitle( i18n( "Edit Link" ) );
@@ -4549,7 +4549,7 @@ void View::insertHyperlink()
 
         //refresh editWidget
       canvasWidget()->setFocus();
-      d->editWidget->setText( cell->text() );
+      d->editWidget->setText( cell->inputText() );
     }
     delete dlg;
 }
@@ -5497,7 +5497,7 @@ void View::slotListChoosePopupMenu( )
   d->popupListChoose = new QMenu();
   QRect selection( d->selection->selection() );
   Cell * cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
-  QString tmp = cell->text();
+  QString tmp = cell->inputText();
   QStringList itemList;
 
   for ( int col = selection.left(); col <= selection.right(); ++col )
@@ -5509,10 +5509,10 @@ void View::slotListChoosePopupMenu( )
            && !( col == d->canvas->markerColumn()
                  && c->row() == d->canvas->markerRow()) )
       {
-        if ( c->value().isString() && c->text() != tmp && !c->text().isEmpty() )
+        if ( c->value().isString() && c->inputText() != tmp && !c->inputText().isEmpty() )
         {
-          if ( itemList.indexOf( c->text() ) == -1 )
-            itemList.append(c->text());
+          if ( itemList.indexOf( c->inputText() ) == -1 )
+            itemList.append(c->inputText());
         }
       }
 
@@ -5578,7 +5578,7 @@ void View::slotItemSelected( QAction* action )
   int x = d->canvas->markerColumn();
   int y = d->canvas->markerRow();
   Cell * cell = d->activeSheet->cellAt (x, y);
-  if (tmp == cell->text())
+  if (tmp == cell->inputText())
     return;
 
   DataManipulator *manipulator = new DataManipulator;
