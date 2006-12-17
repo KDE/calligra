@@ -33,6 +33,7 @@
 #include <qgroupbox.h>
 #include <QLabel>
 #include <QGridLayout>
+#include <kicon.h>
 
 #include <knuminput.h>
 
