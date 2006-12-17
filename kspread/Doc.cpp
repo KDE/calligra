@@ -2166,9 +2166,13 @@ void Doc::addDamage( Damage* damage )
     Q_CHECK_PTR( damage );
 
     if ( damage->type() == Damage::Cell )
-    {
-        kDebug(36005) << *static_cast<CellDamage*>(damage) << endl;
-    }
+        kDebug(36007) << "Adding\t " << *static_cast<CellDamage*>(damage) << endl;
+    else if ( damage->type() == Damage::Sheet )
+        kDebug(36007) << "Adding\t " << *static_cast<SheetDamage*>(damage) << endl;
+    else if ( damage->type() == Damage::Selection )
+        kDebug(36007) << "Adding\t " << *static_cast<SelectionDamage*>(damage) << endl;
+    else
+        kDebug(36007) << "Adding\t " << *damage << endl;
 
     d->damages.append( damage );
 

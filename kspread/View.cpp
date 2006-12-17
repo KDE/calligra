@@ -7073,7 +7073,6 @@ void View::saveCurrentSheetSelection()
 
 void View::handleDamages( const QList<Damage*>& damages )
 {
-    kDebug(36005) << "Processing damages..." << endl;
     bool refreshView = false;
     Region formulaChangedRegion;
     Region layoutChangedRegion;
@@ -7093,12 +7092,12 @@ void View::handleDamages( const QList<Damage*>& damages )
         if( damage->type() == Damage::Cell )
         {
             CellDamage* cellDamage = static_cast<CellDamage*>( damage );
+            kDebug(36007) << "Processing\t " << *cellDamage << endl;
             Sheet* const damagedSheet = cellDamage->sheet();
             const Region region = cellDamage->region();
 
             if ( cellDamage->changes() & CellDamage::Appearance )
             {
-                damagedSheet->setRegionPaintDirty( region ); // still used for embedded object repainting
                 sheetView( damagedSheet )->invalidateRegion( region );
                 paintClipped = false;
             }
@@ -7118,11 +7117,13 @@ void View::handleDamages( const QList<Damage*>& damages )
             {
                 valueChangedRegion.add( region, damagedSheet );
             }
+            continue;
         }
 
         if( damage->type() == Damage::Sheet )
         {
             SheetDamage* sheetDamage = static_cast<SheetDamage*>( damage );
+            kDebug(36007) << "Processing\t " << *sheetDamage << endl;
             Sheet* damagedSheet = sheetDamage->sheet();
 
             if ( sheetDamage->changes() & SheetDamage::PropertiesChanged )
@@ -7135,11 +7136,13 @@ void View::handleDamages( const QList<Damage*>& damages )
                 d->activeSheet->setRegionPaintDirty( d->canvas->visibleCells() );
                 refreshView = true;
             }
+            continue;
         }
 
         if( damage->type() == Damage::Selection )
         {
             SelectionDamage* selectionDamage = static_cast<SelectionDamage*>( damage );
+            kDebug(36007) << "Processing\t " << *selectionDamage << endl;
             const Region region = selectionDamage->region();
 
             if ( paintClipped )
@@ -7147,7 +7150,10 @@ void View::handleDamages( const QList<Damage*>& damages )
                 const QRectF rect = canvasWidget()->cellCoordinatesToView( region.boundingRect() );
                 paintRegion += rect.toRect().adjusted( -3, -3, 4, 4 );
             }
+            continue;
         }
+
+        kDebug(36007) << "Unhandled\t " << *damage << endl;
     }
 
     // First, update the dependencies.

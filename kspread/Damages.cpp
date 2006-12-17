@@ -130,6 +130,20 @@ const KSpread::Region& SelectionDamage::region() const
   kDebug support
 ****************************************************************************/
 
+kdbgstream operator<<( kdbgstream str, const KSpread::Damage& d )
+{
+    switch ( d.type() )
+    {
+        case Damage::Nothing:   return str << "NoDamage";
+        case Damage::Document:  return str << "Document";
+        case Damage::Workbook:  return str << "Workbook";
+        case Damage::Sheet:     return str << "Sheet";
+        case Damage::Range:     return str << "Range";
+        case Damage::Cell:      return str << "Cell";
+        case Damage::Selection: return str << "Selection";
+    }
+}
+
 kdbgstream operator<<( kdbgstream str, const KSpread::CellDamage& d )
 {
     str << "CellDamage: " << d.region().name( d.sheet() );
@@ -138,5 +152,24 @@ kdbgstream operator<<( kdbgstream str, const KSpread::CellDamage& d )
     if ( d.changes() & CellDamage::Layout )     str << " Layout";
     if ( d.changes() & CellDamage::TextFormat ) str << " TextFormat";
     if ( d.changes() & CellDamage::Value )      str << " Value";
+    return str;
+}
+
+kdbgstream operator<<( kdbgstream str, const KSpread::SheetDamage& d )
+{
+    str << "SheetDamage: " << ( d.sheet() ? d.sheet()->sheetName() : "NULL POINTER!" );
+    switch ( d.changes() )
+    {
+      case SheetDamage::None:               return str << " None";
+      case SheetDamage::ContentChanged:     return str << " Content";
+      case SheetDamage::PropertiesChanged:  return str << " Properties";
+      case SheetDamage::Hidden:             return str << " Hidden";
+      case SheetDamage::Shown:              return str << " Shown";
+    }
+}
+
+kdbgstream operator<<( kdbgstream str, const KSpread::SelectionDamage& d )
+{
+    str << "SelectionDamage: " << d.region().name();
     return str;
 }
