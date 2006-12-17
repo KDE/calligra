@@ -17,29 +17,39 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KPrShapeUserData.h>
+#ifndef KPRSHAPEAPPLICATIONDATA_H
+#define KPRSHAPEAPPLICATIONDATA_H
 
-KPrShapeUserData::KPrShapeUserData()
+#include <KoShapeApplicationData.h>
+
+class KPrShapeUserData : public KoShapeApplicationData
 {
-}
+public:
+   KPrShapeUserData();
+   
+   void setAppearSoundEffectFileName( const QString & _a_fileName );
 
-void KPrShapeUserData::setAppearSoundEffectFileName( const QString & _a_fileName )
-{ 
-  a_soundFileName = _a_fileName; 
-}
+   void setDisappearSoundEffectFileName( const QString &_d_fileName );
+   
+   /**
+    * Return sound name used when object appear.
+    * @param return sound name used when object appear.
+    */
+   QString appearSoundEffectFileName() const;
+   
+   /**
+    * Return sound name used when object disappear.
+    * @param return sound name used when object disappear.
+    */
+   QString disappearSoundEffectFileName() const;
 
-void KPrShapeUserData::setDisappearSoundEffectFileName( const QString &_d_fileName )
-{ 
-  d_soundFileName = _d_fileName; 
-}
+private:
+   int m_appearTimer;
+   int m_disappearTimer;
+   QString m_a_soundFileName;
+   QString m_d_soundFileName;
+};
 
-QString KPrShapeUserData::appearSoundEffectFileName() const
-{ 
-  return a_soundFileName; 
-}
 
-QString KPrShapeUserData::disappearSoundEffectFileName() const
-{ 
-  return d_soundFileName; 
-}
+#endif
 
