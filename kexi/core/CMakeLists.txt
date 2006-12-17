@@ -14,6 +14,7 @@ set(kexicore_LIB_SRCS
    kexiprojectset.cpp 
    kexiactionproxy.cpp 
    kexisharedactionhost.cpp 
+   kexiactioncategories.cpp
    kexiproject.cpp 
    kexidialogbase.cpp 
    kexiviewbase.cpp 

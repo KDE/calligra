@@ -21,6 +21,7 @@
 #ifndef KEXIPROJECTDATA_H
 #define KEXIPROJECTDATA_H
 
+#include <kexi_export.h>
 #include <kexidb/connectiondata.h>
 #include <kexidb/schemadata.h>
 
