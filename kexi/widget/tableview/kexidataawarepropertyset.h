@@ -84,7 +84,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 
 	signals:
 		/*! Emmited when row is deleted.
-		 KexiDataAwareObjectInterface::rowDeleted() signal is usuallly used but when you're using
+		 KexiDataAwareObjectInterface::rowDeleted() signal is usually used but when you're using
 		 KexiDataAwarePropertySet, you never know if currentPropertySet() is updated.
 		 So use this signal instead. */
 		void rowDeleted();

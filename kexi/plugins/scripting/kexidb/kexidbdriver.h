@@ -94,7 +94,7 @@ namespace Kross { namespace KexiDB {
             /** Returns true if the passed string is a system field's name, build-in
             system field that cannot be used or created by a user. */
             bool isSystemFieldName(const QString& name);
-            /** The as second argument passed string got escaped to be usuable within
+            /** The as second argument passed string got escaped to be usable within
             a SQL-statement and those escaped string got returned by the method.
             The first argument defines the fieldtype to what we should escape the
             second argument to. */

@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <qstringlist.h>
 
-//I maybe shouldnt use stl?
+//I maybe should not use stl?
 #include <string>
 #include <vector>
 
@@ -549,7 +549,7 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *des
         R.clear();
     }
 
-    //This doesnt work in <libpqxx 2.2
+    //This does not work in <libpqxx 2.2
     //stream.complete();
 
     return true;

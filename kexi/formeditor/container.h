@@ -91,7 +91,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		//! \return The watched widget.
 		QWidget* widget() const { return m_container; }
 
-		//! \return The ObjectTreeItem assosiated with this Container's widget.
+		//! \return The ObjectTreeItem associated with this Container's widget.
 		ObjectTreeItem* objectTree() const { return m_tree; }
 
 		//! Sets the Form which this Container belongs to.

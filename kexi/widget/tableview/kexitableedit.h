@@ -97,7 +97,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		 otherwise no text will be painted. 
 
 		 \a p can be 0 - in this case no painting should be performed, becasue caller only expects 
-		 that \a x, \a y_offset, \a w, \a h, \a txt paramaters are tuned, if needed.
+		 that \a x, \a y_offset, \a w, \a h, \a txt parameters are tuned, if needed.
 		 \a p painter's pen is set to foreground color (usually black) that should be used to paint 
 		 foreground information, if needed. For example boolean editor widget paints 
 		 a rectangle using this color. */

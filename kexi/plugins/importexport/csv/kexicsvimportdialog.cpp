@@ -726,7 +726,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 			else if (x == '\n')
 			{
  				if (!inGUI) {
-					//fill remaining empty fields (database wants them explicity)
+					//fill remaining empty fields (database wants them explicitly)
 					for (int additionalColumn = column; additionalColumn <= maxColumn; additionalColumn++) {
 						setText(row - m_startline, additionalColumn, QString::null, inGUI);
 					}
@@ -1542,7 +1542,7 @@ void KexiCSVImportDialog::accept()
 	if (field.length() > 0)
 	{
 		setText(row - m_startline, column, field, false /*!gui*/);
-		//fill remaining empty fields (database wants them explicity)
+		//fill remaining empty fields (database wants them explicitly)
 		for (int additionalColumn = column; additionalColumn <= maxColumn; additionalColumn++) {
 			setText(row - m_startline, additionalColumn, QString::null, false /*!gui*/);
 		}

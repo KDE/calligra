@@ -333,7 +333,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void changeFont();
 
 	signals:
-		/*! This signal is emited as the property set switched.
+		/*! This signal is emitted as the property set switched.
 		 If \a forceReload is true, the set needs to be reloaded even
 		 if it's the same as previous one. */
 		void propertySetSwitched(KoProperty::Set *set, bool forceReload = false, const QCString& propertyToSelect = QCString());

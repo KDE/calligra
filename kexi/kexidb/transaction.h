@@ -130,7 +130,7 @@ class KEXI_DB_EXPORT TransactionGuard
 		 setTransaction() can be used later to do so. */
 		TransactionGuard();
 
-		/*! Rollbacks not commited transaction. */
+		/*! Rollbacks not committed transaction. */
 		~TransactionGuard();
 
 		/*! Assigns transaction \a trans to this guard. 

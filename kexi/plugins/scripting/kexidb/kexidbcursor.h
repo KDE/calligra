@@ -49,7 +49,7 @@ namespace Kross { namespace KexiDB {
      * while(not cursor.eof()):
      *     # Iterate over the fields the record has.
      *     for i in range( cursor.fieldCount() ):
-     *         # Print some informations.
+     *         # Print some information.
      *         print "%s %s %s" % (cursor.at(), i, cursor.value(i))
      *     # and move on to the next record.
      *     cursor.moveNext()

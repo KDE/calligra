@@ -133,7 +133,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		inline bool isSortingEnabled() const { return m_isSortingEnabled; }
 
 		/*! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
-		 this will dont work if sorting is disabled with setSortingEnabled() */
+		 this will do not work if sorting is disabled with setSortingEnabled() */
 		virtual void setSorting(int col, bool ascending=true);
 
 		/*! Enables or disables sorting for this object
@@ -724,7 +724,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		bool m_emptyRowInsertingEnabled : 1;
 
 		/*! Contains 1 if the object is readOnly, 0 if not; 
-		 otherwise (-1 means "dont know") the 'readOnly' flag from object's 
+		 otherwise (-1 means "do not know") the 'readOnly' flag from object's 
 		 internal data structure (KexiTableViewData *KexiTableView::m_data) is reused. 
 		 */
 		int m_readOnly;

@@ -180,7 +180,7 @@ class KEXI_DB_EXPORT Parser
 
 		/**
 		 * \return detailed information about last error.
-		 * If no error occured ParserError isNull()
+		 * If no error occurred ParserError isNull()
 		 */
 		ParserError error() const;
 

@@ -71,7 +71,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		/*! \return preferred size hint, that can be used to resize the view.
 		 It is computed using maximum of (a) \a otherSize and (b) current KMDI dock area's size,
 		 so the view won't exceed this maximum size. The method is used e.g. in KexiDialogBase::sizeHint().
-		 If you reimplement this method, dont forget to return value of
+		 If you reimplement this method, do not forget to return value of
 		 yoursize.boundedTo( KexiViewBase::preferredSizeHint(otherSize) ). */
 		virtual QSize preferredSizeHint(const QSize& otherSize);
 

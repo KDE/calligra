@@ -116,7 +116,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 		//! \return true id drop down button should be visible (the default).
 		bool dropDownButtonVisible() const;
 
-		//! For overriden property
+		//! For overridden property
 		int lineWidth() const { return KexiFrame::lineWidth(); }
 
 		/*! Overriden to change the policy behaviour a bit:

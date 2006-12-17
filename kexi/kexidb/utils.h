@@ -110,7 +110,7 @@ namespace KexiDB
 
 	/*! Sets \a msg to an error message retrieved from object \a obj, and \a details
 	 to details of this error (server message and result number).
-	 Does nothing if \a obj is null or no error occured.
+	 Does nothing if \a obj is null or no error occurred.
 	 \a msg and \a details strings are not overwritten.
 	 If \a msg is not empty, \a obj's error message is appended to \a details.
 	 */
@@ -229,7 +229,7 @@ namespace KexiDB
 	 i.e. tableSchema.connection() must not return 0.
 	 For SQL data sources it does not fetch any records, only "COUNT(*)" 
 	 SQL aggregation is used at the backed. 
-	 -1 is returned if error occured. */
+	 -1 is returned if error occurred. */
 	KEXI_DB_EXPORT int rowCount(const TableSchema& tableSchema);
 
 //! @todo perhaps use Q_ULLONG here?

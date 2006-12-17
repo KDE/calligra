@@ -212,7 +212,7 @@ bool KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 				return true;
 			}
 			else if (ke->key()==Key_Escape) {
-				//cancelling picker
+				//canceling picker
 				m_datePickerPopupMenu->hide();
 				kdDebug() << "reject" << endl;
 				return true;

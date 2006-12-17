@@ -41,7 +41,7 @@ namespace KexiPart {
 /*!
  You can inherit this class together with KMainWindow (or any KMainWindow).
  Call setAsDefaultHost() to make the host default for all shared actions that have 
- not explicity specified host.
+ not explicitly specified host.
 
  For example how all this is done, see KexiMainWindow implementation.
 
@@ -80,7 +80,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		void setAsDefaultHost();
 
 		/*! \return default shared actions host, used when no host 
-		 is explicity specified for shared actions.
+		 is explicitly specified for shared actions.
 		 There can be exactly one deault shared actions host. */
 		static KexiSharedActionHost& defaultHost();
 

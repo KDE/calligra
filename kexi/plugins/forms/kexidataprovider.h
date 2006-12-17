@@ -72,7 +72,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 
 		/*! Invalidates data sources collected by this provided.
 		 \a invalidSources is the set of data sources that should 
-		 be ommited for fillDataItems(). 
+		 be omitted for fillDataItems(). 
 		 Used by KexiFormView::initDataSource(). */
 		void invalidateDataSources( const QDict<char>& invalidSources, 
 			KexiDB::QuerySchema* query = 0 );

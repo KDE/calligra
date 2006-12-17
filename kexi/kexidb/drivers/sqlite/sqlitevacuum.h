@@ -35,7 +35,7 @@ class KProgressDialog;
 
  KProgressDialog will be displayed. Its progress bar will be updated whenever another 
  table's data compacting is performed. User can click "Cancel" button in any time 
- (except the final commiting) to cancel the operation. In this case, 
+ (except the final committing) to cancel the operation. In this case, 
  it's guaranteed that the original file remains unchanged. 
 
  This is possible because we rely on SQLite's VACUUM SQL command, which itself temporarily 

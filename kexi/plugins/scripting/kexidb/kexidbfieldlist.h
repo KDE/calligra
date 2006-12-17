@@ -37,7 +37,7 @@ namespace Kross { namespace KexiDB {
 
     /**
     * A list of fields. The KexiDBFieldList can be used to handle KexiDBField objects
-    * in a backend-independend way.
+    * in a backend-independent way.
     *
     * Example (in Python) ;
     * @code

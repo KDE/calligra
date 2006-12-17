@@ -103,7 +103,7 @@ bool pqxxSqlCursor::drv_open()
 		((pqxxSqlConnection*)connection())
 			->drv_commitTransaction(((pqxxSqlConnection*)connection())->m_trans);
 //		my_conn->m_trans->commit();
-//		KexiDBDrvDbg << "pqxxSqlCursor::drv_open: trans. commited: " << cur_name <<endl;
+//		KexiDBDrvDbg << "pqxxSqlCursor::drv_open: trans. committed: " << cur_name <<endl;
 
 		//We should now be placed before the first row, if any
 		m_fieldCount = m_res->columns() - (m_containsROWIDInfo ? 1 : 0);
@@ -151,7 +151,7 @@ bool pqxxSqlCursor::drv_close()
 }
 
 //==================================================================================
-//Gets the next record...doesnt need to do much, just return fetchend if at end of result set
+//Gets the next record...does not need to do much, just return fetchend if at end of result set
 void pqxxSqlCursor::drv_getNextRecord()
 {
 //	KexiDBDrvDbg << "pqxxSqlCursor::drv_getNextRecord, size is " <<m_res->size() << " Current Position is " << (long)at() << endl;
@@ -305,7 +305,7 @@ void pqxxSqlCursor::drv_clearServerResult()
 //==================================================================================
 //Add the current record to the internal buffer
 //Implementation required but no need in this driver
-//Result set is a buffer so dont need another
+//Result set is a buffer so do not need another
 void pqxxSqlCursor::drv_appendCurrentRecordToBuffer()
 {
 

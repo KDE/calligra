@@ -217,7 +217,7 @@ bool KexiActionProxy::isSupported(const char* action_name) const
 {
 	QPair<QSignal*,bool> *p = m_signals[action_name];
 	if (!p) {
-		//not supported explicity - try in children...
+		//not supported explicitly - try in children...
 		if (m_focusedChild)
 			return m_focusedChild->isSupported(action_name);
 		QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
@@ -234,7 +234,7 @@ bool KexiActionProxy::isAvailable(const char* action_name, bool alsoCheckInChild
 {
 	QPair<QSignal*,bool> *p = m_signals[action_name];
 	if (!p) {
-		//not supported explicity - try in children...
+		//not supported explicitly - try in children...
 		if (alsoCheckInChildren) {
 			if (m_focusedChild)
 				return m_focusedChild->isAvailable(action_name, alsoCheckInChildren);
@@ -246,7 +246,7 @@ bool KexiActionProxy::isAvailable(const char* action_name, bool alsoCheckInChild
 		}
 		return m_actionProxyParent ? m_actionProxyParent->isAvailable(action_name, false) : false; //last chance: parent
 	}
-	//supported explicity:
+	//supported explicitly:
 	return p->second != 0;
 }
 

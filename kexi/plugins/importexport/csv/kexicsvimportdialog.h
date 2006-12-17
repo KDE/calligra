@@ -122,14 +122,14 @@ class KexiCSVImportDialog : public KDialogBase
 		/*! Parses date from \a text and stores into \a date. 
 		 m_dateRegExp is used for clever detection; 
 		 if '/' separated is found, it's assumed the format is american mm/dd/yyyy.
-		 This function supports ommited zeros, so 1/2/2006 is parsed properly too.
+		 This function supports omitted zeros, so 1/2/2006 is parsed properly too.
 		 \return true on success. */
 		bool parseDate(const QString& text, QDate& date);
 
 		/*! Parses time from \a text and stores into \a date. 
 		 m_timeRegExp1 and m_timeRegExp2 are used for clever detection; 
 		 both hh:mm:ss and hh:mm are supported.
-		 This function supports ommited zeros, so 1:2:3 is parsed properly too.
+		 This function supports omitted zeros, so 1:2:3 is parsed properly too.
 		 \return true on success. */
 		bool parseTime(const QString& text, QTime& time);
 

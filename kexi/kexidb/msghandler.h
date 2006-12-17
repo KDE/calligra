@@ -30,7 +30,7 @@ namespace KexiDB {
  Message title is a text prepended to error or warning messages.
  Use it this way:
  \code
- KexiDB::MessageTitle title(myKexiDBObject, i18n("Terrible error occured"));
+ KexiDB::MessageTitle title(myKexiDBObject, i18n("Terrible error occurred"));
  \endcode
  After leaving current from code block, object's message title will be reverted 
  to previous value.

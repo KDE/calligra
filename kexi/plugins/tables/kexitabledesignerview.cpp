@@ -979,7 +979,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 		}
 	}
 
-	//clear PK when these properies were set to false:
+	//clear PK when these properties were set to false:
 	if ((pname=="indexed" || pname=="unique" || pname=="notNull") 
 		&& set["primaryKey"].value().toBool() && property.value().toBool()==false)
 	{

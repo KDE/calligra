@@ -168,7 +168,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		KexiPart::Item* item(int identifier);
 
 		/**
-		 * @return the database connection assosiated with this project
+		 * @return the database connection associated with this project
 		 */
 		KexiDB::Connection *dbConnection() const;
 

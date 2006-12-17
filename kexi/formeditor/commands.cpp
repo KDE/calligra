@@ -1259,7 +1259,7 @@ PasteWidgetCommand::fixPos(QDomElement &el, Container *container)
 		r.moveBy(10,10);
 	}
 
-	// the pasted wigdet should stay inside container's boudaries
+	// the pasted wigdet should stay inside container's boundaries
 	if(r.x() < 0)
 		r.moveLeft(0);
 	else if(r.right() > container->widget()->width())
