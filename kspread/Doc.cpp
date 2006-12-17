@@ -2163,6 +2163,12 @@ void Doc::addDamage( Damage* damage )
 {
     if ( isLoading() )
         return;
+    Q_CHECK_PTR( damage );
+
+    if ( damage->type() == Damage::Cell )
+    {
+        kDebug(36005) << *static_cast<CellDamage*>(damage) << endl;
+    }
 
     d->damages.append( damage );
 

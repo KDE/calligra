@@ -128,4 +128,14 @@ class SelectionDamage : public Damage
 
 } // namespace KSpread
 
+
+/***************************************************************************
+  kDebug support
+****************************************************************************/
+
+kdbgstream operator<<( kdbgstream str, const KSpread::Damage& d );
+kdbgstream operator<<( kdbgstream str, const KSpread::CellDamage& d );
+kdbgstream operator<<( kdbgstream str, const KSpread::SheetDamage& d );
+kdbgstream operator<<( kdbgstream str, const KSpread::SelectionDamage& d );
+
 #endif // KSPREAD_DAMAGES

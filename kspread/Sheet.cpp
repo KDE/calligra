@@ -5397,13 +5397,15 @@ void Sheet::convertObscuringBorders()
 
 void Sheet::setRegionPaintDirty( const Region & region )
 {
-  if ( isLoading() )
-    return;
+    if ( isLoading() )
+        return;
+    if ( region.isEmpty() || !region.isValid() )
+        return;
 
-  d->paintDirtyList.add(region); // still needed for embedded object repainting
-  doc()->addDamage( new CellDamage( this, region, CellDamage::Appearance ) );
+    d->paintDirtyList.add(region); // still needed for embedded object repainting
+    doc()->addDamage( new CellDamage( this, region, CellDamage::Appearance ) );
 
-//   kDebug(36004) << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
+//     kDebug(36004) << "setRegionPaintDirty "<< static_cast<const Region*>(&region)->name(this) << endl;
 }
 
 void Sheet::setRegionPaintDirty( const QRect& rect )
