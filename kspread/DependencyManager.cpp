@@ -476,7 +476,7 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
 void DependencyManager::Private::removeCircularDependencyFlags(const Region& region)
 {
   // a set of cells, which circular dependency flag is currently removed
-  QSet<Cell*> processedCells;
+  static QSet<Cell*> processedCells;
 
   Region::ConstIterator end(region.constEnd());
   for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
