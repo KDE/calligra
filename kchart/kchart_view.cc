@@ -35,12 +35,12 @@
 #include "kchart_factory.h"
 #include "kchart_part.h"
 #include "kchart_params.h"
-#include "KCWizard.h"
 #include "kchartDataEditor.h"
 #include "kchartConfigDialog.h"
 #include "KChartViewAdaptor.h"
 #include <KoViewAdaptor.h>
-#include "kchartPageLayout.h"
+#include "KCWizard.h"
+#include "KCPageLayout.h"
 #include "kchartPrinterDlg.h"
 
 
@@ -570,8 +570,8 @@ void KChartView::updateButton()
 
 void KChartView::slotConfigPageLayout()
 {
-    KChartParams      *params = ((KChartPart*)koDocument())->params();
-    KChartPageLayout  *dialog = new KChartPageLayout(params, this);
+    KChartParams  *params = ((KChartPart*)koDocument())->params();
+    KCPageLayout  *dialog = new KCPageLayout(params, this);
 
     connect( dialog, SIGNAL( dataChanged() ),
              this,   SLOT( slotRepaint() ) );

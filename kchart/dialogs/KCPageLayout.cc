@@ -17,20 +17,21 @@
 */
 
 
-#include "kchartPageLayout.h"
-#include "kchart_params.h"
-#include <knumvalidator.h>
 #include <QGroupBox>
 #include <QLineEdit>
 #include <QLayout>
+#include <knumvalidator.h>
 //Added by qt3to4:
 #include <klocale.h>
 #include <QLabel>
 
+#include "kchart_params.h"
+#include "KCPageLayout.h"
+
 namespace KChart
 {
 
-KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent)
+KCPageLayout::KCPageLayout( KChartParams* _params, QWidget* parent)
 	: KDialog( parent )
 {
     setButtons( Ok | Cancel | User1 | Apply );
@@ -91,7 +92,7 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent)
     connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotReset() ));
 }
 
-void KChartPageLayout::init()
+void KCPageLayout::init()
 {
     oldGlobalLeadingRight  = params->globalLeadingRight();
     oldGlobalLeadingLeft   = params->globalLeadingLeft();
@@ -100,19 +101,19 @@ void KChartPageLayout::init()
     slotReset();
 }
 
-void KChartPageLayout::slotOk()
+void KCPageLayout::slotOk()
 {
     slotApply();
     accept();
 }
 
-void KChartPageLayout::slotApply()
+void KCPageLayout::slotApply()
 {
     params->setGlobalLeading( leftBorder->text().toInt(),topBorder->text().toInt() , rightBorder->text().toInt(), bottomBorder->text().toInt() );
     emit dataChanged();
 }
 
-void KChartPageLayout::slotReset()
+void KCPageLayout::slotReset()
 {
     rightBorder->setText(QString::number(oldGlobalLeadingRight));
     leftBorder->setText(QString::number(oldGlobalLeadingLeft));
@@ -122,4 +123,4 @@ void KChartPageLayout::slotReset()
 
 }  //KChart namespace
 
-#include "kchartPageLayout.moc"
+#include "KCPageLayout.moc"

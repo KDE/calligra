@@ -38,7 +38,7 @@ set(kchartcommon_LIB_SRCS
    kchartHeaderFooterConfigPage.cc 
    kchartLine3dConfigPage.cc 
    kchartParameterPolarConfigPage.cc 
-   kchartPageLayout.cc 
+   dialogs/KCPageLayout.cc 
    kchartPrinterDlg.cc
    dialogs/KCWizard.cc 
    dialogs/KCWizardDataPage.cc

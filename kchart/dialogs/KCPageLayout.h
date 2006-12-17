@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KCHARTPAGELAYOUT__
-#define __KCHARTPAGELAYOUT__
+#ifndef __KCPAGELAYOUT__
+#define __KCPAGELAYOUT__
 
 #include <kdialog.h>
 
@@ -29,11 +29,12 @@ namespace KChart
 
 class KChartView;
 class KChartParams;
-class KChartPageLayout : public KDialog
+
+class KCPageLayout : public KDialog
 {
     Q_OBJECT
 public:
-    KChartPageLayout( KChartParams* _params, QWidget* parent);
+    KCPageLayout( KChartParams* _params, QWidget* parent);
 public slots:
     void slotOk();
     void slotApply();
