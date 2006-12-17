@@ -70,7 +70,7 @@ void KivioShapeGeometry::setSelection(KoSelection* selection)
 
 void KivioShapeGeometry::update()
 {
-    if(m_selection && m_selection->count() <= 0) {
+    if(!m_selection || m_selection->count() <= 0) {
         return;
     }
 
