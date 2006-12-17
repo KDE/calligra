@@ -60,6 +60,8 @@ class View;
  */
 class KSPREAD_EXPORT CellView
 {
+    friend class SheetView;
+
 public:
     CellView( SheetView* sheetView, int col, int row );
     CellView( const CellView& other );

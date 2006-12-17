@@ -627,6 +627,9 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
 
     const bool isMergedOrObscured = cell->isPartOfMerged() || isObscured();
 
+    if ( d->obscured )
+        kDebug(36004) << "isObscured() = true; isMergedOrObscured = " << isMergedOrObscured << endl;
+
     const bool paintLeft    = ( paintBorder & LeftBorder &&
                                 d->style.leftBorderPen().style() == Qt::NoPen &&
                                 cell->sheet()->getShowGrid() &&
@@ -2223,7 +2226,8 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, Cell* masterCell )
          - style().leftBorderPen().width() - style().rightBorderPen().width() ) &&
          masterCell->mergedYCells() == 0 )
     {
-        int col = masterCell->column() + masterCell->mergedXCells();
+        const int effectiveCol = masterCell->column() + masterCell->mergedXCells();
+        int col = effectiveCol;
 
         // Find free cells to the right of this one.
         enum { Undefined, EnoughSpace, NotEnoughSpace } status = Undefined;
@@ -2260,15 +2264,13 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, Cell* masterCell )
         if ( style().halign() == Style::Left || ( style().halign() == Style::HAlignUndefined
              && !masterCell->value().isNumber() ) )
         {
-            if ( col > masterCell->column() + masterCell->mergedXCells() )
+            if ( col > effectiveCol )
             {
-                d->obscuredCellsX = col - masterCell->column() - masterCell->mergedXCells();
+                d->obscuredCellsX = col - effectiveCol;
                 d->width += extraWidth;
-                for ( int x = masterCell->column() + masterCell->mergedXCells() + 1; x <= col; ++x )
-                {
-                    CellView cellView = sheetView->cellView( x, masterCell->row() );
-                    cellView.obscure( masterCell->column(), masterCell->row() );
-                }
+
+                const QRect obscuredRange( effectiveCol + 1, masterCell->row(), d->obscuredCellsX, 1 );
+                sheetView->obscureCells( obscuredRange, masterCell->cellPosition() );
 
                 // Not enough space
                 if ( status == NotEnoughSpace )
@@ -2297,7 +2299,8 @@ void CellView::obscureVerticalCells( SheetView* sheetView, Cell* masterCell )
          d->textHeight > ( d->height - 2 * s_borderSpace
          - style().topBorderPen().width() - style().bottomBorderPen().width() ) )
     {
-        int row = masterCell->row() + masterCell->mergedYCells();
+        const int effectiveRow = masterCell->row() + masterCell->mergedYCells();
+        int row = effectiveRow;
 
         // Find free cells bottom to this one
         enum { Undefined, EnoughSpace, NotEnoughSpace } status = Undefined;
@@ -2321,16 +2324,13 @@ void CellView::obscureVerticalCells( SheetView* sheetView, Cell* masterCell )
         }
 
         // Check to make sure we haven't already force-merged enough cells.
-        if ( row > masterCell->row() + masterCell->mergedYCells() )
+        if ( row > effectiveRow )
         {
-            d->obscuredCellsY = row - masterCell->row() - masterCell->mergedYCells();
+            d->obscuredCellsY = row - effectiveRow;
             d->height += extraHeight;
 
-            for ( int y = masterCell->row() + 1; y <= row; ++y )
-            {
-                CellView cellView = sheetView->cellView( masterCell->column(), y );
-                cellView.obscure( masterCell->column(), masterCell->row() );
-            }
+            const QRect obscuredRange( masterCell->column(), effectiveRow + 1, 1, d->obscuredCellsY );
+            sheetView->obscureCells( obscuredRange, masterCell->cellPosition() );
 
             // Not enough space
             if ( status == NotEnoughSpace )

@@ -213,3 +213,19 @@ void SheetView::invalidateRange( const QRect& range )
         }
     }
 }
+
+void SheetView::obscureCells( const QRect& range, const QPoint& position )
+{
+    const int right = range.right();
+    const int bottom = range.bottom();
+    for ( int col = range.left(); col <= right; ++col )
+    {
+        for ( int row = range.top(); row <= bottom; ++row )
+        {
+            // create the CellView, but do not use the returned CellView. It is shared!
+            cellView( col, row );
+            // alter the CellView directly instead
+            d->cache.object( QPoint(col,row) )->obscure( position.x(), position.y() );
+        }
+    }
+}

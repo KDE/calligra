@@ -40,6 +40,8 @@ class View;
  */
 class KSPREAD_EXPORT SheetView
 {
+    friend class CellView;
+
 public:
     /**
      * Constructor.
@@ -87,6 +89,12 @@ private:
      * \internal
      */
     void invalidateRange( const QRect& range );
+
+    /**
+     * Marks other CellViews in \p range as obscured by the CellView at \p position .
+     * Used by CellView.
+     */
+    void obscureCells( const QRect& range, const QPoint& position );
 
     class Private;
     Private * const d;
