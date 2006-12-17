@@ -526,7 +526,7 @@ void CellView::paintCellBackground( QPainter& painter, const QPointF& paintCoord
     painter.eraseRect( cellRect );
 
     // Get a background brush
-    QBrush brush = d->style.backgroundBrush();
+    const QBrush brush = d->style.backgroundBrush();
 
     // Draw background pattern if necessary.
     if ( brush.style() != Qt::NoBrush )
@@ -567,7 +567,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
 
     --Robert Knight (robertknight@gmail.com)
     */
-    bool paintingToExternalDevice = dynamic_cast<QPrinter*>(painter.device());
+    const bool paintingToExternalDevice = dynamic_cast<QPrinter*>(painter.device());
 
     const int col = cellRef.x();
     const int row = cellRef.y();
@@ -965,8 +965,7 @@ void CellView::paintText( QPainter& painter,
         && !( cell->sheet()->isProtected()
         && style().hideFormula() ) ) )
     {
-        double value = cell->value().asFloat();
-        if ( style().floatColor() == Style::NegRed && value < 0.0 )
+        if ( style().floatColor() == Style::NegRed && cell->value().asFloat() < 0.0 )
             tmpPen.setColor( Qt::red );
     }
 
@@ -1007,9 +1006,9 @@ void CellView::paintText( QPainter& painter,
 #endif
   painter.setPen( tmpPen );
 
-  QString  tmpText   = cell->strOutText();
-  double   tmpHeight = d->textHeight;
-  double   tmpWidth  = d->textWidth;
+  const QString  tmpText   = cell->strOutText();
+  const double   tmpHeight = d->textHeight;
+  const double   tmpWidth  = d->textWidth;
 
   // If the cell is to narrow to paint the whole contents, then pick
   // out a part of the content that we paint.  The result of this is
@@ -1018,7 +1017,7 @@ void CellView::paintText( QPainter& painter,
   // FIXME: Make this dependent on the height as well.
   //
   if ( cell->testFlag( Cell::Flag_CellTooShortX ) ) {
-    QFontMetrics fontMetrics( effectiveFont( cell ) );
+    const QFontMetrics fontMetrics( effectiveFont( cell ) );
     cell->d->strOutText = textDisplaying( fontMetrics, cell );
 
     // Recalculate the text dimensions and the offset.
@@ -1035,28 +1034,28 @@ void CellView::paintText( QPainter& painter,
 
   double indent = 0.0;
   double offsetCellTooShort = 0.0;
-  int a = d->style.halign();
+  const Style::HAlign hAlign = d->style.halign();
 
     // Apply indent if text is align to left not when text is at right or middle.
-    if (  a == Style::Left && !cell->isEmpty() )
+    if (  hAlign == Style::Left && !cell->isEmpty() )
     {
         indent = d->style.indentation();
     }
 
   // Made an offset, otherwise ### is under red triangle.
-  if ( a == Style::Right && !cell->isEmpty() && cell->testFlag( Cell::Flag_CellTooShortX ) )
+  if ( hAlign == Style::Right && !cell->isEmpty() && cell->testFlag( Cell::Flag_CellTooShortX ) )
     offsetCellTooShort = 4;
 
-  QFontMetrics fm2 = painter.fontMetrics();
+  const QFontMetrics fm2 = painter.fontMetrics();
   double offsetFont = 0.0;
 
   if ( style().valign() == Style::Bottom && style().underline() )
     offsetFont = fm2.underlinePos() + 1;
 
-    int tmpAngle = d->style.angle();
-    bool tmpVerticalText = d->style.verticalText();
+    const int tmpAngle = d->style.angle();
+    const bool tmpVerticalText = d->style.verticalText();
     // force multiple rows on explicitly set line breaks
-    bool tmpMultiRow = d->style.wrapText() || cell->strOutText().contains( '\n' );
+    const bool tmpMultiRow = d->style.wrapText() || cell->strOutText().contains( '\n' );
 
   // Actually paint the text.
   //    There are 4 possible cases:
@@ -1074,8 +1073,8 @@ void CellView::paintText( QPainter& painter,
   else if ( tmpAngle != 0 ) {
     // Case 2: an angle.
 
-    int angle = tmpAngle;
-    QFontMetrics fm = painter.fontMetrics();
+    const int angle = tmpAngle;
+    const QFontMetrics fm = painter.fontMetrics();
 
     painter.rotate( angle );
     double x;
@@ -1101,7 +1100,7 @@ void CellView::paintText( QPainter& painter,
     int i;
     int pos = 0;
     double dy = 0.0;
-    QFontMetrics fm = painter.fontMetrics();
+    const QFontMetrics fm = painter.fontMetrics();
     do {
       i = cell->strOutText().indexOf( "\n", pos );
       if ( i == -1 )
@@ -1144,7 +1143,7 @@ void CellView::paintText( QPainter& painter,
     int i = 0;
     int len = 0;
     double dy = 0.0;
-    QFontMetrics fm = painter.fontMetrics();
+    const QFontMetrics fm = painter.fontMetrics();
     do {
       len = cell->strOutText().length();
       text = cell->strOutText().at( i );
@@ -1184,7 +1183,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
   if ( ! cell->sheet()->isShowPageBorders() )
     return;
 
-  SheetPrint* print = cell->sheet()->print();
+  SheetPrint* const print = cell->sheet()->print();
 
   // Draw page borders
   QLineF line;
@@ -1630,7 +1629,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
   if ( cell->testFlag( Cell::Flag_CellTooShortX ) )
       hAlign = Style::Left; // force left alignment, if text does not fit
 
-  bool isNumeric = cell->value().isNumber();
+  const bool isNumeric = cell->value().isNumber();
 
   if ( !style().verticalText() )
   {
@@ -1713,7 +1712,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
   {
     // Vertical text.
 
-    RowFormat  *rl = cell->sheet()->rowFormat( cell->row() );
+    const RowFormat  *rl = cell->sheet()->rowFormat( cell->row() );
     double      tmpIndent = 0.0;
 
     // Not enough space but align to left.
@@ -1823,7 +1822,7 @@ void CellView::makeLayout( SheetView* sheetView, int col, int row, Cell* cell )
   //
   // First, Determine the correct font with zoom taken into account.
   // Then calculate text dimensions, i.e. d->textWidth and d->textHeight.
-  QFontMetrics fontMetrics( effectiveFont( cell ) );
+  const QFontMetrics fontMetrics( effectiveFont( cell ) );
   textSize( fontMetrics, cell );
 
   // Calculate the size of the cell.
@@ -1879,7 +1878,7 @@ void CellView::calculateCellDimension( const Cell* cell )
 void CellView::calculateTextParameters( Cell* cell )
 {
   // Get the font metrics for the effective font.
-  QFontMetrics fontMetrics( effectiveFont( cell ) );
+  const QFontMetrics fontMetrics( effectiveFont( cell ) );
 
   // Recalculate text dimensions, i.e. d->textWidth and d->textHeight
   textSize( fontMetrics, cell );
@@ -1895,11 +1894,11 @@ void CellView::calculateTextParameters( Cell* cell )
 void CellView::textOffset( const QFontMetrics& fontMetrics, Cell* cell )
 {
     const double ascent = fontMetrics.ascent();
-    int hAlign = d->style.halign();
-    Style::VAlign vAlign = d->style.valign();
-    int tmpAngle = d->style.angle();
-    bool tmpVerticalText = d->style.verticalText();
-    bool tmpMultiRow = d->style.wrapText();
+    Style::HAlign hAlign = d->style.halign();
+    const Style::VAlign vAlign = d->style.valign();
+    const int tmpAngle = d->style.angle();
+    const bool tmpVerticalText = d->style.verticalText();
+    const bool tmpMultiRow = d->style.wrapText();
 
   double  w = d->width;
   double  h = d->height;
@@ -2075,10 +2074,10 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, Cell* cell )
 //
 void CellView::textSize( const QFontMetrics& fm, const Cell* cell )
 {
-    Style::VAlign vAlign = d->style.valign();
-    int tmpAngle = d->style.angle();
-    bool tmpVerticalText = d->style.verticalText();
-    bool fontUnderlined = d->style.underline();
+    const Style::VAlign vAlign = d->style.valign();
+    const int tmpAngle = d->style.angle();
+    const bool tmpVerticalText = d->style.verticalText();
+    const bool fontUnderlined = d->style.underline();
 
     // Set d->textWidth and d->textHeight to correct values according to
     // if the text is horizontal, vertical or rotated.
@@ -2144,7 +2143,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics, Cell* cell )
       int start = 0;    // Start of the line we are handling now
       int breakpos = 0;   // The next candidate pos to break the string
       int pos1 = 0;
-      int availableWidth = (int) ( d->width - 2 * s_borderSpace
+      const int availableWidth = (int) ( d->width - 2 * s_borderSpace
           - 0.5 * style().leftBorderPen().width() - 0.5 * style().rightBorderPen().width() );
 
       do {
@@ -2159,8 +2158,8 @@ void CellView::breakLines( const QFontMetrics& fontMetrics, Cell* cell )
         if (pos1 < linefeed && linefeed < breakpos)
           work_breakpos = linefeed;
 
-        double lineWidth = fontMetrics.width( cell->strOutText().mid( start, (pos1 - start) )
-                                              + outText.mid( pos1, work_breakpos - pos1 ) );
+        const double lineWidth = fontMetrics.width( cell->strOutText().mid( start, (pos1 - start) )
+                                                    + outText.mid( pos1, work_breakpos - pos1 ) );
 
         //linefeed could be -1 when no linefeed is found!
         if (breakpos > linefeed && linefeed > 0)
@@ -2201,7 +2200,7 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, Cell* masterCell )
         return;
 
     double extraWidth = 0.0;
-    Style::HAlign align = d->style.halign();
+    const Style::HAlign align = d->style.halign();
 
     // Get indentation.  This is only used for left aligned text.
     double indent = 0.0;
