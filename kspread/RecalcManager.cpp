@@ -148,8 +148,11 @@ void RecalcManager::recalc()
 
 int RecalcManager::computeDepth(Cell* cell) const
 {
+  // a set of cell, which depth is currently calculated
+  static QSet<Cell*> processedCells;
+
   //prevent infinite recursion (circular dependencies)
-  if (cell->testFlag(Cell::Flag_UpdatingDeps) ||
+  if ( processedCells.contains( cell ) ||
       cell->testFlag (Cell::Flag_CircularCalculation))
   {
     kDebug(36002) << "Circular dependency at " << cell->fullName() << endl;
@@ -165,12 +168,12 @@ int RecalcManager::computeDepth(Cell* cell) const
       cell->setValue(value);
     }
     //clear the compute reference depth flag
-    cell->clearFlag (Cell::Flag_UpdatingDeps);
+    processedCells.remove( cell );
     return 0;
   }
 
   // set the compute reference depth flag
-  cell->setFlag(Cell::Flag_UpdatingDeps);
+  processedCells.insert( cell );
 
   int depth = 0;
 
@@ -215,7 +218,7 @@ int RecalcManager::computeDepth(Cell* cell) const
   }
 
   //clear the computing reference depth flag
-  cell->clearFlag(Cell::Flag_UpdatingDeps);
+  processedCells.remove( cell );
 
   return depth;
 }
@@ -259,10 +262,13 @@ void RecalcManager::recalcRegion(const Region& region)
 
 void RecalcManager::recalcCell(Cell* cell) const
 {
-  //prevent infinite recursion (circular dependencies)
-  if (cell->testFlag (Cell::Flag_CalculatingCell) ||
-      cell->testFlag (Cell::Flag_CircularCalculation))
-  {
+    // a set of cells, that are currently processed
+    static QSet<Cell*> processedCells;
+
+    //prevent infinite recursion (circular dependencies)
+    if ( processedCells.contains( cell ) ||
+         cell->testFlag( Cell::Flag_CircularCalculation ) )
+    {
 #if 0
     kDebug(36002) << "Circle, cell " << cell->fullName() << endl;
     // don't set anything if the cell already has all these things set
@@ -277,18 +283,18 @@ void RecalcManager::recalcCell(Cell* cell) const
       cell->setValue(value);
     }
 #endif
+        //clear the calculation progress flag
+        processedCells.remove( cell );
+        return;
+    }
+    //set the calculation progress flag
+    processedCells.insert( cell );
+
+    //recalculate the cell
+    cell->calc( false );
+
     //clear the calculation progress flag
-    cell->clearFlag (Cell::Flag_CalculatingCell);
-    return;
-  }
-  //set the calculation progress flag
-  cell->setFlag(Cell::Flag_CalculatingCell);
-
-  //recalculate the cell
-  cell->calc (false);
-
-  //clear the calculation progress flag
-  cell->clearFlag(Cell::Flag_CalculatingCell);
+    processedCells.remove( cell );
 }
 
 void RecalcManager::dump() const

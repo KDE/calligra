@@ -702,20 +702,6 @@ public:
     enum StatusFlag
     {
       /**
-       * CalculatingCell
-       * Tells whether this cell it currently under calculation.
-       * If a cell thats 'progressFlag' is set is told to calculate we
-       * have detected a circular reference and we must stop calulating.
-       */
-      Flag_CalculatingCell       = 0x01,
-      /**
-       * UpdatingDeps
-       * Tells whether we've already calculated the reverse dependancies for this
-       * cell.  Similar to the Progress flag but it's for when we are calculating
-       * in the reverse direction.
-       */
-      Flag_UpdatingDeps          = 0x02,
-      /**
        * ParseError
        * True if the cell is calculated and there was an error during calculation
        * In that case the cell usually displays "#Parse!"

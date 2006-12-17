@@ -475,6 +475,9 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
 
 void DependencyManager::Private::removeCircularDependencyFlags(const Region& region)
 {
+  // a set of cells, which circular dependency flag is currently removed
+  QSet<Cell*> processedCells;
+
   Region::ConstIterator end(region.constEnd());
   for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
   {
@@ -486,9 +489,9 @@ void DependencyManager::Private::removeCircularDependencyFlags(const Region& reg
       {
         Cell* cell = sheet->cellAt(col, row);
 
-        if (cell->testFlag(Cell::Flag_UpdatingDeps))
+        if ( processedCells.contains( cell ) )
           continue;
-        cell->setFlag(Cell::Flag_UpdatingDeps);
+        processedCells.insert( cell );
 
         cell->clearFlag(Cell::Flag_CircularCalculation);
 
@@ -496,7 +499,7 @@ void DependencyManager::Private::removeCircularDependencyFlags(const Region& reg
         point.setSheet(cell->sheet());
         removeCircularDependencyFlags(dependencies.value(point));
 
-        cell->clearFlag(Cell::Flag_UpdatingDeps);
+        processedCells.remove( cell );
       }
     }
   }
