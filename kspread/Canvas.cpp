@@ -4098,8 +4098,7 @@ void Canvas::showToolTip( const QPoint& p )
     QString tipText;
     QString comment = sheet->comment( col, row );
     // If cell is too small, show the content
-    if ( cell->testFlag( Cell::Flag_CellTooShortX ) ||
-         cell->testFlag( Cell::Flag_CellTooShortY ) )
+    if ( !view()->sheetView( sheet )->cellView( col, row ).dimensionFits() )
     {
         tipText = cell->strOutText();
     }

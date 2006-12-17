@@ -724,20 +724,6 @@ public:
        */
       Flag_Merged                = 0x04,
       /**
-       * CellTooShortX
-       * When it's True displays ** and/or the red triangle and when the
-       * mouse is over it, the tooltip displays the full value
-       * it's true when text size is bigger that cell size
-       * and when Align is center or left
-       */
-      Flag_CellTooShortX         = 0x08,
-      /**
-       * CellTooShortY
-       * When it's True when mouseover it, the tooltip displays the full value
-       * it's true when text size is bigger that cell height
-       */
-      Flag_CellTooShortY         = 0x10,
-      /**
        * ParseError
        * True if the cell is calculated and there was an error during calculation
        * In that case the cell usually displays "#Parse!"

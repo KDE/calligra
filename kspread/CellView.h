@@ -175,6 +175,8 @@ public:
     double cellHeight() const;
     double cellWidth() const;
 
+    bool dimensionFits() const;
+
 private:
     /**
      * \ingroup Layout

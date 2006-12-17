@@ -79,6 +79,8 @@ public:
         , hidden( false )
         , merged( false )
         , obscured( false )
+        , fittingHeight( true )
+        , fittingWidth( true )
         , obscuredCellsX( 0 )
         , obscuredCellsY( 0 )
         , layoutDirection( Sheet::LeftToRight ) {}
@@ -99,9 +101,11 @@ public:
     double  textWidth;
     double  textHeight;
 
-    bool hidden     : 1;
-    bool merged     : 1;
-    bool obscured   : 1;
+    bool hidden         : 1;
+    bool merged         : 1;
+    bool obscured       : 1;
+    bool fittingHeight  : 1;
+    bool fittingWidth   : 1;
     // NOTE Stefan: A cell is either obscured by an other one or obscures others itself.
     //              But never both at the same time, so we can share the memory for this.
     union
@@ -901,7 +905,7 @@ void CellView::paintMoreTextIndicator( QPainter& painter,
 {
   // Show a red triangle when it's not possible to write all text in cell.
   // Don't print the red triangle if we're printing.
-  if( cell->testFlag( Cell::Flag_CellTooShortX ) &&
+  if( !d->fittingWidth &&
       !dynamic_cast<QPrinter*>(painter.device()) &&
       cellRect.height() > 4.0  &&
       cellRect.width()  > 4.0 )
@@ -1016,7 +1020,7 @@ void CellView::paintText( QPainter& painter,
   //
   // FIXME: Make this dependent on the height as well.
   //
-  if ( cell->testFlag( Cell::Flag_CellTooShortX ) ) {
+  if ( !d->fittingWidth ) {
     const QFontMetrics fontMetrics( effectiveFont( cell ) );
     cell->d->strOutText = textDisplaying( fontMetrics, cell );
 
@@ -1043,7 +1047,7 @@ void CellView::paintText( QPainter& painter,
     }
 
   // Made an offset, otherwise ### is under red triangle.
-  if ( hAlign == Style::Right && !cell->isEmpty() && cell->testFlag( Cell::Flag_CellTooShortX ) )
+  if ( hAlign == Style::Right && !cell->isEmpty() && !d->fittingWidth )
     offsetCellTooShort = 4;
 
   const QFontMetrics fm2 = painter.fontMetrics();
@@ -1156,7 +1160,7 @@ void CellView::paintText( QPainter& painter,
   }
 
   // Check for too short cell and set the outText for future reference.
-  if ( cell->testFlag( Cell::Flag_CellTooShortX ) ) {
+  if ( !d->fittingWidth ) {
     cell->d->strOutText = tmpText;
     d->textHeight = tmpHeight;
     d->textWidth  = tmpWidth;
@@ -1626,7 +1630,7 @@ void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect
 QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
 {
   Style::HAlign hAlign = style().halign();
-  if ( cell->testFlag( Cell::Flag_CellTooShortX ) )
+  if ( !d->fittingWidth )
       hAlign = Style::Left; // force left alignment, if text does not fit
 
   const bool isNumeric = cell->value().isNumber();
@@ -1796,10 +1800,6 @@ void CellView::makeLayout( SheetView* sheetView, int col, int row, Cell* cell )
   // Yes they are: they are useful if this is the default layout, in
   // which case cell->row() and cell->column() are 0 and 0, but _col and _row
   // are the real coordinates of the cell.
-
-  // Some initializations.
-  cell->clearFlag( Cell::Flag_CellTooShortX );
-  cell->clearFlag( Cell::Flag_CellTooShortY );
 
   if ( d->hidden )
     return;
@@ -2207,11 +2207,11 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, Cell* masterCell )
     if ( align == Style::Left && !masterCell->isEmpty() )
         indent = style().indentation();
 
-    // Set Cell::Flag_CellTooShortX if the text is vertical or angled, and too
+    // Set d->fittingWidth to false, if the text is vertical or angled, and too
     // high for the cell.
     if ( style().verticalText() || style().angle() != 0 )
         if ( d->textHeight >= d->height )
-            masterCell->setFlag( Cell::Flag_CellTooShortX );
+            d->fittingWidth = false;
 
     // Do we have to occupy additional cells to the right?  This is only
     // done for cells that have no merged cells in the Y direction.
@@ -2255,7 +2255,7 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, Cell* masterCell )
         // FIXME: Why not right/center aligned text?
         //
         // FIXME: Shouldn't we check to see if end == -1 here before
-        //        setting Cell::Flag_CellTooShortX?
+        //        setting d->fittingWidth to false?
         //
         if ( style().halign() == Style::Left || ( style().halign() == Style::HAlignUndefined
              && !masterCell->value().isNumber() ) )
@@ -2272,13 +2272,13 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, Cell* masterCell )
 
                 // Not enough space
                 if ( status == NotEnoughSpace )
-                    masterCell->setFlag( Cell::Flag_CellTooShortX );
+                    d->fittingWidth = false;
             }
             else
-                masterCell->setFlag( Cell::Flag_CellTooShortX );
+                d->fittingWidth = false;
         }
         else
-            masterCell->setFlag( Cell::Flag_CellTooShortX );
+            d->fittingWidth = false;
     }
 }
 
@@ -2334,10 +2334,10 @@ void CellView::obscureVerticalCells( SheetView* sheetView, Cell* masterCell )
 
             // Not enough space
             if ( status == NotEnoughSpace )
-                masterCell->setFlag( Cell::Flag_CellTooShortY );
+                d->fittingHeight = false;
         }
         else
-            masterCell->setFlag( Cell::Flag_CellTooShortY );
+            d->fittingHeight = false;
     }
 }
 
@@ -2376,4 +2376,9 @@ double CellView::cellHeight() const
 double CellView::cellWidth() const
 {
     return d->width;
+}
+
+bool CellView::dimensionFits() const
+{
+    return d->fittingHeight && d->fittingWidth;
 }
