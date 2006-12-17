@@ -299,7 +299,7 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
     //  a) it is empty
     //  b) something indicates that the text should not be painted
     //  c) the sheet is protected and the cell is hidden.
-    if ( !cell->strOutText().isEmpty()
+    if ( !d->displayText.isEmpty()
             && ( !dynamic_cast<QPrinter*>(painter.device()) || style().printText() )
             && !( cell->sheet()->isProtected()
             && style().hideAll() ) )
@@ -927,7 +927,7 @@ void CellView::paintMoreTextIndicator( QPainter& painter,
     // Get the triangle...
     QPolygonF polygon( 3 );
     polygon.clear();
-    if ( cell->strOutText().isRightToLeft() ) {
+    if ( d->displayText.isRightToLeft() ) {
       polygon << QPointF( cellRect.left() + 4.0, cellRect.y() + cellRect.height() / 2.0 - 4.0 );
       polygon << QPointF( cellRect.left(), cellRect.y() + cellRect.height() / 2.0 );
       polygon << QPointF( cellRect.left() + 4.0, cellRect.y() + cellRect.height() / 2.0 + 4.0 );
@@ -1015,7 +1015,7 @@ void CellView::paintText( QPainter& painter,
 #endif
   painter.setPen( tmpPen );
 
-  const QString  tmpText   = cell->strOutText();
+  const QString  tmpText   = d->displayText;
   const double   tmpHeight = d->textHeight;
   const double   tmpWidth  = d->textWidth;
 
@@ -1064,7 +1064,7 @@ void CellView::paintText( QPainter& painter,
     const int tmpAngle = d->style.angle();
     const bool tmpVerticalText = d->style.verticalText();
     // force multiple rows on explicitly set line breaks
-    const bool tmpMultiRow = d->style.wrapText() || cell->strOutText().contains( '\n' );
+    const bool tmpMultiRow = d->style.wrapText() || d->displayText.contains( '\n' );
 
   // Actually paint the text.
   //    There are 4 possible cases:
@@ -1077,7 +1077,7 @@ void CellView::paintText( QPainter& painter,
 
     const QPointF position( indent + cellRect.x() + d->textX - offsetCellTooShort,
                             cellRect.y() + d->textY - offsetFont );
-    painter.drawText( position, cell->strOutText() );
+    painter.drawText( position, d->displayText );
   }
   else if ( tmpAngle != 0 ) {
     // Case 2: an angle.
@@ -1099,7 +1099,7 @@ void CellView::paintText( QPainter& painter,
       y = cellRect.y() + d->textY + d->textHeight;
     const QPointF position( x * cos( angle * M_PI / 180 ) + y * sin( angle * M_PI / 180 ),
                            -x * sin( angle * M_PI / 180 ) + y * cos( angle * M_PI / 180 ) );
-    painter.drawText( position, cell->strOutText() );
+    painter.drawText( position, d->displayText );
     painter.rotate( -angle );
   }
   else if ( tmpMultiRow && !tmpVerticalText ) {
@@ -1111,11 +1111,11 @@ void CellView::paintText( QPainter& painter,
     double dy = 0.0;
     const QFontMetrics fm = painter.fontMetrics();
     do {
-      i = cell->strOutText().indexOf( "\n", pos );
+      i = d->displayText.indexOf( "\n", pos );
       if ( i == -1 )
-        text = cell->strOutText().mid( pos, cell->strOutText().length() - pos );
+        text = d->displayText.mid( pos, d->displayText.length() - pos );
       else {
-        text = cell->strOutText().mid( pos, i - pos );
+        text = d->displayText.mid( pos, i - pos );
         pos = i + 1;
       }
 
@@ -1145,7 +1145,7 @@ void CellView::paintText( QPainter& painter,
       dy += fm.descent() + fm.ascent();
     } while ( i != -1 );
   }
-  else if ( tmpVerticalText && !cell->strOutText().isEmpty() ) {
+  else if ( tmpVerticalText && !d->displayText.isEmpty() ) {
     // Case 4: Vertical text.
 
     QString text;
@@ -1154,8 +1154,8 @@ void CellView::paintText( QPainter& painter,
     double dy = 0.0;
     const QFontMetrics fm = painter.fontMetrics();
     do {
-      len = cell->strOutText().length();
-      text = cell->strOutText().at( i );
+      len = d->displayText.length();
+      text = d->displayText.at( i );
       const QPointF position( indent + cellRect.x() + d->textX,
                               cellRect.y() + d->textY + dy );
       painter.drawText( position, text );
@@ -1628,7 +1628,7 @@ void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect
 }
 
 
-// Cut strOutText, so that it only holds the part that can be displayed.
+// Cut d->displayText, so that it only holds the part that can be displayed.
 //
 // Used in paintText().
 //
@@ -1663,7 +1663,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
 
     // Estimate worst case length to reduce the number of iterations.
     int start = qRound( ( len - 4.0 - 1.0 - tmpIndent ) / fm.width( '.' ) );
-    start = qMin( cell->strOutText().length(), start );
+    start = qMin( d->displayText.length(), start );
     // Start out with the whole text, cut one character at a time, and
     // when the text finally fits, return it.
     for ( int i = start; i != 0; i-- )
@@ -1671,11 +1671,11 @@ QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
       //Note that numbers are always treated as left-aligned since if we have to cut digits off, they should
       //always be the least significant ones at the end of the string
       if ( hAlign == Style::Left || hAlign == Style::HAlignUndefined || isNumeric )
-        tmp = cell->strOutText().left(i);
+        tmp = d->displayText.left(i);
       else if ( hAlign == Style::Right )
-        tmp = cell->strOutText().right(i);
+        tmp = d->displayText.right(i);
       else
-        tmp = cell->strOutText().mid( ( cell->strOutText().length() - i ) / 2, i );
+        tmp = d->displayText.mid( ( d->displayText.length() - i ) / 2, i );
 
       if (isNumeric)
       {
@@ -1698,12 +1698,12 @@ QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
           RowFormat *rl = cell->sheet()->rowFormat( cell->row() );
           if ( d->textHeight > rl->dblHeight() )
           {
-            for ( int j = cell->strOutText().length(); j != 0; j-- )
+            for ( int j = d->displayText.length(); j != 0; j-- )
             {
-              tmp2 = cell->strOutText().left( j );
+              tmp2 = d->displayText.left( j );
               if ( fm.width( tmp2 ) < rl->dblHeight() - 1.0 )
               {
-                return cell->strOutText().left( qMin( tmp.length(), tmp2.length() ) );
+                return d->displayText.left( qMin( tmp.length(), tmp2.length() ) );
               }
             }
           }
@@ -1743,17 +1743,17 @@ QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
     if ( ( d->textWidth + tmpIndent > len ) || d->textWidth == 0.0 )
       return QString( "" );
 
-    for ( int i = cell->strOutText().length(); i != 0; i-- ) {
+    for ( int i = d->displayText.length(); i != 0; i-- ) {
       if ( fm.ascent() + fm.descent() * i < rl->dblHeight() - 1.0 )
-        return cell->strOutText().left( i );
+        return d->displayText.left( i );
     }
 
     return QString( "" );
   }
 
   QString tmp;
-  for ( int i = cell->strOutText().length(); i != 0; i-- ) {
-    tmp = cell->strOutText().left( i );
+  for ( int i = d->displayText.length(); i != 0; i-- ) {
+    tmp = d->displayText.left( i );
 
     // 4 equals length of red triangle +1 pixel
     if ( fm.width( tmp ) < d->width - 4.0 - 1.0 )
@@ -1796,7 +1796,7 @@ QFont CellView::effectiveFont( Cell* cell ) const
 //
 // and, of course,
 //
-//   cell->strOutText
+//   d->displayText
 //
 void CellView::makeLayout( SheetView* sheetView, int col, int row, Cell* cell )
 {
@@ -1809,7 +1809,7 @@ void CellView::makeLayout( SheetView* sheetView, int col, int row, Cell* cell )
   if ( d->hidden )
     return;
 
-  // Recalculate the output text, cell->strOutText.
+  // Recalculate the output text, cell->strOutText().
   d->displayText = cell->strOutText();
 
   // Empty text?  Reset the outstring and, if this is the default
@@ -1963,7 +1963,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, Cell* cell )
           }
         }
       }
-      else if ( (tmpMultiRow || cell->strOutText().contains( '\n' ) ) && !tmpVerticalText )
+      else if ( (tmpMultiRow || d->displayText.contains( '\n' ) ) && !tmpVerticalText )
       {
       // Is enough place available?
         if ( effBottom - effTop - d->textHeight > 0 )
@@ -2022,7 +2022,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, Cell* cell )
           }
         }
       }
-      else if ( (tmpMultiRow || cell->strOutText().contains( '\n' ) ) && !tmpVerticalText )
+      else if ( (tmpMultiRow || d->displayText.contains( '\n' ) ) && !tmpVerticalText )
       {
       // Is enough place available?
         if ( effBottom - effTop - d->textHeight > 0 )
@@ -2088,20 +2088,20 @@ void CellView::textSize( const QFontMetrics& fm, const Cell* cell )
     if ( !tmpVerticalText && !tmpAngle ) {
         // Horizontal text.
 
-        d->textWidth = ( fm.size( 0, cell->strOutText() ).width() );
+        d->textWidth = ( fm.size( 0, d->displayText ).width() );
         int offsetFont = 0;
         if ( ( vAlign == Style::Bottom ) && fontUnderlined ) {
             offsetFont = fm.underlinePos() + 1;
         }
 
         d->textHeight = ( fm.ascent() + fm.descent() + offsetFont )
-                * ( cell->strOutText().count( '\n' ) + 1 );
+                * ( d->displayText.count( '\n' ) + 1 );
     }
     else if ( tmpAngle!= 0 ) {
         // Rotated text.
 
         const double height = fm.ascent() + fm.descent();
-        const double width  = fm.width( cell->strOutText() );
+        const double width  = fm.width( d->displayText );
         d->textHeight = height * cos( tmpAngle * M_PI / 180 ) + qAbs( width * sin( tmpAngle * M_PI / 180 ) );
 
         d->textWidth = qAbs( height * sin( tmpAngle * M_PI / 180 ) ) + width * cos( tmpAngle * M_PI / 180 );
@@ -2110,11 +2110,11 @@ void CellView::textSize( const QFontMetrics& fm, const Cell* cell )
         // Vertical text.
 
         int width = 0;
-        for ( int i = 0; i < cell->strOutText().length(); i++ )
-            width = qMax( width, fm.width( cell->strOutText().at( i ) ) );
+        for ( int i = 0; i < d->displayText.length(); i++ )
+            width = qMax( width, fm.width( d->displayText.at( i ) ) );
 
         d->textWidth  = width;
-        d->textHeight = ( fm.ascent() + fm.descent() ) * cell->strOutText().length();
+        d->textHeight = ( fm.ascent() + fm.descent() ) * d->displayText.length();
     }
 }
 
@@ -2127,7 +2127,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics, Cell* cell )
        d->textHeight + fontMetrics.ascent() + fontMetrics.descent() < d->height ) )
   {
     // don't remove the existing LF, these are intended line wraps (whishlist #9881)
-    QString outText = cell->strOutText();
+    QString outText = d->displayText;
 
     // Break the line at appropriate places, i.e. spaces, if
     // necessary.  This means to change the spaces where breaks occur
@@ -2162,7 +2162,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics, Cell* cell )
         if (pos1 < linefeed && linefeed < breakpos)
           work_breakpos = linefeed;
 
-        const double lineWidth = fontMetrics.width( cell->strOutText().mid( start, (pos1 - start) )
+        const double lineWidth = fontMetrics.width( d->displayText.mid( start, (pos1 - start) )
                                                     + outText.mid( pos1, work_breakpos - pos1 ) );
 
         //linefeed could be -1 when no linefeed is found!
@@ -2296,7 +2296,7 @@ void CellView::obscureVerticalCells( SheetView* sheetView, Cell* masterCell )
     //
     // FIXME: Setting to make the current cell grow.
     //
-    if ( masterCell->strOutText().contains( '\n' ) &&
+    if ( d->displayText.contains( '\n' ) &&
          d->textHeight > ( d->height - 2 * s_borderSpace
          - style().topBorderPen().width() - style().bottomBorderPen().width() ) )
     {
