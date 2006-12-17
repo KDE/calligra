@@ -716,14 +716,6 @@ public:
        */
       Flag_UpdatingDeps          = 0x02,
       /**
-       * Merged
-       * Tells whether the cell is merged with other cells.  Cells may
-       * occupy other cells space on demand. You may force a cell to
-       * do so by setting this flag. Merging the cell with 0 in both
-       * directions, will disable this flag!
-       */
-      Flag_Merged                = 0x04,
-      /**
        * ParseError
        * True if the cell is calculated and there was an error during calculation
        * In that case the cell usually displays "#Parse!"

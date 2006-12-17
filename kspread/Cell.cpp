@@ -491,7 +491,6 @@ void Cell::mergeCells( int _col, int _row, int _x, int _y )
 
     // If no merging, then remove all traces, and return.
     if ( _x == 0 && _y == 0 ) {
-        clearFlag( Flag_Merged );
         if (d->hasExtra()) {
             d->extra()->mergedWidth  = 0.0;
             d->extra()->mergedHeight = 0.0;
@@ -502,7 +501,6 @@ void Cell::mergeCells( int _col, int _row, int _x, int _y )
     }
 
     // At this point, we know that we will merge some cells.
-    setFlag(Flag_Merged);
     d->extra()->mergedXCells = _x;
     d->extra()->mergedYCells = _y;
 
@@ -993,7 +991,7 @@ double Cell::dblWidth( int _col ) const
 {
     if ( _col < 0 )
         _col = d->column;
-    if ( testFlag(Flag_Merged) )
+    if ( d->hasExtra() && d->extra()->mergedXCells != 0 )
         return d->extra()->mergedWidth;
     return sheet()->columnFormat( _col )->dblWidth();
 }
@@ -1007,7 +1005,7 @@ double Cell::dblHeight( int _row ) const
 {
     if ( _row < 0 )
         _row = d->row;
-    if ( testFlag(Flag_Merged) )
+    if ( d->hasExtra() && d->extra()->mergedYCells != 0 )
         return d->extra()->mergedHeight;
     return sheet()->rowFormat( _row )->dblHeight();
 }
@@ -2205,10 +2203,6 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
             }
             if (i || d->hasExtra())
               d->extra()->mergedXCells = i;
-            if ( i > 0 )
-            {
-              setFlag(Flag_Merged);
-            }
         }
 
         if ( formatElement.hasAttribute( "rowspan" ) )
@@ -2223,18 +2217,10 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
             }
             if (i || d->hasExtra())
               d->extra()->mergedYCells = i;
-            if ( i > 0 )
-            {
-              setFlag(Flag_Merged);
-            }
         }
 
-        if ( testFlag( Flag_Merged ) )
-        {
-            if (d->hasExtra())
-              mergeCells( d->column, d->row, d->extra()->mergedXCells, d->extra()->mergedYCells );
-        }
-
+        if ( d->hasExtra() && ( d->extra()->mergedXCells != 0 || d->extra()->mergedYCells != 0 ) )
+            mergeCells( d->column, d->row, d->extra()->mergedXCells, d->extra()->mergedYCells );
     }
 
     //
@@ -2834,7 +2820,7 @@ void Cell::clearAllErrors()
 
 bool Cell::doesMergeCells() const
 {
-  return testFlag( Flag_Merged );
+    return d->hasExtra() && ( d->extra()->mergedXCells != 0 || d->extra()->mergedYCells != 0 );
 }
 
 void Cell::clearFlag( StatusFlag flag )
