@@ -627,9 +627,6 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
 
     const bool isMergedOrObscured = cell->isPartOfMerged() || isObscured();
 
-    if ( d->obscured )
-        kDebug(36004) << "isObscured() = true; isMergedOrObscured = " << isMergedOrObscured << endl;
-
     const bool paintLeft    = ( paintBorder & LeftBorder &&
                                 d->style.leftBorderPen().style() == Qt::NoPen &&
                                 cell->sheet()->getShowGrid() &&
