@@ -154,12 +154,6 @@ public:
   //
   QString  strText;
 
-  // This is the text we want to display. Not necessarily the same
-  // as strText, e.g. strText="1" and strOutText="1.00" Also holds
-  // value that we got from calculation, formerly known as
-  // strFormulaOut
-  QString  strOutText;
-
   // the Formula object for the cell
   KSpread::Formula *formula;
 

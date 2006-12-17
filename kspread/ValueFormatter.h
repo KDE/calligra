@@ -41,7 +41,7 @@ class ValueFormatter {
   explicit ValueFormatter (ValueConverter *converter);
 
   /** create a text representation of data in this cell */
-  QString formatText (Cell *cell, FormatType fmtType);
+  QString formatText (const Cell *cell, FormatType fmtType);
 
   /** create a text representation of data in this Value */
   QString formatText (const Value &value,
@@ -57,7 +57,7 @@ class ValueFormatter {
   /** create a time format */
   QString timeFormat (const QDateTime &_time, FormatType fmtType);
 
-  static QString errorFormat (Cell *cell);
+  static QString errorFormat (const Cell *cell);
 
  protected:
 

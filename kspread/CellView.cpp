@@ -120,6 +120,11 @@ public:
     };
     Sheet::LayoutDirection layoutDirection : 1;
 
+    // This is the text we want to display. Not necessarily the same
+    // as the user input, e.g. Cell::strText()="1" and displayText="1.00".
+    // Also holds the value, that we got from calculation.
+    QString displayText;
+
     // static empty data to be shared
     static Private* empty( const Sheet* sheet )
     {
@@ -183,7 +188,7 @@ CellView::CellView( SheetView* sheetView, int col, int row )
     {
         //numbers should be right-aligned by default, as well as BiDi text
         if ( ( d->style.formatType() == Text_format) || cell->value().isString() )
-            d->style.setHAlign( cell->d->strOutText.isRightToLeft() ? Style::Right : Style::Left );
+            d->style.setHAlign( d->displayText.isRightToLeft() ? Style::Right : Style::Left );
         else
         {
             Value val = cell->value();
@@ -1022,7 +1027,7 @@ void CellView::paintText( QPainter& painter,
   //
   if ( !d->fittingWidth ) {
     const QFontMetrics fontMetrics( effectiveFont( cell ) );
-    cell->d->strOutText = textDisplaying( fontMetrics, cell );
+    d->displayText = textDisplaying( fontMetrics, cell );
 
     // Recalculate the text dimensions and the offset.
     textSize( fontMetrics, cell );
@@ -1033,7 +1038,7 @@ void CellView::paintText( QPainter& painter,
   if ( cell->sheet()->getHideZero()
        && cell->value().isNumber()
        && cell->value().asFloat() == 0 ) {
-    cell->d->strOutText.clear();
+    d->displayText.clear();
   }
 
   double indent = 0.0;
@@ -1161,17 +1166,17 @@ void CellView::paintText( QPainter& painter,
 
   // Check for too short cell and set the outText for future reference.
   if ( !d->fittingWidth ) {
-    cell->d->strOutText = tmpText;
+    d->displayText = tmpText;
     d->textHeight = tmpHeight;
     d->textWidth  = tmpWidth;
   }
 
   if ( cell->sheet()->getHideZero() && cell->value().isNumber()
       && cell->value().asFloat() == 0 )
-    cell->d->strOutText = tmpText;
+    d->displayText = tmpText;
 
   if ( columnFormat->hidden() || ( cellRect.height() <= 2 ) )
-    cell->d->strOutText = tmpText;
+    d->displayText = tmpText;
 }
 
 
@@ -1681,7 +1686,7 @@ QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
         //TODO Perhaps try to display integer part in standard form if there is not enough room for it?
 
         if (!tmp.contains('.'))
-          cell->d->strOutText = QString().fill( '#', 20 );
+          d->displayText = QString().fill( '#', 20 );
       }
 
       // 4 equal length of red triangle +1 point.
@@ -1805,12 +1810,11 @@ void CellView::makeLayout( SheetView* sheetView, int col, int row, Cell* cell )
     return;
 
   // Recalculate the output text, cell->strOutText.
-  cell->setOutputText();
+  d->displayText = cell->strOutText();
 
   // Empty text?  Reset the outstring and, if this is the default
   // cell, return.
-  if ( cell->d->strOutText.isEmpty() ) {
-    cell->d->strOutText.clear();
+  if ( d->displayText.isEmpty() ) {
     if ( cell->isDefault() ) {
       return;
     }
@@ -2135,7 +2139,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics, Cell* cell )
     }
     else
     {
-      cell->d->strOutText.clear();
+      d->displayText.clear();
 
       // Make sure that we have a space at the end.
       outText += ' ';
@@ -2170,7 +2174,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics, Cell* cell )
 
         if ( lineWidth <= availableWidth ) {
             // We have room for the rest of the line.  End it here.
-          cell->d->strOutText += outText.mid( pos1, breakpos - pos1 );
+          d->displayText += outText.mid( pos1, breakpos - pos1 );
           pos1 = breakpos;
         }
         else {
@@ -2179,10 +2183,10 @@ void CellView::breakLines( const QFontMetrics& fontMetrics, Cell* cell )
             pos1++;
 
           if ( pos1 != 0 && breakpos != -1 ) {
-            cell->d->strOutText += '\n' + outText.mid( pos1, breakpos - pos1 );
+            d->displayText += '\n' + outText.mid( pos1, breakpos - pos1 );
           }
           else
-            cell->d->strOutText += outText.mid( pos1, breakpos - pos1 );
+            d->displayText += outText.mid( pos1, breakpos - pos1 );
 
           start = pos1;
           pos1 = breakpos;

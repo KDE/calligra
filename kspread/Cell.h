@@ -801,16 +801,6 @@ private:
     void valueChanged();
 
     /**
-     * Determines the text to be displayed.
-     *
-     * This depends on the following variables:
-     * \li wether the value or the formula should be shown
-     *
-     * \see ValueFormatter::formatText
-     */
-    void setOutputText();
-
-    /**
      * \ingroup NativeFormat
      */
     bool loadCellData(const KoXmlElement &text, Paste::Operation op);

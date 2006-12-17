@@ -39,7 +39,7 @@ ValueFormatter::ValueFormatter (ValueConverter *conv) : converter( conv )
 {
 }
 
-QString ValueFormatter::formatText (Cell *cell, FormatType fmtType)
+QString ValueFormatter::formatText (const Cell *cell, FormatType fmtType)
 {
   if (cell->hasError ())
     return errorFormat (cell);
@@ -627,7 +627,7 @@ QString ValueFormatter::dateFormat (const QDate &date, FormatType fmtType)
   return tmp;
 }
 
-QString ValueFormatter::errorFormat (Cell *cell)
+QString ValueFormatter::errorFormat (const Cell *cell)
 {
   QString err;
   if (cell->testFlag (Cell::Flag_ParseError))

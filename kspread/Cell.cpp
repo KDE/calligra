@@ -324,7 +324,23 @@ QString Cell::text() const
 //
 QString Cell::strOutText() const
 {
-    return d->strOutText;
+    if ( isDefault() )
+        return QString();
+
+    QString string;
+    // Display a formula if warranted.  If not, display the value instead;
+    // this is the most common case.
+    if ( (!hasError()) && isFormula() && sheet()->getShowFormula()
+           && !( sheet()->isProtected() && style().hideFormula() ) || isEmpty() )
+        string = d->strText;
+    else
+        string = sheet()->doc()->formatter()->formatText(this, formatType());
+
+    // Set the displayed text, if we hold an error value.
+    if (d->value.type() == Value::Error)
+        string = d->value.errorMessage ();
+
+    return string;
 }
 
 const Formula* Cell::formula() const
@@ -363,13 +379,6 @@ void Cell::setValue( const Value& value )
     return;
 
   d->value = value;
-
-  // Format and set the outText.
-  setOutputText();
-
-  // Set the displayed text, if we hold an error value.
-  if (d->value.type() == Value::Error)
-    d->strOutText = d->value.errorMessage ();
 
   // Value of the cell has changed - trigger necessary actions
   valueChanged ();
@@ -856,26 +865,6 @@ void Cell::valueChanged ()
 }
 
 
-// Recalculate d->strOutText.
-//
-
-void Cell::setOutputText()
-{
-  if ( isDefault() ) {
-    d->strOutText.clear();
-    return;
-  }
-
-  // Display a formula if warranted.  If not, display the value instead;
-  // this is the most common case.
-  if ( (!hasError()) && isFormula() && sheet()->getShowFormula()
-       && !( sheet()->isProtected() && style().hideFormula() ) || isEmpty() )
-    d->strOutText = d->strText;
-  else
-    d->strOutText = sheet()->doc()->formatter()->formatText(this, formatType());
-}
-
-
 
 
 // ----------------------------------------------------------------
@@ -973,7 +962,7 @@ int Cell::defineAlignX()
     {
         //numbers should be right-aligned by default, as well as BiDi text
         if ((formatType() == Text_format) || value().isString())
-            align = (d->strOutText.isRightToLeft()) ? Style::Right : Style::Left;
+            align = (strOutText().isRightToLeft()) ? Style::Right : Style::Left;
         else
         {
             Value val = value();
@@ -1032,23 +1021,24 @@ void Cell::incPrecision()
     Style style;
     if ( tmpPreci == -1 )
     {
-        int pos = d->strOutText.indexOf( locale()->decimalSymbol() );
+        const QString strOutText = this->strOutText();
+        int pos = strOutText.indexOf( locale()->decimalSymbol() );
         if ( pos == -1 )
-            pos = d->strOutText.indexOf('.');
+            pos = strOutText.indexOf('.');
         if ( pos == -1 )
             style.setPrecision( 1 );
         else
         {
             int start = 0;
-            if ( d->strOutText.indexOf('%') != -1 )
+            if ( strOutText.indexOf('%') != -1 )
                 start = 2;
-            else if ( d->strOutText.indexOf(locale()->currencySymbol()) == ((int)(d->strOutText.length()-locale()->currencySymbol().length())) )
+            else if ( strOutText.indexOf(locale()->currencySymbol()) == ((int)(strOutText.length()-locale()->currencySymbol().length())) )
                 start = locale()->currencySymbol().length() + 1;
-            else if ( (start=d->strOutText.indexOf('E')) != -1 )
-                start = d->strOutText.length() - start;
+            else if ( (start=strOutText.indexOf('E')) != -1 )
+                start = strOutText.length() - start;
 
-            //kDebug() << "start=" << start << " pos=" << pos << " length=" << d->strOutText.length() << endl;
-            style.setPrecision( qMax( 0, (int)d->strOutText.length() - start - pos ) );
+            //kDebug() << "start=" << start << " pos=" << pos << " length=" << strOutText.length() << endl;
+            style.setPrecision( qMax( 0, (int)strOutText.length() - start - pos ) );
         }
     }
     else if ( tmpPreci < 10 )
@@ -1068,21 +1058,22 @@ void Cell::decPrecision()
     Style style;
     if ( preciTmp == -1 )
     {
-        int pos = d->strOutText.indexOf( locale()->decimalSymbol() );
+        const QString strOutText = this->strOutText();
+        int pos = strOutText.indexOf( locale()->decimalSymbol() );
         int start = 0;
-        if ( d->strOutText.indexOf('%') != -1 )
+        if ( strOutText.indexOf('%') != -1 )
             start = 2;
-        else if ( d->strOutText.indexOf(locale()->currencySymbol()) == ((int)(d->strOutText.length()-locale()->currencySymbol().length())) )
+        else if ( strOutText.indexOf(locale()->currencySymbol()) == ((int)(strOutText.length()-locale()->currencySymbol().length())) )
             start = locale()->currencySymbol().length() + 1;
-        else if ( (start = d->strOutText.indexOf('E')) != -1 )
-            start = d->strOutText.length() - start;
+        else if ( (start = strOutText.indexOf('E')) != -1 )
+            start = strOutText.length() - start;
         else
             start = 0;
 
         if ( pos == -1 )
             return;
 
-        style.setPrecision(d->strOutText.length() - pos - 2 - start);
+        style.setPrecision(strOutText.length() - pos - 2 - start);
         //   if ( preciTmp < 0 )
         //      format()->setPrecision( preciTmp );
     }
@@ -1113,7 +1104,6 @@ void Cell::setCellText( const QString& _text, bool asText )
   if (_text.isEmpty())
   {
     d->strText.clear();
-    d->strOutText.clear();
     setValue( Value::empty() );
     return;
   }
@@ -1121,7 +1111,6 @@ void Cell::setCellText( const QString& _text, bool asText )
   // as text?
   if (asText)
   {
-    d->strOutText = _text;
     d->strText    = _text;
     setValue( Value( _text ) );
     return;
@@ -1501,8 +1490,10 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
   }
 
   result.setAttribute( "dataType", dataType );
-  if ( !d->strOutText.isEmpty() )
-    result.setAttribute( "outStr", d->strOutText );
+
+  const QString strOutText = this->strOutText();
+  if ( !strOutText.isEmpty() )
+    result.setAttribute( "outStr", strOutText );
   result.appendChild( doc.createTextNode( str ) );
 
   return true; /* really isn't much of a way for this function to fail */
@@ -2305,10 +2296,6 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
 
         if ( result.hasAttribute( "dataType" ) )
           dataType = result.attribute( "dataType" );
-        if ( result.hasAttribute( "outStr" ) )
-        {
-          d->strOutText = result.attribute( "outStr" );
-        }
 
         bool clear = true;
         // boolean ?
@@ -2572,11 +2559,6 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         setValue( Value(d->strText) );
       }
     }
-  }
-
-  if ( text.hasAttribute( "outStr" ) ) // very new docs
-  {
-    d->strOutText = text.attribute( "outStr" );
   }
 
   if ( !sheet()->isLoading() )
