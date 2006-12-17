@@ -167,6 +167,8 @@ public:
      */
     QSize obscuredRange() const;
 
+    QPoint obscuringCell() const;
+
     bool isObscured() const;
     bool obscuresCells() const;
 

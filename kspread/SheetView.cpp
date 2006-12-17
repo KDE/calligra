@@ -202,12 +202,12 @@ void SheetView::invalidateRange( const QRect& range )
         {
             if ( !d->cache.contains( QPoint(col,row) ) )
                 continue;
-            const QSize obscuredRange = cellView( col, row ).obscuredRange();
-            if ( !obscuredRange.isEmpty() )
-                invalidateRange( QRect( range.topLeft(), obscuredRange ) );
-            else if ( cellView( col, row ).isObscured() )
-                if ( !range.contains( obscuredRange.width(), obscuredRange.height() ) )
-                    invalidateRange( QRect( obscuredRange.width(), obscuredRange.height(), 1, 1 ) );
+            const CellView cellView = this->cellView( col, row );
+            if ( cellView.obscuresCells() )
+                invalidateRange( QRect( range.topLeft(), cellView.obscuredRange() ) );
+            else if ( cellView.isObscured() )
+                if ( !range.contains( cellView.obscuringCell() ) )
+                    invalidateRange( QRect( cellView.obscuringCell(), QSize( 1, 1 ) ) );
             d->cache.remove( QPoint(col,row) );
             d->cachedArea -= QRect( col, row, 1, 1 );
         }

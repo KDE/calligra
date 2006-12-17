@@ -79,8 +79,8 @@ public:
         , hidden( false )
         , merged( false )
         , obscured( false )
-        , extraXCells( 0 )
-        , extraYCells( 0 )
+        , obscuredCellsX( 0 )
+        , obscuredCellsY( 0 )
         , layoutDirection( Sheet::LeftToRight ) {}
     ~Private()
     {
@@ -102,11 +102,18 @@ public:
     bool hidden     : 1;
     bool merged     : 1;
     bool obscured   : 1;
-    // NOTE Stefan: d->extraXCells, d->extraYCells are used for the position
-    //              of the obscuring cell OR for the amount of obscured cells.
-    //              This depends on d->obscured.
-    int extraXCells : 16; // KS_colMax
-    int extraYCells : 16; // KS_rowMax
+    // NOTE Stefan: A cell is either obscured by an other one or obscures others itself.
+    //              But never both at the same time, so we can share the memory for this.
+    union
+    {
+        int obscuringCellX : 16; // KS_colMax
+        int obscuredCellsX : 16; // KS_colMax
+    };
+    union
+    {
+        int obscuringCellY : 16; // KS_rowMax
+        int obscuredCellsY : 16; // KS_rowMax
+    };
     Sheet::LayoutDirection layoutDirection : 1;
 
     // static empty data to be shared
@@ -304,23 +311,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
 
     const int col = cellCoordinate.x();
     const int row = cellCoordinate.y();
-#if 0
-    // See if this cell is merged or has overflown into neighbor cells.
-    // In that case, the width/height is greater than just the cell
-    // itself.
-    if (cell->mergedXCells() > 0 || cell->mergedYCells() > 0)
-    {
-        d->width   = cell->extraWidth();
-        d->height  = cell->extraHeight();
-    }
-    else
-    {
-        if ( cell->extraXCells() )
-            d->width  = cell->extraWidth();
-        if ( cell->extraYCells() )
-            d->height = cell->extraHeight();
-    }
-#endif
+
     CellView::Borders paintBorder = CellView::NoBorder;
 
     // borders
@@ -1648,11 +1639,14 @@ QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
     // Not enough space but align to left
     double  len = 0.0;
 
-    for ( int i = cell->column(); i <= cell->column() + d->extraXCells; i++ )
+    len = d->width;
+#if 0
+    for ( int i = cell->column(); i <= cell->column() + d->obscuredCellsX; i++ )
     {
       ColumnFormat *cl2 = cell->sheet()->columnFormat( i );
       len += cl2->dblWidth() - 1.0; //-1.0 because the pixel in between 2 cells is shared between both cells
     }
+#endif
 
     QString  tmp;
     double   tmpIndent = 0.0;
@@ -1725,12 +1719,15 @@ QString CellView::textDisplaying( const QFontMetrics& fm, Cell* cell )
     // Not enough space but align to left.
     double  len = 0.0;
 
-    for ( int i = cell->column(); i <= cell->column() + d->extraXCells; i++ ) {
+    len = d->width;
+#if 0
+    for ( int i = cell->column(); i <= cell->column() + d->obscuredCellsX; i++ ) {
       ColumnFormat  *cl2 = cell->sheet()->columnFormat( i );
 
       // -1.0 because the pixel in between 2 cells is shared between both cells
       len += cl2->dblWidth() - 1.0;
     }
+#endif
 
     if ( !cell->isEmpty() )
       tmpIndent = style().indentation();
@@ -1786,7 +1783,7 @@ QFont CellView::effectiveFont( Cell* cell ) const
 //
 //   d->textX,     d->textY
 //   d->textWidth, d->textHeight
-//   d->extraXCells, d->extraYCells
+//   d->obscuredCellsX, d->obscuredCellsY
 //   cell->extraWidth(),  d->extraHeight
 //
 // and, of course,
@@ -1860,10 +1857,10 @@ void CellView::calculateCellDimension( const Cell* cell )
     // FIXME: Introduce double extraWidth/Height here and use them
     //        instead (see FIXME about this in paintCell()).
 
-    for ( int x = cell->column() + 1; x <= cell->column() + d->extraXCells; x++ )
+    for ( int x = cell->column() + 1; x <= cell->column() + d->obscuredCellsX; x++ )
       width += cell->sheet()->columnFormat( x )->dblWidth();
 
-    for ( int y = cell->row() + 1; y <= cell->row() + d->extraYCells; y++ )
+    for ( int y = cell->row() + 1; y <= cell->row() + d->obscuredCellsY; y++ )
       height += cell->sheet()->rowFormat( y )->dblHeight();
   }
 
@@ -2266,7 +2263,7 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, Cell* masterCell )
         {
             if ( col > masterCell->column() + masterCell->mergedXCells() )
             {
-                d->extraXCells = col - masterCell->column() - masterCell->mergedXCells();
+                d->obscuredCellsX = col - masterCell->column() - masterCell->mergedXCells();
                 d->width += extraWidth;
                 for ( int x = masterCell->column() + masterCell->mergedXCells() + 1; x <= col; ++x )
                 {
@@ -2293,9 +2290,9 @@ void CellView::obscureVerticalCells( SheetView* sheetView, Cell* masterCell )
 
     double extraHeight = 0.0;
 
-  // Do we have to occupy additional cells at the bottom ?
+    // Do we have to occupy additional cells at the bottom ?
     //
-  // FIXME: Setting to make the current cell grow.
+    // FIXME: Setting to make the current cell grow.
     //
     if ( masterCell->strOutText().contains( '\n' ) &&
          d->textHeight > ( d->height - 2 * s_borderSpace
@@ -2325,9 +2322,9 @@ void CellView::obscureVerticalCells( SheetView* sheetView, Cell* masterCell )
         }
 
         // Check to make sure we haven't already force-merged enough cells.
-        if ( row >  masterCell->row() + masterCell->mergedYCells() )
+        if ( row > masterCell->row() + masterCell->mergedYCells() )
         {
-            d->extraYCells = row - masterCell->row();
+            d->obscuredCellsY = row - masterCell->row() - masterCell->mergedYCells();
             d->height += extraHeight;
 
             for ( int y = masterCell->row() + 1; y <= row; ++y )
@@ -2348,27 +2345,28 @@ void CellView::obscureVerticalCells( SheetView* sheetView, Cell* masterCell )
 void CellView::obscure( int col, int row )
 {
     d->obscured = true;
-    // NOTE Stefan: Use these parameters for the obscuring cell's position.
-    d->extraXCells = col;
-    d->extraYCells = row;
+    d->obscuringCellX = col;
+    d->obscuringCellY = row;
 }
 
 QSize CellView::obscuredRange() const
 {
-    // NOTE Stefan: d->extraXCells, d->extraYCells are used for the position
-    //              of the obscuring cell OR for the amount of obscured cells.
-    //              This depends on d->obscured.
-    return d->obscured ? QSize() : QSize( d->extraXCells, d->extraYCells );
+    return d->obscured ? QSize() : QSize( d->obscuredCellsX, d->obscuredCellsY );
+}
+
+QPoint CellView::obscuringCell() const
+{
+    return d->obscured ? QPoint( d->obscuringCellX, d->obscuringCellY ) : QPoint();
 }
 
 bool CellView::isObscured() const
 {
-    return d->obscured;
+    return d->obscured && ( d->obscuringCellX != 0 && d->obscuringCellY != 0 );
 }
 
 bool CellView::obscuresCells() const
 {
-    return !d->obscured && ( d->extraXCells != 0 || d->extraYCells != 0 );
+    return !d->obscured && ( d->obscuredCellsX != 0 || d->obscuredCellsY != 0 );
 }
 
 double CellView::cellHeight() const
