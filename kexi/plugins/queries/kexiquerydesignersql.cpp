@@ -85,7 +85,7 @@ class KexiQueryDesignerSQLView::Private
 		KexiDB::QuerySchema *parsedQuery;
 		//! For internal use, statement passed in switching to this view
 		QString origStatement;
-		//! needed to remember height for both modes, beteen switching
+		//! needed to remember height for both modes, between switching
 		int heightForStatusMode, heightForHistoryMode;
 		//! helper for slotUpdateMode()
 		bool action_toggle_history_was_checked : 1;

@@ -34,8 +34,8 @@ namespace KexiDB {
 	EditBuffer contains only changed values.
 
 	EditBuffer offers two modes: db-aware and not-db-aware.
-	Db-aware buffer adresses a field using references to QueryColumnInfo object,
-	while not-db-aware buffer adresses a field using its name.
+	Db-aware buffer addresses a field using references to QueryColumnInfo object,
+	while not-db-aware buffer addresses a field using its name.
 
 	Example usage of not-db-aware buffer:
 	<code>

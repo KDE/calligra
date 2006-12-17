@@ -833,7 +833,7 @@ bool KexiDataAwareObjectInterface::cancelRowEdit()
 			m_verticalHeader->removeLabel(false); //-1 label
 //		updateContents(columnPos(0), rowPos(rows()), 
 //			viewport()->width(), d->rowHeight*3 + (m_navPanel ? m_navPanel->height() : 0)*3 );
-//		updateContents(); //js: above didnt work well so we do that dirty
+//		updateContents(); //js: above did not work well so we do that dirty
 		updateWidgetContents();
 //TODO: still doesn't repaint properly!!
 //		QSize s(tableSize());

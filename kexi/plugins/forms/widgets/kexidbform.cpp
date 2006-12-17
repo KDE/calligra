@@ -471,7 +471,7 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 					return true;
 				else if (d->dataAwareObject->cancelRowEdit())
 					return true;
-				return false; // cancelling not needed - pass the event to the active widget
+				return false; // canceling not needed - pass the event to the active widget
 			}
 			// jstaniek: Fix for Qt bug (handling e.g. Alt+2, Ctrl+2 keys on every platform)
 			//           It's important because we're using alt+2 short cut by default

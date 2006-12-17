@@ -338,8 +338,8 @@ void KexiStartupFileDialog::accept()
 //	QApplication::postEvent(locationEdit, &ev);
 	
 //	kDebug() << "KexiStartupFileDialog::accept() m_lastUrl == " << m_lastUrl.path() << endl;
-//	if (m_lastUrl.path()==currentURL().path()) {//(js) to prevent more multiple kjob signals (i dont know why this is)
-	if (m_lastFileName==currentFileName()) {//(js) to prevent more multiple kjob signals (i dont know why this is)
+//	if (m_lastUrl.path()==currentURL().path()) {//(js) to prevent more multiple kjob signals (I do not know why this is)
+	if (m_lastFileName==currentFileName()) {//(js) to prevent more multiple kjob signals (I do not know why this is)
 //		m_lastUrl=KUrl();
 		m_lastFileName.clear();
 		kDebug() << "m_lastFileName==currentFileName()" << endl;

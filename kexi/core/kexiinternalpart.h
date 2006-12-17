@@ -43,7 +43,7 @@ class QWidget;
  *
  * Internal Kexi parts are parts that are not available for users, but loaded
  * internally be application when needed. Example of such part is Relations Window.
- * The internal part instance is unique and has no explicity stored data.
+ * The internal part instance is unique and has no explicitly stored data.
  * Parts may be able to create widgets or/and dialogs, depending on implementation
  * (createWidgetInstance(), createDialogInstance()).
  * Parts can have unique flag set for dialogs (true by default) 

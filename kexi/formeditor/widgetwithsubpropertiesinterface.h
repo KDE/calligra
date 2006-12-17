@@ -46,7 +46,7 @@ class KFORMEDITOR_EXPORT WidgetWithSubpropertiesInterface
 		//! \return the assigned subwidget.
 		QWidget* subwidget() const;
 
-		//! \return a list of subproperties avaliable for this widget.
+		//! \return a list of subproperties available for this widget.
 		//! This is achieved by only listing those properties that are available in the 
 		QValueList<Q3CString> subproperies() const;
 

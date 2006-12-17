@@ -39,11 +39,11 @@ class KEXIDATATABLE_EXPORT KexiTableItem : public KexiTableItemBase
 	public:
 		~KexiTableItem();
 
-		/*! Clears exisiting column values and inits new \a numCols 
+		/*! Clears existing column values and inits new \a numCols 
 		 columns with empty values. ist of values is resized to \a numCols. */
 		void init(int numCols);
 
-		/*! Clears exisiting column values, current number of columns is preserved. */
+		/*! Clears existing column values, current number of columns is preserved. */
 		void clearValues();
 
 		/*! Prints debug string for this item. */

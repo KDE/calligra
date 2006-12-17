@@ -266,11 +266,11 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		virtual FieldList& insertField(uint position, Field *field);
 
 		/* Like above method, but you can also set column's visibility. 
-		 New column isn't bound explicity to any table.
+		 New column is not bound explicitly to any table.
 		*/
 		FieldList& insertField(uint position, Field *field, bool visible);
 
-		/* Like above method, but you can also explicity bound the new column
+		/* Like above method, but you can also explicitly bound the new column
 		 to specific position on tables list. 
 		 If \a visible is true (the default), the field will be visible. 
 		 If bindToTable==-1, no particular table should be bound.
@@ -451,7 +451,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		*/
 		int tablePosition(const QString& tableName) const;
 		
-		/*! \return a list of all \a tableName table occurences (within FROM section).
+		/*! \return a list of all \a tableName table occurrences (within FROM section).
 		 E.g. for "SELECT * FROM table t, table t2" [0, 1] list is returned.
 		 Empty list is returned there's no such table declared 
 		 in the FROM section at all.
@@ -527,11 +527,11 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 - an aliasname
 		 - a tablename.fieldname
 		 - a tablename.aliasname 
-		 Note that if there are two occurences of the same name,
+		 Note that if there are two occurrrences of the same name,
 		 only the first is accessible using this method. For instance,
 		 calling columnInfo("name") for "SELECT t1.name, t2.name FROM t1, t2" statement
 		 will only return the column related to t1.name and not t2.name, so you'll need to
-		 explicity specify "t2.name" as the identifier to get the second column. */
+		 explicitly specify "t2.name" as the identifier to get the second column. */
 		QueryColumnInfo* columnInfo(const QString& identifier, bool expanded = true);
 
 		/*! Options used in fieldsExpanded(). */
@@ -577,7 +577,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 used for fetching ROWID by KexiDB cursors.
 
 		 By default, all fields are returned in the vector even 
-		 if there are multiple occurences of one or more (options == Default). 
+		 if there are multiple occurrences of one or more (options == Default). 
 
 		 Note: You should assign the resulted vector in your space - it will be shared 
 		 and implicity copied on any modification.

@@ -97,7 +97,7 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 		Part *part(Info *);
 
 		/**
-		 * \return the info for a coresponding internal mime
+		 * \return the info for a corresponding internal mime
 		 */
 		Info *infoForMimeType(const QString& mimeType);
 

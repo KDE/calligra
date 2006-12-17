@@ -98,7 +98,7 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 		 existing project but for server-based projects it's better to ask user.
 		 This method should be called before performImport() or performExport().
 
-		 \return true if no connection-related errors occured. 
+		 \return true if no connection-related errors occurred. 
 		 \a acceptingNeeded is set to true if destination database exists. 
 		 In this case you should ask about accepting database overwriting. 
 		 Used in ImportWizard::import(). */

@@ -79,7 +79,7 @@ class KEXI_DB_EXPORT FieldList
 		/*! \return true if this list contains given \a field. */
 		inline bool hasField(const Field* field) { return m_fields.findRef(field)!=-1; }
 
-		/*! \return first occurence of \a field in the list 
+		/*! \return first occurrence of \a field in the list 
 		 or -1 if this list does not contain this field. */
 		inline int indexOf(const Field* field) { return m_fields.findRef(field); }
 

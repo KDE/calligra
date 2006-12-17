@@ -60,7 +60,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		 so you shouldn't care about destroying this field. */
 		KexiTableViewColumn(KexiDB::Field& f, bool owner = false);
 
-		/*! Not db-aware, convenience ctor, like above. The field is created using specifed parameters that are 
+		/*! Not db-aware, convenience ctor, like above. The field is created using specified parameters that are 
 		 equal to these accepted by KexiDB::Field ctor. The column will be the owner 
 		 of this automatically generated field.
 		 */
@@ -270,7 +270,7 @@ public:
 	inline int sortedColumn() const { return m_sortedColumn; }
 
 	/*! \return 1 if ascending sort order is set, -1 id descending sort order is set,
-	 or 0 if no sorting is set. This is independant of whether data is sorted now. 
+	 or 0 if no sorting is set. This is independent of whether data is sorted now. 
 	 Initial sorting for data after instantiating object is 0. */
 	inline int sortingOrder() const { return m_order; }
 

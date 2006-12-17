@@ -73,7 +73,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		 \return false if doc couldn't be raised or isn't opened. */
 		bool activateWindow(int id);
 
-		/*! Like above, using \a dlg passed explicity. Above method just calls this one. */
+		/*! Like above, using \a dlg passed explicitly. Above method just calls this one. */
 		bool activateWindow(KexiDialogBase *dlg);
 
 //		void startup(KexiProjectData* pdata);

@@ -40,7 +40,7 @@ namespace KexiDB {
  Use masterTable(), and detailsTable() to get one-side table and many-side table, respectively.
 
  Note: some engines (e.g. MySQL with InnoDB) requires that indices at both sides 
- have to be explicity created. 
+ have to be explicitly created. 
 
  \todo (js) It is planned that this will be handled by KexiDB internally and transparently.
 

@@ -42,7 +42,7 @@ namespace Scripting {
      * @code
      * # Get the tableschema from a KexiDBConnection object.
      * tableschema = connection.tableSchema("dept")
-     * # Print some informations.
+     * # Print some information.
      * print "table=%s description=%s" % (tableschema.name(), tableschema.description())
      * # Get the "SELECT * FROM dept;" queryschema for the table.
      * queryschema = tableschema.query()

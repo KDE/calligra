@@ -51,7 +51,7 @@ class KEXICORE_EXPORT KexiUserAction : public KAction
 		KexiUserAction(KexiMainWindow *context, KActionCollection *parent, const QString &name, const QString &text, const QString &pixmap);
 		~KexiUserAction();
 
-		/*! sets execution information assosiated with this action this will mostly look like
+		/*! sets execution information associated with this action this will mostly look like
 		    \code
 		    KexiUserAction *action = new KexiUserAction(...);
 		    Arguments arg;
@@ -67,7 +67,7 @@ class KEXICORE_EXPORT KexiUserAction : public KAction
 		static KexiUserAction *fromCurrentRecord(KexiMainWindow *context, KActionCollection *parent, KexiDB::Cursor *c);
 
 	protected slots:
-		/*! actually executes the assosiated method
+		/*! actually executes the associated method
 		    \note KexiUserAction automatically connects KAction::activated() to KexiUserAction::execute()
 		    */
 		void execute();

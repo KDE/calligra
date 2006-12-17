@@ -102,7 +102,7 @@ class KexiScriptDesignView : public KexiViewBase
 
         /**
          * Update the \a KoProperty::Property::Dict propertymap of the
-         * interpreter-dependend options.
+         * interpreter-dependent options.
          */
         void updateProperties();
 

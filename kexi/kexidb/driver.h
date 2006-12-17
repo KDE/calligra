@@ -91,7 +91,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 			NoFeatures = 0,
 			//! single trasactions are only supported
 			SingleTransactions = 1,   
-			//! multiple concurent trasactions are supported
+			//! multiple concurrent trasactions are supported
 			//! (this implies !SingleTransactions)
 			MultipleTransactions = 2, 
 //(js) NOT YET IN USE:
@@ -174,7 +174,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! \return true if \a n is a system database's name, 
 		 eg. name of build-in, system database that cannot be used or created by a user,
 		 and in most cases user even shouldn't see this. The list is specific for 
-		 a given driver implementation. For implemenation.
+		 a given driver implementation. For implementation.
 		 \sa isSystemObjectName().
 		*/
 		virtual bool isSystemDatabaseName( const QString& n ) const = 0;

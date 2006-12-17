@@ -141,7 +141,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KexiMdiMainFrm, public KexiSharedA
 		 within name/caption dialog (see KexiNameDialog).
 		 If \a allowOverwriting is true, user will be asked for existing
 		 object's overwriting, else it will be impossible to enter
-		 a name of exisiting object.
+		 a name of existing object.
 		 You can check \a allowOverwriting after calling this method.
 		 If it's true, user agreed on overwriting, if it's false, user picked
 		 nonexisting name, so no overwrite will be needed. */

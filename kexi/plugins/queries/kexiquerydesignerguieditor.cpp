@@ -553,7 +553,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 		if (!currentField || currentField->isExpression() || currentField->isQueryAsterisk())
 //! @todo support expressions here
 			continue;
-//! @todo ok, but not for expresions
+//! @todo ok, but not for expressions
 		QString aliasString( (*set)["alias"].value().toString() );
 		currentColumn = temp->query()->columnInfo( 
 			(*set)["table"].value().toString() + "."
@@ -800,7 +800,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 	result.clear();
 	const bool was_dirty = dirty();
 
-	//1. Show explicity declared relations:
+	//1. Show explicitly declared relations:
 	if (showRelations) {
 		KexiDB::Relationship *rel;
 		for (KexiDB::Relationship::ListIterator it(*query->relationships());

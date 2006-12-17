@@ -120,7 +120,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! \brief Creates new database with name \a dbName, using this connection.
 		
-		 If database with \a dbName already exists, or other error occured,
+		 If database with \a dbName already exists, or other error occurred,
 		 false is returned. 
 		 For file-based drivers, \a dbName should be equal to the database
 		 filename (the same as specified for ConnectionData).
@@ -237,7 +237,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 */
 		/*! Commits transaction \a trans.
 		 If there is not \a trans argument passed, and there is default transaction 
-		 (obtained from defaultTransaction()) defined, this one will be commited.
+		 (obtained from defaultTransaction()) defined, this one will be committed.
 		 If default is not present, false is returned (when ignore_inactive is 
 		 false, the default), or true is returned (when ignore_inactive is true).
 		 
@@ -253,7 +253,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 If default is not present, false is returned (when ignore_inactive is 
 		 false, the default), or true is returned (when ignore_inactive is true).
 		 
-		 or any error occured, false is returned.
+		 or any error occurred, false is returned.
 			
 		 On successful rollback, \a trans object will be destroyed.
 		 If this was default transaction, there is no default transaction for now.
@@ -264,7 +264,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \return handle for default transaction for this connection
 		 or null transaction if there is no such a transaction defined. 
 		 If transactions are supported: Any operation on database (e.g. inserts)
-		 that is started without specifing transaction context, will be performed
+		 that is started without specifying transaction context, will be performed
 		 in the context of this transaction.
 		 
 		 Returned null transaction doesn't mean that there is no transactions 
@@ -292,7 +292,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 When auto commit is on (the default on for any new Connection object),
 		 every sql functional statement (statement that changes 
 		 data in the database implicitly starts a new transaction. 
-		 This transaction is automatically commited 
+		 This transaction is automatically committed 
 		 after successful statement execution or rolled back on error.
 		 
 		 For drivers that do not support transactions (see Driver::features())
@@ -303,7 +303,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 transaction per connection (see Driver::SingleTransactions),
 		 use this single connection for autocommiting, so if there is already transaction 
 		 started by the KexiDB user program (with beginTransaction()), this transaction 
-		 is commited before any sql functional statement execution. In this situation
+		 is committed before any sql functional statement execution. In this situation
 		 default transaction is also affected (see defaultTransaction()).
 		 
 		 Only for drivers that support nested transactions (Driver::NestedTransactions),
@@ -784,7 +784,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 //! @todo move this somewhere to low level class (MIGRATION?)
 		/*! LOW LEVEL METHOD. For reimplemenation: returns true if table 
 		 with name \a tableName exists in the database.
-		 \return false if it does not exist or error occured.
+		 \return false if it does not exist or error occurred.
 		 The lookup is case insensitive. */
 		virtual bool drv_containsTable( const QString &tableName ) = 0;
 
@@ -984,7 +984,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 (e.g. if you driver will support multiple transactions per connection).
 		 Make subclass of TransactionData (declared in transaction.h)
 		 and return object of this subclass.
-		 You should return NULL if any error occured.
+		 You should return NULL if any error occurred.
 		 Do not check anything in connection (isConnected(), etc.) - all is already done.
 		*/
 		virtual TransactionData* drv_beginTransaction();
@@ -1031,7 +1031,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		 Special case when used database driver has only single transaction support 
 		 (Driver::SingleTransactions): 
-		 and there is already transaction started, it is commited before
+		 and there is already transaction started, it is committed before
 		 starting a new one, but only if this transaction has been started inside Connection object.
 		 (i.e. by beginAutoCommitTransaction()). Otherwise, a new transaction will not be started, 
 		 but true will be returned immediately.
@@ -1045,7 +1045,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		 Special case when used database driver has only single transaction support 
 		 (Driver::SingleTransactions): if \a trans has been started outside Connection object 
-		 (i.e. not by beginAutoCommitTransaction()), the transaction will not be commited.
+		 (i.e. not by beginAutoCommitTransaction()), the transaction will not be committed.
 		*/
 		bool commitAutoCommitTransaction(const Transaction& trans);
 		

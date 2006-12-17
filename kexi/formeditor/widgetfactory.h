@@ -252,7 +252,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
     has been called. For example, setting "forceShowAdvancedProperty:pixmap" to "1" 
     unhides "pixmap" property for a given class.
 
-  See StdWidgetFactory::StdWidgetFactory() for properies like
+  See StdWidgetFactory::StdWidgetFactory() for properties like
   "Line:orientationSelectionPopup:horizontalIcon".
 
   \n\n

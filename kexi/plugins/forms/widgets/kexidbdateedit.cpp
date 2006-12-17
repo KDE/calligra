@@ -217,7 +217,7 @@ KexiDBDateEdit::eventFilter(QObject *o, QEvent *e)
 				return true;
 			}
 			else if (ke->key()==Qt::Key_Escape) {
-				//cancelling picker
+				//canceling picker
 				m_datePickerPopupMenu->hide();
 				return true;
 			}

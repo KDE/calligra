@@ -221,7 +221,7 @@ private:
    */
   void setupMinMaxSize();
   /**
-   * child0 and child1 contain the embeded widgets. They are always valid
+   * child0 and child1 contain the embedded widgets. They are always valid
    * so no need to make pointer checks.
    * child[01]->getWidget() may be KDockContainer.
    */

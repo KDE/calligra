@@ -30,7 +30,7 @@
 This is in no way meant to compile let alone work
 This is very preliminary and is meant for example only
  
-This will be an example program to demonstrate how to import an exisiting db into
+This will be an example program to demonstrate how to import an existing db into
 a new kexi based db
 */
 

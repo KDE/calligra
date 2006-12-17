@@ -240,13 +240,13 @@ public:
 	/*! Verbatim name as returned by scanner. */
 	QString name;
 
-	/* NULL by default. After succesful validate() it will point to a field,
+	/* NULL by default. After successful validate() it will point to a field,
 	 if the variable is of a form "tablename.fieldname" or "fieldname", 
 	 otherwise (eg. for asterisks) -still NULL.
 	 Only meaningful for column expressions within a query. */
 	Field *field;
 
-	/* -1 by default. After succesful validate() it will contain a position of a table
+	/* -1 by default. After successful validate() it will contain a position of a table
 	 within query that needs to be bound to the field. 
 	 This value can be either be -1 if no binding is needed.
 	 This value is used in the Parser to call 
@@ -254,7 +254,7 @@ public:
 	 Only meaningful for column expressions within a query. */
 	int tablePositionForField;
 
-	/*! NULL by default. After succesful validate() it will point to a table
+	/*! NULL by default. After successful validate() it will point to a table
 	 that is referenced by asterisk, i.e. "*.tablename". 
 	 This is set to NULL if this variable is not an asterisk of that form. */
 	TableSchema *tableForQueryAsterisk;

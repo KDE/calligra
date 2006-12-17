@@ -317,7 +317,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 		KexiDB::DriverManager dm;
 		KexiDB::Driver::Info dinfo = dm.driverInfo(cdata.driverName);
 		if (dinfo.name.isEmpty()) {
-			//driver name provided explicity, but not found
+			//driver name provided explicitly, but not found
 			KMessageBox::sorry(0, dm.errorMsg());
 			return false;
 		}

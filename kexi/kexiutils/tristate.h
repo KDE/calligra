@@ -22,7 +22,7 @@
 
 /**
  * \e cancelled value, in most cases usable if there is a need for returning 
- * \e cancelled value explicity. Example use:
+ * \e cancelled value explicitly. Example use:
  * \code
  * tristate myFunctionThatCanBeCancelled() {
  *   doSomething();
@@ -84,7 +84,7 @@ static const char dontKnow = cancelled;
  * \endcode
  * Having the single parameter, signals and slots have still simple look.
  * Developers can alter their code (by replacing 'bool& result' with 'tristate& result')
- * in case when a possibility of cancelling of, say, data provessing needs to be implemented.
+ * in case when a possibility of canceling of, say, data provessing needs to be implemented.
  * Let's say \e validateData() function uses a QDialog to get some validation from a user.
  * While QDialog::Rejected is returned after cancellation of the validation process, 
  * the information about cancellation needs to be transferred up to a higher level of the program.

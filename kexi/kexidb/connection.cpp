@@ -129,7 +129,7 @@ class ConnectionPrivate
 
 		/*! Default transaction handle.
 		If transactions are supported: Any operation on database (e.g. inserts)
-		that is started without specifing transaction context, will be performed
+		that is started without specifying transaction context, will be performed
 		in the context of this transaction. */
 		Transaction default_trans;
 		Q3ValueList<Transaction> transactions;
@@ -3146,7 +3146,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	m_sql = "INSERT INTO " + escapeIdentifier(mt->name()) + " (";
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
 
-	// add default values, if available (for any column without value explicity set)
+	// add default values, if available (for any column without value explicitly set)
 	const QueryColumnInfo::Vector fieldsExpanded( query.fieldsExpanded( QuerySchema::Unique ) );
 	for (uint i=0; i<fieldsExpanded.count(); i++) {
 		QueryColumnInfo *ci = fieldsExpanded.at(i);
