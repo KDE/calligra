@@ -27,7 +27,10 @@
 
 #include <KoShape.h>
 #include <KoSelection.h>
-#include <KoCommand.h>
+#include <KoShapeMoveCommand.h>
+#include <KoShapeSizeCommand.h>
+#include <KoShapeLockCommand.h>
+#include <KoShapeRotateCommand.h>
 
 #include "KivioDocument.h"
 

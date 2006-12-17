@@ -65,7 +65,10 @@
 #include <KoShapeManager.h>
 #include <KoShapeContainer.h>
 #include <KoShapeGroup.h>
-#include <KoCommand.h>
+#include <KoShapeDeleteCommand.h>
+#include <KoUngroupShapesCommand.h>
+#include <KoShapeCreateCommand.h>
+#include <KoShapeDeleteCommand.h>
 #include <KoSelection.h>
 #include <KoZoomAction.h>
 #include <KoShapeSelector.h>

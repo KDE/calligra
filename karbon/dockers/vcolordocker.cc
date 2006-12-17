@@ -29,7 +29,7 @@
 #include <KoUniColorChooser.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoCommand.h>
+#include <KoShapeBackgroundCommand.h>
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
 

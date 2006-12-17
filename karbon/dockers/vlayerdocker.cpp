@@ -39,7 +39,7 @@
 #include <KoCanvasController.h>
 #include <KoShapeControllerBase.h>
 #include <KoSelection.h>
-#include <KoCommand.h>
+#include <KoShapeDeleteCommand.h>
 #include <KoZoomHandler.h>
 
 #include "vdocument.h"

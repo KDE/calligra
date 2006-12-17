@@ -30,7 +30,8 @@
 #include <ksharedptr.h>
 #include <kxmlguibuilder.h>
 #include <KoUnit.h>
-#include <KoCommand.h>
+#include <KoShapeAlignCommand.h>
+#include <KoShapeDistributeCommand.h>
 #include <KoZoomMode.h>
 #include <koffice_export.h>
 //Added by qt3to4:

@@ -37,7 +37,10 @@
 #include <KoShapeManager.h>
 #include <KoCanvasController.h>
 #include <KoToolManager.h>
-#include <KoCommand.h>
+#include <KoShapeMoveCommand.h>
+#include <KoShapeRotateCommand.h>
+#include <KoShapeShearCommand.h>
+#include <KoShapeSizeCommand.h>
 #include <KoShapeContainer.h>
 
 #include <kdebug.h>

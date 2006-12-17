@@ -22,7 +22,7 @@
 #include "vlayercmd.h"
 #include "vdocument.h"
 #include <KoShapeControllerBase.h>
-#include <KoCommand.h>
+#include <KoShapeDeleteCommand.h>
 #include <klocale.h>
 
 VLayerDeleteCmd::VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, KoLayerShape* layer )

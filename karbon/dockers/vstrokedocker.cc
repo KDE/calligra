@@ -34,7 +34,7 @@
 #include <KoDockFactory.h>
 #include <KoUnitWidgets.h>
 #include <KoShapeManager.h>
-#include <KoCommand.h>
+#include <KoShapeBorderCommand.h>
 #include <KoShapeBorderModel.h>
 
 #include "vstrokedocker.h"
