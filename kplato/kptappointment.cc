@@ -507,12 +507,16 @@ EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) co
             dt.setDate(st.date());
         }
         ndt = dt.addDays(1);
-        // loop trough the interval (it may span dates)
         while (dt.date() <= e.date()) {
             eff = i->effort(dt, ndt);
             ec.add(dt.date(), eff, eff.toDouble(Duration::Unit_h) * rate);
-            dt = ndt;
-            ndt = ndt.addDays(1);
+            if (dt.date() < e.date()) {
+                // loop trough the interval (it spans dates)
+                dt = ndt;
+                ndt = ndt.addDays(1);
+            } else {
+                break;
+            }
         }
     }
     return ec;
