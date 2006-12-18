@@ -53,18 +53,20 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, 
     connect(document, SIGNAL(pageAdded(KWPage*)), this, SLOT(pageSetupChanged()));
     connect(document, SIGNAL(pageRemoved(KWPage*)), this, SLOT(pageSetupChanged()));
 
-    m_toolProxy = KoToolManager::instance()->toolProxy();
-}
-
-void KWCanvas::pageSetupChanged() {
-    m_viewMode->pageSetupChanged();
-    updateSize();
+    m_toolProxy = KoToolManager::instance()->createToolProxy(this);
 }
 
 KWCanvas::~KWCanvas()
 {
     delete m_shapeManager;
     m_shapeManager = 0;
+    delete m_toolProxy;
+    m_toolProxy = 0;
+}
+
+void KWCanvas::pageSetupChanged() {
+    m_viewMode->pageSetupChanged();
+    updateSize();
 }
 
 void KWCanvas::updateSize() {

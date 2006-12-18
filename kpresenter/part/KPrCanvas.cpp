@@ -22,6 +22,7 @@
 #include <KoShapeManager.h>
 #include <KoToolManager.h>
 #include <KoUnit.h>
+#include <KoToolProxy.h>
 
 #include "KPrDocument.h"
 #include "KPrView.h"
@@ -36,7 +37,7 @@ KPrCanvas::KPrCanvas( KPrView * view, KPrDocument * doc )
 , m_doc( doc )
 {
     m_shapeManager = new KoShapeManager( this );
-    m_toolProxy = KoToolManager::instance()->toolProxy();
+    m_toolProxy = KoToolManager::instance()->createToolProxy(this);
     setMinimumSize( 1000, 1000 );
     setFocusPolicy( Qt::StrongFocus );
     // this is much faster than painting it in the paintevent
@@ -47,6 +48,8 @@ KPrCanvas::KPrCanvas( KPrView * view, KPrDocument * doc )
 
 KPrCanvas::~KPrCanvas()
 {
+    delete m_toolProxy;
+    m_toolProxy = 0;
 }
 
 void KPrCanvas::updateSize()

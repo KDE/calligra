@@ -41,7 +41,7 @@ KivioCanvas::KivioCanvas(KivioView* parent)
   : QWidget(parent), KoCanvasBase(0), m_view(parent)
 {
   m_shapeManager = new KoShapeManager(this);
-  m_toolProxy = KoToolManager::instance()->toolProxy();
+  m_toolProxy = KoToolManager::instance()->createToolProxy(this);
 
   setMouseTracking(true);
 
@@ -50,6 +50,8 @@ KivioCanvas::KivioCanvas(KivioView* parent)
 
 KivioCanvas::~KivioCanvas()
 {
+    delete m_toolProxy;
+    m_toolProxy = 0;
 }
 
 void KivioCanvas::gridSize(double *horizontal, double *vertical) const

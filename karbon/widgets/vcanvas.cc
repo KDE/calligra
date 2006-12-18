@@ -65,7 +65,7 @@ KarbonCanvas::KarbonCanvas( KarbonPart *p )
     m_shapeManager = new KoShapeManager(this, m_doc->shapes() );
     setMouseTracking(true);
 
-    m_toolProxy = KoToolManager::instance()->toolProxy();
+    m_toolProxy = KoToolManager::instance()->createToolProxy(this);
 
     connect( m_shapeManager, SIGNAL(selectionChanged()), this, SLOT(adjustSize()) );
     setFocusPolicy(Qt::ClickFocus); // allow to receive keyboard input
@@ -74,6 +74,8 @@ KarbonCanvas::KarbonCanvas( KarbonPart *p )
 
 KarbonCanvas::~KarbonCanvas()
 {
+    delete m_toolProxy;
+    m_toolProxy = 0;
 }
 
 void KarbonCanvas::paintEvent(QPaintEvent * ev)
