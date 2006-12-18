@@ -1225,11 +1225,11 @@ void GanttView::getContextClosedNodes( Context::Ganttview &context, KDGanttViewI
 void GanttView::setReadWriteMode( bool on )
 {
     m_readWrite = on;
-    disconnect( m_gantt, SIGNAL( gvCreateTaskLink( KDGanttViewItem*, KDGanttViewItem::Connector, KDGanttViewItem*, KDGanttViewItem::Connector ) ), this, SLOT( slotCreateTaskLink( KDGanttViewItem*, KDGanttViewItem::Connector, KDGanttViewItem*, KDGanttViewItem::Connector ) ) );
+    disconnect( m_gantt, SIGNAL( gvCreateTaskLink( KDGanttViewItem*, int, KDGanttViewItem*, int ) ), this, SLOT( slotCreateTaskLink( KDGanttViewItem*, int, KDGanttViewItem*, int ) ) );
     disconnect( m_gantt, SIGNAL( taskLinkDoubleClicked( KDGanttViewTaskLink* ) ), this, SLOT( slotModifyLink( KDGanttViewTaskLink* ) ) );
 
     if ( on ) {
-        connect( m_gantt, SIGNAL( gvCreateTaskLink( KDGanttViewItem*, KDGanttViewItem::Connector, KDGanttViewItem*, KDGanttViewItem::Connector ) ), this, SLOT( slotCreateTaskLink( KDGanttViewItem*, KDGanttViewItem::Connector, KDGanttViewItem*, KDGanttViewItem::Connector ) ) );
+        connect( m_gantt, SIGNAL( gvCreateTaskLink( KDGanttViewItem*, int, KDGanttViewItem*, int ) ), this, SLOT( slotCreateTaskLink( KDGanttViewItem*, int, KDGanttViewItem*, int ) ) );
 
         connect( m_gantt, SIGNAL( taskLinkDoubleClicked( KDGanttViewTaskLink* ) ), SLOT( slotModifyLink( KDGanttViewTaskLink* ) ) );
     }
