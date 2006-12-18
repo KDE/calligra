@@ -293,6 +293,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propDesc["onClickActionOption"] = i18n("On Click Option");
 	m_propDesc["autoTabStops"] = i18n("Auto Tab Order");
 	m_propDesc["shadowEnabled"] = i18n("Shadow Enabled");
+	m_propDesc["on"] = i18n("On: button", "On");
 
 	m_propDesc["widgetType"] = i18n("Editor Type");
 	//for autofield's type: inherit i18n from KexiDB
@@ -325,7 +326,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	m_propDesc["scaledContents"] = i18n("Scaled Contents");
 	m_propDesc["keepAspectRatio"] = i18n("Keep Aspect Ratio (short)", "Keep Ratio");
 
-	//hide classes that are repalced by db-aware versions
+	//hide classes that are replaced by db-aware versions
 	hideClass("KexiPictureLabel");
 	hideClass("KComboBox");
 

@@ -91,17 +91,17 @@ void KexiFormEventAction::activate()
 	KexiPart::Item* item = project->item( part->info(), m_objectName );
 	if (!item)
 		return;
-	bool openingCancelled;
+	bool actionCancelled = false;
 	if (m_actionOption.isEmpty()) { // backward compatibility (good defaults)
 		if (part->info()->isExecuteSupported())
 			part->execute(item, parent());
 		else
-			m_mainWin->openObject(item, Kexi::DataViewMode, openingCancelled);
+			m_mainWin->openObject(item, Kexi::DataViewMode, actionCancelled);
 	}
 	else {
 //! @todo react on failure...
 		if (m_actionOption == "open")
-			m_mainWin->openObject(item, Kexi::DataViewMode, openingCancelled);
+			m_mainWin->openObject(item, Kexi::DataViewMode, actionCancelled);
 		else if (m_actionOption == "execute")
 			part->execute(item, parent());
 		else if (m_actionOption == "print") {
@@ -122,10 +122,17 @@ void KexiFormEventAction::activate()
 			if (part->info()->isDataExportSupported())
 				m_mainWin->executeCustomActionForObject(item, m_actionOption);
 		}
+		else if (m_actionOption == "new")
+			m_mainWin->newObject( part->info(), actionCancelled );
 		else if (m_actionOption == "design")
-			m_mainWin->openObject(item, Kexi::DesignViewMode, openingCancelled);
+			m_mainWin->openObject(item, Kexi::DesignViewMode, actionCancelled);
 		else if (m_actionOption == "editText")
-			m_mainWin->openObject(item, Kexi::TextViewMode, openingCancelled);
+			m_mainWin->openObject(item, Kexi::TextViewMode, actionCancelled);
+		else if (m_actionOption == "close") {
+			tristate res = m_mainWin->closeObject(item);
+			if (~res)
+				actionCancelled = true;
+		}
 	}
 }
 
