@@ -1,6 +1,6 @@
 project(kpresenter)
 
-include_directories(${KOFFICEUI_INCLUDES})
+include_directories(${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
 
 ### kpresenterprivate ###
 set( kpresenterprivate_LIB_SRCS
@@ -16,7 +16,7 @@ kde4_automoc(${kpresenterprivate_LIB_SRCS})
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
-target_link_libraries(kpresenterprivate ${KDE4_KDECORE_LIBS} kofficeui flake)
+target_link_libraries(kpresenterprivate ${KDE4_KDECORE_LIBS} kofficeui flake kotext)
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kpresenterprivate  DESTINATION ${LIB_INSTALL_DIR})
@@ -30,7 +30,7 @@ kde4_add_plugin(kpresenterpart WITH_PREFIX ${kpresenterpart_PART_SRCS})
 
 
 
-target_link_libraries(kpresenterpart  ${KDE4_KDECORE_LIBS} kpresenterprivate)
+target_link_libraries(kpresenterpart  ${KDE4_KDECORE_LIBS} kpresenterprivate )
 
 install(TARGETS kpresenterpart DESTINATION ${PLUGIN_INSTALL_DIR})
 

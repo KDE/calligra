@@ -32,6 +32,7 @@
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoZoomAction.h>
+#include <KoTextSelectionHandler.h>
 
 #include <KPrCanvas.h>
 #include <KPrDocument.h>
@@ -111,6 +112,44 @@ void KPrView::initActions()
        setXMLFile( "kpresenter_readonly.rc" );
     else
        setXMLFile( "kpresenter.rc" );
+
+    m_actionFormatBold = new KToggleAction(KIcon("text_bold"), i18n( "Bold" ), actionCollection(), "format_bold");
+    m_actionFormatBold->setShortcut(KShortcut(Qt::CTRL + Qt::Key_B));
+    connect( m_actionFormatBold, SIGNAL(toggled(bool)), this, SLOT(textBold(bool)) );
+
+    m_actionFormatItalic = new KToggleAction(KIcon("text_italic"), i18n( "Italic" ), actionCollection(), "format_italic" );
+    m_actionFormatItalic->setShortcut(KShortcut( Qt::CTRL + Qt::Key_I));
+    connect( m_actionFormatBold, SIGNAL(toggled(bool)), this, SLOT(textItalic(bool)) );
+
+    m_actionFormatUnderline = new KToggleAction(KIcon("text_under"), i18n( "Underline" ), actionCollection(), "format_underline" );
+    m_actionFormatUnderline->setShortcut(KShortcut( Qt::CTRL + Qt::Key_U));
+    connect( m_actionFormatUnderline, SIGNAL(toggled(bool)), this, SLOT(textUnderline(bool)) );
+
+    m_actionFormatStrikeOut = new KToggleAction(KIcon("text_strike"), i18n( "Strike Out" ), actionCollection(), "format_strike" );
+    connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), this, SLOT(textStrikeOut(bool)) );
+
+    // ------------------- Actions with a key binding and no GUI item
+    KAction *action = new KAction( i18n( "Insert Non-Breaking Space" ), actionCollection(), "nonbreaking_space" );
+    action->setShortcut( KShortcut( Qt::CTRL+Qt::Key_Space));
+    connect(action, SIGNAL(triggered()), this, SLOT( slotNonbreakingSpace() ));
+
+    action = new KAction( i18n( "Insert Non-Breaking Hyphen" ), actionCollection(), "nonbreaking_hyphen" );
+    action->setShortcut( KShortcut( Qt::CTRL+Qt::SHIFT+Qt::Key_Minus));
+    connect(action, SIGNAL(triggered()), this, SLOT( slotNonbreakingHyphen() ));
+
+    action = new KAction( i18n( "Insert Soft Hyphen" ), actionCollection(), "soft_hyphen" );
+    action->setShortcut( KShortcut( Qt::CTRL+Qt::Key_Minus));
+    connect(action, SIGNAL(triggered()), this, SLOT( slotSoftHyphen() ));
+
+    action = new KAction( i18n( "Line Break" ), actionCollection(), "line_break" );
+    action->setShortcut( KShortcut( Qt::SHIFT+Qt::Key_Return));
+    connect(action, SIGNAL(triggered()), this, SLOT( slotLineBreak() ));
+
+
+    m_actionFormatFont = new KAction( i18n( "Font..." ), actionCollection(), "format_font" );
+    m_actionFormatFont->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
+    m_actionFormatFont->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
+    connect(m_actionFormatFont, SIGNAL(triggered()), this, SLOT( formatFont() ));
 
     m_actionViewShowGrid = new KToggleAction( i18n( "Show &Grid" ), KShortcut(),
                                             this, SLOT( viewGrid() ),
@@ -232,5 +271,61 @@ void KPrView::recalculateZoom()
 {
     viewZoom(m_zoomHandler.zoomMode(), m_zoomHandler.zoomInPercent());
 }
+
+void KPrView::textBold(bool bold) {
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kprcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->bold(bold);
+}
+
+void KPrView::textItalic(bool italic) {
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kprcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->italic(italic);
+}
+
+void KPrView::textUnderline(bool underline) {
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kprcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->underline(underline);
+}
+
+void KPrView::textStrikeOut(bool strikeout) {
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kprcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->strikeOut(strikeout);
+}
+
+void KPrView::slotNonbreakingSpace() {
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kprcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->insert(QString(QChar(0xa0)));
+}
+
+void KPrView::slotNonbreakingHyphen() {
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kprcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->insert(QString(QChar(0x2013)));
+}
+
+void KPrView::slotSoftHyphen() {
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kprcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->insert(QString(QChar(0xad)));
+}
+
+void KPrView::slotLineBreak() {
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kprcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->insert(QString(QChar('\n')));
+}
+
+void KPrView::formatFont() {
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kprcanvas()->toolProxy()->selection());
+    if(handler)
+        handler->selectFont(this);
+}
+
+
 
 #include "KPrView.moc"

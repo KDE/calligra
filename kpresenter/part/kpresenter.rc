@@ -27,4 +27,13 @@
         <Action name="view_zoom_out"/>
         <Action name="view_zoom_in"/>
     </ToolBar>
+    <ToolBar name="charformat_toolbar" position="top"><Text>Format</Text>
+        <Action name="format_bold"/>
+        <Action name="format_italic"/>
+        <Action name="format_underline"/>
+        <Action name="format_strike"/>
+        <Separator/>
+        <Action name="format_super"/>
+        <Action name="format_sub"/>
+    </ToolBar>
 </kpartgui>

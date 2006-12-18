@@ -64,6 +64,15 @@ protected slots:
     void viewGrid();
     void viewZoom(KoZoomMode::Mode mode, int zoom);
 
+    void textBold(bool bold);
+    void textItalic(bool italic);
+    void textUnderline(bool underline);
+    void textStrikeOut(bool strikeout);
+    void slotNonbreakingSpace();
+    void slotNonbreakingHyphen();
+    void slotSoftHyphen();
+    void slotLineBreak();
+    void formatFont();
 private:    
     void initGUI();
     void initActions();
@@ -80,11 +89,18 @@ private:
 
     KToggleAction *m_actionViewSnapToGrid;
     KToggleAction *m_actionViewShowGrid;
+    KToggleAction *m_actionFormatBold;
+    KToggleAction *m_actionFormatItalic;
+    KToggleAction *m_actionFormatUnderline;
+    KToggleAction *m_actionFormatStrikeOut;
 
     KoRuler *m_horizontalRuler;
     KoRuler *m_verticalRuler;
 
     KoZoomAction *m_viewZoomAction;
+
+    KAction *m_actionFormatFont;
+
 };
 
 #endif /* KPRVIEW_H */
