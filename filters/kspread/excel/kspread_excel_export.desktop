@@ -2,7 +2,6 @@
 Encoding=UTF-8
 Type=Service
 Name=Excel Export Filter for KSpread
-Name[ar]=مِرْشَح تصدير Excel لدى KSpread
 Name[bg]=Филтър за експорт от KSpread в Excel
 Name[br]=Sil ezporzh Excel evit KSpread
 Name[ca]=Filtre d'exportació Excel per a KSpread

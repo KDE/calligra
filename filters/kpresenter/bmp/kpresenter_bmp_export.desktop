@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter BMP Export Filter
+Name[ar]=مرشح تصدير BMP لدى KPresenter
 Name[br]=Sil ezporzh BMB evit KPresenter
 Name[ca]=Filtre d'exportació BMP per a KPresenter
 Name[cy]=Hidlen Allforio BMP KPresenter

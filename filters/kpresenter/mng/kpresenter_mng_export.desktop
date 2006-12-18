@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter MNG Export Filter
+Name[ar]=مرشح تصدير MNG لدى KPresenter
 Name[br]=Sil ezporzh MNG evit KPresenter
 Name[ca]=Filtre d'exportació MNG per a KPresenter
 Name[da]=KPræsenter MNG-eksportfilter
