@@ -47,6 +47,17 @@ SheetSelectPage::SheetSelectPage( QWidget *parent )
   gui->ListViewAvailable->setSorting(-1);
   gui->ListViewSelected->setSorting(-1);
 
+  //setup icons
+  gui->ButtonSelectAll->setIcon(KIcon("2rightarrow"));
+  gui->ButtonSelect->setIcon(KIcon("1rightarrow"));
+  gui->ButtonRemove->setIcon(KIcon("1leftarrow"));
+  gui->ButtonRemoveAll->setIcon(KIcon("2leftarrow"));
+
+  gui->ButtonMoveTop->setIcon(KIcon("2uparrow"));
+  gui->ButtonMoveUp->setIcon(KIcon("1uparrow"));
+  gui->ButtonMoveDown->setIcon(KIcon("1downarrow"));
+  gui->ButtonMoveBottom->setIcon(KIcon("2downarrow"));
+
   //connect buttons
   connect(gui->ButtonSelectAll,SIGNAL(clicked()),this,SLOT(selectAll()));
   connect(gui->ButtonSelect,SIGNAL(clicked()),this,SLOT(select()));
