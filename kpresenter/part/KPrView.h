@@ -32,17 +32,21 @@ class KPrDocument;
 class KToggleAction;
 class KPrPage;
 class KoShapeManager;
+class KoZoomAction;
 
 class KPrView : public KoView
 {
     Q_OBJECT
 public:
-    KPrView( KPrDocument * document, QWidget * parent = 0 );
+    explicit KPrView( KPrDocument * document, QWidget * parent = 0 );
     ~KPrView();
 
     void updateReadWrite( bool readwrite );
 
     KoViewConverter * viewConverter() { return &m_zoomHandler; }
+
+    KoZoomHandler* zoomHandler() { return &m_zoomHandler; }
+
 
     KPrCanvas * kprcanvas() { return m_canvas; }
     
@@ -53,13 +57,20 @@ public:
     KoShapeManager* shapeManager() const;
     KPrCanvas* canvasWidget() const;
 
+    void setZoom(int zoom);
+
 protected slots:
     void viewSnapToGrid();
     void viewGrid();
+    void viewZoom(KoZoomMode::Mode mode, int zoom);
 
 private:    
     void initGUI();
     void initActions();
+    void recalculateZoom();
+
+    /// Reimplemented to recalc the zoom when in fit to page or width mode
+    virtual void resizeEvent(QResizeEvent* event);
 
     KPrDocument * m_doc;
     KPrCanvas * m_canvas;
@@ -72,6 +83,8 @@ private:
 
     KoRuler *m_horizontalRuler;
     KoRuler *m_verticalRuler;
+
+    KoZoomAction *m_viewZoomAction;
 };
 
 #endif /* KPRVIEW_H */

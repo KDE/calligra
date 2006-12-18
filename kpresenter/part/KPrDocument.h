@@ -33,7 +33,7 @@ class KPrDocument : public KoDocument
 {
     Q_OBJECT
 public:
-    KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
+    explicit KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
     ~KPrDocument();
 
     void paintContent( QPainter &painter, const QRect &rect, bool transparent = false,

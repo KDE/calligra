@@ -25,6 +25,7 @@
 
 #include "KPrDocument.h"
 #include "KPrView.h"
+#include "KPrPage.h"
 
 #include <QDebug>
 
@@ -41,11 +42,27 @@ KPrCanvas::KPrCanvas( KPrView * view, KPrDocument * doc )
     // this is much faster than painting it in the paintevent
     setBackgroundRole( QPalette::Base );
     setAutoFillBackground( true );
+    updateSize();
 }
 
 KPrCanvas::~KPrCanvas()
 {
 }
+
+void KPrCanvas::updateSize()
+{
+  int width = 0;
+  int height = 0;
+
+  if(m_view->activePage()) {
+    KoPageLayout pageLayout = m_view->activePage()->pageLayout();
+    width = qRound(m_view->zoomHandler()->zoomItX(pageLayout.ptWidth));
+    height = qRound(m_view->zoomHandler()->zoomItX(pageLayout.ptHeight));
+  }
+
+  setMinimumSize(width, height);
+}
+
 
 void KPrCanvas::gridSize( double *horizontal, double *vertical ) const
 {

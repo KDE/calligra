@@ -31,7 +31,7 @@ class KPrDocument;
 class KPrPage : public KoShapeControllerBase
 {
 public:    
-    KPrPage(KPrDocument *_doc);
+    explicit KPrPage(KPrDocument *_doc);
     ~KPrPage();
 
     virtual void addShape( KoShape * shape );

@@ -30,7 +30,7 @@ class KPrCanvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
 public:
-    KPrCanvas( KPrView * view, KPrDocument * doc );
+    explicit KPrCanvas( KPrView * view, KPrDocument * doc );
     ~KPrCanvas();
     
     void gridSize( double *horizontal, double *vertical ) const;
@@ -59,6 +59,11 @@ protected:
     KPrDocument * m_doc;
     KoShapeManager * m_shapeManager;
     KoToolProxy * m_toolProxy;
+
+public slots:
+    /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
+    void updateSize();
+
 };
 
 #endif /* KPRCANVAS_H */
