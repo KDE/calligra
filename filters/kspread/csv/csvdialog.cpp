@@ -31,9 +31,10 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QTextCodec>
+#include <QApplication>
 
-#include <kapplication.h>
 #include <kdebug.h>
+#include <kglobal.h>
 #include <klocale.h>
 #include <kcombobox.h>
 #include <kmessagebox.h>
@@ -58,7 +59,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
 	setDefaultButton(KDialog::No);
         setButtons( KDialog::Ok|KDialog::Cancel );
     setCaption( i18n( "Import" ) );
-    kapp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
     QStringList encodings;
     encodings << i18nc( "Descriptive encoding name", "Recommended ( %1 )" , "UTF-8" );
@@ -111,7 +112,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
 
 CSVDialog::~CSVDialog()
 {
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 }
 
 void CSVDialog::fillTable( )
@@ -124,7 +125,7 @@ void CSVDialog::fillTable( )
     QChar x;
     QString field;
 
-    kapp->setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     for (row = 0; row < m_dialog->m_sheet->numRows(); ++row)
         for (column = 0; column < m_dialog->m_sheet->numCols(); ++column)
@@ -317,7 +318,7 @@ void CSVDialog::fillTable( )
     }
     fillComboBox();
 
-    kapp->restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 }
 
 void CSVDialog::fillComboBox()
