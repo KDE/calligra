@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=KPresenter Old File Format Filter
+X-KDE-Import=application/x-kpresenter
+X-KDE-Weight=1
+X-KDE-Export=application/vnd.oasis.opendocument.presentation
+X-KDE-Library=libkpr2odp
+ServiceTypes=KOfficeFilter
