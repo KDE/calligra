@@ -42,10 +42,23 @@ public:
     /// @return all shapes.
     QList<KoShape*> shapes() const;
 
+    /**
+     * Return page title
+     * @param return page title
+     */
+    QString pageTitle() const;
+
+    /**
+     * Set page title
+     * @param set page title
+     */
+    void setPageTitle( const QString &);
+
 protected:
     QList<KoShape *> m_shapes;
     KoPageLayout m_pageLayout;
     KPrDocument *m_doc;
+    QString m_pageTitle;
 };
 
 #endif /* KPRPAGE_H */

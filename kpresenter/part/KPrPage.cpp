@@ -48,3 +48,13 @@ void KPrPage::removeShape(KoShape* shape)
     m_shapes.removeAll(shape);
     m_doc->removeShapeFromViews(this, shape);
 }
+
+QString KPrPage::pageTitle() const
+{
+    return m_pageTitle;
+}
+
+void KPrPage::setPageTitle( const QString &_title)
+{
+    m_pageTitle = _title;
+}
