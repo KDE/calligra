@@ -35,5 +35,6 @@ public:
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
 protected:
+    QDomDocument inpdoc;
 };
 #endif // KPR2ODP_H

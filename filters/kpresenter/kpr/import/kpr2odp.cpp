@@ -33,9 +33,19 @@ Kpr2Odp::Kpr2Odp(QObject *parent,const QStringList&) :
 
 KoFilter::ConversionStatus Kpr2Odp::convert( const QByteArray& from, const QByteArray& to )
 {
-    if ( to != "application/x-kpresenter"
-         || from != "application/vnd.oasis.opendocument.presentation" )	
+    if ( from != "application/x-kpresenter"
+         || to != "application/vnd.oasis.opendocument.presentation" )
         return KoFilter::NotImplemented;
+
+    KoStoreDevice* inpdev = m_chain->storageFile( "root", KoStore::Read );
+    if ( !inpdev )
+    {
+        kError(30502) << "Unable to open input stream" << endl;
+        return KoFilter::StorageCreationError;
+    }
+
+    inpdoc.setContent( inpdev );
+
 
     return KoFilter::OK;
 }
