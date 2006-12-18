@@ -18,23 +18,33 @@
 */
 
 #include "KPrPage.h"
+#include "KPrDocument.h"
 
-KPrPage::KPrPage()
+KPrPage::KPrPage(KPrDocument *_doc)
+    :KoShapeControllerBase()
+    , m_doc( _doc )
 {
     m_pageLayout = KoPageLayout::standardLayout();
 }
 
 KPrPage::~KPrPage()
 {
+    m_shapes.clear();
 }
 
-void KPrPage::addShape( KoShape * shape )
+QList<KoShape*> KPrPage::shapes() const
 {
-    m_shapes.append( shape );
+    return m_shapes;
 }
 
-void KPrPage::removeShape( KoShape *shape )
+void KPrPage::addShape(KoShape* shape)
 {
-    m_shapes.removeAll( shape );
+    m_shapes.append(shape);
+    m_doc->addShapeToViews(this, shape);
 }
 
+void KPrPage::removeShape(KoShape* shape)
+{
+    m_shapes.removeAll(shape);
+    m_doc->removeShapeFromViews(this, shape);
+}

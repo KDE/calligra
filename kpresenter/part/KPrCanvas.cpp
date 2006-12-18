@@ -30,7 +30,7 @@
 
 KPrCanvas::KPrCanvas( KPrView * view, KPrDocument * doc )
 : QWidget( view )
-, KoCanvasBase( doc )
+, KoCanvasBase( 0 )
 , m_view( view )
 , m_doc( doc )
 {
@@ -82,8 +82,8 @@ KoViewConverter * KPrCanvas::viewConverter()
 }
 
 KoUnit KPrCanvas::unit()
-{ 
-    return m_doc->unit(); 
+{
+    return m_doc->unit();
 }
 
 void KPrCanvas::paintEvent( QPaintEvent *event )
@@ -91,7 +91,7 @@ void KPrCanvas::paintEvent( QPaintEvent *event )
     QPainter painter( this );
     painter.setRenderHint( QPainter::Antialiasing );
     painter.setClipRect( event->rect() );
-    
+
     m_shapeManager->paint( painter, *( viewConverter() ), false );
     m_toolProxy->paint( painter, *( viewConverter() ) );
 }

@@ -29,13 +29,15 @@
 
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoDocument( parentWidget, parent, singleViewMode )
-, m_commandHistory( new KCommandHistory() )    
-, m_page( new KPrPage() )    
+, m_commandHistory( new KCommandHistory() )
 {
+    m_pageList.append( new KPrPage(this) );
 }
 
 KPrDocument::~KPrDocument()
 {
+    qDeleteAll(m_pageList);
+    m_pageList.clear();
 }
 
 void KPrDocument::paintContent( QPainter &painter, const QRect &rect, bool transparent,
@@ -60,20 +62,6 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     return true;
 }
 
-void KPrDocument::addShape( KoShape * shape )
-{
-    m_page->addShape( shape );
-    foreach( KoView *view, views() ) {
-        KPrCanvas *canvas = static_cast<KPrView*>( view )->kprcanvas();
-        canvas->shapeManager()->add( shape );
-    }
-}
-
-void KPrDocument::removeShape( KoShape *shape )
-{
-    m_page->removeShape( shape );
-}
-
 void KPrDocument::addCommand( KCommand* command, bool execute )
 {
     m_commandHistory->addCommand( command, execute );
@@ -82,6 +70,54 @@ void KPrDocument::addCommand( KCommand* command, bool execute )
 KoView * KPrDocument::createViewInstance( QWidget *parent )
 {
     return new KPrView( this, parent );
+}
+
+KPrPage* KPrDocument::pageByIndex(int index)
+{
+    return m_pageList.at(index);
+}
+
+
+void KPrDocument::addShapeToViews(KPrPage *page, KoShape *shape)
+{
+    if(page == 0 || shape == 0) {
+        return;
+    }
+
+    KoView* view = 0;
+    KPrView* kprView = 0;
+    foreach(view, views()) {
+        kprView = qobject_cast<KPrView*>(view);
+
+        if(kprView && kprView->activePage()) {
+            if(kprView->activePage() == page) {
+                kprView->shapeManager()->add(shape);
+                kprView->canvasWidget()->update();
+            }
+        }
+    }
+}
+
+void KPrDocument::removeShapeFromViews(KPrPage* page, KoShape* shape)
+{
+    if(page == 0 || shape == 0) {
+        return;
+    }
+
+    KoView* view = 0;
+    KPrView* kprView = 0;
+    KPrPage* kprPage = 0;
+
+    foreach(view, views()) {
+        kprView = qobject_cast<KPrView*>(view);
+
+        if(kprView && kprView->activePage()) {
+            if(kprView->activePage() == page) {
+                kprView->shapeManager()->remove(shape);
+                kprView->canvasWidget()->update();
+            }
+        }
+    }
 }
 
 #include "KPrDocument.moc"

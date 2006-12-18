@@ -30,6 +30,8 @@ class KoCanvasController;
 class KPrCanvas;
 class KPrDocument;
 class KToggleAction;
+class KPrPage;
+class KoShapeManager;
 
 class KPrView : public KoView
 {
@@ -43,6 +45,13 @@ public:
     KoViewConverter * viewConverter() { return &m_zoomHandler; }
 
     KPrCanvas * kprcanvas() { return m_canvas; }
+    
+    KPrPage* activePage() const;
+
+    void setActivePage(KPrPage* page);
+    
+    KoShapeManager* shapeManager() const;
+    KPrCanvas* canvasWidget() const;
 
 protected slots:
     void viewSnapToGrid();
@@ -55,6 +64,7 @@ private:
     KPrDocument * m_doc;
     KPrCanvas * m_canvas;
     KoCanvasController * m_canvasController;
+    KPrPage *m_activePage;
     KoZoomHandler m_zoomHandler;
 
     KToggleAction *m_actionViewSnapToGrid;

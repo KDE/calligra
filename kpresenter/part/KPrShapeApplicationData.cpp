@@ -25,22 +25,32 @@ KPrShapeApplicationData::KPrShapeApplicationData()
 }
 
 void KPrShapeApplicationData::setAppearSoundEffectFileName( const QString & _a_fileName )
-{ 
-  m_a_soundFileName = _a_fileName; 
+{
+  m_a_soundFileName = _a_fileName;
 }
 
 void KPrShapeApplicationData::setDisappearSoundEffectFileName( const QString &_d_fileName )
-{ 
-  m_d_soundFileName = _d_fileName; 
+{
+  m_d_soundFileName = _d_fileName;
 }
 
 QString KPrShapeApplicationData::appearSoundEffectFileName() const
-{ 
-  return m_a_soundFileName; 
+{
+  return m_a_soundFileName;
 }
 
 QString KPrShapeApplicationData::disappearSoundEffectFileName() const
-{ 
-  return m_d_soundFileName; 
+{
+  return m_d_soundFileName;
 }
 
+
+void KPrShapeApplicationData::setShapeName( const QString &_name)
+{
+    m_shapeName = _name;
+}
+
+QString KPrShapeApplicationData::shapeName() const
+{
+    return m_shapeName;
+}

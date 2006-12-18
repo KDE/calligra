@@ -23,23 +23,29 @@
 #include <QList>
 
 #include <KoPageLayout.h>
+#include <KoShapeControllerBase.h>
 
 class KoShape;
+class KPrDocument;
 
-class KPrPage
+class KPrPage : public KoShapeControllerBase
 {
 public:    
-    KPrPage();
+    KPrPage(KPrDocument *_doc);
     ~KPrPage();
 
-    void addShape( KoShape * shape );
-    void removeShape( KoShape *shape );
+    virtual void addShape( KoShape * shape );
+    virtual void removeShape( KoShape *shape );
 
     KoPageLayout & pageLayout() { return m_pageLayout; }
+
+    /// @return all shapes.
+    QList<KoShape*> shapes() const;
 
 protected:
     QList<KoShape *> m_shapes;
     KoPageLayout m_pageLayout;
+    KPrDocument *m_doc;
 };
 
 #endif /* KPRPAGE_H */

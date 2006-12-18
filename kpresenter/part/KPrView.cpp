@@ -26,25 +26,36 @@
 #include <KoZoomHandler.h>
 #include <KoToolBoxFactory.h>
 #include <KoShapeSelectorFactory.h>
-
+#include <KoShapeController.h>
+#include <KoShapeManager.h>
 
 #include <KPrCanvas.h>
 #include <KPrDocument.h>
+#include <KPrPage.h>
 
 #include <klocale.h>
 #include <ktoggleaction.h>
-	
+
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
 : KoView( document, parent )
 , m_doc( document )
 {
+    m_activePage = 0;
     initGUI();
     initActions();
+    if(m_doc->pageCount() > 0)
+        setActivePage(m_doc->pageByIndex(0));
 }
 
 KPrView::~KPrView()
 {
     KoToolManager::instance()->removeCanvasController( m_canvasController );
+}
+
+
+KPrPage* KPrView::activePage() const
+{
+    return m_activePage;
 }
 
 void KPrView::updateReadWrite( bool readwrite )
@@ -75,8 +86,13 @@ void KPrView::initGUI()
     connect(m_doc, SIGNAL(unitChanged(KoUnit)), m_verticalRuler, SLOT(setUnit(KoUnit)));
 
     gridLayout->addWidget(m_horizontalRuler, 0, 1);
-    gridLayout->addWidget(m_verticalRuler, 1, 0);    
+    gridLayout->addWidget(m_verticalRuler, 1, 0);
     gridLayout->addWidget( m_canvasController, 1, 1 );
+
+    connect(m_canvasController, SIGNAL(canvasOffsetXChanged(int)),
+            m_horizontalRuler, SLOT(setOffset(int)));
+    connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
+            m_verticalRuler, SLOT(setOffset(int)));
 
     KoToolBoxFactory toolBoxFactory( "Tools" );
     createDockWidget( &toolBoxFactory );
@@ -109,6 +125,33 @@ void KPrView::viewSnapToGrid()
 
 void KPrView::viewGrid()
 {
+
+}
+
+KoShapeManager* KPrView::shapeManager() const
+{
+    return m_canvas->shapeManager();
+}
+
+KPrCanvas* KPrView::canvasWidget() const
+{
+    return m_canvas;
+}
+
+void KPrView::setActivePage(KPrPage* page)
+{
+    if ( !page )
+        return;
+    m_activePage=page;
+
+    m_canvas->shapeController()->setShapeControllerBase(m_activePage);
+    shapeManager()->setShapes(m_activePage->shapes());
+
+    KoPageLayout layout = m_activePage->pageLayout();
+    m_horizontalRuler->setRulerLength(layout.ptWidth);
+    m_verticalRuler->setRulerLength(layout.ptHeight);
+    m_horizontalRuler->setActiveRange(layout.ptLeft, layout.ptWidth - layout.ptRight);
+    m_verticalRuler->setActiveRange(layout.ptTop, layout.ptHeight - layout.ptBottom);
 
 }
 

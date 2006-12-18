@@ -23,14 +23,13 @@
 #include <QObject>
 
 #include <KoDocument.h>
-#include <KoShapeControllerBase.h>
-
+#include <KoShape.h>
 class KCommand;
 class KCommandHistory;
 
 class KPrPage;
 
-class KPrDocument : public KoDocument, public KoShapeControllerBase
+class KPrDocument : public KoDocument
 {
     Q_OBJECT
 public:
@@ -46,17 +45,18 @@ public:
 
     bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
-    void addShape( KoShape * shape );
-    void removeShape( KoShape *shape );
-
     void addCommand( KCommand* command, bool execute );
+    
+    KPrPage* pageByIndex(int index);
+    void addShapeToViews(KPrPage *page, KoShape *shape);
+    void removeShapeFromViews(KPrPage* page, KoShape* shape);
 
 protected:
     KoView * createViewInstance( QWidget *parent );
 
 private:
     KCommandHistory * m_commandHistory;
-    KPrPage * m_page;
+    QList<KPrPage*> m_pageList;
 };
 
 #endif /* KPRDOCUMENT_H */
