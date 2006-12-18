@@ -452,7 +452,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
   QBrush nullBrush;
   painter.setBrush(nullBrush);
 
-  QRect zoomedCellRect = cell->sheet()->doc()->zoomRect( cellRect );
+  QRect zoomedCellRect = cell->doc()->zoomRect( cellRect );
 
   //The highlight rect is just inside the main cell rect
   //This saves the hassle of repainting nearby cells when the highlight is changed as the highlight areas
@@ -651,7 +651,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
 
     // Set the single-pixel width pen for drawing the borders with.
     // NOTE Stefan: Use a cosmetic pen (width = 0), because we want the grid always one pixel wide
-    painter.setPen( QPen( cell->sheet()->doc()->gridColor(), 0, Qt::SolidLine ) );
+    painter.setPen( QPen( cell->doc()->gridColor(), 0, Qt::SolidLine ) );
 
     QLineF line;
 
@@ -751,7 +751,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
         }
 #endif
 
-        //painter.setPen( QPen( cell->sheet()->doc()->gridColor(), 1, Qt::SolidLine ) );
+        //painter.setPen( QPen( cell->doc()->gridColor(), 1, Qt::SolidLine ) );
 
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
@@ -1205,7 +1205,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
     if ( print->isOnNewPageX( cellRef.x() )
          && cellRef.y() <= print->printRange().bottom() )
     {
-      painter.setPen( cell->sheet()->doc()->pageBorderColor() );
+      painter.setPen( cell->doc()->pageBorderColor() );
 
       if ( d->layoutDirection == Sheet::RightToLeft )
         line = QLineF( cellRect.right(), cellRect.top(),
@@ -1219,7 +1219,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
     if ( print->isOnNewPageY( cellRef.y() ) &&
          ( cellRef.x() <= print->printRange().right() ) )
     {
-      painter.setPen( cell->sheet()->doc()->pageBorderColor() );
+      painter.setPen( cell->doc()->pageBorderColor() );
       line = QLineF( cellRect.left(),  cellRect.top(),
                         cellRect.right(), cellRect.top() );
       painter.drawLine( line );
@@ -1228,7 +1228,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
     if ( paintBorder & RightBorder ) {
       if ( print->isOnNewPageX( cellRef.x() + 1 )
            && cellRef.y() <= print->printRange().bottom() ) {
-        painter.setPen( cell->sheet()->doc()->pageBorderColor() );
+        painter.setPen( cell->doc()->pageBorderColor() );
 
         if ( d->layoutDirection == Sheet::RightToLeft )
           line = QLineF( cellRect.left(), cellRect.top(),
@@ -1243,7 +1243,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
     if ( paintBorder & BottomBorder ) {
       if ( print->isOnNewPageY( cellRef.y() + 1 )
            && cellRef.x() <= print->printRange().right() ) {
-        painter.setPen( cell->sheet()->doc()->pageBorderColor() );
+        painter.setPen( cell->doc()->pageBorderColor() );
         line = QLineF( cellRect.left(),  cellRect.bottom(),
                           cellRect.right(), cellRect.bottom() );
         painter.drawLine( line );
@@ -1777,7 +1777,7 @@ QFont CellView::effectiveFont( Cell* cell ) const
 {
     QFont tmpFont( d->style.font() );
     // Scale the font size according to the current zoom.
-    tmpFont.setPointSizeF( tmpFont.pointSizeF() / cell->sheet()->doc()->resolutionY() );
+    tmpFont.setPointSizeF( tmpFont.pointSizeF() / cell->doc()->resolutionY() );
     return tmpFont;
 }
 

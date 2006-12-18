@@ -376,7 +376,7 @@ QString Sheet::sheetName() const
   return d->name;
 }
 
-Map* Sheet::workbook() const
+Map* Sheet::map() const
 {
   return d->workbook;
 }
@@ -1104,7 +1104,7 @@ void Sheet::shiftRows( const QRect& rect )
     for ( int i = rect.top(); i <= rect.bottom(); i++ )
         for ( int j = 0; j < rect.width(); j++ )
             d->cells.shiftRow( QPoint(rect.left(),i) );
-    foreach ( Sheet* sheet, workbook()->sheetList() )
+    foreach ( Sheet* sheet, map()->sheetList() )
     {
         for ( int i = rect.top(); i <= rect.bottom(); ++i )
         {
@@ -1121,7 +1121,7 @@ void Sheet::shiftColumns( const QRect& rect )
     for ( int i = rect.left(); i <= rect.right(); i++ )
         for ( int j = 0; j < rect.height(); j++ )
             d->cells.shiftColumn( QPoint(i,rect.top()) );
-    foreach ( Sheet* sheet, workbook()->sheetList() )
+    foreach ( Sheet* sheet, map()->sheetList() )
     {
         for ( int i = rect.left(); i <= rect.right(); ++i )
         {
@@ -1141,7 +1141,7 @@ void Sheet::unshiftColumns( const QRect& rect )
     for ( int i = rect.left(); i <= rect.right(); ++i )
         for ( int j = 0; j < rect.height(); ++j )
             d->cells.unshiftColumn( QPoint(i,rect.top()) );
-    foreach ( Sheet* sheet, workbook()->sheetList() )
+    foreach ( Sheet* sheet, map()->sheetList() )
     {
         for ( int i = rect.left(); i <= rect.right(); ++i )
         {
@@ -1161,7 +1161,7 @@ void Sheet::unshiftRows( const QRect& rect )
     for ( int i = rect.top(); i <= rect.bottom(); i++ )
         for ( int j = 0; j < rect.width(); j++ )
             d->cells.unshiftRow( QPoint(rect.left(),i) );
-    foreach ( Sheet* sheet, workbook()->sheetList() )
+    foreach ( Sheet* sheet, map()->sheetList() )
     {
         for ( int i = rect.top(); i <= rect.bottom(); ++i )
         {
@@ -1186,7 +1186,7 @@ void Sheet::insertColumns( int col, int number )
         //Recalculate range max (plus size of new column)
         d->sizeMaxX += columnFormat( col+i )->dblWidth();
     }
-    foreach ( Sheet* sheet, workbook()->sheetList() )
+    foreach ( Sheet* sheet, map()->sheetList() )
     {
         sheet->changeNameCellRef( QPoint( col, 1 ), true,
                                   Sheet::ColumnInsert, objectName(),
@@ -1211,7 +1211,7 @@ void Sheet::insertRows( int row, int number )
         //Recalculate range max (plus size of new row)
         d->sizeMaxY += rowFormat( row )->dblHeight();
     }
-    foreach ( Sheet* sheet, workbook()->sheetList() )
+    foreach ( Sheet* sheet, map()->sheetList() )
     {
         sheet->changeNameCellRef( QPoint( 1, row ), true,
                                   Sheet::RowInsert, objectName(),
@@ -1236,7 +1236,7 @@ void Sheet::deleteColumns( int col, int number )
         //Recalculate range max (plus size of new column)
         d->sizeMaxX += columnFormat( KS_colMax )->dblWidth();
     }
-    foreach ( Sheet* sheet, workbook()->sheetList() )
+    foreach ( Sheet* sheet, map()->sheetList() )
     {
         sheet->changeNameCellRef( QPoint( col, 1 ), true,
                                   Sheet::ColumnRemove, objectName(),
@@ -1261,7 +1261,7 @@ void Sheet::deleteRows( int row, int number )
         //Recalculate range max (plus size of new row)
         d->sizeMaxY += rowFormat( KS_rowMax )->dblHeight();
     }
-    foreach ( Sheet* sheet, workbook()->sheetList() )
+    foreach ( Sheet* sheet, map()->sheetList() )
     {
       sheet->changeNameCellRef( QPoint( 1, row ), true,
                                 Sheet::RowRemove, objectName(),
@@ -2034,12 +2034,12 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
   KoXmlElement root = doc.documentElement(); // "spreadsheet-snippet"
   if ( root.hasAttribute( "cut" ) )
   {
-    const Region cutRegion( workbook(), root.attribute( "cut" ), this );
+    const Region cutRegion( map(), root.attribute( "cut" ), this );
     if ( cutRegion.isValid() )
     {
       Region::Point destination( pasteArea.topLeft() );
       destination.setSheet( this );
-      workbook()->dependencyManager()->regionMoved( cutRegion, destination );
+      map()->dependencyManager()->regionMoved( cutRegion, destination );
     }
   }
 
@@ -2534,7 +2534,7 @@ void Sheet::mergeCells(const Region& region, bool hor, bool ver)
   // sanity check
   if( isProtected() )
     return;
-  if( workbook()->isProtected() )
+  if( map()->isProtected() )
     return;
 
   MergeManipulator* manipulator = new MergeManipulator();
@@ -2550,7 +2550,7 @@ void Sheet::dissociateCells(const Region& region)
   // sanity check
   if( isProtected() )
     return;
-  if( workbook()->isProtected() )
+  if( map()->isProtected() )
     return;
 
   Manipulator* manipulator = new MergeManipulator();
@@ -3292,7 +3292,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     // Assigns regions to style names
     QHash<QString, QRegion> styleRegions;
 
-    const int overallRowCount = workbook()->overallRowCount();
+    const int overallRowCount = map()->overallRowCount();
     int rowIndex = 1;
     int indexCol = 1;
     KoXmlNode rowNode = sheetElement.firstChild();
@@ -4093,7 +4093,7 @@ void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
                 }
                 else if ( var == "<author>" )
                 {
-                    Doc* sdoc = workbook()->doc();
+                    Doc* sdoc = doc();
                     KoDocumentInfo* docInfo = sdoc->documentInfo();
 
                     text += docInfo->authorInfo( "creator" );
@@ -4101,7 +4101,7 @@ void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
                 }
                 else if ( var == "<email>" )
                 {
-                    Doc* sdoc = workbook()->doc();
+                    Doc* sdoc = doc();
                     KoDocumentInfo* docInfo = sdoc->documentInfo();
 
                     text += docInfo->authorInfo( "email" );
@@ -4110,7 +4110,7 @@ void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
                 }
                 else if ( var == "<org>" )
                 {
-                    Doc* sdoc = workbook()->doc();
+                    Doc* sdoc = doc();
                     KoDocumentInfo* docInfo    = sdoc->documentInfo();
 
                     text += docInfo->authorInfo( "company" );
@@ -4589,7 +4589,7 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
 
         /* so we don't panic over finding ourself in the following test*/
         sname.clear();
-        while (workbook()->findSheet(testName) != 0)
+        while (map()->findSheet(testName) != 0)
         {
             nameSuffix++;
             testName = baseName + '_' + QString::number(nameSuffix);
@@ -4925,10 +4925,10 @@ const QList<CellBinding*>& Sheet::cellBindings() const
 
 Sheet* Sheet::findSheet( const QString & _name )
 {
-  if ( !workbook() )
+  if ( !map() )
     return 0;
 
-  return workbook()->findSheet( _name );
+  return map()->findSheet( _name );
 }
 
 void Sheet::insertCell( Cell *_cell )
@@ -5271,7 +5271,7 @@ void Sheet::removeSheet()
 
 bool Sheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
 {
-    if ( workbook()->findSheet( name ) )
+    if ( map()->findSheet( name ) )
         return false;
 
     if ( isProtected() )
@@ -5286,7 +5286,7 @@ bool Sheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
     if ( init )
         return true;
 
-    foreach ( Sheet* sheet, workbook()->sheetList() )
+    foreach ( Sheet* sheet, map()->sheetList() )
     {
       sheet->changeCellTabName( old_name, name );
     }

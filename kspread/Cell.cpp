@@ -190,6 +190,12 @@ Sheet * Cell::sheet() const
     return d->sheet;
 }
 
+// Return the sheet that this cell belongs to.
+Doc* Cell::doc() const
+{
+    return d->sheet->doc();
+}
+
 // Return true if this is the default cell.
 bool Cell::isDefault() const
 {
@@ -273,7 +279,7 @@ QString Cell::columnName() const
 
 KLocale* Cell::locale() const
 {
-  return sheet()->doc()->locale();
+  return doc()->locale();
 }
 
 // Return the symbolic name of any column.
@@ -331,7 +337,7 @@ QString Cell::displayText() const
            && !( sheet()->isProtected() && style().hideFormula() ) || isEmpty() )
         string = d->inputText;
     else
-        string = sheet()->doc()->formatter()->formatText(this, formatType());
+        string = doc()->formatter()->formatText(this, formatType());
 
     // Set the displayed text, if we hold an error value.
     if (d->value.type() == Value::Error)
@@ -392,7 +398,7 @@ void Cell::setCellValue (const Value &value, FormatType fmtType, const QString &
             makeFormula();
     }
     else if ( !isFormula() )
-        d->inputText = sheet()->doc()->converter()->asString( value ).asString();
+        d->inputText = doc()->converter()->asString( value ).asString();
     if ( fmtType != No_format )
     {
         Style style;
@@ -528,7 +534,7 @@ void Cell::mergeCells( int _col, int _row, int _x, int _y )
 void Cell::move( int col, int row )
 {
     // For the old position (the new is handled in valueChanged() at the end):
-    sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Appearance | CellDamage::Value ) );
+    doc()->addDamage( new CellDamage( this, CellDamage::Appearance | CellDamage::Value ) );
 
     // Unmerge cells
     mergeCells( d->column, d->row, 0, 0 );
@@ -858,7 +864,7 @@ void Cell::valueChanged ()
   /* TODO - is this a good place for this? */
   updateChart( true );
 
-  sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Appearance | CellDamage::Value ) );
+  doc()->addDamage( new CellDamage( this, CellDamage::Appearance | CellDamage::Value ) );
 }
 
 
@@ -879,7 +885,7 @@ bool Cell::makeFormula()
   // Did a syntax error occur ?
     clearFormula();
 
-    if (sheet()->doc()->showMessageError())
+    if (doc()->showMessageError())
     {
       QString tmp(i18n("Error in cell %1\n\n"));
       tmp = tmp.arg( fullName() );
@@ -893,7 +899,7 @@ bool Cell::makeFormula()
   }
 
   // Update the dependencies and recalculate.
-  sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula |
+  doc()->addDamage( new CellDamage( this, CellDamage::Formula |
                                                              CellDamage::Value ) );
 
   return true;
@@ -907,7 +913,7 @@ void Cell::clearFormula()
         if ( !sheet()->isLoading() )
         {
             kDebug(36002) << "This was a formula. Dependency update triggered." << endl;
-            sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula ) );
+            doc()->addDamage( new CellDamage( this, CellDamage::Formula ) );
         }
         delete d->formula;
         d->formula = 0;
@@ -937,7 +943,7 @@ bool Cell::calc(bool delay)
 
   if ( delay )
   {
-    if ( sheet()->doc()->delayCalculation() )
+    if ( doc()->delayCalculation() )
       return true;
   }
 
@@ -1129,7 +1135,7 @@ void Cell::setDisplayText( const QString& _text )
   const bool isLoading = sheet()->isLoading();
 
   if ( !isLoading )
-    sheet()->doc()->emitBeginOperation( false );
+    doc()->emitBeginOperation( false );
 
   d->inputText = _text;
 
@@ -1146,7 +1152,7 @@ void Cell::setDisplayText( const QString& _text )
   }
 
   if ( !isLoading )
-    sheet()->doc()->emitEndOperation( Region( QRect( d->column, d->row, 1, 1 ) ) );
+    doc()->emitEndOperation( Region( QRect( d->column, d->row, 1, 1 ) ) );
 }
 
 void Cell::setLink( const QString& link )
@@ -1223,13 +1229,13 @@ double Cell::getDouble ()
   //(Tomas) umm can't we simply call value().asFloat() ?
   if (isDate())
   {
-    QDate date = value().asDate( sheet()->doc() );
+    QDate date = value().asDate( doc() );
     QDate dummy (1900, 1, 1);
     return (dummy.daysTo (date) + 1);
   }
   if (isTime())
   {
-    QTime time  = value().asTime( sheet()->doc() );
+    QTime time  = value().asTime( doc() );
     QTime dummy;
     return dummy.secsTo( time );
   }
@@ -1278,7 +1284,7 @@ void Cell::convertToTime ()
     return;
 
   setValue (Value(getDouble ()));
-  QTime time = value().asDateTime( sheet()->doc() ).time();
+  QTime time = value().asDateTime( doc() ).time();
   int msec = (int) ( (value().asFloat() - (int) value().asFloat()) * 1000 );
   time = time.addMSecs( msec );
   setCellText( time.toString() );
@@ -1298,7 +1304,7 @@ void Cell::convertToDate ()
   //TODO: why did we call setValue(), when we override it here?
   QDate date(1900, 1, 1);
   date = date.addDays( (int) value().asFloat() - 1 );
-  date = value().asDateTime( sheet()->doc() ).date();
+  date = value().asDateTime( doc() ).date();
   setCellText (locale()->formatDate (date, true));
 }
 
@@ -1314,12 +1320,12 @@ void Cell::checkTextInput()
   QString str = d->inputText;
 
   // Parses the text and sets its value appropriately (calls Cell::setValue).
-  sheet()->doc()->parser()->parse (str, this);
+  doc()->parser()->parse (str, this);
 
   // Parsing as time acts like an autoformat: we even change d->inputText
   // [h]:mm:ss -> might get set by ValueParser
   if (isTime() && (formatType() != Time_format7))
-    d->inputText = locale()->formatTime( value().asDateTime( sheet()->doc() ).time(), true);
+    d->inputText = locale()->formatTime( value().asDateTime( doc() ).time(), true);
 
   // convert first letter to uppercase ?
   if (sheet()->getFirstLetterUpper() && value().isString() &&
@@ -1452,7 +1458,7 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
       if ( isDate() )
       {
           // serial number of date
-          QDate dd = value().asDateTime( sheet()->doc() ).date();
+          QDate dd = value().asDateTime( this->doc() ).date();
           dataType = "Date";
           str = "%1/%2/%3";
           str = str.arg(dd.year()).arg(dd.month()).arg(dd.day());
@@ -1461,7 +1467,7 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
       {
           // serial number of time
           dataType = "Time";
-          str = value().asDateTime( sheet()->doc() ).time().toString();
+          str = value().asDateTime( this->doc() ).time().toString();
       }
       else
       {
@@ -1701,14 +1707,14 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
     {
       xmlWriter.addAttribute( "office:value-type", "date" );
       xmlWriter.addAttribute( "office:date-value",
-          value().asDate( sheet()->doc() ).toString( Qt::ISODate ) );
+          value().asDate( doc() ).toString( Qt::ISODate ) );
       break;
     }
     case Value::fmt_Time:
     {
       xmlWriter.addAttribute( "office:value-type", "time" );
       xmlWriter.addAttribute( "office:time-value",
-          value().asTime( sheet()->doc() ).toString( "PThhHmmMssS" ) );
+          value().asTime( doc() ).toString( "PThhHmmMssS" ) );
       break;
     }
     case Value::fmt_String:
@@ -1731,7 +1737,7 @@ void Cell::loadOasisConditional( const KoXmlElement* style )
             if ( e.localName() == "map" && e.namespaceURI() == KoXmlNS::style )
             {
                 Conditions conditions;
-                conditions.loadOasisConditions( sheet()->doc()->styleManager(), e );
+                conditions.loadOasisConditions( doc()->styleManager(), e );
                 if ( !conditions.isEmpty() )
                     setConditions( conditions );
                 // break here
@@ -1897,7 +1903,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
 
             if ( ok )
             {
-                setCellValue( Value( QDate( year, month, day ), sheet()->doc() ) );
+                setCellValue( Value( QDate( year, month, day ), doc() ) );
                 Style style;
                 style.setFormatType(ShortDate_format);
                 setStyle( style );
@@ -1944,7 +1950,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
             {
                 // Value kval( timeToNum( hours, minutes, seconds ) );
                 // cell->setValue( kval );
-                setCellValue( Value( QTime( hours % 24, minutes, seconds ), sheet()->doc() ) );
+                setCellValue( Value( QTime( hours % 24, minutes, seconds ), doc() ) );
                 Style style;
                 style.setFormatType (Time_format);
                 setStyle( style );
@@ -2016,7 +2022,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
       loadOasisObjects( frame, oasisContext );
 
     if (isFormula)   // formulas must be recalculated
-      sheet()->doc()->addDamage( new CellDamage( this, CellDamage::Formula |
+      doc()->addDamage( new CellDamage( this, CellDamage::Formula |
                                                                  CellDamage::Value ) );
 
     return true;
@@ -2087,15 +2093,15 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
           if ( !object.isNull() )
           {
             if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString::null).isNull() )
-              obj = new EmbeddedChart( sheet()->doc(), sheet() );
+              obj = new EmbeddedChart( doc(), sheet() );
             else
-              obj = new EmbeddedKOfficeObject( sheet()->doc(), sheet() );
+              obj = new EmbeddedKOfficeObject( doc(), sheet() );
           }
           else
           {
             KoXmlNode image = KoDom::namedItemNS( e, KoXmlNS::draw, "image" );
             if ( !image.isNull() )
-              obj = new EmbeddedPictureObject( sheet(), sheet()->doc()->pictureCollection() );
+              obj = new EmbeddedPictureObject( sheet(), doc()->pictureCollection() );
             else
               kDebug(36003) << "Object type wasn't loaded!" << endl;
           }
@@ -2103,7 +2109,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
           if ( obj )
           {
             obj->loadOasis( e, oasisContext );
-            sheet()->doc()->insertObject( obj );
+            doc()->insertObject( obj );
 
             QString ref = e.attributeNS( KoXmlNS::table, "end-cell-address", QString::null );
             if ( ref.isNull() )
@@ -2218,7 +2224,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     if ( !conditionsElement.isNull())
     {
         Conditions conditions;
-        conditions.loadConditions( sheet()->doc()->styleManager(), conditionsElement );
+        conditions.loadConditions( doc()->styleManager(), conditionsElement );
         if ( !conditions.isEmpty() )
             setConditions( conditions );
     }
@@ -2329,7 +2335,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
             int day   = t.right( t.length() - pos1 - 1 ).toInt();
             QDate date( year, month, day );
             if ( date.isValid() )
-              setValue( Value( date, sheet()->doc() ) );
+              setValue( Value( date, doc() ) );
             else
               clear = false;
           }
@@ -2353,7 +2359,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
             second  = t.right( t.length() - pos1 - 1 ).toInt();
             QTime time( hours, minutes, second );
             if ( time.isValid() )
-              setValue( Value( time, sheet()->doc() ) );
+              setValue( Value( time, doc() ) );
             else
               clear = false;
           }
@@ -2484,7 +2490,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
           kWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
         }
         /* We will need to localize the text version of the number */
-        KLocale* locale = sheet()->doc()->locale();
+        KLocale* locale = doc()->locale();
 
         /* KLocale::formatNumber requires the precision we want to return.
         */
@@ -2517,9 +2523,9 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         int pos1 = t.indexOf('/',pos+1);
         int month = t.mid(pos+1,((pos1-1)-pos)).toInt();
         int day = t.right(t.length()-pos1-1).toInt();
-        setValue( Value( QDate(year,month,day), sheet()->doc() ) );
-        if ( value().asDate( sheet()->doc() ).isValid() ) // Should always be the case for new docs
-          d->inputText = locale()->formatDate( value().asDate( sheet()->doc() ), true );
+        setValue( Value( QDate(year,month,day), doc() ) );
+        if ( value().asDate( doc() ).isValid() ) // Should always be the case for new docs
+          d->inputText = locale()->formatDate( value().asDate( doc() ), true );
         else // This happens with old docs, when format is set wrongly to date
         {
           d->inputText = pasteOperation( t, d->inputText, op );
@@ -2539,9 +2545,9 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         pos1 = t.indexOf(':',pos+1);
         minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
         second = t.right(t.length()-pos1-1).toInt();
-        setValue( Value( QTime(hours,minutes,second), sheet()->doc() ) );
-        if ( value().asTime( sheet()->doc() ).isValid() ) // Should always be the case for new docs
-          d->inputText = locale()->formatTime( value().asTime( sheet()->doc() ), true );
+        setValue( Value( QTime(hours,minutes,second), doc() ) );
+        if ( value().asTime( doc() ).isValid() ) // Should always be the case for new docs
+          d->inputText = locale()->formatTime( value().asTime( doc() ), true );
         else  // This happens with old docs, when format is set wrongly to time
         {
           d->inputText = pasteOperation( t, d->inputText, op );
@@ -2578,8 +2584,8 @@ QTime Cell::toTime(const KoXmlElement &element)
     pos1 = t.indexOf(':',pos+1);
     minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
     second = t.right(t.length()-pos1-1).toInt();
-    setValue( Value( QTime(hours,minutes,second), sheet()->doc() ) );
-    return value().asTime( sheet()->doc() );
+    setValue( Value( QTime(hours,minutes,second), doc() ) );
+    return value().asTime( doc() );
 }
 
 QDate Cell::toDate(const KoXmlElement &element)
@@ -2595,8 +2601,8 @@ QDate Cell::toDate(const KoXmlElement &element)
     pos1 = t.indexOf('/',pos+1);
     month = t.mid(pos+1,((pos1-1)-pos)).toInt();
     day = t.right(t.length()-pos1-1).toInt();
-    setValue( Value( QDate(year,month,day), sheet()->doc() ) );
-    return value().asDate( sheet()->doc() );
+    setValue( Value( QDate(year,month,day), doc() ) );
+    return value().asDate( doc() );
 }
 
 QString Cell::pasteOperation( const QString &new_text, const QString &old_text, Paste::Operation op )
@@ -2821,7 +2827,7 @@ bool Cell::testFlag( StatusFlag flag ) const
 void Cell::checkForNamedAreas( QString & formula ) const
 {
 
-  LoadingInfo* loadinginfo = sheet()->doc()->loadingInfo();
+  LoadingInfo* loadinginfo = doc()->loadingInfo();
   if(! loadinginfo) {
     kDebug(36003) << "Cell::checkForNamedAreas loadinginfo is NULL" << endl;
     return;

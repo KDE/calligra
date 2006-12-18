@@ -363,7 +363,7 @@ Value func_indirect (valVector args, ValueCalc *calc, FuncExtra *e)
     ref = ref;
   }
 
-  Point p (ref, e->sheet->workbook(), e->sheet);
+  Point p (ref, e->sheet->map(), e->sheet);
 
   if ( !p.isValid() )
     return Value::errorVALUE();

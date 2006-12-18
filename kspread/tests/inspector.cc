@@ -174,7 +174,7 @@ void Inspector::Private::handleSheet()
 
 void Inspector::Private::handleDep()
 {
-  DependencyManager* manager = sheet->workbook()->dependencyManager();
+  DependencyManager* manager = sheet->map()->dependencyManager();
   Region deps = manager->getDependents( cell );
 
   depView->clear();

@@ -65,6 +65,7 @@ namespace KSpread
 class CellView;
 class Canvas;
 class ConditionalDialog;
+class Doc;
 class Format;
 class Formula;
 class GenValidationStyles;
@@ -100,9 +101,14 @@ public:
     ~Cell();
 
     /**
-     * Returns the worksheet which owns this cell.
+     * \return the sheet this cell belongs to
      */
     Sheet* sheet() const;
+
+    /**
+     * \return the document this cell belongs to
+     */
+    Doc* doc() const;
 
     /**
      * Returns true if this is a default cell (with row and column equal to zero).

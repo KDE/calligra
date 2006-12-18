@@ -1478,7 +1478,7 @@ Value Formula::eval() const
         entry.reset();
         if (sheet)
         {
-          Point cell (c, sheet->workbook(), sheet);
+          Point cell (c, sheet->map(), sheet);
           if (cell.isValid())
           {
             val1 = cell.sheet()->value (cell.column(), cell.row());
@@ -1497,7 +1497,7 @@ Value Formula::eval() const
         entry.reset();
         if (sheet)
         {
-          Range range (c, sheet->workbook(), sheet);
+          Range range (c, sheet->map(), sheet);
           if (range.isValid())
           {
             val1 = range.sheet()->valueRange (range.startCol(), range.startRow(),

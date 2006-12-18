@@ -67,6 +67,9 @@ public:
    */
   virtual ~Map();
 
+  /**
+   * \return the document this map belongs to
+   */
   Doc* doc() const;
 
   /**

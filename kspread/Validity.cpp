@@ -255,7 +255,7 @@ QDomElement Validity::saveXML( QDomDocument& doc ) const
 
 void Validity::loadOasisValidation( Cell* const cell, const QString& validationName )
 {
-    KoXmlElement element = cell->sheet()->doc()->loadingInfo()->validation( validationName);
+    KoXmlElement element = cell->doc()->loadingInfo()->validation( validationName);
     Validity validity;
     if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
     {
@@ -816,30 +816,30 @@ bool Validity::testValidity( const Cell* cell ) const
             switch( d->cond)
             {
               case Conditional::Equal:
-                valid = (cell->value().asTime( cell->sheet()->doc() ) == d->timeMin);
+                valid = (cell->value().asTime( cell->doc() ) == d->timeMin);
                 break;
               case Conditional::DifferentTo:
-                valid = (cell->value().asTime( cell->sheet()->doc() ) != d->timeMin);
+                valid = (cell->value().asTime( cell->doc() ) != d->timeMin);
                 break;
               case Conditional::Superior:
-                valid = (cell->value().asTime( cell->sheet()->doc() ) > d->timeMin);
+                valid = (cell->value().asTime( cell->doc() ) > d->timeMin);
                 break;
               case Conditional::Inferior:
-                valid = (cell->value().asTime( cell->sheet()->doc() ) < d->timeMin);
+                valid = (cell->value().asTime( cell->doc() ) < d->timeMin);
                 break;
               case Conditional::SuperiorEqual:
-                valid = (cell->value().asTime( cell->sheet()->doc() ) >= d->timeMin);
+                valid = (cell->value().asTime( cell->doc() ) >= d->timeMin);
                 break;
               case Conditional::InferiorEqual:
-                valid = (cell->value().asTime( cell->sheet()->doc() ) <= d->timeMin);
+                valid = (cell->value().asTime( cell->doc() ) <= d->timeMin);
                 break;
               case Conditional::Between:
-                valid = (cell->value().asTime( cell->sheet()->doc() ) >= d->timeMin &&
-                         cell->value().asTime( cell->sheet()->doc() ) <= d->timeMax);
+                valid = (cell->value().asTime( cell->doc() ) >= d->timeMin &&
+                         cell->value().asTime( cell->doc() ) <= d->timeMax);
                 break;
               case Conditional::Different:
-                valid = (cell->value().asTime( cell->sheet()->doc() ) < d->timeMin ||
-                         cell->value().asTime( cell->sheet()->doc() ) > d->timeMax);
+                valid = (cell->value().asTime( cell->doc() ) < d->timeMin ||
+                         cell->value().asTime( cell->doc() ) > d->timeMax);
                 break;
             default :
                 break;
@@ -851,30 +851,30 @@ bool Validity::testValidity( const Cell* cell ) const
             switch( d->cond)
             {
               case Conditional::Equal:
-                valid = (cell->value().asDate( cell->sheet()->doc() ) == d->dateMin);
+                valid = (cell->value().asDate( cell->doc() ) == d->dateMin);
                 break;
               case Conditional::DifferentTo:
-                valid = (cell->value().asDate( cell->sheet()->doc() ) != d->dateMin);
+                valid = (cell->value().asDate( cell->doc() ) != d->dateMin);
                 break;
               case Conditional::Superior:
-                valid = (cell->value().asDate( cell->sheet()->doc() ) > d->dateMin);
+                valid = (cell->value().asDate( cell->doc() ) > d->dateMin);
                 break;
               case Conditional::Inferior:
-                valid = (cell->value().asDate( cell->sheet()->doc() ) < d->dateMin);
+                valid = (cell->value().asDate( cell->doc() ) < d->dateMin);
                 break;
               case Conditional::SuperiorEqual:
-                valid = (cell->value().asDate( cell->sheet()->doc() ) >= d->dateMin);
+                valid = (cell->value().asDate( cell->doc() ) >= d->dateMin);
                 break;
               case Conditional::InferiorEqual:
-                valid = (cell->value().asDate( cell->sheet()->doc() ) <= d->dateMin);
+                valid = (cell->value().asDate( cell->doc() ) <= d->dateMin);
                 break;
               case Conditional::Between:
-                valid = (cell->value().asDate( cell->sheet()->doc() ) >= d->dateMin &&
-                         cell->value().asDate( cell->sheet()->doc() ) <= d->dateMax);
+                valid = (cell->value().asDate( cell->doc() ) >= d->dateMin &&
+                         cell->value().asDate( cell->doc() ) <= d->dateMax);
                 break;
               case Conditional::Different:
-                valid = (cell->value().asDate( cell->sheet()->doc() ) < d->dateMin ||
-                         cell->value().asDate( cell->sheet()->doc() ) > d->dateMax);
+                valid = (cell->value().asDate( cell->doc() ) < d->dateMin ||
+                         cell->value().asDate( cell->doc() ) > d->dateMax);
                 break;
             default :
                 break;

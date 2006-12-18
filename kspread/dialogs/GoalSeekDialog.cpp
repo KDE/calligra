@@ -230,7 +230,7 @@ void GoalSeekDialog::buttonOkClicked()
   {
     Sheet * sheet = m_pView->activeSheet();
 
-    Point source( m_selector3->textEdit()->toPlainText(), sheet->workbook(), sheet );
+    Point source( m_selector3->textEdit()->toPlainText(), sheet->map(), sheet );
     if (!source.isValid())
     {
       KMessageBox::error( this, i18n("Cell reference is invalid.") );
@@ -241,7 +241,7 @@ void GoalSeekDialog::buttonOkClicked()
       return;
     }
 
-    Point target( m_selector1->textEdit()->toPlainText(), sheet->workbook(), sheet );
+    Point target( m_selector1->textEdit()->toPlainText(), sheet->map(), sheet );
     if (!target.isValid())
     {
       KMessageBox::error( this, i18n("Cell reference is invalid.") );

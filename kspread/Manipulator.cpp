@@ -294,7 +294,7 @@ bool MergeManipulator::process(Element* element)
   }
 
   // sanity check
-  if( m_sheet->isProtected() || m_sheet->workbook()->isProtected() )
+  if( m_sheet->isProtected() || m_sheet->map()->isProtected() )
   {
     return false;
   }

@@ -125,8 +125,8 @@ void EmbeddedObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) 
 {
     xmlWriter.addAttribute( "draw:id", "object" + QString::number( indexObj ) );
     //save all into pt
-    xmlWriter.addAttributePt( "svg:x", sheet()->doc()->savingWholeDocument() ? m_geometry.x() : m_geometry.x() + 20.0 );
-    xmlWriter.addAttributePt( "svg:y", sheet()->doc()->savingWholeDocument() ? m_geometry.y() : m_geometry.y() + 20.0 );
+    xmlWriter.addAttributePt( "svg:x", doc()->savingWholeDocument() ? m_geometry.x() : m_geometry.x() + 20.0 );
+    xmlWriter.addAttributePt( "svg:y", doc()->savingWholeDocument() ? m_geometry.y() : m_geometry.y() + 20.0 );
     xmlWriter.addAttributePt( "svg:width", m_geometry.width() );
     xmlWriter.addAttributePt( "svg:height", m_geometry.height() );
 
@@ -200,7 +200,7 @@ void EmbeddedObject::paintSelection( QPainter *_painter, SelectionMode mode )
   _painter->save();
   QRectF bound( geometry().left(), geometry().top(),
                 geometry().width() , geometry().height() );
-  QRect zoomedBound = sheet()->doc()->zoomRectOld( bound ) ;
+  QRect zoomedBound = doc()->zoomRectOld( bound ) ;
 
   //_painter->setPen( QPen( Qt::black, 1, QPen::SolidLine ) );
   _painter->setPen( pen );
@@ -208,12 +208,12 @@ void EmbeddedObject::paintSelection( QPainter *_painter, SelectionMode mode )
 
   //KoRect r = rotateRectObject(); // TODO: rotation
   QRectF r = /*KoRect::fromQRect*/( bound );
-  int x = sheet()->doc()->zoomItXOld( r.left() /*- orig.x()*/);
-  int y = sheet()->doc()->zoomItYOld( r.top() /*- orig.y()*/);
-  int zX6 = /*sheet()->doc()->zoomItXOld*/( 6 );
-  int zY6 = /*sheet()->doc()->zoomItYOld*/( 6 );
-  int w = sheet()->doc()->zoomItXOld(r.width()) - 6;
-  int h = sheet()->doc()->zoomItYOld(r.height()) - 6;
+  int x = doc()->zoomItXOld( r.left() /*- orig.x()*/);
+  int y = doc()->zoomItYOld( r.top() /*- orig.y()*/);
+  int zX6 = /*doc()->zoomItXOld*/( 6 );
+  int zY6 = /*doc()->zoomItYOld*/( 6 );
+  int w = doc()->zoomItXOld(r.width()) - 6;
+  int h = doc()->zoomItYOld(r.height()) - 6;
 
   if ( mode == SM_MOVERESIZE ) {
     _painter->drawRect( x, y,  zX6, zY6 );
@@ -262,16 +262,16 @@ void EmbeddedObject::paintSelection( QPainter *_painter, SelectionMode mode )
 
 QCursor EmbeddedObject::getCursor( const QPoint &_point, ModifyType &_modType, QRect &geometry) const
 {
-    int px = /*sheet()->doc()->zoomItXOld*/(_point.x());
-    int py = /*sheet()->doc()->zoomItYOld*/(_point.y());
-    int ox = /*sheet()->doc()->zoomItXOld*/(/*orig*/geometry.x());
-    int oy = /*sheet()->doc()->zoomItYOld*/(/*orig*/geometry.y());
-    int ow = /*sheet()->doc()->zoomItXOld*/(/*ext*/geometry.width());
-    int oh = /*sheet()->doc()->zoomItYOld*/(/*ext*/geometry.height());
+    int px = /*doc()->zoomItXOld*/(_point.x());
+    int py = /*doc()->zoomItYOld*/(_point.y());
+    int ox = /*doc()->zoomItXOld*/(/*orig*/geometry.x());
+    int oy = /*doc()->zoomItYOld*/(/*orig*/geometry.y());
+    int ow = /*doc()->zoomItXOld*/(/*ext*/geometry.width());
+    int oh = /*doc()->zoomItYOld*/(/*ext*/geometry.height());
 
 //     if ( angle != 0.0 )
 //     {
-//         QRect rr = sheet()->doc()->zoomRectOld( rotateRectObject() );
+//         QRect rr = doc()->zoomRectOld( rotateRectObject() );
 //         ox = rr.x();
 //         oy = rr.y();
 //         ow = rr.width();
@@ -446,11 +446,11 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
   int const penw = pen.width() ;
   QRectF bound( 0, 0,
                 geometry().width() - ( 2 * penw ), geometry().height() - ( 2 * penw ) );
-  QRect const zoomedBound = sheet()->doc()->zoomRectOld( bound );
+  QRect const zoomedBound = doc()->zoomRectOld( bound );
 
   _painter->save();
-  int const xOffset = sheet()->doc()->zoomItXOld( geometry().left() + penw);
-  int const yOffset = sheet()->doc()->zoomItYOld( geometry().top() + penw );
+  int const xOffset = doc()->zoomItXOld( geometry().left() + penw);
+  int const yOffset = doc()->zoomItYOld( geometry().top() + penw );
 
   QRect new_geometry = zoomedBound;
 
@@ -467,7 +467,7 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
    assert( embeddedObject()->document() != 0 );
 
    double zoomX, zoomY;
-    sheet()->doc()->zoom(&zoomX, &zoomY);
+    doc()->zoom(&zoomX, &zoomY);
    embeddedObject()->document()->paintEverything( *_painter,
         zoomedBound,
         embeddedObject()->isTransparent(),
@@ -518,7 +518,7 @@ void EmbeddedKOfficeObject::updateChildGeometry()
 //   embeddedObject()->setGeometry( zh->zoomRectOld( geometry() ), true );
 
 //   return;
-//   QRect r = sheet()->doc()->zoomRectOld( geometry() );
+//   QRect r = doc()->zoomRectOld( geometry() );
 //   if ( _canvas )
 //   {
 //     kDebug() << "_canvas->xOffset():" << _canvas->xOffset() << endl;
@@ -1245,7 +1245,7 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
                            int pageNum, SelectionMode selectionMode, bool drawContour*/ )
 {
     bool drawContour = false;
-    KoZoomHandler*_zoomHandler = sheet()->doc();
+    KoZoomHandler*_zoomHandler = doc();
 
 
     if ( image.isNull() ) return;

@@ -187,7 +187,7 @@ public:
     /**
      * \return the map this sheet belongs to
      */
-    Map* workbook() const;
+    Map* map() const;
 
     /**
      * \return the document this sheet belongs to

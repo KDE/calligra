@@ -123,6 +123,7 @@ class EmbeddedObject
     virtual void resizeBy( const QSizeF & _size );
     virtual void resizeBy( double _dx, double _dy );
 
+    Doc* doc() const { return m_sheet->doc(); }
     Sheet* sheet() const { return m_sheet; }
 
     void setSelected(bool s) { m_selected = s; }

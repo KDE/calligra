@@ -275,7 +275,7 @@ void DependencyManager::updateFormula( Cell* cell, const Region::Element* oldLoc
         //parse each cell/range and put it to our RangeList
         if (tokenType == Token::Cell || tokenType == Token::Range)
         {
-            const Region region( sheet->workbook(), token.text(), sheet );
+            const Region region( sheet->map(), token.text(), sheet );
             const Region::Element* element = *region.constBegin();
 
             kDebug(36002) << region.name() << endl;
@@ -465,7 +465,7 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
     //parse each cell/range and put it to our RangeList
         if (tokenType == Token::Cell || tokenType == Token::Range)
         {
-            Region subRegion(sheet->workbook(), token.text(), sheet);
+            Region subRegion(sheet->map(), token.text(), sheet);
             if (subRegion.isValid())
                 region.add(subRegion);
         }

@@ -224,13 +224,13 @@ AddSheetCommand::AddSheetCommand( Sheet* s )
 
 void AddSheetCommand::execute()
 {
-    sheet->workbook()->insertSheet( sheet );
+    sheet->map()->insertSheet( sheet );
     doc->insertSheet( sheet );
 }
 
 void AddSheetCommand::unexecute()
 {
-    sheet->workbook()->takeSheet( sheet );
+    sheet->map()->takeSheet( sheet );
     doc->takeSheet( sheet );
 }
 
@@ -250,13 +250,13 @@ RemoveSheetCommand::RemoveSheetCommand( Sheet* s )
 
 void RemoveSheetCommand::execute()
 {
-    sheet->workbook()->takeSheet( sheet );
+    sheet->map()->takeSheet( sheet );
     doc->takeSheet( sheet );
 }
 
 void RemoveSheetCommand::unexecute()
 {
-    sheet->workbook()->insertSheet( sheet );
+    sheet->map()->insertSheet( sheet );
     doc->insertSheet( sheet );
 }
 
@@ -552,7 +552,7 @@ ChangeObjectGeometryCommand::ChangeObjectGeometryCommand( EmbeddedObject *_obj, 
 {
   obj = _obj;
   obj->incCmdRef();
-  doc = obj->sheet()->doc();
+  doc = obj->doc();
 }
 
 ChangeObjectGeometryCommand::~ChangeObjectGeometryCommand()
@@ -602,7 +602,7 @@ RemoveObjectCommand::RemoveObjectCommand( EmbeddedObject *_obj, bool _cut )
 {
   obj = _obj;
   cut = _cut;
-  doc = obj->sheet()->doc();
+  doc = obj->doc();
 }
 
 RemoveObjectCommand::~RemoveObjectCommand()
