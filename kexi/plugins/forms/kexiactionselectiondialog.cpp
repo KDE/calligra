@@ -131,6 +131,7 @@ public:
 		KActionPtrList sharedActions( mainWin->allActions() ); //sharedActions() );
 		const Kexi::ActionCategories *acat = Kexi::actionCategories();
 		foreach (KActionPtrList::ConstIterator, it, sharedActions) {
+//			kDebug() << (*it)->name() << " " << (*it)->text() << endl;
 			//! @todo group actions
 			//! @todo: store KAction* here?
 			const int actionCategories = acat->actionCategories((*it)->name());
@@ -176,7 +177,7 @@ public:
 		}
 		Q3ListViewItem *formItem = itemForAction("form");
 		if (formItem) {
-			item = new ActionSelectorDialogListItem("formActions", formItem, i18n("Form actions"));
+			item = new ActionSelectorDialogListItem("formActions", formItem, i18n("Current form's actions", "Current"));
 		}
 		adjustColumn(0);
 		setMinimumWidth( columnWidth(0) + 6 );
@@ -246,7 +247,7 @@ class ActionToExecuteListView : public ActionsListViewBase
 				printItem->setPixmap(0, SmallIcon("fileprint"));
 				KAction *a = KStdAction::printPreview(0, 0, 0);
 				item = new ActionSelectorDialogListItem("printPreview", printItem, 
-					a->text().replace("&", ""));
+					a->text().replace("&", "").replace("...", ""));
 				item->setPixmap(0, SmallIcon(a->icon()));
 				delete a;
 				item = new ActionSelectorDialogListItem("pageSetup", printItem, i18n("Show Page Setup"));
@@ -266,6 +267,8 @@ class ActionToExecuteListView : public ActionsListViewBase
 				setOpen(exportItem, true);
 				exportItem->setExpandable(false);
 			}
+			item = new ActionSelectorDialogListItem("new", this, i18n("Create New Object"));
+			item->setPixmap(0, SmallIcon("filenew"));
 			if (supportedViewModes & Kexi::DesignViewMode) {
 				item = new ActionSelectorDialogListItem("design", this, i18n("Open in Design View"));
 				item->setPixmap(0, SmallIcon("edit"));
@@ -274,6 +277,8 @@ class ActionToExecuteListView : public ActionsListViewBase
 				item = new ActionSelectorDialogListItem("editText", this, i18n("Open in Text View"));
 				item->setPixmap(0, noIcon);
 			}
+			item = new ActionSelectorDialogListItem("close", this, i18n("Close View"));
+			item->setPixmap(0, SmallIcon("fileclose"));
 			updateWidth();
 		}
 

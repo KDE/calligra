@@ -145,6 +145,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		virtual KexiDialogBase* openObject(const Q3CString& mime, const QString& name, 
 			int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0);
 
+		/*! Closes the object for \a item. 
+		 \return true on success (closing can be dealyed though), false on failure and cancelled 
+		 if the object has "opening" job assigned. */
+		virtual tristate closeObject(KexiPart::Item* item);
+
 		/*! Implemented for KexiMainWindow */
 		virtual tristate saveObject( KexiDialogBase *dlg,
 			const QString& messageWhenAskingForName = QString::null, bool dontAsk = false );
@@ -353,7 +358,16 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		//! For convenience
 		KexiDialogBase* openObjectFromNavigator(KexiPart::Item* item, int viewMode);
 
-		bool newObject( KexiPart::Info *info );
+		/*! Creates new object of type defined by \a info part info. 
+		 \a openingCancelled is set to true is opening has been cancelled. 
+		 \return true on success. */
+		virtual bool newObject( KexiPart::Info *info, bool& openingCancelled );
+
+		//! For convenience
+		bool newObject( KexiPart::Info *info ) {
+			bool openingCancelled;
+			return newObject(info, openingCancelled);
+		}
 
 		//! For convenience
 		KexiDialogBase* openObject(KexiPart::Item *item, int viewMode, 

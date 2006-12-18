@@ -876,8 +876,12 @@ void KexiMainWindowImpl::initActions()
 //	actionSettings->setWhatsThis(i18n("Lets you configure Kexi."));
 //	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 
+	// -- add a few missing tooltips (usable especially in Form's "Assign action" dialog)
+	if ((action = actionCollection()->action("window_close")))
+		action->setToolTip("Close the current window");
+
 	// ----- declare action categories, so form's "assign action to button"
-	//       (and macros in the future) will be able to recognze category 
+	//       (and macros in the future) will be able to recognize category 
 	//       of actions and filter them -----------------------------------
 //! @todo shouldn't we move this to core?
 	Kexi::ActionCategories *acat = Kexi::actionCategories();
@@ -920,7 +924,7 @@ void KexiMainWindowImpl::initActions()
 	acat->addAction("edit_insert_empty_row", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
 		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
 
-	acat->addAction("edit_edititem", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
+	acat->addAction("edit_edititem", Kexi::PartItemActionCategory|Kexi::WindowActionCategory,
 		KexiPart::TableObjectType, KexiPart::QueryObjectType);
 
 	acat->addAction("edit_paste_special_data_table", Kexi::GlobalActionCategory);
@@ -1252,6 +1256,7 @@ void KexiMainWindowImpl::updateReadOnlyState()
 void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 {
 	QString not_found_msg;
+	bool openingCancelled;
 	//ok, now open "autoopen: objects
 	if (d->prj) {
 		for (Q3ValueList<KexiProjectData::ObjectInfo>::ConstIterator it = 
@@ -1275,7 +1280,7 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 			}
 			// * NEW
 			if (info["action"]=="new") {
-				if (!newObject( i )) {
+				if (!newObject( i, openingCancelled) && !openingCancelled) {
 					not_found_msg += "<li>";
 					not_found_msg += (i18n("cannot create object of type \"%1\"").arg(info["type"])+
 						internalReason(d->prj)+"<br></li>");
@@ -1351,7 +1356,6 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 				viewMode = Kexi::TextViewMode;
 			else
 				continue; //sanity
-			bool openingCancelled;
 			if (!openObject(item, viewMode, openingCancelled) && !openingCancelled) {
 				not_found_msg += "<li>";
 				not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot open object")+
@@ -3547,50 +3551,31 @@ KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode,
 	return openObject(item, viewMode, openingCancelled);
 }
 
-bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
+tristate KexiMainWindowImpl::closeObject(KexiPart::Item* item)
 {
+#ifndef KEXI_NO_PENDING_DIALOGS
+	Private::PendingJobType pendingType;
+	KexiDialogBase *dlg = d->openedDialogFor( item, pendingType );
+	if (pendingType == Private::DialogClosingJob)
+		return true;
+	else if (pendingType == Private::DialogOpeningJob)
+		return cancelled;
+#else
+	KexiDialogBase *dlg = d->openedDialogFor( item );
+#endif
+	if (!dlg)
+		return cancelled;
+	return closeDialog(dlg);
+}
+
+bool KexiMainWindowImpl::newObject( KexiPart::Info *info, bool& openingCancelled )
+{
+	openingCancelled = false;
 	if (!d->prj || !info)
 		return false;
 	KexiPart::Part *part = Kexi::partManager().partForMimeType(info->mimeType());
 	if(!part)
 		return false;
-
-#if 0 //moved to KexiDialogBase::storeNewData()
-	if(info->projectPartID() == -1)
-	{
-		KexiDB::TableSchema *ts = project()->dbConnection()->tableSchema("kexi__parts");
-		kDebug() << "KexiMainWindowImpl::newObject(): schema: " << ts << endl;
-		if (!ts)
-			return false;
-
-		//temp. hack: avoid problems with autonumber
-		// see http://bugs.kde.org/show_bug.cgi?id=89381
-		int p_id = KexiPart::LastObjectType+1; //min is == 3+1
-		if (project()->dbConnection()->querySingleNumber("SELECT max(p_id) FROM kexi__parts", p_id))
-			p_id++;
-
-//		KexiDB::FieldList *fl = ts->subList("p_name", "p_mime", "p_url");
-		KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
-		kexidbg << "KexiMainWindowImpl::newObject(): fieldlist: " << (fl ? fl->debugString() : QString::null) << endl;
-		if (!fl)
-			return false;
-
-//		kDebug() << info->ptr()->genericName() << endl;
-		kDebug() << info->ptr()->untranslatedGenericName() << endl;
-//		QStringList sl = info->ptr()->propertyNames();
-//		for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
-//			kexidbg << *it << " " << info->ptr()->property(*it).toString() <<  endl;
-		if (!project()->dbConnection()->insertRecord(*fl,
-				QVariant(p_id),
-				QVariant(info->ptr()->untranslatedGenericName()),
-				QVariant(info->mimeType()), QVariant("http://www.koffice.org/kexi/")))
-			return false;
-
-		kDebug() << "KexiMainWindowImpl::newObject(): insert success!" << endl;
-		info->setProjectPartID( (int) project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
-		kDebug() << "KexiMainWindowImpl::newObject(): new id is: " << info->projectPartID()  << endl;
-	}
-#endif
 
 #ifdef KEXI_ADD_CUSTOM_OBJECT_CREATION
 # include "keximainwindowimpl_customobjcreation.h"
@@ -3604,7 +3589,6 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 
 	if (!it->neverSaved()) //only add stored objects to the browser
 		d->nav->addItem(*it);
-	bool openingCancelled;
 	return openObject(it, Kexi::DesignViewMode, openingCancelled);
 }
 

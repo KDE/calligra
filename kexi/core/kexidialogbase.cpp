@@ -527,7 +527,7 @@ tristate KexiDialogBase::storeNewData()
 	if (!part()->info()->isIdStoredInPartDatabase()) {
 		//this part's ID is not stored within kexi__parts:
 		KexiDB::TableSchema *ts = m_parentWindow->project()->dbConnection()->tableSchema("kexi__parts");
-		kDebug() << "KexiMainWindowImpl::newObject(): schema: " << ts << endl;
+		kDebug() << "KexiDialogBase::storeNewData(): schema: " << ts << endl;
 		if (!ts)
 			return false;
 
@@ -552,7 +552,7 @@ tristate KexiDialogBase::storeNewData()
 		}
 
 		KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
-		kDebug() << "KexiMainWindowImpl::newObject(): fieldlist: " 
+		kDebug() << "KexiDialogBase::storeNewData(): fieldlist: " 
 			<< (fl ? fl->debugString() : QString::null) << endl;
 		if (!fl)
 			return false;
@@ -568,10 +568,10 @@ tristate KexiDialogBase::storeNewData()
 				QVariant(part()->info()->mimeType()), QVariant("http://www.koffice.org/kexi/" /*always ok?*/)))
 			return false;
 
-		kDebug() << "KexiMainWindowImpl::newObject(): insert success!" << endl;
+		kDebug() << "KexiDialogBase::storeNewData(): insert success!" << endl;
 		part()->info()->setProjectPartID( p_id );
 			//(int) project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
-		kDebug() << "KexiMainWindowImpl::newObject(): new id is: " 
+		kDebug() << "KexiDialogBase::storeNewData(): new id is: " 
 			<< part()->info()->projectPartID()  << endl;
 
 		part()->info()->setIdStoredInPartDatabase(true);

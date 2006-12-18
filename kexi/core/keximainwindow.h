@@ -96,6 +96,11 @@ class KEXICORE_EXPORT KexiMainWindow : public KexiMdiMainFrm, public KexiSharedA
 		void projectClosed();
 
 	public slots:
+		/*! Creates new object of type defined by \a info part info. 
+		 \a openingCancelled is set to true is opening has been cancelled. 
+		 \return true on success. */
+		virtual bool newObject( KexiPart::Info *info, bool& openingCancelled ) = 0;
+
 		//! Opens object pointed by \a item in a view \a viewMode
 		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode,
 			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0) = 0;
@@ -103,6 +108,11 @@ class KEXICORE_EXPORT KexiMainWindow : public KexiMdiMainFrm, public KexiSharedA
 		//! For convenience
 		virtual KexiDialogBase * openObject(const Q3CString& mime, const QString& name, 
 			int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0) = 0;
+
+		/*! Closes the object for \a item. 
+		 \return true on success (closing can be dealyed though), false on failure and cancelled 
+		 if the object has "opening" job assigned. */
+		virtual tristate closeObject(KexiPart::Item* item) = 0;
 
 		/*! Called to accept property butter editing. */
 		virtual void acceptPropertySetEditing() = 0;
