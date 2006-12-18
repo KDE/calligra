@@ -45,6 +45,7 @@
 #include <KoToolDockerFactory.h>
 #include <KoShapeSelectorFactory.h>
 #include <KoTextSelectionHandler.h>
+#include <KoToolProxy.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -197,6 +198,31 @@ void KWView::setupActions() {
     m_actionViewSnapToGrid->setChecked(m_snapToGrid);
     connect(m_actionViewSnapToGrid, SIGNAL(triggered()), this, SLOT( toggleSnapToGrid() ));
 
+    m_actionRaiseFrame = new KAction( KIcon("raise"), i18n( "Raise Frame" ), actionCollection(), "raiseframe" );
+    m_actionRaiseFrame->setShortcut( KShortcut(Qt::CTRL +Qt::SHIFT+ Qt::Key_R) );
+    m_actionRaiseFrame->setToolTip( i18n( "Raise the currently selected frame so that it appears above "
+        "all the other frames" ) );
+    m_actionRaiseFrame->setWhatsThis( i18n( "Raise the currently selected frame so that it appears "
+        "above all the other frames. This is only useful if frames overlap each other. If multiple "
+        "frames are selected they are all raised in turn." ) );
+    connect(m_actionRaiseFrame, SIGNAL(triggered()), this, SLOT( raiseFrame() ));
+
+    m_actionLowerFrame = new KAction( KIcon("lower"), i18n( "Lower Frame" ), actionCollection(), "lowerframe" );
+    m_actionLowerFrame->setShortcut(KShortcut(Qt::CTRL +Qt::SHIFT+ Qt::Key_L));
+    m_actionLowerFrame->setToolTip( i18n( "Lower the currently selected frame so that it disappears under "
+        "any frame that overlaps it" ) );
+    m_actionLowerFrame->setWhatsThis( i18n( "Lower the currently selected frame so that it disappears under "
+        "any frame that overlaps it. If multiple frames are selected they are all lowered in turn." ) );
+    connect(m_actionLowerFrame, SIGNAL(triggered()), this, SLOT( lowerFrame() ));
+
+    m_actionBringToFront= new KAction( KIcon("bring_forward"), i18n( "Bring to Front" ),  actionCollection(),
+            "bring_tofront_frame" );
+    connect(m_actionBringToFront, SIGNAL(triggered()), this, SLOT( bringToFront() ));
+
+    m_actionSendBackward= new KAction( KIcon("send_backward"), i18n( "Send to Back" ), actionCollection(),
+            "send_toback_frame" );
+    connect(m_actionSendBackward, SIGNAL(triggered()), this, SLOT( sendToBack() ));
+
 
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
@@ -246,26 +272,6 @@ This saves problems with finding out which we missed near the end.
     m_actionCreateLinkedFrame = new KAction( i18n( "Create Linked Copy" ), 0, this, SLOT( createLinkedFrame() ), actionCollection(), "create_linked_frame" );
     m_actionCreateLinkedFrame->setToolTip( i18n( "Create a copy of the current frame, always showing the same contents" ) );
     m_actionCreateLinkedFrame->setWhatsThis( i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies.") );
-
-    m_actionRaiseFrame = new KAction( i18n( "Raise Frame" ), "raise",
-    Qt::CTRL +Qt::SHIFT+ Qt::Key_R, this, SLOT( raiseFrame() ),
-    actionCollection(), "raiseframe" );
-    m_actionRaiseFrame->setToolTip( i18n( "Raise the currently selected frame so that it appears above all the other frames" ) );
-    m_actionRaiseFrame->setWhatsThis( i18n( "Raise the currently selected frame so that it appears above all the other frames. This is only useful if frames overlap each other. If multiple frames are selected they are all raised in turn." ) );
-
-    m_actionLowerFrame = new KAction( i18n( "Lower Frame" ), "lower",
-    Qt::CTRL +Qt::SHIFT+ Qt::Key_L, this, SLOT( lowerFrame() ),
-    actionCollection(), "lowerframe" );
-    m_actionLowerFrame->setToolTip( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it" ) );
-    m_actionLowerFrame->setWhatsThis( i18n( "Lower the currently selected frame so that it disappears under any frame that overlaps it. If multiple frames are selected they are all lowered in turn." ) );
-
-    m_actionBringToFront= new KAction( i18n( "Bring to Front" ), "bring_forward",
-    0, this, SLOT( bringToFront() ),
-    actionCollection(), "bring_tofront_frame" );
-
-    m_actionSendBackward= new KAction( i18n( "Send to Back" ), "send_backward",
-    0, this, SLOT( sendToBack() ),
-        actionCollection(), "send_toback_frame" );
 
 
     // -------------- View menu
@@ -1176,6 +1182,13 @@ void KWView::toggleFooter() {
 void KWView::toggleSnapToGrid() {
     m_snapToGrid = !m_snapToGrid;
     m_document->gridData().setSnapToGrid(m_snapToGrid); // for persistency
+}
+
+void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType direction) {
+    KCommand *cmd = KoShapeReorderCommand::createCommand(kwcanvas()->shapeManager()->selection()->selectedShapes(),
+        kwcanvas()->shapeManager(), direction);
+    if(cmd)
+        m_document->addCommand(cmd);
 }
 
 // end of actions
