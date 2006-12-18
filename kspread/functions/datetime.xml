@@ -616,6 +616,30 @@
 	</Help>
     </Function>
 
+    <Function>
+	<Name>DATEDIF</Name>
+	<Type>Int</Type>
+	<Parameter>
+	    <Comment>First date</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Parameter>
+	    <Comment>Second date</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Parameter>
+	    <Comment>interval</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Help>
+	    <Text>The DATEDIF() function returns the difference between two dates.</Text>
+            <Text>Interval must be one of the following: "m": month; "d": days; "y": complete years; "ym": month excluding years; "yd": days excluding years; "md": days excluding months and years</Text>
+	    <Syntax>DATEDIF(first date; second date; interval)</Syntax>
+	    <Example>DATEDIF(A1;A2;"d") A1 is "1st of January 1995" and A2 is "15th of June 1999" returns number of days 1626</Example>
+	    <Example>DATEDIF(A1;A2;"m") A1 is "1st of January 1995" and A2 is "15th of June 1999" returns number of weeks 53</Example>
+	</Help>
+    </Function>
+
   </Group>
 
 </KSpreadFunctions>

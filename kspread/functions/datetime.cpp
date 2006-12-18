@@ -20,10 +20,12 @@
 
 // built-in date/time functions
 
+#include "Doc.h"
 #include "Functions.h"
 #include "functions/helper.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+
 
 #include <kcalendarsystem.h>
 #include <klocale.h>
@@ -35,6 +37,7 @@ Value func_currentDate (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_currentDateTime (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_currentTime (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_date (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dateDif (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_datevalue (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_day (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_dayname (valVector args, ValueCalc *calc, FuncExtra *);
@@ -87,6 +90,8 @@ void RegisterDateTimeFunctions()
   f->setParamCount (0);
   repo->add (f);
   f = new Function ("DATE",  func_date);
+  f->setParamCount (3);
+  f = new Function ("DATEDIF",  func_dateDif);
   f->setParamCount (3);
   repo->add (f);
   f = new Function ("DATEVALUE",  func_datevalue);
@@ -685,4 +690,119 @@ Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *)
 
   //kDebug(36002) << "weeknum = [startday(" << startday << ") + base(7) + New Year(" << date1.dayOfWeek() <<") + days(" << days << ")] / 7 = " << (startday+7+date1.dayOfWeek()+days)/7 << endl; 
   return Value( (int)(startday+7+date1.dayOfWeek()+days)/7 );
+}
+
+// Function: dateDif
+//
+// 		interval difference type	descrition 	
+// default: 	m	 months
+//		d	 days
+//		y	 complete years
+//		ym	 months excluding years
+//		yd	 days excluding years
+//		md	 days excluding months and years
+//
+Value func_dateDif (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  Value v1( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
+  if (v1.isError()) return v1;
+  QDate date1 = v1.asDate( calc->doc() );
+
+  if (!date1.isValid())
+      return Value::errorVALUE();
+
+  Value v2( calc->conv()->asDate (args[1]).asDate( calc->doc() ), calc->doc() );
+  if (v2.isError()) return v2;
+  QDate date2 = v2.asDate( calc->doc() );
+
+  if (!date2.isValid())
+      return Value::errorVALUE();
+
+  // check if interval is valid
+  QString interval = calc->conv()->asString (args[2]).asString();
+  if ( !(interval=="m" || interval=="d" || interval=="y" || interval=="ym" || interval=="yd" || interval=="md") )
+    return Value::errorVALUE();
+
+  // local vars
+  int y,m,d;
+  int sign=1; // default
+  int res=0;
+  
+  QDate Temp1, Temp2;
+  
+  //QDate date0(1899,12,30); // referenceDate
+   QDate date0 = calc->doc()->referenceDate();
+  if ( date2 < date1 )
+  {
+    // exchange values and set sign
+    Temp1=date1;
+    date1=date2;
+    date2=Temp1;
+    sign=-1;
+  }
+
+  //  
+  // calculate 
+  //
+  
+  // Temp1 = DateSerial(Year(Date2), Month(Date1), Day(Date1))
+  Temp1.setDate(date2.year(), date1.month(), date1.day());
+
+  // Y = Year(Date2) - Year(Date1) + (Temp1 > Date2)
+  y = date2.year() - date1.year() + (date0.daysTo(Temp1) > date0.daysTo(date2)?-1:0);
+  
+  // M = Month(Date2) - Month(Date1) - (12 * (Temp1 > Date2))
+  m = date2.month() - date1.month() - (12 * (Temp1 > date2?-1:0));
+  
+  // D = Day(Date2) - Day(Date1)
+  d = date2.day() - date1.day();
+  
+  if ( d < 0 )
+  {
+    // M = M - 1
+    m--;
+    // D = Day(DateSerial(Year(date2), Month(date2), 0)) + D
+    Temp2.setDate(date2.year(), date2.month()-1, 1);
+    d = Temp2.daysInMonth()+d;
+  }
+  
+  //
+  // output
+  //
+  
+  if ( interval == "y" )
+  {
+    // year
+    res = y*sign;
+  } 
+  else if ( interval == "m" )
+  {
+    // month
+    res = (12*y+m)*sign;
+  } 
+  else if ( interval == "d" )
+  {
+    // days
+    int days = date0.daysTo(date2)-date0.daysTo(date1);
+    res = days*sign;
+  } 
+  else if ( interval == "ym" )
+  {
+    // month excl. years
+    res = m*sign;
+  } 
+  else if ( interval == "yd" )
+  {
+    // days excl. years
+    QDate Temp3(date2.year(), date1.month(), date1.day());
+    int days = date0.daysTo(date2)-date0.daysTo(Temp3);
+    
+    res = days*sign;
+  } 
+  else if ( interval == "md" )
+  {
+    // days excl. month and years
+    res = d*sign;
+  }
+  return Value( res );
 }
