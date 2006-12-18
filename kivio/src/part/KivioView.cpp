@@ -43,6 +43,8 @@
 #include <KoSelection.h>
 #include <KoToolBoxFactory.h>
 #include <KoShapeSelectorFactory.h>
+#include <KoToolDockerFactory.h>
+#include <KoToolDocker.h>
 
 #include "KivioCanvas.h"
 #include "KivioDocument.h"
@@ -137,6 +139,9 @@ void KivioView::initGUI()
     createDockWidget(&toolBoxFactory);
     KoShapeSelectorFactory shapeSelectorFactory;
     createDockWidget(&shapeSelectorFactory);
+    KoToolDockerFactory toolDockerFactory;
+    KoToolDocker* toolDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
+    m_canvasController->setToolOptionDocker(toolDocker);
 
     connect(m_canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
