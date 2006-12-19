@@ -1018,32 +1018,6 @@ void CellView::paintText( QPainter& painter,
 #endif
   painter.setPen( tmpPen );
 
-  const QString  tmpText   = d->displayText;
-  const double   tmpHeight = d->textHeight;
-  const double   tmpWidth  = d->textWidth;
-
-  // If the cell is to narrow to paint the whole contents, then pick
-  // out a part of the content that we paint.  The result of this is
-  // dependent on the data type of the content.
-  //
-  // FIXME: Make this dependent on the height as well.
-  //
-  if ( !d->fittingWidth ) {
-    const QFontMetrics fontMetrics( effectiveFont( cell ) );
-    d->displayText = textDisplaying( fontMetrics, cell );
-
-    // Recalculate the text dimensions and the offset.
-    textSize( fontMetrics, cell );
-    textOffset( fontMetrics, cell );
-  }
-
-  // Hide zero.
-  if ( cell->sheet()->getHideZero()
-       && cell->value().isNumber()
-       && cell->value().asFloat() == 0 ) {
-    d->displayText.clear();
-  }
-
   double indent = 0.0;
   double offsetCellTooShort = 0.0;
   const Style::HAlign hAlign = d->style.halign();
@@ -1166,20 +1140,6 @@ void CellView::paintText( QPainter& painter,
       i++;
     } while ( i != len );
   }
-
-  // Check for too short cell and set the outText for future reference.
-  if ( !d->fittingWidth ) {
-    d->displayText = tmpText;
-    d->textHeight = tmpHeight;
-    d->textWidth  = tmpWidth;
-  }
-
-  if ( cell->sheet()->getHideZero() && cell->value().isNumber()
-      && cell->value().asFloat() == 0 )
-    d->displayText = tmpText;
-
-  if ( d->hidden )
-    d->displayText = tmpText;
 }
 
 
@@ -1812,8 +1772,12 @@ void CellView::makeLayout( SheetView* sheetView, int col, int row, Cell* cell )
   if ( d->hidden )
     return;
 
-  // Recalculate the output text, cell->displayText().
+  // Get the output text, cell->displayText().
   d->displayText = cell->displayText();
+
+    // Hide zero.
+    if ( cell->sheet()->getHideZero() && cell->value().isNumber() && cell->value().asFloat() == 0 )
+        d->displayText.clear();
 
   // Empty text?  Reset the outstring and, if this is the default
   // cell, return.
@@ -1849,6 +1813,17 @@ void CellView::makeLayout( SheetView* sheetView, int col, int row, Cell* cell )
   // Obscure cells, if necessary.
   obscureHorizontalCells( sheetView, cell );
   obscureVerticalCells( sheetView, cell );
+
+    // text fits into cell dimension?
+    if ( dimensionFits() )
+        return;
+
+    // Recalculate the output text.
+    d->displayText = textDisplaying( fontMetrics, cell );
+
+    // Recalculate the text dimensions and the offset.
+    textSize( fontMetrics, cell );
+    textOffset( fontMetrics, cell );
 }
 
 
