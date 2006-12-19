@@ -395,7 +395,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
         painter.setClipping( false );
 
     // Paint the borders if this cell is not part of another merged cell.
-    if ( !cell->isPartOfMerged() )
+    if ( !d->merged )
     {
         paintCustomBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder, cell );
     }
@@ -633,7 +633,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
     // there.  It's also responsible to paint the right and bottom, if
     // it is the last cell on a print out.
 
-    const bool isMergedOrObscured = cell->isPartOfMerged() || isObscured();
+    const bool isMergedOrObscured = d->merged || isObscured();
 
     const bool paintLeft    = ( paintBorder & LeftBorder &&
                                 d->style.leftBorderPen().style() == Qt::NoPen &&
@@ -844,7 +844,7 @@ void CellView::paintCommentIndicator( QPainter& painter,
         // Get the triangle.
         QPolygonF polygon( 3 );
         polygon.clear();
-        if ( cell->sheet()->layoutDirection()==Sheet::RightToLeft ) {
+        if ( d->layoutDirection == Sheet::RightToLeft ) {
             polygon << QPointF( cellRect.x() + 6.0, cellRect.y() );
             polygon << QPointF( cellRect.x(), cellRect.y() );
             polygon << QPointF( cellRect.x(), cellRect.y() + 6.0 );
@@ -886,7 +886,7 @@ void CellView::paintFormulaIndicator( QPainter& painter,
     // Get the triangle...
     QPolygonF polygon( 3 );
     polygon.clear();
-    if ( cell->sheet()->layoutDirection()==Sheet::RightToLeft ) {
+    if ( d->layoutDirection == Sheet::RightToLeft ) {
       polygon << QPointF( cellRect.right() - 6.0, cellRect.bottom() );
       polygon << QPointF( cellRect.right(), cellRect.bottom() );
       polygon << QPointF( cellRect.right(), cellRect.bottom() - 6.0 );
@@ -1573,7 +1573,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
 //
 void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect, Cell* cell )
 {
-    if ( cell->isPartOfMerged() )
+    if ( d->merged )
         return;
 
     QPen fallDiagonalPen( d->style.fallDiagonalPen() );
