@@ -65,12 +65,16 @@ Things not in bugzilla
       force a range.
   + Insert manual page break					      2 ----
 
-* Features
-  + Add text frames and picture frames. It's currently not easy to    2 ----
-    insert pictures!
-
 * OpenDocument file format
   see OASIS.txt							      1 ----
+
+* OpenFormula compliance (Medium group)
+    see list of missing functions below				      1 ----
+    see [2]
+
+* Flake integration.
+  + Provide a table shape					      1 ----
+  + General shape support					      1 ----
 
 * Internals (See also DESIGN.html)
   + Painting    						      1 DONE
@@ -258,6 +262,8 @@ Things not in bugzilla
     - check wether the formula cell carries a valid formulas		----
       and further checks of used cell contents
 
+  + Background spell check (necessary to use kotext)		      2 ----
+
 
 * Major features (big effort)
   + Pivot tables						      3 ----
@@ -271,17 +277,8 @@ Other things: (please add the things you are working on!)
 Not yet sorted (will be entered into categories above)
 
 - Multible Operations (in Excel: "Data"->"Table") (Norbert)
-- background spell check (necessary to use kotext)
-- much more formulas (financial, database...)
-        String2Int, CurrentMonth, CurrentYear, CurrentDay
-        See list below
-- Insert basic drawings, autoforms (necessary to create a share lib from kpresenter)
 - Insert widgets like buttons, drop down lists,... + having the possibily to
   define action if pressed, or selection changes,...
-- Transparency for embedded objects
-- z-order for embedded objects (and possibility to change the order)
-- better handling of embedded objects: e.g. delete them just by marking them + Del-Key
-  not only in the context menu of the borders
 - interface for mail merge
 
 *********
@@ -500,3 +497,6 @@ References:
 ===========
 [1]	Open Document Format for Office Applications (OpenDocument) v1.0,
 	http://docs.oasis-open.org/office/v1.0
+[2]	Open Document Format for Office Applications (OpenDocument),
+	Recalculated Formula (OpenFormula)
+	http://www.oasis-open.org/committees/office
