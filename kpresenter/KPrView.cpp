@@ -82,7 +82,7 @@
 
 #include <kfiledialog.h>
 #include <kmessagebox.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kapplication.h>
 #include <kio/netaccess.h>
 #include <kfontsizeaction.h>
@@ -2335,9 +2335,9 @@ void KPrView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 void KPrView::setupActions()
 {
-    actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
-    actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
-    actionEditPaste = KStdAction::paste( this, SLOT( editPaste() ), actionCollection(), "edit_paste" );
+    actionEditCut = KStandardAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
+    actionEditCopy = KStandardAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
+    actionEditPaste = KStandardAction::paste( this, SLOT( editPaste() ), actionCollection(), "edit_paste" );
     connect( m_pKPresenterDoc, SIGNAL( enablePaste( bool ) ),
              actionEditPaste, SLOT( setEnabled( bool ) ) );
     m_pKPresenterDoc->clipboardDataChanged(); // set paste's initial state
@@ -2345,8 +2345,8 @@ void KPrView::setupActions()
     actionEditDelete = new KAction(KIcon("editdelete"),  i18n( "&Delete" ), actionCollection(), "edit_delete" );
     connect(actionEditDelete, SIGNAL(triggered(bool) ), SLOT( editDelete() ));
     actionEditDelete->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Delete));
-    actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
-    actionEditDeSelectAll= KStdAction::deselect( this, SLOT( editDeSelectAll()), actionCollection(), "edit_deselectall");
+    actionEditSelectAll = KStandardAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
+    actionEditDeSelectAll= KStandardAction::deselect( this, SLOT( editDeSelectAll()), actionCollection(), "edit_deselectall");
     actionEditCopyPage = new KAction(KIcon("editcopy"),  i18n( "Copy Slide" ), actionCollection(), "edit_copypage" );
     connect(actionEditCopyPage, SIGNAL(triggered(bool) ), SLOT( editCopyPage() ));
     actionEditDuplicatePage = new KAction(KIcon("newslide"),  i18n( "Duplicate Slide" ), actionCollection(), "edit_duplicatepage" );
@@ -2354,10 +2354,10 @@ void KPrView::setupActions()
     actionEditDelPage = new KAction(KIcon("delslide"),  i18n( "Delete Slide" ), actionCollection(), "edit_delpage" );
     connect(actionEditDelPage, SIGNAL(triggered(bool) ), SLOT( editDelPage() ));
 
-    actionEditFind=KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
-    actionEditFindNext = KStdAction::findNext( this, SLOT( editFindNext() ), actionCollection(), "edit_findnext" );
-    actionEditFindPrevious = KStdAction::findPrev( this, SLOT( editFindPrevious() ), actionCollection(), "edit_findprevious" );
-    actionEditReplace=KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
+    actionEditFind=KStandardAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
+    actionEditFindNext = KStandardAction::findNext( this, SLOT( editFindNext() ), actionCollection(), "edit_findnext" );
+    actionEditFindPrevious = KStandardAction::findPrev( this, SLOT( editFindPrevious() ), actionCollection(), "edit_findprevious" );
+    actionEditReplace=KStandardAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
 
     // ---------------- View actions
 
@@ -2842,7 +2842,7 @@ void KPrView::setupActions()
 #endif
     action = new KAction( i18n( "Configure &Autocorrection..." ), actionCollection(), "extra_autocorrection" );
     connect(action, SIGNAL(triggered(bool)), SLOT( extraAutoFormat() ));
-    actionExtraSpellCheck = KStdAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
+    actionExtraSpellCheck = KStandardAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
 
     actionFormatParag = new KAction( i18n( "&Paragraph..." ), actionCollection(), "format_paragraph" );
     connect(actionFormatParag, SIGNAL(triggered(bool)), SLOT( formatParagraph() ));

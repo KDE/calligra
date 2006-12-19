@@ -38,7 +38,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmenu.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kaction.h>
 #include <kxmlguiclient.h>
 #include <kmainwindow.h>

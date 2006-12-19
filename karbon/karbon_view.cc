@@ -54,7 +54,7 @@
 #include <KoFilterManager.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <KoContextHelp.h>
 #include <KoUnitWidgets.h>
 #include <KoPageLayoutDia.h>
@@ -1157,8 +1157,8 @@ KarbonView::initActions()
     statusBar()->insertWidget( 2, tbar);
     tbar->addAction(m_zoomAction);
 
-	KStdAction::zoomIn( this, SLOT( viewZoomIn() ), actionCollection(), "view_zoom_in" );
-	KStdAction::zoomOut( this, SLOT( viewZoomOut() ), actionCollection(), "view_zoom_out" );
+	KStandardAction::zoomIn( this, SLOT( viewZoomIn() ), actionCollection(), "view_zoom_in" );
+	KStandardAction::zoomOut( this, SLOT( viewZoomOut() ), actionCollection(), "view_zoom_out" );
 
 	m_showPageMargins = new KToggleAction(KIcon("view_margins"), i18n("Show Page Margins"), actionCollection(), "view_show_margins");
 	connect( m_showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
@@ -1169,11 +1169,11 @@ KarbonView::initActions()
 		return;
 
 	// edit ----->
-	KStdAction::cut(this, SLOT(editCut()), actionCollection(), "edit_cut");
-	KStdAction::copy(this, SLOT(editCopy()), actionCollection(), "edit_copy");
-	KStdAction::paste(this, SLOT(editPaste()), actionCollection(), "edit_paste");
-	KStdAction::selectAll(this, SLOT(editSelectAll()), actionCollection(), "edit_select_all");
-	KStdAction::deselect(this, SLOT(editDeselectAll()), actionCollection(), "edit_deselect_all");
+	KStandardAction::cut(this, SLOT(editCut()), actionCollection(), "edit_cut");
+	KStandardAction::copy(this, SLOT(editCopy()), actionCollection(), "edit_copy");
+	KStandardAction::paste(this, SLOT(editPaste()), actionCollection(), "edit_paste");
+	KStandardAction::selectAll(this, SLOT(editSelectAll()), actionCollection(), "edit_select_all");
+	KStandardAction::deselect(this, SLOT(editDeselectAll()), actionCollection(), "edit_deselect_all");
 
 	KAction *actionImportGraphic = new KAction(i18n("&Import Graphic..."), actionCollection(), "file_import");
 	connect(actionImportGraphic, SIGNAL(triggered()), this, SLOT(fileImportGraphic()));

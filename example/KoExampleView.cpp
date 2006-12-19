@@ -26,7 +26,7 @@
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -38,9 +38,9 @@ ExampleView::ExampleView( ExamplePart* part, QWidget* parent )
         setXMLFile( "example_readonly.rc" ); // simplified GUI
     else
         setXMLFile( "example.rc" );
-    KStdAction::copy(this, SLOT( copy() ), actionCollection(), "copy" );
-    KStdAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
-    // Note: Prefer KStdAction::* to any custom action if possible.
+    KStandardAction::copy(this, SLOT( copy() ), actionCollection(), "copy" );
+    KStandardAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
+    // Note: Prefer KStandardAction::* to any custom action if possible.
     //m_cut = new KAction( i18n("&Cut"), "editcut", 0, this, SLOT( cut() ),
     //                   actionCollection(), "cut");
 }

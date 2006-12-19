@@ -35,7 +35,7 @@
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kdebug.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
@@ -206,16 +206,16 @@ KFormDesigner::WidgetLibrary* KFormDesignerPart::formsLibrary()
 void
 KFormDesignerPart::setupActions()
 {
-	KStdAction::open(this, SLOT(open()), actionCollection());
-	KStdAction::openNew(this, SLOT(createBlankForm()), actionCollection());
-	KStdAction::save(this, SLOT(save()), actionCollection());
-	KStdAction::saveAs(this, SLOT(saveAs()), actionCollection());
-	KStdAction::cut(KFormDesigner::FormManager::self(), SLOT(cutWidget()), actionCollection());
-	KStdAction::copy(KFormDesigner::FormManager::self(), SLOT(copyWidget()), actionCollection());
-	KStdAction::paste(KFormDesigner::FormManager::self(), SLOT(pasteWidget()), actionCollection());
-	KStdAction::undo(KFormDesigner::FormManager::self(), SLOT(undo()), actionCollection());
-	KStdAction::redo(KFormDesigner::FormManager::self(), SLOT(redo()), actionCollection());
-	KStdAction::selectAll(KFormDesigner::FormManager::self(), SLOT(selectAll()), actionCollection());
+	KStandardAction::open(this, SLOT(open()), actionCollection());
+	KStandardAction::openNew(this, SLOT(createBlankForm()), actionCollection());
+	KStandardAction::save(this, SLOT(save()), actionCollection());
+	KStandardAction::saveAs(this, SLOT(saveAs()), actionCollection());
+	KStandardAction::cut(KFormDesigner::FormManager::self(), SLOT(cutWidget()), actionCollection());
+	KStandardAction::copy(KFormDesigner::FormManager::self(), SLOT(copyWidget()), actionCollection());
+	KStandardAction::paste(KFormDesigner::FormManager::self(), SLOT(pasteWidget()), actionCollection());
+	KStandardAction::undo(KFormDesigner::FormManager::self(), SLOT(undo()), actionCollection());
+	KStandardAction::redo(KFormDesigner::FormManager::self(), SLOT(redo()), actionCollection());
+	KStandardAction::selectAll(KFormDesigner::FormManager::self(), SLOT(selectAll()), actionCollection());
 	new KAction(i18n("Clear Widget Contents"), "editclear", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(clearWidgetContent()), actionCollection(), "clear_contents");
 	new KAction(i18n("Delete Widget"), "editdelete", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(deleteWidget()), actionCollection(), "edit_delete");
 	new KAction(i18n("Preview Form"), "filequickprint", Qt::CTRL+Qt::Key_T, this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");

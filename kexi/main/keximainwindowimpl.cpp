@@ -515,7 +515,7 @@ void KexiMainWindowImpl::initActions()
 	action->setToolTip(i18n("Create a new project"));
 	action->setWhatsThis(i18n("Creates a new project. Currently opened project is not affected."));
 
-	action = KStdAction::open( this, SLOT( slotProjectOpen() ), actionCollection(), "project_open" );
+	action = KStandardAction::open( this, SLOT( slotProjectOpen() ), actionCollection(), "project_open" );
 	action->setToolTip(i18n("Open an existing project"));
 	action->setWhatsThis(i18n("Opens an existing project. Currently opened project is not affected."));
 
@@ -526,7 +526,7 @@ void KexiMainWindowImpl::initActions()
 	action->setWhatsThis(i18n("Downloads example databases from the Internet."));
 #endif
 
-//	d->action_open_recent = KStdAction::openRecent( this, SLOT(slotProjectOpenRecent(const KUrl&)), actionCollection(), "project_open_recent" );
+//	d->action_open_recent = KStandardAction::openRecent( this, SLOT(slotProjectOpenRecent(const KUrl&)), actionCollection(), "project_open_recent" );
 
 //#ifdef KEXI_SHOW_UNIMPLEMENTED
 #ifndef KEXI_NO_UNFINISHED
@@ -547,7 +547,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_open_recent = d->dummy_action;
 #endif
 
-	d->action_save = KStdAction::save( 
+	d->action_save = KStandardAction::save( 
 		this, SLOT( slotProjectSave() ), actionCollection(), "project_save" );
 //	d->action_save = new KAction(i18n("&Save"), "filesave", KStdAccel::shortcut(KStdAccel::Save),
 //		this, SLOT(slotProjectSave()), actionCollection(), "project_save");
@@ -573,7 +573,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_close->setToolTip(i18n("Close the current project"));
 	d->action_close->setWhatsThis(i18n("Closes the current project."));
 
-	KStdAction::quit( this, SLOT(slotProjectQuit()), actionCollection(), "quit");
+	KStandardAction::quit( this, SLOT(slotProjectQuit()), actionCollection(), "quit");
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 	d->action_project_relations = new KAction(i18n("&Relationships..."), "relation", Qt::CTRL + Qt::Key_R,
@@ -620,12 +620,12 @@ void KexiMainWindowImpl::initActions()
 //TODO	new KAction(i18n("From Server..."), "server", 0,
 //TODO		this, SLOT(slotImportServer()), actionCollection(), "project_import_server");
 
-	d->action_project_print = KStdAction::print(this, SLOT(slotProjectPrint()),
+	d->action_project_print = KStandardAction::print(this, SLOT(slotProjectPrint()),
 		actionCollection(), "project_print" ); 
 	d->action_project_print->setToolTip(i18n("Print data from the active table or query"));
 	d->action_project_print->setWhatsThis(i18n("Prints data from the active table or query."));
 
-	d->action_project_print_preview = KStdAction::printPreview(
+	d->action_project_print_preview = KStandardAction::printPreview(
 		this, SLOT(slotProjectPrintPreview()),
 		actionCollection(), "project_print_preview" ); 
 	d->action_project_print_preview->setToolTip(
@@ -642,9 +642,9 @@ void KexiMainWindowImpl::initActions()
 		i18n("Shows page setup for printing the active table or query."));
 
 	//EDIT MENU
-	d->action_edit_cut = createSharedAction( KStdAction::Cut, "edit_cut");
-	d->action_edit_copy = createSharedAction( KStdAction::Copy, "edit_copy");
-	d->action_edit_paste = createSharedAction( KStdAction::Paste, "edit_paste");
+	d->action_edit_cut = createSharedAction( KStandardAction::Cut, "edit_cut");
+	d->action_edit_copy = createSharedAction( KStandardAction::Copy, "edit_copy");
+	d->action_edit_paste = createSharedAction( KStandardAction::Paste, "edit_paste");
 
 	d->action_edit_paste_special_data_table = 
 		new KAction(i18n("Paste Special->As Data &Table...", "As Data &Table..."),
@@ -665,12 +665,12 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_copy_special_data_table->setWhatsThis(
 		i18n("Copies selected table or query data to clipboard."));
 
-	d->action_edit_undo = createSharedAction( KStdAction::Undo, "edit_undo");
+	d->action_edit_undo = createSharedAction( KStandardAction::Undo, "edit_undo");
 	d->action_edit_undo->setWhatsThis(i18n("Reverts the most recent editing action."));
-	d->action_edit_redo = createSharedAction( KStdAction::Redo, "edit_redo");
+	d->action_edit_redo = createSharedAction( KStandardAction::Redo, "edit_redo");
 	d->action_edit_redo->setWhatsThis(i18n("Reverts the most recent undo action."));
 
-	d->action_edit_select_all =  createSharedAction( KStdAction::SelectAll, "edit_select_all");
+	d->action_edit_select_all =  createSharedAction( KStandardAction::SelectAll, "edit_select_all");
 
 	d->action_edit_delete = createSharedAction(i18n("&Delete"), "editdelete",
 		0/*Qt::Key_Delete*/, "edit_delete");
@@ -808,11 +808,11 @@ void KexiMainWindowImpl::initActions()
 
 	//SETTINGS MENU
 	setStandardToolBarMenuEnabled( true );
-	action = KStdAction::keyBindings(this, SLOT( slotConfigureKeys() ), actionCollection() );
+	action = KStandardAction::keyBindings(this, SLOT( slotConfigureKeys() ), actionCollection() );
 	action->setWhatsThis(i18n("Lets you configure shortcut keys."));
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-	action = KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
+	action = KStandardAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
 	action->setWhatsThis(i18n("Lets you configure toolbars."));
 
 	d->action_show_other = new KActionMenu(i18n("Other"),
@@ -850,13 +850,13 @@ void KexiMainWindowImpl::initActions()
 #endif
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-	d->action_configure = KStdAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
+	d->action_configure = KStandardAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
 	action->setWhatsThis(i18n("Lets you configure Kexi."));
 #endif
 
 	//HELP MENU
 #if 0//js: todo reenable later
-	KStdAction::tipOfDay( this, SLOT( slotTipOfTheDayAction() ), actionCollection() )
+	KStandardAction::tipOfDay( this, SLOT( slotTipOfTheDayAction() ), actionCollection() )
 		->setWhatsThis(i18n("This shows useful tips on the use of this application."));
 #endif
 #if 0 //we don't have a time for updating info text for each new version

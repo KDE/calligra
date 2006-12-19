@@ -65,15 +65,15 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
 	d->insertFromFileAction = new KAction(i18n("Insert From &File..."), SmallIconSet("fileopen"), 0,
 			this, SLOT(insertFromFile()), &d->actionCollection, "insert");
 	d->insertFromFileAction->plug(this);
-	d->saveAsAction = KStdAction::saveAs(this, SLOT(saveAs()), &d->actionCollection);
+	d->saveAsAction = KStandardAction::saveAs(this, SLOT(saveAs()), &d->actionCollection);
 //	d->saveAsAction->setText(i18n("&Save &As..."));
 	d->saveAsAction->plug(this);
 	insertSeparator();
-	d->cutAction = KStdAction::cut(this, SLOT(cut()), &d->actionCollection);
+	d->cutAction = KStandardAction::cut(this, SLOT(cut()), &d->actionCollection);
 	d->cutAction->plug(this);
-	d->copyAction = KStdAction::copy(this, SLOT(copy()), &d->actionCollection);
+	d->copyAction = KStandardAction::copy(this, SLOT(copy()), &d->actionCollection);
 	d->copyAction->plug(this);
-	d->pasteAction = KStdAction::paste(this, SLOT(paste()), &d->actionCollection);
+	d->pasteAction = KStandardAction::paste(this, SLOT(paste()), &d->actionCollection);
 	d->pasteAction->plug(this);
 	d->deleteAction = new KAction(i18n("&Clear"), SmallIconSet("editdelete"), 0,
 		this, SLOT(clear()), &d->actionCollection, "delete");

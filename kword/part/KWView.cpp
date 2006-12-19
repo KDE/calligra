@@ -239,19 +239,19 @@ This saves problems with finding out which we missed near the end.
     m_actionFileStatistics->setToolTip( i18n( "Sentence, word and letter counts for this document" ) );
     m_actionFileStatistics->setWhatsThis( i18n( "Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score." ) );
     // -------------- Edit actions
-    m_actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
-    m_actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
-    m_actionEditPaste = KStdAction::paste( this, SLOT( editPaste() ), actionCollection(), "edit_paste" );
-    m_actionEditFind = KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
-    m_actionEditFindNext = KStdAction::findNext( this, SLOT( editFindNext() ), actionCollection(), "edit_findnext" );
-    m_actionEditFindPrevious = KStdAction::findPrev( this, SLOT( editFindPrevious() ), actionCollection(), "edit_findprevious" );
-    m_actionEditReplace = KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
-    m_actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
+    m_actionEditCut = KStandardAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
+    m_actionEditCopy = KStandardAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
+    m_actionEditPaste = KStandardAction::paste( this, SLOT( editPaste() ), actionCollection(), "edit_paste" );
+    m_actionEditFind = KStandardAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
+    m_actionEditFindNext = KStandardAction::findNext( this, SLOT( editFindNext() ), actionCollection(), "edit_findnext" );
+    m_actionEditFindPrevious = KStandardAction::findPrev( this, SLOT( editFindPrevious() ), actionCollection(), "edit_findprevious" );
+    m_actionEditReplace = KStandardAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
+    m_actionEditSelectAll = KStandardAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     new KAction( i18n( "Select All Frames" ), 0, this, SLOT( editSelectAllFrames() ), actionCollection(), "edit_selectallframes" );
     m_actionEditSelectCurrentFrame = new KAction( i18n( "Select Frame" ), 0,
     0, this, SLOT( editSelectCurrentFrame() ),
     actionCollection(), "edit_selectcurrentframe" );
-    m_actionSpellCheck = KStdAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
+    m_actionSpellCheck = KStandardAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
     m_actionDeletePage = new KAction( i18n( "Delete Page" ), "delslide", 0,
     this, SLOT( deletePage() ),
     actionCollection(), "delete_page" );
@@ -744,7 +744,7 @@ This saves problems with finding out which we missed near the end.
     m_actionChangeCase->setWhatsThis( i18n( "Alter the capitalization of selected text to one of five pre-defined patterns.<p>You can also switch all letters from upper case to lower case and from lower case to upper case in one move." ) );
 
     //------------------------ Settings menu
-    m_actionConfigure = KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
+    m_actionConfigure = KStandardAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
 
     //------------------------ Menu frameSet
     KAction *actionChangePicture=new KAction( i18n( "Change Picture..." ),"frame_image",0,

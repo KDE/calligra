@@ -30,7 +30,7 @@
 
 #include <kdebug.h>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <ktoolbar.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
@@ -192,11 +192,11 @@ ReportView::ReportView(View *view, QWidget *parent)
 	//setCentralWidget(m_reportview);
 
 	// Create the user interface.
-	//KStdAction::print(this,SLOT(slotPrint()),actionCollection());
-	//KStdAction::quit(this,SLOT(slotFileQuit()),actionCollection());
+	//KStandardAction::print(this,SLOT(slotPrint()),actionCollection());
+	//KStandardAction::quit(this,SLOT(slotFileQuit()),actionCollection());
 
-//	KStdAction::showToolbar(this,SLOT(slotViewToolBar()),actionCollection());
-//	KStdAction::showStatusbar(this,SLOT(slotViewStatusBar()),actionCollection());
+//	KStandardAction::showToolbar(this,SLOT(slotViewToolBar()),actionCollection());
+//	KStandardAction::showStatusbar(this,SLOT(slotViewStatusBar()),actionCollection());
 
 // 	statusBar();
 

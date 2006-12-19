@@ -52,7 +52,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kstdaccel.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
@@ -383,13 +383,13 @@ void KivioView::setupActions()
   m_alignAndDistribute = new KAction( i18n("Align && Distribute..."), CTRL+ALT+Qt::Key_A, this,
     SLOT(alignStencilsDlg()), actionCollection(), "alignStencils" );
 
-  m_editCut = KStdAction::cut( this, SLOT(cutStencil()), actionCollection(), "cutStencil" );
-  m_editCopy = KStdAction::copy( this, SLOT(copyStencil()), actionCollection(), "copyStencil" );
-  m_editPaste = KStdAction::paste( this, SLOT(pasteStencil()), actionCollection(), "pasteStencil" );
+  m_editCut = KStandardAction::cut( this, SLOT(cutStencil()), actionCollection(), "cutStencil" );
+  m_editCopy = KStandardAction::copy( this, SLOT(copyStencil()), actionCollection(), "copyStencil" );
+  m_editPaste = KStandardAction::paste( this, SLOT(pasteStencil()), actionCollection(), "pasteStencil" );
   connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
 
-  m_selectAll = KStdAction::selectAll(this, SLOT(selectAllStencils()), actionCollection(), "selectAllStencils");
-  m_selectNone = KStdAction::deselect(this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils");
+  m_selectAll = KStandardAction::selectAll(this, SLOT(selectAllStencils()), actionCollection(), "selectAllStencils");
+  m_selectNone = KStandardAction::deselect(this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils");
 
   m_groupAction = new KAction( i18n("Group Selection"), "group", CTRL+Qt::Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
   m_groupAction->setWhatsThis(i18n("Group selected objects into a single stencil"));
@@ -506,7 +506,7 @@ void KivioView::setupActions()
   connect( m_setArrowHeads, SIGNAL(endChanged(int)), SLOT(slotSetEndArrow(int)));
   connect( m_setArrowHeads, SIGNAL(startChanged(int)), SLOT(slotSetStartArrow(int)));
 
-  KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "options");
+  KStandardAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "options");
 
   (void) new KAction(i18n("Install Stencil Set..."), 0, this,
     SLOT(installStencilSet()), actionCollection(), "installStencilSet");

@@ -28,7 +28,7 @@
 #include "KFormulaCanvas.h"
 #include <KoCanvasController.h>
 #include <KoZoomHandler.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kaction.h>
 #include <ktip.h>
 #include <klocale.h>
@@ -58,7 +58,7 @@ KFormulaPartView::KFormulaPartView( KFormulaPartDocument* doc, QWidget* parent )
 
     setupActions();
 
-    KStdAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
+    KStandardAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
 }
 
 KFormulaPartView::~KFormulaPartView()
@@ -107,7 +107,7 @@ void KFormulaPartView::setupActions()
     m_addGenericLowerAction;
     m_removeEnclosingAction;
 
-    KStdAction::preferences( this, SLOT(configure()), actionCollection(), "configure" );*/
+    KStandardAction::preferences( this, SLOT(configure()), actionCollection(), "configure" );*/
 }
 
 void KFormulaPartView::focusInEvent( QFocusEvent* )

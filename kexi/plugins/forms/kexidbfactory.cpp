@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kactioncollection.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 
 #include <formeditor/container.h>
 #include <formeditor/form.h>

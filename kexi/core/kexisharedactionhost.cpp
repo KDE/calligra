@@ -275,11 +275,11 @@ KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QSt
 	return 0;
 }
 
-KAction* KexiSharedActionHost::createSharedAction( KStdAction::StdAction id, const char *name,
+KAction* KexiSharedActionHost::createSharedAction( KStandardAction::StdAction id, const char *name,
 	KActionCollection* col)
 {
 	return createSharedActionInternal(
-		KStdAction::create( id, name, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection() )
+		KStandardAction::create( id, name, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection() )
 	);
 }
 

@@ -25,7 +25,7 @@
 #include "vcommand.h"
 #include "karbon_part.h"
 
-#include <kstdaction.h>
+#include <kstandardaction.h>
 
 #include <kdebug.h>
 
@@ -34,8 +34,8 @@ VCommandHistory::VCommandHistory( KarbonPart* part )
 {
 	m_commands.setAutoDelete( true );
 
-	m_undo = KStdAction::undo( this, SLOT( undo() ), m_part->actionCollection(), "koffice_undo" );
-	m_redo = KStdAction::redo( this, SLOT( redo() ), m_part->actionCollection(), "koffice_redo" );
+	m_undo = KStandardAction::undo( this, SLOT( undo() ), m_part->actionCollection(), "koffice_undo" );
+	m_redo = KStandardAction::redo( this, SLOT( redo() ), m_part->actionCollection(), "koffice_redo" );
 
 	clear();
 }

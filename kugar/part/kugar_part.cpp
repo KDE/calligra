@@ -9,7 +9,7 @@
 #include <kinstance.h>
 #include <kaboutdata.h>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <QFile>

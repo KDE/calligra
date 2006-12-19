@@ -41,7 +41,7 @@
 #include <QDockWidget>
 #include <kicon.h>
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
@@ -185,10 +185,10 @@ void KudesignerView::resizeEvent( QResizeEvent* /*_ev*/ )
 
 void KudesignerView::initActions()
 {
-    cutAction = KStdAction::cut( this, SLOT( cut() ), actionCollection() );
-    copyAction = KStdAction::copy( this, SLOT( copy() ), actionCollection() );
-    pasteAction = KStdAction::paste( this, SLOT( paste() ), actionCollection() );
-    selectAllAction = KStdAction::selectAll( this, SLOT( selectAll() ), actionCollection() );
+    cutAction = KStandardAction::cut( this, SLOT( cut() ), actionCollection() );
+    copyAction = KStandardAction::copy( this, SLOT( copy() ), actionCollection() );
+    pasteAction = KStandardAction::paste( this, SLOT( paste() ), actionCollection() );
+    selectAllAction = KStandardAction::selectAll( this, SLOT( selectAll() ), actionCollection() );
     deleteAction = new KAction(KIcon("editdelete"),  i18n( "Delete" ), actionCollection(), "edit_delete" );
     connect(deleteAction, SIGNAL(triggered(bool) ), SLOT( deleteItems() ));
     cutAction->setEnabled( false );

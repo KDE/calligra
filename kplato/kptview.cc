@@ -49,7 +49,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
@@ -563,9 +563,9 @@ View::View( Part* part, QWidget* parent )
 
     // The menu items
     // ------ Edit
-    actionCut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
-    actionCopy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
-    actionPaste = KStdAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
+    actionCut = KStandardAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
+    actionCopy = KStandardAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
+    actionPaste = KStandardAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
 
     // ------ View
     actionViewGantt = new KAction( KIcon( "gantt_chart" ), i18n( "Gantt" ), actionCollection(), "view_gantt" );
@@ -625,13 +625,13 @@ View::View( Part* part, QWidget* parent )
 
 
     /*    // ------ Reports
-        actionFirstpage = KStdAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");
+        actionFirstpage = KStandardAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");
         connect(m_reportview, SIGNAL(setFirstPageActionEnabled(bool)), actionFirstpage, SLOT(setEnabled(bool)));
-        actionPriorpage = KStdAction::prior(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_prevpage");
+        actionPriorpage = KStandardAction::prior(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_prevpage");
         connect(m_reportview, SIGNAL(setPriorPageActionEnabled(bool)), actionPriorpage, SLOT(setEnabled(bool)));
-        actionNextpage = KStdAction::next(m_reportview,SLOT(slotNextPage()),actionCollection(), "go_nextpage");
+        actionNextpage = KStandardAction::next(m_reportview,SLOT(slotNextPage()),actionCollection(), "go_nextpage");
         connect(m_reportview, SIGNAL(setNextPageActionEnabled(bool)), actionNextpage, SLOT(setEnabled(bool)));
-        actionLastpage = KStdAction::lastPage(m_reportview,SLOT(slotLastPage()),actionCollection(), "go_lastpage");
+        actionLastpage = KStandardAction::lastPage(m_reportview,SLOT(slotLastPage()),actionCollection(), "go_lastpage");
         connect(m_reportview, SIGNAL(setLastPageActionEnabled(bool)), actionLastpage, SLOT(setEnabled(bool)));
         m_reportview->enableNavigationBtn();*/
     mainWindow() ->toolBar( "report" ) ->hide();

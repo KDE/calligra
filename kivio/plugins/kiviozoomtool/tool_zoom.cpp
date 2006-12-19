@@ -32,7 +32,7 @@
 #include <kdebug.h>
 #include <KoZoomHandler.h>
 #include <KoPoint.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <KoZoomAction.h>
 
 #include <qapplication.h>
@@ -56,10 +56,10 @@ ZoomTool::ZoomTool(KivioView* parent) : Kivio::MouseTool(parent, "Zoom Mouse Too
   connect(viewZoom, SIGNAL(zoomChanged(const QString&)), parent, SLOT(viewZoom(const QString&)));
   connect(parent, SIGNAL(zoomChanged(int)), viewZoom, SLOT(setZoom(int)));
   
-  m_pPlus = KStdAction::zoomIn(this, SLOT(zoomPlus()), actionCollection(), "zoomPlus");
+  m_pPlus = KStandardAction::zoomIn(this, SLOT(zoomPlus()), actionCollection(), "zoomPlus");
   m_pPlus->setWhatsThis(i18n("You can zoom in on the document by pressing this button."));
 
-  m_pMinus = KStdAction::zoomOut(this, SLOT(zoomMinus()), actionCollection(), "zoomMinus");
+  m_pMinus = KStandardAction::zoomOut(this, SLOT(zoomMinus()), actionCollection(), "zoomMinus");
   m_pMinus->setWhatsThis(i18n("By pressing this button you can zoom out of the document."));
 
   m_pZoomWidth = new KAction( i18n("Zoom Width"), "kivio_zoom_width", Qt::SHIFT+Qt::Key_F4, actionCollection(), "zoomWidth" );

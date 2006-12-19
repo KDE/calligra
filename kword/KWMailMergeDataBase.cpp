@@ -28,7 +28,7 @@
 #include <QComboBox>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kaction.h>
 #include <kmessagebox.h>
 #include <kseparator.h>
@@ -507,7 +507,7 @@ void KWMailMergeConfigDialog::slotPreviewClicked()
     KMainWindow *mw=dynamic_cast<KMainWindow*>(((QWidget *)parent())->topLevelWidget());
     if (mw)
     {
-        KAction *ac=mw->actionCollection()->action(KStdAction::stdName(KStdAction::PrintPreview));
+        KAction *ac=mw->actionCollection()->action(KStandardAction::stdName(KStandardAction::PrintPreview));
         if (ac) ac->trigger();
         else kWarning()<<"Toplevel doesn't provide a print preview action"<<endl;
     }

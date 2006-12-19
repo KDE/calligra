@@ -24,7 +24,7 @@
 #include <QPaintEvent>
 #include <kaction.h>
 #include <kinstance.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kdebug.h>

@@ -76,7 +76,7 @@
 #include <k3spell.h>
 #include <k3spelldlg.h>
 #include <kstatusbar.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <ktoolbarpopupaction.h>
@@ -1012,13 +1012,13 @@ void View::Private::initActions()
 
   // -- editing actions --
 
-  actions->copy = KStdAction::copy( view, SLOT( copySelection() ), ac, "copy" );
+  actions->copy = KStandardAction::copy( view, SLOT( copySelection() ), ac, "copy" );
   actions->copy->setToolTip(i18n("Copy the cell object to the clipboard"));
 
-  actions->paste = KStdAction::paste( view, SLOT( paste() ), ac, "paste" );
+  actions->paste = KStandardAction::paste( view, SLOT( paste() ), ac, "paste" );
   actions->paste->setToolTip(i18n("Paste the contents of the clipboard at the cursor"));
 
-  actions->cut = KStdAction::cut( view, SLOT( cutSelection() ), ac, "cut" );
+  actions->cut = KStandardAction::cut( view, SLOT( cutSelection() ), ac, "cut" );
   actions->cut->setToolTip(i18n("Move the cell object to the clipboard"));
 
   actions->specialPaste = new KAction( KIcon( "special_paste" ), i18n("Special Paste..."), ac, "specialPaste" );
@@ -1029,14 +1029,14 @@ void View::Private::initActions()
   connect(actions->insertCellCopy, SIGNAL(triggered(bool)), view, SLOT( slotInsertCellCopy() ));
   actions->insertCellCopy->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet"));
 
-  actions->selectAll = KStdAction::selectAll( view, SLOT( selectAll() ), ac, "selectAll" );
+  actions->selectAll = KStandardAction::selectAll( view, SLOT( selectAll() ), ac, "selectAll" );
   actions->selectAll->setToolTip(i18n("Selects all cells in the current sheet"));
 
-  actions->find = KStdAction::find( view, SLOT(find()), ac );
-  /*actions->findNext =*/ KStdAction::findNext( view, SLOT( findNext() ), ac );
-  /*actions->findPrevious =*/ KStdAction::findPrev( view, SLOT( findPrevious() ), ac );
+  actions->find = KStandardAction::find( view, SLOT(find()), ac );
+  /*actions->findNext =*/ KStandardAction::findNext( view, SLOT( findNext() ), ac );
+  /*actions->findPrevious =*/ KStandardAction::findPrev( view, SLOT( findPrevious() ), ac );
 
-  actions->replace = KStdAction::replace( view, SLOT(replace()), ac );
+  actions->replace = KStandardAction::replace( view, SLOT(replace()), ac );
 
   actions->fillRight = new KAction( KIcon( 0 ), i18n( "&Right" ), ac, "fillRight" );
   connect(actions->fillRight, SIGNAL(triggered(bool)), view, SLOT( fillRight() ));
@@ -1066,7 +1066,7 @@ void View::Private::initActions()
 
   actions->autoSum->setToolTip(i18n("Insert the 'sum' function"));
 
-  actions->spellChecking = KStdAction::spelling( view, SLOT( extraSpelling() ), ac, "spelling" );
+  actions->spellChecking = KStandardAction::spelling( view, SLOT( extraSpelling() ), ac, "spelling" );
   actions->spellChecking->setToolTip(i18n("Check the spelling"));
 
   actions->formulaSelection = new KSelectAction(i18n("Formula Selection"), ac, "formulaSelection");

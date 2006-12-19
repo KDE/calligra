@@ -45,7 +45,7 @@
 
 // KDE + Qt includes
 #include <klocale.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <kaction.h>
 #include <QIODevice>

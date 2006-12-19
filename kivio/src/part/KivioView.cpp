@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kicon.h>
 
 #include <KoCanvasController.h>

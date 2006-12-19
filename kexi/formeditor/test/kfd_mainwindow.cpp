@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #include <kaction.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kurl.h>
 #include <kdebug.h>
 #include <klibloader.h>
@@ -73,7 +73,7 @@ KFDMainWindow::loadUIFile(const KUrl &url)
 void
 KFDMainWindow::setupActions()
 {
-	KStdAction::quit(kapp, SLOT(quit()), actionCollection());
+	KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
 }
 
 bool

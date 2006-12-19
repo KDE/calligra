@@ -21,7 +21,7 @@
 
 #include <kaction.h>
 #include <klocale.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kdebug.h>
 
 void KWMultiViewCommandHistory::undo() {
@@ -64,7 +64,7 @@ void KWMultiViewCommandHistory::updateActions() {
 }
 
 KAction *KWMultiViewCommandHistory::createUndoAction(KActionCollection *actionCollection) {
-    KAction *undo = KStdAction::undo(0, 0, actionCollection, "koffice_undo");
+    KAction *undo = KStandardAction::undo(0, 0, actionCollection, "koffice_undo");
     undo->setEnabled(isUndoAvailable());
     QPointer<KAction> p(undo);
     m_undoCommands.append(p);
@@ -72,7 +72,7 @@ KAction *KWMultiViewCommandHistory::createUndoAction(KActionCollection *actionCo
 }
 
 KAction *KWMultiViewCommandHistory::createRedoAction(KActionCollection *actionCollection) {
-    KAction *redo = KStdAction::redo(0, 0, actionCollection, "koffice_redo");
+    KAction *redo = KStandardAction::redo(0, 0, actionCollection, "koffice_redo");
     redo->setEnabled(isRedoAvailable());
     QPointer<KAction> p(redo);
     m_redoCommands.append(p);

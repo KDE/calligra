@@ -245,7 +245,7 @@ class ActionToExecuteListView : public ActionsListViewBase
 				ActionSelectorDialogListItem *printItem = new ActionSelectorDialogListItem(
 					"print", this, i18n("Print"));
 				printItem->setPixmap(0, SmallIcon("fileprint"));
-				KAction *a = KStdAction::printPreview(0, 0, 0);
+				KAction *a = KStandardAction::printPreview(0, 0, 0);
 				item = new ActionSelectorDialogListItem("printPreview", printItem, 
 					a->text().replace("&", "").replace("...", ""));
 				item->setPixmap(0, SmallIcon(a->icon()));

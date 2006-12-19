@@ -25,7 +25,7 @@
 #include <qobject.h>
 #include <qpair.h>
 
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kaction.h>
 
 #include "../kexi_export.h"
@@ -133,7 +133,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 
 		/*! Like above - creates shared action, but from standard action identified by \a id. 
 		 Action's data is owned by the main window. */
-		KAction* createSharedAction( KStdAction::StdAction id, const char *name, 
+		KAction* createSharedAction( KStandardAction::StdAction id, const char *name, 
 			KActionCollection* col = 0);
 
 		/*! \return action proxy for object \a o, or NULL if this object has 
