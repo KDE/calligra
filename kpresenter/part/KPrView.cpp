@@ -28,6 +28,7 @@
 #include <KoToolManager.h>
 #include <KoZoomHandler.h>
 #include <KoToolBoxFactory.h>
+#include <KoToolProxy.h>
 #include <KoShapeSelectorFactory.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
