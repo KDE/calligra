@@ -74,7 +74,7 @@ Value func_years (valVector args, ValueCalc *calc, FuncExtra *);
 // sadly, many of these functions aren't Excel compatible
 void RegisterDateTimeFunctions()
 {
-  // missing: Excel:    WORKDAY, NETWORKDAYS, DATEDIF
+  // missing: Excel:    WORKDAY, NETWORKDAYS
   //          Gnumeric: UNIX2DATE, DATE2UNIX
   // TODO: do we really need DATEVALUE and TIMEVALUE ?
   FunctionRepository* repo = FunctionRepository::self();
@@ -341,7 +341,7 @@ Value func_second (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (time.second ());
 }
 
-// Function: weekday
+// Function: WEEKDAY
 Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value v( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
@@ -367,7 +367,7 @@ Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (result);
 }
 
-// Function: datevalue
+// Function: DATEVALUE
 // same result would be obtained by applying number format on a date value
 Value func_datevalue (valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -391,7 +391,7 @@ Value func_timevalue (valVector args, ValueCalc *calc, FuncExtra *)
   return Value::errorVALUE();
 }
 
-// Function: years
+// Function: YEARS
 Value func_years (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
@@ -425,7 +425,7 @@ Value func_years (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (date2.year() - date1.year());
 }
 
-// Function: months
+// Function: MONTHS
 Value func_months (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
@@ -460,7 +460,7 @@ Value func_months (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (months);
 }
 
-// Function: weeks
+// Function: WEEKS
 Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
@@ -486,7 +486,7 @@ Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *)
   return Value ((int) (days / 7));
 }
 
-// Function: days
+// Function: DAYS
 Value func_days (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
@@ -497,7 +497,7 @@ Value func_days (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (date1.daysTo (date2));
 }
 
-// Function: date
+// Function: DATE
 Value func_date (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int y = calc->conv()->asInteger (args[0]).asInteger();
@@ -510,7 +510,7 @@ Value func_date (valVector args, ValueCalc *calc, FuncExtra *)
   return Value::errorVALUE();
 }
 
-// Function: day
+// Function: DAY
 Value func_dayname (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int number = calc->conv()->asInteger (args[0]).asInteger();
@@ -521,7 +521,7 @@ Value func_dayname (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (weekName);
 }
 
-// Function: monthname
+// Function: MONTHNAME
 Value func_monthname (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int number = calc->conv()->asInteger (args[0]).asInteger();
@@ -533,7 +533,7 @@ Value func_monthname (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (monthName);
 }
 
-// Function: time
+// Function: TIME
 Value func_time (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int h = calc->conv()->asInteger (args[0]).asInteger();
@@ -563,25 +563,25 @@ Value func_time (valVector args, ValueCalc *calc, FuncExtra *)
   return Value( QTime (h, m, s), calc->doc() );
 }
 
-// Function: currentDate
+// Function: CURRENTDATE
 Value func_currentDate (valVector, ValueCalc * calc, FuncExtra *)
 {
   return Value( QDate::currentDate(), calc->doc() );
 }
 
-// Function: currentTime
+// Function: CURRENTTIME
 Value func_currentTime (valVector, ValueCalc * calc, FuncExtra *)
 {
   return Value( QTime::currentTime(), calc->doc() );
 }
 
-// Function: currentDateTime
+// Function: CURRENTDATETIME
 Value func_currentDateTime (valVector, ValueCalc * calc, FuncExtra *)
 {
   return Value( QDateTime::currentDateTime(), calc->doc() );
 }
 
-// Function: dayOfYear
+// Function: DAYOFYEAR
 Value func_dayOfYear (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value date = func_date (args, calc, 0);
@@ -589,7 +589,7 @@ Value func_dayOfYear (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (date.asDate( calc->doc() ).dayOfYear());
 }
 
-// Function: daysInMonth
+// Function: DAYSINMONTH
 Value func_daysInMonth (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int y = calc->conv()->asInteger (args[0]).asInteger();
@@ -598,21 +598,21 @@ Value func_daysInMonth (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (date.daysInMonth());
 }
 
-// Function: isLeapYear
+// Function: ISLEAPYEAR
 Value func_isLeapYear  (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int y = calc->conv()->asInteger (args[0]).asInteger();
   return Value (QDate::isLeapYear (y));
 }
 
-// Function: daysInYear
+// Function: DAYSINYEAR
 Value func_daysInYear  (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int y = calc->conv()->asInteger (args[0]).asInteger();
   return Value (QDate::isLeapYear (y) ? 366 : 365);
 }
 
-// Function: weeksInYear
+// Function: WEEKSINYEAR
 Value func_weeksInYear (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int y = calc->conv()->asInteger (args[0]).asInteger();
@@ -620,7 +620,7 @@ Value func_weeksInYear (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (date.weekNumber ());
 }
 
-// Function: easterSunday
+// Function: EASTERSUNDAY
 Value func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int nDay, nMonth;
@@ -647,7 +647,7 @@ Value func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *)
   return Value( QDate (nYear, nMonth, nDay), calc->doc() );
 }
 
-// Function: isoWeekNum
+// Function: ISOWEEKNUM
 Value func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date = calc->conv()->asDate (args[0]).asDate( calc->doc() );
@@ -657,7 +657,7 @@ Value func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (date.weekNumber());
 }
 
-// Function: weekNum
+// Function: WEEKNUM
 //
 // 		method 	startday name of day
 // default: 	1	 0	 sunday
@@ -692,7 +692,7 @@ Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *)
   return Value( (int)(startday+7+date1.dayOfWeek()+days)/7 );
 }
 
-// Function: dateDif
+// Function: DATEDIF
 //
 // 		interval difference type	descrition 	
 // default: 	m	 months
