@@ -198,7 +198,7 @@ CellView::CellView( SheetView* sheetView, int col, int row )
         }
     }
 
-    makeLayout( sheetView, col, row, cell );
+    makeLayout( sheetView, cell );
 }
 
 CellView::CellView( const CellView& other )
@@ -288,7 +288,7 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
         paintFormulaIndicator( painter, cellRect, cell );
 
     // 3. Paint possible indicator for clipped text.
-    paintMoreTextIndicator( painter, cellRect, cell );
+    paintMoreTextIndicator( painter, cellRect );
 
     // 4. Paint cell highlight
 #if 0
@@ -316,8 +316,6 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                                  const QPoint& cellCoordinate, const QRect& cellRegion,
                                  QLinkedList<QPoint> &mergedCellsPainted, Cell* cell, SheetView* sheetView )
 {
-    Sheet* const sheet = cell->sheet();
-
     // The parameter cellCoordinate should be *this, unless this is the default cell.
     Q_ASSERT(cell->isDefault() || ((cellCoordinate.x() == cell->column()) && (cellCoordinate.y() == cell->row())));
 
@@ -397,7 +395,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     // Paint the borders if this cell is not part of another merged cell.
     if ( !d->merged )
     {
-        paintCustomBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder, cell );
+        paintCustomBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder );
     }
 
     // Turn clipping back on.
@@ -405,7 +403,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
         painter.setClipping( true );
 
     // 3. Paint diagonal lines and page borders.
-    paintCellDiagonalLines( painter, cellRect, cell );
+    paintCellDiagonalLines( painter, cellRect );
     paintPageBorders( painter, cellRect, cellCoordinate, paintBorder, cell );
 }
 
@@ -907,9 +905,7 @@ void CellView::paintFormulaIndicator( QPainter& painter,
 
 // Paint an indicator that the text in the cell is cut.
 //
-void CellView::paintMoreTextIndicator( QPainter& painter,
-                                       const QRectF &cellRect,
-                                       Cell* cell )
+void CellView::paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect )
 {
   // Show a red triangle when it's not possible to write all text in cell.
   // Don't print the red triangle if we're printing.
@@ -955,7 +951,6 @@ void CellView::paintText( QPainter& painter,
                           const QRectF &cellRect,
                           const QPoint &cellRef, Cell* cell )
 {
-  const ColumnFormat* columnFormat = cell->sheet()->columnFormat( cellRef.x() );
   QColor textColorPrint = d->style.fontColor();
 
   // Resolve the text color if invalid (=default).
@@ -1220,7 +1215,7 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
 //
 void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
                                   const QRectF &cellRect, const QPoint &cellRef,
-                                  Borders paintBorder, Cell* cell )
+                                  Borders paintBorder )
 {
     //Sanity check: If we are not painting any of the borders then the function
     //really shouldn't be called at all.
@@ -1571,7 +1566,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
 
 // Paint diagonal lines through the cell.
 //
-void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect, Cell* cell )
+void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect )
 {
     if ( d->merged )
         return;
@@ -1755,20 +1750,14 @@ QFont CellView::effectiveFont( Cell* cell ) const
 //   d->textX,     d->textY
 //   d->textWidth, d->textHeight
 //   d->obscuredCellsX, d->obscuredCellsY
-//   cell->extraWidth(),  d->extraHeight
+//   d->width, d->height
 //
 // and, of course,
 //
 //   d->displayText
 //
-void CellView::makeLayout( SheetView* sheetView, int col, int row, Cell* cell )
+void CellView::makeLayout( SheetView* sheetView, Cell* cell )
 {
-  // Are _col and _row really needed ?
-  //
-  // Yes they are: they are useful if this is the default layout, in
-  // which case cell->row() and cell->column() are 0 and 0, but _col and _row
-  // are the real coordinates of the cell.
-
   if ( d->hidden )
     return;
 
@@ -1794,18 +1783,18 @@ void CellView::makeLayout( SheetView* sheetView, int col, int row, Cell* cell )
   // First, Determine the correct font with zoom taken into account.
   // Then calculate text dimensions, i.e. d->textWidth and d->textHeight.
   const QFontMetrics fontMetrics( effectiveFont( cell ) );
-  textSize( fontMetrics, cell );
+  textSize( fontMetrics );
 
   // Calculate the size of the cell.
   calculateCellDimension( cell );
 
   // Check, if we need to break the line into multiple lines and are
   // allowed to do so.
-  breakLines( fontMetrics, cell );
+  breakLines( fontMetrics );
 
   // Also recalculate text dimensions, i.e. d->textWidth and d->textHeight,
   // because of new line breaks.
-  textSize( fontMetrics, cell );
+  textSize( fontMetrics );
 
   // Calculate text offset, i.e. d->textX and d->textY.
   textOffset( fontMetrics, cell );
@@ -1822,7 +1811,7 @@ void CellView::makeLayout( SheetView* sheetView, int col, int row, Cell* cell )
     d->displayText = textDisplaying( fontMetrics, cell );
 
     // Recalculate the text dimensions and the offset.
-    textSize( fontMetrics, cell );
+    textSize( fontMetrics );
     textOffset( fontMetrics, cell );
 }
 
@@ -1863,7 +1852,7 @@ void CellView::calculateTextParameters( Cell* cell )
   const QFontMetrics fontMetrics( effectiveFont( cell ) );
 
   // Recalculate text dimensions, i.e. d->textWidth and d->textHeight
-  textSize( fontMetrics, cell );
+  textSize( fontMetrics );
 
   // Recalculate text offset, i.e. d->textX and d->textY.
   textOffset( fontMetrics, cell );
@@ -2054,7 +2043,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, Cell* cell )
 //
 // Used in makeLayout() and calculateTextParameters().
 //
-void CellView::textSize( const QFontMetrics& fm, const Cell* cell )
+void CellView::textSize( const QFontMetrics& fm )
 {
     const Style::VAlign vAlign = d->style.valign();
     const int tmpAngle = d->style.angle();
@@ -2096,7 +2085,7 @@ void CellView::textSize( const QFontMetrics& fm, const Cell* cell )
     }
 }
 
-void CellView::breakLines( const QFontMetrics& fontMetrics, Cell* cell )
+void CellView::breakLines( const QFontMetrics& fontMetrics )
 {
   if ( style().wrapText() &&
        d->textWidth > ( d->width - 2 * s_borderSpace

@@ -86,7 +86,6 @@ class View;
  */
 class KSPREAD_EXPORT Cell
 {
-    friend class CellView;
 public:
 
     /**

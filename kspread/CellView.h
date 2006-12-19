@@ -188,7 +188,7 @@ private:
      * breaks lines of the text to fit it into the cell, obscures neighbouring
      * cells, if necessary.
      */
-    void makeLayout( SheetView* sheetView, int col, int row, Cell* cell );
+    void makeLayout( SheetView* sheetView, Cell* cell );
 
   /**
    * \ingroup Layout
@@ -205,7 +205,7 @@ private:
    *
    * \internal Called from makeLayout() and calculateTextParameters().
    */
-  void textSize( const QFontMetrics& fontMetrics, const Cell* cell );
+  void textSize( const QFontMetrics& fontMetrics );
 
   /**
    * \ingroup Layout
@@ -232,7 +232,7 @@ private:
    *
    * \internal Called from makeLayout().
    */
-  void breakLines( const QFontMetrics& fontMetrics, Cell* cell );
+  void breakLines( const QFontMetrics& fontMetrics );
 
   /**
    * \ingroup Layout
@@ -303,7 +303,7 @@ private:
    */
   void paintCustomBorders( QPainter& painter, const QRectF &paintRegion,
                            const QRectF &cellRegion, const QPoint& cellCoordinate,
-                           Borders paintBorder, Cell* cell );
+                           Borders paintBorder );
 
   /**
    * \ingroup Painting
@@ -329,7 +329,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect, Cell* cell );
+  void paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect );
 
   /**
    * \ingroup Painting
@@ -354,7 +354,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect, Cell* cell );
+  void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect );
 
     /**
      * Tells this view that the Cell at \p col , \p row obscures this one.

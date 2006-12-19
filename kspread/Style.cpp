@@ -68,6 +68,7 @@ public:
     Value1 value1;
 };
 
+// specialized debug method
 template<>
 QString SubStyleOne<Style::CurrencyFormat, Currency>::debugData( bool withName ) const
 { QString out; if (withName) out = name(Style::CurrencyFormat) + ' '; QDebug qdbg(&out); qdbg << value1.symbol(); return out; }
@@ -1960,7 +1961,7 @@ int Style::fontSize() const
 int Style::precision() const
 {
     if ( !d->subStyles.contains( Precision ) )
-        return SubStyleOne<Precision, int>().value1;
+        return -1; //SubStyleOne<Precision, int>().value1;
     return static_cast<const SubStyleOne<Precision, int>*>( d->subStyles[Precision].data() )->value1;;
 }
 

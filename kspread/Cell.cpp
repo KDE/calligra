@@ -475,16 +475,6 @@ void Cell::copyContent( const Cell* cell )
       setCellText( cell->inputText() );
 }
 
-void Cell::defaultStyle()
-{
-    Style style;
-    style.setDefault();
-    setStyle( style );
-
-    setConditions( Conditions() );
-    setValidity( Validity() );
-}
-
 
 // Merge a number of cells, i.e. make this cell obscure a number of
 // other cells.  If _x and _y == 0, then the merging is removed.
