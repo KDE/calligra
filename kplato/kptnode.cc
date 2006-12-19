@@ -43,7 +43,7 @@ Node::Node(Node *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes(
 }
 
 Node::Node(Node &node, Node *parent) 
-    : QObject( parent),
+    : QObject( 0 ), // Don't set parent, we handle parent/child ourselves
       m_nodes(), 
       m_dependChildNodes(), 
       m_dependParentNodes() {
