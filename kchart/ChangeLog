@@ -1,3 +1,13 @@
+2006-12-19  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix bug 138148: Compile error on Solaris 8 -
+	kchart/kdchart/KDChartAxesPainter.cpp uses trunc, which is not
+	available
+	
+	* kdchart/KDChartAxesPainter.cpp: trunc(): Define it, since some
+	OSes, like Solaris, doesn't have it.  We could make a complicated
+	workaround, but this is the simplest solution.  
+	
 2006-11-07  Inge Wallin  <inge@lysator.liu.se>
 
 	Start on bug 134194: Impossible to change the data range.

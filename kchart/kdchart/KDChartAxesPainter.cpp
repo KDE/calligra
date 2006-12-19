@@ -3701,9 +3701,25 @@ QString KDChartAxesPainter::truncateBehindComma( const double nVal,
     return sVal;
 }
 
+#if 0
+
 #if defined ( Q_WS_WIN)
 #define trunc(x) ((int)(x))
 #endif
+
+#else
+
+// Ugly hack because Solaris (among others?) doesn't have trunc(),
+// since the libs are not C99.  I could do a complex #if expression,
+// but instead I will just define trunc() here.
+
+double trunc(double x)
+{
+    return x >= 0.0 ? floor(x) : -floor(-x);
+}
+
+#endif
+
 
 QString KDChartAxesPainter::applyLabelsFormat( const double nVal_,
                         int   divPow10,
