@@ -128,7 +128,7 @@ public:
     // static empty data to be shared
     static Private* empty( const Sheet* sheet )
     {
-        if( !s_empty)
+        if ( !s_empty )
             s_empty = new Private( sheet->doc()->styleManager()->defaultStyle(),
                                    sheet->columnFormat( 0 )->dblWidth(),
                                    sheet->rowFormat( 0 )->dblHeight() );
@@ -146,8 +146,8 @@ CellView::Private* CellView::Private::s_empty = 0;
 CellView::CellView( SheetView* sheetView, int col, int row )
     : d( Private::empty( sheetView->sheet() ) )
 {
-    Q_ASSERT( col > 0 && col <= KS_colMax );
-    Q_ASSERT( row > 0 && row <= KS_rowMax );
+    Q_ASSERT( 0 <= col <= KS_colMax );
+    Q_ASSERT( 0 <= row <= KS_rowMax );
 
     const Sheet* sheet = sheetView->sheet();
     Cell* const cell = sheet->cellAt( col, row );
@@ -278,6 +278,9 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
     if ( !dynamic_cast<QPrinter*>(painter.device())
             || cell->sheet()->print()->printCommentIndicator() )
         paintCommentIndicator( painter, cellRect, cellRef, cell );
+
+    if ( cell->isDefault() )
+        return;
 
     // 2. Paint possible formula indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())
@@ -1175,7 +1178,7 @@ void CellView::paintText( QPainter& painter,
       && cell->value().asFloat() == 0 )
     d->displayText = tmpText;
 
-  if ( columnFormat->hidden() || ( cellRect.height() <= 2 ) )
+  if ( d->hidden )
     d->displayText = tmpText;
 }
 

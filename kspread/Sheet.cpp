@@ -215,7 +215,6 @@ public:
   Map* workbook;
 
   SheetAdaptor* dbus;
-  SheetView* sheetView;
 
   QString name;
   int id;
@@ -325,8 +324,6 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
 
   new SheetAdaptor(this);
   QDBusConnection::sessionBus().registerObject( '/'+map->doc()->objectName() + '/' + map->objectName()+ '/' + objectName, this);
-
-  d->sheetView = new SheetView( this );
 
   d->cells.setAutoDelete( true );
   d->rows.setAutoDelete( true );

@@ -39,6 +39,7 @@ public:
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
     QRegion cachedArea;
+    CellView* defaultCellView;
 };
 
 SheetView::SheetView( const Sheet* sheet )
@@ -47,10 +48,12 @@ SheetView::SheetView( const Sheet* sheet )
     d->sheet = sheet;
     d->visibleRect = QRect(1,1,0,0);
     d->cache.setMaxCost( 10000 );
+    d->defaultCellView = new CellView( this, 0, 0 );
 }
 
 SheetView::~SheetView()
 {
+    delete d->defaultCellView;
     delete d;
 }
 
@@ -61,6 +64,8 @@ const Sheet* SheetView::sheet() const
 
 CellView SheetView::cellView( int col, int row )
 {
+    Q_ASSERT( 1 <= col <= KS_colMax );
+    Q_ASSERT( 1 <= row <= KS_rowMax );
     if ( !d->cache.contains( QPoint(col,row) ) )
     {
         d->cache.insert( QPoint(col,row), new CellView( this, col, row ) );
