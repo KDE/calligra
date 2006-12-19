@@ -46,6 +46,7 @@ KoFilter::ConversionStatus Kpr2Odp::convert( const QByteArray& from, const QByte
 
     inpdoc.setContent( inpdev );
 
+    //convert it.
 
     return KoFilter::OK;
 }

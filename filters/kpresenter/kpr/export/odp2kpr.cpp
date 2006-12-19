@@ -22,6 +22,8 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <kprodp.h>
+#include <KoGlobal.h>
+#include <KoXmlNS.h
 
 typedef KGenericFactory<Odp2Kpr> Odp2KprFactory;
 K_EXPORT_COMPONENT_FACTORY( libodp2kpr, KprOdpFactory( "kofficefilters" ) )
@@ -44,6 +46,49 @@ KoFilter::ConversionStatus Odp2Kpr::convert( const QByteArray& from, const QByte
         return KoFilter::StorageCreationError;
     }
 
+    // Parse presentation content.xml
+    QXmlInputSource source( inpdev );
+    QXmlSimpleReader reader;
+    KoDocument::setupXmlReader( reader, true /*namespaceProcessing*/ );
+    QString errorMsg;
+    int errorLine, errorColumn;
+    bool ok = doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );
+    if ( !ok )
+    {
+        kError(31000) << "Parsing error! Aborting!" << endl
+                      << " In line: " << errorLine << ", column: " << errorColumn << endl
+                      << " Error message: " << errorMsg << endl;
+        return KoFilter::ParsingError;
+    }
+
+    QDomElement docElem = doc.documentElement();
+    QDomElement realBody( KoDom::namedItemNS( docElem, KoXmlNS::office, "body" ) );
+    if ( realBody.isNull() )
+    {
+        kError(31000) << "No office:body found!" << endl;
+        //setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
+        return KoFilter::WrongFormat;
+    }
+
+    QDomElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "presentation" );
+    if ( body.isNull() )
+    {
+        kError(32001) << "No office:text found!" << endl;
+        return KoFilter::WrongFormat;
+    }
+
+    //now we can transform it.
+
+    //TODO
+
+    // Write output file
+    KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
+    if(!out) {
+        kError(30502) << "Unable to open output file!" << endl;
+        return KoFilter::StorageCreationError;
+    }
+    QByteArray cstring = outdoc.toByteArray(); // utf-8 already
+    out->write( cstring.data(), cstring.length() );
 
     return KoFilter::OK;
 }
