@@ -41,7 +41,7 @@
 #include <KoViewAdaptor.h>
 #include "KCWizard.h"
 #include "KCPageLayout.h"
-#include "kchartPrinterDlg.h"
+#include "KCPrinterDialog.h"
 
 
 using namespace std;
@@ -584,7 +584,7 @@ void KChartView::slotConfigPageLayout()
 void KChartView::setupPrinter( KPrinter &printer )
 {
   if ( !printer.previewOnly() )
-    printer.addDialogPage( new KChartPrinterDlg( 0, "KChart page" ) );
+    printer.addDialogPage( new KCPrinterDialog( 0, "KChart page" ) );
 }
 
 

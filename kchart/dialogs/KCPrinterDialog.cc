@@ -32,11 +32,12 @@
 #include <klocale.h>
 
 // local includes
-#include "kchartPrinterDlg.h"
+#include "KCPrinterDialog.h"
+
 namespace KChart
 {
 
- KChartPrinterDlg::KChartPrinterDlg( QWidget *parent, const char *name )
+KCPrinterDialog::KCPrinterDialog( QWidget *parent, const char *name )
   : KPrintDialogPage( parent )
 {
   setTitle( i18n( "KChart Options" ) );
@@ -62,13 +63,13 @@ namespace KChart
   layout->addStretch( 1 );
 }
 
-void KChartPrinterDlg::getOptions( QMap<QString, QString>& opts, bool )
+void KCPrinterDialog::getOptions( QMap<QString, QString>& opts, bool )
 {
   opts["kde-kchart-printsizex"] = QString::number(txtSizex->value());
   opts["kde-kchart-printsizey"] = QString::number(txtSizey->value());
 }
 
-void KChartPrinterDlg::setOptions( const QMap<QString, QString>& opts )
+void KCPrinterDialog::setOptions( const QMap<QString, QString>& opts )
 {
   if ( opts["kde-kchart-printsizex"].isEmpty() )
     txtSizex->setValue(100);
@@ -81,4 +82,4 @@ void KChartPrinterDlg::setOptions( const QMap<QString, QString>& opts )
 }
 
 }  //namespace KChart
-#include "kchartPrinterDlg.moc"
+#include "KCPrinterDialog.moc"

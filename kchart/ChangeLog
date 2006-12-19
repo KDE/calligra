@@ -1,3 +1,8 @@
+2006-12-20  Inge Wallin  <inge@lysator.liu.se>
+
+	Third step of wish 117960
+	* Move the printer dialog to dialogs/
+
 2006-12-17  Inge Wallin  <ingwa@c83-252-239-226.bredband.comhem.se>
 
 	Second step of wish 117960

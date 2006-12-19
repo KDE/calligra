@@ -20,21 +20,23 @@
 *
 */
 
-#ifndef kchartprintdlg_included
-#define kchartprintdlg_included
+#ifndef KCPRINTDIALOG_INCLUDED
+#define KCPRINTDIALOG_INCLUDED
+
+#include <QLabel>
 
 #include <kdeprint/kprintdialogpage.h>
 #include <knuminput.h>
-#include <QLabel>
+
 namespace KChart
 {
 
-class KChartPrinterDlg : public KPrintDialogPage
+class KCPrinterDialog : public KPrintDialogPage
 {
   Q_OBJECT
   public:
 	/// Getting the common arguments.
-    KChartPrinterDlg( QWidget *parent = 0, const char *name = 0 );
+    KCPrinterDialog( QWidget *parent = 0, const char *name = 0 );
 
 	/// Reimplemented.
     void getOptions( QMap<QString, QString>& opts, bool include_def = false );
@@ -46,5 +48,7 @@ class KChartPrinterDlg : public KPrintDialogPage
     KIntNumInput *txtSizex;
     KIntNumInput *txtSizey;
 };
+
 }  //namespace KChart
+
 #endif //kchartprinterdlg_included
