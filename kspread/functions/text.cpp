@@ -122,7 +122,7 @@ void RegisterTextFunctions()
   f->setParamCount (1, 3);
   repo->add (f);
   f = new Function ("LEFT", func_left);
-  f->setParamCount (2);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("MID", func_mid);
   f->setParamCount (2, 3);
@@ -140,7 +140,7 @@ void RegisterTextFunctions()
   f->setParamCount (2);
   repo->add (f);
   f = new Function ("RIGHT", func_right);
-  f->setParamCount (2);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("SEARCH", func_search);
   f->setParamCount (2, 3);

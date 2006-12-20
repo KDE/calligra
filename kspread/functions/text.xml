@@ -341,8 +341,8 @@
 	<Comment>Source string</Comment>
 	<Type>String</Type>
       </Parameter>
-      <Parameter>
-	<Comment>Amount of characters</Comment>
+      <Parameter optional="true">
+	<Comment>Number of characters</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
@@ -363,8 +363,8 @@
 	<Comment>Source string</Comment>
 	<Type>String</Type>
       </Parameter>
-      <Parameter>
-	<Comment>Amount of characters</Comment>
+      <Parameter optional="true">
+	<Comment>Number of characters</Comment>
 	<Type>Int</Type>
       </Parameter>
       <Help>
