@@ -20,10 +20,13 @@
 #include <kgenericfactory.h>
 #include <KoStoreDevice.h>
 #include <KoFilterChain.h>
+#include <KoDocument.h>
 #include <KoGlobal.h>
-#include <kprodp.h>
+#include <odp2kpr.h>
 #include <KoGlobal.h>
-#include <KoXmlNS.h
+#include <KoXmlNS.h>
+#include <QXmlInputSource>
+#include <QXmlSimpleReader>
 
 typedef KGenericFactory<Odp2Kpr> Odp2KprFactory;
 K_EXPORT_COMPONENT_FACTORY( libodp2kpr, KprOdpFactory( "kofficefilters" ) )

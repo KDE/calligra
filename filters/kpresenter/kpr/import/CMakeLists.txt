@@ -1,5 +1,5 @@
 
-set(kpr2odp_PART_SRCS kprodp.cpp )
+set(kpr2odp_PART_SRCS kpr2odp.cpp )
 
 kde4_automoc(${kpr2odp_PART_SRCS})
 
