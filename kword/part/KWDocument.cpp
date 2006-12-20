@@ -193,6 +193,9 @@ void KWDocument::removeFrameSet( KWFrameSet *fs ) {
             canvas->shapeManager()->remove(frame->shape());
         }
     }
+    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+    if(tfs)
+        tfs->setKWDoc(0);
     emit frameSetRemoved(fs);
 }
 
@@ -216,6 +219,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
             connect(tfs, SIGNAL(moreFramesNeeded(KWTextFrameSet*)),
                     this, SLOT(requestMoreSpace(KWTextFrameSet*)));
         }
+        tfs->setKWDoc(this);
     }
 
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));

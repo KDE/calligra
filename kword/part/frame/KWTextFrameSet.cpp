@@ -37,7 +37,8 @@ KWTextFrameSet::KWTextFrameSet()
     m_layoutTriggered(false),
     m_allowLayoutRequests(true),
     m_textFrameSetType( KWord::OtherTextFrameSet ),
-    m_pageManager(0)
+    m_pageManager(0),
+    m_kwdoc(0)
 {
     m_document->setDocumentLayout(new KWTextDocumentLayout(this));
     m_document->setUseDesignMetrics(true);
@@ -49,7 +50,8 @@ KWTextFrameSet::KWTextFrameSet(KWord::TextFrameSetType type)
     m_layoutTriggered(false),
     m_allowLayoutRequests(true),
     m_textFrameSetType( type ),
-    m_pageManager(0)
+    m_pageManager(0),
+    m_kwdoc(0)
 {
     m_document->setDocumentLayout(new KWTextDocumentLayout(this));
     m_document->setUseDesignMetrics(true);

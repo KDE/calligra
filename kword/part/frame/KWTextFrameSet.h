@@ -26,6 +26,7 @@
 class QTextDocument;
 class KWTextFrame;
 class KWPageManager;
+class KWDocument;
 
 /**
  * A frameset with a TextDocument backing it.
@@ -64,6 +65,8 @@ public:
     void setAllowLayout(bool allow);
     void setPageManager(const KWPageManager *pageMager) { m_pageManager = pageMager; }
     const KWPageManager* pageManager() const { return m_pageManager; }
+    void setKWDoc(const KWDocument *document) { m_kwdoc = document; }
+    const KWDocument *kwDoc() { return m_kwdoc; }
 
 #ifndef NDEBUG
     void printDebug();
@@ -112,6 +115,7 @@ private:
     bool m_protectContent, m_layoutTriggered, m_allowLayoutRequests;
     KWord::TextFrameSetType m_textFrameSetType;
     const KWPageManager *m_pageManager;
+    const KWDocument *m_kwdoc; // for runaround. Lets see if I can remove this later :)
 
     static bool sortTextFrames(const KWFrame *frame1, const KWFrame *frame2);
 };
