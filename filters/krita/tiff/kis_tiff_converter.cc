@@ -375,13 +375,13 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         case PHOTOMETRIC_CIELAB:
         {
             poses[0] = 0; poses[1] = 1; poses[2] = 2; poses[3] = 3;
-            postprocessor = new KisTIFFPostProcessor(nbcolorsamples);
+            postprocessor = new KisTIFFPostProcessorICCLABtoCIELAB(nbcolorsamples);
         }
         break;
         case PHOTOMETRIC_ICCLAB:
         {
             poses[0] = 0; poses[1] = 1; poses[2] = 2; poses[3] = 3;
-            postprocessor = new KisTIFFPostProcessorICCLABtoCIELAB(nbcolorsamples);
+            postprocessor = new KisTIFFPostProcessor(nbcolorsamples);
         }
         break;
         case PHOTOMETRIC_RGB:
