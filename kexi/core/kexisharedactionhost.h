@@ -31,9 +31,10 @@
 #include "../kexi_export.h"
 
 class KShortcut;
+class KGuiItem;
+class KexiMainWindow;
 class KexiActionProxy;
 class KexiSharedActionHostPrivate;
-class KexiMainWindow;
 
 namespace KexiPart {
 	class Part;
@@ -134,6 +135,12 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		/*! Like above - creates shared action, but from standard action identified by \a id. 
 		 Action's data is owned by the main window. */
 		KAction* createSharedAction( KStandardAction::StdAction id, const char *name, 
+			KActionCollection* col = 0);
+
+		/*! Creates shared action with name \a name and shortcut \a cut 
+		 by copying all properties of \a guiItem. 
+		 If \a col action collection is null, main window's action will be used. */
+		KAction* createSharedAction(const KGuiItem& guiItem, const KShortcut &cut, const char *name,
 			KActionCollection* col = 0);
 
 		/*! \return action proxy for object \a o, or NULL if this object has 

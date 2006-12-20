@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -60,6 +60,11 @@ class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiViewBase
 		void copySelection();
 		void cutSelection();
 		void paste();
+		void slotGoToFirstRow();
+		void slotGoToPreviusRow();
+		void slotGoToNextRow();
+		void slotGoToLastRow();
+		void slotGoToNewRow();
 
 	protected slots:
 //		void slotCellSelected(const QVariant& v); //!< @internal

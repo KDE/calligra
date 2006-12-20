@@ -83,6 +83,11 @@ class KEXICORE_EXPORT ActionCategories : public KShared
 				supportedObjectType3, supportedObjectType4, supportedObjectType5, supportedObjectType6,
 				supportedObjectType7, supportedObjectType8); }
 
+		/*! If \a set is true, action with name \a name will support any possible object type
+		 that can be checked by actionSupportsObjectType(). 
+		 Makes sense for action of category Kexi::WindowActionCategory. */
+		void setAllObjectTypesSupported(const char* name, bool set);
+
 		//! \return categories for action \a name (a combination of ActionCategory enum values).
 		//! If there is no such actions declared at all, -1 is returned.
 		int actionCategories(const char* name) const;

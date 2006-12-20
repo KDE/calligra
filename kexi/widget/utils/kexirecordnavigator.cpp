@@ -35,6 +35,8 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <klineedit.h>
+#include <kguiitem.h>
+#include <kstaticdeleter.h>
 
 #include "kexirecordnavigator.h"
 #include "kexirecordmarker.h"
@@ -466,5 +468,51 @@ void KexiRecordNavigator::showEditingIndicator(bool show)
 		QToolTip::remove( d->editingIndicatorLabel );
 	}
 }
+
+//------------------------------------------------
+
+//! @internal
+class KexiRecordNavigatorActionsInternal {
+	public:
+		KexiRecordNavigatorActionsInternal()
+		 : moveToFirstRecord(i18n("First row"), "navigator_first", i18n("Go to first row"))
+		 , moveToPreviousRecord(i18n("Previous row"), "navigator_prev", i18n("Go to previous row"))
+		 , moveToNextRecord(i18n("Next row"), "navigator_next", i18n("Go to next row"))
+		 , moveToLastRecord(i18n("Last row"), "navigator_last", i18n("Go to last row"))
+		 , moveToNewRecord(i18n("New row"), "navigator_new", i18n("Go to new row"))
+		{
+		}
+		static void init();
+		KGuiItem moveToFirstRecord;
+		KGuiItem moveToPreviousRecord;
+		KGuiItem moveToNextRecord;
+		KGuiItem moveToLastRecord;
+		KGuiItem moveToNewRecord;
+};
+
+static KStaticDeleter<KexiRecordNavigatorActionsInternal> KexiRecordNavigatorActions_deleter;
+KexiRecordNavigatorActionsInternal* KexiRecordNavigatorActions_internal = 0;
+
+void KexiRecordNavigatorActionsInternal::init()
+{
+	if (!KexiRecordNavigatorActions_internal)
+		KexiRecordNavigatorActions_deleter.setObject(KexiRecordNavigatorActions_internal, 
+			new KexiRecordNavigatorActionsInternal());
+}
+
+const KGuiItem& KexiRecordNavigator::Actions::moveToFirstRecord()
+{ KexiRecordNavigatorActionsInternal::init(); return KexiRecordNavigatorActions_internal->moveToFirstRecord; }
+
+const KGuiItem& KexiRecordNavigator::Actions::moveToPreviousRecord()
+{ KexiRecordNavigatorActionsInternal::init(); return KexiRecordNavigatorActions_internal->moveToPreviousRecord; }
+
+const KGuiItem& KexiRecordNavigator::Actions::moveToNextRecord()
+{ KexiRecordNavigatorActionsInternal::init(); return KexiRecordNavigatorActions_internal->moveToNextRecord; }
+
+const KGuiItem& KexiRecordNavigator::Actions::moveToLastRecord()
+{ KexiRecordNavigatorActionsInternal::init(); return KexiRecordNavigatorActions_internal->moveToLastRecord; }
+
+const KGuiItem& KexiRecordNavigator::Actions::moveToNewRecord()
+{ KexiRecordNavigatorActionsInternal::init(); return KexiRecordNavigatorActions_internal->moveToNewRecord; }
 
 #include "kexirecordnavigator.moc"

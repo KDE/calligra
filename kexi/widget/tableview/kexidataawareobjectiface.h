@@ -289,6 +289,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void selectPrevPage(); //!< page up action
 		virtual void selectFirstRow();
 		virtual void selectLastRow();
+		virtual void addNewRecordRequested();
 
 		/*! Clears current selection. Current row and column will be now unspecified:
 		 currentRow(), currentColumn() will return -1, and selectedItem() will return null. */
@@ -652,8 +653,6 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 Implemented if there is more than one row displayed, i.e. currently for KexiTableView. */
 		virtual void updateAllVisibleRowsBelow(int row) { Q_UNUSED( row ); }
 
-		virtual void addNewRecordRequested();
-
 		//! Call this from the subclass. */
 		virtual void KexiDataAwareObjectInterface::focusOutEvent(QFocusEvent* e);
 
@@ -842,24 +841,19 @@ public: \
 	void connectCellSelectedSignal(const QObject* receiver, const char* intIntMember) { \
 		connect(this, SIGNAL(cellSelected(int,int)), receiver, intIntMember); \
 	} \
-	\
 	void connectRowEditStartedSignal(const QObject* receiver, const char* intMember) { \
 		connect(this, SIGNAL(rowEditStarted(int)), receiver, intMember); \
 	} \
-	\
 	void connectRowEditTerminatedSignal(const QObject* receiver, const char* voidMember) { \
 		connect(this, SIGNAL(rowEditTerminated(int)), receiver, voidMember); \
 	} \
-	\
 	void connectReloadActionsSignal(const QObject* receiver, const char* voidMember) { \
 		connect(this, SIGNAL(reloadActions()), receiver, voidMember); \
 	} \
-	\
 	void connectDataSetSignal(const QObject* receiver, \
 		const char* kexiTableViewDataMember) { \
 		connect(this, SIGNAL(dataSet(KexiTableViewData*)), receiver, kexiTableViewDataMember); \
 	} \
-	\
 	void connectToReloadDataSlot(const QObject* sender, const char* voidSignal) { \
 		connect(sender, voidSignal, this, SLOT(reloadData())); \
 	}

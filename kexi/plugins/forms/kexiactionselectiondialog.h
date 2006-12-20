@@ -58,6 +58,8 @@ class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialogBase
 		void slotKActionItemSelected(Q3ListViewItem*);
 		void slotActionToExecuteItemExecuted(Q3ListViewItem* item);
 		void slotActionToExecuteItemSelected(Q3ListViewItem*);
+		void slotCurrentFormActionItemExecuted(Q3ListViewItem*);
+		void slotCurrentFormActionItemSelected(Q3ListViewItem*);
 		void slotItemForOpeningOrExecutingSelected(KexiPart::Item* item);
 
 	protected:

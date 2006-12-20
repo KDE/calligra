@@ -55,7 +55,7 @@ KexiPart::Info* KexiFormEventAction::ActionData::decodeString(
 	if (_actionType.isEmpty() || _actionArg.isEmpty())
 		return 0;
 	KexiPart::Info *info = 0;
-	if (_actionType!="kaction") {
+	if (_actionType!="kaction" && _actionType!="currentForm") {
 		info = Kexi::partManager().infoForMimeType( QString("kexi/%1").arg(_actionType) );
 		if (!info)
 			return 0;
@@ -170,7 +170,7 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 		KexiPart::Info* partInfo = data.decodeString(actionType, actionArg, ok);
 		if (!ok)
 			continue;
-		if (actionType=="kaction") {
+		if (actionType=="kaction" || actionType=="currentForm") {
 			KAction *action = mainWin->actionCollection()->action( actionArg.latin1() );
 			if (!action)
 				continue;

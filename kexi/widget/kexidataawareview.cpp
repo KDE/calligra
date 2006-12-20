@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -97,6 +97,19 @@ void KexiDataAwareView::initActions()
 	setAvailable("data_sort_az", m_dataAwareObject->isSortingEnabled());
 	setAvailable("data_sort_za", m_dataAwareObject->isSortingEnabled());
 //! \todo 	plugSharedAction("data_filter", this, SLOT(???()));
+
+	plugSharedAction("data_go_to_first_record", this, SLOT(slotGoToFirstRow()));
+	plugSharedAction("data_go_to_previous_record", this, SLOT(slotGoToPreviusRow()));
+	plugSharedAction("data_go_to_next_record", this, SLOT(slotGoToNextRow()));
+	plugSharedAction("data_go_to_last_record", this, SLOT(slotGoToLastRow()));
+	plugSharedAction("data_go_to_new_record", this, SLOT(slotGoToNewRow()));
+
+//! \todo update availability
+	setAvailable("data_go_to_first_record", true);
+	setAvailable("data_go_to_previous_record", true);
+	setAvailable("data_go_to_next_record", true);
+	setAvailable("data_go_to_last_record", true);
+	setAvailable("data_go_to_new_record", true);
 
 	plugSharedAction("edit_copy", this, SLOT(copySelection()));
 	m_actionClient->plugSharedAction(sharedAction("edit_copy")); //for proper shortcut
@@ -259,5 +272,12 @@ void KexiDataAwareView::paste()
 {
 	m_dataAwareObject->paste();
 }
+
+void KexiDataAwareView::slotGoToFirstRow() { m_dataAwareObject->selectFirstRow(); }
+void KexiDataAwareView::slotGoToPreviusRow() { m_dataAwareObject->selectPrevRow(); }
+void KexiDataAwareView::slotGoToNextRow() { m_dataAwareObject->selectNextRow(); }
+void KexiDataAwareView::slotGoToLastRow() { m_dataAwareObject->selectLastRow(); }
+void KexiDataAwareView::slotGoToNewRow() { m_dataAwareObject->addNewRecordRequested(); }
+
 
 #include "kexidataawareview.moc"

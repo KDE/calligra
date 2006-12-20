@@ -26,6 +26,7 @@
 
 #include <QApplication>
 #include <kiconloader.h>
+#include <kguiitem.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
@@ -281,6 +282,14 @@ KAction* KexiSharedActionHost::createSharedAction( KStandardAction::StdAction id
 	return createSharedActionInternal(
 		KStandardAction::create( id, name, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection() )
 	);
+}
+
+KAction* KexiSharedActionHost::createSharedAction(const KGuiItem& guiItem, const KShortcut &cut, 
+	const char *name, KActionCollection* col)
+{
+	return createSharedActionInternal(
+		new KAction(guiItem, cut, 0/*receiver*/, 0/*slot*/, 
+			col ? col : d->mainWin->actionCollection(), name));
 }
 
 void KexiSharedActionHost::setActionVolatile( KAction *a, bool set )
