@@ -142,6 +142,7 @@ kdbgstream operator<<( kdbgstream str, const KSpread::Damage& d )
         case Damage::Cell:      return str << "Cell";
         case Damage::Selection: return str << "Selection";
     }
+    return str;
 }
 
 kdbgstream operator<<( kdbgstream str, const KSpread::CellDamage& d )
@@ -166,6 +167,7 @@ kdbgstream operator<<( kdbgstream str, const KSpread::SheetDamage& d )
       case SheetDamage::Hidden:             return str << " Hidden";
       case SheetDamage::Shown:              return str << " Shown";
     }
+    return str;
 }
 
 kdbgstream operator<<( kdbgstream str, const KSpread::SelectionDamage& d )
