@@ -875,6 +875,26 @@ void KWDLoader::fill(KWFrame *frame, QDomElement frameElem) {
                   frameElem.attribute("bkBlue", "255").toInt());
     Qt::BrushStyle bs = static_cast<Qt::BrushStyle> ( frameElem.attribute("bkStyle", "1").toInt());
     frame->shape()->setBackground(QBrush(background, bs));
+
+    switch(frameElem.attribute("runaround", "0").toInt()) {
+        case 0:
+            frame->setTextRunAround(KWord::RunThrough);
+            break;
+        case 2:
+            frame->setTextRunAround(KWord::NoRunAround);
+            break;
+        default:
+            frame->setTextRunAround(KWord::RunAround);
+            break;
+    }
+
+    QString side = frameElem.attribute("runaroundSide", "biggest");
+    if(side == "left")
+        frame->setRunAroundSide(KWord::LeftRunAroundSide);
+    else if(side == "right")
+        frame->setRunAroundSide(KWord::RightRunAroundSide);
+
+    frame->shape()->setZIndex(frameElem.attribute("z-index", "1").toInt());
 }
 
 void KWDLoader::loadStyleTemplates( const QDomElement &stylesElem ) {

@@ -502,10 +502,8 @@ public:
 // ----------------- Class that allows us with the runaround of QPainterPaths ----------------
 class Outline {
 public:
-// TODO make this hold a frame as well for the runaround properties. (and honor them ;)
-    Outline(const QPainterPath &p, const QMatrix &matrix)
-            : m_side(None) {
-        QPainterPath path =  matrix.map(p);
+    Outline(KWFrame *frame, const QMatrix &matrix) : m_side(None), m_frame(frame) {
+        QPainterPath path =  matrix.map(frame->shape()->outline());
         m_bounds = path.boundingRect();
         QPolygonF poly = path.toFillPolygon();
 
@@ -521,6 +519,11 @@ public:
             m_edges.insert(line.y1(), line);
             prev = vtx;
         }
+
+        if(m_frame->runAroundSide() == KWord::LeftRunAroundSide)
+            m_side = Right;
+        else if(m_frame->runAroundSide() == KWord::RightRunAroundSide)
+            m_side = Left;
     }
 
     QRectF limit(const QRectF &content) {
@@ -535,6 +538,8 @@ public:
         }
         if(!m_bounds.intersects(content))
             return content;
+        if(m_frame->textRunAround() == KWord::NoRunAround)
+            return QRectF(); // empty
 
         // two points, as we are checking a rect, not a line.
         double points[2] = { content.top(), content.bottom() };
@@ -569,6 +574,8 @@ public:
         return answer;
     }
 
+    KWFrame *frame() { return m_frame; }
+
 private:
     double xAtY(const QLineF &line, double y) const {
         if(line.dx() == 0)
@@ -581,6 +588,7 @@ private:
     Side m_side;
     QMultiMap<double, QLineF> m_edges; //sorted with y-coord
     QRectF m_bounds;
+    KWFrame *m_frame;
 };
 
 
@@ -848,14 +856,15 @@ void KWTextDocumentLayout::layout() {
                     foreach(KWFrame *frame, fs->frames()) {
                         if(frame->shape() == currentShape)
                             continue;
+                        if(frame->textRunAround() == KWord::RunThrough)
+                            continue;
                         if(frame->shape()->zIndex() < currentShape->zIndex())
                             continue;
                         if(! bounds.intersects( frame->shape()->boundingRect()))
                             continue;
-                        QPainterPath path = frame->shape()->outline();
-                        QMatrix dummy = frame->shape()->transformationMatrix(0);
-                        dummy = dummy * currentShape->transformationMatrix(0).inverted();
-                        outlines.append(new Outline(path, dummy));
+                        QMatrix matrix = frame->shape()->transformationMatrix(0);
+                        matrix = matrix * currentShape->transformationMatrix(0).inverted();
+                        outlines.append(new Outline(frame, matrix));
                     }
                 }
             }
