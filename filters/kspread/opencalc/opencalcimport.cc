@@ -569,7 +569,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
     if ( e.hasAttributeNS( ooNS::table, "validation-name" ) )
     {
         kDebug(30518)<<" Celle has a validation :"<<e.attributeNS( ooNS::table, "validation-name", QString::null )<<endl;
-        loadOasisValidation( cell->validity(), e.attributeNS( ooNS::table, "validation-name", QString::null ) );
+        loadOasisValidation( table->validity( columns, row ), e.attributeNS( ooNS::table, "validation-name", QString::null ) );
     }
     if ( e.hasAttributeNS( ooNS::table, "value-type" ) )
     {
