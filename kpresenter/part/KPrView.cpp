@@ -248,12 +248,12 @@ void KPrView::setActivePage(KPrPage* page)
     m_canvas->shapeController()->setShapeControllerBase(m_activePage);
     shapeManager()->setShapes(m_activePage->shapes());
 
+    m_canvas->updateSize();
     KoPageLayout layout = m_activePage->pageLayout();
     m_horizontalRuler->setRulerLength(layout.ptWidth);
     m_verticalRuler->setRulerLength(layout.ptHeight);
     m_horizontalRuler->setActiveRange(layout.ptLeft, layout.ptWidth - layout.ptRight);
     m_verticalRuler->setActiveRange(layout.ptTop, layout.ptHeight - layout.ptBottom);
-
 }
 
 void KPrView::resizeEvent(QResizeEvent* event)
