@@ -1477,7 +1477,9 @@ void SelectAllButton::paintEvent( QPaintEvent* event )
         painter.setPen( backgroundColor.dark(150) );
         painter.setBrush( backgroundBrush );
     }
-    painter.drawRect( QRectF( 0, 0, width(), height() ) );
+    double width = YBORDER_WIDTH;
+    double height = painter.font().pointSizeF() + 5;
+    painter.drawRect( QRectF( 0, 0, width, height ) );
 }
 
 void SelectAllButton::mousePressEvent( QMouseEvent* event )

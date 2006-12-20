@@ -5244,10 +5244,10 @@ void View::refreshView()
 
   d->canvas->updatePosWidget();
 
-  d->hBorderWidget->setMinimumHeight( doc()->zoomItYOld( KoGlobal::defaultFont().pointSizeF() + 5 ) );
-  d->vBorderWidget->setMinimumWidth( doc()->zoomItXOld( YBORDER_WIDTH ) );
-  d->selectAllButton->setMinimumHeight( doc()->zoomItYOld( KoGlobal::defaultFont().pointSizeF() + 5 ) );
-  d->selectAllButton->setMinimumWidth( doc()->zoomItXOld( YBORDER_WIDTH ) );
+  d->hBorderWidget->setMinimumHeight( doc()->zoomItY( KoGlobal::defaultFont().pointSizeF() + 5 ) );
+  d->vBorderWidget->setMinimumWidth( doc()->zoomItX( YBORDER_WIDTH ) );
+  d->selectAllButton->setMinimumHeight( doc()->zoomItY( KoGlobal::defaultFont().pointSizeF() + 5 ) );
+  d->selectAllButton->setMinimumWidth( doc()->zoomItX( YBORDER_WIDTH ) );
 
   Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
   bool interfaceIsRTL = QApplication::isRightToLeft();
