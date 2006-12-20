@@ -994,8 +994,6 @@ void KexiMainWindowImpl::initActions()
 	acat->addAction("window_close", Kexi::GlobalActionCategory | Kexi::WindowActionCategory);
 	acat->setAllObjectTypesSupported("window_close", true);
 
-		KexiPart::TableObjectType, KexiPart::QueryObjectType,
-
 	acat->addAction("window_next", Kexi::GlobalActionCategory);
 
 	acat->addAction("window_previous", Kexi::GlobalActionCategory);
