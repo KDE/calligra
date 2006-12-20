@@ -2515,29 +2515,19 @@ void View::updateEditWidget()
     if (!d->activeSheet)
       return;
 
-    int column = d->canvas->markerColumn();
-    int row    = d->canvas->markerRow();
+    const int column = d->canvas->markerColumn();
+    const int row    = d->canvas->markerRow();
 
-    Cell * cell = d->activeSheet->cellAt( column, row );
+    Cell * const cell = d->activeSheet->cellAt( column, row );
     const Style style = cell->style( column, row );
-    bool active = activeSheet()->getShowFormula()
-        && !( d->activeSheet->isProtected() && cell && style.hideFormula() );
+    const bool active = activeSheet()->getShowFormula()
+        && !( d->activeSheet->isProtected() && style.hideFormula() );
 
     if ( d->activeSheet && !d->activeSheet->isProtected() )
     {
       d->actions->alignLeft->setEnabled(!active);
       d->actions->alignCenter->setEnabled(!active);
       d->actions->alignRight->setEnabled(!active);
-    }
-
-    if ( !cell )
-    {
-        d->editWidget->setText( "" );
-        if ( d->activeSheet->isProtected() )
-          d->editWidget->setEnabled( false );
-        else
-          d->editWidget->setEnabled( true );
-        return;
     }
 
     if ( d->activeSheet->isProtected() && style.hideFormula() )
