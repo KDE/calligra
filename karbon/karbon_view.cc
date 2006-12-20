@@ -28,11 +28,9 @@
 #include <qpainter.h>
 #include <QResizeEvent>
 #include <QPixmap>
-#include <QMouseEvent>
 #include <Q3ValueList>
 #include <QEvent>
 #include <QDropEvent>
-#include <Q3PtrList>
 #include <QGridLayout>
 #include <QToolBar>
 
@@ -58,7 +56,7 @@
 #include <KoContextHelp.h>
 #include <KoUnitWidgets.h>
 #include <KoPageLayoutDia.h>
-#include <vruler.h>
+#include <KoRuler.h>
 #include <Kolinestyleaction.h>
 #include <KoToolManager.h>
 #include <KoShapeRegistry.h>
@@ -138,9 +136,6 @@
 #define debugView(text)
 #endif
 
-const int rulerWidth = 20;  // vertical ruler width
-const int rulerHeight = 20; // horizontal ruler height
-
 KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		: KoView( p, parent ), KXMLGUIBuilder( shell() ), m_part( p ), m_canvas( 0L )
 {
@@ -180,9 +175,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	m_TransformDocker = 0L;
 	m_layerDocker = 0L;
 
-	// set selectTool by default
-	//m_toolbox->slotPressButton( 0 );
-
 	unsigned int max = part()->maxRecentFiles();
 	setNumberOfRecentFiles( max );
 
@@ -193,27 +185,38 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	layout->setMargin(0);
 
 	// widgets:
-	m_horizRuler = new VRuler( Qt::Horizontal, this );
-	m_horizRuler->setUnit(p->unit());
-	connect( p, SIGNAL( unitChanged( KoUnit ) ), m_horizRuler, SLOT( setUnit( KoUnit ) ) );
+    m_canvas = new KarbonCanvas( p );
+    m_canvas->setCommandHistory( p->commandHistory() );
+    m_canvas->setParent( this );
 
-	m_vertRuler = new VRuler( Qt::Vertical, this );
-	m_vertRuler->setUnit(p->unit());
-	connect( p, SIGNAL( unitChanged( KoUnit ) ), m_vertRuler, SLOT( setUnit( KoUnit ) ) );
+    connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 
-	m_canvas = new KarbonCanvas( p );
-	m_canvas->setCommandHistory( p->commandHistory() );
-	m_canvas->setParent( this );
+    m_canvasView = new KoCanvasController(this);
+    m_canvasView->setCanvas(m_canvas);
+    m_canvasView->centerCanvas( false );
+    layout->addWidget(m_canvasView, 1, 1);
+    m_canvasView->show();
 
-	connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
-	//connect( m_canvas, SIGNAL( contentsMoving( int, int ) ), this, SLOT( canvasContentsMoving( int, int ) ) );
+    m_horizRuler = new KoRuler( this, Qt::Horizontal, m_canvas->viewConverter() );
+    m_horizRuler->setShowMousePosition(true);
+    m_horizRuler->setUnit(p->unit());
+    layout->addWidget( m_horizRuler, 0, 1 );
+    connect( p, SIGNAL( unitChanged( KoUnit ) ), m_horizRuler, SLOT( setUnit( KoUnit ) ) );
+    connect(m_canvasView, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
 
-	m_canvasView = new KoCanvasController(this);
-	m_canvasView->setCanvas(m_canvas);
-	m_canvasView->centerCanvas( false );
-	layout->addWidget(m_canvasView, 0, 0);
-	m_canvasView->show();
+    m_vertRuler = new KoRuler( this, Qt::Vertical, m_canvas->viewConverter() );
+    m_vertRuler->setShowMousePosition(true);
+    m_vertRuler->setUnit(p->unit());
+    layout->addWidget( m_vertRuler, 1, 0 );
+    connect( p, SIGNAL( unitChanged( KoUnit ) ), m_horizRuler, SLOT( setUnit( KoUnit ) ) );
 
+    connect(m_canvas, SIGNAL(documentOriginChanged( const QPoint &)), this , SLOT(pageOffsetChanged()));
+    connect(m_canvasView, SIGNAL(canvasOffsetYChanged(int)), this, SLOT(pageOffsetChanged()));
+    connect(m_canvasView, SIGNAL(canvasMousePositionChanged(const QPoint &)),
+            this, SLOT(mousePositionChanged(const QPoint&)));
+
+    updateRuler();
+// 
 	// set up factory
 	m_painterFactory = new VPainterFactory;
 	//m_painterFactory->setPainter( m_canvas->pixmap(), m_canvas->contentsWidth(), m_canvas->contentsHeight() );
@@ -267,9 +270,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 			m_horizRuler->hide();
 			m_vertRuler->hide();
 		}
-
-		m_horizRuler->installEventFilter(m_canvas);
-		m_vertRuler->installEventFilter(m_canvas);
 	}
 
 	setLayout(layout);
@@ -1328,53 +1328,18 @@ KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/, bool /*tran
 	debugView("KarbonView::paintEverything(...)");
 }
 
-bool
-KarbonView::mouseEvent( QMouseEvent* event, const QPointF &p )
+void
+KarbonView::mousePositionChanged( const QPoint &position )
 {
-	debugView(QString("KarbonView::mouseEvent(event, QPointF(%1, %2))").arg(p.x()).arg(p.y()));
+    QPoint viewPos = position - m_canvas->documentOrigin();
+    m_horizRuler->updateMouseCoordinate( viewPos.x() );
+    m_vertRuler->updateMouseCoordinate( viewPos.y() );
 
-	int mx = event->pos().x();
-	int my = event->pos().y();
+    QPointF documentPos = m_canvas->viewConverter()->viewToDocument( viewPos );
+    double x = KoUnit::toUserValue(documentPos.x(), part()->unit());
+    double y = KoUnit::toUserValue(documentPos.y(), part()->unit());
 
-	int px;
-	int py;
-	if( m_canvasView->horizontalScrollBar()->isVisible() && ((m_canvasView->horizontalScrollBar()->value() - m_canvasView->canvasOffsetX()) > 0))
-		px = mx;
-	else
-		px = (mx + m_canvas->canvasWidget()->x() - m_canvasView->canvasOffsetX()); // TODO: needs some checking
-
-	if( m_canvasView->verticalScrollBar()->isVisible() && ((m_canvasView->verticalScrollBar()->value() - m_canvasView->canvasOffsetY()) > 0))
-		py = my;
-	else
-		py = (my + m_canvas->canvasWidget()->y() - m_canvasView->canvasOffsetY());
-
-	m_horizRuler->updatePointer(px, py);
-	m_vertRuler->updatePointer(px, py);
-
-	QPointF xy;
-	xy.setX((mx + m_canvas->canvasWidget()->x() - m_canvasView->canvasOffsetX()) / zoom());
-	xy.setY( qRound(m_part->document().height()) - (my + m_canvas->canvasWidget()->y() - m_canvasView->canvasOffsetY()) / zoom());
-
-	xy.setX(KoUnit::toUserValue(xy.x(), part()->unit()));
-	xy.setY(KoUnit::toUserValue(xy.y(), part()->unit()));
-
-	m_cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::_locale->formatNumber(xy.x(), 2)).arg(KGlobal::_locale->formatNumber(xy.y(), 2)) );
-
-	if( toolController() )
-		return toolController()->mouseEvent( event, p );
-	else
-		return false;
-}
-
-bool
-KarbonView::keyEvent( QEvent* event )
-{
-	debugView("KarbonView::keyEvent(event)");
-
-	if( toolController() )
-		return toolController()->keyEvent( event );
-	else
-		return false;
+    m_cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::_locale->formatNumber(x, 2)).arg(KGlobal::_locale->formatNumber(y, 2)) );
 }
 
 void
@@ -1409,14 +1374,12 @@ KarbonView::showRuler()
 	{
 		m_horizRuler->show();
 		m_vertRuler->show();
-		m_canvas->setGeometry( rulerWidth, rulerHeight, width() - rulerWidth, height() - rulerHeight );
 		updateRuler();
 	}
 	else
 	{
 		m_horizRuler->hide();
 		m_vertRuler->hide();
-		m_canvas->setGeometry( 0, 0, width(), height() );
 	}
 
 	zoomChanged();
@@ -1440,37 +1403,17 @@ KarbonView::togglePageMargins(bool b)
 }
 
 void
+KarbonView::pageOffsetChanged()
+{
+    m_horizRuler->setOffset( m_canvasView->canvasOffsetX() + m_canvas->documentOrigin().x() );
+    m_vertRuler->setOffset( m_canvasView->canvasOffsetY() + m_canvas->documentOrigin().y() );
+}
+
+void
 KarbonView::updateRuler()
 {
-	debugView("KarbonView::updateRuler()");
-
-	/* TODO: port: if(!m_canvas->horizontalScrollBar()->isVisible())
-	{
-		if( (1 + m_canvas->pageOffsetX() - m_canvas->contentsX()) >= 0 )
-		{
-			m_horizRuler->setGeometry( 1 + rulerWidth + m_canvas->pageOffsetX() - m_canvas->contentsX(), 0, qRound( 1 + part()->document().width() * zoom() ), rulerHeight );
-			m_horizRuler->updateVisibleArea(0,0);
-		}
-		else
-		{
-			m_horizRuler->setGeometry( rulerWidth, 0, qRound( 1 + part()->document().width() * zoom() ) - m_canvas->contentsX() + m_canvas->pageOffsetX(), rulerHeight );
-			m_horizRuler->updateVisibleArea((m_canvas->contentsX() - m_canvas->pageOffsetX()),0);
-		}
-	}
-
-	if(!m_canvas->verticalScrollBar()->isVisible())
-	{
-		if( (1 + m_canvas->pageOffsetY() - m_canvas->contentsY()) >= 0 )
-		{
-			m_vertRuler->setGeometry( 0, 1 + rulerHeight + m_canvas->pageOffsetY() - m_canvas->contentsY(), rulerWidth, 1 + qRound( part()->document().height() * zoom() ));
-			m_vertRuler->updateVisibleArea(0,0);
-		}
-		else
-		{
-			m_vertRuler->setGeometry( 0, 1 + rulerHeight, rulerWidth, 1 + qRound( part()->document().height() * zoom() ) + m_canvas->contentsY() - m_canvas->pageOffsetY() );
-			m_vertRuler->updateVisibleArea(0, (m_canvas->contentsY() - m_canvas->pageOffsetY()));
-		}
-	}*/
+    m_horizRuler->setRulerLength( part()->document().width() );
+    m_vertRuler->setRulerLength( part()->document().height() );
 }
 
 void
@@ -1539,46 +1482,6 @@ KarbonView::pageLayout()
 
 		emit pageLayoutChanged();
 	}
-}
-
-void
-KarbonView::canvasContentsMoving( int x, int y )
-{
-	debugView(QString("KarbonView::canvasContentsMoving(x = %1, y = %2)").arg(x).arg(y));
-
-	/* TODO: port: if( m_canvas->horizontalScrollBar()->isVisible() )
-	{
-		if( shell() && m_showRulerAction->isChecked() )
-		{
-			if( (1 + m_canvas->pageOffsetX() - x) >= 0)
-			{
-				m_horizRuler->setGeometry( 1 + rulerWidth + m_canvas->pageOffsetX() - x, 0, qRound( 1 + 	part()->document().width() * zoom() ), rulerHeight );
-				m_horizRuler->updateVisibleArea(0,0);
-			}
-			else
-			{
-				m_horizRuler->setGeometry( rulerWidth, 0, qRound( 1 + part()->document().width() * zoom() ) - x + m_canvas->pageOffsetX(), rulerHeight );
-				m_horizRuler->updateVisibleArea((x - m_canvas->pageOffsetX()),0);
-			}
-		}
-	}
-
-	if( m_canvas->verticalScrollBar()->isVisible() )
-	{
-		if( shell() && m_showRulerAction->isChecked() )
-		{
-			if( (1 + m_canvas->pageOffsetY() - y) >= 0)
-			{
-				m_vertRuler->setGeometry( 0, 1 + rulerHeight + m_canvas->pageOffsetY() - y , rulerWidth, 1 + qRound( part()->document().height() * zoom() ));
-				m_vertRuler->updateVisibleArea(0,0);
-			}
-			else
-			{
-				m_vertRuler->setGeometry( 0, 1 + rulerHeight, rulerWidth, 1 + qRound( part()->document().height() * zoom() ) - y + m_canvas->pageOffsetY() );
-				m_vertRuler->updateVisibleArea(0, (y - m_canvas->pageOffsetY()));
-			}
-		}
-	}*/
 }
 
 void

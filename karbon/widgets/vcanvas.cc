@@ -212,6 +212,7 @@ void KarbonCanvas::adjustSize() {
 
     m_origin.setX( m_marginX - zoomedRect.left() );
     m_origin.setY( m_marginY - zoomedRect.top() );
+    emit documentOriginChanged( m_origin );
 }
 
 QPoint KarbonCanvas::widgetToView( const QPoint& p ) const {

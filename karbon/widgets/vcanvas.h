@@ -101,6 +101,8 @@ public slots:
      */
     void adjustSize();
 
+signals:
+    void documentOriginChanged( const QPoint &origin );
 protected:
     void paintEvent(QPaintEvent * ev);
     void mouseEvent(QMouseEvent *e);

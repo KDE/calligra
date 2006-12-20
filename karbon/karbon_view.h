@@ -38,7 +38,6 @@
 #include <QDropEvent>
 #include <QResizeEvent>
 #include <QLabel>
-#include <QMouseEvent>
 #include <QEvent>
 
 class QLabel;
@@ -54,7 +53,7 @@ class KoZoomAction;
 
 class KoUnitDoubleSpinComboBox;
 class QRectF;
-class VRuler;
+class KoRuler;
 
 class VDocumentTab;
 class VLayersTab;
@@ -90,8 +89,6 @@ public:
 
 	virtual void paintEverything( QPainter &p, const QRect &rect, bool transparent = false );
 
-	bool mouseEvent( QMouseEvent* event, const QPointF & );
-	bool keyEvent( QEvent* event );
 	void dropEvent( QDropEvent *e );
 
 	virtual QWidget* canvas() const;
@@ -201,12 +198,13 @@ protected slots:
 	void slotStrokeChanged( const VStroke& );
 	void slotFillChanged( const VFill & );
 
-	void canvasContentsMoving( int x, int y );
-
 	/// Called by the zoom action to set the zoom
 	void zoomChanged( KoZoomMode::Mode mode, int zoom );
 
 	void centerCanvas();
+    void mousePositionChanged( const QPoint &position );
+    void pageOffsetChanged();
+
 signals:
 	void zoomChanged( double );
 	void selectionChange();
@@ -235,8 +233,8 @@ private:
 	KarbonPart		*m_part;
 	KarbonCanvas		*m_canvas;
 	KoCanvasController	*m_canvasView;
-	VRuler			*m_horizRuler;
-	VRuler			*m_vertRuler;
+	KoRuler			*m_horizRuler;
+	KoRuler			*m_vertRuler;
 
 	VPainterFactory		*m_painterFactory;
 	VStrokeFillPreview	*m_strokeFillPreview;
