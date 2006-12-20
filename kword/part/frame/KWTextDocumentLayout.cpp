@@ -115,7 +115,7 @@ public:
             ptWidth -= m_format.textIndent();
         if(m_newParag && m_block.textList()) // is a listItem
             ptWidth -= listIndent();
-        ptWidth -= m_borderInsets.left + m_borderInsets.right;
+        ptWidth -= m_borderInsets.left + m_borderInsets.right + m_shapeBorder.right;
         return ptWidth;
     }
 
@@ -126,7 +126,7 @@ public:
             m_blockData->setCounterPosition(QPointF(result, y()));
             result += indent;
         }
-        result += m_borderInsets.left;
+        result += m_borderInsets.left + m_shapeBorder.left;
         return result;
     }
 
@@ -164,7 +164,7 @@ public:
             }
         }
 
-        if(m_data->documentOffset() + shape->size().height() < m_y + height) {
+        if(m_data->documentOffset() + shape->size().height() < m_y + height + m_shapeBorder.bottom) {
 //kDebug() << "   NEXT frame" << endl;
             // line does not fit.
             m_data->setEndPosition(m_block.position() + line.textStart()-1);
@@ -238,21 +238,7 @@ public:
             if(m_data)
                 m_data->setPosition(m_block.position());
         }
-        bool allowMargin = true; // wheather to allow margins at top of shape
-        if(m_newShape) {
-            allowMargin = false; // false by default, but check 2 exceptions.
-            if(m_format.boolProperty(KoParagraphStyle::BreakBefore))
-                allowMargin = true;
-            else if( m_styleManager && m_format.topMargin() > 0) {
-                // also allow it when the paragraph has the margin, but the style has a different one.
-                KoParagraphStyle *ps = m_styleManager->paragraphStyle(
-                        m_format.intProperty(KoParagraphStyle::StyleId));
-                if(ps == 0 || ps->topMargin() != m_format.topMargin())
-                    allowMargin = true;
-            }
-        }
-        if(allowMargin)
-            m_y += m_format.topMargin();
+        m_y += topMargin();
         layout = m_block.layout();
         QTextOption options = layout->textOption();
         options.setAlignment(m_format.alignment());
@@ -265,7 +251,6 @@ public:
 //kDebug()<< "nextParag " << m_block.textList() << " for " << m_block.text() << endl;
         return true;
     }
-
     int frameNumber;
     KoShape *shape;
     QTextLayout *layout;
@@ -302,6 +287,8 @@ public:
         m_data = static_cast<KoTextShapeData*> (shape->userData());
         m_data->setDocumentOffset(m_y);
         m_data->faul(); // make dirty since this one needs relayout at this point.
+        m_shapeBorder = shape->borderInsets();
+        m_y += m_shapeBorder.top;
     }
 
     /**
@@ -361,6 +348,7 @@ public:
                 data->setPosition(lastPos+1);
                 m_block = m_frameSet->document()->findBlock( lastPos+1 );
                 m_y = data->documentOffset();
+                m_format = m_block.blockFormat();
 
                 if(m_block.layout() && m_block.layout()->lineCount() > 0) {
                     // block has been layouted. So use its offset.
@@ -381,6 +369,8 @@ public:
                         if(qAbs(m_blockData->border()->rect().top() + top - m_y) < 1E-10)
                             m_y -= top;
                     }
+                    // subtract the top margins as well.
+                    m_y -= topMargin();
                 }
                 break;
             }
@@ -392,6 +382,9 @@ public:
             return;
         shape = m_frameSet->frames()[frameNumber]->shape();
         m_data = dynamic_cast<KoTextShapeData*> (shape->userData());
+        m_shapeBorder = shape->borderInsets();
+        if(m_y == 0)
+            m_y = m_shapeBorder.top;
 
         if(! nextParag())
             frameNumber++;
@@ -452,6 +445,26 @@ public:
         }
     }
 
+    double topMargin() {
+        bool allowMargin = true; // wheather to allow margins at top of shape
+        if(m_newShape) {
+            allowMargin = false; // false by default, but check 2 exceptions.
+            if(m_format.boolProperty(KoParagraphStyle::BreakBefore))
+                allowMargin = true;
+            else if( m_styleManager && m_format.topMargin() > 0) {
+                // also allow it when the paragraph has the margin, but the style has a different one.
+                KoParagraphStyle *ps = m_styleManager->paragraphStyle(
+                        m_format.intProperty(KoParagraphStyle::StyleId));
+                if(ps == 0 || ps->topMargin() != m_format.topMargin())
+                    allowMargin = true;
+            }
+        }
+        if(allowMargin)
+            return m_format.topMargin();
+        return 0.0;
+    }
+
+
     // and the end of text, make sure the rest of the frames have something sane to show.
     void cleanupFrames() {
         int i = frameNumber + 1;
@@ -481,6 +494,7 @@ public:
     KoTextShapeData *m_data;
     bool m_newShape, m_newParag, m_reset;
     KoInsets m_borderInsets;
+    KoInsets m_shapeBorder;
 };
 
 
