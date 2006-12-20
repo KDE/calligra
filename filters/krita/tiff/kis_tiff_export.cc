@@ -60,7 +60,9 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0);
  
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
-    
+    if (!output)
+        return KoFilter::CreationError;
+
     KoColorSpace* cs = output->currentImage()->colorSpace();
     KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
     if( type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32)
@@ -84,9 +86,6 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     delete kdb;
     
     QString filename = m_chain->outputFile();
-
-    if (!output)
-        return KoFilter::CreationError;
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
