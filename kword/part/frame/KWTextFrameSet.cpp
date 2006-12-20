@@ -155,6 +155,8 @@ void KWTextFrameSet::framesEmpty(int framesInUse) {
 }
 
 void KWTextFrameSet::setAllowLayout(bool allow) {
+    if(allow == m_allowLayoutRequests)
+        return;
     m_allowLayoutRequests = allow;
     if(m_allowLayoutRequests)
         updateLayout(false);

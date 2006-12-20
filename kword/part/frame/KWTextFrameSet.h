@@ -53,6 +53,14 @@ public:
     /// set wheater the content of this frameset should not be allowed to be altered
     void setProtectContent(bool protect) { m_protectContent = protect; }
 
+    /**
+     * Sets the flag if this frameset is allowed to automaticall do layout of the textdata.
+     * A text will do layouting of the text when the content changes, but also when frames
+     * are moved.
+     * When lots of changes are made it may be faster to disable layouts for a little while.
+     * @param allow if false; text will no longer be layouted until enabled again.  If true,
+     *  schedule a layout.
+     */
     void setAllowLayout(bool allow);
     void setPageManager(const KWPageManager *pageMager) { m_pageManager = pageMager; }
     const KWPageManager* pageManager() const { return m_pageManager; }
