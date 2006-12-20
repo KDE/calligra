@@ -150,12 +150,6 @@ void KexiFormScrollView::moveToFirstRecordRequested()
 	selectFirstRow();
 }
 
-/*
-void KexiFormScrollView::addNewRecordRequested()
-{
-	//! @todo
-}*/
-
 void KexiFormScrollView::clearColumnsInternal(bool repaint)
 {
 	Q_UNUSED( repaint );

@@ -80,6 +80,7 @@
 
 #include <widget/kexibrowser.h>
 #include <widget/kexipropertyeditorview.h>
+#include <widget/utils/kexirecordnavigator.h>
 #include <koproperty/editor.h>
 #include <koproperty/set.h>
 
@@ -566,7 +567,7 @@ void KexiMainWindowImpl::initActions()
 	KStdAction::quit( this, SLOT(slotProjectQuit()), actionCollection(), "quit");
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-	d->action_project_relations = new KAction(i18n("&Relationships..."), "relation", CTRL + Key_R,
+	d->action_project_relations = new KAction(i18n("&Relationships..."), "relation", Qt::CTRL + Qt::Key_R,
 		this, SLOT(slotProjectRelations()), actionCollection(), "project_relations");
 	d->action_project_relations->setToolTip(i18n("Project relationships"));
 	d->action_project_relations->setWhatsThis(i18n("Shows project relationships."));
@@ -663,14 +664,14 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_select_all =  createSharedAction( KStdAction::SelectAll, "edit_select_all");
 
 	d->action_edit_delete = createSharedAction(i18n("&Delete"), "editdelete",
-		0/*Key_Delete*/, "edit_delete");
-	d->action_edit_delete->setToolTip(i18n("Delete object"));
+		0/*Qt::Key_Delete*/, "edit_delete");
+	d->action_edit_delete->setToolTip(i18n("Delete selected object"));
 	d->action_edit_delete->setWhatsThis(i18n("Deletes currently selected object."));
 
 	d->action_edit_delete_row = createSharedAction(i18n("Delete Row"), "delete_table_row",
-		CTRL+Key_Delete, "edit_delete_row");
-	d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row from a table"));
-	d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row from a table."));
+		Qt::CTRL+Qt::Key_Delete, "edit_delete_row");
+	d->action_edit_delete_row->setToolTip(i18n("Delete currently selected row"));
+	d->action_edit_delete_row->setWhatsThis(i18n("Deletes currently selected row."));
 
 	d->action_edit_clear_table = createSharedAction(i18n("Clear Table Contents"), "clear_table_contents",
 		0, "edit_clear_table");
@@ -678,64 +679,67 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_clear_table->setWhatsThis(i18n("Clears table contents."));
 	setActionVolatile( d->action_edit_clear_table, true );
 
-	d->action_edit_edititem = createSharedAction(i18n("Edit Item"), 0, 0, /* CONFLICT in TV: Key_F2,  */
+	d->action_edit_edititem = createSharedAction(i18n("Edit Item"), 0, 0, /* CONFLICT in TV: Qt::Key_F2,  */
 		"edit_edititem");
 	d->action_edit_edititem->setToolTip(i18n("Edit currently selected item"));
 	d->action_edit_edititem->setWhatsThis(i18n("Edits currently selected item."));
 
-	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "insert_table_row", SHIFT | CTRL | Key_Insert, "edit_insert_empty_row");
+	d->action_edit_insert_empty_row = createSharedAction(i18n("&Insert Empty Row"), "insert_table_row", 
+		Qt::SHIFT | Qt::CTRL | Qt::Key_Insert, "edit_insert_empty_row");
 	setActionVolatile( d->action_edit_insert_empty_row, true );
 	d->action_edit_insert_empty_row->setToolTip(i18n("Insert one empty row above"));
 	d->action_edit_insert_empty_row->setWhatsThis(i18n("Inserts one empty row above currently selected table row."));
 
 	//VIEW MENU
-	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "state_data", Key_F6,
+	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "state_data", Qt::Key_F6,
 		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
 	d->actions_for_view_modes.insert( Kexi::DataViewMode, d->action_view_data_mode );
 	d->action_view_data_mode->setExclusiveGroup("view_mode");
 	d->action_view_data_mode->setToolTip(i18n("Switch to data view"));
 	d->action_view_data_mode->setWhatsThis(i18n("Switches to data view."));
 
-	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", Key_F7,
+	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", Qt::Key_F7,
 		this, SLOT(slotViewDesignMode()), actionCollection(), "view_design_mode");
 	d->actions_for_view_modes.insert( Kexi::DesignViewMode, d->action_view_design_mode );
 	d->action_view_design_mode->setExclusiveGroup("view_mode");
 	d->action_view_design_mode->setToolTip(i18n("Switch to design view"));
 	d->action_view_design_mode->setWhatsThis(i18n("Switches to design view."));
 
-	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", Key_F8,
+	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", Qt::Key_F8,
 		this, SLOT(slotViewTextMode()), actionCollection(), "view_text_mode");
 	d->actions_for_view_modes.insert( Kexi::TextViewMode, d->action_view_text_mode );
 	d->action_view_text_mode->setExclusiveGroup("view_mode");
 	d->action_view_text_mode->setToolTip(i18n("Switch to text view"));
 	d->action_view_text_mode->setWhatsThis(i18n("Switches to text view."));
 
-	d->action_view_nav = new KAction(i18n("Project Navigator"), "", ALT + Key_1,
+	d->action_view_nav = new KAction(i18n("Project Navigator"), "", Qt::ALT + Qt::Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
 	d->action_view_nav->setToolTip(i18n("Go to project navigator panel"));
 	d->action_view_nav->setWhatsThis(i18n("Goes to project navigator panel."));
 
-	d->action_view_mainarea = new KAction(i18n("Main Area"), "", ALT + Key_2,
+	d->action_view_mainarea = new KAction(i18n("Main Area"), "", Qt::ALT + Qt::Key_2,
 		this, SLOT(slotViewMainArea()), actionCollection(), "view_mainarea");
 	d->action_view_mainarea->setToolTip(i18n("Go to main area"));
 	d->action_view_mainarea->setWhatsThis(i18n("Goes to main area."));
 
 #ifdef KEXI_PROP_EDITOR
-	d->action_view_propeditor = new KAction(i18n("Property Editor"), "", ALT + Key_3,
+	d->action_view_propeditor = new KAction(i18n("Property Editor"), "", Qt::ALT + Qt::Key_3,
 		this, SLOT(slotViewPropertyEditor()), actionCollection(), "view_propeditor");
 	d->action_view_propeditor->setToolTip(i18n("Go to property editor panel"));
 	d->action_view_propeditor->setWhatsThis(i18n("Goes to property editor panel."));
 #endif
 
 	//DATA MENU
-	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", SHIFT | Key_Return, "data_save_row");
-	d->action_data_save_row->setToolTip(i18n("Save currently selected table row's data"));
-	d->action_data_save_row->setWhatsThis(i18n("Saves currently selected table row's data."));
+	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", 
+		Qt::SHIFT | Qt::Key_Return, "data_save_row");
+	d->action_data_save_row->setToolTip(i18n("Save changes made to the current row"));
+	d->action_data_save_row->setWhatsThis(i18n("Saves changes made to the current row."));
 //temp. disable because of problems with volatile actions	setActionVolatile( d->action_data_save_row, true );
 
-	d->action_data_cancel_row_changes = createSharedAction(i18n("&Cancel Row Changes"), "button_cancel", 0 , "data_cancel_row_changes");
-	d->action_data_cancel_row_changes->setToolTip(i18n("Cancel changes made to currently selected table row"));
-	d->action_data_cancel_row_changes->setWhatsThis(i18n("Cancels changes made to currently selected table row."));
+	d->action_data_cancel_row_changes = createSharedAction(i18n("&Cancel Row Changes"), 
+		"button_cancel", 0 , "data_cancel_row_changes");
+	d->action_data_cancel_row_changes->setToolTip(i18n("Cancel changes made to the current row"));
+	d->action_data_cancel_row_changes->setWhatsThis(i18n("Cancels changes made to the current row."));
 //temp. disable because of problems with volatile actions	setActionVolatile( d->action_data_cancel_row_changes, true );
 
 	d->action_data_execute = createSharedAction(i18n("&Execute"), "player_play", 0 , "data_execute");
@@ -760,6 +764,13 @@ void KexiMainWindowImpl::initActions()
 	action->setToolTip(i18n("Sort data in descending order"));
 	action->setWhatsThis(i18n("Sorts data in descending (from Z to A and from 9 to 0). Data from selected column is used for sorting."));
 
+	// - record-navigation related actions
+	createSharedAction( KexiRecordNavigator::Actions::moveToFirstRecord(), 0, "data_go_to_first_record");
+	createSharedAction( KexiRecordNavigator::Actions::moveToPreviousRecord(), 0, "data_go_to_previous_record");
+	createSharedAction( KexiRecordNavigator::Actions::moveToNextRecord(), 0, "data_go_to_next_record");
+	createSharedAction( KexiRecordNavigator::Actions::moveToLastRecord(), 0, "data_go_to_last_record");
+	createSharedAction( KexiRecordNavigator::Actions::moveToNewRecord(), 0, "data_go_to_new_record");
+
 	//FORMAT MENU
 	d->action_format_font = createSharedAction(i18n("&Font..."), "fonts", 0, "format_font");
 	d->action_format_font->setToolTip(i18n("Change font for selected object"));
@@ -778,9 +789,9 @@ void KexiMainWindowImpl::initActions()
 	//additional 'Window' menu items
 	d->action_window_next = new KAction( i18n("&Next Window"), "",
 #ifdef Q_WS_WIN
-		CTRL+Key_Tab,
+		Qt::CTRL+Qt::Key_Tab,
 #else
-		ALT+Key_Right,
+		Qt::ALT+Qt::Key_Right,
 #endif
 		this, SLOT(activateNextWin()), actionCollection(), "window_next");
 	d->action_window_next->setToolTip( i18n("Next window") );
@@ -788,9 +799,9 @@ void KexiMainWindowImpl::initActions()
 
 	d->action_window_previous = new KAction( i18n("&Previous Window"), "",
 #ifdef Q_WS_WIN
-		CTRL+SHIFT+Key_Tab,
+		Qt::CTRL+Qt::SHIFT+Qt::Key_Tab,
 #else
-		ALT+Key_Left,
+		Qt::ALT+Qt::Key_Left,
 #endif
 		this, SLOT(activatePrevWin()), actionCollection(), "window_previous");
 	d->action_window_previous->setToolTip( i18n("Previous window") );
@@ -810,7 +821,7 @@ void KexiMainWindowImpl::initActions()
 #endif
 
 #ifndef KEXI_NO_CTXT_HELP
-	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
+	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", Qt::CTRL + Qt::Key_H,
 	 actionCollection(), "options_show_contexthelp");
 #if KDE_IS_VERSION(3,2,90)
 	d->action_show_helper->setCheckedState(i18n("Hide Context Help"));
@@ -886,6 +897,12 @@ void KexiMainWindowImpl::initActions()
 	acat->addWindowAction("data_save_row",
 		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
 
+	acat->addWindowAction("data_cancel_row_changes",
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
+	acat->addWindowAction("delete_table_row",
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
 	//! @todo support this in KexiPart::FormObjectType as well
 	acat->addWindowAction("data_sort_az",
 		KexiPart::TableObjectType, KexiPart::QueryObjectType);
@@ -894,7 +911,9 @@ void KexiMainWindowImpl::initActions()
 	acat->addWindowAction("data_sort_za",
 		KexiPart::TableObjectType, KexiPart::QueryObjectType);
 
-	acat->addWindowAction("edit_clear_table");
+	//! @todo support this in KexiPart::FormObjectType as well
+	acat->addWindowAction("edit_clear_table",
+		KexiPart::TableObjectType, KexiPart::QueryObjectType);
 
 	//! @todo support this in KexiPart::FormObjectType as well
 	acat->addWindowAction("edit_copy_special_data_table", 
@@ -913,25 +932,10 @@ void KexiMainWindowImpl::initActions()
 	acat->addAction("edit_delete_row", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
 		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
 
-	acat->addAction("edit_insert_empty_row", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
-		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
-
 	acat->addAction("edit_edititem", Kexi::PartItemActionCategory|Kexi::WindowActionCategory,
 		KexiPart::TableObjectType, KexiPart::QueryObjectType);
 
 	acat->addAction("edit_paste_special_data_table", Kexi::GlobalActionCategory);
-
-	acat->addAction("edit_redo", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
-		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
-
-	acat->addAction("edit_undo", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
-		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
-
-	acat->addAction("edit_select_all", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
-		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
-
-	acat->addAction("edit_select_all", Kexi::GlobalActionCategory|Kexi::WindowActionCategory,
-		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
 
 	acat->addAction("help_about_app", Kexi::GlobalActionCategory);
 
@@ -987,7 +991,10 @@ void KexiMainWindowImpl::initActions()
 
 	acat->addAction("view_propeditor", Kexi::GlobalActionCategory);
 
-	acat->addAction("window_close", Kexi::GlobalActionCategory);
+	acat->addAction("window_close", Kexi::GlobalActionCategory | Kexi::WindowActionCategory);
+	acat->setAllObjectTypesSupported("window_close", true);
+
+		KexiPart::TableObjectType, KexiPart::QueryObjectType,
 
 	acat->addAction("window_next", Kexi::GlobalActionCategory);
 
@@ -996,6 +1003,26 @@ void KexiMainWindowImpl::initActions()
 	//skipped - design view only
 	acat->addAction("format_font", Kexi::NoActionCategory);
 	acat->addAction("project_save", Kexi::NoActionCategory);
+	acat->addAction("edit_insert_empty_row", Kexi::NoActionCategory);
+	//! @todo support this in KexiPart::TableObjectType, KexiPart::QueryObjectType later
+	acat->addAction("edit_select_all", Kexi::NoActionCategory);
+	//! @todo support this in KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType later
+	acat->addAction("edit_redo", Kexi::NoActionCategory);
+	//! @todo support this in KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType later
+	acat->addAction("edit_undo", Kexi::NoActionCategory);
+
+	//record-navigation related actions
+	acat->addAction("data_go_to_first_record", Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+	acat->addAction("data_go_to_previous_record", Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+	acat->addAction("data_go_to_next_record", Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+	acat->addAction("data_go_to_last_record", Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+	acat->addAction("data_go_to_new_record", Kexi::WindowActionCategory,
+		KexiPart::TableObjectType, KexiPart::QueryObjectType, KexiPart::FormObjectType);
+
 	//skipped - internal: 
 	acat->addAction("tablepart_create", Kexi::NoActionCategory);
 	acat->addAction("querypart_create", Kexi::NoActionCategory);
@@ -1003,7 +1030,6 @@ void KexiMainWindowImpl::initActions()
 	acat->addAction("reportpart_create", Kexi::NoActionCategory);
 	acat->addAction("macropart_create", Kexi::NoActionCategory);
 	acat->addAction("scriptpart_create", Kexi::NoActionCategory);
-	acat->addAction("", Kexi::NoActionCategory);
 }
 
 void KexiMainWindowImpl::invalidateActions()
@@ -2740,11 +2766,6 @@ void KexiMainWindowImpl::slotProjectRelations()
 		return;
 	KexiDialogBase *d = KexiInternalPart::createKexiDialogInstance("relation", this, this);
 	activateWindow(d);
-/*	KexiRelationPart *p = relationPart();
-	if(!p)
-		return;
-
-	p->createWindow(this);*/
 }
 
 void KexiMainWindowImpl::slotImportFile()
@@ -3230,8 +3251,8 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 		//KexiVDebug << "AccelOverride EVENT " << static_cast<QKeyEvent*>(e)->key() << " " << static_cast<QKeyEvent*>(e)->state() == ControlButton << endl;
 
 		//avoid sending CTRL+Tab key twice for tabbed/ideal mode, epecially for win32
-		if (static_cast<QKeyEvent*>(e)->key()==Key_Tab && static_cast<QKeyEvent*>(e)->state() == ControlButton) {
-			if (d->action_window_next->shortcut().keyCodeQt()==Key_Tab+CTRL && d->action_window_next->shortcut().count()==1
+		if (static_cast<QKeyEvent*>(e)->key()==Qt::Key_Tab && static_cast<QKeyEvent*>(e)->state() == ControlButton) {
+			if (d->action_window_next->shortcut().keyCodeQt()==Qt::Key_Tab+Qt::CTRL && d->action_window_next->shortcut().count()==1
 				&& (mdiMode()==KMdi::TabPageMode || mdiMode()==KMdi::IDEAlMode))
 			{
 				static_cast<QKeyEvent*>(e)->accept();

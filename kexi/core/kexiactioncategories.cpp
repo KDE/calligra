@@ -20,6 +20,8 @@
 #include "kexiactioncategories.h"
 
 #include <kstaticdeleter.h>
+#include <kdebug.h>
+
 #include <qmap.h>
 #include <qasciidict.h>
 
@@ -29,10 +31,18 @@ namespace Kexi {
 class ActionInternal
 {
 	public:
-		ActionInternal(int _categories) : categories(_categories), supportedObjectTypes(0) {}
-		~ActionInternal() { delete supportedObjectTypes; }
+		ActionInternal(int _categories) 
+		 : categories(_categories)
+		 , supportedObjectTypes(0)
+		 , allObjectTypesAreSupported(false)
+		{
+		}
+		~ActionInternal() {
+			delete supportedObjectTypes;
+		}
 		int categories;
 		QMap<int, bool> *supportedObjectTypes;
+		bool allObjectTypesAreSupported : 1;
 };
 
 static KStaticDeleter<ActionCategories> Kexi_actionCategoriesDeleter;
@@ -115,6 +125,15 @@ void ActionCategories::addAction(const char* name, int categories,
 	}
 }
 
+void ActionCategories::setAllObjectTypesSupported(const char* name, bool set)
+{
+	ActionInternal * a = d->actions.find( name );
+	if (a)
+		a->allObjectTypesAreSupported = set;
+	else
+		kexiwarn << "ActionCategories::setAllObjectTypesSupported(): no such action \"" << name << "\"" << endl;
+}
+
 int ActionCategories::actionCategories(const char* name) const
 {
 	const ActionInternal * a = d->actions.find( name );
@@ -124,5 +143,7 @@ int ActionCategories::actionCategories(const char* name) const
 bool ActionCategories::actionSupportsObjectType(const char* name, KexiPart::ObjectTypes objectType) const
 {
 	const ActionInternal * a = d->actions.find( name );
+	if (a && a->allObjectTypesAreSupported)
+		return true;
 	return (a && a->supportedObjectTypes) ? a->supportedObjectTypes->contains(objectType) : false;
 }

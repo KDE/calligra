@@ -25,6 +25,7 @@
 #include <kexiutils/utils.h>
 
 #include <kiconloader.h>
+#include <kguiitem.h>
 #include <kdebug.h>
 
 KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h)
@@ -265,6 +266,14 @@ KAction* KexiSharedActionHost::createSharedAction( KStdAction::StdAction id, con
 	return createSharedActionInternal(
 		KStdAction::create( id, name, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection() )
 	);
+}
+
+KAction* KexiSharedActionHost::createSharedAction(const KGuiItem& guiItem, const KShortcut &cut, 
+	const char *name, KActionCollection* col)
+{
+	return createSharedActionInternal(
+		new KAction(guiItem, cut, 0/*receiver*/, 0/*slot*/, 
+			col ? col : d->mainWin->actionCollection(), name));
 }
 
 void KexiSharedActionHost::setActionVolatile( KAction *a, bool set )
