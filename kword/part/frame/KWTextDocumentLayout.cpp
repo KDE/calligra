@@ -192,7 +192,7 @@ public:
         double minimum = m_format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
         if(minimum > 0.0)
             height = qMax(height, minimum);
-        m_y += height;
+        m_y = line.y() + height;
         m_newShape = false;
         m_newParag = false;
         return false;
@@ -253,6 +253,11 @@ public:
 //kDebug()<< "nextParag " << m_block.textList() << " for " << m_block.text() << endl;
         return true;
     }
+
+    double documentOffsetInShape() {
+        return m_data->documentOffset();
+    }
+
     int frameNumber;
     KoShape *shape;
     QTextLayout *layout;
@@ -813,24 +818,26 @@ void KWTextDocumentLayout::layout() {
             bool isValid() const {
                 return line.isValid();
             }
-            bool tryFit() {
+            void tryFit() {
                 QRectF rect(m_state->x(), m_state->y(), m_state->width(), 1.);
                 rect = limit(rect);
-                if(rect.width() <= 0.)
-                    return false;
 
-                do {
+                while(true) {
                     line.setLineWidth(rect.width());
                     rect.setHeight(line.height());
                     QRectF newLine = limit(rect);
-                    if(rect.width() <= 0.)
-                        return false;
-                    if(newLine.left() == rect.left() && newLine.right() == rect.right())
+                    if(newLine.width() <= 0.)
+{
+kDebug() << rect.top() << "] no spacing at all\n";
+                        // TODO be more intelligent then just moving down 10 pt
+                        rect = QRectF(m_state->x(), rect.top() + 10, m_state->width(), rect.height());
+}
+                    else if(newLine.left() == rect.left() && newLine.right() == rect.right())
                         break;
-                    rect = newLine;
-                } while(1);
+                    else
+                        rect = newLine;
+                }
                 line.setPosition(QPointF(rect.x(), rect.y()));
-                return true;
             }
             void setOutlines(const QList<Outline*> &outlines) { m_outlines = &outlines; }
 
@@ -864,6 +871,7 @@ void KWTextDocumentLayout::layout() {
                             continue;
                         QMatrix matrix = frame->shape()->transformationMatrix(0);
                         matrix = matrix * currentShape->transformationMatrix(0).inverted();
+                        matrix.translate(0, m_state->documentOffsetInShape());
                         outlines.append(new Outline(frame, matrix));
                     }
                 }
