@@ -31,7 +31,7 @@ class KWDocument;
 /**
  * A frameset with a TextDocument backing it.
  */
-class KWORD_TEST_EXPORT KWTextFrameSet : public KWFrameSet {
+class KWORD_EXPORT KWTextFrameSet : public KWFrameSet {
     Q_OBJECT
 public:
     /// normal constructor, for user text

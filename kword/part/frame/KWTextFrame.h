@@ -31,7 +31,7 @@ class KWTextFrameSet;
 /**
  * A single frame capable of showing text from a KWTextFrameSet
  */
-class KWORD_TEST_EXPORT KWTextFrame : public KWFrame {
+class KWORD_EXPORT KWTextFrame : public KWFrame {
 public:
     /**
      * Constructor

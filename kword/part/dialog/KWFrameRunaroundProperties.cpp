@@ -85,7 +85,7 @@ void KWFrameRunaroundProperties::open(KoShape *shape) {
     m_shape = shape;
     widget.runAround->setChecked(true);
     widget.longest->setChecked(true);
-    widget.distance->setValue(10);
+    widget.distance->setValue(MM_TO_POINT(1));
 }
 
 void KWFrameRunaroundProperties::save() {
@@ -109,7 +109,5 @@ void KWFrameRunaroundProperties::save() {
 KAction *KWFrameRunaroundProperties::createAction() {
     return 0;
 }
-
-// TODO alter the spinbox to be a unit-double
 
 #include "KWFrameRunaroundProperties.moc"

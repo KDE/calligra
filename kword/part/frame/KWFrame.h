@@ -36,7 +36,7 @@ class KoViewConverter;
  * A frame is really just a shape that is used to place the content
  * of a frameset.
  */
-class KWORD_TEST_EXPORT KWFrame : public KoShapeApplicationData {
+class KWORD_EXPORT KWFrame : public KoShapeApplicationData {
 public:
     /**
      * Constructor
