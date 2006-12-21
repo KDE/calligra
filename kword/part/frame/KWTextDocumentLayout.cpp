@@ -858,7 +858,7 @@ void KWTextDocumentLayout::layout() {
                 QRectF bounds = m_state->shape->boundingRect();
                 foreach(KWFrameSet *fs, m_frameSet->kwDoc()->frameSets()) {
                     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
-                    if(tfs->textFrameSetType() == KWord::MainTextFrameSet)
+                    if(tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet)
                         continue;
                     foreach(KWFrame *frame, fs->frames()) {
                         if(frame->shape() == currentShape)
