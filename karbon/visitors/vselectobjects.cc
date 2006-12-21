@@ -19,7 +19,6 @@
 
 
 #include "vselectobjects.h"
-#include "vlayer.h"
 #include "vdocument.h"
 #include "vsegment.h"
 #include <kdebug.h>

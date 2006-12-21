@@ -74,6 +74,7 @@
 #include <KoPathCommand.h>
 #include <KoToolBoxFactory.h>
 #include <KoShapeSelectorFactory.h>
+#include <KoLayerShape.h>
 
 // Commands.
 #include "vcleanupcmd.h"
@@ -84,7 +85,6 @@
 #include "vtransformcmd.h"
 #include "vinsertcmd.h"
 #include "vzordercmd.h"
-#include "vlayer.h"
 
 // Dialogs.
 #include "vconfiguredlg.h"

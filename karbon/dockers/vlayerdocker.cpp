@@ -41,9 +41,9 @@
 #include <KoSelection.h>
 #include <KoShapeDeleteCommand.h>
 #include <KoZoomHandler.h>
+#include <KoLayerShape.h>
 
 #include "vdocument.h"
-#include "vlayer.h"
 #include "vlayercmd.h"
 
 enum ButtonIds

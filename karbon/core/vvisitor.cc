@@ -21,7 +21,6 @@
 #include "vcomposite.h"
 #include "vdocument.h"
 #include "vgroup.h"
-#include "vlayer.h"
 #include "vpath.h"
 #include "vselection.h"
 #include "vvisitor.h"

@@ -22,7 +22,6 @@
 #include "vzordercmd.h"
 #include "vselection.h"
 #include "vdocument.h"
-#include "vlayer.h"
 
 #include <kdebug.h>
 

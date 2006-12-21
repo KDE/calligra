@@ -20,7 +20,6 @@
 
 #include <dcopclient.h>
 
-#include "vlayer.h"
 #include "vlayer_iface.h"
 
 /*

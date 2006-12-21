@@ -31,7 +31,7 @@
  * in a document.
  * A layer is always invisible and unselectable.
  */
-class KARBONBASE_EXPORT KoLayerShape : public KoShapeContainer
+class FLAKE_EXPORT KoLayerShape : public KoShapeContainer
 {
 public:
     /// The default constructor

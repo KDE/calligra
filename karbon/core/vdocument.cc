@@ -25,7 +25,6 @@
 #include "vdocument.h"
 #include "vselection.h"
 #include "vvisitor.h"
-#include "vlayer.h"
 #include "vstroke.h"
 #include "vdashpattern.h"
 #include "vpainter.h"
@@ -33,6 +32,7 @@
 #include <KoStore.h>
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
+#include <KoLayerShape.h>
 
 #include <kdebug.h>
 

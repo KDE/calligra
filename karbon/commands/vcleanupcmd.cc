@@ -20,7 +20,6 @@
 #include <klocale.h>
 
 #include "vcleanupcmd.h"
-#include "vlayer.h"
 #include "vdocument.h"
 
 VCleanUpCmd::VCleanUpCmd( VDocument *doc )

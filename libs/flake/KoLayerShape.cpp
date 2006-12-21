@@ -17,8 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <klocale.h>
-#include "vlayer.h"
+#include "KoLayerShape.h"
 
 KoLayerShape::KoLayerShape()
 : KoShapeContainer(new LayerMembers())

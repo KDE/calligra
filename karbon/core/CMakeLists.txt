@@ -16,8 +16,7 @@ set(karboncore_SRCS
 #    vgroup_iface.cc 
     vimage.cc 
     vkarbonplugin.cc 
-    vlayer.cc 
-    vobject.cc 
+    vobject.cc
     vpath.cc 
     vpattern.cc 
     vsegment.cc 

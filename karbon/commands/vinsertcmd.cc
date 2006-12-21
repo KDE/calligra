@@ -20,7 +20,6 @@
 #include <klocale.h>
 
 #include "vdocument.h"
-#include "vlayer.h"
 #include "vselection.h"
 #include "vinsertcmd.h"
 #include "vtransformcmd.h"

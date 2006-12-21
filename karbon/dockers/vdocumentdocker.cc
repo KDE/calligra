@@ -44,6 +44,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <KoMainWindow.h>
+#include <KoLayerShape.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kinputdialog.h>
@@ -54,7 +55,6 @@
 #include "karbon_resourceserver.h"
 #include "vdocument.h"
 #include "vqpainter.h"
-#include "vlayer.h"
 #include "vlayercmd.h"
 #include "vzordercmd.h"
 #include "vselection.h"

@@ -38,7 +38,6 @@
 #include "shapes/vpolygon.h"
 #include "vfill.h"
 #include "vgroup.h"
-#include "vlayer.h"
 #include "vimage.h"
 #include "vstroke.h"
 #include "vvisitor.h"

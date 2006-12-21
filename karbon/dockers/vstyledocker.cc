@@ -33,6 +33,7 @@
 #include <kiconloader.h>
 #include <KoMainWindow.h>
 #include <KoFilterManager.h>
+#include <KoLayerShape.h>
 #include <kfiledialog.h>
 
 #include "karbon_part.h"
@@ -41,7 +42,6 @@
 #include "karbon_resourceserver.h"
 #include "karbon_drag.h"
 #include "vselection.h"
-#include "vlayer.h"
 #include "vfill.h"
 #include "vfillcmd.h"
 #include "vtransformcmd.h"

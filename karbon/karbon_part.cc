@@ -40,6 +40,7 @@
 #include <KoMainWindow.h>
 
 #include <KoShapeManager.h>
+#include <KoLayerShape.h>
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -50,7 +51,6 @@
 #include "vpainterfactory.h"
 #include "vselection.h"
 #include "vcanvas.h"
-#include "vlayer.h"
 #include "vdocumentdocker.h"
 #include "vtoolcontroller.h"
 #include "KoApplication.h"

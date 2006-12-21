@@ -21,7 +21,6 @@
 #include "vpath.h"
 #include "vsegment.h"
 #include "vselectnodes.h"
-#include "vlayer.h"
 #include "vdocument.h"
 
 void
