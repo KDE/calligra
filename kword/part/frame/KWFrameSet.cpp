@@ -34,6 +34,7 @@ KWFrameSet::~KWFrameSet() {
 void KWFrameSet::addFrame(KWFrame *frame) {
     Q_ASSERT(frame);
     Q_ASSERT(! m_frames.contains(frame));
+    frame->setFrameSet(this);
     m_frames.append(frame);
     setupFrame(frame);
     emit frameAdded(frame);
@@ -41,8 +42,10 @@ void KWFrameSet::addFrame(KWFrame *frame) {
 
 void KWFrameSet::removeFrame(KWFrame *frame) {
     Q_ASSERT(frame);
-    m_frames.removeAll(frame);
-    emit frameRemoved(frame);
+    if(m_frames.removeAll(frame)) {
+        frame->setFrameSet(0);
+        emit frameRemoved(frame);
+    }
 }
 
 #ifndef NDEBUG

@@ -51,10 +51,13 @@ KWFrame::~KWFrame() {
 }
 
 void KWFrame::setFrameSet(KWFrameSet *fs) {
+    if(fs == m_frameSet)
+        return;
     if(m_frameSet)
         m_frameSet->removeFrame(this);
     m_frameSet = fs;
-    fs->addFrame(this);
+    if(fs)
+        fs->addFrame(this);
 }
 
 void KWFrame::copySettings(const KWFrame *frame) {

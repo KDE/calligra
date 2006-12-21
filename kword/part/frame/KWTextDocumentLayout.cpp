@@ -827,11 +827,8 @@ void KWTextDocumentLayout::layout() {
                     rect.setHeight(line.height());
                     QRectF newLine = limit(rect);
                     if(newLine.width() <= 0.)
-{
-kDebug() << rect.top() << "] no spacing at all\n";
                         // TODO be more intelligent then just moving down 10 pt
                         rect = QRectF(m_state->x(), rect.top() + 10, m_state->width(), rect.height());
-}
                     else if(newLine.left() == rect.left() && newLine.right() == rect.right())
                         break;
                     else
@@ -860,6 +857,9 @@ kDebug() << rect.top() << "] no spacing at all\n";
                 outlines.clear();
                 QRectF bounds = m_state->shape->boundingRect();
                 foreach(KWFrameSet *fs, m_frameSet->kwDoc()->frameSets()) {
+                    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+                    if(tfs->textFrameSetType() == KWord::MainTextFrameSet)
+                        continue;
                     foreach(KWFrame *frame, fs->frames()) {
                         if(frame->shape() == currentShape)
                             continue;
