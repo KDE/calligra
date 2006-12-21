@@ -496,7 +496,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                 }
                 uint32 realTileWidth =  (x + tileWidth) < width ? tileWidth : width - x;
                 for (uint yintile = 0; y + yintile < height && yintile < tileHeight/vsubsampling; ) {
-                    uint linesreaded = tiffReader->copyDataToChannels( x, y + yintile , realTileWidth, tiffstream);
+                    tiffReader->copyDataToChannels( x, y + yintile , realTileWidth, tiffstream);
                     yintile += 1;
                     tiffstream->moveToLine( yintile );
                 }
@@ -552,9 +552,9 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             }
             for( uint32 yinstrip = 0 ; yinstrip < rowsPerStrip && y < height ; )
             {
-                uint linesreaded = tiffReader->copyDataToChannels( 0, y, width, tiffstream);
-                y += linesreaded;
-                yinstrip += linesreaded;
+                uint linesread = tiffReader->copyDataToChannels( 0, y, width, tiffstream);
+                y += linesread;
+                yinstrip += linesread;
                 tiffstream->moveToLine( yinstrip );
             }
             tiffstream->restart();
