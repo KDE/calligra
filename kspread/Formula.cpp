@@ -1324,7 +1324,7 @@ Value Formula::eval() const
   }
 
   if( !d->valid )
-    return Value::errorVALUE();
+    return Value::errorPARSE();
 
   for( int pc = 0; pc < d->codes.count(); pc++ )
   {
@@ -1550,7 +1550,7 @@ Value Formula::eval() const
           return Value::errorVALUE();
         function = FunctionRepository::self()->function ( val1.asString() );
         if( !function )
-          return Value::errorVALUE(); // no such function
+          return Value::errorNAME(); // no such function
 
         ret = function->exec (args, calc, &fe);
         entry.reset();

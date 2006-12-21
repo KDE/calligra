@@ -41,8 +41,8 @@ ValueFormatter::ValueFormatter (ValueConverter *conv) : converter( conv )
 
 QString ValueFormatter::formatText (const Cell *cell, FormatType fmtType)
 {
-  if (cell->hasError ())
-    return errorFormat (cell);
+  if ( cell->value().isError() )
+    return cell->value().errorMessage();
 
   QString str;
 
@@ -626,21 +626,3 @@ QString ValueFormatter::dateFormat (const QDate &date, FormatType fmtType)
 
   return tmp;
 }
-
-QString ValueFormatter::errorFormat (const Cell *cell)
-{
-  QString err;
-  if (cell->testFlag (Cell::Flag_ParseError))
-    err = '#' + i18n ("Parse") + '!';
-  else if ( cell->testFlag (Cell::Flag_CircularCalculation))
-    err = '#' + i18n ("Circle") + '!';
-  else if ( cell->testFlag (Cell::Flag_DependencyError))
-    err = '#' + i18n ("Depend") + '!';
-  else
-  {
-    err = "####";
-    kDebug(36001) << "Unhandled error type." << endl;
-  }
-  return err;
-}
-

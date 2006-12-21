@@ -57,8 +57,6 @@ class ValueFormatter {
   /** create a time format */
   QString timeFormat (const QDateTime &_time, FormatType fmtType);
 
-  static QString errorFormat (const Cell *cell);
-
  protected:
 
   ValueConverter* converter;

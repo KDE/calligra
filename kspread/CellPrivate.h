@@ -112,7 +112,6 @@ public:
     // Default is to not have the "extra" stuff in a cell.
     cellExtra = 0;
     sheet = 0;
-    flags = 0;
   }
 
   ~Private()
@@ -178,7 +177,6 @@ public:
     }
 
     Sheet* sheet;
-    StatusFlags flags;
 
 private:
   // "Extra stuff", see explanation for Cell::Extra.

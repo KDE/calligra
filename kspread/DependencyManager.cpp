@@ -246,17 +246,16 @@ void DependencyManager::updateFormula( Cell* cell, const Region::Element* oldLoc
     if (!cell->isFormula())
         return;
 
-    // Broken formula -> meaningless dependencies
-    // (tries to avoid cell->formula() being null)
-    if (cell->testFlag(Cell::Flag_ParseError))
-        return;
-
     const Formula* formula = cell->formula();
     if ( !formula )
     {
         kDebug(36002) << "Cell at row " << cell->row() << ", col " << cell->column() << " marked as formula, but formula is 0. Formula string: " << cell->inputText() << endl;
         return;
     }
+
+    // Broken formula -> meaningless dependencies
+    if ( !formula->isValid() )
+        return;
 
     Tokens tokens = formula->tokens();
 
@@ -402,7 +401,7 @@ void DependencyManager::Private::removeDependencies(const Cell* cell)
   }
 
   // clear the circular dependency flags
-//   if (cell->testFlag(Cell::Flag_CircularCalculation))
+//   if ( cell->value() == Value::errorCIRCLE() )
   {
     removeCircularDependencyFlags(dependencies.value(point));
   }
@@ -436,11 +435,6 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
     if (!cell->isFormula())
         return Region();
 
-  // Broken formula -> meaningless dependencies
-  // (tries to avoid cell->formula() being null)
-    if (cell->testFlag(Cell::Flag_ParseError))
-        return Region();
-
     const Formula* f = cell->formula();
     if (f==0)
     {
@@ -448,6 +442,10 @@ KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell
 //     Q_ASSERT(cell->formula());
         return Region();
     }
+
+    // Broken formula -> meaningless dependencies
+    if ( !f->isValid() )
+        return Region();
 
     Tokens tokens = f->tokens();
 
@@ -493,7 +491,8 @@ void DependencyManager::Private::removeCircularDependencyFlags(const Region& reg
           continue;
         processedCells.insert( cell );
 
-        cell->clearFlag(Cell::Flag_CircularCalculation);
+        if ( cell->value() == Value::errorCIRCLE() )
+            cell->setValue( Value::empty() );
 
         Region::Point point(col, row);
         point.setSheet(cell->sheet());

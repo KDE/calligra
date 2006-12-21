@@ -340,6 +340,20 @@ class KSPREAD_EXPORT Value
     static const Value& empty();
 
     /**
+     * Returns constant reference to '\#CIRCLE!' error.
+     *
+     * This is used to indicate circular cell references.
+     */
+    static const Value& errorCIRCLE();
+
+    /**
+     * Returns constant reference to '\#DEPEND!' error.
+     *
+     * This is used to indicate broken cell references.
+     */
+    static const Value& errorDEPEND();
+
+    /**
      * Returns constant reference to '\#DIV/0!' error.
      *
      * This is used to indicate that a formula divides by 0 (zero).
@@ -375,6 +389,13 @@ class KSPREAD_EXPORT Value
      * This is to indicate that two area do not intersect.
      */
     static const Value& errorNULL();
+
+    /**
+     * Returns constant reference to '\#PARSE!' error.
+     *
+     * This is used to indicate that a formula could not be parsed correctly.
+     */
+    static const Value& errorPARSE();
 
     /**
      * Returns constant reference to '\#REF!' error.

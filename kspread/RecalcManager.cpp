@@ -152,20 +152,16 @@ int RecalcManager::computeDepth(Cell* cell) const
   static QSet<Cell*> processedCells;
 
   //prevent infinite recursion (circular dependencies)
-  if ( processedCells.contains( cell ) ||
-      cell->testFlag (Cell::Flag_CircularCalculation))
+  if ( processedCells.contains( cell ) || cell->value() == Value::errorCIRCLE() )
   {
     kDebug(36002) << "Circular dependency at " << cell->fullName() << endl;
     // don't set anything if the cell already has all these things set
     // this prevents endless loop for inter-sheet curcular dependencies,
     // where the usual mechanisms fail doe to having multiple dependency
     // managers ...
-    if (!cell->testFlag (Cell::Flag_CircularCalculation))
+    if ( cell->value() != Value::errorCIRCLE() )
     {
-      Value value;
-      cell->setFlag(Cell::Flag_CircularCalculation);
-      value.setError(ValueFormatter::errorFormat(cell));
-      cell->setValue(value);
+      cell->setValue( Value::errorCIRCLE() );
     }
     //clear the compute reference depth flag
     processedCells.remove( cell );
@@ -266,8 +262,7 @@ void RecalcManager::recalcCell(Cell* cell) const
     static QSet<Cell*> processedCells;
 
     //prevent infinite recursion (circular dependencies)
-    if ( processedCells.contains( cell ) ||
-         cell->testFlag( Cell::Flag_CircularCalculation ) )
+    if ( processedCells.contains( cell ) || cell->value() == Value::errorCIRCLE() )
     {
 #if 0
     kDebug(36002) << "Circle, cell " << cell->fullName() << endl;
@@ -275,12 +270,9 @@ void RecalcManager::recalcCell(Cell* cell) const
     // this prevents endless loop for inter-sheet curcular dependencies,
     // where the usual mechanisms fail doe to having multiple dependency
     // managers ...
-    if (!cell->testFlag (Cell::Flag_CircularCalculation))
+    if ( cell->value() != Value::errorCIRCLE() )
     {
-      Value value;
-      cell->setFlag(Cell::Flag_CircularCalculation);
-      value.setError(ValueFormatter::errorFormat(cell));
-      cell->setValue(value);
+      cell->setValue( Value::errorCIRCLE() );
     }
 #endif
         //clear the calculation progress flag

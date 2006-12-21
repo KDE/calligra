@@ -333,15 +333,11 @@ QString Cell::displayText() const
     QString string;
     // Display a formula if warranted.  If not, display the value instead;
     // this is the most common case.
-    if ( (!hasError()) && isFormula() && sheet()->getShowFormula()
+    if ( isFormula() && sheet()->getShowFormula()
            && !( sheet()->isProtected() && style().hideFormula() ) || isEmpty() )
         string = d->inputText;
     else
         string = doc()->formatter()->formatText(this, formatType());
-
-    // Set the displayed text, if we hold an error value.
-    if (d->value.type() == Value::Error)
-        string = d->value.errorMessage ();
 
     return string;
 }
@@ -881,10 +877,7 @@ bool Cell::makeFormula()
       tmp = tmp.arg( fullName() );
       KMessageBox::error( (QWidget*)0, tmp);
     }
-    setFlag(Flag_ParseError);
-    Value value;
-    value.setError ( ValueFormatter::errorFormat(this) );
-    setValue (value);
+    setValue( Value::errorPARSE() );
     return false;
   }
 
@@ -917,7 +910,7 @@ bool Cell::calc(bool delay)
 
   if (d->formula == 0)
   {
-    if ( testFlag( Flag_ParseError ) )  // there was a parse error
+    if ( d->value == Value::errorPARSE() )  // there was a parse error
       return false;
     else
     {
@@ -2779,38 +2772,15 @@ void Cell::setConditionList( const QLinkedList<Conditional> & newList )
     setConditions( conditions );
 }
 
-bool Cell::hasError() const
-{
-  return ( testFlag(Flag_ParseError) ||
-           testFlag(Flag_CircularCalculation) ||
-           testFlag(Flag_DependencyError));
-}
-
 void Cell::clearAllErrors()
 {
-  clearFlag( Flag_ParseError );
-  clearFlag( Flag_CircularCalculation );
-  clearFlag( Flag_DependencyError );
+    if ( value().isError() )
+        setValue( Value::empty() );
 }
 
 bool Cell::doesMergeCells() const
 {
     return d->hasExtra() && ( d->extra()->mergedXCells != 0 || d->extra()->mergedYCells != 0 );
-}
-
-void Cell::clearFlag( StatusFlag flag )
-{
-  d->flags &= ~flag;
-}
-
-void Cell::setFlag( StatusFlag flag )
-{
-  d->flags |= flag;
-}
-
-bool Cell::testFlag( StatusFlag flag ) const
-{
-  return ( d->flags & flag );
 }
 
 

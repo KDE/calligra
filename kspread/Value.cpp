@@ -283,11 +283,14 @@ ValueData* ValueData::s_null = 0;
 
 // static things
 Value ks_value_empty;
+Value ks_error_circle;
+Value ks_error_depend;
 Value ks_error_div0;
 Value ks_error_na;
 Value ks_error_name;
 Value ks_error_null;
 Value ks_error_num;
+Value ks_error_parse;
 Value ks_error_ref;
 Value ks_error_value;
 
@@ -665,6 +668,22 @@ const Value& Value::empty()
   return ks_value_empty;
 }
 
+// reference to #CIRCLE! error
+const Value& Value::errorCIRCLE()
+{
+  if( !ks_error_circle.isError() )
+    ks_error_circle.setError( "#CIRCLE!" );
+  return ks_error_circle;
+}
+
+// reference to #DEPEND! error
+const Value& Value::errorDEPEND()
+{
+  if( !ks_error_depend.isError() )
+    ks_error_depend.setError( "#DEPEND!" );
+  return ks_error_depend;
+}
+
 // reference to #DIV/0! error
 const Value& Value::errorDIV0()
 {
@@ -703,6 +722,14 @@ const Value& Value::errorNULL()
   if( !ks_error_null.isError() )
     ks_error_null.setError( "#NULL!" );
   return ks_error_null;
+}
+
+// reference to #PARSE! error
+const Value& Value::errorPARSE()
+{
+  if( !ks_error_parse.isError() )
+    ks_error_parse.setError( "#PARSE!" );
+  return ks_error_parse;
 }
 
 // reference to #REF! error

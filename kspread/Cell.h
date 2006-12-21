@@ -620,14 +620,6 @@ public:
     //
 
     /**
-     * \return \c true if the cell contains a formula, that could not
-     *         be evaluated, has a circular dependecency or an invalidated
-     *         dependecency. These cells usually appear  on the screen with
-     *         "#Parse!", "#Circle!" or "#Depend!", respectively.
-     */
-    bool hasError() const;
-
-    /**
      * Clear all error flags from the cell.
      */
     void clearAllErrors();
@@ -700,46 +692,6 @@ public:
     //
     //BEGIN
     //
-
-    /**
-     * Cell status flags.
-     */
-    enum StatusFlag
-    {
-      /**
-       * ParseError
-       * True if the cell is calculated and there was an error during calculation
-       * In that case the cell usually displays "#Parse!"
-       */
-      Flag_ParseError            = 0x20,
-      /**
-       * CircularCalculation
-       * True if the cell is calculated and there was an error during calculation
-       * In that case the cell usually displays "#Circle!"
-       */
-      Flag_CircularCalculation   = 0x40,
-      /**
-       * DependencyError
-       * \todo never set so far
-       */
-      Flag_DependencyError       = 0x80
-    };
-    Q_DECLARE_FLAGS(StatusFlags, StatusFlag)
-
-    /**
-     * Clears the status flag \p flag .
-     */
-    void clearFlag( StatusFlag flag );
-
-    /**
-     * Sets the status flag \p flag .
-     */
-    void setFlag( StatusFlag flag );
-
-    /**
-     * Checks wether the status flag \p flag is set.
-     */
-    bool testFlag( StatusFlag flag ) const;
 
 protected:
     /**
@@ -847,8 +799,6 @@ private:
      */
     void unmerge( Cell* masterCell );
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Cell::StatusFlags)
 
 } // namespace KSpread
 
