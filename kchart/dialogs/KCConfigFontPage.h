@@ -17,61 +17,65 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KCHARTPARAMETERCONFIGPAGE_H__
-#define __KCHARTPARAMETERCONFIGPAGE_H__
+#ifndef __KCCONFIGFONTPAGE_H__
+#define __KCCONFIGFONTPAGE_H__
 
 #include <QWidget>
-#include <kcolorbutton.h>
+#include <q3button.h>
+#include <QCheckBox>
+#include "kchartcolorarray.h"
 
-class QSpinBox;
-class QCheckBox;
+#include "koChart.h"
+
 class QLineEdit;
-class QRadioButton;
+class Q3ListBox;
+class QPushButton;
 
 namespace KChart
 {
 
 class KChartParams;
 
-class KChartParameterConfigPage : public QWidget
+class KCConfigFontPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartParameterConfigPage( KChartParams* params, QWidget* parent );
+    KCConfigFontPage( KChartParams* params,QWidget* parent, 
+		      KDChartTableData *dat);
     void init();
     void apply();
+    void initList();
+
 public slots:
-    void changeXaxisState( bool );
-    void automatic_precision_toggled( bool );
-    void axisChanged();
+    void changeLabelFont();
+
 private:
-    KChartParams* _params;
+    KChartParams  *m_params;
 
-    // Checkboxes on the left side of the tab.
-    QCheckBox *grid;
-    QCheckBox *xaxis;
-    QCheckBox *yaxis;
-    //QCheckBox *yaxis2;
-    //QCheckBox *xlabel;
-    QCheckBox *lineMarker;
-    //QCheckBox *llabel;
+    // Widgets
+    QLineEdit     *m_font;
+    Q3ListBox      *m_list;
+    QPushButton   *m_fontButton;
 
-    // Lineedits on the right side of the tab.
-    QLineEdit *xtitle;
-    QLineEdit *ytitle;
+    // Fonts for different things.
+    QFont xTitle;
+    QFont yTitle;
+    QFont yAxis;
+    QFont xAxis;
+    QFont label;
 
-    QRadioButton *lin;
-    QRadioButton *log;
-
-    QRadioButton *max;
-    QSpinBox *maximum_length;
-    //QLineEdit *ylabel_fmt;
-    //QLineEdit *ytitle2;
-    //QLineEdit *ylabel2_fmt;
-    //QLineEdit *annotation;
+    // Old stuff.  Remove?
+	Qt::CheckState xTitleIsRelative;
+	Qt::CheckState yTitleIsRelative;
+	Qt::CheckState labelIsRelative;
+	Qt::CheckState yAxisIsRelative;
+	Qt::CheckState xAxisIsRelative;
+	Qt::CheckState legendIsRelative;
+    KDChartTableData *data;
 };
 
 }  //KChart namespace
 
 #endif
+

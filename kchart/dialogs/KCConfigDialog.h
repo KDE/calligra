@@ -42,17 +42,18 @@ class KCConfigDataPage;
 class KCConfigSubtypePage;
 class KChartHeaderFooterConfigPage;
 
-class KChartColorConfigPage;
-class KChartParameterConfigPage;
 class KChartParameter3dConfigPage;
 class KChartBarslinesConfigPage;
 class KChartParameterPieConfigPage;
-class KChartFontConfigPage;
 class KChartPieConfigPage;
 class KChartComboPage;
 class KChartLegendConfigPage;
 class KChartLine3dConfigPage;
 class KChartParameterPolarConfigPage;
+
+class KCConfigAxesPage;
+class KCConfigColorPage;
+class KCConfigFontPage;
 class KCConfigBackgroundPage;
 
 class KCConfigDialog : public Q3TabDialog
@@ -95,9 +96,9 @@ protected:
 
     KChartHeaderFooterConfigPage     *m_headerfooterpage;
     KChartLegendConfigPage           *m_legendPage;
-    KChartParameterConfigPage        *m_axespage;
-    KChartColorConfigPage            *_colorpage;
-    KChartFontConfigPage             *_parameterfontpage;
+    KCConfigAxesPage             *m_axespage;
+    KCConfigColorPage            *_colorpage;
+    KCConfigFontPage             *_fontpage;
     KCConfigBackgroundPage       *_backgroundpixpage;
 
     //KChartGeometryConfigPage* _geompage;

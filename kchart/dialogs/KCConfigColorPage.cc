@@ -17,13 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kchartColorConfigPage.h"
-#include "kchartColorConfigPage.moc"
 
-#include <kapplication.h>
-#include <kdialog.h>
-#include <klocale.h>
-#include <kcolorbutton.h>
 #include <QLayout>
 #include <QLabel>
 #include <q3buttongroup.h>
@@ -33,16 +27,22 @@
 #include <Q3VBoxLayout>
 #include <Q3GridLayout>
 #include <klistbox.h>
-#include "kchart_params.h"
 #include <kdebug.h>
 #include <kvbox.h>
+#include <kapplication.h>
+#include <kdialog.h>
+#include <klocale.h>
+#include <kcolorbutton.h>
+
+#include "kchart_params.h"
+#include "KCConfigColorPage.h"
 
 namespace KChart
 {
 
-KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
-                                              QWidget* parent, 
-					      KDChartTableData *dat ) :
+KCConfigColorPage::KCConfigColorPage( KChartParams* params,
+				      QWidget* parent, 
+				      KDChartTableData *dat ) :
     QWidget( parent ),
     m_params( params ),
     m_data( dat ),
@@ -194,7 +194,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
 }
 
 
-void KChartColorConfigPage::changeIndex(int newindex)
+void KCConfigColorPage::changeIndex(int newindex)
 {
     if(index > m_params->maxDataColor())
         _dataColorLB->setEnabled(false);
@@ -209,13 +209,13 @@ void KChartColorConfigPage::changeIndex(int newindex)
 }
 
 
-void KChartColorConfigPage::activeColorButton()
+void KCConfigColorPage::activeColorButton()
 {
     _dataColorCB->animateClick();
 }
 
 
-void KChartColorConfigPage::initDataColorList()
+void KCConfigColorPage::initDataColorList()
 {
     QStringList lst;
     for(uint i = 0; i < m_data->rows(); i++)
@@ -237,7 +237,7 @@ void KChartColorConfigPage::initDataColorList()
 }
 
 
-void KChartColorConfigPage::apply()
+void KCConfigColorPage::apply()
 {
 	//Nothing to save
 	if ( m_data->rows() == 0 )
@@ -250,3 +250,5 @@ void KChartColorConfigPage::apply()
 }
 
 }  //KChart namespace
+
+#include "KCConfigColorPage.moc"

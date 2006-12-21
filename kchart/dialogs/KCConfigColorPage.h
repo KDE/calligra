@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KCHARTCOLORCONFIGPAGE_H__
-#define __KCHARTCOLORCONFIGPAGE_H__
+#ifndef __KCHARTCONFIGCOLORPAGE_H__
+#define __KCHARTCONFIGCOLORPAGE_H__
 
 
 #include <QWidget>
@@ -38,12 +38,12 @@ class KChartParams;
 // PENDING(kalle) Make this dynamic.
 #define NUMDATACOLORS 6
 
-class KChartColorConfigPage : public QWidget
+class KCConfigColorPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartColorConfigPage( KChartParams* params, QWidget* parent, KDChartTableData *dat );
+    KCConfigColorPage( KChartParams* params, QWidget* parent, KDChartTableData *dat );
     void apply();
 
     void setBackgroundColor( QColor color );
@@ -106,111 +106,111 @@ private:
 };
 
 
-inline void KChartColorConfigPage::setGridColor( QColor color )
+inline void KCConfigColorPage::setGridColor( QColor color )
 {
     _gridCB->setColor( color );
 }
 
 
-inline QColor KChartColorConfigPage::gridColor() const
+inline QColor KCConfigColorPage::gridColor() const
 {
     return _gridCB->color();
 }
 
 
-inline void KChartColorConfigPage::setLineColor( QColor color )
+inline void KCConfigColorPage::setLineColor( QColor color )
 {
     _lineCB->setColor( color );
 }
 
 
-inline QColor KChartColorConfigPage::lineColor() const
+inline QColor KCConfigColorPage::lineColor() const
 {
     return _lineCB->color();
 }
 
 
-inline void KChartColorConfigPage::setXTitleColor( QColor color )
+inline void KCConfigColorPage::setXTitleColor( QColor color )
 {
     _xtitleCB->setColor( color );
 }
 
 
-inline QColor KChartColorConfigPage::xTitleColor() const
+inline QColor KCConfigColorPage::xTitleColor() const
 {
     return _xtitleCB->color();
 }
 
 
-inline void KChartColorConfigPage::setYTitleColor( QColor color )
+inline void KCConfigColorPage::setYTitleColor( QColor color )
 {
     _ytitleCB->setColor( color );
 }
 
 
-inline QColor KChartColorConfigPage::yTitleColor() const
+inline QColor KCConfigColorPage::yTitleColor() const
 {
     return _ytitleCB->color();
 }
 
 
 #if 0
-inline void KChartColorConfigPage::setYTitle2Color( QColor color )
+inline void KCConfigColorPage::setYTitle2Color( QColor color )
 {
     _ytitle2CB->setColor( color );
 }
 
 
-inline QColor KChartColorConfigPage::yTitle2Color() const
+inline QColor KCConfigColorPage::yTitle2Color() const
 {
     return _ytitle2CB->color();
 }
 #endif
 
-inline void KChartColorConfigPage::setXLabelColor( QColor color )
+inline void KCConfigColorPage::setXLabelColor( QColor color )
 {
     _xlabelCB->setColor( color );
 }
 
 
-inline QColor KChartColorConfigPage::xLabelColor() const
+inline QColor KCConfigColorPage::xLabelColor() const
 {
     return _xlabelCB->color();
 }
 
 
-inline void KChartColorConfigPage::setYLabelColor( QColor color )
+inline void KCConfigColorPage::setYLabelColor( QColor color )
 {
     _ylabelCB->setColor( color );
 }
 
 
-inline QColor KChartColorConfigPage::yLabelColor() const
+inline QColor KCConfigColorPage::yLabelColor() const
 {
     return _ylabelCB->color();
 }
 
 
 #if 0
-inline void KChartColorConfigPage::setYLabel2Color( QColor color )
+inline void KCConfigColorPage::setYLabel2Color( QColor color )
 {
     _ylabel2CB->setColor( color );
 }
 
 
-inline QColor KChartColorConfigPage::yLabel2Color() const
+inline QColor KCConfigColorPage::yLabel2Color() const
 {
     return _ylabel2CB->color();
 }
 #endif
 
-/*inline void KChartColorConfigPage::setEdgeColor( QColor color )
+/*inline void KCConfigColorPage::setEdgeColor( QColor color )
 {
     _edgeCB->setColor( color );
 }
 
 
-inline QColor KChartColorConfigPage::edgeColor() const
+inline QColor KCConfigColorPage::edgeColor() const
 {
     return _edgeCB->color();
 }*/

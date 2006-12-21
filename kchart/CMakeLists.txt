@@ -36,10 +36,10 @@ set(kchartcommon_LIB_SRCS
    kchartParameterPolarConfigPage.cc 
    kchartHeaderFooterConfigPage.cc 
    kchartLegendConfigPage.cc 
-   kchartParameterConfigPage.cc 
-   kchartColorConfigPage.cc 
-   kchartFontConfigPage.cc 
 
+   dialogs/KCConfigAxesPage.cc 
+   dialogs/KCConfigColorPage.cc 
+   dialogs/KCConfigFontPage.cc 
    dialogs/KCConfigBackgroundPage.cc 
    dialogs/KCPageLayout.cc 
    dialogs/KCPrinterDialog.cc

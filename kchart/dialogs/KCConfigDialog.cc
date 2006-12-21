@@ -25,17 +25,17 @@
 #include "KCConfigSubtypePage.h"
 
 #include "kchartHeaderFooterConfigPage.h"
-#include "kchartColorConfigPage.h"
 #include "kchartParameterPieConfigPage.h"
-#include "kchartFontConfigPage.h"
 #include "kchartComboConfigPage.h"
-#include "kchartParameterConfigPage.h"
 #include "kchartPieConfigPage.h"
 #include "kchartParameter3dConfigPage.h"
 #include "kchartLegendConfigPage.h"
 #include "kchartLine3dConfigPage.h"
 #include "kchartParameterPolarConfigPage.h"
 
+#include "KCConfigAxesPage.h"
+#include "KCConfigColorPage.h"
+#include "KCConfigFontPage.h"
 #include "KCConfigBackgroundPage.h"
 
 
@@ -69,7 +69,7 @@ KCConfigDialog::KCConfigDialog( KChartParams* params,
     m_axespage(0),
 
     _colorpage(0),
-    _parameterfontpage(0),
+    _fontpage(0),
     _backgroundpixpage(0)
     //_piepage(0),
 {
@@ -90,12 +90,12 @@ KCConfigDialog::KCConfigDialog( KChartParams* params,
         addTab( m_headerfooterpage,i18n("Header/Footer"));
     }
     else if (flags & KC_COLORS ) {
-        _colorpage = new KChartColorConfigPage( m_params,  this, dat );
+        _colorpage = new KCConfigColorPage( m_params,  this, dat );
         addTab( _colorpage, i18n( "&Colors" ) );
     }
     else if ( flags & KC_FONT ) {
-        _parameterfontpage = new KChartFontConfigPage(m_params,this, dat );
-        addTab( _parameterfontpage, i18n( "&Font" ) );
+        _fontpage = new KCConfigFontPage(m_params,this, dat );
+        addTab( _fontpage, i18n( "&Font" ) );
     }
     else if ( flags & KC_BACK ) {
         _backgroundpixpage = new KCConfigBackgroundPage( m_params, this );
@@ -157,15 +157,15 @@ KCConfigDialog::KCConfigDialog( KChartParams* params,
         if ( m_params->chartType() != KChartParams::Pie
 	     && m_params->chartType() != KChartParams::Ring ) {
 
-            m_axespage = new KChartParameterConfigPage(m_params,this );
+            m_axespage = new KCConfigAxesPage(m_params,this );
             addTab( m_axespage, i18n( "&Axes" ) );
         } 
 
-        _colorpage = new KChartColorConfigPage( m_params,  this, dat );
+        _colorpage = new KCConfigColorPage( m_params,  this, dat );
         addTab( _colorpage, i18n( "&Colors" ) );
 
-        _parameterfontpage = new KChartFontConfigPage(m_params,this, dat );
-        addTab( _parameterfontpage, i18n( "&Font" ) );
+        _fontpage = new KCConfigFontPage(m_params,this, dat );
+        addTab( _fontpage, i18n( "&Font" ) );
 
         _backgroundpixpage = new KCConfigBackgroundPage( m_params, this );
         addTab( _backgroundpixpage, i18n( "&Background" ) );
@@ -246,8 +246,8 @@ void KCConfigDialog::init()
     if ( _linepage3d && m_params->chartType() == KChartParams::Line)
         _linepage3d->init();
 
-    if (_parameterfontpage)
-        _parameterfontpage->init();
+    if (_fontpage)
+        _fontpage->init();
 
     if ( m_subTypePage )
         m_subTypePage->init();
@@ -344,8 +344,8 @@ void KCConfigDialog::apply()
     if( _linepage3d && m_params->chartType() == KChartParams::Line)
         _linepage3d->apply();
 
-    if(_parameterfontpage)
-        _parameterfontpage->apply();
+    if(_fontpage)
+        _fontpage->apply();
 
     if(_colorpage)
         _colorpage->apply();

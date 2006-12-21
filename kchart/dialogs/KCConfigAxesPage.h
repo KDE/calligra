@@ -17,65 +17,61 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KCHARTFONTCONFIGPAGE_H__
-#define __KCHARTFONTCONFIGPAGE_H__
+#ifndef __KCHARTCONFIGAXESPAGE_H__
+#define __KCHARTCONFIGAXESPAGE_H__
 
 #include <QWidget>
-#include <q3button.h>
-#include <QCheckBox>
-#include "kchartcolorarray.h"
+#include <kcolorbutton.h>
 
-#include "koChart.h"
-
+class QSpinBox;
+class QCheckBox;
 class QLineEdit;
-class Q3ListBox;
-class QPushButton;
+class QRadioButton;
 
 namespace KChart
 {
 
 class KChartParams;
 
-class KChartFontConfigPage : public QWidget
+class KCConfigAxesPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartFontConfigPage( KChartParams* params,QWidget* parent, 
-			  KDChartTableData *dat);
+    KCConfigAxesPage( KChartParams* params, QWidget* parent );
     void init();
     void apply();
-    void initList();
-
 public slots:
-    void changeLabelFont();
-
+    void changeXaxisState( bool );
+    void automatic_precision_toggled( bool );
+    void axisChanged();
 private:
-    KChartParams  *m_params;
+    KChartParams* _params;
 
-    // Widgets
-    QLineEdit     *m_font;
-    Q3ListBox      *m_list;
-    QPushButton   *m_fontButton;
+    // Checkboxes on the left side of the tab.
+    QCheckBox *grid;
+    QCheckBox *xaxis;
+    QCheckBox *yaxis;
+    //QCheckBox *yaxis2;
+    //QCheckBox *xlabel;
+    QCheckBox *lineMarker;
+    //QCheckBox *llabel;
 
-    // Fonts for different things.
-    QFont xTitle;
-    QFont yTitle;
-    QFont yAxis;
-    QFont xAxis;
-    QFont label;
+    // Lineedits on the right side of the tab.
+    QLineEdit *xtitle;
+    QLineEdit *ytitle;
 
-    // Old stuff.  Remove?
-	Qt::CheckState xTitleIsRelative;
-	Qt::CheckState yTitleIsRelative;
-	Qt::CheckState labelIsRelative;
-	Qt::CheckState yAxisIsRelative;
-	Qt::CheckState xAxisIsRelative;
-	Qt::CheckState legendIsRelative;
-    KDChartTableData *data;
+    QRadioButton *lin;
+    QRadioButton *log;
+
+    QRadioButton *max;
+    QSpinBox *maximum_length;
+    //QLineEdit *ylabel_fmt;
+    //QLineEdit *ytitle2;
+    //QLineEdit *ylabel2_fmt;
+    //QLineEdit *annotation;
 };
 
 }  //KChart namespace
 
 #endif
-

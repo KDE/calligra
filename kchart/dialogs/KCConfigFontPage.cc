@@ -18,14 +18,7 @@
 */
 
 
-#include "kchartFontConfigPage.h"
-
-#include "kchartFontConfigPage.moc"
-
-#include <kapplication.h>
-#include <klocale.h>
-#include <kcolorbutton.h>
-#include <kdebug.h>
+#include "KCConfigFontPage.h"
 
 #include <QLayout>
 #include <QLabel>
@@ -37,6 +30,10 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 
+#include <kapplication.h>
+#include <klocale.h>
+#include <kcolorbutton.h>
+#include <kdebug.h>
 #include <kfontdialog.h>
 
 // For IRIX
@@ -83,9 +80,9 @@ private:
 namespace KChart
 {
 
-KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
-                                            QWidget* parent, 
-					    KDChartTableData *dat) :
+KCConfigFontPage::KCConfigFontPage( KChartParams* params,
+				    QWidget* parent, 
+				    KDChartTableData *dat) :
     QWidget( parent ), m_params( params ), data(dat)
 {
     Q3GridLayout *grid = new Q3GridLayout(this,4,3,KDialog::marginHint(), KDialog::spacingHint());
@@ -121,7 +118,7 @@ KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
 }
 
 
-void KChartFontConfigPage::initList()
+void KCConfigFontPage::initList()
 {
     if ( m_params->chartType() != KChartParams::Pie
 	 && m_params->chartType() != KChartParams::Ring ) {
@@ -138,7 +135,7 @@ void KChartFontConfigPage::initList()
 
 
 
-void KChartFontConfigPage::changeLabelFont()
+void KCConfigFontPage::changeLabelFont()
 {
     QFont                 *font = 0;
 	Qt::CheckState  *state = 0;
@@ -226,7 +223,7 @@ void KChartFontConfigPage::changeLabelFont()
 }
 
 
-void KChartFontConfigPage::init()
+void KCConfigFontPage::init()
 {
     KDChartAxisParams  leftparms;
     leftparms   = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
@@ -267,7 +264,7 @@ void KChartFontConfigPage::init()
 }
 
 
-void KChartFontConfigPage::apply()
+void KCConfigFontPage::apply()
 {
     // PENDING(kalle) Adapt
     KDChartAxisParams  leftparms;
@@ -308,3 +305,5 @@ void KChartFontConfigPage::apply()
 }
 
 }  //KChart namespace
+
+#include "KCConfigFontPage.moc"

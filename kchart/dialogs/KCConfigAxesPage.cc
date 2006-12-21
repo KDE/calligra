@@ -18,11 +18,6 @@
 */
 
 
-#include "kchartParameterConfigPage.h"
-#include "kchartParameterConfigPage.moc"
-
-#include <kapplication.h>
-#include <klocale.h>
 #include <QLayout>
 #include <QLabel>
 #include <QCheckBox>
@@ -34,16 +29,20 @@
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
-#include <kfontdialog.h>
 
+#include <kapplication.h>
+#include <klocale.h>
+#include <kfontdialog.h>
 
 #include "kdchart/KDChartAxisParams.h"
 #include "kchart_params.h"
+#include "KCConfigAxesPage.h"
+
 
 namespace KChart
 {
 
-KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
+KCConfigAxesPage::KCConfigAxesPage( KChartParams* params,
                                                       QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
@@ -174,7 +173,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
 }
 
 
-    void KChartParameterConfigPage::changeXaxisState(bool /*state*/)
+    void KCConfigAxesPage::changeXaxisState(bool /*state*/)
 {
 #if 0
     if(state)
@@ -184,7 +183,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
 #endif
 }
 
-void KChartParameterConfigPage::init()
+void KCConfigAxesPage::init()
 {
     // PENDING(kalle) adapt these to KDChart
     //     grid->setChecked(_params->grid);
@@ -261,7 +260,7 @@ void KChartParameterConfigPage::init()
 }
 
 
-void KChartParameterConfigPage::apply()
+void KCConfigAxesPage::apply()
 {
 #if 0
     _params->setLegendPosition(llabel->isChecked() ? KDChartParams::LegendRight : KDChartParams::NoLegend);
@@ -349,7 +348,7 @@ void KChartParameterConfigPage::apply()
     }
 }
 
-void KChartParameterConfigPage::automatic_precision_toggled(bool toggled)
+void KCConfigAxesPage::automatic_precision_toggled(bool toggled)
 {
     if (toggled)
         maximum_length->setEnabled(false);
@@ -357,7 +356,7 @@ void KChartParameterConfigPage::automatic_precision_toggled(bool toggled)
         maximum_length->setEnabled(true);
 }
 
-void KChartParameterConfigPage::axisChanged()
+void KCConfigAxesPage::axisChanged()
 {
     if ( !xaxis->isChecked() || !yaxis->isChecked() )
     {
@@ -372,3 +371,5 @@ void KChartParameterConfigPage::axisChanged()
 }
 
 }  //KChart namespace
+
+#include "KCConfigAxesPage.moc"
