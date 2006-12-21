@@ -414,7 +414,7 @@ VPencilTool::setup( KActionCollection *collection )
 	if( m_action == 0 )
 	{
 		m_action = new KAction( KIcon( "14_pencil" ), i18n( "Pencil Tool" ), collection, objectName() );
-		m_action->setDefaultShortcut( KShortcut( Qt::SHIFT+Qt::Key_P ) );
+		m_action->setShortcut( KShortcut( Qt::SHIFT+Qt::Key_P ), KAction::DefaultShortcut );
 		m_action->setToolTip( i18n( "Pencil" ) );
 		connect( m_action, SIGNAL( triggered() ), this, SLOT( activate() ) );
 		// TODO needs porting: m_action->setExclusiveGroup( "freehand" );

@@ -489,7 +489,7 @@ VGradientTool::setup( KActionCollection *collection )
 	if( m_action == 0 )
 	{
 		m_action = new KAction( KIcon( "14_gradient" ), i18n( "Gradient Tool" ), collection, objectName() );
-		m_action->setDefaultShortcut( KShortcut( Qt::Key_G ) );
+		m_action->setShortcut( KShortcut( Qt::Key_G ), KAction::DefaultShortcut );
 		m_action->setToolTip( i18n( "Gradient" ) );
 		connect( m_action, SIGNAL( triggered() ), this, SLOT( activate() ) );
 		// TODO needs porting: m_action->setExclusiveGroup( "misc" );
