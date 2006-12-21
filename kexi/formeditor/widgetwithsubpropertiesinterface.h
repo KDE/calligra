@@ -20,11 +20,13 @@
 #ifndef WIDGETWITHSUBPROPERTIESINTERFACE_H
 #define WIDGETWITHSUBPROPERTIESINTERFACE_H
 
-#include <qcstring.h>
-#include <qvaluelist.h>
+#include <q3cstring.h>
 #include <qwidget.h>
-#include <qguardedptr.h>
+#include <qpointer.h>
 #include <qvariant.h>
+#include <QSet>
+
+#include <kexi_export.h>
 
 namespace KFormDesigner {
 
@@ -46,13 +48,12 @@ class KFORMEDITOR_EXPORT WidgetWithSubpropertiesInterface
 		//! \return the assigned subwidget.
 		QWidget* subwidget() const;
 
-		//! \return a list of subproperties available for this widget.
-		//! This is achieved by only listing those properties that are available in the 
-		QValueList<Q3CString> subproperies() const;
+		//! \return a set of subproperties avaliable for this widget.
+		QSet<Q3CString> subproperies() const;
 
-		//! \return a meta property for a widget's subproperty or 0 if there 
-		//! is no such subproperty.
-		const QMetaProperty *findMetaSubproperty(const char * name) const;
+		//! \return a metaproperty for a widget's subproperty 
+		//! or invalid metaproperty if there is no such subproperty.
+		QMetaProperty findMetaSubproperty(const char * name) const;
 
 		//! \return a value of widget's subproperty. \a ok is set to true on success
 		//! and to false on failure.
@@ -64,8 +65,8 @@ class KFORMEDITOR_EXPORT WidgetWithSubpropertiesInterface
 		bool setSubproperty( const char * name, const QVariant & value );
 
 	protected:
-		QGuardedPtr<QWidget> m_subwidget;
-		QValueList<Q3CString> m_subproperies;
+		QPointer<QWidget> m_subwidget;
+		QSet<Q3CString> m_subproperies;
 };
 }
 

@@ -21,10 +21,10 @@
 #ifndef LIBACTIONWIDGET_H
 #define LIBACTIONWIDGET_H
 
-
 #include <kactionclasses.h>
-//Added by qt3to4:
 #include <Q3CString>
+
+#include <kexi_export.h>
 
 namespace KFormDesigner
 {
@@ -51,7 +51,7 @@ class KFORMEDITOR_EXPORT LibActionWidget : public KToggleAction
 
 	protected slots:
 		/** reimplemented from KToggleAction */
-		virtual void slotActivated();
+		virtual void slotToggled(bool checked);
 
 	private:
 		Q3CString m_className;

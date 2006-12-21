@@ -22,17 +22,15 @@
 #include <kdebug.h>
 
 #include <koproperty/property.h>
-#include "pixmapcollection.h"
 #include "formmanager.h"
 #include "form.h"
 #include "objecttree.h"
 
 using namespace KFormDesigner;
 
-KFDPixmapEdit::KFDPixmapEdit(KoProperty::Property *property, QWidget *parent, const char *name)
- : KoProperty::PixmapEdit(property, parent, name)
+KFDPixmapEdit::KFDPixmapEdit(KoProperty::Property *property, QWidget *parent)
+ : KoProperty::PixmapEdit(property, parent)
 {
-//	m_manager = manager;
 }
 
 KFDPixmapEdit::~KFDPixmapEdit()

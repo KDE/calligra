@@ -26,7 +26,7 @@
 #include <qobject.h>
 #include <qpointer.h>
 #include <qpixmap.h>
-#include <q3popupmenu.h>
+#include <qmenu.h>
 #include <q3asciidict.h>
 //Added by qt3to4:
 #include <Q3CString>
@@ -34,6 +34,7 @@
 #include <QEvent>
 #include <Q3ValueList>
 
+#include <kexi_export.h>
 #include <kexiutils/tristate.h>
 
 // class QPixmap;
@@ -46,8 +47,6 @@ class QDomDocument;
 class QVariant;
 class Q3ListView;
 class KActionCollection;
-class KTextEdit;
-class KLineEdit;
 class KXMLGUIClient;
 
 namespace KoProperty {
@@ -308,7 +307,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 
 		/*! This function can be used to add custom items in widget \a w context
 		menu \a menu. */
-		virtual bool createMenuActions(const Q3CString &classname, QWidget *w, Q3PopupMenu *menu,
+		virtual bool createMenuActions(const Q3CString &classname, QWidget *w, QMenu *menu,
 		    KFormDesigner::Container *container)=0;
 
 		/*! Creates (if necessary) an editor to edit the contents of the widget directly in the Form
@@ -389,10 +388,10 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		/*! This function creates a KLineEdit to input some text and edit a widget's contents.
 		 This can be used in startEditing(). \a text is the text to display by default
 		  in the line edit, \a w is the edited widget, \a geometry is the geometry the new line
-		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit. */
+		   edit should have, and \a alignment is Qt::Alignment of the new line edit. */
 		void createEditor(const Q3CString &classname, const QString &text,
 			QWidget *w, Container *container, QRect geometry,
-			int align, bool useFrame=false, bool multiLine = false,
+			Qt::Alignment alignment, bool useFrame=false, bool multiLine = false,
 			Qt::BackgroundMode background = Qt::NoBackground);
 
 		/*! This function provides a simple editing mode : it justs disable event filtering

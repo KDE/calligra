@@ -94,7 +94,7 @@ void ResizeHandle::updatePos()
 			move(m_set->m_widget->x() + m_set->m_widget->width() - 3, m_set->m_widget->y() + m_set->m_widget->height()/2 - 3);
 			setCursor(QCursor(Qt::SizeHorCursor));
 			break;
-		case Qt::BottomLeftCorner:
+		case BottomLeftCorner:
 			move(m_set->m_widget->x() - 3, m_set->m_widget->y() + m_set->m_widget->height() - 3);
 			setCursor(QCursor(Qt::SizeBDiagCursor));
 			break;
@@ -102,7 +102,7 @@ void ResizeHandle::updatePos()
 			move(m_set->m_widget->x() + m_set->m_widget->width()/2 - 3, m_set->m_widget->y() + m_set->m_widget->height() - 3);
 			setCursor(QCursor(Qt::SizeVerCursor));
 			break;
-		case Qt::BottomRightCorner:
+		case BottomRightCorner:
 			move(m_set->m_widget->x() + m_set->m_widget->width() - 3, m_set->m_widget->y() + m_set->m_widget->height() - 3);
 			setCursor(QCursor(Qt::SizeFDiagCursor));
 			break;
@@ -175,7 +175,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 
 	switch (m_pos)
 	{
-		case Qt::TopRightCorner:
+		case TopRightCorner:
 			tmpw += dummyx;
 			tmpy += dummyy;
 			tmph -= dummyy;
@@ -183,7 +183,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 		case RightCenter:
 			tmpw += dummyx;
 			break;
-		case Qt::BottomRightCorner:
+		case BottomRightCorner:
 			tmpw += dummyx;
 			tmph += dummyy;
 			break;
@@ -194,7 +194,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 		case BottomCenter:
 			tmph=tmph+dummyy;
 			break;
-		case Qt::TopLeftCorner:
+		case TopLeftCorner:
 			tmpx += dummyx;
 			tmpw -= dummyx;
 			tmpy += dummyy;
@@ -204,7 +204,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 			tmpx += dummyx;
 			tmpw -= dummyx;
 			break;
-		case Qt::BottomLeftCorner:
+		case BottomLeftCorner:
 			tmpx += dummyx;
 			tmpw -= dummyx;
 			tmph += dummyy;
@@ -317,14 +317,14 @@ ResizeHandleSet::setWidget(QWidget *modify, bool editing)
 
 	m_widget = modify;
 
-	m_handles[0] = new ResizeHandle(this, ResizeHandle::TopLeft, editing);
+	m_handles[0] = new ResizeHandle(this, ResizeHandle::TopLeftCorner, editing);
 	m_handles[1] = new ResizeHandle(this, ResizeHandle::TopCenter, editing);
-	m_handles[2] = new ResizeHandle(this, ResizeHandle::TopRight, editing);
+	m_handles[2] = new ResizeHandle(this, ResizeHandle::TopRightCorner, editing);
 	m_handles[3] = new ResizeHandle(this, ResizeHandle::LeftCenter, editing);
 	m_handles[4] = new ResizeHandle(this, ResizeHandle::RightCenter, editing);
-	m_handles[5] = new ResizeHandle(this, ResizeHandle::BottomLeft, editing);
+	m_handles[5] = new ResizeHandle(this, ResizeHandle::BottomLeftCorner, editing);
 	m_handles[6] = new ResizeHandle(this, ResizeHandle::BottomCenter, editing);
-	m_handles[7] = new ResizeHandle(this, ResizeHandle::BottomRight, editing);
+	m_handles[7] = new ResizeHandle(this, ResizeHandle::BottomRightCorner, editing);
 }
 
 void

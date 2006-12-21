@@ -23,6 +23,8 @@
 #include <q3ptrlist.h>
 #include <qstring.h>
 
+#include <kexi_export.h>
+
 class QDomNode;
 
 namespace KFormDesigner {

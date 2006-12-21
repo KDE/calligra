@@ -37,9 +37,9 @@ KFormDesigner::removeChildrenFromList(WidgetList &list)
 		// If any widget in the list is a child of this widget, we remove it from the list
 		for(WidgetListIterator it2(list); it2.current() != 0; ++it2) {
 			QWidget *widg = it2.current();
-			if((w != widg) && (w->child(widg->name())))
+			if((w != widg) && (w->findChild<QWidget*>(widg->objectName())))
 			{
-				kDebug() << "Removing the widget " << widg->name() << "which is a child of " << w->name() << endl;
+				kDebug() << "Removing the widget " << widg->objectName() << "which is a child of " << w->objectName() << endl;
 				list.remove(widg);
 			}
 		}
@@ -53,16 +53,13 @@ KFormDesigner::installRecursiveEventFilter(QObject *object, QObject *container)
 	if(!object || !container|| !object->isWidgetType())
 		return;
 
-	kDebug() << "Installing event filter on widget: " << object->name() << " directed to " << container->name() << endl;
+	kDebug() << "Installing event filter on widget: " << object->objectName() << " directed to " << container->objectName() << endl;
 	object->installEventFilter(container);
 	if(((QWidget*)object)->ownCursor())
 		((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
 
-	if(!object->children())
-		return;
-
-	QObjectList list = *(object->children());
-	for(QObject *obj = list.first(); obj; obj = list.next())
+	const QObjectList list( object->children() );
+	foreach (QObject *obj, list)
 		installRecursiveEventFilter(obj, container);
 }
 
@@ -72,18 +69,16 @@ KFormDesigner::removeRecursiveEventFilter(QObject *object, QObject *container)
 	object->removeEventFilter(container);
 	if(!object->isWidgetType())
 		return;
-	if(!object->children())
-		return;
 
-	QObjectList list = *(object->children());
-	for(QObject *obj = list.first(); obj; obj = list.next())
+	const QObjectList list( object->children() );
+	foreach (QObject *obj, list)
 		removeRecursiveEventFilter(obj, container);
 }
 
 void
 KFormDesigner::setRecursiveCursor(QWidget *w, Form *form)
 {
-	ObjectTreeItem *tree = form->objectTree()->lookup(w->name());
+	ObjectTreeItem *tree = form->objectTree()->lookup(w->objectName());
 	if(tree && ((tree->modifiedProperties()->contains("cursor")) || !tree->children()->isEmpty())
 		&& !w->inherits("QLineEdit") && !w->inherits("QTextEdit")
 		) //fix weird behaviour
@@ -92,24 +87,22 @@ KFormDesigner::setRecursiveCursor(QWidget *w, Form *form)
 	if(w->ownCursor())
 		w->setCursor(Qt::ArrowCursor);
 
-	QObjectList *l = w->queryList( "QWidget" );
-	for(QObject *o = l->first(); o; o = l->next())
-		((QWidget*)o)->setCursor(Qt::ArrowCursor);
-	delete l;
+	const QList<QWidget*> list( w->findChildren<QWidget*>() );
+	foreach (QWidget *widget, list)
+		widget->setCursor(Qt::ArrowCursor);
 }
 
 QSize
 KFormDesigner::getSizeFromChildren(QWidget *w, const char *inheritClass)
 {
 	int tmpw = 0, tmph = 0;
-	QObjectList *list = w->queryList(inheritClass, 0, false, false);
-	for(QObject *o = list->first(); o; o = list->next()) {
-		QRect  r = ((QWidget*)o)->geometry();
-		tmpw = qMax(tmpw, r.right());
-		tmph = qMax(tmph, r.bottom());
+	const QList<QWidget*> list( w->findChildren<QWidget*>() );
+	foreach (QWidget *widget, list) {
+		if (widget->inherits(inheritClass)) {
+			tmpw = qMax(tmpw, widget->geometry().right());
+			tmph = qMax(tmph, widget->geometry().bottom());
+		}
 	}
-
-	delete list;
 	return QSize(tmpw, tmph) + QSize(10, 10);
 }
 

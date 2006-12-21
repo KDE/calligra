@@ -48,7 +48,12 @@
 #include "formmanager.h"
 #include "commands.h"
 #include "events.h"
+
+#define KEXI_NO_FLOWLAYOUT
+#warning "Port Kexi flow layout!"
+#ifndef KEXI_NO_FLOWLAYOUT
 #include "kexiflowlayout.h"
+#endif
 
 using namespace KFormDesigner;
 
@@ -326,7 +331,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 			QPainter p(m_container);
 			p.setPen(QPen(Qt::white, 2));
-			p.setRasterOp(XorROP);
+			p.setCompositionMode(QPainter::CompositionMode_Xor);
 			int cols = m_container->width() / gridX;
 			int rows = m_container->height() / gridY;
 
@@ -627,18 +632,22 @@ Container::setLayout(LayoutType type)
 		}
 		case  HFlow:
 		{
+#ifndef KEXI_NO_FLOWLAYOUT
 			KexiFlowLayout *flow = new KexiFlowLayout(m_container,m_margin, m_spacing);
 			flow->setOrientation(Qt::Horizontal);
 			m_layout = (QLayout*)flow;
 			createFlowLayout();
+#endif
 			break;
 		}
 		case VFlow:
 		{
+#ifndef KEXI_NO_FLOWLAYOUT
 			KexiFlowLayout *flow = new KexiFlowLayout(m_container,m_margin, m_spacing);
 			flow->setOrientation(Qt::Vertical);
 			m_layout = (QLayout*)flow;
 			createFlowLayout();
+#endif
 			break;
 		}
 		default:
@@ -676,6 +685,7 @@ Container::createBoxLayout(WidgetList *list)
 void
 Container::createFlowLayout()
 {
+#ifndef KEXI_NO_FLOWLAYOUT
 	KexiFlowLayout *flow = dynamic_cast<KexiFlowLayout*>(m_layout);
 	if(!flow || m_tree->children()->isEmpty())
 		return;
@@ -735,6 +745,7 @@ Container::createFlowLayout()
 
 	delete list;
 	delete list2;
+#endif
 }
 
 void

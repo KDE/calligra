@@ -34,11 +34,11 @@
 #include <kdebug.h>
 #include <klocale.h>
 //#ifdef KEXI_KTEXTEDIT
-#include <ktextedit.h>
+#include <k3textedit.h>
 //#else
 #include <klineedit.h>
 //#endif
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <keditlistbox.h>
 #include <kxmlguiclient.h>
 #include <kactioncollection.h>
@@ -55,6 +55,7 @@
 #include "widgetpropertyset.h"
 #include "widgetwithsubpropertiesinterface.h"
 #include <koproperty/property.h>
+#include <kexiutils/utils.h>
 
 using namespace KFormDesigner;
 
@@ -134,12 +135,13 @@ tristate WidgetInfo::autoSyncForProperty(const char *propertyName) const
 
 void WidgetInfo::setCustomTypeForProperty(const char *propertyName, int type)
 {
-	if (!propertyName || type==KoProperty::Auto)
+	if (!propertyName || type==(int)KoProperty::Auto)
 		return;
 	if (!m_customTypesForProperty) {
 		m_customTypesForProperty = new QMap<Q3CString,int>();
 	}
-	m_customTypesForProperty->replace(propertyName, type);
+	m_customTypesForProperty->remove(propertyName);
+	m_customTypesForProperty->insert(propertyName, type);
 }
 
 int WidgetInfo::customTypeForProperty(const char *propertyName) const
@@ -153,8 +155,9 @@ int WidgetInfo::customTypeForProperty(const char *propertyName) const
 ///// Widget Factory //////////////////////////
 
 WidgetFactory::WidgetFactory(QObject *parent, const char *name)
- : QObject(parent, (const char*)(Q3CString("kformdesigner_")+name))
+ : QObject(parent)
 {
+	setObjectName(QString("kformdesigner_")+name);
 	m_showAdvancedProperties = true;
 	m_classesByName.setAutoDelete(true);
 	m_hiddenClasses = 0;
@@ -172,8 +175,9 @@ void WidgetFactory::addClass(WidgetInfo *w)
 	if (oldw==w)
 		return;
 	if (oldw) {
-		kWarning() << "WidgetFactory::addClass(): class with name '" << w->className()
-			<< "' already exists for factory '" << name() << "'" << endl;
+		kWarning() << "WidgetFactory::addClass(): class with name '" 
+			<< w->className()
+			<< "' already exists for factory '" << objectName() << "'" << endl;
 		return;
 	}
 	m_classesByName.insert( w->className(), w );
@@ -189,13 +193,13 @@ void WidgetFactory::hideClass(const char *classname)
 void
 WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 	QWidget *w, Container *container, QRect geometry,
-	int align, bool useFrame, bool multiLine, Qt::BackgroundMode background)
+	Qt::Alignment alignment, bool useFrame, bool multiLine, Qt::BackgroundMode background)
 {
 //#ifdef KEXI_KTEXTEDIT
 	if (multiLine) {
-		KTextEdit *textedit = new KTextEdit(text, QString::null, w->parentWidget());
+		K3TextEdit *textedit = new K3TextEdit(text, QString::null, w->parentWidget());
 		textedit->setTextFormat(Qt::PlainText);
-		textedit->setAlignment(align);
+		textedit->setAlignment(alignment);
 		if (dynamic_cast<Q3TextEdit*>(w)) {
 			textedit->setWordWrap(dynamic_cast<Q3TextEdit*>(w)->wordWrap());
 			textedit->setWrapPolicy(dynamic_cast<Q3TextEdit*>(w)->wrapPolicy());
@@ -234,7 +238,7 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 	}
 	else {
 		KLineEdit *editor = new KLineEdit(text, w->parentWidget());
-		editor->setAlignment(align);
+		editor->setAlignment(alignment);
 		editor->setPalette(w->palette());
 		editor->setFont(w->font());
 		editor->setGeometry(geometry);
@@ -256,9 +260,12 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 //		m_editor = editor;
 	}
 	//copy properties if available
-	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
-	QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : w;
-	if (-1!=m_editor->metaObject()->findProperty("margin", true) && -1!=subwidget->metaObject()->findProperty("margin", true))
+	WidgetWithSubpropertiesInterface* subpropIface 
+		= dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+	QWidget *subwidget = (subpropIface && subpropIface->subwidget()) 
+		? subpropIface->subwidget() : w;
+	if (-1!=KexiUtils::indexOfPropertyWithSuperclasses(m_editor, "margin") &&
+		-1!=KexiUtils::indexOfPropertyWithSuperclasses(subwidget, "margin"))
 		m_editor->setProperty("margin", subwidget->property("margin"));
 //#endif
 //js	m_handles = new ResizeHandleSet(w, container->form(), true);
@@ -268,7 +275,7 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 		m_handles->raise();
 	}
 
-	ObjectTreeItem *tree = container->form()->objectTree()->lookup(w->name());
+	ObjectTreeItem *tree = container->form()->objectTree()->lookup(w->objectName());
 	if(!tree)
 		return;
 	tree->eventEater()->setContainer(this);
@@ -285,7 +292,7 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 void
 WidgetFactory::disableFilter(QWidget *w, Container *container)
 {
-	ObjectTreeItem *tree = container->form()->objectTree()->lookup(w->name());
+	ObjectTreeItem *tree = container->form()->objectTree()->lookup(w->objectName());
 	if(!tree)
 		return;
 	tree->eventEater()->setContainer(this);
@@ -319,16 +326,18 @@ WidgetFactory::disableFilter(QWidget *w, Container *container)
 bool
 WidgetFactory::editList(QWidget *w, QStringList &list)
 {
-	KDialogBase dialog(w->topLevelWidget(), "stringlist_dialog", true, i18n("Edit List of Items"),
-	    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, false);
+	KDialog dialog(w->topLevelWidget());
+	dialog.setObjectName("stringlist_dialog");
+	dialog.setModal(true);
+	dialog.setCaption(i18n("Edit List of Items"));
+	dialog.setButtons( KDialog::Ok | KDialog::Cancel );
 
-	KEditListBox *edit = new KEditListBox(i18n("Contents of %1").arg(w->name()), &dialog, "editlist");
+	KEditListBox *edit = new KEditListBox(
+		i18n("Contents of %1").arg(w->objectName()), &dialog, "editlist");
 	dialog.setMainWidget(edit);
 	edit->insertStringList(list);
-//	edit->show();
-
-	if(dialog.exec() == QDialog::Accepted)
-	{
+	
+	if(dialog.exec() == QDialog::Accepted) {
 		list = edit->items();
 		return true;
 	}
@@ -360,7 +369,7 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 	if( ((ev->type() == QEvent::Resize) || (ev->type() == QEvent::Move) ) && (obj == m_widget) && editor(m_widget)) {
 		// resize widget using resize handles
 		QWidget *ed = editor(m_widget);
-		resizeEditor(ed, m_widget, m_widget->className());
+		resizeEditor(ed, m_widget, m_widget->metaObject()->className());
 	}
 	else if((ev->type() == QEvent::Paint) && (obj == m_widget) && editor(m_widget)) {
 		// paint event for container edited (eg button group)
@@ -382,8 +391,11 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 			return false;
 
 		QWidget *focus = w->topLevelWidget()->focusWidget();
-		if(focus && w != focus && !w->child(focus->name(), focus->className()))
+		if(focus && w != focus 
+			&& !KexiUtils::findFirstChild<QWidget*>(w, focus->objectName().toLatin1(), focus->metaObject()->className()))
+		{
 			resetEditor();
+		}
 	}
 	else if(ev->type() == QEvent::KeyPress)
 	{
@@ -427,7 +439,7 @@ WidgetFactory::resetEditor()
 	QWidget *ed = editor(m_widget);
 	if(m_widget)
 	{
-		ObjectTreeItem *tree = m_container ? m_container->form()->objectTree()->lookup(m_widget->name()) : 0;
+		ObjectTreeItem *tree = m_container ? m_container->form()->objectTree()->lookup(m_widget->objectName()) : 0;
 		if(!tree)
 		{
 			kDebug() << "WidgetFactory::resetEditor() : error cannot found a tree item " << endl;
@@ -585,8 +597,8 @@ WidgetFactory::isPropertyVisibleInternal(const Q3CString &, QWidget *w,
 }
 
 bool
-WidgetFactory::propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname, QWidget *w, 
-	const Q3CString& property)
+WidgetFactory::propertySetShouldBeReloadedAfterPropertyChange(
+	const Q3CString& classname, QWidget *w, const Q3CString& property)
 {
 	Q_UNUSED(classname);
 	Q_UNUSED(w);
@@ -656,13 +668,13 @@ bool WidgetFactory::inheritsFactories()
 
 QString WidgetFactory::editorText() const {
 	QWidget *ed = editor(m_widget);
-	return dynamic_cast<KTextEdit*>(ed) ? dynamic_cast<KTextEdit*>(ed)->text() : dynamic_cast<KLineEdit*>(ed)->text();
+	return dynamic_cast<K3TextEdit*>(ed) ? dynamic_cast<K3TextEdit*>(ed)->text() : dynamic_cast<KLineEdit*>(ed)->text();
 }
 
 void WidgetFactory::setEditorText(const QString& text) {
 	QWidget *ed = editor(m_widget);
-	if (dynamic_cast<KTextEdit*>(ed))
-		dynamic_cast<KTextEdit*>(ed)->setText(text);
+	if (dynamic_cast<K3TextEdit*>(ed))
+		dynamic_cast<K3TextEdit*>(ed)->setText(text);
 	else
 		dynamic_cast<KLineEdit*>(ed)->setText(text);
 }
@@ -671,7 +683,7 @@ void WidgetFactory::setEditor(QWidget *widget, QWidget *editor)
 {
 	if (!widget)
 		return;
-	WidgetInfo *winfo = m_classesByName[widget->className()];
+	WidgetInfo *winfo = m_classesByName[widget->metaObject()->className()];
 	if (!winfo || winfo->parentFactoryName().isEmpty()) {
 		m_editor = editor;
 	}
@@ -687,12 +699,13 @@ QWidget *WidgetFactory::editor(QWidget *widget) const
 {
 	if (!widget)
 		return 0;
-	WidgetInfo *winfo = m_classesByName[widget->className()];
+	WidgetInfo *winfo = m_classesByName[widget->metaObject()->className()];
 	if (!winfo || winfo->parentFactoryName().isEmpty()) {
 		return m_editor;
 	}
 	else {
-		WidgetFactory *f = m_library->factoryForClassName(widget->className());
+		WidgetFactory *f = m_library->factoryForClassName(
+			widget->metaObject()->className());
 		if (f!=this)
 			return f->editor(widget);
 		return m_editor;
@@ -701,7 +714,8 @@ QWidget *WidgetFactory::editor(QWidget *widget) const
 
 void WidgetFactory::setWidget(QWidget *widget, Container* container)
 {
-	WidgetInfo *winfo = widget ? m_classesByName[widget->className()] : 0;
+	WidgetInfo *winfo = widget 
+		? m_classesByName[widget->metaObject()->className()] : 0;
 	if (winfo && !winfo->parentFactoryName().isEmpty()) {
 		WidgetFactory *f = m_library->factory(winfo->parentFactoryName());
 		if (f!=this)

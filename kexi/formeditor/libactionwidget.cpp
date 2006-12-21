@@ -19,29 +19,33 @@
 */
 
 #include <kdebug.h>
+#include <KIcon>
 
 #include "libactionwidget.h"
 #include "widgetfactory.h"
+#include "formmanager.h"
 
 using namespace KFormDesigner;
 
 LibActionWidget::LibActionWidget(WidgetInfo *w, KActionCollection *c)
- : KToggleAction(w->name(), w->pixmap(), 0/*Qt::Key_F5*/, 0, 0 /*SLOT(slotWidget())*/, 
-	c, QString("library_widget_" + w->className()).latin1())
+ : KToggleAction(KIcon(w->name()), w->pixmap(),
+ // 0/*Qt::Key_F5*/, 0, 0 /*SLOT(slotWidget())*/, 
+	c, QString("library_widget_" + w->className()),
+	FormManager::self()->widgetActionGroup())
 {
 //	kDebug() << "LibActionWidget::LibActionWidget(): " << QString("library_widget_" + w->className()).latin1() << endl;
 	m_className = w->className();
-	setExclusiveGroup("LibActionWidgets");
+//kde4 not needed	setExclusiveGroup("LibActionWidgets");
 	setToolTip(w->name());
 	setWhatsThis(w->description());
 //	connect(this, SIGNAL(activated()), this, SLOT(slotWidget()));
 }
 
 void
-LibActionWidget::slotActivated()
+LibActionWidget::slotToggled(bool checked)
 {
-	KToggleAction::slotActivated();
-	if (isChecked())
+	KToggleAction::slotToggled(checked);
+	if (checked)
 		emit prepareInsert(m_className);
 }
 

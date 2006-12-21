@@ -2,7 +2,11 @@
 
 add_subdirectory( factories )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/lib/kofficecore ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/lib/koproperty ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/libs/kofficecore ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/koproperty ${KDE4_INCLUDES}  )
+
+ADD_DEFINITIONS( 
+-DMAKE_KFORMEDITOR_LIB
+)
 
 
 ########### next target ###############
@@ -35,7 +39,10 @@ kde4_automoc(${kformdesigner_LIB_SRCS})
 
 kde4_add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
 
-target_link_libraries(kformdesigner  ${KDE4_KDECORE_LIBS} kexiextendedwidgets kexiguiutils kexidatatable koproperty ${KDE4_KPARTS_LIBS} )
+target_link_libraries(kformdesigner koproperty kexiutils
+ ${KDE4_KDECORE_LIBS} ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KPARTS_LIBS} )
+# todo: add kexiextendedwidgets kexiguiutils kexidatatable
+
 
 set_target_properties(kformdesigner PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kformdesigner  DESTINATION ${LIB_INSTALL_DIR})

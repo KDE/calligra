@@ -26,11 +26,12 @@
 #include <qstring.h>
 #include <qwidget.h>
 #include <qmap.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QLabel>
 #include <Q3CString>
 #include <QPaintEvent>
+
+#include <kexi_export.h>
 
 class QString;
 class QDomElement;
@@ -46,7 +47,7 @@ class KFORMEDITOR_EXPORT CustomWidget : public QWidget
 	Q_OBJECT
 
 	public:
-		CustomWidget(const Q3CString &className, QWidget *parent, const char *name);
+		CustomWidget(const Q3CString &className, QWidget *parent);
 		virtual ~CustomWidget();
 
 		virtual void paintEvent(QPaintEvent *ev);

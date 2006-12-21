@@ -22,6 +22,8 @@
 
 #include <koproperty/editors/pixmapedit.h>
 
+#include <kexi_export.h>
+
 namespace KFormDesigner {
 
 class KFORMEDITOR_EXPORT KFDPixmapEdit : public KoProperty::PixmapEdit
@@ -29,7 +31,7 @@ class KFORMEDITOR_EXPORT KFDPixmapEdit : public KoProperty::PixmapEdit
 	Q_OBJECT
 
 	public:
-		KFDPixmapEdit(KoProperty::Property *property, QWidget *parent=0, const char *name=0);
+		KFDPixmapEdit(KoProperty::Property *property, QWidget *parent=0);
 		virtual ~KFDPixmapEdit();
 
 	public slots:

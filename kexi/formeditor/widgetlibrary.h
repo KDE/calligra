@@ -25,9 +25,7 @@
 #include <qobject.h>
 #include <qmap.h>
 #include <q3dict.h>
-//Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3PopupMenu>
 #include <Q3CString>
 #include <Q3PtrList>
 
@@ -37,8 +35,8 @@ template<class type> class Q3PtrList;
 template<class type> class Q3ValueVector;
 class KActionCollection;
 class KAction;
+class KMenu;
 class QWidget;
-class Q3PopupMenu;
 class QVariant;
 class QDomDocument;
 class QDomElement;
@@ -94,7 +92,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		QWidget *createWidget(const Q3CString &classname, QWidget *parent, const char *name, Container *c,
 			int options = WidgetFactory::DefaultOptions);
 
-		bool createMenuActions(const Q3CString &c, QWidget *w, Q3PopupMenu *menu,
+		bool createMenuActions(const Q3CString &c, QWidget *w, KMenu *menu,
 			KFormDesigner::Container *container);
 
 		/** 

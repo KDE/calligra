@@ -18,12 +18,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "connectiondialog.h"
+
 #include <qlayout.h>
-#include <qhbox.h>
 #include <qlabel.h>
 #include <qregexp.h>
 #include <qmetaobject.h>
-#include <qstrlist.h>
 
 #include <kpushbutton.h>
 #include <kiconloader.h>
@@ -31,41 +31,56 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 #include "kexitableview.h"
 #include "kexitableviewdata.h"
+#endif
+
 #include "events.h"
 #include "form.h"
 #include "formmanager.h"
 #include "objecttree.h"
 
-#include "connectiondialog.h"
 
-namespace KFormDesigner {
+using namespace KFormDesigner;
 
 /////////////////////////////////////////////////////////////////////////////////
 ///////////// The dialog to edit or add/remove connections //////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 ConnectionDialog::ConnectionDialog(QWidget *parent)
-: KDialogBase(parent, "connections_dialog", true, i18n("Edit Form Connections"),
-							Ok|Cancel|Details, Ok, false)
+: KDialog(parent)
 , m_buffer(0)
 {
-	QFrame *frame = makeMainWidget();
+	setObjectName("connections_dialog");
+	setModal(true);
+	setCaption(i18n("Edit Form Connections"));
+	setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Details );
+	setDefaultButton( KDialog::Ok );
+
+	QFrame *frame = new QFrame(this);
+	setMainWidget(frame);
 	QHBoxLayout *layout = new QHBoxLayout(frame, 0, 6);
 
 	// Setup the details widget /////////
-	QHBox *details = new QHBox(frame);
+	QWidget *details = new QWidget(frame);
+	layout->addWidget(details);
+	QHBoxLayout *detailsLyr = new QHBoxLayout(details);
 	setDetailsWidget(details);
 	setDetails(true);
 
 	m_pixmapLabel = new QLabel(details);
+	detailsLyr->addWidget(m_pixmapLabel);
 	m_pixmapLabel->setFixedWidth( int(IconSize(K3Icon::Desktop) * 1.5) );
-	m_pixmapLabel->setAlignment(AlignHCenter | AlignTop);
+	m_pixmapLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
 	m_textLabel = new QLabel(details);
-	m_textLabel->setAlignment(AlignLeft | AlignTop);
+	detailsLyr->addWidget(m_textLabel);
+	m_textLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 	//setStatusOk();
 
+#ifndef KEXI_NO_TABLEVIEW
+#warning "Port Kexi Table View!"
 	// And the KexiTableView ////////
 	m_data = new KexiTableViewData();
 	m_table = new KexiTableView(0, frame, "connections_tableview");
@@ -75,32 +90,36 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 	m_table->setData(m_data, false);
 	m_table->adjustColumnWidthToContents(0);
 	layout->addWidget(m_table);
+	
+	connect(m_table,SIGNAL(cellSelected(int, int)),
+		this, SLOT(slotCellSelected(int, int)));
+	connect(m_table->data(), SIGNAL(rowInserted(KexiTableItem*,bool)),
+		this, SLOT(slotRowInserted(KexiTableItem*,bool)));
+#endif
 
 	//// Setup the icon toolbar /////////////////
 	QVBoxLayout *vlayout = new QVBoxLayout(layout, 3);
-	KPushButton *newItem = new KPushButton(SmallIconSet("filenew"), i18n("&New Connection"), frame);
-	vlayout->addWidget(newItem);
-	m_buttons.insert(BAdd, newItem);
-	connect(newItem, SIGNAL(clicked()), this, SLOT(newItem()));
+	m_addButton = new KPushButton(KIcon("filenew"), i18n("&New Connection"), frame);
+	vlayout->addWidget(m_addButton);
+	connect(m_addButton, SIGNAL(clicked()), this, SLOT(newItem()));
 
-	KPushButton *delItem = new KPushButton(SmallIconSet("editdelete"), i18n("&Remove Connection"), frame);
-	vlayout->addWidget(delItem);
-	m_buttons.insert(BRemove, delItem);
-	connect(delItem, SIGNAL(clicked()), this, SLOT(removeItem()));
+	m_removeButton = new KPushButton(KIcon("editdelete"), i18n("&Remove Connection"), frame);
+	vlayout->addWidget(m_removeButton);
+	connect(m_removeButton, SIGNAL(clicked()), this, SLOT(removeItem()));
 
 	vlayout->addStretch();
 
 	setInitialSize(QSize(600, 300));
 	//setWFlags(WDestructiveClose);
 
-	connect(m_table,SIGNAL(cellSelected(int, int)), this, SLOT(slotCellSelected(int, int)));
-	connect(m_table->data(), SIGNAL(rowInserted(KexiTableItem*,bool)), this, SLOT(slotRowInserted(KexiTableItem*,bool)));
 	this->newItem();
 }
 
 void
 ConnectionDialog::initTable()
 {
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 	KexiTableViewColumn *col0 = new KexiTableViewColumn(i18n("OK?"), KexiDB::Field::Text);
 	col0->field()->setSubType("KIcon");
 	col0->setReadOnly(true);
@@ -126,7 +145,7 @@ ConnectionDialog::initTable()
 	col4->setRelatedData( m_slotsColumnData );
 	m_data->addColumn(col4);
 
-	QValueList<int> c;
+	QList<int> c;
 	c << 2 << 4;
 	m_table->maximizeColumnsWidth(c);
 	m_table->setColumnStretchEnabled( true, 4 );
@@ -135,6 +154,7 @@ ConnectionDialog::initTable()
 	      this,SLOT(slotCellChanged(KexiTableItem*, int, QVariant, KexiDB::ResultInfo*)));
 	connect(m_data, SIGNAL(rowUpdated(KexiTableItem*)), this, SLOT(checkConnection(KexiTableItem *)));
 	connect(m_table, SIGNAL(itemSelected(KexiTableItem *)), this, SLOT(checkConnection(KexiTableItem *)));
+#endif
 }
 
 void
@@ -142,13 +162,14 @@ ConnectionDialog::exec(Form *form)
 {
 	m_form = form;
 	updateTableData();
-
-	KDialogBase::exec();
+	KDialog::exec();
 }
 
 void ConnectionDialog::slotCellSelected(int col, int row)
 {
-	m_buttons[BRemove]->setEnabled( row < m_table->rows() );
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
+	m_removeButton->setEnabled( row < m_table->rows() );
 	KexiTableItem *item = m_table->itemAt(row);
 	if (!item)
 		return;
@@ -156,6 +177,7 @@ void ConnectionDialog::slotCellSelected(int col, int row)
 		updateSignalList(item);
 	else if(col == 4) // slot col
 		updateSlotList(item);
+#endif
 }
 
 void ConnectionDialog::slotRowInserted(KexiTableItem* item,bool)
@@ -167,6 +189,8 @@ void ConnectionDialog::slotRowInserted(KexiTableItem* item,bool)
 void
 ConnectionDialog::slotOk()
 {
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 	// First we update our buffer contents
 	for(int i=0; i < m_table->rows(); i++)
 	{
@@ -178,6 +202,7 @@ ConnectionDialog::slotOk()
 		c->setReceiver( (*item)[3].toString() );
 		c->setSlot( (*item)[4].toString() );
 	}
+#endif
 
 	// then me make it replace form's current one
 	delete m_form->connectionBuffer();
@@ -194,22 +219,28 @@ ConnectionDialog::updateTableData()
 	ObjectTreeDictIterator it(*dict);
 	for(; it.current(); ++it)
 	{
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 		KexiTableItem *item = m_widgetsColumnData->createItem(); //new KexiTableItem(2);
 		(*item)[0] = it.current()->name();
 		(*item)[1] = (*item)[0];
 		m_widgetsColumnData->append(item);
+#endif
 	}
 	delete dict;
 
 	// Then we fill the columns with the form connections
 	for(Connection *c = m_form->connectionBuffer()->first(); c ; c = m_form->connectionBuffer()->next())
 	{
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 		KexiTableItem *item = m_table->data()->createItem(); //new KexiTableItem(5);
 		(*item)[1] = c->sender();
 		(*item)[2] = c->signal();
 		(*item)[3] = c->receiver();
 		(*item)[4] = c->slot();
 		m_table->insertItem(item, m_table->rows());
+#endif
 	}
 
 	m_buffer = new ConnectionBuffer(*(m_form->connectionBuffer()));
@@ -221,6 +252,8 @@ ConnectionDialog::setStatusOk(KexiTableItem *item)
 	m_pixmapLabel->setPixmap( DesktopIcon("button_ok") );
 	m_textLabel->setText("<qt><h2>The connection is OK.</h2></qt>");
 
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 	if (!item)
 		item = m_table->selectedItem();
 	if (m_table->currentRow() >= m_table->rows())
@@ -232,6 +265,7 @@ ConnectionDialog::setStatusOk(KexiTableItem *item)
 		m_pixmapLabel->setPixmap( QPixmap() );
 		m_textLabel->setText(QString::null);
 	}
+#endif
 }
 
 void
@@ -240,6 +274,8 @@ ConnectionDialog::setStatusError(const QString &msg, KexiTableItem *item)
 	m_pixmapLabel->setPixmap( DesktopIcon("button_cancel") );
 	m_textLabel->setText("<qt><h2>The connection is invalid.</h2></qt>" + msg);
 
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 	if (!item)
 		item = m_table->selectedItem();
 	if (m_table->currentRow() >= m_table->rows())
@@ -251,11 +287,14 @@ ConnectionDialog::setStatusError(const QString &msg, KexiTableItem *item)
 		m_pixmapLabel->setPixmap( QPixmap() );
 		m_textLabel->setText(QString::null);
 	}
+#endif
 }
 
 void
 ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant&, KexiDB::ResultInfo*)
 {
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 	switch(col)
 	{
 		// sender changed, we clear siganl and slot
@@ -271,11 +310,14 @@ ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant&, KexiD
 		default:
 			break;
 	}
+#endif
 }
 
 void
 ConnectionDialog::updateSlotList(KexiTableItem *item)
 {
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 	m_slotsColumnData->deleteAllRows();
 	QString widget = (*item)[1].toString();
 	QString signal = (*item)[2].toString();
@@ -289,53 +331,58 @@ ConnectionDialog::updateSlotList(KexiTableItem *item)
 	QString signalArg(signal);
 	signalArg = signalArg.remove( QRegExp(".*[(]|[)]") );
 
-	QStrList slotList = tree->widget()->metaObject()->slotNames(true);
-	QStrListIterator it(slotList);
-	for(; it.current() != 0; ++it)
-	{
+	const QList<QMetaMethod> list( 
+		KexiUtils::methodsForMetaObjectWithParents(tree->widget()->metaObject(), 
+		QMetaMethod::Slot, QMetaMethod::Public) );
+	foreach (QMetaMethod method, list) {
 		// we add the slot only if it is compatible with the signal
-		QString slotArg(*it);
+		QString slotArg(method.signature());
 		slotArg = slotArg.remove( QRegExp(".*[(]|[)]") );
-
 		if(!signalArg.startsWith(slotArg, true) && (!signal.isEmpty())) // args not compatible
 			continue;
 
 		KexiTableItem *item = m_slotsColumnData->createItem(); //new KexiTableItem(2);
-		(*item)[0] = QString(*it);
+		(*item)[0] = QString::fromLatin1(method.signature());
 		(*item)[1] = (*item)[0];
 		m_slotsColumnData->append(item);
 	}
+#endif
 }
 
 void
 ConnectionDialog::updateSignalList(KexiTableItem *item)
 {
-	ObjectTreeItem *tree = m_form->objectTree()->lookup((*item)[1].toString());
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
+ObjectTreeItem *tree = m_form->objectTree()->lookup((*item)[1].toString());
 	if(!tree || !tree->widget())
 		return;
 
 	m_signalsColumnData->deleteAllRows();
-	QStrList signalList = tree->widget()->metaObject()->signalNames(true);
-	QStrListIterator it(signalList);
-	for(; it.current() != 0; ++it)
-	{
+	const QList<QMetaMethod> list( 
+		KexiUtils::methodsForMetaObjectWithParents(tree->widget()->metaObject(), 
+		QMetaMethod::Signal, QMetaMethod::Public) );
+	foreach (QMetaMethod method, list) {
 		KexiTableItem *item = m_signalsColumnData->createItem(); //new KexiTableItem(2);
-		(*item)[0] = QString(*it);
+		(*item)[0] = QString::fromLatin1(method.signature());
 		(*item)[1] = (*item)[0];
 		m_signalsColumnData->append(item);
 	}
+#endif
 }
 
 void
 ConnectionDialog::checkConnection(KexiTableItem *item)
 {
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 	// First we check if one column is empty
 	for(int i = 1; i < 5; i++)
 	{
 		if( !item || (*item)[i].toString().isEmpty())
 		{
-			setStatusError( i18n("<qt>You have not selected item: <b>%1</b>.</qt>").arg(m_data->column(i)->captionAliasOrName()),
-				item);
+			setStatusError( i18n("<qt>You have not selected item: <b>%1</b>.</qt>")
+			.arg(m_data->column(i)->captionAliasOrName()), item);
 			return;
 		}
 	}
@@ -353,13 +400,17 @@ ConnectionDialog::checkConnection(KexiTableItem *item)
 	}
 
 	setStatusOk(item);
+#endif
 }
 
 void
 ConnectionDialog::newItem()
 {
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 	m_table->acceptRowEdit();
 	m_table->setCursorPosition(m_table->rows(), 1);
+#endif
 }
 
 void
@@ -379,6 +430,8 @@ ConnectionDialog::slotConnectionCreated(KFormDesigner::Form *form, Connection &c
 	if(form != m_form)
 		return;
 
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 	Connection *c = new Connection(connection);
 	KexiTableItem *item = m_table->data()->createItem(); //new KexiTableItem(5);
 	(*item)[1] = c->sender();
@@ -387,6 +440,7 @@ ConnectionDialog::slotConnectionCreated(KFormDesigner::Form *form, Connection &c
 	(*item)[4] = c->slot();
 	m_table->insertItem(item, m_table->rows());
 	m_buffer->append(c);
+#endif
 }
 
 void
@@ -402,6 +456,8 @@ ConnectionDialog::slotConnectionAborted(KFormDesigner::Form *form)
 void
 ConnectionDialog::removeItem()
 {
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 	if(m_table->currentRow() == -1 || m_table->currentRow()>=m_table->rows())
 		return;
 
@@ -413,8 +469,7 @@ ConnectionDialog::removeItem()
 
 	m_buffer->remove(m_table->currentRow());
 	m_table->deleteItem(m_table->selectedItem());
-}
-
+#endif
 }
 
 #include "connectiondialog.moc"

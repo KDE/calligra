@@ -20,7 +20,6 @@
 #include "widgetpropertyset.h"
 
 #include <qstringlist.h>
-#include <qstrlist.h>
 #include <qmetaobject.h>
 #include <qvariant.h>
 #include <qevent.h>
@@ -48,7 +47,7 @@ using namespace KFormDesigner;
 namespace KFormDesigner {
 
 //! @internal
-typedef QValueList< QPointer<QWidget> > QGuardedWidgetList;
+typedef QList< QPointer<QWidget> > QGuardedWidgetList;
 
 //! @internal
 class WidgetPropertySetPrivate
@@ -162,7 +161,7 @@ WidgetPropertySet::saveModifiedProperties()
 	QWidget * w = d->widgets.first();
 	if(!w || d->widgets.count() > 1 || !KFormDesigner::FormManager::self()->activeForm() || !KFormDesigner::FormManager::self()->activeForm()->objectTree())
 			return;
-	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(w->name());
+	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(w->objectName());
 	if(!tree)
 		return;
 
@@ -271,7 +270,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 		kWarning() << "WidgetPropertySet::createPropertiesForWidget() no manager or active form!!!" << endl;
 		return;
 	}
-	ObjectTreeItem *tree = form->objectTree()->lookup(w->name());
+	ObjectTreeItem *tree = form->objectTree()->lookup(w->objectName());
 	if(!tree)
 		return;
 
@@ -287,39 +286,44 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 		return;
 	}
 
-	QStrList pList = w->metaObject()->propertyNames(true);
-	QStrListIterator it(pList);
+//! @todo ineffective, get property names directly
+	QList<QMetaProperty> propList( 
+		KexiUtils::propertiesForMetaObjectWithInherited(w->metaObject()) );
+	QList<Q3CString> propNames;
+	foreach(QMetaProperty mp, propList)
+		propNames.append( mp.name() );
 
 	// add subproperties if available
-	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
-	QStrList tmpList; //used to allocate copy of names
+	WidgetWithSubpropertiesInterface* subpropIface
+		= dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+//	QStrList tmpList; //used to allocate copy of names
 	if (subpropIface) {
-		QValueList<Q3CString> subproperies( 
-			subpropIface->subproperies() );
-		foreach(QValueListConstIterator<Q3CString>, it, subproperies ) {
-			tmpList.append( *it );
-			pList.append( tmpList.last() );
-			kDebug() << "Added subproperty: " << *it << endl;
+		const QSet<Q3CString> subproperies( subpropIface->subproperies() );
+		foreach(Q3CString propName, subproperies) {
+//			tmpList.append( *it );
+			propNames.append( propName );
+			kDebug() << "Added subproperty: " << propName << endl;
 		}
 	}
 
 	// iterate over the property list, and create Property objects
-	for(; it.current() != 0; ++it) {
+	foreach(Q3CString propName, propNames) {
 		//kDebug() << ">> " << it.current() << endl;
-		const QMetaProperty *subMeta = // special case - subproperty
-			subpropIface ? subpropIface->findMetaSubproperty(it.current()) : 0;
-		const QMetaProperty *meta = subMeta ? subMeta 
-			 : w->metaObject()->property( w->metaObject()->findProperty(*it, true), true);
-		if (!meta)
+		const QMetaProperty subMeta = // special case - subproperty
+			subpropIface ? subpropIface->findMetaSubproperty(propName) : QMetaProperty();
+		const QMetaProperty meta = subMeta.isValid() ? subMeta 
+			 : KexiUtils::findPropertyWithSuperclasses(w, propName.constData());
+		if (meta.isValid())
 			continue;
-		const char* propertyName = meta->name();
-		QWidget *subwidget = subMeta/*subpropIface*/ ? subpropIface->subwidget() : w;
+		const char* propertyName = meta.name();
+		QWidget *subwidget = subMeta.isValid()/*subpropIface*/ 
+			? subpropIface->subwidget() : w;
 		WidgetInfo *subwinfo = form->library()->widgetInfoForClassName(subwidget->className());
 //		kDebug() << "$$$ " << subwidget->className() << endl;
 
-		if(subwinfo && meta->designable(subwidget) && !d->set.contains(propertyName)) {
+		if(subwinfo && meta.isDesignable(subwidget) && !d->set.contains(propertyName)) {
 			//! \todo add another list for property description
-			QString desc( d->propCaption[meta->name()] );
+			QString desc( d->propCaption[meta.name()] );
 			//! \todo change i18n
 			if (desc.isEmpty())  //try to get property description from factory
 				desc = form->library()->propertyDescForName(subwinfo, propertyName);
@@ -327,21 +331,24 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 			modifiedPropertiesIt = modifiedProperties->find(propertyName);
 			const bool oldValueExists = modifiedPropertiesIt!=modifiedProperties->constEnd();
 
-			if(meta->isEnumType()) {
+			if(meta.isEnumType()) {
 				if(qstrcmp(propertyName, "alignment") == 0)  {
 					createAlignProperty(meta, w, subwidget);
 					continue;
 				}
 
-				QStringList keys = QStringList::fromStrList( meta->enumKeys() );
-				newProp = new KoProperty::Property(propertyName, createValueList(subwinfo, keys),
+				QStringList keys( KexiUtils::enumKeysForProperty( meta ) );
+				newProp = new KoProperty::Property(
+					propertyName, createValueList(subwinfo, keys),
 					/* assign current or older value */
-					meta->valueToKey( 
-						oldValueExists ? modifiedPropertiesIt.data().toInt() : subwidget->property(propertyName).toInt() ), 
+					meta.enumerator().valueToKey( 
+						oldValueExists ? modifiedPropertiesIt.data().toInt() 
+						: subwidget->property(propertyName).toInt() ), 
 					desc, desc );
 				//now set current value, so the old one is stored as old
 				if (oldValueExists) {
-					newProp->setValue( meta->valueToKey( subwidget->property(propertyName).toInt() ) );
+					newProp->setValue( 
+						meta.enumerator().valueToKey( subwidget->property(propertyName).toInt() ) );
 				}
 			}
 			else {
@@ -408,9 +415,9 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 }
 
 void
-WidgetPropertySet::updatePropertyValue(ObjectTreeItem *tree, const char *property, const QMetaProperty *meta)
+WidgetPropertySet::updatePropertyValue(ObjectTreeItem *tree, const char *property, const QMetaProperty &meta)
 {
-	const char *propertyName = meta ? meta->name() : property;
+	const char *propertyName = meta.isValid() ? meta.name() : property;
 	if (!d->set.contains(propertyName))
 		return;
 	KoProperty::Property p( d->set[propertyName] );
@@ -419,8 +426,8 @@ WidgetPropertySet::updatePropertyValue(ObjectTreeItem *tree, const char *propert
 	QMap<QString, QVariant>::ConstIterator it( tree->modifiedProperties()->find(propertyName) );
 	if (it != tree->modifiedProperties()->constEnd()) {
 		blockSignals(true);
-		if(meta && meta->isEnumType()) {
-			p.setValue( meta->valueToKey( it.data().toInt() ), false );
+		if(meta.isValid() && meta.isEnumType()) {
+			p.setValue( meta.enumerator().valueToKey( it.data().toInt() ), false );
 		}
 		else {
 			p.setValue(it.data(), false );
@@ -462,15 +469,17 @@ WidgetPropertySet::isPropertyVisible(const Q3CString &property, bool isTopLevel,
 
 //	return KFormDesigner::FormManager::self()->lib()->isPropertyVisible(d->widgets.first()->className(), d->widgets.first(),
 	QWidget *w = d->widgets.first();
-	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+	WidgetWithSubpropertiesInterface* subpropIface 
+		= dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
 	QWidget *subwidget;
-	if (subpropIface && subpropIface->findMetaSubproperty(property)) // special case - subproperty
+	if (subpropIface && subpropIface->findMetaSubproperty(property).isValid()) // special case - subproperty
 		subwidget = subpropIface->subwidget();
 	else
 		subwidget = w;
  
-	return KFormDesigner::FormManager::self()->activeForm()->library()->isPropertyVisible(
-		subwidget->className(), subwidget, property, multiple, isTopLevel);
+	return KFormDesigner::FormManager::self()->activeForm()->library()
+		->isPropertyVisible(
+			subwidget->className(), subwidget, property, multiple, isTopLevel);
 }
 
 ////////////////  Slots called when properties are modified ///////////////
@@ -556,8 +565,8 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 				// We store old values for each widget
 				QMap<Q3CString, QVariant> list;
 	//			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
-				foreach(QGuardedWidgetList::ConstIterator, it, d->widgets)
-					list.insert((*it)->name(), (*it)->property(property));
+				foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets)
+					list.insert((*it)->objectName().toLatin1(), (*it)->property(property));
 
 				d->lastCommand = new PropertyCommand(this, list, value, property);
 				KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
@@ -565,11 +574,12 @@ WidgetPropertySet::slotPropertyChanged(KoProperty::Set& set, KoProperty::Propert
 		}
 
 //			for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())
-		foreach(QGuardedWidgetList::ConstIterator, it, d->widgets) {
+		foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets) {
 			if (!alterLastCommand) {
-				ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()
-					->lookup((*it)->name());
-				if(tree && p.isModified())
+				ObjectTreeItem *tree
+					= KFormDesigner::FormManager::self()->activeForm()->objectTree()
+						->lookup((*it)->name());
+				if (tree && p.isModified())
 					tree->addModifiedProperty(property, (*it)->property(property));
 			}
 			(*it)->setProperty(property, value);
@@ -585,9 +595,11 @@ void WidgetPropertySet::emitWidgetPropertyChanged(QWidget *w, const Q3CString& p
 	Form *form = KFormDesigner::FormManager::self()->activeForm();
 	if (form && form->library()->propertySetShouldBeReloadedAfterPropertyChange( w->className(), w, property)) {
 		//setSelectedWidget(0, false);
-		qApp->eventLoop()->processEvents(QEventLoop::AllEvents); //be sure events related to editors are consumed
+		QCoreApplication::processEvents(); //be sure events related to editors are consumed
+//		qApp->eventLoop()->processEvents(QEventLoop::AllEvents); //be sure events related to editors are consumed
 		setSelectedWidget(w, /*!add*/false, /*forceReload*/true);
-		qApp->eventLoop()->processEvents(QEventLoop::AllEvents); //be sure events related to editors are consumed
+		QCoreApplication::processEvents(); //be sure events related to editors are consumed
+		//qApp->eventLoop()->processEvents(QEventLoop::AllEvents); //be sure events related to editors are consumed
 		//KFormDesigner::FormManager::self()->showPropertySet(this, true/*forceReload*/);
 	}
 }
@@ -621,7 +633,9 @@ WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget,
 		else {
 			WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
 			QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
-			if (-1 != subwidget->metaObject()->findProperty(it.key(), true) && subwidget->property(it.key())!=it.data()) {
+			if (-1!=KexiUtils::indexOfPropertyWithSuperclasses(subwidget, it.key()) 
+				&& subwidget->property(it.key())!=it.data()) 
+			{
 				ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(widget->name());
 				if (tree)
 					tree->addModifiedProperty(it.key(), subwidget->property(it.key()));
@@ -642,7 +656,7 @@ void
 WidgetPropertySet::saveEnabledProperty(bool value)
 {
 //	for(QWidget *w = d->widgets.first(); w; w = d->widgets.next()) {
-	foreach(QGuardedWidgetList::ConstIterator, it, d->widgets) {
+	foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets) {
 		ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()
 			->lookup((*it)->name());
 		if(tree->isEnabled() == value)
@@ -709,7 +723,7 @@ WidgetPropertySet::slotPropertyReset(KoProperty::Set& set, KoProperty::Property&
 
 	// We use the old value in modifProp for each widget
 //	for(QWidget *w = d->widgets.first(); w; w = d->widgets.next())  {
-	foreach(QGuardedWidgetList::ConstIterator, it, d->widgets) {
+	foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets) {
 		ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup((*it)->name());
 		if(tree->modifiedProperties()->contains(property.name()))
 			(*it)->setProperty(property.name(), tree->modifiedProperties()->find(property.name()).data());
@@ -721,7 +735,7 @@ WidgetPropertySet::slotWidgetDestroyed()
 {
 //	if(d->widgets.contains(QPointer<const QWidget>( dynamic_cast<const QWidget*>(sender()) ))) {
 	//only clear this set if it contains the destroyed widget
-	foreach(QGuardedWidgetList::ConstIterator, it, d->widgets) {
+	foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets) {
 		if (dynamic_cast<const QWidget*>(sender()) == *it) {
 			clearSet();
 			break;
@@ -752,7 +766,7 @@ WidgetPropertySet::eventFilter(QObject *o, QEvent *ev)
 			d->lastGeoCommand->setPos(static_cast<QMoveEvent*>(ev)->pos());
 		else  {
 			QStringList list;
-			foreach(QGuardedWidgetList::ConstIterator, it, d->widgets)
+			foreach3(QGuardedWidgetList::ConstIterator, it, d->widgets)
 				list.append((*it)->name());
 
 			d->lastGeoCommand = new GeometryPropertyCommand(this, list, static_cast<QMoveEvent*>(ev)->oldPos());
@@ -767,7 +781,7 @@ WidgetPropertySet::eventFilter(QObject *o, QEvent *ev)
 // Alignment-related functions /////////////////////////////
 
 void
-WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *widget, QWidget *subwidget)
+WidgetPropertySet::createAlignProperty(const QMetaProperty& meta, QWidget *widget, QWidget *subwidget)
 {
 	if (!KFormDesigner::FormManager::self()->activeForm() 
 || !KFormDesigner::FormManager::self()->activeForm()->objectTree())
@@ -776,31 +790,31 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *widge
 	QStringList list;
 	QString value;
 	const int alignment = subwidget->property("alignment").toInt();
-	QStringList keys = QStringList::fromStrList( meta->valueToKeys(alignment) );
+	QList<QByteArray> keys( meta.enumerator().valueToKeys(alignment).split('|') );
 
-	QStrList *enumKeys = new QStrList(meta->enumKeys());
-	QStringList possibleValues = QStringList::fromStrList(*enumKeys);
-	delete enumKeys;
+	QStringList possibleValues( KexiUtils::enumKeysForProperty(meta) );
+	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()
+		->objectTree()->lookup(widget->objectName());
+	const bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(widget);
 
-	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(widget->name());
-	bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(widget);
-
-	if(!possibleValues.grep("AlignHCenter").empty())  {
+	if (possibleValues.contains("AlignHCenter"))  {
 		// Create the horizontal alignment property
-		if(!keys.grep("AlignHCenter").isEmpty())
+		if (keys.contains("AlignHCenter"))
 			value = "AlignHCenter";
-		else if(!keys.grep("AlignRight").isEmpty())
+		else if (keys.contains("AlignRight"))
 			value = "AlignRight";
-		else if(!keys.grep("AlignLeft").isEmpty())
+		else if (keys.contains("AlignLeft"))
 			value = "AlignLeft";
-		else if(!keys.grep("AlignJustify").isEmpty())
+		else if (keys.contains("AlignJustify"))
 			value = "AlignJustify";
 		else
 			value = "AlignAuto";
 
-		list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
-		KoProperty::Property *p = new KoProperty::Property("hAlign", createValueList(0, list), value,
-			i18n("Translators: please keep this string short (less than 20 chars)", "Hor. Alignment"),
+		list << "AlignAuto" << "AlignLeft" << "AlignRight" 
+			<< "AlignHCenter" << "AlignJustify";
+		KoProperty::Property *p = new KoProperty::Property(
+			"hAlign", createValueList(0, list), value,
+			i18nc("Translators: please keep this string short (less than 20 chars)", "Hor. Alignment"),
 			i18n("Horizontal Alignment"));
 		d->set.addProperty(p);
 		if(!isPropertyVisible(p->name(), isTopLevel)) {
@@ -810,19 +824,20 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *widge
 		list.clear();
 	}
 
-	if(!possibleValues.grep("AlignTop").empty())
+	if (possibleValues.contains("AlignTop"))
 	{
 		// Create the ver alignment property
-		if(!keys.grep("AlignTop").empty())
+		if (keys.contains("AlignTop"))
 			value = "AlignTop";
-		else if(!keys.grep("AlignBottom").empty())
+		else if (keys.contains("AlignBottom"))
 			value = "AlignBottom";
 		else
 			value = "AlignVCenter";
 
 		list << "AlignTop" << "AlignVCenter" << "AlignBottom";
-		KoProperty::Property *p = new KoProperty::Property("vAlign", createValueList(0, list), value,
-			i18n("Translators: please keep this string short (less than 20 chars)", "Ver. Alignment"),
+		KoProperty::Property *p = new KoProperty::Property(
+			"vAlign", createValueList(0, list), value,
+			i18nc("Translators: please keep this string short (less than 20 chars)", "Ver. Alignment"),
 			i18n("Vertical Alignment"));
 		d->set.addProperty(p);
 		if(!isPropertyVisible(p->name(), isTopLevel)) {
@@ -832,7 +847,7 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *widge
 	}
 
 
-	if(!possibleValues.grep("WordBreak").empty()
+	if (possibleValues.contains("WordBreak")
 //		&& isPropertyVisible("wordbreak", false, subwidget->className())
 //	  && !subWidget->inherits("QLineEdit") /* QLineEdit doesn't support 'word break' is this generic enough?*/
 	) {
@@ -855,34 +870,39 @@ WidgetPropertySet::saveAlignProperty(const QString &property)
 	if (!KFormDesigner::FormManager::self()->activeForm())
 		return;
 
-	QStrList list;
+	QStringList list;
 	if( d->set.contains("hAlign") )
-		list.append( d->set["hAlign"].value().toCString() );
+		list.append( d->set["hAlign"].value().toString() );
 	if( d->set.contains("vAlign") )
-		list.append( d->set["vAlign"].value().toCString() );
+		list.append( d->set["vAlign"].value().toString() );
 	if( d->set.contains("wordbreak") && d->set["wordbreak"].value().toBool() )
 		list.append("WordBreak");
 
-	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(
+	WidgetWithSubpropertiesInterface* subpropIface
+		= dynamic_cast<WidgetWithSubpropertiesInterface*>(
 		(QWidget*)d->widgets.first() );
-	QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : (QWidget*)d->widgets.first();
-	int count = subwidget->metaObject()->findProperty("alignment", true);
-	const QMetaProperty *meta = subwidget->metaObject()->property(count, true);
-	subwidget->setProperty("alignment", meta->keysToValue(list));
+	QWidget *subwidget = (subpropIface && subpropIface->subwidget())
+		? subpropIface->subwidget() : (QWidget*)d->widgets.first();
+	int count = KexiUtils::indexOfPropertyWithSuperclasses(subwidget, "alignment");
+	const QMetaProperty meta( 
+		KexiUtils::findPropertyWithSuperclasses(subwidget, count) );
+	const int valueForKeys = meta.enumerator().keysToValue(list.join("|").toLatin1());
+	subwidget->setProperty("alignment", valueForKeys);
 
-	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(
-		d->widgets.first()->name() );
-	if(tree && d->set[property.latin1()].isModified())
-		tree->addModifiedProperty(property.latin1(), d->set[property.latin1()].oldValue());
+	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()
+		->lookup( d->widgets.first()->objectName() );
+	if(tree && d->set[ property.toLatin1() ].isModified())
+		tree->addModifiedProperty(
+			property.toLatin1(), d->set[property.toLatin1()].oldValue());
 
 	if(d->isUndoing)
 		return;
 
 	if(d->lastCommand && d->lastCommand->property() == "alignment")
-		d->lastCommand->setValue(meta->keysToValue(list));
+		d->lastCommand->setValue(valueForKeys);
 	else {
 		d->lastCommand = new PropertyCommand(this, d->widgets.first()->name(),
-			subwidget->property("alignment"), meta->keysToValue(list), "alignment");
+			subwidget->property("alignment"), valueForKeys, "alignment");
 		KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastCommand, false);
 	}
 }
@@ -913,7 +933,8 @@ WidgetPropertySet::createLayoutProperty(ObjectTreeItem *item)
 
 	updatePropertyValue(item, "layout");
 
-	p = new KoProperty::Property("layoutMargin", container->layoutMargin(), i18n("Layout Margin"), i18n("Layout Margin"));
+	p = new KoProperty::Property("layoutMargin", container->layoutMargin(),
+		i18n("Layout Margin"), i18n("Layout Margin"));
 	d->set.addProperty(p);
 	updatePropertyValue(item, "layoutMargin");
 	if(container->layoutType() == Container::NoLayout)
@@ -1022,41 +1043,41 @@ WidgetPropertySet::initPropertiesDescription()
 
 	d->propValCaption["NoBackground"] = i18n("No Background");
 	d->propValCaption["PaletteForeground"] = i18n("Palette Foreground");
-	d->propValCaption["AutoText"] = i18n("Auto (HINT: for AutoText)", "Auto");
+	d->propValCaption["AutoText"] = i18nc("Auto (HINT: for AutoText)", "Auto");
 
-	d->propValCaption["AlignAuto"] = i18n("Auto (HINT: for Align)", "Auto");
-	d->propValCaption["AlignLeft"] = i18n("Left (HINT: for Align)", "Left");
-	d->propValCaption["AlignRight"] = i18n("Right (HINT: for Align)", "Right");
-	d->propValCaption["AlignHCenter"] = i18n("Center (HINT: for Align)", "Center");
-	d->propValCaption["AlignJustify"] = i18n("Justify (HINT: for Align)", "Justify");
-	d->propValCaption["AlignVCenter"] = i18n("Center (HINT: for Align)", "Center");
-	d->propValCaption["AlignTop"] = i18n("Top (HINT: for Align)", "Top");
-	d->propValCaption["AlignBottom"] = i18n("Bottom (HINT: for Align)", "Bottom");
+	d->propValCaption["AlignAuto"] = i18nc("Auto (HINT: for Align)", "Auto");
+	d->propValCaption["AlignLeft"] = i18nc("Left (HINT: for Align)", "Left");
+	d->propValCaption["AlignRight"] = i18nc("Right (HINT: for Align)", "Right");
+	d->propValCaption["AlignHCenter"] = i18nc("Center (HINT: for Align)", "Center");
+	d->propValCaption["AlignJustify"] = i18nc("Justify (HINT: for Align)", "Justify");
+	d->propValCaption["AlignVCenter"] = i18nc("Center (HINT: for Align)", "Center");
+	d->propValCaption["AlignTop"] = i18nc("Top (HINT: for Align)", "Top");
+	d->propValCaption["AlignBottom"] = i18nc("Bottom (HINT: for Align)", "Bottom");
 
-	d->propValCaption["NoFrame"] = i18n("No Frame (HINT: for Frame Shape)", "No Frame");
-	d->propValCaption["Box"] = i18n("Box (HINT: for Frame Shape)", "Box");
-	d->propValCaption["Panel"] = i18n("Panel (HINT: for Frame Shape)", "Panel");
-	d->propValCaption["WinPanel"] = i18n("Windows Panel (HINT: for Frame Shape)", "Windows Panel");
-	d->propValCaption["HLine"] = i18n("Horiz. Line (HINT: for Frame Shape)", "Horiz. Line");
-	d->propValCaption["VLine"] = i18n("Vertical Line (HINT: for Frame Shape)", "Vertical Line");
-	d->propValCaption["StyledPanel"] = i18n("Styled (HINT: for Frame Shape)", "Styled");
-	d->propValCaption["PopupPanel"] = i18n("Popup (HINT: for Frame Shape)", "Popup");
-	d->propValCaption["MenuBarPanel"] = i18n("Menu Bar (HINT: for Frame Shape)", "Menu Bar");
-	d->propValCaption["ToolBarPanel"] = i18n("Toolbar (HINT: for Frame Shape)", "Toolbar");
-	d->propValCaption["LineEditPanel"] = i18n("Text Box (HINT: for Frame Shape)", "Text Box");
-	d->propValCaption["TabWidgetPanel"] = i18n("Tab Widget (HINT: for Frame Shape)", "Tab Widget");
-	d->propValCaption["GroupBoxPanel"] = i18n("Group Box (HINT: for Frame Shape)", "Group Box");
+	d->propValCaption["NoFrame"] = i18nc("No Frame (HINT: for Frame Shape)", "No Frame");
+	d->propValCaption["Box"] = i18nc("Box (HINT: for Frame Shape)", "Box");
+	d->propValCaption["Panel"] = i18nc("Panel (HINT: for Frame Shape)", "Panel");
+	d->propValCaption["WinPanel"] = i18nc("Windows Panel (HINT: for Frame Shape)", "Windows Panel");
+	d->propValCaption["HLine"] = i18nc("Horiz. Line (HINT: for Frame Shape)", "Horiz. Line");
+	d->propValCaption["VLine"] = i18nc("Vertical Line (HINT: for Frame Shape)", "Vertical Line");
+	d->propValCaption["StyledPanel"] = i18nc("Styled (HINT: for Frame Shape)", "Styled");
+	d->propValCaption["PopupPanel"] = i18nc("Popup (HINT: for Frame Shape)", "Popup");
+	d->propValCaption["MenuBarPanel"] = i18nc("Menu Bar (HINT: for Frame Shape)", "Menu Bar");
+	d->propValCaption["ToolBarPanel"] = i18nc("Toolbar (HINT: for Frame Shape)", "Toolbar");
+	d->propValCaption["LineEditPanel"] = i18nc("Text Box (HINT: for Frame Shape)", "Text Box");
+	d->propValCaption["TabWidgetPanel"] = i18nc("Tab Widget (HINT: for Frame Shape)", "Tab Widget");
+	d->propValCaption["GroupBoxPanel"] = i18nc("Group Box (HINT: for Frame Shape)", "Group Box");
 
-	d->propValCaption["Plain"] = i18n("Plain (HINT: for Frame Shadow)", "Plain");
-	d->propValCaption["Raised"] = i18n("Raised (HINT: for Frame Shadow)", "Raised");
-	d->propValCaption["Sunken"] = i18n("Sunken (HINT: for Frame Shadow)", "Sunken");
-	d->propValCaption["MShadow"] = i18n("for Frame Shadow", "Internal");
+	d->propValCaption["Plain"] = i18nc("Plain (HINT: for Frame Shadow)", "Plain");
+	d->propValCaption["Raised"] = i18nc("Raised (HINT: for Frame Shadow)", "Raised");
+	d->propValCaption["Sunken"] = i18nc("Sunken (HINT: for Frame Shadow)", "Sunken");
+	d->propValCaption["MShadow"] = i18nc("for Frame Shadow", "Internal");
 
-	d->propValCaption["NoFocus"] = i18n("No Focus (HINT: for Focus)", "No Focus");
-	d->propValCaption["TabFocus"] = i18n("Tab (HINT: for Focus)", "Tab");
-	d->propValCaption["ClickFocus"] = i18n("Click (HINT: for Focus)", "Click");
-	d->propValCaption["StrongFocus"] = i18n("Tab/Click (HINT: for Focus)", "Tab/Click");
-	d->propValCaption["WheelFocus"] = i18n("Tab/Click/MouseWheel (HINT: for Focus)", "Tab/Click/MouseWheel");
+	d->propValCaption["NoFocus"] = i18nc("No Focus (HINT: for Focus)", "No Focus");
+	d->propValCaption["TabFocus"] = i18nc("Tab (HINT: for Focus)", "Tab");
+	d->propValCaption["ClickFocus"] = i18nc("Click (HINT: for Focus)", "Click");
+	d->propValCaption["StrongFocus"] = i18nc("Tab/Click (HINT: for Focus)", "Tab/Click");
+	d->propValCaption["WheelFocus"] = i18nc("Tab/Click/MouseWheel (HINT: for Focus)", "Tab/Click/MouseWheel");
 
 	d->propValCaption["Auto"] = i18n("Auto");
 	d->propValCaption["AlwaysOff"] = i18n("Always Off");

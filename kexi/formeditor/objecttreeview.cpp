@@ -167,11 +167,12 @@ ObjectTreeViewItem::setOpen( bool o )
 // ObjectTreeView itself ----------------
 
 ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
- : K3ListView(parent, name)
+ : K3ListView(parent)
  , m_form(0)
 {
+	setObjectName(name);
 	addColumn(i18n("Name"), 130);
-	addColumn(i18n("Widget's type", "Type"), 100);
+	addColumn(i18nc("Widget's type", "Type"), 100);
 
 	installEventFilter(this);
 
@@ -277,13 +278,12 @@ void
 ObjectTreeView::slotSelectionChanged()
 {
 	const bool hadFocus = hasFocus();
-	Q3PtrList<Q3ListViewItem> list = selectedItems();
+	QList<Q3ListViewItem*> list = selectedItems();
 	m_form->selectFormWidget();
-	for(Q3ListViewItem *item = list.first(); item; item = list.next())
-	{
+	foreach (Q3ListViewItem *item, list) {
 		ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(item);
 		QWidget *w = it->objectTree()->widget();
-		if(w && (m_form->selectedWidgets()->findRef(w) == -1))
+		if (w && (m_form->selectedWidgets()->findRef(w) == -1))
 			m_form->setSelectedWidget(w, true, true);
 	}
 	if (hadFocus)

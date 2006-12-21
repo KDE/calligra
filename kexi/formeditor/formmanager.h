@@ -27,8 +27,11 @@
 #include <qtimer.h>
 #include <qpointer.h>
 #include <qstringlist.h>
-//Added by qt3to4:
 #include <Q3CString>
+#include <QActionGroup>
+
+#include "form.h"
+#include <kexi_export.h>
 
 class QWidget;
 class QWorkspace;
@@ -36,7 +39,7 @@ class KMenu;
 class KActionCollection;
 class KAction;
 class KToggleAction;
-class KDialogBase;
+class KDialog;
 class KTextEdit;
 class KXMLGUIClient;
 class KMainWindow;
@@ -51,7 +54,6 @@ namespace KoProperty {
 namespace KFormDesigner {
 
 class WidgetPropertySet;
-class Form;
 class Container;
 class WidgetLibrary;
 class ObjectTreeView;
@@ -149,7 +151,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void createSlotMenu(QWidget *w);
 
 		//! Emits the signal \ref createFormSlot(). Used by WidgetPropertySet.
-		void  emitCreateSlot(const QString &widget, const QString &value)
+		void emitCreateSlot(const QString &widget, const QString &value)
 			{ emit createFormSlot(m_active, widget, value); }
 
 		/*! \return The Form actually active and focused.
@@ -338,7 +340,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! This signal is emitted as the property set switched.
 		 If \a forceReload is true, the set needs to be reloaded even
 		 if it's the same as previous one. */
-		void propertySetSwitched(KoProperty::Set *set, bool forceReload = false, const QCString& propertyToSelect = QCString());
+		void propertySetSwitched(KoProperty::Set *set, bool forceReload = false, 
+			const Q3CString& propertyToSelect = Q3CString());
 
 		/*! This signal is emitted when any change is made to the Form \a form,
 		 so it will need to be saved. */
@@ -397,7 +400,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Slot called when the user chooses an item in signal (or slot) menu.
 		 The \ref createdConnection() is updated, and the connection created
 		 (for the signal menu). */
-		void menuSignalChosen(int id);
+		void menuSignalChosen(QAction* action);
 
 		/*! Slot called when the user changes current style using combbox in toolbar or menu. */
 		void slotStyle();
@@ -409,6 +412,9 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	protected:
 		/*! Inits the Form, adds it to m_forms, and conects slots. */
 		void initForm(Form *form);
+
+		/*! \return action group containing "insert widget" actions for each widget. */
+		QActionGroup* widgetActionGroup() const { return m_widgetActionGroup; }
 
 #if 0
 		/*! Default implementation just calls FormIO::loadFormFromDom().
@@ -469,6 +475,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		// Actions
 		KActionCollection *m_collection;
+		QActionGroup* m_widgetActionGroup;
 		KToggleAction *m_pointer, *m_dragConnection, *m_snapToGrid;
 
 		//! Used to delayed widgets deletion
@@ -476,7 +483,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		Q3PtrList<QWidget> m_deleteWidgetLater_list;
 
 #ifdef KEXI_DEBUG_GUI
-		KDialogBase *m_uiCodeDialog;
+		KDialog *m_uiCodeDialog;
 		KTextEdit *m_currentUICodeDialogEditor;
 		KTextEdit *m_originalUICodeDialogEditor;
 #endif
@@ -490,6 +497,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		friend class PropertyCommand;
 		friend class GeometryPropertyCommand;
 		friend class CutWidgetCommand;
+		friend class LibActionWidget;
 		friend class Form;
 };
 

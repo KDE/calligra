@@ -24,7 +24,6 @@
 #include <qcursor.h>
 #include <qstring.h>
 #include <qlabel.h>
-#include <qobject.h>
 #include <qstylefactory.h>
 #include <qmetaobject.h>
 #include <qregexp.h>
@@ -49,7 +48,7 @@
 #include <kapplication.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <ktextedit.h>
 #include <ktabwidget.h>
 #include <kfontdialog.h>
@@ -69,17 +68,23 @@
 #include "commands.h"
 #include "tabstopdialog.h"
 #include "connectiondialog.h"
-#include "pixmapcollection.h"
 #include "events.h"
 #include "utils.h"
 #include "kfdpixmapedit.h"
 #include <koproperty/editor.h>
 #include <koproperty/property.h>
 #include <koproperty/factory.h>
+#include <kexiutils/utils.h>
 
 #include "formmanager.h"
 
 #define KFD_NO_STYLES //disables; styles support needs improvements
+
+#define KEXI_NO_PIXMAPCOLLECTION
+#warning pixmapcollection
+#ifndef KEXI_NO_PIXMAPCOLLECTION
+#include "pixmapcollection.h"
+#endif
 
 namespace KFormDesigner {
 
@@ -126,10 +131,12 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
 #endif
 
 	connect( KGlobalSettings::self(), SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
-	slotSettingsChanged(KApplication::SETTINGS_SHORTCUTS);
+	slotSettingsChanged(KGlobalSettings::SETTINGS_SHORTCUTS);
 
 //moved to createWidgetLibrary()	m_lib = new WidgetLibrary(this, supportedFactoryGroups);
 	m_propSet = new WidgetPropertySet(this);
+	
+	m_widgetActionGroup = new QActionGroup(this);
 
 	//unused m_editor = 0;
 	m_active = 0;
@@ -209,14 +216,14 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection* collection, KX
 			"signalslot", KShortcut(0), this, SLOT(startCreatingConnection()), m_collection,
 			"drag_connection");
 		//to be exclusive with any 'widget' action
-		m_dragConnection->setExclusiveGroup("LibActionWidgets");
+//kde4 not needed			m_dragConnection->setExclusiveGroup("LibActionWidgets");
 		m_dragConnection->setChecked(false);
 		actions.append(m_dragConnection);
 	}
 
 	m_pointer = new KToggleAction(i18n("Pointer"), "mouse_pointer", KShortcut(0), 
 		this, SLOT(slotPointerClicked()), m_collection, "pointer");
-	m_pointer->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
+//kde4 not needed	m_pointer->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
 	m_pointer->setChecked(true);
 	actions.append(m_pointer);
 
@@ -231,7 +238,7 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection* collection, KX
 	m_style->setEditable(false);
 
 	KGlobal::config()->setGroup("General");
-	QString currentStyle = QString::fromLatin1(kapp->style().name()).lower();
+	QString currentStyle( QString::fromLatin1(kapp->style()->name()).lower() );
 	const QStringList styles = QStyleFactory::keys();
 	m_style->setItems(styles);
 	m_style->setCurrentItem(0);
@@ -246,7 +253,7 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection* collection, KX
 		}
 	}
 
-	m_style->setToolTip(i18n("Set the current view style"));
+	m_style->setToolTip(i18n("Set the current view style."));
 	m_style->setMenuAccelsEnabled(true);
 	actions.append(m_style);
 
@@ -295,18 +302,14 @@ FormManager::insertWidget(const Q3CString &classname)
 //		form->d->cursors = new QMap<QString, QCursor>();
 		if (form->toplevelContainer())
 			form->widget()->setCursor(QCursor(Qt::CrossCursor));
-		QObjectList *l = form->widget()->queryList( "QWidget" );
-		for(QObject *o = l->first(); o; o = l->next())
-		{
-			if( ((QWidget*)o)->ownCursor() )
-			{
-//				form->d->cursors->insert(o->name(), ((QWidget*)o)->cursor());
-				form->d->cursors.insert(o, static_cast<QWidget*>(o)->cursor());
-				static_cast<QWidget*>(o)->setCursor(QCursor(Qt::CrossCursor));
+		QObjectList l( form->widget()->queryList( "QWidget" ) );
+		foreach(QObject *o, l) {
+			QWidget *w = static_cast<QWidget*>(o);
+			if (w->ownCursor()) {
+				form->d->cursors.insert(o, w->cursor());
+				w->setCursor(QCursor(Qt::CrossCursor));
 			}
-
 		}
-		delete l;
 	}
 
 	m_selectedClass = classname;
@@ -326,9 +329,8 @@ FormManager::stopInsert()
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
 		form->widget()->unsetCursor();
-		QObjectList *l = form->widget()->queryList( "QWidget" );
-		for(QObject *o = l->first(); o; o = l->next())
-		{
+		QObjectList l( form->widget()->queryList( "QWidget" ) );
+		foreach (QObject *o, l) {
 			static_cast<QWidget*>(o)->unsetCursor();
 #if 0
 			if( ((QWidget*)o)->ownCursor()) {
@@ -339,9 +341,6 @@ FormManager::stopInsert()
 			}
 #endif
 		}
-		delete l;
-//		delete (form->d->cursors);
-//		form->d->cursors = 0;
 	}
 //#endif
 	m_inserting = false;
@@ -377,21 +376,18 @@ FormManager::startCreatingConnection()
 			form->widget()->setCursor(QCursor(Qt::PointingHandCursor));
 			form->widget()->setMouseTracking(true);
 		}
-		QObjectList *l = form->widget()->queryList( "QWidget" );
-		for(QObject *o = l->first(); o; o = l->next())
-		{
+		QObjectList l( form->widget()->queryList( "QWidget" ) );
+		foreach (QObject *o, l) {
 			QWidget *w = static_cast<QWidget*>(o);
-			if( w->ownCursor() )
-			{
+			if( w->ownCursor() ) {
 				form->d->cursors.insert(w, w->cursor());
 //				form->d->cursors->insert(w->name(), w->cursor());
 				w->setCursor(QCursor(Qt::PointingHandCursor ));
 			}
-			if(w->hasMouseTracking())
+			if (w->hasMouseTracking())
 				form->d->mouseTrackers->append(w->name());
 			w->setMouseTracking(true);
 		}
-		delete l;
 	}
 	delete m_connection;
 	m_connection = new Connection();
@@ -436,21 +432,16 @@ FormManager::stopCreatingConnection()
 	{
 		form->widget()->unsetCursor();
 		form->widget()->setMouseTracking(false);
-		QObjectList *l = form->widget()->queryList( "QWidget" );
-		for(QObject *o = l->first(); o; o = l->next())
-		{
-			QWidget *w = (QWidget*)o;
-			if( w->ownCursor()) {
+		QObjectList l( form->widget()->queryList( "QWidget" ) );
+		foreach (QObject *o, l) {
+			QWidget *w = static_cast<QWidget*>(o);
+			if (w->ownCursor()) {
 				QMap<QObject*,QCursor>::ConstIterator curIt( form->d->cursors.find(o) );
 				if (curIt!=form->d->cursors.constEnd())
-					static_cast<QWidget*>(o)->setCursor( *curIt );
+					w->setCursor( *curIt );
 			}
-//				w->setCursor( (*(form->d->cursors))[o->name()] ) ;
 			w->setMouseTracking( !form->d->mouseTrackers->grep(w->name()).isEmpty() );
 		}
-		delete l;
-//		delete (form->d->cursors);
-//		form->d->cursors = 0;
 		delete (form->d->mouseTrackers);
 		form->d->mouseTrackers = 0;
 	}
@@ -664,7 +655,7 @@ FormManager::previewForm(Form *form, QWidget *container, Form *toForm)
 	else
 		myform = toForm;
 	myform->createToplevel(container);
-	container->setStyle( &(form->widget()->style()) );
+	container->setStyle( form->widget()->style() );
 
 	if (!FormIO::loadFormFromDom(myform, container, domDoc)) {
 		delete myform;
@@ -792,18 +783,20 @@ void
 FormManager::createSignalMenu(QWidget *w)
 {
 	m_sigSlotMenu = new KMenu();
-	m_sigSlotMenu->insertTitle(SmallIcon("connection"), i18n("Signals"));
+	m_sigSlotMenu->addTitle(SmallIcon("connection"), i18n("Signals"));
 
-	Q3StrList list = w->metaObject()->signalNames(true);
-	QStrListIterator it(list);
-	for(; it.current() != 0; ++it)
-		m_sigSlotMenu->insertItem(*it);
+	const QList<QMetaMethod> list( 
+		KexiUtils::methodsForMetaObjectWithParents(w->metaObject(),
+		QMetaMethod::Signal, QMetaMethod::Public) );
+//qt3:	Q3StrList list = w->metaObject()->signalNames(true);
+	foreach (QMetaMethod method, list)
+		m_sigSlotMenu->addAction( QString::fromLatin1(method.signature()) );
 
-	int result = m_sigSlotMenu->exec(QCursor::pos());
-	if(result == -1)
-		resetCreatedConnection();
-	else
+	QAction* result = m_sigSlotMenu->exec(QCursor::pos());
+	if (result)
 		menuSignalChosen(result);
+	else
+		resetCreatedConnection();
 
 	delete m_sigSlotMenu;
 	m_sigSlotMenu = 0;
@@ -813,28 +806,27 @@ void
 FormManager::createSlotMenu(QWidget *w)
 {
 	m_sigSlotMenu = new KMenu();
-	m_sigSlotMenu->insertTitle(SmallIcon("connection"), i18n("Slots"));
+	m_sigSlotMenu->addTitle(SmallIcon("connection"), i18n("Slots"));
 
 	QString signalArg( m_connection->signal().remove( QRegExp(".*[(]|[)]") ) );
 
-	Q3StrList list = w->metaObject()->slotNames(true);
-	QStrListIterator it(list);
-	for(; it.current() != 0; ++it)
-	{
-		// we add the slot only if it is compatible with the signal
-		QString slotArg(*it);
+	const QList<QMetaMethod> list( 
+		KexiUtils::methodsForMetaObjectWithParents(w->metaObject(),
+		QMetaMethod::Slot, QMetaMethod::Public) );
+//qt3:	Q3StrList list = w->metaObject()->slotNames(true);
+	foreach (QMetaMethod method, list) {
+		QString slotArg(method.signature());
 		slotArg = slotArg.remove( QRegExp(".*[(]|[)]") );
-		if(!signalArg.startsWith(slotArg, true)) // args not compatible
-			continue;
-
-		m_sigSlotMenu->insertItem(*it);
+		if (!signalArg.startsWith(slotArg))
+			continue; // args not compatible
+		m_sigSlotMenu->addAction( slotArg );
 	}
 
-	int result = m_sigSlotMenu->exec(QCursor::pos());
-	if(result == -1)
-		resetCreatedConnection();
-	else
+	QAction* result = m_sigSlotMenu->exec(QCursor::pos());
+	if (result)
 		menuSignalChosen(result);
+	else
+		resetCreatedConnection();
 
 	delete m_sigSlotMenu;
 	m_sigSlotMenu = 0;
@@ -864,17 +856,25 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 	}
 
 	//set title
-	if(!multiple)
-	{
-		if(w == container->form()->widget())
-			m_popup->insertTitle(SmallIcon("form"), i18n("%1 : Form").arg(w->name()) );
-		else
-			m_popup->insertTitle( SmallIcon(
-				container->form()->library()->iconName(w->className())), QString(w->name()) + " : " + n );
+	QIcon icon;
+	QString titleText;
+	if (!multiple) {
+		if(w == container->form()->widget()) {
+			icon = SmallIcon("form");
+			titleText = i18n("%1 : Form").arg(w->name());
+		}
+		else {
+			icon = SmallIcon(
+				container->form()->library()->iconName(w->className()));
+			titleText = QString(w->name()) + " : " + n;
+		}
 	}
-	else
-		m_popup->insertTitle(SmallIcon("multiple_obj"), i18n("Multiple Widgets")
-		+ QString(" (%1)").arg(widgetsCount));
+	else {
+		icon = SmallIcon("multiple_obj");
+		titleText = i18n("Multiple Widgets") + QString(" (%1)").arg(widgetsCount);
+	}
+	
+	m_popup->addTitle(icon, titleText);
 
 	KAction *a;
 #define PLUG_ACTION(_name, forceVisible) \
@@ -883,7 +883,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		if (separatorNeeded) \
 			m_popup->insertSeparator(); \
 		separatorNeeded = false; \
-		a->plug(m_popup); \
+		m_popup->addAction(a); \
 	} \
 	}
 
@@ -950,7 +950,8 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 //		menuIds->append(id);
 		if(list.isEmpty())
 			m_popup->setItemEnabled(id, false);
-		connect(sigMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChosen(int)));
+		connect(sigMenu, SIGNAL(triggered(QAction*)), 
+			this, SLOT(menuSignalChosen(QAction*)));
 		separatorNeeded = true;
 	}
 #endif
@@ -963,7 +964,8 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 			lastID = m_popup->insertSeparator();
 		}
 		const uint oldIndex = m_popup->count()-1;
-		container->form()->library()->createMenuActions(w->className(), w, m_popup, container);
+		container->form()->library()
+			->createMenuActions(w->className(), w, m_popup, container);
 		if (oldIndex == (m_popup->count()-1)) {
 //			for (uint i=oldIndex; i<m_popup->count(); i++) {
 //				int id = m_popup->idAt( i );
@@ -1017,20 +1019,20 @@ FormManager::buddyChosen(int id)
 }
 
 void
-FormManager::menuSignalChosen(int id)
+FormManager::menuSignalChosen(QAction* action)
 {
 	if (m_options & HideSignalSlotConnections)
 		return;
 
 	//if(!m_menuWidget)
 	//	return;
-	if(m_drawingSlot && m_sigSlotMenu)
+	if (m_drawingSlot && m_sigSlotMenu && action)
 	{
 		if( m_connection->receiver().isNull() )
-			m_connection->setSignal(m_sigSlotMenu->text(id));
+			m_connection->setSignal(action->text());
 		else
 		{
-			m_connection->setSlot(m_sigSlotMenu->text(id));
+			m_connection->setSlot(action->text());
 			kDebug() << "Finished creating the connection: sender=" << m_connection->sender() << "; signal=" << m_connection->signal() <<
 			  "; receiver=" << m_connection->receiver() << "; slot=" << m_connection->slot() << endl;
 			emit connectionCreated(activeForm(), *m_connection);
@@ -1038,7 +1040,7 @@ FormManager::menuSignalChosen(int id)
 		}
 	}
 	else if(m_menuWidget)
-		emit createFormSlot(m_active, m_menuWidget->name(), m_popup->text(id));
+		emit createFormSlot(m_active, m_menuWidget->name(), action->text());
 }
 
 void
@@ -1210,14 +1212,14 @@ FormManager::slotStyle()
 	if(!activeForm())
 		return;
 
-	KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
+	KSelectAction *m_style = qobject_cast<KSelectAction*>(
+		m_collection->actionOfType<KSelectAction*>("change_style"));
 	QString style = m_style->currentText();
 	activeForm()->widget()->setStyle( style);
 
-	QObjectList *l = activeForm()->widget()->queryList( "QWidget" );
-	for(QObject *o = l->first(); o; o = l->next())
-		(static_cast<QWidget*>(o))->setStyle( style );
-	delete l;
+	QObjectList l( activeForm()->widget()->queryList( "QWidget" ) );
+	foreach (QObject *o, l)
+		static_cast<QWidget*>(o)->setStyle( style );
 }
 
 void
@@ -1226,8 +1228,11 @@ FormManager::editFormPixmapCollection()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
+#warning pixmapcollection
+#ifndef KEXI_NO_PIXMAPCOLLECTION
 	PixmapCollectionEditor dialog(activeForm()->pixmapCollection(), activeForm()->widget()->topLevelWidget());
 	dialog.exec();
+#endif
 }
 
 void
@@ -1431,22 +1436,26 @@ FormManager::showFormUICode()
 	}
 
 	if (!m_uiCodeDialog) {
-		m_uiCodeDialog = new KDialogBase(0, "uiwindow", true, i18n("Form's UI Code"),
-				KDialogBase::Close,	KDialogBase::Close);
-		m_uiCodeDialog->resize(700, 600);
-		KVBox *box = m_uiCodeDialog->makeVBoxMainWidget();
-		KTabWidget* tab = new KTabWidget(box);
+		m_uiCodeDialog = new KPageDialog();
+		m_uiCodeDialog->setFaceType(KPageDialog::Tabbed);
+		m_uiCodeDialog->setObjectName("ui_dialog");
+		m_uiCodeDialog->setModal(true)
+		m_uiCodeDialog->setCaption(i18n("Form's UI Code"));
+		m_uiCodeDialog->setButtons(KDialog::Close);
+//kde4: needed?		m_uiCodeDialog->resize(700, 600);
 
-		m_currentUICodeDialogEditor = new KTextEdit(QString::null, QString::null, tab);
-		tab->addTab( m_currentUICodeDialogEditor, i18n("Current"));
+		m_currentUICodeDialogEditor = new KTextEdit(
+			QString::null, QString::null, m_uiCodeDialog);
+		m_uiCodeDialog->addPage(m_currentUICodeDialogEditor, i18n("Current"));
 		m_currentUICodeDialogEditor->setReadOnly(true);
 		QFont f( m_currentUICodeDialogEditor->font() );
 		f.setFamily("courier");
 		m_currentUICodeDialogEditor->setFont(f);
 		m_currentUICodeDialogEditor->setTextFormat(Qt::PlainText);
 
-		m_originalUICodeDialogEditor = new KTextEdit(QString::null, QString::null, tab);
-		tab->addTab( m_originalUICodeDialogEditor, i18n("Original"));
+		m_originalUICodeDialogEditor = new KTextEdit(
+			QString::null, QString::null, m_uiCodeDialog);
+		m_uiCodeDialog->addPage(m_originalUICodeDialogEditor, i18n("Original"));
 		m_originalUICodeDialogEditor->setReadOnly(true);
 		m_originalUICodeDialogEditor->setFont(f);
 		m_originalUICodeDialogEditor->setTextFormat(Qt::PlainText);
@@ -1463,7 +1472,7 @@ FormManager::showFormUICode()
 void
 FormManager::slotSettingsChanged(int category)
 {
-	if (category==KApplication::SETTINGS_SHORTCUTS) {
+	if (category==KGlobalSettings::SETTINGS_SHORTCUTS) {
 		m_contextMenuKey = KGlobalSettings::contextMenuKey();
 	}
 }
@@ -1497,7 +1506,7 @@ FormManager::emitWidgetSelected( KFormDesigner::Form* form, bool multiple )
 	WidgetList *wlist = form->selectedWidgets();
 	bool fontEnabled = false;
 	for (WidgetListIterator it(*wlist); it.current(); ++it) {
-		if (-1 != it.current()->metaObject()->findProperty("font", true)) {
+		if (-1!=KexiUtils::indexOfPropertyWithSuperclasses(it.current(), "font")) {
 			fontEnabled = true;
 			break;
 		}

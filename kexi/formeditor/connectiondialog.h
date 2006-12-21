@@ -21,10 +21,13 @@
 #ifndef FORMCONNECTIONDIALOG_H
 #define FORMCONNECTIONDIALOG_H
 
-#include <q3intdict.h>
-//Added by qt3to4:
 #include <QLabel>
-#include <kdialogbase.h>
+#include <kdialog.h>
+
+#include <kexi_export.h>
+
+#warning "Port Kexi Table View!"
+#define KEXI_NO_TABLEVIEW
 
 namespace KexiDB {
 	class ResultInfo;
@@ -45,7 +48,7 @@ class Connection;
 
 /*! This dialog is used to edit the connections of a form. It uses KexiTableView for this. There is also a details widget (icon + text)) that shows correctness
   of current connection.  */
-class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
+class KFORMEDITOR_EXPORT ConnectionDialog : public KDialog
 {
 	Q_OBJECT
 
@@ -101,14 +104,17 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
 		virtual void slotOk();
 
 	protected:
-		enum {BAdd = 10, BRemove};
-		Form    *m_form;
+		Form *m_form;
 		ConnectionBuffer *m_buffer;
+#warning "Port Kexi Table View!"
+#ifndef KEXI_NO_TABLEVIEW
 		KexiTableView  *m_table;
 		KexiTableViewData  *m_data;
-		KexiTableViewData *m_widgetsColumnData, *m_slotsColumnData, *m_signalsColumnData;
+		KexiTableViewData *m_widgetsColumnData, 
+			*m_slotsColumnData, *m_signalsColumnData;
+#endif
 		QLabel  *m_pixmapLabel, *m_textLabel;
-		Q3IntDict<Q3Button>  m_buttons;  //! dict of button (for disabling them)
+		KPushButton *m_addButton, *m_removeButton;
 };
 
 }

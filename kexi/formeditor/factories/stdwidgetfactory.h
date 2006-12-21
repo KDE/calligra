@@ -20,13 +20,14 @@
 #ifndef STDWIDGETFACTORY_H
 #define STDWIDGETFACTORY_H
 
-#include <q3frame.h>
-//Added by qt3to4:
+#include <Q3Frame>
 #include <QPixmap>
 #include <Q3CString>
 #include <QLabel>
 #include <Q3ValueList>
-#include <Q3PopupMenu>
+#include <QMenu>
+#include <K3ListViewItem>
+#include <K3ListView>
 
 #include "widgetfactory.h"
 #include "container.h"
@@ -36,8 +37,8 @@ class KFORMEDITOR_EXPORT KexiPictureLabel : public QLabel
 	Q_OBJECT
 
 	public:
-		KexiPictureLabel(const QPixmap &pix, QWidget *parent, const char *name);
-		~KexiPictureLabel(){;}
+		KexiPictureLabel(const QPixmap &pix, QWidget *parent);
+		virtual ~KexiPictureLabel();
 
 		virtual bool setProperty(const char *name, const QVariant &value);
 };
@@ -48,11 +49,11 @@ class KFORMEDITOR_EXPORT Line : public Q3Frame
 	Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
 
 	public:
-		Line(Qt::Orientation orient, QWidget *parent, const char *name);
-		~Line(){;}
+		Line(Qt::Orientation orient, QWidget *parent);
+		virtual ~Line();
 
 		void setOrientation(Qt::Orientation orient);
-		Orientation  orientation() const;
+		Qt::Orientation orientation() const;
 };
 
 //! Factory for all basic widgets, including Spring (not containers)
@@ -61,14 +62,14 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 	Q_OBJECT
 
 	public:
-		StdWidgetFactory(QObject *parent, const char *name, const QStringList &args);
+		StdWidgetFactory(QObject *parent, const QStringList &args);
 		~StdWidgetFactory();
 
 		virtual QWidget *createWidget(const Q3CString &c, QWidget *p, const char *n, 
 			KFormDesigner::Container *container, int options = DefaultOptions);
 
-		virtual bool createMenuActions(const Q3CString &classname, QWidget *w, Q3PopupMenu *menu,
-		   KFormDesigner::Container *container);
+		virtual bool createMenuActions(const Q3CString &classname, QWidget *w, 
+			QMenu *menu, KFormDesigner::Container *container);
 		virtual bool startEditing(const Q3CString &classname, QWidget *w,
 			KFormDesigner::Container *container);
 		virtual bool previewWidget(const Q3CString &classname, QWidget *widget,

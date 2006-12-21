@@ -100,7 +100,7 @@ void
 ObjectTreeItem::storeUnknownProperty(QDomElement &el)
 {
 	if(!el.isNull()) {
-		QTextStream ts(m_unknownProps, QIODevice::WriteOnly|QIODevice::Append );
+		QTextStream ts(&m_unknownProps, QIODevice::WriteOnly|QIODevice::Append );
 		el.save(ts, 0);
 	}
 }

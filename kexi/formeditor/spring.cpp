@@ -37,12 +37,16 @@
 
 #include "spring.h"
 
-Spring::Spring(QWidget *parent, const char *name)
-  : QWidget(parent, name)
+Spring::Spring(QWidget *parent)
+  : QWidget(parent)
 {
 	m_edit = true;
 	m_orient = Qt::Horizontal;
 	setSizeType((SizeType)QSizePolicy::Expanding);
+}
+
+Spring::~Spring()
+{
 }
 
 void
@@ -82,7 +86,7 @@ Spring::paintEvent(QPaintEvent *ev)
 	if(!ev->erased())
 		p.eraseRect(0,0,width(), height());
 	p.setPen(QPen(Qt::white, 1));
-	p.setRasterOp(Qt::XorROP);
+	p.setCompositionMode(QPainter::CompositionMode_Xor);
 	Q3PointArray pa(4);
 	if(m_orient == Qt::Vertical) {
 		uint part = (height()+16) / 16;

@@ -42,46 +42,48 @@ namespace KFormDesigner {
 /////////////////////////////////////////////////////////////////////////////////
 
 EditListViewDialog::EditListViewDialog(QWidget *parent)
-//js(kde3.2 dependent) : KDialogBase(Tabbed, 0/* WFlags */, parent, "editlistview_dialog", true, i18n("Edit listview contents"), Ok|Cancel, Ok, false)
-: KDialogBase(Tabbed, i18n("Edit Listview Contents"), Ok|Cancel, Ok, parent, "editlistview_dialog", true /* modal */, false)
+: KPageDialog(parent)
 {
-	m_column = addPage(i18n("Columns"));
-	m_contents = addPage(i18n("Contents"));
+	setObjectName("editlistview_dialog");
+	setModal(true);
+	setFaceType(Tabbed);
+	setCaption( i18n("Edit Listview Contents") );
 
 	///////// Setup the "Contents" page /////////////////////////////
-	Q3HBoxLayout *layout = new Q3HBoxLayout(m_contents, 0, 6);
+	m_columnsPageItem = addPage(new QWidget(this), i18n("Columns"));
+	Q3HBoxLayout *layout = new Q3HBoxLayout(m_contentsPageItem->widget(), 0, 6);
 
 	//// Setup the icon toolbar /////////////////
 	Q3VBoxLayout *vlayout = new Q3VBoxLayout(layout, 3);
-	QToolButton *newRow = new QToolButton(m_contents);
+	QToolButton *newRow = new QToolButton(m_contentsPageItem->widget());
 	newRow->setIconSet(BarIconSet("edit_add"));
 	newRow->setTextLabel(i18n("&Add Item"), true);
 	vlayout->addWidget(newRow);
 	m_buttons.insert(BNewRow, newRow);
 	connect(newRow, SIGNAL(clicked()), this, SLOT(newRow()));
 
-	QToolButton *newChild = new QToolButton(m_contents);
+	QToolButton *newChild = new QToolButton(m_contentsPageItem->widget());
 	newChild->setIconSet(BarIconSet("1rightarrow"));
 	newChild->setTextLabel(i18n("New &Subitem"), true);
 	vlayout->addWidget(newChild);
 	m_buttons.insert(BNewChild, newChild);
 	connect(newChild, SIGNAL(clicked()), this, SLOT(newChildRow()));
 
-	QToolButton *delRow = new QToolButton(m_contents);
+	QToolButton *delRow = new QToolButton(m_contentsPageItem->widget());
 	delRow->setIconSet(BarIconSet("edit_remove"));
 	delRow->setTextLabel(i18n("&Remove Item"), true);
 	vlayout->addWidget(delRow);
 	m_buttons.insert(BRemRow, delRow);
 	connect(delRow, SIGNAL(clicked()), this, SLOT(removeRow()));
 
-	QToolButton *rowUp = new QToolButton(m_contents);
+	QToolButton *rowUp = new QToolButton(m_contentsPageItem->widget());
 	rowUp->setIconSet(BarIconSet("1uparrow"));
 	rowUp->setTextLabel(i18n("Move Item &Up"), true);
 	vlayout->addWidget(rowUp);
 	m_buttons.insert(BRowUp, rowUp);
 	connect(rowUp, SIGNAL(clicked()), this, SLOT(MoveRowUp()));
 
-	QToolButton *rowDown = new QToolButton(m_contents);
+	QToolButton *rowDown = new QToolButton(m_contentsPageItem->widget());
 	rowDown->setIconSet(BarIconSet("1downarrow"));
 	rowDown->setTextLabel(i18n("Move Item &Down"), true);
 	vlayout->addWidget(rowDown);
@@ -90,7 +92,8 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	vlayout->addStretch();
 
 	//// The listview ///////////
-	m_listview = new K3ListView(m_contents, "editlistview_listview");
+	m_listview = new K3ListView(m_contentsPageItem->widget());
+	m_listview->setObjectName("editlistview_listview");
 	m_listview->setItemsRenameable(true);
 	m_listview->setItemsMovable(true);
 	m_listview->setDragEnabled(true);
@@ -105,10 +108,11 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	connect(m_listview, SIGNAL(moved(Q3ListViewItem*, Q3ListViewItem*, Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
 
 	/////////////////// Setup the columns page ////////////////
-	Q3HBoxLayout *hbox = new Q3HBoxLayout(m_column, 0, 6);
+	m_contentsPageItem = addPage(new QWidget(this), i18n("Contents"));
+	Q3HBoxLayout *hbox = new Q3HBoxLayout(m_columnsPageItem->widget(), 0, 6);
 
 	// The "item properties" field
-	m_editor = new KoProperty::Editor(m_column, "editcolumn_propeditor");
+	m_editor = new KoProperty::Editor(m_columnsPageItem->widget(), "editcolumn_propeditor");
 	m_propSet = new KoProperty::Set(this, "columns");
 	m_propSet->addProperty(new KoProperty::Property("caption", "Caption", i18n("Caption"),i18n("Caption")));
 	m_propSet->addProperty(new KoProperty::Property("width", 100, i18n("Width"), i18n("Width")));
@@ -121,28 +125,28 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 
 	// Setup the icon toolbar //////////
 	Q3VBoxLayout *vbox = new Q3VBoxLayout(hbox, 3);
-	QToolButton *add = new QToolButton(m_column);
+	QToolButton *add = new QToolButton(m_columnsPageItem->widget());
 	add->setIconSet(BarIconSet("edit_add"));
 	add->setTextLabel(i18n("&Add Item"), true);
 	vbox->addWidget(add);
 	m_buttons.insert(BColAdd, add);
 	connect(add, SIGNAL(clicked()), this, SLOT(newItem()));
 
-	QToolButton *remove = new QToolButton(m_column);
+	QToolButton *remove = new QToolButton(m_columnsPageItem->widget());
 	remove->setIconSet(BarIconSet("edit_remove"));
 	remove->setTextLabel(i18n("&Remove Item"), true);
 	vbox->addWidget(remove);
 	m_buttons.insert(BColRem, remove);
 	connect(remove, SIGNAL(clicked()), this, SLOT(removeItem()));
 
-	QToolButton *up = new QToolButton(m_column);
+	QToolButton *up = new QToolButton(m_columnsPageItem->widget());
 	up->setIconSet(BarIconSet("1uparrow"));
 	up->setTextLabel(i18n("Move Item &Up"), true);
 	vbox->addWidget(up);
 	m_buttons.insert(BColUp, up);
 	connect(up, SIGNAL(clicked()), this, SLOT(MoveItemUp()));
 
-	QToolButton *down = new QToolButton(m_column);
+	QToolButton *down = new QToolButton(m_columnsPageItem->widget());
 	down->setIconSet(BarIconSet("1downarrow"));
 	down->setTextLabel(i18n("Move Item &Down"), true);
 	vbox->addWidget(down);
@@ -151,14 +155,15 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	vbox->addStretch();
 
 	// The listbox with columns name /////
-	m_listbox = new KListBox(m_column, "editlistview_columns");
+	m_listbox = new KListBox(m_columnsPageItem->widget(), "editlistview_columns");
 	m_listbox->setFocus();
 	hbox->insertWidget(0, m_listbox);
 	hbox->addWidget(m_editor);
 	connect(m_listbox, SIGNAL(currentChanged(Q3ListBoxItem*)), this, SLOT(updateItemProperties(Q3ListBoxItem*)));
 
 	//// Init dialog and display it ////////////////////////
-	setInitialSize(QSize(500, 300), true);
+#warning "setInitialSize() unavailable on kde 4"
+//	setInitialSize(QSize(500, 300), true);
 }
 
 int
@@ -194,7 +199,7 @@ EditListViewDialog::exec(Q3ListView *listview)
 	m_listbox->setSelected(0, true);
 
 	// and we exec the dialog
-	int r =  KDialogBase::exec();
+	int r =  KPageDialog::exec();
 	if(r == QDialog::Accepted)
 	{
 		listview->clear();
@@ -367,7 +372,7 @@ void
 EditListViewDialog::loadChildNodes(Q3ListView *listview, Q3ListViewItem *item, Q3ListViewItem *parent)
 {
 	Q3ListViewItem *newItem;
-	if(listview->inherits("K3ListView"))
+	if(listview->inherits("KListView"))
 	{
 		if(parent)
 			newItem = new K3ListViewItem(parent);

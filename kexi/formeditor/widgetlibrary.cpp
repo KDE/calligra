@@ -25,15 +25,16 @@
 #include <Q3CString>
 #include <Q3PtrList>
 #include <Q3ValueList>
-#include <Q3PopupMenu>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <klibloader.h>
 #include <kparts/componentfactory.h>
-#include <ktrader.h>
+#include <kservice.h>
+#include <kservicetypetrader.h>
 #include <kiconloader.h>
 #include <kmenu.h>
+#include <kactioncollection.h>
 
 #include "widgetfactory.h"
 #include "widgetlibrary.h"
@@ -41,6 +42,8 @@
 #include "container.h"
 #include "form.h"
 #include "formIO.h"
+
+#include "../kexi_global.h"
 
 namespace KFormDesigner {
 
@@ -119,7 +122,7 @@ WidgetLibrary::WidgetLibrary(QObject *parent, const QStringList& supportedFactor
 	for (QStringList::ConstIterator it = supportedFactoryGroups.constBegin();
 		it!=supportedFactoryGroups.constEnd(); ++it)
 	{
-		d->supportedFactoryGroups.insert( (*it).lower().latin1(), (char*)1);
+		d->supportedFactoryGroups.insert( (*it).toLower().toLatin1(), (char*)1);
 	}
 	lookupFactories();
 }
@@ -157,7 +160,7 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 			if (w->pixmap().isEmpty())
 				w->setPixmap( inheritedClass->pixmap() );
 			//ok?
-			foreach (Q3ValueList<Q3CString>::ConstIterator, it_alt, inheritedClass->m_alternateNames) {
+			foreach3 (Q3ValueList<Q3CString>::ConstIterator, it_alt, inheritedClass->m_alternateNames) {
 				w->addAlternateClassName( *it_alt, inheritedClass->isOverriddenClassName( *it_alt ) );
 			}
 			if (w->includeFileName().isEmpty())
@@ -200,12 +203,11 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 void
 WidgetLibrary::lookupFactories()
 {
-	KTrader::OfferList tlist = KTrader::self()->query("KFormDesigner/WidgetFactory");
-	KTrader::OfferList::ConstIterator it, end( tlist.constEnd() );
-	for( it = tlist.constBegin(); it != end; ++it)
-	{
+	KService::List tlist = KServiceTypeTrader::self()->query("Kexi/DBDriver");
+	KService::List::ConstIterator it(tlist.constBegin()), end( tlist.constEnd() );
+	for(; it != end; ++it) {
 		KService::Ptr ptr = (*it);
-		KService::Ptr* existingService = (d->services)[ptr->library().latin1()];
+		KService::Ptr* existingService = (d->services)[ptr->library().toLatin1()];
 		if (existingService) {
 			kWarning() << "WidgetLibrary::lookupFactories(): factory '" << ptr->name()
 				<< "' already found (library="<< (*existingService)->library()
@@ -214,7 +216,7 @@ WidgetLibrary::lookupFactories()
 		}
 		kDebug() << "WidgetLibrary::lookupFactories(): found factory: " << ptr->name() << endl;
 
-		Q3CString groupName = ptr->property("X-KFormDesigner-FactoryGroup").toCString();
+		Q3CString groupName = ptr->property("X-KFormDesigner-FactoryGroup").toByteArray();
 		if (!groupName.isEmpty() && !d->supportedFactoryGroups[groupName]) {
 			kDebug() << "WidgetLibrary::lookupFactories(): factory group '" << groupName
 				<< "' is unsupported by this application (library=" << ptr->library() << ")"<< endl;
@@ -228,7 +230,7 @@ WidgetLibrary::lookupFactories()
 				.arg(KFormDesigner::version()) << endl;
 			continue;
 		}
-		d->services.insert(ptr->library().latin1(), new KService::Ptr( ptr ));
+		d->services.insert(ptr->library().toLatin1(), new KService::Ptr( ptr ));
 	}
 }
 
@@ -240,16 +242,17 @@ WidgetLibrary::loadFactories()
 	d->factoriesLoaded = true;
 	for (Q3AsciiDictIterator<KService::Ptr> it(d->services); it.current(); ++it) {
 		WidgetFactory *f = KService::createInstance<WidgetFactory>(
-			*it.current(), this, (*it.current())->library().latin1(), QStringList());
+			*it.current(), this, QStringList());
 		if (!f) {
 			kWarning() << "WidgetLibrary::loadFactories(): creating factory failed! "
 				<< (*it.current())->library() << endl;
 			continue;
 		}
+		f->setObjectName( (*it.current())->library() );
 		f->m_library = this;
 		f->m_showAdvancedProperties = d->showAdvancedProperties; //inherit this flag from the library
 		f->m_xmlGUIFileName = (*it.current())->property("X-KFormDesigner-XMLGUIFileName").toString();
-		d->factories.insert( f->name(), f );
+		d->factories.insert( f->objectName().toLatin1(), f );
 
 		//collect information about classes to be hidden
 		if (f->m_hiddenClasses) {
@@ -383,7 +386,7 @@ WidgetLibrary::createWidget(const Q3CString &classname, QWidget *parent, const c
 }
 
 bool
-WidgetLibrary::createMenuActions(const Q3CString &c, QWidget *w, Q3PopupMenu *menu,
+WidgetLibrary::createMenuActions(const Q3CString &c, QWidget *w, KMenu *menu,
 	KFormDesigner::Container *container)
 {
 	loadFactories();
@@ -731,29 +734,29 @@ WidgetFactory::CreateWidgetOptions WidgetLibrary::showOrientationSelectionPopup(
 	if (textHorizontal.isEmpty() && wclass->inheritedClass())
 		iconName = wclass->inheritedClass()->factory()->internalProperty(classname, "orientationSelectionPopup:horizontalText");
 	if (textHorizontal.isEmpty()) //default
-		textHorizontal = i18n("Insert Horizontal Widget", "Insert Horizontal");
+		textHorizontal = i18nc("Insert Horizontal Widget", "Insert Horizontal");
 
 	QString textVertical = wclass->factory()->internalProperty(classname, "orientationSelectionPopup:verticalText");
 	if (textVertical.isEmpty() && wclass->inheritedClass())
 		iconName = wclass->inheritedClass()->factory()->internalProperty(classname, "orientationSelectionPopup:verticalText");
 	if (textVertical.isEmpty()) //default
-		textVertical = i18n("Insert Vertical Widget", "Insert Vertical");
+		textVertical = i18nc("Insert Vertical Widget", "Insert Vertical");
 
-	KMenu* popup = new KMenu(parent, "orientationSelectionPopup");
-	popup->insertTitle(SmallIcon(wclass->pixmap()), i18n("Insert Widget: %1").arg(wclass->name()));
-	popup->insertItem(iconHorizontal, textHorizontal, 1);
-	popup->insertItem(iconVertical, textVertical, 2);
-	popup->insertSeparator();
-	popup->insertItem(SmallIcon("button_cancel"), i18n("Cancel"), 3);
+	KMenu* popup = new KMenu(parent);
+	popup->setObjectName("orientationSelectionPopup");
+	popup->addTitle(SmallIcon(wclass->pixmap()), i18n("Insert Widget: %1").arg(wclass->name()));
+	QAction* horizAction = popup->addAction(iconHorizontal, textHorizontal);
+	QAction* vertAction = popup->addAction(iconVertical, textVertical);
+	popup->addSeparator();
+	popup->addAction(SmallIcon("button_cancel"), i18n("Cancel"));
 	WidgetFactory::CreateWidgetOptions result;
-	switch (popup->exec(pos)) {
-	case 1:
-		result = WidgetFactory::HorizontalOrientation; break;
-	case 2:
-		result = WidgetFactory::VerticalOrientation; break;
-	default:
+	QAction *a = popup->exec(pos);
+	if (a==horizAction)
+		result = WidgetFactory::HorizontalOrientation;
+	else if (a==vertAction)
+		result = WidgetFactory::VerticalOrientation;
+	else
 		result = WidgetFactory::AnyOrientation; //means "cancelled"
-	}
 	delete popup;
 	return result;
 }

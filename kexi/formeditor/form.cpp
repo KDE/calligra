@@ -30,7 +30,9 @@
 #include <kcommand.h>
 #include <kaction.h>
 #include <kmessagebox.h>
+#include <kactioncollection.h>
 
+#include "form.h"
 #include "container.h"
 #include "objecttree.h"
 #include "widgetpropertyset.h"
@@ -38,12 +40,16 @@
 #include "formmanager.h"
 #include "widgetlibrary.h"
 #include "spring.h"
-#include "pixmapcollection.h"
 #include "events.h"
 #include "utils.h"
 #include <koproperty/property.h>
+#include <kexi_global.h>
 
-#include "form.h"
+#warning pixmapcollection
+#define KEXI_NO_PIXMAPCOLLECTION
+#ifndef KEXI_NO_PIXMAPCOLLECTION
+#include "pixmapcollection.h"
+#endif
 
 using namespace KFormDesigner;
 
@@ -98,7 +104,7 @@ Form::Form(WidgetLibrary* library, const char *name, bool designMode)
 	d->design = designMode;
 
 	// Init actions
-	d->collection = new KActionCollection(0, this);
+	d->collection = new KActionCollection(this);
 	d->history = new KCommandHistory(d->collection, true);
 	connect(d->history, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
 	connect(d->history, SIGNAL(documentRestored()), this, SLOT(slotFormRestored()));
@@ -135,7 +141,10 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const Q3CString
 	d->topTree = new ObjectTree(i18n("Form"), container->name(), container, d->toplevel);
 	d->toplevel->setObjectTree(d->topTree);
 	d->toplevel->setForm(this);
+#warning pixmapcollection
+#ifndef KEXI_NO_PIXMAPCOLLECTION
 	d->pixcollection = new PixmapCollection(container->name(), this);
+#endif
 
 	d->topTree->setWidget(container);
 //! todo: copy caption in Kexi from object's caption
@@ -322,6 +331,8 @@ Form::emitActionSignals(bool withUndoAction)
 	if(!withUndoAction)
 		return;
 
+#warning pixmapcollection
+#ifndef KEXI_NO_PIXMAPCOLLECTION
 	KAction *undoAction = d->collection->action("edit_undo");
 	if(undoAction)
 		FormManager::self()->emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
@@ -329,6 +340,7 @@ Form::emitActionSignals(bool withUndoAction)
 	KAction *redoAction = d->collection->action("edit_redo");
 	if(redoAction)
 		FormManager::self()->emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
+#endif
 }
 
 void
@@ -366,7 +378,7 @@ Form::changeName(const Q3CString &oldname, const Q3CString &newname)
 	if(!d->topTree->rename(oldname, newname)) // rename failed
 	{
 		KMessageBox::sorry(widget()->topLevelWidget(),
-			i18n("Renaming widget \"%1\" to \"%2\" failed.").arg(oldname).arg(newname));
+			i18n("Renaming widget \"%1\" to \"%2\" failed.").arg(QString(oldname)).arg(QString(newname)));
 //moved to WidgetPropertySet::slotChangeProperty()
 //		KMessageBox::sorry(widget()->topLevelWidget(),
 //		i18n("A widget with this name already exists. "
@@ -429,17 +441,23 @@ Form::slotCommandExecuted()
 void
 Form::emitUndoEnabled()
 {
+#warning pixmapcollection
+#ifndef KEXI_NO_PIXMAPCOLLECTION
 	KAction *undoAction = d->collection->action("edit_undo");
 	if(undoAction)
 		FormManager::self()->emitUndoEnabled(undoAction->isEnabled(), undoAction->text());
+#endif
 }
 
 void
 Form::emitRedoEnabled()
 {
+#warning pixmapcollection
+#ifndef KEXI_NO_PIXMAPCOLLECTION
 	KAction *redoAction = d->collection->action("edit_redo");
 	if(redoAction)
 		FormManager::self()->emitRedoEnabled(redoAction->isEnabled(), redoAction->text());
+#endif
 }
 
 void
@@ -460,13 +478,9 @@ Form::addWidgetToTabStops(ObjectTreeItem *c)
 		return;
 	if(!(w->focusPolicy() & Qt::TabFocus))
 	{
-		if(!w->children())
-			return;
-
 		// For composed widgets, we check if one of the child can have focus
-		QObjectList list = *(w->children());
-		for(QObject *obj = list.first(); obj; obj = list.next())
-		{
+		const QObjectList list( w->children() );
+		foreach(const QObject *obj, list) {
 //			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() != QWidget::NoFocus)) {
 //			if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() & QWidget::TabFocus)) {
 			if(obj->isWidgetType()) {//QWidget::TabFocus flag will be checked later!

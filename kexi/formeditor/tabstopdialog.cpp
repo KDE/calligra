@@ -42,9 +42,16 @@ using namespace KFormDesigner;
 //////////////////////////////////////////////////////////////////////////////////
 
 TabStopDialog::TabStopDialog(QWidget *parent)
-: KDialogBase(parent, "tabstop_dialog", true, i18n("Edit Tab Order"), Ok|Cancel, Ok, false)
+: KDialog(parent)
 {
-	QFrame *frame = makeMainWidget();
+	setObjectName("tabstop_dialog");
+	setModal(true);
+	setCaption(i18n("Edit Tab Order"));
+	setButtons( KDialog::Ok | KDialog::Cancel );
+	setDefaultButton( KDialog::Ok );
+
+	QFrame *frame = new QFrame(this);
+	setMainWidget(frame);
 	Q3GridLayout *l = new Q3GridLayout(frame, 2, 2, 0, 6);
 	m_treeview = new ObjectTreeView(frame, "tabstops_treeview", true);
 	m_treeview->setItemsMovable(true);
@@ -60,12 +67,12 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 
 	Q3VBoxLayout *vbox = new Q3VBoxLayout();
 	l->addLayout(vbox, 0, 1);
-	m_btnUp = new KPushButton(SmallIconSet("1uparrow"), i18n("Move Up"), frame);
+	m_btnUp = new KPushButton(KIcon("1uparrow"), i18n("Move Up"), frame);
 	m_btnUp->setToolTip( i18n("Move widget up") );
 	vbox->addWidget(m_btnUp);
 	connect(m_btnUp, SIGNAL(clicked()), this, SLOT(moveItemUp()));
 
-	m_btnDown = new KPushButton(SmallIconSet("1downarrow"), i18n("Move Down"), frame);
+	m_btnDown = new KPushButton(KIcon("1downarrow"), i18n("Move Down"), frame);
 	m_btnDown->setToolTip( i18n("Move widget down") );
 	vbox->addWidget(m_btnDown);
 	connect(m_btnDown, SIGNAL(clicked()), this, SLOT(moveItemDown()));
@@ -103,7 +110,7 @@ int TabStopDialog::exec(Form *form)
 		m_treeview->setSelected(m_treeview->firstChild(), true);
 	}
 
-	if (QDialog::Rejected == KDialogBase::exec())
+	if (QDialog::Rejected == KDialog::exec())
 		return QDialog::Rejected;
 
 	//accepted

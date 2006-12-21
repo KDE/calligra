@@ -21,9 +21,9 @@
 #define SPACER_H
 
 #include <qwidget.h>
-//Added by qt3to4:
 #include <Q3CString>
-#include <QPaintEvent>
+
+#include <kexi_export.h>
 
 class QDomElement;
 class QDomDocument;
@@ -50,8 +50,8 @@ class KFORMEDITOR_EXPORT Spring : public QWidget
 		    Expanding = MinimumExpanding|MayShrink };
 
 	public:
-		Spring(QWidget *parent, const char *name);
-		~Spring() {;}
+		Spring(QWidget *parent);
+		~Spring();
 
 		static bool isPropertyVisible(const Q3CString &name);
 		static void saveSpring(KFormDesigner::ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout);
@@ -67,11 +67,8 @@ class KFORMEDITOR_EXPORT Spring : public QWidget
 		void paintEvent(QPaintEvent *ev);
 
 	private:
-		Orientation   m_orient;
-		bool          m_edit;
+		Qt::Orientation m_orient;
+		bool m_edit;
 };
 
-
 #endif
-
-

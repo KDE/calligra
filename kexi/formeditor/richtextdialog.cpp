@@ -16,93 +16,110 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include <qlayout.h>
-//Added by qt3to4:
+
+#include "richtextdialog.h"
+
+#include <QLayout>
+#include <QAction>
 #include <Q3VBoxLayout>
-#include <Q3Frame>
 
 #include <ktoolbar.h>
-#include <kfontcombo.h>
+#include <kfontrequester.h>
 #include <kcolorcombo.h>
 #include <ktoolbarradiogroup.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <KIcon>
 
-#include "richtextdialog.h"
-
-namespace KFormDesigner {
+using namespace KFormDesigner;
 
 //////////////////////////////////////////////////////////////////////////////////
 //////////////// A simple dialog to edit rich text   ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 
 RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
-: KDialogBase(parent, "richtext_dialog", true, i18n("Edit Rich Text"), Ok|Cancel, Ok, false)
+: KDialog(parent)
 {
-	QFrame *frame = makeMainWidget();
+	setObjectName("richtext_dialog");
+	setModal(true);
+	setCaption(i18n("Edit Rich Text"));
+	setButtons( KDialog::Ok | KDialog::Cancel );
+	setDefaultButton( KDialog::Ok );
+	
+	QFrame *frame = new QFrame(this);
+	setMainWidget(frame);
 	Q3VBoxLayout *l = new Q3VBoxLayout(frame);
 	l->setAutoAdd(true);
 
 	m_toolbar = new KToolBar(frame);
-	m_toolbar->setFlat(true);
-	m_toolbar->show();
 
-	m_fcombo = new KFontCombo(m_toolbar);
-	m_toolbar->insertWidget(TBFont, 40, m_fcombo);
-	connect(m_fcombo, SIGNAL(textChanged(const QString&)), this, SLOT(changeFont(const QString &)));
+	m_fontCombo = new KFontRequester(m_toolbar);
+	m_fontComboAction = m_toolbar->addWidget(/*js: TBFont, 40,*/ m_fontCombo);
+	connect(m_fontCombo, SIGNAL(textChanged(const QString&)), 
+		this, SLOT(changeFont(const QString &)));
 
-	m_toolbar->insertSeparator();
+	m_toolbar->addSeparator();
 
-	m_colCombo = new KColorCombo(m_toolbar);
-	m_toolbar->insertWidget(TBColor, 30, m_colCombo);
-	connect(m_colCombo, SIGNAL(activated(const QColor&)), this, SLOT(changeColor(const QColor&)));
+	m_colorCombo = new KColorCombo(m_toolbar);
+	m_colorComboAction = m_toolbar->addWidget(/*js: TBColor, 30,*/ m_colorCombo);
+	connect(m_colorCombo, SIGNAL(activated(const QColor&)), this, SLOT(changeColor(const QColor&)));
 
-	m_toolbar->insertButton("text_bold", TBBold, true, i18n("Bold"));
-	m_toolbar->insertButton("text_italic", TBItalic, true, i18n("Italic"));
-	m_toolbar->insertButton("text_under", TBUnder, true, i18n("Underline"));
-	m_toolbar->setToggle(TBBold, true);
-	m_toolbar->setToggle(TBItalic, true);
-	m_toolbar->setToggle(TBUnder, true);
-	m_toolbar->insertSeparator();
+	m_boldTextAction = m_toolbar->addAction(KIcon("text_bold"), i18n("Bold"));
+	m_boldTextAction->setCheckable(true);
+	m_italicTextAction = m_toolbar->addAction(KIcon("text_italic"), i18n("Italic"));
+	m_italicTextAction->setCheckable(true);
+	m_underlineTextAction = m_toolbar->addAction(KIcon("text_under"), i18n("Underline"));
+	m_underlineTextAction->setCheckable(true);
+	m_toolbar->addSeparator();
 
-	m_toolbar->insertButton("text_super", TBSuper, true, i18n("Superscript"));
-	m_toolbar->insertButton("text_sub", TBSub, true, i18n("Subscript"));
-	m_toolbar->setToggle(TBSuper, true);
-	m_toolbar->setToggle(TBSub, true);
-	m_toolbar->insertSeparator();
+	m_superscriptTextAction = m_toolbar->addAction(KIcon("text_super"), i18n("Superscript"));
+	m_superscriptTextAction->setCheckable(true);
+	m_subscriptTextAction = m_toolbar->addAction(KIcon("text_sub"), i18n("Subscript"));
+	m_subscriptTextAction->setCheckable(true);
+	m_toolbar->addSeparator();
 
-	KToolBarRadioGroup *group = new KToolBarRadioGroup(m_toolbar);
-	m_toolbar->insertButton("text_left", TBLeft, true, i18n("Right Align"));
-	m_toolbar->setToggle(TBLeft, true);
-	group->addButton(TBLeft);
-	m_toolbar->insertButton("text_center", TBCenter, true, i18n("Left Align"));
-	m_toolbar->setToggle(TBCenter, true);
-	group->addButton(TBCenter);
-	m_toolbar->insertButton("text_right", TBRight, true, i18n("Centered"));
-	m_toolbar->setToggle(TBRight, true);
-	group->addButton(TBRight);
-	m_toolbar->insertButton("text_block", TBJustify, true, i18n("Justified"));
-	m_toolbar->setToggle(TBJustify, true);
-	group->addButton(TBJustify);
+	m_alignActionGroup = new QActionGroup(this);
+	m_alignLeftAction = m_toolbar->addAction(KIcon("text_left"), i18n("Left Align"));
+	m_alignLeftAction->setCheckable(true);
+	m_alignActionGroup->addAction(m_alignLeftAction);
+	m_alignCenterAction = m_toolbar->addAction(KIcon("text_center"), i18n("Centered"));
+	m_alignCenterAction->setCheckable(true);
+	m_alignActionGroup->addAction(m_alignCenterAction);
+	m_alignRightAction = m_toolbar->addAction(KIcon("text_right"), i18n("Right Align"));
+	m_alignRightAction->setCheckable(true);
+	m_alignActionGroup->addAction(m_alignRightAction);
+	m_alignJustifyAction = m_toolbar->addAction(KIcon("text_block"), i18n("Justified"));
+	m_alignJustifyAction->setCheckable(true);
+	m_alignActionGroup->addAction(m_alignJustifyAction);
 
-	connect(m_toolbar, SIGNAL(toggled(int)), this, SLOT(buttonToggled(int)));
+	connect(m_toolbar, SIGNAL(actionTriggered(QAction*)),
+		this, SLOT(slotActionTriggered(QAction*)));
 
-	m_edit = new KTextEdit(text, QString::null, frame, "richtext_edit");
-	m_edit->setTextFormat(Qt::RichText);
+	m_edit = new KTextEdit(text, frame);
+	m_edit->setAcceptRichText(true);
+
+/* not needed, slotCurrentCharFormatChanged() handles this
+	connect(m_edit, SIGNAL(cursorPositionChanged()),
+		this, SLOT(cursorPositionChanged()));*/
+//	connect(m_edit, SIGNAL(clicked(int, int)),
+//		this, SLOT(cursorPositionChanged(int, int)));
+	connect(m_edit, SIGNAL(currentCharFormatChanged(const QTextCharFormat&)),
+		this, SLOT(slotCurrentCharFormatChanged(const QTextCharFormat&)));
+
+	m_edit->moveCursor(QTextCursor::End);
+	slotCurrentCharFormatChanged(m_edit->currentCharFormat());
+	//cursorPositionChanged();
+//	m_edit->show();
+//	frame->show();
 	m_edit->setFocus();
+}
 
-	connect(m_edit, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(cursorPositionChanged(int, int)));
-	connect(m_edit, SIGNAL(clicked(int, int)), this, SLOT(cursorPositionChanged(int, int)));
-	connect(m_edit, SIGNAL(currentVerticalAlignmentChanged(VerticalAlignment)), this, SLOT(slotVerticalAlignmentChanged(VerticalAlignment)));
-
-	m_edit->moveCursor(Q3TextEdit::MoveEnd, false);
-	cursorPositionChanged(0, 0);
-	m_edit->show();
-	frame->show();
+RichTextDialog::~RichTextDialog()
+{
 }
 
 QString
-RichTextDialog::text()
+RichTextDialog::text() const
 {
 	return m_edit->text();
 }
@@ -120,55 +137,61 @@ RichTextDialog::changeColor(const QColor &color)
 }
 
 void
-RichTextDialog::buttonToggled(int id)
+RichTextDialog::slotActionTriggered(QAction* action)
 {
-	bool isOn = m_toolbar->isButtonOn(id);
+	const bool isChecked = action->isChecked();
 
-	switch(id)
-	{
-		case TBBold: m_edit->setBold(isOn); break;
-		case TBItalic: m_edit->setItalic(isOn); break;
-		case TBUnder: m_edit->setUnderline(isOn); break;
-		case TBSuper:
-		{
-			if(isOn && m_toolbar->isButtonOn(TBSub))
-				m_toolbar->setButton(TBSub, false);
-			m_edit->setVerticalAlignment(isOn ? Q3TextEdit::AlignSuperScript : Q3TextEdit::AlignNormal);
-			break;
+	if (action==m_boldTextAction)
+		m_edit->setBold(isChecked);
+	else if (action==m_italicTextAction)
+		m_edit->setItalic(isChecked);
+	else if (action==m_underlineTextAction)
+		m_edit->setUnderline(isChecked);
+	else if (action==m_superscriptTextAction) {
+		if (isChecked && m_subscriptTextAction->isChecked()) {
+			m_subscriptTextAction->setChecked(false);
+			QTextCharFormat currentCharFormat = m_edit->currentCharFormat();
+			currentCharFormat.setVerticalAlignment(
+				isChecked ? QTextCharFormat::AlignSuperScript : QTextCharFormat::AlignNormal);
+			m_edit->setCurrentCharFormat(currentCharFormat);
 		}
-		case TBSub:
-		{
-			if(isOn && m_toolbar->isButtonOn(TBSuper))
-				m_toolbar->setButton(TBSuper, false);
-			m_edit->setVerticalAlignment(isOn ? Q3TextEdit::AlignSubScript : Q3TextEdit::AlignNormal);
-			break;
-		}
-		case TBLeft: case TBCenter:
-		case TBRight: case TBJustify:
-		{
-			if(!isOn)  break;
-			switch(id)
-			{
-				case TBLeft:  m_edit->setAlignment(Qt::AlignLeft); break;
-				case TBCenter:  m_edit->setAlignment(Qt::AlignCenter); break;
-				case TBRight:  m_edit->setAlignment(Qt::AlignRight); break;
-				case TBJustify:  m_edit->setAlignment(Qt::AlignJustify); break;
-				default: break;
-			}
-		}
-		default: break;
 	}
-
+	else if (action==m_superscriptTextAction) {
+		if (isChecked && m_superscriptTextAction->isChecked()) {
+			m_superscriptTextAction->setChecked(false);
+			QTextCharFormat currentCharFormat = m_edit->currentCharFormat();
+			currentCharFormat.setVerticalAlignment(
+				isChecked ? QTextCharFormat::AlignSubScript : QTextCharFormat::AlignNormal);
+			m_edit->setCurrentCharFormat(currentCharFormat);
+		}
+	}
+	else if (action==m_alignLeftAction) {
+		if (isChecked)
+			m_edit->setAlignment(Qt::AlignLeft);
+	}
+	else if (action==m_alignCenterAction) {
+		if (isChecked)
+			m_edit->setAlignment(Qt::AlignCenter);
+	}
+	else if (action==m_alignRightAction) {
+		if (isChecked)
+			m_edit->setAlignment(Qt::AlignRight);
+	}
+	else if (action==m_alignJustifyAction) {
+		if (isChecked)
+			m_edit->setAlignment(Qt::AlignJustify);
+	}
 }
 
+/* not needed, slotCurrentCharFormatChanged() handles this
 void
-RichTextDialog::cursorPositionChanged(int, int)
+RichTextDialog::cursorPositionChanged()
 {
-	m_fcombo->setCurrentFont(m_edit->currentFont().family());
-	m_colCombo->setColor(m_edit->color());
-	m_toolbar->setButton(TBBold, m_edit->bold());
-	m_toolbar->setButton(TBItalic, m_edit->italic());
-	m_toolbar->setButton(TBUnder, m_edit->underline());
+	m_fontCombo->setCurrentFont(m_edit->currentFont().family());
+	m_colorCombo->setColor(m_edit->color());
+	m_boldTextAction->setChecked(m_edit->bold());
+	m_italicTextAction->setChecked(m_edit->italic());
+	m_underlineTextAction->setChecked(m_edit->underline());
 
 	int id = 0;
 	switch(m_edit->alignment())
@@ -180,34 +203,30 @@ RichTextDialog::cursorPositionChanged(int, int)
 		default:  id = TBLeft; break;
 	}
 	m_toolbar->setButton(id, true);
-}
+}*/
 
 void
-RichTextDialog::slotVerticalAlignmentChanged(VerticalAlignment align)
+RichTextDialog::slotCurrentCharFormatChanged(const QTextCharFormat& f)
 {
-	switch(align)
-	{
-		case Q3TextEdit::AlignSuperScript:
-		{
-			m_toolbar->setButton(TBSuper, true);
-			m_toolbar->setButton(TBSub, false);
-			break;
-		}
-		case Q3TextEdit::AlignSubScript:
-		{
-			m_toolbar->setButton(TBSub, true);
-			m_toolbar->setButton(TBSuper, false);
-			break;
-		}
-		default:
-		{
-			m_toolbar->setButton(TBSuper, false);
-			m_toolbar->setButton(TBSub, false);
-		}
+	m_superscriptTextAction->setChecked(f.verticalAlignment()==QTextCharFormat::AlignSuperScript);
+	m_subscriptTextAction->setChecked(f.verticalAlignment()==QTextCharFormat::AlignSubScript);
+
+	switch (m_edit->alignment()) {
+	case Qt::AlignLeft:
+		m_alignLeftAction->setChecked(true);
+		break;
+	case Qt::AlignCenter:
+		m_alignCenterAction->setChecked(true);
+		break;
+	case Qt::AlignRight:
+		m_alignRightAction->setChecked(true);
+		break;
+	case Qt::AlignJustify:
+		m_alignJustifyAction->setChecked(true);
+		break;
 	}
-}
-
-
+	
+//! @todo add more formatting options (buttons)
 }
 
 #include "richtextdialog.moc"

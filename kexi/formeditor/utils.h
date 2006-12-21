@@ -22,6 +22,7 @@
 
 #include <q3ptrlist.h>
 #include <qwidget.h>
+#include <kexi_export.h>
 
 namespace KFormDesigner {
 

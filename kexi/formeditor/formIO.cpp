@@ -41,30 +41,42 @@
 #include <Q3ValueList>
 #include <QPixmap>
 #include <Q3HBoxLayout>
+#include <QImageWriter>
 
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kcommand.h>
 #include <kacceleratormanager.h>
 
+#include <kexiutils/utils.h>
 #include "form.h"
 #include "container.h"
 #include "objecttree.h"
 #include "formmanager.h"
 #include "widgetlibrary.h"
 #include "spring.h"
-#include "pixmapcollection.h"
 #include "events.h"
 #include "utils.h"
-#include "kexiflowlayout.h"
 #include "widgetwithsubpropertiesinterface.h"
 #include "formIO.h"
 
+#define KEXI_NO_FLOWLAYOUT
+#warning "Port Kexi flow layout!"
+#ifndef KEXI_NO_FLOWLAYOUT
+#include "kexiflowlayout.h"
+#endif
+
+#define KEXI_NO_PIXMAPCOLLECTION
+#warning pixmapcollection
+#ifndef KEXI_NO_PIXMAPCOLLECTION
+#include "pixmapcollection.h"
+#endif
+
 /// A blank widget used when the class name is not supported
-CustomWidget::CustomWidget(const Q3CString &className, QWidget *parent, const char *name)
-: QWidget(parent, name), m_className(className)
+CustomWidget::CustomWidget(const Q3CString &className, QWidget *parent)
+: QWidget(parent), m_className(className)
 {
-	setBackgroundMode(Qt::PaletteDark);
+	setBackgroundRole(QPalette::Dark);
 }
 
 CustomWidget::~CustomWidget()
@@ -75,7 +87,7 @@ void
 CustomWidget::paintEvent(QPaintEvent *)
 {
 	QPainter p(this);
-	p.setPen(palette().active().text());
+	p.setBrush(palette().text());
 	QRect r(rect());
 	r.setX(r.x()+2);
 	p.drawText(r, Qt::AlignTop, m_className);
@@ -116,7 +128,7 @@ FormIO::saveFormToFile(Form *form, const QString &filename)
 
 	if(filename.isNull())
 	{
-		m_filename = KFileDialog::getSaveFileName(QString::null, i18n("*.ui|Qt Designer UI Files"));
+		m_filename = KFileDialog::getSaveFileName(KUrl(), i18n("*.ui|Qt Designer UI Files"));
 		if(m_filename.isNull())
 			return false;
 	}
@@ -145,7 +157,7 @@ FormIO::saveFormToByteArray(Form *form, QByteArray &dest)
 	QDomDocument domDoc;
 	if (!saveFormToDom(form, domDoc))
 		return false;
-	dest = domDoc.toCString();
+	dest = domDoc.toByteArray();
 	return true;
 }
 
@@ -174,8 +186,9 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 	form->headerProperties()->insert("version", QString::number(form->formatVersion()));
 	//custom properties
 	QDomElement headerPropertiesEl = domDoc.createElement("kfd:customHeader");
-	for (QMapConstIterator<Q3CString,QString> it=form->headerProperties()->constBegin(); it!=form->headerProperties()->constEnd(); ++it) {
-		headerPropertiesEl.setAttribute(it.key(), it.data());
+	QMap<Q3CString,QString>::ConstIterator itEnd = form->headerProperties()->constEnd();
+	for (QMap<Q3CString,QString>::ConstIterator it=form->headerProperties()->constBegin(); it!=itEnd; ++it) {
+		headerPropertiesEl.setAttribute(it.key(), it.value());
 	}
 	uiElement.appendChild(headerPropertiesEl);
 
@@ -211,8 +224,11 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 		tabstop.appendChild(tabStopText);
 	}
 
+#warning pixmapcollection
+#ifndef KEXI_NO_PIXMAPCOLLECTION
 	// Save the Form 's PixmapCollection
 	form->pixmapCollection()->save(uiElement);
+#endif
 	// Save the Form connections
 	form->connectionBuffer()->save(uiElement);
 
@@ -287,7 +303,7 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
 
 	if(filename.isNull())
 	{
-		m_filename = KFileDialog::getOpenFileName(QString::null, i18n("*.ui|Qt Designer UI Files"));
+		m_filename = KFileDialog::getOpenFileName(KUrl(), i18n("*.ui|Qt Designer UI Files"));
 		if(m_filename.isNull())
 			return false;
 	}
@@ -297,23 +313,22 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
 	QFile file(m_filename);
 	if(!file.open(QIODevice::ReadOnly))
 	{
+//! @todo proved err msg to the user
 		kDebug() << "Cannot open the file " << filename << endl;
 		return false;
 	}
-	QTextStream stream(&file);
-	QString text = stream.read();
-
-	QDomDocument inBuf;
-	bool parsed = inBuf.setContent(text, false, &errMsg, &errLine, &errCol);
-
-	if(!parsed)
+	QDomDocument doc;
+	if (!doc.setContent(&file, false/* !namespaceProcessing*/, 
+		&errMsg, &errLine, &errCol))
 	{
-		kDebug() << "WidgetWatcher::load(): " << errMsg << endl;
-		kDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
+//! @todo proved err msg to the user
+		kDebug() << "FormIO::loadFormFromFile(): " << errMsg << endl;
+		kDebug() << "FormIO::loadFormFromFile(): line: " << errLine << " col: " 
+			<< errCol << endl;
 		return false;
 	}
 
-	return loadFormFromDom(form, container, inBuf);
+	return loadFormFromDom(form, container, doc);
 }
 
 bool
@@ -328,7 +343,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 	QDomElement headerPropertiesEl = ui.namedItem("kfd:customHeader").toElement();
 	QDomAttr attr = headerPropertiesEl.firstChild().toAttr();
 	while (!attr.isNull() && attr.isAttr()) {
-		form->headerProperties()->insert(attr.name().latin1(), attr.value());
+		form->headerProperties()->insert(attr.name().toLatin1(), attr.value());
 		attr = attr.nextSibling().toAttr();
 	}
 	//update format version information
@@ -357,7 +372,10 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 
 	// Load the pixmap collection
 	m_savePixmapsInline = ( (ui.namedItem("pixmapinproject").isNull()) || (!ui.namedItem("images").isNull()) );
+#warning pixmapcollection
+#ifndef KEXI_NO_PIXMAPCOLLECTION
 	form->pixmapCollection()->load(ui.namedItem("collection"));
+#endif
 
 	QDomElement element = ui.namedItem("widget").toElement();
 	createToplevelWidget(form, container, element);
@@ -415,44 +433,49 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
 	WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
 	QWidget *subwidget = w;
 	bool addSubwidgetFlag = false;
-	int propertyId = w->metaObject()->findProperty(name, true);
+	int propertyId = KexiUtils::indexOfPropertyWithSuperclasses(w, name);
 	if (propertyId == -1 && subpropIface && subpropIface->subwidget()) { // try property from subwidget
 		subwidget = subpropIface->subwidget();
-		propertyId = subpropIface->subwidget()->metaObject()->findProperty(name, true);
+		propertyId = KexiUtils::indexOfPropertyWithSuperclasses(
+			subpropIface->subwidget(), name);
 		addSubwidgetFlag = true;
 	}
 	if(propertyId == -1)
 	{
 		kDebug() << "FormIO::savePropertyValue()  The object doesn't have this property. Let's try the WidgetLibrary." << endl;
 		if(lib)
-			lib->saveSpecialProperty(w->className(), name, value, w, parentNode, parent);
+			lib->saveSpecialProperty(w->metaObject()->className(), name, value, w, parentNode, parent);
 		return;
 	}
 
-	const QMetaProperty *meta = subwidget->metaObject()->property(propertyId, true);
-	if (!meta->stored( subwidget )) //not storable
+	const QMetaProperty meta( KexiUtils::findPropertyWithSuperclasses(subwidget, propertyId) );
+	if (!meta.isValid() || !meta.isStored( subwidget )) //not storable
 		return;
 	QDomElement propertyE = parent.createElement("property");
 	propertyE.setAttribute("name", name);
 	if (addSubwidgetFlag)
 		propertyE.setAttribute("subwidget", "true");
 
-	if(meta && meta->isEnumType())
+	if(meta.isValid() && meta.isEnumType())
 	{
 		// this property is enum or set type
 		QDomElement type;
 		QDomText valueE;
 
-		if(meta->isSetType())
+		if(meta.isFlagType())
 		{
-			QStringList list = QStringList::fromStrList(meta->valueToKeys(value.toInt()));
+			/* js: it's simpler in Qt4:
+			QStringList list = QStringList::fromStrList(meta.enumerator().valueToKeys(value.toInt()));
 			type = parent.createElement("set");
-			valueE = parent.createTextNode(list.join("|"));
-			type.appendChild(valueE);
+			valueE = parent.createTextNode(list.join("|"));*/
+			type = parent.createElement("set");
+			valueE = parent.createTextNode( 
+				meta.enumerator().valueToKeys(value.toInt()) );
+			type.appendChild( valueE );
 		}
 		else
 		{
-			QString s = meta->valueToKey(value.toInt());
+			QString s = meta.enumerator().valueToKey(value.toInt());
 			type = parent.createElement("enum");
 			valueE = parent.createTextNode(s);
 			type.appendChild(valueE);
@@ -465,10 +488,10 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
 	if(value.type() == QVariant::Pixmap) {
 		QDomText valueE;
 		QDomElement type = parent.createElement("pixmap");
-		Q3CString property = propertyE.attribute("name").latin1();
+		Q3CString property = propertyE.attribute("name").toLatin1();
 //todo		QCString pixmapName = m_currentItem->widget()->property("pixmapName").toCString();
 		if(m_savePixmapsInline /* (js)too risky: || m_currentItem->pixmapName(property).isNull() */)
-			valueE = parent.createTextNode(saveImage(parent, value.toPixmap()));
+			valueE = parent.createTextNode(saveImage(parent, value.value<QPixmap>()));
 		else
 			valueE = parent.createTextNode(m_currentItem->pixmapName(property));
 		type.appendChild(valueE);
@@ -533,9 +556,11 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant val
 			QDomElement r = parent.createElement("red");
 			QDomElement g = parent.createElement("green");
 			QDomElement b = parent.createElement("blue");
-			QDomText valueR = parent.createTextNode(QString::number(value.toColor().Qt::red()));
-			QDomText valueG = parent.createTextNode(QString::number(value.toColor().Qt::green()));
-			QDomText valueB = parent.createTextNode(QString::number(value.toColor().Qt::blue()));
+			
+			const QColor color( value.value<QColor>() );
+			QDomText valueR = parent.createTextNode(QString::number(color.red()));
+			QDomText valueG = parent.createTextNode(QString::number(color.green()));
+			QDomText valueB = parent.createTextNode(QString::number(color.blue()));
 
 			r.appendChild(valueR);
 			g.appendChild(valueG);
@@ -602,13 +627,15 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant val
 			QDomElement i = parent.createElement("italic");
 			QDomElement u = parent.createElement("underline");
 			QDomElement s = parent.createElement("strikeout");
-			QDomText valueF = parent.createTextNode(value.toFont().family());
-			QDomText valueP = parent.createTextNode(QString::number(value.toFont().pointSize()));
-			QDomText valueW = parent.createTextNode(QString::number(value.toFont().weight()));
-			QDomText valueB = parent.createTextNode(QString::number(value.toFont().bold()));
-			QDomText valueI = parent.createTextNode(QString::number(value.toFont().italic()));
-			QDomText valueU = parent.createTextNode(QString::number(value.toFont().underline()));
-			QDomText valueS = parent.createTextNode(QString::number(value.toFont().strikeOut()));
+			
+			const QFont font( value.value<QFont>() );
+			QDomText valueF = parent.createTextNode(font.family());
+			QDomText valueP = parent.createTextNode(QString::number(font.pointSize()));
+			QDomText valueW = parent.createTextNode(QString::number(font.weight()));
+			QDomText valueB = parent.createTextNode(QString::number(font.bold()));
+			QDomText valueI = parent.createTextNode(QString::number(font.italic()));
+			QDomText valueU = parent.createTextNode(QString::number(font.underline()));
+			QDomText valueS = parent.createTextNode(QString::number(font.strikeOut()));
 
 			f.appendChild(valueF);
 			p.appendChild(valueP);
@@ -630,21 +657,23 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant val
 		case QVariant::Cursor:
 		{
 			type = parent.createElement("cursor");
-			valueE = parent.createTextNode(QString::number(value.toCursor().shape()));
+			valueE = parent.createTextNode(QString::number(value.value<QCursor>().shape()));
 			type.appendChild(valueE);
 			break;
 		}
 		case QVariant::SizePolicy:
 		{
 			type = parent.createElement("sizepolicy");
-			QDomElement h = parent.createElement("hsizetype");
-			QDomElement v = parent.createElement("vsizetype");
-			QDomElement hs = parent.createElement("horstretch");
-			QDomElement vs = parent.createElement("verstretch");
-			QDomText valueH = parent.createTextNode(QString::number(value.toSizePolicy().horData()));
-			QDomText valueV = parent.createTextNode(QString::number(value.toSizePolicy().verData()));
-			QDomText valueHS = parent.createTextNode(QString::number(value.toSizePolicy().horStretch()));
-			QDomText valueVS = parent.createTextNode(QString::number(value.toSizePolicy().verStretch()));
+			QDomElement h( parent.createElement("hsizetype"));
+			QDomElement v( parent.createElement("vsizetype"));
+			QDomElement hs( parent.createElement("horstretch"));
+			QDomElement vs( parent.createElement("verstretch"));
+			
+			const QSizePolicy sizePolicy( value.value<QSizePolicy>() );
+			const QDomText valueH( parent.createTextNode(QString::number(sizePolicy.horizontalPolicy())));
+			const QDomText valueV( parent.createTextNode(QString::number(sizePolicy.verticalPolicy())));
+			const QDomText valueHS( parent.createTextNode(QString::number(sizePolicy.horizontalStretch())));
+			const QDomText valueVS( parent.createTextNode(QString::number(sizePolicy.verticalStretch())));
 
 			h.appendChild(valueH);
 			v.appendChild(valueV);
@@ -767,23 +796,19 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 	}
 	else if(type == "color")
 	{
-		QDomElement r = node.namedItem("red").toElement();
-		QDomElement g = node.namedItem("green").toElement();
-		QDomElement b = node.namedItem("blue").toElement();
-
-		int Qt::red = r.text().toInt();
-		int Qt::green = g.text().toInt();
-		int Qt::blue = b.text().toInt();
-
-		return QColor(Qt::red, Qt::green, Qt::blue);
+		const QDomElement r( node.namedItem("red").toElement() );
+		const QDomElement g( node.namedItem("green").toElement() );
+		const QDomElement b( node.namedItem("blue").toElement() );
+		
+		return QColor(r.text().toInt(), g.text().toInt(), b.text().toInt());
 	}
 	else if(type == "bool")
 	{
 		if(text == "true")
-			return QVariant(true, 3);
+			return QVariant(true);
 		else if(text == "false")
-			return QVariant(false, 3);
-		return QVariant(text.toInt(), 3);
+			return QVariant(false);
+		return QVariant(text.toInt()!=0);
 	}
 	else if(type == "number")
 	{
@@ -866,41 +891,43 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 		QDomElement vs = node.namedItem("verstretch").toElement();
 
 		QSizePolicy s;
-		s.setHorData((QSizePolicy::SizeType)h.text().toInt());
-		s.setVerData((QSizePolicy::SizeType)v.text().toInt());
-		s.setHorStretch(hs.text().toInt());
-		s.setVerStretch(vs.text().toInt());
+		s.setHorizontalPolicy((QSizePolicy::SizeType)h.text().toInt());
+		s.setVerticalPolicy((QSizePolicy::SizeType)v.text().toInt());
+		s.setHorizontalStretch(hs.text().toInt());
+		s.setVerticalStretch(vs.text().toInt());
 		return s;
 	}
 	else if(type == "pixmap")
 	{
+#warning pixmapcollection
+#ifndef KEXI_NO_PIXMAPCOLLECTION
 		if(m_savePixmapsInline || !m_currentForm || !m_currentItem || !m_currentForm->pixmapCollection()->contains(text))
 			return loadImage(tag.ownerDocument(), text);
 		else
 		{
-			m_currentItem->setPixmapName(name.latin1(), text);
+			m_currentItem->setPixmapName(name.toLatin1(), text);
 			return m_currentForm->pixmapCollection()->getPixmap(text);
 		}
+#endif
 		return QVariant(QPixmap());
 	}
 	else if(type == "enum")
 		return text;
 	else if(type == "set")
 	{
-		WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(obj);
-		QObject *subobject = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : obj;
-		int count = subobject->metaObject()->findProperty(name.latin1(), true);
-		const QMetaProperty *meta = count!=-1 ? subobject->metaObject()->property(count, true) : 0;
-
-		if(meta && meta->isSetType())
+		WidgetWithSubpropertiesInterface* subpropIface
+			= dynamic_cast<WidgetWithSubpropertiesInterface*>(obj);
+		QObject *subobject = (subpropIface && subpropIface->subwidget())
+			? subpropIface->subwidget() : obj;
+		const QMetaProperty meta( KexiUtils::findPropertyWithSuperclasses(subobject, name.toLatin1().constData()) );
+		if(meta.isValid() && meta.isFlagType())
 		{
-			Q3StrList keys;
+/*qt4			Q3StrList keys;
 			QStringList list = QStringList::split("|", text);
 			QStringList::ConstIterator it, end( list.constEnd() );
 			for( it = list.constBegin(); it != end; ++it)
-				keys.append((*it).latin1());
-
-			return QVariant(meta->keysToValue(keys));
+				keys.append((*it).toLatin1());*/
+			return meta.enumerator().keysToValue(text.toLatin1());
 		}
 	}
 	return QVariant();
@@ -956,13 +983,13 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	if(!item->parent()) // Toplevel widget
 		tclass.setAttribute("class", "QWidget");
 	// For compatibility, HBox, VBox and Grid are saved as "QLayoutWidget"
-	else if(item->widget()->isA("HBox") || item->widget()->isA("VBox") || item->widget()->isA("Grid")
-			|| item->widget()->isA("HFlow") || item->widget()->isA("VFlow"))
+	else if (KexiUtils::objectIsA(item->widget(), 
+			QList<QByteArray>() << "HBox" << "VBox" << "Grid" << "HFlow" << "VFlow"))
 		tclass.setAttribute("class", "QLayoutWidget");
 	else if(item->widget()->isA("CustomWidget"))
 		tclass.setAttribute("class", item->className());
 	else // Normal widgets
-		tclass.setAttribute("class", lib->savingName(item->widget()->className()) );
+		tclass.setAttribute("class", lib->savingName(item->widget()->metaObject()->className()) );
 
 	savePropertyValue(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
 
@@ -1001,7 +1028,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 			// these have already been saved
 		}
 		else {
-			savePropertyValue(tclass, domDoc, it.key().latin1(), item->widget()->property(it.key().latin1()), 
+			savePropertyValue(tclass, domDoc, it.key().toLatin1(), item->widget()->property(it.key().toLatin1()), 
 				item->widget(), lib);
 		}
 	}
@@ -1067,6 +1094,9 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		}
 		case Container::HFlow: case Container::VFlow:
 		{
+#ifdef KEXI_NO_FLOWLAYOUT
+#warning "Port Kexi flow layout!"
+#else
 			layout.setTagName("grid");
 			KexiFlowLayout *flow = static_cast<KexiFlowLayout*>(item->container()->layout());
 			if(!flow)  break;
@@ -1084,6 +1114,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 					saveWidget(titem, layout, domDoc, true); // save grid info for compatibility with QtDesigner
 			}
 			delete list;
+#endif
 			break;
 		}
 		default:
@@ -1093,7 +1124,8 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		}
 	}
 
-	addIncludeFileName(lib->includeFileName(item->widget()->className()), domDoc);
+	addIncludeFileName(lib->includeFileName(
+		item->widget()->metaObject()->className()), domDoc);
 
 	if(resetCurrentForm)
 		m_currentForm = 0;
@@ -1156,7 +1188,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 					if((child.toElement().tagName() == "property") 
 						&& (child.toElement().attribute("name") == "customLayout"))
 					{
-						classname = child.toElement().text().latin1();
+						classname = child.toElement().text().toLatin1();
 						break;
 					}
 				}
@@ -1169,12 +1201,14 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 	else
 	// We check if this classname is an alternate one, and replace it if necessary
 	{
-		classname = el.attribute("class").latin1();
+		classname = el.attribute("class").toLatin1();
 		alternate = container->form()->library()->classNameForAlternate(classname);
 	}
 
-	if(alternate == "CustomWidget")
-		w = new CustomWidget(classname, container->widget(), wname.latin1());
+	if(alternate == "CustomWidget") {
+		w = new CustomWidget(classname, container->widget());
+		w->setObjectName( wname );
+	}
 	else
 	{
 		if(!alternate.isNull())
@@ -1187,9 +1221,9 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 
 		if(!parent)
 			w = container->form()->library()->createWidget(classname, container->widget(), 
-				wname.latin1(), container, widgetOptions);
+				wname.toLatin1(), container, widgetOptions);
 		else
-			w = container->form()->library()->createWidget(classname, parent, wname.latin1(), 
+			w = container->form()->library()->createWidget(classname, parent, wname.toLatin1(), 
 				container, widgetOptions);
 	}
 
@@ -1202,7 +1236,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 		KAcceleratorManager::setNoAccel(w);
 	}
 #endif
-	w->setStyle(&(container->widget()->style()));
+	w->setStyle(container->widget()->style());
 	w->show();
 
 	// We create and insert the ObjectTreeItem at the good place in the ObjectTree
@@ -1253,13 +1287,13 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 		item->container()->layout()->activate();
 
 	// We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
-	Q3ValueList<Q3CString> list(container->form()->library()->autoSaveProperties(w->className()));
+	Q3ValueList<Q3CString> list(container->form()->library()->autoSaveProperties(w->metaObject()->className()));
 	Q3ValueList<Q3CString>::ConstIterator endIt = list.constEnd();
 	KFormDesigner::WidgetWithSubpropertiesInterface* subpropIface 
 		= dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(w);
 	QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : w;
 	for(Q3ValueList<Q3CString>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
-		if(subwidget->metaObject()->findProperty(*it, true) != -1)
+		if (-1!=KexiUtils::indexOfPropertyWithSuperclasses(subwidget, *it))
 			item->addModifiedProperty(*it, subwidget->property(*it));
 	}
 
@@ -1283,7 +1317,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 
 	}
 	// And rename the widget and its ObjectTreeItem
-	container->setName(wname.latin1());
+	container->setName(wname.toLatin1());
 	if(form->objectTree())
 		form->objectTree()->rename(form->objectTree()->name(), wname);
 	form->setInteractiveMode(false);
@@ -1341,7 +1375,7 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 			if (node.attribute("subwidget")=="true") {
 				//this is property for subwidget: remember it for delayed setting
 				//because now the subwidget could be not created yet (true e.g. for KexiDBAutoField)
-				item->addSubproperty( name.latin1(), readPropertyValue(node.firstChild(), w, name) );
+				item->addSubproperty( name.toLatin1(), readPropertyValue(node.firstChild(), w, name) );
 				continue;
 			}
 
@@ -1363,20 +1397,24 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 					item->container()->layout()->setSpacing(spacing);
 				}
 				else if((name == "justify")){
+#ifdef KEXI_NO_FLOWLAYOUT
+#warning "Port Kexi flow layout!"
+#else
 					bool justify = readPropertyValue(node.firstChild(), w, name).toBool();
 					KexiFlowLayout *flow = static_cast<KexiFlowLayout*>(item->container()->layout());
 					if(flow)
 						flow->setJustified(justify);
+#endif
 				}
 			}
 			// If the object doesn't have this property, we let the Factory handle it (maybe a special property)
-			else if(subwidget->metaObject()->findProperty(name.latin1(), true) == -1)
+			else if(-1==KexiUtils::indexOfPropertyWithSuperclasses(subwidget, name.toLatin1()))
 			{
-				if(w->className() == QString::fromLatin1("CustomWidget"))
+				if(w->metaObject()->className() == QString::fromLatin1("CustomWidget"))
 					item->storeUnknownProperty(node);
 				else {
 					bool read = container->form()->library()->readSpecialProperty(
-						w->className(), node, w, item);
+						w->metaObject()->className(), node, w, item);
 					if(!read) // the factory doesn't support this property neither
 						item->storeUnknownProperty(node);
 				}
@@ -1393,13 +1431,13 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 						r.moveTop(0);
 					val = r;
 				}
-				subwidget->setProperty(name.latin1(), val);
+				subwidget->setProperty(name.toLatin1(), val);
 //				int count = w->metaObject()->findProperty(name, true);
 //				const QMetaProperty *meta = w->metaObject()->property(count, true);
 //				if(meta && meta->isEnumType()) {
-//					val = w->property(name.latin1()); //update: we want a numeric value of enum
+//					val = w->property(name.toLatin1()); //update: we want a numeric value of enum
 //				}
-				item->addModifiedProperty(name.latin1(), val);
+				item->addModifiedProperty(name.toLatin1(), val);
 			}
 		}
 		else if(tag == "widget") // a child widget
@@ -1422,17 +1460,25 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 				}
 			}
 
-			 if(layoutName == "HFlow") {
+			if(layoutName == "HFlow") {
+#ifdef KEXI_NO_FLOWLAYOUT
+#warning "Port Kexi flow layout!"
+#else
 				item->container()->m_layType = Container::HFlow;
 				KexiFlowLayout *layout = new KexiFlowLayout(item->widget());
 				layout->setOrientation(Qt::Horizontal);
 				item->container()->m_layout = (QLayout*)layout;
+#endif
 			}
 			else if(layoutName == "VFlow") {
+#ifdef KEXI_NO_FLOWLAYOUT
+#warning "Port Kexi flow layout!"
+#else
 				item->container()->m_layType = Container::VFlow;
 				KexiFlowLayout *layout = new KexiFlowLayout(item->widget());
 				layout->setOrientation(Qt::Vertical);
 				item->container()->m_layout = (QLayout*)layout;
+#endif
 			}
 			else { // grid layout
 				item->container()->m_layType = Container::Grid;
@@ -1454,11 +1500,11 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 			readChildNodes(item, container, node, w);
 		}
 		else {// unknown tag, we let the Factory handle it
-			if(w->className() == QString::fromLatin1("CustomWidget"))
+			if(w->metaObject()->className() == QString::fromLatin1("CustomWidget"))
 				item->storeUnknownProperty(node);
 			else {
 				bool read = container->form()->library()->readSpecialProperty(
-					w->className(), node, w, item);
+					w->metaObject()->className(), node, w, item);
 				if(!read) // the factory doesn't suport this property neither
 					item->storeUnknownProperty(node);
 			}
@@ -1520,33 +1566,31 @@ FormIO::saveImage(QDomDocument &domDoc, const QPixmap &pixmap)
 	QString name = "image" + QString::number(count);
 	image.setAttribute("name", name);
 
-	QImage img = pixmap.convertToImage();
+	const QImage img( pixmap.convertToImage() );
 	QByteArray ba;
-	QBuffer buf(ba);
+	QBuffer buf(&ba);
 	buf.open( QIODevice::WriteOnly | QIODevice::Text );
-	QString format = img.depth() > 1 ? "XPM" : "XBM";
-	QImageIO iio( &buf, format.latin1() );
-	iio.setImage( img );
-	iio.write();
+	const QByteArray format( img.depth() > 1 ? "XPM" : "XBM" );
+	QImageWriter imageWriter( &buf, format );
+	imageWriter.write( img );
 	buf.close();
-	QByteArray bazip = qCompress( ba );
-	ulong len = bazip.size();
+	const QByteArray bazip = qCompress( ba );
+	const int len = bazip.size();
 
 	QDomElement data = domDoc.createElement("data");
-	data.setAttribute("format", format + ".GZ");
+	data.setAttribute("format", QString(format + ".GZ"));
 	data.setAttribute("length", ba.size());
 
 	static const char hexchars[] = "0123456789abcdef";
 	QString content;
-	for(int i = 4; i < (int)len; ++i)
+	for(int i = 4; i < len; i++)
 	{
-	uchar s = (uchar) bazip[i];
-	content += hexchars[s >> 4];
-	content += hexchars[s & 0x0f];
+		uchar s = (uchar) bazip[i];
+		content += hexchars[s >> 4];
+		content += hexchars[s & 0x0f];
 	}
 
-	QDomText text = domDoc.createTextNode(content);
-	data.appendChild(text);
+	data.appendChild( domDoc.createTextNode(content) );
 	image.appendChild(data);
 	images.appendChild(image);
 
@@ -1577,8 +1621,8 @@ FormIO::loadImage(QDomDocument domDoc, const QString& name)
 	uchar *ba = new uchar[baSize];
 	for(int i = lengthOffset; i < baSize; ++i)
 	{
-		char h = data[2 * (i-lengthOffset)].latin1();
-		char l = data[2 * (i-lengthOffset) + 1].latin1();
+		char h = data[2 * (i-lengthOffset)].toLatin1();
+		char l = data[2 * (i-lengthOffset) + 1].toLatin1();
 		uchar r = 0;
 		if(h <= '9')
 		    r += h - '0';
@@ -1605,10 +1649,10 @@ FormIO::loadImage(QDomDocument domDoc, const QString& name)
 		ba[2] = ( len & 0x0000ff00 ) >> 8;
 		ba[3] = ( len & 0x000000ff );
 		QByteArray baunzip = qUncompress(ba, baSize);
-		pix.loadFromData( (const uchar*)baunzip.data(), baunzip.size(), format.left(format.find('.')).latin1() );
+		pix.loadFromData( (const uchar*)baunzip.data(), baunzip.size(), format.left(format.find('.')).toLatin1() );
 	}
 	else
-		pix.loadFromData( (const uchar*)ba+lengthOffset, baSize-lengthOffset, format.latin1() );
+		pix.loadFromData( (const uchar*)ba+lengthOffset, baSize-lengthOffset, format.toLatin1() );
 
 	delete[] ba;
 

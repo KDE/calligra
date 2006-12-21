@@ -27,7 +27,6 @@
 #include <q3ptrdict.h>
 #include <qvariant.h>
 #include <qdom.h>
-//Added by qt3to4:
 #include <Q3CString>
 
 #include <kcommand.h>
@@ -37,7 +36,6 @@ class QWidget;
 class QRect;
 class QPoint;
 class QStringList;
-class Q3CString;
 
 namespace KFormDesigner {
 
@@ -272,7 +270,7 @@ class KFORMEDITOR_EXPORT PasteWidgetCommand : public Command
 
 	protected:
 		Form *m_form;
-		Q3CString m_data;
+		QString m_data;
 		QString m_containername;
 		QPoint m_point;
 		QStringList m_names;
@@ -310,7 +308,7 @@ class KFORMEDITOR_EXPORT CutWidgetCommand : public DeleteWidgetCommand
 		virtual void debug();
 
 	protected:
-		Q3CString m_data;
+		QString m_data;
 };
 
 /*! A Command Group is a command that holds several subcommands.
@@ -359,7 +357,7 @@ class KFORMEDITOR_EXPORT CommandGroup : public Command
 		/*! \return a list of all subcommands of this group. 
 		 Note that if a given subcommand is a group itself, 
 		 it will not be expanded to subcommands on this list. */
-		const Q3PtrList<KCommand>& commands() const;
+		const QList< KCommand*>& commands() const;
 
 		/*! Resets all 'allowExecute' flags that was set in addCommand().
 		 Call this after calling CommandGroup::execute() to ensure that

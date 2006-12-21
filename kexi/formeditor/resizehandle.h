@@ -23,14 +23,8 @@
 #include <q3dict.h>
 #include <qpointer.h>
 #include <qwidget.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QEvent>
-#include <QPaintEvent>
 
-/**
-  *@author Joseph Wenninger
-  */
+#include <kexi_export.h>
 
 namespace KFormDesigner
 {
@@ -47,8 +41,16 @@ class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
 	Q_OBJECT
 
 	public:
-		enum HandlePos { Qt::TopLeftCorner = 0, TopCenter = 2, Qt::TopRightCorner = 4, LeftCenter = 8, RightCenter = 16,
-			Qt::BottomLeftCorner = 32, BottomCenter = 64, Qt::BottomRightCorner = 128 };
+		enum HandlePos {
+			TopLeftCorner = 0,
+			TopCenter = 2,
+			TopRightCorner = 4,
+			LeftCenter = 8,
+			RightCenter = 16,
+			BottomLeftCorner = 32,
+			BottomCenter = 64,
+			BottomRightCorner = 128
+		};
 		ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing=false);
 		virtual ~ResizeHandle();
 		void setEditingMode(bool editing);

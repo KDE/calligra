@@ -20,7 +20,9 @@
 #ifndef TABSTOPEDIT_DIALOG_H
 #define TABSTOPEDIT_DIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
+
+#include <kexi_export.h>
 
 class Q3ListViewItem;
 class QCheckBox;
@@ -35,7 +37,7 @@ class ObjectTreeView;
 //! A dialog to edit Form tab stops
 /*! The user can change the order by dragging list items or using buttons at the right.
   The tab stops can be arranged automatically (see \ref Form::autoAssignTabStops()). */
-class KFORMEDITOR_EXPORT TabStopDialog : public KDialogBase
+class KFORMEDITOR_EXPORT TabStopDialog : public KDialog
 {
 	Q_OBJECT
 

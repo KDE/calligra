@@ -28,8 +28,12 @@
 #include <qvariant.h>
 #include <qstring.h>
 #include <qpointer.h>
-//Added by qt3to4:
 #include <Q3CString>
+
+#include <kexi_export.h>
+
+#include "container.h"
+//#include "eventeater.h"
 
 class QWidget;
 class QDomElement;
@@ -37,8 +41,6 @@ class QDomElement;
 namespace KFormDesigner {
 
 class ObjectTreeItem;
-class Container;
-class EventEater;
 
 //! @short An list of ObjectTreeItem pointers.
 typedef Q3PtrList<ObjectTreeItem> ObjectTreeList;
@@ -56,7 +58,7 @@ typedef Q3DictIterator<ObjectTreeItem> ObjectTreeDictIterator;
 typedef QMap<QString, QVariant> QVariantMap;
 
 //! @short A const iterator for QVariantMap.
-typedef QMapConstIterator<QString, QVariant> QVariantMapConstIterator;
+typedef QMap<QString, QVariant>::ConstIterator QVariantMapConstIterator;
 
 /*! 
  @short An item representing a widget

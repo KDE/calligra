@@ -20,42 +20,47 @@
 #ifndef RICHTEXTEDIT_DIALOG_H
 #define RICHTEXTEDIT_DIALOG_H
 
-#include <kdialogbase.h>
+#include <kdialog.h>
 #include <ktextedit.h>
 
+#include <kexi_export.h>
+
 class KToolBar;
-class KFontCombo;
+class KFontRequester;
 class KColorCombo;
+class QActionGroup;
 
 namespace KFormDesigner {
 
 //! A simple dialog to edit rich text
 /*! It allows to change font name, style and color, alignment. */
-class KFORMEDITOR_EXPORT RichTextDialog : public KDialogBase
+class KFORMEDITOR_EXPORT RichTextDialog : public KDialog
 {
 	Q_OBJECT
 
 	public:
 		RichTextDialog(QWidget *parent, const QString &text);
-		~RichTextDialog(){;}
+		~RichTextDialog();
 
-		QString  text();
-
-		enum VerticalAlignment{AlignNormal = Q3TextEdit::AlignNormal, AlignSuperScript = Q3TextEdit::AlignSuperScript, AlignSubScript = Q3TextEdit::AlignSubScript};
+		QString text() const;
 
 	public slots:
-		void  changeFont(const QString &);
-		void  changeColor(const QColor&);
-		void  buttonToggled(int);
-		void  cursorPositionChanged(int, int);
-		void  slotVerticalAlignmentChanged(VerticalAlignment align);
-
+		void changeFont(const QString &);
+		void changeColor(const QColor&);
+		void slotActionTriggered(QAction* action);
+		//void cursorPositionChanged();
+		void slotCurrentCharFormatChanged(const QTextCharFormat& f);
+		
 	private:
-		enum { TBFont = 100, TBColor, TBBold, TBItalic, TBUnder, TBSuper, TBSub, TBLeft = 201, TBCenter, TBRight, TBJustify };
+		QAction *m_fontComboAction, *m_colorComboAction, *m_boldTextAction,
+			*m_italicTextAction, *m_underlineTextAction,
+			*m_subscriptTextAction, *m_superscriptTextAction,
+			*m_alignLeftAction, *m_alignRightAction, *m_alignCenterAction, *m_alignJustifyAction;
+		QActionGroup* m_alignActionGroup;
 		KToolBar  *m_toolbar;
 		KTextEdit  *m_edit;
-		KFontCombo  *m_fcombo;
-		KColorCombo  *m_colCombo;
+		KFontRequester  *m_fontCombo;
+		KColorCombo  *m_colorCombo;
 };
 
 }

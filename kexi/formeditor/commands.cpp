@@ -45,6 +45,7 @@
 #include "widgetpropertyset.h"
 #include "widgetwithsubpropertiesinterface.h"
 #include <koproperty/property.h>
+#include <kexiutils/utils.h>
 
 #include "commands.h"
 
@@ -131,11 +132,11 @@ PropertyCommand::unexecute()
 
 		WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widg);
 		QWidget *subWidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widg;
-		if (-1!=subWidget->metaObject()->findProperty( m_property, true ))
-			subWidget->setProperty(m_property, it.data());
+		if (-1!=KexiUtils::indexOfPropertyWithSuperclasses( subWidget, m_property ))
+			subWidget->setProperty(m_property, it.value());
 	}
 
-	(*m_propSet)[m_property] = m_oldvalues.begin().data();
+	(*m_propSet)[m_property] = m_oldvalues.begin().value();
 	m_propSet->setUndoing(false);
 }
 
@@ -143,9 +144,9 @@ QString
 PropertyCommand::name() const
 {
 	if(m_oldvalues.count() >= 2)
-		return i18n("Change \"%1\" property for multiple widgets" ).arg(m_property);
+		return i18n("Change \"%1\" property for multiple widgets" ).arg(QString(m_property));
 	else
-		return i18n("Change \"%1\" property for widget \"%2\"" ).arg(m_property).arg(m_oldvalues.begin().key());
+		return i18n("Change \"%1\" property for widget \"%2\"" ).arg(QString(m_property)).arg(QString(m_oldvalues.begin().key()));
 }
 
 void
@@ -659,7 +660,8 @@ LayoutPropertyCommand::unexecute()
 QString
 LayoutPropertyCommand::name() const
 {
-	return i18n("Change layout of widget \"%1\"").arg(m_oldvalues.begin().key());
+	return i18n("Change layout of widget \"%1\"")
+		.arg(QString(m_oldvalues.begin().key()));
 }
 
 void
@@ -779,7 +781,7 @@ InsertWidgetCommand::execute()
 	}
 	w->move(m_insertRect.x(), m_insertRect.y());
 	w->resize(m_insertRect.width()-1, m_insertRect.height()-1); // -1 is not to hide dots
-	w->setStyle(&(m_container->widget()->style()));
+	w->setStyle(m_container->widget()->style());
 	w->setBackgroundOrigin(QWidget::ParentOrigin);
 	w->show();
 
@@ -834,7 +836,7 @@ QString
 InsertWidgetCommand::name() const
 {
 	if(!m_name.isEmpty())
-		return i18n("Insert widget \"%1\"").arg(m_name);
+		return i18n("Insert widget \"%1\"").arg(QString(m_name));
 	else
 		return i18n("Insert widget");
 }
@@ -1061,7 +1063,7 @@ BreakLayoutCommand::debug()
 PasteWidgetCommand::PasteWidgetCommand(QDomDocument &domDoc, Container *container, const QPoint& p)
  : m_point(p)
 {
-	m_data = domDoc.toCString();
+	m_data = domDoc.toString();
 	m_containername = container->widget()->name();
 	m_form = container->form();
 
@@ -1493,8 +1495,8 @@ void
 CutWidgetCommand::execute()
 {
 	DeleteWidgetCommand::execute();
-	m_data = FormManager::self()->m_domDoc.toCString();
-	FormManager::self()->m_domDoc.setContent(m_domDoc.toCString());
+	m_data = FormManager::self()->m_domDoc.toString();
+	FormManager::self()->m_domDoc.setContent(m_domDoc.toString());
 }
 
 void
@@ -1528,7 +1530,7 @@ class CommandGroup::SubCommands : public KMacroCommand
 		 : KMacroCommand(name)
 		{
 		}
-		const Q3PtrList<KCommand>& commands() const { return m_commands; }
+		const QList<KCommand*>& commands() const { return m_commands; }
 };
 }
 
@@ -1544,7 +1546,7 @@ CommandGroup::~CommandGroup()
 	delete m_subCommands;
 }
 
-const Q3PtrList<KCommand>& CommandGroup::commands() const
+const QList<KCommand*>& CommandGroup::commands() const
 {
 	return m_subCommands->commands();
 }
@@ -1562,9 +1564,9 @@ void CommandGroup::addCommand(KCommand *command, bool allowExecute)
 void CommandGroup::execute()
 {
 	FormManager::self()->blockPropertyEditorUpdating(this);
-	for (Q3PtrListIterator<KCommand> it(m_subCommands->commands()); it.current(); ++it) {
-		if (!m_commandsShouldntBeExecuted[it.current()])
-			it.current()->execute();
+	foreach (KCommand* command, m_subCommands->commands()) {
+		if (!m_commandsShouldntBeExecuted[ command ])
+			command->execute();
 	}
 	FormManager::self()->unblockPropertyEditorUpdating(this, m_propSet);
 }
@@ -1589,15 +1591,17 @@ void CommandGroup::resetAllowExecuteFlags()
 void
 CommandGroup::debug()
 {
-	kDebug() << "*CommandGroup: name=\"" << name() << "\" #=" << m_subCommands->commands().count() << endl;
-	uint i = 1;
-	for (Q3PtrListIterator<KCommand> it(m_subCommands->commands()); it.current(); ++it, i++) {
+	kDebug() << "*CommandGroup: name=\"" << name() << "\" #=" 
+		<< m_subCommands->commands().count() << endl;
+	uint i = 0;
+	foreach (KCommand* command, m_subCommands->commands()) {
+		i++;
 		kDebug() << "#" << i << ":" 
-			<< (m_commandsShouldntBeExecuted[it.current()] ? "!" : "") << "allowExecute:" << endl;
-		if (dynamic_cast<Command*>(it.current()))
-			dynamic_cast<Command*>(it.current())->debug();
-		else if (dynamic_cast<CommandGroup*>(it.current()))
-			dynamic_cast<CommandGroup*>(it.current())->debug();
+			<< (m_commandsShouldntBeExecuted[command] ? "!" : "") << "allowExecute:" << endl;
+		if (dynamic_cast<Command*>(command))
+			dynamic_cast<Command*>(command)->debug();
+		else if (dynamic_cast<CommandGroup*>(command))
+			dynamic_cast<CommandGroup*>(command)->debug();
 		else
 			kDebug() << "(other KCommand)" << endl;
 	}

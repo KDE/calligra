@@ -21,8 +21,9 @@
 #define OBJECTTREEVIEW_H
 
 #include <k3listview.h>
-//Added by qt3to4:
 #include <Q3CString>
+
+#include <kexi_export.h>
 
 namespace KFormDesigner {
 

@@ -8,13 +8,13 @@ add_subdirectory( 3rdparty )
 add_subdirectory( kexiutils )
 add_subdirectory( kexidb )
 add_subdirectory( core )
-add_subdirectory( widget )
+#add_subdirectory( widget )
 add_subdirectory( formeditor )
-add_subdirectory( data )
-add_subdirectory( pics )
-add_subdirectory( main )
-add_subdirectory( migration )
-add_subdirectory( plugins )
+#add_subdirectory( data )
+#add_subdirectory( pics )
+#add_subdirectory( main )
+##add_subdirectory( migration )
+#add_subdirectory( plugins )
 add_subdirectory( tests )
 
 
@@ -22,18 +22,18 @@ add_subdirectory( tests )
 
 ########### next target ###############
 
-set(kexi_KDEINIT_SRCS main.cpp )
+#set(kexi_KDEINIT_SRCS main.cpp )
 
-kde4_automoc(${kexi_KDEINIT_SRCS})
+#kde4_automoc(${kexi_KDEINIT_SRCS})
 
-kde4_add_kdeinit_executable( kexi ${kexi_KDEINIT_SRCS})
+#kde4_add_kdeinit_executable( kexi ${kexi_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kexi  ${KDE4_KDECORE_LIBS} kexicore keximain )
+#target_link_libraries(kdeinit_kexi  ${KDE4_KDECORE_LIBS} kexicore keximain )
 
-install(TARGETS kdeinit_kexi  DESTINATION ${LIB_INSTALL_DIR})
+#install(TARGETS kdeinit_kexi  DESTINATION ${LIB_INSTALL_DIR})
 
-target_link_libraries( kexi kdeinit_kexi )
-install(TARGETS kexi  DESTINATION ${BIN_INSTALL_DIR})
+#target_link_libraries( kexi kdeinit_kexi )
+#install(TARGETS kexi  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 

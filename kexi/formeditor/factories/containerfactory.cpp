@@ -15,7 +15,6 @@
 #include <q3hbox.h>
 #include <q3vbox.h>
 #include <qstring.h>
-#include <q3popupmenu.h>
 #include <qdom.h>
 #include <qevent.h>
 #include <qobject.h>
@@ -99,6 +98,15 @@ class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
 		QPointer<QObject>   m_container;
 };*/
 
+KFDTabWidget::KFDTabWidget(QWidget *parent)
+ :  TabWidgetBase(parent)
+{
+}
+
+KFDTabWidget::~KFDTabWidget()
+{
+}
+
 QSize
 KFDTabWidget::sizeHint() const
 {
@@ -112,9 +120,14 @@ KFDTabWidget::sizeHint() const
 
 /// Various layout widgets /////////////////:
 
-HBox::HBox(QWidget *parent, const char *name)
- : Q3Frame(parent, name), m_preview(false)
-{}
+HBox::HBox(QWidget *parent)
+ : Q3Frame(parent), m_preview(false)
+{
+}
+
+HBox::~HBox()
+{
+}
 
 void
 HBox::paintEvent(QPaintEvent *)
@@ -125,9 +138,14 @@ HBox::paintEvent(QPaintEvent *)
 	p.drawRect(1, 1, width()-1, height() - 1);
 }
 
-VBox::VBox(QWidget *parent, const char *name)
- : Q3Frame(parent, name), m_preview(false)
-{}
+VBox::VBox(QWidget *parent)
+ : Q3Frame(parent), m_preview(false)
+{
+}
+
+VBox::~VBox()
+{
+}
 
 void
 VBox::paintEvent(QPaintEvent *)
@@ -138,9 +156,14 @@ VBox::paintEvent(QPaintEvent *)
 	p.drawRect(1, 1, width()-1, height() - 1);
 }
 
-Grid::Grid(QWidget *parent, const char *name)
- : Q3Frame(parent, name), m_preview(false)
-{}
+Grid::Grid(QWidget *parent)
+ : Q3Frame(parent), m_preview(false)
+{
+}
+
+Grid::~Grid()
+{
+}
 
 void
 Grid::paintEvent(QPaintEvent *)
@@ -151,9 +174,14 @@ Grid::paintEvent(QPaintEvent *)
 	p.drawRect(1, 1, width()-1, height() - 1);
 }
 
-HFlow::HFlow(QWidget *parent, const char *name)
- : Q3Frame(parent, name), m_preview(false)
-{}
+HFlow::HFlow(QWidget *parent)
+ : Q3Frame(parent), m_preview(false)
+{
+}
+
+HFlow::~HFlow()
+{
+}
 
 void
 HFlow::paintEvent(QPaintEvent *)
@@ -164,9 +192,14 @@ HFlow::paintEvent(QPaintEvent *)
 	p.drawRect(1, 1, width()-1, height() - 1);
 }
 
-VFlow::VFlow(QWidget *parent, const char *name)
- : Q3Frame(parent, name), m_preview(false)
-{}
+VFlow::VFlow(QWidget *parent)
+ : Q3Frame(parent), m_preview(false)
+{
+}
+
+VFlow::~VFlow()
+{
+}
 
 void
 VFlow::paintEvent(QPaintEvent *)
@@ -273,11 +306,15 @@ InsertPageCommand::name() const
 
 /////// Sub forms ////////////////////////:
 
-SubForm::SubForm(QWidget *parent, const char *name)
-: Q3ScrollView(parent, name), m_form(0), m_widget(0)
+SubForm::SubForm(QWidget *parent)
+: Q3ScrollView(parent), m_form(0), m_widget(0)
 {
 	setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
+}
+
+SubForm::~SubForm()
+{
 }
 
 void
@@ -311,7 +348,7 @@ SubForm::setFormName(const QString &name)
 
 /////   The factory /////////////////////////
 
-ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringList &)
+ContainerFactory::ContainerFactory(QObject *parent, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, "containers")
 {
 	KFormDesigner::WidgetInfo *wBtnGroup = new KFormDesigner::WidgetInfo(this);
@@ -319,7 +356,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wBtnGroup->setClassName("QButtonGroup");
 	wBtnGroup->setName(i18n("Button Group"));
 	wBtnGroup->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "buttonGroup"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "buttonGroup"));
 	wBtnGroup->setDescription(i18n("A simple container to group buttons"));
 	addClass(wBtnGroup);
 
@@ -337,7 +374,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wTabWidget->setIncludeFileName("ktabwidget.h");
 	wTabWidget->setName(i18n("Tab Widget"));
 	wTabWidget->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "tabWidget"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "tabWidget"));
 	wTabWidget->setDescription(i18n("A widget to display multiple pages using tabs"));
 	addClass(wTabWidget);
 
@@ -346,7 +383,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wWidget->setClassName("QWidget");
 	wWidget->setName(i18n("Basic container"));
 	wWidget->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "container"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "container"));
 	wWidget->setDescription(i18n("An empty container with no frame"));
 	addClass(wWidget);
 
@@ -355,7 +392,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wGroupBox->setClassName("QGroupBox");
 	wGroupBox->setName(i18n("Group Box"));
 	wGroupBox->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "groupBox"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "groupBox"));
 	wGroupBox->setDescription(i18n("A container to group some widgets"));
 	addClass(wGroupBox);
 
@@ -364,7 +401,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wFrame->setClassName("QFrame");
 	wFrame->setName(i18n("Frame"));
 	wFrame->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "frame"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "frame"));
 	wFrame->setDescription(i18n("A simple frame container"));
 	addClass(wFrame);
 
@@ -373,7 +410,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wWidgetStack->setClassName("QWidgetStack");
 	wWidgetStack->setName(i18n("Widget Stack"));
 	wWidgetStack->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "widgetStack"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "widgetStack"));
 	wWidgetStack->setDescription(i18n("A container with multiple pages"));
 	addClass(wWidgetStack);
 
@@ -382,7 +419,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wHBox->setClassName("HBox");
 	wHBox->setName(i18n("Horizontal Box"));
 	wHBox->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "horizontalBox"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "horizontalBox"));
 	wHBox->setDescription(i18n("A simple container to group widgets horizontally"));
 	addClass(wHBox);
 
@@ -391,7 +428,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wVBox->setClassName("VBox");
 	wVBox->setName(i18n("Vertical Box"));
 	wVBox->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "verticalBox"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "verticalBox"));
 	wVBox->setDescription(i18n("A simple container to group widgets vertically"));
 	addClass(wVBox);
 
@@ -400,7 +437,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wGrid->setClassName("Grid");
 	wGrid->setName(i18n("Grid Box"));
 	wGrid->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "gridBox"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "gridBox"));
 	wGrid->setDescription(i18n("A simple container to group widgets in a grid"));
 	addClass(wGrid);
 
@@ -411,7 +448,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wSplitter->addAlternateClassName("QSplitter");
 	wSplitter->setName(i18n("Splitter"));
 	wSplitter->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "splitter"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "splitter"));
 	wSplitter->setDescription(i18n("A container that enables user to resize its children"));
 	addClass(wSplitter);
 
@@ -421,7 +458,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wHFlow->setClassName("HFlow");
 	wHFlow->setName(i18n("Row Layout"));
 	wHFlow->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "rowLayout"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "rowLayout"));
 	wHFlow->setDescription(i18n("A simple container to group widgets by rows"));
 	addClass(wHFlow);
 
@@ -431,7 +468,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wVFlow->setClassName("VFlow");
 	wVFlow->setName(i18n("Column Layout"));
 	wVFlow->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "columnLayout"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "columnLayout"));
 	wVFlow->setDescription(i18n("A simple container to group widgets by columns"));
 	addClass(wVFlow);
 
@@ -440,7 +477,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wSubForm->setClassName("SubForm");
 	wSubForm->setName(i18n("Sub Form"));
 	wSubForm->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subForm"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subForm"));
 	wSubForm->setDescription(i18n("A form widget included in another Form"));
 	wSubForm->setAutoSyncForProperty( "formName", false );
 	addClass(wSubForm);
@@ -457,25 +494,27 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	m_propDesc["tabPosition"] = i18n("Tab Position");
 	m_propDesc["tabPosition"] = i18n("Tab Position");
 
-	m_propValDesc["Rounded"] = i18n("for Tab Shape", "Rounded");
-	m_propValDesc["Triangular"] = i18n("for Tab Shape", "Triangular");
+	m_propValDesc["Rounded"] = i18nc("for Tab Shape", "Rounded");
+	m_propValDesc["Triangular"] = i18nc("for Tab Shape", "Triangular");
 }
 
 QWidget*
 ContainerFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 	KFormDesigner::Container *container, int options)
 {
+	QWidget *w = 0;
 	if(c == "QButtonGroup")
 	{
 		QString text = container->form()->library()->textForWidgetName(n, c);
-		Q3ButtonGroup *w = new Q3ButtonGroup(/*i18n("Button Group")*/text, p, n);
-		new KFormDesigner::Container(container, w, container);
-		return w;
+		Q3ButtonGroup *group = new Q3ButtonGroup(/*i18n("Button Group")*/text, p);
+		w = group;
+		new KFormDesigner::Container(container, group, container);
 	}
 	else if(c == "KFDTabWidget")
 	{
 		//MyTabWidget *tab = new MyTabWidget(p, n, container);
-		KFDTabWidget *tab = new KFDTabWidget(p, n);
+		KFDTabWidget *tab = new KFDTabWidget(p);
+		w = tab;
 #if defined(USE_KTabWidget) && KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 		tab->setTabReorderingEnabled(true);
 		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
@@ -493,33 +532,31 @@ ContainerFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 //			m_container=container;
 			addTabPage();
 		}
-
-		return tab;
 	}
 	else if(c == "QWidget")
 	{
-		QWidget *w = new QWidget(p, n);
+		w = new QWidget(p);
+		w->setObjectName(n);
 		new KFormDesigner::Container(container, w, p);
-		return w;
 	}
 	else if(c == "QGroupBox")
 	{
 		QString text = container->form()->library()->textForWidgetName(n, c);
-		Q3GroupBox *w = new Q3GroupBox(/*i18n("Group Box")*/text, p, n);
+		w = new Q3GroupBox(/*i18n("Group Box")*/text, p, n);
 		new KFormDesigner::Container(container, w, container);
-		return w;
 	}
 	else if(c == "QFrame")
 	{
-		Q3Frame *w = new Q3Frame(p, n);
-		w->setLineWidth(2);
-		w->setFrameStyle(Q3Frame::StyledPanel|Q3Frame::Raised);
+		Q3Frame *frm = new Q3Frame(p);
+		w = frm;
+		frm->setLineWidth(2);
+		frm->setFrameStyle(Q3Frame::StyledPanel|Q3Frame::Raised);
 		new KFormDesigner::Container(container, w, container);
-		return w;
 	}
 	else if(c == "QWidgetStack")
 	{
-		Q3WidgetStack *stack = new Q3WidgetStack(p, n);
+		Q3WidgetStack *stack = new Q3WidgetStack(p);
+		w = stack;
 		stack->setLineWidth(2);
 		stack->setFrameStyle(Q3Frame::StyledPanel|Q3Frame::Raised);
 		container->form()->objectTree()->addItem( container->objectTree(),
@@ -533,46 +570,43 @@ ContainerFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 //			m_container = container;
 			addStackPage();
 		}
-		return stack;
 	}
 	else if(c == "HBox") {
-		HBox *w = new HBox(p, n);
+		w = new HBox(p);
 		new KFormDesigner::Container(container, w, container);
-		return w;
 	}
 	else if(c == "VBox") {
-		VBox *w = new VBox(p, n);
+		w = new VBox(p);
 		new KFormDesigner::Container(container, w, container);
-		return w;
 	}
 	else if(c == "Grid") {
-		Grid *w = new Grid(p, n);
+		w = new Grid(p);
 		new KFormDesigner::Container(container, w, container);
-		return w;
 	}
 	else if(c == "HFlow") {
-		HFlow *w = new HFlow(p, n);
+		w = new HFlow(p);
 		new KFormDesigner::Container(container, w, container);
-		return w;
 	}
 	else if(c == "VFlow") {
-		VFlow *w = new VFlow(p, n);
+		w = new VFlow(p);
 		new KFormDesigner::Container(container, w, container);
-		return w;
 	}
 	else if(c == "SubForm") {
-		SubForm *subform = new SubForm(p, n);
-		return subform;
+		w = new SubForm(p);
 	}
 	else if(c == "QSplitter") {
-		QSplitter *split = new QSplitter(p, n);
+		QSplitter *split = new QSplitter(p);
+		w = split;
 		if (0 == (options & WidgetFactory::AnyOrientation))
 			split->setOrientation(
 				(options & WidgetFactory::VerticalOrientation) ? Qt::Vertical : Qt::Horizontal);
 		new KFormDesigner::Container(container, split, container);
-		return split;
 	}
-
+	
+	if(w) {
+		setObjectName(n);
+		return w;
+	}
 	return 0;
 }
 
@@ -602,8 +636,8 @@ ContainerFactory::previewWidget(const Q3CString &classname, QWidget *widget, KFo
 }
 
 bool
-ContainerFactory::createMenuActions(const Q3CString &classname, QWidget *w, Q3PopupMenu *menu,
-	KFormDesigner::Container *container)
+ContainerFactory::createMenuActions(const Q3CString &classname, QWidget *w, 
+	QMenu *menu, KFormDesigner::Container *container)
 {
 	setWidget(w, container);
 	//m_widget = w;
@@ -641,7 +675,7 @@ ContainerFactory::createMenuActions(const Q3CString &classname, QWidget *w, Q3Po
 
 		id = menu->insertItem(SmallIconSet("tab_remove"), i18n("Remove Page"), this, SLOT(removeStackPage()) );
 //		if( ((QWidgetStack*)m_widget)->children()->count() == 4) // == the stack has only one page
-		if(stack->children()->count() == 4) // == the stack has only one page
+		if(stack->children().count() == 4) // == the stack has only one page
 			menu->setItemEnabled(id, false);
 
 		id = menu->insertItem(SmallIconSet("next"), i18n("Jump to Next Page"), this, SLOT(nextStackPage()));

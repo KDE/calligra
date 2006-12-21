@@ -21,17 +21,18 @@
 #ifndef KFD_WIDGETPROPERTYSET_H
 #define KFD_WIDGETPROPERTYSET_H
 
-#include <qobject.h>
-#include <q3strlist.h>
-//Added by qt3to4:
-#include <QEvent>
+#include <QObject>
 #include <Q3CString>
+#include <QStringList>
+#include <QMetaProperty>
 
+#include <kexi_export.h>
 #include <koproperty/set.h>
 #include <koproperty/property.h>
 
 class QMetaObject;
 class QWidget;
+class QEvent;
 
 namespace KFormDesigner {
 
@@ -115,11 +116,13 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 
 		/*! Creates a map property description->prop. value from
 		 the list of keys \a list. */
-		KoProperty::Property::ListData* createValueList(WidgetInfo *winfo, const QStringList &list);
+		KoProperty::Property::ListData* createValueList(WidgetInfo *winfo, 
+			const QStringList &list);
 
 		/*! Changes \a property old value and changed state, using the value
 		stored in \a tree. Optional \a meta can be specified if you need to handle enum values. */
-		void  updatePropertyValue(ObjectTreeItem *tree, const char *property, const QMetaProperty *meta = 0);
+		void updatePropertyValue(ObjectTreeItem *tree, const char *property, 
+			const QMetaProperty &meta = QMetaProperty());
 
 		/*! \return the property list hold by this object. Do not modify the list,
 		 just use this method to change Editor's list. */
@@ -164,7 +167,7 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		 the property and it's a child widget if the child handles the property. 
 		 For example, the second case is true for KexiDBAutoField.
 		 \a meta  is the QMetaProperty for "alignment" property" of subwidget.  */
-		void createAlignProperty(const QMetaProperty *meta, QWidget *widget, QWidget *subwidget);
+		void createAlignProperty(const QMetaProperty &meta, QWidget *widget, QWidget *subwidget);
 
 		/*! Saves the properties related to alignment (ie hAlign, vAlign and WordBreak)
 		 and modifies the "alignment" property of  the widget.*/

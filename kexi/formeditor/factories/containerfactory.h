@@ -38,7 +38,7 @@
 #include <Q3Frame>
 #include <Q3ValueList>
 #include <Q3CString>
-#include <Q3PopupMenu>
+#include <QMenu>
 #include <QPaintEvent>
 
 namespace KFormDesigner
@@ -71,8 +71,8 @@ class KFORMEDITOR_EXPORT HBox : public Q3Frame
 	Q_OBJECT
 
 	public:
-		HBox(QWidget *parent, const char *name);
-		~HBox(){;}
+		HBox(QWidget *parent);
+		~HBox();
 		void setPreviewMode() {m_preview = true;}
 		void paintEvent(QPaintEvent *ev);
 
@@ -86,8 +86,8 @@ class KFORMEDITOR_EXPORT VBox : public Q3Frame
 	Q_OBJECT
 
 	public:
-		VBox(QWidget *parent, const char *name);
-		~VBox(){;}
+		VBox(QWidget *parent);
+		~VBox();
 		void setPreviewMode() {m_preview = true;}
 		void paintEvent(QPaintEvent *ev);
 
@@ -101,8 +101,8 @@ class KFORMEDITOR_EXPORT Grid : public Q3Frame
 	Q_OBJECT
 
 	public:
-		Grid(QWidget *parent, const char *name);
-		~Grid(){;}
+		Grid(QWidget *parent);
+		~Grid();
 		void setPreviewMode() {m_preview = true;}
 		void paintEvent(QPaintEvent *ev);
 
@@ -116,8 +116,8 @@ class KFORMEDITOR_EXPORT HFlow : public Q3Frame
 	Q_OBJECT
 
 	public:
-		HFlow(QWidget *parent, const char *name);
-		~HFlow(){;}
+		HFlow(QWidget *parent);
+		~HFlow();
 		void setPreviewMode() {m_preview = true;}
 		void paintEvent(QPaintEvent *ev);
 
@@ -131,8 +131,8 @@ class KFORMEDITOR_EXPORT VFlow : public Q3Frame
 	Q_OBJECT
 
 	public:
-		VFlow(QWidget *parent, const char *name);
-		~VFlow(){;}
+		VFlow(QWidget *parent);
+		~VFlow();
 		void setPreviewMode() {m_preview = true;}
 		void paintEvent(QPaintEvent *ev);
 		QSize  sizeHint() const;
@@ -146,10 +146,8 @@ class KFORMEDITOR_EXPORT KFDTabWidget : public TabWidgetBase
 	Q_OBJECT
 
 	public:
-		KFDTabWidget(QWidget *parent, const char *name)
-		 : TabWidgetBase(parent, name)
-		{}
-		~KFDTabWidget() {;}
+		KFDTabWidget(QWidget *parent);
+		virtual ~KFDTabWidget();
 
 		virtual QSize sizeHint() const;
 };
@@ -161,8 +159,8 @@ class KFORMEDITOR_EXPORT SubForm : public Q3ScrollView
 	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)
 
 	public:
-		SubForm(QWidget *parent, const char *name);
-		~SubForm() {}
+		SubForm(QWidget *parent);
+		~SubForm();
 
 		//! \return the name of the subform inside the db
 		QString   formName() const { return m_formName; }
@@ -181,13 +179,13 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 	Q_OBJECT
 
 	public:
-		ContainerFactory(QObject *parent, const char *name, const QStringList &args);
-		~ContainerFactory();
+		ContainerFactory(QObject *parent, const QStringList &args);
+		virtual ~ContainerFactory();
 
 		virtual QWidget *createWidget(const Q3CString & classname, QWidget *parent, const char *name, KFormDesigner::Container *container,
 			int options = DefaultOptions);
-		virtual bool createMenuActions(const Q3CString& classname, QWidget *w, Q3PopupMenu *menu,
-			KFormDesigner::Container *container);
+		virtual bool createMenuActions(const Q3CString& classname, QWidget *w, 
+			QMenu *menu, KFormDesigner::Container *container);
 		virtual bool startEditing(const Q3CString &classname, QWidget *w,
 			KFormDesigner::Container *container);
 		virtual bool previewWidget(const Q3CString &classname, QWidget *widget,
