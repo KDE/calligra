@@ -33,7 +33,6 @@ extern "C" {
 #include <kis_progress_subject.h>
 
 #include "kis_types.h"
-#include "kis_global.h"
 #include "kis_annotation.h"
 class KisDoc2;
 class KisUndoAdapter;
