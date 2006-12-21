@@ -17,9 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kchartDataConfigPage.h"
+#include "KCConfigDataPage.h"
 
-#include "kchartDataConfigPage.moc"
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -54,13 +53,13 @@ using namespace std;
 namespace KChart
 {
 
-KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
-					    QWidget* parent, 
-					    KDChartTableData *dat) 
+KCConfigDataPage::KCConfigDataPage( KChartParams* params,
+				    QWidget* parent, 
+				    KDChartTableData *dat) 
     : QWidget( parent ), m_params( params ), data(dat)
 {
     Q3GridLayout *grid1 = new Q3GridLayout(this, 4, 1, KDialog::marginHint(),
-					 KDialog::spacingHint());
+					   KDialog::spacingHint());
 
     // The Data Area
     Q3ButtonGroup *gb1 = new Q3VButtonGroup( i18n( "Data Area" ), this );
@@ -101,7 +100,7 @@ KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
 }
 
 
-void KChartDataConfigPage::init()
+void KCConfigDataPage::init()
 {
     if (m_params->dataDirection() == KChartParams::DataRows)
 	m_rowMajor->setChecked(true);
@@ -113,7 +112,7 @@ void KChartDataConfigPage::init()
 }
 
 
-void KChartDataConfigPage::defaults()
+void KCConfigDataPage::defaults()
 {
     m_colMajor->setChecked( true );
     m_firstRowAsLabel->setChecked( false );
@@ -121,7 +120,7 @@ void KChartDataConfigPage::defaults()
 }
 
 
-void KChartDataConfigPage::apply()
+void KCConfigDataPage::apply()
 {
     if (m_rowMajor->isChecked())
 	m_params->setDataDirection( KChartParams::DataRows );
@@ -134,3 +133,5 @@ void KChartDataConfigPage::apply()
 
 
 }  //KChart namespace
+
+#include "KCConfigDataPage.moc"

@@ -18,8 +18,8 @@
 */
 
 
-#ifndef __KCHARTCONFIGDIALOG_H__
-#define __KCHARTCONFIGDIALOG_H__
+#ifndef __KCCONFIGDIALOG_H__
+#define __KCCONFIGDIALOG_H__
 
 
 #include <q3tabdialog.h>
@@ -38,7 +38,8 @@ namespace KChart
 class KChartParams;
 class KChartAuxiliary;
 
-class KChartSubTypeChartPage;
+class KCConfigDataPage;
+class KCConfigSubtypePage;
 class KChartHeaderFooterConfigPage;
 
 class KChartColorConfigPage;
@@ -47,15 +48,14 @@ class KChartParameter3dConfigPage;
 class KChartBarslinesConfigPage;
 class KChartParameterPieConfigPage;
 class KChartFontConfigPage;
-class KChartDataConfigPage;
 class KChartPieConfigPage;
 class KChartComboPage;
-class KChartBackgroundPixmapConfigPage;
 class KChartLegendConfigPage;
 class KChartLine3dConfigPage;
 class KChartParameterPolarConfigPage;
+class KCConfigBackgroundPage;
 
-class KChartConfigDialog : public Q3TabDialog
+class KCConfigDialog : public Q3TabDialog
 {
     Q_OBJECT
 
@@ -72,9 +72,9 @@ public:
     };
 
 
-    KChartConfigDialog( KChartParams* params,
-                        QWidget* parent, int flags,
-			KDChartTableData *dat );
+    KCConfigDialog( KChartParams* params,
+		    QWidget* parent, int flags,
+		    KDChartTableData *dat );
 
     void subtypePage();
 
@@ -84,8 +84,8 @@ signals:
 protected:
     KChartParams                     *m_params;
 
-    KChartDataConfigPage             *m_dataPage;
-    KChartSubTypeChartPage           *m_subTypePage;
+    KCConfigDataPage             *m_dataPage;
+    KCConfigSubtypePage          *m_subTypePage;
 
     KChartParameter3dConfigPage      *_parameter3dpage;
     KChartLine3dConfigPage           *_linepage3d;
@@ -98,7 +98,7 @@ protected:
     KChartParameterConfigPage        *m_axespage;
     KChartColorConfigPage            *_colorpage;
     KChartFontConfigPage             *_parameterfontpage;
-    KChartBackgroundPixmapConfigPage *_backgroundpixpage;
+    KCConfigBackgroundPage       *_backgroundpixpage;
 
     //KChartGeometryConfigPage* _geompage;
     //KChartPieConfigPage*_piepage;

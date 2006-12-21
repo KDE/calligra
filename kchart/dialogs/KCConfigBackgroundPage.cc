@@ -17,17 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kchartBackgroundPixmapConfigPage.h"
-#include "kchartBackgroundPixmapConfigPage.moc"
-
-#include <klocale.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kfiledialog.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
-#include <kfilemetainfo.h>
-#include <kstringhandler.h>
+#include "KCConfigBackgroundPage.h"
 
 #include <QComboBox>
 #include <qradiobutton.h>
@@ -45,14 +35,23 @@
 #include <Q3VBoxLayout>
 #include <kcolorbutton.h>
 #include <kvbox.h>
+#include <klocale.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kfiledialog.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
+#include <kfilemetainfo.h>
+#include <kstringhandler.h>
+
 
 #include "kchart_params.h"
 
 namespace KChart
 {
 
-KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams* params, QWidget* parent )
-    : QWidget( parent, "KChartBackgroundPixmapConfigPage" ),
+KCConfigBackgroundPage::KCConfigBackgroundPage( KChartParams* params, QWidget* parent )
+    : QWidget( parent, "KCConfigBackgroundPage" ),
       _params( params )
 {
     this->setWhatsThis(
@@ -180,7 +179,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 }
 
 //Code from kcontrol/background/bgdialog.cc
-void KChartBackgroundPixmapConfigPage::loadWallpaperFilesList()
+void KCConfigBackgroundPage::loadWallpaperFilesList()
 {
    // Wallpapers
    // the following QMap is lower cased names mapped to cased names and URLs
@@ -277,7 +276,7 @@ void KChartBackgroundPixmapConfigPage::loadWallpaperFilesList()
    }
 }
 
-void KChartBackgroundPixmapConfigPage::init()
+void KCConfigBackgroundPage::init()
 {
 #if 0
     QStringList lst;
@@ -353,7 +352,7 @@ void KChartBackgroundPixmapConfigPage::init()
         _backgroundCB->setColor(QColor(230, 222, 222) );
 }
 
-void KChartBackgroundPixmapConfigPage::apply()
+void KCConfigBackgroundPage::apply()
 {
     // PENDING(kalle) Readapt
     //     if( wallCB->currentText() != _params->backgroundPixmapName ) {
@@ -421,7 +420,7 @@ void KChartBackgroundPixmapConfigPage::apply()
 }
 
 
-void KChartBackgroundPixmapConfigPage::showSettings( const QString& fileName )
+void KCConfigBackgroundPage::showSettings( const QString& fileName )
 {
    wallCB->blockSignals(true);
 
@@ -455,7 +454,7 @@ void KChartBackgroundPixmapConfigPage::showSettings( const QString& fileName )
 }
 
 
-void KChartBackgroundPixmapConfigPage::slotBrowse()
+void KCConfigBackgroundPage::slotBrowse()
 {
     //TODO: Support non-local wallpapers
     KUrl url = KFileDialog::getOpenFileName( KUrl() );
@@ -464,7 +463,7 @@ void KChartBackgroundPixmapConfigPage::slotBrowse()
     showSettings( url.path() );
 }
 
-void KChartBackgroundPixmapConfigPage::slotWallPaperChanged( int index )
+void KCConfigBackgroundPage::slotWallPaperChanged( int index )
 {
     if ( index != 0 && loadWallPaper() )
     {
@@ -480,7 +479,7 @@ void KChartBackgroundPixmapConfigPage::slotWallPaperChanged( int index )
 }
 
 
-bool KChartBackgroundPixmapConfigPage::loadWallPaper()
+bool KCConfigBackgroundPage::loadWallPaper()
 {
     int i = wallCB->currentIndex();
     if ( i == -1 || i == 0 ) {  // 0 is 'None'
@@ -516,3 +515,5 @@ bool KChartBackgroundPixmapConfigPage::loadWallPaper()
 }
 
 }  //KChart namespace
+
+#include "KCConfigBackgroundPage.moc"

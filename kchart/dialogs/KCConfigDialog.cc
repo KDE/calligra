@@ -18,17 +18,16 @@
 */
 
 
-#include "kchartConfigDialog.h"
-#include "kchartConfigDialog.moc"
+#include "KCConfigDialog.h"
 
 
-#include "kchartBackgroundPixmapConfigPage.h"
-#include "kchartSubTypeChartPage.h"
+#include "KCConfigDataPage.h"
+#include "KCConfigSubtypePage.h"
+
 #include "kchartHeaderFooterConfigPage.h"
 #include "kchartColorConfigPage.h"
 #include "kchartParameterPieConfigPage.h"
 #include "kchartFontConfigPage.h"
-#include "kchartDataConfigPage.h"
 #include "kchartComboConfigPage.h"
 #include "kchartParameterConfigPage.h"
 #include "kchartPieConfigPage.h"
@@ -36,6 +35,9 @@
 #include "kchartLegendConfigPage.h"
 #include "kchartLine3dConfigPage.h"
 #include "kchartParameterPolarConfigPage.h"
+
+#include "KCConfigBackgroundPage.h"
+
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -48,10 +50,10 @@
 namespace KChart
 {
 
-KChartConfigDialog::KChartConfigDialog( KChartParams* params,
-					QWidget* parent, int flags,
-					KDChartTableData *dat ) :
-    Q3TabDialog( parent, "Chart config dialog", true ),
+KCConfigDialog::KCConfigDialog( KChartParams* params,
+				QWidget* parent, int flags,
+				KDChartTableData *dat )
+  : Q3TabDialog( parent, "Chart config dialog", true ),
     m_params( params ),
 
     m_dataPage(0),
@@ -77,7 +79,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     setCaption( i18n( "Chart Setup" ) );
 
     if (flags & KC_DATAFORMAT) {
-        m_dataPage = new KChartDataConfigPage(m_params, this, dat);
+        m_dataPage = new KCConfigDataPage(m_params, this, dat);
         addTab( m_dataPage, i18n( "&Data" ) );
     }
     else if (flags & KC_SUBTYPE) {
@@ -96,7 +98,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         addTab( _parameterfontpage, i18n( "&Font" ) );
     }
     else if ( flags & KC_BACK ) {
-        _backgroundpixpage = new KChartBackgroundPixmapConfigPage( m_params, this );
+        _backgroundpixpage = new KCConfigBackgroundPage( m_params, this );
         addTab( _backgroundpixpage, i18n( "&Background" ) );
     }
     else if ( flags & KC_LEGEND ) {
@@ -105,7 +107,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     }
     else if ( flags & KC_ALL ) {
 	// The data page
-        m_dataPage = new KChartDataConfigPage(m_params, this, dat);
+        m_dataPage = new KCConfigDataPage(m_params, this, dat);
         addTab( m_dataPage, i18n( "&Data" ) );
 
 	// The subtype page
@@ -165,8 +167,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         _parameterfontpage = new KChartFontConfigPage(m_params,this, dat );
         addTab( _parameterfontpage, i18n( "&Font" ) );
 
-        _backgroundpixpage = new KChartBackgroundPixmapConfigPage( m_params, 
-								   this );
+        _backgroundpixpage = new KCConfigBackgroundPage( m_params, this );
         addTab( _backgroundpixpage, i18n( "&Background" ) );
 
         if ( m_params->chartType() == KChartParams::HiLo &&
@@ -196,7 +197,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 }
 
 
-void KChartConfigDialog::init()
+void KCConfigDialog::init()
 {
     // Data page
     if (m_dataPage)
@@ -274,7 +275,7 @@ void KChartConfigDialog::init()
 }
 
 
-void KChartConfigDialog::apply()
+void KCConfigDialog::apply()
 {
     kDebug(35001) << "***KChartConfig::apply()\n";
     // Copy application data from dialog into parameter structure that is also
@@ -378,7 +379,7 @@ void KChartConfigDialog::apply()
 }
 
 
-void KChartConfigDialog::subtypePage()
+void KCConfigDialog::subtypePage()
 {
     switch( m_params->chartType() ) {
     case KDChartParams::Bar:
@@ -405,10 +406,12 @@ void KChartConfigDialog::subtypePage()
 }
 
 
-void KChartConfigDialog::defaults()
+void KCConfigDialog::defaults()
 {
   //FIXME: NYI
 }
 
 
 }  //KChart namespace
+
+#include "KCConfigDialog.moc"

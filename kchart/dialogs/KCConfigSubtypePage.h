@@ -35,12 +35,12 @@ namespace KChart
 
 class KChartParams;
 
-class KChartSubTypeChartPage : public QWidget
+class KCConfigSubtypePage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartSubTypeChartPage( KChartParams* params, QWidget* parent ) :
+    KCConfigSubtypePage( KChartParams* params, QWidget* parent ) :
         QWidget( parent ), m_params( params ) {}
     virtual void init() = 0;
     virtual void apply() = 0;
@@ -49,7 +49,7 @@ protected:
     KChartParams* m_params;
 };
 
-class KChartLineSubTypeChartPage : public KChartSubTypeChartPage
+class KChartLineSubTypeChartPage : public KCConfigSubtypePage
 {
     Q_OBJECT
 
@@ -70,7 +70,7 @@ private:
 };
 
 
-class KChartAreaSubTypeChartPage : public KChartSubTypeChartPage
+class KChartAreaSubTypeChartPage : public KCConfigSubtypePage
 {
     Q_OBJECT
 
@@ -90,7 +90,7 @@ private:
     QLabel* exampleLA;
 };
 
-class KChartBarSubTypeChartPage : public KChartSubTypeChartPage
+class KChartBarSubTypeChartPage : public KCConfigSubtypePage
 {
     Q_OBJECT
 
@@ -111,7 +111,7 @@ private:
 };
 
 
-class KChartHiloSubTypeChartPage : public KChartSubTypeChartPage
+class KChartHiloSubTypeChartPage : public KCConfigSubtypePage
 {
     Q_OBJECT
 
@@ -131,7 +131,7 @@ private:
     QLabel* exampleLA;
 };
 
-class KChartPolarSubTypeChartPage : public KChartSubTypeChartPage
+class KChartPolarSubTypeChartPage : public KCConfigSubtypePage
 {
     Q_OBJECT
 

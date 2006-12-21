@@ -19,17 +19,15 @@
 
 #include <stdlib.h>
 
-#include "kchartSubTypeChartPage.h"
-#include "kchartSubTypeChartPage.moc"
+#include <qradiobutton.h>
+#include <QSpinBox>
+#include <QLabel>
+#include <QLayout>
 
 #include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <qradiobutton.h>
-#include <QSpinBox>
-#include <QLabel>
-#include <QLayout>
 
 
 //Added by qt3to4:
@@ -38,15 +36,17 @@
 #include <kvbox.h>
 
 #include "kchart_params.h"
-
 #include "kchart_factory.h"
+
+#include "KCConfigSubtypePage.h"
+
 
 namespace KChart
 {
 
 KChartHiloSubTypeChartPage::KChartHiloSubTypeChartPage( KChartParams* params,
                                                         QWidget* parent ) :
-    KChartSubTypeChartPage(  params, parent )
+    KCConfigSubtypePage(  params, parent )
 {
     Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
     Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), this );
@@ -125,7 +125,7 @@ void KChartHiloSubTypeChartPage::apply()
 
 KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage( KChartParams* params,
                                                         QWidget* parent ) :
-    KChartSubTypeChartPage(  params, parent )
+    KCConfigSubtypePage(  params, parent )
 {
     Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
     Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), this );
@@ -205,7 +205,7 @@ void KChartAreaSubTypeChartPage::apply()
 
 KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParams* params,
                                                       QWidget* parent ) :
-    KChartSubTypeChartPage( params, parent )
+    KCConfigSubtypePage( params, parent )
 {
     Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
     KVBox       *left = new KVBox( this );
@@ -299,7 +299,7 @@ void KChartBarSubTypeChartPage::apply()
 
 KChartLineSubTypeChartPage::KChartLineSubTypeChartPage( KChartParams* params,
                                                         QWidget* parent ) :
-    KChartSubTypeChartPage(  params, parent )
+    KCConfigSubtypePage(  params, parent )
 {
     Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
     Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), this );
@@ -378,7 +378,7 @@ void KChartLineSubTypeChartPage::apply()
 
 KChartPolarSubTypeChartPage::KChartPolarSubTypeChartPage( KChartParams* params,
                                                         QWidget* parent ) :
-    KChartSubTypeChartPage(  params, parent )
+    KCConfigSubtypePage(  params, parent )
 {
     Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
     Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), this );
@@ -456,3 +456,5 @@ void KChartPolarSubTypeChartPage::apply()
 }
 
 }  //KChart namespace
+
+#include "KCConfigSubtypePage.moc"

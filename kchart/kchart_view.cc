@@ -29,6 +29,7 @@
 
 #include <KoCsvImportDialog.h>
 #include <KoTemplateCreateDia.h>
+#include <KoViewAdaptor.h>
 
 #include "kdchart/KDChart.h"
 #include "kchart_view.h"
@@ -36,10 +37,10 @@
 #include "kchart_part.h"
 #include "kchart_params.h"
 #include "kchartDataEditor.h"
-#include "kchartConfigDialog.h"
 #include "KChartViewAdaptor.h"
-#include <KoViewAdaptor.h>
+
 #include "KCWizard.h"
+#include "KCConfigDialog.h"
 #include "KCPageLayout.h"
 #include "KCPrinterDialog.h"
 
@@ -289,18 +290,17 @@ void KChartView::updateGuiTypeOfChart()
 
 void KChartView::slotConfig()
 {
-    config(KChartConfigDialog::KC_ALL);
+    config(KCConfigDialog::KC_ALL);
 }
 
 
 void KChartView::config(int flags)
 {
     // open a config dialog depending on the chart type
-    KChartParams        *params = ((KChartPart*)koDocument())->params();
-    KDChartTableData    *dat    = ((KChartPart*)koDocument())->data();
+    KChartParams      *params = ((KChartPart*)koDocument())->params();
+    KDChartTableData  *dat    = ((KChartPart*)koDocument())->data();
 
-    KChartConfigDialog  *d      = new KChartConfigDialog( params, this, flags,
-							  dat );
+    KCConfigDialog    *d      = new KCConfigDialog( params, this, flags, dat );
 
     connect( d, SIGNAL( dataChanged() ),
              this, SLOT( slotRepaint() ) );
@@ -515,41 +515,41 @@ void KChartView::mousePressEvent ( QMouseEvent *e )
 
 void KChartView::slotConfigColor()
 {
-    config(KChartConfigDialog::KC_COLORS);
+    config(KCConfigDialog::KC_COLORS);
 }
 
 
 void KChartView::slotConfigFont()
 {
-    config(KChartConfigDialog::KC_FONT);
+    config(KCConfigDialog::KC_FONT);
 }
 
 
 void KChartView::slotConfigBack()
 {
-    config(KChartConfigDialog::KC_BACK);
+    config(KCConfigDialog::KC_BACK);
 }
 
 
 void KChartView::slotConfigLegend()
 {
-   config(KChartConfigDialog::KC_LEGEND);
+   config(KCConfigDialog::KC_LEGEND);
 }
 
 void KChartView::slotConfigDataFormat()
 {
-    config(KChartConfigDialog::KC_DATAFORMAT);
+    config(KCConfigDialog::KC_DATAFORMAT);
 }
 
 void KChartView::slotConfigSubTypeChart()
 {
-    config(KChartConfigDialog::KC_SUBTYPE);
+    config(KCConfigDialog::KC_SUBTYPE);
 }
 
 
 void KChartView::slotConfigHeaderFooterChart()
 {
-    config(KChartConfigDialog::KC_HEADERFOOTER);
+    config(KCConfigDialog::KC_HEADERFOOTER);
 }
 
 

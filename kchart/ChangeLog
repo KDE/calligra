@@ -1,3 +1,12 @@
+2006-12-21  Inge Wallin  <inge@lysator.liu.se>
+
+	Fourth step, part 1 of wish 117960
+	* Move:
+	kchartConfigDialog                -->  dialogs/KCConfigDialog
+	kchartDataConfigPage              -->  dialogs/KCConfigDataPage
+	kchartSubTypeChartPage            -->  dialogs/KCConfigSubtypePage
+	kchartBackgroundPixmapConfigPage  -->  dialogs/KCConfigBackgroundPage
+
 2006-12-20  Inge Wallin  <inge@lysator.liu.se>
 
 	Third step of wish 117960

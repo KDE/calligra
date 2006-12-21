@@ -16,28 +16,31 @@ include_directories(
 ########### next target ###############
 
 set(kchartcommon_LIB_SRCS 
+   kchart_factory.cc 
    kchart_part.cc 
    kchart_view.cc 
+   kchart_params.cc 
    KChartViewAdaptor.cc 
-   kchart_factory.cc 
-   kchartColorConfigPage.cc 
-   kchartParameterConfigPage.cc 
+   KChartParamsAdaptor.cc 
+
+   kchartDataEditor.cc 
+
+   dialogs/KCConfigDialog.cc 
+   dialogs/KCConfigDataPage.cc 
+   dialogs/KCConfigSubtypePage.cc 
+   kchartLine3dConfigPage.cc 
    kchartParameter3dConfigPage.cc 
-   kchartBackgroundPixmapConfigPage.cc 
-   kchartSubTypeChartPage.cc 
    kchartComboConfigPage.cc 
-   kchartFontConfigPage.cc 
-   kchartDataConfigPage.cc 
    kchartPieConfigPage.cc 
    kchartParameterPieConfigPage.cc 
-   kchartConfigDialog.cc 
-   kchartDataEditor.cc 
-   kchartLegendConfigPage.cc 
-   kchart_params.cc 
-   KChartParamsAdaptor.cc 
-   kchartHeaderFooterConfigPage.cc 
-   kchartLine3dConfigPage.cc 
    kchartParameterPolarConfigPage.cc 
+   kchartHeaderFooterConfigPage.cc 
+   kchartLegendConfigPage.cc 
+   kchartParameterConfigPage.cc 
+   kchartColorConfigPage.cc 
+   kchartFontConfigPage.cc 
+
+   dialogs/KCConfigBackgroundPage.cc 
    dialogs/KCPageLayout.cc 
    dialogs/KCPrinterDialog.cc
    dialogs/KCWizard.cc 

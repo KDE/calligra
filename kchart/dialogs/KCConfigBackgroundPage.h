@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KCHARTBACKGROUNDPIXMAPCONFIGPAGE_H__
-#define __KCHARTBACKGROUNDPIXMAPCONFIGPAGE_H__
+#ifndef __KCHARTCONFIGBACKGROUNDPAGE_H__
+#define __KCHARTCONFIGBACKGROUNDPAGE_H__
 
 #include <QWidget>
 #include <qpixmap.h>
@@ -36,13 +36,13 @@ namespace KChart
 
 class KChartParams;
 
-class KChartBackgroundPixmapConfigPage : public QWidget
+class KCConfigBackgroundPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartBackgroundPixmapConfigPage( KChartParams* params,
-                                      QWidget* parent );
+    KCConfigBackgroundPage( KChartParams* params,
+			    QWidget* parent );
     void init();
     void apply();
 

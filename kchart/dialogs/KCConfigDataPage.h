@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KCHARTDATACONFIGPAGE_H__
-#define __KCHARTDATACONFIGPAGE_H__
+#ifndef __KCHARTCONFIGDATAPAGE_H__
+#define __KCHARTCONFIGDATAPAGE_H__
 
 #include <QWidget>
 #include <q3button.h>
@@ -38,13 +38,13 @@ namespace KChart
 
 class  KChartParams;
 
-class KChartDataConfigPage : public QWidget
+class KCConfigDataPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartDataConfigPage( KChartParams* params, QWidget* parent,
-			  KDChartTableData *dat);
+    KCConfigDataPage( KChartParams* params, QWidget* parent,
+		      KDChartTableData *dat);
     void init();
     void defaults();
     void apply();
