@@ -21,6 +21,7 @@
 #define KWFRAMESET_H
 
 #include "KWord.h"
+#include "kword_export.h"
 
 #include <QObject>
 
@@ -32,7 +33,7 @@ class KWFrame;
  * The FrameSet holds KWFrame objects that actually render the content this object
  * holds to the screen or to the printer.
  */
-class KWFrameSet : public QObject {
+class KWORD_TEST_EXPORT KWFrameSet : public QObject {
     Q_OBJECT
 public:
     /// Constructor.
