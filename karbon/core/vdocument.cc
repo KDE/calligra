@@ -239,10 +239,11 @@ VDocument::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainS
 	docWriter->addAttribute( "draw:master-page-name", "Default");
 
 	// save objects:
+    /* TODO implement saving of layers
 	int index = 0;
 	foreach( KoLayerShape* layer, m_layers )
 		layer->saveOasis( store, docWriter, mainStyles, ++index );
-
+    */
 	docWriter->endElement(); // draw:page
 }
 
@@ -315,7 +316,8 @@ VDocument::loadDocumentContent( const QDomElement& doc )
 			if( e.tagName() == "LAYER" )
 			{
 				KoLayerShape* layer = new KoLayerShape();
-				layer->load( e );
+                // TODO implement layer loading
+				//layer->load( e );
 				insertLayer( layer );
 			}
 		}
@@ -325,7 +327,9 @@ VDocument::loadDocumentContent( const QDomElement& doc )
 bool
 VDocument::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
-	return m_layers.first()->loadOasis( element, context );
+    // TODO implement loading layers
+    //return m_layers.first()->loadOasis( element, context );
+    return true;
 }
 
 void

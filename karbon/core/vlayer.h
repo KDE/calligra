@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 The Karbon Developers
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,38 +17,27 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __VLAYER_H__
-#define __VLAYER_H__
+#ifndef __KOLAYERSHAPE_H__
+#define __KOLAYERSHAPE_H__
 
 #include <KoShapeContainer.h>
 #include <koffice_export.h>
 
 #include <QRectF>
 
-class QDomElement;
-class KoStore;
-class KoXmlWriter;
-class KoGenStyles;
-class KoOasisLoadingContext;
-class VVisitor;
-
 /**
- * VLayer manages a set of vobjects. It keeps the objects from bottom to top
- * in a list, ie. objects higher in the list are drawn above lower objects.
- * Objects in a layer can be manipulated and worked on independent of objects
- * in other layers.
+ * Provides arranging shapes into layers.
+ * This makes it possible to have a higher key of a number of objects
+ * in a document.
+ * A layer is always invisible and unselectable.
  */
-
 class KARBONBASE_EXPORT KoLayerShape : public KoShapeContainer
 {
 public:
-	KoLayerShape();
+    /// The default constructor
+    KoLayerShape();
+    /// empty implementation, as the layer itself is not visible
     virtual void paintComponent(QPainter &, const KoViewConverter &) {};
-	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const;
-	virtual bool loadOasis( const QDomElement &element, KoOasisLoadingContext &context );
-	void load( const QDomElement& element );
-	void accept( VVisitor& visitor );
-
     bool hitTest( const QPointF &position ) const;
     virtual QRectF boundingRect() const;
 private:
@@ -69,5 +58,5 @@ private:
     };
 };
 
-#endif
+#endif // __KOLAYERSHAPE_H__
 

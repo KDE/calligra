@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 The Karbon Developers
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,65 +17,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qdom.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include "vlayer.h"
-#include "vvisitor.h"
-
-#include <KoStore.h>
-#include <KoGenStyles.h>
-#include <KoStyleStack.h>
-#include <KoXmlWriter.h>
-#include <KoXmlNS.h>
-#include <KoOasisLoadingContext.h>
-#include <KoOasisStyles.h>
 
 KoLayerShape::KoLayerShape()
 : KoShapeContainer(new LayerMembers())
 {
 }
 
-void
-KoLayerShape::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
-{
-	/*
-	// save objects:
-	VObjectListIterator itr = m_objects;
-
-	for ( ; itr.current(); ++itr )
-		itr.current()->saveOasis( store, docWriter, mainStyles, ++index );
-	*/
-}
-void
-KoLayerShape::load( const QDomElement& element )
-{
-	setVisible( element.attribute( "visible" ) == 0 ? false : true );
-	// TODO: porting to flake
-	//VGroup::load( element );
-}
-
-bool
-KoLayerShape::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
-{
-	return true;
-}
-
-void
-KoLayerShape::accept( VVisitor& visitor )
-{
-	visitor.visitVLayer( *this );
-}
-
-bool
-KoLayerShape::hitTest( const QPointF &position ) const 
+bool KoLayerShape::hitTest( const QPointF &position ) const
 {
     Q_UNUSED(position);
     return false;
 }
 
-QRectF
-KoLayerShape::boundingRect() const
+QRectF KoLayerShape::boundingRect() const
 {
 	QRectF bb;
 
@@ -91,54 +47,48 @@ KoLayerShape::boundingRect() const
 }
 
 //  ############# LayerMembers #############
-KoLayerShape::LayerMembers::LayerMembers() 
+KoLayerShape::LayerMembers::LayerMembers()
 {
 }
 
-KoLayerShape::LayerMembers::~LayerMembers() 
+KoLayerShape::LayerMembers::~LayerMembers()
 {
 }
 
-void 
-KoLayerShape::LayerMembers::add(KoShape *child) 
+void KoLayerShape::LayerMembers::add(KoShape *child)
 {
     if(m_layerMembers.contains(child))
         return;
     m_layerMembers.append(child);
 }
 
-void 
-KoLayerShape::LayerMembers::remove(KoShape *child) 
+void KoLayerShape::LayerMembers::remove(KoShape *child)
 {
     m_layerMembers.removeAll(child);
 }
 
-int 
-KoLayerShape::LayerMembers::count() const 
+int KoLayerShape::LayerMembers::count() const
 {
     return m_layerMembers.count();
 }
 
-QList<KoShape*> 
-KoLayerShape::LayerMembers::iterator() const 
+QList<KoShape*> KoLayerShape::LayerMembers::iterator() const
 {
     return QList<KoShape*>(m_layerMembers);
 }
 
-void 
-KoLayerShape::LayerMembers::containerChanged(KoShapeContainer *container) 
+void KoLayerShape::LayerMembers::containerChanged(KoShapeContainer *container)
 {
     Q_UNUSED(container);
 }
 
-void 
-KoLayerShape::LayerMembers::setClipping(const KoShape *child, bool clipping) 
+void KoLayerShape::LayerMembers::setClipping(const KoShape *child, bool clipping)
 {
     Q_UNUSED(child);
     Q_UNUSED(clipping);
 }
 
-bool KoLayerShape::LayerMembers::childClipped(const KoShape *child) const 
+bool KoLayerShape::LayerMembers::childClipped(const KoShape *child) const
 {
     Q_UNUSED(child);
     return false;
