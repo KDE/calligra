@@ -510,6 +510,19 @@ public:
     Outline(KWFrame *frame, const QMatrix &matrix) : m_side(None), m_frame(frame) {
         QPainterPath path =  matrix.map(frame->shape()->outline());
         m_bounds = path.boundingRect();
+        if(frame->runAroundDistance() >= 0.0) {
+            QMatrix grow = matrix;
+            grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
+            const double scaleX = (m_bounds.width() + frame->runAroundDistance()) / m_bounds.width();
+            const double scaleY = (m_bounds.height() + frame->runAroundDistance()) / m_bounds.height();
+            grow.scale(scaleX, scaleY);
+            grow.translate(-m_bounds.width() / 2.0, -m_bounds.height() / 2.0);
+
+            path =  grow.map(frame->shape()->outline());
+            // kDebug() << "Grow " << frame->runAroundDistance() << ", Before: " << m_bounds << ", after: " << path.boundingRect() << endl;
+            m_bounds = path.boundingRect();
+        }
+
         QPolygonF poly = path.toFillPolygon();
 
         QPointF prev = *(poly.begin());
