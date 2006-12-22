@@ -25,10 +25,10 @@ include_directories(
 		${CMAKE_BINARY_DIR}/karbon/core 
 		${CMAKE_SOURCE_DIR}/karbon/widgets 
 		${CMAKE_BINARY_DIR}/karbon/widgets 
-		${CMAKE_SOURCE_DIR}/karbon/render 
-		${CMAKE_BINARY_DIR}/karbon/render 
-		${CMAKE_SOURCE_DIR}/karbon/commands 
-		${CMAKE_BINARY_DIR}/karbon/commands 
+		${CMAKE_SOURCE_DIR}/karbon/render
+		${CMAKE_BINARY_DIR}/karbon/render
+		${CMAKE_SOURCE_DIR}/karbon/commands
+		${CMAKE_BINARY_DIR}/karbon/commands
 		${CMAKE_SOURCE_DIR}/karbon/dockers 
 		${CMAKE_BINARY_DIR}/karbon/dockers 
 		${CMAKE_SOURCE_DIR}/karbon/dialogs 
@@ -43,7 +43,7 @@ add_subdirectory( core )
 add_subdirectory( widgets )
 add_subdirectory( dialogs )
 add_subdirectory( dockers )
-#add_subdirectory( render )
+add_subdirectory( render )
 #add_subdirectory( tools )
 #add_subdirectory( plugins )
 add_subdirectory( data )
