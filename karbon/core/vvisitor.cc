@@ -56,16 +56,15 @@ VVisitor::visitVGroup( VGroup& group )
 	}
 }
 
-/*
 void
 VVisitor::visitVLayer( KoLayerShape& layer )
 {
 	/* TODO: do we still want that ?
 	foreach( KoShape *shape, layer.iterator() )
 		shape->accept( *this );
-	* /
+	*/
 }
-*/
+
 void
 VVisitor::visitVPath( VPath& composite )
 {
