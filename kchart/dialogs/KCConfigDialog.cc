@@ -29,10 +29,10 @@
 #include "kchartComboConfigPage.h"
 #include "kchartPieConfigPage.h"
 #include "kchartParameter3dConfigPage.h"
-#include "kchartLegendConfigPage.h"
 #include "kchartLine3dConfigPage.h"
 #include "kchartParameterPolarConfigPage.h"
 
+#include "KCConfigLegendPage.h"
 #include "KCConfigAxesPage.h"
 #include "KCConfigColorPage.h"
 #include "KCConfigFontPage.h"
@@ -102,7 +102,7 @@ KCConfigDialog::KCConfigDialog( KChartParams* params,
         addTab( _backgroundpixpage, i18n( "&Background" ) );
     }
     else if ( flags & KC_LEGEND ) {
-        m_legendPage = new KChartLegendConfigPage(m_params,this );
+        m_legendPage = new KCConfigLegendPage(m_params,this );
         addTab( m_legendPage,i18n("Legend"));
     }
     else if ( flags & KC_ALL ) {
@@ -150,7 +150,7 @@ KCConfigDialog::KCConfigDialog( KChartParams* params,
         addTab( m_headerfooterpage, i18n("Header/Footer"));
 
 	// The legend page
-	m_legendPage = new KChartLegendConfigPage(m_params,this );
+	m_legendPage = new KCConfigLegendPage(m_params,this );
         addTab( m_legendPage,i18n("Legend"));
 
 	// Add axes page if applicable (all except Pie, Ring).

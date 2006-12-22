@@ -35,8 +35,8 @@ set(kchartcommon_LIB_SRCS
    kchartParameterPieConfigPage.cc 
    kchartParameterPolarConfigPage.cc 
    kchartHeaderFooterConfigPage.cc 
-   kchartLegendConfigPage.cc 
 
+   dialogs/KCConfigLegendPage.cc 
    dialogs/KCConfigAxesPage.cc 
    dialogs/KCConfigColorPage.cc 
    dialogs/KCConfigFontPage.cc 

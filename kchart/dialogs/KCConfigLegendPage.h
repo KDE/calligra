@@ -18,8 +18,8 @@
 */
 
 
-#ifndef __KCHARTLEGENDCONFIGPAGE_H__
-#define __KCHARTLEGENDCONFIGPAGE_H__
+#ifndef __KCCONFIGLEGENDPAGE_H__
+#define __KCCONFIGLEGENDPAGE_H__
 
 #include <QWidget>
 #include <q3button.h>
@@ -38,13 +38,13 @@ namespace KChart
 
 class KChartParams;
 
-class KChartLegendConfigPage : public QWidget
+class KCConfigLegendPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartLegendConfigPage( KChartParams* params,
-                                 QWidget* parent );
+    KCConfigLegendPage( KChartParams* params, QWidget* parent );
+
     void init();
     void apply();
 public slots:

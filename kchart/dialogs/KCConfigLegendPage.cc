@@ -17,15 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kchartLegendConfigPage.h"
-#include "kchartLegendConfigPage.moc"
-
-#include <kapplication.h>
-#include <klocale.h>
-#include <kcolorbutton.h>
-#include <kfontdialog.h>
-#include <kiconloader.h>
-
 #include <QLabel>
 #include <q3buttongroup.h>
 #include <qradiobutton.h>
@@ -35,15 +26,23 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 
+#include <kapplication.h>
+#include <klocale.h>
+#include <kcolorbutton.h>
+#include <kfontdialog.h>
+#include <kiconloader.h>
+
 #include "kchart_params.h"
 #include "kchart_factory.h"
+#include "KCConfigLegendPage.h"
+
 
 namespace KChart
 {
 
 
-KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
-                                                QWidget* parent ) :
+KCConfigLegendPage::KCConfigLegendPage( KChartParams* params,
+					QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
   //Layout for 4 blocks
@@ -147,7 +146,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   layout->addItem( new QSpacerItem( 300, 0 ), 0, 1 );
 }
 
-void KChartLegendConfigPage::init()
+void KCConfigLegendPage::init()
 {
     switch( _params->legendPosition())
     {
@@ -201,7 +200,7 @@ void KChartLegendConfigPage::init()
         textLegend.setPointSize(_params->legendFontRelSize());
 }
 
-void KChartLegendConfigPage::changeTitleLegendFont()
+void KCConfigLegendPage::changeTitleLegendFont()
 {
 		Qt::CheckState state = titleLegendIsRelative;
     if (    KFontDialog::getFont( titleLegend,false,this, true,&state ) != QDialog::Rejected
@@ -209,7 +208,7 @@ void KChartLegendConfigPage::changeTitleLegendFont()
         titleLegendIsRelative = state;
 }
 
-void KChartLegendConfigPage::changeTextLegendFont()
+void KCConfigLegendPage::changeTextLegendFont()
 {
    Qt::CheckState state = textLegendIsRelative;
     if (    KFontDialog::getFont( textLegend,false,this, true,&state ) != QDialog::Rejected
@@ -217,7 +216,7 @@ void KChartLegendConfigPage::changeTextLegendFont()
         textLegendIsRelative = state;
 }
 
-void KChartLegendConfigPage::apply()
+void KCConfigLegendPage::apply()
 {
     if( noLegend->isOn() )
         _params->setLegendPosition( KDChartParams::NoLegend );
@@ -252,7 +251,7 @@ void KChartLegendConfigPage::apply()
         _params->setLegendFontRelSize(textLegend.pointSize());
 }
 
-QPushButton* KChartLegendConfigPage::addButton( Q3GridLayout* layout,
+QPushButton* KCConfigLegendPage::addButton( Q3GridLayout* layout,
                                                 Q3ButtonGroup* gb,
                                                 const QString &toolTipText,
                                                 const QString &icon,
@@ -271,3 +270,5 @@ QPushButton* KChartLegendConfigPage::addButton( Q3GridLayout* layout,
 }
 
 }  //KChart namespace
+
+#include "KCConfigLegendPage.moc"
