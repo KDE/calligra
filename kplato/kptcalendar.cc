@@ -786,7 +786,7 @@ QPair<DateTime, DateTime> Calendar::firstInterval(const DateTime &start, const D
     QTime endTime;
     QDate date = start.date();
     int i=0;
-    for (; date <= end.date() && i++ < 10; date = date.addDays(1)) {
+    for (; date <= end.date(); date = date.addDays(1)) {
         if (date < end.date())
             endTime = QTime(23, 59, 59, 999);
         else
