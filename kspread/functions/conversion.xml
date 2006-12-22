@@ -247,8 +247,12 @@
 	<Comment>Number</Comment>
 	<Type>Int</Type>
       </Parameter>
+      <Parameter optional="true">
+        <Comment>Format</Comment>
+        <Type>Int</Type>
+      </Parameter>
       <Help>
-        <Text>The ROMAN() function returns the number in roman format. Number should be positive and entire.</Text>
+        <Text>The ROMAN() function returns the number in roman format. Number should be positive and entire. The optional Format argument specifies the level of conciseness, and defaults to 0.</Text>
         <Syntax>ROMAN(Number)</Syntax>
         <Example>ROMAN(99) returns "XCIX"</Example>
         <Example>ROMAN(-55) returns "Err"</Example>

@@ -359,10 +359,19 @@ Value func_lower (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_mid (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString str = calc->conv()->asString (args[0]).asString();
+
   int pos = calc->conv()->asInteger (args[1]).asInteger();
-  uint len = 0xffffffff;
-  if (args.count() == 3)
+  if ( pos < 0 ) {
+    return Value::errorVALUE();
+  }
+
+  int len = 0x7fffffff;
+  if (args.count() == 3) {
     len = (uint) calc->conv()->asInteger (args[2]).asInteger();
+    // the length cannot be less than zero
+    if ( len < 0 )
+      return Value::errorVALUE();
+  }
 
   // Excel compatible
   pos--;
@@ -581,13 +590,15 @@ Value func_substitute (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: T
 Value func_t (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->conv()->asString (args[0]);
+  if ( args[0].isString() )
+    return calc->conv()->asString (args[0]);
+  else
+    return Value::empty();
 }
 
 // Function: TEXT
 Value func_text (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  //Currently the same as the T function ...
   //Second parameter is format_text. It is currently ignored.
   return calc->conv()->asString (args[0]);
 }

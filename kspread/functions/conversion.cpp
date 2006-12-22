@@ -65,6 +65,7 @@ void RegisterConversionFunctions()
   f->setParamCount (2);
   repo->add (f);
   f = new Function ("ROMAN", func_roman);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("SEXDEC", func_sexdec);
   f->setParamCount (1, 3);
@@ -168,6 +169,9 @@ Value func_roman (valVector args, ValueCalc *calc, FuncExtra *)
   if ((value < 0) || (value > 3999))
     return Value::errorNA();
   QString result;
+  // There is an optional argument, but the specification only covers the case
+  // where it is zero for conciseness, and zero is the default. So we just
+  // ignore it.
   result = QString::fromLatin1 (RNThousands[(value / 1000)] +
                                 RNHundreds[(value / 100) % 10] +
                                 RNTens[(value / 10 ) % 10] +
