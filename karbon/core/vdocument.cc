@@ -80,37 +80,6 @@ VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins )
 	p->drawRect( m_width, - 2, 2, m_height );
 	p->drawRect( 0, - 2, m_width, 2 );
 	//p->drawRect( 0, m_height - 1, m_width, 1 );
-	/*
-	// Draw Grid
-	if( m_gridData.isShow )
-	{
-		VStroke s( 0, 1 );
-		s.setColor( m_gridData.color );
-		double dx = m_gridData.freq.width();
-		double dy = m_gridData.freq.height();
-		p->setPen( s );
-		p->setBrush( Qt::NoBrush );
-		QPointF p0( dx, dy );
-		while( p0.x() < m_width )
-		{
-			p->newPath();
-			p->moveTo( QPointF( p0.x(), 0 ) );
-			p->lineTo( QPointF( p0.x(), m_height ) );
-			p->strokePath();
-
-			p0.rx() += dx;
-		}
-		while( p0.y() < m_height )
-		{
-			p->newPath();
-			p->moveTo( QPointF( 0, p0.y() ) );
-			p->lineTo( QPointF( m_width, p0.y() ) );
-			p->strokePath();
-
-			p0.ry() += dy;
-		}
-	}
-	*/
 	// Draw page margins
 	if( showPageMargins )
 	{

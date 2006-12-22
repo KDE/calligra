@@ -31,7 +31,6 @@
 
 #include "vobject.h"
 
-#include "karbon_grid_data.h"
 #include <koffice_export.h>
 #include <KoShapeControllerBase.h>
 
@@ -305,13 +304,6 @@ public:
 	bool saveAsPath() const { return m_saveAsPath; }
 	void saveAsPath( bool b ) { m_saveAsPath = b; }
 
-	/**
-	 * Returns the document's grid.
-	 *
-	 * @return the doument's grid 
-	 */
-	KarbonGridData &grid() { return m_gridData; }
-
     QRectF boundingRect();
 
 private:
@@ -343,8 +335,6 @@ private:
 
 	// TODO this flag is used nowhere, can we remove it?
 	bool m_saveAsPath;
-
-	KarbonGridData m_gridData;
 };
 
 /*

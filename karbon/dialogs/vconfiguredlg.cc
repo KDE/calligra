@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +35,7 @@
 #include <KoUnitWidgets.h>
 #include <kinstance.h>
 #include <kicon.h>
+#include <KoGridData.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
@@ -296,40 +298,40 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 
 	m_view = view;
 	KoUnit unit = view->part()->document().unit();
-	KarbonGridData &gd = view->part()->document().grid();
+	KoGridData &gd = view->part()->gridData();
 	double pgw = view->part()->document().width();
 	double pgh = view->part()->document().height();
-	double fw, fh, sw, sh;
-	gd.spacing( &fw, &fh );
-	gd.snap( &sw, &sh );
 
 	QGroupBox* generalGrp = new QGroupBox( i18n("Grid"), this );
 	QGridLayout *layoutGeneral = new QGridLayout( generalGrp );
 	m_gridChBox = new QCheckBox( i18n( "Show &grid" ), generalGrp );
-	m_gridChBox->setChecked( gd.visible() );
-	m_snapChBox = new QCheckBox( i18n( "Snap to g&rid" ), generalGrp );
-	m_snapChBox->setChecked( gd.snapping() );
+	m_gridChBox->setChecked( gd.showGrid() );
+	//m_snapChBox = new QCheckBox( i18n( "Snap to g&rid" ), generalGrp );
+	//m_snapChBox->setChecked( gd.snapping() );
 	QLabel* gridColorLbl = new QLabel( i18n( "Grid &color:" ), generalGrp);
-	m_gridColorBtn = new KColorButton( gd.color(), generalGrp );
+	m_gridColorBtn = new KColorButton( gd.gridColor(), generalGrp );
 	gridColorLbl->setBuddy( m_gridColorBtn );
 	layoutGeneral->addWidget( m_gridChBox, 0, 0 );
-	layoutGeneral->addWidget( m_snapChBox, 1, 0 );
+	//layoutGeneral->addWidget( m_snapChBox, 1, 0 );
 	layoutGeneral->addWidget( gridColorLbl, 2, 0 );
 	layoutGeneral->addWidget( m_gridColorBtn, 2, 1 );
 
 	QGroupBox* spacingGrp = new QGroupBox( i18n( "Spacing" ), this );
 	QGridLayout* layoutSpacingGrp = new QGridLayout( spacingGrp );
 	QLabel* spaceHorizLbl = new QLabel( i18n( "&Horizontal:" ) );
-	m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgw, 0.1, fw, unit );
+	m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgw, 0.1, gd.gridX(), unit );
 	spaceHorizLbl->setBuddy( m_spaceHorizUSpin );
 	QLabel* spaceVertLbl = new QLabel( i18n( "&Vertical:" ) );
-	m_spaceVertUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgh, 0.1, fh, unit );
+	m_spaceVertUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pgh, 0.1, gd.gridY(), unit );
 	spaceVertLbl->setBuddy( m_spaceVertUSpin );
 	layoutSpacingGrp->addWidget(spaceHorizLbl, 0, 0);
 	layoutSpacingGrp->addWidget(m_spaceHorizUSpin, 0, 1);
 	layoutSpacingGrp->addWidget(spaceVertLbl, 1, 0);
 	layoutSpacingGrp->addWidget(m_spaceVertUSpin, 1, 1);
 
+    /*
+    double sw, sh;
+    gd.snap( &sw, &sh );
 	QGroupBox* snapGrp = new QGroupBox( i18n( "Snap Distance" ), this );
 	QGridLayout* layoutSnapGrp = new QGridLayout( snapGrp );
 	QLabel* snapHorizLbl = new QLabel( i18n( "H&orizontal:" ) );
@@ -342,6 +344,7 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 	layoutSnapGrp->addWidget(m_snapHorizUSpin, 0, 1);
 	layoutSnapGrp->addWidget(snapVertLbl, 1, 0);
 	layoutSnapGrp->addWidget(m_snapVertUSpin, 1, 1);
+    */
 
 	QGridLayout* gl = new QGridLayout( this );
 	gl->setSpacing( KDialog::spacingHint() );
@@ -349,10 +352,10 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 	gl->addWidget( generalGrp, 0, 0, 1, 2 );
 	gl->addItem( new QSpacerItem( 0, 0 ), 1, 1 );
 	gl->addWidget( spacingGrp, 2, 0, 1, 2 );
-	gl->addWidget( snapGrp, 3, 0, 1, 2 );
+	//gl->addWidget( snapGrp, 3, 0, 1, 2 );
 	gl->addItem( new QSpacerItem( 0, 0 ), 4, 0, 1, 2 );
 
-	setValuesFromGrid( view->part()->document().grid() );
+	setValuesFromGrid( view->part()->gridData() );
 
 	connect( m_spaceHorizUSpin, SIGNAL( valueChangedPt( double ) ), SLOT( setMaxHorizSnap( double ) ) );
 	connect( m_spaceVertUSpin, SIGNAL( valueChangedPt( double ) ), SLOT( setMaxVertSnap( double ) ) ) ;
@@ -360,67 +363,68 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 
 void VConfigGridPage::setMaxHorizSnap( double v )
 {
-	m_snapHorizUSpin->setMaximum( v );
+	//m_snapHorizUSpin->setMaximum( v );
 }
 
 void VConfigGridPage::setMaxVertSnap( double v )
 {
-	m_snapVertUSpin->setMaximum( v );
+	//m_snapVertUSpin->setMaximum( v );
 }
 
 void VConfigGridPage::slotUnitChanged( int u )
 {
 	KoUnit unit = KoUnit((KoUnit::Unit) u );
-	m_snapHorizUSpin->setUnit( unit );
-	m_snapVertUSpin->setUnit( unit );
+	//m_snapHorizUSpin->setUnit( unit );
+	//m_snapVertUSpin->setUnit( unit );
 	m_spaceHorizUSpin->setUnit( unit );
 	m_spaceVertUSpin->setUnit( unit );
 }
 
 void VConfigGridPage::apply()
 {
-	KarbonGridData &gd = m_view->part()->document().grid();
-	gd.setSpacing( m_spaceHorizUSpin->value(), m_spaceVertUSpin->value() );
-	gd.setSnap( m_snapHorizUSpin->value(), m_snapVertUSpin->value() );
-	gd.setVisible( m_gridChBox->isChecked() );
-	gd.setSnapping( m_snapChBox->isChecked() );
-	gd.setColor( m_gridColorBtn->color() );
+	KoGridData &gd = m_view->part()->gridData();
+	gd.setGrid( m_spaceHorizUSpin->value(), m_spaceVertUSpin->value() );
+	//gd.setSnap( m_snapHorizUSpin->value(), m_snapVertUSpin->value() );
+	gd.setShowGrid( m_gridChBox->isChecked() );
+	//gd.setSnapping( m_snapChBox->isChecked() );
+	gd.setGridColor( m_gridColorBtn->color() );
 	m_view->repaintAll();
 
 	m_config->setGroup( "Grid" );
-	m_config->writeEntry( "SpacingX", gd.spacingX() );
-	m_config->writeEntry( "SpacingY", gd.spacingY() );
-	m_config->writeEntry( "SnapX", gd.snapX() );
-	m_config->writeEntry( "SnapY", gd.snapY() );
-	m_config->writeEntry( "Color", gd.color() );
+	m_config->writeEntry( "SpacingX", gd.gridX() );
+	m_config->writeEntry( "SpacingY", gd.gridY() );
+	//m_config->writeEntry( "SnapX", gd.snapX() );
+	//m_config->writeEntry( "SnapY", gd.snapY() );
+	m_config->writeEntry( "Color", gd.gridColor() );
 }
 
 void VConfigGridPage::slotDefault()
 {
-	KarbonGridData defGrid;
+	KoGridData defGrid;
 	setValuesFromGrid( defGrid );
 }
 
-void VConfigGridPage::setValuesFromGrid( const KarbonGridData &grid )
+void VConfigGridPage::setValuesFromGrid( const KoGridData &grid )
 {
 	double docW = m_view->part()->document().width();
 	double docH = m_view->part()->document().height();
 
 	m_spaceHorizUSpin->setMaximum( docW );
-	m_spaceHorizUSpin->changeValue( grid.spacingX() );
+	m_spaceHorizUSpin->changeValue( grid.gridX() );
 
 	m_spaceVertUSpin->setMaximum( docH );
-	m_spaceVertUSpin->changeValue( grid.spacingY() );
+	m_spaceVertUSpin->changeValue( grid.gridY() );
 
+    /*
 	m_snapHorizUSpin->setMaximum( grid.spacingX() );
 	m_snapHorizUSpin->changeValue( grid.snapX() );
 
 	m_snapVertUSpin->setMaximum( grid.spacingY() );
 	m_snapVertUSpin->changeValue( grid.snapY() );
-
-	m_gridChBox->setChecked( grid.visible() );
-	m_snapChBox->setChecked( grid.snapping() );
-	m_gridColorBtn->setColor( grid.color() );
+    */
+	m_gridChBox->setChecked( grid.showGrid() );
+	//m_snapChBox->setChecked( grid.snapping() );
+	m_gridColorBtn->setColor( grid.gridColor() );
 }
 
 VConfigDefaultPage::VConfigDefaultPage( KarbonView* view, char* name )

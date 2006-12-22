@@ -63,8 +63,7 @@ set(karboncommon_LIB_SRCS
    karbon_view.cc 
 #   karbon_view_iface.cc 
    karbon_drag.cpp 
-   karbon_grid_data.cpp 
-   karbon_tool_registry.cc 
+   karbon_tool_registry.cc
    karbon_tool_factory.cc 
    vtoolcontroller.cc 
    vtool.cc )

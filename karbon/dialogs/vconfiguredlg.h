@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, Laurent Montel <lmontel@mandrakesoft.com>
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -110,7 +111,7 @@ private:
 	bool m_oldSaveAsPath;
 };
 
-class KarbonGridData;
+class KoGridData;
 
 class VConfigGridPage : public QWidget
 {
@@ -131,15 +132,15 @@ protected slots:
 	void setMaxVertSnap( double v );
 
 private:
-	void setValuesFromGrid( const KarbonGridData &grid );
+	void setValuesFromGrid( const KoGridData &grid );
 
 	KarbonView* m_view;
 	KoUnitDoubleSpinBox* m_spaceHorizUSpin;
 	KoUnitDoubleSpinBox* m_spaceVertUSpin;
-	KoUnitDoubleSpinBox* m_snapHorizUSpin;
-	KoUnitDoubleSpinBox* m_snapVertUSpin;
+	//KoUnitDoubleSpinBox* m_snapHorizUSpin;
+	//KoUnitDoubleSpinBox* m_snapVertUSpin;
 	QCheckBox* m_gridChBox;
-	QCheckBox* m_snapChBox;
+	//QCheckBox* m_snapChBox;
 	KColorButton* m_gridColorBtn;
 	KConfig* m_config;
 };

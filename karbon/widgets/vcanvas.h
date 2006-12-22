@@ -119,6 +119,9 @@ protected:
     QRect viewToWidget( const QRect& r ) const;
 
 private:
+    /// paint the grid
+    void paintGrid( QPainter &painter, const KoViewConverter &converter, const QRectF &area );
+
     KoShapeManager* m_shapeManager;
     KoZoomHandler m_zoomHandler;
 

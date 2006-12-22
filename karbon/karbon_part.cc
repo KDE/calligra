@@ -579,16 +579,17 @@ KarbonPart::initConfig()
 	}
 	if( config->hasGroup( "Grid" ) )
 	{
-		KarbonGridData defGrid;
+		KoGridData defGrid;
 		config->setGroup( "Grid" );
-		double spacingX = config->readEntry<double>( "SpacingX", defGrid.spacingX() );
-		double spacingY = config->readEntry<double>( "SpacingY", defGrid.spacingY() );
-		m_doc.grid().setSpacing( spacingX, spacingY );
-		double snapX = config->readEntry<double>( "SnapX", defGrid.snapX() );
-		double snapY = config->readEntry<double>( "SnapY", defGrid.snapY() );
-		m_doc.grid().setSnap( snapX, snapY );
-		QColor color = config->readEntry<QColor>( "Color", defGrid.color() );
-		m_doc.grid().setColor( color );
+		double spacingX = config->readEntry<double>( "SpacingX", defGrid.gridX() );
+		double spacingY = config->readEntry<double>( "SpacingY", defGrid.gridY() );
+		gridData().setGrid( spacingX, spacingY );
+		//double snapX = config->readEntry<double>( "SnapX", defGrid.snapX() );
+		//double snapY = config->readEntry<double>( "SnapY", defGrid.snapY() );
+		//m_doc.grid().setSnap( snapX, snapY );
+		QColor color = config->readEntry<QColor>( "Color", defGrid.gridColor() );
+		gridData().setGridColor( color );
+        gridData().setShowGrid( false );
 	}
 	if( undos != -1 )
 		setUndoRedoLimit( undos );

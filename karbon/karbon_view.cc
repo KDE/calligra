@@ -1420,7 +1420,7 @@ KarbonView::showGrid()
 {
 	debugView("KarbonView::showGrid()");
 
-	m_part->document().grid().setVisible( m_showGridAction->isChecked() );
+	m_part->gridData().setShowGrid( m_showGridAction->isChecked() );
 	m_canvas->update();
 }
 
@@ -1429,7 +1429,7 @@ KarbonView::snapToGrid()
 {
 	debugView("KarbonView::snapToGrid()");
 
-	m_part->document().grid().setSnapping( m_snapGridAction->isChecked() );
+	m_part->gridData().setSnapToGrid( m_snapGridAction->isChecked() );
 	m_canvas->update();
 }
 

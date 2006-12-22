@@ -90,8 +90,7 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     //gc.setBrush( Qt::white );
     gc.drawRect( m_zoomHandler.documentToView( m_documentRect ) );
 
-    if( m_doc->grid().visible() )
-        m_doc->grid().paint( gc, m_zoomHandler, m_zoomHandler.viewToDocument( widgetToView( ev->rect() ) ) );
+    paintGrid( gc, m_zoomHandler, m_zoomHandler.viewToDocument( widgetToView( ev->rect() ) ) );
 
     m_shapeManager->paint( gc, m_zoomHandler, false );
     m_toolProxy->paint( gc, m_zoomHandler );
@@ -99,6 +98,47 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     gc.end();
 }
 
+void KarbonCanvas::paintGrid( QPainter &painter, const KoViewConverter &converter, const QRectF &area )
+{
+    if( ! m_part->gridData().showGrid() )
+        return;
+
+    painter.setPen( m_part->gridData().gridColor() );
+
+    double gridX = m_part->gridData().gridX();
+
+    double x = 0.0;
+    do {
+        painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ), 
+                          converter.documentToView( QPointF( x, area.bottom() ) ) );
+        x += gridX;
+    } while( x <= area.right() );
+
+    x = - gridX;
+    while( x >= area.left() )
+    {
+        painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ),
+                          converter.documentToView( QPointF( x, area.bottom() ) ) );
+        x -= gridX;
+    };
+
+    double gridY = m_part->gridData().gridY();
+
+    double y = 0.0;
+    do {
+        painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ), 
+                          converter.documentToView( QPointF( area.right(), y ) ) );
+        y += gridY;
+    } while( y <= area.bottom() );
+
+    y = - gridY;
+    while( y >= area.top() )
+    {
+        painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ), 
+                          converter.documentToView( QPointF( area.right(), y ) ) );
+        y -= gridY;
+    };
+}
 void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
 {
     m_toolProxy->mouseMoveEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
@@ -138,11 +178,14 @@ void KarbonCanvas::wheelEvent( QWheelEvent *e )
 }
 
 void KarbonCanvas::gridSize(double *horizontal, double *vertical) const {
-    m_doc->grid().spacing( horizontal, vertical );
+    if( horizontal )
+        *horizontal = m_part->gridData().gridX();
+    if( vertical )
+        *vertical = m_part->gridData().gridY();
 }
 
 bool KarbonCanvas::snapToGrid() const {
-    return m_doc->grid().snapping();
+    return m_part->gridData().snapToGrid();
 }
 
 void KarbonCanvas::addCommand(QUndoCommand *command) {
