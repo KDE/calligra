@@ -45,8 +45,8 @@ public:
 	VBooleanCmd( VDocument* doc, VBooleanType type = intersect );
 	virtual ~VBooleanCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 
 
 	// We can only visit object pairs.

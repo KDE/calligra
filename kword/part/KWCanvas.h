@@ -63,7 +63,7 @@ public:
     /// reimplemented method from superclass
     bool snapToGrid() const;
     /// reimplemented method from superclass
-    void addCommand(KCommand *command, bool execute = true);
+    void addCommand(QUndoCommand *command);
     /// reimplemented method from superclass
     KoShapeManager *shapeManager() const { return m_shapeManager; }
     /// reimplemented method from superclass

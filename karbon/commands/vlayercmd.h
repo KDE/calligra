@@ -21,7 +21,7 @@
 #ifndef __VLAYERCMD_H__
 #define __VLAYERCMD_H__
 
-#include <kcommand.h>
+#include <QUndoCommand>
 
 class VDocument;
 class KoLayerShape;
@@ -29,7 +29,7 @@ class KoShapeControllerBase;
 class KoShapeDeleteCommand;
 
 /// Command for deleting layers
-class VLayerDeleteCmd : public KCommand
+class VLayerDeleteCmd : public QUndoCommand
 {
 public:
     /**
@@ -38,7 +38,7 @@ public:
      * @param controller the controller to remove the layers shape from
      * @param layer the layer which is subject to the command
      */
-    VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, KoLayerShape* layer );
+    VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, KoLayerShape* layer, QUndoCommand* parent = 0 );
 
     /**
      * Layer command which works on a list of layers.
@@ -46,15 +46,13 @@ public:
      * @param controller the controller to remove the layers shape from
      * @param layers the layers which are subject to the command
      */
-    VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, const QList<KoLayerShape*> &layers );
+    VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, const QList<KoLayerShape*> &layers, QUndoCommand* parent = 0 );
     virtual ~VLayerDeleteCmd();
 
-    /// execute the command
-    virtual void execute ();
-    /// revert the actions done in execute
-    virtual void unexecute ();
-    /// return the name of this command
-    virtual QString name () const;
+    /// redo the command
+    virtual void redo ();
+    /// revert the actions done in redo
+    virtual void undo ();
 private:
     VDocument *m_document;               ///< the document to work on
     KoShapeControllerBase *m_controller; ///< the shape controller to remove the layers shapes from
@@ -64,7 +62,7 @@ private:
 };
 
 /// Command for creating layers
-class VLayerCreateCmd : public KCommand
+class VLayerCreateCmd : public QUndoCommand
 {
 public:
     /**
@@ -72,16 +70,14 @@ public:
      * @param document the document containing the layer
      * @param layer the layer which is subject to the command
      */
-    VLayerCreateCmd( VDocument* document, KoLayerShape* layer );
+    VLayerCreateCmd( VDocument* document, KoLayerShape* layer, QUndoCommand* parent = 0 );
 
     virtual ~VLayerCreateCmd();
 
-    /// execute the command
-    virtual void execute ();
-    /// revert the actions done in execute
-    virtual void unexecute ();
-    /// return the name of this command
-    virtual QString name () const;
+    /// redo the command
+    virtual void redo ();
+    /// revert the actions done in redo
+    virtual void undo ();
 
 private:
     VDocument *m_document;    ///< the document to work on
@@ -90,7 +86,7 @@ private:
 };
 
 /// Command for raising or lowering layers
-class VLayerZOrderCmd : public KCommand
+class VLayerZOrderCmd : public QUndoCommand
 {
 public:
     /// The different types of layer commands.
@@ -104,31 +100,29 @@ public:
      * Layer command which works on a single layer.
      * @param document the document containing the layer
      * @param layer the layer which is subject to the command
-     * @param commandType the type of the command to execute
+     * @param commandType the type of the command to redo
      */
-    VLayerZOrderCmd( VDocument* document, KoLayerShape* layer, VLayerCmdType commandType );
+    VLayerZOrderCmd( VDocument* document, KoLayerShape* layer, VLayerCmdType commandType, QUndoCommand* parent = 0 );
 
     /**
      * Layer command which works on a single layer.
      * @param document the document containing the layer
      * @param layers the list of layers which are subject to the command
-     * @param commandType the type of the command to execute
+     * @param commandType the type of the command to redo
      */
-    VLayerZOrderCmd( VDocument* document, QList<KoLayerShape*> layers, VLayerCmdType commandType );
+    VLayerZOrderCmd( VDocument* document, QList<KoLayerShape*> layers, VLayerCmdType commandType, QUndoCommand* parent = 0 );
 
     virtual ~VLayerZOrderCmd();
 
-    /// execute the command
-    virtual void execute ();
-    /// revert the actions done in execute
-    virtual void unexecute ();
-    /// return the name of this command
-    virtual QString name () const;
+    /// redo the command
+    virtual void redo ();
+    /// revert the actions done in redo
+    virtual void undo ();
 
 private:
     VDocument *m_document;         ///< the document to work on
     QList<KoLayerShape*> m_layers; ///< the list of layers subject to the command
-    VLayerCmdType m_cmdType;       ///< the type of the command to execute
+    VLayerCmdType m_cmdType;       ///< the type of the command to redo
 };
 
 #endif

@@ -76,8 +76,8 @@ public:
 		double angle, double pinch, double radius );
 	virtual ~VWhirlPinchCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 
 	virtual void visitVPath( VPath& composite );
 	virtual void visitVSubpath( VSubpath& path );

@@ -136,13 +136,6 @@ KoView* KWDocument::createViewInstance(QWidget* parent) {
             view->kwcanvas()->shapeManager()->add(frame->shape());
         }
     }
-    KAction *undo = m_commandHistory.createUndoAction(view->actionCollection());
-    connect(undo, SIGNAL(triggered(bool)), view, SLOT(editUndo()));
-    KAction *redo = m_commandHistory.createRedoAction(view->actionCollection());
-    connect(redo, SIGNAL(triggered(bool)), view, SLOT(editRedo()));
-
-    connect(view, SIGNAL(undo()), &m_commandHistory, SLOT(undo()));
-    connect(view, SIGNAL(redo()), &m_commandHistory, SLOT(redo()));
 
     return view;
 }
@@ -472,10 +465,6 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     // Note that more stuff will happen in completeLoading
 
     setModified(false);
-}
-
-void KWDocument::addCommand(KCommand *command, bool execute) {
-    m_commandHistory.addCommand2(command, execute);
 }
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {

@@ -75,7 +75,7 @@ VTransformCmd::~VTransformCmd()
 }
 
 void
-VTransformCmd::execute()
+VTransformCmd::redo()
 {
 	VObjectListIterator itr( m_selection->objects() );
 
@@ -112,7 +112,7 @@ VTransformCmd::execute()
 }
 
 void
-VTransformCmd::unexecute()
+VTransformCmd::undo()
 {
 	// inverting the matrix should undo the affine transformation
 	m_mat = m_mat.inverted();
@@ -300,7 +300,7 @@ VTranslateBezierCmd::~VTranslateBezierCmd()
 }
 
 void
-VTranslateBezierCmd::execute()
+VTranslateBezierCmd::redo()
 {
 	if( m_segment->degree() == 3 )
 	{
@@ -352,7 +352,7 @@ VTranslateBezierCmd::execute()
 }
 
 void
-VTranslateBezierCmd::unexecute()
+VTranslateBezierCmd::undo()
 {
 	QMatrix m2( m_mat.m11(), m_mat.m12(), m_mat.m21(), m_mat.m22(), -m_mat.dx(), -m_mat.dy() );
 	if( m_segment )
@@ -423,14 +423,14 @@ VTranslatePointCmd::~VTranslatePointCmd()
 }
 
 void
-VTranslatePointCmd::execute()
+VTranslatePointCmd::redo()
 {
 	translatePoints();
 	setSuccess( true );
 }
 
 void
-VTranslatePointCmd::unexecute()
+VTranslatePointCmd::undo()
 {
 	m_mat = m_mat.inverted();
 	translatePoints();

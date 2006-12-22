@@ -192,12 +192,6 @@ public:
      */
     const KoStyleManager *styleManager() const { return m_styleManager; }
 
-    /**
-     * Add a command to the history.
-     * @see KCommandHistory::addCommand()
-     */
-    void addCommand(KCommand *command, bool execute = true);
-
 #ifndef NDEBUG
     /// Use a log of kDebug calls to print out the internal state of the document and its members
     void printDebug();

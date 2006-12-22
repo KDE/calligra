@@ -151,7 +151,7 @@ VCreateShadowCmd::~VCreateShadowCmd()
 }
 
 void
-VCreateShadowCmd::execute()
+VCreateShadowCmd::redo()
 {
 	// Did we have at least once a success? Otherwise we don't get inserted
 	// into the command history.
@@ -222,7 +222,7 @@ VCreateShadowCmd::execute()
 }
 
 void
-VCreateShadowCmd::unexecute()
+VCreateShadowCmd::undo()
 {
 	// Nothing to do.
 	if( m_newObjects->objects().count() == 0 )

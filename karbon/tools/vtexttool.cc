@@ -972,7 +972,7 @@ VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text 
 {
 	m_textModifications = 0L;
 
-	m_executed = false;
+	m_redod = false;
 }
 
 VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text,
@@ -1002,7 +1002,7 @@ VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text,
 	m_textModifications->newTranslucentShadow = newTranslucentShadow;
 	m_textModifications->oldTranslucentShadow = text->translucentShadow();
 
-	m_executed = false;
+	m_redod = false;
 }
 
 VTextTool::VTextCmd::~VTextCmd()
@@ -1011,7 +1011,7 @@ VTextTool::VTextCmd::~VTextCmd()
 }
 
 void
-VTextTool::VTextCmd::execute()
+VTextTool::VTextCmd::redo()
 {
 	if( !m_text )
 		return;
@@ -1048,13 +1048,13 @@ VTextTool::VTextCmd::execute()
 		m_text->setState( VObject::normal );
 	}
 
-	m_executed = true;
+	m_redod = true;
 
 	setSuccess( true );
 }
 
 void
-VTextTool::VTextCmd::unexecute()
+VTextTool::VTextCmd::undo()
 {
 	if( !m_text )
 		return;
@@ -1082,13 +1082,13 @@ VTextTool::VTextCmd::unexecute()
 		m_text->setState( VObject::normal );
 	}
 
-	m_executed = false;
+	m_redod = false;
 
 	setSuccess( false );
 }
 
 VTextTool::VTextToCompositeCmd::VTextToCompositeCmd( VDocument* doc, const QString& name, VText* text )
-		: VCommand( doc, name, "14_text" ), m_text( text ), m_group( 0L ), m_executed( false )
+		: VCommand( doc, name, "14_text" ), m_text( text ), m_group( 0L ), m_redod( false )
 {
 }
 
@@ -1097,7 +1097,7 @@ VTextTool::VTextToCompositeCmd::~VTextToCompositeCmd()
 }
 
 void
-VTextTool::VTextToCompositeCmd::execute()
+VTextTool::VTextToCompositeCmd::redo()
 {
 	if( !m_text )
 		return;
@@ -1116,13 +1116,13 @@ VTextTool::VTextToCompositeCmd::execute()
 	document()->selection()->clear();
 	document()->selection()->append( m_group );
 
-	m_executed = true;
+	m_redod = true;
 
 	setSuccess( true );
 }
 
 void
-VTextTool::VTextToCompositeCmd::unexecute()
+VTextTool::VTextToCompositeCmd::undo()
 {
 	if( !m_text )
 		return;
@@ -1133,7 +1133,7 @@ VTextTool::VTextToCompositeCmd::unexecute()
 
 	m_group->setState( VObject::deleted );
 
-	m_executed = false;
+	m_redod = false;
 
 	setSuccess( false );
 }

@@ -36,8 +36,8 @@ class VSelection;
 class KARBONCOMMAND_EXPORT VReplacingCmd : public VCommand
 {
 public:
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 
 protected:
 	/**

@@ -50,12 +50,6 @@ KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool single
 
     setUnit(KGlobal::locale()->measureSystem() == KLocale::Metric ? KoUnit(KoUnit::Centimeter) : KoUnit(KoUnit::Inch));
 
-    m_commandHistory = new KCommandHistory(actionCollection(), true);
-    connect(m_commandHistory, SIGNAL(documentRestored()),
-            this, SLOT(slotDocumentRestored()));
-    connect(m_commandHistory, SIGNAL(commandExecuted(KCommand*)),
-            this, SLOT(slotCommandExecuted()));
-
     //TODO Remove when ready testing
     KivioMasterPage* masterPage = addMasterPage("standard");
     addPage(masterPage, "page 1");
@@ -63,9 +57,6 @@ KivioDocument::KivioDocument(QWidget* parentWidget, QObject* parent, bool single
 
 KivioDocument::~KivioDocument()
 {
-    delete m_commandHistory;
-    m_commandHistory = 0;
-
     qDeleteAll(m_pageList);
     m_pageList.clear();
     qDeleteAll(m_masterPageList);
@@ -148,36 +139,6 @@ bool KivioDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
 KoView* KivioDocument::createViewInstance(QWidget* parent)
 {
     return new KivioView(this, parent);
-}
-
-void KivioDocument::addCommand(KCommand* command, bool execute)
-{
-    if(!command) return;
-
-    m_commandHistory->addCommand(command, execute);
-
-    if(!execute) {
-        slotCommandExecuted();
-    }
-}
-
-void KivioDocument::slotDocumentRestored()
-{
-    setModified(false);
-}
-
-void KivioDocument::slotCommandExecuted()
-{
-    setModified(true);
-    emit updateGui();
-}
-
-void KivioDocument::addShell(KoMainWindow* shell)
-{
-    connect(shell, SIGNAL(documentSaved()), m_commandHistory, SLOT(documentSaved()));
-    connect(shell, SIGNAL(saveDialogShown()), this, SLOT(saveDialogShown()));
-
-    KoDocument::addShell(shell);
 }
 
 KivioMasterPage* KivioDocument::addMasterPage(const QString& title)

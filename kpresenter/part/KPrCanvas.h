@@ -35,7 +35,7 @@ public:
     
     void gridSize( double *horizontal, double *vertical ) const;
     bool snapToGrid() const;
-    void addCommand( KCommand *command, bool execute = true );
+    void addCommand( QUndoCommand *command );
     KoShapeManager * shapeManager() const;
     void updateCanvas( const QRectF& rc );
 

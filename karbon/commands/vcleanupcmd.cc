@@ -32,13 +32,13 @@ VCleanUpCmd::~VCleanUpCmd()
 }
 
 void
-VCleanUpCmd::execute()
+VCleanUpCmd::redo()
 {
 	visit( *document() );
 }
 
 void
-VCleanUpCmd::unexecute()
+VCleanUpCmd::undo()
 {
 }
 

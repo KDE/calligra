@@ -186,7 +186,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 	// widgets:
     m_canvas = new KarbonCanvas( p );
-    m_canvas->setCommandHistory( p->commandHistory() );
     m_canvas->setParent( this );
 
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
@@ -540,7 +539,7 @@ KarbonView::editDeleteSelection()
 	selection->deselectAll();
 
 	KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( part(), selectedShapes );
-	part()->commandHistory()->addCommand( cmd, true );
+	part()->KoDocument::addCommand( cmd );
 }
 
 void
@@ -622,7 +621,7 @@ KarbonView::selectionAlign(KoShapeAlignCommand::Align align)
 	bRect= (selectedShapes.count() == 1) ? part()->document().boundingRect() : selection->boundingRect();
 	KoShapeAlignCommand *cmd = new KoShapeAlignCommand( selectedShapes, align, bRect);
 
-	part()->commandHistory()->addCommand( cmd, true );
+	part()->KoDocument::addCommand( cmd );
 }
 
 
@@ -702,7 +701,7 @@ KarbonView::selectionDistribute(KoShapeDistributeCommand::Distribute distribute)
 
 	KoShapeDistributeCommand *cmd = new KoShapeDistributeCommand( selectedShapes, distribute, selection->boundingRect());
 
-	part()->commandHistory()->addCommand( cmd, true );
+	part()->KoDocument::addCommand( cmd );
 }
 
 void
@@ -792,11 +791,11 @@ KarbonView::groupSelection()
 		groupedShapes << shape;
 	}
 
-	KMacroCommand *cmd = new KMacroCommand( i18n("Group shapes") );
-	cmd->addCommand( new KoShapeCreateCommand( m_part, group ) );
-	cmd->addCommand( new KoGroupShapesCommand( group, groupedShapes ) );
+	QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
+	new KoShapeCreateCommand( m_part, group, cmd );
+	new KoGroupShapesCommand( group, groupedShapes, cmd );
 
-	part()->commandHistory()->addCommand( cmd, true );
+	part()->KoDocument::addCommand( cmd );
 }
 
 void
@@ -819,7 +818,7 @@ KarbonView::ungroupSelection()
 		containerSet << shape;
 	}
 
-	KMacroCommand *cmd = new KMacroCommand( i18n("Ungroup shapes") );
+	QUndoCommand *cmd = new QUndoCommand( i18n("Ungroup shapes") );
 
 	// add a ungroup command for each found shape container to the macro command
 	foreach( KoShape* shape, containerSet )
@@ -827,11 +826,11 @@ KarbonView::ungroupSelection()
 		KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
 		if( container )
         {
-			cmd->addCommand( new KoUngroupShapesCommand( container, container->iterator() ) );
-            cmd->addCommand( new KoShapeDeleteCommand( m_part, container ) );
+			new KoUngroupShapesCommand( container, container->iterator(), cmd );
+            new KoShapeDeleteCommand( m_part, container, cmd );
         }
 	}
-	part()->commandHistory()->addCommand( cmd, true );
+	part()->KoDocument::addCommand( cmd );
 }
 
 void
@@ -865,7 +864,7 @@ KarbonView::combinePath()
 	}
 
 	if( paths.size() )
-		m_canvas->addCommand( new KoPathCombineCommand( part(), paths ), true );
+		m_canvas->addCommand( new KoPathCombineCommand( part(), paths ) );
 }
 
 void
@@ -890,7 +889,7 @@ KarbonView::separatePath()
 	}
 
 	if( paths.size() )
-		m_canvas->addCommand( new KoPathSeparateCommand( part(), paths ), true );
+		m_canvas->addCommand( new KoPathSeparateCommand( part(), paths ) );
 }
 
 void

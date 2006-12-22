@@ -29,7 +29,6 @@
 
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoDocument( parentWidget, parent, singleViewMode )
-, m_commandHistory( new KCommandHistory() )
 {
     m_pageList.append( new KPrPage(this) );
 }
@@ -60,11 +59,6 @@ bool KPrDocument::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyl
 bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
     return true;
-}
-
-void KPrDocument::addCommand( KCommand* command, bool execute )
-{
-    m_commandHistory->addCommand( command, execute );
 }
 
 KoView * KPrDocument::createViewInstance( QWidget *parent )

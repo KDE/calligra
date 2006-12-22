@@ -52,8 +52,8 @@ protected:
 		VInsertImageCmd( VDocument* doc, const QString& name, VImage *image, QPointF pos );
 		virtual ~VInsertImageCmd() {}
 
-		virtual void execute();
-		virtual void unexecute();
+		virtual void redo();
+		virtual void undo();
 		virtual bool changesSelection() const { return true; }
 
 	protected:

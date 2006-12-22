@@ -116,7 +116,7 @@ VStrokeCmd::changeStroke( const VColor &color )
 }
 
 void
-VStrokeCmd::execute()
+VStrokeCmd::redo()
 {
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
@@ -181,7 +181,7 @@ VStrokeCmd::execute()
 }
 
 void
-VStrokeCmd::unexecute()
+VStrokeCmd::undo()
 {
 	VObjectListIterator itr( m_selection->objects() );
 	int i = 0;

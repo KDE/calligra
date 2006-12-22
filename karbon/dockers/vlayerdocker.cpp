@@ -210,7 +210,7 @@ void VLayerDocker::addLayer()
     {
         KoLayerShape* layer = new KoLayerShape();
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        canvasController->canvas()->addCommand( new VLayerCreateCmd( m_document, layer ), true );
+        canvasController->canvas()->addCommand( new VLayerCreateCmd( m_document, layer ) );
         m_document->setObjectName( layer, name );
         m_model->update();
     }
@@ -224,7 +224,7 @@ void VLayerDocker::deleteItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
 
-    KCommand *cmd = 0;
+    QUndoCommand *cmd = 0;
 
     if( selectedLayers.count() )
     {
@@ -243,7 +243,7 @@ void VLayerDocker::deleteItem()
     if( cmd )
     {
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        canvasController->canvas()->addCommand( cmd, true );
+        canvasController->canvas()->addCommand( cmd );
         m_model->update();
     }
 }
@@ -256,7 +256,7 @@ void VLayerDocker::raiseItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
 
-    KCommand *cmd = 0;
+    QUndoCommand *cmd = 0;
 
     if( selectedLayers.count() )
     {
@@ -275,7 +275,7 @@ void VLayerDocker::raiseItem()
     if( cmd )
     {
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        canvasController->canvas()->addCommand( cmd, true );
+        canvasController->canvas()->addCommand( cmd );
         m_model->update();
     }
 }
@@ -288,7 +288,7 @@ void VLayerDocker::lowerItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
 
-    KCommand *cmd = 0;
+    QUndoCommand *cmd = 0;
 
     if( selectedLayers.count() )
     {
@@ -307,7 +307,7 @@ void VLayerDocker::lowerItem()
     if( cmd )
     {
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        canvasController->canvas()->addCommand( cmd, true );
+        canvasController->canvas()->addCommand( cmd );
         m_model->update();
     }
 }

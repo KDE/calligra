@@ -37,8 +37,8 @@ public:
 	VFillCmd( VDocument *doc, const VFill &, const QString& icon = "14_action" );
 	virtual ~VFillCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 
 	virtual bool changesSelection() const { return true; }
 

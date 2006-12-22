@@ -88,7 +88,7 @@ VImageTool::VInsertImageCmd::VInsertImageCmd( VDocument* doc, const QString& nam
 }
 
 void
-VImageTool::VInsertImageCmd::execute()
+VImageTool::VInsertImageCmd::redo()
 {
 	if( !m_image )
 		return;
@@ -110,7 +110,7 @@ VImageTool::VInsertImageCmd::execute()
 }
 
 void
-VImageTool::VInsertImageCmd::unexecute()
+VImageTool::VInsertImageCmd::undo()
 {
 	if( !m_image )
 		return;

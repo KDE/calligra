@@ -1142,7 +1142,7 @@ void KWView::formatFont() {
 
 void KWView::editDeleteFrame() {
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KCommand *cmd = kwcanvas()->shapeController()->removeShape(shape);
+        QUndoCommand *cmd = kwcanvas()->shapeController()->removeShape(shape);
         m_document->addCommand(cmd);
     }
 }
@@ -1187,7 +1187,7 @@ void KWView::toggleSnapToGrid() {
 }
 
 void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType direction) {
-    KCommand *cmd = KoShapeReorderCommand::createCommand(kwcanvas()->shapeManager()->selection()->selectedShapes(),
+    QUndoCommand *cmd = KoShapeReorderCommand::createCommand(kwcanvas()->shapeManager()->selection()->selectedShapes(),
         kwcanvas()->shapeManager(), direction);
     if(cmd)
         m_document->addCommand(cmd);

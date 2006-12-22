@@ -52,6 +52,7 @@ KarbonCanvas::KarbonCanvas( KarbonPart *p )
     , KoCanvasBase( p )
     , m_zoomHandler()
     , m_doc( &( p->document() ) )
+    , m_part( p )
     , m_marginX( defaultMargin )
     , m_marginY( defaultMargin )
     , m_visibleWidth( 500 )
@@ -144,10 +145,9 @@ bool KarbonCanvas::snapToGrid() const {
     return m_doc->grid().snapping();
 }
 
-void KarbonCanvas::addCommand(KCommand *command, bool execute) {
+void KarbonCanvas::addCommand(QUndoCommand *command) {
 
-    if( m_commandHistory )
-        m_commandHistory->addCommand(command, execute);
+    m_part->KoDocument::addCommand(command);
 }
 
 void KarbonCanvas::updateCanvas(const QRectF& rc) {

@@ -221,7 +221,7 @@ VTransformDocker::translate()
             oldPositions.append( shape->position() );
             newPositions.append( shape->position() + moveBy );
         }
-        canvasController->canvas()->addCommand( new KoShapeMoveCommand( selectedShapes, oldPositions, newPositions ), true );
+        canvasController->canvas()->addCommand( new KoShapeMoveCommand( selectedShapes, oldPositions, newPositions ) );
     }
     update();
 }
@@ -332,10 +332,10 @@ VTransformDocker::rotate()
 		newPositions << shape->position();
 	}
 	selection->rotate( selection->rotation() + relativeAngle );
-	KMacroCommand *cmd = new KMacroCommand("Rotate");
-	cmd->addCommand( new KoShapeMoveCommand( selectedShapes, oldPositions, newPositions ) );
-	cmd->addCommand( new KoShapeRotateCommand( selectedShapes, oldAngles, newAngles ) );
-	canvasController->canvas()->addCommand( cmd, true );
+	QUndoCommand *cmd = new QUndoCommand("Rotate");
+	new KoShapeMoveCommand( selectedShapes, oldPositions, newPositions, cmd );
+	new KoShapeRotateCommand( selectedShapes, oldAngles, newAngles, cmd );
+	canvasController->canvas()->addCommand( cmd );
 }
 
 #include "vtransformdocker.moc"

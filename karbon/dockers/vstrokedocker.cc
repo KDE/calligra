@@ -172,7 +172,7 @@ void VStrokeDocker::updateCanvas()
 	newBorder->setMiterLimit( m_border.miterLimit() );
 
 	KoShapeBorderCommand *cmd = new KoShapeBorderCommand( selection->selectedShapes(), newBorder );
-	canvasController->canvas()->addCommand( cmd, true );
+	canvasController->canvas()->addCommand( cmd );
 }
 
 void VStrokeDocker::slotCapChanged( int ID )

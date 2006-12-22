@@ -44,7 +44,7 @@ VZOrderCmd::~VZOrderCmd()
 }
 
 void
-VZOrderCmd::execute()
+VZOrderCmd::redo()
 {
 	/* TODO: porting to flake 
 	if( m_state == sendToBack )
@@ -142,31 +142,31 @@ VZOrderCmd::execute()
 }
 
 void
-VZOrderCmd::unexecute()
+VZOrderCmd::undo()
 {
 	/* TODO: porting to flake 
 	if( m_state == sendToBack )
 	{
 		m_state = bringToFront;
-		execute();
+		redo();
 		m_state = sendToBack;
 	}
 	else if( m_state == bringToFront )
 	{
 		m_state = sendToBack;
-		execute();
+		redo();
 		m_state = bringToFront;
 	}
 	else if( m_state == up )
 	{
 		m_state = down;
-		execute();
+		redo();
 		m_state = up;
 	}
 	else if( m_state == down )
 	{
 		m_state = up;
-		execute();
+		redo();
 		m_state = down;
 	}
 	setSuccess( false );

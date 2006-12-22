@@ -70,7 +70,7 @@ VCommandHistory::clear()
 }
 
 void
-VCommandHistory::addCommand( VCommand* command, bool execute )
+VCommandHistory::addCommand( VCommand* command, bool redo )
 {
 	if( command == 0L )
 		return;
@@ -87,9 +87,9 @@ VCommandHistory::addCommand( VCommand* command, bool execute )
 	m_commands.append( command );
 	kDebug(38000) << "History: new command: " << m_commands.findRef( command ) << endl;
 
-	if( execute )
+	if( redo )
 	{
-		command->execute();
+		command->redo();
 		emit commandExecuted( command );
 	}
 
@@ -130,7 +130,7 @@ VCommandHistory::undo()
 
 	VCommand* cmd = m_commands.at( i );
 
-	cmd->unexecute();
+	cmd->undo();
 
 	emit commandExecuted( cmd );
 
@@ -166,7 +166,7 @@ VCommandHistory::redo()
 	if( ( cmd = m_commands.at( i ) ) == 0L )
 		return;
 
-	cmd->execute();
+	cmd->redo();
 
 	emit commandExecuted( cmd );
 	emit commandExecuted();
@@ -182,7 +182,7 @@ VCommandHistory::undo( VCommand* command )
 	if( ( m_commands.findRef( command ) == -1 ) || ( !command->success() ) )
 		return;
 
-	command->unexecute();
+	command->undo();
 
 	emit commandExecuted( command );
 	emit commandExecuted();
@@ -198,7 +198,7 @@ VCommandHistory::redo( VCommand* command )
 	if( ( m_commands.findRef( command ) == -1 ) || ( command->success() ) )
 		return;
 
-	command->execute();
+	command->redo();
 
 	emit commandExecuted( command );
 	emit commandExecuted();
@@ -226,7 +226,7 @@ VCommandHistory::undoAllTo( VCommand* command )
 
 		if( cmd->success() )
 		{
-			cmd->unexecute();
+			cmd->undo();
 			emit commandExecuted( cmd );
 		}
 	}
@@ -255,7 +255,7 @@ VCommandHistory::redoAllTo( VCommand* command )
 
 		if( !cmd->success() )
 		{
-			cmd->execute();
+			cmd->redo();
 			emit commandExecuted( cmd );
 		}
 	}

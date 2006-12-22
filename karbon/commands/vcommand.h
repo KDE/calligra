@@ -65,14 +65,14 @@ public:
 	 * All the changes to the document are done here.
 	 * All commands have to implement this function.
 	 */
-	virtual void execute() = 0;
+	virtual void redo() = 0;
 
 	/**
-	 * Unexecutes the command.
+	 * Unredos the command.
 	 *
 	 * All changes to the document have to be undone here.
 	 */
-	virtual void unexecute() {}
+	virtual void undo() {}
 
 	/**
 	 * Returns if the command changes the actual document selection.
@@ -166,9 +166,9 @@ public:
 	 * Adds a new command to the history.
 	 *
 	 * @param command the new command to add
-	 * @param execute controls if the new command should be executed
+	 * @param redo controls if the new command should be redod
 	 */
-	void addCommand( VCommand* command, bool execute = true );
+	void addCommand( VCommand* command, bool redo = true );
 
 
 	// limits
@@ -271,13 +271,13 @@ signals:
 	void historyCleared();
 
 	/** 
-	 * This signal is emitted when a command is executed.
+	 * This signal is emitted when a command is redod.
 	 *
-	 * The executed command is given as the argument.
+	 * The redod command is given as the argument.
 	 */
 	void commandExecuted( VCommand* );
 
-	/** This signal is emitted when a command is executed. */
+	/** This signal is emitted when a command is redod. */
 	void commandExecuted();
 
 	/** 

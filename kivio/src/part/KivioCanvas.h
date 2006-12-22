@@ -70,7 +70,7 @@ class KivioCanvas : public QWidget, public KoCanvasBase
      * @param command the command to add
      * @param execute if true, the commands execute method will be called
      */
-    virtual void addCommand(KCommand *command, bool execute = true);
+    virtual void addCommand(QUndoCommand *command);
 
     /**
      * return the current shapeManager

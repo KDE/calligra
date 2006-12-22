@@ -92,7 +92,7 @@ VFillCmd::visitVText( VText& text )
 }
 
 void
-VFillCmd::execute()
+VFillCmd::redo()
 {
 	if( !m_selection )
 		m_selection = document()->selection()->clone();
@@ -107,7 +107,7 @@ VFillCmd::execute()
 }
 
 void
-VFillCmd::unexecute()
+VFillCmd::undo()
 {
 	VObjectListIterator itr( m_objects );
 

@@ -45,7 +45,7 @@ VBooleanCmd::~VBooleanCmd()
 }
 
 void
-VBooleanCmd::execute()
+VBooleanCmd::redo()
 {
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
@@ -58,7 +58,7 @@ VBooleanCmd::execute()
 }
 
 void
-VBooleanCmd::unexecute()
+VBooleanCmd::undo()
 {
 }
 

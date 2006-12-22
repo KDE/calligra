@@ -120,8 +120,7 @@ void KivioShapeGeometry::positionChanged()
     }
 
     KoShapeMoveCommand* moveCommand = new KoShapeMoveCommand(shapes, prevPos, newPos);
-    moveCommand->execute();
-    m_doc->addCommand(moveCommand, false);
+    m_doc->addCommand(moveCommand);
 }
 
 void KivioShapeGeometry::sizeChanged()
@@ -165,8 +164,7 @@ void KivioShapeGeometry::sizeChanged()
     }
 
     KoShapeSizeCommand* sizeCommand = new KoShapeSizeCommand(shapes, prevSize, newSize);
-    sizeCommand->execute();
-    m_doc->addCommand(sizeCommand, false);
+    m_doc->addCommand(sizeCommand);
 
     // Make sure we show the correct values (needed for keep ratio)
     size = firstShape->size();
@@ -198,8 +196,7 @@ void KivioShapeGeometry::protectSizeChanged(bool protect)
     }
 
     KoShapeLockCommand* lockCommand = new KoShapeLockCommand(selectionSet, oldLock, newLock);
-    lockCommand->execute();
-    m_doc->addCommand(lockCommand, false);
+    m_doc->addCommand(lockCommand);
 }
 
 void KivioShapeGeometry::rotationChanged()
@@ -227,8 +224,7 @@ void KivioShapeGeometry::rotationChanged()
     }
 
     KoShapeRotateCommand* rotateCommand = new KoShapeRotateCommand(shapes, prevRotation, newRotation);
-    rotateCommand->execute();
-    m_doc->addCommand(rotateCommand, false);
+    m_doc->addCommand(rotateCommand);
 }
 
 void KivioShapeGeometry::setUnit(KoUnit unit)

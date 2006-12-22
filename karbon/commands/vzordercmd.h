@@ -43,8 +43,8 @@ public:
 	VZOrderCmd( VDocument* doc, VObject *obj, VOrder );
 	virtual ~VZOrderCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 	virtual bool isExecuted() { return true; }
 
 protected:

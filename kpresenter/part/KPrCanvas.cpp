@@ -79,9 +79,9 @@ bool KPrCanvas::snapToGrid() const
     return m_doc->gridData().snapToGrid();
 }
 
-void KPrCanvas::addCommand( KCommand *command, bool execute )
+void KPrCanvas::addCommand( QUndoCommand *command )
 {
-    m_doc->addCommand( command, execute );
+    m_doc->addCommand( command );
 }
 
 KoShapeManager * KPrCanvas::shapeManager() const

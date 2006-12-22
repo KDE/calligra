@@ -71,8 +71,8 @@ public:
 	VCreateShadowCmd( VDocument* doc, int distance, int angle, float opacity );
 	virtual ~VCreateShadowCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 	virtual bool changesSelection() const { return true; }
 private:
 	VSelection	*m_oldObjects;

@@ -28,15 +28,15 @@ public:
 	VClipartCmd( VDocument* doc, const QString& name, VObject* clipart );
 	virtual ~VClipartCmd() {}
 
-	virtual void execute();
-	virtual void unexecute();
-	virtual bool isExecuted() { return m_executed; }
+	virtual void redo();
+	virtual void undo();
+	virtual bool isExecuted() { return m_redod; }
 
 	virtual bool changesSelection() const { return true; }
 
 private:
 	VObject* m_clipart;
-	bool m_executed;
+	bool m_redod;
 };
 
 #endif

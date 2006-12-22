@@ -25,6 +25,7 @@
 #include <QBrush>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QUndoCommand>
 
 #include <KoZoomHandler.h>
 #include <KoPageLayout.h>
@@ -67,9 +68,9 @@ bool KivioCanvas::snapToGrid() const
   return false;
 }
 
-void KivioCanvas::addCommand(KCommand* command, bool execute)
+void KivioCanvas::addCommand(QUndoCommand* command)
 {
-  m_view->document()->addCommand(command, execute);
+  m_view->document()->addCommand(command);
 }
 
 KoShapeManager* KivioCanvas::shapeManager() const

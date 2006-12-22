@@ -61,12 +61,6 @@ class KivioDocument : public KoDocument
 
         virtual bool saveOasis(KoStore* store, KoXmlWriter* manifestWriter);
 
-        /// Reimplemented for command history support
-        virtual void addShell(KoMainWindow* shell);
-
-        /// Add @p command to the command history
-        void addCommand(KCommand* command, bool execute);
-
         /* ---------Page handling--------- */
         /** Creates a master page and adds it to the document
         * @param title Title of the master page
@@ -101,12 +95,6 @@ class KivioDocument : public KoDocument
 
         /// Removes @p shape from the views
         void removeShapeFromViews(KivioAbstractPage* page, KoShape* shape);
-
-    public slots:
-        /// This is called when the last saved state of the document has been restored
-        void slotDocumentRestored();
-        /// This is called whenever a command has been executed or unexecuted
-        void slotCommandExecuted();
 
     signals:
         /// Emited when the gui needs to be updated.

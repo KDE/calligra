@@ -23,12 +23,12 @@
 #include "vselection.h"
 
 VClipartCmd::VClipartCmd( VDocument* doc, const QString& name, VObject* clipart )
-	: VCommand( doc, name ), m_clipart( clipart->clone() ), m_executed( false )
+	: VCommand( doc, name ), m_clipart( clipart->clone() ), m_redod( false )
 {
 }
 
 void
-VClipartCmd::execute()
+VClipartCmd::redo()
 {
 	if( !m_clipart )
 		return;
@@ -45,13 +45,13 @@ VClipartCmd::execute()
 		*/
 	}
 
-	m_executed = true;
+	m_redod = true;
 
 	setSuccess( true );
 }
 
 void
-VClipartCmd::unexecute()
+VClipartCmd::undo()
 {
 	if( !m_clipart )
 		return;
@@ -60,7 +60,7 @@ VClipartCmd::unexecute()
 
 	m_clipart->setState( VObject::deleted );
 
-	m_executed = false;
+	m_redod = false;
 
 	setSuccess( false );
 }

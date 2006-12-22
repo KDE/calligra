@@ -92,7 +92,7 @@ void VColorDocker::updateColor( const KoColor &c )
 	color.setAlpha(opacity);
 
 	KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush( color ) );
-	canvasController->canvas()->addCommand( cmd, true );
+	canvasController->canvas()->addCommand( cmd );
 }
 
 void VColorDocker::updateFgColor(const KoColor &c)

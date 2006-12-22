@@ -64,7 +64,7 @@ public:
     virtual bool snapToGrid() const;
     virtual KoUnit unit();
 
-    void addCommand(KCommand *command, bool execute = true);
+    void addCommand(QUndoCommand *command);
 
     KoShapeManager *shapeManager() const { return m_shapeManager; }
 
@@ -77,8 +77,6 @@ public:
     KoViewConverter *viewConverter() { return &m_zoomHandler; }
 
     QWidget *canvasWidget() { return this; }
-
-    void setCommandHistory( KCommandHistory* history ) { m_commandHistory = history; }
 
     /** Sets the maximal available visible size. */
     void setVisibleSize( int visibleWidth, int visibleHeight );
@@ -124,11 +122,10 @@ private:
     KoShapeManager* m_shapeManager;
     KoZoomHandler m_zoomHandler;
 
-    KCommandHistory *m_commandHistory;
-
     KoToolProxy *m_toolProxy;
 
     VDocument *m_doc;
+    KarbonPart *m_part;
     QRectF m_contentRect;  ///< the content rect around all content of the document (>=m_documentRect)
     QRectF m_documentRect; ///< the doument page rect defining the documents page size
     QPoint m_origin;       ///< the origin of the document page rect

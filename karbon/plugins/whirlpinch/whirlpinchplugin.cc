@@ -151,7 +151,7 @@ VWhirlPinchCmd::~VWhirlPinchCmd()
 }
 
 void
-VWhirlPinchCmd::execute()
+VWhirlPinchCmd::redo()
 {
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
@@ -159,7 +159,7 @@ VWhirlPinchCmd::execute()
 }
 
 void
-VWhirlPinchCmd::unexecute()
+VWhirlPinchCmd::undo()
 {
 }
 

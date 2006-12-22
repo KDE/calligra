@@ -37,8 +37,8 @@ public:
 				VObjectList *objects, double offset );
 	virtual ~VInsertCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 
 protected:
 	VObjectList  m_objects;

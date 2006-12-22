@@ -35,8 +35,8 @@ public:
 	VCleanUpCmd( VDocument *doc );
 	virtual ~VCleanUpCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 
 	virtual void visitVLayer( KoLayerShape& layer );
 };

@@ -205,11 +205,11 @@ private:
 				  bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow );
 		virtual ~VTextCmd();
 
-		virtual void execute();
-		virtual void unexecute();
+		virtual void redo();
+		virtual void undo();
 		virtual bool isExecuted()
 		{
-			return m_executed;
+			return m_redod;
 		}
 		virtual bool changesSelection() const { return true; }
 
@@ -243,7 +243,7 @@ private:
 		};
 
 		VText* m_text;
-		bool m_executed;
+		bool m_redod;
 		VTextModifPrivate* m_textModifications;
 	};
 
@@ -253,17 +253,17 @@ private:
 		VTextToCompositeCmd( VDocument* doc, const QString& name, VText* text );
 		virtual ~VTextToCompositeCmd();
 
-		virtual void execute();
-		virtual void unexecute();
+		virtual void redo();
+		virtual void undo();
 		virtual bool isExecuted()
 		{
-			return m_executed;
+			return m_redod;
 		}
 
 	private:
 		VText* m_text;
 		VGroup* m_group;
-		bool m_executed;
+		bool m_redod;
 	};
 
 	void drawPathCreation();

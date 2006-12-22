@@ -42,8 +42,8 @@ public:
 	VStrokeCmd( VDocument *doc, const Q3ValueList<float>& );
 	virtual ~VStrokeCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 
 	virtual bool changesSelection() const { return true; }
 

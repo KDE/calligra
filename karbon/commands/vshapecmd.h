@@ -27,7 +27,7 @@ class VPath;
 
 /*
  * Provides a common base class for creation commands since they all have
- * a similar execute / unexecute behaviour and all build a VPath. Upon
+ * a similar redo / undo behaviour and all build a VPath. Upon
  * execution() the shape will be added to the document and selected, upon undoing
  * it will be set to the deleted state.
  */
@@ -37,8 +37,8 @@ public:
 	VShapeCmd( VDocument* doc, const QString& name, VPath* shape, const QString& icon = "14_polygon" );
 	virtual ~VShapeCmd() {}
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 
 	virtual bool changesSelection() const { return true; }
 

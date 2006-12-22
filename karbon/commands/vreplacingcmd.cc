@@ -37,7 +37,7 @@ VReplacingCmd::~VReplacingCmd()
 }
 
 void
-VReplacingCmd::execute()
+VReplacingCmd::redo()
 {
 	// Did we have at least once a success? Otherwise we don't get inserted
 	// into the command history.
@@ -115,7 +115,7 @@ VReplacingCmd::execute()
 }
 
 void
-VReplacingCmd::unexecute()
+VReplacingCmd::undo()
 {
 	// Nothing to do.
 	if( m_newObjects->objects().count() == 0 )

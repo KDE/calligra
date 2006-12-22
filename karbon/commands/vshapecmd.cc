@@ -31,7 +31,7 @@ VShapeCmd::VShapeCmd( VDocument* doc, const QString& name, VPath* shape, const Q
 }
 
 void
-VShapeCmd::execute()
+VShapeCmd::redo()
 {
 	if( !m_shape )
 		return;
@@ -60,7 +60,7 @@ VShapeCmd::execute()
 }
 
 void
-VShapeCmd::unexecute()
+VShapeCmd::undo()
 {
 	if( !m_shape )
 		return;

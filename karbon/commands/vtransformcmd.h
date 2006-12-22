@@ -45,8 +45,8 @@ public:
 	VTransformCmd( VDocument *doc, const QMatrix& mat, bool duplicate = false );
 	virtual ~VTransformCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 
 	virtual void visitVPath( VPath& composite );
 	virtual void visitVSubpath( VSubpath& path );
@@ -104,8 +104,8 @@ public:
 	VTranslateBezierCmd( VDocument *doc, VSegment *segment, double d1, double d2, bool firstControl );
 	virtual ~VTranslateBezierCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 
 	virtual void visitVSubpath( VSubpath& path );
 
@@ -123,8 +123,8 @@ public:
 	VTranslatePointCmd( VDocument *doc, double d1, double d2 );
 	virtual ~VTranslatePointCmd();
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void redo();
+	virtual void undo();
 
 	virtual void visitVSubpath( VSubpath& path );
 

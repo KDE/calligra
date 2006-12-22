@@ -40,7 +40,7 @@ VInsertCmd::~VInsertCmd()
 
 
 void
-VInsertCmd::execute()
+VInsertCmd::redo()
 {
 	VObjectListIterator itr( m_objects );
 
@@ -69,7 +69,7 @@ VInsertCmd::execute()
 
 
 void
-VInsertCmd::unexecute()
+VInsertCmd::undo()
 {
 	document()->selection()->clear();
 
