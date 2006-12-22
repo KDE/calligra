@@ -208,16 +208,9 @@ Value func_eomonth (valVector args, ValueCalc *calc, FuncExtra *)
   return Value( date, calc->doc() );
 }
 
-// Function: DAYS360
-// algorithm adapted from gnumeric
-Value func_days360 (valVector args, ValueCalc *calc, FuncExtra *)
+// internal helper function
+static int func_days360_helper( QDate date1, QDate date2, bool european )
 {
-  QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
-  QDate date2 = calc->conv()->asDate (args[1]).asDate( calc->doc() );
-  bool european = false;
-  if (args.count() == 3)
-    european = calc->conv()->asBoolean (args[2]).asBoolean();
-
   int day1, day2;
   int month1, month2;
   int year1, year2;
@@ -263,10 +256,21 @@ Value func_days360 (valVector args, ValueCalc *calc, FuncExtra *)
       day1 = 30;
   }
 
-  int result = ( ( year2 - year1 ) * 12 + ( month2 - month1 ) ) * 30
+  return ( ( year2 - year1 ) * 12 + ( month2 - month1 ) ) * 30
     + ( day2 - day1 );
+}
 
-  return Value (result);
+// Function: DAYS360
+// algorithm adapted from gnumeric
+Value func_days360 (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate date2 = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  bool european = false;
+  if (args.count() == 3)
+    european = calc->conv()->asBoolean (args[2]).asBoolean();
+
+  return Value( func_days360_helper( date1, date2, european ) );
 }
 
 // Function: YEAR

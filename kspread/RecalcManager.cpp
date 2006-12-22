@@ -50,7 +50,6 @@ public:
    * \li depth(A2) = 1
    * \li depth(A3) = 2
    */
-  QHash<Cell*, int> cells;
   QMap<int, Cell*> depths;
   DependencyManager* depManager;
   bool busy;
@@ -70,231 +69,60 @@ RecalcManager::~RecalcManager()
 
 void RecalcManager::regionChanged(const Region& region)
 {
-  if (d->busy || region.isEmpty())
-    return;
-  d->busy = true;
-  kDebug(36002) << "RecalcManager::regionChanged " << region.name() << endl;
-  ElapsedTime et( "Overall region recalculation", ElapsedTime::PrintOnlyTime );
-  {
-    ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
-    recalcRegion(region);
-  }
-  recalc();
-  d->busy = false;
+    if (d->busy || region.isEmpty())
+        return;
+    d->busy = true;
+    kDebug(36002) << "RecalcManager::regionChanged " << region.name() << endl;
+    ElapsedTime et( "Overall region recalculation", ElapsedTime::PrintOnlyTime );
+    d->depths = d->depManager->cellsToCalculate( region );
+    recalc();
+    d->busy = false;
 }
 
 void RecalcManager::recalcSheet(Sheet* const sheet)
 {
-  if (d->busy)
-    return;
-  d->busy = true;
-  ElapsedTime et( "Overall sheet recalculation", ElapsedTime::PrintOnlyTime );
-  {
-    ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
-    foreach (Region::Point point, d->depManager->dependencies().keys())
-    {
-      Cell* const cell = point.cell();
-      if (cell->sheet() != sheet)
-      {
-        // not in the sheet to be recalculated
-        continue;
-      }
-      if (!d->cells.contains(cell))
-      {
-        int depth = computeDepth(cell);
-        d->cells.insert(cell, depth);
-        d->depths.insertMulti(depth, cell);
-      }
-    }
-  }
-  recalc();
-  d->busy = false;
+    if (d->busy)
+        return;
+    d->busy = true;
+    ElapsedTime et( "Overall sheet recalculation", ElapsedTime::PrintOnlyTime );
+    d->depths = d->depManager->cellsToCalculate( sheet );
+    recalc();
+    d->busy = false;
 }
 
 void RecalcManager::recalcMap()
 {
-  if (d->busy)
-    return;
-  d->busy = true;
-  ElapsedTime et( "Overall map recalculation", ElapsedTime::PrintOnlyTime );
-  {
-    ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
-    foreach (Region::Point point, d->depManager->dependencies().keys())
-    {
-      Cell* const cell = point.cell();
-      if (!d->cells.contains(cell))
-      {
-        int depth = computeDepth(cell);
-        d->cells.insert(cell, depth);
-        d->depths.insertMulti(depth, cell);
-      }
-    }
-  }
-  recalc();
-  d->busy = false;
+    if (d->busy)
+        return;
+    d->busy = true;
+    ElapsedTime et( "Overall map recalculation", ElapsedTime::PrintOnlyTime );
+    d->depths = d->depManager->cellsToCalculate();
+    recalc();
+    d->busy = false;
 }
 
 void RecalcManager::recalc()
 {
-  ElapsedTime et( "Recalculating cells", ElapsedTime::PrintOnlyTime );
-  foreach (Cell* cell, d->depths)
-  {
-    recalcCell(cell);
-  }
-
-  d->cells.clear();
-  d->depths.clear();
-}
-
-int RecalcManager::computeDepth(Cell* cell) const
-{
-  // a set of cell, which depth is currently calculated
-  static QSet<Cell*> processedCells;
-
-  //prevent infinite recursion (circular dependencies)
-  if ( processedCells.contains( cell ) || cell->value() == Value::errorCIRCLE() )
-  {
-    kDebug(36002) << "Circular dependency at " << cell->fullName() << endl;
-    // don't set anything if the cell already has all these things set
-    // this prevents endless loop for inter-sheet curcular dependencies,
-    // where the usual mechanisms fail doe to having multiple dependency
-    // managers ...
-    if ( cell->value() != Value::errorCIRCLE() )
+    ElapsedTime et( "Recalculating cells", ElapsedTime::PrintOnlyTime );
+    foreach (Cell* cell, d->depths)
     {
-      cell->setValue( Value::errorCIRCLE() );
+        // only recalculate, if no circular dependency occured
+        if ( cell->value() != Value::errorCIRCLE() )
+            cell->calc( false );
     }
-    //clear the compute reference depth flag
-    processedCells.remove( cell );
-    return 0;
-  }
-
-  // set the compute reference depth flag
-  processedCells.insert( cell );
-
-  int depth = 0;
-
-  Region::Point point(cell->column(), cell->row());
-  point.setSheet(cell->sheet());
-  const Region region = d->depManager->dependencies().value(point);
-
-  Region::ConstIterator end(region.constEnd());
-  for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
-  {
-    const QRect range = (*it)->rect();
-    Sheet* sheet = (*it)->sheet();
-    const int right = range.right();
-    const int bottom = range.bottom();
-    for (int col = range.left(); col <= right; ++col)
-    {
-      for (int row = range.top(); row <= bottom; ++row)
-      {
-        Region::Point referencedPoint(col, row);
-        referencedPoint.setSheet(sheet);
-        if (!d->depManager->dependencies().contains(referencedPoint))
-        {
-          // no further references
-          // depth is one at least
-          depth = qMax(depth, 1);
-          continue;
-        }
-
-        Cell* referencedCell = sheet->cellAt(col, row);
-        if (d->cells.contains(referencedCell))
-        {
-          // the referenced cell depth was already computed
-          depth = qMax(d->cells[referencedCell] + 1, depth);
-          continue;
-        }
-
-        // compute the depth of the referenced cell, add one and
-        // take it as new depth, if it's greater than the current one
-        depth = qMax(computeDepth(referencedCell) + 1, depth);
-      }
-    }
-  }
-
-  //clear the computing reference depth flag
-  processedCells.remove( cell );
-
-  return depth;
-}
-
-void RecalcManager::recalcRegion(const Region& region)
-{
-  Region::ConstIterator end(region.constEnd());
-  for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
-  {
-    const QRect range = (*it)->rect();
-    const Sheet* sheet = (*it)->sheet();
-    const int right = range.right();
-    const int bottom = range.bottom();
-    for (int col = range.left(); col <= right; ++col)
-    {
-      for (int row = range.top(); row <= bottom; ++row)
-      {
-        Cell* const cell = sheet->cellAt(col, row);
-        if ( cell->isDefault() )
-            continue;
-
-        // If we have not processed this cell yet.
-        if (!d->cells.contains(cell))
-        {
-          int depth = computeDepth(cell);
-          d->cells.insert(cell, depth);
-          d->depths.insertMulti(depth, cell);
-
-          // Recursion. We need the whole dependency tree of the changed region.
-          // An infinite loop is prevented by the check above.
-          Region dependentRegion = d->depManager->getDependents(cell);
-          if (!dependentRegion.contains(QPoint(cell->column(), cell->row()), cell->sheet()))
-          {
-            recalcRegion(dependentRegion);
-          }
-        }
-      }
-    }
-  }
-}
-
-void RecalcManager::recalcCell(Cell* cell) const
-{
-    // a set of cells, that are currently processed
-    static QSet<Cell*> processedCells;
-
-    //prevent infinite recursion (circular dependencies)
-    if ( processedCells.contains( cell ) || cell->value() == Value::errorCIRCLE() )
-    {
-#if 0
-    kDebug(36002) << "Circle, cell " << cell->fullName() << endl;
-    // don't set anything if the cell already has all these things set
-    // this prevents endless loop for inter-sheet curcular dependencies,
-    // where the usual mechanisms fail doe to having multiple dependency
-    // managers ...
-    if ( cell->value() != Value::errorCIRCLE() )
-    {
-      cell->setValue( Value::errorCIRCLE() );
-    }
-#endif
-        //clear the calculation progress flag
-        processedCells.remove( cell );
-        return;
-    }
-    //set the calculation progress flag
-    processedCells.insert( cell );
-
-    //recalculate the cell
-    cell->calc( false );
-
-    //clear the calculation progress flag
-    processedCells.remove( cell );
+    kDebug(36002) << "Recalculating " << d->depths.count() << " cell(s).." << endl;
+    dump();
+    d->depths.clear();
 }
 
 void RecalcManager::dump() const
 {
-    foreach (Cell* cell, d->depths)
+    QMap<int, Cell*>::ConstIterator end(d->depths.constEnd());
+    for ( QMap<int, Cell*>::ConstIterator it(d->depths.constBegin()); it != end; ++it )
     {
+        Cell* cell = it.value();
         QString cellName = cell->name();
         while ( cellName.count() < 4 ) cellName.prepend( ' ' );
-        kDebug(36002) << "depth( " << cellName << " ) = " << d->cells[cell] << endl;
+        kDebug(36002) << "depth( " << cellName << " ) = " << it.key() << endl;
     }
 }

@@ -365,7 +365,7 @@ const Value Cell::value() const
 void Cell::setValue( const Value& value )
 {
 //   kDebug() << k_funcinfo << endl;
-  if (value.type() != Value::Error)
+  if (!value.isError())
     clearAllErrors();
 
   //If the value has not changed then we don't need to do anything
@@ -381,8 +381,6 @@ void Cell::setValue( const Value& value )
 
   // Value of the cell has changed - trigger necessary actions
   valueChanged ();
-
-  sheet()->setRegionPaintDirty(Region(cellPosition()));
 }
 
 void Cell::setCellValue (const Value &value, FormatType fmtType, const QString &txt)
@@ -2775,7 +2773,10 @@ void Cell::setConditionList( const QLinkedList<Conditional> & newList )
 void Cell::clearAllErrors()
 {
     if ( value().isError() )
-        setValue( Value::empty() );
+    {
+        d->value = Value::empty();
+        valueChanged();
+    }
 }
 
 bool Cell::doesMergeCells() const

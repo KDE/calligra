@@ -998,17 +998,12 @@ void Sheet::recalc( bool force )
 
 void Sheet::valueChanged (Cell *cell)
 {
-  //TODO: call cell updating, when cell damaging implemented
-
-  // Recaculate cells depending on this cell.
-  if ( !doc()->isLoading() && getAutoCalc() )
-  {
-    // Prepare the Region structure.
-    Region region;
-    region.add(QPoint(cell->column(), cell->row()), this);
-
-    d->workbook->recalcManager()->regionChanged(region);
-  }
+    // Recalculate cells depending on this cell.
+    if ( !doc()->isLoading() && getAutoCalc() )
+    {
+        // recalculate cells
+        doc()->addDamage( new CellDamage( cell, CellDamage::Appearance | CellDamage::Value ) );
+    }
 
   //REMOVED - modification change - this was causing modified flag to be set inappropriately.
   //nobody else seems to be setting the modified flag, so we do it here
@@ -1053,7 +1048,6 @@ void Sheet::refreshRemoveAreaName(const QString & _areaName)
 
 void Sheet::refreshChangeAreaName(const QString & _areaName)
 {
-  Region region; // for recalculation
   Cell * c = d->cells.firstCell();
   QString tmp = '\'' + _areaName + '\'';
   for( ;c ; c = c->nextCell() )
@@ -1063,12 +1057,11 @@ void Sheet::refreshChangeAreaName(const QString & _areaName)
       if (c->inputText().indexOf(tmp) != -1)
       {
         if ( c->makeFormula() )
-          region.add(QPoint(c->column(), c->row()), c->sheet());
+            // recalculate cells
+            doc()->addDamage( new CellDamage( c, CellDamage::Appearance | CellDamage::Value ) );
       }
     }
   }
-  // recalculate cells
-  d->workbook->recalcManager()->regionChanged(region);
 }
 
 void Sheet::changeCellTabName( QString const & old_name, QString const & new_name )
@@ -2190,8 +2183,8 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
         refreshCell->updateChart();
   }
 
-  // recalculate cells
-  d->workbook->recalcManager()->regionChanged(recalcRegion);
+    // recalculate cells
+    this->doc()->addDamage( new CellDamage( this, recalcRegion, CellDamage::Appearance | CellDamage::Value ) );
 
     this->doc()->setModified( true );
 
@@ -2421,9 +2414,7 @@ void Sheet::deleteCells(const Region& region)
     d->cells.setAutoDelete( true );
 
     // recalculate dependent cells
-    d->workbook->recalcManager()->regionChanged(region);
-    // repaint region
-    setRegionPaintDirty(region);
+    doc()->addDamage( new CellDamage( this, region, CellDamage::Appearance | CellDamage::Value ) );
 
     // TODO: don't go through all cells here!
     // Since obscured cells might have been deleted we

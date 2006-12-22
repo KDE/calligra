@@ -61,7 +61,7 @@ public:
   /**
    * \return cells depending on \p cell
    */
-  Region getDependents(const Cell* cell);
+  Region getDependents(const Cell* cell) const;
 
   /**
    * Adjusts formulas after cut & paste operations or column/row insertions/deletions.
@@ -72,7 +72,26 @@ public:
   void regionMoved( const Region& movedRegion, const Region::Point& destination );
 
 protected:
-  QMap<Region::Point, Region> dependencies() const;
+    /**
+     * Finds all cells in region and their dependents, that need recalculation.
+     *
+     * \return the cells, that need recalculation, ordered by reference depth
+     *
+     * \see RecalcManager::regionChanged
+     */
+    QMap<int, Cell*> cellsToCalculate( const Region& region ) const;
+
+    /**
+     * Finds all cells in \p sheet , that have got a formula and hence need
+     * recalculation.
+     * If \p sheet is zero, all cells in the Map a returned.
+     *
+     * \return the cells, that need recalculation, ordered by reference depth
+     *
+     * \see RecalcManager::recalcMap
+     * \see RecalcManager::recalcSheet
+     */
+    QMap<int, Cell*> cellsToCalculate( Sheet* sheet = 0 ) const;
 
   /**
    * \param cell the cell which formula should  be altered

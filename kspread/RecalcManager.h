@@ -61,19 +61,15 @@ public:
 
   /**
    * Recalculates the cells refering to cells in \p region .
-   * First the reference cell depths are computed for all cells
-   * refering to this region. Then the cells are recalculated sorted
-   * by the reference depth in ascending order.
+   * The cells are recalculated sorted by the reference depth in ascending order.
    *
-   * \see recalcRegion()
    * \see recalc()
    */
   void regionChanged(const Region& region);
 
   /**
    * Recalculates the sheet \p sheet .
-   * First the reference cell depths are computed. Then the cells are
-   * recalculated sorted by the reference depth in ascending order.
+   * The cells are recalculated sorted by the reference depth in ascending order.
    *
    * \see recalc()
    */
@@ -81,8 +77,7 @@ public:
 
   /**
    * Recalculates the whole map.
-   * First the reference cell depth are computed. Then the cells are
-   * recalculated sorted by the reference depth in ascending order.
+   * The cells are recalculated sorted by the reference depth in ascending order.
    *
    * \see recalc()
    */
@@ -95,46 +90,12 @@ public:
 
 protected:
   /**
-   * Computes the reference depth.
-   * Depth means the maximum depth of all cells this cell depends on plus one,
-   * while a cell, which do not refer to other cells, has a depth
-   * of zero.
-   *
-   * Examples:
-   * \li A1: '=1.0'
-   * \li A2: '=A1+A1'
-   * \li A3: '=A1+A1+A2'
-   *
-   * \li depth(A1) = 0
-   * \li depth(A2) = 1
-   * \li depth(A3) = 2
-   */
-  int computeDepth(Cell* cell) const;
-
-  /**
    * Iterates over the map of cell with their reference depths
    * and calls recalcCell().
    *
    * \see recalcCell()
    */
   void recalc();
-
-  /**
-   * Used in the recalculation events for changed regions.
-   * Determines the reference depth for each position in \p region .
-   * Calls itself recursively for the regions, that depend on cells
-   * in \p region .
-   *
-   * \see recalcCell()
-   */
-  void recalcRegion(const Region& region);
-
-  /**
-   * Recalculates \p cell .
-   * Checks for circular recalculations and sets an error, if those
-   * occur.
-   */
-  void recalcCell(Cell* cell) const;
 
 private:
   class Private;

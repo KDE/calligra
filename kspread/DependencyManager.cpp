@@ -48,6 +48,31 @@ public:
   void generateDependencies(const Cell* cell);
 
   /**
+   * Computes the reference depth.
+   * Depth means the maximum depth of all cells this cell depends on plus one,
+   * while a cell, which do not refer to other cells, has a depth
+   * of zero.
+   *
+   * Examples:
+   * \li A1: '=1.0'
+   * \li A2: '=A1+A1'
+   * \li A3: '=A1+A1+A2'
+   *
+   * \li depth(A1) = 0
+   * \li depth(A2) = 1
+   * \li depth(A3) = 2
+   */
+  int computeDepth(Cell* cell) const;
+
+  /**
+   * Used in the recalculation events for changed regions.
+   * Determines the reference depth for each position in \p region .
+   * Calls itself recursively for the regions, that depend on cells
+   * in \p region .
+   */
+  void generateDepths(const Region& region);
+
+  /**
    * \return dependencies of \p cell
    */
   Region getDependencies (const Region::Point &cell);
@@ -55,7 +80,7 @@ public:
   /**
    * \return cells depending on \p cell
    */
-  Region getDependents(const Cell* cell);
+  Region getDependents(const Cell* cell) const;
 
   void areaModified (const QString &name);
 
@@ -79,6 +104,11 @@ public:
    */
   void removeCircularDependencyFlags(const Region& region);
 
+  /**
+   * Helper function for DependencyManager::cellsToCalculate().
+   */
+  void cellsToCalculate( const Region& region, QSet<Cell*>& cells ) const;
+
   /** debug */
   void dump() const;
 
@@ -90,6 +120,22 @@ public:
   QHash<Sheet*, PointTree*> dependents; // FIXME Stefan: Why is a QHash<Sheet*, PointTree> crashing?
   /** list of cells referencing a given named area */
   QMap<QString, QMap<Region::Point, bool> > areaDeps;
+  /**
+   * Stores cells with its reference depth.
+   * Depth means the maximum depth of all cells this cell depends on plus one,
+   * while a cell which has a formula without cell references has a depth
+   * of zero.
+   *
+   * Examples:
+   * \li A1: '=1.0'
+   * \li A2: '=A1+A1'
+   * \li A3: '=A1+A1+A2'
+   *
+   * \li depth(A1) = 0
+   * \li depth(A2) = 1
+   * \li depth(A3) = 2
+   */
+  QHash<Cell*, int> depths;
 };
 
 // This is currently not called - but it's really convenient to call it from
@@ -126,6 +172,13 @@ void DependencyManager::Private::dump() const
       kDebug(36002) << "The cells depending on " << uniqueKey << " are: " << debugStr.join(", ") << endl;
     }
   }
+
+    foreach ( Cell* cell, depths.keys() )
+    {
+        QString cellName = cell->name();
+        while ( cellName.count() < 4 ) cellName.prepend( ' ' );
+        kDebug(36002) << "depth( " << cellName << " ) = " << depths[cell] << endl;
+    }
 }
 
 DependencyManager::DependencyManager()
@@ -146,34 +199,39 @@ void DependencyManager::reset ()
 
 void DependencyManager::regionChanged(const Region& region)
 {
-  if (region.isEmpty())
-    return;
-  kDebug(36002) << "DependencyManager::regionChanged " << region.name() << endl;
-  Region::ConstIterator end(region.constEnd());
-  for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
-  {
-    const QRect range = (*it)->rect();
-    const Sheet* sheet = (*it)->sheet();
-    for (int col = range.left(); col <= range.right(); ++col)
+    if (region.isEmpty())
+        return;
+    kDebug(36002) << "DependencyManager::regionChanged " << region.name() << endl;
+    Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
     {
-      for (int row = range.top(); row <= range.bottom(); ++row)
-      {
-        Cell* cell = sheet->cellAt(col, row);
-
-        // empty or default cell or cell without a formula? remove it
-        if ( cell->isEmpty() || !cell->isFormula() )
+        const QRect range = (*it)->rect();
+        const Sheet* sheet = (*it)->sheet();
+        for (int col = range.left(); col <= range.right(); ++col)
         {
-          d->removeDependencies(cell);
-          continue;
-        }
+            for (int row = range.top(); row <= range.bottom(); ++row)
+            {
+                Cell* cell = sheet->cellAt(col, row);
 
-        // don't re-generate dependencies if we're updating dependencies
-//         if ( !(cell->testFlag (Cell::Flag_Progress)))
-          d->generateDependencies(cell);
-      }
+                // remove it from the reference depth list
+                d->depths.remove( cell );
+
+                // empty or default cell or cell without a formula? remove it
+                if ( cell->isEmpty() || !cell->isFormula() )
+                {
+                    d->removeDependencies(cell);
+                    continue;
+                }
+
+                d->generateDependencies(cell);
+            }
+        }
     }
-  }
-  d->dump();
+    {
+        ElapsedTime et( "Computing reference depths", ElapsedTime::PrintOnlyTime );
+        d->generateDepths(region);
+    }
+    d->dump();
 }
 
 void DependencyManager::areaModified (const QString &name)
@@ -183,20 +241,28 @@ void DependencyManager::areaModified (const QString &name)
 
 void DependencyManager::updateAllDependencies(const Map* map)
 {
-  foreach (const Sheet* sheet, map->sheetList())
-  {
-    for (Cell* cell = sheet->firstCell(); cell; cell = cell->nextCell())
-    {
-      // empty or default cell or cell without a formula? remove it
-      if ( cell->isEmpty() || !cell->isFormula() )
-      {
-        d->removeDependencies(cell);
-        continue;
-      }
+    // clear the reference depth list
+    d->depths.clear();
 
-      d->generateDependencies(cell);
+    foreach (const Sheet* sheet, map->sheetList())
+    {
+        for (Cell* cell = sheet->firstCell(); cell; cell = cell->nextCell())
+        {
+            // empty or default cell or cell without a formula? remove it
+            if ( cell->isEmpty() || !cell->isFormula() )
+            {
+                d->removeDependencies(cell);
+                continue;
+            }
+
+            d->generateDependencies(cell);
+            if (!d->depths.contains(cell))
+            {
+                int depth = d->computeDepth(cell);
+                d->depths.insert(cell, depth);
+            }
+        }
     }
-  }
 }
 
 // RangeList DependencyManager::getDependencies (const Region::Point &cell)
@@ -204,14 +270,34 @@ void DependencyManager::updateAllDependencies(const Map* map)
 //   return d->getDependencies (cell);
 // }
 
-KSpread::Region DependencyManager::getDependents(const Cell* cell)
+KSpread::Region DependencyManager::getDependents(const Cell* cell) const
 {
   return d->getDependents(cell);
 }
 
-QMap<KSpread::Region::Point, KSpread::Region> DependencyManager::dependencies() const
+QMap<int, Cell*> DependencyManager::cellsToCalculate( const Region& region ) const
 {
-  return d->dependencies;
+    if (region.isEmpty())
+        return QMap<int, Cell*>();
+
+    QSet<Cell*> cells;
+    d->cellsToCalculate( region, cells );
+    QMap<int, Cell*> depths;
+    foreach ( Cell* cell, cells )
+        depths.insertMulti( d->depths[cell], cell );
+    return depths;
+}
+
+QMap<int, Cell*> DependencyManager::cellsToCalculate( Sheet* sheet ) const
+{
+    QMap<int, Cell*> depths;
+    foreach ( Cell* cell, d->depths.keys() )
+    {
+        if ( sheet && cell->sheet() != sheet )
+            continue;
+        depths.insertMulti( d->depths[cell], cell );
+    }
+    return depths;
 }
 
 void DependencyManager::regionMoved( const Region& movedRegion, const Region::Point& destination )
@@ -309,7 +395,7 @@ KSpread::Region DependencyManager::Private::getDependencies (const Region::Point
   return dependencies.value(cell);
 }
 
-KSpread::Region DependencyManager::Private::getDependents(const Cell* cell)
+KSpread::Region DependencyManager::Private::getDependents(const Cell* cell) const
 {
   Sheet* const sheet = cell->sheet();
 
@@ -429,6 +515,131 @@ void DependencyManager::Private::generateDependencies(const Cell* cell)
   addDependency(cell, region);
 }
 
+void DependencyManager::Private::generateDepths(const Region& region)
+{
+    static QSet<Cell*> processedCells;
+
+    Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
+    {
+        const QRect range = (*it)->rect();
+        const Sheet* sheet = (*it)->sheet();
+        const int right = range.right();
+        const int bottom = range.bottom();
+        for (int col = range.left(); col <= right; ++col)
+        {
+            for (int row = range.top(); row <= bottom; ++row)
+            {
+                Cell* const cell = sheet->cellAt(col, row);
+                if ( cell->isDefault() )
+                    continue;
+
+                //prevent infinite recursion (circular dependencies)
+                if ( processedCells.contains( cell ) || cell->value() == Value::errorCIRCLE() )
+                {
+                    kDebug(36002) << "Circular dependency at " << cell->fullName() << endl;
+                    // don't set anything if the cell already has all these things set
+                    // this prevents endless loop for inter-sheet curcular dependencies,
+                    // where the usual mechanisms fail doe to having multiple dependency
+                    // managers ...
+                    if ( cell->value() != Value::errorCIRCLE() )
+                        cell->setValue( Value::errorCIRCLE() );
+                    depths.insert(cell, 0);
+                    // clear the compute reference depth flag
+                    processedCells.remove( cell );
+                    continue;
+                }
+
+                // set the compute reference depth flag
+                processedCells.insert( cell );
+
+                int depth = computeDepth(cell);
+                depths.insert(cell, depth);
+
+                // Recursion. We need the whole dependency tree of the changed region.
+                // An infinite loop is prevented by the check above.
+                Region dependentRegion = getDependents(cell);
+                if (!dependentRegion.contains(QPoint(col, row), cell->sheet()))
+                    generateDepths(dependentRegion);
+
+                // clear the compute reference depth flag
+                processedCells.remove( cell );
+            }
+        }
+    }
+}
+
+int DependencyManager::Private::computeDepth(Cell* cell) const
+{
+    // a set of cell, which depth is currently calculated
+    static QSet<Cell*> processedCells;
+
+    //prevent infinite recursion (circular dependencies)
+    if ( processedCells.contains( cell ) || cell->value() == Value::errorCIRCLE() )
+    {
+        kDebug(36002) << "Circular dependency at " << cell->fullName() << endl;
+        // don't set anything if the cell already has all these things set
+        // this prevents endless loop for inter-sheet curcular dependencies,
+        // where the usual mechanisms fail doe to having multiple dependency
+        // managers ...
+        if ( cell->value() != Value::errorCIRCLE() )
+            cell->setValue( Value::errorCIRCLE() );
+        //clear the compute reference depth flag
+        processedCells.remove( cell );
+        return 0;
+    }
+
+    // set the compute reference depth flag
+    processedCells.insert( cell );
+
+    int depth = 0;
+
+    Region::Point point(cell->column(), cell->row());
+    point.setSheet(cell->sheet());
+    const Region region = dependencies.value(point);
+
+    Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
+    {
+        const QRect range = (*it)->rect();
+        Sheet* sheet = (*it)->sheet();
+        const int right = range.right();
+        const int bottom = range.bottom();
+        for (int col = range.left(); col <= right; ++col)
+        {
+            for (int row = range.top(); row <= bottom; ++row)
+            {
+                Region::Point referencedPoint(col, row);
+                referencedPoint.setSheet(sheet);
+                if (!dependencies.contains(referencedPoint))
+                {
+                    // no further references
+                    // depth is one at least
+                    depth = qMax(depth, 1);
+                    continue;
+                }
+
+                Cell* referencedCell = sheet->cellAt(col, row);
+                if (depths.contains(referencedCell))
+                {
+                    // the referenced cell depth was already computed
+                    depth = qMax(depths[referencedCell] + 1, depth);
+                    continue;
+                }
+
+                // compute the depth of the referenced cell, add one and
+                // take it as new depth, if it's greater than the current one
+                depth = qMax(computeDepth(referencedCell) + 1, depth);
+            }
+        }
+    }
+
+    //clear the computing reference depth flag
+    processedCells.remove( cell );
+
+    return depth;
+}
+
 KSpread::Region DependencyManager::Private::computeDependencies(const Cell* cell) const
 {
   // Not a formula -> no dependencies
@@ -502,4 +713,32 @@ void DependencyManager::Private::removeCircularDependencyFlags(const Region& reg
       }
     }
   }
+}
+
+void DependencyManager::Private::cellsToCalculate( const Region& region, QSet<Cell*>& cells ) const
+{
+    Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
+    {
+        const QRect range = (*it)->rect();
+        const Sheet* sheet = (*it)->sheet();
+        for (int col = range.left(); col <= range.right(); ++col)
+        {
+            for (int row = range.top(); row <= range.bottom(); ++row)
+            {
+                Cell* cell = sheet->cellAt(col, row);
+
+                // check for already processed cells
+                if ( cells.contains( cell ) )
+                    continue;
+
+                // add it to the list
+                cells.insert( cell );
+
+                // add its dependents to the list
+                const Region dependencies = getDependents( cell );
+                cellsToCalculate( dependencies, cells );
+            }
+        }
+    }
 }
