@@ -548,15 +548,15 @@ KarbonView::editPurgeHistory()
 	debugView("KarbonView::editPurgeHistory()");
 
 	// TODO: check for history size != 0
-
-	if( KMessageBox::warningContinueCancel( this,
+    // TODO needs porting
+/*	if( KMessageBox::warningContinueCancel( this,
 			i18n( "This action cannot be undone later. Do you really want to continue?" ),
 			i18n( "Purge History" ),
 			KStdGuiItem::del(),
 			"edit_purge_history" ) )
 	{
 		part()->commandHistory()->clear();
-	}
+	}*/
 }
 
 void

@@ -70,10 +70,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 	setTemplateType( "karbon_template" );
 	m_bShowStatusBar = true;
 
-	m_commandHistory = new KCommandHistory( actionCollection(), true );
-	connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
-	connect( m_commandHistory, SIGNAL( commandExecuted( KCommand * ) ), this, SLOT( slotCommandExecuted( KCommand * ) ) );
-
 	initConfig();
 
 	m_merge = false;
@@ -96,8 +92,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 
 KarbonPart::~KarbonPart()
 {
-	// delete the command-history:
-	delete m_commandHistory;
 }
 
 void
@@ -471,7 +465,8 @@ KarbonPart::slotCommandExecuted( KCommand *command )
 void
 KarbonPart::clearHistory()
 {
-	m_commandHistory->clear();
+// TODO needs porting
+// 	m_commandHistory->clear();
 }
 
 void
@@ -550,8 +545,9 @@ KarbonPart::reorganizeGUI()
 void
 KarbonPart::setUndoRedoLimit( int undos )
 {
-	m_commandHistory->setUndoLimit( undos );
-	m_commandHistory->setRedoLimit( undos );
+// TODO needs porting
+/*	m_commandHistory->setUndoLimit( undos );
+	m_commandHistory->setRedoLimit( undos );*/
 }
 
 void
@@ -608,14 +604,6 @@ KarbonPart::mergeNativeFormat( const QString &file )
 	m_merge = false;
 	return result;
 }
-
-void
-KarbonPart::addShell( KoMainWindow *shell )
-{
-	connect( shell, SIGNAL( documentSaved() ), m_commandHistory, SLOT( documentSaved() ) );
-	KoDocument::addShell( shell );
-}
-
 
 void
 KarbonPart::slotUnitChanged( KoUnit /*unit*/ )

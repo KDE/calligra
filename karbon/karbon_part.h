@@ -62,8 +62,6 @@ public:
 	virtual QDomDocument saveXML();
 	virtual bool saveOasis( KoStore *store, KoXmlWriter *manifestWriter );
 
-	virtual void addShell( KoMainWindow *shell );
-
 	/// insert a command into the undo/redo-history:
 	void addCommand( VCommand* cmd, bool repaint = false );
 
@@ -72,12 +70,6 @@ public:
 
 	// Clear history.
 	void clearHistory();
-
-	/// access the command history:
-	KCommandHistory* commandHistory()
-	{
-		return m_commandHistory;
-	}
 
 	bool showStatusBar() const
 	{
@@ -118,7 +110,6 @@ protected:
 
 private:
 	VDocument m_doc;					/// store non-visual doc info
-	KCommandHistory* m_commandHistory;	/// maintain a command history for undo/redo
 
 	bool m_bShowStatusBar;				/// enable/disable status bar in attached view(s)
 	bool m_merge;
