@@ -138,6 +138,7 @@ void RegisterMathFunctions()
   f = new Function ("FIB",           func_fib); // KSpread-specific, like Quattro-Pro's FIB
   repo->add (f);
   f = new Function ("FLOOR",         func_floor);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("INT",           func_int);
   repo->add (f);
@@ -378,10 +379,34 @@ Value func_ceiling (valVector args, ValueCalc *calc, FuncExtra *)
   return d;
 }
 
-// Function: floor
+// Function: FLOOR
 Value func_floor (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->roundDown (args[0], Value(0));
+  Value number = args[0];
+
+  Value res;
+  if ( args.count() == 2 )
+  { // we have the optional "resolution" ("significance") argument
+    res = args[1];
+  } else {
+    // use 1 or -1, depending on the sign of the first argument
+    res = calc->gequal( number,  Value( 0.0 ) ) ? Value( 1.0 ) : Value( -1.0 );
+  }
+  if ( calc->isZero( res ) )
+    return Value::errorDIV0();
+
+  Value d = calc->div( number, res );
+  if ( calc->greater( Value( 0 ), d ) ) {
+    // the sign of the arguments is different
+    return Value::errorVALUE();
+  }
+  Value rud = calc->roundUp( d );
+  if ( calc->approxEqual( rud, res ) )
+    d = calc->mul( rud, res );
+  else
+    d = calc->mul( calc->roundDown( d ), res );
+
+  return d;
 }
 
 // Function: ln

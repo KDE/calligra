@@ -833,10 +833,11 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The CEILING() function rounds x up to the nearest multiple of significance.</Text>
+	<Text>The CEILING() function rounds x up (away from zero) to the nearest multiple of Significance. The default value for Significance is 1 (or -1 if the value is negative), which means rounding up to the nearest integer. Note that this does not match the normal mathematical definition of a ceiling function.</Text>
 	<Syntax>CEILING(x)</Syntax>
 	<Example>CEILING(12.5) equals 13</Example>
 	<Example>CEILING(6.43; 4) equals 8</Example>
+	<Example>CEILING(-6.43; -4) equals -8</Example>
 	<Related>CEIL</Related>
 	<Related>FLOOR</Related>
       </Help>
@@ -849,12 +850,19 @@
 	<Comment>A floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
+      <Parameter optional="true">
+	<Comment>Significance (optional)</Comment>
+	<Type>Float</Type>
+      </Parameter>
       <Help>
-	<Text>The FLOOR() function rounds x down to the nearest integer, returning that value as a double.</Text>
+	<Text>The FLOOR() function rounds x down (towards zero)to the nearest mutiple of Significance. The default value for Significance is 1 (or -1 if the value is negative), which means rounding up to the nearest integer. Note that this does not match the normal mathematic definition of a floor function.</Text>
 	<Syntax>FLOOR(x)</Syntax>
 	<Example>FLOOR(12.5) equals 12</Example>
-	<Example>FLOOR(-12.5) equals -13</Example>
+	<Example>FLOOR(-12.5) equals -12</Example>
+	<Example>FLOOR(5; 2) equals 4</Example>
+	<Example>FLOOR(5; 2.2) equals 4.4</Example>
 	<Related>CEIL</Related>
+	<Related>CEILING</Related>
       </Help>
     </Function>
 

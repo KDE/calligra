@@ -484,7 +484,7 @@ long Value::asInteger() const
     result = d->i;
 
   if( type() == Value::Float )
-    result = static_cast<int>(d->f);
+    result = static_cast<int>(floor( d->f ) );
 
   return result;
 }

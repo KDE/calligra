@@ -403,7 +403,7 @@ Value func_proper (valVector args, ValueCalc *calc, FuncExtra *)
       continue;
     }
 
-    if (str[i] == ' ' || str[i] == '-')
+    if (str[i].isSpace() || str[i].isPunct())
       first = true;
   }
 

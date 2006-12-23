@@ -786,7 +786,6 @@ Value ValueCalc::lcm (const Value &a, const Value &b)
 
 Value ValueCalc::base (const Value &val, int base, int prec)
 {
-  if (base == 10) return round (val, prec);
   if (prec < 0) prec = 2;
   if ((base < 2) || (base > 36))
     return Value::errorVALUE();
