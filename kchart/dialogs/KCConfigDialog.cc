@@ -24,7 +24,6 @@
 #include "KCConfigDataPage.h"
 #include "KCConfigSubtypePage.h"
 
-#include "kchartHeaderFooterConfigPage.h"
 #include "kchartParameterPieConfigPage.h"
 #include "kchartComboConfigPage.h"
 #include "kchartPieConfigPage.h"
@@ -32,6 +31,7 @@
 #include "kchartLine3dConfigPage.h"
 #include "kchartParameterPolarConfigPage.h"
 
+#include "KCConfigHeaderFooterPage.h"
 #include "KCConfigLegendPage.h"
 #include "KCConfigAxesPage.h"
 #include "KCConfigColorPage.h"
@@ -86,7 +86,7 @@ KCConfigDialog::KCConfigDialog( KChartParams* params,
         subtypePage();
     }
     else if (flags & KC_HEADERFOOTER) {
-        m_headerfooterpage=new KChartHeaderFooterConfigPage(m_params,this);
+        m_headerfooterpage=new KCConfigHeaderFooterPage(m_params,this);
         addTab( m_headerfooterpage,i18n("Header/Footer"));
     }
     else if (flags & KC_COLORS ) {
@@ -146,7 +146,7 @@ KCConfigDialog::KCConfigDialog( KChartParams* params,
 
 
 	// The Header/Footer page
-        m_headerfooterpage=new KChartHeaderFooterConfigPage(m_params, this);
+        m_headerfooterpage=new KCConfigHeaderFooterPage(m_params, this);
         addTab( m_headerfooterpage, i18n("Header/Footer"));
 
 	// The legend page

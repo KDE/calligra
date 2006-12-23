@@ -17,12 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kchartHeaderFooterConfigPage.h"
-#include "kchartHeaderFooterConfigPage.moc"
-
-#include <kapplication.h>
-#include <kdialog.h>
-#include <klocale.h>
 #include <QLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -31,14 +25,19 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <kfontdialog.h>
+#include <kapplication.h>
+#include <kdialog.h>
+#include <klocale.h>
 
 #include "kchart_params.h"
+#include "KCConfigHeaderFooterPage.h"
+
 
 namespace KChart
 {
 
-KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params,
-                                                      QWidget* parent ) :
+KCConfigHeaderFooterPage::KCConfigHeaderFooterPage( KChartParams* params,
+						    QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
     Q3GridLayout* layout = new Q3GridLayout( this, 4, 3 );
@@ -101,7 +100,7 @@ KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params
     layout->activate();
 }
 
-void KChartHeaderFooterConfigPage::init()
+void KCConfigHeaderFooterPage::init()
 {
     titleColorButton->setColor(_params->headerFooterColor( KDChartParams::HdFtPosHeader ) );
     subtitleColorButton->setColor(_params->headerFooterColor( KDChartParams::HdFtPosHeader2 ));
@@ -134,7 +133,7 @@ void KChartHeaderFooterConfigPage::init()
 }
 
 
-void KChartHeaderFooterConfigPage::apply()
+void KCConfigHeaderFooterPage::apply()
 {
     _params->setHeaderFooterColor( KDChartParams::HdFtPosHeader,titleColorButton->color() );
     _params->setHeaderFooterColor( KDChartParams::HdFtPosHeader2,subtitleColorButton->color() );
@@ -157,7 +156,7 @@ void KChartHeaderFooterConfigPage::apply()
                                   footerFont.pointSize() );
 }
 
-void KChartHeaderFooterConfigPage::changeTitleFont()
+void KCConfigHeaderFooterPage::changeTitleFont()
 {
     Qt::CheckState state = titleFontIsRelative;
     if (    KFontDialog::getFont( titleFont,false,this, true,&state ) != QDialog::Rejected
@@ -165,7 +164,7 @@ void KChartHeaderFooterConfigPage::changeTitleFont()
         titleFontIsRelative = state;
 }
 
-void KChartHeaderFooterConfigPage::changeSubtitleFont()
+void KCConfigHeaderFooterPage::changeSubtitleFont()
 {
     Qt::CheckState state = subtitleFontIsRelative;
     if (    KFontDialog::getFont( subtitleFont,false,this, true,&state ) != QDialog::Rejected
@@ -173,7 +172,7 @@ void KChartHeaderFooterConfigPage::changeSubtitleFont()
         subtitleFontIsRelative = state;
 }
 
-void KChartHeaderFooterConfigPage::changeFooterFont()
+void KCConfigHeaderFooterPage::changeFooterFont()
 {
     Qt::CheckState state = footerFontIsRelative;
     if (    KFontDialog::getFont( footerFont,false,this, true,&state ) != QDialog::Rejected
@@ -182,3 +181,5 @@ void KChartHeaderFooterConfigPage::changeFooterFont()
 }
 
 }  //KChart namespace
+
+#include "KCConfigHeaderFooterPage.moc"

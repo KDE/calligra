@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KCHARTHEADERFOOTERCONFIGPAGE_H__
-#define __KCHARTHEADERFOOTERCONFIGPAGE_H__
+#ifndef __KCCONFIGHEADERFOOTERPAGE_H__
+#define __KCCONFIGHEADERFOOTERPAGE_H__
 
 #include <QWidget>
 #include <kcolorbutton.h>
@@ -31,12 +31,12 @@ namespace KChart
 
 class KChartParams;
 
-class KChartHeaderFooterConfigPage : public QWidget
+class KCConfigHeaderFooterPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartHeaderFooterConfigPage( KChartParams* params, QWidget* parent );
+    KCConfigHeaderFooterPage( KChartParams* params, QWidget* parent );
     void init();
     void apply();
 protected slots:

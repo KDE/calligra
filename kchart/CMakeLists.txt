@@ -22,20 +22,20 @@ set(kchartcommon_LIB_SRCS
    kchart_params.cc 
    KChartViewAdaptor.cc 
    KChartParamsAdaptor.cc 
-
    kchartDataEditor.cc 
 
    dialogs/KCConfigDialog.cc 
    dialogs/KCConfigDataPage.cc 
    dialogs/KCConfigSubtypePage.cc 
+
    kchartLine3dConfigPage.cc 
    kchartParameter3dConfigPage.cc 
    kchartComboConfigPage.cc 
    kchartPieConfigPage.cc 
    kchartParameterPieConfigPage.cc 
    kchartParameterPolarConfigPage.cc 
-   kchartHeaderFooterConfigPage.cc 
 
+   dialogs/KCConfigHeaderFooterPage.cc 
    dialogs/KCConfigLegendPage.cc 
    dialogs/KCConfigAxesPage.cc 
    dialogs/KCConfigColorPage.cc 

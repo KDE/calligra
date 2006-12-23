@@ -40,7 +40,6 @@ class KChartAuxiliary;
 
 class KCConfigDataPage;
 class KCConfigSubtypePage;
-class KChartHeaderFooterConfigPage;
 
 class KChartParameter3dConfigPage;
 class KChartBarslinesConfigPage;
@@ -50,6 +49,7 @@ class KChartComboPage;
 class KChartLine3dConfigPage;
 class KChartParameterPolarConfigPage;
 
+class KCConfigHeaderFooterPage;
 class KCConfigLegendPage;
 class KCConfigAxesPage;
 class KCConfigColorPage;
@@ -94,7 +94,7 @@ protected:
     KChartParameterPieConfigPage     *_parameterpiepage;
     KChartParameterPolarConfigPage   *_polarpage;
 
-    KChartHeaderFooterConfigPage     *m_headerfooterpage;
+    KCConfigHeaderFooterPage     *m_headerfooterpage;
     KCConfigLegendPage           *m_legendPage;
     KCConfigAxesPage             *m_axespage;
     KCConfigColorPage            *_colorpage;
