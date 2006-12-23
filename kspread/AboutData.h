@@ -61,7 +61,7 @@ KAboutData * newAboutData()
     aboutData->addAuthor("Robert Knight", 0 , "robertknight@gmail.com");
     aboutData->addAuthor("Stefan Nikolaus", 0, "stefan.nikolaus@kdemail.net");
     // "Thanks to" section
-    aboutData->addCredit("Sascha Pfau", "Functions: DATEDIF, IMLOG2, IMLOG10, WEEKNUM", "mrpeacock@gmail.com");
+    aboutData->addCredit("Sascha Pfau", "Functions: DATEDIF, IMLOG2, IMLOG10, WEEKNUM, YEARFRAC", "mrpeacock@gmail.com");
     return aboutData;
 }
 

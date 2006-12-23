@@ -640,6 +640,28 @@
 	</Help>
     </Function>
 
+    <Function>
+	<Name>YEARFRAC</Name>
+	<Type>Int</Type>
+	<Parameter>
+	    <Comment>First date</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Parameter>
+	    <Comment>Second date</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Parameter>
+	    <Comment>interval</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Help>
+	    <Text>The YEARFRAC() function returns the number of full days between start date and end date according to the basis.</Text>
+            <Text>Basis must be one of the following: 0 = 30/360 US, 1 = Actual/actual, 2 = Actual/360, 3 = Actual/365, 4 = European 30/360</Text>
+	    <Syntax>YEARFRAC(start date; endd date; basis)</Syntax>
+	</Help>
+    </Function>
+
   </Group>
 
 </KSpreadFunctions>

@@ -68,6 +68,7 @@ Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weeksInYear (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_year (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_yearFrac (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_years (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all date/time functions
@@ -174,6 +175,9 @@ void RegisterDateTimeFunctions()
   f = new Function ("WEEKSINYEAR",  func_weeksInYear);
   repo->add (f);
   f = new Function ("YEAR",   func_year);
+  repo->add (f);
+  f = new Function ("YEARFRAC",  func_yearFrac);
+  f->setParamCount (2, 3);
   repo->add (f);
   f = new Function ("YEARS",  func_years);
   f->setParamCount (3);
@@ -808,5 +812,125 @@ Value func_dateDif (valVector args, ValueCalc *calc, FuncExtra *)
     // days excl. month and years
     res = d*sign;
   }
+  return Value( res );
+}
+
+// Function: YEARFRAC
+//
+// 		basis    descritption day-count 	
+// default: 	0	 US (NASD) system. 30 days/month, 360 days/year (30/360)
+//		1	 Actual/actual (Euro), also known as AFB
+//		2	 Actual/360
+//		3	 Actual/365
+//		4	 European 30/360
+//
+Value func_yearFrac (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  Value v1( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
+  if (v1.isError()) return v1;
+  QDate date1 = v1.asDate( calc->doc() );
+
+  if (!date1.isValid())
+      return Value::errorVALUE();
+
+  Value v2( calc->conv()->asDate (args[1]).asDate( calc->doc() ), calc->doc() );
+  if (v2.isError()) return v2;
+  QDate date2 = v2.asDate( calc->doc() );
+
+  if (!date2.isValid())
+      return Value::errorVALUE();
+
+  // check if basis is valid
+  int basis = calc->conv()->asInteger (args[2]).asInteger();
+  if ( basis < 0 || basis > 4 ) 
+    return Value::errorVALUE();
+
+  //
+  // calculation
+  //
+
+  QDate date0 = calc->doc()->referenceDate(); // referenceDate
+
+  if ( date2 < date1 )
+  {
+    // exchange dates
+    QDate Temp1=date1;
+    date1=date2;
+    date2=Temp1;
+  }
+
+  int days = date0.daysTo(date2) - date0.daysTo(date1);
+
+  //kDebug(36002) << "date1 = " << date1 << "    date2 = " << date2 << "    days = " << days << "    basis = " << basis << endl;
+
+  double res=0;
+  double peryear=0;
+
+  switch(basis)
+  {
+    case 1:
+    {
+      // Actual/actual
+      int leaps=0,years=0;
+      double k;
+
+      if (days < (365 + QDate::isLeapYear(date1.year()) + 1))
+      {
+        // less than 1 year
+        //kDebug(36002) << "less tahn 1 year ..." << endl;
+
+        // bool 1 = 29.2. is in between dates
+        k = (QDate::isLeapYear(date1.year()) && date1.month()<3) || (QDate::isLeapYear(date2.year()) && date2.month()*100+date2.day() >= 2*100+29);
+        years = 1;
+      }
+      else
+      {
+        // more than 1 year
+        //kDebug(36002) << "more than 1 year ..." << endl;
+        years = date2.year()-date1.year()+1;
+        leaps = QDate(date2.year()+1, 1, 1).toJulianDay() - QDate(date1.year(), 1, 1).toJulianDay() - 365*years;
+        k = (double)leaps/years;
+      }
+
+      //kDebug(36002) << "leaps = " << leaps << "    years = " << years << "    leaps per year = " << (double)leaps/years << endl;
+      peryear = 365 + k;
+      break;
+    }
+    case 2:
+    {
+      // Actual/360
+      peryear = 360;
+      break;
+    }
+    case 3:
+    {
+      // Actual/365
+      peryear = 365;
+      break;
+    }
+    case 4:
+    {
+      // 30/360 Europe
+
+      // calc datedif360 (start, end, Europe)
+      days = func_days360_helper( date1, date2, 1);
+
+      peryear = 360;
+      break;
+    }
+    default:
+    {
+      // NASD 30/360
+      basis = 0;
+
+      // calc datedif360 (start, end, US)
+      days = func_days360_helper( date1, date2, 0);
+
+      peryear = 360;
+    }
+  }
+
+  res = (double)days / peryear;
+
   return Value( res );
 }
