@@ -17,12 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kchartParameter3dConfigPage.h"
-#include "kchartParameter3dConfigPage.moc"
-
-#include <kapplication.h>
-#include <kdialog.h>
-#include <klocale.h>
 #include <QLayout>
 #include <QLabel>
 #include <QCheckBox>
@@ -31,13 +25,19 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 
+#include <kapplication.h>
+#include <kdialog.h>
+#include <klocale.h>
+
 #include "kchart_params.h"
+#include "KCConfigSubtypeBarPage.h"
+
 
 namespace KChart
 {
 
-KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
-                                                          QWidget* parent ) :
+KCConfigSubtypeBarPage::KCConfigSubtypeBarPage( KChartParams* params,
+						QWidget* parent ) :
     QWidget( parent ),m_params( params )
 {
   Q3GridLayout* layout = new Q3GridLayout(this, 2, 2,KDialog::marginHint(),KDialog::spacingHint());
@@ -96,7 +96,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage( KChartParams* params,
 }
 
 
-void KChartParameter3dConfigPage::slotChange3DParameter(bool b)
+void KCConfigSubtypeBarPage::slotChange3DParameter(bool b)
 {
     angle3d->setEnabled(b);
     depth->setEnabled(b);
@@ -104,7 +104,7 @@ void KChartParameter3dConfigPage::slotChange3DParameter(bool b)
 }
 
 
-void KChartParameter3dConfigPage::init()
+void KCConfigSubtypeBarPage::init()
 {
     bool state=m_params->threeDBars();
     bar3d->setChecked(state);
@@ -116,7 +116,7 @@ void KChartParameter3dConfigPage::init()
 }
 
 
-void KChartParameter3dConfigPage::apply()
+void KCConfigSubtypeBarPage::apply()
 {
     m_params->setThreeDBars(bar3d->isChecked());
     m_params->setThreeDBarAngle( angle3d->value() );
@@ -126,3 +126,5 @@ void KChartParameter3dConfigPage::apply()
 
 
 }  //KChart namespace
+
+#include "KCConfigSubtypeBarPage.moc"

@@ -27,9 +27,9 @@ set(kchartcommon_LIB_SRCS
    dialogs/KCConfigDialog.cc 
    dialogs/KCConfigDataPage.cc 
    dialogs/KCConfigSubtypePage.cc 
+   dialogs/KCConfigSubtypeBarPage.cc 
 
    kchartLine3dConfigPage.cc 
-   kchartParameter3dConfigPage.cc 
    kchartComboConfigPage.cc 
    kchartPieConfigPage.cc 
    kchartParameterPieConfigPage.cc 

@@ -23,11 +23,11 @@
 
 #include "KCConfigDataPage.h"
 #include "KCConfigSubtypePage.h"
+#include "KCConfigSubtypeBarPage.h"
 
 #include "kchartParameterPieConfigPage.h"
 #include "kchartComboConfigPage.h"
 #include "kchartPieConfigPage.h"
-#include "kchartParameter3dConfigPage.h"
 #include "kchartLine3dConfigPage.h"
 #include "kchartParameterPolarConfigPage.h"
 
@@ -59,7 +59,7 @@ KCConfigDialog::KCConfigDialog( KChartParams* params,
     m_dataPage(0),
     m_subTypePage(0),
 
-    _parameter3dpage(0),
+    m_subtypeBarPage(0),
     _linepage3d(0),
     _parameterpiepage(0),
     _polarpage(0),
@@ -115,8 +115,8 @@ KCConfigDialog::KCConfigDialog( KChartParams* params,
 
 	// The subtype configuration page (not for all types).
         if ( m_params->chartType() == KChartParams::Bar ) {
-            _parameter3dpage = new KChartParameter3dConfigPage(m_params,this );
-            addTab( _parameter3dpage,i18n("Bar"));
+            m_subtypeBarPage = new KCConfigSubtypeBarPage(m_params,this );
+            addTab( m_subtypeBarPage,i18n("Bar"));
         }
         else if ( m_params->chartType() == KChartParams::Line) {
             _linepage3d= new KChartLine3dConfigPage(m_params,this);
@@ -240,8 +240,8 @@ void KCConfigDialog::init()
     if (_parameterpiepage)
 	_parameterpiepage->init();
 
-    if (_parameter3dpage)
-        _parameter3dpage->init();
+    if (m_subtypeBarPage)
+        m_subtypeBarPage->init();
 
     if ( _linepage3d && m_params->chartType() == KChartParams::Line)
         _linepage3d->init();
@@ -338,8 +338,8 @@ void KCConfigDialog::apply()
     if (_piepage)
 	_piepage->apply();
 #endif
-    if( _parameter3dpage && m_params->chartType() == KChartParams::Bar  )
-        _parameter3dpage->apply();
+    if( m_subtypeBarPage && m_params->chartType() == KChartParams::Bar  )
+        m_subtypeBarPage->apply();
 
     if( _linepage3d && m_params->chartType() == KChartParams::Line)
         _linepage3d->apply();

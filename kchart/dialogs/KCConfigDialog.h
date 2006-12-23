@@ -41,7 +41,8 @@ class KChartAuxiliary;
 class KCConfigDataPage;
 class KCConfigSubtypePage;
 
-class KChartParameter3dConfigPage;
+class KCConfigSubtypeBarPage;
+
 class KChartBarslinesConfigPage;
 class KChartParameterPieConfigPage;
 class KChartPieConfigPage;
@@ -88,7 +89,7 @@ protected:
     KCConfigDataPage             *m_dataPage;
     KCConfigSubtypePage          *m_subTypePage;
 
-    KChartParameter3dConfigPage      *_parameter3dpage;
+    KCConfigSubtypeBarPage       *m_subtypeBarPage;
     KChartLine3dConfigPage           *_linepage3d;
     KChartBarslinesConfigPage        *m_barslinesPage;
     KChartParameterPieConfigPage     *_parameterpiepage;

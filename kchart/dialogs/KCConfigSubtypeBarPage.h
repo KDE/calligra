@@ -18,8 +18,8 @@
 */
 
 
-#ifndef __KCHARTPARAMETER3DCONFIGPAGE_H__
-#define __KCHARTPARAMETER3DCONFIGPAGE_H__
+#ifndef __KCCONFIGSUBTYPEBARPAGE_H__
+#define __KCCONFIGSUBTYPEBARPAGE_H__
 
 #include <QWidget>
 #include <knuminput.h>
@@ -31,13 +31,12 @@ namespace KChart
 
 class KChartParams;
 
-class KChartParameter3dConfigPage : public QWidget
+class KCConfigSubtypeBarPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartParameter3dConfigPage( KChartParams* params,
-                                 QWidget* parent );
+    KCConfigSubtypeBarPage( KChartParams* params, QWidget* parent );
     void init();
     void apply();
 
