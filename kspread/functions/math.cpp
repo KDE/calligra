@@ -146,7 +146,8 @@ void RegisterMathFunctions()
   repo->add (f);
   f = new Function ("LN",            func_ln);
   repo->add (f);
-  f = new Function ("LOG",           func_log10);
+  f = new Function ("LOG",           func_logn);
+  f->setParamCount (1, 2);
   repo->add (f);
   f = new Function ("LOG2",          func_log2);
   repo->add (f);
@@ -313,14 +314,22 @@ void RegisterMathFunctions()
 // Function: SQRT
 Value func_sqrt (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->sqrt (args[0]);
+  Value arg = args[0];
+  if ( calc->gequal( arg, Value( 0.0 ) ) )
+    return calc->sqrt (arg);
+  else
+    return Value::errorVALUE();
 }
 
 // Function: SQRTPI
 Value func_sqrtpi (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // sqrt (val * PI)
-  return calc->sqrt (calc->mul (args[0], calc->pi()));
+  Value arg = args[0];
+  if ( calc->gequal( arg, Value( 0.0 ) ) )
+    return calc->sqrt (calc->mul (args[0], calc->pi()));
+  else
+    return Value::errorVALUE();
 }
 
 // Function: ROOTN
@@ -418,7 +427,10 @@ Value func_ln (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: LOGn
 Value func_logn (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->log (args[0], args[1]);
+  if ( args.count() == 2 )
+    return calc->log (args[0], args[1]);
+  else
+    return calc->log( args[0] );
 }
 
 // Function: LOG2
@@ -445,6 +457,7 @@ Value func_suma (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->sum (args, true);
 }
 
+// Function: SUMIF
 Value func_sumif (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value checkRange = args[0];
@@ -725,6 +738,7 @@ Value func_inv (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->mul (args[0], -1);
 }
 
+// Function: MROUND
 Value func_mround (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value d = args[0];

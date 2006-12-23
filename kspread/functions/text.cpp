@@ -338,6 +338,8 @@ Value func_left (valVector args, ValueCalc *calc, FuncExtra *)
   int nb = 1;
   if (args.count() == 2)
     nb = calc->conv()->asInteger (args[1]).asInteger();
+  if ( nb < 0 )
+    return Value::errorVALUE();
 
   return Value (str.left (nb));
 }

@@ -635,10 +635,11 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The SQRT() function returns the non-negative square root of x. If x is negative, "NaN" is returned.</Text>
+	<Text>The SQRT() function returns the non-negative square root of the argument. It is an error if the argument is negative.</Text>
 	<Syntax>SQRT(x)</Syntax>
 	<Example>SQRT(9) equals 3</Example>
-	<Example>SQRT(-9) equals "NaN"</Example>
+	<Example>SQRT(-9) is an error</Example>
+        <Related>IMSQRT</Related>
       </Help>
     </Function>
 
@@ -650,7 +651,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The SQRTPI() function returns the non-negative square root of x * PI.</Text>
+	<Text>The SQRTPI() function returns the non-negative square root of x * PI. It is an error if the argument is negative.</Text>
 	<Syntax>SQRTPI(x)</Syntax>
 	<Example>SQRTPI(2) equals 2.506628</Example>
       </Help>

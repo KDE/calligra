@@ -368,7 +368,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The LEFT() function returns a substring that contains the 'length' leftmost characters of the string. The whole string is returned if 'length' exceeds the length of the string.</Text>
+	<Text>The LEFT() function returns a substring that contains the 'length' leftmost characters of the string. The whole string is returned if 'length' exceeds the length of the string. It is an error for the number of characters to be less than 0.</Text>
 	<Syntax>LEFT(text;length)</Syntax>
 	<Example>LEFT("hello";2) returns "he"</Example>
 	<Example>LEFT("KSpread";10) returns "KSpread"</Example>
