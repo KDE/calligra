@@ -40,6 +40,7 @@
 #include <KoShapeControllerBase.h>
 #include <KoSelection.h>
 #include <KoShapeDeleteCommand.h>
+#include <KoShapeReorderCommand.h>
 #include <KoZoomHandler.h>
 #include <KoLayerShape.h>
 
@@ -256,6 +257,8 @@ void VLayerDocker::raiseItem()
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
 
+    KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
+
     QUndoCommand *cmd = 0;
 
     if( selectedLayers.count() )
@@ -269,13 +272,12 @@ void VLayerDocker::raiseItem()
     }
     else if( selectedShapes.count() )
     {
-        // TODO implement shape z-order command
+        cmd = KoShapeReorderCommand::createCommand( selectedShapes.toSet(), canvas->shapeManager(), KoShapeReorderCommand::RaiseShape );
     }
 
     if( cmd )
     {
-        KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        canvasController->canvas()->addCommand( cmd );
+        canvas->addCommand( cmd );
         m_model->update();
     }
 }
@@ -287,6 +289,8 @@ void VLayerDocker::lowerItem()
 
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
+
+    KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
 
     QUndoCommand *cmd = 0;
 
@@ -301,13 +305,12 @@ void VLayerDocker::lowerItem()
     }
     else if( selectedShapes.count() )
     {
-        // TODO implement shape z-order command
+        cmd = KoShapeReorderCommand::createCommand( selectedShapes.toSet(), canvas->shapeManager(), KoShapeReorderCommand::LowerShape );
     }
 
     if( cmd )
     {
-        KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        canvasController->canvas()->addCommand( cmd );
+        canvas->addCommand( cmd );
         m_model->update();
     }
 }
@@ -336,6 +339,7 @@ void VLayerDocker::extractSelectedLayersAndShapes( QList<KoLayerShape*> &layers,
 VDocumentModel::VDocumentModel( VDocument *document, KoShapeManager *shapeManager )
 : m_document( document )
 , m_shapeManager( shapeManager )
+, m_lastContainer( 0 )
 {
 }
 
@@ -384,7 +388,7 @@ QModelIndex VDocumentModel::index( int row, int column, const QModelIndex &paren
         return QModelIndex();
 
     if( row < parentShape->childCount() )
-        return createIndex( row, column, parentShape->iterator().at(row) );
+        return createIndex( row, column, childFromIndex( parentShape, row ) );
     else
         return QModelIndex();
 }
@@ -419,7 +423,7 @@ QModelIndex VDocumentModel::parent( const QModelIndex &child ) const
     if( ! grandParentShape )
         return QModelIndex();
 
-    return createIndex( grandParentShape->iterator().indexOf( parentShape ), 0, parentShape );
+    return createIndex( indexFromChild( grandParentShape, parentShape ), 0, parentShape );
 }
 
 QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
@@ -476,7 +480,6 @@ QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
             return double(bbox.width()) / bbox.height();
         }
         default:
-            // TODO draw layers and shape into an image for the thumbnail and tooltip
             if (role >= int(BeginThumbnailRole))
                 return createThumbnail( shape, QSize( role - int(BeginThumbnailRole), role - int(BeginThumbnailRole) ) );
             else
@@ -653,6 +656,32 @@ void VDocumentModel::paintShape( KoShape *shape, QPainter &painter, const KoView
         }
         painter.restore();
     }
+}
+
+KoShape * VDocumentModel::childFromIndex( KoShapeContainer *parent, int row ) const
+{
+    return parent->iterator().at(row);
+
+    if( parent != m_lastContainer )
+    {
+        m_lastContainer = parent;
+        m_childs = parent->iterator();
+        qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
+    }
+    return m_childs.at( row );
+}
+
+int VDocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *child ) const
+{
+    return parent->iterator().indexOf( child );
+
+    if( parent != m_lastContainer )
+    {
+        m_lastContainer = parent;
+        m_childs = parent->iterator();
+        qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
+    }
+    return m_childs.indexOf( child );
 }
 
 #include "vlayerdocker.moc"

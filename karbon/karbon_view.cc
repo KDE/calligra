@@ -67,6 +67,7 @@
 #include <KoUngroupShapesCommand.h>
 #include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
+#include <KoShapeReorderCommand.h>
 #include <KoSelection.h>
 #include <KoZoomAction.h>
 #include <KoShapeSelector.h>
@@ -84,7 +85,6 @@
 #include "vstrokecmd.h"
 #include "vtransformcmd.h"
 #include "vinsertcmd.h"
-#include "vzordercmd.h"
 
 // Dialogs.
 #include "vconfiguredlg.h"
@@ -736,37 +736,37 @@ KarbonView::selectionDuplicate()
 void
 KarbonView::selectionBringToFront()
 {
-	debugView("KarbonView::selectionBringToFront()");
+    debugView("KarbonView::selectionBringToFront()");
 
-	part()->addCommand(
-		new VZOrderCmd( &part()->document(), VZOrderCmd::bringToFront ), true );
+    KoSelectionSet selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::BringToFront ) );
 }
 
 void
 KarbonView::selectionMoveUp()
 {
-	debugView("KarbonView::selectionMoveUp()");
+    debugView("KarbonView::selectionMoveUp()");
 
-	part()->addCommand(
-		new VZOrderCmd( &part()->document(), VZOrderCmd::up ), true );
+    KoSelectionSet selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::RaiseShape ) );
 }
 
 void
 KarbonView::selectionMoveDown()
 {
-	debugView("KarbonView::selectionMoveDown()");
+    debugView("KarbonView::selectionMoveDown()");
 
-	part()->addCommand(
-		new VZOrderCmd( &part()->document(), VZOrderCmd::down ), true );
+    KoSelectionSet selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::LowerShape ) );
 }
 
 void
 KarbonView::selectionSendToBack()
 {
-	debugView("KarbonView::selectionSendToBack()");
+    debugView("KarbonView::selectionSendToBack()");
 
-	part()->addCommand(
-		new VZOrderCmd( &part()->document(), VZOrderCmd::sendToBack ), true );
+    KoSelectionSet selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::SendToBack ) );
 }
 
 void

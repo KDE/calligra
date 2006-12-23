@@ -30,6 +30,7 @@ class KoCanvasBase;
 class KoShapeManager;
 class KoShapeControllerBase;
 class KoShape;
+class KoShapeContainer;
 class KoLayerShape;
 class QAbstractItemModel;
 class VDocumentModel;
@@ -91,9 +92,13 @@ private:
     QImage createThumbnail( KoShape* shape, const QSize &thumbSize ) const;
     QRectF transformedShapeBox( KoShape *shape ) const;
     void paintShape( KoShape *shape, QPainter &painter, const KoViewConverter &converter, bool isSingleShape ) const;
+    KoShape * childFromIndex( KoShapeContainer *parent, int row ) const;
+    int indexFromChild( KoShapeContainer *parent, KoShape *child ) const;
     VDocument *m_document;
     KoShapeManager *m_shapeManager;
     KoShape *m_shape;
+    mutable QList<KoShape*> m_childs;
+    mutable KoShapeContainer *m_lastContainer;
 };
 
 #endif // V_LAYER_DOCKER
