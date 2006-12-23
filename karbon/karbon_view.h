@@ -56,7 +56,6 @@ class QRectF;
 class KoRuler;
 
 class VDocumentTab;
-class VLayersTab;
 class VStrokeDocker;
 class VColorDocker;
 class VStyleDocker;

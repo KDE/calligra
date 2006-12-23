@@ -14,7 +14,6 @@ set(karboncommands_SRCS
     vstrokecmd.cc 
     vtransformcmd.cc 
     vinsertcmd.cc 
-    vzordercmd.cc
     )
 
 kde4_automoc(${karboncommands_SRCS})

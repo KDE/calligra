@@ -20,23 +20,16 @@
 #ifndef __VDOCUMENTDOCKER_H__
 #define __VDOCUMENTDOCKER_H__
 
-#include <q3listview.h>
-#include <q3ptrdict.h>
 #include <QPaintEvent>
 #include <QPixmap>
 #include <QLabel>
 #include <QEvent>
 
-class Q3HButtonGroup;
-class QPoint;
 class QPointF;
 class QLabel;
 class QPixmap;
-class QCheckBox;
 
 class VDocument;
-class KoShape;
-class KoShapeContainer;
 class KarbonView;
 
 /*************************************************************************
@@ -90,94 +83,6 @@ class VDocumentTab : public QWidget
 
 		KarbonView*			m_view;
 }; // VDocumentTab
-
-/*************************************************************************
- *  Layers Tab                                                           *
- *************************************************************************/
-
-class VLayerListViewItem : public Q3CheckListItem
-{
-public:
-	VLayerListViewItem( Q3ListView* parent, KoLayerShape* layer, VDocument *doc, Q3PtrDict<VLayerListViewItem> *map );
-	virtual ~VLayerListViewItem();
-
-	KoLayerShape* layer() { return m_layer; }
-	int pos();
-	void update();
-	virtual QString key( int column, bool ascending ) const;
-	virtual int compare( Q3ListViewItem *i, int col, bool ascending ) const;
-	void setKey( uint key ) { m_key = key; }
-
-protected:
-	virtual void stateChange( bool on );
-
-private:
-	KoLayerShape *m_layer;
-	VDocument	 *m_document;
-	uint		  m_key;
-	Q3PtrDict<VLayerListViewItem> *m_map;
-}; // VLayerListViewItem
-
-class VObjectListViewItem : public Q3ListViewItem
-{
-public:
-	VObjectListViewItem( Q3ListViewItem* parent, KoShape* object, VDocument *doc, uint key, Q3PtrDict<VObjectListViewItem> *map );
-	virtual ~VObjectListViewItem();
-
-	KoShape* object() { return m_object; }
-	void update();
-	virtual QString key( int column, bool ascending ) const;
-	virtual int compare( Q3ListViewItem *i, int col, bool ascending ) const;
-	void setKey( uint key ) { m_key = key; }
-private:
-	KoShape		*m_object;
-	VDocument	*m_document;
-	uint		 m_key;
-	Q3PtrDict<VObjectListViewItem> *m_map;
-};
-
-class VLayersTab : public QWidget
-{
-Q_OBJECT
-
-public:
-	VLayersTab( KarbonView* view, QWidget* parent = 0 );
-	~VLayersTab();
-
-public slots:
-	void updatePreviews();
-	void updateLayers();
-
-	void itemClicked( Q3ListViewItem* item, const QPoint&, int col );
-	void selectionChangedFromList();
-	void selectionChangedFromTool();
-	void renameItem( Q3ListViewItem* item, const QPoint&, int col );
-	void addLayer();
-	void raiseItem();
-	void lowerItem();
-	void deleteItem();
-	void slotCommandExecuted( VCommand* command );
-
-private slots:
-	void slotButtonClicked( int ID );
-	void removeDeletedObjectsFromList();
-	void updateChildItems( Q3ListViewItem *item );
-	void toggleState( KoShape *obj, int col );
-
-protected:
-	VLayerListViewItem* listItem( int pos );
-	void updateObjects( KoShapeContainer *object, Q3ListViewItem *item );
-	void resetSelection();
-	void selectActiveLayer();
-
-private:
-	Q3ListView						*m_layersListView;
-	Q3HButtonGroup					*m_buttonGroup;
-	KarbonView						*m_view;
-	VDocument						*m_document;
-	Q3PtrDict<VLayerListViewItem>	m_layers;
-	Q3PtrDict<VObjectListViewItem>	m_objects;
-}; // VLayersTab
 
 #endif
 
