@@ -755,7 +755,7 @@ Value func_avedev (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result;
   calc->arrayWalk (args, result, awAveDev, calc->avg (args));
-  return result;
+  return calc->div (result, calc->count (args));
 }
 
 // Function: median
