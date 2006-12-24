@@ -24,7 +24,7 @@
 
 
 class QButtonGroup;
-
+class QCheckBox;
 
 class EpsExportDlg : public KDialogBase
 {
@@ -34,9 +34,10 @@ public:
 	EpsExportDlg( QWidget* parent = 0L, const char* name = 0L );
 
 	uint psLevel() const;
-
+	bool exportHidden() const;
 private:
 	QButtonGroup* m_psLevelButtons;
+	QCheckBox* m_hiddenExport;
 };
 
 #endif

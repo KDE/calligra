@@ -39,7 +39,7 @@ class VSelectObjects : public VVisitor
 {
 public:
 	VSelectObjects( VObjectList& selection, bool select = true )
-		: m_selection( selection ), m_select( select ), m_insideGroups( false ) {}
+		: m_selection( selection ), m_select( select ), m_rectMode( true ), m_insideGroups( false ) {}
 
 	VSelectObjects( VObjectList& selection, const KoRect& rect, bool select = true )
 		: m_selection( selection ), m_select( select ), m_rect( rect ), m_rectMode( true ), m_insideGroups( false ) { }

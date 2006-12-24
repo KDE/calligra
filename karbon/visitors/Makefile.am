@@ -13,14 +13,16 @@ noinst_HEADERS = \
 	vselectobjects.h \
 	vdrawselection.h \
 	vselectiondesc.h \
-	vtransformnodes.h 
+	vtransformnodes.h \
+	vcomputeboundingbox.h
 
 libkarbonvisitors_la_SOURCES = \
 	vselectnodes.cc \
 	vselectobjects.cc \
 	vdrawselection.cc \
 	vselectiondesc.cc \
-	vtransformnodes.cc 
+	vtransformnodes.cc \
+	vcomputeboundingbox.cc
 
 libkarbonvisitors_la_METASOURCES = \
 	AUTO

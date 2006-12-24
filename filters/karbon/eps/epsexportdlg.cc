@@ -21,6 +21,7 @@
 #include <qradiobutton.h>
 #include <qstring.h>
 #include <qvbox.h>
+#include <qcheckbox.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -41,6 +42,9 @@ EpsExportDlg::EpsExportDlg( QWidget* parent, const char* name )
 	radio = new QRadioButton( i18n( "PostScript level 2" ), m_psLevelButtons );
 	radio = new QRadioButton( i18n( "PostScript level 3" ), m_psLevelButtons );
 
+	m_hiddenExport = new QCheckBox( i18n( "Export hidden layers" ), page );
+	m_hiddenExport->setChecked( true );
+
 	m_psLevelButtons->setRadioButtonExclusive( true );
 	m_psLevelButtons->setButton( 2 );
 }
@@ -52,5 +56,10 @@ EpsExportDlg::psLevel() const
 		m_psLevelButtons->id( m_psLevelButtons->selected() ) );
 }
 
+bool
+EpsExportDlg::exportHidden() const
+{
+	return m_hiddenExport->isChecked();
+}
 #include "epsexportdlg.moc"
 

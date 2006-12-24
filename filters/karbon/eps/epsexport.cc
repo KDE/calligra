@@ -46,7 +46,7 @@
 #include "vselection.h"
 #include "vstroke.h"
 #include "vtext.h"
-
+#include "vcomputeboundingbox.h"
 
 // Define PostScript level1 operators.
 static char l1_newpath		= 'N';
@@ -83,7 +83,7 @@ K_EXPORT_COMPONENT_FACTORY( libkarbonepsexport, EpsExportFactory() )
 
 
 EpsExport::EpsExport( KoFilter*, const char*, const QStringList& )
-	: KoFilter()
+	: KoFilter(), m_exportHidden( true )
 {
 }
 
@@ -113,6 +113,7 @@ EpsExport::convert( const QCString& from, const QCString& to )
 	{
 		// Which PostScript level to support?
 		m_psLevel = dialog->psLevel() + 1;
+		m_exportHidden = dialog->exportHidden();
 
 		QFile fileOut( m_chain->outputFile() );
 		if( !fileOut.open( IO_WriteOnly ) )
@@ -154,11 +155,10 @@ EpsExport::convert( const QCString& from, const QCString& to )
 void
 EpsExport::visitVDocument( VDocument& document )
 {
-	// Select all objects.
-	document.selection()->append();
-
-	// Get the bounding box of all selected objects.
-	const KoRect& rect = document.selection()->boundingBox();
+	// calculate the documents bounding box
+	VComputeBoundingBox bbox( ! m_exportHidden );
+	document.accept( bbox );
+	const KoRect &rect = bbox.boundingRect();
 
 	// Print a header.
 	*m_stream <<
@@ -177,10 +177,6 @@ EpsExport::visitVDocument( VDocument& document )
 			rect.bottom() << "\n"
 		"%%Creator: Karbon14 EPS Exportfilter 0.5"
 	<< endl;
-
-	// We dont need the selection anymore.
-	document.selection()->clear();
-
 
 	// Process document info.
 	KoStoreDevice* storeIn;
@@ -232,6 +228,38 @@ EpsExport::visitVDocument( VDocument& document )
 	*m_stream <<
 		"%%EOF"
 	<< endl;
+}
+
+void
+EpsExport::visitVGroup( VGroup& group )
+{
+	VObjectListIterator itr( group.objects() );
+
+	for( ; itr.current(); ++itr )
+	{
+		// do not export hidden child objects
+		if( ! m_exportHidden && ! isVisible( itr.current() ) )
+			continue;
+		itr.current()->accept( *this );
+	}
+}
+
+void
+EpsExport::visitVLayer( VLayer& layer )
+{
+	// do not export hidden layers
+	if( ! m_exportHidden && ! isVisible( &layer ) )
+		return;
+
+	VObjectListIterator itr( layer.objects() );
+
+	for( ; itr.current(); ++itr )
+	{
+		// do not export hidden objects
+		if( ! m_exportHidden && ! isVisible( itr.current() ) )
+			continue;
+		itr.current()->accept( *this );
+	}
 }
 
 void
@@ -444,5 +472,10 @@ EpsExport::getColor( const VColor& color )
 		copy[2] << " " << l1_setrgbcolor;
 }
 
+bool
+EpsExport::isVisible( const VObject* object ) const
+{
+	return object->state() != VObject::hidden && object->state() != VObject::hidden_locked;
+}
 
 #include "epsexport.moc"
