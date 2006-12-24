@@ -17,12 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kchartLine3dConfigPage.h"
-#include "kchartLine3dConfigPage.moc"
-
-#include <kapplication.h>
-#include <klocale.h>
-#include <kdialog.h>
 #include <QLayout>
 #include <QLabel>
 #include <QCheckBox>
@@ -31,12 +25,18 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 
+#include <kapplication.h>
+#include <klocale.h>
+#include <kdialog.h>
+
 #include "kchart_params.h"
+#include "KCConfigSubtypeLinePage.h"
+
 
 namespace KChart
 {
 
-KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
+KCConfigSubtypeLinePage::KCConfigSubtypeLinePage( KChartParams* params,
                                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
@@ -106,7 +106,7 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
   //layout->addItem( new QSpacerItem(300, 0 ), 0, 1 );
 }
 
-void KChartLine3dConfigPage::slotChange3DParameter(bool b)
+void KCConfigSubtypeLinePage::slotChange3DParameter(bool b)
 {
 #if 0
     angle3dX->setEnabled(b);
@@ -118,7 +118,7 @@ void KChartLine3dConfigPage::slotChange3DParameter(bool b)
 }
 
 
-void KChartLine3dConfigPage::init()
+void KCConfigSubtypeLinePage::init()
 {
 #if 0
     bool state=_params->threeDLines();
@@ -136,7 +136,7 @@ void KChartLine3dConfigPage::init()
 #endif
 }
 
-void KChartLine3dConfigPage::apply()
+void KCConfigSubtypeLinePage::apply()
 {
 #if 0
     _params->setThreeDLines(line3d->isChecked());
@@ -151,3 +151,5 @@ void KChartLine3dConfigPage::apply()
 
 
 }  //KChart namespace
+
+#include "KCConfigSubtypeLinePage.moc"

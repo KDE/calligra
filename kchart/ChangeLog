@@ -1,5 +1,14 @@
 2006-12-23  Inge Wallin  <inge@lysator.liu.se>
 
+	Fourth step, part 5b of wish 117960 (now finished)
+	Put the config dialog in dialogs/
+	* Move:
+	kchartLine3dConfigPage.cc         --> dialogs/KCConfigSubtypeLinePage
+	kchartParameterPieConfigPage.cc   --> dialogs/KCConfigSubtypePiePage
+	kchartParameterPolarConfigPage.cc --> dialogs/KCConfigSubtypePolarPage
+	
+	----------------------------------------------------------------
+
 	Fourth step, part 5a of wish 117960
 	Put the config dialog in dialogs/
 	* Move:

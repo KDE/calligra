@@ -42,14 +42,12 @@ class KCConfigDataPage;
 class KCConfigSubtypePage;
 
 class KCConfigSubtypeBarPage;
-
-class KChartBarslinesConfigPage;
-class KChartParameterPieConfigPage;
-class KChartPieConfigPage;
-class KChartComboPage;
-class KChartLine3dConfigPage;
-class KChartParameterPolarConfigPage;
-
+class KCConfigSubtypeLinePage;
+class KCConfigSubtypePiePage;
+class KCConfigSubtypePolarPage;
+//class KChartBarslinesConfigPage;
+//class KChartPieConfigPage;
+//class KChartComboPage;
 class KCConfigHeaderFooterPage;
 class KCConfigLegendPage;
 class KCConfigAxesPage;
@@ -84,17 +82,14 @@ signals:
     void dataChanged();
 
 protected:
-    KChartParams                     *m_params;
+    KChartParams                 *m_params;
 
     KCConfigDataPage             *m_dataPage;
     KCConfigSubtypePage          *m_subTypePage;
-
     KCConfigSubtypeBarPage       *m_subtypeBarPage;
-    KChartLine3dConfigPage           *_linepage3d;
-    KChartBarslinesConfigPage        *m_barslinesPage;
-    KChartParameterPieConfigPage     *_parameterpiepage;
-    KChartParameterPolarConfigPage   *_polarpage;
-
+    KCConfigSubtypeLinePage      *m_subtypeLinePage;
+    KCConfigSubtypePiePage       *m_subtypePiePage;
+    KCConfigSubtypePolarPage     *m_subtypePolarPage;
     KCConfigHeaderFooterPage     *m_headerfooterpage;
     KCConfigLegendPage           *m_legendPage;
     KCConfigAxesPage             *m_axespage;

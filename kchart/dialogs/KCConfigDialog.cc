@@ -24,13 +24,11 @@
 #include "KCConfigDataPage.h"
 #include "KCConfigSubtypePage.h"
 #include "KCConfigSubtypeBarPage.h"
-
-#include "kchartParameterPieConfigPage.h"
-#include "kchartComboConfigPage.h"
-#include "kchartPieConfigPage.h"
-#include "kchartLine3dConfigPage.h"
-#include "kchartParameterPolarConfigPage.h"
-
+#include "KCConfigSubtypeLinePage.h"
+#include "KCConfigSubtypePiePage.h"
+#include "KCConfigSubtypePolarPage.h"
+//#include "kchartComboConfigPage.h"
+//#include "kchartPieConfigPage.h"
 #include "KCConfigHeaderFooterPage.h"
 #include "KCConfigLegendPage.h"
 #include "KCConfigAxesPage.h"
@@ -60,9 +58,9 @@ KCConfigDialog::KCConfigDialog( KChartParams* params,
     m_subTypePage(0),
 
     m_subtypeBarPage(0),
-    _linepage3d(0),
-    _parameterpiepage(0),
-    _polarpage(0),
+    m_subtypeLinePage(0),
+    m_subtypePiePage(0),
+    m_subtypePolarPage(0),
 
     m_headerfooterpage(0),
     m_legendPage(0),
@@ -119,20 +117,19 @@ KCConfigDialog::KCConfigDialog( KChartParams* params,
             addTab( m_subtypeBarPage,i18n("Bar"));
         }
         else if ( m_params->chartType() == KChartParams::Line) {
-            _linepage3d= new KChartLine3dConfigPage(m_params,this);
-            addTab( _linepage3d,i18n("Line"));
+            m_subtypeLinePage= new KCConfigSubtypeLinePage(m_params,this);
+            addTab( m_subtypeLinePage,i18n("Line"));
         }
 #if 0
         else if ( m_params->chartType() == KChartParams::BarLines) {
             m_barslinesPage = new KChartBarslinesConfigPage(m_params, this);
-            addTab( _linepage3d,i18n("Line"));
+            addTab( m_barslinesPage,i18n("Line"));
         }
 #endif
 	else if ( m_params->chartType() == KChartParams::Pie ) {
 
-            _parameterpiepage = new KChartParameterPieConfigPage(m_params, 
-								 this );
-            addTab( _parameterpiepage, i18n( "&Pie" ) );
+            m_subtypePiePage = new KCConfigSubtypePiePage(m_params, this );
+            addTab( m_subtypePiePage, i18n( "&Pie" ) );
 
 #if 0 // Disabled for 1.4.
             _piepage = new KChartPieConfigPage(m_params, this, dat );
@@ -140,8 +137,8 @@ KCConfigDialog::KCConfigDialog( KChartParams* params,
 #endif
         }
         else if ( m_params->chartType() == KChartParams::Polar) {
-            _polarpage=new KChartParameterPolarConfigPage(m_params,this);
-            addTab( _polarpage,i18n("&Polar"));
+            m_subtypePolarPage=new KCConfigSubtypePolarPage(m_params,this);
+            addTab( m_subtypePolarPage,i18n("&Polar"));
         }
 
 
@@ -237,14 +234,14 @@ void KCConfigDialog::init()
     if (_piepage)
 	_piepage->init();
 #endif
-    if (_parameterpiepage)
-	_parameterpiepage->init();
+    if (m_subtypePiePage)
+	m_subtypePiePage->init();
 
     if (m_subtypeBarPage)
         m_subtypeBarPage->init();
 
-    if ( _linepage3d && m_params->chartType() == KChartParams::Line)
-        _linepage3d->init();
+    if ( m_subtypeLinePage && m_params->chartType() == KChartParams::Line)
+        m_subtypeLinePage->init();
 
     if (_fontpage)
         _fontpage->init();
@@ -270,8 +267,8 @@ void KCConfigDialog::init()
 
     if (m_headerfooterpage)
         m_headerfooterpage->init();
-    if (_polarpage)
-        _polarpage->init();
+    if (m_subtypePolarPage)
+        m_subtypePolarPage->init();
 }
 
 
@@ -332,8 +329,8 @@ void KCConfigDialog::apply()
     if (m_axespage)
 	m_axespage->apply();
 
-    if (_parameterpiepage)
-	_parameterpiepage->apply();
+    if (m_subtypePiePage)
+	m_subtypePiePage->apply();
 #if 0
     if (_piepage)
 	_piepage->apply();
@@ -341,8 +338,8 @@ void KCConfigDialog::apply()
     if( m_subtypeBarPage && m_params->chartType() == KChartParams::Bar  )
         m_subtypeBarPage->apply();
 
-    if( _linepage3d && m_params->chartType() == KChartParams::Line)
-        _linepage3d->apply();
+    if( m_subtypeLinePage && m_params->chartType() == KChartParams::Line)
+        m_subtypeLinePage->apply();
 
     if(_fontpage)
         _fontpage->apply();
@@ -371,8 +368,8 @@ void KCConfigDialog::apply()
 
     if (m_headerfooterpage)
         m_headerfooterpage->apply();
-    if (_polarpage)
-        _polarpage->apply();
+    if (m_subtypePolarPage)
+        m_subtypePolarPage->apply();
 
     // Data in the params struct has changed; notify the application.
     emit dataChanged();

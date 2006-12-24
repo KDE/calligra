@@ -17,15 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kchartParameterPieConfigPage.h"
-
-#include "kchartParameterPieConfigPage.moc"
-
-#include <kapplication.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kdialog.h>
-
 #include <QLayout>
 #include <QLabel>
 #include <q3buttongroup.h>
@@ -37,13 +28,20 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
+#include <kapplication.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kdialog.h>
+
 #include "kchart_params.h"
+#include "KCConfigSubtypePiePage.h"
+
 
 namespace KChart
 {
 
-KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params,
-                                                            QWidget* parent ) :
+KCConfigSubtypePiePage::KCConfigSubtypePiePage( KChartParams* params,
+						QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
     Q3VBoxLayout  *toplevel = new Q3VBoxLayout( this, 10 );
@@ -75,13 +73,13 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
     connect(pie3d,SIGNAL(toggled ( bool )),this, SLOT(active3DPie(bool)));
 }
 
-void KChartParameterPieConfigPage::active3DPie(bool b)
+void KCConfigSubtypePiePage::active3DPie(bool b)
 {
     drawShadowColor->setEnabled(b);
     depth->setEnabled(b);
 }
 
-void KChartParameterPieConfigPage::init()
+void KCConfigSubtypePiePage::init()
 {
     bool state=_params->threeDPies();
     pie3d->setChecked(state);
@@ -96,7 +94,7 @@ void KChartParameterPieConfigPage::init()
 }
 
 
-void KChartParameterPieConfigPage::apply()
+void KCConfigSubtypePiePage::apply()
 {
      _params->setThreeDPies( pie3d->isChecked() );
      if( _params->threeDPies() )	{
@@ -108,3 +106,6 @@ void KChartParameterPieConfigPage::apply()
 }
 
 }  //KChart namespace
+
+#include "KCConfigSubtypePiePage.moc"
+

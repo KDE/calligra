@@ -28,13 +28,11 @@ set(kchartcommon_LIB_SRCS
    dialogs/KCConfigDataPage.cc 
    dialogs/KCConfigSubtypePage.cc 
    dialogs/KCConfigSubtypeBarPage.cc 
-
-   kchartLine3dConfigPage.cc 
-   kchartComboConfigPage.cc 
-   kchartPieConfigPage.cc 
-   kchartParameterPieConfigPage.cc 
-   kchartParameterPolarConfigPage.cc 
-
+   dialogs/KCConfigSubtypeLinePage.cc
+   dialogs/KCConfigSubtypePiePage.cc
+   dialogs/KCConfigSubtypePolarPage.cc
+   #kchartComboConfigPage.cc 
+   #kchartPieConfigPage.cc 
    dialogs/KCConfigHeaderFooterPage.cc 
    dialogs/KCConfigLegendPage.cc 
    dialogs/KCConfigAxesPage.cc 

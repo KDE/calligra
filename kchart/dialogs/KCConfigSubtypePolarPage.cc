@@ -17,15 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kchartParameterPolarConfigPage.h"
-
-#include "kchartParameterPolarConfigPage.moc"
-
-#include <kapplication.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kdialog.h>
-
 #include <QLayout>
 #include <QLabel>
 #include <q3buttongroup.h>
@@ -37,13 +28,20 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
+#include <kapplication.h>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kdialog.h>
+
 #include "kchart_params.h"
+#include "KCConfigSubtypePolarPage.h"
+
 
 namespace KChart
 {
 
-KChartParameterPolarConfigPage::KChartParameterPolarConfigPage( KChartParams* params,
-                                                            QWidget* parent ) :
+KCConfigSubtypePolarPage::KCConfigSubtypePolarPage( KChartParams* params,
+						    QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
     Q3VBoxLayout *grid1 = new Q3VBoxLayout(this);
@@ -67,7 +65,7 @@ KChartParameterPolarConfigPage::KChartParameterPolarConfigPage( KChartParams* pa
 }
 
 
-void KChartParameterPolarConfigPage::init()
+void KCConfigSubtypePolarPage::init()
 {
     polarMarker->setChecked(_params->polarMarker());
     angle->setValue( _params->polarZeroDegreePos() );
@@ -76,7 +74,7 @@ void KChartParameterPolarConfigPage::init()
 }
 
 
-void KChartParameterPolarConfigPage::apply()
+void KCConfigSubtypePolarPage::apply()
 {
     _params->setPolarZeroDegreePos(angle->value());
     _params->setPolarMarker(polarMarker->isChecked());
@@ -85,3 +83,5 @@ void KChartParameterPolarConfigPage::apply()
 }
 
 }  //KChart namespace
+
+#include "KCConfigSubtypePolarPage.moc"

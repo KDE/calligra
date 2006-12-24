@@ -18,8 +18,8 @@
 */
 
 
-#ifndef __KCHARTPARAMETERPIECONFIGPAGE_H__
-#define __KCHARTPARAMETERPIECONFIGPAGE_H__
+#ifndef __KCCONFIGSUBTYPEPIEPAGE_H__
+#define __KCCONFIGSUBTYPEPIEPAGE_H__
 
 #include <QWidget>
 
@@ -37,12 +37,12 @@ namespace KChart
 class KChartParams;
 
 
-class KChartParameterPieConfigPage : public QWidget
+class KCConfigSubtypePiePage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartParameterPieConfigPage( KChartParams* params,QWidget* parent );
+    KCConfigSubtypePiePage( KChartParams* params,QWidget* parent );
     void init();
     void apply();
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2000,2001,2002,2003,2004 Laurent Montel <montel@kde.org>
+   Copyright (C) 2001 Matthias Kalle Dalheimer <kalle@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,15 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KCHARTPARAMETERPOLARCONFIGPAGE_H__
-#define __KCHARTPARAMETERPOLARCONFIGPAGE_H__
+#ifndef __KCCONFIGSUBTYPELINEPAGE_H__
+#define __KCCONFIGSUBTYPELINEPAGE_H__
 
 #include <QWidget>
+#include <knuminput.h>
 
-class QCheckBox;
-class QRadioButton;
-class QLineEdit;
-class QSpinBox;
 class QCheckBox;
 
 namespace KChart
@@ -33,20 +30,26 @@ namespace KChart
 
 class KChartParams;
 
-class KChartParameterPolarConfigPage : public QWidget
+class KCConfigSubtypeLinePage : public QWidget
 {
     Q_OBJECT
 
 public:
-    KChartParameterPolarConfigPage( KChartParams* params,QWidget* parent );
+    KCConfigSubtypeLinePage( KChartParams* params, QWidget* parent );
     void init();
     void apply();
+protected slots:
+    void slotChange3DParameter(bool);
 private:
     KChartParams* _params;
-    QCheckBox *polarMarker;
-    QCheckBox *showCircularLabel;
-    QSpinBox *angle, *lineWidth;
+    KIntNumInput* angle3dX;
+    KIntNumInput* angle3dY;
+    KIntNumInput* lineWidth;
+    KDoubleNumInput* depth;
+    QCheckBox* line3d, *drawShadowColor;
+    QCheckBox  *lineMarkers;
 };
+
 
 }  //KChart namespace
 
