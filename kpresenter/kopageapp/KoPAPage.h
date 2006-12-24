@@ -17,37 +17,26 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrView.h"
+#ifndef KOPAPAGE_H
+#define KOPAPAGE_H
 
-#include <KPrDocument.h>
+#include "KoPAPageBase.h"
 
-KPrView::KPrView( KPrDocument *document, QWidget *parent )
-: KoPAView( document, parent )
+class KoPAMasterPage;
+
+class KoPAPage : public KoPAPageBase
 {
-    initActions();
-}
+public:    
+    explicit KoPAPage( KoPAMasterPage * masterPage );
+    ~KoPAPage();
 
-KPrView::~KPrView()
-{
-}
+    KoPageLayout & pageLayout();
 
+    void setMasterPage( KoPAMasterPage * masterPage );
+    KoPAMasterPage * masterPage() { return m_masterPage; }
 
-void KPrView::initGUI()
-{
-    KoPAView::initGUI();
-    // do special kpresenter stuff here
-}
+protected:
+    KoPAMasterPage * m_masterPage;
+};
 
-void KPrView::initActions()
-{
-    if ( !m_doc->isReadWrite() )
-       setXMLFile( "kpresenter_readonly.rc" );
-    else
-       setXMLFile( "kpresenter.rc" );
-
-    KoPAView::initActions();
-    // do special kpresenter stuff here
-}
-
-
-#include "KPrView.moc"
+#endif /* KOPAPAGE_H */

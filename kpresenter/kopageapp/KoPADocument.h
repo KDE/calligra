@@ -17,19 +17,25 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRDOCUMENT_H
-#define KPRDOCUMENT_H
+#ifndef KOPADOCUMENT_H
+#define KOPADOCUMENT_H
 
 #include <QObject>
 
-#include <KoPADocument.h>
+#include <KoDocument.h>
+#include <KoShapeControllerBase.h>
 
-class KPrDocument : public KoPADocument
+class KoShapeAddRemoveData;
+
+class KoPAPage;
+class KoPAMasterPage;
+
+class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeControllerBase 
 {
     Q_OBJECT
 public:
-    explicit KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
-    ~KPrDocument();
+    explicit KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
+    virtual ~KoPADocument();
 
     void paintContent( QPainter &painter, const QRect &rect, bool transparent = false,
                        double zoomX = 1.0, double zoomY = 1.0 );
@@ -40,8 +46,17 @@ public:
 
     bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
+    KoPAPage* pageByIndex(int index);
+
+    void addShape( KoShape *shape, KoShapeAddRemoveData * addRemoveData );
+    void removeShape( KoShape* shape, KoShapeAddRemoveData * addRemoveData );
+
 protected:
-    KoView * createViewInstance( QWidget *parent );
+    virtual KoView *createViewInstance(  QWidget *parent ) = 0;
+
+private:
+    QList<KoPAPage*> m_pages;
+    QList<KoPAMasterPage*> m_masterPages;
 };
 
-#endif /* KPRDOCUMENT_H */
+#endif /* KOPADOCUMENT_H */

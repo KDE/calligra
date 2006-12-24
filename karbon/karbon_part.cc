@@ -618,8 +618,9 @@ KarbonPart::slotUnitChanged( KoUnit /*unit*/ )
 }
 
 void
-KarbonPart::addShape( KoShape* shape )
+KarbonPart::addShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData )
 {
+    Q_UNUSED( addRemoveData )
 	m_doc.add( shape );
 	foreach( KoView *view, views() ) {
 		KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
@@ -631,8 +632,9 @@ KarbonPart::addShape( KoShape* shape )
 }
 
 void
-KarbonPart::removeShape( KoShape* shape )
+KarbonPart::removeShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData )
 {
+    Q_UNUSED( addRemoveData )
 	m_doc.remove( shape );
 	foreach( KoView *view, views() ) {
 		KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();

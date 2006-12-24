@@ -27,6 +27,7 @@
 
 class KoPageLayout;
 class KoShape;
+class KoShapeAddRemoveData;
 
 class KivioDocument;
 class KivioLayer;
@@ -56,8 +57,8 @@ class KivioAbstractPage : public KoShapeControllerBase
     /// @return list of layers
     QList<KivioLayer*> layers() const;
 
-    virtual void addShape(KoShape* shape);
-    virtual void removeShape(KoShape* shape);
+    virtual void addShape(KoShape* shape, KoShapeAddRemoveData *addRemoveData);
+    virtual void removeShape(KoShape* shape, KoShapeAddRemoveData *addRemoveData);
 
     /// @return all shapes from all layers
     QList<KoShape*> shapes() const;

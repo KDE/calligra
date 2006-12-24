@@ -58,7 +58,7 @@ void VLayerDeleteCmd::redo()
         shapes += layer->iterator().toSet();
     }
     if( ! m_deleteCmd )
-        m_deleteCmd = new KoShapeDeleteCommand( m_controller, shapes );
+        m_deleteCmd = new KoShapeDeleteCommand( m_controller, shapes, 0 );
 
     m_deleteCmd->redo();
 }

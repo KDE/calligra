@@ -1,14 +1,12 @@
 project(kpresenter)
 
-include_directories(${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
+include_directories(${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES} ${KOPAGEAPP_INCLUDES})
 
 ### kpresenterprivate ###
 set( kpresenterprivate_LIB_SRCS
      KPrFactory.cpp
      KPrDocument.cpp
      KPrView.cpp
-     KPrCanvas.cpp
-     KPrPage.cpp
    )
 
 kde4_automoc(${kpresenterprivate_LIB_SRCS})
@@ -16,7 +14,7 @@ kde4_automoc(${kpresenterprivate_LIB_SRCS})
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
-target_link_libraries(kpresenterprivate ${KDE4_KDECORE_LIBS} kofficeui flake kotext)
+target_link_libraries(kpresenterprivate ${KDE4_KDECORE_LIBS} kofficeui flake kotext kopageapp)
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kpresenterprivate  DESTINATION ${LIB_INSTALL_DIR})

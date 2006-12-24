@@ -41,6 +41,7 @@ class KWFrameSet;
 
 class KoOasisStyles;
 class KoStyleManager;
+class KoShapeAddRemoveData;
 
 class KLocalizedString;
 class QDomDocument;
@@ -61,9 +62,9 @@ public:
 
     // KoShapeControllerBase interface
     /// reimplemented from KoShapeControllerBase
-    void addShape (KoShape *shape);
+    void addShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData);
     /// reimplemented from KoShapeControllerBase
-    void removeShape (KoShape *shape);
+    void removeShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData);
 
 
     // KoDocument interface

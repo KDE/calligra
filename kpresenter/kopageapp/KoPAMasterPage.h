@@ -17,44 +17,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrPage.h"
-#include "KPrDocument.h"
+#ifndef KOPAMASTERPAGE_H
+#define KOPAMASTERPAGE_H
 
-KPrPage::KPrPage(KPrDocument *_doc)
-    :KoShapeControllerBase()
-    , m_doc( _doc )
-{
-    m_pageLayout = KoPageLayout::standardLayout();
-}
 
-KPrPage::~KPrPage()
-{
-    m_shapes.clear();
-}
+#include "KoPAPage.h"
 
-QList<KoShape*> KPrPage::shapes() const
-{
-    return m_shapes;
-}
+#include <KoPageLayout.h>
 
-void KPrPage::addShape(KoShape* shape)
+class KoPAMasterPage : KoPAPageBase
 {
-    m_shapes.append(shape);
-    m_doc->addShapeToViews(this, shape);
-}
+public:    
+    explicit KoPAMasterPage();
+    ~KoPAMasterPage();
 
-void KPrPage::removeShape(KoShape* shape)
-{
-    m_shapes.removeAll(shape);
-    m_doc->removeShapeFromViews(this, shape);
-}
+    KoPageLayout & pageLayout() { return m_pageLayout; }
 
-QString KPrPage::pageTitle() const
-{
-    return m_pageTitle;
-}
+protected:
+    KoPageLayout m_pageLayout;
+};
 
-void KPrPage::setPageTitle( const QString &_title)
-{
-    m_pageTitle = _title;
-}
+#endif /* KOPAMASTERPAGE_H */

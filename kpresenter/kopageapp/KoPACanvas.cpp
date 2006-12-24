@@ -17,28 +17,27 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrCanvas.h"
+#include "KoPACanvas.h"
 
 #include <KoShapeManager.h>
 #include <KoToolManager.h>
-#include <KoUnit.h>
 #include <KoToolProxy.h>
+#include <KoUnit.h>
 
-#include "KPrDocument.h"
-#include "KPrView.h"
-#include "KPrPage.h"
+#include "KoPADocument.h"
+#include "KoPAView.h"
+#include "KoPAPage.h"
 
 #include <QDebug>
 
-KPrCanvas::KPrCanvas( KPrView * view, KPrDocument * doc )
+KoPACanvas::KoPACanvas( KoPAView * view, KoPADocument * doc )
 : QWidget( view )
-, KoCanvasBase( 0 )
+, KoCanvasBase( doc )
 , m_view( view )
 , m_doc( doc )
 {
     m_shapeManager = new KoShapeManager( this );
-    m_toolProxy = KoToolManager::instance()->createToolProxy(this);
-    setMinimumSize( 1000, 1000 );
+    m_toolProxy = KoToolManager::instance()->createToolProxy( this );
     setFocusPolicy( Qt::StrongFocus );
     // this is much faster than painting it in the paintevent
     setBackgroundRole( QPalette::Base );
@@ -46,67 +45,65 @@ KPrCanvas::KPrCanvas( KPrView * view, KPrDocument * doc )
     updateSize();
 }
 
-KPrCanvas::~KPrCanvas()
+KoPACanvas::~KoPACanvas()
 {
-    delete m_toolProxy;
-    m_toolProxy = 0;
 }
 
-void KPrCanvas::updateSize()
+void KoPACanvas::updateSize()
 {
   int width = 0;
   int height = 0;
 
-  if(m_view->activePage()) {
+  if ( m_view->activePage() ) 
+  {
     KoPageLayout pageLayout = m_view->activePage()->pageLayout();
-    width = qRound(m_view->zoomHandler()->zoomItX(pageLayout.ptWidth));
-    height = qRound(m_view->zoomHandler()->zoomItX(pageLayout.ptHeight));
+    width = qRound( m_view->zoomHandler()->zoomItX( pageLayout.ptWidth ) );
+    height = qRound( m_view->zoomHandler()->zoomItX( pageLayout.ptHeight ) );
   }
 
-  setMinimumSize(width, height);
+  setMinimumSize( width, height );
 }
 
 
-void KPrCanvas::gridSize( double *horizontal, double *vertical ) const
+void KoPACanvas::gridSize( double *horizontal, double *vertical ) const
 {
     *horizontal = m_doc->gridData().gridX();
     *vertical = m_doc->gridData().gridY();
-
 }
 
-bool KPrCanvas::snapToGrid() const
+bool KoPACanvas::snapToGrid() const
 {
     return m_doc->gridData().snapToGrid();
 }
 
-void KPrCanvas::addCommand( QUndoCommand *command )
+void KoPACanvas::addCommand( QUndoCommand *command )
 {
     m_doc->addCommand( command );
 }
 
-KoShapeManager * KPrCanvas::shapeManager() const
+KoShapeManager * KoPACanvas::shapeManager() const
 {
     return m_shapeManager;
 }
 
-void KPrCanvas::updateCanvas( const QRectF& rc )
+void KoPACanvas::updateCanvas( const QRectF& rc )
 {
     QRect clipRect( viewConverter()->documentToView( rc ).toRect() );
     clipRect.adjust( -2, -2, 2, 2 ); // Resize to fit anti-aliasing
     update( clipRect );
 }
 
-KoViewConverter * KPrCanvas::viewConverter()
+KoViewConverter * KoPACanvas::viewConverter()
 {
     return m_view->viewConverter();
 }
 
-KoUnit KPrCanvas::unit()
+KoUnit KoPACanvas::unit()
 {
     return m_doc->unit();
 }
 
-void KPrCanvas::paintEvent( QPaintEvent *event )
+void KoPACanvas::paintEvent( QPaintEvent *event )
 {
     QPainter painter( this );
     painter.setRenderHint( QPainter::Antialiasing );
@@ -116,44 +113,44 @@ void KPrCanvas::paintEvent( QPaintEvent *event )
     m_toolProxy->paint( painter, *( viewConverter() ) );
 }
 
-void KPrCanvas::tabletEvent( QTabletEvent *event )
+void KoPACanvas::tabletEvent( QTabletEvent *event )
 {
     m_toolProxy->tabletEvent( event, viewConverter()->viewToDocument( event->pos() ) );
 }
 
-void KPrCanvas::mousePressEvent( QMouseEvent *event )
+void KoPACanvas::mousePressEvent( QMouseEvent *event )
 {
     m_toolProxy->mousePressEvent( event, viewConverter()->viewToDocument( event->pos() ) );
 }
 
-void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *event )
+void KoPACanvas::mouseDoubleClickEvent( QMouseEvent *event )
 {
     m_toolProxy->mouseDoubleClickEvent( event, viewConverter()->viewToDocument( event->pos() ) );
 }
 
-void KPrCanvas::mouseMoveEvent( QMouseEvent *event )
+void KoPACanvas::mouseMoveEvent( QMouseEvent *event )
 {
     m_toolProxy->mouseMoveEvent( event, viewConverter()->viewToDocument( event->pos() ) );
 }
 
-void KPrCanvas::mouseReleaseEvent( QMouseEvent *event )
+void KoPACanvas::mouseReleaseEvent( QMouseEvent *event )
 {
     m_toolProxy->mouseReleaseEvent( event, viewConverter()->viewToDocument( event->pos() ) );
 }
 
-void KPrCanvas::keyPressEvent( QKeyEvent *event )
+void KoPACanvas::keyPressEvent( QKeyEvent *event )
 {
     m_toolProxy->keyPressEvent( event );
 }
 
-void KPrCanvas::keyReleaseEvent( QKeyEvent *event )
+void KoPACanvas::keyReleaseEvent( QKeyEvent *event )
 {
     m_toolProxy->keyReleaseEvent( event );
 }
 
-void KPrCanvas::wheelEvent ( QWheelEvent * event )
+void KoPACanvas::wheelEvent ( QWheelEvent * event )
 {
     m_toolProxy->wheelEvent( event, viewConverter()->viewToDocument( event->pos() ) );
 }
 
-#include "KPrCanvas.moc"
+#include "KoPACanvas.moc"

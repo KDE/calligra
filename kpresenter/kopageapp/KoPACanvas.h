@@ -17,21 +17,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRCANVAS_H
-#define KPRCANVAS_H
+#ifndef KOPACANVAS_H
+#define KOPACANVAS_H
 
 #include <QWidget>
 #include <KoCanvasBase.h>
 
-class KPrView;
-class KPrDocument;
+class KoPAView;
+class KoPADocument;
 
-class KPrCanvas : public QWidget, public KoCanvasBase
+class KoPACanvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
 public:
-    explicit KPrCanvas( KPrView * view, KPrDocument * doc );
-    ~KPrCanvas();
+    explicit KoPACanvas( KoPAView * view, KoPADocument * doc );
+    ~KoPACanvas();
     
     void gridSize( double *horizontal, double *vertical ) const;
     bool snapToGrid() const;
@@ -44,6 +44,10 @@ public:
     QWidget* canvasWidget() { return this; }
     KoUnit unit();
 
+public slots:
+    /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
+    void updateSize();
+
 protected:    
     void paintEvent( QPaintEvent* event );
     void tabletEvent( QTabletEvent *event );
@@ -55,15 +59,11 @@ protected:
     void keyReleaseEvent( QKeyEvent *event );
     void wheelEvent ( QWheelEvent * event );
 
-    KPrView * m_view;
-    KPrDocument * m_doc;
+    KoPAView * m_view;
+    KoPADocument * m_doc;
     KoShapeManager * m_shapeManager;
     KoToolProxy * m_toolProxy;
 
-public slots:
-    /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
-    void updateSize();
-
 };
 
-#endif /* KPRCANVAS_H */
+#endif /* KOPACANVAS_H */

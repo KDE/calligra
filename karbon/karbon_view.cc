@@ -538,7 +538,7 @@ KarbonView::editDeleteSelection()
 		return;
 	selection->deselectAll();
 
-	KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( part(), selectedShapes );
+	KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( part(), selectedShapes, 0 );
 	part()->KoDocument::addCommand( cmd );
 }
 
@@ -792,7 +792,7 @@ KarbonView::groupSelection()
 	}
 
 	QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
-	new KoShapeCreateCommand( m_part, group, cmd );
+	new KoShapeCreateCommand( m_part, group, 0, cmd );
 	new KoGroupShapesCommand( group, groupedShapes, cmd );
 
 	part()->KoDocument::addCommand( cmd );
@@ -827,7 +827,7 @@ KarbonView::ungroupSelection()
 		if( container )
         {
 			new KoUngroupShapesCommand( container, container->iterator(), cmd );
-            new KoShapeDeleteCommand( m_part, container, cmd );
+            new KoShapeDeleteCommand( m_part, container, 0, cmd );
         }
 	}
 	part()->KoDocument::addCommand( cmd );

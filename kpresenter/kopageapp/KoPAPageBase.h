@@ -17,31 +17,57 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRDOCUMENT_H
-#define KPRDOCUMENT_H
+#ifndef KOPAPAGEBASE_H
+#define KOPAPAGEBASE_H
 
-#include <QObject>
 
-#include <KoPADocument.h>
+#include <QList>
+#include <QString>
 
-class KPrDocument : public KoPADocument
+class KoPageLayout;
+
+class KoShape;
+
+class KoPAPageBase
 {
-    Q_OBJECT
-public:
-    explicit KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
-    ~KPrDocument();
+public:    
+    explicit KoPAPageBase();
+    virtual ~KoPAPageBase();
 
-    void paintContent( QPainter &painter, const QRect &rect, bool transparent = false,
-                       double zoomX = 1.0, double zoomY = 1.0 );
+    /**
+     * @brief Add a shape to the page
+     *
+     * @param shape to add
+     */
+    void addShape( KoShape * shape );
 
-    bool loadXML( QIODevice *, const KoXmlDocument & doc );
-    bool loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
-                    const KoXmlDocument & settings, KoStore* store );
+    /**
+     * @brief Remove a shape from the page
+     *
+     * @param shape to remove
+     */
+    void removeShape( KoShape *shape );
 
-    bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+    virtual KoPageLayout & pageLayout() = 0;
+
+    /// @return all shapes.
+    QList<KoShape*> shapes() const;
+
+    /**
+     * Return page title
+     * @param return page title
+     */
+    QString pageTitle() const;
+
+    /**
+     * Set page title
+     * @param set page title
+     */
+    void setPageTitle( const QString &);
 
 protected:
-    KoView * createViewInstance( QWidget *parent );
+    QList<KoShape *> m_shapes;
+    QString m_pageTitle;
 };
 
-#endif /* KPRDOCUMENT_H */
+#endif /* KOPAPAGEBASE_H */

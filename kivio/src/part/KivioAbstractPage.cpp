@@ -80,8 +80,9 @@ void KivioAbstractPage::removeLayer(KivioLayer* layer)
     m_layerList.removeAll(layer);
 }
 
-void KivioAbstractPage::addShape(KoShape* shape)
+void KivioAbstractPage::addShape(KoShape* shape, KoShapeAddRemoveData *addRemoveData)
 {
+    Q_UNUSED( addRemoveData );
     m_shapeList.append(shape);
 
     if(!shape->parent())
@@ -90,8 +91,9 @@ void KivioAbstractPage::addShape(KoShape* shape)
     document()->addShapeToViews(this, shape);
 }
 
-void KivioAbstractPage::removeShape(KoShape* shape)
+void KivioAbstractPage::removeShape(KoShape* shape, KoShapeAddRemoveData *addRemoveData)
 {
+    Q_UNUSED( addRemoveData );
     m_shapeList.removeAll(shape);
 
     if(shape->parent())

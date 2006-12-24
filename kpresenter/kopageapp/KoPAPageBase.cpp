@@ -17,37 +17,37 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrView.h"
+#include "KoPAPageBase.h"
 
-#include <KPrDocument.h>
-
-KPrView::KPrView( KPrDocument *document, QWidget *parent )
-: KoPAView( document, parent )
-{
-    initActions();
-}
-
-KPrView::~KPrView()
+KoPAPageBase::KoPAPageBase()
 {
 }
 
-
-void KPrView::initGUI()
+KoPAPageBase::~KoPAPageBase()
 {
-    KoPAView::initGUI();
-    // do special kpresenter stuff here
 }
 
-void KPrView::initActions()
+QList<KoShape*> KoPAPageBase::shapes() const
 {
-    if ( !m_doc->isReadWrite() )
-       setXMLFile( "kpresenter_readonly.rc" );
-    else
-       setXMLFile( "kpresenter.rc" );
-
-    KoPAView::initActions();
-    // do special kpresenter stuff here
+    return m_shapes;
 }
 
+void KoPAPageBase::addShape( KoShape* shape )
+{
+    m_shapes.append( shape );
+}
 
-#include "KPrView.moc"
+void KoPAPageBase::removeShape( KoShape* shape )
+{
+    m_shapes.removeAll( shape );
+}
+
+QString KoPAPageBase::pageTitle() const
+{
+    return m_pageTitle;
+}
+
+void KoPAPageBase::setPageTitle( const QString &_title )
+{
+    m_pageTitle = _title;
+}

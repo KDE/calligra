@@ -238,7 +238,7 @@ void VLayerDocker::deleteItem()
     }
     else if( selectedShapes.count() )
     {
-        cmd = new KoShapeDeleteCommand( m_shapeController, selectedShapes.toSet() );
+        cmd = new KoShapeDeleteCommand( m_shapeController, selectedShapes.toSet(), 0 );
     }
 
     if( cmd )

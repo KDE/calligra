@@ -17,37 +17,36 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrView.h"
+#ifndef KOSHAPEADDREMOVEDATA_H
+#define KOSHAPEADDREMOVEDATA_H
 
-#include <KPrDocument.h>
+#include <koffice_export.h>
 
-KPrView::KPrView( KPrDocument *document, QWidget *parent )
-: KoPAView( document, parent )
+/**
+ * This is a virtual base class for an object that is passed to a KoShapeControllerBase
+ * during add/remove of a shape. A application can use it it pass any information that 
+ * can be used to add/remove a shape. 
+ * Only if an application sets this in KoCanvasBase the information is passed.
+ */
+class FLAKE_EXPORT KoShapeAddRemoveData
 {
-    initActions();
-}
+public: 
+    /**
+     * @brief Constructor
+     */
+    KoShapeAddRemoveData() {}
 
-KPrView::~KPrView()
-{
-}
+    /**
+     * @brief Destructor
+     */
+    virtual ~KoShapeAddRemoveData() {}
 
+    /**
+     * @brief Clone the object
+     *
+     * @return a copy of the object
+     */
+    virtual KoShapeAddRemoveData * clone() const = 0;
+};
 
-void KPrView::initGUI()
-{
-    KoPAView::initGUI();
-    // do special kpresenter stuff here
-}
-
-void KPrView::initActions()
-{
-    if ( !m_doc->isReadWrite() )
-       setXMLFile( "kpresenter_readonly.rc" );
-    else
-       setXMLFile( "kpresenter.rc" );
-
-    KoPAView::initActions();
-    // do special kpresenter stuff here
-}
-
-
-#include "KPrView.moc"
+#endif /* KOSHAPEADDREMOVEDATA_H */

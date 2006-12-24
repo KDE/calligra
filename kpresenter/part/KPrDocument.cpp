@@ -21,22 +21,15 @@
 
 #include <kcommand.h>
 
-#include <KoShapeManager.h>
-
-#include "KPrCanvas.h"
 #include "KPrView.h"
-#include "KPrPage.h"
 
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
-: KoDocument( parentWidget, parent, singleViewMode )
+: KoPADocument( parentWidget, parent, singleViewMode )
 {
-    m_pageList.append( new KPrPage(this) );
 }
 
 KPrDocument::~KPrDocument()
 {
-    qDeleteAll(m_pageList);
-    m_pageList.clear();
 }
 
 void KPrDocument::paintContent( QPainter &painter, const QRect &rect, bool transparent,
@@ -47,6 +40,7 @@ void KPrDocument::paintContent( QPainter &painter, const QRect &rect, bool trans
 bool KPrDocument::loadXML( QIODevice *, const KoXmlDocument & doc )
 {
     //Perhaps not necessary if we use filter import/export for old file format
+    //will be removed
     return true;
 }
 
@@ -64,54 +58,6 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 KoView * KPrDocument::createViewInstance( QWidget *parent )
 {
     return new KPrView( this, parent );
-}
-
-KPrPage* KPrDocument::pageByIndex(int index)
-{
-    return m_pageList.at(index);
-}
-
-
-void KPrDocument::addShapeToViews(KPrPage *page, KoShape *shape)
-{
-    if(page == 0 || shape == 0) {
-        return;
-    }
-
-    KoView* view = 0;
-    KPrView* kprView = 0;
-    foreach(view, views()) {
-        kprView = qobject_cast<KPrView*>(view);
-
-        if(kprView && kprView->activePage()) {
-            if(kprView->activePage() == page) {
-                kprView->shapeManager()->add(shape);
-                kprView->canvasWidget()->update();
-            }
-        }
-    }
-}
-
-void KPrDocument::removeShapeFromViews(KPrPage* page, KoShape* shape)
-{
-    if(page == 0 || shape == 0) {
-        return;
-    }
-
-    KoView* view = 0;
-    KPrView* kprView = 0;
-    KPrPage* kprPage = 0;
-
-    foreach(view, views()) {
-        kprView = qobject_cast<KPrView*>(view);
-
-        if(kprView && kprView->activePage()) {
-            if(kprView->activePage() == page) {
-                kprView->shapeManager()->remove(shape);
-                kprView->canvasWidget()->update();
-            }
-        }
-    }
 }
 
 #include "KPrDocument.moc"

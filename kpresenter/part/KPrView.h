@@ -22,85 +22,20 @@
 
 #include <QObject>
 
-#include <KoView.h>
-#include <KoZoomHandler.h>
-#include <KoRuler.h>
+#include <KoPAView.h>
 
-class KoCanvasController;
-class KPrCanvas;
 class KPrDocument;
-class KToggleAction;
-class KPrPage;
-class KoShapeManager;
-class KoZoomAction;
 
-class KPrView : public KoView
+class KPrView : public KoPAView
 {
     Q_OBJECT
 public:
     explicit KPrView( KPrDocument * document, QWidget * parent = 0 );
     ~KPrView();
 
-    void updateReadWrite( bool readwrite );
-
-    KoViewConverter * viewConverter() { return &m_zoomHandler; }
-
-    KoZoomHandler* zoomHandler() { return &m_zoomHandler; }
-
-
-    KPrCanvas * kprcanvas() { return m_canvas; }
-    
-    KPrPage* activePage() const;
-
-    void setActivePage(KPrPage* page);
-    
-    KoShapeManager* shapeManager() const;
-    KPrCanvas* canvasWidget() const;
-
-    void setZoom(int zoom);
-
-protected slots:
-    void viewSnapToGrid();
-    void viewGrid();
-    void viewZoom(KoZoomMode::Mode mode, int zoom);
-
-    void textBold(bool bold);
-    void textItalic(bool italic);
-    void textUnderline(bool underline);
-    void textStrikeOut(bool strikeout);
-    void slotNonbreakingSpace();
-    void slotNonbreakingHyphen();
-    void slotSoftHyphen();
-    void slotLineBreak();
-    void formatFont();
-private:    
+protected:    
     void initGUI();
     void initActions();
-    void recalculateZoom();
-
-    /// Reimplemented to recalc the zoom when in fit to page or width mode
-    virtual void resizeEvent(QResizeEvent* event);
-
-    KPrDocument * m_doc;
-    KPrCanvas * m_canvas;
-    KoCanvasController * m_canvasController;
-    KPrPage *m_activePage;
-    KoZoomHandler m_zoomHandler;
-
-    KToggleAction *m_actionViewSnapToGrid;
-    KToggleAction *m_actionViewShowGrid;
-    KToggleAction *m_actionFormatBold;
-    KToggleAction *m_actionFormatItalic;
-    KToggleAction *m_actionFormatUnderline;
-    KToggleAction *m_actionFormatStrikeOut;
-
-    KoRuler *m_horizontalRuler;
-    KoRuler *m_verticalRuler;
-
-    KoZoomAction *m_viewZoomAction;
-
-    KAction *m_actionFormatFont;
-
 };
 
 #endif /* KPRVIEW_H */
