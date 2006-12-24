@@ -86,7 +86,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_paddingRight( 0 ),
       m_paddingTop( 0 ),
       m_paddingBottom( 0 ),
-      m_minFrameHeight( 0 ),
+      m_minFrameHeight( 0.01 ), // not 0, since AutoExtendFrame means min-height in odt
       m_internalY( 0 ),
       m_zOrder( 0 ),
       m_backgroundColor( (fs && (fs->type() == FT_PICTURE || fs->type() == FT_PART)) ? QBrush( QColor(), Qt::NoBrush) : QBrush( QColor() ) ), // valid brush with invalid color ( default )
@@ -442,7 +442,7 @@ void KWFrame::loadBorderProperties( KoStyleStack& styleStack )
     m_paddingTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "top" ) );
     m_paddingBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "bottom" ) );
 
-    // background color (3.11.25)
+    // background color
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) ) {
         QString color = styleStack.attributeNS( KoXmlNS::fo, "background-color" );
         if ( color == "transparent" )
@@ -476,6 +476,19 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
     styleStack.setTypeProperties( typeProperties );
 
     loadBorderProperties( styleStack );
+
+    // Background color is now done with fill-color.
+    // loadBorderProperties loads fo:background-color for compatibility (and for table cells),
+    // but the correct way for text boxes is draw:fill-color
+    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "fill-color" ) ) {
+        QString color = styleStack.attributeNS( KoXmlNS::draw, "fill-color" );
+        if ( color == "transparent" )
+            m_backgroundColor = QBrush( QColor(), Qt::NoBrush );
+        else
+        {
+            m_backgroundColor = QBrush( QColor( color ) /*, brush style is a dead feature, ignored */ );
+        }
+    }
 
 #if 0 // not allowed in the current OASIS spec
     // margins, i.e. runAroundGap. fo:margin for 4 values or padding-left/right/top/bottom
@@ -650,6 +663,13 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
         frameStyle.addProperty( "style:horizontal-pos", "from-left" );
         frameStyle.addProperty( "style:vertical-pos", "from-top" );
     }
+
+    // Background (KWFrame::saveBorderProperties saves as fo:background-color, but OOo-2.0.x uses draw:fill-color)
+    // So now we use draw:fill-color too, the text background color is in fact a paragraph feature.
+    if ( m_backgroundColor.style() == Qt::NoBrush )
+        frameStyle.addProperty( "draw:fill-color", "transparent" );
+    else if ( m_backgroundColor.color().isValid() )
+        frameStyle.addProperty( "draw:fill-color", m_backgroundColor.color().name() );
 
     saveBorderProperties( frameStyle );
     saveMarginProperties( frameStyle );
