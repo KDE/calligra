@@ -1,7 +1,6 @@
 project(kpresenter)
 
 add_subdirectory( part )
-add_subdirectory( kopageapp )
 
 
 #configure_file(config-kpresenter.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kpresenter.h )
