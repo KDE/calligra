@@ -70,7 +70,7 @@ void KoEllipseShape::moveHandleAction( int handleId, const QPointF & point, Qt::
     double angle = 0;
     if ( diff.x() == 0 )
     {
-        angle = diff.y() < 0 ? 270 : 90;
+        angle = ( diff.y() < 0 ? 270 : 90 ) * M_PI / 180.0;
     }
     else
     {
@@ -98,7 +98,6 @@ void KoEllipseShape::moveHandleAction( int handleId, const QPointF & point, Qt::
             break;
         case 2:
         {
-            qDebug() << "kindAngle:" << m_kindAngle;
             QList<QPointF> kindHandlePositions;
             kindHandlePositions.push_back( QPointF( m_center + QPointF( cos( m_kindAngle ) * m_radii.x(), -sin( m_kindAngle ) * m_radii.y() ) ) );
             kindHandlePositions.push_back( m_center );
@@ -113,7 +112,6 @@ void KoEllipseShape::moveHandleAction( int handleId, const QPointF & point, Qt::
                 {
                     diff = pointDiff;
                     handlePos = i;
-                    qDebug() << i << "diff:" << diff;
                 }
             }
             m_handles[handleId] = kindHandlePositions[handlePos];
@@ -127,7 +125,10 @@ void KoEllipseShape::updatePath( const QSizeF &size )
     QPointF startpoint( m_handles[0] );
 
     QPointF curvePoints[12];
-    double sweepAngle = m_endAngle == m_startAngle ? 360 : m_endAngle - m_startAngle;
+    double sweepAngle =  m_endAngle - m_startAngle;
+    // treat also as full circle
+    if ( sweepAngle == 0 || sweepAngle == -360 )
+        sweepAngle = 360;
     if ( m_startAngle > m_endAngle )
     {
         sweepAngle = 360 - m_startAngle + m_endAngle;
@@ -157,7 +158,6 @@ void KoEllipseShape::updatePath( const QSizeF &size )
         --cp;
     }
 
-    qDebug() << "KoEllipseShape" << cp;
     m_subpaths[0]->clear();
     for ( int i = 0; i <= cp; ++i )
     {
