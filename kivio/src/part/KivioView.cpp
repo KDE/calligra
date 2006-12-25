@@ -131,6 +131,7 @@ void KivioView::initGUI()
             m_horizontalRuler, SLOT(setOffset(int)));
     connect(m_canvasController, SIGNAL(canvasOffsetYChanged(int)),
             m_verticalRuler, SLOT(setOffset(int)));
+    connect(m_canvasController, SIGNAL(sizeChanged(const QSize&)), this, SLOT(canvasControllerResized()));
 
     KivioShapeGeometryFactory geometryFactory(document());
     m_geometryDocker = qobject_cast<KivioShapeGeometry*>(createDockWidget(&geometryFactory));
@@ -230,8 +231,7 @@ void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
         zoomString = i18n("%1%", newZoom);
     }
 
-    // Don't allow smaller zoom then 10% or bigger then 2000%
-    if((newZoom < 10) || (newZoom > 2000) || (newZoom == m_zoomHandler->zoomInPercent())) {
+    if(newZoom == m_zoomHandler->zoomInPercent()) {
         return;
     }
 
@@ -239,18 +239,6 @@ void KivioView::viewZoom(KoZoomMode::Mode mode, int zoom)
     m_viewZoomAction->setZoom(zoomString);
     setZoom(newZoom);
     m_canvas->setFocus();
-}
-
-void KivioView::resizeEvent(QResizeEvent* event)
-{
-    KoView::resizeEvent(event);
-
-    if(m_zoomHandler->zoomMode() != KoZoomMode::ZOOM_CONSTANT) {
-        recalculateZoom();
-    }
-
-    m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX());
-    m_verticalRuler->setOffset(m_canvasController->canvasOffsetY());
 }
 
 void KivioView::recalculateZoom()
@@ -287,6 +275,16 @@ void KivioView::selectionChanged()
 void KivioView::updateGui()
 {
     selectionChanged();
+}
+
+void KivioView::canvasControllerResized()
+{
+    if(m_zoomHandler->zoomMode() != KoZoomMode::ZOOM_CONSTANT) {
+        recalculateZoom();
+    }
+
+    m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX());
+    m_verticalRuler->setOffset(m_canvasController->canvasOffsetY());
 }
 
 #include "KivioView.moc"

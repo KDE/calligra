@@ -84,14 +84,14 @@ class KivioView : public KoView
     /// Called when the doc emits updateGui
     void updateGui();
 
+    /// Called when the canvas controller is resized
+    void canvasControllerResized();
+
   protected:
     /// Creates and initializes the GUI.
     void initGUI();
     /// Initializes all the actions
     void initActions();
-
-    /// Reimplemented to recalc the zoom when in fit to page or width mode
-    virtual void resizeEvent(QResizeEvent* event);
 
   private:
     KivioDocument* m_document;
