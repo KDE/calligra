@@ -213,12 +213,14 @@ Value func_eomonth (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // internal helper function
-static int func_days360_helper( QDate date1, QDate date2, bool european )
+static int func_days360_helper( const QDate& _date1, const QDate& _date2, bool european )
 {
   int day1, day2;
   int month1, month2;
   int year1, year2;
   bool negative = false;
+  QDate date1( _date1 );
+  QDate date2( _date2 );
 
   if (date1.daysTo( date2 ) < 0)
   {
