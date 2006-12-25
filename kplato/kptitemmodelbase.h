@@ -98,7 +98,7 @@ class TreeViewBase : public QTreeView
 {
     Q_OBJECT
 public:
-    TreeViewBase( QWidget *parent );
+    explicit TreeViewBase( QWidget *parent );
 
     void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
     bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }

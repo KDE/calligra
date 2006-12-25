@@ -47,7 +47,7 @@ class ScheduleItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    ScheduleItemModel( Part *part, QObject *parent = 0 );
+    explicit ScheduleItemModel( Part *part, QObject *parent = 0 );
     ~ScheduleItemModel();
 
     virtual void setProject( Project *project );

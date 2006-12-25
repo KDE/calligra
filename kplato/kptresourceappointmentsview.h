@@ -55,7 +55,7 @@ class ResourceAppointmentsView : public DoubleListViewBase
     Q_OBJECT
 public:
 
-    ResourceAppointmentsView( QWidget *parent );
+    explicit ResourceAppointmentsView( QWidget *parent );
 
     //~ResourceAppointmentsView();
 
