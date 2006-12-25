@@ -106,7 +106,7 @@ void RecalcManager::recalc()
     ElapsedTime et( "Recalculating cells", ElapsedTime::PrintOnlyTime );
     foreach (Cell* cell, d->depths)
     {
-        // only recalculate, if no circular dependency occured
+        // only recalculate, if no circular dependency occurred
         if ( cell->value() != Value::errorCIRCLE() )
             cell->calc( false );
     }
