@@ -44,7 +44,10 @@ namespace KSpread
 class Sheet;
 
 /**
- * A custom spatial storage based on an R-Tree.
+ * A custom spatial storage.
+ * Acts mainly as a wrapper around the R-Tree data structure to allow a future
+ * replacement of this backend. Decorated with some additional features like
+ * garbage collection, caching, used area tracking, etc.
  */
 template<typename T>
 class KSPREAD_EXPORT Storage

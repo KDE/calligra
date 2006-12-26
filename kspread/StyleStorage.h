@@ -34,7 +34,10 @@ class StyleManipulator;
 class SubStyle;
 
 /**
- * A wrapper to allow future replacements of the storage backend.
+ * The style storage.
+ * Acts mainly as a wrapper around the R-Tree data structure to allow a future
+ * replacement of this backend. Decorated with some additional features like
+ * garbage collection, caching, used area tracking, etc.
  */
 class KSPREAD_EXPORT StyleStorage : public QObject
 {

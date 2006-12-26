@@ -209,7 +209,7 @@ FunctionRepository* FunctionRepository::self()
     RegisterTextFunctions();
     RegisterTrigFunctions();
 
-    kDebug() << "Functions registered, loading descriptions" << endl;
+    kDebug() << s_self->d->functions.count() << " functions registered, loading descriptions" << endl;
 
     // find all XML description files
     QStringList files = Factory::global()->dirs()->findAllResources
