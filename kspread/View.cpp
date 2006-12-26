@@ -3880,9 +3880,9 @@ void View::paste()
     KoXmlDocument stylesDoc;
     (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, errorMessage );
     // Load styles from style.xml
-    oasisStyles.createStyleMap( stylesDoc, true );
+    oasisStyles.createStyleMap( stylesDoc );
     // Also load styles from content.xml
-    oasisStyles.createStyleMap( doc, false );
+    oasisStyles.createStyleMap( doc );
 
     // from KSpreadDoc::loadOasis:
     KoXmlElement content = doc.documentElement();

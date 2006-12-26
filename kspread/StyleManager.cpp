@@ -76,21 +76,23 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
     else
       resetDefaultStyle();
 
-    uint nStyles = oasisStyles.userStyles().count();
+    QList<KoXmlElement*> customStyles( oasisStyles.customStyles( "table-cell" ).values() );
+    uint nStyles = customStyles.count();
     for (unsigned int item = 0; item < nStyles; item++) {
-        KoXmlElement styleElem = oasisStyles.userStyles()[item];
+        KoXmlElement* styleElem = customStyles[item];
+        if ( !styleElem ) continue;
 
         // assume the name assigned by the application
-        const QString oasisName = styleElem.attributeNS( KoXmlNS::style, "name", QString::null );
+        const QString oasisName = styleElem->attributeNS( KoXmlNS::style, "name", QString::null );
 
         // then replace by user-visible one (if any)
-        const QString name = styleElem.attributeNS( KoXmlNS::style, "display-name", oasisName );
+        const QString name = styleElem->attributeNS( KoXmlNS::style, "display-name", oasisName );
         kDebug(36003) << " StyleManager: Loading common cell style: " << oasisName << " (display name: " << name << ")" << endl;
 
         if ( !name.isEmpty() )
         {
             CustomStyle * style = 0;
-            if ( styleElem.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
+            if ( styleElem->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
                 // The style's parent name will be set in Style::loadOasis(..).
                 // After all styles are loaded the pointer to the parent is set.
                 style = new CustomStyle( name );
@@ -98,7 +100,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
                 style = new CustomStyle( name, m_defaultStyle );
 
             //fixme test return;
-            style->loadOasis( oasisStyles, styleElem, name );
+            style->loadOasis( oasisStyles, *styleElem, name );
             insertStyle (style);
             // insert it into the the map sorted the OpenDocument name
             m_oasisStyles[oasisName] = style;
@@ -336,20 +338,19 @@ QStringList StyleManager::styleNames() const
 
 Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles )
 {
-  Q3DictIterator<KoXmlElement> it( oasisStyles.styles("table-cell") );
   Styles autoStyles;
-  for (;it.current();++it)
+  foreach ( KoXmlElement* element, oasisStyles.autoStyles("table-cell") )
   {
-    if ( it.current()->hasAttributeNS( KoXmlNS::style , "name" ) )
+    if ( element->hasAttributeNS( KoXmlNS::style , "name" ) )
     {
-      QString name = it.current()->attributeNS( KoXmlNS::style , "name" , QString::null );
+      QString name = element->attributeNS( KoXmlNS::style , "name" , QString::null );
       kDebug(36003) << "StyleManager: Preloading automatic cell style: " << name << endl;
       autoStyles.remove( name );
-      autoStyles[name].loadOasisStyle( oasisStyles, *(it.current()) );
+      autoStyles[name].loadOasisStyle( oasisStyles, *(element) );
 
-      if ( it.current()->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
+      if ( element->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
       {
-        QString parentStyleName = it.current()->attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
+        QString parentStyleName = element->attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
         if ( m_oasisStyles.contains( parentStyleName ) )
         {
           autoStyles[name].setParentName( m_oasisStyles[parentStyleName]->name() );

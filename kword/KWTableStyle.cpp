@@ -50,15 +50,13 @@ void KWTableStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext
 
 int KWTableStyleCollection::loadOasisStyles( KoOasisContext& context, const KoStyleCollection& paragraphStyles, const KWFrameStyleCollection& frameStyles )
 {
-    Q3ValueVector<QDomElement> userStyles = context.oasisStyles().userStyles();
+    QList<QDomElement> userStyles = context.oasisStyles().customStyles( "table-cell" ).values();
     bool defaultStyleDeleted = false;
     int stylesLoaded = 0;
     for (unsigned int item = 0; item < userStyles.count(); item++) {
-        QDomElement styleElem = userStyles[item];
-	Q_ASSERT( !styleElem.isNull() );
-
-        if ( styleElem.attributeNS( KoXmlNS::style, "family", QString::null ) != "table-cell" )
-            continue;
+        QDomElement* styleElem = userStyles[item];
+        if ( !styleElem ) continue;
+	Q_ASSERT( !styleElem->isNull() );
 
         if ( !defaultStyleDeleted ) {
             KWTableStyle *s = findStyle( defaultStyleName() );
@@ -70,7 +68,7 @@ int KWTableStyleCollection::loadOasisStyles( KoOasisContext& context, const KoSt
 
         KWTableStyle *sty = new KWTableStyle( QString::null, 0, 0 );
         // Load the style
-        sty->loadOasis( styleElem, context, paragraphStyles, frameStyles );
+        sty->loadOasis( *styleElem, context, paragraphStyles, frameStyles );
         // Style created, now let's try to add it
         sty = static_cast<KWTableStyle *>( addStyle( sty ) );
 

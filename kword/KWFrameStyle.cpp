@@ -51,15 +51,13 @@ void KWFrameStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext
 
 int KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
 {
-    Q3ValueVector<QDomElement> userStyles = context.oasisStyles().userStyles();
+    QList<QDomElement*> userStyles = context.oasisStyles().customStyles( "graphic" ).values();
     bool defaultStyleDeleted = false;
     int stylesLoaded = 0;
     for (unsigned int item = 0; item < userStyles.count(); item++) {
-        QDomElement styleElem = userStyles[item];
-	Q_ASSERT( !styleElem.isNull() );
-
-        if ( styleElem.attributeNS( KoXmlNS::style, "family", QString::null ) != "graphic" )
-            continue;
+        QDomElement* styleElem = userStyles[item];
+        if ( !styleElem ) continue;
+	Q_ASSERT( !styleElem->isNull() );
 
         if ( !defaultStyleDeleted ) {
             KWFrameStyle *s = findStyle( defaultStyleName() );
@@ -71,7 +69,7 @@ int KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
 
         KWFrameStyle *sty = new KWFrameStyle( QString::null );
         // Load the style
-        sty->loadOasis( styleElem, context );
+        sty->loadOasis( *styleElem, context );
         // Style created, now let's try to add it
         sty = static_cast<KWFrameStyle *>( addStyle( sty ) );
 
