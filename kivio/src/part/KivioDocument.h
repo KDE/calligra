@@ -20,81 +20,15 @@
 #ifndef KIVIODOCUMENT_H
 #define KIVIODOCUMENT_H
 
-#include <QList>
+#include <KoPADocument.h>
 
-#include <KoDocument.h>
-
-class QDomDocument;
-class QIODevice;
-class QPainter;
-class QRect;
-
-class KCommand;
-class KCommandHistory;
-
-class KoStore;
-class KoOasisStyle;
-class KoOasisContext;
-class KoXmlWriter;
-class KoView;
-class KoShape;
-
-class KivioMasterPage;
-class KivioPage;
-class KivioAbstractPage;
-
-class KivioDocument : public KoDocument
+class KivioDocument : public KoPADocument
 {
     Q_OBJECT
 
     public:
         KivioDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode = false);
         ~KivioDocument();
-
-        virtual void paintContent(QPainter &painter, const QRect &rect, bool transparent = false,
-                                double zoomX = 1.0, double zoomY = 1.0);
-
-        virtual bool loadXML(QIODevice* device, const QDomDocument& doc);
-
-        virtual bool loadOasis(const QDomDocument& doc, KoOasisStyles& oasisStyles,
-                            const QDomDocument& settings, KoStore* store);
-
-        virtual bool saveOasis(KoStore* store, KoXmlWriter* manifestWriter);
-
-        /* ---------Page handling--------- */
-        /** Creates a master page and adds it to the document
-        * @param title Title of the master page
-        * @return Pointer to the new master page
-        */
-        KivioMasterPage* addMasterPage(const QString& title);
-
-        /** Creates a page and adds it to the document
-        * @param masterPage Master page for the page
-        * @param title Title of the page
-        * @return Pointer to the new page or null if the page couldn't be created
-        */
-        KivioPage* addPage(KivioMasterPage* masterPage, const QString& title);
-
-        /** Returns the master page at @p index in the list
-        * @param index Index in the list
-        * @return Pointer to master page if @p index exists in the list else null
-        */
-        KivioMasterPage* masterPageByIndex(int index);
-
-        /** Returns the page at @p index in the list
-        * @param index Index in the list
-        * @return Pointer to page if @p index exists in the list else null
-        */
-        KivioPage* pageByIndex(int index);
-
-        /// Returns the number of pages in the document
-        int pageCount() const;
-
-        /// Adds @p shape to the views
-        void addShapeToViews(KivioAbstractPage* page, KoShape* shape);
-
-        /// Removes @p shape from the views
-        void removeShapeFromViews(KivioAbstractPage* page, KoShape* shape);
 
     signals:
         /// Emited when the gui needs to be updated.
@@ -103,17 +37,6 @@ class KivioDocument : public KoDocument
     protected:
         /// Creates a KivioView instance and returns it
         virtual KoView* createViewInstance(QWidget* parent);
-
-        /** Load OpenDoc master pages
-        * @return true if loading was successful else false
-        */
-        bool loadMasterPages(const KoOasisContext& oasisContext);
-
-    private:
-        KCommandHistory* m_commandHistory;
-
-        QList<KivioMasterPage*> m_masterPageList;
-        QList<KivioPage*> m_pageList;
-    };
+};
 
 #endif

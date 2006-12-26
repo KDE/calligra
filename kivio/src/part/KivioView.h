@@ -20,23 +20,14 @@
 #ifndef KIVIOVIEW_H
 #define KIVIOVIEW_H
 
-#include <KoView.h>
-#include <KoZoomMode.h>
+#include <KoPAView.h>
 
 class KAction;
 
-class KoShapeManager;
-class KoCanvasController;
-class KoZoomAction;
-class KoZoomHandler;
-class KoRuler;
-
-class KivioCanvas;
 class KivioDocument;
-class KivioAbstractPage;
 class KivioShapeGeometry;
 
-class KivioView : public KoView
+class KivioView : public KoPAView
 {
   Q_OBJECT
 
@@ -44,66 +35,24 @@ class KivioView : public KoView
     KivioView(KivioDocument* document, QWidget* parent);
     ~KivioView();
 
-    /// Returns the canvas widget.
-    KivioCanvas* canvasWidget() const;
-    virtual QWidget* canvas() const;
-
     /// Returns the document
     KivioDocument* document() const;
 
-    /// Returns the zoom handler
-    KoZoomHandler* zoomHandler() const;
-
-    virtual void updateReadWrite(bool readwrite);
-
-    /// The page currently shown on the canvas
-    KivioAbstractPage* activePage() const;
-
-    /// The shape manager that handles drawing of the shapes on the canvas
-    KoShapeManager* shapeManager() const;
-
-  public Q_SLOTS:
-    /// Change the page that will be shown on the canvas
-    void setActivePage(KivioAbstractPage* page);
-
-    /// Set the new zoom and update the canvas
-    void setZoom(int zoom);
-
-    /// Called when the mouse position changes on the canvas
-    void updateMousePosition(QPoint position);
-
   protected Q_SLOTS:
-    /// Called by the zoom action to set the zoom
-    void viewZoom(KoZoomMode::Mode mode, int zoom);
-    /// Called when the zoom mode needs a recalculation of the zoom
-    void recalculateZoom();
-
     /// Called when the selection changed
     void selectionChanged();
 
     /// Called when the doc emits updateGui
     void updateGui();
 
-    /// Called when the canvas controller is resized
-    void canvasControllerResized();
-
   protected:
     /// Creates and initializes the GUI.
-    void initGUI();
+    void initializeGUI();
     /// Initializes all the actions
-    void initActions();
+    void initializeActions();
 
   private:
     KivioDocument* m_document;
-    KivioCanvas* m_canvas;
-    KoCanvasController* m_canvasController;
-    KoZoomHandler* m_zoomHandler;
-    KoRuler* m_horizontalRuler;
-    KoRuler* m_verticalRuler;
-
-    KoZoomAction* m_viewZoomAction;
-
-    KivioAbstractPage* m_activePage;
 
     KivioShapeGeometry* m_geometryDocker;
 };
