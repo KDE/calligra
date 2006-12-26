@@ -1622,10 +1622,8 @@ bool KChartPart::loadData( const KoXmlDocument& doc,
 bool KChartPart::loadOldXML( const KoXmlDocument& doc )
 {
     kDebug(35001) << "kchart loadOldXML called" << endl;
-#ifdef KOXML_USE_QDOM
     if ( doc.doctype().name() != "chart" )
         return false;
-#endif
 
     kDebug(35001) << "Ok, it is a chart" << endl;
 
