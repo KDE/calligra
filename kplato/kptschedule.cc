@@ -836,7 +836,7 @@ void ScheduleManager::createSchedules()
     m_project.changed( this );
 }
 
-void ScheduleManager::setName( QString name )
+void ScheduleManager::setName( const QString& name )
 {
     m_name = name;
     if ( m_expected )

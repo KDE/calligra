@@ -74,7 +74,7 @@ class ResourceItem : public DoubleListViewBase::MasterListItem
     public:
         ResourceItem( Resource *r, QTreeWidget *parent, bool highlight = false );
         ResourceItem( Resource *r, QTreeWidgetItem *parent, bool highlight = false );
-        ResourceItem( QString text, QTreeWidgetItem *parent, bool highlight = false );
+        ResourceItem( const QString& text, QTreeWidgetItem *parent, bool highlight = false );
 
         Resource *resource;
         EffortCostMap effortMap;

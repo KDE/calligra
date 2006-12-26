@@ -100,8 +100,8 @@ public:
     ~ViewListWidget();
     
     QTreeWidgetItem *addCategory( const QString& name );
-    ViewListItem *addView(QTreeWidgetItem *category, const QString& name, KoView *view, KoDocument *doc, QString icon = QString::null );
-    ViewListItem *addView( QTreeWidgetItem *category, const QString& name, KoView *view, DocumentChild *ch, QString icon = QString::null );
+    ViewListItem *addView(QTreeWidgetItem *category, const QString& name, KoView *view, KoDocument *doc, const QString& icon = QString::null );
+    ViewListItem *addView( QTreeWidgetItem *category, const QString& name, KoView *view, DocumentChild *ch, const QString& icon = QString::null );
     void setSelected( QTreeWidgetItem *item );
     ViewListItem *findItem( KoView *view, QTreeWidgetItem* parent = 0 );
     

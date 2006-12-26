@@ -183,7 +183,7 @@ Appointment::UsedEffort::~UsedEffort() {
         delete takeFirst();
 }
 
-void Appointment::UsedEffort::inSort(QDate date, Duration effort, bool overtime) {
+void Appointment::UsedEffort::inSort(const QDate& date, Duration effort, bool overtime) {
     UsedEffortItem *item = new UsedEffortItem(date, effort, overtime);
     this->append(item);
 //TODO    qSort(*this);
@@ -586,7 +586,7 @@ double Appointment::actualCostTo(const QDate &date) {
     return 0.0;
 }
 
-void Appointment::addActualEffort(QDate date, Duration effort, bool overtime) {
+void Appointment::addActualEffort(const QDate& date, Duration effort, bool overtime) {
     //kDebug()<<k_funcinfo<<endl;
     m_actualEffort.inSort(date, effort, overtime);
 }
@@ -707,8 +707,9 @@ Appointment Appointment::operator+(const Appointment &app) {
 }
 
 #ifndef NDEBUG
-void Appointment::printDebug(QString indent)
+void Appointment::printDebug(const QString& _indent)
 {
+    QString indent = _indent;
     //kDebug()<<indent<<"  + Appointment: "<<this<<endl;
     bool err = false;
     if (m_node == 0) {

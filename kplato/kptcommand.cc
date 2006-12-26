@@ -1978,7 +1978,7 @@ void ProjectModifyEndTimeCmd::unexecute()
 }
 
 //----------------------------
-AddScheduleManagerCmd::AddScheduleManagerCmd( Part *part, Project &node, ScheduleManager *sm, QString name )
+AddScheduleManagerCmd::AddScheduleManagerCmd( Part *part, Project &node, ScheduleManager *sm, const QString& name )
     : NamedCommand( part, name ),
     m_node( node ),
     m_sm( sm ),
@@ -2006,7 +2006,7 @@ void AddScheduleManagerCmd::unexecute()
     m_mine = true;
 }
 
-DeleteScheduleManagerCmd::DeleteScheduleManagerCmd( Part *part, Project &node, ScheduleManager *sm, QString name )
+DeleteScheduleManagerCmd::DeleteScheduleManagerCmd( Part *part, Project &node, ScheduleManager *sm, const QString& name )
     : AddScheduleManagerCmd( part, node, sm, name )
 {
 }
@@ -2021,7 +2021,7 @@ void DeleteScheduleManagerCmd::unexecute()
     AddScheduleManagerCmd::execute();
 }
 
-ModifyScheduleManagerNameCmd::ModifyScheduleManagerNameCmd( Part *part, ScheduleManager &sm, QString value, QString name )
+ModifyScheduleManagerNameCmd::ModifyScheduleManagerNameCmd( Part *part, ScheduleManager &sm, const QString& value, const QString& name )
     : NamedCommand( part, name ),
     m_sm( sm ),
     oldvalue( sm.name() ),
@@ -2039,7 +2039,7 @@ void ModifyScheduleManagerNameCmd::unexecute()
     m_sm.setName( oldvalue );
 }
 
-ModifyScheduleManagerDistributionCmd::ModifyScheduleManagerDistributionCmd( Part *part, ScheduleManager &sm, bool value, QString name )
+ModifyScheduleManagerDistributionCmd::ModifyScheduleManagerDistributionCmd( Part *part, ScheduleManager &sm, bool value, const QString& name )
     : NamedCommand( part, name ),
     m_sm( sm ),
     oldvalue( sm.usePert() ),
@@ -2057,7 +2057,7 @@ void ModifyScheduleManagerDistributionCmd::unexecute()
     m_sm.setUsePert( oldvalue );
 }
 
-ModifyScheduleManagerCalculateAllCmd::ModifyScheduleManagerCalculateAllCmd( Part *part, ScheduleManager &sm, bool value, QString name )
+ModifyScheduleManagerCalculateAllCmd::ModifyScheduleManagerCalculateAllCmd( Part *part, ScheduleManager &sm, bool value, const QString& name )
     : NamedCommand( part, name ),
     m_sm( sm ),
     oldvalue( sm.calculateAll() ),
@@ -2075,7 +2075,7 @@ void ModifyScheduleManagerCalculateAllCmd::unexecute()
     m_sm.setCalculateAll( oldvalue );
 }
 
-CalculateScheduleCmd::CalculateScheduleCmd( Part *part, Project &node, ScheduleManager &sm, QString name )
+CalculateScheduleCmd::CalculateScheduleCmd( Part *part, Project &node, ScheduleManager &sm, const QString& name )
     : NamedCommand( part, name ),
     m_node( node ),
     m_sm( sm ),

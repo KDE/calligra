@@ -974,7 +974,7 @@ private:
 class AddScheduleManagerCmd : public NamedCommand
 {
 public:
-    AddScheduleManagerCmd( Part *part, Project &project, ScheduleManager *sm, QString name = 0 );
+    AddScheduleManagerCmd( Part *part, Project &project, ScheduleManager *sm, const QString& name = 0 );
     ~AddScheduleManagerCmd();
     void execute();
     void unexecute();
@@ -988,7 +988,7 @@ private:
 class DeleteScheduleManagerCmd : public AddScheduleManagerCmd
 {
 public:
-    DeleteScheduleManagerCmd( Part *part, Project &project, ScheduleManager *sm, QString name = 0 );
+    DeleteScheduleManagerCmd( Part *part, Project &project, ScheduleManager *sm, const QString& name = 0 );
     void execute();
     void unexecute();
 };
@@ -996,7 +996,7 @@ public:
 class ModifyScheduleManagerNameCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerNameCmd( Part *part,ScheduleManager &sm, QString value, QString name = 0 );
+    ModifyScheduleManagerNameCmd( Part *part,ScheduleManager &sm, const QString& value, const QString& name = 0 );
     void execute();
     void unexecute();
 
@@ -1008,7 +1008,7 @@ private:
 class ModifyScheduleManagerDistributionCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerDistributionCmd( Part *part,ScheduleManager &sm, bool value, QString name = 0 );
+    ModifyScheduleManagerDistributionCmd( Part *part,ScheduleManager &sm, bool value, const QString& name = 0 );
     void execute();
     void unexecute();
 
@@ -1020,7 +1020,7 @@ private:
 class ModifyScheduleManagerCalculateAllCmd : public NamedCommand
 {
 public:
-    ModifyScheduleManagerCalculateAllCmd( Part *part,ScheduleManager &sm, bool value, QString name = 0 );
+    ModifyScheduleManagerCalculateAllCmd( Part *part,ScheduleManager &sm, bool value, const QString& name = 0 );
     void execute();
     void unexecute();
 
@@ -1032,7 +1032,7 @@ private:
 class CalculateScheduleCmd : public NamedCommand
 {
 public:
-    CalculateScheduleCmd( Part *part, Project &project, ScheduleManager &sm, QString name = 0 );
+    CalculateScheduleCmd( Part *part, Project &project, ScheduleManager &sm, const QString& name = 0 );
     void execute();
     void unexecute();
 

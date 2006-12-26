@@ -49,7 +49,7 @@ TaskAppointmentsView::ResourceItem::ResourceItem( Resource *r, QTreeWidgetItem *
     //kDebug()<<k_funcinfo<<endl;
 }
 
-TaskAppointmentsView::ResourceItem::ResourceItem( QString text, QTreeWidgetItem *parent, bool highlight )
+TaskAppointmentsView::ResourceItem::ResourceItem( const QString& text, QTreeWidgetItem *parent, bool highlight )
         : DoubleListViewBase::MasterListItem( parent, text, highlight ),
         resource( 0 )
 {

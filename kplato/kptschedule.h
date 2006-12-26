@@ -358,7 +358,7 @@ class ScheduleManager
 public:
     explicit ScheduleManager( Project &project, const QString name = QString() );
 
-    void setName( QString name );
+    void setName( const QString& name );
     QString name() const { return m_name; }
 
     void createSchedules();

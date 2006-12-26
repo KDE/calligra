@@ -198,7 +198,7 @@ public:
     Appointment &operator+=(const Appointment &app);
     Appointment operator+(const Appointment &app);
     
-    void addActualEffort(QDate date, Duration effort, bool overtime=false);
+    void addActualEffort(const QDate& date, Duration effort, bool overtime=false);
     
     void setCalculationMode( int mode ) { m_calculationMode = mode; }
     int calculationMode() const { return m_calculationMode; }
@@ -229,7 +229,7 @@ private:
     public:
         UsedEffort();
         ~UsedEffort();
-        void inSort(QDate date, Duration effort, bool overtime=false);
+        void inSort(const QDate& date, Duration effort, bool overtime=false);
         Duration usedEffort(bool includeOvertime=true) const;
         Duration usedEffort(const QDate &date, bool includeOvertime=true) const;
         Duration usedEffortTo(const QDate &date, bool includeOvertime=true) const;
@@ -244,7 +244,7 @@ private:
 
 #ifndef NDEBUG
 public:
-        void printDebug(QString ident);
+        void printDebug(const QString& ident);
 #endif
 };
 

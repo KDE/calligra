@@ -71,7 +71,7 @@ public slots:
     virtual void checkAllFieldsFilled();
     virtual void setEstimateFields( int mask );
     virtual void setEstimateScales( double day );
-    virtual void setEstimateFieldUnit( int field, QString unit );
+    virtual void setEstimateFieldUnit( int field, const QString& unit );
     virtual void startDateChanged();
     virtual void startTimeChanged( const QTime & time );
     virtual void endDateChanged();

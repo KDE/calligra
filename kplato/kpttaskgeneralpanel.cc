@@ -387,7 +387,7 @@ void TaskGeneralPanelImpl::setEstimateScales( double day )
 }
 
 
-void TaskGeneralPanelImpl::setEstimateFieldUnit( int field, QString unit )
+void TaskGeneralPanelImpl::setEstimateFieldUnit( int field, const QString& unit )
 {
     estimate->setFieldUnit(field, unit);
 }

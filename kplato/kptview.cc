@@ -332,7 +332,7 @@ QTreeWidgetItem *ViewListWidget::addCategory( const QString& name )
     return item;
 }
 
-ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString& name, KoView *view, KoDocument *doc, QString icon )
+ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString& name, KoView *view, KoDocument *doc, const QString& icon )
 {
     ViewListItem * item = new ViewListItem( category, QStringList( name ), ViewListWidget::SubView );
     item->setView( view );
@@ -343,7 +343,7 @@ ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString&
     return item;
 }
 
-ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString& name, KoView *view, DocumentChild *ch, QString icon )
+ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString& name, KoView *view, DocumentChild *ch, const QString& icon )
 {
     ViewListItem * item = new ViewListItem( category, QStringList( name ), ViewListWidget::ChildDocument );
     item->setView( view );

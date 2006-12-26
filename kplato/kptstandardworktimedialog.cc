@@ -45,7 +45,7 @@ namespace KPlato
 class WeekdayListItem : public QTreeWidgetItem
 {
 public:
-    WeekdayListItem(Calendar *cal, int wd, QTreeWidget *parent, QString name, QTreeWidgetItem *after)
+    WeekdayListItem(Calendar *cal, int wd, QTreeWidget *parent, const QString& name, QTreeWidgetItem *after)
     : QTreeWidgetItem(parent, after),
       original(cal->weekday(wd)),
       calendar(cal),
