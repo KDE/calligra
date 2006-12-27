@@ -17,7 +17,8 @@
             <Action name="view_zoom_in"/>
             <Action name="view_zoom"/>
             <Separator/>
-            <Action name="view_palette_action_menu"/>
+            <Action name="view_rulers"/>
+            <Separator/>
             <Action name="view_grid"/>
             <Action name="view_snaptogrid"/>
         </Menu>

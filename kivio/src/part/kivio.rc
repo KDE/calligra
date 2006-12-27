@@ -17,12 +17,7 @@
       <Action name="zoom_in"/>
       <Action name="view_zoom"/>
       <Separator/>
-      <Action name="view_palette_action_menu"/>
+      <Action name="view_rulers"/>
     </Menu>
   </MenuBar>
-  <ToolBar name="mainToolBar">
-    <Action name="view_zoom"/>
-    <Action name="zoom_out"/>
-    <Action name="zoom_in"/>
-  </ToolBar>
 </kpartgui>
