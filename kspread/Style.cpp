@@ -322,6 +322,18 @@ void Style::loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoSt
 
 void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack )
 {
+    // precision for the default cell style
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "decimal-places" ) )
+    {
+        bool ok;
+        const int precision = styleStack.attributeNS( KoXmlNS::style, "decimal-places" ).toInt( &ok );
+        if ( ok && precision > -1 )
+        {
+            kDebug(36003) << "\tprecision: " << precision << endl;
+            setPrecision( precision );
+        }
+    }
+
     QString str;
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
     {
