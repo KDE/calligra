@@ -370,7 +370,7 @@ public:
      */
     bool loadOasis( const KoXmlElement& sheet,
                     KoOasisLoadingContext& oasisContext,
-                    const Styles& styleMap );
+                    const Styles& autoStyles );
 
     /**
      * \ingroup OpenDocument
@@ -1460,7 +1460,8 @@ protected:
      */
     bool loadRowFormat( const KoXmlElement& row, int &rowIndex,
                         KoOasisLoadingContext& oasisContext,
-                        QHash<QString, QRegion>& styleRegions );
+                        QHash<QString, QRegion>& rowStyleRegions,
+                        QHash<QString, QRegion>& cellStyleRegions );
 
     /**
      * \ingroup OpenDocument
@@ -1469,7 +1470,18 @@ protected:
      */
     bool loadColumnFormat(const KoXmlElement& row,
                           const KoOasisStyles& oasisStyles, int & indexCol,
-                          QHash<QString, QRegion>& styleRegions );
+                          QHash<QString, QRegion>& columnStyleRegions );
+
+    /**
+     * \ingroup OpenDocument
+     * Inserts the styles contained in \p styleRegions into the style storage.
+     * Looks automatic styles up in the map of preloaded automatic styles,
+     * \p autoStyles , and custom styles in the StyleManager.
+     * The region is restricted to \p usedArea .
+     */
+    void loadOasisInsertStyles( const Styles& autoStyles,
+                                const QHash<QString, QRegion>& styleRegions,
+                                const QRect& usedArea );
 
     /**
      * \ingroup OpenDocument

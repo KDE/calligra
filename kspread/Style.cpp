@@ -2348,8 +2348,13 @@ void Style::operator=( const Style& other )
 
 void Style::merge( const Style& style )
 {
-    for ( int i = 0; i < style.subStyles().count(); ++i )
-        insertSubStyle( style.subStyles()[i] );
+    const QList<SharedSubStyle> subStyles( style.subStyles() );
+    kDebug(36006) << "merging " << subStyles.count() << " attributes." << endl;
+    for ( int i = 0; i < subStyles.count(); ++i )
+    {
+        kDebug(36006) << subStyles[i]->debugData() << endl;
+        insertSubStyle( subStyles[i] );
+    }
 }
 
 void Style::dump() const
@@ -2451,7 +2456,7 @@ SharedSubStyle Style::createSubStyle( Key key, const QVariant& value )
             break;
         // font
         case FontColor:
-            newSubStyle = new SubStyleOne<FontBold, QColor>( value.value<QColor>() );
+            newSubStyle = new SubStyleOne<FontColor, QColor>( value.value<QColor>() );
             break;
         case FontFamily:
             newSubStyle = new SubStyleOne<FontFamily, QString>( value.value<QString>() );

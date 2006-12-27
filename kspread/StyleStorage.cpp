@@ -430,28 +430,32 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
                 // first, load the attributes of the parent style(s)
                 QList<CustomStyle*> parentStyles;
                 CustomStyle* parentStyle = styleManager()->style( namedStyle->parentName() );
-//                 if ( parentStyle )
-//                     kDebug(36006) << "StyleStorage: " << namedStyle->name() << "'s parent = " << parentStyle->name() << endl;
+//                 kDebug(36006) << "StyleStorage: " << namedStyle->name() << "'s parent = " << namedStyle->parentName() << endl;
                 while ( parentStyle )
                 {
 //                     kDebug(36006) << "StyleStorage: " << parentStyle->name() << "'s parent = " << parentStyle->parentName() << endl;
                     parentStyles.prepend( parentStyle );
-                    // FIXME Stefan: Make sure, that "Default" does not inherit "Default"! OOo default style!
-                    if ( parentStyle->name() == "Default" )
-                        break;
                     parentStyle = styleManager()->style( parentStyle->parentName() );
                 }
                 for ( int i = 0; i < parentStyles.count(); ++i )
+                {
+//                     kDebug(36006) << "StyleStorage: merging " << parentStyles[i]->name() << " in." << endl;
                     style.merge( *parentStyles[i] );
+                }
                 // second, merge the other attributes in
+//                 kDebug(36006) << "StyleStorage: merging " << namedStyle->name() << " in." << endl;
                 style.merge( *namedStyle );
                 // not the default anymore
                 style.clearAttribute( Style::DefaultStyleKey );
+                // reset the parent name
+                style.setParentName( namedStyle->name() );
+//                 kDebug(36006) << "StyleStorage: merging done" << endl;
             }
         }
         else
         {
             // insert the substyle
+//             kDebug(36006) << "StyleStorage: inserting " << subStyles[i]->debugData() << endl;
             style.insertSubStyle( subStyles[i] );
             // not the default anymore
             style.clearAttribute( Style::DefaultStyleKey );

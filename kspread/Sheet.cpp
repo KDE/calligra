@@ -3225,7 +3225,7 @@ QString Sheet::getPart( const KoXmlNode & part )
 
 bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                        KoOasisLoadingContext& oasisContext,
-                       const Styles& styleMap )
+                       const Styles& autoStyles )
 {
     setLayoutDirection (LeftToRight);
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
@@ -3277,12 +3277,17 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     //Maps from a column index to the name of the default cell style for that column
     QMap<int,QString> defaultColumnCellStyles;
 
-    // Assigns regions to style names
-    QHash<QString, QRegion> styleRegions;
+    // Cell style regions
+    QHash<QString, QRegion> cellStyleRegions;
+    // Cell style regions (row defaults)
+    QHash<QString, QRegion> rowStyleRegions;
+    // Cell style regions (column defaults)
+    QHash<QString, QRegion> columnStyleRegions;
 
     const int overallRowCount = map()->overallRowCount();
     int rowIndex = 1;
     int indexCol = 1;
+    int maxColumn = 1;
     KoXmlNode rowNode = sheetElement.firstChild();
     // Some spreadsheet programs may support more rows than
     // KSpread so limit the number of repeated rows.
@@ -3302,8 +3307,9 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                 if ( rowElement.localName()=="table-column" && indexCol <= KS_colMax )
                 {
                     kDebug(36003)<<" table-column found : index column before "<< indexCol<<endl;
-                    loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol , styleRegions);
+                    loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol, columnStyleRegions );
                     kDebug(36003)<<" table-column found : index column after "<< indexCol<<endl;
+                    maxColumn = qMax( maxColumn, indexCol );
                 }
                 else if ( rowElement.localName() == "table-header-rows" )
                 {
@@ -3313,14 +3319,14 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                     // NOTE Handle header rows as ordinary ones
                     //      as long as they're not supported.
                     loadRowFormat( headerRowNode.toElement(), rowIndex,
-                                   oasisContext, /*rowNode.isNull() ,*/ styleRegions );
+                                   oasisContext, /*rowNode.isNull() ,*/ rowStyleRegions, cellStyleRegions );
                     headerRowNode = headerRowNode.nextSibling();
                   }
                 }
                 else if( rowElement.localName() == "table-row" )
                 {
                     kDebug(36003)<<" table-row found :index row before "<<rowIndex<<endl;
-                    loadRowFormat( rowElement, rowIndex, oasisContext, /*rowNode.isNull() ,*/ styleRegions );
+                    loadRowFormat( rowElement, rowIndex, oasisContext, /*rowNode.isNull() ,*/ rowStyleRegions, cellStyleRegions );
                     kDebug(36003)<<" table-row found :index row after "<<rowIndex<<endl;
                 }
                 else if ( rowElement.localName() == "shapes" )
@@ -3335,18 +3341,12 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
         doc()->emitProgress( 100 * rowIndex / overallRowCount );
     }
 
-    foreach ( QString styleName, styleRegions.keys() )
-    {
-        if ( !styleMap.contains( styleName ) && !doc()->styleManager()->style( styleName ) )
-             continue;
-        foreach ( QRect rect, styleRegions[styleName].rects() )
-        {
-            if ( styleMap.contains( styleName ) )
-                setStyle( Region(rect), styleMap[styleName] );
-            else
-                setStyle( Region(rect), *doc()->styleManager()->style( styleName ) );
-        }
-    }
+    // insert the styles into the storage (column defaults)
+    loadOasisInsertStyles( autoStyles, columnStyleRegions, QRect( 1, 1, maxColumn, rowIndex - 1 ) );
+    // insert the styles into the storage (row defaults)
+    loadOasisInsertStyles( autoStyles, rowStyleRegions, QRect( 1, 1, maxColumn, rowIndex - 1 ) );
+    // insert the styles into the storage
+    loadOasisInsertStyles( autoStyles, cellStyleRegions, QRect( 1, 1, maxColumn, rowIndex - 1 ) );
 
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
     {
@@ -3562,7 +3562,7 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
 
 bool Sheet::loadColumnFormat(const KoXmlElement& column,
                              const KoOasisStyles& oasisStyles, int & indexCol,
-                             QHash<QString, QRegion>& styleRegions )
+                             QHash<QString, QRegion>& columnStyleRegions )
 {
 //   kDebug(36003)<<"bool Sheet::loadColumnFormat(const KoXmlElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
 
@@ -3586,7 +3586,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
       const QString styleName = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
       if ( !styleName.isEmpty() )
       {
-          styleRegions[styleName] += QRect( indexCol, 1, indexCol + number - 1, KS_rowMax /*FIXME*/ );
+          columnStyleRegions[styleName] += QRect( indexCol, 1, indexCol + number - 1, KS_rowMax /*FIXME*/ );
       }
     }
 
@@ -3663,10 +3663,41 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     return true;
 }
 
+void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
+                                   const QHash<QString, QRegion>& styleRegions,
+                                   const QRect& usedArea )
+{
+    kDebug(36003) << "Inserting styles ..." << endl;
+    const QList<QString> styleNames = styleRegions.keys();
+    for ( int i = 0; i < styleNames.count(); ++i )
+    {
+        if ( !autoStyles.contains( styleNames[i] ) && !doc()->styleManager()->style( styleNames[i] ) )
+        {
+            kWarning(36003) << "\t" << styleNames[i] << " not used" << endl;
+            continue;
+        }
+        const QRegion styleRegion = styleRegions[styleNames[i]] & QRegion( usedArea );
+        foreach ( const QRect& rect, styleRegion.rects() )
+        {
+            if ( autoStyles.contains( styleNames[i] ) )
+            {
+                kDebug(36003) << "\tautomatic: " << styleNames[i] << " at " << rect << endl;
+                setStyle( Region(rect), autoStyles[styleNames[i]] );
+            }
+            else
+            {
+                const CustomStyle* style = doc()->styleManager()->style( styleNames[i] );
+                kDebug(36003) << "\tcustom: " << style->name() << " at " << rect << endl;
+                setStyle( Region(rect), *style );
+            }
+        }
+    }
+}
 
 bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                            KoOasisLoadingContext& oasisContext,
-                           QHash<QString, QRegion>& styleRegions )
+                           QHash<QString, QRegion>& rowStyleRegions,
+                           QHash<QString, QRegion>& cellStyleRegions )
 {
 //    kDebug(36003)<<"Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
 
@@ -3703,7 +3734,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
       const QString styleName = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
       if ( !styleName.isEmpty() )
       {
-          styleRegions[styleName] += QRect( 1, rowIndex, KS_colMax /*FIXME*/, rowIndex + number - 1 );
+          rowStyleRegions[styleName] += QRect( 1, rowIndex, KS_colMax /*FIXME*/, rowIndex + number - 1 );
       }
     }
 
@@ -3783,7 +3814,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                 const bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
                 const QString styleName = cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null );
                 if ( cellHasStyle && !styleName.isEmpty())
-                    styleRegions[styleName] += QRect( columnIndex, backupRow, 1, 1 );
+                    cellStyleRegions[styleName] += QRect( columnIndex, backupRow, 1, 1 );
 
                 Cell* const cell = nonDefaultCell( columnIndex, backupRow );
                 cell->loadOasis( cellElement, oasisContext );
@@ -3825,7 +3856,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
                                 }
                                 // TODO Stefan: set the attributes in one go for the repeated range
                                 if ( cellHasStyle && !styleName.isEmpty())
-                                    styleRegions[styleName] += QRect( columnIndex, newRow, 1, 1 );
+                                    cellStyleRegions[styleName] += QRect( columnIndex, newRow, 1, 1 );
                                 const QString comment = this->comment( columnIndex, backupRow );
                                 if ( !comment.isEmpty() )
                                     setComment( Region(QPoint(columnIndex, newRow)), comment );

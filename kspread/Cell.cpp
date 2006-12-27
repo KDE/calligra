@@ -1731,12 +1731,12 @@ void Cell::loadOasisConditional( const KoXmlElement* style )
 
 bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisContext )
 {
-    kDebug(36003) << "*** Loading cell properties ***** at " << column() << ',' << row () << endl;
+    kDebug(36003) << "*** Loading cell properties ***** at " << column() << ", " << row () << endl;
 
     if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         kDebug(36003)<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
-        oasisContext.fillStyleStack( element, KoXmlNS::table, "styleName", "table-cell" );
+        oasisContext.fillStyleStack( element, KoXmlNS::table, "style-name", "table-cell" );
 
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
         const KoXmlElement* cellStyle = oasisContext.oasisStyles().findStyle( str, "table-cell" );

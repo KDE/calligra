@@ -58,6 +58,13 @@ class KSPREAD_EXPORT StyleManager
   void loadOasisStyleTemplate(  KoOasisStyles& oasisStyles );
 
   CustomStyle * defaultStyle() const { return m_defaultStyle; }
+
+  /**
+   * Searches for a style named \p name in the map of styles.
+   * On OpenDocument loading, it searches the name in the map sorted
+   * by the OpenDocument internal name .
+   * \return the custom style named \p name
+   */
   CustomStyle * style( QString const & name ) const;
 
   void resetDefaultStyle ();
