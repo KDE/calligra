@@ -24,41 +24,6 @@ public:
 private slots:
     void initTestCase();
 
-    /// Test the hittest of KWTextDocumentLayout
-    void testHitTest();
-
-    /// Test breaking lines based on the width of the shape.
-    void testLineBreaking();
-    /// Test breaking lines for frames with different widths.
-    void testMultiFrameLineBreaking();
-    /// Tests incrementing Y pos based on the font size
-    void testBasicLineSpacing();
-    /// Tests incrementing Y pos based on the font size
-    void testBasicLineSpacing2();
-    /// Tests advanced linespacing options provided in our style.
-    void testAdvancedLineSpacing();
-
-// Block styles
-    /// Test top, left, right and bottom margins of paragraphs.
-    void testMargins();
-    void testMultipageMargins();
-    void testTextIndent();
-    void testBasicTextAlignments();
-    void testTextAlignments();
-    void testPageBreak();
-    void testPageBreak2();
-
-// Lists
-    void testBasicList();
-    void testNumberedList();
-    void testInterruptedLists(); // consecutiveNumbering
-    void testNestedLists();
-// relativeBulletSize
-
-    //etc
-    void testParagOffset();
-    void testParagraphBorders();
-
 private:
     void initForNewTest(const QString &initText = QString());
 

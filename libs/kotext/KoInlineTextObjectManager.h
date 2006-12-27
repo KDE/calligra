@@ -16,46 +16,36 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KOINLINEOBJECTMANAGER_H
+#define KOINLINEOBJECTMANAGER_H
 
-#ifndef KWTEXTDOCUMENTLAYOUT_H
-#define KWTEXTDOCUMENTLAYOUT_H
+// KOffice libs
+#include <KoInlineObjectBase.h>
+#include <koffice_export.h>
 
-#include "kword_export.h"
+// Qt + kde
+#include <QHash>
+#include <QTextDocument>
+#include <QTextFormat>
+#include <QTextInlineObject>
 
-#include <KoTextDocumentLayout.h>
-
-#include <QRectF>
-#include <QSizeF>
-
-class KWTextFrameSet;
-//   class KWTextFrame;
-//   class KoStyleManager;
-//   class QTextLayout;
-//   class QTextList;
-//   class LayoutState;
-
-/**
- * KWords text layouter that allows text to flow in multiple frames and around
- * other KWord objects.
- */
-class KWORD_TEST_EXPORT KWTextDocumentLayout : public KoTextDocumentLayout {
+class KOTEXT_EXPORT KoInlineTextObjectManager {
+// TODO, when to delete the inlineObject s
 public:
-    /// constructor
-    KWTextDocumentLayout(KWTextFrameSet *frameSet);
-    ~KWTextDocumentLayout();
+    KoInlineTextObjectManager();
 
-    void layout();
+    KoInlineObjectBase *inlineTextObject(const QTextFormat &format) const;
+    KoInlineObjectBase *inlineTextObject(const QTextCursor &cursor) const;
 
-    QList<KoShape*> shapes() const;
-
-    void scheduleLayout();
-
+    void insertInlineObject(QTextCursor &cursor, KoInlineObjectBase *object);
 
 private:
-    KWTextFrameSet *m_frameSet;
+    enum Properties {
+        InlineInstanceId = QTextFormat::UserProperty+7001
+    };
 
-    int m_lastKnownFrameCount;
-    bool m_moreFramesRequested;
+    QHash<int, KoInlineObjectBase*> m_objects;
+    int m_lastObjectId;
 };
 
 #endif

@@ -16,46 +16,28 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KOINLINEOBJECTBASE_H
+#define KOINLINEOBJECTBASE_H
+#include <QHash>
+#include <QTextDocument>
+#include <QTextFormat>
+#include <QTextInlineObject>
 
-#ifndef KWTEXTDOCUMENTLAYOUT_H
-#define KWTEXTDOCUMENTLAYOUT_H
-
-#include "kword_export.h"
-
-#include <KoTextDocumentLayout.h>
-
-#include <QRectF>
-#include <QSizeF>
-
-class KWTextFrameSet;
-//   class KWTextFrame;
-//   class KoStyleManager;
-//   class QTextLayout;
-//   class QTextList;
-//   class LayoutState;
-
-/**
- * KWords text layouter that allows text to flow in multiple frames and around
- * other KWord objects.
- */
-class KWORD_TEST_EXPORT KWTextDocumentLayout : public KoTextDocumentLayout {
+class KoInlineObjectBase {
 public:
-    /// constructor
-    KWTextDocumentLayout(KWTextFrameSet *frameSet);
-    ~KWTextDocumentLayout();
+    KoInlineObjectBase() : m_id(-1) {}
+    virtual ~KoInlineObjectBase() {}
 
-    void layout();
+    virtual void updatePosition(const QTextDocument &document, QTextInlineObject item,
+            int posInDocument, const QTextFormat & format ) = 0;
+    virtual void resize(const QTextDocument &document, QTextInlineObject item,
+            int posInDocument, const QTextFormat & format ) = 0;
+    virtual void paint (QPainter &painter, const QTextDocument &document, const QRectF &rect,
+            QTextInlineObject object, int posInDocument, const QTextFormat &format) = 0;
 
-    QList<KoShape*> shapes() const;
-
-    void scheduleLayout();
-
-
+    int id() const { return m_id; }
+    void setId(int id) { m_id = id; }
 private:
-    KWTextFrameSet *m_frameSet;
-
-    int m_lastKnownFrameCount;
-    bool m_moreFramesRequested;
+    int m_id;
 };
-
 #endif
