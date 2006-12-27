@@ -40,6 +40,7 @@
 #include <QTimer>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <QPainter>
 
 #include <kcompletion.h>
 #include <kstandarddirs.h>
