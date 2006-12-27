@@ -40,7 +40,7 @@
 #include <KoMainWindow.h>
 
 #include <KoShapeManager.h>
-#include <KoLayerShape.h>
+#include <KoShapeLayer.h>
 
 #include "karbon_factory.h"
 #include "karbon_part.h"

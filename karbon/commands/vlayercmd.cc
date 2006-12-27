@@ -18,14 +18,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <KoLayerShape.h>
+#include <KoShapeLayer.h>
 #include "vlayercmd.h"
 #include "vdocument.h"
 #include <KoShapeControllerBase.h>
 #include <KoShapeDeleteCommand.h>
 #include <klocale.h>
 
-VLayerDeleteCmd::VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, KoLayerShape* layer, QUndoCommand* parent )
+VLayerDeleteCmd::VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, KoShapeLayer* layer, QUndoCommand* parent )
 : QUndoCommand( parent ), m_document( document ), m_controller( shapeController ), m_deleteCmd( 0 ), m_deleteLayers( false )
 {
     m_layers.append( layer );
@@ -33,7 +33,7 @@ VLayerDeleteCmd::VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *sh
     setText( i18n( "Delete Layer" ) );
 }
 
-VLayerDeleteCmd::VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, const QList<KoLayerShape*> &layers, QUndoCommand* parent )
+VLayerDeleteCmd::VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, const QList<KoShapeLayer*> &layers, QUndoCommand* parent )
 : QUndoCommand( parent ), m_document( document ), m_controller( shapeController ), m_layers( layers ), m_deleteCmd( 0 ), m_deleteLayers( false )
 {
     setText( i18n( "Delete Layer" ) );
@@ -52,7 +52,7 @@ void VLayerDeleteCmd::redo()
     m_deleteLayers = true;
     QSet<KoShape*> shapes;
 
-    foreach( KoLayerShape* layer, m_layers )
+    foreach( KoShapeLayer* layer, m_layers )
     {
         m_document->removeLayer( layer );
         shapes += layer->iterator().toSet();
@@ -66,12 +66,12 @@ void VLayerDeleteCmd::redo()
 void VLayerDeleteCmd::undo()
 {
     m_deleteLayers = false;
-    foreach( KoLayerShape* layer, m_layers )
+    foreach( KoShapeLayer* layer, m_layers )
         m_document->insertLayer( layer );
     m_deleteCmd->undo();
 }
 
-VLayerCreateCmd::VLayerCreateCmd( VDocument* document, KoLayerShape* layer, QUndoCommand* parent )
+VLayerCreateCmd::VLayerCreateCmd( VDocument* document, KoShapeLayer* layer, QUndoCommand* parent )
 : QUndoCommand( parent ), m_document( document ), m_layer( layer ), m_deleteLayer( true )
 {
     setText( i18n( "Create Layer") );
@@ -95,7 +95,7 @@ void VLayerCreateCmd::undo()
     m_deleteLayer = true;
 }
 
-VLayerZOrderCmd::VLayerZOrderCmd( VDocument* document, KoLayerShape* layer, VLayerCmdType commandType, QUndoCommand* parent )
+VLayerZOrderCmd::VLayerZOrderCmd( VDocument* document, KoShapeLayer* layer, VLayerCmdType commandType, QUndoCommand* parent )
 : QUndoCommand( parent ), m_document( document ), m_cmdType( commandType )
 {
     m_layers.append( layer );
@@ -106,7 +106,7 @@ VLayerZOrderCmd::VLayerZOrderCmd( VDocument* document, KoLayerShape* layer, VLay
         setText( i18n( "Lower Layer") );
 }
 
-VLayerZOrderCmd::VLayerZOrderCmd( VDocument* document, QList<KoLayerShape*> layers, VLayerCmdType commandType, QUndoCommand* parent )
+VLayerZOrderCmd::VLayerZOrderCmd( VDocument* document, QList<KoShapeLayer*> layers, VLayerCmdType commandType, QUndoCommand* parent )
 : QUndoCommand( parent ), m_document( document ), m_layers( layers ), m_cmdType( commandType )
 {
     if( m_cmdType == raiseLayer )
@@ -121,7 +121,7 @@ VLayerZOrderCmd::~VLayerZOrderCmd()
 
 void VLayerZOrderCmd::redo()
 {
-    foreach( KoLayerShape* layer, m_layers )
+    foreach( KoShapeLayer* layer, m_layers )
     {
         if( m_cmdType == raiseLayer )
             m_document->raiseLayer( layer );
@@ -132,7 +132,7 @@ void VLayerZOrderCmd::redo()
 
 void VLayerZOrderCmd::undo()
 {
-    foreach( KoLayerShape* layer, m_layers )
+    foreach( KoShapeLayer* layer, m_layers )
     {
         if( m_cmdType == raiseLayer )
             m_document->lowerLayer( layer );

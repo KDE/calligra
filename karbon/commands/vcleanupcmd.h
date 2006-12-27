@@ -22,7 +22,7 @@
 
 #include "vcommand.h"
 
-class KoLayerShape;
+class KoShapeLayer;
 
 /*
  * This visitor visits all layers and destroys all objects
@@ -38,7 +38,7 @@ public:
 	virtual void redo();
 	virtual void undo();
 
-	virtual void visitVLayer( KoLayerShape& layer );
+	virtual void visitVLayer( KoShapeLayer& layer );
 };
 
 #endif

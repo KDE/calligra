@@ -24,7 +24,7 @@
 #include <QUndoCommand>
 
 class VDocument;
-class KoLayerShape;
+class KoShapeLayer;
 class KoShapeControllerBase;
 class KoShapeDeleteCommand;
 
@@ -38,7 +38,7 @@ public:
      * @param controller the controller to remove the layers shape from
      * @param layer the layer which is subject to the command
      */
-    VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, KoLayerShape* layer, QUndoCommand* parent = 0 );
+    VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, KoShapeLayer* layer, QUndoCommand* parent = 0 );
 
     /**
      * Layer command which works on a list of layers.
@@ -46,7 +46,7 @@ public:
      * @param controller the controller to remove the layers shape from
      * @param layers the layers which are subject to the command
      */
-    VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, const QList<KoLayerShape*> &layers, QUndoCommand* parent = 0 );
+    VLayerDeleteCmd( VDocument* document, KoShapeControllerBase *shapeController, const QList<KoShapeLayer*> &layers, QUndoCommand* parent = 0 );
     virtual ~VLayerDeleteCmd();
 
     /// redo the command
@@ -56,7 +56,7 @@ public:
 private:
     VDocument *m_document;               ///< the document to work on
     KoShapeControllerBase *m_controller; ///< the shape controller to remove the layers shapes from
-    QList<KoLayerShape*> m_layers;       ///< the list of layers subject to the command
+    QList<KoShapeLayer*> m_layers;       ///< the list of layers subject to the command
     KoShapeDeleteCommand *m_deleteCmd;   ///< the command for deleting the layers shapes
     bool m_deleteLayers;                 ///< controls if layers should be deleted when destroying the command
 };
@@ -70,7 +70,7 @@ public:
      * @param document the document containing the layer
      * @param layer the layer which is subject to the command
      */
-    VLayerCreateCmd( VDocument* document, KoLayerShape* layer, QUndoCommand* parent = 0 );
+    VLayerCreateCmd( VDocument* document, KoShapeLayer* layer, QUndoCommand* parent = 0 );
 
     virtual ~VLayerCreateCmd();
 
@@ -81,7 +81,7 @@ public:
 
 private:
     VDocument *m_document;    ///< the document to work on
-    KoLayerShape* m_layer;    ///< the layer subject to the command
+    KoShapeLayer* m_layer;    ///< the layer subject to the command
     bool m_deleteLayer;       ///< controls if layers should be deleted when destroying the command
 };
 
@@ -102,7 +102,7 @@ public:
      * @param layer the layer which is subject to the command
      * @param commandType the type of the command to redo
      */
-    VLayerZOrderCmd( VDocument* document, KoLayerShape* layer, VLayerCmdType commandType, QUndoCommand* parent = 0 );
+    VLayerZOrderCmd( VDocument* document, KoShapeLayer* layer, VLayerCmdType commandType, QUndoCommand* parent = 0 );
 
     /**
      * Layer command which works on a single layer.
@@ -110,7 +110,7 @@ public:
      * @param layers the list of layers which are subject to the command
      * @param commandType the type of the command to redo
      */
-    VLayerZOrderCmd( VDocument* document, QList<KoLayerShape*> layers, VLayerCmdType commandType, QUndoCommand* parent = 0 );
+    VLayerZOrderCmd( VDocument* document, QList<KoShapeLayer*> layers, VLayerCmdType commandType, QUndoCommand* parent = 0 );
 
     virtual ~VLayerZOrderCmd();
 
@@ -121,7 +121,7 @@ public:
 
 private:
     VDocument *m_document;         ///< the document to work on
-    QList<KoLayerShape*> m_layers; ///< the list of layers subject to the command
+    QList<KoShapeLayer*> m_layers; ///< the list of layers subject to the command
     VLayerCmdType m_cmdType;       ///< the type of the command to redo
 };
 

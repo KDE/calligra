@@ -75,7 +75,6 @@
 #include <KoPathCommand.h>
 #include <KoToolBoxFactory.h>
 #include <KoShapeSelectorFactory.h>
-#include <KoLayerShape.h>
 
 // Commands.
 #include "vcleanupcmd.h"

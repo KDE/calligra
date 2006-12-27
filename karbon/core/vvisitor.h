@@ -31,7 +31,7 @@ class VSubpath;
 class VSelection;
 class VText;
 class VImage;
-class KoLayerShape;
+class KoShapeLayer;
 
 /**
   \brief The abstract visitor class
@@ -94,7 +94,7 @@ public:
 		Visit method for a VLayer. Pass a \a layer to this function.
 		This is a virtual function so you need to implement it in the subclass if you want to use it.
 	*/
-	virtual void visitVLayer( KoLayerShape& layer );
+	virtual void visitVLayer( KoShapeLayer& layer );
 
 	/**
 		Visit method for a VSubpath. Pass a \a path to this function.

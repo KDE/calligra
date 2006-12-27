@@ -41,7 +41,7 @@ VVisitor::visitVDocument( VDocument& document )
 {
     /*
 	foreach( KoShape* layer, document.layers() )
-		((KoLayerShape*)layer)->accept( *this );
+		((KoShapeLayer*)layer)->accept( *this );
     */
 }
 
@@ -57,7 +57,7 @@ VVisitor::visitVGroup( VGroup& group )
 }
 
 void
-VVisitor::visitVLayer( KoLayerShape& layer )
+VVisitor::visitVLayer( KoShapeLayer& layer )
 {
 	/* TODO: do we still want that ?
 	foreach( KoShape *shape, layer.iterator() )

@@ -42,7 +42,7 @@
 #include <KoShapeDeleteCommand.h>
 #include <KoShapeReorderCommand.h>
 #include <KoZoomHandler.h>
-#include <KoLayerShape.h>
+#include <KoShapeLayer.h>
 
 #include "vdocument.h"
 #include "vlayercmd.h"
@@ -175,10 +175,10 @@ void VLayerDocker::itemClicked( const QModelIndex &index )
     KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
     if( ! shape )
         return;
-    if( dynamic_cast<KoLayerShape*>( shape ) )
+    if( dynamic_cast<KoShapeLayer*>( shape ) )
         return;
 
-    QList<KoLayerShape*> selectedLayers;
+    QList<KoShapeLayer*> selectedLayers;
     QList<KoShape*> selectedShapes;
 
     // separate selected layers and selected shapes
@@ -209,7 +209,7 @@ void VLayerDocker::addLayer()
                                           i18n( "New layer" ), &ok, this );
     if( ok )
     {
-        KoLayerShape* layer = new KoLayerShape();
+        KoShapeLayer* layer = new KoShapeLayer();
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
         canvasController->canvas()->addCommand( new VLayerCreateCmd( m_document, layer ) );
         m_document->setObjectName( layer, name );
@@ -219,7 +219,7 @@ void VLayerDocker::addLayer()
 
 void VLayerDocker::deleteItem()
 {
-    QList<KoLayerShape*> selectedLayers;
+    QList<KoShapeLayer*> selectedLayers;
     QList<KoShape*> selectedShapes;
 
     // separate selected layers and selected shapes
@@ -251,7 +251,7 @@ void VLayerDocker::deleteItem()
 
 void VLayerDocker::raiseItem()
 {
-    QList<KoLayerShape*> selectedLayers;
+    QList<KoShapeLayer*> selectedLayers;
     QList<KoShape*> selectedShapes;
 
     // separate selected layers and selected shapes
@@ -264,7 +264,7 @@ void VLayerDocker::raiseItem()
     if( selectedLayers.count() )
     {
         // check if all layers could be raised
-        foreach( KoLayerShape* layer, selectedLayers )
+        foreach( KoShapeLayer* layer, selectedLayers )
             if( ! m_document->canRaiseLayer( layer ) )
                 return;
 
@@ -284,7 +284,7 @@ void VLayerDocker::raiseItem()
 
 void VLayerDocker::lowerItem()
 {
-    QList<KoLayerShape*> selectedLayers;
+    QList<KoShapeLayer*> selectedLayers;
     QList<KoShape*> selectedShapes;
 
     // separate selected layers and selected shapes
@@ -297,7 +297,7 @@ void VLayerDocker::lowerItem()
     if( selectedLayers.count() )
     {
         // check if all layers could be raised
-        foreach( KoLayerShape* layer, selectedLayers )
+        foreach( KoShapeLayer* layer, selectedLayers )
             if( ! m_document->canLowerLayer( layer ) )
                 return;
 
@@ -315,7 +315,7 @@ void VLayerDocker::lowerItem()
     }
 }
 
-void VLayerDocker::extractSelectedLayersAndShapes( QList<KoLayerShape*> &layers, QList<KoShape*> &shapes )
+void VLayerDocker::extractSelectedLayersAndShapes( QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes )
 {
     layers.clear();
     shapes.clear();
@@ -328,7 +328,7 @@ void VLayerDocker::extractSelectedLayersAndShapes( QList<KoLayerShape*> &layers,
     foreach( QModelIndex index, selectedItems )
     {
         KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
-        KoLayerShape *layer = dynamic_cast<KoLayerShape*>( shape );
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
         if( layer )
             layers.append( layer );
         else if( ! selectedItems.contains( index.parent() ) )
@@ -404,7 +404,7 @@ QModelIndex VDocumentModel::parent( const QModelIndex &child ) const
 
     KoShape *childShape = static_cast<KoShape*>( child.internalPointer() );
     // check if child shape is a layer, and return invalid model index if it is
-    KoLayerShape *childlayer = dynamic_cast<KoLayerShape*>( childShape );
+    KoShapeLayer *childlayer = dynamic_cast<KoShapeLayer*>( childShape );
     if( childlayer )
         return QModelIndex();
 
@@ -414,7 +414,7 @@ QModelIndex VDocumentModel::parent( const QModelIndex &child ) const
         return QModelIndex();
 
     // check if the parent is a layer
-    KoLayerShape *parentLayer = dynamic_cast<KoLayerShape*>( parentShape );
+    KoShapeLayer *parentLayer = dynamic_cast<KoShapeLayer*>( parentShape );
     if( parentLayer )
         return createIndex( m_document->layers().count()-1-m_document->layers().indexOf( parentLayer ), 0, parentShape );
 
@@ -443,7 +443,7 @@ QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
             QString name = m_document->objectName( shape );
             if( name.isEmpty() )
             {
-                if( dynamic_cast<KoLayerShape*>( shape ) )
+                if( dynamic_cast<KoShapeLayer*>( shape ) )
                     name = i18n("Layer");
                 else if( dynamic_cast<KoShapeContainer*>( shape ) )
                     name = i18n("Group");
@@ -457,7 +457,7 @@ QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
         case Qt::SizeHintRole: return shape->size();
         case ActiveRole:
         {
-            KoLayerShape *layer = dynamic_cast<KoLayerShape*>( shape );
+            KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
             if( layer )
                 return (layer == m_document->activeLayer() );
             else if( m_shapeManager )
@@ -522,7 +522,7 @@ bool VDocumentModel::setData(const QModelIndex &index, const QVariant &value, in
         case ActiveRole:
             if (value.toBool())
             {
-                KoLayerShape *layer = dynamic_cast<KoLayerShape*>( shape );
+                KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
                 if( layer )
                     m_document->setActiveLayer( layer );
             }

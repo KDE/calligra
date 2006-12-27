@@ -43,7 +43,7 @@ VCleanUpCmd::undo()
 }
 
 void
-VCleanUpCmd::visitVLayer( KoLayerShape& layer )
+VCleanUpCmd::visitVLayer( KoShapeLayer& layer )
 {
 	// TODO: is that absolete now?
 	/*

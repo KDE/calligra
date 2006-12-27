@@ -31,7 +31,7 @@ class KoShapeManager;
 class KoShapeControllerBase;
 class KoShape;
 class KoShapeContainer;
-class KoLayerShape;
+class KoShapeLayer;
 class QAbstractItemModel;
 class VDocumentModel;
 class KoViewConverter;
@@ -66,7 +66,7 @@ private slots:
     void lowerItem();
     void itemClicked( const QModelIndex &index );
 private:
-    void extractSelectedLayersAndShapes( QList<KoLayerShape*> &layers, QList<KoShape*> &shapes );
+    void extractSelectedLayersAndShapes( QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );
     KoShapeControllerBase *m_shapeController;
     VDocument *m_document;
     KoDocumentSectionView *m_layerView;

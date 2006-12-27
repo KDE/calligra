@@ -32,7 +32,7 @@
 #include <KoStore.h>
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
-#include <KoLayerShape.h>
+#include <KoShapeLayer.h>
 
 #include <kdebug.h>
 
@@ -47,7 +47,7 @@ VDocument::VDocument()
 	m_selection = new VSelection( this );
 
 	// create a layer. we need at least one:
-	m_activeLayer = new KoLayerShape();
+	m_activeLayer = new KoShapeLayer();
 	m_layers.append( m_activeLayer );
 	// TODO: porting to flake
 	//m_activeLayer->setSelected( true );
@@ -64,7 +64,7 @@ VDocument::VDocument( const VDocument& document )
 VDocument::~VDocument()
 {
 	delete( m_selection );
-	foreach( KoLayerShape* shape, m_layers )
+	foreach( KoShapeLayer* shape, m_layers )
 		delete shape;
 }
 
@@ -112,7 +112,7 @@ VDocument::draw( VPainter *painter, const QRectF* rect ) const
 }
 
 void
-VDocument::insertLayer( KoLayerShape* layer )
+VDocument::insertLayer( KoShapeLayer* layer )
 {
 //	if ( pos == -1 || !m_layers.insert( layer, pos ))
 	m_layers.append( layer );
@@ -120,28 +120,28 @@ VDocument::insertLayer( KoLayerShape* layer )
 } // VDocument::insertLayer
 
 void
-VDocument::removeLayer( KoLayerShape* layer )
+VDocument::removeLayer( KoShapeLayer* layer )
 {
 	m_layers.removeAt( m_layers.indexOf( layer ) );
 	if ( m_layers.count() == 0 )
-		m_layers.append( new KoLayerShape() );
+		m_layers.append( new KoShapeLayer() );
 	m_activeLayer = m_layers.last();
 } // VDocument::removeLayer
 
-bool VDocument::canRaiseLayer( KoLayerShape* layer )
+bool VDocument::canRaiseLayer( KoShapeLayer* layer )
 {
     int pos = m_layers.indexOf( layer );
     return (pos != int( m_layers.count() ) - 1 && pos >= 0 );
 }
 
-bool VDocument::canLowerLayer( KoLayerShape* layer )
+bool VDocument::canLowerLayer( KoShapeLayer* layer )
 {
     int pos = m_layers.indexOf( layer );
     return (pos>0);
 }
 
 void
-VDocument::raiseLayer( KoLayerShape* layer )
+VDocument::raiseLayer( KoShapeLayer* layer )
 {
 	int pos = m_layers.indexOf( layer );
 	if( pos != int( m_layers.count() ) - 1 && pos >= 0 )
@@ -149,7 +149,7 @@ VDocument::raiseLayer( KoLayerShape* layer )
 } // VDocument::raiseLayer
 
 void
-VDocument::lowerLayer( KoLayerShape* layer )
+VDocument::lowerLayer( KoShapeLayer* layer )
 {
 	int pos = m_layers.indexOf( layer );
 	if ( pos > 0 )
@@ -157,13 +157,13 @@ VDocument::lowerLayer( KoLayerShape* layer )
 } // VDocument::lowerLayer
 
 int
-VDocument::layerPos( KoLayerShape* layer )
+VDocument::layerPos( KoShapeLayer* layer )
 {
 	return m_layers.indexOf( layer );
 } // VDocument::layerPos
 
 void
-VDocument::setActiveLayer( KoLayerShape* layer )
+VDocument::setActiveLayer( KoShapeLayer* layer )
 {
 	if ( m_layers.indexOf( layer ) != -1 )
 		m_activeLayer = layer;
@@ -210,7 +210,7 @@ VDocument::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainS
 	// save objects:
     /* TODO implement saving of layers
 	int index = 0;
-	foreach( KoLayerShape* layer, m_layers )
+	foreach( KoShapeLayer* layer, m_layers )
 		layer->saveOasis( store, docWriter, mainStyles, ++index );
     */
 	docWriter->endElement(); // draw:page
@@ -284,7 +284,7 @@ VDocument::loadDocumentContent( const QDomElement& doc )
 
 			if( e.tagName() == "LAYER" )
 			{
-				KoLayerShape* layer = new KoLayerShape();
+				KoShapeLayer* layer = new KoShapeLayer();
                 // TODO implement layer loading
 				//layer->load( e );
 				insertLayer( layer );

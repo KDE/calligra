@@ -40,9 +40,9 @@ class VSelection;
 class KoPageLayout;
 class KoShape;
 
-class KoLayerShape;
+class KoShapeLayer;
 
-typedef QList<KoLayerShape*> VLayerList;
+typedef QList<KoShapeLayer*> VLayerList;
 
 /**
  * All non-visual, static doc info is in here.
@@ -144,7 +144,7 @@ public:
 	 * @param layer the layer to check
 	 * @return true if layer can be raised, else false
 	 */
-	bool canRaiseLayer( KoLayerShape* layer );
+	bool canRaiseLayer( KoShapeLayer* layer );
 
 	/**
 	 * Checks if specified layer can be lowered. 
@@ -155,21 +155,21 @@ public:
 	 * @param layer the layer to check
 	 * @return true if layer can be lowered, else false
 	 */
-	bool canLowerLayer( KoLayerShape* layer );
+	bool canLowerLayer( KoShapeLayer* layer );
 
 	/**
 	 * Raises the layer.
 	 * 
 	 * @param layer the layer to raise
 	 */
-	void raiseLayer( KoLayerShape* layer );
+	void raiseLayer( KoShapeLayer* layer );
 
 	/**
 	 * Lowers the layer.
 	 * 
 	 * @param layer the layer to lower
 	 */
-	void lowerLayer( KoLayerShape* layer );
+	void lowerLayer( KoShapeLayer* layer );
 
 	/**
 	 * Returns the position of the specified layer.
@@ -177,7 +177,7 @@ public:
 	 * @param layer the layer to retrieve the position for
 	 * @return the layer position
 	 */
-	int layerPos( KoLayerShape* layer );
+	int layerPos( KoShapeLayer* layer );
 
 	/**
 	 * Inserts a new layer.
@@ -186,7 +186,7 @@ public:
 	 *
 	 * @param layer the layer to insert
 	 */
-	void insertLayer( KoLayerShape* layer );
+	void insertLayer( KoShapeLayer* layer );
 
 	/**
 	 * Removes the layer.
@@ -195,7 +195,7 @@ public:
 	 *
 	 * @param layer the layer to remove
 	 */
-	void removeLayer( KoLayerShape* layer );
+	void removeLayer( KoShapeLayer* layer );
 
 	/**
 	 * Sets the active layer.
@@ -204,14 +204,14 @@ public:
 	 *
 	 * @param layer the layer to set active
 	 */
-	void setActiveLayer( KoLayerShape* layer );
+	void setActiveLayer( KoShapeLayer* layer );
 
 	/**
 	 * Returns a pointer to the active layer.
 	 *
 	 * @return the currently active layer
 	 */
-	KoLayerShape* activeLayer() const { return m_activeLayer; }
+	KoShapeLayer* activeLayer() const { return m_activeLayer; }
 
 	/**
 	 * Returns the list of layers.
@@ -319,7 +319,7 @@ private:
 
     QList<KoShape*> m_objects;   ///< The list of all object of the document.
 	VLayerList m_layers;         ///< The layers in this document.
-	KoLayerShape* m_activeLayer; ///< The active layer.
+	KoShapeLayer* m_activeLayer; ///< The active layer.
 
 	/// The selection. A list of selected objects.
 	VSelection* m_selection;

@@ -33,7 +33,7 @@
 #include <kiconloader.h>
 #include <KoMainWindow.h>
 #include <KoFilterManager.h>
-#include <KoLayerShape.h>
+#include <KoShapeLayer.h>
 #include <kfiledialog.h>
 
 #include "karbon_part.h"
