@@ -60,7 +60,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kurlrequester.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <kpushbutton.h>
 #include <ktoolinvocation.h>
 #include <kvbox.h>
@@ -377,16 +377,16 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
     colorGroup->setHidden( true );
 
     KHBox *buttonLayout = new KHBox( this );
-    KPushButton *helpButton = new KPushButton( KStdGuiItem::help(), buttonLayout );
+    KPushButton *helpButton = new KPushButton( KStandardGuiItem::help(), buttonLayout );
     helpButton->setWhatsThis(
                      i18n( "Selecting this button will take you to the KPresenter "
                            "documentation that provides more information on how "
                            "to use the Memory Stick export function. ") );
-    KPushButton *createButton = new KPushButton( KStdGuiItem::ok(), buttonLayout );
+    KPushButton *createButton = new KPushButton( KStandardGuiItem::ok(), buttonLayout );
     createButton->setWhatsThis(
                      i18n( "Selecting this button will proceed to generating "
                            "the presentation in the special Sony format." ) );
-    KPushButton *cancelButton = new KPushButton( KStdGuiItem::cancel(), buttonLayout );
+    KPushButton *cancelButton = new KPushButton( KStandardGuiItem::cancel(), buttonLayout );
     cancelButton->setWhatsThis(
                      i18n( "Selecting this button will cancel out of the "
                            "generation of the presentation, and return "

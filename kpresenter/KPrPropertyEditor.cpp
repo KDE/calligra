@@ -34,7 +34,7 @@
 #include "KPrObjectProperties.h"
 
 #include <klocale.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 
 KPrPropertyEditor::KPrPropertyEditor( QWidget *parent, const char *name, KPrPage *page, KPrDocument *doc )
     : Q3TabDialog( parent, name, true )
@@ -51,9 +51,9 @@ KPrPropertyEditor::KPrPropertyEditor( QWidget *parent, const char *name, KPrPage
     , m_generalProperty( 0 )
     , m_objectProperties( 0 )
 {
-    setCancelButton( KStdGuiItem::cancel().text() );
-    setOkButton( KStdGuiItem::ok().text() );
-    setApplyButton( KStdGuiItem::apply().text() );
+    setCancelButton( KStandardGuiItem::cancel().text() );
+    setOkButton( KStandardGuiItem::ok().text() );
+    setApplyButton( KStandardGuiItem::apply().text() );
 
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( slotDone() ) );
 

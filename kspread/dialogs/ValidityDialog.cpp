@@ -59,7 +59,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   setModal( true );
   setButtons( User2|User1|Cancel );
   setDefaultButton( User1 );
-  setButtonGuiItem( User1, KStdGuiItem::ok() );
+  setButtonGuiItem( User1, KStandardGuiItem::ok() );
   setButtonGuiItem( User2, KGuiItem( i18n("Clear &All") ) );
 
   m_pView=parent;

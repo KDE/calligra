@@ -102,7 +102,7 @@
 #include <kparts/event.h>
 #include <kstandarddirs.h>
 #include <kstatusbar.h>
-#include <kstdaccel.h>
+#include <kstandardshortcut.h>
 #include <kstandardaction.h>
 #include <ktemporaryfile.h>
 #include <kiconloader.h>
@@ -1199,7 +1199,7 @@ void KWView::setupActions()
     new KAction( i18n( "Line Break" ), Qt::SHIFT+Qt::Key_Return,
                  this, SLOT( slotLineBreak() ), actionCollection(), "line_break" );
 
-    new KAction( i18n( "Completion" ), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT( slotCompletion() ), actionCollection(), "completion" );
+    new KAction( i18n( "Completion" ), KStandardShortcut::shortcut(KStandardShortcut::TextCompletion), this, SLOT( slotCompletion() ), actionCollection(), "completion" );
 
     new KAction( i18n( "Increase Numbering Level" ), Qt::ALT+Qt::Key_Right,
                  this, SLOT( slotIncreaseNumberingLevel() ), actionCollection(), "increase_numbering_level" );
@@ -2664,7 +2664,7 @@ void KWView::deleteFrame( bool warning )
                 i18n( "You are about to delete a table.\n"
                       "Doing so will delete all the text in the table.\n"
                       "Are you sure you want to do that?"),
-                i18n("Delete Table"), KStdGuiItem::del(),
+                i18n("Delete Table"), KStandardGuiItem::del(),
                 "DeleteTableConfirmation" );
             if (result != KMessageBox::Continue)
                 return;
@@ -2688,7 +2688,7 @@ void KWView::deleteFrame( bool warning )
                     this,
                     i18n("By deleting the last text frame (%1),\nthe text-contents will be lost.\n"
                           "Delete anyway?",fs->name()),
-                    i18n("Delete Frame"), KStdGuiItem::del());
+                    i18n("Delete Frame"), KStandardGuiItem::del());
 
                 if (result != KMessageBox::Continue)
                     return;

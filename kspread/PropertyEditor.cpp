@@ -35,7 +35,7 @@
 
 #include <klocale.h>
 #include <kguiitem.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 
 using namespace KSpread;
 
@@ -54,9 +54,9 @@ PropertyEditor::PropertyEditor( QWidget *parent, const char *name, Sheet *page, 
      , m_generalProperty( 0 )
 //     , m_objectProperties( 0 )
 {
-    setCancelButton( KStdGuiItem::cancel().text() );
-    setOkButton( KStdGuiItem::ok().text() );
-    setApplyButton( KStdGuiItem::apply().text() );
+    setCancelButton( KStandardGuiItem::cancel().text() );
+    setOkButton( KStandardGuiItem::ok().text() );
+    setApplyButton( KStandardGuiItem::apply().text() );
 
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( slotDone() ) );
 

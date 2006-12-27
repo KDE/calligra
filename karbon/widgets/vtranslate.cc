@@ -26,7 +26,7 @@
 #include <QGridLayout>
 #include <klocale.h>
 #include <knuminput.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <kguiitem.h>
 #include <kpushbutton.h>
 
@@ -66,7 +66,7 @@ VTranslate::VTranslate( QWidget* parent, const char* name )
 	m_buttonDuplicate = new QPushButton(i18n("&Duplicate"), this);
 	mainlayout->addWidget(m_buttonDuplicate);
 	mainlayout->addSpacing(1);
-	m_buttonApply = new KPushButton(KStdGuiItem::apply(), this);
+	m_buttonApply = new KPushButton(KStandardGuiItem::apply(), this);
 	mainlayout->addWidget(m_buttonApply);
 
 	mainlayout->activate();

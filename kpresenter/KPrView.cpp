@@ -157,7 +157,7 @@
 #include <KoCommentDia.h>
 
 #include "KPrDuplicateObjDia.h"
-#include <kstdaccel.h>
+#include <kstandardshortcut.h>
 #include <KoDocumentInfo.h>
 #include <kaccelgen.h>
 #include "KPrImportStyleDia.h"
@@ -2945,7 +2945,7 @@ void KPrView::setupActions()
     action->setShortcut(QKeySequence(Qt::SHIFT+Qt::Key_Return));
     action = new KAction( i18n( "Completion" ), actionCollection(), "completion" );
     connect(action, SIGNAL(triggered(bool)), SLOT( slotCompletion() ));
-    action->setShortcut(KStdAccel::shortcut(KStdAccel::TextCompletion));
+    action->setShortcut(KStandardShortcut::shortcut(KStandardShortcut::TextCompletion));
 
     action = new KAction( i18n( "Increase Numbering Level" ), actionCollection(), "increase_numbering_level" );
     connect(action, SIGNAL(triggered(bool)), SLOT( slotIncreaseNumberingLevel() ));

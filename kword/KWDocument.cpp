@@ -1428,7 +1428,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         int ret = KMessageBox::warningContinueCancel(
             0, i18n("This document was created with a newer version of KWord (syntax version: %1)\n"
                     "Opening it in this version of KWord will lose some information.",m_syntaxVersion),
-            i18n("File Format Mismatch"), KStdGuiItem::cont() );
+            i18n("File Format Mismatch"), KStandardGuiItem::cont() );
         if ( ret == KMessageBox::Cancel )
         {
             setErrorMessage( "USER_CANCELED" );

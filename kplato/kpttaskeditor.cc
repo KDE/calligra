@@ -48,7 +48,7 @@
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kstandardaction.h>
-#include <kstdaccel.h>
+#include <kstandardshortcut.h>
 #include <kaccelgen.h>
 
 namespace KPlato

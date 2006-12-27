@@ -40,7 +40,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <ktextedit.h>
 #include <kpushbutton.h>
 
@@ -135,7 +135,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_buttonOk->setDefault( true );
   Layout5->addWidget( m_buttonOk );
 
-  m_buttonCancel = new KPushButton( KStdGuiItem::cancel(), this );
+  m_buttonCancel = new KPushButton( KStandardGuiItem::cancel(), this );
   m_buttonCancel->setAutoDefault( true );
   Layout5->addWidget( m_buttonCancel );
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );

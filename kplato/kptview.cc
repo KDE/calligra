@@ -53,7 +53,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
-#include <kstdaccel.h>
+#include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kdeversion.h>
 #include <kstatusbar.h>

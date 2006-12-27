@@ -30,7 +30,7 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 #include <kpushbutton.h>
 #include <ktoolinvocation.h>
 
@@ -52,9 +52,9 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     m_buttonLayout = new QHBoxLayout( this );
     m_textEdit = new QTextEdit( this );
     m_position = new QLabel( this );
-    m_btnHelp = new KPushButton( KStdGuiItem::help(), this );
-    m_btnOk = new KPushButton( KStdGuiItem::ok(), this );
-    m_btnCancel = new KPushButton( KStdGuiItem::cancel(), this );
+    m_btnHelp = new KPushButton( KStandardGuiItem::help(), this );
+    m_btnOk = new KPushButton( KStandardGuiItem::ok(), this );
+    m_btnCancel = new KPushButton( KStandardGuiItem::cancel(), this );
     
     m_buttonLayout->addWidget( m_btnHelp );
     m_buttonLayout->addSpacing( 100 );

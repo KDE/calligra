@@ -51,7 +51,7 @@
 #include <kdebug.h>
 #include <kdeversion.h>
 
-#include <kstdguiitem.h>
+#include <KStandardGuiItem>
 
 using namespace KSpread;
 
@@ -77,8 +77,8 @@ reference::reference( View* parent, const char* /*name*/ )
   KButtonBox *bb = new KButtonBox( this );
   //  bb->addStretch();
   m_pEdit = bb->addButton( i18n("&Edit...") );
-  m_pOk = bb->addButton( KStdGuiItem::ok() );
-  m_pCancel = bb->addButton( KStdGuiItem::cancel() );
+  m_pOk = bb->addButton( KStandardGuiItem::ok() );
+  m_pCancel = bb->addButton( KStandardGuiItem::cancel() );
   m_pOk->setDefault( true );
   bb->layout();
   lay1->addWidget( bb );
@@ -158,7 +158,7 @@ void reference::slotRemove()
   if (m_list->currentItem() == -1)
     return;
 
-  int ret = KMessageBox::warningContinueCancel( this, i18n("Do you really want to remove this area name?"),i18n("Remove Area"),KStdGuiItem::del());
+  int ret = KMessageBox::warningContinueCancel( this, i18n("Do you really want to remove this area name?"),i18n("Remove Area"),KStandardGuiItem::del());
   if (ret == KMessageBox::Cancel)
     return;
 
