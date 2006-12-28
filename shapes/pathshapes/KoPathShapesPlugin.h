@@ -20,7 +20,7 @@
 #ifndef KOPATHSHAPESPLUGIN_H
 #define KOPATHSHAPESPLUGIN_H
 
-#include <KoShapeFactory.h>
+#include <QObject>
 
 class KoPathShapesPlugin : public QObject {
     Q_OBJECT
