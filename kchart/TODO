@@ -54,20 +54,21 @@ Item								   Prio Status
   + Grid setting for both directions				      2 ----
 
 * Wizard
-  + New data page?						     S2 ----
-    - Data in rows / columns						--
-    - First row / column as header?					--
+  + New data page?						     S2 DONE
+    - Data in rows / columns						done
+    - First row / column as header?					done
+  + Combine selection of type and subtype into one dialog.	      2 ----
   + Subtype page should have icons for subtypes like config dialog.   2 ----
 
 * Config dialog
   + Check keyboard shortcuts for all tabs			     S1 ----
-  + Setting background image doesn't work			      2 ----
-  + According to Fredrik, background page works badly all over	      2 ----
+  + Setting background image doesn't work				  ----
+  + According to Fredrik, background page works badly all over		  ----
   + Check *all* subpages for uglyness and bugs			     S1 INGE
-    - Color		Ugly					     S1 --
-    - BackgroundPixmap	Ugly					     S1 --
+    - Color		Ugly						  ----
+    - BackgroundPixmap	Ugly						  ----
   + Integrate the Colors and Font pages into Axes?		      2 ----
-    - Maybe create a little combination widget that can change        2 --
+    - Maybe create a little combination widget that can change		  ----
       both font and color for a text item?
 
 * Data editor
@@ -117,4 +118,4 @@ Large items
     - class KChartParam							  done
 
 * Structure
-  + put dialogs in their own directory				      3 ----
+  + put dialogs in their own directory				      3 DONE
