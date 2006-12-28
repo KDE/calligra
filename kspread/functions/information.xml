@@ -261,6 +261,18 @@
       </Help>
     </Function>
 
+    <Function>
+    <Name>NA</Name>
+    <Type>Error</Type>
+    <Help>
+        <Text>The NA() function returns the constant error value, N/A.</Text>
+        <Syntax>NA()</Syntax>
+        <Related>ISNA</Related>
+        <Related>ISERR</Related>
+        <Related>ISERROR</Related>
+    </Help>
+    </Function>
+
    <Function>
       <Name>TYPE</Name>
       <Type>Int</Type>

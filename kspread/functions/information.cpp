@@ -54,6 +54,7 @@ Value func_isref (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_istext (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_istime (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_n (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_na (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_type (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_version (valVector args, ValueCalc *calc, FuncExtra *);
 
@@ -100,6 +101,9 @@ void RegisterInformationFunctions()
   f = new Function ("ISTIME", func_istime);
   repo->add (f);
   f = new Function ("N", func_n);
+  repo->add (f);
+  f = new Function ("NA", func_na);
+  f->setParamCount (0);
   repo->add (f);
   f = new Function ("TYPE", func_type);
   f->setAcceptArray ();
@@ -281,4 +285,10 @@ Value func_filename (valVector, ValueCalc *calc, FuncExtra *)
 Value func_n (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->conv()->asFloat (args[0]);
+}
+
+// Function: NA
+Value func_na(valVector, ValueCalc *, FuncExtra *)
+{
+    return Value::errorNA();
 }
