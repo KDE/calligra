@@ -77,9 +77,6 @@ Value func_years (valVector args, ValueCalc *calc, FuncExtra *);
 // sadly, many of these functions aren't Excel compatible
 void RegisterDateTimeFunctions()
 {
-  // missing: Excel:    WORKDAY, NETWORKDAYS
-  //          Gnumeric: UNIX2DATE, DATE2UNIX
-  // TODO: do we really need DATEVALUE and TIMEVALUE ?
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
 
