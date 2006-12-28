@@ -361,7 +361,7 @@ Value func_second (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: WEEKDAY
 Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value v( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
+  Value v( calc->conv()->asDate (args[0]) );
   if (v.isError()) return v;
   QDate date = v.asDate( calc->doc() );
   int method = 1;
@@ -684,7 +684,7 @@ Value func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value v( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
+  Value v( calc->conv()->asDate (args[0]) );
   if (v.isError()) return v;
   QDate date = v.asDate( calc->doc() );
 
@@ -721,14 +721,14 @@ Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_dateDif (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value v1( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
+  Value v1( calc->conv()->asDate (args[0]) );
   if (v1.isError()) return v1;
   QDate date1 = v1.asDate( calc->doc() );
 
   if (!date1.isValid())
       return Value::errorVALUE();
 
-  Value v2( calc->conv()->asDate (args[1]).asDate( calc->doc() ), calc->doc() );
+  Value v2( calc->conv()->asDate (args[1]) );
   if (v2.isError()) return v2;
   QDate date2 = v2.asDate( calc->doc() );
 
@@ -835,14 +835,14 @@ Value func_dateDif (valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_yearFrac (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value v1( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
+  Value v1( calc->conv()->asDate (args[0]) );
   if (v1.isError()) return v1;
   QDate date1 = v1.asDate( calc->doc() );
 
   if (!date1.isValid())
       return Value::errorVALUE();
 
-  Value v2( calc->conv()->asDate (args[1]).asDate( calc->doc() ), calc->doc() );
+  Value v2( calc->conv()->asDate (args[1]) );
   if (v2.isError()) return v2;
   QDate date2 = v2.asDate( calc->doc() );
 
@@ -951,7 +951,7 @@ Value func_yearFrac (valVector args, ValueCalc *calc, FuncExtra *)
 // 
 Value func_workday (valVector args, ValueCalc *calc, FuncExtra *e)
 {
-  Value v( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
+  Value v( calc->conv()->asDate (args[0]) );
   
   if (v.isError()) return v;
   QDate startdate = v.asDate( calc->doc() );
@@ -1010,7 +1010,7 @@ Value func_workday (valVector args, ValueCalc *calc, FuncExtra *e)
     { // no array parameter
       if (args[2].isString())
       {// isString
-        Value v( calc->conv()->asDate (args[2]).asDate( calc->doc() ), calc->doc() );
+        Value v( calc->conv()->asDate (args[2]) );
 	if (v.isError()) 
 	  return Value::errorVALUE();
 	
@@ -1051,12 +1051,12 @@ Value func_workday (valVector args, ValueCalc *calc, FuncExtra *e)
 // 
 Value func_networkday (valVector args, ValueCalc *calc, FuncExtra *e)
 {
-  Value v1( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
+  Value v1( calc->conv()->asDate (args[0]) );
   
   if (v1.isError()) return v1;
   QDate startdate = v1.asDate( calc->doc() );
 
-  Value v2( calc->conv()->asDate (args[1]).asDate( calc->doc() ), calc->doc() );
+  Value v2( calc->conv()->asDate (args[1]) );
   
   if (v2.isError()) return v2;
   QDate enddate = v2.asDate( calc->doc() );
@@ -1113,7 +1113,7 @@ Value func_networkday (valVector args, ValueCalc *calc, FuncExtra *e)
     { // no array parameter
       if (args[2].isString())
       {
-        Value v( calc->conv()->asDate (args[2]).asDate( calc->doc() ), calc->doc() );
+        Value v( calc->conv()->asDate (args[2]) );
 	if (v.isError()) 
 	  return Value::errorVALUE();
 	
