@@ -233,11 +233,11 @@ CustomStyle * StyleManager::style( QString const & name ) const
     if ( name.isEmpty() )
         return 0;
     // on OpenDocument loading
-    if ( !m_oasisStyles.isEmpty() )
+//     if ( !m_oasisStyles.isEmpty() )
     {
         if ( m_oasisStyles.contains( name ) )
             return m_oasisStyles[name];
-        return 0;
+//         return 0;
     }
     if ( m_styles.contains(name) )
         return m_styles[name];

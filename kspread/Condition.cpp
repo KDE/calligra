@@ -151,7 +151,7 @@ bool Conditions::currentCondition( const Cell* cell, Conditional & condition ) c
 
     QLinkedList<Conditional>::const_iterator it;
     double value   = cell->value().asFloat();
-    QString strVal = cell->inputText();
+    QString strVal = cell->value().asString();
 
 
     for ( it = d->conditionList.begin(); it != d->conditionList.end(); ++it )
