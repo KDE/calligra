@@ -56,7 +56,7 @@ KCWizardCharttype::KCWizardCharttype( QWidget* parent,
 
     m_colPos=0;
     m_rowPos=0;
-    m_layout = new Q3GridLayout(this, 3, 4, 5);
+    m_layout = new Q3GridLayout(this, 3, 3, 5);
     m_layout->setRowStretch(0, 0);
     m_layout->setRowStretch(1, 0);
     m_layout->setRowStretch(2, 0);
@@ -64,14 +64,11 @@ KCWizardCharttype::KCWizardCharttype( QWidget* parent,
     addButton( i18n( "Bar" ),            "chart_bar",    KChartParams::Bar );
     addButton( i18n( "Lines" ),          "chart_line",   KChartParams::Line );
     addButton( i18n( "Area" ),           "chart_area",   KChartParams::Area );
-#if 0
-    addButton( i18n( "Bars and Lines" ), "chart_barlines", KChartParams::BarLines );
-#endif
 
     addButton( i18n("HiLo"),             "chart_hilo",   KChartParams::HiLo );
     addButton( i18n("Box & Whisker "),   "chart_boxwhisker", KChartParams::BoxWhisker );
     incPos();
-    incPos();
+    //incPos();
 
     addButton( i18n( "Pie" ),            "chart_pie",    KChartParams::Pie );
     addButton( i18n( "Ring" ),           "chart_ring",   KChartParams::Ring );
@@ -108,7 +105,7 @@ void KCWizardCharttype::addButton(const QString &name,
 
 void KCWizardCharttype::incPos()
 {
-    if (m_colPos == 3) {
+    if (m_colPos == 2) {
 	m_colPos=0;
 	m_rowPos++; //place the next button in the second row
     }
