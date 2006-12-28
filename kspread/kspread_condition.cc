@@ -120,7 +120,7 @@ bool Conditions::currentCondition( Conditional & condition )
 
   QValueList<Conditional>::const_iterator it;
   double value   = m_cell->value().asFloat();
-  QString strVal = m_cell->text();
+  QString strVal = m_cell->value().asString();
 
 
   for ( it = m_condList.begin(); it != m_condList.end(); ++it )
