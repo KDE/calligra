@@ -58,6 +58,7 @@ Value func_minutes (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_month (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_monthname (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_months (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_networkday (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_second (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_seconds (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_time (valVector args, ValueCalc *calc, FuncExtra *);
@@ -67,6 +68,7 @@ Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weeksInYear (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_workday (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_year (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yearFrac (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_years (valVector args, ValueCalc *calc, FuncExtra *);
@@ -146,6 +148,10 @@ void RegisterDateTimeFunctions()
   f = new Function ("MONTHS",  func_months);
   f->setParamCount (3);
   repo->add (f);
+  f = new Function ("NETWORKDAY",  func_networkday);
+  f->setParamCount (2, 3);
+  f->setAcceptArray();
+  repo->add (f);
   f = new Function ("NOW",  func_currentDateTime);
   f->setParamCount (0);
   repo->add (f);
@@ -173,6 +179,10 @@ void RegisterDateTimeFunctions()
   f->setParamCount (3);
   repo->add (f);
   f = new Function ("WEEKSINYEAR",  func_weeksInYear);
+  repo->add (f);
+  f = new Function ("WORKDAY",  func_workday);
+  f->setParamCount (2, 3);
+  f->setAcceptArray();
   repo->add (f);
   f = new Function ("YEAR",   func_year);
   repo->add (f);
@@ -935,4 +945,208 @@ Value func_yearFrac (valVector args, ValueCalc *calc, FuncExtra *)
   res = (double)days / peryear;
 
   return Value( res );
+}
+
+// Function: WORKDAY 
+//
+// - negative days count backwards
+// - if holidays is not an array it is only added to days (neg. are not allowed)
+// 
+Value func_workday (valVector args, ValueCalc *calc, FuncExtra *e)
+{
+  Value v( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
+  
+  if (v.isError()) return v;
+  QDate startdate = v.asDate( calc->doc() );
+
+  if (!startdate.isValid())
+      return Value::errorVALUE();
+
+  //
+  // vars 
+  //
+  int days = calc->conv()->asInteger (args[1]).asInteger();
+  
+  QDate date0 = calc->doc()->referenceDate(); 	// referenceDate
+  QDate enddate = startdate;			// enddate
+  valVector holidays; 				// stores holidays
+  int sign=1; 					// sign 1 = forward, -1 = backward
+  
+  if ( days < 0 )
+  {
+    // change sign and set count to ccw
+    days = days * -1;
+    sign = -1;
+  }
+  
+  //
+  // check for holidays
+  //
+  if (args.count() > 2)
+  {
+    if (args[2].type() == Value::Array) 
+    { // parameter is array
+      unsigned int row1, col1, rows, cols;
+     
+      row1 = e->ranges[2].row1;
+      col1 = e->ranges[2].col1;
+      rows = e->ranges[2].row2 - row1 + 1;
+      cols = e->ranges[2].col2 - col1 + 1;
+        
+      Value holiargs = args[2];
+	
+      for (unsigned r = 0; r < rows; ++r)
+	for (unsigned c = 0; c < cols; ++c)
+	{
+	  // only append if element is a valid date
+	  if (!holiargs.element(c+col1, r+row1).isEmpty())
+	  {
+	    Value v (calc->conv()->asDate (holiargs.element(c+col1, r+row1)));
+	    if (v.isError())
+	      return Value::errorVALUE();
+
+	    if (v.asDate( calc->doc() ).isValid())
+	      holidays.append( v );
+	  } 
+	}
+    } else 
+    { // no array parameter
+      if (args[2].isString())
+      {// isString
+        Value v( calc->conv()->asDate (args[2]).asDate( calc->doc() ), calc->doc() );
+	if (v.isError()) 
+	  return Value::errorVALUE();
+	
+	if (v.asDate( calc->doc() ).isValid())
+	  holidays.append( v );
+	
+      } else
+      {// isNumber 
+        int hdays = calc->conv()->asInteger (args[2]).asInteger();
+
+        if ( hdays < 0 )
+	  return Value::errorVALUE();
+        days = days + hdays;
+      }
+    }
+  }
+
+  //
+  // count days
+  //
+  while(days)
+  {
+    // exclude weekends and holidays
+    do
+    {
+      enddate = enddate.addDays( 1*sign );
+    } while( enddate.dayOfWeek()>5 || holidays.contains(Value (date0.daysTo(enddate)) ) );
+    
+    days--;
+  }
+
+  return Value( enddate.toString() );
+}
+
+// Function: NETWORKDAY 
+//
+// - if holidays is not an array it is only added to days (neg. are not allowed)
+// 
+Value func_networkday (valVector args, ValueCalc *calc, FuncExtra *e)
+{
+  Value v1( calc->conv()->asDate (args[0]).asDate( calc->doc() ), calc->doc() );
+  
+  if (v1.isError()) return v1;
+  QDate startdate = v1.asDate( calc->doc() );
+
+  Value v2( calc->conv()->asDate (args[1]).asDate( calc->doc() ), calc->doc() );
+  
+  if (v2.isError()) return v2;
+  QDate enddate = v2.asDate( calc->doc() );
+
+  if (!startdate.isValid() || !enddate.isValid())
+      return Value::errorVALUE();
+
+  //
+  // vars 
+  //
+   
+  int days = 0;					// workdays
+  QDate date0 = calc->doc()->referenceDate(); 	// referenceDate
+  valVector holidays; 				// stores holidays
+  int sign=1; 					// sign 1 = forward, -1 = backward
+  
+  if ( enddate < startdate )
+  {
+    // change sign and set count to ccw
+    sign = -1;
+  }
+    
+  //
+  // check for holidays
+  //
+  if (args.count() > 2)
+  {
+    if (args[2].type() == Value::Array) 
+    { // parameter is array
+      unsigned int row1, col1, rows, cols;
+     
+      row1 = e->ranges[2].row1;
+      col1 = e->ranges[2].col1;
+      rows = e->ranges[2].row2 - row1 + 1;
+      cols = e->ranges[2].col2 - col1 + 1;
+        
+      Value holiargs = args[2];
+	
+      for (unsigned r = 0; r < rows; ++r)
+	for (unsigned c = 0; c < cols; ++c)
+	{
+	  // only append if element is a valid date
+	  if (!holiargs.element(c+col1, r+row1).isEmpty())
+	  {
+	    Value v (calc->conv()->asDate (holiargs.element(c+col1, r+row1)));
+	    if (v.isError())
+	      return Value::errorVALUE();
+
+	    if (v.asDate( calc->doc() ).isValid())
+	      holidays.append( v );
+	  }
+	}
+    } else 
+    { // no array parameter
+      if (args[2].isString())
+      {
+        Value v( calc->conv()->asDate (args[2]).asDate( calc->doc() ), calc->doc() );
+	if (v.isError()) 
+	  return Value::errorVALUE();
+	
+	if (v.asDate( calc->doc() ).isValid())
+	  holidays.append( v );
+	
+      } else
+      {// isNumber 
+        int hdays = calc->conv()->asInteger (args[2]).asInteger();
+
+        if ( hdays < 0 )
+	  return Value::errorVALUE();
+        days = days - hdays;
+      }
+    }
+  }
+  
+  //
+  // count days
+  //
+  while(startdate != enddate)
+  {
+    if (startdate.dayOfWeek()>5 || holidays.contains(Value (date0.daysTo(startdate)) ))
+    {
+      startdate = startdate.addDays( 1*sign );
+      continue;
+    }
+    
+    startdate = startdate.addDays( 1*sign );
+    days++;
+  }
+  return Value( days );
 }

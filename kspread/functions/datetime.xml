@@ -662,6 +662,53 @@
 	</Help>
     </Function>
 
+    <Function>
+	<Name>WORKDAY</Name>
+	<Type>Date</Type>
+	<Parameter>
+	    <Comment>Start date</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Parameter>
+	    <Comment>Working days</Comment>
+	    <Type>Int</Type>
+	</Parameter>
+	<Parameter>
+	    <Comment>Holidays</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Help>
+	    <Text>The WORKDAY() function returns the date which is working days from the start date.</Text>
+	    <Text>Holidays must be one of the following: number = days to add, a single date or an array of dates.</Text>
+            <Syntax>WORKDAY(start date; days; holidays)</Syntax>
+	    <Example>WORKDAY(B9;2;D3:E4) B9 is "01/01/2001", D3 is "01/03/2001", D4 is "01/04/2003" workday returns "Fri Jan 5 2001"</Example>
+	</Help>
+    </Function>
+
+    <Function>
+	<Name>NETWORKDAY</Name>
+	<Type>Int</Type>
+	<Parameter>
+	    <Comment>Start date</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Parameter>
+	    <Comment>End date</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Parameter>
+	    <Comment>Holidays</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Help>
+	    <Text>The NETWORKDAY() function returns the number of working days between startdate and enddate.</Text>
+	    <Text>Holidays must be one of the following: number = days to add, a single date or an array of dates.</Text>
+            <Syntax>NETWORKDAY(start date; end date; holidays)</Syntax>
+	    <Example>NETWORKDAY("01/01/2001";"01/08/2001") returns 5 workdays</Example>
+	    <Example>NETWORKDAY("01/01/2001";"01/08/2001";2) returns 3 workdays</Example>
+	</Help>
+    </Function>
+
   </Group>
 
 </KSpreadFunctions>
