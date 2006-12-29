@@ -57,7 +57,7 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     setInstance(KWScriptingPart::instance());
     setXMLFile(KStandardDirs::locate("data","kword/kpartplugins/scripting.rc"), true);
 
-    kDebug() << "KWScripting plugin. Class: " << metaObject()->className() << ", Parent: " << parent->metaObject()->className() << endl;
+    kDebug(32010) << "KWScripting plugin. Class: " << metaObject()->className() << ", Parent: " << parent->metaObject()->className() << endl;
 
     KWView* view = dynamic_cast< KWView* >(parent);
     Q_ASSERT(view);
@@ -96,7 +96,7 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
 
 KWScriptingPart::~KWScriptingPart()
 {
-    kDebug() << "KWScriptingPart::~KWScriptingPart()" << endl;
+    kDebug(32010) << "KWScriptingPart::~KWScriptingPart()" << endl;
     delete d;
 }
 

@@ -77,7 +77,7 @@ namespace Scripting {
             QObject* addFrame(const QString& shapeId) {
                 KoShapeFactory *factory = KoShapeRegistry::instance()->get(shapeId);
                 if( ! factory ) {
-                    kDebug() << "Scripting::Module::addFrame() Invalid shapeId: " << shapeId << endl;
+                    kWarning(32010) << "Scripting::Module::addFrame() Invalid shapeId: " << shapeId << endl;
                     return 0;
                 }
                 KoShape *shape = factory->createDefaultShape();
