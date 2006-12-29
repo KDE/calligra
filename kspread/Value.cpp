@@ -562,31 +562,32 @@ QString Value::errorMessage() const
 // NOTE: date/time is stored as serial number
 void Value::setValue( const QDateTime& dt, const Doc* doc  )
 {
-  QDate refDate( doc->referenceDate() );
-  QTime refTime( 0, 0 );
+  const QDate refDate( doc->referenceDate() );
+  const QTime refTime( 0, 0 );  // reference time is midnight
 
-  int i = refDate.daysTo( dt.date() );
-  i += refTime.secsTo( dt.time() ) / 86400;
+  double f= refDate.daysTo( dt.date() );
+  f += refTime.msecsTo( dt.time() ) / 86400000; // 24*60*60*1000
 
-  setValue( i );
+  setValue( f );
   d->format = fmt_DateTime;
 }
 
 void Value::setValue( const QTime& time, const Doc* doc )
 {
-  Q_UNUSED(doc);
-  // reference time is midnight
-  QTime refTime( 0, 0 );
-  int i = refTime.msecsTo( time ) /* / 86400000 */;
+  Q_UNUSED( doc );
+  const QTime refTime( 0, 0 );  // reference time is midnight
 
-  setValue( i );
+  double f = refTime.msecsTo( time ) / 86400000; // 24*60*60*1000
+
+  setValue( f );
   d->format = fmt_Time;
 }
 
 void Value::setValue( const QDate& date, const Doc* doc )
 {
-  QDate refDate = QDate( doc->referenceDate() );
-  int i = refDate.daysTo( date );
+  const QDate refDate( doc->referenceDate() );
+
+  const int i = refDate.daysTo( date );
 
   setValue( i );
   d->format = fmt_Date;
@@ -595,7 +596,14 @@ void Value::setValue( const QDate& date, const Doc* doc )
 // get the value as date/time
 QDateTime Value::asDateTime( const Doc* doc ) const
 {
-  return QDateTime( asDate( doc ), asTime( doc ) );
+  QDateTime datetime( doc->referenceDate(), QTime(), Qt::UTC );
+
+  const int days = asInteger();
+  const int msecs = static_cast<int>( ( asFloat() - days ) * 86400000 ); // 24*60*60*1000
+  datetime = datetime.addDays( days );
+  datetime = datetime.addMSecs( msecs );
+
+  return datetime;
 }
 
 // get the value as date
@@ -615,8 +623,9 @@ QTime Value::asTime( const Doc* doc ) const
   Q_UNUSED(doc);
   QTime dt;
 
-  int i = asInteger();
-  dt = dt.addMSecs(i) /*( f * 86400 * 1000  )*/;
+  const int days = asInteger();
+  const int msecs = static_cast<int>( ( asFloat() - days ) * 86400000 ); // 24*60*60*1000
+  dt = dt.addMSecs( msecs );
 
   return dt;
 }

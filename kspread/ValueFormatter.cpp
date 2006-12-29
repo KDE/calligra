@@ -414,8 +414,9 @@ QString ValueFormatter::fractionFormat (double value, FormatType fmtType)
   }
 }
 
-QString ValueFormatter::timeFormat (const QDateTime &dt, FormatType fmtType)
+QString ValueFormatter::timeFormat (const QDateTime &_dt, FormatType fmtType)
 {
+  const QDateTime dt( _dt.toUTC() );
   if (fmtType == Time_format)
     return converter->locale()->formatTime(dt.time(), false);
 

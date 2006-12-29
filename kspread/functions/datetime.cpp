@@ -1164,7 +1164,7 @@ Value func_networkday (valVector args, ValueCalc *calc, FuncExtra *e)
 // - add method tryParseDateTime
 Value func_unix2date(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value v( calc->conv()->asInteger( args[0] ) );
+    const Value v( calc->conv()->asInteger( args[0] ) );
     if (v.isError())
         return v;
 
@@ -1172,19 +1172,17 @@ Value func_unix2date(valVector args, ValueCalc *calc, FuncExtra *)
     datetime.setTimeSpec( Qt::UTC );
     datetime.setTime_t( v.asInteger() );
 
-    return Value( datetime.date(), calc->doc() );
+    return Value( datetime, calc->doc() );
 }
 
 // Function: UNIX2DATE
 Value func_date2unix (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value v( calc->conv()->asDate( args[0]) );
+    const Value v( calc->conv()->asDateTime( args[0]) );
     if ( v.isError() )
         return v;
 
-    QDateTime datetime;
-    datetime.setTimeSpec( Qt::UTC );
-    datetime.setDate( v.asDate( calc->doc() ) );
+    const QDateTime datetime( v.asDateTime( calc->doc() ) );
 
     return Value( static_cast<int>( datetime.toTime_t() ) );
 }

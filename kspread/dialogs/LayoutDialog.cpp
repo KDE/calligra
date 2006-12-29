@@ -1285,7 +1285,7 @@ void CellFormatPageFloat::slotChangeState()
 
             list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),false);
             list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),true);
-            QDateTime tmpTime (QDate (1, 1, 1900), QTime (10, 35, 25));
+            QDateTime tmpTime (QDate (1, 1, 1900), QTime (10, 35, 25), Qt::UTC);
 
 
             ValueFormatter *fmt = dlg->getDoc()->formatter();

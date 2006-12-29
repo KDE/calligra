@@ -605,13 +605,13 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
 
   if (ok)
     *ok = true;
-  return QDateTime( refDate, QTime( hour, minute, second ) );
+  return QDateTime( refDate, QTime( hour, minute, second ), Qt::UTC );
 
  error:
   if (ok)
     *ok = false;
   // return invalid date if it didn't work
-  return QDateTime( refDate, QTime( -1, -1, -1 ) );
+  return QDateTime( refDate, QTime( -1, -1, -1 ), Qt::UTC );
 }
 
 /**
