@@ -390,6 +390,8 @@ public:
 	ActionToExecuteListView* actionToExecuteListView;
 	QLabel *actionToExecuteLbl;
 	QWidget *secondAnd3rdColumnMainWidget;
+	Q3GridLayout *glyr;
+	Q3GridLayout *secondAnd3rdColumnGrLyr;
 	QWidgetStack *secondAnd3rdColumnStack, *secondColumnStack;
 	bool hideActionToExecuteListView;
 };
@@ -425,13 +427,13 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
     - for displaying objects, the stack contains secondAnd3rdColumnMainWidget QWidget and Q3GridLayout *secondAnd3rdColumnGrLyr
 	 - kactionPageWidget contains only a Q3VBoxLayout and label+kactionListView
 */
-	Q3GridLayout *glyr = new Q3GridLayout(mainWidget, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
-	glyr->setRowStretch(1, 1);
+	d->glyr = new Q3GridLayout(mainWidget, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
+	d->glyr->setRowStretch(1, 1);
 
 	// 1st column: action types
 	d->actionCategoriesListView = new ActionCategoriesListView(mainWidget);
 	d->actionCategoriesListView->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
-	glyr->addWidget(d->actionCategoriesListView, 1, 0);
+	d->glyr->addWidget(d->actionCategoriesListView, 1, 0);
 	connect( d->actionCategoriesListView, SIGNAL(selectionChanged(Q3ListViewItem*)), 
 		this, SLOT(slotActionCategorySelected(Q3ListViewItem*)));
 
@@ -439,22 +441,22 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	lbl->setMinimumHeight(lbl->fontMetrics().height()*2);
 	lbl->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	lbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::TextWordWrap);
-	glyr->addWidget(lbl, 0, 0, Qt::AlignTop|Qt::AlignLeft);
+	d->glyr->addWidget(lbl, 0, 0, Qt::AlignTop|Qt::AlignLeft);
 
 	// widget stack for 2nd and 3rd column
 	d->secondAnd3rdColumnStack = new QWidgetStack(mainWidget);
 	d->secondAnd3rdColumnStack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-	glyr->addMultiCellWidget(d->secondAnd3rdColumnStack, 0, 1, 1, 1);//, Qt::AlignTop|Qt::AlignLeft);
+	d->glyr->addMultiCellWidget(d->secondAnd3rdColumnStack, 0, 1, 1, 1);//, Qt::AlignTop|Qt::AlignLeft);
 
 	d->secondAnd3rdColumnMainWidget = new QWidget(d->secondAnd3rdColumnStack);
 	d->secondAnd3rdColumnMainWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-	Q3GridLayout *secondAnd3rdColumnGrLyr = new Q3GridLayout(d->secondAnd3rdColumnMainWidget, 2, 2, 0, KDialog::spacingHint());
-	secondAnd3rdColumnGrLyr->setRowStretch(1, 2);
+	d->secondAnd3rdColumnGrLyr = new Q3GridLayout(d->secondAnd3rdColumnMainWidget, 2, 2, 0, KDialog::spacingHint());
+	d->secondAnd3rdColumnGrLyr->setRowStretch(1, 2);
 	d->secondAnd3rdColumnStack->addWidget(d->secondAnd3rdColumnMainWidget);
 
 	// 2nd column: list of actions/objects
 	d->objectsListView = new KexiBrowser(d->secondAnd3rdColumnMainWidget, d->mainWin, 0/*features*/);
-	secondAnd3rdColumnGrLyr->addWidget(d->objectsListView, 1, 0);
+	d->secondAnd3rdColumnGrLyr->addWidget(d->objectsListView, 1, 0);
 	connect(d->objectsListView, SIGNAL(selectionChanged(KexiPart::Item*)),
 		this, SLOT(slotItemForOpeningOrExecutingSelected(KexiPart::Item*)));
 
@@ -462,7 +464,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	d->selectActionToBeExecutedLbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	d->selectActionToBeExecutedLbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::TextWordWrap);
 	d->selectActionToBeExecutedLbl->setMinimumHeight(d->selectActionToBeExecutedLbl->fontMetrics().height()*2);
-	secondAnd3rdColumnGrLyr->addWidget(d->selectActionToBeExecutedLbl, 0, 0, Qt::AlignTop|Qt::AlignLeft);
+	d->secondAnd3rdColumnGrLyr->addWidget(d->selectActionToBeExecutedLbl, 0, 0, Qt::AlignTop|Qt::AlignLeft);
 
 	d->emptyWidget = new QWidget(d->secondAnd3rdColumnStack);
 	d->secondAnd3rdColumnStack->addWidget(d->emptyWidget);
@@ -476,19 +478,20 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 		this, SLOT(slotActionToExecuteItemExecuted(Q3ListViewItem*)));
 	connect(d->actionToExecuteListView, SIGNAL(selectionChanged(Q3ListViewItem*)),
 		this, SLOT(slotActionToExecuteItemSelected(Q3ListViewItem*)));
-	secondAnd3rdColumnGrLyr->addWidget(d->actionToExecuteListView, 1, 1);
+	d->secondAnd3rdColumnGrLyr->addWidget(d->actionToExecuteListView, 1, 1);
 
 	d->actionToExecuteLbl = new QLabel(d->actionToExecuteListView, 
 		i18n("Action to execute:"), d->secondAnd3rdColumnMainWidget);
 	d->actionToExecuteLbl->installEventFilter(this); //to be able to disable painting
 	d->actionToExecuteLbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	d->actionToExecuteLbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::TextWordWrap);
-	secondAnd3rdColumnGrLyr->addWidget(d->actionToExecuteLbl, 0, 1, Qt::AlignTop|Qt::AlignLeft);
+	d->secondAnd3rdColumnGrLyr->addWidget(d->actionToExecuteLbl, 0, 1, Qt::AlignTop|Qt::AlignLeft);
 
 	// temporary show all sections to avoid resizing the dialog in the future
 	d->actionCategoriesListView->selectAction("table");
 	d->setActionToExecuteSectionVisible(true);
 	adjustSize();
+	resize(qMax(700, width()), qMax(450, height()));
 	d->actionToExecuteListView->updateWidth();
 
 	bool ok;
