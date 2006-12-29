@@ -812,6 +812,12 @@ Migration (Import Project Wizard) TODO:
   because type of server db is in fact selected on the next page (source conn selection)
 - set the same path for "destination" file browser as for "source" one
 - add "do not create system tables" option to the wizard
+- reuse the migration framework to support "offline mode" - for instance usable while moving with 
+  out of network with a laptop, by copying the relevant remote tables to a local temp db; 
+  this is already implemnted e.g. in MSA 2k7:
+  http://blogs.msdn.com/access/archive/2006/10/13/sharepoint-apps-offline-and-intro-to-sharepoint-designer.aspx
+  coming back online requeres data merges what is not easy as resolving potential conflict may be needed
+  (example: http://clintc.officeisp.net/Blogs/2006/40%20-%20SharePoint%20Offline/10%20-%20Conflict%20Resolution%20UI.JPG)
 
 MDB Migration:
 - add checks for "no space left on device" error (otherwise Kexi will crash)
@@ -937,6 +943,10 @@ Forms TODO
 KDElibs4 TODO:
 - wizard
 - do not require .la in libltdl
+
+Kexi 2.0 TODOs:
+- decrease # of shared libs, see Clarification at the bottom 
+  of http://people.redhat.com/drepper/no_static_linking.html
 
 == April 1 2007 TODO ==
 - show the screenshot of kexi displaying yes/no/maybe-dialogs, as for the "Woman edition"

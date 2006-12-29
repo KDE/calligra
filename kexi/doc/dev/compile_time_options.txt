@@ -1,7 +1,7 @@
 Compile-Time Options for Kexi
 -----------------------------
 
-(c) 2005, Jaroslaw Staniek, <js @ iidea . pl>
+(c) 2005-2006, Jaroslaw Staniek, <js @ iidea . pl>
 
 
 See http://www.kexi-project.org/wiki/wikiview/index.php?AdvancedBuildNotes
@@ -52,12 +52,6 @@ If KEXI_SCRIPTS_SUPPORT is defined, this option defines that
 Kross, located at kexi/scripting{core|plugins}, should be
 compiled and used for scripting.
 Default: same as KEXI_SCRIPTS_SUPPORT
-
-* KEXI_SERVER_SUPPORT
-Type: defined/undefined
-Default: defined in kexidb/kexidb_export.h if KEXI_OPTIONS is undefined
-Description: If defined, server connections will be supported; else: support 
-for these will be disabled even if is compiled.
 
 * KEXI_NO_MIGRATION
 Type: defined/undefined
