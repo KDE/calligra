@@ -125,16 +125,13 @@ static KCmdLineOptions options[] =
 	"of type <object_type> and name <object_name>\n"
 	"from specified project on application start.\n"
 	"See --print for more details."), 0 },
-#ifdef KEXI_SHOW_UNIMPLEMENTED
-  { "final-mode", I18N_NOOP(
-	"Start project in Final Mode, regardless \n"
-	"of the project settings".), 0 },
+  { "user-mode", I18N_NOOP(
+	"Start project in User Mode, regardless \n"
+	"of the project settings."), 0 },
   { "design-mode", I18N_NOOP(
 	"Start project in Design Mode, regardless \n"
 	"of the project settings."), 0 },
-#endif
 
-#ifdef KEXI_SERVER_SUPPORT
   { ":", I18N_NOOP("Options related to database servers:"), 0 },
   { "u", 0, 0 },
   { "user <name>", I18N_NOOP(
@@ -167,7 +164,6 @@ static KCmdLineOptions options[] =
 	"Skip displaying connection dialog window\n"
 	"and connect directly. Available when\n"
 	"opening .kexic or .kexis shortcut files."), 0 },
-#endif //KEXI_SERVER_SUPPORT
 
   { "+[project-name]", I18N_NOOP(
 	"Kexi database project filename,\n"

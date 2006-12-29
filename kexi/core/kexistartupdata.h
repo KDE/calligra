@@ -68,16 +68,16 @@ class KEXICORE_EXPORT KexiStartupData
 			Used on startup (by --design-mode comman line switch). */
 		bool forcedDesignMode() const;
 	
-		/*! \return true is the Final Mode is forced for this project. 
-			Used on startup (by --final-mode comman line switch). 
+		/*! \return true is the User Mode is forced for this project. 
+			Used on startup (by --user-mode comman line switch). 
 			By default this is false. */
-		bool forcedFinalMode() const;
+		bool forcedUserMode() const;
 		
 	protected:
 		KexiProjectData *m_projectData;
 		Action m_action;
 		KexiStartupData::Import m_importActionData;
-		bool m_forcedFinalMode : 1;
+		bool m_forcedUserMode : 1;
 		bool m_forcedDesignMode : 1;
 		bool m_createDB : 1;
 		bool m_dropDB : 1;

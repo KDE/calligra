@@ -40,7 +40,7 @@ public:
 		propEditor=0;
 		propEditorToolWindow=0;
 		propEditorTabWidget=0;
-		final = false;
+		userMode = false;
 		nav=0;
 		navToolWindow=0;
 		prj = 0;
@@ -242,6 +242,21 @@ void updatePropEditorDockWidthInfo() {
 			if (alsoSeparator)
 				pm->setItemVisible( pm->idAt(i+1), false ); //also separator
 		}
+	}
+	
+	void disableMenuItem(const QString& menuName, const QString& itemText)
+	{
+		QPopupMenu *pm = popups[menuName.ascii()];
+		if (!pm)
+			return;
+		uint i=0;
+		const uint c = pm->count();
+		for (;i<c;i++) {
+			if (pm->text( pm->idAt(i) ).lower().trimmed()==itemText.lower().trimmed())
+				break;
+		}
+		if (i<c)
+			pm->setItemEnabled( pm->idAt(i), false );
 	}
 
 	void updatePropEditorVisibility(int viewMode)
@@ -464,8 +479,8 @@ void updatePropEditorDockWidthInfo() {
 //		//! Used sometimes to block showErrorMessage()
 //		bool disableErrorMessages : 1;
 
-		//! Indicates if project is started in --final mode
-		bool final : 1;
+		//! Indicates if project is started in User Mode
+		bool userMode : 1;
 
 		//! Used on opening 1st child window
 		bool maximizeFirstOpenedChildFrm : 1;

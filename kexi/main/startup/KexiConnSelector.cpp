@@ -183,7 +183,6 @@ void KexiConnSelectorWidget::showAdvancedConn()
 //void KexiConnSelectorWidget::showAdvancedConn()
 void KexiConnSelectorWidget::slotPrjTypeSelected(int id)
 {
-#ifdef KEXI_SERVER_SUPPORT
 	if (id==1) {//file-based prj type
 		showSimpleConn();
 	}
@@ -209,9 +208,6 @@ void KexiConnSelectorWidget::slotPrjTypeSelected(int id)
 		}
 		d->stack->raiseWidget(m_remote);
 	}
-#else
-	showSimpleConn(); //safe
-#endif
 }
 
 ConnectionDataLVItem* KexiConnSelectorWidget::addConnectionData( KexiDB::ConnectionData* data )
@@ -244,13 +240,6 @@ void KexiConnSelectorWidget::showSimpleConn()
 		}
 	}
 	d->stack->raiseWidget(m_fileDlg);
-#ifndef KEXI_SERVER_SUPPORT
-/*	m_file->spacer->hide();
-	m_file->label->hide();
-	m_file->btn_advanced->hide();
-	m_file->label->parentWidget()->hide();*/
-
-#endif
 }
 
 int KexiConnSelectorWidget::selectedConnectionType() const

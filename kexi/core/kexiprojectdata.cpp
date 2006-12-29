@@ -43,13 +43,13 @@ class KexiProjectDataPrivate
 {
 public:
 	KexiProjectDataPrivate()
-	 : finalMode(false)
+	 : userMode(false)
 	 , readOnly(false)
 	{}
 	
 	KexiDB::ConnectionData connData;
 	QDateTime lastOpened;
-	bool finalMode : 1;
+	bool userMode : 1;
 	bool readOnly : 1;
 };
 
@@ -126,9 +126,9 @@ void KexiProjectData::setDatabaseName(const QString& dbName)
 	KexiDB::SchemaData::setName(dbName);
 }
 
-bool KexiProjectData::finalMode() const
+bool KexiProjectData::userMode() const
 {
-	return d->finalMode;
+	return d->userMode;
 }
 
 QDateTime KexiProjectData::lastOpened() const

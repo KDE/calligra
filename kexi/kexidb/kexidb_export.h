@@ -52,7 +52,7 @@
 #if defined(Q_WS_WIN) || defined(KEXI_OPTIONS)
 /* defined in a .pro file or 'KEXI_OPTIONS' env. variable */
 #else
-# define KEXI_SERVER_SUPPORT
+
 #endif
 
 /* Might want to add GUI defines here if widgets are to be

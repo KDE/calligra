@@ -41,6 +41,7 @@ KexiSimplePrintingPart::KexiSimplePrintingPart()
 		"query");*/
 	m_names["instanceCaption"] = i18n("Printing");
 	m_supportedViewModes = Kexi::DesignViewMode;
+	m_supportedUserViewModes = Kexi::DesignViewMode;
 }
 
 KexiSimplePrintingPart::~KexiSimplePrintingPart()

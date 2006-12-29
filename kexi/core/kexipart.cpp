@@ -100,6 +100,7 @@ Part::Part(QObject *parent, const char *name, const QStringList &)
 	setObjectName(name);
 	m_info = 0;
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
+	m_supportedUserViewModes = Kexi::DataViewMode;
 	m_mainWin = 0;
 	m_newObjectsAreDirty = false;
 }
@@ -113,6 +114,7 @@ Part::Part(QObject* parent, StaticInfo *info)
 	setObjectName("StaticPart");
 	m_info = info;
 	m_supportedViewModes = Kexi::DesignViewMode;
+	m_supportedUserViewModes = 0;
 	m_mainWin = 0;
 	m_newObjectsAreDirty = false;
 }
