@@ -21,17 +21,19 @@
 
 #include "KFormulaCanvas.h"
 #include "KFormulaPartView.h"
+#include "KFormulaPartDocument.h"
 #include <KoShapeManager.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <QPaintEvent>
 #include <QPainter>
 
-KFormulaCanvas::KFormulaCanvas( KFormulaPartView* view, QWidget* parent )
-              : QWidget( parent ),
-	        m_view( view )
+KFormulaCanvas::KFormulaCanvas( KFormulaPartView* view, KFormulaPartDocument* document, QWidget* parent )
+    : QWidget( parent ),
+      KoCanvasBase( document ),
+      m_view( view )
 {
-    m_toolProxy = KoToolManager::instance()->toolProxy();
+    m_toolProxy = KoToolManager::instance()->createToolProxy( this );
     m_shapeManager = new KoShapeManager( this );
 	
     setFocusPolicy( Qt::StrongFocus );
@@ -102,7 +104,7 @@ bool KFormulaCanvas::snapToGrid() const
     return false;             // KFormula doesn't use a grid
 }
     
-void KFormulaCanvas::addCommand( KCommand *command, bool execute )
+void KFormulaCanvas::addCommand( QUndoCommand *command )
 {
 }
     
@@ -128,7 +130,7 @@ QWidget* KFormulaCanvas::canvasWidget()
 
 KoUnit KFormulaCanvas::unit()
 {
-    return KoUnit::Centimeter;  // return this as default
+    return KoUnit( KoUnit::Centimeter );  // return this as default
 }
 
 KoToolProxy* KFormulaCanvas::toolProxy()

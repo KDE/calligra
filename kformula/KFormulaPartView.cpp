@@ -46,7 +46,7 @@ KFormulaPartView::KFormulaPartView( KFormulaPartDocument* doc, QWidget* parent )
 
     setInstance( KFormulaPartFactory::global() );
 
-    m_formulaCanvas = new KFormulaCanvas( this, this );
+    m_formulaCanvas = new KFormulaCanvas( this, m_partDocument );
     m_zoomHandler = new KoZoomHandler();
     m_canvasController = new KoCanvasController( this );
     m_canvasController->setCanvas( m_formulaCanvas );

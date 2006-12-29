@@ -27,6 +27,7 @@
 #include <KoCanvasBase.h>
 
 class KFormulaPartView;
+class KFormulaPartDocument;
 class KoShapeManager;
 class KoToolProxy;
 
@@ -40,7 +41,7 @@ class KoToolProxy;
 class KFormulaCanvas : public KoCanvasBase, public QWidget {
 public:
     /// The constructor taking arguments for QWidget
-    KFormulaCanvas( KFormulaPartView* view, QWidget* parent = 0 );
+    KFormulaCanvas( KFormulaPartView* view, KFormulaPartDocument* document, QWidget* parent = 0 );
 
     /// The destructor
     ~KFormulaCanvas();
@@ -52,7 +53,7 @@ public:
     bool snapToGrid() const;
     
     /// reimplemented method from superclass
-    void addCommand( KCommand* command, bool execute = true );
+    void addCommand( QUndoCommand* command );
      
     /// reimplemented method from superclass
     KoShapeManager* shapeManager() const;

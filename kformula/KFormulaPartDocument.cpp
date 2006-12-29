@@ -57,6 +57,14 @@ KFormulaPartDocument::~KFormulaPartDocument()
 }
 
 
+void KFormulaPartDocument::addShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData)
+{
+}
+
+void KFormulaPartDocument::removeShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData)
+{
+}
+
 bool KFormulaPartDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
 /*  KoStoreDevice dev( store );

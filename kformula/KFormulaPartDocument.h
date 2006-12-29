@@ -23,6 +23,7 @@
 #define KFORMULAPARTDOCUMENT_H
 
 #include <KoDocument.h>
+#include <KoShapeControllerBase.h>
 #include "KFormulaPartView.h"
 #include <QPainter>
 #include <kcommand.h>
@@ -41,7 +42,7 @@ class KoXmlWriter;
  * The actual data KFormulaPartDocument is maintaining is a list of FormulaShape.
  * 
  */
-class KFormulaPartDocument : public KoDocument {
+class KFormulaPartDocument : public KoDocument, public KoShapeControllerBase {
 Q_OBJECT
 public:
     /// The basic constructor
@@ -49,15 +50,33 @@ public:
 		           bool singleViewMode = false );
     ~KFormulaPartDocument();
 
+    // KoShapeControllerBase interface
+    /// reimplemented from KoShapeControllerBase
+    void addShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData);
+    /// reimplemented from KoShapeControllerBase
+    void removeShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData);
+
+
+    // KoDocument interface
+    /// reimplemented from KoDocument
     void paintContent( QPainter &painter, const QRect &rect,
 		    bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
 
+    /// reimplemented from KoDocument
     void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
-    bool showEmbedInitDialog(QWidget* parent);
-    bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
-		            const QDomDocument& settings, KoStore* );
+
+    /// reimplemented from KoDocument
+    bool loadXML( QIODevice *, const KoXmlDocument & doc );
+
+    /// reimplemented from KoDocument
+    bool loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles,
+		            const KoXmlDocument& settings, KoStore* );
+
+    /// reimplemented from KoDocument
     bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
-    bool loadXML( QIODevice *, const QDomDocument & doc );
+
+    /// reimplemented from KoDocument
+    bool showEmbedInitDialog(QWidget* parent);
 
 protected slots:
     void commandExecuted();
