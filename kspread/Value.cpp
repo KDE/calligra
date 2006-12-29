@@ -599,7 +599,7 @@ QDateTime Value::asDateTime( const Doc* doc ) const
   QDateTime datetime( doc->referenceDate(), QTime(), Qt::UTC );
 
   const int days = asInteger();
-  const int msecs = static_cast<int>( ( asFloat() - days ) * 86400000 ); // 24*60*60*1000
+  const int msecs = qRound( ( asFloat() - days ) * 86400000 ); // 24*60*60*1000
   datetime = datetime.addDays( days );
   datetime = datetime.addMSecs( msecs );
 
@@ -624,7 +624,7 @@ QTime Value::asTime( const Doc* doc ) const
   QTime dt;
 
   const int days = asInteger();
-  const int msecs = static_cast<int>( ( asFloat() - days ) * 86400000 ); // 24*60*60*1000
+  const int msecs = qRound( ( asFloat() - days ) * 86400000 ); // 24*60*60*1000
   dt = dt.addMSecs( msecs );
 
   return dt;

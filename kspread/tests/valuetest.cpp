@@ -152,40 +152,35 @@ void ValueTester::testTime()
   // time value
   v1 = new Value();
   v1->setValue( Value( QTime( 0, 0, 0 ), &doc ) );
-  QCOMPARE( v1->type(), Value::Integer );
-  int time_error = 0; // used to  save time, bail on first error
-  for( unsigned h = 0; !time_error && h < 24; h++ )
-  for( unsigned m = 0; !time_error && m < 60; m++ )
-  for( unsigned s = 0; !time_error && s < 60; s++ )
+  QCOMPARE( v1->type(), Value::Float );
+  for( unsigned h = 0; h < 24; h++ )
+  for( unsigned m = 0; m < 60; m++ )
+  for( unsigned s = 0; s < 60; s++ )
   {
     QTime t1 = QTime( h, m, s );
     v1->setValue( Value( t1, &doc ) );
     QTime t2 = v1->asTime( &doc );
-    if( t1.hour() != t2.hour() ) time_error++;
-    if( t1.minute() != t2.minute() ) time_error++;
-    if( t1.second() != t2.second() ) time_error++;
-    if( t1.msec() != t2.msec() ) time_error++;
+    QCOMPARE( t1.hour(), t2.hour() );
+    QCOMPARE( t1.minute(), t2.minute() );
+    QCOMPARE( t1.second(), t2.second() );
+    QCOMPARE( t1.msec(), t2.msec() );
   }
-  QCOMPARE( time_error, 0 );
   delete v1;
 
   // time value (msec)
   v1 = new Value();
   v1->setValue( Value( QTime( 0, 0, 0 ), &doc ) );
-  QCOMPARE( v1->type(), Value::Integer );
-  int msec_error = 0; // used to  save time, bail on first error
+  QCOMPARE( v1->type(), Value::Float );
   for( unsigned ms= 0;ms < 1000;ms++ )
   {
     QTime t1 = QTime( 1, 14, 2, ms );
     v1->setValue( Value( t1, &doc ) );
     QTime t2 = v1->asTime( &doc );
-    if( t1.hour() != t2.hour() ) msec_error++;
-    if( t1.minute() != t2.minute() ) msec_error++;
-    if( t1.second() != t2.second() ) msec_error++;
-    if( t1.msec() != t2.msec() ) msec_error++;
-    if( msec_error ) break;
+    QCOMPARE( t1.hour(), t2.hour() );
+    QCOMPARE( t1.minute(), t2.minute() );
+    QCOMPARE( t1.second(), t2.second() );
+    QCOMPARE( t1.msec(), t2.msec() );
   }
-  QCOMPARE( msec_error, 0 );
   delete v1;
 }
 
