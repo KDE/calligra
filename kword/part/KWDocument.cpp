@@ -89,8 +89,7 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
 KWDocument::~KWDocument() {
 }
 
-void KWDocument::addShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData) {
-    Q_UNUSED( addRemoveData );
+void KWDocument::addShape (KoShape *shape) {
     // KWord adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
     // will call addFrameSet.  Which will itself cal addFrame()
     // any call coming in here is due to the undo/redo framework or for nested frames
@@ -105,8 +104,7 @@ void KWDocument::addShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData)
     }
 }
 
-void KWDocument::removeShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData) {
-    Q_UNUSED( addRemoveData );
+void KWDocument::removeShape (KoShape *shape) {
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->shapeManager()->remove(shape);

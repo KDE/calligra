@@ -18,6 +18,9 @@
       <Action name="view_zoom"/>
       <Separator/>
       <Action name="view_rulers"/>
+      <Separator/>
+      <Action name="view_grid"/>
+      <Action name="view_snaptogrid"/>
     </Menu>
   </MenuBar>
 </kpartgui>

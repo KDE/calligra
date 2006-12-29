@@ -52,9 +52,9 @@ public:
 
     // KoShapeControllerBase interface
     /// reimplemented from KoShapeControllerBase
-    void addShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData);
+    void addShape (KoShape *shape);
     /// reimplemented from KoShapeControllerBase
-    void removeShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData);
+    void removeShape (KoShape *shape);
 
 
     // KoDocument interface

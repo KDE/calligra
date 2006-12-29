@@ -57,11 +57,11 @@ KFormulaPartDocument::~KFormulaPartDocument()
 }
 
 
-void KFormulaPartDocument::addShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData)
+void KFormulaPartDocument::addShape (KoShape *shape)
 {
 }
 
-void KFormulaPartDocument::removeShape (KoShape *shape, KoShapeAddRemoveData * addRemoveData)
+void KFormulaPartDocument::removeShape (KoShape *shape)
 {
 }
 

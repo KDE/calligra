@@ -794,7 +794,7 @@ KarbonView::groupSelection()
     // add group to parent of first shape to be grouped
     group->setParent( groupedShapes.first()->parent() );
 	QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
-	new KoShapeCreateCommand( m_part, group, 0, cmd );
+	new KoShapeCreateCommand( m_part, group, cmd );
 	new KoGroupShapesCommand( group, groupedShapes, cmd );
 	part()->KoDocument::addCommand( cmd );
 }
@@ -828,7 +828,7 @@ KarbonView::ungroupSelection()
 		if( container )
         {
 			new KoUngroupShapesCommand( container, container->iterator(), cmd );
-            new KoShapeDeleteCommand( m_part, container, 0, cmd );
+            new KoShapeDeleteCommand( m_part, container, cmd );
         }
 	}
 	part()->KoDocument::addCommand( cmd );

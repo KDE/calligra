@@ -620,10 +620,8 @@ KarbonPart::slotUnitChanged( KoUnit /*unit*/ )
 }
 
 void
-KarbonPart::addShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData )
+KarbonPart::addShape( KoShape* shape )
 {
-    Q_UNUSED( addRemoveData )
-
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 
     KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
@@ -656,9 +654,8 @@ KarbonPart::addShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData )
 }
 
 void
-KarbonPart::removeShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData )
+KarbonPart::removeShape( KoShape* shape )
 {
-    Q_UNUSED( addRemoveData )
     KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
     if( layer )
     {

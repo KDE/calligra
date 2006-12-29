@@ -91,8 +91,8 @@ public:
 	bool mergeNativeFormat( const QString & file );
 
 	// implemented from KoShapeController
-	virtual void addShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData );
-	virtual void removeShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData );
+	virtual void addShape( KoShape* shape );
+	virtual void removeShape( KoShape* shape );
 
 public slots:
 	/// repaint all views attached to this koDocument

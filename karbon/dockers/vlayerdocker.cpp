@@ -212,7 +212,7 @@ void VLayerDocker::addLayer()
     {
         KoShapeLayer* layer = new KoShapeLayer();
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        QUndoCommand *cmd = new KoShapeCreateCommand( m_shapeController, layer, 0, 0 );
+        QUndoCommand *cmd = new KoShapeCreateCommand( m_shapeController, layer, 0 );
         cmd->setText( i18n( "Create Layer") );
         canvasController->canvas()->addCommand( cmd );
         m_document->setObjectName( layer, name );
