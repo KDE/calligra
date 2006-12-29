@@ -237,6 +237,9 @@ Things not in bugzilla
       reference depth is useless. Therefore, we have to respect the
       automatic recalc setting.
 
+  + Value							      1 ----
+    - Support datetimes.						----
+
   + Matrix operations						      2 ----
     - Determinant							----
     - Dimension								----
@@ -399,9 +402,6 @@ Engineering:
 
 
 Date & Time:
-
-UNIX2DATE								SASCHA
-DATE2UNIX								SASCHA
 
 
 Math:

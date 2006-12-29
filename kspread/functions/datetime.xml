@@ -709,6 +709,36 @@
 	</Help>
     </Function>
 
+    <Function>
+	<Name>DATE2UNIX</Name>
+	<Type>Int</Type>
+	<Parameter>
+	    <Comment>Date</Comment>
+	    <Type>String</Type>
+	</Parameter>
+	<Help>
+	    <Text>DATE2UNIX() function converts a date and time value to unix time.</Text>
+            <Text>A unix time is the number of seconds after midnight January 1st, 1970.</Text>
+            <Syntax>DATE2UNIX(date)</Syntax>
+	    <Example>DATE2UNIX("01/08/2001") returns 5 workdays</Example>
+	</Help>
+    </Function>
+
+    <Function>
+	<Name>UNIX2DATE</Name>
+	<Type>Date</Type>
+	<Parameter>
+	    <Comment>Unixtime</Comment>
+	    <Type>Int</Type>
+	</Parameter>
+	<Help>
+	    <Text>UNIX2DATE() function converts unix time to a date and time value.</Text>
+            <Text>A unix time is the number of seconds after midnight January 1st, 1970.</Text>
+            <Syntax>UNIX2DATE(unixtime)</Syntax>
+	    <Example>UNIX2DATE(0) returns 1970-01-01 00:00:00</Example>
+	</Help>
+    </Function>
+
   </Group>
 
 </KSpreadFunctions>

@@ -62,8 +62,8 @@ KAboutData * newAboutData()
     aboutData->addAuthor("Stefan Nikolaus", 0, "stefan.nikolaus@kdemail.net");
     // "Thanks to" section
     aboutData->addCredit("Sascha Pfau",
-                         "Functions:\tDATEDIF, IMLOG2, IMLOG10, NETWORKDAY,\n"
-                         "\tWEEKNUM, WORKDAY, YEARFRAC", "mrpeacock@gmail.com");
+                         "Functions:\tDATE2UNIX, DATEDIF, IMLOG2, IMLOG10, NETWORKDAY,\n"
+                         "\tUNIX2DATE, WEEKNUM, WORKDAY, YEARFRAC", "mrpeacock@gmail.com");
     aboutData->addCredit("Brad Hards", "Various functions reviewed for OpenFormula compliance",
                          "bradh@frogmouth.net");
     return aboutData;

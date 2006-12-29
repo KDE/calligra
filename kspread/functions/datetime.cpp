@@ -37,6 +37,7 @@ Value func_currentDate (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_currentDateTime (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_currentTime (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_date (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_date2unix (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_dateDif (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_datevalue (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_day (valVector args, ValueCalc *calc, FuncExtra *);
@@ -64,6 +65,7 @@ Value func_seconds (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_time (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_timevalue (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_today (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_unix2date (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *);
@@ -91,6 +93,9 @@ void RegisterDateTimeFunctions()
   repo->add (f);
   f = new Function ("DATE",  func_date);
   f->setParamCount (3);
+  f = new Function ("DATE2UNIX",  func_date2unix);
+  f->setParamCount (1);
+  repo->add (f);
   f = new Function ("DATEDIF",  func_dateDif);
   f->setParamCount (3);
   repo->add (f);
@@ -165,6 +170,9 @@ void RegisterDateTimeFunctions()
   repo->add (f);
   f = new Function ("TODAY",  func_currentDate);
   f->setParamCount (0);
+  repo->add (f);
+  f = new Function ("UNIX2DATE",  func_unix2date);
+  f->setParamCount (1);
   repo->add (f);
   f = new Function ("WEEKDAY",  func_weekday);
   f->setParamCount (1, 2);
@@ -1146,4 +1154,37 @@ Value func_networkday (valVector args, ValueCalc *calc, FuncExtra *e)
     days++;
   }
   return Value( days );
+}
+
+// Function: DATE2UNIX
+//
+// Gnumeric docs says 01/01/2000 = 946656000
+// TODO:
+// - create FormatType mm/dd/yyyy hh:mm:ss
+// - add method tryParseDateTime
+Value func_unix2date(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value v( calc->conv()->asInteger( args[0] ) );
+    if (v.isError())
+        return v;
+
+    QDateTime datetime;
+    datetime.setTimeSpec( Qt::UTC );
+    datetime.setTime_t( v.asInteger() );
+
+    return Value( datetime.date(), calc->doc() );
+}
+
+// Function: UNIX2DATE
+Value func_date2unix (valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value v( calc->conv()->asDate( args[0]) );
+    if ( v.isError() )
+        return v;
+
+    QDateTime datetime;
+    datetime.setTimeSpec( Qt::UTC );
+    datetime.setDate( v.asDate( calc->doc() ) );
+
+    return Value( static_cast<int>( datetime.toTime_t() ) );
 }
