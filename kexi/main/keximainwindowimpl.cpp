@@ -116,9 +116,6 @@
 #include "kexinewstuff.h"
 #endif
 
-//show property editor
-#define KEXI_PROP_EDITOR 1
-
 //! @todo REENABLE when blinking and dock
 //! width changes will be removed in KMDI
 //#define PROPEDITOR_VISIBILITY_CHANGES
@@ -226,12 +223,12 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 {
 	KImageIO::registerFormats();
 	KexiProjectData *pdata = Kexi::startupHandler().projectData();
-	d->final = Kexi::startupHandler().forcedFinalMode() /* <-- simply forced final mode */
-		/* project has 'final mode' set as default and not 'design mode' override is found: */
-		|| (pdata && pdata->finalMode() && !Kexi::startupHandler().forcedDesignMode());
+	d->userMode = Kexi::startupHandler().forcedUserMode() /* <-- simply forced the user mode */
+		/* project has 'user mode' set as default and not 'design mode' override is found: */
+		|| (pdata && pdata->userMode() && !Kexi::startupHandler().forcedDesignMode());
 
-	if(d->final)
-		kdDebug() << "KexiMainWindowImpl::KexiMainWindowImpl(): starting up in final mode" << endl;
+	if(userMode())
+		kdDebug() << "KexiMainWindowImpl::KexiMainWindowImpl(): starting up in the User Mode" << endl;
 
 	d->config = kapp->config();
 
@@ -264,22 +261,21 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		this, SLOT(slotMdiModeHasBeenChangedTo(KMdi::MdiMode)));
 
 
-	if(!d->final)
-	{
+	//if (!userMode()) {
 		setXMLFile("kexiui.rc");
 		setAcceptDrops(true);
 		initActions();
 		createShellGUI(true);
-	}
+	//}
 
 	d->statusBar = new KexiStatusBar(this, "status_bar");
 
 	d->origAppCaption = caption();
 
 	restoreSettings();
+	(void)Kexi::smallFont(this/*init*/);
 
-	if(!d->final)
-	{
+	if (!userMode()) {
 		initContextHelp();
 		initPropertyEditor();
 	}
@@ -316,7 +312,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		kmdi_tooldock_menu_action->setEnabled(false);
 	}
 
-	if (!isFakingSDIApplication() && !d->final) {
+	if (!isFakingSDIApplication()/* && !userMode()*/) {
 //		QPopupMenu *menu = (QPopupMenu*) child( "window", "KPopupMenu" );
 		QPopupMenu *menu = d->popups["window"];
 		unsigned int count = menuBar()->count();
@@ -325,13 +321,27 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		else
 			menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, count-2); // standard position is left to the last ('Help')
 	}
+	if (userMode()) {
+		//hide "insert" menu and disable "project_import", "edit_paste_special" menus
+		QPopupMenu *menu = d->popups["insert"];
+		if (menu) {
+			for (uint i=0; i < menuBar()->count(); i++) {
+				if (menuBar()->text( menuBar()->idAt(i) ) == i18n("&Insert")) {
+					menuBar()->setItemVisible( menuBar()->idAt(i), false );
+					break;
+				}
+			}
+		}
+		d->disableMenuItem("file", i18n("&Import"));
+		d->disableMenuItem("edit", i18n("Paste &Special"));
+	}
 
 	m_pTaskBar->setCaption(i18n("Task Bar"));	//js TODO: move this to KMDIlib
 
-	if (!d->final) {
+//	if (!userMode()) {
 		invalidateActions();
 		d->timer.singleShot(0,this,SLOT(slotLastActions()));
-	}
+//	}
 
 	setTabWidgetVisibility(KMdi::AlwaysShowTabs);
 	if (mdiMode()==KMdi::IDEAlMode) {
@@ -344,6 +354,8 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		closeButton->setPaletteBackgroundColor(closeButton->palette().active().background()); 
 //		closeButton->setIconSet(SmallIconSet("tab_remove"));
 		tabWidget()->setCornerWidget( closeButton, Qt::TopRight );
+		closeButton->hide(); // hide until it's needed to avoid problems in "user mode" 
+		                     // when initially the main window is empty
 		QToolTip::add(closeButton, 
 			i18n("Close the current tab page in Kexi tab interface", "Close the current tab"));
 		QObject::connect( closeButton, SIGNAL( clicked() ), this, SLOT( closeActiveView() ) );
@@ -588,13 +600,17 @@ void KexiMainWindowImpl::initActions()
 	d->action_tools_compact_database->setWhatsThis(
 		i18n("Compacts the current database project, so it will take less space and work faster."));
 
-	d->action_project_import_data_table = new KAction(
-		i18n("Import->Table Data From File...", "Table Data From &File..."),
-		"table"/*! @todo: change to "file_import" or so*/,
-		0, this, SLOT(slotProjectImportDataTable()), actionCollection(), 
-		"project_import_data_table");
-	d->action_project_import_data_table->setToolTip(i18n("Import table data from a file"));
-	d->action_project_import_data_table->setWhatsThis(i18n("Imports table data from a file."));
+	if (userMode())
+		d->action_project_import_data_table = 0;
+	else {
+		d->action_project_import_data_table = new KAction(
+			i18n("Import->Table Data From File...", "Table Data From &File..."),
+			"table"/*! @todo: change to "file_import" or so*/,
+			0, this, SLOT(slotProjectImportDataTable()), actionCollection(), 
+			"project_import_data_table");
+		d->action_project_import_data_table->setToolTip(i18n("Import table data from a file"));
+		d->action_project_import_data_table->setWhatsThis(i18n("Imports table data from a file."));
+	}
 
 	d->action_project_export_data_table = new KAction(i18n("Export->Table or Query Data to File...", 
 		"Table or Query Data to &File..."),
@@ -637,14 +653,18 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_copy = createSharedAction( KStdAction::Copy, "edit_copy");
 	d->action_edit_paste = createSharedAction( KStdAction::Paste, "edit_paste");
 
-	d->action_edit_paste_special_data_table = 
-		new KAction(i18n("Paste Special->As Data &Table...", "As Data &Table..."),
-		"table", 0, this, SLOT(slotEditPasteSpecialDataTable()),
-		actionCollection(), "edit_paste_special_data_table");
-	d->action_edit_paste_special_data_table->setToolTip(
-		i18n("Paste clipboard data as a table"));
-	d->action_edit_paste_special_data_table->setWhatsThis(
-		i18n("Pastes clipboard data to a table."));
+	if (userMode())
+		d->action_edit_paste_special_data_table = 0;
+	else {
+		d->action_edit_paste_special_data_table = 
+			new KAction(i18n("Paste Special->As Data &Table...", "As Data &Table..."),
+			"table", 0, this, SLOT(slotEditPasteSpecialDataTable()),
+			actionCollection(), "edit_paste_special_data_table");
+		d->action_edit_paste_special_data_table->setToolTip(
+			i18n("Paste clipboard data as a table"));
+		d->action_edit_paste_special_data_table->setWhatsThis(
+			i18n("Pastes clipboard data to a table."));
+	}
 
 	d->action_edit_copy_special_data_table =
 		new KAction(i18n("Copy Special->Table or Query Data...", 
@@ -691,26 +711,38 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_insert_empty_row->setWhatsThis(i18n("Inserts one empty row above currently selected table row."));
 
 	//VIEW MENU
-	d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "state_data", Qt::Key_F6,
-		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
-	d->actions_for_view_modes.insert( Kexi::DataViewMode, d->action_view_data_mode );
-	d->action_view_data_mode->setExclusiveGroup("view_mode");
-	d->action_view_data_mode->setToolTip(i18n("Switch to data view"));
-	d->action_view_data_mode->setWhatsThis(i18n("Switches to data view."));
+	if (!userMode()) {
+		d->action_view_data_mode = new KRadioAction(i18n("&Data View"), "state_data", Qt::Key_F6,
+			this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
+		d->actions_for_view_modes.insert( Kexi::DataViewMode, d->action_view_data_mode );
+		d->action_view_data_mode->setExclusiveGroup("view_mode");
+		d->action_view_data_mode->setToolTip(i18n("Switch to data view"));
+		d->action_view_data_mode->setWhatsThis(i18n("Switches to data view."));
+	}
+	else
+		d->action_view_data_mode = 0;
 
-	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", Qt::Key_F7,
-		this, SLOT(slotViewDesignMode()), actionCollection(), "view_design_mode");
-	d->actions_for_view_modes.insert( Kexi::DesignViewMode, d->action_view_design_mode );
-	d->action_view_design_mode->setExclusiveGroup("view_mode");
-	d->action_view_design_mode->setToolTip(i18n("Switch to design view"));
-	d->action_view_design_mode->setWhatsThis(i18n("Switches to design view."));
+	if (!userMode()) {
+		d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", Qt::Key_F7,
+			this, SLOT(slotViewDesignMode()), actionCollection(), "view_design_mode");
+		d->actions_for_view_modes.insert( Kexi::DesignViewMode, d->action_view_design_mode );
+		d->action_view_design_mode->setExclusiveGroup("view_mode");
+		d->action_view_design_mode->setToolTip(i18n("Switch to design view"));
+		d->action_view_design_mode->setWhatsThis(i18n("Switches to design view."));
+	}
+	else
+		d->action_view_design_mode = 0;
 
-	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", Qt::Key_F8,
-		this, SLOT(slotViewTextMode()), actionCollection(), "view_text_mode");
-	d->actions_for_view_modes.insert( Kexi::TextViewMode, d->action_view_text_mode );
-	d->action_view_text_mode->setExclusiveGroup("view_mode");
-	d->action_view_text_mode->setToolTip(i18n("Switch to text view"));
-	d->action_view_text_mode->setWhatsThis(i18n("Switches to text view."));
+	if (!userMode()) {
+		d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", Qt::Key_F8,
+			this, SLOT(slotViewTextMode()), actionCollection(), "view_text_mode");
+		d->actions_for_view_modes.insert( Kexi::TextViewMode, d->action_view_text_mode );
+		d->action_view_text_mode->setExclusiveGroup("view_mode");
+		d->action_view_text_mode->setToolTip(i18n("Switch to text view"));
+		d->action_view_text_mode->setWhatsThis(i18n("Switches to text view."));
+	}
+	else
+		d->action_view_text_mode = 0;
 
 	d->action_view_nav = new KAction(i18n("Project Navigator"), "", Qt::ALT + Qt::Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
@@ -722,12 +754,14 @@ void KexiMainWindowImpl::initActions()
 	d->action_view_mainarea->setToolTip(i18n("Go to main area"));
 	d->action_view_mainarea->setWhatsThis(i18n("Goes to main area."));
 
-#ifdef KEXI_PROP_EDITOR
-	d->action_view_propeditor = new KAction(i18n("Property Editor"), "", Qt::ALT + Qt::Key_3,
-		this, SLOT(slotViewPropertyEditor()), actionCollection(), "view_propeditor");
-	d->action_view_propeditor->setToolTip(i18n("Go to property editor panel"));
-	d->action_view_propeditor->setWhatsThis(i18n("Goes to property editor panel."));
-#endif
+	if (!userMode()) {
+		d->action_view_propeditor = new KAction(i18n("Property Editor"), "", Qt::ALT + Qt::Key_3,
+			this, SLOT(slotViewPropertyEditor()), actionCollection(), "view_propeditor");
+		d->action_view_propeditor->setToolTip(i18n("Go to property editor panel"));
+		d->action_view_propeditor->setWhatsThis(i18n("Goes to property editor panel."));
+	}
+	else
+		d->action_view_propeditor = 0;
 
 	//DATA MENU
 	d->action_data_save_row = createSharedAction(i18n("&Save Row"), "button_ok", 
@@ -1063,9 +1097,6 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 {
 //	stateChanged("project_opened",d->prj ? StateNoReverse : StateReverse);
 
-	if(d->final)
-		return;
-
 	const bool have_dialog = d->curDialog;
 	const bool dialog_dirty = d->curDialog && d->curDialog->dirty();
 	const bool readOnly = d->prj && d->prj->dbConnection() && d->prj->dbConnection()->isReadOnly();
@@ -1076,7 +1107,8 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	d->action_project_properties->setEnabled(d->prj);
 	d->action_close->setEnabled(d->prj);
 	d->action_project_relations->setEnabled(d->prj);
-	d->action_project_import_data_table->setEnabled(d->prj && !readOnly);
+	if (d->action_project_import_data_table)
+		d->action_project_import_data_table->setEnabled(d->prj && !readOnly);
 	d->action_project_export_data_table->setEnabled( 
 		d->curDialog && d->curDialog->part()->info()->isDataExportSupported() 
 		&& !d->curDialog->neverSaved() );
@@ -1089,7 +1121,9 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	d->action_project_print_setup->setEnabled( printingActionsEnabled );
 
 	//EDIT MENU
-	d->action_edit_paste_special_data_table->setEnabled(d->prj && !readOnly);
+
+	if (d->action_edit_paste_special_data_table)
+		d->action_edit_paste_special_data_table->setEnabled(d->prj && !readOnly);
 
 //! @todo "copy special" is currently enabled only for data view mode; 
 //! 	what about allowing it to enable in design view for "kexi/table" ?
@@ -1104,16 +1138,23 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	//VIEW MENU
 	d->action_view_nav->setEnabled(d->prj);
 	d->action_view_mainarea->setEnabled(d->prj);
-	d->action_view_propeditor->setEnabled(d->prj);
-	d->action_view_data_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::DataViewMode) );
-	if (!d->action_view_data_mode->isEnabled())
-		d->action_view_data_mode->setChecked(false);
-	d->action_view_design_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::DesignViewMode) );
-	if (!d->action_view_design_mode->isEnabled())
-		d->action_view_design_mode->setChecked(false);
-	d->action_view_text_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::TextViewMode) );
-	if (!d->action_view_text_mode->isEnabled())
-		d->action_view_text_mode->setChecked(false);
+	if (d->action_view_propeditor)
+		d->action_view_propeditor->setEnabled(d->prj);
+	if (d->action_view_data_mode) {
+		d->action_view_data_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::DataViewMode) );
+		if (!d->action_view_data_mode->isEnabled())
+			d->action_view_data_mode->setChecked(false);
+	}
+	if (d->action_view_design_mode) {
+		d->action_view_design_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::DesignViewMode) );
+		if (!d->action_view_design_mode->isEnabled())
+			d->action_view_design_mode->setChecked(false);
+	}
+	if (d->action_view_text_mode) {
+		d->action_view_text_mode->setEnabled( have_dialog && d->curDialog->supportsViewMode(Kexi::TextViewMode) );
+		if (!d->action_view_text_mode->isEnabled())
+			d->action_view_text_mode->setChecked(false);
+	}
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper->setEnabled(d->prj);
 #endif
@@ -1148,12 +1189,18 @@ void KexiMainWindowImpl::invalidateViewModeActions()
 {
 	if (d->curDialog) {
 		//update toggle action
-		if (d->curDialog->currentViewMode()==Kexi::DataViewMode)
-			d->action_view_data_mode->setChecked( true );
-		else if (d->curDialog->currentViewMode()==Kexi::DesignViewMode)
-			d->action_view_design_mode->setChecked( true );
-		else if (d->curDialog->currentViewMode()==Kexi::TextViewMode)
-			d->action_view_text_mode->setChecked( true );
+		if (d->curDialog->currentViewMode()==Kexi::DataViewMode) {
+			if (d->action_view_data_mode)
+				d->action_view_data_mode->setChecked( true );
+		}
+		else if (d->curDialog->currentViewMode()==Kexi::DesignViewMode) {
+			if (d->action_view_design_mode)
+				d->action_view_design_mode->setChecked( true );
+		}
+		else if (d->curDialog->currentViewMode()==Kexi::TextViewMode) {
+			if (d->action_view_text_mode)
+				d->action_view_text_mode->setChecked( true );
+		}
 	}
 }
 
@@ -1161,7 +1208,8 @@ tristate KexiMainWindowImpl::startup()
 {
 	switch (Kexi::startupHandler().action()) {
 	case KexiStartupHandler::CreateBlankProject:
-		makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
+		if (d->propEditor)
+			makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
 		return createBlankProject();
 	case KexiStartupHandler::UseTemplate:
 		return cancelled;
@@ -1175,7 +1223,8 @@ tristate KexiMainWindowImpl::startup()
 			Kexi::startupHandler().importActionData().fileName
 		);
 	default:;
-		makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
+		if (d->propEditor)
+			makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
 	}
 	return true;
 }
@@ -1191,10 +1240,10 @@ static QString internalReason(KexiDB::Object *obj)
 tristate KexiMainWindowImpl::openProject(const KexiProjectData& projectData)
 {
 	KexiProjectData *newProjectData = new KexiProjectData(projectData);
-	if (d->final) {
+//	if (userMode()) {
 		//TODO: maybe also auto allow to open objects...
-		return initFinalMode(newProjectData);
-	}
+//		return initUserModeMode(newProjectData);
+//	}
 	createKexiProject( newProjectData );
 	if (!newProjectData->connectionData()->savePassword 
 		&& newProjectData->connectionData()->password.isEmpty()
@@ -1243,7 +1292,6 @@ tristate KexiMainWindowImpl::openProject(const KexiProjectData& projectData)
 		return false;
 	}
 	initNavigator();
-//	initPropertyEditor();
 	Kexi::recentProjects().addProjectData( newProjectData );
 	updateReadOnlyState();
 	invalidateActions();
@@ -1309,7 +1357,6 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 			KexiPart::Item *item = d->prj->item(i, info["name"]);
 
 			if (!item) {
-				not_found_msg += "<li>";
 				QString taskName;
 				if (info["action"]=="print-preview")
 					taskName = i18n("making print preview for");
@@ -1338,7 +1385,6 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 			if (info["action"]=="execute") {
 				tristate res = executeItem(item);
 				if (false == res) {
-					not_found_msg += "<li>";
 					not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot execute object")+
 					internalReason(d->prj)+"<br></li>" );
 				}
@@ -1347,7 +1393,6 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 			else if (info["action"]=="print") {
 				tristate res = printItem(item);
 				if (false == res) {
-					not_found_msg += "<li>";
 					not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot print object")+
 					internalReason(d->prj)+"<br></li>" );
 				}
@@ -1356,7 +1401,6 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 			else if (info["action"]=="print-preview") {
 				tristate res = printPreviewForItem(item);
 				if (false == res) {
-					not_found_msg += "<li>";
 					not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot make print preview of object")+
 					internalReason(d->prj)+"<br></li>" );
 				}
@@ -1372,14 +1416,22 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 				viewMode = Kexi::TextViewMode;
 			else
 				continue; //sanity
-			if (!openObject(item, viewMode, openingCancelled) && !openingCancelled) {
-				not_found_msg += "<li>";
-				not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot open object")+
-					internalReason(d->prj)+"<br></li>" );
+
+			QString openObjectMessage;
+			if (!openObject(item, viewMode, openingCancelled, 0, &openObjectMessage) 
+				&& (!openingCancelled || !openObjectMessage.isEmpty()))
+			{
+				not_found_msg += (QString("<li>\"")+ info["name"] + "\" - ");
+				if (openObjectMessage.isEmpty())
+					not_found_msg += i18n("cannot open object");
+				else
+					not_found_msg += openObjectMessage;
+				not_found_msg += internalReason(d->prj) + "<br></li>";
 				continue;
 			}
-			else
+			else {
 				d->wasAutoOpen = true;
+			}
 		}
 	}
 	enableMessages( true );
@@ -1481,7 +1533,7 @@ tristate KexiMainWindowImpl::closeProject()
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 		int dwWidth = dw->width();
 		if (ds) {
-				if (d->openedDialogsCount()!=0 && d->propEditorTabWidget->isVisible())
+				if (d->openedDialogsCount()!=0 && d->propEditorTabWidget && d->propEditorTabWidget->isVisible())
 					d->navDockSeparatorPos = ds->separatorPosInPercent();
 				else
 					d->navDockSeparatorPos = (100 * dwWidth) / width();
@@ -1528,7 +1580,7 @@ tristate KexiMainWindowImpl::closeProject()
 
 	updateReadOnlyState();
 	invalidateActions();
-	if(!d->final)
+//	if (!userMode())
 		updateAppCaption();
 
 	emit projectClosed();
@@ -1613,7 +1665,7 @@ KexiMainWindowImpl::initNavigator()
 
 void KexiMainWindowImpl::slotLastActions()
 {
-#if defined(KEXI_PROP_EDITOR) && defined(KDOCKWIDGET_P)
+#if defined(KDOCKWIDGET_P)
 	if (mdiMode()==KMdi::ChildframeMode || mdiMode()==KMdi::TabPageMode) {
 //		KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
 		//KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
@@ -1630,7 +1682,6 @@ void KexiMainWindowImpl::slotLastActions()
 
 void KexiMainWindowImpl::initPropertyEditor()
 {
-#ifdef KEXI_PROP_EDITOR
 	if (!d->propEditor) {
 //TODO: FIX LAYOUT PROBLEMS
 		d->propEditorTabWidget = new KTabWidget(this);
@@ -1644,7 +1695,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 
 		d->config->setGroup("PropertyEditor");
 		int size = d->config->readNumEntry("FontSize", -1);
-		QFont f( Kexi::smallFont(this/*init*/) );
+		QFont f( Kexi::smallFont() );
 		if (size>0)
 			f.setPixelSize( size );
 		d->propEditorTabWidget->setFont(f);
@@ -1680,7 +1731,6 @@ void KexiMainWindowImpl::initPropertyEditor()
 	//js			m_rightContainer->setForcedFixedWidth( 400 );
 	//js		}
 		}
-	#endif
 
 	//	int w = d->propEditor->width();
 	/*    KMdiToolViewAccessor *tmp=createToolWindow();
@@ -3413,6 +3463,15 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 	return KMdiMainFrm::eventFilter(obj,e);//let KMDI do its work
 }
 
+bool KexiMainWindowImpl::openingAllowed(KexiPart::Item* item, int viewMode)
+{
+	//! @todo this can be more complex once we deliver ACLs...
+	if (!userMode())
+		return true;
+	KexiPart::Part * part = Kexi::partManager().partForMimeType(item->mimeType());
+	return part && (part->supportedUserViewModes() & viewMode);
+}
+
 KexiDialogBase *
 KexiMainWindowImpl::openObject(const QCString& mimeType, const QString& name, 
 	int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs)
@@ -3425,8 +3484,16 @@ KexiMainWindowImpl::openObject(const QCString& mimeType, const QString& name,
 
 KexiDialogBase *
 KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode, bool &openingCancelled,
-	QMap<QString,QString>* staticObjectArgs)
+	QMap<QString,QString>* staticObjectArgs, QString* errorMessage)
 {
+	if (!openingAllowed(item, viewMode)) {
+		if (errorMessage)
+			*errorMessage = i18n("opening is not allowed in \"data view/design view/text view\" mode", 
+				"opening is not allowed in \"%1\" mode").arg(Kexi::nameForViewMode(viewMode));
+		openingCancelled = true;
+		return 0;
+	}
+	
 	if (!d->prj || !item)
 		return 0;
 	KexiUtils::WaitCursor wait;
@@ -3449,17 +3516,6 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode, bool &opening
 			if (!switchToViewMode(viewMode))
 				return 0;
 		}
-/*		if (dlg->currentViewMode()!=viewMode) {
-			//try to switch
-			bool cancelled;
-			if (!dlg->switchToViewMode(viewMode, cancelled)) {
-				//js TODO: add error msg...
-				return 0;
-			}
-			if (cancelled)
-				return 0;
-			needsUpdateViewGUIClient = false;
-		}*/
 		needsUpdateViewGUIClient = false;
 	}
 	else {
@@ -3474,9 +3530,6 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode, bool &opening
 		d->addItemToPendingDialogs(item, Private::DialogOpeningJob);
 #endif
 		dlg = d->prj->openObject(this, *item, viewMode, staticObjectArgs);
-
-//moved up		if (dlg)
-//			d->updatePropEditorVisibility(dlg->currentViewMode());
 	}
 
 	if (!dlg || !activateWindow(dlg)) {
@@ -3488,7 +3541,7 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode, bool &opening
 		return 0;
 	}
 
-	if (needsUpdateViewGUIClient && !d->final) {
+	if (needsUpdateViewGUIClient /*&& !userMode()*/) {
 		//view changed: switch to this view's gui client
 		KXMLGUIClient *viewClient=dlg->guiClient();
 		updateDialogViewGUIClient(viewClient);
@@ -3523,6 +3576,10 @@ KexiDialogBase *
 KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode, 
 	bool &openingCancelled)
 {
+	if (!openingAllowed(item, viewMode)) {
+		openingCancelled = true;
+		return 0;
+	}
 	if (!d->prj || !item)
 		return false;
 #ifndef KEXI_NO_PENDING_DIALOGS
@@ -3575,6 +3632,10 @@ tristate KexiMainWindowImpl::closeObject(KexiPart::Item* item)
 
 bool KexiMainWindowImpl::newObject( KexiPart::Info *info, bool& openingCancelled )
 {
+	if (userMode()) {
+		openingCancelled = true;
+		return false;
+	}
 	openingCancelled = false;
 	if (!d->prj || !info)
 		return false;
@@ -3599,6 +3660,8 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info, bool& openingCancelled
 
 tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 {
+	if (userMode())
+		return cancelled;
 	if (!d->prj || !item)
 		return false;
 
@@ -3671,6 +3734,10 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 
 void KexiMainWindowImpl::renameObject( KexiPart::Item *item, const QString& _newName, bool &success )
 {
+	if (userMode()) {
+		success = false;
+		return;
+	}
 	d->pendingDialogsExist();
 	QString newName = _newName.stripWhiteSpace();
 	if (newName.isEmpty()) {
@@ -3746,7 +3813,7 @@ void KexiMainWindowImpl::slotDirtyFlagChanged(KexiDialogBase* dlg)
 {
 	KexiPart::Item *item = dlg->partItem();
 	//update text in navigator and app. caption
-	if(!d->final)
+	if(!userMode())
 		d->nav->updateItemName( *item, dlg->dirty() );
 
 	invalidateActions();
@@ -3851,24 +3918,23 @@ void KexiMainWindowImpl::slotOptionsEnableForms(bool show, bool noMessage)
 	Kexi::tempShowForms() = show;
 }
 
-bool KexiMainWindowImpl::inFinalMode() const
+bool KexiMainWindowImpl::userMode() const
 {
-	return d->final;
+	return d->userMode;
 }
 
 bool
-KexiMainWindowImpl::initFinalMode(KexiProjectData *projectData)
+KexiMainWindowImpl::initUserMode(KexiProjectData *projectData)
 {
-//TODO
-	Kexi::tempShowForms() = true;
-	Kexi::tempShowReports() = true;
-	Kexi::tempShowMacros() = true;
-	Kexi::tempShowScripts() = true;
+//	Kexi::tempShowForms() = true;
+//	Kexi::tempShowReports() = true;
+//	Kexi::tempShowMacros() = true;
+//	Kexi::tempShowScripts() = true;
 	if(!projectData)
 		return false;
 
 	createKexiProject(projectData); //initialize project
-	d->prj->setFinal(true);         //announce that we are in fianl mode
+//	d->prj->setFinal(true);         //announce that we are in fianl mode
 
 	tristate res = d->prj->open();             //try to open database
 	if (!res || ~res) {
@@ -3877,6 +3943,7 @@ KexiMainWindowImpl::initFinalMode(KexiProjectData *projectData)
 		return false;
 	}
 
+#if 0 //todo reenable; autoopen objects are handled elsewhere
 	KexiDB::TableSchema *sch = d->prj->dbConnection()->tableSchema("kexi__final");
 	QString err_msg = i18n("Could not start project \"%1\" in Final Mode.")
 		.arg(static_cast<KexiDB::SchemaData*>(projectData)->name());
@@ -3935,7 +4002,7 @@ KexiMainWindowImpl::initFinalMode(KexiProjectData *projectData)
 	}
 
 	QWidget::setCaption("MyApp");//TODO
-
+#endif
 	return true;
 }
 
@@ -4095,6 +4162,9 @@ tristate KexiMainWindowImpl::executeItem(KexiPart::Item* item)
 
 void KexiMainWindowImpl::slotProjectImportDataTable()
 {
+//! @todo allow data appending (it is not possible now)
+	if (userMode())
+		return;
 	QMap<QString,QString> args;
 	args.insert("sourceType", "file");
 	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
@@ -4266,7 +4336,9 @@ tristate KexiMainWindowImpl::printActionForItem(KexiPart::Item* item, PrintActio
 			}
 		}
 	}
-	KexiSimplePrintingPart *printingPart = new KexiSimplePrintingPart();
+	KexiPart::Part * printingPart = Kexi::partManager().partForMimeType("kexi/simpleprinting");
+	if (!printingPart)
+		printingPart = new KexiSimplePrintingPart(); //hardcoded as there're no .desktop file
 	KexiPart::Item* printingPartItem = d->prj->createPartItem(
 		printingPart, item->name() //<-- this will look like "table1 : printing" on the window list
 	);
@@ -4320,6 +4392,9 @@ tristate KexiMainWindowImpl::copyItemToClipboardAsDataTable(KexiPart::Item* item
 
 void KexiMainWindowImpl::slotEditPasteSpecialDataTable()
 {
+//! @todo allow data appending (it is not possible now)
+	if (userMode())
+		return;
 	QMap<QString,QString> args;
 	args.insert("sourceType", "clipboard");
 	QDialog *dlg = KexiInternalPart::createModalDialogInstance(

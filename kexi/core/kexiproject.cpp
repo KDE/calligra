@@ -737,6 +737,9 @@ KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& ite
 	int viewMode, QMap<QString,QString>* staticObjectArgs)
 {
 	clearError();
+	if (viewMode!=Kexi::DataViewMode && data()->userMode())
+		return 0;
+	
 	KexiDB::MessageTitle et(this);
 	KexiPart::Part *part = findPartFor(item);
 	if (!part)
@@ -770,6 +773,9 @@ bool KexiProject::checkWritable()
 bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 {
 	clearError();
+	if (data()->userMode())
+		return false;
+	
 	KexiDB::MessageTitle et(this);
 	if (!checkWritable())
 		return false;
@@ -808,8 +814,11 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 
 bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const QString& _newName )
 {
-	KexiUtils::WaitCursor wait;
 	clearError();
+	if (data()->userMode())
+		return 0;
+	
+	KexiUtils::WaitCursor wait;
 	QString newName = _newName.stripWhiteSpace();
 	{
 		KexiDB::MessageTitle et(this);
@@ -859,6 +868,9 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString& suggestedCaption)
 {
 	clearError();
+	if (data()->userMode())
+		return 0;
+
 	KexiDB::MessageTitle et(this);
 	KexiPart::Part *part = Kexi::partManager().part(info);
 	if (!part) {

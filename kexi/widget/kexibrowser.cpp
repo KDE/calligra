@@ -123,18 +123,6 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 	}
 
 	// actions
-	m_deleteAction = new KAction(i18n("&Delete"), "editdelete", 0/*Qt::Key_Delete*/, 
-		this, SLOT(slotRemove()), m_actions, "edit_delete");
-//! @todo 1.1: just add "Delete" tooltip and what's this
-	m_deleteAction->setToolTip(i18n("&Delete").replace("&",""));
-	m_renameAction = new KAction(i18n("&Rename"), "", 0, 
-		this, SLOT(slotRename()), m_actions, "edit_rename");
-#ifdef KEXI_SHOW_UNIMPLEMENTED
-//todo	plugSharedAction("edit_cut",SLOT(slotCut()));
-//todo	plugSharedAction("edit_copy",SLOT(slotCopy()));
-//todo	plugSharedAction("edit_paste",SLOT(slotPaste()));
-#endif
-
 	m_openAction = new KAction(i18n("&Open"), "fileopen", 0/*Qt::Key_Enter conflict!*/, this, 
 		SLOT(slotOpenObject()), this, "open_object");
 	m_openAction->setToolTip(i18n("Open object"));
@@ -147,38 +135,59 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 		buttons_flyr->add(btn);
 	}
 
-	m_designAction = new KAction(i18n("&Design"), "edit", 0/*Qt::CTRL + Qt::Key_Enter conflict!*/, this, 
-		SLOT(slotDesignObject()), this, "design_object");
-	m_designAction->setToolTip(i18n("Design object"));
-	m_designAction->setWhatsThis(i18n("Starts designing of the object selected in the list"));
-	if (m_features & Toolbar) {
-		btn = new KexiSmallToolButton(this, m_designAction);
-		buttons_flyr->add(btn);
+	if (m_mainWin->userMode()) {
+//! @todo some of these actions can be supported once we deliver ACLs...
+		m_deleteAction = 0;
+		m_renameAction = 0;
+		m_designAction = 0;
+		m_editTextAction = 0;
+		m_newObjectAction = 0;
+		m_newObjectPopup = 0;
 	}
+	else {
+		m_deleteAction = new KAction(i18n("&Delete"), "editdelete", 0/*Qt::Key_Delete*/, 
+			this, SLOT(slotRemove()), m_actions, "edit_delete");
+	//! @todo 1.1: just add "Delete" tooltip and what's this
+		m_deleteAction->setToolTip(i18n("&Delete").replace("&",""));
 
-	m_editTextAction = new KAction(i18n("Open in &Text View"), "", 0, this, 
-		SLOT(slotEditTextObject()), this, "editText_object");
-	m_editTextAction->setToolTip(i18n("Open object in text view"));
-	m_editTextAction->setWhatsThis(i18n("Opens selected object in the list in text view"));
+		m_renameAction = new KAction(i18n("&Rename"), "", 0, 
+			this, SLOT(slotRename()), m_actions, "edit_rename");
+#ifdef KEXI_SHOW_UNIMPLEMENTED
+		//todo	plugSharedAction("edit_cut",SLOT(slotCut()));
+		//todo	plugSharedAction("edit_copy",SLOT(slotCopy()));
+		//todo	plugSharedAction("edit_paste",SLOT(slotPaste()));
+#endif
 
-	m_newObjectAction = new KAction("", "filenew", 0, this, SLOT(slotNewObject()), this, "new_object");
-//	m_newObjectToolbarAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");
-//	m_toolbar->insertSeparator();
-//	m_newObjectToolbarAction->plug(m_toolbar);
-	if (m_features & Toolbar) {
-		m_newObjectToolButton = new KexiSmallToolButton(this, "", QIconSet(), "new_object");
-		m_newObjectPopup = new KPopupMenu(this, "newObjectPopup");
-		connect(m_newObjectPopup, SIGNAL(aboutToShow()), this, SLOT(slotNewObjectPopupAboutToShow()));
-	//	KexiPart::Part* part = Kexi::partManager().part("kexi/table");
-	//	m_newObjectPopup->insertItem( SmallIconSet(part->info()->createItemIcon()), part->instanceName() );
-		m_newObjectToolButton->setPopup(m_newObjectPopup);
-		m_newObjectToolButton->setPopupDelay(QApplication::startDragTime());
-		connect(m_newObjectToolButton, SIGNAL(clicked()), this, SLOT(slotNewObject()));
-		buttons_flyr->add(m_newObjectToolButton);
+		m_designAction = new KAction(i18n("&Design"), "edit", 0/*Qt::CTRL + Qt::Key_Enter conflict!*/, this, 
+			SLOT(slotDesignObject()), this, "design_object");
+		m_designAction->setToolTip(i18n("Design object"));
+		m_designAction->setWhatsThis(i18n("Starts designing of the object selected in the list"));
+		if (m_features & Toolbar) {
+			btn = new KexiSmallToolButton(this, m_designAction);
+			buttons_flyr->add(btn);
+		}
 
-		m_deleteObjectToolButton = new KexiSmallToolButton(this, m_deleteAction);
-		m_deleteObjectToolButton->setTextLabel("");
-		buttons_flyr->add(m_deleteObjectToolButton);
+		m_editTextAction = new KAction(i18n("Open in &Text View"), "", 0, this, 
+			SLOT(slotEditTextObject()), this, "editText_object");
+		m_editTextAction->setToolTip(i18n("Open object in text view"));
+		m_editTextAction->setWhatsThis(i18n("Opens selected object in the list in text view"));
+
+		m_newObjectAction = new KAction("", "filenew", 0, this, SLOT(slotNewObject()), this, "new_object");
+		if (m_features & Toolbar) {
+			m_newObjectToolButton = new KexiSmallToolButton(this, "", QIconSet(), "new_object");
+			m_newObjectPopup = new KPopupMenu(this, "newObjectPopup");
+			connect(m_newObjectPopup, SIGNAL(aboutToShow()), this, SLOT(slotNewObjectPopupAboutToShow()));
+		//	KexiPart::Part* part = Kexi::partManager().part("kexi/table");
+		//	m_newObjectPopup->insertItem( SmallIconSet(part->info()->createItemIcon()), part->instanceName() );
+			m_newObjectToolButton->setPopup(m_newObjectPopup);
+			m_newObjectToolButton->setPopupDelay(QApplication::startDragTime());
+			connect(m_newObjectToolButton, SIGNAL(clicked()), this, SLOT(slotNewObject()));
+			buttons_flyr->add(m_newObjectToolButton);
+
+			m_deleteObjectToolButton = new KexiSmallToolButton(this, m_deleteAction);
+			m_deleteObjectToolButton->setTextLabel("");
+			buttons_flyr->add(m_deleteObjectToolButton);
+		}
 	}
 
 	m_executeAction = new KAction(i18n("Execute"), "player_play", 0, this,
@@ -200,13 +209,19 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 	m_pageSetupAction->setWhatsThis(
 		i18n("Shows page setup for printing the active table or query."));
 
-	m_partPopup = new KPopupMenu(this, "partPopup");
-	m_partPopupTitle_id = m_partPopup->insertTitle("");
-	m_newObjectAction->plug(m_partPopup);
+	if (m_mainWin->userMode()) {
+//! @todo some of these actions can be supported once we deliver ACLs...
+		m_partPopup = 0;
+	}
+	else {
+		m_partPopup = new KPopupMenu(this, "partPopup");
+		m_partPopupTitle_id = m_partPopup->insertTitle("");
+		m_newObjectAction->plug(m_partPopup);
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-	m_partPopup->insertSeparator();
-	plugSharedAction("edit_paste", m_partPopup);
+		m_partPopup->insertSeparator();
+		plugSharedAction("edit_paste", m_partPopup);
 #endif
+	}
 
 	if (m_features & ContextMenus) {
 		//init popups
@@ -215,14 +230,20 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 		m_openAction->plug(m_itemPopup);
 		m_openAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 
-		m_designAction->plug(m_itemPopup);
-		m_designAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
+		if (m_designAction) {
+			m_designAction->plug(m_itemPopup);
+			m_designAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
+		}
 
-		m_editTextAction->plug(m_itemPopup);
-		m_editTextAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
+		if (m_editTextAction) {
+			m_editTextAction->plug(m_itemPopup);
+			m_editTextAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
+		}
 
-		m_newObjectAction->plug(m_itemPopup);
-		m_itemPopup->insertSeparator();
+		if (m_newObjectAction) {
+			m_newObjectAction->plug(m_itemPopup);
+			m_itemPopup->insertSeparator();
+		}
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 	//todo	plugSharedAction("edit_cut", m_itemPopup);
 	//todo	plugSharedAction("edit_copy", m_itemPopup);
@@ -241,11 +262,18 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 
 		m_pageSetupAction->plug(m_itemPopup);
 		m_pageSetupAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
-		m_itemPopup->insertSeparator();
-		m_pageSetupAction_id_sep = m_itemPopup->idAt(m_itemPopup->count()-1);
+		if (m_renameAction || m_deleteAction) {
+			m_itemPopup->insertSeparator();
+			m_pageSetupAction_id_sep = m_itemPopup->idAt(m_itemPopup->count()-1);
+		}
+		else {
+			m_pageSetupAction_id_sep = -1;
+		}
 
-		m_renameAction->plug(m_itemPopup);
-		m_deleteAction->plug(m_itemPopup);
+		if (m_renameAction)
+			m_renameAction->plug(m_itemPopup);
+		if (m_deleteAction)
+			m_deleteAction->plug(m_itemPopup);
 	}
 	else {
 		m_itemPopup = 0;
@@ -388,7 +416,7 @@ KexiBrowser::slotContextMenu(KListView* /*list*/, QListViewItem *item, const QPo
 	if(!item || !(m_features & ContextMenus))
 		return;
 	KexiBrowserItem *bit = static_cast<KexiBrowserItem*>(item);
-	KPopupMenu *pm;
+	KPopupMenu *pm = 0;
 	if (bit->item()) {
 		pm = m_itemPopup;
 		//update popup title
@@ -401,7 +429,7 @@ KexiBrowser::slotContextMenu(KListView* /*list*/, QListViewItem *item, const QPo
 		}
 		pm->changeTitle(m_itemPopupTitle_id, *bit->pixmap(0), title_text);
 	}
-	else {
+	else if (m_partPopup) {
 		pm = m_partPopup;
 		QString title_text = bit->text(0).stripWhiteSpace();
 		pm->changeTitle(m_partPopupTitle_id, *bit->pixmap(0), title_text);
@@ -414,7 +442,8 @@ KexiBrowser::slotContextMenu(KListView* /*list*/, QListViewItem *item, const QPo
 		m_list->setCurrentItem(item);
 		m_list->repaintItem(item);
 	}
-	pm->exec(pos);
+	if (pm)
+		pm->exec(pos);
 }
 
 void
@@ -451,9 +480,11 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	const bool gotitem = it && it->item();
 	//bool gotgroup = it && !it->item();
 //TODO: also check if the item is not read only
-	m_deleteAction->setEnabled(gotitem && !m_readOnly);
-	if (m_features & Toolbar) {
-		m_deleteObjectToolButton->setEnabled(gotitem && !m_readOnly);
+	if (m_deleteAction) {
+		m_deleteAction->setEnabled(gotitem && !m_readOnly);
+		if (m_features & Toolbar) {
+			m_deleteObjectToolButton->setEnabled(gotitem && !m_readOnly);
+		}
 	}
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 //todo	setAvailable("edit_cut",gotitem);
@@ -462,43 +493,56 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 #endif
 
 	m_openAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DataViewMode));
-	m_designAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DesignViewMode));
-	m_editTextAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::TextViewMode));
+	if (m_designAction)
+		m_designAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DesignViewMode));
+	if (m_editTextAction)
+		m_editTextAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::TextViewMode));
 
 	if (m_features & ContextMenus) {
 		m_itemPopup->setItemVisible(m_openAction_id, m_openAction->isEnabled());
-		m_itemPopup->setItemVisible(m_designAction_id, m_designAction->isEnabled());
-		m_itemPopup->setItemVisible(m_editTextAction_id, part && m_editTextAction->isEnabled());
-		m_itemPopup->setItemVisible(m_executeAction_id, gotitem && it->info()->isExecuteSupported());
-		m_itemPopup->setItemVisible(m_exportActionMenu_id, gotitem && it->info()->isDataExportSupported());
-		m_itemPopup->setItemVisible(m_exportActionMenu_id_sep, gotitem && it->info()->isDataExportSupported());
-		m_itemPopup->setItemVisible(m_printAction_id, gotitem && it->info()->isPrintingSupported());
-		m_itemPopup->setItemVisible(m_pageSetupAction_id, gotitem && it->info()->isPrintingSupported());
-		m_itemPopup->setItemVisible(m_pageSetupAction_id_sep, gotitem && it->info()->isPrintingSupported());
+		if (m_designAction)
+			m_itemPopup->setItemVisible(m_designAction_id, m_designAction->isEnabled());
+		if (m_editTextAction)
+			m_itemPopup->setItemVisible(m_editTextAction_id, part && m_editTextAction->isEnabled());
+		if (m_executeAction)
+			m_itemPopup->setItemVisible(m_executeAction_id, gotitem && it->info()->isExecuteSupported());
+		if (m_exportActionMenu) {
+			m_itemPopup->setItemVisible(m_exportActionMenu_id, gotitem && it->info()->isDataExportSupported());
+			m_itemPopup->setItemVisible(m_exportActionMenu_id_sep, gotitem && it->info()->isDataExportSupported());
+		}
+		if (m_printAction)
+			m_itemPopup->setItemVisible(m_printAction_id, gotitem && it->info()->isPrintingSupported());
+		if (m_pageSetupAction) {
+			m_itemPopup->setItemVisible(m_pageSetupAction_id, gotitem && it->info()->isPrintingSupported());
+			if (m_pageSetupAction_id_sep!=-1)
+				m_itemPopup->setItemVisible(m_pageSetupAction_id_sep, gotitem && it->info()->isPrintingSupported());
+		}
 	}
 
 	if (m_prevSelectedPart != part) {
 		m_prevSelectedPart = part;
 		if (part) {
-			m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceCaption() ));
-			m_newObjectAction->setIcon( part->info()->createItemIcon() );
-//			m_newObjectToolbarAction->setIcon( part->info()->createItemIcon() );
-//			m_newObjectToolbarAction->setText(m_newObjectAction->text());
-			if (m_features & Toolbar) {
-				m_newObjectToolButton->setIconSet( part->info()->createItemIcon() );
-				QToolTip::add(m_newObjectToolButton, 
-					i18n("Create object: %1").arg( part->instanceCaption().lower() ));
-				QWhatsThis::add(m_newObjectToolButton, 
-					i18n("Creates a new object: %1").arg( part->instanceCaption().lower() ));
+			if (m_newObjectAction) {
+				m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceCaption() ));
+				m_newObjectAction->setIcon( part->info()->createItemIcon() );
+				if (m_features & Toolbar) {
+					m_newObjectToolButton->setIconSet( part->info()->createItemIcon() );
+					QToolTip::add(m_newObjectToolButton, 
+						i18n("Create object: %1").arg( part->instanceCaption().lower() ));
+					QWhatsThis::add(m_newObjectToolButton, 
+						i18n("Creates a new object: %1").arg( part->instanceCaption().lower() ));
+				}
 			}
 		} else {
-			m_newObjectAction->setText(i18n("&Create Object..."));
-//			m_newObjectToolbarAction->setIconSet( SmallIconSet("filenew") );
-//			m_newObjectToolbarAction->setText(m_newObjectAction->text());
-			if (m_features & Toolbar) {
-				m_newObjectToolButton->setIconSet( "filenew" );
-				QToolTip::add(m_newObjectToolButton, i18n("Create object"));
-				QWhatsThis::add(m_newObjectToolButton, i18n("Creates a new object"));
+			if (m_newObjectAction) {
+				m_newObjectAction->setText(i18n("&Create Object..."));
+	//			m_newObjectToolbarAction->setIconSet( SmallIconSet("filenew") );
+	//			m_newObjectToolbarAction->setText(m_newObjectAction->text());
+				if (m_features & Toolbar) {
+					m_newObjectToolButton->setIconSet( "filenew" );
+					QToolTip::add(m_newObjectToolButton, i18n("Create object"));
+					QWhatsThis::add(m_newObjectToolButton, i18n("Creates a new object"));
+				}
 			}
 		}
 	}
@@ -543,6 +587,7 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 			ke->accept();
 			return true;
 		}
+		//override rename action
 		if (ke->key()==Qt::Key_F2 && ke->state()==Qt::NoButton) {
 			slotRename();
 			ke->accept();
@@ -566,7 +611,7 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 
 void KexiBrowser::slotRemove()
 {
-	if (!m_deleteAction->isEnabled() || !(m_features & Writable))
+	if (!m_deleteAction || !m_deleteAction->isEnabled() || !(m_features & Writable))
 		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it || !it->item())
@@ -576,7 +621,7 @@ void KexiBrowser::slotRemove()
 
 void KexiBrowser::slotNewObject()
 {
-	if (!(m_features & Writable))
+	if (!m_newObjectAction || !(m_features & Writable))
 		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it || !it->info())
@@ -594,6 +639,8 @@ void KexiBrowser::slotOpenObject()
 
 void KexiBrowser::slotDesignObject()
 {
+	if (!m_designAction)
+		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it || !it->item())
 		return;
@@ -602,6 +649,8 @@ void KexiBrowser::slotDesignObject()
 
 void KexiBrowser::slotEditTextObject()
 {
+	if (!m_editTextAction)
+		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it || !it->item())
 		return;
@@ -632,7 +681,7 @@ void KexiBrowser::slotPaste()
 
 void KexiBrowser::slotRename()
 {
-	if (!(m_features & Writable))
+	if (!m_renameAction || !(m_features & Writable))
 		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (it)
@@ -708,7 +757,7 @@ void KexiBrowser::clearSelection()
 
 void KexiBrowser::slotNewObjectPopupAboutToShow()
 {
-	if ((m_features & Toolbar) && m_newObjectPopup->count()==0) {
+	if ((m_features & Toolbar) && m_newObjectPopup && m_newObjectPopup->count()==0) {
 		//preload items
 		KexiPart::PartInfoList *list = Kexi::partManager().partInfoList(); //this list is properly sorted
 		for (KexiPart::PartInfoListIterator it(*list); it.current(); ++it) {
@@ -727,6 +776,8 @@ void KexiBrowser::slotNewObjectPopupAboutToShow()
 
 void KexiBrowser::slotExecuteObject()
 {
+	if (!m_executeAction)
+		return;
 	KexiPart::Item* item = selectedPartItem();
 	if (item)
 		emit executeItem( item );
@@ -734,6 +785,8 @@ void KexiBrowser::slotExecuteObject()
 
 void KexiBrowser::slotExportAsDataTable()
 {
+	if (!m_dataExportAction)
+		return;
 	KexiPart::Item* item = selectedPartItem();
 	if (item)
 		emit exportItemAsDataTable( item );
@@ -755,6 +808,8 @@ bool KexiBrowser::actionEnabled(const QCString& actionName) const
 
 void KexiBrowser::slotPrintItem()
 {
+	if (!m_printAction)
+		return;
 	KexiPart::Item* item = selectedPartItem();
 	if (item)
 		emit printItem( item );
@@ -762,6 +817,8 @@ void KexiBrowser::slotPrintItem()
 
 void KexiBrowser::slotPageSetupForItem()
 {
+	if (!m_pageSetupAction)
+		return;
 	KexiPart::Item* item = selectedPartItem();
 	if (item)
 		emit pageSetupForItem( item );
@@ -771,12 +828,16 @@ void KexiBrowser::slotPageSetupForItem()
 void KexiBrowser::setReadOnly(bool set)
 {
 	m_readOnly = set;
-	m_deleteAction->setEnabled(!m_readOnly);
-	m_renameAction->setEnabled(!m_readOnly);
-	m_newObjectAction->setEnabled(!m_readOnly);
-	if (m_features & Toolbar) {
-		m_newObjectPopup->setEnabled(!m_readOnly);
-		m_newObjectToolButton->setEnabled(!m_readOnly);
+	if (m_deleteAction)
+		m_deleteAction->setEnabled(!m_readOnly);
+	if (m_renameAction)
+		m_renameAction->setEnabled(!m_readOnly);
+	if (m_newObjectAction) {
+		m_newObjectAction->setEnabled(!m_readOnly);
+		if (m_features & Toolbar) {
+			m_newObjectPopup->setEnabled(!m_readOnly);
+			m_newObjectToolButton->setEnabled(!m_readOnly);
+		}
 	}
 }
 

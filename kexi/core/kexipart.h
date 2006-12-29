@@ -87,14 +87,22 @@ class KEXICORE_EXPORT Part : public QObject
 			return false;
 		}
 
-		/*! \return supported modes for dialogs created by this part, ie. a combination
+		/*! \return supported modes for dialogs created by this part, i.e. a combination
 		 of Kexi::ViewMode enum elements.
 		 Set this member in your KexiPart subclass' ctor, if you need to override the default value
-		 that equals Kexi::DataViewMode | Kexi::DesignViewMode.
+		 that equals Kexi::DataViewMode | Kexi::DesignViewMode, 
+		 or Kexi::DesignViewMode in case of Kexi::PartStaticPart object.
 		 This information is used to set supported view modes for every 
-		 KexiDialogBase derived object created by this KexiPart.
-		 Default flag combination is Kexi::DataViewMode | Kexi::DesignViewMode. */
+		 KexiDialogBase-derived object created by this KexiPart. */
 		inline int supportedViewModes() const { return m_supportedViewModes; }
+
+		/*! \return supported modes for dialogs created by this part in "user mode", i.e. a combination
+		 of Kexi::ViewMode enum elements.
+		 Set this member in your KexiPart subclass' ctor, if you need to override the default value
+		 that equals Kexi::DataViewMode. or 0 in case of Kexi::PartStaticPart object.
+		 This information is used to set supported view modes for every 
+		 KexiDialogBase-derived object created by this KexiPart. */
+		inline int supportedUserViewModes() const { return m_supportedUserViewModes; }
 
 //! @todo make it protected, outside world should use KexiProject
 		/*! "Opens" an instance that the part provides, pointed by \a item in a mode \a viewMode. 
@@ -290,6 +298,11 @@ class KEXICORE_EXPORT Part : public QObject
 		/*! Supported modes for dialogs created by this part.
 		 @see supportedViewModes() */
 		int m_supportedViewModes;
+
+		/*! Supported modes for dialogs created by this part in "user mode".
+		 The default is Kexi::DataViewMode. It is altered in classes like KexiSimplePrintingPart.
+		 @see supportedUserViewModes() */
+		int m_supportedUserViewModes;
 
 		Info *m_info;
 		GUIClient *m_guiClient;

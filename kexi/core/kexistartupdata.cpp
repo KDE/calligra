@@ -29,7 +29,7 @@
 KexiStartupData::KexiStartupData()
 	: m_projectData(0)
 	, m_action(KexiStartupData::DoNothing)
-	, m_forcedFinalMode(false)
+	, m_forcedUserMode(false)
 	, m_forcedDesignMode(false)
 //	, m_createDB(false)
 //	, m_dropDB(false)
@@ -51,9 +51,9 @@ KexiStartupData::Action KexiStartupData::action() const
 	return m_action;
 }
 
-bool KexiStartupData::forcedFinalMode() const
+bool KexiStartupData::forcedUserMode() const
 {
-	return m_forcedFinalMode;
+	return m_forcedUserMode;
 }
 
 bool KexiStartupData::forcedDesignMode() const

@@ -203,29 +203,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 
 	//finish:
 	updateGeometry();
-//	d->m_prjtype_sel->lv_types->setMaximumWidth(width()/2);
 	m_prjtype_sel->lv_types->setSelected(d->lvi_file, true);
-
-#ifdef KEXI_SERVER_SUPPORT
-//	//get settings
-//	KGlobal::config()->setGroup("Startup");
-//	//"" means goto 1st page
-//	QString default_storage = KGlobal::config()->readEntry("DefaultStorageForNewProjects","");
-#else
-//	QString default_storage = "file";
-	setBackEnabled(m_db_title, false);
-	showPage(m_db_title);
-#endif
-/*	if (default_storage.lower()=="server") {
-		m_prjtype_sel->lv_types->setSelected(d->lvi_server, true);
-//		m_prjtype_sel->chk_always->setChecked(true);
-		m_conn_sel->showAdvancedConn();
-		showPage(m_conn_sel);
-	}
-	else { //"file"
-//		m_prjtype_sel->chk_always->setChecked(true);
-		showPage(m_db_title);
-	}*/
 }
 
 KexiNewProjectWizard::~KexiNewProjectWizard()

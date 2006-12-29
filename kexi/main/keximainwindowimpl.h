@@ -72,16 +72,21 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! Like above, using \a dlg passed explicitly. Above method just calls this one. */
 		bool activateWindow(KexiDialogBase *dlg);
 
-//		void startup(KexiProjectData* pdata);
 		/*! Performs startup actions. \return false if application should exit immediately
 		 with an error status. */
 		tristate startup();
 
-		/*! \return true if this window is in the Final Mode. */
-		bool inFinalMode() const;
+		/*! \return true if the application window is in the User Mode. */
+		virtual bool userMode() const;
+
+		/*! \return true if opening of item \a item in \a viewMode mode is allowed. 
+		 userMode() is taken into account as well 
+		 as KexiPart::Part::supportedUserViewModes() for \a  item. */
+		bool openingAllowed(KexiPart::Item* item, int viewMode);
 
 		virtual bool eventFilter( QObject *obj, QEvent * e );
 
+		//! \return popup menu for \a popupName name.
 		virtual QPopupMenu* findPopupMenu(const char *popupName);
 
 		/*! Implemented for KexiMainWindow. */
@@ -91,12 +96,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		 Implemented for KexiMainWindow. */
 		virtual KexiDialogBase* currentDialog() const;
 
-		/**
-		 * @returns a pointer to the relation parts loads it if needed
-		 */
-//		KexiRelationPart	*relationPart();
-
-//TODO: move to kexiproject
+//! @todo move to kexiproject
 		/*! Generates ID for private "document" like Relations window.
 		 Private IDs are negative numbers (while ID regular part instance's IDs are >0)
 		 Private means that the object is not stored as-is in the project but is somewhat
@@ -133,9 +133,12 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! Opens object pointed by \a item in a view \a viewMode.
 		 \a staticObjectArgs can be passed for static object 
 		 (only works when part for this item is of type KexiPart::StaticPart).
-		 \a openingCancelled is set to true is opening has been cancelled. */
+		 \a openingCancelled is set to true is opening has been cancelled. 
+		 \a errorMessage, if not 0, points to a string that can be set to error message
+		 if one encountered. */
 		virtual KexiDialogBase* openObject(KexiPart::Item *item, int viewMode, 
-			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0);
+			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0,
+			QString* errorMessage = 0);
 
 		//! For convenience
 		virtual KexiDialogBase* openObject(const QCString& mime, const QString& name, 
@@ -212,11 +215,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void projectOpened();
 
 	protected:
-		/*! Initialises final mode: constructs window according to kexi__final database
+		/*! Initialises the User Mode: constructs window according to kexi__final database
 		 and loads the specified part.
 		 \return true on success or false if e.g. kexi__final does not exist
 		 or a fatal exception happened */
-		bool initFinalMode(KexiProjectData *projectData);
+		bool initUserMode(KexiProjectData *projectData);
 
 		/*!
 		 Creates navigator (if it's not yet created),

@@ -304,14 +304,12 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
 //	if (cdata.driverName.isEmpty())
 //		cdata.driverName = KexiDB::Driver::defaultFileBasedDriverName();
-#ifdef KEXI_SERVER_SUPPORT
 	if (!args->getOption("host").isEmpty())
 		cdata.hostName = args->getOption("host");
 	if (!args->getOption("local-socket").isEmpty())
 		cdata.localSocketFileName = args->getOption("local-socket");
 	if (!args->getOption("user").isEmpty())
 		cdata.userName = args->getOption("user");
-#endif
 //	cdata.password = args->getOption("password");
 	bool fileDriverSelected;
 	if (cdata.driverName.isEmpty())
@@ -346,7 +344,6 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 	}
 	*/
 	
-#ifdef KEXI_SERVER_SUPPORT
 	const QString portStr = args->getOption("port");
 	if (!portStr.isEmpty()) {
 		bool ok;
@@ -359,15 +356,9 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 			return false;
 		}
 	}
-#endif
 
-#ifdef KEXI_SHOW_UNIMPLEMENTED
-	m_forcedFinalMode = args->isSet("final-mode");
+	m_forcedUserMode = args->isSet("user-mode");
 	m_forcedDesignMode = args->isSet("design-mode");
-#else
-	m_forcedFinalMode = false;
-	m_forcedDesignMode = false;
-#endif
 	bool createDB = args->isSet("createdb");
 	const bool alsoOpenDB = args->isSet("create-opendb");
 	if (alsoOpenDB)
@@ -419,9 +410,9 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 		kdDebug() << "ARG" <<i<< "= " << args->arg(i) <<endl;
 	}*/
 
-	if (m_forcedFinalMode && m_forcedDesignMode) {
+	if (m_forcedUserMode && m_forcedDesignMode) {
 		KMessageBox::sorry( 0, i18n(
-		"You have used both \"final-mode\" and \"design-mode\" startup options.")+couldnotMsg);
+		"You have used both \"user-mode\" and \"design-mode\" startup options.")+couldnotMsg);
 		return false;
 	}
 

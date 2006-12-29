@@ -147,7 +147,6 @@ void KexiStartupFileDialog::updateFilters()
 			allfilters += mime->patterns();
 		}
 	}
-#ifdef KEXI_SERVER_SUPPORT
 	if (normalOpeningMode || m_mode & SavingServerBasedDB) {
 		mime = KMimeType::mimeType("application/x-kexiproject-shortcut");
 		if (mime && m_excludedMimeTypes.find(mime->name())==m_excludedMimeTypes.end()) {
@@ -162,7 +161,6 @@ void KexiStartupFileDialog::updateFilters()
 			allfilters += mime->patterns();
 		}
 	}
-#endif
 
 //! @todo hardcoded for MSA:
 	if (normalOpeningMode) {

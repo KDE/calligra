@@ -170,10 +170,8 @@ bool DriverManagerInternal::lookupDrivers()
 			}
 		}
 		else {
-#ifndef KEXI_SERVER_SUPPORT
 			//no support for this driver
 			continue;
-#endif
 		}
 
 		m_services.insert(srv_name, ptr);

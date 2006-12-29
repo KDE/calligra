@@ -54,9 +54,9 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 
 		KexiProjectData& operator=(const KexiProjectData& pdata);
 
-		/*! \return true if there is final mode set in internal 
+		/*! \return true if there is the User Mode set in internal 
 		 project settings. */
-		bool finalMode() const;
+		bool userMode() const;
 		
 		KexiDB::ConnectionData* connectionData();
 

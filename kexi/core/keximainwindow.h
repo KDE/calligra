@@ -79,6 +79,9 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		/*! \return currently active dialog (window) od 0 if there is no active dialog. */
 		virtual KexiDialogBase* currentDialog() const = 0;
 
+		/*! \return true if this window is in the User Mode. */
+		virtual bool userMode() const = 0;
+
 	signals:
 		//! Emitted to make sure the project can be close. 
 		//! Connect a slot here and set \a cancel to true to cancel the closing.
@@ -99,7 +102,8 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 
 		//! Opens object pointed by \a item in a view \a viewMode
 		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode,
-			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0) = 0;
+			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0,
+			QString* errorMessage = 0) = 0;
 
 		//! For convenience
 		virtual KexiDialogBase * openObject(const QCString& mime, const QString& name, 
