@@ -171,11 +171,6 @@ bool DriverManagerInternal::lookupDrivers()
 				}
 			}
 		}
-		else {
-			//no support for this driver
-			continue;
-		}
-
 		m_services.insert( srv_name, ptr );
 		m_services_lcase.insert( srv_name,  ptr );
 		KexiDBDbg << "KexiDB::DriverManager::lookupDrivers(): registered driver: "
