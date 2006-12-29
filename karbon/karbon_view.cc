@@ -390,7 +390,7 @@ KarbonView::print( KPrinter &printer )
 
 	kop.begin();
 
-	part()->document().draw( &kop, &rect );
+	//part()->document().draw( &kop, &rect );
 
 	kop.end();
 
@@ -1396,10 +1396,11 @@ KarbonView::showPageMargins()
 void
 KarbonView::togglePageMargins(bool b)
 {
-	debugView(QString("KarbonView::togglePageMargins(%1)").arg(b));
+    debugView(QString("KarbonView::togglePageMargins(%1)").arg(b));
 
-	((KToggleAction*)actionCollection()->action("view_show_margins"))->setChecked(b);
-	m_canvas->updateCanvas(m_canvas->canvasWidget()->rect());
+    ((KToggleAction*)actionCollection()->action("view_show_margins"))->setChecked(b);
+    m_canvas->setShowMargins( b );
+    m_canvas->update();
 }
 
 void

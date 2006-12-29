@@ -65,49 +65,6 @@ VDocument::~VDocument()
 }
 
 void
-VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins ) const
-{
-	p->setPen( QColor( "black" ) );
-	p->setBrush( Qt::white );
-	p->drawRect( 0, 0, m_width, m_height );
-
-	p->setPen( Qt::NoPen );
-	p->setBrush( Qt::black );
-	p->drawRect( m_width, - 2, 2, m_height );
-	p->drawRect( 0, - 2, m_width, 2 );
-	//p->drawRect( 0, m_height - 1, m_width, 1 );
-	// Draw page margins
-	if( showPageMargins )
-	{
-		int ml = int( pl.ptLeft );
-		int mt = int( pl.ptTop );
-		int mr = int( pl.ptRight );
-		int mb = int( pl.ptBottom );
-
-		VStroke s( 0, 1 );
-		s.setColor( QColor( "blue" ) );
-		Q3ValueList<float> dashes;
-		s.dashPattern().setArray( dashes << 5 << 5 );
-		p->setPen( s );
-		p->setBrush( Qt::NoBrush );
-		p->drawRect(ml, mt, m_width-ml-mr, m_height-mt-mb);
-	}
-}
-
-void
-VDocument::draw( VPainter *painter, const QRectF* rect ) const
-{
-	/*
-	Q3PtrListIterator<VLayer> itr = m_layers;
-
-	for ( ; itr.current(); ++itr )
-	{
-		itr.current()->draw( painter, rect );
-	}
-	*/
-}
-
-void
 VDocument::insertLayer( KoShapeLayer* layer )
 {
     m_layers.append( layer );

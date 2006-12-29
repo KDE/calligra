@@ -88,6 +88,8 @@ public:
 
     KoToolProxy * toolProxy() { return m_toolProxy; }
 
+    /// Enables/disables showing page margins
+    void setShowMargins( bool on );
 
 public slots:
 
@@ -121,6 +123,8 @@ protected:
 private:
     /// paint the grid
     void paintGrid( QPainter &painter, const KoViewConverter &converter, const QRectF &area );
+    /// paint page margins
+    void paintMargins( QPainter &painter, const KoViewConverter &converter );
 
     KoShapeManager* m_shapeManager;
     KoZoomHandler m_zoomHandler;
@@ -138,6 +142,7 @@ private:
     int m_visibleHeight;   ///< available space in y-direction used for calulating zoom fit and margins
     int m_fitMarginX;      ///< x-margin used when zoom fitting to page or width
     int m_fitMarginY;      ///< y-margin used when zoom fitting to page or width
+    bool m_showMargins;    ///< should page margins be shown
 };
 
 #endif

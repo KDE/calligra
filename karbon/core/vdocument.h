@@ -79,18 +79,6 @@ public:
 	 */
 	virtual ~VDocument();
 
-	virtual void draw( VPainter* painter, const QRectF* rect ) const;
-	
-	/**
-	 * Draw the document frame to a painting device.
-	 *
-	 * @param painter abstraction that is used to render to a painting device.
-	 * @param pl layout describing the page to draw on (restricting the painter)
-	 * @param drawPageMargins if @c true, also draw the crop marks for the page margins,
-	 *        otherwise, don't draw them.
-	 */
-	void drawPage( VPainter *painter, const KoPageLayout &pl, bool drawPageMargins ) const;
-
 	/**
 	 * Returns document width.
 	 *

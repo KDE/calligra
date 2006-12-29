@@ -59,6 +59,7 @@ KarbonCanvas::KarbonCanvas( KarbonPart *p )
     , m_visibleHeight( 500 )
     , m_fitMarginX( 20 )
     , m_fitMarginY( 20 )
+    , m_showMargins( false )
 {
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
@@ -90,6 +91,7 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     //gc.setBrush( Qt::white );
     gc.drawRect( m_zoomHandler.documentToView( m_documentRect ) );
 
+    paintMargins( gc, m_zoomHandler );
     paintGrid( gc, m_zoomHandler, m_zoomHandler.viewToDocument( widgetToView( ev->rect() ) ) );
 
     m_shapeManager->paint( gc, m_zoomHandler, false );
@@ -139,6 +141,24 @@ void KarbonCanvas::paintGrid( QPainter &painter, const KoViewConverter &converte
         y -= gridY;
     };
 }
+
+void KarbonCanvas::paintMargins( QPainter &painter, const KoViewConverter &converter )
+{
+    if( ! m_showMargins )
+        return;
+
+    KoPageLayout pl = m_part->pageLayout();
+
+    QRectF marginRect( pl.ptLeft, pl.ptTop, m_doc->width()-pl.ptLeft-pl.ptRight, m_doc->height()-pl.ptTop-pl.ptBottom );
+
+    QPen pen( Qt::blue );
+    QVector<qreal> pattern;
+    pattern << 5 << 5;
+    pen.setDashPattern( pattern );
+    painter.setPen( pen );
+    painter.drawRect( converter.documentToView( marginRect ) );
+}
+
 void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
 {
     m_toolProxy->mouseMoveEvent( e, m_zoomHandler.viewToDocument( widgetToView( e->pos() ) ) );
@@ -281,6 +301,11 @@ KoUnit KarbonCanvas::unit() {
 QPoint KarbonCanvas::documentOrigin()
 {
     return m_origin;
+}
+
+void KarbonCanvas::setShowMargins( bool on )
+{
+    m_showMargins = on;
 }
 
 #include "vcanvas.moc"
