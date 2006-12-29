@@ -2361,10 +2361,10 @@ void Style::operator=( const Style& other )
 void Style::merge( const Style& style )
 {
     const QList<SharedSubStyle> subStyles( style.subStyles() );
-    kDebug(36006) << "merging " << subStyles.count() << " attributes." << endl;
+//     kDebug(36006) << "merging " << subStyles.count() << " attributes." << endl;
     for ( int i = 0; i < subStyles.count(); ++i )
     {
-        kDebug(36006) << subStyles[i]->debugData() << endl;
+//         kDebug(36006) << subStyles[i]->debugData() << endl;
         insertSubStyle( subStyles[i] );
     }
 }
