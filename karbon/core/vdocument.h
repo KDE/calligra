@@ -21,17 +21,14 @@
 #ifndef VDOCUMENT_H
 #define VDOCUMENT_H
 
-#include <KoUnit.h>
-
 #include <QString>
 #include <QMap>
-#include <q3ptrlist.h>
-#include <q3ptrdict.h>
 #include <QRectF>
 
 #include "vobject.h"
 
 #include <koffice_export.h>
+#include <KoUnit.h>
 #include <KoShapeControllerBase.h>
 
 class QDomDocument;
@@ -241,26 +238,26 @@ public:
 		{ m_selectionMode = mode; }
 
 	/**
-	 * Adds a new object to the active layer.
+	 * Adds an object to the document.
 	 *
-	 * @param object the object to append
+	 * @param shape the object to append
 	 */
 	void add( KoShape* shape );
 
 	/**
 	 * Removes an object from the document.
 	 *
-	 * @param object the object to append
+	 * @param shape the object to append
 	 */
 	void remove( KoShape* shape );
 	
 	/**
 	 * Returns custom name of specified object.
 	 *
-	 * @param obj the object to retrieve name for
+	 * @param shape the object to retrieve name for
 	 * @return the custom name of the object or an empty string if no custom name is set
 	 */
-	QString objectName( const KoShape *obj ) const;
+	QString objectName( const KoShape *shape ) const;
 
 	/**
 	 * Sets custom name of specified object.
@@ -271,7 +268,7 @@ public:
 	 * @param obj the object to set custom name for
 	 * @param name the the custom name to set
 	 */
-	void setObjectName( const KoShape *obj, const QString name );
+	void setObjectName( const KoShape *shape, const QString &name );
 
 	bool saveAsPath() const { return m_saveAsPath; }
 	void saveAsPath( bool b ) { m_saveAsPath = b; }
@@ -279,30 +276,19 @@ public:
     QRectF boundingRect();
 
 private:
-	/**
-	 * Document width.
-	 */
-	double m_width;
 
-	/**
-	 * Document height.
-	 */
-	double m_height;
+    double m_width;  ///< the document width
+    double m_height; ///< the document height
 
     QList<KoShape*> m_objects;   ///< The list of all object of the document.
-	VLayerList m_layers;         ///< The layers in this document.
+    VLayerList m_layers;         ///< The layers in this document.
 
-	/// The selection. A list of selected objects.
-	VSelection* m_selection;
-	/// The selectionMode
-	VSelectionMode m_selectionMode;
+    VSelection* m_selection;        ///< The selection. A list of selected objects.
+    VSelectionMode m_selectionMode; ///< The selectionMode
 
-	/**
-	 * The unit.
-	 */
-	KoUnit m_unit;
+    KoUnit m_unit; ///< The unit.
 
-	QMap<const KoShape *, QString>	m_objectNames;
+    QMap<const KoShape *, QString>	m_objectNames; /// the shape <-> name mapping
 
 	// TODO this flag is used nowhere, can we remove it?
 	bool m_saveAsPath;

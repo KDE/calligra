@@ -19,15 +19,11 @@
 */
 
 #include <qdom.h>
-#include <Q3ValueList>
 #include <QRectF>
 
 #include "vdocument.h"
 #include "vselection.h"
 #include "vvisitor.h"
-#include "vstroke.h"
-#include "vdashpattern.h"
-#include "vpainter.h"
 
 #include <KoStore.h>
 #include <KoPageLayout.h>
@@ -244,16 +240,16 @@ VDocument::accept( VVisitor& visitor )
 }
 
 QString
-VDocument::objectName( const KoShape *obj ) const
+VDocument::objectName( const KoShape *shape ) const
 {
-	QMap<const KoShape *, QString>::ConstIterator it = m_objectNames.find( obj );
-	return it == m_objectNames.end() ? 0L : it.value();
+    QMap<const KoShape *, QString>::ConstIterator it = m_objectNames.find( shape );
+    return it == m_objectNames.end() ? 0L : it.value();
 }
 
 void
-VDocument::setObjectName( const KoShape *obj, const QString name )
+VDocument::setObjectName( const KoShape *shape, const QString &name )
 {
-	m_objectNames.insert( obj, name );
+    m_objectNames.insert( shape, name );
 }
 
 QRectF 
