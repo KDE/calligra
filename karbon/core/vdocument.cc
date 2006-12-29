@@ -44,13 +44,9 @@ VDocument::VDocument()
 , m_unit( KoUnit::Millimeter )
 , m_saveAsPath(true)
 {
-	m_selection = new VSelection( this );
-
-	// create a layer. we need at least one:
-	m_activeLayer = new KoShapeLayer();
-	m_layers.append( m_activeLayer );
-	// TODO: porting to flake
-	//m_activeLayer->setSelected( true );
+    m_selection = new VSelection( this );
+    // create a layer. we need at least one:
+    insertLayer( new KoShapeLayer() );
 }
 
 VDocument::VDocument( const VDocument& document )
@@ -114,9 +110,7 @@ VDocument::draw( VPainter *painter, const QRectF* rect ) const
 void
 VDocument::insertLayer( KoShapeLayer* layer )
 {
-//	if ( pos == -1 || !m_layers.insert( layer, pos ))
-	m_layers.append( layer );
-	m_activeLayer = layer;
+    m_layers.append( layer );
 } // VDocument::insertLayer
 
 void
@@ -125,7 +119,6 @@ VDocument::removeLayer( KoShapeLayer* layer )
 	m_layers.removeAt( m_layers.indexOf( layer ) );
 	if ( m_layers.count() == 0 )
 		m_layers.append( new KoShapeLayer() );
-	m_activeLayer = m_layers.last();
 } // VDocument::removeLayer
 
 bool VDocument::canRaiseLayer( KoShapeLayer* layer )
@@ -163,30 +156,16 @@ VDocument::layerPos( KoShapeLayer* layer )
 } // VDocument::layerPos
 
 void
-VDocument::setActiveLayer( KoShapeLayer* layer )
-{
-	if ( m_layers.indexOf( layer ) != -1 )
-		m_activeLayer = layer;
-} // VDocument::setActiveLayer
-
-void
 VDocument::add( KoShape* shape )
 {
     if( ! m_objects.contains( shape ) )
         m_objects.append( shape );
-
-    // only add shape to active layer if it has no parent yet
-    if( ! shape->parent() )
-        m_activeLayer->addChild( shape );
 }
 
 void
 VDocument::remove( KoShape* shape )
 {
     m_objects.removeAt( m_objects.indexOf( shape ) );
-    // remove the shape from its current parent too
-    if( shape->parent() )
-        shape->parent()->removeChild( shape );
 }
 
 QDomDocument

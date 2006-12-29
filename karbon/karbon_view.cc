@@ -75,6 +75,7 @@
 #include <KoPathCommand.h>
 #include <KoToolBoxFactory.h>
 #include <KoShapeSelectorFactory.h>
+#include <KoShapeController.h>
 
 // Commands.
 #include "vcleanupcmd.h"
@@ -177,7 +178,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	unsigned int max = part()->maxRecentFiles();
 	setNumberOfRecentFiles( max );
 
-        connect( p, SIGNAL( unitChanged( KoUnit ) ), this, SLOT( setUnit( KoUnit ) ) );
+    connect( p, SIGNAL( unitChanged( KoUnit ) ), this, SLOT( setUnit( KoUnit ) ) );
 
 	// layout:
 	QGridLayout *layout = new QGridLayout();
@@ -223,6 +224,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	if( shell() )
 	{
 		KoToolManager::instance()->addControllers( m_canvasView );
+        // set the first layer active
+        m_canvasView->canvas()->shapeManager()->selection()->setActiveLayer( part()->document().layers().first() );
 
 		//Create Dockers
 		createColorDock();
@@ -779,7 +782,6 @@ KarbonView::groupSelection()
 
 	KoShapeGroup *group = new KoShapeGroup();
 	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
-
 	QList<KoShape*> groupedShapes;
 
 	// only group shapes with an unselected parent
@@ -789,11 +791,11 @@ KarbonView::groupSelection()
 			continue;
 		groupedShapes << shape;
 	}
-
+    // add group to parent of first shape to be grouped
+    group->setParent( groupedShapes.first()->parent() );
 	QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
 	new KoShapeCreateCommand( m_part, group, 0, cmd );
 	new KoGroupShapesCommand( group, groupedShapes, cmd );
-
 	part()->KoDocument::addCommand( cmd );
 }
 

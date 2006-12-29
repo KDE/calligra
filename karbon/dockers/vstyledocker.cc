@@ -34,6 +34,9 @@
 #include <KoMainWindow.h>
 #include <KoFilterManager.h>
 #include <KoShapeLayer.h>
+#include <KoToolManager.h>
+#include <KoCanvasController.h>
+#include <KoShapeManager.h>
 #include <kfiledialog.h>
 
 #include "karbon_part.h"
@@ -280,7 +283,10 @@ ClipartWidget::importClipart()
 	//m_part->document().selection()->append( m_part->document().activeLayer()->objects() );
 	addClipart();
 	m_part->document().selection()->clear();
-	m_part->document().removeLayer( m_part->document().activeLayer() );
+
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    m_part->document().removeLayer( selection->activeLayer() );
 }
 
 void

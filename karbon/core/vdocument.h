@@ -198,22 +198,6 @@ public:
 	void removeLayer( KoShapeLayer* layer );
 
 	/**
-	 * Sets the active layer.
-	 *
-	 * The specified layer is set active, if it is found in the layer list.
-	 *
-	 * @param layer the layer to set active
-	 */
-	void setActiveLayer( KoShapeLayer* layer );
-
-	/**
-	 * Returns a pointer to the active layer.
-	 *
-	 * @return the currently active layer
-	 */
-	KoShapeLayer* activeLayer() const { return m_activeLayer; }
-
-	/**
 	 * Returns the list of layers.
      * The layer list provides a hierarchical view/access of the document data.
      * All the documents shapes are children of a shape container, where a layer
@@ -319,7 +303,6 @@ private:
 
     QList<KoShape*> m_objects;   ///< The list of all object of the document.
 	VLayerList m_layers;         ///< The layers in this document.
-	KoShapeLayer* m_activeLayer; ///< The active layer.
 
 	/// The selection. A list of selected objects.
 	VSelection* m_selection;

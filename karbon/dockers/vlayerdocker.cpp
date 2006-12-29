@@ -39,6 +39,7 @@
 #include <KoCanvasController.h>
 #include <KoShapeControllerBase.h>
 #include <KoSelection.h>
+#include <KoShapeCreateCommand.h>
 #include <KoShapeDeleteCommand.h>
 #include <KoShapeReorderCommand.h>
 #include <KoZoomHandler.h>
@@ -211,7 +212,9 @@ void VLayerDocker::addLayer()
     {
         KoShapeLayer* layer = new KoShapeLayer();
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        canvasController->canvas()->addCommand( new VLayerCreateCmd( m_document, layer ) );
+        QUndoCommand *cmd = new KoShapeCreateCommand( m_shapeController, layer, 0, 0 );
+        cmd->setText( i18n( "Create Layer") );
+        canvasController->canvas()->addCommand( cmd );
         m_document->setObjectName( layer, name );
         m_model->update();
     }
@@ -230,7 +233,16 @@ void VLayerDocker::deleteItem()
     if( selectedLayers.count() )
     {
         if( m_document->layers().count() > selectedLayers.count() )
-            cmd = new VLayerDeleteCmd( m_document, m_shapeController, selectedLayers );
+        {
+            KoSelectionSet deleteShapes;
+            foreach( KoShapeLayer* layer, selectedLayers )
+            {
+                deleteShapes.unite( layer->iterator().toSet() );
+                deleteShapes.insert( layer );
+            }
+            cmd = new KoShapeDeleteCommand( m_shapeController, deleteShapes, 0 );
+            cmd->setText( i18n( "Delete Layer" ) );
+        }
         else
         {
             KMessageBox::error( 0L, i18n( "Could not delete all layers. At least one layer is required."), i18n( "Error deleting layers") );
@@ -458,12 +470,12 @@ QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
         case ActiveRole:
         {
             KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
-            if( layer )
-                return (layer == m_document->activeLayer() );
-            else if( m_shapeManager )
-                return m_shapeManager->selection()->isSelected( shape );
-            else
+            if( ! m_shapeManager )
                 return false;
+            if( layer )
+                return (layer == m_shapeManager->selection()->activeLayer() );
+            else
+                return m_shapeManager->selection()->isSelected( shape );
         }
         case PropertiesRole: return QVariant::fromValue( properties( shape ) );
         case AspectRatioRole:
@@ -524,7 +536,7 @@ bool VDocumentModel::setData(const QModelIndex &index, const QVariant &value, in
             {
                 KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
                 if( layer )
-                    m_document->setActiveLayer( layer );
+                    m_shapeManager->selection()->setActiveLayer( layer );
             }
             break;
         default:

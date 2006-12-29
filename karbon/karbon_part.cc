@@ -39,6 +39,8 @@
 #include <KoOasisSettings.h>
 #include <KoMainWindow.h>
 
+#include <KoCanvasController.h>
+#include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
 
@@ -621,28 +623,58 @@ void
 KarbonPart::addShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData )
 {
     Q_UNUSED( addRemoveData )
-	m_doc.add( shape );
-	foreach( KoView *view, views() ) {
-		KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
-		canvas->shapeManager()->add(shape);
-		canvas->adjustSize();
-		canvas->update();
-	}
-	setModified( true );
+
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+
+    KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
+    if( layer )
+    {
+        m_doc.insertLayer( layer );
+        KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+        selection->setActiveLayer( layer );
+    }
+    else
+    {
+        // only add shape to active layer if it has no parent yet
+        if( ! shape->parent() )
+        {
+            kDebug(38000) << "shape has no parent, adding to the active layer!" << endl;
+            KoShapeLayer *activeLayer = canvasController->canvas()->shapeManager()->selection()->activeLayer();
+            if( activeLayer )
+                activeLayer->addChild( shape );
+        }
+
+        m_doc.add( shape );
+        foreach( KoView *view, views() ) {
+            KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
+            canvas->shapeManager()->add(shape);
+            canvas->adjustSize();
+            canvas->update();
+        }
+    }
+    setModified( true );
 }
 
 void
 KarbonPart::removeShape( KoShape* shape, KoShapeAddRemoveData *addRemoveData )
 {
     Q_UNUSED( addRemoveData )
-	m_doc.remove( shape );
-	foreach( KoView *view, views() ) {
-		KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
-		canvas->shapeManager()->remove(shape);
-		canvas->adjustSize();
-		canvas->update();
-	}
-	setModified( true );
+    KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
+    if( layer )
+    {
+        m_doc.removeLayer( layer );
+    }
+    else
+    {
+        m_doc.remove( shape );
+        foreach( KoView *view, views() ) {
+            KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
+            canvas->shapeManager()->remove(shape);
+            canvas->adjustSize();
+            canvas->update();
+        }
+    }
+    setModified( true );
 }
 
 #include "karbon_part.moc"
