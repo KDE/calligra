@@ -876,5 +876,73 @@
       </Help>
     </Function>
 
+    <Function>
+    <Name>CUMIPMT</Name>
+    <Type>Float</Type>
+    <Parameter>
+        <Comment>rate</Comment>
+        <Type>Float</Type>
+    </Parameter>
+    <Parameter>
+        <Comment>periods</Comment>
+        <Type>Float</Type>
+    </Parameter>
+    <Parameter>
+        <Comment>value</Comment>
+        <Type>Float</Type>
+    </Parameter>
+    <Parameter>
+        <Comment>start</Comment>
+        <Type>Int</Type>
+    </Parameter>
+    <Parameter>
+        <Comment>end</Comment>
+        <Type>Int</Type>
+    </Parameter>
+    <Parameter>
+        <Comment>type</Comment>
+        <Type>Int</Type>
+    </Parameter>
+    <Help>
+        <Text>Calculates the cumulative interest payment.</Text>
+        <Syntax>CUMIPMT(rate, periods, value, start, end, type)</Syntax>
+        <Example>CUMIPMT( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -3562,187023</Example>
+    </Help>
+    </Function>
+
+    <Function>
+    <Name>CUMPRINC</Name>
+    <Type>Float</Type>
+    <Parameter>
+        <Comment>rate</Comment>
+        <Type>Float</Type>
+    </Parameter>
+    <Parameter>
+        <Comment>periods</Comment>
+        <Type>Float</Type>
+    </Parameter>
+    <Parameter>
+        <Comment>value</Comment>
+        <Type>Float</Type>
+    </Parameter>
+    <Parameter>
+        <Comment>start</Comment>
+        <Type>Int</Type>
+    </Parameter>
+    <Parameter>
+        <Comment>end</Comment>
+        <Type>Int</Type>
+    </Parameter>
+    <Parameter>
+        <Comment>type</Comment>
+        <Type>Int</Type>
+    </Parameter>
+    <Help>
+        <Text>Calculates the cumulative principal payment.</Text>
+        <Syntax>CUMPRINC(rate, periods, value, start, end, type)</Syntax>
+        <Example>CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -11904,054201</Example>
+    </Help>
+    </Function>
+
   </Group>
 </KSpreadFunctions>

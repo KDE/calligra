@@ -44,6 +44,8 @@ Value func_accrintm (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_compound (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_continuous (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_coupnum (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_cumipmt (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_cumprinc (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_db (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ddb (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_disc (valVector args, ValueCalc *calc, FuncExtra *);
@@ -92,6 +94,12 @@ void RegisterFinancialFunctions()
   repo->add (f);
   f = new Function ("COUPNUM", func_coupnum);
   f->setParamCount (3, 5);
+  repo->add (f);
+  f = new Function ("CUMIPMT", func_cumipmt);
+  f->setParamCount (6);
+  repo->add (f);
+  f = new Function ("CUMPRINC", func_cumprinc);
+  f->setParamCount (6);
   repo->add (f);
   f = new Function ("DB", func_db);
   f->setParamCount (4, 5);
@@ -211,6 +219,15 @@ static Value getPrinc (ValueCalc *calc, Value start,
   return calc->add (val2, val3);
 }
 
+// helper for IPMT and CUMIPMT
+static Value helper_ipmt( ValueCalc* calc, Value rate, Value per, Value nper, Value pv, Value fv, Value type )
+{
+    const Value payment = getPay (calc, rate, nper, pv, fv, type);
+    const Value ineg = getPrinc (calc, pv, payment, rate, calc->sub (per, Value(1)));
+    // -ineg * rate
+    return calc->mul (calc->mul (ineg, Value(-1)), rate);
+}
+
 // Function: COUPNUM - taken from GNUMERIC
 Value func_coupnum (valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -310,6 +327,75 @@ Value func_accrintm (valVector args, ValueCalc *calc, FuncExtra *)
 
   // par*date * d/y
   return calc->mul (calc->mul (par, rate), d / y);
+}
+
+// Function: CUMIPMT
+Value func_cumipmt(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    const Value rate = args[0];
+    if ( rate.asFloat() <= 0.0 )
+        return Value::errorVALUE();
+    const Value nper = args[1];
+    const int periods = nper.asInteger();
+    if ( periods <= 0 )
+        return Value::errorVALUE();
+    const Value pv = args[2];
+    if ( pv.asFloat() <= 0.0 )
+        return Value::errorVALUE();
+    const Value v1( calc->conv()->asInteger(args[3]) );
+    if ( v1.isError() )
+        return Value::errorVALUE();
+    const int start = v1.asInteger();
+    if ( start <= 0 || start > periods )
+        return Value::errorVALUE();
+    const Value v2( calc->conv()->asInteger(args[4]) );
+    if ( v2.isError() )
+        return Value::errorVALUE();
+    const int end = v2.asInteger();
+    if ( end < start || end > periods )
+        return Value::errorVALUE();
+    const Value type( calc->conv()->asInteger(args[5]) );
+    if ( type.isError() )
+        return Value::errorVALUE();
+
+    Value result(0.0);
+    for ( int per = start; per <= end; ++per )
+        result = calc->add( result, helper_ipmt( calc, rate, Value(per), nper, pv, Value(0.0), type ) );
+    return result;
+}
+
+// Function: CUMPRINC
+Value func_cumprinc(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    const Value rate = args[0];
+    if ( rate.asFloat() <= 0.0 )
+        return Value::errorVALUE();
+    const Value nper = args[1];
+    const int periods = nper.asInteger();
+    if ( periods <= 0 )
+        return Value::errorVALUE();
+    const Value pv = args[2];
+    if ( pv.asFloat() <= 0.0 )
+        return Value::errorVALUE();
+    const Value v1( calc->conv()->asInteger(args[3]) );
+    if ( v1.isError() )
+        return Value::errorVALUE();
+    const int start = v1.asInteger();
+    if ( start <= 0 || start > periods )
+        return Value::errorVALUE();
+    const Value v2( calc->conv()->asInteger(args[4]) );
+    if ( v2.isError() )
+        return Value::errorVALUE();
+    const int end = v2.asInteger();
+    if ( end < start || end > periods )
+        return Value::errorVALUE();
+    const Value type( calc->conv()->asInteger(args[5]) );
+    if ( type.isError() )
+        return Value::errorVALUE();
+
+    const Value pay = getPay(calc, rate, nper, pv, Value(0.0), type);
+    const Value cumipmt = func_cumipmt(args, calc, 0);
+    return calc->sub( calc->mul(pay, Value(end-start+1)), cumipmt);
 }
 
 // Function: DISC
@@ -593,11 +679,7 @@ Value func_ipmt (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() > 4) fv = args[4];
   if (args.count() == 6) type = args[5];
 
-  Value payment = getPay (calc, rate, nper, pv, fv, type);
-  Value ineg = getPrinc (calc, pv, payment, rate, calc->sub (per, Value(1)));
-
-  // -ineg * rate
-  return calc->mul (calc->mul (ineg, Value(-1)), rate);
+  return helper_ipmt( calc, rate, per, nper, pv, fv, type);
 }
 
 // Function: PPMT
