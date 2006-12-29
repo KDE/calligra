@@ -566,7 +566,7 @@ void Value::setValue( const QDateTime& dt, const Doc* doc  )
   const QTime refTime( 0, 0 );  // reference time is midnight
 
   double f= refDate.daysTo( dt.date() );
-  f += refTime.msecsTo( dt.time() ) / 86400000; // 24*60*60*1000
+  f += static_cast<double>( refTime.msecsTo( dt.time() ) ) / 86400000; // 24*60*60*1000
 
   setValue( f );
   d->format = fmt_DateTime;
@@ -577,7 +577,7 @@ void Value::setValue( const QTime& time, const Doc* doc )
   Q_UNUSED( doc );
   const QTime refTime( 0, 0 );  // reference time is midnight
 
-  double f = refTime.msecsTo( time ) / 86400000; // 24*60*60*1000
+  const double f = static_cast<double>( refTime.msecsTo( time ) ) / 86400000; // 24*60*60*1000
 
   setValue( f );
   d->format = fmt_Time;
