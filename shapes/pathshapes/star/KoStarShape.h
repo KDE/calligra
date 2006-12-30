@@ -24,6 +24,13 @@
 
 #define KoStarShapeId "KoStarShape"
 
+/**
+ * The star shape is a shape that can represent a star or
+ * a regular polygon. There a some properties which can
+ * be changed to control the appearance of the shape
+ * like the number of corners, the inner/outer radius
+ * and the corner roundness.
+ */
 class KoStarShape : public KoParameterShape
 {
 public:
@@ -95,21 +102,25 @@ public:
 protected:
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     void updatePath( const QSizeF &size );
+    /// recreates the path points when the corner count or convexity changes
     void createPath();
 
 private:
     /// Computes the star center point from the inner points
     QPointF computeCenter() const;
+
+    /// the handle types
     enum Handles { tip = 0, base = 1 };
-    uint m_cornerCount; ///< number of corners
-    double m_radius[2]; ///< the different radii
-    double m_angles[2]; ///< the offset angles
-    double m_zoomX; ///< scaling in x
-    double m_zoomY; ///< scaling in y
+
+    uint m_cornerCount;    ///< number of corners
+    double m_radius[2];    ///< the different radii
+    double m_angles[2];    ///< the offset angles
+    double m_zoomX;        ///< scaling in x
+    double m_zoomY;        ///< scaling in y
     double m_roundness[2]; ///< the roundness at the handles
-    QPointF m_center;   ///< the star center point
-    bool m_convex;   ///< controls if the star is convex
-    KoSubpath m_points;
+    QPointF m_center;      ///< the star center point
+    bool m_convex;         ///< controls if the star is convex
+    KoSubpath m_points;    ///< the path points
 };
 
 #endif /* KOSTARSHAPE_H */
