@@ -36,6 +36,7 @@ private slots:
   void testDB();
   void testDDB();
   void testEURO();
+  void testNOMINAL();
   void testSLN();
   void testSYD();
 

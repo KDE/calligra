@@ -140,6 +140,16 @@ void FinancialFunctionsTest::testEURO()
   CHECK_EVAL( "EURO(\"NOMANSLAND\")", Value::errorVALUE() );
 }
 
+void FinancialFunctionsTest::testNOMINAL()
+{
+  CHECK_EVAL( "NOMINAL(13.5%;12)", Value((double) 0.1273031669590416));
+  CHECK_EVAL( "NOMINAL(13.5%;12)", Value((double) 0.1273031669590416));
+  CHECK_EVAL( "NOMINAL(25%;12)", Value((double) 0.2252311814580734));
+  CHECK_EVAL( "NOMINAL(25%;4)", Value((double) 0.2294850537622564));
+  CHECK_EVAL( "NOMINAL(20%;12)", Value((double) 0.1837136459967743));
+  CHECK_EVAL( "NOMINAL(10%;12)", Value((double) 0.0956896851468452));
+}
+
 // Straight-line depreciation
 // SLN(cost, salvage, life)
 void FinancialFunctionsTest::testSLN()
