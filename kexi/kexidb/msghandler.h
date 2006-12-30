@@ -83,8 +83,8 @@ class KEXI_DB_EXPORT MessageHandler
 		 Reimplement this. This implementation does nothing, just returns \a defaultResult. */
 		virtual int askQuestion( const QString& message, 
 			KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-			const KGuiItem &buttonYes=KStdGuiItem::yes(), 
-			const KGuiItem &buttonNo=KStdGuiItem::no(),
+			const KGuiItem &buttonYes=KStandardGuiItem::yes(), 
+			const KGuiItem &buttonNo=KStandardGuiItem::no(),
 			const QString &dontShowAskAgainName = QString::null,
 			int options = KMessageBox::Notify );
 

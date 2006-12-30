@@ -22,7 +22,7 @@
 
 #include <kexidb/error.h>
 #include <kmessagebox.h>
-#include <kstdguiitem.h>
+#include <kstandardguiitem.h>
 #include <qstring.h>
 
 namespace KexiDB {
@@ -143,8 +143,8 @@ class KEXI_DB_EXPORT Object
 		 See KexiDB::MessageHandler::askQuestion() for details. */
 		virtual int askQuestion( const QString& message, 
 			KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-			const KGuiItem &buttonYes=KStdGuiItem::yes(), 
-			const KGuiItem &buttonNo=KStdGuiItem::no(),
+			const KGuiItem &buttonYes=KStandardGuiItem::yes(), 
+			const KGuiItem &buttonNo=KStandardGuiItem::no(),
 			const QString &dontShowAskAgainName = QString::null,
 			int options = KMessageBox::Notify,
 			MessageHandler* msgHandler = 0 );
