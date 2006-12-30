@@ -713,20 +713,12 @@ void Sheet::fillSequence( const QList<Cell*>& _srcList,
 
 QVariant getDiff( const Value& value1, const Value& value2  , AutoFillSequenceItem::Type type  )
 {
-  if ( type == AutoFillSequenceItem::FLOAT )
+  if ( type == AutoFillSequenceItem::FLOAT || type == AutoFillSequenceItem::TIME )
 	  return QVariant( value2.asFloat() - value1.asFloat() );
-  if ( type == AutoFillSequenceItem::TIME || type == AutoFillSequenceItem::DATE )
+  if ( type == AutoFillSequenceItem::DATE )
 	  return QVariant( (int)( value2.asInteger() - value1.asInteger() ) );
 
   return QVariant( (int)0 );
-  // note: date and time difference can be calculated as
-  // the difference of the serial number
- /* if( (type == AutoFillSequenceItem::FLOAT) ||
-      (type == AutoFillSequenceItem::DATE) ||
-      (type == AutoFillSequenceItem::TIME) )
-    return ( value2.asFloat() - value1.asFloat() );
-  else
-    return 0.0;*/
 }
 
 bool Sheet::fillSequenceWithInterval( const QList<Cell*>& _srcList,
@@ -869,7 +861,8 @@ bool Sheet::fillSequenceWithInterval( const QList<Cell*>& _srcList,
         i   *= -1;
       }
 
-      if ( type == AutoFillSequenceItem::FLOAT )
+      if ( type == AutoFillSequenceItem::FLOAT ||
+           type == AutoFillSequenceItem::TIME )
 	      cellValue = src->value().asFloat();
       else
 	      cellValue = (int)src->value().asInteger();
@@ -904,7 +897,7 @@ bool Sheet::fillSequenceWithInterval( const QList<Cell*>& _srcList,
 
 	if ( type == AutoFillSequenceItem::TIME)
 	{
-		Value timeValue = doc()->converter()->asTime( Value(cellValue.toInt()) );
+		Value timeValue = doc()->converter()->asTime( Value(cellValue.toDouble()) );
 		Value stringValue = doc()->converter()->asString( timeValue );
 		dest->setCellText( stringValue.asString() );
 	}
@@ -1156,7 +1149,8 @@ void Sheet::fillSequenceWithCopy( const QList<Cell*>& _srcList,
         cell->setCellText( tmp );
         ++incr;
       }
-      else if ( !AutoFillSequenceItem::month->isEmpty()
+      else if ( AutoFillSequenceItem::month
+                && !AutoFillSequenceItem::month->isEmpty()
 	        && AutoFillSequenceItem::month->contains( _srcList.at( s )->inputText())
 	        && _srcList.count() == 1 )
       {
@@ -1166,7 +1160,8 @@ void Sheet::fillSequenceWithCopy( const QList<Cell*>& _srcList,
 	cell->setCellText((AutoFillSequenceItem::month->at( k )));
         incr++;
       }
-      else if ( AutoFillSequenceItem::day->isEmpty()
+      else if ( AutoFillSequenceItem::day
+                && AutoFillSequenceItem::day->isEmpty()
 	        && AutoFillSequenceItem::day->contains( _srcList.at( s )->inputText())
 	        && _srcList.count()==1 )
       {

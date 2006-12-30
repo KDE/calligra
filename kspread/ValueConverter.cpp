@@ -320,7 +320,7 @@ Value ValueConverter::asTime (const Value &value) const
       val.setValue ( Value( QTime::currentTime(), doc() ) );
     break;
     case Value::Integer:
-      val.setValue (value.asInteger());
+      val.setValue (value.asFloat());
       val.setFormat (Value::fmt_Time);
     break;
     case Value::Float:
