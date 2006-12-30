@@ -78,7 +78,6 @@
 #include <KoShapeController.h>
 
 // Commands.
-#include "vcleanupcmd.h"
 #include "vclipartcmd.h"
 #include "vclosepathcmd.h"
 #include "vfillcmd.h"
@@ -1255,7 +1254,7 @@ KarbonView::initActions()
 	m_showRulerAction->setChecked(false);
 	connect( m_showRulerAction, SIGNAL(triggered()), this, SLOT(showRuler()));
 
-	m_showGridAction = new KToggleAction(KIcon("view_grid"), i18n("Show Grid"), actionCollection(), "view_show_grid");
+	m_showGridAction = new KToggleAction(KIcon("grid"), i18n("Show Grid"), actionCollection(), "view_show_grid");
 	m_showGridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
 	m_showGridAction->setToolTip(i18n("Shows or hides grid"));
 	//m_showGridAction->setChecked(true);
@@ -1583,7 +1582,6 @@ KarbonView::repaintAll( const QRectF &r )
 {
 	debugView(QString("KarbonView::repaintAll(QRectF(%1, %2, %3, %4))").arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height()));
 
-	m_canvas->updateCanvas(r);
 	m_canvas->updateCanvas( r );
 }
 
