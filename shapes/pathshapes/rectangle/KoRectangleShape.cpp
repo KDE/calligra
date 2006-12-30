@@ -205,3 +205,31 @@ void KoRectangleShape::createPath( const QSizeF &size )
     arcTo( rx, ry, 180, -90 );
     closeMerge();
 }
+
+double KoRectangleShape::cornerRadiusX() const
+{
+    return m_cornerRadiusX;
+}
+
+void KoRectangleShape::setCornerRadiusX( double radius )
+{
+    if( radius >= 0.0 && radius <= 100.0 )
+    {
+        m_cornerRadiusX = radius;
+        updatePath( size() );
+    }
+}
+
+double KoRectangleShape::cornerRadiusY() const
+{
+    return m_cornerRadiusY;
+}
+
+void KoRectangleShape::setCornerRadiusY( double radius )
+{
+    if( radius >= 0.0 && radius <= 100.0 )
+    {
+        m_cornerRadiusY = radius;
+        updatePath( size() );
+    }
+}
