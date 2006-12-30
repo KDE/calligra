@@ -111,6 +111,10 @@ public:
      */
     KWPage* appendPage();
 
+    /**
+     * remove a page from the document.
+     * @param pageNumber the pageNumber that should be removed.
+     */
     void removePage(int pageNumber);
 
     /**
@@ -163,8 +167,17 @@ public:
      */
     int lastPage() const;
 
+    /**
+     * Set the document to start counting at a specific pagenumber.
+     * This will cause the document to relayout pagespreads and insert pages if needed.
+     * @param pageNumber the new page number of the first page of this document.
+     */
     void setStartPage(int pageNumber);
 
+    /**
+     * Alters the page layout of all pages that have not explicitly been changed individually.
+     * This will cause all auto-generated frames to be re-layouted if needed.
+     */
     void setDefaultPageLayout(const KoPageLayout &layout);
 
     /// return the amount of framesets this document holds

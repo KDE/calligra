@@ -21,8 +21,18 @@
 
 #include <KoShape.h>
 
+/**
+ * This shape allows the concept of copy-of-frame by nesting a frame in another.
+ * This shape has a position and size, but all the rest of its settings will be
+ * reused from the original, as passed on the constructor.  The shapes appearance
+ * will be the same as the original, just in a different place in the document.
+ */
 class KWCopyShape : public KoShape {
 public:
+    /**
+     * Constructor
+     * @param original the original shape this one will look like.
+     */
     KWCopyShape(KoShape *original);
     ~KWCopyShape();
 
@@ -32,9 +42,6 @@ public:
     void paintDecorations(QPainter &painter, const KoViewConverter &converter, bool selected);
     /// reimplemented from KoShape
     const QPainterPath outline() const;
-    /// reimplemented from KoShape
-    //void copySettings(const KoShape *shape);
-
 
 private:
     KoShape *m_original;

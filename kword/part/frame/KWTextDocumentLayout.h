@@ -28,11 +28,6 @@
 #include <QSizeF>
 
 class KWTextFrameSet;
-//   class KWTextFrame;
-//   class KoStyleManager;
-//   class QTextLayout;
-//   class QTextList;
-//   class LayoutState;
 
 /**
  * KWords text layouter that allows text to flow in multiple frames and around
@@ -44,12 +39,14 @@ public:
     KWTextDocumentLayout(KWTextFrameSet *frameSet);
     ~KWTextDocumentLayout();
 
+    /// reimplemented from KoTextDocumentLayout::layout()
     void layout();
 
+    /// reimplemented from KoTextDocumentLayout::shapes()
     QList<KoShape*> shapes() const;
 
+    /// reimplemented from KoTextDocumentLayout::scheduleLayout()
     void scheduleLayout();
-
 
 private:
     KWTextFrameSet *m_frameSet;

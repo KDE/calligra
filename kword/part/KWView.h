@@ -61,6 +61,10 @@ public:
     KWView( const QString& viewMode, KWDocument *document, QWidget *parent );
     ~KWView();
 
+    /**
+     * return the KWDocument that owns this view.
+     * @see KoView::document()
+     */
     KWDocument *kwdocument() const { return m_document; }
 
     // interface KoView
@@ -69,6 +73,7 @@ public:
     /// overwritten method from superclass
     QWidget *canvas() const;
 
+    /// returns true if this view has the snap-to-grid enabled.
     bool snapToGrid() const { return m_snapToGrid; }
 
     /**

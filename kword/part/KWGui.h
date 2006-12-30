@@ -66,6 +66,9 @@ public:
     /// return if the there currently is a vertical scrolBar visible
     bool verticalScrollBarVisible();
 
+    /**
+     * Request a repaint of the rulers.
+     */
     void updateRulers() const;
 
     /**
