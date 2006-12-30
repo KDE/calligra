@@ -39,6 +39,11 @@ Value FinancialFunctionsTest::evaluate(const QString& formula)
   f.setExpression( expr );
   Value result = f.eval();
 
+#if 0
+  // this magically generates the CHECKs
+  printf("  CHECK_EVAL( \"%s\", Value((double) %.14f);\n", qPrintable(formula), result.asFloat());
+#endif
+
   return result;
 }
 
