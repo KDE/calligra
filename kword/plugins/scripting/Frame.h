@@ -36,14 +36,45 @@ namespace Scripting {
     class Frame : public QObject
     {
             Q_OBJECT
+            Q_ENUMS(TextRunAround)
+            Q_ENUMS(FrameBehavior)
         public:
-            Frame(QObject* parent, KWFrame* frame) : QObject(parent), m_frame(frame) {}
+            Frame(QObject* parentFrameSet, KWFrame* frame) : QObject(parentFrameSet), m_frame(frame) {}
             virtual ~Frame() {}
+
+            enum TextRunAround {
+                NoRunAround = KWord::NoRunAround, ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
+                RunAround = KWord::RunAround, ///< The text will run around the outline of the frame
+                RunThrough = KWord::RunThrough ///< The text will completely ignore the frame and layout as if it was not there
+            };
+
+            enum FrameBehavior {
+                AutoExtendFrameBehavior = KWord::AutoExtendFrameBehavior, ///< Make the frame bigger to fit the contents
+                AutoCreateNewFrameBehavior = KWord::AutoCreateNewFrameBehavior, ///< Create a new frame on the next page
+                IgnoreContentFrameBehavior = KWord::IgnoreContentFrameBehavior ///< Ignore the content and clip it
+            };
 
         public Q_SLOTS:
 
-            /** Return the Id of this shape, indentifying the type of shape by the id of the factory. */
+            /** Return the Id of this shape, identifying the type of shape by the id of the factory. */
             QString shapeId() const { return m_frame->shape()->shapeId(); }
+            /** Return the parent \a FrameSet object this \a Frame object is child of. */
+            QObject* frameSet() { return parent(); }
+
+            /** This property what should happen when the frame is full. */
+            int frameBehavior() const { return m_frame->frameBehavior(); }
+            /** Set what should happen when the frame is full. */
+            void setFrameBehavior(int framebehavior) { m_frame->setFrameBehavior( (KWord::FrameBehavior) framebehavior ); }
+
+            /** Return the text runaround property for this frame. This property specifies
+            how text from another textframe will behave when this frame intersects with it. */
+            int textRunAround() const { return m_frame->textRunAround(); }
+            /** Set the text runaround property for this frame. */
+            void setTextRunAround(int textrunaround) { return m_frame->setTextRunAround( (KWord::TextRunAround) textrunaround ); }
+            /** Return the space between this frames edge and the text when that text runs around this frame. */
+            double runAroundDistance() const { return m_frame->runAroundDistance(); }
+            /** Set the space between this frames edge and the text when that text runs around this frame. */
+            void setRunAroundDistance(double runarounddistance) { m_frame->setRunAroundDistance(runarounddistance); }
 
             /** Request a repaint to be queued. */
             void repaint() const { m_frame->shape()->repaint(); }

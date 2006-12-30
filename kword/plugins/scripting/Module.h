@@ -79,16 +79,23 @@ namespace Scripting {
 
             /** Return the amount of framesets this document holds. */
             int frameSetCount();
-            /** Return a list of all the framesets this document holds. */
+            /** Return the \a FrameSet object identified by the index frameSetNr. */
             QObject* frameSet(int frameSetNr);
-
-            //void addFrameSet( KWFrameSet *f );
-            //void removeFrameSet( KWFrameSet *fs );
-
             /** Add and return a new \a FrameSet object for text handled with \a TextDocument . */
-            QObject* addTextFrameSet(const QString& name);
+            QObject* addTextFrameSet(const QString& framesetname);
             /** Add and return a new \a FrameSet object. */
-            QObject* addFrameSet(const QString& name);
+            QObject* addFrameSet(const QString& framesetname);
+
+            /***** Frame *****/
+
+            /** Return the amount of frames this document holds. */
+            int frameCount();
+            /** Return a the \a Frame object identified by the index frameNr. */
+            QObject* frame(int frameNr);
+            /** Add and return a new \a FrameSet object for text handled with \a TextDocument . */
+            QObject* addTextFrame(const QString& framesetname);
+            /** Add and return a new \a FrameSet object. */
+            QObject* addFrame(const QString& framesetname, const QString& shapeId);
 
             /***** Layout *****/
 

@@ -3,14 +3,15 @@
 import KWord, time
 
 #KWord.insertPage( KWord.pageCount() )
-KWord.insertPage(0)
+if KWord.pageCount() < 1:
+    KWord.insertPage(0)
 
 fs = KWord.frameSet(0)
 doc = fs.textDocument()
 
 doc.setHtml(
     (
-        "<h1><font color=\"blue\">Python Test Script</font></h1>"
+        "<h1><font color=\"blue\">Python Sample Script</font></h1>"
         "<p><i>italic</i> and <b>bold</b> and <u>underlined</u> and a <a href=\"test\">link</a></p>."
         "<ul>"
         "<li>Time=<b>%s</b></li>"

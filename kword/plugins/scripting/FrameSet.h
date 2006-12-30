@@ -68,7 +68,7 @@ namespace Scripting {
             /** Return the \a Frame object with index \p frameNr or NULL if there exists no \a Frame with such a index. */
             QObject* frame(int frameNr) {
                 if( frameNr >= 0 && frameNr < m_frameset->frames().count() )
-                    return new Frame(parent(), m_frameset->frames().at(frameNr));
+                    return new Frame(this, m_frameset->frames().at(frameNr));
                 return 0;
             }
 
@@ -82,7 +82,7 @@ namespace Scripting {
                 }
                 KoShape *shape = factory->createDefaultShape();
                 Q_ASSERT(shape);
-                shape->setZIndex( 1 + m_frameset->frameCount() );
+                shape->setZIndex( 100 + m_frameset->frameCount() );
                 KWFrame* frame = 0;
                 KWTextFrameSet* textframeset = dynamic_cast<KWTextFrameSet*>( (KWFrameSet*)m_frameset );
                 if( textframeset )

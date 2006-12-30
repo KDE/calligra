@@ -27,25 +27,27 @@ print "zIndex=%s" % textframe.zIndex()
 #textframe.setZIndex(3)
 
 # add KoStarShape frame
-starframe = KWord.addFrameSet("mystar").addFrame("KoStarShape")
+#starframe = KWord.addFrameSet("mystar").addFrame("KoStarShape")
+starframe = KWord.addFrame("mystar", "KoStarShape")
 if starframe != None:
-    starframe.setPosition(400, 50)
+    starframe.setPosition(450, 50)
     starframe.rotate(25.0)
 
 # add KoPathShape frame
-pathframe = KWord.addFrameSet("mypath").addFrame("KoPathShape")
+pathframe = KWord.addFrame("mypath", "KoPathShape")
 if pathframe != None:
     pathframe.setPosition(400, 150)
     pathframe.shear(0.5, 0.5)
 
 # add KoRegularPolygonShape frame
-polyframe = KWord.addFrameSet("mypoly").addFrame("KoRegularPolygonShape")
+polyframe = KWord.addFrame("mypoly", "KoRegularPolygonShape")
 if polyframe != None:
     polyframe.setPosition(420, 320)
     polyframe.shear(-0.5, -0.5)
 
 # add TableShape frame
-tableframe = KWord.addFrameSet("mytable").addFrame("TableShape")
+tableframe = KWord.addFrame("mytable", "TableShape")
 if tableframe != None:
+    tableframe.setTextRunAround(tableframe.RunThrough)
     tableframe.setPosition(200, 160)
     tableframe.resize(160, 160)

@@ -34,6 +34,7 @@
 #include <KWView.h>
 #include <KWPage.h>
 #include <KWFrameSet.h>
+#include <KWFrame.h>
 
 extern "C"
 {
@@ -138,7 +139,7 @@ QObject* Module::frameSet(int frameSetNr)
     return new FrameSet(this, frameset);
 }
 
-QObject* Module::addTextFrameSet(const QString& name)
+QObject* Module::addTextFrameSet(const QString& framesetname)
 {
     KWord::TextFrameSetType type = KWord::OtherTextFrameSet;
     /*
@@ -155,18 +156,52 @@ QObject* Module::addTextFrameSet(const QString& name)
     */
 
     KWTextFrameSet* frameset = new KWTextFrameSet(type);
-    frameset->setName(name);
+    frameset->setName(framesetname);
     frameset->setAllowLayout(false);
     doc()->addFrameSet(frameset);
     return new FrameSet(this, frameset);
 }
 
-QObject* Module::addFrameSet(const QString& name)
+QObject* Module::addFrameSet(const QString& framesetname)
 {
     KWFrameSet* frameset = new KWFrameSet();
-    frameset->setName(name);
+    frameset->setName(framesetname);
     doc()->addFrameSet(frameset);
     return new FrameSet(this, frameset);
+}
+
+int Module::frameCount()
+{
+    int count = 0;
+    foreach(KWFrameSet* set, doc()->frameSets())
+        count += set->frames().count();
+    return count;
+}
+
+QObject* Module::frame(int frameNr)
+{
+    if(frameNr >= 0) {
+        int idx = 0;
+        foreach(KWFrameSet* set, doc()->frameSets()) {
+            const int c = set->frames().count();
+            if(frameNr < idx + c)
+                return new Frame(new FrameSet(this, set), set->frames().at(idx));
+            idx += c;
+        }
+    }
+    return 0;
+}
+
+QObject* Module::addTextFrame(const QString& framesetname)
+{
+    FrameSet* set = dynamic_cast< FrameSet* >( addTextFrameSet(framesetname) );
+    return set ? set->addTextFrame() : 0;
+}
+
+QObject* Module::addFrame(const QString& framesetname, const QString& shapeId)
+{
+    FrameSet* set = dynamic_cast< FrameSet* >( addFrameSet(framesetname) );
+    return set ? set->addFrame(shapeId) : 0;
 }
 
 QObject* Module::standardPageLayout()
