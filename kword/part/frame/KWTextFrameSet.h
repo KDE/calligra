@@ -40,7 +40,7 @@ public:
      * Constructor with a type of text specified
      * @param type the type of frameSet; this can indicate headers, footers etc.
      */
-    KWTextFrameSet(KWord::TextFrameSetType type);
+    explicit KWTextFrameSet(KWord::TextFrameSetType type);
     ~KWTextFrameSet();
 
     /// return the type of frameSet this is

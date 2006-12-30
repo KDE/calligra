@@ -42,7 +42,7 @@ public:
      * Constructor
      * @param parent the document this loader will work for.
      */
-    KWDLoader(KWDocument *parent);
+    explicit KWDLoader(KWDocument *parent);
     virtual ~KWDLoader();
 
     /**

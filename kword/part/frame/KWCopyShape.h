@@ -33,7 +33,7 @@ public:
      * Constructor
      * @param original the original shape this one will look like.
      */
-    KWCopyShape(KoShape *original);
+    explicit KWCopyShape(KoShape *original);
     ~KWCopyShape();
 
     /// reimplemented from KoShape

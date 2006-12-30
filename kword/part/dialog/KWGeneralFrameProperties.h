@@ -35,7 +35,7 @@ class KWGeneralFrameProperties : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
     /// constructor
-    KWGeneralFrameProperties(FrameConfigSharedState *state);
+    explicit KWGeneralFrameProperties(FrameConfigSharedState *state);
     ~KWGeneralFrameProperties();
 
     /// load all info from the argument frame into this widget

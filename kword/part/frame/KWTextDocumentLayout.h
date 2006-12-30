@@ -36,7 +36,7 @@ class KWTextFrameSet;
 class KWORD_TEST_EXPORT KWTextDocumentLayout : public KoTextDocumentLayout {
 public:
     /// constructor
-    KWTextDocumentLayout(KWTextFrameSet *frameSet);
+    explicit KWTextDocumentLayout(KWTextFrameSet *frameSet);
     ~KWTextDocumentLayout();
 
     /// reimplemented from KoTextDocumentLayout::layout()

@@ -36,7 +36,7 @@ class KWFrameRunaroundProperties : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
     /// constructor
-    KWFrameRunaroundProperties(FrameConfigSharedState *state);
+    explicit KWFrameRunaroundProperties(FrameConfigSharedState *state);
     ~KWFrameRunaroundProperties();
 
     /// load all info from the argument frames into this widget

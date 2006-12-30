@@ -33,7 +33,7 @@ class KoShape;
 class KWFrameGeometry : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
-    KWFrameGeometry(FrameConfigSharedState *state);
+    explicit KWFrameGeometry(FrameConfigSharedState *state);
     ~KWFrameGeometry();
 
     void open(KWFrame* frame);

@@ -32,7 +32,7 @@
 class KWViewModePreview : public KWViewMode {
 public:
     /// constructor
-    KWViewModePreview( KWCanvas* canvas );
+    explicit KWViewModePreview( KWCanvas* canvas );
     ~KWViewModePreview() {}
 
     QPointF documentToView( const QPointF & point ) const;

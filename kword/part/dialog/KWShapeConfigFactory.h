@@ -29,7 +29,7 @@ class KWDocument;
 /// \internal
 class FrameConfigSharedState {
 public:
-    FrameConfigSharedState(KWDocument *document);
+    explicit FrameConfigSharedState(KWDocument *document);
     ~FrameConfigSharedState();
 
     void addUser() { m_refcount++; }
@@ -74,7 +74,7 @@ private:
 class KWFrameGeometryFactory : public KoShapeConfigFactory {
 public:
     /// constructor
-    KWFrameGeometryFactory(FrameConfigSharedState *state) : m_state(state) {}
+    explicit KWFrameGeometryFactory(FrameConfigSharedState *state) : m_state(state) {}
     ~KWFrameGeometryFactory() {}
 
     /// reimplemented method from superclass
@@ -111,7 +111,7 @@ private:
 class KWGeneralFramePropertiesFactory : public KoShapeConfigFactory {
 public:
     /// constructor
-    KWGeneralFramePropertiesFactory(FrameConfigSharedState *state) : m_state(state) {}
+    explicit KWGeneralFramePropertiesFactory(FrameConfigSharedState *state) : m_state(state) {}
     ~KWGeneralFramePropertiesFactory() {}
 
     /// reimplemented method from superclass

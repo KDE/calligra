@@ -38,7 +38,7 @@ class KWFrameConnectSelector : public KoShapeConfigWidgetBase {
     Q_OBJECT
 public:
     /// constructor
-    KWFrameConnectSelector(FrameConfigSharedState *state);
+    explicit KWFrameConnectSelector(FrameConfigSharedState *state);
     ~KWFrameConnectSelector();
 
     /// load all info from the argument frame into this widget
