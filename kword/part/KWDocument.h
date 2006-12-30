@@ -23,7 +23,6 @@
 
 #include "KWPageSettings.h"
 #include "KWPageManager.h"
-#include "KWMultiViewCommandHistory.h"
 #include "frame/KWFrameLayout.h"
 
 #include <KoDocument.h>
@@ -245,7 +244,6 @@ private:
     KWFrameLayout m_frameLayout;
 
     KoStyleManager *m_styleManager;
-    KWMultiViewCommandHistory m_commandHistory;
 };
 
 /// \internal
