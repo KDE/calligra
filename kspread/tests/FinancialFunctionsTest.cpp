@@ -57,6 +57,20 @@ namespace QTest
   }
 }
 
+// Fixed-declining balance depreciation
+// DB(cost, salvage, life, period, month)
+void FinancialFunctionsTest::testDB()
+{
+  // Excel example: http://office.microsoft.com/en-us/excel/HP100623551033.aspx
+	CHECK_EVAL( "DB(1000000; 100000; 6; 1; 7)", Value((double)186083.33333333334303) ) ;
+	CHECK_EVAL( "DB(1000000; 100000; 6; 2; 7)", Value((double)259639.41666666665697) ) ;
+	CHECK_EVAL( "DB(1000000; 100000; 6; 3; 7)", Value((double)176814.44275000001653) ) ;
+	CHECK_EVAL( "DB(1000000; 100000; 6; 4; 7)", Value((double)120410.63551274998463) ) ;
+	CHECK_EVAL( "DB(1000000; 100000; 6; 5; 7)", Value((double)81999.642784182738978) ) ;
+	CHECK_EVAL( "DB(1000000; 100000; 6; 6; 7)", Value((double)55841.756736028459272) ) ;
+	CHECK_EVAL( "DB(1000000; 100000; 6; 7; 7)", Value((double)15845.09847384807108) ) ;
+}
+
 // Double declining balance depreciation
 // DDB(cost, salvage, life, period, factor)
 void FinancialFunctionsTest::testDDB()

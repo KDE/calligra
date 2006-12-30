@@ -33,6 +33,7 @@ class FinancialFunctionsTest: public QObject
     Q_OBJECT
 
 private slots:
+  void testDB();
   void testDDB();
   void testEURO();
 
