@@ -557,6 +557,9 @@ KarbonPart::initConfig()
 {
 	KConfig* config = KarbonPart::instance()->config();
 
+    // disable grid by default
+    gridData().setShowGrid( false );
+
 	if( config->hasGroup( "Interface" ) )
 	{
 		config->setGroup( "Interface" );
@@ -591,7 +594,6 @@ KarbonPart::initConfig()
 		//m_doc.grid().setSnap( snapX, snapY );
 		QColor color = config->readEntry<QColor>( "Color", defGrid.gridColor() );
 		gridData().setGridColor( color );
-        gridData().setShowGrid( false );
 	}
 	if( undos != -1 )
 		setUndoRedoLimit( undos );
