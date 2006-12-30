@@ -3,8 +3,7 @@ include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOPAINTER_INCLUDES} ${
 set(karboncommands_SRCS
     vbooleancmd.cc 
     vclipartcmd.cc
-    vclosepathcmd.cc 
-    vcommand.cc 
+    vcommand.cc
     vfillcmd.cc 
     vflattencmd.cc 
     vlayercmd.cc

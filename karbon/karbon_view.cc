@@ -79,7 +79,6 @@
 
 // Commands.
 #include "vclipartcmd.h"
-#include "vclosepathcmd.h"
 #include "vfillcmd.h"
 #include "vstrokecmd.h"
 #include "vtransformcmd.h"
@@ -836,9 +835,9 @@ KarbonView::ungroupSelection()
 void
 KarbonView::closePath()
 {
-	debugView("KarbonView::closePath()");
+    debugView("KarbonView::closePath()");
 
-	part()->addCommand( new VClosePathCmd( &part()->document() ), true );
+    // TODO add the new close path command here
 }
 
 void
