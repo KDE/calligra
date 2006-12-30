@@ -48,12 +48,12 @@ public:
     explicit AutoFillSequenceItem( double _d );
     explicit AutoFillSequenceItem( const QString &_str );
 
-    bool getDelta( AutoFillSequenceItem *_seq, double &delta );
+    double delta( AutoFillSequenceItem *_seq, bool *ok = 0 ) const;
 
     QString getSuccessor( int _no, double _delta );
     QString getPredecessor( int _no, double _delta );
 
-    Type getType()const { return m_Type; }
+    Type type()const { return m_Type; }
     int getIValue()const { return m_IValue; }
     double getDValue()const { return m_DValue; }
     QString getString()const { return m_String; }
@@ -100,16 +100,12 @@ public:
     ~AutoFillDeltaSequence();
 
     bool isOk()const { return m_ok; }
-
-    bool equals( AutoFillDeltaSequence *_delta );
-
-    QVector<double>* getSequence() { return m_sequence; }
-
-    double getItemDelta( int _pos );
+    bool operator==( const AutoFillDeltaSequence& o ) const;
+    double deltaItem( int _pos ) const;
 
 protected:
     bool m_ok;
-    QVector<double>* m_sequence;
+    QVector<double> m_sequence;
 };
 
 } // namespace KSpread

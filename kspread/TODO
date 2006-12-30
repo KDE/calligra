@@ -191,6 +191,7 @@ Things not in bugzilla
     - DeleteRow								done
     - Insert cells							done
     - Delete cells							done
+    - Autofill sequence							----
 
   + Rich text in cells.						      1 ----
 	Use KoText.

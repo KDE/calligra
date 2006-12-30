@@ -59,65 +59,49 @@ QStringList *AutoFillSequenceItem::other = 0;
  **********************************************************************************/
 
 AutoFillDeltaSequence::AutoFillDeltaSequence( AutoFillSequence *_first, AutoFillSequence *_next )
-  : m_ok(true),
-    m_sequence(0)
+    : m_ok( true )
 {
-  if ( _first->count() != _next->count() )
-  {
-    m_ok = false;
-    return;
-  }
-
-  m_sequence = new QVector<double> ( _first->count() );
-
-  int index = 0;
-  AutoFillSequenceItem *item = _first->value( index );
-  AutoFillSequenceItem *item2 = _next->value( index );
-  int i = 0;
-  // for( item = _first->value( index ); item != 0 && item2 != 0L; item = _first->value( ++index ) );
-  for ( i = 0; i < _first->count(); i++ )
-  {
-    double d;
-    if ( !item->getDelta( item2, d ) )
-      {
+    if ( _first->count() != _next->count() )
+    {
         m_ok = false;
         return;
-      }
-    m_sequence->insert( i++, d );
-    item2 = _next->value( ++index );
-    item = _first->value( ++index );
-  }
+    }
+
+    m_sequence = QVector<double>( _first->count() );
+
+    for ( int i = 0; i < _first->count(); ++i )
+    {
+        double delta = _first->value( i )->delta( _next->value( i ), &m_ok );
+        if ( !m_ok )
+            return;
+        m_sequence.insert( i++, delta ); // FIXME Stefan: Why the extra increment here?
+    }
 }
 
 AutoFillDeltaSequence::~AutoFillDeltaSequence()
 {
-    delete m_sequence;
 }
 
-bool AutoFillDeltaSequence::equals( AutoFillDeltaSequence *_delta )
+bool AutoFillDeltaSequence::operator==( const AutoFillDeltaSequence& o ) const
 {
-  if ( m_sequence == 0 )
-    return false;
-  if ( _delta->getSequence() == 0 )
-    return false;
-  if ( m_sequence->size() != _delta->getSequence()->size() )
-    return false;
+    if ( m_sequence.isEmpty() || o.m_sequence.isEmpty() )
+        return false;
+    if ( m_sequence.size() != o.m_sequence.size() )
+        return false;
 
-  for ( int i = 0; i < m_sequence->size(); i++ )
-  {
-    if ( m_sequence->at( i ) != _delta->getSequence()->at( i ) )
-      return false;
-  }
-
-  return true;
+    for ( int i = 0; i < m_sequence.size(); i++ )
+    {
+        if ( m_sequence.at( i ) != o.m_sequence.at( i ) )
+            return false;
+    }
+    return true;
 }
 
-double AutoFillDeltaSequence::getItemDelta( int _pos )
+double AutoFillDeltaSequence::deltaItem( int _pos ) const
 {
-  if ( m_sequence == 0 )
-    return 0.0;
-
-  return m_sequence->at( _pos );
+    if ( m_sequence.isEmpty() || !( 0 <= _pos < m_sequence.count() ) )
+        return 0.0;
+    return m_sequence.at( _pos );
 }
 
 /**********************************************************************************
@@ -209,31 +193,31 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
         other=new QStringList(config->readEntry("Other list", QStringList()));
       }
 
-    if ( month->indexOf( _str ) != -1 )
+    if ( month->contains( _str ) )
     {
         m_Type = MONTH;
         return;
     }
 
-    if ( shortMonth->indexOf( _str ) != -1 )
+    if ( shortMonth->contains( _str ) )
     {
         m_Type = SHORTMONTH;
         return;
     }
 
-    if ( day->indexOf( _str ) != -1 )
+    if ( day->contains( _str ) )
     {
       m_Type = DAY;
       return;
     }
 
-    if ( shortDay->indexOf( _str ) != -1 )
+    if ( shortDay->contains( _str ) )
     {
       m_Type = SHORTDAY;
       return;
     }
 
-    if( other->indexOf(_str) != -1 )
+    if( other->contains( _str ) )
       {
 	m_Type = OTHER;
 	int index = other->indexOf(_str);
@@ -248,96 +232,91 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
         m_Type = FORMULA;
 }
 
-bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
+double AutoFillSequenceItem::delta( AutoFillSequenceItem *seq, bool *ok ) const
 {
-    if ( seq->getType() != m_Type )
+    if ( seq->type() != m_Type )
         return false;
+
+    if ( ok )
+        *ok = true;
 
     switch( m_Type )
     {
     case INTEGER:
-        _delta = (double)( seq->getIValue() - m_IValue );
-        return true;
+        return static_cast<double>( seq->getIValue() - m_IValue );
     case FLOAT:
-        _delta = seq->getDValue() - m_DValue;
-        return true;
+        return seq->getDValue() - m_DValue;
     case FORMULA:
     case STRING:
-        if ( m_String == seq->getString() )
-        {
-            _delta = 0.0;
-            return true;
-        }
-        return false;
+        if ( ok )
+            *ok = ( m_String == seq->getString() );
+        return 0.0;
     case MONTH:
-        {
-            int i = month->indexOf( m_String );
-            int j = month->indexOf( seq->getString() );
-            int k = j;
+    {
+        int i = month->indexOf( m_String );
+        int j = month->indexOf( seq->getString() );
+        int k = j;
 
-            if ( j + 1 == i )
-                _delta = -1.0;
-            else
-                _delta = ( double )( k - i );
-            return true;
-        }
-
+        if ( j + 1 == i )
+            return -1.0;
+        else
+            return static_cast<double>( k - i );
+    }
     case SHORTMONTH:
-        {
-            int i = shortMonth->indexOf( m_String );
-            int j = shortMonth->indexOf( seq->getString() );
-            int k = j;
+    {
+        int i = shortMonth->indexOf( m_String );
+        int j = shortMonth->indexOf( seq->getString() );
+        int k = j;
 
-            if ( j + 1 == i )
-                _delta = -1.0;
-            else
-                _delta = ( double )( k - i );
-            return true;
-        }
-
+        if ( j + 1 == i )
+            return -1.0;
+        else
+            return static_cast<double>( k - i );
+    }
     case DAY:
+    {
+        int i = day->indexOf( m_String );
+        int j = day->indexOf( seq->getString() );
+        int k = j;
+
+        if ( j + 1 == i )
+            return -1.0;
+        else
         {
-            int i = day->indexOf( m_String );
-            int j = day->indexOf( seq->getString() );
-            int k = j;
-
-            if ( j + 1 == i )
-                _delta = -1.0;
-            else
-                _delta = ( double )( k - i );
-            kDebug() << m_String << " i: " << i << " j: " << j << " k: " << k << " delta: " << _delta << endl;
-            return true;
+            kDebug() << m_String << " i: " << i << " j: " << j << " k: " << k << " delta: " << k-i << endl;
+            return static_cast<double>( k - i );
         }
-
+    }
     case SHORTDAY:
-        {
-            int i = shortDay->indexOf( m_String );
-            int j = shortDay->indexOf( seq->getString() );
-            int k = j;
+    {
+        int i = shortDay->indexOf( m_String );
+        int j = shortDay->indexOf( seq->getString() );
+        int k = j;
 
-            if ( j + 1 == i )
-                _delta = -1.0;
-            else
-                _delta = ( double )( k - i );
-            return true;
-        }
+        if ( j + 1 == i )
+            return -1.0;
+        else
+            return static_cast<double>( k - i );
+    }
     case OTHER:
-      {
-	if( m_OtherEnd!= seq->getIOtherEnd() || m_OtherBegin!= seq->getIOtherBegin())
-	  return false;
-	int i = other->indexOf( m_String );
-	int j = other->indexOf( seq->getString() );
-	int k = j;
-	if ( j < i )
-	  k += (m_OtherEnd - m_OtherBegin - 1);
-	/*if ( j + 1 == i )
-	  _delta = -1.0;
-	  else*/
-	  _delta = ( double )( k - i );
-	return true;
-      }
-     default:
-      return false;
+    {
+        if ( ok )
+            *ok = ( m_OtherEnd!= seq->getIOtherEnd() || m_OtherBegin!= seq->getIOtherBegin() );
+
+        int i = other->indexOf( m_String );
+        int j = other->indexOf( seq->getString() );
+        int k = j;
+        if ( j < i )
+            k += (m_OtherEnd - m_OtherBegin - 1);
+/*        if ( j + 1 == i )
+            return -1.0;
+        else*/
+            return static_cast<double>( k - i );
+    }
+    default:
+        if ( ok )
+            *ok = false;
+        return 0.0;
     }
 }
 
@@ -521,11 +500,7 @@ bool AutoFillSequence::matches( AutoFillSequence* _seq, AutoFillDeltaSequence *_
     AutoFillDeltaSequence delta( this, _seq );
     if ( !delta.isOk() )
         return false;
-
-    if ( delta.equals( _delta ) )
-         return true;
-
-    return false;
+    return ( delta == *_delta );
 }
 
 void AutoFillSequence::fillCell( Cell *src, Cell *dest, AutoFillDeltaSequence *delta, int _block, bool down )
@@ -533,7 +508,7 @@ void AutoFillSequence::fillCell( Cell *src, Cell *dest, AutoFillDeltaSequence *d
     QString erg = "";
 
     // Special handling for formulas
-    if ( sequence.value(0) != 0 && sequence.first()->getType() == AutoFillSequenceItem::FORMULA )
+    if ( sequence.value(0) != 0 && sequence.first()->type() == AutoFillSequenceItem::FORMULA )
     {
         QString f = dest->decodeFormula( sequence.first()->getString() );
         dest->setCellText( f );
@@ -545,12 +520,12 @@ void AutoFillSequence::fillCell( Cell *src, Cell *dest, AutoFillDeltaSequence *d
     if (down)
     {
       foreach ( AutoFillSequenceItem* item, sequence )
-        erg += item->getSuccessor( _block, delta->getItemDelta( i++ ) );
+        erg += item->getSuccessor( _block, delta->deltaItem( i++ ) );
     }
     else
     {
       foreach ( AutoFillSequenceItem* item, sequence )
-        erg += item->getPredecessor( _block, delta->getItemDelta( i++ ) );
+        erg += item->getPredecessor( _block, delta->deltaItem( i++ ) );
     }
 
     dest->setCellText( erg );
@@ -708,7 +683,6 @@ void Sheet::fillSequence( const QList<Cell*>& _srcList,
     }
 
     doc()->emitEndOperation();
-
 }
 
 QVariant getDiff( const Value& value1, const Value& value2  , AutoFillSequenceItem::Type type  )
