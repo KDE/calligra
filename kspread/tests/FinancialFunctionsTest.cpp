@@ -103,5 +103,22 @@ void FinancialFunctionsTest::testEURO()
   CHECK_EVAL( "EURO(\"NOMANSLAND\")", Value::errorVALUE() );
 }
 
+// Straight-line depreciation
+// SLN(cost, salvage, life)
+void FinancialFunctionsTest::testSLN()
+{
+	// Excel example: http://office.microsoft.com/en-us/excel/HP100623811033.aspx
+	CHECK_EVAL( "SLN(30000; 7500; 10)", Value((double)2250.0) ) ;
+}
+
+// Sum-of-years' digits depreciation
+// SYD(cost, salvage, life, period)
+void FinancialFunctionsTest::testSYD()
+{
+	// Excel example: http://office.microsoft.com/en-us/excel/HP100623821033.aspx
+	CHECK_EVAL( "SYD(30000; 7500; 10; 1)", Value((double)4090.9090909090909918) ) ;
+	CHECK_EVAL( "SYD(30000; 7500; 10; 10)", Value((double)409.09090909090906507) ) ;
+}
+
 QTEST_KDEMAIN(FinancialFunctionsTest, GUI)
 #include "FinancialFunctionsTest.moc"
