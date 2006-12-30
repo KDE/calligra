@@ -35,7 +35,7 @@ class KFormulaPartViewAdaptor: public QDBusAbstractAdaptor
   Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.formula.view")
 
 public:
-   KFormulaPartViewAdaptor( KFormulaPartView *view_ );
+   explicit KFormulaPartViewAdaptor( KFormulaPartView *view_ );
    
 public Q_SLOTS: // METHODS
     void addThinSpace();

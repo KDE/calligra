@@ -49,7 +49,7 @@ class KFormulaWidget : public QWidget {
     Q_OBJECT
 
 public:
-    KFormulaWidget( KFormula::Container*, QWidget* parent=0, const char* name=0, Qt::WFlags f=0 );
+    explicit KFormulaWidget( KFormula::Container*, QWidget* parent=0, const char* name=0, Qt::WFlags f=0 );
     ~KFormulaWidget();
 
 

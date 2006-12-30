@@ -35,7 +35,7 @@ class KFConfig : public KPageDialog
 {
     Q_OBJECT
 public:
-    KFConfig( KFormulaPartView* parent );
+    explicit KFConfig( KFormulaPartView* parent );
 
 public slots:
     void slotApply();

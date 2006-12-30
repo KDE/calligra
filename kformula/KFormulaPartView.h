@@ -48,7 +48,7 @@ public:
      * @param _doc a pointer to the associated KFormulaDoc
      * @param _parent a pointer to the view's parent
      */
-    KFormulaPartView( KFormulaPartDocument* _doc, QWidget* _parent=0 );
+    explicit KFormulaPartView( KFormulaPartDocument* _doc, QWidget* _parent=0 );
 
     /// A virtual destructor
     virtual ~KFormulaPartView();

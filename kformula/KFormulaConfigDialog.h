@@ -33,7 +33,7 @@ class KFormulaConfigDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    KFormulaConfigDialog( KFormulaPartView* parent );
+    explicit KFormulaConfigDialog( KFormulaPartView* parent );
 
 public slots:
     void slotApply();
