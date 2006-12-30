@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,9 +26,9 @@
 
 KoEllipseShape::KoEllipseShape()
 : m_startAngle( 0 )
-, m_endAngle( 0 )    
-, m_kindAngle( M_PI )    
-, m_type( Arc )    
+, m_endAngle( 0 )
+, m_kindAngle( M_PI )
+, m_type( Arc )
 {
     m_handles.push_back( QPointF( 100, 50 ) );
     m_handles.push_back( QPointF( 100, 50 ) );
@@ -122,6 +123,7 @@ void KoEllipseShape::moveHandleAction( int handleId, const QPointF & point, Qt::
 
 void KoEllipseShape::updatePath( const QSizeF &size )
 {
+    Q_UNUSED( size );
     QPointF startpoint( m_handles[0] );
 
     QPointF curvePoints[12];
@@ -198,11 +200,47 @@ void KoEllipseShape::updateKindHandle()
        case Arc:
            m_handles[2] = m_center + QPointF( cos( m_kindAngle ) * m_radii.x(), -sin( m_kindAngle ) * m_radii.y() );
            break;
-       case Pie:    
+       case Pie:
            m_handles[2] = m_center;
            break;
-       case Chord:    
+       case Chord:
            m_handles[2] = ( m_handles[0] + m_handles[1] ) / 2.0;
            break;
    }
+}
+
+void KoEllipseShape::setType( KoEllipseType type )
+{
+    m_type = type;
+    updateKindHandle();
+    updatePath( size() );
+}
+
+KoEllipseShape::KoEllipseType KoEllipseShape::type() const
+{
+    return m_type;
+}
+
+void KoEllipseShape::setStartAngle( double angle )
+{
+    m_startAngle = angle;
+    updateKindHandle();
+    updatePath( size() );
+}
+
+double KoEllipseShape::startAngle() const
+{
+    return m_startAngle;
+}
+
+void KoEllipseShape::setEndAngle( double angle )
+{
+    m_endAngle = angle;
+    updateKindHandle();
+    updatePath( size() );
+}
+
+double KoEllipseShape::endAngle() const
+{
+    return m_endAngle;
 }

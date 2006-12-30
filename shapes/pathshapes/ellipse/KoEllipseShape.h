@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,30 +26,61 @@
 #define KoEllipseShapeId "KoEllipseShape"
 
 /**
- * This class adds support for arc, pie, chord, circle and ellipse 
- * shapes.
+ * This class adds support for arc, pie, chord, circle and ellipse
+ * shapes. The ellipse/circle radii are defined by the actual size
+ * of the ellipse shape which can be changed with the resize
+ * method.
  */
 class KoEllipseShape : public KoParameterShape
 {
-public:    
+public:
+    /// the possible ellipse types
+    enum KoEllipseType
+    {
+        Arc = 0,   ///< an ellipse arc
+        Pie = 1,   ///< an ellipse pie
+        Chord = 2  ///< an ellipse chord
+    };
+
     KoEllipseShape();
     ~KoEllipseShape();
 
     void resize( const QSizeF &newSize );
     virtual QPointF normalize();
 
-protected:    
+    /**
+     * Sets the type of the ellipse.
+     * @param type the new ellipse type
+     */
+    void setType( KoEllipseType type );
+
+    /// Returns the actual ellipse type
+    KoEllipseType type() const;
+
+    /**
+     * Sets the start angle of the ellipse.
+     * @param angle the new start angle in degree
+     */
+    void setStartAngle( double angle );
+
+    /// Returns the actual ellipse start angle in degree
+    double startAngle() const;
+
+    /**
+     * Sets the end angle of the ellipse.
+     * @param angle the new end angle in degree
+     */
+    void setEndAngle( double angle );
+
+    /// Returns the actual ellipse end angle in degree
+    double endAngle() const;
+
+protected:
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     void updatePath( const QSizeF &size );
     void createPath( const QSizeF &size );
 
-private:    
-    enum KoEllipseType
-    {
-        Arc = 0,
-        Pie = 1,
-        Chord = 2
-    };
+private:
 
     void updateKindHandle();
 
@@ -62,6 +94,7 @@ private:
     QPointF m_center;
     // the radii of the ellips
     QPointF m_radii;
+    // the actual ellipse type
     KoEllipseType m_type;
 
     KoSubpath m_points;
