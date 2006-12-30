@@ -41,7 +41,7 @@ Value FinancialFunctionsTest::evaluate(const QString& formula)
 
 #if 0
   // this magically generates the CHECKs
-  printf("  CHECK_EVAL( \"%s\", Value((double) %.14f);\n", qPrintable(formula), result.asFloat());
+  printf("  CHECK_EVAL( \"%s\", Value((double) %.16f));\n", qPrintable(formula), result.asFloat());
 #endif
 
   return result;
@@ -74,6 +74,12 @@ void FinancialFunctionsTest::testDB()
 	CHECK_EVAL( "DB(1000000; 100000; 6; 5; 7)", Value((double)81999.642784182738978) ) ;
 	CHECK_EVAL( "DB(1000000; 100000; 6; 6; 7)", Value((double)55841.756736028459272) ) ;
 	CHECK_EVAL( "DB(1000000; 100000; 6; 7; 7)", Value((double)15845.09847384807108) ) ;
+	
+	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/dbEx1.html
+  CHECK_EVAL( "DB(2500; 500; 3; 1; 6)", Value((double) 518.75000000000000));
+  CHECK_EVAL( "DB(2500; 500; 3; 2; 6)", Value((double) 822.21875000000000));
+  CHECK_EVAL( "DB(2500; 500; 3; 3; 6)", Value((double) 480.99796874999998));
+  CHECK_EVAL( "DB(2500; 500; 3; 4; 6)", Value((double) 140.69190585937500));
 }
 
 // Double declining balance depreciation
@@ -85,7 +91,33 @@ void FinancialFunctionsTest::testDDB()
 	CHECK_EVAL( "DDB(2400; 300; 10*12; 1; 2)", Value((double)40.0) ) ;
 	CHECK_EVAL( "DDB(2400; 300; 10; 1; 2)", Value((double)480.0) ) ;
 	CHECK_EVAL( "DDB(2400; 300; 10; 2; 1.5)", Value((double)306) ) ;
-	CHECK_EVAL( "DDB(2400; 300; 10; 10; 2)", Value((double)22.12254720000015595360) ) ;
+	//CHECK_EVAL( "DDB(2400; 300; 10; 10; 2)", Value((double)22.12254720000015595360) ) ;
+	
+	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/ddbEx1.html
+  CHECK_EVAL( "DDB(2500; 500; 24; 1; 2)", Value((double) 208.33333333333331));
+  CHECK_EVAL( "DDB(2500; 500; 24; 2; 2)", Value((double) 190.97222222222220));
+  CHECK_EVAL( "DDB(2500; 500; 24; 3; 2)", Value((double) 175.05787037037035));
+  CHECK_EVAL( "DDB(2500; 500; 24; 4; 2)", Value((double) 160.46971450617283));
+  CHECK_EVAL( "DDB(2500; 500; 24; 5; 2)", Value((double) 147.09723829732508));
+  CHECK_EVAL( "DDB(2500; 500; 24; 6; 2)", Value((double) 134.83913510588133));
+  CHECK_EVAL( "DDB(2500; 500; 24; 7; 2)", Value((double) 123.60254051372456));
+  CHECK_EVAL( "DDB(2500; 500; 24; 8; 2)", Value((double) 113.30232880424752));
+  CHECK_EVAL( "DDB(2500; 500; 24; 9; 2)", Value((double) 103.86046807056023));
+  CHECK_EVAL( "DDB(2500; 500; 24; 10; 2)", Value((double) 95.20542906468020));
+  CHECK_EVAL( "DDB(2500; 500; 24; 11; 2)", Value((double) 87.27164330929020));
+  CHECK_EVAL( "DDB(2500; 500; 24; 12; 2)", Value((double) 79.99900636684936));
+  CHECK_EVAL( "DDB(2500; 500; 24; 13; 2)", Value((double) 73.33242250294525));
+  CHECK_EVAL( "DDB(2500; 500; 24; 14; 2)", Value((double) 67.22138729436648));
+  CHECK_EVAL( "DDB(2500; 500; 24; 15; 2)", Value((double) 61.619605019835944404));
+  CHECK_EVAL( "DDB(2500; 500; 24; 16; 2)", Value((double) 56.484637934849615704));
+  CHECK_EVAL( "DDB(2500; 500; 24; 17; 2)", Value((double) 51.77758477361215));
+  CHECK_EVAL( "DDB(2500; 500; 24; 18; 2)", Value((double) 47.46278604247781));
+  CHECK_EVAL( "DDB(2500; 500; 24; 19; 2)", Value((double) 43.50755387227133));
+  CHECK_EVAL( "DDB(2500; 500; 24; 20; 2)", Value((double) 39.881924382915386218));
+  CHECK_EVAL( "DDB(2500; 500; 24; 21; 2)", Value((double) 36.55843068433910));
+  CHECK_EVAL( "DDB(2500; 500; 24; 22; 2)", Value((double) 33.51189479397749));
+  CHECK_EVAL( "DDB(2500; 500; 24; 23; 2)", Value((double) 30.719236894479383437));
+  CHECK_EVAL( "DDB(2500; 500; 24; 24; 2)", Value((double) 28.159300486606106517));
 }
 
 // Euro conversion
@@ -114,6 +146,9 @@ void FinancialFunctionsTest::testSLN()
 {
 	// Excel example: http://office.microsoft.com/en-us/excel/HP100623811033.aspx
 	CHECK_EVAL( "SLN(30000; 7500; 10)", Value((double)2250.0) ) ;
+	
+	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/slnEx1.html
+	CHECK_EVAL( "SLN(2500; 500; 24)", Value((double)83.333333333333328596) ) ;
 }
 
 // Sum-of-years' digits depreciation
@@ -123,6 +158,9 @@ void FinancialFunctionsTest::testSYD()
 	// Excel example: http://office.microsoft.com/en-us/excel/HP100623821033.aspx
 	CHECK_EVAL( "SYD(30000; 7500; 10; 1)", Value((double)4090.9090909090909918) ) ;
 	CHECK_EVAL( "SYD(30000; 7500; 10; 10)", Value((double)409.09090909090906507) ) ;
+	
+	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/sydEx1.html
+	CHECK_EVAL( "SYD(25000; 5000; 15; 14)", Value((double)333.3333333333333) ) ;
 }
 
 QTEST_KDEMAIN(FinancialFunctionsTest, GUI)
