@@ -140,6 +140,17 @@ void FinancialFunctionsTest::testEURO()
   CHECK_EVAL( "EURO(\"NOMANSLAND\")", Value::errorVALUE() );
 }
 
+// Level-coupon bond
+// LEVEL_COUPON(faceValue; couponRate; couponsPerYear; years; marketRate)
+void FinancialFunctionsTest::testLEVELCOUPON()
+{
+  CHECK_EVAL( "LEVEL_COUPON(1000; .13; 1; 4; .1)", Value((double) 1095.0959633904788006));
+  CHECK_EVAL( "LEVEL_COUPON(1000; .13; 2; 4; .1)", Value((double) 1096.9481913913939479));
+  CHECK_EVAL( "LEVEL_COUPON(1000; .10; 1; 10; .25)", Value((double) 464.4245094400000085));
+  CHECK_EVAL( "LEVEL_COUPON(1000; .12; 1; 10; .25)", Value((double) 535.8345748479999884));
+  CHECK_EVAL( "LEVEL_COUPON(1000; .20; 1; 10; .25)", Value((double) 821.4748364800000218));
+}
+
 // Yearly nominal interest rate
 // NOMINAL(effectiveRate, periods)
 void FinancialFunctionsTest::testNOMINAL()
@@ -181,6 +192,16 @@ void FinancialFunctionsTest::testSYD()
 	
 	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/sydEx1.html
 	CHECK_EVAL( "SYD(25000; 5000; 15; 14)", Value((double)333.3333333333333) ) ;
+}
+
+// Zero-coupon (pure discount) bond
+// ZERO_COUPON(faceValue; rate; years)
+void FinancialFunctionsTest::testZEROCOUPON()
+{
+  CHECK_EVAL( "ZERO_COUPON(1000;.1;20)", Value((double) 148.6436280241434531));
+  CHECK_EVAL( "ZERO_COUPON(1000;.2;20)", Value((double) 26.0840533045888456));
+  CHECK_EVAL( "ZERO_COUPON(1000;.15/12;10)", Value((double) 883.1809261539680165));
+  CHECK_EVAL( "ZERO_COUPON(1000;.25;1)", Value((double) 800));
 }
 
 QTEST_KDEMAIN(FinancialFunctionsTest, GUI)

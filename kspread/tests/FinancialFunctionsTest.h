@@ -36,9 +36,11 @@ private slots:
   void testDB();
   void testDDB();
   void testEURO();
+  void testLEVELCOUPON();
   void testNOMINAL();
   void testSLN();
   void testSYD();
+  void testZEROCOUPON();
 
 private:
   Value evaluate(const QString&);
