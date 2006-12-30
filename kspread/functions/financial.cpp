@@ -851,10 +851,17 @@ Value func_nominal (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value effective = args[0];
   Value periods = args[1];
-
-  if (calc->isZero (periods)) // Check null
+  
+  // sentinel checks
+  if (calc->isZero (periods))
     return Value::errorDIV0();
-
+  if (!calc->greater (periods, Value(0.0)))
+    return Value::errorVALUE();
+  if (calc->isZero (effective))
+    return Value::errorVALUE();
+  if(!calc->greater (effective, Value(0.0)))
+    return Value::errorVALUE();
+    
   // pw = pow (effective + 1, 1 / periods)
   // result = periods * (pw - 1);
   Value pw;

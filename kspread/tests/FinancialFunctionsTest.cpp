@@ -140,14 +140,24 @@ void FinancialFunctionsTest::testEURO()
   CHECK_EVAL( "EURO(\"NOMANSLAND\")", Value::errorVALUE() );
 }
 
+// Yearly nominal interest rate
+// NOMINAL(effectiveRate, periods)
 void FinancialFunctionsTest::testNOMINAL()
 {
-  CHECK_EVAL( "NOMINAL(13.5%;12)", Value((double) 0.1273031669590416));
-  CHECK_EVAL( "NOMINAL(13.5%;12)", Value((double) 0.1273031669590416));
-  CHECK_EVAL( "NOMINAL(25%;12)", Value((double) 0.2252311814580734));
-  CHECK_EVAL( "NOMINAL(25%;4)", Value((double) 0.2294850537622564));
-  CHECK_EVAL( "NOMINAL(20%;12)", Value((double) 0.1837136459967743));
-  CHECK_EVAL( "NOMINAL(10%;12)", Value((double) 0.0956896851468452));
+  CHECK_EVAL( "NOMINAL(13.5%; 12)", Value((double) 0.1273031669590416));
+  CHECK_EVAL( "NOMINAL(13.5%; 12)", Value((double) 0.1273031669590416));
+  CHECK_EVAL( "NOMINAL(25%; 12)", Value((double) 0.2252311814580734));
+  CHECK_EVAL( "NOMINAL(25%; 4)", Value((double) 0.2294850537622564));
+  CHECK_EVAL( "NOMINAL(20%; 12)", Value((double) 0.1837136459967743));
+  CHECK_EVAL( "NOMINAL(10%; 12)", Value((double) 0.0956896851468452));
+  
+  // rate must be positive
+  CHECK_EVAL( "NOMINAL(0; 12)", Value::errorVALUE());
+
+  // periods must be positive
+  CHECK_EVAL( "NOMINAL(10%; 0)", Value::errorDIV0());
+  CHECK_EVAL( "NOMINAL(10%; -1)", Value::errorVALUE());
+  CHECK_EVAL( "NOMINAL(10%; -2)", Value::errorVALUE());
 }
 
 // Straight-line depreciation
