@@ -32,7 +32,7 @@ class ParserNode;
  */
 class FormulaStringParser {
 public:
-    FormulaStringParser( const KFormula::SymbolTable& symbolTable, QString formula );
+    FormulaStringParser( const KFormula::SymbolTable& symbolTable, const QString& formula );
     ~FormulaStringParser();
 
     QDomDocument parse();
@@ -49,7 +49,7 @@ private:
     ParserNode* parseTerm();
     ParserNode* parsePower();
     ParserNode* parsePrimary();
-    void expect( TokenType type, QString msg );
+    void expect( TokenType type, const QString& msg );
 
     QString nextToken();
     bool eol() { return m_formula.length() == pos; }
@@ -57,7 +57,7 @@ private:
     void readNumber();
     void readDigits();
 
-    void error( QString err );
+    void error( const QString& err );
     QStringList m_errorList;
 
     const KFormula::SymbolTable& m_symbolTable;

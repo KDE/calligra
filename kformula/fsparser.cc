@@ -46,7 +46,7 @@ int ParserNode::debugCount = 0;
 
 class PrimaryNode : public ParserNode {
 public:
-    PrimaryNode( QString primary ) : m_primary( primary ), m_functionName( false ) {}
+    PrimaryNode( const QString& primary ) : m_primary( primary ), m_functionName( false ) {}
     //virtual void output( ostream& stream ) { stream << "PrimaryNode {" << m_primary << "}" << endl; }
     virtual void buildXML( QDomDocument& doc, QDomElement element );
     virtual bool isSimple() { return true; }
@@ -100,7 +100,7 @@ void UnaryMinus::buildXML( QDomDocument& doc, QDomElement element )
 
 class OperatorNode : public ParserNode {
 public:
-    OperatorNode( QString type, ParserNode* lhs, ParserNode* rhs )
+    OperatorNode( const QString& type, ParserNode* lhs, ParserNode* rhs )
         : m_type( type ), m_lhs( lhs ), m_rhs( rhs ) {}
     ~OperatorNode() { delete m_rhs; delete m_lhs; }
 //     virtual void output( ostream& stream ) {
@@ -115,7 +115,7 @@ protected:
 
 class AssignNode : public OperatorNode {
 public:
-    AssignNode( QString type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
+    AssignNode( const QString& type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
     virtual void buildXML( QDomDocument& doc, QDomElement element );
 };
 
@@ -130,7 +130,7 @@ void AssignNode::buildXML( QDomDocument& doc, QDomElement element )
 
 class ExprNode : public OperatorNode {
 public:
-    ExprNode( QString type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
+    ExprNode( const QString& type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
     virtual void buildXML( QDomDocument& doc, QDomElement element );
 };
 
@@ -145,7 +145,7 @@ void ExprNode::buildXML( QDomDocument& doc, QDomElement element )
 
 class TermNode : public OperatorNode {
 public:
-    TermNode( QString type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
+    TermNode( const QString& type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
     virtual void buildXML( QDomDocument& doc, QDomElement element );
 };
 
@@ -177,7 +177,7 @@ void TermNode::buildXML( QDomDocument& doc, QDomElement element )
 
 class PowerNode : public OperatorNode {
 public:
-    PowerNode( QString type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
+    PowerNode( const QString& type, ParserNode* lhs, ParserNode* rhs ) : OperatorNode( type, lhs, rhs ) {}
     virtual void buildXML( QDomDocument& doc, QDomElement element );
 };
 
@@ -427,7 +427,7 @@ void MatrixNode::buildXML( QDomDocument& doc, QDomElement element )
 // }
 
 
-FormulaStringParser::FormulaStringParser( const KFormula::SymbolTable& symbolTable, QString formula )
+FormulaStringParser::FormulaStringParser( const KFormula::SymbolTable& symbolTable, const QString& formula )
     : m_symbolTable( symbolTable ), m_formula( formula ),
       pos( 0 ), line( 1 ), column( 1 ), m_newlineIsSpace( true )
 {
@@ -633,7 +633,7 @@ ParserNode* FormulaStringParser::parsePrimary()
     }
 }
 
-void FormulaStringParser::expect( TokenType type, QString msg )
+void FormulaStringParser::expect( TokenType type, const QString& msg )
 {
     if ( currentType == type ) {
         nextToken();
