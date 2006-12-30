@@ -745,7 +745,7 @@
       </Parameter>
       <Help>
 	<Text>The LEVEL_COUPON() function calculates the value of a level-coupon bond. For example: if the interest rate is 10%, a $1000 bond with semi-annual coupons at a rate of 13% that matures in 4 years is worth LEVEL_COUPON(1000;.13;2;4;.1) or $1096.95.</Text>
-	<Syntax>LEVEL_COUPON(face value;rate;years)</Syntax>
+	<Syntax>LEVEL_COUPON(face value;coupon rate;coupons per year;years;market rate)</Syntax>
 	<Example>LEVEL_COUPON(1000;.13;2;4;.1) equals 1096.95</Example>
       </Help>
     </Function>
