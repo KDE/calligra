@@ -41,7 +41,7 @@ Value FinancialFunctionsTest::evaluate(const QString& formula)
 
 #if 0
   // this magically generates the CHECKs
-  printf("  CHECK_EVAL( \"%s\", Value((double) %.16f));\n", qPrintable(formula), result.asFloat());
+  printf("  CHECK_EVAL( \"%s\", Value((double) %.16f) );\n", qPrintable(formula), result.asFloat());
 #endif
 
   return result;
@@ -180,6 +180,9 @@ void FinancialFunctionsTest::testSLN()
 	
 	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/slnEx1.html
 	CHECK_EVAL( "SLN(2500; 500; 24)", Value((double)83.333333333333328596) ) ;
+	
+	// http://www.gnome.org/projects/gnumeric/doc/gnumeric-SLN.shtml
+	CHECK_EVAL( "SLN(10000; 700; 10)", Value((double)930) );
 }
 
 // Sum-of-years' digits depreciation
@@ -192,6 +195,9 @@ void FinancialFunctionsTest::testSYD()
 	
 	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/sydEx1.html
 	CHECK_EVAL( "SYD(25000; 5000; 15; 14)", Value((double)333.3333333333333) ) ;
+	
+	// http://www.gnome.org/projects/gnumeric/doc/gnumeric-SYD.shtml
+	CHECK_EVAL( "SYD(5000; 200; 5; 2)", Value((double)1280) );
 }
 
 // Zero-coupon (pure discount) bond
