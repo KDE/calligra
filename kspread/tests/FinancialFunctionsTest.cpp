@@ -127,6 +127,7 @@ void FinancialFunctionsTest::testEURO()
   CHECK_EVAL( "EURO(\"ATS\")", Value(13.7603) );
   CHECK_EVAL( "EURO(\"BEF\")", Value(40.3399) );
   CHECK_EVAL( "EURO(\"DEM\")", Value(1.95583) );
+  CHECK_EVAL( "EURO(\"EUR\")", Value(1.0) );
   CHECK_EVAL( "EURO(\"ESP\")", Value(166.386) );
   CHECK_EVAL( "EURO(\"FIM\")", Value(5.94573) );
   CHECK_EVAL( "EURO(\"FRF\")", Value(6.55957) );
@@ -137,7 +138,7 @@ void FinancialFunctionsTest::testEURO()
   CHECK_EVAL( "EURO(\"NLG\")", Value(2.20371) );
   CHECK_EVAL( "EURO(\"PTE\")", Value(200.482) );
 
-  CHECK_EVAL( "EURO(\"NOMANSLAND\")", Value::errorVALUE() );
+  CHECK_EVAL( "EURO(\"NOMANSLAND\")", Value::errorNUM() );
 }
 
 // Level-coupon bond

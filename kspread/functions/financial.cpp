@@ -985,6 +985,7 @@ Value func_euro (valVector args, ValueCalc *calc, FuncExtra *)
   if( currency == "ATS" ) result = 13.7603;  // Austria
   else if( currency == "BEF" ) result = 40.3399;  // Belgium
   else if( currency == "DEM" ) result = 1.95583;  // Germany
+  else if( currency == "EUR" ) result = 1.0;  // Euro
   else if( currency == "ESP" ) result = 166.386;  // Spain
   else if( currency == "FIM" ) result = 5.94573;  // Finland
   else if( currency == "FRF" ) result = 6.55957;  // France
@@ -995,7 +996,7 @@ Value func_euro (valVector args, ValueCalc *calc, FuncExtra *)
   else if( currency == "NLG" ) result = 2.20371;  // Nederland
   else if( currency == "PTE" ) result = 200.482;  // Portugal
   else
-    return Value::errorVALUE();
+    return Value::errorNUM();
 
   return Value (result);
 }
