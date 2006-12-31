@@ -870,7 +870,7 @@ Value func_ddb (valVector args, ValueCalc *calc, FuncExtra *)
   if ( cost < 0.0 || salvage < 0.0 || life <= 0.0 || period < 0.0 || factor < 0.0 )
     return Value::errorVALUE();
 
-  for( int i = 0; i < life; ++i )
+  for( int i = 0; i < life-1; ++i )
   {
     double periodDep = ( cost - total ) * ( factor / life );
     if ( i == period - 1 )
