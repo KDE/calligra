@@ -194,7 +194,7 @@ void KWTextDocumentLayout::layout() {
                     if(newLine.width() <= 0.)
                         // TODO be more intelligent then just moving down 10 pt
                         rect = QRectF(m_state->x(), rect.top() + 10, m_state->width(), rect.height());
-                    else if(newLine.left() == rect.left() && newLine.right() == rect.right())
+                    else if(qAbs(newLine.left() -rect.left()) < 1E-10 && qAbs(newLine.right() - rect.right() < 1E-10))
                         break;
                     else
                         rect = newLine;
