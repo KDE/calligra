@@ -1269,7 +1269,7 @@ public:
      *
      * @see mouseReleaseEvent
      */
-    void autofill( QRect &src, QRect &dest );
+    void autofill( const QRect& src, const QRect& dest );
 
 
     //
@@ -1556,7 +1556,7 @@ protected:
      */
     void fillSequence( const QList<Cell*>& _srcList,
                        const QList<Cell*>& _destList,
-                       const QList<AutoFillSequence*>& _seqList,
+                       const AutoFillSequence& _seqList,
                        bool down = true );
 
     // helper function for areaIsEmpty
@@ -1578,15 +1578,6 @@ private:
      * \ingroup Embedding
      */
     bool objectNameExists( EmbeddedObject *object, QList<EmbeddedObject*> &list );
-
-    bool fillSequenceWithInterval( const QList<Cell*>& _srcList,
-                                   const QList<Cell*>& _destList,
-                                   const QList<AutoFillSequence*>& _seqList,
-                                   bool down );
-
-    void fillSequenceWithCopy( const QList<Cell*>& _srcList,
-                               const QList<Cell*>& _destList,
-                               bool down);
 
     /**
      * \ingroup NativeFormat

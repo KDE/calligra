@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-
+   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2003 Ariya Hidayat <ariya@kde.org>
    Copyright 2002 Norbert Andres <nandres@web.de>
    Copyright 2001-2002 Laurent Montel <montel@kde.org>
@@ -27,85 +27,62 @@
 #define __AUTOFILL_H__
 
 #include <QList>
-#include <QVector>
 #include <QString>
 #include <QStringList>
 
 namespace KSpread
 {
-class AutoFillDeltaSequence;
-class AutoFillSequenceItem;
-class AutoFillSequence;
 class Cell;
 
+/**
+ * A cell content for auto-filling.
+ */
 class AutoFillSequenceItem
 {
 public:
     enum Type { INTEGER, FLOAT, STRING, DAY, SHORTDAY,
       MONTH, SHORTMONTH, FORMULA, OTHER, DATE, TIME };
 
-    explicit AutoFillSequenceItem( int _i );
-    explicit AutoFillSequenceItem( double _d );
-    explicit AutoFillSequenceItem( const QString &_str );
+    explicit AutoFillSequenceItem( const Cell* cell );
 
     double delta( AutoFillSequenceItem *_seq, bool *ok = 0 ) const;
 
-    QString getSuccessor( int _no, double _delta );
-    QString getPredecessor( int _no, double _delta );
+    QVariant nextValue( int _no, double _delta );
+    QVariant prevValue( int _no, double _delta );
 
-    Type type()const { return m_Type; }
-    int getIValue()const { return m_IValue; }
-    double getDValue()const { return m_DValue; }
-    QString getString()const { return m_String; }
-    int getIOtherEnd()const {return m_OtherEnd; }
-    int getIOtherBegin()const {return m_OtherBegin; }
+    Type type()          const { return m_Type; }
+    int getIValue()      const { return m_IValue; }
+    double getDValue()   const { return m_DValue; }
+    QString getString()  const { return m_String; }
+    int getIOtherEnd()   const {return m_OtherEnd; }
+    int getIOtherBegin() const {return m_OtherBegin; }
+
     static QStringList *other;
     static QStringList *month;
     static QStringList *day;
     static QStringList *shortMonth;
     static QStringList *shortDay;
+
 protected:
-    int    m_IValue;
-    double m_DValue;
-    int    m_OtherBegin;
-    int    m_OtherEnd;
-
+    int     m_IValue;
+    double  m_DValue;
+    int     m_OtherBegin;
+    int     m_OtherEnd;
     QString m_String;
-
-    Type m_Type;
+    Type    m_Type;
 };
 
-class AutoFillSequence
+/**
+ * A sequence of cell contents for auto-filling.
+ */
+class AutoFillSequence : public QList<AutoFillSequenceItem*>
 {
 public:
-    AutoFillSequence( Cell *_obj );
+    AutoFillSequence();
+    AutoFillSequence( const QList<AutoFillSequenceItem*>& );
     ~AutoFillSequence();
 
-    int count()const { return sequence.count(); }
-
-    AutoFillSequenceItem* value( int index ) { return sequence.value( index ); }
-
-    bool matches( AutoFillSequence* _seq, AutoFillDeltaSequence *_delta );
-
-    void fillCell( Cell *src, Cell *dest, AutoFillDeltaSequence *delta, int _block, bool down = true );
-
-protected:
-    QList<AutoFillSequenceItem*> sequence;
-};
-
-class AutoFillDeltaSequence
-{
-public:
-    AutoFillDeltaSequence( AutoFillSequence *_first, AutoFillSequence *_next );
-    ~AutoFillDeltaSequence();
-
-    bool isOk()const { return m_ok; }
-    bool operator==( const AutoFillDeltaSequence& o ) const;
-    double deltaItem( int _pos ) const;
-
-protected:
-    bool m_ok;
-    QVector<double> m_sequence;
+    QList<double> createDeltaSequence( int intervalLength ) const;
 };
 
 } // namespace KSpread
