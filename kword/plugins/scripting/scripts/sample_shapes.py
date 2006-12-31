@@ -9,7 +9,7 @@ textframe.setBackgroundColor("#ff0000")
 textframe.resize(200,100)
 
 doc = textframeset.textDocument()
-doc.setHtml("<h1> Text Frame</h1>")
+doc.setHtml("<h1>Text Frame</h1>")
 
 cursor = doc.rootFrame().lastCursorPosition()
 cursor.insertBlock()

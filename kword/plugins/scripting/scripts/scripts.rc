@@ -6,6 +6,18 @@
             interpreter="python"
             file="extensions/sample_text.py" />
     <script
+            name="pysamplelist"
+            text="Python Sample: Lists"
+            comment="This python script demonstrates how to deal with lists"
+            interpreter="python"
+            file="extensions/sample_lists.py" />
+    <script
+            name="pysampletables"
+            text="Python Sample: Tables"
+            comment="This python script demonstrates how to deal with tables"
+            interpreter="python"
+            file="extensions/sample_tables.py" />
+    <script
             name="pysampleshapes"
             text="Python Sample: Shapes"
             comment="This python script demonstrates usage of shapes"

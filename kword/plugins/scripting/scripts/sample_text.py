@@ -3,9 +3,7 @@
 import KWord, time
 
 #KWord.insertPage( KWord.pageCount() )
-if KWord.pageCount() < 1:
-    KWord.insertPage(0)
-
+#if KWord.pageCount() < 1: KWord.insertPage(0)
 fs = KWord.frameSet(0)
 doc = fs.textDocument()
 
@@ -50,26 +48,3 @@ for i in range( KWord.frameSetCount() ):
     shapeids = [frameset.frame(i).shapeId() for i in range(frameset.frameCount())]
     cursor.insertHtml( "(nr=%i name=%s shapeids=%s)<br/>" % (i,frameset.name(),shapeids) )
     cursor.insertBlock()
-
-cursor = doc.rootFrame().lastCursorPosition()
-cursor.insertBlock()
-cursor.insertHtml("<p><b>Table:</b></p>")
-table = cursor.insertTable(3,3)
-table.firstCursorPosition(0, 0).insertHtml("A")
-table.firstCursorPosition(0, 1).insertHtml("B")
-table.firstCursorPosition(1, 0).insertHtml("C")
-table.firstCursorPosition(1, 1).insertHtml("D")
-print "========> rows=%s cols=%s" % (table.rows(),table.columns())
-#for row in range(0, table.rows()):
-    ##table.insertRows(row,1)
-    #for col in range(table.columns() -1,0,-1):
-        #table.firstCursorPosition(row,col).insertText( "(row=%s col=%s)" % (row,col) )
-        ##c.insertBlock()
-        ##f = c.insertFrame()
-        ##f.firstCursorPosition().insertText( "(row=%s col=%s)" % (row,col) )
-        ##c.insertHtml( "(row=%s col=%s)" % (row,col) )
-
-#l = cursor.insertList()
-#for i in range(5):
-#    c = l.addItem()
-#    print "-----> listitem-cursor=%s" % c
