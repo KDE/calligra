@@ -118,6 +118,13 @@ void FinancialFunctionsTest::testDDB()
   CHECK_EVAL( "DDB(2500; 500; 24; 22; 2)", Value((double) 33.51189479397749));
   CHECK_EVAL( "DDB(2500; 500; 24; 23; 2)", Value((double) 30.719236894479383437));
   CHECK_EVAL( "DDB(2500; 500; 24; 24; 2)", Value((double) 28.159300486606106517));
+  
+  // try default factor (=2)
+  CHECK_EVAL( "DDB(2400; 300; 10*12; 1)", Value((double)40.0) ) ;
+  CHECK_EVAL( "DDB(2400; 300; 10; 1)", Value((double)480.0) ) ;
+  CHECK_EVAL( "DDB(2500; 500; 24; 22)", Value((double) 33.51189479397749));
+  CHECK_EVAL( "DDB(2500; 500; 24; 23)", Value((double) 30.719236894479383437));
+  CHECK_EVAL( "DDB(2500; 500; 24; 24)", Value((double) 28.159300486606106517));
 }
 
 // Euro conversion
