@@ -38,7 +38,7 @@
 
 extern "C"
 {
-    QObject* krossmodule()
+    KDE_EXPORT QObject* krossmodule()
     {
         return new Scripting::Module();
     }
