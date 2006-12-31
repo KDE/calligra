@@ -178,6 +178,44 @@ void FinancialFunctionsTest::testEURO()
   CHECK_EVAL( "EURO(\"NOMANSLAND\")", Value::errorNUM() );
 }
 
+// Currency conversion using Euro
+// EUROCONVERT(number,source,target)
+void FinancialFunctionsTest::testEUROCONVERT()
+{
+  // 1 Euro to ...
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"ATS\")", Value((double)13.7603) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"BEF\")", Value((double)40.3399) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"DEM\")", Value((double)1.95583) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"ESP\")", Value((double)166.386) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"EUR\")", Value((double)1.0) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"FIM\")", Value((double)5.94573) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"FRF\")", Value((double)6.55957) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"GRD\")", Value((double)340.75) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"IEP\")", Value((double)0.787564) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"ITL\")", Value((double)1936.27) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"LUX\")", Value((double)40.3399) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"NLG\")", Value((double)2.20371) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"PTE\")", Value((double)200.482) );
+  
+  // identity
+  CHECK_EVAL( "EUROCONVERT(1;\"BEF\";\"bef\")", Value((double)1.0) );
+  CHECK_EVAL( "EUROCONVERT(1;\"DEM\";\"dem\")", Value((double)1.0) );
+  CHECK_EVAL( "EUROCONVERT(1;\"ESP\";\"esp\")", Value((double)1.0) );
+  CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"eur\")", Value((double)1.0) );
+  CHECK_EVAL( "EUROCONVERT(1;\"FIM\";\"fim\")", Value((double)1.0) );
+  CHECK_EVAL( "EUROCONVERT(1;\"FRF\";\"frf\")", Value((double)1.0) );
+  CHECK_EVAL( "EUROCONVERT(1;\"GRD\";\"grd\")", Value((double)1.0) );
+  CHECK_EVAL( "EUROCONVERT(1;\"IEP\";\"iep\")", Value((double)1.0) );
+  CHECK_EVAL( "EUROCONVERT(1;\"ITL\";\"itl\")", Value((double)1.0) );
+  CHECK_EVAL( "EUROCONVERT(1;\"LUX\";\"lux\")", Value((double)1.0) );
+  CHECK_EVAL( "EUROCONVERT(1;\"NLG\";\"nlg\")", Value((double)1.0) );
+  CHECK_EVAL( "EUROCONVERT(1;\"PTE\";\"pte\")", Value((double)1.0) );
+  
+  CHECK_EVAL( "EUROCONVERT(2;\"ESP\";\"DEM\")", Value((double)(2*1.95583/166.386)) );
+  CHECK_EVAL( "EUROCONVERT(3;\"itl\";\"nlg\")", Value((double)(3*2.20371/1936.27)) );
+}
+
+
 // Level-coupon bond
 // LEVEL_COUPON(faceValue; couponRate; couponsPerYear; years; marketRate)
 void FinancialFunctionsTest::testLEVELCOUPON()
