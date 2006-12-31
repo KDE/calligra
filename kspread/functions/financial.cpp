@@ -976,26 +976,35 @@ Value func_ddb (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (cost - total - salvage);
 }
 
+
+static double helper_eurofactor(const QString& currency)
+{
+  QString cur = currency.toUpper();
+  double result = -1;
+
+  if( cur == "ATS" ) result = 13.7603;       // Austria
+  else if( cur == "BEF" ) result = 40.3399;  // Belgium
+  else if( cur == "DEM" ) result = 1.95583;  // Germany
+  else if( cur == "ESP" ) result = 166.386;  // Spain
+  else if( cur == "EUR" ) result = 1.0;      // Euro
+  else if( cur == "FIM" ) result = 5.94573;  // Finland
+  else if( cur == "FRF" ) result = 6.55957;  // France
+  else if( cur == "GRD" ) result = 340.75;   // Greece
+  else if( cur == "IEP" ) result = 0.787564; // Ireland
+  else if( cur == "ITL" ) result = 1936.27;  // Italy
+  else if( cur == "LUX" ) result = 40.3399;  // Luxembourg
+  else if( cur == "NLG" ) result = 2.20371;  // Netherlands
+  else if( cur == "PTE" ) result = 200.482;  // Portugal
+  
+  return result;
+} 
+
 // Function: EURO
 Value func_euro (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QString currency = calc->conv()->asString (args[0]).asString().toUpper();
-  double result = -1;
-
-  if( currency == "ATS" ) result = 13.7603;  // Austria
-  else if( currency == "BEF" ) result = 40.3399;  // Belgium
-  else if( currency == "DEM" ) result = 1.95583;  // Germany
-  else if( currency == "EUR" ) result = 1.0;  // Euro
-  else if( currency == "ESP" ) result = 166.386;  // Spain
-  else if( currency == "FIM" ) result = 5.94573;  // Finland
-  else if( currency == "FRF" ) result = 6.55957;  // France
-  else if( currency == "GRD" ) result = 340.75;   // Greece
-  else if( currency == "IEP" ) result = 0.787564; // Ireland
-  else if( currency == "ITL" ) result = 1936.27;  // Italy
-  else if( currency == "LUX" ) result = 40.3399;  // Luxemburg
-  else if( currency == "NLG" ) result = 2.20371;  // Nederland
-  else if( currency == "PTE" ) result = 200.482;  // Portugal
-  else
+  QString currency = calc->conv()->asString (args[0]).asString();
+  double result = helper_eurofactor(currency);
+  if( result < 0 )
     return Value::errorNUM();
 
   return Value (result);
