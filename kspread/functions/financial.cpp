@@ -54,6 +54,7 @@ Value func_dollarfr (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_duration (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_effective (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_euro (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_euroconvert (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fv_annuity (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_intrate (valVector args, ValueCalc *calc, FuncExtra *);
@@ -127,6 +128,9 @@ void RegisterFinancialFunctions()
   repo->add (f);
   f = new Function ("EURO", func_euro);  // KSpread-specific, Gnumeric-compatible
   f->setParamCount (1);
+  repo->add (f);
+  f = new Function ("EUROCONVERT", func_euroconvert); 
+  f->setParamCount (3);
   repo->add (f);
   f = new Function ("FV", func_fv);
   f->setParamCount (3);
@@ -1006,6 +1010,26 @@ Value func_euro (valVector args, ValueCalc *calc, FuncExtra *)
   double result = helper_eurofactor(currency);
   if( result < 0 )
     return Value::errorNUM();
+
+  return Value (result);
+}
+
+// EUROCONVERT(number,source,target)
+Value func_euroconvert (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  double number = calc->conv()->asFloat (args[0]).asFloat();
+  QString source = calc->conv()->asString (args[1]).asString();
+  QString target = calc->conv()->asString (args[2]).asString();
+  
+  double factor1 = helper_eurofactor(source);
+  double factor2 = helper_eurofactor(target);
+
+  if( factor1 < 0 )
+    return Value::errorNUM();
+  if( factor2 < 0 )
+    return Value::errorNUM();
+    
+  double result = number * factor2 / factor1;
 
   return Value (result);
 }
