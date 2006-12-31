@@ -134,8 +134,8 @@ void FinancialFunctionsTest::testEURO()
   CHECK_EVAL( "EURO(\"ATS\")", Value(13.7603) );
   CHECK_EVAL( "EURO(\"BEF\")", Value(40.3399) );
   CHECK_EVAL( "EURO(\"DEM\")", Value(1.95583) );
-  CHECK_EVAL( "EURO(\"EUR\")", Value(1.0) );
   CHECK_EVAL( "EURO(\"ESP\")", Value(166.386) );
+  CHECK_EVAL( "EURO(\"EUR\")", Value(1.0) );
   CHECK_EVAL( "EURO(\"FIM\")", Value(5.94573) );
   CHECK_EVAL( "EURO(\"FRF\")", Value(6.55957) );
   CHECK_EVAL( "EURO(\"GRD\")", Value(340.75) );
@@ -144,6 +144,36 @@ void FinancialFunctionsTest::testEURO()
   CHECK_EVAL( "EURO(\"LUX\")", Value(40.3399) );
   CHECK_EVAL( "EURO(\"NLG\")", Value(2.20371) );
   CHECK_EVAL( "EURO(\"PTE\")", Value(200.482) );
+  
+  // should still work with lowercase 
+  CHECK_EVAL( "EURO(\"ats\")", Value(13.7603) );
+  CHECK_EVAL( "EURO(\"bef\")", Value(40.3399) );
+  CHECK_EVAL( "EURO(\"dem\")", Value(1.95583) );
+  CHECK_EVAL( "EURO(\"esp\")", Value(166.386) );
+  CHECK_EVAL( "EURO(\"eur\")", Value(1.0) );
+  CHECK_EVAL( "EURO(\"fim\")", Value(5.94573) );
+  CHECK_EVAL( "EURO(\"frf\")", Value(6.55957) );
+  CHECK_EVAL( "EURO(\"grd\")", Value(340.75) );
+  CHECK_EVAL( "EURO(\"iep\")", Value(0.787564) );
+  CHECK_EVAL( "EURO(\"itl\")", Value(1936.27) );
+  CHECK_EVAL( "EURO(\"lux\")", Value(40.3399) );
+  CHECK_EVAL( "EURO(\"nlg\")", Value(2.20371) );
+  CHECK_EVAL( "EURO(\"pte\")", Value(200.482) );
+
+  // should still work with mixed-case
+  CHECK_EVAL( "EURO(\"Ats\")", Value(13.7603) );
+  CHECK_EVAL( "EURO(\"Bef\")", Value(40.3399) );
+  CHECK_EVAL( "EURO(\"Dem\")", Value(1.95583) );
+  CHECK_EVAL( "EURO(\"Esp\")", Value(166.386) );
+  CHECK_EVAL( "EURO(\"Eur\")", Value(1.0) );
+  CHECK_EVAL( "EURO(\"Fim\")", Value(5.94573) );
+  CHECK_EVAL( "EURO(\"Frf\")", Value(6.55957) );
+  CHECK_EVAL( "EURO(\"GrD\")", Value(340.75) );
+  CHECK_EVAL( "EURO(\"IeP\")", Value(0.787564) );
+  CHECK_EVAL( "EURO(\"Itl\")", Value(1936.27) );
+  CHECK_EVAL( "EURO(\"luX\")", Value(40.3399) );
+  CHECK_EVAL( "EURO(\"nlG\")", Value(2.20371) );
+  CHECK_EVAL( "EURO(\"ptE\")", Value(200.482) );
 
   CHECK_EVAL( "EURO(\"NOMANSLAND\")", Value::errorNUM() );
 }
