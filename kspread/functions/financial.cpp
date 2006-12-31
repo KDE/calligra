@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
 
+   Copyright (C) 2002,2006 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
-   Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2002 Norbert Andres <nandres@web.de>
    Copyright (C) 1999-2000 Laurent Montel <montel@kde.org>
    Copyright (C) 1999-2000 Laurent Montel <montel@kde.org>
