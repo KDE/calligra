@@ -946,7 +946,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		for(; it.current() != 0; ++it)
 			sigMenu->insertItem(*it);
 
-		int id = m_popup->insertItem(SmallIconSet(""), i18n("Events"), sigMenu);
+		int id = m_popup->insertItem(KIcon(""), i18n("Events"), sigMenu);
 //		menuIds->append(id);
 		if(list.isEmpty())
 			m_popup->setItemEnabled(id, false);

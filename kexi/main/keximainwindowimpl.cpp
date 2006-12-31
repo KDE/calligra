@@ -362,7 +362,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		closeButton->setAutoRaise( true );
 		closeButton->setPixmap( QPixmap( kde2_closebutton ) );
 		closeButton->setPaletteBackgroundColor(closeButton->palette().active().background()); 
-//		closeButton->setIconSet(SmallIconSet("tab_remove"));
+//		closeButton->setIconSet(KIcon("tab_remove"));
 		tabWidget()->setCornerWidget( closeButton, Qt::TopRightCorner );
 		closeButton->hide(); // hide until it's needed to avoid problems in "user mode" 
 		                     // when initially the main window is empty
@@ -2725,9 +2725,9 @@ KexiMainWindowImpl::slotProjectOpenRecentAboutToShow()
 //	}
 
 //	int cur_idx = action_open_recent_projects_title_index+1;
-	popup->insertItem(SmallIconSet("kexiproject_sqlite"), "My project 1");
-	popup->insertItem(SmallIconSet("kexiproject_sqlite"), "My project 2");
-	popup->insertItem(SmallIconSet("kexiproject_sqlite"), "My project 3");
+	popup->insertItem(KIcon("kexiproject_sqlite"), "My project 1");
+	popup->insertItem(KIcon("kexiproject_sqlite"), "My project 2");
+	popup->insertItem(KIcon("kexiproject_sqlite"), "My project 3");
 
 #if 0
 	//show recent connections
@@ -2738,10 +2738,10 @@ KexiMainWindowImpl::slotProjectOpenRecentAboutToShow()
 //	for (int i=cur_idx; i<count; i++) {
 //		popup->removeItemAt(cur_idx);
 //	}
-	popup->insertItem(SmallIconSet("socket"), "My connection 1");
-	popup->insertItem(SmallIconSet("socket"), "My connection 2");
-	popup->insertItem(SmallIconSet("socket"), "My connection 3");
-	popup->insertItem(SmallIconSet("socket"), "My connection 4");
+	popup->insertItem(KIcon("socket"), "My connection 1");
+	popup->insertItem(KIcon("socket"), "My connection 2");
+	popup->insertItem(KIcon("socket"), "My connection 3");
+	popup->insertItem(KIcon("socket"), "My connection 4");
 #endif
 }
 

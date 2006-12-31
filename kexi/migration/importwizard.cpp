@@ -358,7 +358,7 @@ void ImportWizard::setupImporting()
 	KButtonBox *optionsBox = new KButtonBox(m_importingPage);
 	vbox->addWidget( optionsBox );
 	m_importOptionsButton = optionsBox->addButton(i18n("Advanced Options"), this, SLOT(slotOptionsButtonClicked()));
-	m_importOptionsButton->setIconSet(SmallIconSet("configure"));
+	m_importOptionsButton->setIconSet(KIcon("configure"));
 	optionsBox->addStretch(1);
 
 	vbox->addWidget( m_progressBar );

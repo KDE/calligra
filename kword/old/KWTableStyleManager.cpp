@@ -245,12 +245,12 @@ void KWTableStyleManager::setupWidget()
 
 
     m_moveUpButton = new QPushButton( frame1, "moveUpButton" );
-    m_moveUpButton->setIconSet( SmallIconSet( "up" ) );
+    m_moveUpButton->setIconSet( KIcon( "up" ) );
     connect( m_moveUpButton, SIGNAL( clicked() ), this, SLOT( moveUpStyle() ) );
     frame1Layout->addWidget( m_moveUpButton, 1, 1 );
 
     m_moveDownButton = new QPushButton( frame1, "moveDownButton" );
-    m_moveDownButton->setIconSet( SmallIconSet( "down" ) );
+    m_moveDownButton->setIconSet( KIcon( "down" ) );
     connect( m_moveDownButton, SIGNAL( clicked() ), this, SLOT( moveDownStyle() ) );
     frame1Layout->addWidget( m_moveDownButton, 1, 0 );
 

@@ -185,7 +185,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, KexiMainWindow *mainWin, int features)
 			m_newObjectPopup = new KMenu(this, "newObjectPopup");
 			connect(m_newObjectPopup, SIGNAL(aboutToShow()), this, SLOT(slotNewObjectPopupAboutToShow()));
 		//	KexiPart::Part* part = Kexi::partManager().part("kexi/table");
-		//	m_newObjectPopup->insertItem( SmallIconSet(part->info()->createItemIcon()), part->instanceName() );
+		//	m_newObjectPopup->insertItem( KIcon(part->info()->createItemIcon()), part->instanceName() );
 			m_newObjectToolButton->setPopup(m_newObjectPopup);
 			m_newObjectToolButton->setPopupDelay(QApplication::startDragTime());
 			connect(m_newObjectToolButton, SIGNAL(clicked()), this, SLOT(slotNewObject()));
@@ -445,7 +445,7 @@ KexiBrowser::slotContextMenu(K3ListView* /*list*/, Q3ListViewItem *item, const Q
 			m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceName() ));
 		else
 			m_newObjectAction->setText(i18n("&Create Object..."));
-		m_newObjectAction->setIcon( SmallIconSet(bit->info()->itemIcon()) );*/
+		m_newObjectAction->setIcon( KIcon(bit->info()->itemIcon()) );*/
 		m_list->setCurrentItem(item);
 		m_list->repaintItem(item);
 	}
@@ -543,7 +543,7 @@ KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
 		} else {
 			if (m_newObjectAction) {
 				m_newObjectAction->setText(i18n("&Create Object..."));
-	//			m_newObjectToolbarAction->setIconSet( SmallIconSet("filenew") );
+	//			m_newObjectToolbarAction->setIconSet( KIcon("filenew") );
 	//			m_newObjectToolbarAction->setText(m_newObjectAction->text());
 				if (m_features & Toolbar) {
 					m_newObjectToolButton->setIconSet( "filenew" );

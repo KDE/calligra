@@ -56,35 +56,35 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	//// Setup the icon toolbar /////////////////
 	Q3VBoxLayout *vlayout = new Q3VBoxLayout(layout, 3);
 	QToolButton *newRow = new QToolButton(m_contentsPageItem->widget());
-	newRow->setIconSet(BarIconSet("edit_add"));
+	newRow->setIconSet(KIcon("edit_add"));
 	newRow->setTextLabel(i18n("&Add Item"), true);
 	vlayout->addWidget(newRow);
 	m_buttons.insert(BNewRow, newRow);
 	connect(newRow, SIGNAL(clicked()), this, SLOT(newRow()));
 
 	QToolButton *newChild = new QToolButton(m_contentsPageItem->widget());
-	newChild->setIconSet(BarIconSet("1rightarrow"));
+	newChild->setIconSet(KIcon("1rightarrow"));
 	newChild->setTextLabel(i18n("New &Subitem"), true);
 	vlayout->addWidget(newChild);
 	m_buttons.insert(BNewChild, newChild);
 	connect(newChild, SIGNAL(clicked()), this, SLOT(newChildRow()));
 
 	QToolButton *delRow = new QToolButton(m_contentsPageItem->widget());
-	delRow->setIconSet(BarIconSet("edit_remove"));
+	delRow->setIconSet(KIcon("edit_remove"));
 	delRow->setTextLabel(i18n("&Remove Item"), true);
 	vlayout->addWidget(delRow);
 	m_buttons.insert(BRemRow, delRow);
 	connect(delRow, SIGNAL(clicked()), this, SLOT(removeRow()));
 
 	QToolButton *rowUp = new QToolButton(m_contentsPageItem->widget());
-	rowUp->setIconSet(BarIconSet("1uparrow"));
+	rowUp->setIconSet(KIcon("1uparrow"));
 	rowUp->setTextLabel(i18n("Move Item &Up"), true);
 	vlayout->addWidget(rowUp);
 	m_buttons.insert(BRowUp, rowUp);
 	connect(rowUp, SIGNAL(clicked()), this, SLOT(MoveRowUp()));
 
 	QToolButton *rowDown = new QToolButton(m_contentsPageItem->widget());
-	rowDown->setIconSet(BarIconSet("1downarrow"));
+	rowDown->setIconSet(KIcon("1downarrow"));
 	rowDown->setTextLabel(i18n("Move Item &Down"), true);
 	vlayout->addWidget(rowDown);
 	m_buttons.insert(BRowDown, rowDown);
@@ -126,28 +126,28 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	// Setup the icon toolbar //////////
 	Q3VBoxLayout *vbox = new Q3VBoxLayout(hbox, 3);
 	QToolButton *add = new QToolButton(m_columnsPageItem->widget());
-	add->setIconSet(BarIconSet("edit_add"));
+	add->setIconSet(KIcon("edit_add"));
 	add->setTextLabel(i18n("&Add Item"), true);
 	vbox->addWidget(add);
 	m_buttons.insert(BColAdd, add);
 	connect(add, SIGNAL(clicked()), this, SLOT(newItem()));
 
 	QToolButton *remove = new QToolButton(m_columnsPageItem->widget());
-	remove->setIconSet(BarIconSet("edit_remove"));
+	remove->setIconSet(KIcon("edit_remove"));
 	remove->setTextLabel(i18n("&Remove Item"), true);
 	vbox->addWidget(remove);
 	m_buttons.insert(BColRem, remove);
 	connect(remove, SIGNAL(clicked()), this, SLOT(removeItem()));
 
 	QToolButton *up = new QToolButton(m_columnsPageItem->widget());
-	up->setIconSet(BarIconSet("1uparrow"));
+	up->setIconSet(KIcon("1uparrow"));
 	up->setTextLabel(i18n("Move Item &Up"), true);
 	vbox->addWidget(up);
 	m_buttons.insert(BColUp, up);
 	connect(up, SIGNAL(clicked()), this, SLOT(MoveItemUp()));
 
 	QToolButton *down = new QToolButton(m_columnsPageItem->widget());
-	down->setIconSet(BarIconSet("1downarrow"));
+	down->setIconSet(KIcon("1downarrow"));
 	down->setTextLabel(i18n("Move Item &Down"), true);
 	vbox->addWidget(down);
 	m_buttons.insert(BColDown, down);

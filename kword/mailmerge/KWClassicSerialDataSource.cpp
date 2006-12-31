@@ -350,12 +350,12 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
     KHBox *toolbar = new KHBox( back );
 
     first = new QToolButton( toolbar );
-    first->setIconSet( SmallIconSet( "start" ) );
+    first->setIconSet( KIcon( "start" ) );
     first->setFixedSize( first->sizeHint() );
     connect(first, SIGNAL(clicked()), this, SLOT(firstRecord()));
 
     back_ = new QToolButton( toolbar );
-    back_->setIconSet( SmallIconSet( "back" ) );
+    back_->setIconSet( KIcon( "back" ) );
     back_->setFixedSize( back_->sizeHint() );
     connect(back_, SIGNAL(clicked()), this, SLOT(prevRecord()));
 
@@ -365,12 +365,12 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
              this, SLOT( changeRecord( int ) ) );
 
     forward = new QToolButton( toolbar );
-    forward->setIconSet( SmallIconSet( "forward" ) );
+    forward->setIconSet( KIcon( "forward" ) );
     forward->setFixedSize( forward->sizeHint() );
     connect(forward, SIGNAL(clicked()), this, SLOT(nextRecord()));
 
     finish = new QToolButton( toolbar );
-    finish->setIconSet( SmallIconSet( "finish" ) );
+    finish->setIconSet( KIcon( "finish" ) );
     finish->setFixedSize( finish->sizeHint() );
     connect(finish, SIGNAL(clicked()), this, SLOT(lastRecord()));
 
@@ -378,28 +378,28 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
     sep->setMaximumWidth( 10 );
 
     newRecord = new QToolButton( toolbar );
-    newRecord->setIconSet( SmallIconSet( "sl_addrecord" ) );
+    newRecord->setIconSet( KIcon( "sl_addrecord" ) );
     newRecord->setFixedSize( newRecord->sizeHint() );
     connect( newRecord, SIGNAL( clicked() ),
              this, SLOT( addRecord() ) );
     newRecord->setToolTip( i18n( "Add record" ) );
 
     newEntry = new QToolButton( toolbar );
-    newEntry->setIconSet( SmallIconSet( "sl_addentry" ) );
+    newEntry->setIconSet( KIcon( "sl_addentry" ) );
     newEntry->setFixedSize( newEntry->sizeHint() );
     connect( newEntry, SIGNAL( clicked() ),
              this, SLOT( addEntry() ) );
     newEntry->setToolTip( i18n( "Add entry" ) );
 
     deleteRecord = new QToolButton( toolbar );
-    deleteRecord->setIconSet( SmallIconSet( "sl_delrecord" ) );
+    deleteRecord->setIconSet( KIcon( "sl_delrecord" ) );
     deleteRecord->setFixedSize( deleteRecord->sizeHint() );
     connect( deleteRecord, SIGNAL( clicked() ),
              this, SLOT( removeRecord() ) );
     deleteRecord->setToolTip( i18n( "Remove record" ) );
 
     deleteEntry = new QToolButton( toolbar );
-    deleteEntry->setIconSet( SmallIconSet( "sl_delentry" ) );
+    deleteEntry->setIconSet( KIcon( "sl_delentry" ) );
     deleteEntry->setFixedSize( deleteEntry->sizeHint() );
     connect( deleteEntry, SIGNAL( clicked() ),
              this, SLOT( removeEntry() ) );

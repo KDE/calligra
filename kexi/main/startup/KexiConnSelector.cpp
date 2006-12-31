@@ -136,7 +136,7 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set,
 	globalLyr->addWidget(d->stack);
 
 //	m_file = new KexiOpenExistingFile( this, "KexiOpenExistingFile");
-//	m_file->btn_advanced->setIconSet( SmallIconSet("1downarrow") );
+//	m_file->btn_advanced->setIconSet( KIcon("1downarrow") );
 	m_fileDlg = 0;
 		
 //	addWidget(m_file);
@@ -145,7 +145,7 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set,
 	m_remote = new KexiConnSelectorBase(d->stack, "conn_sel");
 	m_remote->icon->setPixmap( DesktopIcon("network") );
 	m_remote->icon->setFixedSize( m_remote->icon->pixmap()->size() );
-//	m_remote->btn_back->setIconSet( SmallIconSet("1uparrow") );
+//	m_remote->btn_back->setIconSet( KIcon("1uparrow") );
 	connect(m_remote->btn_add, SIGNAL(clicked()), this, SLOT(slotRemoteAddBtnClicked()));
 	connect(m_remote->btn_edit, SIGNAL(clicked()), this, SLOT(slotRemoteEditBtnClicked()));
 	connect(m_remote->btn_remove, SIGNAL(clicked()), this, SLOT(slotRemoteRemoveBtnClicked()));

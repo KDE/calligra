@@ -116,7 +116,7 @@ void KisPDFImportWidget::updateMaxCanvasSize() {
     }
     m_maxWidthInch /= 72.;
     m_maxHeightInch /= 72.;
-    kdDebug() << m_maxWidthInch << " " << m_maxHeightInch << endl;
+    kDebug() << m_maxWidthInch << " " << m_maxHeightInch << endl;
     updateWidth();
     updateHeight();
 }

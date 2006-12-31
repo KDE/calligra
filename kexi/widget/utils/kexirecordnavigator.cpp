@@ -96,13 +96,13 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	d->lyr->addWidget( m_navBtnFirst = new QToolButton(this) );
 	m_navBtnFirst->setFixedWidth(bw);
 	m_navBtnFirst->setFocusPolicy(Qt::NoFocus);
-	m_navBtnFirst->setIconSet( SmallIconSet("navigator_first") );
+	m_navBtnFirst->setIconSet( KIcon("navigator_first") );
 	m_navBtnFirst->setToolTip( i18n("First row"));
 	
 	d->lyr->addWidget( m_navBtnPrev = new QToolButton(this) );
 	m_navBtnPrev->setFixedWidth(bw);
 	m_navBtnPrev->setFocusPolicy(Qt::NoFocus);
-	m_navBtnPrev->setIconSet( SmallIconSet("navigator_prev") );
+	m_navBtnPrev->setIconSet( KIcon("navigator_prev") );
 	m_navBtnPrev->setAutoRepeat(true);
 	m_navBtnPrev->setToolTip( i18n("Previous row"));
 	
@@ -143,21 +143,21 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	d->lyr->addWidget( m_navBtnNext = new QToolButton(this) );
 	m_navBtnNext->setFixedWidth(bw);
 	m_navBtnNext->setFocusPolicy(Qt::NoFocus);
-	m_navBtnNext->setIconSet( SmallIconSet("navigator_next") );
+	m_navBtnNext->setIconSet( KIcon("navigator_next") );
 	m_navBtnNext->setAutoRepeat(true);
 	m_navBtnNext->setToolTip( i18n("Next row"));
 	
 	d->lyr->addWidget( m_navBtnLast = new QToolButton(this) );
 	m_navBtnLast->setFixedWidth(bw);
 	m_navBtnLast->setFocusPolicy(Qt::NoFocus);
-	m_navBtnLast->setIconSet( SmallIconSet("navigator_last") );
+	m_navBtnLast->setIconSet( KIcon("navigator_last") );
 	m_navBtnLast->setToolTip( i18n("Last row"));
 	
 	d->lyr->addSpacing( 6 );
 	d->lyr->addWidget( m_navBtnNew = new QToolButton(this) );
 	m_navBtnNew->setFixedWidth(bw);
 	m_navBtnNew->setFocusPolicy(Qt::NoFocus);
-	m_navBtnNew->setIconSet( SmallIconSet("navigator_new") );
+	m_navBtnNew->setIconSet( KIcon("navigator_new") );
 	m_navBtnNew->setToolTip( i18n("New row"));
 	m_navBtnNext->setEnabled(isInsertingEnabled());
 	

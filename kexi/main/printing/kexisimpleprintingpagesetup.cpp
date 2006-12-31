@@ -340,7 +340,7 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWi
 	m_contents->printButton->setText( KStdGuiItem::print().text() );
 	connect(m_contents->printButton, SIGNAL(clicked()), this, SLOT(print()));
 
-	m_contents->printPreviewButton->setIconSet( SmallIconSet("filequickprint") );
+	m_contents->printPreviewButton->setIconSet( KIcon("filequickprint") );
 	m_contents->printPreviewButton->setText( i18n("Print Previe&w...") );
 	connect(m_contents->printPreviewButton, SIGNAL(clicked()), this, SLOT(printPreview()));
 

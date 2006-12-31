@@ -33,7 +33,7 @@ KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text,
  : QToolButton(parent, name)
 {
 	init();
-	update(text, SmallIconSet(icon));
+	update(text, KIcon(icon));
 }
 
 KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text,
@@ -105,7 +105,7 @@ void KexiSmallToolButton::setIconSet( const QIcon& iconSet )
 
 void KexiSmallToolButton::setIconSet( const QString& icon )
 {
-	setIconSet( SmallIconSet(icon) );
+	setIconSet( KIcon(icon) );
 }
 
 void KexiSmallToolButton::setTextLabel( const QString & newLabel, bool tipToo )

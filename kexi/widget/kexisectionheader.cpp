@@ -92,7 +92,7 @@ void KexiSectionHeader::addButton(const QString& icon, const QString& toolTip,
 	}
 
 	if (!icon.isEmpty()) {
-		QIcon iset = SmallIconSet(icon);
+		QIcon iset = KIcon(icon);
 		btn->setIconSet( iset );
 		QFontMetrics fm(d->lbl->font());
 		btn->setMaximumHeight( qMax(fm.height(), 16) );

@@ -86,7 +86,7 @@ KoShellWindow::KoShellWindow()
   m_tabCloseButton = new QToolButton( m_pFrame );
   connect( m_tabCloseButton, SIGNAL( clicked() ),
            this, SLOT( slotFileClose() ) );
-  m_tabCloseButton->setIcon( SmallIconSet( "tab_remove" ) );
+  m_tabCloseButton->setIcon( KIcon( "tab_remove" ) );
   m_tabCloseButton->adjustSize();
   m_tabCloseButton->setToolTip( i18n("Close"));
   m_pFrame->setCornerWidget( m_tabCloseButton, Qt::BottomRight );

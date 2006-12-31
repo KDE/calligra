@@ -1470,11 +1470,11 @@ QAbstractButton* View::Private::newIconButton( const char *_file, bool _kbutton,
 
   if ( !_kbutton ) {
     QPushButton* pb = new QPushButton( _parent );
-    pb->setIcon( SmallIconSet(_file) );
+    pb->setIcon( KIcon(_file) );
     return pb;
   } else {
     QToolButton* pb = new QToolButton( _parent );
-    pb->setIcon( SmallIconSet(_file) );
+    pb->setIcon( KIcon(_file) );
     return pb;
   }
 }

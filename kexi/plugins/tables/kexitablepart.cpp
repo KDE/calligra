@@ -61,7 +61,7 @@ KexiTablePart::KexiTablePart(QObject *parent, const char *name, const QStringLis
 	// REGISTERED ID:
 	m_registeredPartID = (int)KexiPart::TableObjectType;
 
-	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
+	kDebug() << "KexiTablePart::KexiTablePart()" << endl;
 	m_names["instanceName"] 
 		= i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
@@ -107,7 +107,7 @@ KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog,
 	KexiTablePart::TempData *temp = static_cast<KexiTablePart::TempData*>(dialog->tempData());
 	if (!temp->table) {
 		temp->table = win->project()->dbConnection()->tableSchema(item.name());
-		kdDebug() << "KexiTablePart::execute(): schema is " << temp->table << endl;
+		kDebug() << "KexiTablePart::execute(): schema is " << temp->table << endl;
 	}
 
 	if (viewMode == Kexi::DesignViewMode) {
@@ -240,7 +240,7 @@ void KexiTablePart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow
 	d->lookupColumnPage->setProject(prj);
 
 //! @todo add lookup field icon
-	tab->addTab( d->lookupColumnPage, SmallIconSet("combo"), "");
+	tab->addTab( d->lookupColumnPage, KIcon("combo"), "");
 	tab->setTabToolTip( d->lookupColumnPage, i18n("Lookup column"));
 }
 
@@ -264,7 +264,7 @@ KexiTableDataSource::~KexiTableDataSource()
 KexiDB::FieldList *
 KexiTableDataSource::fields(KexiProject *project, const KexiPart::Item &it)
 {
-	kdDebug() << "KexiTableDataSource::fields(): " << it.name() << endl;
+	kDebug() << "KexiTableDataSource::fields(): " << it.name() << endl;
 	return project->dbConnection()->tableSchema(it.name());
 }
 

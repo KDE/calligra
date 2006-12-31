@@ -43,24 +43,24 @@ StencilTextEditor::StencilTextEditor(const QString& caption, QWidget *parent, co
   m_mainWidget = new StencilTextEditorUI(this);
   setMainWidget(m_mainWidget);
 
-  m_mainWidget->m_boldButton->setIconSet(SmallIconSet("text_bold", 16));
-  m_mainWidget->m_italicsButton->setIconSet(SmallIconSet("text_italic", 16));
-  m_mainWidget->m_underLineButton->setIconSet(SmallIconSet("text_under", 16));
+  m_mainWidget->m_boldButton->setIconSet(KIcon("text_bold", 16));
+  m_mainWidget->m_italicsButton->setIconSet(KIcon("text_italic", 16));
+  m_mainWidget->m_underLineButton->setIconSet(KIcon("text_under", 16));
 
   QPopupMenu* menu = new QPopupMenu(m_mainWidget->m_hAlignButton, "hAlignMenu");
   menu->setCheckable(true);
-  menu->insertItem(SmallIconSet("text_left", 16), i18n("Align Left"), Qt::AlignLeft);
-  menu->insertItem(SmallIconSet("text_center", 16), i18n("Align Center"), Qt::AlignHCenter);
-  menu->insertItem(SmallIconSet("text_right", 16), i18n("Align Right"), Qt::AlignRight);
+  menu->insertItem(KIcon("text_left", 16), i18n("Align Left"), Qt::AlignLeft);
+  menu->insertItem(KIcon("text_center", 16), i18n("Align Center"), Qt::AlignHCenter);
+  menu->insertItem(KIcon("text_right", 16), i18n("Align Right"), Qt::AlignRight);
   m_mainWidget->m_hAlignButton->setPopup(menu);
   connect(menu, SIGNAL(activated(int)), this, SLOT(setHorizontalAlign(int)));
   connect(m_mainWidget->m_hAlignButton, SIGNAL(clicked()), this, SLOT(showHAlignPopup()));
 
   menu = new QPopupMenu(m_mainWidget->m_vAlignButton, "hAlignMenu");
   menu->setCheckable(true);
-  menu->insertItem(SmallIconSet("align_top", 16), i18n("Align Top"), Qt::AlignTop);
-  menu->insertItem(SmallIconSet("align_vcenter", 16), i18n("Align Vertical Center"), Qt::AlignVCenter);
-  menu->insertItem(SmallIconSet("align_bottom", 16), i18n("Align Bottom"), Qt::AlignBottom);
+  menu->insertItem(KIcon("align_top", 16), i18n("Align Top"), Qt::AlignTop);
+  menu->insertItem(KIcon("align_vcenter", 16), i18n("Align Vertical Center"), Qt::AlignVCenter);
+  menu->insertItem(KIcon("align_bottom", 16), i18n("Align Bottom"), Qt::AlignBottom);
   m_mainWidget->m_vAlignButton->setPopup(menu);
   connect(menu, SIGNAL(activated(int)), this, SLOT(setVerticalAlign(int)));
   connect(m_mainWidget->m_vAlignButton, SIGNAL(clicked()), this, SLOT(showVAlignPopup()));

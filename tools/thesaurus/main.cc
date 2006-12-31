@@ -106,11 +106,11 @@ Thesaurus::Thesaurus(QObject* parent, const QStringList &)
     row1->addWidget(m_edit, 1);
     row1->addWidget(m_search, 0);
     m_back = new QToolButton(m_page);
-    m_back->setIcon(BarIconSet(QString::fromLatin1("back")));
+    m_back->setIcon(KIcon(QString::fromLatin1("back")));
     m_back->setToolTip( i18n("Back"));
     row1->addWidget(m_back, 0);
     m_forward = new QToolButton(m_page);
-    m_forward->setIcon(BarIconSet(QString::fromLatin1("forward")));
+    m_forward->setIcon(KIcon(QString::fromLatin1("forward")));
     m_forward->setToolTip( i18n("Forward"));
     row1->addWidget(m_forward, 0);
     m_lang = new KPushButton(i18n("Change Language..."), m_page);

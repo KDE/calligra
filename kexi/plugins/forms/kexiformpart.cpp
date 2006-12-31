@@ -500,10 +500,10 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab, KexiMainWindow*
 	KexiProject *prj = mainWin->project();
 	d->dataSourcePage->setProject(prj);
 
-	tab->addTab( d->dataSourcePage, SmallIconSet("database"), "");
+	tab->addTab( d->dataSourcePage, KIcon("database"), "");
 	tab->setTabToolTip( d->dataSourcePage, i18n("Data Source"));
 
-	tab->addTab( d->objectTreeView, SmallIconSet("widgets"), "");
+	tab->addTab( d->objectTreeView, KIcon("widgets"), "");
 	tab->setTabToolTip( d->objectTreeView, i18n("Widgets"));
 }
 

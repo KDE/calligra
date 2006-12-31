@@ -451,7 +451,7 @@ void
 KexiDBFactory::createCustomActions(KActionCollection* col)
 {
 	//this will create shared instance action for design mode (special collection is provided)
-	m_assignAction = new KAction( i18n("&Assign Action..."), SmallIconSet("form_action"),
+	m_assignAction = new KAction( i18n("&Assign Action..."), KIcon("form_action"),
 		0, 0, 0, col, "widget_assign_action");
 }
 

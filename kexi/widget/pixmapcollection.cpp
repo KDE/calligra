@@ -247,21 +247,21 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
 	//// Setup the icon toolbar /////////////////
 	Q3VBoxLayout *vlayout = new Q3VBoxLayout(l, 3);
 	QToolButton *newItemPath = new QToolButton(frame);
-	newItemPath->setIconSet(BarIconSet("fileopen"));
+	newItemPath->setIconSet(KIcon("fileopen"));
 	newItemPath->setTextLabel(i18n("&Add File"), true);
 	vlayout->addWidget(newItemPath);
 	m_buttons.insert(BNewItemPath, newItemPath);
 	connect(newItemPath, SIGNAL(clicked()), this, SLOT(newItemByPath()));
 
 	QToolButton *newItemName = new QToolButton(frame);
-	newItemName->setIconSet(BarIconSet("icons"));
+	newItemName->setIconSet(KIcon("icons"));
 	newItemName->setTextLabel(i18n("&Add an Icon"), true);
 	vlayout->addWidget(newItemName);
 	m_buttons.insert(BNewItemName, newItemName);
 	connect(newItemName, SIGNAL(clicked()), this, SLOT(newItemByName()));
 
 	QToolButton *delItem = new QToolButton(frame);
-	delItem->setIconSet(BarIconSet("edit_remove"));
+	delItem->setIconSet(KIcon("edit_remove"));
 	delItem->setTextLabel(i18n("&Remove Selected Item"), true);
 	vlayout->addWidget(delItem);
 	m_buttons.insert(BDelItem, delItem);
@@ -371,8 +371,8 @@ PixmapCollectionEditor::displayMenu(Q3IconViewItem *it, const QPoint &p)
 {
 	if(!it) return;
 	KMenu *menu = new KMenu();
-	menu->insertItem(SmallIconSet("edit"), i18n("Rename Item"), this, SLOT(renameItem()));
-	menu->insertItem(SmallIconSet("remove"), i18n("Remove Item"), this, SLOT(removeItem()));
+	menu->insertItem(KIcon("edit"), i18n("Rename Item"), this, SLOT(renameItem()));
+	menu->insertItem(KIcon("remove"), i18n("Remove Item"), this, SLOT(removeItem()));
 	menu->exec(p);
 }
 

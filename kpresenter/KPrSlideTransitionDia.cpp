@@ -148,8 +148,8 @@ KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name,
     m_dialog->soundRequester->setUrl( m_soundFileName );
     m_dialog->soundRequester->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
     soundEffectChanged();
-    m_dialog->playButton->setIconSet( SmallIconSet( "player_play" ) );
-    m_dialog->stopButton->setIconSet( SmallIconSet( "player_stop" ) );
+    m_dialog->playButton->setIconSet( KIcon( "player_play" ) );
+    m_dialog->stopButton->setIconSet( KIcon( "player_stop" ) );
     connect( m_dialog->playButton, SIGNAL( clicked() ), this, SLOT( playSound() ) );
     connect( m_dialog->stopButton, SIGNAL( clicked() ), this, SLOT( stopSound() ) );
 

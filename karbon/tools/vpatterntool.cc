@@ -67,9 +67,9 @@ VPatternWidget::VPatternWidget( Q3PtrList<QTableWidgetItem>* patterns, VTool*, Q
 	m_buttonGroup->insert( m_importPatternButton = new QToolButton( m_buttonGroup ) );
 	m_buttonGroup->insert( m_deletePatternButton = new QToolButton( m_buttonGroup ) );
 	m_patternChooser->setFixedSize( 180, 120 );
-	m_importPatternButton->setIcon( SmallIconSet( "14_layer_newlayer" ) );
+	m_importPatternButton->setIcon( KIcon( "14_layer_newlayer" ) );
 	m_importPatternButton->setText( i18n( "Import" ) );
-	m_deletePatternButton->setIcon( SmallIconSet("14_layer_deletelayer" ) );
+	m_deletePatternButton->setIcon( KIcon("14_layer_deletelayer" ) );
 	m_deletePatternButton->setText( i18n( "Delete" ) );
 
 	m_buttonGroup->setInsideMargin( 3 );
