@@ -152,14 +152,11 @@ Things not in bugzilla
     - OpenDocument saving of cell styles should not include the		----
       attributes set for column/rows.
     - Launch the garbage collection in a separate thread.		----
-    - Garbage collection triggering.					----
+    - Garbage collection triggering.					done
       Currently, every minute the whole tree is filled in as possible
       garbage and each piece is checked when time allows. To avoid the
-      check of the whole tree every minute (at worst), a StorageDamage
-      should be implemented. It should know what kind of storage is
-      affected (style, comment, ...) and which rectangle was changed.
-      The intersecting rectangles should then be checked once the
-      StorageDamage is processed.
+      check of the whole tree every minute (at worst), the changed
+      region's rectangle/data pairs are marked as possible garbage.
 
   + Speed up selection.						      1 ----
     - Clipped selection painting.					done

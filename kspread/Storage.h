@@ -31,7 +31,7 @@
 #include "Sheet.h"
 #include "Validity.h"
 
-static const int g_garbageCollectionTimeOut = 60000; // one minute
+static const int g_garbageCollectionTimeOut = 100;
 
 inline uint qHash( const QPoint& point )
 {
@@ -125,16 +125,20 @@ public:
     QList< QPair<QRectF,T> > unshiftColumns(const QRect& rect);
 
 protected:
-    virtual void garbageCollectionInitialization();
+    virtual void triggerGarbageCollection();
     virtual void garbageCollection();
+
+    /**
+     * Triggers all necessary actions after a change of \p rect .
+     * Calls invalidateCache() and adds the data in
+     * \p rect to the list of possible garbage.
+     */
+    void regionChanged( const QRect& rect );
 
     /**
      * Invalidates all cached styles lying in \p rect .
      */
     void invalidateCache( const QRect& rect );
-
-    QTimer* m_garbageCollectionInitializationTimer;
-    QTimer* m_garbageCollectionTimer;
 
 private:
     Sheet* m_sheet;
@@ -150,17 +154,11 @@ template<typename T>
 Storage<T>::Storage( Sheet* sheet )
     : m_sheet( sheet )
 {
-    m_garbageCollectionInitializationTimer = new QTimer();
-    m_garbageCollectionInitializationTimer->start(g_garbageCollectionTimeOut);
-    m_garbageCollectionTimer = new QTimer();
-    m_garbageCollectionTimer->start();
 }
 
 template<typename T>
 Storage<T>::~Storage()
 {
-    delete m_garbageCollectionInitializationTimer;
-    delete m_garbageCollectionTimer;
 }
 
 template<typename T>
@@ -219,10 +217,9 @@ void Storage<T>::insert(const Region& region, const T& _data)
             m_usedArea -= (*it)->rect();
         else
             m_usedArea += (*it)->rect();
-        // invalidate the affected, cached styles
-        invalidateCache( (*it)->rect() );
         // insert data
         m_tree.insert((*it)->rect(), data);
+        regionChanged( (*it)->rect() );
     }
     m_sheet->setRegionPaintDirty( region );
 }
@@ -275,9 +272,8 @@ template<typename T>
 QList< QPair<QRectF,T> > Storage<T>::shiftRows(const QRect& rect)
 {
     const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
-    // invalidate the affected, cached styles
-    invalidateCache( invalidRect );
     QList< QPair<QRectF,T> > undoData = m_tree.shiftRows( rect );
+    regionChanged( invalidRect );
     m_sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
@@ -286,9 +282,8 @@ template<typename T>
 QList< QPair<QRectF,T> > Storage<T>::shiftColumns(const QRect& rect)
 {
     const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
-    // invalidate the affected, cached styles
-    invalidateCache( invalidRect );
     QList< QPair<QRectF,T> > undoData = m_tree.shiftColumns( rect );
+    regionChanged( invalidRect );
     m_sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
@@ -297,9 +292,8 @@ template<typename T>
 QList< QPair<QRectF,T> > Storage<T>::unshiftRows(const QRect& rect)
 {
     const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
-    // invalidate the affected, cached styles
-    invalidateCache( invalidRect );
     QList< QPair<QRectF,T> > undoData = m_tree.unshiftRows( rect );
+    regionChanged( invalidRect );
     m_sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
@@ -308,20 +302,15 @@ template<typename T>
 QList< QPair<QRectF,T> > Storage<T>::unshiftColumns(const QRect& rect)
 {
     const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
-    // invalidate the affected, cached styles
-    invalidateCache( invalidRect );
     QList< QPair<QRectF,T> > undoData = m_tree.unshiftColumns( rect );
+    regionChanged( invalidRect );
     m_sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
 
 template<typename T>
-void Storage<T>::garbageCollectionInitialization()
+void Storage<T>::triggerGarbageCollection()
 {
-    // last garbage collection finished?
-    if ( !m_possibleGarbage.isEmpty() )
-        return;
-    m_possibleGarbage = m_tree.intersectingPairs( QRect( 1, 1, KS_colMax, KS_rowMax ) );
 }
 
 template<typename T>
@@ -341,6 +330,7 @@ void Storage<T>::garbageCollection()
     {
         kDebug(36006) << "Storage: removing default data at " << currentPair.first << endl;
         m_tree.remove( currentPair.first, currentPair.second );
+        triggerGarbageCollection();
         return; // already done
     }
 
@@ -368,6 +358,17 @@ void Storage<T>::garbageCollection()
             break;
         }
     }
+    triggerGarbageCollection();
+}
+
+template<typename T>
+void Storage<T>::regionChanged( const QRect& rect )
+{
+    // mark the possible garbage
+    m_possibleGarbage += m_tree.intersectingPairs( rect );
+    triggerGarbageCollection();
+    // invalidate cache
+    invalidateCache( rect );
 }
 
 template<typename T>
@@ -395,14 +396,10 @@ class CommentStorage : public QObject, public Storage<QString>
 {
     Q_OBJECT
 public:
-    explicit CommentStorage( Sheet* sheet ) : Storage<QString>( sheet )
-    {
-        connect(m_garbageCollectionInitializationTimer, SIGNAL(timeout()), this, SLOT(garbageCollectionInitialization()));
-        connect(m_garbageCollectionTimer, SIGNAL(timeout()), this, SLOT(garbageCollection()));
-    }
+    explicit CommentStorage( Sheet* sheet ) : Storage<QString>( sheet ) {}
 
 protected Q_SLOTS:
-    virtual void garbageCollectionInitialization() { Storage<QString>::garbageCollectionInitialization(); }
+    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
     virtual void garbageCollection() { Storage<QString>::garbageCollection(); }
 };
 
@@ -412,14 +409,10 @@ class ConditionsStorage : public QObject, public Storage<Conditions>
 {
     Q_OBJECT
 public:
-    explicit ConditionsStorage( Sheet* sheet ) : Storage<Conditions>( sheet )
-    {
-        connect(m_garbageCollectionInitializationTimer, SIGNAL(timeout()), this, SLOT(garbageCollectionInitialization()));
-        connect(m_garbageCollectionTimer, SIGNAL(timeout()), this, SLOT(garbageCollection()));
-    }
+    explicit ConditionsStorage( Sheet* sheet ) : Storage<Conditions>( sheet ) {}
 
 protected Q_SLOTS:
-    virtual void garbageCollectionInitialization() { Storage<Conditions>::garbageCollectionInitialization(); }
+    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
     virtual void garbageCollection() { Storage<Conditions>::garbageCollection(); }
 };
 
@@ -429,14 +422,10 @@ class ValidityStorage : public QObject, public Storage<Validity>
 {
     Q_OBJECT
 public:
-    explicit ValidityStorage( Sheet* sheet ) : Storage<Validity>( sheet )
-    {
-        connect(m_garbageCollectionInitializationTimer, SIGNAL(timeout()), this, SLOT(garbageCollectionInitialization()));
-        connect(m_garbageCollectionTimer, SIGNAL(timeout()), this, SLOT(garbageCollection()));
-    }
+    explicit ValidityStorage( Sheet* sheet ) : Storage<Validity>( sheet ) {}
 
 protected Q_SLOTS:
-    virtual void garbageCollectionInitialization() { Storage<Validity>::garbageCollectionInitialization(); }
+    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
     virtual void garbageCollection() { Storage<Validity>::garbageCollection(); }
 };
 

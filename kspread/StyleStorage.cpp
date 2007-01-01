@@ -44,8 +44,6 @@ public:
     QSet<int> usedRows;
     QRegion usedArea;
     QHash<Style::Key, QList<SharedSubStyle> > subStyles;
-    QTimer* garbageCollectionInitializationTimer;
-    QTimer* garbageCollectionTimer;
     QList< QPair<QRectF,SharedSubStyle> > possibleGarbage;
     QCache<QPoint, Style> cache;
     QRegion cachedArea;
@@ -56,19 +54,11 @@ StyleStorage::StyleStorage( Sheet* sheet )
     , d(new Private)
 {
     d->sheet = sheet;
-    d->garbageCollectionInitializationTimer = new QTimer(this);
-    connect(d->garbageCollectionInitializationTimer, SIGNAL(timeout()), this, SLOT(garbageCollectionInitialization()));
-    d->garbageCollectionInitializationTimer->start(g_garbageCollectionTimeOut);
-    d->garbageCollectionTimer = new QTimer(this);
-    connect(d->garbageCollectionTimer, SIGNAL(timeout()), this, SLOT(garbageCollection()));
-    d->garbageCollectionTimer->start();
     d->cache.setMaxCost( g_maximumCachedStyles );
 }
 
 StyleStorage::~StyleStorage()
 {
-    delete d->garbageCollectionInitializationTimer;
-    delete d->garbageCollectionTimer;
     delete d;
 }
 
@@ -160,8 +150,6 @@ int StyleStorage::nextStyleRight( int column, int row ) const
 void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
 {
 //     kDebug(36006) << "StyleStorage: inserting " << subStyle->type() << " into " << rect << endl;
-    // invalidate the affected, cached styles
-    invalidateCache( rect );
     // lookup already used substyles
     typedef const QList< SharedSubStyle> StoredSubStyleList;
     StoredSubStyleList& storedSubStyles( d->subStyles.value(subStyle->type()) );
@@ -172,12 +160,14 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
         {
 //             kDebug(36006) << "[REUSING EXISTING SUBSTYLE]" << endl;
             d->tree.insert(rect, *it);
+            regionChanged( rect );
             return;
         }
     }
     // insert substyle and add to the used substyle list
     d->tree.insert(rect, subStyle);
     d->subStyles[subStyle->type()].append(subStyle);
+    regionChanged( rect );
 }
 
 void StyleStorage::insert(const Region& region, const Style& style)
@@ -216,10 +206,9 @@ void StyleStorage::insert(const Region& region, const Style& style)
             else
                 d->usedArea += (*it)->rect();
 
-            // invalidate the affected, cached styles
-            invalidateCache( (*it)->rect() );
             // insert substyle
             insert((*it)->rect(), subStyle);
+            regionChanged( (*it)->rect() );
         }
     }
     d->sheet->setRegionPaintDirty( region );
@@ -268,9 +257,8 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::deleteColumns(int position, 
 QList< QPair<QRectF,SharedSubStyle> > StyleStorage::shiftRows( const QRect& rect )
 {
     const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
-    // invalidate the affected, cached styles
-    invalidateCache( invalidRect );
     QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.shiftRows( rect );
+    regionChanged( invalidRect );
     d->sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
@@ -278,9 +266,8 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::shiftRows( const QRect& rect
 QList< QPair<QRectF,SharedSubStyle> > StyleStorage::shiftColumns( const QRect& rect )
 {
     const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
-    // invalidate the affected, cached styles
-    invalidateCache( invalidRect );
     QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.shiftColumns( rect );
+    regionChanged( invalidRect );
     d->sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
@@ -288,9 +275,8 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::shiftColumns( const QRect& r
 QList< QPair<QRectF,SharedSubStyle> > StyleStorage::unshiftRows( const QRect& rect )
 {
     const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
-    // invalidate the affected, cached styles
-    invalidateCache( invalidRect );
     QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.unshiftRows( rect );
+    regionChanged( invalidRect );
     d->sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
 }
@@ -298,19 +284,10 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::unshiftRows( const QRect& re
 QList< QPair<QRectF,SharedSubStyle> > StyleStorage::unshiftColumns( const QRect& rect )
 {
     const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
-    // invalidate the affected, cached styles
-    invalidateCache( invalidRect );
     QList< QPair<QRectF,SharedSubStyle> > undoData = d->tree.unshiftColumns( rect );
+    regionChanged( invalidRect );
     d->sheet->setRegionPaintDirty( Region(invalidRect) );
     return undoData;
-}
-
-void StyleStorage::garbageCollectionInitialization()
-{
-    // last garbage collection finished?
-    if ( !d->possibleGarbage.isEmpty() )
-        return;
-    d->possibleGarbage = d->tree.intersectingPairs( QRect( 1, 1, KS_colMax, KS_rowMax ) );
 }
 
 void StyleStorage::garbageCollection()
@@ -330,6 +307,7 @@ void StyleStorage::garbageCollection()
                         << ", used " << currentPair.second->ref << " times" << endl;
         d->tree.remove( currentPair.first, currentPair.second );
         d->subStyles[currentPair.second->type()].removeAll( currentPair.second );
+        QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
         return; // already done
     }
 
@@ -347,6 +325,7 @@ void StyleStorage::garbageCollection()
                         << " at " << currentPair.first
                         << ", used " << currentPair.second->ref << " times" << endl;
         d->tree.remove( currentPair.first, currentPair.second );
+        QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
         return; // already done
     }
 
@@ -394,6 +373,16 @@ void StyleStorage::garbageCollection()
             break;
         }
     }
+    QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
+}
+
+void StyleStorage::regionChanged( const QRect& rect )
+{
+    // mark the possible garbage
+    d->possibleGarbage += d->tree.intersectingPairs( rect );
+    QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
+    // invalidate cache
+    invalidateCache( rect );
 }
 
 void StyleStorage::invalidateCache( const QRect& rect )

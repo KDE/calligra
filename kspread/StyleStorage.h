@@ -155,10 +155,16 @@ public:
     QList< QPair<QRectF,SharedSubStyle> > unshiftColumns(const QRect& rect);
 
 protected Q_SLOTS:
-    void garbageCollectionInitialization();
     void garbageCollection();
 
 protected:
+    /**
+     * Triggers all necessary actions after a change of \p rect .
+     * Calls invalidateCache() and adds the substyles in
+     * \p rect to the list of possible garbage.
+     */
+    void regionChanged( const QRect& rect );
+
     /**
      * Invalidates all cached styles lying in \p rect .
      */
