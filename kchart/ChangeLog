@@ -1,5 +1,8 @@
 2007-01-01  Inge Wallin  <inge@lysator.liu.se>
 
+	Import KDChart 2.0 sources.
+	* kdchart/*.{h,cpp}: New file.
+	
 	Prepare porting of KChart from KDChart 1.1.4 to KDChart 2.0
 	* rename kdchart  -->  kdchart1
 	* *.cpp: Don't include kdchart/...
