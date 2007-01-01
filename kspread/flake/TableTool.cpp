@@ -74,7 +74,7 @@ void TableTool::activate( bool temporary )
     kDebug() << k_funcinfo << endl;
 
     KoSelection* selection = m_canvas->shapeManager()->selection();
-    foreach ( KoShape* shape, selection->selectedShapes().toList() )
+    foreach ( KoShape* shape, selection->selectedShapes() )
     {
         d->tableShape = dynamic_cast<TableShape*>( shape );
         if ( d->tableShape )

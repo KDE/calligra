@@ -50,15 +50,15 @@ VLayerDeleteCmd::~VLayerDeleteCmd()
 void VLayerDeleteCmd::redo()
 {
     m_deleteLayers = true;
-    QSet<KoShape*> shapes;
+    QList<KoShape*> shapes;
 
     foreach( KoShapeLayer* layer, m_layers )
     {
         m_document->removeLayer( layer );
-        shapes += layer->iterator().toSet();
+        shapes += layer->iterator();
     }
     if( ! m_deleteCmd )
-        m_deleteCmd = new KoShapeDeleteCommand( m_controller, shapes, 0 );
+        m_deleteCmd = new KoShapeDeleteCommand( m_controller, shapes );
 
     m_deleteCmd->redo();
 }

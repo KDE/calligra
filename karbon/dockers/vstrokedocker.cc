@@ -36,6 +36,7 @@
 #include <KoShapeManager.h>
 #include <KoShapeBorderCommand.h>
 #include <KoShapeBorderModel.h>
+#include <KoSelection.h>
 
 #include "vstrokedocker.h"
 

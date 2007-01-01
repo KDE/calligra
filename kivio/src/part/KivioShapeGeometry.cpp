@@ -97,7 +97,7 @@ void KivioShapeGeometry::positionChanged()
     if(m_lockedForUpdate)
         return;
 
-    KoSelectionSet selectionSet = m_selection->selectedShapes(KoFlake::StrippedSelection);
+    QList<KoShape*> selectionSet = m_selection->selectedShapes(KoFlake::StrippedSelection);
     KoShape* firstShape = *(selectionSet.begin());
     QPointF position = firstShape->position();
     double dx = m_xInput->value() - position.x();
@@ -130,7 +130,7 @@ void KivioShapeGeometry::sizeChanged()
 
     m_lockedForUpdate = true;
 
-    KoSelectionSet selectionSet = m_selection->selectedShapes(KoFlake::StrippedSelection);
+    QList<KoShape*> selectionSet = m_selection->selectedShapes(KoFlake::StrippedSelection);
     KoShape* firstShape = *(selectionSet.begin());
     QSizeF size = firstShape->size();
     double dx = m_widthInput->value() - size.width();
@@ -186,7 +186,7 @@ void KivioShapeGeometry::protectSizeChanged(bool protect)
     if(m_lockedForUpdate)
         return;
 
-    KoSelectionSet selectionSet = m_selection->selectedShapes(KoFlake::StrippedSelection);
+    QList<KoShape*> selectionSet = m_selection->selectedShapes(KoFlake::StrippedSelection);
     QList<bool> oldLock;
     QList<bool> newLock;
 
@@ -204,7 +204,7 @@ void KivioShapeGeometry::rotationChanged()
     if(m_lockedForUpdate)
         return;
 
-    KoSelectionSet selectionSet = m_selection->selectedShapes(KoFlake::StrippedSelection);
+    QList<KoShape*> selectionSet = m_selection->selectedShapes(KoFlake::StrippedSelection);
     KoShape* firstShape = *(selectionSet.begin());
     double rotation = firstShape->rotation();
     double dr = m_rotationInput->value() - rotation;

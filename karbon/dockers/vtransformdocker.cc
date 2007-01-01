@@ -212,7 +212,7 @@ VTransformDocker::translate()
 
     if( rect.x() != newPos.x() || rect.y() != newPos.y() )
     {
-        KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+        QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
         QPointF moveBy = newPos - selection->position();
         QList<QPointF> oldPositions;
         QList<QPointF> newPositions;
@@ -237,7 +237,7 @@ VTransformDocker::scale()
 
 	if( rect.width() != newSize.width() || rect.height() != newSize.height() )
 	{
-		KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+		QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
 		QList<QSizeF> oldSizes, newSizes;
 		foreach( KoShape* shape, selectedShapes )
 		{
@@ -309,7 +309,7 @@ VTransformDocker::rotate()
 	
 	KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 	KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-	KoSelectionSet selectedShapes = selection->selectedShapes();
+	QList<KoShape*> selectedShapes = selection->selectedShapes();
 
 	QPointF center = selection->boundingRect().center();
 	double initialAngle = selection->rotation();

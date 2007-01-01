@@ -533,12 +533,12 @@ KarbonView::editDeleteSelection()
 	if( ! selection )
 		return;
 
-	KoSelectionSet selectedShapes = selection->selectedShapes();
+	QList<KoShape*> selectedShapes = selection->selectedShapes();
 	if( selectedShapes.count() < 1)
 		return;
 	selection->deselectAll();
 
-	KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( part(), selectedShapes, 0 );
+	KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( part(), selectedShapes );
 	part()->KoDocument::addCommand( cmd );
 }
 
@@ -613,7 +613,7 @@ KarbonView::selectionAlign(KoShapeAlignCommand::Align align)
 	if( ! selection )
 		return;
 
-	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+	QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
 	if( selectedShapes.count() < 1)
 		return;
 
@@ -696,7 +696,7 @@ KarbonView::selectionDistribute(KoShapeDistributeCommand::Distribute distribute)
 	if( ! selection )
 		return;
 
-	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+	QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
 	if( selectedShapes.count() < 2) return;
 
 	KoShapeDistributeCommand *cmd = new KoShapeDistributeCommand( selectedShapes, distribute, selection->boundingRect());
@@ -738,7 +738,7 @@ KarbonView::selectionBringToFront()
 {
     debugView("KarbonView::selectionBringToFront()");
 
-    KoSelectionSet selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
     part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::BringToFront ) );
 }
 
@@ -747,7 +747,7 @@ KarbonView::selectionMoveUp()
 {
     debugView("KarbonView::selectionMoveUp()");
 
-    KoSelectionSet selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
     part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::RaiseShape ) );
 }
 
@@ -756,7 +756,7 @@ KarbonView::selectionMoveDown()
 {
     debugView("KarbonView::selectionMoveDown()");
 
-    KoSelectionSet selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
     part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::LowerShape ) );
 }
 
@@ -765,7 +765,7 @@ KarbonView::selectionSendToBack()
 {
     debugView("KarbonView::selectionSendToBack()");
 
-    KoSelectionSet selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
     part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::SendToBack ) );
 }
 
@@ -779,7 +779,7 @@ KarbonView::groupSelection()
 		return;
 
 	KoShapeGroup *group = new KoShapeGroup();
-	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+	QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
 	QList<KoShape*> groupedShapes;
 
 	// only group shapes with an unselected parent
@@ -806,8 +806,8 @@ KarbonView::ungroupSelection()
 	if( ! selection )
 		return;
 
-	KoSelectionSet selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
-	KoSelectionSet containerSet;
+	QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+	QList<KoShape*> containerSet;
 
 	// only ungroup shape containers with an unselected parent
 	foreach( KoShape* shape, selectedShapes )
@@ -849,7 +849,7 @@ KarbonView::combinePath()
 	if( ! selection )
 		return;
 
-	KoSelectionSet selectedShapes = selection->selectedShapes();
+	QList<KoShape*> selectedShapes = selection->selectedShapes();
 	QList<KoPathShape*> paths;
 
 	foreach( KoShape* shape, selectedShapes )
@@ -874,7 +874,7 @@ KarbonView::separatePath()
 	if( ! selection )
 		return;
 
-	KoSelectionSet selectedShapes = selection->selectedShapes();
+	QList<KoShape*> selectedShapes = selection->selectedShapes();
 	QList<KoPathShape*> paths;
 
 	foreach( KoShape* shape, selectedShapes )

@@ -234,13 +234,13 @@ void VLayerDocker::deleteItem()
     {
         if( m_document->layers().count() > selectedLayers.count() )
         {
-            KoSelectionSet deleteShapes;
+            QList<KoShape*> deleteShapes;
             foreach( KoShapeLayer* layer, selectedLayers )
             {
-                deleteShapes.unite( layer->iterator().toSet() );
-                deleteShapes.insert( layer );
+                deleteShapes += layer->iterator();
+                deleteShapes.append( layer );
             }
-            cmd = new KoShapeDeleteCommand( m_shapeController, deleteShapes, 0 );
+            cmd = new KoShapeDeleteCommand( m_shapeController, deleteShapes );
             cmd->setText( i18n( "Delete Layer" ) );
         }
         else
@@ -250,7 +250,7 @@ void VLayerDocker::deleteItem()
     }
     else if( selectedShapes.count() )
     {
-        cmd = new KoShapeDeleteCommand( m_shapeController, selectedShapes.toSet(), 0 );
+        cmd = new KoShapeDeleteCommand( m_shapeController, selectedShapes );
     }
 
     if( cmd )
@@ -284,7 +284,7 @@ void VLayerDocker::raiseItem()
     }
     else if( selectedShapes.count() )
     {
-        cmd = KoShapeReorderCommand::createCommand( selectedShapes.toSet(), canvas->shapeManager(), KoShapeReorderCommand::RaiseShape );
+        cmd = KoShapeReorderCommand::createCommand( selectedShapes, canvas->shapeManager(), KoShapeReorderCommand::RaiseShape );
     }
 
     if( cmd )
@@ -317,7 +317,7 @@ void VLayerDocker::lowerItem()
     }
     else if( selectedShapes.count() )
     {
-        cmd = KoShapeReorderCommand::createCommand( selectedShapes.toSet(), canvas->shapeManager(), KoShapeReorderCommand::LowerShape );
+        cmd = KoShapeReorderCommand::createCommand( selectedShapes, canvas->shapeManager(), KoShapeReorderCommand::LowerShape );
     }
 
     if( cmd )
