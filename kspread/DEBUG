@@ -10,11 +10,13 @@ Ctrl-Shift-T : activate kspread's self tests
 Ctrl-Shift-I : show object inspector
 
 
-Debug areas (16.09.2006)
+Debug areas (01.01.2007)
 ========================
 36001        kspread
 36002        kspread (Formula)
 36003        kspread (OpenDocument)
 36004        kspread (Painting)
 36005        kspread (UI)
+36006        kspread (Style)
+36007        kspread (Damage)
 37000        kspread

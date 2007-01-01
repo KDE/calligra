@@ -149,8 +149,6 @@ Things not in bugzilla
     - Get rid of KSpread::Style::Currency. Use KSpread::Currency.	done
     - Add configure option to choose wether the style of the current	----
       or of the previous (default) column/row is used on insertion.
-    - OpenDocument saving of cell styles should not include the		----
-      attributes set for column/rows.
     - Launch the garbage collection in a separate thread.		----
     - Garbage collection triggering.					done
       Currently, every minute the whole tree is filled in as possible
