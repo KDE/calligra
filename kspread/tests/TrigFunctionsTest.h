@@ -34,8 +34,10 @@ class TrigFunctionsTest: public QObject
 
 private slots:
   void testCOS();
+  void testCOSH();
   void testPI();
   void testSIN();
+  void testSINH();
   void testTAN();
 
 private:
