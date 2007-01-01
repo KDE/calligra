@@ -31,7 +31,8 @@
 #include <KoTemplateCreateDia.h>
 #include <KoViewAdaptor.h>
 
-#include "kdchart/KDChart.h"
+#include "KDChart.h"
+
 #include "kchart_view.h"
 #include "kchart_factory.h"
 #include "kchart_part.h"

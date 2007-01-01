@@ -1,3 +1,10 @@
+2007-01-01  Inge Wallin  <inge@lysator.liu.se>
+
+	Prepare porting of KChart from KDChart 1.1.4 to KDChart 2.0
+	* rename kdchart  -->  kdchart1
+	* *.cpp: Don't include kdchart/...
+	* CMakeLists.txt use kdchart1 instead of kdchart
+
 2006-12-28  Inge Wallin  <inge@lysator.liu.se>
 
 	Fix ugly wrap around in charttype selection in the wizard.

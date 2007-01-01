@@ -1,13 +1,13 @@
 
 project(kchart)
 
-add_subdirectory( kdchart )
+add_subdirectory( kdchart1 )
 add_subdirectory( toolbar )
 add_subdirectory( pics )
 add_subdirectory( templates )
 
 include_directories(
-	${CMAKE_SOURCE_DIR}/kchart/kdchart/ 
+	${CMAKE_SOURCE_DIR}/kchart/kdchart1/ 
 	${CMAKE_SOURCE_DIR}/kchart/dialogs
 	${CMAKE_SOURCE_DIR}/interfaces 
 	${KOFFICEUI_INCLUDES} )

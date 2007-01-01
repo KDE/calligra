@@ -12,12 +12,13 @@
 using std::cout;
 using std::cerr;
 
+#include "KDChart.h"
+#include "KDChartTable.h"
+
 #include "kchart_part.h"
 #include "kchart_view.h"
 #include "kchart_factory.h"
 #include "kchart_params.h"
-#include "kdchart/KDChart.h"
-#include "kdchart/KDChartTable.h"
 #include "dialogs/KCWizard.h"
 
 #include <KoDom.h>

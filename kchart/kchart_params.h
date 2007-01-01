@@ -26,13 +26,14 @@ class KoXmlWriter;
 class KoGenStyles;
 class KoOasisLoadingContext;
 class KoStore;
+
 class KDChartParams;
 // class DCOPObject;
 
 #include <KoXmlReader.h>
 
 
-#include "kdchart/KDChartParams.h"
+#include "KDChartParams.h"
 
 
 namespace KChart

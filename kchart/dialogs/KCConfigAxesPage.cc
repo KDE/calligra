@@ -34,7 +34,8 @@
 #include <klocale.h>
 #include <kfontdialog.h>
 
-#include "kdchart/KDChartAxisParams.h"
+#include "KDChartAxisParams.h"
+
 #include "kchart_params.h"
 #include "KCConfigAxesPage.h"
 

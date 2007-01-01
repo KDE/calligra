@@ -36,8 +36,8 @@ using std::cerr;
 
 #include <QRegExp>
 
-#include "kdchart/KDChartParams.h"
-#include "kdchart/KDChartAxisParams.h"
+#include "KDChartParams.h"
+#include "KDChartAxisParams.h"
 
 #include "kchart_params.h"
 #include "kchart_part.h"

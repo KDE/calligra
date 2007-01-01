@@ -8,10 +8,12 @@
 
 
 #include <KoView.h>
-#include "kdchart/KDChartAxisParams.h"
 //Added by qt3to4:
 #include <QMouseEvent>
 #include <QPaintEvent>
+
+#include "KDChartAxisParams.h"
+
 
 class KAction;
 class KToggleAction;

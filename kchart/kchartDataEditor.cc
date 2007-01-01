@@ -19,7 +19,8 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-#include "kdchart/KDChartAxisParams.h"
+#include "KDChartAxisParams.h"
+
 #include "kchart_params.h"
 
 #include "kchartDataEditor.h"
