@@ -63,7 +63,7 @@ Value FinancialFunctionsTest::evaluate(const QString& formula)
 
 #if 0
   // this magically generates the CHECKs
-  printf("  CHECK_EVAL( \"%s\",  %15g) );\n", qPrintable(formula), result.asFloat());
+  printf("  CHECK_EVAL( \"%s\",  %.14e) );\n", qPrintable(formula), result.asFloat());
 #endif
 
   return RoundNumber(result);
@@ -102,6 +102,15 @@ void FinancialFunctionsTest::testDB()
   CHECK_EVAL( "DB(2500; 500; 3; 2; 6)",  822.218750000000 );
   CHECK_EVAL( "DB(2500; 500; 3; 3; 6)",  480.997968750000 );
   CHECK_EVAL( "DB(2500; 500; 3; 4; 6)",  140.691905859375 );
+
+  // test cases in OpenFormula specification
+  CHECK_EVAL( "DB(4000;500;4;2)",  963.90 );
+  CHECK_EVAL( "DB(4000;500;4;2;2)",  1510.65 );
+  CHECK_EVAL( "DB(4000;500;4;5)",  0.0 );
+  CHECK_EVAL( "DB(0;500;4;2)",  Value::errorNUM() );
+  CHECK_EVAL( "DB(4000;-500;4;2)",  Value::errorNUM() );
+  CHECK_EVAL( "DB(4000;500;0;0)",  Value::errorNUM() );
+  CHECK_EVAL( "DB(4000;500;2;0)",  Value::errorNUM() );
 }
 
 // Double declining balance depreciation
@@ -141,6 +150,11 @@ void FinancialFunctionsTest::testDDB()
   CHECK_EVAL( "DDB(2500; 500; 24; 23; 2)",  30.719236894479383437 );
   CHECK_EVAL( "DDB(2500; 500; 24; 24; 2)",  -162.08839416072669337 );
   
+  // test cases in OpenFormula specification
+  CHECK_EVAL( "DDB(4000; 500; 4; 2; 2)", 1000 ) ;
+  CHECK_EVAL( "DDB(4000; 500; 4; 2)", 1000 ) ;
+  //CHECK_EVAL( "DDB(1100; 100; 5; 5; 2.3 )", 0 ) ;
+
   // try default factor (=2)
   CHECK_EVAL( "DDB(2400; 300; 10*12; 1)", 40.0 ) ;
   CHECK_EVAL( "DDB(2400; 300; 10; 1)", 480.0 ) ;
@@ -392,7 +406,6 @@ void FinancialFunctionsTest::testEUROCONVERT()
   CHECK_EVAL( "EUROCONVERT( 157; \"PTE\"; \"nlg\" )", 157*2.20371/200.482 );
 }
 
-
 // Level-coupon bond
 // LEVEL_COUPON(faceValue; couponRate; couponsPerYear; years; marketRate)
 void FinancialFunctionsTest::testLEVELCOUPON()
@@ -422,7 +435,13 @@ void FinancialFunctionsTest::testNOMINAL()
   CHECK_EVAL( "NOMINAL(10%; 0)", Value::errorDIV0());
   CHECK_EVAL( "NOMINAL(10%; -1)", Value::errorVALUE());
   CHECK_EVAL( "NOMINAL(10%; -2)", Value::errorVALUE());
+  
+  // test cases in OpenFormula specification
+  CHECK_EVAL( "NOMINAL(8%;4)", 0.0777061876330940 );
+  CHECK_EVAL( "NOMINAL(12.5%;12)", 0.118362966638538 );
+  CHECK_EVAL( "NOMINAL(1%;2)",  0.00997512422417790 );
 }
+
 
 // Straight-line depreciation
 // SLN(cost, salvage, life)
@@ -436,6 +455,9 @@ void FinancialFunctionsTest::testSLN()
 	
 	// http://www.gnome.org/projects/gnumeric/doc/gnumeric-SLN.shtml
 	CHECK_EVAL( "SLN(10000; 700; 10)", 930 );
+	
+	// test cases in OpenFormula specification
+	CHECK_EVAL( "SLN(4000;500;4)", 875);
 }
 
 // Sum-of-years' digits depreciation
@@ -451,6 +473,9 @@ void FinancialFunctionsTest::testSYD()
 	
 	// http://www.gnome.org/projects/gnumeric/doc/gnumeric-SYD.shtml
 	CHECK_EVAL( "SYD(5000; 200; 5; 2)", 1280 );
+	
+	// test cases in OpenFormula specification
+	CHECK_EVAL( "SYD(4000;500;4;2)", 1050 );
 }
 
 // Zero-coupon (pure discount) bond
