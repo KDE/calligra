@@ -6677,7 +6677,8 @@ void View::calcStatusBarOp()
   Value val;
   QRect tmpRect(d->selection->selection());
   MethodOfCalc tmpMethod = doc()->getTypeOfCalc();
-  if ( tmpMethod != NoneCalc )
+  // FIXME Stefan: This should also work for everything's selected.
+  if ( tmpMethod != NoneCalc && !selection()->isAllSelected() )
   {
 
     Value range = sheet->valueRange (tmpRect.left(), tmpRect.top(),
