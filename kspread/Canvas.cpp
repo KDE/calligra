@@ -1037,8 +1037,7 @@ void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
     return;
   }
 
-  Selection* selection = d->view->selection();
-  QRect s( selection->lastRange() );
+  const Selection* selection = d->view->selection();
 
   // The user started the drag in the lower right corner of the marker ?
   if ( d->mouseAction == ResizeCell && !sheet->isProtected() )
@@ -1048,9 +1047,7 @@ void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
   }
   else if ( d->mouseAction == AutoFill && !sheet->isProtected() )
   {
-    QRect dest = s;
-    sheet->autofill( d->autoFillSource, dest );
-
+    sheet->autofill( d->autoFillSource, selection->lastRange() );
     d->view->updateEditWidget();
   }
   // The user started the drag in the middle of a cell ?

@@ -60,18 +60,23 @@ QStringList *AutoFillSequenceItem::other = 0;
  **********************************************************************************/
 
 AutoFillSequenceItem::AutoFillSequenceItem( const Cell* cell )
+    : m_IValue( 0 )
+    , m_DValue( 0.0 )
+    , m_OtherBegin( 0 )
+    , m_OtherEnd( 0 )
+    , m_Type( INTEGER )
 {
     if ( cell->isFormula() )
     {
         m_String = cell->encodeFormula();
         m_Type = FORMULA;
     }
-    else if ( cell->value().isInteger() || cell->isDate() )
+    else if ( cell->value().isInteger() || ( !cell->isDefault() && cell->isDate() ) )
     {
         m_IValue = static_cast<int>( cell->value().asInteger() );
         m_Type = INTEGER;
     }
-    else if ( cell->value().isFloat() || cell->isTime() )
+    else if ( cell->value().isFloat() || ( !cell->isDefault() && cell->isTime() ) )
     {
         m_DValue = cell->value().asFloat();
         m_Type = FLOAT;
@@ -139,7 +144,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const Cell* cell )
             shortDay->append( i18n("Sun") );
         }
 
-        if ( other==0 )
+        if ( other == 0 )
         {
             // other=new QStringList();
             KConfig *config = Factory::global()->config();
@@ -181,9 +186,6 @@ AutoFillSequenceItem::AutoFillSequenceItem( const Cell* cell )
             m_OtherEnd = (otherEnd != -1) ? otherEnd : other->count();
             return;
         }
-
-        if ( m_String[0] == '=' )
-            m_Type = FORMULA;
     }
 }
 
@@ -563,7 +565,7 @@ static void fillSequence( const QList<Cell*>& _srcList,
         }
         else
         {
-            if ( s >= intervalLength )
+            if ( s == -1 )
             {
                 s = intervalLength - 1;
                 ++block;
@@ -571,15 +573,6 @@ static void fillSequence( const QList<Cell*>& _srcList,
         }
 
         kDebug() << "Cell: " << cell->name() << ", position: " << s << ", block: " << block << endl;
-
-        // Special handling for formulas
-        if ( _seqList.value(0) != 0 && _seqList.value(0)->type() == AutoFillSequenceItem::FORMULA )
-        {
-            QString f = cell->decodeFormula( _seqList.value(0)->getString() );
-            cell->setCellText( f );
-            cell->copyFormat( _srcList.at( s ) );
-            continue;
-        }
 
         // Calculate the new value of 'cell' by adding 'block' times the delta to the
         // value of cell 's'.
@@ -602,16 +595,37 @@ static void fillSequence( const QList<Cell*>& _srcList,
             const Value dateValue = cell->doc()->converter()->asDate( Value( variant.toInt() ) );
             cell->setCellValue( dateValue );
         }
+        else if ( _seqList.value( s )->type() == AutoFillSequenceItem::FORMULA )
+        {
+            // Special handling for formulas
+            cell->setCellText( cell->decodeFormula( _seqList.value( s )->getString() ) );
+        }
         else if ( variant.type() == QVariant::Double )
             cell->setCellValue( Value( variant.toDouble() ) );
         else if ( variant.type() == QVariant::Int )
             cell->setCellValue( Value( variant.toInt() ) );
         else if ( variant.type() == QVariant::String )
-            cell->setCellValue( Value( variant.toString() ) );
+        {
+            QRegExp number( "(\\d+)" );
+            int pos = number.indexIn( variant.toString() );
+            if ( pos!=-1 )
+            {
+                const int num = number.cap( 1 ).toInt() + 1;
+                cell->setCellText( variant.toString().replace( number, QString::number( num ) ) );
+            }
+            else if ( !_srcList.at( s )->link().isEmpty() )
+            {
+                cell->setCellText( variant.toString() );
+                cell->setLink( _srcList.at( s )->link() );
+            }
+            else
+                cell->setCellValue( Value( variant.toString() ) );
+        }
 
         // copy the style of the source cell
         //
-        cell->copyFormat( _srcList.at( s ) );
+        if ( !_srcList.at( s )->isDefault() ) // FIXME Stefan: there could be a style also for default cells.
+            cell->copyFormat( _srcList.at( s ) );
 
         // next/previous cell
         if ( down )
@@ -634,12 +648,10 @@ static void fillSequence( const QList<Cell*>& _srcList,
  *
  **********************************************************************************/
 
-void Sheet::autofill( const QRect& src, const QRect& _dest )
+void Sheet::autofill( const QRect& src, const QRect& dest )
 {
-    if ( src == _dest )
+    if ( src.contains( dest ) )
         return;
-
-    QRect dest( _dest );
 
     doc()->emitBeginOperation();
 
@@ -694,11 +706,8 @@ void Sheet::autofill( const QRect& src, const QRect& _dest )
     }
 
     // Fill from right to left
-    if ( ( src.left() == dest.right() || src.left() == dest.right() - 1) && src.right() >= dest.right() )
+    if ( src.left() == dest.right() && src.right() >= dest.right() )
     {
-        if ( src.left() != dest.right() )
-            dest.setRight( dest.right() - 1 );
-
         for ( int y = dest.top(); y <= dest.bottom(); y++ )
         {
             int x;
@@ -717,12 +726,10 @@ void Sheet::autofill( const QRect& src, const QRect& _dest )
     }
 
     // Fill from bottom to top
-    if ( (src.top() == dest.bottom() || src.top() == (dest.bottom() - 1) ) && src.bottom() >= dest.bottom() )
+    if ( src.top() == dest.bottom() && src.bottom() >= dest.bottom() )
     {
-        if (src.top() != dest.bottom() )
-            dest.setBottom(dest.bottom() - 1);
-        int startVal = qMin( dest.left(), src.left());
-        int endVal = qMax(src.right(), dest.right());
+        const int startVal = qMin( dest.left(), src.left() );
+        const int endVal = qMax( src.right(), dest.right() );
         for ( int x = startVal; x <= endVal; x++ )
         {
             int y;
@@ -772,12 +779,12 @@ void Sheet::fillSequence( const QList<Cell*>& _srcList,
     if ( _srcList.count() == 1 )
     {
         const Cell* cell = _srcList.value( 0 );
-        if ( cell->isTime() )
+        if ( !cell->isDefault() && cell->isTime() )
         {
             // TODO Stefan: delta depending on minimum unit of format
             deltaSequence.append( Value( QTime( 1, 0 ), doc() ).asFloat() );
         }
-        else if ( cell->isDate() )
+        else if ( !cell->isDefault() && cell->isDate() )
         {
             // TODO Stefan: delta depending on minimum unit of format
             deltaSequence.append( Value( QDate( 0, 0, 1 ), doc() ).asInteger() );
