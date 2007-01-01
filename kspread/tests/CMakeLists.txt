@@ -64,7 +64,17 @@ target_link_libraries(FinancialFunctionsTest kspreadcommon ${QT_QTTEST_LIBRARY})
 
 add_test(FinancialFunctions FinancialFunctionsTest)
 
+########### next target ###############
 
+set(MathFunctionsTest_SRCS MathFunctionsTest.cpp)
+
+kde4_automoc(${MathFunctionsTest_SRCS})
+
+kde4_add_executable(MathFunctionsTest RUN_UNINSTALLED ${MathFunctionsTest_SRCS})
+
+target_link_libraries(MathFunctionsTest kspreadcommon ${QT_QTTEST_LIBRARY})
+
+add_test(MathFunctions MathFunctionsTest)
 
 ########### install files ###############
 
