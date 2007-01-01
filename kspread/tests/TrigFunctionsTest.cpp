@@ -230,6 +230,17 @@ void TrigFunctionsTest::testCOS()
   CHECK_EVAL( "COS( 127*2*PI()/128 )", 0.998795456205172 );
 }
 
+void TrigFunctionsTest::testPI()
+{
+  CHECK_EVAL( "PI()", 3.14159265358979 );
+  CHECK_EVAL( "2*PI()", 6.28318530717959);
+  CHECK_EVAL( "3*PI()", 9.42477796076938);
+  CHECK_EVAL( "PI()/2", 1.57079632679490);
+  CHECK_EVAL( "PI()/PI()", 1.0 );
+  CHECK_EVAL( "PI()/(2*PI())", 0.5 );
+  CHECK_EVAL( "(2*PI())/(2*PI())", 1.0 );
+}
+
 void TrigFunctionsTest::testSIN()
 {
   // some trivial cases
