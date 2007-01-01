@@ -2,7 +2,7 @@
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/kchart 
-	${CMAKE_SOURCE_DIR}/kchart/kdchart 
+	${CMAKE_SOURCE_DIR}/kchart/kdchart1
 	${CMAKE_SOURCE_DIR}/interfaces 
 	${CMAKE_SOURCE_DIR}/filters/libdialogfilter 
 	${KDE4_INCLUDE_DIR} 
