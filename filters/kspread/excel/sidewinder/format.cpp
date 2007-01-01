@@ -368,6 +368,7 @@ FormatBackground::FormatBackground()
 {
   d = new FormatBackground::Private();
   d->null = true;
+  d->pattern = 0;
 }
 
 // destructor
