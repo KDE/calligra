@@ -1141,10 +1141,9 @@ void KWView::formatFont() {
 }
 
 void KWView::editDeleteFrame() {
-    foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        QUndoCommand *cmd = kwcanvas()->shapeController()->removeShape(shape);
-        m_document->addCommand(cmd);
-    }
+    QUndoCommand *cmd = kwcanvas()->shapeController()->removeShapes(
+            kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection));
+    m_document->addCommand(cmd);
 }
 
 void KWView::toggleHeader() {
