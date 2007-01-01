@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_MATH_FUNCTIONS_TEST
-#define KSPREAD_MATH_FUNCTIONS_TEST
+#ifndef KSPREAD_TRIG_FUNCTIONS_TEST
+#define KSPREAD_TRIG_FUNCTIONS_TEST
 
 #include <QtGui>
 #include <QtTest/QtTest>
@@ -28,7 +28,7 @@
 namespace KSpread
 {
 
-class MathFunctionsTest: public QObject
+class TrigFunctionsTest: public QObject
 {
     Q_OBJECT
 
@@ -43,4 +43,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_MATH_FUNCTIONS_TEST
+#endif // KSPREAD_TRIG_FUNCTIONS_TEST

@@ -66,15 +66,15 @@ add_test(FinancialFunctions FinancialFunctionsTest)
 
 ########### next target ###############
 
-set(MathFunctionsTest_SRCS MathFunctionsTest.cpp)
+set(TrigFunctionsTest_SRCS TrigFunctionsTest.cpp)
 
-kde4_automoc(${MathFunctionsTest_SRCS})
+kde4_automoc(${TrigFunctionsTest_SRCS})
 
-kde4_add_executable(MathFunctionsTest RUN_UNINSTALLED ${MathFunctionsTest_SRCS})
+kde4_add_executable(TrigFunctionsTest RUN_UNINSTALLED ${TrigFunctionsTest_SRCS})
 
-target_link_libraries(MathFunctionsTest kspreadcommon ${QT_QTTEST_LIBRARY})
+target_link_libraries(TrigFunctionsTest kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(MathFunctions MathFunctionsTest)
+add_test(TrigFunctions TrigFunctionsTest)
 
 ########### install files ###############
 

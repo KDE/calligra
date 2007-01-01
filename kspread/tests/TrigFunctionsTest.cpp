@@ -24,7 +24,7 @@
 #include <Formula.h>
 #include <Value.h>
 
-#include "MathFunctionsTest.h"
+#include "TrigFunctionsTest.h"
 
 #include <float.h> // DBL_EPSILON
 #include <math.h>
@@ -60,7 +60,7 @@ static Value RoundNumber(const Value& v)
     return v;  
 }
 
-Value MathFunctionsTest::evaluate(const QString& formula)
+Value TrigFunctionsTest::evaluate(const QString& formula)
 {
   Formula f;
   QString expr = formula;
@@ -91,7 +91,7 @@ namespace QTest
   }
 }
 
-void MathFunctionsTest::testCOS()
+void TrigFunctionsTest::testCOS()
 {
   // some trivial cases
   CHECK_EVAL( "COS(0)", 1);
@@ -230,7 +230,7 @@ void MathFunctionsTest::testCOS()
   CHECK_EVAL( "COS( 127*2*PI()/128 )", 0.998795456205172 );
 }
 
-void MathFunctionsTest::testSIN()
+void TrigFunctionsTest::testSIN()
 {
   // some trivial cases
   CHECK_EVAL( "SIN(0)", 0);
@@ -369,7 +369,7 @@ void MathFunctionsTest::testSIN()
   CHECK_EVAL( "SIN( 127*2*PI()/128 )", -0.0490676743274181 );
 }
 
-void MathFunctionsTest::testTAN()
+void TrigFunctionsTest::testTAN()
 {
   // some trivial cases
   CHECK_EVAL( "TAN(0)", 0);
@@ -507,5 +507,5 @@ void MathFunctionsTest::testTAN()
 }
 
 
-QTEST_KDEMAIN(MathFunctionsTest, GUI)
-#include "MathFunctionsTest.moc"
+QTEST_KDEMAIN(TrigFunctionsTest, GUI)
+#include "TrigFunctionsTest.moc"
