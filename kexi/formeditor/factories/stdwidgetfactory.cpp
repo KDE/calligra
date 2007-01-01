@@ -38,6 +38,7 @@
 #include <klistbox.h>
 #include <ktextedit.h>
 #include <kiconloader.h>
+#include <kicon.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
 #include <kdebug.h>
