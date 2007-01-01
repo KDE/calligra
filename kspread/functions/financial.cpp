@@ -930,11 +930,11 @@ Value func_db (valVector args, ValueCalc *calc, FuncExtra *)
     month = calc->conv()->asFloat (args[4]).asFloat();
 
   // sentinel check
-  if (cost == 0 || life <= 0.0)
-    return Value::errorVALUE ();
+  if (cost == 0 || life <= 0.0 || period == 0)
+    return Value::errorNUM ();
 
   if (calc->lower (calc->div (Value(salvage), Value(cost)), Value(0)))
-    return Value::errorVALUE ();
+    return Value::errorNUM ();
 
   double rate = 1000 * (1 - pow( (salvage/cost), (1/life) ));
   rate = floor( rate + 0.5 )  / 1000;
