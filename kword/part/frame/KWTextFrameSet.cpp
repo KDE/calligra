@@ -25,6 +25,7 @@
 #include "KWPage.h"
 
 #include <KoTextShapeData.h>
+#include <KoInlineTextObjectManager.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -40,7 +41,10 @@ KWTextFrameSet::KWTextFrameSet()
     m_pageManager(0),
     m_kwdoc(0)
 {
-    m_document->setDocumentLayout(new KWTextDocumentLayout(this));
+    KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
+    KoInlineTextObjectManager *manager = new KoInlineTextObjectManager(layout);
+    layout->setInlineObjectTextManager(manager);
+    m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
 }
 
