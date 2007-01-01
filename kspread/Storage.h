@@ -26,6 +26,7 @@
 #include <koffice_export.h>
 
 #include "Condition.h"
+#include "Doc.h"
 #include "Region.h"
 #include "RTree.h"
 #include "Sheet.h"
@@ -364,6 +365,8 @@ void Storage<T>::garbageCollection()
 template<typename T>
 void Storage<T>::regionChanged( const QRect& rect )
 {
+    if ( m_sheet->doc()->isLoading() )
+         return;
     // mark the possible garbage
     m_possibleGarbage += m_tree.intersectingPairs( rect );
     triggerGarbageCollection();

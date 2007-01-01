@@ -378,6 +378,8 @@ void StyleStorage::garbageCollection()
 
 void StyleStorage::regionChanged( const QRect& rect )
 {
+    if ( d->sheet->doc()->isLoading() )
+         return;
     // mark the possible garbage
     d->possibleGarbage += d->tree.intersectingPairs( rect );
     QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
