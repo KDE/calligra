@@ -18,7 +18,7 @@ KAboutData * newKarbonAboutData()
 		version,
 		description,
 		KAboutData::License_GPL,
-		I18N_NOOP( "(c) 2001-2006, The Karbon Developers" ),
+		I18N_NOOP( "(c) 2001-2007, The Karbon Developers" ),
 		I18N_NOOP( "You are invited to participate in any way." ),
 		"http://www.koffice.org/karbon/");
 	aboutData->addAuthor(

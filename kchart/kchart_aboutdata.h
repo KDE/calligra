@@ -35,7 +35,7 @@ KAboutData * newKChartAboutData()
 {
     KAboutData * aboutData= new KAboutData("kchart", I18N_NOOP("KChart"),
                                            version, description, KAboutData::License_GPL,
-                                           I18N_NOOP("(c) 1998-2006, Kalle Dalheimer and Klarälvdalens Datakonsult AB"),
+                                           I18N_NOOP("(c) 1998-2007, Kalle Dalheimer and Klarälvdalens Datakonsult AB"),
                                            I18N_NOOP("The drawing engine which forms the base of KChart\nis also available as a commercial product\nfrom Klarälvdalens Datakonsult AB.\nContact info@klaralvdalens-datakonsult.se\nfor more information."),
 					   "http://www.koffice.org/kchart/");
     aboutData->addAuthor("Kalle Dalheimer", 0, "kalle@kde.org");

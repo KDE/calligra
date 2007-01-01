@@ -30,7 +30,7 @@ KAboutData *newKugarAboutData()
 {
     KAboutData * aboutData = new KAboutData( "kugar", I18N_NOOP( "Kugar" ),
                              VERSION, I18N_NOOP( "Report viewer(generator)" ), KAboutData::License_GPL,
-                             I18N_NOOP( "(c) 1999-2006, The Kugar Team" ), 0, "http://www.koffice.org" );
+                             I18N_NOOP( "(c) 1999-2007, The Kugar Team" ), 0, "http://www.koffice.org" );
 
     aboutData->addAuthor( "Alexander Dymo",
                           I18N_NOOP( "Maintainer, Report Designer, Kugar library enhancements" ), "cloudtemple@mksat.net",

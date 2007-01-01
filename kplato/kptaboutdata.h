@@ -34,7 +34,7 @@ KAboutData * newAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kplato", I18N_NOOP("KPlato"),
                                            KPLATO_VERSION, KPLATO_DESCRIPTION, KAboutData::License_GPL,
-                                           I18N_NOOP("(c) 1998-2006, The KPlato Team"), 0,
+                                           I18N_NOOP("(c) 1998-2007, The KPlato Team"), 0,
 					   "http://www.koffice.org/kplato/" );
     aboutData->addAuthor("Thomas Zander", 0, 0 ); // please don't re-add, I don't like getting personal emails :)
     aboutData->addAuthor("Bo Thorsen", 0, "bo@sonofthor.dk");
