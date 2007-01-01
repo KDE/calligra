@@ -9,7 +9,7 @@ doc = fs.textDocument()
 
 doc.setHtml(
     (
-        "<h1><font color=\"blue\">Python Sample Script</font></h1>"
+        "<h1><font color=\"blue\">Python Sample: Text</font></h1>"
         "<p><i>italic</i> and <b>bold</b> and <u>underlined</u> and a <a href=\"test\">link</a></p>."
         "<ul>"
         "<li>Time=<b>%s</b></li>"

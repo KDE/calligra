@@ -1,26 +1,66 @@
 <KrossScripting>
+
+    <!--
     <script
+        name="pydocstructur"
+        text="Document Structur"
+        comment="Document Structur"
+        interpreter="python"
+        file="extensions/docstructur.py" />
+    //-->
+
+    <collection name="insert" text="Insert">
+        <script
+            name="pyinsertdocinfos"
+            text="Document Informations"
+            comment="This python script inserts document informations"
+            interpreter="python"
+            file="extensions/insert_docinfos.py" />
+        <script
+            name="pyinsertframelist"
+            text="Framelist"
+            comment="This python script inserts a list of all frames"
+            interpreter="python"
+            file="extensions/insert_framelist.py" />
+        <script
+            name="pyinsertshape"
+            text="Shape..."
+            comment="This python script inserts a shape"
+            interpreter="python"
+            file="extensions/insert_shape.py" />
+    </collection>
+
+    <collection name="samples" text="Samples">
+        <script
             name="pysampletext"
-            text="Python Sample: Text"
+            text="Text"
             comment="This python script demonstrates usage of the text engine"
             interpreter="python"
             file="extensions/sample_text.py" />
-    <script
+        <script
             name="pysamplelist"
-            text="Python Sample: Lists"
+            text="Lists"
             comment="This python script demonstrates how to deal with lists"
             interpreter="python"
             file="extensions/sample_lists.py" />
-    <script
+        <script
             name="pysampletables"
-            text="Python Sample: Tables"
+            text="Tables"
             comment="This python script demonstrates how to deal with tables"
             interpreter="python"
             file="extensions/sample_tables.py" />
-    <script
+        <script
             name="pysampleshapes"
-            text="Python Sample: Shapes"
+            text="Shapes"
             comment="This python script demonstrates usage of shapes"
             interpreter="python"
             file="extensions/sample_shapes.py" />
+        <script
+            name="pysampleallshapes"
+            text="All Shapes"
+            comment="This python script adds all shapes"
+            interpreter="python"
+            file="extensions/sample_allshapes.py" />
+    </collection>
+
 </KrossScripting>

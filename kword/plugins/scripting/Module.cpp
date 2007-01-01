@@ -128,6 +128,14 @@ void Module::setStartPage(int pageNumber)
      doc()->setStartPage(pageNumber);
 }
 
+QStringList Module::shapeKeys()
+{
+    QStringList keys;
+    foreach(QString key, KoShapeRegistry::instance()->keys())
+        keys.append(key);
+    return keys;
+}
+
 int Module::frameSetCount()
 {
     return doc()->frameSetCount();

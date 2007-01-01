@@ -75,6 +75,12 @@ namespace Scripting {
             /** Set a new startpage for this document.  */
             void setStartPage(int pageNumber);
 
+            /***** Shapes *****/
+
+            /** Return a list of shapeId names. Such a shapeId name could then be
+            used for example with the \a addFrame() method to create a new frame. */
+            QStringList shapeKeys();
+
             /***** FrameSet *****/
 
             /** Return the amount of framesets this document holds. */
