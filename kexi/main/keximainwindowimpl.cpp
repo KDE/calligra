@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -236,6 +236,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	d->userMode = Kexi::startupHandler().forcedUserMode() /* <-- simply forced the user mode */
 		/* project has 'user mode' set as default and not 'design mode' override is found: */
 		|| (pdata && pdata->userMode() && !Kexi::startupHandler().forcedDesignMode());
+	d->isProjectNavigatorVisible = Kexi::startupHandler().isProjectNavigatorVisible();
 
 	if(userMode())
 		kDebug() << "KexiMainWindowImpl::KexiMainWindowImpl(): starting up in the User Mode" << endl;
@@ -754,10 +755,14 @@ void KexiMainWindowImpl::initActions()
 	else
 		d->action_view_text_mode = 0;
 
-	d->action_view_nav = new KAction(i18n("Project Navigator"), "", Qt::ALT + Qt::Key_1,
-		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
-	d->action_view_nav->setToolTip(i18n("Go to project navigator panel"));
-	d->action_view_nav->setWhatsThis(i18n("Goes to project navigator panel."));
+	if (d->isProjectNavigatorVisible) {
+		d->action_view_nav = new KAction(i18n("Project Navigator"), "", Qt::ALT + Qt::Key_1,
+			this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
+		d->action_view_nav->setToolTip(i18n("Go to project navigator panel"));
+		d->action_view_nav->setWhatsThis(i18n("Goes to project navigator panel."));
+	}
+	else
+		d->action_view_nav = 0;
 
 	d->action_view_mainarea = new KAction(i18n("Main Area"), "", Qt::ALT + Qt::Key_2,
 		this, SLOT(slotViewMainArea()), actionCollection(), "view_mainarea");
@@ -1144,7 +1149,8 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 		d->action_edit_copy_special_data_table->setEnabled( false );
 
 	//VIEW MENU
-	d->action_view_nav->setEnabled(d->prj);
+	if (d->action_view_nav)
+		d->action_view_nav->setEnabled(d->prj);
 	d->action_view_mainarea->setEnabled(d->prj);
 	if (d->action_view_propeditor)
 		d->action_view_propeditor->setEnabled(d->prj);
@@ -1502,10 +1508,11 @@ tristate KexiMainWindowImpl::closeProject()
 	}
 #endif
 
-	d->saveSettingsForShowProjectNavigator = d->prj; //only save nav. visibility setting is project is opened
-	if (!d->prj) {
+	//only save nav. visibility setting is project is opened
+	d->saveSettingsForShowProjectNavigator = d->prj && d->isProjectNavigatorVisible;
+
+	if (!d->prj)
 		return true;
-	}
 
 	{
 		// make sure the project can be closed
@@ -1609,10 +1616,10 @@ void KexiMainWindowImpl::initContextHelp() {
 #endif
 }
 
-void
-KexiMainWindowImpl::initNavigator()
+void KexiMainWindowImpl::initNavigator()
 {
-	kDebug() << "KexiMainWindowImpl::initNavigator()" << endl;
+	if (!d->isProjectNavigatorVisible)
+		return;
 
 	if(!d->nav)
 	{

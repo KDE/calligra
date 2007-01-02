@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -78,6 +78,15 @@ static KCmdLineOptions options[] =
 	"be performed without write support. This option\n"
 	"is ignored when \"createdb\" option is present,\n"
 	"otherwise the database could not be created."), 0 },
+  { "user-mode", I18N_NOOP(
+	"Start project in User Mode, regardless \n"
+	"of the project settings."), 0 },
+  { "design-mode", I18N_NOOP(
+	"Start project in Design Mode, regardless \n"
+	"of the project settings."), 0 },
+  { "show-navigator", I18N_NOOP(
+	"Show the Project Navigator side pane even\n"
+	"if Kexi runs in User Mode."), 0 },
   { "skip-startup-dialog", I18N_NOOP(
 	"Skip displaying startup dialog window.\n"
 	"If there is no project name specified to open,\n"
@@ -125,12 +134,6 @@ static KCmdLineOptions options[] =
 	"of type <object_type> and name <object_name>\n"
 	"from specified project on application start.\n"
 	"See --print for more details."), 0 },
-  { "user-mode", I18N_NOOP(
-	"Start project in User Mode, regardless \n"
-	"of the project settings."), 0 },
-  { "design-mode", I18N_NOOP(
-	"Start project in Design Mode, regardless \n"
-	"of the project settings."), 0 },
 
   { ":", I18N_NOOP("Options related to database servers:"), 0 },
   { "u", 0, 0 },
