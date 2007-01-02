@@ -20,7 +20,7 @@
 #include <qworkspace.h>
 #include <q3dockarea.h>
 #include <q3dockwindow.h>
-#include <q3hbox.h>
+#include <khbox.h>
 #include <qpainter.h>
 #include <qevent.h>
 #include <qobject.h>
@@ -142,7 +142,7 @@ KFormDesignerKDevPart::KFormDesignerKDevPart(QWidget *parent, const char *name, 
 		setUniqueFormMode(false);
 	m_inShell = (!args.grep("shell").isEmpty());
 
-	Q3HBox *container = new Q3HBox(parent, "kfd_container_widget");
+	KHBox *container = new KHBox(parent, "kfd_container_widget");
 	container->setFocusPolicy(Qt::ClickFocus);
 
 	m_workspace = new QWorkspace(container, "kfd_workspace");

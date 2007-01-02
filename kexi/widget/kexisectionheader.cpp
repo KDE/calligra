@@ -23,7 +23,7 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <q3hbox.h>
+#include <khbox.h>
 #include <qtooltip.h>
 //Added by qt3to4:
 #include <QEvent>
@@ -53,7 +53,7 @@ class KexiSectionHeaderPrivate
 		Qt::Orientation orientation;
 		QLabel *lbl;
 		KexiSectionHeader::BoxLayout *lyr;
-		Q3HBox *lbl_b;
+		KHBox *lbl_b;
 };
 
 //==========================
@@ -66,7 +66,7 @@ KexiSectionHeader::KexiSectionHeader(const QString &caption, Orientation o, QWid
 	d->orientation = o;
 	d->lyr = new BoxLayout( this, d->orientation==Qt::Vertical ? Q3BoxLayout::TopToBottom : Q3BoxLayout::LeftToRight );
 	d->lyr->setAutoAdd(true);
-	d->lbl_b = new Q3HBox(this);
+	d->lbl_b = new KHBox(this);
 	d->lbl = new QLabel(QString(" ")+caption, d->lbl_b);
 	d->lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 	d->lbl->setFocusPolicy(StrongFocus);
