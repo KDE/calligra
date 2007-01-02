@@ -839,6 +839,20 @@ QItemSelectionModel::SelectionFlags NodeTreeView::selectionCommand(const QModelI
     return QTreeView::selectionCommand( index, event );
 }
 
+void NodeTreeView::contextMenuEvent ( QContextMenuEvent * event )
+{
+    kDebug()<<k_funcinfo<<endl;
+    QModelIndex i = indexAt( event->pos() );
+    if ( ! i.isValid() ) {
+        return;
+    }
+    Node *node = itemModel()->node( i );
+    if ( node == 0 ) {
+        return;
+    }
+    emit contextMenuRequested( node, event->globalPos() );
+}
+
 //-----------------------------------
 TaskEditor::TaskEditor( Part *part, QWidget *parent )
     : ViewBase( part, parent )
@@ -854,6 +868,8 @@ TaskEditor::TaskEditor( Part *part, QWidget *parent )
     connect( m_editor, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT ( slotCurrentChanged( QModelIndex ) ) );
 
     connect( m_editor, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
+    
+    connect( m_editor, SIGNAL( contextMenuRequested( Node*, const QPoint& ) ), SLOT( slotContextMenuRequested( Node*, const QPoint& ) ) );
 }
 
 void TaskEditor::draw( Project &project )
@@ -928,6 +944,25 @@ Node *TaskEditor::currentNode() const {
         return 0;
     }
     return n;
+}
+
+void TaskEditor::slotContextMenuRequested( Node *node, const QPoint& pos )
+{
+    kDebug()<<k_funcinfo<<node->name()<<" : "<<pos<<endl;
+    QString name;
+    switch ( node->type() ) {
+        case Node::Type_Task:
+        case Node::Type_Milestone:
+            name = "task_popup";
+            break;
+        case Node::Type_Summarytask:
+            name = "summarytask_popup";
+            break;
+        default:
+            name = "node_popup";
+    }
+    kDebug()<<k_funcinfo<<name<<endl;
+    emit requestPopupMenu( name, pos );
 }
 
 void TaskEditor::slotEnableActions()

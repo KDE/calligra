@@ -558,6 +558,8 @@ View::View( Part* part, QWidget* parent )
     connect( m_resourceview, SIGNAL( itemDoubleClicked() ), SLOT( slotEditResource() ) );
     connect( m_resourceview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
+    connect( m_taskeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
     connect( m_resourceeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
 
@@ -1220,6 +1222,12 @@ void View::slotOpenNode()
 {
     //kDebug()<<k_funcinfo<<endl;
     Node * node = currentTask();
+    slotOpenNode( node );
+}
+
+void View::slotOpenNode( Node *node )
+{
+    //kDebug()<<k_funcinfo<<endl;
     if ( !node )
         return ;
 

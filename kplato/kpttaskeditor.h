@@ -131,6 +131,7 @@ signals:
     void currentChanged( const QModelIndex& );
     void currentColumnChanged( QModelIndex, QModelIndex );
     void selectionChanged( const QModelIndexList );
+    void contextMenuRequested( Node *node, const QPoint &pos );
     
 protected slots:
     void headerContextMenuRequested( const QPoint &pos );
@@ -141,7 +142,8 @@ protected slots:
 protected:
     void keyPressEvent(QKeyEvent *event);
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
-
+    void contextMenuEvent( QContextMenuEvent * event );
+    
 private:
     bool m_arrowKeyNavigation;
 };
@@ -163,6 +165,7 @@ public:
     virtual void updateReadWrite( bool /*readwrite*/ ) {};
 
 signals:
+    void requestPopupMenu( const QString&, const QPoint & );
     void openNode();
     void addTask();
     void addMilestone();
@@ -184,6 +187,8 @@ protected:
 private slots:
     void slotSelectionChanged( const QModelIndexList );
     void slotCurrentChanged( const QModelIndex& );
+    void slotContextMenuRequested( Node *node, const QPoint& pos );
+    
     void slotEnableActions();
 
     void slotAddTask();

@@ -237,6 +237,7 @@ protected slots:
     void slotViewReports();
 
     void slotOpenNode();
+    void slotOpenNode( Node *node );
     void slotTaskProgress();
     void slotDeleteTask( QList<Node*> lst );
     void slotDeleteTask( Node *node );
