@@ -1752,7 +1752,7 @@ from the attached dataset.
 of the dataset values are ignored completely.</b>
 It will show one digit behind the comma.
 The resulting chart can be perfectly compared to
-another chart since it allways starts and ends at the very same level - no
+another chart since it always starts and ends at the very same level - no
 matter what the dataset values are about actually.
 
 \verbatim
