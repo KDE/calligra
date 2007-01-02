@@ -178,6 +178,7 @@ public:
     
 signals:
     void requestPopupMenu( const QString&, const QPoint& );
+    void addResource( ResourceGroup *group );
     
 public slots:
     /// Activate/deactivate the gui

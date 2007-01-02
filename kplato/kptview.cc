@@ -527,6 +527,8 @@ View::View( Part* part, QWidget* parent )
     connect( m_taskeditor, SIGNAL( indentTask() ), SLOT( slotIndentTask() ) );
     connect( m_taskeditor, SIGNAL( unindentTask() ), SLOT( slotUnindentTask() ) );
 
+    connect( m_resourceeditor, SIGNAL( addResource( ResourceGroup* ) ), SLOT( slotAddResource( ResourceGroup* ) ) );
+
     connect( m_scheduleeditor, SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
     connect( m_scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
     connect( m_scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
@@ -1116,7 +1118,6 @@ void View::slotAddSubTask()
     delete dia;
 }
 
-
 void View::slotAddTask()
 {
     Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
@@ -1538,12 +1539,36 @@ void View::slotExportGantt()
     }
 }
 
+void View::slotAddResource( ResourceGroup *group )
+{
+    kDebug()<<k_funcinfo<<endl;
+    if ( group == 0 ) {
+        return;
+    }
+    Resource *r = new Resource();
+    ResourceDialog *dia = new ResourceDialog( getProject(), r );
+    if ( dia->exec()  == QDialog::Accepted) {
+        KMacroCommand *m = new KMacroCommand( i18n( "Add resource" ) );
+        m->addCommand( new AddResourceCmd( getPart(), group, r ) );
+        KCommand * cmd = dia->buildCommand( getPart() );
+        if ( cmd ) {
+            m->addCommand( cmd );
+        }
+        getPart()->addCommand( m );
+        delete dia;
+        return;
+    }
+    delete r;
+    delete dia;
+}
+
 void View::slotEditResource()
 {
     //kDebug()<<k_funcinfo<<endl;
     Resource * r = currentResource();
-    if ( !r )
+    if ( r == 0 ) {
         return ;
+    }
     ResourceDialog *dia = new ResourceDialog( getProject(), r );
     if ( dia->exec()  == QDialog::Accepted) {
         KCommand * cmd = dia->buildCommand( getPart() );

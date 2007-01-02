@@ -172,6 +172,7 @@ public:
 
 public slots:
     void slotUpdate();
+    void slotAddResource( ResourceGroup *group );
     void slotEditResource();
     void slotEditCut();
     void slotEditCopy();

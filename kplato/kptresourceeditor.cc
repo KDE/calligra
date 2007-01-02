@@ -1071,7 +1071,18 @@ void ResourceEditor::setupGui()
 void ResourceEditor::slotAddResource()
 {
     kDebug()<<k_funcinfo<<endl;
-    /*    emit addResource();*/
+    ResourceGroup *g = currentResourceGroup();
+    if ( g == 0 ) {
+        Resource *r = currentResource();
+        if ( r == 0 ) {
+            return;
+        }
+        g = r->parentGroup();
+    }
+    if ( g == 0 ) {
+        return;
+    }
+    emit addResource( g );
 }
 
 void ResourceEditor::slotAddGroup()

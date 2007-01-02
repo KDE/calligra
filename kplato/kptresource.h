@@ -235,7 +235,9 @@ public:
     const QString &email() const { return m_email;}
 
     void copy( Resource *resource );
-
+    
+    ResourceGroup *parentGroup() const { return qobject_cast<ResourceGroup*>( parent() ); }
+    
     /// Set the time from when the resource is available to this project
     void setAvailableFrom( const QDateTime &af ) {m_availableFrom = af;}
     /// Return the time when the resource is available to this project
