@@ -23,7 +23,7 @@ kde4_add_plugin(krita_openexr_import WITH_PREFIX ${krita_openexr_import_PART_SRC
 
 
 
-target_link_libraries(krita_openexr_import kritaui krita_rgb_f32 krita_rgb_f16half ${OPENEXR_LIBRARIES} )
+target_link_libraries(krita_openexr_import kritaui ${OPENEXR_LIBRARIES} )
 
 install(TARGETS krita_openexr_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -38,7 +38,7 @@ kde4_add_plugin(krita_openexr_export WITH_PREFIX ${krita_openexr_export_PART_SRC
 
 
 
-target_link_libraries(krita_openexr_export kritaui krita_rgb_f32 krita_rgb_f16half ${OPENEXR_LIBRARIES})
+target_link_libraries(krita_openexr_export kritaui ${OPENEXR_LIBRARIES})
 
 install(TARGETS krita_openexr_export  DESTINATION ${PLUGIN_INSTALL_DIR})
 
