@@ -1228,6 +1228,31 @@ void DocumentWrapper::setEnabled( bool enabled )
             setShortcut( KShortcut( CTRL + Key_G ) );
         getInsertSymbolAction()->
             setShortcut( KShortcut( CTRL + Key_I ) );
+        getAddOverlineAction()->
+            setShortcut( KShortcut( CTRL + SHIFT + Key_O ) );
+        getAddUnderlineAction()->
+            setShortcut( KShortcut( CTRL + SHIFT + Key_U ) );
+        getAddBracketAction()->
+            setShortcut( KShortcut( CTRL + SHIFT + Key_B ) );
+        getAddSBracketAction()->
+            setShortcut( KShortcut( CTRL + SHIFT + Key_D ) );
+        getAddCBracketAction()->
+            setShortcut( KShortcut( CTRL + SHIFT + Key_C ) );
+        getAddAbsAction()->
+            setShortcut( KShortcut( CTRL + SHIFT + Key_A ) );
+        getAddFractionAction()->
+            setShortcut( KShortcut( CTRL + SHIFT + Key_F ) );
+        getAddRootAction()->
+            setShortcut( KShortcut( CTRL + SHIFT + Key_R ) );
+        getAddSumAction()->
+            setShortcut( KShortcut( CTRL + SHIFT + Key_S ) );
+        getAddProductAction()->
+            setShortcut( KShortcut( CTRL + SHIFT + Key_P ) );
+        getAddIntegralAction()->
+            setShortcut( KShortcut( CTRL + SHIFT + Key_I ) );
+        getAddMatrixAction()->
+            setShortcut( KShortcut( CTRL + SHIFT + Key_M ) );
+
     }
     else {
         getAddGenericUpperAction()->setShortcut( KShortcut() );
@@ -1235,6 +1260,18 @@ void DocumentWrapper::setEnabled( bool enabled )
         getRemoveEnclosingAction()->setShortcut( KShortcut() );
         getMakeGreekAction()->setShortcut( KShortcut() );
         getInsertSymbolAction()->setShortcut( KShortcut() );
+        getAddOverlineAction()->setShortcut( KShortcut() );
+        getAddUnderlineAction()->setShortcut( KShortcut() );
+        getAddBracketAction()->setShortcut( KShortcut() );
+        getAddSBracketAction()->setShortcut( KShortcut() );
+        getAddCBracketAction()->setShortcut( KShortcut() );
+        getAddAbsAction()->setShortcut( KShortcut() );
+        getAddFractionAction()->setShortcut( KShortcut() );
+        getAddRootAction()->setShortcut( KShortcut() );
+        getAddSumAction()->setShortcut( KShortcut() );
+        getAddProductAction()->setShortcut( KShortcut() );
+        getAddIntegralAction()->setShortcut( KShortcut() );
+        getAddMatrixAction()->setShortcut( KShortcut() );
     }
 }
 
