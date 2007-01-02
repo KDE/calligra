@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Builds a single .kexi file from a .sql file specified as $1.
+# Only .kexi file that is older than .sql file is recreated.
+# ksqlite is needed on the PATH
+
+PATH=$PATH:../3rdparty/kexisql3/src/.libs/
+which ksqlite > /dev/null || exit 1
+
+[ $# -lt 1 ] && echo "Missing .kexi.sql filename." && exit 1
+
+kexi_file=`echo $1 | sed -e "s/\.kexi\.sql/\.kexi/"`
+if test -f $kexi_file -a ! $kexi_file -ot $1 ; then
+	echo "Local $kexi_file is newer than $1 - skipping it"
+	exit 0
+fi
+rm -f $kexi_file
+echo "Creating $kexi_file ... "
+ksqlite $kexi_file < $1 || exit 1
+echo "OK"
