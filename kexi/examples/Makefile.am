@@ -1,5 +1,5 @@
-%.kexi: %.kexi.sql
-	./build_kexi_file.sh $<
+Simple_Database.kexi: Simple_Database.kexi.sql
+	./build_kexi_file.sh Simple_Database.kexi.sql
 
 examplesdir = $(kde_datadir)/kexi/examples
-examples_DATA=Simple_Database.kexi
+examples_DATA = Simple_Database.kexi
