@@ -27,9 +27,10 @@
 #include <KoXmlNS.h>
 #include <QXmlInputSource>
 #include <QXmlSimpleReader>
+#include <KoDom.h>
 
 typedef KGenericFactory<Odp2Kpr> Odp2KprFactory;
-K_EXPORT_COMPONENT_FACTORY( libodp2kpr, KprOdpFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY( libodp2kpr, Odp2KprFactory( "kofficefilters" ) )
 
 Odp2Kpr::Odp2Kpr(QObject *parent,const QStringList&) :
     KoFilter(parent)
