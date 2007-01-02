@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -71,6 +71,9 @@ class KEXICORE_EXPORT KexiStartupData
 			Used on startup (by --user-mode comman line switch). 
 			By default this is false. */
 		bool forcedUserMode() const;
+
+		/*! \return true if the Project Navigator should be visible even if User Mode is on. */
+		bool isProjectNavigatorVisible() const;
 		
 	protected:
 		KexiProjectData *m_projectData;
@@ -78,6 +81,7 @@ class KEXICORE_EXPORT KexiStartupData
 		KexiStartupData::Import m_importActionData;
 		bool m_forcedUserMode : 1;
 		bool m_forcedDesignMode : 1;
+		bool m_isProjectNavigatorVisible : 1;
 		bool m_createDB : 1;
 		bool m_dropDB : 1;
 		bool m_alsoOpenDB : 1;

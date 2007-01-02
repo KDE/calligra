@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -359,6 +359,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
 	m_forcedUserMode = args->isSet("user-mode");
 	m_forcedDesignMode = args->isSet("design-mode");
+	m_isProjectNavigatorVisible = args->isSet("show-navigator");
 	bool createDB = args->isSet("createdb");
 	const bool alsoOpenDB = args->isSet("create-opendb");
 	if (alsoOpenDB)

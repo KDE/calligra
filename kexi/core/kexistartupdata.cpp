@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ KexiStartupData::KexiStartupData()
 	, m_action(KexiStartupData::DoNothing)
 	, m_forcedUserMode(false)
 	, m_forcedDesignMode(false)
+	, m_isProjectNavigatorVisible(false)
 //	, m_createDB(false)
 //	, m_dropDB(false)
 //	, m_alsoOpenDB(false)
@@ -61,6 +62,13 @@ bool KexiStartupData::forcedDesignMode() const
 	return m_forcedDesignMode;
 }
 
+bool KexiStartupData::isProjectNavigatorVisible() const
+{
+	if (m_forcedUserMode && !m_forcedDesignMode)
+		return m_isProjectNavigatorVisible;
+	return true;
+}
+
 KexiStartupData::Import KexiStartupData::importActionData() const
 {
 	return m_importActionData;
@@ -70,6 +78,7 @@ KexiStartupData::Import::Import()
 {
 }
 
-KexiStartupData::Import::operator bool() const {
+KexiStartupData::Import::operator bool() const
+{
 	return !fileName.isEmpty() && !mimeType.isEmpty();
 }

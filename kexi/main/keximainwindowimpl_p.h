@@ -1,6 +1,6 @@
 /* This file is part of the KDE projec
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -478,6 +478,9 @@ void updatePropEditorDockWidthInfo() {
 
 		//! Indicates if project is started in User Mode
 		bool userMode : 1;
+
+		//! Indicates if project navigator should be visible
+		bool isProjectNavigatorVisible : 1;
 
 		//! Used on opening 1st child window
 		bool maximizeFirstOpenedChildFrm : 1;

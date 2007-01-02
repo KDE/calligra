@@ -20,7 +20,13 @@ TODO: PqxxMigrate::drv_copyTable():  we've switched from BLOBs to LongText
   ==KexiDB::Field::LongText part shoud be removed; add other backward-copatibility code (how?)
        if (fieldsExpanded.at(index)->field->type()==KexiDB::Field::BLOB || fieldsExpanded.at(index)->field->type()==KexiDB::Field::LongText)
 TODO: examples in makefile.am fails with automake 
-      (fix ksqlite path to 3rdparty/kexisql3/src/ksqli as it's not installed)
+      (fix ksqlite path to 3rdparty/kexisql3/src/ksqlite as it's not installed)
+
+2007-01-02
+Startup
+- Command line option "--show-navigator" added - shows the Project Navigator
+  side pane even if Kexi runs in User Mode.
+2.0: merged
 
 2006-12-21..28
 Kexi 2.0
