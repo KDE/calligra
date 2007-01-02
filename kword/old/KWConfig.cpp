@@ -71,7 +71,7 @@ using namespace KSpell2;
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
-#include <kurlrequesterdlg.h>
+#include <kurlrequesterdialog.h>
 #include <kfiledialog.h>
 #include <QTabWidget>
 #include <keditlistbox.h>

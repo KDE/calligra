@@ -70,7 +70,7 @@
 
 #include <kmessagebox.h>
 #include <kdeversion.h>
-#include <kurlrequesterdlg.h>
+#include <kurlrequesterdialog.h>
 #include <k3listview.h>
 #include <kfiledialog.h>
 #include <KoEditPath.h>
