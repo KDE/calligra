@@ -22,6 +22,7 @@
 
 #include <QDebug>
 #include <QList>
+#include <QRect>
 #include <QString>
 
 namespace KSpread
@@ -151,8 +152,8 @@ public:
     }
 
     /**
-     * Inserts \p data at \p col , \p row .
-     * \return the overridden data (default data, if no overwrite)
+     * Removes data at \p col , \p row .
+     * \return the removed data (default data, if none)
      */
     T remove( int col, int row )
     {
@@ -177,6 +178,92 @@ public:
         // adjust the offsets of this row and the following rows
         for ( int r = row; r < m_rows.count(); ++r )
             --m_rows[r];
+        return oldData;
+    }
+
+    /**
+     * Insert \p number columns at \p position .
+     * \return the data, that became out of range (shifted over the end)
+     */
+    QList<T> insertColumns( int position, int number = 1 )
+    {
+        QList<T> oldData;
+        // TODO
+        return oldData;
+    }
+
+    /**
+     * Removes \p number columns at \p position .
+     * \return the removed data
+     */
+    QList<T> removeColumns( int position, int number = 1 )
+    {
+        QList<T> oldData;
+        // TODO
+        return oldData;
+    }
+
+    /**
+     * Insert \p number rows at \p position .
+     * \return the data, that became out of range (shifted over the end)
+     */
+    QList<T> insertRows( int position, int number = 1 )
+    {
+        QList<T> oldData;
+        // TODO
+        return oldData;
+    }
+
+    /**
+     * Removes \p number rows at \p position .
+     * \return the removed data
+     */
+    QList<T> removeRows( int position, int number = 1 )
+    {
+        QList<T> oldData;
+        // TODO
+        return oldData;
+    }
+
+    /**
+     * Shifts the rows right of \p rect to the right by the width of \p rect .
+     */
+    QList<T> shiftRows( const QRect& rect )
+    {
+        QList<T> oldData;
+        // TODO
+        return oldData;
+    }
+
+    /**
+     * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
+     */
+    QList<T> shiftColumns( const QRect& rect )
+    {
+        QList<T> oldData;
+        // TODO
+        return oldData;
+    }
+
+    /**
+     * Shifts the rows left of \p rect to the left by the width of \p rect .
+     * \return the former rectangle/data pairs
+     */
+    QList<T> unshiftRows( const QRect& rect )
+    {
+        QList<T> oldData;
+        // TODO
+        return oldData;
+    }
+
+    /**
+     * Shifts the columns on top of \p rect to the top by the height of \p rect .
+     * \return the removed data
+     */
+    QList<T> unshiftColumns( const QRect& rect )
+    {
+        QList<T> oldData;
+        // TODO
         return oldData;
     }
 
