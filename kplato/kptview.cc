@@ -966,6 +966,13 @@ void View::slotCurrentScheduleChanged()
 {
     kDebug()<<k_funcinfo<<endl;
     // hmmm, find a better way. Maybe a "current view schedule"?
+    Schedule *sch = getProject().currentSchedule();
+    foreach ( QAction *act, m_scheduleActions.keys() ) {
+        if ( m_scheduleActions[ act ] == sch ) {
+            act->setChecked( true );
+            break;
+        }
+    }
     m_ganttview->drawChanges();
     //m_resourceview->draw();
     m_accountsview->draw();
@@ -978,7 +985,9 @@ void View::slotViewSchedule( QAction *act )
     kDebug()<<k_funcinfo<<endl;
     Schedule *sch = m_scheduleActions.value( act, 0 );
     // hmmm, find a better way. Maybe a "current view schedule"?
-    getProject().setCurrentSchedule( sch->id() );
+    if ( sch != getProject().currentSchedule() ) {
+        getProject().setCurrentSchedule( sch->id() );
+    }
 }
 
 void View::slotActionDestroyed( QObject *o )
@@ -1887,12 +1896,26 @@ void View::slotPrintDebug()
 }
 void View::slotPrintSelectedDebug()
 {
-    Node * curr = m_ganttview->currentNode();
-    if ( curr ) {
-        kDebug() << "-------- Debug printout: Selected node" << endl;
-        curr->printDebug( true, "" );
-    } else
-        slotPrintDebug();
+    if ( m_tab->currentWidget() == m_ganttview ) {
+        Node * curr = m_ganttview->currentNode();
+        if ( curr ) {
+            kDebug() << "-------- Debug printout: Selected node" << endl;
+            curr->printDebug( true, "" );
+        } else
+            slotPrintDebug();
+    } else if ( m_tab->currentWidget() == m_resourceeditor ) {
+        Resource *r = m_resourceeditor->currentResource();
+        if ( r ) {
+            r->printDebug("");
+            return;
+        }
+        ResourceGroup *g = m_resourceeditor->currentResourceGroup();
+        if ( g ) {
+            r->printDebug("");
+            return;
+        }
+    }
+    slotPrintDebug();
 }
 void View::slotPrintCalendarDebug()
 {

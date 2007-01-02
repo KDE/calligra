@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  Copyright (C) 2001 Thomas zander <zander@kde.org>
- Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Library General Public
@@ -116,36 +116,38 @@ void Project::calculate()
         kError() << k_funcinfo << "No current schedule to calculate" << endl;
         return ;
     }
-    Effort::Use estType = ( Effort::Use ) m_currentSchedule->type();
+    MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
+    Effort::Use estType = ( Effort::Use ) cs->type();
     if ( type() == Type_Project ) {
-        initiateCalculation( *m_currentSchedule );
+        initiateCalculationLists( *cs );
+        initiateCalculation( *cs );
         if ( m_constraint == Node::MustStartOn ) {
             //kDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString()<<endl;
-            m_currentSchedule->startTime = m_constraintStartTime;
-            m_currentSchedule->earliestStart = m_constraintStartTime;
+            cs->startTime = m_constraintStartTime;
+            cs->earliestStart = m_constraintStartTime;
             // Calculate from start time
-            propagateEarliestStart( m_currentSchedule->earliestStart );
-            m_currentSchedule->latestFinish = calculateForward( estType );
-            propagateLatestFinish( m_currentSchedule->latestFinish );
-            calculateBackward( estType );
-            m_currentSchedule->endTime = scheduleForward( m_currentSchedule->startTime, estType );
+            propagateEarliestStart( cs->earliestStart );
+            cs->latestFinish = calculateForward( estType );
+            propagateLatestFinish( cs->latestFinish );
+            cs->calculateBackward( estType );
+            cs->endTime = scheduleForward( cs->startTime, estType );
             calcCriticalPath( false );
         } else {
             //kDebug()<<k_funcinfo<<"Node="<<m_name<<" End="<<m_constraintEndTime.toString()<<endl;
-            m_currentSchedule->endTime = m_constraintEndTime;
-            m_currentSchedule->latestFinish = m_constraintEndTime;
+            cs->endTime = m_constraintEndTime;
+            cs->latestFinish = m_constraintEndTime;
             // Calculate from end time
-            propagateLatestFinish( m_currentSchedule->latestFinish );
-            m_currentSchedule->earliestStart = calculateBackward( estType );
-            propagateEarliestStart( m_currentSchedule->earliestStart );
-            calculateForward( estType );
-            m_currentSchedule->startTime = scheduleBackward( m_currentSchedule->endTime, estType );
+            propagateLatestFinish( cs->latestFinish );
+            cs->earliestStart = calculateBackward( estType );
+            propagateEarliestStart( cs->earliestStart );
+            cs->calculateForward( estType );
+            cs->startTime = scheduleBackward( cs->endTime, estType );
             calcCriticalPath( true );
         }
         //makeAppointments();
         calcResourceOverbooked();
-        m_currentSchedule->notScheduled = false;
-        emit scheduleChanged( static_cast<MainSchedule*>( m_currentSchedule ) );
+        cs->notScheduled = false;
+        emit scheduleChanged( cs );
     } else if ( type() == Type_Subproject ) {
         kWarning() << k_funcinfo << "Subprojects not implemented" << endl;
     } else {
@@ -156,13 +158,17 @@ void Project::calculate()
 bool Project::calcCriticalPath( bool fromEnd )
 {
     //kDebug()<<k_funcinfo<<endl;
+    MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
+    if ( cs == 0 ) {
+        return false;
+    }
     if ( fromEnd ) {
-        QListIterator<Node*> startnodes = m_startNodes;
+        QListIterator<Node*> startnodes = cs->startNodes();
         while ( startnodes.hasNext() ) {
             startnodes.next() ->calcCriticalPath( fromEnd );
         }
     } else {
-        QListIterator<Node*> endnodes = m_endNodes;
+        QListIterator<Node*> endnodes = cs->endNodes();
         while ( endnodes.hasNext() ) {
             endnodes.next() ->calcCriticalPath( fromEnd );
         }
@@ -196,14 +202,21 @@ Duration *Project::getRandomDuration()
 DateTime Project::calculateForward( int use )
 {
     //kDebug()<<k_funcinfo<<m_name<<endl;
+    MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
+    if ( cs == 0 ) {
+        return DateTime();
+    }
     if ( type() == Node::Type_Project ) {
+        // Do constrained first
+        foreach ( Node *n, cs->hardConstraints() ) {
+            n->calculateEarlyFinish( use );
+        }
         // Follow *parent* relations back and
         // calculate forwards following the child relations
         DateTime finish;
         DateTime time;
-        QListIterator<Node*> endnodes = m_endNodes;
-        while ( endnodes.hasNext() ) {
-            time = endnodes.next() ->calculateForward( use );
+        foreach ( Node *n, cs->endNodes() ) {
+            time = n->calculateForward( use );
             if ( !finish.isValid() || time > finish )
                 finish = time;
         }
@@ -218,14 +231,21 @@ DateTime Project::calculateForward( int use )
 DateTime Project::calculateBackward( int use )
 {
     //kDebug()<<k_funcinfo<<m_name<<endl;
+    MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
+    if ( cs == 0 ) {
+        return DateTime();
+    }
     if ( type() == Node::Type_Project ) {
+        // Do constrained first
+        foreach ( Node *n, cs->hardConstraints() ) {
+            n->calculateLateStart( use );
+        }
         // Follow *child* relations back and
         // calculate backwards following parent relation
         DateTime start;
         DateTime time;
-        QListIterator<Node*> startnodes = m_startNodes;
-        while ( startnodes.hasNext() ) {
-            time = startnodes.next() ->calculateBackward( use );
+        foreach ( Node *n, cs->startNodes() ) {
+            time = n->calculateBackward( use );
             if ( !start.isValid() || time < start )
                 start = time;
         }
@@ -239,10 +259,14 @@ DateTime Project::calculateBackward( int use )
 
 DateTime Project::scheduleForward( const DateTime &earliest, int use )
 {
+    MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
+    if ( cs == 0 ) {
+        return DateTime();
+    }
     resetVisited();
     DateTime end = earliest;
     DateTime time;
-    QListIterator<Node*> it( m_endNodes );
+    QListIterator<Node*> it( cs->endNodes() );
     while ( it.hasNext() ) {
         time = it.next() ->scheduleForward( earliest, use );
         if ( time > end )
@@ -255,10 +279,14 @@ DateTime Project::scheduleForward( const DateTime &earliest, int use )
 
 DateTime Project::scheduleBackward( const DateTime &latest, int use )
 {
+    MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
+    if ( cs == 0 ) {
+        return DateTime();
+    }
     resetVisited();
     DateTime start = latest;
     DateTime time;
-    QListIterator<Node*> it( m_startNodes );
+    QListIterator<Node*> it( cs->startNodes() );
     while ( it.hasNext() ) {
         time = it.next() ->scheduleBackward( latest, use );
         if ( time < start )
@@ -271,13 +299,17 @@ DateTime Project::scheduleBackward( const DateTime &latest, int use )
 
 void Project::adjustSummarytask()
 {
-    QListIterator<Node*> it( m_summarytasks );
+    MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
+    if ( cs == 0 ) {
+        return;
+    }
+    QListIterator<Node*> it( cs->summaryTasks() );
     while ( it.hasNext() ) {
         it.next() ->adjustSummarytask();
     }
 }
 
-void Project::initiateCalculation( Schedule &sch )
+void Project::initiateCalculation( MainSchedule &sch )
 {
     //kDebug()<<k_funcinfo<<m_name<<endl;
     // clear all resource appointments
@@ -288,19 +320,16 @@ void Project::initiateCalculation( Schedule &sch )
         git.next() ->initiateCalculation( sch );
     }
     Node::initiateCalculation( sch );
-    m_startNodes.clear();
-    m_endNodes.clear();
-    m_summarytasks.clear();
-    initiateCalculationLists( m_startNodes, m_endNodes, m_summarytasks );
 }
 
-void Project::initiateCalculationLists( QList<Node*> &startnodes, QList<Node*> &endnodes, QList<Node*> &summarytasks )
+void Project::initiateCalculationLists( MainSchedule &sch )
 {
     //kDebug()<<k_funcinfo<<m_name<<endl;
+    sch.clearNodes();
     if ( type() == Node::Type_Project ) {
         QListIterator<Node*> it = childNodeIterator();
         while ( it.hasNext() ) {
-            it.next() ->initiateCalculationLists( startnodes, endnodes, summarytasks );
+            it.next() ->initiateCalculationLists( sch );
         }
     } else {
         //TODO: subproject

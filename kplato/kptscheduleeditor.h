@@ -89,6 +89,9 @@ protected:
     QVariant state( const QModelIndex &index, int role ) const;
     bool setState( const QModelIndex &index, const QVariant &value, int role );
 
+    QVariant allowOverbooking( const QModelIndex &index, int role ) const;
+    bool setAllowOverbooking( const QModelIndex &index, const QVariant &value, int role );
+    
     QVariant usePert( const QModelIndex &index, int role ) const;
     bool setUsePert( const QModelIndex &index, const QVariant &value, int role );
 

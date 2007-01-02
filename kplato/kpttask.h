@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -205,29 +205,41 @@ protected:
     /// Check if this node has any dependent parent nodes
     virtual bool isStartNode() const;
     
-    virtual void initiateCalculation(Schedule &sch);
+    virtual void initiateCalculation(MainSchedule &sch);
     /**
      * Sets up the lists used for calculation.
      * This includes adding summarytasks relations to subtasks
      * and lists for start- and endnodes.
      */
-    virtual void initiateCalculationLists(QList<Node*> &startnodes, QList<Node*> &endnodes, QList<Node*> &summarytasks);
+    virtual void initiateCalculationLists(MainSchedule &sch);
     /**
-     * Calculates ref m_durationForward from ref earliestStart and
-     * returns the resulting end time, 
-     * which will be used as the succesors ref earliestStart.
-     *
+     * Calculates early start and early finish, first for all predeccessors,
+     * then for this task.
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      */
     virtual DateTime calculateForward(int use);
     /**
+     * Calculates ref m_durationForward from ref earliestStart and
+     * returns the resulting end time (early finish),
+     * which will be used as the succesors ref earliestStart.
+     *
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     */
+    virtual DateTime calculateEarlyFinish(int use);
+    /**
+     * Calculates late start and late finish, first for all successors,
+     * then for this task.
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     */
+    virtual DateTime calculateBackward(int use);
+    /**
      * Calculates ref m_durationBackward from ref latestFinish and
-     * returns the resulting start time, 
+     * returns the resulting start time (late start),
      * which will be used as the predecessors ref latestFinish.
      *
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      */
-    virtual DateTime calculateBackward(int use);
+    virtual DateTime calculateLateStart(int use);
     /**
      * Schedules the task within the limits of earliestStart and latestFinish.
      * Calculates ref m_startTime, ref m_endTime and ref m_duration,
@@ -239,6 +251,15 @@ protected:
      */
     virtual DateTime scheduleForward(const DateTime &earliest, int use);
     /**
+     * Schedules the task within the limits of start time and latestFinish,
+     * Calculates end time and duration.
+     * Assumes ref calculateForward() and ref calculateBackward() has been run.
+     *
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     * @return The tasks endtime which can be used for scheduling the successor.
+     */
+    virtual DateTime scheduleFromStartTime(int use);
+    /**
      * Schedules the task within the limits of earliestStart and latestFinish.
      * Calculates ref m_startTime, ref m_endTime and ref m_duration,
      * Assumes ref calculateForward() and ref calculateBackward() has been run.
@@ -248,6 +269,16 @@ protected:
      * @return The tasks starttime which can be used for scheduling the predeccessor.
      */
     virtual DateTime scheduleBackward(const DateTime &latest, int use);
+    /**
+     * Schedules the task within the limits of end time and latestFinish.
+     * Calculates endTime and duration.
+     * Assumes ref calculateForward() and ref calculateBackward() has been run.
+     *
+     * @param latest The task is not scheduled to end later than this
+     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     * @return The tasks starttime which can be used for scheduling the predeccessor.
+     */
+    virtual DateTime scheduleFromEndTime(int use);
     
     /**
      * Summarytasks (with milestones) need special treatment because 

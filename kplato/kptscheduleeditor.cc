@@ -169,7 +169,7 @@ QModelIndex ScheduleItemModel::index( int row, int column, const QModelIndex &pa
 
 int ScheduleItemModel::columnCount( const QModelIndex &parent ) const
 {
-    return 4;
+    return 5;
 }
 
 int ScheduleItemModel::rowCount( const QModelIndex &parent ) const
@@ -260,6 +260,46 @@ bool ScheduleItemModel::setState( const QModelIndex &index, const QVariant &valu
     return false;
 }
 
+QVariant ScheduleItemModel::allowOverbooking( const QModelIndex &index, int role ) const
+{
+    ScheduleManager *sm = manager ( index );
+    if ( sm == 0 ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::EditRole: 
+            return sm->allowOverbooking();
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            return sm->allowOverbooking() ? i18n( "Allow" ) : i18n( "Avoid" );
+        case Role::EnumList:
+            return QStringList() << i18n( "Avoid" ) << i18n( "Allow" );
+        case Role::EnumListValue:
+            return sm->allowOverbooking() ? 1 : 0;
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool ScheduleItemModel::setAllowOverbooking( const QModelIndex &index, const QVariant &value, int role )
+{
+    ScheduleManager *sm = manager ( index );
+    if ( sm == 0 ) {
+        return false;
+    }
+    switch ( role ) {
+        case Qt::EditRole:
+            m_part->addCommand(new ModifyScheduleManagerAllowOverbookingCmd( m_part, *sm, value.toBool(), "Modify Schedule Allow Overbooking" ) );
+            return true;
+    }
+    return false;
+}
+
+
 QVariant ScheduleItemModel::usePert( const QModelIndex &index, int role ) const
 {
     ScheduleManager *sm = manager ( index );
@@ -346,8 +386,9 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
     switch ( index.column() ) {
         case 0: result = name( index, role ); break;
         case 1: result = state( index, role ); break;
-        case 2: result = usePert( index, role ); break;
-        case 3: result = calculateAll( index, role ); break;
+        case 2: result = allowOverbooking( index, role ); break;
+        case 3: result = usePert( index, role ); break;
+        case 4: result = calculateAll( index, role ); break;
         default:
             kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
             return QVariant();
@@ -370,8 +411,9 @@ bool ScheduleItemModel::setData( const QModelIndex &index, const QVariant &value
     switch (index.column()) {
         case 0: return setName( index, value, role );
         case 1: return setState( index, value, role );
-        case 2: return setUsePert( index, value, role );
-        case 3: return setCalculateAll( index, value, role );
+        case 2: return setAllowOverbooking( index, value, role );
+        case 3: return setUsePert( index, value, role );
+        case 4: return setCalculateAll( index, value, role );
         default:
             qWarning("data: invalid display value column %d", index.column());
             break;
@@ -386,8 +428,9 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
             switch ( section ) {
                 case 0: return i18n( "Name" );
                 case 1: return i18n( "State" );
-                case 2: return i18n( "Distribution" );
-                case 3: return i18n( "Calculate" );
+                case 2: return i18n( "Overbooking" );
+                case 3: return i18n( "Distribution" );
+                case 4: return i18n( "Calculate" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -410,6 +453,7 @@ QItemDelegate *ScheduleItemModel::createDelegate( int column, QWidget *parent ) 
     switch ( column ) {
         case 2: return new EnumDelegate( parent );
         case 3: return new EnumDelegate( parent );
+        case 4: return new EnumDelegate( parent );
     }
     return 0;
 }

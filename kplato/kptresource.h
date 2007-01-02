@@ -50,6 +50,7 @@ class Calendar;
 class ResourceRequestCollection;
 class EffortCostMap;
 class Schedule;
+class Schedule;
 class ResourceSchedule;
 class Schedule;
 class XMLLoaderObject;
@@ -247,7 +248,8 @@ public:
     void addWorkingHour( QTime from, QTime until );
     QList<QTime*> workingHours() { return m_workingHours; }
 
-    DateTime getFirstAvailableTime( DateTime after = DateTime() );
+    DateTime firstAvailableAfter( const DateTime &time, const DateTime &limit ) const;
+    
     DateTime getBestAvailableTime( Duration duration );
     DateTime getBestAvailableTime( const DateTime after, const Duration duration );
 
@@ -317,12 +319,12 @@ public:
      * Find the first available time after time, within limit.
      * Returns invalid DateTime if not available.
      */
-    DateTime availableAfter( const DateTime &time, const DateTime limit = DateTime(), bool checkAppointments = false ) const;
+    DateTime availableAfter( const DateTime &time, const DateTime limit = DateTime() ) const;
     /**
      * Find the first available time before time, within limit.
      * Returns invalid DateTime if not available.
      */
-    DateTime availableBefore( const DateTime &time, const DateTime limit = DateTime(), bool checkAppointments = false ) const;
+    DateTime availableBefore( const DateTime &time, const DateTime limit = DateTime()) const;
 
     Resource *findId() const { return findId( m_id ); }
     Resource *findId( const QString &id ) const;
@@ -335,7 +337,7 @@ public:
     Appointment appointmentIntervals() const;
     Duration plannedEffort( const QDate &date ) const;
 
-    void setCurrentSchedule( Schedule *schedule ) { m_currentSchedule = schedule; }
+    void setCurrentSchedulePtr( Schedule *schedule ) { m_currentSchedule = schedule; }
     void setCurrentSchedule( long id ) { m_currentSchedule = findSchedule( id ); }
     Schedule *currentSchedule() const { return m_currentSchedule; }
 
@@ -464,12 +466,13 @@ public:
             m_resource->unregisterRequest( this );
     }
 
-    void makeAppointment( Schedule *schedule )
-    {
-        if ( m_resource )
-            m_resource->makeAppointment( schedule );
-    }
+    void makeAppointment( Schedule *schedule );
     Task *task() const;
+
+    Schedule *resourceSchedule( Schedule *ns );
+    DateTime availableAfter(const DateTime &time, Schedule *ns);
+    DateTime availableBefore(const DateTime &time, Schedule *ns);
+    Duration effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok = 0 );
 
 private:
     Resource *m_resource;
@@ -518,7 +521,7 @@ public:
     */
     int workUnits() const;
 
-    Duration effort( const DateTime &time, const Duration &duration, bool backward, bool *ok = 0 ) const;
+    Duration effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok = 0 ) const;
 
     int numDays( const DateTime &time, bool backward ) const;
 
@@ -526,10 +529,10 @@ public:
      * Returns the duration needed to do the effort  effort
      * starting at start.
      */
-    Duration duration( const DateTime &start, const Duration &effort, bool backward = false );
+    Duration duration( const DateTime &start, const Duration &effort, Schedule *ns, bool backward = false );
 
-    DateTime availableAfter( const DateTime &time );
-    DateTime availableBefore( const DateTime &time );
+    DateTime availableAfter( const DateTime &time, Schedule *ns );
+    DateTime availableBefore( const DateTime &time, Schedule *ns );
 
     /**
      * Makes appointments for task @param task to the 
@@ -611,10 +614,10 @@ void clear() { m_requests.clear(); }
     * Returns the duration needed to do the effort @param effort
     * starting at @param time.
     */
-    Duration duration( const DateTime &time, const Duration &effort, bool backward = false );
+    Duration duration( const DateTime &time, const Duration &effort, Schedule *sch, bool backward = false );
 
-    DateTime availableAfter( const DateTime &time );
-    DateTime availableBefore( const DateTime &time );
+    DateTime availableAfter( const DateTime &time, Schedule *ns );
+    DateTime availableBefore( const DateTime &time, Schedule *ns );
 
     /**
     * Makes appointments for the task @param task to the requested resources.

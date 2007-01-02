@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- Copyright (C) 2005 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2005 - 2007 Dag Andersen <danders@get2net.dk>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Library General Public
@@ -83,15 +83,17 @@ public:
     virtual Node *node() const { return 0; }
     
     virtual bool usePert() const;
-    virtual bool reserveResources() const;
+    virtual bool allowOverbooking() const;
+
 
     virtual bool loadXML( const QDomElement &element );
     virtual void saveXML( QDomElement &element ) const;
     void saveCommonXML( QDomElement &element ) const;
     void saveAppointments( QDomElement &element ) const;
 
-    virtual DateTimeInterval available( const DateTimeInterval &interval ) const
-    { return DateTimeInterval( interval.first, interval.second ); }
+    virtual TimeInterval available( const QDate &date, const TimeInterval &interval ) const;
+    virtual DateTimeInterval available( const DateTimeInterval &interval ) const;
+
     enum CalculationMode { Scheduling, CalculateForward, CalculateBackward };
     /// Set calculation mode
     void setCalculationMode( int mode ) { m_calculationMode = mode; }
@@ -99,6 +101,9 @@ public:
     int calculationMode() const { return m_calculationMode; }
     /// Return the list of appointments
     QList<Appointment*> &appointments() { return m_appointments; }
+    /// Return the list of appointments
+    /// @param which specifies which list is returned
+    QList<Appointment*> &appointments( int which);
     /// Adds appointment to this schedule only
     virtual bool add( Appointment *appointment );
     /// Adds appointment to both this resource schedule and node schedule
@@ -109,7 +114,7 @@ public:
     /// Attach the appointment to appropriate list (appointment->calculationMode() specifies list)
     bool attatch( Appointment *appointment );
     
-    Appointment appointmentIntervals() const;
+    virtual Appointment appointmentIntervals( int which = Scheduling ) const;
 
     virtual bool isOverbooked() const { return false; }
     virtual bool isOverbooked( const DateTime & /*start*/, const DateTime & /*end*/ ) const { return false; }
@@ -166,6 +171,14 @@ public:
 
     virtual void initiateCalculation();
     virtual void calcResourceOverbooked();
+    
+    virtual void insertHardConstraint( Node * ) {}
+    virtual void insertSoftConstraint( Node * ) {}
+    virtual void insertForwardNode( Node *node );
+    virtual void insertBackwardNode( Node *node );
+    virtual void insertStartNode( Node * ) {}
+    virtual void insertEndNode( Node * ) {}
+    virtual void insertSummaryTask( Node * ) {}
 
     void setScheduled( bool on ) { notScheduled = !on; }
     bool isScheduled() const { return !notScheduled; }
@@ -300,11 +313,13 @@ public:
 
     virtual bool isOverbooked() const;
     virtual bool isOverbooked( const DateTime &start, const DateTime &end ) const;
-    Appointment appointmentIntervals() const;
 
     virtual Resource *resource() const { return m_resource; }
     virtual double normalRatePrHour() const;
 
+    virtual TimeInterval available( const QDate &date, const TimeInterval &interval ) const;
+    virtual DateTimeInterval available( const DateTimeInterval &interval ) const;
+    
 private:
     Resource *m_resource;
     Schedule *m_parent;
@@ -327,8 +342,8 @@ public:
     ~MainSchedule();
     virtual bool isDeleted() const { return m_deleted; }
     
+    virtual bool allowOverbooking() const;
     virtual bool usePert() const;
-    virtual bool reserveResources() const;
 
     virtual bool loadXML( const QDomElement &element, Project &project );
     virtual void saveXML( QDomElement &element ) const;
@@ -339,9 +354,43 @@ public:
     int numSchedules() const;
     int indexOf( MainSchedule *sch ) const;
     
+    DateTime calculateForward( int use );
+    DateTime calculateBackward( int use );
+    DateTime scheduleForward( const DateTime &earliest, int use );
+    DateTime scheduleBackward( const DateTime &latest, int use );
+    
+    void clearNodes() { 
+        m_hardconstraints.clear(); 
+        m_softconstraints.clear(); 
+        m_forwardnodes.clear(); 
+        m_backwardnodes.clear();
+        m_startNodes.clear();
+        m_endNodes.clear();
+        m_summarytasks.clear();
+    }
+    virtual void insertHardConstraint( Node *node ) { m_hardconstraints.append( node ); }
+    QList<Node*> hardConstraints() const { return m_hardconstraints; }
+    virtual void insertSoftConstraint( Node *node ) { m_softconstraints.append( node ); }
+    QList<Node*> softConstraints() const { return m_softconstraints; }
+    virtual void insertForwardNode( Node *node ) { m_forwardnodes.append( node ); }
+    virtual void insertBackwardNode( Node *node ) { m_backwardnodes.append( node ); }
+    virtual void insertStartNode( Node *node ) { m_startNodes.append( node ); }
+    QList<Node*> startNodes() const { return m_startNodes; }
+    virtual void insertEndNode( Node *node ) { m_endNodes.append( node ); }
+    QList<Node*> endNodes() const { return m_endNodes; }
+    virtual void insertSummaryTask( Node *node ) { m_summarytasks.append( node ); }
+    QList<Node*> summaryTasks() const { return m_summarytasks; }
+    
 private:
     ScheduleManager *m_manager;
-
+    QList<Node*> m_hardconstraints;
+    QList<Node*> m_softconstraints;
+    QList<Node*> m_forwardnodes;
+    QList<Node*> m_backwardnodes;
+    QList<Node*> m_startNodes;
+    QList<Node*> m_endNodes;
+    QList<Node*> m_summarytasks;
+    
 #ifndef NDEBUG
 public:
     virtual void printDebug( const QString& ident );
@@ -376,10 +425,11 @@ public:
 
     QStringList state() const;
 
+    void setAllowOverbooking( bool on );
+    bool allowOverbooking() const;
+    
     void setUsePert( bool on );
     bool usePert() const { return m_usePert; }
-
-    bool reserveResources() const { return false; }
 
     void setCalculateAll( bool on );
     bool calculateAll() const { return m_calculateAll; }
@@ -397,6 +447,7 @@ protected:
 protected:
     Project &m_project;
     QString m_name;
+    bool m_allowOverbooking;
     bool m_calculateAll;
     bool m_usePert;
     MainSchedule *m_expected;

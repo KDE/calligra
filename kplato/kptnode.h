@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -275,11 +275,15 @@ public:
     /// Cost performance index
     double costPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) { return 0.0; }
     
-    virtual void initiateCalculationLists(QList<Node*> &startnodes, QList<Node*> &endnodes, QList<Node*> &summarytasks) = 0;
+    virtual void initiateCalculationLists(MainSchedule &sch) = 0;
     virtual DateTime calculateForward(int /*use*/) = 0;
+    virtual DateTime calculateEarlyFinish(int /*use*/) { return DateTime(); }
     virtual DateTime calculateBackward(int /*use*/) = 0;
+    virtual DateTime calculateLateStart(int /*use*/) { return DateTime(); }
     virtual DateTime scheduleForward(const DateTime &, int /*use*/) = 0;
+    virtual DateTime scheduleFromStartTime(int /*use*/) { return DateTime(); }
     virtual DateTime scheduleBackward(const DateTime &, int /*use*/) = 0;
+    virtual DateTime scheduleFromEndTime(int /*use*/) { return DateTime(); }
     virtual void adjustSummarytask() = 0;
 
     /// Returns the (previously) calculated duration
@@ -398,7 +402,7 @@ public:
     /// Check if this node has any dependent parent nodes
     virtual bool isStartNode() const;
     
-    virtual void initiateCalculation(Schedule &sch);
+    virtual void initiateCalculation(MainSchedule &sch);
     virtual void resetVisited();
     void propagateEarliestStart(DateTime &time);
     void propagateLatestFinish(DateTime &time);

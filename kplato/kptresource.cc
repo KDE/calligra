@@ -454,7 +454,7 @@ Calendar *Resource::calendar(bool local) const {
     return m_calendar;
 }
 
-DateTime Resource::getFirstAvailableTime(DateTime /*after*/) {
+DateTime Resource::firstAvailableAfter(const DateTime &, const DateTime & ) const {
     return DateTime();
 }
 
@@ -553,12 +553,13 @@ bool Resource::addAppointment(Appointment *appointment, Schedule &main) {
 
 // called from makeAppointment
 void Resource::addAppointment(Schedule *node, DateTime &start, DateTime &end, double load) {
-    //kDebug()<<k_funcinfo<<endl;
+    Q_ASSERT( start < end );
     Schedule *s = findSchedule(node->id());
     if (s == 0) {
         s = createSchedule(node->parent());
     }
     s->setCalculationMode( node->calculationMode() );
+    //kDebug()<<k_funcinfo<<"id="<<node->id()<<" Mode="<<node->calculationMode()<<" "<<start<<end<<endl;
     s->addAppointment(node, start, end, load);
 }
 
@@ -594,12 +595,13 @@ ResourceSchedule *Resource::createSchedule(const QString& name, int type, long i
 
 ResourceSchedule *Resource::createSchedule(Schedule *parent) {
     ResourceSchedule *sch = new ResourceSchedule(parent, this);
+    //kDebug()<<k_funcinfo<<"id="<<sch->id()<<endl;
     addSchedule(sch);
     return sch;
 }
 
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end) {
-    //kDebug()<<k_funcinfo<<node->calculationMode()<<" "<<from<<" - "<<end<<endl;
+    //kDebug()<<k_funcinfo<<"node id="<<node->id()<<" mode="<<node->calculationMode()<<" "<<from<<" - "<<end<<endl;
     if (!from.isValid() || !end.isValid()) {
         kWarning()<<k_funcinfo<<"Invalid time"<<endl;
         return;
@@ -610,26 +612,26 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
     }
     DateTime time = from;
     while (time < end) {
-        //kDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
+        //kDebug()<<k_funcinfo<<time<<" to "<<end<<endl;
         if (!time.isValid() || !end.isValid()) {
             kWarning()<<k_funcinfo<<"Invalid time"<<endl;
             return;
         }
-        if (!cal->hasInterval(time, end)) {
-            //kDebug()<<time.toString()<<" to "<<end.toString()<<": No (more) interval(s)"<<endl;
+        if (!cal->hasInterval(time, end, m_currentSchedule)) {
+            //kDebug()<<time<<" to "<<end<<": No (more) interval(s)"<<endl;
             kWarning()<<k_funcinfo<<m_name<<": Resource only partially available"<<endl;
             //node->resourceNotAvailable = true;
             return; // nothing more to do
         }
-        DateTimeInterval i = cal->firstInterval(time, end);
+        DateTimeInterval i = cal->firstInterval(time, end, m_currentSchedule);
         if (!i.second.isValid()) {
             kWarning()<<k_funcinfo<<"Invalid interval: "<<time<<", "<<end<<endl;
             return;
         }
         if (time == i.second)
             return; // hmmm, didn't get a new interval, avoid loop
+        //kDebug()<<k_funcinfo<<m_name<<"-->"<<node->node()->name()<<" add :"<<i.first.toString()<<" to "<<i.second.toString()<<endl;
         addAppointment(node, i.first, i.second, m_units);
-        //kDebug()<<k_funcinfo<<"Add :"<<i.first.toString()<<" to "<<i.second.toString()<<endl;
         if (!(node->workStartTime.isValid()) || i.first < node->workStartTime)
             node->workStartTime = i.first;
         if (!(node->workEndTime.isValid()) || i.second > node->workEndTime)
@@ -639,7 +641,7 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
     return;
 }
 void Resource::makeAppointment(Schedule *node) {
-    //kDebug()<<k_funcinfo<<m_name<< ": "<<node->node()->name()<<": "<<node->startTime.toString()<<" dur "<<node->duration.toString()<<endl;
+    //kDebug()<<k_funcinfo<<m_name<< ": id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<node->node()->name()<<": id="<<node->id()<<" mode="<<node->calculationMode()<<" "<<node->startTime<<endl;
     if (!node->startTime.isValid()) {
         kWarning()<<k_funcinfo<<m_name<<": startTime invalid"<<endl;
         return;
@@ -707,7 +709,7 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
         DateTime t = availableBefore(start, limit);
         if (t.isValid()) {
             sts = true;
-            e = (cal->effort(limit, t) * m_units)/100;
+            e = (cal->effort(limit, t, m_currentSchedule) * m_units)/100;
         } else {
             //kDebug()<<k_funcinfo<<m_name<<": Not available (start="<<start<<", "<<limit<<")"<<endl;
         }
@@ -716,7 +718,7 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
         DateTime t = availableAfter(start, limit);
         if (t.isValid()) {
             sts = true;
-            e = (cal->effort(t, limit) * m_units)/100;
+            e = (cal->effort(t, limit, m_currentSchedule) * m_units)/100;
         }
     }
     //kDebug()<<k_funcinfo<<start.toString()<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")"<<endl;
@@ -724,7 +726,7 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
     return e;
 }
 
-DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, bool checkAppointments) const {
+DateTime Resource::availableAfter(const DateTime &time, const DateTime limit ) const {
     DateTime t;
     if (m_units == 0) {
         return t;
@@ -746,15 +748,12 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, bo
         return t;
     }
     t = m_availableFrom > time ? m_availableFrom : time;
-    t = cal->firstAvailableAfter(t, lmt);
-    if (checkAppointments) {
-        //TODO
-    }
-    //kDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
+    t = cal->firstAvailableAfter(t, lmt, m_currentSchedule);
+    //kDebug()<<k_funcinfo<<m_currentSchedule<<" "<<m_name<<" id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<" returns: "<<time<<"="<<t<<" "<<lmt<<endl;
     return t;
 }
 
-DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, bool checkAppointments) const {
+DateTime Resource::availableBefore(const DateTime &time, const DateTime limit) const {
     DateTime t;
     if (m_units == 0) {
         return t;
@@ -782,11 +781,8 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, b
         t = m_availableUntil < time ? m_availableUntil : time;
     }
     //kDebug()<<k_funcinfo<<t<<", "<<lmt<<endl;
-    t = cal->firstAvailableBefore(t, lmt);
-    if (checkAppointments) {
-        //TODO
-    }
-    //kDebug()<<k_funcinfo<<m_name<<" returns: "<<time<<"="<<t<<" "<<endl;
+    t = cal->firstAvailableBefore(t, lmt, m_currentSchedule);
+    //kDebug()<<k_funcinfo<<m_name<<" id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<" returns: "<<time<<"="<<t<<" "<<lmt<<endl;
     return t;
 }
 
@@ -906,6 +902,41 @@ Task *ResourceRequest::task() const {
     return m_parent ? m_parent->task() : 0;
 }
 
+Schedule *ResourceRequest::resourceSchedule( Schedule *ns )
+{
+    Resource *r = resource();
+    Schedule *s = r->findSchedule(ns->id());
+    if (s == 0) {
+        s = r->createSchedule(ns->parent());
+    }
+    s->setCalculationMode( ns->calculationMode() );
+    //kDebug()<<k_funcinfo<<s->name()<<": id="<<s->id()<<" mode="<<s->calculationMode()<<endl;
+    return s;
+}
+
+DateTime ResourceRequest::availableAfter(const DateTime &time, Schedule *ns) {
+    resource()->setCurrentSchedulePtr( resourceSchedule( ns ) );
+    return resource()->availableAfter(time);
+}
+
+DateTime ResourceRequest::availableBefore(const DateTime &time, Schedule *ns) {
+    resource()->setCurrentSchedulePtr( resourceSchedule( ns ) );
+    return resource()->availableBefore(time);
+}
+
+Duration ResourceRequest::effort( const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok ) {
+    resource()->setCurrentSchedulePtr( resourceSchedule( ns ) );
+    return resource()->effort(time, duration, backward, ok);
+}
+
+void ResourceRequest::makeAppointment( Schedule *ns )
+{
+    if ( m_resource ) {
+        m_resource->setCurrentSchedulePtr( resourceSchedule( ns ) );
+        m_resource->makeAppointment( ns );
+    }
+}
+
 /////////
 ResourceGroupRequest::ResourceGroupRequest(ResourceGroup *group, int units)
     : m_group(group), m_units(units) {
@@ -962,7 +993,7 @@ bool ResourceGroupRequest::load(QDomElement &element, Project &project) {
 
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
-	    if (list.item(i).isElement()) {
+        if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "resource-request") {
                 ResourceRequest *r = new ResourceRequest();
@@ -1010,12 +1041,12 @@ int ResourceGroupRequest::workUnits() const {
 }
 
 //TODO: handle nonspecific resources
-Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &duration, bool backward, bool *ok) const {
+Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &duration, Schedule *ns, bool backward, bool *ok) const {
     Duration e;
     bool sts=false;
     if (ok) *ok = sts;
     foreach (ResourceRequest *r, m_resourceRequests) {
-        e += r->resource()->effort(time, duration, backward, &sts);
+        e += r->effort(time, duration, ns, backward, &sts);
         if (sts && ok) *ok = sts;
         //kDebug()<<k_funcinfo<<(backward?"(B)":"(F)" )<<it.current()->resource()->name()<<": time="<<time<<" dur="<<duration.toString()<<"gave e="<<e.toString()<<endl;
     }
@@ -1043,7 +1074,7 @@ int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
     return time.daysTo(t2);
 }
 
-Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_effort, bool backward) {
+Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_effort, Schedule *ns, bool backward) {
     //kDebug()<<k_funcinfo<<"--->"<<(backward?"(B) ":"(F) ")<<m_group->name()<<" "<<time.toString()<<": effort: "<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")"<<endl;
     Duration e;
     if (_effort == Duration::zeroDuration) {
@@ -1060,7 +1091,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i <= nDays; ++i) {
         // days
         end = end.addDays(inc);
-        e1 = effort(start, d, backward, &sts);
+        e1 = effort(start, d, ns, backward, &sts);
         //kDebug()<<"["<<i<<"of"<<nDays<<"] "<<(backward?"(B)":"(F):")<<"  start="<<start<<" e+e1="<<(e+e1).toString()<<" match "<<_effort.toString()<<endl;
         if (e + e1 < _effort) {
             e += e1;
@@ -1078,7 +1109,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i < 24; ++i) {
         // hours
         end = end.addSecs(inc*60*60);
-        e1 = effort(start, d, backward, &sts);
+        e1 = effort(start, d, ns, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -1096,7 +1127,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i < 60; ++i) {
         //minutes
         end = end.addSecs(inc*60);
-        e1 = effort(start, d, backward, &sts);
+        e1 = effort(start, d, ns, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -1114,7 +1145,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i < 60 && sts; ++i) {
         //seconds
         end = end.addSecs(inc);
-        e1 = effort(start, d, backward, &sts);
+        e1 = effort(start, d, ns, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -1131,7 +1162,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i < 1000; ++i) {
         //milliseconds
         end.setTime(end.time().addMSecs(inc));
-        e1 = effort(start, d, backward, &sts);
+        e1 = effort(start, d, ns, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -1148,17 +1179,17 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     }
     DateTime t;
     if (e != Duration::zeroDuration) {
-        t = backward ? availableAfter(end) : availableBefore(end);
+        t = backward ? availableAfter(end, ns) : availableBefore(end, ns);
     }
     end = t.isValid() ? t : time;
     //kDebug()<<k_funcinfo<<"<---"<<(backward?"(B) ":"(F) ")<<m_group->name()<<": "<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" effort: "<<_effort.toString(Duration::Format_Day)<<endl;
     return (end>time?end-time:time-end);
 }
 
-DateTime ResourceGroupRequest::availableAfter(const DateTime &time) {
+DateTime ResourceGroupRequest::availableAfter(const DateTime &time, Schedule *ns) {
     DateTime start;
     foreach (ResourceRequest *r, m_resourceRequests) {
-        DateTime t = r->resource()->availableAfter(time);
+        DateTime t = r->availableAfter(time, ns);
         if (t.isValid() && (!start.isValid() || t < start))
             start = t;
     }
@@ -1168,10 +1199,10 @@ DateTime ResourceGroupRequest::availableAfter(const DateTime &time) {
     return start;
 }
 
-DateTime ResourceGroupRequest::availableBefore(const DateTime &time) {
+DateTime ResourceGroupRequest::availableBefore(const DateTime &time, Schedule *ns) {
     DateTime end;
     foreach (ResourceRequest *r, m_resourceRequests) {
-        DateTime t = r->resource()->availableBefore(time);
+        DateTime t = r->availableBefore(time, ns);
         if (t.isValid() && (!end.isValid() || t > end))
             end = t;
     }
@@ -1267,7 +1298,7 @@ int ResourceRequestCollection::workUnits() const {
 // The effort is distributed on "work type" resourcegroups in proportion to
 // the amount of resources requested for each group.
 // "Material type" of resourcegroups does not (atm) affect the duration.
-Duration ResourceRequestCollection::duration(const DateTime &time, const Duration &effort, bool backward) {
+Duration ResourceRequestCollection::duration(const DateTime &time, const Duration &effort, Schedule *ns, bool backward) {
     //kDebug()<<k_funcinfo<<"time="<<time.toString()<<" effort="<<effort.toString(Duration::Format_Day)<<" backward="<<backward<<endl;
     if (isEmpty()) {
         return effort;
@@ -1280,7 +1311,7 @@ Duration ResourceRequestCollection::duration(const DateTime &time, const Duratio
         if (r->isEmpty())
             continue;
         if (r->group()->type() == ResourceGroup::Type_Work) {
-            Duration d = r->duration(time, (effort*r->workUnits())/units, backward);
+            Duration d = r->duration(time, (effort*r->workUnits())/units, ns, backward);
             if (d > dur)
                 dur = d;
         } else if (r->group()->type() == ResourceGroup::Type_Material) {
@@ -1292,10 +1323,10 @@ Duration ResourceRequestCollection::duration(const DateTime &time, const Duratio
     return dur;
 }
 
-DateTime ResourceRequestCollection::availableAfter(const DateTime &time) {
+DateTime ResourceRequestCollection::availableAfter(const DateTime &time, Schedule *ns) {
     DateTime start;
     foreach (ResourceGroupRequest *r, m_requests) {
-        DateTime t = r->availableAfter(time);
+        DateTime t = r->availableAfter(time, ns);
         if (t.isValid() && (!start.isValid() || t < start))
             start = t;
     }
@@ -1305,10 +1336,10 @@ DateTime ResourceRequestCollection::availableAfter(const DateTime &time) {
     return start;
 }
 
-DateTime ResourceRequestCollection::availableBefore(const DateTime &time) {
+DateTime ResourceRequestCollection::availableBefore(const DateTime &time, Schedule *ns) {
     DateTime end;
     foreach (ResourceGroupRequest *r, m_requests) {
-        DateTime t = r->availableBefore(time);
+        DateTime t = r->availableBefore(time, ns);
         if (t.isValid() && (!end.isValid() ||t > end))
             end = t;
     }

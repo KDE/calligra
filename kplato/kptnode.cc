@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas zander <zander@kde.org>
-   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 200 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -592,7 +592,7 @@ void Node::moveLatestFinish(DateTime &time) {
     }
 }
 
-void Node::initiateCalculation(Schedule &sch) {
+void Node::initiateCalculation(MainSchedule &sch) {
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->initiateCalculation(sch);

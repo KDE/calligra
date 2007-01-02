@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 2001 Thomas Zander zander@kde.org
-  Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -325,18 +325,14 @@ protected:
     DateTime scheduleBackward( const DateTime &latest, int use );
     void adjustSummarytask();
 
-    void initiateCalculation( Schedule &sch );
-    void initiateCalculationLists( QList<Node*> &startnodes, QList<Node*> &endnodes, QList<Node*> &summarytasks );
+    void initiateCalculation( MainSchedule &sch );
+    void initiateCalculationLists( MainSchedule &sch );
 
     bool legalParents( Node *par, Node *child );
     bool legalChildren( Node *par, Node *child );
 
 private:
     void init();
-
-    QList<Node*> m_startNodes;
-    QList<Node*> m_endNodes;
-    QList<Node*> m_summarytasks;
 
     QHash<QString, ResourceGroup*> resourceGroupIdDict;
     QHash<QString, Resource*> resourceIdDict;

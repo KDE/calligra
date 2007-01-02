@@ -113,8 +113,11 @@ public:
     Appointment();
     Appointment(Schedule *resource, Schedule *node, DateTime start, DateTime end, double load);
     Appointment(Schedule *resource, Schedule *node, DateTime start, Duration duration, double load);
+    Appointment( const Appointment &app );
     ~Appointment();
 
+    bool isEmpty() const { return m_intervals.isEmpty(); }
+    
     // get/set member values.
     Schedule *node() const { return m_node; }
     void setNode(Schedule *n) { m_node = n; }
@@ -202,6 +205,10 @@ public:
     
     void setCalculationMode( int mode ) { m_calculationMode = mode; }
     int calculationMode() const { return m_calculationMode; }
+    
+protected:
+    void copy(const Appointment &app);
+    void merge(const Appointment &app);
     
 private:
     Schedule *m_node;

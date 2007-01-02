@@ -2039,6 +2039,24 @@ void ModifyScheduleManagerNameCmd::unexecute()
     m_sm.setName( oldvalue );
 }
 
+ModifyScheduleManagerAllowOverbookingCmd::ModifyScheduleManagerAllowOverbookingCmd( Part *part, ScheduleManager &sm, bool value, const QString& name )
+    : NamedCommand( part, name ),
+    m_sm( sm ),
+    oldvalue( sm.allowOverbooking() ),
+    newvalue( value )
+{
+}
+
+void ModifyScheduleManagerAllowOverbookingCmd::execute()
+{
+    m_sm.setAllowOverbooking( newvalue );
+}
+
+void ModifyScheduleManagerAllowOverbookingCmd::unexecute()
+{
+    m_sm.setAllowOverbooking( oldvalue );
+}
+
 ModifyScheduleManagerDistributionCmd::ModifyScheduleManagerDistributionCmd( Part *part, ScheduleManager &sm, bool value, const QString& name )
     : NamedCommand( part, name ),
     m_sm( sm ),

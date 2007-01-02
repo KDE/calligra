@@ -81,14 +81,26 @@ public:
      * Returns the amount of 'worktime' that can be done on
      * this day between the times start and end.
      */
-    Duration effort(const QTime &start, const QTime &end);
+    Duration effort(const QTime &start, const QTime &end, Schedule *sch=0);
+    /**
+     * Returns the amount of 'worktime' that can be done on
+     * this day between the times start and end.
+     */
+    Duration effort(const QDate &date, const QTime &start, const QTime &end, Schedule *sch=0);
 
     /**
      * Returns the actual 'work interval' for the interval start to end.
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    TimeInterval interval(const QTime &start, const QTime &end) const;
+    TimeInterval interval(const QTime &start, const QTime &end, Schedule *sch=0) const;
+    
+    /**
+     * Returns the actual 'work interval' for the interval start to end.
+     * If no 'work interval' exists, returns the interval start, end.
+     * Use @ref hasInterval() to check if a 'work interval' exists.
+     */
+    TimeInterval interval(const QDate date, const QTime &start, const QTime &end, Schedule *sch=0) const;
     
     bool hasInterval() const;
 
@@ -96,7 +108,14 @@ public:
      * Returns true if at least a part of a 'work interval' exists 
      * for the interval start to end.
      */
-    bool hasInterval(const QTime &start, const QTime &end) const;
+    bool hasInterval(const QTime &start, const QTime &end, Schedule *sch=0) const;
+    
+    /**
+     * Returns true if at least a part of a 'work interval' exists 
+     * for the interval start to end.
+     * Assumes this day is date. (Used by weekday hasInterval().)
+     */
+    bool hasInterval(const QDate date, const QTime &start, const QTime &end, Schedule *sch=0) const;
     
     Duration duration() const;
     
@@ -152,7 +171,7 @@ public:
     bool operator==(const CalendarWeekdays *weekdays) const;
     bool operator!=(const CalendarWeekdays *weekdays) const;
 
-    Duration effort(const QDate &date, const QTime &start, const QTime &end);
+    Duration effort(const QDate &date, const QTime &start, const QTime &end, Schedule *sch=0);
     
     /**
      * Returns the actual 'work interval' on the weekday defined by date
@@ -160,12 +179,12 @@ public:
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    TimeInterval interval(const QDate date, const QTime &start, const QTime &end) const;
+    TimeInterval interval(const QDate date, const QTime &start, const QTime &end, Schedule *sch) const;
     /**
      * Returns true if at least a part of a 'work interval' exists 
      * on the weekday defined by date for the interval start to end.
      */
-    bool hasInterval(const QDate date, const QTime &start, const QTime &end) const;
+    bool hasInterval(const QDate date, const QTime &start, const QTime &end, Schedule *sch) const;
     bool hasInterval() const;
 
     Duration duration() const;
@@ -274,12 +293,12 @@ public:
      * Returns the amount of 'worktime' that can be done on
      * the date  date between the times  start and  end.
      */
-    Duration effort(const QDate &date, const QTime &start, const QTime &end) const;
+    Duration effort(const QDate &date, const QTime &start, const QTime &end, Schedule *sch=0) const;
     /**
      * Returns the amount of 'worktime' that can be done in the
      * interval from start to end
      */
-    Duration effort(const DateTime &start, const DateTime &end) const;
+    Duration effort(const DateTime &start, const DateTime &end, Schedule *sch=0) const;
 
     /**
      * Returns the first 'work interval' for the interval 
@@ -287,7 +306,7 @@ public:
      * If no 'work interval' exists, returns an interval with invalid DateTime.
      * You can also use @ref hasInterval() to check if a 'work interval' exists.
      */
-    DateTimeInterval firstInterval(const DateTime &start, const DateTime &end) const;
+    DateTimeInterval firstInterval(const DateTime &start, const DateTime &end, Schedule *sch=0) const;
     
     /**
      * Returns the first 'work interval' on date for the interval 
@@ -295,19 +314,19 @@ public:
      * If no 'work interval' exists, returns an interval with first==second.
      * You can also use @ref hasInterval() to check if a 'work interval' exists.
      */
-    TimeInterval firstInterval(const QDate &date, const QTime &start, const QTime &end) const;
+    TimeInterval firstInterval(const QDate &date, const QTime &start, const QTime &end, Schedule *sch=0) const;
     
     /**
      * Returns true if at least a part of a 'work interval' exists 
      * for the interval starting at start and ending at end.
      */
-    bool hasInterval(const DateTime &start, const DateTime &end) const;
+    bool hasInterval(const DateTime &start, const DateTime &end, Schedule *sch=0) const;
         
     /**
      * Returns true if at least a part of a 'work interval' exists 
      * for the interval on date, starting at start and ending at end.
      */
-    bool hasInterval(const QDate &date, const QTime &start, const QTime &end) const;
+    bool hasInterval(const QDate &date, const QTime &start, const QTime &end, Schedule *sch=0) const;
         
     /** 
      * Find the first available time after time before limit.

@@ -1005,6 +1005,18 @@ private:
     QString oldvalue, newvalue;
 };
 
+class ModifyScheduleManagerAllowOverbookingCmd : public NamedCommand
+{
+public:
+    ModifyScheduleManagerAllowOverbookingCmd( Part *part,ScheduleManager &sm, bool value, const QString& name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+    bool oldvalue, newvalue;
+};
+
 class ModifyScheduleManagerDistributionCmd : public NamedCommand
 {
 public:
