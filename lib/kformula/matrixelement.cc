@@ -1130,7 +1130,7 @@ int MatrixElement::readContentFromMathMLDom( QDomNode& node )
     while ( !n.isNull() ) {
         if ( n.isElement() ) {
             QDomElement e = n.toElement();
-            if ( e.tagName().lower() == "mtr")
+            if ( e.tagName().lower() == "mtr" || e.tagName().lower() == "mlabeledtr" )
             {
                 rows++;
 
@@ -1143,6 +1143,8 @@ int MatrixElement::readContentFromMathMLDom( QDomNode& node )
                         cc++;
                     cellnode = cellnode.nextSibling();
                 }
+                if ( cc > 0 && e.tagName().lower() == "mlabeledtr" )
+                    cc--;
                 if ( cc > cols )
                     cols = cc;
             }
@@ -1168,8 +1170,14 @@ int MatrixElement::readContentFromMathMLDom( QDomNode& node )
     while ( !node.isNull() ) {
         if ( node.isElement() ) {
             QDomElement e = node.toElement();
-            if ( e.tagName().lower() == "mtr" ) {
+            if ( e.tagName().lower() == "mtr" || e.tagName().lower() == "mlabeledtr" ) {
                 QDomNode cellnode = e.firstChild();
+                if ( e.tagName().lower() == "mlabeledtr" ) {
+                    while ( ! cellnode.isNull() && ! cellnode.isElement() )
+                        cellnode = cellnode.nextSibling();
+                    if ( ! cellnode.isNull() )
+                        cellnode = cellnode.nextSibling();
+                }
                 while ( !cellnode.isNull() ) {
                     if ( cellnode.isElement() ) {
                         QDomElement cellelement = cellnode.toElement();
