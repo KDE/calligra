@@ -72,17 +72,6 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     foreach(KoID id, KoShapeRegistry::instance()->listKeys())
         KoShapeRegistry::instance()->get(id)->setOptionPanels(panels);
 
-    // print error if kotext not available
-    if( KoShapeRegistry::instance()->get(KoTextShape_SHAPEID) == 0 ) {
-         KMessageBox::error(parentWidget,
-                 i18n("Can not find needed text component, KWord will quit now"),
-                 i18n("Installation Error"));
-        QCoreApplication::exit(10);
-        QTimer::singleShot(0, QCoreApplication::instance(), SLOT(quit));
-        // TODO actually quit if I can figure out how to do that from here :(
-        return;
-    }
-
     clear();
 }
 
@@ -483,6 +472,22 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {
     }
     else
         appendPage();
+}
+
+void KWDocument::showStartUpWidget(KoMainWindow* parent, bool alwaysShow) {
+    // print error if kotext not available
+    if( KoShapeRegistry::instance()->get(KoTextShape_SHAPEID) == 0 )
+        // need to wait 1 event since exiting here would not work.
+        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+    else
+        KoDocument::showStartUpWidget(parent, alwaysShow);
+}
+
+void KWDocument::showErrorAndDie() {
+     KMessageBox::error(widget(),
+             i18n("Can not find needed text component, KWord will quit now"),
+             i18n("Installation Error"));
+    QCoreApplication::exit(10);
 }
 
 #ifndef NDEBUG

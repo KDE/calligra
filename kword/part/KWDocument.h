@@ -229,6 +229,9 @@ private slots:
     void addFrame( KWFrame *frame );
     void requestMoreSpace(KWTextFrameSet *fs);
 
+    /// Called after the constructor figures out there is an install problem.
+    void showErrorAndDie();
+
 private:
     friend class PageProcessingQueue;
     friend class KWDLoader;
@@ -241,6 +244,8 @@ private:
      * or "reload" when kword is embedded into konqueror.
      */
     void clear();
+
+    void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
 
 private:
     bool m_hasTOC;
