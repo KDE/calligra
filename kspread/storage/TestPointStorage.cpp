@@ -56,7 +56,8 @@ void PointStorageTest::testInsertion()
     storage.insert(  5,  4, 24 );
     storage.insert(  5,  5, 25 );
     // overwrite
-    storage.insert(  5,  5, 30 );
+    int old = storage.insert(  5,  5, 30 );
+    QCOMPARE( old, 25 );
     // ( 1, 6,11,16,21)
     // ( 2, 7,12,17,22)
     // ( 3, 8,13,18,23)
@@ -121,6 +122,41 @@ void PointStorageTest::testLookup()
 
 void PointStorageTest::testDeletion()
 {
+    PointStorage<int> storage;
+    storage.m_data << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12;
+    storage.m_rows << 0 << 3 << 6 << 9 << 10;
+    storage.m_cols << 1 << 2 << 5 << 1 << 2 << 3 << 2 << 3 << 5 << 4 << 1 << 5;
+    // ( 1, 2,  ,  , 3)
+    // ( 4, 5, 6,  ,  )
+    // (  , 7, 8,  , 9)
+    // (  ,  ,  ,10,  )
+    // (11,  ,  ,  ,12)
+    int old = storage.remove( 4, 4 );
+    QCOMPARE( old, 10 );
+    old = storage.remove( 5, 1 );
+    QCOMPARE( old,  3 );
+    old = storage.remove( 2, 2 );
+    QCOMPARE( old,  5 );
+    // ( 1, 2,  ,  ,  )
+    // ( 4,  , 6,  ,  )
+    // (  , 7, 8,  , 9)
+    // (  ,  ,  ,  ,  )
+    // (11,  ,  ,  ,12)
+
+    const QList<int> data( QList<int>() << 1 << 2 << 4 << 6 << 7 << 8 << 9 << 11 << 12 );
+    const QList<int> rows( QList<int>() << 0 << 2 << 4 << 7 << 7 );
+    const QList<int> cols( QList<int>() << 1 << 2 << 1 << 3 << 2 << 3 << 5 << 1 << 5);
+
+//     qDebug() << storage.m_data;
+//     qDebug() << data;
+//     qDebug() << storage.m_rows;
+//     qDebug() << rows;
+//     qDebug() << storage.m_cols;
+//     qDebug() << cols;
+
+    QCOMPARE( storage.m_data, data );
+    QCOMPARE( storage.m_rows, rows );
+    QCOMPARE( storage.m_cols, cols );
 }
 
 void PointStorageTest::testInsertColumns()

@@ -68,8 +68,9 @@ public:
 
     /**
      * Inserts \p data at \p col , \p row .
+     * \return the overridden data (default data, if no overwrite)
      */
-    void insert( int col, int row, const T& data )
+    T insert( int col, int row, const T& data )
     {
 //         qDebug() << "insert(" << col << "," << row << "," << data << ")";
 //         Q_ASSERT( 1 <= col <= KS_colMax );
@@ -114,12 +115,15 @@ public:
             {
 //                 qDebug() << "column exists";
                 const int index = rowStart + ( cit - cols.constBegin() );
+                const T oldData = m_data[ index ];
                 m_data[ index ] = data;
+                return oldData;
             }
         }
 //         qDebug() << "data: " << m_data;
 //         qDebug() << "rows: " << m_rows;
 //         qDebug() << "cols: " << m_cols;
+        return T();
     }
 
     /**
@@ -144,6 +148,36 @@ public:
         const int index = cit - cols.constBegin();
         const QList<T> data = m_data.mid( rowStart, rowLength );
         return data.value( index );
+    }
+
+    /**
+     * Inserts \p data at \p col , \p row .
+     * \return the overridden data (default data, if no overwrite)
+     */
+    T remove( int col, int row )
+    {
+        // row's missing?
+        if ( row - 1 > m_rows.count() )
+            return T();
+        const int rowStart = m_rows.value( row - 1 );
+        const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
+        const QList<int> cols = m_cols.mid( rowStart, rowLength );
+        QList<int>::const_iterator cit = qBinaryFind( cols, col );
+        // column's missing?
+        if ( cit == cols.constEnd() )
+            return T();
+//         qDebug() << "data exists";
+        const int index = rowStart + ( cit - cols.constBegin() );
+        // save the old data
+        const T oldData = m_data[ index ];
+        // remove the actual data
+        m_data.removeAt( index );
+        // remove the column index
+        m_cols.removeAt( index );
+        // adjust the offsets of this row and the following rows
+        for ( int r = row; r < m_rows.count(); ++r )
+            --m_rows[r];
+        return oldData;
     }
 
     /**
