@@ -1,8 +1,6 @@
-
 project(kexi)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-kexi.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kexi.h )
-
 
 add_subdirectory( 3rdparty )
 add_subdirectory( kexiutils )
@@ -12,12 +10,14 @@ add_subdirectory( core )
 add_subdirectory( formeditor )
 #add_subdirectory( data )
 #add_subdirectory( pics )
+
+# The main2 directory contains some new mainwindow-code based on KoDocument+KoView
 #add_subdirectory( main )
+add_subdirectory( main2 )
+
 ##add_subdirectory( migration )
 #add_subdirectory( plugins )
 add_subdirectory( tests )
-
-
 
 
 ########### next target ###############
