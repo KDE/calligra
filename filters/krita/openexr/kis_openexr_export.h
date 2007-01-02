@@ -28,6 +28,7 @@ class KisOpenEXRExport : public KoFilter {
 public:
     KisOpenEXRExport(QObject* parent, const QStringList&);
     virtual ~KisOpenEXRExport();
+    void getPixel(const quint8 *src, half *red, half *green, half *blue, half *alpha) const;
 
 public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);

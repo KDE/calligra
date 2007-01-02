@@ -37,8 +37,8 @@
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
 #include "kis_paint_device.h"
-#include "kis_rgb_f32_colorspace.h"
-#include "kis_rgb_f16half_colorspace.h"
+// #include "kis_rgb_f32_colorspace.h"
+// #include "kis_rgb_f16half_colorspace.h"
 
 #include "kis_openexr_export.h"
 
@@ -92,10 +92,9 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
 
     doc -> undoAdapter() -> setUndo(undo);
 
-    //KisF32RgbColorSpace * cs = static_cast<KisF32RgbColorSpace *>((KoColorSpaceRegistry::instance() -> get(KoID("RGBAF32", ""))));
-    KisRgbF16HalfColorSpace *cs = dynamic_cast<KisRgbF16HalfColorSpace *>(layer->paintDevice()->colorSpace());
+    KoColorSpace *cs = layer->paintDevice()->colorSpace();
 
-    if (cs == 0) {
+    if (cs->id() != "RGBAF16HALF") {
         // We could convert automatically, but the conversion wants to be done with
         // selectable profiles and rendering intent.
         KMessageBox::information(0, i18n("The image is using an unsupported color space. "
@@ -124,7 +123,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
 
         file.setFrameBuffer(pixels.data() - dataWindow.min.x - (dataWindow.min.y + y) * dataWidth, 1, dataWidth);
 
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(dataWindow.min.x, dataWindow.min.y + y, dataWidth, false);
+        KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(dataWindow.min.x, dataWindow.min.y + y, dataWidth);
         Rgba *rgba = pixels.data();
 
         while (!it.isDone()) {
@@ -135,7 +134,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
             half unmultipliedBlue;
             half alpha;
 
-            cs -> getPixel(it.rawData(), &unmultipliedRed, &unmultipliedGreen, &unmultipliedBlue, &alpha);
+            getPixel(it.rawData(), &unmultipliedRed, &unmultipliedGreen, &unmultipliedBlue, &alpha);
             rgba -> r = unmultipliedRed * alpha;
             rgba -> g = unmultipliedGreen * alpha;
             rgba -> b = unmultipliedBlue * alpha;
@@ -150,6 +149,23 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
     //vKisAnnotationSP_it endIt = img -> endAnnotations();
     return KoFilter::OK;
 }
+
+void KisOpenEXRExport::getPixel(const quint8 *src, half *red, half *green, half *blue, half *alpha) const
+{
+   struct Pixel {
+        half blue;
+        half green;
+        half red;
+        half alpha;
+    };
+    const Pixel *srcPixel = reinterpret_cast<const Pixel *>(src);
+
+    *red = srcPixel->red;
+    *green = srcPixel->green;
+    *blue = srcPixel->blue;
+    *alpha = srcPixel->alpha;
+}
+
 
 #include "kis_openexr_export.moc"
 

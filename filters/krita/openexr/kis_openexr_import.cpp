@@ -46,8 +46,8 @@
 #include "kis_annotation.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_iterators_pixel.h"
-#include "kis_rgb_f32_colorspace.h"
-#include "kis_rgb_f16half_colorspace.h"
+// #include "kis_rgb_f32_colorspace.h"
+// #include "kis_rgb_f16half_colorspace.h"
 
 using namespace std;
 using namespace Imf;
@@ -127,7 +127,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
         file.setFrameBuffer(pixels.data() - dataWindow.min.x - (dataWindow.min.y + y) * dataWidth, 1, dataWidth);
         file.readPixels(dataWindow.min.y + y);
 
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(dataWindow.min.x, dataWindow.min.y + y, dataWidth, true);
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(dataWindow.min.x, dataWindow.min.y + y, dataWidth);
         Rgba *rgba = pixels.data();
 
         while (!it.isDone()) {

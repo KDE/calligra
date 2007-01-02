@@ -21,15 +21,14 @@ if(PNG_FOUND)
     add_subdirectory(png)
 endif(PNG_FOUND)
 
-message(STATUS "reactivate openexr when colorspaces f32 and f16 are reactivated")
 if(OPENEXR_FOUND)
-#	add_subdirectory(openexr)
+    add_subdirectory(openexr)
 endif(OPENEXR_FOUND)
 
 if(GRAPHICSMAGICK_FOUND)
-	add_subdirectory(gmagick)
+    add_subdirectory(gmagick)
 endif(GRAPHICSMAGICK_FOUND)
 
 if(POPPLER_QT4_FOUND)
-   add_subdirectory(pdf)
+    add_subdirectory(pdf)
 endif(POPPLER_QT4_FOUND)
