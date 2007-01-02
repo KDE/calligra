@@ -34,3 +34,11 @@ install(TARGETS kdeinit_kexi  DESTINATION ${LIB_INSTALL_DIR})
 target_link_libraries( kexi kdeinit_kexi )
 install(TARGETS kexi DESTINATION ${BIN_INSTALL_DIR})
 #install( FILES  kexi.desktop  DESTINATION ${APPLNK_INSTALL_DIR}/Office)
+
+########### next target ###############
+
+SET(kexipart_PART_SRCS KexiFactory_init.cpp )
+kde4_automoc(${kexipart_PART_SRCS})
+kde4_add_plugin(kexipart WITH_PREFIX ${kexipart_PART_SRCS})
+target_link_libraries(kexipart ${KDE4_KDECORE_LIBS} keximain)
+install(TARGETS kexipart  DESTINATION ${PLUGIN_INSTALL_DIR})
