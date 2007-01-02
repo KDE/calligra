@@ -60,7 +60,7 @@ class KDE_EXPORT KexiView : public KoView
 
         /**
         * Update the readwrite/readonly state.
-        * Implement abstract \a KoView::updateReadWrite method.
+        * Implements the abstract \a KoView::updateReadWrite method.
         */
         virtual void updateReadWrite(bool readwrite);
 

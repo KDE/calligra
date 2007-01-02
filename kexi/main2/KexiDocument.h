@@ -65,7 +65,7 @@ class KDE_EXPORT KexiDocument : public KoDocument, public KoZoomHandler
         * @param parent the parent object
         * @param singleViewMode enables single view mode, if @c true
         */
-        KexiDocument(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
+        explicit KexiDocument(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
 
         /**
         * Destroys the document.
@@ -74,25 +74,25 @@ class KDE_EXPORT KexiDocument : public KoDocument, public KoZoomHandler
 
         /**
         * Main painting method.
-        * Implement abstract \a KoZoomHandler::paintContent method.
+        * Implements the abstract \a KoDocument::paintContent method.
         */
         virtual void paintContent(QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0);
 
         /**
         * Main loading method.
-        * Implement abstract \a KoDocument::loadXML method.
+        * Implements the abstract \a KoDocument::loadXML method.
         */
         virtual bool loadXML(QIODevice*, const KoXmlDocument& doc);
 
         /**
         * Main loading method.
-        * Implement abstract \a KoDocument::loadOasis method.
+        * Implements the abstract \a KoDocument::loadOasis method.
         */
         virtual bool loadOasis(const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const KoXmlDocument& settings, KoStore*);
 
         /**
         * Main saving method.
-        * Implement abstract \a KoDocument::saveOasis method.
+        * Implements the abstract \a KoDocument::saveOasis method.
         */
         virtual bool saveOasis(KoStore* store, KoXmlWriter* manifestWriter);
 

@@ -30,21 +30,19 @@ class KAboutData;
 
 class KDE_EXPORT KexiFactory : public KoFactory
 {
-    Q_OBJECT
-public:
-    KexiFactory(QObject* parent = 0, const char* name = 0);
-    ~KexiFactory();
+        Q_OBJECT
+    public:
+        explicit KexiFactory(QObject* parent = 0, const char* name = 0);
+        ~KexiFactory();
 
-    virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, QObject *parent = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
+        virtual KParts::Part *createPartObject(QWidget *parentWidget = 0, QObject *parent = 0, const char *classname = "KoDocument", const QStringList &args = QStringList());
 
-    static KInstance* global();
+        static KInstance* global();
+        static KAboutData* aboutData();
 
-    // _Creates_ a KAboutData but doesn't keep ownership
-    static KAboutData* aboutData();
-
-private:
-    static KInstance* s_global;
-    static KAboutData* s_aboutData;
+    private:
+        static KInstance* s_global;
+        static KAboutData* s_aboutData;
 };
 
 #endif

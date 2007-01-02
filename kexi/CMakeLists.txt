@@ -22,29 +22,28 @@ add_subdirectory( tests )
 
 ########### next target ###############
 
+# that functionality got moved to kexi/main2/CMakeLists.txt
 #set(kexi_KDEINIT_SRCS main.cpp )
-
 #kde4_automoc(${kexi_KDEINIT_SRCS})
-
 #kde4_add_kdeinit_executable( kexi ${kexi_KDEINIT_SRCS})
-
 #target_link_libraries(kdeinit_kexi  ${KDE4_KDECORE_LIBS} kexicore keximain )
-
 #install(TARGETS kdeinit_kexi  DESTINATION ${LIB_INSTALL_DIR})
-
 #target_link_libraries( kexi kdeinit_kexi )
-#install(TARGETS kexi  DESTINATION ${BIN_INSTALL_DIR})
+#install(TARGETS kexi DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kexi.desktop  DESTINATION ${APPLNK_INSTALL_DIR}/Office)
+# the old KDE3-way was to install the desktop-file here while the new KDE4 way is to install to ${XDG_APPS_DIR}
+#install( FILES  kexi.desktop  DESTINATION ${APPLNK_INSTALL_DIR}/Office)
+
+#install(FILES kexi.rc kexi_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kexi)
+install(FILES kexipart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kexi.desktop DESTINATION ${XDG_APPS_DIR})
+#install(FILES kexi.kcfg DESTINATION  ${KCFG_INSTALL_DIR} )
 
 #kde4_create_doxygen_docs( EXCLUDE 3rdparty kexidb/parser/sqlparser.h kexidb/drivers/odbc  )
 
-
-
-
-
+########### OLD ###############
 #original Makefile.am contents follow:
 
 #include $(top_srcdir)/kexi/Makefile.global
@@ -117,9 +116,5 @@ install( FILES  kexi.desktop  DESTINATION ${APPLNK_INSTALL_DIR}/Office)
 #	fi
 #	rm -f tips.cpp
 #
-#
 #DOXYGEN_EXCLUDE = 3rdparty kexidb/parser/sqlparser.h kexidb/drivers/odbc
-#
 #include $(top_srcdir)/admin/Doxyfile.am
-#
-#
