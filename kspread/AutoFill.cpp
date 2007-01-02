@@ -484,8 +484,8 @@ static QList<double> findInterval( const AutoFillSequence& _seqList )
 
         QString str( "Deltas: [ " );
         foreach ( double d, deltaSequence )
-            str += QString::number( d ) + " ";
-        kDebug() << str << "]" << endl;
+            str += QString::number( d ) + ' ';
+        kDebug() << str << ']' << endl;
 
         // Verify the delta by looking at cells intervalLength.._seqList.count().
         // We only looked at the cells 0..2*intervalLength-1.
@@ -518,8 +518,8 @@ static QList<double> findInterval( const AutoFillSequence& _seqList )
 
         QString str( "Deltas: [ " );
         foreach ( double d, deltaSequence )
-            str += QString::number( d ) + " ";
-        kDebug() << str << "]" << endl;
+            str += QString::number( d ) + ' ';
+        kDebug() << str << ']' << endl;
     }
 
     return deltaSequence;
