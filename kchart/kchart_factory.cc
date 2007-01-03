@@ -69,8 +69,6 @@ KInstance* KChartFactory::global()
          s_global = new KInstance(aboutData());
          s_global->dirs()->addResourceType( "kchart_template",
          KStandardDirs::kde_default("data") + "kchart/templates/");
-         // Tell the iconloader about share/apps/koffice/icons
-         s_global->iconLoader()->addAppDir("koffice");
     }
     return s_global;
 }
