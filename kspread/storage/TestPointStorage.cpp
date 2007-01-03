@@ -383,6 +383,52 @@ void PointStorageTest::testShiftDown()
     QCOMPARE( storage.m_cols, cols );
 }
 
+typedef unsigned long tval;
+
+inline tval stamp(void) 
+{
+        tval tsc;
+        asm volatile("rdtsc" : "=a" (tsc) : : "edx");
+        return tsc;
+}
+
+inline tval measure(tval t)
+{
+        tval tsc;
+        asm volatile("rdtsc" : "=a" (tsc) : : "edx");
+        if (tsc>t)
+                return tsc-t;
+        else
+                return t-tsc;
+}
+
+void PointStorageTest::testLookupPerformance()
+{
+    PointStorage<int> storage;
+    for ( int r = 0; r < 100; ++r )
+    {
+        for ( int c = 0; c < 1000; ++c )
+        {
+            storage.m_data << c;
+            storage.m_cols << ( c + 1 );
+        }
+        storage.m_rows << r*1000;
+    }
+//     qDebug() << endl << qPrintable( storage.dump() );
+    qDebug() << "start measuring...";
+
+    tval start = stamp();
+    int v;
+    for ( int r = 1; r <= 100; ++r )
+    {
+        for ( int c = 1; c <= 1000; ++c )
+        {
+            v = storage.lookup( c, r );
+        }
+    }
+    qDebug() << "ticks: " << measure( start );
+}
+
 
 QTEST_MAIN(PointStorageTest)
 

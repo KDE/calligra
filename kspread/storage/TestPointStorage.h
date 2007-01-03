@@ -41,6 +41,7 @@ private Q_SLOTS:
     void testShiftRight();
     void testShiftUp();
     void testShiftDown();
+    void testLookupPerformance();
 };
 
 } // namespace KSpread
