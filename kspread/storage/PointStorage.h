@@ -61,16 +61,12 @@ public:
      * Constructor.
      * Creates an empty storage. Actually, does nothing.
      */
-    PointStorage()
-    {
-    }
+    PointStorage() {}
 
     /**
      * Destructor.
      */
-    ~PointStorage()
-    {
-    }
+    ~PointStorage() {}
 
     /**
      * Inserts \p data at \p col , \p row .
@@ -78,13 +74,11 @@ public:
      */
     T insert( int col, int row, const T& data )
     {
-//         qDebug() << "insert(" << col << "," << row << "," << data << ")";
         Q_ASSERT( 1 <= col <= KS_colMax );
         Q_ASSERT( 1 <= row <= KS_rowMax );
         // row's missing?
         if ( row > m_rows.count() )
         {
-//             qDebug() << "row's missing";
             // insert missing rows
             int counter = row - m_rows.count();
             while ( counter-- > 0 )
@@ -97,7 +91,6 @@ public:
         // the row exists
         else
         {
-//             qDebug() << "row exists";
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
             const QList<int> cols = m_cols.mid( rowStart, rowLength );
@@ -105,7 +98,6 @@ public:
             // column's missing?
             if ( cit == cols.constEnd() )
             {
-//                 qDebug() << "column's missing";
                 // determine the index where the data and column has to be inserted
                 const int index = rowStart + cols.count();
                 // insert the actual data
@@ -119,16 +111,12 @@ public:
             // column exists
             else
             {
-//                 qDebug() << "column exists";
                 const int index = rowStart + ( cit - cols.constBegin() );
                 const T oldData = m_data[ index ];
                 m_data[ index ] = data;
                 return oldData;
             }
         }
-//         qDebug() << "data: " << m_data;
-//         qDebug() << "rows: " << m_rows;
-//         qDebug() << "cols: " << m_cols;
         return T();
     }
 
@@ -174,7 +162,6 @@ public:
         // column's missing?
         if ( cit == cols.constEnd() )
             return T();
-//         qDebug() << "data exists";
         const int index = rowStart + ( cit - cols.constBegin() );
         // save the old data
         const T oldData = m_data[ index ];
@@ -216,9 +203,15 @@ public:
      */
     QList< QPair<QPoint,T> > insertRows( int position, int number = 1 )
     {
+        Q_ASSERT( 1 <= position <= KS_rowMax );
+        // row's missing?
+        if ( position - 1 > m_rows.count() )
+            return QList< QPair<QPoint,T> >();
         QList< QPair<QPoint,T> > oldData;
+        int dataCount = 0;
+        int rowCount = 0;
         // save the old data
-        for ( int row = KS_rowMax - number; row < KS_rowMax; ++row )
+        for ( int row = KS_rowMax - number + 1; row - 1 <= m_rows.count() && row <= KS_rowMax; ++row )
         {
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
@@ -226,11 +219,18 @@ public:
             const QList<int> data = m_data.mid( rowStart, rowLength );
             for ( int col = 0; col < cols.count(); ++col )
                 oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
+            dataCount += data.count();
         }
-        // TODO create missing rows
-        // TODO remove the out of range data, column indices
-        // insert the rows
-        const int index = m_rows.value( position );
+        // remove the out of range data
+        while ( dataCount > 0 )
+        {
+            m_data.removeLast();
+            m_cols.removeLast();
+        }
+        while ( rowCount > 0 )
+            m_rows.removeLast();
+        // insert the new rows
+        const int index = m_rows.value( position - 1 );
         for ( int r = 0; r < number; ++r )
             m_rows.insert( position, index );
         return oldData;
@@ -311,18 +311,15 @@ public:
         }
         for ( int row = 0; row < m_rows.count(); ++row )
         {
-//             qDebug() << "row: " << row;
             str += '(';
             const int rowStart = m_rows.value( row );
             const int rowLength = ( row + 1 < m_rows.count() ) ? m_rows.value( row + 1 ) - rowStart : -1;
             const QList<int> cols = m_cols.mid( rowStart, rowLength );
             const QList<int> data = m_data.mid( rowStart, rowLength );
-//             qDebug() << "row: " << row << ", start: " << rowStart << ", length: " << rowLength;
             int lastCol = 0;
             for ( int col = 0; col < cols.count(); ++col )
             {
                 int counter = cols.value( col ) - lastCol;
-//                 qDebug() << "col: " << cols.value( col ) << ", lastCol: " << lastCol << ", counter: " << counter;
                 while ( counter-- > 1 )
                     str += "  ,";
                 str += QString( "%1," ).arg( data.value( col ), 2 );
@@ -330,7 +327,6 @@ public:
             }
             // fill the column up to the max
             int counter = maxCols - lastCol;
-//             qDebug() << "maxCols: " << maxCols << ", lastCol: " << lastCol << ", counter: " << counter;
             while ( counter-- > 0 )
                 str += "  ,";
             // replace the last comma
