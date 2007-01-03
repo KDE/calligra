@@ -977,6 +977,10 @@ Value func_ddb (valVector args, ValueCalc *calc, FuncExtra *)
   previous *= cost;
   result = previous - current;
 
+  // can't be negative
+  if(result < 0.0)
+    result = 0.0;
+    
   return Value(result);
 }
 
