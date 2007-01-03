@@ -173,11 +173,11 @@ void PointStorageTest::testInsertColumns()
 
     storage.insertColumns( 2, 2 ); // in the middle
     storage.insertColumns( 9, 1 ); // beyond the current end
-    // ( 1,  ,  , 2,  ,  , 3,  ,  )
-    // ( 4,  ,  , 5, 6,  ,  ,  ,  )
-    // (  ,  ,  , 7, 8,  , 9,  ,  )
-    // (  ,  ,  ,  ,  ,10,  ,  ,  )
-    // (11,  ,  ,  ,  ,  ,12,  ,  )
+    // ( 1,  ,  , 2,  ,  , 3)
+    // ( 4,  ,  , 5, 6,  ,  )
+    // (  ,  ,  , 7, 8,  , 9)
+    // (  ,  ,  ,  ,  ,10,  )
+    // (11,  ,  ,  ,  ,  ,12)
 
     const QList<int> data( QList<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 );
     const QList<int> rows( QList<int>() << 0 << 3 << 6 << 9 << 10 );
@@ -236,11 +236,9 @@ void PointStorageTest::testInsertRows()
     // (  , 7, 8,  , 9)
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
-    // (  ,  ,  ,  ,  )
-    // (  ,  ,  ,  ,  )
 
     const QList<int> data( QList<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 );
-    const QList<int> rows( QList<int>() << 0 << 3 << 3 << 3 << 6 << 9 << 10 << 12 << 12 );
+    const QList<int> rows( QList<int>() << 0 << 3 << 3 << 3 << 6 << 9 << 10 );
     const QList<int> cols( QList<int>() << 1 << 2 << 5 << 1 << 2 << 3 << 2 << 3 << 5 << 4 << 1 << 5 );
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
@@ -284,16 +282,17 @@ void PointStorageTest::testShiftLeft()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    // TODO
+    storage.unshiftRows( QRect( 2, 2, 2, 1 ) );
+    storage.unshiftRows( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3)
-    // ( 4, 5, 6,  ,  )
-    // (  , 7, 8,  , 9)
+    // ( 4,  ,  ,  ,  )
+    // (  ,  ,  ,  , 9)
     // (  ,  ,  ,10,  )
-    // (11,  ,  ,  ,12)
+    // (11,  ,  ,  ,  )
 
-    const QList<int> data( QList<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 );
-    const QList<int> rows( QList<int>() << 0 << 3 << 6 << 9 << 10 );
-    const QList<int> cols( QList<int>() << 1 << 2 << 5 << 1 << 2 << 3 << 2 << 3 << 5 << 4 << 1 << 5 );
+    const QList<int> data( QList<int>() << 1 << 2 << 3 << 4 << 9 << 10 << 11 );
+    const QList<int> rows( QList<int>() << 0 << 3 << 4 << 5 << 6 );
+    const QList<int> cols( QList<int>() << 1 << 2 << 5 << 1 << 5 << 4 << 1 );
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
@@ -311,16 +310,17 @@ void PointStorageTest::testShiftRight()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    // TODO
-    // ( 1, 2,  ,  , 3)
-    // ( 4, 5, 6,  ,  )
-    // (  , 7, 8,  , 9)
-    // (  ,  ,  ,10,  )
-    // (11,  ,  ,  ,12)
+    storage.shiftRows( QRect( 2, 2, 2, 1 ) );
+    storage.shiftRows( QRect( 5, 5, 1, 1 ) );
+    // ( 1, 2,  ,  , 3,  ,  )
+    // ( 4,  ,  , 5, 6,  ,  )
+    // (  ,  ,  , 7, 8,  , 9)
+    // (  ,  ,  ,10,  ,  ,  )
+    // (11,  ,  ,  ,  ,12,  )
 
     const QList<int> data( QList<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 );
     const QList<int> rows( QList<int>() << 0 << 3 << 6 << 9 << 10 );
-    const QList<int> cols( QList<int>() << 1 << 2 << 5 << 1 << 2 << 3 << 2 << 3 << 5 << 4 << 1 << 5 );
+    const QList<int> cols( QList<int>() << 1 << 2 << 5 << 1 << 4 << 5 << 4 << 5 << 7 << 4 << 1 << 6 );
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
@@ -338,16 +338,17 @@ void PointStorageTest::testShiftUp()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    // TODO
+    storage.unshiftColumns( QRect( 2, 2, 1, 2 ) );
+    storage.unshiftColumns( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3)
-    // ( 4, 5, 6,  ,  )
-    // (  , 7, 8,  , 9)
+    // ( 4,  ,  ,  ,  )
+    // (  ,  ,  ,  , 9)
     // (  ,  ,  ,10,  )
-    // (11,  ,  ,  ,12)
+    // (11,  ,  ,  ,  )
 
-    const QList<int> data( QList<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 );
-    const QList<int> rows( QList<int>() << 0 << 3 << 6 << 9 << 10 );
-    const QList<int> cols( QList<int>() << 1 << 2 << 5 << 1 << 2 << 3 << 2 << 3 << 5 << 4 << 1 << 5 );
+    const QList<int> data( QList<int>() << 1 << 2 << 3 << 4 << 9 << 10 << 11 );
+    const QList<int> rows( QList<int>() << 0 << 3 << 4 << 5 << 6 );
+    const QList<int> cols( QList<int>() << 1 << 2 << 5 << 1 << 5 << 4 << 1 );
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
@@ -365,7 +366,7 @@ void PointStorageTest::testShiftDown()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.shiftColumns( QRect( 2, 3, 1, 3 ) );
+    storage.shiftColumns( QRect( 2, 2, 1, 2 ) );
     storage.shiftColumns( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
