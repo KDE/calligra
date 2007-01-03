@@ -375,9 +375,9 @@ void PointStorageTest::testShiftDown()
     // (11, 7, 8,  ,  )
     // (  ,  ,  ,  ,12)
 
-    const QList<int> data( QList<int>() << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 );
+    const QList<int> data( QList<int>() << 1 << 2 << 3 << 4 << 9 << 5 << 6 << 10 << 11 << 7 << 8 << 12 );
     const QList<int> rows( QList<int>() << 0 << 3 << 4 << 5 << 8 << 11 << 12 );
-    const QList<int> cols( QList<int>() << 1 << 2 << 5 << 1 << 2 << 3 << 2 << 3 << 5 << 4 << 1 << 5 );
+    const QList<int> cols( QList<int>() << 1 << 2 << 5 << 1 << 5 << 2 << 3 << 4 << 1 << 2 << 3 << 5 );
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
