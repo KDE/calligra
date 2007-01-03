@@ -17,7 +17,7 @@ add_subdirectory( main2 )
 
 ##add_subdirectory( migration )
 #add_subdirectory( plugins )
-add_subdirectory( tests )
+#add_subdirectory( tests )
 
 ########### next target ###############
 
