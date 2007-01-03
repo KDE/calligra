@@ -220,14 +220,15 @@ public:
             for ( int col = 0; col < cols.count(); ++col )
                 oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
             dataCount += data.count();
+            ++rowCount;
         }
         // remove the out of range data
-        while ( dataCount > 0 )
+        while ( dataCount-- > 0 )
         {
             m_data.removeLast();
             m_cols.removeLast();
         }
-        while ( rowCount > 0 )
+        while ( rowCount-- > 0 )
             m_rows.removeLast();
         // insert the new rows
         const int index = m_rows.value( position - 1 );
@@ -242,8 +243,36 @@ public:
      */
     QList< QPair<QPoint,T> > removeRows( int position, int number = 1 )
     {
+        Q_ASSERT( 1 <= position <= KS_rowMax );
+        // row's missing?
+        if ( position - 1 > m_rows.count() )
+            return QList< QPair<QPoint,T> >();
         QList< QPair<QPoint,T> > oldData;
-        // TODO
+        int dataCount = 0;
+        int rowCount = 0;
+        // save the old data
+        for ( int row = position; row <= m_rows.count() && row <= position + number - 1; ++row )
+        {
+            const int rowStart = m_rows.value( row - 1 );
+            const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
+            const QList<int> cols = m_cols.mid( rowStart, rowLength );
+            const QList<int> data = m_data.mid( rowStart, rowLength );
+            for ( int col = 0; col < cols.count(); ++col )
+                oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
+            dataCount += data.count();
+            ++rowCount;
+        }
+        // adjust the offsets of the following rows
+        for ( int r = position + number - 1; r < m_rows.count(); ++r )
+            m_rows[r] -= dataCount;
+        // remove the out of range data
+        while ( dataCount-- > 0 )
+        {
+            m_data.removeAt( m_rows.value( position - 1 ) );
+            m_cols.removeAt( m_rows.value( position - 1 ) );
+        }
+        while ( rowCount-- > 0 )
+            m_rows.removeAt( position - 1 );
         return oldData;
     }
 
