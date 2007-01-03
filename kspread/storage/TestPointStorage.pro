@@ -4,7 +4,6 @@
 
 TEMPLATE = app
 INCLUDEPATH += .
-INCLUDEPATH += /usr/local/kde/4.0/include
 
 HEADERS += TestPointStorage.h
 INTERFACES +=

@@ -25,6 +25,11 @@
 #include <QRect>
 #include <QString>
 
+// #include "Global.h"
+#warning Include Global.h for KS_colMax, KS_rowMax.
+#define KS_rowMax 0x7FFF
+#define KS_colMax 0x7FFF
+
 namespace KSpread
 {
 
@@ -74,8 +79,8 @@ public:
     T insert( int col, int row, const T& data )
     {
 //         qDebug() << "insert(" << col << "," << row << "," << data << ")";
-//         Q_ASSERT( 1 <= col <= KS_colMax );
-//         Q_ASSERT( 1 <= row <= KS_rowMax );
+        Q_ASSERT( 1 <= col <= KS_colMax );
+        Q_ASSERT( 1 <= row <= KS_rowMax );
         // row's missing?
         if ( row > m_rows.count() )
         {
@@ -134,8 +139,8 @@ public:
      */
     T lookup( int col, int row ) const
     {
-//         Q_ASSERT( 1 <= col <= KS_colMax );
-//         Q_ASSERT( 1 <= row <= KS_rowMax );
+        Q_ASSERT( 1 <= col <= KS_colMax );
+        Q_ASSERT( 1 <= row <= KS_rowMax );
         // is the row not present?
         if ( row - 1 > m_rows.count() )
             return T();
@@ -155,8 +160,10 @@ public:
      * Removes data at \p col , \p row .
      * \return the removed data (default data, if none)
      */
-    T remove( int col, int row )
+    T take( int col, int row )
     {
+        Q_ASSERT( 1 <= col <= KS_colMax );
+        Q_ASSERT( 1 <= row <= KS_rowMax );
         // row's missing?
         if ( row - 1 > m_rows.count() )
             return T();
@@ -185,9 +192,9 @@ public:
      * Insert \p number columns at \p position .
      * \return the data, that became out of range (shifted over the end)
      */
-    QList<T> insertColumns( int position, int number = 1 )
+    QList< QPair<QPoint,T> > insertColumns( int position, int number = 1 )
     {
-        QList<T> oldData;
+        QList< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
@@ -196,9 +203,9 @@ public:
      * Removes \p number columns at \p position .
      * \return the removed data
      */
-    QList<T> removeColumns( int position, int number = 1 )
+    QList< QPair<QPoint,T> > removeColumns( int position, int number = 1 )
     {
-        QList<T> oldData;
+        QList< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
@@ -207,10 +214,25 @@ public:
      * Insert \p number rows at \p position .
      * \return the data, that became out of range (shifted over the end)
      */
-    QList<T> insertRows( int position, int number = 1 )
+    QList< QPair<QPoint,T> > insertRows( int position, int number = 1 )
     {
-        QList<T> oldData;
-        // TODO
+        QList< QPair<QPoint,T> > oldData;
+        // save the old data
+        for ( int row = KS_rowMax - number; row < KS_rowMax; ++row )
+        {
+            const int rowStart = m_rows.value( row - 1 );
+            const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
+            const QList<int> cols = m_cols.mid( rowStart, rowLength );
+            const QList<int> data = m_data.mid( rowStart, rowLength );
+            for ( int col = 0; col < cols.count(); ++col )
+                oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
+        }
+        // TODO create missing rows
+        // TODO remove the out of range data, column indices
+        // insert the rows
+        const int index = m_rows.value( position );
+        for ( int r = 0; r < number; ++r )
+            m_rows.insert( position, index );
         return oldData;
     }
 
@@ -218,40 +240,42 @@ public:
      * Removes \p number rows at \p position .
      * \return the removed data
      */
-    QList<T> removeRows( int position, int number = 1 )
+    QList< QPair<QPoint,T> > removeRows( int position, int number = 1 )
     {
-        QList<T> oldData;
+        QList< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
 
     /**
      * Shifts the rows right of \p rect to the right by the width of \p rect .
+     * \return the data, that became out of range (shifted over the end)
      */
-    QList<T> shiftRows( const QRect& rect )
+    QList< QPair<QPoint,T> > shiftRows( const QRect& rect )
     {
-        QList<T> oldData;
+        QList< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
 
     /**
      * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
+     * \return the data, that became out of range (shifted over the end)
      */
-    QList<T> shiftColumns( const QRect& rect )
+    QList< QPair<QPoint,T> > shiftColumns( const QRect& rect )
     {
-        QList<T> oldData;
+        QList< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
 
     /**
      * Shifts the rows left of \p rect to the left by the width of \p rect .
-     * \return the former rectangle/data pairs
+     * \return the removed data
      */
-    QList<T> unshiftRows( const QRect& rect )
+    QList< QPair<QPoint,T> > unshiftRows( const QRect& rect )
     {
-        QList<T> oldData;
+        QList< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
@@ -260,9 +284,9 @@ public:
      * Shifts the columns on top of \p rect to the top by the height of \p rect .
      * \return the removed data
      */
-    QList<T> unshiftColumns( const QRect& rect )
+    QList< QPair<QPoint,T> > unshiftColumns( const QRect& rect )
     {
-        QList<T> oldData;
+        QList< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
