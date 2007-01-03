@@ -20,7 +20,6 @@
 
 #include "identifier.h"
 #include "transliteration_table.h"
-#include <kdebug.h>
 
 using namespace KexiUtils;
 
@@ -37,7 +36,7 @@ bool KexiUtils::isIdentifier(const QString& s)
 
 QString KexiUtils::string2FileName(const QString &s)
 {
-	QString fn = s.simplifyWhiteSpace();
+	QString fn( s.simplifyWhiteSpace() );
 	fn.replace(' ',"_"); fn.replace('$',"_");
 	fn.replace('\\',"-"); fn.replace('/',"-"); 
 	fn.replace(':',"-"); fn.replace('*',"-"); 
@@ -46,8 +45,6 @@ QString KexiUtils::string2FileName(const QString &s)
 
 inline QString char2Identifier(const QChar& c)
 {
-	kdDebug() << c << ": " << QString("0x%1").arg(c.unicode(),0,16) << endl;
-
 	if (c.unicode() >= TRANSLITERATION_TABLE_SIZE)
 		return QString(QChar('_'));
 	const char *const s = transliteration_table[c.unicode()];
