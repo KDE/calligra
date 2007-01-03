@@ -29,6 +29,7 @@
 
 KInstance* KPrFactory::s_instance = 0;
 KAboutData* KPrFactory::s_aboutData = 0;
+KIconLoader* KPrFactory::s_iconLoader = 0;
 
 KPrFactory::KPrFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
@@ -65,6 +66,18 @@ KAboutData* KPrFactory::aboutData()
     return s_aboutData;
 }
 
+KIconLoader* KPrFactory::iconLoader()
+{
+    if( !s_iconLoader )
+    {
+        s_iconLoader = new KIconLoader( instance()->instanceName() );
+        // Tell the iconloader about share/apps/koffice/icons
+        s_iconLoader->addAppDir("koffice");
+    }
+    
+    return s_iconLoader;
+}
+
 KInstance* KPrFactory::instance()
 {
     if ( !s_instance )
@@ -75,8 +88,6 @@ KInstance* KPrFactory::instance()
                 KStandardDirs::kde_default("data") + "kpresenter/templates/");
         s_instance->dirs()->addResourceType("slideshow",
                 KStandardDirs::kde_default("data") + "kpresenter/slideshow/");
-        // Tell the iconloader about share/apps/koffice/icons
-        s_instance->iconLoader()->addAppDir("koffice");
     }
     return s_instance;
 }

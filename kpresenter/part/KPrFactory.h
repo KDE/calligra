@@ -24,6 +24,7 @@
 #include <KoFactory.h>
 
 class KAboutData;
+class KIconLoader;
 
 class KPRESENTER_EXPORT KPrFactory : public KoFactory
 {
@@ -39,10 +40,13 @@ public:
 
     // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
-
+    
+    static KIconLoader* iconLoader();
+    
 private:
     static KInstance* s_instance;
     static KAboutData* s_aboutData;
+    static KIconLoader* s_iconLoader;
 };
 
 #endif
