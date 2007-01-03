@@ -52,6 +52,8 @@ Factory::~Factory()
   s_aboutData=0;
   delete s_global;
   s_global = 0;
+  delete s_iconLoader;
+  s_iconLoader = 0;
 //   delete s_dcopObject;
 //   s_dcopObject = 0;
 }
