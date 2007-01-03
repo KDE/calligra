@@ -408,50 +408,48 @@ void PointStorageTest::testInsertionPerformance()
 //     qDebug() << endl << qPrintable( storage.dump() );
     qDebug() << "start measuring...";
 
-    tval start = stamp();
+    tval start = 0;
+    tval ticks = 0;
     int v;
+    int col = 0;
+    int row = 0;
+    int cols = 0;
+    int rows = 0;
     int counter = 0;
-    for ( int r = 1; r <= 500; ++r )
+    const int iterations = 100000;
+    while ( counter < iterations )
     {
-        for ( int c = 1; c <= 100; c += 10 )
+        col = 1 + rand() % 1000;
+        row = 1 + rand() % 1000;
+        cols = col + 10 * ( rand() % 10 );
+        rows = row + rand() % 10;
+        start = stamp();
+        for ( int r = row; r <= rows; ++r )
         {
-            v = storage.insert( c, r, c );
-            v = storage.insert( c+1, r, c );
-            v = storage.insert( c+2, r, c );
-            v = storage.insert( c+3, r, c );
-            v = storage.insert( c+4, r, c );
-            v = storage.insert( c+5, r, c );
-            v = storage.insert( c+6, r, c );
-            v = storage.insert( c+7, r, c );
-            v = storage.insert( c+8, r, c );
-            v = storage.insert( c+9, r, c );
-            counter += 10;
+            for ( int c = col; c <= cols && counter < iterations; c += 10 )
+            {
+                v = storage.insert( c, r, c );
+                v = storage.insert( c+1, r, c );
+                v = storage.insert( c+2, r, c );
+                v = storage.insert( c+3, r, c );
+                v = storage.insert( c+4, r, c );
+                v = storage.insert( c+5, r, c );
+                v = storage.insert( c+6, r, c );
+                v = storage.insert( c+7, r, c );
+                v = storage.insert( c+8, r, c );
+                v = storage.insert( c+9, r, c );
+                counter += 10;
+            }
         }
+        ticks += measure( start );
     }
-    for ( int c = 1; c <= 100; c += 10 )
-    {
-        for ( int r = 501; r <= 1000; ++r )
-        {
-            v = storage.insert( c, r, c );
-            v = storage.insert( c+1, r, c );
-            v = storage.insert( c+2, r, c );
-            v = storage.insert( c+3, r, c );
-            v = storage.insert( c+4, r, c );
-            v = storage.insert( c+5, r, c );
-            v = storage.insert( c+6, r, c );
-            v = storage.insert( c+7, r, c );
-            v = storage.insert( c+8, r, c );
-            v = storage.insert( c+9, r, c );
-            counter += 10;
-        }
-    }
-    qDebug() << counter << " insertions in " << measure( start ) << " ticks";
+    qDebug() << counter << " insertions in " << ticks << " ticks";
 }
 
 void PointStorageTest::testLookupPerformance()
 {
     PointStorage<int> storage;
-    for ( int r = 0; r < 100; ++r )
+    for ( int r = 0; r < 1000; ++r )
     {
         for ( int c = 0; c < 1000; ++c )
         {
@@ -463,46 +461,43 @@ void PointStorageTest::testLookupPerformance()
 //     qDebug() << endl << qPrintable( storage.dump() );
     qDebug() << "start measuring...";
 
-    tval start = stamp();
+    tval start = 0;
+    tval ticks = 0;
     int v;
+    int col = 0;
+    int row = 0;
+    int cols = 0;
+    int rows = 0;
     int counter = 0;
-    for ( int r = 1; r <= 500; ++r )
+    const int iterations = 100000;
+    while ( counter < iterations )
     {
-        for ( int c = 1; c <= 100; c += 10 )
+        col = 1 + rand() % 1000;
+        row = 1 + rand() % 1000;
+        cols = col + 10 * ( rand() % 10 );
+        rows = row + rand() % 10;
+        start = stamp();
+        for ( int r = row; r <= rows; ++r )
         {
-            v = storage.lookup( c, r );
-            v = storage.lookup( c+1, r );
-            v = storage.lookup( c+2, r );
-            v = storage.lookup( c+3, r );
-            v = storage.lookup( c+4, r );
-            v = storage.lookup( c+5, r );
-            v = storage.lookup( c+6, r );
-            v = storage.lookup( c+6, r );
-            v = storage.lookup( c+7, r );
-            v = storage.lookup( c+8, r );
-            v = storage.lookup( c+9, r );
-            counter += 10;
+            for ( int c = col; c <= cols && counter < iterations; c += 10 )
+            {
+                v = storage.lookup( c, r );
+                v = storage.lookup( c+1, r );
+                v = storage.lookup( c+2, r );
+                v = storage.lookup( c+3, r );
+                v = storage.lookup( c+4, r );
+                v = storage.lookup( c+5, r );
+                v = storage.lookup( c+6, r );
+                v = storage.lookup( c+6, r );
+                v = storage.lookup( c+7, r );
+                v = storage.lookup( c+8, r );
+                v = storage.lookup( c+9, r );
+                counter += 10;
+            }
         }
+        ticks += measure( start );
     }
-    for ( int c = 1; c <= 100; c += 10 )
-    {
-        for ( int r = 1; r <= 500; ++r )
-        {
-            v = storage.lookup( c, r );
-            v = storage.lookup( c+1, r );
-            v = storage.lookup( c+2, r );
-            v = storage.lookup( c+3, r );
-            v = storage.lookup( c+4, r );
-            v = storage.lookup( c+5, r );
-            v = storage.lookup( c+6, r );
-            v = storage.lookup( c+6, r );
-            v = storage.lookup( c+7, r );
-            v = storage.lookup( c+8, r );
-            v = storage.lookup( c+9, r );
-            counter += 10;
-        }
-    }
-    qDebug() << counter << " lookups in " << measure( start ) << " ticks";
+    qDebug() << counter << " lookups in " << ticks << " ticks";
 }
 
 
