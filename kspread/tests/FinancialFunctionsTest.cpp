@@ -488,5 +488,24 @@ void FinancialFunctionsTest::testZEROCOUPON()
   CHECK_EVAL( "ZERO_COUPON(1000;.25;1)",  800 );
 }
 
-QTEST_KDEMAIN(FinancialFunctionsTest, GUI)
+#include <QtTest/QtTest>
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <kapplication.h>
+
+#define KSPREAD_TEST(TestObject) \
+int main(int argc, char *argv[]) \
+{ \
+    setenv("LC_ALL", "C", 1); \
+    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
+    KAboutData aboutData( "qttest", "qttest", "version" );  \
+    KCmdLineArgs::init(&aboutData); \
+    KApplication app; \
+    TestObject tc; \
+    return QTest::qExec( &tc, argc, argv ); \
+}
+
+KSPREAD_TEST(FinancialFunctionsTest)
+//QTEST_KDEMAIN(FinancialFunctionsTest, GUI)
+
 #include "FinancialFunctionsTest.moc"
