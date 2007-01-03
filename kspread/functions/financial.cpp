@@ -969,17 +969,23 @@ Value func_ddb (valVector args, ValueCalc *calc, FuncExtra *)
 
   double result = 0.0;
 
-  // depreciation is the value between two periods
-  double invrate = (life-factor)/life;
-  double current = (period==1) ? invrate : pow (invrate, period);
-  double previous = current / invrate;
-  current *= cost;
-  previous *= cost;
-  result = previous - current;
+  if(factor >= life)
+    // special case: amazingly gigantic depreciating rate
+    result = (period > 1) ? 0 : (cost < salvage) ? 0 : cost - salvage;
+  else
+  {
+    // depreciation is the value between two periods
+    double invrate = (life-factor)/life;
+    double current = (period==1) ? invrate : pow (invrate, period);
+    double previous = current / invrate;
+    current *= cost;
+    previous *= cost;
+    result = previous - current;
 
-  // should not be more than the salvage
-  if(current < salvage)
-    result = previous - salvage;
+    // should not be more than the salvage
+    if(current < salvage)
+      result = previous - salvage;
+  }
 
   // can't be negative
   if(result < 0.0)
