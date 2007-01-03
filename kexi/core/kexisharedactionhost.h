@@ -134,7 +134,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 
 		/*! Like above - creates shared action, but from standard action identified by \a id. 
 		 Action's data is owned by the main window. */
-		KAction* createSharedAction( KStandardAction::StdAction id, const char *name, 
+		KAction* createSharedAction( KStandardAction::StandardAction id, const char *name, 
 			KActionCollection* col = 0);
 
 		/*! Creates shared action with name \a name and shortcut \a cut 

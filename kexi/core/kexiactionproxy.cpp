@@ -165,7 +165,11 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
 
 	KAction *ka = dynamic_cast<KAction*>(a);
 	Q_ASSERT(ka);
-	KAction *alt_act = new KAction(alternativeText, ka->iconSet(), ka->shortcut(), ka->parent(), 0, 0, altName);
+	KAction *alt_act = new KAction(0 /*KActionCollection*/, altName/*objectName*/);
+	alt_act->setText(alternativeText);
+	alt_act->setParent(ka->parent());
+	alt_act->setIcon(KIcon(ka->iconSet()));
+	alt_act->setShortcut(ka->shortcut());
 
 	QObject::connect(alt_act, SIGNAL(activated()), a, SLOT(activate()));
 	w->addAction(alt_act);

@@ -257,26 +257,32 @@ QList<KAction*> KexiSharedActionHost::sharedActions() const
 KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &pix_name,
 	const KShortcut &cut, const char *name, KActionCollection* col, const char *subclassName)
 {
-	if (subclassName==0)
-		return createSharedActionInternal(
-			new KAction(text, pix_name,
-			cut, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection(), name)
-		);
-	else if (qstricmp(subclassName,"KToggleAction")==0)
-		return createSharedActionInternal(
-			new KToggleAction(text, pix_name,
-			cut, 0/*receiver*/, 0/*slot*/, col ? col : d->mainWin->actionCollection(), name)
-		);
-	else if (qstricmp(subclassName,"KActionMenu")==0)
-		return createSharedActionInternal(
-			new KActionMenu(KIcon(pix_name), text, col ? col : d->mainWin->actionCollection(), name)
-		);
-//TODO: more KAction subclasses
-
+	if (subclassName==0) {
+		KAction* action = new KAction(col ? col : d->mainWin->actionCollection(), name/*objectName*/);
+		action->setText(text);
+		action->setIcon(KIcon(pix_name));
+		action->setShortcut(cut);
+		return createSharedActionInternal(action);
+	}
+	else if (qstricmp(subclassName,"KToggleAction")==0) {
+		KToggleAction* action = new KToggleAction(col ? col : d->mainWin->actionCollection(), name/*objectName*/);
+		action->setText(text);
+		action->setIcon(KIcon(pix_name));
+		action->setShortcut(cut);
+		return createSharedActionInternal(action);
+	}
+	else if (qstricmp(subclassName,"KActionMenu")==0) {
+		KActionMenu* action = new KActionMenu(col ? col : d->mainWin->actionCollection(), name/*objectName*/);
+		action->setText(text);
+		action->setIcon(KIcon(pix_name));
+		action->setShortcut(cut);
+		return createSharedActionInternal(action);
+	}
+	//TODO: more KAction subclasses
 	return 0;
 }
 
-KAction* KexiSharedActionHost::createSharedAction( KStandardAction::StdAction id, const char *name,
+KAction* KexiSharedActionHost::createSharedAction( KStandardAction::StandardAction id, const char *name,
 	KActionCollection* col)
 {
 	return createSharedActionInternal(
@@ -287,9 +293,14 @@ KAction* KexiSharedActionHost::createSharedAction( KStandardAction::StdAction id
 KAction* KexiSharedActionHost::createSharedAction(const KGuiItem& guiItem, const KShortcut &cut, 
 	const char *name, KActionCollection* col)
 {
-	return createSharedActionInternal(
-		new KAction(guiItem, cut, 0/*receiver*/, 0/*slot*/, 
-			col ? col : d->mainWin->actionCollection(), name));
+	KAction* action = new KAction(col ? col : d->mainWin->actionCollection(), name);
+	action->setText( guiItem.text() );
+	action->setIcon( guiItem.icon() );
+	action->setShortcut(cut);
+	action->setEnabled( guiItem.isEnabled() ); //TODO how to update enable/disable? is it needed anyway?
+	action->setToolTip( guiItem.toolTip() );
+	action->setWhatsThis( guiItem.whatsThis() );
+	return createSharedActionInternal(action);
 }
 
 void KexiSharedActionHost::setActionVolatile( KAction *a, bool set )
