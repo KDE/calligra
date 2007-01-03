@@ -2,7 +2,6 @@
 Encoding=UTF-8
 Type=MimeType
 MimeType=application/x-kexiproject-sqlite
-Hidden=true
 Icon=kexiproject_sqlite
 Patterns=
 Comment=Kexi Database File-Based Project
