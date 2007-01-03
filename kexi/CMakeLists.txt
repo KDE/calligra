@@ -19,7 +19,6 @@ add_subdirectory( main2 )
 #add_subdirectory( plugins )
 add_subdirectory( tests )
 
-
 ########### next target ###############
 
 # that functionality got moved to kexi/main2/CMakeLists.txt

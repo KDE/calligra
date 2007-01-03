@@ -27,6 +27,7 @@
 #include <KoFactory.h>
 
 class KAboutData;
+class KIconLoader;
 
 class KDE_EXPORT KexiFactory : public KoFactory
 {
@@ -39,10 +40,12 @@ class KDE_EXPORT KexiFactory : public KoFactory
 
         static KInstance* global();
         static KAboutData* aboutData();
+        static KIconLoader* iconLoader();
 
     private:
         static KInstance* s_global;
         static KAboutData* s_aboutData;
+        static KIconLoader* s_iconLoader;
 };
 
 #endif

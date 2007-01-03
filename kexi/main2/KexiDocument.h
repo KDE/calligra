@@ -73,6 +73,11 @@ class KDE_EXPORT KexiDocument : public KoDocument, public KoZoomHandler
         ~KexiDocument();
 
         /**
+        * @return list of all documents
+        */
+        static QList<KexiDocument*> documents();
+
+        /**
         * Main painting method.
         * Implements the abstract \a KoDocument::paintContent method.
         */

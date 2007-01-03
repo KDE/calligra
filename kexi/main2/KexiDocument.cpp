@@ -23,6 +23,7 @@
 
 #include "KexiDocument.h"
 #include "KexiView.h"
+#include "KexiFactory.h"
 
 #include <KoXmlWriter.h>
 
@@ -52,21 +53,32 @@
 class KexiDocument::Private
 {
     public:
+        static QList<KexiDocument*> s_docs;
+        static int s_docId;
 };
 
-//QList<Doc*> Doc::Private::s_docs;
-//int Doc::Private::s_docId = 0;
+QList<KexiDocument*> KexiDocument::Private::s_docs;
+int KexiDocument::Private::s_docId = 0;
 
 KexiDocument::KexiDocument(QWidget *parentWidget, QObject* parent, bool singleViewMode)
     : KoDocument(parentWidget, parent, singleViewMode)
     , d( new Private() )
 {
+    setObjectName( QString("Document%1").arg(d->s_docId++).toLocal8Bit() );
+    documents().append( this );
+    setInstance( KexiFactory::global(), false );
 }
 
 KexiDocument::~KexiDocument()
 {
-  //if(isReadWrite()) saveConfig();
-  delete d;
+    //if( isReadWrite() ) saveConfig();
+    //d->s_docs.removeAll( this );
+    delete d;
+}
+
+QList<KexiDocument*> KexiDocument::documents()
+{
+  return Private::s_docs;
 }
 
 void KexiDocument::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
