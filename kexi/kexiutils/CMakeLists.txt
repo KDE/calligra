@@ -19,6 +19,8 @@ add_custom_command(
 	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/transliteration_table.cpp.bz2
 )
 
+macro_additional_clean_files( ${CMAKE_CURRENT_BINARY_DIR}/transliteration_table.cpp )
+
 set_target_properties(kexiutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
 install(TARGETS kexiutils  DESTINATION ${LIB_INSTALL_DIR})
