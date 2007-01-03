@@ -12,6 +12,7 @@
 
 
 class KInstance;
+class KIconLoader;
 class KAboutData;
 
 namespace KChart
@@ -31,12 +32,15 @@ public:
 
     static KInstance* global();
 
+    static KIconLoader* iconLoader();
+
     // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
 
 private:
-    static KInstance* s_global;
-    static KAboutData *s_aboutData;
+    static KInstance    *s_global;
+    static KIconLoader  *s_iconLoader;
+    static KAboutData   *s_aboutData;
 };
 
 }  //namespace KChart

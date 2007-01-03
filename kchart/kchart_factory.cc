@@ -34,6 +34,8 @@ KChartFactory::~KChartFactory()
     s_aboutData = 0;
     delete s_global;
     s_global = 0;
+    delete s_iconLoader;
+    s_iconLoader = 0;
 }
 
 
@@ -72,6 +74,19 @@ KInstance* KChartFactory::global()
     }
     return s_global;
 }
+
+
+KIconLoader* KChartFactory::iconLoader()
+{
+  if ( !s_iconLoader ) {
+      // Tell the iconloader about share/apps/koffice/icons
+      s_iconLoader = new KIconLoader(global()->instanceName(), global()->dirs());
+      s_iconLoader->addAppDir("koffice");
+  }
+  
+  return s_iconLoader;
+}
+
 
 }  //namespace KChart
 
