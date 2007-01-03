@@ -964,21 +964,20 @@ Value func_ddb (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() == 5)
     factor = calc->conv()->asFloat (args[4]).asFloat();
 
-  double total   = 0.0;
-
   if ( cost < 0.0 || salvage < 0.0 || life <= 0.0 || period < 0.0 || factor < 0.0 )
     return Value::errorVALUE();
 
-  for( int i = 0; i < life-1; ++i )
-  {
-    double periodDep = ( cost - total ) * ( factor / life );
-    if ( i == period - 1 )
-      return Value (periodDep);
-    else
-      total += periodDep;
-  }
+  double result = 0.0;
 
-  return Value (cost - total - salvage);
+  // depreciation is the value between two periods
+  double invrate = (life-factor)/life;
+  double current = (period==1) ? invrate : pow (invrate, period);
+  double previous = current / invrate;
+  current *= cost;
+  previous *= cost;
+  result = previous - current;
+
+  return Value(result);
 }
 
 
