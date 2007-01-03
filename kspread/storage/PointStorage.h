@@ -248,32 +248,21 @@ public:
     }
 
     /**
-     * Shifts the rows right of \p rect to the right by the width of \p rect .
-     * \return the data, that became out of range (shifted over the end)
-     */
-    QList< QPair<QPoint,T> > shiftRows( const QRect& rect )
-    {
-        QList< QPair<QPoint,T> > oldData;
-        // TODO
-        return oldData;
-    }
-
-    /**
-     * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
-     * \return the data, that became out of range (shifted over the end)
-     */
-    QList< QPair<QPoint,T> > shiftColumns( const QRect& rect )
-    {
-        QList< QPair<QPoint,T> > oldData;
-        // TODO
-        return oldData;
-    }
-
-    /**
      * Shifts the rows left of \p rect to the left by the width of \p rect .
      * \return the removed data
      */
-    QList< QPair<QPoint,T> > unshiftRows( const QRect& rect )
+    QList< QPair<QPoint,T> > shiftLeft( const QRect& rect )
+    {
+        QList< QPair<QPoint,T> > oldData;
+        // TODO
+        return oldData;
+    }
+
+    /**
+     * Shifts the rows right of \p rect to the right by the width of \p rect .
+     * \return the data, that became out of range (shifted over the end)
+     */
+    QList< QPair<QPoint,T> > shiftRight( const QRect& rect )
     {
         QList< QPair<QPoint,T> > oldData;
         // TODO
@@ -284,7 +273,18 @@ public:
      * Shifts the columns on top of \p rect to the top by the height of \p rect .
      * \return the removed data
      */
-    QList< QPair<QPoint,T> > unshiftColumns( const QRect& rect )
+    QList< QPair<QPoint,T> > shiftUp( const QRect& rect )
+    {
+        QList< QPair<QPoint,T> > oldData;
+        // TODO
+        return oldData;
+    }
+
+    /**
+     * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
+     * \return the data, that became out of range (shifted over the end)
+     */
+    QList< QPair<QPoint,T> > shiftDown( const QRect& rect )
     {
         QList< QPair<QPoint,T> > oldData;
         // TODO
