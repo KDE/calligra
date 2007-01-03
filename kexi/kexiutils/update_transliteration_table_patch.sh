@@ -24,11 +24,11 @@
 
 # 1. Create an original transliteration file by reversing changes
 
-bzcat transliteration_table.h.bz2 > transliteration_table.h.orig || exit 1
-patch -p0 -R transliteration_table.h.orig < transliteration_table.h.patch  || exit 1
+bzcat transliteration_table.cpp.bz2 > transliteration_table.cpp.orig || exit 1
+patch -p0 -R transliteration_table.cpp.orig < transliteration_table.cpp.patch  || exit 1
 
-# 2. Update transliteration_table.h.patch file
+# 2. Update transliteration_table.cpp.patch file
 
-diff -u transliteration_table.h.orig transliteration_table.h \
- > transliteration_table.h.patch  || exit 1
+diff -u transliteration_table.cpp.orig transliteration_table.cpp \
+ > transliteration_table.cpp.patch  || exit 1
 

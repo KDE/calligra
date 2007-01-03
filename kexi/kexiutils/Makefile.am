@@ -1,16 +1,8 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-all: transliteration_table.h
-
-transliteration_table.h: transliteration_table.h.bz2
-	bunzip2 -k transliteration_table.h.bz2
-
-libkexiutils.la: transliteration_table.h
-	
-
 lib_LTLIBRARIES = libkexiutils.la
 libkexiutils_la_SOURCES = identifier.cpp validator.cpp utils.cpp debuggui.cpp \
-  styleproxy.cpp longlongvalidator.cpp transliteration_table.h
+  styleproxy.cpp longlongvalidator.cpp transliteration_table.cpp
 
 libkexiutilsincludedir=$(includedir)/kexiutils
 libkexiutilsinclude_HEADERS = tristate.h identifier.h validator.h utils.h kexiutils_export.h \
@@ -27,3 +19,6 @@ libkexiutils_la_LIBADD = $(LIB_QT) $(LIB_KDEUI) $(LIB_KIO)
 INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
 
 METASOURCES = AUTO
+
+transliteration_table.cpp: transliteration_table.cpp.bz2
+	bunzip2 -k transliteration_table.cpp.bz2

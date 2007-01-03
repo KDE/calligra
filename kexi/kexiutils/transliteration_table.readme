@@ -23,7 +23,7 @@ to transliterate any unicode character (having code < 65535)
 to an identifier, what gives constant time for converting 
 single character.
 
-The resulting generated code is kept in transliteration_table.h file,
+The resulting generated code is kept in transliteration_table.{h|cpp} files,
 included by identifier.cpp for use in public utility functions.
 
 For each item, the table (basically a table of c-strings) contains:
@@ -36,16 +36,16 @@ For each item, the table (basically a table of c-strings) contains:
 4. Fixes: Because iconv/recode tools are not fully implemented in regards 
 to transliteration to latin-1 (e.g. no good support 
 for Greek and Cyrillic/Serbian characters), 
-the transliteration_table.h file is patched with 
-transliteration_table.h.patch which provides fixes written by hand.
+the transliteration_table.cpp file is patched with 
+transliteration_table.cpp.patch which provides fixes written by hand.
 
 If you find invalid or missing transliterations:
- a) edit transliteration_table.h (using UTF-8-compliant text editor!)
-   - if transliteration_table.h file does not exist, 
+ a) edit transliteration_table.cpp (using UTF-8-compliant text editor!)
+   - if transliteration_table.cpp file does not exist, 
    extract it from transliteration_table.bz2 archive
  b) run update_transliteration_table_patch.sh shell script,
-   what will update the transliteration_table.h.patch file
- c) send the transliteration_table.h.patch file to the Kexi team
+   what will update the transliteration_table.cpp.patch file
+ c) send the transliteration_table.cpp.patch file to the Kexi team
 
 5. Credits
  Jaroslaw Staniek <js at iidea.pl>
