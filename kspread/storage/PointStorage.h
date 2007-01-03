@@ -248,7 +248,8 @@ public:
     }
 
     /**
-     * Shifts the rows left of \p rect to the left by the width of \p rect .
+     * Shifts the data right of \p rect to the left by the width of \p rect .
+     * The data formerly contained in \p rect becomes overridden.
      * \return the removed data
      */
     QList< QPair<QPoint,T> > shiftLeft( const QRect& rect )
@@ -259,7 +260,7 @@ public:
     }
 
     /**
-     * Shifts the rows right of \p rect to the right by the width of \p rect .
+     * Shifts the data right of \p rect to the right by the width of \p rect .
      * \return the data, that became out of range (shifted over the end)
      */
     QList< QPair<QPoint,T> > shiftRight( const QRect& rect )
@@ -270,7 +271,8 @@ public:
     }
 
     /**
-     * Shifts the columns on top of \p rect to the top by the height of \p rect .
+     * Shifts the data below \p rect to the top by the height of \p rect .
+     * The data formerly contained in \p rect becomes overridden.
      * \return the removed data
      */
     QList< QPair<QPoint,T> > shiftUp( const QRect& rect )
@@ -281,7 +283,7 @@ public:
     }
 
     /**
-     * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
+     * Shifts the data below \p rect to the bottom by the height of \p rect .
      * \return the data, that became out of range (shifted over the end)
      */
     QList< QPair<QPoint,T> > shiftDown( const QRect& rect )
