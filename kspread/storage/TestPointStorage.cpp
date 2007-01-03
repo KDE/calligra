@@ -402,6 +402,52 @@ inline tval measure(tval t)
                 return t-tsc;
 }
 
+void PointStorageTest::testInsertionPerformance()
+{
+    PointStorage<int> storage;
+//     qDebug() << endl << qPrintable( storage.dump() );
+    qDebug() << "start measuring...";
+
+    tval start = stamp();
+    int v;
+    int counter = 0;
+    for ( int r = 1; r <= 500; ++r )
+    {
+        for ( int c = 1; c <= 100; c += 10 )
+        {
+            v = storage.insert( c, r, c );
+            v = storage.insert( c+1, r, c );
+            v = storage.insert( c+2, r, c );
+            v = storage.insert( c+3, r, c );
+            v = storage.insert( c+4, r, c );
+            v = storage.insert( c+5, r, c );
+            v = storage.insert( c+6, r, c );
+            v = storage.insert( c+7, r, c );
+            v = storage.insert( c+8, r, c );
+            v = storage.insert( c+9, r, c );
+            counter += 10;
+        }
+    }
+    for ( int c = 1; c <= 100; c += 10 )
+    {
+        for ( int r = 501; r <= 1000; ++r )
+        {
+            v = storage.insert( c, r, c );
+            v = storage.insert( c+1, r, c );
+            v = storage.insert( c+2, r, c );
+            v = storage.insert( c+3, r, c );
+            v = storage.insert( c+4, r, c );
+            v = storage.insert( c+5, r, c );
+            v = storage.insert( c+6, r, c );
+            v = storage.insert( c+7, r, c );
+            v = storage.insert( c+8, r, c );
+            v = storage.insert( c+9, r, c );
+            counter += 10;
+        }
+    }
+    qDebug() << counter << " insertions in " << measure( start ) << " ticks";
+}
+
 void PointStorageTest::testLookupPerformance()
 {
     PointStorage<int> storage;
@@ -419,14 +465,44 @@ void PointStorageTest::testLookupPerformance()
 
     tval start = stamp();
     int v;
-    for ( int r = 1; r <= 100; ++r )
+    int counter = 0;
+    for ( int r = 1; r <= 500; ++r )
     {
-        for ( int c = 1; c <= 1000; ++c )
+        for ( int c = 1; c <= 100; c += 10 )
         {
             v = storage.lookup( c, r );
+            v = storage.lookup( c+1, r );
+            v = storage.lookup( c+2, r );
+            v = storage.lookup( c+3, r );
+            v = storage.lookup( c+4, r );
+            v = storage.lookup( c+5, r );
+            v = storage.lookup( c+6, r );
+            v = storage.lookup( c+6, r );
+            v = storage.lookup( c+7, r );
+            v = storage.lookup( c+8, r );
+            v = storage.lookup( c+9, r );
+            counter += 10;
         }
     }
-    qDebug() << "ticks: " << measure( start );
+    for ( int c = 1; c <= 100; c += 10 )
+    {
+        for ( int r = 1; r <= 500; ++r )
+        {
+            v = storage.lookup( c, r );
+            v = storage.lookup( c+1, r );
+            v = storage.lookup( c+2, r );
+            v = storage.lookup( c+3, r );
+            v = storage.lookup( c+4, r );
+            v = storage.lookup( c+5, r );
+            v = storage.lookup( c+6, r );
+            v = storage.lookup( c+6, r );
+            v = storage.lookup( c+7, r );
+            v = storage.lookup( c+8, r );
+            v = storage.lookup( c+9, r );
+            counter += 10;
+        }
+    }
+    qDebug() << counter << " lookups in " << measure( start ) << " ticks";
 }
 
 
