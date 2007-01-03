@@ -20,6 +20,7 @@
 #include "KivioFactory.h"
 
 #include <kinstance.h>
+#include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 
@@ -65,7 +66,7 @@ KInstance* KivioFactory::instance()
 
     s_instance->dirs()->addResourceType("kivio_template", KStandardDirs::kde_default("data")
                                         + "kivio/templates/");
-    s_instance->iconLoader()->addAppDir("koffice");
+    kapp->iconLoader()->addAppDir("koffice");
   }
 
   return s_instance;
