@@ -8,7 +8,7 @@ add_subdirectory( kexidb )
 add_subdirectory( core )
 #add_subdirectory( widget )
 add_subdirectory( formeditor )
-#add_subdirectory( data )
+add_subdirectory( data )
 #add_subdirectory( pics )
 
 # The main2 directory contains some new mainwindow-code based on KoDocument+KoView
