@@ -282,7 +282,7 @@ void PointStorageTest::testShiftLeft()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.unshiftRows( QRect( 2, 2, 2, 1 ) );
+    storage.unshiftRows( QRect( 2, 2, 2, 2 ) );
     storage.unshiftRows( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
@@ -310,7 +310,7 @@ void PointStorageTest::testShiftRight()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.shiftRows( QRect( 2, 2, 2, 1 ) );
+    storage.shiftRows( QRect( 2, 2, 2, 2 ) );
     storage.shiftRows( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3,  ,  )
     // ( 4,  ,  , 5, 6,  ,  )
@@ -338,7 +338,7 @@ void PointStorageTest::testShiftUp()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.unshiftColumns( QRect( 2, 2, 1, 2 ) );
+    storage.unshiftColumns( QRect( 2, 2, 2, 2 ) );
     storage.unshiftColumns( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
@@ -366,7 +366,7 @@ void PointStorageTest::testShiftDown()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.shiftColumns( QRect( 2, 2, 1, 2 ) );
+    storage.shiftColumns( QRect( 2, 2, 2, 2 ) );
     storage.shiftColumns( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
