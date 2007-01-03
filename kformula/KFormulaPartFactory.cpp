@@ -23,6 +23,7 @@
 #include "KFormulaAboutData.h"
 
 #include <kinstance.h>
+#include <kapplication.h>
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -73,7 +74,7 @@ KInstance* KFormulaPartFactory::global()
         s_global->dirs()->addResourceType( "toolbar",
                         KStandardDirs::kde_default("data") + "koffice/toolbar/");
         // Tell the iconloader about share/apps/koffice/icons*/
-        s_global->iconLoader()->addAppDir("koffice");
+        kapp->iconLoader()->addAppDir("koffice");
     }
     return s_global;
 }
