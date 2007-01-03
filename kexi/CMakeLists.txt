@@ -5,7 +5,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-kexi.h.cmake ${CMAKE_CURRENT_B
 add_subdirectory( 3rdparty )
 add_subdirectory( kexiutils )
 add_subdirectory( kexidb )
-add_subdirectory( core )
+#add_subdirectory( core )
 #add_subdirectory( widget )
 add_subdirectory( formeditor )
 add_subdirectory( data )

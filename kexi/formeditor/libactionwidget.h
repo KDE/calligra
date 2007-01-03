@@ -21,7 +21,7 @@
 #ifndef LIBACTIONWIDGET_H
 #define LIBACTIONWIDGET_H
 
-#include <kactionclasses.h>
+#include <ktoggleaction.h>
 #include <Q3CString>
 
 #include <kexi_export.h>

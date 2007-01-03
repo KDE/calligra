@@ -26,7 +26,6 @@
 #include <ktoolbar.h>
 #include <kfontrequester.h>
 #include <kcolorcombo.h>
-#include <ktoolbarradiogroup.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <KIcon>

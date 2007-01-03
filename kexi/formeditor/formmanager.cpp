@@ -44,7 +44,8 @@
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <kstyle.h>
-#include <kactionclasses.h>
+#include <ktoggleaction.h>
+#include <kselectaction.h>
 #include <kapplication.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
