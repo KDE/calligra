@@ -95,8 +95,7 @@ void KCWizardCharttype::addButton(const QString &name,
     KChartButton *button = new KChartButton( this, name, 
 					     BarIcon( icon_name, 
 						      K3Icon::SizeMedium,
-						      K3Icon::DefaultState,
-						      KChartFactory::global()) );
+						      K3Icon::DefaultState ) );
     m_layout->addWidget(button, m_rowPos, m_colPos);
     m_typeBG->insert( button->button(), type );
 

@@ -97,13 +97,13 @@ void KChartHiloSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::HiLoNormal:
-        exampleLA->setPixmap( UserIcon( "chart_hilo_normal", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_hilo_normal" /*, KChartFactory::global()*/  ) );
         break;
     case KDChartParams::HiLoClose:
-        exampleLA->setPixmap( UserIcon( "chart_hilo_close", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_hilo_close" ) );
         break;
     case KDChartParams::HiLoOpenClose:
-        exampleLA->setPixmap( UserIcon( "chart_hilo_openclose", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_hilo_openclose" ) );
         break;
     };
 }
@@ -177,13 +177,13 @@ void KChartAreaSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::AreaNormal:
-        exampleLA->setPixmap( UserIcon( "chart_area_normal", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_area_normal" ) );
         break;
     case KDChartParams::AreaStacked:
-        exampleLA->setPixmap( UserIcon( "chart_area_stacked", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_area_stacked" ) );
         break;
     case KDChartParams::AreaPercent:
-        exampleLA->setPixmap( UserIcon( "chart_area_percent", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_area_percent" ) );
         break;
     };
 }
@@ -269,13 +269,13 @@ void KChartBarSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::BarStacked:
-	exampleLA->setPixmap( UserIcon( "chart_bar_layer", KChartFactory::global() ) );
+	exampleLA->setPixmap( UserIcon( "chart_bar_layer" ) );
 	break;
     case KDChartParams::BarNormal:
-	exampleLA->setPixmap( UserIcon( "chart_bar_beside", KChartFactory::global() ) );
+	exampleLA->setPixmap( UserIcon( "chart_bar_beside" ) );
 	break;
     case KDChartParams::BarPercent:
-	exampleLA->setPixmap( UserIcon( "chart_bar_percent", KChartFactory::global() ) );
+	exampleLA->setPixmap( UserIcon( "chart_bar_percent" ) );
 	break;
     };
 }
@@ -350,13 +350,13 @@ void KChartLineSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::AreaNormal:
-        exampleLA->setPixmap( UserIcon( "chart_line_normal", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_line_normal"  ) );
         break;
     case KDChartParams::AreaStacked:
-        exampleLA->setPixmap( UserIcon( "chart_line_stacked", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_line_stacked" ) );
         break;
     case KDChartParams::AreaPercent:
-        exampleLA->setPixmap( UserIcon( "chart_line_percent", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_line_percent" ) );
         break;
     };
 }
@@ -429,13 +429,13 @@ void KChartPolarSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::PolarNormal:
-        exampleLA->setPixmap( UserIcon( "chart_polar_normal", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_polar_normal" ) );
         break;
     case KDChartParams::PolarStacked:
-        exampleLA->setPixmap( UserIcon( "chart_polar_stacked", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_polar_stacked" ) );
         break;
     case KDChartParams::PolarPercent:
-        exampleLA->setPixmap( UserIcon( "chart_polar_percent", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_polar_percent" ) );
         break;
     };
 }

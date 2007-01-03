@@ -262,8 +262,7 @@ QPushButton* KCConfigLegendPage::addButton( Q3GridLayout* layout,
   button->setToggleButton( true );
   button->setPixmap( BarIcon( icon,
                               K3Icon::SizeMedium,
-                              K3Icon::DefaultState,
-                              KChartFactory::global() ) );
+                              K3Icon::DefaultState ) );
   button->setToolTip( toolTipText );
   layout->addWidget( button, posY, posX );
   return button;
