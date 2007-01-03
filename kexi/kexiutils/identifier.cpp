@@ -19,8 +19,8 @@
 */
 
 #include "identifier.h"
-#include <kstaticdeleter.h>
-#include <qdict.h>
+#include "transliteration_table.h"
+#include <kdebug.h>
 
 using namespace KexiUtils;
 
@@ -44,189 +44,45 @@ QString KexiUtils::string2FileName(const QString &s)
 	return fn;
 }
 
-// These are in pairs - first the non-latin character in UTF-8,
-// the second is the latin character(s) to appear in identifiers.
-static const char* string2Identifier_table[] = {
-/* 1. Polish characters */
-"Ą", "A",  "Ć", "C",  "Ę", "E",
-"Ł", "L",  "Ń", "N",  "Ó", "O",
-"Ś", "S",  "Ź", "Z",  "Ż", "Z",
-"ą", "a",  "ć", "c",  "ę", "e",
-"ł", "l",  "ń", "n",  "ó", "o",
-"ś", "s",  "ź", "z",  "ż", "z",
-
-/* 2. The mappings of the german "umlauts" to their 2-letter equivalents:
-  (Michael Drüing <michael at drueing.de>)
-
- Note that ß->ss is AFAIK not always correct transliteration, for example
- "Maße" and "Masse" is different, the first meaning "measurements" (as
- plural of "Maß" meaning "measurement"), the second meaning "(physical)
- mass". They're also pronounced dirrefently, the first one is longer, the
- second one short. */
-/** @todo the above three only appear at the beginning of a word. if the word is in
- all caps - like in a caption - then the 2-letter equivalents should also be
- in all caps */
-"Ä", "Ae",
-"Ö", "Oe",
-"Ü", "Ue",
-"ä", "ae",
-"ö", "oe",
-"ü", "ue",
-"ß", "ss",
- 
-/* 3. The part of Serbian Cyrillic which is shared with other Cyrillics but 
- that doesn't mean I am sure that eg. Russians or Bulgarians would do the 
- same. (Chusslove Illich <caslav.ilic at gmx.net>) */
-"а", "a",
-"б", "b",
-"в", "v",
-"г", "g",
-"д", "d",
-"е", "e",
-"ж", "z",
-"з", "z",
-"и", "i",
-"к", "k",
-"л", "l",
-"м", "m",
-"н", "n",
-"о", "o",
-"п", "p",
-"р", "r",
-"с", "s",
-"т", "t",
-"у", "u",
-"ф", "f",
-"х", "h",
-"ц", "c",
-"ч", "c",
-"ш", "s",
-"А", "A",
-"Б", "B",
-"В", "V",
-"Г", "G",
-"Д", "D",
-"Е", "E",
-"Ж", "Z",
-"З", "Z",
-"И", "I",
-"К", "K",
-"Л", "L",
-"М", "M",
-"Н", "N",
-"О", "O",
-"П", "P",
-"Р", "R",
-"С", "S",
-"Т", "T",
-"У", "U",
-"Ф", "F",
-"Х", "H",
-"Ц", "C",
-"Ч", "C",
-"Ш", "S",
-// 3.1. The Serbian-specific Cyrillic characters:
-"ђ", "dj",
-"ј", "j",
-"љ", "lj",
-"њ", "nj",
-"ћ", "c",
-"џ", "dz",
-"Ђ", "Dj",
-"Ј", "J",
-"Љ", "Lj",
-"Њ", "Nj",
-"Ћ", "C",
-"Џ", "Dz",
-// 3.2. The non-ASCII Serbian Latin characters:
-"đ", "dj",
-"ž", "z",
-"ć", "c",
-"č", "c",
-"š", "s",
-"Đ", "Dj",
-"Ž", "Z",
-"Ć", "C",
-"Č", "C",
-"Š", "S",
-// 4. Czech characters (cs_CZ, Michal Svec)
- "Á", "A",
- "Č", "C",
- "Ď", "D",
- "É", "E",
- "Ě", "E",
- "Í", "I",
- "Ň", "N",
- "Ó", "O",
- "Ř", "R",
- "Š", "S",
- "Ť", "T",
- "Ú", "U",
- "Ů", "U",
- "Ý", "Y",
- "Ž", "Z",
- "á", "a",
- "č", "c",
- "ď", "d",
- "é", "e",
- "ě", "e",
- "í", "i",
- "ň", "n",
- "ó", "o",
- "ř", "r",
- "š", "s",
- "ť", "t",
- "ú", "u",
- "ů", "u",
- "ý", "y",
- "ž", "z",
-// END.
-0
-};
-
-//! used for O(1) character transformations in char2Identifier()
-static KStaticDeleter< QDict<QCString> > string2Identifier_deleter;
-static QDict<QCString>* string2Identifier_dict = 0;
-
 inline QString char2Identifier(const QChar& c)
 {
-	if ((c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9') || c=='_')
-		return QString(c);
-	else {
-		if (!string2Identifier_dict) {
-			//build dictionary for later use
-			string2Identifier_deleter.setObject( string2Identifier_dict, new QDict<QCString>(1009) );
-			string2Identifier_dict->setAutoDelete(true);
-			for (const char **p = string2Identifier_table; *p; p+=2) {
-				string2Identifier_dict->replace( /* replace, not insert because there may be duplicates */
-					QString::fromUtf8(*p), new QCString(*(p+1)) );
-			}
-		}
-		const QCString *fixedChar = string2Identifier_dict->find(c);
-		if (fixedChar)
-			return *fixedChar;
-	}
-	return QString(QChar('_'));
+	kdDebug() << c << ": " << QString("0x%1").arg(c.unicode(),0,16) << endl;
+
+	if (c.unicode() >= TRANSLITERATION_TABLE_SIZE)
+		return QString(QChar('_'));
+	const char *const s = transliteration_table[c.unicode()];
+	return s ? QString::fromLatin1(s) : QString(QChar('_'));
 }
 
 QString KexiUtils::string2Identifier(const QString &s)
 {
+	if (s.isEmpty())
+		return QString::null;
 	QString r, id = s.simplifyWhiteSpace();
 	if (id.isEmpty())
-		return id;
+		return QString::null;
 	r.reserve(id.length());
-//		return "_";
 	id.replace(' ',"_");
 	QChar c = id[0];
+	QString add;
+	bool wasUnderscore = false;
 
 	if (c>='0' && c<='9') {
 		r+='_';
 		r+=c;
-	} else
-		r+=char2Identifier(c);
+	} else {
+		add = char2Identifier(c);
+		r+=add;
+		wasUnderscore = add == "_";
+	}
 
-	for (uint i=1; i<id.length(); i++)
-		r+=char2Identifier(id.at(i));
+	for (uint i=1; i<id.length(); i++) {
+		add = char2Identifier(id.at(i));
+		if (wasUnderscore && add == "_")
+			continue;
+		wasUnderscore = add == "_";
+		r+=add;
+	}
 	return r;
 }
 
