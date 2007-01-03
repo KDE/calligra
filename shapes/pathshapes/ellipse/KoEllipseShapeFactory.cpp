@@ -32,7 +32,7 @@ KoEllipseShapeFactory::KoEllipseShapeFactory( QObject *parent )
     setIcon("ellipse-shape");
 }
 
-KoShape * KoEllipseShapeFactory::createDefaultShape() 
+KoShape * KoEllipseShapeFactory::createDefaultShape() const
 {
     KoEllipseShape * ellipse = new KoEllipseShape();
 

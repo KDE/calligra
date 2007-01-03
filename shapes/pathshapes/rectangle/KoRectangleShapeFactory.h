@@ -31,7 +31,7 @@ public:
     /// constructor
     explicit KoRectangleShapeFactory(QObject *parent);
     ~KoRectangleShapeFactory() {}
-    KoShape * createDefaultShape();
+    KoShape * createDefaultShape() const;
     KoShape * createShape(const KoProperties * params) const;
 };
 

@@ -74,7 +74,7 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     addTemplate(t);
 }
 
-KoShape * KoStarShapeFactory::createDefaultShape()
+KoShape * KoStarShapeFactory::createDefaultShape() const
 {
     KoStarShape *star = new KoStarShape();
 

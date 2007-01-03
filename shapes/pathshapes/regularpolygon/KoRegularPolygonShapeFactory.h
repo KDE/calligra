@@ -31,7 +31,7 @@ class KoRegularPolygonShapeFactory : public KoShapeFactory
 public:
     explicit KoRegularPolygonShapeFactory(QObject *parent);
     ~KoRegularPolygonShapeFactory() {}
-    KoShape *createDefaultShape();
+    KoShape *createDefaultShape() const;
     KoShape *createShape(const KoProperties*) const;
 };
 

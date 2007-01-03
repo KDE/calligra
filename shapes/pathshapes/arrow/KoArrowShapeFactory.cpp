@@ -95,7 +95,7 @@ KoArrowShapeFactory::KoArrowShapeFactory(QObject *parent)
         addTemplate(t);
 }
 
-KoShape *KoArrowShapeFactory::createDefaultShape()
+KoShape *KoArrowShapeFactory::createDefaultShape() const
 {
 	KoArrowShape *s = new KoArrowShape();
 	s->resize(QSizeF(100,100));

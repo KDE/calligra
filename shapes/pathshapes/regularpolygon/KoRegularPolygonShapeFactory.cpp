@@ -48,7 +48,7 @@ KoRegularPolygonShapeFactory::KoRegularPolygonShapeFactory(QObject *parent)
 	addTemplate(t);
 }
 
-KoShape *KoRegularPolygonShapeFactory::createDefaultShape()
+KoShape *KoRegularPolygonShapeFactory::createDefaultShape() const
 {
 	KoRegularPolygonShape *s = new KoRegularPolygonShape();
 	s->setPoints(5);

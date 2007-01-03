@@ -30,7 +30,7 @@ KoRectangleShapeFactory::KoRectangleShapeFactory( QObject *parent )
     setIcon("rectangle");
 }
 
-KoShape * KoRectangleShapeFactory::createDefaultShape() 
+KoShape * KoRectangleShapeFactory::createDefaultShape() const
 {
     KoRectangleShape * rect = new KoRectangleShape();
 

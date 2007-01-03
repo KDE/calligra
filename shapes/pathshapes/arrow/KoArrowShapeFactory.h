@@ -31,7 +31,7 @@ class KoArrowShapeFactory : public KoShapeFactory
 public:
     explicit KoArrowShapeFactory(QObject *parent);
     ~KoArrowShapeFactory() {}
-    KoShape *createDefaultShape();
+    KoShape *createDefaultShape() const;
     KoShape *createShape(const KoProperties*) const;
 };
 

@@ -49,7 +49,7 @@ public:
     TableShapeFactory( QObject* parent, const QStringList& );
     ~TableShapeFactory() {}
 
-    KoShape* createDefaultShape();
+    KoShape* createDefaultShape() const;
     KoShape* createShape( const KoProperties* params ) const;
 };
 

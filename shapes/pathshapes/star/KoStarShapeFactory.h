@@ -33,7 +33,7 @@ public:
     /// constructor
     explicit KoStarShapeFactory(QObject *parent);
     ~KoStarShapeFactory() {}
-    KoShape * createDefaultShape();
+    KoShape * createDefaultShape() const;
     KoShape * createShape(const KoProperties * params) const;
 };
 

@@ -64,7 +64,7 @@ TableShapeFactory::TableShapeFactory( QObject* parent, const QStringList& list )
 #endif
 }
 
-KoShape* TableShapeFactory::createDefaultShape()
+KoShape* TableShapeFactory::createDefaultShape() const
 {
     TableShape* shape = new TableShape();
     shape->setShapeId( shapeId() );
