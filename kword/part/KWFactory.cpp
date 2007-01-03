@@ -22,6 +22,7 @@
 #include "KWDocument.h"
 #include <kinstance.h>
 #include <kstandarddirs.h>
+#include <kapplication.h>
 
 #include <kiconloader.h>
 
@@ -73,7 +74,7 @@ KInstance* KWFactory::instance()
       s_instance->dirs()->addResourceType( "kword_template",
               KStandardDirs::kde_default("data") + "kword/templates/");
 
-      s_instance->iconLoader()->addAppDir("koffice");
+      kapp->iconLoader()->addAppDir("koffice");
     }
     return s_instance;
 }
