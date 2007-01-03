@@ -18,6 +18,7 @@
 */
 
 #include <kdebug.h>
+#include <kiconloader.h>
 #include <kinstance.h>
 #include <kstandarddirs.h>
 
@@ -30,6 +31,7 @@
 using namespace KSpread;
 
 KInstance* Factory::s_global = 0;
+KIconLoader* Factory::s_iconLoader = 0;
 // DCOPObject* Factory::s_dcopObject = 0;
 KAboutData* Factory::s_aboutData = 0;
 
@@ -86,10 +88,21 @@ KInstance* Factory::global()
 				         KStandardDirs::kde_default("data") + "koffice/toolbar/");
       s_global->dirs()->addResourceType( "functions", KStandardDirs::kde_default("data") + "kspread/functions/");
       s_global->dirs()->addResourceType( "sheet-styles", KStandardDirs::kde_default("data") + "kspread/sheetstyles/");
-      // Tell the iconloader about share/apps/koffice/icons
-      s_global->iconLoader()->addAppDir("koffice");
+      
     }
     return s_global;
+}
+
+KIconLoader* Factory::iconLoader()
+{
+  if( !s_iconLoader )
+  {
+      // Tell the iconloader about share/apps/koffice/icons
+      s_iconLoader = new KIconLoader(global()->instanceName(), global()->dirs());
+      s_iconLoader->addAppDir("koffice");
+  }
+  
+  return s_iconLoader;
 }
 
 // DCOPObject* Factory::dcopObject()
