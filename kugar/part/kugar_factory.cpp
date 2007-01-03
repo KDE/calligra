@@ -9,6 +9,7 @@
 #include <kaboutdata.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kapplication.h>
 
 #if defined(HAVE_CONFIG_H)
 #include "config.h"
@@ -39,8 +40,8 @@ KInstance* KugarFactory::global()
     if ( !s_instance )
     {
         s_instance = new KInstance( aboutData() );
-        s_instance->iconLoader() ->addAppDir( "koffice" );
-        s_instance->iconLoader() ->addAppDir( "kugar" );
+        kapp->iconLoader() ->addAppDir( "koffice" );
+        kapp->iconLoader() ->addAppDir( "kugar" );
 
     }
     return s_instance;
