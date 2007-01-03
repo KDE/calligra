@@ -68,7 +68,6 @@
 #include <kfontdialog.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
-#include <knotifyclient.h>
 #include <kpassworddialog.h>
 #include <kprocio.h>
 #include <kreplace.h>
