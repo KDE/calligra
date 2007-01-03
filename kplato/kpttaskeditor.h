@@ -87,6 +87,8 @@ protected:
     bool setName( Node *node, const QVariant &value, int role );
     QVariant leader( const Node *node, int role ) const;
     bool setLeader( Node *node, const QVariant &value, int role );
+    QVariant allocation( const Node *node, int role ) const;
+    bool setAllocation( Node *node, const QVariant &value, int role );
     QVariant description( const Node *node, int role ) const;
     bool setDescription( Node *node, const QVariant &value, int role );
     QVariant type( const Node *node, int role ) const;

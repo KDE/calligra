@@ -65,6 +65,8 @@ public:
     int units() const;
     int workUnits() const;
     void makeAppointments();
+    virtual QStringList requestNameList() const;
+
     /**
      * Calculates if the assigned resource is overbooked 
      * within the duration of this task

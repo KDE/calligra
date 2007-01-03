@@ -980,6 +980,19 @@ ResourceRequest *ResourceGroupRequest::find(Resource *resource) {
     return 0;
 }
 
+QStringList ResourceGroupRequest::requestNameList() const {
+    QStringList lst;
+    if ( m_units > 0 && m_group ) {
+        lst << m_group->name();
+    }
+    foreach ( ResourceRequest *r, m_resourceRequests ) {
+        if ( r->resource() ) {
+            lst << r->resource()->name();
+        }
+    }
+    return lst;
+}
+
 bool ResourceGroupRequest::load(QDomElement &element, Project &project) {
     //kDebug()<<k_funcinfo<<endl;
     m_group = project.findResourceGroup(element.attribute("group-id"));
@@ -1260,6 +1273,14 @@ ResourceRequest *ResourceRequestCollection::find(Resource *resource) const {
         req = it.next()->find(resource);
     }
     return req;
+}
+
+QStringList ResourceRequestCollection::requestNameList() const {
+    QStringList lst;
+    foreach ( ResourceGroupRequest *r, m_requests ) {
+        lst << r->requestNameList();
+    }
+    return lst;
 }
 
 // bool ResourceRequestCollection::load(QDomElement &element, Project &project) {

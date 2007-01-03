@@ -509,7 +509,8 @@ public:
 
     ResourceRequest *takeResourceRequest( ResourceRequest *request );
     ResourceRequest *find( Resource *resource );
-
+    QStringList requestNameList() const;
+    
     bool load( QDomElement &element, Project &project );
     void save( QDomElement &element ) const;
 
@@ -596,11 +597,12 @@ public:
     ResourceGroupRequest *find( ResourceGroup *resource ) const;
     ResourceRequest *find( Resource *resource ) const;
     bool isEmpty() const;
+    void clear() { m_requests.clear(); }
 
+    QStringList requestNameList() const;
+    
     //bool load(QDomElement &element, Project &project);
     void save( QDomElement &element ) const;
-
-void clear() { m_requests.clear(); }
 
     /**
     * Returns the total amount of resource units in percent

@@ -126,6 +126,14 @@ void Task::takeRequest(ResourceGroupRequest *request) {
     }
 }
 
+QStringList Task::requestNameList() const {
+     QStringList lst;
+     if ( m_requests ) {
+         lst << m_requests->requestNameList();
+     }
+     return lst;
+}
+
 int Task::units() const {
     if (!m_requests)
         return 0;

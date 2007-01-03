@@ -213,6 +213,7 @@ public:
     virtual DateTime mustFinishOn() const { return m_constraintEndTime; }
 
     virtual ResourceGroupRequest *resourceRequest(ResourceGroup */*group*/) const { return 0; }
+    virtual QStringList requestNameList() const { return QStringList(); }
     virtual void makeAppointments();
     /// Calculates if the assigned resource is overbooked 
     /// within the duration of this node
