@@ -3,7 +3,10 @@ Encoding=UTF-8
 Type=MimeType
 MimeType=application/x-kexiproject-sqlite
 Icon=kexiproject_sqlite
-Patterns=
+#was hidden on KDE3 and no pattern was defined
+#Hidden=true
+#Patterns=
+Patterns=*.kexi
 Comment=Kexi Database File-Based Project
 Comment[fr]=Projet de base de données Kexi basé sur un fichier
 Comment[x-test]=xxKexi Database File-Based Projectxx
