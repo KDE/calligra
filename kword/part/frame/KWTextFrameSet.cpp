@@ -131,8 +131,31 @@ void KWTextFrameSet::scheduleLayout() {
 
 void KWTextFrameSet::relayout() {
     m_layoutTriggered = false;
+    QList<KWFrame*> dirtyFrames = m_frames;
+    bool foundADirtyOne = false;
+    KWFrame *firstDirtyFrame = 0;
+    foreach(KWFrame *frame, m_frames) {
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
+        if(!firstDirtyFrame && data && data->isDirty())
+            firstDirtyFrame = frame;
+        if(! firstDirtyFrame)
+            dirtyFrames.removeAll(frame);
+    }
     qSort(m_frames.begin(), m_frames.end(), sortTextFrames); // make sure the ordering is proper
-    // TODO check if ordering changed and mark the first changed frame as 'dirty'
+    if(foundADirtyOne) {
+        // if the dirty frame has been resorted to no longer be the first one, then we should
+        // mark dirty any frame that were previously later in the flow, but are now before it.
+        foreach(KWFrame *frame, m_frames) {
+            if(frame == firstDirtyFrame)
+                break;
+            if(dirtyFrames.contains(frame)) {
+                static_cast<KoTextShapeData*> (frame->shape()->userData())->faul();
+                // just the first is enough.
+                break;
+            }
+        }
+    }
+
     KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>( m_document->documentLayout() );
     if(lay)
         lay->layout();
