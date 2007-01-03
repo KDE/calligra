@@ -5,6 +5,8 @@
 TEMPLATE = app
 INCLUDEPATH += .
 
+QMAKE_CXXFLAGS += -O4 -fomit-frame-pointer
+
 HEADERS += TestPointStorage.h
 INTERFACES +=
 SOURCES += TestPointStorage.cpp
