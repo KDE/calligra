@@ -197,12 +197,13 @@ int SingleContentElement::readContentFromMathMLDom( QDomNode& node )
         return -1;
     }
 
-    if ( content->buildMathMLChild( node ) == -1 ) {
+    int nodeCounter = content->buildMathMLChild( node );
+    if ( nodeCounter == -1 ) {
         kdWarning( DEBUGID) << "Empty content in SingleContentElement\n";
         return -1;
     }
 
-    return 1;
+    return nodeCounter;
 }
 
 void SingleContentElement::writeMathMLContent( QDomDocument& doc, QDomElement& element, bool oasisFormat ) const
@@ -517,6 +518,7 @@ bool BracketElement::readAttributesFromMathMLDom(const QDomElement& element)
 int BracketElement::readContentFromMathMLDom(QDomNode& node)
 {
     bool empty = false;
+    int nodeCounter = 0;
     if ( m_operator ) {
         node = node.parentNode();
         QDomNode open = node;
@@ -529,7 +531,14 @@ int BracketElement::readContentFromMathMLDom(QDomNode& node)
         if ( nodeNum == 0 ) { // Empty content
             empty = true;
         }
-        if ( nodeNum > 1 ) { // More than two elements inside, infer a mrow
+        else if ( nodeNum == 1 ) {
+            do {
+                node = node.nextSibling();
+                nodeCounter++;
+            } while ( ! node.isElement() );
+        }
+        else { // More than two elements inside, infer a mrow
+            nodeCounter += nodeNum;
             kdWarning() << "NodeNum: " << nodeNum << endl;
             QDomDocument doc = node.ownerDocument();
             QDomElement de = doc.createElement( "mrow" );
@@ -588,17 +597,26 @@ int BracketElement::readContentFromMathMLDom(QDomNode& node)
         }
     }
     if ( ! empty ) {
-        inherited::readContentFromMathMLDom( node );
+        int contentNumber = inherited::readContentFromMathMLDom( node );
+        if ( contentNumber == -1 )
+            return -1;
+        nodeCounter += contentNumber;
+        for (int i = 0; i < contentNumber; i++ ) {
+            if ( node.isNull() ) {
+                return -1;
+            }
+            node = node.nextSibling();
+        }
     }
     if ( m_operator ) {
-        if ( ! operatorType( node, false ) ) {
+        int operatorNumber = operatorType( node, false );
+        if ( operatorNumber == -1 ) {
             return -1;
         }
-        if ( empty )
-            return 2;
-        return 3;
+        nodeCounter += operatorNumber;
     }
-    return 1;
+    kdDebug( DEBUGID ) << "Number of bracket nodes: " << nodeCounter << endl;
+    return nodeCounter;
 }
 
 QString BracketElement::toLatex()
@@ -645,57 +663,65 @@ QString BracketElement::formulaString()
     return "(" + getContent()->formulaString() + ")";
 }
 
-bool BracketElement::operatorType( QDomNode& node, bool open )
+int BracketElement::operatorType( QDomNode& node, bool open )
 {
+    int counter = 1;
     SymbolType* type = open ? &leftType : &rightType;
+    while ( ! node.isNull() && ! node.isElement() ) {
+        node = node.nextSibling();
+        counter++;
+    }
     if ( node.isElement() ) {
         QDomElement e = node.toElement();
-        QString s =  e.text();
-        if ( s.isNull() )
-            return false;
-        *type = static_cast<SymbolType>( QString::number( s.at( 0 ).latin1() ).toInt() );
-        node = node.nextSibling();
-    }
-    else if ( node.isEntityReference() ) {
-        QString name = node.nodeName();
-        // TODO: To fully support these, SymbolType has to be extended,
-        //       and better Unicode support is a must
-        // CloseCurlyDoubleQuote 0x201D
-        // CloseCurlyQoute       0x2019
-        // LeftCeiling           0x2308
-        // LeftDoubleBracket     0x301A
-        // LeftFloor             0x230A
-        // OpenCurlyDoubleQuote  0x201C
-        // OpenCurlyQuote        0x2018
-        // RightCeiling          0x2309
-        // RightDoubleBracket    0x301B
-        // RightFloor            0x230B
-        if ( name == "LeftAngleBracket" ) {
-            *type = LeftCornerBracket;
-        }
-        else if ( name == "RightAngleBracket" ) {
-            *type = RightCornerBracket; 
+        QDomNode child = e.firstChild();
+        if ( child.isEntityReference() ) {
+            kdWarning() << "Entity Reference\n";
+            QString name = node.nodeName();
+            // TODO: To fully support these, SymbolType has to be extended,
+            //       and better Unicode support is a must
+            // CloseCurlyDoubleQuote 0x201D
+            // CloseCurlyQoute       0x2019
+            // LeftCeiling           0x2308
+            // LeftDoubleBracket     0x301A
+            // LeftFloor             0x230A
+            // OpenCurlyDoubleQuote  0x201C
+            // OpenCurlyQuote        0x2018
+            // RightCeiling          0x2309
+            // RightDoubleBracket    0x301B
+            // RightFloor            0x230B
+            if ( name == "LeftAngleBracket" ) {
+                *type = LeftCornerBracket;
+            }
+            else if ( name == "RightAngleBracket" ) {
+                *type = RightCornerBracket; 
+            }
+            else {
+                if ( open ) {
+                    *type = LeftRoundBracket;
+                }
+                else
+                    *type = RightRoundBracket;
+            }
         }
         else {
-            if ( open ) {
-                *type = LeftRoundBracket;
-            }
-            else
-                *type = RightRoundBracket;
+            QString s =  e.text();
+            if ( s.isNull() )
+                return -1;
+            *type = static_cast<SymbolType>( QString::number( s.at( 0 ).latin1() ).toInt() );
         }
-        node = node.nextSibling();
     }
     else {
-        return false;
+        return -1;
     }
-    return true;
+    return counter;
 }
 
 int BracketElement::searchOperator( const QDomNode& node )
 {
     QDomNode n = node;
-    for ( int i = 0; ! n.isNull(); n = n.nextSibling(), i++ ) {
+    for ( int i = -2; ! n.isNull(); n = n.nextSibling() ) {
         if ( n.isElement() ) {
+            i++;
             QDomElement e = n.toElement();
             if ( e.tagName().lower() == "mo" ) {
                 // Try to guess looking at attributes
