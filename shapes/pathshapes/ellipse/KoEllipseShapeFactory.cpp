@@ -38,7 +38,13 @@ KoShape * KoEllipseShapeFactory::createDefaultShape() const
 
     ellipse->setBorder( new KoLineBorder( 1.0 ) );
     ellipse->setShapeId( KoPathShapeId );
-                 
+
+    QRadialGradient gradient( QPointF(50,50), 50.0, QPointF(25,25) );
+    //QConicalGradient gradient( QPointF(50,50), 45.0 );
+    gradient.setColorAt( 0.0, Qt::white );
+    gradient.setColorAt( 1.0, Qt::green );
+    ellipse->setBackground( QBrush( gradient ) );
+
     return ellipse;
 }
 

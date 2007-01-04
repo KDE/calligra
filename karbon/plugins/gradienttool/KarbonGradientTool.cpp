@@ -1,0 +1,310 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#include "KarbonGradientTool.h"
+
+#include <KoShape.h>
+#include <KoCanvasBase.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+#include <KoPointerEvent.h>
+#include <KoShapeBackgroundCommand.h>
+
+#include <QBrush>
+#include <QGradient>
+#include <QLinearGradient>
+#include <QUndoCommand>
+
+#include <math.h>
+
+KarbonGradientTool::KarbonGradientTool(KoCanvasBase *canvas)
+: KoTool( canvas )
+, m_currentStrategy( 0 )
+{
+}
+
+KarbonGradientTool::~KarbonGradientTool()
+{
+}
+
+void KarbonGradientTool::paint( QPainter &painter, KoViewConverter &converter )
+{
+    painter.save();
+    painter.setBrush( Qt::green );
+    painter.setPen( Qt::blue );
+
+    foreach( GradientStrategy *strategy, m_gradients )
+    {
+        painter.save();
+        strategy->paint( painter, converter );
+        painter.restore();
+    }
+
+    if( m_currentStrategy )
+    {
+        painter.setBrush( Qt::red );
+        m_currentStrategy->paint( painter, converter );
+    }
+    painter.restore();
+}
+
+void KarbonGradientTool::mousePressEvent( KoPointerEvent *event )
+{
+    Q_UNUSED( event )
+    if( m_currentStrategy )
+        m_currentStrategy->setEditing( true );
+}
+
+void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
+{
+    if( m_currentStrategy )
+    {
+        m_currentStrategy->shape()->repaint();
+        if( m_currentStrategy->isEditing() )
+        {
+            m_currentStrategy->handleMouseMove( event->point, event->modifiers() );
+            m_currentStrategy->shape()->repaint();
+            return;
+        }
+    }
+    foreach( GradientStrategy *strategy, m_gradients )
+    {
+        if( strategy->selectHandle( event->point ) )
+        {
+            m_currentStrategy = strategy;
+            m_currentStrategy->shape()->repaint();
+            useCursor(Qt::SizeAllCursor);
+            return;
+        }
+    }
+    m_currentStrategy = 0;
+    useCursor(Qt::ArrowCursor, true);
+ }
+
+void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
+{
+    Q_UNUSED( event )
+    if( m_currentStrategy )
+    {
+        m_currentStrategy->setEditing( false );
+        m_canvas->addCommand( m_currentStrategy->createCommand() );
+    }
+}
+
+void KarbonGradientTool::activate( bool temporary )
+{
+    Q_UNUSED(temporary);
+    if( ! m_canvas->shapeManager()->selection()->count() )
+    {
+        emit sigDone();
+        return;
+    }
+
+    m_gradients.clear();
+    m_currentStrategy = 0;
+
+    foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
+    {
+        const QBrush &background = shape->background();
+        if( background.style() == Qt::LinearGradientPattern )
+        {
+            const QLinearGradient *gradient = static_cast<const QLinearGradient*>( background.gradient() );
+            m_gradients.append( new LinearGradientStrategy( shape, gradient ) );
+        }
+        else if( background.style() == Qt::RadialGradientPattern )
+        {
+            const QRadialGradient *gradient = static_cast<const QRadialGradient*>( background.gradient() );
+            m_gradients.append( new RadialGradientStrategy( shape, gradient ) );
+        }
+        else if( background.style() == Qt::ConicalGradientPattern )
+        {
+            const QConicalGradient *gradient = static_cast<const QConicalGradient*>( background.gradient() );
+            m_gradients.append( new ConicalGradientStrategy( shape, gradient ) );
+        }
+        else
+            continue;
+        shape->repaint();
+    }
+
+    useCursor(Qt::ArrowCursor, true);
+}
+
+void KarbonGradientTool::deactivate()
+{
+    foreach( GradientStrategy* strategy, m_gradients )
+        delete strategy;
+    m_gradients.clear();
+    foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
+        shape->repaint();
+}
+
+KarbonGradientTool::GradientStrategy::GradientStrategy( KoShape *shape )
+: m_shape( shape ),m_selectedHandle( -1 ), m_editing( false )
+{
+}
+
+void KarbonGradientTool::GradientStrategy::setEditing( bool on )
+{
+    m_editing = on;
+    if( on )
+        m_oldBackground = m_shape->background();
+}
+
+bool KarbonGradientTool::GradientStrategy::selectHandle( const QPointF &mousePos )
+{
+    int handleIndex = 0;
+    foreach( QPointF handle, m_handles )
+    {
+        if( mouseInsideHandle( mousePos, handle ) )
+        {
+            m_selectedHandle = handleIndex;
+            return true;
+        }
+        handleIndex++;
+    }
+    m_selectedHandle = -1;
+    return false;
+}
+
+void KarbonGradientTool::GradientStrategy::paintHandle( QPainter &painter, const QPointF &position )
+{
+    // TODO get the handle radius from a global property
+    int handleRadius = 3;
+    painter.drawRect( QRectF( position.x()-handleRadius, position.y()-handleRadius, 2*handleRadius, 2*handleRadius ) );
+}
+
+bool KarbonGradientTool::GradientStrategy::mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos )
+{
+    // TODO get the handle radius from a global property
+    int handleRadius = 3;
+    if( mousePos.x() < m_shape->position().x()+handlePos.x()-handleRadius )
+        return false;
+    if( mousePos.x() > m_shape->position().x()+handlePos.x()+handleRadius )
+        return false;
+    if( mousePos.y() < m_shape->position().y()+handlePos.y()-handleRadius )
+        return false;
+    if( mousePos.y() > m_shape->position().y()+handlePos.y()+handleRadius )
+        return false;
+    return true;
+}
+
+void KarbonGradientTool::GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
+{
+    Q_UNUSED( modifiers )
+
+    m_handles[m_selectedHandle] = mouseLocation - m_shape->position();
+
+    m_newBackground = background();
+    m_shape->setBackground( m_newBackground );
+}
+
+QUndoCommand * KarbonGradientTool::GradientStrategy::createCommand()
+{
+    m_shape->setBackground( m_oldBackground );
+    QList<KoShape*> shapes;
+    return new KoShapeBackgroundCommand( shapes << m_shape, m_newBackground, 0 );
+}
+
+KarbonGradientTool::LinearGradientStrategy::LinearGradientStrategy( KoShape *shape, const QLinearGradient *gradient )
+: GradientStrategy( shape )
+{
+    m_handles.append( gradient->start() );
+    m_handles.append( gradient->finalStop() );
+}
+
+void KarbonGradientTool::LinearGradientStrategy::paint( QPainter &painter, KoViewConverter &converter )
+{
+    QPointF startPoint = converter.documentToView( m_handles[start] );
+    QPointF stopPoint = converter.documentToView( m_handles[stop] );
+
+    painter.setWorldMatrix( m_shape->transformationMatrix( &converter ), true );
+    painter.drawLine( startPoint, stopPoint );
+    paintHandle( painter, startPoint );
+    paintHandle( painter, stopPoint );
+}
+
+QBrush KarbonGradientTool::LinearGradientStrategy::background()
+{
+    QLinearGradient gradient( m_handles[start], m_handles[stop] );
+    gradient.setStops( m_oldBackground.gradient()->stops() );
+    return QBrush( gradient );
+}
+
+KarbonGradientTool::RadialGradientStrategy::RadialGradientStrategy( KoShape *shape, const QRadialGradient *gradient )
+: GradientStrategy( shape )
+{
+    m_handles.append( gradient->center() );
+    m_handles.append( gradient->focalPoint() );
+    m_handles.append( gradient->center() + QPointF( gradient->radius(), 0 ) );
+}
+
+void KarbonGradientTool::RadialGradientStrategy::paint( QPainter &painter, KoViewConverter &converter )
+{
+    QPointF centerPoint = converter.documentToView( m_handles[center] );
+    QPointF radiusPoint = converter.documentToView( m_handles[radius] );
+    QPointF focalPoint = converter.documentToView( m_handles[focal] );
+
+    painter.setWorldMatrix( m_shape->transformationMatrix( &converter ), true );
+    painter.drawLine( centerPoint, radiusPoint );
+    paintHandle( painter, centerPoint );
+    paintHandle( painter, radiusPoint );
+    paintHandle( painter, focalPoint );
+}
+
+QBrush KarbonGradientTool::RadialGradientStrategy::background()
+{
+    QPointF d = m_handles[radius]-m_handles[center];
+    double r = sqrt( d.x()*d.x() + d.y()*d.y() );
+    QRadialGradient gradient( m_handles[center], r, m_handles[focal] );
+    gradient.setStops( m_oldBackground.gradient()->stops() );
+    return QBrush( gradient );
+}
+
+KarbonGradientTool::ConicalGradientStrategy::ConicalGradientStrategy( KoShape *shape, const QConicalGradient *gradient )
+: GradientStrategy( shape )
+{
+    double angle = gradient->angle() * M_PI / 180.0;
+    double scale = 0.25 * ( shape->size().height() + shape->size().width() );
+    m_handles.append( gradient->center() );
+    m_handles.append( gradient->center() + scale * QPointF( cos( angle ), -sin( angle ) ) );
+}
+
+void KarbonGradientTool::ConicalGradientStrategy::paint( QPainter &painter, KoViewConverter &converter )
+{
+    QPointF centerPoint = converter.documentToView( m_handles[center] );
+    QPointF directionPoint = converter.documentToView( m_handles[direction] );
+
+    painter.setWorldMatrix( m_shape->transformationMatrix( &converter ), true );
+    painter.drawLine( centerPoint, directionPoint );
+    paintHandle( painter, centerPoint );
+    paintHandle( painter, directionPoint );
+}
+
+QBrush KarbonGradientTool::ConicalGradientStrategy::background()
+{
+    QPointF d = m_handles[direction]-m_handles[center];
+    double angle = atan2( -d.y(), d.x() ) / M_PI * 180.0;
+    if( angle < 0.0 )
+        angle += 360;
+    QConicalGradient gradient( m_handles[center], angle );
+    gradient.setStops( m_oldBackground.gradient()->stops() );
+    return QBrush( gradient );
+}
+
+#include "KarbonGradientTool.moc"
