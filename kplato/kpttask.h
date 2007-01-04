@@ -66,7 +66,9 @@ public:
     int workUnits() const;
     void makeAppointments();
     virtual QStringList requestNameList() const;
-
+    virtual bool containsRequest( const QString &/*identity*/ ) const;
+    virtual ResourceRequest *resourceRequest( const QString &/*name*/ ) const;
+    
     /**
      * Calculates if the assigned resource is overbooked 
      * within the duration of this task

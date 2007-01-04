@@ -915,9 +915,38 @@ ResourceGroup *Project::group( const QString& id )
     return findResourceGroup( id );
 }
 
+ResourceGroup *Project::groupByName( const QString& name ) const
+{
+    foreach ( ResourceGroup *g, resourceGroupIdDict.values() ) {
+        if ( g->name() == name ) {
+            return g;
+        }
+    }
+    return 0;
+}
+
 Resource *Project::resource( const QString& id )
 {
     return findResource( id );
+}
+
+Resource *Project::resourceByName( const QString& name ) const
+{
+    foreach ( Resource *r, resourceIdDict.values() ) {
+        if ( r->name() == name ) {
+            return r;
+        }
+    }
+    return 0;
+}
+
+QStringList Project::resourceNameList() const
+{
+    QStringList lst;
+    foreach ( Resource *r, resourceIdDict.values() ) {
+        lst << r->name();
+    }
+    return lst;
 }
 
 // TODO

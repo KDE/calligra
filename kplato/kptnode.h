@@ -212,8 +212,11 @@ public:
     virtual DateTime mustStartOn() const { return m_constraintStartTime; }
     virtual DateTime mustFinishOn() const { return m_constraintEndTime; }
 
-    virtual ResourceGroupRequest *resourceRequest(ResourceGroup */*group*/) const { return 0; }
+    virtual ResourceGroupRequest *resourceGroupRequest(ResourceGroup */*group*/) const { return 0; }
     virtual QStringList requestNameList() const { return QStringList(); }
+    virtual bool containsRequest( const QString &/*identity*/ ) const { return false; }
+    virtual ResourceRequest *resourceRequest( const QString &/*name*/ ) const { return 0; }
+    
     virtual void makeAppointments();
     /// Calculates if the assigned resource is overbooked 
     /// within the duration of this node
@@ -470,7 +473,8 @@ public:
     // Reimplement this
     virtual Duration calcDuration(const DateTime &/*time*/, const Duration &/*effort*/, bool /*backward*/) { return Duration::zeroDuration;}
 
-
+    virtual void changed() { changed( this ); }
+    
 protected:
     // NOTE: Cannot use setCurrentSchedule() due to overload/casting problems
     void setCurrentSchedulePtr(Schedule *schedule) { m_currentSchedule = schedule; }

@@ -77,6 +77,7 @@ Task::~Task() {
             delete m_schedules.take(k);
         }
     }
+    delete m_requests;
 }
 
 int Task::type() const {
@@ -117,21 +118,26 @@ void Task::addRequest(ResourceGroupRequest *request) {
 }
 
 void Task::takeRequest(ResourceGroupRequest *request) {
+    kDebug()<<k_funcinfo<<request<<endl;
     if (m_requests) {
         m_requests->takeRequest(request);
-        if (m_requests->isEmpty()) {
-            delete m_requests;
-            m_requests = 0;
-        }
     }
 }
 
 QStringList Task::requestNameList() const {
-     QStringList lst;
-     if ( m_requests ) {
-         lst << m_requests->requestNameList();
-     }
-     return lst;
+    QStringList lst;
+    if ( m_requests ) {
+        lst << m_requests->requestNameList();
+    }
+    return lst;
+}
+
+bool Task::containsRequest( const QString &identity ) const {
+    return m_requests == 0 ? false : m_requests->contains( identity );
+}
+
+ResourceRequest *Task::resourceRequest( const QString &name ) const {
+    return m_requests == 0 ? 0 : m_requests->resourceRequest( name );
 }
 
 int Task::units() const {

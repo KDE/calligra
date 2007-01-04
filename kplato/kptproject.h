@@ -103,8 +103,11 @@ public:
 
     /// Returns the resourcegroup with identity id.
     ResourceGroup *group( const QString& id );
+    ResourceGroup *groupByName( const QString& name ) const;
     /// Returns the resource with identity id.
     Resource *resource( const QString& id );
+    Resource *resourceByName( const QString& name ) const;
+    QStringList resourceNameList() const;
 
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, long id = -1 ) const;
 

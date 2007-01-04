@@ -497,6 +497,7 @@ public:
     ResourceRequestCollection *parent() const { return m_parent; }
 
     ResourceGroup *group() const { return m_group; }
+    void unregister( const ResourceGroup *group ) { if ( group == m_group ) m_group = 0; }
     QList<ResourceRequest*> &resourceRequests() { return m_resourceRequests; }
     void addResourceRequest( ResourceRequest *request );
     void deleteResourceRequest( ResourceRequest *request )
@@ -505,10 +506,12 @@ public:
         if ( i != -1 )
             m_resourceRequests.removeAt( i );
         delete request;
+        changed();
     }
-
+    
     ResourceRequest *takeResourceRequest( ResourceRequest *request );
     ResourceRequest *find( Resource *resource );
+    ResourceRequest *resourceRequest( const QString &name );
     QStringList requestNameList() const;
     
     bool load( QDomElement &element, Project &project );
@@ -552,6 +555,8 @@ public:
 
     Task *task() const;
 
+    void changed();
+    
 private:
     ResourceGroup *m_group;
     int m_units;
@@ -578,6 +583,7 @@ public:
     {
         m_requests.append( request );
         request->setParent( this );
+        changed();
     }
     void deleteRequest( ResourceGroupRequest *request )
     {
@@ -585,19 +591,24 @@ public:
         if ( i != -1 )
             m_requests.removeAt( i );
         delete request;
+        changed();
     }
 
     void takeRequest( ResourceGroupRequest *request )
     {
         int i = m_requests.indexOf( request );
-        if ( i != -1 )
+        if ( i != -1 ) {
             m_requests.removeAt( i );
+            changed();
+        }
     }
 
     ResourceGroupRequest *find( ResourceGroup *resource ) const;
     ResourceRequest *find( Resource *resource ) const;
+    ResourceRequest *resourceRequest( const QString &name ) const;
     bool isEmpty() const;
     void clear() { m_requests.clear(); }
+    bool contains( const QString &identity ) const;
 
     QStringList requestNameList() const;
     
@@ -635,6 +646,8 @@ public:
 
     Task &task() const { return m_task; }
 
+    void changed();
+    
 protected:
     struct Interval
     {

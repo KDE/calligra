@@ -740,6 +740,7 @@ protected:
     ResourceGroup *m_group;
     Project *m_project;
     bool m_mine;
+    KMacroCommand *m_cmd;
 };
 
 class AddResourceGroupCmd : public RemoveResourceGroupCmd

@@ -971,7 +971,7 @@ RemoveResourceRequestCmd::RemoveResourceRequestCmd( Part *part, ResourceGroupReq
 {
 
     m_mine = false;
-    //kDebug()<<k_funcinfo<<"group="<<group<<" req="<<request<<endl;
+    //kDebug()<<k_funcinfo<<"group req="<<group<<" req="<<request<<" to gr="<<m_group->group()<<endl;
     Task *t = request->task();
     if ( t ) { // safety, something is seriously wrong!
         foreach ( Schedule * s, t->schedules() ) {
@@ -1499,13 +1499,21 @@ void ModifyResourceCalendarCmd::unexecute()
 RemoveResourceGroupCmd::RemoveResourceGroupCmd( Part *part, Project *project, ResourceGroup *group, const QString& name )
         : NamedCommand( part, name ),
         m_group( group ),
-        m_project( project )
+        m_project( project ),
+        m_cmd( 0 )
 {
 
     m_mine = false;
+    if ( !m_group->requests().isEmpty() ) {
+        m_cmd = new KMacroCommand("");
+        foreach( ResourceGroupRequest * r, m_group->requests() ) {
+            m_cmd->addCommand( new RemoveResourceGroupRequestCmd( part, r ) );
+        }
+    }
 }
 RemoveResourceGroupCmd::~RemoveResourceGroupCmd()
 {
+    delete m_cmd;
     if ( m_mine )
         delete m_group;
 }
@@ -1513,10 +1521,8 @@ void RemoveResourceGroupCmd::execute()
 {
     // remove all requests to this group
     int c = 0;
-    foreach ( ResourceGroupRequest * r, m_group->requests() ) {
-        if ( r->parent() ) {
-            r->parent() ->takeRequest( r );
-        }
+    if ( m_cmd ) {
+        m_cmd->execute();
         c = 1;
     }
     if ( m_project )
@@ -1527,19 +1533,16 @@ void RemoveResourceGroupCmd::execute()
 }
 void RemoveResourceGroupCmd::unexecute()
 {
-    // add all requests
     int c = 0;
-    foreach ( ResourceGroupRequest * r, m_group->requests() ) {
-        if ( r->parent() ) {
-            r->parent() ->addRequest( r );
-        }
-        c = 1;
-    }
     if ( m_project )
         m_project->addResourceGroup( m_group );
 
     m_mine = false;
-
+    // add all requests
+    if ( m_cmd ) {
+        m_cmd->unexecute();
+        c = 1;
+    }
     setCommandType( c );
 }
 

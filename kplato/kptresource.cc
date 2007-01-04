@@ -51,6 +51,9 @@ ResourceGroup::~ResourceGroup() {
     if (findId() == this) {
         removeId(); // only remove myself (I may be just a working copy)
     }
+    foreach ( ResourceGroupRequest* r, m_requests ) {
+        r->unregister( this );
+    }
     while (!m_resources.isEmpty()) {
         delete m_resources.takeFirst();
     }
@@ -939,15 +942,15 @@ void ResourceRequest::makeAppointment( Schedule *ns )
 
 /////////
 ResourceGroupRequest::ResourceGroupRequest(ResourceGroup *group, int units)
-    : m_group(group), m_units(units) {
+    : m_group(group), m_units(units), m_parent(0) {
 
-    //kDebug()<<k_funcinfo<<"Request to: "<<(group ? group->name() : QString("None"))<<endl;
+    kDebug()<<k_funcinfo<<"Request to: "<<(group ? group->name() : QString("None"))<<endl;
     if (group)
         group->registerRequest(this);
 }
 
 ResourceGroupRequest::~ResourceGroupRequest() {
-    //kDebug()<<k_funcinfo<<"Group: "<<m_group->name()<<endl;
+    kDebug()<<k_funcinfo<<endl;
     if (m_group)
         m_group->unregisterRequest(this);
 
@@ -957,25 +960,37 @@ ResourceGroupRequest::~ResourceGroupRequest() {
 }
 
 void ResourceGroupRequest::addResourceRequest(ResourceRequest *request) {
-    //kDebug()<<k_funcinfo<<"("<<request<<") to Group: "<<m_group->name()<<endl;
+    kDebug()<<k_funcinfo<<"("<<request<<") to Group: "<<(void*)m_group<<endl;
     request->setParent(this);
     m_resourceRequests.append(request);
     request->registerRequest();
+    changed();
 }
 
 ResourceRequest *ResourceGroupRequest::takeResourceRequest(ResourceRequest *request) {
     if (request)
         request->unregisterRequest();
+    ResourceRequest *r = 0;
     int i = m_resourceRequests.indexOf(request);
-    if (i != -1)
-        return m_resourceRequests.takeAt(i);
-    return 0;
+    if (i != -1) {
+        r = m_resourceRequests.takeAt(i);
+    }
+    changed();
+    return r;
 }
 
 ResourceRequest *ResourceGroupRequest::find(Resource *resource) {
     foreach (ResourceRequest *gr, m_resourceRequests) {
         if (gr->resource() == resource)
             return gr;
+    }
+    return 0;
+}
+
+ResourceRequest *ResourceGroupRequest::resourceRequest( const QString &name ) {
+    foreach (ResourceRequest *r, m_resourceRequests) {
+        if (r->resource()->name() == name )
+            return r;
     }
     return 0;
 }
@@ -1245,13 +1260,20 @@ Task *ResourceGroupRequest::task() const {
     return m_parent ? &(m_parent->task()) : 0;
 }
 
+void ResourceGroupRequest::changed()
+{
+     if ( m_parent ) 
+         m_parent->changed();
+}
+
 /////////
 ResourceRequestCollection::ResourceRequestCollection(Task &task)
     : m_task(task) {
+    kDebug()<<k_funcinfo<<this<<(void*)(&task)<<endl;
 }
 
 ResourceRequestCollection::~ResourceRequestCollection() {
-    //kDebug()<<k_funcinfo<<"Group: "<<m_group->name()<<endl;
+    kDebug()<<k_funcinfo<<this<<endl;
     while (!m_requests.empty()) {
         delete m_requests.takeFirst();
     }
@@ -1275,12 +1297,26 @@ ResourceRequest *ResourceRequestCollection::find(Resource *resource) const {
     return req;
 }
 
+ResourceRequest *ResourceRequestCollection::resourceRequest( const QString &name ) const {
+    ResourceRequest *req = 0;
+    QListIterator<ResourceGroupRequest*> it(m_requests);
+    while (req == 0 && it.hasNext()) {
+        req = it.next()->resourceRequest( name );
+    }
+    return req;
+}
+
 QStringList ResourceRequestCollection::requestNameList() const {
     QStringList lst;
     foreach ( ResourceGroupRequest *r, m_requests ) {
         lst << r->requestNameList();
     }
     return lst;
+}
+
+bool ResourceRequestCollection::contains( const QString &identity ) const {
+    QStringList lst = requestNameList();
+    return lst.indexOf( QRegExp( identity, Qt::CaseSensitive, QRegExp::FixedString ) ) != -1;
 }
 
 // bool ResourceRequestCollection::load(QDomElement &element, Project &project) {
@@ -1391,6 +1427,13 @@ bool ResourceRequestCollection::isEmpty() const {
     }
     return true;
 }
+
+void ResourceRequestCollection::changed()
+{
+    kDebug()<<k_funcinfo<<(void*)(&m_task)<<endl;
+    m_task.changed();
+}
+
 #ifndef NDEBUG
 
 void ResourceGroup::printDebug(const QString& _indent)
