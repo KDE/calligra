@@ -334,7 +334,7 @@ void KFCSplitToken::unexecute()
 {
     kdDebug( DEBUGID ) << k_funcinfo << endl;
     KFCAddToken::unexecute();
-    FormulaCursor *cursor;
+    FormulaCursor *cursor = getUnexecuteCursor();
     cursor->setCursorData( splitCursor );
     cursor->insert( splitList, afterCursor );
     if (removeSelection != 0) {
