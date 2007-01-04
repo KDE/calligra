@@ -45,7 +45,6 @@ KarbonGradientTool::~KarbonGradientTool()
 
 void KarbonGradientTool::paint( QPainter &painter, KoViewConverter &converter )
 {
-    painter.save();
     painter.setBrush( Qt::green );
     painter.setPen( Qt::blue );
 
@@ -61,7 +60,6 @@ void KarbonGradientTool::paint( QPainter &painter, KoViewConverter &converter )
         painter.setBrush( Qt::red );
         m_currentStrategy->paint( painter, converter );
     }
-    painter.restore();
 }
 
 void KarbonGradientTool::mousePressEvent( KoPointerEvent *event )
@@ -94,8 +92,8 @@ void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
         }
     }
     m_currentStrategy = 0;
-    useCursor(Qt::ArrowCursor, true);
- }
+    useCursor(Qt::ArrowCursor);
+}
 
 void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
 {

@@ -28,7 +28,7 @@
 KarbonGradientToolFactory::KarbonGradientToolFactory(QObject *parent)
 : KoToolFactory(parent, "KarbonGradientTool", i18n("Gradient tool") )
 {
-    setToolTip( i18n("Gradient editing tool") );
+    setToolTip( i18n("Gradient Editing Tool") );
     setToolType( mainToolType() );
     setIcon( "14_gradient" );
     setPriority( 3 );
