@@ -45,9 +45,10 @@ KarbonGradientTool::~KarbonGradientTool()
 
 void KarbonGradientTool::paint( QPainter &painter, KoViewConverter &converter )
 {
-    painter.setBrush( Qt::green );
-    painter.setPen( Qt::blue );
+    painter.setBrush( Qt::green ); //TODO make configurable
+    painter.setPen( Qt::blue ); //TODO make configurable
 
+    // paint all the strategies
     foreach( GradientStrategy *strategy, m_gradients )
     {
         painter.save();
@@ -55,9 +56,10 @@ void KarbonGradientTool::paint( QPainter &painter, KoViewConverter &converter )
         painter.restore();
     }
 
+    // paint selected strategy with another color
     if( m_currentStrategy )
     {
-        painter.setBrush( Qt::red );
+        painter.setBrush( Qt::red ); //TODO make configurable
         m_currentStrategy->paint( painter, converter );
     }
 }
@@ -73,11 +75,11 @@ void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
 {
     if( m_currentStrategy )
     {
-        m_currentStrategy->shape()->repaint();
+        m_currentStrategy->repaint();
         if( m_currentStrategy->isEditing() )
         {
             m_currentStrategy->handleMouseMove( event->point, event->modifiers() );
-            m_currentStrategy->shape()->repaint();
+            m_currentStrategy->repaint();
             return;
         }
     }
@@ -86,7 +88,7 @@ void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
         if( strategy->selectHandle( event->point ) )
         {
             m_currentStrategy = strategy;
-            m_currentStrategy->shape()->repaint();
+            m_currentStrategy->repaint();
             useCursor(Qt::SizeAllCursor);
             return;
         }
@@ -98,6 +100,7 @@ void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
 void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
 {
     Q_UNUSED( event )
+    // if we are editing, get out of edit mode and add a command to the stack
     if( m_currentStrategy )
     {
         m_currentStrategy->setEditing( false );
@@ -137,7 +140,7 @@ void KarbonGradientTool::activate( bool temporary )
         }
         else
             continue;
-        shape->repaint();
+        m_gradients.last()->repaint();
     }
 
     useCursor(Qt::ArrowCursor, true);
@@ -146,7 +149,10 @@ void KarbonGradientTool::activate( bool temporary )
 void KarbonGradientTool::deactivate()
 {
     foreach( GradientStrategy* strategy, m_gradients )
+    {
+        strategy->repaint();
         delete strategy;
+    }
     m_gradients.clear();
     foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
         shape->repaint();
@@ -160,6 +166,8 @@ KarbonGradientTool::GradientStrategy::GradientStrategy( KoShape *shape )
 void KarbonGradientTool::GradientStrategy::setEditing( bool on )
 {
     m_editing = on;
+    // if we are going into editing mode, save the old background
+    // for use inside the command emitted when finished
     if( on )
         m_oldBackground = m_shape->background();
 }
@@ -217,6 +225,25 @@ QUndoCommand * KarbonGradientTool::GradientStrategy::createCommand()
     m_shape->setBackground( m_oldBackground );
     QList<KoShape*> shapes;
     return new KoShapeBackgroundCommand( shapes << m_shape, m_newBackground, 0 );
+}
+
+void KarbonGradientTool::GradientStrategy::repaint() const
+{
+    // calculate the bounding rect of the handles
+    QRectF boundingRect( m_handles[0], QSize(0,0) );
+    for( int i = 1; i < m_handles.count(); ++i )
+    {
+        QPointF handle = m_handles[i];
+        boundingRect.setLeft( qMin( handle.x(), boundingRect.left() ) );
+        boundingRect.setRight( qMax( handle.x(), boundingRect.right() ) );
+        boundingRect.setTop( qMin( handle.y(), boundingRect.top() ) );
+        boundingRect.setBottom( qMax( handle.y(), boundingRect.bottom() ) );
+    }
+    // TODO get the handle radius from a global property
+    int handleRadius = 3;
+    boundingRect.adjust( -handleRadius, -handleRadius, handleRadius, handleRadius );
+    m_shape->repaint( boundingRect );
+    m_shape->repaint();
 }
 
 KarbonGradientTool::LinearGradientStrategy::LinearGradientStrategy( KoShape *shape, const QLinearGradient *gradient )

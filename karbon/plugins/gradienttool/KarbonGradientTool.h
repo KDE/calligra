@@ -29,6 +29,11 @@ class QLinearGradient;
 class QRadialGradient;
 class QConicalGradient;
 
+/**
+ * A tool for editing gradient backgrounds of shapes.
+ * The gradients can be edited by moving gradient
+ * handles directly on the canvas.
+ */
 class KarbonGradientTool : public KoTool
 {
     Q_OBJECT
@@ -46,31 +51,44 @@ public:
     void deactivate();
 
 private:
+    /// the base class for gradient editing strategies
     class GradientStrategy
     {
     public:
+        /// constructs new strategy on the specified shape
         GradientStrategy( KoShape *shape );
         virtual ~GradientStrategy() {};
+        /// painting of the gradient editing handles
         virtual void paint( QPainter &painter, KoViewConverter &converter ) = 0;
+        /// selects handle at the given position
         virtual bool selectHandle( const QPointF &mousePos );
-        KoShape * shape() { return m_shape; }
+        /// mouse position handling for moving handles
         void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+        /// sets the strategy into editing mode
         void setEditing( bool on );
+        /// checks if strategy is in editing mode
         bool isEditing() { return m_editing; }
+        /// create the command for changing the shapes background
         QUndoCommand * createCommand();
+        /// schedules a repaint of the shape and gradient handles
+        void repaint() const;
     protected:
+        /// paints a handle at the given position
         void paintHandle( QPainter &painter, const QPointF &position );
+        /// checks if given mouse position is inside the handle rect at the specified position
         bool mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos );
+        /// creates an updated background brush from the actual data
         virtual QBrush background() = 0;
-        KoShape *m_shape;
-        int m_selectedHandle;
-        QBrush m_oldBackground;
-        QBrush m_newBackground;
-        QList<QPointF> m_handles;
+        KoShape *m_shape;         ///< the shape we are working on
+        int m_selectedHandle;     ///< index of currently delected handle or -1 if none selected
+        QBrush m_oldBackground;   ///< the old background brush
+        QBrush m_newBackground;   ///< the new background brush
+        QList<QPointF> m_handles; ///< the list of handles
     private:
-        bool m_editing;
+        bool m_editing; /// the edit mode flag
     };
 
+    /// class for editing a linear gradient
     class LinearGradientStrategy : public GradientStrategy
     {
     public:
@@ -81,6 +99,7 @@ private:
         enum Handles { start, stop };
     };
 
+    /// class for editing a radial gradient
     class RadialGradientStrategy : public GradientStrategy
     {
     public:
@@ -91,6 +110,7 @@ private:
         enum Handles { center, focal, radius };
     };
 
+    /// class for editing a conical gradient
     class ConicalGradientStrategy : public GradientStrategy
     {
     public:
@@ -101,8 +121,8 @@ private:
         enum Handles { center, direction };
     };
 
-    QList<GradientStrategy*> m_gradients;
-    GradientStrategy* m_currentStrategy;
+    QList<GradientStrategy*> m_gradients; ///< the list of editing strategies, one for each shape
+    GradientStrategy* m_currentStrategy;  ///< the current editing strategy
 };
 
 #endif // _KARBONGRADIENTTOOL_H_
