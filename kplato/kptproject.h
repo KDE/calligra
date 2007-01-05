@@ -104,6 +104,9 @@ public:
     /// Returns the resourcegroup with identity id.
     ResourceGroup *group( const QString& id );
     ResourceGroup *groupByName( const QString& name ) const;
+    
+    void addResource( ResourceGroup *group, Resource *resource );
+    Resource *takeResource( ResourceGroup *group, Resource *resource );
     /// Returns the resource with identity id.
     Resource *resource( const QString& id );
     Resource *resourceByName( const QString& name ) const;
@@ -200,6 +203,10 @@ public:
     {
         resourceGroupIdDict.insert( id, group );
     }
+    /// Generate, set and insert unique id
+    bool setResourceGroupId( ResourceGroup *group);
+    /// returns a unique resourcegroup id
+    QString uniqueResourceGroupId() const;
 
     Resource *findResource( const QString &id ) const
     {
@@ -212,6 +219,10 @@ public:
     /// Insert the resource with identity id
     void insertResourceId( const QString &id, Resource *resource )
     { resourceIdDict.insert( id, resource ); }
+    /// Generate, set and insert unique id
+    bool setResourceId( Resource *resource );
+    /// returns a unique resource id
+    QString uniqueResourceId() const;
 
     /// Find the calendar with identity id
     virtual Calendar *findCalendar( const QString &id ) const

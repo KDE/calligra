@@ -593,21 +593,34 @@ void Project::setParentSchedule( Schedule *sch )
     }
 }
 
-void Project::addResourceGroup( ResourceGroup * group )
+void Project::addResourceGroup( ResourceGroup *group )
 {
+    emit resourceGroupToBeAdded( group );
     m_resourceGroups.append( group );
+    setResourceGroupId( group );
     group->setProject( this );
+    foreach ( Resource *r, group->resources() ) {
+        setResourceId( r );
+        r->setProject( this );
+    }
     emit resourceGroupAdded( group );
 }
 
-ResourceGroup *Project::takeResourceGroup( ResourceGroup *resource )
+ResourceGroup *Project::takeResourceGroup( ResourceGroup *group )
 {
-    int i = m_resourceGroups.indexOf( resource );
+    int i = m_resourceGroups.indexOf( group );
     if ( i == -1 ) {
         return 0;
     }
+    emit resourceGroupToBeRemoved( group );
     ResourceGroup *g = m_resourceGroups.takeAt( i );
+    Q_ASSERT( group == g );
     g->setProject( 0 );
+    removeResourceGroupId( g->id() );
+    foreach ( Resource *r, g->resources() ) {
+        r->setProject( 0 );
+        removeResourceId( r->id() );
+    }
     emit resourceGroupRemoved( g );
     return g;
 }
@@ -616,6 +629,25 @@ QList<ResourceGroup*> &Project::resourceGroups()
 {
     return m_resourceGroups;
 }
+
+void Project::addResource( ResourceGroup *group, Resource *resource )
+{
+    emit resourceToBeAdded( group, resource );
+    group->addResource( resource, 0 );
+    setResourceId( resource );
+    emit resourceAdded( group, resource );
+}
+
+Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
+{
+    emit resourceToBeRemoved( group, resource );
+    removeResourceId( resource->id() );
+    Resource *r = group->takeResource( resource );
+    Q_ASSERT( resource == r );
+    emit resourceRemoved( group, r );
+    return r;
+}
+
 
 bool Project::addTask( Node* task, Node* position )
 {
@@ -909,6 +941,39 @@ bool Project::registerNodeId( Node *node )
     return true;
 }
 
+bool Project::setResourceGroupId( ResourceGroup *group )
+{
+    if ( group == 0 ) {
+        return false;
+    }
+    if ( ! group->id().isEmpty() ) {
+        ResourceGroup *g = findResourceGroup( group->id() );
+        if ( group == g ) {
+            return true;
+        } else if ( g == 0 ) {
+            insertResourceGroupId( group->id(), group );
+            return true;;
+        }
+    }
+    QString id = uniqueResourceGroupId();
+    group->setId( id );
+    if ( id.isEmpty() ) {
+        return false;
+    }
+    insertResourceGroupId( id, group );
+    return true;
+}
+
+QString Project::uniqueResourceGroupId() const {
+    QString id;
+    for (int i=0; i<32000 ; ++i) {
+        id = id.setNum(i);
+        if ( ! resourceGroupIdDict.contains( id ) ) {
+            return id;
+        }
+    }
+    return QString();
+}
 
 ResourceGroup *Project::group( const QString& id )
 {
@@ -923,6 +988,40 @@ ResourceGroup *Project::groupByName( const QString& name ) const
         }
     }
     return 0;
+}
+
+bool Project::setResourceId( Resource *resource )
+{
+    if ( resource == 0 ) {
+        return false;
+    }
+    if ( ! resource->id().isEmpty() ) {
+        Resource *r = findResource( resource->id() );
+        if ( resource == r ) {
+            return true;
+        } else if ( r == 0 ) {
+            insertResourceId( resource->id(), resource );
+            return true;;
+        }
+    }
+    QString id = uniqueResourceId();
+    resource->setId( id );
+    if ( id.isEmpty() ) {
+        return false;
+    }
+    insertResourceId( id, resource );
+    return true;
+}
+
+QString Project::uniqueResourceId() const {
+    QString id;
+    for (int i=0; i<32000 ; ++i) {
+        id = id.setNum(i);
+        if ( ! resourceIdDict.contains( id ) ) {
+            return id;
+        }
+    }
+    return QString();
 }
 
 Resource *Project::resource( const QString& id )

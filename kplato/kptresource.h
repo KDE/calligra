@@ -66,6 +66,10 @@ class XMLLoaderObject;
  *  and friends based on the schedules we got from the PIM projects.
  *  (Thomas Zander mrt-2003 by suggestion of Shaheed)
  */
+ 
+// FIXME Atm we use both QObject parent/child AND handles resources via m_resources!
+// The QObject parent/child is only used for accessing the parent ResourceGroup from Resource.
+// We need these to be QObject also for safe casting.
 class ResourceGroup : public QObject
 {
     Q_OBJECT
@@ -76,8 +80,7 @@ public:
     enum Type { Type_Work, Type_Material };
 
     QString id() const { return m_id; }
-    bool setId( const QString& id );
-    void generateId();
+    void setId( const QString& id );
 
     Project *project() { return m_project; }
 
@@ -173,10 +176,6 @@ public:
 
 protected:
     virtual void changed();
-    void resourceToBeAdded( Resource *res );
-    void resourceAdded( Resource *res );
-    void resourceToBeRemoved( Resource *res );
-    void resourceRemoved( Resource *res );
 
 private:
     Project *m_project;
@@ -215,8 +214,7 @@ public:
     virtual ~Resource();
 
     QString id() const { return m_id; }
-    bool setId( const QString& id );
-    void generateId();
+    void setId( const QString& id );
 
     enum Type { Type_Work, Type_Material };
     void setType( Type type );

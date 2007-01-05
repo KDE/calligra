@@ -1197,17 +1197,20 @@ AddResourceCmd::~AddResourceCmd()
 }
 void AddResourceCmd::execute()
 {
-    m_group->addResource( m_resource, 0 /*risk*/ );
-    m_mine = false;
-    //kDebug()<<k_funcinfo<<"added: "<<m_resource<<endl;
+    if ( m_group->project() ) {
+        m_group->project()->addResource( m_group, m_resource );
+        m_mine = false;
+        //kDebug()<<k_funcinfo<<"added: "<<m_resource<<endl;
+    }
     setCommandType( 0 );
 }
 void AddResourceCmd::unexecute()
 {
-    m_group->takeResource( m_resource );
-    //kDebug()<<k_funcinfo<<"removed: "<<m_resource<<endl;
-    m_mine = true;
-
+    if ( m_group->project() ) {
+        m_group->project()->takeResource( m_group, m_resource );
+        //kDebug()<<k_funcinfo<<"removed: "<<m_resource<<endl;
+        m_mine = true;
+    }
     setCommandType( 0 );
 }
 

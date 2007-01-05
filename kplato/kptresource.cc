@@ -42,7 +42,6 @@ ResourceGroup::ResourceGroup()
 {
     m_project = 0;
     m_type = Type_Work;
-    generateId();
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
@@ -66,68 +65,9 @@ void ResourceGroup::changed() {
     }
 }
 
-void ResourceGroup::resourceToBeAdded( Resource *res ) {
-    if ( m_project ) {
-        m_project->sendResourceToBeAdded( this, res );
-    }
-}
-
-void ResourceGroup::resourceAdded( Resource *res ) {
-    if ( m_project ) {
-        m_project->sendResourceAdded( this, res );
-    }
-}
-
-void ResourceGroup::resourceToBeRemoved( Resource *res ) {
-    if ( m_project ) {
-        m_project->sendResourceToBeRemoved( this, res );
-    }
-}
-
-void ResourceGroup::resourceRemoved( Resource *res ) {
-    if ( m_project ) {
-        m_project->sendResourceRemoved( this, res );
-    }
-}
-
-bool ResourceGroup::setId(const QString& id) {
+void ResourceGroup::setId(const QString& id) {
     //kDebug()<<k_funcinfo<<id<<endl;
-    if (id.isEmpty()) {
-        kError()<<k_funcinfo<<"id is empty"<<endl;
-        m_id = id;
-        return false;
-    }
-    ResourceGroup *g = findId();
-    if (g == this) {
-        //kDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
-        removeId();
-    } else if (g) {
-        //Hmmm, shouldn't happen
-        kError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different group: "<<g->name()<<endl;
-    }
-    if (findId(id)) {
-        kError()<<k_funcinfo<<"id '"<<id<<"' is already used for different group: "<<findId(id)->name()<<endl;
-        m_id = QString(); // hmmm
-        return false;
-    }
     m_id = id;
-    insertId(id);
-    //kDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
-    return true;
-}
-
-void ResourceGroup::generateId() {
-    if (!m_id.isEmpty()) {
-        removeId();
-    }
-    for (int i=0; i<32000 ; ++i) {
-        m_id = m_id.setNum(i);
-        if (!findId()) {
-            insertId(m_id);
-            return;
-        }
-    }
-    m_id = QString();
 }
 
 void ResourceGroup::setName( const QString& n )
@@ -170,11 +110,20 @@ void ResourceGroup::setProject( Project *project )
 }
 
 void ResourceGroup::addResource(Resource* resource, Risk*) {
-    resourceToBeAdded( resource );
     resource->setParent( this );
     resource->setProject( m_project );
     m_resources.append( resource );
-    resourceAdded( resource );
+}
+
+Resource *ResourceGroup::takeResource(Resource *resource) {
+    Resource *r = 0;
+    int i = m_resources.indexOf(resource);
+    if (i != -1) {
+        r = m_resources.takeAt(i);
+        r->setParent( 0 );
+        r->setProject( 0 );
+    }
+    return r;
 }
 
 int ResourceGroup::indexOf( const Resource *resource ) const
@@ -184,19 +133,6 @@ int ResourceGroup::indexOf( const Resource *resource ) const
 
 Risk* ResourceGroup::getRisk(int) {
     return 0L;
-}
-
-Resource *ResourceGroup::takeResource(Resource *resource) {
-    int i = m_resources.indexOf(resource);
-    if (i != -1) {
-        resourceToBeRemoved( resource );
-        Resource *r = m_resources.takeAt(i);
-        r->setParent( 0 );
-        r->setProject( 0 );
-        resourceRemoved( r );
-        return r;
-    }
-    return 0;
 }
 
 void ResourceGroup::addRequiredResource(ResourceGroup*) {
@@ -300,7 +236,6 @@ Resource::Resource()
     cost.fixed = 0;
     m_calendar = 0;
     m_currentSchedule = 0;
-    generateId();
     //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
@@ -326,45 +261,9 @@ Resource::~Resource() {
     }
 }
 
-bool Resource::setId(const QString& id) {
+void Resource::setId(const QString& id) {
     //kDebug()<<k_funcinfo<<id<<endl;
-    if (id.isEmpty()) {
-        kError()<<k_funcinfo<<"id is empty"<<endl;
-        m_id = id;
-        return false;
-    }
-    Resource *r = findId();
-    if (r == this) {
-        //kDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
-        removeId();
-    } else if (r) {
-        //Hmmm, shouldn't happen
-        kError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different resource: "<<r->name()<<endl;
-    }
-    if (findId(id)) {
-        kError()<<k_funcinfo<<"id '"<<id<<"' is already used for different resource: "<<findId(id)->name()<<endl;
-        m_id = QString(); // hmmm
-        return false;
-    }
     m_id = id;
-    insertId(id);
-    //kDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
-    return true;
-}
-
-void Resource::generateId() {
-    if (!m_id.isEmpty()) {
-        removeId();
-    }
-    for (int i=0; i<32000 ; ++i) {
-        m_id = m_id.setNum(i);
-        if (!findId()) {
-            insertId(m_id);
-            //kDebug()<<k_funcinfo<<m_name<<": inserted id="<<m_id<<endl;
-            return;
-        }
-    }
-    m_id = QString();
 }
 
 void Resource::copy(Resource *resource) {
