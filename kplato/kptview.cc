@@ -1936,15 +1936,18 @@ void View::slotPrintSelectedDebug()
             curr->printDebug( true, "" );
         } else
             slotPrintDebug();
+        return;
     } else if ( m_tab->currentWidget() == m_resourceeditor ) {
         Resource *r = m_resourceeditor->currentResource();
         if ( r ) {
-            r->printDebug("");
+            kDebug() <<"-------- Debug printout: Selected resource"<<endl;
+            r->printDebug("  !");
             return;
         }
         ResourceGroup *g = m_resourceeditor->currentResourceGroup();
         if ( g ) {
-            r->printDebug("");
+            kDebug() <<"-------- Debug printout: Selected group"<<endl;
+            g->printDebug("  !");
             return;
         }
     }
@@ -1952,7 +1955,7 @@ void View::slotPrintSelectedDebug()
 }
 void View::slotPrintCalendarDebug()
 {
-    kDebug() << "-------- Debug printout: Node list" << endl;
+    //kDebug() << "-------- Debug printout: Calendars" << endl;
     /*    Node *curr = m_ganttview->currentNode();
         if (curr) {
             curr->printDebug(true,"");
