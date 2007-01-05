@@ -1170,8 +1170,29 @@ void TaskEditor::slotAddSubtask()
 
 void TaskEditor::slotDeleteTask()
 {
-    kDebug()<<k_funcinfo<<endl;
-    emit deleteTaskList( selectedNodes() );
+    //kDebug()<<k_funcinfo<<endl;
+    QList<Node*> lst = selectedNodes();
+    while ( true ) {
+        // remove children of selected tasks, as parents delete their children
+        Node *ch = 0;
+        foreach ( Node *n1, lst ) {
+            foreach ( Node *n2, lst ) {
+                if ( n2->isChildOf( n1 ) ) {
+                    ch = n2;
+                    break;
+                }
+            }
+            if ( ch != 0 ) {
+                break;
+            }
+        }
+        if ( ch == 0 ) {
+            break;
+        }
+        lst.removeAt( lst.indexOf( ch ) );
+    }
+    //foreach ( Node* n, lst ) { kDebug()<<k_funcinfo<<n->name()<<endl; }
+    emit deleteTaskList( lst );
 }
 
 void TaskEditor::slotIndentTask()
