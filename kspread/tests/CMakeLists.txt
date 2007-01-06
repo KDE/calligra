@@ -2,7 +2,7 @@ if(KDE4_BUILD_TESTS)
 
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KOFFICEUI_INCLUDES} )
 
-set(libtests_SRCS tester.cc testrunner.cc value_tester.cc formula_tester.cc inspector.cc)
+set(libtests_SRCS tester.cc testrunner.cc formula_tester.cc inspector.cc)
 
 ########### next target ###############
 

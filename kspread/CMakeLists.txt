@@ -64,7 +64,6 @@ kde4_add_ui_files(dialogs_DIR_SRCS
 SET (tests_DIR_SRCS
 	tests/tester.cc
 	tests/testrunner.cc
-	tests/value_tester.cc
 	tests/formula_tester.cc
 	tests/inspector.cc
 	)

@@ -30,7 +30,6 @@
 #include <kpushbutton.h>
 
 #include "tester.h"
-#include "value_tester.h"
 #include "formula_tester.h"
 //#include "stylecluster_tester.h"
 
@@ -84,7 +83,6 @@ TestRunner::TestRunner():
   QObject::connect( d->runButton, SIGNAL( clicked() ), this, SLOT( runTest() ) );
 
   // add all tests here !!
-  addTester( new ValueTester() );
   // addTester( new StyleClusterTester() );
   addTester( new FormulaParserTester() );
   addTester( new FormulaEvalTester() );
