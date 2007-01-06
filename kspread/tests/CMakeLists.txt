@@ -64,6 +64,18 @@ add_test(Value TestValue)
 
 ########### next target ###############
 
+set(TestMathFunctions_SRCS TestMathFunctions.cpp)
+
+kde4_automoc(${TestMathFunctions_SRCS})
+
+kde4_add_executable(TestMathFunctions RUN_UNINSTALLED ${TestMathFunctions_SRCS})
+
+target_link_libraries(TestMathFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+
+add_test(MathFunctions TestMathFunctions)
+
+########### next target ###############
+
 set(TestFinancialFunctions_SRCS TestFinancialFunctions.cpp)
 
 kde4_automoc(${TestFinancialFunctions_SRCS})
