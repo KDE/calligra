@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "../tests/BenchmarkHelper.h"
 #include "PointStorage.h"
 
 #include "TestPointStorage.h"
@@ -383,31 +384,12 @@ void PointStorageTest::testShiftDown()
     QCOMPARE( storage.m_cols, cols );
 }
 
-typedef unsigned long tval;
-
-inline tval stamp(void) 
-{
-        tval tsc;
-        asm volatile("rdtsc" : "=a" (tsc) : : "edx");
-        return tsc;
-}
-
-inline tval measure(tval t)
-{
-        tval tsc;
-        asm volatile("rdtsc" : "=a" (tsc) : : "edx");
-        if (tsc>t)
-                return tsc-t;
-        else
-                return t-tsc;
-}
-
 void PointStorageTest::testInsertionPerformance()
 {
     PointStorage<int> storage;
     qDebug() << "measuring loading-like insertion...";
-    tval start = 0;
-    tval ticks = 0;
+    Time::tval start = 0;
+    Time::tval ticks = 0;
     int v;
     int col = 1;
     int row = 1;
@@ -415,7 +397,7 @@ void PointStorageTest::testInsertionPerformance()
     int rows = 10000;
     int counter = 0;
     const int iterations = 100000;
-    start = stamp();
+    start = Time::stamp();
     for ( int r = row; r <= rows; ++r )
     {
         for ( int c = col; c <= cols; c += 1 )
@@ -424,9 +406,8 @@ void PointStorageTest::testInsertionPerformance()
             counter += 1;
         }
     }
-    ticks = measure( start );
-    qDebug() << counter << " insertions in " << ticks << " ticks";
-    qDebug() << "Average is " << ticks/counter << " ticks/insertion";
+    ticks = Time::elapsed( start );
+    qDebug() << qPrintable( Time::printAverage( ticks, counter ) );
 
     qDebug() << "measuring random singular insertion...";
     storage.clear();
@@ -437,7 +418,7 @@ void PointStorageTest::testInsertionPerformance()
         row = 1 + rand() % 1000;
         cols = col + 1;
         rows = row + 1;
-        start = stamp();
+        start = Time::stamp();
         for ( int r = row; r <= rows; ++r )
         {
             for ( int c = col; c <= cols && counter < iterations; c += 1 )
@@ -446,10 +427,9 @@ void PointStorageTest::testInsertionPerformance()
                 counter += 1;
             }
         }
-        ticks += measure( start );
+        ticks += Time::elapsed( start );
     }
-    qDebug() << counter << " insertions in " << ticks << " ticks";
-    qDebug() << "Average is " << ticks/counter << " ticks/insertion";
+    qDebug() << qPrintable( Time::printAverage( ticks, counter ) );
 }
 
 void PointStorageTest::testLookupPerformance()
@@ -467,8 +447,8 @@ void PointStorageTest::testLookupPerformance()
 //     qDebug() << endl << qPrintable( storage.dump() );
     qDebug() << "start measuring...";
 
-    tval start = 0;
-    tval ticks = 0;
+    Time::tval start = 0;
+    Time::tval ticks = 0;
     int v;
     int col = 0;
     int row = 0;
@@ -482,7 +462,7 @@ void PointStorageTest::testLookupPerformance()
         row = 1 + rand() % 1000;
         cols = col + 1 * ( rand() % 10 );
         rows = row + rand() % 10;
-        start = stamp();
+        start = Time::stamp();
         for ( int r = row; r <= rows && counter < iterations; ++r )
         {
             for ( int c = col; c <= cols && counter < iterations; c += 1 )
@@ -491,10 +471,9 @@ void PointStorageTest::testLookupPerformance()
                 counter += 1;
             }
         }
-        ticks += measure( start );
+        ticks += Time::elapsed( start );
     }
-    qDebug() << counter << " lookups in " << ticks << " ticks";
-    qDebug() << "Average is " << ticks/counter << " ticks/lookup";
+    qDebug() << qPrintable( Time::printAverage( ticks, counter ) );
 }
 
 

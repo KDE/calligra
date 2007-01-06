@@ -19,12 +19,11 @@
 
 #include <iostream>
 
-#include <QList>
-#include <QTime>
-#include <QVector>
 #include <QCoreApplication>
 
 #include <kdebug.h>
+
+#include "BenchmarkHelper.h"
 
 // #include "rtree.h"
 #include "RTree.h"
@@ -40,13 +39,12 @@ int main( int argc, char** argv )
 
   cout << "Insertion performance test..." << endl;
 
-  QTime time;
-  time.start();
   const int max_x = 100;
   const int step_x = 1;
   const int max_y = 1000;
   const int step_y = 1;
   int counter = 0;
+  Time::tval start = Time::stamp();
   for ( int y = 1; y <= max_y; y += step_y ) // equals row insertion into table
   {
     for ( int x = 1; x <= max_x; x += step_x ) // equals cell insertion into row
@@ -55,30 +53,30 @@ int main( int argc, char** argv )
       ++counter;
     }
   }
-  cout << "\t Inserted " << counter << " rectangles in " << time.elapsed() << " ms" << endl;
+  cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), counter ) ) << endl;
 
-  cout << "Row insertion performance test..." << endl;
-  time.restart();
+  cout << "Row insertion performance test (5 rows at row 1)..." << endl;
+  start = Time::stamp();
   tree.insertRows(1,5);
-  cout << "\t Inserted 5 rows at row 1 in " << time.elapsed() << " ms" << endl;
+  cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), 1 ) ) << endl;
 
-  cout << "Column insertion performance test..." << endl;
-  time.restart();
+  cout << "Column insertion performance test (5 columns at column 1)..." << endl;
+  start = Time::stamp();
   tree.insertColumns(1,5);
-  cout << "\t Inserted 5 columns at column 1 in " << time.elapsed() << " ms" << endl;
+  cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), 1 ) ) << endl;
 
-  cout << "Row deletion performance test..." << endl;
-  time.restart();
+  cout << "Row deletion performance test (5 rows at row 1)..." << endl;
+  start = Time::stamp();
   tree.deleteRows(1,5);
-  cout << "\t Deleted 5 rows at row 1 in " << time.elapsed() << " ms" << endl;
+  cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), 1 ) ) << endl;
 
-  cout << "Column deletion performance test..." << endl;
-  time.restart();
+  cout << "Column deletion performance test (5 columns at column 1)..." << endl;
+  start = Time::stamp();
   tree.deleteColumns(1,5);
-  cout << "\t Deleted 5 columns at column 1 in " << time.elapsed() << " ms" << endl;
+  cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), 1 ) ) << endl;
 
   cout << "Lookup performance test..." << endl;
-  time.restart();
+  start = Time::stamp();
   counter = 0;
   for ( int y = 1; y <= max_y; y += step_y )
   {
@@ -87,6 +85,6 @@ int main( int argc, char** argv )
       if ( !tree.contains(QPoint(x,y)).isEmpty() ) counter++;
     }
   }
-  cout << "\t Found " << counter << " positions in " << time.elapsed() << " ms" << endl;
+  cout << "\t " << qPrintable( Time::printAverage( Time::elapsed( start ), counter ) ) << endl;
   return 0;
 }

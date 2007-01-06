@@ -89,6 +89,23 @@ inline tval measure(tval t)
                 return t-tsc;
 }
 
+static void printAverage( tval ticks, int counter )
+{
+    double ms = 0.0;
+    QProcess procCpuInfo;
+    procCpuInfo.start( "cat /proc/cpuinfo");
+    if ( procCpuInfo.waitForFinished() )
+    {
+        QRegExp reg( "cpu MHz\\s+:\\s+(\\d{4}.\\d{3})" );
+        reg.indexIn( procCpuInfo.readAllStandardOutput() );
+        bool ok = true;
+        double freq = reg.cap(1).toDouble( &ok );
+        if ( ok )
+            ms = ticks / counter / freq;
+    }
+    qDebug() << "Average: " << ticks << '/' << counter << '=' << ticks/counter << "ticks/lookup; " << qPrintable( QString::number( ms, 'g', 3 ) ) << "us/lookup";
+}
+
 void ClusterTest::testInsertionPerformance()
 {
     Cluster storage;
@@ -112,8 +129,7 @@ void ClusterTest::testInsertionPerformance()
         }
     }
     ticks = measure( start );
-    qDebug() << counter << " insertions in " << ticks << " ticks";
-    qDebug() << "Average is " << ticks/counter << " ticks/insertion";
+    printAverage( ticks, counter );
 
     qDebug() << "measuring random singular insertion...";
     storage.clear();
@@ -135,8 +151,7 @@ void ClusterTest::testInsertionPerformance()
         }
         ticks += measure( start );
     }
-    qDebug() << counter << " insertions in " << ticks << " ticks";
-    qDebug() << "Average is " << ticks/counter << " ticks/insertion";
+    printAverage( ticks, counter );
 }
 
 void ClusterTest::testLookupPerformance()
@@ -179,8 +194,7 @@ void ClusterTest::testLookupPerformance()
         }
         ticks += measure( start );
     }
-    qDebug() << counter << " lookups in " << ticks << " ticks";
-    qDebug() << "Average is " << ticks/counter << " ticks/lookup";
+    printAverage( ticks, counter );
 }
 
 
