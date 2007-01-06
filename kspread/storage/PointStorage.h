@@ -69,6 +69,16 @@ public:
     ~PointStorage() {}
 
     /**
+     * Clears the storage.
+     */
+    void clear()
+    {
+        m_cols.clear();
+        m_rows.clear();
+        m_data.clear();
+    }
+
+    /**
      * Inserts \p data at \p col , \p row .
      * \return the overridden data (default data, if no overwrite)
      */
