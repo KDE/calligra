@@ -71,6 +71,8 @@ a lot of rows than columns. Maybe something like LEVEL1=128/256 and LEVEL2=256/1
 */
 class Cluster
 {
+    friend class ClusterTest;
+
 public:
     Cluster();
     ~Cluster();
