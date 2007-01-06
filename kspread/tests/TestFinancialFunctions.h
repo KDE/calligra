@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2007 Ariya Hidayat <ariya@kde.org>
+   Copyright 2006 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,11 +14,11 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+ * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_TRIG_FUNCTIONS_TEST
-#define KSPREAD_TRIG_FUNCTIONS_TEST
+#ifndef KSPREAD_TEST_FINANCIAL_FUNCTIONS
+#define KSPREAD_TEST_FINANCIAL_FUNCTIONS
 
 #include <QtGui>
 #include <QtTest/QtTest>
@@ -28,17 +28,20 @@
 namespace KSpread
 {
 
-class TrigFunctionsTest: public QObject
+class TestFinancialFunctions: public QObject
 {
     Q_OBJECT
 
 private slots:
-  void testCOS();
-  void testCOSH();
-  void testPI();
-  void testSIN();
-  void testSINH();
-  void testTAN();
+  void testDB();
+  void testDDB();
+  void testEURO();
+  void testEUROCONVERT();
+  void testLEVELCOUPON();
+  void testNOMINAL();
+  void testSLN();
+  void testSYD();
+  void testZEROCOUPON();
 
 private:
   Value evaluate(const QString&);
@@ -46,4 +49,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_TRIG_FUNCTIONS_TEST
+#endif // KSPREAD_TEST_FINANCIAL_FUNCTIONS

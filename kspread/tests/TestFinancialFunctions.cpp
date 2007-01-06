@@ -24,7 +24,7 @@
 #include <Formula.h>
 #include <Value.h>
 
-#include "FinancialFunctionsTest.h"
+#include "TestFinancialFunctions.h"
 
 #include <float.h> // DBL_EPSILON
 
@@ -52,7 +52,7 @@ static Value RoundNumber(const Value& v)
     return v;  
 }
 
-Value FinancialFunctionsTest::evaluate(const QString& formula)
+Value TestFinancialFunctions::evaluate(const QString& formula)
 {
   Formula f;
   QString expr = formula;
@@ -86,7 +86,7 @@ namespace QTest
 
 // Fixed-declining balance depreciation
 // DB(cost, salvage, life, period, month)
-void FinancialFunctionsTest::testDB()
+void TestFinancialFunctions::testDB()
 {
   // Excel example: http://office.microsoft.com/en-us/excel/HP100623551033.aspx
 	CHECK_EVAL( "DB(1000000; 100000; 6; 1; 7)", 186083.3333333333 ) ;
@@ -115,7 +115,7 @@ void FinancialFunctionsTest::testDB()
 
 // Double declining balance depreciation
 // DDB(cost, salvage, life, period, factor)
-void FinancialFunctionsTest::testDDB()
+void TestFinancialFunctions::testDDB()
 {
 	// Excel example: http://office.microsoft.com/en-us/excel/HP100623561033.aspx
 	CHECK_EVAL( "DDB(2400; 300; 10*365; 1; 2)", 1.31506849315065 ) ;
@@ -178,7 +178,7 @@ void FinancialFunctionsTest::testDDB()
 
 // Euro conversion
 // EURO(currency)
-void FinancialFunctionsTest::testEURO()
+void TestFinancialFunctions::testEURO()
 {
   CHECK_EVAL( "EURO(\"ATS\")", 13.7603 );
   CHECK_EVAL( "EURO(\"BEF\")", 40.3399 );
@@ -229,7 +229,7 @@ void FinancialFunctionsTest::testEURO()
 
 // Currency conversion using Euro
 // EUROCONVERT(number,source,target)
-void FinancialFunctionsTest::testEUROCONVERT()
+void TestFinancialFunctions::testEUROCONVERT()
 {
   // 1 Euro to ...
   CHECK_EVAL( "EUROCONVERT(1;\"EUR\";\"ATS\")", 13.7603 );
@@ -421,7 +421,7 @@ void FinancialFunctionsTest::testEUROCONVERT()
 
 // Level-coupon bond
 // LEVEL_COUPON(faceValue; couponRate; couponsPerYear; years; marketRate)
-void FinancialFunctionsTest::testLEVELCOUPON()
+void TestFinancialFunctions::testLEVELCOUPON()
 {
   CHECK_EVAL( "LEVEL_COUPON(1000; .13; 1; 4; .1)",   1095.0959633904788 );
   CHECK_EVAL( "LEVEL_COUPON(1000; .13; 2; 4; .1)",   1096.9481913913939 );
@@ -432,7 +432,7 @@ void FinancialFunctionsTest::testLEVELCOUPON()
 
 // Yearly nominal interest rate
 // NOMINAL(effectiveRate, periods)
-void FinancialFunctionsTest::testNOMINAL()
+void TestFinancialFunctions::testNOMINAL()
 {
   CHECK_EVAL( "NOMINAL(13.5%; 12)",  0.1273031669590416 );
   CHECK_EVAL( "NOMINAL(13.5%; 12)",  0.1273031669590416 );
@@ -458,7 +458,7 @@ void FinancialFunctionsTest::testNOMINAL()
 
 // Straight-line depreciation
 // SLN(cost, salvage, life)
-void FinancialFunctionsTest::testSLN()
+void TestFinancialFunctions::testSLN()
 {
 	// Excel example: http://office.microsoft.com/en-us/excel/HP100623811033.aspx
 	CHECK_EVAL( "SLN(30000; 7500; 10)", 2250.0 ) ;
@@ -475,7 +475,7 @@ void FinancialFunctionsTest::testSLN()
 
 // Sum-of-years' digits depreciation
 // SYD(cost, salvage, life, period)
-void FinancialFunctionsTest::testSYD()
+void TestFinancialFunctions::testSYD()
 {
 	// Excel example: http://office.microsoft.com/en-us/excel/HP100623821033.aspx
 	CHECK_EVAL( "SYD(30000; 7500; 10; 1)",  4090.909090909090 ) ;
@@ -493,7 +493,7 @@ void FinancialFunctionsTest::testSYD()
 
 // Zero-coupon (pure discount) bond
 // ZERO_COUPON(faceValue; rate; years)
-void FinancialFunctionsTest::testZEROCOUPON()
+void TestFinancialFunctions::testZEROCOUPON()
 {
   CHECK_EVAL( "ZERO_COUPON(1000;.1;20)",  148.6436280241434531 );
   CHECK_EVAL( "ZERO_COUPON(1000;.2;20)",  26.0840533045888456 );
@@ -518,7 +518,7 @@ int main(int argc, char *argv[]) \
     return QTest::qExec( &tc, argc, argv ); \
 }
 
-KSPREAD_TEST(FinancialFunctionsTest)
-//QTEST_KDEMAIN(FinancialFunctionsTest, GUI)
+KSPREAD_TEST(TestFinancialFunctions)
+//QTEST_KDEMAIN(TestFinancialFunctions, GUI)
 
-#include "FinancialFunctionsTest.moc"
+#include "TestFinancialFunctions.moc"

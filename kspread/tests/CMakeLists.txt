@@ -54,27 +54,27 @@ add_test(Value valuetest)
 
 ########### next target ###############
 
-set(FinancialFunctionsTest_SRCS FinancialFunctionsTest.cpp)
+set(TestFinancialFunctions_SRCS TestFinancialFunctions.cpp)
 
-kde4_automoc(${FinancialFunctionsTest_SRCS})
+kde4_automoc(${TestFinancialFunctions_SRCS})
 
-kde4_add_executable(FinancialFunctionsTest RUN_UNINSTALLED ${FinancialFunctionsTest_SRCS})
+kde4_add_executable(TestFinancialFunctions RUN_UNINSTALLED ${TestFinancialFunctions_SRCS})
 
-target_link_libraries(FinancialFunctionsTest kspreadcommon ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestFinancialFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(FinancialFunctions FinancialFunctionsTest)
+add_test(FinancialFunctions TestFinancialFunctions)
 
 ########### next target ###############
 
-set(TrigFunctionsTest_SRCS TrigFunctionsTest.cpp)
+set(TestTrigFunctions_SRCS TestTrigFunctions.cpp)
 
-kde4_automoc(${TrigFunctionsTest_SRCS})
+kde4_automoc(${TestTrigFunctions_SRCS})
 
-kde4_add_executable(TrigFunctionsTest RUN_UNINSTALLED ${TrigFunctionsTest_SRCS})
+kde4_add_executable(TestTrigFunctions RUN_UNINSTALLED ${TestTrigFunctions_SRCS})
 
-target_link_libraries(TrigFunctionsTest kspreadcommon ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestTrigFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(TrigFunctions TrigFunctionsTest)
+add_test(TrigFunctions TestTrigFunctions)
 
 
 

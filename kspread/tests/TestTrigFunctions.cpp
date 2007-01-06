@@ -24,7 +24,7 @@
 #include <Formula.h>
 #include <Value.h>
 
-#include "TrigFunctionsTest.h"
+#include "TestTrigFunctions.h"
 
 #include <float.h> // DBL_EPSILON
 #include <math.h>
@@ -60,7 +60,7 @@ static Value RoundNumber(const Value& v)
     return v;  
 }
 
-Value TrigFunctionsTest::evaluate(const QString& formula)
+Value TestTrigFunctions::evaluate(const QString& formula)
 {
   Formula f;
   QString expr = formula;
@@ -91,7 +91,7 @@ namespace QTest
   }
 }
 
-void TrigFunctionsTest::testCOS()
+void TestTrigFunctions::testCOS()
 {
   // some trivial cases
   CHECK_EVAL( "COS(0)", 1);
@@ -231,7 +231,7 @@ void TrigFunctionsTest::testCOS()
 }
 
 // hyperbolic cosine
-void TrigFunctionsTest::testCOSH()
+void TestTrigFunctions::testCOSH()
 {
   CHECK_EVAL( "COSH(   0*PI()/64 )", 1.00000000000000 );
   CHECK_EVAL( "COSH(   1*PI()/64 )", 1.00120502763102 );
@@ -299,7 +299,7 @@ void TrigFunctionsTest::testCOSH()
   CHECK_EVAL( "COSH(  63*PI()/64 )", 11.0387967912398 );
 }
 
-void TrigFunctionsTest::testPI()
+void TestTrigFunctions::testPI()
 {
   CHECK_EVAL( "PI()", 3.14159265358979 );
   CHECK_EVAL( "2*PI()", 6.28318530717959);
@@ -310,7 +310,7 @@ void TrigFunctionsTest::testPI()
   CHECK_EVAL( "(2*PI())/(2*PI())", 1.0 );
 }
 
-void TrigFunctionsTest::testSIN()
+void TestTrigFunctions::testSIN()
 {
   // some trivial cases
   CHECK_EVAL( "SIN(0)", 0);
@@ -450,7 +450,7 @@ void TrigFunctionsTest::testSIN()
 }
 
 // hyperbolic sine
-void TrigFunctionsTest::testSINH()
+void TestTrigFunctions::testSINH()
 {
   CHECK_EVAL( "SINH(   0*PI()/64 )", 0.00000000000000 );
   CHECK_EVAL( "SINH(   1*PI()/64 )", 0.0491071008473137 );
@@ -518,7 +518,7 @@ void TrigFunctionsTest::testSINH()
   CHECK_EVAL( "SINH(  63*PI()/64 )", 10.9934086887683 );
 }
 
-void TrigFunctionsTest::testTAN()
+void TestTrigFunctions::testTAN()
 {
   // some trivial cases
   CHECK_EVAL( "TAN(0)", 0);
@@ -656,5 +656,5 @@ void TrigFunctionsTest::testTAN()
 }
 
 
-QTEST_KDEMAIN(TrigFunctionsTest, GUI)
-#include "TrigFunctionsTest.moc"
+QTEST_KDEMAIN(TestTrigFunctions, GUI)
+#include "TestTrigFunctions.moc"
