@@ -64,8 +64,8 @@ const Sheet* SheetView::sheet() const
 
 CellView SheetView::cellView( int col, int row )
 {
-    Q_ASSERT( 1 <= col <= KS_colMax );
-    Q_ASSERT( 1 <= row <= KS_rowMax );
+    Q_ASSERT( 1 <= col && col <= KS_colMax );
+    Q_ASSERT( 1 <= row && col <= KS_rowMax );
     if ( !d->cache.contains( QPoint(col,row) ) )
     {
         d->cache.insert( QPoint(col,row), new CellView( this, col, row ) );

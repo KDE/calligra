@@ -146,8 +146,8 @@ CellView::Private* CellView::Private::s_empty = 0;
 CellView::CellView( SheetView* sheetView, int col, int row )
     : d( Private::empty( sheetView->sheet() ) )
 {
-    Q_ASSERT( 0 <= col <= KS_colMax );
-    Q_ASSERT( 0 <= row <= KS_rowMax );
+    Q_ASSERT( 0 <= col && col <= KS_colMax );
+    Q_ASSERT( 0 <= row && row <= KS_rowMax );
 
     const Sheet* sheet = sheetView->sheet();
     Cell* const cell = sheet->cellAt( col, row );

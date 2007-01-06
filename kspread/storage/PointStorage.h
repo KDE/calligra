@@ -84,8 +84,8 @@ public:
      */
     T insert( int col, int row, const T& data )
     {
-        Q_ASSERT( 1 <= col <= KS_colMax );
-        Q_ASSERT( 1 <= row <= KS_rowMax );
+        Q_ASSERT( 1 <= col && col <= KS_colMax );
+        Q_ASSERT( 1 <= row && row <= KS_rowMax );
         // row's missing?
         if ( row > m_rows.count() )
         {
@@ -139,8 +139,8 @@ public:
      */
     T lookup( int col, int row ) const
     {
-        Q_ASSERT( 1 <= col <= KS_colMax );
-        Q_ASSERT( 1 <= row <= KS_rowMax );
+        Q_ASSERT( 1 <= col && col <= KS_colMax );
+        Q_ASSERT( 1 <= row && row <= KS_rowMax );
         // is the row not present?
         if ( row - 1 > m_rows.count() )
             return T();
@@ -162,8 +162,8 @@ public:
      */
     T take( int col, int row )
     {
-        Q_ASSERT( 1 <= col <= KS_colMax );
-        Q_ASSERT( 1 <= row <= KS_rowMax );
+        Q_ASSERT( 1 <= col && col <= KS_colMax );
+        Q_ASSERT( 1 <= row && row <= KS_rowMax );
         // row's missing?
         if ( row - 1 > m_rows.count() )
             return T();
@@ -215,7 +215,7 @@ public:
      */
     QList< QPair<QPoint,T> > insertRows( int position, int number = 1 )
     {
-        Q_ASSERT( 1 <= position <= KS_rowMax );
+        Q_ASSERT( 1 <= position && position <= KS_rowMax );
         // row's missing?
         if ( position - 1 > m_rows.count() )
             return QList< QPair<QPoint,T> >();
@@ -255,7 +255,7 @@ public:
      */
     QList< QPair<QPoint,T> > removeRows( int position, int number = 1 )
     {
-        Q_ASSERT( 1 <= position <= KS_rowMax );
+        Q_ASSERT( 1 <= position && position <= KS_rowMax );
         // row's missing?
         if ( position - 1 > m_rows.count() )
             return QList< QPair<QPoint,T> >();
