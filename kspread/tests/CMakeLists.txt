@@ -30,15 +30,15 @@ add_test(OpenFormula TestOpenFormula)
 
 ########### next target ###############
 
-set(rtreeperformance_SRCS rtreeperformancetest.cpp)
+set(BenchmarkRTree_SRCS BenchmarkRTree.cpp)
 
-kde4_automoc(${rtreeperformance_SRCS})
+kde4_automoc(${BenchmarkRTree_SRCS})
 
-kde4_add_executable(rtreeperformancetest RUN_UNINSTALLED ${rtreeperformance_SRCS})
+kde4_add_executable(BenchmarkRTree RUN_UNINSTALLED ${BenchmarkRTree_SRCS})
 
-target_link_libraries(rtreeperformancetest kdecore)
+target_link_libraries(BenchmarkRTree kdecore)
 
-# add_test(R-Tree rtreeperformancetest)
+# add_test(R-Tree BenchmarkRTreetest)
 
 ########### next target ###############
 
