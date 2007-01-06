@@ -50,7 +50,7 @@ inline tval elapsed(tval t)
 
 static QString printAverage( tval ticks, int counter )
 {
-    double ms = 0.0;
+    QString str;
     QProcess procCpuInfo;
     procCpuInfo.start( "cat /proc/cpuinfo");
     if ( procCpuInfo.waitForFinished() )
@@ -60,9 +60,18 @@ static QString printAverage( tval ticks, int counter )
         bool ok = true;
         double freq = reg.cap(1).toDouble( &ok );
         if ( ok )
-            ms = ticks / counter / freq;
+        {
+            double ms = 1000 * ticks / counter / freq;
+            str = QString("%1 ns/operations").arg( QString::number( ms, 'f', 2 ) );
+            if(ms > 1000)
+            {
+              ms = ticks / counter / freq;
+              str = QString("%1 us/operations").arg( QString::number( ms, 'f', 2 ) );
+            }
+        }
     }
-    return QString( "Average: %1/%2=%3 cycles/operation; %4 us/operation" ).arg( ticks ).arg( counter ).arg( ticks/counter ).arg( QString::number( ms, 'f', 3 ) );
+    return QString( "Average: %1/%2=%3 cycles/operation; %4" ).arg( ticks ).
+      arg( counter ).arg( ticks/counter ).arg( str );
 }
 
 } // namespace Time
