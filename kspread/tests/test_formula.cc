@@ -56,5 +56,4 @@ int main( int argc, char** argv )
 
   run( new FormulaParserTester() );
   run( new FormulaEvalTester() );
-  run( new FormulaOasisConversionTester() );
 }

@@ -49,16 +49,6 @@ private:
   void checkEval( const char *file, int line, const char* msg, const QString&, const Value& );
 };
 
-class FormulaOasisConversionTester : public Tester
-{
-public:
-  FormulaOasisConversionTester();
-  virtual QString name();
-  virtual void run();
-private:
-  void checkOasis( const char *file, int line, const char* msg, const QString&, const QString& );
-};
-
 } // namespace KSpread
 
 #endif // KSPREAD_FORMULA_TESTER

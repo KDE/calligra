@@ -86,7 +86,6 @@ TestRunner::TestRunner():
   // addTester( new StyleClusterTester() );
   addTester( new FormulaParserTester() );
   addTester( new FormulaEvalTester() );
-  addTester( new FormulaOasisConversionTester() );
 }
 
 TestRunner::~TestRunner()

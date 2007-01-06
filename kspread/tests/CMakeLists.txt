@@ -18,6 +18,18 @@ add_test(formula formulatest)
 
 ########### next target ###############
 
+set(TestOpenFormula_SRCS TestOpenFormula.cpp)
+
+kde4_automoc(${TestOpenFormula_SRCS})
+
+kde4_add_executable(TestOpenFormula RUN_UNINSTALLED ${TestOpenFormula_SRCS})
+
+target_link_libraries(TestOpenFormula kspreadcommon ${QT_QTTEST_LIBRARY})
+
+add_test(OpenFormula TestOpenFormula)
+
+########### next target ###############
+
 set(rtreeperformance_SRCS rtreeperformancetest.cpp)
 
 kde4_automoc(${rtreeperformance_SRCS})
