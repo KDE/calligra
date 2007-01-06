@@ -144,44 +144,28 @@ void Cell::setComment( const QString& comment, int col, int row ) const
     sheet()->setComment( Region(QPoint(col, row)), comment );
 }
 
-Conditions Cell::conditions( int col, int row ) const
+Conditions Cell::conditions() const
 {
-    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
-    if ( col == 0 )
-        col = this->column();
-    if ( row == 0 )
-        row = this->row();
-    return sheet()->conditions( col, row );
+    Q_ASSERT( !isDefault() );
+    return sheet()->conditions( d->column, d->row );
 }
 
-void Cell::setConditions( Conditions conditions, int col, int row ) const
+void Cell::setConditions( Conditions conditions ) const
 {
-    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
-    if ( col == 0 )
-        col = this->column();
-    if ( row == 0 )
-        row = this->row();
-    sheet()->setConditions( Region(QPoint(col, row)), conditions );
+    Q_ASSERT( !isDefault() );
+    sheet()->setConditions( Region(cellPosition()), conditions );
 }
 
-Validity Cell::validity( int col, int row ) const
+Validity Cell::validity() const
 {
-    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
-    if ( col == 0 )
-        col = this->column();
-    if ( row == 0 )
-        row = this->row();
-    return sheet()->validity( col, row );
+    Q_ASSERT( !isDefault() );
+    return sheet()->validity( d->column, d->row );
 }
 
-void Cell::setValidity( Validity validity, int col, int row ) const
+void Cell::setValidity( Validity validity ) const
 {
-    Q_ASSERT( !isDefault() || (col!=0 && row!=0) );
-    if ( col == 0 )
-        col = this->column();
-    if ( row == 0 )
-        row = this->row();
-    sheet()->setValidity( Region(QPoint(col, row)), validity );
+    Q_ASSERT( !isDefault() );
+    sheet()->setValidity( Region(cellPosition()), validity );
 }
 
 // Return the sheet that this cell belongs to.
@@ -1502,7 +1486,7 @@ void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter, int row, int column )
 
 QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles, int col, int row )
 {
-    Conditions conditions = this->conditions( col, row );
+    Conditions conditions = sheet()->conditions( col, row );
     if ( !conditions.isEmpty() )
     {
         // this has to be an automatic style
@@ -1591,7 +1575,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         xmlwriter.addAttribute( "table:number-columns-repeated", QString::number( repeated ) );
     }
 
-    Validity validity = this->validity( column, row );
+    Validity validity = sheet()->validity( column, row );
     if ( !validity.isEmpty() )
     {
         GenValidationStyle styleVal(&validity);
@@ -2757,9 +2741,9 @@ QPoint Cell::cellPosition() const
     return QPoint( d->column, d->row );
 }
 
-QLinkedList<Conditional> Cell::conditionList( int col, int row ) const
+QLinkedList<Conditional> Cell::conditionList() const
 {
-    Conditions conditions = this->conditions( col, row );
+    Conditions conditions = sheet()->conditions( d->column, d->row );
     return conditions.conditionList();
 }
 

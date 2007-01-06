@@ -1591,7 +1591,7 @@ bool Sheet::cellIsEmpty (Cell *c, TestType _type, int col, int row)
         return false;
       break;
     case Validity:
-      if ( !c->validity( col, row ).isEmpty() )
+      if ( !validity( col, row ).isEmpty() )
         return false;
       break;
     case Comment:
@@ -1599,7 +1599,7 @@ bool Sheet::cellIsEmpty (Cell *c, TestType _type, int col, int row)
         return false;
       break;
     case ConditionalCellAttribute:
-      if ( c->conditionList( col, row ).count() > 0)
+      if ( conditions( col, row ).conditionList().count() > 0)
         return false;
       break;
     }

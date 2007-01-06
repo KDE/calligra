@@ -207,20 +207,6 @@ public:
     void setComment( const QString& comment, int col = 0, int row = 0 ) const;
 
     /**
-     * \return the conditions associated with this cell
-     */
-    Conditions conditions( int col = 0, int row = 0 ) const;
-
-    void setConditions( Conditions conditions, int col = 0, int row = 0 ) const;
-
-    /**
-     * \return the validity checks associated with this cell
-     */
-    Validity validity( int col = 0, int row = 0 ) const;
-
-    void setValidity( Validity validity, int col = 0, int row = 0 ) const;
-
-    /**
      * Returns the value that this cell holds. It could be from the user
      * (i.e. when s/he enters a value) or a result of formula.
      */
@@ -645,9 +631,23 @@ public:
     //
 
     /**
+     * \return the conditions associated with this cell
+     */
+    Conditions conditions() const;
+
+    void setConditions( Conditions conditions ) const;
+
+    /**
+     * \return the validity checks associated with this cell
+     */
+    Validity validity() const;
+
+    void setValidity( Validity validity ) const;
+
+    /**
      * Gets a copy of the list of current conditions
      */
-    QLinkedList<Conditional> conditionList( int column = 0, int row = 0 ) const;
+    QLinkedList<Conditional> conditionList() const;
 
     /**
      * Replace the old set of conditions with a new one

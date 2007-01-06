@@ -426,7 +426,7 @@ void Canvas::validateSelection()
         int col = selection()->marker().x();
         int row = selection()->marker().y();
         Cell * cell = sheet->cellAt( col,row );
-        Validity validity = cell->validity( col, row );
+        Validity validity = sheet->validity( col, row );
         if ( validity.displayValidationInformation() )
         {
             QString title = validity.titleInfo();
