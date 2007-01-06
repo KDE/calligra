@@ -655,6 +655,24 @@ void TestTrigFunctions::testTAN()
   CHECK_EVAL( "TAN( 127*2*PI()/128 )", -0.0491268497694673 );
 }
 
+#include <QtTest/QtTest>
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <kapplication.h>
 
-QTEST_KDEMAIN(TestTrigFunctions, GUI)
+#define KSPREAD_TEST(TestObject) \
+int main(int argc, char *argv[]) \
+{ \
+    setenv("LC_ALL", "C", 1); \
+    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
+    KAboutData aboutData( "qttest", "qttest", "version" );  \
+    KCmdLineArgs::init(&aboutData); \
+    KApplication app; \
+    TestObject tc; \
+    return QTest::qExec( &tc, argc, argv ); \
+}
+
+KSPREAD_TEST(TestTrigFunctions)
+//QTEST_KDEMAIN(TestTrigFunctions, GUI)
+
 #include "TestTrigFunctions.moc"
