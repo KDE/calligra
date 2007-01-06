@@ -26,8 +26,6 @@
 
 #include "TestFinancialFunctions.h"
 
-#include <float.h> // DBL_EPSILON
-
 using namespace KSpread;
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult
