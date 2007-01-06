@@ -86,7 +86,7 @@ kde4_add_executable(TestCluster RUN_UNINSTALLED ${TestCluster_SRCS})
 
 target_link_libraries(TestCluster kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(Cluster TestCluster)
+#add_test(Cluster TestCluster)
 
 
 endif(KDE4_BUILD_TESTS)
