@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_VALUE_TEST
-#define KSPREAD_VALUE_TEST
+#ifndef KSPREAD_TEST_VALUE
+#define KSPREAD_TEST_VALUE
 
 #include <QtGui>
 #include <QtTest/QtTest>
@@ -26,7 +26,7 @@
 namespace KSpread
 {
 
-class ValueTester: public QObject
+class TestValue: public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
@@ -46,4 +46,4 @@ private Q_SLOTS:
 
 } // namespace KSpread
 
-#endif // KSPREAD_VALUE_TEST
+#endif // KSPREAD_TEST_VALUE

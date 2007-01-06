@@ -42,15 +42,15 @@ add_test(R-Tree rtreetest)
 
 ########### next target ###############
 
-set(valuetest_SRCS valuetest.cpp)
+set(TestValue_SRCS TestValue.cpp)
 
-kde4_automoc(${valuetest_SRCS})
+kde4_automoc(${TestValue_SRCS})
 
-kde4_add_executable(valuetest RUN_UNINSTALLED ${valuetest_SRCS})
+kde4_add_executable(TestValue RUN_UNINSTALLED ${TestValue_SRCS})
 
-target_link_libraries(valuetest kspreadcommon ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestValue kspreadcommon ${QT_QTTEST_LIBRARY})
 
-add_test(Value valuetest)
+add_test(Value TestValue)
 
 ########### next target ###############
 

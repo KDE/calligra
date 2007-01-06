@@ -24,11 +24,11 @@
 #include <Doc.h>
 #include <Value.h>
 
-#include "valuetest.h"
+#include "TestValue.h"
 
 using namespace KSpread;
 
-void ValueTester::testEmpty()
+void TestValue::testEmpty()
 {
   Value* v1;
 
@@ -38,7 +38,7 @@ void ValueTester::testEmpty()
   delete v1;
 }
 
-void ValueTester::testBoolean()
+void TestValue::testBoolean()
 {
   Value* v1;
 
@@ -63,7 +63,7 @@ void ValueTester::testBoolean()
   delete v1;
 }
 
-void ValueTester::testInteger()
+void TestValue::testInteger()
 {
   Value* v1;
 
@@ -82,7 +82,7 @@ void ValueTester::testInteger()
   delete v1;
 }
 
-void ValueTester::testFloat()
+void TestValue::testFloat()
 {
   Value* v1;
 
@@ -101,7 +101,7 @@ void ValueTester::testFloat()
   delete v1;
 }
 
-void ValueTester::testString()
+void TestValue::testString()
 {
   Value* v1;
 
@@ -120,7 +120,7 @@ void ValueTester::testString()
   delete v1;
 }
 
-void ValueTester::testDate()
+void TestValue::testDate()
 {
   Value* v1;
 
@@ -144,7 +144,7 @@ void ValueTester::testDate()
   delete v1;
 }
 
-void ValueTester::testTime()
+void TestValue::testTime()
 {
   Doc doc;
   Value* v1;
@@ -184,7 +184,7 @@ void ValueTester::testTime()
   delete v1;
 }
 
-void ValueTester::testError()
+void TestValue::testError()
 {
   // TODO error values
 
@@ -193,7 +193,7 @@ void ValueTester::testError()
   // TODO pow
 }
 
-void ValueTester::testArray()
+void TestValue::testArray()
 {
   Value* v1;
   Value* v2;
@@ -259,7 +259,7 @@ void ValueTester::testArray()
   delete v2;
 }
 
-void ValueTester::testCopy()
+void TestValue::testCopy()
 {
   Value* v1;
   Value* v2;
@@ -276,7 +276,7 @@ void ValueTester::testCopy()
   delete v2;
 }
 
-void ValueTester::testAssignment()
+void TestValue::testAssignment()
 {
   Value* v1;
   Value* v2;
@@ -293,7 +293,7 @@ void ValueTester::testAssignment()
   delete v2;
 }
 
-void ValueTester::testDetach()
+void TestValue::testDetach()
 {
   Value* v1;
   Value* v2;
@@ -310,5 +310,5 @@ void ValueTester::testDetach()
   delete v2;
 }
 
-QTEST_KDEMAIN(ValueTester, GUI)
-#include "valuetest.moc"
+QTEST_KDEMAIN(TestValue, GUI)
+#include "TestValue.moc"
