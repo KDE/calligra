@@ -239,7 +239,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		createDockWidget( &shapeSelectorFactory );
 
 		m_strokeFillPreview = new VStrokeFillPreview( part() );
-        createDock(i18n("Stroke/Fills"), m_strokeFillPreview);
+        //createDock(i18n("Stroke/Fills"), m_strokeFillPreview);
 
 		KoToolDockerFactory toolDockerFactory;
 		KoToolDocker * toolDocker =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
