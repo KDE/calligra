@@ -1214,7 +1214,7 @@ FormManager::slotStyle()
 		return;
 
 	KSelectAction *m_style = qobject_cast<KSelectAction*>(
-		m_collection->actionOfType<KSelectAction*>("change_style"));
+		m_collection->action("change_style"));
 	QString style = m_style->currentText();
 	activeForm()->widget()->setStyle( style);
 
