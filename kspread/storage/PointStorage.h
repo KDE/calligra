@@ -101,17 +101,14 @@ public:
         // the row exists
         else
         {
-            const int rowStart = m_rows.value( row - 1 );
-//             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
-//             const QList<int> cols = m_cols.mid( rowStart, rowLength );
-            QList<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
-            QList<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
-            QList<int>::const_iterator cit = qBinaryFind( cstart, cend, col );
+            const QList<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
+            const QList<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
+            const QList<int>::const_iterator cit = qBinaryFind( cstart, cend, col );
             // column's missing?
             if ( cit == cend )
             {
                 // determine the index where the data and column has to be inserted
-                const int index = rowStart + ( cend - cstart );
+                const int index = m_rows.value( row - 1 ) + ( cend - cstart );
                 // insert the actual data
                 m_data.insert( index, data );
                 // insert the column index
@@ -123,7 +120,7 @@ public:
             // column exists
             else
             {
-                const int index = rowStart + ( cit - cstart );
+                const int index = m_rows.value( row - 1 ) + ( cit - cstart );
                 const T oldData = m_data[ index ];
                 m_data[ index ] = data;
                 return oldData;
@@ -144,16 +141,13 @@ public:
         // is the row not present?
         if ( row - 1 > m_rows.count() )
             return T();
-        const int rowStart = m_rows.value( row - 1 );
-        const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
-        const QList<int> cols = m_cols.mid( rowStart, rowLength );
-        QList<int>::const_iterator cit = qBinaryFind( cols, col );
+        const QList<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
+        const QList<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
+        const QList<int>::const_iterator cit = qBinaryFind( cstart, cend, col );
         // is the col not present?
-        if ( cit == cols.constEnd() )
+        if ( cit == cend )
             return T();
-        const int index = cit - cols.constBegin();
-        const QList<T> data = m_data.mid( rowStart, rowLength );
-        return data.value( index );
+        return m_data.value( m_rows.value( row - 1 ) + ( cit - cstart ) );
     }
 
     /**
