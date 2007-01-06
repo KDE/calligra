@@ -209,10 +209,30 @@ public:
      */
     QVector< QPair<QPoint,T> > removeColumns( int position, int number = 1 )
     {
-        Q_UNUSED( position );
-        Q_UNUSED( number );
+        Q_ASSERT( 1 <= position && position <= KS_colMax );
         QVector< QPair<QPoint,T> > oldData;
-        // TODO
+        for ( int row = m_rows.count(); row > 0; --row )
+        {
+            const int rowStart = m_rows.value( row - 1 );
+            const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
+            const QVector<int> cols = m_cols.mid( rowStart, rowLength );
+            for ( int col = cols.count() - 1; col >= 0; --col )
+            {
+                if ( cols.value( col ) >= position )
+                {
+                    if ( cols.value( col ) < position + number )
+                    {
+                        oldData.append( qMakePair( QPoint( cols.value( col ), row ), m_data.value( rowStart + col ) ) );
+                        m_cols.remove( rowStart + col );
+                        m_data.remove( rowStart + col );
+                        for ( int r = row; r < m_rows.count(); ++r )
+                            --m_rows[r];
+                    }
+                    else
+                        m_cols[rowStart + col] -= number;
+                }
+            }
+        }
         return oldData;
     }
 
