@@ -21,9 +21,9 @@
 #define KSPREAD_POINT_STORAGE
 
 #include <QDebug>
-#include <QList>
 #include <QRect>
 #include <QString>
+#include <QVector>
 
 // #include "Global.h"
 #warning Include Global.h for KS_colMax, KS_rowMax.
@@ -90,9 +90,7 @@ public:
         if ( row > m_rows.count() )
         {
             // insert missing rows
-            int counter = row - m_rows.count();
-            while ( counter-- > 0 )
-                m_rows.append( m_data.count() );
+            m_rows.insert( m_rows.count(), row - m_rows.count(), m_data.count() );
             // append the actual data
             m_data.append( data );
             // append the column index
@@ -101,9 +99,9 @@ public:
         // the row exists
         else
         {
-            const QList<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
-            const QList<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
-            const QList<int>::const_iterator cit = qBinaryFind( cstart, cend, col );
+            const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
+            const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
+            const QVector<int>::const_iterator cit = qBinaryFind( cstart, cend, col );
             // column's missing?
             if ( cit == cend )
             {
@@ -141,9 +139,9 @@ public:
         // is the row not present?
         if ( row - 1 > m_rows.count() )
             return T();
-        const QList<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
-        const QList<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
-        const QList<int>::const_iterator cit = qBinaryFind( cstart, cend, col );
+        const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
+        const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
+        const QVector<int>::const_iterator cit = qBinaryFind( cstart, cend, col );
         // is the col not present?
         if ( cit == cend )
             return T();
@@ -163,8 +161,8 @@ public:
             return T();
         const int rowStart = m_rows.value( row - 1 );
         const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
-        const QList<int> cols = m_cols.mid( rowStart, rowLength );
-        QList<int>::const_iterator cit = qBinaryFind( cols, col );
+        const QVector<int> cols = m_cols.mid( rowStart, rowLength );
+        QVector<int>::const_iterator cit = qBinaryFind( cols, col );
         // column's missing?
         if ( cit == cols.constEnd() )
             return T();
@@ -172,9 +170,9 @@ public:
         // save the old data
         const T oldData = m_data[ index ];
         // remove the actual data
-        m_data.removeAt( index );
+        m_data.remove( index );
         // remove the column index
-        m_cols.removeAt( index );
+        m_cols.remove( index );
         // adjust the offsets of this row and the following rows
         for ( int r = row; r < m_rows.count(); ++r )
             --m_rows[r];
@@ -185,9 +183,9 @@ public:
      * Insert \p number columns at \p position .
      * \return the data, that became out of range (shifted over the end)
      */
-    QList< QPair<QPoint,T> > insertColumns( int position, int number = 1 )
+    QVector< QPair<QPoint,T> > insertColumns( int position, int number = 1 )
     {
-        QList< QPair<QPoint,T> > oldData;
+        QVector< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
@@ -196,9 +194,9 @@ public:
      * Removes \p number columns at \p position .
      * \return the removed data
      */
-    QList< QPair<QPoint,T> > removeColumns( int position, int number = 1 )
+    QVector< QPair<QPoint,T> > removeColumns( int position, int number = 1 )
     {
-        QList< QPair<QPoint,T> > oldData;
+        QVector< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
@@ -207,13 +205,13 @@ public:
      * Insert \p number rows at \p position .
      * \return the data, that became out of range (shifted over the end)
      */
-    QList< QPair<QPoint,T> > insertRows( int position, int number = 1 )
+    QVector< QPair<QPoint,T> > insertRows( int position, int number = 1 )
     {
         Q_ASSERT( 1 <= position && position <= KS_rowMax );
         // row's missing?
         if ( position - 1 > m_rows.count() )
-            return QList< QPair<QPoint,T> >();
-        QList< QPair<QPoint,T> > oldData;
+            return QVector< QPair<QPoint,T> >();
+        QVector< QPair<QPoint,T> > oldData;
         int dataCount = 0;
         int rowCount = 0;
         // save the old data
@@ -221,8 +219,8 @@ public:
         {
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
-            const QList<int> cols = m_cols.mid( rowStart, rowLength );
-            const QList<int> data = m_data.mid( rowStart, rowLength );
+            const QVector<int> cols = m_cols.mid( rowStart, rowLength );
+            const QVector<int> data = m_data.mid( rowStart, rowLength );
             for ( int col = 0; col < cols.count(); ++col )
                 oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
             dataCount += data.count();
@@ -231,11 +229,11 @@ public:
         // remove the out of range data
         while ( dataCount-- > 0 )
         {
-            m_data.removeLast();
-            m_cols.removeLast();
+            m_data.remove( m_data.count() - 1 );
+            m_cols.remove( m_cols.count() - 1 );
         }
         while ( rowCount-- > 0 )
-            m_rows.removeLast();
+            m_rows.remove( m_rows.count() - 1 );
         // insert the new rows
         const int index = m_rows.value( position - 1 );
         for ( int r = 0; r < number; ++r )
@@ -247,13 +245,13 @@ public:
      * Removes \p number rows at \p position .
      * \return the removed data
      */
-    QList< QPair<QPoint,T> > removeRows( int position, int number = 1 )
+    QVector< QPair<QPoint,T> > removeRows( int position, int number = 1 )
     {
         Q_ASSERT( 1 <= position && position <= KS_rowMax );
         // row's missing?
         if ( position - 1 > m_rows.count() )
-            return QList< QPair<QPoint,T> >();
-        QList< QPair<QPoint,T> > oldData;
+            return QVector< QPair<QPoint,T> >();
+        QVector< QPair<QPoint,T> > oldData;
         int dataCount = 0;
         int rowCount = 0;
         // save the old data
@@ -261,8 +259,8 @@ public:
         {
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
-            const QList<int> cols = m_cols.mid( rowStart, rowLength );
-            const QList<int> data = m_data.mid( rowStart, rowLength );
+            const QVector<int> cols = m_cols.mid( rowStart, rowLength );
+            const QVector<int> data = m_data.mid( rowStart, rowLength );
             for ( int col = 0; col < cols.count(); ++col )
                 oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
             dataCount += data.count();
@@ -274,11 +272,11 @@ public:
         // remove the out of range data
         while ( dataCount-- > 0 )
         {
-            m_data.removeAt( m_rows.value( position - 1 ) );
-            m_cols.removeAt( m_rows.value( position - 1 ) );
+            m_data.remove( m_rows.value( position - 1 ) );
+            m_cols.remove( m_rows.value( position - 1 ) );
         }
         while ( rowCount-- > 0 )
-            m_rows.removeAt( position - 1 );
+            m_rows.remove( position - 1 );
         return oldData;
     }
 
@@ -287,9 +285,9 @@ public:
      * The data formerly contained in \p rect becomes overridden.
      * \return the removed data
      */
-    QList< QPair<QPoint,T> > shiftLeft( const QRect& rect )
+    QVector< QPair<QPoint,T> > shiftLeft( const QRect& rect )
     {
-        QList< QPair<QPoint,T> > oldData;
+        QVector< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
@@ -298,9 +296,9 @@ public:
      * Shifts the data right of \p rect to the right by the width of \p rect .
      * \return the data, that became out of range (shifted over the end)
      */
-    QList< QPair<QPoint,T> > shiftRight( const QRect& rect )
+    QVector< QPair<QPoint,T> > shiftRight( const QRect& rect )
     {
-        QList< QPair<QPoint,T> > oldData;
+        QVector< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
@@ -310,9 +308,9 @@ public:
      * The data formerly contained in \p rect becomes overridden.
      * \return the removed data
      */
-    QList< QPair<QPoint,T> > shiftUp( const QRect& rect )
+    QVector< QPair<QPoint,T> > shiftUp( const QRect& rect )
     {
-        QList< QPair<QPoint,T> > oldData;
+        QVector< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
@@ -321,9 +319,9 @@ public:
      * Shifts the data below \p rect to the bottom by the height of \p rect .
      * \return the data, that became out of range (shifted over the end)
      */
-    QList< QPair<QPoint,T> > shiftDown( const QRect& rect )
+    QVector< QPair<QPoint,T> > shiftDown( const QRect& rect )
     {
-        QList< QPair<QPoint,T> > oldData;
+        QVector< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
     }
@@ -341,7 +339,7 @@ public:
         {
             const int rowStart = m_rows.value( row );
             const int rowLength = ( row + 1 < m_rows.count() ) ? m_rows.value( row + 1 ) - rowStart : -1;
-            const QList<int> cols = m_cols.mid( rowStart, rowLength );
+            const QVector<int> cols = m_cols.mid( rowStart, rowLength );
             maxCols = qMax( maxCols, cols.value( cols.count() - 1 ) );
         }
         for ( int row = 0; row < m_rows.count(); ++row )
@@ -349,8 +347,8 @@ public:
             str += '(';
             const int rowStart = m_rows.value( row );
             const int rowLength = ( row + 1 < m_rows.count() ) ? m_rows.value( row + 1 ) - rowStart : -1;
-            const QList<int> cols = m_cols.mid( rowStart, rowLength );
-            const QList<int> data = m_data.mid( rowStart, rowLength );
+            const QVector<int> cols = m_cols.mid( rowStart, rowLength );
+            const QVector<int> data = m_data.mid( rowStart, rowLength );
             int lastCol = 0;
             for ( int col = 0; col < cols.count(); ++col )
             {
@@ -372,9 +370,9 @@ public:
     }
 
 private:
-    QList<int> m_cols;    // stores the column indices (beginning with one)
-    QList<int> m_rows;    // stores the row offsets in m_data
-    QList<T>   m_data;    // stores the actual non-default data
+    QVector<int> m_cols;    // stores the column indices (beginning with one)
+    QVector<int> m_rows;    // stores the row offsets in m_data
+    QVector<T>   m_data;    // stores the actual non-default data
 };
 
 } // namespace KSpread
