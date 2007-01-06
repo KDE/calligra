@@ -125,7 +125,6 @@
 #include "Style.h"
 #include "StyleManager.h"
 #include "StyleManipulators.h"
-#include "testrunner.h"
 #include "Undo.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -7161,14 +7160,6 @@ void View::handleDamages( const QList<Damage*>& damages )
         canvas()->update();
     if ( refreshView )
         this->refreshView();
-}
-
-void View::runInternalTests()
-{
-    // run various tests, only for developers
-    KSpread::TestRunner* runner = new KSpread::TestRunner();
-    runner->exec();
-    delete runner;
 }
 
 void View::runInspector()

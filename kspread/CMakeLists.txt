@@ -60,14 +60,6 @@ kde4_add_ui_files(dialogs_DIR_SRCS
 	dialogs/SubtotalWidget.ui
 	)
 
-
-SET (tests_DIR_SRCS
-	tests/tester.cc
-	tests/testrunner.cc
-	tests/formula_tester.cc
-	tests/inspector.cc
-	)
-
 SET (functions_DIR_SRCS
 	functions/conversion.cpp
 	functions/database.cpp
@@ -140,8 +132,8 @@ SET (kspreadcommon_LIB_SRCS
 	ValueParser.cpp
 	View.cpp
 	ViewAdaptor.cpp
+	tests/inspector.cc
 	${dialogs_DIR_SRCS}
-	${tests_DIR_SRCS}
 	${functions_DIR_SRCS}
 	)
 

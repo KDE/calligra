@@ -501,7 +501,6 @@ public Q_SLOTS:
 
     void handleDamages( const QList<Damage*>& damages );
 
-    void runInternalTests();
     void runInspector();
 
     void initialiseMarkerFromSheet( Sheet *_sheet, const QPoint &point );
