@@ -43,6 +43,10 @@ private Q_SLOTS:
     void testShiftDown();
     void testInsertionPerformance();
     void testLookupPerformance();
+    void testInsertColumnsPerformance();
+    void testDeleteColumnsPerformance();
+    void testInsertRowsPerformance();
+    void testDeleteRowsPerformance();
 };
 
 } // namespace KSpread

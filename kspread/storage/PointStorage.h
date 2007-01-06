@@ -185,8 +185,21 @@ public:
      */
     QVector< QPair<QPoint,T> > insertColumns( int position, int number = 1 )
     {
+        Q_ASSERT( 1 <= position && position <= KS_colMax );
         QVector< QPair<QPoint,T> > oldData;
-        // TODO
+        for ( int row = 1; row <= m_rows.count(); ++row )
+        {
+            const int rowStart = m_rows.value( row - 1 );
+            const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
+            const QVector<int> cols = m_cols.mid( rowStart, rowLength );
+            for ( int col = 0; col < cols.count(); ++col )
+            {
+                if ( cols.value( col ) > KS_colMax - position )
+                    oldData.append( qMakePair( QPoint( cols.value( col ), row ), m_data.value( rowStart + col ) ) );
+                else if ( cols.value( col ) >= position )
+                    m_cols[rowStart + col] += number;
+            }
+        }
         return oldData;
     }
 
@@ -196,6 +209,8 @@ public:
      */
     QVector< QPair<QPoint,T> > removeColumns( int position, int number = 1 )
     {
+        Q_UNUSED( position );
+        Q_UNUSED( number );
         QVector< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
@@ -287,6 +302,7 @@ public:
      */
     QVector< QPair<QPoint,T> > shiftLeft( const QRect& rect )
     {
+        Q_UNUSED( rect );
         QVector< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
@@ -298,6 +314,7 @@ public:
      */
     QVector< QPair<QPoint,T> > shiftRight( const QRect& rect )
     {
+        Q_UNUSED( rect );
         QVector< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
@@ -310,6 +327,7 @@ public:
      */
     QVector< QPair<QPoint,T> > shiftUp( const QRect& rect )
     {
+        Q_UNUSED( rect );
         QVector< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;
@@ -321,6 +339,7 @@ public:
      */
     QVector< QPair<QPoint,T> > shiftDown( const QRect& rect )
     {
+        Q_UNUSED( rect );
         QVector< QPair<QPoint,T> > oldData;
         // TODO
         return oldData;

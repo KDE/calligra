@@ -476,6 +476,70 @@ void PointStorageTest::testLookupPerformance()
     qDebug() << qPrintable( Time::printAverage( ticks, counter ) );
 }
 
+void PointStorageTest::testInsertColumnsPerformance()
+{
+    PointStorage<int> storage;
+    for ( int c = 0; c < KS_colMax; ++c )
+    {
+        storage.m_data << 1;
+        storage.m_cols << 1;
+    }
+    storage.m_rows << 0;
+    qDebug() << "start measuring...";
+    Time::tval start = Time::stamp();
+    for ( int i = 1; i < 10000; ++i )
+        storage.insertColumns( 42, 3 );
+    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
+}
+
+void PointStorageTest::testDeleteColumnsPerformance()
+{
+    PointStorage<int> storage;
+    for ( int c = 0; c < KS_colMax; ++c )
+    {
+        storage.m_data << 1;
+        storage.m_cols << 1;
+    }
+    storage.m_rows << 0;
+    qDebug() << "start measuring...";
+    Time::tval start = Time::stamp();
+    for ( int i = 1; i < 10000; ++i )
+        storage.removeColumns( 42, 3 );
+    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
+}
+
+void PointStorageTest::testInsertRowsPerformance()
+{
+    PointStorage<int> storage;
+    for ( int r = 0; r < KS_rowMax; ++r )
+    {
+        storage.m_data << 1;
+        storage.m_cols << 1;
+        storage.m_rows << r;
+    }
+    qDebug() << "start measuring...";
+    Time::tval start = Time::stamp();
+    for ( int i = 1; i < 10000; ++i )
+        storage.insertRows( 42, 3 );
+    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
+}
+
+void PointStorageTest::testDeleteRowsPerformance()
+{
+    PointStorage<int> storage;
+    for ( int r = 0; r < KS_rowMax; ++r )
+    {
+        storage.m_data << 1;
+        storage.m_cols << 1;
+        storage.m_rows << r;
+    }
+    qDebug() << "start measuring...";
+    Time::tval start = Time::stamp();
+    for ( int i = 1; i < 10000; ++i )
+        storage.removeRows( 42, 3 );
+    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
+}
+
 
 QTEST_MAIN(PointStorageTest)
 
