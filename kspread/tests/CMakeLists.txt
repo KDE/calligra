@@ -30,15 +30,15 @@ target_link_libraries(rtreeperformancetest kdecore)
 
 ########### next target ###############
 
-set(rtreetest_SRCS rtreetest.cpp)
+set(TestRTree_SRCS TestRTree.cpp)
 
-kde4_automoc(${rtreetest_SRCS})
+kde4_automoc(${TestRTree_SRCS})
 
-kde4_add_executable(rtreetest RUN_UNINSTALLED ${rtreetest_SRCS})
+kde4_add_executable(TestRTree RUN_UNINSTALLED ${TestRTree_SRCS})
 
-target_link_libraries(rtreetest kdecore ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestRTree kdecore ${QT_QTTEST_LIBRARY})
 
-add_test(R-Tree rtreetest)
+add_test(R-Tree TestRTree)
 
 ########### next target ###############
 

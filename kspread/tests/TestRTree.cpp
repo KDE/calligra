@@ -2,7 +2,7 @@
 
 #include "RTree.h"
 
-#include "rtreetest.h"
+#include "TestRTree.h"
 
 using namespace KSpread;
 
@@ -39,7 +39,7 @@ public:
     virtual int type() const { return 1; }
 };
 
-void RTreeTest::testIntersectingPairs()
+void TestRTree::testIntersectingPairs()
 {
     RTree<SharedTestClass> tree;
     tree.insert( QRect(1,1,1,1), new DerivedClass(QString("foo") ) );
@@ -50,7 +50,7 @@ void RTreeTest::testIntersectingPairs()
     QCOMPARE(pairs[0].second->type(), 1);
 }
 
-void RTreeTest::testShiftRows()
+void TestRTree::testShiftRows()
 {
     RTree<SharedTestClass> tree;
     tree.insert( QRect(2,2,2,1), new DerivedClass(QString("foo") ) );
@@ -65,7 +65,7 @@ void RTreeTest::testShiftRows()
     QCOMPARE(pairs[2].second->member, QString("foo"));
 }
 
-void RTreeTest::testShiftColumns()
+void TestRTree::testShiftColumns()
 {
     RTree<SharedTestClass> tree;
     tree.insert( QRect(2,2,1,2), new DerivedClass(QString("foo") ) );
@@ -80,7 +80,7 @@ void RTreeTest::testShiftColumns()
     QCOMPARE(pairs[2].second->member, QString("foo"));
 }
 
-void RTreeTest::testUnshiftRows()
+void TestRTree::testUnshiftRows()
 {
     RTree<SharedTestClass> tree;
     tree.insert( QRect(5,2,2,1), new DerivedClass(QString("foo") ) );
@@ -95,7 +95,7 @@ void RTreeTest::testUnshiftRows()
     QCOMPARE(pairs[2].second->member, QString("foo"));
 }
 
-void RTreeTest::testUnshiftColumns()
+void TestRTree::testUnshiftColumns()
 {
     RTree<SharedTestClass> tree;
     tree.insert( QRect(2,5,1,2), new DerivedClass(QString("foo") ) );
@@ -110,5 +110,5 @@ void RTreeTest::testUnshiftColumns()
     QCOMPARE(pairs[2].second->member, QString("foo"));
 }
 
-QTEST_MAIN(RTreeTest)
-#include "rtreetest.moc"
+QTEST_MAIN(TestRTree)
+#include "TestRTree.moc"

@@ -1,12 +1,12 @@
-#ifndef KSPREAD_RTREE_TEST
-#define KSPREAD_RTREE_TEST
+#ifndef KSPREAD_TEST_RTREE
+#define KSPREAD_TEST_RTREE
 
 #include <QtTest/QtTest>
 
 namespace KSpread
 {
 
-class RTreeTest: public QObject
+class TestRTree: public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
@@ -19,4 +19,4 @@ private Q_SLOTS:
 
 } // namespace KSpread
 
-#endif // KSPREAD_RTREE_TEST
+#endif // KSPREAD_TEST_RTREE
