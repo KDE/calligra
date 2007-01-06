@@ -1,2 +1,19 @@
-The tests are run inside of kspread by pressing Ctrl + Shift + T.
-See ../DEBUG for more information.
+All tests are run by changing to this directory (using 'cd') and then 
+running 'ctest'. If a test fails, run that particular test to see the 
+error message(s) in details.
+
+The available tests so far:
+
+  FinancialFunctions
+  Formula
+  OpenFormula
+  RTree
+  TrigFunctions
+  Value
+
+
+Some tests are not intended only to check performance
+  BenchmarkCluster
+  BenchmarkRTree
+  
+They are not executed using 'ctest', thus you have to run it manually.  
