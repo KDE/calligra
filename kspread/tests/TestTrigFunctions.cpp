@@ -27,9 +27,6 @@
 #include "TestTrigFunctions.h"
 
 #include <float.h> // DBL_EPSILON
-#include <math.h>
-
-using namespace KSpread;
 
 using namespace KSpread;
 
