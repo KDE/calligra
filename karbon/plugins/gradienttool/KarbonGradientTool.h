@@ -42,13 +42,18 @@ public:
     ~KarbonGradientTool();
 
     void paint( QPainter &painter, KoViewConverter &converter );
+    void repaintDecorations();
 
     void mousePressEvent( KoPointerEvent *event ) ;
     void mouseMoveEvent( KoPointerEvent *event );
     void mouseReleaseEvent( KoPointerEvent *event );
+    void keyPressEvent(QKeyEvent *event);
 
     void activate (bool temporary=false);
     void deactivate();
+
+private slots:
+    virtual void resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res );
 
 private:
     /// the base class for gradient editing strategies
@@ -72,6 +77,12 @@ private:
         QUndoCommand * createCommand();
         /// schedules a repaint of the shape and gradient handles
         void repaint() const;
+        /// sets the handle radius used for painting the handles
+        static void setHandleRadius( int radius ) { m_handleRadius = radius; }
+        /// returns the actual handle radius
+        static int handleRadius() { return m_handleRadius; }
+        /// returns the gradient handles bounding rect
+        QRectF boundingRect();
     protected:
         /// paints a handle at the given position
         void paintHandle( QPainter &painter, const QPointF &position );
@@ -85,6 +96,7 @@ private:
         QBrush m_newBackground;   ///< the new background brush
         QList<QPointF> m_handles; ///< the list of handles
     private:
+        static int m_handleRadius; ///< the handle radius for all gradient strategies
         bool m_editing; /// the edit mode flag
     };
 

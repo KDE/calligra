@@ -64,6 +64,13 @@ void KarbonGradientTool::paint( QPainter &painter, KoViewConverter &converter )
     }
 }
 
+void KarbonGradientTool::repaintDecorations()
+{
+    foreach( GradientStrategy *strategy, m_gradients )
+        m_canvas->updateCanvas( strategy->boundingRect() );
+}
+
+
 void KarbonGradientTool::mousePressEvent( KoPointerEvent *event )
 {
     Q_UNUSED( event )
@@ -108,6 +115,27 @@ void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
     }
 }
 
+void KarbonGradientTool::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+        case Qt::Key_I:
+        {
+            uint handleRadius = GradientStrategy::handleRadius();
+            if(event->modifiers() & Qt::ControlModifier)
+                handleRadius--;
+            else
+                handleRadius++;
+            m_canvas->resourceProvider()->setHandleRadius( handleRadius );
+        }
+        break;
+        default:
+            event->ignore();
+            return;
+    }
+    event->accept();
+}
+
 void KarbonGradientTool::activate( bool temporary )
 {
     Q_UNUSED(temporary);
@@ -143,6 +171,12 @@ void KarbonGradientTool::activate( bool temporary )
         m_gradients.last()->repaint();
     }
 
+    if( m_gradients.count() == 0 )
+    {
+        emit sigDone();
+        return;
+    }
+    m_gradients.first()->setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
     useCursor(Qt::ArrowCursor, true);
 }
 
@@ -157,6 +191,24 @@ void KarbonGradientTool::deactivate()
     foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
         shape->repaint();
 }
+
+void KarbonGradientTool::resourceChanged( KoCanvasResource::EnumCanvasResource key, const QVariant & res )
+{
+    switch( key )
+    {
+        case KoCanvasResource::HandleRadius:
+            foreach( GradientStrategy *strategy, m_gradients )
+                strategy->repaint();
+            GradientStrategy::setHandleRadius( res.toUInt() );
+            foreach( GradientStrategy *strategy, m_gradients )
+                strategy->repaint();
+        break;
+        default:
+            return;
+    }
+}
+
+int KarbonGradientTool::GradientStrategy::m_handleRadius = 3;
 
 KarbonGradientTool::GradientStrategy::GradientStrategy( KoShape *shape )
 : m_shape( shape ),m_selectedHandle( -1 ), m_editing( false )
@@ -190,22 +242,18 @@ bool KarbonGradientTool::GradientStrategy::selectHandle( const QPointF &mousePos
 
 void KarbonGradientTool::GradientStrategy::paintHandle( QPainter &painter, const QPointF &position )
 {
-    // TODO get the handle radius from a global property
-    int handleRadius = 3;
-    painter.drawRect( QRectF( position.x()-handleRadius, position.y()-handleRadius, 2*handleRadius, 2*handleRadius ) );
+    painter.drawRect( QRectF( position.x()-m_handleRadius, position.y()-m_handleRadius, 2*m_handleRadius, 2*m_handleRadius ) );
 }
 
 bool KarbonGradientTool::GradientStrategy::mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos )
 {
-    // TODO get the handle radius from a global property
-    int handleRadius = 3;
-    if( mousePos.x() < m_shape->position().x()+handlePos.x()-handleRadius )
+    if( mousePos.x() < m_shape->position().x()+handlePos.x()-m_handleRadius )
         return false;
-    if( mousePos.x() > m_shape->position().x()+handlePos.x()+handleRadius )
+    if( mousePos.x() > m_shape->position().x()+handlePos.x()+m_handleRadius )
         return false;
-    if( mousePos.y() < m_shape->position().y()+handlePos.y()-handleRadius )
+    if( mousePos.y() < m_shape->position().y()+handlePos.y()-m_handleRadius )
         return false;
-    if( mousePos.y() > m_shape->position().y()+handlePos.y()+handleRadius )
+    if( mousePos.y() > m_shape->position().y()+handlePos.y()+m_handleRadius )
         return false;
     return true;
 }
@@ -227,22 +275,24 @@ QUndoCommand * KarbonGradientTool::GradientStrategy::createCommand()
     return new KoShapeBackgroundCommand( shapes << m_shape, m_newBackground, 0 );
 }
 
-void KarbonGradientTool::GradientStrategy::repaint() const
+QRectF KarbonGradientTool::GradientStrategy::boundingRect()
 {
+    QMatrix matrix = m_shape->transformationMatrix( 0 );
     // calculate the bounding rect of the handles
-    QRectF boundingRect( m_handles[0], QSize(0,0) );
+    QRectF bbox( matrix.map( m_handles[0] ), QSize(0,0) );
     for( int i = 1; i < m_handles.count(); ++i )
     {
-        QPointF handle = m_handles[i];
-        boundingRect.setLeft( qMin( handle.x(), boundingRect.left() ) );
-        boundingRect.setRight( qMax( handle.x(), boundingRect.right() ) );
-        boundingRect.setTop( qMin( handle.y(), boundingRect.top() ) );
-        boundingRect.setBottom( qMax( handle.y(), boundingRect.bottom() ) );
+        QPointF handle = matrix.map( m_handles[i] );
+        bbox.setLeft( qMin( handle.x(), bbox.left() ) );
+        bbox.setRight( qMax( handle.x(), bbox.right() ) );
+        bbox.setTop( qMin( handle.y(), bbox.top() ) );
+        bbox.setBottom( qMax( handle.y(), bbox.bottom() ) );
     }
-    // TODO get the handle radius from a global property
-    int handleRadius = 3;
-    boundingRect.adjust( -handleRadius, -handleRadius, handleRadius, handleRadius );
-    m_shape->repaint( boundingRect );
+    return bbox.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius );
+}
+
+void KarbonGradientTool::GradientStrategy::repaint() const
+{
     m_shape->repaint();
 }
 
