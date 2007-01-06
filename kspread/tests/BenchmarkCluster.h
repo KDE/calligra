@@ -26,23 +26,10 @@
 namespace KSpread
 {
 
-class ClusterTest : public QObject
+class ClusterBenchmark : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-#if 0
-    void testInsertion();
-    void testLookup();
-    void testDeletion();
-    void testInsertColumns();
-    void testDeleteColumns();
-    void testInsertRows();
-    void testDeleteRows();
-    void testShiftLeft();
-    void testShiftRight();
-    void testShiftUp();
-    void testShiftDown();
-#endif
     void testInsertionPerformance();
     void testLookupPerformance();
 };
