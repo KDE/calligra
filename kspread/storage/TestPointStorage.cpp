@@ -444,6 +444,7 @@ void PointStorageTest::testInsertionPerformance()
         ticks += measure( start );
     }
     qDebug() << counter << " insertions in " << ticks << " ticks";
+    qDebug() << "Average is " << ticks/counter << " ticks/insertions";
 }
 
 void PointStorageTest::testLookupPerformance()
@@ -498,6 +499,7 @@ void PointStorageTest::testLookupPerformance()
         ticks += measure( start );
     }
     qDebug() << counter << " lookups in " << ticks << " ticks";
+    qDebug() << "Average is " << ticks/counter << " ticks/lookup";
 }
 
 
