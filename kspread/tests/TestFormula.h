@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2004 Ariya Hidayat <ariya@kde.org>
+   Copyright 2004,2007 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,38 +14,36 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_TEST_RUNNER
-#define KSPREAD_TEST_RUNNER
+#ifndef KSPREAD_TEST_FORMULA
+#define KSPREAD_TEST_FORMULA
 
-#include <kdialog.h>
+#include <QtGui>
+#include <QtTest/QtTest>
 
 namespace KSpread
 {
 
-class Tester;
-
-class TestRunner : public KDialog
+class TestFormula: public QObject
 {
 Q_OBJECT
 
-public:
-  TestRunner();
-  ~TestRunner();
-  
-  void addTester( Tester* tester );
-  
-private slots:
-  void runTest();
-  
+private Q_SLOTS:
+  void testTokenizer();
+  void testConstant();
+  void testUnary();
+  void testBinary();
+  void testOperators();
+  void testString();
+  void testFunction();
+  void testInlineArrays();
+
 private:
-  class Private;
-  Private* d;
+  Value evaluate(const QString&, Value&);
 };
 
-}
+} // namespace KSpread
 
-#endif // KSPREAD_TEST_RUNNER
-
+#endif // KSPREAD_TEST_FORMULA

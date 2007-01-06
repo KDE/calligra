@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2004 Ariya Hidayat <ariya@kde.org>
+   Copyright 2004,2007 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,32 +14,21 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <klocale.h>
-#include <kdebug.h>
 
-#include "tester.h"
-#include "formula_tester.h"
+#include "qtest_kde.h"
 
 #include <Formula.h>
+#include <Util.h>
 #include <Value.h>
 
-#define CHECK_PARSE(x,y)  checkParse(__FILE__,__LINE__,#x,x,y)
-#define CHECK_EVAL(x,y)  checkEval(__FILE__,__LINE__,#x,x,y)
-#define CHECK_OASIS(x,y)  checkOasis(__FILE__,__LINE__,#x,x,y)
+#include "TestFormula.h"
 
 using namespace KSpread;
 
-FormulaParserTester::FormulaParserTester(): Tester()
-{
-}
-
-QString FormulaParserTester::name()
-{
-  return QString("Formula (Parser)");
-}
 
 static char encodeTokenType( const Token& token )
 {
@@ -84,11 +73,10 @@ static QString describeTokenCodes( const QString& tokenCodes )
   return result.prepend("{").append("}");
 }
 
-void FormulaParserTester::checkParse( const char *file, int line, const char* msg,
-  const QString& formula, const QString& tokenCodes )
-{
-  testCount++;
+#define CHECK_TOKENIZE(x,y) QCOMPARE(tokenizeFormula(x), QString(y))
 
+static QString tokenizeFormula(const QString& formula)
+{
   Formula f;
   QString expr = formula;
   expr.prepend( '=' );
@@ -100,111 +88,29 @@ void FormulaParserTester::checkParse( const char *file, int line, const char* ms
     for( int i = 0; i < tokens.count(); i++ )
       resultCodes.append( encodeTokenType( tokens[i] ) );
 
-  if( resultCodes != tokenCodes )
-  {
-    QString message = msg;
-    message.append( " Result: ").append( describeTokenCodes( resultCodes ) );
-    message.append( " Expected: ").append( describeTokenCodes( tokenCodes ) );
-    fail( file, line, message );
-  }
+  return resultCodes;
 }
 
-void FormulaParserTester::run()
+
+// because we may need to promote expected value from integer to float
+#define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
+
+Value TestFormula::evaluate(const QString& formula, Value& ex)
 {
-  testCount = 0;
-  errorList.clear();
-
-  // simple, single-token formulas
-  CHECK_PARSE( "True", "x" );
-  CHECK_PARSE( "False", "x" );
-  CHECK_PARSE( "36", "i" );
-  CHECK_PARSE( "0", "i" );
-  CHECK_PARSE( "3.14159", "f" );
-  CHECK_PARSE( ".25", "f" );
-  CHECK_PARSE( "1e-9", "f" );
-  CHECK_PARSE( "2e3", "f" );
-  CHECK_PARSE( ".3333e0", "f" );
-
-  // cell/range/identifier
-  CHECK_PARSE( "A1", "c" );
-  CHECK_PARSE( "Sheet1!A1", "c" );
-  CHECK_PARSE( "'Sheet1'!A1", "c" );
-  CHECK_PARSE( "'Sheet One'!A1", "c" );
-  CHECK_PARSE( "2006!A1", "c" );
-  CHECK_PARSE( "2006bak!A1", "c" );
-  CHECK_PARSE( "2006bak2!A1", "c" );
-  CHECK_PARSE( "'2006bak2'!A1", "c" );
-  CHECK_PARSE( "A1:B100", "r" );
-  CHECK_PARSE( "Sheet1!A1:B100", "r" );
-  CHECK_PARSE( "'Sheet One'!A1:B100", "r" );
-  CHECK_PARSE( "SIN", "x" );
-  // log2 and log10 are cell references and function identifiers
-  CHECK_PARSE( "LOG2", "c" );
-  CHECK_PARSE( "LOG10:11", "r" );
-  CHECK_PARSE( "LOG2(2)", "xoio" );
-  CHECK_PARSE( "LOG10(10)", "xoio" );
-
-  // operators
-  CHECK_PARSE( "+", "o" );
-  CHECK_PARSE( "-", "o" );
-  CHECK_PARSE( "*", "o" );
-  CHECK_PARSE( "/", "o" );
-  CHECK_PARSE( "+", "o" );
-  CHECK_PARSE( "^", "o" );
-  CHECK_PARSE( "(", "o" );
-  CHECK_PARSE( ")", "o" );
-  CHECK_PARSE( ",", "o" );
-  CHECK_PARSE( ";", "o" );
-  CHECK_PARSE( "=", "o" );
-  CHECK_PARSE( "<", "o" );
-  CHECK_PARSE( ">", "o" );
-  CHECK_PARSE( "<=", "o" );
-  CHECK_PARSE( ">=", "o" );
-  CHECK_PARSE( "%", "o" );
-
-  // commonly used formulas
-  CHECK_PARSE( "A1+A2", "coc" );
-  CHECK_PARSE( "2.5*B1", "foc" );
-  CHECK_PARSE( "SUM(A1:Z10)", "xoro" );
-  CHECK_PARSE( "MAX(Sheet1!Sales)", "xoro" );
-  CHECK_PARSE( "-ABS(A1)", "oxoco" );
-
-  // should be correctly parsed though they are nonsense (can't be evaluated)
-  CHECK_PARSE( "0E0.5", "ff" );
-  CHECK_PARSE( "B3 D4:D5 Sheet1!K1", "crc" );
-  CHECK_PARSE( "SIN A1", "xc" );
-  CHECK_PARSE( "SIN A1:A20", "xr" );
-
-  // invalid formulas, can't be parsed correctly
-  CHECK_PARSE( "+1.23E", QString::null );
-
-#ifdef KSPREAD_INLINE_ARRAYS
-  // inline arrays
-  CHECK_PARSE( "{1;2|3;4}", "oioioioio" );
-#endif
-}
-
-FormulaEvalTester::FormulaEvalTester(): Tester()
-{
-}
-
-QString FormulaEvalTester::name()
-{
-  return QString("Formula (Eval)");
-}
-
-void FormulaEvalTester::checkEval( const char *file, int line, const char* msg,
-  const QString& formula, const Value& expected )
-{
-  testCount++;
-
   Formula f;
   QString expr = formula;
   if ( expr[0] != '=' )
     expr.prepend( '=' );
   f.setExpression( expr );
   Value result = f.eval();
+  
+  if(result.isFloat() && ex.isInteger())
+    ex = Value(ex.asFloat());
+  if(result.isInteger() && ex.isFloat())
+    result = Value(result.asFloat());  
 
+  // TODO: compare arrays
+#if 0
   bool equality = false;
   if ( expected.type() == Value::Array )
   {
@@ -216,39 +122,103 @@ void FormulaEvalTester::checkEval( const char *file, int line, const char* msg,
       for ( uint col = 0; col < cols; ++col )
         if ( !result.element(col,row).equal( expected.element(col,row) ) ) break;
     equality = true;
-  }
-  else
-    equality = result.equal( expected );
+#endif
 
-  if( !equality )
+  return result;
+}
+
+namespace QTest 
+{
+  template<>
+  char *toString(const Value& value)
   {
     QString message;
     QTextStream ts( &message, QIODevice::WriteOnly );
-    ts << msg;
-    ts << " Result: " << result;
-    ts << " Expected: " << expected;
-    fail( file, line, message );
+    ts << value;
+    return qstrdup(message.toLatin1());
   }
 }
 
-
-void FormulaEvalTester::run()
+void TestFormula::testTokenizer()
 {
-  testCount = 0;
-  errorList.clear();
+  // simple, single-token formulas
+  CHECK_TOKENIZE( "True", "x" );
+  CHECK_TOKENIZE( "False", "x" );
+  CHECK_TOKENIZE( "36", "i" );
+  CHECK_TOKENIZE( "0", "i" );
+  CHECK_TOKENIZE( "3.14159", "f" );
+  CHECK_TOKENIZE( ".25", "f" );
+  CHECK_TOKENIZE( "1e-9", "f" );
+  CHECK_TOKENIZE( "2e3", "f" );
+  CHECK_TOKENIZE( ".3333e0", "f" );
 
+  // cell/range/identifier
+  CHECK_TOKENIZE( "A1", "c" );
+  CHECK_TOKENIZE( "Sheet1!A1", "c" );
+  CHECK_TOKENIZE( "'Sheet1'!A1", "c" );
+  CHECK_TOKENIZE( "'Sheet One'!A1", "c" );
+  CHECK_TOKENIZE( "2006!A1", "c" );
+  CHECK_TOKENIZE( "2006bak!A1", "c" );
+  CHECK_TOKENIZE( "2006bak2!A1", "c" );
+  CHECK_TOKENIZE( "'2006bak2'!A1", "c" );
+  CHECK_TOKENIZE( "A1:B100", "r" );
+  CHECK_TOKENIZE( "Sheet1!A1:B100", "r" );
+  CHECK_TOKENIZE( "'Sheet One'!A1:B100", "r" );
+  CHECK_TOKENIZE( "SIN", "x" );
+  
+  // log2 and log10 are cell references and function identifiers
+  CHECK_TOKENIZE( "LOG2", "c" );
+  CHECK_TOKENIZE( "LOG10:11", "r" );
+  CHECK_TOKENIZE( "LOG2(2)", "xoio" );
+  CHECK_TOKENIZE( "LOG10(10)", "xoio" );
+
+  // operators
+  CHECK_TOKENIZE( "+", "o" );
+  CHECK_TOKENIZE( "-", "o" );
+  CHECK_TOKENIZE( "*", "o" );
+  CHECK_TOKENIZE( "/", "o" );
+  CHECK_TOKENIZE( "+", "o" );
+  CHECK_TOKENIZE( "^", "o" );
+  CHECK_TOKENIZE( "(", "o" );
+  CHECK_TOKENIZE( ")", "o" );
+  CHECK_TOKENIZE( ",", "o" );
+  CHECK_TOKENIZE( ";", "o" );
+  CHECK_TOKENIZE( "=", "o" );
+  CHECK_TOKENIZE( "<", "o" );
+  CHECK_TOKENIZE( ">", "o" );
+  CHECK_TOKENIZE( "<=", "o" );
+  CHECK_TOKENIZE( ">=", "o" );
+  CHECK_TOKENIZE( "%", "o" );
+
+  // commonly used formulas
+  CHECK_TOKENIZE( "A1+A2", "coc" );
+  CHECK_TOKENIZE( "2.5*B1", "foc" );
+  CHECK_TOKENIZE( "SUM(A1:Z10)", "xoro" );
+  CHECK_TOKENIZE( "MAX(Sheet1!Sales)", "xoro" );
+  CHECK_TOKENIZE( "-ABS(A1)", "oxoco" );
+
+  // should be correctly parsed though they are nonsense (can't be evaluated)
+  CHECK_TOKENIZE( "0E0.5", "ff" );
+  CHECK_TOKENIZE( "B3 D4:D5 Sheet1!K1", "crc" );
+  CHECK_TOKENIZE( "SIN A1", "xc" );
+  CHECK_TOKENIZE( "SIN A1:A20", "xr" );
+
+  // invalid formulas, can't be parsed correctly
+  CHECK_TOKENIZE( "+1.23E", QString() );
+}
+
+void TestFormula::testConstant()
+{
   // simple constants
   CHECK_EVAL( "0", Value(0) );
   CHECK_EVAL( "1", Value(1) );
   CHECK_EVAL( "-1", Value(-1) );
   CHECK_EVAL( "3.14e7", Value(3.14e7) );
   CHECK_EVAL( "3.14e-7", Value(3.14e-7) );
+}
 
-
-  // simple binary operation
-  CHECK_EVAL( "0+0", Value(0) );
-  CHECK_EVAL( "1+1", Value(2) );
-
+void TestFormula::testUnary()
+{
   // unary minus
   CHECK_EVAL( "-1", Value(-1) );
   CHECK_EVAL( "--1", Value(1) );
@@ -270,16 +240,14 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "1.1-COS(0)", Value(0.1) );
   CHECK_EVAL( "1.2--COS(0)", Value(2.2) );
   CHECK_EVAL( "1.3---COS(0)", Value(0.3) );
+}
 
-  // no parentheses, checking operator precendences
-  CHECK_EVAL( "14+3*77", Value(245) );
-  CHECK_EVAL( "14-3*77", Value(-217) );
-  CHECK_EVAL( "26*4+81", Value(185) );
-  CHECK_EVAL( "26*4-81", Value(23) );
-  CHECK_EVAL( "30-45/3", Value(15) );
-  CHECK_EVAL( "45+45/3", Value(60) );
-  CHECK_EVAL( "4+3*2-1", Value(9) );
-
+void TestFormula::testBinary()
+{
+  // simple binary operation
+  CHECK_EVAL( "0+0", Value(0) );
+  CHECK_EVAL( "1+1", Value(2) );
+  
   // power operator is left associative
   CHECK_EVAL( "2^3", Value(8) );
   CHECK_EVAL( "2^3^2", Value(64) );
@@ -292,29 +260,73 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "1e3+7/0", Value::errorDIV0() );
   CHECK_EVAL( "2^(99/0)", Value::errorDIV0() );
 
+}
+
+void TestFormula::testOperators()
+{
+  // no parentheses, checking operator precendences
+  CHECK_EVAL( "14+3*77", Value(245) );
+  CHECK_EVAL( "14-3*77", Value(-217) );
+  CHECK_EVAL( "26*4+81", Value(185) );
+  CHECK_EVAL( "26*4-81", Value(23) );
+  CHECK_EVAL( "30-45/3", Value(15) );
+  CHECK_EVAL( "45+45/3", Value(60) );
+  CHECK_EVAL( "4+3*2-1", Value(9) );
+}
+
+void TestFormula::testString()
+{
   // string expansion ...
   CHECK_EVAL( "\"2\"+5", Value(7) );
   CHECK_EVAL( "2+\"5\"", Value(7) );
   CHECK_EVAL( "\"2\"+\"5\"", Value(7) );
+}
 
+void TestFormula::testFunction()
+{
   //the built-in sine function
   CHECK_EVAL ("SIN(0)", Value(0));
   CHECK_EVAL ("2+sin(\"2\"-\"2\")", Value(2));
   CHECK_EVAL ("\"1\"+sin(\"0\")", Value(1));
-
-
+}
+  
+void TestFormula::testInlineArrays()
+{
 #ifdef KSPREAD_INLINE_ARRAYS
   // inline arrays
+  CHECK_TOKENIZE( "{1;2|3;4}", "oioioioio" );
+  
   Value array(2,2);
-  array.setElement(0,0,Value(1));
-  array.setElement(1,0,Value(2));
-  array.setElement(0,1,Value(3));
-  array.setElement(1,1,Value(4));
+  array.setElement(0,0,Value((int)1));
+  array.setElement(1,0,Value((int)2));
+  array.setElement(0,1,Value((int)3));
+  array.setElement(1,1,Value((int)4));
   CHECK_EVAL( "={1;2|3;4}", array );
-  array.setElement(1,0,Value(0));
+
+  array.setElement(1,0,Value(0.0));
   CHECK_EVAL( "={1;SIN(0)|3;4}", array ); // "dynamic"
-  CHECK_EVAL( "=SUM({1;2|3;4})", Value(10) );
+  CHECK_EVAL( "=SUM({1;2|3;4})", Value(10) );  
 #endif
 }
 
+#include <QtTest/QtTest>
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <kapplication.h>
 
+#define KSPREAD_TEST(TestObject) \
+int main(int argc, char *argv[]) \
+{ \
+    setenv("LC_ALL", "C", 1); \
+    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
+    KAboutData aboutData( "qttest", "qttest", "version" );  \
+    KCmdLineArgs::init(&aboutData); \
+    KApplication app; \
+    TestObject tc; \
+    return QTest::qExec( &tc, argc, argv ); \
+}
+
+KSPREAD_TEST(TestFormula)
+//QTEST_KDEMAIN(TestFormula, GUI)
+
+#include "TestFormula.moc"
