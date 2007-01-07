@@ -61,12 +61,19 @@ static QString printAverage( tval ticks, int counter )
         double freq = reg.cap(1).toDouble( &ok );
         if ( ok )
         {
-            double ms = 1000 * ticks / counter / freq;
-            str = QString("%1 ns/operations").arg( QString::number( ms, 'f', 2 ) );
-            if(ms > 1000)
+            double time = 1000.0 * ticks / counter / freq; // ns
+            if ( time < 1000.0 )
+                str = QString("%1 ns/operation").arg( QString::number( time, 'f', 2 ) );
+            else
             {
-              ms = ticks / counter / freq;
-              str = QString("%1 us/operations").arg( QString::number( ms, 'f', 2 ) );
+                time /= 1000.0; // us
+                if ( time < 1000.0 )
+                    str = QString("%1 us/operation").arg( QString::number( time, 'f', 2 ) );
+                else
+                {
+                    time /= 1000.0; // ms
+                    str = QString("%1 ms/operation").arg( QString::number( time, 'f', 2 ) );
+                }
             }
         }
     }

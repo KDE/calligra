@@ -546,6 +546,38 @@ void PointStorageTest::testDeleteRowsPerformance()
     qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
 }
 
+void PointStorageTest::testShiftLeftPerformance()
+{
+    PointStorage<int> storage;
+    for ( int c = 0; c < KS_colMax; ++c )
+    {
+        storage.m_data << 1;
+        storage.m_cols << 1;
+    }
+    storage.m_rows << 0;
+    qDebug() << "start measuring...";
+    Time::tval start = Time::stamp();
+    for ( int i = 1; i < 10000; ++i )
+        storage.shiftLeft( QRect( 42, 1, 3, 1) );
+    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
+}
+
+void PointStorageTest::testShiftRightPerformance()
+{
+    PointStorage<int> storage;
+    for ( int c = 0; c < KS_colMax; ++c )
+    {
+        storage.m_data << 1;
+        storage.m_cols << 1;
+    }
+    storage.m_rows << 0;
+    qDebug() << "start measuring...";
+    Time::tval start = Time::stamp();
+    for ( int i = 1; i < 10000; ++i )
+        storage.shiftRight( QRect( 42, 1, 3, 1) );
+    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
+}
+
 
 QTEST_MAIN(PointStorageTest)
 
