@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CLUSTER_TEST
-#define KSPREAD_CLUSTER_TEST
+#ifndef KSPREAD_CLUSTER_BENCHMARK
+#define KSPREAD_CLUSTER_BENCHMARK
 
 #include <QtGui>
 #include <QtTest/QtTest>
@@ -32,8 +32,16 @@ class ClusterBenchmark : public QObject
 private Q_SLOTS:
     void testInsertionPerformance();
     void testLookupPerformance();
+    void testInsertColumnsPerformance();
+    void testDeleteColumnsPerformance();
+    void testInsertRowsPerformance();
+    void testDeleteRowsPerformance();
+    void testShiftLeftPerformance();
+    void testShiftRightPerformance();
+    void testShiftUpPerformance();
+    void testShiftDownPerformance();
 };
 
 } // namespace KSpread
 
-#endif // KSPREAD_CLUSTER_TEST
+#endif // KSPREAD_CLUSTER_BENCHMARK
