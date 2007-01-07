@@ -165,6 +165,33 @@ void TestMathFunctions::testCEILING()
   CHECK_EVAL( "CEILING(1; -2)", Value::errorNUM() );
 }
 
+void TestMathFunctions::testFIB()
+{
+  CHECK_EVAL( "FIB(1)", 1 );
+  CHECK_EVAL( "FIB(2)", 1 );
+  CHECK_EVAL( "FIB(3)", 2 );
+  CHECK_EVAL( "FIB(4)", 3 );
+  CHECK_EVAL( "FIB(5)", 5 );
+  CHECK_EVAL( "FIB(6)", 8 );
+  CHECK_EVAL( "FIB(7)", 13 );
+  CHECK_EVAL( "FIB(8)", 21 );
+  CHECK_EVAL( "FIB(9)", 34 );
+  CHECK_EVAL( "FIB(10)", 55 );
+  
+  // large number
+  CHECK_EVAL( "FIB(100)", 3.54224848179263E+20 );
+  CHECK_EVAL( "FIB(200)", 2.80571172992512E+41 );
+  CHECK_EVAL( "FIB(300)", 2.22232244629423E+62 );
+  CHECK_EVAL( "FIB(400)", 1.76023680645016E+83 );
+  CHECK_EVAL( "FIB(500)", 1.394232245617E+104 );
+  CHECK_EVAL( "FIB(600)", 1.10433070572954E+125 );
+  
+  // invalid   
+  CHECK_EVAL( "FIB(0)", Value::errorNUM() );
+  CHECK_EVAL( "FIB(-1)", Value::errorNUM() );
+  CHECK_EVAL( "FIB(\"text\")", Value::errorVALUE() );
+}
+
 
 #include <QtTest/QtTest>
 #include <kaboutdata.h>
