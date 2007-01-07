@@ -402,7 +402,7 @@ void PointStorageTest::testInsertionPerformance()
     {
         for ( int c = col; c <= cols; c += 1 )
         {
-            v = storage.insert( c, r, c );
+            storage.insert( c, r, c );
             counter += 1;
         }
     }
@@ -423,7 +423,7 @@ void PointStorageTest::testInsertionPerformance()
         {
             for ( int c = col; c <= cols && counter < iterations; c += 1 )
             {
-                v = storage.insert( c, r, c );
+                storage.insert( c, r, c );
                 counter += 1;
             }
         }
