@@ -275,8 +275,8 @@ void PointStorageTest::testShiftLeft()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.shiftLeft( QRect( 2, 2, 2, 2 ) );
-    storage.shiftLeft( QRect( 5, 5, 1, 1 ) );
+    storage.removeShiftLeft( QRect( 2, 2, 2, 2 ) );
+    storage.removeShiftLeft( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
     // (  ,  , 9,  ,  )
@@ -303,8 +303,8 @@ void PointStorageTest::testShiftRight()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.shiftRight( QRect( 2, 2, 2, 2 ) );
-    storage.shiftRight( QRect( 5, 5, 1, 1 ) );
+    storage.insertShiftRight( QRect( 2, 2, 2, 2 ) );
+    storage.insertShiftRight( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3,  ,  )
     // ( 4,  ,  , 5, 6,  ,  )
     // (  ,  ,  , 7, 8,  , 9)
@@ -331,8 +331,8 @@ void PointStorageTest::testShiftUp()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.shiftUp( QRect( 2, 2, 2, 2 ) );
-    storage.shiftUp( QRect( 5, 5, 1, 1 ) );
+    storage.removeShiftUp( QRect( 2, 2, 2, 2 ) );
+    storage.removeShiftUp( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
     // (  ,  ,  ,  , 9)
@@ -366,8 +366,8 @@ void PointStorageTest::testShiftDown()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.shiftDown( QRect( 2, 2, 2, 2 ) );
-    storage.shiftDown( QRect( 5, 5, 1, 1 ) );
+    storage.insertShiftDown( QRect( 2, 2, 2, 2 ) );
+    storage.insertShiftDown( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
     // (  ,  ,  ,  , 9)
@@ -706,7 +706,7 @@ void PointStorageTest::testShiftLeftPerformance()
     qDebug() << "start measuring...";
     Time::tval start = Time::stamp();
     for ( int i = 1; i < 10000; ++i )
-        storage.shiftLeft( QRect( 42, 1, 3, 1) );
+        storage.removeShiftLeft( QRect( 42, 1, 3, 1) );
     qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
 }
 
@@ -722,7 +722,7 @@ void PointStorageTest::testShiftRightPerformance()
     qDebug() << "start measuring...";
     Time::tval start = Time::stamp();
     for ( int i = 1; i < 10000; ++i )
-        storage.shiftRight( QRect( 42, 1, 3, 1) );
+        storage.insertShiftRight( QRect( 42, 1, 3, 1) );
     qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
 }
 

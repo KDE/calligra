@@ -80,8 +80,11 @@ public:
 
     /**
      * Returns the number of items in the storage.
-     * Usable to check the bounds while using Iterator.
+     * Usable to iterate over all non-default data.
      * \return number of items
+     * \see col()
+     * \see row()
+     * \see data()
      */
     int count() const
     {
@@ -330,7 +333,7 @@ public:
      * The data formerly contained in \p rect becomes overridden.
      * \return the removed data
      */
-    QVector< QPair<QPoint,T> > shiftLeft( const QRect& rect )
+    QVector< QPair<QPoint,T> > removeShiftLeft( const QRect& rect )
     {
         Q_ASSERT( 1 <= rect.left() && rect.left() <= KS_colMax );
         QVector< QPair<QPoint,T> > oldData;
@@ -360,10 +363,10 @@ public:
     }
 
     /**
-     * Shifts the data right of \p rect to the right by the width of \p rect .
+     * Shifts the data in and right of \p rect to the right by the width of \p rect .
      * \return the data, that became out of range (shifted over the end)
      */
-    QVector< QPair<QPoint,T> > shiftRight( const QRect& rect )
+    QVector< QPair<QPoint,T> > insertShiftRight( const QRect& rect )
     {
         Q_ASSERT( 1 <= rect.left() && rect.left() <= KS_colMax );
         QVector< QPair<QPoint,T> > oldData;
@@ -388,7 +391,7 @@ public:
      * The data formerly contained in \p rect becomes overridden.
      * \return the removed data
      */
-    QVector< QPair<QPoint,T> > shiftUp( const QRect& rect )
+    QVector< QPair<QPoint,T> > removeShiftUp( const QRect& rect )
     {
         Q_ASSERT( 1 <= rect.top() && rect.top() <= KS_rowMax );
         // row's missing?
@@ -421,10 +424,10 @@ public:
     }
 
     /**
-     * Shifts the data below \p rect to the bottom by the height of \p rect .
+     * Shifts the data in and below \p rect to the bottom by the height of \p rect .
      * \return the data, that became out of range (shifted over the end)
      */
-    QVector< QPair<QPoint,T> > shiftDown( const QRect& rect )
+    QVector< QPair<QPoint,T> > insertShiftDown( const QRect& rect )
     {
         Q_ASSERT( 1 <= rect.top() && rect.top() <= KS_rowMax );
         // row's missing?
@@ -554,6 +557,9 @@ public:
     /**
      * Returns the column of the non-default data at \p index .
      * \return the data's column at \p index .
+     * \see count()
+     * \see row()
+     * \see data()
      */
     int col( int index ) const
     {
@@ -563,6 +569,9 @@ public:
     /**
      * Returns the row of the non-default data at \p index .
      * \return the data's row at \p index .
+     * \see count()
+     * \see col()
+     * \see data()
      */
     int row( int index ) const
     {
@@ -572,6 +581,9 @@ public:
     /**
      * Returns the non-default data at \p index .
      * \return the data at \p index .
+     * \see count()
+     * \see col()
+     * \see row()
      */
     T data( int index ) const
     {
