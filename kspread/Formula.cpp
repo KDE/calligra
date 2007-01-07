@@ -653,9 +653,9 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
          QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
          if( exp.indexIn( cell ) != 0 )
          {
-
-           // we're done with named area
-           // (Tomas) huh? this doesn't seem to check for named areas ...
+           // regexp failed, means we have something like "Sheet2!TotalSales"
+           // and not "Sheet2!A2"
+           // thus, assume so far that it's a named area
            tokens.append( Token( Token::Range, tokenText, tokenStart ) );
            tokenText = "";
            state = Start;
@@ -1522,9 +1522,9 @@ Value Formula::eval() const
 
       // calling function
       case Opcode::Function:
+        // sanity check, this should not happen unless opcode is wrong
+        // (i.e. there's a bug in the compile() function)
         if( stack.count() < index )
-          // (Tomas) umm, how could that be ? I mean, the index value
-          //  is computed from the stack *confused*
           return Value::errorVALUE(); // not enough arguments
 
         args.clear();
