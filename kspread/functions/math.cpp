@@ -382,7 +382,7 @@ Value func_ceiling (valVector args, ValueCalc *calc, FuncExtra *)
 
   Value d = calc->div (number, res);
   if (calc->greater (Value(0), d))
-    return Value::errorVALUE();
+    return Value::errorNUM();
 
   Value rud = calc->roundDown (d);
   if (calc->approxEqual (rud, d))
