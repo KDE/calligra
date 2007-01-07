@@ -478,22 +478,44 @@ void PointStorageTest::testIteration()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QCOMPARE( (int)storage.first(), 0 );
-    QCOMPARE( (int)storage.last(), 11 );
-    PointStorage<int>::Iterator it = storage.first();
-    QCOMPARE( *(--it),  1 );
-    QCOMPARE( *(++it),  2 );
-    QCOMPARE( *(++it),  3 );
-    QCOMPARE( *(++it),  4 );
-    QCOMPARE( *(++it),  5 );
-    QCOMPARE( *(++it),  6 );
-    QCOMPARE( *(++it),  7 );
-    QCOMPARE( *(++it),  8 );
-    QCOMPARE( *(++it),  9 );
-    QCOMPARE( *(++it), 10 );
-    QCOMPARE( *(++it), 11 );
-    QCOMPARE( *(++it), 12 );
-    QCOMPARE( (int)(++it), 12 );
+    QCOMPARE( storage.data(  0 ),  1 );
+    QCOMPARE( storage.data(  1 ),  2 );
+    QCOMPARE( storage.data(  2 ),  3 );
+    QCOMPARE( storage.data(  3 ),  4 );
+    QCOMPARE( storage.data(  4 ),  5 );
+    QCOMPARE( storage.data(  5 ),  6 );
+    QCOMPARE( storage.data(  6 ),  7 );
+    QCOMPARE( storage.data(  7 ),  8 );
+    QCOMPARE( storage.data(  8 ),  9 );
+    QCOMPARE( storage.data(  9 ), 10 );
+    QCOMPARE( storage.data( 10 ), 11 );
+    QCOMPARE( storage.data( 11 ), 12 );
+
+    QCOMPARE( storage.col(  0 ),  1 );
+    QCOMPARE( storage.col(  1 ),  2 );
+    QCOMPARE( storage.col(  2 ),  5 );
+    QCOMPARE( storage.col(  3 ),  1 );
+    QCOMPARE( storage.col(  4 ),  2 );
+    QCOMPARE( storage.col(  5 ),  3 );
+    QCOMPARE( storage.col(  6 ),  2 );
+    QCOMPARE( storage.col(  7 ),  3 );
+    QCOMPARE( storage.col(  8 ),  5 );
+    QCOMPARE( storage.col(  9 ),  4 );
+    QCOMPARE( storage.col( 10 ),  1 );
+    QCOMPARE( storage.col( 11 ),  5 );
+
+    QCOMPARE( storage.row(  0 ),  1 );
+    QCOMPARE( storage.row(  1 ),  1 );
+    QCOMPARE( storage.row(  2 ),  1 );
+    QCOMPARE( storage.row(  3 ),  2 );
+    QCOMPARE( storage.row(  4 ),  2 );
+    QCOMPARE( storage.row(  5 ),  2 );
+    QCOMPARE( storage.row(  6 ),  3 );
+    QCOMPARE( storage.row(  7 ),  3 );
+    QCOMPARE( storage.row(  8 ),  3 );
+    QCOMPARE( storage.row(  9 ),  4 );
+    QCOMPARE( storage.row( 10 ),  5 );
+    QCOMPARE( storage.row( 11 ),  5 );
 }
 
 void PointStorageTest::testInsertionPerformance()

@@ -552,39 +552,30 @@ public:
     }
 
     /**
-     * Iterator.
-     * Usable to iterate row-wise over all data in the storage.
-     * \note The iterator is not invalidated, if the storage changes.
+     * Returns the column of the non-default data at \p index .
+     * \return the data's column at \p index .
      */
-    class Iterator
+    int col( int index ) const
     {
-    public:
-        Iterator( const PointStorage<T>* s, int i = 0 ) : m_storage( s ), m_index( i ) {}
-        Iterator operator++() { if ( m_index < m_storage->count() ) ++m_index; return *this; }
-        Iterator operator--() { if ( m_index > 0 ) --m_index; return *this; }
-        const T& operator*() const { return m_storage->m_data.at( m_index ); }
-        operator int() const { return m_index; }
-        int col() const { return m_storage->m_cols.value( m_index ); }
-        int row() const { Q_ASSERT(false); /*TODO*/ return -1; }
-    private:
-        const PointStorage<T>* m_storage;
-        int m_index;
-    };
-
-    /**
-     * \return an iterator pointing to the first data of the storage.
-     */
-    Iterator first() const
-    {
-        return Iterator( this );
+        return m_cols.value( index );
     }
 
     /**
-     * \return an iterator pointing to the last data of the storage.
+     * Returns the row of the non-default data at \p index .
+     * \return the data's row at \p index .
      */
-    Iterator last() const
+    int row( int index ) const
     {
-        return Iterator( this, m_data.count()-1 );
+        return qUpperBound( m_rows, index ) - m_rows.begin();
+    }
+
+    /**
+     * Returns the non-default data at \p index .
+     * \return the data at \p index .
+     */
+    T data( int index ) const
+    {
+        return m_data.value( index );
     }
 
 private:
