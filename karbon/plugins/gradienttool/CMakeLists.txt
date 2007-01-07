@@ -12,5 +12,7 @@ kde4_add_plugin(gradienttool ${gradienttool_PART_SRCS})
 
 target_link_libraries(gradienttool kofficeui)
 
+kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons  )
+
 install(TARGETS gradienttool DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES gradienttool.desktop DESTINATION ${SERVICES_INSTALL_DIR})
