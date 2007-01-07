@@ -45,6 +45,7 @@ private Q_SLOTS:
     void testFirstRowData();
     void testNextColumnData();
     void testNextRowData();
+    void testIteration();
     void testInsertionPerformance();
     void testLookupPerformance();
     void testInsertColumnsPerformance();

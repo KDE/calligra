@@ -466,6 +466,36 @@ void PointStorageTest::testNextRowData()
     QCOMPARE( storage.nextRowData( 3, 5 ), 12 );
 }
 
+void PointStorageTest::testIteration()
+{
+    PointStorage<int> storage;
+    storage.m_data << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12;
+    storage.m_rows << 0 << 3 << 6 << 9 << 10;
+    storage.m_cols << 1 << 2 << 5 << 1 << 2 << 3 << 2 << 3 << 5 << 4 << 1 << 5;
+    // ( 1, 2,  ,  , 3)
+    // ( 4, 5, 6,  ,  )
+    // (  , 7, 8,  , 9)
+    // (  ,  ,  ,10,  )
+    // (11,  ,  ,  ,12)
+
+    QCOMPARE( (int)storage.first(), 0 );
+    QCOMPARE( (int)storage.last(), 11 );
+    PointStorage<int>::Iterator it = storage.first();
+    QCOMPARE( *(--it),  1 );
+    QCOMPARE( *(++it),  2 );
+    QCOMPARE( *(++it),  3 );
+    QCOMPARE( *(++it),  4 );
+    QCOMPARE( *(++it),  5 );
+    QCOMPARE( *(++it),  6 );
+    QCOMPARE( *(++it),  7 );
+    QCOMPARE( *(++it),  8 );
+    QCOMPARE( *(++it),  9 );
+    QCOMPARE( *(++it), 10 );
+    QCOMPARE( *(++it), 11 );
+    QCOMPARE( *(++it), 12 );
+    QCOMPARE( (int)(++it), 12 );
+}
+
 void PointStorageTest::testInsertionPerformance()
 {
     PointStorage<int> storage;

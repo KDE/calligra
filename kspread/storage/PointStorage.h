@@ -79,6 +79,16 @@ public:
     }
 
     /**
+     * Returns the number of items in the storage.
+     * Usable to check the bounds while using Iterator.
+     * \return number of items
+     */
+    int count() const
+    {
+        return m_data.count();
+    }
+
+    /**
      * Inserts \p data at \p col , \p row .
      * \return the overridden data (default data, if no overwrite)
      */
@@ -539,6 +549,42 @@ public:
             str += '\n';
         }
         return str.isEmpty() ? QString( "()" ) : str.mid( 0, str.length() - 1 );
+    }
+
+    /**
+     * Iterator.
+     * Usable to iterate row-wise over all data in the storage.
+     * \note The iterator is not invalidated, if the storage changes.
+     */
+    class Iterator
+    {
+    public:
+        Iterator( const PointStorage<T>* s, int i = 0 ) : m_storage( s ), m_index( i ) {}
+        Iterator operator++() { if ( m_index < m_storage->count() ) ++m_index; return *this; }
+        Iterator operator--() { if ( m_index > 0 ) --m_index; return *this; }
+        const T& operator*() const { return m_storage->m_data.at( m_index ); }
+        operator int() const { return m_index; }
+        int col() const { return m_storage->m_cols.value( m_index ); }
+        int row() const { Q_ASSERT(false); /*TODO*/ return -1; }
+    private:
+        const PointStorage<T>* m_storage;
+        int m_index;
+    };
+
+    /**
+     * \return an iterator pointing to the first data of the storage.
+     */
+    Iterator first() const
+    {
+        return Iterator( this );
+    }
+
+    /**
+     * \return an iterator pointing to the last data of the storage.
+     */
+    Iterator last() const
+    {
+        return Iterator( this, m_data.count()-1 );
     }
 
 private:
