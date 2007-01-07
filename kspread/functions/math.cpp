@@ -874,6 +874,12 @@ Lucas' formula for the nth Fibonacci number F(n) is given by
 
 */
   Value n = args[0];
+  if(!n.isNumber())
+    return Value::errorVALUE();
+    
+  if ( !calc->greater( n, Value( 0.0 ) ) )
+    return Value::errorNUM();
+
   Value s = calc->sqrt (Value(5.0));
   // u1 = ((1+sqrt(5))/2)^n
   Value u1 = calc->pow (calc->div (calc->add (Value(1), s), Value(2)), n);
