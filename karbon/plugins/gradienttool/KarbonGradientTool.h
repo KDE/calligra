@@ -91,7 +91,7 @@ private:
         /// creates an updated background brush from the actual data
         virtual QBrush background() = 0;
         KoShape *m_shape;         ///< the shape we are working on
-        int m_selectedHandle;     ///< index of currently delected handle or -1 if none selected
+        int m_selectedHandle;     ///< index of currently deleted handle or -1 if none selected
         QBrush m_oldBackground;   ///< the old background brush
         QBrush m_newBackground;   ///< the new background brush
         QList<QPointF> m_handles; ///< the list of handles
