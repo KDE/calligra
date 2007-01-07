@@ -322,9 +322,30 @@ public:
      */
     QVector< QPair<QPoint,T> > shiftLeft( const QRect& rect )
     {
-        Q_UNUSED( rect );
+        Q_ASSERT( 1 <= rect.left() && rect.left() <= KS_colMax );
         QVector< QPair<QPoint,T> > oldData;
-        // TODO
+        for ( int row = rect.bottom(); row >= rect.top(); --row )
+        {
+            const int rowStart = m_rows.value( row - 1 );
+            const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
+            const QVector<int> cols = m_cols.mid( rowStart, rowLength );
+            for ( int col = cols.count() - 1; col >= 0; --col )
+            {
+                if ( cols.value( col ) >= rect.left() )
+                {
+                    if ( cols.value( col ) <= rect.right() )
+                    {
+                        oldData.append( qMakePair( QPoint( cols.value( col ), row ), m_data.value( rowStart + col ) ) );
+                        m_cols.remove( rowStart + col );
+                        m_data.remove( rowStart + col );
+                        for ( int r = row; r < m_rows.count(); ++r )
+                            --m_rows[r];
+                    }
+                    else
+                        m_cols[rowStart + col] -= rect.width();
+                }
+            }
+        }
         return oldData;
     }
 
@@ -334,9 +355,21 @@ public:
      */
     QVector< QPair<QPoint,T> > shiftRight( const QRect& rect )
     {
-        Q_UNUSED( rect );
+        Q_ASSERT( 1 <= rect.left() && rect.left() <= KS_colMax );
         QVector< QPair<QPoint,T> > oldData;
-        // TODO
+        for ( int row = rect.left(); row <= rect.right(); ++row )
+        {
+            const int rowStart = m_rows.value( row - 1 );
+            const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
+            const QVector<int> cols = m_cols.mid( rowStart, rowLength );
+            for ( int col = 0; col < cols.count(); ++col )
+            {
+                if ( cols.value( col ) > KS_colMax - rect.left() )
+                    oldData.append( qMakePair( QPoint( cols.value( col ), row ), m_data.value( rowStart + col ) ) );
+                else if ( cols.value( col ) >= rect.left() )
+                    m_cols[rowStart + col] += rect.width();
+            }
+        }
         return oldData;
     }
 
@@ -347,9 +380,33 @@ public:
      */
     QVector< QPair<QPoint,T> > shiftUp( const QRect& rect )
     {
-        Q_UNUSED( rect );
+        Q_ASSERT( 1 <= rect.top() && rect.top() <= KS_rowMax );
+        // row's missing?
+        if ( rect.top() - 1 > m_rows.count() )
+            return QVector< QPair<QPoint,T> >();
         QVector< QPair<QPoint,T> > oldData;
-        // TODO
+        for ( int row = rect.top(); row <= m_rows.count() && row <= rect.bottom(); ++row )
+        {
+            const int rowStart = m_rows.value( row - 1 );
+            const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
+            const QVector<int> cols = m_cols.mid( rowStart, rowLength );
+            const QVector<int> data = m_data.mid( rowStart, rowLength );
+            for ( int col = 0; col < cols.count(); ++col )
+            {
+                if ( cols.value( col ) >= rect.left() )
+                {
+                    if ( cols.value( col ) <= rect.right() )
+                    {
+                        oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
+                        m_cols.remove( rowStart + col );
+                        m_data.remove( rowStart + col );
+                        // adjust the offsets of the following rows
+                        for ( int r = row; r < m_rows.count(); ++r )
+                            --m_rows[r];
+                    }
+                }
+            }
+        }
         return oldData;
     }
 
@@ -359,9 +416,33 @@ public:
      */
     QVector< QPair<QPoint,T> > shiftDown( const QRect& rect )
     {
-        Q_UNUSED( rect );
+        Q_ASSERT( 1 <= rect.top() && rect.top() <= KS_rowMax );
+        // row's missing?
+        if ( rect.top() - 1 > m_rows.count() )
+            return QVector< QPair<QPoint,T> >();
         QVector< QPair<QPoint,T> > oldData;
-        // TODO
+        for ( int row = rect.bottom(); row >= rect.top(); --row )
+        {
+            const int rowStart = m_rows.value( row - 1 );
+            const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
+            const QVector<int> cols = m_cols.mid( rowStart, rowLength );
+            const QVector<int> data = m_data.mid( rowStart, rowLength );
+            for ( int col = 0; col < cols.count(); ++col )
+            {
+                if ( cols.value( col ) >= rect.left() )
+                {
+                    if ( cols.value( col ) <= rect.right() )
+                    {
+                        oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
+                        m_cols.remove( rowStart + col );
+                        m_data.remove( rowStart + col );
+                        // adjust the offsets of the following rows
+                        for ( int r = row; r < m_rows.count(); ++r )
+                            --m_rows[r];
+                    }
+                }
+            }
+        }
         return oldData;
     }
 

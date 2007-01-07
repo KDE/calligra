@@ -147,14 +147,6 @@ void PointStorageTest::testDeletion()
     const QVector<int> data( QVector<int>() << 1 << 2 << 4 << 6 << 7 << 8 << 9 << 11 << 12 );
     const QVector<int> rows( QVector<int>() << 0 << 2 << 4 << 7 << 7 );
     const QVector<int> cols( QVector<int>() << 1 << 2 << 1 << 3 << 2 << 3 << 5 << 1 << 5);
-
-//     qDebug() << storage.m_data;
-//     qDebug() << data;
-//     qDebug() << storage.m_rows;
-//     qDebug() << rows;
-//     qDebug() << storage.m_cols;
-//     qDebug() << cols;
-
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
@@ -287,13 +279,13 @@ void PointStorageTest::testShiftLeft()
     storage.shiftLeft( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
-    // (  ,  ,  ,  , 9)
+    // (  ,  , 9,  ,  )
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,  )
 
     const QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 9 << 10 << 11 );
     const QVector<int> rows( QVector<int>() << 0 << 3 << 4 << 5 << 6 );
-    const QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 5 << 4 << 1 );
+    const QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 3 << 4 << 1 );
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
@@ -346,10 +338,17 @@ void PointStorageTest::testShiftUp()
     // (  ,  ,  ,  , 9)
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,  )
+    qDebug() << endl << qPrintable( storage.dump() );
 
     const QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 9 << 10 << 11 );
     const QVector<int> rows( QVector<int>() << 0 << 3 << 4 << 5 << 6 );
     const QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 5 << 4 << 1 );
+    qDebug() << "data result: " << storage.m_data;
+    qDebug() << "data expect: " << data;
+    qDebug() << "rows result: " << storage.m_rows;
+    qDebug() << "rows expect: " << rows;
+    qDebug() << "cols result: " << storage.m_cols;
+    qDebug() << "cols expect: " << cols;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
@@ -375,10 +374,17 @@ void PointStorageTest::testShiftDown()
     // (  , 5, 6,10,  )
     // (11, 7, 8,  ,  )
     // (  ,  ,  ,  ,12)
+    qDebug() << endl << qPrintable( storage.dump() );
 
     const QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 9 << 5 << 6 << 10 << 11 << 7 << 8 << 12 );
     const QVector<int> rows( QVector<int>() << 0 << 3 << 4 << 5 << 8 << 11 << 12 );
     const QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 5 << 2 << 3 << 4 << 1 << 2 << 3 << 5 );
+    qDebug() << "data result: " << storage.m_data;
+    qDebug() << "data expect: " << data;
+    qDebug() << "rows result: " << storage.m_rows;
+    qDebug() << "rows expect: " << rows;
+    qDebug() << "cols result: " << storage.m_cols;
+    qDebug() << "cols expect: " << cols;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
