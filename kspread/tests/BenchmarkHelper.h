@@ -48,7 +48,7 @@ inline tval elapsed(tval t)
                 return t-tsc;
 }
 
-static QString printAverage( tval ticks, int counter )
+static QString printAverage( tval ticks, int counter, const QString& prefix = QString() )
 {
     QString str;
     QProcess procCpuInfo;
@@ -77,8 +77,8 @@ static QString printAverage( tval ticks, int counter )
             }
         }
     }
-    return QString( "Average: %1/%2=%3 cycles/operation; %4" ).arg( ticks ).
-      arg( counter ).arg( ticks/counter ).arg( str );
+    return QString( "%1 Average: %2/%3=%4 cycles/operation; %5" ).
+      arg(prefix). arg( ticks ).arg( counter ).arg( ticks/counter ).arg( str );
 }
 
 } // namespace Time
