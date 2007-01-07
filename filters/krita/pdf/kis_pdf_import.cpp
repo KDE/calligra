@@ -68,11 +68,11 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 {
     QString filename = m_chain -> inputFile();
     kDebug(41008) << "Importing using PDFImport!" << filename << endl;
-    
+
     if (filename.isEmpty())
         return KoFilter::FileNotFound;
-    
-    
+
+
     KUrl url;
     url.setPath(filename);
 
@@ -85,9 +85,9 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     if (KIO::NetAccess::download(url, tmpFile, qApp -> mainWidget())) {
         url.setPath( tmpFile );
     }
-    
+
     Poppler::Document* pdoc = Poppler::Document::load( QFile::encodeName(url.path() ) );
-    
+
 
     if ( !pdoc)
     {
@@ -112,7 +112,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     KDialog* kdb = new KDialog(0);
     kdb->setCaption( i18n("PDF Import Options") );
     kdb->setModal(false);
-    
+
     KisPDFImportWidget* wdg = new KisPDFImportWidget(pdoc, kdb);
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
@@ -122,7 +122,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         delete kdb;
         return KoFilter::StorageCreationError; // FIXME Cancel doesn't exist :(
     }
-    
+
     // Init kis's doc
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
     if (!doc)
@@ -134,12 +134,11 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     doc -> prepareForImport();
     // Create the krita image
-    KoColorSpace* cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID("RGBA"), "");
+    KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(KoID("RGBA"), "");
     int width = wdg->intWidth->value();
     int height = wdg->intHeight->value();
     KisImageSP img = new KisImage(doc->undoAdapter(), width, height, cs, "built image");
-    img->blockSignals(true); // Don't send out signals while we're building the image
-    
+
     // create a layer
     QList<int> pages = wdg->pages();
     for(QList<int>::const_iterator it = pages.begin(); it != pages.end(); ++it)
@@ -148,12 +147,11 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         layer->paintDevice()->convertFromQImage( pdoc->page( *it )->splashRenderToImage(wdg->intHorizontal->value(), wdg->intVertical->value() ), "");
         img->addLayer(layer, img->rootLayer(), 0);
     }
-    
-    img->blockSignals(false);
+
     doc -> setCurrentImage( img);
-    
+
     KIO::NetAccess::removeTempFile(tmpFile);
-    
+
     delete pdoc;
     delete kdb;
     return KoFilter::OK;

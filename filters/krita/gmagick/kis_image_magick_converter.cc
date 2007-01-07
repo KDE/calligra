@@ -444,10 +444,10 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         if (colorProfile)
         {
             kDebug(41008) << "image has embedded profile: " << colorProfile -> productName() << "\n";
-            cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(csName, colorProfile);
+            cs = KoColorSpaceRegistry::instance()->colorSpace(csName, colorProfile);
         }
         else
-            cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(csName,""),"");
+            cs = KoColorSpaceRegistry::instance()->colorSpace(KoID(csName,""),"");
 
         if (!cs) {
             kDebug(41008) << "Krita does not support colorspace " << image -> colorspace<< "\n";
@@ -463,8 +463,6 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         if( ! m_img) {
             m_img = new KisImage(m_doc->undoAdapter(), image -> columns, image -> rows, cs, "built image");
             Q_CHECK_PTR(m_img);
-            m_img->blockSignals(true); // Don't send out signals while we're building the image
-
             // XXX I'm assuming separate layers won't have other profile things like EXIF
             setAnnotationsForImage(image, m_img);
         }

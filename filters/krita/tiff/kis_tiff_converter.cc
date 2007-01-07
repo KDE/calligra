@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
- 
+
 #include "kis_tiff_converter.h"
 
 #include <stdio.h>
@@ -233,7 +233,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
     kDebug(41008) << "Colorspace is : " << csName << " with a depth of " << depth << " and with a nb of channels of " << nbchannels << endl;
-    
+
     // Read image profile
     kDebug() << "Reading profile" << endl;
     KoColorProfile* profile = 0;
@@ -249,24 +249,24 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     } else {
         kDebug(41008) << "No Profile found" << endl;
     }
-    
+
     // Retrieve a pointer to the colorspace
     KoColorSpace* cs = 0;
     if (profile && profile->isSuitableForOutput())
     {
         kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
-        cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(csName, profile);
+        cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
     }
     else
-        cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(csName,""),"");
+        cs = KoColorSpaceRegistry::instance()->colorSpace(KoID(csName,""),"");
 
     if(cs == 0) {
         kDebug(41008) << "Colorspace " << csName << " is not available, please check your installation." << endl;
         TIFFClose(image);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
-    
-    // Create the cmsTransform if needed 
+
+    // Create the cmsTransform if needed
     cmsHTRANSFORM transform = 0;
     if(profile && !profile->isSuitableForOutput())
     {
@@ -276,7 +276,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                                        INTENT_PERCEPTUAL, 0);
     }
 
-    
+
     // Check if there is an alpha channel
     int8 alphapos = -1; // <- no alpha
     // Check which extra is alpha if any
@@ -292,7 +292,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                 // the alpha value.  This needs to be reversed later (postprocessor?)
                 alphapos = i;
             }
-    
+
             if (sampleinfo[i] == EXTRASAMPLE_UNASSALPHA)
             {
                 // color values are not premultiplied with alpha, and can be used as they are.
@@ -300,7 +300,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             }
         }
     }
-    
+
     // Read META Information
     KoDocumentInfo * info = m_doc->documentInfo();
     char* text;
@@ -313,8 +313,8 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     if (TIFFGetField(image,TIFFTAG_IMAGEDESCRIPTION,&text) ) {
         info->setAboutInfo("description", text);
     }
-    
-    
+
+
     // Get the planar configuration
     uint16 planarconfig;
     if(TIFFGetField(image, TIFFTAG_PLANARCONFIG, &planarconfig) == 0)
@@ -327,7 +327,6 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     if( ! m_img ) {
         m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
         Q_CHECK_PTR(m_img);
-        m_img->blockSignals(true); // Don't send out signals while we're building the image
         if(profile)
         {
             KisAnnotationSP annotation;
@@ -350,12 +349,12 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     tdata_t buf = 0;
     tdata_t* ps_buf = 0; // used only for planar configuration separated
     TIFFStreamBase* tiffstream;
-    
+
     KisTIFFReaderBase* tiffReader = 0;
-    
+
     quint8 poses[5];
     KisTIFFPostProcessor* postprocessor = 0;
-    
+
     // Configure poses
     uint8 nbcolorsamples = nbchannels - extrasamplescount;
     switch(color_type)
@@ -399,8 +398,8 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         default:
         break;
     }
-    
-    
+
+
     // Initisalize tiffReader
     uint16 * lineSizeCoeffs = new uint16[nbchannels];
     uint16 vsubsampling = 1;
@@ -443,7 +442,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     } else if(dstDepth == 32) {
         tiffReader = new KisTIFFReaderTarget32bit( layer->paintDevice(), poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
     }
-    
+
     if(TIFFIsTiled(image))
     {
         kDebug(41008) << "tiled image" << endl;
@@ -571,7 +570,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         }
         delete[] ps_buf;
     }
-    
+
     m_img->addLayer(KisLayerSP(layer), m_img->rootLayer(), KisLayerSP(0));
     return KisImageBuilder_RESULT_OK;
 }
@@ -617,7 +616,7 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageSP i
 
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
-    
+
     // Open file for writing
     TIFF *image;
     if((image = TIFFOpen(QFile::encodeName(uri.path()), "w")) == NULL){
@@ -643,7 +642,7 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageSP i
     {
         TIFFSetField(image, TIFFTAG_ARTIST, author.toAscii().data());
     }
-    
+
     KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(img->rootLayer().data());
     if(root == 0)
     {
@@ -658,7 +657,7 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageSP i
         TIFFClose(image);
         return KisImageBuilder_RESULT_FAILURE;
     }
-    
+
     TIFFClose(image);
     return KisImageBuilder_RESULT_OK;
 }

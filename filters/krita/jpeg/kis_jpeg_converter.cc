@@ -166,10 +166,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     if (profile && profile->isSuitableForOutput())
     {
         kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
-        cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(csName, profile);
+        cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
     }
     else
-        cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(csName,""),"");
+        cs = KoColorSpaceRegistry::instance()->colorSpace(KoID(csName,""),"");
 
     if(cs == 0)
     {

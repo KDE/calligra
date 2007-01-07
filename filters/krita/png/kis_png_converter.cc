@@ -259,10 +259,10 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     if (profile && profile->isSuitableForOutput())
     {
         kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
-        cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(csName, profile);
+        cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
     }
     else
-        cs = KisMetaRegistry::instance()->csRegistry()->colorSpace(KoID(csName,""),"");
+        cs = KoColorSpaceRegistry::instance()->colorSpace(KoID(csName,""),"");
 
     if(cs == 0)
     {
@@ -334,7 +334,6 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     // Creating the KisImageSP
     if( ! m_img) {
         m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
-        m_img->blockSignals(true); // Don't send out signals while we're building the image
         Q_CHECK_PTR(m_img);
         if(profile && !profile->isSuitableForOutput())
         {

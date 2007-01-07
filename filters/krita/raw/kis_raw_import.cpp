@@ -88,7 +88,7 @@ KisRawImport::KisRawImport(QObject *parent, const QStringList&)
 
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
-    m_monitorProfile = KisMetaRegistry::instance()->csRegistry()->profileByName(monitorProfileName);
+    m_monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
 
     slotFillCmbProfiles();
 }
@@ -201,16 +201,15 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
             KoColorSpace * cs = 0;
             if (m_page->radioGray->isChecked()) {
-                cs  = KisMetaRegistry::instance()->csRegistry()->colorSpace( "GRAYA", profile() );
+                cs  = KoColorSpaceRegistry::instance()->colorSpace( "GRAYA", profile() );
             }
             else {
-               cs  = KisMetaRegistry::instance()->csRegistry()->colorSpace( "RGBA", profile() );
+               cs  = KoColorSpaceRegistry::instance()->colorSpace( "RGBA", profile() );
             }
             if (cs == 0) { kDebug() << "No CS\n"; return KoFilter::InternalError; }
 
             image = new KisImage(doc->undoAdapter(), img.width(), img.height(), cs, filename);
             if (image.isNull()) return KoFilter::CreationError;
-            image->blockSignals(true); // Don't send out signals while we're building the image
 
             layer = dynamic_cast<KisPaintLayer*>( image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE, COMPOSITE_OVER, cs).data());
             if (layer.isNull()) return KoFilter::CreationError;
@@ -239,10 +238,10 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
             KoColorSpace * cs = 0;
             if (m_page->radioGray->isChecked()) {
-                cs  = KisMetaRegistry::instance()->csRegistry()->colorSpace( "GRAYA16", profile() );
+                cs  = KoColorSpaceRegistry::instance()->colorSpace( "GRAYA16", profile() );
             }
             else {
-                cs = KisMetaRegistry::instance()->csRegistry()->colorSpace( "RGBA16", profile() );
+                cs = KoColorSpaceRegistry::instance()->colorSpace( "RGBA16", profile() );
             }
             if (cs == 0) return KoFilter::InternalError;
 
@@ -347,10 +346,10 @@ void KisRawImport::slotUpdatePreview()
 
         KoColorSpace * cs = 0;
         if (m_page->radioGray->isChecked()) {
-            cs  = KisMetaRegistry::instance()->csRegistry()->colorSpace( "GRAYA16", profile() );
+            cs  = KoColorSpaceRegistry::instance()->colorSpace( "GRAYA16", profile() );
         }
         else {
-            cs = KisMetaRegistry::instance()->csRegistry()->colorSpace( "RGBA16", profile() );
+            cs = KoColorSpaceRegistry::instance()->colorSpace( "RGBA16", profile() );
         }
         KisPaintDevice * dev = new KisPaintDevice(cs, "preview");
             // Copy the colordata to the pixels
@@ -580,7 +579,7 @@ QSize KisRawImport::determineSize(quint32& startOfImageData)
 KoColorProfile * KisRawImport::profile()
 {
     if (m_page->chkProfile->isChecked()) {
-        return KisMetaRegistry::instance()->csRegistry()->profileByName(m_page->cmbProfile->currentText());
+        return KoColorSpaceRegistry::instance()->profileByName(m_page->cmbProfile->currentText());
     }
     else
         return 0;
@@ -590,9 +589,9 @@ void KisRawImport::slotFillCmbProfiles()
 {
     KoID s = colorSpace();
 
-    KoColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
+    KoColorSpaceFactory * csf = KoColorSpaceRegistry::instance() -> get(s);
     m_page -> cmbProfile -> clear();
-    QList<KoColorProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+    QList<KoColorProfile *>  profileList = KoColorSpaceRegistry::instance()->profilesFor( csf );
 
     foreach (KoColorProfile *profile, profileList) {
         m_page->cmbProfile->addItem(profile->productName());
