@@ -371,6 +371,11 @@ Value func_ceiling (valVector args, ValueCalc *calc, FuncExtra *)
     res = args[1];
   else
     res = calc->gequal (number, Value(0.0)) ? Value(1.0) : Value(-1.0);
+    
+  // short-circuit, and allow CEILING(0;0) to give 0 (which is correct)
+  // instead of DIV0 error  
+  if(calc->isZero(number))
+    return Value(0.0);  
 
   if (calc->isZero(res))
     return Value::errorDIV0();
