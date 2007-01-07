@@ -700,7 +700,9 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
             lstyle->setListItemPrefix( element.attribute("lefttext"));
             lstyle->setListItemSuffix( element.attribute("righttext"));
             lstyle->setDisplayLevel( element.attribute("display-levels").toInt());
-            // TODO restart
+            lstyle->setDisplayLevel( element.attribute("display-levels").toInt());
+            if(element.attribute("restart", "false") == "true")
+                style->setRestartListNumbering(true);
             style->setListStyle(*lstyle);
         }
         else
