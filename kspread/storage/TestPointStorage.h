@@ -41,6 +41,10 @@ private Q_SLOTS:
     void testShiftRight();
     void testShiftUp();
     void testShiftDown();
+    void testFirstColumnData();
+    void testFirstRowData();
+    void testNextColumnData();
+    void testNextRowData();
     void testInsertionPerformance();
     void testLookupPerformance();
     void testInsertColumnsPerformance();
