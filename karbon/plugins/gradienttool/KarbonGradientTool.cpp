@@ -247,13 +247,14 @@ void KarbonGradientTool::GradientStrategy::paintHandle( QPainter &painter, const
 
 bool KarbonGradientTool::GradientStrategy::mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos )
 {
-    if( mousePos.x() < m_shape->position().x()+handlePos.x()-m_handleRadius )
+    QPointF handle = m_shape->transformationMatrix(0).map( handlePos );
+    if( mousePos.x() < handle.x()-m_handleRadius )
         return false;
-    if( mousePos.x() > m_shape->position().x()+handlePos.x()+m_handleRadius )
+    if( mousePos.x() > handle.x()+m_handleRadius )
         return false;
-    if( mousePos.y() < m_shape->position().y()+handlePos.y()-m_handleRadius )
+    if( mousePos.y() < handle.y()-m_handleRadius )
         return false;
-    if( mousePos.y() > m_shape->position().y()+handlePos.y()+m_handleRadius )
+    if( mousePos.y() > handle.y()+m_handleRadius )
         return false;
     return true;
 }
@@ -262,7 +263,7 @@ void KarbonGradientTool::GradientStrategy::handleMouseMove(const QPointF &mouseL
 {
     Q_UNUSED( modifiers )
 
-    m_handles[m_selectedHandle] = mouseLocation - m_shape->position();
+    m_handles[m_selectedHandle] = m_shape->transformationMatrix(0).inverted().map( mouseLocation );
 
     m_newBackground = background();
     m_shape->setBackground( m_newBackground );
