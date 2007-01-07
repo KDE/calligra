@@ -2,7 +2,7 @@ project(kformula)
 
 add_subdirectory( pics )
 
-include_directories(${KFORMULA_INCLUDES} ${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
+include_directories( ${KOFFICEUI_INCLUDES} ${KOTEXT_INCLUDES})
 
 
 ########### next target ###############
@@ -21,7 +21,7 @@ kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
 
 
 
-target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kofficeui kformulalib )
+target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kofficeui )
 
 install(TARGETS kformulapart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
