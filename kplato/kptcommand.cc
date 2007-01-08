@@ -1604,25 +1604,112 @@ void ModifyResourceGroupTypeCmd::unexecute()
     setCommandType( 0 );
 }
 
-TaskModifyProgressCmd::TaskModifyProgressCmd( Part *part, Task &task, struct Task::Progress &value, const QString& name )
+ModifyCompletionStartedCmd::ModifyCompletionStartedCmd( Part *part, Completion &completion, bool value, const QString& name )
         : NamedCommand( part, name ),
-        m_task( task ),
-        m_newvalue( value )
+        m_completion( completion ),
+        oldvalue( m_completion.started() ),
+        newvalue( value )
 {
-    m_oldvalue = task.progress();
 }
-void TaskModifyProgressCmd::execute()
+void ModifyCompletionStartedCmd::execute()
 {
-    m_task.progress() = m_newvalue;
+    m_completion.setStarted( newvalue );
 
     setCommandType( 0 );
 }
-void TaskModifyProgressCmd::unexecute()
+void ModifyCompletionStartedCmd::unexecute()
 {
-    m_task.progress() = m_oldvalue;
+    m_completion.setStarted( oldvalue );
 
     setCommandType( 0 );
 }
+
+ModifyCompletionFinishedCmd::ModifyCompletionFinishedCmd( Part *part, Completion &completion, bool value, const QString& name )
+        : NamedCommand( part, name ),
+        m_completion( completion ),
+        oldvalue( m_completion.finished() ),
+        newvalue( value )
+{
+}
+void ModifyCompletionFinishedCmd::execute()
+{
+    m_completion.setFinished( newvalue );
+
+    setCommandType( 0 );
+}
+void ModifyCompletionFinishedCmd::unexecute()
+{
+    m_completion.setFinished( oldvalue );
+
+    setCommandType( 0 );
+}
+
+ModifyCompletionStartTimeCmd::ModifyCompletionStartTimeCmd( Part *part, Completion &completion, QDateTime value, const QString& name )
+        : NamedCommand( part, name ),
+        m_completion( completion ),
+        oldvalue( m_completion.startTime() ),
+        newvalue( value )
+{
+}
+void ModifyCompletionStartTimeCmd::execute()
+{
+    m_completion.setStartTime( newvalue );
+
+    setCommandType( 0 );
+}
+void ModifyCompletionStartTimeCmd::unexecute()
+{
+    m_completion.setStartTime( oldvalue );
+
+    setCommandType( 0 );
+}
+
+ModifyCompletionFinishTimeCmd::ModifyCompletionFinishTimeCmd( Part *part, Completion &completion, QDateTime value, const QString& name )
+        : NamedCommand( part, name ),
+        m_completion( completion ),
+        oldvalue( m_completion.finishTime() ),
+        newvalue( value )
+{
+}
+void ModifyCompletionFinishTimeCmd::execute()
+{
+    m_completion.setFinishTime( newvalue );
+
+    setCommandType( 0 );
+}
+void ModifyCompletionFinishTimeCmd::unexecute()
+{
+    m_completion.setFinishTime( oldvalue );
+
+    setCommandType( 0 );
+}
+
+AddCompletionEntryCmd::AddCompletionEntryCmd( Part *part, Completion &completion, const QDate &date, Completion::Entry *value, const QString& name )
+        : NamedCommand( part, name ),
+        m_completion( completion ),
+        m_date( date ),
+        newvalue( value )
+{
+    oldvalue = m_completion.entry( date );
+}
+void AddCompletionEntryCmd::execute()
+{
+    if ( oldvalue ) {
+        m_completion.takeEntry( m_date );
+    }
+    m_completion.addEntry( m_date, newvalue );
+
+    setCommandType( 0 );
+}
+void AddCompletionEntryCmd::unexecute()
+{
+    m_completion.takeEntry( m_date );
+    if ( oldvalue ) {
+        m_completion.addEntry( m_date, oldvalue );
+    }
+    setCommandType( 0 );
+}
+
 
 AddAccountCmd::AddAccountCmd( Part *part, Project &project, Account *account, const QString& parent, const QString& name )
         : NamedCommand( part, name ),

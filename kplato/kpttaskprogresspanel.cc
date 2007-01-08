@@ -44,30 +44,35 @@ namespace KPlato
 TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWidget *parent, const char *name)
     : TaskProgressPanelImpl(parent, name),
       m_task(task),
+      m_completion( task.completion() ),
       m_dayLength(24)
 {
     kDebug()<<k_funcinfo<<endl;
-    m_progress = task.progress();
-    started->setChecked(m_progress.started);
-    finished->setChecked(m_progress.finished);
-    startTime->setDateTime(m_progress.startTime);
-    finishTime->setDateTime(m_progress.finishTime);
+    started->setChecked(m_completion.started());
+    finished->setChecked(m_completion.finished());
+    startTime->setDateTime(m_completion.startTime());
+    finishTime->setDateTime(m_completion.finishTime());
     
-    percentFinished->setValue(m_progress.percentFinished);
+    if ( m_completion.entryDate() < QDate::currentDate() ) {
+        dateEdit->setDate( QDate::currentDate() );
+    } else {
+        dateEdit->setDate( m_completion.entryDate() );
+    } 
+    percentFinished->setValue(m_completion.percentFinished());
     
     if (workTime) {
         kDebug()<<k_funcinfo<<"daylength="<<workTime->durationDay().hours()<<endl;
         m_dayLength = workTime->durationDay().hours();
         setEstimateScales(m_dayLength);
     }
-    remainingEffort->setValue(m_progress.remainingEffort);
+    remainingEffort->setValue(m_completion.remainingEffort());
     remainingEffort->setVisibleFields(DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes);
     remainingEffort->setFieldUnit(0, i18nc("day", "d"));
     remainingEffort->setFieldUnit(1, i18nc("hour", "h"));
     remainingEffort->setFieldUnit(2, i18nc("minute", "m"));
 
-    m_progress.totalPerformed = task.actualEffort(); //FIXME
-    actualEffort->setValue(m_progress.totalPerformed);
+    m_completion.totalPerformed() = task.actualEffort(); //FIXME
+    actualEffort->setValue(m_completion.totalPerformed());
     actualEffort->setVisibleFields(DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes);
     actualEffort->setFieldUnit(0, i18nc("day", "d"));
     actualEffort->setFieldUnit(1, i18nc("hour", "h"));
@@ -88,21 +93,41 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
 
 
 bool TaskProgressPanel::ok() {
-    m_progress.started = started->isChecked();
-    m_progress.finished = finished->isChecked();
-    m_progress.startTime = startTime->dateTime();
-    m_progress.finishTime = finishTime->dateTime();
-    m_progress.percentFinished = percentFinished->value();
-    m_progress.remainingEffort = remainingEffort->value();
-    m_progress.totalPerformed = actualEffort->value();
     return true;
 }
 
 KCommand *TaskProgressPanel::buildCommand(Part *part) {
-    KCommand *cmd = 0;
-    QString c = i18n("Modify progress");
-    if (m_task.progress() != m_progress) {
-        cmd = new TaskModifyProgressCmd(part, m_task, m_progress, c);
+    KMacroCommand *cmd = 0;
+    QString c = i18n("Modify task completion");
+    
+    if ( m_completion.started() != started->isChecked() ) {
+        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        cmd->addCommand( new ModifyCompletionStartedCmd(part, m_completion, started->isChecked() ) );
+    }
+    if ( m_completion.finished() != finished->isChecked() ) {
+        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        cmd->addCommand( new ModifyCompletionFinishedCmd(part, m_completion, finished->isChecked() ) );
+    }
+    if ( m_completion.startTime() != startTime->dateTime() ) {
+        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        cmd->addCommand( new ModifyCompletionStartTimeCmd(part, m_completion, startTime->dateTime() ) );
+    }
+    if ( m_completion.finishTime() != finishTime->dateTime() ) {
+        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        cmd->addCommand( new ModifyCompletionFinishTimeCmd(part, m_completion, finishTime->dateTime() ) );
+    }
+    if ( m_completion.entryDate() != dateEdit->date() ) {
+        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        Completion::Entry *e = new Completion::Entry( percentFinished->value(), remainingEffort->value(), actualEffort->value() );
+        cmd->addCommand( new AddCompletionEntryCmd(part, m_completion, dateEdit->date(), e ) );
+    } else {
+        if ( ( m_completion.percentFinished() != percentFinished->value() ) ||
+             ( m_completion.remainingEffort()  != remainingEffort->value() ) ||
+             ( m_completion.totalPerformed() != actualEffort->value() ) ) {
+            if ( cmd == 0 ) cmd = new KMacroCommand( c );
+            Completion::Entry *e = new Completion::Entry( percentFinished->value(), remainingEffort->value(), actualEffort->value() );
+            cmd->addCommand( new AddCompletionEntryCmd(part, m_completion, dateEdit->date(), e ) );
+        }
     }
     return cmd;
 }

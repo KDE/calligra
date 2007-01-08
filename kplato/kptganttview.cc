@@ -566,7 +566,7 @@ void GanttView::modifyTask( KDGanttViewItem *item, Task *task )
     }
     item->setText( text );
     if ( m_showProgress ) {
-        item->setProgress( task->progress().percentFinished );
+        item->setProgress( task->completion().percentFinished() );
     } else {
         item->setProgress( 0 );
     }
@@ -589,7 +589,7 @@ void GanttView::modifyTask( KDGanttViewItem *item, Task *task )
         w += i18n( "End: %1", locale->formatDateTime( task->endTime() ) );
         if ( m_showProgress ) {
             w += '\n';
-            w += i18n( "Completion: %1%", task->progress().percentFinished );
+            w += i18n( "Completion: %1%", task->completion().percentFinished() );
         }
         if ( task->positiveFloat() > Duration::zeroDuration ) {
             w += '\n' + i18n( "Float: %1", task->positiveFloat().toString( Duration::Format_i18nDayTime ) );

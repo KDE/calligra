@@ -777,18 +777,72 @@ class ModifyResourceGroupTypeCmd : public NamedCommand
         int m_oldvalue;
 };
 
-class TaskModifyProgressCmd : public NamedCommand
+class ModifyCompletionStartedCmd : public NamedCommand
 {
 public:
-    TaskModifyProgressCmd( Part *part, Task &task, struct Task::Progress &value, const QString& name = QString() );
+    ModifyCompletionStartedCmd( Part *part, Completion &completion, bool value, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
-    Task &m_task;
-    struct Task::Progress m_newvalue;
-    struct Task::Progress m_oldvalue;
+    Completion &m_completion;
+    bool oldvalue;
+    bool newvalue;
 };
+
+class ModifyCompletionFinishedCmd : public NamedCommand
+{
+public:
+    ModifyCompletionFinishedCmd( Part *part, Completion &completion, bool value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    bool oldvalue;
+    bool newvalue;
+};
+
+class ModifyCompletionStartTimeCmd : public NamedCommand
+{
+public:
+    ModifyCompletionStartTimeCmd( Part *part, Completion &completion, QDateTime value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    QDateTime oldvalue;
+    QDateTime newvalue;
+};
+
+class ModifyCompletionFinishTimeCmd : public NamedCommand
+{
+public:
+    ModifyCompletionFinishTimeCmd( Part *part, Completion &completion, QDateTime value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    QDateTime oldvalue;
+    QDateTime newvalue;
+};
+
+class AddCompletionEntryCmd : public NamedCommand
+{
+public:
+    AddCompletionEntryCmd( Part *part, Completion &completion, const QDate &date, Completion::Entry *value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    QDate m_date;
+    Completion::Entry *oldvalue;
+    Completion::Entry *newvalue;
+};
+
 
 class AddAccountCmd : public NamedCommand
 {

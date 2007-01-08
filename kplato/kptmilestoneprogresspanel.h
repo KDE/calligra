@@ -57,7 +57,7 @@ public:
 
 private:
     Task &m_task;
-    struct Task::Progress m_progress;
+    Completion &m_completion;
 };
 
 }  //KPlato namespace

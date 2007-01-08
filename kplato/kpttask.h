@@ -25,12 +25,82 @@
 #include "kptduration.h"
 #include "kptresource.h"
 
+#include <QDateTime>
 #include <QList>
+#include <QMap>
 
 namespace KPlato
 {
 
-class DateTime;
+/**
+ * The Completion class holds information about the tasks progress.
+ */
+class Completion
+{
+    
+public:
+    class Entry
+    {
+        public:
+            Entry()
+            : percentFinished( 0 ),
+              remainingEffort( Duration::zeroDuration ),
+              totalPerformed( Duration::zeroDuration )
+            {}
+            Entry( int percent,  Duration remaining, Duration performed )
+            : percentFinished( percent ),
+              remainingEffort( remaining ),
+              totalPerformed( performed )
+            {}
+            
+            int percentFinished;
+            Duration remainingEffort;
+            Duration totalPerformed;
+    };
+    typedef QMap<QDate, Entry*> EntryList;
+
+    explicit Completion();
+    ~Completion();
+    
+    bool operator==(const Completion &p);
+    bool operator!=(Completion &p) { return !(*this == p); }
+    Completion &operator=(const Completion &p);
+    
+    /// Load from document
+    bool loadXML(QDomElement &element, XMLLoaderObject &status );
+    /// Save to document
+    void saveXML(QDomElement &element) const;
+    
+    bool started() const { return m_started; }
+    void setStarted( bool on );
+    bool finished() const { return m_finished; }
+    void setFinished( bool on );
+    DateTime startTime() const { return m_startTime; }
+    void setStartTime( const QDateTime &dt );
+    DateTime finishTime() const { return m_finishTime; }
+    void setFinishTime( const QDateTime &dt );
+    
+    const EntryList &entries() const { return m_entries; }
+    void addEntry( const QDate &date, Entry *entry );
+    Entry *takeEntry( const QDate &date ) { return m_entries.take( date ); }
+    Entry *entry( const QDate &date ) const { return m_entries[ date ]; }
+    
+    QDate entryDate() const;
+    int percentFinished() const;
+    Duration remainingEffort() const;
+    Duration totalPerformed() const;
+    
+private:
+    bool m_started, m_finished;
+    DateTime m_startTime, m_finishTime;
+    EntryList m_entries;
+
+#ifndef NDEBUG
+public:
+    void printDebug( const QByteArray &ident ) const;
+#endif
+};
+
 
 /**
   * A task in the scheduling software is represented by this class. A task
@@ -78,7 +148,7 @@ public:
     void setConstraint(Node::ConstraintType type);
 
     /// Load from document
-    virtual bool load(QDomElement &element, Project &project);
+    virtual bool load(QDomElement &element, XMLLoaderObject &status );
     /// Save to document
     virtual void save(QDomElement &element) const;
     /// Save appointments for schedule with id
@@ -177,31 +247,7 @@ public:
     
     virtual bool effortMetError( long id = -1 ) const;
     
-    struct Progress {
-        Progress() { started = finished = false; percentFinished = 0; }
-        bool operator==(struct Progress &p) {
-            return started == p.started && finished == p.finished &&
-                   startTime == p.startTime && finishTime == p.finishTime &&
-                   percentFinished == p.percentFinished &&
-                   remainingEffort == p.remainingEffort &&
-                   totalPerformed == p.totalPerformed;
-        }
-        bool operator!=(struct Progress &p) { return !(*this == p); }
-        struct Progress &operator=(struct Progress &p) {
-            started = p.started; finished = p.finished;
-            startTime = p.startTime; finishTime = p.finishTime;
-            percentFinished = p.percentFinished;
-            remainingEffort = p.remainingEffort;
-            totalPerformed = p.totalPerformed;
-            return *this;
-        }
-        bool started, finished;
-        DateTime startTime, finishTime;
-        int percentFinished;
-        Duration remainingEffort;
-        Duration totalPerformed;        
-    };
-    struct Progress &progress() { return m_progress; }
+    Completion &completion() { return m_completion; }
     
 protected:
     /// Check if this node has any dependent child nodes
@@ -323,7 +369,7 @@ private:
     QList<Relation*> m_parentProxyRelations;
     QList<Relation*> m_childProxyRelations;
       
-    struct Progress m_progress;
+    Completion m_completion;
     
 #ifndef NDEBUG
 public:

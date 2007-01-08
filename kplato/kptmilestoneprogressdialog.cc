@@ -50,18 +50,7 @@ void MilestoneProgressDialog::slotChanged() {
 }
 
 KCommand *MilestoneProgressDialog::buildCommand(Part *part) {
-    KMacroCommand *m = new KMacroCommand(i18n("Modify Milestone Progress"));
-    bool modified = false;
-    KCommand *cmd = m_panel->buildCommand(part);
-    if (cmd) {
-        m->addCommand(cmd);
-        modified = true;
-    }
-    if (!modified) {
-        delete m;
-        return 0;
-    }
-    return m;
+    return m_panel->buildCommand(part);;
 }
 
 void MilestoneProgressDialog::slotOk() {

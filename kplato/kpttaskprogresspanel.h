@@ -69,8 +69,8 @@ protected:
     
 private:
     Task &m_task;
+    Completion &m_completion;
     int m_dayLength;
-    struct Task::Progress m_progress;
 };
 
 }  //KPlato namespace

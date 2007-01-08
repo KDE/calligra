@@ -434,7 +434,7 @@ bool Project::load( QDomElement &element, XMLLoaderObject &status )
                 // Load the task (and resourcerequests).
                 // Depends on resources already loaded
                 Task * child = new Task( this );
-                if ( child->load( e, *this ) ) {
+                if ( child->load( e, status ) ) {
                     if ( !addTask( child, this ) ) {
                         delete child; // TODO: Complain about this
                     }

@@ -28,6 +28,7 @@
 #include "kptcalendar.h"
 #include "kpteffortcostmap.h"
 #include "kptschedule.h"
+#include "kptxmlloaderobject.h"
 
 #include <qdom.h>
 #include <qbrush.h>
@@ -182,8 +183,7 @@ void Task::setConstraint(Node::ConstraintType type) {
 }
 
 
-bool Task::load(QDomElement &element, Project &project) {
-    // Load attributes (TODO: Handle different types of tasks, milestone, summary...)
+bool Task::load(QDomElement &element, XMLLoaderObject &status ) {
     QString s;
     bool ok = false;
     m_id = element.attribute("id");
@@ -211,7 +211,7 @@ bool Task::load(QDomElement &element, Project &project) {
     
     m_wbs = element.attribute("wbs", "");
     
-    // Load the project children
+    // Load the task children
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
@@ -219,7 +219,7 @@ bool Task::load(QDomElement &element, Project &project) {
 
             if (e.tagName() == "project") {
                 // Load the subproject
-/*                Project *child = new Project(this);
+/*                Project *child = new Project(this, status);
                 if (child->load(e)) {
                     if (!project.addSubTask(child, this)) {
                         delete child;  // TODO: Complain about this
@@ -231,8 +231,8 @@ bool Task::load(QDomElement &element, Project &project) {
             } else if (e.tagName() == "task") {
                 // Load the task
                 Task *child = new Task(this);
-                if (child->load(e, project)) {
-                    if (!project.addSubTask(child, this)) {
+                if (child->load(e, status)) {
+                    if (!status.project().addSubTask(child, this)) {
                         delete child;  // TODO: Complain about this
                     }
                 } else {
@@ -247,25 +247,14 @@ bool Task::load(QDomElement &element, Project &project) {
             } else if (e.tagName() == "resourcegroup-request") {
                 // Load the resource request
                 ResourceGroupRequest *r = new ResourceGroupRequest();
-                if (r->load(e, project)) {
+                if (r->load(e, status.project())) {
                     addRequest(r);
                 } else {
                     kError()<<k_funcinfo<<"Failed to load resource request"<<endl;
                     delete r;
                 }
             } else if (e.tagName() == "progress") {
-                m_progress.started = (bool)e.attribute("started", "0").toInt();
-                m_progress.finished = (bool)e.attribute("finished", "0").toInt();
-                
-                s = e.attribute("startTime");
-                if (!s.isEmpty())
-                    m_progress.startTime = DateTime::fromString(s);
-                s = e.attribute("finishTime");
-                if (!s.isEmpty())
-                    m_progress.finishTime = DateTime::fromString(s);
-                m_progress.percentFinished = e.attribute("percent-finished", "0").toInt();
-                m_progress.remainingEffort = Duration::fromString(e.attribute("remaining-effort"));
-                m_progress.totalPerformed = Duration::fromString(e.attribute("performed-effort"));
+                m_completion.loadXML( e, status );
             } else if (e.tagName() == "schedules") {
                 QDomNodeList lst = e.childNodes();
                 for (unsigned int i=0; i<lst.count(); ++i) {
@@ -290,12 +279,10 @@ bool Task::load(QDomElement &element, Project &project) {
     return true;
 }
 
-
 void Task::save(QDomElement &element)  const {
     QDomElement me = element.ownerDocument().createElement("task");
     element.appendChild(me);
 
-    //TODO: Handle different types of tasks, milestone, summary...
     me.setAttribute("id", m_id);
     me.setAttribute("name", m_name);
     me.setAttribute("leader", m_leader);
@@ -312,15 +299,7 @@ void Task::save(QDomElement &element)  const {
     
     m_effort->save(me);
 
-    QDomElement el = me.ownerDocument().createElement("progress");
-    me.appendChild(el);
-    el.setAttribute("started", m_progress.started);
-    el.setAttribute("finished", m_progress.finished);
-    el.setAttribute("startTime", m_progress.startTime.toString(Qt::ISODate));
-    el.setAttribute("finishTime", m_progress.finishTime.toString(Qt::ISODate));
-    el.setAttribute("percent-finished", m_progress.percentFinished);
-    el.setAttribute("remaining-effort", m_progress.remainingEffort.toString());
-    el.setAttribute("performed-effort", m_progress.totalPerformed.toString());
+    m_completion.saveXML( me );
     
     if (!m_schedules.isEmpty()) {
         QDomElement schs = me.ownerDocument().createElement("schedules");
@@ -431,7 +410,7 @@ Duration Task::actualEffort( long id ) {
             eff += n->actualEffort(id);
         }
     } else {
-        eff = m_progress.totalPerformed;
+        eff = m_completion.totalPerformed();
     }
     /* If we want to register pr resource...
     } else if (m_currentSchedule) {
@@ -594,12 +573,12 @@ double Task::effortPerformanceIndex(const QDate &date, bool *error) {
     double res = 0.0;
     Duration ae = actualEffortTo(date);
     
-    bool e = (ae == Duration::zeroDuration || m_progress.percentFinished == 0);
+    bool e = (ae == Duration::zeroDuration || m_completion.percentFinished() == 0);
     if (error) {
         *error = e;
     }
     if (!e) {
-        res = (plannedEffortTo(date).toDouble() * ((double)m_progress.percentFinished/100.0) / ae.toDouble());
+        res = (plannedEffortTo(date).toDouble() * ((double)m_completion.percentFinished()/100.0) / ae.toDouble());
     }
     return res;
 }
@@ -609,12 +588,12 @@ double Task::costPerformanceIndex(const QDate &date, bool *error) {
     double res = 0.0;
     Duration ac = qint64(actualCostTo(date));
     
-    bool e = (ac == Duration::zeroDuration || m_progress.percentFinished == 0);
+    bool e = (ac == Duration::zeroDuration || m_completion.percentFinished() == 0);
     if (error) {
         *error = e;
     }
     if (!e) {
-        res = (plannedCostTo(date) * m_progress.percentFinished)/(100 * actualCostTo(date));
+        res = (plannedCostTo(date) * m_completion.percentFinished())/(100 * actualCostTo(date));
     }
     return res;
 }
@@ -1789,6 +1768,147 @@ bool Task::effortMetError( long id ) const {
     return s->plannedEffort() < effort()->effort(static_cast<Effort::Use>(s->type()),  s->usePert());
 }
 
+//------------------------------------------
+
+Completion::Completion()
+    : m_started( false ),
+      m_finished( false )
+{}
+
+Completion::~Completion()
+{ 
+    qDeleteAll( m_entries );
+}
+    
+bool Completion::operator==( const Completion &p )
+{
+    return m_started == p.started() && m_finished == p.finished() &&
+            m_startTime == p.startTime() && m_finishTime == p.finishTime() &&
+            m_entries == p.entries();
+}
+Completion &Completion::operator=( const Completion &p )
+{
+    m_started = p.started(); m_finished = p.finished();
+    m_startTime = p.startTime(); m_finishTime = p.finishTime();
+    m_entries = p.entries();
+    return *this;
+}
+    
+void Completion::setStarted( bool on )
+{
+     m_started = on;
+}
+
+void Completion::setFinished( bool on )
+{
+     m_finished = on;
+}
+
+void Completion::setStartTime( const QDateTime &dt )
+{
+     m_startTime = dt;
+}
+
+void Completion::setFinishTime( const QDateTime &dt )
+{
+     m_finishTime = dt;
+}
+    
+void Completion::addEntry( const QDate &date, Entry *entry )
+{
+     m_entries.insert( date, entry );
+     kDebug()<<k_funcinfo<<m_entries.count()<<" added: "<<date<<endl;
+     printDebug("");
+}
+    
+QDate Completion::entryDate() const
+{
+     return m_entries.isEmpty() ? QDate() : m_entries.keys().last();
+}
+
+int Completion::percentFinished() const
+{
+     return m_entries.isEmpty() ? 0 : m_entries.values().last()->percentFinished;
+}
+    
+Duration Completion::remainingEffort() const
+{
+     return m_entries.isEmpty() ? 0 : m_entries.values().last()->remainingEffort;
+}
+
+Duration Completion::totalPerformed() const
+{
+     return m_entries.isEmpty() ? 0 : m_entries.values().last()->totalPerformed;
+}
+
+bool Completion::loadXML( QDomElement &element, XMLLoaderObject &status )
+{
+    //kDebug()<<k_funcinfo<<endl;
+    QString s;
+    m_started = (bool)element.attribute("started", "0").toInt();
+    m_finished = (bool)element.attribute("finished", "0").toInt();
+    s = element.attribute("startTime");
+    if (!s.isEmpty()) {
+        m_startTime = DateTime::fromString(s);
+    }
+    s = element.attribute("finishTime");
+    if (!s.isEmpty()) {
+        m_finishTime = DateTime::fromString(s);
+    }
+    if (status.version() < "0.6") {
+        if ( m_started ) {
+            Entry *entry = new Entry( element.attribute("percent-finished", "0").toInt(), Duration::fromString(element.attribute("remaining-effort")),  Duration::fromString(element.attribute("performed-effort")) );
+            QDate date = m_startTime.date();
+            if ( m_finished ) {
+                date = m_finishTime.date();
+            }
+            // almost the best we can do ;)
+            addEntry( date, entry );
+        }
+    } else {
+        QDomNodeList list = element.childNodes();
+        for (unsigned int i=0; i<list.count(); ++i) {
+            if (list.item(i).isElement()) {
+                QDomElement e = list.item(i).toElement();
+                if (e.tagName() == "completion-entry") {
+                    QDate date;
+                    s = e.attribute("date");
+                    if ( !s.isEmpty() ) {
+                        date = QDate::fromString( s, Qt::ISODate );
+                    }
+                    if ( !date.isValid() ) {
+                        kWarning()<<k_funcinfo<<"Illegal date: "<<date<<s<<endl;
+                        continue;
+                    }
+                    Entry *entry = new Entry( e.attribute("percent-finished", "0").toInt(), Duration::fromString(e.attribute("remaining-effort")),  Duration::fromString(e.attribute("performed-effort")) );
+                    addEntry( date, entry );
+                }
+            }
+        }
+    }
+    return true;
+}
+
+void Completion::saveXML(QDomElement &element)  const
+{
+    QDomElement el = element.ownerDocument().createElement("progress");
+    element.appendChild(el);
+    el.setAttribute("started", m_started);
+    el.setAttribute("finished", m_finished);
+    el.setAttribute("startTime", m_startTime.toString(Qt::ISODate));
+    el.setAttribute("finishTime", m_finishTime.toString(Qt::ISODate));
+    foreach( QDate date, m_entries.uniqueKeys() ) {
+        QDomElement elm = el.ownerDocument().createElement("completion-entry");
+        el.appendChild(elm);
+        Entry *e = m_entries[ date ];
+        elm.setAttribute( "date", date.toString( Qt::ISODate ) );
+        elm.setAttribute( "percent-finished", e->percentFinished );
+        elm.setAttribute( "remaining-effort", e->remainingEffort.toString() );
+        elm.setAttribute( "performed-effort", e->totalPerformed.toString() );
+    }
+}
+
+//----------------------------------
 #ifndef NDEBUG
 void Task::printDebug(bool children, const QByteArray& _indent) {
     QByteArray indent = _indent;
@@ -1799,8 +1919,26 @@ void Task::printDebug(bool children, const QByteArray& _indent) {
     if (m_requests)
         m_requests->printDebug(indent);
     
+    m_completion.printDebug( indent );
+    
     Node::printDebug(children, indent);
 
+}
+
+void Completion::printDebug(const QByteArray& _indent) const {
+    QByteArray indent = _indent;
+    kDebug()<<indent<<"+ Completion: ("<<m_entries.count()<<" entries)"<<endl;
+    indent += "!  ";
+    kDebug()<<indent<<"Started: "<<m_started<<"  "<<m_startTime<<endl;
+    kDebug()<<indent<<"Finished: "<<m_finished<<"  "<<m_finishTime<<endl;
+    indent += "  ";
+    foreach( QDate d, m_entries.keys() ) {
+        Entry *e = m_entries[ d ];
+        kDebug()<<indent<<"Date: "<<d<<endl;
+        kDebug()<<(indent+" ! ")<<"% Finished: "<<e->percentFinished<<endl;
+        kDebug()<<(indent+" ! ")<<"Remainig: "<<e->remainingEffort.toString()<<endl;
+        kDebug()<<(indent+" ! ")<<"Performed: "<<e->totalPerformed.toString()<<endl;
+    }
 }
 
 #endif

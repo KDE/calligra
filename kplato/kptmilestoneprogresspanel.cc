@@ -36,32 +36,39 @@ namespace KPlato
 
 MilestoneProgressPanel::MilestoneProgressPanel(Task &task, QWidget *parent, const char *name)
     : MilestoneProgressPanelImpl(parent, name),
-      m_task(task)
+      m_task(task),
+      m_completion( task.completion() )
+
 {
     kDebug()<<k_funcinfo<<endl;
-    m_progress = task.progress();
-    finished->setChecked(m_progress.finished);
-    finishTime->setDateTime(m_progress.finishTime);
-        
+    finished->setChecked(m_completion.finished());
+    finishTime->setDateTime(m_completion.finishTime());
     enableWidgets();
     finished->setFocus();
 }
 
 
 bool MilestoneProgressPanel::ok() {
-    m_progress.started = finished->isChecked();
-    m_progress.finished = finished->isChecked();
-    m_progress.startTime = finishTime->dateTime();
-    m_progress.finishTime = finishTime->dateTime();
-    m_progress.percentFinished = m_progress.finished ? 100 : 0;
     return true;
 }
 
 KCommand *MilestoneProgressPanel::buildCommand(Part *part) {
-    KCommand *cmd = 0;
-    QString c = i18n("Modify progress");
-    if (m_task.progress() != m_progress) {
-        cmd = new TaskModifyProgressCmd(part, m_task, m_progress, c);
+    KMacroCommand *cmd = 0;
+    QString c = i18n("Modify milestone completion");
+    
+    if ( m_completion.finished() != finished->isChecked() ) {
+        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        cmd->addCommand( new ModifyCompletionFinishedCmd(part, m_completion, finished->isChecked()) );
+    }
+    if ( m_completion.finishTime() != finishTime->dateTime() ) {
+        if ( cmd == 0 ) cmd = new KMacroCommand( c );
+        cmd->addCommand( new ModifyCompletionFinishTimeCmd(part, m_completion, finishTime->dateTime() ) );
+    }
+    if ( finished->isChecked() && finishTime->dateTime().isValid() ) {
+        Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
+        cmd->addCommand( new AddCompletionEntryCmd( part, m_completion, finishTime->dateTime().date(), e ) );
+    } else {
+        // TODO: Remove ??
     }
     return cmd;
 }
