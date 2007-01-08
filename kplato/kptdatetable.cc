@@ -22,10 +22,10 @@
 #include "kptdatetable.h"
 #include "kptmap.h"
 
-#include <kapplication.h>
 #include <knotification.h>
 #include <kcalendarsystem.h>
 
+#include <QApplication>
 #include <QDateTime>
 #include <QString>
 #include <QPen>

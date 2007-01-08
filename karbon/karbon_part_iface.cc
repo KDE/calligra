@@ -20,7 +20,6 @@
 
 #include <dcopclient.h>
 
-#include <kapplication.h>
 
 #include "karbon_part.h"
 #include "karbon_part_iface.h"

@@ -67,7 +67,6 @@
 #include <kmessagebox.h>
 #include <kbuttonbox.h>
 #include <ksimpleconfig.h>
-#include <kapplication.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kcharsets.h>
@@ -276,14 +275,14 @@ void KPrWebPresentation::initCreation( QProgressBar *progressBar )
 
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
 
     str = path + "/pics";
     KIO::NetAccess::mkdir( str,( QWidget* )0L );
 
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
 
     const char *pics[] = { "home", "first", "next", "prev", "last", 0 };
 
@@ -299,7 +298,7 @@ void KPrWebPresentation::initCreation( QProgressBar *progressBar )
         KIO::NetAccess::file_copy( srcurl, desturl, -1, true /*overwrite*/);
         p = progressBar->value();
         progressBar->setValue( ++p );
-        kapp->processEvents();
+        qApp->processEvents();
     }
 }
 
@@ -324,7 +323,7 @@ void KPrWebPresentation::createSlidesPictures( QProgressBar *progressBar )
 
         p = progressBar->value();
         progressBar->setValue( ++p );
-        kapp->processEvents();
+        qApp->processEvents();
     }
 }
 
@@ -529,7 +528,7 @@ void KPrWebPresentation::createSlidesHTML( QProgressBar *progressBar )
 
         int p = progressBar->value();
         progressBar->setValue( ++p );
-        kapp->processEvents();
+        qApp->processEvents();
     }
 }
 
@@ -575,7 +574,7 @@ void KPrWebPresentation::createMainPage( QProgressBar *progressBar )
     KIO::NetAccess::file_move( tmp.fileName(), dest, -1, true /*overwrite*/);
 
     progressBar->setValue( progressBar->maximum() );
-    kapp->processEvents();
+    qApp->processEvents();
 }
 
 void KPrWebPresentation::init()

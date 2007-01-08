@@ -20,7 +20,6 @@
 #include "vobject_iface.h"
 #include "vobject.h"
 
-#include <kapplication.h>
 #include <dcopclient.h>
 
 VObjectIface::VObjectIface( VObject* obj )

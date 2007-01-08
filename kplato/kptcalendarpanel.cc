@@ -27,7 +27,6 @@
 
 
 #include <kglobal.h>
-#include <kapplication.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
 #include <kiconloader.h>
@@ -37,8 +36,8 @@
 #include <qstyle.h>
 #include <qtoolbutton.h>
 #include <QToolTip>
+#include <QApplication>
 #include <QFont>
-//Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
 #include <QResizeEvent>

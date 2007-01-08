@@ -25,7 +25,6 @@
 #include "KPrPage.h"
 #include "KPrDocument.h"
 
-#include <kapplication.h>
 
 KPrViewAdaptor::KPrViewAdaptor( KPrView *view_ )
     : KoViewAdaptor( view_ )

@@ -23,7 +23,6 @@
 #include "KPrDocument.h"
 #include "KPrView.h"
 #include <KoTextObject.h>
-#include <kapplication.h>
 #include "KPrCanvas.h"
 #include <kdebug.h>
 #include <kcommand.h>

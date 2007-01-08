@@ -58,7 +58,6 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <KoGlobal.h>
-#include <kapplication.h>
 #include <k3urldrag.h>
 #include <ktemporaryfile.h>
 #include <klocale.h>

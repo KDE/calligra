@@ -58,8 +58,8 @@
 
 // KDE includes
 #include <kactioncollection.h>
-#include <kapplication.h>
 #include <kconfig.h>
+#include <kinstance.h>
 #include <kdebug.h>
 #include <kfind.h>
 #include <kfinddialog.h>

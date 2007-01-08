@@ -22,7 +22,6 @@
 #include "KPrPieObject.h"
 #include "KPrObject.h"
 #include "KPrUtils.h"
-#include <kapplication.h>
 #include <kdebug.h>
 
 KPrPieObjectAdaptor::KPrPieObjectAdaptor( KPrPieObject *_obj )

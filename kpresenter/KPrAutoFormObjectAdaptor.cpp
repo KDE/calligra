@@ -24,7 +24,6 @@
 #include "KPrObject.h"
 #include <kdebug.h>
 
-#include <kapplication.h>
 
 KPrAutoFormObjectAdaptor::KPrAutoFormObjectAdaptor( KPrAutoformObject *_obj )
     : KPrObject2DAdaptor(_obj)

@@ -66,7 +66,7 @@ KInstance* KivioFactory::instance()
 
     s_instance->dirs()->addResourceType("kivio_template", KStandardDirs::kde_default("data")
                                         + "kivio/templates/");
-    kapp->iconLoader()->addAppDir("koffice");
+    KIconLoader::global()->addAppDir("koffice");
   }
 
   return s_instance;

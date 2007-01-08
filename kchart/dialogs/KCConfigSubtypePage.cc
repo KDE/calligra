@@ -24,7 +24,6 @@
 #include <QLabel>
 #include <QLayout>
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>

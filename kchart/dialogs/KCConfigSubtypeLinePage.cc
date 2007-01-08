@@ -25,7 +25,6 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <kdialog.h>
 

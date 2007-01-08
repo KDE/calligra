@@ -50,7 +50,6 @@
 #include <QResizeEvent>
 #include <Q3VBoxLayout>
 
-#include <kapplication.h>
 #include <kbuttonbox.h>
 #include <kcolorbutton.h>
 #include <kglobal.h>
@@ -94,7 +93,7 @@ void KPrMSPresentation::initCreation( QProgressBar *progressBar )
 
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
 
     for (int dirNum = 101; dirNum < 999; dirNum++) {
         slidePath = QString("/DCIM/%1MSPJP").arg(dirNum);
@@ -104,13 +103,13 @@ void KPrMSPresentation::initCreation( QProgressBar *progressBar )
 
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
 
     str = (  path + slidePath );
     KIO::NetAccess::mkdir( str,( QWidget* )0L  );
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
 
     // now do the SPP file directory
     str = (  path + "/MSSONY" );
@@ -118,14 +117,14 @@ void KPrMSPresentation::initCreation( QProgressBar *progressBar )
 
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
     str = (  path + "/MSSONY/PJ" );
     KIO::NetAccess::mkdir( str,( QWidget* )0L  );
 
 
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
 
     // create the title slides
     QPixmap titleSlide( 1024, 768 );
@@ -142,7 +141,7 @@ void KPrMSPresentation::initCreation( QProgressBar *progressBar )
 
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
 
     // and put the specified title string on the first slide
     QFont textFont( "SansSerif", 96 );
@@ -159,7 +158,7 @@ void KPrMSPresentation::initCreation( QProgressBar *progressBar )
 
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
 
 }
 
@@ -184,7 +183,7 @@ void KPrMSPresentation::createSlidesPictures( QProgressBar *progressBar )
 
         p = progressBar->value();
         progressBar->setValue( ++p );
-        kapp->processEvents();
+        qApp->processEvents();
     }
 }
 
@@ -201,7 +200,7 @@ void KPrMSPresentation::createIndexFile( QProgressBar *progressBar )
     sppStream.setByteOrder(QDataStream::LittleEndian);
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
 
     // We are doing little endian
     sppStream << (quint32)0x00505053; // SPP magic header
@@ -225,7 +224,7 @@ void KPrMSPresentation::createIndexFile( QProgressBar *progressBar )
     sppStream << (quint32)0x00000000; // more nulls
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
 
     // title 1, 16 bytes null padded
     strncpy( buff, "SPJT0001.JPG", 15 );
@@ -254,7 +253,7 @@ void KPrMSPresentation::createIndexFile( QProgressBar *progressBar )
     }
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
 
     // Add in the slide filenames
     QString filename;
@@ -265,7 +264,7 @@ void KPrMSPresentation::createIndexFile( QProgressBar *progressBar )
         sppStream.writeRawBytes( buff, 64 );
         p = progressBar->value();
         progressBar->setValue( ++p );
-        kapp->processEvents();
+        qApp->processEvents();
     }
 
     // OK, now we need to fill to 16384 bytes
@@ -277,7 +276,7 @@ void KPrMSPresentation::createIndexFile( QProgressBar *progressBar )
 
     p = progressBar->value();
     progressBar->setValue( ++p );
-    kapp->processEvents();
+    qApp->processEvents();
 
     sppFile.flush();
     KIO::NetAccess::file_move( sppFile.fileName(), filenameStore, -1, true /*overwrite*/);

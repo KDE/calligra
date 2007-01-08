@@ -34,7 +34,6 @@
 #include "Doc.h"
 #include "DataManipulators.h"
 
-#include <kapplication.h>
 #include <kdebug.h>
 
 // #include "KSpreadCellIface.h"

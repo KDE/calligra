@@ -29,7 +29,6 @@
 #include <klistbox.h>
 #include <kdebug.h>
 #include <kvbox.h>
-#include <kapplication.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kcolorbutton.h>

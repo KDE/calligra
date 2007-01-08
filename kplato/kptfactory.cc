@@ -21,7 +21,6 @@
 #include "kptpart.h"
 #include "kptaboutdata.h"
 #include <kinstance.h>
-#include <kapplication.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -89,7 +88,7 @@ KInstance* Factory::global()
 					  KStandardDirs::kde_default("data") + "koffice/toolbar/");
 
         // Tell the iconloader about share/apps/koffice/icons
-        kapp->iconLoader()->addAppDir("koffice");
+        KIconLoader::global()->addAppDir("koffice");
     }
     return s_global;
 }

@@ -26,6 +26,7 @@
 
 #include <q3textbrowser.h>
 #include <QTabWidget>
+#include <QApplication>
 //Added by qt3to4:
 #include <QCloseEvent>
 #include <QGridLayout>
@@ -44,7 +45,6 @@
 #include "View.h"
 #include "Functions.h"
 
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kbuttonbox.h>
 #include <knumvalidator.h>

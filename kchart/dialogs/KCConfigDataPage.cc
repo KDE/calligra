@@ -20,7 +20,6 @@
 #include "KCConfigDataPage.h"
 
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <kcolorbutton.h>
 #include <kdebug.h>

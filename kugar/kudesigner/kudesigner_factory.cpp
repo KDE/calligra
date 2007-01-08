@@ -21,7 +21,6 @@
 #include <kudesigner_doc.h>
 #include <kudesigner_aboutdata.h>
 #include <kinstance.h>
-#include <kapplication.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -92,7 +91,7 @@ KInstance* KudesignerFactory::global()
                                             KStandardDirs::kde_default( "data" ) + "kudesigner/templates/" );
 
         // Tell the iconloader about share/apps/koffice/icons
-        kapp->iconLoader() ->addAppDir( "koffice" );
+        KIconLoader::global() ->addAppDir( "koffice" );
     }
     return s_global;
 }

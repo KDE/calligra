@@ -23,7 +23,6 @@
 
 #include "KPrObject.h"
 #include <kdebug.h>
-#include <kapplication.h>
 
 KPrObject2DAdaptor::KPrObject2DAdaptor(KPr2DObject *obj_)
     : KPrObjectAdaptor(obj_)

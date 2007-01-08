@@ -107,7 +107,7 @@ int KivioStencilSetAction::plug( QWidget* widget, int index)
     if ( hasIconSet() )
       id = menu->insertItem( iconSet(), text(), popupMenu(), -1, index );
     else
-      id = menu->insertItem( kapp->iconLoader()->loadIcon(icon(), K3Icon::Small),
+      id = menu->insertItem( KIconLoader::global()->loadIcon(icon(), K3Icon::Small),
         text(), popupMenu(), -1, index );
 
     if ( !isEnabled() )

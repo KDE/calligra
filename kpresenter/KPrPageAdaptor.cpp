@@ -28,7 +28,6 @@
 #include "KPrTextObject.h"
 #include "KPrView.h"
 #include "KPrBackground.h"
-#include <kapplication.h>
 #include "KPrDocument.h"
 #include "KPrCanvas.h"
 #include <kdebug.h>

@@ -22,7 +22,6 @@
 #include "KPrRectObject.h"
 #include "KPrObject.h"
 
-#include <kapplication.h>
 
 KPrRectObjectAdaptor::KPrRectObjectAdaptor( KPrRectObject *_obj )
     : KPrObject2DAdaptor(_obj)

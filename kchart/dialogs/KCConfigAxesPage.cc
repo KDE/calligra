@@ -30,7 +30,6 @@
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <kfontdialog.h>
 

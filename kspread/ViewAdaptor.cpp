@@ -26,7 +26,6 @@
 */
 
 
-#include <kapplication.h>
 
 #include "Doc.h"
 #include "Map.h"

@@ -21,7 +21,6 @@
 #include "KPtViewAdaptor.h"
 #include "kptview.h"
 
-#include <kapplication.h>
 
 namespace KPlato
 {

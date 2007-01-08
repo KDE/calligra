@@ -23,7 +23,6 @@
 #include "KPrUtils.h"
 #include <kdebug.h>
 
-#include <kapplication.h>
 
 KPrFreehandObjectAdaptor::KPrFreehandObjectAdaptor( KPrFreehandObject *_obj )
     : KPrObjectAdaptor(_obj)

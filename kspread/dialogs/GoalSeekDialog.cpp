@@ -36,7 +36,6 @@
 #include "View.h"
 #include "DataManipulators.h"
 
-#include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -47,6 +46,7 @@
 #include <QFrame>
 #include <QLabel>
 #include <QLayout>
+#include <QApplication>
 #include <QLineEdit>
 #include <QToolTip>
 #include <QVariant>

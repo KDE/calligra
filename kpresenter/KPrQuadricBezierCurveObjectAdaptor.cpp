@@ -24,7 +24,6 @@
 #include "KPrObject.h"
 #include <kdebug.h>
 
-#include <kapplication.h>
 
 KPrQuadricBezierCurveObjectAdaptor::KPrQuadricBezierCurveObjectAdaptor( KPrQuadricBezierCurveObject *_obj )
     : KPrObjectAdaptor(_obj)

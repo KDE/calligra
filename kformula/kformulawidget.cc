@@ -26,7 +26,6 @@
 #include <QKeyEvent>
 #include <QPaintEvent>
 
-#include <kapplication.h>
 #include <kdebug.h>
 
 #include <basicelement.h>

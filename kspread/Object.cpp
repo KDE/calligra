@@ -23,12 +23,12 @@
 #include "View.h"
 
 #include <assert.h>
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kimageeffect.h>
 #include <kparts/partmanager.h>
 #include <koChart.h>
 
+#include <QApplication>
 #include <QBitmap>
 #include <QBuffer>
 #include <QCursor>
@@ -204,7 +204,7 @@ void EmbeddedObject::paintSelection( QPainter *_painter, SelectionMode mode )
 
   //_painter->setPen( QPen( Qt::black, 1, QPen::SolidLine ) );
   _painter->setPen( pen );
-  _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
+  _painter->setBrush( qApp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
 
   //KoRect r = rotateRectObject(); // TODO: rotation
   QRectF r = /*KoRect::fromQRect*/( bound );
@@ -240,7 +240,7 @@ void EmbeddedObject::paintSelection( QPainter *_painter, SelectionMode mode )
     zX6=zX6-2;
     zY6=zY6-2;
 
-    QBrush brush=kapp->palette().color( QPalette::Active,QColorGroup::Base );
+    QBrush brush=qApp->palette().color( QPalette::Active,QColorGroup::Base );
     _painter->fillRect( x, y,  zX6, zY6, brush );
     _painter->fillRect( x, y + h / 2, zX6, zY6, brush);
     _painter->fillRect( x, y + h, zX6, zY6, brush );

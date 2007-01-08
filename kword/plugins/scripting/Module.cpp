@@ -24,7 +24,7 @@
 #include "FrameSet.h"
 
 #include <QPointer>
-#include <kapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 
 #include <KoDocumentAdaptor.h>
@@ -85,7 +85,7 @@ void Module::setView(KWView* view)
 
 QObject* Module::application()
 {
-    return KApplication::kApplication()->findChild< KoApplicationAdaptor* >();
+    return qApp->findChild< KoApplicationAdaptor* >();
 }
 
 QObject* Module::document()

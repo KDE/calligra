@@ -22,7 +22,6 @@
 #include "KPrPolygonObject.h"
 #include "KPrObject.h"
 
-#include <kapplication.h>
 
 KPrPolygonObjectAdaptor::KPrPolygonObjectAdaptor( KPrPolygonObject *_obj )
     : KPrObject2DAdaptor(_obj)

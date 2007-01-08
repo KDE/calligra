@@ -76,7 +76,7 @@ KInstance* ExampleFactory::global()
         // Add any application-specific resource directories here
 
         // Tell the iconloader about share/apps/koffice/icons
-        kapp->iconLoader()->addAppDir("koffice");
+        KIconLoader::global()->addAppDir("koffice");
     }
     return s_global;
 }

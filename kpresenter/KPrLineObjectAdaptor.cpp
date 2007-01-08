@@ -24,7 +24,6 @@
 #include "KPrObject.h"
 #include <kdebug.h>
 
-#include <kapplication.h>
 
 KPrLineObjectAdaptor::KPrLineObjectAdaptor( KPrLineObject *_obj )
     : KPrObjectAdaptor(_obj)

@@ -21,7 +21,6 @@
 #include "KPrTextViewAdaptor.h"
 
 #include "KPrTextObject.h"
-#include <kapplication.h>
 
 KPrTextViewAdaptor::KPrTextViewAdaptor( KPrTextView *_textview )
     :KoTextViewAdaptor(_textview)

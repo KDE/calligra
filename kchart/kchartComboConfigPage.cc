@@ -20,7 +20,6 @@
 #include "kchartComboConfigPage.h"
 #include "kchartComboConfigPage.moc"
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdialog.h>

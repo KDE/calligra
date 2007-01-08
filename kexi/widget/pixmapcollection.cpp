@@ -104,7 +104,7 @@ PixmapCollection::getPixmap(const QString &name)
 
 	if(m_pixmaps[name].second != 0)
 	{
-		return kapp->iconLoader()->loadIcon(m_pixmaps[name].first, K3Icon::NoGroup, m_pixmaps[name].second);
+		return KIconLoader::global()->loadIcon(m_pixmaps[name].first, K3Icon::NoGroup, m_pixmaps[name].second);
 	}
 	else
 		return QPixmap(m_pixmaps[name].first);

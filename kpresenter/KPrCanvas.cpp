@@ -52,7 +52,6 @@
 #include <QPoint>
 #include <qclipboard.h>
 #include <QBuffer>
-#include <kapplication.h>
 #include <kmimemagic.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -3058,7 +3057,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
                 QPainter p;
                 p.begin( this );
                 drawBackground( &p,
-                                QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ),
+                                QRect( 0, 0, qApp->desktop()->width(), kapp->desktop()->height() ),
                                 doc->pageList().at( m_step.m_pageNumber ) );
                 p.end();
             }
@@ -3410,7 +3409,7 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
         m_effectHandler = 0;
     }
 
-    QPixmap screen_orig( kapp->desktop()->width(), kapp->desktop()->height() );
+    QPixmap screen_orig( qApp->desktop()->width(), kapp->desktop()->height() );
 
     KPrPage *page = m_view->kPresenterDoc()->pageList().at( m_step.m_pageNumber );
     // YABADABADOOOOOOO.... That's a hack :-)
@@ -3419,7 +3418,7 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
         //kDebug(33001) << "Page::doObjEffects - in the strange hack" << endl;
         QPainter p;
         p.begin( &screen_orig );
-        QRect desktopRect = QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
+        QRect desktopRect = QRect( 0, 0, qApp->desktop()->width(), kapp->desktop()->height() );
         drawBackground( &p, desktopRect, page );
         PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, true, true );
         drawPresPage( &p, desktopRect ,step );
@@ -3561,7 +3560,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     int i = 0;
 
     repaint( false );
-    kapp->processEvents();
+    qApp->processEvents();
 
     editMode = false;
     fillBlack = false;
@@ -3598,7 +3597,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     {
         i=(*it);
         progress.setProgress( ++j );
-        kapp->processEvents();
+        qApp->processEvents();
 
         if ( progress.wasCanceled() )
             break;
@@ -3615,10 +3614,10 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
         painter->fillRect( m_view->kPresenterDoc()->pageList().at( m_step.m_pageNumber )->getZoomPageRect(), Qt::white );
 
         printPage( painter, step, printer, rows, cols );
-        kapp->processEvents();
+        qApp->processEvents();
 
         painter->resetXForm();
-        kapp->processEvents();
+        qApp->processEvents();
 
         current_slide += slides_per_page;
 

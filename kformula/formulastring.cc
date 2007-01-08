@@ -27,7 +27,6 @@
 
 #include <q3whatsthis.h>
 
-#include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <KStandardGuiItem>

@@ -20,7 +20,6 @@
 #include "KPtViewIface.h"
 #include "kptview.h"
 
-#include <kapplication.h>
 #include <dcopclient.h>
 #include <dcopref.h>
 

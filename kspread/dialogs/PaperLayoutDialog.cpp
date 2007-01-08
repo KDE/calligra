@@ -31,6 +31,7 @@
 #include <View.h>
 #include <Selection.h>
 
+#include <QApplication>
 #include <QCheckBox>
 #include <QLabel>
 #include <QLineEdit>
@@ -46,7 +47,6 @@
 #include <QEvent>
 #include <QVBoxLayout>
 
-#include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>

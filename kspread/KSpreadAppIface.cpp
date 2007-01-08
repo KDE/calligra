@@ -29,7 +29,6 @@
 #include "Doc.h"
 
 #include <dcopclient.h>
-#include <kapplication.h>
 
 using namespace KSpread;
 

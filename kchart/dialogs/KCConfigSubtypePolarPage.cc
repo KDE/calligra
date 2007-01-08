@@ -28,7 +28,6 @@
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdialog.h>

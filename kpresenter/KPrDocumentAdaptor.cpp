@@ -29,7 +29,6 @@
 #include "KPrView.h"
 #include "KPrPage.h"
 
-#include <kapplication.h>
 #include <KoVariable.h>
 #include "KPrVariableCollection.h"
 #include <KoAutoFormat.h>

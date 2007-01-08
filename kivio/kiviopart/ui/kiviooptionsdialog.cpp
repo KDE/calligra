@@ -98,7 +98,7 @@ KivioOptionsDialog::KivioOptionsDialog(KivioView* parent, const char* name)
 void KivioOptionsDialog::initPage()
 {
   QFrame* page = addPage(i18n("Page"), i18n("Page Settings"),
-    kapp->iconLoader()->loadIcon("empty", K3Icon::Toolbar, 32));
+    KIconLoader::global()->loadIcon("empty", K3Icon::Toolbar, 32));
   m_pageIndex = pageIndex(page);
 
   KivioView* view = static_cast<KivioView*>(parent());

@@ -21,7 +21,6 @@
 
 #include "KPrBackground.h"
 #include "KPrDocument.h"
-#include <kapplication.h>
 #include "KPrGradientCollection.h"
 #include "KPrTextObject.h"
 #include "KPrPage.h"
@@ -527,7 +526,7 @@ void KPrBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRe
         // NOTE: make all multiplications before any division
         double w = _origSize.width();
         w *= ext.width();
-        QRect desk = KGlobalSettings::desktopGeometry(kapp->activeWindow());
+        QRect desk = KGlobalSettings::desktopGeometry(qApp->activeWindow());
         w /= desk.width();
         double h = _origSize.height();
         h *= ext.height();

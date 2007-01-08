@@ -20,7 +20,6 @@
 #include "kchartPieConfigPage.h"
 #include "kchartPieConfigPage.moc"
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <QLayout>
 #include <QLabel>

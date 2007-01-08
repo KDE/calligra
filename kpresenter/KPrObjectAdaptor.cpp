@@ -23,7 +23,6 @@
 
 #include "KPrObject.h"
 #include <kdebug.h>
-#include <kapplication.h>
 
 KPrObjectAdaptor::KPrObjectAdaptor( KPrObject *obj_ )
   : QDBusAbstractAdaptor( obj_ )

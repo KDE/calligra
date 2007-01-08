@@ -24,7 +24,6 @@
 
 #include <QList>
 
-#include <kapplication.h>
 #include <kdebug.h>
 
 #include "Doc.h"

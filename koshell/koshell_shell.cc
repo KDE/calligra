@@ -34,7 +34,6 @@
 #include "koshell_shell.h"
 #include "koshellsettings.h"
 
-#include <kapplication.h>
 #include <ktemporaryfile.h>
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -404,12 +403,12 @@ void KoShellWindow::updateCaption()
 void KoShellWindow::slotSidebar_Part(int _item)
 {
   //kDebug() << "Component part chosen:" << _item << endl;
-  kapp->setOverrideCursor( QCursor(Qt::WaitCursor) );
+  qApp->setOverrideCursor( QCursor(Qt::WaitCursor) );
   m_documentEntry = m_mapComponents[ _item ];
   kDebug() << m_documentEntry.service() << endl;
   kDebug() << m_documentEntry.name() << endl;
   KoDocument *doc = m_documentEntry.createDoc();
-  kapp->restoreOverrideCursor();
+  qApp->restoreOverrideCursor();
   if (doc)
   {
     if ( doc->showEmbedInitDialog( this ) )

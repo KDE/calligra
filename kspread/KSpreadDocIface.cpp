@@ -31,7 +31,6 @@
 #include "Doc.h"
 #include "Map.h"
 
-#include <kapplication.h>
 #include <dcopclient.h>
 #include <QColor>
 #include <kdebug.h>

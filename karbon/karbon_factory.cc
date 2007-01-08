@@ -27,7 +27,6 @@
 #include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 #include <kparts/plugin.h>
-#include <kapplication.h>
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -126,7 +125,7 @@ KarbonFactory::instance()
 											  KStandardDirs::kde_default( "data" ) + "karbon/cliparts/" );
 		s_instance->dirs()->addResourceType( "karbon_template", KStandardDirs::kde_default("data") + "karbon/templates/" );
 		// Tell the iconloader about share/apps/koffice/icons
-        kapp->iconLoader()->addAppDir("koffice");
+        KIconLoader::global()->addAppDir("koffice");
 	}
 
 	return s_instance;

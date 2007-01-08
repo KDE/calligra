@@ -31,7 +31,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <kinstance.h>
-#include <kapplication.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
@@ -501,7 +500,7 @@ KarbonResourceServer::cachePixmap( const QString &key, int group_or_size )
 	QPixmap *result = 0L;
 	if( !( result = m_pixmaps[ key ] ) )
 	{
-		result = new QPixmap( kapp->iconLoader()->iconPath( key, group_or_size ) );
+		result = new QPixmap( KIconLoader::global()->iconPath( key, group_or_size ) );
 		m_pixmaps.insert( key, result );
 	}
 	return result;

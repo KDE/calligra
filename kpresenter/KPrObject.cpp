@@ -35,7 +35,6 @@
 //Added by qt3to4:
 #include <QList>
 
-#include <kapplication.h>
 #include <KoOasisContext.h>
 #include "KoOasisStyles.h"
 
@@ -1410,7 +1409,7 @@ void KPrObject::paintSelection( QPainter *_painter, KoTextZoomHandler *_zoomHand
     _painter->save();
     _painter->translate( _zoomHandler->zoomItXOld(orig.x()), _zoomHandler->zoomItYOld(orig.y()) );
     _painter->setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
-    _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
+    _painter->setBrush( qApp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
 
     QRectF r = getRealRect();
 
@@ -1446,7 +1445,7 @@ void KPrObject::paintSelection( QPainter *_painter, KoTextZoomHandler *_zoomHand
         zX6=zX6-2;
         zY6=zY6-2;
 
-        QBrush brush=kapp->palette().color( QPalette::Active,QColorGroup::Base );
+        QBrush brush=qApp->palette().color( QPalette::Active,QColorGroup::Base );
         _painter->fillRect( x, y,  zX6, zY6, brush );
         _painter->fillRect( x, y + h / 2, zX6, zY6, brush);
         _painter->fillRect( x, y + h, zX6, zY6, brush );

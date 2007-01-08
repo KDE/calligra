@@ -27,7 +27,6 @@
 #include <QWidget>
 #include <qmatrix.h>
 
-#include <kapplication.h>
 #include <kdebug.h>
 #include <krandomsequence.h>
 

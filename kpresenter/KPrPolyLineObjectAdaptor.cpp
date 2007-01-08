@@ -22,7 +22,6 @@
 #include "KPrPolylineObject.h"
 #include "KPrObject.h"
 
-#include <kapplication.h>
 
 KPrPolyLineObjectAdaptor::KPrPolyLineObjectAdaptor( KPrPolylineObject *_obj )
     : KPrObjectAdaptor(_obj)

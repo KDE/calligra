@@ -24,7 +24,7 @@
 #include "ScriptingFunction.h"
 
 #include <QPointer>
-#include <kapplication.h>
+#include <QApplication>
 #include <kdebug.h>
 
 #include <Doc.h>
@@ -84,7 +84,7 @@ void ScriptingModule::setView(KSpread::View* view)
 
 QObject* ScriptingModule::application()
 {
-	return KApplication::kApplication()->findChild< KoApplicationAdaptor* >();
+	return qApp->findChild< KoApplicationAdaptor* >();
 }
 
 QObject* ScriptingModule::document()

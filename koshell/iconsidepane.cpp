@@ -39,7 +39,6 @@
 #include <QMouseEvent>
 
 
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kiconloader.h>

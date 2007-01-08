@@ -23,7 +23,6 @@
 #include "KPrUtils.h"
 #include <kdebug.h>
 
-#include <kapplication.h>
 
 KPrCubicBezierCurveObjectAdaptor::KPrCubicBezierCurveObjectAdaptor( KPrCubicBezierCurveObject *_obj )
     : KPrObjectAdaptor(_obj)

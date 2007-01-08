@@ -24,7 +24,6 @@
 #include <QMimeData>
 #include <QString>
 
-#include <kapplication.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kfiledialog.h>
