@@ -20,7 +20,7 @@
 
 // built-in information functions
 
-
+#include <kofficeversion.h>
 #include <sys/utsname.h>
 
 #include <QDir>
@@ -118,7 +118,7 @@ Value func_info (valVector args, ValueCalc *calc, FuncExtra *)
     return Value (QDir::currentPath());
 
   if (type == "release")
-    return Value (QString (VERSION));
+    return Value (QString (KOFFICE_VERSION_STRING));
 
   if ( type == "numfile" )
     return Value ((int) Doc::documents().count());
