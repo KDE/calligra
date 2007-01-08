@@ -17,16 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#include <QFile>
 #include <QFileInfo>
-#include <QTextStream>
-//Added by qt3to4:
 #include <QByteArray>
 
 #include <kdebug.h>
@@ -80,7 +71,7 @@ bool PalmDocWorker::doCloseFile(void)
   PalmDoc doc;
   doc.setName( title );
   doc.setText( text );
-  doc.save( outfile.latin1() );
+  doc.save( QFile::encodeName(outfile) );
 
   return true;
 }

@@ -19,11 +19,9 @@
 **
 */
 
-#include <QDir>
-//Added by qt3to4:
 #include <QTextStream>
 #include <kdebug.h>		/* for kDebug() stream */
-#include <config.h>
+
 #include <config-filters.h>
 /* Needed to convert picture in eps file. Use GraphicsMagick. */
 #ifdef HAVE_MAGICK

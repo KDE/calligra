@@ -17,16 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#include <QFileInfo>
-#include <q3valuelist.h>
+#include <QFile>
 #include <QFont>
-//Added by qt3to4:
 #include <QByteArray>
 
 #include <kdebug.h>
@@ -241,7 +233,7 @@ KoFilter::ConversionStatus WMLImport::convert( const QByteArray& from, const QBy
 
   // parse/convert input file
   WMLConverter filter;
-  filter.parse( m_chain->inputFile().latin1() );
+  filter.parse( QFile::encodeName(m_chain->inputFile()) );
 
   // check for error
   // FIXME better error handling/reporting
@@ -256,7 +248,7 @@ KoFilter::ConversionStatus WMLImport::convert( const QByteArray& from, const QBy
   // store output document
   if( out )
     {
-      QByteArray cstring = root.utf8();
+      QByteArray cstring = root.toUtf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
       out->write( (const char*) cstring, cstring.length() );
     }
@@ -268,7 +260,7 @@ KoFilter::ConversionStatus WMLImport::convert( const QByteArray& from, const QBy
   out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
   if ( out )
     {
-       QByteArray cstring = documentInfo.utf8();
+       QByteArray cstring = documentInfo.toUtf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
 
        out->write( (const char*) cstring, cstring.length() );

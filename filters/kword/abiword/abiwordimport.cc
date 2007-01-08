@@ -17,19 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
 #include <QMap>
-#include <QBuffer>
-#include <q3picture.h>
 #include <QtXml>
-#include <qdom.h>
 #include <QDateTime>
-//Added by qt3to4:
 #include <QByteArray>
 
 #include <kdebug.h>

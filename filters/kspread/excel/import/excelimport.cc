@@ -18,20 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
 #include <excelimport.h>
 #include <excelimport.moc>
 
-#include <QBuffer>
-#include <QDateTime>
-#include <QFile>
 #include <QString>
-#include <QTextStream>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>

@@ -20,6 +20,7 @@
 #ifndef __WP6_H
 #define __WP6_H
 
+#include <QFile>
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
 

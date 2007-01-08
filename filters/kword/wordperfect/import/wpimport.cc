@@ -17,20 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
 #include <kdebug.h>
 #include <KoFilterChain.h>
 #include <kgenericfactory.h>
 
 #include <wpimport.h>
 
-#include <stdio.h> // debug
-//Added by qt3to4:
 #include <QByteArray>
 
 typedef KGenericFactory<WPImport> WPImportFactory;

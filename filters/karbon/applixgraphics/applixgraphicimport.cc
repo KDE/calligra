@@ -18,17 +18,10 @@
 */
 #define FAKTOR 39.4  // 1000 dots/inch / 2.54 cm/inch    =   394 dots/cm  = 39.4 dots/mm
 
-#include <config.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
 #include <kdebug.h>
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
-//Added by qt3to4:
 #include <Q3CString>
 #include <KoFilterChain.h>
 #include <kgenericfactory.h>
@@ -820,15 +813,11 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QByteArray& from,
         return KoFilter::StorageCreationError;
     }
 
-    Q3CString cstring = str.utf8();
-    out->write ( (const char*)cstring, cstring.size() - 1 );
+    QByteArray cstring = str.toUtf8();
+    out->write ( (const char*)cstring, cstring.size() );
 
     in.close  ();
     return KoFilter::OK;
 }
 
-#include <applixgraphicimport.moc>
-
-
-
-
+#include "applixgraphicimport.moc"

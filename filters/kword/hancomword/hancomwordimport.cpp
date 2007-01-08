@@ -17,12 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
 #include <hancomwordimport.h>
 #include <hancomwordimport.moc>
 
@@ -94,7 +88,7 @@ KoFilter::ConversionStatus HancomWordImport::convert( const QByteArray& from, co
   d->outputFile = m_chain->outputFile();
   d->paragraphs.clear();
 
-  POLE::Storage storage( d->inputFile.latin1() );
+  POLE::Storage storage( QFile::encodeName(d->inputFile) );
   if( !storage.open() )
     return KoFilter::WrongFormat;
 

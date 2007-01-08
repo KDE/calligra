@@ -43,10 +43,6 @@
 
 #include "xml2latexparser.h"
 
-/*#ifdef __FreeBSD__
-#include <unistd.h>
-#endif*/
-
 /*
  *  Constructs a KWordLatexExportDia which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.

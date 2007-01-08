@@ -17,21 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
 #include <powerpointimport.h>
 #include <powerpointimport.moc>
 
 #include <QBuffer>
-#include <q3cstring.h>
 #include <QColor>
-#include <QFile>
 #include <QString>
-#include <QTextStream>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>

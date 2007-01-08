@@ -17,15 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
 #include <QMessageBox>
 #include <q3ptrlist.h>
-//Added by qt3to4:
 #include <QTextStream>
 #include <QByteArray>
 #include <applixwordimport.h>

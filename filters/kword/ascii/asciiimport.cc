@@ -19,12 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
 #include <QObject>
 #include <QString>
 // #include <QRegExp> // Currently not needed (due to disabled code)
