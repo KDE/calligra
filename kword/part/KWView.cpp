@@ -119,48 +119,58 @@ void KWView::setupActions() {
     connect( m_actionViewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, int ) ),
             this, SLOT( viewZoom( KoZoomMode::Mode, int ) ) );
 
-    m_actionFormatFrameSet = new KAction( i18n( "Frame/Frameset Properties" ),
-            actionCollection(), "format_frameset");
+    m_actionFormatFrameSet  = new KAction(i18n("Frame/Frameset Properties"), this);
+    actionCollection()->addAction("format_frameset", m_actionFormatFrameSet );
     m_actionFormatFrameSet->setToolTip( i18n( "Alter frameset properties" ) );
     m_actionFormatFrameSet->setEnabled( false );
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
-    KAction *print = new KAction("MyPrint", actionCollection(), "file_my_print");
+    QAction *print  = new KAction("MyPrint", this);
+    actionCollection()->addAction("file_my_print", print );
     connect(print, SIGNAL(triggered()), this, SLOT(print()));
 
-    m_actionFormatBold = new KToggleAction(KIcon("text_bold"), i18n( "Bold" ), actionCollection(), "format_bold");
+    m_actionFormatBold  = new KToggleAction(KIcon("text_bold"), i18n("Bold"), this);
+    actionCollection()->addAction("format_bold", m_actionFormatBold );
     m_actionFormatBold->setShortcut(KShortcut(Qt::CTRL + Qt::Key_B));
     connect( m_actionFormatBold, SIGNAL(toggled(bool)), this, SLOT(textBold(bool)) );
 
-    m_actionFormatItalic = new KToggleAction(KIcon("text_italic"), i18n( "Italic" ), actionCollection(), "format_italic" );
+    m_actionFormatItalic  = new KToggleAction(KIcon("text_italic"), i18n("Italic"), this);
+    actionCollection()->addAction("format_italic", m_actionFormatItalic );
     m_actionFormatItalic->setShortcut(KShortcut( Qt::CTRL + Qt::Key_I));
     connect( m_actionFormatBold, SIGNAL(toggled(bool)), this, SLOT(textItalic(bool)) );
 
-    m_actionFormatUnderline = new KToggleAction(KIcon("text_under"), i18n( "Underline" ), actionCollection(), "format_underline" );
+    m_actionFormatUnderline  = new KToggleAction(KIcon("text_under"), i18n("Underline"), this);
+    actionCollection()->addAction("format_underline", m_actionFormatUnderline );
     m_actionFormatUnderline->setShortcut(KShortcut( Qt::CTRL + Qt::Key_U));
     connect( m_actionFormatUnderline, SIGNAL(toggled(bool)), this, SLOT(textUnderline(bool)) );
 
-    m_actionFormatStrikeOut = new KToggleAction(KIcon("text_strike"), i18n( "Strike Out" ), actionCollection(), "format_strike" );
+    m_actionFormatStrikeOut  = new KToggleAction(KIcon("text_strike"), i18n("Strike Out"), this);
+    actionCollection()->addAction("format_strike", m_actionFormatStrikeOut );
     connect( m_actionFormatStrikeOut, SIGNAL(toggled(bool)), this, SLOT(textStrikeOut(bool)) );
 
     // ------------------- Actions with a key binding and no GUI item
-    KAction *action = new KAction( i18n( "Insert Non-Breaking Space" ), actionCollection(), "nonbreaking_space" );
+    KAction *action  = new KAction(i18n("Insert Non-Breaking Space"), this);
+    actionCollection()->addAction("nonbreaking_space", action );
     action->setShortcut( KShortcut( Qt::CTRL+Qt::Key_Space));
     connect(action, SIGNAL(triggered()), this, SLOT( slotNonbreakingSpace() ));
 
-    action = new KAction( i18n( "Insert Non-Breaking Hyphen" ), actionCollection(), "nonbreaking_hyphen" );
+    action  = new KAction(i18n("Insert Non-Breaking Hyphen"), this);
+    actionCollection()->addAction("nonbreaking_hyphen", action );
     action->setShortcut( KShortcut( Qt::CTRL+Qt::SHIFT+Qt::Key_Minus));
     connect(action, SIGNAL(triggered()), this, SLOT( slotNonbreakingHyphen() ));
 
-    action = new KAction( i18n( "Insert Soft Hyphen" ), actionCollection(), "soft_hyphen" );
+    action  = new KAction(i18n("Insert Soft Hyphen"), this);
+    actionCollection()->addAction("soft_hyphen", action );
     action->setShortcut( KShortcut( Qt::CTRL+Qt::Key_Minus));
     connect(action, SIGNAL(triggered()), this, SLOT( slotSoftHyphen() ));
 
-    action = new KAction( i18n( "Line Break" ), actionCollection(), "line_break" );
+    action  = new KAction(i18n("Line Break"), this);
+    actionCollection()->addAction("line_break", action );
     action->setShortcut( KShortcut( Qt::SHIFT+Qt::Key_Return));
     connect(action, SIGNAL(triggered()), this, SLOT( slotLineBreak() ));
 
-    m_actionInsertFrameBreak = new KAction( QString::null, actionCollection(), "insert_framebreak" );
+    m_actionInsertFrameBreak  = new KAction(QString::null, this);
+    actionCollection()->addAction("insert_framebreak", m_actionInsertFrameBreak );
     m_actionInsertFrameBreak->setShortcut( KShortcut( Qt::CTRL + Qt::Key_Return));
     connect(m_actionInsertFrameBreak, SIGNAL(triggered()), this, SLOT( insertFrameBreak() ));
     //if ( m_document->processingType() == KWDocument::WP ) {
@@ -173,34 +183,40 @@ void KWView::setupActions() {
         m_actionInsertFrameBreak->setWhatsThis( i18n( "This inserts a non-printing character at the current cursor position. All text after this point will be moved into the next frame in the frameset." ) );
     } */
 
-    m_actionFormatFont = new KAction( i18n( "Font..." ), actionCollection(), "format_font" );
+    m_actionFormatFont  = new KAction(i18n("Font..."), this);
+    actionCollection()->addAction("format_font", m_actionFormatFont );
     m_actionInsertFrameBreak->setShortcut( KShortcut( Qt::ALT + Qt::CTRL + Qt::Key_F));
     m_actionFormatFont->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
     m_actionFormatFont->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
     connect(m_actionFormatFont, SIGNAL(triggered()), this, SLOT( formatFont() ));
 
-    m_actionEditDelFrame = new KAction( i18n( "Delete Frame" ), actionCollection(), "edit_delframe");
+    m_actionEditDelFrame  = new KAction(i18n("Delete Frame"), this);
+    actionCollection()->addAction("edit_delframe", m_actionEditDelFrame );
     m_actionEditDelFrame->setToolTip( i18n( "Delete the currently selected frame(s)" ) );
     m_actionEditDelFrame->setWhatsThis( i18n( "Delete the currently selected frame(s)." ) );
     connect(m_actionEditDelFrame, SIGNAL(triggered()), this, SLOT( editDeleteFrame() ));
 
-    m_actionViewHeader = new KToggleAction( i18n("Enable Document Headers"), actionCollection(), "format_header" );
+    m_actionViewHeader  = new KToggleAction(i18n("Enable Document Headers"), this);
+    actionCollection()->addAction("format_header", m_actionViewHeader );
     m_actionViewHeader->setCheckedState(KGuiItem(i18n("Disable Document Headers")));
     m_actionViewHeader->setToolTip( i18n( "Shows and hides header display" ) );
     m_actionViewHeader->setWhatsThis( i18n( "Selecting this option toggles the display of headers in KWord.<br><br>Headers are special frames at the top of each page which can contain page numbers or other information." ) );
     connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT( toggleHeader() ));
 
-    m_actionViewFooter = new KToggleAction( i18n( "Enable Document Footers" ), actionCollection(), "format_footer" );
+    m_actionViewFooter  = new KToggleAction(i18n("Enable Document Footers"), this);
+    actionCollection()->addAction("format_footer", m_actionViewFooter );
     m_actionViewFooter->setCheckedState(KGuiItem(i18n("Disable Document Footers")));
     m_actionViewFooter->setToolTip( i18n( "Shows and hides footer display" ) );
     m_actionViewFooter->setWhatsThis( i18n( "Selecting this option toggles the display of footers in KWord. <br><br>Footers are special frames at the bottom of each page which can contain page numbers or other information." ) );
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT( toggleFooter() ));
 
-    m_actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), actionCollection(), "view_snaptogrid" );
+    m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
+    actionCollection()->addAction("view_snaptogrid", m_actionViewSnapToGrid);
     m_actionViewSnapToGrid->setChecked(m_snapToGrid);
     connect(m_actionViewSnapToGrid, SIGNAL(triggered()), this, SLOT( toggleSnapToGrid() ));
 
-    m_actionRaiseFrame = new KAction( KIcon("raise"), i18n( "Raise Frame" ), actionCollection(), "raiseframe" );
+    m_actionRaiseFrame  = new KAction(KIcon("raise"), i18n("Raise Frame"), this);
+    actionCollection()->addAction("raiseframe", m_actionRaiseFrame );
     m_actionRaiseFrame->setShortcut( KShortcut(Qt::CTRL +Qt::SHIFT+ Qt::Key_R) );
     m_actionRaiseFrame->setToolTip( i18n( "Raise the currently selected frame so that it appears above "
         "all the other frames" ) );
@@ -209,7 +225,8 @@ void KWView::setupActions() {
         "frames are selected they are all raised in turn." ) );
     connect(m_actionRaiseFrame, SIGNAL(triggered()), this, SLOT( raiseFrame() ));
 
-    m_actionLowerFrame = new KAction( KIcon("lower"), i18n( "Lower Frame" ), actionCollection(), "lowerframe" );
+    m_actionLowerFrame  = new KAction(KIcon("lower"), i18n("Lower Frame"), this);
+    actionCollection()->addAction("lowerframe", m_actionLowerFrame );
     m_actionLowerFrame->setShortcut(KShortcut(Qt::CTRL +Qt::SHIFT+ Qt::Key_L));
     m_actionLowerFrame->setToolTip( i18n( "Lower the currently selected frame so that it disappears under "
         "any frame that overlaps it" ) );
@@ -217,12 +234,12 @@ void KWView::setupActions() {
         "any frame that overlaps it. If multiple frames are selected they are all lowered in turn." ) );
     connect(m_actionLowerFrame, SIGNAL(triggered()), this, SLOT( lowerFrame() ));
 
-    m_actionBringToFront= new KAction( KIcon("bring_forward"), i18n( "Bring to Front" ),  actionCollection(),
-            "bring_tofront_frame" );
+    m_actionBringToFront = new KAction(KIcon("bring_forward"), i18n("Bring to Front"), this);
+    actionCollection()->addAction("bring_tofront_frame", m_actionBringToFront);
     connect(m_actionBringToFront, SIGNAL(triggered()), this, SLOT( bringToFront() ));
 
-    m_actionSendBackward= new KAction( KIcon("send_backward"), i18n( "Send to Back" ), actionCollection(),
-            "send_toback_frame" );
+    m_actionSendBackward = new KAction(KIcon("send_backward"), i18n("Send to Back"), this);
+    actionCollection()->addAction("send_toback_frame", m_actionSendBackward);
     connect(m_actionSendBackward, SIGNAL(triggered()), this, SLOT( sendToBack() ));
 
 
@@ -237,23 +254,24 @@ This saves problems with finding out which we missed near the end.
     m_actionExtraCreateTemplate->setToolTip( i18n( "Save this document and use it later as a template" ) );
     m_actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br>You can use this new template as a starting point for another document." ) );
 
-    m_actionFileStatistics = new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
+    m_actionFileStatistics  = new KAction(i18n("Statistics"), this);
+    actionCollection()->addAction("file_statistics", m_actionFileStatistics );
     m_actionFileStatistics->setToolTip( i18n( "Sentence, word and letter counts for this document" ) );
     m_actionFileStatistics->setWhatsThis( i18n( "Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score." ) );
     // -------------- Edit actions
-    m_actionEditCut = KStandardAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
-    m_actionEditCopy = KStandardAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
-    m_actionEditPaste = KStandardAction::paste( this, SLOT( editPaste() ), actionCollection(), "edit_paste" );
-    m_actionEditFind = KStandardAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
-    m_actionEditFindNext = KStandardAction::findNext( this, SLOT( editFindNext() ), actionCollection(), "edit_findnext" );
-    m_actionEditFindPrevious = KStandardAction::findPrev( this, SLOT( editFindPrevious() ), actionCollection(), "edit_findprevious" );
-    m_actionEditReplace = KStandardAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
-    m_actionEditSelectAll = KStandardAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
+    m_actionEditCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( editCut() ));
+    m_actionEditCopy = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( editCopy() ));
+    m_actionEditPaste = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT( editPaste() ));
+    m_actionEditFind = actionCollection()->addAction(KStandardAction::Find,  "edit_find", this, SLOT( editFind() ));
+    m_actionEditFindNext = actionCollection()->addAction(KStandardAction::FindNext,  "edit_findnext", this, SLOT( editFindNext() ));
+    m_actionEditFindPrevious = actionCollection()->addAction(KStandardAction::FindPrev,  "edit_findprevious", this, SLOT( editFindPrevious() ));
+    m_actionEditReplace = actionCollection()->addAction(KStandardAction::Replace,  "edit_replace", this, SLOT( editReplace() ));
+    m_actionEditSelectAll = actionCollection()->addAction(KStandardAction::SelectAll,  "edit_selectall", this, SLOT( editSelectAll() ));
     new KAction( i18n( "Select All Frames" ), 0, this, SLOT( editSelectAllFrames() ), actionCollection(), "edit_selectallframes" );
     m_actionEditSelectCurrentFrame = new KAction( i18n( "Select Frame" ), 0,
     0, this, SLOT( editSelectCurrentFrame() ),
     actionCollection(), "edit_selectcurrentframe" );
-    m_actionSpellCheck = KStandardAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
+    m_actionSpellCheck = actionCollection()->addAction(KStandardAction::Spelling,  "extra_spellcheck", this, SLOT( slotSpellCheck() ));
     m_actionDeletePage = new KAction( i18n( "Delete Page" ), "delslide", 0,
     this, SLOT( deletePage() ),
     actionCollection(), "delete_page" );
@@ -264,14 +282,15 @@ This saves problems with finding out which we missed near the end.
     actionCollection(), "edit_sldatabase" );
 
 
-    KAction* mailMergeLabelAction = new KWMailMergeLabelAction::KWMailMergeLabelAction(
+    QAction * mailMergeLabelAction = new KWMailMergeLabelAction::KWMailMergeLabelAction(
     i18n("Drag Mail Merge Variable"), actionCollection(), "mailmerge_draglabel" );
     connect( mailMergeLabelAction, SIGNAL( triggered(bool) ), this, SLOT(editMailMergeDataBase()) );
 
     //    (void) new KWMailMergeComboAction::KWMailMergeComboAction(i18n("Insert Mailmerge Var"),0,this,SLOT(JWJWJW()),actionCollection(),"mailmerge_varchooser");
 
     // -------------- Frame menu
-    m_actionCreateLinkedFrame = new KAction( i18n( "Create Linked Copy" ), 0, this, SLOT( createLinkedFrame() ), actionCollection(), "create_linked_frame" );
+    m_actionCreateLinkedFrame  = new KAction(i18n("Create Linked Copy"), this);
+    actionCollection()->addAction("create_linked_frame", m_actionCreateLinkedFrame );
     m_actionCreateLinkedFrame->setToolTip( i18n( "Create a copy of the current frame, always showing the same contents" ) );
     m_actionCreateLinkedFrame->setWhatsThis( i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies.") );
 
@@ -458,8 +477,10 @@ This saves problems with finding out which we missed near the end.
     connect( m_actionFormatFontSize, SIGNAL( fontSizeChanged( int ) ),
             this, SLOT( textSizeSelected( int ) ) );
 
-    m_actionFontSizeIncrease = new KAction( i18n("Increase Font Size"), "fontsizeup", Qt::CTRL + Qt::Key_Greater, this, SLOT( increaseFontSize() ), actionCollection(), "increase_fontsize" );
-    m_actionFontSizeDecrease = new KAction( i18n("Decrease Font Size"), "fontsizedown", Qt::CTRL + Qt::Key_Less, this, SLOT( decreaseFontSize() ), actionCollection(), "decrease_fontsize" );
+    m_actionFontSizeIncrease  = new KAction(i18n("Increase Font Size"), "fontsizeup"), this);
+    actionCollection()->addAction("increase_fontsize", m_actionFontSizeIncrease );
+    m_actionFontSizeDecrease  = new KAction(i18n("Decrease Font Size"), "fontsizedown"), this);
+    actionCollection()->addAction("decrease_fontsize", m_actionFontSizeDecrease );
 
     m_actionFormatFontFamily = new KFontAction( KFontChooser::SmoothScalableFonts,
             //i18n( "Font Family" ),
@@ -467,8 +488,10 @@ This saves problems with finding out which we missed near the end.
     connect( m_actionFormatFontFamily, SIGNAL( triggered( const QString & ) ),
             this, SLOT( textFontSelected( const QString & ) ) );
 
-    m_actionFormatStyleMenu = new KActionMenu( i18n( "Style" ), actionCollection(), "format_stylemenu" );
-    m_actionFormatStyle = new KSelectAction( i18n( "Style" ), actionCollection(), "format_style" );
+    m_actionFormatStyleMenu  = new KActionMenu(i18n("Style"), this);
+    actionCollection()->addAction("format_stylemenu", m_actionFormatStyleMenu );
+    m_actionFormatStyle  = new KSelectAction(i18n("Style"), this);
+    actionCollection()->addAction("format_style", m_actionFormatStyle );
     // In fact, binding a key to this action will simply re-apply the current style. Why not.
     //m_actionFormatStyle->setShortcutConfigurable( false );
     connect( m_actionFormatStyle, SIGNAL( activated( int ) ),
@@ -541,9 +564,11 @@ This saves problems with finding out which we missed near the end.
     m_actionFormatColor->setDefaultColor(QColor());
 
 
-    m_actionFormatNumber = new KActionMenu( KIcon( "enumList" ), i18n( "Number" ), actionCollection(), "format_number" );
+    m_actionFormatNumber  = new KActionMenu(KIcon( "enumList" ), i18n("Number"), this);
+    actionCollection()->addAction("format_number", m_actionFormatNumber );
     m_actionFormatNumber->setDelayed( false );
-    m_actionFormatBullet = new KActionMenu( KIcon( "unsortedList" ), i18n( "Bullet" ), actionCollection(), "format_bullet" );
+    m_actionFormatBullet  = new KActionMenu(KIcon( "unsortedList" ), i18n("Bullet"), this);
+    actionCollection()->addAction("format_bullet", m_actionFormatBullet );
     m_actionFormatBullet->setDelayed( false );
     QActionGroup* counterStyleActionGroup = new QActionGroup( this );
     counterStyleActionGroup->setExclusive( true );
@@ -746,10 +771,10 @@ This saves problems with finding out which we missed near the end.
     m_actionChangeCase->setWhatsThis( i18n( "Alter the capitalization of selected text to one of five pre-defined patterns.<p>You can also switch all letters from upper case to lower case and from lower case to upper case in one move." ) );
 
     //------------------------ Settings menu
-    m_actionConfigure = KStandardAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
+    m_actionConfigure = actionCollection()->addAction(KStandardAction::Preferences,  "configure", this, SLOT(configure()));
 
     //------------------------ Menu frameSet
-    KAction *actionChangePicture=new KAction( i18n( "Change Picture..." ),"frame_image",0,
+    QAction *actionChangePicture=new KAction( i18n( "Change Picture..." ),"frame_image",0,
             this, SLOT( changePicture() ),
             actionCollection(), "change_picture" );
     actionChangePicture->setToolTip( i18n( "Change the picture in the currently selected frame" ) );

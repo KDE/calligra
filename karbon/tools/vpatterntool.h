@@ -29,6 +29,7 @@
 class Q3HButtonGroup;
 class QToolButton;
 class KoResourceChooser;
+class KActionCollection;
 class QPointF;
 class QRectF;
 

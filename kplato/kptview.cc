@@ -64,7 +64,6 @@
 #include <kfiledialog.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
-#include <kseparatoraction.h>
 #include <KoQueryTrader.h>
 
 #include "kptview.h"
@@ -298,7 +297,6 @@ ViewListWidget::ViewListWidget( QWidget *parent )//QString name, KMainWindow *pa
 
 ViewListWidget::~ViewListWidget()
 {
-    delete m_separator;
 }
 
 void ViewListWidget::slotActionTriggered()
@@ -388,7 +386,8 @@ void ViewListWidget::setupContextMenus()
 {
     // NOTE: can't use xml file as there may not be a factory()
     QAction *action;
-    m_separator = new KSeparatorAction();
+    m_separator = new QAction(this);
+    m_separator->setSeparator(true);
     // Query for documents
     m_lstEntries = KoDocumentEntry::query();
     Q3ValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
@@ -567,75 +566,97 @@ View::View( Part* part, QWidget* parent )
 
     // The menu items
     // ------ Edit
-    actionCut = KStandardAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
-    actionCopy = KStandardAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
-    actionPaste = KStandardAction::paste( this, SLOT( slotEditPaste() ), actionCollection(), "edit_paste" );
+    actionCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( slotEditCut() ));
+    actionCopy = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( slotEditCopy() ));
+    actionPaste = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT( slotEditPaste() ));
 
     // ------ View
-    actionViewGantt = new KAction( KIcon( "gantt_chart" ), i18n( "Gantt" ), actionCollection(), "view_gantt" );
+    actionViewGantt  = new KAction(KIcon( "gantt_chart" ), i18n("Gantt"), this);
+    actionCollection()->addAction("view_gantt", actionViewGantt );
     connect( actionViewGantt, SIGNAL( triggered( bool ) ), SLOT( slotViewGantt() ) );
 
-    actionViewSelector = new KToggleAction( i18n( "Show Selector" ), actionCollection(), "view_show_selector" );
+    actionViewSelector  = new KToggleAction(i18n("Show Selector"), this);
+    actionCollection()->addAction("view_show_selector", actionViewSelector );
     connect( actionViewSelector, SIGNAL( triggered( bool ) ), SLOT( slotViewSelector( bool ) ) );
 
     m_scheduleActionGroup = new QActionGroup( this );
     m_scheduleActionGroup->setExclusive( true );
     connect( m_scheduleActionGroup, SIGNAL( triggered( QAction* ) ), SLOT( slotViewSchedule( QAction* ) ) );
 
-    actionViewGanttResources = new KToggleAction( i18n( "Resources" ), actionCollection(), "view_gantt_showResources" );
+    actionViewGanttResources  = new KToggleAction(i18n("Resources"), this);
+    actionCollection()->addAction("view_gantt_showResources", actionViewGanttResources );
     connect( actionViewGanttResources, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttResources() ) );
-    actionViewGanttTaskName = new KToggleAction( i18n( "Task Name" ), actionCollection(), "view_gantt_showTaskName" );
+    actionViewGanttTaskName  = new KToggleAction(i18n("Task Name"), this);
+    actionCollection()->addAction("view_gantt_showTaskName", actionViewGanttTaskName );
     connect( actionViewGanttTaskName, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttTaskName() ) );
-    actionViewGanttTaskLinks = new KToggleAction( i18n( "Task Links" ), actionCollection(), "view_gantt_showTaskLinks" );
+    actionViewGanttTaskLinks  = new KToggleAction(i18n("Task Links"), this);
+    actionCollection()->addAction("view_gantt_showTaskLinks", actionViewGanttTaskLinks );
     connect( actionViewGanttTaskLinks, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttTaskLinks() ) );
-    actionViewGanttProgress = new KToggleAction( i18n( "Progress" ), actionCollection(), "view_gantt_showProgress" );
+    actionViewGanttProgress  = new KToggleAction(i18n("Progress"), this);
+    actionCollection()->addAction("view_gantt_showProgress", actionViewGanttProgress );
     connect( actionViewGanttProgress, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttProgress() ) );
-    actionViewGanttFloat = new KToggleAction( i18n( "Float" ), actionCollection(), "view_gantt_showFloat" );
+    actionViewGanttFloat  = new KToggleAction(i18n("Float"), this);
+    actionCollection()->addAction("view_gantt_showFloat", actionViewGanttFloat );
     connect( actionViewGanttFloat, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttFloat() ) );
-    actionViewGanttCriticalTasks = new KToggleAction( i18n( "Critical Tasks" ), actionCollection(), "view_gantt_showCriticalTasks" );
+    actionViewGanttCriticalTasks  = new KToggleAction(i18n("Critical Tasks"), this);
+    actionCollection()->addAction("view_gantt_showCriticalTasks", actionViewGanttCriticalTasks );
     connect( actionViewGanttCriticalTasks, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttCriticalTasks() ) );
-    actionViewGanttCriticalPath = new KToggleAction( i18n( "Critical Path" ), actionCollection(), "view_gantt_showCriticalPath" );
+    actionViewGanttCriticalPath  = new KToggleAction(i18n("Critical Path"), this);
+    actionCollection()->addAction("view_gantt_showCriticalPath", actionViewGanttCriticalPath );
     connect( actionViewGanttCriticalPath, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttCriticalPath() ) );
 
-    //    actionViewGanttNotScheduled = new KToggleAction(i18n("Not Scheduled"), 0, 0, this, SLOT(slotViewGanttNotScheduled()), actionCollection(), "view_gantt_showNotScheduled");
+    // actionViewGanttNotScheduled  = new KToggleAction(i18n("Not Scheduled"), this);
+    // actionCollection()->addAction("view_gantt_showNotScheduled", actionViewGanttNotScheduled );
+    // connect(actionViewGanttNotScheduled, SIGNAL(triggered(bool)), this, SLOT(slotViewGanttNotScheduled()));
 
-    actionViewTaskAppointments = new KToggleAction( i18n( "Show allocations" ), actionCollection(), "view_task_appointments" );
+    actionViewTaskAppointments  = new KToggleAction(i18n("Show allocations"), this);
+    actionCollection()->addAction("view_task_appointments", actionViewTaskAppointments );
     connect( actionViewTaskAppointments, SIGNAL( triggered( bool ) ), SLOT( slotViewTaskAppointments() ) );
 
-    actionViewResources = new KAction( KIcon( "resources" ), i18n( "Resources" ), actionCollection(), "view_resources" );
+    actionViewResources  = new KAction(KIcon( "resources" ), i18n("Resources"), this);
+    actionCollection()->addAction("view_resources", actionViewResources );
     connect( actionViewResources, SIGNAL( triggered( bool ) ), SLOT( slotViewResources() ) );
 
-    actionViewResourceAppointments = new KToggleAction( i18n( "Show allocations" ), actionCollection(), "view_resource_appointments" );
+    actionViewResourceAppointments  = new KToggleAction(i18n("Show allocations"), this);
+    actionCollection()->addAction("view_resource_appointments", actionViewResourceAppointments );
     connect( actionViewResourceAppointments, SIGNAL( triggered( bool ) ), SLOT( slotViewResourceAppointments() ) );
 
-    actionViewAccounts = new KAction( KIcon( "accounts" ), i18n( "Accounts" ), actionCollection(), "view_accounts" );
+    actionViewAccounts  = new KAction(KIcon( "accounts" ), i18n("Accounts"), this);
+    actionCollection()->addAction("view_accounts", actionViewAccounts );
     connect( actionViewAccounts, SIGNAL( triggered( bool ) ), SLOT( slotViewAccounts() ) );
 
-    //actionViewReports = new KAction(i18n("Reports"), "reports", 0, this, SLOT(slotViewReports()), actionCollection(), "view_reports");
+    //actionViewReports  = new KAction(i18n("Reports"), "reports"), this);
+    // actionCollection()->addAction("view_reports", actionViewReports );
+    // connect( actionViewReports, SIGNAL( triggered( bool ) ), SLOT( slotViewReports() ) );
 
     // ------ Insert
 
     // ------ Project
-    actionEditMainProject = new KAction( KIcon( "edit" ), i18n( "Edit Main Project..." ), actionCollection(), "project_edit" );
+    actionEditMainProject  = new KAction(KIcon( "edit" ), i18n("Edit Main Project..."), this);
+    actionCollection()->addAction("project_edit", actionEditMainProject );
     connect( actionEditMainProject, SIGNAL( triggered( bool ) ), SLOT( slotProjectEdit() ) );
-    actionEditStandardWorktime = new KAction( KIcon( "edit" ), i18n( "Edit Standard Worktime..." ), actionCollection(), "project_worktime" );
+    actionEditStandardWorktime  = new KAction(KIcon( "edit" ), i18n("Edit Standard Worktime..."), this);
+    actionCollection()->addAction("project_worktime", actionEditStandardWorktime );
     connect( actionEditStandardWorktime, SIGNAL( triggered( bool ) ), SLOT( slotProjectWorktime() ) );
-    actionEditCalendar = new KAction( KIcon( "edit" ), i18n( "Edit Calendar..." ), actionCollection(), "project_calendar" );
+    actionEditCalendar  = new KAction(KIcon( "edit" ), i18n("Edit Calendar..."), this);
+    actionCollection()->addAction("project_calendar", actionEditCalendar );
     connect( actionEditCalendar, SIGNAL( triggered( bool ) ), SLOT( slotProjectCalendar() ) );
-    actionEditAccounts = new KAction( KIcon( "edit" ), i18n( "Edit Accounts..." ), actionCollection(), "project_accounts" );
+    actionEditAccounts  = new KAction(KIcon( "edit" ), i18n("Edit Accounts..."), this);
+    actionCollection()->addAction("project_accounts", actionEditAccounts );
     connect( actionEditAccounts, SIGNAL( triggered( bool ) ), SLOT( slotProjectAccounts() ) );
-    actionEditResources = new KAction( KIcon( "edit" ), i18n( "Edit Resources..." ), actionCollection(), "project_resources" );
+    actionEditResources  = new KAction(KIcon( "edit" ), i18n("Edit Resources..."), this);
+    actionCollection()->addAction("project_resources", actionEditResources );
     connect( actionEditResources, SIGNAL( triggered( bool ) ), SLOT( slotProjectResources() ) );
 
 
     /*    // ------ Reports
-        actionFirstpage = KStandardAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");
+    actionFirstpage = actionCollection()->addAction(KStandardAction::FirstPage, "go_firstpage", m_reportview,SLOT(slotPrevPage()));
         connect(m_reportview, SIGNAL(setFirstPageActionEnabled(bool)), actionFirstpage, SLOT(setEnabled(bool)));
-        actionPriorpage = KStandardAction::prior(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_prevpage");
+    actionPriorpage = actionCollection()->addAction(KStandardAction::Prior, "go_prevpage", m_reportview,SLOT(slotPrevPage()));
         connect(m_reportview, SIGNAL(setPriorPageActionEnabled(bool)), actionPriorpage, SLOT(setEnabled(bool)));
-        actionNextpage = KStandardAction::next(m_reportview,SLOT(slotNextPage()),actionCollection(), "go_nextpage");
+    actionNextpage = actionCollection()->addAction(KStandardAction::Next,  "go_nextpage", m_reportview,SLOT(slotNextPage()));
         connect(m_reportview, SIGNAL(setNextPageActionEnabled(bool)), actionNextpage, SLOT(setEnabled(bool)));
-        actionLastpage = KStandardAction::lastPage(m_reportview,SLOT(slotLastPage()),actionCollection(), "go_lastpage");
+    actionLastpage = actionCollection()->addAction(KStandardAction::LastPage,  "go_lastpage", m_reportview,SLOT(slotLastPage()));
         connect(m_reportview, SIGNAL(setLastPageActionEnabled(bool)), actionLastpage, SLOT(setEnabled(bool)));
         m_reportview->enableNavigationBtn();*/
     mainWindow() ->toolBar( "report" ) ->hide();
@@ -645,10 +666,12 @@ View::View( Part* part, QWidget* parent )
 
 
     // ------ Tools
-    actionDefineWBS = new KAction( KIcon( "tools_define_wbs" ), i18n( "Define WBS Pattern..." ), actionCollection(), "tools_generate_wbs" );
+    actionDefineWBS  = new KAction(KIcon( "tools_define_wbs" ), i18n("Define WBS Pattern..."), this);
+    actionCollection()->addAction("tools_generate_wbs", actionDefineWBS );
     connect( actionDefineWBS, SIGNAL( triggered( bool ) ), SLOT( slotDefineWBS() ) );
 
-    actionGenerateWBS = new KAction( KIcon( "tools_generate_wbs" ), i18n( "Generate WBS Code" ), actionCollection(), "tools_define_wbs" );
+    actionGenerateWBS  = new KAction(KIcon( "tools_generate_wbs" ), i18n("Generate WBS Code"), this);
+    actionCollection()->addAction("tools_define_wbs", actionGenerateWBS );
     connect( actionGenerateWBS, SIGNAL( triggered( bool ) ), SLOT( slotGenerateWBS() ) );
     
     // ------ Export (testing)
@@ -656,18 +679,23 @@ View::View( Part* part, QWidget* parent )
     //    SLOT(slotExportGantt()), actionCollection(), "export_gantt");
 
     // ------ Settings
-    actionConfigure = new KAction( KIcon( "configure" ), i18n( "Configure KPlato..." ), actionCollection(), "configure" );
+    actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure KPlato..."), this);
+    actionCollection()->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
 
     // ------ Popup
-    actionOpenNode = new KAction( KIcon( "edit" ), i18n( "Edit..." ), actionCollection(), "node_properties" );
+    actionOpenNode  = new KAction(KIcon( "edit" ), i18n("Edit..."), this);
+    actionCollection()->addAction("node_properties", actionOpenNode );
     connect( actionOpenNode, SIGNAL( triggered( bool ) ), SLOT( slotOpenNode() ) );
-    actionTaskProgress = new KAction( KIcon( "edit" ), i18n( "Progress..." ), actionCollection(), "task_progress" );
+    actionTaskProgress  = new KAction(KIcon( "edit" ), i18n("Progress..."), this);
+    actionCollection()->addAction("task_progress", actionTaskProgress );
     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
-    actionDeleteTask = new KAction( KIcon( "editdelete" ), i18n( "Delete Task" ), actionCollection(), "delete_task" );
+    actionDeleteTask  = new KAction(KIcon( "editdelete" ), i18n("Delete Task"), this);
+    actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
 
-    actionEditResource = new KAction( KIcon( "edit" ), i18n( "Edit Resource..." ), actionCollection(), "edit_resource" );
+    actionEditResource  = new KAction(KIcon( "edit" ), i18n("Edit Resource..."), this);
+    actionCollection()->addAction("edit_resource", actionEditResource );
     connect( actionEditResource, SIGNAL( triggered( bool ) ), SLOT( slotEditResource() ) );
 
     // Viewlist popup
@@ -675,21 +703,25 @@ View::View( Part* part, QWidget* parent )
     
     // ------------------- Actions with a key binding and no GUI item
     // Temporary, till we get a menu entry
-    actNoInformation = new KAction( "Toggle no information", actionCollection(), "show_noinformation" );
+    actNoInformation  = new KAction(i18n("Toggle no information"), this);
+    actionCollection()->addAction("show_noinformation", actNoInformation );
     connect( actNoInformation, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttNoInformation() ) );
     actNoInformation->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_T ) );
 
 #ifndef NDEBUG
     //new KAction("Print Debug", CTRL+Qt::SHIFT+Qt::Key_P, this, SLOT( slotPrintDebug()), actionCollection(), "print_debug");
-    KAction *action = new KAction( "Print Debug", actionCollection(), "print_debug" );
+    QAction *action  = new KAction("Print Debug", this);
+    actionCollection()->addAction("print_debug", action );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( slotPrintSelectedDebug() ) );
     action->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_P ) );
-    action = new KAction( "Print Calendar Debug", actionCollection(), "print_calendar_debug" );
+    action  = new KAction("Print Calendar Debug", this);
+    actionCollection()->addAction("print_calendar_debug", action );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( slotPrintCalendarDebug() ) );
     action->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_C ) );
     //     new KAction("Print Test Debug", CTRL+Qt::SHIFT+Qt::Key_T, this, SLOT(slotPrintTestDebug()), actionCollection(), "print_test_debug");
 
-    KAction *actExportGantt = new KAction( i18n( "Export Gantt" ), actionCollection(), "export_gantt" );
+    QAction *actExportGantt  = new KAction(i18n("Export Gantt"), this);
+    actionCollection()->addAction("export_gantt", actExportGantt );
     connect( actExportGantt, SIGNAL( triggered( bool ) ), SLOT( slotExportGantt() ) );
     actExportGantt->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_G ) );
 
@@ -1014,7 +1046,8 @@ void View::slotPlugScheduleActions()
     foreach( Schedule *sch, getProject().schedules().values() ) {
         if ( ! sch->isDeleted() ) {
             QString n = sch->name() + " (" + sch->typeToString( true ) + ')';
-            KAction *act = new KToggleAction( n, actionCollection(), n );
+            QAction *act = new KToggleAction( n, this);
+            actionCollection()->addAction(n, act );
             m_scheduleActions.insert( act, sch );
             m_scheduleActionGroup->addAction( act );
             if ( ca == 0 && cs == sch ) {

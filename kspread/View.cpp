@@ -318,17 +318,17 @@ class ViewActions
 public:
 
     // cell formatting
-    KAction* cellLayout;
-    KAction *actionExtraProperties;
-    KAction* defaultFormat;
+    QAction * cellLayout;
+    QAction *actionExtraProperties;
+    QAction * defaultFormat;
     KToggleAction* bold;
     KToggleAction* italic;
     KToggleAction* underline;
     KToggleAction* strikeOut;
     KFontAction* selectFont;
     KFontSizeAction* selectFontSize;
-    KAction* fontSizeUp;
-    KAction* fontSizeDown;
+    QAction * fontSizeUp;
+    QAction * fontSizeDown;
     TKSelectColorAction* textColor;
     KToggleAction* alignLeft;
     KToggleAction* alignCenter;
@@ -338,139 +338,139 @@ public:
     KToggleAction* alignBottom;
     KToggleAction* wrapText;
     KToggleAction* verticalText;
-    KAction* increaseIndent;
-    KAction* decreaseIndent;
-    KAction* changeAngle;
+    QAction * increaseIndent;
+    QAction * decreaseIndent;
+    QAction * changeAngle;
     KToggleAction* percent;
-    KAction* precplus;
-    KAction* precminus;
+    QAction * precplus;
+    QAction * precminus;
     KToggleAction* money;
-    KAction* upper;
-    KAction* lower;
-    KAction* firstLetterUpper;
+    QAction * upper;
+    QAction * lower;
+    QAction * firstLetterUpper;
     TKSelectColorAction* bgColor;
-    KAction* borderLeft;
-    KAction* borderRight;
-    KAction* borderTop;
-    KAction* borderBottom;
-    KAction* borderAll;
-    KAction* borderOutline;
-    KAction* borderRemove;
+    QAction * borderLeft;
+    QAction * borderRight;
+    QAction * borderTop;
+    QAction * borderBottom;
+    QAction * borderAll;
+    QAction * borderOutline;
+    QAction * borderRemove;
     TKSelectColorAction* borderColor;
     KSelectAction* selectStyle;
-    KAction* createStyle;
+    QAction * createStyle;
 
     // cell operations
-    KAction* editCell;
-    KAction* insertCell;
-    KAction* removeCell;
-    KAction* deleteCell;
+    QAction * editCell;
+    QAction * insertCell;
+    QAction * removeCell;
+    QAction * deleteCell;
     KToolBarPopupAction* mergeCell;
-    KAction* mergeCellHorizontal;
-    KAction* mergeCellVertical;
-    KAction* dissociateCell;
-    KAction* clearText;
-    KAction* conditional;
-    KAction* clearConditional;
-    KAction* validity;
-    KAction* clearValidity;
-    KAction* addModifyComment;
-    KAction* removeComment;
-    KAction* clearComment;
+    QAction * mergeCellHorizontal;
+    QAction * mergeCellVertical;
+    QAction * dissociateCell;
+    QAction * clearText;
+    QAction * conditional;
+    QAction * clearConditional;
+    QAction * validity;
+    QAction * clearValidity;
+    QAction * addModifyComment;
+    QAction * removeComment;
+    QAction * clearComment;
 
     // column & row operations
-    KAction* resizeColumn;
-    KAction* insertColumn;
-    KAction* deleteColumn;
-    KAction* hideColumn;
-    KAction* showColumn;
-    KAction* equalizeColumn;
-    KAction* showSelColumns;
-    KAction* resizeRow;
-    KAction* insertRow;
-    KAction* deleteRow;
-    KAction* hideRow;
-    KAction* showRow;
-    KAction* equalizeRow;
-    KAction* showSelRows;
-    KAction* adjust;
+    QAction * resizeColumn;
+    QAction * insertColumn;
+    QAction * deleteColumn;
+    QAction * hideColumn;
+    QAction * showColumn;
+    QAction * equalizeColumn;
+    QAction * showSelColumns;
+    QAction * resizeRow;
+    QAction * insertRow;
+    QAction * deleteRow;
+    QAction * hideRow;
+    QAction * showRow;
+    QAction * equalizeRow;
+    QAction * showSelRows;
+    QAction * adjust;
 
     // sheet/workbook operations
-    KAction* sheetProperties;
-    KAction* insertSheet;
-    KAction* menuInsertSheet;
-    KAction* removeSheet;
-    KAction* renameSheet;
-    KAction* hideSheet;
-    KAction* showSheet;
-    KAction* autoFormat;
-    KAction* areaName;
-    KAction* showArea;
-    KAction* insertSeries;
-    KAction* insertFunction;
-    KAction* insertSpecialChar;
-    KAction* insertFromDatabase;
-    KAction* insertFromTextfile;
-    KAction* insertFromClipboard;
-    KAction* transform;
-    KAction* sort;
-    KAction* sortDec;
-    KAction* sortInc;
-    KAction* fillRight;
-    KAction* fillLeft;
-    KAction* fillUp;
-    KAction* fillDown;
-    KAction* paperLayout;
-    KAction* definePrintRange;
-    KAction* resetPrintRange;
+    QAction * sheetProperties;
+    QAction * insertSheet;
+    QAction * menuInsertSheet;
+    QAction * removeSheet;
+    QAction * renameSheet;
+    QAction * hideSheet;
+    QAction * showSheet;
+    QAction * autoFormat;
+    QAction * areaName;
+    QAction * showArea;
+    QAction * insertSeries;
+    QAction * insertFunction;
+    QAction * insertSpecialChar;
+    QAction * insertFromDatabase;
+    QAction * insertFromTextfile;
+    QAction * insertFromClipboard;
+    QAction * transform;
+    QAction * sort;
+    QAction * sortDec;
+    QAction * sortInc;
+    QAction * fillRight;
+    QAction * fillLeft;
+    QAction * fillUp;
+    QAction * fillDown;
+    QAction * paperLayout;
+    QAction * definePrintRange;
+    QAction * resetPrintRange;
     KToggleAction* showPageBorders;
-    KAction* recalcWorksheet;
-    KAction* recalcWorkbook;
+    QAction * recalcWorksheet;
+    QAction * recalcWorkbook;
     KToggleAction* protectSheet;
     KToggleAction* protectDoc;
 
     // general editing
-    KAction* cut;
-    KAction* copy;
-    KAction* paste;
-    KAction* specialPaste;
-    KAction* insertCellCopy;
-    KAction* selectAll;
-    KAction* find;
-    KAction* replace;
+    QAction * cut;
+    QAction * copy;
+    QAction * paste;
+    QAction * specialPaste;
+    QAction * insertCellCopy;
+    QAction * selectAll;
+    QAction * find;
+    QAction * replace;
 
     // navigation
-    KAction* gotoCell;
-    KAction* nextSheet;
-    KAction* prevSheet;
-    KAction* firstSheet;
-    KAction* lastSheet;
+    QAction * gotoCell;
+    QAction * nextSheet;
+    QAction * prevSheet;
+    QAction * firstSheet;
+    QAction * lastSheet;
 
     // misc
-    KAction* styleDialog;
-    KAction* autoSum;
+    QAction * styleDialog;
+    QAction * autoSum;
     KSelectAction* formulaSelection;
-    KAction* insertLink;
-    KAction* removeLink;
-    KAction* consolidate;
-    KAction* goalSeek;
-    KAction* subTotals;
-    KAction* textToColumns;
-    KAction* multipleOperations;
-    KAction* createTemplate;
+    QAction * insertLink;
+    QAction * removeLink;
+    QAction * consolidate;
+    QAction * goalSeek;
+    QAction * subTotals;
+    QAction * textToColumns;
+    QAction * multipleOperations;
+    QAction * createTemplate;
     KoPartSelectAction *insertPart;
     KToggleAction* insertChartFrame;
-    KAction* insertPicture;
-    KAction* customList;
-    KAction* spellChecking;
-    KAction* inspector;
+    QAction * insertPicture;
+    QAction * customList;
+    QAction * spellChecking;
+    QAction * inspector;
 
     // settings
     KoZoomAction* viewZoom;
     KToggleAction* showStatusBar;
     KToggleAction* showTabBar;
     KToggleAction* showFormulaBar;
-    KAction* preference;
+    QAction * preference;
 
     // running calculation
     KToggleAction* calcNone;
@@ -491,53 +491,64 @@ void View::Private::initActions()
 
   // -- cell formatting actions --
 
-  actions->cellLayout = new KAction( KIcon( "cell_layout" ), i18n("Cell Format..."), ac, "cellLayout" );
+  actions->cellLayout  = new KAction(KIcon( "cell_layout" ), i18n("Cell Format..."), view);
+  ac->addAction("cellLayout", actions->cellLayout );
   actions->cellLayout->setShortcut( QKeySequence( Qt::CTRL+ Qt::ALT+ Qt::Key_F));
   connect(actions->cellLayout, SIGNAL(triggered(bool)), view, SLOT( layoutDlg() ));
 
   actions->cellLayout->setToolTip( i18n("Set the cell formatting") );
 
-  actions->actionExtraProperties = new KAction( KIcon( "penbrush" ), i18n( "&Properties" ), ac, "extra_properties" );
+  actions->actionExtraProperties  = new KAction(KIcon( "penbrush" ), i18n("&Properties"), view);
+  ac->addAction("extra_properties", actions->actionExtraProperties );
   connect(actions->actionExtraProperties, SIGNAL(triggered(bool)), view, SLOT( extraProperties() ));
 
 
-  actions->defaultFormat = new KAction( i18n("Default"), ac, "default" );
+  actions->defaultFormat  = new KAction(i18n("Default"), view);
+  ac->addAction("default", actions->defaultFormat );
   connect(actions->defaultFormat, SIGNAL(triggered(bool)),view, SLOT( setDefaultStyle() ));
 
   actions->defaultFormat->setToolTip( i18n("Resets to the default format") );
 
-  actions->bold = new KToggleAction( KIcon( "text_bold" ), i18n("Bold"), ac, "bold");
+  actions->bold  = new KToggleAction(KIcon( "text_bold" ), i18n("Bold"), view);
+  ac->addAction("bold", actions->bold );
   actions->bold->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_B));
   connect( actions->bold, SIGNAL( toggled( bool) ),
                     view, SLOT( bold( bool ) ) );
 
-  actions->italic = new KToggleAction( KIcon( "text_italic" ), i18n("Italic"), ac, "italic");
+  actions->italic  = new KToggleAction(KIcon( "text_italic" ), i18n("Italic"), view);
+  ac->addAction("italic", actions->italic );
   actions->italic->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_I));
   connect( actions->italic, SIGNAL( toggled( bool) ),
                     view, SLOT( italic( bool ) ) );
 
-  actions->underline = new KToggleAction( KIcon( "text_under" ), i18n("Underline"), ac, "underline");
+  actions->underline  = new KToggleAction(KIcon( "text_under" ), i18n("Underline"), view);
+  ac->addAction("underline", actions->underline );
   actions->underline->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_U));
   connect( actions->underline, SIGNAL( toggled( bool) ),
                     view, SLOT( underline( bool ) ) );
 
-  actions->strikeOut = new KToggleAction( KIcon( "text_strike" ), i18n("Strike Out"), ac, "strikeout");
+  actions->strikeOut  = new KToggleAction(KIcon( "text_strike" ), i18n("Strike Out"), view);
+  ac->addAction("strikeout", actions->strikeOut );
   connect( actions->strikeOut, SIGNAL( toggled( bool) ),
                     view, SLOT( strikeOut( bool ) ) );
 
-  actions->selectFont = new KFontAction( i18n("Select Font..."), ac, "selectFont" );
+  actions->selectFont  = new KFontAction(i18n("Select Font..."), view);
+  ac->addAction("selectFont", actions->selectFont );
   connect( actions->selectFont, SIGNAL( triggered( const QString& ) ),
                     view, SLOT( fontSelected( const QString& ) ) );
 
-  actions->selectFontSize = new KFontSizeAction( i18n("Select Font Size"), ac, "selectFontSize" );
+  actions->selectFontSize  = new KFontSizeAction(i18n("Select Font Size"), view);
+  ac->addAction("selectFontSize", actions->selectFontSize );
   connect( actions->selectFontSize, SIGNAL( fontSizeChanged( int ) ),
                     view, SLOT( fontSizeSelected( int ) ) );
 
-  actions->fontSizeUp = new KAction( KIcon( "fontsizeup" ), i18n("Increase Font Size"), ac,  "increaseFontSize" );
+  actions->fontSizeUp  = new KAction(KIcon( "fontsizeup" ), i18n("Increase Font Size"), view);
+  ac->addAction("increaseFontSize", actions->fontSizeUp );
   connect(actions->fontSizeUp, SIGNAL(triggered(bool)), view, SLOT( increaseFontSize() ));
 
 
-  actions->fontSizeDown = new KAction( KIcon( "fontsizedown" ), i18n("Decrease Font Size"), ac, "decreaseFontSize" );
+  actions->fontSizeDown  = new KAction(KIcon( "fontsizedown" ), i18n("Decrease Font Size"), view);
+  ac->addAction("decreaseFontSize", actions->fontSizeDown );
   connect(actions->fontSizeDown, SIGNAL(triggered(bool)), view, SLOT( decreaseFontSize() ));
 
 
@@ -546,93 +557,111 @@ void View::Private::initActions()
   actions->textColor->setDefaultColor(QColor());
 
   QActionGroup* groupAlign = new QActionGroup( view );
-  actions->alignLeft = new KToggleAction( KIcon("text_left"), i18n("Align Left"), ac, "left", groupAlign );
+  actions->alignLeft  = new KToggleAction(KIcon("text_left"), i18n("Align Left"), view);
+  ac->addAction("left", actions->alignLeft );
   connect( actions->alignLeft, SIGNAL( toggled( bool ) ),
                     view, SLOT( alignLeft( bool ) ) );
   actions->alignLeft->setToolTip(i18n("Left justify the cell contents"));
 
-  actions->alignCenter = new KToggleAction( KIcon("text_center"), i18n("Align Center"), ac, "center", groupAlign );
+  actions->alignCenter  = new KToggleAction(KIcon("text_center"), i18n("Align Center"), view);
+  ac->addAction("center", actions->alignCenter );
   connect( actions->alignCenter, SIGNAL( toggled( bool ) ),
                     view, SLOT( alignCenter( bool ) ) );
   actions->alignCenter->setToolTip(i18n("Center the cell contents"));
 
-  actions->alignRight = new KToggleAction( KIcon("text_right"), i18n("Align Right"), ac, "right", groupAlign );
+  actions->alignRight  = new KToggleAction(KIcon("text_right"), i18n("Align Right"), view);
+  ac->addAction("right", actions->alignRight );
   connect( actions->alignRight, SIGNAL( toggled( bool ) ),
                     view, SLOT( alignRight( bool ) ) );
   actions->alignRight->setToolTip(i18n("Right justify the cell contents"));
 
   QActionGroup* groupPos = new QActionGroup( view );
-  actions->alignTop = new KToggleAction( KIcon("text_top"), i18n("Align Top"), ac, "top", groupPos );
+  actions->alignTop  = new KToggleAction(KIcon("text_top"), i18n("Align Top"), view);
+  ac->addAction("top", actions->alignTop );
   connect( actions->alignTop, SIGNAL( toggled( bool ) ),
                     view, SLOT( alignTop( bool ) ) );
   actions->alignTop->setToolTip(i18n("Align cell contents along the top of the cell"));
 
-  actions->alignMiddle = new KToggleAction( KIcon("middle"), i18n("Align Middle"), ac, "middle", groupPos );
+  actions->alignMiddle  = new KToggleAction(KIcon("middle"), i18n("Align Middle"), view);
+  ac->addAction("middle", actions->alignMiddle );
   connect( actions->alignMiddle, SIGNAL( toggled( bool ) ),
                     view, SLOT( alignMiddle( bool ) ) );
   actions->alignMiddle->setToolTip(i18n("Align cell contents centered in the cell"));
 
-  actions->alignBottom = new KToggleAction( KIcon("text_bottom"), i18n("Align Bottom"), ac, "bottom", groupPos );
+  actions->alignBottom  = new KToggleAction(KIcon("text_bottom"), i18n("Align Bottom"), view);
+  ac->addAction("bottom", actions->alignBottom );
   connect( actions->alignBottom, SIGNAL( toggled( bool ) ),
                     view, SLOT( alignBottom( bool ) ) );
   actions->alignBottom->setToolTip(i18n("Align cell contents along the bottom of the cell"));
 
-  actions->wrapText = new KToggleAction( KIcon( "multirow" ), i18n("Wrap Text"), ac, "multiRow" );
+  actions->wrapText  = new KToggleAction(KIcon( "multirow" ), i18n("Wrap Text"), view);
+  ac->addAction("multiRow", actions->wrapText );
   connect( actions->wrapText, SIGNAL( toggled( bool ) ),
                     view, SLOT( wrapText( bool ) ) );
   actions->wrapText->setToolTip(i18n("Make the cell text wrap onto multiple lines"));
 
-  actions->verticalText = new KToggleAction( KIcon("vertical_text"  ), i18n("Vertical Text"),ac, "verticaltext" );
+  actions->verticalText  = new KToggleAction(KIcon("vertical_text"  ), i18n("Vertical Text"), view);
+  ac->addAction("verticaltext", actions->verticalText );
   connect( actions->verticalText, SIGNAL( toggled( bool ) ),
                     view, SLOT( verticalText( bool ) ) );
   actions->verticalText->setToolTip(i18n("Print cell contents vertically"));
 
-  actions->increaseIndent = new KAction( KIcon( QApplication::isRightToLeft() ? "format_decreaseindent" : "format_increaseindent" ), i18n("Increase Indent"), ac, "increaseindent" );
+  actions->increaseIndent  = new KAction(KIcon( QApplication::isRightToLeft() ? "format_decreaseindent" : "format_increaseindent" ), i18n("Increase Indent"), view);
+  ac->addAction("increaseindent", actions->increaseIndent );
   connect(actions->increaseIndent, SIGNAL(triggered(bool)), view, SLOT( increaseIndent() ));
 
   actions->increaseIndent->setToolTip(i18n("Increase the indentation"));
 
-  actions->decreaseIndent = new KAction( KIcon( QApplication::isRightToLeft() ? "format_increaseindent" : "format_decreaseindent" ), i18n("Decrease Indent"), ac, "decreaseindent");
+  actions->decreaseIndent  = new KAction(KIcon( QApplication::isRightToLeft() ? "format_increaseindent" : "format_decreaseindent" ), i18n("Decrease Indent"), view);
+  ac->addAction("decreaseindent", actions->decreaseIndent );
   connect(actions->decreaseIndent, SIGNAL(triggered(bool)), view, SLOT( decreaseIndent() ));
 
   actions->decreaseIndent->setToolTip(i18n("Decrease the indentation"));
 
-  actions->changeAngle = new KAction( i18n("Change Angle..."), ac, "changeangle" );
+  actions->changeAngle  = new KAction(i18n("Change Angle..."), view);
+  ac->addAction("changeangle", actions->changeAngle );
   connect(actions->changeAngle, SIGNAL(triggered(bool)),view, SLOT( changeAngle() ));
 
   actions->changeAngle->setToolTip(i18n("Change the angle that cell contents are printed"));
 
-  actions->percent = new KToggleAction( KIcon( "percent" ), i18n("Percent Format"), ac, "percent");
+  actions->percent  = new KToggleAction(KIcon( "percent" ), i18n("Percent Format"), view);
+  ac->addAction("percent", actions->percent );
   connect( actions->percent, SIGNAL( toggled( bool ) ),
                     view, SLOT( percent( bool ) ) );
   actions->percent->setToolTip(i18n("Set the cell formatting to look like a percentage"));
 
-  actions->precplus = new KAction( KIcon( "prec_plus" ), i18n("Increase Precision"), ac, "precplus");
+  actions->precplus  = new KAction(KIcon( "prec_plus" ), i18n("Increase Precision"), view);
+  ac->addAction("precplus", actions->precplus );
   connect(actions->precplus, SIGNAL(triggered(bool)), view, SLOT( increasePrecision() ));
 
   actions->precplus->setToolTip(i18n("Increase the decimal precision shown onscreen"));
 
-  actions->precminus = new KAction( KIcon( "prec_minus" ), i18n("Decrease Precision"), ac, "precminus");
+  actions->precminus  = new KAction(KIcon( "prec_minus" ), i18n("Decrease Precision"), view);
+  ac->addAction("precminus", actions->precminus );
   connect(actions->precminus, SIGNAL(triggered(bool)), view, SLOT( decreasePrecision() ));
 
   actions->precminus->setToolTip(i18n("Decrease the decimal precision shown onscreen"));
 
-  actions->money = new KToggleAction( KIcon( "money" ), i18n("Money Format"), ac, "money");
+  actions->money  = new KToggleAction(KIcon( "money" ), i18n("Money Format"), view);
+  ac->addAction("money", actions->money );
   connect( actions->money, SIGNAL( toggled( bool ) ),
                     view, SLOT( moneyFormat( bool ) ) );
   actions->money->setToolTip(i18n("Set the cell formatting to look like your local currency"));
 
-  actions->upper = new KAction( KIcon( "fontsizeup" ), i18n("Upper Case"), ac, "upper" );
+  actions->upper  = new KAction(KIcon( "fontsizeup" ), i18n("Upper Case"), view);
+  ac->addAction("upper", actions->upper );
   connect(actions->upper, SIGNAL(triggered(bool)), view, SLOT( upper() ));
 
   actions->upper->setToolTip(i18n("Convert all letters to upper case"));
 
-  actions->lower = new KAction( KIcon( "fontsizedown" ), i18n("Lower Case"), ac, "lower" );
+  actions->lower  = new KAction(KIcon( "fontsizedown" ), i18n("Lower Case"), view);
+  ac->addAction("lower", actions->lower );
   connect(actions->lower, SIGNAL(triggered(bool)), view, SLOT( lower() ));
 
   actions->lower->setToolTip(i18n("Convert all letters to lower case"));
 
-  actions->firstLetterUpper = new KAction( KIcon("first_letter_upper" ), i18n("Convert First Letter to Upper Case"),ac, "firstletterupper" );
+  actions->firstLetterUpper  = new KAction(KIcon("first_letter_upper" ), i18n("Convert First Letter to Upper Case"), view);
+  ac->addAction("firstletterupper", actions->firstLetterUpper );
   connect(actions->firstLetterUpper, SIGNAL(triggered(bool)), view, SLOT( firstLetterUpper() ));
 
   actions->firstLetterUpper->setToolTip(i18n("Capitalize the first letter"));
@@ -643,37 +672,44 @@ void View::Private::initActions()
   actions->bgColor->setDefaultColor(QColor());
   actions->bgColor->setToolTip(i18n("Set the background color"));
 
-  actions->borderLeft = new KAction( KIcon( "border_left" ), i18n("Border Left"), ac, "borderLeft" );
+  actions->borderLeft  = new KAction(KIcon( "border_left" ), i18n("Border Left"), view);
+  ac->addAction("borderLeft", actions->borderLeft );
   connect(actions->borderLeft, SIGNAL(triggered(bool)), view, SLOT( borderLeft() ));
 
   actions->borderLeft->setToolTip(i18n("Set a left border to the selected area"));
 
-  actions->borderRight = new KAction( KIcon( "border_right" ), i18n("Border Right"), ac, "borderRight" );
+  actions->borderRight  = new KAction(KIcon( "border_right" ), i18n("Border Right"), view);
+  ac->addAction("borderRight", actions->borderRight );
   connect(actions->borderRight, SIGNAL(triggered(bool)), view, SLOT( borderRight() ));
 
   actions->borderRight->setToolTip(i18n("Set a right border to the selected area"));
 
-  actions->borderTop = new KAction( KIcon( "border_top" ), i18n("Border Top"), ac, "borderTop" );
+  actions->borderTop  = new KAction(KIcon( "border_top" ), i18n("Border Top"), view);
+  ac->addAction("borderTop", actions->borderTop );
   connect(actions->borderTop, SIGNAL(triggered(bool)), view, SLOT( borderTop() ));
 
   actions->borderTop->setToolTip(i18n("Set a top border to the selected area"));
 
-  actions->borderBottom = new KAction( KIcon( "border_bottom" ), i18n("Border Bottom"), ac, "borderBottom" );
+  actions->borderBottom  = new KAction(KIcon( "border_bottom" ), i18n("Border Bottom"), view);
+  ac->addAction("borderBottom", actions->borderBottom );
   connect(actions->borderBottom, SIGNAL(triggered(bool)), view, SLOT( borderBottom() ));
 
   actions->borderBottom->setToolTip(i18n("Set a bottom border to the selected area"));
 
-  actions->borderAll = new KAction( KIcon( "border_all" ), i18n("All Borders"), ac, "borderAll" );
+  actions->borderAll  = new KAction(KIcon( "border_all" ), i18n("All Borders"), view);
+  ac->addAction("borderAll", actions->borderAll );
   connect(actions->borderAll, SIGNAL(triggered(bool)), view, SLOT( borderAll() ));
 
   actions->borderAll->setToolTip(i18n("Set a border around all cells in the selected area"));
 
-  actions->borderRemove = new KAction( KIcon( "border_remove" ), i18n("Remove Borders"), ac, "borderRemove" );
+  actions->borderRemove  = new KAction(KIcon( "border_remove" ), i18n("Remove Borders"), view);
+  ac->addAction("borderRemove", actions->borderRemove );
   connect(actions->borderRemove, SIGNAL(triggered(bool)), view, SLOT( borderRemove() ));
 
   actions->borderRemove->setToolTip(i18n("Remove all borders in the selected area"));
 
-  actions->borderOutline = new KAction( KIcon( ("border_outline") ), i18n("Border Outline"), ac, "borderOutline" );
+  actions->borderOutline  = new KAction(KIcon( ("border_outline") ), i18n("Border Outline"), view);
+  ac->addAction("borderOutline", actions->borderOutline );
   connect(actions->borderOutline, SIGNAL(triggered(bool)), view, SLOT( borderOutline() ));
 
   actions->borderOutline->setToolTip(i18n("Set a border to the outline of the selected area"));
@@ -683,240 +719,288 @@ void View::Private::initActions()
                     view, SLOT( changeBorderColor() ) );
   actions->borderColor->setToolTip( i18n( "Select a new border color" ) );
 
-  actions->selectStyle = new KSelectAction( i18n( "St&yle" ), ac, "stylemenu" );
+  actions->selectStyle  = new KSelectAction(i18n("St&yle"), view);
+  ac->addAction("stylemenu", actions->selectStyle );
   actions->selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells" ) );
   connect( actions->selectStyle, SIGNAL( triggered( const QString & ) ),
            view, SLOT( setStyle( const QString & ) ) );
 
-  actions->createStyle = new KAction( i18n( "Create Style From Cell..." ), ac, "createStyle" );
+  actions->createStyle  = new KAction(i18n("Create Style From Cell..."), view);
+  ac->addAction("createStyle", actions->createStyle );
   connect(actions->createStyle, SIGNAL(triggered(bool)),view, SLOT( createStyleFromCell()));
 
   actions->createStyle->setToolTip( i18n( "Create a new style based on the currently selected cell" ) );
 
   // -- cell operation actions --
 
-  actions->editCell = new KAction( KIcon("cell_edit" ), i18n("Modify Cell"), ac, "editCell" );
+  actions->editCell  = new KAction(KIcon("cell_edit" ), i18n("Modify Cell"), view);
+  ac->addAction("editCell", actions->editCell );
   actions->editCell->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_M));
   connect(actions->editCell, SIGNAL(triggered(bool)), view, SLOT( editCell() ));
 
   actions->editCell->setToolTip(i18n("Edit the highlighted cell"));
 
-  actions->insertCell = new KAction( KIcon( "insertcell" ), i18n("Insert Cells..."), ac, "insertCell" );
+  actions->insertCell  = new KAction(KIcon( "insertcell" ), i18n("Insert Cells..."), view);
+  ac->addAction("insertCell", actions->insertCell );
   connect(actions->insertCell, SIGNAL(triggered(bool)), view, SLOT( slotInsert() ));
 
   actions->insertCell->setToolTip(i18n("Insert a blank cell into the spreadsheet"));
 
-  actions->removeCell = new KAction( KIcon( "removecell" ), i18n("Remove Cells..."), ac, "removeCell" );
+  actions->removeCell  = new KAction(KIcon( "removecell" ), i18n("Remove Cells..."), view);
+  ac->addAction("removeCell", actions->removeCell );
   connect(actions->removeCell, SIGNAL(triggered(bool)), view, SLOT( slotRemove() ));
 
   actions->removeCell->setToolTip(i18n("Removes the current cell from the spreadsheet"));
 
-  actions->deleteCell = new KAction( KIcon( "deletecell" ), i18n("Delete"), ac, "delete" );
+  actions->deleteCell  = new KAction(KIcon( "deletecell" ), i18n("Delete"), view);
+  ac->addAction("delete", actions->deleteCell );
   connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT( deleteSelection() ));
 
   actions->deleteCell->setToolTip(i18n("Delete all contents and formatting of the current cell"));
 
-  actions->mergeCell = new KToolBarPopupAction( KIcon( "mergecell" ), i18n("Merge Cells"), ac, "mergecell" );
+  actions->mergeCell  = new KToolBarPopupAction(KIcon( "mergecell" ), i18n("Merge Cells"), view);
+  ac->addAction("mergecell", actions->mergeCell );
   connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT( mergeCell() ));
   actions->mergeCell->setToolTip(i18n("Merge the selected region"));
   actions->mergeCell->menu()->addAction( actions->mergeCell );
 
-  actions->mergeCellHorizontal = new KAction( KIcon("mergecell-horizontal" ), i18n("Merge Cells Horizontally"), ac, "mergecellHorizontal" );
+  actions->mergeCellHorizontal  = new KAction(KIcon("mergecell-horizontal" ), i18n("Merge Cells Horizontally"), view);
+  ac->addAction("mergecellHorizontal", actions->mergeCellHorizontal );
   connect(actions->mergeCellHorizontal, SIGNAL(triggered(bool)), view, SLOT( mergeCellHorizontal() ));
 
   actions->mergeCellHorizontal->setToolTip(i18n("Merge the selected Region.horizontally"));
   actions->mergeCell->menu()->addAction( actions->mergeCellHorizontal );
 
-  actions->mergeCellVertical = new KAction( KIcon("mergecell-vertical" ), i18n("Merge Cells Vertically"), ac, "mergecellVertical" );
+  actions->mergeCellVertical  = new KAction(KIcon("mergecell-vertical" ), i18n("Merge Cells Vertically"), view);
+  ac->addAction("mergecellVertical", actions->mergeCellVertical );
   connect(actions->mergeCellVertical, SIGNAL(triggered(bool)), view, SLOT( mergeCellVertical() ));
 
   actions->mergeCellVertical->setToolTip(i18n("Merge the selected region vertically"));
   actions->mergeCell->menu()->addAction( actions->mergeCellVertical );
 
-  actions->dissociateCell = new KAction( KIcon("dissociatecell" ), i18n("Dissociate Cells"), ac, "dissociatecell" );
+  actions->dissociateCell  = new KAction(KIcon("dissociatecell" ), i18n("Dissociate Cells"), view);
+  ac->addAction("dissociatecell", actions->dissociateCell );
   connect(actions->dissociateCell, SIGNAL(triggered(bool)), view, SLOT( dissociateCell() ));
 
   actions->dissociateCell->setToolTip(i18n("Unmerge the selected region"));
 
-  actions->clearText = new KAction( i18n("Text"), ac, "cleartext" );
+  actions->clearText  = new KAction(i18n("Text"), view);
+  ac->addAction("cleartext", actions->clearText );
   connect(actions->clearText, SIGNAL(triggered(bool)),view, SLOT( clearTextSelection() ));
 
   actions->clearText->setToolTip(i18n("Remove the contents of the current cell"));
 
-  actions->conditional = new KAction( i18n("Conditional Cell Attributes..."), ac, "conditional" );
+  actions->conditional  = new KAction(i18n("Conditional Cell Attributes..."), view);
+  ac->addAction("conditional", actions->conditional );
   connect(actions->conditional, SIGNAL(triggered(bool)),view, SLOT( conditional() ));
 
   actions->conditional->setToolTip(i18n("Set cell format based on certain conditions"));
 
 
-  actions->clearConditional = new KAction( i18n("Conditional Cell Attributes"), ac, "clearconditional" );
+  actions->clearConditional  = new KAction(i18n("Conditional Cell Attributes"), view);
+  ac->addAction("clearconditional", actions->clearConditional );
   connect(actions->clearConditional, SIGNAL(triggered(bool)),view, SLOT( clearConditionalSelection() ));
 
   actions->clearConditional->setToolTip(i18n("Remove the conditional cell formatting"));
 
-  actions->validity = new KAction( i18n("Validity..."), ac, "validity" );
+  actions->validity  = new KAction(i18n("Validity..."), view);
+  ac->addAction("validity", actions->validity );
   connect(actions->validity, SIGNAL(triggered(bool)),view, SLOT( validity() ));
 
   actions->validity->setToolTip(i18n("Set tests to confirm cell data is valid"));
 
-  actions->clearValidity = new KAction( i18n("Validity"), ac, "clearvalidity" );
+  actions->clearValidity  = new KAction(i18n("Validity"), view);
+  ac->addAction("clearvalidity", actions->clearValidity );
   connect(actions->clearValidity, SIGNAL(triggered(bool)),view, SLOT( clearValiditySelection() ));
 
   actions->clearValidity->setToolTip(i18n("Remove the validity tests on this cell"));
 
-  actions->addModifyComment = new KAction( KIcon("comment" ), i18n("&Add/Modify Comment..."), ac, "addmodifycomment" );
+  actions->addModifyComment  = new KAction(KIcon("comment" ), i18n("&Add/Modify Comment..."), view);
+  ac->addAction("addmodifycomment", actions->addModifyComment );
   connect(actions->addModifyComment, SIGNAL(triggered(bool)), view, SLOT( addModifyComment() ));
 
   actions->addModifyComment->setToolTip(i18n("Edit a comment for this cell"));
 
-  actions->removeComment = new KAction( KIcon("removecomment" ), i18n("&Remove Comment"), ac, "removecomment" );
+  actions->removeComment  = new KAction(KIcon("removecomment" ), i18n("&Remove Comment"), view);
+  ac->addAction("removecomment", actions->removeComment );
   connect(actions->removeComment, SIGNAL(triggered(bool)),  view, SLOT( clearCommentSelection() ));
   actions->removeComment->setToolTip(i18n("Remove this cell's comment"));
 
-  actions->clearComment = new KAction( i18n("Comment"), ac, "clearcomment" );
+  actions->clearComment  = new KAction(i18n("Comment"), view);
+  ac->addAction("clearcomment", actions->clearComment );
   connect(actions->clearComment, SIGNAL(triggered(bool)),view, SLOT( clearCommentSelection() ));
   actions->clearComment->setToolTip(i18n("Remove this cell's comment"));
 
   // -- column & row actions --
 
-  actions->resizeColumn = new KAction( KIcon( "resizecol" ), i18n("Resize Column..."), ac, "resizeCol" );
+  actions->resizeColumn  = new KAction(KIcon( "resizecol" ), i18n("Resize Column..."), view);
+  ac->addAction("resizeCol", actions->resizeColumn );
   connect(actions->resizeColumn, SIGNAL(triggered(bool)), view, SLOT( resizeColumn() ));
 
   actions->resizeColumn->setToolTip(i18n("Change the width of a column"));
 
-  actions->insertColumn = new KAction( KIcon( "insert_table_col" ), i18n("Insert Columns"), ac, "insertColumn" );
+  actions->insertColumn  = new KAction(KIcon( "insert_table_col" ), i18n("Insert Columns"), view);
+  ac->addAction("insertColumn", actions->insertColumn );
   connect(actions->insertColumn, SIGNAL(triggered(bool)), view, SLOT( insertColumn() ));
 
   actions->insertColumn->setToolTip(i18n("Inserts a new column into the spreadsheet"));
 
-  actions->deleteColumn = new KAction( KIcon( "delete_table_col" ), i18n("Delete Columns"), ac, "deleteColumn" );
+  actions->deleteColumn  = new KAction(KIcon( "delete_table_col" ), i18n("Delete Columns"), view);
+  ac->addAction("deleteColumn", actions->deleteColumn );
   connect(actions->deleteColumn, SIGNAL(triggered(bool)), view, SLOT( deleteColumn() ));
 
   actions->deleteColumn->setToolTip(i18n("Removes a column from the spreadsheet"));
 
-  actions->hideColumn = new KAction( KIcon( "hide_table_column" ), i18n("Hide Columns"), ac, "hideColumn" );
+  actions->hideColumn  = new KAction(KIcon( "hide_table_column" ), i18n("Hide Columns"), view);
+  ac->addAction("hideColumn", actions->hideColumn );
   connect(actions->hideColumn, SIGNAL(triggered(bool)), view, SLOT( hideColumn() ));
 
   actions->hideColumn->setToolTip(i18n("Hide the column from view"));
 
-  actions->showColumn = new KAction( KIcon( "show_table_column" ), i18n("Show Columns..."), ac, "showColumn" );
+  actions->showColumn  = new KAction(KIcon( "show_table_column" ), i18n("Show Columns..."), view);
+  ac->addAction("showColumn", actions->showColumn );
   connect(actions->showColumn, SIGNAL(triggered(bool)), view, SLOT( slotShowColumnDialog() ));
 
   actions->showColumn->setToolTip(i18n("Show hidden columns"));
 
-  actions->equalizeColumn = new KAction( KIcon( "adjustcol" ), i18n("Equalize Column"), ac, "equalizeCol" );
+  actions->equalizeColumn  = new KAction(KIcon( "adjustcol" ), i18n("Equalize Column"), view);
+  ac->addAction("equalizeCol", actions->equalizeColumn );
   connect(actions->equalizeColumn, SIGNAL(triggered(bool)), view, SLOT( equalizeColumn() ));
 
   actions->equalizeColumn->setToolTip(i18n("Resizes selected columns to be the same size"));
 
-  actions->showSelColumns = new KAction( KIcon( "show_sheet_column" ), i18n("Show Columns"), ac, "showSelColumns" );
+  actions->showSelColumns  = new KAction(KIcon( "show_sheet_column" ), i18n("Show Columns"), view);
+  ac->addAction("showSelColumns", actions->showSelColumns );
   connect(actions->showSelColumns, SIGNAL(triggered(bool)), view, SLOT( showColumn() ));
 
   actions->showSelColumns->setToolTip(i18n("Show hidden columns in the selection"));
   actions->showSelColumns->setEnabled(false);
 
-  actions->resizeRow = new KAction( KIcon( "resizerow" ), i18n("Resize Row..."), ac, "resizeRow" );
+  actions->resizeRow  = new KAction(KIcon( "resizerow" ), i18n("Resize Row..."), view);
+  ac->addAction("resizeRow", actions->resizeRow );
   connect(actions->resizeRow, SIGNAL(triggered(bool)), view, SLOT( resizeRow() ));
 
   actions->resizeRow->setToolTip(i18n("Change the height of a row"));
 
-  actions->insertRow = new KAction( KIcon( "insert_table_row" ), i18n("Insert Rows"), ac, "insertRow" );
+  actions->insertRow  = new KAction(KIcon( "insert_table_row" ), i18n("Insert Rows"), view);
+  ac->addAction("insertRow", actions->insertRow );
   connect(actions->insertRow, SIGNAL(triggered(bool)), view, SLOT( insertRow() ));
 
   actions->insertRow->setToolTip(i18n("Inserts a new row into the spreadsheet"));
 
-  actions->deleteRow = new KAction( KIcon( "delete_table_row" ), i18n("Delete Rows"), ac, "deleteRow" );
+  actions->deleteRow  = new KAction(KIcon( "delete_table_row" ), i18n("Delete Rows"), view);
+  ac->addAction("deleteRow", actions->deleteRow );
   connect(actions->deleteRow, SIGNAL(triggered(bool)), view, SLOT( deleteRow() ));
 
   actions->deleteRow->setToolTip(i18n("Removes a row from the spreadsheet"));
 
-  actions->hideRow = new KAction( KIcon( "hide_table_row" ), i18n("Hide Rows"), ac, "hideRow" );
+  actions->hideRow  = new KAction(KIcon( "hide_table_row" ), i18n("Hide Rows"), view);
+  ac->addAction("hideRow", actions->hideRow );
   connect(actions->hideRow, SIGNAL(triggered(bool)), view, SLOT( hideRow() ));
 
   actions->hideRow->setToolTip(i18n("Hide a row from view"));
 
-  actions->showRow = new KAction( KIcon( "show_table_row" ), i18n("Show Rows..."), ac, "showRow" );
+  actions->showRow  = new KAction(KIcon( "show_table_row" ), i18n("Show Rows..."), view);
+  ac->addAction("showRow", actions->showRow );
   connect(actions->showRow, SIGNAL(triggered(bool)), view, SLOT( slotShowRowDialog() ));
   actions->showRow->setToolTip(i18n("Show hidden rows"));
 
-  actions->equalizeRow = new KAction( KIcon( "adjustrow" ), i18n("Equalize Row"), ac, "equalizeRow" );
+  actions->equalizeRow  = new KAction(KIcon( "adjustrow" ), i18n("Equalize Row"), view);
+  ac->addAction("equalizeRow", actions->equalizeRow );
   connect(actions->equalizeRow, SIGNAL(triggered(bool)), view, SLOT( equalizeRow() ));
   actions->equalizeRow->setToolTip(i18n("Resizes selected rows to be the same size"));
 
-  actions->showSelRows = new KAction( KIcon( "show_table_row" ), i18n("Show Rows"), ac, "showSelRows" );
+  actions->showSelRows  = new KAction(KIcon( "show_table_row" ), i18n("Show Rows"), view);
+  ac->addAction("showSelRows", actions->showSelRows );
   connect(actions->showSelRows, SIGNAL(triggered(bool)), view, SLOT( showRow() ));
 
   actions->showSelRows->setEnabled(false);
   actions->showSelRows->setToolTip(i18n("Show hidden rows in the selection"));
 
-  actions->adjust = new KAction( i18n("Adjust Row && Column"), ac, "adjust" );
+  actions->adjust  = new KAction(i18n("Adjust Row && Column"), view);
+  ac->addAction("adjust", actions->adjust );
   connect(actions->adjust, SIGNAL(triggered(bool)),view, SLOT( adjust() ));
 
   actions->adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit"));
 
   // -- sheet/workbook actions --
-  actions->sheetProperties = new KAction( i18n("Sheet Properties"), ac, "sheetProperties" );
+  actions->sheetProperties  = new KAction(i18n("Sheet Properties"), view);
+  ac->addAction("sheetProperties", actions->sheetProperties );
   connect(actions->sheetProperties, SIGNAL(triggered(bool)),view, SLOT( sheetProperties() ));
 
   actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties"));
 
-  actions->insertSheet = new KAction( KIcon("inserttable" ), i18n("Insert Sheet"), ac, "insertSheet" );
+  actions->insertSheet  = new KAction(KIcon("inserttable" ), i18n("Insert Sheet"), view);
+  ac->addAction("insertSheet", actions->insertSheet );
   connect(actions->insertSheet, SIGNAL(triggered(bool)), view, SLOT( insertSheet() ));
 
   actions->insertSheet->setToolTip(i18n("Insert a new sheet"));
 
   // same action as insertSheet, but without 'insert' in the caption
-  actions->menuInsertSheet = new KAction( KIcon("inserttable" ), i18n("&Sheet"), ac, "menuInsertSheet" );
+  actions->menuInsertSheet  = new KAction(KIcon("inserttable" ), i18n("&Sheet"), view);
+  ac->addAction("menuInsertSheet", actions->menuInsertSheet );
   connect(actions->menuInsertSheet, SIGNAL(triggered(bool)), view, SLOT( insertSheet() ));
 
   actions->menuInsertSheet->setToolTip(i18n("Insert a new sheet"));
 
-  actions->removeSheet = new KAction( KIcon( "delete_table" ), i18n("Remove Sheet"), ac, "removeSheet" );
+  actions->removeSheet  = new KAction(KIcon( "delete_table" ), i18n("Remove Sheet"), view);
+  ac->addAction("removeSheet", actions->removeSheet );
   connect(actions->removeSheet, SIGNAL(triggered(bool)), view, SLOT( removeSheet() ));
 
   actions->removeSheet->setToolTip(i18n("Remove the active sheet"));
 
-  actions->renameSheet = new KAction( i18n("Rename Sheet..."), ac, "renameSheet" );
+  actions->renameSheet  = new KAction(i18n("Rename Sheet..."), view);
+  ac->addAction("renameSheet", actions->renameSheet );
   connect(actions->renameSheet, SIGNAL(triggered(bool)),view, SLOT( slotRename() ));
   actions->renameSheet->setToolTip(i18n("Rename the active sheet"));
 
-  actions->showSheet = new KAction(i18n("Show Sheet..."), ac, "showSheet" );
+  actions->showSheet  = new KAction(i18n("Show Sheet..."), view);
+  ac->addAction("showSheet", actions->showSheet );
   connect(actions->showSheet, SIGNAL(triggered(bool)),view, SLOT( showSheet()));
   actions->showSheet->setToolTip(i18n("Show a hidden sheet"));
 
-  actions->hideSheet = new KAction(i18n("Hide Sheet"), ac, "hideSheet" );
+  actions->hideSheet  = new KAction(i18n("Hide Sheet"), view);
+  ac->addAction("hideSheet", actions->hideSheet );
   connect(actions->hideSheet, SIGNAL(triggered(bool)),view, SLOT( hideSheet() ));
   actions->hideSheet->setToolTip(i18n("Hide the active sheet"));
 
-  actions->autoFormat = new KAction( i18n("AutoFormat..."), ac, "sheetFormat" );
+  actions->autoFormat  = new KAction(i18n("AutoFormat..."), view);
+  ac->addAction("sheetFormat", actions->autoFormat );
   connect(actions->autoFormat, SIGNAL(triggered(bool)),view, SLOT( sheetFormat() ));
   actions->autoFormat->setToolTip(i18n("Set the worksheet formatting"));
 
-  actions->areaName = new KAction( i18n("Area Name..."), ac, "areaname" );
+  actions->areaName  = new KAction(i18n("Area Name..."), view);
+  ac->addAction("areaname", actions->areaName );
   connect(actions->areaName, SIGNAL(triggered(bool)),view, SLOT( setAreaName() ));
   actions->areaName->setToolTip(i18n("Set a name for a region of the spreadsheet"));
 
-  actions->showArea = new KAction( i18n("Show Area..."), ac, "showArea" );
+  actions->showArea  = new KAction(i18n("Show Area..."), view);
+  ac->addAction("showArea", actions->showArea );
   connect(actions->showArea, SIGNAL(triggered(bool)),view, SLOT( showAreaName() ));
   actions->showArea->setToolTip(i18n("Display a named area"));
 
-  actions->insertFunction = new KAction( KIcon( "funct" ), i18n("&Function..."), ac, "insertMathExpr" );
+  actions->insertFunction  = new KAction(KIcon( "funct" ), i18n("&Function..."), view);
+  ac->addAction("insertMathExpr", actions->insertFunction );
   connect(actions->insertFunction, SIGNAL(triggered(bool)), view, SLOT( insertMathExpr() ));
   actions->insertFunction->setToolTip(i18n("Insert math expression"));
 
-  actions->insertSeries = new KAction( KIcon("series" ), i18n("&Series..."), ac, "series");
+  actions->insertSeries  = new KAction(KIcon("series" ), i18n("&Series..."), view);
+  ac->addAction("series", actions->insertSeries );
   connect(actions->insertSeries, SIGNAL(triggered(bool)), view, SLOT( insertSeries() ));
   actions->insertSeries ->setToolTip(i18n("Insert a series"));
 
-  actions->insertLink = new KAction( KIcon( "insert_link" ), i18n("&Link..."), ac, "insertHyperlink" );
+  actions->insertLink  = new KAction(KIcon( "insert_link" ), i18n("&Link..."), view);
+  ac->addAction("insertHyperlink", actions->insertLink );
   connect(actions->insertLink, SIGNAL(triggered(bool)), view, SLOT( insertHyperlink() ));
   actions->insertLink->setToolTip(i18n("Insert an Internet hyperlink"));
 
-  actions->removeLink = new KAction( i18n("&Remove Link"), ac, "removeHyperlink" );
+  actions->removeLink  = new KAction(i18n("&Remove Link"), view);
+  ac->addAction("removeHyperlink", actions->removeLink );
   connect(actions->removeLink, SIGNAL(triggered(bool)),view, SLOT( removeHyperlink() ));
   actions->removeLink->setToolTip(i18n("Remove a link"));
 
-  actions->insertSpecialChar = new KAction( KIcon("char"), i18n( "S&pecial Character..." ), ac, "insertSpecialChar" );
+  actions->insertSpecialChar  = new KAction(KIcon("char"), i18n("S&pecial Character..."), view);
+  ac->addAction("insertSpecialChar", actions->insertSpecialChar );
   connect( actions->insertSpecialChar, SIGNAL( toggled( bool ) ),
                     view, SLOT( insertSpecialChar() ) );
   actions->insertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard" ) );
@@ -924,28 +1008,33 @@ void View::Private::initActions()
   actions->insertPart = new KoPartSelectAction( i18n("&Object"), "frame_query",      view, SLOT( insertObject() ), ac, "insertPart");
   actions->insertPart->setToolTip(i18n("Insert an object from another program"));
 
-  actions->insertChartFrame = new KToggleAction( KIcon( "insert_chart" ), i18n("&Chart"), ac, "insertChart" );
+  actions->insertChartFrame  = new KToggleAction(KIcon( "insert_chart" ), i18n("&Chart"), view);
+  ac->addAction("insertChart", actions->insertChartFrame );
   connect(actions->insertChartFrame, SIGNAL(triggered(bool)), view, SLOT( insertChart() ));
 
   actions->insertChartFrame->setToolTip(i18n("Insert a chart"));
 
-  actions->insertPicture = new KAction( i18n("&Picture"), ac, "insertPicture" );
+  actions->insertPicture  = new KAction(i18n("&Picture"), view);
+  ac->addAction("insertPicture", actions->insertPicture );
   connect(actions->insertPicture, SIGNAL(triggered(bool)),view, SLOT( insertPicture() ));
 
   actions->insertPicture->setToolTip(i18n("Insert a picture"));
 
 #ifndef QT_NO_SQL
-  actions->insertFromDatabase = new KAction( i18n("From &Database..."),  ac, "insertFromDatabase");
+  actions->insertFromDatabase  = new KAction(i18n("From &Database..."), view);
+  ac->addAction("insertFromDatabase", actions->insertFromDatabase );
   connect(actions->insertFromDatabase, SIGNAL(triggered(bool)),view, SLOT( insertFromDatabase() ));
   actions->insertFromDatabase->setToolTip(i18n("Insert data from a SQL database"));
 #endif
 
-  actions->insertFromTextfile = new KAction( i18n("From &Text File..."), ac, "insertFromTextfile");
+  actions->insertFromTextfile  = new KAction(i18n("From &Text File..."), view);
+  ac->addAction("insertFromTextfile", actions->insertFromTextfile );
   connect(actions->insertFromTextfile, SIGNAL(triggered(bool)),view,  SLOT( insertFromTextfile() ));
 
   actions->insertFromTextfile->setToolTip(i18n("Insert data from a text file to the current cursor position/selection"));
 
-  actions->insertFromClipboard = new KAction( i18n("From &Clipboard..."), ac, "insertFromClipboard");
+  actions->insertFromClipboard  = new KAction(i18n("From &Clipboard..."), view);
+  ac->addAction("insertFromClipboard", actions->insertFromClipboard );
   connect(actions->insertFromClipboard, SIGNAL(triggered(bool)),view, SLOT( insertFromClipboard() ));
 
   actions->insertFromClipboard->setToolTip(i18n("Insert CSV data from the clipboard to the current cursor position/selection"));
@@ -955,79 +1044,92 @@ void View::Private::initActions()
 //   actions->transform->setToolTip(i18n("Rotate the contents of the cell"));
 //   actions->transform->setEnabled( false );
 
-  actions->sort = new KAction( i18n("&Sort..."), ac, "sort" );
+  actions->sort  = new KAction(i18n("&Sort..."), view);
+  ac->addAction("sort", actions->sort );
   connect(actions->sort, SIGNAL(triggered(bool)),view, SLOT( sort() ));
 
   actions->sort->setToolTip(i18n("Sort a group of cells"));
 
-  actions->sortDec = new KAction( KIcon( "sort_decrease" ), i18n("Sort &Decreasing"), ac, "sortDec" );
+  actions->sortDec  = new KAction(KIcon( "sort_decrease" ), i18n("Sort &Decreasing"), view);
+  ac->addAction("sortDec", actions->sortDec );
   connect(actions->sortDec, SIGNAL(triggered(bool)), view, SLOT( sortDec() ));
   actions->sortDec->setToolTip(i18n("Sort a group of cells in decreasing (last to first) order"));
 
-  actions->sortInc = new KAction( KIcon( "sort_incr" ), i18n("Sort &Increasing"), ac, "sortInc" );
+  actions->sortInc  = new KAction(KIcon( "sort_incr" ), i18n("Sort &Increasing"), view);
+  ac->addAction("sortInc", actions->sortInc );
   connect(actions->sortInc, SIGNAL(triggered(bool)), view, SLOT( sortInc() ));
   actions->sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order"));
 
-  actions->paperLayout = new KAction( i18n("Page Layout..."), ac, "paperLayout" );
+  actions->paperLayout  = new KAction(i18n("Page Layout..."), view);
+  ac->addAction("paperLayout", actions->paperLayout );
   connect(actions->paperLayout, SIGNAL(triggered(bool)),view, SLOT( paperLayoutDlg() ));
   actions->paperLayout->setToolTip(i18n("Specify the layout of the spreadsheet for a printout"));
 
-  actions->definePrintRange = new KAction( i18n("Define Print Range"), ac, "definePrintRange" );
+  actions->definePrintRange  = new KAction(i18n("Define Print Range"), view);
+  ac->addAction("definePrintRange", actions->definePrintRange );
   connect(actions->definePrintRange, SIGNAL(triggered(bool)),view, SLOT( definePrintRange() ));
   actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet"));
 
-  actions->resetPrintRange = new KAction( i18n("Reset Print Range"), ac, "resetPrintRange" );
+  actions->resetPrintRange  = new KAction(i18n("Reset Print Range"), view);
+  ac->addAction("resetPrintRange", actions->resetPrintRange );
   connect(actions->resetPrintRange, SIGNAL(triggered(bool)),view, SLOT( resetPrintRange() ));
   actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet"));
 
-  actions->showPageBorders = new KToggleAction( i18n("Show Page Borders"),      ac, "showPageBorders");
+  actions->showPageBorders  = new KToggleAction(i18n("Show Page Borders"), view);
+  ac->addAction("showPageBorders", actions->showPageBorders );
   actions->showPageBorders->setCheckedState(KGuiItem(i18n("Hide Page Borders")));
   connect( actions->showPageBorders, SIGNAL( toggled( bool ) ),
                     view, SLOT( togglePageBorders( bool ) ) );
   actions->showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be" ) );
 
-  actions->recalcWorksheet = new KAction( i18n("Recalculate Sheet"), ac, "RecalcWorkSheet" );
+  actions->recalcWorksheet  = new KAction(i18n("Recalculate Sheet"), view);
+  ac->addAction("RecalcWorkSheet", actions->recalcWorksheet );
   actions->recalcWorksheet->setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_F9));
   connect(actions->recalcWorksheet, SIGNAL(triggered(bool)),view, SLOT( recalcWorkSheet() ));
 
   actions->recalcWorksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet"));
 
-  actions->recalcWorkbook = new KAction( i18n("Recalculate Document"), ac, "RecalcWorkBook" );
+  actions->recalcWorkbook  = new KAction(i18n("Recalculate Document"), view);
+  ac->addAction("RecalcWorkBook", actions->recalcWorkbook );
   actions->recalcWorkbook->setShortcut( QKeySequence( Qt::Key_F9));
   connect(actions->recalcWorkbook, SIGNAL(triggered(bool)),view, SLOT( recalcWorkBook() ));
 
   actions->recalcWorkbook->setToolTip(i18n("Recalculate the value of every cell in all worksheets"));
 
-  actions->protectSheet = new KToggleAction( i18n( "Protect &Sheet..." ),      ac, "protectSheet" );
+  actions->protectSheet  = new KToggleAction(i18n("Protect &Sheet..."), view);
+  ac->addAction("protectSheet", actions->protectSheet );
   actions->protectSheet->setToolTip( i18n( "Protect the sheet from being modified" ) );
   connect( actions->protectSheet, SIGNAL( toggled( bool ) ),
                     view, SLOT( toggleProtectSheet( bool ) ) );
 
-  actions->protectDoc = new KToggleAction( i18n( "Protect &Document..." ),      ac, "protectDoc" );
+  actions->protectDoc  = new KToggleAction(i18n("Protect &Document..."), view);
+  ac->addAction("protectDoc", actions->protectDoc );
   actions->protectDoc->setToolTip( i18n( "Protect the document from being modified" ) );
   connect( actions->protectDoc, SIGNAL( toggled( bool ) ),
                     view, SLOT( toggleProtectDoc( bool ) ) );
 
   // -- editing actions --
 
-  actions->copy = KStandardAction::copy( view, SLOT( copySelection() ), ac, "copy" );
+  actions->copy = ac->addAction(KStandardAction::Copy,  "copy", view, SLOT( copySelection() ));
   actions->copy->setToolTip(i18n("Copy the cell object to the clipboard"));
 
-  actions->paste = KStandardAction::paste( view, SLOT( paste() ), ac, "paste" );
+  actions->paste = ac->addAction(KStandardAction::Paste,  "paste", view, SLOT( paste() ));
   actions->paste->setToolTip(i18n("Paste the contents of the clipboard at the cursor"));
 
-  actions->cut = KStandardAction::cut( view, SLOT( cutSelection() ), ac, "cut" );
+  actions->cut = ac->addAction(KStandardAction::Cut,  "cut", view, SLOT( cutSelection() ));
   actions->cut->setToolTip(i18n("Move the cell object to the clipboard"));
 
-  actions->specialPaste = new KAction( KIcon( "special_paste" ), i18n("Special Paste..."), ac, "specialPaste" );
+  actions->specialPaste  = new KAction(KIcon( "special_paste" ), i18n("Special Paste..."), view);
+  ac->addAction("specialPaste", actions->specialPaste );
   connect(actions->specialPaste, SIGNAL(triggered(bool)), view, SLOT( specialPaste() ));
   actions->specialPaste->setToolTip(i18n("Paste the contents of the clipboard with special options"));
 
-  actions->insertCellCopy = new KAction( KIcon( "insertcellcopy" ), i18n("Paste with Insertion"), ac, "insertCellCopy" );
+  actions->insertCellCopy  = new KAction(KIcon( "insertcellcopy" ), i18n("Paste with Insertion"), view);
+  ac->addAction("insertCellCopy", actions->insertCellCopy );
   connect(actions->insertCellCopy, SIGNAL(triggered(bool)), view, SLOT( slotInsertCellCopy() ));
   actions->insertCellCopy->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet"));
 
-  actions->selectAll = KStandardAction::selectAll( view, SLOT( selectAll() ), ac, "selectAll" );
+  actions->selectAll = ac->addAction(KStandardAction::SelectAll,  "selectAll", view, SLOT( selectAll() ));
   actions->selectAll->setToolTip(i18n("Selects all cells in the current sheet"));
 
   actions->find = KStandardAction::find( view, SLOT(find()), ac );
@@ -1036,38 +1138,45 @@ void View::Private::initActions()
 
   actions->replace = KStandardAction::replace( view, SLOT(replace()), ac );
 
-  actions->fillRight = new KAction( KIcon( 0 ), i18n( "&Right" ), ac, "fillRight" );
+  actions->fillRight  = new KAction(KIcon( 0 ), i18n("&Right"), view);
+  ac->addAction("fillRight", actions->fillRight );
   connect(actions->fillRight, SIGNAL(triggered(bool)), view, SLOT( fillRight() ));
 
 
-  actions->fillLeft = new KAction( KIcon( 0 ), i18n( "&Left" ), ac, "fillLeft" );
+  actions->fillLeft  = new KAction(KIcon( 0 ), i18n("&Left"), view);
+  ac->addAction("fillLeft", actions->fillLeft );
   connect(actions->fillLeft, SIGNAL(triggered(bool)), view, SLOT( fillLeft() ));
 
 
-  actions->fillDown = new KAction( KIcon( 0 ), i18n( "&Down" ), ac, "fillDown" );
+  actions->fillDown  = new KAction(KIcon( 0 ), i18n("&Down"), view);
+  ac->addAction("fillDown", actions->fillDown );
   connect(actions->fillDown, SIGNAL(triggered(bool)), view, SLOT( fillDown() ));
 
 
-  actions->fillUp = new KAction( KIcon( 0 ), i18n( "&Up" ), ac, "fillUp" );
+  actions->fillUp  = new KAction(KIcon( 0 ), i18n("&Up"), view);
+  ac->addAction("fillUp", actions->fillUp );
   connect(actions->fillUp, SIGNAL(triggered(bool)), view, SLOT( fillUp() ));
 
 
   // -- misc actions --
 
-  actions->styleDialog = new KAction( i18n( "Style Manager" ), ac, "styles" );
+  actions->styleDialog  = new KAction(i18n("Style Manager"), view);
+  ac->addAction("styles", actions->styleDialog );
   connect(actions->styleDialog, SIGNAL(triggered(bool)),view, SLOT( styleDialog() ));
 
   actions->styleDialog->setToolTip( i18n( "Edit and organize cell styles" ) );
 
-  actions->autoSum = new KAction( KIcon( "black_sum" ), i18n("Autosum"), ac, "autoSum" );
+  actions->autoSum  = new KAction(KIcon( "black_sum" ), i18n("Autosum"), view);
+  ac->addAction("autoSum", actions->autoSum );
   connect(actions->autoSum, SIGNAL(triggered(bool)), view, SLOT( autoSum() ));
 
   actions->autoSum->setToolTip(i18n("Insert the 'sum' function"));
 
-  actions->spellChecking = KStandardAction::spelling( view, SLOT( extraSpelling() ), ac, "spelling" );
+  actions->spellChecking = ac->addAction(KStandardAction::Spelling,  "spelling", view, SLOT( extraSpelling() ));
   actions->spellChecking->setToolTip(i18n("Check the spelling"));
 
-  actions->formulaSelection = new KSelectAction(i18n("Formula Selection"), ac, "formulaSelection");
+  actions->formulaSelection  = new KSelectAction(i18n("Formula Selection"), view);
+  ac->addAction("formulaSelection", actions->formulaSelection );
   actions->formulaSelection->setToolTip(i18n("Insert a function"));
   QStringList lst;
   lst.append( "SUM");
@@ -1088,132 +1197,156 @@ void View::Private::initActions()
   connect( actions->viewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, int ) ),
       view, SLOT( viewZoom( KoZoomMode::Mode, int ) ) );
 
-  actions->consolidate = new KAction( i18n("&Consolidate..."), ac, "consolidate" );
+  actions->consolidate  = new KAction(i18n("&Consolidate..."), view);
+  ac->addAction("consolidate", actions->consolidate );
   connect(actions->consolidate, SIGNAL(triggered(bool)),view, SLOT( consolidate() ));
 
   actions->consolidate->setToolTip(i18n("Create a region of summary data from a group of similar regions"));
 
-  actions->goalSeek = new KAction( i18n("&Goal Seek..."), ac, "goalSeek" );
+  actions->goalSeek  = new KAction(i18n("&Goal Seek..."), view);
+  ac->addAction("goalSeek", actions->goalSeek );
   connect(actions->goalSeek, SIGNAL(triggered(bool)),view, SLOT( goalSeek() ));
 
   actions->goalSeek->setToolTip( i18n("Repeating calculation to find a specific value") );
 
-  actions->subTotals = new KAction( i18n("&Subtotals..."), ac, "subtotals" );
+  actions->subTotals  = new KAction(i18n("&Subtotals..."), view);
+  ac->addAction("subtotals", actions->subTotals );
   connect(actions->subTotals, SIGNAL(triggered(bool)),view, SLOT( subtotals() ));
 
   actions->subTotals->setToolTip( i18n("Create different kind of subtotals to a list or database") );
 
-  actions->textToColumns = new KAction( i18n("&Text to Columns..."), ac, "textToColumns" );
+  actions->textToColumns  = new KAction(i18n("&Text to Columns..."), view);
+  ac->addAction("textToColumns", actions->textToColumns );
   connect(actions->textToColumns, SIGNAL(triggered(bool)),view, SLOT( textToColumns() ));
 
   actions->textToColumns->setToolTip( i18n("Expand the content of cells to multiple columns") );
 
-  actions->multipleOperations = new KAction( i18n("&Multiple Operations..."), ac, "multipleOperations" );
+  actions->multipleOperations  = new KAction(i18n("&Multiple Operations..."), view);
+  ac->addAction("multipleOperations", actions->multipleOperations );
   connect(actions->multipleOperations, SIGNAL(triggered(bool)),view, SLOT( multipleOperations() ));
 
   actions->multipleOperations->setToolTip( i18n("Apply the same formula to various cells using different values for the parameter") );
 
-  actions->createTemplate = new KAction( i18n( "&Create Template From Document..." ), ac, "createTemplate" );
+  actions->createTemplate  = new KAction(i18n("&Create Template From Document..."), view);
+  ac->addAction("createTemplate", actions->createTemplate );
   connect(actions->createTemplate, SIGNAL(triggered(bool)),view, SLOT( createTemplate() ));
 
 
-  actions->customList = new KAction( i18n("Custom Lists..."), ac, "sortlist" );
+  actions->customList  = new KAction(i18n("Custom Lists..."), view);
+  ac->addAction("sortlist", actions->customList );
   connect(actions->customList, SIGNAL(triggered(bool)),view, SLOT( sortList() ));
   actions->customList->setToolTip(i18n("Create custom lists for sorting or autofill"));
 
   // -- navigation actions --
 
-  actions->gotoCell = new KAction( KIcon("goto" ), i18n("Goto Cell..."), ac, "gotoCell" );
+  actions->gotoCell  = new KAction(KIcon("goto" ), i18n("Goto Cell..."), view);
+  ac->addAction("gotoCell", actions->gotoCell );
   connect(actions->gotoCell, SIGNAL(triggered(bool)), view, SLOT( gotoCell() ));
   actions->gotoCell->setToolTip(i18n("Move to a particular cell"));
 
-  actions->nextSheet = new KAction( KIcon( "forward" ), i18n("Next Sheet"), ac, "nextSheet");
+  actions->nextSheet  = new KAction(KIcon( "forward" ), i18n("Next Sheet"), view);
+  ac->addAction("nextSheet", actions->nextSheet );
   actions->nextSheet->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_PageDown));
   connect(actions->nextSheet, SIGNAL(triggered(bool)), view, SLOT( nextSheet() ));
 
   actions->nextSheet->setToolTip(i18n("Move to the next sheet"));
 
-  actions->prevSheet = new KAction( KIcon( "back" ), i18n("Previous Sheet"), ac, "previousSheet");
+  actions->prevSheet  = new KAction(KIcon( "back" ), i18n("Previous Sheet"), view);
+  ac->addAction("previousSheet", actions->prevSheet );
   actions->prevSheet->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_PageUp));
   connect(actions->prevSheet, SIGNAL(triggered(bool)), view, SLOT( previousSheet() ));
 
   actions->prevSheet->setToolTip(i18n("Move to the previous sheet"));
 
-  actions->firstSheet = new KAction( KIcon( "start" ), i18n("First Sheet"), ac, "firstSheet");
+  actions->firstSheet  = new KAction(KIcon( "start" ), i18n("First Sheet"), view);
+  ac->addAction("firstSheet", actions->firstSheet );
   connect(actions->firstSheet, SIGNAL(triggered(bool)), view, SLOT( firstSheet() ));
 
   actions->firstSheet->setToolTip(i18n("Move to the first sheet"));
 
-  actions->lastSheet = new KAction( KIcon( "finish" ), i18n("Last Sheet"), ac, "lastSheet");
+  actions->lastSheet  = new KAction(KIcon( "finish" ), i18n("Last Sheet"), view);
+  ac->addAction("lastSheet", actions->lastSheet );
   connect(actions->lastSheet, SIGNAL(triggered(bool)), view, SLOT( lastSheet() ));
 
   actions->lastSheet->setToolTip(i18n("Move to the last sheet"));
 
   // -- settings actions --
 
-  actions->showStatusBar = new KToggleAction( i18n("Show Status Bar"), ac, "showStatusBar" );
+  actions->showStatusBar  = new KToggleAction(i18n("Show Status Bar"), view);
+  ac->addAction("showStatusBar", actions->showStatusBar );
   actions->showStatusBar->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
   connect( actions->showStatusBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showStatusBar( bool ) ) );
   actions->showStatusBar->setToolTip(i18n("Show the status bar"));
 
-  actions->showTabBar = new KToggleAction( i18n("Show Tab Bar"), ac, "showTabBar" );
+  actions->showTabBar  = new KToggleAction(i18n("Show Tab Bar"), view);
+  ac->addAction("showTabBar", actions->showTabBar );
   actions->showTabBar->setCheckedState(KGuiItem(i18n("Hide Tab Bar")));
   connect( actions->showTabBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showTabBar( bool ) ) );
   actions->showTabBar->setToolTip(i18n("Show the tab bar"));
 
-  actions->showFormulaBar = new KToggleAction( i18n("Show Formula Bar"), ac, "showFormulaBar" );
+  actions->showFormulaBar  = new KToggleAction(i18n("Show Formula Bar"), view);
+  ac->addAction("showFormulaBar", actions->showFormulaBar );
   actions->showFormulaBar->setCheckedState(KGuiItem(i18n("Hide Formula Bar")));
   connect( actions->showFormulaBar, SIGNAL( toggled( bool ) ),
       view, SLOT( showFormulaBar( bool ) ) );
   actions->showFormulaBar->setToolTip(i18n("Show the formula bar"));
 
-  actions->preference = new KAction( KIcon("configure" ), i18n("Configure KSpread..."), ac, "preference" );
+  actions->preference  = new KAction(KIcon("configure" ), i18n("Configure KSpread..."), view);
+  ac->addAction("preference", actions->preference );
   connect(actions->preference, SIGNAL(triggered(bool)), view, SLOT( preference() ));
   actions->preference->setToolTip(i18n("Set various KSpread options"));
 
   // -- running calculation actions --
 
   QActionGroup* groupCalc = new QActionGroup( view );
-  actions->calcNone = new KToggleAction( i18n("None"), ac, "menu_none", groupCalc );
+  actions->calcNone  = new KToggleAction(i18n("None"), view);
+  ac->addAction("menu_none", actions->calcNone );
   connect( actions->calcNone, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcNone->setToolTip(i18n("No calculation"));
 
-  actions->calcSum = new KToggleAction( i18n("Sum"), ac, "menu_sum", groupCalc );
+  actions->calcSum  = new KToggleAction(i18n("Sum"), view);
+  ac->addAction("menu_sum", actions->calcSum );
   connect( actions->calcSum, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcSum->setToolTip(i18n("Calculate using sum"));
 
-  actions->calcMin = new KToggleAction( i18n("Min"), ac, "menu_min", groupCalc );
+  actions->calcMin  = new KToggleAction(i18n("Min"), view);
+  ac->addAction("menu_min", actions->calcMin );
   connect( actions->calcMin, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcMin->setToolTip(i18n("Calculate using minimum"));
 
-  actions->calcMax = new KToggleAction( i18n("Max"), ac, "menu_max", groupCalc );
+  actions->calcMax  = new KToggleAction(i18n("Max"), view);
+  ac->addAction("menu_max", actions->calcMax );
   connect( actions->calcMax, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcMax->setToolTip(i18n("Calculate using maximum"));
 
-  actions->calcAverage = new KToggleAction( i18n("Average"), ac, "menu_average", groupCalc );
+  actions->calcAverage  = new KToggleAction(i18n("Average"), view);
+  ac->addAction("menu_average", actions->calcAverage );
   connect( actions->calcAverage, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcAverage->setToolTip(i18n("Calculate using average"));
 
-  actions->calcCount = new KToggleAction( i18n("Count"), ac, "menu_count", groupCalc );
+  actions->calcCount  = new KToggleAction(i18n("Count"), view);
+  ac->addAction("menu_count", actions->calcCount );
   connect( actions->calcCount, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcCount->setToolTip(i18n("Calculate using the count"));
 
-  actions->calcCountA = new KToggleAction( i18n("CountA"), ac, "menu_counta", groupCalc );
+  actions->calcCountA  = new KToggleAction(i18n("CountA"), view);
+  ac->addAction("menu_counta", actions->calcCountA );
   connect( actions->calcCountA, SIGNAL( toggled( bool ) ),
       view, SLOT( menuCalc( bool ) ) );
   actions->calcCountA->setToolTip(i18n("Calculate using the countA"));
 
   // -- special action, only for developers --
 
-  actions->inspector = new KAction( KIcon( "inspector" ), i18n("Run Inspector..."), ac, "inspector" );
+  actions->inspector  = new KAction(KIcon( "inspector" ), i18n("Run Inspector..."), view);
+  ac->addAction("inspector", actions->inspector );
   actions->inspector->setShortcut( QKeySequence( Qt::CTRL+ Qt::SHIFT + Qt::Key_I));
   connect(actions->inspector, SIGNAL(triggered(bool)), view, SLOT( runInspector() ));
 

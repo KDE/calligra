@@ -45,6 +45,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <kactioncollection.h>
 #include <KoMainWindow.h>
 
 #include <commdefs.h>
@@ -189,40 +190,54 @@ void KudesignerView::initActions()
     copyAction = KStandardAction::copy( this, SLOT( copy() ), actionCollection() );
     pasteAction = KStandardAction::paste( this, SLOT( paste() ), actionCollection() );
     selectAllAction = KStandardAction::selectAll( this, SLOT( selectAll() ), actionCollection() );
-    deleteAction = new KAction(KIcon("editdelete"),  i18n( "Delete" ), actionCollection(), "edit_delete" );
+    deleteAction  = new KAction(KIcon("editdelete"), i18n("Delete"), this);
+    actionCollection()->addAction("edit_delete", deleteAction );
     connect(deleteAction, SIGNAL(triggered(bool) ), SLOT( deleteItems() ));
     cutAction->setEnabled( false );
     copyAction->setEnabled( false );
     pasteAction->setEnabled( false );
     //    deleteAction->setEnabled(false);
 
-    sectionsReportHeader = new KAction(KIcon("irh"),  i18n( "Report Header" ), actionCollection(), "rheader" );
+    sectionsReportHeader  = new KAction(KIcon("irh"), i18n("Report Header"), this);
+    actionCollection()->addAction("rheader", sectionsReportHeader );
     connect(sectionsReportHeader, SIGNAL(triggered(bool) ), SLOT( slotAddReportHeader() ));
-    sectionsReportFooter = new KAction(KIcon("irf"),  i18n( "Report Footer" ), actionCollection(), "rfooter" );
+    sectionsReportFooter  = new KAction(KIcon("irf"), i18n("Report Footer"), this);
+    actionCollection()->addAction("rfooter", sectionsReportFooter );
     connect(sectionsReportFooter, SIGNAL(triggered(bool) ), SLOT( slotAddReportFooter() ));
-    sectionsPageHeader = new KAction(KIcon("iph"),  i18n( "Page Header" ), actionCollection(), "pheader" );
+    sectionsPageHeader  = new KAction(KIcon("iph"), i18n("Page Header"), this);
+    actionCollection()->addAction("pheader", sectionsPageHeader );
     connect(sectionsPageHeader, SIGNAL(triggered(bool) ), SLOT( slotAddPageHeader() ));
-    sectionsPageFooter = new KAction(KIcon("ipf"),  i18n( "Page Footer" ), actionCollection(), "pfooter" );
+    sectionsPageFooter  = new KAction(KIcon("ipf"), i18n("Page Footer"), this);
+    actionCollection()->addAction("pfooter", sectionsPageFooter );
     connect(sectionsPageFooter, SIGNAL(triggered(bool) ), SLOT( slotAddPageFooter() ));
-    sectionsDetailHeader = new KAction(KIcon("idh"),  i18n( "Detail Header" ), actionCollection(), "dheader" );
+    sectionsDetailHeader  = new KAction(KIcon("idh"), i18n("Detail Header"), this);
+    actionCollection()->addAction("dheader", sectionsDetailHeader );
     connect(sectionsDetailHeader, SIGNAL(triggered(bool) ), SLOT( slotAddDetailHeader() ));
-    sectionsDetail = new KAction(KIcon("id"),  i18n( "Detail" ), actionCollection(), "detail" );
+    sectionsDetail  = new KAction(KIcon("id"), i18n("Detail"), this);
+    actionCollection()->addAction("detail", sectionsDetail );
     connect(sectionsDetail, SIGNAL(triggered(bool) ), SLOT( slotAddDetail() ));
-    sectionsDetailFooter = new KAction(KIcon("idf"),  i18n( "Detail Footer" ), actionCollection(), "dfooter" );
+    sectionsDetailFooter  = new KAction(KIcon("idf"), i18n("Detail Footer"), this);
+    actionCollection()->addAction("dfooter", sectionsDetailFooter );
     connect(sectionsDetailFooter, SIGNAL(triggered(bool) ), SLOT( slotAddDetailFooter() ));
 
-    itemsNothing = new KToggleAction(KIcon("frame_edit"),  i18n( "Clear Selection" ), actionCollection(), "nothing" );
+    itemsNothing  = new KToggleAction(KIcon("frame_edit"), i18n("Clear Selection"), this);
+    actionCollection()->addAction("nothing", itemsNothing );
     connect(itemsNothing, SIGNAL(triggered(bool)), SLOT( slotAddItemNothing() ));
     itemsNothing->setChecked( true );
-    itemsLabel = new KToggleAction(KIcon("frame_text"),  i18n( "Label" ), actionCollection(), "label" );
+    itemsLabel  = new KToggleAction(KIcon("frame_text"), i18n("Label"), this);
+    actionCollection()->addAction("label", itemsLabel );
     connect(itemsLabel, SIGNAL(triggered(bool)), SLOT( slotAddItemLabel() ));
-    itemsField = new KToggleAction(KIcon("frame_field"),  i18n( "Field" ), actionCollection(), "field" );
+    itemsField  = new KToggleAction(KIcon("frame_field"), i18n("Field"), this);
+    actionCollection()->addAction("field", itemsField );
     connect(itemsField, SIGNAL(triggered(bool)), SLOT( slotAddItemField() ));
-    itemsSpecial = new KToggleAction(KIcon("frame_query"),  i18n( "Special Field" ), actionCollection(), "special" );
+    itemsSpecial  = new KToggleAction(KIcon("frame_query"), i18n("Special Field"), this);
+    actionCollection()->addAction("special", itemsSpecial );
     connect(itemsSpecial, SIGNAL(triggered(bool)), SLOT( slotAddItemSpecial() ));
-    itemsCalculated = new KToggleAction(KIcon("frame_formula"),  i18n( "Calculated Field" ), actionCollection(), "calcfield" );
+    itemsCalculated  = new KToggleAction(KIcon("frame_formula"), i18n("Calculated Field"), this);
+    actionCollection()->addAction("calcfield", itemsCalculated );
     connect(itemsCalculated, SIGNAL(triggered(bool)), SLOT( slotAddItemCalculated() ));
-    itemsLine = new KToggleAction(KIcon("frame_chart"),  i18n( "Line" ), actionCollection(), "line" );
+    itemsLine  = new KToggleAction(KIcon("frame_chart"), i18n("Line"), this);
+    actionCollection()->addAction("line", itemsLine );
     connect(itemsLine, SIGNAL(triggered(bool)), SLOT( slotAddItemLine() ));
 
     QActionGroup *group = new QActionGroup( this );
@@ -233,10 +248,12 @@ void KudesignerView::initActions()
     group->addAction( itemsCalculated );
     group->addAction( itemsLine );
 
-    gridActionLabel = new KAction( i18n( "Grid Label" ), actionCollection(), "gridlabel" );
+    gridActionLabel  = new KAction(i18n("Grid Label"), this);
+    actionCollection()->addAction("gridlabel", gridActionLabel );
     gridActionLabel->setDefaultWidget( gridLabel );
 
-    gridAction = new KAction( i18n( "Grid Size" ), actionCollection(), "gridaction" );
+    gridAction  = new KAction(i18n("Grid Size"), this);
+    actionCollection()->addAction("gridaction", gridAction );
     gridAction->setDefaultWidget( gridBox );
 }
 

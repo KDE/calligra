@@ -31,7 +31,7 @@
 
 class VDocument;
 class KarbonPart;
-class KAction;
+class QAction;
 
 /**
  * The base class for all karbon commands.
@@ -308,8 +308,8 @@ private:
 	KarbonPart *m_part;
 	unsigned int m_undoLimit;
 	unsigned int m_redoLimit;
-	KAction *m_undo;
-	KAction *m_redo;
+	QAction *m_undo;
+	QAction *m_redo;
 	Q3PtrList<VCommand> m_commands;
 	int m_savedPos;
 };

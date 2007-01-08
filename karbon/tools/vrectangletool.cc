@@ -144,7 +144,8 @@ VRectangleTool::setup( KActionCollection *collection )
 
 	if( m_action == 0 )
 	{
-		m_action = new KAction( KIcon( "14_rectangle" ), i18n( "Rectangle Tool" ), collection, objectName() );
+		m_action = new KAction( KIcon( "14_rectangle" ), i18n( "Rectangle Tool" ), collection );
+        collection->addAction(objectName(), m_action );
 		m_action->setShortcut( KShortcut( Qt::Key_Plus+Qt::Key_F9 ), KAction::DefaultShortcut );
 		m_action->setToolTip( i18n( "Rectangle" ) );
 		connect( m_action, SIGNAL( triggered() ), this, SLOT( activate() ) );

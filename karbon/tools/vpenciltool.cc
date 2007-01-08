@@ -413,7 +413,8 @@ VPencilTool::setup( KActionCollection *collection )
 
 	if( m_action == 0 )
 	{
-		m_action = new KAction( KIcon( "14_pencil" ), i18n( "Pencil Tool" ), collection, objectName() );
+		m_action = new KAction( KIcon( "14_pencil" ), i18n( "Pencil Tool" ), collection );
+        collection->addAction(objectName(), m_action );
 		m_action->setShortcut( KShortcut( Qt::SHIFT+Qt::Key_P ), KAction::DefaultShortcut );
 		m_action->setToolTip( i18n( "Pencil" ) );
 		connect( m_action, SIGNAL( triggered() ), this, SLOT( activate() ) );

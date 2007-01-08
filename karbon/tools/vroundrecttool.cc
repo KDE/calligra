@@ -181,7 +181,8 @@ VRoundRectTool::setup( KActionCollection *collection )
 
 	if( m_action == 0 )
 	{
-		m_action = new KAction( KIcon( "14_roundrect" ), i18n( "Round Rectangle Tool" ), collection, objectName() );
+		m_action = new KAction( KIcon( "14_roundrect" ), i18n( "Round Rectangle Tool" ), collection );
+        collection->addAction(objectName(), m_action );
 		m_action->setShortcut( KShortcut( Qt::SHIFT+Qt::Key_H ), KAction::DefaultShortcut );
 		m_action->setToolTip( i18n( "Round Rectangle" ) );
 		connect( m_action, SIGNAL( triggered() ), this, SLOT( activate() ) );

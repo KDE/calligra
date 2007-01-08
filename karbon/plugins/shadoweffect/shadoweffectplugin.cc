@@ -27,6 +27,7 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <kicon.h>
+#include <kactioncollection.h>
 
 #include <knuminput.h>
 #include <core/vgroup.h>
@@ -42,7 +43,8 @@ K_EXPORT_COMPONENT_FACTORY( karbon_shadoweffectplugin, ShadowEffectPluginFactory
 ShadowEffectPlugin::ShadowEffectPlugin( KarbonView *parent, const QStringList & )
 : Plugin( parent )
 {
-	KAction *actionShadowEffect = new KAction(KIcon("shadowRB"), i18n("&Shadow Effect..."), actionCollection(), "object_shadow");
+    KAction *actionShadowEffect  = new KAction(KIcon("shadowRB"), i18n("&Shadow Effect..."), this);
+    actionCollection()->addAction("object_shadow", actionShadowEffect );
 	connect(actionShadowEffect, SIGNAL(triggered()), this, SLOT(slotShadowEffect()));
 
 	m_shadowEffectDlg = new VShadowEffectDlg();

@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <koffice_export.h>
 class KAction;
+class KActionCollection;
 class KarbonPart;
 class KarbonView;
 class QEvent;

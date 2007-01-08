@@ -126,7 +126,7 @@ private:
     KoDocumentEntry m_documentEntry;
     
     ViewListItem *m_contextitem;
-    KSeparatorAction *m_separator;
+    QAction *m_separator;
     QList<QAction*> m_noitem;
     QList<QAction*> m_category;
     QList<QAction*> m_view;
@@ -310,9 +310,9 @@ private:
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
     // ------ Edit
-    KAction *actionCut;
-    KAction *actionCopy;
-    KAction *actionPaste;
+    QAction *actionCut;
+    QAction *actionCopy;
+    QAction *actionPaste;
 
     // ------ View
     KAction *actionViewGantt;

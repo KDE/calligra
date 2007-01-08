@@ -36,15 +36,15 @@
 #include <kicon.h>
 
 #include <knuminput.h>
+#include <kactioncollection.h>
 
 typedef KGenericFactory<WhirlPinchPlugin, KarbonView> WhirlPinchPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_whirlpinchplugin, WhirlPinchPluginFactory( "karbonwhirlpinchplugin" ) )
 
 WhirlPinchPlugin::WhirlPinchPlugin( KarbonView *parent, const QStringList & ) : Plugin( parent )
 {
-	KAction *a = new KAction( actionCollection(), "path_whirlpinch" );
-	a->setText( i18n( "&Whirl/Pinch..." ) );
-	a->setIcon( KIcon( "14_whirl" ) );
+	QAction *a = new KAction(KIcon( "14_whirl" ), i18n("&Whirl/Pinch..."), this );
+    actionCollection()->addAction("path_whirlpinch", a);
 	connect( a, SIGNAL( triggered() ), this, SLOT( slotWhirlPinch() ) );
 
 	m_whirlPinchDlg = new VWhirlPinchDlg();

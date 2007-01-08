@@ -50,6 +50,7 @@
 #include <kstandardaction.h>
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
+#include <kactioncollection.h>
 
 namespace KPlato
 {
@@ -1114,37 +1115,45 @@ void TaskEditor::setupGui()
     KActionCollection *coll = actionCollection();
     
     QString name = "taskeditor_add_list";
-    actionAddTask = new KAction( KIcon( "add_task" ), i18n( "Add Task..." ), coll, "add_task" );
+    actionAddTask  = new KAction(KIcon( "add_task" ), i18n("Add Task..."), this);
+    actionCollection()->addAction("add_task", actionAddTask );
     connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
     addAction( name, actionAddTask );
     
-    actionAddSubtask = new KAction( KIcon( "add_sub_task" ), i18n( "Add Sub-Task..." ), coll, "add_sub_task" );
+    actionAddSubtask  = new KAction(KIcon( "add_sub_task" ), i18n("Add Sub-Task..."), this);
+    actionCollection()->addAction("add_sub_task", actionAddSubtask );
     connect( actionAddSubtask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
     addAction( name, actionAddSubtask );
     
-    actionAddMilestone = new KAction( KIcon( "add_milestone" ), i18n( "Add Milestone..." ), coll, "add_milestone" );
+    actionAddMilestone  = new KAction(KIcon( "add_milestone" ), i18n("Add Milestone..."), this);
+    actionCollection()->addAction("add_milestone", actionAddMilestone );
     connect( actionAddMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddMilestone() ) );
     addAction( name, actionAddMilestone );
     
-    actionDeleteTask = new KAction( KIcon( "editdelete" ), i18n( "Delete Task" ), coll, "delete_task" );
+    actionDeleteTask  = new KAction(KIcon( "editdelete" ), i18n("Delete Task"), this);
+    actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
     addAction( name, actionDeleteTask );
 
     
     name = "taskeditor_move_list";
-    actionIndentTask = new KAction(KIcon("indent_task"), i18n("Indent Task"), coll, "indent_task");
+    actionIndentTask  = new KAction(KIcon("indent_task"), i18n("Indent Task"), this);
+    actionCollection()->addAction("indent_task", actionIndentTask );
     connect(actionIndentTask, SIGNAL(triggered(bool) ), SLOT(slotIndentTask()));
     addAction( name, actionIndentTask );
     
-    actionUnindentTask = new KAction(KIcon("unindent_task"), i18n("Unindent Task"), coll, "unindent_task");
+    actionUnindentTask  = new KAction(KIcon("unindent_task"), i18n("Unindent Task"), this);
+    actionCollection()->addAction("unindent_task", actionUnindentTask );
     connect(actionUnindentTask, SIGNAL(triggered(bool) ), SLOT(slotUnindentTask()));
     addAction( name, actionUnindentTask );
     
-    actionMoveTaskUp = new KAction(KIcon("move_task_up"), i18n("Move Up"), coll, "move_task_up");
+    actionMoveTaskUp  = new KAction(KIcon("move_task_up"), i18n("Move Up"), this);
+    actionCollection()->addAction("move_task_up", actionMoveTaskUp );
     connect(actionMoveTaskUp, SIGNAL(triggered(bool) ), SLOT(slotMoveTaskUp()));
     addAction( name, actionMoveTaskUp );
     
-    actionMoveTaskDown = new KAction(KIcon("move_task_down"), i18n("Move Down"), coll, "move_task_down");
+    actionMoveTaskDown  = new KAction(KIcon("move_task_down"), i18n("Move Down"), this);
+    actionCollection()->addAction("move_task_down", actionMoveTaskDown );
     connect(actionMoveTaskDown, SIGNAL(triggered(bool) ), SLOT(slotMoveTaskDown()));
     addAction( name, actionMoveTaskDown );
 

@@ -49,6 +49,7 @@
 #include <klocale.h>
 #include <kprinter.h>
 #include <kxmlguifactory.h>
+#include <kactioncollection.h>
 
 #include <kdebug.h>
 
@@ -631,15 +632,18 @@ void ScheduleEditor::setupGui()
     KActionCollection *coll = actionCollection();
     QString name = "scheduleeditor_edit_list";
     
-    actionCalculateSchedule = new KAction( KIcon( "project_calculate" ), i18n( "Calculate Schedule..." ), coll, "calculate_schedule" );
+    actionCalculateSchedule  = new KAction(KIcon( "project_calculate" ), i18n("Calculate Schedule..."), this);
+    actionCollection()->addAction("calculate_schedule", actionCalculateSchedule );
     connect( actionCalculateSchedule, SIGNAL( triggered( bool ) ), SLOT( slotCalculateSchedule() ) );
     addAction( name, actionCalculateSchedule );
     
-    actionAddSchedule = new KAction( KIcon( "filenew" ), i18n( "Add Schedule..." ), coll, "add_schedule" );
+    actionAddSchedule  = new KAction(KIcon( "filenew" ), i18n("Add Schedule..."), this);
+    actionCollection()->addAction("add_schedule", actionAddSchedule );
     connect( actionAddSchedule, SIGNAL( triggered( bool ) ), SLOT( slotAddSchedule() ) );
     addAction( name, actionAddSchedule );
     
-    actionDeleteSelection = new KAction( KIcon( "editdelete" ), i18n( "Delete Selected Schedules" ), coll, "schedule_delete_selection" );
+    actionDeleteSelection  = new KAction(KIcon( "editdelete" ), i18n("Delete Selected Schedules"), this);
+    actionCollection()->addAction("schedule_delete_selection", actionDeleteSelection );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
     addAction( name, actionDeleteSelection );
 

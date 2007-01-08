@@ -30,13 +30,15 @@
 #include <kicon.h>
 
 #include <knuminput.h>
+#include <kactioncollection.h>
 
 typedef KGenericFactory<VRoundCornersPlugin, KarbonView> VRoundCornersPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_roundcornersplugin, VRoundCornersPluginFactory( "karbonroundcornersplugin" ) )
 
 VRoundCornersPlugin::VRoundCornersPlugin( KarbonView *parent, const QStringList & ) : Plugin( parent )
 {
-	KAction *actionRoundCorners = new KAction(KIcon("14_roundcorners"), i18n("&Round Corners..."), actionCollection(), "path_round_corners");
+    KAction *actionRoundCorners  = new KAction(KIcon("14_roundcorners"), i18n("&Round Corners..."), this);
+    actionCollection()->addAction("path_round_corners", actionRoundCorners );
 	connect(actionRoundCorners, SIGNAL(triggered()), this, SLOT(slotRoundCorners()));
 
 	m_roundCornersDlg = new VRoundCornersDlg();

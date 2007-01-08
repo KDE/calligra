@@ -10,6 +10,7 @@
 #include <kaction.h>
 #include <kstandardaction.h>
 #include <kmessagebox.h>
+#include <kactioncollection.h>
 #include <kio/netaccess.h>
 #include <QFile>
 //Added by qt3to4:
@@ -43,11 +44,10 @@ KugarView::KugarView( KugarPart *part, QWidget *parent)
 
 
     // Define the actions.
-
-    KStandardAction::prior( view, SLOT( slotPrevPage() ), actionCollection(), "kuPrevPage" );
-    KStandardAction::next( view, SLOT( slotNextPage() ), actionCollection(), "kuNextPage" );
-    KStandardAction::firstPage( view, SLOT( slotFirstPage() ), actionCollection(), "kuFirstPage" );
-    KStandardAction::lastPage( view, SLOT( slotLastPage() ), actionCollection(), "kuLastPage" );
+    actionCollection()->addAction(KStandardAction::Prior,  "kuPrevPage", view, SLOT( slotPrevPage() ));
+    actionCollection()->addAction(KStandardAction::Next,  "kuNextPage", view, SLOT( slotNextPage() ));
+    actionCollection()->addAction(KStandardAction::FirstPage,  "kuFirstPage", view, SLOT( slotFirstPage() ));
+    actionCollection()->addAction(KStandardAction::LastPage,  "kuLastPage", view, SLOT( slotLastPage() ));
 
     setXMLFile( "kugarpart.rc" );
 

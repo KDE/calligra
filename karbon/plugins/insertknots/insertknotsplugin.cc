@@ -30,13 +30,15 @@
 #include <kicon.h>
 
 #include <knuminput.h>
+#include <kactioncollection.h>
 
 typedef KGenericFactory<InsertKnotsPlugin, KarbonView> InsertKnotsPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_insertknotsplugin, InsertKnotsPluginFactory( "karboninsertknotsplugin" ) )
 
 InsertKnotsPlugin::InsertKnotsPlugin( KarbonView *parent, const QStringList & ) : Plugin( parent )
 {
-	KAction *actionInsertKnots = new KAction(KIcon("14_insertknots"), i18n("&Insert Knots..."), actionCollection(), "path_insert_knots");
+    QAction *actionInsertKnots  = new KAction(KIcon("14_insertknots"), i18n("&Insert Knots..."), this);
+    actionCollection()->addAction("path_insert_knots", actionInsertKnots );
 	connect(actionInsertKnots, SIGNAL(triggered()), this, SLOT(slotInsertKnots()));
 
 	m_insertKnotsDlg = new VInsertKnotsDlg();

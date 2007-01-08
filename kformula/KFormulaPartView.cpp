@@ -30,6 +30,7 @@
 #include <KoZoomHandler.h>
 #include <kstandardaction.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 #include <ktip.h>
 #include <klocale.h>
 #include <kicon.h>

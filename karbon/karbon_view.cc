@@ -1143,7 +1143,8 @@ KarbonView::initActions()
 	debugView("KarbonView::initActions()");
 
 	// view ----->
-	m_viewAction = new KSelectAction(i18n("View &Mode"), actionCollection(), "view_mode");
+    m_viewAction  = new KSelectAction(i18n("View &Mode"), this);
+    actionCollection()->addAction("view_mode", m_viewAction );
 	connect(m_viewAction, SIGNAL(triggered()), this, SLOT(viewModeChanged()));
 
 	m_zoomAction = new KoZoomAction( KoZoomMode::ZOOM_CONSTANT|KoZoomMode::ZOOM_PAGE|KoZoomMode::ZOOM_WIDTH,
@@ -1155,10 +1156,11 @@ KarbonView::initActions()
     statusBar()->insertWidget( 2, tbar);
     tbar->addAction(m_zoomAction);
 
-	KStandardAction::zoomIn( this, SLOT( viewZoomIn() ), actionCollection(), "view_zoom_in" );
-	KStandardAction::zoomOut( this, SLOT( viewZoomOut() ), actionCollection(), "view_zoom_out" );
+    actionCollection()->addAction(KStandardAction::ZoomIn,  "view_zoom_in", this, SLOT( viewZoomIn() ));
+    actionCollection()->addAction(KStandardAction::ZoomOut,  "view_zoom_out", this, SLOT( viewZoomOut() ));
 
-	m_showPageMargins = new KToggleAction(KIcon("view_margins"), i18n("Show Page Margins"), actionCollection(), "view_show_margins");
+    m_showPageMargins  = new KToggleAction(KIcon("view_margins"), i18n("Show Page Margins"), this);
+    actionCollection()->addAction("view_show_margins", m_showPageMargins );
 	connect( m_showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
 	m_showPageMargins->setCheckedState(KGuiItem(i18n("Hide Page Margins")));
 
@@ -1167,124 +1169,154 @@ KarbonView::initActions()
 		return;
 
 	// edit ----->
-	KStandardAction::cut(this, SLOT(editCut()), actionCollection(), "edit_cut");
-	KStandardAction::copy(this, SLOT(editCopy()), actionCollection(), "edit_copy");
-	KStandardAction::paste(this, SLOT(editPaste()), actionCollection(), "edit_paste");
-	KStandardAction::selectAll(this, SLOT(editSelectAll()), actionCollection(), "edit_select_all");
-	KStandardAction::deselect(this, SLOT(editDeselectAll()), actionCollection(), "edit_deselect_all");
+    actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT(editCut()));
+    actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT(editCopy()));
+    actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT(editPaste()));
+    actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
+    actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
-	KAction *actionImportGraphic = new KAction(i18n("&Import Graphic..."), actionCollection(), "file_import");
+    KAction *actionImportGraphic  = new KAction(i18n("&Import Graphic..."), this);
+    actionCollection()->addAction("file_import", actionImportGraphic );
 	connect(actionImportGraphic, SIGNAL(triggered()), this, SLOT(fileImportGraphic()));
 
-	m_deleteSelectionAction = new KAction(KIcon("editdelete"), i18n("D&elete"), actionCollection(), "edit_delete");
+    m_deleteSelectionAction  = new KAction(KIcon("editdelete"), i18n("D&elete"), this);
+    actionCollection()->addAction("edit_delete", m_deleteSelectionAction );
 	m_deleteSelectionAction->setShortcut(QKeySequence("Del"));
 	connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
 
-	KAction *actionPurgeHistory = new KAction(i18n("&History"), actionCollection(), "edit_purge_history");
+    KAction *actionPurgeHistory  = new KAction(i18n("&History"), this);
+    actionCollection()->addAction("edit_purge_history", actionPurgeHistory );
 	connect(actionPurgeHistory, SIGNAL(triggered()), this, SLOT(editPurgeHistory()));
 	// edit <-----
 
 	// object ----->
-	KAction *actionDuplicate = new KAction(KIcon("duplicate"), i18n("&Duplicate"), actionCollection(), "object_duplicate");
+    KAction *actionDuplicate  = new KAction(KIcon("duplicate"), i18n("&Duplicate"), this);
+    actionCollection()->addAction("object_duplicate", actionDuplicate );
 	actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
 	connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
 
-	KAction *actionBringToFront = new KAction(KIcon("bring_forward"), i18n("Bring to &Front"), actionCollection(), "object_move_totop");
+    KAction *actionBringToFront  = new KAction(KIcon("bring_forward"), i18n("Bring to &Front"), this);
+    actionCollection()->addAction("object_move_totop", actionBringToFront );
 	actionBringToFront->setShortcut(QKeySequence("Ctrl+Shift+]"));
 	connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
-	KAction *actionRaise = new KAction(KIcon("raise"), i18n("&Raise"), actionCollection(), "object_move_up");
+    KAction *actionRaise  = new KAction(KIcon("raise"), i18n("&Raise"), this);
+    actionCollection()->addAction("object_move_up", actionRaise );
 	actionRaise->setShortcut(QKeySequence("Ctrl+]"));
 	connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-	KAction *actionLower = new KAction(KIcon("lower"), i18n("&Lower"), actionCollection(), "object_move_down");
+    KAction *actionLower  = new KAction(KIcon("lower"), i18n("&Lower"), this);
+    actionCollection()->addAction("object_move_down", actionLower );
 	actionLower->setShortcut(QKeySequence("Ctrl+["));
 	connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
-	KAction *actionSendToBack = new KAction(KIcon("send_backward"), i18n("Send to &Back"), actionCollection(), "object_move_tobottom");
+    KAction *actionSendToBack  = new KAction(KIcon("send_backward"), i18n("Send to &Back"), this);
+    actionCollection()->addAction("object_move_tobottom", actionSendToBack );
 	actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
 	connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
-	KAction *actionAlignLeft = new KAction(KIcon("aoleft"), i18n("Align Left"), actionCollection(), "object_align_horizontal_left");
+    KAction *actionAlignLeft  = new KAction(KIcon("aoleft"), i18n("Align Left"), this);
+    actionCollection()->addAction("object_align_horizontal_left", actionAlignLeft );
 	connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
-	KAction *actionAlignCenter = new KAction(KIcon("aocenterh"), i18n("Align Center (Horizontal)"), actionCollection(), "object_align_horizontal_center");
+    KAction *actionAlignCenter  = new KAction(KIcon("aocenterh"), i18n("Align Center (Horizontal)"), this);
+    actionCollection()->addAction("object_align_horizontal_center", actionAlignCenter );
 	connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
 
-	KAction *actionAlignRight = new KAction(KIcon("aoright"), i18n("Align Right"), actionCollection(), "object_align_horizontal_right");
+    KAction *actionAlignRight  = new KAction(KIcon("aoright"), i18n("Align Right"), this);
+    actionCollection()->addAction("object_align_horizontal_right", actionAlignRight );
 	connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
 
-	KAction *actionAlignTop = new KAction(KIcon("aotop"), i18n("Align Top"), actionCollection(), "object_align_vertical_top");
+    KAction *actionAlignTop  = new KAction(KIcon("aotop"), i18n("Align Top"), this);
+    actionCollection()->addAction("object_align_vertical_top", actionAlignTop );
 	connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
 
-	KAction *actionAlignMiddle = new KAction(KIcon("aocenterv"), i18n("Align Middle (Vertical)"), actionCollection(), "object_align_vertical_center");
+    KAction *actionAlignMiddle  = new KAction(KIcon("aocenterv"), i18n("Align Middle (Vertical)"), this);
+    actionCollection()->addAction("object_align_vertical_center", actionAlignMiddle );
 	connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
 
-	KAction *actionAlignBottom = new KAction(KIcon("aobottom"), i18n("Align Bottom"), actionCollection(), "object_align_vertical_bottom");
+    KAction *actionAlignBottom  = new KAction(KIcon("aobottom"), i18n("Align Bottom"), this);
+    actionCollection()->addAction("object_align_vertical_bottom", actionAlignBottom );
 	connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
 
-	KAction *actionDistributeHorizontalCenter = new KAction(i18n("Distribute Center (Horizontal)"), actionCollection(), "object_distribute_horizontal_center");
+    KAction *actionDistributeHorizontalCenter  = new KAction(i18n("Distribute Center (Horizontal)"), this);
+    actionCollection()->addAction("object_distribute_horizontal_center", actionDistributeHorizontalCenter );
 	connect(actionDistributeHorizontalCenter, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalCenter()));
 
-	KAction *actionDistributeHorizontalGap = new KAction(i18n("Distribute Gaps (Horizontal)"), actionCollection(), "object_distribute_horizontal_gap");
+    KAction *actionDistributeHorizontalGap  = new KAction(i18n("Distribute Gaps (Horizontal)"), this);
+    actionCollection()->addAction("object_distribute_horizontal_gap", actionDistributeHorizontalGap );
 	connect(actionDistributeHorizontalGap, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalGap()));
 
-	KAction *actionDistributeLeft = new KAction(i18n("Distribute Left Borders"), actionCollection(), "object_distribute_horizontal_left");
+    KAction *actionDistributeLeft  = new KAction(i18n("Distribute Left Borders"), this);
+    actionCollection()->addAction("object_distribute_horizontal_left", actionDistributeLeft );
 	connect(actionDistributeLeft, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalLeft()));
 
-	KAction *actionDistributeRight = new KAction(i18n("Distribute Right Borders"), actionCollection(), "object_distribute_horizontal_right");
+    KAction *actionDistributeRight  = new KAction(i18n("Distribute Right Borders"), this);
+    actionCollection()->addAction("object_distribute_horizontal_right", actionDistributeRight );
 	connect(actionDistributeRight, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalRight()));
 
-	KAction *actionDistributeVerticalCenter = new KAction(i18n("Distribute Center (Vertical)"), actionCollection(), "object_distribute_vertical_center");
+    KAction *actionDistributeVerticalCenter  = new KAction(i18n("Distribute Center (Vertical)"), this);
+    actionCollection()->addAction("object_distribute_vertical_center", actionDistributeVerticalCenter );
 	connect(actionDistributeVerticalCenter, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalCenter()));
 
-	KAction *actionDistributeVerticalGap = new KAction(i18n("Distribute Gaps (Vertical)"), actionCollection(), "object_distribute_vertical_gap");
+    KAction *actionDistributeVerticalGap  = new KAction(i18n("Distribute Gaps (Vertical)"), this);
+    actionCollection()->addAction("object_distribute_vertical_gap", actionDistributeVerticalGap );
 	connect(actionDistributeVerticalGap, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalGap()));
 
-	KAction *actionDistributeBottom = new KAction(i18n("Distribute Bottom Borders"), actionCollection(), "object_distribute_vertical_bottom");
+    KAction *actionDistributeBottom  = new KAction(i18n("Distribute Bottom Borders"), this);
+    actionCollection()->addAction("object_distribute_vertical_bottom", actionDistributeBottom );
 	connect(actionDistributeBottom, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalBottom()));
 
-	KAction *actionDistributeTop = new KAction(i18n("Distribute Top Borders"), actionCollection(), "object_distribute_vertical_top");
+    KAction *actionDistributeTop  = new KAction(i18n("Distribute Top Borders"), this);
+    actionCollection()->addAction("object_distribute_vertical_top", actionDistributeTop );
 	connect(actionDistributeTop, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalTop()));
 
-	m_showRulerAction = new KToggleAction(i18n("Show Rulers"), actionCollection(), "view_show_ruler");
+    m_showRulerAction  = new KToggleAction(i18n("Show Rulers"), this);
+    actionCollection()->addAction("view_show_ruler", m_showRulerAction );
 	m_showRulerAction->setCheckedState(KGuiItem(i18n("Hide Rulers")));
 	m_showRulerAction->setToolTip(i18n("Shows or hides rulers"));
 	m_showRulerAction->setChecked(false);
 	connect( m_showRulerAction, SIGNAL(triggered()), this, SLOT(showRuler()));
 
-	m_showGridAction = new KToggleAction(KIcon("grid"), i18n("Show Grid"), actionCollection(), "view_show_grid");
+    m_showGridAction  = new KToggleAction(KIcon("grid"), i18n("Show Grid"), this);
+    actionCollection()->addAction("view_show_grid", m_showGridAction );
 	m_showGridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
 	m_showGridAction->setToolTip(i18n("Shows or hides grid"));
 	//m_showGridAction->setChecked(true);
 	connect(m_showGridAction, SIGNAL(triggered()), this, SLOT(showGrid()));
 
-	m_snapGridAction = new KToggleAction(i18n("Snap to Grid"), actionCollection(), "view_snap_to_grid");
+    m_snapGridAction  = new KToggleAction(i18n("Snap to Grid"), this);
+    actionCollection()->addAction("view_snap_to_grid", m_snapGridAction );
 	m_snapGridAction->setToolTip(i18n( "Snaps to grid"));
 	//m_snapGridAction->setChecked(true);
 	connect(m_snapGridAction, SIGNAL(triggered()), this, SLOT(snapToGrid()));
 
-	m_groupObjects = new KAction(KIcon("group"), i18n("&Group Objects"), actionCollection(), "selection_group");
+    m_groupObjects  = new KAction(KIcon("group"), i18n("&Group Objects"), this);
+    actionCollection()->addAction("selection_group", m_groupObjects );
 	m_groupObjects->setShortcut(QKeySequence("Ctrl+G"));
 	connect(m_groupObjects, SIGNAL(triggered()), this, SLOT(groupSelection()));
 
-	m_ungroupObjects = new KAction(KIcon("ungroup"), i18n("&Ungroup Objects"), actionCollection(), "selection_ungroup");
+    m_ungroupObjects  = new KAction(KIcon("ungroup"), i18n("&Ungroup Objects"), this);
+    actionCollection()->addAction("selection_ungroup", m_ungroupObjects );
 	m_ungroupObjects->setShortcut(QKeySequence("Ctrl+Shift+G"));
 	connect(m_ungroupObjects, SIGNAL(triggered()), this, SLOT(ungroupSelection()));
 	// object <-----
 
 	// path ------->
-	m_closePath = new KAction(i18n("&Close Path"), actionCollection(), "close_path");
+    m_closePath  = new KAction(i18n("&Close Path"), this);
+    actionCollection()->addAction("close_path", m_closePath );
 	m_closePath->setShortcut(QKeySequence("Ctrl+U"));
 	m_closePath->setEnabled( false );
 	connect(m_closePath, SIGNAL(triggered()), this, SLOT(closePath()));
 
-	m_combinePath = new KAction( i18n("Com&bine Path"), actionCollection(), "combine_path" );
+    m_combinePath  = new KAction(i18n("Com&bine Path"), this);
+    actionCollection()->addAction("combine_path", m_combinePath );
 	m_combinePath->setShortcut(QKeySequence("Ctrl+K"));
 	m_combinePath->setEnabled( false );
 	connect(m_combinePath, SIGNAL(triggered()), this, SLOT(combinePath()));
 
-	m_separatePath = new KAction( i18n("Se&parate Path"), actionCollection(), "separate_path" );
+    m_separatePath  = new KAction(i18n("Se&parate Path"), this);
+    actionCollection()->addAction("separate_path", m_separatePath );
 	m_separatePath->setShortcut(QKeySequence("Shift+Ctrl+K"));
 	m_separatePath->setEnabled( false );
 	connect(m_separatePath, SIGNAL(triggered()), this, SLOT(separatePath()));
@@ -1311,10 +1343,12 @@ new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setL
 	m_setLineWidth->insertItem( 20.0 );
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( setLineWidth() ) );
 
-	m_configureAction = new KAction(KIcon("configure"), i18n("Configure Karbon..."), actionCollection(), "configure");
+    m_configureAction  = new KAction(KIcon("configure"), i18n("Configure Karbon..."), this);
+    actionCollection()->addAction("configure", m_configureAction );
 	connect(m_configureAction, SIGNAL(triggered()), this, SLOT(configure()));
 
-	KAction *actionPageLayout = new KAction(i18n("Page &Layout..."), actionCollection(), "page_layout");
+    KAction *actionPageLayout  = new KAction(i18n("Page &Layout..."), this);
+    actionCollection()->addAction("page_layout", actionPageLayout );
 	connect(actionPageLayout, SIGNAL(triggered()), this, SLOT(pageLayout()));
 
 	m_contextHelpAction = new KoContextHelpAction( actionCollection(), this );

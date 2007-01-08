@@ -52,6 +52,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kprinter.h>
+#include <kactioncollection.h>
 #include <kxmlguifactory.h>
 
 #include <kabc/addressee.h>
@@ -1054,15 +1055,18 @@ void ResourceEditor::setupGui()
     KActionCollection *coll = actionCollection();
     
     QString name = "resourceeditor_edit_list";
-    actionAddResource = new KAction( KIcon( "filenew" ), i18n( "Add Resource..." ), coll, "add_resource" );
+    actionAddResource  = new KAction(KIcon( "filenew" ), i18n("Add Resource..."), this);
+    actionCollection()->addAction("add_resource", actionAddResource );
     connect( actionAddResource, SIGNAL( triggered( bool ) ), SLOT( slotAddResource() ) );
     addAction( name, actionAddResource );
     
-    actionAddGroup = new KAction( KIcon( "filenew" ), i18n( "Add Resource Group..." ), coll, "add_group" );
+    actionAddGroup  = new KAction(KIcon( "filenew" ), i18n("Add Resource Group..."), this);
+    actionCollection()->addAction("add_group", actionAddGroup );
     connect( actionAddGroup, SIGNAL( triggered( bool ) ), SLOT( slotAddGroup() ) );
     addAction( name, actionAddGroup );
     
-    actionDeleteSelection = new KAction( KIcon( "editdelete" ), i18n( "Delete Selected Items" ), coll, "delete_selection" );
+    actionDeleteSelection  = new KAction(KIcon( "editdelete" ), i18n("Delete Selected Items"), this);
+    actionCollection()->addAction("delete_selection", actionDeleteSelection );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
     addAction( name, actionDeleteSelection );
     

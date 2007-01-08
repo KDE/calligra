@@ -68,14 +68,16 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     //d->guiclient ->setXMLFile(locate("data","kspreadplugins/scripting.rc"), true);
 
     // Setup the actions Kross provides and KSpread likes to have.
-    KAction* execaction = new KAction(i18n("Execute Script File..."), actionCollection(), "executescriptfile");
+    KAction* execaction  = new KAction(i18n("Execute Script File..."), this);
+    actionCollection()->addAction("executescriptfile", execaction);
     connect(execaction, SIGNAL(triggered(bool)), d->guiclient, SLOT(executeFile()));
 
-    KAction* manageraction = new KAction(i18n("Script Manager..."), actionCollection(), "configurescripts");
+    KAction* manageraction  = new KAction(i18n("Script Manager..."), this);
+    actionCollection()->addAction("configurescripts", manageraction);
     connect(manageraction, SIGNAL(triggered(bool)), d->guiclient, SLOT(showManager()));
 
     QAction* scriptmenuaction = d->guiclient->action("scripts");
-    actionCollection()->insert(scriptmenuaction);
+    actionCollection()->addAction("scripts", scriptmenuaction);
 
     //TODO handle different view-instances
 #if 0

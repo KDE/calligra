@@ -26,6 +26,7 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <ktoggleaction.h>
+#include <kactioncollection.h>
 
 #include <KoCsvImportDialog.h>
 #include <KoTemplateCreateDia.h>
@@ -70,63 +71,84 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
 
     m_dbus = new ViewAdaptor(this);
 
-    m_importData = new KAction( i18n( "Import Data..." ), actionCollection(), "import_data" );
+    m_importData  = new KAction(i18n("Import Data..."), this);
+    actionCollection()->addAction("import_data", m_importData );
     connect(m_importData, SIGNAL(triggered(bool)), SLOT( importData() ));
-    KAction *actionExtraCreateTemplate = new KAction( i18n( "&Create Template From Document..." ), actionCollection(), "extra_template" );
+    KAction *actionExtraCreateTemplate  = new KAction(i18n("&Create Template From Document..."), this);
+    actionCollection()->addAction("extra_template", actionExtraCreateTemplate );
     connect(actionExtraCreateTemplate, SIGNAL(triggered(bool)), SLOT( extraCreateTemplate() ));
 
-    m_wizard = new KAction(KIcon("wizard"),  i18n("Customize with &Wizard..."), actionCollection(), "wizard");
+    m_wizard  = new KAction(KIcon("wizard"), i18n("Customize with &Wizard..."), this);
+    actionCollection()->addAction("wizard", m_wizard );
     connect(m_wizard, SIGNAL(triggered(bool) ), SLOT( wizard() ));
-    m_edit = new KAction(KIcon("edit"),  i18n("Edit &Data..."), actionCollection(), "editdata");
+    m_edit  = new KAction(KIcon("edit"), i18n("Edit &Data..."), this);
+    actionCollection()->addAction("editdata", m_edit );
     connect(m_edit, SIGNAL(triggered(bool) ), SLOT( editData() ));
-    m_config = new KAction(KIcon("configure"),  i18n( "&Chart..." ), actionCollection(), "config" );
+    m_config  = new KAction(KIcon("configure"), i18n("&Chart..."), this);
+    actionCollection()->addAction("config", m_config );
     connect(m_config, SIGNAL(triggered(bool) ), SLOT( slotConfig() ));
 
     // One KToggleAction per chart type
-    m_chartbars = new KToggleAction(KIcon("chart_bar_3d"),  i18n("&Bar"), actionCollection(), "barschart");
+    m_chartbars  = new KToggleAction(KIcon("chart_bar_3d"), i18n("&Bar"), this);
+    actionCollection()->addAction("barschart", m_chartbars );
     connect(m_chartbars, SIGNAL(triggered(bool)), SLOT( barsChart() ));
     QActionGroup *charttypes = new QActionGroup( this );
 	charttypes->addAction(m_chartbars);
 
-    m_chartline = new KToggleAction(KIcon("chart_line"),  i18n("&Line"), actionCollection(), "linechart");
+    m_chartline  = new KToggleAction(KIcon("chart_line"), i18n("&Line"), this);
+    actionCollection()->addAction("linechart", m_chartline );
     connect(m_chartline, SIGNAL(triggered(bool)), SLOT( lineChart() ));
 	charttypes->addAction(m_chartline);
 
-    m_chartareas = new KToggleAction(KIcon("chart_area"),  i18n("&Area"), actionCollection(), "areaschart");
+    m_chartareas  = new KToggleAction(KIcon("chart_area"), i18n("&Area"), this);
+    actionCollection()->addAction("areaschart", m_chartareas );
     connect(m_chartareas, SIGNAL(triggered(bool)), SLOT( areasChart() ));
 	charttypes->addAction(m_chartareas);
 
-    m_charthilo = new KToggleAction(KIcon("chart_hilo"),  i18n("&HiLo"), actionCollection(), "hilochart");
+    m_charthilo  = new KToggleAction(KIcon("chart_hilo"), i18n("&HiLo"), this);
+    actionCollection()->addAction("hilochart", m_charthilo );
     connect(m_charthilo, SIGNAL(triggered(bool)), SLOT( hiLoChart() ));
 	charttypes->addAction(m_charthilo);
- m_chartbw = new KToggleAction(KIcon("chart_boxwhisker"),  i18n("Bo&x && Whiskers"), actionCollection(), "bwchart");
+    m_chartbw  = new KToggleAction(KIcon("chart_boxwhisker"), i18n("Bo&x && Whiskers"), this);
+    actionCollection()->addAction("bwchart", m_chartbw );
  connect(m_chartbw, SIGNAL(triggered(bool)), SLOT( bwChart() ));
 	charttypes->addAction(m_chartbw);
- m_chartpie = new KToggleAction(KIcon("chart_pie"),  i18n("&Pie"), actionCollection(), "piechart");
+    m_chartpie  = new KToggleAction(KIcon("chart_pie"), i18n("&Pie"), this);
+    actionCollection()->addAction("piechart", m_chartpie );
  connect(m_chartpie, SIGNAL(triggered(bool)), SLOT( pieChart() ));
     charttypes->addAction(m_chartpie);
- m_chartring = new KToggleAction(KIcon("chart_ring"),  i18n("&Ring"), actionCollection(), "ringchart");
+    m_chartring  = new KToggleAction(KIcon("chart_ring"), i18n("&Ring"), this);
+    actionCollection()->addAction("ringchart", m_chartring );
  connect(m_chartring, SIGNAL(triggered(bool)), SLOT( ringChart() ));
 	charttypes->addAction(m_chartring);
- m_chartpolar = new KToggleAction(KIcon("chart_polar"),  i18n("&Polar"), actionCollection(), "polarchart");
+    m_chartpolar  = new KToggleAction(KIcon("chart_polar"), i18n("&Polar"), this);
+    actionCollection()->addAction("polarchart", m_chartpolar );
  connect(m_chartpolar, SIGNAL(triggered(bool)), SLOT( polarChart() ));
 	charttypes->addAction(m_chartpolar);
     // Configuration KActions
-    m_colorConfig = new KAction( i18n( "&Colors..." ), actionCollection(), "color_config" );
+    m_colorConfig  = new KAction(i18n("&Colors..."), this);
+    actionCollection()->addAction("color_config", m_colorConfig );
     connect(m_colorConfig, SIGNAL(triggered(bool)), SLOT( slotConfigColor() ));
- m_fontConfig = new KAction( i18n( "&Font..." ), actionCollection(), "font_config" );
+    m_fontConfig  = new KAction(i18n("&Font..."), this);
+    actionCollection()->addAction("font_config", m_fontConfig );
  connect(m_fontConfig, SIGNAL(triggered(bool)), SLOT( slotConfigFont() ));
- m_backConfig = new KAction( i18n( "&Background..." ), actionCollection(), "back_config" );
+    m_backConfig  = new KAction(i18n("&Background..."), this);
+    actionCollection()->addAction("back_config", m_backConfig );
  connect(m_backConfig, SIGNAL(triggered(bool)), SLOT( slotConfigBack() ));
- m_legendConfig = new KAction( i18n( "&Legend..." ), actionCollection(), "legend_config" );
+    m_legendConfig  = new KAction(i18n("&Legend..."), this);
+    actionCollection()->addAction("legend_config", m_legendConfig );
  connect(m_legendConfig, SIGNAL(triggered(bool)), SLOT( slotConfigLegend() ));
- m_subTypeChartConfig = new KAction( i18n( "Chart &Sub-type..." ), actionCollection(), "legend_subtype" );
+    m_subTypeChartConfig  = new KAction(i18n("Chart &Sub-type..."), this);
+    actionCollection()->addAction("legend_subtype", m_subTypeChartConfig );
  connect(m_subTypeChartConfig, SIGNAL(triggered(bool)), SLOT( slotConfigSubTypeChart() ));
- m_dataFormatConfig = new KAction( i18n( "&Data Format..." ), actionCollection(), "data_format" );
+    m_dataFormatConfig  = new KAction(i18n("&Data Format..."), this);
+    actionCollection()->addAction("data_format", m_dataFormatConfig );
  connect(m_dataFormatConfig, SIGNAL(triggered(bool)), SLOT( slotConfigDataFormat() ));
- m_headerFooterConfig = new KAction( i18n( "&Header && Footer..." ), actionCollection(), "headerfooter_subtype" );
+    m_headerFooterConfig  = new KAction(i18n("&Header && Footer..."), this);
+    actionCollection()->addAction("headerfooter_subtype", m_headerFooterConfig );
  connect(m_headerFooterConfig, SIGNAL(triggered(bool)), SLOT( slotConfigHeaderFooterChart() ));
- m_pageLayoutConfig = new KAction( i18n( "Page Layout..." ), actionCollection(), "page_layout" );
+    m_pageLayoutConfig  = new KAction(i18n("Page Layout..."), this);
+    actionCollection()->addAction("page_layout", m_pageLayoutConfig );
  connect(m_pageLayoutConfig, SIGNAL(triggered(bool)), SLOT( slotConfigPageLayout() ));
 
     // initialize the configuration

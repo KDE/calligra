@@ -27,6 +27,7 @@
 #include <QPaintEvent>
 #include <kaction.h>
 #include <kstandardaction.h>
+#include <kactioncollection.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -38,8 +39,8 @@ ExampleView::ExampleView( ExamplePart* part, QWidget* parent )
         setXMLFile( "example_readonly.rc" ); // simplified GUI
     else
         setXMLFile( "example.rc" );
-    KStandardAction::copy(this, SLOT( copy() ), actionCollection(), "copy" );
-    KStandardAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
+    actionCollection()->addAction(KStandardAction::Copy,  "copy", this, SLOT( copy() ));
+    actionCollection()->addAction(KStandardAction::Cut,  "cut", this, SLOT( cut() ));
     // Note: Prefer KStandardAction::* to any custom action if possible.
     //m_cut = new KAction( i18n("&Cut"), "editcut", 0, this, SLOT( cut() ),
     //                   actionCollection(), "cut");

@@ -37,6 +37,7 @@
 #include <klocale.h>
 #include <kofficeversion.h>
 #include <kmessagebox.h>
+#include <kactioncollection.h>
 
 #include <QPoint>
 #include <QRect>
@@ -72,8 +73,8 @@ PluginInsertCalendar::PluginInsertCalendar( QObject *parent, const QStringList& 
 
     this->m_dialog = 0;
 
-    KAction* insert = new KAction(i18n("Insert Calendar..."),
-                                  actionCollection(), "kspreadinsertcalendar");
+    QAction * insert  = new KAction(i18n("Insert Calendar..."), this);
+    actionCollection()->addAction("kspreadinsertcalendar", insert );
     connect( insert, SIGNAL(triggered(bool)), this, SLOT(slotShowDialog()) );
 }
 

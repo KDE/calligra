@@ -29,6 +29,7 @@
 #include <kicon.h>
 
 #include <knuminput.h>
+#include <kactioncollection.h>
 #include <commands/vflattencmd.h>
 
 
@@ -38,7 +39,8 @@ K_EXPORT_COMPONENT_FACTORY( karbon_flattenpathplugin, FlattenPathPluginFactory( 
 FlattenPathPlugin::FlattenPathPlugin( KarbonView *parent, const QStringList & )
 : Plugin( parent/*, name*/ )
 {
-	KAction *actionFlattenPath = new KAction(KIcon("14_flatten"), i18n("&Flatten Path..."), actionCollection(), "path_flatten");
+    KAction *actionFlattenPath  = new KAction(KIcon("14_flatten"), i18n("&Flatten Path..."), this);
+    actionCollection()->addAction("path_flatten", actionFlattenPath );
 	connect(actionFlattenPath, SIGNAL(triggered()), this, SLOT(slotFlattenPath()));
 
 	m_flattenPathDlg = new VFlattenDlg();
