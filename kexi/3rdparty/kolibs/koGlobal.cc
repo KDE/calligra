@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "config.h"
+#include "config-prefix.h"
 #include <KoGlobal.h>
 #include <kdebug.h>
 #include <qfont.h>
@@ -53,7 +53,7 @@ KoGlobal::KoGlobal()
     
 
     // Tell KStandardDirs about the koffice prefix
-    KGlobal::dirs()->addPrefix(PREFIX);
+    KGlobal::dirs()->addPrefix(KOFFICEPREFIX);
 
     // Tell the iconloader about share/apps/koffice/icons
     KGlobal::iconLoader()->addAppDir("koffice");

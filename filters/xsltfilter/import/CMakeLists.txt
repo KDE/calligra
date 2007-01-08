@@ -1,7 +1,5 @@
 
-
-include_directories(${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR})
-
+include_directories(${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/..)
 
 ########### next target ###############
 

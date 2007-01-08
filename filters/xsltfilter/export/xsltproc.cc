@@ -27,6 +27,7 @@
  */
 #include "xsltproc.h"
 #include <config-filters.h>
+#include <config-xsltfilter.h>
 #include <QFile>
 
 #ifdef HAVE_STRING_H
