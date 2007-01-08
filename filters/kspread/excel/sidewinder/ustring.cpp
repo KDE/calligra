@@ -21,10 +21,8 @@
 
 #include "ustring.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <config-filters.h>
+#include <config-endian.h> // WORDS_BIGENDIAN
 
 #define USTRING_SIMPLIFIED
 

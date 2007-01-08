@@ -41,6 +41,8 @@
 #include <string.h>
 
 #include "../config.h" // SIZEOF_INT
+#include <config-endian.h> // WORDS_BIGENDIAN
+
 #include "Digest.h"
 #include <kdebug.h>
 #include <kcodecs.h>

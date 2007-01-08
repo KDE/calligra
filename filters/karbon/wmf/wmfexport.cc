@@ -16,10 +16,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
 #include <qdom.h>
-#include <q3cstring.h>
-//Added by qt3to4:
 #include <Q3PointArray>
 #include <kdebug.h>
 #include <kgenericfactory.h>

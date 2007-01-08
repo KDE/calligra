@@ -21,7 +21,6 @@
 
 #include <stdio.h>
 
-#include <config.h>
 #include <lcms.h>
 
 #include <QFile>

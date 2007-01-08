@@ -20,9 +20,7 @@
 DESCRIPTION
 */
 
-#include <config.h>
 #include <qdom.h>
-#include <q3cstring.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <KoFilterChain.h>

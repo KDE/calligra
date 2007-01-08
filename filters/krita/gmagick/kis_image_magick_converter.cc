@@ -56,8 +56,6 @@
 #include "kis_group_layer.h"
 #include "kis_paint_device.h"
 
-#include "../../../config.h"
-
 namespace {
 
     const quint8 PIXEL_BLUE = 0;
