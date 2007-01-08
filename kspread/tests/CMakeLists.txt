@@ -110,5 +110,29 @@ target_link_libraries(BenchmarkCluster kspreadcommon ${QT_QTTEST_LIBRARY})
 
 #add_test(Cluster BenchmarkCluster)
 
+########### next target ###############
+
+set(BenchmarkPointStorage_SRCS BenchmarkPointStorage.cpp)
+
+kde4_automoc(${BenchmarkPointStorage_SRCS})
+
+kde4_add_executable(BenchmarkPointStorage RUN_UNINSTALLED ${BenchmarkPointStorage_SRCS})
+
+target_link_libraries(BenchmarkPointStorage ${QT_QTTEST_LIBRARY})
+
+# add_test(PointStorage BenchmarkPointStoragetest)
+
+########### next target ###############
+
+set(TestPointStorage_SRCS TestPointStorage.cpp)
+
+kde4_automoc(${TestPointStorage_SRCS})
+
+kde4_add_executable(TestPointStorage RUN_UNINSTALLED ${TestPointStorage_SRCS})
+
+target_link_libraries(TestPointStorage ${QT_QTTEST_LIBRARY})
+
+add_test(PointStorage TestPointStorage)
+
 
 endif(KDE4_BUILD_TESTS)

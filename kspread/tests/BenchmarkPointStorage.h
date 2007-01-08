@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_POINT_STORAGE_TEST
-#define KSPREAD_POINT_STORAGE_TEST
+#ifndef KSPREAD_POINT_STORAGE_BENCHMARK
+#define KSPREAD_POINT_STORAGE_BENCHMARK
 
 #include <QtGui>
 #include <QtTest/QtTest>
@@ -26,26 +26,10 @@
 namespace KSpread
 {
 
-class PointStorageTest : public QObject
+class PointStorageBenchmark : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void testInsertion();
-    void testLookup();
-    void testDeletion();
-    void testInsertColumns();
-    void testDeleteColumns();
-    void testInsertRows();
-    void testDeleteRows();
-    void testShiftLeft();
-    void testShiftRight();
-    void testShiftUp();
-    void testShiftDown();
-    void testFirstColumnData();
-    void testFirstRowData();
-    void testNextColumnData();
-    void testNextRowData();
-    void testIteration();
     void testInsertionPerformance();
     void testLookupPerformance();
     void testInsertColumnsPerformance();
@@ -58,4 +42,4 @@ private Q_SLOTS:
 
 } // namespace KSpread
 
-#endif // KSPREAD_POINT_STORAGE_TEST
+#endif // KSPREAD_POINT_STORAGE_BENCHMARK

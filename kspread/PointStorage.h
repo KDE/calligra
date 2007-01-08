@@ -25,10 +25,7 @@
 #include <QString>
 #include <QVector>
 
-// #include "Global.h"
-#warning Include Global.h for KS_colMax, KS_rowMax.
-#define KS_rowMax 0x7FFF
-#define KS_colMax 0x7FFF
+#include "Global.h"
 
 namespace KSpread
 {
@@ -54,6 +51,7 @@ namespace KSpread
 template<typename T>
 class PointStorage
 {
+    friend class PointStorageBenchmark;
     friend class PointStorageTest;
 
 public:
