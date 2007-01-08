@@ -45,17 +45,25 @@ namespace KSpread
 class Sheet;
 
 /**
- * A custom spatial storage.
+ * A custom rectangular storage.
+ * Based on an R-Tree data structure.
+ * Usable for any kind of data attached to rectangular regions.
+ *
  * Acts mainly as a wrapper around the R-Tree data structure to allow a future
  * replacement of this backend. Decorated with some additional features like
  * garbage collection, caching, used area tracking, etc.
+ *
+ * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ * \since 2.0
+ *
+ * \note For data assigned to points use PointStorage.
  */
 template<typename T>
-class KSPREAD_EXPORT Storage
+class KSPREAD_EXPORT RectStorage
 {
 public:
-    explicit Storage( Sheet* sheet );
-    virtual ~Storage();
+    explicit RectStorage( Sheet* sheet );
+    virtual ~RectStorage();
 
     /**
      * \return the stored value at the position \p point .
@@ -152,18 +160,18 @@ private:
 };
 
 template<typename T>
-Storage<T>::Storage( Sheet* sheet )
+RectStorage<T>::RectStorage( Sheet* sheet )
     : m_sheet( sheet )
 {
 }
 
 template<typename T>
-Storage<T>::~Storage()
+RectStorage<T>::~RectStorage()
 {
 }
 
 template<typename T>
-T Storage<T>::contains(const QPoint& point) const
+T RectStorage<T>::contains(const QPoint& point) const
 {
     // first, lookup point in the cache
     if ( m_cache.contains( point ) )
@@ -180,7 +188,7 @@ T Storage<T>::contains(const QPoint& point) const
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > Storage<T>::undoData(const QRect& rect) const
+QList< QPair<QRectF,T> > RectStorage<T>::undoData(const QRect& rect) const
 {
     QList< QPair<QRectF,T> > result = m_tree.intersectingPairs(rect);
     for ( int i = 0; i < result.count(); ++i )
@@ -192,13 +200,13 @@ QList< QPair<QRectF,T> > Storage<T>::undoData(const QRect& rect) const
 }
 
 template<typename T>
-QRect Storage<T>::usedArea() const
+QRect RectStorage<T>::usedArea() const
 {
     return m_usedArea.boundingRect();
 }
 
 template<typename T>
-void Storage<T>::insert(const Region& region, const T& _data)
+void RectStorage<T>::insert(const Region& region, const T& _data)
 {
     T data;
     // lookup already used data
@@ -226,7 +234,7 @@ void Storage<T>::insert(const Region& region, const T& _data)
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > Storage<T>::insertRows(int position, int number)
+QList< QPair<QRectF,T> > RectStorage<T>::insertRows(int position, int number)
 {
     const QRect invalidRect(1,position,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
@@ -237,7 +245,7 @@ QList< QPair<QRectF,T> > Storage<T>::insertRows(int position, int number)
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > Storage<T>::insertColumns(int position, int number)
+QList< QPair<QRectF,T> > RectStorage<T>::insertColumns(int position, int number)
 {
     const QRect invalidRect(position,1,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
@@ -248,7 +256,7 @@ QList< QPair<QRectF,T> > Storage<T>::insertColumns(int position, int number)
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > Storage<T>::deleteRows(int position, int number)
+QList< QPair<QRectF,T> > RectStorage<T>::deleteRows(int position, int number)
 {
     const QRect invalidRect(1,position,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
@@ -259,7 +267,7 @@ QList< QPair<QRectF,T> > Storage<T>::deleteRows(int position, int number)
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > Storage<T>::deleteColumns(int position, int number)
+QList< QPair<QRectF,T> > RectStorage<T>::deleteColumns(int position, int number)
 {
     const QRect invalidRect(position,1,KS_colMax,KS_rowMax);
     // invalidate the affected, cached styles
@@ -270,7 +278,7 @@ QList< QPair<QRectF,T> > Storage<T>::deleteColumns(int position, int number)
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > Storage<T>::shiftRows(const QRect& rect)
+QList< QPair<QRectF,T> > RectStorage<T>::shiftRows(const QRect& rect)
 {
     const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
     QList< QPair<QRectF,T> > undoData = m_tree.shiftRows( rect );
@@ -280,7 +288,7 @@ QList< QPair<QRectF,T> > Storage<T>::shiftRows(const QRect& rect)
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > Storage<T>::shiftColumns(const QRect& rect)
+QList< QPair<QRectF,T> > RectStorage<T>::shiftColumns(const QRect& rect)
 {
     const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
     QList< QPair<QRectF,T> > undoData = m_tree.shiftColumns( rect );
@@ -290,7 +298,7 @@ QList< QPair<QRectF,T> > Storage<T>::shiftColumns(const QRect& rect)
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > Storage<T>::unshiftRows(const QRect& rect)
+QList< QPair<QRectF,T> > RectStorage<T>::unshiftRows(const QRect& rect)
 {
     const QRect invalidRect( rect.topLeft(), QPoint(KS_colMax, rect.bottom()) );
     QList< QPair<QRectF,T> > undoData = m_tree.unshiftRows( rect );
@@ -300,7 +308,7 @@ QList< QPair<QRectF,T> > Storage<T>::unshiftRows(const QRect& rect)
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > Storage<T>::unshiftColumns(const QRect& rect)
+QList< QPair<QRectF,T> > RectStorage<T>::unshiftColumns(const QRect& rect)
 {
     const QRect invalidRect( rect.topLeft(), QPoint(rect.right(), KS_rowMax) );
     QList< QPair<QRectF,T> > undoData = m_tree.unshiftColumns( rect );
@@ -310,12 +318,12 @@ QList< QPair<QRectF,T> > Storage<T>::unshiftColumns(const QRect& rect)
 }
 
 template<typename T>
-void Storage<T>::triggerGarbageCollection()
+void RectStorage<T>::triggerGarbageCollection()
 {
 }
 
 template<typename T>
-void Storage<T>::garbageCollection()
+void RectStorage<T>::garbageCollection()
 {
     // any possible garbage left?
     if ( m_possibleGarbage.isEmpty() )
@@ -329,7 +337,7 @@ void Storage<T>::garbageCollection()
     // check wether the default style is placed first
     if ( currentPair.second == T() && pairs[0].second == T() && pairs[0].first == currentPair.first )
     {
-        kDebug(36006) << "Storage: removing default data at " << currentPair.first << endl;
+        kDebug(36006) << "RectStorage: removing default data at " << currentPair.first << endl;
         m_tree.remove( currentPair.first, currentPair.second );
         triggerGarbageCollection();
         return; // already done
@@ -354,7 +362,7 @@ void Storage<T>::garbageCollection()
         if ( ( pair.second == currentPair.second || pair.second == T() ) &&
              pair.first.contains( currentPair.first ) )
         {
-            kDebug(36006) << "Storage: removing data at " << currentPair.first << endl;
+            kDebug(36006) << "RectStorage: removing data at " << currentPair.first << endl;
             m_tree.remove( currentPair.first, currentPair.second );
             break;
         }
@@ -363,7 +371,7 @@ void Storage<T>::garbageCollection()
 }
 
 template<typename T>
-void Storage<T>::regionChanged( const QRect& rect )
+void RectStorage<T>::regionChanged( const QRect& rect )
 {
     if ( m_sheet->doc()->isLoading() )
          return;
@@ -375,7 +383,7 @@ void Storage<T>::regionChanged( const QRect& rect )
 }
 
 template<typename T>
-void Storage<T>::invalidateCache( const QRect& rect )
+void RectStorage<T>::invalidateCache( const QRect& rect )
 {
 //     kDebug(36006) << "StyleStorage: Invalidating " << rect << endl;
     const QRegion region = m_cachedArea.intersected( rect );
@@ -395,41 +403,41 @@ void Storage<T>::invalidateCache( const QRect& rect )
 
 
 
-class CommentStorage : public QObject, public Storage<QString>
+class CommentStorage : public QObject, public RectStorage<QString>
 {
     Q_OBJECT
 public:
-    explicit CommentStorage( Sheet* sheet ) : Storage<QString>( sheet ) {}
+    explicit CommentStorage( Sheet* sheet ) : RectStorage<QString>( sheet ) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
-    virtual void garbageCollection() { Storage<QString>::garbageCollection(); }
+    virtual void garbageCollection() { RectStorage<QString>::garbageCollection(); }
 };
 
 
 
-class ConditionsStorage : public QObject, public Storage<Conditions>
+class ConditionsStorage : public QObject, public RectStorage<Conditions>
 {
     Q_OBJECT
 public:
-    explicit ConditionsStorage( Sheet* sheet ) : Storage<Conditions>( sheet ) {}
+    explicit ConditionsStorage( Sheet* sheet ) : RectStorage<Conditions>( sheet ) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
-    virtual void garbageCollection() { Storage<Conditions>::garbageCollection(); }
+    virtual void garbageCollection() { RectStorage<Conditions>::garbageCollection(); }
 };
 
 
 
-class ValidityStorage : public QObject, public Storage<Validity>
+class ValidityStorage : public QObject, public RectStorage<Validity>
 {
     Q_OBJECT
 public:
-    explicit ValidityStorage( Sheet* sheet ) : Storage<Validity>( sheet ) {}
+    explicit ValidityStorage( Sheet* sheet ) : RectStorage<Validity>( sheet ) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
-    virtual void garbageCollection() { Storage<Validity>::garbageCollection(); }
+    virtual void garbageCollection() { RectStorage<Validity>::garbageCollection(); }
 };
 
 } // namespace KSpread

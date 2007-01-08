@@ -80,7 +80,7 @@
 #include "Selection.h"
 #include "SheetPrint.h"
 #include "SheetView.h"
-#include "Storage.h"
+#include "RectStorage.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "StyleStorage.h"

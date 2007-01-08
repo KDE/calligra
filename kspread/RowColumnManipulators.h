@@ -21,7 +21,7 @@
 #define KSPREAD_MANIPULATOR_ROWCOL
 
 #include "Manipulator.h"
-#include "Storage.h"
+#include "RectStorage.h"
 #include "Style.h"
 
 namespace KSpread

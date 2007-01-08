@@ -28,7 +28,7 @@
 #include "View.h"
 
 #include "SheetView.h"
-#include "Storage.h"
+#include "RectStorage.h"
 
 using namespace KSpread;
 

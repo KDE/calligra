@@ -30,7 +30,7 @@
 #include "Map.h"
 #include "Sheet.h"
 #include "Format.h"
-#include "Storage.h"
+#include "RectStorage.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "Undo.h"

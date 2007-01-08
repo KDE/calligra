@@ -46,7 +46,7 @@ namespace KSpread
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  * \since 2.0
  *
- * \note For data assigned to rectangular regions use Storage.
+ * \note For data assigned to rectangular regions use RectStorage.
  */
 template<typename T>
 class PointStorage

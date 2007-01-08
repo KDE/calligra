@@ -28,7 +28,7 @@
 #include "Style.h"
 #include "StyleManager.h"
 #include "StyleManipulators.h"
-#include "Storage.h"
+#include "RectStorage.h"
 #include "StyleStorage.h"
 
 static const int g_maximumCachedStyles = 10000;

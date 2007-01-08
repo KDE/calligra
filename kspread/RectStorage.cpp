@@ -18,4 +18,4 @@
 */
 
 // muahahaha!
-#include "Storage.moc"
+#include "RectStorage.moc"

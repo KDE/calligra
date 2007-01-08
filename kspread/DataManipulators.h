@@ -23,7 +23,7 @@
 
 #include "Manipulator.h"
 #include "Global.h"
-#include "Storage.h"
+#include "RectStorage.h"
 #include "Style.h"
 #include "Value.h"
 #include <koffice_export.h>
