@@ -1,4 +1,4 @@
-
+configure_file(sqliteconfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/sqliteconfig.h )
 
 ########### next target ###############
 
