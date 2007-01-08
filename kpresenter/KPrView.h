@@ -21,15 +21,9 @@
 #ifndef kpresenter_view_h
 #define kpresenter_view_h
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <qpointer.h>
 #include <qtimer.h>
 #include <qdatetime.h>
-//Added by qt3to4:
-#include <QResizeEvent>
 #include <QSplitter>
 #include <QLabel>
 #include <QWheelEvent>
@@ -51,6 +45,7 @@
 #include <KoTabulator.h>
 
 class QSplitter;
+class QResizeEvent;
 class QLabel;
 class KPrViewAdaptor;
 class KPrView;

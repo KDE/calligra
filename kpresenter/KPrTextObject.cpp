@@ -18,9 +18,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <QBuffer>
 #include "KPrTextObject.h"
 #include "KPrTextObject.moc"
@@ -51,7 +48,6 @@
 #include <QFont>
 #include <QFile>
 #include <QWidget>
-#include <q3picture.h>
 #include <qpainter.h>
 #include <qmatrix.h>
 #include <qdom.h>
@@ -59,7 +55,6 @@
 #include <qfontdatabase.h>
 #include <q3popupmenu.h>
 #include <qclipboard.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QList>

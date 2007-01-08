@@ -85,7 +85,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <unistd.h>
-#include <config.h>
 
 #include <KoRichText.h>
 #include <KoTextObject.h>

@@ -162,7 +162,6 @@
 #include <kaccelgen.h>
 #include "KPrImportStyleDia.h"
 #include <k3urldrag.h>
-#include <config.h>
 #include <KoStore.h>
 #include <KoStoreDrag.h>
 

@@ -27,9 +27,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
-
-#warning "kde4: readd it"
+#warning "kde4: port from arts to phonon"
 #define WITHOUT_ARTS
 
 #ifndef WITHOUT_ARTS

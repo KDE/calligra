@@ -25,10 +25,6 @@
 #define __kpresenter_doc_h__
 
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 class KoGenStyles;
 class KPrView;
 class KPrDocumentAdaptor;
