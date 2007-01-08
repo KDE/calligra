@@ -42,5 +42,6 @@ check_prototype_exists(DPMSCapable "X11/Xlib.h;X11/extensions/dpms.h" HAVE_DPMSC
 check_type_size("int" SIZEOF_INT)
 check_type_size("char *"  SIZEOF_CHAR_P)
 check_type_size("long" SIZEOF_LONG)
+check_type_size("longlong" SIZEOF_LONG_LONG)
 check_type_size("short" SIZEOF_SHORT)
 

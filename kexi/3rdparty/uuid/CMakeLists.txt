@@ -1,6 +1,6 @@
 
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/uuid_types.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/uuid_types.h )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/uuid_types.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/uuid_types.h @ONLY )
 
 
 
