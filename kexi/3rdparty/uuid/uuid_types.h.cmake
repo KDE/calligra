@@ -7,16 +7,28 @@
 	!defined(_UUID_TYPES) && !defined(_EXT2_TYPES_H))
 #define _UUID_TYPES_H
 
+/* The size of a `char *', as computed by sizeof. */
+#define SIZEOF_CHAR_P ${SIZEOF_CHAR_P}
+
+/* The size of a `int', as computed by sizeof. */
+#define SIZEOF_INT ${SIZEOF_INT}
+
+/* The size of a `long', as computed by sizeof. */
+#define SIZEOF_LONG ${SIZEOF_LONG}
+
+/* The size of a `short', as computed by sizeof. */
+#define SIZEOF_SHORT ${SIZEOF_SHORT}
+
 typedef unsigned char __u8;
 typedef signed char __s8;
 
-#if (@SIZEOF_INT@ == 8)
+#if (SIZEOF_INT == 8)
 typedef int		__s64;
 typedef unsigned int	__u64;
-#elif (@SIZEOF_LONG@ == 8)
+#elif (SIZEOF_LONG == 8)
 typedef long		__s64;
 typedef unsigned long	__u64;
-#elif (@SIZEOF_LONG_LONG@ == 8)
+#elif (SIZEOF_LONG_LONG == 8)
 #if defined(__GNUC__)
 typedef __signed__ long long 	__s64;
 #else
@@ -25,23 +37,23 @@ typedef signed long long 	__s64;
 typedef unsigned long long	__u64;
 #endif
 
-#if (@SIZEOF_INT@ == 2)
+#if (SIZEOF_INT == 2)
 typedef	int		__s16;
 typedef	unsigned int	__u16;
-#elif (@SIZEOF_SHORT@ == 2)
+#elif (SIZEOF_SHORT == 2)
 typedef	short		__s16;
 typedef	unsigned short	__u16;
 #else
   ?==error: undefined 16 bit type
 #endif
 
-#if (@SIZEOF_INT@ == 4)
+#if (SIZEOF_INT == 4)
 typedef	int		__s32;
 typedef	unsigned int	__u32;
-#elif (@SIZEOF_LONG@ == 4)
+#elif (SIZEOF_LONG == 4)
 typedef	long		__s32;
 typedef	unsigned long	__u32;
-#elif (@SIZEOF_SHORT@ == 4)
+#elif (SIZEOF_SHORT == 4)
 typedef	short		__s32;
 typedef	unsigned short	__u32;
 #else
