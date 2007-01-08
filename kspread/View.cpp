@@ -4977,7 +4977,7 @@ void View::toggleProtectDoc( bool mode )
      }
 
      QByteArray hash( "" );
-     QString password( passwd );
+     QString password( dlg.password() );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
      if ( !doc()->map()->checkPassword( hash ) )
@@ -5028,7 +5028,7 @@ void View::toggleProtectSheet( bool mode )
      }
 
      QByteArray hash( "" );
-     QString password( passwd );
+     QString password( dlg.password() );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
 
