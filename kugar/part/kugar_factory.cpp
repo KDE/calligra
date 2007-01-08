@@ -11,10 +11,6 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 
-#if defined(HAVE_CONFIG_H)
-#include "config.h"
-#endif
-
 #include "kugar_factory.h"
 #include "kugar_part.h"
 #include "kugar_about.h"

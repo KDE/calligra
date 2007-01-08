@@ -3,7 +3,6 @@
 // This file contains the implementation of the Kugar KPart.
 
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kinstance.h>
@@ -21,10 +20,6 @@
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <KoStore.h>
-
-#if defined(HAVE_CONFIG_H)
-#include "config.h"
-#endif
 
 #include "kugar_part.h"
 #include "kugar_view.h"
@@ -141,7 +136,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
         else
         {
             QString former_localtpl = localtpl;
-            localtpl = kapp -> dirs() -> findResource( "data", "kugar/templates/" + tpl );
+            localtpl = KGlobal::dirs() -> findResource( "data", "kugar/templates/" + tpl );
             if ( localtpl.isEmpty() )
             {
                 KUrl tmpURL( m_docURL );

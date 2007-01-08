@@ -19,17 +19,14 @@
 #ifndef KUGAR_ABOUT_H
 #define KUGAR_ABOUT_H
 
-#if defined(HAVE_CONFIG_H)
-#include "config.h"
-#endif
-
+#include <kofficeversion.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 
 KAboutData *newKugarAboutData()
 {
     KAboutData * aboutData = new KAboutData( "kugar", I18N_NOOP( "Kugar" ),
-                             VERSION, I18N_NOOP( "Report viewer(generator)" ), KAboutData::License_GPL,
+                             KOFFICE_VERSION_STRING, I18N_NOOP( "Report viewer(generator)" ), KAboutData::License_GPL,
                              I18N_NOOP( "(c) 1999-2007, The Kugar Team" ), 0, "http://www.koffice.org" );
 
     aboutData->addAuthor( "Alexander Dymo",

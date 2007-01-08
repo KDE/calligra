@@ -3,7 +3,6 @@
 // This file contains the implementation of the Kugar KPart.
 
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kinstance.h>
@@ -19,9 +18,6 @@
 #include <kiconloader.h>
 #include <QLayout>
 
-#if defined(HAVE_CONFIG_H)
-#include "config.h"
-#endif
 
 #include "kugar_part.h"
 #include "kugar_view.h"
