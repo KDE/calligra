@@ -462,7 +462,6 @@ public:
     KAction* insertPicture;
     KAction* customList;
     KAction* spellChecking;
-    KAction* internalTests;
     KAction* inspector;
 
     // settings
@@ -1212,10 +1211,6 @@ void View::Private::initActions()
   actions->calcCountA->setToolTip(i18n("Calculate using the countA"));
 
   // -- special action, only for developers --
-
-  actions->internalTests = new KAction( KIcon( "internalTests" ), i18n("Run Internal Tests..."), ac, "internalTests" );
-  actions->internalTests->setShortcut( QKeySequence( Qt::CTRL+ Qt::SHIFT + Qt::Key_T));
-  connect(actions->internalTests, SIGNAL(triggered(bool)), view, SLOT( runInternalTests() ));
 
   actions->inspector = new KAction( KIcon( "inspector" ), i18n("Run Inspector..."), ac, "inspector" );
   actions->inspector->setShortcut( QKeySequence( Qt::CTRL+ Qt::SHIFT + Qt::Key_I));
