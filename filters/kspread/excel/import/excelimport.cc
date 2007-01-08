@@ -22,6 +22,7 @@
 #include <excelimport.moc>
 
 #include <QString>
+#include <QDate>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
