@@ -4866,27 +4866,29 @@ void View::toggleProtectSheet( bool mode )
    if ( !d->activeSheet )
        return;
 
-   QByteArray passwd;
    if ( mode )
    {
-     int result = KPasswordDialog::getNewPassword( this, passwd, i18n( "Protect Sheet" ), i18n( "Enter a password.") );
-     if ( result != KPasswordDialog::Accepted )
+     KNewPasswordDialog dlg(this);
+     dlg.setPrompt( i18n( "Enter a password.") );
+     dlg.setWindowTitle( i18n( "Protect Sheet" ) );
+     if ( dlg.exec() != KPasswordDialog::Accepted )
      {
        d->actions->protectSheet->setChecked( false );
        return;
      }
 
      QByteArray hash( "" );
-     QString password( passwd );
+     QString password = dlg.password();
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
-
      d->activeSheet->setProtected( hash );
    }
    else
    {
-     int result = KPasswordDialog::getPassword( this, passwd, i18n( "Unprotect Sheet" ), i18n( "Enter the password.") );
-     if ( result != KPasswordDialog::Accepted )
+     KPasswordDialog dlg(this);
+     dlg.setPrompt( i18n( "Enter the password.") );
+     dlg.setWindowTitle( i18n( "Unprotect Sheet" ) );
+     if ( dlg.exec() != KPasswordDialog::Accepted )
      {
        d->actions->protectSheet->setChecked( true );
        return;
@@ -4896,6 +4898,7 @@ void View::toggleProtectSheet( bool mode )
      QString password( passwd );
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
+
 
      if ( !d->activeSheet->checkPassword( hash ) )
      {
@@ -4905,7 +4908,9 @@ void View::toggleProtectSheet( bool mode )
      }
 
      d->activeSheet->setProtected( QByteArray() );
+
    }
+
    doc()->setModified( true );
    d->adjustActions( !mode );
    doc()->emitBeginOperation();
