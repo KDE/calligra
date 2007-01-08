@@ -40,21 +40,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../config.h" // SIZEOF_INT
 #include <config-endian.h> // WORDS_BIGENDIAN
 
 #include "Digest.h"
 #include <kdebug.h>
 #include <kcodecs.h>
 
-typedef unsigned char sal_uInt8;
-typedef unsigned short sal_uInt16;
-
-#if  SIZEOF_INT == 4
-typedef unsigned int sal_uInt32;
-#elif
-typedef unsigned long sal_uInt32;
-#endif
+typedef quint8 sal_uInt8;
+typedef quint16 sal_uInt16;
+typedef quint32 sal_uInt32;
 
 void rtl_freeZeroMemory(void * p, sal_uInt32 n);
 void rtl_freeMemory(void * p);
