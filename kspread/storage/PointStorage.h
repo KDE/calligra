@@ -590,6 +590,35 @@ public:
         return m_data.value( index );
     }
 
+    /**
+     * The maximum occupied column, i.e. the horizontal storage dimension.
+     * \return the maximum column
+     */
+    int columns() const
+    {
+        int columns = 0;
+        for ( int c = 0; c < m_cols.count(); ++c )
+            columns = qMax( m_cols.value( c ), columns );
+        return columns;
+    }
+
+    /**
+     * The maximum occupied row, i.e. the vertical storage dimension.
+     * \return the maximum row
+     */
+    int rows() const
+    {
+        return m_rows.count();
+    }
+
+    /**
+     * Equality operator.
+     */
+    bool operator==( const PointStorage<T>& o ) const
+    {
+        return ( m_rows == o.m_rows && m_cols == o.m_cols && m_data == o.m_data );
+    }
+
 private:
     QVector<int> m_cols;    // stores the column indices (beginning with one)
     QVector<int> m_rows;    // stores the row offsets in m_data
