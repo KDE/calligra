@@ -4,7 +4,9 @@
 # Only .kexi file that is older than .sql file is recreated.
 # ksqlite is needed on the PATH
 
-PATH=$PATH:../3rdparty/kexisql3/src/.libs/
+KEXISQL3PATH=../3rdparty/kexisql3/src/.libs/
+PATH=$PATH:$KEXISQL3PATH
+LD_LIBRARY_PATH=$KEXISQL3PATH:$KEXISQL3PATH
 which ksqlite > /dev/null || exit 1
 
 [ $# -lt 1 ] && echo "Missing .kexi.sql filename." && exit 1
