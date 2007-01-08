@@ -21,4 +21,4 @@ INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
 METASOURCES = AUTO
 
 transliteration_table.cpp: transliteration_table.cpp.bz2
-	bunzip2 -k transliteration_table.cpp.bz2
+	bunzip2 -ck $(srcdir)/transliteration_table.cpp.bz2 > ./transliteration_table.cpp
