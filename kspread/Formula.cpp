@@ -1568,7 +1568,7 @@ Value Formula::eval() const
         // check if enough array elements are available
         if( stack.count() < cols * rows )
             return Value::errorVALUE();
-        Value array( cols, rows );
+        Value array( Value::Array );
         for ( int row = rows - 1; row >= 0; --row )
         {
             for ( int col = cols - 1; col >= 0; --col )

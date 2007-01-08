@@ -369,7 +369,7 @@ Value func_skew_est (valVector args, ValueCalc *calc, FuncExtra *)
   if (res.isZero())
     return Value::errorVALUE();
 
-  Value params (2, 1);
+  Value params( Value::Array );
   params.setElement (0, 0, avg);
   params.setElement (1, 0, res);
   Value tskew;
@@ -390,7 +390,7 @@ Value func_skew_pop (valVector args, ValueCalc *calc, FuncExtra *)
   if (res.isZero())
     return Value::errorVALUE();
 
-  Value params (2, 1);
+  Value params( Value::Array );
   params.setElement (0, 0, avg);
   params.setElement (1, 0, res);
   Value tskew;
@@ -633,7 +633,7 @@ Value func_kurtosis_est (valVector args, ValueCalc *calc, FuncExtra *)
   if (devsq.isZero ())
     return Value::errorDIV0();
 
-  Value params (2, 1);
+  Value params( Value::Array );
   params.setElement (0, 0, avg);
   params.setElement (1, 0, devsq);
   Value x4;
@@ -660,7 +660,7 @@ Value func_kurtosis_pop (valVector args, ValueCalc *calc, FuncExtra *)
   if (devsq.isZero ())
     return Value::errorDIV0();
 
-  Value params (2, 1);
+  Value params( Value::Array );
   params.setElement (0, 0, avg);
   params.setElement (1, 0, devsq);
   Value x4;

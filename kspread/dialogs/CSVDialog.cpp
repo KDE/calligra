@@ -155,7 +155,7 @@ void CSVDialog::accept()
   else
     m_targetRect.setBottom( m_targetRect.top() + numRows - 1 );
 
-  Value val (numCols, numRows);
+  Value val( Value::Array );
   for (int row = 0; row < numRows; ++row)
     for (int col = 0; col < numCols; ++col)
       val.setElement (col, row, Value(getText (row, col)));

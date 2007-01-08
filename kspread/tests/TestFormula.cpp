@@ -296,7 +296,7 @@ void TestFormula::testInlineArrays()
   // inline arrays
   CHECK_TOKENIZE( "{1;2|3;4}", "oioioioio" );
   
-  Value array(2,2);
+  Value array( Value::Array );
   array.setElement(0,0,Value((int)1));
   array.setElement(1,0,Value((int)2));
   array.setElement(0,1,Value((int)3));

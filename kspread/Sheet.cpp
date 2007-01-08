@@ -1966,7 +1966,7 @@ void Sheet::pasteTextPlain( QString &_text, QRect pasteArea)
   
   // split the text into lines and put them into an array value
   QStringList list = _text.split( '\n' );
-  Value value (1, list.size());
+  Value value( Value::Array );
   int which = 0;
   QStringList::iterator it;
   for (it = list.begin(); it != list.end(); ++it)

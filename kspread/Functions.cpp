@@ -143,7 +143,7 @@ Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
       if (x > cols) cols = x;
     }
     // allocate the resulting array
-    Value res (cols, rows);
+    Value res( Value::Array );
     // perform the actual computation for each element of the array
     for (int row = 0; row < rows; ++row)
       for (int col = 0; col < cols; ++col) {

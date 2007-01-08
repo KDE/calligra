@@ -963,7 +963,7 @@ Value determinant (ValueCalc *calc, Value matrix)
 
   // n >= 3
   for (int i = 0; i < n; ++i) {
-    Value smaller (n-1, n-1);
+    Value smaller( Value::Array );
     int col = 0;
     for (int c = 0; c < n; ++c)
       if (c != i) {
@@ -1004,7 +1004,7 @@ Value func_mmult (valVector args, ValueCalc *calc, FuncExtra *)
     return Value::errorVALUE();
 
   // create the resulting matrix
-  Value res (c2, r1);
+  Value res( Value::Array );
 
   // perform the multiplication - O(n^3) algorithm
   for (uint row = 0; row < r1; ++row)

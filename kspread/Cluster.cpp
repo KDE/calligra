@@ -652,37 +652,25 @@ Value Cluster::valueRange (int col1, int row1,
   // if we are out of range occupied by cells, we return an empty
   // array of the requested size
   if ((row1 > m_biggestY) || (col1 > m_biggestX))
-  {
-    int cols = col2 - col1 + 1;
-    int rows = row2 - row1 + 1;
-    Value array (cols, rows);
-    return array;
-  }
+    return Value( Value::Array );
 
   return makeArray (col1, row1, col2, row2);
 }
 
-Value Cluster::makeArray (int col1, int row1,
-    int col2, int row2) const
+Value Cluster::makeArray( int col1, int row1, int col2, int row2 ) const
 {
-  // this generates an array of values
-  // TODO: make this thing faster by skipping empty regions
-  int cols = col2 - col1 + 1;
-  int rows = row2 - row1 + 1;
-  Value array (cols, rows);
-  for (int row = row1; row <= row2; ++row)
-    for (int col = col1; col <= col2; ++col)
+    // this generates an array of values
+    Value array( Value::Array );
+    for ( int row = row1; row <= row2; ++row )
     {
-      Cell *cell = lookup (col, row);
-      if (cell)
-      {
-        Value val = cell->value();
-        array.setElement (col-col1, row-row1, val);
-      }
+        for ( Cell* cell = getFirstCellRow( row ); cell; cell = getNextCellRight( cell->column(), row ) )
+        {
+            if ( cell->column() >= col1 && cell->column() <= col2 )
+                array.setElement( cell->column()-col1, row-row1, cell->value() );
+        }
     }
-
-  //return the result
-  return array;
+    //return the result
+    return array;
 }
 
 Cell* Cluster::getFirstCellColumn(int col) const

@@ -19,6 +19,7 @@
 
 #include "Value.h"
 #include "Doc.h"
+#include "PointStorage.h"
 
 #include <kdebug.h>
 
@@ -31,168 +32,7 @@
 
 using namespace KSpread;
 
-// helper struct for array implementation
-// this struct holds one piece of an array of size CHUNK_COLS x CHUNK_ROWS
-// or less
-struct arrayChunk {
-  arrayChunk (int c, int r) {
-    cols = c; rows = r;
-    ptr = new Value* [c*r];
-    for (int i = 0; i < c*r; ++i) ptr[i] = 0;
-  }
-
-  ~arrayChunk () {
-    if (!ptr) return;
-    unsigned count = cols * rows;
-    for (unsigned i = 0; i < count; i++)
-      delete ptr[i];
-    delete [] ptr;
-  }
-
-  arrayChunk( const arrayChunk& ac )
-  {
-    operator=( ac );
-  }
-
-  arrayChunk& operator= ( const arrayChunk& ac )
-  {
-    cols = ac.cols; rows = ac.rows;
-    ptr = new Value* [cols*rows];
-    unsigned count = cols * rows;
-    for( unsigned i = 0; i < count; i++ )
-      if( ac.ptr[i] )
-        ptr[i] = new Value( *ac.ptr[i] );
-      else
-        ptr[i] = 0;
-    return *this;
-  }
-
-  Value **ptr;
-  unsigned cols, rows;
-};
-
-#define CHUNK_COLS 128
-#define CHUNK_ROWS 128
-// helper class for array implementation
-class ValueArray
-{
-public:
-  arrayChunk **chunks;
-  unsigned columns;
-  unsigned rows;
-  unsigned chunkCols, chunkRows;
-
-  ValueArray(): chunks(0), columns(0), rows(0), chunkCols(0), chunkRows(0) {};
-
-  ~ValueArray()
-  {
-    clear();
-  };
-
-  ValueArray( const ValueArray& va )
-    : chunks(0), columns(0), rows(0), chunkCols(0), chunkRows(0)
-  {
-    operator=( va );
-  }
-
-  ValueArray& operator= ( const ValueArray& va )
-  {
-    init( va.columns, va.rows );
-    unsigned count = chunkCols * chunkRows;
-    for( unsigned i = 0; i < count; i++ )
-      if( va.chunks[i] )
-        chunks[i] = new arrayChunk (*va.chunks[i]);
-      else
-        chunks[i] = 0;
-    return *this;
-  }
-
-  void clear()
-  {
-    int c = columns / CHUNK_COLS;
-    int r = rows / CHUNK_ROWS;
-    if (columns % CHUNK_COLS != 0) c++;
-    if (rows % CHUNK_ROWS != 0) r++;
-    if( !chunks ) return;
-    unsigned count = c*r;
-    if( !count ) return;
-    for (unsigned i = 0; i < count; i++)
-      delete chunks[i];
-    delete [] chunks;
-    chunks = 0;
-    columns = rows = chunkCols = chunkRows = 0;
-  }
-
-  void init( unsigned c, unsigned r )
-  {
-    if (chunks) clear();
-    if (c <= 0) c = 1;
-    if (r <= 0) r = 1;
-    columns = c; rows = r;
-    int cc = columns / CHUNK_COLS;
-    int rr = rows / CHUNK_ROWS;
-    if (columns % CHUNK_COLS != 0) cc++;
-    if (rows % CHUNK_ROWS != 0) rr++;
-    chunkCols = cc;
-    chunkRows = rr;
-    unsigned count = cc*rr;
-    chunks = new arrayChunk* [count];
-    for( unsigned i = 0; i < count; i++ )
-      chunks[i] = 0;
-  }
-
-  Value* at( unsigned c, unsigned r ) const
-  {
-    if( !chunks ) return 0;
-    if( c >= columns ) return 0;
-    if( r >= rows ) return 0;
-
-    int col = c / CHUNK_COLS;
-    int row = r / CHUNK_ROWS;
-    int cpos = c % CHUNK_COLS;
-    int rpos = r % CHUNK_ROWS;
-    arrayChunk *chunk = chunks[row * chunkCols + col];
-    if (!chunk) return 0;
-    return chunk->ptr[rpos * chunk->cols + cpos];
-  };
-
-  void set( unsigned c, unsigned r, Value* v )
-  {
-    if (!chunks) return;
-    if( c >= columns ) return;
-    if( r >= rows ) return;
-    unsigned col = c / CHUNK_COLS;
-    unsigned row = r / CHUNK_ROWS;
-    unsigned cpos = c % CHUNK_COLS;
-    unsigned rpos = r % CHUNK_ROWS;
-    arrayChunk *chunk = chunks[row * chunkCols + col];
-    if (!chunk) {
-      unsigned cc = (col==chunkCols-1) ? (columns % CHUNK_COLS) : CHUNK_COLS;
-      unsigned rr = (row==chunkRows-1) ? (rows % CHUNK_ROWS) : CHUNK_ROWS;
-      chunk = new arrayChunk (cc, rr);
-      chunks[row * chunkCols + col] = chunk;
-    }
-    delete chunk->ptr[rpos * chunk->cols + cpos];
-    chunk->ptr[rpos * chunk->cols + cpos] = v;
-  }
-
-  bool operator==( const ValueArray& other ) const
-  {
-    if ( columns != other.columns || rows != other.rows )
-      return false;
-    for ( unsigned r = 0; r < rows; ++r )
-      for ( unsigned c = 0; c < columns; ++c ) {
-        Value* v1 = at( c, r );
-        Value* v2 = other.at( c, r );
-        if ( ( v1 && !v2 ) || ( !v1 && v2 ) )
-            return false;
-        if ( !( v1 && v2 && *v1 == *v2 ) )
-            return false;
-    }
-    return true;
-  }
-
-};
+typedef PointStorage<Value*> ValueArray;
 
 
 // helper class for Value
@@ -409,16 +249,6 @@ Value::Value( const QDate& dt, const Doc* doc )
 {
   d = ValueData::null();
   setValue( dt, doc );
-}
-
-// create an array value
-Value::Value( unsigned columns, unsigned rows )
-{
-  d = new ValueData;
-  d->type = Array;
-  d->format = fmt_None;
-  d->pa = new ValueArray;
-  d->pa->init( columns, rows );
 }
 
 // assign value from other
@@ -644,31 +474,46 @@ void Value::setFormat (Value::Format fmt)
 Value Value::element( unsigned column, unsigned row ) const
 {
   if( d->type != Array ) return *this;
-  if( !d->pa ) return *this;
-  Value* v = d->pa->at (column % columns(), row % rows());
+  if( !d->pa ) return empty();
+  Value* v = d->pa->lookup (column + 1, row + 1);
+  return v ? Value( *v ) : empty();
+}
+
+Value Value::element( unsigned index ) const
+{
+  if( d->type != Array ) return *this;
+  if( !d->pa ) return empty();
+  Value* v = d->pa->data( index );
   return v ? Value( *v ) : empty();
 }
 
 void Value::setElement( unsigned column, unsigned row, const Value& v )
 {
   if( d->type != Array ) return;
-  if( !d->pa ) return;
+  if( !d->pa ) d->pa = new ValueArray();
   detach();
-  d->pa->set( column, row, new Value( v ) );
+  d->pa->insert( column + 1, row + 1, new Value( v ) );
 }
 
 unsigned Value::columns() const
 {
   if( d->type != Array ) return 1;
   if( !d->pa ) return 1;
-  return d->pa->columns;
+  return d->pa->columns();
 }
 
 unsigned Value::rows() const
 {
   if( d->type != Array ) return 1;
   if( !d->pa ) return 1;
-  return d->pa->rows;
+  return d->pa->rows();
+}
+
+unsigned Value::count() const
+{
+  if( d->type != Array ) return 1;
+  if( !d->pa ) return 1;
+  return d->pa->count();
 }
 
 // reference to empty value

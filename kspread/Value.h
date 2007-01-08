@@ -149,11 +149,6 @@ class KSPREAD_EXPORT Value
     Value( const QDate& date, const Doc* doc );
 
     /**
-     * Create an array of values.
-     */
-    Value( unsigned columns, unsigned rows );
-
-    /**
      * Returns the type of the value.
      */
     Type type() const;
@@ -304,6 +299,14 @@ class KSPREAD_EXPORT Value
     Value element( unsigned column, unsigned row ) const;
 
     /**
+     * Return an array element given by its index denoting its position in the
+     * row-wise sorted list of non-empty values.
+     * Usable to iterate over the array.
+     * \see count()
+     */
+    Value element( unsigned index ) const;
+
+    /**
      * Sets an element in the array value. Do not use if isArray() is false.
      */
     void setElement( unsigned column, unsigned row, const Value& value );
@@ -319,6 +322,14 @@ class KSPREAD_EXPORT Value
      * Returns 1 if isArray() returns false.
      */
     unsigned rows() const;
+
+    /**
+     * If this value is an array, return the number of non-empty elements.
+     * Returns 1 if isArray() returns false.
+     * Usable to iterate over the array.
+     * \see element(unsigned)
+     */
+    unsigned count() const;
 
     /**
      * Returns error message associated with this value.

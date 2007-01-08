@@ -199,21 +199,21 @@ void TestValue::testArray()
   Value* v2;
 
   // array
-  v1 = new Value( 10, 3 ); // 10 columns, 3 rows
+  v1 = new Value( Value::Array );
   QCOMPARE( v1->type(), Value::Array );
-  QCOMPARE( v1->columns(), (unsigned)10 );
-  QCOMPARE( v1->rows(), (unsigned)3 );
+  QCOMPARE( v1->columns(), (unsigned)1 );
+  QCOMPARE( v1->rows(), (unsigned)1 );
   delete v1;
 
   // check empty value in array
-  v1 = new Value( 1, 1 );
+  v1 = new Value( Value::Array );
   QCOMPARE( v1->type(), Value::Array );
   v2 = new Value( v1->element( 0, 0 ) );
   QCOMPARE( v2->type(), Value::Empty );
   delete v1;
 
   // fill simple 1x1 array
-  v1 = new Value( 1, 1 );
+  v1 = new Value( Value::Array );
   QCOMPARE( v1->type(), Value::Array );
   v2 = new Value( 14.3 );
   v1->setElement( 0, 0, *v2 );
@@ -225,10 +225,10 @@ void TestValue::testArray()
   delete v1;
 
   // stress test, array of 1000x1000
-  v1 = new Value( 1000, 1000 );
+  v1 = new Value( Value::Array );
   QCOMPARE( v1->type(), Value::Array );
-  for( unsigned c=0; c<1000; c++ )
   for( unsigned r=0; r<1000; r++ )
+  for( unsigned c=0; c<1000; c++ )
   {
     int index = 1000*r + c;
     v1->setElement( c, r, Value( index ) );
@@ -247,7 +247,7 @@ void TestValue::testArray()
   delete v1;
 
   // assignment of array value
-  v1 = new Value( 1, 1 );
+  v1 = new Value( Value::Array );
   QCOMPARE( v1->type(), Value::Array );
   v1->setElement( 0, 0, Value( 14.3) );
   v2 = new Value( *v1 ); // v2 is now also an array
