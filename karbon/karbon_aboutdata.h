@@ -3,10 +3,10 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <config.h>
+#include <kofficeversion.h>
 
 static const char* description=I18N_NOOP( "A Vector Graphics Drawing Application." );
-static const char* version=VERSION;
+static const char* version=KOFFICE_VERSION_STRING;
 
 // This is all implemented here so that the executable and the part can share it
 // without sharing an object file.

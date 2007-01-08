@@ -21,10 +21,6 @@
 #ifndef __KARBON_VIEW__
 #define __KARBON_VIEW__
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <KoView.h>
 #include <QPointF>
 #include <ksharedptr.h>

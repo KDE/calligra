@@ -22,10 +22,6 @@
 
 #include <config-karbon.h>
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <q3ptrlist.h>
 #include <QString>
 #include <QFont>
