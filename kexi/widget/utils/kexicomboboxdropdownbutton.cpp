@@ -77,7 +77,8 @@ void KexiComboBoxDropDownButton::styleChange( QStyle & oldStyle )
 	else
 		m_fixForHeight = 0;
 	//</hack>
-	m_drawComplexControl = style().inherits("KStyle") 
+	m_drawComplexControl =
+		(style().inherits("KStyle") && qstricmp(style().name(),"qtcurve")!=0)
 		|| qstricmp(style().name(),"platinum")==0;
 	if (m_fixForHeight==0)
 		setFixedWidth( style().querySubControlMetrics( QStyle::CC_ComboBox, 
