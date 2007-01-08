@@ -19,10 +19,6 @@
 #ifndef KIVIO_LINE_STYLE_H
 #define KIVIO_LINE_STYLE_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <QColor>
 #include <qdom.h>
 #include <qpen.h>

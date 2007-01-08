@@ -19,10 +19,6 @@
 #ifndef KIVIO_ARROWHEAD_H
 #define KIVIO_ARROWHEAD_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <QColor>
 #include <qdom.h>
 #include <koffice_export.h>

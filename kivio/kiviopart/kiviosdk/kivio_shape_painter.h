@@ -1,10 +1,6 @@
 #ifndef KIVIO_SHAPE_PAINTER_H
 #define KIVIO_SHAPE_PAINTER_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include "kivio_fill_style.h"
 
 class KivioPainter;

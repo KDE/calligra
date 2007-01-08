@@ -1,10 +1,6 @@
 #ifndef KIVIO_TEXT_STYLE_H
 #define KIVIO_TEXT_STYLE_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <QFont>
 
 class QDomDocument;

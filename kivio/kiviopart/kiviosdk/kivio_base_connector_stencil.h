@@ -19,10 +19,6 @@
 #ifndef KIVIO_BASE_CONNECTOR_STENCIL_H
 #define KIVIO_BASE_CONNECTOR_STENCIL_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <qdom.h>
 #include <qptrlist.h>
 

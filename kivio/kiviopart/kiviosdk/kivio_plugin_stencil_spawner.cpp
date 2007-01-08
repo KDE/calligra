@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <config.h>
 #include "kivio_plugin_stencil_spawner.h"
 #include <kparts/part.h>
 #include <kparts/componentfactory.h>
@@ -44,7 +43,7 @@ KivioPluginStencilSpawner::~KivioPluginStencilSpawner()
 bool KivioPluginStencilSpawner::load( const QString &f )
 {
   QFileInfo lib(f);
-  
+
   if( lib.exists())
   {
     m_fileName = lib.baseName();
@@ -59,7 +58,7 @@ bool KivioPluginStencilSpawner::load( const QString &f )
     kDebug(43000) << "Failed to load: " << m_fileName << endl;
     return false;
   }
-  
+
   // Get the icon
   m_pIcon = fac->GetIcon();
 

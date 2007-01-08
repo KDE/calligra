@@ -1,10 +1,6 @@
 #ifndef _KIVIO_1D_STENCIL_H
 #define _KIVIO_1D_STENCIL_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <qdom.h>
 #include <qptrlist.h>
 
