@@ -68,6 +68,7 @@
 #include <kfontdialog.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
+#include <knewpassworddialog.h>
 #include <kpassworddialog.h>
 #include <kprocio.h>
 #include <kreplace.h>
@@ -4814,26 +4815,29 @@ void View::toggleProtectDoc( bool mode )
    if ( !doc() || !doc()->map() )
      return;
 
-   QByteArray passwd;
    if ( mode )
    {
-     int result = KPasswordDialog::getNewPassword( this, passwd, i18n( "Protect Document" ), i18n( "Enter a password.") );
-     if ( result != KPasswordDialog::Accepted )
+     KNewPasswordDialog dlg(this);
+     dlg.setPrompt( i18n( "Enter a password.") );
+     dlg.setWindowTitle( i18n( "Protect Document" ) );
+     if ( dlg.exec() != KPasswordDialog::Accepted )
      {
        d->actions->protectDoc->setChecked( false );
        return;
      }
 
      QByteArray hash( "" );
-     QString password( passwd );
+     QString password = dlg.password();
      if ( password.length() > 0 )
        SHA1::getHash( password, hash );
      doc()->map()->setProtected( hash );
    }
    else
    {
-     int result = KPasswordDialog::getPassword( this, passwd, i18n( "Unprotect Document" ), i18n( "Enter the password.") );
-     if ( result != KPasswordDialog::Accepted )
+     KPasswordDialog dlg(this);
+     dlg.setPrompt( i18n( "Enter the password.") );
+     dlg.setWindowTitle( i18n( "Unprotect Document" ) );
+     if ( dlg.exec() != KPasswordDialog::Accepted )
      {
        d->actions->protectDoc->setChecked( true );
        return;
