@@ -21,7 +21,6 @@
 // built-in information functions
 
 
-#include <config.h>
 #include <sys/utsname.h>
 
 #include <QDir>

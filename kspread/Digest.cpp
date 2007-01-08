@@ -40,7 +40,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../config.h"
+#include "../config.h" // SIZEOF_INT
 #include "Digest.h"
 #include <kdebug.h>
 #include <kcodecs.h>
