@@ -17,7 +17,6 @@
  *
  */
 
-#include <config.h>
 #include "kfile_gnumeric.h"
 
 #include <klocale.h>

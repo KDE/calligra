@@ -17,7 +17,6 @@
  *
  */
 
-#include <config.h>
 #include "kfile_koffice.h"
 
 #include <klocale.h>

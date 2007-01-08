@@ -36,7 +36,6 @@
  * No more duplicated strings of same contents to facilitate changes
  */
 
-#include <config.h>
 #include "kfile_ooo.h"
 
 #include <klocale.h>
