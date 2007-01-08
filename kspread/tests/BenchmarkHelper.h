@@ -51,32 +51,39 @@ inline tval elapsed(tval t)
 static QString printAverage( tval ticks, int counter, const QString& prefix = QString() )
 {
     QString str;
+    bool ok = false;
+    double freq = 0.0;
+    
+#ifdef Q_OS_LINUX
     QProcess procCpuInfo;
     procCpuInfo.start( "cat /proc/cpuinfo");
     if ( procCpuInfo.waitForFinished() )
     {
         QRegExp reg( "cpu MHz\\s+:\\s+(\\d{4}.\\d{3})" );
         reg.indexIn( procCpuInfo.readAllStandardOutput() );
-        bool ok = true;
-        double freq = reg.cap(1).toDouble( &ok );
-        if ( ok )
+        ok = true;
+        freq = reg.cap(1).toDouble( &ok );
+    }
+#endif
+
+    if ( ok && (freq > 0) )
+    {
+        double time = 1000.0 * ticks / counter / freq; // ns
+        if ( time < 1000.0 )
+            str = QString("%1 ns/operation").arg( QString::number( time, 'f', 2 ) );
+        else
         {
-            double time = 1000.0 * ticks / counter / freq; // ns
+            time /= 1000.0; // us
             if ( time < 1000.0 )
-                str = QString("%1 ns/operation").arg( QString::number( time, 'f', 2 ) );
+                str = QString("%1 us/operation").arg( QString::number( time, 'f', 2 ) );
             else
             {
-                time /= 1000.0; // us
-                if ( time < 1000.0 )
-                    str = QString("%1 us/operation").arg( QString::number( time, 'f', 2 ) );
-                else
-                {
-                    time /= 1000.0; // ms
-                    str = QString("%1 ms/operation").arg( QString::number( time, 'f', 2 ) );
-                }
+                time /= 1000.0; // ms
+                str = QString("%1 ms/operation").arg( QString::number( time, 'f', 2 ) );
             }
         }
     }
+    
     return QString( "%1 Average: %2/%3=%4 cycles/operation; %5" ).
       arg(prefix). arg( ticks ).arg( counter ).arg( ticks/counter ).arg( str );
 }
