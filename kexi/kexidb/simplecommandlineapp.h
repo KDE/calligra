@@ -26,6 +26,7 @@
 #include <kaboutdata.h>
 
 struct KCmdLineOptions;
+class KInstance;
 
 namespace KexiDB
 {

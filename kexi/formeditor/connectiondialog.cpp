@@ -67,7 +67,7 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 	layout->addWidget(details);
 	QHBoxLayout *detailsLyr = new QHBoxLayout(details);
 	setDetailsWidget(details);
-	setDetails(true);
+	setDetailsWidgetVisible(true);
 
 	m_pixmapLabel = new QLabel(details);
 	detailsLyr->addWidget(m_pixmapLabel);
