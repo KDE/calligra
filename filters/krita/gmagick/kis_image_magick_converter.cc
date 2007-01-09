@@ -289,9 +289,10 @@ namespace {
                         kdDebug(41008) << "Storing of attribute " << (*it) -> type() << "failed!\n";
                     }
             } else { // Profile
+                    unsigned char * profiledata = new unsigned char[(*it) -> annotation() . size()];
+                    memcpy( profiledata, (*it) -> annotation() . data(), (*it) -> annotation() . size());
                     if (!ProfileImage(dst, (*it) -> type().ascii(),
-                                    (unsigned char*)(*it) -> annotation() . data(),
-                                    (*it) -> annotation() . size(), MagickFalse)) {
+                                    profiledata, (*it) -> annotation() . size(), MagickFalse)) {
                         kdDebug(41008) << "Storing failed!" << endl;
                     }
             }
