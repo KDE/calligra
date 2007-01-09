@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2001 David Faure <faure@kde.org>
- * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -87,9 +87,14 @@ int KWGui::visibleHeight() const {
     return m_canvasController->visibleHeight();
 }
 
-bool KWGui::verticalScrollBarVisible() {
-    return m_canvasController->verticalScrollBar() &&
-        m_canvasController->verticalScrollBar()->isVisible();
+QSize KWGui::viewportSize() const {
+    return m_canvasController->viewport()->size();
+}
+
+
+bool KWGui::horizontalScrollBarVisible() {
+    return m_canvasController->horizontalScrollBar() &&
+        m_canvasController->horizontalScrollBar()->isVisible();
 }
 
 void KWGui::setToolOptionDocker(KoToolDocker *docker) {

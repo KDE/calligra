@@ -117,7 +117,6 @@ void KWView::setupActions() {
     m_zoomHandler.setZoomMode( m_document->zoomMode() );
     m_zoomHandler.setZoom( m_document->zoom() );
     updateZoomControls();
-    QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
     connect( m_actionViewZoom, SIGNAL( zoomChanged( KoZoomMode::Mode, int ) ),
             this, SLOT( viewZoom( KoZoomMode::Mode, int ) ) );
 
@@ -344,14 +343,6 @@ This saves problems with finding out which we missed near the end.
             actionCollection(), "view_frameborders" );
     m_actionViewFrameBorders->setToolTip( i18n( "Turns the border display on and off" ) );
     m_actionViewFrameBorders->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
-
-    m_actionViewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
-            actionCollection(), "view_zoom" );
-
-    connect( m_actionViewZoom, SIGNAL( triggered( const QString & ) ),
-            this, SLOT( viewZoom( const QString & ) ) );
-    m_actionViewZoom->setEditable(true);
-    changeZoomMenu( );
 
     // -------------- Insert menu
     m_actionInsertSpecialChar = new KAction( i18n( "Special Character..." ), "char",
@@ -947,9 +938,6 @@ void KWView::setZoom( int zoom ) {
         m_actionViewZoom->setEffectiveZoom( zoom );
     }
 
-    //getGUI()->getHorzRuler()->setZoom( m_zoomHandler.zoomedResolutionX() );
-    //getGUI()->getVertRuler()->setZoom( m_zoomHandler.zoomedResolutionY() );
-
     //if ( statusBar() )
     //    m_sbZoomLabel->setText( ' ' + QString::number( zoom ) + "% " );
 
@@ -970,9 +958,10 @@ void KWView::viewZoom( KoZoomMode::Mode mode, int zoom )
 
     if ( mode == KoZoomMode::ZOOM_WIDTH ) {
         m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_WIDTH);
-        newZoom = qRound( static_cast<double>(m_gui->visibleWidth() * 100 ) / (m_zoomHandler.resolutionX() * m_currentPage->width() ) ) - 1;
+        newZoom = qRound( static_cast<double>(m_gui->viewportSize().width() * 100 ) /
+                (m_zoomHandler.resolutionX() * m_currentPage->width() ) ) - 1;
 
-        if(newZoom != m_zoomHandler.zoomInPercent() && !m_gui->verticalScrollBarVisible()) {
+        if(newZoom != m_zoomHandler.zoomInPercent() || m_gui->horizontalScrollBarVisible()) {
             // we have to do this twice to take into account a possibly appearing vertical scrollbar
             QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
         }
@@ -981,8 +970,9 @@ void KWView::viewZoom( KoZoomMode::Mode mode, int zoom )
         m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_PAGE);
         double height = m_zoomHandler.resolutionY() * m_currentPage->height();
         double width = m_zoomHandler.resolutionX() * m_currentPage->width();
-        newZoom = qMin( qRound( static_cast<double>(m_gui->visibleHeight() * 100 ) / height ),
-                     qRound( static_cast<double>(m_gui->visibleWidth() * 100 ) / width ) ) - 1;
+        QSize viewport = m_gui->viewportSize();
+        newZoom = qMin( qRound( static_cast<double>(viewport.height() * 100 ) / height ),
+                     qRound( static_cast<double>(viewport.width()* 100 ) / width ) ) - 1;
     }
     else {
         m_zoomHandler.setZoomMode(KoZoomMode::ZOOM_CONSTANT);
@@ -1031,6 +1021,11 @@ void KWView::resizeEvent( QResizeEvent *e )
 
     if ( m_zoomHandler.zoomMode() != KoZoomMode::ZOOM_CONSTANT )
         updateZoom();
+}
+
+void KWView::showEvent(QShowEvent *event) {
+    Q_UNUSED(event);
+    QTimer::singleShot( 1000, this, SLOT( updateZoom() ) );
 }
 
 void KWView::editFrameProperties() {
