@@ -207,7 +207,7 @@ QModelIndex ResourceItemModel::index( int row, int column, const QModelIndex &pa
 
 int ResourceItemModel::columnCount( const QModelIndex &parent ) const
 {
-    return 9;
+    return 10;
 }
 
 int ResourceItemModel::rowCount( const QModelIndex &parent ) const
@@ -404,6 +404,47 @@ bool ResourceItemModel::setEmail( Resource *res, const QVariant &value, int role
     return false;
 }
 
+QVariant ResourceItemModel::calendar( const Resource *res, int role ) const
+{
+    Calendar *cal = res->calendar( true ); // don't check for default calendar
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return cal == 0 ? i18n( "None" ) : cal->name();
+        case Role::EnumList: 
+            return QStringList() << i18n( "None" ) << m_project->calendarNames();
+        case Role::EnumListValue: 
+            return cal == 0 ? 0 : m_project->calendarNames().indexOf( cal->name() );
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool ResourceItemModel::setCalendar( Resource *res, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+        {
+            Calendar *c = 0;
+            if ( value.toInt() > 0 ) {
+                QStringList lst = calendar( res, Role::EnumList ).toStringList();
+                if ( value.toInt() < lst.count() ) {
+                    c = m_project->calendarByName( lst.at( value.toInt() ) );
+                }
+            }
+            m_part->addCommand( new ModifyResourceCalendarCmd( m_part, res, c, "Modify resource calendar" ) );
+            return true;
+        }
+    }
+    return false;
+}
+
+
 QVariant ResourceItemModel::units( const Resource *res, int role ) const
 {
     switch ( role ) {
@@ -570,11 +611,12 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
             case 1: result = type( r, role ); break;
             case 2: result = initials( r, role ); break;
             case 3: result = email( r, role ); break;
-            case 4: result = units( r, role ); break;
-            case 5: result = availableFrom( r, role ); break;
-            case 6: result = availableUntil( r, role ); break;
-            case 7: result = normalRate( r, role ); break;
-            case 8: result = overtimeRate( r, role ); break;
+            case 4: result = calendar( r, role ); break;
+            case 5: result = units( r, role ); break;
+            case 6: result = availableFrom( r, role ); break;
+            case 7: result = availableUntil( r, role ); break;
+            case 8: result = normalRate( r, role ); break;
+            case 9: result = overtimeRate( r, role ); break;
             default:
                 kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
                 return QVariant();
@@ -627,11 +669,12 @@ bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value
             case 1: return setType( r, value, role );
             case 2: return setInitials( r, value, role );
             case 3: return setEmail( r, value, role );
-            case 4: return setUnits( r, value, role );
-            case 5: return setAvailableFrom( r, value, role );
-            case 6: return setAvailableUntil( r, value, role );
-            case 7: return setNormalRate( r, value, role );
-            case 8: return setOvertimeRate( r, value, role );
+            case 4: return setCalendar( r, value, role );
+            case 5: return setUnits( r, value, role );
+            case 6: return setAvailableFrom( r, value, role );
+            case 7: return setAvailableUntil( r, value, role );
+            case 8: return setNormalRate( r, value, role );
+            case 9: return setOvertimeRate( r, value, role );
             default:
                 qWarning("data: invalid display value column %d", index.column());
                 return false;
@@ -660,12 +703,12 @@ QVariant ResourceItemModel::headerData( int section, Qt::Orientation orientation
                 case 1: return i18n( "Type" );
                 case 2: return i18n( "Initials" );
                 case 3: return i18n( "Email" );
-                case 4: return i18n( "Limit (%)" );
-                case 5: return i18n( "Available From" );
-                case 6: return i18n( "Available Until" );
-                case 7: return i18n( "Normal Rate" );
-                case 8: return i18n( "Overtime Rate" );
-                case 9: return i18n( "Fixed Cost" );
+                case 4: return i18n( "Calendar" );
+                case 5: return i18n( "Limit (%)" );
+                case 6: return i18n( "Available From" );
+                case 7: return i18n( "Available Until" );
+                case 8: return i18n( "Normal Rate" );
+                case 9: return i18n( "Overtime Rate" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -689,11 +732,12 @@ QVariant ResourceItemModel::headerData( int section, Qt::Orientation orientation
             case 1: return ToolTip::ResourceType;
             case 2: return ToolTip::ResourceInitials;
             case 3: return ToolTip::ResourceEMail;
-            case 4: return ToolTip::ResourceUnits;
-            case 5: return ToolTip::ResourceAvailableFrom;
-            case 6: return ToolTip::ResourceAvailableUntil;
-            case 7: return ToolTip::ResourceNormalRate;
-            case 8: return ToolTip::ResourceOvertimeRate;
+            case 4: return ToolTip::ResourceCalendar;
+            case 5: return ToolTip::ResourceUnits;
+            case 6: return ToolTip::ResourceAvailableFrom;
+            case 7: return ToolTip::ResourceAvailableUntil;
+            case 8: return ToolTip::ResourceNormalRate;
+            case 9: return ToolTip::ResourceOvertimeRate;
             default: return QVariant();
         }
     }
@@ -796,6 +840,7 @@ ResourceTreeView::ResourceTreeView( Part *part, QWidget *parent )
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     setItemDelegateForColumn( 1, new EnumDelegate( this ) );
+    setItemDelegateForColumn( 4, new EnumDelegate( this ) );
 
     setAcceptDrops( true );
     setDropIndicatorShown( true );

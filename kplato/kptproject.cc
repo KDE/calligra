@@ -1217,7 +1217,17 @@ Calendar *Project::calendar( const QString& id ) const
     return findCalendar( id );
 }
 
-QList<Calendar*> Project::calendars()
+Calendar *Project::calendarByName( const QString& name ) const
+{
+    foreach( Calendar *c, calendars() ) {
+        if ( c->name() == name ) {
+            return c;
+        }
+    }
+    return 0;
+}
+
+QList<Calendar*> Project::calendars() const
 {
     QList<Calendar*> list;
     QListIterator<Calendar*> it = m_calendars;
@@ -1228,6 +1238,15 @@ QList<Calendar*> Project::calendars()
         }
     }
     return list;
+}
+
+QStringList Project::calendarNames() const
+{
+    QStringList lst;
+    foreach( Calendar *c, calendars() ) {
+        lst << c->name();
+    }
+    return lst;
 }
 
 void Project::setStandardWorktime( StandardWorktime * worktime )

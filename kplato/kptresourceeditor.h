@@ -102,6 +102,9 @@ protected:
     
     QVariant email( const Resource *res, int role ) const;
     bool setEmail( Resource *res, const QVariant &value, int role );
+    
+    QVariant calendar( const Resource *res, int role ) const;
+    bool setCalendar( Resource *res, const QVariant &value, int role );
 
     QVariant units( const Resource *res, int role ) const;
     bool setUnits( Resource *res, const QVariant &value, int role );

@@ -63,6 +63,7 @@ namespace ToolTip
     static QString ResourceType = i18n( "The type of the resource or resource group." );
     static QString ResourceInitials = i18n( "The initials of the resource.." );
     static QString ResourceEMail = i18n( "The e-mail address of the resource." );
+    static QString ResourceCalendar = i18n( "The calendar defines when the resource is working." );
     static QString ResourceUnits = i18n( "The maximum load that can be assigned." );
     static QString ResourceAvailableFrom = i18n( "Defines when the resource is available to the project." );
     static QString ResourceAvailableUntil = i18n( "Defines when the resource is available to the project." );

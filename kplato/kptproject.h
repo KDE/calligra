@@ -146,11 +146,15 @@ public:
     virtual double actualCostTo( const QDate &date, long id = -1  );
 
     Calendar *defaultCalendar() { return m_standardWorktime->calendar(); }
-    QList<Calendar*> calendars();
+    QList<Calendar*> calendars() const;
     void addCalendar( Calendar *calendar );
     /// Returns the calendar with identity id.
     Calendar *calendar( const QString& id ) const;
-
+    /// Returns a list of all calendars
+    QStringList calendarNames() const;
+    /// Find calendar by name
+    Calendar *calendarByName( const QString &name ) const;
+    
     /**
      * Defines the length of days, weeks, months and years
      * and the standard working week.
