@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2001 David Faure <faure@kde.org>
- * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -109,8 +109,10 @@ void KWView::setupActions() {
     if ( kwcanvas() && kwcanvas()->viewMode()->hasPages() )
         modes |= KoZoomMode::ZOOM_PAGE;
 
-    m_actionViewZoom = new KoZoomAction( modes, i18n( "Zoom" ), 0, KShortcut(),
-            actionCollection(), "view_zoom" );
+    m_actionViewZoom = new KoZoomAction( modes, i18n("Zoom"), this );
+    actionCollection()->addAction("view_zoom", m_actionViewZoom);
+    actionCollection()->addAction(KStandardAction::ZoomIn,  "zoom_in", m_actionViewZoom, SLOT(zoomIn()));
+    actionCollection()->addAction(KStandardAction::ZoomOut,  "zoom_out", m_actionViewZoom, SLOT(zoomOut()));
     m_zoomHandler.setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
     m_zoomHandler.setZoomMode( m_document->zoomMode() );
     m_zoomHandler.setZoom( m_document->zoom() );
