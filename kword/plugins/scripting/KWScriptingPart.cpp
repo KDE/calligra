@@ -32,8 +32,8 @@
 
 #include <KWView.h>
 
-//#define KROSS_MAIN_EXPORT KDE_EXPORT
 #include <kross/core/manager.h>
+#include <kross/core/action.h>
 #include <kross/core/guiclient.h>
 
 typedef KGenericFactory< KWScriptingPart > KWordScriptingFactory;
@@ -43,11 +43,13 @@ K_EXPORT_COMPONENT_FACTORY( krossmodulekword, KWordScriptingFactory( "krossmodul
 class KWScriptingPart::Private
 {
     public:
+        KWView* view;
+
         Kross::GUIClient* guiclient;
         Scripting::Module* module;
 
         Private() : module(0) {}
-        ~Private() {}
+        ~Private() { delete module; }
 };
 
 KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
@@ -59,8 +61,8 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
 
     kDebug(32010) << "KWScripting plugin. Class: " << metaObject()->className() << ", Parent: " << parent->metaObject()->className() << endl;
 
-    KWView* view = dynamic_cast< KWView* >(parent);
-    Q_ASSERT(view);
+    d->view = dynamic_cast< KWView* >(parent);
+    Q_ASSERT(d->view);
 
     // Create the Kross GUIClient which is the higher level to let
     // Kross deal with scripting code.
@@ -79,27 +81,32 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     QAction* scriptmenuaction = d->guiclient->action("scripts");
     actionCollection()->addAction("scripts", scriptmenuaction);
 
-    //TODO handle different view-instances
-#if 0
-    // Publish the KWScriptingModule which offers access to KSpread internals.
-    Scripting::Module* module = Kross::Manager::self().hasObject("KWord")
-        ? dynamic_cast< Scripting::Module* >( Kross::Manager::self().object("KWord") )
-        : 0;
-    if( ! module ) {
-        module = new Scripting::Module(this);
-        Kross::Manager::self().addObject(module, "KWord");
-    }
-#else
-    Scripting::Module* module = new Scripting::Module(this);
-    Kross::Manager::self().addObject(module, "KWord");
-#endif
-    module->setView(view);
+    connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
+    connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
 }
 
 KWScriptingPart::~KWScriptingPart()
 {
     kDebug(32010) << "KWScriptingPart::~KWScriptingPart()" << endl;
     delete d;
+}
+
+void KWScriptingPart::started(Kross::Action*)
+{
+    kDebug(32010) << "KWScriptingPart::started" << endl;
+    if( d->module )
+        delete d->module;
+    d->module = new Scripting::Module();
+    d->module->setView(d->view);
+    Kross::Manager::self().addObject(d->module, "KWord");
+}
+
+void KWScriptingPart::finished(Kross::Action*)
+{
+    kDebug(32010) << "KWScriptingPart::finished" << endl;
+    //d->view->document()->setModified(true);
+    //d->module->deleteLater();
+    //QApplication::restoreOverrideCursor();
 }
 
 #include "KWScriptingPart.moc"

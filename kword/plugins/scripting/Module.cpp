@@ -57,8 +57,8 @@ namespace Scripting {
     };
 }
 
-Module::Module(QObject* parent)
-    : QObject(parent)
+Module::Module()
+    : QObject()
     , d( new Private() )
 {
     setObjectName("KWordScriptingModule");
