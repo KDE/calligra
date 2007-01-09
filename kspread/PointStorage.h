@@ -460,10 +460,10 @@ public:
 
     /**
      * Retrieve the first used data in \p col .
-     * Can be used in conjunction with nextColumnData() to loop through a column.
+     * Can be used in conjunction with nextInColumn() to loop through a column.
      * \return the first used data in \p col or the default data, if the column is empty.
      */
-    T firstColumnData( int col ) const
+    T firstInColumn( int col ) const
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         return m_data.value( m_cols.indexOf( col ) );
@@ -471,10 +471,10 @@ public:
 
     /**
      * Retrieve the first used data in \p row .
-     * Can be used in conjunction with nextRowData() to loop through a row.
+     * Can be used in conjunction with nextInRow() to loop through a row.
      * \return the first used data in \p row or the default data, if the row is empty.
      */
-    T firstRowData( int row ) const
+    T firstInRow( int row ) const
     {
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
         return m_data.value( m_rows.value( row - 1 ) );
@@ -482,10 +482,10 @@ public:
 
     /**
      * Retrieve the next used data in \p col after \p row .
-     * Can be used in conjunction with firstColumnData() to loop through a column.
+     * Can be used in conjunction with firstInColumn() to loop through a column.
      * \return the next used data in \p col or the default data, there is no further data.
      */
-    T nextColumnData( int col, int row ) const
+    T nextInColumn( int col, int row ) const
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );
@@ -494,10 +494,10 @@ public:
 
     /**
      * Retrieve the next used data in \p row after \p col .
-     * Can be used in conjunction with firstRowData() to loop through a row.
+     * Can be used in conjunction with firstInRow() to loop through a row.
      * \return the next used data in \p row or the default data, if there is no further data.
      */
-    T nextRowData( int col, int row ) const
+    T nextInRow( int col, int row ) const
     {
         Q_ASSERT( 1 <= col && col <= KS_colMax );
         Q_ASSERT( 1 <= row && row <= KS_rowMax );

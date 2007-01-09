@@ -389,7 +389,7 @@ void PointStorageTest::testShiftDown()
     QCOMPARE( storage.m_cols, cols );
 }
 
-void PointStorageTest::testFirstColumnData()
+void PointStorageTest::testFirstInColumn()
 {
     PointStorage<int> storage;
     storage.m_data << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12;
@@ -401,14 +401,14 @@ void PointStorageTest::testFirstColumnData()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QCOMPARE( storage.firstColumnData( 1 ),  1 );
-    QCOMPARE( storage.firstColumnData( 2 ),  2 );
-    QCOMPARE( storage.firstColumnData( 3 ),  6 );
-    QCOMPARE( storage.firstColumnData( 4 ), 10 );
-    QCOMPARE( storage.firstColumnData( 5 ),  3 );
+    QCOMPARE( storage.firstInColumn( 1 ),  1 );
+    QCOMPARE( storage.firstInColumn( 2 ),  2 );
+    QCOMPARE( storage.firstInColumn( 3 ),  6 );
+    QCOMPARE( storage.firstInColumn( 4 ), 10 );
+    QCOMPARE( storage.firstInColumn( 5 ),  3 );
 }
 
-void PointStorageTest::testFirstRowData()
+void PointStorageTest::testFirstInRow()
 {
     PointStorage<int> storage;
     storage.m_data << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12;
@@ -420,14 +420,14 @@ void PointStorageTest::testFirstRowData()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QCOMPARE( storage.firstRowData( 1 ),  1 );
-    QCOMPARE( storage.firstRowData( 2 ),  4 );
-    QCOMPARE( storage.firstRowData( 3 ),  7 );
-    QCOMPARE( storage.firstRowData( 4 ), 10 );
-    QCOMPARE( storage.firstRowData( 5 ), 11 );
+    QCOMPARE( storage.firstInRow( 1 ),  1 );
+    QCOMPARE( storage.firstInRow( 2 ),  4 );
+    QCOMPARE( storage.firstInRow( 3 ),  7 );
+    QCOMPARE( storage.firstInRow( 4 ), 10 );
+    QCOMPARE( storage.firstInRow( 5 ), 11 );
 }
 
-void PointStorageTest::testNextColumnData()
+void PointStorageTest::testNextInColumn()
 {
     PointStorage<int> storage;
     storage.m_data << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12;
@@ -439,14 +439,14 @@ void PointStorageTest::testNextColumnData()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QCOMPARE( storage.nextColumnData( 1, 3 ), 11 );
-    QCOMPARE( storage.nextColumnData( 2, 3 ),  0 );
-    QCOMPARE( storage.nextColumnData( 3, 3 ),  0 );
-    QCOMPARE( storage.nextColumnData( 4, 3 ), 10 );
-    QCOMPARE( storage.nextColumnData( 5, 3 ), 12 );
+    QCOMPARE( storage.nextInColumn( 1, 3 ), 11 );
+    QCOMPARE( storage.nextInColumn( 2, 3 ),  0 );
+    QCOMPARE( storage.nextInColumn( 3, 3 ),  0 );
+    QCOMPARE( storage.nextInColumn( 4, 3 ), 10 );
+    QCOMPARE( storage.nextInColumn( 5, 3 ), 12 );
 }
 
-void PointStorageTest::testNextRowData()
+void PointStorageTest::testNextInRow()
 {
     PointStorage<int> storage;
     storage.m_data << 1 << 2 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12;
@@ -458,11 +458,11 @@ void PointStorageTest::testNextRowData()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    QCOMPARE( storage.nextRowData( 3, 1 ),  3 );
-    QCOMPARE( storage.nextRowData( 3, 2 ),  0 );
-    QCOMPARE( storage.nextRowData( 3, 3 ),  9 );
-    QCOMPARE( storage.nextRowData( 3, 4 ), 10 );
-    QCOMPARE( storage.nextRowData( 3, 5 ), 12 );
+    QCOMPARE( storage.nextInRow( 3, 1 ),  3 );
+    QCOMPARE( storage.nextInRow( 3, 2 ),  0 );
+    QCOMPARE( storage.nextInRow( 3, 3 ),  9 );
+    QCOMPARE( storage.nextInRow( 3, 4 ), 10 );
+    QCOMPARE( storage.nextInRow( 3, 5 ), 12 );
 }
 
 void PointStorageTest::testIteration()
