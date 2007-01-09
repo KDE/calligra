@@ -399,7 +399,12 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
     }
 
     if (ei.severity != UndefinedException)
+    {
         CatchException(&ei);
+        kdDebug(41008) << "Exceptions happen when loading" << endl;
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+    
 
     if (images == 0) {
         DestroyImageInfo(ii);
@@ -413,6 +418,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
     m_img = 0;
 
     while ((image = RemoveFirstImageFromList(&images))) {
+        if(image->rows == 0 or image->columns == 0) return KisImageBuilder_RESULT_FAILURE;
         ViewInfo *vi = OpenCacheView(image);
 
         // Determine image depth -- for now, all channels of an imported image are of the same depth
