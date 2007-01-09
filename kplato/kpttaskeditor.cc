@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2006 - 2007 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -812,8 +812,7 @@ void NodeItemModel::slotNodeChanged( Node *node )
 
 //--------------------
 NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
-    : QTreeView( parent ),
-    m_arrowKeyNavigation( true )
+    : TreeViewBase( parent )
 {
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setModel( new NodeItemModel( part ) );
@@ -859,105 +858,6 @@ void NodeTreeView::currentChanged( const QModelIndex & current, const QModelInde
     emit currentChanged( current );
 }
 
-/*!
-  \reimp
- */
-void NodeTreeView::keyPressEvent(QKeyEvent *event)
-{
-    kDebug()<<k_funcinfo<<event->key()<<", "<<m_arrowKeyNavigation<<endl;
-    if ( !m_arrowKeyNavigation ) {
-        QTreeView::keyPressEvent( event );
-        return;
-    }
-    QModelIndex current = currentIndex();
-    if ( current.isValid() ) {
-        switch (event->key()) {
-            case Qt::Key_Right: {
-                if ( current.column() < model()->columnCount() - 1 ) {
-                    QModelIndex i = model()->index( current.row(), current.column() + 1, current.parent() );
-                    selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
-                }
-                event->accept();
-                return;
-                break;
-            }
-            case Qt::Key_Left: {
-                if ( current.column() > 0 ) {
-                    QModelIndex i = model()->index( current.row(), current.column() - 1, current.parent() );
-                    selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
-                }
-                event->accept();
-                return;
-                break;
-            }
-            case Qt::Key_Down: {
-                QModelIndex i = indexBelow( current );
-                if ( i.isValid() ) {
-                    i = model()->index( i.row(), current.column(), i.parent() );
-                    selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
-                }
-                event->accept();
-                return;
-                break;
-            }
-            case Qt::Key_Up: {
-                QModelIndex i = indexAbove( current );
-                if ( i.isValid() ) {
-                    i = model()->index( i.row(), current.column(), i.parent() );
-                    selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
-                }
-                event->accept();
-                return;
-                break;
-            }
-            case Qt::Key_Plus:
-                if ( itemsExpandable()) {
-                    if ( model()->hasChildren( current ) ) {
-                        QTreeView::keyPressEvent( event );
-                        //HACK: Bug in qt??
-                        selectionModel()->setCurrentIndex(current, QItemSelectionModel::NoUpdate);
-                    }
-                    event->accept();
-                    return;
-                }
-                break;
-            case Qt::Key_Minus:
-                if ( itemsExpandable() ) {
-                    if ( model()->hasChildren( current ) ) {
-                        QTreeView::keyPressEvent( event );
-                        //HACK: Bug in qt??
-                        selectionModel()->setCurrentIndex(current, QItemSelectionModel::NoUpdate);
-                    }
-                    event->accept();
-                    return;
-                }
-                break;
-        }
-    }
-    QTreeView::keyPressEvent(event);
-}
-
-QItemSelectionModel::SelectionFlags NodeTreeView::selectionCommand(const QModelIndex &index,
-        const QEvent *event) const
-{
-/*    if ( event && event->type() == QEvent::KeyPress && selectionMode() == QAbstractItemView::ExtendedSelection ) {
-        if ( static_cast<const QKeyEvent*>(event)->key() == Qt::Key_Space ) {
-            Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
-            QItemSelectionModel::SelectionFlags bflags = QItemSelectionModel::Rows;
-            // 
-            if ( modifiers && Qt::ShiftModifier ) {
-                return QItemSelectionModel::SelectCurrent|bflags;
-            }
-            // Toggle on Ctrl-Qt::Key_Space
-            if ( modifiers & Qt::ControlModifier ) {
-                return QItemSelectionModel::Toggle|bflags;
-            }
-            // Select on Space alone
-            return QItemSelectionModel::ClearAndSelect|bflags;
-        }
-    }*/
-    return QTreeView::selectionCommand( index, event );
-}
 
 void NodeTreeView::contextMenuEvent ( QContextMenuEvent * event )
 {

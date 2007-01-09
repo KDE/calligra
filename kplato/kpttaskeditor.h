@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2006 -2007 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -113,7 +113,7 @@ protected:
 
 };
 
-class NodeTreeView : public QTreeView
+class NodeTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
@@ -122,9 +122,6 @@ public:
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     NodeItemModel *itemModel() const { return static_cast<NodeItemModel*>( model() ); }
-    
-    void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
-    bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
     
     Project *project() const { return itemModel()->project(); }
     void setProject( Project *project ) { itemModel()->setProject( project ); }
@@ -142,12 +139,8 @@ protected slots:
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
     
 protected:
-    void keyPressEvent(QKeyEvent *event);
-    QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
     void contextMenuEvent( QContextMenuEvent * event );
-    
-private:
-    bool m_arrowKeyNavigation;
+
 };
 
 class TaskEditor : public ViewBase

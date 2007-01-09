@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 Dag Andersen <kplato@kde.org>
+  Copyright (C) 2006 - 2007 Dag Andersen <kplato@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -134,9 +134,6 @@ public:
 
     ResourceItemModel *itemModel() const { return static_cast<ResourceItemModel*>( model() ); }
 
-    void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
-    bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
-
     Project *project() const { return itemModel()->project(); }
     void setProject( Project *project ) { itemModel()->setProject( project ); }
 
@@ -157,11 +154,6 @@ protected slots:
 
 protected:
     void contextMenuEvent ( QContextMenuEvent * event );
-    void keyPressEvent(QKeyEvent *event);
-    QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
-    
-private:
-    bool m_arrowKeyNavigation;
 };
 
 class ResourceEditor : public ViewBase
