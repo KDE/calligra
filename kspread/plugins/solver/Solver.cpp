@@ -20,7 +20,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <ktextedit.h>
-
+#include <kactioncollection.h>
 #include <Formula.h>
 #include <Cell.h>
 #include <Doc.h>
