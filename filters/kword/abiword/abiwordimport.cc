@@ -152,7 +152,7 @@ bool StructureParser::StartElementC(StackItem* stackItem, StackItem* stackCurren
             StyleDataMap::Iterator it=styleDataMap.find(strStyleName);
             if (it!=styleDataMap.end())
             {
-                strStyleProps=it.data().m_props;
+                strStyleProps=it.value().m_props;
             }
         }
 
@@ -329,7 +329,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
     if (strLevel.isEmpty())
     {
         // We have not "level" attribute, so we must use the style's level.
-        level=it.data().m_level;
+        level=it.value().m_level;
     }
     else
     {
@@ -347,7 +347,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
     paragraphElementOut.appendChild(formatsPluralElementOut);
 
     AbiPropsMap abiPropsMap;
-    PopulateProperties(stackItem,it.data().m_props,attributes,abiPropsMap,false);
+    PopulateProperties(stackItem,it.value().m_props,attributes,abiPropsMap,false);
 
     stackItem->elementType=ElementTypeParagraph;
     stackItem->stackElementParagraph=paragraphElementOut; // <PARAGRAPH>
@@ -689,7 +689,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
         kDebug(30506) << "Decode and write base64 stream: " << stackItem->fontName << endl;
         // We need to decode the base64 stream
         // However KCodecs has no QString to QByteArray decoder!
-        QByteArray base64Stream=stackItem->strTemp2.utf8(); // Use utf8 to avoid corruption of data
+        QByteArray base64Stream=stackItem->strTemp2.toUtf8(); // Use utf8 to avoid corruption of data
         QByteArray binaryStream;
         KCodecs::base64Decode(base64Stream, binaryStream);
         out->write(binaryStream, binaryStream.count());
@@ -699,7 +699,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
         // Unknown text format!
         kDebug(30506) << "Write character stream: " << stackItem->fontName << endl;
         // We strip the white space in front to avoid white space before a XML declaration
-        QByteArray strOut=stackItem->strTemp2.trimmed().utf8();
+        QByteArray strOut=stackItem->strTemp2.trimmed().toUtf8();
         out->write(strOut,strOut.length());
     }
 
@@ -1581,10 +1581,10 @@ bool StructureParser::endDocument(void)
     it=styleDataMap.find("Normal");
     if (it!=styleDataMap.end())
     {
-        kDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
+        kDebug(30506) << "\"" << it.key() << "\" => " << it.value().m_props << endl;
         QDomElement styleElement=mainDocument.createElement("STYLE");
         stylesPluralElement.appendChild(styleElement);
-        AddStyle(styleElement, it.key(),it.data(),mainDocument);
+        AddStyle(styleElement, it.key(),it.value(),mainDocument);
     }
     else
         kWarning(30506) << "No 'Normal' style" << endl;
@@ -1594,12 +1594,12 @@ bool StructureParser::endDocument(void)
         if (it.key()=="Normal")
             continue;
 
-        kDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
+        kDebug(30506) << "\"" << it.key() << "\" => " << it.value().m_props << endl;
 
         QDomElement styleElement=mainDocument.createElement("STYLE");
         stylesPluralElement.appendChild(styleElement);
 
-        AddStyle(styleElement, it.key(),it.data(),mainDocument);
+        AddStyle(styleElement, it.key(),it.value(),mainDocument);
     }
     kDebug(30506) << "######  End Style List  ######" << endl;
 
@@ -1763,7 +1763,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     //Find the last extension
     QString strExt;
     QString fileIn = m_chain->inputFile();
-    const int result=fileIn.findRev('.');
+    const int result=fileIn.lastIndexOf('.');
     if (result>=0)
     {
         strExt=fileIn.mid(result);
