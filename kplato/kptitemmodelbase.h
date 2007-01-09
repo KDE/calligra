@@ -105,7 +105,8 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent *event);
-    
+    QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
+
 protected:
     bool m_arrowKeyNavigation;
 };

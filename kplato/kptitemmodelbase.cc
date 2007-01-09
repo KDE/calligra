@@ -267,6 +267,27 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
     QTreeView::keyPressEvent(event);
 }
 
+QItemSelectionModel::SelectionFlags TreeViewBase::selectionCommand(const QModelIndex &index, const QEvent *event) const
+{
+    /*    if ( event && event->type() == QEvent::KeyPress && selectionMode() == QAbstractItemView::ExtendedSelection ) {
+        if ( static_cast<const QKeyEvent*>(event)->key() == Qt::Key_Space ) {
+        Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
+        QItemSelectionModel::SelectionFlags bflags = QItemSelectionModel::Rows;
+        // 
+        if ( modifiers && Qt::ShiftModifier ) {
+        return QItemSelectionModel::SelectCurrent|bflags;
+    }
+    // Toggle on Ctrl-Qt::Key_Space
+        if ( modifiers & Qt::ControlModifier ) {
+        return QItemSelectionModel::Toggle|bflags;
+    }
+    // Select on Space alone
+        return QItemSelectionModel::ClearAndSelect|bflags;
+    }
+    }*/
+    return QTreeView::selectionCommand( index, event );
+}
+
 
 } //namespace KPlato
 

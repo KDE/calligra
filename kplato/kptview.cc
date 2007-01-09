@@ -69,6 +69,7 @@
 #include "kptview.h"
 #include "kptviewbase.h"
 #include "kptaccountsview.h"
+#include "kptaccountseditor.h"
 #include "kptfactory.h"
 #include "kptmilestoneprogressdialog.h"
 #include "kptnode.h"
@@ -486,16 +487,21 @@ View::View( Part* part, QWidget* parent )
     // to the right
     m_tab = new QStackedWidget( m_sp );
     
-    m_taskeditor = new TaskEditor( getPart(), m_tab );
-    m_tab->addWidget( m_taskeditor );
-    m_taskeditor->draw( getProject() );
-    connect( m_taskeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    m_accountseditor = new AccountsEditor( getPart(), m_tab );
+    m_tab->addWidget( m_accountseditor );
+    m_accountseditor->draw( getProject() );
+    connect( m_accountseditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     
     m_resourceeditor = new ResourceEditor( getPart(), m_tab );
     m_tab->addWidget( m_resourceeditor );
     m_resourceeditor->draw( getProject() );
     connect( m_resourceeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
+    m_taskeditor = new TaskEditor( getPart(), m_tab );
+    m_tab->addWidget( m_taskeditor );
+    m_taskeditor->draw( getProject() );
+    connect( m_taskeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    
     m_scheduleeditor = new ScheduleEditor( getPart(), m_tab );
     m_tab->addWidget( m_scheduleeditor );
     m_scheduleeditor->draw( getProject() );
@@ -536,8 +542,9 @@ View::View( Part* part, QWidget* parent )
 
     QTreeWidgetItem *cat;
     cat = m_viewlist->addCategory( i18n( "Editors" ) );
-    m_viewlist->addView( cat, i18n( "Tasks" ), m_taskeditor, getPart(), "task_editor" );
+    m_viewlist->addView( cat, i18n( "Accounts" ), m_accountseditor, getPart(), "accounts_editor" );
     m_viewlist->addView( cat, i18n( "Resources" ), m_resourceeditor, getPart(), "resource_editor" );
+    m_viewlist->addView( cat, i18n( "Tasks" ), m_taskeditor, getPart(), "task_editor" );
     m_viewlist->addView( cat, i18n( "Schedules" ), m_scheduleeditor, getPart(), "schedule_editor" );
 
     cat = m_viewlist->addCategory( i18n( "Views" ) );

@@ -55,6 +55,7 @@ class ViewListWidget;
 class AccountsView;
 class GanttView;
 class ResourceView;
+class AccountsEditor;
 class TaskEditor;
 class ResourceEditor;
 class ScheduleEditor;
@@ -283,6 +284,7 @@ private:
     GanttView *m_ganttview;
     ResourceView *m_resourceview;
     AccountsView *m_accountsview;
+    AccountsEditor *m_accountseditor;
     TaskEditor *m_taskeditor;
     ResourceEditor *m_resourceeditor;
     ScheduleEditor *m_scheduleeditor;

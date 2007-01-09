@@ -71,6 +71,9 @@ namespace ToolTip
     static QString ResourceOvertimeRate = i18n( "The cost pr hour, overtime hours." );
     static QString ResourceFixedCost = i18n( "The fixed cost." );
 
+    static QString AccountName = i18n( "The name of the account" );
+    static QString AccountDescription = i18n( "The description of the account" );
+
 } //namespace ToolTip
 
 

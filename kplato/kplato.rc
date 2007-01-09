@@ -18,6 +18,8 @@
             <Separator/>
             <ActionList name="scheduleeditor_edit_list"/>
             <Separator/>
+            <ActionList name="accountseditor_edit_list"/>
+            <Separator/>
             <Action name="link_mode"/>
         </Menu>
         <Menu name="view"><text>&amp;View</text>
@@ -81,6 +83,8 @@
         <Separator/>
         <ActionList name="resourceeditor_edit_list"/>
         <Separator/>
+        <ActionList name="accountseditor_edit_list"/>
+        <Separator/>
         <ActionList name="scheduleeditor_edit_list"/>
     </ToolBar>
     <Menu name="node_popup">
@@ -135,5 +139,13 @@
         <Action name="edit_cut"/>
         <Action name="edit_copy"/>
         <Action name="edit_paste"/> -->
+    </Menu>
+    <Menu name="accountseditor_popup">
+        <Action name="add_account"/>
+    </Menu>
+    <Menu name="accountseditor_account_popup">
+        <Action name="add_account"/>
+        <Action name="add_subaccount"/>
+        <Action name="delete_account"/>
     </Menu>
 </kpartgui>
