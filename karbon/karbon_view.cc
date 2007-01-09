@@ -33,6 +33,7 @@
 #include <QDropEvent>
 #include <QGridLayout>
 #include <QToolBar>
+#include <QTimer>
 
 #include <kaction.h>
 #include <kcolormimedata.h>
