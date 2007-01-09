@@ -22,6 +22,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
+#include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoID.h>
 
