@@ -98,15 +98,16 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     while( pdoc->isLocked() )
     {
-        QByteArray password;
-        int result = KPasswordDialog::getPassword(0, password, i18n("A password is required to read that pdf"));
-        if (result == KPasswordDialog::Accepted)
-        {
-            pdoc->unlock(password, password); //TODO: should probably ask for two passwords ? but that would be weird
-        } else {
+        KPasswordDialog dlg(0);
+	dlg.setPrompt( i18n("A password is required to read that pdf")  );
+	dlg.setWindowTitle( i18n("A password is required to read that pdf") );
+	if( dlg.exec() != QDialog::Accepted )
+	{
             kDebug(41008) << "Password canceled" << endl;
             return KoFilter::StorageCreationError;
-        }
+	}
+	else
+		pdoc->unlock(dlg.password().toLocal8Bit(), dlg.password().toLocal8Bit());
     }
 
     KDialog* kdb = new KDialog(0);
