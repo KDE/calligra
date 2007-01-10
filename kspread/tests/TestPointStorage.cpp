@@ -330,17 +330,17 @@ void PointStorageTest::testShiftUp()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
-    storage.removeShiftUp( QRect( 2, 2, 2, 2 ) );
+    storage.removeShiftUp( QRect( 2, 2, 2, 1 ) );
     storage.removeShiftUp( QRect( 5, 5, 1, 1 ) );
     // ( 1, 2,  ,  , 3)
-    // ( 4,  ,  ,  ,  )
+    // ( 4, 7, 8,  ,  )
     // (  ,  ,  ,  , 9)
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,  )
 
-    const QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 9 << 10 << 11 );
-    const QVector<int> rows( QVector<int>() << 0 << 3 << 4 << 5 << 6 );
-    const QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 5 << 4 << 1 );
+    const QVector<int> data( QVector<int>() << 1 << 2 << 3 << 4 << 7 << 8 << 9 << 10 << 11 );
+    const QVector<int> rows( QVector<int>() << 0 << 3 << 6 << 7 << 8 );
+    const QVector<int> cols( QVector<int>() << 1 << 2 << 5 << 1 << 2 << 3 << 5 << 4 << 1 );
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
