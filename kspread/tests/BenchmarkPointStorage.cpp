@@ -82,7 +82,9 @@ void PointStorageBenchmark::testLookupPerformance()
         10000, 100,    // typical data: more rows
         10000, 2000,   // and 20 times larger
         100, 10000,    // not really typical: more columns
-        8000, 8000     // hopelessly large
+        8000, 8000,    // hopelessly large
+        10, 32757,     // some complete columns; KS_colMax-10, because of max lookup range of width 10 below
+        32757, 10      // some complete rows; KS_rowMax-10, because of max lookup range of height 10 below
         };
 
     PointStorage<int> storage;
