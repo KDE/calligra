@@ -23,7 +23,15 @@
 
 //#include <QApplication>
 //#include <QFileInfo>
+#include <QToolBar>
+#include <QBoxLayout>
+#include <QTreeView>
+#include <QModelIndex>
+#include <QHeaderView>
+#include <QDockWidget>
 
+#include <klocale.h>
+#include <kicon.h>
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 #include <kactioncollection.h>
@@ -35,6 +43,66 @@
 #include <kross/core/manager.h>
 #include <kross/core/action.h>
 #include <kross/core/guiclient.h>
+#include <kross/core/model.h>
+
+/***********************************************************************
+ * KWScriptingDocker
+ */
+
+KWScriptingDocker::KWScriptingDocker(QWidget* parent, Kross::GUIClient* guiclient)
+    : QWidget(parent)
+    , m_guiclient(guiclient)
+{
+    QBoxLayout* layout = new QVBoxLayout(this);
+    layout->setMargin(0);
+    setLayout(layout);
+
+    m_view = new QTreeView(this);
+    m_view->setRootIsDecorated(false);
+    m_view->header()->hide();
+    m_model = new Kross::ActionCollectionProxyModel(this);
+    m_view->setModel(m_model);
+    layout->addWidget(m_view, 1);
+    m_view->expandAll();
+
+    QToolBar* tb = new QToolBar(this);
+    layout->addWidget(tb);
+    tb->setMovable(false);
+    //tb->setOrientation(Qt::Vertical);
+    //tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    tb->addAction(KIcon("player_play"), i18n("Run"), this, SLOT(runScript()) );
+    tb->addAction(KIcon("player_stop"), i18n("Stop"), this, SLOT(stopScript()) );
+
+    connect(m_view, SIGNAL(doubleClicked(const QModelIndex&)), SLOT(runScript()));
+}
+
+KWScriptingDocker::~KWScriptingDocker()
+{
+}
+
+void KWScriptingDocker::runScript()
+{
+    QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
+    if( index.isValid() ) {
+        Kross::Action* action = Kross::ActionCollectionModel::action(index);
+        if( action )
+            action->trigger();
+    }
+}
+
+void KWScriptingDocker::stopScript()
+{
+    QModelIndex index = m_model->mapToSource( m_view->currentIndex() );
+    if( index.isValid() ) {
+        Kross::Action* action = Kross::ActionCollectionModel::action(index);
+        if( action )
+            action->finalize();
+    }
+}
+
+/***********************************************************************
+ * KWScriptingPart
+ */
 
 typedef KGenericFactory< KWScriptingPart > KWordScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY( krossmodulekword, KWordScriptingFactory( "krossmodulekword" ) )
@@ -44,10 +112,8 @@ class KWScriptingPart::Private
 {
     public:
         KWView* view;
-
         Kross::GUIClient* guiclient;
         Scripting::Module* module;
-
         Private() : module(0) {}
         ~Private() { delete module; }
 };
@@ -69,6 +135,9 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     d->guiclient = new Kross::GUIClient(this, this);
     //d->guiclient ->setXMLFile(locate("data","kspreadplugins/scripting.rc"), true);
 
+    d->module = new Scripting::Module();
+    d->module->setView(d->view);
+
     // Setup the actions Kross provides and KSpread likes to have.
     KAction* execaction  = new KAction(i18n("Execute Script File..."), this);
     actionCollection()->addAction("executescriptfile", execaction);
@@ -83,6 +152,9 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
 
     connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(started(Kross::Action*)));
     connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
+
+    QDockWidget* dock = d->view->createDock(i18n("Scripts"), new KWScriptingDocker(d->view, d->guiclient));
+    dock->setVisible(false);
 }
 
 KWScriptingPart::~KWScriptingPart()
@@ -94,10 +166,6 @@ KWScriptingPart::~KWScriptingPart()
 void KWScriptingPart::started(Kross::Action*)
 {
     kDebug(32010) << "KWScriptingPart::started" << endl;
-    if( d->module )
-        delete d->module;
-    d->module = new Scripting::Module();
-    d->module->setView(d->view);
     Kross::Manager::self().addObject(d->module, "KWord");
 }
 
