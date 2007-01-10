@@ -29,8 +29,8 @@
 #include <QPainter>
 
 KFormulaCanvas::KFormulaCanvas( KFormulaPartView* view, KFormulaPartDocument* document, QWidget* parent )
-    : QWidget( parent ),
-      KoCanvasBase( document ),
+    : KoCanvasBase( document ),
+      QWidget( parent ),
       m_view( view )
 {
     m_toolProxy = KoToolManager::instance()->createToolProxy( this );
