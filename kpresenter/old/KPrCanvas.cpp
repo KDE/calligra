@@ -52,7 +52,7 @@
 #include <QPoint>
 #include <qclipboard.h>
 #include <QBuffer>
-#include <kmimemagic.h>
+#include <kmimetype.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kprinter.h>
@@ -4039,10 +4039,10 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                 filename = url.path();
             }
 
-            KMimeMagicResult *res = KMimeMagic::self()->findFileType( filename );
+            KMimeType::Ptr mime = KMimeType::findByPath( filename );
 
-            if ( res && res->isValid() ) {
-                QString mimetype = res->mimeType();
+            if ( mime && !mime->isDefault() ) {
+                QString mimetype = mime->name();
                 if ( mimetype.contains( "image" ) ) {
                     QCursor c = cursor();
                     setCursor( Qt::waitCursor );
