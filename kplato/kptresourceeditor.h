@@ -126,7 +126,7 @@ protected:
 
 };
 
-class ResourceTreeView : public QTreeView
+class ResourceTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:

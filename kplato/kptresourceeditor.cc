@@ -831,7 +831,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
 
 //--------------------
 ResourceTreeView::ResourceTreeView( Part *part, QWidget *parent )
-    : QTreeView( parent )
+    : TreeViewBase( parent )
 {
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setModel( new ResourceItemModel( part ) );
