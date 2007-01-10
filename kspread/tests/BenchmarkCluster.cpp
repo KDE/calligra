@@ -37,8 +37,7 @@ void ClusterBenchmark::testInsertionPerformance()
     int row = 1;
     int cols = 100;
     int rows = 10000;
-    int counter = 0;
-    const int iterations = 100000;
+    long counter = 0;
     start = Time::stamp();
     for ( int r = row; r <= rows; ++r )
     {
@@ -54,7 +53,7 @@ void ClusterBenchmark::testInsertionPerformance()
     qDebug() << "measuring random singular insertion...";
     storage.clear();
     counter = 0;
-    while ( counter < iterations )
+    while ( counter < Time::iterations )
     {
         col = 1 + rand() % 1000;
         row = 1 + rand() % 1000;
@@ -63,7 +62,7 @@ void ClusterBenchmark::testInsertionPerformance()
         start = Time::stamp();
         for ( int r = row; r <= rows; ++r )
         {
-            for ( int c = col; c <= cols && counter < iterations; c += 1 )
+            for ( int c = col; c <= cols && counter < Time::iterations; c += 1 )
             {
                 storage.insert( cell, c, r );
                 counter += 1;
@@ -78,6 +77,9 @@ void ClusterBenchmark::testLookupPerformance()
 {
     // row x column
     const int scenarios[] = {
+#if 1
+        1000, 1000    // large
+#else
         5, 5,          // very small
         30, 20,        // fit to screen
         100, 100,      // medium
@@ -86,6 +88,7 @@ void ClusterBenchmark::testLookupPerformance()
         10000, 2000,   // and 20 times larger
         100, 10000,    // not really typical: more columns
         8000, 8000     // hopelessly large
+#endif
         };
 
     Cluster storage;
@@ -97,6 +100,7 @@ void ClusterBenchmark::testLookupPerformance()
         int maxcol = scenarios[sc*2+1];
 
         storage.clear();
+#if 0
         for ( int r = 0; r < maxrow; ++r )
         {
             for ( int c = 0; c < maxcol; ++c )
@@ -104,6 +108,12 @@ void ClusterBenchmark::testLookupPerformance()
                 storage.insert( cell, c, r );
             }
         }
+#else
+        storage.insert(cell, 1,1);
+        storage.insert(cell, maxcol/2, maxrow/2);
+        storage.insert(cell, maxcol/3, maxrow/3);
+        storage.insert(cell, maxcol, maxrow);
+#endif
     //     qDebug() << endl << qPrintable( storage.dump() );
         QString prefix = QString("%1 x %2").arg(maxrow).arg(maxcol);
         qDebug() << "start measuring..." << prefix;
@@ -115,18 +125,17 @@ void ClusterBenchmark::testLookupPerformance()
         int row = 0;
         int cols = 0;
         int rows = 0;
-        int counter = 0;
-        const int iterations = 100000;
-        while ( counter < iterations )
+        long counter = 0;
+        while ( counter < Time::iterations )
         {
             col = 1 + rand() % maxcol;
             row = 1 + rand() % maxrow;
             cols = col + 1 * ( rand() % 10 );
             rows = row + rand() % 10;
             start = Time::stamp();
-            for ( int r = row; r <= rows && counter < iterations; ++r )
+            for ( int r = row; r <= rows && counter < Time::iterations; ++r )
             {
-                for ( int c = col; c <= cols && counter < iterations; c += 1 )
+                for ( int c = col; c <= cols && counter < Time::iterations; c += 1 )
                 {
                     v = storage.lookup( c, r );
                     counter += 1;

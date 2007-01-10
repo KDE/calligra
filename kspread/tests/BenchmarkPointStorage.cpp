@@ -34,8 +34,7 @@ void PointStorageBenchmark::testInsertionPerformance()
     int row = 1;
     int cols = 100;
     int rows = 10000;
-    int counter = 0;
-    const int iterations = 100000;
+    long counter = 0;
     start = Time::stamp();
     for ( int r = row; r <= rows; ++r )
     {
@@ -51,7 +50,7 @@ void PointStorageBenchmark::testInsertionPerformance()
     qDebug() << "measuring random singular insertion...";
     storage.clear();
     counter = 0;
-    while ( counter < iterations )
+    while ( counter < Time::iterations )
     {
         col = 1 + rand() % 1000;
         row = 1 + rand() % 1000;
@@ -60,7 +59,7 @@ void PointStorageBenchmark::testInsertionPerformance()
         start = Time::stamp();
         for ( int r = row; r <= rows; ++r )
         {
-            for ( int c = col; c <= cols && counter < iterations; c += 1 )
+            for ( int c = col; c <= cols && counter < Time::iterations; c += 1 )
             {
                 storage.insert( c, r, c );
                 counter += 1;
@@ -115,18 +114,17 @@ void PointStorageBenchmark::testLookupPerformance()
         int row = 0;
         int cols = 0;
         int rows = 0;
-        int counter = 0;
-        const int iterations = 100000;
-        while ( counter < iterations )
+        long counter = 0;
+        while ( counter < Time::iterations )
         {
             col = 1 + rand() % maxcol;
             row = 1 + rand() % maxrow;
             cols = col + 1 * ( rand() % 10 );
             rows = row + rand() % 10;
             start = Time::stamp();
-            for ( int r = row; r <= rows && counter < iterations; ++r )
+            for ( int r = row; r <= rows && counter < Time::iterations; ++r )
             {
-                for ( int c = col; c <= cols && counter < iterations; c += 1 )
+                for ( int c = col; c <= cols && counter < Time::iterations; c += 1 )
                 {
                     v = storage.lookup( c, r );
                     counter += 1;
