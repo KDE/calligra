@@ -888,6 +888,29 @@ QObject *ResourceTreeView::currentObject() const
     return itemModel()->object( currentIndex() );
 }
 
+QList<QObject*> ResourceTreeView::selectedObjects() const
+{
+    QList<QObject*> lst;
+    foreach( QModelIndex i, selectionModel()->selectedRows() ) {
+        QObject *o = itemModel()->object( i );
+        if ( o ) {
+            lst << o;
+        }
+    }
+    return lst;
+}
+
+QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
+{
+    kDebug()<<k_funcinfo<<endl;
+    m_part->addCommand( new AddResourceGroupCmd( m_part, m_project, g, i18n( "Add resource group" ) ) );
+    int row = m_project->resourceGroups().indexOf( g );
+    if ( row != -1 ) {
+        return createIndex( row, 0, g );
+    }
+    return QModelIndex();
+    kDebug()<<k_funcinfo<<endl;
+}
 
 //-----------------------------------
 ResourceEditor::ResourceEditor( Part *part, QWidget *parent )
@@ -897,20 +920,20 @@ ResourceEditor::ResourceEditor( Part *part, QWidget *parent )
     
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_editor = new ResourceTreeView( part, this );
-    l->addWidget( m_editor );
-    m_editor->setEditTriggers( m_editor->editTriggers() | QAbstractItemView::EditKeyPressed );
+    m_view = new ResourceTreeView( part, this );
+    l->addWidget( m_view );
+    m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( m_editor, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
+    connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
 
-    connect( m_editor, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
+    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
     
-    connect( m_editor, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
 }
 
 void ResourceEditor::draw( Project &project )
 {
-    m_editor->setProject( &project );
+    m_view->setProject( &project );
 }
 
 void ResourceEditor::draw()
@@ -922,8 +945,8 @@ void ResourceEditor::setGuiActive( bool activate )
     kDebug()<<k_funcinfo<<activate<<endl;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
-    if ( activate && !m_editor->currentIndex().isValid() ) {
-        m_editor->selectionModel()->setCurrentIndex(m_editor->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
+    if ( activate && !m_view->currentIndex().isValid() ) {
+        m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
     }
 }
 
@@ -932,7 +955,7 @@ void ResourceEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
     kDebug()<<k_funcinfo<<index.row()<<", "<<index.column()<<": "<<pos<<endl;
     QString name;
     if ( index.isValid() ) {
-        QObject *obj = m_editor->itemModel()->object( index );
+        QObject *obj = m_view->itemModel()->object( index );
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
             name = "resourceeditor_group_popup";
@@ -949,12 +972,12 @@ void ResourceEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
 
 Resource *ResourceEditor::currentResource() const
 {
-    return qobject_cast<Resource*>( m_editor->currentObject() );
+    return qobject_cast<Resource*>( m_view->currentObject() );
 }
 
 ResourceGroup *ResourceEditor::currentResourceGroup() const
 {
-    return qobject_cast<ResourceGroup*>( m_editor->currentObject() );
+    return qobject_cast<ResourceGroup*>( m_view->currentObject() );
 }
 
 void ResourceEditor::slotCurrentChanged(  const QModelIndex &curr )
@@ -968,12 +991,12 @@ void ResourceEditor::slotSelectionChanged( const QModelIndexList list)
     kDebug()<<k_funcinfo<<list.count()<<endl;
     bool res = false, grp = false;
     foreach ( QModelIndex i, list ) {
-        Resource *r = qobject_cast<Resource*>( m_editor->itemModel()->object( i ) );
+        Resource *r = qobject_cast<Resource*>( m_view->itemModel()->object( i ) );
         if ( r ) {
             res = true;
             continue;
         }
-        ResourceGroup *g = qobject_cast<ResourceGroup*>( m_editor->itemModel()->object( i ) );
+        ResourceGroup *g = qobject_cast<ResourceGroup*>( m_view->itemModel()->object( i ) );
         if ( r ) {
             grp = true;
         }
@@ -988,7 +1011,7 @@ void ResourceEditor::slotEnableActions( bool resource, bool group )
 
 void ResourceEditor::updateActionsEnabled(  bool resource, bool group )
 {
-    Project *p = m_editor->project();
+    Project *p = m_view->project();
 
     actionAddResource->setEnabled( resource );
     actionAddGroup->setEnabled( resource );
@@ -1003,16 +1026,19 @@ void ResourceEditor::setupGui()
     QString name = "resourceeditor_edit_list";
     actionAddResource  = new KAction(KIcon( "filenew" ), i18n("Add Resource..."), this);
     actionCollection()->addAction("add_resource", actionAddResource );
+    actionAddResource->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionAddResource, SIGNAL( triggered( bool ) ), SLOT( slotAddResource() ) );
     addAction( name, actionAddResource );
     
     actionAddGroup  = new KAction(KIcon( "filenew" ), i18n("Add Resource Group..."), this);
     actionCollection()->addAction("add_group", actionAddGroup );
+    actionAddGroup->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddGroup, SIGNAL( triggered( bool ) ), SLOT( slotAddGroup() ) );
     addAction( name, actionAddGroup );
     
     actionDeleteSelection  = new KAction(KIcon( "editdelete" ), i18n("Delete Selected Items"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
+    actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
     addAction( name, actionDeleteSelection );
     
@@ -1038,13 +1064,21 @@ void ResourceEditor::slotAddResource()
 void ResourceEditor::slotAddGroup()
 {
     kDebug()<<k_funcinfo<<endl;
-    /*    emit addResourceGroup();*/
+    ResourceGroup *g = new ResourceGroup();
+    QModelIndex i = m_view->itemModel()->insertGroup( g );
+    if ( i.isValid() ) {
+        m_view->setCurrentIndex( i );
+        m_view->edit( i );
+    }
 }
 
 void ResourceEditor::slotDeleteSelection()
 {
-    kDebug()<<k_funcinfo<<endl;
-    /*    emit deleteTaskList( selectedResources() );*/
+    QObjectList lst = m_view->selectedObjects();
+    kDebug()<<k_funcinfo<<lst.count()<<" objects"<<endl;
+    if ( ! lst.isEmpty() ) {
+        emit deleteObjectList( lst );
+    }
 }
 
 

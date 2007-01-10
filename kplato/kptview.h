@@ -251,6 +251,10 @@ protected slots:
 
     void slotConnectNode();
 
+    void slotDeleteResource( Resource *resource );
+    void slotDeleteResourceGroup( ResourceGroup *group );
+    void slotDeleteResourceObjects( QObjectList );
+
     void slotCurrentChanged( int );
 
 #ifndef NDEBUG

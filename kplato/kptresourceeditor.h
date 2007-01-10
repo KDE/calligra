@@ -79,7 +79,8 @@ public:
 
 
     QObject *object( const QModelIndex &index ) const;
-        
+    QModelIndex insertGroup( ResourceGroup *g );
+    
 protected slots:
     void slotResourceChanged( Resource* );
     void slotResourceGroupChanged( ResourceGroup * );
@@ -138,6 +139,8 @@ public:
     void setProject( Project *project ) { itemModel()->setProject( project ); }
 
     QObject *currentObject() const;
+    QList<QObject*> selectedObjects() const;
+    QModelIndex insertGroup( ResourceGroup *g );
     
 signals:
     void currentChanged( const QModelIndex& );
@@ -173,7 +176,8 @@ public:
     
 signals:
     void requestPopupMenu( const QString&, const QPoint& );
-    void addResource( ResourceGroup *group );
+    void addResource( ResourceGroup* );
+    void deleteObjectList( QObjectList );
     
 public slots:
     /// Activate/deactivate the gui
@@ -194,7 +198,7 @@ private slots:
     void slotDeleteSelection();
 
 private:
-    ResourceTreeView *m_editor;
+    ResourceTreeView *m_view;
 
     KAction *actionAddResource;
     KAction *actionAddGroup;

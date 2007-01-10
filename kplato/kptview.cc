@@ -533,6 +533,7 @@ View::View( Part* part, QWidget* parent )
     connect( m_taskeditor, SIGNAL( unindentTask() ), SLOT( slotUnindentTask() ) );
 
     connect( m_resourceeditor, SIGNAL( addResource( ResourceGroup* ) ), SLOT( slotAddResource( ResourceGroup* ) ) );
+    connect( m_resourceeditor, SIGNAL( deleteObjectList( QObjectList ) ), SLOT( slotDeleteResourceObjects( QObjectList ) ) );
 
     connect( m_scheduleeditor, SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
     connect( m_scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
@@ -1617,6 +1618,58 @@ void View::slotEditResource()
     }
     delete dia;
 }
+
+void View::slotDeleteResource( Resource *resource )
+{
+    getPart()->addCommand( new RemoveResourceCmd( getPart(), resource->parentGroup(), resource, i18n( "Delete Resource" ) ) );
+}
+
+void View::slotDeleteResourceGroup( ResourceGroup *group )
+{
+    getPart()->addCommand( new RemoveResourceGroupCmd( getPart(), group->project(), group, i18n( "Delete Resourcegroup" ) ) );
+}
+
+void View::slotDeleteResourceObjects( QObjectList lst )
+{
+    kDebug()<<k_funcinfo<<endl;
+    if ( lst.count() == 1 ) {
+        Resource *r = qobject_cast<Resource*>( lst.first() );
+        if ( r ) {
+            slotDeleteResource( r );
+        } else {
+            ResourceGroup *g = qobject_cast<ResourceGroup*>( lst.first() );
+            if ( g ) {
+                slotDeleteResourceGroup( g );
+            }
+        }
+        return;
+    }
+    int num = 0;
+    KMacroCommand *cmd = 0, *rc = 0, *gc = 0;
+    foreach ( QObject *o, lst ) {
+        Resource *r = qobject_cast<Resource*>( o );
+        if ( r ) {
+            if ( rc == 0 )  rc = new KMacroCommand( "" );
+            rc->addCommand( new RemoveResourceCmd( getPart(), r->parentGroup(), r ) );
+            continue;
+        }
+        ResourceGroup *g = qobject_cast<ResourceGroup*>( o );
+        if ( g ) {
+            if ( gc == 0 )  gc = new KMacroCommand( "" );
+            gc->addCommand( new RemoveResourceGroupCmd( getPart(), g->project(), g ) );
+        }
+    }
+    if ( rc || gc ) {
+        cmd = new KMacroCommand( i18n( "Delete Resource Objects" ) );
+    }
+    if ( rc ) 
+        cmd->addCommand( rc );
+    if ( gc ) 
+        cmd->addCommand( gc );
+    if ( cmd )
+        getPart()->addCommand( cmd );
+}
+
 
 void View::updateReadWrite( bool /*readwrite*/ )
 {}
