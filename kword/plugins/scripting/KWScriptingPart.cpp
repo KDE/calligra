@@ -154,7 +154,8 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList&)
     connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(finished(Kross::Action*)));
 
     QDockWidget* dock = d->view->createDock(i18n("Scripts"), new KWScriptingDocker(d->view, d->guiclient));
-    dock->setVisible(false);
+    Q_UNUSED(dock);
+    //dock->setVisible(false);
 }
 
 KWScriptingPart::~KWScriptingPart()
