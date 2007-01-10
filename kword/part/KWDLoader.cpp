@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -530,8 +530,11 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
     for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
     {
         if ( paragraph.tagName() == "PARAGRAPH" ) {
-            if(! firstParag)
-                cursor.insertText("\n");
+            if(! firstParag) {
+                QTextBlockFormat emptyTbf;
+                QTextCharFormat emptyCf;
+                cursor.insertBlock(emptyTbf, emptyCf);
+            }
             firstParag = false;
             QDomElement layout = paragraph.firstChildElement("LAYOUT");
             if(!layout.isNull()) {
@@ -541,8 +544,37 @@ void KWDLoader::fill(KWTextFrameSet *fs, QDomElement framesetElem) {
                     style = m_document->styleManager()->defaultParagraphStyle();
                 KoParagraphStyle paragStyle(*style); // tmp style.
                 fill(&paragStyle, layout);
+
                 QTextBlock block = cursor.block();
                 paragStyle.applyStyle(block);
+                if(style->listStyle() == 0 && paragStyle.listStyle()) {
+                    Q_ASSERT(block.textList());
+                    // this parag has a parag specific list.  Lets see if we can merge it with
+                    // previous ones.
+                    const int level = paragStyle.listStyle()->level();
+                    const QTextFormat format = block.textList()->format();
+                    QTextBlock prev = block.previous();
+                    bool merge = false;
+                    for(; prev.isValid(); prev = prev.previous()) {
+                        if(! prev.textList())
+                            continue;
+                        QTextFormat prevFormat = prev.textList()->format();
+                        if(prevFormat.intProperty(KoListStyle::Level) == level) {
+                            if(format == prevFormat)
+                                merge = true;
+                            break;
+                        }
+                        else if(prevFormat.intProperty(KoListStyle::Level) < level)
+                            break;
+                    }
+                    if(merge) {
+                        Q_ASSERT(block.textList()->count() == 1);
+                        block.textList()->remove(block);
+                        Q_ASSERT(block.textList() == 0);
+                        Q_ASSERT(prev.textList());
+                        prev.textList()->add(block);
+                    }
+                }
             }
             cursor.insertText( paragraph.firstChildElement("TEXT").text() );
 
@@ -678,16 +710,19 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
            case 3: lstyle->setStyle(KoListStyle::UpperAlphaItem); break;
            case 4: lstyle->setStyle(KoListStyle::RomanLowerItem); break;
            case 5: lstyle->setStyle(KoListStyle::UpperRomanItem); break;
-           case 6: lstyle->setStyle(KoListStyle::CustomCharItem);
-                // TODO
+           case 6: {
+                lstyle->setStyle(KoListStyle::CustomCharItem);
+                QChar character( element.attribute("bullet", QString::number('*')).toInt() );
+                lstyle->setBulletCharacter(character);
                 break;
-           case 7: lstyle->setStyle(KoListStyle::CustomCharItem);
-                // TODO
-                break;
+            }
            case 8: lstyle->setStyle(KoListStyle::CircleItem); break;
            case 9: lstyle->setStyle(KoListStyle::SquareItem); break;
            case 10: lstyle->setStyle(KoListStyle::DiscItem); break;
            case 11: lstyle->setStyle(KoListStyle::BoxItem); break;
+           case 7: lstyle->setStyle(KoListStyle::CustomCharItem);
+                kWarning() << "According to spec COUNTER with type 7 is not supported, ignoring\n";
+                // fall through
            default: {
                 delete lstyle;
                 lstyle = 0;
