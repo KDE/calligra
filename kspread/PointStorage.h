@@ -397,24 +397,37 @@ public:
         if ( rect.top() - 1 > m_rows.count() )
             return QVector< QPair<QPoint,T> >();
         QVector< QPair<QPoint,T> > oldData;
-        for ( int row = rect.top(); row <= m_rows.count() && row <= rect.bottom(); ++row )
+        for ( int row = rect.top(); row <= m_rows.count() && row <= KS_rowMax - rect.height(); ++row )
         {
             const int rowStart = m_rows.value( row - 1 );
             const int rowLength = ( row < m_rows.count() ) ? m_rows.value( row ) - rowStart : -1;
             const QVector<int> cols = m_cols.mid( rowStart, rowLength );
             const QVector<int> data = m_data.mid( rowStart, rowLength );
-            for ( int col = 0; col < cols.count(); ++col )
+            for ( int col = cols.count() - 1; col >= 0; --col )
             {
-                if ( cols.value( col ) >= rect.left() )
+                if ( cols.value( col ) >= rect.left() && cols.value( col ) <= rect.right() )
                 {
-                    if ( cols.value( col ) <= rect.right() )
-                    {
+                    // save the old data
+                    if ( row <= rect.bottom() )
                         oldData.append( qMakePair( QPoint( cols.value( col ), row ), data.value( col ) ) );
+                    // search
+                    const QVector<int>::const_iterator cstart2( ( row + rect.height() - 1 < m_rows.count() ) ? m_cols.begin() + m_rows.value( row + rect.height() - 1 ) : m_cols.end() );
+                    const QVector<int>::const_iterator cend2( ( ( row + rect.height() < m_rows.count() ) ) ? ( m_cols.begin() + m_rows.value( row + rect.height() ) ) : m_cols.end() );
+                    const QVector<int>::const_iterator cit2 = qBinaryFind( cstart2, cend2, cols.value( col ) );
+                    // column's missing?
+                    if ( cit2 == cend2 )
+                    {
                         m_cols.remove( rowStart + col );
                         m_data.remove( rowStart + col );
                         // adjust the offsets of the following rows
                         for ( int r = row; r < m_rows.count(); ++r )
                             --m_rows[r];
+                    }
+                    // column exists
+                    else
+                    {
+                        // copy
+                        m_data[rowStart + col] = m_data.value( cit2 - m_cols.begin() );
                     }
                 }
             }
