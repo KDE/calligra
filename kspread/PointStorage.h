@@ -545,7 +545,7 @@ public:
             const int rowStart = m_rows.value( row );
             const int rowLength = ( row + 1 < m_rows.count() ) ? m_rows.value( row + 1 ) - rowStart : -1;
             const QVector<int> cols = m_cols.mid( rowStart, rowLength );
-            const QVector<int> data = m_data.mid( rowStart, rowLength );
+            const QVector<T> data = m_data.mid( rowStart, rowLength );
             int lastCol = 0;
             for ( int col = 0; col < cols.count(); ++col )
             {

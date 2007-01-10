@@ -249,6 +249,9 @@ void TestValue::testArray()
   // assignment of array value
   v1 = new Value( Value::Array );
   QCOMPARE( v1->type(), Value::Array );
+  v1->setElement( 1, 1, Value( 44.3) );
+  v1->setElement( 0, 1, Value( 34.3) );
+  v1->setElement( 1, 0, Value( 24.3) );
   v1->setElement( 0, 0, Value( 14.3) );
   v2 = new Value( *v1 ); // v2 is now also an array
   delete v1;
