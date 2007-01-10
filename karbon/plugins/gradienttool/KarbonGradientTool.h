@@ -85,7 +85,7 @@ private:
         QRectF boundingRect();
     protected:
         /// paints a handle at the given position
-        void paintHandle( QPainter &painter, const QPointF &position );
+        void paintHandle( QPainter &painter, KoViewConverter &converter, const QPointF &position );
         /// checks if given mouse position is inside the handle rect at the specified position
         bool mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos );
         /// creates an updated background brush from the actual data
@@ -95,6 +95,7 @@ private:
         QBrush m_oldBackground;   ///< the old background brush
         QBrush m_newBackground;   ///< the new background brush
         QList<QPointF> m_handles; ///< the list of handles
+        QMatrix m_matrix;         ///< matrix to map handle into document coordinate system
     private:
         static int m_handleRadius; ///< the handle radius for all gradient strategies
         bool m_editing; /// the edit mode flag
