@@ -20,6 +20,7 @@
 
 #include <kdebug.h>
 #include <KIcon>
+#include <KActionCollection>
 
 #include "libactionwidget.h"
 #include "widgetfactory.h"
@@ -28,11 +29,10 @@
 using namespace KFormDesigner;
 
 LibActionWidget::LibActionWidget(WidgetInfo *w, KActionCollection *c)
- : KToggleAction(KIcon(w->name()), w->pixmap(),
- // 0/*Qt::Key_F5*/, 0, 0 /*SLOT(slotWidget())*/, 
-	c, QString("library_widget_" + w->className()),
-	FormManager::self()->widgetActionGroup())
+ : KToggleAction(KIcon(w->pixmap()), w->name(), c)
 {
+	setObjectName( QString("library_widget_" + w->className()) );
+	FormManager::self()->widgetActionGroup()->addAction( this );
 //	kDebug() << "LibActionWidget::LibActionWidget(): " << QString("library_widget_" + w->className()).latin1() << endl;
 	m_className = w->className();
 //kde4 not needed	setExclusiveGroup("LibActionWidgets");

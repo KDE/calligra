@@ -26,6 +26,8 @@
 
 #include <kexi_export.h>
 
+class KActionCollection;
+
 namespace KFormDesigner
 {
 

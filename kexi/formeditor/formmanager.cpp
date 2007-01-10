@@ -208,55 +208,67 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection* collection, KX
 {
 	m_collection = collection;
 
-	ActionList actions = lib->createWidgetActions(client, m_collection, this, SLOT(insertWidget(const Q3CString &)));
+	ActionList actions = lib->createWidgetActions(client, m_collection, 
+		this, SLOT(insertWidget(const Q3CString &)));
 
 	if (m_options & HideSignalSlotConnections)
 		m_dragConnection = 0;
 	else {
-		m_dragConnection = new KToggleAction(i18n("Connect Signals/Slots"),
-			"signalslot", KShortcut(0), this, SLOT(startCreatingConnection()), m_collection,
-			"drag_connection");
+		m_dragConnection = new KToggleAction(
+			KIcon("signalslot"), i18n("Connect Signals/Slots"), m_collection);
+		m_dragConnection->setObjectName("drag_connection");
+		m_widgetActionGroup->addAction( m_dragConnection );
+		connect(m_dragConnection, SIGNAL(triggered()),
+			this, SLOT(startCreatingConnection()));
 		//to be exclusive with any 'widget' action
 //kde4 not needed			m_dragConnection->setExclusiveGroup("LibActionWidgets");
 		m_dragConnection->setChecked(false);
 		actions.append(m_dragConnection);
 	}
 
-	m_pointer = new KToggleAction(i18n("Pointer"), "mouse_pointer", KShortcut(0), 
-		this, SLOT(slotPointerClicked()), m_collection, "pointer");
+	m_pointer = new KToggleAction(
+		KIcon("mouse_pointer"), i18n("Pointer"), m_collection);
+	m_pointer->setObjectName("pointer");
+	m_widgetActionGroup->addAction( m_pointer );
+	connect(m_pointer, SIGNAL(triggered()),
+		this, SLOT(slotPointerClicked()));
 //kde4 not needed	m_pointer->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
 	m_pointer->setChecked(true);
 	actions.append(m_pointer);
 
-	m_snapToGrid = new KToggleAction(i18n("Snap to Grid"), QString::null, KShortcut(0), 
-		0, 0, m_collection, "snap_to_grid");
+	m_snapToGrid = new KToggleAction(
+		i18n("Snap to Grid"), m_collection);
+	m_snapToGrid->setObjectName("snap_to_grid");
+	m_widgetActionGroup->addAction( m_snapToGrid );
 	m_snapToGrid->setChecked(true);
 	actions.append(m_snapToGrid);
 
 	// Create the Style selection action (with a combo box in toolbar and submenu items)
- 	KSelectAction *m_style = new KSelectAction( i18n("Style"), KShortcut(0), 
-		this, SLOT(slotStyle()), m_collection, "change_style");
-	m_style->setEditable(false);
+	KSelectAction *styleAction = new KSelectAction(
+			i18n("Style"), m_collection);
+	styleAction->setObjectName("change_style");
+	connect(styleAction, SIGNAL(triggered()),
+		this, SLOT(slotStyle()));
+	styleAction->setEditable(false);
 
 	KGlobal::config()->setGroup("General");
 	QString currentStyle( QString::fromLatin1(kapp->style()->name()).lower() );
 	const QStringList styles = QStyleFactory::keys();
-	m_style->setItems(styles);
-	m_style->setCurrentItem(0);
+	styleAction->setItems(styles);
+	styleAction->setCurrentItem(0);
 
 	QStringList::ConstIterator endIt = styles.constEnd();
 	int idx = 0;
 	for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx)
 	{
 		if ((*it).lower() == currentStyle) {
-			m_style->setCurrentItem(idx);
+			styleAction->setCurrentItem(idx);
 			break;
 		}
 	}
-
-	m_style->setToolTip(i18n("Set the current view style."));
-	m_style->setMenuAccelsEnabled(true);
-	actions.append(m_style);
+	styleAction->setToolTip(i18n("Set the current view style."));
+	styleAction->setMenuAccelsEnabled(true);
+	actions.append(styleAction);
 
 	lib->addCustomWidgetActions(m_collection);
 
@@ -1213,10 +1225,10 @@ FormManager::slotStyle()
 	if(!activeForm())
 		return;
 
-	KSelectAction *m_style = qobject_cast<KSelectAction*>(
+	KSelectAction *styleAction = qobject_cast<KSelectAction*>(
 		m_collection->action("change_style"));
-	QString style = m_style->currentText();
-	activeForm()->widget()->setStyle( style);
+	QString style = styleAction->currentText();
+	activeForm()->widget()->setStyle(style);
 
 	QObjectList l( activeForm()->widget()->queryList( "QWidget" ) );
 	foreach (QObject *o, l)
