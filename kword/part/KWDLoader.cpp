@@ -736,6 +736,11 @@ void KWDLoader::fill(KoParagraphStyle *style, QDomElement layout) {
             lstyle->setListItemSuffix( element.attribute("righttext"));
             lstyle->setDisplayLevel( element.attribute("display-levels").toInt());
             lstyle->setDisplayLevel( element.attribute("display-levels").toInt());
+            switch(element.attribute("align", "0").toInt()) {
+                case 0: lstyle->setAlignment(Qt::AlignLeading); break; // align = auto
+                case 1: lstyle->setAlignment(Qt::AlignAbsolute | Qt::AlignLeft); break; // align = left
+                case 2: lstyle->setAlignment(Qt::AlignAbsolute | Qt::AlignRight); break; // align = right
+            }
             if(element.attribute("restart", "false") == "true")
                 style->setRestartListNumbering(true);
             style->setListStyle(*lstyle);
