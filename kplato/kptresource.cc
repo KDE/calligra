@@ -109,10 +109,11 @@ void ResourceGroup::setProject( Project *project )
     }
 }
 
-void ResourceGroup::addResource(Resource* resource, Risk*) {
+void ResourceGroup::addResource(int index, Resource* resource, Risk*) {
+    int i = index == -1 ? m_resources.count() : index;
     resource->setParent( this );
     resource->setProject( m_project );
-    m_resources.append( resource );
+    m_resources.insert(i, resource );
 }
 
 Resource *ResourceGroup::takeResource(Resource *resource) {
@@ -158,7 +159,7 @@ bool ResourceGroup::load(QDomElement &element, XMLLoaderObject &status ) {
                // Load the resource
                 Resource *child = new Resource();
                 if (child->load(e, status)) {
-                    addResource(child, 0);
+                    addResource( -1, child, 0);
                 } else {
                     // TODO: Complain about this
                     delete child;

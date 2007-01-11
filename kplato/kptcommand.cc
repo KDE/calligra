@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-  Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation;
-  version 2 of the License.
+  License as published by the Free Software Foundation; either
+  version 2 of the License, or (at your option) any later version.
   
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -1185,7 +1185,7 @@ AddResourceCmd::AddResourceCmd( Part *part, ResourceGroup *group, Resource *reso
         m_group( group ),
         m_resource( resource )
 {
-
+    m_index = group->indexOf( resource );
     m_mine = true;
 }
 AddResourceCmd::~AddResourceCmd()
@@ -1198,7 +1198,7 @@ AddResourceCmd::~AddResourceCmd()
 void AddResourceCmd::execute()
 {
     if ( m_group->project() ) {
-        m_group->project()->addResource( m_group, m_resource );
+        m_group->project()->addResource( m_group, m_resource, m_index );
         m_mine = false;
         //kDebug()<<k_funcinfo<<"added: "<<m_resource<<endl;
     }
@@ -1505,7 +1505,7 @@ RemoveResourceGroupCmd::RemoveResourceGroupCmd( Part *part, Project *project, Re
         m_project( project ),
         m_cmd( 0 )
 {
-
+    m_index = project->indexOf( group );
     m_mine = false;
     if ( !m_group->requests().isEmpty() ) {
         m_cmd = new KMacroCommand("");
@@ -1538,7 +1538,7 @@ void RemoveResourceGroupCmd::unexecute()
 {
     int c = 0;
     if ( m_project )
-        m_project->addResourceGroup( m_group );
+        m_project->addResourceGroup( m_group, m_index );
 
     m_mine = false;
     // add all requests
@@ -1552,7 +1552,6 @@ void RemoveResourceGroupCmd::unexecute()
 AddResourceGroupCmd::AddResourceGroupCmd( Part *part, Project *project, ResourceGroup *group, const QString& name )
         : RemoveResourceGroupCmd( part, project, group, name )
 {
-
     m_mine = true;
 }
 void AddResourceGroupCmd::execute()

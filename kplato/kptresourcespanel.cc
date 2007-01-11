@@ -175,7 +175,7 @@ public:
         while (!m_resourceItems.isEmpty()) {
             ResourcesPanelResourceItem *item = m_resourceItems.takeFirst();
             //kDebug()<<k_funcinfo<<item->m_resource->name()<<endl;
-            m_group->addResource(item->takeResource(), 0);
+            m_group->addResource(-1, item->takeResource(), 0);
             delete item;
         }
     }

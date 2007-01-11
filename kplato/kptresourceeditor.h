@@ -59,6 +59,8 @@ public:
     virtual QModelIndex parent( const QModelIndex & index ) const;
     virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+    QModelIndex index( const ResourceGroup *group ) const;
+    QModelIndex index( const Resource *resource ) const;
 
     virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
@@ -84,6 +86,14 @@ public:
 protected slots:
     void slotResourceChanged( Resource* );
     void slotResourceGroupChanged( ResourceGroup * );
+    void slotResourceGroupToBeInserted( const ResourceGroup *group, int row );
+    void slotResourceGroupInserted( const ResourceGroup *group );
+    void slotResourceGroupToBeRemoved( const ResourceGroup *group );
+    void slotResourceGroupRemoved( const ResourceGroup *group );
+    void slotResourceToBeInserted( const Resource *resource, int row );
+    void slotResourceInserted( const Resource *resource );
+    void slotResourceToBeRemoved( const Resource *resource );
+    void slotResourceRemoved( const Resource *resource );
 
 protected:
     QVariant notUsed( const ResourceGroup *res, int role ) const;
@@ -125,6 +135,10 @@ protected:
     QVariant fixedCost( const Resource *res, int role ) const;
     bool setFixedCost( Resource *res, const QVariant &value, int role );
 
+private:
+    // Used for sanity checks
+    Resource *m_resource;
+    ResourceGroup *m_group;
 };
 
 class ResourceTreeView : public TreeViewBase

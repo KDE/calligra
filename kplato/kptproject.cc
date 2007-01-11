@@ -593,10 +593,11 @@ void Project::setParentSchedule( Schedule *sch )
     }
 }
 
-void Project::addResourceGroup( ResourceGroup *group )
+void Project::addResourceGroup( ResourceGroup *group, int index )
 {
-    emit resourceGroupToBeAdded( group );
-    m_resourceGroups.append( group );
+    int i = index == -1 ? m_resourceGroups.count() : index;
+    emit resourceGroupToBeAdded( group, i );
+    m_resourceGroups.insert( i, group );
     setResourceGroupId( group );
     group->setProject( this );
     foreach ( Resource *r, group->resources() ) {
@@ -630,21 +631,22 @@ QList<ResourceGroup*> &Project::resourceGroups()
     return m_resourceGroups;
 }
 
-void Project::addResource( ResourceGroup *group, Resource *resource )
+void Project::addResource( ResourceGroup *group, Resource *resource, int index )
 {
-    emit resourceToBeAdded( group, resource );
-    group->addResource( resource, 0 );
+    int i = index == -1 ? group->resources().count() : index;
+    sendResourceToBeAdded( group, resource );
+    group->addResource( i, resource, 0 );
     setResourceId( resource );
-    emit resourceAdded( group, resource );
+    sendResourceAdded( group, resource );
 }
 
 Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
 {
-    emit resourceToBeRemoved( group, resource );
+    sendResourceToBeRemoved( group, resource );
     removeResourceId( resource->id() );
     Resource *r = group->takeResource( resource );
     Q_ASSERT( resource == r );
-    emit resourceRemoved( group, r );
+    sendResourceRemoved( group, r );
     return r;
 }
 
@@ -1472,21 +1474,21 @@ void Project::changed( ScheduleManager *sm, int type )
 
 void Project::sendResourceAdded( const ResourceGroup *group, const Resource *resource )
 {
-    emit resourceAdded( group, resource );
+    emit resourceAdded( resource );
 }
 
 void Project::sendResourceToBeAdded( const ResourceGroup *group, const Resource *resource )
 {
-    emit resourceToBeAdded( group, resource );
+    emit resourceToBeAdded( resource, group->numResources() );
 }
 
 void Project::sendResourceRemoved( const ResourceGroup *group, const Resource *resource )
 {
-    emit resourceRemoved( group, resource );
+    emit resourceRemoved( resource );
 }
 void Project::sendResourceToBeRemoved( const ResourceGroup *group, const Resource *resource )
 {
-    emit resourceToBeRemoved( group, resource );
+    emit resourceToBeRemoved( resource );
 }
 
 void Project::changed( Resource *resource )

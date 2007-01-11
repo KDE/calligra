@@ -80,7 +80,7 @@ public:
     virtual void save( QDomElement &element ) const;
 
     QList<ResourceGroup*> &resourceGroups();
-    virtual void addResourceGroup( ResourceGroup *resource );
+    virtual void addResourceGroup( ResourceGroup *resource, int index = -1 );
     ResourceGroup *takeResourceGroup( ResourceGroup *resource );
     int indexOf( ResourceGroup *resource ) const { return m_resourceGroups.indexOf( resource ); }
     ResourceGroup *resourceGroupAt( int pos ) const { return m_resourceGroups.value( pos ); }
@@ -105,7 +105,7 @@ public:
     ResourceGroup *group( const QString& id );
     ResourceGroup *groupByName( const QString& name ) const;
     
-    void addResource( ResourceGroup *group, Resource *resource );
+    void addResource( ResourceGroup *group, Resource *resource, int index = -1 );
     Resource *takeResource( ResourceGroup *group, Resource *resource );
     /// Returns the resource with identity id.
     Resource *resource( const QString& id );
@@ -297,15 +297,15 @@ signals:
     
     void resourceGroupChanged( ResourceGroup *group );
     void resourceGroupAdded( const ResourceGroup *group );
-    void resourceGroupToBeAdded( const ResourceGroup *group );
+    void resourceGroupToBeAdded( const ResourceGroup *group, int row );
     void resourceGroupRemoved( const ResourceGroup *group );
     void resourceGroupToBeRemoved( const ResourceGroup *group );
     
     void resourceChanged( Resource *resource );
-    void resourceAdded( const ResourceGroup *group, const Resource *resource );
-    void resourceToBeAdded( const ResourceGroup *group, const Resource *resource );
-    void resourceRemoved( const ResourceGroup *group, const Resource *resource );
-    void resourceToBeRemoved( const ResourceGroup *group, const Resource *resource );
+    void resourceAdded( const Resource *resource );
+    void resourceToBeAdded( const Resource *resource, int row );
+    void resourceRemoved( const Resource *resource );
+    void resourceToBeRemoved( const Resource *resource );
 
     void scheduleManagerChanged( ScheduleManager *sch );
     void scheduleManagerAdded( const ScheduleManager *sch );

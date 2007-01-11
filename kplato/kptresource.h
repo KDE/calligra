@@ -99,7 +99,7 @@ public:
      * <p>Risks must always be associated with a resource, so there is no option
      * to manipulate risks (@ref Risk) separately
          */
-    void addResource( Resource*, Risk* );
+    void addResource( int index, Resource*, Risk* );
     Resource *takeResource( Resource *resource );
     QList<Resource*> &resources() { return m_resources; }
     int indexOf( const Resource *resource ) const;
