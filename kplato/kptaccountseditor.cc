@@ -1,9 +1,9 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen kplato@kde.org>
+  Copyright (C) 2007 Dag Andersen <kplato@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation;
+  License as published by the Free Software Foundation; either
   version 2 of the License, or (at your option) any later version.
 
   This library is distributed in the hope that it will be useful,
@@ -63,7 +63,8 @@ namespace KPlato
 {
 
 AccountItemModel::AccountItemModel( Part *part, QObject *parent )
-    : ItemModelBase( part, parent )
+    : ItemModelBase( part, parent ),
+    m_account( 0 )
 {
 }
 
@@ -71,18 +72,63 @@ AccountItemModel::~AccountItemModel()
 {
 }
 
+void AccountItemModel::slotAccountToBeInserted( const Account *account, int row )
+{
+    //kDebug()<<k_funcinfo<<account->name()<<endl;
+    Q_ASSERT( m_account == 0 );
+    m_account = const_cast<Account*>(account);
+    beginInsertRows( index( account->parent() ), row, row );
+}
+
+void AccountItemModel::slotAccountInserted( const Account *account )
+{
+    //kDebug()<<k_funcinfo<<account->name()<<endl;
+    Q_ASSERT( account == m_account );
+    endInsertRows();
+    m_account = 0;
+}
+
+void AccountItemModel::slotAccountToBeRemoved( const Account *account )
+{
+    //kDebug()<<k_funcinfo<<account->name()<<endl;
+    Q_ASSERT( m_account == 0 );
+    m_account = const_cast<Account*>(account);
+    int row = index( account ).row();
+    beginRemoveRows( index( account->parent() ), row, row );
+}
+
+void AccountItemModel::slotAccountRemoved( const Account *account )
+{
+    //kDebug()<<k_funcinfo<<account->name()<<endl;
+    Q_ASSERT( account == m_account );
+    endRemoveRows();
+    m_account = 0;
+}
+
 void AccountItemModel::setProject( Project *project )
 {
     if ( m_project ) {
-/*        disconnect( m_project, SIGNAL( accountsChanged( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
-        disconnect( m_project, SIGNAL( accountsGroupChanged( AccountGroup* ) ), this, SLOT( slotAccountGroupChanged( Account* ) ) );
+        Accounts *acc = &( m_project->accounts() );
+        disconnect( acc , SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
         
-        disconnect( m_project, SIGNAL( accountsGroupToBeAdded( const AccountGroup* ) ), this, SLOT( slotLayoutToBeChanged() ) );*/
+        disconnect( acc, SIGNAL( accountAdded( const Account*, int ) ), this, SLOT( slotAccountInserted( const Account*, int ) ) );
+        disconnect( acc, SIGNAL( accountToBeAdded( const Account* ) ), this, SLOT( slotLayoutToBeChanged( const Account* ) ) );
+        
+        disconnect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
+        disconnect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
     }
     m_project = project;
-//     connect( m_project, SIGNAL( accountsChanged( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
-//     connect( m_project, SIGNAL( accountsGroupChanged( AccountGroup* ) ), this, SLOT( slotAccountGroupChanged( Account* ) ) );
-
+    if ( project ) {
+        Accounts *acc = &( project->accounts() );
+        kDebug()<<k_funcinfo<<acc<<endl;
+        connect( acc, SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
+        
+        connect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( acc, SIGNAL( accountToBeAdded( const Account* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+        
+        connect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
+        connect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+    }
 }
 
 Qt::ItemFlags AccountItemModel::flags( const QModelIndex &index ) const
@@ -100,7 +146,7 @@ Qt::ItemFlags AccountItemModel::flags( const QModelIndex &index ) const
     if ( !m_readWrite ) {
         return flags &= ~Qt::ItemIsEditable;
     }
-    if ( static_cast<Account*>( account ( index ) ) ) {
+    if ( account ( index ) ) {
         switch ( index.column() ) {
             default: flags |= Qt::ItemIsEditable;
         }
@@ -121,7 +167,14 @@ QModelIndex AccountItemModel::parent( const QModelIndex &index ) const
     }
     Account *par = a->parent();
     if ( par ) {
-        int row = par->accountList().indexOf( a );
+        a = par->parent();
+        int row = -1;
+        if ( a ) {
+            row = a->accountList().indexOf( par );
+        } else {
+            row = m_project->accounts().accountList().indexOf( par );
+        }
+        //kDebug()<<k_funcinfo<<par->name()<<": "<<row<<endl;
         return createIndex( row, 0, par );
     }
     return QModelIndex();
@@ -154,6 +207,26 @@ QModelIndex AccountItemModel::index( int row, int column, const QModelIndex &par
         return createIndex( row, column, par->accountList().at( row ) );
     }
     return QModelIndex();
+}
+
+QModelIndex AccountItemModel::index( const Account *account ) const
+{
+    Account *a = const_cast<Account*>(account);
+    if ( m_project == 0 || account == 0 ) {
+        return QModelIndex();
+    }
+    int row = -1;
+    Account *par = a->parent();
+    if ( par == 0 ) {
+         row = m_project->accounts().accountList().indexOf( a );
+    } else {
+        row = par->accountList().indexOf( a );
+    }
+    if ( row == -1 ) {
+        return QModelIndex();
+    }
+    return createIndex( row, 0, a );
+
 }
 
 int AccountItemModel::columnCount( const QModelIndex &parent ) const
@@ -205,7 +278,9 @@ bool AccountItemModel::setName( Account *a, const QVariant &value, int role )
 {
     switch ( role ) {
         case Qt::EditRole:
-            m_part->addCommand( new RenameAccountCmd( m_part, a, value.toString(), "Modify account name" ) );
+            if ( value.toString() != a->name() ) {
+                m_part->addCommand( new RenameAccountCmd( m_part, a, value.toString(), "Modify account name" ) );
+            }
             return true;
     }
     return false;
@@ -231,7 +306,9 @@ bool AccountItemModel::setDescription( Account *a, const QVariant &value, int ro
 {
     switch ( role ) {
         case Qt::EditRole:
-            m_part->addCommand( new ModifyAccountDescriptionCmd( m_part, a, value.toString(), "Modify account description" ) );
+            if ( value.toString() != a->description() ) {
+                m_part->addCommand( new ModifyAccountDescriptionCmd( m_part, a, value.toString(), "Modify account description" ) );
+            }
             return true;
     }
     return false;
@@ -252,7 +329,7 @@ QVariant AccountItemModel::data( const QModelIndex &index, int role ) const
             return QVariant();
     }
     if ( result.isValid() ) {
-        if ( result.type() == QVariant::String && result.toString().isEmpty()) {
+        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
             result = " ";
         }
@@ -317,13 +394,58 @@ Account *AccountItemModel::account( const QModelIndex &index ) const
 void AccountItemModel::slotAccountChanged( Account *account )
 {
     Account *par = account->parent();
-    if ( par == 0 ) {
+    if ( par ) {
         int row = par->accountList().indexOf( account );
         emit dataChanged( createIndex( row, 0, account ), createIndex( row, columnCount() - 1, account ) );
     } else {
         int row = m_project->accounts().accountList().indexOf( account );
         emit dataChanged( createIndex( row, 0, account ), createIndex( row, columnCount() - 1, account ) );
     }
+}
+
+QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent )
+{
+    kDebug()<<k_funcinfo<<endl;
+    if ( account->name().isEmpty() || m_project->accounts().findAccount( account->name() ) ) {
+        QString s = parent == 0 ? account->name() : parent->name();
+        account->setName( m_project->accounts().uniqueId( s ) );
+        //m_project->accounts().insertId( account );
+    }
+    m_part->addCommand( new AddAccountCmd( m_part, *m_project, account, parent, i18n( "Add account" ) ) );
+    int row = -1;
+    if ( parent ) {
+        row = parent->accountList().indexOf( account );
+    } else {
+        row = m_project->accounts().accountList().indexOf( account );
+    }
+    if ( row != -1 ) {
+        //kDebug()<<k_funcinfo<<"Inserted: "<<account->name()<<endl;
+        return createIndex( row, 0, account );
+    }
+    kDebug()<<k_funcinfo<<"Can't find "<<account->name()<<endl;
+    return QModelIndex();
+}
+
+void AccountItemModel::removeAccounts( QList<Account*> lst )
+{
+    KMacroCommand *cmd = 0;
+    QString c = lst.count() > 1 ? i18n( "Delete Accounts" ) : i18n( "Delete Account" );
+    while ( ! lst.isEmpty() ) {
+        bool del = true;
+        Account *acc = lst.takeFirst();
+        foreach ( Account *a, lst ) {
+            if ( acc->isChildOf( a ) ) {
+                del = false; // acc will be deleted when a is deleted
+                break;
+            }
+        }
+        if ( del ) {
+            if ( cmd == 0 ) cmd = new KMacroCommand( c );
+            cmd->addCommand( new RemoveAccountCmd( m_part, *m_project, acc ) );
+        }
+    }
+    if ( cmd )
+        m_part->addCommand( cmd );
 }
 
 //--------------------
@@ -380,6 +502,27 @@ void AccountTreeView::currentChanged( const QModelIndex & current, const QModelI
 Account *AccountTreeView::currentAccount() const
 {
     return itemModel()->account( currentIndex() );
+}
+
+Account *AccountTreeView::selectedAccount() const
+{
+    QModelIndexList lst = selectionModel()->selectedRows();
+    if ( lst.count() == 1 ) {
+        return itemModel()->account( lst.first() );
+    }
+    return 0;
+}
+
+QList<Account*> AccountTreeView::selectedAccounts() const
+{
+    QList<Account*> lst;
+    foreach ( QModelIndex i, selectionModel()->selectedRows() ) {
+        Account *a = itemModel()->account( i );
+        if ( a ) {
+            lst << a;
+        }
+    }
+    return lst;
 }
 
 
@@ -454,14 +597,7 @@ void AccountsEditor::slotCurrentChanged(  const QModelIndex &curr )
 void AccountsEditor::slotSelectionChanged( const QModelIndexList list)
 {
     kDebug()<<k_funcinfo<<list.count()<<endl;
-    foreach ( QModelIndex i, list ) {
-        Account *a = m_view->itemModel()->account( i );
-        if ( a ) {
-            slotEnableActions( true );
-            return;
-        }
-    }
-    slotEnableActions( false );
+    updateActionsEnabled( true );
 }
 
 void AccountsEditor::slotEnableActions( bool on )
@@ -471,9 +607,12 @@ void AccountsEditor::slotEnableActions( bool on )
 
 void AccountsEditor::updateActionsEnabled(  bool on )
 {
-    actionAddAccount->setEnabled( true );
-    actionAddSubAccount->setEnabled( on );
-    actionDeleteSelection->setEnabled( on );
+    QList<Account*> lst = m_view->selectedAccounts();
+    bool one = lst.count() == 1;
+    bool more = lst.count() > 1;
+    actionAddAccount->setEnabled( on && !more );
+    actionAddSubAccount->setEnabled( on && one );
+    actionDeleteSelection->setEnabled( on && ( one || more ) );
 }
 
 void AccountsEditor::setupGui()
@@ -504,19 +643,36 @@ void AccountsEditor::setupGui()
 void AccountsEditor::slotAddAccount()
 {
     kDebug()<<k_funcinfo<<endl;
-    emit addAccount( currentAccount() );
+    Account *parent = m_view->selectedAccount(); // sibling
+    if ( parent ) {
+        parent = parent->parent();
+    }
+    insertAccount( new Account(), parent );
 }
 
 void AccountsEditor::slotAddSubAccount()
 {
     kDebug()<<k_funcinfo<<endl;
-    emit addAccount( currentAccount() );
+    insertAccount( new Account(), m_view->selectedAccount() );
+}
+
+void AccountsEditor::insertAccount( Account *account, Account *parent )
+{
+    QModelIndex i = m_view->itemModel()->insertAccount( account, parent );
+    if ( i.isValid() ) {
+        QModelIndex p = m_view->model()->parent( i );
+        if (parent) kDebug()<<k_funcinfo<<" parent="<<parent->name()<<": "<<p.row()<<", "<<p.column()<<endl;
+        kDebug()<<k_funcinfo<<i.row()<<", "<<i.column()<<endl;
+        m_view->setExpanded( p, true );
+        m_view->setCurrentIndex( i );
+        m_view->edit( i );
+    }
 }
 
 void AccountsEditor::slotDeleteSelection()
 {
     kDebug()<<k_funcinfo<<endl;
-    /*    emit deleteTaskList( selectedAccounts() );*/
+    m_view->itemModel()->removeAccounts( m_view->selectedAccounts() );
 }
 
 

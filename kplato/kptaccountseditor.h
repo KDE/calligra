@@ -58,6 +58,7 @@ public:
     virtual QModelIndex parent( const QModelIndex & index ) const;
     virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+    QModelIndex index( const Account* account ) const;
 
     virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
@@ -73,9 +74,15 @@ public:
     virtual void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
 
     Account *account( const QModelIndex &index ) const;
-        
+    QModelIndex insertAccount( Account *account, Account *parent = 0 );
+    void removeAccounts( QList<Account*> lst );
+    
 protected slots:
     void slotAccountChanged( Account* );
+    void slotAccountToBeInserted( const Account *account, int row );
+    void slotAccountInserted( const Account *account );
+    void slotAccountToBeRemoved( const Account *account );
+    void slotAccountRemoved( const Account *account );
 
 protected:
     QVariant name( const Account *account, int role ) const;
@@ -84,6 +91,8 @@ protected:
     QVariant description( const Account *account, int role ) const;
     bool setDescription( Account *account, const QVariant &value, int role );
 
+private:
+    Account *m_account; // test for sane operation
 };
 
 class AccountTreeView : public TreeViewBase
@@ -98,6 +107,8 @@ public:
     void setProject( Project *project ) { itemModel()->setProject( project ); }
 
     Account *currentAccount() const;
+    Account *selectedAccount() const;
+    QList<Account*> selectedAccounts() const;
     
 signals:
     void currentChanged( const QModelIndex& );
@@ -134,6 +145,7 @@ public:
 signals:
     void requestPopupMenu( const QString&, const QPoint& );
     void addAccount( Account *account );
+    void deleteAccounts( QList<Account*> );
     
 public slots:
     /// Activate/deactivate the gui
@@ -141,7 +153,8 @@ public slots:
 
 protected:
     void updateActionsEnabled( bool on );
-
+    void insertAccount( Account *account, Account *parent );
+    
 private slots:
     void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
     

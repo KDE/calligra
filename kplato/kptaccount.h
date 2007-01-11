@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation;
-   version 2 of the License.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,7 +21,7 @@
 #define KPTACCOUNT_H
 
 #include <qdatetime.h>
-#include <QHash>
+#include <QMap>
 #include <QList>
 #include <qstringlist.h>
 
@@ -69,7 +69,7 @@ public:
     void setName(const QString& name);
     
     QString description() const { return m_description; }
-    void setDescription(const QString& desc) { m_description = desc; }
+    void setDescription(const QString& desc);
 
     bool isElement() const { return m_accountList.isEmpty(); }
     
@@ -78,8 +78,9 @@ public:
     Account *parent() const { return m_parent; }
     void setParent(Account *parent) { m_parent = parent; }
     void clear() { m_accountList.clear(); }
-    void append(Account *account);
+    void insert(Account *account, int index = -1);
     void take(Account *account);
+    bool isChildOf( const Account *account ) const;
     void insertChildren();
     
     bool load(QDomElement &element, Project &project);
@@ -93,6 +94,8 @@ public:
     bool removeId(const QString &id);
     bool insertId();
     bool insertId(Account *account);
+    
+    void changed();
     
     class CostPlace {
     public:
@@ -176,8 +179,9 @@ typedef QListIterator<Account*> AccountListIterator;
  *  Accounts administrates all accounts.
  */
 
-class Accounts
+class Accounts : public QObject
 {
+    Q_OBJECT
 public:
     explicit Accounts(Project &project);
     ~Accounts();
@@ -188,7 +192,7 @@ public:
     EffortCostMap plannedCost(const Account &account, const QDate &start, const QDate &end, long id = -1);
     
     void clear() { m_accountList.clear(); m_idDict.clear(); }
-    void append(Account *account);
+    void insert(Account *account, Account *parent=0, int index = -1);
     void take(Account *account);
     
     bool load(QDomElement &element, Project &project);
@@ -205,13 +209,24 @@ public:
     Account *findAccount(const QString &id) const;
     bool insertId(Account *account);
     bool removeId(const QString &id);
+    QString uniqueId( const QString &seed ) const;
     
     void accountDeleted(Account *account) 
         { if (account == m_defaultAccount) m_defaultAccount = 0; }
+
+    void accountChanged( Account *account );
+    
+signals:
+    void accountAdded( const Account * );
+    void accountToBeAdded( const Account *, int );
+    void accountRemoved( const Account * );
+    void accountToBeRemoved( const Account * );
+    void changed( Account *);
+    
 private:
     Project &m_project;
     AccountList m_accountList;
-    QHash<QString, Account*> m_idDict;
+    QMap<QString, Account*> m_idDict;
 
     Account *m_defaultAccount;
 

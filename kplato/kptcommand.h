@@ -874,6 +874,8 @@ public:
 private:
     Project &m_project;
     Account *m_account;
+    Account *m_parent;
+    int m_index;
     bool m_isDefault;
     bool m_mine;
 

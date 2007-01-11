@@ -1741,20 +1741,14 @@ void AddAccountCmd::execute()
     if ( m_parent == 0 && !m_parentName.isEmpty() ) {
         m_parent = m_project.accounts().findAccount( m_parentName );
     }
-    if ( m_parent )
-        m_parent->append( m_account );
-    else
-        m_project.accounts().append( m_account );
+    m_project.accounts().insert( m_account, m_parent );
 
     setCommandType( 0 );
     m_mine = false;
 }
 void AddAccountCmd::unexecute()
 {
-    if ( m_parent )
-        m_parent->take( m_account );
-    else
-        m_project.accounts().take( m_account );
+    m_project.accounts().take( m_account );
 
     setCommandType( 0 );
     m_mine = true;
@@ -1763,8 +1757,14 @@ void AddAccountCmd::unexecute()
 RemoveAccountCmd::RemoveAccountCmd( Part *part, Project &project, Account *account, const QString& name )
         : NamedCommand( part, name ),
         m_project( project ),
-        m_account( account )
+        m_account( account ),
+        m_parent( account->parent() )
 {
+    if ( m_parent ) {
+        m_index = m_parent->accountList().indexOf( account );
+    } else {
+        m_index = project.accounts().accountList().indexOf( account );
+    }
     m_mine = false;
     m_isDefault = account == project.accounts().defaultAccount();
 }
@@ -1780,24 +1780,17 @@ void RemoveAccountCmd::execute()
     if ( m_isDefault ) {
         m_project.accounts().setDefaultAccount( 0 );
     }
-    if ( m_account->parent() )
-        m_account->parent() ->take( m_account );
-    else
-        m_project.accounts().take( m_account );
+    m_project.accounts().take( m_account );
 
     setCommandType( 0 );
     m_mine = true;
 }
 void RemoveAccountCmd::unexecute()
 {
-    if ( m_account->parent() )
-        m_account->parent() ->append( m_account );
-    else
-        m_project.accounts().append( m_account );
-
-    if ( m_isDefault )
+    m_project.accounts().insert( m_account, m_parent, m_index );
+    if ( m_isDefault ) {
         m_project.accounts().setDefaultAccount( m_account );
-
+    }
     setCommandType( 0 );
     m_mine = false;
 }

@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation;
-   version 2 of the License.
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -66,6 +66,11 @@ Account::~Account() {
         delete m_costPlaces.takeFirst();
 }
     
+void Account::changed() {
+    if ( m_list ) {
+        m_list->accountChanged( this );
+    }
+}
 
 void Account::setName(const QString& name) {
     if (findAccount() == this) {
@@ -73,14 +78,23 @@ void Account::setName(const QString& name) {
     }
     m_name = name;
     insertId();
+    changed();
 }
 
-void Account::append(Account *account){
+void Account::setDescription(const QString& desc)
+{
+    m_description = desc;
+    changed();
+}
+
+void Account::insert(Account *account, int index) {
     Q_ASSERT(account);
-    m_accountList.append(account); 
+    int i = index == -1 ? m_accountList.count() : index;
+    m_accountList.insert(i, account);
     account->setList(m_list);
     account->setParent(this);
     insertId(account);
+    account->insertChildren();
 }
 
 void Account::insertChildren() {
@@ -107,7 +121,18 @@ void Account::take(Account *account) {
     }
     //kDebug()<<k_funcinfo<<account->name()<<endl;
 }
-    
+
+bool Account::isChildOf( const Account *account) const
+{
+    if ( m_parent == 0 ) {
+        return false;
+    }
+    if ( m_parent == account ) {
+        return true;
+    }
+    return  m_parent->isChildOf( account );
+}
+
 bool Account::load(QDomElement &element, Project &project) {
     m_name = element.attribute("name");
     m_description = element.attribute("description");
@@ -377,28 +402,42 @@ EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, 
     return ec;
 }
 
-void Accounts::append(Account *account) {
+void Accounts::insert(Account *account, Account *parent, int index) {
     Q_ASSERT(account);
-    m_accountList.append(account); 
-    account->setList(this);
-    account->setParent(0); // incase...
-    insertId(account);
+    if ( parent == 0 ) {
+        int i = index == -1 ? m_accountList.count() : index;
+        emit accountToBeAdded( account, i );
+        m_accountList.insert(i, account);
+        account->setList(this);
+        account->setParent(0); // incase...
+        insertId(account);
+        account->insertChildren();
+    } else {
+        int i = index == -1 ? parent->accountList().count() : index;
+        emit accountToBeAdded( account, i );
+        parent->insert( account, i );
+    }
     //kDebug()<<k_funcinfo<<account->name()<<endl;
-    account->insertChildren();
+    emit accountAdded( account );
 }
 
 void Accounts::take(Account *account){
     if (account == 0) {
         return;
     }
+    emit accountToBeRemoved( account );
     removeId(account->name());
     if (account->parent()) {
         account->parent()->take(account);
+        emit accountRemoved( account );
+        //kDebug()<<k_funcinfo<<account->name()<<endl;
         return;
     }
     int i = m_accountList.indexOf(account);
-    if (i != -1)
+    if (i != -1) {
         m_accountList.removeAt(i);
+    }
+    emit accountRemoved( account );
     //kDebug()<<k_funcinfo<<account->name()<<endl;
 }
     
@@ -410,7 +449,7 @@ bool Accounts::load(QDomElement &element, Project &project) {
             if (e.tagName() == "account") {
                 Account *child = new Account();
                 if (child->load(e, project)) {
-                    append(child);
+                    insert(child);
                 } else {
                     // TODO: Complain about this
                     kWarning()<<k_funcinfo<<"Loading failed"<<endl;
@@ -478,11 +517,7 @@ Account *Accounts::findShutdownAccount(const Node &node) const {
 }
 
 Account *Accounts::findAccount(const QString &id) const {
-    QHash<QString, Account*>::ConstIterator ai = m_idDict.find(id);
-    if (ai == m_idDict.constEnd()) {
-        return 0;
-    }
-    return ai.value();
+    return m_idDict.value(id);
 }
 
 bool Accounts::insertId(Account *account) {
@@ -498,7 +533,8 @@ bool Accounts::insertId(Account *account) {
         return true;
     }
     //TODO: Create unique id?
-    kWarning()<<k_funcinfo<<"Insert failed"<<endl;
+    kWarning()<<k_funcinfo<<"Insert failed, creating unique id"<<endl;
+    account->setName( uniqueId( account->name() ) ); // setName() calls insertId !!
     return false;
 }
 
@@ -508,10 +544,37 @@ bool Accounts::removeId(const QString &id) {
     return res;
 }
 
-#ifndef NDEBUG
-void Accounts::printDebug(const QString& /*indent*/) {
+QString Accounts::uniqueId( const QString &seed ) const
+{
+    QString s = seed.isEmpty() ? i18n( "Account" ) + ".%1" : seed + ".%1";
+    int i = 1;
+    QString n = s.arg( i );
+    while (  findAccount( n ) ) {
+        n = s.arg( ++i );
+    }
+    kDebug()<<k_funcinfo<<n<<endl;
+    return n;
 }
-void Account::printDebug(const QString& /*indent*/) {
+
+void Accounts::accountChanged( Account *account ) 
+{
+    emit changed( account );
+}
+
+#ifndef NDEBUG
+void Accounts::printDebug(const QString& indent) {
+    kDebug()<<indent<<"Accounts:    "<<m_accountList.count()<<" children"<<endl;
+    foreach( Account *a, m_accountList ) {
+        a->printDebug( indent + "    !" );
+    }
+}
+void Account::printDebug(const QString& indent) {
+    kDebug()<<indent<<"--- Account:    "<<m_name<<": "<<m_accountList.count()<<" children"<<endl;
+    foreach( Account *a, m_accountList ) {
+        a->printDebug( indent + "    !" );
+    }
 }
 #endif
 } //namespace KPlato
+
+#include "kptaccount.moc"
