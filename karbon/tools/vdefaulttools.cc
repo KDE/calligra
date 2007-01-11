@@ -26,18 +26,10 @@
 
 #include "vdefaulttools.h"
 
-#include "vellipsetool.h"
-#include "vgradienttool.h"
 #include "vpatterntool.h"
 #include "vpenciltool.h"
-#include "vpolygontool.h"
 #include "vpolylinetool.h"
-#include "vrectangletool.h"
-#include "vrotatetool.h"
-#include "vroundrecttool.h"
-#include "vselecttool.h"
 #include "vshapetool.h"
-#include "vsheartool.h"
 #include "vsinustool.h"
 #include "vspiraltool.h"
 #include "vstartool.h"
@@ -60,17 +52,9 @@ VDefaultTools::VDefaultTools(QObject *parent, const QStringList &)
 	if ( parent->inherits("KarbonFactory") )
 	{
 		KarbonToolRegistry* r = KarbonToolRegistry::instance();
-		r->add(new KarbonToolFactory<VSelectTool>());
-		r->add(new KarbonToolFactory<VRotateTool>());
-		r->add(new KarbonToolFactory<VShearTool>());
-		r->add(new KarbonToolFactory<VEllipseTool>());
-		r->add(new KarbonToolFactory<VGradientTool>());
 		r->add(new KarbonToolFactory<VPatternTool>());
 		r->add(new KarbonToolFactory<VPencilTool>());
-		r->add(new KarbonToolFactory<VPolygonTool>());
 		r->add(new KarbonToolFactory<VPolylineTool>());
-		r->add(new KarbonToolFactory<VRectangleTool>());
-		r->add(new KarbonToolFactory<VRoundRectTool>());
 		r->add(new KarbonToolFactory<VSinusTool>());
 		r->add(new KarbonToolFactory<VSpiralTool>());
 		r->add(new KarbonToolFactory<VStarTool>());
