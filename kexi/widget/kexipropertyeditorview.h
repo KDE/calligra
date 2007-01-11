@@ -78,11 +78,11 @@ class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
  - "this:classString property" of type string describes object's class name
  - "this:iconName" property of type string describes class name
  - "name" or "caption" property of type string describes object's name
- - "this:useCaptionAsObjectName" propety of type boolean forces displaying "caption"
+ - "this:useCaptionAsObjectName" property of type boolean forces displaying "caption"
    property instead of "name" - this can be usable when we know that "caption" properties
    are available for a given type of objects (this is the case for Table Designer fields)
 */
-class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget //KexiViewBase
+class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget
 {
 	Q_OBJECT
 

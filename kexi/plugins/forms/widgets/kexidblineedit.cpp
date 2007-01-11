@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,8 +57,8 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
  : KLineEdit(parent, name)
  , KexiDBTextWidgetInterface()
  , KexiFormDataItemInterface()
- , m_dateFormatter(0)
- , m_timeFormatter(0)
+//moved , m_dateFormatter(0)
+//moved , m_timeFormatter(0)
  , m_menuExtender(this, this)
  , m_internalReadOnly(false)
  , m_slotTextChanged_enabled(true)
@@ -75,8 +75,8 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent, const char *name)
 
 KexiDBLineEdit::~KexiDBLineEdit()
 {
-	delete m_dateFormatter;
-	delete m_timeFormatter;
+//moved	delete m_dateFormatter;
+//moved	delete m_timeFormatter;
 }
 
 void KexiDBLineEdit::setInvalidState( const QString& displayText )
@@ -90,6 +90,7 @@ void KexiDBLineEdit::setInvalidState( const QString& displayText )
 
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
+#if 0 //moved to KexiTextFormatter
 	QVariant value;
 	if (removeOld)
 		value = add;
@@ -136,15 +137,18 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 			return;
 		}
 	}
-	
+#endif	
 	m_slotTextChanged_enabled = false;
-	 setText( value.toString() );
+	setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
+//	 setText( value.toString() );
 	 setCursorPosition(0); //ok?
 	m_slotTextChanged_enabled = true;
 }
 
 QVariant KexiDBLineEdit::value()
 {
+	return m_textFormatter.textToValue( text() );
+#if 0 // moved to KexiTextFormatter
 	if (! m_columnInfo)
 		return QVariant();
 	const KexiDB::Field::Type t = m_columnInfo->field->type();
@@ -177,8 +181,8 @@ QVariant KexiDBLineEdit::value()
 		return QVariant();
 	}
 //! @todo more data types!
-
 	return text();
+#endif
 }
 
 void KexiDBLineEdit::slotTextChanged(const QString&)
@@ -195,12 +199,14 @@ bool KexiDBLineEdit::valueIsNull()
 
 bool KexiDBLineEdit::valueIsEmpty()
 {
+	return m_textFormatter.valueIsEmpty( text() );
+#if 0 // moved to KexiTextFormatter
 	if (text().isEmpty())
 		return true;
 
 	if (m_columnInfo) {
 		const KexiDB::Field::Type t = m_columnInfo->field->type();
-		if (t == KexiDB::Field::Date)
+		if (t == KexiDB::Field::Date || )
 			return dateFormatter()->isEmpty( text() );
 		else if (t == KexiDB::Field::Time)
 			return timeFormatter()->isEmpty( text() );
@@ -210,10 +216,13 @@ bool KexiDBLineEdit::valueIsEmpty()
 
 //! @todo
 	return text().isEmpty();
+#endif
 }
 
 bool KexiDBLineEdit::valueIsValid()
 {
+	return m_textFormatter.valueIsValid( text() );
+#if 0 // moved to KexiTextFormatter
 	if (!m_columnInfo)
 		return true;
 //! @todo fix for fields with "required" property = true
@@ -230,6 +239,7 @@ bool KexiDBLineEdit::valueIsValid()
 
 //! @todo
 	return true;
+#endif
 }
 
 bool KexiDBLineEdit::isReadOnly() const
@@ -291,13 +301,17 @@ void KexiDBLineEdit::clear()
 void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
 	KexiFormDataItemInterface::setColumnInfo(cinfo);
+	m_textFormatter.setField( cinfo ? cinfo->field : 0 );
+
 	if (!cinfo)
 		return;
+
 //! @todo handle input mask (via QLineEdit::setInputMask()) using a special KexiDB::FieldInputMask class
 	const KexiDB::Field::Type t = cinfo->field->type();
 
 	setValidator( new KexiDB::FieldValidator(*cinfo->field, this) );
 
+#if 0 // moved to KexiTextFormatter
 	if (t==KexiDB::Field::Date) {
 //! @todo use KDateWidget?
 		setInputMask( dateFormatter()->inputMask() );
@@ -311,6 +325,10 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 		setInputMask( 
 			dateTimeInputMask( *dateFormatter(), *timeFormatter() ) );
 	}
+#endif
+	const QString inputMask( m_textFormatter.inputMask() );
+	if (!inputMask.isEmpty())
+		setInputMask( inputMask );
 
 	KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
 }

@@ -25,6 +25,7 @@ set(kexidatatable_LIB_SRCS
    kexicomboboxtableedit.cpp 
    kexicomboboxpopup.cpp 
    kexidataawarepropertyset.cpp
+   kexitextformatter.cpp
 )
 
 kde4_automoc(${kexidatatable_LIB_SRCS})

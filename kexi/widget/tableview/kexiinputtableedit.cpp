@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,8 +19,6 @@
  */
 
 #include "kexiinputtableedit.h"
-
-#include <kexidb/field.h>
 
 #include <qregexp.h>
 #include <qevent.h>
@@ -41,6 +39,8 @@
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
 #include <kexiutils/longlongvalidator.h>
+#include <kexidb/field.h>
+#include <kexidb/fieldvalidator.h>
 
 //! @internal
 class MyLineEdit : public KLineEdit
@@ -79,9 +79,11 @@ KexiInputTableEdit::~KexiInputTableEdit()
 
 void KexiInputTableEdit::init()
 {
-	kDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
-	kDebug() << "KexiInputTableEdit: type== " << field()->typeName() << endl;
-	kDebug() << "KexiInputTableEdit: displayed type== " << displayedField()->typeName() << endl;
+//	kDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
+//	kDebug() << "KexiInputTableEdit: type== " << field()->typeName() << endl;
+//	kDebug() << "KexiInputTableEdit: displayed type== " << displayedField()->typeName() << endl;
+
+	m_textFormatter.setField( field() );
 
 	//init settings
 	m_decsym = KGlobal::locale()->decimalSymbol();
@@ -119,8 +121,7 @@ void KexiInputTableEdit::init()
 
 void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-	QString text( valueToText(removeOld ? QVariant() : m_origValue, add.toString(), true/*setValidator*/) );
-
+	QString text( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
 	if (text.isEmpty()) {
 		if (m_origValue.toString().isEmpty()) {
 			//we have to set NULL initial value:
@@ -138,17 +139,25 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 //js TODO: by default we're moving to the end of editor, ADD OPTION allowing "select all chars"
 		m_lineedit->end(false);
 #endif
+
+	if (!m_lineedit->validator()) {
+		QValidator *validator = new KexiDB::FieldValidator(
+			*field(), m_lineedit, "KexiInputTableEdit-validator");
+		m_lineedit->setValidator( validator );
+	}
 }
 
-QString KexiInputTableEdit::valueToText(const QVariant& value, const QString& add, bool setValidator)
+#if 0
+//moved to KexiTextFormatter
+QString KexiInputTableEdit::valueToText(KexiDB::Field* field, const QVariant& value, const QString& add)
 {
 	QString text; //result
 
-	if (field()->isFPNumericType()) {
+	if (field->isFPNumericType()) {
 //! @todo precision!
 //! @todo support 'g' format
 		text = QString::number(value.toDouble(), 'f', 
-			qMax(field()->visibleDecimalPlaces(), 10)); //<-- 10 is quite good maximum for fractional digits 
+			qMax(field->visibleDecimalPlaces(), 10)); //<-- 10 is quite good maximum for fractional digits 
 													  //! @todo add command line settings?
 		if (value.toDouble() == 0.0) {
 			text = add.isEmpty() ? "0" : add; //eat 0
@@ -160,7 +169,7 @@ QString KexiInputTableEdit::valueToText(const QVariant& value, const QString& ad
 				//nothing
 			}
 			else if (sl.count()==2) {
-				kDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
+//				kDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
 				const QString sl1 = sl[1];
 				int pos = sl1.length()-1;
 				if (pos>=1) {
@@ -175,22 +184,24 @@ QString KexiInputTableEdit::valueToText(const QVariant& value, const QString& ad
 			}
 			text += add;
 		}
-		if (setValidator) {
+/*moved to KexiDB::FieldValidator
+		if (setValidator && !m_lineedit->validator()) {
 			QValidator *validator = new KDoubleValidator(m_lineedit);
 			m_lineedit->setValidator( validator );
-		}
+		}*/
 	}
 	else {
 		text = value.toString();
-		if (field()->isIntegerType()) {
+		if (field->isIntegerType()) {
 			if (value.toInt() == 0) {
 				text = add; //eat 0
 			}
 			else {
 				text += add;
 			}
+/*moved to KexiDB::FieldValidator
 //! @todo implement ranges here!
-			if (setValidator) {
+			if (setValidator && !m_lineedit->validator()) {
 				QValidator *validator;
 				if (KexiDB::Field::BigInteger == field()->type()) {
 //! @todo use field->isUnsigned() for KexiUtils::ULongLongValidator
@@ -200,7 +211,7 @@ QString KexiInputTableEdit::valueToText(const QVariant& value, const QString& ad
 					validator = new KIntValidator(m_lineedit);
 				}
 				m_lineedit->setValidator( validator );
-			}
+			}*/
 		}
 		else {//default: text
 			text += add;
@@ -209,6 +220,7 @@ QString KexiInputTableEdit::valueToText(const QVariant& value, const QString& ad
 
 	return text;
 }
+#endif
 
 void KexiInputTableEdit::paintEvent ( QPaintEvent * /*e*/ )
 {
@@ -244,7 +256,7 @@ kDebug() << "KexiInputTableEdit::setRestrictedCompletion()" << endl;
 void
 KexiInputTableEdit::completed(const QString &s)
 {
-	kDebug() << "KexiInputTableEdit::completed(): " << s << endl;
+//	kDebug() << "KexiInputTableEdit::completed(): " << s << endl;
 	m_lineedit->setText(s);
 }
 
@@ -300,98 +312,8 @@ QVariant KexiInputTableEdit::value()
 		return ok ? QVariant(result) : QVariant();
 	}
 	//default: text
-	return QVariant( m_lineedit->text() );
+	return m_lineedit->text();
 }
-#if 0
-	//let qt&mysql understand what we mean... (numeric values)
-	QString v;
-	switch(m_type)
-	{
-		case QVariant::UInt:
-		case QVariant::Int:
-		case QVariant::Double:
-//			QString v;
-			if(!m_calculatedCell)
-			{
-				v = m_cview->text().replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
-				v = v.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
-				v = v.replace(QRegExp("\\" + KGlobal::locale()->negativeSign()), "-");
-				kDebug() << "KexiInputTableEdit::value() converting => " << v.latin1() << endl;
-				return QVariant(v);
-			}
-			else
-			{
-				//ok here should the formula be parsed so, just feel like in perl :)
-				kDebug() << "KexiInputTableEdit::value() calculating..." << endl;
-				double result = 0;
-				QString real = m_cview->text().right(m_cview->text().length() - 1);
-				real = real.replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
-				real = real.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
-				QStringList values = QStringList::split(QRegExp("[\\+|\\*|\\/|-]"), real, false);
-				QStringList ops = QStringList::split(QRegExp("[0-9]{1,8}(?:\\.[0-9]+)?"), real, false);
-
-				double lastValue = 0;
-				QString lastOp = "";
-				for(int i=0; i < (int)values.count(); i++)
-				{
-					double next;
-
-					QString op = QString((*ops.at(i))).trimmed();
-
-					if(!((*values.at(i+1)).isEmpty()) && i == 0)
-					{
-						double local = (*values.at(i)).toDouble();
-						next = (*values.at(i+1)).toDouble();
-
-						QString op = (*ops.at(i));
-						if(op == "+")
-							result = local + next;
-						else if(op == "-")
-							result = local - next;
-						else if(op == "*")
-							result = local * next;
-						else
-							result = local / next;
-					}
-					else if(!(*values.at(i+1)).isEmpty())
-					{
-						next = (*values.at(i+1)).toDouble();
-
-						QString op = QString((*ops.at(i))).trimmed();
-						if(op == "+")
-							result = result + next;
-						else if(op == "-")
-							result = result - next;
-						else if(op == "*")
-							result = result * next;
-						else
-							result = result / next;
-					}
-
-				}
-
-				return QVariant(result);
-
-			}
-			break;
-
-		default:
-			kDebug() << "KexiInputTableEdit::value() default..." << endl;
-			return QVariant(m_cview->text());
-	}
-
-void
-KexiInputTableEdit::end(bool mark)
-{
-	m_cview->end(mark);
-}
-
-void
-KexiInputTableEdit::backspace()
-{
-	m_cview->backspace();
-}
-#endif
 
 void
 KexiInputTableEdit::clear()
@@ -420,7 +342,7 @@ void KexiInputTableEdit::handleCopyAction(const QVariant& value, const QVariant&
 {
 	Q_UNUSED(visibleValue);
 //! @todo handle rich text?
-	qApp->clipboard()->setText( valueToText(value, QString::null) );
+	qApp->clipboard()->setText( m_textFormatter.valueToText(value, QString::null) );
 }
 
 void KexiInputTableEdit::handleAction(const QString& actionName)
@@ -448,7 +370,7 @@ bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect&
 	const QFontMetrics& fm, bool focused)
 {
 	QString text( value.type()==QVariant::String ? value.toString()
-		: valueToText(value, QString::null, false /*!setValidator*/) );
+		: m_textFormatter.valueToText(value, QString::null) );
 	QRect internalRect(rect);
 	internalRect.setLeft(rect.x()+leftMargin());
 	internalRect.setWidth(internalRect.width()-rightMargin(focused)-2*3);

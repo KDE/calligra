@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,10 +31,9 @@
 #include "kexiformdataiteminterface.h"
 #include "kexidbtextwidgetinterface.h"
 #include "kexidbutils.h"
+#include <widget/tableview/kexitextformatter.h>
 #include <widget/utils/kexidatetimeformatter.h>
 
-class KexiDateFormatter;
-class KexiTimeFormatter;
 class KexiDBWidgetContextMenuExtender;
 
 /*! @internal Utility: alter background color to be a blended color 
@@ -129,6 +128,8 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
 		virtual bool event ( QEvent * );
 
+#if 0
+//moved to KexiTextFormatter
 		inline KexiDateFormatter* dateFormatter() {
 			return m_dateFormatter ? m_dateFormatter : m_dateFormatter = new KexiDateFormatter();
 		}
@@ -136,17 +137,22 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		inline KexiTimeFormatter* timeFormatter() {
 			return m_timeFormatter ? m_timeFormatter : m_timeFormatter = new KexiTimeFormatter();
 		}
+#endif
 
 		virtual QPopupMenu * createPopupMenu();
 
 		//! Implemented for KexiSubwidgetInterface
 		virtual bool appendStretchRequired(KexiDBAutoField* autoField) const;
 
+#if 0
+//moved to KexiTextFormatter
 		//! Used for date and date/time types
 		KexiDateFormatter* m_dateFormatter;
-
 		//! Used for time and date/time types
 		KexiTimeFormatter* m_timeFormatter;
+#endif
+		//! Used to format text
+		KexiTextFormatter m_textFormatter;
 
 		//! Used for read only flag to disable editing
 		QGuardedPtr<const QValidator> m_readOnlyValidator;

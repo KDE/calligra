@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -146,8 +146,12 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 			property.setListData(*slist, *nlist);
 		}
 	}
-	if (oldValue.type() == newValue.type() && oldValue == newValue && !forceAddCommand)
+	if (oldValue.type() == newValue.type() 
+		&& (oldValue == newValue || (!oldValue.isValid() && !newValue.isValid()))
+		&& !forceAddCommand)
+	{
 		return;
+	}
 
 	const bool prev_addHistoryCommand_in_slotPropertyChanged_enabled 
 		= addHistoryCommand_in_slotPropertyChanged_enabled; //remember

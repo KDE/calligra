@@ -607,7 +607,7 @@ QString KexiDB::formatNumberForVisibleDecimalPlaces(double value, int decimalPla
 {
 //! @todo round?
 	if (decimalPlaces < 0) {
-		QString s = QString::number(value, 'f', 10 /*reasonable precision*/);
+		QString s( QString::number(value, 'f', 10 /*reasonable precision*/));
 		uint i = s.length()-1;
 		while (i>0 && s[i]=='0')
 			i--;
