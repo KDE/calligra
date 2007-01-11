@@ -161,7 +161,9 @@ void KWDocStructParagItem::deleteItem()
     editItem();
     KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>(gui()->canvasWidget()->currentFrameSetEdit());
     if (edit) {
+#ifdef __GNUC__
 #warning TODO implement deleteParagraph
+#endif
 #if 0 // doesn't exist!!!
         edit->textView()->deleteParagraph(m_parag);
 #endif
@@ -1143,7 +1145,9 @@ KWDocStruct::KWDocStruct(QWidget* parent, KWDocument* doc, KWGUI* gui)
     //searchBar->setFlat( true );
     //searchBar->setMovingEnabled( false );
 
+#ifdef __GNUC__
 #warning finish porting ( KToolBarButton -> QToolButton, K3ListViewSearchLine )
+#endif
 #if 0
     KToolBarButton* eraseButton = new KToolBarButton( "locationbar_erase", 0, searchBar );
     m_tree = new KWDocStructTree( this, doc, gui );

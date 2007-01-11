@@ -1109,7 +1109,9 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
 #endif
 
     // don't store parent, if it's the default style
+#ifdef __GNUC__
 #warning FIXME Stefan: check for default style
+#endif
 //     if ( m_parent && (m_parent->type() != BUILTIN || m_parent->name() != "Default") )
 //         // FIXME this is not the OASIS parent style's name. it's its display name!
 //         style.addAttribute( "style:parent-style-name", m_parent->name() );

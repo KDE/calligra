@@ -1852,7 +1852,9 @@ void KWInsertRemovePageCommand::doRemove(int pageNumber) {
     const double topOfPage = m_doc->pageManager()->topOfPage(pageNumber);
     m_doc->pageManager()->removePage( pageNumber );
 
+#ifdef __GNUC__
 #warning FIXME to work with KoCommand and KoShapeMoveCommands
+#endif
 #if 0
     if(firstRun && m_doc->lastPage() >= pageNumber) { // only walk frames when there was a page
                                                       // after the deleted one

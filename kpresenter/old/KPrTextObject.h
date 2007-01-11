@@ -249,7 +249,9 @@ public:
 
     void keyPressEvent( QKeyEvent * );
     void keyReleaseEvent( QKeyEvent * );
+#ifdef __GNUC__
 #warning "kde4 reapply it"
+#endif
 #if 0
 	void imStartEvent( QIMEvent * );
     void imComposeEvent( QIMEvent * );

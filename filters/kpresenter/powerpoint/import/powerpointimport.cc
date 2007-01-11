@@ -237,7 +237,9 @@ QByteArray PowerPointImport::createStyles()
   stylesWriter->endElement();  // office:document-styles
   stylesWriter->endDocument();
   delete stylesWriter;
+#ifdef __GNUC__
 #warning "kde4 port it"
+#endif
 #if 0
   // for troubleshooting only !!
   QString dbg;
@@ -299,7 +301,9 @@ QByteArray PowerPointImport::createContent()
   contentWriter->endElement();  // office:document-content
   contentWriter->endDocument();
   delete contentWriter;
+#ifdef __GNUC__
 #warning "kde4 port it"
+#endif
 #if 0
   // for troubleshooting only !!
   QString dbg;
@@ -331,7 +335,9 @@ QByteArray PowerPointImport::createManifest()
   manifestWriter->endElement();
   manifestWriter->endDocument();
   delete manifestWriter;
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 #if 0
   // for troubleshooting only !!
   QString dbg;

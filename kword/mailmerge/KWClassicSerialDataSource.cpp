@@ -521,7 +521,7 @@ void KWClassicMailMergeEditor::removeEntry()
         dbList->updateItems();
         updateButton();
     }
-#if defined( Q_CC_GNU )
+#ifdef __GNUC__
 #warning reimplement
 #endif
 /*

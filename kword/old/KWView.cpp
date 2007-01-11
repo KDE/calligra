@@ -6204,7 +6204,9 @@ void KWView::inlineFrame()
 
     if(m_actionInlineFrame->isChecked())
     {
+#ifdef __GNUC__
 #warning make this use flake move commands.
+#endif
 #if 0
         KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Frameset Inline") );
         Q3ValueList<FrameIndex> frameindexList;

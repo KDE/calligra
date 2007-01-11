@@ -38,7 +38,9 @@ void KWordTableHandler::tableStart( KWord::Table* table )
     Q_ASSERT( table );
     Q_ASSERT( !table->name.isEmpty() );
     m_currentTable = table;
+#ifdef __GNUC__
 #warning "port it: qHeapSort"
+#endif
     //qHeapSort( table->m_cellEdges );
 #if 0
     for (unsigned int i = 0; i < table->m_cellEdges.size(); i++)

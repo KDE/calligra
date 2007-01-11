@@ -1922,7 +1922,9 @@ void KPrTextView::updateUI( bool updateFormat, bool force  )
     if( m_paragLayout.tabList() != parag->tabList() || force )
     {
         m_paragLayout.setTabList( parag->tabList() );
+#ifdef __GNUC__
 #warning "Port this to new KoRuler"
+#endif
 #if 0
         KoRuler * hr = m_canvas->getView()->getHRuler();
         if ( hr )
@@ -2229,7 +2231,9 @@ void KPrTextView::showPopup( KPrView *view, const QPoint &point, QList<QAction*>
     KoVariable* var = variable();
     if ( var )
     {
+#ifdef __GNUC__
 #warning "kde4 port"	    
+#endif
         //variableList = view->kPresenterDoc()->getVariableCollection()->popupActionList();
     }
 
@@ -2245,7 +2249,9 @@ void KPrTextView::showPopup( KPrView *view, const QPoint &point, QList<QAction*>
     else
     {
         bool singleWord= false;
+#ifdef __GNUC__
 #warning "kde4: port it!!!!!!!!!!"
+#endif
 		//actionList = dataToolActionList(view->kPresenterDoc()->instance(), word, singleWord);
         //kDebug(33001) << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
         KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( var );
@@ -2367,7 +2373,9 @@ void KPrTextView::insertVariable( KoVariable *var, KoTextFormat *format, bool re
 
 bool KPrTextView::canDecode( QMimeSource *e )
 {
+#ifdef __GNUC__
 #warning "kde4 port it";
+#endif
 		return false;
     //return kpTextObject()->kPresenterDocument()->isReadWrite() && ( KoTextObject::providesOasis( e->mimeData() ) || Q3TextDrag::canDecode( e ) );
 }
@@ -2421,7 +2429,9 @@ Q3DragObject * KPrTextView::newDrag( QWidget * parent )
         return false;
 
     delete store;
+#ifdef __GNUC__
 #warning "kde4: port it!"
+#endif
 #if 0
     KMultipleDrag* multiDrag = new KMultipleDrag( parent );
     if (  !plainText.isEmpty() )
@@ -2500,7 +2510,9 @@ void KPrTextView::dropEvent( QDropEvent * e )
         QString returnedTypeMime = KoTextObject::providesOasis( e->mimeData() );
         if ( !returnedTypeMime.isEmpty() )
         {
+#ifdef __GNUC__
 #warning "kde4: port it !"
+#endif
 #if 0
 				QByteArray arr = e->data( returnedTypeMime );
             if ( arr.size() )

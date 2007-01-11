@@ -170,7 +170,9 @@ void FormatDialog::slotOk()
 	return;
     }
 
+#ifdef __GNUC__
 #warning FIXME Stefan: port to new style storage
+#endif
 #if 0
     if ( !m_view->doc()->undoLocked() )
     {

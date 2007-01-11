@@ -376,8 +376,9 @@ int KWTableStyleManager::tableStyleIndex( int pos )
     }
     kWarning() << "KWTableStyleManager::tableStyleIndex no style found at pos " << pos << endl;
 
-#ifdef __GNUC_
+#ifdef __GNUC__#ifdef __GNUC__
 #warning implement undo/redo
+#endif
 #endif
 
     return 0;
@@ -562,7 +563,9 @@ void KWTableStyleManager::slotOk() {
 void KWTableStyleManager::slotApply() {
     save();
     apply();
+#ifdef __GNUC__
 #warning "kde4 port it"
+#endif
     //KDialog::slotApply();
 }
 

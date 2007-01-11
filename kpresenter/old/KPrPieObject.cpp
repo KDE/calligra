@@ -205,7 +205,9 @@ void KPrPieObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
     if ( drawContour ) {
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
         //_painter->setRasterOp( Qt::NotXorROP );
     }
     else {

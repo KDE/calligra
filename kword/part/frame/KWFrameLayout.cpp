@@ -336,7 +336,9 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
             first = false;
         }
     }
+#ifdef __GNUC__
 #warning can never reach that code as footnote is a constant 0
+#endif
     if(footnote) {
         footnote->shape()->setPosition(
                 QPointF(left + layout.ptLeft, resultingPositions[7]));

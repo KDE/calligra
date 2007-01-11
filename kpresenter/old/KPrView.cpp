@@ -341,7 +341,9 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent )
     m_loader = KSpell2::Loader::openLoader( KSharedConfig::openConfig( "kpresenterrc" ) );
 
     m_autoPresTimerConnected = false;
+#ifdef __GNUC__
 #warning "kde4: delete it"
+#endif
 	//m_actionList.setAutoDelete( true );
     checkConcavePolygon = false;
     cornersValue = 3;
@@ -900,7 +902,9 @@ void KPrView::toolsZoom()
 
 void KPrView::toolsLinePopup()
 {
+#ifdef __GNUC__
 #warning "kde4 port it"
+#endif
 #if 0
 		switch (m_currentLineTool)
     {
@@ -938,7 +942,9 @@ void KPrView::toolsLine()
 
 void KPrView::toolsShapePopup()
 {
+#ifdef __GNUC__
 #warning "kde4 port it"
+#endif
 #if 0
     switch (m_currentShapeTool)
     {
@@ -1171,7 +1177,9 @@ void KPrView::toolsConvexOrConcavePolygon()
 
 void KPrView::toolsClosedLinePopup()
 {
+#ifdef __GNUC__
 #warning "kde4 port it"
+#endif
 #if 0
     switch (m_currentClosedLineTool)
     {
@@ -1837,13 +1845,17 @@ void KPrView::textInsertPageNum()
 
 void KPrView::mtextFont()
 {
+#ifdef __GNUC__
 #warning "kde4 port"	
+#endif
 #if 0	
     KoTextFormatInterface* textAdaptor = m_canvas->applicableTextInterfaces().first();
     if (!textAdaptor)
         return;
 
+#ifdef __GNUC__
 #warning pointless variable
+#endif
     QColor col = textAdaptor->textBackgroundColor();
     col = col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
 
@@ -2713,7 +2725,9 @@ void KPrView::setupActions()
 
     actionExtraLineEnd = new KAction(KIcon("line_end"),  i18n("Line End"), actionCollection(), "extra_lineend" );
     connect(actionExtraLineEnd, SIGNAL(triggered(bool) ), SLOT( extraLineEnd() ));
+#ifdef __GNUC__
 #warning "kde4 disable it"
+#endif
 #if 0
     actionExtraPenStyle = new KoLineStyleAction( i18n("Outline Style"), "pen_style",
                                        this, SLOT( extraPenStyle(int) ),
@@ -3675,7 +3689,9 @@ void KPrView::setupScrollbars()
 
 void KPrView::setupRulers()
 {
+#ifdef __GNUC__
 #warning "Needs porting when KoRuler is fully reimplemented"
+#endif
     tabChooser = new KoTabChooser( pageBase, KoTabChooser::TAB_ALL );
     tabChooser->setReadWrite(kPresenterDoc()->isReadWrite());
     h_ruler = new KoRuler( pageBase, Qt::Horizontal, zoomHandler() );
@@ -4787,7 +4803,9 @@ void KPrView::refreshCustomMenu()
                 act = new KAction( varName, actionCollection(), name );
                 connect(act, SIGNAL(triggered(bool)), SLOT( insertCustomVariable() ));
                 act->setShortcut(shortCuts[varName]);
+#ifdef __GNUC__
 #warning "kde4 port it"
+#endif
                 //act->setGroup( "custom-variable-action" );
                 actionInsertCustom->addAction( act );
                 i++;
@@ -4800,7 +4818,9 @@ void KPrView::refreshCustomMenu()
 
     act = new KAction( i18n("New..."), actionCollection(), QString("custom-action_%1").arg(i).toLatin1() );
     connect(act, SIGNAL(triggered(bool)), SLOT( insertNewCustomVariable() ));
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 	//act->setGroup( "custom-variable-action" );
     actionInsertCustom->addAction( act );
 
@@ -4919,7 +4939,9 @@ void KPrView::openLink()
 
 void KPrView::showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin, bool rtl )
 {
+#ifdef __GNUC__
 #warning "Port this to the new KoRuler"
+#endif
 #if 0
     KoRuler * hRuler = getHRuler();
     if ( hRuler )
@@ -4958,7 +4980,9 @@ void KPrView::newRightIndent( double _rightIndent)
 
 void KPrView::slotUpdateRuler()
 {
+#ifdef __GNUC__
 #warning "Port this to the new KoRuler"
+#endif
 #if 0
     // Set the "frame start" in the ruler (tabs are relative to that position)
     bool isText=!m_canvas->applicableTextObjects().isEmpty();
@@ -5010,7 +5034,9 @@ void KPrView::slotHRulerDoubleClicked( double ptpos )
 // This does _not_ handle Tabulators!
 void KPrView::slotHRulerDoubleClicked()
 {
+#ifdef __GNUC__
 #warning "Port this to the new KoRuler"
+#endif
 #if 0
     KoRuler *ruler = getHRuler();
 
@@ -5381,7 +5407,9 @@ void KPrView::updateStyleList()
     // Generate unique accelerators for the menu items
     KAccelGen::generate( lst, lstWithAccels );
     QMap<QString, KShortcut> shortCuts;
+#ifdef __GNUC__
 #warning "KDE4 port"
+#endif
 #if 0
 	QList<QAction *> actions = actionCollection()->actions("styleList");
     for (int actNdx = 0; actNdx < actions.count(); ++actNdx) {
@@ -5588,7 +5616,9 @@ void KPrView::updateGridButton()
 
 void KPrView::refreshRuler( bool state )
 {
+#ifdef __GNUC__
 #warning "Port this to new KoRuler"
+#endif
 #if 0
     if( getHRuler() )
     {
@@ -5651,7 +5681,9 @@ void KPrView::refreshRuler( bool state )
 
 void KPrView::addGuideLine()
 {
+#ifdef __GNUC__
 #warning "port to new koguide"	
+#endif
 #if 0	
     QRectF rect( m_canvas->activePage()->getPageRect() );
 
@@ -6136,7 +6168,9 @@ void KPrView::updateBgSpellCheckingState()
 
 void KPrView::updateRulerInProtectContentMode()
 {
+#ifdef __GNUC__
 #warning "Port this to new KoRuler"
+#endif
 #if 0
     KPrTextView *edit=m_canvas->currentTextObjectView();
     if ( edit && getHRuler()) {

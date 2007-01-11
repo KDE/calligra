@@ -2241,7 +2241,9 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
       if ( cell.hasAttribute( "dataType" ) ) // new docs
         text.setAttribute( "dataType", cell.attribute( "dataType" ) );
 #else
+#ifdef __GNUC__
 #warning Problem with KoXmlReader conversion!
+#endif
       kWarning() << "Problem with KoXmlReader conversion!" << endl;
 #endif
 

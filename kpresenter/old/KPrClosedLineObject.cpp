@@ -196,7 +196,9 @@ void KPrClosedLineObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandl
         Q3PointArray pointArray2 = points.zoomPointArray( _zoomHandler );
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
         //_painter->setRasterOp( Qt::NotXorROP );
         _painter->drawPolygon( pointArray2 );
         return;

@@ -26,7 +26,9 @@
 
 #include <kexi_export.h>
 
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #define KEXI_NO_TABLEVIEW
 
 namespace KexiDB {
@@ -106,7 +108,9 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialog
 	protected:
 		Form *m_form;
 		ConnectionBuffer *m_buffer;
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 		KexiTableView  *m_table;
 		KexiTableViewData  *m_data;

@@ -45,7 +45,9 @@
 #include <koproperty/property.h>
 #include <kexi_global.h>
 
+#ifdef __GNUC__
 #warning pixmapcollection
+#endif
 #define KEXI_NO_PIXMAPCOLLECTION
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 #include "pixmapcollection.h"
@@ -141,7 +143,9 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const Q3CString
 	d->topTree = new ObjectTree(i18n("Form"), container->name(), container, d->toplevel);
 	d->toplevel->setObjectTree(d->topTree);
 	d->toplevel->setForm(this);
+#ifdef __GNUC__
 #warning pixmapcollection
+#endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 	d->pixcollection = new PixmapCollection(container->name(), this);
 #endif
@@ -331,7 +335,9 @@ Form::emitActionSignals(bool withUndoAction)
 	if(!withUndoAction)
 		return;
 
+#ifdef __GNUC__
 #warning pixmapcollection
+#endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 	KAction *undoAction = d->collection->action("edit_undo");
 	if(undoAction)
@@ -441,7 +447,9 @@ Form::slotCommandExecuted()
 void
 Form::emitUndoEnabled()
 {
+#ifdef __GNUC__
 #warning pixmapcollection
+#endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 	KAction *undoAction = d->collection->action("edit_undo");
 	if(undoAction)
@@ -452,7 +460,9 @@ Form::emitUndoEnabled()
 void
 Form::emitRedoEnabled()
 {
+#ifdef __GNUC__
 #warning pixmapcollection
+#endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 	KAction *redoAction = d->collection->action("edit_redo");
 	if(redoAction)

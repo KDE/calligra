@@ -62,7 +62,9 @@ bool KHTMLReader::filter(const KUrl& url) {
 		return false;
 	}
 
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 #if 0
 	//FIXME use synchronous IO instead of this hack if possible.
 	QWidget dummy(0);//,0,WType_Dialog | WShowModal);

@@ -495,7 +495,9 @@ QDomDocument Doc::saveXML()
       ++iter;
     }
 #else
+#ifdef __GNUC__
 #warning Problem with KoXmlReader conversion!
+#endif
     kWarning() << "Problem with KoXmlReader conversion!" << endl;
 #endif
 
@@ -1108,7 +1110,9 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
 #ifdef KOXML_USE_QDOM
       d->savedDocParts[ tagName ] = element;
 #else
+#ifdef __GNUC__
 #warning Problem with KoXmlReader conversion!
+#endif
       kWarning() << "Problem with KoXmlReader conversion!" << endl;
 #endif
     }
@@ -1222,7 +1226,9 @@ bool Doc::docData( QString const & xmlTag, QDomElement & data )
   data = iter.value();
   d->savedDocParts.erase( iter );
 #else
+#ifdef __GNUC__
 #warning Problem with KoXmlReader conversion!
+#endif
   kWarning() << "Problem with KoXmlReader conversion!" << endl;
 #endif
 
@@ -1361,7 +1367,7 @@ MethodOfCalc Doc::getTypeOfCalc() const
 
 void Doc::setKSpellConfig(K3SpellConfig _kspell)
 {
-#if defined( Q_CC_GNU )
+#ifdef __GNUC__
 #warning TODO KDE4 port to sonnet
 #endif
 #if 0
@@ -1379,7 +1385,7 @@ void Doc::setKSpellConfig(K3SpellConfig _kspell)
 
 K3SpellConfig * Doc::getKSpellConfig()
 {
-#if defined( Q_CC_GNU )
+#ifdef __GNUC__
 #warning TODO KDE4 port to sonnet
 #endif
 #if 0

@@ -82,7 +82,9 @@
 #define KFD_NO_STYLES //disables; styles support needs improvements
 
 #define KEXI_NO_PIXMAPCOLLECTION
+#ifdef __GNUC__
 #warning pixmapcollection
+#endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 #include "pixmapcollection.h"
 #endif
@@ -1241,7 +1243,9 @@ FormManager::editFormPixmapCollection()
 	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
+#ifdef __GNUC__
 #warning pixmapcollection
+#endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 	PixmapCollectionEditor dialog(activeForm()->pixmapCollection(), activeForm()->widget()->topLevelWidget());
 	dialog.exec();

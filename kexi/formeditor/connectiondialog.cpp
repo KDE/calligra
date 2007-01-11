@@ -31,7 +31,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 #include "kexitableview.h"
 #include "kexitableviewdata.h"
@@ -80,7 +82,9 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 	//setStatusOk();
 
 #ifndef KEXI_NO_TABLEVIEW
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 	// And the KexiTableView ////////
 	m_data = new KexiTableViewData();
 	m_table = new KexiTableView(0, frame, "connections_tableview");
@@ -118,7 +122,9 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 void
 ConnectionDialog::initTable()
 {
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 	KexiTableViewColumn *col0 = new KexiTableViewColumn(i18n("OK?"), KexiDB::Field::Text);
 	col0->field()->setSubType("KIcon");
@@ -167,7 +173,9 @@ ConnectionDialog::exec(Form *form)
 
 void ConnectionDialog::slotCellSelected(int col, int row)
 {
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 	m_removeButton->setEnabled( row < m_table->rows() );
 	KexiTableItem *item = m_table->itemAt(row);
@@ -189,7 +197,9 @@ void ConnectionDialog::slotRowInserted(KexiTableItem* item,bool)
 void
 ConnectionDialog::slotOk()
 {
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 	// First we update our buffer contents
 	for(int i=0; i < m_table->rows(); i++)
@@ -219,7 +229,9 @@ ConnectionDialog::updateTableData()
 	ObjectTreeDictIterator it(*dict);
 	for(; it.current(); ++it)
 	{
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 		KexiTableItem *item = m_widgetsColumnData->createItem(); //new KexiTableItem(2);
 		(*item)[0] = it.current()->name();
@@ -232,7 +244,9 @@ ConnectionDialog::updateTableData()
 	// Then we fill the columns with the form connections
 	for(Connection *c = m_form->connectionBuffer()->first(); c ; c = m_form->connectionBuffer()->next())
 	{
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 		KexiTableItem *item = m_table->data()->createItem(); //new KexiTableItem(5);
 		(*item)[1] = c->sender();
@@ -252,7 +266,9 @@ ConnectionDialog::setStatusOk(KexiTableItem *item)
 	m_pixmapLabel->setPixmap( DesktopIcon("button_ok") );
 	m_textLabel->setText("<qt><h2>The connection is OK.</h2></qt>");
 
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 	if (!item)
 		item = m_table->selectedItem();
@@ -274,7 +290,9 @@ ConnectionDialog::setStatusError(const QString &msg, KexiTableItem *item)
 	m_pixmapLabel->setPixmap( DesktopIcon("button_cancel") );
 	m_textLabel->setText("<qt><h2>The connection is invalid.</h2></qt>" + msg);
 
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 	if (!item)
 		item = m_table->selectedItem();
@@ -293,7 +311,9 @@ ConnectionDialog::setStatusError(const QString &msg, KexiTableItem *item)
 void
 ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant&, KexiDB::ResultInfo*)
 {
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 	switch(col)
 	{
@@ -316,7 +336,9 @@ ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant&, KexiD
 void
 ConnectionDialog::updateSlotList(KexiTableItem *item)
 {
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 	m_slotsColumnData->deleteAllRows();
 	QString widget = (*item)[1].toString();
@@ -352,7 +374,9 @@ ConnectionDialog::updateSlotList(KexiTableItem *item)
 void
 ConnectionDialog::updateSignalList(KexiTableItem *item)
 {
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 ObjectTreeItem *tree = m_form->objectTree()->lookup((*item)[1].toString());
 	if(!tree || !tree->widget())
@@ -374,7 +398,9 @@ ObjectTreeItem *tree = m_form->objectTree()->lookup((*item)[1].toString());
 void
 ConnectionDialog::checkConnection(KexiTableItem *item)
 {
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 	// First we check if one column is empty
 	for(int i = 1; i < 5; i++)
@@ -406,7 +432,9 @@ ConnectionDialog::checkConnection(KexiTableItem *item)
 void
 ConnectionDialog::newItem()
 {
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 	m_table->acceptRowEdit();
 	m_table->setCursorPosition(m_table->rows(), 1);
@@ -430,7 +458,9 @@ ConnectionDialog::slotConnectionCreated(KFormDesigner::Form *form, Connection &c
 	if(form != m_form)
 		return;
 
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 	Connection *c = new Connection(connection);
 	KexiTableItem *item = m_table->data()->createItem(); //new KexiTableItem(5);
@@ -456,7 +486,9 @@ ConnectionDialog::slotConnectionAborted(KFormDesigner::Form *form)
 void
 ConnectionDialog::removeItem()
 {
+#ifdef __GNUC__
 #warning "Port Kexi Table View!"
+#endif
 #ifndef KEXI_NO_TABLEVIEW
 	if(m_table->currentRow() == -1 || m_table->currentRow()>=m_table->rows())
 		return;

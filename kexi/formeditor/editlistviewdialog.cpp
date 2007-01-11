@@ -162,7 +162,9 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	connect(m_listbox, SIGNAL(currentChanged(Q3ListBoxItem*)), this, SLOT(updateItemProperties(Q3ListBoxItem*)));
 
 	//// Init dialog and display it ////////////////////////
+#ifdef __GNUC__
 #warning "setInitialSize() unavailable on kde 4"
+#endif
 //	setInitialSize(QSize(500, 300), true);
 }
 

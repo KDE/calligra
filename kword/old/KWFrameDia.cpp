@@ -555,7 +555,9 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         m_sideGap->setMaxLength(6);
         m_sideGrid->addWidget(m_sideGap,2,1);
         m_sideAlign = new QComboBox (false,m_sideHeads);
+#ifdef __GNUC__
 #warning "kde4: port it		"
+#endif
         //m_sideAlign->setAutoResize(false);
         m_sideAlign->insertItem ( i18n("Left"));
         m_sideAlign->insertItem ( i18n("Right"));

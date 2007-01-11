@@ -1478,7 +1478,9 @@ KPrObjectAdaptor* KPrObject::dbusObject()
 
 void KPrObject::setupClipRegion( QPainter *painter, const QRegion &clipRegion )
 {
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 #if 0
     QRegion region = painter->clipRegion( QPainter::CoordPainter );
     if ( region.isEmpty() )

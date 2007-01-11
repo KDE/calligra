@@ -127,7 +127,9 @@ bool KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString
         kWarning(30508) << "Could not load image (KWEFBaseWorker::loadAndConvertToImage)" <<endl;
         return false;
     }
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 #if 0    
     QImageIO imageIO;
     imageIO.setImage(qimage);

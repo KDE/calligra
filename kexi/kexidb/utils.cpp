@@ -466,7 +466,9 @@ void ConnectionTestDialog::error(KexiDB::Object *obj)
 	QMutex mutex;
 	mutex.lock();
 #ifndef Q_OS_WIN
+#ifdef __GNUC__
 #warning QWaitCondition::wait() OK?
+#endif
 #endif
 	m_wait.wait(&mutex);
 	mutex.unlock();

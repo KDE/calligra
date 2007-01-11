@@ -910,7 +910,7 @@ configureSpellPage::configureSpellPage( View* _view,KVBox *box , char * /*name*/
   config = Factory::global()->config();
 
 
-#if defined( Q_CC_GNU )
+#ifdef __GNUC__
 #warning TODO KDE4 port to sonnet
 #endif
 #if 0
@@ -937,7 +937,7 @@ configureSpellPage::configureSpellPage( View* _view,KVBox *box , char * /*name*/
 
 void configureSpellPage::apply()
 {
-#if defined( Q_CC_GNU )
+#ifdef __GNUC__
 #warning TODO KDE4 port to sonnet
 #endif
 #if 0

@@ -249,7 +249,9 @@ KPrThumbBar::KPrThumbBar(QWidget *parent, KPrDocument *d, KPrView *v)
     setItemsMovable(false);
     setResizeMode(Q3IconView::Adjust);
 
+#ifdef __GNUC__
 #warning "port it: qtooltip"
+#endif
     //m_thumbTip = new ThumbToolTip(this);
 
     connect(this, SIGNAL(currentChanged(Q3IconViewItem *)),
@@ -1094,7 +1096,9 @@ void KPrOutline::renamePageTitle()
         page_titles.append( it->pageTitle() );
 
     KPrRenamePageValidator validator( page_titles );
+#ifdef __GNUC__
 #warning "kde4: port to KPrRenamePageValidator"
+#endif
     QString newTitle = KInputDialog::getText( i18n("Rename Slide"),
                                               i18n("Slide title:"), activeTitle/*, &ok, this, 0,
                                               &validator );*/);

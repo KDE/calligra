@@ -2602,7 +2602,9 @@ void CellFormatPageBorder::InitializeGrids()
 
   /* now set up the group box with the pattern selector */
   tmpQGroupBox = new QGroupBox( this );
+#ifdef __GNUC__
 #warning "kde4 port it"
+#endif
   //tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
   tmpQGroupBox->setTitle( i18n("Pattern") );
   tmpQGroupBox->setAlignment( Qt::AlignLeft );
@@ -3543,7 +3545,9 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 
     tmpQGroupBox = new QGroupBox( this );
     tmpQGroupBox->setTitle( i18n("Preview") );
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
     //tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
     tmpQGroupBox->setAlignment( Qt::AlignLeft );
 

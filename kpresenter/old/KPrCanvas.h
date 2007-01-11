@@ -538,7 +538,9 @@ protected:
     virtual void dropEvent( QDropEvent *e );
     virtual void keyPressEvent( QKeyEvent *e );
     virtual void keyReleaseEvent( QKeyEvent *e );
+#ifdef __GNUC__
 #warning "kde4 reapply it"	
+#endif
 #if 0
 	virtual void imStartEvent( QIMEvent * e );
     virtual void imComposeEvent( QIMEvent * e );

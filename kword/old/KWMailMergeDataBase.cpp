@@ -226,7 +226,9 @@ const QMap< QString, QString > &KWMailMergeDataBase::getRecordEntries() const
 
 int KWMailMergeDataBase::getNumRecords() const
 {
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 #if 0
     if (plugin)
         return plugin->getNumRecords();

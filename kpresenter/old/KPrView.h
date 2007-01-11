@@ -1013,7 +1013,9 @@ private:
     KAction *actionExtraGroup;
     KAction *actionExtraUnGroup;
     //KoLineStyleAction *actionExtraPenStyle;
+#ifdef __GNUC__
 #warning "kde4: disable it"
+#endif
 	//KoLineWidthAction *actionExtraPenWidth;
 
     KAction *actionScreenConfigPages;

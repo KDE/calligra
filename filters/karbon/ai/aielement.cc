@@ -743,7 +743,9 @@ bool AIElement::cast( Type t )
     case AIElement::Double:
 	    asDouble();
 	    break;
+#ifdef __GNUC__
 #warning "KDE4: TODO how port it"
+#endif
 #if 0		
     case AIElement::CString:
 	    asCString();

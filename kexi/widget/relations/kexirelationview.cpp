@@ -344,7 +344,9 @@ KexiRelationView::setReadOnly(bool b)
 	{
 //		(*it)->setReadOnly(b);
 #ifndef Q_WS_WIN
+#ifdef __GNUC__
 		#warning readonly needed
+#endif
 #endif
 	}*/
 }

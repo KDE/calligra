@@ -275,7 +275,9 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
 
                         QPainter p;
                         p.begin( &m_gradientPix );
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
                         //p.setClipRegion( clipregion , QPainter::CoordPainter);
                         p.drawPixmap( 0, 0, gradient->pixmap() );
                         p.end();

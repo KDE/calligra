@@ -50,7 +50,9 @@
 #include "events.h"
 
 #define KEXI_NO_FLOWLAYOUT
+#ifdef __GNUC__
 #warning "Port Kexi flow layout!"
+#endif
 #ifndef KEXI_NO_FLOWLAYOUT
 #include "kexiflowlayout.h"
 #endif

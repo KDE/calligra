@@ -27,7 +27,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
 
+#ifdef __GNUC__
 #warning "kde4: port from arts to phonon"
+#endif
 #define WITHOUT_ARTS
 
 #ifndef WITHOUT_ARTS

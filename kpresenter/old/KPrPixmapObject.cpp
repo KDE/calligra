@@ -64,7 +64,9 @@ KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection )
     m_ie_par2 = QVariant();
     m_ie_par3 = QVariant();
     // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 	//m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
     keepRatio = true;
     dbus = new KPrPixmapObjectAdaptor( this );
@@ -87,7 +89,9 @@ KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection, const K
     m_ie_par2 = QVariant();
     m_ie_par3 = QVariant();
     // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 	//m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 
     setPicture( key );
@@ -582,7 +586,9 @@ QPixmap KPrPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
 
     image.setAlphaBuffer(true);
     QBitmap tmpMask;
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
     //tmpMask = image.createAlphaMask().scale(size);
     pixmap.setMask(tmpMask);
 
@@ -688,7 +694,9 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
     QPen pen2;
     if ( drawContour ) {
         pen2 = QPen( Qt::black, 1, Qt::DotLine );
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
         //_painter->setRasterOp( Qt::NotXorROP );
     }
     else {

@@ -147,7 +147,9 @@ namespace KDXML {
             // we store an empty image without any data
             createIntNode( doc, pixmapElement, "Length", 0 );
         }else{
+#ifdef __GNUC__
 #warning "kde4 port"
+#endif
 #if 0				
             // Convert the pixmap to an image, save that image to an in-memory
             // XPM representation and compress this representation. This

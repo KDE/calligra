@@ -3520,7 +3520,9 @@ void Canvas::copyOasisObjects()
     QMimeData* mimeData = new QMimeData();
     if ( !plainText.isEmpty() )
         mimeData->setText( plainText );
+#ifdef __GNUC__
 #warning TODO KDE4 portage: Drag'n'drop of KoPicture
+#endif
 #if 0
     if ( !picture.isNull() )
         multiDrag->setMimeData( picture.dragObject( 0 ) );

@@ -369,7 +369,9 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 
 
         QPixmap topBuffer( buffer );
+#ifdef __GNUC__
 #warning "kde4: port it!"
+#endif
 		QPainter topPainter;//( &topBuffer, &buffer );
         topPainter.translate( -diffx(), -diffy() );
         topPainter.setBrushOrigin( -diffx(), -diffy() );
@@ -513,7 +515,9 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect, KPrPage * 
 void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush ) const
 {
     painter->save();
+#ifdef __GNUC__
 #warning "kde4: port it"	
+#endif
     //painter->setClipRegion( emptySpaceRegion, QPainter::CoordPainter );
     painter->setPen( Qt::NoPen );
 
@@ -855,7 +859,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     recalcAutoGuides();
                     if ( m_view->kPresenterDoc()->showGuideLines() && !m_disableSnapping )
                     {
+#ifdef __GNUC__
 #warning "port to qrectf/qpointf"			    
+#endif
                         //m_gl.repaintSnapping( objectRect( false ) );
                     }
                 }
@@ -1113,7 +1119,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
             setCursor( Qt::arrowCursor );
             QPoint pnt = QCursor::pos();
+#ifdef __GNUC__
 #warning "kde4: port it to qaction"
+#endif
 #if 0
 			int ret = m_presMenu->exec( pnt );
             // we have to continue the timer if the menu was canceled and we draw mode is not active
@@ -2189,7 +2197,9 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
         }
     }
 }
+#ifdef __GNUC__
 #warning "kde4 port it"
+#endif
 #if 0
 void KPrCanvas::imStartEvent( QIMEvent * e )
 {
@@ -4209,7 +4219,9 @@ void KPrCanvas::copyObjs()
             KoPicture pic = kprdoc->pictureCollection()->findPicture( savePictures.first() );
             Q3DragObject* picDrag = pic.dragObject( 0L );
             if ( picDrag ) {
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 #if 0
                 KMultipleDrag* multipleDrag = new KMultipleDrag( 0L );
                 multipleDrag->addDragObject( kd );
@@ -4619,14 +4631,18 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
             m_moveSnapDiff = QPointF( 0, 0 );
 
             KoGuides::SnapStatus snapStatus = KoGuides::SNAP_NONE;
+#ifdef __GNUC__
 #warning "kde4: port to qrectf"	    
+#endif
             //m_gl.snapToGuideLines( movedRect, KEY_SNAP_DISTANCE, snapStatus, m_moveSnapDiff );
 
             move += m_moveSnapDiff;
         }
         else
         {
+#ifdef __GNUC__
 #warning "kde4: port to qrectf"		
+#endif
             //m_gl.diffNextGuide( rect, move );
         }
     }
@@ -4656,7 +4672,9 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
         // redraw guidelines (intentionally always)
         QRectF movedRect( rect );
         movedRect.translate( move.x(), move.y() );	
+#ifdef __GNUC__
 #warning "kde4: port to qrectf"	
+#endif
         //m_gl.repaintSnapping( movedRect );
     }
 
@@ -4704,7 +4722,9 @@ void KPrCanvas::moveObjectsByMouse( QPointF &pos, bool keepXorYunchanged )
 
     if ( snapToGuideLines )
     {
+#ifdef __GNUC__
 #warning "kde4 port to qrectf"	    
+#endif
         //m_gl.snapToGuideLines( movedRect, MOUSE_SNAP_DISTANCE, snapStatus, m_moveSnapDiff );
     }
 
@@ -4747,7 +4767,9 @@ void KPrCanvas::moveObjectsByMouse( QPointF &pos, bool keepXorYunchanged )
     if ( snapToGuideLines )
     {
         // redraw guidelines (intentionally always)
+#ifdef __GNUC__
 #warning "kde4: port to qrectf" 
+#endif
         //m_gl.repaintSnapping( movedRect );
     }
 
@@ -4952,7 +4974,9 @@ void KPrCanvas::resizeObject( ModifyType _modType, const QPointF & point, bool k
             {
                 sp.setY( rect.bottom() );
             }
+#ifdef __GNUC__
 #warning "kde4 port to qrectf"	    
+#endif
             //m_gl.repaintSnapping( sp, snapStatus );
         }
 
@@ -5052,7 +5076,9 @@ void KPrCanvas::stopSound()
 
 void KPrCanvas::setXimPosition( int x, int y, int w, int h, QFont *f )
 {
+#ifdef __GNUC__
 #warning "kde4 : port it"
+#endif
 //    QWidget::setMicroFocusHint( x - diffx(), y - diffy(), w, h, true, f );
 }
 
@@ -5571,7 +5597,9 @@ QPointF KPrCanvas::snapPoint( QPointF &pos, bool repaintSnapping )
 
     if ( snapToGuideLines )
     {
+#ifdef __GNUC__
 #warning "port to QPointF/QRectF"	    
+#endif
         //m_gl.snapToGuideLines( sp, MOUSE_SNAP_DISTANCE, snapStatus, snapDiff );
     }
 
@@ -5592,7 +5620,9 @@ QPointF KPrCanvas::snapPoint( QPointF &pos, bool repaintSnapping )
     // redraw guidelines (intentionally always)
     if ( repaintSnapping && snapToGuideLines )
     {
+#ifdef __GNUC__
 #warning "kde4: port to QRectF/QPointF"	    
+#endif
         //m_gl.repaintSnapping( sp, KoGuides::SNAP_BOTH );
     }
 
@@ -5684,7 +5714,9 @@ void KPrCanvas::popupContextMenu()
         }
         setCursor( Qt::arrowCursor );
         QPoint p( width()/2, height()/2 );
+#ifdef __GNUC__
 #warning "kde4: port to qaction"
+#endif
 #if 0
 		int ret = m_presMenu->exec( p );
         // we have to continue the timer if the menu was canceled and draw mode is not active

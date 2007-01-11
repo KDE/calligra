@@ -2177,7 +2177,7 @@ void View::extraSpelling()
 
 void View::startKSpell()
 {
-#if defined( Q_CC_GNU )
+#ifdef __GNUC__
 #warning TODO KDE4 port to sonnet
 #endif
 #if 0

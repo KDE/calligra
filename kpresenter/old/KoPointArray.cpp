@@ -250,7 +250,9 @@ QRectF KoPointArray::boundingRect() const
             maxy = pd->y();
         pd++;
     }
+#ifdef __GNUC__
 #warning "kde4 verify it!"    
+#endif
     return QRectF( QPointF(minx,miny), QSizeF(maxx-minx,maxy-miny) );
 }
 

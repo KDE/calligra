@@ -61,13 +61,17 @@
 #include "formIO.h"
 
 #define KEXI_NO_FLOWLAYOUT
+#ifdef __GNUC__
 #warning "Port Kexi flow layout!"
+#endif
 #ifndef KEXI_NO_FLOWLAYOUT
 #include "kexiflowlayout.h"
 #endif
 
 #define KEXI_NO_PIXMAPCOLLECTION
+#ifdef __GNUC__
 #warning pixmapcollection
+#endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 #include "pixmapcollection.h"
 #endif
@@ -224,7 +228,9 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
 		tabstop.appendChild(tabStopText);
 	}
 
+#ifdef __GNUC__
 #warning pixmapcollection
+#endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 	// Save the Form 's PixmapCollection
 	form->pixmapCollection()->save(uiElement);
@@ -372,7 +378,9 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 
 	// Load the pixmap collection
 	m_savePixmapsInline = ( (ui.namedItem("pixmapinproject").isNull()) || (!ui.namedItem("images").isNull()) );
+#ifdef __GNUC__
 #warning pixmapcollection
+#endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 	form->pixmapCollection()->load(ui.namedItem("collection"));
 #endif
@@ -899,7 +907,9 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 	}
 	else if(type == "pixmap")
 	{
+#ifdef __GNUC__
 #warning pixmapcollection
+#endif
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 		if(m_savePixmapsInline || !m_currentForm || !m_currentItem || !m_currentForm->pixmapCollection()->contains(text))
 			return loadImage(tag.ownerDocument(), text);
@@ -1095,7 +1105,9 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 		case Container::HFlow: case Container::VFlow:
 		{
 #ifdef KEXI_NO_FLOWLAYOUT
+#ifdef __GNUC__
 #warning "Port Kexi flow layout!"
+#endif
 #else
 			layout.setTagName("grid");
 			KexiFlowLayout *flow = static_cast<KexiFlowLayout*>(item->container()->layout());
@@ -1398,7 +1410,9 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 				}
 				else if((name == "justify")){
 #ifdef KEXI_NO_FLOWLAYOUT
+#ifdef __GNUC__
 #warning "Port Kexi flow layout!"
+#endif
 #else
 					bool justify = readPropertyValue(node.firstChild(), w, name).toBool();
 					KexiFlowLayout *flow = static_cast<KexiFlowLayout*>(item->container()->layout());
@@ -1462,7 +1476,9 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 
 			if(layoutName == "HFlow") {
 #ifdef KEXI_NO_FLOWLAYOUT
+#ifdef __GNUC__
 #warning "Port Kexi flow layout!"
+#endif
 #else
 				item->container()->m_layType = Container::HFlow;
 				KexiFlowLayout *layout = new KexiFlowLayout(item->widget());
@@ -1472,7 +1488,9 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 			}
 			else if(layoutName == "VFlow") {
 #ifdef KEXI_NO_FLOWLAYOUT
+#ifdef __GNUC__
 #warning "Port Kexi flow layout!"
+#endif
 #else
 				item->container()->m_layType = Container::VFlow;
 				KexiFlowLayout *layout = new KexiFlowLayout(item->widget());

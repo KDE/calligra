@@ -103,7 +103,9 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent)
     QDockWidget  *dw2 = new QDockWidget( shell() );
     m_structure = new Kudesigner::StructureWidget( dw1 );
     m_propertyEditor = new Editor( dw2 );
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 #if 0
 	dw1->boxLayout() ->addWidget( m_structure, 1 );
     dw2->boxLayout() ->addWidget( m_propertyEditor, 1 );

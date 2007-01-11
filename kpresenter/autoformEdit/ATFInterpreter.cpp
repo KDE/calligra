@@ -107,7 +107,9 @@ void ATFInterpreter::load(const QString & fileName)
     {
         while (!ptA.atEnd())
         {
+#ifdef __GNUC__
 #warning "kde4: port it"				
+#endif
             //ptA.readLine(line.data()->toLatin1(),255);
             lines.append(line.simplified());
         }

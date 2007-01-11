@@ -312,8 +312,9 @@ int KWFrameStyleManager::frameStyleIndex( int pos ) {
     }
     kWarning() << "KWFrameStyleManager::frameStyleIndex no style found at pos " << pos << " count=" << m_frameStyles.count() << endl;
 
-#ifdef __GNUC_
+#ifdef __GNUC__#ifdef __GNUC__
 #warning implement undo/redo
+#endif
 #endif
 
     return 0;
@@ -494,7 +495,9 @@ void KWFrameStyleManager::slotApply()
 {
     save();
     apply();
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
     //KDialog::slotApply();
 }
 

@@ -162,7 +162,9 @@ void KWConfig::unitChanged( int u )
 
 void KWConfig::openPage(int flags)
 {
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 #if 0
     if(flags & KW_KSPELL)
         showPage( 2 );
@@ -209,7 +211,9 @@ void KWConfig::slotApply()
 
 void KWConfig::slotDefault()
 {
+#ifdef __GNUC__
 #warning "kde4: port it"
+#endif
 #if 0
     switch(activePageIndex())
     {
