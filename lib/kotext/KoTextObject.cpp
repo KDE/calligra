@@ -262,7 +262,7 @@ KoTextObject::UndoRedoInfo::UndoRedoInfo( KoTextObject *to )
 
 bool KoTextObject::UndoRedoInfo::valid() const
 {
-    return text.length() > 0 && id >= 0 && index >= 0;
+    return text.length() > 0 && id >= 0 && index >= 0 && type != Invalid;
 }
 
 void KoTextObject::UndoRedoInfo::clear()
@@ -276,22 +276,25 @@ void KoTextObject::UndoRedoInfo::clear()
                 KoTextDocCommand * cmd = new KoTextInsertCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
                 textdoc->addCommand( cmd );
                 Q_ASSERT( placeHolderCmd );
-                // Inserting any custom items -> macro command, to let custom items add their command
-                if ( !customItemsMap.isEmpty() )
+                if ( placeHolderCmd ) // crash prevention
                 {
-                    CustomItemsMap::Iterator it = customItemsMap.begin();
-                    for ( ; it != customItemsMap.end(); ++it )
+                    // Inserting any custom items -> macro command, to let custom items add their command
+                    if ( !customItemsMap.isEmpty() )
                     {
-                        KoTextCustomItem * item = it.data();
-                        KCommand * itemCmd = item->createCommand();
-                        if ( itemCmd )
-                            placeHolderCmd->addCommand( itemCmd );
+                        CustomItemsMap::Iterator it = customItemsMap.begin();
+                        for ( ; it != customItemsMap.end(); ++it )
+                        {
+                            KoTextCustomItem * item = it.data();
+                            KCommand * itemCmd = item->createCommand();
+                            if ( itemCmd )
+                                placeHolderCmd->addCommand( itemCmd );
+                        }
+                        placeHolderCmd->addCommand( new KoTextCommand( textobj, /*cmd, */QString::null ) );
                     }
-                    placeHolderCmd->addCommand( new KoTextCommand( textobj, /*cmd, */QString::null ) );
-                }
-                else
-                {
-                    placeHolderCmd->addCommand( new KoTextCommand( textobj, /*cmd, */QString::null ) );
+                    else
+                    {
+                        placeHolderCmd->addCommand( new KoTextCommand( textobj, /*cmd, */QString::null ) );
+                    }
                 }
             } break;
             case Delete:
@@ -319,7 +322,7 @@ void KoTextObject::UndoRedoInfo::clear()
     index = -1;
     oldParagLayouts.clear();
     customItemsMap.clear();
-    placeHolderCmd = 0L;
+    placeHolderCmd = 0;
 }
 
 void KoTextObject::copyCharFormatting( KoTextParag *parag, int position, int index /*in text*/, bool moveCustomItems )
@@ -722,7 +725,8 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         if ( textdoc->removeSelection( selectionId ) && repaint )
             selectionChangedNotify(); // does the repaint
     }
-    if ( !customItemsMap.isEmpty() ) {
+    if ( !customItemsMap.isEmpty()
+         && !commandName.isNull() /* see replace-selection; #139890 */ ) {
         clearUndoRedoInfo();
     }
 
