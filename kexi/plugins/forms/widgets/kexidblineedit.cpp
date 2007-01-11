@@ -307,8 +307,6 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 		return;
 
 //! @todo handle input mask (via QLineEdit::setInputMask()) using a special KexiDB::FieldInputMask class
-	const KexiDB::Field::Type t = cinfo->field->type();
-
 	setValidator( new KexiDB::FieldValidator(*cinfo->field, this) );
 
 #if 0 // moved to KexiTextFormatter

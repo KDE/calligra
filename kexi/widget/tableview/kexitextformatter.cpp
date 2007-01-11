@@ -167,11 +167,11 @@ QVariant KexiTextFormatter::textToValue(const QString& text) const
 	case KexiDB::Field::Float:
 	case KexiDB::Field::Double: {
 		// replace custom decimal symbol with '.' as required by to{Float|Double}()
-		QString t( text );
-		t.replace(KGlobal::locale()->decimalSymbol(), ".");
+		QString fixedText( text );
+		fixedText.replace(KGlobal::locale()->decimalSymbol(), ".");
 		if (t == KexiDB::Field::Double)
-			return t.toDouble();
-		return t.toFloat();
+			return fixedText.toDouble();
+		return fixedText.toFloat();
 	}
 	default:
 		return text;
