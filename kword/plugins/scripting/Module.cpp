@@ -144,7 +144,7 @@ int Module::frameSetCount()
 QObject* Module::frameSet(int frameSetNr)
 {
     KWFrameSet* frameset = (frameSetNr>=0 && frameSetNr<doc()->frameSetCount()) ? doc()->frameSets().at(frameSetNr) : 0;
-    return new FrameSet(this, frameset);
+    return frameset ? new FrameSet(this, frameset) : 0;
 }
 
 QObject* Module::addTextFrameSet(const QString& framesetname)

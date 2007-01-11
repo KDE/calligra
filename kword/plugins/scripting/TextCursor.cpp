@@ -75,7 +75,9 @@ QObject* TextCursor::insertList(QObject* textformat) {
     if(format)
         f = format->format()->toListFormat();
     else {
-        f.setStyle(QTextListFormat::ListDisc); f.setIndent(f.indent()+1); //testcase
+        //testcase
+        f.setStyle(QTextListFormat::ListDisc);
+        f.setIndent(f.indent()+1);
     }
     QTextList* l = m_cursor.insertList(f);
     return l ? new TextList(this, l) : 0;
