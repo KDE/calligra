@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2002-2006 David Faure <faure@kde.org>
- * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -59,7 +59,9 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     m_zoom(100),
     m_frameLayout(pageManager(), m_frameSets, &m_pageSettings)
 {
+    m_frameLayout.setDocument(this);
     m_styleManager = new KoStyleManager(this);
+    m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
     m_zoomMode = KoZoomMode::ZOOM_WIDTH;
 
     setInstance( KWFactory::instance(), false );
@@ -76,6 +78,7 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
 }
 
 KWDocument::~KWDocument() {
+    delete m_styleManager;
 }
 
 void KWDocument::addShape (KoShape *shape) {
@@ -91,6 +94,7 @@ void KWDocument::addShape (KoShape *shape) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->shapeManager()->add(shape);
     }
+m_inlineTextObjectManager->setProperty(KoInlineObjectBase::KWordStart, m_frameSets.count()); // TEst it..
 }
 
 void KWDocument::removeShape (KoShape *shape) {
@@ -175,9 +179,6 @@ void KWDocument::removeFrameSet( KWFrameSet *fs ) {
             canvas->shapeManager()->remove(frame->shape());
         }
     }
-    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
-    if(tfs)
-        tfs->setKWDoc(0);
     emit frameSetRemoved(fs);
 }
 
@@ -201,7 +202,6 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
             connect(tfs, SIGNAL(moreFramesNeeded(KWTextFrameSet*)),
                     this, SLOT(requestMoreSpace(KWTextFrameSet*)));
         }
-        tfs->setKWDoc(this);
     }
 
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));

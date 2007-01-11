@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,6 +43,7 @@ KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFra
     m_firstHeader(0),
     m_firstFooter(0),
     m_maintext(0),
+    m_document(0),
     m_setup(false)
 {
 }
@@ -433,13 +434,13 @@ KWTextFrameSet *KWFrameLayout::getOrCreate(KWord::TextFrameSetType type) {
         case KWord::MainTextFrameSet:
             answer = &m_maintext; break;
         default:
-            KWTextFrameSet *newFS = new KWTextFrameSet();
+            KWTextFrameSet *newFS = new KWTextFrameSet(m_document);
             emit newFrameSet(newFS);
             return newFS;
     }
     Q_ASSERT(answer);
     if(*answer == 0) {
-        KWTextFrameSet *newFS = new KWTextFrameSet(type);
+        KWTextFrameSet *newFS = new KWTextFrameSet(m_document, type);
         emit newFrameSet(newFS);
         Q_ASSERT(m_frameSets.contains(newFS));
         *answer = newFS;

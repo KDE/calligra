@@ -107,7 +107,7 @@ void KWFrameConnectSelector::save() {
     Q_ASSERT(m_frameSets.count() == m_items.count());
     KWFrameSet *oldFS = m_frame->frameSet();
     if(widget.newRadio->isChecked()) {
-        KWTextFrameSet *newFS = new KWTextFrameSet();
+        KWTextFrameSet *newFS = new KWTextFrameSet(m_state->document());
         newFS->setName(widget.frameSetName->text());
         m_frame->setFrameSet(newFS);
         m_state->document()->addFrameSet(newFS);

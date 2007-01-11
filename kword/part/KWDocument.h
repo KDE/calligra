@@ -28,6 +28,7 @@
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
 #include <KoZoomMode.h>
+#include <KoInlineTextObjectManager.h>
 
 #include <QObject>
 #include <QPainter>
@@ -204,6 +205,8 @@ public:
      */
     const KoStyleManager *styleManager() const { return m_styleManager; }
 
+    KoInlineTextObjectManager *inlineTextObjectManager() const { return m_inlineTextObjectManager; }
+
 #ifndef NDEBUG
     /// Use a log of kDebug calls to print out the internal state of the document and its members
     void printDebug();
@@ -262,6 +265,8 @@ private:
     KWFrameLayout m_frameLayout;
 
     KoStyleManager *m_styleManager;
+
+    KoInlineTextObjectManager *m_inlineTextObjectManager;
 };
 
 /// \internal

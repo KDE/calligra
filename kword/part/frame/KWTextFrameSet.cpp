@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 #include "KWTextFrame.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
+#include "KWDocument.h"
 
 #include <KoTextShapeData.h>
 #include <KoInlineTextObjectManager.h>
@@ -32,32 +33,33 @@
 #include <QTextDocument>
 #include <QTimer>
 
-KWTextFrameSet::KWTextFrameSet()
+KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
     : m_document( new QTextDocument() ),
     m_protectContent(false),
     m_layoutTriggered(false),
     m_allowLayoutRequests(true),
     m_textFrameSetType( KWord::OtherTextFrameSet ),
     m_pageManager(0),
-    m_kwdoc(0)
+    m_kwordDocument(doc)
 {
     KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
-    KoInlineTextObjectManager *manager = new KoInlineTextObjectManager(layout);
-    layout->setInlineObjectTextManager(manager);
+    layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
     m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
 }
 
-KWTextFrameSet::KWTextFrameSet(KWord::TextFrameSetType type)
+KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType type)
     : m_document( new QTextDocument() ),
     m_protectContent(false),
     m_layoutTriggered(false),
     m_allowLayoutRequests(true),
     m_textFrameSetType( type ),
     m_pageManager(0),
-    m_kwdoc(0)
+    m_kwordDocument(doc)
 {
-    m_document->setDocumentLayout(new KWTextDocumentLayout(this));
+    KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
+    layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
+    m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
     switch(m_textFrameSetType) {
         case KWord::FirstPageHeaderTextFrameSet:

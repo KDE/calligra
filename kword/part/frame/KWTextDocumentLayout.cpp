@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -217,11 +217,11 @@ void KWTextDocumentLayout::layout() {
 
         if(m_state->shape != currentShape) { // next shape; refresh the outlines cache.
             currentShape = m_state->shape;
-            if(m_frameSet->kwDoc()) {
+            if(m_frameSet->kwordDocument()) {
                 qDeleteAll(outlines);
                 outlines.clear();
                 QRectF bounds = m_state->shape->boundingRect();
-                foreach(KWFrameSet *fs, m_frameSet->kwDoc()->frameSets()) {
+                foreach(KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
                     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
                     if(tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet)
                         continue;

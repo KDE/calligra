@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,12 +35,12 @@ class KWORD_EXPORT KWTextFrameSet : public KWFrameSet {
     Q_OBJECT
 public:
     /// normal constructor, for user text
-    KWTextFrameSet();
+    explicit KWTextFrameSet(const KWDocument *document);
     /**
      * Constructor with a type of text specified
      * @param type the type of frameSet; this can indicate headers, footers etc.
      */
-    explicit KWTextFrameSet(KWord::TextFrameSetType type);
+    KWTextFrameSet(const KWDocument *document, KWord::TextFrameSetType type);
     ~KWTextFrameSet();
 
     /// return the type of frameSet this is
@@ -65,8 +65,7 @@ public:
     void setAllowLayout(bool allow);
     void setPageManager(const KWPageManager *pageMager) { m_pageManager = pageMager; }
     const KWPageManager* pageManager() const { return m_pageManager; }
-    void setKWDoc(const KWDocument *document) { m_kwdoc = document; }
-    const KWDocument *kwDoc() { return m_kwdoc; }
+    const KWDocument *kwordDocument() const { return m_kwordDocument; }
 
 #ifndef NDEBUG
     void printDebug();
@@ -115,7 +114,7 @@ private:
     bool m_protectContent, m_layoutTriggered, m_allowLayoutRequests;
     KWord::TextFrameSetType m_textFrameSetType;
     const KWPageManager *m_pageManager;
-    const KWDocument *m_kwdoc; // for runaround. Lets see if I can remove this later :)
+    const KWDocument *m_kwordDocument;
 
     static bool sortTextFrames(const KWFrame *frame1, const KWFrame *frame2);
 };

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,6 +34,7 @@ class KWTextFrameSet;
 class KWPageSettings;
 class KWPage;
 class KWFrame;
+class KWDocument;
 
 class KoShape;
 
@@ -87,6 +88,8 @@ public:
      */
     void createNewFrameForPage(KWTextFrameSet *fs, int pageNumber);
 
+    void setDocument(KWDocument *document) { m_document = document; }
+
 signals:
     /**
      * Signal emitted when a frameset is created
@@ -111,6 +114,8 @@ private:
 
     KWTextFrameSet *m_oddHeaders, *m_evenHeaders, *m_oddFooters, *m_evenFooters;
     KWTextFrameSet *m_firstHeader, *m_firstFooter, *m_maintext;
+
+    const KWDocument *m_document;
 
     bool m_setup;
 };

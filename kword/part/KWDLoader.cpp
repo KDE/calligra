@@ -426,7 +426,7 @@ KWFrameSet *KWDLoader::loadFrameSet( QDomElement framesetElem, bool loadFrames, 
                     default:
                         type = KWord::OtherTextFrameSet; break;
                 }
-                KWTextFrameSet *fs = new KWTextFrameSet(type);
+                KWTextFrameSet *fs = new KWTextFrameSet(m_document, type);
                 fs->setAllowLayout(false);
                 fs->setName( fsname );
                 fill(fs, framesetElem);
