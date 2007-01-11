@@ -224,7 +224,8 @@ luPt ContextStyle::getAdjustedSize( TextStyle tstyle, double factor ) const
     return qRound( ptToLayoutUnitPt( m_sizeFactor 
                                      * m_baseSize 
                                      * getReductionFactor( tstyle )
-                                     * factor ) );
+                                     * factor
+                                     * zoom() / 100.0 ) );
 }
 
 luPixel ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space, double factor ) const
@@ -243,28 +244,32 @@ luPixel ContextStyle::getThinSpace( TextStyle tstyle, double factor ) const
 {
     return ptToPixelX( m_sizeFactor
                        * textStyleValues[ tstyle ].thinSpace( quad )
-                       * factor );
+                       * factor
+                       * zoom() / 100.0 );
 }
 
 luPixel ContextStyle::getMediumSpace( TextStyle tstyle, double factor ) const
 {
     return ptToPixelX( m_sizeFactor
                        * textStyleValues[ tstyle ].mediumSpace( quad ) 
-                       * factor );
+                       * factor
+                       * zoom() / 100.0 );
 }
 
 luPixel ContextStyle::getThickSpace( TextStyle tstyle, double factor ) const
 {
     return ptToPixelX( m_sizeFactor
                        * textStyleValues[ tstyle ].thickSpace( quad ) 
-                       * factor );
+                       * factor
+                       * zoom() / 100.0 );
 }
 
 luPixel ContextStyle::getQuadSpace( TextStyle tstyle, double factor ) const
 {
     return ptToPixelX( m_sizeFactor
                        * textStyleValues[ tstyle ].quadSpace( quad ) 
-                       * factor );
+                       * factor
+                       * zoom() / 100.0 );
 }
 
 luPixel ContextStyle::axisHeight( TextStyle tstyle, double factor ) const
@@ -272,7 +277,8 @@ luPixel ContextStyle::axisHeight( TextStyle tstyle, double factor ) const
     //return ptToPixelY( textStyleValues[ tstyle ].axisHeight( m_axisHeight ) );
     return static_cast<luPixel>( m_sizeFactor
                                  * textStyleValues[ tstyle ].axisHeight( m_axisHeight ) 
-                                 * factor );
+                                 * factor
+                                 * zoom() / 100.0 );
 }
 
 luPt ContextStyle::getBaseSize() const
@@ -297,17 +303,17 @@ void ContextStyle::setSizeFactor( double factor )
 
 luPixel ContextStyle::getLineWidth( double factor ) const
 {
-    return ptToLayoutUnitPixX( m_sizeFactor*lineWidth*factor );
+    return ptToLayoutUnitPixX( m_sizeFactor*lineWidth*factor*zoom() / 100.0 );
 }
 
 luPixel ContextStyle::getEmptyRectWidth( double factor ) const
 {
-    return ptToLayoutUnitPixX( m_sizeFactor*m_baseSize*factor/1.8 );
+    return ptToLayoutUnitPixX( m_sizeFactor*m_baseSize*factor*(zoom() / 100.0)/1.8 );
 }
 
 luPixel ContextStyle::getEmptyRectHeight( double factor ) const
 {
-    return ptToLayoutUnitPixX( m_sizeFactor*m_baseSize*factor/1.8 );
+    return ptToLayoutUnitPixX( m_sizeFactor*m_baseSize*factor*(zoom() / 100.0)/1.8 );
 }
 
 
