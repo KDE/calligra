@@ -164,8 +164,8 @@ void KexiTableEdit::setupContents( QPainter *p, bool focused, const QVariant& va
 	if (realField->isFPNumericType()) {
 //! @todo ADD OPTION to displaying NULL VALUES as e.g. "(null)"
 		if (!val.isNull()) {
-				txt = KexiDB::formatNumberForVisibleDecimalPlaces(
-					val.toDouble(), realField->visibleDecimalPlaces());
+			txt = KexiDB::formatNumberForVisibleDecimalPlaces(
+				val.toDouble(), realField->visibleDecimalPlaces());
 		}
 		w -= 6;
 		align |= AlignRight;

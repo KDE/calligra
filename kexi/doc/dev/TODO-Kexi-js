@@ -435,6 +435,9 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - enlarge the default main window size, currently it's ~50% ofthe desktop size 
   - not convenient as user is forced to enlarge the window by hand (settings are stored though)
 - add "File->Save All" action
+- add settings dialog, KConfigXT based simple version 
+   + about:config-like using kconfigeditor http://extragear.kde.org/apps/kconfigeditor/
+     (possible reuse of koproperty)
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
@@ -1027,7 +1030,6 @@ Form/TV Shortcuts:
 
 == TODOs for 1.1.2 ==
 - support combo box within the autofield widget
-- use transliteration script: http://bugs.kde.org/show_bug.cgi?id=133170
 (done?): notify and update data source after schema changes
 - todo: fix things like SELECT *, cars.owner AS ab, 1.3 AS wyr1, persons.surname FROM cars LEFT OUTER JOIN persons ON cars.owner=persons.id  WHERE cars.owner > 3
       (crash - see Simple_Database.kexi - persons_and_cars query has lookup fields and OUTER JOIN is NOT PARSED

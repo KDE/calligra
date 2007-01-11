@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -75,11 +75,6 @@ AlterTableHandler::RemoveFieldAction& AlterTableHandler::ActionBase::toRemoveFie
 	return nullRemoveFieldAction;
 }
 
-void AlterTableHandler::ActionBase::simplifyActions(ActionDictDict &fieldActions)
-{
-	Q_UNUSED(fieldActions);
-}
-
 AlterTableHandler::InsertFieldAction& AlterTableHandler::ActionBase::toInsertFieldAction()
 {
 	if (dynamic_cast<InsertFieldAction*>(this))
@@ -118,8 +113,7 @@ AlterTableHandler::FieldActionBase::~FieldActionBase()
 static KStaticDeleter< QMap<QCString,int> > KexiDB_alteringTypeForProperty_deleter;
 QMap<QCString,int> *KexiDB_alteringTypeForProperty = 0;
 
-//! @internal
-static int alteringTypeForProperty(const QCString& propertyName)
+int AlterTableHandler::alteringTypeForProperty(const QCString& propertyName)
 {
 	if (!KexiDB_alteringTypeForProperty) {
 		KexiDB_alteringTypeForProperty_deleter.setObject( KexiDB_alteringTypeForProperty, 
@@ -148,7 +142,12 @@ static int alteringTypeForProperty(const QCString& propertyName)
 		I("width", MainSchemaAlteringRequired);
 		// defaultValue: depends on backend, for mysql it can only by a constant or now()...
 		// -- should we look at Driver here?
+#ifdef KEXI_NO_UNFINISHED
+//! @todo reenable
+		I("defaultValue", MainSchemaAlteringRequired);
+#else
 		I2("defaultValue", PhysicalAlteringRequired, MainSchemaAlteringRequired);
+#endif
 		I2("primaryKey", PhysicalAlteringRequired, DataConversionRequired);
 		I2("unique", PhysicalAlteringRequired, DataConversionRequired); // we may want to add an Index here
 		I2("notNull", PhysicalAlteringRequired, DataConversionRequired); // we may want to add an Index here
@@ -291,7 +290,7 @@ static void debugFieldActions(const AlterTableHandler::ActionDictDict &fieldActi
 */
 void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDict &fieldActions)
 {
-	ActionDict *actionsLikeThis = fieldActions[ uid() ]; //newName.latin1() ];
+	ActionDict *actionsLikeThis = fieldActions[ uid() ];
 	if (m_propertyName=="name") {
 		// Case 1. special: name1 -> name2, i.e. rename action
 		QString newName( newValue().toString() );
@@ -362,6 +361,11 @@ void AlterTableHandler::ChangeFieldPropertyAction::simplifyActions(ActionDictDic
 	}
 }
 
+bool AlterTableHandler::ChangeFieldPropertyAction::shouldBeRemoved(ActionDictDict &fieldActions)
+{
+	Q_UNUSED(fieldActions);
+	return fieldName().lower() == m_newValue.toString().lower();
+}
 
 tristate AlterTableHandler::ChangeFieldPropertyAction::updateTableSchema(TableSchema &table, Field* field,
 	QMap<QString, QString>& fieldMap)
@@ -755,29 +759,28 @@ void AlterTableHandler::debug()
 		it.current()->debug();
 }
 
-TableSchema* AlterTableHandler::executeInternal(const QString& tableName, tristate& result, bool simulate,
-	QString* debugString)
+TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArguments& args)
 {
-	result = false;
+	args.result = false;
 	if (!d->conn) {
-		//err msg?
+//! @todo err msg?
 		return 0;
 	}
 	if (d->conn->isReadOnly()) {
-		//err msg?
+//! @todo err msg?
 		return 0;
 	}
 	if (!d->conn->isDatabaseUsed()) {
-		//err msg?
+//! @todo err msg?
 		return 0;
 	}
 	TableSchema *oldTable = d->conn->tableSchema(tableName);
 	if (!oldTable) {
-		//err msg?
+//! @todo err msg?
 		return 0;
 	}
 
-	if (!debugString)
+	if (!args.debugString)
 		debug();
 
 	// Find a sum of requirements...
@@ -826,22 +829,24 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 		action->simplifyActions( fieldActions );
 	}
 
-	if (!debugString)
-		debugFieldActions(fieldActions, simulate);
+	if (!args.debugString)
+		debugFieldActions(fieldActions, args.simulate);
 
 	// Prepare actions for execution ----
 	// - Sort actions by order
 	ActionVector actionsVector(allActionsCount);
 	int currentActionsCount = 0; //some actions may be removed
-	int requirements = 0;
+	args.requirements = 0;
 	QDict<char> fieldsWithChangedMainSchema(997); // Used to collect fields with changed main schema.
 	                                              // This will be used when recreateTable is false to update kexi__fields
 	for (ActionDictDictIterator it(fieldActions); it.current(); ++it) {
 		for (AlterTableHandler::ActionDictIterator it2(*it.current());it2.current(); ++it2, currentActionsCount++) {
+			if (it2.current()->shouldBeRemoved(fieldActions))
+				continue;
 			actionsVector.insert( it2.current()->m_order, it2.current() );
 			// a sum of requirements...
 			const int r = it2.current()->alteringRequirements();
-			requirements |= r;
+			args.requirements |= r;
 			if (r & MainSchemaAlteringRequired && dynamic_cast<ChangeFieldPropertyAction*>(it2.current())) {
 				// Remember, this will be used when recreateTable is false to update kexi__fields, below.
 				fieldsWithChangedMainSchema.insert( 
@@ -850,30 +855,36 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 		}
 	}
 	// - Debug
-	QString dbg = QString("** Overall altering requirements: %1").arg(requirements);
+	QString dbg = QString("** Overall altering requirements: %1").arg(args.requirements);
 	KexiDBDbg << dbg << endl;
-	const bool recreateTable = (requirements & PhysicalAlteringRequired);
+
+	if (args.onlyComputeRequirements) {
+		args.result = true;
+		return 0;
+	}
+
+	const bool recreateTable = (args.requirements & PhysicalAlteringRequired);
 
 #ifdef KEXI_DEBUG_GUI
-	if (simulate)
+	if (args.simulate)
 		KexiUtils::addAlterTableActionDebug(dbg, 0);
 #endif
 	dbg = QString("** Ordered, simplified actions (%1, was %2):").arg(currentActionsCount).arg(allActionsCount);
 	KexiDBDbg << dbg << endl;
 #ifdef KEXI_DEBUG_GUI
-	if (simulate)
+	if (args.simulate)
 		KexiUtils::addAlterTableActionDebug(dbg, 0);
 #endif
 	for (int i=0; i<allActionsCount; i++) {
-		debugAction(actionsVector[i], 1, simulate, QString("%1: ").arg(i+1), debugString);
+		debugAction(actionsVector[i], 1, args.simulate, QString("%1: ").arg(i+1), args.debugString);
 	}
 
-	if (requirements == 0) {//nothing to do
-		result = true;
+	if (args.requirements == 0) {//nothing to do
+		args.result = true;
 		return oldTable;
 	}
-	if (simulate) {//do not execute
-		result = true;
+	if (args.simulate) {//do not execute
+		args.result = true;
 		return oldTable;
 	}
 // @todo transaction!
@@ -891,7 +902,7 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 		newTable->setName( tempDestTableName );
 	}
 	oldTable->debug();
-	if (recreateTable && !debugString)
+	if (recreateTable && !args.debugString)
 		newTable->debug();
 
 	// Update table schema in memory ----
@@ -923,8 +934,8 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 		}
 		//if (!currentField)
 		//	continue;
-		result = action->updateTableSchema(*newTable, currentField, fieldMap);
-		if (result!=true) {
+		args.result = action->updateTableSchema(*newTable, currentField, fieldMap);
+		if (args.result!=true) {
 			if (recreateTable)
 				delete newTable;
 			return 0;
@@ -936,7 +947,7 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 		if (!d->conn->createTable( newTable, false )) {
 			setError(d->conn);
 			delete newTable;
-			result = false;
+			args.result = false;
 			return 0;
 		}
 	}
@@ -947,10 +958,10 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 		action = actionsVector[i];
 		if (!action)
 			continue;
-		result = action->execute(*d->conn, *newTable);
-		if (!result || ~result) {
+		args.result = action->execute(*d->conn, *newTable);
+		if (!args.result || ~args.result) {
 //! @todo delete newTable...
-			result = false;
+			args.result = false;
 			return 0;
 		}
 	}
@@ -961,7 +972,7 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 //! @todo better errmsg?
 		setError(d->conn);
 //! @todo delete newTable...
-		result = false;
+		args.result = false;
 		return 0;
 	}
 
@@ -1022,13 +1033,13 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 		if (!d->conn->executeSQL( sql )) {
 			setError(d->conn);
 //! @todo delete newTable...
-			result = false;
+			args.result = false;
 			return 0;
 		}
 
 		const QString oldTableName = oldTable->name();
-/*		result = d->conn->dropTable( oldTable );
-		if (!result || ~result) {
+/*		args.result = d->conn->dropTable( oldTable );
+		if (!args.result || ~args.result) {
 			setError(d->conn);
 //! @todo delete newTable...
 			return 0;
@@ -1039,14 +1050,14 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 		if (!d->conn->alterTableName(*newTable, oldTableName, true /*replace*/)) {
 			setError(d->conn);
 //! @todo delete newTable...
-			result = false;
+			args.result = false;
 			return 0;
 		}
 		oldTable = 0;
 	}
 
 	if (!recreateTable) {
-		if ((MainSchemaAlteringRequired & requirements) && !fieldsWithChangedMainSchema.isEmpty()) {
+		if ((MainSchemaAlteringRequired & args.requirements) && !fieldsWithChangedMainSchema.isEmpty()) {
 			//update main schema (kexi__fields) for changed fields
 			foreach_list(QDictIterator<char>, it, fieldsWithChangedMainSchema) {
 				Field *f = newTable->field( it.currentKey() );
@@ -1054,7 +1065,7 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 					if (!d->conn->storeMainFieldSchema(f)) {
 						setError(d->conn);
 			//! @todo delete newTable...
-						result = false;
+						args.result = false;
 						return 0;
 					}
 				}
@@ -1062,11 +1073,11 @@ TableSchema* AlterTableHandler::executeInternal(const QString& tableName, trista
 		}
 	}
 
-	result = true;
+	args.result = true;
 	return newTable;
 }
 
-TableSchema* AlterTableHandler::execute(const QString& tableName, tristate &result, bool simulate)
+/*TableSchema* AlterTableHandler::execute(const QString& tableName, tristate &result, bool simulate)
 {
 	return executeInternal( tableName, result, simulate, 0 );
 }
@@ -1074,6 +1085,8 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, tristate &resu
 tristate AlterTableHandler::simulateExecution(const QString& tableName, QString& debugString)
 {
 	tristate result;
-	(void)executeInternal( tableName, result, true/*simulate*/, &debugString );
+	(void)executeInternal( tableName, result, true//simulate
+	, &debugString );
 	return result;
 }
+*/

@@ -884,7 +884,7 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 		QString v = escapeIdentifier(field->name()) + " ";
 		const bool autoinc = field->isAutoIncrement();
 		const bool pk = field->isPrimaryKey() || (autoinc && m_driver->beh->AUTO_INCREMENT_REQUIRES_PK);
-//TODO: warning: ^^^^^ this allows only ont autonumber per table when AUTO_INCREMENT_REQUIRES_PK==true!
+//TODO: warning: ^^^^^ this allows only one autonumber per table when AUTO_INCREMENT_REQUIRES_PK==true!
 		if (autoinc && m_driver->beh->SPECIAL_AUTO_INCREMENT_DEF) {
 			if (pk)
 				v += m_driver->beh->AUTO_INCREMENT_TYPE + " " + m_driver->beh->AUTO_INCREMENT_PK_FIELD_OPTION;
@@ -921,8 +921,11 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 ///@todo IS this ok for all engines?: if (!autoinc && !field->isPrimaryKey() && field->isNotNull())
 			if (!autoinc && !pk && field->isNotNull())
 				v += " NOT NULL"; //only add not null option if no autocommit is set
-			if (field->defaultValue().isValid())
-				v += QString::fromLatin1(" DEFAULT ") + m_driver->valueToSQL( field, field->defaultValue() );
+			if (field->defaultValue().isValid()) {
+				QString valToSQL( m_driver->valueToSQL( field, field->defaultValue() ) );
+				if (!valToSQL.isEmpty()) //for sanity
+					v += QString::fromLatin1(" DEFAULT ") + valToSQL;
+			}
 		}
 		sql += v;
 	}

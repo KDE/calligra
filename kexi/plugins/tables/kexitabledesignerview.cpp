@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1415,43 +1415,27 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 		return false;
 	}
 
-	tristate res = true;
-	if (!d->tempStoreDataUsingRealAlterTable && !d->dontAskOnStoreData && !dontAsk) {
-		bool emptyTable;
-		const QString msg = d->messageForSavingChanges(emptyTable);
-		if (!emptyTable) {
-			if (KMessageBox::No == KMessageBox::questionYesNo(this, msg))
-				res = cancelled;
-		}
-	}
-	d->dontAskOnStoreData = false; //one-time use
-	if (~res) {
-		d->recentResultOfStoreData = res;
-		return res;
-	}
-//		KMessageBox::information(this, i18n("Saving changes for existing table design is not yet supported."));
-//		cancel = true;
-
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
-
 	KexiDB::AlterTableHandler *alterTableHandler = 0;
 	KexiDB::TableSchema *newTable = 0;
-	if (d->tempStoreDataUsingRealAlterTable) {
-		KexiDB::AlterTableHandler::ActionList actions;
-		res = buildAlterTableActions( actions );
-	//todo: result?
+
+	//- create action list for the alter table handler
+	KexiDB::AlterTableHandler::ActionList actions;
+	tristate res = buildAlterTableActions( actions );
+	bool realAlterTableCanBeUsed = false; //!< @todo this is temporary flag before we switch entirely to real alter table
+	if (res == true) {
 		alterTableHandler = new KexiDB::AlterTableHandler( *conn );
 		alterTableHandler->setActions(actions);
-	}
-	else {
-//! @todo temp; remove this:
-		//keep old behaviour
-		newTable = new KexiDB::TableSchema();
-		//copy schema data
-		static_cast<KexiDB::SchemaData&>(*newTable) = static_cast<KexiDB::SchemaData&>(*tempData()->table);
-		res = buildSchema(*newTable);
-		kexipluginsdbg << "KexiTableDesignerView::storeData() : BUILD SCHEMA:" << endl;
-		newTable->debug();
+
+		if (!d->tempStoreDataUsingRealAlterTable) {
+			//only compute requirements
+			KexiDB::AlterTableHandler::ExecutionArguments args;
+			args.onlyComputeRequirements = true;
+			(void)alterTableHandler->execute(tempData()->table->name(), args);
+			res = args.result;
+			if (res == true && 0 == (args.requirements & (0xffff ^ KexiDB::AlterTableHandler::SchemaAlteringRequired)))
+				realAlterTableCanBeUsed = true;
+		}
 	}
 
 	if (res == true) {
@@ -1461,32 +1445,57 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
 			"but following objects using this table are opened:")
 			.arg(tempData()->table->name()));
 	}
+
 	if (res == true) {
-		if (d->tempStoreDataUsingRealAlterTable) {
-			newTable = alterTableHandler->execute(tempData()->table->name(), res);
+		if (!d->tempStoreDataUsingRealAlterTable && !realAlterTableCanBeUsed) {
+//! @todo temp; remove this case:
+			delete alterTableHandler;
+			alterTableHandler = 0;
+			// - inform about removing the current table and ask for confimation
+			if (!d->dontAskOnStoreData && !dontAsk) {
+				bool emptyTable;
+				const QString msg = d->messageForSavingChanges(emptyTable);
+				if (!emptyTable) {
+					if (KMessageBox::No == KMessageBox::questionYesNo(this, msg))
+						res = cancelled;
+				}
+			}
+			d->dontAskOnStoreData = false; //one-time use
+			if (~res) {
+				d->recentResultOfStoreData = res;
+				return res;
+			}
+			// keep old behaviour:
+			newTable = new KexiDB::TableSchema();
+			// copy the schema data
+			static_cast<KexiDB::SchemaData&>(*newTable) = static_cast<KexiDB::SchemaData&>(*tempData()->table);
+			res = buildSchema(*newTable);
+			kexipluginsdbg << "KexiTableDesignerView::storeData() : BUILD SCHEMA:" << endl;
+			newTable->debug();
+
+			res = conn->alterTable(*tempData()->table, *newTable);
+			if (res != true)
+				parentDialog()->setStatus(conn, "");
+		}
+		else {
+			KexiDB::AlterTableHandler::ExecutionArguments args;
+			newTable = alterTableHandler->execute(tempData()->table->name(), args);
+			res = args.result;
 			kexipluginsdbg << "KexiTableDesignerView::storeData() : ALTER TABLE EXECUTE: " 
 				<< res.toString() << endl;
-			if (!res) {
+			if (true != res) {
 				alterTableHandler->debugError();
 				parentDialog()->setStatus(alterTableHandler, "");
 			}
-//! @todo: result?
 		}
-		else {
-//! @todo temp; remove this:
-			//keep old behaviour
-			res = conn->alterTable(*tempData()->table, *newTable);
-			if (!res)
-				parentDialog()->setStatus(conn, "");
-		}
-		if (res == true) {
-			//change current schema
-			tempData()->table = newTable;
-			tempData()->tableSchemaChangedInPreviousView = true;
-		}
-		else {
-			delete newTable;
-		}
+	}
+	if (res == true) {
+		//change current schema
+		tempData()->table = newTable;
+		tempData()->tableSchemaChangedInPreviousView = true;
+	}
+	else {
+		delete newTable;
 	}
 	delete alterTableHandler;
 	d->recentResultOfStoreData = res;
@@ -1507,11 +1516,15 @@ tristate KexiTableDesignerView::simulateAlterTableExecution(QString *debugTarget
 //todo: result?
 	KexiDB::AlterTableHandler alterTableHandler( *conn );
 	alterTableHandler.setActions(actions);
-
-	if (debugTarget)
-		return alterTableHandler.simulateExecution(tempData()->table->name(), *debugTarget);
-	else
-		return alterTableHandler.execute(tempData()->table->name(), res, /*simulate*/true);
+	KexiDB::AlterTableHandler::ExecutionArguments args;
+	if (debugTarget) {
+		args.debugString = debugTarget;
+	}
+	else {
+		args.simulate = true;
+	}
+	(void)alterTableHandler.execute(tempData()->table->name(), args);
+	return args.result;
 # else
 	return false;
 # endif

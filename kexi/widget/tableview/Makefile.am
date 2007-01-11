@@ -8,7 +8,7 @@ libkexidatatable_la_SOURCES = kexidataawareobjectiface.cpp \
 	kexidatetableedit.cpp kexitimetableedit.cpp kexidatetimetableedit.cpp \
 	kexiinputtableedit.cpp kexiblobtableedit.cpp kexibooltableedit.cpp \
 	kexicomboboxbase.cpp kexicomboboxtableedit.cpp kexicomboboxpopup.cpp \
-	kexidataawarepropertyset.cpp
+	kexidataawarepropertyset.cpp kexitextformatter.cpp
 
 noinst_HEADERS = kexitableview_p.h
 

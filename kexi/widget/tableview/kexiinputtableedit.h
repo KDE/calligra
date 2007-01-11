@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,10 +26,11 @@
 
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
+#include "kexitextformatter.h"
 
 /*! @short General purpose cell editor using line edit widget.
 */
-class KexiInputTableEdit : public KexiTableEdit
+class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 
@@ -37,6 +38,14 @@ class KexiInputTableEdit : public KexiTableEdit
 		KexiInputTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
 
 		virtual ~KexiInputTableEdit();
+
+#if 0
+//moved to KexiTextFormatter
+		/*! \return text for \a value and \a field. 
+		 \a add is a text that should be added to the value if possible. 
+		 Used in setValueInternal(), by form widgets and for reporting/printing. */
+		static QString valueToText(KexiDB::Field* field, const QVariant& value, const QString& add);
+#endif
 
 		virtual bool valueChanged();
 
@@ -102,11 +111,7 @@ class KexiInputTableEdit : public KexiTableEdit
 		void init();
 		virtual void paintEvent( QPaintEvent *e );
 
-		/*! \return text for \a value. \a add is a text that should be added to the value if possible.
-		 If \a setValidator is true, an appropriate validator will be setup for the internal line edit 
-		 widget when needed. */
-		QString valueToText(const QVariant& value, const QString& add, bool setValidator = false);
-
+		KexiTextFormatter m_textFormatter;
 		bool m_calculatedCell;
 		QString m_decsym; //! decimal symbol
 		QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing

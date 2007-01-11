@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -197,7 +197,17 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 
 				virtual void updateAlteringRequirements() {};
 
-				virtual void simplifyActions(ActionDictDict &fieldActions);
+				/*! Simplifies \a fieldActions dictionary. If this action has to be inserted
+				 Into the dictionary, an ActionDict is created first and then a copy of this action 
+				 is inserted into it. */
+				virtual void simplifyActions(ActionDictDict &fieldActions) { Q_UNUSED(fieldActions); }
+
+				/*! After calling simplifyActions() for each action, 
+				 shouldBeRemoved() is called for them as an additional step. 
+				 This is used for ChangeFieldPropertyAction items so actions
+				 that do not change property values are removed. */
+				virtual bool shouldBeRemoved(ActionDictDict &fieldActions) { 
+					Q_UNUSED(fieldActions); return false; }
 
 				virtual tristate updateTableSchema(TableSchema &table, Field* field, 
 					QMap<QString, QString>& fieldMap) 
@@ -271,6 +281,8 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				virtual QString debugString(const DebugOptions& debugOptions = DebugOptions());
 
 				virtual void simplifyActions(ActionDictDict &fieldActions);
+
+				virtual bool shouldBeRemoved(ActionDictDict &fieldActions);
 
 				virtual tristate updateTableSchema(TableSchema &table, Field* field, 
 					QMap<QString, QString>& fieldMap);
@@ -384,36 +396,69 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		 Use ActionBase::ListIterator to iterate over the list items. */
 		const ActionList& actions() const;
 
+		//! Arguments for AlterTableHandler::execute().
+		class ExecutionArguments {
+			public:
+				ExecutionArguments()
+				 : debugString(0)
+				 , requirements(0)
+				 , result(false)
+				 , simulate(false)
+				 , onlyComputeRequirements(false)
+				{
+				}
+			/*! If not 0, debug is directed here. Used only in the alter table test suite. */
+			QString* debugString;
+			/*! Requrements computed, a combination of AlteringRequirements values. */
+			int requirements;
+			/*! Set to true on success, to false on failure. */
+			tristate result;
+			/*! Used only in the alter table test suite. */
+			bool simulate : 1;
+			/*! Set to true if requirements should be computed 
+			 and the execute() method should return afterwards. */
+			bool onlyComputeRequirements;
+		};
+
 		/*! Performs table alteration using predefined actions for table named \a tableName,
 		 assuming it already exists. The Connection object passed to the constructor must exist,
 		 must be connected and a database must be used. The connection must not be read-only.
 
-		 If \a simulate is true, the execution is only simulated, i.e. al lactions are processed 
+		 If args.simulate is true, the execution is only simulated, i.e. al lactions are processed 
 		 like for regular execution but no changes are performed physically. 
-		 THis mode is used only for debugging purposes.
+		 This mode is used only for debugging purposes.
 
 	@todo For some cases, table schema can completely change, so it will be needed 
 		 to refresh all objects depending on it.
 		 Implement this!
 
-		 Sets \a result to true on success, to false on failure or when the above requirements are not met
-		 (then, you can detailed get error message from KexiDB::Object). 
-		 When the action has been cancelled (stopped), \a result is set to cancelled value. 
-		 If \a debugString is not 0, it will be filled with 
+		 Sets args.result to true on success, to false on failure or when the above requirements are not met
+		 (then, you can get a detailed error message from KexiDB::Object). 
+		 When the action has been cancelled (stopped), args.result is set to cancelled value. 
+		 If args.debugString is not 0, it will be filled with debugging output.
 		 \return the new table schema object created as a result of schema altering.
-		 The old table is returned if recreating table schema was not necessary or \a simulate is true. 
-		 0 is returned if \a result is not true. */
-		TableSchema* execute(const QString& tableName, tristate& result, bool simulate = false);
+		 The old table is returned if recreating table schema was not necessary or args.simulate is true. 
+		 0 is returned if args.result is not true. */
+		TableSchema* execute(const QString& tableName, ExecutionArguments & args);
 
+		//! Displays debug information about all actions collected by the handler.
 		void debug();
 
 		/*! Like execute() with simulate set to true, but debug is directed to debugString. 
 		 This function is used only in the alter table test suite. */
-		tristate simulateExecution(const QString& tableName, QString& debugString);
+//		tristate simulateExecution(const QString& tableName, QString& debugString);
+
+		/*! Helper. \return a combination of AlteringRequirements values decribing altering type required 
+		 when a given property field's \a propertyName is altered.
+		 Used internally AlterTableHandler. Moreover it can be also used in the Table Designer's code
+		 as a temporary replacement before AlterTableHandler is fully implemented. 
+		 Thus, it is possible to identify properties that have no PhysicalAlteringRequired flag set 
+		 (e.g. caption or extended properties like visibleDecimalPlaces. */
+		static int alteringTypeForProperty(const QCString& propertyName);
 
 	protected:
-		TableSchema* executeInternal(const QString& tableName, tristate& result, bool simulate = false,
-			QString* debugString = 0);
+//		TableSchema* executeInternal(const QString& tableName, tristate& result, bool simulate = false,
+//			QString* debugString = 0);
 
 		class Private;
 		Private *d;
