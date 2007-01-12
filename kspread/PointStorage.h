@@ -113,13 +113,12 @@ public:
         {
             const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
             const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
-            const QVector<int>::const_iterator cit = qBinaryFind( cstart, cend, col );
+            const QVector<int>::const_iterator cit = qLowerBound( cstart, cend, col );
             // column's missing?
-            if ( cit == cend )
+            if ( cit == cend || *cit != col )
             {
                 // determine the index where the data and column has to be inserted
-                 // FIXME Stefan: one binary search should be enough
-                const int index = m_rows.value( row - 1 ) + ( qLowerBound( cstart, cend, col ) - cstart );
+                const int index = m_rows.value( row - 1 ) + ( cit - cstart );
                 // insert the actual data
                 m_data.insert( index, data );
                 // insert the column index
