@@ -103,26 +103,31 @@ Value TestFormula::evaluate(const QString& formula, Value& ex)
     expr.prepend( '=' );
   f.setExpression( expr );
   Value result = f.eval();
-  
+
   if(result.isFloat() && ex.isInteger())
     ex = Value(ex.asFloat());
   if(result.isInteger() && ex.isFloat())
-    result = Value(result.asFloat());  
+    result = Value(result.asFloat());
 
-  // TODO: compare arrays
-#if 0
-  bool equality = false;
-  if ( expected.type() == Value::Array )
+  // compare arrays
+  // This is necessary, because the array consists of pointers to Values, not of Values.
+  bool equality = true;
+  if ( ex.type() == Value::Array )
   {
-    const uint cols = expected.columns();
-    const uint rows = expected.rows();
+    const uint cols = ex.columns();
+    const uint rows = ex.rows();
     if ( cols == result.columns() )
     if ( rows == result.rows() )
     for ( uint row = 0; row < rows; ++row )
       for ( uint col = 0; col < cols; ++col )
-        if ( !result.element(col,row).equal( expected.element(col,row) ) ) break;
-    equality = true;
-#endif
+    {
+        equality = result.element(col,row).equal( ex.element(col,row) );
+        if ( !equality )
+            break;
+    }
+    if ( equality )
+        result = ex; // copy to get the same pointers
+  }
 
   return result;
 }
