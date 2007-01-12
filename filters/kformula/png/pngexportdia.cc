@@ -70,6 +70,7 @@ PNGExportDia::PNGExportDia( const QDomDocument &dom, const QString &outFile, QWi
     connectAll();
     connect( proportional, SIGNAL( clicked() ),
              this, SLOT( proportionalClicked() ) );
+    connect(this, SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 PNGExportDia::~PNGExportDia()

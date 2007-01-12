@@ -89,6 +89,8 @@ CSVExportDialog::CSVExportDialog( QWidget * parent )
            this, SLOT( textquoteSelected( const QString & ) ) );
   connect( m_dialog->m_selectionOnly, SIGNAL( toggled( bool ) ),
            this, SLOT( selectionOnlyChanged( bool ) ) );
+  connect( this,SIGNAL(okClicked()),SLOT(slotOk()));
+  connect( this,SIGNAL(cancelClicked()),this,SLOT(slotOk()));
 }
 
 CSVExportDialog::~CSVExportDialog()

@@ -46,6 +46,7 @@ KFormulaConfigDialog::KFormulaConfigDialog( KFormulaPartView* parent )
                                          page1 );*/
     addPage(page);
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
+    connect(this,SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
 }
 
 void KFormulaConfigDialog::slotApply()

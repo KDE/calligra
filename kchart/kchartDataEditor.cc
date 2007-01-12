@@ -258,6 +258,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 
     // Add tooltips and WhatsThis help.
     addDocs();
+    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
 }
 
 
