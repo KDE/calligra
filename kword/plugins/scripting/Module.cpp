@@ -163,7 +163,7 @@ QObject* Module::addTextFrameSet(const QString& framesetname)
     type = KWord::OtherTextFrameSet;
     */
 
-    KWTextFrameSet* frameset = new KWTextFrameSet(type);
+    KWTextFrameSet* frameset = new KWTextFrameSet(doc(), type);
     frameset->setName(framesetname);
     frameset->setAllowLayout(false);
     doc()->addFrameSet(frameset);
