@@ -43,7 +43,8 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
     m_kwordDocument(doc)
 {
     KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
-    layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
+    if(doc)
+        layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
     m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
 }
@@ -58,7 +59,8 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
     m_kwordDocument(doc)
 {
     KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
-    layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
+    if(doc)
+        layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
     m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
     switch(m_textFrameSetType) {

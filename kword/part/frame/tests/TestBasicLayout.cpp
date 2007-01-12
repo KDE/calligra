@@ -51,7 +51,7 @@ void TestBasicLayout::testGetOrCreateFrameSet() {
     QVERIFY(fs2);
     QCOMPARE(fs, fs2);
 
-    KWTextFrameSet *main = new KWTextFrameSet(KWord::MainTextFrameSet);
+    KWTextFrameSet *main = new KWTextFrameSet(0, KWord::MainTextFrameSet);
     m_frames.append(main);
     bfl.m_setup = false;
     KWTextFrameSet *main2 = bfl.getOrCreate(KWord::MainTextFrameSet);
