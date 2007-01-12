@@ -32,7 +32,7 @@
 
 using namespace KSpread;
 
-typedef PointStorage<Value*> ValueArray;
+typedef PointStorage<Value> ValueArray;
 
 
 // helper class for Value
@@ -475,16 +475,14 @@ Value Value::element( unsigned column, unsigned row ) const
 {
   if( d->type != Array ) return *this;
   if( !d->pa ) return empty();
-  Value* v = d->pa->lookup (column + 1, row + 1);
-  return v ? Value( *v ) : empty();
+  return d->pa->lookup (column + 1, row + 1);
 }
 
 Value Value::element( unsigned index ) const
 {
   if( d->type != Array ) return *this;
   if( !d->pa ) return empty();
-  Value* v = d->pa->data( index );
-  return v ? Value( *v ) : empty();
+  return d->pa->data( index );
 }
 
 void Value::setElement( unsigned column, unsigned row, const Value& v )
@@ -492,7 +490,7 @@ void Value::setElement( unsigned column, unsigned row, const Value& v )
   if( d->type != Array ) return;
   if( !d->pa ) d->pa = new ValueArray();
   detach();
-  d->pa->insert( column + 1, row + 1, new Value( v ) );
+  d->pa->insert( column + 1, row + 1, v );
 }
 
 unsigned Value::columns() const
