@@ -94,7 +94,6 @@ void KWDocument::addShape (KoShape *shape) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->shapeManager()->add(shape);
     }
-m_inlineTextObjectManager->setProperty(KoInlineObjectBase::KWordStart, m_frameSets.count()); // TEst it..
 }
 
 void KWDocument::removeShape (KoShape *shape) {
@@ -137,6 +136,7 @@ KWPage* KWDocument::insertPage( int afterPageNum ) {
     KWPage *page = m_pageManager.insertPage(afterPageNum+1);
     PageProcessingQueue *ppq = new PageProcessingQueue(this);
     ppq->addPage(page);
+    m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
     return page;
 }
 
@@ -153,6 +153,7 @@ void KWDocument::removePage(int pageNumber) {
     }
     emit pageRemoved(page);
     m_pageManager.removePage(page);
+    m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
 void KWDocument::setStartPage(int pagenumber) {
@@ -161,6 +162,8 @@ void KWDocument::setStartPage(int pagenumber) {
         // TODO insert pages so pagespreads always start on an even pagenumber.
     }
     m_pageManager.setStartPage(pagenumber);
+    m_inlineTextObjectManager->setProperty(KoInlineObject::StartPage, pagenumber);
+    m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
 void KWDocument::setDefaultPageLayout(const KoPageLayout &layout) {
