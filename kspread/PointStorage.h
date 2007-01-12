@@ -118,7 +118,8 @@ public:
             if ( cit == cend )
             {
                 // determine the index where the data and column has to be inserted
-                const int index = m_rows.value( row - 1 ) + ( cend - cstart );
+                 // FIXME Stefan: one binary search should be enough
+                const int index = m_rows.value( row - 1 ) + ( qLowerBound( cstart, cend, col ) - cstart );
                 // insert the actual data
                 m_data.insert( index, data );
                 // insert the column index

@@ -232,6 +232,62 @@ void PointStorageBenchmark::testShiftRightPerformance()
     qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10000 ) );
 }
 
+void PointStorageBenchmark::testIterationPerformance()
+{
+    // row x column
+    const int scenarios[] = {
+#if 0
+        5, 5,          // very small
+        30, 20,        // fit to screen
+        100, 100,      // medium
+        1000, 1000,    // large
+        10000, 100,    // typical data: more rows
+        10000, 2000,   // and 20 times larger
+        100, 10000,    // not really typical: more columns
+#endif
+        8000, 8000,    // hopelessly large
+#if 0
+        10, 32757,     // some complete columns; KS_colMax-10, because of max lookup range of width 10 below
+        32757, 10      // some complete rows; KS_rowMax-10, because of max lookup range of height 10 below
+#endif
+        };
+
+    PointStorage<int> storage;
+
+    for (uint sc = 0; sc < sizeof(scenarios)/sizeof(scenarios[0])/2; sc++)
+    {
+        int maxrow = scenarios[sc*2];
+        int maxcol = scenarios[sc*2+1];
+
+        storage.clear();
+        for ( int r = 0; r < maxrow; ++r )
+        {
+            for ( int c = 0; c < maxcol; ++c )
+            {
+                storage.m_data << c;
+                storage.m_cols << ( c + 1 );
+            }
+            storage.m_rows << r*maxcol;
+        }
+    //     qDebug() << endl << qPrintable( storage.dump() );
+        QString prefix = QString("%1 x %2").arg(maxrow).arg(maxcol);
+        qDebug() << "start measuring..." << prefix;
+
+        Time::tval start = 0;
+        int v;
+        int col = 0;
+        int row = 0;
+        int cols = 0;
+        int rows = 0;
+        start = Time::stamp();
+        for ( int i = 0; i < storage.count(); ++i )
+        {
+            v = storage.data( i );
+        }
+        Time::tval ticks = Time::elapsed( start );
+        qDebug() << qPrintable( Time::printAverage( ticks, storage.count(), prefix ) );
+    }
+}
 
 QTEST_MAIN(PointStorageBenchmark)
 

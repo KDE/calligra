@@ -38,6 +38,7 @@ private Q_SLOTS:
     void testDeleteRowsPerformance();
     void testShiftLeftPerformance();
     void testShiftRightPerformance();
+    void testIterationPerformance();
 };
 
 } // namespace KSpread

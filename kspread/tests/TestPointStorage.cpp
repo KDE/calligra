@@ -64,18 +64,37 @@ void PointStorageTest::testInsertion()
     // ( 4, 9,14,19,24)
     // ( 5,10,15,20,25)
 
-    const QVector<int> data( QVector<int>() << 1<< 6 << 11 << 16 << 21
-                                        << 2 << 7 << 12 << 17 << 22
-                                        << 3 << 8 << 13 << 18 << 23
-                                        << 4 << 9 << 14 << 19 << 24
-                                        << 5 << 10 << 15 << 20 << 30 );
-    const QVector<int> rows( QVector<int>() << 0 << 5 << 10 << 15 << 20 );
-    const QVector<int> cols( QVector<int>() << 1 << 2 << 3 << 4 << 5
-                                        << 1 << 2 << 3 << 4 << 5
-                                        << 1 << 2 << 3 << 4 << 5
-                                        << 1 << 2 << 3 << 4 << 5
-                                        << 1 << 2 << 3 << 4 << 5 );
+    QVector<int> data( QVector<int>() << 1<< 6 << 11 << 16 << 21
+                                      << 2 << 7 << 12 << 17 << 22
+                                      << 3 << 8 << 13 << 18 << 23
+                                      << 4 << 9 << 14 << 19 << 24
+                                      << 5 << 10 << 15 << 20 << 30 );
+    QVector<int> rows( QVector<int>() << 0 << 5 << 10 << 15 << 20 );
+    QVector<int> cols( QVector<int>() << 1 << 2 << 3 << 4 << 5
+                                      << 1 << 2 << 3 << 4 << 5
+                                      << 1 << 2 << 3 << 4 << 5
+                                      << 1 << 2 << 3 << 4 << 5
+                                      << 1 << 2 << 3 << 4 << 5 );
+    QCOMPARE( storage.m_data, data );
+    QCOMPARE( storage.m_rows, rows );
+    QCOMPARE( storage.m_cols, cols );
 
+
+    // reverse filling
+    storage.clear();
+    storage.insert( 2, 2, 4 );
+    storage.insert( 1, 2, 3 );
+    storage.insert( 2, 1, 2 );
+    storage.insert( 1, 1, 1 );
+    // ( 1, 2)
+    // ( 3, 4)
+
+    data.clear();
+    rows.clear();
+    cols.clear();
+    data << 1 << 2 << 3 << 4;
+    rows << 0 << 2;
+    cols << 1 << 2 << 1 << 2;
     QCOMPARE( storage.m_data, data );
     QCOMPARE( storage.m_rows, rows );
     QCOMPARE( storage.m_cols, cols );
