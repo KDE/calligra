@@ -1136,11 +1136,11 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
           generic->setChecked(true);
     else
     {
-        if (cellFormatType==Number_format)
+        if (cellFormatType==Format::Number)
                 number->setChecked(true);
-        else if (cellFormatType==Percentage_format)
+        else if (cellFormatType==Format::Percentage)
                 percent->setChecked(true);
-        else if (cellFormatType==Money_format)
+        else if (cellFormatType==Format::Money)
         {
                 money->setChecked(true);
                 currencyLabel->show();
@@ -1160,17 +1160,17 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
                   currency->setItemText( 0, tmp );
                 }
         }
-        else if ( cellFormatType == Scientific_format )
+        else if ( cellFormatType == Format::Scientific )
           scientific->setChecked(true);
-        else if ( formatIsDate (cellFormatType) )
+        else if ( Format::isDate (cellFormatType) )
                 date->setChecked(true);
-        else if ( formatIsTime (cellFormatType) )
+        else if ( Format::isTime (cellFormatType) )
           time->setChecked(true);
-        else if ( formatIsFraction (cellFormatType) )
+        else if ( Format::isFraction (cellFormatType) )
           fraction->setChecked(true);
-	else if (cellFormatType == Text_format)
+	else if (cellFormatType == Format::Text)
 	  textFormat->setChecked(true);
-	else if (cellFormatType == Custom_format)
+	else if (cellFormatType == Format::Custom)
 	  customFormat->setChecked(true);
         }
 
@@ -1253,23 +1253,23 @@ void CellFormatPageFloat::slotChangeState()
             list+=i18n("Two digits 15/22");
             list+=i18n("Three digits 153/652");
             listFormat->insertStringList(list);
-            if (cellFormatType == fraction_half)
+            if (cellFormatType == Format::fraction_half)
                 listFormat->setCurrentItem(0);
-            else if (cellFormatType == fraction_quarter)
+            else if (cellFormatType == Format::fraction_quarter)
                 listFormat->setCurrentItem(1);
-            else if (cellFormatType == fraction_eighth )
+            else if (cellFormatType == Format::fraction_eighth )
                 listFormat->setCurrentItem(2);
-            else if (cellFormatType == fraction_sixteenth )
+            else if (cellFormatType == Format::fraction_sixteenth )
                 listFormat->setCurrentItem(3);
-            else if (cellFormatType == fraction_tenth )
+            else if (cellFormatType == Format::fraction_tenth )
                 listFormat->setCurrentItem(4);
-            else if (cellFormatType == fraction_hundredth )
+            else if (cellFormatType == Format::fraction_hundredth )
                 listFormat->setCurrentItem(5);
-            else if (cellFormatType == fraction_one_digit )
+            else if (cellFormatType == Format::fraction_one_digit )
                 listFormat->setCurrentItem(6);
-            else if (cellFormatType == fraction_two_digits )
+            else if (cellFormatType == Format::fraction_two_digits )
                 listFormat->setCurrentItem(7);
-            else if (cellFormatType == fraction_three_digits )
+            else if (cellFormatType == Format::fraction_three_digits )
                 listFormat->setCurrentItem(8);
             else
                 listFormat->setCurrentItem(0);
@@ -1289,35 +1289,35 @@ void CellFormatPageFloat::slotChangeState()
 
 
             ValueFormatter *fmt = dlg->getDoc()->formatter();
-            list+= fmt->timeFormat(tmpTime, Time_format1);
-            list+= fmt->timeFormat(tmpTime, Time_format2);
-            list+= fmt->timeFormat(tmpTime, Time_format3);
-            list+= fmt->timeFormat(tmpTime, Time_format4);
-            list+= fmt->timeFormat(tmpTime, Time_format5);
-            list+= ( fmt->timeFormat(tmpTime, Time_format6) + i18n(" (=[mm]::ss)") );
-            list+= ( fmt->timeFormat(tmpTime, Time_format7) + i18n(" (=[hh]::mm::ss)") );
-            list+= ( fmt->timeFormat(tmpTime, Time_format8) + i18n(" (=[hh]::mm)") );
+            list+= fmt->timeFormat(tmpTime, Format::Time1);
+            list+= fmt->timeFormat(tmpTime, Format::Time2);
+            list+= fmt->timeFormat(tmpTime, Format::Time3);
+            list+= fmt->timeFormat(tmpTime, Format::Time4);
+            list+= fmt->timeFormat(tmpTime, Format::Time5);
+            list+= ( fmt->timeFormat(tmpTime, Format::Time6) + i18n(" (=[mm]::ss)") );
+            list+= ( fmt->timeFormat(tmpTime, Format::Time7) + i18n(" (=[hh]::mm::ss)") );
+            list+= ( fmt->timeFormat(tmpTime, Format::Time8) + i18n(" (=[hh]::mm)") );
             listFormat->insertStringList(list);
 
-            if ( cellFormatType == Time_format )
+            if ( cellFormatType == Format::Time )
                 listFormat->setCurrentItem(0);
-            else if (cellFormatType == SecondeTime_format)
+            else if (cellFormatType == Format::SecondeTime)
                 listFormat->setCurrentItem(1);
-            else if (cellFormatType == Time_format1)
+            else if (cellFormatType == Format::Time1)
                 listFormat->setCurrentItem(2);
-            else if (cellFormatType == Time_format2)
+            else if (cellFormatType == Format::Time2)
                 listFormat->setCurrentItem(3);
-            else if (cellFormatType == Time_format3)
+            else if (cellFormatType == Format::Time3)
                 listFormat->setCurrentItem(4);
-            else if (cellFormatType == Time_format4)
+            else if (cellFormatType == Format::Time4)
                 listFormat->setCurrentItem(5);
-            else if (cellFormatType == Time_format5)
+            else if (cellFormatType == Format::Time5)
                 listFormat->setCurrentItem(6);
-            else if (cellFormatType == Time_format6)
+            else if (cellFormatType == Format::Time6)
                 listFormat->setCurrentItem(7);
-            else if (cellFormatType == Time_format7)
+            else if (cellFormatType == Format::Time7)
                 listFormat->setCurrentItem(8);
-            else if (cellFormatType == Time_format8)
+            else if (cellFormatType == Format::Time8)
                 listFormat->setCurrentItem(9);
             else
                 listFormat->setCurrentItem(0);
@@ -1352,105 +1352,105 @@ void CellFormatPageFloat::init()
     ValueFormatter *fmt = dlg->getDoc()->formatter();
 
     /*18-Feb-00*/
-    list+=fmt->dateFormat( tmpDate, date_format1);
+    list+=fmt->dateFormat( tmpDate, Format::Date1);
     /*18-Feb-1999*/
-    list+=fmt->dateFormat( tmpDate, date_format2);
+    list+=fmt->dateFormat( tmpDate, Format::Date2);
     /*18-Feb*/
-    list+=fmt->dateFormat( tmpDate, date_format3);
+    list+=fmt->dateFormat( tmpDate, Format::Date3);
     /*18-2*/
-    list+=fmt->dateFormat( tmpDate, date_format4);
+    list+=fmt->dateFormat( tmpDate, Format::Date4);
     /*18/2/00*/
-    list+=fmt->dateFormat( tmpDate, date_format5);
+    list+=fmt->dateFormat( tmpDate, Format::Date5);
     /*18/5/1999*/
-    list+=fmt->dateFormat( tmpDate, date_format6);
+    list+=fmt->dateFormat( tmpDate, Format::Date6);
     /*Feb-99*/
-    list+=fmt->dateFormat( tmpDate, date_format7);
+    list+=fmt->dateFormat( tmpDate, Format::Date7);
     /*February-99*/
-    list+=fmt->dateFormat( tmpDate, date_format8);
+    list+=fmt->dateFormat( tmpDate, Format::Date8);
     /*February-1999*/
-    list+=fmt->dateFormat( tmpDate, date_format9);
+    list+=fmt->dateFormat( tmpDate, Format::Date9);
     /*F-99*/
-    list+=fmt->dateFormat( tmpDate, date_format10);
+    list+=fmt->dateFormat( tmpDate, Format::Date10);
     /*18/Feb*/
-    list+=fmt->dateFormat( tmpDate, date_format11);
+    list+=fmt->dateFormat( tmpDate, Format::Date11);
     /*18/2*/
-    list+=fmt->dateFormat( tmpDate, date_format12);
+    list+=fmt->dateFormat( tmpDate, Format::Date12);
     /*18/Feb/1999*/
-    list+=fmt->dateFormat( tmpDate, date_format13);
+    list+=fmt->dateFormat( tmpDate, Format::Date13);
     /*2000/Feb/18*/
-    list+=fmt->dateFormat( tmpDate, date_format14);
+    list+=fmt->dateFormat( tmpDate, Format::Date14);
     /*2000-Feb-18*/
-    list+=fmt->dateFormat( tmpDate, date_format15);
+    list+=fmt->dateFormat( tmpDate, Format::Date15);
     /*2000-2-18*/
-    list+=fmt->dateFormat( tmpDate, date_format16);
+    list+=fmt->dateFormat( tmpDate, Format::Date16);
     /*2 february 2000*/
-    list+=fmt->dateFormat( tmpDate, date_format17);
-    list+=fmt->dateFormat( tmpDate, date_format18);
-    list+=fmt->dateFormat( tmpDate, date_format19);
-    list+=fmt->dateFormat( tmpDate, date_format20);
-    list+=fmt->dateFormat( tmpDate, date_format21);
-    list+=fmt->dateFormat( tmpDate, date_format22);
-    list+=fmt->dateFormat( tmpDate, date_format23);
-    list+=fmt->dateFormat( tmpDate, date_format24);
-    list+=fmt->dateFormat( tmpDate, date_format25);
-    list+=fmt->dateFormat( tmpDate, date_format26);
+    list+=fmt->dateFormat( tmpDate, Format::Date17);
+    list+=fmt->dateFormat( tmpDate, Format::Date18);
+    list+=fmt->dateFormat( tmpDate, Format::Date19);
+    list+=fmt->dateFormat( tmpDate, Format::Date20);
+    list+=fmt->dateFormat( tmpDate, Format::Date21);
+    list+=fmt->dateFormat( tmpDate, Format::Date22);
+    list+=fmt->dateFormat( tmpDate, Format::Date23);
+    list+=fmt->dateFormat( tmpDate, Format::Date24);
+    list+=fmt->dateFormat( tmpDate, Format::Date25);
+    list+=fmt->dateFormat( tmpDate, Format::Date26);
 
     listFormat->insertStringList(list);
-    if ( cellFormatType == ShortDate_format )
+    if ( cellFormatType == Format::ShortDate )
         listFormat->setCurrentItem(0);
-    else if (cellFormatType == TextDate_format)
+    else if (cellFormatType == Format::TextDate)
         listFormat->setCurrentItem(1);
-    else if (cellFormatType == date_format1)
+    else if (cellFormatType == Format::Date1)
         listFormat->setCurrentItem(2);
-    else if (cellFormatType == date_format2)
+    else if (cellFormatType == Format::Date2)
         listFormat->setCurrentItem(3);
-    else if (cellFormatType == date_format3)
+    else if (cellFormatType == Format::Date3)
         listFormat->setCurrentItem(4);
-    else if (cellFormatType == date_format4)
+    else if (cellFormatType == Format::Date4)
         listFormat->setCurrentItem(5);
-    else if (cellFormatType == date_format5)
+    else if (cellFormatType == Format::Date5)
         listFormat->setCurrentItem(6);
-    else if (cellFormatType == date_format6)
+    else if (cellFormatType == Format::Date6)
         listFormat->setCurrentItem(7);
-    else if (cellFormatType == date_format7)
+    else if (cellFormatType == Format::Date7)
         listFormat->setCurrentItem(8);
-    else if (cellFormatType == date_format8)
+    else if (cellFormatType == Format::Date8)
         listFormat->setCurrentItem(9);
-    else if (cellFormatType == date_format9)
+    else if (cellFormatType == Format::Date9)
         listFormat->setCurrentItem(10);
-    else if (cellFormatType == date_format10)
+    else if (cellFormatType == Format::Date10)
         listFormat->setCurrentItem(11);
-    else if (cellFormatType == date_format11)
+    else if (cellFormatType == Format::Date11)
         listFormat->setCurrentItem(12);
-    else if (cellFormatType == date_format12)
+    else if (cellFormatType == Format::Date12)
         listFormat->setCurrentItem(13);
-    else if (cellFormatType == date_format13)
+    else if (cellFormatType == Format::Date13)
         listFormat->setCurrentItem(14);
-    else if (cellFormatType == date_format14)
+    else if (cellFormatType == Format::Date14)
         listFormat->setCurrentItem(15);
-    else if (cellFormatType == date_format15)
+    else if (cellFormatType == Format::Date15)
         listFormat->setCurrentItem(16);
-    else if (cellFormatType == date_format16)
+    else if (cellFormatType == Format::Date16)
         listFormat->setCurrentItem(17);
-    else if (cellFormatType == date_format17)
+    else if (cellFormatType == Format::Date17)
         listFormat->setCurrentItem(18);
-    else if (cellFormatType == date_format18)
+    else if (cellFormatType == Format::Date18)
         listFormat->setCurrentItem(19);
-    else if (cellFormatType == date_format19)
+    else if (cellFormatType == Format::Date19)
         listFormat->setCurrentItem(20);
-    else if (cellFormatType == date_format20)
+    else if (cellFormatType == Format::Date20)
         listFormat->setCurrentItem(21);
-    else if (cellFormatType == date_format21)
+    else if (cellFormatType == Format::Date21)
         listFormat->setCurrentItem(22);
-    else if (cellFormatType == date_format22)
+    else if (cellFormatType == Format::Date22)
         listFormat->setCurrentItem(23);
-    else if (cellFormatType == date_format23)
+    else if (cellFormatType == Format::Date23)
         listFormat->setCurrentItem(24);
-    else if (cellFormatType == date_format24)
+    else if (cellFormatType == Format::Date24)
         listFormat->setCurrentItem(25);
-    else if (cellFormatType == date_format25)
+    else if (cellFormatType == Format::Date25)
         listFormat->setCurrentItem(26);
-    else if (cellFormatType == date_format26)
+    else if (cellFormatType == Format::Date26)
         listFormat->setCurrentItem(27);
     else
         listFormat->setCurrentItem(0);
@@ -1470,87 +1470,87 @@ void CellFormatPageFloat::currencyChanged(const QString &)
 void CellFormatPageFloat::updateFormatType ()
 {
   if (generic->isChecked())
-    newFormatType = Generic_format;
+    newFormatType = Format::Generic;
   else if (number->isChecked())
-    newFormatType = Number_format;
+    newFormatType = Format::Number;
   else if (percent->isChecked())
-    newFormatType = Percentage_format;
+    newFormatType = Format::Percentage;
   else if (date->isChecked())
   {
-    newFormatType=ShortDate_format;
+    newFormatType = Format::ShortDate;
     switch (listFormat->currentItem())
     {
-      case 0: newFormatType=ShortDate_format; break;
-      case 1: newFormatType=TextDate_format; break;
-      case 2: newFormatType=date_format1; break; /*18-Feb-99*/
-      case 3: newFormatType=date_format2; break; /*18-Feb-1999*/
-      case 4: newFormatType=date_format3; break; /*18-Feb*/
-      case 5: newFormatType=date_format4; break; /*18-05*/
-      case 6: newFormatType=date_format5; break; /*18/05/00*/
-      case 7: newFormatType=date_format6; break; /*18/05/1999*/
-      case 8: newFormatType=date_format7; break;/*Feb-99*/
-      case 9: newFormatType=date_format8; break; /*February-99*/
-      case 10: newFormatType=date_format9; break; /*February-1999*/
-      case 11: newFormatType=date_format10; break; /*F-99*/
-      case 12: newFormatType=date_format11; break; /*18/Feb*/
-      case 13: newFormatType=date_format12; break; /*18/02*/
-      case 14: newFormatType=date_format13; break; /*18/Feb/1999*/
-      case 15: newFormatType=date_format14; break; /*2000/Feb/18*/
-      case 16: newFormatType=date_format15; break;/*2000-Feb-18*/
-      case 17: newFormatType=date_format16; break;/*2000-02-18*/
-      case 18: newFormatType=date_format17; break; /*2000-02-18*/
-      case 19: newFormatType=date_format18; break;
-      case 20: newFormatType=date_format19; break;
-      case 21: newFormatType=date_format20; break;
-      case 22: newFormatType=date_format21; break;
-      case 23: newFormatType=date_format22; break;
-      case 24: newFormatType=date_format23; break;
-      case 25: newFormatType=date_format24; break;
-      case 26: newFormatType=date_format25; break;
-      case 27: newFormatType=date_format26; break;
+      case 0: newFormatType = Format::ShortDate; break;
+      case 1: newFormatType = Format::TextDate; break;
+      case 2: newFormatType = Format::Date1; break; /*18-Feb-99*/
+      case 3: newFormatType = Format::Date2; break; /*18-Feb-1999*/
+      case 4: newFormatType = Format::Date3; break; /*18-Feb*/
+      case 5: newFormatType = Format::Date4; break; /*18-05*/
+      case 6: newFormatType = Format::Date5; break; /*18/05/00*/
+      case 7: newFormatType = Format::Date6; break; /*18/05/1999*/
+      case 8: newFormatType = Format::Date7; break;/*Feb-99*/
+      case 9: newFormatType = Format::Date8; break; /*February-99*/
+      case 10: newFormatType = Format::Date9; break; /*February-1999*/
+      case 11: newFormatType = Format::Date10; break; /*F-99*/
+      case 12: newFormatType = Format::Date11; break; /*18/Feb*/
+      case 13: newFormatType = Format::Date12; break; /*18/02*/
+      case 14: newFormatType = Format::Date13; break; /*18/Feb/1999*/
+      case 15: newFormatType = Format::Date14; break; /*2000/Feb/18*/
+      case 16: newFormatType = Format::Date15; break;/*2000-Feb-18*/
+      case 17: newFormatType = Format::Date16; break;/*2000-02-18*/
+      case 18: newFormatType = Format::Date17; break; /*2000-02-18*/
+      case 19: newFormatType = Format::Date18; break;
+      case 20: newFormatType = Format::Date19; break;
+      case 21: newFormatType = Format::Date20; break;
+      case 22: newFormatType = Format::Date21; break;
+      case 23: newFormatType = Format::Date22; break;
+      case 24: newFormatType = Format::Date23; break;
+      case 25: newFormatType = Format::Date24; break;
+      case 26: newFormatType = Format::Date25; break;
+      case 27: newFormatType = Format::Date26; break;
     }
   }
   else if (money->isChecked())
-    newFormatType = Money_format;
+    newFormatType = Format::Money;
   else if (scientific->isChecked())
-    newFormatType = Scientific_format;
+    newFormatType = Format::Scientific;
   else if (fraction->isChecked())
   {
-    newFormatType=fraction_half;
+    newFormatType = Format::fraction_half;
     switch (listFormat->currentItem())
     {
-      case 0: newFormatType=fraction_half; break;
-      case 1: newFormatType=fraction_quarter; break;
-      case 2: newFormatType=fraction_eighth; break;
-      case 3: newFormatType=fraction_sixteenth; break;
-      case 4: newFormatType=fraction_tenth; break;
-      case 5: newFormatType=fraction_hundredth; break;
-      case 6: newFormatType=fraction_one_digit; break;
-      case 7: newFormatType=fraction_two_digits; break;
-      case 8: newFormatType=fraction_three_digits; break;
+      case 0: newFormatType = Format::fraction_half; break;
+      case 1: newFormatType = Format::fraction_quarter; break;
+      case 2: newFormatType = Format::fraction_eighth; break;
+      case 3: newFormatType = Format::fraction_sixteenth; break;
+      case 4: newFormatType = Format::fraction_tenth; break;
+      case 5: newFormatType = Format::fraction_hundredth; break;
+      case 6: newFormatType = Format::fraction_one_digit; break;
+      case 7: newFormatType = Format::fraction_two_digits; break;
+      case 8: newFormatType = Format::fraction_three_digits; break;
     }
   }
   else if (time->isChecked())
   {
-    newFormatType=Time_format;
+    newFormatType = Format::Time;
     switch (listFormat->currentItem())
     {
-      case 0: newFormatType=Time_format; break;
-      case 1: newFormatType=SecondeTime_format; break;
-      case 2: newFormatType=Time_format1; break;
-      case 3: newFormatType=Time_format2; break;
-      case 4: newFormatType=Time_format3; break;
-      case 5: newFormatType=Time_format4; break;
-      case 6: newFormatType=Time_format5; break;
-      case 7: newFormatType=Time_format6; break;
-      case 8: newFormatType=Time_format7; break;
-      case 9: newFormatType=Time_format8; break;
+      case 0: newFormatType = Format::Time; break;
+      case 1: newFormatType = Format::SecondeTime; break;
+      case 2: newFormatType = Format::Time1; break;
+      case 3: newFormatType = Format::Time2; break;
+      case 4: newFormatType = Format::Time3; break;
+      case 5: newFormatType = Format::Time4; break;
+      case 6: newFormatType = Format::Time5; break;
+      case 7: newFormatType = Format::Time6; break;
+      case 8: newFormatType = Format::Time7; break;
+      case 9: newFormatType = Format::Time8; break;
     }
   }
   else if (textFormat->isChecked())
-    newFormatType = Text_format;
+    newFormatType = Format::Text;
   else if (customFormat->isChecked())
-    newFormatType = Custom_format;
+    newFormatType = Format::Custom;
 }
 
 void CellFormatPageFloat::makeformat()
@@ -1593,7 +1593,7 @@ void CellFormatPageFloat::makeformat()
                         floatFormat,
                         prefix->isEnabled() ? prefix->text() : QString::null,
                         postfix->isEnabled() ? postfix->text() : QString::null,
-                        newFormatType == Money_format ? dlg->m_currency.symbol() : QString::null);
+                        newFormatType == Format::Money ? dlg->m_currency.symbol() : QString::null);
   if (tmp.length() > 50)
     tmp = tmp.left (50);
   exampleLabel->setText(tmp.prepend("<font color=" + color.name() + '>').append("</font>"));

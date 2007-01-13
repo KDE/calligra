@@ -245,7 +245,7 @@ protected:
     QLineEdit* customFormatEdit;
     QLabel *exampleLabel;
     CellFormatDialog *dlg;
-    FormatType cellFormatType, newFormatType;
+    Format::Type cellFormatType, newFormatType;
     //test if value changed
     bool m_bFormatTypeChanged;
     bool m_bFormatColorChanged;
@@ -589,7 +589,7 @@ public:
     int textRotation;
     bool bTextRotation;
 
-    FormatType formatType;
+    Format::Type formatType;
     bool bFormatType;
 
     Value value;

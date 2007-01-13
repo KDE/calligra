@@ -242,10 +242,10 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
             switch (dataStyle.type)
             {
                 case KoOasisStyles::NumericStyleFormat::Number:
-                    setFormatType( Number_format );
+                    setFormatType( Format::Number );
                     break;
                 case KoOasisStyles::NumericStyleFormat::Scientific:
-                    setFormatType( Scientific_format );
+                    setFormatType( Format::Scientific );
                     break;
                 case KoOasisStyles::NumericStyleFormat::Currency:
                     kDebug(36003) << " currency-symbol: " << dataStyle.currencySymbol << endl;
@@ -255,7 +255,7 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
                     }
                     break;
                 case KoOasisStyles::NumericStyleFormat::Percentage:
-                    setFormatType( Percentage_format );
+                    setFormatType( Format::Percentage );
                     break;
                 case KoOasisStyles::NumericStyleFormat::Fraction:
                     // determine format of fractions, dates and times by using the
@@ -285,10 +285,10 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
                     }
                     break;
                 case KoOasisStyles::NumericStyleFormat::Boolean:
-                    setFormatType( Number_format );
+                    setFormatType( Format::Number );
                     break;
                 case KoOasisStyles::NumericStyleFormat::Text:
-                    setFormatType( Text_format );
+                    setFormatType( Format::Text );
                     break;
             }
 
@@ -561,117 +561,117 @@ static QString convertDateFormat( const QString& date )
     return result;
 }
 
-FormatType Style::dateType( const QString &_format )
+Format::Type Style::dateType( const QString &_format )
 {
     const QString dateFormatShort = convertDateFormat( KGlobal::locale()->dateFormatShort() );
     const QString dateFormat = convertDateFormat( KGlobal::locale()->dateFormat() );
 
     if ( _format == "dd-MMM-yy" )
-        return date_format1;
+        return Format::Date1;
     else if ( _format == "dd-MMM-yyyy" )
-        return date_format2;
+        return Format::Date2;
     else if ( _format == "d-MM" )
-        return date_format3;
+        return Format::Date3;
     else if ( _format == "dd-MM" ) //TODO ???????
-        return date_format4;
+        return Format::Date4;
     else if ( _format == "dd/MM/yy" )
-        return date_format5;
+        return Format::Date5;
     else if ( _format == "dd/MM/yyyy" )
-        return date_format6;
+        return Format::Date6;
     else if ( _format == "MMM-yy" )
-        return date_format7;
+        return Format::Date7;
     else if ( _format == "MMMM-yyyy" )
-        return date_format9;
+        return Format::Date9;
     else if ( _format == "MMMMM-yy" )
-        return date_format10;
+        return Format::Date10;
     else if ( _format == "dd/MMM" )
-        return date_format11;
+        return Format::Date11;
     else if ( _format == "dd/MM" )
-        return date_format12;
+        return Format::Date12;
     else if ( _format == "dd/MMM/yyyy" )
-        return date_format13;
+        return Format::Date13;
     else if ( _format == "yyyy/MMM/dd" )
-        return date_format14;
+        return Format::Date14;
     else if ( _format == "yyyy-MMM-dd" )
-        return date_format15;
+        return Format::Date15;
     else if ( _format == "yyyy/MM/dd" )
-        return date_format16;
+        return Format::Date16;
     else if ( _format == "d MMMM yyyy" )
-        return date_format17;
+        return Format::Date17;
     else if ( _format == "MM/dd/yyyy" )
-        return date_format18;
+        return Format::Date18;
     else if ( _format == "MM/dd/yy" )
-        return date_format19;
+        return Format::Date19;
     else if ( _format == "MMM/dd/yy" )
-        return date_format20;
+        return Format::Date20;
     else if ( _format == "MMM/dd/yyyy" )
-        return date_format21;
+        return Format::Date21;
     else if ( _format == "MMM-yyyy" )
-        return date_format22;
+        return Format::Date22;
     else if ( _format == "yyyy" )
-        return date_format23;
+        return Format::Date23;
     else if ( _format == "yy" )
-        return date_format24;
+        return Format::Date24;
     else if ( _format == "yyyy/MM/dd" )
-        return date_format25;
+        return Format::Date25;
     else if ( _format == "yyyy/MMM/dd" )
-        return date_format26;
+        return Format::Date26;
     else if ( _format == dateFormatShort )
-        return ShortDate_format;
+        return Format::ShortDate;
     else if ( _format == dateFormat )
-        return TextDate_format;
+        return Format::TextDate;
     else
-        return ShortDate_format;
+        return Format::ShortDate;
 }
 
-FormatType Style::timeType( const QString &_format )
+Format::Type Style::timeType( const QString &_format )
 {
     if ( _format == "h:mm AP" )
-        return Time_format1;
+        return Format::Time1;
     else if ( _format == "h:mm:ss AP" )
-        return Time_format2;
+        return Format::Time2;
     else if ( _format == "hh \\h mm \\m\\i\\n ss \\s" )
-        return Time_format3;
+        return Format::Time3;
     else if ( _format == "hh:mm" )
-        return Time_format4;
+        return Format::Time4;
     else if ( _format == "hh:mm:ss" )
-        return Time_format5;
+        return Format::Time5;
     else if ( _format == "m:ss" )
-        return Time_format6;
+        return Format::Time6;
     else if ( _format == "h:mm:ss" )
-        return Time_format7;
+        return Format::Time7;
     else if ( _format == "h:mm" )
-        return Time_format8;
+        return Format::Time8;
     else
-        return Time_format;
+        return Format::Time;
 }
 
-FormatType Style::fractionType( const QString &_format )
+Format::Type Style::fractionType( const QString &_format )
 {
     if ( _format == "# ?/2" )
-        return fraction_half;
+        return Format::fraction_half;
     else if ( _format =="# ?/4" )
-        return fraction_quarter;
+        return Format::fraction_quarter;
     else if ( _format == "# ?/8" )
-        return fraction_eighth;
+        return Format::fraction_eighth;
     else if ( _format == "# ?/16" )
-        return fraction_sixteenth;
+        return Format::fraction_sixteenth;
     else if ( _format == "# ?/10" )
-        return fraction_tenth;
+        return Format::fraction_tenth;
     else if ( _format == "# ?/100" )
-        return fraction_hundredth;
+        return Format::fraction_hundredth;
     else if ( _format == "# ?/?" )
-        return fraction_one_digit;
+        return Format::fraction_one_digit;
     else if ( _format == "# \?\?/\?\?" )
-        return fraction_two_digits;
+        return Format::fraction_two_digits;
     else if ( _format == "# \?\?\?/\?\?\?" )
-        return fraction_three_digits;
+        return Format::fraction_three_digits;
     else
-        return fraction_half;
+        return Format::fraction_half;
 }
 
 QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles,
-                                         FormatType _style,
+                                         Format::Type _style,
                                          const QString &_prefix, const QString &_postfix,
                                          int _precision, const QString& symbol )
 {
@@ -680,90 +680,90 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
     QString valueType;
     switch( _style )
     {
-        case Number_format:
+        case Format::Number:
             styleName = saveOasisStyleNumericNumber( mainStyles, _style, _precision, _prefix, _postfix );
             valueType = "float";
             break;
-        case Text_format:
+        case Format::Text:
             styleName = saveOasisStyleNumericText( mainStyles, _style, _precision, _prefix, _postfix );
             valueType = "string";
             break;
-        case Money_format:
+        case Format::Money:
             styleName = saveOasisStyleNumericMoney( mainStyles, _style, symbol, _precision, _prefix, _postfix );
             valueType = "currency";
             break;
-        case Percentage_format:
+        case Format::Percentage:
             styleName = saveOasisStyleNumericPercentage( mainStyles, _style, _precision, _prefix, _postfix );
             valueType = "percentage";
             break;
-        case Scientific_format:
+        case Format::Scientific:
             styleName = saveOasisStyleNumericScientific( mainStyles, _style, _prefix, _postfix, _precision );
             valueType = "float";
             break;
-        case ShortDate_format:
-        case TextDate_format:
+        case Format::ShortDate:
+        case Format::TextDate:
             styleName = saveOasisStyleNumericDate( mainStyles, _style, _prefix, _postfix );
             valueType = "date";
             break;
-        case Time_format:
-        case SecondeTime_format:
-        case Time_format1:
-        case Time_format2:
-        case Time_format3:
-        case Time_format4:
-        case Time_format5:
-        case Time_format6:
-        case Time_format7:
-        case Time_format8:
+        case Format::Time:
+        case Format::SecondeTime:
+        case Format::Time1:
+        case Format::Time2:
+        case Format::Time3:
+        case Format::Time4:
+        case Format::Time5:
+        case Format::Time6:
+        case Format::Time7:
+        case Format::Time8:
             styleName = saveOasisStyleNumericTime( mainStyles, _style, _prefix, _postfix );
             valueType = "time";
             break;
-        case fraction_half:
-        case fraction_quarter:
-        case fraction_eighth:
-        case fraction_sixteenth:
-        case fraction_tenth:
-        case fraction_hundredth:
-        case fraction_one_digit:
-        case fraction_two_digits:
-        case fraction_three_digits:
+        case Format::fraction_half:
+        case Format::fraction_quarter:
+        case Format::fraction_eighth:
+        case Format::fraction_sixteenth:
+        case Format::fraction_tenth:
+        case Format::fraction_hundredth:
+        case Format::fraction_one_digit:
+        case Format::fraction_two_digits:
+        case Format::fraction_three_digits:
             styleName = saveOasisStyleNumericFraction( mainStyles, _style, _prefix, _postfix );
             valueType = "float";
             break;
-        case date_format1:
-        case date_format2:
-        case date_format3:
-        case date_format4:
-        case date_format5:
-        case date_format6:
-        case date_format7:
-        case date_format8:
-        case date_format9:
-        case date_format10:
-        case date_format11:
-        case date_format12:
-        case date_format13:
-        case date_format14:
-        case date_format15:
-        case date_format16:
-        case date_format17:
-        case date_format18:
-        case date_format19:
-        case date_format20:
-        case date_format21:
-        case date_format22:
-        case date_format23:
-        case date_format24:
-        case date_format25:
-        case date_format26:
+        case Format::Date1:
+        case Format::Date2:
+        case Format::Date3:
+        case Format::Date4:
+        case Format::Date5:
+        case Format::Date6:
+        case Format::Date7:
+        case Format::Date8:
+        case Format::Date9:
+        case Format::Date10:
+        case Format::Date11:
+        case Format::Date12:
+        case Format::Date13:
+        case Format::Date14:
+        case Format::Date15:
+        case Format::Date16:
+        case Format::Date17:
+        case Format::Date18:
+        case Format::Date19:
+        case Format::Date20:
+        case Format::Date21:
+        case Format::Date22:
+        case Format::Date23:
+        case Format::Date24:
+        case Format::Date25:
+        case Format::Date26:
             styleName = saveOasisStyleNumericDate( mainStyles, _style, _prefix, _postfix );
             valueType = "date";
             break;
-        case Custom_format:
+        case Format::Custom:
             styleName = saveOasisStyleNumericCustom( mainStyles, _style, _prefix, _postfix );
             break;
-        case Generic_format:
-        case No_format:
+        case Format::Generic:
+        case Format::None:
             if (_precision > -1 || !_prefix.isEmpty() || !_postfix.isEmpty())
             {
                 styleName = saveOasisStyleNumericNumber( mainStyles, _style, _precision, _prefix, _postfix );
@@ -778,7 +778,7 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
     return styleName;
 }
 
-QString Style::saveOasisStyleNumericNumber( KoGenStyles& mainStyles, FormatType /*_style*/, int _precision,
+QString Style::saveOasisStyleNumericNumber( KoGenStyles& mainStyles, Format::Type /*_style*/, int _precision,
                                                const QString& _prefix, const QString& _postfix )
 {
     QString format;
@@ -796,13 +796,13 @@ QString Style::saveOasisStyleNumericNumber( KoGenStyles& mainStyles, FormatType 
     return KoOasisStyles::saveOasisNumberStyle( mainStyles, format, _prefix, _postfix );
 }
 
-QString Style::saveOasisStyleNumericText( KoGenStyles& /*mainStyles*/, FormatType /*_style*/, int /*_precision*/,
+QString Style::saveOasisStyleNumericText( KoGenStyles& /*mainStyles*/, Format::Type /*_style*/, int /*_precision*/,
                                              const QString& /*_prefix*/, const QString& /*_postfix*/ )
 {
     return "";
 }
 
-QString Style::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, FormatType /*_style*/,
+QString Style::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, Format::Type /*_style*/,
                                               const QString& symbol, int _precision,
                                               const QString& _prefix, const QString& _postfix )
 {
@@ -821,7 +821,7 @@ QString Style::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, FormatType /
     return KoOasisStyles::saveOasisCurrencyStyle( mainStyles, format, symbol, _prefix, _postfix );
 }
 
-QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatType /*_style*/, int _precision,
+QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, Format::Type /*_style*/, int _precision,
         const QString& _prefix, const QString& _postfix )
 {
     //<number:percentage-style style:name="N106" style:family="data-style">
@@ -845,7 +845,7 @@ QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatTy
 }
 
 
-QString Style::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatType /*_style*/,
+QString Style::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, Format::Type /*_style*/,
         const QString &_prefix, const QString _suffix, int _precision )
 {
     //<number:number-style style:name="N60" style:family="data-style">
@@ -866,7 +866,7 @@ QString Style::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatTy
     return KoOasisStyles::saveOasisScientificStyle( mainStyles, format, _prefix, _suffix );
 }
 
-QString Style::saveOasisStyleNumericDate( KoGenStyles&mainStyles, FormatType _style,
+QString Style::saveOasisStyleNumericDate( KoGenStyles&mainStyles, Format::Type _style,
                                              const QString& _prefix, const QString& _postfix )
 {
     QString format;
@@ -874,90 +874,90 @@ QString Style::saveOasisStyleNumericDate( KoGenStyles&mainStyles, FormatType _st
     switch( _style )
     {
         //TODO fixme use locale of kspread and not kglobal
-        case ShortDate_format:
+        case Format::ShortDate:
             format = KGlobal::locale()->dateFormatShort();
             locale = true;
             break;
-        case TextDate_format:
+        case Format::TextDate:
             format = KGlobal::locale()->dateFormat();
             locale = true;
             break;
-        case date_format1:
+        case Format::Date1:
             format = "dd-MMM-yy";
             break;
-        case date_format2:
+        case Format::Date2:
             format = "dd-MMM-yyyy";
             break;
-        case date_format3:
+        case Format::Date3:
             format = "dd-M";
             break;
-        case date_format4:
+        case Format::Date4:
             format = "dd-MM";
             break;
-        case date_format5:
+        case Format::Date5:
             format = "dd/MM/yy";
             break;
-        case date_format6:
+        case Format::Date6:
             format = "dd/MM/yyyy";
             break;
-        case date_format7:
+        case Format::Date7:
             format = "MMM-yy";
             break;
-        case date_format8:
+        case Format::Date8:
             format = "MMMM-yy";
             break;
-        case date_format9:
+        case Format::Date9:
             format = "MMMM-yyyy";
             break;
-        case date_format10:
+        case Format::Date10:
             format = "MMMMM-yy";
             break;
-        case date_format11:
+        case Format::Date11:
             format = "dd/MMM";
             break;
-        case date_format12:
+        case Format::Date12:
             format = "dd/MM";
             break;
-        case date_format13:
+        case Format::Date13:
             format = "dd/MMM/yyyy";
             break;
-        case date_format14:
+        case Format::Date14:
             format = "yyyy/MMM/dd";
             break;
-        case date_format15:
+        case Format::Date15:
             format = "yyyy-MMM-dd";
             break;
-        case date_format16:
+        case Format::Date16:
             format = "yyyy/MM/dd";
             break;
-        case date_format17:
+        case Format::Date17:
             format = "d MMMM yyyy";
             break;
-        case date_format18:
+        case Format::Date18:
             format = "MM/dd/yyyy";
             break;
-        case date_format19:
+        case Format::Date19:
             format = "MM/dd/yy";
             break;
-        case date_format20:
+        case Format::Date20:
             format = "MMM/dd/yy";
             break;
-        case date_format21:
+        case Format::Date21:
             format = "MMM/dd/yyyy";
             break;
-        case date_format22:
+        case Format::Date22:
             format = "MMM-yyyy";
             break;
-        case date_format23:
+        case Format::Date23:
             format = "yyyy";
             break;
-        case date_format24:
+        case Format::Date24:
             format = "yy";
             break;
-        case date_format25:
+        case Format::Date25:
             format = "yyyy/MM/dd";
             break;
-        case date_format26:
+        case Format::Date26:
             format = "yyyy/MMM/dd";
             break;
         default:
@@ -967,7 +967,7 @@ QString Style::saveOasisStyleNumericDate( KoGenStyles&mainStyles, FormatType _st
     return KoOasisStyles::saveOasisDateStyle( mainStyles, format, locale, _prefix, _postfix );
 }
 
-QString Style::saveOasisStyleNumericCustom( KoGenStyles& /*mainStyles*/, FormatType /*_style*/,
+QString Style::saveOasisStyleNumericCustom( KoGenStyles& /*mainStyles*/, Format::Type /*_style*/,
                                                const QString& /*_prefix*/, const QString& /*_postfix*/ )
 {
     //TODO
@@ -987,7 +987,7 @@ QString Style::saveOasisStyleNumericCustom( KoGenStyles& /*mainStyles*/, FormatT
     return "";
 }
 
-QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, FormatType _style,
+QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, Format::Type _style,
                                              const QString& _prefix, const QString& _postfix )
 {
     //<number:time-style style:name="N42" style:family="data-style">
@@ -1003,34 +1003,34 @@ QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, FormatType _s
     //TODO use format
     switch( _style )
     {
-        case Time_format: //TODO FIXME
+        case Format::Time: //TODO FIXME
             format = "hh:mm:ss";
             break;
-            case SecondeTime_format: //TODO FIXME
+            case Format::SecondeTime: //TODO FIXME
                 format = "hh:mm";
                 break;
-        case Time_format1:
+        case Format::Time1:
             format = "h:mm AP";
             break;
-        case Time_format2:
+        case Format::Time2:
             format = "h:mm:ss AP";
             break;
-            case Time_format3: // 9 h 01 min 28 s
+            case Format::Time3: // 9 h 01 min 28 s
                 format = "hh \\h mm \\m\\i\\n ss \\s";
                 break;
-        case Time_format4:
+        case Format::Time4:
             format = "hh:mm";
             break;
-        case Time_format5:
+        case Format::Time5:
             format = "hh:mm:ss";
             break;
-        case Time_format6:
+        case Format::Time6:
             format = "m:ss";
             break;
-        case Time_format7:
+        case Format::Time7:
             format = "h:mm:ss";
             break;
-        case Time_format8:
+        case Format::Time8:
             format = "h:mm";
             break;
         default:
@@ -1041,44 +1041,44 @@ QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, FormatType _s
 }
 
 
-QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatType _style,
+QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, Format::Type formatType,
         const QString &_prefix, const QString _suffix )
 {
     //<number:number-style style:name="N71" style:family="data-style">
     //<number:fraction number:min-integer-digits="0" number:min-numerator-digits="2" number:min-denominator-digits="2"/>
     //</number:number-style>
     QString format;
-    switch( _style )
+    switch( formatType )
     {
-        case fraction_half:
+        case Format::fraction_half:
             format = "# ?/2";
             break;
-        case fraction_quarter:
+        case Format::fraction_quarter:
             format = "# ?/4";
             break;
-        case fraction_eighth:
+        case Format::fraction_eighth:
             format = "# ?/8";
             break;
-        case fraction_sixteenth:
+        case Format::fraction_sixteenth:
             format = "# ?/16";
             break;
-        case fraction_tenth:
+        case Format::fraction_tenth:
             format = "# ?/10";
             break;
-        case fraction_hundredth:
+        case Format::fraction_hundredth:
             format = "# ?/100";
             break;
-        case fraction_one_digit:
+        case Format::fraction_one_digit:
             format = "# ?/?";
             break;
-        case fraction_two_digits:
+        case Format::fraction_two_digits:
             format = "# \?\?/\?\?";
             break;
-        case fraction_three_digits:
+        case Format::fraction_three_digits:
             format = "# \?\?\?/\?\?\?";
             break;
         default:
-            kDebug(36003)<<" fraction format not defined :"<<_style<<endl;
+            kDebug(36003)<<" fraction format not defined :"<<formatType<<endl;
             break;
     }
 
@@ -1183,7 +1183,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
                                  if ( d->subStyles.contains( CustomFormat ) && !customFormat().isEmpty() )
                                  format.setAttribute( "custom", customFormat() );
 
-                                 if ( d->subStyles.contains( FormatType ) && formatType() == Money )
+                                 if ( d->subStyles.contains( Format::Type ) && formatType() == Money )
                          {
                                  format.setAttribute( "type", (int) currency().type );
                                  format.setAttribute( "symbol", currency().symbol );
@@ -1325,7 +1325,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
                              _precision = precision();
 
                          QString currencyCode;
-                         if ( d->subStyles.contains( FormatTypeKey ) && formatType() == Money_format )
+                         if ( d->subStyles.contains( FormatTypeKey ) && formatType() == Format::Money )
                          {
                              currencyCode = currency().code();
                          }
@@ -1382,7 +1382,7 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
     if ( d->subStyles.contains( CustomFormat ) && !customFormat().isEmpty() )
         format.setAttribute( "custom", customFormat() );
 
-    if ( d->subStyles.contains( FormatTypeKey ) && formatType() == Money_format )
+    if ( d->subStyles.contains( FormatTypeKey ) && formatType() == Format::Money )
     {
         format.setAttribute( "type", (int) currency().index() );
         format.setAttribute( "symbol", currency().symbol() );
@@ -1566,13 +1566,13 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
         int fo = format.attribute( "format" ).toInt( &ok );
         if ( ! ok )
             return false;
-        setFormatType( static_cast<FormatType>(fo) );
+        setFormatType( static_cast<Format::Type>(fo) );
     }
     if ( format.hasAttribute( "custom" ) )
     {
         setCustomFormat( format.attribute( "custom" ) );
     }
-    if ( formatType() == Money_format )
+    if ( formatType() == Format::Money )
     {
         ok = true;
         Currency currency;
@@ -1910,11 +1910,11 @@ Style::FloatColor Style::floatColor() const
     return static_cast<const SubStyleOne<FloatColorKey, FloatColor>*>( d->subStyles[FloatColorKey].data() )->value1;;
 }
 
-FormatType Style::formatType() const
+Format::Type Style::formatType() const
 {
     if ( !d->subStyles.contains( FormatTypeKey ) )
-        return SubStyleOne<FormatTypeKey, FormatType>().value1;
-    return static_cast<const SubStyleOne<FormatTypeKey, FormatType>*>( d->subStyles[FormatTypeKey].data() )->value1;;
+        return SubStyleOne<FormatTypeKey, Format::Type>().value1;
+    return static_cast<const SubStyleOne<FormatTypeKey, Format::Type>*>( d->subStyles[FormatTypeKey].data() )->value1;;
 }
 
 Currency Style::currency() const
@@ -2159,7 +2159,7 @@ void Style::setFloatColor( FloatColor color )
     insertSubStyle( FloatColorKey, color );
 }
 
-void Style::setFormatType( FormatType format )
+void Style::setFormatType( Format::Type format )
 {
     insertSubStyle( FormatTypeKey, format );
 }
@@ -2292,7 +2292,7 @@ bool Style::compare( const SubStyle* one, const SubStyle* two )
         case Precision:
             return static_cast<const SubStyleOne<Precision,int>*>(one)->value1 == static_cast<const SubStyleOne<Precision,int>*>(two)->value1;
         case FormatTypeKey:
-            return static_cast<const SubStyleOne<FormatTypeKey,FormatType>*>(one)->value1 == static_cast<const SubStyleOne<FormatTypeKey,FormatType>*>(two)->value1;
+            return static_cast<const SubStyleOne<FormatTypeKey,Format::Type>*>(one)->value1 == static_cast<const SubStyleOne<FormatTypeKey,Format::Type>*>(two)->value1;
         case FloatFormatKey:
             return static_cast<const SubStyleOne<FloatFormatKey,FloatFormat>*>(one)->value1 == static_cast<const SubStyleOne<FloatFormatKey,FloatFormat>*>(two)->value1;
         case FloatColorKey:
@@ -2446,7 +2446,7 @@ SharedSubStyle Style::createSubStyle( Key key, const QVariant& value )
             newSubStyle = new SubStyleOne<Precision, int>( value.value<int>() );
             break;
         case FormatTypeKey:
-            newSubStyle = new SubStyleOne<FormatTypeKey, FormatType>( (FormatType)value.value<int>() );
+            newSubStyle = new SubStyleOne<FormatTypeKey, Format::Type>( (Format::Type)value.value<int>() );
             break;
         case FloatFormatKey:
             newSubStyle = new SubStyleOne<FloatFormatKey, FloatFormat>( (FloatFormat)value.value<int>() );

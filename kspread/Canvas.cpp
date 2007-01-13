@@ -2820,34 +2820,34 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
     {
         case Qt::Key_Exclam:
             manipulator->setName( i18n("Number Format") );
-            manipulator->setFormatType (Number_format);
+            manipulator->setFormatType( Format::Number );
             manipulator->setPrecision( 2 );
             break;
 
         case Qt::Key_Dollar:
             manipulator->setName( i18n("Currency Format") );
-            manipulator->setFormatType (Money_format);
+            manipulator->setFormatType( Format::Money );
             manipulator->setPrecision( d->view->doc()->locale()->fracDigits() );
             break;
 
         case Qt::Key_Percent:
             manipulator->setName( i18n("Percentage Format") );
-            manipulator->setFormatType (Percentage_format);
+            manipulator->setFormatType( Format::Percentage );
             break;
 
         case Qt::Key_At:
             manipulator->setName( i18n("Time Format") );
-            manipulator->setFormatType( SecondeTime_format );
+            manipulator->setFormatType( Format::SecondeTime );
             break;
 
         case Qt::Key_NumberSign:
             manipulator->setName( i18n("Date Format") );
-            manipulator->setFormatType( ShortDate_format );
+            manipulator->setFormatType( Format::ShortDate );
             break;
 
         case Qt::Key_AsciiCircum:
             manipulator->setName( i18n("Scientific Format") );
-            manipulator->setFormatType( Scientific_format );
+            manipulator->setFormatType( Format::Scientific );
             break;
 
         case Qt::Key_Ampersand:

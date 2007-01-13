@@ -27,6 +27,7 @@
 #include <KoXmlReader.h>
 
 #include "Currency.h"
+#include "Format.h"
 
 class KoGenStyle;
 class KoGenStyles;
@@ -199,7 +200,7 @@ public:
     VAlign      valign()      const;
     FloatFormat floatFormat() const;
     FloatColor  floatColor()  const;
-    FormatType  formatType()  const;
+    Format::Type  formatType()  const;
 
     Currency currency() const;
 
@@ -256,7 +257,7 @@ public:
     void setBackgroundBrush( QBrush const & brush );
     void setFloatFormat( FloatFormat format );
     void setFloatColor( FloatColor color );
-    void setFormatType( FormatType format );
+    void setFormatType( Format::Type format );
     void setCustomFormat( QString const & strFormat );
     void setPrecision( int precision );
     void setPrefix( QString const & prefix );
@@ -275,34 +276,34 @@ public:
 
     // static functions
     //
-    static FormatType dateType( const QString &_format );
-    static FormatType timeType( const QString &_format );
-    static FormatType fractionType( const QString &_format );
+    static Format::Type dateType( const QString& );
+    static Format::Type timeType( const QString& );
+    static Format::Type fractionType( const QString& );
 
     /**
      * @return the name of the data style (number, currency, percentage, date,
      * boolean, text)
      */
-    static QString saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles, FormatType _style,
+    static QString saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles, Format::Type _style,
                                           const QString &_prefix, const QString &_postfix, int _precision, const QString& symbol );
-    static QString saveOasisStyleNumericDate( KoGenStyles &mainStyles, FormatType _style,
+    static QString saveOasisStyleNumericDate( KoGenStyles &mainStyles, Format::Type _style,
                                               const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatType _style,
+    static QString saveOasisStyleNumericFraction( KoGenStyles &mainStyles, Format::Type _style,
                                                   const QString &_prefix, const QString _suffix );
-    static QString saveOasisStyleNumericTime( KoGenStyles& mainStyles, FormatType _style,
+    static QString saveOasisStyleNumericTime( KoGenStyles& mainStyles, Format::Type _style,
                                               const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericCustom( KoGenStyles&mainStyles, FormatType _style,
+    static QString saveOasisStyleNumericCustom( KoGenStyles&mainStyles, Format::Type _style,
                                                 const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericScientific( KoGenStyles&mainStyles, FormatType _style,
+    static QString saveOasisStyleNumericScientific( KoGenStyles&mainStyles, Format::Type _style,
                                                     const QString &_prefix, const QString _suffix, int _precision );
-    static QString saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatType _style, int _precision,
+    static QString saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, Format::Type _style, int _precision,
                                                     const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericMoney( KoGenStyles&mainStyles, FormatType _style,
+    static QString saveOasisStyleNumericMoney( KoGenStyles&mainStyles, Format::Type _style,
                                                const QString& symbol, int _precision,
                                                const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericText( KoGenStyles&mainStyles, FormatType _style, int _precision,
+    static QString saveOasisStyleNumericText( KoGenStyles&mainStyles, Format::Type _style, int _precision,
                                               const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericNumber( KoGenStyles&mainStyles, FormatType _style, int _precision,
+    static QString saveOasisStyleNumericNumber( KoGenStyles&mainStyles, Format::Type _style, int _precision,
                                                 const QString &_prefix, const QString &_suffix );
     static QString saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush );
 

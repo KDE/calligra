@@ -367,7 +367,7 @@ void Cell::setValue( const Value& value )
   valueChanged ();
 }
 
-void Cell::setCellValue (const Value &value, FormatType fmtType, const QString &txt)
+void Cell::setCellValue (const Value &value, Format::Type fmtType, const QString &txt)
 {
     if ( !txt.isNull() )
     {
@@ -377,7 +377,7 @@ void Cell::setCellValue (const Value &value, FormatType fmtType, const QString &
     }
     else if ( !isFormula() )
         d->inputText = doc()->converter()->asString( value ).asString();
-    if ( fmtType != No_format )
+    if ( fmtType != Format::None )
     {
         Style style;
         style.setFormatType( fmtType );
@@ -929,7 +929,7 @@ int Cell::defineAlignX()
     if ( align == Style::HAlignUndefined )
     {
         //numbers should be right-aligned by default, as well as BiDi text
-        if ((formatType() == Text_format) || value().isString())
+        if ((formatType() == Format::Text) || value().isString())
             align = (displayText().isRightToLeft()) ? Style::Right : Style::Left;
         else
         {
@@ -1133,24 +1133,24 @@ QString Cell::link() const
   return d->hasExtra() ? d->extra()->link : QString();
 }
 
-FormatType Cell::formatType( int col, int row ) const
+Format::Type Cell::formatType( int col, int row ) const
 {
     return style( col, row ).formatType();
 }
 
 bool Cell::isDate( int col, int row ) const
 {
-    FormatType ft = formatType( col, row );
+    Format::Type ft = formatType( col, row );
 
-    return (formatIsDate (ft) || ((ft == Generic_format) &&
+    return (Format::isDate (ft) || ((ft == Format::Generic) &&
             (value().format() == Value::fmt_Date)));
 }
 
 bool Cell::isTime( int col, int row ) const
 {
-    FormatType ft = formatType( col, row );
+    Format::Type ft = formatType( col, row );
 
-    return (formatIsTime (ft) || ((ft == Generic_format) &&
+    return (Format::isTime (ft) || ((ft == Format::Generic) &&
             (value().format() == Value::fmt_Time)));
 }
 
@@ -1289,7 +1289,7 @@ void Cell::checkTextInput()
 
   // Parsing as time acts like an autoformat: we even change d->inputText
   // [h]:mm:ss -> might get set by ValueParser
-  if (isTime() && (formatType() != Time_format7))
+  if (isTime() && (formatType() != Format::Time7))
     d->inputText = locale()->formatTime( value().asDateTime( doc() ).time(), true);
 
   // convert first letter to uppercase ?
@@ -1304,12 +1304,12 @@ void Cell::checkTextInput()
 //used in calc, setNumber, ValueParser
 void Cell::checkNumberFormat()
 {
-    if ( formatType() == Number_format && value().isNumber() )
+    if ( formatType() == Format::Number && value().isNumber() )
     {
         if ( value().asFloat() > 1e+10 )
         {
             Style style;
-            style.setFormatType( Scientific_format );
+            style.setFormatType( Format::Scientific );
             setStyle( style );
         }
     }
@@ -1805,7 +1805,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
             double value = element.attributeNS( KoXmlNS::office, "value", QString::null ).toDouble( &ok );
             if( ok )
             {
-                setCellValue( Value(value), Money_format );
+                setCellValue( Value(value), Format::Money );
 
                 if (element.hasAttributeNS( KoXmlNS::office, "currency" ) )
                 {
@@ -1833,7 +1833,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
                     setCellText( str );
                 }
                 Style style;
-                style.setFormatType( Percentage_format );
+                style.setFormatType( Format::Percentage );
                 setStyle( style );
             }
         }
@@ -1870,7 +1870,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
             {
                 setCellValue( Value( QDate( year, month, day ), doc() ) );
                 Style style;
-                style.setFormatType(ShortDate_format);
+                style.setFormatType( Format::ShortDate );
                 setStyle( style );
                 kDebug(36003) << "Set QDate: " << year << " - " << month << " - " << day << endl;
             }
@@ -1917,7 +1917,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
                 // cell->setValue( kval );
                 setCellValue( Value( QTime( hours % 24, minutes, seconds ), doc() ) );
                 Style style;
-                style.setFormatType (Time_format);
+                style.setFormatType( Format::Time );
                 setStyle( style );
             }
         }
@@ -1931,7 +1931,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
                 setCellValue( Value(value) );
             }
             Style style;
-            style.setFormatType (Text_format);
+            style.setFormatType( Format::Text );
             setStyle( style );
         }
         else
@@ -2463,7 +2463,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         */
         int precision = t.length() - t.indexOf('.') - 1;
 
-        if ( formatType() == Percentage_format )
+        if ( formatType() == Format::Percentage )
         {
           if (value().isInteger())
             t = locale->formatNumber( value().asInteger() * 100 );

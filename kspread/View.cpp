@@ -1535,9 +1535,9 @@ void View::Private::adjustActions( Cell* cell, int column, int row )
 
   actions->wrapText->setChecked( style.wrapText() );
 
-  FormatType ft = style.formatType();
-  actions->percent->setChecked( ft == Percentage_format );
-  actions->money->setChecked( ft == Money_format );
+  Format::Type ft = style.formatType();
+  actions->percent->setChecked( ft == Format::Percentage );
+  actions->money->setChecked( ft == Format::Money );
 
   if ( activeSheet && !activeSheet->isProtected() )
     actions->removeComment->setEnabled( !cell->comment( column, row ).isEmpty() );
@@ -6340,7 +6340,7 @@ void View::moneyFormat(bool b)
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n( "Format Money" ) );
-    manipulator->setFormatType( b ? Money_format : Generic_format );
+    manipulator->setFormatType( b ? Format::Money : Format::Generic );
     manipulator->setPrecision( b ?  d->doc->locale()->fracDigits() : 0 );
     manipulator->add( *selection() );
     manipulator->execute();
@@ -6430,7 +6430,7 @@ void View::percent( bool b )
     StyleManipulator* manipulator = new StyleManipulator();
     manipulator->setSheet( d->activeSheet );
     manipulator->setName( i18n( "Format Percent" ) );
-    manipulator->setFormatType( b ? Percentage_format : Generic_format );
+    manipulator->setFormatType( b ? Format::Percentage : Format::Generic );
     manipulator->add( *selection() );
     manipulator->execute();
 }

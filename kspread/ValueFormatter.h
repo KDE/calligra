@@ -42,21 +42,21 @@ class ValueFormatter {
   explicit ValueFormatter (ValueConverter *converter);
 
   /** create a text representation of data in this cell */
-  QString formatText (const Cell *cell, FormatType fmtType);
+  QString formatText (const Cell *cell, Format::Type fmtType);
 
   /** create a text representation of data in this Value */
   QString formatText (const Value &value,
-      FormatType fmtType, int precision = -1,
+      Format::Type fmtType, int precision = -1,
       Style::FloatFormat floatFormat = Style::OnlyNegSigned,
       const QString &prefix = QString::null,
       const QString &postfix = QString::null,
       const QString &currencySymbol = QString::null);
 
   /** create a date format */
-  QString dateFormat (const QDate &_date, FormatType fmtType);
+  QString dateFormat (const QDate &_date, Format::Type fmtType);
 
   /** create a time format */
-  QString timeFormat (const QDateTime &_time, FormatType fmtType);
+  QString timeFormat (const QDateTime &_time, Format::Type fmtType);
 
  protected:
 
@@ -64,15 +64,15 @@ class ValueFormatter {
 
   /** determine the formatting type that should be used to format this value
   in a cell with a given format type */
-  FormatType determineFormatting (const Value &value,
-      FormatType fmtType);
+  Format::Type determineFormatting (const Value &value,
+      Format::Type fmtType);
 
   /** create a number format */
-  QString createNumberFormat (double value, int precision, FormatType fmt,
+  QString createNumberFormat (double value, int precision, Format::Type fmt,
       bool alwaysSigned, const QString& currencySymbol);
 
   /** create a fraction format */
-  QString fractionFormat (double value, FormatType fmtType);
+  QString fractionFormat (double value, Format::Type fmtType);
 
   /** Remove trailing zeros and the decimal point if necessary
   unless the number has no decimal point */

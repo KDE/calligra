@@ -44,13 +44,13 @@ const KLocale* ValueParser::locale() const
 
 void ValueParser::parse (const QString& str, Cell *cell)
 {
-  FormatType format = cell->formatType();
+  Format::Type format = cell->formatType();
 
   // If the text is empty, we don't have a value
   // If the user stated explicitly that he wanted text
   // (using the format or using a quote),
   // then we don't parse as a value, but as string.
-  if ( str.isEmpty() || format == Text_format || str.at(0)=='\'' )
+  if ( str.isEmpty() || format == Format::Text || str.at(0)=='\'' )
   {
     cell->setValue (Value(str));
     return;
@@ -202,7 +202,7 @@ Value ValueParser::tryParseBool (const QString& str, bool *ok)
   {
     val.setValue (false);
     if (ok) *ok = true;
-    fmtType = Number_format;    //TODO: really?
+    fmtType = Format::Number;    //TODO: really?
   }
   return val;
 }
@@ -312,7 +312,7 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
       //    "' successfully parsed as percentage: " << val << '%' << endl;
       value.setValue (val / 100.0);
       value.setFormat (Value::fmt_Percent);
-      fmtType = Percentage_format;
+      fmtType = Format::Percentage;
     }
     else
     {
@@ -324,13 +324,13 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
 		value.setValue (val);
 
       if ( str2.contains('E') || str2.contains('e') )
-        fmtType = Scientific_format;
+        fmtType = Format::Scientific;
       else
       {
         if (val > 1e+10)
-          fmtType = Scientific_format;
+          fmtType = Format::Scientific;
         else
-          fmtType = Number_format;
+          fmtType = Format::Number;
       }
     }
   }
@@ -403,9 +403,9 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
 
     //test if it's a short date or text date.
     if (m_doc->locale()->formatDate (tmpDate, false) == str)
-      fmtType = TextDate_format;
+      fmtType = Format::TextDate;
     else
-      fmtType = ShortDate_format;
+      fmtType = Format::ShortDate;
   }
   if (!valid)
   {
@@ -464,11 +464,11 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
   }
   if (valid)
   {
-    fmtType = Time_format;
+    fmtType = Format::Time;
     if ( duration )
     {
       val.setValue( Value( tmpTime, doc() ) );
-      fmtType = Time_format7;
+      fmtType = Format::Time7;
     }
     else
       val.setValue( Value( tmpTime.time(), doc() ) );

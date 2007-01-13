@@ -145,7 +145,7 @@ public:
      */
     QString paperFormatString()const;
 
-    void setPaperFormat(KoFormat _format) {m_paperFormat=_format;}
+    void setPaperFormat(KoFormat format) { m_paperFormat = format; }
 
     void setPaperOrientation(KoOrientation _orient);
 

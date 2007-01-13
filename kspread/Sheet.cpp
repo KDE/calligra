@@ -1758,7 +1758,7 @@ class SetWordSpellingManipulator : public AbstractDataManipulator {
  protected:
   int idx;
   QStringList list;
-  Value newValue (Element *, int col, int row, bool *parsing, FormatType *)
+  Value newValue (Element *, int col, int row, bool *parsing, Format::Type *)
   {
     *parsing = false;
     // find out whether this cell was supplying data for the original list

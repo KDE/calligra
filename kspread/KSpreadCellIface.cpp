@@ -332,53 +332,53 @@ QString CellIface::postfix() const
     return cell->format()->postfix( m_point.x(), m_point.y() );
 }
 
-void CellIface::setFormatType(const QString &_formatType)
+void CellIface::setFormatType(const QString Format::&Type)
 {
     if( !m_sheet ) return;
 
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     FormatType format;
     cell->format()->setPrecision(2);
-    if (_formatType=="Generic")
-        format = Generic_format;
-    else if(_formatType=="Number")
-        format=Number_format;
-    else if (_formatType=="Text")
-        format=Text_format;
-    else if(_formatType=="Money")
-        format=Money_format;
-    else if(_formatType=="Percentage")
-        format=Percentage_format;
-    else if(_formatType=="Scientific")
-        format=Scientific_format;
-    else if(_formatType=="ShortDate")
-        format=ShortDate_format;
-    else if(_formatType=="TextDate")
-        format=TextDate_format;
-    else if(_formatType=="Time")
-        format=Time_format;
-    else if(_formatType=="SecondeTime")
-        format=SecondeTime_format;
-    else if(_formatType=="fraction_half")
+    if (Format::Type=="Generic")
+        format = Format::Generic;
+    else Format::if(Type=="Number")
+        Format::format=Number;
+    else if (Format::Type=="Text")
+        Format::format=Text;
+    else Format::if(Type=="Money")
+        Format::format=Money;
+    else Format::if(Type=="Percentage")
+        Format::format=Percentage;
+    else Format::if(Type=="Scientific")
+        Format::format=Scientific;
+    else Format::if(Type=="ShortDate")
+        Format::format=ShortDate;
+    else Format::if(Type=="TextDate")
+        Format::format=TextDate;
+    else Format::if(Type=="Time")
+        Format::format=Time;
+    else Format::if(Type=="SecondeTime")
+        Format::format=SecondeTime;
+    else Format::if(Type=="fraction_half")
         format=fraction_half;
-    else if(_formatType=="fraction_quarter")
+    else Format::if(Type=="fraction_quarter")
         format=fraction_quarter;
-    else if(_formatType=="fraction_eighth")
+    else Format::if(Type=="fraction_eighth")
         format=fraction_eighth;
-    else if(_formatType=="fraction_sixteenth")
+    else Format::if(Type=="fraction_sixteenth")
         format=fraction_sixteenth;
-    else if(_formatType=="fraction_tenth")
+    else Format::if(Type=="fraction_tenth")
         format=fraction_tenth;
-    else if(_formatType=="fraction_hundredth")
+    else Format::if(Type=="fraction_hundredth")
         format=fraction_hundredth;
-    else if(_formatType=="fraction_one_digit")
+    else Format::if(Type=="fraction_one_digit")
         format=fraction_one_digit;
-    else if(_formatType=="fraction_two_digits")
+    else Format::if(Type=="fraction_two_digits")
         format=fraction_two_digits;
-    else if(_formatType=="fraction_three_digits")
+    else Format::if(Type=="fraction_three_digits")
         format=fraction_three_digits;
     else
-        format=Generic_format;
+        Format::format=Generic;
     cell->format()->setFormatType( format);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
@@ -391,69 +391,69 @@ QString CellIface::getFormatType() const
     QString stringFormat;
     switch( cell->format()->getFormatType(m_point.x(), m_point.y()))
         {
-        case Text_format:
+        case Format::Text:
             stringFormat="Text";
             break;
-        case Number_format:
+        case Format::Number:
                 stringFormat="Number";
                 break;
-        case Money_format:
+        case Format::Money:
                 stringFormat="Money";
                 break;
-        case Percentage_format:
+        case Format::Percentage:
                 stringFormat="Percentage";
                 break;
-        case Scientific_format:
+        case Format::Scientific:
                 stringFormat="Scientific";
                 break;
-        case ShortDate_format:
+        case Format::ShortDate:
                 stringFormat="ShortDate";
                 break;
-        case TextDate_format:
+        case Format::TextDate:
                 stringFormat="TextDate";
                 break;
-        case date_format1:
-        case date_format2:
-        case date_format3:
-        case date_format4:
-        case date_format5:
-        case date_format6:
-        case date_format7:
-        case date_format8:
-        case date_format9:
-        case date_format10:
-        case date_format11:
-        case date_format12:
-        case date_format13:
-        case date_format14:
-        case date_format15:
-        case date_format16:
-	case date_format17:
-	case date_format18:
-	case date_format19:
-	case date_format20:
-	case date_format21:
-	case date_format22:
-	case date_format23:
-	case date_format24:
-	case date_format25:
-	case date_format26:
+        case Format::Date1:
+        case Format::Date2:
+        case Format::Date3:
+        case Format::Date4:
+        case Format::Date5:
+        case Format::Date6:
+        case Format::Date7:
+        case Format::Date8:
+        case Format::Date9:
+        case Format::Date10:
+        case Format::Date11:
+        case Format::Date12:
+        case Format::Date13:
+        case Format::Date14:
+        case Format::Date15:
+        case Format::Date16:
+	case Format::Date17:
+	case Format::Date18:
+	case Format::Date19:
+	case Format::Date20:
+	case Format::Date21:
+	case Format::Date22:
+	case Format::Date23:
+	case Format::Date24:
+	case Format::Date25:
+	case Format::Date26:
                 stringFormat="date format";
                 break;
-        case Time_format:
+        case Format::Time:
                 stringFormat="Time";
                 break;
-        case SecondeTime_format:
+        case Format::SecondeTime:
                 stringFormat="SecondeTime";
                 break;
-        case Time_format1:
-        case Time_format2:
-        case Time_format3:
-        case Time_format4:
-        case Time_format5:
-        case Time_format6:
-        case Time_format7:
-        case Time_format8:
+        case Format::Time1:
+        case Format::Time2:
+        case Format::Time3:
+        case Format::Time4:
+        case Format::Time5:
+        case Format::Time6:
+        case Format::Time7:
+        case Format::Time8:
                 stringFormat="time format";
                 break;
         case fraction_half:

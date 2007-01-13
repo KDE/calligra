@@ -73,7 +73,7 @@ void SortManipulator::clearSortOrder ()
 }
 
 Value SortManipulator::newValue (Element *element, int col, int row,
-    bool *parse, FormatType *)
+    bool *parse, Format::Type *)
 {
   QRect range = element->rect();
   int colidx = col - range.left();

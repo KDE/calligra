@@ -282,11 +282,6 @@ private:
   QPoint current;
 };
 
-//helper functions for the formatting
-bool formatIsDate (FormatType fmt);
-bool formatIsTime (FormatType fmt);
-bool formatIsFraction (FormatType fmt);
-
 
 
 // TODO Stefan: move to Region class as static members

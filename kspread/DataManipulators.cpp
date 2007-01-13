@@ -52,7 +52,7 @@ bool AbstractDataManipulator::process (Element* element)
       int colidx = col - range.left();
       int rowidx = row - range.top();
       bool parse = false;
-      FormatType fmtType = No_format;
+      Format::Type fmtType = Format::None;
       
       // do nothing if we don't want a change here
       if (!wantChange (element, col, row))
@@ -75,7 +75,7 @@ bool AbstractDataManipulator::process (Element* element)
       // we have the data - set it !
       if (parse) {
         Cell *cell = m_sheet->nonDefaultCell (col, row);
-        if (fmtType != No_format)
+        if (fmtType != Format::None)
         {
             Style style;
             style.setFormatType (fmtType);
@@ -204,7 +204,7 @@ bool AbstractDFManipulator::preProcessing ()
 }
 
 DataManipulator::DataManipulator ()
-  : m_format (No_format),
+  : m_format (Format::None),
   m_parsing (false)
 {
   // default name for DataManipulator, can be changed using setName
@@ -216,10 +216,10 @@ DataManipulator::~DataManipulator ()
 }
 
 Value DataManipulator::newValue (Element *element, int col, int row,
-    bool *parsing, FormatType *formatType)
+    bool *parsing, Format::Type *formatType)
 {
   *parsing = m_parsing;
-  if (m_format != No_format)
+  if (m_format != Format::None)
     *formatType = m_format;
   QRect range = element->rect();
   int colidx = col - range.left();
@@ -266,7 +266,7 @@ void SeriesManipulator::setupSeries (const QPoint &_marker, double start,
 }
 
 Value SeriesManipulator::newValue (Element *element, int col, int row,
-    bool *parse, FormatType *)
+    bool *parse, Format::Type *)
 {
   *parse = false;
   ValueCalc *calc = m_sheet->doc()->calc();
@@ -314,7 +314,7 @@ ArrayFormulaManipulator::~ArrayFormulaManipulator ()
 }
 
 Value ArrayFormulaManipulator::newValue (Element *element, int col, int row,
-                                 bool *parsing, FormatType *)
+                                 bool *parsing, Format::Type *)
 {
   *parsing = true;
   QRect range = element->rect();
@@ -345,7 +345,7 @@ FillManipulator::~FillManipulator ()
 }
 
 Value FillManipulator::newValue (Element *element, int col, int row,
-    bool *parse, FormatType *fmtType)
+    bool *parse, Format::Type *fmtType)
 {
   Q_UNUSED(fmtType)
   QRect range = element->rect();
@@ -389,7 +389,7 @@ CaseManipulator::~CaseManipulator ()
 }
 
 Value CaseManipulator::newValue (Element *element, int col, int row,
-    bool *parse, FormatType *)
+    bool *parse, Format::Type *)
 {
   Q_UNUSED(element)
   // if we are here, we know that we want the change

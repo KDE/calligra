@@ -716,13 +716,13 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 
 	switch( style.formatType())
 	{
-        case Number_format:
+        case Format::Number:
             stringFormat="0.00";
 			break;
-        case Text_format:
+        case Format::Text:
             stringFormat="general";
             break;
-		case Money_format:
+		case Format::Money:
 
             if (!style.hasAttribute(Style::CurrencyFormat))
             {
@@ -745,152 +745,152 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
                 stringFormat="[$" + currency.code() + "]0.00";
 
             break;
-		case Percentage_format:
+		case Format::Percentage:
 		    stringFormat="0.00%";
 			break;
-		case Scientific_format:
+		case Format::Scientific:
 		    stringFormat="0.00E+00";
 			break;
-		case ShortDate_format:
+		case Format::ShortDate:
 			stringFormat=cell->locale()->dateFormatShort();
 			break;
-		case TextDate_format:
+		case Format::TextDate:
 			stringFormat=cell->locale()->dateFormat();
 			break;
-		case date_format1:
+		case Format::Date1:
             stringFormat="dd-mmm-yy";
             break;
-		case date_format2:
+		case Format::Date2:
             stringFormat="dd-mmm-yyyy";
             break;
-		case date_format3:
+		case Format::Date3:
             stringFormat="dd-mmm";
             break;
-		case date_format4:
+		case Format::Date4:
             stringFormat="dd-mm";
             break;
-		case date_format5:
+		case Format::Date5:
             stringFormat="dd/mm/yy";
             break;
-		case date_format6:
+		case Format::Date6:
             stringFormat="dd/mm/yyyy";
             break;
-		case date_format7:
+		case Format::Date7:
             stringFormat="mmm-yy";
             break;
-		case date_format8:
+		case Format::Date8:
             stringFormat="mmmm-yy";
             break;
-		case date_format9:
+		case Format::Date9:
             stringFormat="mmmm-yyyy";
             break;
-		case date_format10:
+		case Format::Date10:
             stringFormat="m-yy";
             break;
-		case date_format11:
+		case Format::Date11:
             stringFormat="dd/mmm";
             break;
-		case date_format12:
+		case Format::Date12:
             stringFormat="dd/mm";
             break;
-		case date_format13:
+		case Format::Date13:
             stringFormat="dd/mmm/yyyy";
             break;
-		case date_format14:
+		case Format::Date14:
             stringFormat="yyyy/mmm/dd";
             break;
-		case date_format15:
+		case Format::Date15:
             stringFormat="yyyy-mmm-dd";
             break;
-		case date_format16:
+		case Format::Date16:
             stringFormat="yyyy-mm-dd";
             break;
-        case date_format17:
+        case Format::Date17:
             stringFormat="d mmmm yyyy";
             break;
-        case date_format18:
+        case Format::Date18:
             stringFormat="mm/dd/yyyy";
             break;
-        case date_format19:
+        case Format::Date19:
             stringFormat="mm/dd/yy";
             break;
-        case date_format20:
+        case Format::Date20:
             stringFormat="mmm/dd/yy";
             break;
-        case date_format21:
+        case Format::Date21:
             stringFormat="mmm/dd/yyyy";
             break;
-        case date_format22:
+        case Format::Date22:
             stringFormat="mmm-yyyy";
             break;
-        case date_format23:
+        case Format::Date23:
             stringFormat="yyyy";
             break;
-        case date_format24:
+        case Format::Date24:
             stringFormat="yy";
             break;
-        case date_format25:
+        case Format::Date25:
             stringFormat="yyyy/mm/dd";
             break;
-        case date_format26:
+        case Format::Date26:
 			stringFormat="yyyy/mmm/dd";
             break;
-		case Time_format:
-		case SecondeTime_format:
+		case Format::Time:
+		case Format::SecondeTime:
 			stringFormat=cell->locale()->timeFormat();
 			break;
-        case Time_format1:
+        case Format::Time1:
             stringFormat = "h:mm AM/PM";
             break;
-        case Time_format2:
+        case Format::Time2:
             stringFormat = "h:mm:ss AM/PM";
             break;
-        case Time_format3:
+        case Format::Time3:
             stringFormat = "h \"h\" mm \"min\" ss \"s\"";
             break;
-        case Time_format4:
+        case Format::Time4:
             stringFormat = "h:mm";
             break;
-        case Time_format5:
+        case Format::Time5:
             stringFormat = "h:mm:ss";
             break;
-        case Time_format6:
+        case Format::Time6:
             stringFormat = "mm:ss";
             break;
-        case Time_format7:
+        case Format::Time7:
             stringFormat = "[h]:mm:ss";
             break;
-        case Time_format8:
+        case Format::Time8:
             stringFormat = "[h]:mm";
             break;
-		case fraction_half:
+		case Format::fraction_half:
 			stringFormat="# ?/2";
 			break;
-		case fraction_quarter:
+		case Format::fraction_quarter:
 			stringFormat="# ?/4";
 			break;
-		case fraction_eighth:
+		case Format::fraction_eighth:
 			stringFormat="# ?/8";
 			break;
-		case fraction_sixteenth:
+		case Format::fraction_sixteenth:
 			stringFormat="# ?/16";
 			break;
-		case fraction_tenth:
+		case Format::fraction_tenth:
 			stringFormat="# ?/10";
 			break;
-		case fraction_hundredth:
+		case Format::fraction_hundredth:
 			stringFormat="# ?/100";
 			break;
-		case fraction_one_digit:
+		case Format::fraction_one_digit:
 			stringFormat="# ?/?";
 			break;
-		case fraction_two_digits:
+		case Format::fraction_two_digits:
 			stringFormat="# ?\?/?\?";
 			break;
-		case fraction_three_digits:
+		case Format::fraction_three_digits:
 			stringFormat="# ?\?\?/?\?\?";
 			break;
-        case Custom_format:
+        case Format::Custom:
             stringFormat = style.customFormat();
             break;
         default:

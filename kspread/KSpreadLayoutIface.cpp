@@ -109,48 +109,48 @@ void LayoutIface::setPrefix(const QString &_prefix)
     layout->setPrefix( _prefix );
 }
 
-void LayoutIface::setFormatType(const QString &_formatType)
+void LayoutIface::setFormatType(const QString Format::&Type)
 {
     FormatType format;
     layout->setPrecision(2);
-    if (_formatType=="Generic")
-        format = Generic_format;
-    else if(_formatType=="Number")
-        format=Number_format;
-    else if(_formatType=="Money")
-        format=Money_format;
-    else if(_formatType=="Percentage")
-        format=Percentage_format;
-    else if(_formatType=="Scientific")
-        format=Scientific_format;
-    else if(_formatType=="ShortDate")
-        format=ShortDate_format;
-    else if(_formatType=="TextDate")
-        format=TextDate_format;
-    else if(_formatType=="Time")
-        format=Time_format;
-    else if(_formatType=="SecondeTime")
-        format=SecondeTime_format;
-    else if(_formatType=="fraction_half")
+    if (Format::Type=="Generic")
+        format = Format::Generic;
+    else Format::if(Type=="Number")
+        Format::format=Number;
+    else Format::if(Type=="Money")
+        Format::format=Money;
+    else Format::if(Type=="Percentage")
+        Format::format=Percentage;
+    else Format::if(Type=="Scientific")
+        Format::format=Scientific;
+    else Format::if(Type=="ShortDate")
+        Format::format=ShortDate;
+    else Format::if(Type=="TextDate")
+        Format::format=TextDate;
+    else Format::if(Type=="Time")
+        Format::format=Time;
+    else Format::if(Type=="SecondeTime")
+        Format::format=SecondeTime;
+    else Format::if(Type=="fraction_half")
         format=fraction_half;
-    else if(_formatType=="fraction_quarter")
+    else Format::if(Type=="fraction_quarter")
         format=fraction_quarter;
-    else if(_formatType=="fraction_eighth")
+    else Format::if(Type=="fraction_eighth")
         format=fraction_eighth;
-    else if(_formatType=="fraction_sixteenth")
+    else Format::if(Type=="fraction_sixteenth")
         format=fraction_sixteenth;
-    else if(_formatType=="fraction_tenth")
+    else Format::if(Type=="fraction_tenth")
         format=fraction_tenth;
-    else if(_formatType=="fraction_hundredth")
+    else Format::if(Type=="fraction_hundredth")
         format=fraction_hundredth;
-    else if(_formatType=="fraction_one_digit")
+    else Format::if(Type=="fraction_one_digit")
         format=fraction_one_digit;
-    else if(_formatType=="fraction_two_digits")
+    else Format::if(Type=="fraction_two_digits")
         format=fraction_two_digits;
-    else if(_formatType=="fraction_three_digits")
+    else Format::if(Type=="fraction_three_digits")
         format=fraction_three_digits;
     else
-        format=Generic_format;
+        Format::format=Generic;
     layout->setFormatType( format);
 }
 

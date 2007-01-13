@@ -94,6 +94,7 @@ SET (kspreadcommon_LIB_SRCS
 	Editors.cpp
 	Events.cpp
 	Factory.cpp
+	Format.cpp
 	Formula.cpp
 	Functions.cpp
 	GeneralProperty.cpp

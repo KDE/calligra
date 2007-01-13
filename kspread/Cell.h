@@ -43,6 +43,7 @@
 
 #include "Condition.h"
 #include "Global.h"
+#include "Format.h"
 
 class QDomElement;
 class QDomDocument;
@@ -66,7 +67,6 @@ class CellView;
 class Canvas;
 class ConditionalDialog;
 class Doc;
-class Format;
 class Formula;
 class GenValidationStyles;
 class Sheet;
@@ -234,7 +234,7 @@ public:
      *
      * \note Calls setValue() after setting the formatting and input text.
      */
-    void setCellValue (const Value& value, FormatType fmtType = No_format,
+    void setCellValue (const Value& value, Format::Type fmtType = Format::None,
                        const QString& inputText = QString::null);
 
     /**
@@ -461,7 +461,7 @@ public:
      * Note that this is "how the user would like the data to be displayed if possible".
      * If he selects a date format, and the cell contains a string, we won't apply that format.
      */
-    FormatType formatType( int col = 0, int row = 0 ) const;
+    Format::Type formatType( int col = 0, int row = 0 ) const;
 
     /** returns true, if cell format is of date type or content is a date */
     bool isDate( int col = 0, int row = 0 ) const;

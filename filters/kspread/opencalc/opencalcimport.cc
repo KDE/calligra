@@ -599,7 +599,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
           {
               Currency currency( e.attributeNS( ooNS::table, "currency", QString::null ) );
               style.setCurrency( currency );
-              style.setFormatType( Money_format );
+              style.setFormatType( Format::Money );
           }
         }
       }
@@ -614,7 +614,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
             //TODO fixme
 			//cell->setFactor( 100 );
             // TODO: replace with custom...
-            style.setFormatType( Percentage_format );
+            style.setFormatType( Format::Percentage );
           }
         }
         else if ( type == "boolean" )
@@ -628,7 +628,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
           else
             cell->setValue( Value( false ) );
           ok = true;
-          style.setFormatType( Custom_format );
+          style.setFormatType( Format::Custom );
         }
         else if ( type == "date" )
         {
@@ -708,7 +708,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
             // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
             // cell->setValue( kval );
             cell->setValue( Value( QTime( hours % 24, minutes, seconds ), cell->sheet()->doc() ) );
-            style.setFormatType( Custom_format );
+            style.setFormatType( Format::Custom );
           }
         }
 
@@ -1670,7 +1670,7 @@ void OpenCalcImport::loadOasisCellValidation( const KoXmlElement&body )
 
 
 QString * OpenCalcImport::loadFormat( KoXmlElement * element,
-                                      FormatType & formatType,
+                                      Format::Type & formatType,
                                       QString name )
 {
   if ( !element )
@@ -1690,17 +1690,17 @@ QString * OpenCalcImport::loadFormat( KoXmlElement * element,
   bool negRed = false;
 
   if ( element->localName() == "time-style" )
-    formatType = Custom_format;
+    formatType = Format::Custom;
   else if ( element->localName() == "date-style" )
-    formatType = Custom_format;
+    formatType = Format::Custom;
   else if ( element->localName() == "percentage-style" )
-    formatType = Custom_format;
+    formatType = Format::Custom;
   else if ( element->localName() == "number-style" )
-    formatType = Custom_format;
+    formatType = Format::Custom;
   else if ( element->localName() == "currency-style" )
-    formatType = Custom_format;
+    formatType = Format::Custom;
   else if ( element->localName() == "boolean-style" )
-    formatType = Custom_format;
+    formatType = Format::Custom;
 
   if ( !e.isNull() )
     format = new QString();
@@ -1910,7 +1910,7 @@ QString * OpenCalcImport::loadFormat( KoXmlElement * element,
       for ( i = 0; i < exp; ++i )
         format->append( '0' );
 
-      formatType = Custom_format;
+      formatType = Format::Custom;
     }
     else if ( e.localName() == "fraction" && e.namespaceURI()==ooNS::number)
     {
@@ -2253,7 +2253,7 @@ void OpenCalcImport::readInStyle( Style * layout, KoXmlElement const & style )
     if ( style.hasAttributeNS( ooNS::style, "data-style-name" ) )
     {
       QString * format = m_formats[ style.attributeNS( ooNS::style, "data-style-name", QString::null ) ];
-      FormatType formatType = Generic_format;
+      Format::Type formatType = Format::Generic;
 
       if ( !format )
       {

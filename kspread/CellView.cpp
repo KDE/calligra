@@ -187,7 +187,7 @@ CellView::CellView( SheetView* sheetView, int col, int row )
     if ( d->style.halign() == Style::HAlignUndefined )
     {
         //numbers should be right-aligned by default, as well as BiDi text
-        if ( ( d->style.formatType() == Text_format) || cell->value().isString() )
+        if ( ( d->style.formatType() == Format::Text) || cell->value().isString() )
             d->style.setHAlign( d->displayText.isRightToLeft() ? Style::Right : Style::Left );
         else
         {

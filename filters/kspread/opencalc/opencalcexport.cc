@@ -636,9 +636,9 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
     else if ( value.isNumber() )
     {
       kDebug(30518) << "Type: Number" << endl;
-      FormatType type = style.formatType();
+      Format::Type type = style.formatType();
 
-      if ( type == Percentage_format )
+      if ( type == Format::Percentage )
         cellElem.setAttribute( "table:value-type", "percentage" );
       else
         cellElem.setAttribute( "table:value-type", "float" );

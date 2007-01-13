@@ -42,7 +42,7 @@ namespace KSpread {
 struct ADMStorage {
   Value val;
   QString text;
-  FormatType format;
+  Format::Type format;
 };
 
 class AbstractDataManipulator : public Manipulator {
@@ -55,7 +55,7 @@ class AbstractDataManipulator : public Manipulator {
     If the function sets *parse to true, the value will be treated as an
     user-entered string and parsed by Cell. */
     virtual Value newValue (Element *element, int col, int row,
-      bool *parse, FormatType *fmtType) = 0;
+      bool *parse, Format::Type *fmtType) = 0;
 
     /** do we want to change this cell ? */
     virtual bool wantChange (Element *element, int col, int row) {
@@ -114,13 +114,12 @@ class KSPREAD_EXPORT DataManipulator : public AbstractDataManipulator {
     void setValue (Value val) { data = val; };
     /** If set, all cells shall be switched to this format. If parsing is
     true, the resulting value may end up being different. */
-    void setFormat (FormatType fmtType) { m_format = fmtType; };
+    void setFormat (Format::Type fmtType) { m_format = fmtType; };
   protected:
-    virtual Value newValue (Element *element, int col, int row, bool *,
-        FormatType *);
-    
+    virtual Value newValue (Element *element, int col, int row, bool *, Format::Type *);
+
     Value data;
-    FormatType m_format;
+    Format::Type m_format;
     bool m_parsing : 1;
 };
 
@@ -137,7 +136,7 @@ class KSPREAD_EXPORT SeriesManipulator : public AbstractDataManipulator {
         double step, Series mode, Series type);
   protected:
     virtual Value newValue (Element *element, int col, int row, bool *,
-        FormatType *);
+        Format::Type *);
     
     Series m_type;
     Value m_start, m_step, m_prev;
@@ -151,7 +150,7 @@ class KSPREAD_EXPORT ArrayFormulaManipulator : public AbstractDataManipulator {
     void setText (const QString text) { m_text = text; };
   protected:
     virtual Value newValue (Element *element, int col, int row, bool *,
-        FormatType *);
+        Format::Type *);
     QString cellRef, m_text;
 };
 
@@ -166,7 +165,7 @@ class KSPREAD_EXPORT FillManipulator : public AbstractDFManipulator {
     void setDirection (Direction d) { m_dir = d; };
   protected:
     virtual Value newValue (Element *element, int col, int row,
-        bool *parse, FormatType *fmtType);
+        bool *parse, Format::Type *fmtType);
     virtual Style newFormat (Element *element, int col, int row);
     Direction m_dir;
 };
@@ -187,7 +186,7 @@ class KSPREAD_EXPORT CaseManipulator: public AbstractDataManipulator {
     void changeFirstUpper ();
   protected:
     virtual Value newValue (Element *element, int col, int row,
-        bool *parse, FormatType *fmtType);
+        bool *parse, Format::Type *fmtType);
 
     /** do we want to change this cell ? */
     virtual bool wantChange (Element *element, int col, int row);

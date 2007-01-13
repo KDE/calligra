@@ -38,10 +38,10 @@ namespace KSpread
 {
 class ColumnFormat;
 class Doc;
-class Format;
 class Region;
 class RowFormat;
 class Sheet;
+class Style;
 class Undo;
 class UndoResizeColRow;
 
@@ -64,14 +64,14 @@ QString text;
 struct layoutTextCell {
 int row;
 int col;
-Format * l;
+Style * l;
 QString text;
 };
 
 struct layoutCell {
 int row;
 int col;
-Format *l;
+Style *l;
 };
 
 struct layoutColumn {

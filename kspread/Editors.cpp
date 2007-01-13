@@ -918,7 +918,7 @@ void CellEditor::slotTextChanged()
     d->length -= 2; */
   }
 
-  if ( (cell()->formatType()) == Percentage_format )
+  if ( (cell()->formatType()) == Format::Percentage )
   {
     if ( (t.length() == 1) && t[0].isDigit() )
     {

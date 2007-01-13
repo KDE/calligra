@@ -23,7 +23,7 @@
 
 #include <QDateTime>
 
-#include "Global.h"
+#include "Format.h"
 
 class KLocale;
 
@@ -75,7 +75,7 @@ class ValueParser {
   double readNumber(const QString &_str, bool * ok, bool * isInt);
   /** a helper function to read integers */
   int readInt (const QString &str, uint &pos);
-  FormatType fmtType;
+  Format::Type fmtType;
 };
 
 }  //namespace KSpread

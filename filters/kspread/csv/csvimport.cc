@@ -166,7 +166,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                cell->setCellText( text );
 
                Style style;
-               style.setFormatType (Generic_format);
+               style.setFormatType (Format::Generic);
                cell->setStyle(style);
 
                /* old code
@@ -249,7 +249,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
               cell = sheet->nonDefaultCell( col + 1, row + 1, s );
               cell->setCellText( text );
               Style style;
-              style.setFormatType( ShortDate_format );
+              style.setFormatType( Format::ShortDate );
               cell->setStyle(style);
               break;
              }
@@ -258,7 +258,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
               cell = sheet->nonDefaultCell( col + 1, row + 1, s );
               cell->setCellText( text, false );
               Style style;
-              style.setFormatType( Money_format );
+              style.setFormatType( Format::Money );
               style.setPrecision( 2 );
               cell->setStyle(style);
               break;

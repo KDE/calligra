@@ -162,7 +162,7 @@ void CSVDialog::accept()
   manipulator->setName (i18n ("Text to Columns"));
   manipulator->setSheet (sheet);
   manipulator->setParsing (true);
-  manipulator->setFormat (Generic_format);
+  manipulator->setFormat (Format::Generic);
   manipulator->setValue (val);
   manipulator->add (m_targetRect);
   manipulator->execute ();

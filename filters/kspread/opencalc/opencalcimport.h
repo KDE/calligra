@@ -21,7 +21,7 @@
 #ifndef OpenCalc_IMPORT_H__
 #define OpenCalc_IMPORT_H__
 
-#include "Global.h"
+#include "Format.h"
 
 #include <KoFilter.h>
 
@@ -100,7 +100,7 @@ class OpenCalcImport : public KoFilter
   void loadBorder( KSpread::Style * layout, QString const & borderDef, bPos pos ) const;
   void loadTableMasterStyle( KSpread::Sheet * table, QString const & stylename );
   QString * loadFormat( KoXmlElement * element,
-                        KSpread::FormatType & formatType,
+                        KSpread::Format::Type & formatType,
                         QString name );
   void checkForNamedAreas( QString & formula ) const;
   void loadOasisCellValidation( const KoXmlElement&body );

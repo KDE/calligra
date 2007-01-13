@@ -71,7 +71,6 @@ class ConditionsStorage;
 class RowFormat;
 class EmbeddedChart;
 class Doc;
-class Format;
 class GenValidationStyles;
 class Map;
 class Point;
@@ -1388,8 +1387,8 @@ public:
      */
     void refreshView(const Region& region);
 
-    void emit_updateRow( RowFormat *_format, int _row, bool repaint = true );
-    void emit_updateColumn( ColumnFormat *_format, int _column );
+    void emit_updateRow( RowFormat* rowFormat, int _row, bool repaint = true );
+    void emit_updateColumn( ColumnFormat* columnFormat, int _column );
 
     /**
      * Needed for Cell::leftBorderPen and friends, since we can not
