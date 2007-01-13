@@ -35,6 +35,13 @@ namespace KSpread
  * Based on a compressed sparse matrix data structure.
  * Usable for any kind of data attached to 2D coordinates.
  *
+ * Only non-default data with its coordinate is stored. Hence, the storage
+ * has a small memory footprint nearly regardless of the data's location.
+ * Each empty row before a location occupy an integer, which is not the case
+ * for columns. Iterating over the data becomes fast compared to dense
+ * matrix/array, where each location has to be traversed irrespective of
+ * default or non-default data.
+ *
  * The actual data is stored in the list m_data. It is grouped by rows in
  * ascending order. The rows' beginnings and ends are stored in the list
  * m_rows. Its index corresponds to the row index. The values denote the
