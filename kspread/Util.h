@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright 2006,2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 1998,1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,11 +15,11 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef __UTIL_H__
-#define __UTIL_H__
+#ifndef KSPREAD_UTIL
+#define KSPREAD_UTIL
 
 #include <QString>
 #include <QRect>
@@ -51,7 +51,7 @@ class Sheet;
 /**
 * Represents the position of a single cell in a workbook.  Each position has a row, column and optionally an associated Sheet.
 * Columns and rows can be marked as fixed.  This is for handling absolute coordinates in formulae (eg. in the
-* formula "=$C$1" both the column (C) and row (1) are fixed.
+* formula "=$C$1" both the column and row (1) are fixed.
 */
 class KSPREAD_EXPORT Point
 {
@@ -322,32 +322,38 @@ namespace Util
 
     //Return true when it's a reference to cell from sheet.
     KSPREAD_EXPORT bool localReferenceAnchor( const QString &_ref );
+
+    // TODO Stefan: used nowhere
+    int         penCompare( QPen const & pen1, QPen const & pen2 );
 }
 
-
 /**
  * \ingroup NativeFormat
+ * This namespace collects methods related to KSpread's old native file format
+ * encoding/decoding.
  */
-QDomElement util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc );
+namespace NativeFormat
+{
+    /**
+     * \ingroup NativeFormat
+     */
+    QDomElement createElement( const QString & tagName, const QFont & font, QDomDocument & doc );
 
-/**
- * \ingroup NativeFormat
- */
-QDomElement util_createElement( const QString & tagname, const QPen & pen, QDomDocument & doc );
+    /**
+     * \ingroup NativeFormat
+     */
+    QDomElement createElement( const QString & tagname, const QPen & pen, QDomDocument & doc );
 
-/**
- * \ingroup NativeFormat
- */
-QFont       util_toFont( KoXmlElement & element );
+    /**
+     * \ingroup NativeFormat
+     */
+    QFont       toFont( KoXmlElement & element );
 
-/**
- * \ingroup NativeFormat
- */
-QPen        util_toPen( KoXmlElement & element );
-// TODO Stefan: used nowhere
-int         util_penCompare( QPen const & pen1, QPen const & pen2 );
-
-
+    /**
+     * \ingroup NativeFormat
+     */
+    QPen        toPen( KoXmlElement & element );
+}
 
 /**
  * \ingroup OpenDocument
@@ -356,38 +362,38 @@ int         util_penCompare( QPen const & pen1, QPen const & pen2 );
  */
 namespace Oasis
 {
-  /**
-   * \ingroup OpenDocument
-   * Creates OpenDocument pen attributes of the QPen \p pen .
-   * \return the OpenDocument pen attributes
-   */
-  QString encodePen( const QPen& pen );
+    /**
+     * \ingroup OpenDocument
+     * Creates OpenDocument pen attributes of the QPen \p pen .
+     * \return the OpenDocument pen attributes
+     */
+    QString encodePen( const QPen& pen );
 
-  /**
-   * \ingroup OpenDocument
-   * Creates a QPen of OpenDocument pen attributes \p str .
-   * \return the created QPen
-   */
-  QPen decodePen( const QString &str );
+    /**
+     * \ingroup OpenDocument
+     * Creates a QPen of OpenDocument pen attributes \p str .
+     * \return the created QPen
+     */
+    QPen decodePen( const QString &str );
 
-  /**
-   * \ingroup OpenDocument
-   * Converts an OpenDocument representation of a formula/cell reference to a
-   * localized formula/cell reference.
-   * @param expr The expression to convert from OpenDocument format.
-   * @param locale The locale to which the expression should be converted.
-   */
-  // TODO check visibility
-  KSPREAD_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0);
+    /**
+     * \ingroup OpenDocument
+     * Converts an OpenDocument representation of a formula/cell reference to a
+     * localized formula/cell reference.
+     * @param expr The expression to convert from OpenDocument format.
+     * @param locale The locale to which the expression should be converted.
+     */
+    // TODO check visibility
+    KSPREAD_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0);
 
-  /**
-   * \ingroup OpenDocument
-   * Converts a localized formula/cell reference to an OpenDocument
-   * representation of a formula/cell reference.
-   * @param expr The expression to convert to OpenDocument format.
-   * @param locale The locale from which the expression should be converted.
-   */
-  KSPREAD_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
+    /**
+     * \ingroup OpenDocument
+     * Converts a localized formula/cell reference to an OpenDocument
+     * representation of a formula/cell reference.
+     * @param expr The expression to convert to OpenDocument format.
+     * @param locale The locale from which the expression should be converted.
+     */
+    KSPREAD_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
 
     /**
      * \ingroup OpenDocument
@@ -407,4 +413,4 @@ namespace Oasis
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_UTIL

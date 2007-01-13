@@ -1429,10 +1429,10 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
     }
 
   //  if ( d->subStyles.contains( Font ) )
-  //    format.appendChild( util_createElement( "font", m_textFont, doc ) );
+  //    format.appendChild( NativeFormat::createElement( "font", m_textFont, doc ) );
 
     if ( d->subStyles.contains( FontColor ) && fontColor().isValid() )
-        format.appendChild( util_createElement( "pen", fontColor(), doc ) );
+        format.appendChild( NativeFormat::createElement( "pen", fontColor(), doc ) );
 
     if ( d->subStyles.contains( BackgroundBrush ) )
     {
@@ -1443,42 +1443,42 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
     if ( d->subStyles.contains( LeftPen ) )
     {
         QDomElement left = doc.createElement( "left-border" );
-        left.appendChild( util_createElement( "pen", leftBorderPen(), doc ) );
+        left.appendChild( NativeFormat::createElement( "pen", leftBorderPen(), doc ) );
         format.appendChild( left );
     }
 
     if ( d->subStyles.contains( TopPen ) )
     {
         QDomElement top = doc.createElement( "top-border" );
-        top.appendChild( util_createElement( "pen", topBorderPen(), doc ) );
+        top.appendChild( NativeFormat::createElement( "pen", topBorderPen(), doc ) );
         format.appendChild( top );
     }
 
     if ( d->subStyles.contains( RightPen ) )
     {
         QDomElement right = doc.createElement( "right-border" );
-        right.appendChild( util_createElement( "pen", rightBorderPen(), doc ) );
+        right.appendChild( NativeFormat::createElement( "pen", rightBorderPen(), doc ) );
         format.appendChild( right );
     }
 
     if ( d->subStyles.contains( BottomPen ) )
     {
         QDomElement bottom = doc.createElement( "bottom-border" );
-        bottom.appendChild( util_createElement( "pen", bottomBorderPen(), doc ) );
+        bottom.appendChild( NativeFormat::createElement( "pen", bottomBorderPen(), doc ) );
         format.appendChild( bottom );
     }
 
     if ( d->subStyles.contains( FallDiagonalPen ) )
     {
         QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
-        fallDiagonal.appendChild( util_createElement( "pen", fallDiagonalPen(), doc ) );
+        fallDiagonal.appendChild( NativeFormat::createElement( "pen", fallDiagonalPen(), doc ) );
         format.appendChild( fallDiagonal );
     }
 
     if ( d->subStyles.contains( GoUpDiagonalPen ) )
     {
         QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
-        goUpDiagonal.appendChild( util_createElement( "pen", goUpDiagonalPen(), doc ) );
+        goUpDiagonal.appendChild( NativeFormat::createElement( "pen", goUpDiagonalPen(), doc ) );
         format.appendChild( goUpDiagonal );
     }
 }
@@ -1625,7 +1625,7 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
     KoXmlElement font = format.namedItem( "font" ).toElement();
     if ( !font.isNull() )
     {
-        QFont f( util_toFont( font ) );
+        QFont f( NativeFormat::toFont( font ) );
         setFontFamily( f.family() );
         setFontSize( f.pointSize() );
         if ( f.italic() )
@@ -1688,7 +1688,7 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
     KoXmlElement pen = format.namedItem( "pen" ).toElement();
     if ( !pen.isNull() )
     {
-        setFontColor( util_toPen( pen ).color() );
+        setFontColor( NativeFormat::toPen( pen ).color() );
     }
 
     KoXmlElement left = format.namedItem( "left-border" ).toElement();
@@ -1697,7 +1697,7 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
         KoXmlElement pen = left.namedItem( "pen" ).toElement();
         if ( !pen.isNull() )
         {
-            setLeftBorderPen( util_toPen( pen ) );
+            setLeftBorderPen( NativeFormat::toPen( pen ) );
         }
     }
 
@@ -1707,7 +1707,7 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
         KoXmlElement pen = top.namedItem( "pen" ).toElement();
         if ( !pen.isNull() )
         {
-            setTopBorderPen( util_toPen( pen ) );
+            setTopBorderPen( NativeFormat::toPen( pen ) );
         }
     }
 
@@ -1717,7 +1717,7 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
         KoXmlElement pen = right.namedItem( "pen" ).toElement();
         if ( !pen.isNull() )
         {
-            setRightBorderPen( util_toPen( pen ) );
+            setRightBorderPen( NativeFormat::toPen( pen ) );
         }
     }
 
@@ -1727,7 +1727,7 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
         KoXmlElement pen = bottom.namedItem( "pen" ).toElement();
         if ( !pen.isNull() )
         {
-            setBottomBorderPen( util_toPen( pen ) );
+            setBottomBorderPen( NativeFormat::toPen( pen ) );
         }
     }
 
@@ -1737,7 +1737,7 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
         KoXmlElement pen = fallDiagonal.namedItem( "pen" ).toElement();
         if ( !pen.isNull() )
         {
-            setFallDiagonalPen( util_toPen( pen ) );
+            setFallDiagonalPen( NativeFormat::toPen( pen ) );
         }
     }
 
@@ -1747,7 +1747,7 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
         KoXmlElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
         if ( !pen.isNull() )
         {
-            setGoUpDiagonalPen( util_toPen( pen ) );
+            setGoUpDiagonalPen( NativeFormat::toPen( pen ) );
         }
     }
 

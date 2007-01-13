@@ -442,7 +442,7 @@ QDomElement Conditions::saveConditions( QDomDocument & doc ) const
         else
         {
             child.setAttribute( "color", condition.colorcond->name() );
-            child.appendChild( util_createElement( "font", *condition.fontcond, doc ) );
+            child.appendChild( NativeFormat::createElement( "font", *condition.fontcond, doc ) );
         }
 
         conditions.appendChild( child );
@@ -643,7 +643,7 @@ void Conditions::loadConditions( const StyleManager* styleManager, const KoXmlEl
 
         KoXmlElement font = conditionElement.namedItem( "font" ).toElement();
         if ( !font.isNull() )
-            newCondition.fontcond = new QFont( util_toFont( font ) );
+            newCondition.fontcond = new QFont( NativeFormat::toFont( font ) );
 
         if ( conditionElement.hasAttribute( "style" ) )
         {

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
+   Copyright 2006,2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 1998,1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,7 +15,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <ctype.h>
@@ -83,7 +83,7 @@ QString KSpread::util_rangeName(Sheet * _sheet, const QRect &_area)
     return _sheet->sheetName() + '!' + util_rangeName(_area);
 }
 
-QDomElement KSpread::util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc )
+QDomElement KSpread::NativeFormat::createElement( const QString & tagName, const QFont & font, QDomDocument & doc )
 {
   QDomElement e( doc.createElement( tagName ) );
 
@@ -103,7 +103,7 @@ QDomElement KSpread::util_createElement( const QString & tagName, const QFont & 
   return e;
 }
 
-QDomElement KSpread::util_createElement( const QString & tagname, const QPen & pen, QDomDocument & doc )
+QDomElement KSpread::NativeFormat::createElement( const QString & tagname, const QPen & pen, QDomDocument & doc )
 {
   QDomElement e( doc.createElement( tagname ) );
   e.setAttribute( "color", pen.color().name() );
@@ -112,7 +112,7 @@ QDomElement KSpread::util_createElement( const QString & tagname, const QPen & p
   return e;
 }
 
-QFont KSpread::util_toFont( KoXmlElement & element )
+QFont KSpread::NativeFormat::toFont( KoXmlElement & element )
 {
   bool ok;
   int size = element.attribute("size").toInt( &ok );
@@ -152,7 +152,7 @@ QFont KSpread::util_toFont( KoXmlElement & element )
   return f;
 }
 
-QPen KSpread::util_toPen( KoXmlElement & element )
+QPen KSpread::NativeFormat::toPen( KoXmlElement & element )
 {
   bool ok;
   QPen p;
@@ -812,7 +812,7 @@ Cell* RangeIterator::next()
 }
 
 //not used anywhere
-int KSpread::util_penCompare( QPen const & pen1, QPen const & pen2 )
+int KSpread::Util::penCompare( QPen const & pen1, QPen const & pen2 )
 {
   if ( pen1.style() == Qt::NoPen && pen2.style() == Qt::NoPen )
     return 0;
