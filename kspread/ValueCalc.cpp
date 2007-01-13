@@ -1609,12 +1609,10 @@ void ValueCalc::arrayWalk (const Value &range,
     return;
   }
 
-  int rows = range.rows ();
-  int cols = range.columns ();
-  for (int r = 0; r < rows; r++)
-    for (int c = 0; c < cols; c++)
+    // iterate over the non-empty entries
+    for ( uint i = 0; i < range.count(); ++i )
     {
-      Value v = range.element (c, r);
+      Value v = range.element( i );
       if (v.isArray())
         arrayWalk (v, res, func, param);
       else {
@@ -1772,12 +1770,10 @@ int ValueCalc::countIf (const Value &range, const Condition &cond)
 
   int res = 0;
 
-  int cols = range.columns ();
-  int rows = range.rows ();
-  for (int r = 0; r < rows; r++)
-    for (int c = 0; c < cols; c++)
+    // iterate over the non-empty entries
+    for ( uint i = 0; i < range.count(); ++i )
     {
-      Value v = range.element (c, r);
+      Value v = range.element( i );
 
       if (v.isArray())
         res += countIf (v, cond);
