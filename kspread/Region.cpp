@@ -922,7 +922,7 @@ Region::Point::Point(const QString& sCell)
     //get the colomn number for the character between actual position and the first non text charakter
     if ( result != -1 )
     {
-        x = util_decodeColumnLabelText( string.mid( p, result - p ) ); // x is defined now
+        x = Util::decodeColumnLabelText( string.mid( p, result - p ) ); // x is defined now
     }
     else  // If there isn't any, then this is not a point -> return
     {

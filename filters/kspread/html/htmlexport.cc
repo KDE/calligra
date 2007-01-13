@@ -269,7 +269,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
 
             if ( !cell->link().isEmpty() )
             {
-                if ( localReferenceAnchor(cell->link()) )
+                if ( Util::localReferenceAnchor(cell->link()) )
                 {
                     text = cell->inputText();
                 }

@@ -376,10 +376,10 @@ void PaperLayout::slotOk()
         int first = tmpRepeatCols.indexOf(':');
         if ( ( first != -1 ) && ( (int)tmpRepeatCols.length() > first ) )
         {
-            int col1 = util_decodeColumnLabelText( tmpRepeatCols.left( first ) );
+            int col1 = Util::decodeColumnLabelText( tmpRepeatCols.left( first ) );
             if ( col1 > 0 && col1 <= KS_colMax )
             {
-                int col2 = util_decodeColumnLabelText( tmpRepeatCols.mid( first+1 ) );
+                int col2 = Util::decodeColumnLabelText( tmpRepeatCols.mid( first+1 ) );
                 if ( col2 > 0 && col2 <= KS_colMax )
                 {
                     error = false;

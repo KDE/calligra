@@ -215,18 +215,18 @@ void areaNames( Doc * ksdoc, const QString &_name, QString _zone )
             QString right = _zone.mid( pos+2, _zone.length()-pos-2 );
             int pos = left.indexOf( '$' );
 
-            rect.setLeft( util_decodeColumnLabelText(left.left(pos ) ) );
+            rect.setLeft( Util::decodeColumnLabelText(left.left(pos ) ) );
             rect.setTop( left.right( left.length()-pos-1 ).toInt() );
 
             pos = right.indexOf( '$' );
-            rect.setRight( util_decodeColumnLabelText(right.left(pos ) ) );
+            rect.setRight( Util::decodeColumnLabelText(right.left(pos ) ) );
             rect.setBottom( right.right( right.length()-pos-1 ).toInt() );
        }
         else
         {
             QString left = _zone;
             int pos = left.indexOf( '$' );
-            int leftPos = util_decodeColumnLabelText(left.left(pos ) );
+            int leftPos = Util::decodeColumnLabelText(left.left(pos ) );
             rect.setLeft( leftPos );
             rect.setRight( leftPos );
 

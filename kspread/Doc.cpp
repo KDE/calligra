@@ -1908,8 +1908,8 @@ void Doc::saveOasisAreaName( KoXmlWriter & xmlWriter )
             xmlWriter.startElement( "table:named-range" );
 
             xmlWriter.addAttribute( "table:name", ( *it ).ref_name );
-            xmlWriter.addAttribute( "table:base-cell-address", convertRefToBase( ( *it ).sheet_name, ( *it ).rect ) );
-            xmlWriter.addAttribute( "table:cell-range-address", convertRefToRange( ( *it ).sheet_name, ( *it ).rect ) );
+            xmlWriter.addAttribute( "table:base-cell-address", Oasis::convertRefToBase( ( *it ).sheet_name, ( *it ).rect ) );
+            xmlWriter.addAttribute( "table:cell-range-address", Oasis::convertRefToRange( ( *it ).sheet_name, ( *it ).rect ) );
 
             xmlWriter.endElement();
         }

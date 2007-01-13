@@ -38,7 +38,7 @@ using namespace KSpread;
 
 //used in Point::init, Cell::encodeFormula and
 //  dialogs/kspread_dlg_paperlayout.cc
-int KSpread::util_decodeColumnLabelText( const QString &_col )
+int KSpread::Util::decodeColumnLabelText( const QString &_col )
 {
     int col = 0;
     int offset='a'-'A';
@@ -51,7 +51,7 @@ int KSpread::util_decodeColumnLabelText( const QString &_col )
         else if( _col[i] >= 'a' && _col[i] <= 'z' )
             col += counterColumn * ( _col[i].toLatin1() - 'A' - offset + 1 );
         else
-            kDebug(36001) << "util_decodeColumnLabelText: Wrong characters in label text for col:'" << _col << '\'' << endl;
+            kDebug(36001) << "Util::decodeColumnLabelText: Wrong characters in label text for col:'" << _col << '\'' << endl;
     }
     return col;
 }
@@ -274,7 +274,7 @@ void Point::init(const QString & _str)
 
     //get the colomn number for the character between actual position and the first non text charakter
     if ( result != -1 )
-  x = util_decodeColumnLabelText( str.mid( p, result - p ) ); // x is defined now
+  x = Util::decodeColumnLabelText( str.mid( p, result - p ) ); // x is defined now
     else  // If there isn't any, then this is not a point -> return
     {
   kDebug(36001) << "Point::init: no number in string (str: '" << str.mid( p, result ) << '\'' << endl;
@@ -743,7 +743,7 @@ bool KSpread::util_isRowOrColumnSelected(const QRect &selection)
 }
 
 //used in View::slotRename
-bool KSpread::util_validateSheetName(const QString &name)
+bool KSpread::Util::validateSheetName(const QString &name)
 {
   if (name[0] == ' ')
   {
@@ -845,7 +845,7 @@ int KSpread::util_penCompare( QPen const & pen1, QPen const & pen2 )
 }
 
 
-QString KSpread::convertRefToBase( const QString & sheet, const QRect & rect )
+QString KSpread::Oasis::convertRefToBase( const QString & sheet, const QRect & rect )
 {
   QPoint bottomRight( rect.bottomRight() );
 
@@ -859,22 +859,22 @@ QString KSpread::convertRefToBase( const QString & sheet, const QRect & rect )
   return s;
 }
 
-QString KSpread::convertRefToRange( const QString & sheet, const QRect & rect )
+QString KSpread::Oasis::convertRefToRange( const QString & sheet, const QRect & rect )
 {
   QPoint topLeft( rect.topLeft() );
   QPoint bottomRight( rect.bottomRight() );
 
   if ( topLeft == bottomRight )
-    return convertRefToBase( sheet, rect );
+    return Oasis::convertRefToBase( sheet, rect );
 
   QString s( '$' );
   s += sheet;
   s += ".$";
-  s += /*util_encodeColumnLabelText*/Cell::columnName( topLeft.x() );
+  s += /*Util::encodeColumnLabelText*/Cell::columnName( topLeft.x() );
   s += '$';
   s += QString::number( topLeft.y() );
   s += ":.$";
-  s += /*util_encodeColumnLabelText*/Cell::columnName( bottomRight.x() );
+  s += /*Util::encodeColumnLabelText*/Cell::columnName( bottomRight.x() );
   s += '$';
   s += QString::number( bottomRight.y() );
 
@@ -883,7 +883,7 @@ QString KSpread::convertRefToRange( const QString & sheet, const QRect & rect )
 
  // e.g.: Sheet4.A1:Sheet4.E28
  //used in Sheet::saveOasis
-QString KSpread::convertRangeToRef( const QString & sheetName, const QRect & _area )
+QString KSpread::Oasis::convertRangeToRef( const QString & sheetName, const QRect & _area )
 {
     return sheetName + '.' + Cell::name( _area.left(), _area.top() ) + ':' + sheetName + '.'+ Cell::name( _area.right(), _area.bottom() );
 }
@@ -967,7 +967,7 @@ QPen KSpread::Oasis::decodePen( const QString &border )
 }
 
 //Return true when it's a reference to cell from sheet.
-bool KSpread::localReferenceAnchor( const QString &_ref )
+bool KSpread::Util::localReferenceAnchor( const QString &_ref )
 {
     bool isLocalRef = (_ref.indexOf("http://") != 0 &&
                        _ref.indexOf("mailto:") != 0 &&

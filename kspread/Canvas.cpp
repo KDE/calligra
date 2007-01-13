@@ -1081,7 +1081,7 @@ void Canvas::processClickSelectionHandle( QMouseEvent *event )
 
 void Canvas::processLeftClickAnchor()
 {
-    bool isRefLink = localReferenceAnchor( d->anchor );
+    bool isRefLink = Util::localReferenceAnchor( d->anchor );
     bool isLocalLink = (d->anchor.indexOf("file:") == 0);
     if ( !isRefLink )
     {

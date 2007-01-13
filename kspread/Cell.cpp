@@ -700,7 +700,7 @@ QString Cell::encodeFormula( bool _era, int _col, int _row ) const
                     {
                         //now calculate the row as integer value
                         int col = 0;
-                        col = util_decodeColumnLabelText( buffer );
+                        col = Util::decodeColumnLabelText( buffer );
                         if ( fix1 )
                             erg += QString( "$%1" ).arg( col );
                         else
@@ -1593,7 +1593,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         xmlwriter.startElement( "text:p" );
         xmlwriter.startElement( "text:a" );
         //Reference cell is started by '#'
-        if ( localReferenceAnchor( link() ) )
+        if ( Util::localReferenceAnchor( link() ) )
             xmlwriter.addAttribute( " xLinkDialog.href", ( '#'+link() ) );
         else
             xmlwriter.addAttribute( " xLinkDialog.href", link() );

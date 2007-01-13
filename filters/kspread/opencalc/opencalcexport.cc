@@ -414,8 +414,8 @@ void exportNamedExpr( QDomDocument & doc, QDomElement & parent,
     Reference ref = *it;
 
     namedRange.setAttribute( "table:name", ref.ref_name );
-    namedRange.setAttribute( "table:base-cell-address", convertRefToBase( ref.sheet_name, ref.rect ) );
-    namedRange.setAttribute( "table:cell-range-address", convertRefToRange( ref.sheet_name, ref.rect ) );
+    namedRange.setAttribute( "table:base-cell-address", Oasis::convertRefToBase( ref.sheet_name, ref.rect ) );
+    namedRange.setAttribute( "table:cell-range-address", Oasis::convertRefToRange( ref.sheet_name, ref.rect ) );
 
     parent.appendChild( namedRange );
 
@@ -480,7 +480,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
     QRect _printRange = sheet->print()->printRange();
     if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
     {
-        QString range= convertRangeToRef( name, _printRange );
+        QString range= Oasis::convertRangeToRef( name, _printRange );
         //kDebug(30518)<<" range : "<<range<<endl;
         tabElem.setAttribute( "table:print-ranges", range );
     }
@@ -663,7 +663,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       QDomElement linkref = doc.createElement( "text:a" );
 
       QString tmp = cell->link();
-       if ( localReferenceAnchor( tmp ) )
+       if ( Util::localReferenceAnchor( tmp ) )
            linkref.setAttribute( "xlink:href", ( '#'+tmp ) );
        else
            linkref.setAttribute( "xlink:href", tmp  );

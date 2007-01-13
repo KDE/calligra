@@ -296,18 +296,6 @@ QString util_rangeColumnName( const QRect &_area);
 QString util_rangeRowName( const QRect &_area);
 //END
 
-/**
-* Call this function to decode the text of a column label to an integer
-* i.e. AA->27
-*/
-KSPREAD_EXPORT int util_decodeColumnLabelText( const QString &_col );
-/**
-* Call this function to encode an integer to the text of the column label
-* i.e. 27->AA
-*/
-KSPREAD_EXPORT QString util_encodeColumnLabelText( int column );
-
-
 // TODO Stefan: move to Region class as static members
 //BEGIN
 bool util_isAllSelected(const QRect &selection);
@@ -316,8 +304,25 @@ bool util_isRowSelected(const QRect &selection);
 bool util_isRowOrColumnSelected( const QRect &selection );
 //END
 
+namespace Util
+{
+    /**
+     * Call this function to decode the text of a column label to an integer
+     * i.e. AA->27
+     */
+    KSPREAD_EXPORT int decodeColumnLabelText( const QString &_col );
 
-bool util_validateSheetName(const QString &name);
+    /**
+     * Call this function to encode an integer to the text of the column label
+     * i.e. 27->AA
+     */
+    KSPREAD_EXPORT QString encodeColumnLabelText( int column );
+
+    bool validateSheetName(const QString &name);
+
+    //Return true when it's a reference to cell from sheet.
+    KSPREAD_EXPORT bool localReferenceAnchor( const QString &_ref );
+}
 
 
 /**
@@ -341,25 +346,6 @@ QFont       util_toFont( KoXmlElement & element );
 QPen        util_toPen( KoXmlElement & element );
 // TODO Stefan: used nowhere
 int         util_penCompare( QPen const & pen1, QPen const & pen2 );
-
-/**
- * \ingroup OpenDocument
- */
-KSPREAD_EXPORT QString convertRefToRange( const QString & sheet, const QRect & rect );
-
-/**
- * \ingroup OpenDocument
- */
-KSPREAD_EXPORT QString convertRefToBase( const QString & sheet, const QRect & rect );
-
-/**
- * \ingroup OpenDocument
- */
-KSPREAD_EXPORT QString convertRangeToRef( const QString & sheetName, const QRect & _area );
-
-
-//Return true when it's a reference to cell from sheet.
-KSPREAD_EXPORT bool localReferenceAnchor( const QString &_ref );
 
 
 
@@ -402,6 +388,21 @@ namespace Oasis
    * @param locale The locale from which the expression should be converted.
    */
   KSPREAD_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
+
+    /**
+     * \ingroup OpenDocument
+     */
+    KSPREAD_EXPORT QString convertRefToRange( const QString & sheet, const QRect & rect );
+
+    /**
+     * \ingroup OpenDocument
+     */
+    KSPREAD_EXPORT QString convertRefToBase( const QString & sheet, const QRect & rect );
+
+    /**
+     * \ingroup OpenDocument
+     */
+    KSPREAD_EXPORT QString convertRangeToRef( const QString & sheetName, const QRect & _area );
 }
 
 } // namespace KSpread

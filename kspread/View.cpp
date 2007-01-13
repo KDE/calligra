@@ -6569,7 +6569,7 @@ void View::slotRename()
 
   if( !ok ) return;
 
-  while (!util_validateSheetName(newName))
+  while (!Util::validateSheetName(newName))
   {
     KMessageBox::information( this, i18n("Sheet name contains illegal characters. Only numbers and letters are allowed."),
       i18n("Change Sheet Name") );
