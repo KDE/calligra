@@ -36,7 +36,6 @@
 #include "Doc.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "Format.h"
 #include "View.h"
 
 #include "CommentDialog.h"

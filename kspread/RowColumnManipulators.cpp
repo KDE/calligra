@@ -22,7 +22,7 @@
 #include <float.h>
 
 #include "CellView.h"
-#include "Format.h"
+#include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "SheetView.h"
 #include "StyleStorage.h"

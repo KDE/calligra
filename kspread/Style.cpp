@@ -34,7 +34,6 @@
 #include <KoXmlWriter.h>
 
 #include "Doc.h"
-#include "Format.h"
 #include "Global.h"
 #include "Util.h"
 

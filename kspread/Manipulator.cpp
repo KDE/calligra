@@ -29,7 +29,6 @@
 #include "Doc.h"
 #include "Map.h"
 #include "Sheet.h"
-#include "Format.h"
 #include "RectStorage.h"
 #include "Style.h"
 #include "StyleManager.h"

@@ -23,7 +23,6 @@
 
 #include <CellView.h>
 #include <Doc.h>
-#include <Format.h>
 #include <Map.h>
 #include <Sheet.h>
 #include <SheetView.h>

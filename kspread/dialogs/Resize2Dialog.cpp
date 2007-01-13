@@ -44,12 +44,12 @@
 #include <Doc.h>
 #include <Global.h>
 #include <Localization.h>
-#include <Format.h>
+#include "RowColumnFormat.h"
+#include "RowColumnManipulators.h"
+#include "Selection.h"
 #include <Sheet.h>
 #include <Undo.h>
 #include <View.h>
-#include "RowColumnManipulators.h"
-#include "Selection.h"
 
 #include "Resize2Dialog.h"
 

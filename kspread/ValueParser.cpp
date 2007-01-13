@@ -22,8 +22,8 @@
 
 #include "Cell.h"
 #include "Doc.h"
-#include "Format.h"
 #include "Localization.h"
+#include "Style.h"
 #include "Value.h"
 
 using namespace KSpread;

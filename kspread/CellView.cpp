@@ -49,7 +49,7 @@
 #include "Canvas.h"
 #include "Condition.h"
 #include "Doc.h"
-#include "Format.h"
+#include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "SheetPrint.h"

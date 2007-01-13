@@ -36,8 +36,8 @@
 #include <kspread/Doc.h>
 #include <kspread/Global.h>
 #include <kspread/Map.h>
+#include <kspread/RowColumnFormat.h>
 #include <kspread/Sheet.h>
-#include <kspread/Format.h>
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
 #include <kspread/Cell.h>

@@ -40,15 +40,15 @@
 #include <KoDocumentInfo.h>
 
 // KSpread
+#include <kspread/Canvas.h>
 #include <kspread/Currency.h>
+#include <kspread/Doc.h>
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>
-#include <kspread/Format.h>
-#include <kspread/Doc.h>
-#include <kspread/View.h>
-#include <kspread/Canvas.h>
 #include <kspread/SheetPrint.h>
+#include <kspread/RowColumnFormat.h>
 #include <kspread/Validity.h>
+#include <kspread/View.h>
 
 using namespace KSpread;
 

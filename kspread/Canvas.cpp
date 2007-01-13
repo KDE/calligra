@@ -95,7 +95,7 @@
 #include "Global.h"
 #include "Localization.h"
 #include "Map.h"
-#include "Format.h"
+#include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "SheetView.h"

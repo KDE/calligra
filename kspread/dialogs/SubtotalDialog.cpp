@@ -33,7 +33,6 @@
 // KSpread
 #include "DataManipulators.h"
 #include "Sheet.h"
-#include "Format.h"
 #include "View.h"
 #include "Doc.h"
 #include "Util.h"

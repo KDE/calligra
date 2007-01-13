@@ -35,7 +35,6 @@
 #include <Cell.h>
 #include <Doc.h>
 #include <Sheet.h>
-#include <Format.h>
 #include <View.h>
 
 #include "AngleDialog.h"

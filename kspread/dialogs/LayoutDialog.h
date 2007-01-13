@@ -45,7 +45,7 @@
 #include <knuminput.h>
 
 #include "Doc.h"
-#include "Format.h"
+#include "RowColumnFormat.h"
 #include "Style.h"
 #include "Value.h"
 #include "View.h"

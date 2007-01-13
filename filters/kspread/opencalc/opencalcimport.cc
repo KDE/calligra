@@ -49,10 +49,10 @@
 #include <kspread/Doc.h>
 #include <kspread/Global.h>
 #include <kspread/Map.h>
+#include <kspread/Region.h>
+#include <kspread/RowColumnFormat.h>
 #include <kspread/Sheet.h>
 #include <kspread/SheetPrint.h>
-#include <kspread/Format.h>
-#include <kspread/Region.h>
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
 #include <kspread/Util.h>

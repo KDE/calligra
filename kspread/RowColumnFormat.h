@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FORMAT
-#define KSPREAD_FORMAT
+#ifndef KSPREAD_ROW_COLUMN_FORMAT
+#define KSPREAD_ROW_COLUMN_FORMAT
 
 #include <QBrush>
 #include <QColor>
@@ -229,4 +229,4 @@ private:
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_ROW_COLUMN_FORMAT

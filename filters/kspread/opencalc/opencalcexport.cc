@@ -43,17 +43,17 @@
 #include <KoGlobal.h>
 
 #include <kspread/AboutData.h> // for version
+#include <kspread/Canvas.h>
 #include <kspread/Cell.h>
 #include <kspread/Doc.h>
-//#include <kspread/Format.h>
 #include <kspread/Map.h>
-#include <kspread/View.h>
-#include <kspread/Canvas.h>
+#include <kspread/RowColumnFormat.h>
 #include <kspread/Sheet.h>
 #include <kspread/SheetPrint.h>
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
 #include <kspread/Util.h>
+#include <kspread/View.h>
 
 using namespace KSpread;
 

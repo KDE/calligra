@@ -26,7 +26,7 @@
 #include "Cell.h"
 #include "Doc.h"
 #include "Editors.h"
-#include "Format.h"
+#include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "View.h"
 #include "Util.h"

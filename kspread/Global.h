@@ -120,7 +120,6 @@ namespace Paste
   };
 } // namespace Paste
 
-enum Series { Column,Row,Linear,Geometric };
 // necessary due to QDock* enums (Werner)
 enum MoveTo { Bottom, Left, Top, Right, BottomFirst };
 enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc, CountA };

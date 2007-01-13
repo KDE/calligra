@@ -20,7 +20,8 @@
 #ifndef KSPREAD_VALUEFORMATTER
 #define KSPREAD_VALUEFORMATTER
 
-#include "Format.h"
+#include "Global.h"
+#include "Style.h"
 
 #include <QDateTime>
 

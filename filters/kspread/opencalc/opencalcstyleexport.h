@@ -21,12 +21,14 @@
 #ifndef OPENCALCSTYLEEXPORT_H
 #define OPENCALCSTYLEEXPORT_H
 
-#include "kspread/Format.h"
+#include "kspread/Global.h"
+#include "kspread/Style.h"
 
 #include <QColor>
 #include <QFont>
-#include <q3ptrlist.h>
+#include <QPen>
 #include <QString>
+#include <q3ptrlist.h>
 
 namespace KSpread
 {

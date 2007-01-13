@@ -32,12 +32,12 @@
 
 // KSpread
 #include "Doc.h"
+#include "Region.h"
+#include "RowColumnFormat.h"
+#include "RowColumnManipulators.h"
 #include "Sheet.h"
-#include "Format.h"
 #include "Util.h"
 #include "View.h"
-#include "Region.h"
-#include "RowColumnManipulators.h"
 
 // Local
 #include "ShowColRowDialog.h"

@@ -69,6 +69,7 @@
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "Map.h"
+#include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "SheetPrint.h"

@@ -19,17 +19,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "Format.h"
+#include "Commands.h"
+#include "Doc.h"
+#include "Localization.h"
+#include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "SheetView.h"
 #include "Selection.h"
-#include "Localization.h"
-#include "Doc.h"
 #include "Undo.h"
 
 #include "SheetPrint.h"
 
-#include "Commands.h"
 #include <KoDocumentInfo.h>
 
 #include <kmessagebox.h>

@@ -23,7 +23,7 @@
 #include <kdebug.h>
 
 #include "Cell.h"
-#include "Format.h"
+#include "RowColumnFormat.h"
 
 #include "Cluster.h"
 

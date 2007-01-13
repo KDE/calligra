@@ -22,8 +22,8 @@
 #include <QRect>
 
 #include "Canvas.h"
-#include "Format.h"
 #include "Region.h"
+#include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "View.h"
 

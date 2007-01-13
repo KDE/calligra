@@ -42,7 +42,7 @@
 #include "Style.h"
 #include "StyleManager.h"
 
-#include "Format.h"
+#include "RowColumnFormat.h"
 
 using namespace std;
 using namespace KSpread;

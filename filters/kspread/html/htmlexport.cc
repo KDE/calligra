@@ -35,7 +35,6 @@
 #include <kofficeversion.h>
 
 #include <kspread/Map.h>
-#include <kspread/Format.h>
 #include <kspread/Sheet.h>
 #include <kspread/Doc.h>
 #include <kspread/Util.h>

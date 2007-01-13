@@ -94,7 +94,6 @@ SET (kspreadcommon_LIB_SRCS
 	Editors.cpp
 	Events.cpp
 	Factory.cpp
-	Format.cpp
 	Formula.cpp
 	Functions.cpp
 	GeneralProperty.cpp
@@ -109,6 +108,7 @@ SET (kspreadcommon_LIB_SRCS
 	PropertyEditor.cpp
 	RecalcManager.cpp
 	Region.cpp
+	RowColumnFormat.cpp
 	RowColumnManipulators.cpp
 	Selection.cpp
 	Sheet.cpp
