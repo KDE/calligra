@@ -42,6 +42,7 @@ TaskProgressDialog::TaskProgressDialog(Task &task, StandardWorktime *workTime, Q
     enableButtonOk(false);
 
     connect(m_panel, SIGNAL( changed() ), SLOT(slotChanged()));
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 void TaskProgressDialog::slotChanged() {

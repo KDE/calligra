@@ -335,7 +335,7 @@ EditAreaName::EditAreaName( View * parent,
 
   m_sheets->setItemText( m_sheets->currentIndex(), (*it).sheet_name );
   m_area->setText( tmpName );
-
+  connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 EditAreaName::~EditAreaName()

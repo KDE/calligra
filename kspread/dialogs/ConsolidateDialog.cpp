@@ -130,6 +130,8 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
 
   connect(m_pView->selection(), SIGNAL(changed(const Region&)),
           this, SLOT(slotSelectionChanged()));
+  connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+  connect(this,SIGNAL(cancelClicked()),this,SLOT(slotCancel()));
 }
 
 ConsolidateDialog::~ConsolidateDialog()

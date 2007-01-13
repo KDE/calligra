@@ -42,6 +42,7 @@ SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
   QWidget* spacer = new QWidget( mainWidget );
   spacer->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Expanding );
   showButtonSeparator( true );
+  connect(this,SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
 }
 
 SheetPropertiesDialog::~SheetPropertiesDialog()

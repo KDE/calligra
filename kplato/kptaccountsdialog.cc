@@ -38,6 +38,7 @@ AccountsDialog::AccountsDialog(Accounts &acc, QWidget *p, const char *n)
 
     enableButtonOk(false);
     connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOk(bool)));
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 KCommand *AccountsDialog::buildCommand(Part *part) {

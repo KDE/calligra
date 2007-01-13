@@ -56,6 +56,7 @@ KWMailMergeKSpreadConfig::KWMailMergeKSpreadConfig( QWidget *parent, KWMailMerge
 
   loadDocument();
   slotTextChanged( _urlRequester->lineEdit()->text() );
+  connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 

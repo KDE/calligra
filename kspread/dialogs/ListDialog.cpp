@@ -96,6 +96,7 @@ ListDialog::ListDialog( QWidget* parent, const char* name )
   connect( m_pCopy, SIGNAL( clicked() ), this, SLOT( slotCopy() ) );
   connect( list, SIGNAL(doubleClicked(Q3ListBoxItem *)),this,SLOT(slotDoubleClicked(Q3ListBoxItem *)));
   connect( list, SIGNAL(clicked ( Q3ListBoxItem * )),this,SLOT(slotTextClicked(Q3ListBoxItem * )));
+  connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
   init();
   entryList->setEnabled(false);
   m_pModify->setEnabled(false);

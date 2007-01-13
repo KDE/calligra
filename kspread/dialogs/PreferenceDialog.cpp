@@ -68,7 +68,7 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
   m_pView=parent;
 
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
-
+  connect(this, SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
   KVBox *page2 = new KVBox();
   p2 = addPage(page2, i18n("Locale Settings"));
   p2->setIcon( KIcon( BarIcon("gohome",K3Icon::SizeMedium) ) );

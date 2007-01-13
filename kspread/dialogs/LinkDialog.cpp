@@ -161,6 +161,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     showButtonSeparator( true );
     d->internetText->setFocus();
     resize( 400,300 );
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
 LinkDialog::~LinkDialog()

@@ -53,6 +53,7 @@ KFConfig::KFConfig( KFormulaPartView* parent )
 //                                          page2 );
 
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
+    connect(this,SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
 }
 
 void KFConfig::slotApply()

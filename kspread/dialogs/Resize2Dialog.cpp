@@ -98,6 +98,8 @@ ResizeRow::ResizeRow( View* parent, const char* name )
 
     //store the visible value, for later check for changes
     rowHeight = m_pHeight->value();
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect(this,SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
 }
 
 void ResizeRow::slotOk()
@@ -170,6 +172,9 @@ ResizeColumn::ResizeColumn( View* parent, const char* name )
 
     //store the visible value, for later check for changes
     columnWidth = m_pWidth->value();
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect(this,SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
+
 }
 
 void ResizeColumn::slotOk()
